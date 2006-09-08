@@ -19,6 +19,8 @@
 #ifndef KIS_ABSTRACT_COLORSPACE_H_
 #define KIS_ABSTRACT_COLORSPACE_H_
 
+#include <strings.h>
+
 #include <qmap.h>
 #include <qcolor.h>
 #include <qstringlist.h>
@@ -211,6 +213,60 @@ protected:
                           Q_INT32 renderingIntent);
 
     virtual void compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity);
+
+
+    // So I don't need to re-implement it everywhere.
+    template <typename ColorType,
+              typename NativeMult, typename Uint8ToNative, typename NativeOpacityTest,
+              int AlphaPos, int NonAlphaSize, int TotalSize>
+    void abstractCompositeAlphaDarken(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
+                                      const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride,
+                                      const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride,
+                                      Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity,
+                                      NativeMult nativeMult, Uint8ToNative uint8ToNative,
+                                      NativeOpacityTest nativeOpacityTest) {
+        while (rows > 0) {
+
+            const ColorType *src = reinterpret_cast<const ColorType*>(srcRowStart);
+            ColorType *dst = reinterpret_cast<ColorType*>(dstRowStart);
+            const Q_UINT8 *mask = maskRowStart;
+            Q_INT32 columns = numColumns;
+
+            while (columns > 0) {
+
+                ColorType srcAlpha = src[AlphaPos];
+                ColorType dstAlpha = dst[AlphaPos];
+
+                // apply the alphamask
+                if(mask != 0)
+                {
+                    if(*mask != OPACITY_OPAQUE)
+                        srcAlpha = nativeMult(srcAlpha, uint8ToNative(*mask));
+                    mask++;
+                }
+
+                if (opacity != OPACITY_OPAQUE) {
+                    srcAlpha = nativeMult(srcAlpha, uint8ToNative(opacity));
+                }
+
+                // not transparent
+                if (nativeOpacityTest(srcAlpha) && srcAlpha >= dstAlpha) {
+                    dst[AlphaPos] = srcAlpha;
+                    memcpy(dst, src, NonAlphaSize * sizeof(ColorType));
+                }
+
+                columns--;
+                src += TotalSize;
+                dst += TotalSize;
+            }
+
+            rows--;
+            srcRowStart += srcRowStride;
+            dstRowStart += dstRowStride;
+            if(maskRowStart)
+                maskRowStart += maskRowStride;
+        }
+    }
 
 protected:
 

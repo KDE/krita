@@ -58,5 +58,23 @@ public:
 
     virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+
+protected:
+    // For Alpha Composite
+    struct U16Mult {
+        inline Q_UINT16 operator()(const Q_UINT16& a, const Q_UINT16& b) const {
+            return UINT16_MULT(a, b);
+        }
+    };
+    struct Uint8ToU16 {
+        inline Q_UINT16 operator()(const Q_UINT8 src) const {
+            return UINT8_TO_UINT16(src);
+        }
+    };
+    struct U16OpacityTest {
+        inline bool operator()(const Q_UINT16& opacity) const {
+            return opacity != U16_OPACITY_TRANSPARENT;
+        }
+    };
 };
 #endif // KIS_U16_BASE_COLORSPACE_H_

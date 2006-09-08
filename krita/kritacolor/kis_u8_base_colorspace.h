@@ -24,6 +24,7 @@
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
+#include "kis_integer_maths.h"
 
 /**
  * This class is the base for all homogenous 8-bit/channel colorspaces with 8-bit alpha channels
@@ -52,6 +53,24 @@ public:
 
     virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+
+protected:
+    // For Alpha Composite
+    struct U8Mult {
+        inline Q_UINT8 operator()(const Q_UINT8& a, const Q_UINT8& b) const {
+            return UINT8_MULT(a, b);
+        }
+    };
+    struct Uint8ToU8 {
+        inline Q_UINT8 operator()(const Q_UINT8 src) const {
+            return src;
+        }
+    };
+    struct U8OpacityTest {
+        inline bool operator()(const Q_UINT8& opacity) const {
+            return opacity != OPACITY_TRANSPARENT;
+        }
+    };
 };
 
 

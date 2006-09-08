@@ -293,13 +293,17 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
                 newPos.append(p);
             }
             if(shapes.count() > 0) {
+                if(m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000)
+                    m_moveCommand = 0;
                 if(m_moveCommand) // alter previous instead of creating new one.
                     m_moveCommand->setNewPositions(newPos);
                 else {
+kDebug() << "new command\n";
                     m_moveCommand = new KoShapeMoveCommand(shapes, prevPos, newPos);
                     m_canvas->addCommand(m_moveCommand, false);
                 }
                 m_moveCommand->execute();
+                m_lastUsedMoveCommand = QTime::currentTime();
             }
         }
     }

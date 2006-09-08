@@ -30,6 +30,7 @@
 //#include <kstaticdeleter.h>
 
 #include <QImage>
+#include <QTime>
 
 class KoInteractionStrategy;
 class KoShapeMoveCommand;
@@ -110,6 +111,8 @@ private:
     QPolygonF m_selectionOutline;
     QPointF m_lastPoint;
     KoShapeMoveCommand *m_moveCommand;
+    QTime m_lastUsedMoveCommand;
+
     // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];
     QCursor m_rotateCursors[8];

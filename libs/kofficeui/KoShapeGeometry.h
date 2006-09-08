@@ -28,16 +28,23 @@
 
 class KoShape;
 
+/**
+ * A widget that shows the basic geometry items of a shape.
+ */
 class KoShapeGeometry : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
     KoShapeGeometry();
     ~KoShapeGeometry();
 
+    /// reimplemented from KoShapeConfigWidgetBase
     void open(KoShape *shape);
+    /// reimplemented from KoShapeConfigWidgetBase
     void save();
+    /// reimplemented from KoShapeConfigWidgetBase
     KAction *createAction();
 
+    /// reimplemented from KoShapeConfigWidgetBase
     void setUnit(KoUnit::Unit unit);
 
 private:

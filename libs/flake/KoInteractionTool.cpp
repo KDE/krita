@@ -40,17 +40,6 @@
 
 #define HANDLE_DISTANCE 10
 
-QPointF KoInteractionTool::m_handleDiff[] = {
-    QPointF( 0, -HANDLE_DISTANCE ),
-    QPointF( HANDLE_DISTANCE, -HANDLE_DISTANCE ),
-    QPointF( HANDLE_DISTANCE, 0 ),
-    QPointF( HANDLE_DISTANCE, HANDLE_DISTANCE ),
-    QPointF( 0, HANDLE_DISTANCE ),
-    QPointF( -HANDLE_DISTANCE, HANDLE_DISTANCE ),
-    QPointF( -HANDLE_DISTANCE, 0 ),
-    QPointF( -HANDLE_DISTANCE, -HANDLE_DISTANCE )
-};
-
 KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
 : KoTool( canvas )
 , m_currentStrategy( 0 )
@@ -297,6 +286,18 @@ KoSelection *KoInteractionTool::selection() {
 }
 
 KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool *innerHandleMeaning) {
+    // check for handles in this order; meaning that when handles overlap the one on top is chosen
+    static const KoFlake::SelectionHandle handleOrder[] = {
+        KoFlake::BottomRightHandle,
+        KoFlake::TopLeftHandle,
+        KoFlake::BottomLeftHandle,
+        KoFlake::TopRightHandle,
+        KoFlake::BottomMiddleHandle,
+        KoFlake::RightMiddleHandle,
+        KoFlake::LeftMiddleHandle,
+        KoFlake::TopMiddleHandle,
+        KoFlake::NoHandle
+    };
     recalcSelectionBox();
     KoViewConverter *converter = m_canvas->viewConverter();
 
@@ -307,7 +308,8 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
         *innerHandleMeaning =  path.contains(point);
     }
     for ( int i = 0; i < KoFlake::NoHandle; ++i ) {
-        QPointF pt = converter->documentToView(point) - converter->documentToView(m_selectionBox[i]);
+        KoFlake::SelectionHandle handle = handleOrder[i];
+        QPointF pt = converter->documentToView(point) - converter->documentToView(m_selectionBox[handle]);
 
         // if just inside the outline
         if(qAbs(pt.x()) < HANDLE_DISTANCE &&
@@ -317,7 +319,7 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
                 if(qAbs(pt.x()) < 4 && qAbs(pt.y()) < 4)
                     *innerHandleMeaning = true;
             }
-            return static_cast<KoFlake::SelectionHandle> (i);
+            return handle;
         }
     }
     return KoFlake::NoHandle;

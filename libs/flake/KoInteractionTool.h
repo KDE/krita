@@ -105,7 +105,6 @@ private:
     KoSelection * selection();
     KoFlake::SelectionHandle m_lastHandle;
     bool m_mouseWasInsideHandles;
-    static QPointF m_handleDiff[8];
     QPointF m_selectionBox[8];
     QPolygonF m_selectionOutline;
     QPointF m_lastPoint;

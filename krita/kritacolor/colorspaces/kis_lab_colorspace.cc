@@ -481,6 +481,12 @@ void KisLabColorSpace::bitBlt(Q_UINT8 *dst,
     case COMPOSITE_BURN:
         //compositeBurn(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
         break;
+    case COMPOSITE_ALPHA_DARKEN:
+        abstractCompositeAlphaDarken<Q_UINT16, U16Mult, Uint8ToU16, U16OpacityTest,
+                    CHANNEL_ALPHA, NUM_COLOR_CHANNELS, NUM_CHANNELS>(
+                    dst, dstRowStride, src, srcRowStride, mask, maskRowStride,
+                    rows, cols, opacity, U16Mult(), Uint8ToU16(), U16OpacityTest());
+        break;
     default:
         break;
     }
@@ -491,6 +497,7 @@ KisCompositeOpList KisLabColorSpace::userVisiblecompositeOps() const
     KisCompositeOpList list;
 
     list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KisCompositeOp(COMPOSITE_ALPHA_DARKEN));
 
     return list;
 }

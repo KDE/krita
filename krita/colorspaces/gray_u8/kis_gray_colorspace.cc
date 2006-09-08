@@ -302,7 +302,7 @@ void KisGrayColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_GRAY_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(srcAlpha, opacity);
                 }
 
                 if (srcAlpha == OPACITY_OPAQUE) {

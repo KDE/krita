@@ -1,9 +1,11 @@
 Krita documentation outline
 
+Last edited 2006-09-08 (Sander Koning)
 
-Last edited 2006-08-04 (Sander Koning)
 
 Changelog (of major updates)
+
+2006-09-08: ASK: add section separators, update for 1.6
 2006-05-28: ASK: split into 1.5 and 1.6 parts
 2006-01-31: ASK: elaborate on parts to be written; consistent spelling
 2006-01-26: ASK: split the "Using Krita" chapter
@@ -12,6 +14,7 @@ Changelog (of major updates)
 2005-08-31: ASK: adhere to KDE style
 2005-08-30: ASK: initial version
 
+----------------------------------------------------------------------
 
 This document tries to give a suitable outline for Krita's documentation. It
 is based on the Krita manual in SVN (koffice/krita/doc/manual/krita.kwd) as of
@@ -20,32 +23,87 @@ thoughts about what the documentation for a graphics application such as this
 should look like.  Comments, suggestions, ideas etc. are more than welcome.
 Especially the real content still needs a lot of polishing.
 
+----------------------------------------------------------------------
 
-An outline of the manual content as in krita.kwd, included here for reference:
+The current outline (working towards 1.6):
 
 - Introduction
-  - About the manual
-  - About the author
-- Showing Off
-  - Intro tutorial
-- On the face of it
-  - Layout
-  - Menus
-- Files
-- Serious about color
-  - Colour theory
-- Selections
-  - Creating selections (select, unselect, wand)
-- Messing with images
-- Painting
+  - What is Krita
+  - Key features
+    - Color management
+    - File formats
+  - About this manual
+  - About the application author
+
+- Tutorial
+  - Starting to know Krita (up to a new document)
+  - A small selections and layers tutorial
+  - Quick start guides
+    - Crop an area and save it as a new image
+    - Draw a rectangle on your picture
+  - Using tablets
+  - [TODO] Fills (colors, patterns and gradients)
+  - [TODO] Using tool options (the "Tool" palette)
+  - [TODO] Editing image properties (resize, rotate, ...)
+
+- [TODO] Painting
+  - [TODO] Introduction to Krita's painting model
+  - [TODO] Detailed description of tools and options, colors, ...
+  - [TODO] Brushes, adding/customising, ...
+  - [TODO] ...
+
+- [TODO] Viewing
+  - [TODO] Fullscreen, multiple and split views, zooming ...
+  - [TODO] Rulers, guides, grid, ...
+  - [TODO] ...
+
 - Layers
+  - General information
+  - Layer box
+  - Working with layers ([TODO] expand)
+  - Adjustment layers ([TODO] expand)
+  - [TODO] Layer masks
+  - Compositing modes ([TODO] expand)
+  - [TODO] Create, transform, combine, histograms, ...
+
+- Selections
+  - Making a selection
+  - Painting your selection
+  - Unselecting
+  - Making a new selection
+  - Selecting a contiguous area (magic wand)
+  - Selecting similar colors
+  - Inverting the selection
+  - [TODO] elaborate and extend hugely
+
 - Filters
-- Hacking Krita
-- Configuring Krita
-- Help!
-  - Help contact info
+  - (all filters)
 
+- Colorspaces
+  - Introduction to colorspaces
+  - Available colorspaces
+  - [TODO] properties, usage, converting, ...
 
+- Commands
+  - General layout
+  - Menus
+  - Toolbars
+  - Palettes
+  - Dialogs
+
+- Settings
+
+- Developers' information
+  - Scripting
+  - Plugins
+
+- FAQ
+
+- Credits
+
+- Installation
+
+----------------------------------------------------------------------
 
 Outline for the 1.5 manual (final as of 2006-05-31):
 
@@ -100,81 +158,30 @@ Outline for the 1.5 manual (final as of 2006-05-31):
 
 - Installation
 
+----------------------------------------------------------------------
 
-The current outline (going to 1.6):
+An outline of the manual content as in krita.kwd:
 
 - Introduction
-  - What is Krita
-  - Key features
-    - Color management
-    - File formats
-  - About this manual
-  - About the application author
-
-- Tutorial
-  - Starting to know Krita (up to a new document)
-  - A small selections and layers tutorial
-  - Quick start guides
-    - Crop an area and save it as a new image
-    - Draw a rectangle on you picture
-  - [TODO] Fills (colors, patterns and gradients)
-  - [TODO] Using tool options (the "Tool" palette)
-  - [TODO] Editing image properties (resize, rotate, ...)
-
-- [TODO] Painting
-  - [TODO] Introduction to Krita's painting model
-  - [TODO] Detailed description of tools and options, colors, ...
-  - [TODO] Brushes, adding/customising, ...
-  - [TODO] ...
-
-- [TODO] Viewing
-  - [TODO] Fullscreen, multiple and split views, zooming ...
-  - [TODO] Rulers, guides, grid, ...
-  - [TODO] ...
-
-- Layers
-  - General information
-  - Layer box
-  - Working with layers ([TODO] expand)
-  - Adjustment layers ([TODO] expand)
-  - [TODO] Layer masks
-  - Compositing modes ([TODO] expand)
-  - [TODO] Create, transform, combine, histograms, ...
-
-- Selections
-  - Making a selection
-  - Painting your selection
-  - Unselecting
-  - Making a new selection
-  - Selecting a contiguous area (magic wand)
-  - Selecting similar colors
-  - Inverting the selection
-  - [TODO] elaborate and extend hugely
-
-- Filters
-  - (all filters, [TODO] make sure all filters are discussed)
-
-- Colorspaces
-  - Introduction to colorspaces
-  - Available colorspaces
-  - [TODO] properties, usage, converting, ...
-
-- Commands ([TODO] check and make up-to-date)
-  - General layout
+  - About the manual
+  - About the author
+- Showing Off
+  - Intro tutorial
+- On the face of it
+  - Layout
   - Menus
-  - Toolbars
-  - Palettes
-  - Dialogs
+- Files
+- Serious about color
+  - Colour theory
+- Selections
+  - Creating selections (select, unselect, wand)
+- Messing with images
+- Painting
+- Layers
+- Filters
+- Hacking Krita
+- Configuring Krita
+- Help!
+  - Help contact info
 
-- Settings ([TODO] check)
 
-- Scripting
-
-- [TODO] Developers' information
-  - [TODO] plugins (see BSAR's text in 1.6/koffice/krita/doc)
-
-- FAQ
-
-- Credits
-
-- Installation

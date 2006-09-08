@@ -50,7 +50,7 @@ void KoTextTool::paint( QPainter &painter, KoViewConverter &converter) {
     double zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
-    const QTextDocument *document = m_caret.block().document();
+    //const QTextDocument *document = m_caret.block().document();
 
 /*
     QAbstractTextDocumentLayout::PaintContext pc;
@@ -118,18 +118,35 @@ kDebug() << "    appending" << endl;
     block.layout()->drawCursor(&painter, QPointF(0,0), m_caret.position() - block.position());
 }
 
-void KoTextTool::mousePressEvent( KoPointerEvent *event )  {
-    int position = pointToPosition(event->point);
-    if(position >= 0) {
-        repaint();
-        m_caret.setPosition(position);
-        repaint();
+void KoTextTool::mousePressEvent( KoPointerEvent *event ) {
+    if(! m_textShape->boundingRect().contains(event->point)) {
+        QRectF area(event->point, QSizeF(1,1));
+        foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(area, true)) {
+            KoTextShape *textShape = dynamic_cast<KoTextShape*> (shape);
+            if(textShape) {
+                m_textShape = textShape;
+                KoTextShapeData *d = static_cast<KoTextShapeData*> (textShape->userData());
+                if(d->document() == m_textShapeData->document())
+                    break; // stop looking.
+            }
+        }
+        m_textShapeData = static_cast<KoTextShapeData*> (m_textShape->userData());
+        // in case its a different doc...
+        m_caret = QTextCursor(m_textShapeData->document());
     }
+
+    int position = pointToPosition(event->point);
+    repaint();
+    m_caret.setPosition(position);
+    repaint();
 }
 
 int KoTextTool::pointToPosition(const QPointF & point) const {
     QPointF p = m_textShape->convertScreenPos(point);
-    return m_caret.block().document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
+    int caretPos = m_caret.block().document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
+    caretPos = qMax(caretPos, m_textShapeData->position());
+    caretPos = qMin(caretPos, m_textShapeData->endPosition());
+    return caretPos;
 }
 
 void KoTextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {

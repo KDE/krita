@@ -376,8 +376,8 @@ void KisToolTransform::move(KisMoveEvent *e)
 
             if(m_function == MOVE)
             {
-                m_translateX += newX;
-                m_translateY += newY;
+                m_translateX += mousePos.x() - m_translateX;
+                m_translateY += mousePos.y() - m_translateY;
             }
 
             if(m_function == ROTATE)

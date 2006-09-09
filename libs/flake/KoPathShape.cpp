@@ -33,6 +33,21 @@ KoPathPoint::KoPathPoint( const KoPathPoint & pathPoint )
     m_properties = pathPoint.m_properties;
 }
 
+KoPathPoint& KoPathPoint::operator=( const KoPathPoint &rhs )
+{
+    if( this == &rhs )
+        return (*this);
+
+    m_shape = rhs.m_shape;
+    m_point = rhs.m_point;
+    m_controlPoint1 = rhs.m_controlPoint1;
+    m_controlPoint2 = rhs.m_controlPoint2;
+    m_properties = rhs.m_properties;
+    //m_pointGroup = rhs.m_pointGroup;
+
+    return (*this);
+}
+
 void KoPathPoint::setPoint( const QPointF & point ) 
 {
     m_point = point;
@@ -111,6 +126,11 @@ void KoPathPoint::paint(QPainter &painter, const QSizeF &size, bool selected)
     }
     else
         painter.drawEllipse( handle.translated( point() ) );
+}
+
+void KoPathPoint::setParent( KoPathShape* parent )
+{
+    m_shape = parent;
 }
 
 void KoPathPoint::removeFromGroup()
@@ -472,6 +492,8 @@ QPair<KoSubpath*, int> KoPathShape::removePoint( KoPathPoint *point )
         if( index != -1 )
         {
             ( *pathIt )->removeAt( index );
+            point->setParent( 0 );
+
             // the first point of the sub path has been removed
             if ( index == 0 )
             {
@@ -499,24 +521,7 @@ void KoPathShape::insertPoint( KoPathPoint* point, KoSubpath* subpath, int posit
         subpath->last()->setProperties( subpath->last()->properties() | KoPathPoint::CanHaveControlPoint2 );
     }
     subpath->insert( position, point );
-}
-
-#if 0
-KoPathPoint* KoPathShape::prevPoint( KoPathPoint* point )
-{
-    KoSubpathList::iterator pathIt( m_subpaths.begin() );
-    for ( ; pathIt != m_subpaths.end(); ++pathIt )
-    {
-        int index = ( *pathIt )->indexOf( point );
-        if( index != -1 )
-        {
-            if( index == 0 )
-                return 0;
-            else
-                return ( *pathIt )->value( index-1 );
-        }
-    }
-    return 0;
+    point->setParent( this );
 }
 
 KoPathPoint* KoPathShape::nextPoint( KoPathPoint* point )
@@ -531,6 +536,25 @@ KoPathPoint* KoPathShape::nextPoint( KoPathPoint* point )
                 return 0;
             else
                 return ( *pathIt )->value( index+1 );
+        }
+    }
+    return 0;
+}
+
+#if 0
+
+KoPathPoint* KoPathShape::prevPoint( KoPathPoint* point )
+{
+    KoSubpathList::iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
+    {
+        int index = ( *pathIt )->indexOf( point );
+        if( index != -1 )
+        {
+            if( index == 0 )
+                return 0;
+            else
+                return ( *pathIt )->value( index-1 );
         }
     }
     return 0;
@@ -574,3 +598,71 @@ bool KoPathShape::insertPointBefore( KoPathPoint *point, KoPathPoint *nextPoint 
     return false;
 }
 #endif
+
+KoPathPoint* KoPathShape::splitAt( const KoPathSegment &segment, double t )
+{
+    if( t < 0.0 || t > 1.0 )
+        return 0;
+
+    KoSubpath *subPath = 0;
+    int index = 0;
+    // first check if the segment is part of the path
+    KoSubpathList::iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
+    {
+        index = ( *pathIt )->indexOf( segment.first );
+
+        if( index != -1 )
+        {
+            subPath = *pathIt;
+            if( index == ( *pathIt )->size()-1 )
+                return 0;
+            if( ( *pathIt )->at( index + 1 ) != segment.second )
+                return 0;
+            break;
+        }
+    }
+    // both segment points were not found
+    if( ! subPath )
+        return 0;
+
+    KoPathPoint *splitPoint = 0;
+
+    // check if we have a curve
+    if( segment.first->properties() & KoPathPoint::HasControlPoint2 && segment.second->properties() & KoPathPoint::HasControlPoint1 )
+    {
+        QPointF q[4] ={ segment.first->point(), segment.first->controlPoint2(), segment.second->controlPoint1(), segment.second->point() };
+        QPointF p[3];
+        // the De Casteljau algorithm.
+        for( unsigned short j = 1; j <= 3; ++j )
+        {
+            for( unsigned short i = 0; i <= 3 - j; ++i )
+            {
+                q[ i ] = ( 1.0 - t ) * q[ i ] + t * q[ i + 1 ];
+            }
+            // modify the new segment.
+            p[j - 1] = q[ 0 ];
+        }
+        KoPathPoint::KoPointProperties props = KoPathPoint::CanAndHasControlPoint1|KoPathPoint::CanAndHasControlPoint2;
+        splitPoint = new KoPathPoint( this, QPointF(0,0), props );
+        // modify the second control point of the segment start point
+        segment.first->setControlPoint2( p[0] );
+
+        splitPoint->setControlPoint1( p[1] );
+        splitPoint->setPoint( p[2] );
+        splitPoint->setControlPoint2( q[1] );
+
+        // modify the first control point of the segment end point
+        segment.second->setControlPoint1( q[2] );
+    }
+    else if( segment.first->properties() == KoPathPoint::Normal )
+    {
+        QPointF splitPointPos = segment.first->point() + t * (segment.second->point() - segment.first->point());
+        // easy, just a line
+        splitPoint = new KoPathPoint( this, splitPointPos );
+    }
+
+    subPath->insert( index+1, splitPoint );
+
+    return splitPoint;
+}

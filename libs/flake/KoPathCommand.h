@@ -129,4 +129,47 @@ private:
     QList<KoPointRemoveData> m_data;
 };
 
+/// The undo / redo command for splitting a path segment
+class KoSegmentSplitCommand : public KoPointBaseCommand
+{
+public:
+    /**
+     * Command to split a single path segment at the given position
+     * @param shape the path shape containing the points
+     * @param segment the segment to split
+     * @param splitPosition the position to split at [0..1]
+     */
+    KoSegmentSplitCommand( KoPathShape *shape, const KoPathSegment &segment, double splitPosition );
+    /**
+     * Command to split multiple path segments at different positions
+     * @param shape the path shape containing the points
+     * @param segments the segments to split
+     * @param splitPositions the positions to split at [0..1]
+     */
+    KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, const QList<double> &splitPositions );
+    /**
+     * Command to split multiple path segments at the same position
+     * @param shape the path shape containing the points
+     * @param segments the segments to split
+     * @param splitPosition the position to split at [0..1]
+     */
+    KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, double splitPosition );
+    virtual ~KoSegmentSplitCommand();
+    /// execute the command
+    void execute();
+    /// revert the actions done in execute
+    void unexecute();
+    /// return the name of this command
+    QString name() const;
+private:
+    QList<KoPathSegment> m_segments;
+    typedef QPair<KoPathPoint,KoPathPoint> KoSegmentData;
+    QList<KoSegmentData> m_oldNeighbors;
+    QList<KoSegmentData> m_newNeighbors;
+    QList<double> m_splitPos;
+    QList<KoPathPoint*> m_splitPoints;
+    bool m_deletePoint;
+    QList< QPair<KoSubpath*,int> > m_splitPointPos;
+};
+
 #endif

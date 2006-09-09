@@ -285,6 +285,23 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 m_canvas->addCommand( cmd, true );
             }
         break;
+        case Qt::Key_Insert:
+            if( m_selectedPoints.size() )
+            {
+                QList<KoPathSegment> segments;
+                foreach( KoPathPoint* p, m_selectedPoints )
+                {
+                    KoPathPoint *n = m_pathShape->nextPoint( p );
+                    if( m_selectedPoints.contains( n ) )
+                        segments << qMakePair( p, n );
+                }
+                if( segments.size() )
+                {
+                    KoSegmentSplitCommand *cmd = new KoSegmentSplitCommand( m_pathShape, segments, 0.5 );
+                    m_canvas->addCommand( cmd, true );
+                }
+            }
+        break;
     }
     event->accept();
 }

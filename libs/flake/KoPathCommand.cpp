@@ -254,3 +254,114 @@ QString KoPointRemoveCommand::name() const
 {
     return i18n( "Remove point" );
 }
+
+KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const KoPathSegment &segment, double splitPosition )
+: KoPointBaseCommand( shape )
+, m_deletePoint( false )
+{
+    if( segment.first && segment.second )
+    {
+        m_segments << segment;
+        m_oldNeighbors << qMakePair( *segment.first, *segment.second );
+        m_newNeighbors << qMakePair( *segment.first, *segment.second );
+        m_splitPoints << 0;
+        m_splitPointPos << qMakePair( (KoSubpath*)0, 0 );
+        m_splitPos << splitPosition;
+    }
+}
+
+KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, const QList<double> &splitPositions )
+: KoPointBaseCommand( shape )
+, m_deletePoint( false )
+{
+    Q_ASSERT(segments.size() == splitPositions.size());
+    // check all the segments
+    for( int i = 0; i < segments.size(); ++i )
+    {
+        const KoPathSegment &segment = segments[i];
+        if( segment.first && segment.second )
+        {
+            m_segments << segment;
+            m_oldNeighbors << qMakePair( *segment.first, *segment.second );
+            m_newNeighbors << qMakePair( *segment.first, *segment.second );
+            m_splitPoints << 0;
+            m_splitPointPos << qMakePair( (KoSubpath*)0, 0 );
+            m_splitPos << splitPositions[i];
+        }
+    }
+}
+
+KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, double splitPosition )
+: KoPointBaseCommand( shape )
+, m_deletePoint( false )
+{
+    // check all the segments
+    for( int i = 0; i < segments.size(); ++i )
+    {
+        const KoPathSegment &segment = segments[i];
+        if( segment.first && segment.second )
+        {
+            m_segments << segment;
+            m_oldNeighbors << qMakePair( *segment.first, *segment.second );
+            m_newNeighbors << qMakePair( *segment.first, *segment.second );
+            m_splitPoints << 0;
+            m_splitPointPos << qMakePair( (KoSubpath*)0, 0 );
+            m_splitPos << splitPosition;
+        }
+    }
+}
+
+KoSegmentSplitCommand::~KoSegmentSplitCommand()
+{
+    if( m_deletePoint )
+    {
+        foreach( KoPathPoint* p, m_splitPoints )
+            delete p;
+    }
+}
+
+void KoSegmentSplitCommand::execute()
+{
+    QRectF oldControlRect = m_shape->outline().controlPointRect();
+
+    m_deletePoint = false;
+
+    for( int i = 0; i < m_segments.size(); ++i )
+    {
+        KoPathSegment &segment = m_segments[i];
+        KoPathPoint *splitPoint = m_splitPoints[i];
+        if( ! splitPoint )
+        {
+            m_splitPoints[i] = m_shape->splitAt( segment, m_splitPos[i] );
+            m_newNeighbors[i] = qMakePair( *segment.first, *segment.second );
+        }
+        else
+        {
+            m_shape->insertPoint( splitPoint, m_splitPointPos[i].first, m_splitPointPos[i].second );
+            *segment.first = m_newNeighbors[i].first;
+            *segment.second = m_newNeighbors[i].second;
+        }
+    }
+    repaint( oldControlRect );
+}
+
+void KoSegmentSplitCommand::unexecute()
+{
+    QRectF oldControlRect = m_shape->outline().controlPointRect();
+
+    m_deletePoint = true;
+
+    for( int i = m_segments.size()-1; i >= 0; --i )
+    {
+        KoPathSegment &segment = m_segments[i];
+        m_splitPointPos[i] = m_shape->removePoint( m_splitPoints[i] );
+        *segment.first = m_oldNeighbors[i].first;
+        *segment.second = m_oldNeighbors[i].second;
+    }
+    repaint( oldControlRect );
+}
+
+QString KoSegmentSplitCommand::name() const
+{
+    return i18n( "Split segment" );
+}

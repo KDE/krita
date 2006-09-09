@@ -89,6 +89,11 @@ public:
     KoPathPoint( const KoPathPoint & pathPoint );
 
     /**
+     * @brief Assignment operator.
+     */
+    KoPathPoint& operator=( const KoPathPoint &rhs );
+
+    /**
      * @brief Destructor
      */
     ~KoPathPoint() {}
@@ -170,6 +175,12 @@ public:
      */
     void paint(QPainter &painter, const QSizeF &size, bool selected );
 
+    /**
+     * @brief Sets the parent path shape.
+     * @param shape the new parent path shape
+     */
+    void setParent( KoPathShape* parent );
+
 protected:
     friend class KoPointGroup;
     friend class KoPathShape;
@@ -230,6 +241,8 @@ private:
 /// a KoSubpath contains a path from a moveTo until a close or a new moveTo
 typedef QList<KoPathPoint *> KoSubpath;
 typedef QList<KoSubpath *> KoSubpathList;
+/// A KoPathSegment is a pair two neighboring KoPathPoints 
+typedef QPair<KoPathPoint*,KoPathPoint*> KoPathSegment;
 
 /**
  * @brief This is the base for all graphical objects.
@@ -349,6 +362,14 @@ public:
      */
     QPair<KoSubpath*, int> removePoint( KoPathPoint *point );
 
+    /**
+     * @brief Splits the path segment starting with the given point at the specified position.
+     * @param segment the path segment to split
+     * @param t the segment position in interval [0..1]
+     * @return the inserted path point or 0 if splitting failed
+     */
+    KoPathPoint* splitAt( const KoPathSegment &segment, double t );
+
 #if 0 // not used yet
     /**
      * @brief Inserts a new point after an existing path point.
@@ -375,6 +396,7 @@ public:
      * @return the previous point, or null if no previous point exists
      */
     KoPathPoint* prevPoint( KoPathPoint* point );
+#endif
 
     /**
      * @brief Returns the next point of a given path point.
@@ -385,7 +407,6 @@ public:
      * @return the next point, or null if no next point exists
      */
     KoPathPoint* nextPoint( KoPathPoint* point );
-#endif
 private:
     void map( const QMatrix &matrix );
 

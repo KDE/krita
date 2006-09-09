@@ -145,6 +145,8 @@ int KoTextTool::pointToPosition(const QPointF & point) const {
     QPointF p = m_textShape->convertScreenPos(point);
     int caretPos = m_caret.block().document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
     caretPos = qMax(caretPos, m_textShapeData->position());
+    if(m_textShapeData->endPosition() == -1)
+        kWarning() << "Clicking in not fully layed-out textframe\n";
     caretPos = qMin(caretPos, m_textShapeData->endPosition());
     return caretPos;
 }

@@ -44,6 +44,7 @@ public:
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_FREEHAND; }
+    virtual Q_UINT32 priority() { return 1; }
     virtual QWidget* createOptionWidget(QWidget* parent);
 
 public slots:

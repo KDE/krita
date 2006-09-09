@@ -44,7 +44,8 @@ public:
     virtual ~KisToolFill();
 
     virtual void setup(KActionCollection *collection);
-        virtual enumToolType toolType() { return TOOL_FILL; }
+    virtual enumToolType toolType() { return TOOL_FILL; }
+    virtual Q_UINT32 priority() { return 0; }
 
     virtual void update(KisCanvasSubject *subject);
 

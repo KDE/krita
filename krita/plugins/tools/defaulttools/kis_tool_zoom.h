@@ -44,7 +44,7 @@ public:
 public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_VIEW; }
-    virtual Q_UINT32 priority() { return 3; }
+    virtual Q_UINT32 priority() { return 2; }
 
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual void move(KisMoveEvent *e);

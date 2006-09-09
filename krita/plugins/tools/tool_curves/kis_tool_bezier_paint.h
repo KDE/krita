@@ -36,7 +36,8 @@ public:
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
-
+    virtual Q_UINT32 priority() { return 7; }
+    
 protected:
 
     virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);

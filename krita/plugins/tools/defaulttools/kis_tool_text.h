@@ -42,6 +42,7 @@ public:
     virtual void update(KisCanvasSubject *subject);
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_FILL; }
+    virtual Q_UINT32 priority() { return 2; }
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
     virtual QWidget* createOptionWidget(QWidget* parent);

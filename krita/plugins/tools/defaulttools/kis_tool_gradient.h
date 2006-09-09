@@ -54,7 +54,8 @@ public:
     virtual ~KisToolGradient();
 
     virtual void setup(KActionCollection *collection);
-        virtual enumToolType toolType() { return TOOL_FILL; }
+    virtual enumToolType toolType() { return TOOL_FILL; }
+    virtual Q_UINT32 priority() { return 1; }
 
     virtual void update(KisCanvasSubject *subject);
 

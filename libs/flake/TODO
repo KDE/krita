@@ -1,4 +1,12 @@
-* add a ShearingStrategy (boemann)
-* Add 'ensureVisible(KoShape)' to KoCanvasController (see QScrollArea for what it should do)
+For anyone that wants to hack on flake here is a list of things that need to be done;
 
+* Add 'ensureVisible(KoShape)' to KoCanvasController (see QScrollArea for what it should do)
+* Allow the setting of a QPainterPath to the CreateShape which is then displayed (and
+  scaled etc) instead of the rubberband.  The rubberband is still used if no painterPath is set.
+* CreateTool (probably in the strategy) should create actions and add them to the canvasBase
+  on creation of a shape.
+* Fix scale strategy so it will not create zero sized objects.  Negative size is allowed, though.
+
+
+Other:
 Use xcursorgen to create real xcursors ? (boemann)

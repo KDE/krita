@@ -1,5 +1,4 @@
-
-macro_optional_find_package(KROSS)
+OPTION(KOFFICE_ENABLE_SCRIPTING   "build scripting library (Kross)" ON)
 
 add_subdirectory( store )
 add_subdirectory( kwmf )

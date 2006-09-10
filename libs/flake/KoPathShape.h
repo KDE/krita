@@ -53,8 +53,6 @@ public:
         CanHaveControlPoint2 = 2, ///< it can have a control point 2
         HasControlPoint1 = 4, ///< it has a control point 1
         HasControlPoint2 = 8, ///< it has a control point 2
-        CanAndHasControlPoint1 = 5, ///< CanHaveControlPoint1 | HasControlPoint1
-        CanAndHasControlPoint2 = 10, ///< CanHaveControlPoint2 | HasControlPoint2
         StartSubpath = 16, ///< it starts a new subpath by a moveTo command
         CloseSubpath = 32, ///< it closes a subpath
         IsSmooth = 64, ///< it is smooth, both control points on a line through the point
@@ -160,6 +158,22 @@ public:
      * @return the properties of the point
      */
     void setProperties( KoPointProperties properties );
+
+    /**
+     * @brief check if there is a controlPoint1
+     *
+     * @return true when CanHaveControlPoint1 and HasControlPoint1 is set
+     * @return false otherwise
+     */
+    bool activeControlPoint1();
+
+    /**
+     * @brief check if there is a controlPoint2
+     *
+     * @return true when CanHaveControlPoint2 and HasControlPoint2 is set
+     * @return false otherwise
+     */
+    bool activeControlPoint2();
 
     /**
      * @brief apply matrix on the point

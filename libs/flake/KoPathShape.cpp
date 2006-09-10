@@ -80,6 +80,16 @@ void KoPathPoint::setProperties( KoPointProperties properties )
     m_shape->update(); 
 }
 
+bool KoPathPoint::activeControlPoint1()
+{
+    return ( properties() & HasControlPoint1 && properties() & CanHaveControlPoint1 );
+}
+
+bool KoPathPoint::activeControlPoint2()
+{
+    return ( properties() & HasControlPoint2 && properties() & CanHaveControlPoint2 );
+}
+
 void KoPathPoint::map( const QMatrix &matrix, bool mapGroup )
 { 
     if ( m_pointGroup && mapGroup )
@@ -101,12 +111,12 @@ void KoPathPoint::paint(QPainter &painter, const QSizeF &size, bool selected)
 
     if( selected )
     {
-        if( properties() & CanAndHasControlPoint1 )
+        if( activeControlPoint1() )
         {
             painter.drawLine( point(), controlPoint1() );
             painter.drawEllipse( handle.translated( controlPoint1() ) );
         }
-        if( properties() & CanAndHasControlPoint2 )
+        if( activeControlPoint2() )
         {
             painter.drawLine( point(), controlPoint2() );
             painter.drawEllipse( handle.translated( controlPoint2() ) );
@@ -294,14 +304,14 @@ const QPainterPath KoPathShape::KoPathShape::outline() const
                 //qDebug() << "moveTo" << ( *it )->point();
                 path.moveTo( ( *it )->point() );
             }
-            else if ( activeCP || ( *it )->properties() & KoPathPoint::CanAndHasControlPoint1 )
+            else if ( activeCP || ( *it )->activeControlPoint1() )
             {
                 //qDebug() << "activeCP " << activeCP 
                 //    << "lastPoint->controlPoint2()" << lastPoint->controlPoint2()
                 //    << "lastPoint->point()" << lastPoint->point() << ( *it )->controlPoint1();
 
                 path.cubicTo( activeCP ? lastPoint->controlPoint2() : lastPoint->point()
-                            , ( *it )->properties() & KoPathPoint::CanAndHasControlPoint1 ? ( *it )->controlPoint1() : ( *it )->point()
+                            , ( *it )->activeControlPoint1() ? ( *it )->controlPoint1() : ( *it )->point()
                             , ( *it )->point() );
             }
             else
@@ -315,7 +325,7 @@ const QPainterPath KoPathShape::KoPathShape::outline() const
                 path.closeSubpath();
             }
 
-            if ( ( *it )->properties() & KoPathPoint::CanAndHasControlPoint2 )
+            if ( ( *it )->activeControlPoint2() )
             {
                 activeCP = true;
             }
@@ -474,9 +484,9 @@ QList<KoPathPoint*> KoPathShape::pointsAt( const QRectF &r )
         {
             if( r.contains( (*it)->point() ) )
                 result.append( *it );
-            else if( (*it)->properties() & KoPathPoint::CanAndHasControlPoint1 && r.contains( (*it)->controlPoint1() ) )
+            else if( (*it)->activeControlPoint1() && r.contains( (*it)->controlPoint1() ) )
                 result.append( *it );
-            else if( (*it)->properties() & KoPathPoint::CanAndHasControlPoint2 && r.contains( (*it)->controlPoint2() ) )
+            else if( (*it)->activeControlPoint2() && r.contains( (*it)->controlPoint2() ) )
                 result.append( *it );
         }
     }
@@ -643,7 +653,7 @@ KoPathPoint* KoPathShape::splitAt( const KoPathSegment &segment, double t )
             // modify the new segment.
             p[j - 1] = q[ 0 ];
         }
-        KoPathPoint::KoPointProperties props = KoPathPoint::CanAndHasControlPoint1|KoPathPoint::CanAndHasControlPoint2;
+        KoPathPoint::KoPointProperties props = KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2;
         splitPoint = new KoPathPoint( this, QPointF(0,0), props );
         // modify the second control point of the segment start point
         segment.first->setControlPoint2( p[0] );

@@ -85,7 +85,7 @@ void KisGroupLayer::resetProjection(KisPaintDevice* to)
 
 bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayer* l) {
     return l && l->paintDevice()->colorSpace() == m_image->colorSpace() && l->visible()
-             && l->opacity() == OPACITY_OPAQUE && !l->temporaryTarget();
+             && l->opacity() == OPACITY_OPAQUE && !l->temporaryTarget() && !l->hasMask();
 }
 
 KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)

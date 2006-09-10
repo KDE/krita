@@ -179,7 +179,9 @@ void KisToolFreehand::initPaint(KisEvent *)
                 if (l->parent() && (l->parent()->parent() == 0)
                     && (l->parent()->childCount() == 1)
                     && l->parent()->paintLayerInducesProjectionOptimization(pl)) {
-                    l->parent()->resetProjection(device);
+                    // If there's a mask, device could've been the mask. The induce function
+                    // should catch this, but better safe than sorry
+                    l->parent()->resetProjection(pl->paintDevice());
                 }
 
                 m_target = new KisPaintDevice(m_currentImage->activeLayer(),

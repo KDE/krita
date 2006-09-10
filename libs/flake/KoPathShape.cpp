@@ -639,9 +639,14 @@ KoPathPoint* KoPathShape::splitAt( const KoPathSegment &segment, double t )
     KoPathPoint *splitPoint = 0;
 
     // check if we have a curve
-    if( segment.first->properties() & KoPathPoint::HasControlPoint2 && segment.second->properties() & KoPathPoint::HasControlPoint1 )
+    if( segment.first->properties() & KoPathPoint::HasControlPoint2 || segment.second->properties() & KoPathPoint::HasControlPoint1 )
     {
-        QPointF q[4] ={ segment.first->point(), segment.first->controlPoint2(), segment.second->controlPoint1(), segment.second->point() };
+        QPointF q[4] ={ 
+           segment.first->point(), 
+           segment.first->activeControlPoint2() ? segment.first->controlPoint2() : segment.first->point(), 
+           segment.second->activeControlPoint1() ? segment.second->controlPoint1() : segment.second->point(), 
+           segment.second->point()
+        };
         QPointF p[3];
         // the De Casteljau algorithm.
         for( unsigned short j = 1; j <= 3; ++j )
@@ -653,23 +658,21 @@ KoPathPoint* KoPathShape::splitAt( const KoPathSegment &segment, double t )
             // modify the new segment.
             p[j - 1] = q[ 0 ];
         }
-        KoPathPoint::KoPointProperties props = KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2;
-        splitPoint = new KoPathPoint( this, QPointF(0,0), props );
+        splitPoint = new KoPathPoint( this, p[2], KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2 );
         // modify the second control point of the segment start point
         segment.first->setControlPoint2( p[0] );
 
         splitPoint->setControlPoint1( p[1] );
-        splitPoint->setPoint( p[2] );
         splitPoint->setControlPoint2( q[1] );
 
         // modify the first control point of the segment end point
         segment.second->setControlPoint1( q[2] );
     }
-    else if( segment.first->properties() == KoPathPoint::Normal )
+    else
     {
         QPointF splitPointPos = segment.first->point() + t * (segment.second->point() - segment.first->point());
         // easy, just a line
-        splitPoint = new KoPathPoint( this, splitPointPos );
+        splitPoint = new KoPathPoint( this, splitPointPos, KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2 );
     }
 
     subPath->insert( index+1, splitPoint );

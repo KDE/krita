@@ -42,10 +42,11 @@ void KisTiledRandomAccessor::moveTo(Q_INT32 x, Q_INT32 y)
     // Look in the cache if the tile if the data is available
     for( int i = 0; i < m_tilesCacheSize; i++)
     {
-        if( m_tilesCache[i]->area.contains(QPoint(x,y)))
+        if( x >= m_tilesCache[i]->area_x1 && x <= m_tilesCache[i]->area_x2 &&
+            y >= m_tilesCache[i]->area_y1 && y <= m_tilesCache[i]->area_y2 )
         {
             KisTileInfo* kti = m_tilesCache[i];
-            Q_UINT32 offset = x - kti->area.x() + (y -kti->area.y()) * KisTile::WIDTH;
+            Q_UINT32 offset = x - kti->area_x1 + (y -kti->area_y1) * KisTile::WIDTH;
             offset *= m_pixelSize;
             m_data = kti->data + offset;
             m_oldData = kti->oldData + offset;
@@ -69,7 +70,7 @@ void KisTiledRandomAccessor::moveTo(Q_INT32 x, Q_INT32 y)
     Q_UINT32 col = xToCol( x );
     Q_UINT32 row = yToRow( y );
     KisTileInfo* kti = fetchTileData(col, row);
-    Q_UINT32 offset = x - kti->area.x() + (y - kti->area.y()) * KisTile::WIDTH;
+    Q_UINT32 offset = x - kti->area_x1 + (y - kti->area_y1) * KisTile::WIDTH;
     offset *= m_pixelSize;
     m_data = kti->data + offset;
     m_oldData = kti->oldData + offset;
@@ -101,7 +102,11 @@ KisTiledRandomAccessor::KisTileInfo* KisTiledRandomAccessor::fetchTileData(Q_INT
 
     kti->data = kti->tile->data();
 
-    kti->area = QRect( col * KisTile::HEIGHT, row * KisTile::WIDTH, KisTile::WIDTH - 1, KisTile::HEIGHT - 1 );
+//     kti->area = QRect( col * KisTile::HEIGHT, row * KisTile::WIDTH, KisTile::WIDTH - 1, KisTile::HEIGHT - 1 );
+    kti->area_x1 = col * KisTile::HEIGHT;
+    kti->area_y1 = row * KisTile::WIDTH;
+    kti->area_x2 = kti->area_x1 + KisTile::HEIGHT - 1;
+    kti->area_y2 = kti->area_y1 + KisTile::WIDTH - 1;
 
     // set old data
     kti->oldtile = m_ktm->getOldTile(col, row, kti->tile);

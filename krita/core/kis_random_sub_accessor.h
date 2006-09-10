@@ -34,7 +34,7 @@ class KisRandomSubAccessorPixel{
         void sampledOldRawData(Q_UINT8* dst);
         void sampledRawData(Q_UINT8* dst);
         inline void moveTo(double x, double y) { m_currentPoint.setX(x); m_currentPoint.setY(y); }
-        inline void moveTo(KisPoint p ) { m_currentPoint = p; }
+        inline void moveTo(const KisPoint& p ) { m_currentPoint = p; }
     private:
         KisPaintDeviceSP m_device;
         int m_position, m_end;

@@ -33,7 +33,8 @@ class KisTiledRandomAccessor : public KShared {
         KisTile* oldtile;
         Q_UINT8* data;
         const Q_UINT8* oldData;
-        QRect area;
+        Q_UINT32 area_x1, area_y1, area_x2, area_y2;
+//         QRect area;
     };
     public:
         KisTiledRandomAccessor(KisTiledDataManager *ktm, Q_INT32 x, Q_INT32 y, bool writable);

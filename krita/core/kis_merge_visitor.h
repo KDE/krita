@@ -135,7 +135,7 @@ public:
             } else {
                 KisSelectionSP mask = layer->getMaskAsSelection();
                 // The indirect painting happens on the mask
-                if (tempTarget) {
+                if (tempTarget && layer->editMask()) {
                     KisPaintDeviceSP maskSrc = layer->getMask();
                     KisPaintDeviceSP temp = new KisPaintDevice(maskSrc->colorSpace());
                     temp = paintIndirect(maskSrc, temp, layer, sx, sy, dx, dy, w, h);
@@ -149,6 +149,10 @@ public:
                         ++srcIt;
                         ++dstIt;
                     }
+                } else if (tempTarget) {
+                    // We have a mask, and paint indirect, but not on the mask
+                    KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
+                    source = paintIndirect(source, temp, layer, sx, sy, dx, dy, w, h);
                 }
 
                 gc.bltSelection(dx, dy,

@@ -7,6 +7,7 @@
 #  LCMS_FOUND, If false, do not try to use LCMS.
 
 find_path(LCMS_INCLUDE_DIR lcms.h
+   ${CMAKE_INSTALL_PREFIX}/include
    /usr/include
    /usr/include/lcms
    /usr/local/include
@@ -15,6 +16,7 @@ find_path(LCMS_INCLUDE_DIR lcms.h
 
 find_library(LCMS_LIBRARIES NAMES lcms liblcms
    PATHS
+   ${CMAKE_INSTALL_PREFIX}/lib
    /usr/lib
    /usr/lib/lcms
    /usr/local/lib

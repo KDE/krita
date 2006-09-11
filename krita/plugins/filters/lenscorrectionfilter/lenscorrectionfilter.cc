@@ -97,33 +97,33 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
-    
+
     QRect layerrect = src->exactBounds();
-    
+
     QRect workingrect = layerrect.intersect( rawrect );
-    
+
     setProgressTotalSteps(workingrect.width() * workingrect.height());
 
     KisColorSpace* cs = dst->colorSpace();
-    
+
     QVariant value;
     double xcenter = (config && config->getProperty("xcenter", value)) ? value.toInt() : 50;
     double ycenter = (config && config->getProperty("ycenter", value)) ? value.toInt() : 50;
     double correctionnearcenter = (config && config->getProperty("correctionnearcenter", value)) ? value.toDouble() : 0.;
     double correctionnearedges = (config && config->getProperty("correctionnearedges", value)) ? value.toDouble() : 0.;
     double brightness = ( (config && config->getProperty("brightness", value)) ? value.toDouble() : 0. );
-    
+
     KisRectIteratorPixel dstIt = dst->createRectIterator(workingrect.x(), workingrect.y(), workingrect.width(), workingrect.height(), true );
     KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor();
-    
+
     double normallise_radius_sq = 4.0 / (layerrect.width() * layerrect.width() + layerrect.height() * layerrect.height());
     xcenter = layerrect.x() + layerrect.width() * xcenter / 100.0;
     ycenter = layerrect.y() + layerrect.height() * ycenter / 100.0;
     double mult_sq = correctionnearcenter / 200.0;
     double mult_qd = correctionnearedges / 200.0;
-    
+
     Q_UINT16 lab[4];
-    
+
     while(!dstIt.isDone())
     {
         double off_x = dstIt.x() - xcenter;
@@ -133,7 +133,7 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
         double radius_mult = radius_sq * mult_sq + radius_sq * radius_sq * mult_qd;
         double mag = radius_mult;
         radius_mult += 1.0;
-        
+
         double srcX = xcenter + radius_mult * off_x;
         double srcY = ycenter + radius_mult * off_y;
 
@@ -142,9 +142,9 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
         srcRSA.moveTo( KisPoint( srcX, srcY ) );
         srcRSA.sampledOldRawData( dstIt.rawData() );
         cs->toLabA16( dstIt.rawData(), (Q_UINT8*)lab, 1);
-        lab[0] = CLAMP( lab[0] * brighten, 0, 65535);
+        lab[0] = CLAMP( lab[0] * static_cast<Q_UINT16>( brighten ), 0, 65535);
         cs->fromLabA16( (Q_UINT8*)lab, dstIt.rawData(), 1);
-        
+
         ++dstIt;
         incProgress();
     }

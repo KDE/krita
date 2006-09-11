@@ -34,7 +34,6 @@ class KisTiledRandomAccessor : public KShared {
         Q_UINT8* data;
         const Q_UINT8* oldData;
         Q_UINT32 area_x1, area_y1, area_x2, area_y2;
-//         QRect area;
     };
     public:
         KisTiledRandomAccessor(KisTiledDataManager *ktm, Q_INT32 x, Q_INT32 y, bool writable);
@@ -55,8 +54,8 @@ class KisTiledRandomAccessor : public KShared {
     private:
         KisTiledDataManager *m_ktm;
         KisTileInfo** m_tilesCache;
-        Q_INT32 m_tilesCacheSize;
-        Q_INT32 m_pixelSize;
+        Q_UINT32 m_tilesCacheSize;
+        Q_UINT32 m_pixelSize;
         Q_UINT8* m_data;
         const Q_UINT8* m_oldData;
         bool m_writable;

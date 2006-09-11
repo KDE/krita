@@ -64,20 +64,19 @@ double norm2(const KisPoint& p)
 void KisPerspectiveTransformWorker::run()
 {
     kdDebug() << "r = " << m_r << endl;
-    
+
     //TODO: understand why my caching of the rect didn't work...
     if(m_dev->hasSelection())
         m_r = m_dev->selection()->selectedExactRect();
     else
         m_r = m_dev->exactBounds();
     KisColorSpace * cs = m_dev->colorSpace();
-    Q_UINT8 pixelSize = m_dev->pixelSize();
-    
+
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
-    
+
     kdDebug() << "r = " << m_r << endl;
-    KisRectIteratorPixel dstIt = m_dev->createRectIterator(m_r.x(), m_r.y(), m_r.width(), m_r.height(), true); 
+    KisRectIteratorPixel dstIt = m_dev->createRectIterator(m_r.x(), m_r.y(), m_r.width(), m_r.height(), true);
     KisPaintDeviceSP srcdev = new KisPaintDevice(*m_dev.data());
     { // ensure that the random sub accessor is deleted first
         KisRandomSubAccessorPixel srcAcc = srcdev->createRandomSubAccessor();
@@ -97,7 +96,7 @@ void KisPerspectiveTransformWorker::run()
                 sf = (sf == 0.) ? 1. : 1./sf;
                 p.setX( ( dstIt.x() * m_matrix[0][0] + dstIt.y() * m_matrix[0][1] + m_matrix[0][2] ) * sf );
                 p.setY( ( dstIt.x() * m_matrix[1][0] + dstIt.y() * m_matrix[1][1] + m_matrix[1][2] ) * sf );
-    
+
                 srcAcc.moveTo( p );
                 srcAcc.sampledOldRawData( dstIt.rawData() );
                 // TODO: Should set alpha = alpha*(1-selectedness)

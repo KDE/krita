@@ -267,7 +267,7 @@ void KisToolPerspectiveTransform::buttonPress(KisButtonPressEvent *event)
             case EDITRECTINTERRACTION:
             {
                 KisImageSP img = m_subject->currentImg();
-        
+
                 if (img && img->activeDevice() && event->button() == LeftButton) {
                     m_actualyMoveWhileSelected = false;
                     m_dragEnd = event->pos();
@@ -352,7 +352,7 @@ void KisToolPerspectiveTransform::move(KisMoveEvent *event)
 
                 KisPoint translate = event->pos() - m_dragEnd;
                 m_dragEnd = event->pos();
-                
+
                 double matrixFrom[3][3];
                 double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(m_topleft, m_topright, m_bottomleft, m_bottomright, m_initialRect);
                 for(int i = 0; i < 3; i++)
@@ -363,7 +363,7 @@ void KisToolPerspectiveTransform::move(KisMoveEvent *event)
                     }
                 }
                 delete b;
-                
+
                 KisPoint topLeft = KisPerspectiveMath::matProd(matrixFrom, m_initialRect.topLeft() );
                 KisPoint topRight = KisPerspectiveMath::matProd(matrixFrom, m_initialRect.topRight() );
                 KisPoint bottomLeft = KisPerspectiveMath::matProd(matrixFrom, m_initialRect.bottomLeft() );
@@ -372,17 +372,18 @@ void KisToolPerspectiveTransform::move(KisMoveEvent *event)
                 switch(m_handleSelected)
                 {
                     case TOPHANDLE:
-                        dstRect.setTop(  dstRect.top() + translate.y() );
+                        dstRect.setTop(  static_cast<int>( dstRect.top() + translate.y() ) ) ;
                         break;
                     case LEFTHANDLE:
-                        dstRect.setLeft(  dstRect.left() + translate.x() );
+                        dstRect.setLeft(  static_cast<int>( dstRect.left() + translate.x() ) );
                         break;
                     case BOTTOMHANDLE:
-                        dstRect.setBottom(  dstRect.bottom() + translate.y() );
+                        dstRect.setBottom(  static_cast<int>( dstRect.bottom() + translate.y() ) );
                         break;
                     case RIGHTHANDLE:
-                        dstRect.setRight(  dstRect.right() + translate.x() );
+                        dstRect.setRight(  static_cast<int>( dstRect.right() + translate.x() ) );
                         break;
+                    case MIDDLEHANDLE:
                     case NOHANDLE:
                         kdDebug() << "Should NOT happen" << endl;
                 }
@@ -400,7 +401,7 @@ void KisToolPerspectiveTransform::move(KisMoveEvent *event)
                 m_topright = KisPerspectiveMath::matProd(matrixTo, m_initialRect.topRight());
                 m_bottomleft = KisPerspectiveMath::matProd(matrixTo, m_initialRect.bottomLeft());
                 m_bottomright = KisPerspectiveMath::matProd(matrixTo, m_initialRect.bottomRight());
-                
+
                 paintOutline();
                 m_actualyMoveWhileSelected = true;
             } else if (m_handleSelected == MIDDLEHANDLE) {
@@ -522,7 +523,7 @@ void KisToolPerspectiveTransform::paintOutline(KisCanvasPainter& gc, const QRect
         {
             case DRAWRECTINTERRACTION:
             {
-                kdDebug() << "DRAWRECTINTERRACTION paintOutline " << m_points.size() << endl; 
+                kdDebug() << "DRAWRECTINTERRACTION paintOutline " << m_points.size() << endl;
                 KisPoint start, end;
                 QPoint startPos;
                 QPoint endPos;
@@ -550,7 +551,7 @@ void KisToolPerspectiveTransform::paintOutline(KisCanvasPainter& gc, const QRect
                 QPoint topright = controller->windowToView(m_topright).roundQPoint();
                 QPoint bottomleft = controller->windowToView(m_bottomleft).roundQPoint();
                 QPoint bottomright = controller->windowToView(m_bottomright).roundQPoint();
-        
+
                 gc.setRasterOp(Qt::NotROP);
                 gc.setPen(pen);
                 gc.drawRect(topleft.x()-4, topleft.y()-4, 8, 8);

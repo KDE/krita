@@ -54,7 +54,7 @@ class KisWaveCurve {
     public:
         virtual double valueAt(int x, int y) =0;
 };
-        
+
 class KisSinusoidalWaveCurve : public KisWaveCurve {
     public:
         KisSinusoidalWaveCurve(int amplitude, int wavelenght, int shift) : m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift)
@@ -130,11 +130,9 @@ void KisFilterWave::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
-    
+
     setProgressTotalSteps(rect.width() * rect.height());
 
-    KisColorSpace* cs = dst->colorSpace();
-    
     QVariant value;
     int horizontalwavelength = (config && config->getProperty("horizontalwavelength", value)) ? value.toInt() : 50;
     int horizontalshift = (config && config->getProperty("horizontalshift", value)) ? value.toInt() : 50;

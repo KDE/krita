@@ -38,12 +38,12 @@ class KisPerspectiveTransformWorker : public KisProgressSubject
     private:
         virtual void cancel() { m_cancelRequested = true; }
     private:
-        bool m_cancelRequested;
         Q_INT32 m_progressTotalSteps;
         Q_INT32 m_lastProgressReport;
         Q_INT32 m_progressStep;
         double m_xcenter, m_ycenter, m_p, m_q;
         KisPaintDeviceSP m_dev;
+        bool m_cancelRequested;
         KisProgressDisplayInterface *m_progress;
         double m_matrix[3][3];
         QRect m_r;

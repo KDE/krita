@@ -28,7 +28,7 @@ KisTiledRandomAccessor::KisTiledRandomAccessor(KisTiledDataManager *ktm, Q_INT32
 
 KisTiledRandomAccessor::~KisTiledRandomAccessor()
 {
-    for( int i = 0; i < m_tilesCacheSize; i++)
+    for( uint i = 0; i < m_tilesCacheSize; i++)
     {
         m_tilesCache[i]->tile->removeReader();
         m_tilesCache[i]->oldtile->removeReader();
@@ -39,11 +39,14 @@ KisTiledRandomAccessor::~KisTiledRandomAccessor()
 
 void KisTiledRandomAccessor::moveTo(Q_INT32 x, Q_INT32 y)
 {
+
     // Look in the cache if the tile if the data is available
-    for( int i = 0; i < m_tilesCacheSize; i++)
+    for( uint i = 0; i < m_tilesCacheSize; i++)
     {
-        if( x >= m_tilesCache[i]->area_x1 && x <= m_tilesCache[i]->area_x2 &&
-            y >= m_tilesCache[i]->area_y1 && y <= m_tilesCache[i]->area_y2 )
+        // XXX: area_x1 etc are uint, x,y are int, what do we do
+        // with negative coordinates?
+        if( static_cast<Q_UINT32>( x ) >= m_tilesCache[i]->area_x1 && static_cast<Q_UINT32>( x )<= m_tilesCache[i]->area_x2 &&
+            static_cast<Q_UINT32>( y )>= m_tilesCache[i]->area_y1 && static_cast<Q_UINT32>( y )<= m_tilesCache[i]->area_y2 )
         {
             KisTileInfo* kti = m_tilesCache[i];
             Q_UINT32 offset = x - kti->area_x1 + (y -kti->area_y1) * KisTile::WIDTH;
@@ -97,7 +100,7 @@ KisTiledRandomAccessor::KisTileInfo* KisTiledRandomAccessor::fetchTileData(Q_INT
 {
     KisTileInfo* kti = new KisTileInfo;
     kti->tile = m_ktm->getTile(col, row, m_writable);
-    
+
     kti->tile->addReader();
 
     kti->data = kti->tile->data();

@@ -81,22 +81,20 @@ bool KisToolFill::flood(int startX, int startY)
     if (!device) return false;
 
     if (m_fillOnlySelection) {
+        QRect rc = device->selection()->exactBounds();
         KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace(),  "filled");
         KisFillPainter painter(filled);
-        // XXX: The fillRect methods should either set the dirty rect or return it,
-        // so we don't have to blit over all of the image, but only the part that's
-        // really filled.
         if (m_usePattern)
-            painter.fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
+            painter.fillRect(rc.x(), rc.y(), rc.width(), rc.height(),
                              m_subject->currentPattern());
         else
-            painter.fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
+            painter.fillRect(rc.x(), rc.y(), rc.width(), rc.height(),
                              m_subject->fgColor(), m_opacity);
         painter.end();
         KisPainter painter2(device);
         if (m_currentImage->undo()) painter2.beginTransaction(i18n("Fill"));
-        painter2.bltSelection(0, 0, m_compositeOp, filled, m_opacity,
-                              0, 0, m_currentImage->width(), m_currentImage->height());
+        painter2.bltSelection(rc.x(), rc.y() , m_compositeOp, filled, m_opacity,
+                              rc.x(), rc.y(), rc.width(), rc.height());
 
         device->setDirty(filled->extent());
         notifyModified();
@@ -169,7 +167,6 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
     connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
     m_checkUsePattern = new QCheckBox(i18n("Use pattern"), widget);
-    //m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the gradient selected to fill with"));
     m_checkUsePattern->setChecked(m_usePattern);
     connect(m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(slotSetUsePattern(bool)));
 
@@ -178,7 +175,6 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
     connect(m_checkSampleMerged, SIGNAL(toggled(bool)), this, SLOT(slotSetSampleMerged(bool)));
 
     m_checkFillSelection = new QCheckBox(i18n("Fill entire selection"), widget);
-    //m_checkFillSelection->setToolTip(i18n("When checked do not look at the current layer colors, but just fill all of the selected area"));
     m_checkFillSelection->setChecked(m_fillOnlySelection);
     connect(m_checkFillSelection, SIGNAL(toggled(bool)), this, SLOT(slotSetFillSelection(bool)));
 

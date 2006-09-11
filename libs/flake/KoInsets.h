@@ -27,10 +27,6 @@
  */
 struct FLAKE_EXPORT KoInsets {
 public:
-    KoInsets()
-    {
-    }
-
     /**
      * Constructor.
      * @param top the inset at the top.
@@ -43,6 +39,12 @@ public:
         this->left = left;
         this->bottom = bottom;
         this->right = right;
+    }
+    /**
+     * Constructor.
+     * Initializes all values to 0
+     */
+    KoInsets() : top(0.), bottom(0.), left(0.), right(0.) {
     }
     double top;     ///< Top inset
     double bottom;  ///< Bottom inset

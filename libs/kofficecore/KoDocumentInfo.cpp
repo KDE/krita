@@ -275,13 +275,15 @@ bool KoDocumentInfo::saveOasisAboutInfo( KoXmlWriter &xmlWriter )
                   KoDocument* doc = dynamic_cast< KoDocument* >( parent() );
                   setAboutInfo( "title", doc->url().fileName() );
                 }
-                xmlWriter.startElement( QString( "dc:" + tag ).toLatin1().constData() );
+                QByteArray elementName( QString( "dc:" + tag ).toLatin1().constData() );
+                xmlWriter.startElement( elementName );
                 xmlWriter.addTextNode( aboutInfo( tag ) );
                 xmlWriter.endElement();
             }
             else
             {
-                xmlWriter.startElement( QString( "meta:" + tag ).toLatin1().constData() );
+                QByteArray elementName( QString( "meta:" + tag).toLatin1().constData() );
+                xmlWriter.startElement( elementName );
                 xmlWriter.addTextNode( aboutInfo( tag ) );
                 xmlWriter.endElement();
             }

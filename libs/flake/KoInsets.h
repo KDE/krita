@@ -27,6 +27,10 @@
  */
 struct FLAKE_EXPORT KoInsets {
 public:
+    KoInsets()
+    {
+    }
+
     /**
      * Constructor.
      * @param top the inset at the top.

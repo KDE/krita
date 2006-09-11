@@ -174,6 +174,10 @@ void KoTextTool::mouseReleaseEvent( KoPointerEvent *event ) {
 void KoTextTool::keyPressEvent(QKeyEvent *event) {
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     switch(event->key()) { // map input to moveOperation
+/* TODO
+ * Look at KoTextView::handleKeyPressEvent
+ * Use    if ( KShortcut(  e->key() ) == KStdAccel::deleteWordBack() )  and friends
+ */
         case Qt::Key_Backspace:
             useCursor(Qt::BlankCursor);
             m_caret.deletePreviousChar();
@@ -236,7 +240,8 @@ void KoTextTool::keyReleaseEvent(QKeyEvent *event) {
 
 void KoTextTool::activate (bool temporary) {
     Q_UNUSED(temporary);
-    foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes().toList()) {
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    foreach(KoShape *shape, selection->selectedShapes().toList()) {
         m_textShape = dynamic_cast<KoTextShape*> (shape);
         if(m_textShape)
             break;
@@ -245,7 +250,13 @@ void KoTextTool::activate (bool temporary) {
         emit sigDone();
         return;
     }
+    foreach(KoShape *shape, selection->selectedShapes().toList()) {
+        // deselect others.
+        if(m_textShape == shape) continue;
+        selection->deselect(shape);
+    }
     m_textShapeData = static_cast<KoTextShapeData*> (m_textShape->userData());
+    m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
     m_caret = QTextCursor(m_textShapeData->document());
     useCursor(Qt::IBeamCursor, true);
     m_textShape->repaint();
@@ -253,6 +264,8 @@ void KoTextTool::activate (bool temporary) {
 
 void KoTextTool::deactivate() {
     m_textShape = 0;
+    if(m_textShapeData)
+        m_textShapeData->document()->setUndoRedoEnabled(false); // erase undo history.
     m_textShapeData = 0;
 }
 

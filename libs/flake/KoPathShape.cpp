@@ -301,14 +301,14 @@ const QPainterPath KoPathShape::KoPathShape::outline() const
         {
             if ( ( *it )->properties() & KoPathPoint::StartSubpath )
             {
-                //qDebug() << "moveTo" << ( *it )->point();
+                //qDebug() << "moveTo(" << ( *it )->point() << ")";
                 path.moveTo( ( *it )->point() );
             }
             else if ( activeCP || ( *it )->activeControlPoint1() )
             {
-                //qDebug() << "activeCP " << activeCP 
-                //    << "lastPoint->controlPoint2()" << lastPoint->controlPoint2()
-                //    << "lastPoint->point()" << lastPoint->point() << ( *it )->controlPoint1();
+                //qDebug() << "cubicTo(" << ( activeCP ? lastPoint->controlPoint2() : lastPoint->point() )
+                //         << "," << ( ( *it )->activeControlPoint1() ? ( *it )->controlPoint1() : ( *it )->point() )
+                //         << "," << ( *it )->point() << ")";
 
                 path.cubicTo( activeCP ? lastPoint->controlPoint2() : lastPoint->point()
                             , ( *it )->activeControlPoint1() ? ( *it )->controlPoint1() : ( *it )->point()
@@ -316,12 +316,23 @@ const QPainterPath KoPathShape::KoPathShape::outline() const
             }
             else
             {
-                //qDebug() << "lineTo" << ( *it )->point();
+                //qDebug() << "lineTo(" << ( *it )->point() << ")";
                 path.lineTo( ( *it )->point() );
             }
             if ( ( *it )->properties() & KoPathPoint::CloseSubpath )
             {
-                //qDebug() << "closeSubpath";
+                // add curve when there is a curve on the way to the first point
+                KoPathPoint * firstPoint = ( *pathIt )->first();
+                if ( ( *it )->activeControlPoint2() || firstPoint->activeControlPoint1() )
+                {
+                    //qDebug() << "cubicTo(" << ( ( *it )->activeControlPoint2() ? ( *it )->controlPoint2() : ( *it )->point() )
+                    //         << "," << ( firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : firstPoint->point() )
+                    //         << "," << firstPoint->point() << ")";
+                    path.cubicTo( (*it)->activeControlPoint2() ? ( *it )->controlPoint2() : ( *it )->point()
+                                , firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : firstPoint->point()
+                                , firstPoint->point() );
+                }
+                //qDebug() << "closeSubpath()";
                 path.closeSubpath();
             }
 
@@ -420,6 +431,32 @@ void KoPathShape::close()
     firstPoint->setProperties( firstPoint->properties() | KoPathPoint::CanHaveControlPoint1 );
 }
 
+void KoPathShape::closeMerge()
+{
+    if ( m_subpaths.empty() )
+    {
+        return;
+    }
+    KoPathPoint * lastPoint = m_subpaths.last()->last();
+    KoPathPoint * firstPoint = m_subpaths.last()->first();
+
+    if ( lastPoint->point() == firstPoint->point() )
+    {
+        firstPoint->setProperties( firstPoint->properties() | KoPathPoint::CanHaveControlPoint1 );
+        if ( lastPoint->activeControlPoint1() )
+            firstPoint->setControlPoint1( lastPoint->controlPoint1() );
+        removePoint( lastPoint );
+        // remove point
+        delete lastPoint;
+        lastPoint = m_subpaths.last()->last();
+        lastPoint->setProperties( lastPoint->properties() | KoPathPoint::CloseSubpath );
+    }
+    else
+    {
+        close();
+    }
+}
+
 QPointF KoPathShape::normalize()
 {
     QPointF oldTL( boundingRect().topLeft() );
@@ -504,17 +541,34 @@ QPair<KoSubpath*, int> KoPathShape::removePoint( KoPathPoint *point )
             ( *pathIt )->removeAt( index );
             point->setParent( 0 );
 
-            // the first point of the sub path has been removed
-            if ( index == 0 )
+            if ( !( *pathIt )->isEmpty() )
             {
-                ( *pathIt )->first()->setProperties( ( *pathIt )->first()->properties() & ~KoPathPoint::CanHaveControlPoint1 | KoPathPoint::StartSubpath );
+                // the first point of the sub path has been removed
+                if ( index == 0 )
+                {
+                    if ( ( *pathIt )->last()->properties() & KoPathPoint::CloseSubpath )
+                    {
+                        ( *pathIt )->first()->setProperties( ( *pathIt )->first()->properties() | KoPathPoint::StartSubpath );
+                    }
+                    else
+                    {
+                        ( *pathIt )->first()->setProperties( ( ( *pathIt )->first()->properties() & ~KoPathPoint::CanHaveControlPoint1 ) | KoPathPoint::StartSubpath );
+                    }
+                }
+                // the last point of the sub path has been removed
+                else if ( index == ( *pathIt )->size() )
+                {
+                    if ( point->properties() & KoPathPoint::CloseSubpath )
+                    {
+                        ( *pathIt )->last()->setProperties( ( *pathIt )->last()->properties() | KoPathPoint::CloseSubpath );
+                    }
+                    else
+                    {
+                        ( *pathIt )->last()->setProperties( ( *pathIt )->last()->properties() & ~KoPathPoint::CanHaveControlPoint2 );
+                    }
+                }
+                return QPair<KoSubpath*, int>( *pathIt, index );
             }
-            // the last point of the sub path has been removed
-            else if ( index == ( *pathIt )->size() )
-            {
-                ( *pathIt )->last()->setProperties( ( *pathIt )->last()->properties() & ~KoPathPoint::CanHaveControlPoint2 );
-            }
-            return QPair<KoSubpath*, int>( *pathIt, index );
         }
     }
     return QPair<KoSubpath*, int>( 0, 0 );
@@ -528,7 +582,7 @@ void KoPathShape::insertPoint( KoPathPoint* point, KoSubpath* subpath, int posit
     }
     else if ( position == subpath->size() )
     {
-        subpath->last()->setProperties( subpath->last()->properties() | KoPathPoint::CanHaveControlPoint2 );
+        subpath->last()->setProperties( subpath->last()->properties() & ~KoPathPoint::CloseSubpath | KoPathPoint::CanHaveControlPoint2 );
     }
     subpath->insert( position, point );
     point->setParent( this );

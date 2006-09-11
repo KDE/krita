@@ -344,6 +344,17 @@ public:
     void close();
 
     /**
+     * @brief close the current subpath
+     *
+     * It tries to merge the last and first point of the subpath
+     * to one point and then closes the subpath. If merging is not 
+     * possible as the two point are to far from each other a close
+     * will be done.
+     * TODO define a maximum distance between  the two points until this is working
+     */
+    void closeMerge();
+
+    /**
      * @brief The path is updated
      *
      * This is called when a point of the path is updated. It will be used 

@@ -948,7 +948,7 @@ void KoWmfReadPrivate::createFontIndirect( quint32 size, QDataStream& stream )
         handle->font.setFixedPitch( ((fixedPitch & 0x01) == 0) );
         // TODO: investigation why some test case need -2
         // size of font in logical point
-        handle->font.setPointSize( QABS(pointSize) - 2 );
+        handle->font.setPointSize( qAbs(pointSize) - 2 );
         handle->font.setWeight( (weight >> 3) );
         handle->font.setItalic( (property & 0x01) );
         handle->font.setUnderline( (property & 0x100) );

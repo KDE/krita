@@ -24,7 +24,6 @@
 #include "KoID.h"
 #include <QList>
 #include <map>
-#include <kdebug.h>
 
 /**
  * Base class for registry objects.
@@ -49,7 +48,6 @@ public:
      */
     void add(T item)
     {
-kDebug(30008) << "**********add 1" << endl;
         m_storage.insert( typename storageMap::value_type( item->id(), item) );
     }
     /**

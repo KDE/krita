@@ -265,13 +265,13 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
     } else if(m_currentStrategy == 0) {
         double x=0.0, y=0.0;
         if(event->key() == Qt::Key_Left)
-            x=-1;
+            x=-0.5;
         else if(event->key() == Qt::Key_Right)
-            x=1;
+            x=0.5;
         else if(event->key() == Qt::Key_Up)
-            y=-1;
+            y=-0.5;
         else if(event->key() == Qt::Key_Down)
-            y=1;
+            y=0.5;
 
         if(x != 0.0 || y != 0.0) { // actually move
             if((event->modifiers() & Qt::ShiftModifier) == 0) { // no shift used

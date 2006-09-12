@@ -76,8 +76,81 @@ void KoPathPoint::setProperties( KoPointProperties properties )
         properties &= ~IsSmooth;
         properties &= ~IsSymmetric;
     }
+    if( properties & KoPathPoint::StartSubpath )
+    {
+        properties &= ~CloseSubpath;
+    }
     m_properties = properties;
-    m_shape->update(); 
+    m_shape->update();
+}
+
+void KoPathPoint::setProperty( KoPointProperty property )
+{
+    switch( property )
+    {
+        case StartSubpath:
+            m_properties &= ~CloseSubpath;
+        break;
+        case CloseSubpath:
+            m_properties &= ~StartSubpath;
+            m_properties |= CanHaveControlPoint2;
+        break;
+        case CanHaveControlPoint1:
+            if( m_properties & StartSubpath )
+                return;
+        break;
+        case HasControlPoint1:
+            if( m_properties & CanHaveControlPoint1 == 0 )
+                return;
+        break;
+        case CanHaveControlPoint2:
+            if( m_properties & CloseSubpath )
+                return;
+        break;
+        case HasControlPoint2:
+            if( m_properties & CanHaveControlPoint2 == 0 )
+                return;
+        break;
+        case IsSmooth:
+            if( m_properties & HasControlPoint1 == 0 && m_properties & HasControlPoint2 == 0 )
+                return;
+            m_properties &= ~IsSymmetric;
+        break;
+        case IsSymmetric:
+            if( m_properties & HasControlPoint1 == 0 && m_properties & HasControlPoint2 == 0 )
+                return;
+            m_properties &= ~IsSmooth;
+        break;
+        default: return;
+    }
+    m_properties |= property;
+}
+
+void KoPathPoint::unsetProperty( KoPointProperty property )
+{
+    switch( property )
+    {
+        case StartSubpath:
+            m_properties |= CanHaveControlPoint1;
+        break;
+        case CloseSubpath:
+            m_properties |= CanHaveControlPoint2;
+        break;
+        case CanHaveControlPoint1:
+            m_properties &= ~HasControlPoint1;
+        break;
+        case CanHaveControlPoint2:
+            m_properties &= ~HasControlPoint2;
+        break;
+        case HasControlPoint1:
+        case HasControlPoint2:
+        case IsSmooth:
+        case IsSymmetric:
+            // no others depend on these
+        break;
+        default: return;
+    }
+    m_properties &= ~property;
 }
 
 bool KoPathPoint::activeControlPoint1()
@@ -143,6 +216,27 @@ void KoPathPoint::setParent( KoPathShape* parent )
     m_shape = parent;
 }
 
+void KoPathPoint::reverse()
+{
+    qSwap( m_controlPoint1, m_controlPoint2 );
+    KoPointProperties newProps = Normal;
+    if( m_properties & CanHaveControlPoint1 )
+        newProps |= CanHaveControlPoint2;
+    if( m_properties & CanHaveControlPoint2 )
+        newProps |= CanHaveControlPoint1;
+    if( m_properties & HasControlPoint1 )
+        newProps |= HasControlPoint2;
+    if( m_properties & HasControlPoint2 )
+        newProps |= HasControlPoint1;
+    newProps |= m_properties & IsSmooth;
+    newProps |= m_properties & IsSymmetric;
+    newProps |= m_properties & StartSubpath;
+    newProps |= m_properties & CloseSubpath;
+    qDebug() << "oldProps = " << m_properties;
+    m_properties = newProps;
+    qDebug() << "newProps = " << m_properties;
+}
+
 void KoPathPoint::removeFromGroup()
 { 
     if ( m_pointGroup ) 
@@ -160,7 +254,7 @@ void KoPathPoint::addToGroup( KoPointGroup *pointGroup )
     m_pointGroup = pointGroup; 
 }
 
-void KoPointGroup::add( KoPathPoint * point ) 
+void KoPointGroup::add( KoPathPoint * point )
 { 
     m_points.insert( point ); 
     point->addToGroup( this );
@@ -425,10 +519,7 @@ void KoPathShape::close()
     {
         return;
     }
-    KoPathPoint * lastPoint = m_subpaths.last()->last();
-    lastPoint->setProperties( lastPoint->properties() | KoPathPoint::CloseSubpath | KoPathPoint::CanHaveControlPoint2 );
-    KoPathPoint * firstPoint = m_subpaths.last()->first();
-    firstPoint->setProperties( firstPoint->properties() | KoPathPoint::CanHaveControlPoint1 );
+    closeSubpath( m_subpaths.last() );
 }
 
 void KoPathShape::closeMerge()
@@ -530,7 +621,7 @@ QList<KoPathPoint*> KoPathShape::pointsAt( const QRectF &r )
     return result;
 }
 
-QPair<KoSubpath*, int> KoPathShape::removePoint( KoPathPoint *point )
+KoPointPosition KoPathShape::removePoint( KoPathPoint *point )
 {
     KoSubpathList::iterator pathIt( m_subpaths.begin() );
     for ( ; pathIt != m_subpaths.end(); ++pathIt )
@@ -571,7 +662,7 @@ QPair<KoSubpath*, int> KoPathShape::removePoint( KoPathPoint *point )
             }
         }
     }
-    return QPair<KoSubpath*, int>( 0, 0 );
+    return KoPointPosition( 0, 0 );
 }
 
 void KoPathShape::insertPoint( KoPathPoint* point, KoSubpath* subpath, int position )
@@ -732,4 +823,271 @@ KoPathPoint* KoPathShape::splitAt( const KoPathSegment &segment, double t )
     subPath->insert( index+1, splitPoint );
 
     return splitPoint;
+}
+
+QPair<KoPathPoint*,KoPathPoint*> KoPathShape::breakAt( KoPathPoint *breakPoint )
+{
+    QPair<KoPathPoint*,KoPathPoint*> result( 0, 0 );
+
+    if( ! breakPoint )
+        return result;
+
+    KoPointPosition pointPos = findPoint( breakPoint );
+    if( ! pointPos.first )
+        return result;
+
+    KoSubpath *subpath = pointPos.first;
+
+    // check if the subpath is closed
+    if( subpath->last()->properties() & KoPathPoint::CloseSubpath )
+    {
+        KoPathPoint *newPoint = 0;
+        // break at the first subpath point
+        if( pointPos.second == 0 )
+        {
+            // duplicate the first point, which becomes the new last point
+            newPoint = new KoPathPoint( *subpath->first() );
+            newPoint->unsetProperty( KoPathPoint::StartSubpath );
+            newPoint->unsetProperty( KoPathPoint::CanHaveControlPoint2 );
+            subpath->last()->unsetProperty( KoPathPoint::CloseSubpath );
+            subpath->append( newPoint );
+        }
+        // break at the last point
+        else if( pointPos.second == subpath->size()-1 )
+        {
+            // duplicate the last point, which becomes the new first point
+            newPoint = new KoPathPoint( *subpath->last() );
+            // the last point no longer closes the subpath
+            subpath->last()->unsetProperty( KoPathPoint::CloseSubpath );
+            // the first point no longer starts the subpath 
+            subpath->first()->unsetProperty( KoPathPoint::StartSubpath );
+            // the new point start the open subpath
+            newPoint->setProperty( KoPathPoint::StartSubpath );
+            newPoint->unsetProperty( KoPathPoint::CanHaveControlPoint1 );
+            subpath->prepend( newPoint );
+        }
+        // break in between
+        else
+        {
+            // duplicate the break point, which becomes the new first point
+            newPoint = new KoPathPoint( *breakPoint );
+            // the old starting node no longer starts the subpath
+            subpath->first()->unsetProperty( KoPathPoint::StartSubpath );
+            subpath->first()->setProperty( KoPathPoint::CanHaveControlPoint1 );
+            // the old end node no longer closes nor ends the subpath
+            subpath->last()->unsetProperty( KoPathPoint::CloseSubpath );
+            // now reorder the subpath
+            for( int i = 0; i <= pointPos.second; ++i )
+                subpath->append( subpath->takeFirst() );
+
+            // make the breakpoint an ending node
+            breakPoint->unsetProperty( KoPathPoint::CanHaveControlPoint2 );
+            // make the new point a starting node 
+            newPoint->setProperty( KoPathPoint::StartSubpath );
+            newPoint->unsetProperty( KoPathPoint::CanHaveControlPoint1 );
+            subpath->prepend( newPoint );
+        }
+    }
+    else
+    {
+        // the subpath is not closed, so breaking at the end nodes has no effect
+        if( pointPos.second == 0 || pointPos.second == subpath->size()-1 )
+            return result;
+
+        // now break the subpath into two subpaths
+        KoSubpath *newSubpath = new KoSubpath;
+
+        // copy the break point and make it a starting node
+        KoPathPoint *newPoint = new KoPathPoint( *breakPoint );
+        newPoint->setProperty( KoPathPoint::StartSubpath );
+        newPoint->unsetProperty( KoPathPoint::CanHaveControlPoint1 );
+        newSubpath->append( newPoint );
+
+        // make the break point an end node
+        breakPoint->unsetProperty( KoPathPoint::CanHaveControlPoint2 );
+
+        int size = subpath->size();
+        for( int i = pointPos.second+1; i < size; ++i )
+            newSubpath->append( subpath->takeAt( pointPos.second+1 ) );
+
+        m_subpaths.append( newSubpath );
+
+        result.first = breakPoint;
+        result.second = newPoint;
+    }
+
+    return result;
+}
+
+bool KoPathShape::breakAt( const KoPathSegment &segment )
+{
+    if( ! segment.first || ! segment.second )
+        return false;
+    if( segment.first == segment.second )
+        return false;
+    KoPointPosition pos1 = findPoint( segment.first );
+    if( ! pos1.first )
+        return false;
+    KoPointPosition pos2 = findPoint( segment.second );
+    if( ! pos2.first )
+        return false;
+    if( pos1.first != pos2.first )
+        return false;
+
+    // get ordered point indeces 
+    KoSubpath *subpath = pos1.first;
+    int index1 = pos1.second < pos2.second ? pos1.second : pos2.second;
+    int index2 = pos1.second > pos2.second ? pos1.second : pos2.second;
+    KoPathPoint *p1 = (*subpath)[index1];
+    KoPathPoint *p2 = (*subpath)[index2];
+
+    // check if the path is closed
+    if( subpath->last()->properties() & KoPathPoint::CloseSubpath )
+    {
+        // check if we break at the closing segment
+        if( index1 == 0 && index2 == subpath->size()-1 )
+        {
+            // just unclose the subpath
+            p2->setProperties( p2->properties() & ~KoPathPoint::CloseSubpath );
+        }
+        else
+        {
+            // we break in between -> reorder the subpath
+            // make first point the new endpoint
+            p1->unsetProperty( KoPathPoint::CanHaveControlPoint2 );
+            // make second point the new start point
+            p2->setProperty( KoPathPoint::StartSubpath );
+            // the last point no longer closes the subpath
+            subpath->last()->unsetProperty( KoPathPoint::CloseSubpath );
+            // the first no longer start the subath
+            subpath->first()->unsetProperty( KoPathPoint::StartSubpath );
+            // now reorder the subpath
+            for( int i = 0; i <= index1; ++i )
+                subpath->append( subpath->takeFirst() );
+        }
+    }
+    else
+    {
+        // subpath is not closed, breaking between first and last has no effect
+        if( index1 == 0 && index2 == subpath->size()-1 )
+            return true;
+
+        // break into two subpaths
+        KoSubpath *newSubpath = new KoSubpath;
+        int size = subpath->size();
+        for( int i = index2; i < size; ++i )
+            newSubpath->append( subpath->takeAt( index2 ) );
+
+        // now make the first point of the new subpath a starting node
+        newSubpath->first()->setProperty( KoPathPoint::StartSubpath );
+        newSubpath->first()->unsetProperty( KoPathPoint::CanHaveControlPoint1 );
+        // the last point of the old subpath is now an ending node 
+        subpath->last()->unsetProperty( KoPathPoint::CanHaveControlPoint2 );
+        m_subpaths.append( newSubpath );
+    }
+    repaint();
+    return true;
+}
+
+void KoPathShape::joinBetween( KoPathPoint *endPoint1, KoPathPoint *endPoint2 )
+{
+    if( endPoint1 == endPoint2 )
+        return;
+
+    KoPointPosition pos1 = findPoint( endPoint1 );
+    if( ! pos1.first )
+        return;
+    // check if first point is end or start node
+    if( pos1.second != 0 && pos1.second != pos1.first->size()-1 )
+        return;
+    KoPointPosition pos2 = findPoint( endPoint2 );
+    if( ! pos2.first )
+        return;
+    // check if second point is end or start node
+    if( pos2.second != 0 && pos2.second != pos2.first->size()-1 )
+        return;
+
+    // check if one of the subpaths is already closed
+    if( pos1.first->last()->properties() & KoPathPoint::CloseSubpath )
+        return;
+    if( pos2.first->last()->properties() & KoPathPoint::CloseSubpath )
+        return;
+
+    // check if points are end nodes of same subpath
+    if( pos1.first == pos2.first )
+    {
+        // just close the subpath
+        closeSubpath( pos1.first );
+    }
+    else
+    {
+        // merge the two subpaths
+        if( pos1.second == 0 )
+            reverseSubpath( *pos1.first );
+
+        // the last point is no longer an end node
+        pos1.first->last()->setProperty( KoPathPoint::CanHaveControlPoint2 );
+
+        if( pos2.second != 0 )
+            reverseSubpath( *pos2.first );
+
+        // the first point does not start a subpath anymore
+        pos2.first->first()->unsetProperty( KoPathPoint::StartSubpath );
+
+        // append the second subpath to the first
+        foreach( KoPathPoint* p, *pos2.first )
+            pos1.first->append( p );
+
+        // delete the second subpaths
+        int index = m_subpaths.indexOf( pos2.first );
+        m_subpaths.removeAt( index );
+    }
+}
+
+KoPointPosition KoPathShape::findPoint( KoPathPoint* point )
+{
+    KoSubpathList::iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
+    {
+        int index = ( *pathIt )->indexOf( point );
+        if( index != -1 )
+            return KoPointPosition( *pathIt, index );
+    }
+    return KoPointPosition( 0, 0 );
+}
+
+void KoPathShape::closeSubpath( KoSubpath *subpath )
+{
+    KoPathPoint * lastPoint = subpath->last();
+    lastPoint->setProperties( lastPoint->properties() | KoPathPoint::CloseSubpath | KoPathPoint::CanHaveControlPoint2 );
+    KoPathPoint * firstPoint = subpath->first();
+    firstPoint->setProperties( firstPoint->properties() | KoPathPoint::CanHaveControlPoint1 );
+}
+
+void KoPathShape::reverseSubpath( KoSubpath &subpath )
+{
+    int size = subpath.size();
+    for( int i = 0; i < size; ++i )
+    {
+        KoPathPoint *p = subpath.takeAt( i );
+        p->reverse();
+        subpath.prepend( p );
+    }
+
+    // adjust the position dependent properties
+    KoPathPoint *first = subpath.first();
+    KoPathPoint *last = subpath.last();
+
+    KoPathPoint::KoPointProperties firstProps = first->properties();
+    KoPathPoint::KoPointProperties lastProps = last->properties();
+
+    firstProps |= KoPathPoint::StartSubpath;
+    lastProps &= ~KoPathPoint::StartSubpath;
+    if( firstProps & KoPathPoint::CloseSubpath )
+    {
+        firstProps &= ~KoPathPoint::CloseSubpath;
+        lastProps |= KoPathPoint::CloseSubpath;
+    }
+    first->setProperties( firstProps );
+    last->setProperties( lastProps );
 }

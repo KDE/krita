@@ -302,6 +302,19 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 }
             }
         break;
+        case Qt::Key_B:
+            if( m_selectedPoints.size() == 1 )
+                m_pathShape->breakAt( m_selectedPoints.first() );
+            else if( m_selectedPoints.size() == 2 )
+            {
+                KoPathSegment segment( m_selectedPoints.first(), m_selectedPoints.last() );
+                m_pathShape->breakAt( segment );
+            }
+        break;
+        case Qt::Key_J:
+            if( m_selectedPoints.size() >= 2 )
+                m_pathShape->joinBetween( m_selectedPoints[0], m_selectedPoints[1] );
+        break;
     }
     event->accept();
 }

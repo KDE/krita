@@ -154,10 +154,21 @@ public:
 
     /**
      * @brief Set the properties of a point
-     *
-     * @return the properties of the point
+     * @param properties the new properties
      */
     void setProperties( KoPointProperties properties );
+
+    /**
+     * @brief Sets a single property of a point.
+     * @param property the property to set
+     */
+    void setProperty( KoPointProperty property );
+
+    /**
+     * @brief Removes a property from the point.
+     * @param property the property to remove 
+     */
+    void unsetProperty( KoPointProperty property );
 
     /**
      * @brief check if there is a controlPoint1
@@ -195,6 +206,14 @@ public:
      */
     void setParent( KoPathShape* parent );
 
+    /**
+     * @brief Reverses the path point.
+     *
+     * The control points are swapped and the point properties are adjusted.
+     * The position dependent properties like StartSubpath and CloseSubpath
+     * are not changed.
+     */
+    void reverse();
 protected:
     friend class KoPointGroup;
     friend class KoPathShape;
@@ -202,7 +221,6 @@ protected:
     void addToGroup( KoPointGroup *pointGroup );
     void map( const QMatrix &matrix, bool mapGroup );
     KoPointGroup * group() { return m_pointGroup; }
-
 private:
     KoPathShape * m_shape;
     QPointF m_point;
@@ -257,7 +275,8 @@ typedef QList<KoPathPoint *> KoSubpath;
 typedef QList<KoSubpath *> KoSubpathList;
 /// A KoPathSegment is a pair two neighboring KoPathPoints 
 typedef QPair<KoPathPoint*,KoPathPoint*> KoPathSegment;
-
+/// The position of a path point within a path shape
+typedef QPair<KoSubpath*, int> KoPointPosition;
 /**
  * @brief This is the base for all graphical objects.
  *
@@ -379,21 +398,66 @@ public:
      */
     QList<KoPathPoint*> pointsAt( const QRectF &r );
 
+    /**
+     * @brief Inserts a new point into the given subpath at the specified position
+     * @param point the point to insert
+     * @param subpath the subpath to insert the point into
+     * @param position the position within the subpath to insert the point at 
+     */
     void insertPoint( KoPathPoint* point, KoSubpath* subpath, int position );
+
     /**
      * @brief Removes point from the path.
      * @param point the point to remove
      * @return A QPair of the KoSubpath and the position in the subpath the removed point had
      */
-    QPair<KoSubpath*, int> removePoint( KoPathPoint *point );
+    KoPointPosition removePoint( KoPathPoint *point );
 
     /**
-     * @brief Splits the path segment starting with the given point at the specified position.
+     * @brief Splits the given path segment at the specified position.
      * @param segment the path segment to split
      * @param t the segment position in interval [0..1]
      * @return the inserted path point or 0 if splitting failed
      */
     KoPathPoint* splitAt( const KoPathSegment &segment, double t );
+
+    /**
+     * @brief Breaks the path at the given path point.
+     *
+     * The subpath which owns the given point is broken into two subpath,
+     * where the break point is doubled, and becomes an ending node in
+     * the first part and a starting node in the second part.
+     * If the subpath is closed, it is just opened at the given position.
+     *
+     * @param breakPoint the point at which to break
+     * @return the two resulting end points
+     */
+    QPair<KoPathPoint*,KoPathPoint*> breakAt( KoPathPoint *breakPoint );
+
+    /**
+     * @brief Breaks the path at the given segment.
+     *
+     * The subpath is broken by deleteing the given segment. So both
+     * segment points become a starting/ending nodes of the new
+     * subpaths.
+     *
+     * @param segment the segment at which to break the path
+     * @return true if breaking the path was successful, else false
+     */
+    bool breakAt( const KoPathSegment &segment );
+
+    /**
+     * @brief Joins the two given end subpath end points.
+     *
+     * If the two end points are of the same subpath, the subpath is simply closed.
+     * If they belong to diffrent subpath, these subpaths are merged into one
+     * subpath. If no new segment should be created the given end points are
+     * merged into one point.
+     *
+     * @param endPoint1 the first end point to join
+     * @param endPoint2 the second end point to join
+     */
+    void joinBetween( KoPathPoint *endPoint1, KoPathPoint *endPoint2 );
 
 #if 0 // not used yet
     /**
@@ -437,6 +501,9 @@ private:
 
     void updateLast( KoPathPoint * lastPoint );
 
+    void closeSubpath( KoSubpath *subpath );
+    KoPointPosition findPoint( KoPathPoint* point );
+    void reverseSubpath( KoSubpath &subpath );
 #ifndef NDEBUG
     void paintDebug( QPainter &painter );
 #endif

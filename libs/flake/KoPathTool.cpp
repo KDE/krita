@@ -312,8 +312,11 @@ void KoPathTool::keyReleaseEvent(QKeyEvent *event) {
 
 void KoPathTool::activate (bool temporary) {
     Q_UNUSED(temporary);
-    KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    m_pathShape = dynamic_cast<KoPathShape*> (shape);
+    foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes()) {
+        m_pathShape = dynamic_cast<KoPathShape*> (shape);
+        if(m_pathShape)
+            break;
+    }
     if(m_pathShape == 0) {
         emit sigDone();
         return;
@@ -323,11 +326,13 @@ void KoPathTool::activate (bool temporary) {
 }
 
 void KoPathTool::deactivate() {
-    QRectF repaintRect = transformed( m_pathShape->outline().controlPointRect() );
-    m_selectedPoints.clear();
+    if(m_pathShape) {
+        QRectF repaintRect = transformed( m_pathShape->outline().controlPointRect() );
+        m_selectedPoints.clear();
+        repaint( repaintRect );
+    }
     m_pathShape = 0;
     m_activePoint = 0;
-    repaint( repaintRect );
     delete m_rubberSelect;
     m_rubberSelect = 0;
 }

@@ -1054,7 +1054,7 @@ QString KoOasisStyles::saveOasisNumberStyle( KoGenStyles &mainStyles, const QStr
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_NUMBER );
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
     int decimalplaces = 0;

@@ -593,7 +593,8 @@ void KoBirdEyePanel::fitThumbnailToView()
 
 void KoBirdEyePanel::renderView()
 {
-    Q_ASSERT(!m_viewBuffer.isNull());
+    //sebsauer, 20060912: assert's on view=>New View. Seems it's not good to assume that resizeViewEvent() is called before renderView().
+    //Q_ASSERT(!m_viewBuffer.isNull());
 
     if (!m_viewBuffer.isNull()) {
 

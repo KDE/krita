@@ -345,7 +345,7 @@ void KoView::canvasAddChild( KoViewChild * )
 {
 }
 
-void KoView::customEvent( QCustomEvent *ev )
+void KoView::customEvent( QEvent *ev )
 {
   if ( KParts::PartActivateEvent::test( ev ) )
     partActivateEvent( (KParts::PartActivateEvent *)ev );

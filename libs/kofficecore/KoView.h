@@ -424,7 +424,7 @@ protected:
    * and KParts::GUIActivateEvent.
    * The respective handlers are called if such an event is found.
    */
-  virtual void customEvent( QCustomEvent *ev );
+  virtual void customEvent( QEvent *ev );
 
   /**
    * Handles the event KParts::PartActivateEvent.

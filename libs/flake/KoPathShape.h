@@ -424,9 +424,10 @@ public:
     /**
      * @brief Breaks the path at the given path point.
      *
-     * The subpath which owns the given point is broken into two subpath,
-     * where the break point is doubled, and becomes an ending node in
-     * the first part and a starting node in the second part.
+     * The subpath which owns the given point is broken into two subpaths,
+     * where the break point is doubled. The old breakpoint becomes an
+     * ending node in the first part and the doubled breakpoint a starting
+     * node in the second part.
      * If the subpath is closed, it is just opened at the given position.
      *
      * @param breakPoint the point at which to break
@@ -437,9 +438,12 @@ public:
     /**
      * @brief Breaks the path at the given segment.
      *
-     * The subpath is broken by deleteing the given segment. So both
-     * segment points become a starting/ending nodes of the new
-     * subpaths.
+     * The subpath is broken by deleteing the given segment. If the
+     * segment points are the start and end point of a single closed
+     * subpath, the subpath is simply unclosed. If the segment points
+     * are in the middle of the subpath, two new subpath are mode out
+     * of the subpath to break. So both segment points become
+     * starting/ending nodes of the new subpaths.
      *
      * @param segment the segment at which to break the path
      * @return true if breaking the path was successful, else false
@@ -450,9 +454,8 @@ public:
      * @brief Joins the two given end subpath end points.
      *
      * If the two end points are of the same subpath, the subpath is simply closed.
-     * If they belong to diffrent subpath, these subpaths are merged into one
-     * subpath. If no new segment should be created the given end points are
-     * merged into one point.
+     * If they belong to different subpaths, these subpaths are merged into one
+     * subpath.
      *
      * @param endPoint1 the first end point to join
      * @param endPoint2 the second end point to join

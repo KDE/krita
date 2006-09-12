@@ -1033,7 +1033,7 @@ void QWinMetaFile::createFontIndirect( long , short* parm)
     handle->font.setFamily( family );
     handle->font.setFixedPitch( ((parm[ 8 ] & 0x01) == 0) );
     // TODO: investigation why some test case need -2. (size of font in logical point)
-    handle->font.setPointSize( QABS(parm[ 0 ]) - 2 );
+    handle->font.setPointSize( qAbs(parm[ 0 ]) - 2 );
     handle->font.setWeight( (parm[ 4 ] >> 3) );
     handle->font.setItalic( (parm[ 5 ] & 0x01) );
     handle->font.setUnderline( (parm[ 5 ] & 0x100) );

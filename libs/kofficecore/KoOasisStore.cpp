@@ -132,8 +132,8 @@ bool KoOasisStore::closeManifestWriter()
     bool ok = false;
     if ( m_store->open( "META-INF/manifest.xml" ) )
     {
-        Q_LONG written = m_store->write( buffer->buffer() );
-        ok = ( written == (Q_LONG)buffer->buffer().size() && m_store->close() );
+        qint64 written = m_store->write( buffer->buffer() );
+        ok = ( written == (qint64) buffer->buffer().size() && m_store->close() );
     }
     delete buffer;
     return ok;

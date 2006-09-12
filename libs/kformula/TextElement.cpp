@@ -300,7 +300,8 @@ void TextElement::setUpPainter(const ContextStyle& context, QPainter& painter)
 
 const SymbolTable& TextElement::getSymbolTable() const
 {
-//    return formula()->getSymbolTable();
+    static SymbolTable s;
+    return s;
 }
 
 

@@ -174,7 +174,8 @@ int MatrixEntryElement::tabPos( int i )
 /*    if ( i < tabs.count() ) {
         return childPos( tabs.at( i ) );
     }
-    return -1;*/
+    */
+    return -1;
 }
 
 } // namespace KFormula

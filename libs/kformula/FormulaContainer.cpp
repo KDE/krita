@@ -277,7 +277,8 @@ bool Container::isEmpty()
 
 const SymbolTable& Container::getSymbolTable() const
 {
-//    return document()->getSymbolTable();
+    static SymbolTable s;
+    return s;
 }
 
 
@@ -390,11 +391,13 @@ void Container::emitErrorMsg( const QString& msg )
 
 const QRectF& Container::boundingRect() const
 {
-/*    const ContextStyle& context = document()->getContextStyle();
-    return QRectF( context.layoutUnitToPixelX( m_formulaElement->getX() ),
+ //   const ContextStyle& context = document()->getContextStyle();
+    static QRectF r;
+/*    r = QRectF( context.layoutUnitToPixelX( m_formulaElement->getX() ),
                    context.layoutUnitToPixelY( m_formulaElement->getY() ),
                    context.layoutUnitToPixelX( m_formulaElement->getWidth() ),
                    context.layoutUnitToPixelY( m_formulaElement->getHeight() ) );*/
+    return r;
 }
 
 const QRectF& Container::coveredRect() const
@@ -411,7 +414,8 @@ const QRectF& Container::coveredRect() const
                    context.layoutUnitToPixelX( cursorRect.width() ),
                    context.layoutUnitToPixelY( cursorRect.height() ) );
     }
-    return boundingRect();*/
+    */
+    return boundingRect();
 }
 /*
 double Container::width() const
@@ -431,6 +435,7 @@ double Container::baseline() const
 /*    const ContextStyle& context = document()->getContextStyle();
     //return context.layoutUnitToPixelY( rootElement()->getBaseline() );
     return context.layoutUnitPtToPt( context.pixelYToPt( m_formulaElement->getBaseline() ) );*/
+    return 0.0;
 }
 
 void Container::moveTo( int x, int y )
@@ -449,6 +454,8 @@ int Container::fontSize() const
 //        const ContextStyle& context = document()->getContextStyle();
 //        return qRound( context.baseSize() );
     }
+
+    return 0;
 }
 
 void Container::setFontSize( int pointSize, bool /*forPrint*/ )
@@ -499,10 +506,10 @@ bool Container::load( const QDomElement &fe )
         recalcLayout();
         return true;
     }
-    else {
-        delete root;
-        kWarning( DEBUGID ) << "Error constructing element tree." << endl;
-    }
+
+    delete root;
+    kWarning( DEBUGID ) << "Error constructing element tree." << endl;
+    return false;
 }
 
 
@@ -545,7 +552,8 @@ bool Container::loadMathML( const QDomElement &element, bool oasisFormat )
         getHistory()->clear();
         return true;
     }
-    return false;*/
+    */
+    return false;
 }
 
 /*

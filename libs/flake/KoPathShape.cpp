@@ -138,12 +138,19 @@ void KoPathPoint::unsetProperty( KoPointProperty property )
         break;
         case CanHaveControlPoint1:
             m_properties &= ~HasControlPoint1;
+            m_properties &= ~IsSmooth;
+            m_properties &= ~IsSymmetric;
         break;
         case CanHaveControlPoint2:
             m_properties &= ~HasControlPoint2;
+            m_properties &= ~IsSmooth;
+            m_properties &= ~IsSymmetric;
         break;
         case HasControlPoint1:
         case HasControlPoint2:
+            m_properties &= ~IsSmooth;
+            m_properties &= ~IsSymmetric;
+        break;
         case IsSmooth:
         case IsSymmetric:
             // no others depend on these
@@ -825,23 +832,24 @@ KoPathPoint* KoPathShape::splitAt( const KoPathSegment &segment, double t )
     return splitPoint;
 }
 
-QPair<KoPathPoint*,KoPathPoint*> KoPathShape::breakAt( KoPathPoint *breakPoint )
+bool KoPathShape::breakAt( KoPathPoint *breakPoint, KoPathPoint* &insertedPoint )
 {
-    QPair<KoPathPoint*,KoPathPoint*> result( 0, 0 );
-
     if( ! breakPoint )
-        return result;
+        return false;
 
     KoPointPosition pointPos = findPoint( breakPoint );
     if( ! pointPos.first )
-        return result;
+        return false;
 
     KoSubpath *subpath = pointPos.first;
+    KoPathPoint *newPoint = 0;
+
+    if( &insertedPoint )
+        insertedPoint = 0;
 
     // check if the subpath is closed
     if( subpath->last()->properties() & KoPathPoint::CloseSubpath )
     {
-        KoPathPoint *newPoint = 0;
         // break at the first subpath point
         if( pointPos.second == 0 )
         {
@@ -892,13 +900,13 @@ QPair<KoPathPoint*,KoPathPoint*> KoPathShape::breakAt( KoPathPoint *breakPoint )
     {
         // the subpath is not closed, so breaking at the end nodes has no effect
         if( pointPos.second == 0 || pointPos.second == subpath->size()-1 )
-            return result;
+            return false;
 
         // now break the subpath into two subpaths
         KoSubpath *newSubpath = new KoSubpath;
 
         // copy the break point and make it a starting node
-        KoPathPoint *newPoint = new KoPathPoint( *breakPoint );
+        newPoint = new KoPathPoint( *breakPoint );
         newPoint->setProperty( KoPathPoint::StartSubpath );
         newPoint->unsetProperty( KoPathPoint::CanHaveControlPoint1 );
         newSubpath->append( newPoint );
@@ -911,12 +919,12 @@ QPair<KoPathPoint*,KoPathPoint*> KoPathShape::breakAt( KoPathPoint *breakPoint )
             newSubpath->append( subpath->takeAt( pointPos.second+1 ) );
 
         m_subpaths.append( newSubpath );
-
-        result.first = breakPoint;
-        result.second = newPoint;
     }
 
-    return result;
+    if( &insertedPoint )
+        insertedPoint = newPoint;
+
+    return true;
 }
 
 bool KoPathShape::breakAt( const KoPathSegment &segment )
@@ -989,29 +997,29 @@ bool KoPathShape::breakAt( const KoPathSegment &segment )
     return true;
 }
 
-void KoPathShape::joinBetween( KoPathPoint *endPoint1, KoPathPoint *endPoint2 )
+bool KoPathShape::joinBetween( KoPathPoint *endPoint1, KoPathPoint *endPoint2 )
 {
     if( endPoint1 == endPoint2 )
-        return;
+        return false;
 
     KoPointPosition pos1 = findPoint( endPoint1 );
     if( ! pos1.first )
-        return;
+        return false;
     // check if first point is end or start node
     if( pos1.second != 0 && pos1.second != pos1.first->size()-1 )
-        return;
+        return false;
     KoPointPosition pos2 = findPoint( endPoint2 );
     if( ! pos2.first )
-        return;
+        return false;
     // check if second point is end or start node
     if( pos2.second != 0 && pos2.second != pos2.first->size()-1 )
-        return;
+        return false;
 
     // check if one of the subpaths is already closed
     if( pos1.first->last()->properties() & KoPathPoint::CloseSubpath )
-        return;
+        return false;
     if( pos2.first->last()->properties() & KoPathPoint::CloseSubpath )
-        return;
+        return false;
 
     // check if points are end nodes of same subpath
     if( pos1.first == pos2.first )
@@ -1042,6 +1050,8 @@ void KoPathShape::joinBetween( KoPathPoint *endPoint1, KoPathPoint *endPoint2 )
         int index = m_subpaths.indexOf( pos2.first );
         m_subpaths.removeAt( index );
     }
+
+    return true;
 }
 
 KoPointPosition KoPathShape::findPoint( KoPathPoint* point )

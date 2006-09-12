@@ -23,12 +23,12 @@
 #include <kdebug.h>
 #include <math.h>
 
-KoPointBaseCommand::KoPointBaseCommand( KoPathShape *shape )
+KoPathBaseCommand::KoPathBaseCommand( KoPathShape *shape )
 : m_shape( shape )
 {
 }
 
-void KoPointBaseCommand::repaint( const QRectF &oldControlPointRect )
+void KoPathBaseCommand::repaint( const QRectF &oldControlPointRect )
 {
     // the bounding rect has changed -> normalize
     QPointF offset = m_shape->normalize();
@@ -41,7 +41,7 @@ void KoPointBaseCommand::repaint( const QRectF &oldControlPointRect )
 }
 
 KoPointMoveCommand::KoPointMoveCommand( KoPathShape *shape, KoPathPoint *point, const QPointF &offset, KoPathPoint::KoPointType pointType )
-: KoPointBaseCommand( shape )
+: KoPathBaseCommand( shape )
 , m_offset( offset )
 , m_pointType( pointType )
 {
@@ -49,7 +49,7 @@ KoPointMoveCommand::KoPointMoveCommand( KoPathShape *shape, KoPathPoint *point, 
 }
 
 KoPointMoveCommand::KoPointMoveCommand( KoPathShape *shape, const QList<KoPathPoint*> &points, const QPointF &offset )
-: KoPointBaseCommand( shape )
+: KoPathBaseCommand( shape )
 , m_points( points )
 , m_offset( offset )
 , m_pointType( KoPathPoint::Node )
@@ -130,7 +130,7 @@ QString KoPointMoveCommand::name() const
 }
 
 KoPointPropertyCommand::KoPointPropertyCommand( KoPathShape *shape, KoPathPoint *point, KoPathPoint::KoPointProperties property )
-: KoPointBaseCommand( shape )
+: KoPathBaseCommand( shape )
 , m_point( point )
 , m_newProperties( property )
 {
@@ -205,13 +205,13 @@ QString KoPointPropertyCommand::name() const
 }
 
 KoPointRemoveCommand::KoPointRemoveCommand( KoPathShape *shape, KoPathPoint *point )
-: KoPointBaseCommand( shape )
+: KoPathBaseCommand( shape )
 {
     m_data << KoPointRemoveData( point );
 }
 
 KoPointRemoveCommand::KoPointRemoveCommand( KoPathShape *shape, const QList<KoPathPoint*> &points )
-: KoPointBaseCommand( shape )
+: KoPathBaseCommand( shape )
 {
     foreach( KoPathPoint* point, points )
         m_data << KoPointRemoveData( point );
@@ -256,7 +256,7 @@ QString KoPointRemoveCommand::name() const
 }
 
 KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const KoPathSegment &segment, double splitPosition )
-: KoPointBaseCommand( shape )
+: KoPathBaseCommand( shape )
 , m_deletePoint( false )
 {
     if( segment.first && segment.second )
@@ -271,7 +271,7 @@ KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const KoPathSe
 }
 
 KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, const QList<double> &splitPositions )
-: KoPointBaseCommand( shape )
+: KoPathBaseCommand( shape )
 , m_deletePoint( false )
 {
     Q_ASSERT(segments.size() == splitPositions.size());
@@ -292,7 +292,7 @@ KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<Ko
 }
 
 KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, double splitPosition )
-: KoPointBaseCommand( shape )
+: KoPathBaseCommand( shape )
 , m_deletePoint( false )
 {
     // check all the segments
@@ -364,4 +364,120 @@ void KoSegmentSplitCommand::unexecute()
 QString KoSegmentSplitCommand::name() const
 {
     return i18n( "Split segment" );
+}
+
+KoPointJoinCommand::KoPointJoinCommand( KoPathShape *shape, KoPathPoint *point1, KoPathPoint *point2 )
+: KoPathBaseCommand( shape )
+, m_point1( point1 )
+, m_point2( point2 )
+, m_joined( false )
+{
+}
+
+void KoPointJoinCommand::execute()
+{
+    m_joined = m_shape->joinBetween( m_point1, m_point2 );
+    m_shape->repaint();
+}
+
+void KoPointJoinCommand::unexecute()
+{
+    if( m_joined )
+    {
+        m_shape->breakAt( KoPathSegment( m_point1, m_point2 ) );
+        m_shape->repaint();
+    }
+}
+
+QString KoPointJoinCommand::name() const
+{
+    return i18n( "Join points" );
+}
+
+KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *breakPoint )
+: KoPathBaseCommand( shape )
+, m_breakPoint( breakPoint )
+, m_segment( 0, 0 )
+, m_breakSegment( false )
+, m_broken( false )
+, m_newPoint( 0 )
+, m_pointData1( 0, QPointF(0,0) )
+, m_pointData2( 0, QPointF(0,0) )
+{
+    if( breakPoint )
+        m_pointData1 = *breakPoint;
+    KoPathPoint *nextPoint = m_shape->nextPoint( m_breakPoint );
+    if( nextPoint )
+        m_pointData2 = *nextPoint;
+}
+
+KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, const KoPathSegment &segment )
+: KoPathBaseCommand( shape )
+, m_breakPoint( 0 )
+, m_segment( segment )
+, m_breakSegment( true )
+, m_broken( false )
+, m_newPoint( 0 )
+, m_pointData1( 0, QPointF(0,0) )
+, m_pointData2( 0, QPointF(0,0) )
+{
+    if( m_segment.first )
+        m_pointData1 = *m_segment.first;
+    if( m_segment.second )
+        m_pointData2 = *m_segment.second;
+}
+
+KoSubpathBreakCommand::~KoSubpathBreakCommand()
+{
+}
+
+void KoSubpathBreakCommand::execute()
+{
+    if( m_breakSegment )
+    {
+        if( m_segment.first && m_segment.second )
+        {
+            m_broken = m_shape->breakAt( m_segment );
+            m_shape->repaint();
+        }
+    }
+    else
+    {
+        if( m_breakPoint )
+        {
+            m_broken = m_shape->breakAt( m_breakPoint, m_newPoint );
+            m_shape->repaint();
+        }
+    }
+}
+
+void KoSubpathBreakCommand::unexecute()
+{
+    if( ! m_broken )
+        return;
+
+    if( m_breakSegment )
+    {
+        m_shape->joinBetween( m_segment.first, m_segment.second );
+        *m_segment.first = m_pointData1;
+        *m_segment.second = m_pointData2;
+    }
+    else
+    {
+        KoPathPoint *nextPoint = m_shape->nextPoint( m_newPoint );
+        m_shape->removePoint( m_newPoint );
+        delete m_newPoint;
+        m_newPoint = 0;
+        if( m_shape->joinBetween( m_breakPoint, nextPoint ) )
+        {
+            *m_breakPoint = m_pointData1;
+            *nextPoint = m_pointData2;
+        }
+    }
+    m_shape->repaint();
+}
+
+QString KoSubpathBreakCommand::name() const
+{
+    return i18n( "Break subpath" );
 }

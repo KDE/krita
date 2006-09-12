@@ -431,9 +431,10 @@ public:
      * If the subpath is closed, it is just opened at the given position.
      *
      * @param breakPoint the point at which to break
-     * @return the two resulting end points
+     * @param insertedPoint the new inserted point if any
+     * @return true if the subpath was broken, else false
      */
-    QPair<KoPathPoint*,KoPathPoint*> breakAt( KoPathPoint *breakPoint );
+    bool breakAt( KoPathPoint *breakPoint, KoPathPoint* &insertedPoint );
 
     /**
      * @brief Breaks the path at the given segment.
@@ -459,8 +460,9 @@ public:
      *
      * @param endPoint1 the first end point to join
      * @param endPoint2 the second end point to join
+     * @return true if the point could be joined, else false
      */
-    void joinBetween( KoPathPoint *endPoint1, KoPathPoint *endPoint2 );
+    bool joinBetween( KoPathPoint *endPoint1, KoPathPoint *endPoint2 );
 
 #if 0 // not used yet
     /**

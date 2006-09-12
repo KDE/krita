@@ -26,10 +26,10 @@
 #include <KoPathShape.h>
 
 /// the base command for commands altering a path shape
-class KoPointBaseCommand : public KCommand {
+class KoPathBaseCommand : public KCommand {
 public:
     /// intialize the base command with the shape
-    KoPointBaseCommand( KoPathShape *shape );
+    KoPathBaseCommand( KoPathShape *shape );
 protected:
     /**
      * Call this to repaint the shape after altering.
@@ -40,7 +40,7 @@ protected:
 };
 
 /// The undo / redo command for path point moving.
-class KoPointMoveCommand : public KoPointBaseCommand {
+class KoPointMoveCommand : public KoPathBaseCommand {
 public:
     /**
      * Command to move single path point.
@@ -70,7 +70,7 @@ private:
 };
 
 /// The undo / redo command for changing the path point type.
-class KoPointPropertyCommand : public KoPointBaseCommand {
+class KoPointPropertyCommand : public KoPathBaseCommand {
 public:
     /**
      * Command to change the type of the point
@@ -94,7 +94,7 @@ private:
 };
 
 /// The undo / redo command for removing path points.
-class KoPointRemoveCommand : public KoPointBaseCommand {
+class KoPointRemoveCommand : public KoPathBaseCommand {
 public:
     /**
      * Command to remove a single point from a path shape
@@ -130,7 +130,7 @@ private:
 };
 
 /// The undo / redo command for splitting a path segment
-class KoSegmentSplitCommand : public KoPointBaseCommand
+class KoSegmentSplitCommand : public KoPathBaseCommand
 {
 public:
     /**
@@ -170,6 +170,64 @@ private:
     QList<KoPathPoint*> m_splitPoints;
     bool m_deletePoint;
     QList< QPair<KoSubpath*,int> > m_splitPointPos;
+};
+
+/// The undo / redo command for joining two start/end path points
+class KoPointJoinCommand : public KoPathBaseCommand
+{
+public:
+    /**
+     * Command to join two start/end path points.
+     * @param shape the path shape whose points to join
+     * @param point1 the first point of the subpath to join
+     * @param point2 the second point of the subpath to join
+     */
+    KoPointJoinCommand( KoPathShape *shape, KoPathPoint *point1, KoPathPoint *point2 );
+    /// execute the command
+    void execute();
+    /// revert the actions done in execute
+    void unexecute();
+    /// return the name of this command
+    QString name() const;
+private:
+    KoPathPoint* m_point1;
+    KoPathPoint* m_point2;
+    bool m_joined;
+};
+
+/// The undo / redo command for breaking a subpath
+class KoSubpathBreakCommand : public KoPathBaseCommand
+{
+public:
+    /**
+     * Command to break a subpath at a single point.
+     * @param shape the path shape whose subpath to close
+     * @param point1 the first point of the subpath to join
+     * @param point2 the second point of the subpath to join
+     */
+    KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *breakPoint );
+    /**
+     * Command to break a subpath at a path segment
+     * @param shape the path shape whose subpath to close
+     * @param point1 the first point of the subpath to join
+     * @param point2 the second point of the subpath to join
+     */
+    KoSubpathBreakCommand( KoPathShape *shape, const KoPathSegment &segment );
+    virtual ~KoSubpathBreakCommand();
+    /// execute the command
+    void execute();
+    /// revert the actions done in execute
+    void unexecute();
+    /// return the name of this command
+    QString name() const;
+private:
+    KoPathPoint* m_breakPoint;
+    KoPathSegment m_segment;
+    bool m_breakSegment;
+    bool m_broken;
+    KoPathPoint* m_newPoint;
+    KoPathPoint m_pointData1; ///< data of the first point to restore
+    KoPathPoint m_pointData2; ///< data of the second point to restore 
 };
 
 #endif

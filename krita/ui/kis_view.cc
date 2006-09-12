@@ -307,7 +307,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent)
     createLayerBox();
 
     //XXX: Logic for this needs updating for Qt4. Enable painting from start for now.
-    m_paintViewEnabled = true;
+    //m_paintViewEnabled = true; //sebsauer, 20060912: seems to work correct with current Qt4-snapshot
 
     setupCanvas();
     m_canvas->hide();

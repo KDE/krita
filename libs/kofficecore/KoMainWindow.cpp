@@ -40,7 +40,7 @@
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
-#include <kprogressbar.h>
+#include <QProgressBar>
 #include <kpushbutton.h>
 #include <kdebug.h>
 #include <ktempfile.h>
@@ -148,7 +148,7 @@ public:
   KoView *m_activeView;
 
   QLabel * statusBarLabel;
-  KProgressBar *m_progress;
+  QProgressBar *m_progress;
 
   QList<KAction *> m_splitViewActionList;
   // This additional list is needed, because we don't plug
@@ -1469,7 +1469,7 @@ void KoMainWindow::slotProgress(int value) {
             d->m_progress=0L;
         }
         statusBar()->setMaximumHeight(statusBar()->height());
-        d->m_progress=new KProgressBar(statusBar());
+        d->m_progress=new QProgressBar(statusBar());
         //d->m_progress->setMaximumHeight(statusBar()->height());
         statusBar()->addPermanentWidget( d->m_progress );
         d->m_progress->show();

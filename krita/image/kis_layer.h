@@ -216,9 +216,9 @@ public:
     virtual QString name() const;
     virtual void setName(const QString& name);
 
-    KoCompositeOp compositeOp() const { return m_compositeOp; }
-    void setCompositeOp(const KoCompositeOp& compositeOp);
-    KNamedCommand *setCompositeOpCommand(const KoCompositeOp& compositeOp);
+    const KoCompositeOp * compositeOp() const { return m_compositeOp; }
+    void setCompositeOp(const KoCompositeOp * compositeOp);
+    KNamedCommand * setCompositeOpCommand(const KoCompositeOp * compositeOp);
 
     KisImage *image() const { return m_image; }
     virtual void setImage(KisImage *image) { m_image = image; }
@@ -273,7 +273,7 @@ private:
     KisImage *m_image;
 
     // Operation used to composite this layer with the layers _under_ this layer
-    KoCompositeOp m_compositeOp;
+    const KoCompositeOp * m_compositeOp;
 };
 
 #endif // KIS_LAYER_H_

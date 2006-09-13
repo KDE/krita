@@ -21,13 +21,17 @@
 
 #include <config.h>
 #include <lcms.h>
+#include <limits.h>
 
 #include <QImage>
+#include <QBitArray>
+#include <QHash>
 #include <q3valuevector.h>
 #include <q3valuelist.h>
 
 #include <KoCompositeOp.h>
 #include <KoChannelInfo.h>
+#include <KoID.h>
 
 
 class KoColorProfile;
@@ -192,12 +196,21 @@ public:
     //========== Capabilities =================================================//
 
     /**
-     * Returns the list of user-visible composite ops supported by this colourspace. Internal
-     * ops such as COPY, CLEAR, and ERASE, are not included as these make no sense
-     * for layers in the full image model.
+     * Returns the list of user-visible composite ops supported by this colourspace.
      */
-    virtual KoCompositeOpList userVisiblecompositeOps() const = 0;
+    virtual KoCompositeOpList userVisiblecompositeOps() const;
 
+    /**
+     * Retrieve a single composite op from the ones this colorspace offers.
+     * If the requeste composite op does not exist, COMPOSITE_OVER is returned.
+     */
+    virtual const KoCompositeOp * compositeOp(const QString & id);
+
+    /**
+     * add a composite op to this colorspace.
+     */
+    virtual void addCompositeOp(const KoCompositeOp * op);
+    
     /**
      * Returns true if the colorspace supports channel values outside the
      * (normalised) range 0 to 1.
@@ -428,19 +441,110 @@ public:
     /**
      * Compose two arrays of pixels together. If source and target
      * are not the same colour model, the source pixels will be
-     * converted to the target model.
+     * converted to the target model. We're "dst" -- "dst" pixels are always in _this_
+     * colorspace.
+     *
+     * @param dst pointer to the pixels onto which src will be composited. dst is "below" src.
+     * @param dststride skip in bytes to the starting point of the next row of dst pixels
+     * @param srcSpace the colorspace of the source pixels that will be composited onto "us"
+     * @param src pointer to the pixels that will be composited onto "us"
+     * @param srcRowStride skip in bytes to the starting point of the next row of src pixels
+     * @param srcAlphaMask pointer to an alpha mask that determines whether and how much 
+     *        of src will be composited onto dst
+     * @param maskRowStride skip in bytes to the starting point of the next row of mask pixels
+     * @param rows the number of rows of pixels we'll be compositing
+     * @param cols the length in pixels of a single row we'll be compositing.
+     * @param op the composition operator to use, e.g. COPY_OVER
+     * @param channelFlags a bit array reflecting which channels will be composited and which
+     *        channels won't.
      */
     virtual void bitBlt(quint8 *dst,
-                qint32 dststride,
-                KoColorSpace * srcSpace,
-                const quint8 *src,
-                qint32 srcRowStride,
-                const quint8 *srcAlphaMask,
-                qint32 maskRowStride,
-                quint8 opacity,
-                qint32 rows,
-                qint32 cols,
-                const KoCompositeOp& op) = 0;
+			qint32 dststride,
+			KoColorSpace * srcSpace,
+			const quint8 *src,
+			qint32 srcRowStride,
+			const quint8 *srcAlphaMask,
+			qint32 maskRowStride,
+			quint8 opacity,
+			qint32 rows,
+			qint32 cols,
+			const KoCompositeOp * op,
+			const QBitArray & channelFlags) 
+    {
+	Q_UNUSED(dst);
+	Q_UNUSED(dststride);
+	Q_UNUSED(srcSpace);
+	Q_UNUSED(src);
+	Q_UNUSED(srcRowStride);
+	Q_UNUSED(srcAlphaMask);
+	Q_UNUSED(maskRowStride);
+	Q_UNUSED(opacity);
+	Q_UNUSED(rows);
+	Q_UNUSED(cols);
+	Q_UNUSED(op);
+	Q_UNUSED(channelFlags); 
+    }
+
+    /**
+     * Convenience function for the above where all channels are turned on.
+     */
+    virtual void bitBlt(quint8 *dst,
+			qint32 dststride,
+			KoColorSpace * srcSpace,
+			const quint8 *src,
+			qint32 srcRowStride,
+			const quint8 *srcAlphaMask,
+			qint32 maskRowStride,
+			quint8 opacity,
+			qint32 rows,
+			qint32 cols,
+			const KoCompositeOp * op) 
+    {
+	Q_UNUSED(dst);
+	Q_UNUSED(dststride);
+	Q_UNUSED(srcSpace);
+	Q_UNUSED(src);
+	Q_UNUSED(srcRowStride);
+	Q_UNUSED(srcAlphaMask);
+	Q_UNUSED(maskRowStride);
+	Q_UNUSED(opacity);
+	Q_UNUSED(rows);
+	Q_UNUSED(cols);
+	Q_UNUSED(op);
+    }
+    
+    /**
+     * Convenience function for the above if you don't have the composite op object yet.
+     */
+    virtual void bitBlt(quint8 *dst,
+			qint32 dststride,
+			KoColorSpace * srcSpace,
+			const quint8 *src,
+			qint32 srcRowStride,
+			const quint8 *srcAlphaMask,
+			qint32 maskRowStride,
+			quint8 opacity,
+			qint32 rows,
+			qint32 cols,
+			const QString & op,
+			const QBitArray & channelFlags);
+
+    /**
+     * Convenience function for the above, if you simply want all channels composited
+     */
+    virtual void bitBlt(quint8 *dst,
+			qint32 dststride,
+			KoColorSpace * srcSpace,
+			const quint8 *src,
+			qint32 srcRowStride,
+			const quint8 *srcAlphaMask,
+			qint32 maskRowStride,
+			quint8 opacity,
+			qint32 rows,
+			qint32 cols,
+			const QString& op);
+
+    
 
     /**
      * The backgroundfilters will be run periodically on the newly
@@ -458,6 +562,7 @@ private:
 protected:
     KoColorSpaceRegistry * m_parent;
     Q3ValueVector<KoChannelInfo *> m_channels;
+    QHash<QString, KoCompositeOp *> m_compositeOps;
 
 };
 

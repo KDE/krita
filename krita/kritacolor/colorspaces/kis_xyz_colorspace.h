@@ -82,7 +82,7 @@ public:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KoCompositeOp& op);
+                const KoCompositeOp* op);
 
     KoCompositeOpList userVisiblecompositeOps() const;
 

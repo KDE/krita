@@ -206,7 +206,7 @@ void KisToolFreehand::initPaint(KisEvent *)
         m_painter->setCompositeOp(m_compositeOp);
         m_painter->setOpacity(m_opacity);
     } else {
-        m_painter->setCompositeOp(COMPOSITE_OVER);
+        m_painter->setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_OVER));
         m_painter->setOpacity( OPACITY_OPAQUE );
 
     }

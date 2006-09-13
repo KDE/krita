@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-
+#include <KoCompositeOp.h>
 #include "kis_cmb_composite.h"
 
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
@@ -44,20 +44,20 @@ void KisCmbComposite::setCompositeOpList(const KoCompositeOpList & list)
     m_list = list;
 
     for(int i = 0; i < m_list.count(); ++i)
-        addItem(m_list.at(i).id().name());
+        addItem(m_list.at(i)->description());
 }
 
-KoCompositeOp KisCmbComposite::currentItem() const
+KoCompositeOp * KisCmbComposite::currentItem() const
 {
     qint32 i = super::currentIndex();
-    if (i > m_list.count() - 1) return KoCompositeOp();
+    if (i > m_list.count() - 1) return 0;
 
     return m_list[i];
 }
 
-void KisCmbComposite::setCurrent(const KoCompositeOp& op)
+void KisCmbComposite::setCurrent(const KoCompositeOp* op)
 {
-    qint32 index = m_list.indexOf(op);
+    qint32 index = m_list.indexOf(const_cast<KoCompositeOp*>( op ));
 
     if (index >= 0) {
         super::setCurrentIndex(index);
@@ -67,7 +67,7 @@ void KisCmbComposite::setCurrent(const KoCompositeOp& op)
 void KisCmbComposite::setCurrent(const QString & s)
 {
     for (int i = 0; i < m_list.count(); ++i) {
-        if (m_list.at(i).id().id() == s) {
+        if (m_list.at(i)->id() == s) {
             super::setCurrentIndex(i);
             break;
         }

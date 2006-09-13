@@ -22,7 +22,9 @@
 
 #include <kdebug.h>
 #include <kconfig.h>
+#include <klocale.h>
 #include <kglobal.h>
+#include <limits.h>
 
 #include "KoLcmsColorSpaceTrait.h"
 #include "KoColorProfile.h"
@@ -30,6 +32,54 @@
 #include "KoIntegerMaths.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoChannelInfo.h"
+
+namespace {
+
+    class CompositeCopy : public KoCompositeOp {
+
+    public:
+
+        CompositeCopy(KoColorSpace * cs)
+            : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Copy" ) )
+        {
+        }
+
+    public:
+
+        void composite(quint8 *dstRowStart,
+                       qint32 dstRowStride,
+                       const quint8 *srcRowStart,
+                       qint32 srcRowStride,
+                       const quint8 *maskRowStart,
+                       qint32 maskRowStride,
+                       qint32 rows,
+                       qint32 numColumns,
+                       quint8 opacity,
+                       const QBitArray & channelFlags) const
+        {
+
+            Q_UNUSED( maskRowStart );
+            Q_UNUSED( maskRowStride );
+            Q_UNUSED( channelFlags );
+            quint8 *dst = dstRowStart;
+            const quint8 *src = srcRowStart;
+            qint32 bytesPerPixel = m_colorSpace->pixelSize();
+
+            while (rows > 0) {
+                memcpy(dst, src, numColumns * bytesPerPixel);
+
+                if (opacity != OPACITY_OPAQUE) {
+                    m_colorSpace->multiplyAlpha(dst, opacity, numColumns);
+                }
+
+                dst += dstRowStride;
+                src += srcRowStride;
+                --rows;
+            }
+        }
+    };
+}
+
 
 class KoColorAdjustmentImpl : public KoColorAdjustment
 {
@@ -79,6 +129,7 @@ KoLcmsColorSpaceTrait::KoLcmsColorSpaceTrait(DWORD cmType,
     m_defaultToRGB = 0;
     m_defaultFromLab = 0;
     m_defaultToLab = 0;
+
 }
 
 void KoLcmsColorSpaceTrait::init()
@@ -107,6 +158,7 @@ void KoLcmsColorSpaceTrait::init()
 
     m_defaultToLab = cmsCreateTransform(m_profile->profile(), m_cmType, hLab, TYPE_Lab_16,
                                         INTENT_PERCEPTUAL, 0);
+    m_compositeOps.insert( COMPOSITE_COPY, new CompositeCopy( this ) );
 }
 
 KoLcmsColorSpaceTrait::~KoLcmsColorSpaceTrait()
@@ -539,14 +591,14 @@ void KoLcmsColorSpaceTrait::convolveColors(quint8** colors, qint32 * kernelValue
 
 
     if (channelFlags & KoChannelInfo::FLAG_COLOR) {
-        const_cast<KoLcmsColorSpaceTrait *>(this)->fromQColor(QColor(CLAMP((totalRed / factor) + offset, 0, UINT8_MAX),
-                                        CLAMP((totalGreen / factor) + offset, 0, UINT8_MAX),
-                                        CLAMP((totalBlue / factor) + offset, 0, UINT8_MAX)),
-            dstOpacity,
-            dst);
+        const_cast<KoLcmsColorSpaceTrait *>(this)->fromQColor(QColor(CLAMP((totalRed / factor) + offset, 0, SCHAR_MAX),
+                                                                     CLAMP((totalGreen / factor) + offset, 0, SCHAR_MAX),
+                                                                     CLAMP((totalBlue / factor) + offset, 0, SCHAR_MAX)),
+                                                              dstOpacity,
+                                                              dst);
     }
     if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
-        const_cast<KoLcmsColorSpaceTrait *>(this)->fromQColor(dstColor, CLAMP((totalAlpha/ factor) + offset, 0, UINT8_MAX), dst);
+        const_cast<KoLcmsColorSpaceTrait *>(this)->fromQColor(dstColor, CLAMP((totalAlpha/ factor) + offset, 0, SCHAR_MAX), dst);
     }
 
 }
@@ -616,16 +668,17 @@ KoID KoLcmsColorSpaceTrait::mathToolboxID() const
 }
 
 void KoLcmsColorSpaceTrait::bitBlt(quint8 *dst,
-                   qint32 dststride,
-                   KoColorSpace * srcSpace,
-                   const quint8 *src,
-                   qint32 srcRowStride,
-                   const quint8 *srcAlphaMask,
-                   qint32 maskRowStride,
-                   quint8 opacity,
-                   qint32 rows,
-                   qint32 cols,
-                   const KoCompositeOp& op)
+                                   qint32 dststride,
+                                   KoColorSpace * srcSpace,
+                                   const quint8 *src,
+                                   qint32 srcRowStride,
+                                   const quint8 *srcAlphaMask,
+                                   qint32 maskRowStride,
+                                   quint8 opacity,
+                                   qint32 rows,
+                                   qint32 cols,
+                                   const KoCompositeOp * op,
+                                   const QBitArray & channelFlags)
 {
     if (rows <= 0 || cols <= 0)
         return;
@@ -642,36 +695,79 @@ void KoLcmsColorSpaceTrait::bitBlt(quint8 *dst,
 
         for (qint32 row = 0; row < rows; row++) {
             srcSpace->convertPixelsTo(src + row * srcRowStride,
-                                        m_conversionCache.data() + row * cols * pixelSize(), this,
-                                        cols);
+                                      m_conversionCache.data() + row * cols * pixelSize(), this,
+                                      cols);
         }
 
         // The old srcRowStride is no longer valid because we converted to the current cs
         srcRowStride = cols * pixelSize();
 
-        bitBlt(dst,
-               dststride,
-               m_conversionCache.data(),
-               srcRowStride,
-               srcAlphaMask,
-               maskRowStride,
-               opacity,
-               rows,
-               cols,
-               op);
+        op->composite( dst, dststride,
+                      m_conversionCache.data(), srcRowStride,
+                      srcAlphaMask, maskRowStride,
+                      rows,  cols,
+                      opacity, channelFlags );
 
     }
     else {
-        bitBlt(dst,
-               dststride,
-               src,
-               srcRowStride,
-               srcAlphaMask,
-               maskRowStride,
-               opacity,
-               rows,
-               cols,
-               op);
+        op->composite( dst, dststride,
+                      src, srcRowStride,
+                      srcAlphaMask, maskRowStride,
+                      rows,  cols,
+                      opacity, channelFlags );
+    }
+}
+
+// XXX: I don't wan this code duplication, but also don't want an
+//      extra function call in this critical section of code. What to
+//      do?
+void KoLcmsColorSpaceTrait::bitBlt(quint8 *dst,
+                                   qint32 dststride,
+                                   KoColorSpace * srcSpace,
+                                   const quint8 *src,
+                                   qint32 srcRowStride,
+                                   const quint8 *srcAlphaMask,
+                                   qint32 maskRowStride,
+                                   quint8 opacity,
+                                   qint32 rows,
+                                   qint32 cols,
+                                   const KoCompositeOp * op)
+{
+    if (rows <= 0 || cols <= 0)
+        return;
+
+    if (this != srcSpace) {
+        quint32 len = pixelSize() * rows * cols;
+
+        // If our conversion cache is too small, extend it.
+        if (!m_conversionCache.resize( len, Q3GArray::SpeedOptim )) {
+            kWarning() << "Could not allocate enough memory for the conversion!\n";
+            // XXX: We should do a slow, pixel by pixel bitblt here...
+            abort();
+        }
+
+        for (qint32 row = 0; row < rows; row++) {
+            srcSpace->convertPixelsTo(src + row * srcRowStride,
+                                      m_conversionCache.data() + row * cols * pixelSize(), this,
+                                      cols);
+        }
+
+        // The old srcRowStride is no longer valid because we converted to the current cs
+        srcRowStride = cols * pixelSize();
+
+        op->composite( dst, dststride,
+                      m_conversionCache.data(), srcRowStride,
+                      srcAlphaMask, maskRowStride,
+                      rows,  cols,
+                      opacity);
+
+    }
+    else {
+        op->composite( dst, dststride,
+                      src,srcRowStride,
+                      srcAlphaMask, maskRowStride,
+                      rows,  cols,
+                      opacity);
     }
 }
 
@@ -721,24 +817,5 @@ cmsHTRANSFORM KoLcmsColorSpaceTrait::createTransform(KoColorSpace * dstColorSpac
         return tf;
     }
     return 0;
-}
-
-void KoLcmsColorSpaceTrait::compositeCopy(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 * /*maskRowStart*/, qint32 /*maskRowStride*/, qint32 rows, qint32 numColumns, quint8 opacity)
-{
-    quint8 *dst = dstRowStart;
-    const quint8 *src = srcRowStart;
-    qint32 bytesPerPixel = pixelSize();
-
-    while (rows > 0) {
-        memcpy(dst, src, numColumns * bytesPerPixel);
-
-        if (opacity != OPACITY_OPAQUE) {
-            multiplyAlpha(dst, opacity, numColumns);
-        }
-
-        dst += dstRowStride;
-        src += srcRowStride;
-        --rows;
-    }
 }
 

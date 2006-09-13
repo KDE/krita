@@ -457,17 +457,6 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
 
     QString compositeOpName = element.attribute("compositeop");
-    KoCompositeOp compositeOp;
-
-    if (compositeOpName.isNull()) {
-        compositeOp = COMPOSITE_OVER;
-    } else {
-        compositeOp = KoCompositeOp(compositeOpName);
-    }
-
-    if (!compositeOp.isValid()) {
-        return KisLayerSP(0);
-    }
 
     if ((attr = element.attribute("visible")).isNull())
         attr = "1";
@@ -481,19 +470,19 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
     // Now find out the layer type and do specific handling
     if ((attr = element.attribute("layertype")).isNull())
-        return loadPaintLayer(element, img, name, x, y, opacity, visible, locked, compositeOp) ;
+        return loadPaintLayer(element, img, name, x, y, opacity, visible, locked, compositeOpName);
 
     if(attr == "paintlayer")
-        return loadPaintLayer(element, img, name, x, y, opacity, visible, locked, compositeOp);
+        return loadPaintLayer(element, img, name, x, y, opacity, visible, locked, compositeOpName);
 
     if(attr == "grouplayer")
-        return KisLayerSP(loadGroupLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data());
+        return KisLayerSP(loadGroupLayer(element, img, name, x, y, opacity, visible, locked, compositeOpName).data());
 
     if(attr == "adjustmentlayer")
-        return KisLayerSP(loadAdjustmentLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data());
+        return KisLayerSP(loadAdjustmentLayer(element, img, name, x, y, opacity, visible, locked, compositeOpName).data());
 
     if(attr == "partlayer")
-        return KisLayerSP(loadPartLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data());
+        return KisLayerSP(loadPartLayer(element, img, name, x, y, opacity, visible, locked, compositeOpName).data());
 
     kWarning(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
     return KisLayerSP(0);
@@ -502,7 +491,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
 KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
                                   QString name, qint32 x, qint32 y,
-                                  qint32 opacity, bool visible, bool locked, KoCompositeOp compositeOp)
+                                  qint32 opacity, bool visible, bool locked, const QString & compositeOp)
 {
     QString attr;
     KisPaintLayerSP layer;
@@ -517,10 +506,12 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
         // use default profile - it will be replaced later in completLoading
         cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(colorspacename,"");
 
+    const KoCompositeOp * op = cs->compositeOp(compositeOp);
+
     layer = new KisPaintLayer(img.data(), name, opacity, cs);
     Q_CHECK_PTR(layer);
 
-    layer->setCompositeOp(compositeOp);
+    layer->setCompositeOp(op);
     layer->setVisible(visible);
     layer->setLocked(locked);
     layer->setX(x);
@@ -545,15 +536,15 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
 
 KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP img,
                                        QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                                       KoCompositeOp compositeOp)
+                                       const QString & compositeOp)
 {
     QString attr;
     KisGroupLayerSP layer;
 
     layer = new KisGroupLayer(img.data(), name, opacity);
     Q_CHECK_PTR(layer);
-
-    layer->setCompositeOp(compositeOp);
+    const KoCompositeOp * op = img->colorSpace()->compositeOp(compositeOp);
+    layer->setCompositeOp(op);
     layer->setVisible(visible);
     layer->setLocked(locked);
     layer->setX(x);
@@ -566,7 +557,7 @@ KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP im
 
 KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, KisImageSP img,
                                              QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                                             KoCompositeOp compositeOp)
+                                             const QString & compositeOp)
 {
     QString attr;
     KisAdjustmentLayerSP layer;
@@ -590,7 +581,8 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
     layer = KisAdjustmentLayerSP(new KisAdjustmentLayer(img, name, kfc, KisSelectionSP(0)));
     Q_CHECK_PTR(layer);
 
-    layer->setCompositeOp(compositeOp);
+    const KoCompositeOp * op = img->colorSpace()->compositeOp(compositeOp);
+    layer->setCompositeOp(op);
     layer->setVisible(visible);
     layer->setLocked(locked);
     layer->setX(x);
@@ -608,7 +600,7 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
 KisPartLayerSP KisDoc::loadPartLayer(const QDomElement& element, KisImageSP img,
                                      QString name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
                                       bool visible, bool locked,
-                                      KoCompositeOp compositeOp) {
+                                      const QString & compositeOp) {
     KisChildDoc* child = new KisChildDoc(this);
     QString filename(element.attribute("filename"));
     QDomElement partElement = element.namedItem("object").toElement();
@@ -623,8 +615,8 @@ KisPartLayerSP KisDoc::loadPartLayer(const QDomElement& element, KisImageSP img,
 
     KisPartLayerSP layer = KisPartLayerSP(new KisPartLayerImpl(img, child));
     Q_CHECK_PTR(layer);
-
-    layer->setCompositeOp(compositeOp);
+    const KoCompositeOp * op = img->colorSpace()->compositeOp(compositeOp);
+    layer->setCompositeOp(op);
     layer->setVisible(visible);
     layer->setLocked(locked);
     layer->setOpacity(opacity);

@@ -96,7 +96,7 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
     m_painter->setPaintColor(KoColor(Qt::white, selection->colorSpace()));
     m_painter->setBrush(m_subject->currentBrush());
     m_painter->setOpacity(OPACITY_OPAQUE);
-    m_painter->setCompositeOp(COMPOSITE_ERASE);
+    m_painter->setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_ERASE));
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("eraser", 0, painter());
     painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
 

@@ -50,7 +50,7 @@ public:
         layerElement.setAttribute("x", layer->x());
         layerElement.setAttribute("y", layer->y());
         layerElement.setAttribute("opacity", layer->opacity());
-        layerElement.setAttribute("compositeop", layer->compositeOp().id().id());
+        layerElement.setAttribute("compositeop", layer->compositeOp()->id());
         layerElement.setAttribute("visible", layer->visible());
         layerElement.setAttribute("locked", layer->locked());
         layerElement.setAttribute("layertype", "paintlayer");
@@ -82,7 +82,7 @@ public:
             layerElement.setAttribute("x", layer->x());
             layerElement.setAttribute("y", layer->y());
             layerElement.setAttribute("opacity", layer->opacity());
-            layerElement.setAttribute("compositeop", layer->compositeOp().id().id());
+            layerElement.setAttribute("compositeop", layer->compositeOp()->id());
             layerElement.setAttribute("visible", layer->visible());
             layerElement.setAttribute("locked", layer->locked());
             layerElement.setAttribute("layertype", "grouplayer");
@@ -120,7 +120,7 @@ public:
         layerElement.setAttribute("filtername", layer->filter()->name());
         layerElement.setAttribute("filterversion", layer->filter()->version());
         layerElement.setAttribute("opacity", layer->opacity());
-        layerElement.setAttribute("compositeop", layer->compositeOp().id().id());
+        layerElement.setAttribute("compositeop", layer->compositeOp()->id());
         layerElement.setAttribute("visible", layer->visible());
         layerElement.setAttribute("locked", layer->locked());
         layerElement.setAttribute("layertype", "adjustmentlayer");

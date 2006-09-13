@@ -453,7 +453,7 @@ void KisView::createLayerBox()
     connect(m_layerBox, SIGNAL(sigOpacityChanged(int, bool)), this, SLOT(layerOpacity(int, bool)));
     connect(m_layerBox, SIGNAL(sigOpacityFinishedChanging(int, int)),
             this, SLOT(layerOpacityFinishedChanging(int, int)));
-    connect(m_layerBox, SIGNAL(sigItemComposite(const KoCompositeOp&)), this, SLOT(layerCompositeOp(const KoCompositeOp&)));
+    connect(m_layerBox, SIGNAL(sigItemComposite(const KoCompositeOp*)), this, SLOT(layerCompositeOp(const KoCompositeOp*)));
 
     paletteManager()->addWidget(m_layerBox, "layerbox", krita::LAYERBOX, 0);
 }
@@ -2050,7 +2050,7 @@ void KisView::preferences()
     }
 }
 
-void KisView::layerCompositeOp(const KoCompositeOp& compositeOp)
+void KisView::layerCompositeOp(const KoCompositeOp* compositeOp)
 {
     KisImageSP img = currentImg();
     if (!img) return;

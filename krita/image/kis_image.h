@@ -218,14 +218,13 @@ public:
      */
     KoColor mergedPixel(qint32 x, qint32 y);
 
-    /// Creates a new paint layer with the specified properties, adds it to the image, and returns it.
-    KisLayerSP newLayer(const QString& name, quint8 opacity,
-                             const KoCompositeOp& compositeOp = KoCompositeOp(), KoColorSpace * colorstrategy = 0);
-
+    // This was only used from the performance tests?
+    KisLayerSP newLayer(const QString& name, quint8 opacity, const QString & compositeOp, KoColorSpace * colorstrategy);
+    
     /// Get the active painting device. Returns 0 if the active layer does not have a paint device.
     KisPaintDeviceSP activeDevice();
 
-    void setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp& compositeOp, const QString& name);
+    void setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp * compositeOp, const QString& name);
 
     KisGroupLayerSP rootLayer() const;
     KisLayerSP activeLayer() const;

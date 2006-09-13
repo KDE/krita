@@ -47,3 +47,9 @@ Polygone: NTAA
 Polyline: NTAA
  
 Duplicate Brush: NTAA
+
+* AchiestDragon:
+
+[20:19] <AchiestDragon> the main down side of using it is when using say the spray tool the mouse pointer shows it fine but once you start drawing it gets in the way , is there a way to get the pointer to change to something that is less in the way like a small crosshair
+[20:22] <boud> AchiestDragon: yes, you can choose a crosshair cursor, however, then you won't have the brush outline anymore.
+

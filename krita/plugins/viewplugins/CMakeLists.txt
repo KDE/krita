@@ -1,5 +1,5 @@
 
-add_subdirectory( performancetest )
+#add_subdirectory( performancetest )
 add_subdirectory( colorrange )
 add_subdirectory( colorspaceconversion )
 add_subdirectory( dropshadow )

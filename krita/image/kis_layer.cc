@@ -164,18 +164,18 @@ namespace {
         typedef KisLayerCommand super;
 
     public:
-        KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp& oldCompositeOp, const KoCompositeOp& newCompositeOp);
+        KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp * oldCompositeOp, const KoCompositeOp * newCompositeOp);
 
         virtual void execute();
         virtual void unexecute();
 
     private:
-        KoCompositeOp m_oldCompositeOp;
-        KoCompositeOp m_newCompositeOp;
+        const KoCompositeOp * m_oldCompositeOp;
+        const KoCompositeOp * m_newCompositeOp;
     };
 
-    KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp& oldCompositeOp,
-                                       const KoCompositeOp& newCompositeOp) :
+    KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp* oldCompositeOp,
+                                       const KoCompositeOp* newCompositeOp) :
         super(i18n("Layer Composite Mode"), layer)
     {
         m_oldCompositeOp = oldCompositeOp;
@@ -280,7 +280,7 @@ KisLayer::KisLayer(KisImage *img, const QString &name, quint8 opacity) :
     m_name(name),
     m_parent(0),
     m_image(img),
-    m_compositeOp(COMPOSITE_OVER)
+    m_compositeOp(const_cast<KoCompositeOp*>( img->colorSpace()->compositeOp( COMPOSITE_OVER )) )
 {
     setObjectName(name);
 }
@@ -314,7 +314,7 @@ KoDocumentSectionModel::PropertyList KisLayer::properties() const
     l << Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible());
     l << Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), locked());
     l << Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
-    l << Property(i18n("Composite Mode"), compositeOp().id().name());
+    l << Property(i18n("Composite Mode"), compositeOp()->id());
     return l;
 }
 
@@ -605,18 +605,18 @@ void KisLayer::setName(const QString& name)
     }
 }
 
-void KisLayer::setCompositeOp(const KoCompositeOp& compositeOp)
+void KisLayer::setCompositeOp(const KoCompositeOp* compositeOp)
 {
     if (m_compositeOp != compositeOp)
     {
-       m_compositeOp = compositeOp;
+       m_compositeOp = const_cast<KoCompositeOp*>( compositeOp );
        notifyPropertyChanged();
        setDirty();
 
     }
 }
 
-KNamedCommand *KisLayer::setCompositeOpCommand(const KoCompositeOp& newCompositeOp)
+KNamedCommand *KisLayer::setCompositeOpCommand(const KoCompositeOp* newCompositeOp)
 {
     return new KisLayerCompositeOpCommand(KisLayerSP(this), compositeOp(), newCompositeOp);
 }
@@ -696,7 +696,7 @@ QModelIndex KisLayer::index(int row, int column, const QModelIndex &parent) cons
 {
     if (!parent.isValid())
     {
-        if( row < childCount() )
+        if( static_cast<uint>( row ) < childCount() )
             return createIndex(row, column, at(row).data());
         else
             return QModelIndex();

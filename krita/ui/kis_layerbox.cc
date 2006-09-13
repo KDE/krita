@@ -129,7 +129,7 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
     connect(m_lst->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
     connect(m_lst->intOpacity, SIGNAL(valueChanged(int, bool)), SIGNAL(sigOpacityChanged(int, bool)));
     connect(m_lst->intOpacity, SIGNAL(finishedChanging(int, int)), SIGNAL(sigOpacityFinishedChanging(int, int)));
-    connect(m_lst->cmbComposite, SIGNAL(activated(const KoCompositeOp&)), SIGNAL(sigItemComposite(const KoCompositeOp&)));
+    connect(m_lst->cmbComposite, SIGNAL(activated(const KoCompositeOp*)), SIGNAL(sigItemComposite(const KoCompositeOp*)));
 }
 
 KisLayerBox::~KisLayerBox()
@@ -203,7 +203,7 @@ void KisLayerBox::updateUI()
         }
 }
 
-void KisLayerBox::slotSetCompositeOp(const KoCompositeOp& compositeOp)
+void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
     m_lst->cmbComposite->blockSignals(true);
     m_lst->cmbComposite->setCurrent(compositeOp);

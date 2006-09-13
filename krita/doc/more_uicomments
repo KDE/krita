@@ -1,0 +1,134 @@
+From alexandre.prokoudine@gmail.com Wed Apr 12 14:35:24 2006
+
+On 4/12/06, Boudewijn Rempt wrote:
+
+> > - add ability to resize by cropping;
+>
+> You mean scaling? I'm not quite clear here.
+
+Yes, scaling :)
+
+> > It would be great having USM (Unsharp Mask) as adjustable layer.
+>
+> That's already in the separate krita-plugins project, and will be
+> added as a standard in krita 1.6.
+
+That's great. I wish it would be possible to compile SVN trunk.
+./configure can't find my Qt4 libs even if I point the script to
+correct path by -with-qt-libs=3D$PATH
+
+> > 3. Colorization. There is no colorization, neither as destructive
+> > filter, nor as adjustment layer. This is a quite helpful filter when
+> > you have lots of shots from a concert - because lighting on stage is
+> > colored, pictures never look the way you see them and it's barely
+> > fixable. Some people like it and some - difinitely not :)
+>
+> That needs a bit of an explanation, not sure what you mean. It's differen=
+t
+> from a per-channel adjustment?
+
+I think it is, here is are a couple of examples of colorized photos:
+
+http://static.flickr.com/49/126866213_4b8ac93e19.jpg
+http://static.flickr.com/52/126343654_a8bc3243dd.jpg
+
+See http://docs.gimp.org/en/gimp-tool-colorize.html for details.
+
+> > 4. Soft glow filter. Makes skin look softer, essential feature for
+> > female portraits retouching :)
+>
+> Got a good algorithm? Sounds like something quite a few people would like
+> to implement.
+
+http://hans.breuer.org/gimp/pdb/plug_in.html#plug_in_softglow
+
+> > 5. Hints. There are almost no hints/tooltips throughout interface. I
+> > usually disable them, but beginners need them.
+>
+> Working on those. Right after doc/ui-freeze we got an inventory of missin=
+g
+> tooltips from someone :-(
+
+Good to know :)
+
+> Well, tango is one thing I don't want to commit myself to. I want to keep
+> Krita blended in with the other KOffice apps, not so much with other art
+> apps.
+
+I see. Would it still be possible to work on improving icons within
+KOffice style?
+
+Alexandre
+
+
+From alexandre.prokoudine@gmail.com Wed Apr 12 14:06:42 2006
+
+Hi Boudewijn,
+
+First of all, congratulations to this release! I can barely imagine
+amount of work all the team put into this release.
+
+I decided to edit last photosession completely in Krita for the first
+time, exporting images from UFRaw as 16bit TIFF and opening them in
+Krita.
+
+Here are several observations.
+
+1. Cropping. Most of my pictures go to web, which is why after
+cropping I still have to make an additional step and resize them. It
+would be great to be able to save and reuse cropping presets. For
+example:
+
+- Web landscape (800x533px, 72 dpi)
+- Web portrait (533x800px, 72 dpi)
+
+plus some presets for printing with larger Width and Height values and
+300dpi. Using ratio spinbox isn't that comfortable - I do it since the
+first release of GIMP 2.3.x with new cropping tool and I'm not very
+fond of it.
+
+Thus required changes would be:
+
+- add dpi value to cropping tool;
+- add ability to resize by cropping;
+- add presets mechanism.
+
+Earlier I wrote about composition hints as guide lines while cropping.
+
+2. Sharpening. Only simple non-adjustable sharpening tool is available
+at the moment. It works for large images, but doesn't work for small
+ones (images look oversharped), and one always needs applying some
+sharpening after downscaling a photo.
+
+It would be great having USM (Unsharp Mask) as adjustable layer.
+
+Some useful info on unsharp masking:
+
+http://www.photo.net/bboard/q-and-a-fetch-msg.tcl?msg_id=3D000Qi5
+http://www.earthboundlight.com/phototips/unsharp-mask.html
+http://home.planet.nl/~astro.ccd.scholten/processing_E.htm
+
+3. Colorization. There is no colorization, neither as destructive
+filter, nor as adjustment layer. This is a quite helpful filter when
+you have lots of shots from a concert - because lighting on stage is
+colored, pictures never look the way you see them and it's barely
+fixable. Some people like it and some - difinitely not :)
+
+4. Soft glow filter. Makes skin look softer, essential feature for
+female portraits retouching :)
+
+5. Hints. There are almost no hints/tooltips throughout interface. I
+usually disable them, but beginners need them.
+
+6. Tools icons.For me they are not much readable. Did you have a look
+at ones in http://tango-project.org/ArtLibreSet ? Would be great
+having them in Krita. Some are not ready yet, but of you consider
+using ArtLibreSet, I could try to find some time for it or talk to
+Andreas Nilsson who has already done similar work for Scribus
+(http://scribus.sourceforge.net/gallery/tango/index.html).
+
+Again, thank you for the great work on Krita!
+
+Alexandre
+
+

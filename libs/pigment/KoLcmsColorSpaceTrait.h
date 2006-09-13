@@ -146,43 +146,39 @@ public:
     virtual KoID mathToolboxID() const;
 
     virtual void bitBlt(quint8 *dst,
-                qint32 dststride,
-                KoColorSpace * srcSpace,
-                const quint8 *src,
-                qint32 srcRowStride,
-                const quint8 *srcAlphaMask,
-                qint32 maskRowStride,
-                quint8 opacity,
-                qint32 rows,
-                qint32 cols,
-                const KoCompositeOp& op);
+			qint32 dststride,
+			KoColorSpace * srcSpace,
+			const quint8 *src,
+			qint32 srcRowStride,
+			const quint8 *srcAlphaMask,
+			qint32 maskRowStride,
+			quint8 opacity,
+			qint32 rows,
+			qint32 cols,
+			const KoCompositeOp * op,
+			const QBitArray & channelFlags);
+
+
+    virtual void bitBlt(quint8 *dst,
+			qint32 dststride,
+			KoColorSpace * srcSpace,
+			const quint8 *src,
+			qint32 srcRowStride,
+			const quint8 *srcAlphaMask,
+			qint32 maskRowStride,
+			quint8 opacity,
+			qint32 rows,
+			qint32 cols,
+			const KoCompositeOp * op);
 
 //========================== END of Public API ========================================//
 
 protected:
 
-
-    /**
-     * Compose two byte arrays containing pixels in the same color
-     * model together.
-     */
-    virtual void bitBlt(quint8 *dst,
-                qint32 dstRowSize,
-                const quint8 *src,
-                qint32 srcRowStride,
-                const quint8 *srcAlphaMask,
-                qint32 maskRowStride,
-                quint8 opacity,
-                qint32 rows,
-                qint32 cols,
-                const KoCompositeOp& op) = 0;
-
     virtual cmsHTRANSFORM createTransform(KoColorSpace * dstColorSpace,
                           KoColorProfile *  srcProfile,
                           KoColorProfile *  dstProfile,
                           qint32 renderingIntent);
-
-    virtual void compositeCopy(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity);
 
 protected:
 

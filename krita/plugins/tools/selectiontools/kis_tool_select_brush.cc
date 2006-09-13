@@ -96,7 +96,7 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
     m_painter->setPaintColor(KoColor(Qt::black, selection->colorSpace()));
     m_painter->setBrush(m_subject->currentBrush());
     m_painter->setOpacity(OPACITY_OPAQUE);//m_subject->fgColor().colorSpace()->intensity8(m_subject->fgColor().data()));
-    m_painter->setCompositeOp(COMPOSITE_OVER);
+    m_painter->setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, painter());
     painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
 

@@ -107,9 +107,9 @@ class KRITAUI_EXPORT KisFiltersListView : public K3IconView {
 
 public:
 
-    KisFiltersListView(QWidget* parent, const char* name = 0);
-    KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name = 0) KDE_DEPRECATED;
-    KisFiltersListView(KisPaintDeviceSP layer, QWidget* parent, const char * name = 0);
+    KisFiltersListView(QWidget* parent, bool filterForAdjustmentLayers = false, const char* name = 0);
+    KisFiltersListView(KisLayerSP layer, QWidget* parent, bool filterForAdjustmentLayers = false, const char * name = 0) KDE_DEPRECATED;
+    KisFiltersListView(KisPaintDeviceSP layer, QWidget* parent, bool filterForAdjustmentLayers = false, const char * name = 0);
 
     virtual void customEvent(QCustomEvent *);
 
@@ -138,6 +138,8 @@ private:
     KisPaintDeviceSP m_thumb;
     KoColorProfile * m_profile;
     KisThreadPool * threadPool;
+    bool m_filterForAdjustmentLayers;
+
 };
 
 #endif

@@ -1,0 +1,36 @@
+From lmarso@gmail.com Fri Jan  6 17:42:13 2006
+
+The following site *legitimately with permission from the author* has
+two chapters online of Dan Margulis' exciting book "Photoshop LAB
+Color".  (I do not know Dan or his publisher and for goodness sake I'm
+NOT promoting the book).
+
+http://www.ledet.com/margulis/articles.html
+
+Page 2 of the "Chapter 9" sample depicts color curves under LAB in
+Photoshop.  You will note that they are "inverted" in that they go
+from light at the lower left hand corner to dark at the upper left. 
+The L channel is luminosity, A rebalances Green and Magenta, and B
+rebalances Blue and Yellow.  Page 12 has another example of common
+manipulations to LAB curves.
+
+Page 10 shows the fascinating color channel layer blending tool in
+Photoshop.  You can pick a color channel, then selectively decide
+where along the gamut you want color blended with the layers below,
+including the ability to decide upon a fading range rather than a
+fixed endpoint.  (This particular widget is probably off in the
+future, as it is an adjustment layer, and as I understand it, Krita
+developers are struggling with the basic layer model).
+
+The "before and after" of a downtown alongside waterfront on Page 16
+shows the use of these two tools together, to modify an image and
+selectively blend down the result.
+
+Unfortunately, these samples do not include any images or examples of
+the color channel value averaging tool based on a defined radius.
+_______________________________________________
+kimageshop mailing list
+kimageshop@kde.org
+https://mail.kde.org/mailman/listinfo/kimageshop
+
+

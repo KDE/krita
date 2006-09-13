@@ -227,7 +227,7 @@ bool KisPartLayerImpl::saveToXML(QDomDocument doc, QDomElement elem)
     embeddedElement.setAttribute("y", 0);
 
     embeddedElement.setAttribute("opacity", opacity());
-    embeddedElement.setAttribute("compositeop", compositeOp().id().id());
+    embeddedElement.setAttribute("compositeop", compositeOp()->id());
     embeddedElement.setAttribute("visible", visible());
     embeddedElement.setAttribute("locked", locked());
     embeddedElement.setAttribute("layertype", "partlayer");

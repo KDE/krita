@@ -723,13 +723,14 @@ void KoUniColorChooser::updateValues()
     m_aIn->setValue(((quint16 *)tmpColor.data())[1]/256);
     m_bIn->setValue(((quint16 *)tmpColor.data())[2]/256);
 
+#if 0
     tmpColor = m_currentColor;
     tmpColor.convertTo(cmykColorSpace());
     m_CIn->setValue((tmpColor.data()[0]*100)/255);
     m_MIn->setValue((tmpColor.data()[1]*100/255));
     m_YIn->setValue((tmpColor.data()[2]*100)/255);
     m_KIn->setValue((tmpColor.data()[3]*100)/255);
-
+#endif
     m_HIn->blockSignals(false);
     m_SIn->blockSignals(false);
     m_VIn->blockSignals(false);

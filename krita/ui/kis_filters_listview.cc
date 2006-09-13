@@ -110,18 +110,20 @@ KisFiltersIconViewItem::~KisFiltersIconViewItem()
 
 // ------------------------------------------------
 
-KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name)
+KisFiltersListView::KisFiltersListView(QWidget* parent, bool filterForAdjustmentLayers, const char* name)
     : K3IconView(parent, name)
     , m_original(0)
     , m_profile(0)
+    , m_filterForAdjustmentLayers(filterForAdjustmentLayers)
 {
     init();
 }
 
-KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name)
+KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, bool filterForAdjustmentLayers, const char * name)
     : K3IconView(parent, name)
     , m_original(0)
     , m_profile(0)
+    , m_filterForAdjustmentLayers(filterForAdjustmentLayers)
 {
     KisPaintLayer* pl = dynamic_cast<KisPaintLayer*>(layer.data());
     if(pl != 0)
@@ -132,10 +134,11 @@ KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, const 
     init();
 }
 
-KisFiltersListView::KisFiltersListView(KisPaintDeviceSP device, QWidget* parent, const char * name)
+KisFiltersListView::KisFiltersListView(KisPaintDeviceSP device, QWidget* parent, bool filterForAdjustmentLayers, const char * name)
     : K3IconView(parent, name)
     , m_original(device)
     , m_profile(0)
+    , m_filterForAdjustmentLayers(filterForAdjustmentLayers)
 {
     buildPreview();
     init();
@@ -194,6 +197,9 @@ void KisFiltersListView::buildPreview()
         KisFilterSP f = KisFilterRegistry::instance()->get(*it);
         // Check if filter support the preview and work with the current colorspace
         if (f->supportsPreview() && f->workWith( m_original->colorSpace() ) ) {
+
+            if (m_filterForAdjustmentLayers && !f->supportsAdjustmentLayers()) continue;
+
             std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration(m_thumb);
             // apply the filter for each of example of configuration
             for(std::list<KisFilterConfiguration*>::iterator itc = configlist.begin();

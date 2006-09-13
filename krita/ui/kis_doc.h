@@ -45,7 +45,6 @@ class KisNameServer;
 class KisChildDoc;
 class KoColorSpace;
 class KoColor;
-class KoCompositeOp;
 
 class KRITAUI_EXPORT KisDoc : public KoDocument, private KisUndoAdapter {
 
@@ -185,16 +184,16 @@ private:
     KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
     KisLayerSP loadPaintLayer(const QDomElement& elem, KisImageSP img,
                 QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                KoCompositeOp compositeOp);
+                const QString & compositeOp);
     KisGroupLayerSP loadGroupLayer(const QDomElement& elem, KisImageSP img,
                 QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                KoCompositeOp compositeOp);
+                const QString &compositeOp);
     KisAdjustmentLayerSP loadAdjustmentLayer(const QDomElement& elem, KisImageSP img,
                                              QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                                             KoCompositeOp compositeOp);
+                                             const QString & compositeOp);
     KisPartLayerSP loadPartLayer(const QDomElement& elem, KisImageSP img,
                                   QString name, qint32 x, qint32 y, qint32 opacity,
-                                  bool visible, bool locked, KoCompositeOp compositeOp);
+                                  bool visible, bool locked, const QString &compositeOp);
     bool init();
 
     void setIOSteps(qint32 nsteps);

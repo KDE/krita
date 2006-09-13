@@ -89,7 +89,7 @@ protected:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KoCompositeOp& op);
+                const KoCompositeOp* op);
 
     void compositeOver(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, float opacity);
     void compositeMultiply(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, float opacity);

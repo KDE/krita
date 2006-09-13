@@ -715,7 +715,7 @@ void KisRgbU16ColorSpace::bitBlt(quint8 *dst,
                       quint8 U8_opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KoCompositeOp& op)
+                      const KoCompositeOp* op)
 {
     quint16 opacity = UINT8_TO_UINT16(U8_opacity);
 

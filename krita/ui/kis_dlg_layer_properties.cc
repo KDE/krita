@@ -38,11 +38,12 @@
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
                      qint32 opacity,
-                     const KoCompositeOp& compositeOp,
+                     const KoCompositeOp* compositeOp,
                      const KoColorSpace * colorSpace,
                      QWidget *parent, const char *name, Qt::WFlags f)
-    : super(parent/* f*/)
+    : super(parent)
 {
+    Q_UNUSED(f);
     setCaption( i18n("Layer Properties") );
     setButtons( Ok | Cancel );
     setDefaultButton( Ok );
@@ -103,7 +104,7 @@ int KisDlgLayerProperties::getOpacity() const
     return opacity;
 }
 
-KoCompositeOp KisDlgLayerProperties::getCompositeOp() const
+KoCompositeOp * KisDlgLayerProperties::getCompositeOp() const
 {
     return m_page->cmbComposite->currentItem();
 }

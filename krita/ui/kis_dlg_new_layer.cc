@@ -137,7 +137,7 @@ int NewLayerDialog::opacity() const
     return opacity;
 }
 
-KoCompositeOp NewLayerDialog::compositeOp() const
+KoCompositeOp * NewLayerDialog::compositeOp() const
 {
     return m_page->cmbComposite->currentItem();
 }

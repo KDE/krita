@@ -1,0 +1,46 @@
+From lmarso@gmail.com Fri Jan  6 02:50:59 2006
+
+Boudewijn and I discussed the potential utility of Krita to work on
+curves for the channels of LAB colorspace, once the color
+profile-aware color adjustment tool (temporarily out of CVS) is
+restored to the build sources.
+
+I have offered to write up what I know about the standard presentation
+of LAB curves, e.g., in Photoshop, which is generally inverted from
+lighter values on the lower left to darker values on the upper right,
+and using color values from -128 to zero at midpoint to 128 (that's in
+8 bit).
+
+I presume the tool will initially work like the Cinepaint analogue,
+doing a proper conversion in each direction, but without inverting the
+curves or remapping the color values to the standard scale.
+
+One thing I don't know is if you can resize the curves widget. 
+Manipulations of curves in the A and B channels, in particular, often
+require considerable precision in a small area around the center
+point.  The ability to significantly enlarge the curves widget would
+have great value.
+
+I'll watch for the return of the color profile-aware color adjustment
+tool code, and I'll try and help if anyone wants to move toward the
+standard presentation of LAB from there.
+
+Boudewijn and I also discussed the Photoshop "color picker" tool which
+permits you to select a radius over which values are averaged.  In
+addition, Photoshop lets you click on multiple points with values
+you're focusing on for manipulation by curves.  You can click on and
+save multiple averages, which appear one atop another.  Then, when you
+manipulate the curves, a column appears alongside those saved
+averages, and you can watch how your curve manipulations change the
+average values.  It's sort of a "preview" of the effect of your curve
+manipulations, expressed in color values averaged over a radius of
+pixels.
+
+For a full recitation of LAB colorspace manipulation and its power,
+pick up Dan Margulis' "Photoshop LAB Color".
+_______________________________________________
+kimageshop mailing list
+kimageshop@kde.org
+https://mail.kde.org/mailman/listinfo/kimageshop
+
+

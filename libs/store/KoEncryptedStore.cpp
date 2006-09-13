@@ -91,7 +91,7 @@ KoEncryptedStore::KoEncryptedStore( QIODevice *dev, Mode mode, const QByteArray 
 }
 
 KoEncryptedStore::KoEncryptedStore( QWidget* window, const KUrl& url, const QString & filename, Mode mode, const QByteArray & appIdentification )
-    : m_init_url( url ), m_init_dev( NULL ), m_init_deferred( false ), m_init_appIdentification( appIdentification ), m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_window( window ), m_filename( QString( url.toString( ) ) ), m_manifestBuffer( QByteArray() ) {
+    : m_init_url( url ), m_init_dev( NULL ), m_init_deferred( false ), m_init_appIdentification( appIdentification ), m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_window( window ), m_filename( QString( url.url( ) ) ), m_manifestBuffer( QByteArray() ) {
     if( mode == Write ) {
         // Prevent the underlying store from being opened if encryption is not supported
         m_bGood = QCA::isSupported( "sha1" ) && QCA::isSupported( "pbkdf2(sha1)" ) && init( mode, appIdentification );

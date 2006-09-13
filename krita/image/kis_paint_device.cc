@@ -40,6 +40,7 @@
 #include "kis_iteratorpixeltrait.h"
 #include "KoColorProfile.h"
 #include "KoColor.h"
+#include "KoColorSpace.h"
 #include "KoIntegerMaths.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_selection.h"
@@ -653,7 +654,7 @@ void KisPaintDevice::convertTo(KoColorSpace * dstColorSpace, qint32 renderingInt
     if (undoAdapter() && undoAdapter()->undo()) {
         undoAdapter()->addCommand(new KisConvertLayerTypeCmd(undoAdapter(), KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_colorSpace));
     }
-    emit colorSpaceChanged(dstColorSpace);
+    // XXX: emit colorSpaceChanged(dstColorSpace);
 }
 
 void KisPaintDevice::setProfile(KoColorProfile * profile)

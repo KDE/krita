@@ -105,7 +105,7 @@ void KisRuler::recalculateSize()
     m_pixmapBuffer = new QPixmap(w, h);
     Q_CHECK_PTR(m_pixmapBuffer);
 
-    drawRuler();
+    //drawRuler();
     updatePointer(m_currentPosition, m_currentPosition);
 }
 
@@ -117,7 +117,7 @@ KoUnit::Unit KisRuler::unit() const
 void KisRuler::setUnit(KoUnit::Unit u)
 {
     m_unit = u;
-    drawRuler();
+    //drawRuler();
     updatePointer(m_currentPosition, m_currentPosition);
     update();
 }
@@ -126,7 +126,7 @@ void KisRuler::setZoom(double zoom)
 {
     m_zoom = zoom;
     recalculateSize();
-    drawRuler();
+    //drawRuler();
     updatePointer(m_currentPosition, m_currentPosition);
     update();
 }
@@ -163,7 +163,7 @@ void KisRuler::updateVisibleArea(qint32 xpos, qint32 ypos)
     else
         m_firstVisible = ypos;
 
-    drawRuler();
+    //drawRuler();
     update();
     updatePointer(m_currentPosition, m_currentPosition);
 }
@@ -325,13 +325,13 @@ void KisRuler::styleChange(QStyle& oldStyle)
 {
     Q_UNUSED(oldStyle);
     updateGeometry();
-    drawRuler();
+    //drawRuler();
 }
 
 void KisRuler::paletteChange(const QPalette& oldPalette)
 {
     Q_UNUSED(oldPalette);
-    drawRuler();
+    //drawRuler();
 }
 
 void KisRuler::show()

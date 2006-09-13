@@ -150,10 +150,10 @@ void KisToolSelectPolygonal::finish()
         switch(m_selectAction)
         {
             case SELECTION_ADD:
-                painter.setCompositeOp(COMPOSITE_OVER);
+                painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
                 break;
             case SELECTION_SUBTRACT:
-                painter.setCompositeOp(COMPOSITE_SUBTRACT);
+                painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
                 break;
             default:
                 break;

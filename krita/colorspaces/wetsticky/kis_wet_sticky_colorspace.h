@@ -128,7 +128,7 @@ protected:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KoCompositeOp& op);
+                const KoCompositeOp* op);
 
 
     virtual bool convertPixelsTo(const quint8 * src, KoColorProfile *  srcProfile,

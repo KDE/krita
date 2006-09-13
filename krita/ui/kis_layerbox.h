@@ -64,7 +64,7 @@ public:
     virtual bool eventFilter(QObject *object, QEvent *event);
 
 public slots:
-    void slotSetCompositeOp(const KoCompositeOp& compositeOp);
+    void slotSetCompositeOp(const KoCompositeOp* compositeOp);
     void slotSetOpacity(int opacity);
     void slotSetColorSpace(const KoColorSpace * colorSpace);
 
@@ -77,7 +77,7 @@ signals:
 
     void sigOpacityChanged(int opacity, bool withSlider);
     void sigOpacityFinishedChanging(int previous, int opacity);
-    void sigItemComposite(const KoCompositeOp&);
+    void sigItemComposite(const KoCompositeOp*);
 
 private:
     enum LayerTypes { PAINT_LAYER, GROUP_LAYER, ADJUSTMENT_LAYER, OBJECT_LAYER };

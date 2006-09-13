@@ -491,6 +491,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                        qint32 width,
                        qint32 height)
 {
+    Q_UNUSED( antiAliasThreshold );
     m_cancelRequested = false;
 
     if (!m_gradient) return false;

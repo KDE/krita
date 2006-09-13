@@ -74,7 +74,7 @@ KisPainter::KisPainter(KisPaintDeviceSP device)
 {
     init();
     Q_ASSERT(device);
-        begin(device);
+    begin(device);
 }
 
 void KisPainter::init()
@@ -85,7 +85,6 @@ void KisPainter::init()
     m_brush = 0;
     m_pattern= 0;
     m_opacity = OPACITY_OPAQUE;
-    m_compositeOp = COMPOSITE_OVER;
     m_dab = 0;
     m_fillStyle = FillStyleNone;
     m_strokeStyle = StrokeStyleBrush;
@@ -108,6 +107,7 @@ void KisPainter::begin(KisPaintDeviceSP device)
 
     m_device = device;
     m_colorSpace = device->colorSpace();
+    m_compositeOp = m_colorSpace->compositeOp( COMPOSITE_OVER );
     m_pixelSize = device->pixelSize();
 }
 
@@ -147,7 +147,7 @@ QRect KisPainter::dirtyRect() {
 }
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
-                        const KoCompositeOp& op,
+                        const KoCompositeOp* op,
                         KisPaintDeviceSP srcdev,
                         quint8 opacity,
                         qint32 sx, qint32 sy,
@@ -159,7 +159,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    if (srcdev->extentIsValid() && op != COMPOSITE_COPY) {
+    if (srcdev->extentIsValid() && op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
         srcRect &= srcdev->extent();
     }
 
@@ -234,7 +234,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 }
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
-                  const KoCompositeOp &op,
+                  const KoCompositeOp * op,
                   KisPaintDeviceSP srcdev,
                   KisSelectionSP seldev,
                   quint8 opacity,
@@ -261,7 +261,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    if (srcdev->extentIsValid() && op != COMPOSITE_COPY) {
+    if (srcdev->extentIsValid() && op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
         srcRect &= srcdev->extent();
     }
 
@@ -345,7 +345,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
 
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
-                  const KoCompositeOp& op,
+                  const KoCompositeOp* op,
                   KisPaintDeviceSP srcdev,
                   quint8 opacity,
                   qint32 sx, qint32 sy,
@@ -871,7 +871,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
     // and if we're painting without outlines, then there will be no dirty rect. Let's do it ourselves...
     // addDirtyRect( r ); // XXX the bltSelection will add to the dirtyrect
 
-    bltSelection(r.x(), r.y(), compositeOp(), polygon, opacity(), r.x(), r.y(), r.width(), r.height());
+    bltSelection(r.x(), r.y(), m_compositeOp, polygon, opacity(), r.x(), r.y(), r.width(), r.height());
 }
 
 void KisPainter::paintPolygon(const vKisPoint& points)

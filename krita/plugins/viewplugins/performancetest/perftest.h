@@ -59,7 +59,7 @@ private:
     QString paintViewTest(quint32 testCount);
     QString paintViewFPSTest();
 
-    QString doBlit(const KoCompositeOp& op,
+    QString doBlit(const KoCompositeOp* op,
                KoID cspace,
                quint8 opacity,
                quint32 testCount,

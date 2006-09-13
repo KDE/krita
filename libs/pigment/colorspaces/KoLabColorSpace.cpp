@@ -31,6 +31,172 @@
 
 #include "KoLabColorSpace.h"
 #include "KoIntegerMaths.h"
+#include "KoCompositeOp.h"
+
+namespace {
+
+    struct Pixel {
+        quint16 lightness;
+        quint16 a;
+        quint16 b;
+        quint16 alpha;
+    };
+
+    static const quint16 U16_OPACITY_OPAQUE = UINT16_MAX;
+    static const quint16 U16_OPACITY_TRANSPARENT = UINT16_MIN;
+
+    class CompositeOver : public KoCompositeOp {
+
+    public:
+
+        CompositeOver(KoColorSpace * cs)
+            : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal" ) )
+        {
+        }
+
+    public:
+
+        void composite(quint8 *dstRowStart,
+                       qint32 dststride,
+                       const quint8 *srcRowStart,
+                       qint32 srcstride,
+                       const quint8 *maskRowStart,
+                       qint32 maskstride,
+                       qint32 rows,
+                       qint32 cols,
+                       quint8 U8_opacity,
+                       const QBitArray & channelFlags) const
+        {
+            Q_UNUSED( channelFlags );
+
+            quint16 opacity = UINT8_TO_UINT16(U8_opacity);
+
+            while (rows > 0) {
+                const Pixel *src = reinterpret_cast<const Pixel *>(srcRowStart);
+                Pixel *dst = reinterpret_cast<Pixel *>(dstRowStart);
+                const quint8 *mask = maskRowStart;
+                qint32 columns = cols;
+
+                while (columns > 0) {
+
+                    quint16 srcAlpha = src->alpha;
+
+                    // apply the alphamask
+                    if (mask != 0) {
+                        if (*mask != OPACITY_OPAQUE) {
+                            srcAlpha = UINT16_MULT(srcAlpha, *mask);
+                        }
+                        mask++;
+                    }
+
+                    if (srcAlpha != U16_OPACITY_TRANSPARENT) {
+
+                        if (opacity != U16_OPACITY_OPAQUE) {
+                            srcAlpha = UINT16_MULT(srcAlpha, opacity);
+                        }
+
+                        if (srcAlpha == U16_OPACITY_OPAQUE) {
+                            memcpy(dst, src, sizeof(Pixel));
+                        } else {
+                            quint16 dstAlpha = dst->alpha;
+
+                            quint16 srcBlend;
+
+                            if (dstAlpha == U16_OPACITY_OPAQUE) {
+                                srcBlend = srcAlpha;
+                            } else {
+                                quint16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                                dst->alpha = newAlpha;
+
+                                if (newAlpha != 0) {
+                                    srcBlend = UINT16_DIVIDE(srcAlpha, newAlpha);
+                                } else {
+                                    srcBlend = srcAlpha;
+                                }
+                            }
+
+                            if (srcBlend == U16_OPACITY_OPAQUE) {
+                                memcpy(dst, src, sizeof(Pixel));
+                            } else {
+                                dst->lightness = UINT16_BLEND(src->lightness, dst->lightness, srcBlend);
+                                dst->a = UINT16_BLEND(src->a, dst->a, srcBlend);
+                                dst->b = UINT16_BLEND(src->b, dst->b, srcBlend);
+                            }
+                        }
+                    }
+                    columns--;
+                    src++;
+                    dst++;
+                }
+
+                rows--;
+                srcRowStart += srcstride;
+                dstRowStart += dststride;
+                if(maskRowStart) {
+                    maskRowStart += maskstride;
+                }
+            }
+        }
+
+    };
+
+    class CompositeErase : public KoCompositeOp {
+
+    public:
+
+        CompositeErase(KoColorSpace * cs)
+            : KoCompositeOp(cs, COMPOSITE_ERASE, i18n("Erase" ) )
+        {
+        }
+
+    public:
+
+        void composite(quint8 *dstRowStart,
+                       qint32 dststride,
+                       const quint8 *srcRowStart,
+                       qint32 srcstride,
+                       const quint8 *maskRowStart,
+                       qint32 maskstride,
+                       qint32 rows,
+                       qint32 cols,
+                       quint8 U8_opacity,
+                       const QBitArray & channelFlags) const
+        {
+            Q_UNUSED( U8_opacity );
+            Q_UNUSED( channelFlags );
+            while (rows-- > 0)
+            {
+                const Pixel *s = reinterpret_cast<const Pixel *>(srcRowStart);
+                Pixel *d = reinterpret_cast<Pixel *>(dstRowStart);
+                const quint8 *mask = maskRowStart;
+
+                for (qint32 i = cols; i > 0; i--, s++, d++)
+                {
+                    quint16 srcAlpha = s->alpha;
+
+                    // apply the alphamask
+                    if (mask != 0) {
+                        quint8 U8_mask = *mask;
+
+                        if (U8_mask != OPACITY_OPAQUE) {
+                            srcAlpha = UINT16_BLEND(srcAlpha, U16_OPACITY_OPAQUE, UINT8_TO_UINT16(U8_mask));
+                        }
+                        mask++;
+                    }
+                    d->alpha = UINT16_MULT(srcAlpha, d->alpha);
+                }
+
+                dstRowStart += dststride;
+                srcRowStart += srcstride;
+                if(maskRowStart) {
+                    maskRowStart += maskstride;
+                }
+            }
+        }
+    };
+
+
+};
 
 KoLabColorSpace::KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p)
     : KoColorSpace("LABA", i18n("L*a*b* (16-bit integer/channel)"), parent)
@@ -44,6 +210,9 @@ KoLabColorSpace::KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *
     m_channels.push_back(new KoChannelInfo(i18n("a*"), CHANNEL_A * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(150,150,150)));
     m_channels.push_back(new KoChannelInfo(i18n("b*"), CHANNEL_B * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(200,200,200)));
     m_channels.push_back(new KoChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
+
+    m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver( this ) );
+    m_compositeOps.insert( COMPOSITE_ERASE, new CompositeErase( this ) );
 
     init();
 }
@@ -230,265 +399,6 @@ void KoLabColorSpace::getSingleChannelPixel(quint8 *dst, const quint8 *src, quin
             break;
         }
     }
-}
-
-void KoLabColorSpace::compositeOver(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
-{
-    while (rows > 0) {
-        const Pixel *src = reinterpret_cast<const Pixel *>(srcRowStart);
-        Pixel *dst = reinterpret_cast<Pixel *>(dstRowStart);
-        const quint8 *mask = maskRowStart;
-        qint32 columns = numColumns;
-
-        while (columns > 0) {
-
-            quint16 srcAlpha = src->alpha;
-
-            // apply the alphamask
-            if (mask != 0) {
-                if (*mask != OPACITY_OPAQUE) {
-                    srcAlpha = UINT16_MULT(srcAlpha, *mask);
-                }
-                mask++;
-            }
-
-            if (srcAlpha != U16_OPACITY_TRANSPARENT) {
-
-                if (opacity != U16_OPACITY_OPAQUE) {
-                    srcAlpha = UINT16_MULT(srcAlpha, opacity);
-                }
-
-                if (srcAlpha == U16_OPACITY_OPAQUE) {
-                    memcpy(dst, src, sizeof(Pixel));
-                } else {
-                    quint16 dstAlpha = dst->alpha;
-
-                    quint16 srcBlend;
-
-                    if (dstAlpha == U16_OPACITY_OPAQUE) {
-                        srcBlend = srcAlpha;
-                    } else {
-                        quint16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                        dst->alpha = newAlpha;
-
-                        if (newAlpha != 0) {
-                            srcBlend = UINT16_DIVIDE(srcAlpha, newAlpha);
-                        } else {
-                            srcBlend = srcAlpha;
-                        }
-                    }
-
-                    if (srcBlend == U16_OPACITY_OPAQUE) {
-                        memcpy(dst, src, sizeof(Pixel));
-                    } else {
-/*printf("blend is %d\n", srcBlend);
-printf("%d %d %d\n", src->lightness, src->a, src->b);
-printf("%d %d %d\n", dst->lightness, dst->a, dst->b);
-*/
-                        dst->lightness = UINT16_BLEND(src->lightness, dst->lightness, srcBlend);
-                        dst->a = UINT16_BLEND(src->a, dst->a, srcBlend);
-                        dst->b = UINT16_BLEND(src->b, dst->b, srcBlend);
-//printf("%d %d %d\n", dst->lightness, dst->a, dst->b);
-                    }
-                }
-            }
-
-            columns--;
-            src++;
-            dst++;
-        }
-
-        rows--;
-        srcRowStart += srcRowStride;
-        dstRowStart += dstRowStride;
-        if(maskRowStart) {
-            maskRowStart += maskRowStride;
-        }
-    }
-}
-
-void KoLabColorSpace::compositeErase(quint8 *dst,
-            qint32 dstRowSize,
-            const quint8 *src,
-            qint32 srcRowSize,
-            const quint8 *srcAlphaMask,
-            qint32 maskRowStride,
-            qint32 rows,
-            qint32 cols,
-            quint16 /*opacity*/)
-{
-    while (rows-- > 0)
-    {
-        const Pixel *s = reinterpret_cast<const Pixel *>(src);
-        Pixel *d = reinterpret_cast<Pixel *>(dst);
-        const quint8 *mask = srcAlphaMask;
-
-        for (qint32 i = cols; i > 0; i--, s++, d++)
-        {
-            quint16 srcAlpha = s->alpha;
-
-            // apply the alphamask
-            if (mask != 0) {
-                quint8 U8_mask = *mask;
-
-                if (U8_mask != OPACITY_OPAQUE) {
-                    srcAlpha = UINT16_BLEND(srcAlpha, U16_OPACITY_OPAQUE, UINT8_TO_UINT16(U8_mask));
-                }
-                mask++;
-            }
-            d->alpha = UINT16_MULT(srcAlpha, d->alpha);
-        }
-
-        dst += dstRowSize;
-        src += srcRowSize;
-        if(srcAlphaMask) {
-            srcAlphaMask += maskRowStride;
-        }
-    }
-}
-
-void KoLabColorSpace::bitBlt(quint8 *dst,
-                      qint32 dstRowStride,
-                      const quint8 *src,
-                      qint32 srcRowStride,
-                      const quint8 *mask,
-                      qint32 maskRowStride,
-                      quint8 U8_opacity,
-                      qint32 rows,
-                      qint32 cols,
-                      const KoCompositeOp& op)
-{
-    quint16 opacity = UINT8_TO_UINT16(U8_opacity);
-
-    switch (op.op()) {
-    case COMPOSITE_UNDEF:
-        // Undefined == no composition
-        break;
-    case COMPOSITE_OVER:
-        compositeOver(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_IN:
-        //compositeIn(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_OUT:
-        //compositeOut(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_ATOP:
-        //compositeAtop(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_XOR:
-        //compositeXor(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_PLUS:
-        //compositePlus(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_MINUS:
-        //compositeMinus(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_ADD:
-        //compositeAdd(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_SUBTRACT:
-        //compositeSubtract(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_DIFF:
-        //compositeDiff(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_MULT:
-        //compositeMultiply(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_DIVIDE:
-        //compositeDivide(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_BUMPMAP:
-        //compositeBumpmap(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_COPY:
-        compositeCopy(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, U8_opacity);
-        break;
-    case COMPOSITE_COPY_RED:
-        //compositeCopyRed(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_COPY_GREEN:
-        //compositeCopyGreen(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_COPY_BLUE:
-        //compositeCopyBlue(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_COPY_OPACITY:
-        //compositeCopyOpacity(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_CLEAR:
-        //compositeClear(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_DISSOLVE:
-        //compositeDissolve(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_DISPLACE:
-        //compositeDisplace(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-#if 0
-    case COMPOSITE_MODULATE:
-        compositeModulate(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_THRESHOLD:
-        compositeThreshold(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-#endif
-    case COMPOSITE_NO:
-        // No composition.
-        break;
-    case COMPOSITE_DARKEN:
-        //compositeDarken(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_LIGHTEN:
-        //compositeLighten(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_HUE:
-        //compositeHue(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_SATURATION:
-        //compositeSaturation(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_VALUE:
-        //compositeValue(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_COLOR:
-        //compositeColor(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_COLORIZE:
-        //compositeColorize(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_LUMINIZE:
-        //compositeLuminize(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_SCREEN:
-        //compositeScreen(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_OVERLAY:
-        //compositeOverlay(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_ERASE:
-        compositeErase(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_DODGE:
-        //compositeDodge(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    case COMPOSITE_BURN:
-        //compositeBurn(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
-        break;
-    default:
-        break;
-    }
-}
-
-KoCompositeOpList KoLabColorSpace::userVisiblecompositeOps() const
-{
-    KoCompositeOpList list;
-
-    list.append(KoCompositeOp(COMPOSITE_OVER));
-
-    return list;
 }
 
 QString KoLabColorSpace::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const

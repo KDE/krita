@@ -747,7 +747,7 @@ void Property::emitPropertyChanged()
 		//still on it. So, if we try to access ourself/this once the signal
 		//got emitted we may end in a very hard to reproduce crash. So, the
 		//emit should happen as last step in this method!
-		emit d->set->propertyChangedInternal(*d->set, *this);
+		//emit d->set->propertyChangedInternal(*d->set, *this);
 		emit d->set->propertyChanged(*d->set, *this);
 	}
 }

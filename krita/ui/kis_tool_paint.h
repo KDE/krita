@@ -86,7 +86,7 @@ public slots:
     virtual void deactivate();
 
     void slotSetOpacity(int opacityPerCent);
-    void slotSetCompositeMode(const KoCompositeOp& compositeOp);
+    void slotSetCompositeMode(const KoCompositeOp* compositeOp);
     void slotPopupQuickHelp();
 
 protected:
@@ -102,7 +102,7 @@ protected:
     KisCanvasSubject *m_subject;
     QRect m_dirtyRect;
     quint8 m_opacity;
-    KoCompositeOp m_compositeOp;
+    const KoCompositeOp * m_compositeOp;
     bool m_paintOutline;
 
 private:

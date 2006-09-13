@@ -76,7 +76,6 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     }
     
     KoColorSpace* cs = src->colorSpace();
-    Q_INT32 depth = cs->nColorChannels();
     
     // Compute the blur mask
     KisAutobrushShape* kas = new KisAutobrushCircleShape(2*windowsize+1, 2*windowsize+1, windowsize, windowsize);
@@ -110,7 +109,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
                 Q_UINT8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
                 if( diff > threshold)
                 {
-                    cs->bitBlt( dstIt.rawData(), 0, cs, intermIt.rawData(), 0, 0, 0, 255, 1, 1, KoCompositeOp(COMPOSITE_COPY) );
+                    cs->bitBlt( dstIt.rawData(), 0, cs, intermIt.rawData(), 0, 0, 0, 255, 1, 1, cs->compositeOp(COMPOSITE_COPY) );
                 }
             }
             incProgress();

@@ -202,7 +202,7 @@ void KisGrayColorSpace::bitBlt(quint8 *dst,
                       quint8 opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KoCompositeOp& op)
+                      const KoCompositeOp* op)
 {
     switch (op.op()) {
     case COMPOSITE_OVER:

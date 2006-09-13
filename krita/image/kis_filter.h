@@ -70,6 +70,9 @@ public:
     /// This filter can be displayed in a preview dialog
     virtual bool supportsPreview() { return false; };
 
+    /// This filter can be used in adjustment layers
+    virtual bool supportsAdjustmentLayers() { return supportsPreview(); };
+
     /**
      * Return a list of default configuration to demonstrates the use of the filter
      * @return a list with a null element if the filter do not use a configuration

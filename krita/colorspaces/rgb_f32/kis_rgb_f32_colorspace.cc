@@ -794,7 +794,7 @@ void KisRgbF32ColorSpace::bitBlt(quint8 *dst,
                       quint8 U8_opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KoCompositeOp& op)
+                      const KoCompositeOp* op)
 {
     float opacity = UINT8_TO_FLOAT(U8_opacity);
 

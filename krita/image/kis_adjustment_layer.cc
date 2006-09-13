@@ -107,7 +107,7 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
     KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
 
     if (selection) {
-        gc.bitBlt(0, 0, COMPOSITE_COPY, KisPaintDeviceSP(selection.data()),
+        gc.bitBlt(0, 0, cs->compositeOp(COMPOSITE_COPY), KisPaintDeviceSP(selection.data()),
                   0, 0, image()->bounds().width(), image()->bounds().height());
     } else {
         gc.fillRect(image()->bounds(), KoColor(Qt::white, cs), MAX_SELECTED);

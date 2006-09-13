@@ -420,7 +420,7 @@ namespace {
                       KisUndoAdapter *adapter,
                       const QString& name,
                       qint32 opacity,
-                      const KoCompositeOp& compositeOp) : super(i18n("Layer Property Changes"))
+                      const KoCompositeOp* compositeOp) : super(i18n("Layer Property Changes"))
             {
                 m_layer = layer;
                 m_img = img;
@@ -439,7 +439,7 @@ namespace {
             {
                 QString name = m_layer->name();
                 qint32 opacity = m_layer->opacity();
-                KoCompositeOp compositeOp = m_layer->compositeOp();
+                m_compositeOp = m_layer->compositeOp();
 
                 m_adapter->setUndo(false);
                 m_img->setLayerProperties(m_layer,
@@ -449,7 +449,6 @@ namespace {
                 m_adapter->setUndo(true);
                 m_name = name;
                 m_opacity = opacity;
-                m_compositeOp = compositeOp;
                 m_layer->setDirty();
             }
 
@@ -464,7 +463,7 @@ namespace {
         KisImageSP m_img;
         QString m_name;
         qint32 m_opacity;
-        KoCompositeOp m_compositeOp;
+        const KoCompositeOp * m_compositeOp;
     };
 
     // -------------------------------------------------------
@@ -983,17 +982,16 @@ KisPaintDeviceSP KisImage::activeDevice()
     return KisPaintDeviceSP(0);
 }
 
-KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const KoCompositeOp& compositeOp, KoColorSpace * colorstrategy)
+KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const QString & compositeOp, KoColorSpace * cs)
 {
     KisPaintLayer * layer;
-    if (colorstrategy)
-        layer = new KisPaintLayer(this, name, opacity, colorstrategy);
+    if (cs)
+        layer = new KisPaintLayer(this, name, opacity, cs);
     else
         layer = new KisPaintLayer(this, name, opacity);
     Q_CHECK_PTR(layer);
 
-    if (compositeOp.isValid())
-        layer->setCompositeOp(compositeOp);
+    layer->setCompositeOp(cs->compositeOp(compositeOp));
     layer->setVisible(true);
 
     KisLayerSP layerSP(layer);
@@ -1009,13 +1007,13 @@ KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const KoCompo
     return layerSP;
 }
 
-void KisImage::setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp& compositeOp, const QString& name)
+void KisImage::setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp* compositeOp, const QString& name)
 {
     if (layer && (layer->opacity() != opacity || layer->compositeOp() != compositeOp || layer->name() != name)) {
         if (undo()) {
             QString oldname = layer->name();
             qint32 oldopacity = layer->opacity();
-            KoCompositeOp oldCompositeOp = layer->compositeOp();
+            const KoCompositeOp * oldCompositeOp = layer->compositeOp();
             layer->setName(name);
             layer->setOpacity(opacity);
             layer->setCompositeOp(compositeOp);

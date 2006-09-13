@@ -41,7 +41,7 @@ public:
                const char *name = 0);
 
     QString layerName() const;
-    KoCompositeOp compositeOp() const;
+    KoCompositeOp * compositeOp() const;
     qint32 opacity() const;
     KoID colorSpaceID() const;
     QString profileName() const;

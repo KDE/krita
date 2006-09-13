@@ -73,7 +73,7 @@ class KisYCbCrU16ColorSpace : public KoU16ColorSpaceTrait
                             Q_UINT8 opacity,
                             Q_INT32 rows,
                             Q_INT32 cols,
-                            const KoCompositeOp& op);
+                            const KoCompositeOp* op);
 
         void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
         void compositeErase(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);

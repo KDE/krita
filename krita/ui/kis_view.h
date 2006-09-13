@@ -449,7 +449,7 @@ private slots:
     QPoint mapToScreen(const QPoint& pt);
     void slotImageProperties();
 
-    void layerCompositeOp(const KoCompositeOp& compositeOp);
+    void layerCompositeOp(const KoCompositeOp* compositeOp);
     void layerOpacity(int opacity, bool dontundo);
     void layerOpacityFinishedChanging(int previous, int opacity);
 

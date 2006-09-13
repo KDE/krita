@@ -795,7 +795,7 @@ void KisRgbF16HalfColorSpace::bitBlt(quint8 *dst,
                       quint8 U8_opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KoCompositeOp& op)
+                      const KoCompositeOp* op)
 {
     half opacity = UINT8_TO_HALF(U8_opacity);
 

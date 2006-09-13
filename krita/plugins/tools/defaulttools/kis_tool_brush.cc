@@ -153,7 +153,7 @@ void KisToolBrush::slotSetPaintingMode( int mode )
 QWidget* KisToolBrush::createOptionWidget(QWidget* parent)
 {
     QWidget *widget = super::createOptionWidget(parent);
-    m_chkDirect = new QCheckBox(i18n("Paint directly"), widget);
+    m_chkDirect = new QCheckBox(i18n("Paint incrementally"), widget);
     m_chkDirect->setObjectName("chkDirect");
     m_chkDirect->setChecked(true);
     connect(m_chkDirect, SIGNAL(stateChanged(int)), this, SLOT(slotSetPaintingMode(int)));

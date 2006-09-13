@@ -213,7 +213,7 @@ QImage KisYCbCrU16ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width
 }
 
 
-void KisYCbCrU16ColorSpace::bitBlt(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *srcAlphaMask, Q_INT32 maskRowStride, Q_UINT8 opacity, Q_INT32 rows, Q_INT32 cols, const KoCompositeOp& op)
+void KisYCbCrU16ColorSpace::bitBlt(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *srcAlphaMask, Q_INT32 maskRowStride, Q_UINT8 opacity, Q_INT32 rows, Q_INT32 cols, const KoCompositeOp* op)
 {
     switch (op.op()) {
         case COMPOSITE_UNDEF:

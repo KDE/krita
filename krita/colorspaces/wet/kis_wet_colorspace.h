@@ -169,7 +169,7 @@ protected:
             quint8 opacity,
             qint32 rows,
             qint32 cols,
-            const KoCompositeOp& op);
+            const KoCompositeOp* op);
 private:
 
     // This was static, but since we have only one instance of the color strategy,

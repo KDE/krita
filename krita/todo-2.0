@@ -75,7 +75,7 @@ New selection system
 
 ?  * selections, adj. masks, wetness, height masks (all 8-bit mask ideas)
       as sublayers to paint layers, and make them movable between layers
-      and x,y, toggle on/off.
+      and x,y, toggle on/off. Allow more than one mask per layer
 ?  * add opacity slider to selection painting tools so you can select something 50%.
 ?  * loading and saving of selections
 ?  * BUG 121975: selections and group layers.
@@ -98,6 +98,11 @@ a paint layer, or form their own layer? The latter should be easier to do.
 ?  * Add path capability 
 ?  * Make it possible to stroke paths & filter stroked paths
 ?  * Make it possible to convert a path into a seletction.
+
+Note: where do we use Emmanuele's path tool? Especially the stroking using Krita's 
+colors, brushes etc needs to be kept as a feature. Note also the difference between
+having an embedded vector object and an path tool with artistic stroking capabilities.
+Especially cool when we can stroke using imitation paint.
 
 History & versioning
 
@@ -155,7 +160,7 @@ B  * make scaling filter more user friendly by removing the combo and just prese
 ?  * add a cheatsheet widget that integrates with knewstuff to have tutorials that people
       can download and follow from Krita.
 ?  * create opacity widget (One that grows more white or transparent (showing those gray blocks) based on the input)
-
+?  * Note Ilmari's remarks on the mailing list
 
 Integration
 
@@ -176,7 +181,11 @@ C  * finish, polish and document scripting support
 R  * document plugin API
 ?  * create plugin that merges grayscale layers back into one color image.
 ?  * as many filters as possible :-)
+?  * sharpen filter with settable sharpness. Look at digikam's code for this.
 
+Tools
+
+?  * dodge and burn tool (see Dik Takken's email)
 
 Release
 

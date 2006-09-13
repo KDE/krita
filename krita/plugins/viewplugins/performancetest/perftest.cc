@@ -267,7 +267,7 @@ QString PerfTest::bltTest(quint32 testCount)
 }
 
 
-QString PerfTest::doBlit(const KoCompositeOp& op,
+QString PerfTest::doBlit(const KoCompositeOp* op,
                          KoID cspace,
                          quint8 opacity,
                          quint32 testCount,

@@ -38,6 +38,7 @@ public:
 public:
     virtual bool willDegrade(ColorSpaceIndependence independence)
         {
+            Q_UNUSED(independence);
             return false;
         };
 
@@ -74,21 +75,6 @@ protected:
                      quint8 *dst, KoColorSpace * dstColorSpace,
                      quint32 numPixels,
                      qint32 renderingIntent = INTENT_PERCEPTUAL);
-
-
-
-    virtual void bitBlt(quint8 *dst,
-                qint32 dststride,
-                const quint8 *src,
-                qint32 srcRowStride,
-                const quint8 *srcAlphaMask,
-                qint32 maskRowStride,
-                quint8 opacity,
-                qint32 rows,
-                qint32 cols,
-                const KoCompositeOp& op);
-
-    KoCompositeOpList userVisiblecompositeOps() const;
 
 };
 

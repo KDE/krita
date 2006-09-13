@@ -196,7 +196,7 @@ namespace {
     };
 
 
-};
+}
 
 KoLabColorSpace::KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p)
     : KoColorSpace("LABA", i18n("L*a*b* (16-bit integer/channel)"), parent)

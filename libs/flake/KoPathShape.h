@@ -528,8 +528,13 @@ private:
 
     void updateLast( KoPathPoint ** lastPoint );
 
+    /// closes specified subpath
     void closeSubpath( KoSubpath *subpath );
+    /// close-merges specified subpath
+    void closeMergeSubpath( KoSubpath *subpath );
+    /// return subpath and position of specified point
     KoPointPosition findPoint( KoPathPoint* point );
+    /// reverses specified subpath (last point becomes first point)
     void reverseSubpath( KoSubpath &subpath );
 #ifndef NDEBUG
     void paintDebug( QPainter &painter );

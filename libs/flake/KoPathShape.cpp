@@ -624,24 +624,7 @@ void KoPathShape::closeMerge()
     {
         return;
     }
-    KoPathPoint * lastPoint = m_subpaths.last()->last();
-    KoPathPoint * firstPoint = m_subpaths.last()->first();
-
-    if ( lastPoint->point() == firstPoint->point() )
-    {
-        firstPoint->setProperties( firstPoint->properties() | KoPathPoint::CanHaveControlPoint1 );
-        if ( lastPoint->activeControlPoint1() )
-            firstPoint->setControlPoint1( lastPoint->controlPoint1() );
-        removePoint( lastPoint );
-        // remove point
-        delete lastPoint;
-        lastPoint = m_subpaths.last()->last();
-        lastPoint->setProperties( lastPoint->properties() | KoPathPoint::CanHaveControlPoint2 | KoPathPoint::CloseSubpath );
-    }
-    else
-    {
-        close();
-    }
+    closeMergeSubpath( m_subpaths.last() );
 }
 
 QPointF KoPathShape::normalize()
@@ -1157,10 +1140,38 @@ KoPointPosition KoPathShape::findPoint( KoPathPoint* point )
 
 void KoPathShape::closeSubpath( KoSubpath *subpath )
 {
+    if( ! subpath )
+        return;
+
     KoPathPoint * lastPoint = subpath->last();
     lastPoint->setProperties( lastPoint->properties() | KoPathPoint::CloseSubpath | KoPathPoint::CanHaveControlPoint2 );
     KoPathPoint * firstPoint = subpath->first();
     firstPoint->setProperties( firstPoint->properties() | KoPathPoint::CanHaveControlPoint1 );
+}
+
+void KoPathShape::closeMergeSubpath( KoSubpath *subpath )
+{
+    if ( ! subpath )
+        return;
+
+    KoPathPoint * lastPoint = subpath->last();
+    KoPathPoint * firstPoint = subpath->first();
+
+    if ( lastPoint->point() == firstPoint->point() )
+    {
+        firstPoint->setProperties( firstPoint->properties() | KoPathPoint::CanHaveControlPoint1 );
+        if ( lastPoint->activeControlPoint1() )
+            firstPoint->setControlPoint1( lastPoint->controlPoint1() );
+        removePoint( lastPoint );
+        // remove point
+        delete lastPoint;
+        lastPoint = subpath->last();
+        lastPoint->setProperties( lastPoint->properties() | KoPathPoint::CanHaveControlPoint2 | KoPathPoint::CloseSubpath );
+    }
+    else
+    {
+        closeSubpath( subpath );
+    }
 }
 
 void KoPathShape::reverseSubpath( KoSubpath &subpath )

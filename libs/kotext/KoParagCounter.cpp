@@ -206,10 +206,11 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
     m_startNumber = ( restartNumbering != -1 ) ? restartNumbering : 1;
     //kDebug() << k_funcinfo << "IN: restartNumbering=" << restartNumbering << " OUT: m_restartCounter=" << m_restartCounter << " m_startNumber=" << m_startNumber << endl;
 
+    m_prefix = listStyle.attributeNS( KoXmlNS::style, "num-prefix", QString::null );
+    m_suffix = listStyle.attributeNS( KoXmlNS::style, "num-suffix", QString::null );
+
     if ( orderedList || heading ) {
         m_style = static_cast<Style>( importCounterType( listStyle.attributeNS( KoXmlNS::style, "num-format", QString::null)[0] ) );
-        m_prefix = listStyle.attributeNS( KoXmlNS::style, "num-prefix", QString::null );
-        m_suffix = listStyle.attributeNS( KoXmlNS::style, "num-suffix", QString::null );
         QString dl = listStyle.attributeNS( KoXmlNS::text, "display-levels", QString::null );
         m_displayLevels = dl.isEmpty() ? 1 : dl.toInt();
     } else { // bullets, see 3.3.6 p138
@@ -304,8 +305,6 @@ void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter, bool incl
     }
     else
     {
-        listLevelWriter.addAttribute( "style:num-prefix", m_prefix );
-        listLevelWriter.addAttribute( "style:num-suffix", m_suffix );
         if ( includeLevelAndProperties ) // not for KWVariableSettings
             listLevelWriter.addAttribute( "text:display-levels", m_displayLevels );
         if ( (Style)m_style == STYLE_CUSTOM )
@@ -320,6 +319,9 @@ void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter, bool incl
 
     }
     // m_numbering isn't saved, it's set depending on context (NUM_CHAPTER for headings).
+
+    listLevelWriter.addAttribute( "style:num-prefix", m_prefix );
+    listLevelWriter.addAttribute( "style:num-suffix", m_suffix );
 
     if ( includeLevelAndProperties ) // false when called for footnotes-configuration
     {

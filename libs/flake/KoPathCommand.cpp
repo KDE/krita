@@ -62,13 +62,12 @@ void KoPointMoveCommand::execute()
 
     if( m_pointType == KoPathPoint::Node )
     {
+        QMatrix matrix;
+        matrix.translate( m_offset.x(), m_offset.y() );
+
         foreach( KoPathPoint *p, m_points )
         {
-            p->setPoint( p->point() + m_offset );
-            if( p->properties() & KoPathPoint::HasControlPoint1 )
-                p->setControlPoint1( p->controlPoint1() + m_offset );
-            if( p->properties() & KoPathPoint::HasControlPoint2 )
-                p->setControlPoint2( p->controlPoint2() + m_offset );
+           p->map( matrix, true );
         }
     }
     else if( m_pointType == KoPathPoint::ControlPoint1 )

@@ -22,6 +22,7 @@
 
 #include <QDebug>
 #include <QPainter>
+#include <math.h>
 
 KoPathPoint::KoPathPoint( const KoPathPoint & pathPoint )
 : m_pointGroup( 0 )
@@ -356,6 +357,19 @@ void KoPathShape::paintDebug( QPainter &painter )
 }
 #endif
 
+void KoPathShape::debugPath()
+{
+    KoSubpathList::iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
+    {
+        KoSubpath::const_iterator it( ( *pathIt )->begin() );
+        for ( ; it != ( *pathIt )->end(); ++it )
+        {
+            qDebug() << "p:" << ( *pathIt ) << "," << *it << "," << ( *it )->point() << "," << ( *it )->properties() << "," << ( *it )->group();
+        }
+    }
+}
+
 void KoPathShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected)
 {
     if( ! selected ) return;
@@ -400,10 +414,13 @@ const QPainterPath KoPathShape::KoPathShape::outline() const
         bool activeCP = false;
         for ( ; it != ( *pathIt )->end(); ++it )
         {
-            if ( ( *it )->properties() & KoPathPoint::StartSubpath )
+            if ( it == ( *pathIt )->begin() )
             {
-                //qDebug() << "moveTo(" << ( *it )->point() << ")";
-                path.moveTo( ( *it )->point() );
+                if ( ( *it )->properties() & KoPathPoint::StartSubpath )
+                {
+                    //qDebug() << "moveTo(" << ( *it )->point() << ")";
+                    path.moveTo( ( *it )->point() );
+                }
             }
             else if ( activeCP || ( *it )->activeControlPoint1() )
             {
@@ -500,7 +517,7 @@ KoPathPoint * KoPathShape::lineTo( const QPointF &p )
     }
     KoPathPoint * point = new KoPathPoint( this, p, KoPathPoint::CanHaveControlPoint1 );
     KoPathPoint * lastPoint = m_subpaths.last()->last();
-    updateLast( lastPoint );
+    updateLast( &lastPoint );
     m_subpaths.last()->push_back( point );
     return point;
 }
@@ -512,12 +529,84 @@ KoPathPoint * KoPathShape::curveTo( const QPointF &c1, const QPointF &c2, const 
         moveTo( QPointF( 0, 0 ) );
     }
     KoPathPoint * lastPoint = m_subpaths.last()->last();
-    updateLast( lastPoint );
+    updateLast( &lastPoint );
     lastPoint->setControlPoint2( c1 );
     KoPathPoint * point = new KoPathPoint( this, p, KoPathPoint::CanHaveControlPoint1 );
     point->setControlPoint1( c2 );
     m_subpaths.last()->push_back( point );
     return point;
+}
+
+KoPathPoint * KoPathShape::arcTo( double rx, double ry, double startAngle, double sweepAngle )
+{
+    if ( m_subpaths.empty() )
+    {
+        moveTo( QPointF( 0, 0 ) );
+    }
+
+    // check Parameters
+    if ( sweepAngle == 0 )
+        return m_subpaths.last()->last();
+    if (  sweepAngle > 360 )
+        sweepAngle = 360;
+    else if (  sweepAngle < -360 )
+        sweepAngle = - 360;
+
+    if ( rx == 0 || ry == 0 )
+    {
+        //TODO
+    }
+
+    // split angles bigger than 90° so that it gives a good aproximation to the circle
+    double parts = ceil( qAbs( sweepAngle / 90.0 ) );
+
+    double sa_rad = startAngle * M_PI / 180.0;
+    double partangle = sweepAngle / parts;
+    double endangle = startAngle + partangle;
+    double se_rad = endangle * M_PI / 180.0;
+    double sinsa = sin( sa_rad );
+    double cossa = cos( sa_rad );
+    double kappa = 4.0 / 3.0 * tan( ( se_rad - sa_rad ) / 4 );
+
+    // startpoint is at the last point is the path but when it is closed
+    // it is at the first point
+    KoPathPoint * lastPoint = m_subpaths.last()->last();
+    if ( lastPoint->properties() & KoPathPoint::CloseSubpath )
+    {
+        lastPoint = m_subpaths.last()->first();
+    }
+    QPointF startpoint( lastPoint->point() );
+    //center berechnen
+    QPointF center( startpoint - QPointF( cossa * rx, -sinsa * ry ) );
+
+    qDebug() << "kappa" << kappa << "parts" << parts;
+    
+    KoPathPoint * newEndPoint = lastPoint;
+        
+    for ( int part = 0; part < parts; ++part )
+    {
+        // start tangent
+        QPointF controlpoint1( startpoint - QPointF( sinsa * rx * kappa, cossa * ry * kappa ) );
+
+        double sinse = sin( se_rad );
+        double cosse = cos( se_rad );
+
+        // end point
+        QPointF endpoint( center + QPointF( cosse * rx, -sinse * ry ) );
+        // end tangent
+        QPointF controlpoint2( endpoint - QPointF( -sinse * rx * kappa, -cosse * ry * kappa ) );
+
+        newEndPoint = curveTo( controlpoint1, controlpoint2, endpoint );
+
+        // set the endpoint as next start point
+        startpoint = endpoint;
+        sinsa = sinse;
+        cossa = cosse;
+        endangle += partangle;
+        se_rad = endangle * M_PI / 180.0;
+    }
+
+    return newEndPoint;
 }
 
 void KoPathShape::close()
@@ -547,7 +636,7 @@ void KoPathShape::closeMerge()
         // remove point
         delete lastPoint;
         lastPoint = m_subpaths.last()->last();
-        lastPoint->setProperties( lastPoint->properties() | KoPathPoint::CloseSubpath );
+        lastPoint->setProperties( lastPoint->properties() | KoPathPoint::CanHaveControlPoint2 | KoPathPoint::CloseSubpath );
     }
     else
     {
@@ -584,12 +673,13 @@ void KoPathShape::map( const QMatrix &matrix )
     }
 }
 
-void KoPathShape::updateLast( KoPathPoint * lastPoint )
+void KoPathShape::updateLast( KoPathPoint ** lastPoint )
 {
-    if ( lastPoint->properties() & KoPathPoint::CloseSubpath )
+    if ( ( *lastPoint )->properties() & KoPathPoint::CloseSubpath )
     {
         KoPathPoint * subpathStart = m_subpaths.last()->first();
         KoPathPoint * newLastPoint = new KoPathPoint( *subpathStart );
+        newLastPoint->setProperties( KoPathPoint::Normal );
         KoPointGroup * group = subpathStart->group();
         if ( group == 0 )
         {
@@ -601,10 +691,9 @@ void KoPathShape::updateLast( KoPathPoint * lastPoint )
         KoSubpath *path = new KoSubpath;
         path->push_back( newLastPoint );
         m_subpaths.push_back( path );
-        lastPoint = newLastPoint;
-        lastPoint->setProperties( KoPathPoint::Normal );
+        *lastPoint = newLastPoint;
     }
-    lastPoint->setProperties( lastPoint->properties() | KoPathPoint::CanHaveControlPoint2 );
+    ( *lastPoint )->setProperties( ( *lastPoint )->properties() | KoPathPoint::CanHaveControlPoint2 );
 }
 
 QList<KoPathPoint*> KoPathShape::pointsAt( const QRectF &r )

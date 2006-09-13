@@ -190,8 +190,12 @@ public:
      * @brief apply matrix on the point
      *
      * This does a matrix multiplication on all points of the point
+     * 
+     * @param matrix which will be applied to all points 
+     * @param mapGroup true when the matrix should be also applied to 
+     *                 all points of the group the point belongs to
      */
-    void map( const QMatrix &matrix ) { map( matrix, true ); }
+    void map( const QMatrix &matrix, bool mapGroup = false );
 
     /**
      * Paints the path point with the actual brush and pen
@@ -219,7 +223,6 @@ protected:
     friend class KoPathShape;
     void removeFromGroup();
     void addToGroup( KoPointGroup *pointGroup );
-    void map( const QMatrix &matrix, bool mapGroup );
     KoPointGroup * group() { return m_pointGroup; }
 private:
     KoPathShape * m_shape;
@@ -356,6 +359,20 @@ public:
      * @return The newly created point 
      */
     KoPathPoint * curveTo( const QPointF &c1, const QPointF &c2, const QPointF &p );
+
+    /**
+     * @brief add a arc.
+     *
+     * Adds an arc starting at the current point. The arc will be converted to bezier curves.
+     * @param rx x radius of the ellipse
+     * @param ry y radius of the ellipse
+     * @param startAngle the angle where the arc will be started
+     * @param sweepAngle the length of the angle
+     * TODO add param to have angle of the ellipse
+     *
+     * @return The newly created point 
+     */
+    KoPathPoint * arcTo( double rx, double ry, double startAngle, double sweepAngle );
 
     /**
      * @brief close the current subpath
@@ -501,10 +518,15 @@ public:
      * @return the next point, or null if no next point exists
      */
     KoPathPoint* nextPoint( KoPathPoint* point );
+
+    /**
+     * @brief print debug information about a the points of the path
+     */
+    void debugPath();
 private:
     void map( const QMatrix &matrix );
 
-    void updateLast( KoPathPoint * lastPoint );
+    void updateLast( KoPathPoint ** lastPoint );
 
     void closeSubpath( KoSubpath *subpath );
     KoPointPosition findPoint( KoPathPoint* point );

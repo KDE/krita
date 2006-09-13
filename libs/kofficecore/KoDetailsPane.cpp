@@ -40,7 +40,7 @@
 #include <kdebug.h>
 #include <ktextbrowser.h>
 #include <kapplication.h>
-
+#include <kglobalsettings.h>
 #include "KoTemplates.h"
 
 
@@ -72,9 +72,7 @@ KoDetailsPane::KoDetailsPane(QWidget* parent, KInstance* _instance, const QStrin
   m_documentList->setColumnText(0, header);
   changePalette();
 
-  if(kapp) {
-    connect(kapp, SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
-  }
+  connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
 
   connect(m_documentList, SIGNAL(selectionChanged(Q3ListViewItem*)),
   this, SLOT(selectionChanged(Q3ListViewItem*)));

@@ -58,7 +58,7 @@ void IntSpinBox::setValue(const QVariant &value)
 	if (dynamic_cast<IntEdit*>(parentWidget()) && dynamic_cast<IntEdit*>(parentWidget())->isReadOnly())
 		return;
 	if (value.isNull())
-		editor()->clear();
+		lineEdit()->clear();
 	else
 		KIntSpinBox::setValue(value.toInt());
 }
@@ -234,7 +234,7 @@ void DoubleSpinBox::setValue( const QVariant& value )
 	if (dynamic_cast<DoubleEdit*>(parentWidget()) && dynamic_cast<DoubleEdit*>(parentWidget())->isReadOnly())
 		return;
 	if (value.isNull())
-		editor()->clear();
+		lineEdit()->clear();
 	else
 		KDoubleSpinBox::setValue(value.toDouble());
 }

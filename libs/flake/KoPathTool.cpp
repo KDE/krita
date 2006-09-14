@@ -18,13 +18,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KoPathTool.h>
-#include <KoCanvasBase.h>
-#include <KoSelection.h>
-#include <KoShapeManager.h>
-#include <KoPointerEvent.h>
-#include <KoPathCommand.h>
-
+#include "KoPathTool.h"
+#include "KoCanvasBase.h"
+#include "KoSelection.h"
+#include "KoShapeManager.h"
+#include "KoPointerEvent.h"
+#include "KoPathCommand.h"
+#include "KoInsets.h"
+#include "KoShapeBorderModel.h"
 #include <kdebug.h>
 #include <QKeyEvent>
 
@@ -55,7 +56,14 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
                 m_rubberSelect->paint( painter, converter );
         }
 
-        QRect shape = converter.documentToView( transformed( outline.controlPointRect() ) ).toRect();
+        QRectF controlPointRect = outline.controlPointRect();
+        if( m_pathShape->border() )
+        {
+            KoInsets insets;
+            m_pathShape->border()->borderInsets( m_pathShape, insets );
+            controlPointRect.adjust( -insets.left, -insets.top, insets.right, insets.bottom );
+        }
+        QRect shape = converter.documentToView( transformed( controlPointRect ) ).toRect();
         if(painter.clipRegion().intersect( QRegion(shape) ).isEmpty())
             return;
     }
@@ -317,6 +325,40 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
             {
                 KoPointJoinCommand *cmd = new KoPointJoinCommand( m_pathShape, m_selectedPoints[0], m_selectedPoints[1] );
                 m_canvas->addCommand( cmd, true );
+            }
+        break;
+        case Qt::Key_F:
+            if( m_selectedPoints.size() )
+            {
+                QList<KoPathSegment> segments;
+                foreach( KoPathPoint* p, m_selectedPoints )
+                {
+                    KoPathPoint *n = m_pathShape->nextPoint( p );
+                    if( m_selectedPoints.contains( n ) )
+                        segments << qMakePair( p, n );
+                }
+                if( segments.size() )
+                {
+                    KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( m_pathShape, segments, true );
+                    m_canvas->addCommand( cmd, true );
+                }
+            }
+        break;
+        case Qt::Key_C:
+            if( m_selectedPoints.size() )
+            {
+                QList<KoPathSegment> segments;
+                foreach( KoPathPoint* p, m_selectedPoints )
+                {
+                    KoPathPoint *n = m_pathShape->nextPoint( p );
+                    if( m_selectedPoints.contains( n ) )
+                        segments << qMakePair( p, n );
+                }
+                if( segments.size() )
+                {
+                    KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( m_pathShape, segments, false );
+                    m_canvas->addCommand( cmd, true );
+                }
             }
         break;
     }

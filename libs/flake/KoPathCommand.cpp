@@ -480,3 +480,81 @@ QString KoSubpathBreakCommand::name() const
 {
     return i18n( "Break subpath" );
 }
+
+KoSegmentTypeCommand::KoSegmentTypeCommand( KoPathShape *shape, const KoPathSegment &segment, bool changeToLine )
+: KoPathBaseCommand( shape )
+, m_changeToLine( changeToLine )
+{
+    if( segment.first && segment.second )
+        m_segments.append( segment );
+}
+
+KoSegmentTypeCommand::KoSegmentTypeCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, bool changeToLine )
+: KoPathBaseCommand( shape )
+, m_changeToLine( changeToLine )
+{
+    foreach( KoPathSegment segment, segments )
+    {
+        if( segment.first && segment.second )
+            m_segments.append( segment );
+    }
+}
+
+void KoSegmentTypeCommand::execute()
+{
+    QRectF oldControlRect = m_shape->outline().controlPointRect();
+
+    m_oldPointData.clear();
+    foreach( KoPathSegment s, m_segments )
+    {
+        m_oldPointData.insert( s.first, *s.first );
+        m_oldPointData.insert( s.second, *s.second );
+    }
+
+    foreach( KoPathSegment s, m_segments )
+    {
+        if( m_changeToLine )
+        {
+            s.first->unsetProperty( KoPathPoint::HasControlPoint2 );
+            s.second->unsetProperty( KoPathPoint::HasControlPoint1 );
+        }
+        else
+        {
+            // check if segment is already a curve
+            if( s.first->properties() & KoPathPoint::HasControlPoint2 || s.second->properties() & KoPathPoint::HasControlPoint1 )
+                continue;
+
+            QPointF pointDiff = s.second->point() - s.first->point();
+            s.first->setControlPoint2( s.first->point() + 0.3 * pointDiff );
+            s.second->setControlPoint1( s.first->point() + 0.7 * pointDiff );
+        }
+    }
+
+    QPointF offset = m_shape->normalize();
+    QMatrix matrix;
+    matrix.translate( -offset.x(), -offset.y() );
+    QMap<KoPathPoint*, KoPathPoint>::iterator it = m_oldPointData.begin();
+    for(; it != m_oldPointData.end(); ++it )
+        it.value().map( matrix );
+
+    repaint( oldControlRect.translated( -offset ) );
+}
+
+void KoSegmentTypeCommand::unexecute()
+{
+    QRectF oldControlRect = m_shape->outline().controlPointRect();
+
+    KoPathPoint defaultPoint( 0, QPointF(0,0) );
+    foreach( KoPathSegment s, m_segments )
+    {
+        *s.first = m_oldPointData.value( s.first, defaultPoint );
+        *s.second = m_oldPointData.value( s.second, defaultPoint );
+    }
+
+    repaint( oldControlRect );
+}
+
+QString KoSegmentTypeCommand::name() const
+{
+    return i18n( "Change segment type" );
+}

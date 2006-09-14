@@ -19,6 +19,8 @@
 */
 
 #include "KoPathShape.h"
+#include "KoInsets.h"
+#include "KoShapeBorderModel.h"
 
 #include <QDebug>
 #include <QPainter>
@@ -403,7 +405,7 @@ QRectF KoPathShape::handleRect( const QPointF &p ) const
     return QRectF( p.x()-handleRadius, p.y()-handleRadius, 2*handleRadius, 2*handleRadius );
 }
 
-const QPainterPath KoPathShape::KoPathShape::outline() const
+const QPainterPath KoPathShape::outline() const
 {
     KoSubpathList::const_iterator pathIt( m_subpaths.begin() );
     QPainterPath path;
@@ -471,6 +473,12 @@ const QPainterPath KoPathShape::KoPathShape::outline() const
 QRectF KoPathShape::boundingRect() const
 {
     QRectF bb( outline().boundingRect() );
+    if( m_border )
+    {
+        KoInsets inset;
+        m_border->borderInsets( this, inset );
+        bb.adjust( -inset.left, -inset.top, inset.right, inset.bottom );
+    }
     //qDebug() << "KoPathShape::boundingRect = " << bb;
     return transformationMatrix( 0 ).mapRect( bb );
 }

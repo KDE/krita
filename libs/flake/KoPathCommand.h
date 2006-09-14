@@ -22,6 +22,7 @@
 
 #include <kcommand.h>
 #include <QList>
+#include <QMap>
 #include <QPointF>
 #include <KoPathShape.h>
 
@@ -228,6 +229,36 @@ private:
     KoPathPoint* m_newPoint;
     KoPathPoint m_pointData1; ///< data of the first point to restore
     KoPathPoint m_pointData2; ///< data of the second point to restore 
+};
+
+/// The undo / redo command for changing a segments type (curve/line)
+class KoSegmentTypeCommand : public KoPathBaseCommand
+{
+public:
+    /**
+     * Command for changing a segments type (curve/line)
+     * @param shape the path shape whose subpath to close
+     * @param segment the segment to change the type of
+     * @param changeToLine if true, changes segment to line, else changes segment to curve
+     */
+    KoSegmentTypeCommand( KoPathShape *shape, const KoPathSegment &segment, bool changeToLine );
+    /**
+     * Command for changing a segments type (curve/line)
+     * @param shape the path shape whose subpath to close
+     * @param segments the segments to change the type of
+     * @param changeToLine if true, changes segments to lines, else changes segments to curves
+     */
+    KoSegmentTypeCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, bool changeToLine );
+    /// execute the command
+    void execute();
+    /// revert the actions done in execute
+    void unexecute();
+    /// return the name of this command
+    QString name() const;
+private:
+    QList<KoPathSegment> m_segments;
+    QMap<KoPathPoint*,KoPathPoint> m_oldPointData;
+    bool m_changeToLine;
 };
 
 #endif

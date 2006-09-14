@@ -389,8 +389,10 @@ KoColorAdjustment *KoLcmsColorSpaceTrait::createDesaturateAdjustment()
      bchsw.Saturation = -25;
 
      adj->profiles[1] = _cmsCreateProfilePlaceholder();
-     if (!adj->profiles[1]) // can't allocate
+     if (!adj->profiles[1]) { // can't allocate
+        delete adj;
         return NULL;
+     }
 
      cmsSetDeviceClass(adj->profiles[1], icSigAbstractClass);
      cmsSetColorSpace(adj->profiles[1], icSigLabData);
@@ -407,6 +409,7 @@ KoColorAdjustment *KoLcmsColorSpaceTrait::createDesaturateAdjustment()
          // Shouldn't reach here
          cmsFreeLUT(Lut);
          cmsCloseProfile(adj->profiles[1]);
+         delete adj;
          return NULL;
      }
 

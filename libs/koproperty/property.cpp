@@ -344,6 +344,8 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 			   || (t==QVariant::UInt && newt==QVariant::Int)
 			   || (t==QVariant::CString && newt==QVariant::String)
 			   || (t==QVariant::String && newt==QVariant::CString)
+			   || (t==QVariant::ULongLong && newt==QVariant::LongLong)
+			   || (t==QVariant::LongLong && newt==QVariant::ULongLong)
 		 )) {
 		kopropertywarn << "Property::setValue(): INCOMPAT TYPES! " << currentValue 
 			<< " and " << value << endl;
@@ -364,6 +366,8 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 		//..or both are not empty and values differ
 			|| (!currentValue.toString().isEmpty() && !value.toString().isEmpty() && currentValue != value) );
 	}
+	else if (t == QVariant::Invalid && newt == QVariant::Invalid)
+		ch = false;
 	else
 		ch = (currentValue != value);
 

@@ -78,7 +78,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
                                     SLOT(slotToggleAllPalettes()),
                                     m_actionCollection, "toggleAllPaletteWindows");
 
-        m_toggleShowHidePalettes->setCheckedState(i18n("Show Palette Windows Again"));
+        m_toggleShowHidePalettes->setCheckedState(KGuiItem(i18n("Show Palette Windows Again")));
     }
     else {
         m_toggleShowHidePalettes = new KToggleAction(i18n("Show Palette Windows Again"),
@@ -86,7 +86,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
                                     SLOT(slotToggleAllPalettes()),
                                     m_actionCollection, "toggleAllPaletteWindows");
 
-        m_toggleShowHidePalettes->setCheckedState(i18n("Hide All Palette Windows"));
+        m_toggleShowHidePalettes->setCheckedState(KGuiItem(i18n("Hide All Palette Windows")));
     }
     m_viewActionMenu->addAction(m_toggleShowHidePalettes);
 
@@ -167,7 +167,7 @@ void KoPaletteManager::addWidget(QWidget * widget,
 
     KToggleAction * a;
     a = new KToggleAction(i18n("Show %1",widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
-    a->setCheckedState(i18n("Hide %1",widget->caption()));
+    a->setCheckedState(KGuiItem(i18n("Hide %1",widget->caption())));
 
     m_mapper->setMapping(a, m_widgetNames->count()); // This is the position at which we'll insert the action
     m_actions->insert( name, a );

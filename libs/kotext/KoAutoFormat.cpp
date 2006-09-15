@@ -255,7 +255,7 @@ void KoAutoFormat::loadListOfWordCompletion()
 {
     KConfig* config = KoGlobal::kofficeConfig();
     KConfigGroup configGroup( config, "Completion Word" );
-    m_listCompletion->insertItems(configGroup.readListEntry( "list" ));
+    m_listCompletion->insertItems(configGroup.readEntry( "list",QStringList() ));
 }
 
 void KoAutoFormat::readConfig(bool force)

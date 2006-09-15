@@ -731,7 +731,7 @@ bool KoMainWindow::exportConfirmation( const QByteArray &outputFormat )
                         "<p>Do you still want to export to this format?</qt>",
                   QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
                   i18n( "Confirm Export" ),
-                  i18n ("Export"),
+                  KGuiItem(i18n ("Export")),
                   "NonNativeExportConfirmation" // different to the one used for Save (above)
                   );
     }
@@ -1549,7 +1549,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
       {
           KToggleAction * act = new KToggleAction( i18n("Show %1 Toolbar", tb->windowTitle() ),
                                                    actionCollection(), tb->objectName().toUtf8() );
-	  act->setCheckedState(i18n("Hide %1 Toolbar", tb->windowTitle() ));
+	  act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", tb->windowTitle() )));
 	  connect( act, SIGNAL( toggled( bool ) ), this, SLOT( slotToolbarToggled( bool ) ) );
           act->setChecked ( !tb->isHidden() );
           d->m_toolbarList.append( act );

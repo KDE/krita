@@ -21,6 +21,7 @@
 
 #include "FormulaElement.h"
 #include "FormulaCursor.h"
+#include "symboltable.h"
 #include <KoXmlWriter.h>
 //#include <QPainter>
 

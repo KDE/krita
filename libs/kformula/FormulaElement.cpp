@@ -200,7 +200,9 @@ KCommand* FormulaElement::buildCommand( Container* container, Request* request )
 
 const SymbolTable& FormulaElement::getSymbolTable() const
 {
-//    return m_document->getSymbolTable();
+#warning FIXME
+    static SymbolTable s;
+    return s;
 }
 
 

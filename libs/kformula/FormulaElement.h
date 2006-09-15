@@ -165,7 +165,7 @@ public:
     /**
      * @returns our documents symbol table
      */
-    const SymbolTable& getSymbolTable() const;
+    //const SymbolTable& getSymbolTable() const;
 
     int getBaseSize() const { return baseSize; }
     void setBaseSize( int size );

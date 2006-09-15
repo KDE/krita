@@ -21,7 +21,6 @@
 
 #include "FormulaElement.h"
 #include "FormulaCursor.h"
-#include "symboltable.h"
 #include <KoXmlWriter.h>
 //#include <QPainter>
 
@@ -198,14 +197,6 @@ KCommand* FormulaElement::buildCommand( Container* container, Request* request )
     }
     return BasicElement::buildCommand( container, request );
 }*/
-
-const SymbolTable& FormulaElement::getSymbolTable() const
-{
-#warning FIXME
-    static SymbolTable s;
-    return s;
-}
-
 
 QDomElement FormulaElement::emptyFormulaElement( QDomDocument& doc )
 {

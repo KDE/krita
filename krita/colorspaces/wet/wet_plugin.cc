@@ -117,7 +117,7 @@ true);
 
         w->setWindowTitle(i18n("Watercolors"));
 
-        m_view->canvasSubject()->paletteManager()->addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER,  false);
+        m_view->createDock(i18n("Watercolors"), w);
         m_view->canvasSubject()->attach(w);
     }
 

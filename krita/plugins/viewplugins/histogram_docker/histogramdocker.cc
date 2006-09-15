@@ -86,8 +86,7 @@ true);
                 this, SLOT(colorSpaceChanged(KoColorSpace*))); // No need to force updates here
 
         // Add it to the control palette
-        m_view->canvasSubject()->paletteManager()->addWidget(
-            m_hview, "histodocker", krita::CONTROL_PALETTE);
+        m_view->createDock(i18n("Histogram"), m_hview);
     } else {
         m_cache = 0;
     }

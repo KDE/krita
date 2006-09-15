@@ -169,9 +169,6 @@ public:
     /// XXX: Remove this method
     virtual KisSelectionManager * selectionManager() = 0;
 
-    /// XXX: Remove this method
-    virtual KoPaletteManager * paletteManager() = 0;
-
     /**
      * Get the profile that this view uses to display itself on
      * he monitor.

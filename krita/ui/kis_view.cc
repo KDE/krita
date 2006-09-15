@@ -36,6 +36,7 @@
 #include <QStyle>
 #include <QStringList>
 #include <QObject>
+#include <QDockWidget>
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <QResizeEvent>
@@ -87,8 +88,6 @@
 
 #include <KoUniColorChooser.h>
 
-#include <kopalettemanager.h>
-#include <kopalette.h>
 #include <oldtoolbox.h>
 #include <KoDocumentSectionView.h>
 
@@ -178,6 +177,9 @@
 
 #include "kis_custom_palette.h"
 
+
+
+
 // Time in ms that must pass after a tablet event before a mouse event is allowed to
 // change the input device to the mouse. This is needed because mouse events are always
 // sent to a receiver if it does not accept the tablet event.
@@ -195,7 +197,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent)
     , m_gridManager( 0 )
     , m_selectionManager( 0 )
     , m_filterManager( 0 )
-    , m_paletteManager( 0 )
     , m_toolManager( 0 )
     , m_actLayerVis( false )
     , m_hRuler( 0 )
@@ -273,13 +274,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent)
 
     connect(&m_initialZoomTimer, SIGNAL(timeout()), SLOT(slotInitialZoomTimeout()));
     m_initialZoomTimer.setSingleShot(true);
-
-    m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
-    if (cfg.fixDockerWidth()) m_paletteManager->setFixedWidth( 360 );
-
-    m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
-    m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
-    m_paletteManager->createPalette( krita::LAYERBOX, i18n("Layers"));
 
     m_selectionManager = new KisSelectionManager(this, doc);
     m_filterManager = new KisFilterManager(this, doc);
@@ -366,7 +360,6 @@ KisView::~KisView()
     KisConfig cfg;
     cfg.setShowRulers( m_RulerAction->isChecked() );
 
-    delete m_paletteManager;
     delete m_selectionManager;
     delete m_filterManager;
     delete m_toolManager;
@@ -400,12 +393,14 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
     {
         m_toolBox = new OldToolBox(mainWindow(), "ToolBox", KisFactory::instance(), NUMBER_OF_TOOLTYPES);
         m_toolBox->setWindowTitle(i18n("Krita"));
-        m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
+        QDockWidget * toolOptionDocker = createDock(i18n("Tool Options"), 0);
+
+        m_toolManager->setUp(m_toolBox, toolOptionDocker, actionCollection());
 
         Qt::ToolBarArea dock = stringToDock( element.attribute( "position" ).toLower() );
 
         mainWindow()->addToolBar(dock, m_toolBox);
-        //mainWindow()->moveDockWindow( m_toolBox, dock, false, 0, 0 );
+        
     }
 
     return KXMLGUIBuilder::createContainer( parent, index, element, id );
@@ -426,14 +421,19 @@ void KisView::removeContainer( QWidget *container, QWidget *parent, QDomElement 
     }
 }
 
-KoPaletteManager * KisView::paletteManager()
+
+QDockWidget * KisView::createDock(const QString & title, QWidget * w)
 {
-    if (!m_paletteManager) {
-        m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
-        Q_CHECK_PTR(m_paletteManager);
-    }
-    return m_paletteManager;
+    QDockWidget * d = new QDockWidget(title, mainWindow());
+    d->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    // XXX: How do we restore the dock to the preferred place? Is that automatic?
+    d->setWidget(w);
+    d->setObjectName(title);
+    mainWindow()->addDockWidget(Qt::RightDockWidgetArea, d);
+    // XXX: add the toggle to the right menu. How do we do that?
+    return d;
 }
+
 
 void KisView::createLayerBox()
 {
@@ -455,7 +455,7 @@ void KisView::createLayerBox()
             this, SLOT(layerOpacityFinishedChanging(int, int)));
     connect(m_layerBox, SIGNAL(sigItemComposite(const KoCompositeOp*)), this, SLOT(layerCompositeOp(const KoCompositeOp*)));
 
-    paletteManager()->addWidget(m_layerBox, "layerbox", krita::LAYERBOX, 0);
+    createDock(i18n("Layers"), m_layerBox);
 }
 void KisView::setupScrollBars()
 {
@@ -1303,20 +1303,6 @@ void KisView::layerUpdateGUI(bool enable)
 
     if (pl && ( m_currentColorChooserDisplay != KoID("BLA") ||
                 pl->paintDevice()->colorSpace()->id() != m_currentColorChooserDisplay)) {
-        if (pl->paintDevice()->colorSpace()->id() == KoID("WET")) {
-            m_paletteManager->hideWidget( "hsvwidget" );
-            m_paletteManager->hideWidget( "rgbwidget" );
-            m_paletteManager->hideWidget( "graywidget" );
-            m_paletteManager->hideWidget( "palettewidget" );
-            m_paletteManager->showWidget( "watercolor docker" );
-        }
-        else {
-            m_paletteManager->hideWidget( "watercolor docker" );
-            m_paletteManager->showWidget( "palettewidget" );
-            m_paletteManager->showWidget( "graywidget" );
-            m_paletteManager->showWidget( "rgbwidget" );
-            m_paletteManager->showWidget( "hsvwidget" );
-        }
         m_currentColorChooserDisplay = pl->paintDevice()->colorSpace()->id();
     }
 
@@ -2009,7 +1995,6 @@ void KisView::preferences()
     if (PreferencesDialog::editPreferences())
     {
         KisConfig cfg;
-        m_paletteManager->slotResetFont();
         resetMonitorProfile();
 
 #ifdef HAVE_OPENGL
@@ -3776,14 +3761,14 @@ void KisView::createDockers()
 {
     m_birdEyeBox = new KisBirdEyeBox(this);
     m_birdEyeBox->setWindowTitle(i18n("Overview"));
-    m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
+    createDock(i18n("Overview"), m_birdEyeBox);
 
     m_colorchooser = new KoUniColorChooser(0);
     m_colorchooser->setWindowTitle(i18n("Color by values"));
 
     connect(m_colorchooser, SIGNAL(sigColorChanged(const KoColor &)), this, SLOT(slotSetFGColor(const KoColor &)));
     connect(this, SIGNAL(sigFGColorChanged(const KoColor &)), m_colorchooser, SLOT(setColor(const KoColor &)));
-    m_paletteManager->addWidget( m_colorchooser, "unicolorchooser", krita::COLORBOX, 0, PALETTE_DOCKER, true);
+    createDock(i18n("Color by values"), m_colorchooser);
 
     //make sure the color chooser get right default values
     emit sigFGColorChanged(m_fg);
@@ -3802,7 +3787,7 @@ void KisView::createDockers()
         m_palettewidget->slotAddPalette(resource);
     }
     connect(m_palettewidget, SIGNAL(colorSelected(const KoColor &)), this, SLOT(slotSetFGColor(const KoColor &)));
-    m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX, 10, PALETTE_DOCKER, true);
+    createDock(i18n("Palettes"), m_palettewidget);
 }
 
 QPoint KisView::applyViewTransformations(const QPoint& p) const {
@@ -3843,7 +3828,6 @@ void KisView::slotLoadingFinished()
 {
     // Set the current image for real now everything is ready to go.
     setCurrentImage(document()->currentImage());
-    m_paletteManager->showWidget( "layerbox" );
     m_canvas->show();
     disconnect(document(), SIGNAL(loadingFinished()), this, SLOT(slotLoadingFinished()));
 

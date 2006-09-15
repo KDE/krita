@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kopalettemanager.h"
+#include <QtGui>
 
 #include "kis_part_layer.h"
 #include "kis_tool_manager.h"
@@ -39,18 +39,19 @@ KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasController * 
     m_toolBox = 0;
     m_oldTool = 0;
     m_dummyTool = 0;
-    m_paletteManager = 0;
     m_actionCollection = 0;
     m_tools_disabled = false;
     setup = false;
 }
+
+
 
 KisToolManager::~KisToolManager()
 {
     delete m_dummyTool;
 }
 
-void KisToolManager::setUp(OldToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * actionCollection)
+void KisToolManager::setUp(OldToolBox * toolbox, QDockWidget * toolPaletteWidget, KActionCollection * actionCollection)
 {
     if (setup) {
         resetToolBox( toolbox );
@@ -58,7 +59,7 @@ void KisToolManager::setUp(OldToolBox * toolbox, KoPaletteManager * paletteManag
     }
 
     m_toolBox = toolbox;
-    m_paletteManager = paletteManager;
+    m_toolPaletteWidget = toolPaletteWidget;
     m_actionCollection = actionCollection;
 
     // Dummy tool for when the layer is locked or invisible
@@ -183,19 +184,18 @@ void KisToolManager::setCurrentTool(KisTool *tool)
         {
             oldTool->deactivate();
             oldTool->action()->setChecked( false );
-
-            m_paletteManager->removeWidget(krita::TOOL_OPTION_WIDGET);
+            m_toolPaletteWidget->setWidget(new QWidget(m_toolPaletteWidget));
         }
 
         if (tool) {
 
             if (!tool->optionWidget()) {
-                tool->createOptionWidget(0);
+                tool->createOptionWidget(m_toolPaletteWidget);
             }
             QWidget * w = tool->optionWidget();
 
             if (w)
-                m_paletteManager->addWidget(w, krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
+                m_toolPaletteWidget->setWidget(w);
 
             m_inputDeviceToolMap[m_controller->currentInputDevice()] = tool;
             m_controller->setCanvasCursor(tool->cursor());
@@ -247,7 +247,7 @@ void KisToolManager::setToolForInputDevice(KisInputDevice oldDevice, KisInputDev
     KisTool *oldTool = currentTool();
     if (oldTool)
     {
-        m_paletteManager->removeWidget(krita::TOOL_OPTION_WIDGET);
+        m_toolPaletteWidget->setWidget(new QWidget(m_toolPaletteWidget));
         oldTool->deactivate();
     }
 

@@ -107,7 +107,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     actionCollection()->insert(scriptmenuaction);
 
     QWidget* w = new ScriptingViewWidget(d->guiclient, d->view);
-    d->view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager", krita::LAYERBOX, 10,  PALETTE_DOCKER, false);
+    d->view->createDock(i18n("Scripts"), w);
 
     connect(d->guiclient, SIGNAL(executionFinished(Kross::Action*)), this, SLOT(executionFinished(Kross::Action*)));
     connect(d->guiclient, SIGNAL(executionStarted(Kross::Action*)), this, SLOT(executionStarted(Kross::Action*)));

@@ -82,7 +82,6 @@ class KoPartSelectAction;
 class KoDocumentEntry;
 class KoIconItem;
 class KoTabBar;
-class KoPaletteManager;
 class KoGrayWidget;
 class KoHSVWidget;
 class KoRGBWidget;
@@ -145,6 +144,15 @@ public: // KXMLGUIBuilder implementation
 
     virtual QWidget *createContainer( QWidget *parent, int index, const QDomElement &element, int &id );
     virtual void removeContainer( QWidget *container, QWidget *parent, QDomElement &element, int id );
+
+    
+    /**
+    * Convenience function to create a dock widget
+    * @param title Title of the docker
+    * @param w     Widget that's to be embedded (may be 0)
+    * @return the dock widget itself
+    */
+    QDockWidget * createDock(const QString & name, QWidget * widget);
 
 public: // KoView implementation
     virtual bool eventFilter(QObject *o, QEvent *e);
@@ -278,8 +286,6 @@ private:
     inline KisGridManager * gridManager() { return m_gridManager; }
 
     inline KisSelectionManager * selectionManager() { return m_selectionManager; }
-
-    KoPaletteManager * paletteManager();
 
     KoColorProfile *  monitorProfile();
 
@@ -521,7 +527,6 @@ private:
     KisGridManager * m_gridManager;
     KisSelectionManager * m_selectionManager;
     KisFilterManager * m_filterManager;
-    KoPaletteManager * m_paletteManager;
     KisToolManager * m_toolManager;
     bool m_actLayerVis;
 

@@ -27,13 +27,13 @@
 #include "kis_tool_types.h"
 #include "kis_input_device.h"
 
+class QDockWidget;
 class KoView;
 class KisCanvasSubject;
 class KisView;
 class KisTool;
 class KisToolRegistry;
 class KisCanvasController;
-class KoPaletteManager;
 class OldToolBox;
 
 /**
@@ -51,7 +51,7 @@ public:
 
 public:
 
-    void setUp(OldToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * collection);
+    void setUp(OldToolBox * toolbox, QDockWidget * toolPaletteWidget, KActionCollection * collection);
     
     // Called when the toolbox is deleted because the view was made inactive in favour of another view
     void youAintGotNoToolBox();
@@ -84,7 +84,7 @@ private:
     KisCanvasSubject * m_subject;
     KisCanvasController * m_controller;
 
-    KoPaletteManager * m_paletteManager;
+    QDockWidget * m_toolPaletteWidget;
     KActionCollection * m_actionCollection;
 
     OldToolBox * m_toolBox;

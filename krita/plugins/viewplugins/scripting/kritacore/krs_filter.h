@@ -30,6 +30,34 @@ class KritaCoreModule;
 
 /**
  * This class enables access to the filters Krita provides.
+ *
+ * For example (in Ruby)
+ * @code
+ * require "Krita"
+ *
+ * # fetch the image.
+ * image = Krita.image()
+ *
+ * # we like to operate on the active painting layer.
+ * layer = image.activePaintLayer()
+ *
+ * # get the height and the width the layer has.
+ * width = layer.width()
+ * height = layer.height()
+ *
+ * # we like to use the progressbar
+ * progress = Krita.progress()
+ * progress.setProgressTotalSteps( (width / 20) * (height / 20) )
+ *
+ * # apply the invert filter each 20x20 pixels at a 10x10 rect.
+ * invertfilter = Krita.filter("invert")
+ * 0.step(width - 10, 20) do |x|
+ *     0.step(height - 10, 20) do |y|
+ *         invertfilter.process(layer, x, y, x + 10, y + 10)
+ *         progress.incProgress()
+ *     end
+ * end
+ * @endcode
  */
 class Filter : public QObject
 {

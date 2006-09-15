@@ -690,7 +690,7 @@ void KisView::setupActions()
     m_RulerAction->setShortcut(Qt::CTRL+Qt::Key_R);
     connect(m_RulerAction, SIGNAL(triggered()), this, SLOT(showRuler()));
     m_RulerAction->setChecked(cfg.showRulers());
-    m_RulerAction->setCheckedState(i18n("Hide Rulers"));
+    m_RulerAction->setCheckedState(KGuiItem(i18n("Hide Rulers")));
     m_RulerAction->setWhatsThis( i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
                                       "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to disable "
                                       "the rulers from being displayed." ) );
@@ -1961,7 +1961,7 @@ void KisView::flattenImage()
             int answer = KMessageBox::warningYesNo(this,
                                    i18n("The image contains hidden layers that will be lost."),
                                    i18n("Flatten Image"),
-                                   i18n("&Flatten Image"),
+                                   KGuiItem(i18n("&Flatten Image")),
                                    KStdGuiItem::cancel());
 
             if (answer != KMessageBox::Yes) {

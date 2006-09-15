@@ -1,6 +1,20 @@
 <KrossScripting>
 
 	<ScriptAction
+		name="pilimport"
+		text="Python Imaging Library Import"
+		description="Import images with the Python Imaging Library (PIL)"
+		interpreter="python"
+		file="pilimport.py" />
+
+	<ScriptAction
+		name="pilexport"
+		text="Python Imaging Library Export"
+		description="Export images with the Python Imaging Library (PIL)"
+		interpreter="python"
+		file="pilexport.py" />
+
+	<ScriptAction
 		name="rbinvert"
 		text="Invert with Ruby"
 		description="Invert the pixel of an image with Ruby"
@@ -15,24 +29,24 @@
 		file="invert.py" />
 
 	<ScriptAction
-		name="randompaint"
+		name="rbrandompaint"
 		text="Random painting"
 		description="Demonstrate how to use the Painter scripting API and paint random shape on screen"
 		interpreter="ruby"
 		file="randompaint.rb" />
 
 	<ScriptAction
-		name="pilimport"
-		text="Python Imaging Library Import"
-		description="Import images with the Python Imaging Library (PIL)"
-		interpreter="python"
-		file="pilimport.py" />
+		name="rbfilterstest"
+		text="Filters Test"
+		description="Test of filters in a ruby-scripting"
+		interpreter="ruby"
+		file="filterstest.rb" />
 
 	<ScriptAction
-		name="pilexport"
-		text="Python Imaging Library Export"
-		description="Export images with the Python Imaging Library (PIL)"
-		interpreter="python"
-		file="pilexport.py" />
+		name="rbchangecs"
+		text="Change colorspace"
+		description="Demonstrate how to change the colorspace in a script"
+		interpreter="ruby"
+		file="changecs.rb" />
 
 </KrossScripting>

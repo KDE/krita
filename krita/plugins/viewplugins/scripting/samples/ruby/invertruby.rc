@@ -1,9 +1,0 @@
-<KrossScripting>
-    <ScriptAction
-      name="InvertRuby"
-      text="Invert (ruby)"
-      description="Invert the pixel of an image (ruby)"
-      icon=""
-      interpreter="ruby"
-      file="invert.rb" />
-</KrossScripting>

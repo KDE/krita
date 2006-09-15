@@ -64,14 +64,15 @@ namespace Kross {
     {
         public:
             KActionCollection* collection;
-            Private(KActionCollection* collection) : collection(collection) {}
+            bool editable;
+            Private(KActionCollection* collection, bool editable) : collection(collection), editable(editable) {}
     };
 
 }
 
-GUIManagerModel::GUIManagerModel(KActionCollection* collection, QObject* parent)
+GUIManagerModel::GUIManagerModel(KActionCollection* collection, QObject* parent, bool editable)
     : QAbstractItemModel(parent)
-    , d(new Private(collection))
+    , d(new Private(collection, editable))
 {
 }
 
@@ -109,7 +110,7 @@ Qt::ItemFlags GUIManagerModel::flags(const QModelIndex &index) const
 {
     if(! index.isValid())
         return Qt::ItemIsEnabled;
-    if(index.column() == 0)
+    if(index.column() == 0 && d->editable)
         return QAbstractItemModel::flags(index) | Qt::ItemIsUserCheckable;
     return QAbstractItemModel::flags(index); // | Qt::ItemIsEditable;
 }
@@ -128,7 +129,7 @@ QVariant GUIManagerModel::data(const QModelIndex& index, int role) const
         case Qt::WhatsThisRole:
             return action->description();
         case Qt::CheckStateRole:
-            return action->isVisible();
+            return d->editable ? action->isVisible() : QVariant();
         default:
             return QVariant();
     }
@@ -136,7 +137,7 @@ QVariant GUIManagerModel::data(const QModelIndex& index, int role) const
 
 bool GUIManagerModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(! index.isValid())
+    if(! index.isValid() || ! d->editable)
         return false;
     Action* action = static_cast< Action* >( index.internalPointer() );
     switch( role ) {
@@ -187,7 +188,7 @@ namespace Kross {
 
 }
 
-GUIManagerView::GUIManagerView(GUIClient* guiclient, QWidget* parent)
+GUIManagerView::GUIManagerView(GUIClient* guiclient, QWidget* parent, bool editable)
     : QTreeView(parent)
     , d(new Private())
 {
@@ -197,7 +198,7 @@ GUIManagerView::GUIManagerView(GUIClient* guiclient, QWidget* parent)
     setItemsExpandable(false);
     header()->hide();
 
-    d->model = new GUIManagerModel(guiclient->scriptsActionCollection(), this);
+    d->model = new GUIManagerModel(guiclient->scriptsActionCollection(), this, editable);
     setModel(d->model);
 
     d->selectionmodel = new QItemSelectionModel(d->model, this);
@@ -325,13 +326,12 @@ GUIManagerDialog::GUIManagerDialog(GUIClient* guiclient, QWidget* parent)
     setCaption( i18n("Scripts Manager") );
     setButtons( KDialog::Close );
 
-    QWidget* mainwidget = new QWidget(this);
+    QWidget* mainwidget = mainWidget();
     QHBoxLayout* mainlayout = new QHBoxLayout();
     mainlayout->setMargin(0);
     mainwidget->setLayout(mainlayout);
-    setMainWidget(mainwidget);
 
-    d->view = new GUIManagerView(guiclient, mainwidget);
+    d->view = new GUIManagerView(guiclient, mainwidget, true);
     mainlayout->addWidget(d->view);
 
     QWidget* btnwidget = new QWidget(mainwidget);

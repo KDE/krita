@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QPoint>
 #include <QPointer>
+#include <QToolBar>
 
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -72,19 +73,35 @@ class ScriptingPart::Private
         }
 };
 
-class ScriptingViewWidget : public Kross::GUIManagerView
+class ScriptingDocker : public QWidget
 {
     public:
-        ScriptingViewWidget(Kross::GUIClient* guiclient, QWidget* parent)
-            : Kross::GUIManagerView(guiclient, parent) {}
-        virtual ~ScriptingViewWidget() {}
+        ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient) : QWidget(parent)
+        {
+            QBoxLayout* layout = new QVBoxLayout(this);
+            layout->setMargin(0);
+            setLayout(layout);
+
+            Kross::GUIManagerView* view = new Kross::GUIManagerView(guiclient, this, false);
+            layout->addWidget(view, 1);
+            KActionCollection* collection = view->actionCollection();
+
+            QToolBar* tb = new QToolBar(this);
+            layout->addWidget(tb);
+            tb->setMovable(false);
+            //tb->setOrientation(Qt::Vertical);
+            //tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+            tb->addAction( collection->action("runscript") );
+            tb->addAction( collection->action("stopscript") );
+        }
+
+        virtual ~ScriptingDocker() {}
 };
 
 ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
     , d(new Private())
 {
-    //setInstance(KritaScriptingFactory::instance());
     setInstance(ScriptingPart::instance());
 
     d->view = dynamic_cast< KisView* >(parent);
@@ -106,13 +123,12 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     KAction* scriptmenuaction = d->guiclient->action("scripts");
     actionCollection()->insert(scriptmenuaction);
 
-    QWidget* w = new ScriptingViewWidget(d->guiclient, d->view);
-    d->view->createDock(i18n("Scripts"), w);
+    d->view->createDock(i18n("Scripts"), new ScriptingDocker(d->view, d->guiclient));
 
     connect(d->guiclient, SIGNAL(executionFinished(Kross::Action*)), this, SLOT(executionFinished(Kross::Action*)));
     connect(d->guiclient, SIGNAL(executionStarted(Kross::Action*)), this, SLOT(executionStarted(Kross::Action*)));
 
-    // do we need the monitor?
+    // do we still need the monitor?
     ScriptingMonitor::instance()->monitor( d->guiclient );
 }
 

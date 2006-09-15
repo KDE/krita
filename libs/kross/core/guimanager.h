@@ -44,7 +44,7 @@ namespace Kross {
     class KROSS_EXPORT GUIManagerModel : public QAbstractItemModel
     {
         public:
-            GUIManagerModel(KActionCollection* collection, QObject* parent);
+            GUIManagerModel(KActionCollection* collection, QObject* parent, bool editable);
             virtual ~GUIManagerModel();
 
             virtual int columnCount(const QModelIndex& parent = QModelIndex()) const; 
@@ -69,7 +69,7 @@ namespace Kross {
     {
             Q_OBJECT
         public:
-            GUIManagerView(GUIClient* guiclient, QWidget* parent);
+            GUIManagerView(GUIClient* guiclient, QWidget* parent, bool editable);
             virtual ~GUIManagerView();
 
             KActionCollection* actionCollection() const;

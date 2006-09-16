@@ -604,7 +604,7 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
             m_mode->setText(i18n("Manual Mode"));
         }
         draw(false);
-    } else if (event->key() == Qt::Key_Delete) {
+    } else if (event->key() == Qt::Key_Delete && m_curve->count()) {
         draw(false);
         m_dragging = false;
         if (m_curve->pivots().count() == 2)

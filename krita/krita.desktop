@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Krita
 Name[eo]=Krito
 Name[hi]=के-रिता
+Name[km]= Krita
 Name[lo]=ກຣິຕາ
 Exec=krita %U
 DocPath=krita/index.html

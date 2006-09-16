@@ -32,10 +32,31 @@
  */
 class ChangeFollower : public QObject {
 public:
+    /**
+     * Create a new ChangeFollower that can update the document with
+     * any changes made in the styles managed by the style manager.
+     * This class is created by the KoStyleManager to proxy for a document.
+     * The reason this is a proxy class instead of simply a couple of methods
+     * inside KoStyleManager is for memory management. A stylemanager can
+     * maintain a lot of documents and these documents can be deleted without
+     * telling the styleManager.  We use the QObject principle of children
+     * getting deleted when the parant gets deleted to track the document, which
+     * we use as the parant document.
+     */
     ChangeFollower(QTextDocument *parent, KoStyleManager *manager);
+    /// Destructor, called when the parant is deleted.
     ~ChangeFollower();
 
+    /**
+     * Will update all the text in the document with the changes.
+     * The document this follower is associated with is scanned for
+     * text that has one of the changed styles and on those portions of the text
+     * the style will be (re)applied.
+     * @param changedStyles a list of styleIds. from KoParagraphStyle::styleId
+     *      and KoCharacterStyle::styleId
+     */
     void processUpdates(const QList<int> &changedStyles);
+    /// return the document this follower is following.
     const QTextDocument *document() const { return m_document; }
 
 private:

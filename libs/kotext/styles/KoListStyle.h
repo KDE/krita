@@ -28,24 +28,42 @@ class StylePrivate;
 
 /**
  * This class groups all styling-options for lists.
+ * See KoParagraphStyle::setListStyle()
+ * This class represents one list-level which can span several paragraphs, but
+ * typically just one pargraph-style since that style can be reused on various
+ * paragraphs.
  */
 class KoListStyle {
 public:
+    /// This list is used to specify what kind of list-style to use
     enum Style {
+        /// Draw a square
         SquareItem = QTextListFormat::ListSquare,
+        /// Draw a disc (filled circle)
         DiscItem = QTextListFormat::ListDisc,
+        /// Draw a disc (non-filled disk)
         CircleItem = QTextListFormat::ListCircle,
+        /// use arabic numbering (1, 2, 3, ...)
         DecimalItem = QTextListFormat::ListDecimal,
+        /// use alpha numbering (a, b, c, ... aa, ab, ...)
         AlphaLowerItem = QTextListFormat::ListLowerAlpha,
+        /// use alpha numbering (A, B, C, ... AA, AB, ...)
         UpperAlphaItem = QTextListFormat::ListUpperAlpha,
+        /// don't draw a list item, just the prefix/suffix
         NoItem = 1,
+        /// use lower roman counting.  (i, ii, iii, iv, ...)
         RomanLowerItem,
+        /// use lower roman counting.  (I, II, III, IV, ...)
         UpperRomanItem,
+        /// draw a box
         BoxItem,
+        /// use an unicode char for the numbering
         CustomCharItem
          // TODO look at css 3 for things like hebrew counters
+         // TODO allow a bitmap 'bullet'
     };
 
+    /// further properties
     enum Property {
         ListItemPrefix = QTextFormat::UserProperty+1000, ///< The text to be printed before the listItem
         ListItemSuffix, ///< The text to be printed after the listItem
@@ -61,10 +79,14 @@ public:
         ExplicitListValue ///< TextBlock level int with the value that that parag will have
     };
 
+    /// constructor
     KoListStyle();
+    /// copy constructor
     KoListStyle(const KoListStyle &orig);
 
+    /// set the style to be used for this list.
     void setStyle(Style style) { setProperty(QTextListFormat::ListStyle, (int) style); }
+    /// return the used style
     Style style() const { return static_cast<Style> (propertyInt(QTextListFormat::ListStyle)); }
     void setListItemPrefix(const QString &prefix) { setProperty(ListItemPrefix, prefix ); }
     QString listItemPrefix() const { return propertyString(ListItemPrefix); }

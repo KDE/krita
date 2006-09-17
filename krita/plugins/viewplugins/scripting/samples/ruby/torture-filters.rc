@@ -1,9 +1,0 @@
-<KrossScripting>
-    <ScriptAction
-                 name="TortureFiltersRuby"
-                 text="Torture Krita with Filters"
-                 description="Test all filters with all colorspaces (ruby)"
-                 icon=""
-                 interpreter="ruby"
-                 file="torture-filters.rb" />
-</KrossScripting>

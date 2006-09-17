@@ -1,9 +1,0 @@
-<KrossScripting>
-    <ScriptAction
-      name="ReshapeHistogramPython"
-      text="Reshape Histogram (python)"
-      description="It's an experimental approach to improve color of image, it doesn't work as it, but it show how to use an histogram in a script :)"
-      icon=""
-      interpreter="python"
-      file="reshapehisto.py" />
-</KrossScripting>

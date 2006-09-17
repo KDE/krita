@@ -1,40 +1,32 @@
-# This file is part of Krita
-#
-# Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+"""
+Reshape Histogram.
+
+It's an experimental script to try to reshape histogram, while the results are far
+to be convincing yet it is still an example on how to use histogram in a script.
+
+Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+Published under the GNU GPL >=v2
+"""
+
+try:
+    import Krita
+except:
+    raise "Import of the Krita module failed."
 
 import math
-
-# it's an experimental script to try to reshape histogram, while the results are far to be convincing yet
-# it is still an example on how to use histogram in a script
 
 def sign(a):
     if a < 0:
         return -1
     else:
         return 1
-#def abs(a):
-    #if a <
 
 def computeDiff(histo, histoTarget):
     diff = [ ]
-    histoMax = histo.getHighest()
+    histoMax = histo.highest()
     count = 0
     while( count < 256 ) :
-        v = histo.getValue(count)
+        v = histo.value(count)
         diff.append( v / histoMax - histoTarget[count])
         count += 1
     derivdiff = [ ]
@@ -49,110 +41,108 @@ def computeDiff(histo, histoTarget):
         count += 1
     derivdiff.append(diff[255] - diff[254] )
     return diff
-        
-try:
-    import krosskritacore
-except:
-    raise "Import of the KritaCore module failed."
 
 #histoTarget = [ 0.0, 0.01226531745085, 0.024528789662323, 0.0367885716726463, 0.049042819075215, 0.0612896882960706, 0.0735273368712555, 0.0857539237239997, 0.0979676094416996, 0.110166556552646, 0.122348929802458, 0.13451289643019, 0.146656626444054, 0.158778292896733, 0.170876072160234, 0.18294814420024, 0.194992692849922, 0.207007906083172, 0.218991976287209, 0.230943100534525, 0.242859480854121, 0.254739324502003, 0.266580844230888, 0.278382258559083, 0.290141792038499, 0.301857675521758, 0.313528146428344, 0.325151449009778, 0.336725834613756, 0.348249561947225, 0.359720897338346, 0.371138114997318, 0.38249949727601, 0.393803334926368, 0.405047927357568, 0.416231582891849, 0.427352619019025, 0.4384093626496, 0.449400150366478, 0.460323328675215, 0.471177254252771, 0.481960294194744, 0.492670826261026, 0.50330723911986, 0.513867932590253, 0.524351317882718, 0.534755817838293, 0.545079867165813, 0.555321912677404, 0.565480413522147, 0.575553841417885, 0.585540680881154, 0.595439429455167, 0.605248597935856, 0.614966710595909, 0.624592305406788, 0.634123934258679, 0.643560163178352, 0.652899572544893, 0.662140757303275, 0.671282327175744, 0.680322906870975, 0.689261136290974, 0.698095670735701, 0.706825181105366, 0.715448354100387, 0.723963892418968, 0.732370514952268, 0.740666956977137, 0.748851970346384, 0.756924323676554, 0.764882802533185, 0.772726209613504, 0.780453364926561, 0.788063105970749, 0.795554287908693, 0.802925783739486, 0.810176484468239, 0.817305299272921, 0.824311155668464, 0.83119299966812, 0.837949795942015, 0.84458052797292, 0.851084198209167, 0.857459828214736, 0.863706458816447, 0.869823150248263, 0.875808982292675, 0.881663054419139, 0.887384485919556, 0.892972416040772, 0.898426004114068, 0.903744429681637, 0.908926892620016, 0.913972613260457, 0.918880832506229, 0.923650811946811, 0.928281833968988, 0.93277320186481, 0.937124239936404, 0.941334293597632, 0.945402729472569, 0.949328935490789, 0.953112320979447, 0.956752316752142, 0.960248375194552, 0.963599970346811, 0.966806597982642, 0.969867775685214, 0.972783042919718, 0.97555196110265, 0.978174113667795, 0.980649106128898, 0.982976566139007, 0.985156143546496, 0.987187510447739, 0.989070361236445, 0.990804412649628, 0.99238940381023, 0.993825096266363, 0.995111274027184, 0.99624774359539, 0.997234333996328, 0.998070896803715, 0.998757306161974, 0.99929345880516, 0.999679274072503, 0.999914693920536, 0.999999682931835, 0.99993422832034, 0.999718339933283, 0.999352050249705, 0.998835414375572, 0.998168510035481, 0.997351437560967, 0.996384319875413, 0.995267302475555, 0.994000553409588, 0.992584263251893, 0.991018645074359, 0.989303934414332, 0.987440389239176, 0.985428289907469, 0.983267939126818, 0.980959661908326, 0.978503805517689, 0.975900739422957, 0.973150855238948, 0.970254566668332, 0.967212309439392, 0.964024541240472, 0.960691741651122, 0.957214412069943, 0.953593075639162, 0.949828277165924, 0.945920583040329, 0.941870581150226, 0.937678880792763, 0.933346112582728, 0.928872928357675, 0.924260001079857, 0.919508024734984, 0.914617714227821, 0.909589805274631, 0.90442505429249, 0.899124238285494, 0.89368815472786, 0.888117621443952, 0.882413476485242, 0.876576578004235, 0.870607804125365, 0.86450805281288, 0.858278241735758, 0.851919308129644, 0.845432208655849, 0.83881791925743, 0.832077435012361, 0.825211769983833, 0.818221957067693, 0.811109047837053, 0.803874112384084, 0.796518239159033, 0.789042534806467, 0.781448123998789, 0.773736149267035, 0.76590777082899, 0.757964166414642, 0.749906531088995, 0.741736077072283, 0.733454033557598, 0.725061646525966, 0.716560178558895, 0.707950908648432, 0.699235132004742, 0.690414159861254, 0.681489319277395, 0.672461952938941, 0.663333418956019, 0.654105090658787, 0.644778356390828, 0.635354619300277, 0.625835297128734, 0.616221821997965, 0.606515640194456, 0.596718211951823, 0.586831011231134, 0.576855525499155, 0.566793255504575, 0.556645715052225, 0.546414430775338, 0.536100941905873, 0.525706800042952, 0.515233568919429, 0.504682824166636, 0.49405615307734, 0.483355154366944, 0.472581437932973, 0.461736624612871, 0.450822345940161, 0.439840243898986, 0.428791970677089, 0.417679188417244, 0.406503568967204, 0.39526679362818, 0.383970552901897, 0.372616546236274, 0.361206481769749, 0.349742076074299, 0.338225053897198, 0.326657147901536, 0.315040098405551, 0.303375653120808, 0.291665566889271, 0.279911601419294, 0.268115525020586, 0.256279112338177, 0.244404144085436, 0.232492406776176, 0.220545692455878, 0.208565798432095, 0.196554527004056, 0.184513685191523, 0.172445084462932, 0.160350540462877, 0.148231872738948, 0.136090904468, 0.123929462181863, 0.111749375492553, 0.0995524768170189, 0.0873406011014653, 0.0751155855452987, 0.0628792693247314, 0.0506334933160884, 0.0383800998188613, 0.0261209322785436, 0.0138578350092972 ]
-
 histoTarget = [ 0.0, 0.00392156862745098, 0.00784313725490196, 0.0117647058823529, 0.0156862745098039, 0.0196078431372549, 0.0235294117647059, 0.0274509803921569, 0.0313725490196078, 0.0352941176470588, 0.0392156862745098, 0.0431372549019608, 0.0470588235294118, 0.0509803921568627, 0.0549019607843137, 0.0588235294117647, 0.0627450980392157, 0.0666666666666667, 0.0705882352941176, 0.0745098039215686, 0.0784313725490196, 0.0823529411764706, 0.0862745098039216, 0.0901960784313725, 0.0941176470588235, 0.0980392156862745, 0.101960784313725, 0.105882352941176, 0.109803921568627, 0.113725490196078, 0.117647058823529, 0.12156862745098, 0.125490196078431, 0.129411764705882, 0.133333333333333, 0.137254901960784, 0.141176470588235, 0.145098039215686, 0.149019607843137, 0.152941176470588, 0.156862745098039, 0.16078431372549, 0.164705882352941, 0.168627450980392, 0.172549019607843, 0.176470588235294, 0.180392156862745, 0.184313725490196, 0.188235294117647, 0.192156862745098, 0.196078431372549, 0.2, 0.203921568627451, 0.207843137254902, 0.211764705882353, 0.215686274509804, 0.219607843137255, 0.223529411764706, 0.227450980392157, 0.231372549019608, 0.235294117647059, 0.23921568627451, 0.243137254901961, 0.247058823529412, 0.250980392156863, 0.254901960784314, 0.258823529411765, 0.262745098039216, 0.266666666666667, 0.270588235294118, 0.274509803921569, 0.27843137254902, 0.282352941176471, 0.286274509803922, 0.290196078431373, 0.294117647058824, 0.298039215686275, 0.301960784313725, 0.305882352941176, 0.309803921568627, 0.313725490196078, 0.317647058823529, 0.32156862745098, 0.325490196078431, 0.329411764705882, 0.333333333333333, 0.337254901960784, 0.341176470588235, 0.345098039215686, 0.349019607843137, 0.352941176470588, 0.356862745098039, 0.36078431372549, 0.364705882352941, 0.368627450980392, 0.372549019607843, 0.376470588235294, 0.380392156862745, 0.384313725490196, 0.388235294117647, 0.392156862745098, 0.396078431372549, 0.4, 0.403921568627451, 0.407843137254902, 0.411764705882353, 0.415686274509804, 0.419607843137255, 0.423529411764706, 0.427450980392157, 0.431372549019608, 0.435294117647059, 0.43921568627451, 0.443137254901961, 0.447058823529412, 0.450980392156863, 0.454901960784314, 0.458823529411765, 0.462745098039216, 0.466666666666667, 0.470588235294118, 0.474509803921569, 0.47843137254902, 0.482352941176471, 0.486274509803922, 0.490196078431373, 0.494117647058824, 0.498039215686275, 0.501960784313725, 0.505882352941176, 0.509803921568627, 0.513725490196078, 0.517647058823529, 0.52156862745098, 0.525490196078431, 0.529411764705882, 0.533333333333333, 0.537254901960784, 0.541176470588235, 0.545098039215686, 0.549019607843137, 0.552941176470588, 0.556862745098039, 0.56078431372549, 0.564705882352941, 0.568627450980392, 0.572549019607843, 0.576470588235294, 0.580392156862745, 0.584313725490196, 0.588235294117647, 0.592156862745098, 0.596078431372549, 0.6, 0.603921568627451, 0.607843137254902, 0.611764705882353, 0.615686274509804, 0.619607843137255, 0.623529411764706, 0.627450980392157, 0.631372549019608, 0.635294117647059, 0.63921568627451, 0.643137254901961, 0.647058823529412, 0.650980392156863, 0.654901960784314, 0.658823529411765, 0.662745098039216, 0.666666666666667, 0.670588235294118, 0.674509803921569, 0.67843137254902, 0.682352941176471, 0.686274509803922, 0.690196078431373, 0.694117647058824, 0.698039215686274, 0.701960784313725, 0.705882352941177, 0.709803921568627, 0.713725490196078, 0.717647058823529, 0.72156862745098, 0.725490196078431, 0.729411764705882, 0.733333333333333, 0.737254901960784, 0.741176470588235, 0.745098039215686, 0.749019607843137, 0.752941176470588, 0.756862745098039, 0.76078431372549, 0.764705882352941, 0.768627450980392, 0.772549019607843, 0.776470588235294, 0.780392156862745, 0.784313725490196, 0.788235294117647, 0.792156862745098, 0.796078431372549, 0.8, 0.803921568627451, 0.807843137254902, 0.811764705882353, 0.815686274509804, 0.819607843137255, 0.823529411764706, 0.827450980392157, 0.831372549019608, 0.835294117647059, 0.83921568627451, 0.843137254901961, 0.847058823529412, 0.850980392156863, 0.854901960784314, 0.858823529411765, 0.862745098039216, 0.866666666666667, 0.870588235294118, 0.874509803921569, 0.87843137254902, 0.882352941176471, 0.886274509803922, 0.890196078431372, 0.894117647058824, 0.898039215686275, 0.901960784313726, 0.905882352941176, 0.909803921568627, 0.913725490196078, 0.917647058823529, 0.92156862745098, 0.925490196078431, 0.929411764705882, 0.933333333333333, 0.937254901960784, 0.941176470588235, 0.945098039215686, 0.949019607843137, 0.952941176470588, 0.956862745098039, 0.96078431372549, 0.964705882352941, 0.968627450980392, 0.972549019607843, 0.976470588235294, 0.980392156862745, 0.984313725490196, 0.988235294117647, 0.992156862745098, 0.996078431372549, 1.0 ]
 
-doc = krosskritacore.get("KritaDocument")
-image = doc.getImage()
-layer = image.getActivePaintLayer()
-if (layer.colorSpaceId() != "RGBA" ):
-    raise("This script works only for 8bit RGBA layers")
+image = Krita.image()
+layer = image.activePaintLayer()
+width = layer.width()
+height = layer.height()
 
-width = layer.getWidth()
-height = layer.getHeight()
+if( layer.colorSpaceId() != "RGBA" ):
+    raise "This script works only for 8bit RGBA layers"
+
+progress = Krita.progress()
+progress.setProgressTotalSteps(width * height)
 
 countreshaping = 0
 while countreshaping < 1:
     histo = layer.createHistogram("RGB8HISTO",0)
-    print "################################### histogram reshaping ##################################################"
+    print "######### histogram reshaping #########"
     if histo == 0:
-        raise "Uncompatible histogram\n"
-    print "Max : " + str( histo.getMax() ) + " Min : " + str( histo.getMin() )
-    
-    #Compute the area of the target histogram
+        raise "Incompatible histogram"
+    print "Max : " + str( histo.max() ) + " Min : " + str( histo.min() )
+
+    print "compute the area of the target histogram"
     aireHistoTarget = 0.0
     count = 0
     while( count < 256 ) :
         aireHistoTarget += histoTarget[count]
         count += 1
-        
-    #compute the table for the blue channel
+
+    print "compute the table for the blue channel"
     histo.setChannel(0)
     tableb = [ ]
-    histoMax = histo.getHighest()
+    histoMax = histo.highest()
     aireHisto = width * height
     coeff = aireHistoTarget / aireHisto
     count = 0
     position = 0
     residu = 0.
     while( count < 256 ) :
-        residu += histo.getValue(count) * coeff
+        residu += histo.value(count) * coeff
         while residu > 0.0:
             residu -= histoTarget[position]
             position += 1
         tableb.append( position )
         count += 1
-    #compute the table for the green channel
+
+    print "compute the table for the green channel"
     histo.setChannel(1)
     tableg = [ ]
-    histoMax = histo.getHighest()
+    histoMax = histo.highest()
     aireHisto = width * height
     coeff = aireHistoTarget / aireHisto
     count = 0
     position = 0
     residu = 0.
     while( count < 256 ) :
-        residu += histo.getValue(count) * coeff
+        residu += histo.value(count) * coeff
         while residu > 0.0:
             residu -= histoTarget[position]
             position += 1
         tableg.append( position )
         count += 1
-    #compute the table for the red channel
+
+    print "compute the table for the red channel"
     histo.setChannel(2)
     tabler = [ ]
-    histoMax = histo.getHighest()
+    histoMax = histo.highest()
     aireHisto = width * height
     coeff = aireHistoTarget / aireHisto
     count = 0
     position = 0
     residu = 0.
     while( count < 256 ) :
-        residu += histo.getValue(count) * coeff
+        residu += histo.value(count) * coeff
         while residu > 0.0:
             residu -= histoTarget[position]
             position += 1
         tabler.append( position )
         count += 1
-        
+
     it = layer.createRectIterator( 0, 0, width, height )
     print "kikoo : " + str(countreshaping)
-    while (not it.isDone()) :
-        r = it.getRed()
-        g = it.getGreen()
-        b = it.getBlue()
+    finesh = it.isDone()
+    while(not finesh):
+        (r,g,b,a) = it.pixel()
         #var = ( tabler[r] - r + tableg[g] - g + tableb[b] - b ) / 3
         #ng = g + var
         #nr = r + var
         #nb = b + var
-        it.setRed(tabler[r])
-        it.setGreen(tableg[g])
-        it.setBlue(tableb[b])
-        it.next()
-    
+        it.setPixel( [tabler[r],tableg[g],tableb[b]] )
+        #it.setPixel( (tabler[r],tableg[g],tableb[b]) ) #FIXME: crashes
+
+        finesh = it.next()
+        progress.incProgress()
+
     #histo.setChannel(0)
     #diff = [ ]
-    #histoMax = histo.getHighest()
+    #histoMax = histo.highest()
     #count = 0
     #while( count < 256 ) :
-        #v = histo.getValue(count)
+        #v = histo.value(count)
         #diff.append( v / histoMax - histoTarget[count])
         #count += 1
     #diffb = [ ]
@@ -162,13 +152,13 @@ while countreshaping < 1:
         #diffb.append((diff[count+1] - diff[count - 1])/2.0)
         #count += 1
     #diffb.append(diff[255] - diff[254] )
-    
+
     #histo.setChannel(1)
     #diff = [ ]
-    #histoMax = histo.getHighest()
+    #histoMax = histo.highest()
     #count = 0
     #while( count < 256 ) :
-        #v = histo.getValue(count)
+        #v = histo.value(count)
         #diff.append( v / histoMax - histoTarget[count])
         #count += 1
     #diffg = [ ]
@@ -178,13 +168,13 @@ while countreshaping < 1:
         #diffg.append((diff[count+1] - diff[count - 1])/2.0)
         #count += 1
     #diffg.append(diff[255] - diff[254] )
-    
+
     #histo.setChannel(2)
     #diff = [ ]
-    #histoMax = histo.getHighest()
+    #histoMax = histo.highest()
     #count = 0
     #while( count < 256 ) :
-        #v = histo.getValue(count)
+        #v = histo.value(count)
         #diff.append( v / histoMax - histoTarget[count])
         #count += 1
     #diffr = [ ]
@@ -194,14 +184,13 @@ while countreshaping < 1:
         #diffr.append((diff[count+1] - diff[count - 1])/2.0)
         #count += 1
     #diffr.append(diff[255] - diff[254] )
-    
-    
+
     #histo.setChannel(0)
     #diff = [ ]
-    #histoMax = histo.getHighest()
+    #histoMax = histo.highest()
     #count = 0
     #while( count < 256 ) :
-        #v = histo.getValue(count)
+        #v = histo.value(count)
         #diff.append( v / histoMax - histoTarget[count])
         #count += 1
     #diffb = [ ]
@@ -211,13 +200,13 @@ while countreshaping < 1:
         #diffb.append( sign(diff[count+1] - diff[count - 1]) * abs(diff[count]) )
         #count += 1
     #diffb.append( sign(diff[255] - diff[254] ) * abs(diff[255]) )
-    
+
     #histo.setChannel(1)
     #diff = [ ]
-    #histoMax = histo.getHighest()
+    #histoMax = histo.highest()
     #count = 0
     #while( count < 256 ) :
-        #v = histo.getValue(count)
+        #v = histo.value(count)
         #diff.append( v / histoMax - histoTarget[count])
         #count += 1
     #diffg = [ ]
@@ -227,13 +216,13 @@ while countreshaping < 1:
         #diffg.append( sign(diff[count+1] - diff[count - 1]) * abs(diff[count]) )
         #count += 1
     #diffg.append( sign(diff[255] - diff[254] ) * abs(diff[255]) )
-    
+
     #histo.setChannel(2)
     #diff = [ ]
-    #histoMax = histo.getHighest()
+    #histoMax = histo.highest()
     #count = 0
     #while( count < 256 ) :
-        #v = histo.getValue(count)
+        #v = histo.value(count)
         #diff.append( v / histoMax - histoTarget[count])
         #count += 1
     #diffr = [ ]
@@ -243,10 +232,9 @@ while countreshaping < 1:
         #diffr.append( sign(diff[count+1] - diff[count - 1]) * abs(diff[count]) )
         #count += 1
     #diffr.append( sign(diff[255] - diff[254] ) * abs(diff[255]) )
-    
-    
-        #print str(diffr) + " " + str(diff[count+1]) + " " + str(diff[count-1])
-    
+
+    #print str(diffr) + " " + str(diff[count+1]) + " " + str(diff[count-1])
+
     #histo.setChannel(0)
     #diffb = computeDiff(histo, histoTarget)
     #print "##########################"
@@ -257,7 +245,7 @@ while countreshaping < 1:
         #print diffb[count]
         #print "\n"
         #count += 1
-    
+
     #histo.setChannel(1)
     #diffg = computeDiff(histo, histoTarget)
     #print "##########################"
@@ -268,7 +256,7 @@ while countreshaping < 1:
         #print diffg[count]
         #print "\n"
         #count += 1
-    
+
     #histo.setChannel(2)
     #diffr = computeDiff(histo, histoTarget)
     #print "##########################"
@@ -279,22 +267,16 @@ while countreshaping < 1:
         #print diffr[count]
         #print "\n"
         #count += 1
-    
+
     #it = layer.createRectIterator( 0, 0, width, height )
     #print "kikoo : " + str(countreshaping)
     #while (not it.isDone()) :
-        #r = it.getRed()
-        #g = it.getGreen()
-        #b = it.getBlue()
+        #(r,g,b) = it.pixel()
         #coeff = 1.0 - ( diffr[r] + diffg[g] + diffb[b] ) / 3.0
         ##print str(r) + " = " + str(diffr[r]) + " " + str(g) + " = " + str(diffg[g]) + " " + str(b) + " = " + str(diffb[b]) + " coeff = " + str(coeff)
-        #ng = g * coeff
-        #nr = r * coeff
-        #nb = b * coeff
-        #it.setRed(nr)
-        #it.setGreen(ng)
-        #it.setBlue(nb)
+        #it.setPixel( (r * coeff, g * coeff, b * coeff) )
         #it.next()
+
     countreshaping += 1
-    
-doc.notifyModification()
+
+#doc.notifyModification()

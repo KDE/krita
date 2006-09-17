@@ -49,11 +49,11 @@ filters = []
 for i in Image.ID:
 	try:
 		driver = Image.SAVE[string.upper(i)]
-		if driver != None:
-			factory, accept = Image.OPEN[i]
-			filters.append( (factory.format_description,".%s .%s" % (factory.format,factory.format.lower())) )
-	except:
+		factory, accept = Image.OPEN[i]
+		filters.append( (factory.format_description,".%s .%s" % (factory.format,factory.format.lower())) )
+	except KeyError:
 		pass
+
 Tkinter.Tk().withdraw()
 filename = tkFileDialog.asksaveasfilename(filetypes=filters)
 if filename:

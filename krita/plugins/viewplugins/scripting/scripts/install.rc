@@ -37,7 +37,7 @@
 
 	<ScriptAction
 		name="rbfilterstest"
-		text="Filters Test"
+		text="Filters test"
 		description="Test of filters in a ruby-scripting"
 		interpreter="ruby"
 		file="filterstest.rb" />
@@ -48,5 +48,26 @@
 		description="Demonstrate how to change the colorspace in a script"
 		interpreter="ruby"
 		file="changecs.rb" />
+	
+	<ScriptAction
+		name="pyreshapehisto"
+		text="Reshape Histogram"
+		description="It's an experimental script to try to reshape histogram, while the results are far to be convincing yet it is still an example on how to use histogram in a script."
+		interpreter="python"
+		file="reshapehisto.py" />
+
+	<ScriptAction
+		name="rbtorturepainting"
+		text="Torture Krita with painting"
+		description="Paint on an image and create multiple layers"
+		interpreter="ruby"
+		file="torture-painting.rb" />
+
+	<ScriptAction
+		name="rbtorturefilters"
+		text="Torture Krita with filters"
+		description="Test all filters with all colorspaces"
+		interpreter="ruby"
+		file="torture-filters.rb" />
 
 </KrossScripting>

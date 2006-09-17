@@ -73,7 +73,7 @@ for i in Image.ID:
 	try:
 		factory, accept = Image.OPEN[i]
 		filters.append( (factory.format_description,".%s .%s" % (factory.format,factory.format.lower())) )
-	except:
+	except KeyError:
 		pass
 Tkinter.Tk().withdraw()
 filename = tkFileDialog.askopenfilename(filetypes=filters)

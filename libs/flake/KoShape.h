@@ -465,6 +465,14 @@ public:
      */
     QMatrix transformationMatrix(const KoViewConverter *converter) const;
 
+    /**
+     * Copy all the settings from the parameter shape and apply them to this shape.
+     * Settings like the position and rotation to visible and locked.  The parent
+     * is a notable exclusion.
+     * @param shape the shape to use as original
+     */
+    virtual void copySettings(const KoShape *shape);
+
 protected:
     QMatrix m_invMatrix; ///< The inverted matrix; for convenience
     QBrush m_backgroundBrush; ///< Stands for the background color / fill etc.
@@ -478,14 +486,6 @@ protected:
      * @param converter the converter for the current views zoom.
      */
     static void applyConversion(QPainter &painter, const KoViewConverter &converter);
-
-    /**
-     * Copy all the settings from the parameter shape and apply them to this shape.
-     * Settings like the position and rotation to visible and locked.  The parent
-     * is a notable exclusion.
-     * @param shape the shape to use as original
-     */
-    virtual void copySettings(const KoShape *shape);
 
     /**
      * Update the position of the shape in the tree of the KoShapeManager.

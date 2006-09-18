@@ -36,7 +36,6 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kopalettemanager.h>
 #include <KoMainWindow.h>
 
 #include <kis_debug_areas.h>

@@ -27,8 +27,6 @@
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 
-#include <kopalettemanager.h>
-
 #include "KoColorSpaceRegistry.h"
 #include "kis_progress_display_interface.h"
 #include "kis_dlg_filtersgallery.h"
@@ -54,8 +52,8 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const QStringList &)
     if ( parent->inherits("KisView") )
     {
         setInstance(KritaFiltersGallery::instance());
-        
-setXMLFile(KStandardDirs::locate("data","kritaplugins/kritafiltersgallery.rc"), 
+
+setXMLFile(KStandardDirs::locate("data","kritaplugins/kritafiltersgallery.rc"),
 true);
 
         m_view = (KisView*) parent;

@@ -143,13 +143,6 @@ P? * A possible cause for the threadpool crashing issue is the fact that we thro
 
 General user interface
 
-?  * new palette/docker system, much like now but better implemented with QT4. 
-      (actually in kofficelib)
-     - tabs in dockers drag-and-droppable (vector of docker windows, create new docker if tab
-        dropped outside existing docker window)
-     - disable dragging the toolbox from dock position to dock position (see Karbon) if QT4 
-        doesn't fix relayout
-?  * after hiding and reshowing all palettes, the wrong ones are active
 ?  * color picker: top combo should be as wide as the whole widget; the widget is a bit too big,
       we should try to make the listview a lot smaller. Maybe just use labels here?
 ?  * the edit palette dialog two-step should be changed into a single dialog

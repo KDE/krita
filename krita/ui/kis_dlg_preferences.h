@@ -25,8 +25,6 @@
 
 #include <kpagedialog.h>
 
-#include <kopalettemanager.h>
-
 #include "kis_canvas.h"
 
 #include "ui_wdggeneralsettings.h"
@@ -66,12 +64,12 @@ public:
     GeneralTab( QWidget *parent = 0, const char *name = 0 );
 
     enumCursorStyle cursorStyle();
-    enumKoDockability dockability();
-    float dockerFontSize();
+//     enumKoDockability dockability();
+//     float dockerFontSize();
     
     void setDefault();
 private:
-    QButtonGroup m_dockabilityGroup;
+//     QButtonGroup m_dockabilityGroup;
 };
 
 //=======================

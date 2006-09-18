@@ -35,6 +35,7 @@
 #include <kstatusbar.h>
 #include <kapplication.h>
 #include <QTimer>
+#include <QtGui/QDockWidget>
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <QEvent>
@@ -442,6 +443,7 @@ void KoView::showAllStatusBarItems( bool show )
             (*it).ensureItemHidden( sb );
 }
 
+
 void KoView::addStatusBarItem( QWidget * widget, int stretch, bool permanent )
 {
     KoViewPrivate::StatusBarItem item( widget, stretch, permanent );
@@ -468,6 +470,20 @@ void KoView::removeStatusBarItem( QWidget * widget )
     if ( it == d->m_statusBarItems.end() )
         kWarning() << "KoView::removeStatusBarItem. Widget not found : " << widget << endl;
 }
+
+QDockWidget * KoView::createDock(const QString & title, QWidget * w)
+{
+    QDockWidget * d = new QDockWidget(title, mainWindow());
+    d->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    d->setWidget(w);
+    d->setObjectName(title);
+    mainWindow()->addDockWidget(Qt::RightDockWidgetArea, d);
+
+    return d;
+}
+
+
+
 
 KoDocumentChild *KoView::selectedChild()
 {

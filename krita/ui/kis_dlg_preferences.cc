@@ -72,18 +72,18 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 {
     KisConfig cfg;
 
-    m_dockabilityGroup.addButton(radioAllowDocking, DOCK_ENABLED);
-    m_dockabilityGroup.addButton(radioDisallowDocking, DOCK_DISABLED);
-    m_dockabilityGroup.addButton(radioSmartDocking, DOCK_SMART);
+//     m_dockabilityGroup.addButton(radioAllowDocking, DOCK_ENABLED);
+//     m_dockabilityGroup.addButton(radioDisallowDocking, DOCK_DISABLED);
+//     m_dockabilityGroup.addButton(radioSmartDocking, DOCK_SMART);
+// 
+//     kDebug() << "Dock is " << cfg.dockability() << endl;
 
-    kDebug() << "Dock is " << cfg.dockability() << endl;
 
-
-    QAbstractButton *button = m_dockabilityGroup.button(cfg.dockability());
-    Q_ASSERT(button);
-    if (button) {
-        button->setChecked(true);
-    }
+//     QAbstractButton *button = m_dockabilityGroup.button(cfg.dockability());
+//     Q_ASSERT(button);
+//     if (button) {
+//         button->setChecked(true);
+//     }
 
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     numDockerFontSize->setValue((int)cfg.dockerFontSize());
@@ -94,12 +94,12 @@ void GeneralTab::setDefault()
     KisConfig cfg;
 
     m_cmbCursorShape->setCurrentIndex(cfg.getDefaultCursorStyle());
-    QAbstractButton *button = m_dockabilityGroup.button(cfg.getDefaultDockability());
+/*    QAbstractButton *button = m_dockabilityGroup.button(cfg.getDefaultDockability());
     Q_ASSERT(button);
     if (button) {
         button->setChecked(true);
     }
-    numDockerFontSize->setValue((int)(cfg.getDefaultDockerFontSize()));
+    numDockerFontSize->setValue((int)(cfg.getDefaultDockerFontSize()));*/
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -107,15 +107,15 @@ enumCursorStyle GeneralTab::cursorStyle()
     return (enumCursorStyle)m_cmbCursorShape->currentIndex();
 }
 
-enumKoDockability GeneralTab::dockability()
-{
-    return (enumKoDockability)m_dockabilityGroup.checkedId();
-}
-
-float GeneralTab::dockerFontSize()
-{
-    return (float)numDockerFontSize->value();
-}
+// enumKoDockability GeneralTab::dockability()
+// {
+//     return (enumKoDockability)m_dockabilityGroup.checkedId();
+// }
+// 
+// float GeneralTab::dockerFontSize()
+// {
+//     return (float)numDockerFontSize->value();
+// }
 
 //---------------------------------------------------------------------------------------------------
 
@@ -850,8 +850,8 @@ bool PreferencesDialog::editPreferences()
     {
         KisConfig cfg;
         cfg.setCursorStyle(dialog->m_general->cursorStyle());
-        cfg.setDockability( dialog->m_general->dockability() );
-        cfg.setDockerFontSize( dialog->m_general->dockerFontSize() );
+//         cfg.setDockability( dialog->m_general->dockability() );
+//         cfg.setDockerFontSize( dialog->m_general->dockerFontSize() );
 
         // Color settings
         cfg.setMonitorProfile( dialog->m_colorSettings->m_page->cmbMonitorProfile->currentText());

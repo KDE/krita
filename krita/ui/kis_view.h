@@ -146,13 +146,6 @@ public: // KXMLGUIBuilder implementation
     virtual void removeContainer( QWidget *container, QWidget *parent, QDomElement &element, int id );
 
     
-    /**
-    * Convenience function to create a dock widget
-    * @param title Title of the docker
-    * @param w     Widget that's to be embedded (may be 0)
-    * @return the dock widget itself
-    */
-    QDockWidget * createDock(const QString & name, QWidget * widget);
 
 public: // KoView implementation
     virtual bool eventFilter(QObject *o, QEvent *e);

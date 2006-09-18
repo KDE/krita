@@ -36,7 +36,6 @@ class KisSelectionManager;
 class QWidget;
 class QCursor;
 class KoColor;
-class KoPaletteManager;
 class KoColorProfile;
 class KisPaintOpSettings;
 

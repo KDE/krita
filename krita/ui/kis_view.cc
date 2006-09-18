@@ -422,19 +422,6 @@ void KisView::removeContainer( QWidget *container, QWidget *parent, QDomElement 
 }
 
 
-QDockWidget * KisView::createDock(const QString & title, QWidget * w)
-{
-    QDockWidget * d = new QDockWidget(title, mainWindow());
-    d->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    // XXX: How do we restore the dock to the preferred place? Is that automatic?
-    d->setWidget(w);
-    d->setObjectName(title);
-    mainWindow()->addDockWidget(Qt::RightDockWidgetArea, d);
-    // XXX: add the toggle to the right menu. How do we do that?
-    return d;
-}
-
-
 void KisView::createLayerBox()
 {
     m_layerBox = new KisLayerBox();

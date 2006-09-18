@@ -27,8 +27,6 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kopalettemanager.h>
-
 #include "kis_meta_registry.h"
 #include "kis_doc.h"
 #include "kis_global.h"
@@ -53,8 +51,8 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
         m_view = dynamic_cast<KisView*>(parent);
 
         setInstance(KritaHistogramDockerFactory::instance());
-        
-setXMLFile(KStandardDirs::locate("data","kritaplugins/kritahistogramdocker.rc"), 
+
+setXMLFile(KStandardDirs::locate("data","kritaplugins/kritahistogramdocker.rc"),
 true);
 
         KisImageSP img = m_view->canvasSubject()->currentImg();

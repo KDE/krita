@@ -67,13 +67,14 @@ void KisPerspectiveTransformWorker::run()
 
     //TODO: understand why my caching of the rect didn't work...
     if(m_dev->hasSelection())
+    {
         m_r = m_dev->selection()->selectedExactRect();
+    }
     else
+    {
         m_r = m_dev->exactBounds();
+    }
     KisColorSpace * cs = m_dev->colorSpace();
-
-    if(m_dev->hasSelection())
-        m_dev->selection()->clear();
 
     kdDebug() << "r = " << m_r << endl;
     KisRectIteratorPixel dstIt = m_dev->createRectIterator(m_r.x(), m_r.y(), m_r.width(), m_r.height(), true);
@@ -99,6 +100,7 @@ void KisPerspectiveTransformWorker::run()
 
                 srcAcc.moveTo( p );
                 srcAcc.sampledOldRawData( dstIt.rawData() );
+                
                 // TODO: Should set alpha = alpha*(1-selectedness)
                 cs->setAlpha( dstIt.rawData(), 255, 1);
             } else {

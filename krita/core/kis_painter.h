@@ -122,6 +122,17 @@ public:
                 Q_INT32 sx, Q_INT32 sy,
                 Q_INT32 sw, Q_INT32 sh);
 
+    /**
+     * A version of bitBlt that renders using an external mask, ignoring
+     * the src device's own selection, if it has one.
+     */
+    void bltMask(Q_INT32 dx, Q_INT32 dy,
+                      const KisCompositeOp &op,
+                      KisPaintDeviceSP src,
+                      KisPaintDeviceSP selMask,
+                      Q_UINT8 opacity,
+                      Q_INT32 sx, Q_INT32 sy,
+                      Q_INT32 sw, Q_INT32 sh);
 
     /**
      * A version of bitBlt that renders using an external selection mask, ignoring

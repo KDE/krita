@@ -296,15 +296,15 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     
     
     // Add the dab as selection to the srcdev
-    KisPainter copySelection(srcdev->selection().data());
-    copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);
-    copySelection.end();
+//     KisPainter copySelection(srcdev->selection().data());
+//     copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);
+//     copySelection.end();
 
     // copy the srcdev onto a new device, after applying the dab selection
-    KisPaintDeviceSP target = new KisPaintDevice(srcdev->colorSpace(), "duplicate target dev");
+    KisPaintDeviceSP target = srcdev;//new KisPaintDevice(srcdev->colorSpace(), "duplicate target dev");
     copyPainter.begin(target);
 
-    copyPainter.bltSelection(0, 0, COMPOSITE_OVER, srcdev, srcdev->selection(),
+    copyPainter.bltMask(0, 0, COMPOSITE_OVER, srcdev, dab,
                              OPACITY_OPAQUE, 0, 0, sw, sh);
     copyPainter.end();
 

@@ -248,24 +248,36 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
                   Q_INT32 sx, Q_INT32 sy,
                   Q_INT32 sw, Q_INT32 sh)
 {
-    if (srcdev == 0) return;
-
-    if (seldev == 0) return;
-
-    if (m_device == 0) return;
-
     // Better use a probablistic method than a too slow one
     if (seldev->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
 /*
         kdDebug() << "Blitting outside selection rect\n";
 
         kdDebug() << "srcdev: " << srcdev << " (" << srcdev->name() << ")"
-                << ", seldev: " << seldev << " (" << seldev->name() << ")"
-                << ". dx, dy " << dx << "," << dy
-                << ". sx, sy : sw, sy " << sx << "," << sy << " : " << sw << "," << sh << endl;
+        << ", seldev: " << seldev << " (" << seldev->name() << ")"
+        << ". dx, dy " << dx << "," << dy
+        << ". sx, sy : sw, sy " << sx << "," << sy << " : " << sw << "," << sh << endl;
 */
         return;
     }
+    bltMask(dx,dy,op,srcdev,seldev.data(),opacity,sx,sy,sw,sh);
+}
+
+void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
+                     const KisCompositeOp &op,
+                     KisPaintDeviceSP srcdev,
+                     KisPaintDeviceSP seldev,
+                     Q_UINT8 opacity,
+                     Q_INT32 sx, Q_INT32 sy,
+                     Q_INT32 sw, Q_INT32 sh)
+
+{
+    if (srcdev == 0) return;
+
+    if (seldev == 0) return;
+
+    if (m_device == 0) return;
+
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 

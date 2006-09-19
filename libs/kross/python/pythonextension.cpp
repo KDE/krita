@@ -21,6 +21,7 @@
 #include "pythonvariant.h"
 
 #include <QWidget>
+#include <QMetaMethod>
 #include <qvarlengtharray.h>
 
 using namespace Kross;

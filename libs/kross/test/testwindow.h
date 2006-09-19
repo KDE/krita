@@ -21,7 +21,6 @@
 #define KROSS_TEST_TESTWINDOW_H
 
 #include "../core/action.h"
-#include "../core/object.h"
 #include "../core/manager.h"
 #include "../core/guiclient.h"
 

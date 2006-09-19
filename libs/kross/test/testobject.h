@@ -28,8 +28,6 @@
 
 #include <kdebug.h>
 
-#include "../core/object.h"
-
 class TestObject : public QObject
 {
         Q_OBJECT
@@ -81,8 +79,8 @@ class TestObject : public QObject
         QString func_qstring_qstring_int(QString,int);
 
         // Kross::Object
-        void func_void_krossobject(Kross::Object::Ptr);
-        Kross::Object::Ptr func_krossobject_krossobject(Kross::Object::Ptr);
+        //void func_void_krossobject(Kross::Object::Ptr);
+        //Kross::Object::Ptr func_krossobject_krossobject(Kross::Object::Ptr);
 
         // QObject
         void func_void_qobject(QObject*);

@@ -159,6 +159,7 @@ QVariant TestObject::func_qvariant_qvariant(const QVariant& v)
     return v;
 }
 
+/*
 void TestObject::func_void_krossobject(Kross::Object::Ptr obj)
 {
     kDebug() << "TestObject::func_void_krossobject " << (obj ? QString("objectName=%1 className=%2").arg(obj->objectName()).arg(obj->metaObject()->className()) : "NULL") << endl;
@@ -169,6 +170,7 @@ Kross::Object::Ptr TestObject::func_krossobject_krossobject(Kross::Object::Ptr o
     kDebug() << "TestObject::func_krossobject_krossobject " << (obj ? QString("objectName=%1 className=%2").arg(obj->objectName()).arg(obj->metaObject()->className()) : "NULL") << endl;
     return obj;
 }
+*/
 
 void TestObject::func_void_qobject(QObject* obj)
 {

@@ -22,9 +22,6 @@
 
 #include "pythonconfig.h"
 
-#include "../core/krossconfig.h"
-#include "../core/object.h"
-
 #include <QObject>
 #include <QString>
 #include <QStringList>

@@ -4,8 +4,6 @@ include_directories( ${KOFFICECORE_INCLUDES} )
 
 set(krosscore_LIB_SRCS
    krossconfig.cpp
-   metaobject.cpp 
-   object.cpp 
    interpreter.cpp 
    script.cpp 
    action.cpp
@@ -25,4 +23,4 @@ install(TARGETS krosscore  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES krossconfig.h object.h metaobject.h metatype.h interpreter.h script.h action.h manager.h guiclient.h DESTINATION ${INCLUDE_INSTALL_DIR}/kross/core)
+install( FILES krossconfig.h metatype.h interpreter.h script.h action.h manager.h guiclient.h DESTINATION ${INCLUDE_INSTALL_DIR}/kross/core)

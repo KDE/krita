@@ -45,7 +45,7 @@
 #include "kis_tool_gradient.h"
 #include "kis_undo_adapter.h"
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
+#include "QPainter"
 
 KisToolGradient::KisToolGradient()
     : super(i18n("Gradient")),
@@ -73,13 +73,13 @@ void KisToolGradient::update(KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
-void KisToolGradient::paint(KisCanvasPainter& gc)
+void KisToolGradient::paint(QPainter& gc)
 {
     if (m_dragging)
         paintLine(gc);
 }
 
-void KisToolGradient::paint(KisCanvasPainter& gc, const QRect&)
+void KisToolGradient::paint(QPainter& gc, const QRect&)
 {
     if (m_dragging)
         paintLine(gc);
@@ -200,13 +200,13 @@ void KisToolGradient::paintLine()
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
         KisCanvas *canvas = controller->kiscanvas();
-        KisCanvasPainter gc(canvas);
+        QPainter gc(canvas->canvasWidget());
 
         paintLine(gc);
     }
 }
 
-void KisToolGradient::paintLine(KisCanvasPainter& gc)
+void KisToolGradient::paintLine(QPainter& gc)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();

@@ -38,7 +38,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_canvas_subject.h"
 
-#include "kis_canvas_painter.h"
+#include "QPainter"
 #include "kis_boundary_painter.h"
 
 KisToolDuplicate::KisToolDuplicate()

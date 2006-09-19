@@ -54,7 +54,7 @@
 #include "kis_tool_crop.h"
 
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
+#include "QPainter"
 
 
 
@@ -115,12 +115,12 @@ void KisToolCrop::deactivate()
     }
 }
 
-void KisToolCrop::paint(KisCanvasPainter& gc)
+void KisToolCrop::paint(QPainter& gc)
 {
     paintOutlineWithHandles(gc, QRect());
 }
 
-void KisToolCrop::paint(KisCanvasPainter& gc, const QRect& rc)
+void KisToolCrop::paint(QPainter& gc, const QRect& rc)
 {
     paintOutlineWithHandles(gc, rc);
 }
@@ -350,7 +350,7 @@ void KisToolCrop::move(KisMoveEvent *e)
                         else if( m_mouseOnHandleType == LowerLeft)
                             m_mouseOnHandleType = LowerRight;
                     }
-                    
+
                     m_rectCrop = m_rectCrop.normalize();
                     m_rectCrop = m_rectCrop.intersect( QRect(0,0, imageWidth + 1, imageHeight + 1 ) );
                     m_dragStart = e->pos().floorQPoint();
@@ -424,14 +424,14 @@ void KisToolCrop::paintOutlineWithHandles()
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
         KisCanvas *canvas = controller->kiscanvas();
-        KisCanvasPainter gc(canvas);
+        QPainter gc(canvas->canvasWidget());
         QRect rc;
 
         paintOutlineWithHandles(gc, rc);
     }
 }
 
-void KisToolCrop::paintOutlineWithHandles(KisCanvasPainter& gc, const QRect&)
+void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
 {
     if (m_subject && (m_selecting || m_haveCropSelection)) {
         KisCanvasController *controller = m_subject->canvasController();

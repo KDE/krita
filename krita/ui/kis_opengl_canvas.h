@@ -6,6 +6,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <QPaintEvent>
+#include <QPainter>
 #include <QDropEvent>
 /*
  *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
@@ -49,8 +50,6 @@ class KisOpenGLCanvasWidget : public virtual QGLWidget, public virtual KisCanvas
 public:
     KisOpenGLCanvasWidget(QWidget *parent, const char *name, QGLWidget *sharedContextWidget);
     ~KisOpenGLCanvasWidget();
-
-    virtual KisCanvasWidgetPainter *createPainter();
 
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     virtual void selectTabletDeviceEvents();

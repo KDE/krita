@@ -54,14 +54,14 @@ class KisToolLine : public KisToolPaint {
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
 
-    virtual void paint(KisCanvasPainter& gc);
-    virtual void paint(KisCanvasPainter& gc, const QRect& rc);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
 
     virtual QString quickHelp() const;
 
  private:
     void paintLine();
-    void paintLine(KisCanvasPainter& gc, const QRect& rc);
+    void paintLine(QPainter& gc, const QRect& rc);
 
     KisPoint straightLine(KisPoint point);
 

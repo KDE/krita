@@ -64,9 +64,9 @@ public:
     virtual void doubleClick(KisDoubleClickEvent * event);
 
 protected:
-    virtual void paint(KisCanvasPainter& gc);
-    virtual void paint(KisCanvasPainter& gc, const QRect& rc);
-    void draw(KisCanvasPainter& gc);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    void draw(QPainter& gc);
     void draw();
     void finish();
     virtual void keyPress(QKeyEvent *e);

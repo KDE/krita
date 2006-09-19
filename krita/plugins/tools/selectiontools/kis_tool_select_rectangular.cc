@@ -47,7 +47,7 @@
 #include "kis_selection_options.h"
 #include <kis_selected_transaction.h>
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
+#include "QPainter"
 
 KisToolSelectRectangular::KisToolSelectRectangular()
     : super(i18n("Rectangular Select Tool"))
@@ -83,13 +83,13 @@ void KisToolSelectRectangular::update(KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
-void KisToolSelectRectangular::paint(KisCanvasPainter& gc)
+void KisToolSelectRectangular::paint(QPainter& gc)
 {
     if (m_selecting)
         paintOutline(gc, QRect());
 }
 
-void KisToolSelectRectangular::paint(KisCanvasPainter& gc, const QRect& rc)
+void KisToolSelectRectangular::paint(QPainter& gc, const QRect& rc)
 {
     if (m_selecting)
         paintOutline(gc, rc);
@@ -239,14 +239,14 @@ void KisToolSelectRectangular::paintOutline()
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
         KisCanvas *canvas = controller->kiscanvas();
-        KisCanvasPainter gc(canvas);
+        QPainter gc(canvas->canvasWidget());
         QRect rc;
 
         paintOutline(gc, rc);
     }
 }
 
-void KisToolSelectRectangular::paintOutline(KisCanvasPainter& gc, const QRect&)
+void KisToolSelectRectangular::paintOutline(QPainter& gc, const QRect&)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();

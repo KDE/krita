@@ -43,7 +43,7 @@
 #include "kis_move_event.h"
 #include "kis_paintop_registry.h"
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
+#include "QPainter"
 #include "kis_cursor.h"
 #include "kis_int_spinbox.h"
 
@@ -153,7 +153,7 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
 
     KisCanvasController *controller = m_subject->canvasController();
     KisCanvas *canvas = controller->kiscanvas();
-    KisCanvasPainter p (canvas);
+    QPainter p (canvas->canvasWidget());
     QPen pen(Qt::SolidLine);
 
     KisPoint startPos;

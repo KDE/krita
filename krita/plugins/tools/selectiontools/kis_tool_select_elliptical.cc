@@ -45,7 +45,7 @@
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
+#include "QPainter"
 
 KisToolSelectElliptical::KisToolSelectElliptical()
     : super(i18n("Elliptical Select"))
@@ -82,13 +82,13 @@ void KisToolSelectElliptical::update(KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
-void KisToolSelectElliptical::paint(KisCanvasPainter& gc)
+void KisToolSelectElliptical::paint(QPainter& gc)
 {
     if (m_selecting)
         paintOutline(gc, QRect());
 }
 
-void KisToolSelectElliptical::paint(KisCanvasPainter& gc, const QRect& rc)
+void KisToolSelectElliptical::paint(QPainter& gc, const QRect& rc)
 {
     if (m_selecting)
         paintOutline(gc, rc);
@@ -242,14 +242,14 @@ void KisToolSelectElliptical::paintOutline()
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
         KisCanvas *canvas = controller->kiscanvas();
-        KisCanvasPainter gc(canvas);
+        QPainter gc(canvas->canvasWidget());
         QRect rc;
 
         paintOutline(gc, rc);
     }
 }
 
-void KisToolSelectElliptical::paintOutline(KisCanvasPainter& gc, const QRect&)
+void KisToolSelectElliptical::paintOutline(QPainter& gc, const QRect&)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();

@@ -9,7 +9,6 @@ set(kritaui_LIB_SRCS
    kis_brush_chooser.cc
    kis_canvas.cc
    kis_canvas_widget.cc
-   kis_canvas_painter.cc
    kis_clipboard.cc
    kis_cmb_composite.cc
    kis_cmb_idlist.cc
@@ -40,7 +39,6 @@ set(kritaui_LIB_SRCS
    kis_multi_double_filter_widget.cc
    kis_multi_integer_filter_widget.cc
    kis_opengl_canvas.cc
-   kis_opengl_canvas_painter.cc
    kis_opengl_image_context.cc
    kis_paintop_box.cc
    kis_palette_view.cc
@@ -50,7 +48,6 @@ set(kritaui_LIB_SRCS
    kis_previewdialog.cc
    kis_previewwidget.cc
    kis_qpaintdevice_canvas.cc
-   kis_qpaintdevice_canvas_painter.cc
    kis_resource_mediator.cc
    kis_resourceserver.cc
    kis_ruler.cc

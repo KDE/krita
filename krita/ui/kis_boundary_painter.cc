@@ -21,12 +21,12 @@
 #include "kis_boundary.h"
 #include "kis_boundary_painter.h"
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
+#include "QPainter"
 
 QPixmap KisBoundaryPainter::createPixmap(const KisBoundary& boundary, int w, int h)
 {
     QPixmap target(w, h);
-    KisCanvasPainter painter(&target);
+    QPainter painter(&target);
 
     painter.eraseRect(0, 0, w, h);
 
@@ -36,7 +36,7 @@ QPixmap KisBoundaryPainter::createPixmap(const KisBoundary& boundary, int w, int
     return target;
 }
 
-void KisBoundaryPainter::paint(const KisBoundary& boundary, KisCanvasPainter& painter)
+void KisBoundaryPainter::paint(const KisBoundary& boundary, QPainter& painter)
 {
     KisBoundary::PointPairListList::const_iterator it = boundary.m_horSegments.constBegin();
     KisBoundary::PointPairListList::const_iterator end = boundary.m_horSegments.constEnd();

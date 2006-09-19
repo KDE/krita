@@ -42,7 +42,7 @@
 #include "kis_move_event.h"
 #include "kis_paintop_registry.h"
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
+#include "QPainter"
 #include "kis_cursor.h"
 
 #include "kis_tool_polyline.h"
@@ -173,12 +173,12 @@ void KisToolPolyline::doubleClick(KisDoubleClickEvent *)
 }
 
 
-void KisToolPolyline::paint(KisCanvasPainter& gc)
+void KisToolPolyline::paint(QPainter& gc)
 {
     draw(gc);
 }
 
-void KisToolPolyline::paint(KisCanvasPainter& gc, const QRect&)
+void KisToolPolyline::paint(QPainter& gc, const QRect&)
 {
     draw(gc);
 }
@@ -188,13 +188,13 @@ void KisToolPolyline::draw()
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
         KisCanvas *canvas = controller->kiscanvas();
-        KisCanvasPainter gc(canvas);
+        QPainter gc(canvas->canvasWidget());
 
         draw(gc);
     }
 }
 
-void KisToolPolyline::draw(KisCanvasPainter& gc)
+void KisToolPolyline::draw(QPainter& gc)
 {
         if (!m_subject || !m_currentImage)
             return;

@@ -31,9 +31,7 @@
 #endif
 
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
 #include "kis_qpaintdevice_canvas.h"
-#include "kis_qpaintdevice_canvas_painter.h"
 
 KisQPaintDeviceCanvasWidget::KisQPaintDeviceCanvasWidget(QWidget *parent, const char *name)
     : QWidget(parent)
@@ -120,10 +118,6 @@ bool KisQPaintDeviceCanvasWidget::x11Event(XEvent *event)
 
 #endif // Q_WS_X11
 
-KisCanvasWidgetPainter *KisQPaintDeviceCanvasWidget::createPainter()
-{
-    return new KisQPaintDeviceCanvasPainter(this);
-}
 
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
 void KisQPaintDeviceCanvasWidget::selectTabletDeviceEvents()

@@ -43,7 +43,7 @@
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
+#include "QPainter"
 #include "kis_boundary_painter.h"
 #include "kis_brush.h"
 
@@ -80,10 +80,10 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
 
     if (e->button() == Qt::LeftButton) {
-        
-        
+
+
         if (!m_currentImage->bounds().contains(e->pos().floorQPoint())) return;
-        
+
         initPaint(e);
         paintAt(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
 
@@ -108,7 +108,7 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
             else {
                 // Just update the canvas. XXX: After 1.5, find a better way to make sure tools don't set dirty what they didn't touch.
                 m_subject->canvasController()->updateCanvas( r );
-            } 
+            }
         }
     }
 }
@@ -125,7 +125,7 @@ void KisToolFreehand::move(KisMoveEvent *e)
     if (m_mode == PAINT) {
 
         paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e->pos(), e->pressure(), e->xTilt(), e->yTilt());
-    
+
         m_prevPos = e->pos();
         m_prevPressure = e->pressure();
         m_prevXTilt = e->xTilt();
@@ -148,7 +148,7 @@ void KisToolFreehand::move(KisMoveEvent *e)
                 // Just update the canvas
                 r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
                 m_subject->canvasController()->updateCanvas( r );
-            } 
+            }
         }
     }
 }
@@ -163,10 +163,10 @@ void KisToolFreehand::initPaint(KisEvent *)
     // Create painter
     KisPaintDeviceSP device;
     if (m_currentImage && (device = m_currentImage->activeDevice())) {
-        
+
         if (m_painter)
             delete m_painter;
-        
+
         if (!m_paintIncremental) {
             if (m_currentImage->undo())
                 m_currentImage->undoAdapter()->beginMacro(m_transactionText);
@@ -225,7 +225,7 @@ void KisToolFreehand::endPaint()
 {
     m_mode = HOVER;
     if (m_currentImage) {
-        
+
         if (m_painter) {
             // If painting in mouse release, make sure painter
             // is destructed or end()ed
@@ -304,7 +304,7 @@ void KisToolFreehand::paintOutline(const KisPoint& point) {
     KisBrush *brush = m_subject->currentBrush();
     // There may not be a brush present, and we shouldn't crash in that case
     if (brush) {
-        KisCanvasPainter gc(canvas);
+        QPainter gc( canvas->canvasWidget() );
         QPen pen(Qt::SolidLine);
 
         KisPoint hotSpot = brush->hotSpot();
@@ -324,8 +324,9 @@ void KisToolFreehand::paintOutline(const KisPoint& point) {
         }
 
         gc.translate(topLeft.x(), topLeft.y());
-
+        gc.end();
         KisBoundaryPainter::paint(brush->boundary(), gc);
+
         m_paintedOutline = true;
     }
 }

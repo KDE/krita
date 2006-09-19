@@ -45,8 +45,6 @@ public:
     KisQPaintDeviceCanvasWidget(QWidget *parent = 0, const char *name = 0);
     ~KisQPaintDeviceCanvasWidget();
 
-    virtual KisCanvasWidgetPainter *createPainter();
-
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     virtual void selectTabletDeviceEvents();
 #endif

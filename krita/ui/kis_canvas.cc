@@ -57,7 +57,7 @@
 ** not clear to you.
 **
 **********************************************************************/
-
+#include <QPainter>
 #include <QCursor>
 #include <QWheelEvent>
 #include <QPaintEvent>
@@ -200,15 +200,9 @@ QGLWidget *KisCanvas::OpenGLWidget() const
 }
 #endif
 
-KisCanvasWidgetPainter *KisCanvas::createPainter()
+QWidget *KisCanvas::canvasWidget()
 {
-    Q_ASSERT(m_canvasWidget != 0);
-    return m_canvasWidget->createPainter();
-}
-
-KisCanvasWidget *KisCanvas::canvasWidget() const
-{
-    return m_canvasWidget;
+    return dynamic_cast<QWidget*>( m_canvasWidget );
 }
 
 void KisCanvas::setGeometry(int x, int y, int width, int height)

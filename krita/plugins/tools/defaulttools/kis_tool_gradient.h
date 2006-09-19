@@ -60,8 +60,8 @@ public:
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
 
-    virtual void paint(KisCanvasPainter& gc);
-    virtual void paint(KisCanvasPainter& gc, const QRect& rc);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
 
     QWidget* createOptionWidget(QWidget* parent);
 
@@ -73,7 +73,7 @@ public slots:
 
 private:
     void paintLine();
-    void paintLine(KisCanvasPainter& gc);
+    void paintLine(QPainter& gc);
 
     KisPoint straightLine(KisPoint point);
 

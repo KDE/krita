@@ -31,7 +31,7 @@
 
 #include "kis_canvas.h"
 #include "kis_opengl_canvas.h"
-#include "kis_opengl_canvas_painter.h"
+#include "QPainter"
 
 #ifdef HAVE_OPENGL
 KisOpenGLCanvasWidget::KisOpenGLCanvasWidget(QWidget *parent, const char *name, QGLWidget *sharedContextWidget)
@@ -126,11 +126,6 @@ bool KisOpenGLCanvasWidget::x11Event(XEvent *event)
 }
 
 #endif // Q_WS_X11
-
-KisCanvasWidgetPainter *KisOpenGLCanvasWidget::createPainter()
-{
-    return new KisOpenGLCanvasPainter(this);
-}
 
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
 void KisOpenGLCanvasWidget::selectTabletDeviceEvents()

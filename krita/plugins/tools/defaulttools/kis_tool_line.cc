@@ -39,7 +39,7 @@
 #include "kis_canvas_subject.h"
 #include "kis_undo_adapter.h"
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
+#include "QPainter"
 #include "kis_cursor.h"
 #include "kis_layer.h"
 
@@ -69,13 +69,13 @@ void KisToolLine::update(KisCanvasSubject *subject)
 }
 
 
-void KisToolLine::paint(KisCanvasPainter& gc)
+void KisToolLine::paint(QPainter& gc)
 {
     if (m_dragging)
         paintLine(gc, QRect());
 }
 
-void KisToolLine::paint(KisCanvasPainter& gc, const QRect& rc)
+void KisToolLine::paint(QPainter& gc, const QRect& rc)
 {
     if (m_dragging)
         paintLine(gc, rc);
@@ -191,14 +191,14 @@ void KisToolLine::paintLine()
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
         KisCanvas *canvas = controller->kiscanvas();
-        KisCanvasPainter gc(canvas);
+        QPainter gc(canvas->canvasWidget());
         QRect rc;
 
         paintLine(gc, rc);
     }
 }
 
-void KisToolLine::paintLine(KisCanvasPainter& gc, const QRect&)
+void KisToolLine::paintLine(QPainter& gc, const QRect&)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();

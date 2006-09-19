@@ -23,11 +23,11 @@
 #include <QPixmap>
 
 class KisBoundary;
-class KisCanvasPainter;
+class QPainter;
 
 class KRITAUI_EXPORT KisBoundaryPainter {
 public:
-    static void paint(const KisBoundary& boundary, KisCanvasPainter& painter);
+    static void paint(const KisBoundary& boundary, QPainter& painter);
     static QPixmap createPixmap(const KisBoundary& boundary, int w, int h);
 };
 

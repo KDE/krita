@@ -75,11 +75,11 @@ void KisToolPaint::update(KisCanvasSubject *subject)
     updateCompositeOpComboBox();
 }
 
-void KisToolPaint::paint(KisCanvasPainter&)
+void KisToolPaint::paint(QPainter&)
 {
 }
 
-void KisToolPaint::paint(KisCanvasPainter&, const QRect&)
+void KisToolPaint::paint(QPainter&, const QRect&)
 {
 }
 

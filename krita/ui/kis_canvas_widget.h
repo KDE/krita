@@ -68,7 +68,6 @@ class KisMoveEvent;
 class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisDoubleClickEvent;
-class KisCanvasWidgetPainter;
 
 class KisCanvasWidget : public QObject {
     Q_OBJECT
@@ -81,8 +80,6 @@ public:
     // is unable to keep up with them, i.e. intermediate move events in the event
     // queue are skipped.
     void enableMoveEventCompressionHint(bool enableMoveCompression) { m_enableMoveEventCompressionHint = enableMoveCompression; }
-
-    virtual KisCanvasWidgetPainter *createPainter() = 0;
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
     static KisInputDevice findActiveInputDevice();

@@ -46,8 +46,8 @@ public:
     virtual QWidget * createOptionWidget(QWidget* parent);
         virtual QWidget* optionWidget();
 
-    virtual void paint(KisCanvasPainter& gc);
-    virtual void paint(KisCanvasPainter& gc, const QRect& rc);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
@@ -60,7 +60,7 @@ public slots:
 private:
     void clearSelection();
     void paintOutline();
-    void paintOutline(KisCanvasPainter& gc, const QRect& rc);
+    void paintOutline(QPainter& gc, const QRect& rc);
 
 private:
     KisCanvasSubject *m_subject;

@@ -43,11 +43,11 @@ void KisToolNonPaint::update(KisCanvasSubject *subject)
     m_subject = subject;
 }
 
-void KisToolNonPaint::paint(KisCanvasPainter&)
+void KisToolNonPaint::paint(QPainter&)
 {
 }
 
-void KisToolNonPaint::paint(KisCanvasPainter&, const QRect&)
+void KisToolNonPaint::paint(QPainter&, const QRect&)
 {
 }
 

@@ -61,8 +61,8 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_TRANSFORM; }
     virtual quint32 priority() { return 0; }
-    virtual void paint(KisCanvasPainter& gc);
-    virtual void paint(KisCanvasPainter& gc, const QRect& rc);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
@@ -83,7 +83,7 @@ public:
 
 private:
 
-    void paintOutline(KisCanvasPainter& gc, const QRect& rc);
+    void paintOutline(QPainter& gc, const QRect& rc);
     void transform();
     void recalcOutline();
     double rotX(double x, double y) { return m_cosa*x - m_sina*y;};

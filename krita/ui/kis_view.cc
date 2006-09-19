@@ -106,7 +106,7 @@
 #include "kis_brush.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
-#include "kis_canvas_painter.h"
+#include "QPainter"
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_controlframe.h"
@@ -400,7 +400,7 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
         Qt::ToolBarArea dock = stringToDock( element.attribute( "position" ).toLower() );
 
         mainWindow()->addToolBar(dock, m_toolBox);
-        
+
     }
 
     return KXMLGUIBuilder::createContainer( parent, index, element, id );
@@ -2247,7 +2247,7 @@ void KisView::print(KPrinter& printer)
 void KisView::paintToolOverlay(const QRegion& region)
 {
     if (!region.isEmpty() && m_toolManager->currentTool() && !m_toolIsPainting) {
-        KisCanvasPainter gc(m_canvas);
+        QPainter gc ( m_canvas->canvasWidget( ) );
 
         gc.setClipRegion(region);
         gc.setClipping(true);
@@ -2264,7 +2264,7 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
     if (m_canvas->isOpenGLCanvas()) {
         paintOpenGLView(event->rect());
     } else {
-        paintQPaintDeviceView(event->region());
+        paintQPaintDeviceView(event->rect());
     }
 }
 

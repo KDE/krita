@@ -37,7 +37,7 @@
 #include "kis_tool_rectangle.h"
 #include "kis_undo_adapter.h"
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
+#include "QPainter"
 #include "kis_cursor.h"
 #include "kis_layer.h"
 
@@ -159,7 +159,7 @@ void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
 
     KisCanvasController *controller = m_subject->canvasController ();
     KisCanvas *canvas = controller->kiscanvas();
-    KisCanvasPainter p (canvas);
+    QPainter p (canvas->canvasWidget());
 
     //p.setRasterOp (Qt::NotROP);
     p.drawRect (QRect (controller->windowToView (start).floorQPoint(), controller->windowToView (end).floorQPoint()));

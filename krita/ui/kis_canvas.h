@@ -70,6 +70,12 @@ class KisButtonReleaseEvent;
 class KisDoubleClickEvent;
 class KisCanvasWidgetPainter;
 
+/**
+ * KisCanvas is is responsible for the interaction with the user via mouse
+ * and keyboard. There is one per view. KisCanvas delegates the drawing
+ * of the image to KisCanvasWidget and filters the events caught by the
+ * KisCanvasWidget and where necessary
+ */
 class KRITAUI_EXPORT KisCanvas : public QObject {
     Q_OBJECT
 
@@ -108,6 +114,8 @@ public:
 
     void updateGeometry();
 
+    QWidget * canvasWidget();
+
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     void selectTabletDeviceEvents();
 #endif
@@ -130,7 +138,7 @@ protected:
     // Allow KisView to render on the widget directly, but everything else
     // has restricted access.
     friend class KisView;
-    friend class KisCanvasPainter;
+    friend class QPainter;
 
     // One of these will be valid, the other null. In Qt3, using a QPainter on
     // a QGLWidget is not reliable.
@@ -153,9 +161,6 @@ protected:
 
     QCursor cursor() const;
     void setCursor(const QCursor& cursor);
-
-    KisCanvasWidgetPainter *createPainter();
-    KisCanvasWidget *canvasWidget() const;
 
 protected:
 #ifdef HAVE_OPENGL

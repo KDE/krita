@@ -51,7 +51,7 @@ class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisDoubleClickEvent;
 class KisMoveEvent;
-class KisCanvasPainter;
+class QPainter;
 
 enum enumToolType {
     TOOL_SHAPE = 0,   // Geometric shapes like ellipses and lines
@@ -74,8 +74,8 @@ public:
 
 public:
 
-    virtual void paint(KisCanvasPainter& gc) = 0;
-    virtual void paint(KisCanvasPainter& gc, const QRect& rc) = 0;
+    virtual void paint(QPainter& gc) = 0;
+    virtual void paint(QPainter& gc, const QRect& rc) = 0;
 
     /**
      * This function is called after the creation of a tool to create the KAction corresponding

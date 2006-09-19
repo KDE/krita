@@ -30,10 +30,10 @@ class ThreadWeaver::Job;
  * This class holds a list of jobs that will be handled sequentially while allowing
  * a not-yet-executing job to be removed from the queue.
  */
-class JobsListPolicy : public ThreadWeaver::QueuePolicy {
+class KoJobsListPolicy : public ThreadWeaver::QueuePolicy {
 public:
     /// constructor
-    JobsListPolicy();
+    KoJobsListPolicy();
     /// add a job that the policy will manage
     void addJob(ThreadWeaver::Job *job);
 

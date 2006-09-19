@@ -17,15 +17,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ExecutePolicy.h"
-#include "Action.h"
+#include "KoExecutePolicy.h"
+#include "KoAction.h"
 #include "ActionJob_p.h"
-#include "JobsListPolicy.h"
+#include "KoJobsListPolicy.h"
 #include <WeaverInterface.h>
 
 using namespace ThreadWeaver;
 
-void OnlyLastPolicy::schedule(Action *action, JobsListPolicy *jobsList, QVariant *params) {
+void KoOnlyLastPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params) {
     if(action->weaver() == 0) {
         qWarning("Action has no weaver set, ignoring scheduling request");
         return;
@@ -48,13 +48,13 @@ void OnlyLastPolicy::schedule(Action *action, JobsListPolicy *jobsList, QVariant
     action->weaver()->enqueue(job);
 }
 
-void DirectPolicy::schedule(Action *action, JobsListPolicy *jobsList, QVariant *params) {
+void KoDirectPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params) {
     Q_UNUSED(jobsList);
     ActionJob *job = new ActionJob(action, ActionJob::EnableNoChange, params);
     job->run();
 }
 
-void QueuedPolicy::schedule(Action *action, JobsListPolicy *jobsList, QVariant *params) {
+void KoQueuedPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params) {
     if(action->weaver() == 0) {
         qWarning("Action has no weaver set, ignoring scheduling request");
         return;
@@ -67,7 +67,7 @@ void QueuedPolicy::schedule(Action *action, JobsListPolicy *jobsList, QVariant *
     action->weaver()->enqueue(job);
 }
 
-void SimpleQueuedPolicy::schedule(Action *action, JobsListPolicy *jobsList, QVariant *params) {
+void KoSimpleQueuedPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params) {
     if(action->weaver() == 0) {
         qWarning("Action has no weaver set, ignoring scheduling request");
         return;
@@ -79,7 +79,7 @@ void SimpleQueuedPolicy::schedule(Action *action, JobsListPolicy *jobsList, QVar
 }
 
 // statics
-ExecutePolicy *const ExecutePolicy::onlyLastPolicy = new OnlyLastPolicy();
-ExecutePolicy *const ExecutePolicy::directPolicy = new DirectPolicy();
-ExecutePolicy *const ExecutePolicy::queuedPolicy = new QueuedPolicy();
-ExecutePolicy *const ExecutePolicy::simpleQueuedPolicy = new SimpleQueuedPolicy();
+KoExecutePolicy *const KoExecutePolicy::onlyLastPolicy = new KoOnlyLastPolicy();
+KoExecutePolicy *const KoExecutePolicy::directPolicy = new KoDirectPolicy();
+KoExecutePolicy *const KoExecutePolicy::queuedPolicy = new KoQueuedPolicy();
+KoExecutePolicy *const KoExecutePolicy::simpleQueuedPolicy = new KoSimpleQueuedPolicy();

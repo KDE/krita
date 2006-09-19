@@ -24,35 +24,35 @@
 
 class QVariant;
 
-class Action;
-class JobsListPolicy;
+class KoAction;
+class KoJobsListPolicy;
 
-class OnlyLastPolicy;
-class DirectPolicy;
-class QueuedPolicy;
-class SimpleQueuedPolicy;
+class KoOnlyLastPolicy;
+class KoDirectPolicy;
+class KoQueuedPolicy;
+class KoSimpleQueuedPolicy;
 
 /**
  * Each action that is called 'execute()' on will be executed according to policy.
  * Each action will have a policy set; that policy will be used on execution of that
  * action to determine what will happen next.
  */
-class KOFFICECORE_EXPORT ExecutePolicy {
+class KOFFICECORE_EXPORT KoExecutePolicy {
 public:
-    ExecutePolicy() {}
-    virtual ~ExecutePolicy() {}
+    KoExecutePolicy() {}
+    virtual ~KoExecutePolicy() {}
     /**
      * schedule an action according to policy.
      * @param action the action to be scheduled.
      * @param jobsList the list of jobs currently associated with the action.
      * @param params a parameters object that belongs with the current action.
      */
-    virtual void schedule(Action *action, JobsListPolicy *jobsList, QVariant *params) = 0;
+    virtual void schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params) = 0;
 
-    static ExecutePolicy *const onlyLastPolicy;
-    static ExecutePolicy *const directPolicy;
-    static ExecutePolicy *const queuedPolicy;
-    static ExecutePolicy *const simpleQueuedPolicy;
+    static KoExecutePolicy *const onlyLastPolicy;
+    static KoExecutePolicy *const directPolicy;
+    static KoExecutePolicy *const queuedPolicy;
+    static KoExecutePolicy *const simpleQueuedPolicy;
     // TODO alter to staticDeleter when we depend on kdelibs.
 };
 
@@ -70,15 +70,15 @@ public:
  * last action will be executed and the other actions will be discarded. Effect is
  * that only the last preview will be generated and the first 4 ignored.
  */
-class KOFFICECORE_EXPORT OnlyLastPolicy : public ExecutePolicy {
-    void schedule(Action *action, JobsListPolicy *jobsList, QVariant *params);
+class KOFFICECORE_EXPORT KoOnlyLastPolicy : public KoExecutePolicy {
+    void schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params);
 };
 
 /**
  * This policy will execute the action in the calling thread.
  */
-class KOFFICECORE_EXPORT DirectPolicy : public ExecutePolicy {
-    void schedule(Action *action, JobsListPolicy *jobsList, QVariant *params);
+class KOFFICECORE_EXPORT KoDirectPolicy : public KoExecutePolicy {
+    void schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params);
 };
 
 /**
@@ -87,15 +87,15 @@ class KOFFICECORE_EXPORT DirectPolicy : public ExecutePolicy {
  * executing it will be enabled again. This way only one action can be executed at the
  * same time and additional executes will be ignored until the first is done.
  */
-class KOFFICECORE_EXPORT QueuedPolicy : public ExecutePolicy {
-    void schedule(Action *action, JobsListPolicy *jobsList, QVariant *params);
+class KOFFICECORE_EXPORT KoQueuedPolicy : public KoExecutePolicy {
+    void schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params);
 };
 
 /**
  * This policy will queue each action to be executed serially.
  */
-class KOFFICECORE_EXPORT SimpleQueuedPolicy : public ExecutePolicy {
-    void schedule(Action *action, JobsListPolicy *jobsList, QVariant *params);
+class KOFFICECORE_EXPORT KoSimpleQueuedPolicy : public KoExecutePolicy {
+    void schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params);
 };
 
 #endif

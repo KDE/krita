@@ -2,7 +2,7 @@
 
 add_subdirectory( tests )
 
-include_directories( ${KWMF_INCLUDES} ${KOSTORE_INCLUDES} )
+include_directories( ${KWMF_INCLUDES} ${KOSTORE_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 ########### next target ###############
 
@@ -58,6 +58,10 @@ set(kofficecore_LIB_SRCS
    KoDocumentInfoPropsPage.cpp
    KoTemplatesPane.cpp
    KoRecentDocumentsPane.cpp
+    threadAction/ActionJob_p.cpp
+    threadAction/KoAction.cpp
+    threadAction/KoExecutePolicy.cpp
+    threadAction/KoJobsListPolicy.cpp
 )
 
 kde4_automoc(${kofficecore_LIB_SRCS})
@@ -79,7 +83,7 @@ kde4_add_ui_files( kofficecore_LIB_SRCS
 
 kde4_add_library(kofficecore SHARED ${kofficecore_LIB_SRCS})
 
-target_link_libraries(kofficecore  ${KDE4_KPARTS_LIBS} kstore ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} kowmf)
+target_link_libraries(kofficecore ${KDE4_KPARTS_LIBS} kstore ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} kowmf threadweaver)
 
 set_target_properties(kofficecore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kofficecore DESTINATION ${LIB_INSTALL_DIR} )
@@ -144,5 +148,9 @@ install( FILES
     KoOasisLoadingContext.h 
     KoPoint.h 
     KoRTree.h
-    KoGenStyle.h DESTINATION ${INCLUDE_INSTALL_DIR})
+    KoGenStyle.h
+    threadAction/KoJobsListPolicy.h
+    threadAction/KoExecutePolicy.h
+    threadAction/KoAction.h
+DESTINATION ${INCLUDE_INSTALL_DIR})
 

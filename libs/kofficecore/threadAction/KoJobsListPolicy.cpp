@@ -16,38 +16,38 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "JobsListPolicy.h"
+#include "KoJobsListPolicy.h"
 #include <Job.h>
 
 using namespace ThreadWeaver;
 
-JobsListPolicy::JobsListPolicy() : mutex(QMutex::Recursive) {
+KoJobsListPolicy::KoJobsListPolicy() : mutex(QMutex::Recursive) {
 }
 
-bool JobsListPolicy::canRun (Job *job) {
+bool KoJobsListPolicy::canRun (Job *job) {
     mutex.lock();
     bool rc = m_jobs.isEmpty() || m_jobs[0] == job;
     mutex.unlock();
     return rc;
 }
 
-void JobsListPolicy::free (Job *job) {
+void KoJobsListPolicy::free (Job *job) {
     Q_UNUSED(job);
     release(job);
 }
 
-void JobsListPolicy::release (Job *job) {
+void KoJobsListPolicy::release (Job *job) {
     mutex.lock();
     m_jobs.removeAll(job);
     job->deleteLater();
     mutex.unlock();
 }
 
-void JobsListPolicy::destructed (Job *job) {
+void KoJobsListPolicy::destructed (Job *job) {
     release(job);
 }
 
-const QList<Job*> JobsListPolicy::jobs() {
+const QList<Job*> KoJobsListPolicy::jobs() {
     QList<Job*> answer;
     mutex.lock();
     foreach(Job *job, m_jobs)
@@ -56,13 +56,13 @@ const QList<Job*> JobsListPolicy::jobs() {
     return answer;
 }
 
-void JobsListPolicy::addJob(Job *job) {
+void KoJobsListPolicy::addJob(Job *job) {
     mutex.lock();
     m_jobs.append(job);
     mutex.unlock();
 }
 
-int JobsListPolicy::count() {
+int KoJobsListPolicy::count() {
     mutex.lock();
     int i = m_jobs.count();
     mutex.unlock();

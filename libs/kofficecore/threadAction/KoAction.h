@@ -20,11 +20,11 @@
 #define TW_ACTION_H
 
 #include <Job.h>
-#include "JobsListPolicy.h"
+#include "KoJobsListPolicy.h"
 
 #include <koffice_export.h>
 
-class ExecutePolicy;
+class KoExecutePolicy;
 class DirectPolicy;
 
 /**
@@ -52,15 +52,15 @@ class DirectPolicy;
  *
  * Notice that the default version uses the SimpleQueuedPolicy.
  */
-class KOFFICECORE_EXPORT Action : public QObject {
+class KOFFICECORE_EXPORT KoAction : public QObject {
     Q_OBJECT
 public:
     /**
      * Create a new Action object.
      * @param parent the parent QObject, for memory mangement purposes.
      */
-    Action(QObject *parent = 0);
-    virtual ~Action() {}
+    KoAction(QObject *parent = 0);
+    virtual ~KoAction() {}
 
     /**
      * Set a ThreadWeaver on this action which is used to execute the action in a
@@ -77,7 +77,7 @@ public:
     /**
      * Set a new policy for this action.
      */
-    void setExecutePolicy(ExecutePolicy *policy) { m_policy = policy; }
+    void setExecutePolicy(KoExecutePolicy *policy) { m_policy = policy; }
 
     /**
      * Enable disable this action and all its registered components. Incoming
@@ -133,10 +133,10 @@ private:
     void doAction(QVariant *params); // called from ActionJob
     void doActionUi(QVariant *params); // called from ActionJob
 
-    ExecutePolicy *m_policy;
+    KoExecutePolicy *m_policy;
     ThreadWeaver::WeaverInterface *m_weaver;
     bool m_enabled;
-    JobsListPolicy m_jobsQueue;
+    KoJobsListPolicy m_jobsQueue;
 };
 
 #endif

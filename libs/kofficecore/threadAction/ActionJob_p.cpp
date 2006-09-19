@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "ActionJob_p.h"
-#include "Action.h"
+#include "KoAction.h"
 
 #include <QCoreApplication>
 #include <QEvent>
@@ -28,7 +28,7 @@ public:
     ActionJobEvent() : QEvent(QEvent::User) {}
 };
 
-ActionJob::ActionJob(Action *parent, Enable enable, QVariant *params)
+ActionJob::ActionJob(KoAction *parent, Enable enable, QVariant *params)
     : Job(parent),
     m_action(parent),
     m_enable(enable),

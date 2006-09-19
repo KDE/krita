@@ -16,31 +16,31 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Action.h"
-#include "ExecutePolicy.h"
+#include "KoAction.h"
+#include "KoExecutePolicy.h"
 #include "ActionJob_p.h"
 
 #include <QVariant>
 
-Action::Action(QObject *parent)
+KoAction::KoAction(QObject *parent)
     : QObject(parent),
-    m_policy(ExecutePolicy::simpleQueuedPolicy),
+    m_policy(KoExecutePolicy::simpleQueuedPolicy),
     m_enabled(true)
 {
 }
 
-void Action::execute() {
+void KoAction::execute() {
     execute(0);
 }
 
-void Action::execute(QVariant *params) {
+void KoAction::execute(QVariant *params) {
     if(!m_enabled)
         return;
     Q_ASSERT(m_weaver);
     m_policy->schedule(this, &m_jobsQueue, params);
 }
 
-void Action::doAction(QVariant *params) {
+void KoAction::doAction(QVariant *params) {
     if(params)
         emit triggered(*params);
     else {
@@ -49,7 +49,7 @@ void Action::doAction(QVariant *params) {
     }
 }
 
-void Action::doActionUi(QVariant *params) {
+void KoAction::doActionUi(QVariant *params) {
     if(params)
         emit updateUi(*params);
     else {
@@ -58,4 +58,4 @@ void Action::doActionUi(QVariant *params) {
     }
 }
 
-#include "Action.moc"
+#include "KoAction.moc"

@@ -19,8 +19,8 @@
 #ifndef TW_ACTION_H
 #define TW_ACTION_H
 
-#include <Job.h>
 #include "KoJobsListPolicy.h"
+#include <WeaverInterface.h>
 
 #include <koffice_export.h>
 

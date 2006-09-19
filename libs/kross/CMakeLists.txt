@@ -1,4 +1,10 @@
-macro_optional_find_package(RUBY)
+# temporary to work around a bug in the FindRUBY.cmake as deployed with cmake.
+#macro_optional_find_package(RUBY)
+
+set(MYRUBY_DIR ${CMAKE_SOURCE_DIR}/libs/kross )
+find_package(MYRUBY)
+macro_optional_find_package(MYRUBY)
+
 include_directories( ${KOFFICECORE_INCLUDES} )
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
@@ -18,10 +24,10 @@ if(PYTHON_INCLUDE_PATH)
 endif(PYTHON_INCLUDE_PATH)		
 
 # Ruby
-
-MESSAGE(STATUS "Remember to fix ruby's configuration")
-#MESSAGE(STATUS "s :RUBY_INCLUDE_PATH :<${RUBY_INCLUDE_PATH}")
-#MESSAGE(STATUS "s :RUBY_EXECUTABLE :<${RUBY_EXECUTABLE}")
-#if(RUBY_INCLUDE_PATH)
-#	add_subdirectory(ruby)
-#endif(RUBY_INCLUDE_PATH)
+##MESSAGE(STATUS "Remember to fix ruby's configuration")
+MESSAGE(STATUS "s :RUBY_INCLUDE_PATH :<${RUBY_INCLUDE_PATH}")
+MESSAGE(STATUS "s :RUBY_EXECUTABLE :<${RUBY_EXECUTABLE}")
+MESSAGE(STATUS "s :RUBY_LIBRARY :<${RUBY_LIBRARY}")
+if(RUBY_INCLUDE_PATH)
+	add_subdirectory(ruby)
+endif(RUBY_INCLUDE_PATH)

@@ -1,9 +1,8 @@
 # temporary to work around a bug in the FindRUBY.cmake as deployed with cmake.
 #macro_optional_find_package(RUBY)
 
-set(MYRUBY_DIR ${CMAKE_SOURCE_DIR}/libs/kross )
-find_package(MYRUBY)
-macro_optional_find_package(MYRUBY)
+set(MyRuby_DIR ${CMAKE_SOURCE_DIR}/libs/kross )
+find_package(MyRuby)
 
 include_directories( ${KOFFICECORE_INCLUDES} )
 

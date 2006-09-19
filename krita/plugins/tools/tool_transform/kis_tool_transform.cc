@@ -889,7 +889,7 @@ void KisToolTransform::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Transform"),
-                        "transform",
+                        "tool_transform",
                         0,
                         this,
                         SLOT(activate()),

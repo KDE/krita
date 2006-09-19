@@ -29,7 +29,8 @@ kritatoolcrop_la_METASOURCES = AUTO
 KDE_OPTIONS = nofinal
 
 kritapics_DATA = \
-	tool_crop_cursor.png
+	tool_crop_cursor.png \
+	tool_crop.png
 
 kritapicsdir = $(kde_datadir)/krita/pics
 

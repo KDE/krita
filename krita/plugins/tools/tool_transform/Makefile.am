@@ -29,7 +29,8 @@ kritatooltransform_la_METASOURCES = AUTO
 KDE_OPTIONS = nofinal
 
 kritapics_DATA = \
-	rotate_cursor.xpm
+	rotate_cursor.xpm \
+	tool_transform.png
 
 kritapicsdir = $(kde_datadir)/krita/pics
 

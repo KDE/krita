@@ -215,7 +215,7 @@ void KisToolFill::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Fill"),
-                        "color_fill",
+                        "tool_color_fill",
                         Qt::Key_F,
                         this,
                         SLOT(activate()),

@@ -58,6 +58,7 @@ kritapics_DATA = \
 	tool_freehand_cursor.png \
 	tool_duplicate_cursor.png \
 	tool_fill_cursor.png \
+	tool_color_fill.png \
 	tool_text_cursor.png \
 	tool_gradient_cursor.png \
         tool_gradient.png \
@@ -70,7 +71,11 @@ kritapics_DATA = \
         openhand_cursor.xpm \
         closedhand_cursor.xpm \
 	tool_zoom_plus_cursor.png \
-	tool_zoom_minus_cursor.png
+	tool_zoom_minus_cursor.png \
+	tool_move.png \
+	tool_colorpicker.png \
+	tool_duplicate.png \
+	tool_zoom.png
 
 
 kritapicsdir = $(kde_datadir)/krita/pics

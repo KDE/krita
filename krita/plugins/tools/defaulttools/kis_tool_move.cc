@@ -98,7 +98,7 @@ void KisToolMove::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Move"),
-                        "move",
+                        "tool_move",
                         Qt::SHIFT+Qt::Key_V,
                         this,
                         SLOT(activate()),

@@ -716,7 +716,7 @@ void KisToolCrop::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Crop"),
-                                    "crop",
+                                    "tool_crop",
                                     0,
                                     this,
                                     SLOT(activate()),

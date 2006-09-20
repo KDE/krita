@@ -5,7 +5,12 @@ println("Hello world from kjs :-)");
 - KjsEmbed callAsFunction in qobject_binding.cpp does currently not eval returnvalues.
 - KjsEmbed crashes on unhandled types like uint, qlonglong, qulonglong, ...
 - We need some way to disable insecure functionality like e.g. the QFile-wrapper on demand (or
-  even better limit read/write access to defined directories/files).
+  even better limit read/write access to defined directories/files + how to prevent filling
+  of the fs with >n GB files?).
+- scripts may need persistent configs vs. temp files.
+- network-access?
+- iosupport looks evil
+- there is no support for dynamic loadable modules?
 - IMHO KjsEmbed should come with a wrapper for KUnitTest/QUnitTest
 - May it make sense to refactor QVariant-handling? So, move it into an own class + add support
   for metatypes?

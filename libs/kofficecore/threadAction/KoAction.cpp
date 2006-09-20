@@ -25,6 +25,7 @@
 KoAction::KoAction(QObject *parent)
     : QObject(parent),
     m_policy(KoExecutePolicy::simpleQueuedPolicy),
+    m_weaver(0),
     m_enabled(true)
 {
 }

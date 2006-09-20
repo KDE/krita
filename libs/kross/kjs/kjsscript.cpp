@@ -122,7 +122,7 @@ void KjsScript::execute()
     }
 
     KJS::UString code = m_action->code();
-    krossdebug( QString("KjsScript::execute code=\n%1").arg(code.qstring()) );
+    //krossdebug( QString("KjsScript::execute code=\n%1").arg(code.qstring()) );
     KJSEmbed::Engine::ExitStatus exitstatus = d->engine->execute(code);
     KJS::Completion completion = d->engine->completion();
 

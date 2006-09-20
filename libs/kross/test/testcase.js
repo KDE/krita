@@ -28,15 +28,64 @@ function UnitTest()
 	}
 }
 
-myUnitTest = new UnitTest();
-myUnitTest.assert(1,2);
-myUnitTest.printResult();
+tester = new UnitTest();
 
 // We have 2 instances of TestObject which is inherits QObject.
-//var testobj1 = TestObject1
-//var testobj2 = TestObject2
+var testobj1 = TestObject1
+var testobj2 = TestObject2
 //println("TestObject1: " + testobj1);
 //println("TestObject2: " + testobj1);
+
+// bool
+tester.assert(testobj1.func_bool_bool(true), true);
+tester.assert(testobj1.func_bool_bool(false), false);
+
+// int
+tester.assert(testobj1.func_int_int(0), 0);
+tester.assert(testobj1.func_int_int(177321), 177321);
+tester.assert(testobj1.func_int_int(-98765), -98765);
+
+// uint
+tester.assert(testobj1.func_uint_uint(0), 0);
+tester.assert(testobj1.func_uint_uint(177321), 177321);
+
+// double
+tester.assert(testobj1.func_double_double(0.0), 0.0);
+tester.assert(testobj1.func_double_double(1773.2177), 1773.2177);
+tester.assert(testobj1.func_double_double(-548993.271993), -548993.271993);
+
+// longlong
+tester.assert(testobj1.func_qlonglong_qlonglong(0), 0);
+tester.assert(testobj1.func_qlonglong_qlonglong(7379), 7379);
+tester.assert(testobj1.func_qlonglong_qlonglong(-6384673), -6384673);
+tester.assert(testobj1.func_qlonglong_qlonglong(678324787843223472165), 678324787843223472165);
+
+// ulonglong
+tester.assert(testobj1.func_qulonglong_qulonglong(0), 0);
+tester.assert(testobj1.func_qulonglong_qulonglong(378972), 378972);
+
+// bytearray
+tester.assert(testobj1.func_qbytearray_qbytearray("  Some String as ByteArray  "), "  Some String as ByteArray  ");
+tester.assert(testobj1.func_qbytearray_qbytearray(" \0\n\r\t\s\0 test "), " \0\n\r\t\s\0 test ");
+
+// string
+tester.assert(testobj1.func_qstring_qstring(""), "");
+tester.assert(testobj1.func_qstring_qstring(" "), " ");
+tester.assert(testobj1.func_qstring_qstring(" Another \n\r Test!   $%&\" "), " Another \n\r Test!   $%&\" ");
+
+// stringlist
+//tester.assert(testobj1.func_qstringlist_qstringlist([]), []);
+//tester.assert(testobj1.func_qstringlist_qstringlist(["string1"]), ["string1"]);
+//tester.assert(testobj1.func_qstringlist_qstringlist([" string1","string2 "]), [" string1","string2 "]);
+
+// variantlist
+//tester.assert(testobj1.func_qvariantlist_qvariantlist([]), []);
+//tester.assert(testobj1.func_qvariantlist_qvariantlist([[[[]],[]]]), [[[[]],[]]]);
+//tester.assert(testobj1.func_qvariantlist_qvariantlist(["A string",[17539,-8591],[5.32,-842.775]]), ["A string",[17539,-8591],[5.32,-842.775]]);
+//tester.assert(testobj1.func_qvariantlist_qvariantlist([[true,[],false,"Other String"],"test"]), [[true,[],false,"Other String"],"test"]);
+
+// print the test-results
+tester.printResult();
 
 // Create a dialog and show it.
 //var frame = new Widget("QFrame", this );

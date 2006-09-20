@@ -18,7 +18,7 @@ IF (RUBY_EXECUTABLE)
     EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"ruby_version\"])'" OUTPUT_VARIABLE RUBY_VERSION)
 
     FIND_LIBRARY(RUBY_LIBRARY
-      NAMES ruby ruby${RUBY_VERSION}
+      NAMES ruby${RUBY_VERSION}
       PATHS ${RUBY_LIBRARY_PATH}
     )
 

@@ -73,9 +73,6 @@ public:
    * @param document is the document which should be displayed in this view. This pointer
    *                 must not be zero.
    * @param parent   parent widget for this view.
-   * @param name     Name of the view. The name is used in DCOP, so the name should
-   *                 match the pattern [A-Za-z_][A-Za-z_0-9]*.
-   *
    */
   KoView( KoDocument *document, QWidget *parent = 0 );
   /**

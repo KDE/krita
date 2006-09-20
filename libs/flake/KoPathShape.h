@@ -206,7 +206,7 @@ public:
 
     /**
      * @brief Sets the parent path shape.
-     * @param shape the new parent path shape
+     * @param parent the new parent path shape
      */
     void setParent( KoPathShape* parent );
 

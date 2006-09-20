@@ -203,15 +203,13 @@ public:
     /**
      * Command to break a subpath at a single point.
      * @param shape the path shape whose subpath to close
-     * @param point1 the first point of the subpath to join
-     * @param point2 the second point of the subpath to join
+     * @param breakPoint the point to break at
      */
     KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *breakPoint );
     /**
      * Command to break a subpath at a path segment
      * @param shape the path shape whose subpath to close
-     * @param point1 the first point of the subpath to join
-     * @param point2 the second point of the subpath to join
+     * @param segment the segment
      */
     KoSubpathBreakCommand( KoPathShape *shape, const KoPathSegment &segment );
     virtual ~KoSubpathBreakCommand();

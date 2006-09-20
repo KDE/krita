@@ -15,7 +15,7 @@ FIND_PROGRAM(RUBY_EXECUTABLE
 IF (RUBY_EXECUTABLE)
     EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"libdir\"])'" OUTPUT_VARIABLE RUBY_LIBRARY_PATH)
     EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"rubyincludedir\"] || Config::CONFIG[\"archdir\"])'" OUTPUT_VARIABLE RUBY_POSSIBLE_INCLUDE_PATH)
-    EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"rubyincludedir\"] || Config::CONFIG[\"ruby_version\"])'" OUTPUT_VARIABLE RUBY_VERSION)
+    EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"ruby_version\"])'" OUTPUT_VARIABLE RUBY_VERSION)
 
     FIND_LIBRARY(RUBY_LIBRARY
       NAMES ruby ruby${RUBY_VERSION}

@@ -63,13 +63,13 @@ void PaddedElement::calcSizes( const ContextStyle& context,
             width += it->getWidth() + spaceBefore;
             luPixel baseline = it->getBaseline();
             if ( baseline > -1 ) {
-                height = QMAX( height, baseline );
-                depth = QMAX( depth, it->getHeight() - baseline );
+                height = qMax( height, baseline );
+                depth = qMax( depth, it->getHeight() - baseline );
             }
             else {
                 luPixel bl = it->getHeight()/2 + context.axisHeight( tstyle, factor );
-                height = QMAX( height, bl );
-                depth = QMAX( depth, it->getHeight() - bl );
+                height = qMax( height, bl );
+                depth = qMax( depth, it->getHeight() - bl );
             }
         }
     }

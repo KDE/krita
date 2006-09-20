@@ -9,27 +9,21 @@
 
 FIND_PROGRAM(RUBY_EXECUTABLE
   NAMES ruby ruby1.8 ruby1.9
-  PATHS
-  /usr/bin
-  /usr/local/bin
+  PATHS /usr/bin /usr/local/bin
 )
 
 IF (RUBY_EXECUTABLE)
+    EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"libdir\"])'" OUTPUT_VARIABLE RUBY_LIBRARY_PATH)
+    EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"rubyincludedir\"] || Config::CONFIG[\"archdir\"])'" OUTPUT_VARIABLE RUBY_POSSIBLE_INCLUDE_PATH)
+    EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"rubyincludedir\"] || Config::CONFIG[\"ruby_version\"])'" OUTPUT_VARIABLE RUBY_VERSION)
 
-    EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"libdir\"]'" OUTPUT_VARIABLE RUBY_LIBRARY_PATH)
-
-    EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"rubyincludedir\"])'" OUTPUT_VARIABLE RUBY_POSSIBLE_INCLUDE_PATH)
-    IF (NOT RUBY_POSSIBLE_INCLUDE_PATH)
-        EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"archdir\"])'" OUTPUT_VARIABLE RUBY_POSSIBLE_INCLUDE_PATH)
-    ENDIF (NOT RUBY_POSSIBLE_INCLUDE_PATH)
+    FIND_LIBRARY(RUBY_LIBRARY
+      NAMES ruby ruby${RUBY_VERSION}
+      PATHS ${RUBY_LIBRARY_PATH}
+    )
 
     FIND_PATH(RUBY_INCLUDE_PATH ruby.h
       ${RUBY_POSSIBLE_INCLUDE_PATH}
-    )
-
-    FIND_LIBRARY(RUBY_LIBRARY
-      NAMES ruby ruby1.8 ruby1.9
-      PATHS ${RUBY_LIBRARY_PATH}
     )
 
     IF (RUBY_LIBRARY AND RUBY_INCLUDE_PATH)

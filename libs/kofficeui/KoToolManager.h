@@ -81,7 +81,6 @@ public:
     shell()->addDockWidget(Qt::LeftDockWidgetArea,
         KoToolManager::instance()->toolBox("MyApp"));
 @endcode
-     * @param parent the parent QWidget the toolbox will be child of.
      * @param applicationName the title for the toolbox
      */
     KoToolBox *toolBox(const QString &applicationName = QString());

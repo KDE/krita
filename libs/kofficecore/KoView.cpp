@@ -607,7 +607,7 @@ void KoView::slotChildActivated( bool a )
   // #### HACK
   // We want to delete as many views as possible and this
   // trick is used to go upwards in the view-tree.
-  emit activated( FALSE );
+  emit activated( false );
 }
 
 void KoView::slotChildChanged( KoDocumentChild *child )
@@ -699,12 +699,12 @@ bool KoView::isInOperation() const
 void KoView::beginOperation()
 {
    d->m_inOperation = true;
-   canvas()->setUpdatesEnabled(FALSE);
+   canvas()->setUpdatesEnabled( false );
 }
 
 void KoView::endOperation()
 {
-   canvas()->setUpdatesEnabled(TRUE);
+   canvas()->setUpdatesEnabled( true );
    d->m_inOperation = false;
 
 //   canvas()->update();

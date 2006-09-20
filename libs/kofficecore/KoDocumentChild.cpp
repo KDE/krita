@@ -158,7 +158,7 @@ bool KoDocumentChild::load( const KoXmlElement& element, bool uppercase )
         return false;
     }
 
-    bool brect = FALSE;
+    bool brect = false;
     KoXmlNode n = element.firstChild();
     for( ; !n.isNull(); n = n.nextSibling() )
     {

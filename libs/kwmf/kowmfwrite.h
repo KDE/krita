@@ -105,10 +105,10 @@ public:
     void  drawPie( int left, int top, int width, int height, int a, int alen );
     void  drawChord( int left, int top, int width, int height, int a, int alen );
     void  drawPolyline( const QPolygon& pa );
-    void  drawPolygon( const QPolygon& pa, bool winding=FALSE );
+    void  drawPolygon( const QPolygon& pa, bool winding=false );
     // drawPolyPolygon draw the XOR of a list of polygons
     // listPa : list of polygons
-    void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=FALSE );
+    void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=false );
     void  drawImage( int left, int top, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing functions

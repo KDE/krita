@@ -132,10 +132,10 @@ public:
     virtual void  drawPie( int x, int y, int w, int h, int a, int alen ) = 0;
     virtual void  drawChord( int x, int y, int w, int h, int a, int alen ) = 0;
     virtual void  drawPolyline( const QPolygon &pa ) = 0;
-    virtual void  drawPolygon( const QPolygon &pa, bool winding=FALSE ) = 0;
+    virtual void  drawPolygon( const QPolygon &pa, bool winding=false ) = 0;
     // drawPolyPolygon draw the XOR of a list of polygons
     // listPa : list of polygons
-    virtual void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=FALSE ) = 0;
+    virtual void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=false ) = 0;
     virtual void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 ) = 0;
 
     // Text drawing functions
@@ -144,7 +144,7 @@ public:
     virtual void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation ) = 0;
 
     // matrix transformation : only used for bitmap manipulation
-    virtual void  setMatrix( const QMatrix &, bool combine=FALSE ) = 0;
+    virtual void  setMatrix( const QMatrix &, bool combine=false ) = 0;
 
 private:
     KoWmfReadPrivate  *mKwmf;

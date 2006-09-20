@@ -102,12 +102,12 @@ private:
     void  drawPie( int x, int y, int w, int h, int a, int alen );
     void  drawChord( int x, int y, int w, int h, int a, int alen );
     void  drawPolyline( const QPolygon& pa );
-    void  drawPolygon( const QPolygon& pa, bool winding=FALSE );
+    void  drawPolygon( const QPolygon& pa, bool winding=false );
     /**
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=FALSE );
+    void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=false );
     void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing functions
@@ -116,7 +116,7 @@ private:
     void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation );
 
     // matrix transformation : only used in some bitmap manipulation
-    void  setMatrix( const QMatrix &, bool combine=FALSE );
+    void  setMatrix( const QMatrix &, bool combine=false );
 
 private:
     QPainter mPainter;

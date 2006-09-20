@@ -11,6 +11,7 @@ endif(KUNITTEST_FOUND)
 ########### next target ###############
 
 set(libkritatile_SRCS
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiled_random_accessor.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledvlineiterator.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledhlineiterator.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tileddatamanager.cc
@@ -57,6 +58,8 @@ set(kritaimage_LIB_SRCS
    kis_paintop_registry.cc
    kis_palette.cc
    kis_pattern.cc
+   kis_random_accessor.cpp
+   kis_random_sub_accessor.cpp
    kis_rect.cc
    kis_resource.cc
    kis_rotate_visitor.cc

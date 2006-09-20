@@ -77,7 +77,7 @@ protected:
     // Allow the baseclass of iterators acces to the interior
     // derived iterator classes must go through KisTiledIterator
     friend class KisTiledIterator;
-
+    friend class KisTiledRandomAccessor;
 protected:
 
     void setDefaultPixel(const quint8 *defPixel);

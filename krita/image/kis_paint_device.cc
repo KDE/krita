@@ -28,6 +28,11 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "KoColorProfile.h"
+#include "KoColor.h"
+#include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
+#include "KoIntegerMaths.h"
 #include <KoStore.h>
 
 #include "kis_global.h"
@@ -38,11 +43,8 @@
 #include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"
-#include "KoColorProfile.h"
-#include "KoColor.h"
-#include "KoColorSpace.h"
-#include "KoIntegerMaths.h"
-#include "KoColorSpaceRegistry.h"
+#include "kis_random_accessor.h"
+#include "kis_random_sub_accessor.h"
 #include "kis_selection.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
@@ -873,6 +875,18 @@ KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, q
     else
         return KisVLineIteratorPixel(this, m_datamanager.data(), NULL, x, y, h, m_x, m_y, writable);
 
+}
+
+KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(Q_INT32 x, Q_INT32 y, bool writable) {
+  if(hasSelection())
+    return KisRandomAccessorPixel(m_datamanager.data(), m_selection->m_datamanager.data(), x, y, m_x, m_y, writable);
+  else
+    return KisRandomAccessorPixel(m_datamanager.data(), NULL, x, y, m_x, m_y, writable);
+}
+
+KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor()
+{
+  return KisRandomSubAccessorPixel(KisPaintDeviceSP(this));
 }
 
 void KisPaintDevice::emitSelectionChanged()

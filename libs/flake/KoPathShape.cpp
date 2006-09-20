@@ -1134,6 +1134,31 @@ bool KoPathShape::joinBetween( KoPathPoint *endPoint1, KoPathPoint *endPoint2 )
     return true;
 }
 
+bool KoPathShape::combine( KoPathShape *path )
+{
+    if( ! path )
+        return false;
+
+    QMatrix pathMatrix = path->transformationMatrix(0);
+    QMatrix myMatrix = transformationMatrix(0).inverted();
+
+    foreach( KoSubpath* subpath, path->m_subpaths )
+    {
+        KoSubpath *newSubpath = new KoSubpath();
+
+        foreach( KoPathPoint* point, *subpath )
+        {
+            KoPathPoint *newPoint = new KoPathPoint( *point );
+            newPoint->map( pathMatrix );
+            newPoint->map( myMatrix );
+            newSubpath->append( newPoint );
+        }
+        m_subpaths.append( newSubpath );
+    }
+    normalize();
+    return true;
+}
+
 KoPointPosition KoPathShape::findPoint( KoPathPoint* point )
 {
     KoSubpathList::iterator pathIt( m_subpaths.begin() );

@@ -481,6 +481,13 @@ public:
      */
     bool joinBetween( KoPathPoint *endPoint1, KoPathPoint *endPoint2 );
 
+    /**
+     * @brief Combines two path by appending the data of the specified path.
+     * @param path the path to combine with
+     * @return true if combining was successful, else false
+     */
+    bool combine( KoPathShape *path );
+    
 #if 0 // not used yet
     /**
      * @brief Inserts a new point after an existing path point.

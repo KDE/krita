@@ -19,6 +19,7 @@
  */
 
 #include "KoPathCommand.h"
+#include "KoShapeControllerBase.h"
 #include <klocale.h>
 #include <kdebug.h>
 #include <math.h>
@@ -557,4 +558,61 @@ void KoSegmentTypeCommand::unexecute()
 QString KoSegmentTypeCommand::name() const
 {
     return i18n( "Change segment type" );
+}
+
+KoPathCombineCommand::KoPathCombineCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths )
+: m_controller( controller )
+, m_paths( paths )
+, m_combinedPath( 0 )
+, m_deletePath( true )
+{
+}
+
+KoPathCombineCommand::~KoPathCombineCommand()
+{
+    if( m_deletePath )
+        delete m_combinedPath;
+}
+
+void KoPathCombineCommand::execute()
+{
+    if( ! m_paths.size() )
+        return;
+
+    if( ! m_combinedPath )
+    {
+        m_combinedPath = new KoPathShape();
+        m_combinedPath->setBorder( m_paths.first()->border() );
+        m_combinedPath->setShapeId( m_paths.first()->shapeId() );
+        // combine the paths
+        foreach( KoPathShape* path, m_paths )
+            m_combinedPath->combine( path );
+    }
+    if( m_controller )
+    {
+        foreach( KoPathShape* p, m_paths )
+            m_controller->removeShape( p );
+
+        m_controller->addShape( m_combinedPath );
+        m_deletePath = false;
+    }
+}
+
+void KoPathCombineCommand::unexecute()
+{
+    if( ! m_paths.size() )
+        return;
+
+    if( m_controller )
+    {
+        m_controller->removeShape( m_combinedPath );
+        foreach( KoPathShape* p, m_paths )
+            m_controller->addShape( p );
+        m_deletePath = true;
+    }
+}
+
+QString KoPathCombineCommand::name() const
+{
+    return i18n( "Combine paths" );
 }

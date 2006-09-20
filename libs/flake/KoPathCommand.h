@@ -259,4 +259,30 @@ private:
     bool m_changeToLine;
 };
 
+class KoShapeControllerBase;
+
+/// The undo / redo command for combining two or more paths into one
+class KoPathCombineCommand : public KCommand
+{
+public:
+    /**
+     * Command for combining a list of paths into one single path.
+     * @param controller the controller to used for removing/inserting.
+     * @param paths the list of paths to combine
+     */
+    KoPathCombineCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths );
+    virtual ~KoPathCombineCommand();
+    /// execute the command
+    void execute();
+    /// revert the actions done in execute
+    void unexecute();
+    /// return the name of this command
+    QString name() const;
+private:
+    KoShapeControllerBase *m_controller;
+    QList<KoPathShape*> m_paths;
+    KoPathShape *m_combinedPath;
+    bool m_deletePath;
+};
+
 #endif

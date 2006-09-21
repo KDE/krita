@@ -76,6 +76,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
     mainWidget = new KSnapshotWidget( vbox, "mainWidget" );
     Q_CHECK_PTR(mainWidget);
 
+    mainWidget->btnSave->hide();
     connect(mainWidget, SIGNAL(startImageDrag()), SLOT(slotDragSnapshot()));
 
     connect( mainWidget, SIGNAL( newClicked() ), SLOT( slotGrab() ) );

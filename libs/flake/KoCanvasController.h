@@ -126,7 +126,7 @@ signals:
      */
     void canvasOffsetYChanged(int offset);
 
-protected Q_SLOTS:
+protected slots:
     /// Called by the horizontal scrollbar when it's value changes
     void updateCanvasOffsetX();
     /// Called by the vertical scrollbar when it's value changes

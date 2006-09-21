@@ -21,10 +21,6 @@
 #ifndef BLURPLUGIN_H
 #define BLURPLUGIN_H
 
-// TODO: remove that
-#define LCMS_HEADER <lcms.h>
-// TODO: remove it !
-
 #include <kparts/plugin.h>
 
 class BlurFilterPlugin : public KParts::Plugin

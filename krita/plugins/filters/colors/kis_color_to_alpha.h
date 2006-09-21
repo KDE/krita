@@ -18,18 +18,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_BLUR_FILTER_H
-#define KIS_BLUR_FILTER_H
+#ifndef KIS_COLOR_TO_ALPHA_H_
+#define KIS_COLOR_TO_ALPHA_H_
 
 #include "kis_filter.h"
 
-class KisBlurFilter : public KisFilter
-{
+class KisFilterColorToAlpha : public KisFilter {
     public:
-        KisBlurFilter();
+        KisFilterColorToAlpha();
     public:
         virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-        static inline KoID id() { return KoID("blur", i18n("Blur")); };
+        static inline KoID id() { return KoID("colortoalpha", i18n("Color to Alpha")); };
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
@@ -39,5 +38,6 @@ class KisBlurFilter : public KisFilter
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
         virtual KisFilterConfiguration* configuration(QWidget*);
 };
+
 
 #endif

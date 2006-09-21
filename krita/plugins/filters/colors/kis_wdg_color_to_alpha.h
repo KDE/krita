@@ -18,28 +18,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
  
-#ifndef _KIS_WDG_BLUR_H_
-#define _KIS_WDG_BLUR_H_
+#ifndef _KIS_WDG_COLOR_TO_ALPHA_H_
+#define _KIS_WDG_COLOR_TO_ALPHA_H_
 
 #include <kis_filter_config_widget.h>
 
 class KisFilter;
-class Ui_WdgBlur;
+class Ui_WdgColorToAlphaBase;
 
-class KisWdgBlur : public KisFilterConfigWidget
+class KisWdgColorToAlpha : public KisFilterConfigWidget
 {
     Q_OBJECT
     public:
-        KisWdgBlur( KisFilter* nfilter, QWidget * parent, const char * name);
-        inline Ui_WdgBlur* widget() { return m_widget; };
+        KisWdgColorToAlpha( KisFilter* nfilter, QWidget * parent, const char * name);
+        inline Ui_WdgColorToAlphaBase* widget() { return m_widget; };
         virtual void setConfiguration(KisFilterConfiguration*);
-    private slots:
-        void linkSpacingToggled(bool);
-        void spinBoxHalfWidthChanged(int );
-        void spinBoxHalfHeightChanged(int );
     private:
-        bool m_halfSizeLink;
-        Ui_WdgBlur* m_widget;
+        Ui_WdgColorToAlphaBase* m_widget;
 };
 
 #endif

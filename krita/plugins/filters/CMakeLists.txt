@@ -17,4 +17,6 @@ add_subdirectory( lenscorrectionfilter )
 add_subdirectory( randompickfilter )
 add_subdirectory( blur )
 add_subdirectory( fastcolortransfer )
+add_subdirectory( colors )
+add_subdirectory( unsharp )
 

@@ -17,29 +17,34 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
-#ifndef _KIS_WDG_BLUR_H_
-#define _KIS_WDG_BLUR_H_
 
-#include <kis_filter_config_widget.h>
+#include "unsharp.h"
 
-class KisFilter;
-class Ui_WdgBlur;
+#include <kgenericfactory.h>
 
-class KisWdgBlur : public KisFilterConfigWidget
+#include "kis_unsharp_filter.h"
+
+typedef KGenericFactory<UnsharpPlugin> UnsharpPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( kritaunsharpfilter, UnsharpPluginFactory( "krita" ) )
+
+UnsharpPlugin::UnsharpPlugin(QObject *parent, const QStringList &)
+        : KParts::Plugin(parent)
 {
-    Q_OBJECT
-    public:
-        KisWdgBlur( KisFilter* nfilter, QWidget * parent, const char * name);
-        inline Ui_WdgBlur* widget() { return m_widget; };
-        virtual void setConfiguration(KisFilterConfiguration*);
-    private slots:
-        void linkSpacingToggled(bool);
-        void spinBoxHalfWidthChanged(int );
-        void spinBoxHalfHeightChanged(int );
-    private:
-        bool m_halfSizeLink;
-        Ui_WdgBlur* m_widget;
-};
+    setInstance(UnsharpPluginFactory::instance());
 
-#endif
+
+    kdDebug(41006) << "Extensions Image enhancement Filters plugin. Class: "
+          << className()
+          << ", Parent: "
+          << parent -> className()
+          << "\n";
+
+    if (parent->inherits("KisFilterRegistry")) {
+        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
+        manager->add(KisFilterSP(new KisUnsharpFilter()));
+    }
+}
+
+UnsharpPlugin::~UnsharpPlugin()
+{
+}

@@ -18,26 +18,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_BLUR_FILTER_H
-#define KIS_BLUR_FILTER_H
+#ifndef KIS_MINMAX_FILTERS_H
+#define KIS_MINMAX_FILTERS_H
 
 #include "kis_filter.h"
 
-class KisBlurFilter : public KisFilter
+class KisFilterMax : public KisFilter
 {
     public:
-        KisBlurFilter();
+        KisFilterMax();
     public:
         virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-        static inline KoID id() { return KoID("blur", i18n("Blur")); };
+        static inline KoID id() { return KoID("maximize", i18n("Maximize Channel")); };
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
-        virtual bool supportsAdjustmentLayers() { return false; }
         virtual ColorSpaceIndependence colorSpaceIndendendence() { return FULLY_INDEPENDENT; };
+};
+
+class KisFilterMin : public KisFilter
+{
     public:
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-        virtual KisFilterConfiguration* configuration(QWidget*);
+        KisFilterMin();
+    public:
+        virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
+        static inline KoID id() { return KoID("minimize", i18n("Minimize Channel")); };
+        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPreview() { return true; }
+        virtual bool supportsIncrementalPainting() { return false; }
+        virtual ColorSpaceIndependence colorSpaceIndendendence() { return FULLY_INDEPENDENT; };
 };
 
 #endif

@@ -78,6 +78,7 @@ set(kritaui_LIB_SRCS
    kis_dlg_adj_layer_props.cc
    squeezedcombobox.cpp
    kis_matrix_widget.cpp
+   kis_perspective_grid_manager.cpp
    )
 
 kde4_automoc(${kritaui_LIB_SRCS})
@@ -171,4 +172,5 @@ install( FILES
     kobirdeyepanel.h
     kis_filters_listview.h
     kis_input_device.h
+    kis_perspective_grid_manager.h
     DESTINATION ${INCLUDE_INSTALL_DIR})

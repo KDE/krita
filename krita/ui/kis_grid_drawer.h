@@ -30,6 +30,7 @@ class KisView;
 class KActionCollection;
 class KToggleAction;
 class KAction;
+class KisSubPerspectiveGrid;
 
 class GridDrawer {
     public:
@@ -38,9 +39,12 @@ class GridDrawer {
     
     public:
         void drawGrid(KisImageSP image, const QRect& wr);
+        void drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisSubPerspectiveGrid* grid);
     
         virtual void setPen(const QPen& pen) = 0;
         virtual void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2) = 0;
+        inline void drawLine(const QPoint& p1, const QPoint& p2) { drawLine(p1.x(), p1.y(), p2.x(), p2.y() ); }
+        inline void drawLine(const QPointF* p1, const QPointF* p2) { drawLine( p1->toPoint(), p2->toPoint()); }
     private:
         Qt::PenStyle gs2style(quint32 s);
 };

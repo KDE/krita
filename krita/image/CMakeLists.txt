@@ -75,7 +75,10 @@ set(kritaimage_LIB_SRCS
    kis_exif_info.cc
    kis_thread_pool.cc
    kis_exif_value.cc
-   kis_filter_strategy.h )
+   kis_filter_strategy.h
+   kis_perspective_grid.cpp
+   kis_perspective_math.cpp
+)
 
 kde4_automoc(${kritaimage_LIB_SRCS})
 
@@ -89,5 +92,5 @@ install(TARGETS kritaimage  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kis_canvas_subject.h kis_canvas_controller.h kis_canvas_observer.h kis_debug_areas.h kis_global.h kis_annotation.h kis_shared_ptr_vector.h kis_undo_adapter.h kis_progress_subject.h kis_progress_display_interface.h kis_adjustment_layer.h kis_alpha_mask.h  	kis_autobrush_resource.h kis_autogradient_resource.h kis_background.h kis_boundary.h kis_brush.h  	kis_command.h kis_convolution_painter.h kis_fill_painter.h kis_filter.h  	kis_filter_registry.h kis_gradient.h kis_gradient_painter.h kis_histogram.h kis_image.h  	kis_imagepipe_brush.h kis_iterator.h kis_iterators_pixel.h  	kis_iteratorpixeltrait.h kis_layer.h kis_meta_registry.h kis_nameserver.h   kis_paint_device.h kis_painter.h kis_paintop.h kis_paintop_registry.h  	kis_palette.h kis_pattern.h kis_point.h kis_rect.h kis_resource.h kis_selection.h  	kis_transaction.h kis_types.h kis_vec.h kis_filter_config_widget.h  	kis_filter_configuration.h kis_exif_info.h kis_exif_value.h  DESTINATION ${INCLUDE_INSTALL_DIR})
+install( FILES  kis_canvas_subject.h kis_canvas_controller.h kis_canvas_observer.h kis_debug_areas.h kis_global.h kis_annotation.h kis_shared_ptr_vector.h kis_undo_adapter.h kis_progress_subject.h kis_progress_display_interface.h kis_adjustment_layer.h kis_alpha_mask.h  	kis_autobrush_resource.h kis_autogradient_resource.h kis_background.h kis_boundary.h kis_brush.h  	kis_command.h kis_convolution_painter.h kis_fill_painter.h kis_filter.h  	kis_filter_registry.h kis_gradient.h kis_gradient_painter.h kis_histogram.h kis_image.h  	kis_imagepipe_brush.h kis_iterator.h kis_iterators_pixel.h  	kis_iteratorpixeltrait.h kis_layer.h kis_meta_registry.h kis_nameserver.h   kis_paint_device.h kis_painter.h kis_paintop.h kis_paintop_registry.h  	kis_palette.h kis_pattern.h kis_point.h kis_rect.h kis_resource.h kis_selection.h  	kis_transaction.h kis_types.h kis_vec.h kis_filter_config_widget.h  	kis_filter_configuration.h kis_exif_info.h kis_exif_value.h kis_perspective_grid.h kis_perspective_math.h DESTINATION ${INCLUDE_INSTALL_DIR})
 

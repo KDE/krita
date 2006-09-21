@@ -63,6 +63,7 @@
 #include "kis_group_layer.h"
 #include "kis_iterators_pixel.h"
 #include "kis_shear_visitor.h"
+#include "kis_perspective_grid.h"
 
 class KisImage::KisImagePrivate {
 public:
@@ -70,6 +71,7 @@ public:
     quint32     lockCount;
     bool sizeChangedWhileLocked;
     bool selectionChangedWhileLocked;
+    KisPerspectiveGrid* perspectiveGrid;
 };
 
 
@@ -518,6 +520,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 {
     if (this != &rhs) {
         m_private = new KisImagePrivate(*rhs.m_private);
+        m_private->perspectiveGrid = new KisPerspectiveGrid(*rhs.m_private->perspectiveGrid);
         m_uri = rhs.m_uri;
         m_name.clear();
         m_width = rhs.m_width;
@@ -548,6 +551,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 
 KisImage::~KisImage()
 {
+    delete m_private->perspectiveGrid;
     delete m_private;
     delete m_nserver;
 }
@@ -615,6 +619,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
     m_private->lockCount = 0;
     m_private->sizeChangedWhileLocked = false;
     m_private->selectionChangedWhileLocked = false;
+    m_private->perspectiveGrid = new KisPerspectiveGrid();
 
     m_adapter = adapter;
 
@@ -1639,5 +1644,11 @@ KisBackgroundSP KisImage::background() const
 {
     return m_bkg;
 }
+
+KisPerspectiveGrid* KisImage::perspectiveGrid()
+{
+    return m_private->perspectiveGrid;
+}
+
 #include "kis_image.moc"
 

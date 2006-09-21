@@ -174,6 +174,7 @@
 #include "kis_selection_manager.h"
 #include "kis_filter_manager.h"
 #include "kis_grid_manager.h"
+#include "kis_perspective_grid_manager.h"
 
 #include "kis_custom_palette.h"
 
@@ -195,6 +196,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent)
     , m_popup( 0 )
     , m_partHandler( 0 )
     , m_gridManager( 0 )
+    , m_perspectiveGridManager( 0 )
     , m_selectionManager( 0 )
     , m_filterManager( 0 )
     , m_toolManager( 0 )
@@ -279,6 +281,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent)
     m_filterManager = new KisFilterManager(this, doc);
     m_toolManager = new KisToolManager(canvasSubject(), this);
     m_gridManager = new KisGridManager(this);
+    m_perspectiveGridManager = new KisPerspectiveGridManager(this);
 
     // This needs to be set before the dockers are created.
     m_image = m_doc->currentImage();
@@ -587,6 +590,7 @@ void KisView::setupActions()
     m_selectionManager->setup(actionCollection());
     m_filterManager->setup(actionCollection());
     m_gridManager->setup(actionCollection());
+    m_perspectiveGridManager->setup(actionCollection());
 
     m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
     connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
@@ -1024,6 +1028,7 @@ void KisView::updateQPaintDeviceCanvas(const QRect& imageRect)
                     }
 
                     m_gridManager->drawGrid( wr, &gc );
+                    m_perspectiveGridManager->drawGrid( wr, &gc );
                 }
 //                    paintGuides();
             } else {
@@ -1169,6 +1174,7 @@ void KisView::paintOpenGLView(const QRect& canvasRect)
             glDisable(GL_BLEND);
 
             m_gridManager->drawGrid(wr, 0, true);
+            m_perspectiveGridManager->drawGrid( wr, 0, true );
 
             // Unbind the texture otherwise the ATI driver crashes when the canvas context is
             // made current after the textures are deleted following an image resize.
@@ -1313,6 +1319,7 @@ void KisView::layerUpdateGUI(bool enable)
     m_filterManager->updateGUI();
     m_toolManager->updateGUI();
     m_gridManager->updateGUI();
+    m_perspectiveGridManager->updateGUI();
 
 
     KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(layer.data());

@@ -102,6 +102,7 @@ class KisFilterManager;
 class KisFilterStrategy;
 class KisGradient;
 class KisGridManager;
+class KisPerspectiveGridManager;
 class KisLabelProgress;
 class KisLayerBox;
 class KisMoveEvent;
@@ -276,6 +277,7 @@ private:
     virtual KisDoc * document() const;
 
     inline KisGridManager * gridManager() { return m_gridManager; }
+    inline KisPerspectiveGridManager* perspectiveGridManager() { return m_perspectiveGridManager; }
 
     inline KisSelectionManager * selectionManager() { return m_selectionManager; }
 
@@ -516,6 +518,7 @@ private:
     KisPartLayerHandler* m_partHandler;
 
     KisGridManager * m_gridManager;
+    KisPerspectiveGridManager * m_perspectiveGridManager;
     KisSelectionManager * m_selectionManager;
     KisFilterManager * m_filterManager;
     KisToolManager * m_toolManager;
@@ -638,6 +641,7 @@ protected:
     friend class KisSelectionManager;
     friend class KisFilterManager;
     friend class KisGridManager;
+    friend class KisPerspectiveGridManager;
 };
 
 class KisPaletteChooser : public QDialog, public Ui::KisPaletteChooser

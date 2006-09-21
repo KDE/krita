@@ -1159,6 +1159,36 @@ bool KoPathShape::combine( KoPathShape *path )
     return true;
 }
 
+bool KoPathShape::separate( QList<KoPathShape*> & separatedPaths )
+{
+    if( ! m_subpaths.size() )
+        return false;
+
+    QMatrix myMatrix = transformationMatrix(0);
+
+    foreach( KoSubpath* subpath, m_subpaths )
+    {
+        KoPathShape *shape = new KoPathShape();
+        if( ! shape ) continue;
+
+        shape->setBorder( border() );
+        shape->setShapeId( shapeId() );
+
+        KoSubpath *newSubpath = new KoSubpath();
+
+        foreach( KoPathPoint* point, *subpath )
+        {
+            KoPathPoint *newPoint = new KoPathPoint( *point );
+            newPoint->map( myMatrix );
+            newSubpath->append( newPoint );
+        }
+        shape->m_subpaths.append( newSubpath );
+        shape->normalize();
+        separatedPaths.append( shape );
+    }
+    return true;
+}
+
 KoPointPosition KoPathShape::findPoint( KoPathPoint* point )
 {
     KoSubpathList::iterator pathIt( m_subpaths.begin() );

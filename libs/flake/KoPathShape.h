@@ -487,7 +487,14 @@ public:
      * @return true if combining was successful, else false
      */
     bool combine( KoPathShape *path );
-    
+
+    /**
+     * @brief Creates separate path shapes, one for each existing subpath.
+     * @param separatedPaths the list which contains the separated path shapes
+     * @return true if separating the path was successful, else false 
+     */
+    bool separate( QList<KoPathShape*> & separatedPaths );
+
 #if 0 // not used yet
     /**
      * @brief Inserts a new point after an existing path point.

@@ -616,3 +616,59 @@ QString KoPathCombineCommand::name() const
 {
     return i18n( "Combine paths" );
 }
+
+KoPathSeparateCommand::KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths )
+: m_controller( controller )
+, m_paths( paths )
+, m_deletePaths( false )
+{
+}
+
+KoPathSeparateCommand::~KoPathSeparateCommand()
+{
+    if( m_deletePaths )
+    {
+        foreach( KoPathShape* p, m_separatedPaths )
+            delete p;
+    }
+}
+
+void KoPathSeparateCommand::execute()
+{
+    if( ! m_separatedPaths.size() )
+    {
+        foreach( KoPathShape* p, m_paths )
+        {
+            QList<KoPathShape*> separatedPaths;
+            if( p->separate( separatedPaths ) )
+                m_separatedPaths << separatedPaths;
+        }
+    }
+    if( m_controller )
+    {
+        foreach( KoPathShape* p, m_paths )
+            m_controller->removeShape( p );
+        foreach( KoPathShape *p, m_separatedPaths )
+            m_controller->addShape( p );
+    }
+    foreach( KoPathShape* p, m_paths )
+        p->repaint();
+}
+
+void KoPathSeparateCommand::unexecute()
+{
+    if( m_controller )
+    {
+        foreach( KoPathShape *p, m_separatedPaths )
+            m_controller->removeShape( p );
+        foreach( KoPathShape* p, m_paths )
+            m_controller->addShape( p );
+    }
+    foreach( KoPathShape* p, m_paths )
+        p->repaint();
+}
+
+QString KoPathSeparateCommand::name() const
+{
+    return i18n( "Separate paths" );
+}

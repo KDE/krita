@@ -285,4 +285,27 @@ private:
     bool m_deletePath;
 };
 
+/// The undo / redo command for separating subpaths into different paths
+class KoPathSeparateCommand : public KCommand
+{
+public:
+    /**
+     * Command for separating subpaths of a list of paths into different paths.
+     * @param controller the controller to used for removing/inserting.
+     * @param paths the list of paths to separate
+     */
+    KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths );
+    virtual ~KoPathSeparateCommand();
+    /// execute the command
+    void execute();
+    /// revert the actions done in execute
+    void unexecute();
+    /// return the name of this command
+    QString name() const;
+private:
+    KoShapeControllerBase *m_controller;
+    QList<KoPathShape*> m_paths;
+    QList<KoPathShape*> m_separatedPaths;
+    bool m_deletePaths;
+};
 #endif

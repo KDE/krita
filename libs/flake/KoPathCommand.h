@@ -282,7 +282,7 @@ private:
     KoShapeControllerBase *m_controller;
     QList<KoPathShape*> m_paths;
     KoPathShape *m_combinedPath;
-    bool m_deletePath;
+    bool m_isCombined;
 };
 
 /// The undo / redo command for separating subpaths into different paths
@@ -306,6 +306,6 @@ private:
     KoShapeControllerBase *m_controller;
     QList<KoPathShape*> m_paths;
     QList<KoPathShape*> m_separatedPaths;
-    bool m_deletePaths;
+    bool m_isSeparated;
 };
 #endif

@@ -564,13 +564,18 @@ KoPathCombineCommand::KoPathCombineCommand( KoShapeControllerBase *controller, c
 : m_controller( controller )
 , m_paths( paths )
 , m_combinedPath( 0 )
-, m_deletePath( true )
+, m_isCombined( false )
 {
 }
 
 KoPathCombineCommand::~KoPathCombineCommand()
 {
-    if( m_deletePath )
+    if( m_isCombined && m_controller )
+    {
+        foreach( KoPathShape* path, m_paths )
+            delete path;
+    }
+    else
         delete m_combinedPath;
 }
 
@@ -588,13 +593,15 @@ void KoPathCombineCommand::execute()
         foreach( KoPathShape* path, m_paths )
             m_combinedPath->combine( path );
     }
+
+    m_isCombined = true;
+
     if( m_controller )
     {
         foreach( KoPathShape* p, m_paths )
             m_controller->removeShape( p );
 
         m_controller->addShape( m_combinedPath );
-        m_deletePath = false;
     }
 }
 
@@ -603,12 +610,13 @@ void KoPathCombineCommand::unexecute()
     if( ! m_paths.size() )
         return;
 
+    m_isCombined = false;
+
     if( m_controller )
     {
         m_controller->removeShape( m_combinedPath );
         foreach( KoPathShape* p, m_paths )
             m_controller->addShape( p );
-        m_deletePath = true;
     }
 }
 
@@ -620,13 +628,18 @@ QString KoPathCombineCommand::name() const
 KoPathSeparateCommand::KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths )
 : m_controller( controller )
 , m_paths( paths )
-, m_deletePaths( false )
+, m_isSeparated( false )
 {
 }
 
 KoPathSeparateCommand::~KoPathSeparateCommand()
 {
-    if( m_deletePaths )
+    if( m_isSeparated && m_controller )
+    {
+        foreach( KoPathShape* p, m_paths )
+            delete p;
+    }
+    else
     {
         foreach( KoPathShape* p, m_separatedPaths )
             delete p;
@@ -644,6 +657,9 @@ void KoPathSeparateCommand::execute()
                 m_separatedPaths << separatedPaths;
         }
     }
+
+    m_isSeparated = true;
+
     if( m_controller )
     {
         foreach( KoPathShape* p, m_paths )
@@ -664,6 +680,9 @@ void KoPathSeparateCommand::unexecute()
         foreach( KoPathShape* p, m_paths )
             m_controller->addShape( p );
     }
+
+    m_isSeparated = false;
+
     foreach( KoPathShape* p, m_paths )
         p->repaint();
 }

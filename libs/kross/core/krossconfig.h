@@ -22,32 +22,7 @@
 
 #include <QString>
 #include <koffice_export.h>
-/**
- * The Kross scripting bridge to embed scripting functionality
- * into an application.
- *
- * - abstract API to access the scripting functionality.
- * - interpreter independend to be able to decide on runtime
- *   if we like to use the python, kjs (KDE JavaScript) or
- *   whatever scripting interpreter.
- * - flexibility by beeing able to connect different
- *   scripting interpreters together into something like
- *   a "working chain" (e.g. python-script script1 spends
- *   some functionality the kjs-script script2 likes to
- *   use.
- * - transparently bridge functionality wrappers like
- *   \a Kross::KexiDB together with interpreters like \a Kross::Python.
- * - Introspection where needed to be able to manipulate
- *   behaviours and functionality on runtime.
- * - Qt/KDE based, so use the extended techs both spends.
- * - integrate nicly as powerfull scripting system into the
- *   Kexi application.
- *
- * \author Sebastian Sauer
- * \sa http://kross.dipe.org
- * \sa http://www.koffice.org
- * \sa http://www.kde.org
- */
+
 namespace Kross {
 
     /// Debugging enabled.

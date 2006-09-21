@@ -165,7 +165,6 @@ QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
     selectScript();
     unselectScript();
 
-//TODO    return Kross::Object::Ptr(0);
     return QVariant();
 }
 

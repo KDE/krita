@@ -686,7 +686,7 @@ void KisOpenGLCanvasPainter::drawCubicBezier(const QPointArray& pointArray, int 
 
     recursiveCurve(P1, P2, P3, P4, 1, dest);
 
-    glBegin(GL_LINES);
+    glBegin(GL_LINE_STRIP);
 
     for (QValueList<QPoint>::iterator it = dest.begin(); it != dest.end(); it++) {
         QPoint point = (*it);

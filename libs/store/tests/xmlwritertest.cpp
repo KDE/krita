@@ -83,7 +83,7 @@ int main( int argc, char** argv ) {
     writer.addTextSpan( QString::fromLatin1( "   \t\n foo  " ) );
     writer.endElement();
     TEST_END( "textspan test", "<r>\n"
-              " <p> <text:s text:c=\"2\"/><text:tab/><text:line-break/> foo <text:s/></p>\n"
+              " <p><text:s text:c=\"3\"/><text:tab/><text:line-break/> foo<text:s text:c=\"2\"/></p>\n"
               "</r>\n" );
 
     TEST_BEGIN( 0, 0 );
@@ -93,7 +93,7 @@ int main( int argc, char** argv ) {
     writer.addTextSpan( QString::fromUtf8( "   \t\n foö  " ), tabCache );
     writer.endElement();
     TEST_END( "textspan with tabcache", "<r>\n"
-              " <p> <text:s text:c=\"2\"/><text:tab text:tab-ref=\"1\"/><text:line-break/> foö <text:s/></p>\n"
+              " <p><text:s text:c=\"3\"/><text:tab text:tab-ref=\"1\"/><text:line-break/> foö<text:s text:c=\"2\"/></p>\n"
               "</r>\n" );
 
     TEST_BEGIN( 0, 0 );

@@ -379,8 +379,10 @@ void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCac
 {
     int len = text.length();
     int nrSpaces = 0; // number of consecutive spaces
+    bool leadingSpace = false;
     QString str;
     str.reserve( len );
+
     // Accumulate chars either in str or in nrSpaces (for spaces).
     // Flush str when writing a subelement (for spaces or for another reason)
     // Flush nrSpaces when encountering two or more consecutive spaces
@@ -389,9 +391,16 @@ void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCac
         if ( ch != ' ' ) {
             if ( nrSpaces > 0 ) {
                 // For the first space we use ' '.
-                // "it is good practice to use (text:s) for the second and all following SPACE characters in a sequence."
+                // "it is good practice to use (text:s) for the second and all following SPACE 
+                // characters in a sequence." (per the ODF spec)
+                // however, per the HTML spec, "authors should not rely on user agents to render 
+                // white space immediately after a start tag or immediately before an end tag"
+                // (and both we and OO.o ignore leading spaces in <text:p> or <text:h> elements...)
+                if (!leadingSpace)
+                {
                 str += ' ';
                 --nrSpaces;
+                }
                 if ( nrSpaces > 0 ) { // there are more spaces
                     if ( !str.isEmpty() )
                         addTextNode( str );
@@ -403,6 +412,7 @@ void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCac
                 }
             }
             nrSpaces = 0;
+            leadingSpace = false;
         }
         switch ( ch.unicode() ) {
         case '\t':
@@ -422,6 +432,8 @@ void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCac
             endElement();
             break;
         case ' ':
+            if ( i == 0 )
+                leadingSpace = true;
             ++nrSpaces;
             break;
         default:
@@ -430,10 +442,6 @@ void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCac
         }
     }
     // either we still have text in str or we have spaces in nrSpaces
-    if ( nrSpaces > 0 ) {
-        str += ' ';
-        --nrSpaces;
-    }
     if ( !str.isEmpty() ) {
         addTextNode( str );
     }

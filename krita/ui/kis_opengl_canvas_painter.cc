@@ -688,10 +688,12 @@ void KisOpenGLCanvasPainter::drawCubicBezier(const QPointArray& pointArray, int 
 
     glBegin(GL_LINE_STRIP);
 
+    glVertex2i(P1.x(), P1.y());
     for (QValueList<QPoint>::iterator it = dest.begin(); it != dest.end(); it++) {
         QPoint point = (*it);
         glVertex2i(point.x(), point.y());
     }
+    glVertex2i(P4.x(), P4.y());
 
     glEnd();
 }

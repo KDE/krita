@@ -146,7 +146,7 @@ public:
     virtual double zoomFactor() const = 0;
     
     /**
-     * retrieve the undo adapater -- there is one undo adapter
+     * retrieve the undo adapter -- there is one undo adapter
      * per document, and it collects all transactions
      */
     virtual KisUndoAdapter *undoAdapter() const = 0;

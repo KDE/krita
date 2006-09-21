@@ -269,7 +269,6 @@ private:
 
     virtual KisUndoAdapter *undoAdapter() const;
 
-    virtual KisCanvasController *canvasController() const;
     virtual KisToolControllerInterface *toolController() const;
 
     virtual KisProgressDisplayInterface *progressDisplay() const;
@@ -288,8 +287,8 @@ private:
 
 public:
 
-    KisCanvasController * getCanvasController() { return this; };
-
+    virtual KisCanvasController *canvasController() const;
+    KisInputDevice currentInputDevice() const;
 
 private slots:
     virtual void updateCanvas();
@@ -336,7 +335,6 @@ private:
     virtual QCursor setCanvasCursor(const QCursor & cursor);
 
     void setInputDevice(KisInputDevice inputDevice);
-    KisInputDevice currentInputDevice() const;
 
 // -------------------------------------------------------------------------//
 //                      KisView internals

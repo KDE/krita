@@ -428,7 +428,7 @@ KisLayerSP KisSelectionManager::paste()
         gc.end();
 
        //figure out where to position the clip
-        KisCanvasController *cc = m_parent->getCanvasController();
+        KisCanvasController *cc = m_parent->canvasController();
         QPoint center = cc->viewToWindow(QPoint(cc->kiscanvas()->width()/2, cc->kiscanvas()->height()/2));
         QPoint bottomright = cc->viewToWindow(QPoint(cc->kiscanvas()->width(), cc->kiscanvas()->height()));
         if(bottomright.x() > img->width())

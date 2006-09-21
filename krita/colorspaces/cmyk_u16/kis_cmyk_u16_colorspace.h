@@ -22,7 +22,6 @@
 
 #include <krita_export.h>
 
-#include "kis_global.h"
 #include "KoU16ColorSpaceTrait.h"
 #include "KoLcmsColorSpaceTrait.h"
 #include "KoIntegerMaths.h"

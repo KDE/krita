@@ -277,7 +277,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent)
 
     m_selectionManager = new KisSelectionManager(this, doc);
     m_filterManager = new KisFilterManager(this, doc);
-    m_toolManager = new KisToolManager(canvasSubject(), getCanvasController());
+    m_toolManager = new KisToolManager(canvasSubject(), this);
     m_gridManager = new KisGridManager(this);
 
     // This needs to be set before the dockers are created.

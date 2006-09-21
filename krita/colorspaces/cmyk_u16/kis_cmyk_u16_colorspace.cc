@@ -25,10 +25,8 @@
 
 #include <QImage>
 
-#include <kdebug.h>
 #include <klocale.h>
 
-#include <kis_debug_areas.h>
 #include "kis_cmyk_u16_colorspace.h"
 #include "KoU16ColorSpaceTrait.h"
 #include "kis_color_conversions.h"
@@ -153,11 +151,11 @@ void KisCmykU16ColorSpace::invertColor(quint8 * src, qint32 nPixels)
 void KisCmykU16ColorSpace::applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *adj, qint32 nPixels)
 {
     quint32 psize = pixelSize();
-    
+
     quint8 * tmp = new quint8[nPixels * psize];
     quint8 * tmpPtr = tmp;
     memcpy(tmp, dst, nPixels * psize);
-    
+
     KoLcmsColorSpaceTrait::applyAdjustment(src, dst, adj, nPixels);
 
     // Copy the alpha, which lcms doesn't do for us, grumble.
@@ -166,9 +164,9 @@ void KisCmykU16ColorSpace::applyAdjustment(const quint8 *src, quint8 *dst, KoCol
     {
         quint16 *pixelAlphaSrc = reinterpret_cast<quint16 *>(tmpPtr + 8);
         quint16 *pixelAlphaDst = reinterpret_cast<quint16 *>(dst + 8);
-        
+
         *pixelAlphaDst= *pixelAlphaSrc;
-        
+
         tmpPtr += psize;
         dst += psize;
     }
@@ -462,7 +460,7 @@ void KisCmykU16ColorSpace::compositeBurn(quint8 *dstRowStart, qint32 dstRowStrid
 
             srcColor = qMin(((UINT16_MAX - dstColor) * (UINT16_MAX + 1u)) / (srcColor + 1u), UINT16_MAX);
             if (srcColor > UINT16_MAX - srcColor) srcColor = UINT16_MAX;
-            
+
             quint16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
             dst[channel] = newColor;

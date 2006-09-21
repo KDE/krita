@@ -20,7 +20,9 @@
 
 #include <QObject>
 #include "kis_types.h"
+#include "kis_paint_device.h"
 #include "kis_layer_visitor.h"
+#include "kis_layer.h"
 #include "KoCompositeOp.h"
 #include <krita_export.h>
 

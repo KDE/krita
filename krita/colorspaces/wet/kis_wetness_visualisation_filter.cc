@@ -18,7 +18,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <ktoggleaction.h>
 
@@ -28,7 +27,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_factory.h>
 #include "kis_wet_colorspace.h"
-#include <kis_debug_areas.h>
 #include "kis_wetness_visualisation_filter.h"
 
 WetnessVisualisationFilter::WetnessVisualisationFilter(KisView* view)
@@ -49,9 +47,8 @@ void WetnessVisualisationFilter::setAction(KToggleAction* action) {
 }
 
 void WetnessVisualisationFilter::slotActivated() {
-    kDebug(DBG_AREA_CMS) << "activated" << endl;
+
     if (!m_action) {
-        kDebug(DBG_AREA_CMS) << "no action" << endl;
         return;
     }
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(

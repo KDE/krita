@@ -27,8 +27,6 @@
 #include <Q3ValueList>
 
 #include <klocale.h>
-#include <kdebug.h>
-#include <kis_debug_areas.h>
 #include "KoLcmsColorSpaceTrait.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_image.h"

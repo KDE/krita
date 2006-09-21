@@ -65,17 +65,5 @@ const double PRESSURE_MAX = 1.0;
 const double PRESSURE_DEFAULT = (PRESSURE_MAX - PRESSURE_MIN) / 2;
 const double PRESSURE_THRESHOLD = 5.0 / 255.0;
 
-
-namespace krita {
-
-    // String constants for palettes and palette widgets
-    const QString TOOL_OPTION_WIDGET ("tooloptions");
-
-    const QString CONTROL_PALETTE ("controlpalette");
-    const QString PAINTBOX ("paintbox");
-    const QString COLORBOX ("colorbox");
-    const QString LAYERBOX ("layerbox");
-}
-
 #endif // KISGLOBAL_H_
 

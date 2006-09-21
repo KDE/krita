@@ -21,9 +21,7 @@
 
 #include <kinstance.h>
 #include <kgenericfactory.h>
-#include <kdebug.h>
 
-#include <kis_debug_areas.h>
 #include <KoColorSpaceRegistry.h>
 
 #include "rgb_u16_plugin.h"

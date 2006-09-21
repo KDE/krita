@@ -1128,7 +1128,7 @@ QString PerfTest::paintViewTest(quint32 testCount)
 #endif
 
     for (quint32 i = 0; i < testCount; ++i) {
-        m_view->getCanvasController()->updateCanvas(QRect(0, 0, 512, 512));
+        m_view->canvasController()->updateCanvas(QRect(0, 0, 512, 512));
     }
 
 #if USE_CALLGRIND
@@ -1154,7 +1154,7 @@ QString PerfTest::paintViewTest(quint32 testCount)
     t.restart();
 
     for (quint32 i = 0; i < testCount; ++i) {
-        m_view->getCanvasController()->updateCanvas(QRect(0, 0, 512, 512));
+        m_view->canvasController()->updateCanvas(QRect(0, 0, 512, 512));
     }
 
     report = report.append(QString("    painted a 512 x 512 image with 3 layers %1 times: %2 ms\n").arg(testCount).arg(t.elapsed()));
@@ -1177,7 +1177,7 @@ QString PerfTest::paintViewFPSTest()
     const int millisecondsPerSecond = 1000;
 
     while (t.elapsed() < millisecondsPerSecond) {
-        m_view->getCanvasController()->updateCanvas();
+        m_view->canvasController()->updateCanvas();
         numViewsPainted++;
     }
 

@@ -21,10 +21,6 @@
 
 #include <kinstance.h>
 #include <kgenericfactory.h>
-#include <kdebug.h>
-
-#include <kis_debug_areas.h>
-
 #include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
 

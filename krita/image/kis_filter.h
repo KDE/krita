@@ -116,7 +116,7 @@ public:
      * colorspace should implement the api fully; and that the filter should simply call
      * that api. After all, you don't need lcms to desaturate.
      *
-     * @param colorsSpace
+     * @param KoColorSpace the colorspace that we want to know this filter works with
      */
     virtual bool workWith(KoColorSpace*) { return true; }
 

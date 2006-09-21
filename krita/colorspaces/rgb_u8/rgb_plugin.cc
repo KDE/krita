@@ -28,11 +28,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
-#include <kis_debug_areas.h>
-
-#include <kis_debug_areas.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
 

@@ -27,7 +27,6 @@
 #include <kgenericfactory.h>
 
 #include <kis_colorspace_registry.h>
-#include <kis_debug_areas.h>
 #include "wet_sticky_plugin.h"
 
 #include "kis_wet_sticky_colorspace.h"

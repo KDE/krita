@@ -138,6 +138,7 @@ protected:
     // Allow KisView to render on the widget directly, but everything else
     // has restricted access.
     friend class KisView;
+    friend class KisCanvasControllerImpl;
     friend class QPainter;
 
     // One of these will be valid, the other null. In Qt3, using a QPainter on

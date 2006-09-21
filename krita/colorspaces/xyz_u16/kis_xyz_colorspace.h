@@ -20,7 +20,6 @@
 
 #include <QColor>
 
-#include "kis_global.h"
 #include "KoIntegerMaths.h"
 #include "kis_u16_base_colorspace.h"
 

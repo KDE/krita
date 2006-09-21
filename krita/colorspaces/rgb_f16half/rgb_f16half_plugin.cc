@@ -22,10 +22,7 @@
 
 #include <kinstance.h>
 #include <kgenericfactory.h>
-#include <kdebug.h>
-
-#include <kis_debug_areas.h>
-#include <KoColorSpaceRegistry.h>
+k#include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "rgb_f16half_plugin.h"

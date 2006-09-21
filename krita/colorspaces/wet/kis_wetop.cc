@@ -19,12 +19,9 @@
 #include <QRect>
 #include <QCheckBox>
 
-#include <kdebug.h>
-
 #include "KoIntegerMaths.h"
 
 #include <kis_brush.h>
-#include <kis_debug_areas.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_types.h>
@@ -130,7 +127,6 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KoColorSpace * cs = device->colorSpace();
 
     if (cs->id() != KoID("WET","")) {
-        kDebug(DBG_AREA_CMS) << "You cannot paint wet paint on dry pixels.\n";
         return;
     }
 
@@ -147,7 +143,6 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // the paint
     // double wetness = paint.w; // XXX: Was unused
     // strength is a double in the 0 - 2 range, but upscaled to quint16:
-    kDebug() << "Original strength as in paint.h: " << paint.h << endl;
 
     double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
 

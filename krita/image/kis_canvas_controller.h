@@ -177,15 +177,6 @@ public:
     virtual QCursor setCanvasCursor(const QCursor & cursor) = 0;
     
     /**
-     * Set the active input device to the specified input device, This
-     * could be a mouse, a stylus, an eraser or any other pointing input
-     * device.
-     *
-     * @param inputDevice the new input device
-     */
-    virtual void setInputDevice(KisInputDevice inputDevice) = 0;
-
-    /**
      * @return the current input device, such as a mouse or a stylus
      */
     virtual KisInputDevice currentInputDevice() const = 0;

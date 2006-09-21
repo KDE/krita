@@ -18,10 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdebug.h>
 #include <kis_view.h>
 #include <kis_image.h>
-#include <kis_debug_areas.h>
 #include "kis_texture_painter.h"
 #include "kis_texture_filter.h"
 
@@ -29,10 +27,7 @@ void WetPaintDevAction::act(KisPaintDeviceSP device, qint32 w, qint32 h) const {
     KoColorSpace * cs = device->colorSpace();
 
     if (cs->id() != KoID("WET","")) {
-        kDebug(DBG_AREA_CMS) << "You set this kind of texture on non-wet layers!.\n";
         return;
-    } else {
-        kDebug(DBG_AREA_CMS) << "Wet Paint Action activated!\n";
     }
 
     // XXX if params of the painter get configurable, make them here configurable as well?

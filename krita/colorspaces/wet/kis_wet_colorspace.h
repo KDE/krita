@@ -23,7 +23,6 @@
 #include <q3valuelist.h>
 #include <QMap>
 
-#include "kis_global.h"
 #include "KoLcmsColorSpaceTrait.h"
 
 class KisFilter;

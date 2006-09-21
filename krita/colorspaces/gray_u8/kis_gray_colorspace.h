@@ -23,7 +23,6 @@
 
 #include <krita_export.h>
 
-#include "kis_global.h"
 #include "KoLcmsColorSpaceTrait.h"
 #include "KoU8ColorSpaceTrait.h"
 

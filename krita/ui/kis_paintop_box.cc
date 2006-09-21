@@ -45,7 +45,7 @@
 
 KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name)
     : super (parent),
-      m_canvasController(view->getCanvasController())
+      m_canvasController(view->canvasController())
 {
     setObjectName(name);
 
@@ -80,7 +80,7 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
     connect(view, SIGNAL(sigInputDeviceChanged(const KisInputDevice&)),
             this, SLOT(slotInputDeviceChanged(const KisInputDevice&)));
 
-    setCurrentPaintop(defaultPaintop(m_canvasController->currentInputDevice()));
+    setCurrentPaintop(defaultPaintop(view->currentInputDevice()));
 }
 
 KisPaintopBox::~KisPaintopBox()

@@ -21,12 +21,8 @@
 
 #include <kinstance.h>
 #include <kgenericfactory.h>
-#include <kdebug.h>
-
-#include <kis_debug_areas.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
-#include <kis_debug_areas.h>
 #include "cmyk_u16_plugin.h"
 #include "kis_cmyk_u16_colorspace.h"
 

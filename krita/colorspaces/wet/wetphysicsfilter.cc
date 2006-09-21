@@ -20,14 +20,11 @@
 #include <vector>
 
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <kis_iterators_pixel.h>
 #include <kis_filter_registry.h>
-#include <kis_debug_areas.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
-#include <kis_debug_areas.h>
 #include "wetphysicsfilter.h"
 
 
@@ -43,7 +40,6 @@ WetPhysicsFilter::WetPhysicsFilter()
 
 void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& r)
 {
-     kDebug() << "Wetphysics filter called " << dst->objectName() << ", " << r << endl;
     /*
       This is actually a kind of convolution filter. Use the slow but clear way of convolving
       until I get the physics right; then move to the faster way of convolving from the convolution
@@ -130,7 +126,6 @@ void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, K
             topIt.nextRow();
             midIt.nextRow();
             botIt.nextRow();
-            //kDebug() << "Done one row: " << y << "\n";
             x = 0;
             ++y;
         }

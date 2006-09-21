@@ -44,19 +44,19 @@
 namespace {
 
     class CanvasAdapter : public KoCanvasAdapter {
-    
+
     public:
         CanvasAdapter(KisCanvasSubject * canvasSubject) : KoCanvasAdapter(), m_canvasSubject(canvasSubject) {}
         virtual ~CanvasAdapter() {}
-        
+
     public:
-    
-        virtual KoRect visibleArea() 
+
+        virtual KoRect visibleArea()
             {
                 if (!m_canvasSubject->currentImg()) return KoRect(0,0,0,0);
-                
+
                 KisCanvasController * c = m_canvasSubject->canvasController();
-                
+
                 if (c && c->kiscanvas())
                     return c->viewToWindow(KisRect(0, 0, c->kiscanvas()->width(), c->kiscanvas()->height()));
                 else
@@ -68,22 +68,22 @@ namespace {
                return m_canvasSubject->zoomFactor();
            }
 
-        virtual QRect size() 
+        virtual QRect size()
             {
                 if (!m_canvasSubject->currentImg()) return QRect(0,0,0,0);
-                
-                return QRect(0, 0, m_canvasSubject->currentImg()->width(), m_canvasSubject->currentImg()->height()); 
+
+                return QRect(0, 0, m_canvasSubject->currentImg()->width(), m_canvasSubject->currentImg()->height());
             }
-            
-        virtual void setViewCenterPoint(double x, double y) 
-            { 
+
+        virtual void setViewCenterPoint(double x, double y)
+            {
                 m_canvasSubject->canvasController()->zoomAroundPoint(x, y, m_canvasSubject->zoomFactor());
             }
-            
+
     private:
-    
+
         KisCanvasSubject * m_canvasSubject;
-    
+
     };
 
     class ZoomListener : public KoZoomAdapter {
@@ -110,23 +110,23 @@ namespace {
     };
 
     class ThumbnailProvider : public KoThumbnailAdapter {
-    
+
         public:
             ThumbnailProvider(KisImageSP image, KisCanvasSubject* canvasSubject)
                 : KoThumbnailAdapter()
                 , m_image(image)
                 , m_canvasSubject(canvasSubject) {}
-                
+
             virtual ~ThumbnailProvider() {}
-            
+
         public:
-        
+
             virtual QSize pixelSize()
                 {
                     if (!m_image) return QSize(0, 0);
                     return QSize(m_image->width(), m_image->height());
                 }
-                
+
             virtual QImage image(QRect r, QSize thumbnailSize)
                 {
                     if (!m_image || r.isEmpty() || thumbnailSize.width() == 0 || thumbnailSize.height() == 0) {
@@ -135,7 +135,7 @@ namespace {
 
                     KisPaintDevice thumbnailRect(m_image->colorSpace(), "thumbnailRect");
                     KisPaintDeviceSP mergedImage = m_image->projection();
-                    
+
                     qint32 imageWidth = m_image->width();
                     qint32 imageHeight = m_image->height();
                     quint32 pixelSize = m_image->colorSpace()->pixelSize();
@@ -159,7 +159,7 @@ namespace {
                         }
                     }
 
-                    return thumbnailRect.convertToQImage(m_canvasSubject->monitorProfile(), 0, 0, r.width(), r.height(), 
+                    return thumbnailRect.convertToQImage(m_canvasSubject->monitorProfile(), 0, 0, r.width(), r.height(),
                                                          m_canvasSubject->HDRExposure());
                 }
 
@@ -168,10 +168,10 @@ namespace {
                     m_image = image;
                 }
         private:
-        
+
             KisImageSP m_image;
             KisCanvasSubject * m_canvasSubject;
-    
+
     };
 
 }
@@ -184,6 +184,8 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
     setObjectName(name);
 
     QVBoxLayout * l = new QVBoxLayout(this);
+
+    if (!m_subject) return;
 
     m_image = m_subject->currentImg();
 

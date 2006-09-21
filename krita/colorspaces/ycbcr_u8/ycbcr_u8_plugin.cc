@@ -24,10 +24,8 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
-#include <kis_debug_areas.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
-#include <kis_debug_areas.h>
 
 #include "kis_ycbcr_u8_colorspace.h"
 

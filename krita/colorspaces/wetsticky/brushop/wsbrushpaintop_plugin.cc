@@ -27,7 +27,6 @@
 #include <kgenericfactory.h>
 
 #include <kis_paintop_registry.h>
-#include <kis_debug_areas.h>
 #include "kis_wsbrushop.h"
 
 #include "wsbrushpaintop_plugin.h"

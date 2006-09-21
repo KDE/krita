@@ -36,7 +36,7 @@ KisPartLayerHandler::KisPartLayerHandler(KisView* view, const KoDocumentEntry& e
                                          KisGroupLayerSP parent, KisLayerSP above)
     : m_parent(parent), m_above(above), m_view(view), m_entry(entry) {
     m_started = false;
-    view->getCanvasController()->setCanvasCursor( KisCursor::selectCursor() );
+    view->canvasController()->setCanvasCursor( KisCursor::selectCursor() );
 }
 
 void KisPartLayerHandler::done() {
@@ -49,7 +49,7 @@ void KisPartLayerHandler::gotMoveEvent(KisMoveEvent* event) {
         return;
     }
 
-    QPainter painter( m_view->getCanvasController()->kiscanvas()->canvasWidget() );
+    QPainter painter( m_view->canvasController()->kiscanvas()->canvasWidget() );
     //painter.setRasterOp( NotROP );
 
     // erase old lines

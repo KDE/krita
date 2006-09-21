@@ -33,16 +33,13 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 
 #include <KoMainWindow.h>
 
-#include <kis_debug_areas.h>
 #include "kis_meta_registry.h"
 #include <kis_factory.h>
 #include <kis_image.h>
-#include <kis_debug_areas.h>
 #include <kis_types.h>
 #include <kis_view.h>
 #include <KoColorSpaceRegistry.h>

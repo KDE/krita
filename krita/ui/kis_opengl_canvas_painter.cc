@@ -252,6 +252,7 @@ Qt::Qt::RasterOp KisOpenGLCanvasPainter::rasterOp() const
 
 void KisOpenGLCanvasPainter::setRasterOp(Qt::RasterOp /*rasterOp*/)
 {
+    // XXX: Implement for curve tool
 }
 
 const QPoint& KisOpenGLCanvasPainter::brushOrigin() const
@@ -547,10 +548,12 @@ void KisOpenGLCanvasPainter::drawWinFocusRect(const QRect& /*r*/, const QColor& 
 
 void KisOpenGLCanvasPainter::drawRoundRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*xRnd*/, int /*yRnd*/)
 {
+    // XXX: Implement for the curve tool
 }
 
-void KisOpenGLCanvasPainter::drawRoundRect(const QRect& /*r*/, int /*xRnd*/, int /*yRnd*/)
+void KisOpenGLCanvasPainter::drawRoundRect(const QRect& r, int xRnd, int yRnd)
 {
+    drawRoundRect(r.x(), r.y(), r.width(), r.height(), xRnd, yRnd);
 }
 
 void KisOpenGLCanvasPainter::drawEllipse(int x, int y, int w, int h)
@@ -643,6 +646,7 @@ void KisOpenGLCanvasPainter::drawConvexPolygon(const QPointArray& /*pointArray*/
 
 void KisOpenGLCanvasPainter::drawCubicBezier(const QPointArray& /*pointArray*/, int /*index*/)
 {
+    // XXX: Implement for curve tool
 }
 
 void KisOpenGLCanvasPainter::drawPixmap(int /*x*/, int /*y*/, const QPixmap& /*pixmap*/, int /*sx*/, int /*sy*/, int /*sw*/, int /*sh*/)

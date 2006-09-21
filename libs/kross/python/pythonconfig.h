@@ -44,30 +44,6 @@
 
 namespace Kross {
 
-/**
- * The Python plugin for the \a Kross scripting framework.
- *
- * The code in this namespace manage the embedded python
- * interpreter and python-scripts.
- *
- * There is no dependency to e.g. the \a Kross::KexiDB
- * wrapper. Everything is handled through the common
- * \a Kross::Api bridge. Therefore this interpreter-
- * implementation should be able to make all defined
- * wrappers accessible by the python scripting
- * language.
- *
- * Internaly we use PyCXX - a set of classes to help
- * create extensions of python in the C++ language - to
- * access the python c api. Any python version since
- * 2.0 is supported.
- *
- * \author Sebastian Sauer
- * \sa http://www.python.org
- * \sa http://cxx.sourceforge.net
- */
-namespace Python {
-
     // The version of this python plugin. This will be exported
     // to the scripting code. That way we're able to write
     // scripting code for different incompatible Kross python
@@ -101,6 +77,6 @@ namespace Python {
 
     //#define KROSS_PYTHON_VARIANT_DEBUG
 
-}}
+}
 
 #endif

@@ -71,35 +71,19 @@ namespace Kross {
         #define krosswarning(x)
     #endif
 
-    /**
-     * The common Kross API used as common codebase.
-     *
-     * The API spends \a Kross::Api::Object and more specialized
-     * classes to bridge other Kross parts together. Interaction
-     * between objects got wrapped at runtime and introspection-
-     * functionality enables dynamic manipulations.
-     * The proxy functionality prevents cross-dependencies
-     * between Kross parts like the \a Kross::Python implementation
-     * and the \a Kross::KexiDB wrapper.
-     *
-     * \author Sebastian Sauer
-     */
-    namespace Api {
+    #define KROSS_OBJECT_METACALL_DEBUG
+    //#define KROSS_METATYPE_DEBUG
+    #define KROSS_INTERPRETER_DEBUG
 
-        #define KROSS_OBJECT_METACALL_DEBUG
-        //#define KROSS_METATYPE_DEBUG
-        #define KROSS_INTERPRETER_DEBUG
+    // The name of the interpreter's library. Those library got loaded
+    // dynamicly during runtime. Comment out to disable compiling of
+    // the interpreter-plugin or to hardcode the location of the lib
+    // like I did at the following line.
 
-        // The name of the interpreter's library. Those library got loaded
-        // dynamicly during runtime. Comment out to disable compiling of
-        // the interpreter-plugin or to hardcode the location of the lib
-        // like I did at the following line.
-
-        //#define KROSS_PYTHON_LIBRARY "/home/kde4/koffice/_build/lib/krosspython.la"
-        #define KROSS_PYTHON_LIBRARY "krosspython"
-        #define KROSS_RUBY_LIBRARY "krossruby"
-        #define KROSS_KJS_LIBRARY "krosskjs"
-    }
+    //#define KROSS_PYTHON_LIBRARY "/home/kde4/koffice/_build/lib/krosspython.la"
+    #define KROSS_PYTHON_LIBRARY "krosspython"
+    #define KROSS_RUBY_LIBRARY "krossruby"
+    #define KROSS_KJS_LIBRARY "krosskjs"
 
 }
 

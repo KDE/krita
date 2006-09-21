@@ -11,4 +11,8 @@ add_subdirectory( roundcorners )
 add_subdirectory( smalltilesfilter )
 add_subdirectory( sobelfilter )
 add_subdirectory( colorsfilters )
+add_subdirectory( wavefilter )
+add_subdirectory( noisefilter )
+add_subdirectory( lenscorrectionfilter )
+add_subdirectory( randompickfilter )
 

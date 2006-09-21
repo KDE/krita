@@ -32,6 +32,7 @@
 class QComboBox;
 class KTextEdit;
 
+/// \internal
 class TestWindow : public KMainWindow
 {
         Q_OBJECT

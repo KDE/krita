@@ -28,6 +28,7 @@
 
 #include <kdebug.h>
 
+/// \internal
 class TestObject : public QObject
 {
         Q_OBJECT

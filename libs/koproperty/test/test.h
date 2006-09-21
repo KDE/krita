@@ -29,6 +29,7 @@
 #include "set.h"
 
 /*!
+ * @internal
  * @short KoProperty test appliation main window
  * @author Cedric Pasteur <cedric.pasteur@free.fr>
  * @version 0.1

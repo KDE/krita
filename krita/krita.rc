@@ -135,7 +135,7 @@
 
 </MenuBar>
 
-<ToolBar name="edit_toolbar" position="top"><Text>Edit</Text>
+<!--ToolBar name="edit_toolbar" position="top"><Text>Edit</Text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -144,13 +144,13 @@
   <Action name="remove"/>
   <Action name="scrap_selection"/>
   <Action name="paste_special"/>
-</ToolBar>
+</ToolBar-->
 
-<ToolBar name="navigation" position="top"><Text>Navigation</Text>
+<!--ToolBar name="navigation" position="top"><Text>Navigation</Text>
   <Action name="refresh_canvas"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
-</ToolBar>
+</ToolBar-->
 
 <ToolBar name="ToolBox" position="left">
     <Text>Krita</Text>

@@ -97,7 +97,7 @@ void KisOpenGLCanvasPainter::updateViewTransformation()
     glOrtho(0, m_widget->width(), m_widget->height(), 0, -1, 1);
 
     glTranslatef(m_viewport.x(), m_viewport.y(), 0.0);
-    glScalef(static_cast<float>(m_viewport.width()) / m_window.width(), 
+    glScalef(static_cast<float>(m_viewport.width()) / m_window.width(),
              static_cast<float>(m_viewport.height()) / m_window.height(),
              1.0);
     glTranslatef(-m_window.x(), -m_window.y(), 0.0);
@@ -252,7 +252,6 @@ Qt::Qt::RasterOp KisOpenGLCanvasPainter::rasterOp() const
 
 void KisOpenGLCanvasPainter::setRasterOp(Qt::RasterOp /*rasterOp*/)
 {
-    // XXX: Implement for curve tool
 }
 
 const QPoint& KisOpenGLCanvasPainter::brushOrigin() const
@@ -548,12 +547,10 @@ void KisOpenGLCanvasPainter::drawWinFocusRect(const QRect& /*r*/, const QColor& 
 
 void KisOpenGLCanvasPainter::drawRoundRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*xRnd*/, int /*yRnd*/)
 {
-    // XXX: Implement for the curve tool
 }
 
-void KisOpenGLCanvasPainter::drawRoundRect(const QRect& r, int xRnd, int yRnd)
+void KisOpenGLCanvasPainter::drawRoundRect(const QRect& /*r*/, int /*xRnd*/, int /*yRnd*/)
 {
-    drawRoundRect(r.x(), r.y(), r.width(), r.height(), xRnd, yRnd);
 }
 
 void KisOpenGLCanvasPainter::drawEllipse(int x, int y, int w, int h)
@@ -644,9 +641,59 @@ void KisOpenGLCanvasPainter::drawConvexPolygon(const QPointArray& /*pointArray*/
 {
 }
 
-void KisOpenGLCanvasPainter::drawCubicBezier(const QPointArray& /*pointArray*/, int /*index*/)
+QPoint midpoint (const QPoint& P1, const QPoint& P2)
 {
-    // XXX: Implement for curve tool
+    QPoint temp;
+    temp.setX((P1.x()+P2.x())/2);
+    temp.setY((P1.y()+P2.y())/2);
+    return temp;
+}
+
+#define MAX_LEVEL 5
+
+void recursiveCurve (const QPoint& P1, const QPoint& P2, const QPoint& P3,
+                     const QPoint& P4, int level, QValueList<QPoint>& dest)
+{
+    if (level > MAX_LEVEL) {
+        dest.append(midpoint(P1,P4));
+        return;
+    }
+
+    QPoint L1, L2, L3, L4;
+    QPoint H, R1, R2, R3, R4;
+
+    L1 = P1;
+    L2 = midpoint(P1, P2);
+    H  = midpoint(P2, P3);
+    R3 = midpoint(P3, P4);
+    R4 = P4;
+    L3 = midpoint(L2, H);
+    R2 = midpoint(R3, H);
+    L4 = midpoint(L3, R2);
+    R1 = L4;
+    recursiveCurve(L1, L2, L3, L4, level + 1, dest);
+    recursiveCurve(R1, R2, R3, R4, level + 1, dest);
+}
+
+void KisOpenGLCanvasPainter::drawCubicBezier(const QPointArray& pointArray, int index)
+{
+    QPoint P1, P2, P3, P4;
+    QValueList<QPoint> dest;
+    P1 = pointArray[index++];
+    P2 = pointArray[index++];
+    P3 = pointArray[index++];
+    P4 = pointArray[index];
+
+    recursiveCurve(P1, P2, P3, P4, 1, dest);
+
+    glBegin(GL_LINES);
+
+    for (QValueList<QPoint>::iterator it = dest.begin(); it != dest.end(); it++) {
+        QPoint point = (*it);
+        glVertex2i(point.x(), point.y());
+    }
+
+    glEnd();
 }
 
 void KisOpenGLCanvasPainter::drawPixmap(int /*x*/, int /*y*/, const QPixmap& /*pixmap*/, int /*sx*/, int /*sy*/, int /*sw*/, int /*sh*/)

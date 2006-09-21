@@ -39,46 +39,59 @@
 
 namespace Kross {
 
-    /**********************************************************************
+    /**
      * The RubyType helper classes used to cast between QVariant
      * and VALUE values.
      *
+     * Following QVariant::Type's are implemented;
+     *   \li QVariant::Invalid
+     *   \li QVariant::Int
+     *   \li QVariant::UInt
+     *   \li QVariant::Double
+     *   \li QVariant::Bool
+     *   \li QVariant::LongLong
+     *   \li QVariant::ULongLong
+     *   \li QVariant::ByteArray
+     *   \li QVariant::String
+     *   \li QVariant::StringList
+     *   \li QVariant::List
+     *   \li QVariant::Map
+     *
      * Following QVariant::Type's are unimplemented yet (do we need them anyways?);
-     *   QVariant::BitArray
-     *   QVariant::Date
-     *   QVariant::Time
-     *   QVariant::DateTime
-     *   QVariant::Bitmap
-     *   QVariant::Brush
-     *   QVariant::Char
-     *   QVariant::Color
-     *   QVariant::Cursor
-     *   QVariant::Font
-     *   QVariant::Icon
-     *   QVariant::Image
-     *   QVariant::KeySequence
-     *   QVariant::Line
-     *   QVariant::LineF
-     *   QVariant::Locale
-     *   QVariant::Palette
-     *   QVariant::Pen
-     *   QVariant::Pixmap
-     *   QVariant::Point
-     *   QVariant::PointArray
-     *   QVariant::PointF
-     *   QVariant::Polygon
-     *   QVariant::Rect
-     *   QVariant::RectF
-     *   QVariant::RegExp
-     *   QVariant::Region
-     *   QVariant::Size
-     *   QVariant::SizeF
-     *   QVariant::SizePolicy
-     *   QVariant::TextFormat
-     *   QVariant::TextLength
-     *   QVariant::Url
+     *   \li QVariant::BitArray
+     *   \li QVariant::Date
+     *   \li QVariant::Time
+     *   \li QVariant::DateTime
+     *   \li QVariant::Bitmap
+     *   \li QVariant::Brush
+     *   \li QVariant::Char
+     *   \li QVariant::Color
+     *   \li QVariant::Cursor
+     *   \li QVariant::Font
+     *   \li QVariant::Icon
+     *   \li QVariant::Image
+     *   \li QVariant::KeySequence
+     *   \li QVariant::Line
+     *   \li QVariant::LineF
+     *   \li QVariant::Locale
+     *   \li QVariant::Palette
+     *   \li QVariant::Pen
+     *   \li QVariant::Pixmap
+     *   \li QVariant::Point
+     *   \li QVariant::PointArray
+     *   \li QVariant::PointF
+     *   \li QVariant::Polygon
+     *   \li QVariant::Rect
+     *   \li QVariant::RectF
+     *   \li QVariant::RegExp
+     *   \li QVariant::Region
+     *   \li QVariant::Size
+     *   \li QVariant::SizeF
+     *   \li QVariant::SizePolicy
+     *   \li QVariant::TextFormat
+     *   \li QVariant::TextLength
+     *   \li QVariant::Url
      */
-
     template<typename VARIANTTYPE, typename RBTYPE = VALUE>
     struct RubyType
     {
@@ -89,6 +102,7 @@ namespace Kross {
         //inline static QVARIANTTYPE toVariant(const VARIANTTYPE&) { return QVariant(); }
     };
 
+    /// \internal
     template<>
     struct RubyType<QVariant>
     {
@@ -96,6 +110,7 @@ namespace Kross {
         static QVariant toVariant(VALUE value);
     };
 
+    /// \internal
     template<>
     struct RubyType<int>
     {
@@ -109,6 +124,7 @@ namespace Kross {
         }
     };
 
+    /// \internal
     template<>
     struct RubyType<uint>
     {
@@ -122,6 +138,7 @@ namespace Kross {
         }
     };
 
+    /// \internal
     template<>
     struct RubyType<double>
     {
@@ -133,6 +150,7 @@ namespace Kross {
         }
     };
 
+    /// \internal
     template<>
     struct RubyType<bool>
     {
@@ -144,6 +162,7 @@ namespace Kross {
         }
     };
 
+    /// \internal
     template<>
     struct RubyType<qlonglong>
     {
@@ -155,6 +174,7 @@ namespace Kross {
         }
     };
 
+    /// \internal
     template<>
     struct RubyType<qulonglong>
     {
@@ -166,6 +186,7 @@ namespace Kross {
         }
     };
 
+    /// \internal
     template<>
     struct RubyType<QByteArray>
     {
@@ -177,6 +198,7 @@ namespace Kross {
         }
     };
 
+    /// \internal
     template<>
     struct RubyType<QString>
     {
@@ -188,6 +210,7 @@ namespace Kross {
         }
     };
 
+    /// \internal
     template<>
     struct RubyType<QStringList>
     {
@@ -205,6 +228,7 @@ namespace Kross {
         }
     };
 
+    /// \internal
     template<>
     struct RubyType<QVariantList>
     {
@@ -222,6 +246,7 @@ namespace Kross {
         }
     };
 
+    /// \internal
     template<>
     struct RubyType<QVariantMap>
     {
@@ -247,18 +272,18 @@ namespace Kross {
         }
     };
 
-    /**********************************************************************
-     * Following helper classes are used as temp objects within
-     * RubyExtension to translate an argument into a void* needed
-     * for QGenericArgument's data pointer.
+    /**
+     * The RubyMetaTypeFactory helper class us used as factory within
+     * \a RubyExtension to translate an argument into a \a MetaType
+     * needed for QGenericArgument's data pointer.
      */
-
     class RubyMetaTypeFactory
     {
         public:
             static MetaType* create(const char* typeName, VALUE valueect);
     };
 
+    /// \internal
     template<typename VARIANTTYPE>
     class RubyMetaTypeVariant : public MetaTypeVariant<VARIANTTYPE>
     {

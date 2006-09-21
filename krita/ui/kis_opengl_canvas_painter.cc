@@ -545,13 +545,37 @@ void KisOpenGLCanvasPainter::drawWinFocusRect(const QRect& /*r*/, const QColor& 
 {
 }
 
-void KisOpenGLCanvasPainter::drawRoundRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*xRnd*/, int /*yRnd*/)
+void KisOpenGLCanvasPainter::drawRoundRect(int x, int y, int w, int h, int /*xRnd*/, int /*yRnd*/)
 {
+    glBegin(GL_LINES);
+
+    glVertex2i(x, y);
+    glVertex2i(x + w - 1, y);
+
+    glVertex2i(x + w - 1, y);
+    glVertex2i(x + w - 1, y + h - 1);
+
+    glVertex2i(x + w - 1, y + h - 1);
+    glVertex2i(x, y + h - 1);
+
+    glVertex2i(x, y + h - 1);
+    glVertex2i(x, y);
+
+    glEnd();
 }
 
-void KisOpenGLCanvasPainter::drawRoundRect(const QRect& /*r*/, int /*xRnd*/, int /*yRnd*/)
+void KisOpenGLCanvasPainter::drawRoundRect(const QRect& r, int /*xRnd*/, int /*yRnd*/)
 {
+    drawRoundRect(r.x(), r.y(), r.width(), r.height());
 }
+
+// void KisOpenGLCanvasPainter::drawRoundRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*xRnd*/, int /*yRnd*/)
+// {
+// }
+//
+// void KisOpenGLCanvasPainter::drawRoundRect(const QRect& /*r*/, int /*xRnd*/, int /*yRnd*/)
+// {
+// }
 
 void KisOpenGLCanvasPainter::drawEllipse(int x, int y, int w, int h)
 {

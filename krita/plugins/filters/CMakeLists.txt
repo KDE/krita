@@ -15,4 +15,5 @@ add_subdirectory( wavefilter )
 add_subdirectory( noisefilter )
 add_subdirectory( lenscorrectionfilter )
 add_subdirectory( randompickfilter )
+add_subdirectory( blur )
 

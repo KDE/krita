@@ -38,6 +38,7 @@ using namespace Kross;
 
 namespace Kross {
 
+    /// \internal
     class RubyScriptPrivate {
         friend class RubyScript;
         RubyScriptPrivate() : m_compile(0) { }
@@ -165,7 +166,6 @@ QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
     unselectScript();
 
 //TODO    return Kross::Object::Ptr(0);
-
     return QVariant();
 }
 

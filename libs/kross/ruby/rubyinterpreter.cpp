@@ -56,10 +56,11 @@ using namespace Kross;
 
 namespace Kross {
 
-    typedef std::map<QString, VALUE> mStrVALUE;
-    typedef mStrVALUE::iterator mStrVALUE_it;
-    typedef mStrVALUE::const_iterator mStrVALUE_cit;
+    //typedef std::map<QString, VALUE> mStrVALUE;
+    //typedef mStrVALUE::iterator mStrVALUE_it;
+    //typedef mStrVALUE::const_iterator mStrVALUE_cit;
 
+    /// \internal
     class RubyInterpreterPrivate {
         friend class RubyInterpreter;
     };

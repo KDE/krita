@@ -36,6 +36,7 @@ using namespace Kross;
 
 namespace Kross {
 
+    /// \internal
     class RubyExtensionPrivate {
         friend class RubyExtension;
 

@@ -29,6 +29,7 @@ using namespace Kross;
 
 namespace Kross {
 
+    /// \internal
     class RubyModulePrivate {
         friend class RubyModule;
 

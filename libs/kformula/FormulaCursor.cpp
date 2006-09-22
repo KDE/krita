@@ -132,7 +132,7 @@ bool FormulaCursor::isHome() const
 
 bool FormulaCursor::isEnd() const
 {
-    if( getElement()->elementType() == Sequence )
+    if( currentElement()->elementType() == Sequence )
         return ( m_positionInElement == m_currentElement->childElements().count() );
     else
 	return ( m_positionInElement == 1 );
@@ -147,7 +147,7 @@ bool FormulaCursor::isEnd() const
 void FormulaCursor::setTo( BasicElement* element, int cursor, int mark)
 {
     hasChangedFlag = true;
-    current = element;
+    m_currentElement = element;
     m_positionInElement = cursor;
     if ((mark == -1) && selectionFlag) {
         return;
@@ -201,7 +201,7 @@ void FormulaCursor::goInsideElement(BasicElement* element)
  */
 void FormulaCursor::normalize(Direction direction)
 {
-    BasicElement* element = getElement();
+    BasicElement* element = currentElement();
     element->normalize(this, direction);
 }
 
@@ -249,16 +249,16 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
 
     //remove(list, direction);
     if (hasSelection()) {
-        getElement()->remove(this, list, direction);
+        currentElement()->remove(this, list, direction);
     }
 
     QList<BasicElement*> ldist;
     ldist.append(element);
-    getElement()->insert(this, ldist, direction);;
+    currentElement()->insert(this, ldist, direction);;
     SequenceElement* mainChild = element->getMainChild();
     if (mainChild != 0) {
         mainChild->goInside(this);
-        getElement()->insert(this, list, direction);
+        currentElement()->insert(this, list, direction);
         /*
         BasicElement* parent = element->getParent();
         if (direction == beforeCursor) {
@@ -282,7 +282,7 @@ BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
     assert( !isReadOnly() );
     QList<BasicElement*> childrenList;
     QList<BasicElement*> list;
-    BasicElement* element = getElement();
+    BasicElement* element = currentElement();
     SequenceElement* mainChild = element->getMainChild();
     if ((mainChild != 0) && (mainChild->countChildren() > 0)) {
         mainChild->selectAllChildren(this);
@@ -291,7 +291,7 @@ BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
     element->getParent()->moveRight(this, element);
     setSelecting(false);
     remove(list);
-    getElement()->insert(this, childrenList, direction);
+    currentElement()->insert(this, childrenList, direction);
     if (list.count() > 0) {
         return list.takeAt(0);
     }
@@ -309,10 +309,10 @@ BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
 BasicElement* FormulaCursor::removeEnclosingElement(Direction direction)
 {
     assert( !isReadOnly() );
-    BasicElement* parent = getElement()->getParent();
+    BasicElement* parent = currentElement()->getParent();
     if (parent != 0) {
-        if (getElement() == parent->getMainChild()) {
-            parent->selectChild(this, getElement());
+        if (currentElement() == parent->getMainChild()) {
+            parent->selectChild(this, currentElement());
             return replaceByMainChildContent(direction);
         }
     }
@@ -326,7 +326,7 @@ BasicElement* FormulaCursor::removeEnclosingElement(Direction direction)
  */
 bool FormulaCursor::elementIsSenseless()
 {
-    BasicElement* element = getElement();
+    BasicElement* element = currentElement();
     return element->isSenseless();
 }
 
@@ -340,7 +340,7 @@ bool FormulaCursor::elementIsSenseless()
  */
 BasicElement* FormulaCursor::getActiveChild(Direction direction)
 {
-    return getElement()->getChild(this, direction);
+    return currentElement()->getChild(this, direction);
 }
 
 BasicElement* FormulaCursor::getSelectedChild()
@@ -376,7 +376,7 @@ bool FormulaCursor::pointsAfterMainChild(BasicElement* element)
 {
     if (element != 0) {
         SequenceElement* mainChild = element->getMainChild();
-        return (getElement() == mainChild) &&
+        return (currentElement() == mainChild) &&
             ((mainChild->countChildren() == getPos()) || (0 == getPos()));
     }
     return false;
@@ -387,7 +387,7 @@ bool FormulaCursor::pointsAfterMainChild(BasicElement* element)
  */
 void FormulaCursor::elementWillVanish(BasicElement* element)
 {
-    BasicElement* child = getElement();
+    BasicElement* child = currentElement();
     if (child == element->getParent()) {
         child->childWillVanish(this, element);
         return;
@@ -421,98 +421,17 @@ bool FormulaCursor::isReadOnly() const
     return false;
 }
 
-
-/**
- * Stores the currently selected elements inside a dom.
- */
-void FormulaCursor::copy( QDomDocument& doc )
-{
-/*    if (hasSelection()) {
-        SequenceElement* sequence = normal();
-        if (sequence != 0) {
-            QDomElement root = doc.documentElement();
-            QDomElement de = sequence->formula()->emptyFormulaElement( doc );
-            root.appendChild( de );
-
-            sequence->getChildrenDom(doc, de, getSelectionStart(), getSelectionEnd());
-        }
-        else {
-            // This must never happen.
-            qFatal("A not normalized cursor is selecting.");
-        }
-    }*/
-}
-
-/**
- * Inserts the elements that could be read from the dom into
- * the list. Returns true on success.
- */
-bool FormulaCursor::buildElementsFromDom( QDomElement root, QList<BasicElement*>& list )
-{
-    assert( !isReadOnly() );
-    SequenceElement* sequence = normal();
-    if (sequence != 0) {
-        QDomElement e = root.firstChild().toElement();
-        if (sequence->buildChildrenFromDom(list, e.firstChild())) {
-            return true;
-        }
-    }
-    return false;
-}
-
-
-/**
- * Creates a new CursorData object that describes the cursor.
- * It's up to the caller to delete this object.
- */
-/*FormulaCursor::CursorData* FormulaCursor::getCursorData()
-{
-    return new CursorData(current, m_positionInElement, markPos,
-                          selectionFlag, linearMovement, readOnly);
-}*/
-
-
-// Keep in sync with 'setCursorData'
-FormulaCursor& FormulaCursor::operator= (const FormulaCursor& other)
-{
-    current = other.current;
-    m_positionInElement = other.m_positionInElement;
-    markPos = other.markPos;
-    selectionFlag = other.selectionFlag;
-    linearMovement = other.linearMovement;
-    readOnly = other.readOnly;
-    hasChangedFlag = true;
-    return *this;
-}
-
-
-/**
- * Sets the cursor to where the CursorData points to. No checking is done
- * so you better make sure the point exists.
- */
-/*void FormulaCursor::setCursorData(FormulaCursor::CursorData* data)
-{
-    current = data->current;
-    m_positionInElement = data->cursorPos;
-    markPos = data->markPos;
-    selectionFlag = data->selectionFlag;
-    linearMovement = data->linearMovement;
-    readOnly = data->readOnly;
-    hasChangedFlag = true;
-}*/
-
-
 /**
  * Returns the sequence the cursor is in if we are normal. If not returns 0.
  */
 SequenceElement* FormulaCursor::normal()
 {
-    return dynamic_cast<SequenceElement*>(current);
+    return dynamic_cast<SequenceElement*>(m_currentElement);
 }
 
 const SequenceElement* FormulaCursor::normal() const
 {
-    return dynamic_cast<SequenceElement*>(current);
+    return dynamic_cast<SequenceElement*>(m_currentElement);
 }
 
 } // namespace KFormula

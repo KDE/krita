@@ -38,6 +38,8 @@ class BasicElement;
 class SequenceElement;
 
 /**
+ * @short The cursor being moved through the formula
+ *
  * Each element implements its own cursor behaviour. There are always at least two
  * positions the cursor can have in an element: before and after. Only in sequences
  * there are more positions possible. Before the element is 0, after it 1 and so on.
@@ -109,7 +111,6 @@ public:
 
     
     
-    FormulaCursor& operator= (const FormulaCursor&);
 
     // where the cursor and the mark are
     int getPos() const { return m_positionInElement; }
@@ -125,25 +126,6 @@ public:
      * if it has drawn the cursor.
      */
     void clearChangedFlag() { hasChangedFlag = false; }
-
-    /**
-     * Returns wether we are in selection mode.
-     */
-//    bool isSelectionMode() const { return selectionFlag; }
-
-    /**
-     * Returns wether there actually is a selection.
-     */
-//    bool isSelection() const { return selectionFlag && (getPos() != getMark()); }
-
-    /**
-     * Sets the selection mode.
-     */
-//    void setSelection(bool selection) { selectionFlag = selection; hasChangedFlag = true; }
-
-    // how to travel
-
-//    bool getLinearMovement() const { return linearMovement; }
 
     /**
      * Sets the cursor in linear mode. This means you can visit every
@@ -218,19 +200,6 @@ public:
 
 
     /**
-     * The element we are in. In most cases this is a SequenceElement.
-     * There is no way to place a cursor outside a SequenceElement by
-     * normal movement.
-     * But in special cases (e.g. if you remove an index from an
-     * IndexElement) the cursor can be placed to odd places. This is
-     * the reason why you have to normalize the cursor after each
-     * removal.
-     */
-    BasicElement* getElement() { return current; }
-    const BasicElement* getElement() const { return current; }
-
-
-    /**
      * Moves the cursor to a normal position. That is somewhere
      * inside a SequenceElement.
      * You need to call this after each removal because the cursor
@@ -252,33 +221,9 @@ public:
     void selectActiveElement();
 
     /**
-     * Stores the currently selected elements inside a dom.
-     */
-    void copy( QDomDocument& doc );
-
-    /**
-     * Inserts the elements that could be read from the dom into
-     * the list. Returns true on success.
-     */
-    bool buildElementsFromDom( QDomElement root, QList<BasicElement*>& list );
-
-    // undo/redo support
-
-    /**
      * The element is going to leave the formula with and all its children.
      */
     void elementWillVanish(BasicElement* element);
-
-    /**
-     * @returns the point inside the formula widget where the cursor is.
-     */
-    const LuPixelPoint& getCursorPoint() const { return cursorPoint; }
-
-    /**
-     * @returns the area the cursor is currently on.
-     */
-    const LuPixelRect& getCursorSize() const { return cursorSize; }
-    void addCursorSize( const LuPixelRect& rect ) { cursorSize |= rect; }
 
     /**
      * @returns whether we are allowed to alter the document.
@@ -335,14 +280,6 @@ private:
      * Sets the selection according to the shift key.
      */
     void handleSelectState(int flag);
-
-
-    /**
-     * The element the cursor is inside right now.
-     */
-    BasicElement* current;
-
-
 
     /**
      * The position of the mark. If we are in selection mode this

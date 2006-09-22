@@ -336,7 +336,7 @@ void SequenceElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 void SequenceElement::goInside(FormulaCursor* cursor)
 {
     cursor->setSelecting(false);
-    cursor->setTo(this, 0);
+    cursor->setCursorTo(this, 0);
 }
 
 
@@ -376,7 +376,7 @@ void SequenceElement::insert(FormulaCursor* cursor,
                              QList<BasicElement*>& newChildren,
                              Direction direction)
 {
-    int pos = cursor->getPos();
+/*    int pos = cursor->getPos();
     int count = newChildren.count();
     for (int i = 0; i < count; i++) {
         BasicElement* child = newChildren.takeAt(0);
@@ -389,7 +389,7 @@ void SequenceElement::insert(FormulaCursor* cursor,
     else {
         cursor->setTo(this, pos, pos+count);
     }
-
+*/
     //formula()->changed();
     //parse();
 }
@@ -486,7 +486,7 @@ void SequenceElement::normalize(FormulaCursor* cursor, Direction)
  */
 BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Direction direction )
 {
-    if ( direction == beforeCursor ) {
+/*    if ( direction == beforeCursor ) {
         if ( cursor->getPos() > 0 ) {
             return m_sequenceChildren.at( cursor->getPos() - 1 );
         }
@@ -496,7 +496,7 @@ BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Direction direct
             return m_sequenceChildren.at( cursor->getPos() );
         }
     }
-    return 0;
+    return 0;*/
 }
 
 
@@ -506,15 +506,15 @@ BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Direction direct
  */
 void SequenceElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 {
-    int pos = m_sequenceChildren.indexOf(child);
+/*    int pos = m_sequenceChildren.indexOf(child);
     if (pos > -1) {
         cursor->setTo(this, pos+1, pos);
-    }
+    }*/
 }
 
 void SequenceElement::childWillVanish(FormulaCursor* cursor, BasicElement* child)
 {
-    int childPos = m_sequenceChildren.indexOf(child);
+/*    int childPos = m_sequenceChildren.indexOf(child);
     if (childPos > -1) {
         int pos = cursor->getPos();
         if (pos > childPos) {
@@ -525,7 +525,7 @@ void SequenceElement::childWillVanish(FormulaCursor* cursor, BasicElement* child
             mark--;
         }
         cursor->setTo(this, pos, mark);
-    }
+    }*/
 }
 
 
@@ -534,12 +534,12 @@ void SequenceElement::childWillVanish(FormulaCursor* cursor, BasicElement* child
  */
 void SequenceElement::selectAllChildren(FormulaCursor* cursor)
 {
-    cursor->setTo(this, m_sequenceChildren.count(), 0);
+//    cursor->setTo(this, m_sequenceChildren.count(), 0);
 }
 
 bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
 {
-    if ( cursor->hasSelection() ) {
+ /*   if ( cursor->hasSelection() ) {
         uint from = qMin( cursor->getPos(), cursor->getMark() );
         uint to = qMax( cursor->getPos(), cursor->getMark() );
         for ( uint i = from; i < to; i++ ) {
@@ -549,7 +549,7 @@ bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
             }
         }
     }
-    return true;
+    return true;*/
 }
 
 /*

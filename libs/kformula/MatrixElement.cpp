@@ -320,12 +320,12 @@ void MatrixElement::goInside(FormulaCursor* cursor)
 
 void MatrixElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 {
-    for (int r = 0; r < rows(); r++) {
+/*    for (int r = 0; r < rows(); r++) {
         for (int c = 0; c < cols(); c++) {
             if (child == matrixEntryAt(r, c))
                 cursor->setTo(this, r*cols()+c);
         }
-    }
+    }*/
 }
 
 bool MatrixElement::searchElement(BasicElement* element, int& row, int& column)

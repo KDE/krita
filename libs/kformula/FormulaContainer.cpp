@@ -245,7 +245,7 @@ void Container::setActiveCursor(FormulaCursor* cursor)
 
 bool Container::hasValidCursor() const
 {
-    return (impl->activeCursor != 0) && !impl->activeCursor->isReadOnly();
+    return (impl->activeCursor != 0) /*&& !impl->activeCursor->isReadOnly()*/;
 }
 
 void Container::testDirty()

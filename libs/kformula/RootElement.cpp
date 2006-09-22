@@ -324,7 +324,7 @@ void RootElement::remove(FormulaCursor* cursor,
                          QList<BasicElement*>& removedChildren,
                          Direction direction)
 {
-    switch (cursor->getPos()) {
+/*    switch (cursor->getPos()) {
     case contentPos:
         getParent()->selectChild(cursor, this);
         getParent()->remove(cursor, removedChildren, direction);
@@ -336,7 +336,7 @@ void RootElement::remove(FormulaCursor* cursor,
         cursor->setTo(this, upperLeftPos);
         //formula()->changed();
         break;
-    }
+    }*/
 }
 
 
@@ -355,12 +355,12 @@ SequenceElement* RootElement::getMainChild()
  */
 void RootElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 {
-    if (child == m_radicand) {
+/*    if (child == m_radicand) {
         cursor->setTo(this, contentPos);
     }
     else if (child == m_exponent) {
         cursor->setTo(this, upperLeftPos);
-    }
+    }*/
 }
 
 
@@ -378,7 +378,7 @@ void RootElement::moveToIndex(FormulaCursor* cursor, Direction direction)
 
 void RootElement::setToIndex(FormulaCursor* cursor)
 {
-    cursor->setTo(this, upperLeftPos);
+ //   cursor->setTo(this, upperLeftPos);
 }
 
 

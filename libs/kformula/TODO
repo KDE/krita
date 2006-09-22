@@ -6,7 +6,7 @@
 - clean up BasicElement class
 - finish the attribute system
 - factor out the old loading system and make it a filter
-- cleanup the FormulaCursor class
+*done - cleanup the FormulaCursor class
 - rework the kformulacommand class to use KoCommand and simplify and reduce the commands
 - implement correct selecting in FormulaCursor - the old implementation was not totally correct
 

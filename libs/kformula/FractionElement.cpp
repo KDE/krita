@@ -242,7 +242,7 @@ void FractionElement::remove(FormulaCursor* cursor,
                              QList<BasicElement*>& removedChildren,
                              Direction direction)
 {
-    switch (cursor->getPos()) {
+/*    switch (cursor->getPos()) {
     case numeratorPos:
         getParent()->selectChild(cursor, this);
         getParent()->remove(cursor, removedChildren, direction);
@@ -254,7 +254,7 @@ void FractionElement::remove(FormulaCursor* cursor,
         cursor->setTo(this, denominatorPos);
         //formula()->changed();
         break;
-    }
+    }*/
 }
 /*
 bool FractionElement::isSenseless()
@@ -273,12 +273,12 @@ SequenceElement* FractionElement::getMainChild()
  */
 void FractionElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 {
-    if (child == m_numerator) {
+/*    if (child == m_numerator) {
         cursor->setTo(this, numeratorPos);
     }
     else if (child == m_denominator) {
         cursor->setTo(this, denominatorPos);
-    }
+    }*/
 }
 
 

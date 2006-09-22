@@ -25,24 +25,23 @@
 #include <QString>
 #include <QStack>
 
-#include <QDomElement>
-#include "kformuladefs.h"
-
 class QPainter;
 
 namespace KFormula {
 
 class BasicElement;
 
-
-class SequenceElement;
-
 /**
  * @short The cursor being moved through the formula
  *
- * Each element implements its own cursor behaviour. There are always at least two
- * positions the cursor can have in an element: before and after. Only in sequences
- * there are more positions possible. Before the element is 0, after it 1 and so on.
+ * The FormulaTool instanciates FormulaCursor to move around in the formula. Each
+ * element implements its own cursor behaviour. There are always at least two
+ * positions the cursor can have in an element: before and after the element. Only
+ * in sequences there are more positions possible and in a BasicElement there is
+ * only one position. Before the element is 0, after it 1 and so on.
+ * FormulaTool calls the moveLeft, moveRight, moveUp and moveDown methods. It also
+ * sets with setSelection and setWordMovement the further behaviour of the cursor
+ * according to the modifiers the user pressed.
  */
 class FormulaCursor {
 public:

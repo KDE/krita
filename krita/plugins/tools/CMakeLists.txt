@@ -9,7 +9,7 @@ add_subdirectory( tool_polyline )
 add_subdirectory( tool_selectsimilar )
 add_subdirectory( tool_star )
 add_subdirectory( tool_transform )
-
+add_subdirectory( tool_perspectivegrid )
 
 
 

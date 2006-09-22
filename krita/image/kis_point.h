@@ -18,6 +18,7 @@
 #ifndef KIS_POINT_H_
 #define KIS_POINT_H_
 
+#include <QPointF>
 #include <QVector>
 #include <KoPoint.h>
 
@@ -32,6 +33,9 @@ public:
     KisPoint(double x, double y) : super(x, y) {}
     KisPoint(const QPoint& pt) : super(pt) {}
     KisPoint(const KoPoint& pt) : super(pt) {}
+    KisPoint(const QPointF& pt) : super(pt.x(), pt.y() ) { }
+    
+    QPointF toPointF() const { return QPointF(x(),y()); }
 
     int floorX() const { return static_cast<int>(x()); }
     int floorY() const { return static_cast<int>(y()); }

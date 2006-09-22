@@ -31,6 +31,7 @@ class KisPattern;
 class KisPaintOpFactory;
 class KisToolControllerInterface;
 class KisUndoAdapter;
+class KisPerspectiveGridManager;
 class KisProgressDisplayInterface;
 class KisSelectionManager;
 class QWidget;
@@ -174,6 +175,10 @@ public:
      */
     virtual KoColorProfile *  monitorProfile() = 0;
 
+    /**
+     * Get the perspective grid manager.
+     */
+    virtual KisPerspectiveGridManager* perspectiveGridManager() = 0;
 
 private:
     KisCanvasSubject(const KisCanvasSubject&);

@@ -58,6 +58,16 @@ public:
     
     Q_INT32 y() const { return KisHLineIterator::y() + m_offsety; }
     
+    Q_INT32 nConseqHPixels() const {
+        if (m_selectionIterator) {
+            Q_INT32 parent = KisHLineIteratorPixel::nConseqHPixels();
+            Q_INT32 selection = m_selectionIterator->nConseqHPixels();
+            if (parent < selection)
+                return parent;
+            return selection;
+        }
+        return KisHLineIteratorPixel::nConseqHPixels();
+    }
 protected:
 
     Q_INT32 m_offsetx, m_offsety;
@@ -85,7 +95,7 @@ public:
     Q_INT32 x() const { return KisVLineIterator::x() + m_offsetx; }
     
     Q_INT32 y() const { return KisVLineIterator::y() + m_offsety; }
-    
+
 protected:
 
     Q_INT32 m_offsetx, m_offsety;
@@ -113,7 +123,18 @@ public:
     Q_INT32 x() const { return KisRectIterator::x() + m_offsetx; }
     
     Q_INT32 y() const { return KisRectIterator::y() + m_offsety; }
-    
+
+    Q_INT32 nConseqPixels() const {
+        if (m_selectionIterator) {
+            Q_INT32 parent = KisRectIterator::nConseqPixels();
+            Q_INT32 selection = m_selectionIterator->nConseqPixels();
+            if (parent < selection)
+                return parent;
+            return selection;
+        }
+        return KisRectIterator::nConseqPixels();
+    }
+
 protected:
 
     Q_INT32 m_offsetx, m_offsety;

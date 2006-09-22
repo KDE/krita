@@ -34,6 +34,8 @@
 
 namespace KFormula {
 
+class TextElement;
+class MatrixElement;
 class MatrixRowElement;
 class MatrixEntryElement;
 
@@ -135,7 +137,7 @@ protected:
 
 private:
 
-    void destroyUndoCursor() { delete undocursor; undocursor = 0; }
+//    void destroyUndoCursor() { delete undocursor; undocursor = 0; }
 
     /**
      * Saves the cursor that is used to execute the command.
@@ -145,12 +147,12 @@ private:
     /**
      * Cursor position before the command execution.
      */
-    FormulaCursor::CursorData* cursordata;
+//    FormulaCursor::CursorData* cursordata;
 
     /**
      * Cursor position after the command execution.
      */
-    FormulaCursor::CursorData* undocursor;
+//    FormulaCursor::CursorData* undocursor;
 
     /**
      * The container we belong to.
@@ -279,7 +281,7 @@ private:
      * cursor positions. The one after the first removal (this one)
      * and another at the end.
      */
-    FormulaCursor::CursorData* simpleRemoveCursor;
+//    FormulaCursor::CursorData* simpleRemoveCursor;
 
     Direction dir;
 };

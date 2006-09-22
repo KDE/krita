@@ -84,7 +84,7 @@ void MatrixRowElement::goInside( FormulaCursor* cursor )
 
 void MatrixRowElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
 {
-    // If you want to select more than one line you'll have to
+/*    // If you want to select more than one line you'll have to
     // select the whole element.
     if (cursor->isSelectionMode()) {
         getParent()->moveLeft(cursor, this);
@@ -112,12 +112,12 @@ void MatrixRowElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
                 kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
             }
         }
-    }
+    }*/
 }
 
 void MatrixRowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveRight(cursor, this);
     }
     else {
@@ -141,12 +141,12 @@ void MatrixRowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
             kDebug( DEBUGID ) << k_funcinfo << endl;
             kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
         }
-    }
+    }*/
 }
 
 void MatrixRowElement::moveUp( FormulaCursor* cursor, BasicElement* from )
 {
-    // If you want to select more than one line you'll have to
+/*    // If you want to select more than one line you'll have to
     // select the whole element.
     if (cursor->isSelectionMode()) {
         getParent()->moveLeft(cursor, this);
@@ -203,12 +203,12 @@ void MatrixRowElement::moveUp( FormulaCursor* cursor, BasicElement* from )
                 kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
             }
         }
-    }
+    }*/
 }
 
 void MatrixRowElement::moveDown( FormulaCursor* cursor, BasicElement* from )
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveRight(cursor, this);
     }
     else {
@@ -261,7 +261,7 @@ void MatrixRowElement::moveDown( FormulaCursor* cursor, BasicElement* from )
             kDebug( DEBUGID ) << k_funcinfo << endl;
             kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
         }
-    }
+    }*/
 }
 
 
@@ -371,7 +371,7 @@ void MatrixRowElement::insert( FormulaCursor* cursor,
     else {
         e->moveRight(cursor, this);
     }
-    cursor->setSelection(false);
+    cursor->setSelecting(false);
     //formula()->changed();
 }
 

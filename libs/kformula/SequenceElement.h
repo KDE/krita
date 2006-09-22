@@ -45,6 +45,8 @@ public:
     
     ~SequenceElement();
 
+    virtual void paint( QPainter& painter ) const;
+    
     virtual const QList<BasicElement*> childElements();
 
     /// @return The child element at the position @p index - 0 if the sequence is empty
@@ -52,6 +54,10 @@ public:
 
     /// @return The index of the @p element in the sequence - -1 if not in sequence
     int indexOfElement( const BasicElement* element ) const;
+
+    virtual void moveLeft( FormulaCursor* cursor, BasicElement* from );
+
+    virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
 
     virtual void readMathML( const QDomElement& element );
     
@@ -98,32 +104,6 @@ public:
                        const LuPixelPoint& parentOrigin );
 
 
-    virtual void drawEmptyRect( QPainter& painter, const ContextStyle& context,
-                                const LuPixelPoint& upperLeft );
-
-    virtual void calcCursorSize( const ContextStyle& context,
-                                 FormulaCursor* cursor, bool smallCursor );
-
-    /**
-     * If the cursor is inside a sequence it needs to be drawn.
-     */
-    virtual void drawCursor( QPainter& painter, const ContextStyle& context,
-                             FormulaCursor* cursor, bool smallCursor,
-                             bool activeCursor );
-
-    /**
-     * Enters this element while moving to the left starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the left of it.
-     */
-    virtual void moveLeft(FormulaCursor* cursor, BasicElement* from);
-
-    /**
-     * Enters this element while moving to the right starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the right of it.
-     */
-    virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
 
     /**
      * Moves to the beginning of this word or if we are there already
@@ -150,18 +130,6 @@ public:
      * this element or below it.
      */
     virtual void moveDown(FormulaCursor* cursor, BasicElement* from);
-
-    /**
-     * Moves the cursor to the first position in this sequence.
-     * (That is before the first child.)
-     */
-    virtual void moveHome(FormulaCursor* cursor);
-
-    /**
-     * Moves the cursor to the last position in this sequence.
-     * (That is behind the last child.)
-     */
-    virtual void moveEnd(FormulaCursor* cursor);
 
     /**
      * Sets the cursor inside this element to its start position.

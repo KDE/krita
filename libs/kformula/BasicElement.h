@@ -48,6 +48,17 @@ struct UnitSize {
     Unit unit;
 };*/
 
+enum ElementType {
+    Basic,
+    Sequence,
+    Fraction,
+    Matrix,
+    MatrixRow,
+    MatrixEntry,
+    UnderOver
+};
+
+
 /**
  * @short The base class for all elements of a formula
  *
@@ -94,21 +105,25 @@ public:
      */
     virtual const QList<BasicElement*> childElements();
 
-    /// @return The element's painter path used for painting it
-    const QPainterPath& elementPath() const;
+    /**
+     * Insert the new child at the current cursor position
+     * @param cursor The cursor holding the position where to inser
+     * @param child A BasicElement to insert
+     */
+    virtual void insertChild( FormulaCursor* cursor, BasicElement* child );
+   
+    /**
+     * Remove a child element
+     * @param element The BasicElement to remove
+     */ 
+    virtual void removeChild( BasicElement* element );
 
-    /// @return The height of the element
-    double height() const;
-
-    /// @return The width of the element
-    double width() const;
-
-    /// @return The bounding rectangle of the element
-    const QRectF& boundingRect() const;
-
-    /// @return The parent element of this BasicElement
-    BasicElement* parentElement() const;
-
+    /**
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     */
+    virtual void paint( QPainter& painter ) const;
+    
     /**
      * Move the FormulaCursor left
      * @param cursor The FormulaCursor to be moved
@@ -149,6 +164,24 @@ public:
      */
     virtual void moveEnd( FormulaCursor* cursor );
 
+    /// @return The element's ElementType
+    ElementType elementType() const;
+    
+    /// @return The height of the element
+    double height() const;
+
+    /// @return The width of the element
+    double width() const;
+
+    /// @return The baseline of the element
+    double baseLine() const;
+
+    /// @return The bounding rectangle of the element
+    const QRectF& boundingRect() const;
+
+    /// @return The parent element of this BasicElement
+    BasicElement* parentElement() const;
+    
     /// Read the element from MathML
     virtual void readMathML( const QDomElement& element );
 
@@ -274,24 +307,6 @@ public:
      */
     virtual void registerTab( BasicElement* /*tab*/ ) {}
 
-
-    /**
-     **** This is called by the container to get a command depending on
-     * the current cursor position (this is how the element gets chosen)
-     * and the request.
-     *
-     * @returns the command that performs the requested action with
-     * the containers active cursor.
-     */
-//    virtual KCommand* buildCommand( Container*, Request* ) { return 0; }
-
-    /**
-     * Parses the input. It's the container which does create
-     * new elements because it owns the undo stack. But only the
-     * sequence knows what chars are allowed.
-     */
-//    virtual KCommand* input( Container*, QKeyEvent* ) { return 0; }
-
     // basic support
 
     const BasicElement* getParent() const { return m_parentElement; }
@@ -322,7 +337,6 @@ public:
      * element.
      */
     QDomElement getElementDom( QDomDocument& doc);
-
 
     /**
      * Set this element attribute, build children and
@@ -364,7 +378,6 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
-
     /**
      * Returns if the SequenceElement could be constructed from the nodes first child.
      * The node name must match the given name.
@@ -376,27 +389,18 @@ protected:
 private:
     /// The element's parent element - might not be null except of FormulaElement
     BasicElement* m_parentElement;
-    
-    /// The boundingRect storing the element's width, height, x and y
-    QRectF m_boundingRect;
 
     /// A map of all attributes where attribute name is assigned to a value
     QMap<QString,QVariant> m_attributes;
 
-
-
+    /// The element's type, for example a Sequence, a Fraction etc
+    ElementType m_elementType;
     
-    
-    /**
-     * The position of our base line from
-     * the upper border. A sequence aligns its elements
-     * along this line.
-     *
-     * There are elements (like matrix) that don't have a base line. It is
-     * -1 in this case. The alignment is done using the middle line.
-     */
-    luPixel m_baseline;
-
+    /// The boundingRect storing the element's width, height, x and y
+    QRectF m_boundingRect;
+   
+    /// The position of our base line from the upper border
+    double m_baseline;
 };
 
 } // namespace KFormula

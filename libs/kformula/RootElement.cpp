@@ -185,7 +185,7 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
  */
 void RootElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveLeft(cursor, this);
     }
     else {
@@ -204,7 +204,7 @@ void RootElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         else {
             getParent()->moveLeft(cursor, this);
         }
-    }
+    }*/
 }
 
 /**
@@ -214,7 +214,7 @@ void RootElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
  */
 void RootElement::moveRight(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveRight(cursor, this);
     }
     else {
@@ -233,7 +233,7 @@ void RootElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         else {
             getParent()->moveRight(cursor, this);
         }
-    }
+    }*/
 }
 
 /**
@@ -243,7 +243,7 @@ void RootElement::moveRight(FormulaCursor* cursor, BasicElement* from)
  */
 void RootElement::moveUp(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveUp(cursor, this);
     }
     else {
@@ -261,7 +261,7 @@ void RootElement::moveUp(FormulaCursor* cursor, BasicElement* from)
         else {
             getParent()->moveUp(cursor, this);
         }
-    }
+    }*/
 }
 
 /**
@@ -271,7 +271,7 @@ void RootElement::moveUp(FormulaCursor* cursor, BasicElement* from)
  */
 void RootElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveDown(cursor, this);
     }
     else {
@@ -289,7 +289,7 @@ void RootElement::moveDown(FormulaCursor* cursor, BasicElement* from)
         else {
             getParent()->moveDown(cursor, this);
         }
-    }
+    }*/
 }
 
 /**
@@ -299,7 +299,7 @@ void RootElement::insert(FormulaCursor* cursor,
                          QList<BasicElement*>& newChildren,
                          Direction direction)
 {
-    if (cursor->getPos() == upperLeftPos) {
+/*    if (cursor->getPos() == upperLeftPos) {
         m_radicand = static_cast<SequenceElement*>(newChildren.takeAt(0));
         m_radicand->setParent(this);
 
@@ -311,7 +311,7 @@ void RootElement::insert(FormulaCursor* cursor,
         }
         cursor->setSelection(false);
         //formula()->changed();
-    }
+    }*/
 }
 
 /**

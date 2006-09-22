@@ -10,6 +10,8 @@ include_directories( ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES})
 ########### next target ###############
 
 set(kformulalib_LIB_SRCS 
+   FormulaShape.cpp
+   FormulaTool.cpp
    FormulaCursor.cpp 
    FormulaContainer.cpp
    BasicElement.cpp 
@@ -30,7 +32,7 @@ set(kformulalib_LIB_SRCS
 #   GlyphElement.cpp
 #   ErrorElement.cpp
    ElementFactory.cpp 
-   kformulacommand.cc 
+#   kformulacommand.cc 
    MatrixDialog.cc 
    contextstyle.cc 
    symboltable.cc 

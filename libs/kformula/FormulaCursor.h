@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,58 +16,103 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef FORMULACURSOR_H
 #define FORMULACURSOR_H
 
 #include <QString>
-#include <QList>
+#include <QStack>
 
-#include "BasicElement.h"
+#include <QDomElement>
 #include "kformuladefs.h"
+
+class QPainter;
 
 namespace KFormula {
 
-class FormulaElement;
-class MatrixElement;
-class NameSequence;
-class RootElement;
-class TextElement;
+class BasicElement;
 
+
+class SequenceElement;
 
 /**
- * The selection. This might be a position selection or
- * an area. Each view will need one FormulaCursor.
- *
- * The @ref Container always uses the cursor to operate on
- * the element tree.
- *
- * Note that it is up to the elements to actually move the cursor.
- * (The cursor has no chance to know how.)
+ * Each element implements its own cursor behaviour. There are always at least two
+ * positions the cursor can have in an element: before and after. Only in sequences
+ * there are more positions possible. Before the element is 0, after it 1 and so on.
  */
 class FormulaCursor {
-
-    // Yes, we do have a friend.
-    friend class SequenceElement;
-
 public:
-
     /**
-     * Creates a cursor and puts is at the beginning
-     * of the formula.
-     *
-     * @param element the formula the cursor point to. This must not be 0.
+     * The constructor - set the FormulaCursor right to the beginning
+     * @param element The element the FormulaCursor is set to at the beginning
      */
-    FormulaCursor(FormulaElement* element);
+    FormulaCursor( BasicElement* element );
 
+    /// @return The element the FormulaCursor is currently inside
     BasicElement* currentElement() const;
 
+    /**
+     * Draw the cursor to the given QPainter
+     * @param painter The QPainter the cursor draws itsself to
+     */
+    void paint( QPainter &painter ) const;
+
+    /**
+     * Set the cursor to a new position
+     * @param current The new element the pointer is inside
+     * @þaram position The position in the new element the cursor is set to
+     */
+    void setCursorTo( BasicElement* current, int position );
+
+    /// Move the cursor to the left
+    void moveLeft();
+
+    /// Move the cursor to the right
+    void moveRight();
+
+    /// Move the cursor up
+    void moveUp();
+
+    /// Move the cursor down
+    void moveDown();
+
+    /// Move the cursor to the first position in the current element
+    void moveHome();
+
+    /// Move the cursor to the last position in the current element
+    void moveEnd();
+
+    /// @return whether the cursor is at the first position
+    bool isHome() const;
+
+    /// @return whether the cursor is at the last position
+    bool isEnd() const;
+
+    /**
+     * Make the cursor selecting
+     * @param selecting When true the cursor is selecting
+     */ 
+    void setSelecting( bool selecting );
+
+    /// @return @c true when the cursor is selecting
+    bool hasSelection() const;
+
+    /**
+     * Make the cursor move a whole element
+     * @param wordMovement When true the cursor moves a whole element
+     */
+    void setWordMovement( bool wordMovement );
+    
+    
+
+    
+    
     FormulaCursor& operator= (const FormulaCursor&);
 
     // where the cursor and the mark are
-    int getPos() const { return cursorPos; }
+    int getPos() const { return m_positionInElement; }
     int getMark() const { return markPos; }
 
     /**
@@ -83,50 +129,21 @@ public:
     /**
      * Returns wether we are in selection mode.
      */
-    bool isSelectionMode() const { return selectionFlag; }
+//    bool isSelectionMode() const { return selectionFlag; }
 
     /**
      * Returns wether there actually is a selection.
      */
-    bool isSelection() const { return selectionFlag && (getPos() != getMark()); }
+//    bool isSelection() const { return selectionFlag && (getPos() != getMark()); }
 
     /**
      * Sets the selection mode.
      */
-    void setSelection(bool selection) { selectionFlag = selection; hasChangedFlag = true; }
-
-    /**
-     * Calculates the size of the cursor. Needs to be called before
-     * the cursor can be drawn.
-     */
-    void calcCursorSize( const ContextStyle& context, bool smallCursor );
-
-    /**
-     * Draws the cursor at its current position.
-     * The cursor will always be drawn in xor mode.
-     */
-    void draw( QPainter&, const ContextStyle& context, bool smallCursor, bool activeCursor );
-
-
-    // simple cursor movement.
-
-    void moveLeft(int flag = NormalMovement);
-    void moveRight(int flag = NormalMovement);
-    void moveUp(int flag = NormalMovement);
-    void moveDown(int flag = NormalMovement);
-
-    void moveHome(int flag = NormalMovement);
-    void moveEnd(int flag = NormalMovement);
-
-    /** @returns whether the cursor is at the first position. */
-    bool isHome() const;
-
-    /** @returns whether the cursor is at the last position. */
-    bool isEnd() const;
+//    void setSelection(bool selection) { selectionFlag = selection; hasChangedFlag = true; }
 
     // how to travel
 
-    bool getLinearMovement() const { return linearMovement; }
+//    bool getLinearMovement() const { return linearMovement; }
 
     /**
      * Sets the cursor in linear mode. This means you can visit every
@@ -138,12 +155,6 @@ public:
      * Moves the cursor inside the element. Selection is turned off.
      */
     void goInsideElement(BasicElement* element);
-
-    // mouse selection
-
-    void mousePress( const LuPixelPoint&, int flags );
-    void mouseMove( const LuPixelPoint&, int flags );
-    void mouseRelease( const LuPixelPoint&, int flags );
 
     /**
      * Removes the current selected children and returns them.
@@ -254,47 +265,9 @@ public:
     // undo/redo support
 
     /**
-     * A black box that is supposed to contain everything
-     * which is needed to describe a cursor. Only the cursor
-     * itself is allowed to read it.
-     */
-    class CursorData {
-        friend class FormulaCursor;
-        BasicElement* current;
-        int cursorPos;
-        int markPos;
-        bool selectionFlag;
-        bool linearMovement;
-        bool readOnly;
-
-        CursorData(BasicElement* c,
-                   int pos, int mark, bool selection, bool linear, bool ro)
-            : current(c), cursorPos(pos), markPos(mark),
-              selectionFlag(selection), linearMovement(linear),
-              readOnly(ro) {}
-    };
-
-    /**
-     * Creates a new CursorData object that describes the cursor.
-     * It's up to the caller to delete this object.
-     */
-    CursorData* getCursorData();
-
-    /**
-     * Sets the cursor to where the CursorData points to. No checking is done
-     * so you better make sure the point exists.
-     */
-    void setCursorData(CursorData* data);
-
-    /**
      * The element is going to leave the formula with and all its children.
      */
     void elementWillVanish(BasicElement* element);
-
-    /**
-     * A new formula has been loaded. Our current element has to change.
-     */
-    void formulaLoaded(FormulaElement* rootElement);
 
     /**
      * @returns the point inside the formula widget where the cursor is.
@@ -318,6 +291,22 @@ public:
     void setReadOnly(bool ro) { readOnly = ro; }
 
 private:
+    /// The element that currently owns the cursor
+    BasicElement* m_currentElement;
+    
+    /// The cursor's position inside m_ownerElement - 0 based index
+    int m_positionInElement;
+
+    /// Indicates whether the cursor should move a whole element
+    bool m_wordMovement;
+
+    /// Indicates whether the cursor is currently selecting
+    bool m_selecting;
+    
+    QStack<BasicElement*> m_selectedElements;
+
+   
+
 
     /**
      * Returns the child the cursor points to. Depending on the
@@ -353,13 +342,7 @@ private:
      */
     BasicElement* current;
 
-    /**
-     * The position the cursor in on inside the element.
-     * Might be anything from 0 to current->children->size().
-     *
-     * This is where new elements are put in.
-     */
-    int cursorPos;
+
 
     /**
      * The position of the mark. If we are in selection mode this

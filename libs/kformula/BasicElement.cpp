@@ -39,6 +39,22 @@ BasicElement::~BasicElement()
 {
 }
 
+void BasicElement::paint( QPainter& painter ) const
+{
+    // TODO paint a blue rectangle with boundingRect
+    // painter.setBrush( Qt::NoBrush );
+    // painter.setPen( QPen(  ) );
+    // painter.drawRect( m_boundingRect );
+}
+
+void BasicElement::insertChild( FormulaCursor* , BasicElement* )
+{
+}
+
+void BasicElement::removeChild( BasicElement* )
+{
+}
+
 const QList<BasicElement*> BasicElement::childElements() 
 {
     return QList<BasicElement*>();
@@ -47,6 +63,26 @@ const QList<BasicElement*> BasicElement::childElements()
 const QRectF& BasicElement::boundingRect() const
 {
     return m_boundingRect;
+}
+
+double BasicElement::height() const
+{
+    return m_boundingRect.height();
+}
+
+double BasicElement::width() const
+{
+    return m_boundingRect.width();
+}
+
+ElementType BasicElement::elementType() const
+{
+    return m_elementType;
+}
+
+BasicElement* BasicElement::parentElement() const
+{
+    return m_parentElement;
 }
 
 BasicElement* BasicElement::childElementAt( const QPointF& p )
@@ -67,11 +103,6 @@ BasicElement* BasicElement::childElementAt( const QPointF& p )
     }
     
     return this;    // if no child contains the point, it's the FormulaElement itsself
-}
-
-BasicElement* BasicElement::parentElement() const
-{
-    return m_parentElement;
 }
 
 void BasicElement::moveLeft( FormulaCursor* cursor, BasicElement* )
@@ -159,6 +190,9 @@ void BasicElement::writeMathMLAttributes( KoXmlWriter* writer )
         // combination of data and unit still missing 
     }
 }
+
+
+
 
 void BasicElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {

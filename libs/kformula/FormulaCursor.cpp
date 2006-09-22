@@ -15,7 +15,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <QPainter>
@@ -24,26 +24,122 @@
 #include <assert.h>
 
 #include "FormulaCursor.h"
-#include "FormulaElement.h"
-#include "MatrixElement.h"
-#include "RootElement.h"
+
+
 #include "SequenceElement.h"
-#include "TextElement.h"
 
 namespace KFormula {
 
-FormulaCursor::FormulaCursor(FormulaElement* element)
-        : selectionFlag(false), linearMovement(false),
-          hasChangedFlag(true), readOnly(false)
+FormulaCursor::FormulaCursor( BasicElement* element )
+              : m_wordMovement( false ),
+                m_selecting( false )
 {
-    //setTo(element, 0);
-    element->goInside( this );
+    m_currentElement = element;
+    m_positionInElement = 0;
 }
 
 BasicElement* FormulaCursor::currentElement() const
 {
-    return current;
+    return m_currentElement;
 }
+
+bool FormulaCursor::hasSelection() const
+{
+    return m_selecting;
+}
+
+void FormulaCursor::setSelecting( bool selecting )
+{
+    m_selecting = selecting;
+}
+
+void FormulaCursor::setWordMovement( bool wordMovement )
+{
+    m_wordMovement = wordMovement;
+}
+
+void FormulaCursor::paint( QPainter& painter ) const
+{
+    QPointF top = m_currentElement->boundingRect().topLeft();
+    
+    if( m_currentElement->elementType() == Basic )  // set the cursor in the middle
+        top += QPointF( m_currentElement->width()/2, 0 );
+    else
+    { 
+        // determine the x coordinate by summing up the elements' width before the cursor
+        for( int i = 0; i < m_positionInElement; i++ )
+            top += QPointF( m_currentElement->childElements().value(i)->width(), 0 );
+    }
+    
+    QPointF bottom = top + QPointF( 0, m_currentElement->height() );
+    painter.drawLine( top, bottom );
+}
+
+void FormulaCursor::setCursorTo( BasicElement* current, int position )
+{
+    m_currentElement = current;
+    m_positionInElement = position;
+}
+
+void FormulaCursor::moveLeft()
+{
+    if( m_wordMovement && !isHome() )                 // move only if the 
+        m_positionInElement--;                        // positionallows it
+    else 
+        m_currentElement->moveLeft( this, m_currentElement );
+}
+
+void FormulaCursor::moveRight()
+{
+    if( m_wordMovement )
+    {
+        if( !isEnd() )
+            m_positionInElement++;
+        else
+            m_currentElement->moveRight( this, m_currentElement );
+    }
+    else 
+        m_currentElement->moveRight( this, m_currentElement );
+}
+
+void FormulaCursor::moveUp()
+{
+    m_currentElement->moveUp( this, m_currentElement );
+}
+
+void FormulaCursor::moveDown()
+{
+    m_currentElement->moveDown( this, m_currentElement );
+}
+
+void FormulaCursor::moveHome()
+{
+    m_positionInElement = 0;
+}
+
+void FormulaCursor::moveEnd()
+{
+    if( m_currentElement->elementType() == Sequence )
+	m_positionInElement = m_currentElement->childElements().count();
+    else
+        m_positionInElement = 1;
+}
+
+bool FormulaCursor::isHome() const
+{
+    return m_positionInElement == 0;
+}
+
+bool FormulaCursor::isEnd() const
+{
+    if( getElement()->elementType() == Sequence )
+        return ( m_positionInElement == m_currentElement->childElements().count() );
+    else
+	return ( m_positionInElement == 1 );
+}
+
+
+
 
 
 
@@ -52,12 +148,12 @@ void FormulaCursor::setTo( BasicElement* element, int cursor, int mark)
 {
     hasChangedFlag = true;
     current = element;
-    cursorPos = cursor;
+    m_positionInElement = cursor;
     if ((mark == -1) && selectionFlag) {
         return;
     }
     if (mark != -1) {
-        setSelection(true);
+        setSelecting(true);
     }
     markPos = mark;
 }
@@ -66,7 +162,7 @@ void FormulaCursor::setTo( BasicElement* element, int cursor, int mark)
 void FormulaCursor::setPos(int pos)
 {
     hasChangedFlag = true;
-    cursorPos = pos;
+    m_positionInElement = pos;
 }
 
 void FormulaCursor::setMark(int mark)
@@ -75,207 +171,18 @@ void FormulaCursor::setMark(int mark)
     markPos = mark;
 }
 
-void FormulaCursor::calcCursorSize( const ContextStyle& context, bool smallCursor )
-{
-    // We only draw the cursor if its normalized.
-    SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
-
-    if (sequence != 0) {
-        sequence->calcCursorSize( context, this, smallCursor );
-    }
-}
-
-void FormulaCursor::draw( QPainter& painter, const ContextStyle& context, 
-                          bool smallCursor, bool activeCursor )
-{
-    //if (readOnly && !isSelection())
-    //return;
-
-    // We only draw the cursor if its normalized.
-    SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
-
-    if (sequence != 0) {
-        sequence->drawCursor( painter, context, this, smallCursor, activeCursor );
-    }
-}
-
-
 void FormulaCursor::handleSelectState(int flag)
 {
     if (flag & SelectMovement) {
-        if (!isSelection()) {
+        if (!hasSelection()) {
             setMark(getPos());
-            setSelection(true);
+            setSelecting(true);
         }
     }
     else {
-        setSelection(false);
+        setSelecting(false);
     }
 }
-
-void FormulaCursor::moveLeft(int flag)
-{
-    BasicElement* element = getElement();
-    handleSelectState(flag);
-    if (flag & WordMovement) {
-        SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
-        if (sequence != 0) {
-            sequence->moveWordLeft(this);
-        }
-        else {
-            element->moveHome(this);
-        }
-    }
-    else {
-        element->moveLeft(this, element);
-    }
-}
-
-void FormulaCursor::moveRight(int flag)
-{
-    BasicElement* element = getElement();
-    handleSelectState(flag);
-    if (flag & WordMovement) {
-        SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
-        if (sequence != 0) {
-            sequence->moveWordRight(this);
-        }
-        else {
-            element->moveEnd(this);
-        }
-    }
-    else {
-        element->moveRight(this, element);
-    }
-}
-
-void FormulaCursor::moveUp(int flag)
-{
-    BasicElement* element = getElement();
-    handleSelectState(flag);
-    element->moveUp(this, element);
-}
-
-void FormulaCursor::moveDown(int flag)
-{
-    BasicElement* element = getElement();
-    handleSelectState(flag);
-    element->moveDown(this, element);
-}
-
-void FormulaCursor::moveHome(int flag)
-{
-    BasicElement* element = getElement();
-    handleSelectState(flag);
-    element->moveHome(this);
-}
-
-void FormulaCursor::moveEnd(int flag)
-{
-    BasicElement* element = getElement();
-    handleSelectState(flag);
-    element->moveEnd(this);
-}
-
-bool FormulaCursor::isHome() const
-{
-//    return ( getElement() == getElement()->formula() ) && ( getPos() == 0 );
-    return true;
-}
-
-bool FormulaCursor::isEnd() const
-{
-//    return ( getElement() == getElement()->formula() ) &&
-//                  ( getPos() == normal()->countChildren() );
-//
-//                  
-    // this should be decided with position in the current element
-    // like the following code there is a cast missing and it is only example code
-/*    if( getElement()->elementType() == Sequence )
-	return ( m_actualPosition == getElement()->childCount() );
-    else
-	return ( m_actualPosition == 1 );*/
-    return true;
-}
-
-void FormulaCursor::mousePress( const LuPixelPoint& pos, int flag )
-{
-//    FormulaElement* formula = getElement()->formula();
-//    formula->goToPos( this, pos );
-
-//    for new kformula api, use it soon
-//    setCursorToElement( m_container->childElementAt( pos ) );
-    if (flag & SelectMovement) {
-        setSelection(true);
-        if (getMark() == -1) {
-            setMark(getPos());
-        }
-    }
-    else {
-        setSelection(false);
-        setMark(getPos());
-    }
-}
-
-void FormulaCursor::mouseMove( const LuPixelPoint& point, int )
-{
-    setSelection(true);
-    BasicElement* element = getElement();
-    int mark = getMark();
-
- //   FormulaElement* formula = getElement()->formula();
-//    formula->goToPos( this, point );
-    BasicElement* newElement = getElement();
-    int pos = getPos();
-
-    BasicElement* posChild = 0;
-    BasicElement* markChild = 0;
-    while (element != newElement) {
-        posChild = newElement;
-        newElement = newElement->getParent();
-        if (newElement == 0) {
-            posChild = 0;
-            newElement = getElement();
-            markChild = element;
-            element = element->getParent();
-        }
-    }
-
-    if (dynamic_cast<SequenceElement*>(element) == 0) {
-        element = element->getParent();
-        element->selectChild(this, newElement);
-    }
-    else {
-        if (posChild != 0) {
-            element->selectChild(this, posChild);
-            pos = getPos();
-        }
-        if (markChild != 0) {
-            element->selectChild(this, markChild);
-            mark = getMark();
-        }
-        if (pos == mark) {
-            if ((posChild == 0) && (markChild != 0)) {
-                mark++;
-            }
-            else if ((posChild != 0) && (markChild == 0)) {
-                mark--;
-            }
-        }
-        else if (pos < mark) {
-            if (posChild != 0) {
-                pos--;
-            }
-        }
-        setTo(element, pos, mark);
-    }
-}
-
-void FormulaCursor::mouseRelease( const LuPixelPoint&, int )
-{
-    //mouseSelectionFlag = false;
-}
-
 
 /**
  * Moves the cursor inside the element. Selection is turned off.
@@ -341,7 +248,7 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
     //list.setAutoDelete(true);
 
     //remove(list, direction);
-    if (isSelection()) {
+    if (hasSelection()) {
         getElement()->remove(this, list, direction);
     }
 
@@ -382,7 +289,7 @@ BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
         remove(childrenList);
     }
     element->getParent()->moveRight(this, element);
-    setSelection(false);
+    setSelecting(false);
     remove(list);
     getElement()->insert(this, childrenList, direction);
     if (list.count() > 0) {
@@ -438,7 +345,7 @@ BasicElement* FormulaCursor::getActiveChild(Direction direction)
 
 BasicElement* FormulaCursor::getSelectedChild()
 {
-    if (isSelection()) {
+    if (hasSelection()) {
         if ((getSelectionEnd() - getSelectionStart()) > 1) {
             return 0;
         }
@@ -454,8 +361,8 @@ BasicElement* FormulaCursor::getSelectedChild()
 
 void FormulaCursor::selectActiveElement()
 {
-    if ( !isSelection() && getPos() > 0 ) {
-        setSelection( true );
+    if ( !hasSelection() && getPos() > 0 ) {
+        setSelecting( true );
         setMark( getPos() - 1 );
     }
 }
@@ -490,7 +397,7 @@ void FormulaCursor::elementWillVanish(BasicElement* element)
             // This is meant to catch all cursors that did not
             // cause the deletion.
             child->getParent()->moveLeft(this, child);
-            setSelection(false);
+            setSelecting(false);
             hasChangedFlag = true;
             return;
         }
@@ -498,18 +405,6 @@ void FormulaCursor::elementWillVanish(BasicElement* element)
     }
 }
 
-
-/**
- * A new formula has been loaded. Our current element has to change.
- */
-void FormulaCursor::formulaLoaded(FormulaElement* rootElement)
-{
-    //current = rootElement;
-    //setPos(0);
-    rootElement->goInside( this );
-    setMark(-1);
-    setSelection(false);
-}
 
 
 bool FormulaCursor::isReadOnly() const
@@ -532,7 +427,7 @@ bool FormulaCursor::isReadOnly() const
  */
 void FormulaCursor::copy( QDomDocument& doc )
 {
-/*    if (isSelection()) {
+/*    if (hasSelection()) {
         SequenceElement* sequence = normal();
         if (sequence != 0) {
             QDomElement root = doc.documentElement();
@@ -570,18 +465,18 @@ bool FormulaCursor::buildElementsFromDom( QDomElement root, QList<BasicElement*>
  * Creates a new CursorData object that describes the cursor.
  * It's up to the caller to delete this object.
  */
-FormulaCursor::CursorData* FormulaCursor::getCursorData()
+/*FormulaCursor::CursorData* FormulaCursor::getCursorData()
 {
-    return new CursorData(current, cursorPos, markPos,
+    return new CursorData(current, m_positionInElement, markPos,
                           selectionFlag, linearMovement, readOnly);
-}
+}*/
 
 
 // Keep in sync with 'setCursorData'
 FormulaCursor& FormulaCursor::operator= (const FormulaCursor& other)
 {
     current = other.current;
-    cursorPos = other.cursorPos;
+    m_positionInElement = other.m_positionInElement;
     markPos = other.markPos;
     selectionFlag = other.selectionFlag;
     linearMovement = other.linearMovement;
@@ -595,16 +490,16 @@ FormulaCursor& FormulaCursor::operator= (const FormulaCursor& other)
  * Sets the cursor to where the CursorData points to. No checking is done
  * so you better make sure the point exists.
  */
-void FormulaCursor::setCursorData(FormulaCursor::CursorData* data)
+/*void FormulaCursor::setCursorData(FormulaCursor::CursorData* data)
 {
     current = data->current;
-    cursorPos = data->cursorPos;
+    m_positionInElement = data->cursorPos;
     markPos = data->markPos;
     selectionFlag = data->selectionFlag;
     linearMovement = data->linearMovement;
     readOnly = data->readOnly;
     hasChangedFlag = true;
-}
+}*/
 
 
 /**
@@ -620,4 +515,4 @@ const SequenceElement* FormulaCursor::normal() const
     return dynamic_cast<SequenceElement*>(current);
 }
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula

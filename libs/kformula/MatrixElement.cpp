@@ -46,7 +46,7 @@ namespace KFormula {
 
 MatrixElement::MatrixElement( int rows, int columns, BasicElement* parent ) : BasicElement( parent )
 {
-// I have to think about how to use matrizes best with the new element list!!
+// TODO think about how to use matrizes best with the new element list!!
 	
 //    MatrixRowElement* tmp = 0;
     
@@ -184,7 +184,7 @@ void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
  */
 void MatrixElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
 {
-    if( cursor->isSelectionMode() )
+/*    if( cursor->isSelectionMode() )
         getParent()->moveLeft(cursor, this);
     else
     {
@@ -207,7 +207,7 @@ void MatrixElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             else 
                 getParent()->moveLeft(cursor, this);
         }
-    }
+    }*/
 }
 
 /**
@@ -217,7 +217,7 @@ void MatrixElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
  */
 void MatrixElement::moveRight(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveRight(cursor, this);
     }
     else {
@@ -242,7 +242,7 @@ void MatrixElement::moveRight(FormulaCursor* cursor, BasicElement* from)
                 getParent()->moveRight(cursor, this);
             }
         }
-    }
+    }*/
 }
 
 /**
@@ -252,7 +252,7 @@ void MatrixElement::moveRight(FormulaCursor* cursor, BasicElement* from)
  */
 void MatrixElement::moveUp(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveUp(cursor, this);
     }
     else {
@@ -274,7 +274,7 @@ void MatrixElement::moveUp(FormulaCursor* cursor, BasicElement* from)
                 getParent()->moveUp(cursor, this);
             }
         }
-    }
+    }*/
 }
 
 /**
@@ -284,7 +284,7 @@ void MatrixElement::moveUp(FormulaCursor* cursor, BasicElement* from)
  */
 void MatrixElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveDown(cursor, this);
     }
     else {
@@ -306,7 +306,7 @@ void MatrixElement::moveDown(FormulaCursor* cursor, BasicElement* from)
                 getParent()->moveDown(cursor, this);
             }
         }
-    }
+    }*/
 }
 
 /**

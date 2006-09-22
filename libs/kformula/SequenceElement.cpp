@@ -58,9 +58,34 @@ SequenceElement::~SequenceElement()
 {
 }
 
+void SequenceElement::paint( QPainter& painter ) const
+{
+    // just paint all children, a sequence has no visual representation
+    foreach( BasicElement* childElement, m_sequenceChildren )
+        childElement->paint( painter );
+}
+
+void SequenceElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
+{
+    // the parent element enters the seqeunce from the left
+    if( from == parentElement() )
+        cursor->setCursorTo( this, m_sequenceChildren.count() );
+    else   // the cursor comes from a child element
+        cursor->setCursorTo( this, m_sequenceChildren.indexOf( from ) );
+}
+
+void SequenceElement::moveRight( FormulaCursor* cursor, BasicElement* from )
+{
+    // the parent element enters the seqeunce from the right 
+    if( from == parentElement() )
+        cursor->setCursorTo( this, 0 );
+    else   // the cursor comes from a child element
+        cursor->setCursorTo( this, m_sequenceChildren.indexOf( from )+1 );
+}
+
 const QList<BasicElement*> SequenceElement::childElements()
 {
-    return QList<BasicElement*>();
+    return m_sequenceChildren;
 }
 
 BasicElement* SequenceElement::childAt( int i )
@@ -82,6 +107,10 @@ void SequenceElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
    
     writer->endElement();
 }
+
+
+
+
 
 
 
@@ -177,6 +206,8 @@ void SequenceElement::setChildrenPositions()
 }
 
 
+
+
 /**
  * Draws the whole element including its m_sequenceChildren.
  * The `parentOrigin' is the point this element's parent starts.
@@ -210,116 +241,6 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
     }*/
 }
 
-/*
-void SequenceElement::dispatchFontCommand( FontCommand* cmd )
-{
-  foreach( BasicElement* child, m_sequenceChildren )
-    child->dispatchFontCommand( cmd );
-}
-*/
-
-void SequenceElement::drawEmptyRect( QPainter& painter, const ContextStyle& context,
-                                     const LuPixelPoint& upperLeft )
-{
-    if ( context.edit() ) {
-        painter.setBrush(Qt::NoBrush);
-        painter.setPen( QPen( context.getEmptyColor(),
-                              context.layoutUnitToPixelX( context.getLineWidth() ) ) );
-        painter.drawRect( context.layoutUnitToPixelX( upperLeft.x() ),
-                          context.layoutUnitToPixelY( upperLeft.y() ),
-                          context.layoutUnitToPixelX( getWidth() ),
-                          context.layoutUnitToPixelY( getHeight() ) );
-    }
-}
-
-void SequenceElement::calcCursorSize( const ContextStyle& context,
-                                      FormulaCursor* cursor, bool smallCursor )
-{
-    LuPixelPoint point = widgetPos();
-    uint pos = cursor->getPos();
-
-    luPixel posX = getChildPosition( context, pos );
-    luPixel height = getHeight();
-
-    luPixel unitX = context.ptToLayoutUnitPixX( 1 );
-    luPixel unitY = context.ptToLayoutUnitPixY( 1 );
-
-    // Here are those evil constants that describe the cursor size.
-
-    if ( cursor->isSelection() ) {
-        uint mark = cursor->getMark();
-        luPixel markX = getChildPosition( context, mark );
-        luPixel x = qMin(posX, markX);
-        luPixel width = abs(posX - markX);
-
-        if ( smallCursor ) {
-            cursor->cursorSize.setRect( point.x()+x, point.y(), width, height );
-        }
-        else {
-            cursor->cursorSize.setRect( point.x()+x, point.y() - 2*unitY,
-                                        width + unitX, height + 4*unitY );
-        }
-    }
-    else {
-        if ( smallCursor ) {
-            cursor->cursorSize.setRect( point.x()+posX, point.y(),
-                                        unitX, height );
-        }
-        else {
-            cursor->cursorSize.setRect( point.x(), point.y() - 2*unitY,
-                                        getWidth() + unitX, height + 4*unitY );
-        }
-    }
-
-    cursor->cursorPoint.setX( point.x()+posX );
-    cursor->cursorPoint.setY( point.y()+getHeight()/2 );
-}
-
-
-/**
- * If the cursor is inside a sequence it needs to be drawn.
- */
-void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context,
-                                  FormulaCursor* cursor, bool smallCursor,
-                                  bool activeCursor )
-{
-    //painter.setRasterOp( Qt::XorROP );
-    if ( cursor->isSelection() ) {
-        const LuPixelRect& r = cursor->cursorSize;
-        painter.fillRect( context.layoutUnitToPixelX( r.x() ),
-                          context.layoutUnitToPixelY( r.y() ),
-                          context.layoutUnitToPixelX( r.width() ),
-                          context.layoutUnitToPixelY( r.height() ),
-                          Qt::white );
-    }
-    painter.setPen( QPen( Qt::white,
-                    context.layoutUnitToPixelX( context.getLineWidth()/2 ) ) );
-    const LuPixelPoint& point = cursor->getCursorPoint();
-    const LuPixelRect& size = cursor->getCursorSize();
-    if ( activeCursor )
-    {
-        int offset = 0;
-        if ( cursor->isSelection() && cursor->getPos() > cursor->getMark() )
-            offset = -1;
-        painter.drawLine( context.layoutUnitToPixelX( point.x() ) + offset,
-                          context.layoutUnitToPixelY( size.top() ),
-                          context.layoutUnitToPixelX( point.x() ) + offset,
-                          context.layoutUnitToPixelY( size.bottom() )-1 );
-        painter.drawLine( context.layoutUnitToPixelX( point.x() ) + offset + 1,
-                          context.layoutUnitToPixelY( size.top() ),
-                          context.layoutUnitToPixelX( point.x() ) + offset + 1,
-                          context.layoutUnitToPixelY( size.bottom() )-1 );
-    }
-    if ( !smallCursor && !cursor->isSelection() )
-        painter.drawLine( context.layoutUnitToPixelX( size.left() ),
-                          context.layoutUnitToPixelY( size.bottom() )-1,
-                          context.layoutUnitToPixelX( size.right() )-1,
-                          context.layoutUnitToPixelY( size.bottom() )-1 );
-    // This might be wrong but probably isn't.
-   // painter.setRasterOp( Qt::CopyROP );
-}
-
-
 luPixel SequenceElement::getChildPosition( const ContextStyle& context, int child )
 {
     if (child < m_sequenceChildren.count())
@@ -332,129 +253,6 @@ luPixel SequenceElement::getChildPosition( const ContextStyle& context, int chil
             return context.ptToLayoutUnitPixX( 2 );
     }
 }
-
-
-// navigation
-//
-// The elements are responsible to handle cursor movement themselves.
-// To do this they need to know the direction the cursor moves and
-// the element it comes from.
-//
-// The cursor might be in normal or in selection mode.
-
-/**
- * Enters this element while moving to the left starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the left of it.
- */
-void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
-{
-/*    // Our parent asks us for a cursor position. Found.
-    if (from == getParent()) {
-        cursor->setTo(this, m_sequenceChildren.count());
-        //from->entered( this );
-    }
-
-    // We already owned the cursor. Ask next child then.
-    else if (from == this) {
-        if (cursor->getPos() > 0) {
-            if (cursor->isSelectionMode()) {
-                cursor->setTo(this, cursor->getPos()-1);
-
-                // invisible elements are not visible so we move on.
-                if (m_sequenceChildren.at(cursor->getPos())->isInvisible()) {
-                    moveLeft(cursor, this);
-                }
-            }
-            else {
-                m_sequenceChildren.at(cursor->getPos()-1)->moveLeft(cursor, this);
-            }
-        }
-        else {
-            // Needed because FormulaElement derives this.
-            if (getParent() != 0) {
-                getParent()->moveLeft(cursor, this);
-            }
-            else {
-                formula()->moveOutLeft( cursor );
-            }
-        }
-    }
-
-    // The cursor came from one of our m_sequenceChildren or
-    // something is wrong.
-    else {
-        int fromPos = m_sequenceChildren.indexOf(from);
-        cursor->setTo(this, fromPos);
-        if (cursor->isSelectionMode()) {
-            cursor->setMark(fromPos+1);
-        }
-
-        // invisible elements are not visible so we move on.
-        if (from->isInvisible()) {
-            moveLeft(cursor, this);
-        }
-        //formula()->tell( "" );
-    }*/
-}
-
-/**
- * Enters this element while moving to the right starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the right of it.
- */
-void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
-{
-/*    // Our parent asks us for a cursor position. Found.
-    if (from == getParent()) {
-        cursor->setTo(this, 0);
-        //from->entered( this );
-    }
-
-    // We already owned the cursor. Ask next child then.
-    else if (from == this) {
-        int pos = cursor->getPos();
-        if (pos < m_sequenceChildren.count()) {
-            if (cursor->isSelectionMode()) {
-                cursor->setTo(this, pos+1);
-
-                // invisible elements are not visible so we move on.
-                if (m_sequenceChildren.at(pos)->isInvisible()) {
-                    moveRight(cursor, this);
-                }
-            }
-            else {
-                m_sequenceChildren.at(pos)->moveRight(cursor, this);
-            }
-        }
-        else {
-            // Needed because FormulaElement derives this.
-            if (getParent() != 0) {
-                getParent()->moveRight(cursor, this);
-            }
-            else {
-                formula()->moveOutRight( cursor );
-            }
-        }
-    }
-
-    // The cursor came from one of our m_sequenceChildren or
-    // something is wrong.
-    else {
-        int fromPos = m_sequenceChildren.indexOf(from);
-        cursor->setTo(this, fromPos+1);
-        if (cursor->isSelectionMode()) {
-            cursor->setMark(fromPos);
-        }
-
-        // invisible elements are not visible so we move on.
-        if (from->isInvisible()) {
-            moveRight(cursor, this);
-        }
-        //formula()->tell( "" );
-    }*/
-}
-
 
 void SequenceElement::moveWordLeft(FormulaCursor* cursor)
 {
@@ -530,46 +328,6 @@ void SequenceElement::moveDown(FormulaCursor* cursor, BasicElement* from)
     }*/
 }
 
-/**
- * Moves the cursor to the first position in this sequence.
- * (That is before the first child.)
- */
-void SequenceElement::moveHome(FormulaCursor* cursor)
-{
-    if (cursor->isSelectionMode()) {
-        BasicElement* element = cursor->getElement();
-        if (element != this) {
-            while (element->getParent() != this) {
-                element = element->getParent();
-            }
-            cursor->setMark(m_sequenceChildren.indexOf(element)+1);
-        }
-    }
-    cursor->setTo(this, 0);
-}
-
-/**
- * Moves the cursor to the last position in this sequence.
- * (That is behind the last child.)
- */
-void SequenceElement::moveEnd(FormulaCursor* cursor)
-{
-    if (cursor->isSelectionMode()) {
-        BasicElement* element = cursor->getElement();
-        if (element != this) {
-            while (element->getParent() != this) {
-                element = element->getParent();
-                if (element == 0) {
-                    cursor->setMark(m_sequenceChildren.count());
-                    break;
-                }
-            }
-            if( element )
-                cursor->setMark(m_sequenceChildren.indexOf(element));
-        }
-    }
-    cursor->setTo(this, m_sequenceChildren.count());
-}
 
 /**
  * Sets the cursor inside this element to its start position.
@@ -577,7 +335,7 @@ void SequenceElement::moveEnd(FormulaCursor* cursor)
  */
 void SequenceElement::goInside(FormulaCursor* cursor)
 {
-    cursor->setSelection(false);
+    cursor->setSelecting(false);
     cursor->setTo(this, 0);
 }
 
@@ -718,7 +476,7 @@ void SequenceElement::removeChild(QList<BasicElement*>& removedChildren, int pos
  */
 void SequenceElement::normalize(FormulaCursor* cursor, Direction)
 {
-    cursor->setSelection(false);
+    cursor->setSelecting(false);
 }
 
 
@@ -781,7 +539,7 @@ void SequenceElement::selectAllChildren(FormulaCursor* cursor)
 
 bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
 {
-    if ( cursor->isSelection() ) {
+    if ( cursor->hasSelection() ) {
         uint from = qMin( cursor->getPos(), cursor->getMark() );
         uint to = qMax( cursor->getPos(), cursor->getMark() );
         for ( uint i = from; i < to; i++ ) {

@@ -28,10 +28,7 @@
 #include <QList>
 
 namespace KFormula {
-
-class SequenceElement;
-
-
+	
 /**
  * @short A fraction element in a formula
  *
@@ -154,14 +151,8 @@ protected:
     virtual bool readContentFromDom(QDomNode& node);
 
 private:
-    SequenceElement* m_numerator;
-    SequenceElement* m_denominator;
-
-    int m_linethickness;  // also thin | medium | thick
-//	numalign    left | center | right
-//	denomalign  left | center | right
-    bool m_bevelled;
-	
+    BasicElement* m_numerator;
+    BasicElement* m_denominator;
 };
 
 } // namespace KFormula

@@ -341,7 +341,7 @@ void Container::paste()
 
 void Container::paste( const QDomDocument& document, QString desc )
 {
-    FormulaCursor* cursor = activeCursor();
+/*    FormulaCursor* cursor = activeCursor();
     QList<BasicElement*> list;
 //    list.setAutoDelete( true );
     if ( cursor->buildElementsFromDom( document.documentElement(), list ) ) {
@@ -354,7 +354,7 @@ void Container::paste( const QDomDocument& document, QString desc )
             }
             //execute(command);
         }
-    }
+    }*/
 }
 
 void Container::copy()
@@ -377,7 +377,7 @@ void Container::cut()
     if (!hasValidCursor())
         return;
     FormulaCursor* cursor = activeCursor();
-    if (cursor->isSelection()) {
+    if (cursor->hasSelection()) {
         copy();
         DirectedRemove r( req_remove, beforeCursor );
         performRequest( &r );

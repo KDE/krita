@@ -17,15 +17,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KFORMULASHAPE_H
-#define KFORMULASHAPE_H
+#ifndef FORMULASHAPE_H
+#define FORMULASHAPE_H
 
 #include <KoShape.h>
 
+#include <QDomDocument>
+
+class KoXmlWriter;
+
 namespace KFormula {
 
-class FormulaRenderer;
-class FormulaContainer;
+class BasicElement;
 
 /**
  * @short The flake shape for a formula
@@ -41,45 +44,30 @@ public:
     ~FormulaShape();
 
     /// inherited from KoShape
-    virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0;
+    void paint( QPainter &painter, KoViewConverter &converter );
+
+    /// @return The BasicElement at the highest level in the formula tree
+    BasicElement* formulaElement() const;
 
     /**
      * Save the formula as MathML
-     * @param stream
+     * @param writer 
      * @param oasisFormat If true the MathMl is saved to OASIS conform MathML
     */
-    void saveMathML( QTextStream& stream, bool oasisFormat = false );
+    void saveMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
     /**
      * Load the formula from the specified file containing MathML
      * @param doc The DomDocument to load from
      * @param oasisFormat If true the formula is read from OASIS conform MathML
-     * @return true if success
      */
-    bool loadMathML( const QDomDocument &doc, bool oasisFormat = false );
-
-protected:
-    void mousePressEvent( QMouseEvent* event );
-    void mouseReleaseEvent( QMouseEvent* event );
-    void mouseDoubleClickEvent( QMouseEvent* event );
-    void mouseMoveEvent( QMouseEvent* event );
-
-    void keyPressEvent( QKeyEvent* event );
-    void focusInEvent( QFocusEvent* event );
-    void focusOutEvent( QFocusEvent* event );
-
+    void loadMathML( const QDomDocument &doc, bool oasisFormat = false );
 
 private:
-    /// The formula data
-    FormulaContainer* m_formulaContainer;
-
-    /// The @see FormulaCursor used to alter the formula data in @ref m_formulaContainer
-    FormulaCursor* m_formulaCursor;
-
-    /// The formula renderer used to paint the formula
-    FormulaRenderer* m_formulaRenderer;
+    /// The element at the highest level in the formula tree
+    BasicElement* m_formulaElement;
 };
 
 } // namespace KFormula
 
-#endif // KFORMULASHAPE_H
+#endif // FORMULASHAPE_H

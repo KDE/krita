@@ -18,61 +18,45 @@
 */
 
 #include "FormulaShape.h"
+#include "BasicElement.h"
 
-#include "FormulaRenderer.h"
-#include "FormulaCursor.h"
-#include "FormulaContainer.h"
-#include "MathMLLoader.h"
+#include <KoXmlWriter.h>
 
 namespace KFormula {
 	
 FormulaShape::FormulaShape()
 {
-    m_formulaContainer = new FormulaContainer();
-    m_formulaCursor = 0;
-    m_formulaRenderer = 0;
+    m_formulaElement = 0;
 }
 
 FormulaShape::~FormulaShape()
 {
-    if( m_formulaRenderer )
-         delete m_formulaRenderer;
-
-    delete m_formulaContainer;
 }
 
 void FormulaShape::paint( QPainter &painter, KoViewConverter &converter )
 {
-    m_formulaRenderer = new FormulaRenderer();
-    m_formulaRenderer->render( painter ); 
+    // TODO adapt the QPainter's QMatrix to convert the points correctly to pixels
+    m_formulaElement->paint( painter );
+}
+
+BasicElement* FormulaShape::formulaElement() const
+{
+    return m_formulaElement;
 }
    
-void FormulaShape::setFormulaCursor( FormulaCursor* cursor )
+void FormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
 {
+    if( !m_formulaElement )
+        return;
+
+    // TODO start a MathML doc or the OASIS pendant
+    
+    m_formulaElement->writeMathML( writer, oasisFormat );
 }
 
-FormulaCursor* FormulaShape::formulaCursor() const
+void FormulaShape::loadMathML( const QDomDocument &doc, bool oasisFormat )
 {
-}
-
-void FormulaShape::keyPressEvent( QKeyEvent* event )
-{
-    m_formulaContainer->deleteElementBeforeCursor();
-    m_formulaContainer->deleteElementAfterCursor();
-    m_formulaContainer->moveSelectedElements();
-    m_formulaContainer->deleteSelectedElements();
-}
-
-
-void FormulaShape::saveMathML( QTextStream& stream, bool oasisFormat = false )
-{
-}
-
-bool FormulaShape::loadMathML( const QDomDocument &doc, bool oasisFormat = false )
-{
-    MathMLLoader loader( m_formulaContainer );
-    if( !loader.parse( doc ) )
-        return false;
+    // TODO combine the implementations of FormulaContainer and FormulaElement
 }
 
 } // namespace KFormula

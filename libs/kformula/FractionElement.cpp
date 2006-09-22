@@ -20,16 +20,14 @@
 */
 
 #include "FractionElement.h"
-
-#include <QPainter>
-
+#include "ElementFactory.h"
 #include <KoXmlWriter.h>
 
+#include <QPainter>
 
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "FormulaElement.h"
 #include "FormulaCursor.h"
 #include "SequenceElement.h"
 
@@ -37,10 +35,8 @@ namespace KFormula {
 
 FractionElement::FractionElement( BasicElement* parent ) : BasicElement( parent )
 {
-    m_numerator = 0;
-    m_denominator = 0;
-    m_bevelled = false;
-    m_linethickness = 1;
+    m_numerator = new BasicElement( this );
+    m_denominator = new BasicElement( this );
 }
 
 FractionElement::~FractionElement()
@@ -64,7 +60,18 @@ const QList<BasicElement*> FractionElement::childElements()
 
 void FractionElement::readMathML( const QDomElement& element )
 {
+    readMathMLAttributes( element );
 
+    if( element.childNodes().count() != 2 )
+	return;
+    
+    QDomElement tmp = element.firstChildElement();
+    m_numerator = ElementFactory::createElement( tmp.tagName(), this );
+    m_numerator->readMathML( tmp );
+    
+    tmp = element.lastChildElement();
+    m_denominator = ElementFactory::createElement( tmp.tagName(), this );
+    m_denominator->readMathML( tmp );
 }
 
 void FractionElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
@@ -133,7 +140,7 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
 
 void FractionElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveLeft(cursor, this);
     }
     else {
@@ -152,12 +159,12 @@ void FractionElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         else {
             getParent()->moveLeft(cursor, this);
         }
-    }
+    }*/
 }
 
 void FractionElement::moveRight(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveRight(cursor, this);
     }
     else {
@@ -176,12 +183,12 @@ void FractionElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         else {
             getParent()->moveRight(cursor, this);
         }
-    }
+    }*/
 }
 
 void FractionElement::moveUp(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveUp(cursor, this);
     }
     else {
@@ -194,12 +201,12 @@ void FractionElement::moveUp(FormulaCursor* cursor, BasicElement* from)
         else {
             getParent()->moveUp(cursor, this);
         }
-    }
+    }*/
 }
 
 void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelectionMode()) {
+/*    if (cursor->isSelectionMode()) {
         getParent()->moveDown(cursor, this);
     }
     else {
@@ -209,7 +216,7 @@ void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
             m_denominator->moveRight(cursor, this);
         else
             getParent()->moveDown(cursor, this);
-    }
+    }*/
 }
 /*
 void FractionElement::insert(FormulaCursor* cursor,
@@ -317,7 +324,7 @@ bool FractionElement::readAttributesFromDom(QDomElement element)
  */
 bool FractionElement::readContentFromDom(QDomNode& node)
 {
-    if (!BasicElement::readContentFromDom(node)) {
+/*    if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
 
@@ -332,7 +339,7 @@ bool FractionElement::readContentFromDom(QDomNode& node)
         return false;
     }
     node = node.nextSibling();
-
+*/
     return true;
 }
 

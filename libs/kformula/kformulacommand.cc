@@ -194,20 +194,20 @@ KFCRemove::~KFCRemove()
 
 void KFCRemove::execute()
 {
-    FormulaCursor* cursor = getExecuteCursor();
+/*    FormulaCursor* cursor = getExecuteCursor();
     cursor->remove(removedList, dir);
     if (cursor->elementIsSenseless()) {
         simpleRemoveCursor = cursor->getCursorData();
         element = cursor->replaceByMainChildContent();
     }
     setUnexecuteCursor(cursor);
-    cursor->normalize( dir );
+    cursor->normalize( dir );*/
     testDirty();
 }
 
 void KFCRemove::unexecute()
 {
-    FormulaCursor* cursor = getUnexecuteCursor();
+/*    FormulaCursor* cursor = getUnexecuteCursor();
     if (element != 0) {
         cursor->replaceSelectionWith(element);
         element = 0;
@@ -217,7 +217,7 @@ void KFCRemove::unexecute()
         simpleRemoveCursor = 0;
     }
 //    cursor->insert(removedList, dir);
-    cursor->setSelection(false);
+    cursor->setSelection(false);*/
     testDirty();
 }
 

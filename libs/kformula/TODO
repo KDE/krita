@@ -7,5 +7,6 @@
 - finish the attribute system
 - factor out the old loading system and make it a filter
 - cleanup the FormulaCursor class
+- rework the kformulacommand class to use KoCommand and simplify and reduce the commands
 
 09.22.06 - not sorted by priority

@@ -1,6 +1,3 @@
-
-
-add_subdirectory( colorspaces )
 if(KUNITTEST_FOUND)
     add_subdirectory(tests)
 endif(KUNITTEST_FOUND)
@@ -14,8 +11,6 @@ set(kritacolor_LIB_SRCS
    kis_basic_histogram_producers.cc 
    kis_color_conversions.cc 
    )
-#   ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/kis_xyz_colorspace.cc
-#   ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/kis_xyz_colorspace.h
 
 kde4_automoc(${kritacolor_LIB_SRCS})
 

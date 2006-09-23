@@ -102,7 +102,7 @@ void KisPerspectiveTransformWorker::run()
                 srcAcc.sampledOldRawData( dstIt.rawData() );
                 
                 // TODO: Should set alpha = alpha*(1-selectedness)
-                cs->setAlpha( dstIt.rawData(), 255, 1);
+//                 cs->setAlpha( dstIt.rawData(), 255, 1);
             } else {
                 cs->setAlpha( dstIt.rawData(), 0, 1);
             }

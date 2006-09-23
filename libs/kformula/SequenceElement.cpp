@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,7 +20,8 @@
 */
 
 #include "SequenceElement.h"
-
+#include "ElementFactory.h"
+#include "FormulaCursor.h"
 #include <KoXmlWriter.h>
 #include <QPainter>
 
@@ -36,7 +38,7 @@
 
 #include "MatrixDialog.h"
 #include "BracketElement.h"
-#include "FormulaCursor.h"
+
 #include "FormulaElement.h"
 #include "FractionElement.h"
 #include "kformulacommand.h"
@@ -50,7 +52,9 @@
 
 namespace KFormula {
 
-SequenceElement::SequenceElement( BasicElement* parent ) : BasicElement(parent),  textSequence(true),singlePipe(true)
+SequenceElement::SequenceElement( BasicElement* parent ) : BasicElement(parent),
+							   textSequence(true),
+							   singlePipe(true)
 {
 }
 
@@ -63,6 +67,44 @@ void SequenceElement::paint( QPainter& painter ) const
     // just paint all children, a sequence has no visual representation
     foreach( BasicElement* childElement, m_sequenceChildren )
         childElement->paint( painter );
+}
+
+void SequenceElement::calculateSize()
+{
+    if( m_sequenceChildren.isEmpty() )  // do not do anything if there are no children
+        return;
+
+    QPointF origin = boundingRect().topLeft();
+    double width = 0.0;
+    double topToBaseline = 0.0;
+    double baselineToBottom = 0.0;
+    foreach( BasicElement* child, m_sequenceChildren  )  // iterate through the children
+    {
+        child->setOrigin( origin );    // set their origin
+        child->calculateSize();        // calculate their size
+        topToBaseline = qMax( topToBaseline, child->baseLine() );
+        baselineToBottom = qMax( baselineToBottom, child->height()-child->baseLine() );
+	width += child->width();       // add their width
+	origin += QPointF( width, 0 ); // and move the current origin
+    }
+
+    setWidth( width );
+    setHeight( topToBaseline + baselineToBottom );
+    setBaseline( topToBaseline );
+}
+
+void SequenceElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+{
+    Q_ASSERT( cursor->position() > m_sequenceChildren.count() );
+    
+    m_sequenceChildren.insert( cursor->position(), child );
+}
+   
+void SequenceElement::removeChild( BasicElement* element )
+{
+    int i = m_sequenceChildren.indexOf( element );
+    Q_ASSERT( i == -1 );
+    delete m_sequenceChildren.takeAt( i );
 }
 
 void SequenceElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
@@ -95,6 +137,17 @@ BasicElement* SequenceElement::childAt( int i )
 
 void SequenceElement::readMathML( const QDomElement& element )
 {
+    readMathMLAttributes( element );
+   
+    BasicElement* tmpElement = 0;
+    QDomElement tmp = element.firstChildElement();
+    while( !tmp.isNull() )
+    {
+        tmpElement = ElementFactory::createElement( tmp.tagName(), this );
+        m_sequenceChildren << tmpElement;
+	tmpElement->readMathML( tmp );
+	tmp = tmp.nextSiblingElement();
+    }
 }
 
 void SequenceElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
@@ -107,6 +160,8 @@ void SequenceElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
    
     writer->endElement();
 }
+
+
 
 
 
@@ -136,67 +191,7 @@ bool SequenceElement::isEmpty()
 }
 
 
-/**
- * Calculates our width and height and
- * our m_sequenceChildren's parentPosition.
- */
-void SequenceElement::calcSizes(const ContextStyle& style,
-                                ContextStyle::TextStyle tstyle,
-                                ContextStyle::IndexStyle istyle)
-{
-/*    if (!isEmpty()) {
-        luPixel width = 0;
-        luPixel toBaseline = 0;
-        luPixel fromBaseline = 0;
 
-        // Let's do all normal elements that have a base line.
-        foreach( BasicElement* child, m_sequenceChildren  )
-       	{
-            luPixel spaceBefore = 0;
-            if ( isFirstOfToken( child ) ) {
-                //spaceBefore =
-                //    style.ptToPixelX( child->getElementType()->getSpaceBefore( style,
-                //                                                               tstyle ) );
-            }
-
-            if ( !child->isInvisible() ) {
-                child->calcSizes( style, tstyle, istyle );
-                child->setX( width + spaceBefore );
-                width += child->getWidth() + spaceBefore;
-
-                luPixel childBaseline = child->getBaseline();
-                if ( childBaseline > -1 ) {
-                    toBaseline = qMax( toBaseline, childBaseline );
-                    fromBaseline = qMax( fromBaseline,
-                                         child->getHeight() - childBaseline );
-                }
-                else {
-                    luPixel bl = child->getHeight()/2 + style.axisHeight( tstyle );
-                    toBaseline = qMax( toBaseline, bl );
-                    fromBaseline = qMax( fromBaseline, child->getHeight() - bl );
-                }
-            }
-            else {
-                width += spaceBefore;
-                child->setX( width );
-            }
-        }
-
-        setWidth(width);
-        setHeight(toBaseline+fromBaseline);
-        setBaseline(toBaseline);
-
-        setChildrenPositions();
-    }
-    else {
-        luPixel w = style.getEmptyRectWidth();
-        luPixel h = style.getEmptyRectHeight();
-        setWidth( w );
-        setHeight( h );
-        setBaseline( h );
-        //setMidline( h*.5 );
-    }*/
-}
 
 
 void SequenceElement::setChildrenPositions()
@@ -254,9 +249,9 @@ luPixel SequenceElement::getChildPosition( const ContextStyle& context, int chil
     }
 }
 
-void SequenceElement::moveWordLeft(FormulaCursor* cursor)
+/*void SequenceElement::moveWordLeft(FormulaCursor* cursor)
 {
-/*    uint pos = cursor->getPos();
+    uint pos = cursor->getPos();
     if (pos > 0) {
         ElementType* type = m_sequenceChildren.at(pos-1)->getElementType();
         if (type != 0) {
@@ -265,13 +260,13 @@ void SequenceElement::moveWordLeft(FormulaCursor* cursor)
     }
     else {
         moveLeft(cursor, this);
-    }*/
-}
+    }
+}*/
 
 
-void SequenceElement::moveWordRight(FormulaCursor* cursor)
+/*void SequenceElement::moveWordRight(FormulaCursor* cursor)
 {
-/*    int pos = cursor->getPos();
+    int pos = cursor->getPos();
     if (pos < m_sequenceChildren.count()) {
         ElementType* type = m_sequenceChildren.at(pos)->getElementType();
         if (type != 0) {
@@ -280,54 +275,8 @@ void SequenceElement::moveWordRight(FormulaCursor* cursor)
     }
     else {
         moveRight(cursor, this);
-    }*/
-}
-
-
-/**
- * Enters this element while moving up starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or above it.
- */
-void SequenceElement::moveUp(FormulaCursor* cursor, BasicElement* from)
-{
-// disabled because this uses formula() and implements a moveUp case that
-// is only important for FormulaElement that has to be changed and moved to
-// FormulaElement         -hubipete 2006-09-03
-
-/*    if (from == getParent()) {
-        moveRight(cursor, this);
     }
-    else {
-        if (getParent() != 0) {
-            getParent()->moveUp(cursor, this);
-        }
-        else {
-            formula()->moveOutAbove( cursor );
-        }
-    }*/
-}
-
-/**
- * Enters this element while moving down starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or below it.
- */
-void SequenceElement::moveDown(FormulaCursor* cursor, BasicElement* from)
-{
-/*    if (from == getParent()) {
-        moveRight(cursor, this);
-    }
-    else {
-        if (getParent() != 0) {
-            getParent()->moveDown(cursor, this);
-        }
-        else {
-            formula()->moveOutBelow( cursor );
-        }
-    }*/
-}
-
+}*/
 
 /**
  * Sets the cursor inside this element to its start position.
@@ -338,32 +287,6 @@ void SequenceElement::goInside(FormulaCursor* cursor)
     cursor->setSelecting(false);
     cursor->setCursorTo(this, 0);
 }
-
-
-// m_sequenceChildren
-
-/**
- * Removes the child. If this was the main child this element might
- * request its own removal.
- * The cursor is the one that caused the removal. It has to be moved
- * to the place any user expects the cursor after that particular
- * element has been removed.
- */
-// void SequenceElement::removeChild(FormulaCursor* cursor, BasicElement* child)
-// {
-//     int pos = m_sequenceChildren.find(child);
-//     formula()->elementRemoval(child, pos);
-//     cursor->setTo(this, pos);
-//     m_sequenceChildren.remove(pos);
-//     /*
-//         if len(self.m_sequenceChildren) == 0:
-//             if self.parent != None:
-//                 self.parent.removeChild(cursor, self)
-//                 return
-//     */
-//     formula()->changed();
-// }
-
 
 /**
  * Inserts all new m_sequenceChildren at the cursor position. Places the
@@ -455,21 +378,6 @@ void SequenceElement::remove(FormulaCursor* cursor,
     //parse();
 }
 
-
-/**
- * Removes the m_sequenceChildren at pos and appends it to the list.
- */
-void SequenceElement::removeChild(QList<BasicElement*>& removedChildren, int pos)
-{
-    BasicElement* child = m_sequenceChildren.at(pos);
-    //formula()->elementRemoval(child);
-    m_sequenceChildren.takeAt(pos);
-    removedChildren.append(child);
-    //cerr << *removedChildren.at(0) << endl;
-    //formula()->changed();
-}
-
-
 /**
  * Moves the cursor to a normal place where new elements
  * might be inserted.
@@ -512,6 +420,11 @@ void SequenceElement::selectChild(FormulaCursor* cursor, BasicElement* child)
     }*/
 }
 
+bool SequenceElement::isFirstOfToken( BasicElement* child )
+{
+    return true;//( child->getElementType() != 0 ) && isChildNumber( child->getElementType()->start(), child );
+}
+
 void SequenceElement::childWillVanish(FormulaCursor* cursor, BasicElement* child)
 {
 /*    int childPos = m_sequenceChildren.indexOf(child);
@@ -552,426 +465,11 @@ bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
     return true;*/
 }
 
-/*
-KCommand* SequenceElement::buildCommand( Container* container, Request* request )
-{
-    FormulaCursor* cursor = container->activeCursor();
-    if ( cursor->isReadOnly() ) {
-        //formula()->tell( i18n( "write protection" ) );
-        return 0;
-    }
-
-    switch ( *request ) {
-    case req_addText: {
-        KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
-        TextRequest* tr = static_cast<TextRequest*>( request );
-        for ( int i = 0; i < tr->text().length(); i++ ) {
-            command->addElement( creationStrategy->createTextElement( tr->text()[i] ) );
-        }
-        return command;
-    }
-    case req_addTextChar: {
-        KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
-        TextCharRequest* tr = static_cast<TextCharRequest*>( request );
-        TextElement* element = creationStrategy->createTextElement( tr->ch(), tr->isSymbol() );
-        command->addElement( element );
-        return command;
-    }
-    case req_addEmptyBox: {
-        EmptyElement* element = creationStrategy->createEmptyElement();
-        if ( element != 0 ) {
-            KFCReplace* command = new KFCReplace( i18n("Add Empty Box"), container );
-            command->addElement( element );
-            return command;
-        }
-        break;
-    }
-    case req_addNameSequence:
-        if ( onlyTextSelected( container->activeCursor() ) ) {
-            NameSequence* nameSequence = creationStrategy->createNameSequence();
-            if ( nameSequence != 0 ) {
-                KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Name" ), container );
-                command->setElement( nameSequence );
-                return command;
-            }
-        }
-        break;
-    case req_addBracket: {
-        BracketRequest* br = static_cast<BracketRequest*>( request );
-        BracketElement* bracketElement =
-            creationStrategy->createBracketElement( br->left(), br->right() );
-        if ( bracketElement != 0 ) {
-            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Bracket"), container);
-            command->setElement( bracketElement );
-            return command;
-        }
-        break;
-    }
-    case req_addOverline: {
-        OverlineElement* overline = creationStrategy->createOverlineElement();
-        if ( overline != 0 ) {
-            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Overline"), container);
-            command->setElement( overline );
-            return command;
-        }
-        break;
-    }
-    case req_addUnderline: {
-        UnderlineElement* underline = creationStrategy->createUnderlineElement();
-        if ( underline != 0 ) {
-            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Underline"), container);
-            command->setElement( underline );
-            return command;
-        }
-        break;
-    }
-    case req_addMultiline: {
-        MatrixRowElement* matrixrow = creationStrategy->createMatrixRowElement();
-        if ( matrixrow != 0 ) {
-            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Matrixrow"), container);
-            command->setElement( matrixrow );
-            return command;
-        }
-        break;
-    }
-    case req_addSpace: {
-        SpaceRequest* sr = static_cast<SpaceRequest*>( request );
-        SpaceElement* element = creationStrategy->createSpaceElement( sr->space() );
-        if ( element != 0 ) {
-            KFCReplace* command = new KFCReplace( i18n("Add Space"), container );
-            command->addElement( element );
-            return command;
-        }
-        break;
-    }
-    case req_addFraction: {
-        FractionElement* fraction = creationStrategy->createFractionElement();
-        if ( fraction != 0 ) {
-            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Fraction"), container);
-            command->setElement( fraction );
-            return command;
-        }
-        break;
-    }
-    case req_addRoot: {
-        RootElement* root = creationStrategy->createRootElement();
-        if ( root != 0 ) {
-            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Root"), container);
-            command->setElement( root );
-            return command;
-        }
-        break;
-    }
-    case req_addSymbol: {
-        SymbolRequest* sr = static_cast<SymbolRequest*>( request );
-        SymbolElement* symbol = creationStrategy->createSymbolElement( sr->type() );
-        if ( symbol != 0 ) {
-            KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Symbol" ), container );
-            command->setElement( symbol );
-            return command;
-        }
-        break;
-    }
-    case req_addOneByTwoMatrix: {
-        FractionElement* element = creationStrategy->createFractionElement();
-        if ( element != 0 ) {
-            KFCAddReplacing* command = new KFCAddReplacing( i18n("Add 1x2 Matrix"), container );
-            //element->showLine(false);
-            command->setElement(element);
-            return command;
-        }
-    }
-    case req_addMatrix: {
-        MatrixRequest* mr = static_cast<MatrixRequest*>( request );
-        uint rows = mr->rows(), cols = mr->columns();
-        if ( ( rows == 0 ) || ( cols == 0 ) ) {
-            MatrixDialog* dialog = new MatrixDialog( 0 );
-            if ( dialog->exec() ) {
-                rows = dialog->h;
-                cols = dialog->w;
-            }
-            delete dialog;
-        }
-
-        if ( ( rows != 0 ) && ( cols != 0 ) ) {
-            KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Matrix" ), container );
-            command->setElement( creationStrategy->createMatrixElement( rows, cols ) );
-            return command;
-        }
-        else
-            return 0L;
-    }
-    case req_addIndex: {
-        if ( cursor->getPos() > 0 && !cursor->isSelection() ) {
-            IndexElement* element =
-                dynamic_cast<IndexElement*>( m_sequenceChildren.at( cursor->getPos()-1 ) );
-            if ( element != 0 ) {
-                element->getMainChild()->goInside( cursor );
-                return element->getMainChild()->buildCommand( container, request );
-            }
-        }
-        IndexElement* element = creationStrategy->createIndexElement();
-        if ( element != 0 ) {
-            if ( !cursor->isSelection() ) {
-                cursor->moveLeft( SelectMovement | WordMovement );
-            }
-            IndexRequest* ir = static_cast<IndexRequest*>( request );
-            KFCAddIndex* command = new KFCAddIndex( container, element,
-                                                    element->getIndex( ir->index() ) );
-            return command;
-        }
-        break;
-    }
-    case req_removeEnclosing: {
-        if ( !cursor->isSelection() ) {
-            DirectedRemove* dr = static_cast<DirectedRemove*>( request );
-            KFCRemoveEnclosing* command = new KFCRemoveEnclosing( container, dr->direction() );
-            return command;
-        }
-    }
-    case req_remove: {
-        SequenceElement* sequence = cursor->normal();
-        if ( sequence &&   ( sequence == sequence->formula() ) && ( sequence->countChildren() == 0 ) ) {
-            sequence->formula()->removeFormula( cursor );
-            return 0;
-        }
-        else {
-            DirectedRemove* dr = static_cast<DirectedRemove*>( request );
-
-            // empty removes are not legal!
-            if ( !cursor->isSelection() ) {
-                if ( countChildren() > 0 ) {
-                    if ( ( cursor->getPos() == 0 ) && ( dr->direction() == beforeCursor ) ) {
-                        return 0;
-                    }
-                    if ( ( cursor->getPos() == countChildren() ) && ( dr->direction() == afterCursor ) ) {
-                        return 0;
-                    }
-                }
-                else if ( getParent() == 0 ) {
-                    return 0;
-                }
-            }
-
-            KFCRemove* command = new KFCRemove( container, dr->direction() );
-            return command;
-        }
-    }
-    case req_compactExpression: {
-        cursor->moveEnd();
-        cursor->moveRight();
-        formula()->cursorHasMoved( cursor );
-        break;
-    }
-    case req_makeGreek: {
-        TextElement* element = cursor->getActiveTextElement();
-        if ((element != 0) && !element->isSymbol()) {
-            cursor->selectActiveElement();
-            const SymbolTable& table = container->document()->getSymbolTable();
-            if (table.greekLetters().contains(element->getCharacter())) {
-                KFCReplace* command = new KFCReplace( i18n( "Change Char to Symbol" ), container );
-                TextElement* symbol = creationStrategy->createTextElement( table.unicodeFromSymbolFont( element->getCharacter() ), true );
-                command->addElement( symbol );
-                return command;
-            }
-            cursor->setSelection( false );
-        }
-        break;
-    }
-    case req_paste:
-    case req_copy:
-    case req_cut:
-        break;
-    case req_formatBold:
-    case req_formatItalic: {
-        if ( cursor->isSelection() ) {
-            CharStyleRequest* csr = static_cast<CharStyleRequest*>( request );
-            CharStyle cs = normalChar;
-            if ( csr->bold() ) cs = static_cast<CharStyle>( cs | boldChar );
-            if ( csr->italic() ) cs = static_cast<CharStyle>( cs | italicChar );
-            CharStyleCommand* cmd = new CharStyleCommand( cs, i18n( "Change Char Style" ), container );
-            int end = cursor->getSelectionEnd();
-            for ( int i = cursor->getSelectionStart(); i<end; ++i ) {
-                cmd->addElement( m_sequenceChildren.at( i ) );
-            }
-            return cmd;
-        }
-        break;
-    }
-    case req_formatFamily: {
-        if ( cursor->isSelection() ) {
-            CharFamilyRequest* cfr = static_cast<CharFamilyRequest*>( request );
-            CharFamily cf = cfr->charFamily();
-            CharFamilyCommand* cmd = new CharFamilyCommand( cf, i18n( "Change Char Family" ), container );
-            int end = cursor->getSelectionEnd();
-            for ( int i = cursor->getSelectionStart(); i<end; ++i ) {
-                cmd->addElement( m_sequenceChildren.at( i ) );
-            }
-            return cmd;
-        }
-        break;
-    }
-    default:
-        break;
-    }
-    return 0;
-}
-*/
-/*
-KCommand* SequenceElement::input( Container* container, QKeyEvent* event )
-{
-    QChar ch = event->text().at( 0 );
-    if ( ch.isPrint() ) {
-        return input( container, ch );
-    }
-    else {
-        int action = event->key();
-        int state = event->modifiers();
-        MoveFlag flag = movementFlag(state);
-
-	switch ( action ) {
-        case Qt::Key_Backspace: {
-            DirectedRemove r( req_remove, beforeCursor );
-            return buildCommand( container, &r );
-        }
-        case Qt::Key_Delete: {
-            DirectedRemove r( req_remove, afterCursor );
-            return buildCommand( container, &r );
-        }
-	case Qt::Key_Left: {
-            FormulaCursor* cursor = container->activeCursor();
-            cursor->moveLeft( flag );
-            formula()->cursorHasMoved( cursor );
-            break;
-        }
-        case Qt::Key_Right: {
-            FormulaCursor* cursor = container->activeCursor();
-            cursor->moveRight( flag );
-            formula()->cursorHasMoved( cursor );
-            break;
-        }
-        case Qt::Key_Up: {
-            FormulaCursor* cursor = container->activeCursor();
-            cursor->moveUp( flag );
-            formula()->cursorHasMoved( cursor );
-            break;
-        }
-        case Qt::Key_Down: {
-            FormulaCursor* cursor = container->activeCursor();
-            cursor->moveDown( flag );
-            formula()->cursorHasMoved( cursor );
-            break;
-        }
-        case Qt::Key_Home: {
-            FormulaCursor* cursor = container->activeCursor();
-            cursor->moveHome( flag );
-            formula()->cursorHasMoved( cursor );
-            break;
-        }
-        case Qt::Key_End: {
-            FormulaCursor* cursor = container->activeCursor();
-            cursor->moveEnd( flag );
-            formula()->cursorHasMoved( cursor );
-            break;
-        }
-        default:
-            if ( state & Qt::ControlModifier ) {
-                switch ( event->key() ) {
-                case Qt::Key_AsciiCircum: {
-                    IndexRequest r( upperLeftPos );
-                    return buildCommand( container, &r );
-                }
-                case Qt::Key_Underscore: {
-                    IndexRequest r( lowerLeftPos );
-                    return buildCommand( container, &r );
-                }
-                default:
-                    break;
-                }
-            }
-        }
-    }
-    return 0;
-}
 
 
-KCommand* SequenceElement::input( Container* container, QChar ch )
-{
-    int unicode = ch.unicode();
-    switch (unicode) {
-    case '(': {
-        BracketRequest r( container->document()->leftBracketChar(),
-                          container->document()->rightBracketChar() );
-        singlePipe = true;
-        return buildCommand( container, &r );
-    }
-    case '[': {
-        BracketRequest r( LeftSquareBracket, RightSquareBracket );
-        singlePipe = true;
-        return buildCommand( container, &r );
-    }
-    case '{': {
-        BracketRequest r( LeftCurlyBracket, RightCurlyBracket );
-        singlePipe = true;
-        return buildCommand( container, &r );
-    }
-    case '|': {	
-        if (!singlePipe) { // We have had 2 '|' in a row so we want brackets
 
-          DirectedRemove rDelete( req_remove, beforeCursor ); //Delete the previous '|' we dont need it any more
-          KCommand* command = buildCommand( container, &rDelete );
-          command->execute();
-          
-          BracketRequest rBracket( LeftLineBracket , RightLineBracket);
-          singlePipe = true;  //the next '|' will be a single pipe again
-          return buildCommand( container, &rBracket );    
-        }
-        else { // We really do only want 1 '|'
-          TextCharRequest r(ch);
 
-          //in case another '|' character is entered right after this one, '| |' brackets are made; see above
-          singlePipe = false;
 
-          return buildCommand( container, &r );   
-        }
-    }
-    case '^': {
-        IndexRequest r( upperRightPos );
-        singlePipe = true;
-        return buildCommand( container, &r );
-    }
-    case '_': {
-        IndexRequest r( lowerRightPos );
-        singlePipe = true;
-        return buildCommand( container, &r );
-    }
-    case ' ': {
-        Request r( req_compactExpression );
-        singlePipe = true;
-        return buildCommand( container, &r );
-    }
-    case '}': {
-        Request r( req_addEmptyBox );
-        singlePipe = true;
-        return buildCommand( container, &r );
-    }
-    case ']':
-    case ')':
-        singlePipe = true; 
-        break;
-    case '\\': {
-        Request r( req_addNameSequence );
-        singlePipe = true;
-        return buildCommand( container, &r );
-    }
-    default: {
-        TextCharRequest r( ch );
-        singlePipe = true;
-        return buildCommand( container, &r );
-    }
-    }
-    return 0;
-}*/
 
 /**
  * Stores the given m_sequenceChildrens dom in the element.
@@ -1044,11 +542,6 @@ bool SequenceElement::readContentFromDom(QDomNode& node)
     }
 
     return buildChildrenFromDom(m_sequenceChildren, node);
-}
-
-bool SequenceElement::isFirstOfToken( BasicElement* child )
-{
-    return true;//( child->getElementType() != 0 ) && isChildNumber( child->getElementType()->start(), child );
 }
 
 } // namespace KFormula

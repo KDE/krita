@@ -38,6 +38,11 @@ BasicElement* FormulaCursor::currentElement() const
     return m_currentElement;
 }
 
+int FormulaCursor::position() const
+{
+    return m_positionInElement;
+}
+
 bool FormulaCursor::hasSelection() const
 {
     return m_selecting;

@@ -29,7 +29,7 @@
 
 namespace KFormula {
 
-BasicElement::BasicElement( BasicElement* p ) : m_baseline( 0 )
+BasicElement::BasicElement( BasicElement* p ) : m_baseLine( 0 )
 {
     m_parentElement = p;
     m_boundingRect = QRectF( 0, 0, 0, 0 );
@@ -45,6 +45,13 @@ void BasicElement::paint( QPainter& painter ) const
     // painter.setBrush( Qt::NoBrush );
     // painter.setPen( QPen(  ) );
     // painter.drawRect( m_boundingRect );
+}
+
+void BasicElement::calculateSize()
+{
+    // set the bounding rect to a default value
+    // m_boundingRect.setWidth( );
+    // m_boundingRect.setHeight( ); 
 }
 
 void BasicElement::insertChild( FormulaCursor* , BasicElement* )
@@ -73,6 +80,26 @@ double BasicElement::height() const
 double BasicElement::width() const
 {
     return m_boundingRect.width();
+}
+
+double BasicElement::baseLine() const
+{
+    return m_baseLine;
+}
+
+void BasicElement::setWidth( double width )
+{
+    m_boundingRect.setWidth( width );
+}
+
+void BasicElement::setHeight( double height )
+{
+    m_boundingRect.setHeight( height );
+}
+
+void BasicElement::setOrigin( QPointF origin )
+{
+    m_boundingRect.setTopLeft( origin );
 }
 
 ElementType BasicElement::elementType() const
@@ -190,6 +217,11 @@ void BasicElement::writeMathMLAttributes( KoXmlWriter* writer )
         // combination of data and unit still missing 
     }
 }
+
+
+
+
+
 
 
 
@@ -323,15 +355,7 @@ bool BasicElement::buildChild( SequenceElement* child, QDomNode node, QString na
     return false;
 }
 
-void BasicElement::setWidth( double width )
-{
-    m_boundingRect.setWidth( width );
-}
 
-void BasicElement::setHeight( double height )
-{
-    m_boundingRect.setHeight( height );
-}
 
 void BasicElement::setX( double x )
 {

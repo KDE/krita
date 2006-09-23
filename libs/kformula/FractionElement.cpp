@@ -82,7 +82,7 @@ void FractionElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
     m_numerator->writeMathML( writer, oasisFormat );
     m_denominator->writeMathML( writer, oasisFormat );
 
-    writer->endElement();		
+    writer->endElement();
 }
 
 void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)

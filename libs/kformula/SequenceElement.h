@@ -25,6 +25,7 @@
 #include "BasicElement.h"
 
 
+
 #include <QList>
 #include <QString>
 #include <QKeyEvent>
@@ -41,11 +42,28 @@ class SymbolTable;
  */
 class SequenceElement : public BasicElement {
 public:
-    SequenceElement(BasicElement* parent = 0);
+    /// The standard constructor
+    SequenceElement( BasicElement* parent = 0 );
     
     ~SequenceElement();
 
     virtual void paint( QPainter& painter ) const;
+
+    virtual void calculateSize();
+
+    /**
+     * Insert a new child at the cursor position - reimplemented from BasicElement
+     * @param cursor The cursor holding the position where to inser
+     * @param child A BasicElement to insert
+     */
+    virtual void insertChild( FormulaCursor* cursor, BasicElement* child );
+   
+    /**
+     * Remove a child element
+     * @param element The BasicElement to remove
+     */ 
+    virtual void removeChild( BasicElement* element );
+
     
     virtual const QList<BasicElement*> childElements();
 
@@ -55,8 +73,18 @@ public:
     /// @return The index of the @p element in the sequence - -1 if not in sequence
     int indexOfElement( const BasicElement* element ) const;
 
+    /**
+     * Move the FormulaCursor left - reimplemented from BasicElement
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
     virtual void moveLeft( FormulaCursor* cursor, BasicElement* from );
 
+    /**
+     * Move the FormulaCursor right - reimplemented from BasicElement
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
     virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
 
     virtual void readMathML( const QDomElement& element );
@@ -88,9 +116,9 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& context,
-                           ContextStyle::TextStyle tstyle,
-                           ContextStyle::IndexStyle istyle);
+    //virtual void calcSizes(const ContextStyle& context,
+    //                       ContextStyle::TextStyle tstyle,
+    //                       ContextStyle::IndexStyle istyle);
 
     /**
      * Draws the whole element including its children.
@@ -104,40 +132,11 @@ public:
                        const LuPixelPoint& parentOrigin );
 
 
-
-    /**
-     * Moves to the beginning of this word or if we are there already
-     * to the beginning of the previous.
-     */
-    virtual void moveWordLeft(FormulaCursor* cursor);
-
-    /**
-     * Moves to the end of this word or if we are there already
-     * to the end of the next.
-     */
-    virtual void moveWordRight(FormulaCursor* cursor);
-
-    /**
-     * Enters this element while moving up starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or above it.
-     */
-    virtual void moveUp(FormulaCursor* cursor, BasicElement* from);
-
-    /**
-     * Enters this element while moving down starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or below it.
-     */
-    virtual void moveDown(FormulaCursor* cursor, BasicElement* from);
-
     /**
      * Sets the cursor inside this element to its start position.
      * For most elements that is the main child.
      */
     virtual void goInside(FormulaCursor* cursor);
-
-
 
     /**
      * Inserts all new children at the cursor position. Places the
@@ -196,14 +195,6 @@ public:
 
     bool onlyTextSelected( FormulaCursor* cursor );
 
-    /**
-     * Parses the input. It's the container which does create
-     * new elements because it owns the undo stack. But only the
-     * sequence knows what chars are allowed.
-     */
-//    virtual KCommand* input( Container* container, QChar ch );
-//    virtual KCommand* input( Container* container, QKeyEvent* event );
-
    /**
      * Stores the given childrens dom in the element.
      */
@@ -217,8 +208,6 @@ public:
     bool buildChildrenFromDom(QList<BasicElement*>& list, QDomNode n);
 
 protected:
-    //Save/load support
-
     /**
      * Returns the tag name of this element type.
      */
@@ -267,14 +256,6 @@ private:
     /// The sorted list of all elements in this sequence
     QList<BasicElement*> m_sequenceChildren;
 
-
-
-
-
-    /**
-     * Removes the children at pos and appends it to the list.
-     */
-    void removeChild(QList<BasicElement*>& removedChildren, int pos);
 
     /**
      * true if the sequence contains only text

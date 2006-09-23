@@ -106,7 +106,7 @@ public:
     virtual const QList<BasicElement*> childElements();
 
     /**
-     * Insert the new child at the current cursor position
+     * Insert a new child at the cursor position
      * @param cursor The cursor holding the position where to inser
      * @param child A BasicElement to insert
      */
@@ -123,6 +123,9 @@ public:
      * @param painter The QPainter to paint the element to
      */
     virtual void paint( QPainter& painter ) const;
+
+    /// Calculate the element's sizes and the size of its children
+    virtual void calculateSize();
     
     /**
      * Move the FormulaCursor left
@@ -178,6 +181,14 @@ public:
 
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
+
+    void setWidth( double width );
+
+    void setHeight( double height );
+    
+    void setBaseLine( double baseLine );
+
+    void setOrigin( QPointF origin );
 
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
@@ -321,12 +332,9 @@ public:
     double getWidth() const;
     double getHeight() const;
 
-
-    void setWidth( double width );
-    void setHeight( double height );
     
-    luPixel getBaseline() const { return m_baseline; }
-    void setBaseline( luPixel line ) { m_baseline = line; }
+    luPixel getBaseline() const { return m_baseLine; }
+    void setBaseline( luPixel line ) { m_baseLine = line; }
 
     luPixel axis( const ContextStyle& style, ContextStyle::TextStyle tstyle ) const {
         return getBaseline() - style.axisHeight( tstyle ); }
@@ -400,7 +408,7 @@ private:
     QRectF m_boundingRect;
    
     /// The position of our base line from the upper border
-    double m_baseline;
+    double m_baseLine;
 };
 
 } // namespace KFormula

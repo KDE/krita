@@ -54,6 +54,9 @@ public:
     /// @return The element the FormulaCursor is currently inside
     BasicElement* currentElement() const;
 
+    /// @return The current position in m_currentElement
+    int position() const;
+
     /**
      * Draw the cursor to the given QPainter
      * @param painter The QPainter the cursor draws itsself to

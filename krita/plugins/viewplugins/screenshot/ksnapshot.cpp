@@ -77,6 +77,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
     Q_CHECK_PTR(mainWidget);
 
     mainWidget->btnSave->hide();
+    mainWidget->btnPrint->hide();
     connect(mainWidget, SIGNAL(startImageDrag()), SLOT(slotDragSnapshot()));
 
     connect( mainWidget, SIGNAL( newClicked() ), SLOT( slotGrab() ) );

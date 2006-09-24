@@ -190,6 +190,8 @@ public:
 
     void setOrigin( QPointF origin );
 
+    void setParentElement( BasicElement* parent );
+
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
     

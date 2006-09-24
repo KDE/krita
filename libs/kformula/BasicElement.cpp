@@ -102,6 +102,11 @@ void BasicElement::setOrigin( QPointF origin )
     m_boundingRect.setTopLeft( origin );
 }
 
+void BasicElement::setParentElement( BasicElement* parent )
+{
+    m_parentElement = parent;
+}
+
 ElementType BasicElement::elementType() const
 {
     return m_elementType;

@@ -36,7 +36,7 @@ class FormulaCursor;
  */
 class FormulaTool : public KoTool {
 public:
-    FormulaTool( KoCanvasBase *canvas );
+    explicit FormulaTool( KoCanvasBase *canvas );
     ~FormulaTool();
 
     void paint( QPainter &painter, KoViewConverter &converter );

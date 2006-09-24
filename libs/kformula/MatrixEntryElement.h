@@ -57,15 +57,6 @@ public:
 	
     virtual void registerTab( BasicElement* tab );
 	
-        /**
- 	 * This is called by the container to get a command depending o                                                                                                         * the current cursor position (this is how the element gets chosen)
-         * and the request.
-	 * @returns the command that performs the requested action with the
-	 * containers active cursor.
-	 */
-/*	 virtual KCommand* buildCommand( Container*, Request* );
-	 virtual KCommand* input( Container* container, QKeyEvent* event );
-	 virtual KCommand* input( Container* container, QChar ch );*/
 	 int tabCount() const { return tabs.count(); }
 	 BasicElement* tab( int i ) { return tabs.at( i ); }
 		 

@@ -24,17 +24,7 @@
 
 #include "BasicElement.h"
 
-
-
-#include <QList>
-#include <QString>
-#include <QKeyEvent>
-
-class QKeyEvent;
-
 namespace KFormula {
-
-class SymbolTable;
 
 /**
  * The element that contains a number of children.
@@ -94,106 +84,7 @@ public:
 
 
 
-    
-    /**
-     * @returns whether its prohibited to change the sequence with this cursor.
-     */
-    virtual bool readOnly( const FormulaCursor* ) const;
-
-    /**
-     * @returns true if the sequence contains only text.
-     */
-    virtual bool isTextOnly() const { return textSequence; }
-
-
-    /**
-     * @returns true if there is no visible element in the sequence.
-     * Please note that there might be phantom elements.
-     */
-    bool isEmpty();
-
-    /**
-     * Calculates our width and height and
-     * our children's parentPosition.
-     */
-    //virtual void calcSizes(const ContextStyle& context,
-    //                       ContextStyle::TextStyle tstyle,
-    //                       ContextStyle::IndexStyle istyle);
-
-    /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
-     */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       const LuPixelPoint& parentOrigin );
-
-
-    /**
-     * Sets the cursor inside this element to its start position.
-     * For most elements that is the main child.
-     */
-    virtual void goInside(FormulaCursor* cursor);
-
-    /**
-     * Inserts all new children at the cursor position. Places the
-     * cursor according to the direction. The inserted elements will
-     * be selected.
-     *
-     * The list will be emptied but stays the property of the caller.
-     */
-    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
-
-    /**
-     * Removes all selected children and returns them. Places the
-     * cursor to where the children have been.
-     */
-    virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
-
-    /**
-     * Moves the cursor to a normal place where new elements
-     * might be inserted.
-     */
-    virtual void normalize(FormulaCursor*, Direction);
-
-    /**
-     * Returns the child at the cursor.
-     * Does not care about the selection.
-     */
-    virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor);
-
-    /**
-     * Sets the cursor to select the child. The mark is placed before,
-     * the position behind it.
-     */
-    virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
-
-    /**
-     * Moves the cursor away from the given child. The cursor is
-     * guaranteed to be inside this element.
-     */
-    virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child);
-
-    /**
-     * @returns the number of children we have.
-     */
-    int countChildren() const { return m_sequenceChildren.count(); }
-
-    /**
-     * @returns whether the child has the given number.
-     */
-    bool isChildNumber( uint pos, BasicElement* child )
-        { return m_sequenceChildren.at( pos ) == child; }
-
-    /**
-     * Selects all children. The cursor is put behind, the mark before them.
-     */
-    void selectAllChildren(FormulaCursor* cursor);
-
-    bool onlyTextSelected( FormulaCursor* cursor );
+ 
 
    /**
      * Stores the given childrens dom in the element.
@@ -231,38 +122,9 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
-    /**
-     * Sets the childrens' positions after their size has been
-     * calculated.
-     *
-     * @see #calcSizes
-     */
-    virtual void setChildrenPositions();
-
-    /**
-     * @returns the position where the child starts.
-     *
-     * @param context the context the child is in
-     * @param child the child's number
-     */
-    luPixel getChildPosition( const ContextStyle& context, int child );
-
-    /**
-     * @returns whether the child is the first element of its token.
-     */
-    virtual bool isFirstOfToken( BasicElement* child );
-
 private:
     /// The sorted list of all elements in this sequence
-    QList<BasicElement*> m_sequenceChildren;
-
-
-    /**
-     * true if the sequence contains only text
-     */
-    bool textSequence;
-
-    bool singlePipe; //The key '|' produces one '|' not '| |', '||' produces '| |'
+    QList<BasicElement*> m_sequenceElements;
 };
 
 } // namespace KFormula

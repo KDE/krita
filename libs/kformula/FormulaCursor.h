@@ -49,7 +49,7 @@ public:
      * The constructor - set the FormulaCursor right to the beginning
      * @param element The element the FormulaCursor is set to at the beginning
      */
-    FormulaCursor( BasicElement* element );
+    explicit FormulaCursor( BasicElement* element );
 
     /// @return The element the FormulaCursor is currently inside
     BasicElement* currentElement() const;

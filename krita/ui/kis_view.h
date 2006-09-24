@@ -282,7 +282,7 @@ private:
     virtual KisDoc * document() const;
 
     inline KisGridManager * gridManager() { return m_gridManager; }
-    virtual KisPerspectiveGridManager* perspectiveGridManager() { return m_perspectiveGridManager; }
+    inline KisPerspectiveGridManager* perspectiveGridManager() { return m_perspectiveGridManager; }
     
     inline KisSelectionManager * selectionManager() { return m_selectionManager; }
 

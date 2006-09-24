@@ -404,7 +404,8 @@ BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Direction direct
             return m_sequenceChildren.at( cursor->getPos() );
         }
     }
-    return 0;*/
+*/ // TODO
+    return 0;
 }
 
 
@@ -463,6 +464,7 @@ bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
         }
     }
     return true;*/
+    return false; // TODO
 }
 
 

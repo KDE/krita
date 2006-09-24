@@ -104,7 +104,7 @@ void KisPerspectiveTransformWorker::run()
                 // TODO: Should set alpha = alpha*(1-selectedness)
 //                 cs->setAlpha( dstIt.rawData(), 255, 1);
             } else {
-                cs->setAlpha( dstIt.rawData(), 0, 1);
+//                 cs->setAlpha( dstIt.rawData(), 0, 1);
             }
             m_progressStep ++;
             if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)

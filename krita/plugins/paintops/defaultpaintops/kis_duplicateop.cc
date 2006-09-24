@@ -89,7 +89,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     if (!m_painter) return;
 
     bool heal = m_painter->duplicateHealing();
-    int healradius = m_painter->duplicateHealingRadius();
+//     int healradius = m_painter->duplicateHealingRadius();
 
     KisPaintDeviceSP device = m_painter->device();
     if (m_source) device = m_source;
@@ -239,9 +239,9 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         KisHLineIteratorPixel deviceIt = device->createHLineIterator(x, y, sw, false );
         KisHLineIteratorPixel srcDevIt = srcdev->createHLineIterator(0, 0, sw, true );
         double* matrixIt = matrix;
-        for(int y = 0; y < sh; y++)
+        for(int j = 0; j < sh; j++)
         {
-            for(int x= 0; !srcDevIt.isDone(); x++)
+            for(int i= 0; !srcDevIt.isDone(); i++)
             {
                 deviceCs->toLabA16(deviceIt.rawData(), (Q_UINT8*)dataDevice, 1);
                 deviceCs->toLabA16(srcDevIt.rawData(), (Q_UINT8*)dataSrcDev, 1);
@@ -273,9 +273,9 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         deviceIt = device->createHLineIterator(x, y, sw, false );
         srcDevIt = srcdev->createHLineIterator(0, 0, sw, true );
         matrixIt = matrix;
-        for(int y = 0; y < sh; y++)
+        for(int j = 0; j < sh; j++)
         {
-            for(int x= 0; !srcDevIt.isDone(); x++)
+            for(int i= 0; !srcDevIt.isDone(); i++)
             {
                 deviceCs->toLabA16(deviceIt.rawData(), (Q_UINT8*)dataDevice, 1);
                 deviceCs->toLabA16(srcDevIt.rawData(), (Q_UINT8*)dataSrcDev, 1);
@@ -301,8 +301,9 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 //     copySelection.end();
 
     // copy the srcdev onto a new device, after applying the dab selection
-    KisPaintDeviceSP target = new KisPaintDevice(srcdev->colorSpace(), "duplicate target dev");
+    KisPaintDeviceSP target = srcdev ;//new KisPaintDevice(srcdev->colorSpace(), "duplicate target dev");
     copyPainter.begin(target);
+    copyPainter.beginTransaction("bouuh");
 
     copyPainter.bltMask(0, 0, COMPOSITE_OVER, srcdev, dab,
                              OPACITY_OPAQUE, 0, 0, sw, sh);

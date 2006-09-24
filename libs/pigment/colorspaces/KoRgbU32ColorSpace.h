@@ -22,7 +22,13 @@
 
 #include <KoLcmsColorSpace.h>
 
-class KoRgbU32ColorSpace : public KoLcmsColorSpace<quint32,4>
+struct RgbU32Traits {
+    typedef quint32 channels_type;
+    static const quint32 channels_nb = 4;
+    static const qint32 alpha_pos = 3;
+};
+
+class KoRgbU32ColorSpace : public KoLcmsColorSpace<RgbU32Traits>
 {
     public:
         KoRgbU32ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);

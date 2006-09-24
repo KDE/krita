@@ -78,7 +78,7 @@ class KoColorSpaceMaths {
         inline static _T blend(_T a, _T b, qint64 alpha)
         {
             traits_compositetype c = ((traits_compositetype)a - (traits_compositetype)b) >> traits::bits();
-//             return c+b;
+            return c+b;
         }
         /**
          * This function will scale a value of type _T to fit into a _Tdst.

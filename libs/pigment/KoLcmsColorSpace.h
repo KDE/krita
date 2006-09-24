@@ -59,12 +59,12 @@ struct KoColorAdjustmentImpl : public KoColorAdjustment
     cmsHTRANSFORM transform;
 };
 
-template<typename _Tchannels, quint32 _nchannels>
-class KoLcmsColorSpace : public KoColorSpaceAbstract<_Tchannels, _nchannels> {
+template<class _CSTraits>
+class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
     protected:
-        KoLcmsColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, qint32 alphaPos, DWORD cmType,
+        KoLcmsColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, DWORD cmType,
                          icColorSpaceSignature colorSpaceSignature,
-                         KoColorProfile *p) : KoColorSpaceAbstract<_Tchannels, _nchannels>(id, name, parent, alphaPos), m_profile( p ), m_cmType( cmType ), m_colorSpaceSignature( colorSpaceSignature )
+                         KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name, parent), m_profile( p ), m_cmType( cmType ), m_colorSpaceSignature( colorSpaceSignature )
 
         {
             m_qcolordata = 0;
@@ -362,9 +362,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_Tchannels, _nchannels> {
         {
             if (!m_profile) return 0;
 
-            LPGAMMATABLE *transferFunctions = new LPGAMMATABLE[ _nchannels +1];
+            LPGAMMATABLE *transferFunctions = new LPGAMMATABLE[ _CSTraits::channels_nb +1];
 
-            for(uint ch=0; ch < _nchannels; ch++) {
+            for(uint ch=0; ch < _CSTraits::channels_nb; ch++) {
                 transferFunctions[ch] = cmsBuildGamma(256, 1.0);
                 for(uint i =0; i < 256; i++) {
                     transferFunctions[ch]->GammaTable[i] = transferValues[ch][i];
@@ -473,7 +473,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_Tchannels, _nchannels> {
 
                 for (int i = 0; i < nPixels; ++i) {
 
-                    const_cast<KoLcmsColorSpace<_Tchannels, _nchannels>* >(this)->toQColor(src + (i * psize), &c);
+                    const_cast<KoLcmsColorSpace<_CSTraits>* >(this)->toQColor(src + (i * psize), &c);
                     qint32 r, g, b;
 
                     if (compensate) {
@@ -488,7 +488,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_Tchannels, _nchannels> {
                     }
                     c.setRgb(r, g, b);
 
-                    const_cast<KoLcmsColorSpace<_Tchannels, _nchannels>* >(this)->fromQColor( c, dst  + (i * psize));
+                    const_cast<KoLcmsColorSpace<_CSTraits>* >(this)->fromQColor( c, dst  + (i * psize));
                 }
             }
         }

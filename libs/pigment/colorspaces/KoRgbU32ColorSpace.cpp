@@ -25,7 +25,7 @@
 #include "KoCompositeOp.h"
 
 KoRgbU32ColorSpace::KoRgbU32ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
- KoLcmsColorSpace<quint32,4>("RGBU32", i18n("RGB 32-bit integer/channel)"), parent, 3, TYPE_BGRA_32, icSigRgbData, p)
+ KoLcmsColorSpace<RgbU32Traits>("RGBU32", i18n("RGB 32-bit integer/channel)"), parent, TYPE_BGRA_32, icSigRgbData, p)
 {
     m_channels.push_back(new KoChannelInfo(i18n("Red"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT32, 4, QColor(255,0,0)));
     m_channels.push_back(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT32, 4, QColor(0,255,0)));

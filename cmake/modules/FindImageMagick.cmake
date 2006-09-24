@@ -93,17 +93,24 @@ find_program(MAGICK_CONFIG_EXECUTABLE
 set(IMAGEMAGICK_FOUND FALSE)
 
 if(MAGICK_CONFIG_EXECUTABLE)
+
+   # use pkg-config to get the directories and then use these values
+   # in the FIND_PATH() and FIND_LIBRARY() calls
+   INCLUDE(UsePkgConfig)
+   PKGCONFIG(ImageMagick _libMagickIncDir _libMagickLinkDir _libMagickLinkFlags _libMagickCflags)
+
    find_path(IMAGEMAGICK_INCLUDE_DIR magick/api.h
       /usr/include
       /usr/local/include
       /opt/local/include
    )
 
-   find_library(IMAGEMAGICK_LIBRARIES Magick
-      /usr/lib
-      /usr/local/lib
-      /opt/local/lib
-   )
+   set(IMAGEMAGICK_LIBRARIES ${_libMagickLinkFlags})
+   #   find_library(IMAGEMAGICK_LIBRARIES Magick
+   #   /usr/lib
+   #   /usr/local/lib
+   #   /opt/local/lib
+   # )
 
    exec_program(${MAGICK_CONFIG_EXECUTABLE} ARGS --version OUTPUT_VARIABLE IMAGEMAGICK_VERSION)
 

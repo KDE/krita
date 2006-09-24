@@ -109,6 +109,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
     accel->insert( "New3", Qt::Key_Space, this, SLOT(slotGrab()));
 
     mainWidget->btnNew->setFocus();
+    
 }
 
 KSnapshot::~KSnapshot()
@@ -435,7 +436,8 @@ void KSnapshot::performGrab()
     updatePreview();
     QApplication::restoreOverrideCursor();
     modified = true;
-    show();
+//     show();
+    slotOk();
 }
 
 void KSnapshot::setTime(int newTime)

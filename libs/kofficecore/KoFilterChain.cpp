@@ -192,7 +192,7 @@ QString KoFilterChain::chainOutput() const
 {
     if ( m_state == Done )
         return m_inputFile; // as we already called manageIO()
-    return QString::null;
+    return QString();
 }
 
 QString KoFilterChain::inputFile()
@@ -201,7 +201,7 @@ QString KoFilterChain::inputFile()
         return m_inputFile;
     else if ( m_inputQueried != Nil ) {
         kWarning( 30500 ) << "You already asked for some different source." << endl;
-        return QString::null;
+        return QString();
     }
     m_inputQueried = File;
 
@@ -230,7 +230,7 @@ QString KoFilterChain::outputFile()
         return m_outputFile;
     else if ( m_outputQueried != Nil ) {
         kWarning( 30500 ) << "You already asked for some different destination." << endl;
-        return QString::null;
+        return QString();
     }
     m_outputQueried = File;
 
@@ -409,11 +409,11 @@ void KoFilterChain::manageIO()
         delete m_inputTempFile;  // autodelete
         m_inputTempFile = 0;
     }
-    m_inputFile = QString::null;
+    m_inputFile = QString();
 
     if ( !m_outputFile.isEmpty() ) {
         m_inputFile = m_outputFile;
-        m_outputFile = QString::null;
+        m_outputFile = QString();
         m_inputTempFile = m_outputTempFile;
         m_outputTempFile = 0;
 
@@ -466,13 +466,13 @@ void KoFilterChain::inputFileHelper( KoDocument* document, const QString& altern
         if ( !createTempFile( &m_inputTempFile ) ) {
             delete m_inputTempFile;
             m_inputTempFile = 0;
-            m_inputFile = QString::null;
+            m_inputFile = QString();
             return;
         }
         if ( !document->saveNativeFormat( m_inputTempFile->name() ) ) {
             delete m_inputTempFile;
             m_inputTempFile = 0;
-            m_inputFile = QString::null;
+            m_inputFile = QString();
             return;
         }
         m_inputFile = m_inputTempFile->name();
@@ -486,7 +486,7 @@ void KoFilterChain::outputFileHelper( bool autoDelete )
     if ( !createTempFile( &m_outputTempFile, autoDelete ) ) {
         delete m_outputTempFile;
         m_outputTempFile = 0;
-        m_outputFile = QString::null;
+        m_outputFile = QString();
     }
     else
         m_outputFile = m_outputTempFile->name();

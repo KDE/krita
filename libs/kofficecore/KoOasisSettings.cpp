@@ -135,7 +135,7 @@ QString KoOasisSettings::Items::findConfigItem( const KoXmlElement& element,
         }
     }
     *ok = false;
-    return QString::null;
+    return QString();
 }
 
 

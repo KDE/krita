@@ -124,7 +124,7 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
     cmdBuf += KProcess::quote(tmpFile.name());
     cmdBuf += " -q -g";
     cmdBuf += QString::number( wantedWidth );
-    cmdBuf += "x";
+    cmdBuf += 'x';
     cmdBuf += QString::number( wantedHeight );
 
     if ( ( resolutionx > 0) && ( resolutiony > 0) )
@@ -134,7 +134,7 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
         // It brings more problems at print than solutions
         cmdBuf += " -r";
         cmdBuf += QString::number( resolutionx );
-        cmdBuf += "x";
+        cmdBuf += 'x';
         cmdBuf += QString::number( resolutiony );
 #endif
     }

@@ -339,7 +339,7 @@ bool KoDocumentChild::finishLoadingDocument( KoStore* store, KoDocument* doc, bo
         QApplication::setOverrideCursor( Qt::WaitCursor );
     }
 
-    m_tmpURL = QString::null;
+    m_tmpURL = QString();
 
     // see KoDocument::insertChild for an explanation what's going on
     // now :-)

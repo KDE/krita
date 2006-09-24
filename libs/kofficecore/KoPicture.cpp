@@ -67,7 +67,7 @@ QString KoPicture::uniquePictureId() const
     if ( m_sharedData )
         return m_sharedData->uniquePictureId();
     else
-        return QString::null;
+        return QString();
 }
 
 KoPicture& KoPicture::operator=( const KoPicture &other )

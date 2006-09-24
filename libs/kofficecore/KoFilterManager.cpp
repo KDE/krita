@@ -111,7 +111,7 @@ QString KoFilterChooser::filterSelected ()
     if (item > -1)
         return m_mimeTypes [item];
     else
-        return QString::null;
+        return QString();
 }
 
 
@@ -155,7 +155,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     if ( t->name() == KMimeType::defaultMimeType() ) {
         kError(s_area) << "No mimetype found for " << url << endl;
         status = KoFilter::BadMimeType;
-        return QString::null;
+        return QString();
     }
 
     m_graph.setSourceMimeType( t->name().toLatin1() );  // .latin1() is okay here (Werner)
@@ -168,7 +168,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
 	    if ( !m_document->isAutoErrorHandlingEnabled() )
 	    {
 		status = KoFilter::BadConversionGraph;
-		return QString::null;
+		return QString();
 	    }
             QByteArray nativeFormat = m_document->nativeFormatMimeType ();
 
@@ -200,7 +200,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
                             << t->name() << endl;
             importErrorHelper( t->name(), userCancelled );
             status = KoFilter::BadConversionGraph;
-            return QString::null;
+            return QString();
         }
     }
 
@@ -220,28 +220,28 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     else {
         kError(s_area) << "You aren't supposed to use import() from a filter!" << endl;
         status = KoFilter::UsageError;
-        return QString::null;
+        return QString();
     }
 
     if ( !chain ) {
         kError(s_area) << "Couldn't create a valid filter chain!" << endl;
         importErrorHelper( t->name() );
         status = KoFilter::BadConversionGraph;
-        return QString::null;
+        return QString();
     }
 
     // Okay, let's invoke the filters one after the other
     m_direction = Import; // vital information!
     m_importUrl = url;  // We want to load that file
-    m_exportUrl = QString::null;  // This is null for sure, as embedded stuff isn't
+    m_exportUrl = QString();  // This is null for sure, as embedded stuff isn't
                                   // allowed to use that method
     status = chain->invokeChain();
 
-    m_importUrl = QString::null;  // Reset the import URL
+    m_importUrl.clear();  // Reset the import URL
 
     if ( status == KoFilter::OK )
         return chain->chainOutput();
-    return QString::null;
+    return QString();
 }
 
 KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QByteArray& mimeType )

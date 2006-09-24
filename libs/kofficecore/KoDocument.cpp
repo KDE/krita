@@ -417,7 +417,7 @@ bool KoDocument::saveFile()
                 if ( d->m_backupPath.isEmpty())
                     backup = url();
                 else
-                    backup = d->m_backupPath +"/"+url().fileName();
+                    backup = d->m_backupPath +'/'+url().fileName();
                 backup.setPath( backup.path() + QString::fromLatin1("~") );
                 KFileItem item( entry, url() );
                 Q_ASSERT( item.name() == url().fileName() );
@@ -959,7 +959,7 @@ bool KoDocument::saveExternalChildren()
 
 bool KoDocument::saveNativeFormat( const QString & file )
 {
-    d->lastErrorMessage = QString::null;
+    d->lastErrorMessage.clear();
     //kDebug(30003) << "Saving to store" << endl;
 
     KoStore::Backend backend = KoStore::Auto;
@@ -1317,7 +1317,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
         Q_ASSERT( url.isLocalFile() );
         QString dir = url.directory(KUrl::AppendTrailingSlash);
         QString filename = url.fileName();
-        return dir + "." + filename + ".autosave" + extension;
+        return dir + '.' + filename + ".autosave" + extension;
     }
 }
 
@@ -1378,7 +1378,7 @@ bool KoDocument::import( const KUrl & _url )
 bool KoDocument::openURL( const KUrl & _url )
 {
     kDebug(30003) << "KoDocument::openURL url=" << _url.url() << endl;
-    d->lastErrorMessage = QString::null;
+    d->lastErrorMessage.clear();
 
     // Reimplemented, to add a check for autosave files and to improve error reporting
     if ( !_url.isValid() )

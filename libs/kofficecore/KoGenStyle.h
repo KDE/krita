@@ -278,14 +278,14 @@ private:
         QMap<QString, QString>::const_iterator it = m_properties[type].find( propName );
         if ( it != m_properties[type].end() )
             return it.value();
-        return QString::null;
+        return QString();
     }
 
     QString attribute( const QString& propName ) const {
         QMap<QString, QString>::const_iterator it = m_attributes.find( propName );
         if ( it != m_attributes.end() )
             return it.value();
-        return QString::null;
+        return QString();
     }
 
     void writeStyleProperties( KoXmlWriter* writer, PropertyType i,

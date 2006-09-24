@@ -129,7 +129,7 @@ QString KoStyleStack::attribute( const QString& name, const QString& detail ) co
         if ( !detail.isEmpty() && properties.hasAttribute( fullName ) )
             return properties.attribute( fullName );
     }
-    return QString::null;
+    return QString();
 }
 
 QString KoStyleStack::attributeNS( const char* nsURI, const char* name, const char* detail ) const
@@ -150,7 +150,7 @@ QString KoStyleStack::attributeNS( const char* nsURI, const char* name, const ch
         if ( detail && properties.hasAttributeNS( nsURI, fullName ) )
             return properties.attributeNS( nsURI, fullName, QString::null );
     }
-    return QString::null;
+    return QString();
 }
 
 bool KoStyleStack::hasAttributeNS( const char* nsURI, const char* name, const char* detail ) const
@@ -289,7 +289,7 @@ QString KoStyleStack::userStyleDisplayName( const QString& family ) const
         if ( isUserStyle( *it, family ) )
             return (*it).attributeNS( m_styleNSURI, "display-name", QString::null );
     }
-    return QString::null; // no display name, this can happen since it's optional
+    return QString(); // no display name, this can happen since it's optional
 }
 
 void KoStyleStack::setTypeProperties( const char* typeProperties )

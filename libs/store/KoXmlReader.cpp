@@ -290,11 +290,11 @@ KoXmlNodeData::KoXmlNodeData()
 {
   nodeType = KoXmlNode::NullNode;
 
-  tagName = QString::null;
-  prefix = QString::null;
-  localName = QString::null;
-  namespaceURI = QString::null;
-  textData = QString::null;
+  tagName = QString();
+  prefix = QString();
+  localName = QString();
+  namespaceURI = QString();
+  textData = QString();
 
   count = 1;
   parent = 0;
@@ -327,10 +327,10 @@ void KoXmlNodeData::clear()
   }
 
   nodeType = KoXmlNode::NullNode;
-  tagName = QString::null;
-  prefix = QString::null;
-  namespaceURI = QString::null;
-  textData = QString::null;
+  tagName.clear();
+  prefix.clear();
+  namespaceURI.clear();
+  textData.clear();
 
   attr.clear();
   attrNS.clear();
@@ -341,7 +341,7 @@ void KoXmlNodeData::clear()
 
   delete xmlReader;
   xmlReader = 0;
-  buffer = QString::null;
+  buffer.clear();
 }
 
 QString KoXmlNodeData::text()
@@ -608,9 +608,9 @@ QXmlDefaultHandler()
   rootNode = n;
   currentNode = n;
   cdata = false;
-  entityName = QString::null;
+  entityName = QString();
 
-  errorMsg = QString::null;
+  errorMsg = QString();
   errorLine = 0;
   errorColumn = 0;
 
@@ -630,7 +630,7 @@ bool KoXmlHandler::startDocument()
   // just for sanity
   currentNode = rootNode;  
   cdata = false;
-  entityName = QString::null;
+  entityName.clear();
   elementDepth = -1;
 
   return true;
@@ -761,9 +761,9 @@ const QString& name, const QXmlAttributes& atts )
       element = new KoXmlNodeData;
       element->nodeType = KoXmlNode::ElementNode;
       element->parent = currentNode;
-      element->namespaceURI = QString::null;
-      element->prefix = QString::null;
-      element->localName = QString::null;
+      element->namespaceURI = QString();
+      element->prefix = QString();
+      element->localName = QString();
       element->tagName = nodeTagName;
 
       if( rootNode->nodeType == KoXmlNode::DocumentNode ) 
@@ -947,7 +947,7 @@ bool KoXmlHandler::startEntity( const QString& name )
 bool KoXmlHandler::endEntity( const QString& name )
 {
   Q_UNUSED( name );
-  entityName = QString::null;
+  entityName = QString();
   return true;
 }
 
@@ -1101,17 +1101,17 @@ QString KoXmlNode::nodeName() const
 
 QString KoXmlNode::prefix() const
 {
-  return isElement() ? d->prefix : QString::null;
+  return isElement() ? d->prefix : QString();
 }
 
 QString KoXmlNode::namespaceURI() const
 {
-  return isElement() ? d->namespaceURI : QString::null;
+  return isElement() ? d->namespaceURI : QString();
 }
 
 QString KoXmlNode::localName() const
 {
-  return isElement() ? d->localName : QString::null;
+  return isElement() ? d->localName : QString();
 }
 
 KoXmlDocument KoXmlNode::ownerDocument() const
@@ -1281,7 +1281,7 @@ bool KoXmlElement::operator!= ( const KoXmlElement& element ) const
 
 QString KoXmlElement::tagName() const
 {
-  return isElement() ? ((KoXmlNodeData*)d)->tagName: QString::null;
+  return isElement() ? ((KoXmlNodeData*)d)->tagName: QString();
 }
 
 QString KoXmlElement::text() const

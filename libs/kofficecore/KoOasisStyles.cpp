@@ -456,7 +456,7 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
             format = format.right( format.length()-prefix.length() );
         }
         else
-            prefix = QString::null;
+            prefix.clear();
     }
     if ( !suffix.isEmpty() )
     {
@@ -466,7 +466,7 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
             format = format.left( format.length()-suffix.length() );
         }
         else
-            suffix = QString::null;
+            suffix.clear();
     }
 
     dataStyle.formatStr=format;

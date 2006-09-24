@@ -818,7 +818,7 @@ public:
      * After using loadNativeFormat on a template, one wants
      * to set the url to KUrl()
      */
-    void resetURL() { m_url = KUrl(); m_file = QString::null; }
+    void resetURL() { m_url = KUrl(); m_file.clear(); }
 
     /**
      * Set when you want an external embedded document to be stored internally

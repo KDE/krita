@@ -191,5 +191,5 @@ QString KoOasisStore::mimeForPath( const KoXmlDocument& doc, const QString& full
                 return elem.attributeNS( KoXmlNS::manifest, "media-type", QString::null );
         }
     }
-    return QString::null;
+    return QString();
 }

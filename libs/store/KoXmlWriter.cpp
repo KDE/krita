@@ -404,7 +404,7 @@ void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCac
                 if ( nrSpaces > 0 ) { // there are more spaces
                     if ( !str.isEmpty() )
                         addTextNode( str );
-                    str = QString::null;
+                    str.clear();
                     startElement( "text:s" );
                     if ( nrSpaces > 1 ) // it's 1 by default
                         addAttribute( "text:c", nrSpaces );
@@ -418,7 +418,7 @@ void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCac
         case '\t':
             if ( !str.isEmpty() )
                 addTextNode( str );
-            str = QString::null;
+            str.clear();
             startElement( "text:tab" );
             if ( tabCache.contains( i ) )
                 addAttribute( "text:tab-ref", tabCache[i] + 1 );
@@ -427,7 +427,7 @@ void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCac
         case '\n':
             if ( !str.isEmpty() )
                 addTextNode( str );
-            str = QString::null;
+            str.clear();
             startElement( "text:line-break" );
             endElement();
             break;

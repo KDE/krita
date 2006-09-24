@@ -268,7 +268,7 @@ void KoDocumentInfoDlg::slotLoadFromKABC()
 
     d->m_authorUi->leFullName->setText( addr.formattedName() );
     d->m_authorUi->leInitials->setText( addr.givenName()[ 0 ] + ". " +
-            addr.familyName()[ 0 ] + "." );
+            addr.familyName()[ 0 ] + '.' );
     d->m_authorUi->leTitle->setText( addr.title() );
     d->m_authorUi->leCompany->setText( addr.organization() );
     d->m_authorUi->leEmail->setText( addr.preferredEmail() );

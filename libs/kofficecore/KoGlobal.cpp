@@ -173,7 +173,7 @@ QString KoGlobal::tagOfLanguage( const QString & _lang)
     QMap<QString,QString>::ConstIterator it = map.find( _lang );
     if ( it != map.end() )
         return *it;
-    return QString::null;
+    return QString();
 }
 
 QString KoGlobal::languageFromTag( const QString &langTag )

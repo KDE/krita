@@ -57,7 +57,7 @@ enum ColorSpaceIndependence {
     TO_RGBA8,
     TO_RGBA16
 };
-
+// TODO: constify all function of KisColorSpace
 /**
  * A KoColorSpace is the definition of a certain color space.
  * 
@@ -106,7 +106,10 @@ public:
     //========== Channels =====================================================//
 
     /// Return a vector describing all the channels this color model has.
-    virtual Q3ValueVector<KoChannelInfo *> channels() const = 0;
+    virtual Q3ValueVector<KoChannelInfo *> channels() const
+    {
+        return m_channels;
+    }
 
     /**
      * The total number of channels for a single pixel in this color model

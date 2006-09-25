@@ -37,7 +37,7 @@ extern "C"
      * Exported and loadable function as entry point to use
      * the \a PythonInterpreter.
      * The krosspython library the \a PythonInterpreter is part
-     * will be loaded dynamicly at runtime from e.g.
+     * will be loaded dynamically at runtime from e.g.
      * \a Kross::Manager::getInterpreter and this exported
      * function will be used to return an instance of the
      * \a PythonInterpreter implementation.

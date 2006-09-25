@@ -59,14 +59,14 @@ public:
 
     /**
      * register the profile with the color space registry
-     * @param profile the new profile to be registred so it can be combined with
+     * @param profile the new profile to be registered so it can be combined with
      *  colorspaces.
      */
     void addProfile(KoColorProfile * profile);
 
     /**
-     * Return a profile by its given name, or 0 if none registred.
-     * @return a profile by its given name, or 0 if none registred.
+     * Return a profile by its given name, or 0 if none registered.
+     * @return a profile by its given name, or 0 if none registered.
      * @param name the product name as set on the profile.
      * @see addProfile()
      * @see KoColorProfile::productName()
@@ -76,7 +76,7 @@ public:
     /**
      * Return the list of profiles for the argument colorspacefactory.
      * Profiles will not work with any color space, you can query which profiles
-     * that are registred with this registry can be used in combination with the
+     * that are registered with this registry can be used in combination with the
      * argument factory.
      * @param factory the factory with which all the returned profiles will work.
      * @return a list of profiles for the factory
@@ -86,7 +86,7 @@ public:
     /**
      * Return the list of profiles for a colorspace with the argument id.
      * Profiles will not work with any color space, you can query which profiles
-     * that are registred with this registry can be used in combination with the
+     * that are registered with this registry can be used in combination with the
      * argument factory.
      * @param id the colorspace-id with which all the returned profiles will work.
      * @return a list of profiles for the factory
@@ -98,7 +98,7 @@ public:
     /**
      * Return the list of profiles for a colorspace with the argument id.
      * Profiles will not work with any color space, you can query which profiles
-     * that are registred with this registry can be used in combination with the
+     * that are registered with this registry can be used in combination with the
      * argument factory.
      * @param colorProfileId the colorspace-id with which all the returned profiles will work.
      * @return a list of profiles for the factory

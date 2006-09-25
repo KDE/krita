@@ -38,7 +38,7 @@ extern "C"
     /**
      * Exported and loadable function as entry point to use
      * the \a RubyInterpreter.
-     * The krossruby library will be loaded dynamicly at runtime from e.g.
+     * The krossruby library will be loaded dynamically at runtime from e.g.
      * \a Kross::Manager::getInterpreter and this exported
      * function will be used to return an instance of the
      * \a RubyInterpreter implementation.

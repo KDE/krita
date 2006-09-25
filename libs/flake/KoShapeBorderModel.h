@@ -60,8 +60,8 @@ public:
      */
     virtual KoInsets* borderInsets(const KoShape *shape, KoInsets &insets) = 0;
     /**
-     * Returns true if there is some transparancy, false if the border is fully opaque.
-     * @return if the border is transparant.
+     * Returns true if there is some transparency, false if the border is fully opaque.
+     * @return if the border is transparent.
      */
     virtual bool hasTransparancy() = 0;
     /**

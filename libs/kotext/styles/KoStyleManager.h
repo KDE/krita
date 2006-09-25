@@ -61,11 +61,11 @@ public:
     /**
      * Add a document for which the styles will be applied.
      * Whenever a style is changed (signified by a alteredStyle() call) all
-     * registred documents will be updated to reflect that change.
+     * registered documents will be updated to reflect that change.
      */
     void add(QTextDocument *document);
      /**
-      * Remove a previously registred document.
+      * Remove a previously registered document.
       */
     void remove(QTextDocument *document);
 
@@ -90,7 +90,7 @@ public:
     /**
      * Return the first characterStyle with the param user-visible-name.
      * Since the name does not have to be unique there can be multiple
-     * styles registred with that name, only the first is returned
+     * styles registered with that name, only the first is returned
      * @param name the name of the style.
      * @see characterStyle(id);
      */
@@ -99,7 +99,7 @@ public:
     /**
      * Return the first paragraphStyle with the param user-visible-name.
      * Since the name does not have to be unique there can be multiple
-     * styles registred with that name, only the first is returned
+     * styles registered with that name, only the first is returned
      * @param name the name of the style.
      * @see paragraphStyle(id);
      */

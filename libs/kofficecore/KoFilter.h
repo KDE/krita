@@ -128,7 +128,7 @@ private:
  * a filter is Kontour's MSOD (MS Office Drawing) filter.
  *
  * The more complex case is embedding various streams from within the same filter
- * library. This is neccesary for OLE like files (at least with the current design
+ * library. This is necessary for OLE like files (at least with the current design
  * of the OLEFilter). In this case you have to use @ref #startInternalEmbedding and
  * @ref #endInternalEmbedding accordingly. Try to use the previous method if possible.
  *

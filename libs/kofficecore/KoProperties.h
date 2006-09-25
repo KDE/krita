@@ -83,7 +83,7 @@ public:
      *      int age = props->getProperty("age").toInt();
      *  @endcode
      * @return a property by name, wrapped in a QVariant.
-     * @param name the name (or key) with which the variant was registred.
+     * @param name the name (or key) with which the variant was registered.
      * @see getInt() getString()
      */
     virtual QVariant getProperty(const QString & name) const;
@@ -97,20 +97,20 @@ public:
      *      int age = props->getInt("age");
      *  @endcode
      * @return an integer property by name
-     * @param name the name (or key) with which the variant was registred.
+     * @param name the name (or key) with which the variant was registered.
      * @param def the default value, should there not be no propery by the name this will be returned.
      * @see getProperty() getString()
      */
     int getInt(const QString & name, int def = 0) const;
     /**
      * Return a double property by name.
-     * @param name the name (or key) with which the variant was registred.
+     * @param name the name (or key) with which the variant was registered.
      * @param def the default value, should there not be no propery by the name this will be returned.
      */
     double getDouble(const QString & name, double def = 0.0) const;
     /**
      * Return a boolean property by name.
-     * @param name the name (or key) with which the variant was registred.
+     * @param name the name (or key) with which the variant was registered.
      * @param def the default value, should there not be no propery by the name this will be returned.
      */
     bool getBool(const QString & name, bool def = false) const;
@@ -123,7 +123,7 @@ public:
      *      QString name = props->getString("name");
      *  @endcode
      * @return an QString property by name
-     * @param name the name (or key) with which the variant was registred.
+     * @param name the name (or key) with which the variant was registered.
      * @see getProperty() getInt()
      * @param def the default value, should there not be no propery by the name this will be returned.
      */

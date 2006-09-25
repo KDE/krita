@@ -67,7 +67,7 @@ void KoTextTool::paint( QPainter &painter, KoViewConverter &converter) {
         return;
 
 #if 0
-Hmm, not usefull right now due to the implementation of QAbstractTextDocumentLayout
+Hmm, not useful right now due to the implementation of QAbstractTextDocumentLayout
     if(m_caret.selectionStart() != m_caret.selectionEnd()) { // paint selection
         //kDebug(32500) << "Selection: " << m_caret.selectionStart() << "-" << m_caret.selectionEnd() << "\n";
         bool first = true;
@@ -146,7 +146,7 @@ int KoTextTool::pointToPosition(const QPointF & point) const {
     int caretPos = m_caret.block().document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
     caretPos = qMax(caretPos, m_textShapeData->position());
     if(m_textShapeData->endPosition() == -1)
-        kWarning() << "Clicking in not fully layed-out textframe\n";
+        kWarning() << "Clicking in not fully laid-out textframe\n";
     caretPos = qMin(caretPos, m_textShapeData->endPosition());
     return caretPos;
 }

@@ -43,7 +43,7 @@ KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
         return ZOOM_CONSTANT;
     // we return ZOOM_CONSTANT else because then we can pass '10%' or '15%'
     // or whatever, it's automatically converted. ZOOM_CONSTANT is 
-    // changable, whereas all other zoom modes (non-constants) are normal 
+    // changeable, whereas all other zoom modes (non-constants) are normal 
     // text like "Fit to xxx". they let the view grow/shrink according 
     // to windowsize, hence the term 'non-constant'
 }

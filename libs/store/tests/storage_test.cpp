@@ -216,7 +216,7 @@ int main( int argc, char **argv )
     KApplication app(false);
 
     // KZip (due to KSaveFile) doesn't support relative filenames
-    // So use $PWD as base for the paths explicitely.
+    // So use $PWD as base for the paths explicitly.
     const QString testDir = QDir::currentPath();
     if ( test( "Tar", KoStore::Tar, testDir+"test.tgz" ) != 0 )
       return 1;

@@ -50,12 +50,12 @@ public:
     /// @return true if we're inside a list (i.e. the stack isn't empty)
     bool hasListStyle() const { return !m_stack.isEmpty(); }
 
-    /// @return currenty applicable list style, i.e. the one on top of the stack
+    /// @return currently applicable list style, i.e. the one on top of the stack
     /// Most list-level properties are the attributes of that element.
     QDomElement currentListStyle() const;
 
     /**
-     * @return the style:list-level-properties for the currenty applicable list style.
+     * @return the style:list-level-properties for the currently applicable list style.
      * The list-level properties that are only "style" information,
      * like text:min-label-width, text:space-before, and style:font-name
      * are the attributes of that element.
@@ -63,13 +63,13 @@ public:
     QDomElement currentListStyleProperties() const;
 
     /**
-     * @return the style:text-properties for the currenty applicable list style.
+     * @return the style:text-properties for the currently applicable list style.
      */
     QDomElement currentListStyleTextProperties() const;
 
     /**
      * Set the initial level of the list, i.e. of item at the bottom of the stack.
-     * This is used when a level is explicitely specified in the
+     * This is used when a level is explicitly specified in the
      * [un]ordered-list tag (OASIS extension)
      */
     void setInitialLevel( int initialLevel );

@@ -58,7 +58,7 @@ public:
     double documentOffset() const { return m_offset; }
     /**
      * Set the amount of points into the document (y direction) that is relevant for this
-     * datas-shape.  This allows multiple shapes to all use one document at different offsets
+     * data-shape.  This allows multiple shapes to all use one document at different offsets
      * into the document.
      */
     void setDocumentOffset(double offset) { m_offset = offset; }

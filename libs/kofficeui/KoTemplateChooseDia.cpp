@@ -488,7 +488,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     bool ischecked = startwithoutdialog == QString("yes");
 
     // When not starting up, display a tri-state button telling whether
-    // the user actually choosed the template to start with next times (bug:77542)
+    // the user actually chose the template to start with next times (bug:77542)
     if (d->m_dialogType == Everything)
     {
         d->m_nodiag->setChecked( ischecked );

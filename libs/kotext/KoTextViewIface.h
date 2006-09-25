@@ -148,7 +148,7 @@ public:
     //return false if there is not a link
     bool changeLinkVariableName( const QString & _name) const;
 
-    //be carefull these functions return QString::null when there is not
+    //be careful these functions return QString::null when there is not
     //a variable
     QString linkVariableUrl( ) const;
     QString linkVariableName( ) const;

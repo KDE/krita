@@ -438,7 +438,7 @@ private:
     KoTabulatorsLineEdit* sTabPos;
     Q3ButtonGroup* bgAlign;
     QRadioButton* rAlignLeft;
-    QRadioButton* rAlignCentre;
+    QRadioButton* rAlignCenter;
     QRadioButton* rAlignRight;
     QRadioButton* rAlignVar;
     QLineEdit* sAlignChar;

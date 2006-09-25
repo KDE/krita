@@ -74,8 +74,8 @@ public:
     virtual bool childClipped(const KoShape *child) const = 0;
 
     /**
-     * Return the current number of children registred.
-     * @return the current number of children registred.
+     * Return the current number of children registered.
+     * @return the current number of children registered.
      */
     virtual int count() const = 0;
 
@@ -108,7 +108,7 @@ public:
  * all children move with it.
  * <p>Each child can optionally be said to be 'clipped' by the container.
  * This feature will give the effect that even if the child has a size and
- * position outside the container, it will not be shown.  This is especially usefull
+ * position outside the container, it will not be shown.  This is especially useful
  * for showing cutouts of content, like images, without changing the actual content.
  * <p>For so called clipped children any modification made to the container is
  * propagated to the child. This includes rotation as well as scaling and shearing.
@@ -117,7 +117,7 @@ public:
  * data model KoGraphicsContainerModel and if you provide a custom implementation
  * of that model any means can be used to maintain a list of children, as long as
  * you will take care to register them with the appropriate object manager.
- * <p>An example usage where a custom model might be usefull is when you have a
+ * <p>An example usage where a custom model might be useful is when you have a
  * container for text areas which are split into columns.  If you resize the container
  * and the width of the individual columns gets too small, the model can choose to
  * remove a child or add one when the width allows another column.
@@ -150,8 +150,8 @@ public:
     void removeChild(KoShape *object);
 
     /**
-     * Return the current number of children registred.
-     * @return the current number of children registred.
+     * Return the current number of children registered.
+     * @return the current number of children registered.
      */
     int childCount() const;
 

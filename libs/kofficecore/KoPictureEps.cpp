@@ -77,7 +77,7 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
 
     // ### TODO: do not call GhostScript up to three times for each re-scaling (one call of GhostScript should be enough to know which device is available: gs --help)
     // png16m is better, but not always available -> fallback to bmp16m, then fallback to ppm (256 colors)
-    // ### TODO: pcx24b is also a true colour format
+    // ### TODO: pcx24b is also a true color format
     // ### TODO: support alpha (other gs devices needed)
 
     const char* deviceTable[] = { "png16m", "bmp16m", "ppm", 0 };

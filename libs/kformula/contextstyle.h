@@ -347,7 +347,7 @@ private:
     bool centerSymbol;
 
     /**
-     * Whether we want coloured formulae.
+     * Whether we want colored formulae.
      */
     bool m_syntaxHighlighting;
 

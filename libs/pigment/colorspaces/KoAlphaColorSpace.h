@@ -27,7 +27,7 @@
 
 /**
  * The alpha mask is a special color strategy that treats all pixels as
- * alpha value with a colour common to the mask. The default color is white.
+ * alpha value with a color common to the mask. The default color is white.
  */
 class PIGMENT_EXPORT KoAlphaColorSpace : public KoU8ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:

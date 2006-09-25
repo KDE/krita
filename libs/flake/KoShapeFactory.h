@@ -188,7 +188,7 @@ protected:
     void setToolTip(const QString & tooltip);
     /**
      * Set an icon to be used in a selector of shapes
-     * @param iconName the basename (without extention) of the icon
+     * @param iconName the basename (without extension) of the icon
      * @see KIconLoader
      */
     void setIcon(const QString & iconName);

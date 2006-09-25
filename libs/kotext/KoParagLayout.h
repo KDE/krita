@@ -105,7 +105,7 @@ public:
     /**
      *  The background color is used for text that has no background color set,
      *  and for parts of the paragraph that are not covered by text.
-     *  In theory anyway: the background colour isn't used in rendering text
+     *  In theory anyway: the background color isn't used in rendering text
      *  yet, but it's nice to preserve the value.
      */
     QColor backgroundColor;

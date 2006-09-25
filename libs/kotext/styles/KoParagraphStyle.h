@@ -135,7 +135,7 @@ public:
         return static_cast<Qt::Alignment> (propertyInt(QTextFormat::BlockAlignment));
     }
     /**
-     * Paragraphs that are broken accross two frames are normally broken at the bottom
+     * Paragraphs that are broken across two frames are normally broken at the bottom
      * of the frame.  Using this property we can set the minimum number of lines that should
      * appear in the second frame to avoid really short paragraphs standing alone (also called
      * widows).  So, if a 10 line parag is broken in a way that only one line is in the second
@@ -148,7 +148,7 @@ public:
      */
     int widowThreshold() const { return propertyInt(WidowThreshold); }
     /**
-     * Paragraphs that are broken accross two frames are normally broken at the bottom
+     * Paragraphs that are broken across two frames are normally broken at the bottom
      * of the frame.  Using this property we can set the minimum number of lines that should
      * appear in the first frame to avoid really short paragraphs standing alone (also called
      * orphans).  So, if a paragraph is broken so only 2 line is left in the first frame

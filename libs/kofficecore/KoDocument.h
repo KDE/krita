@@ -689,13 +689,13 @@ public:
      * document as their root document.
      *
      * This method is automatically called from KoMainWindow::setRootDocument,
-     * so you dont need to call it.
+     * so you do not need to call it.
      */
     virtual void addShell( KoMainWindow *shell );
 
     /**
      * Removes the shell from the list. That happens automatically if the shell changes its
-     * root document. Usually you dont need to call this method.
+     * root document. Usually you do not need to call this method.
      */
     virtual void removeShell( KoMainWindow *shell );
 

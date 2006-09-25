@@ -281,7 +281,7 @@ VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv
             }
         } catch(Kross::Exception::Ptr exception) {
             #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                krossdebug("c++ exception catched, raise a ruby error");
+                krossdebug("c++ exception caught, raise a ruby error");
             #endif
             throw convertFromException(exception);
         }  catch(...) {

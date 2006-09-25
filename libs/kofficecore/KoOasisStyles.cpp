@@ -290,7 +290,7 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
             format += shortForm ? "s" : "ss";
         } else if ( localName == "am-pm" ) {
             format += "ap";
-        } else if ( localName == "text" ) { // litteral
+        } else if ( localName == "text" ) { // literal
             format += e.text();
         } else if ( localName == "suffix" ) {
             suffix = e.text();
@@ -1314,7 +1314,8 @@ QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QStrin
     return mainStyles.lookup( currentStyle, "N" );
 }
 
-//This is an extension of numeric style. For the moment we used namespace of oasis format for specific koffice extention. change it for the futur.
+//This is an extension of numeric style. For the moment we used namespace of 
+//oasis format for specific koffice extension. Change it for the future.
 void KoOasisStyles::addKofficeNumericStyleExtension( KoXmlWriter & elementWriter, const QString &_suffix, const QString &_prefix )
  {
      if ( !_suffix.isEmpty() )

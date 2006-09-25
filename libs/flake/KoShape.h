@@ -85,7 +85,7 @@ public:
      * @brief Paint the shape
      * The class extending this one is responsible for painting itself.  Since we do not
      * assume the shape is square the paint must also clear its background if it will draw
-     * something transparant on top.
+     * something transparent on top.
      * This can be done with a method like:
      * <code>
        painter.fillRect(converter.normalToView(QRectF(QPointF(0.0,0.0), size())), background());</code>
@@ -231,27 +231,27 @@ public:
 
     /**
      * Set the background of the shape.
-     * A QBrush can have a plain color, be fully transparant or have a complex fill.
+     * A QBrush can have a plain color, be fully transparent or have a complex fill.
      * setting such a brush will allow the shape to fill itself using that brush and
-     * will be able to tell if its transparant or not.
+     * will be able to tell if its transparent or not.
      * @param brush the brush for the background.
      */
     void setBackground ( const QBrush & brush ) { m_backgroundBrush = brush; }
 
     /**
      * return the brush used to paint te background of this shape with.
-     * A QBrush can have a plain color, be fully transparant or have a complex fill.
+     * A QBrush can have a plain color, be fully transparent or have a complex fill.
      * setting such a brush will allow the shape to fill itself using that brush and
-     * will be able to tell if its transparant or not.
+     * will be able to tell if its transparent or not.
      * @return the background-brush
      */
     const QBrush& background () { return m_backgroundBrush; }
 
     /**
-     * Returns true if there is some transparancy, false if the shape is fully opaque.
-     * The default implementation will just return if the background has some transparancy,
+     * Returns true if there is some transparency, false if the shape is fully opaque.
+     * The default implementation will just return if the background has some transparency,
      * you should override it and always return true if your shape is not square.
-     * @return if the shape is (partly) transparant.
+     * @return if the shape is (partly) transparent.
      */
     virtual bool hasTransparancy();
 
@@ -271,7 +271,7 @@ public:
      * <p>Just like two objects having the same x or y coordinate will make them 'touch',
      * so will two objects with the same z-index touch on the z plane.  In layering the
      * shape this, however, can cause a little confusion as one always has to be on top.
-     * The layering if two overlapping objects have the same index is implementation dependant
+     * The layering if two overlapping objects have the same index is implementation dependent
      * and probably depends on the order in which they are added to the shape manager.
      * @param zIndex the new z-index;
      */
@@ -434,7 +434,7 @@ public:
 
     /**
      * Set a data object on the shape to be used by an application.
-     * This is specifically usefull when a shape is created in a plugin and that data from that
+     * This is specifically useful when a shape is created in a plugin and that data from that
      * shape should be accessible outside the plugin.
      * @param userData the new user data, or 0 to delete the current one.
      */

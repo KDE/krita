@@ -126,7 +126,7 @@ public:
     /**
      * @brief Adds a text node as a child of the current element.
      *
-     * This is appends the litteral content of @p str to the contents of the element.
+     * This is appends the literal content of @p str to the contents of the element.
      * E.g. addTextNode( "foo" ) inside a \<p\> element gives \<p\>foo\</p\>,
      * and startElement( "b" ); endElement( "b" ); addTextNode( "foo" ) gives \<p\>\<b/\>foo\</p\>
      */

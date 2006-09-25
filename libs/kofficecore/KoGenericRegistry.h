@@ -124,7 +124,7 @@ public:
      * This function allow to search a KoID from the name.
      * @param t the name to search
      * @param result The result is filled in this variable
-     * @return true if the search has been successfull, false otherwise
+     * @return true if the search has been successful, false otherwise
      */
     bool search(const QString& t, KoID& result) const
     {

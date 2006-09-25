@@ -456,7 +456,7 @@ public:
     /**
      * @brief Breaks the path at the given segment.
      *
-     * The subpath is broken by deleteing the given segment. If the
+     * The subpath is broken by deleting the given segment. If the
      * segment points are the start and end point of a single closed
      * subpath, the subpath is simply unclosed. If the segment points
      * are in the middle of the subpath, two new subpath are mode out

@@ -45,7 +45,7 @@ public:
 
     /**
      * For classes that are handed this event, you can choose to accept (default) this event.
-     * Acceptance signifies that you have handled this event and found it usefull, the effect
+     * Acceptance signifies that you have handled this event and found it useful, the effect
      * of that will be that the event will not be handled to other event handlers.
      */
     void accept() { m_event->accept(); }

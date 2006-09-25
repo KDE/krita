@@ -97,7 +97,7 @@ void RubyScript::compile()
     }
 
     #ifdef KROSS_RUBY_SCRIPT_DEBUG
-        krossdebug("Compilation was successfull");
+        krossdebug("Compilation was successful");
     #endif
 }
 

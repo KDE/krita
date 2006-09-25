@@ -1022,7 +1022,7 @@ bool KoPathShape::breakAt( const KoPathSegment &segment )
     if( pos1.first != pos2.first )
         return false;
 
-    // get ordered point indeces 
+    // get ordered point indexes 
     KoSubpath *subpath = pos1.first;
     int index1 = pos1.second < pos2.second ? pos1.second : pos2.second;
     int index2 = pos1.second > pos2.second ? pos1.second : pos2.second;

@@ -526,7 +526,7 @@ void KoLcmsColorSpaceTrait::mixColors(const quint8 **colors, const quint8 *weigh
 
     while (nColors--)
     {
-        // Ugly hack to get around the current constness mess of the colour strategy...
+        // Ugly hack to get around the current constness mess of the color strategy...
         const_cast<KoLcmsColorSpaceTrait *>(this)->toQColor(*colors, &c, &opacity);
 
         quint32 alphaTimesWeight = UINT8_MULT(opacity, *weights);

@@ -1600,7 +1600,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
 #endif
 	    // we flush before and after tabs
 	    flush = flush || ( chr->c == '\t' || nextchr->c == '\t' );
-	    // we flush on soft hypens
+	    // we flush on soft hyphens
 	    flush = flush || ( chr->c.unicode() == 0xad );
 	    // we flush on custom items
 	    flush = flush || chr->isCustom();
@@ -3003,7 +3003,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
             {
                 lastFormatRaw = newFormat;
                 // Remove isMisspelled from format, to avoid useless derived styles
-                // (which would be indentical to their parent style)
+                // (which would be identical to their parent style)
                 KoTextFormat tmpFormat( *newFormat );
                 tmpFormat.setMisspelled( false );
                 newFormat = formatCollection()->format( &tmpFormat );

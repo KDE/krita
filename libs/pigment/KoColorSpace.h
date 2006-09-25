@@ -64,7 +64,7 @@ enum ColorSpaceIndependence {
 /**
  * A KoColorSpace is the definition of a certain color space.
  * 
- * A color model and a color space are two releated concepts. A color
+ * A color model and a color space are two related concepts. A color
  * model is more general in that it describes the channels involved and
  * how they in broad terms combine to describe a color. Examples are
  * RGB, HSV, CMYK.
@@ -163,7 +163,7 @@ public:
 
      /**
       * Set dstPixel to the pixel containing only the given channel of srcPixel. The remaining channels
-      * should be set to whatever makes sense for 'empty' channels of this colour space,
+      * should be set to whatever makes sense for 'empty' channels of this color space,
       * with the intent being that the pixel should look like it only has the given channel.
       */
      virtual void getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) = 0;
@@ -202,7 +202,7 @@ public:
     //========== Capabilities =================================================//
 
     /**
-     * Returns the list of user-visible composite ops supported by this colourspace.
+     * Returns the list of user-visible composite ops supported by this colorspace.
      */
     virtual KoCompositeOpList userVisiblecompositeOps() const;
 
@@ -465,7 +465,7 @@ public:
 
     /**
      * Compose two arrays of pixels together. If source and target
-     * are not the same colour model, the source pixels will be
+     * are not the same color model, the source pixels will be
      * converted to the target model. We're "dst" -- "dst" pixels are always in _this_
      * colorspace.
      *

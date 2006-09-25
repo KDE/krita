@@ -180,7 +180,7 @@ namespace Kross {
             virtual ~Interpreter();
 
             /**
-             * Create and return a new interpreter dependend
+             * Create and return a new interpreter dependent
              * \a Script instance.
              *
              * \param Action The \a Action

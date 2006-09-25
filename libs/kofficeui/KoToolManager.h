@@ -74,7 +74,7 @@ public:
 
     /**
      * Create a new ToolBox with title.
-     * This creates a new toolbox that is initialized with all tools registred for you
+     * This creates a new toolbox that is initialized with all tools registered for you
      * to attach to the view of your application.
      * If your view extends KoView the line of code is:
 @code
@@ -107,7 +107,7 @@ public:
     /**
      * Return the tool that is able to create shapes for this param canvas.
      * This is typically used by the KoShapeSelector to set which shape to create next.
-     * @param canvas the canvas that is a child of a previously registred controller
+     * @param canvas the canvas that is a child of a previously registered controller
      *    who's tool you want.
      * @see addControllers()
      */

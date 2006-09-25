@@ -37,7 +37,7 @@ namespace KFormula {
  */
 class TextElement : public BasicElement {
 public:
-    /// The standart constructor
+    /// The standard constructor
     TextElement( BasicElement* parent = 0 );
 
     /**

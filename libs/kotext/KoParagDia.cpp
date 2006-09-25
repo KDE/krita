@@ -1695,9 +1695,9 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     rAlignLeft->setText( i18n( "&Left" ) );
     ButtonGroup1Layout->addWidget( rAlignLeft );
 
-    rAlignCentre = new QRadioButton( bgAlign );
-    rAlignCentre->setText( i18n( "C&enter" ) );
-    ButtonGroup1Layout->addWidget( rAlignCentre );
+    rAlignCenter = new QRadioButton( bgAlign );
+    rAlignCenter->setText( i18n( "C&enter" ) );
+    ButtonGroup1Layout->addWidget( rAlignCenter );
 
     rAlignRight = new QRadioButton( bgAlign );
     rAlignRight->setText( i18n( "&Right" ) );

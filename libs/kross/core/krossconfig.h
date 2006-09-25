@@ -51,7 +51,7 @@ namespace Kross {
     #define KROSS_INTERPRETER_DEBUG
 
     // The name of the interpreter's library. Those library got loaded
-    // dynamicly during runtime. Comment out to disable compiling of
+    // dynamically during runtime. Comment out to disable compiling of
     // the interpreter-plugin or to hardcode the location of the lib
     // like I did at the following line.
 

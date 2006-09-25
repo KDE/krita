@@ -51,7 +51,7 @@ public:
     void paint( QPainter &painter, KoViewConverter &converter );
 
     /**
-     * Returns the shape Controller that is registred to hold the shapes this tool creates.
+     * Returns the shape Controller that is registered to hold the shapes this tool creates.
      * @return the shape controller.
      */
     KoShapeControllerBase* controller() const { return m_shapeController; }
@@ -59,7 +59,7 @@ public:
     /**
      * Set the shape controller that this tool adds its created shapes to.
      * This tool will create a shape after user input and that shape has to be
-     * registred to the hosting application.  We add/remove the shape via the
+     * registered to the hosting application.  We add/remove the shape via the
      * KoShapeControllerBase interface.<br>
      * Note that this tool will create a command that can be used for undo/redo.
      * The undo will actually call the remove.

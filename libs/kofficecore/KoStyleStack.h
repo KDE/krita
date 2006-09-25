@@ -168,7 +168,7 @@ public:
      * Set the type of properties that will be looked for.
      * For instance setTypeProperties("paragraph") will make hasAttribute() and attribute()
      * look into "paragraph-properties".
-     * If @p typeProperties is 0, the stylestack is resetted to look for "properties"
+     * If @p typeProperties is 0, the stylestack is reset to look for "properties"
      * as it does by default.
      */
     void setTypeProperties( const char* typeProperties );

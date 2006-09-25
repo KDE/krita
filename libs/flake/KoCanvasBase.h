@@ -119,7 +119,7 @@ public:
     virtual KoUnit::Unit unit() = 0;
 
 #if 0
-/*  The next list of methods are naming taken from Krita, which means they have allready been
+/*  The next list of methods are naming taken from Krita, which means they have already been
     toughened by time.  So, if you ever need a method in this interface; please uncomment the
     respective one here for good naming conventions.  It will probably save you time in
     implementing some of the methods in the different KOffice apps as well ;)
@@ -188,7 +188,7 @@ public:
     virtual void zoomOut(qint32 x, qint32 y)  0;
    
     /**
-     * To centre the view on the given point with the given zoom factor.
+     * To center the view on the given point with the given zoom factor.
      *
      * @param x the x coordinate of the center point in document coordinates
      * @param y the y coordinate of the center point in document coordinates

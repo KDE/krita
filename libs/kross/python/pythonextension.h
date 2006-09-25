@@ -37,7 +37,7 @@ namespace Kross {
     /**
      * The PythonExtension is a wrapper-object to let C++ and
      * Python interact together.
-     * Instances of this class are used everytime if we send
+     * Instances of this class are used every time if we send
      * or got something to/from python.
      */
     class PythonExtension : public Py::PythonExtension<PythonExtension>

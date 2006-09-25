@@ -109,7 +109,7 @@ private:
      *
      * @param array the array which is read
      * @param start start position of the PostScript stream
-     * @param lenght lenght of the PostScript stream
+     * @param length length of the PostScript stream
      * @param pos current position (which is also returned)
      * @param lastCharWasCr defines if the previous line ended with a Carriage Return,
      *   to skip an eventual Line Feed at the start of this line

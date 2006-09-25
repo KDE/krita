@@ -84,7 +84,7 @@ public:
        pixels (may be different from the rowstride of the dst pixels,
        in which case the smaller value is used).
       @param maskRowStart start of the byte mask that determines whether and if so, then how much of src is used for blending
-      @param maskRowStride lenght of the mask scanlines in bytes
+      @param maskRowStride length of the mask scanlines in bytes
       @param rows number of scanlines to blend
       @param numColumns length of the row of pixels in pixels
       @param opacity transparency with which to blend

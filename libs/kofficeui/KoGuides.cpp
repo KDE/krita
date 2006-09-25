@@ -105,7 +105,7 @@ void KoGuides::paintGuides( QPainter &painter )
         Q3ValueList<KoGuideLine *>::iterator it = m_guideLines[i].begin();
         for ( ; it != m_guideLines[i].end(); ++it )
         {
-            if ( !( *it )->automatic || ( *it )->snapping ) // dont paint autoStyle guides when they are not snapping
+            if ( !( *it )->automatic || ( *it )->snapping ) // do not paint autoStyle guides when they are not snapping
             {
                 if ( ( *it )->snapping )
                     painter.setPen( QPen( Qt::green, 0, Qt::DotLine ) );

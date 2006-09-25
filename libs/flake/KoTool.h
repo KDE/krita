@@ -160,7 +160,7 @@ signals:
      * Emitted when this tool wants itself to temporarily be replaced by another tool.
      * For instance, a paint tool could desire to be
      * temporarily replaced by a pan tool which could be temporarily
-     * replaced by a colourpicker.
+     * replaced by a colorpicker.
      * @param id the identification of the desired tool
      */
     void sigActivateTemporary(const QString & id);

@@ -61,7 +61,7 @@ public:
     /**
      * @brief Insert data item into the tree
      *
-     * This will insert a data item into the tree. If neccessary the tree will
+     * This will insert a data item into the tree. If necessary the tree will
      * adjust itself.
      *
      * @param data
@@ -72,7 +72,7 @@ public:
     /**
      * @brief Remove a data item from the tree
      *
-     * This removed a data item from the tree. If neccessary the tree will
+     * This removed a data item from the tree. If necessary the tree will
      * adjust itself.
      *
      * @param data
@@ -519,7 +519,7 @@ QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::spli
     Q_ASSERT( n1->childCount() + n2->childCount() == node->childCount() );
 
     // move the data back to the old node
-    // this has to be done as the current node is allready in the tree.
+    // this has to be done as the current node is already in the tree.
     node->clear();
     for ( int i = 0; i < n1->childCount(); ++i )
     {

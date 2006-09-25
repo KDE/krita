@@ -35,7 +35,7 @@ namespace Kross {
     class Action;
 
     /**
-     * Base class for interpreter dependend functionality
+     * Base class for interpreter dependent functionality
      * each script provides.
      *
      * Each \a Action holds a pointer to a class

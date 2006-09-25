@@ -31,7 +31,7 @@
  * The group shape allows you to add children which will then be grouped in selections
  * and actions.
  * <p>If you have a set of shapes, that together make up a bigger shape it is often
- * usefull to group them together so the user will perceive the different shapes as
+ * useful to group them together so the user will perceive the different shapes as
  * actually being one.  This means that if the user clicks on one object, all objects
  * in the group will be selected at ones, making the tools that works on
  * selections alter all of them at the same time.

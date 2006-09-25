@@ -61,7 +61,7 @@ public:
 
 protected:
 
-    // This is going to disappear in favour of a real macro facility some day.
+    // This is going to disappear in favor of a real macro facility some day.
     void fillNameTable( SymbolTable::NameTable& names );
 
     static void testFont( QStringList& missing, const QString& fontName );

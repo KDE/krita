@@ -169,8 +169,8 @@ public:
    *
    * @param painter the painter do modify.
    * @param combine tells whether the new clip region is an intersection
-   *        of the current region with the childs region or whether only
-   *        the childs region is set.
+   *        of the current region with the child's region or whether only
+   *        the child's region is set.
    */
   virtual void setClipRegion( QPainter& painter, bool combine = true );
 

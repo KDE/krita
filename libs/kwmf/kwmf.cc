@@ -51,22 +51,22 @@ KWmf::~KWmf()
 //
 
 void KWmf::brushSet(
-    unsigned colour,
+    unsigned color,
     unsigned style)
 {
-    m_dc.m_brushColour = colour;
+    m_dc.m_brushColour = color;
     m_dc.m_brushStyle = style;
 }
 
 //-----------------------------------------------------------------------------
 unsigned KWmf::getColour(
-    S32 colour)
+    S32 color)
 {
     unsigned red, green, blue;
 
-    red = colour & 255;
-    green = (colour >> 8) & 255;
-    blue = (colour >> 16) & 255;
+    red = color & 255;
+    green = (color >> 8) & 255;
+    blue = (color >> 16) & 255;
     return (red << 16) + (green << 8) + blue;
 }
 
@@ -89,14 +89,14 @@ void KWmf::genericArc(
     // the ends of the arc.
 
     QRect ellipse(topLeft, bottomRight);
-    QPoint centre = ellipse.center();
-    double startAngle = atan2((double)(centre.y() - start.y()), (double)(centre.x() - start.x()));
-    double stopAngle = atan2((double)(centre.y() - end.y()), (double)(centre.x() - end.x()));
+    QPoint center = ellipse.center();
+    double startAngle = atan2((double)(center.y() - start.y()), (double)(center.x() - start.x()));
+    double stopAngle = atan2((double)(center.y() - end.y()), (double)(center.x() - end.x()));
 
     startAngle = 180 * startAngle / PI;
     stopAngle = 180 * stopAngle / PI;
 
-    gotEllipse(m_dc, type, centre, ellipse.size() / 2,
+    gotEllipse(m_dc, type, center, ellipse.size() / 2,
                static_cast<unsigned int>(startAngle),
                static_cast<unsigned int>(stopAngle));
 }
@@ -563,11 +563,11 @@ void KWmf::opBrushCreateIndirect(
     Qt::BrushStyle style;
     WinObjBrushHandle *handle = handleCreateBrush();
     S16 arg;
-    S32 colour;
+    S32 color;
     S16 discard;
 
-    operands >> arg >> colour;
-    handle->m_colour = getColour(colour);
+    operands >> arg >> color;
+    handle->m_color = getColour(color);
     if (arg == 2)
     {
         operands >> arg;
@@ -686,7 +686,7 @@ void KWmf::opPenCreateIndirect(
     };
     WinObjPenHandle *handle = handleCreatePen();
     S16 arg;
-    S32 colour;
+    S32 color;
 
     operands >> arg;
     if (arg >= 0 && arg < 8)
@@ -700,8 +700,8 @@ void KWmf::opPenCreateIndirect(
     }
     operands >> arg;
     handle->m_width = arg;
-    operands >> arg >> colour;
-    handle->m_colour = getColour(colour);
+    operands >> arg >> color;
+    handle->m_color = getColour(color);
 }
 
 void KWmf::opPie(
@@ -826,11 +826,11 @@ void KWmf::opWindowSetExt(
 }
 
 void KWmf::penSet(
-    unsigned colour,
+    unsigned color,
     unsigned style,
     unsigned width)
 {
-    m_dc.m_penColour = colour;
+    m_dc.m_penColour = color;
     m_dc.m_penStyle = style;
     m_dc.m_penWidth = width;
 }
@@ -920,11 +920,11 @@ KWmf::DrawContext::DrawContext()
 void KWmf::WinObjBrushHandle::apply(
     KWmf &p)
 {
-    p.brushSet(m_colour, m_style);
+    p.brushSet(m_color, m_style);
 }
 
 void KWmf::WinObjPenHandle::apply(
     KWmf &p)
 {
-    p.penSet(m_colour, m_style, m_width);
+    p.penSet(m_color, m_style, m_width);
 }

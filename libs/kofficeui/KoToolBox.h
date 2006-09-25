@@ -72,7 +72,7 @@ public:
      * For a button added to this toolbox you can regiter a visibility-code by which that
      * button will be known.  Using setButtonsVisible() you can then show only the buttons
      * you want visible.
-     * @param button the previously registred button
+     * @param button the previously registered button
      * @param code that we recognize this button by, does not have to be unique.
      */
     void setVisibilityCode(QAbstractButton *button, const QString &code);
@@ -87,9 +87,9 @@ public slots:
 
     /**
      * Show only the dynamic buttons that have a code from parameter codes.
-     * The toolbox allows buttons to be optionally registred with a visibilityCode. This code
+     * The toolbox allows buttons to be optionally registered with a visibilityCode. This code
      * can be passed here and all buttons that have that code are shown. All buttons that
-     * have another visibility code registred are hidden.
+     * have another visibility code registered are hidden.
      * @param codes a list of all the codes to show.
      */
     void setButtonsVisible(const QList<QString> &codes);

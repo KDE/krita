@@ -72,10 +72,10 @@ public:
     // Should be protected...
 
     void brushSet(
-        unsigned colour,
+        unsigned color,
         unsigned style);
     void penSet(
-        unsigned colour,
+        unsigned color,
         unsigned style,
         unsigned width);
 
@@ -132,7 +132,7 @@ private:
     {
     public:
         virtual void apply(KWmf &p);
-        unsigned m_colour;
+        unsigned m_color;
         unsigned m_style;
     };
 
@@ -140,7 +140,7 @@ private:
     {
     public:
         virtual void apply(KWmf &p);
-        unsigned m_colour;
+        unsigned m_color;
         unsigned m_style;
         unsigned m_width;
     };
@@ -149,7 +149,7 @@ private:
     WinObjBrushHandle *handleCreateBrush(void);
     QList<WinObjHandle *>m_objectHandles;
 
-    unsigned getColour(S32 colour);
+    unsigned getColour(S32 color);
     QPoint normalisePoint(
         QDataStream &operands);
     QSize normaliseSize(

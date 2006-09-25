@@ -49,7 +49,7 @@ public:
 
 public:
     /**
-     * Sets the default pixel. Note that this might change every occurrance, and it might not, but new data
+     * Sets the default pixel. Note that this might change every occurrence, and it might not, but new data
      * well be initialised with this pixel
      */
     inline void setDefaultPixel(const quint8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); }

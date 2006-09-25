@@ -544,7 +544,7 @@ void KisTiledDataManager::rollback(KisMementoSP memento)
     // Rollback means restoring all of the tiles in the memento to our hashtable.
 
     // But first clear the memento redo hashtable.
-    // This is nessesary as new changes might have been done since last rollback (automatic filters)
+    // This is necessary as new changes might have been done since last rollback (automatic filters)
     for(int i = 0; i < 1024; i++)
     {
         memento->deleteAll(memento->m_redoHashTable[i]);

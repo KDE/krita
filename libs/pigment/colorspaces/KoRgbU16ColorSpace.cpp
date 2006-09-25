@@ -29,10 +29,10 @@
 KoRgbU16ColorSpace::KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
  KoLcmsColorSpace<RgbU16Traits>("RGBU16", i18n("RGB 16-bit integer/channel)"), parent, TYPE_BGRA_16, icSigRgbData, p)
 {
-    m_channels.push_back(new KoChannelInfo(i18n("Red"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(255,0,0)));
-    m_channels.push_back(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(0,255,0)));
-    m_channels.push_back(new KoChannelInfo(i18n("Blue"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(0,0,255)));
-    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Red"), 2* sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(255,0,0)));
+    m_channels.push_back(new KoChannelInfo(i18n("Green"), 1* sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(0,255,0)));
+    m_channels.push_back(new KoChannelInfo(i18n("Blue"), 0* sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(0,0,255)));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 3* sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16));
     init();
     m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver<RgbU16Traits>( this ) );
     m_compositeOps.insert( COMPOSITE_ERASE, new CompositeErase<RgbU16Traits>( this ) );

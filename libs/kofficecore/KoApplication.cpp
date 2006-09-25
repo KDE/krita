@@ -101,7 +101,7 @@ bool KoApplication::start()
     if ( entry.isEmpty() )
     {
         kError( 30003 ) << instanceName() << "part.desktop not found." << endl;
-        kError( 30003 ) << "Run 'kde-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
+        kError( 30003 ) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
         kError( 30003 ) << "Check your installation (did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
         return false;
     }

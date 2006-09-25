@@ -100,7 +100,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
       if ( KServiceType::serviceType( mimetype ).isNull() )
       {
         kError(30003) << "Unknown KOffice MimeType " << mimetype << "." << endl;
-        kError(30003) << "Check your installation (for instance, run 'kde-config --path mime' and check the result)." << endl;
+        kError(30003) << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
       } else
       {
         kError(30003) << "Found no KOffice part able to handle " << mimetype << "!" << endl;

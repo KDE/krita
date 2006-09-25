@@ -296,7 +296,7 @@ void KisSelection::paintSelection(QImage img, qint32 imageRectX, qint32 imageRec
                     quint8 srcGrey = (qRed(srcPixel) + qGreen(srcPixel) + qBlue(srcPixel)) / 9;
                     quint8 srcAlpha = qAlpha(srcPixel);
     
-                    // Colour influence is proportional to alphaPixel.
+                    // Color influence is proportional to alphaPixel.
                     srcGrey = UINT8_MULT(srcGrey, srcAlpha);
     
                     QRgb dstPixel;
@@ -498,7 +498,7 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
                     quint8 srcGrey = (qRed(srcPixel) + qGreen(srcPixel) + qBlue(srcPixel)) / 9;
                     quint8 srcAlpha = qAlpha(srcPixel);
 
-                    // Colour influence is proportional to alphaPixel.
+                    // Color influence is proportional to alphaPixel.
                     srcGrey = UINT8_MULT(srcGrey, srcAlpha);
 
                     QRgb dstPixel;

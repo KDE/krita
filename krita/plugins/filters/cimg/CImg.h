@@ -18502,7 +18502,7 @@ namespace cimg {
   minimum, maximum, mean and variance of pixel values of images, as well as the corresponding min/max pixel location.
 
   - The class \ref cimg_library::CImgException (and its subclasses) are used by the library to throw exceptions
-  when errors occur. Those exceptions can be catched with a bloc <tt>try { ..} catch (CImgException) { .. }</tt>.
+  when errors occur. Those exceptions can be caught with a block <tt>try { ..} catch (CImgException) { .. }</tt>.
   Subclasses define precisely the type of encountered errors.
 
   Knowing these five classes is \b enough to get benefit of the %CImg Library functionalities.

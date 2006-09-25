@@ -230,7 +230,7 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
 {
     m_optionsWidget = new ColorPickerOptionsWidget(parent);
 
-    m_optionsWidget->cbUpdateCurrentColour->setChecked(m_updateColor);
+    m_optionsWidget->cbUpdateCurrentColor->setChecked(m_updateColor);
 
     m_optionsWidget->cmbSources->setCurrentIndex(0);
 
@@ -240,7 +240,7 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
 
     m_optionsWidget->listViewChannels->setSortingEnabled(false);
 
-    connect(m_optionsWidget->cbUpdateCurrentColour, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
+    connect(m_optionsWidget->cbUpdateCurrentColor, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
     connect(m_optionsWidget->cbNormaliseValues, SIGNAL(toggled(bool)), SLOT(slotSetNormaliseValues(bool)));
     connect(m_optionsWidget->cbPalette, SIGNAL(toggled(bool)),
             SLOT(slotSetAddPalette(bool)));

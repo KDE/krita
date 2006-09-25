@@ -480,7 +480,7 @@ QString PerfTest::fillTest(quint32 testCount)
         }
         report = report.append(QString("    Opaque fill rect bigger than layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 
-        // Colour fill
+        // Color fill
 
         t.restart();
         for (quint32 i = 0; i < testCount; ++i) {

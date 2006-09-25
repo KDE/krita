@@ -64,7 +64,7 @@ typedef KSharedPtr<KisMemento> KisMementoSP;
  * A paint device contains the actual pixel data and offers methods
  * to read and write pixels. A paint device has an integer x,y position
  * (i.e., are not positioned on the image with sub-pixel accuracy).
- * A KisPaintDevice doesn't have any fixed size, the size change dynamicaly
+ * A KisPaintDevice doesn't have any fixed size, the size changes dynamically
  * when pixels are accessed by an iterator.
  */
 class KRITAIMAGE_EXPORT KisPaintDevice

@@ -35,7 +35,7 @@ KoRgbU16ColorSpace::KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorPro
     m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT16));
     init();
     m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver<RgbU16Traits>( this ) );
-//     m_compositeOps.insert( COMPOSITE_ERASE, new CompositeErase( this ) );
+    m_compositeOps.insert( COMPOSITE_ERASE, new CompositeErase<RgbU16Traits>( this ) );
 }
 
 bool KoRgbU16ColorSpace::willDegrade(ColorSpaceIndependence independence)

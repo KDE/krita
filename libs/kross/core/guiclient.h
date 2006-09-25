@@ -156,7 +156,7 @@ namespace Kross {
             /**
              * Called if execution was successfully.
              */
-            void executionSuccessfull();
+            void executionSuccessful();
 
         signals:
 #if 0

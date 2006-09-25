@@ -163,7 +163,7 @@ void GUIClient::readConfig()
             action->setInterpreter(interpreter);
         action->setVisible( config->readEntry(QString("%1_enabled").arg(name), true) );
         connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
-        connect(action, SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
+        connect(action, SIGNAL( success() ), this, SLOT( executionSuccessful() ));
         connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
 
         d->scriptsmenu->addAction(action);
@@ -273,7 +273,7 @@ void GUIClient::setDOMDocument(const QDomDocument &document, bool merge)
 }
 #endif
 
-void GUIClient::executionSuccessfull()
+void GUIClient::executionSuccessful()
 {
     Action* action = dynamic_cast< Action* >( QObject::sender() );
     emit executionFinished(action);
@@ -315,7 +315,7 @@ bool GUIClient::executeFile(const KUrl& file)
 bool GUIClient::executeAction(Action::Ptr action)
 {
     connect(action.data(), SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
-    connect(action.data(), SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
+    connect(action.data(), SIGNAL( success() ), this, SLOT( executionSuccessful() ));
     connect(action.data(), SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
 
     action->trigger(); // activate the action and execute the script that way
@@ -390,7 +390,7 @@ bool GUIClient::installPackage(const KUrl& file)
         QDomElement element = nodelist.item(i).toElement();
         Action* action = new Action(d->actions, element, packagepath);
         connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
-        connect(action, SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
+        connect(action, SIGNAL( success() ), this, SLOT( executionSuccessful() ));
         connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
         d->scriptsmenu->addAction(action);
     }

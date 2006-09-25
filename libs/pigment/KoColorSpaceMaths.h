@@ -20,8 +20,6 @@
 #ifndef KOCOLORSPACEMATHS_H_
 #define KOCOLORSPACEMATHS_H_
 
-#include <KoIntegerMaths.h>
-
 template<typename _T>
 class KoColorSpaceMathsTraits {
     public:
@@ -37,7 +35,7 @@ template<>
 class KoColorSpaceMathsTraits<quint8> {
     public:
         typedef qint32 compositetype;
-        inline static qint64 max() { return 0x000F; }
+        inline static qint64 max() { return 0x00FF; }
         inline static qint64 min() { return 0; }
         inline static qint8 bits() { return 8; }
 };
@@ -46,7 +44,7 @@ template<>
 class KoColorSpaceMathsTraits<quint16> {
     public:
         typedef qint32 compositetype;
-        inline static qint64 max() { return 0x00FF; }
+        inline static qint64 max() { return 0xFFFF; }
         inline static qint64 min() { return 0; }
         inline static qint8 bits() { return 16; }
 };
@@ -64,7 +62,7 @@ template<>
 class KoColorSpaceMathsTraits<quint32> {
     public:
         typedef qint64 compositetype;
-        inline static qint64 max() { return 0xFFFF; }
+        inline static qint64 max() { return 0xFFFFFFFF; }
         inline static qint64 min() { return 0; }
         inline static qint8 bits() { return 32; }
 };
@@ -75,9 +73,17 @@ class KoColorSpaceMaths {
     typedef KoColorSpaceMathsTraits<_T> traits;
     typedef typename traits::compositetype traits_compositetype;
     public:
+        inline static _T multiply(_T a, _Tdst b)
+        {
+            return ((traits_compositetype)a * b ) /  KoColorSpaceMathsTraits<_Tdst>::max();
+        }
+        inline static _T divide(_T a, _Tdst b)
+        {
+            return ((traits_compositetype)a *  KoColorSpaceMathsTraits<_Tdst>::max() ) / b;
+        }
         inline static _T blend(_T a, _T b, qint64 alpha)
         {
-            traits_compositetype c = ((traits_compositetype)a - (traits_compositetype)b) >> traits::bits();
+            traits_compositetype c = ( ((traits_compositetype)a - (traits_compositetype)b) * alpha ) >> traits::bits();
             return c+b;
         }
         /**
@@ -86,10 +92,6 @@ class KoColorSpaceMaths {
         inline static _Tdst scaleToA(_T a)
         {
             return (traits_compositetype)a >> ( traits::bits() - KoColorSpaceMathsTraits<_Tdst>::bits() );
-        }
-        inline static _T multiply(_T a, _T b)
-        {
-            return a * b / traits::max();
         }
 };
 

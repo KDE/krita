@@ -22,8 +22,6 @@
 #ifndef KOLCMSCOLORSPACE_H_
 #define KOLCMSCOLORSPACE_H_
 
-#include <Q3MemArray>
-
 #include <kconfig.h>
 #include <kglobal.h>
 
@@ -86,7 +84,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             m_qcolordata = new quint8[3];
             Q_CHECK_PTR(m_qcolordata);
 
-            if (m_profile == 0) return;
+            if (m_profile == 0) { exit(0); return; }
 
     // For conversions from default rgb
             m_lastFromRGB = cmsCreate_sRGBProfile();
@@ -97,6 +95,14 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
             m_defaultToRGB =  cmsCreateTransform(m_profile->profile(), m_cmType,
                     m_lastFromRGB, TYPE_BGR_8,
+                    INTENT_PERCEPTUAL, 0);
+
+            m_defaultFromRGB16 = cmsCreateTransform(m_lastFromRGB, TYPE_BGR_16,
+                    m_profile->profile(), m_cmType,
+                    INTENT_PERCEPTUAL, 0);
+
+            m_defaultToRGB16 =  cmsCreateTransform(m_profile->profile(), m_cmType,
+                    m_lastFromRGB, TYPE_BGR_16,
                     INTENT_PERCEPTUAL, 0);
 
             cmsHPROFILE hLab  = cmsCreateLabProfile(NULL);
@@ -205,13 +211,38 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
             cmsDoTransform( m_defaultFromLab,  const_cast<quint8 *>( src ), dst,  nPixels );
         }
-        
+        virtual void fromRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+        {
+            if ( m_defaultFromRGB16 == 0 ) return;
+
+            cmsDoTransform( m_defaultFromRGB16,  const_cast<quint8 *>( src ), dst,  nPixels );
+        }
+        virtual void toRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+        {
+            if ( m_defaultToRGB16 == 0 ) return;
+
+            cmsDoTransform( m_defaultToRGB16, const_cast<quint8 *>( src ), dst, nPixels );
+        }
+
         virtual bool convertPixelsTo(const quint8 * src,
                 quint8 * dst,
                 KoColorSpace * dstColorSpace,
                 quint32 numPixels,
                 qint32 renderingIntent)
         {
+/*            kdDebug() << "new conversion" << endl;
+            for(int i = 0; i < numPixels; i++)
+            {
+                typename _CSTraits::channels_type* srcNative = this->nativeArray( const_cast<quint8*>( src + i * this->pixelSize()) );
+                kdDebug() << this->pixelSize() <<  dstColorSpace->pixelSize() << " " << srcNative[0] << " " << srcNative[1] << " " << srcNative[2] << " " << srcNative[3] << endl;
+                srcNative[0] = 0xFFF0;
+                srcNative[1] = 0x5FFF;
+                srcNative[2] = 0x2FFF;
+                srcNative[3] = 0xFFFF;
+                kdDebug() << srcNative[0] << " " << srcNative[1] << " " << srcNative[2] << " " << srcNative[3] << endl;
+            }*/
+            
+            
             if (dstColorSpace->colorSpaceType() == colorSpaceType()
                 && dstColorSpace->getProfile() == getProfile())
             {
@@ -394,16 +425,15 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
         virtual void invertColor(quint8 * src, qint32 nPixels)
         {
-            QColor c;
-            quint8 opacity;
+            quint16 rgba[4];
             quint32 psize = this->pixelSize();
-
-            while (nPixels--)
+            while(nPixels--)
             {
-                toQColor(src, &c, &opacity);
-                c.setRgb(UINT8_MAX - c.red(), UINT8_MAX - c.green(), UINT8_MAX - c.blue());
-                fromQColor( c, opacity, src);
-
+                toRgbA16(src, reinterpret_cast<quint8 *>(rgba), 1);
+                rgba[0] = KoColorSpaceMathsTraits<quint16>::max() - rgba[0];
+                rgba[1] = KoColorSpaceMathsTraits<quint16>::max() - rgba[1];
+                rgba[2] = KoColorSpaceMathsTraits<quint16>::max() - rgba[2];
+                fromRgbA16(reinterpret_cast<quint8 *>(rgba), src, 1);
                 src += psize;
             }
         }
@@ -553,6 +583,8 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         quint8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
         cmsHTRANSFORM m_defaultToRGB;    // Default transform to 8 bit sRGB
         cmsHTRANSFORM m_defaultFromRGB;  // Default transform from 8 bit sRGB
+        cmsHTRANSFORM m_defaultToRGB16;    // Default transform to 16 bit sRGB
+        cmsHTRANSFORM m_defaultFromRGB16;  // Default transform from 16 bit sRGB
 
         cmsHPROFILE   m_lastRGBProfile;  // Last used profile to transform to/from RGB
         cmsHTRANSFORM m_lastToRGB;       // Last used transform to transform to RGB
@@ -572,7 +604,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         typedef QMap<KoColorSpace *, cmsHTRANSFORM>  TransformMap;
         TransformMap m_transforms; // Cache for existing transforms
 
-        Q3MemArray<quint8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
 };
 
 

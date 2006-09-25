@@ -24,6 +24,7 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
+#include <KoIntegerMaths.h>
 
 namespace {
 
@@ -95,7 +96,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
         
         virtual quint32 nColorChannels() const { return _CSTraits::channels_nb - 1; }
         virtual quint32 nChannels() const { return _CSTraits::channels_nb; };
-        virtual quint32 pixelSize() const { return _CSTraits::channels_nb * sizeof(_CSTraits::channels_nb); }
+        virtual quint32 pixelSize() const { return _CSTraits::channels_nb * sizeof(typename _CSTraits::channels_type); }
 
         Q3ValueVector<KoChannelInfo *> channels()
         {
@@ -279,7 +280,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
             return KoID("Basic");
         }
 
-    private:
+    protected:
         inline const typename _CSTraits::channels_type* nativeArray(const quint8 * a) const { return reinterpret_cast<const typename _CSTraits::channels_type*>(a); }
         inline typename _CSTraits::channels_type* nativeArray(quint8 * a) const { return reinterpret_cast<typename _CSTraits::channels_type*>(a); }
 };

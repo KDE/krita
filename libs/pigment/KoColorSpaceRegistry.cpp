@@ -38,7 +38,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "colorspaces/KoAlphaColorSpace.h"
 #include "colorspaces/KoLabColorSpace.h"
-#include "colorspaces/KoRgbU32ColorSpace.h"
+#include "colorspaces/KoRgbU16ColorSpace.h"
 
 KoColorSpaceRegistry *KoColorSpaceRegistry::m_singleton = 0;
 
@@ -100,7 +100,7 @@ void KoColorSpaceRegistry::init()
     KoColorProfile *labProfile = new KoColorProfile(cmsCreateLabProfile(NULL));
     addProfile(labProfile);
     add(new KoLabColorSpaceFactory());
-    add(new KoRgbU32ColorSpaceFactory());
+    add(new KoRgbU16ColorSpaceFactory());
 /* XXX where to put this
     KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>

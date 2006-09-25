@@ -26,6 +26,8 @@
 #include <QImage>
 #include <QBitArray>
 #include <QHash>
+
+#include <Q3MemArray>
 #include <q3valuevector.h>
 #include <q3valuelist.h>
 
@@ -58,6 +60,7 @@ enum ColorSpaceIndependence {
     TO_RGBA16
 };
 // TODO: constify all function of KisColorSpace
+// TODO: RgbA16 convert function must be set to pure virtual
 /**
  * A KoColorSpace is the definition of a certain color space.
  * 
@@ -321,6 +324,25 @@ public:
     virtual void fromLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const = 0;
 
     /**
+     * Convert the specified data to Rgb 16 bits. All colorspaces are guaranteed to support this
+     *
+     * @param src the source data
+     * @param dst the destination data
+     * @param nPixels the number of source pixels
+     */
+    virtual void toRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const {};
+
+    /**
+     * Convert the specified data from Rgb 16 bits. to this colorspace. All colorspaces are
+     * guaranteed to support this.
+     *
+     * @param src the pixels in 16 bit rgb format
+     * @param dst the destination data
+     * @param nPixels the number of pixels in the array
+     */
+    virtual void fromRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const {};
+    
+    /**
      * Convert a byte array of srcLen pixels *src to the specified color space
      * and put the converted bytes into the prepared byte array *dst.
      *
@@ -472,22 +494,7 @@ public:
 			qint32 rows,
 			qint32 cols,
 			const KoCompositeOp * op,
-			const QBitArray & channelFlags) 
-    {
-	Q_UNUSED(dst);
-	Q_UNUSED(dststride);
-	Q_UNUSED(srcSpace);
-	Q_UNUSED(src);
-	Q_UNUSED(srcRowStride);
-	Q_UNUSED(srcAlphaMask);
-	Q_UNUSED(maskRowStride);
-	Q_UNUSED(opacity);
-	Q_UNUSED(rows);
-	Q_UNUSED(cols);
-	Q_UNUSED(op);
-	Q_UNUSED(channelFlags); 
-    }
-
+            const QBitArray & channelFlags);
     /**
      * Convenience function for the above where all channels are turned on.
      */
@@ -501,20 +508,7 @@ public:
 			quint8 opacity,
 			qint32 rows,
 			qint32 cols,
-			const KoCompositeOp * op) 
-    {
-	Q_UNUSED(dst);
-	Q_UNUSED(dststride);
-	Q_UNUSED(srcSpace);
-	Q_UNUSED(src);
-	Q_UNUSED(srcRowStride);
-	Q_UNUSED(srcAlphaMask);
-	Q_UNUSED(maskRowStride);
-	Q_UNUSED(opacity);
-	Q_UNUSED(rows);
-	Q_UNUSED(cols);
-	Q_UNUSED(op);
-    }
+            const KoCompositeOp * op);
     
     /**
      * Convenience function for the above if you don't have the composite op object yet.
@@ -566,6 +560,7 @@ protected:
     KoColorSpaceRegistry * m_parent;
     Q3ValueVector<KoChannelInfo *> m_channels;
     QHash<QString, KoCompositeOp *> m_compositeOps;
+    Q3MemArray<quint8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
 
 };
 

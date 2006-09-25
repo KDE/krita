@@ -12,6 +12,7 @@ set(pigment_SRCS
     KoColorSpaceRegistry.cpp
     KoColor.cpp
     KoColorSpace.cpp
+    KoColorSpaceMaths.cpp
     KoCompositeOp.cpp
     KoColorProfile.cpp
     KoLcmsColorSpaceTrait.cpp
@@ -21,7 +22,7 @@ set(pigment_SRCS
 	${FILE_OPENEXR_SOURCES}
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoAlphaColorSpace.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoLabColorSpace.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU32ColorSpace.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU16ColorSpace.cpp
 )
 
 kde4_automoc(${pigment_SRCS})

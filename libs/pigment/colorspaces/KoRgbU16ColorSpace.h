@@ -17,43 +17,41 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KORGBU32COLORSPACE_H_
-#define KORGBU32COLORSPACE_H_
+#ifndef KORGBU16COLORSPACE_H_
+#define KORGBU16COLORSPACE_H_
 
 #include <KoLcmsColorSpace.h>
 
-struct RgbU32Traits {
-    typedef quint32 channels_type;
+struct RgbU16Traits {
+    typedef quint16 channels_type;
     static const quint32 channels_nb = 4;
     static const qint32 alpha_pos = 3;
 };
 
-class KoRgbU32ColorSpace : public KoLcmsColorSpace<RgbU32Traits>
+class KoRgbU16ColorSpace : public KoLcmsColorSpace<RgbU16Traits>
 {
     public:
-        KoRgbU32ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+        KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence);
 };
 
-#define TYPE_BGRA_32           (COLORSPACE_SH(PT_RGB)|EXTRA_SH(1)|CHANNELS_SH(3)|BYTES_SH(4)|DOSWAP_SH(1)|SWAPFIRST_SH(1))
-
-class KoRgbU32ColorSpaceFactory : public KoColorSpaceFactory
+class KoRgbU16ColorSpaceFactory : public KoColorSpaceFactory
 {
     public:
     /**
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-        virtual KoID id() const { return KoID("RGBU32", i18n("RGB (32-bit integer/channel)")); };
+        virtual KoID id() const { return KoID("RGBU16", i18n("RGB (16-bit integer/channel)")); };
 
     /**
          * lcms colorspace type definition.
      */
-        virtual quint32 colorSpaceType() { return TYPE_BGRA_32; };
+        virtual quint32 colorSpaceType() { return TYPE_BGRA_16; };
 
-        virtual icColorSpaceSignature colorSpaceSignature() { return icSigLabData; };
+        virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
     
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoRgbU32ColorSpace(parent, p); };
+        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoRgbU16ColorSpace(parent, p); };
 
         virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };

@@ -17,7 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qglobal.h>
+
 #include <KoColorSpaceMaths.h>
+
+#include <KoIntegerMaths.h>
 
 // TODO: use more functions from KoIntegersMaths to do the computation
 

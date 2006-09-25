@@ -213,7 +213,7 @@ private:
     KoLcmsColorSpaceTrait(const KoLcmsColorSpaceTrait&);
     KoLcmsColorSpaceTrait& operator=(const KoLcmsColorSpaceTrait&);
 
-    Q3MemArray<quint8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
+//     Q3MemArray<quint8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
 };
 
 #endif // KIS_LCMS_BASE_COLORSPACE_H_

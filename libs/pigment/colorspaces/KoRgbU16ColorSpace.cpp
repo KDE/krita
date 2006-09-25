@@ -17,26 +17,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoRgbU32ColorSpace.h"
+#include "KoRgbU16ColorSpace.h"
 
 #include <kdebug.h>
 #include <klocale.h>
 
 #include "KoCompositeOp.h"
+#include "KoCompositeOpImpl.h"
 
-KoRgbU32ColorSpace::KoRgbU32ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
- KoLcmsColorSpace<RgbU32Traits>("RGBU32", i18n("RGB 32-bit integer/channel)"), parent, TYPE_BGRA_32, icSigRgbData, p)
+
+KoRgbU16ColorSpace::KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
+ KoLcmsColorSpace<RgbU16Traits>("RGBU16", i18n("RGB 16-bit integer/channel)"), parent, TYPE_BGRA_16, icSigRgbData, p)
 {
-    m_channels.push_back(new KoChannelInfo(i18n("Red"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT32, 4, QColor(255,0,0)));
-    m_channels.push_back(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT32, 4, QColor(0,255,0)));
-    m_channels.push_back(new KoChannelInfo(i18n("Blue"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT32, 4, QColor(0,0,255)));
-    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
+    m_channels.push_back(new KoChannelInfo(i18n("Red"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(255,0,0)));
+    m_channels.push_back(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(0,255,0)));
+    m_channels.push_back(new KoChannelInfo(i18n("Blue"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(0,0,255)));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT16));
     init();
-//     m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver( this ) );
+    m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver<RgbU16Traits>( this ) );
 //     m_compositeOps.insert( COMPOSITE_ERASE, new CompositeErase( this ) );
 }
 
-bool KoRgbU32ColorSpace::willDegrade(ColorSpaceIndependence independence)
+bool KoRgbU16ColorSpace::willDegrade(ColorSpaceIndependence independence)
 {
     if (independence == TO_RGBA8) 
         return true;

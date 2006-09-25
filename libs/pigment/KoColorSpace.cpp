@@ -18,6 +18,9 @@
 */
 
 #include "KoColorSpace.h"
+
+#include <kdebug.h>
+
 #include "KoCompositeOp.h"
 
 KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent)
@@ -116,5 +119,109 @@ void KoColorSpace::bitBlt(quint8 *dst,
     }
     else {
         bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, m_compositeOps.value( COMPOSITE_OVER ) );
+    }
+}
+
+void KoColorSpace::bitBlt(quint8 *dst,
+                                   qint32 dststride,
+                                   KoColorSpace * srcSpace,
+                                   const quint8 *src,
+                                   qint32 srcRowStride,
+                                   const quint8 *srcAlphaMask,
+                                   qint32 maskRowStride,
+                                   quint8 opacity,
+                                   qint32 rows,
+                                   qint32 cols,
+                                   const KoCompositeOp * op,
+                                   const QBitArray & channelFlags)
+{
+    if (rows <= 0 || cols <= 0)
+        return;
+
+    if (this != srcSpace) {
+        quint32 len = pixelSize() * rows * cols;
+
+        // If our conversion cache is too small, extend it.
+        if (!m_conversionCache.resize( len, Q3GArray::SpeedOptim )) {
+            kWarning() << "Could not allocate enough memory for the conversion!\n";
+            // XXX: We should do a slow, pixel by pixel bitblt here...
+            abort();
+        }
+
+        for (qint32 row = 0; row < rows; row++) {
+            srcSpace->convertPixelsTo(src + row * srcRowStride,
+                                      m_conversionCache.data() + row * cols * pixelSize(), this,
+                                      cols);
+        }
+
+        // The old srcRowStride is no longer valid because we converted to the current cs
+        srcRowStride = cols * pixelSize();
+
+        op->composite( dst, dststride,
+                       m_conversionCache.data(), srcRowStride,
+                       srcAlphaMask, maskRowStride,
+                       rows,  cols,
+                       opacity, channelFlags );
+
+    }
+    else {
+        op->composite( dst, dststride,
+                       src, srcRowStride,
+                       srcAlphaMask, maskRowStride,
+                       rows,  cols,
+                       opacity, channelFlags );
+    }
+}
+
+// XXX: I don't wan this code duplication, but also don't want an
+//      extra function call in this critical section of code. What to
+//      do?
+void KoColorSpace::bitBlt(quint8 *dst,
+                                   qint32 dststride,
+                                   KoColorSpace * srcSpace,
+                                   const quint8 *src,
+                                   qint32 srcRowStride,
+                                   const quint8 *srcAlphaMask,
+                                   qint32 maskRowStride,
+                                   quint8 opacity,
+                                   qint32 rows,
+                                   qint32 cols,
+                                   const KoCompositeOp * op)
+{
+    if (rows <= 0 || cols <= 0)
+        return;
+
+    if (this != srcSpace) {
+        quint32 len = pixelSize() * rows * cols;
+
+        // If our conversion cache is too small, extend it.
+        if (!m_conversionCache.resize( len, Q3GArray::SpeedOptim )) {
+            kWarning() << "Could not allocate enough memory for the conversion!\n";
+            // XXX: We should do a slow, pixel by pixel bitblt here...
+            abort();
+        }
+
+        for (qint32 row = 0; row < rows; row++) {
+            srcSpace->convertPixelsTo(src + row * srcRowStride,
+                                      m_conversionCache.data() + row * cols * pixelSize(), this,
+                                      cols);
+        }
+
+        // The old srcRowStride is no longer valid because we converted to the current cs
+        srcRowStride = cols * pixelSize();
+
+        op->composite( dst, dststride,
+                       m_conversionCache.data(), srcRowStride,
+                       srcAlphaMask, maskRowStride,
+                       rows,  cols,
+                       opacity);
+
+    }
+    else {
+        op->composite( dst, dststride,
+                       src,srcRowStride,
+                       srcAlphaMask, maskRowStride,
+                       rows,  cols,
+                       opacity);
     }
 }

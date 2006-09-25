@@ -54,12 +54,12 @@ void KWmf::brushSet(
     unsigned color,
     unsigned style)
 {
-    m_dc.m_brushColour = color;
+    m_dc.m_brushColor = color;
     m_dc.m_brushStyle = style;
 }
 
 //-----------------------------------------------------------------------------
-unsigned KWmf::getColour(
+unsigned KWmf::getColor(
     S32 color)
 {
     unsigned red, green, blue;
@@ -567,7 +567,7 @@ void KWmf::opBrushCreateIndirect(
     S16 discard;
 
     operands >> arg >> color;
-    handle->m_color = getColour(color);
+    handle->m_color = getColor(color);
     if (arg == 2)
     {
         operands >> arg;
@@ -701,7 +701,7 @@ void KWmf::opPenCreateIndirect(
     operands >> arg;
     handle->m_width = arg;
     operands >> arg >> color;
-    handle->m_color = getColour(color);
+    handle->m_color = getColor(color);
 }
 
 void KWmf::opPie(
@@ -830,7 +830,7 @@ void KWmf::penSet(
     unsigned style,
     unsigned width)
 {
-    m_dc.m_penColour = color;
+    m_dc.m_penColor = color;
     m_dc.m_penStyle = style;
     m_dc.m_penWidth = width;
 }
@@ -910,9 +910,9 @@ void KWmf::walk(
 KWmf::DrawContext::DrawContext()
 {
     // TBD: initalise with proper values.
-    m_brushColour = 0x808080;
+    m_brushColor = 0x808080;
     m_brushStyle = 1;
-    m_penColour = 0x808080;
+    m_penColor = 0x808080;
     m_penStyle = 1;
     m_penWidth = 1;
 }

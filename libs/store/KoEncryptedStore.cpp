@@ -606,8 +606,8 @@ void KoEncryptedStore::findPasswordInKWallet( ) {
     /* About KWallet access
      *
      * The choice has been made to postfix every entry in a kwallet concerning passwords for opendocument files with /opendocument
-     * This choice has been made since, at the time of this writing, the author could not find any reference as to standardised
-     * naming schemes for entries in the wallet. Since collission of passwords in entries should be avoided and is at least possible,
+     * This choice has been made since, at the time of this writing, the author could not find any reference as to standardized
+     * naming schemes for entries in the wallet. Since collision of passwords in entries should be avoided and is at least possible,
      * considering remote files might be both protected by a secured web-area (konqueror makes an entry) and a password (we make an
      * entry), it seems a good thing to make sure it won't happen.
      */

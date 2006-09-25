@@ -62,9 +62,9 @@ public:
     public:
         DrawContext();
         bool m_winding;
-        unsigned m_brushColour;
+        unsigned m_brushColor;
         unsigned m_brushStyle;
-        unsigned m_penColour;
+        unsigned m_penColor;
         unsigned m_penStyle;
         unsigned m_penWidth;
     };
@@ -149,7 +149,7 @@ private:
     WinObjBrushHandle *handleCreateBrush(void);
     QList<WinObjHandle *>m_objectHandles;
 
-    unsigned getColour(S32 color);
+    unsigned getColor(S32 color);
     QPoint normalisePoint(
         QDataStream &operands);
     QSize normaliseSize(

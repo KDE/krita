@@ -84,7 +84,7 @@ KisFilterConfiguration* KisFilterFastColorTransfer::configuration(QWidget* w)
 
 void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-    kDebug() << "Start transfering color" << endl;
+    kDebug() << "Start transferring color" << endl;
     QVariant value;
     QString fileName;
     if (config && config->getProperty("filename", value))

@@ -64,7 +64,7 @@ public:
 
     KisSelectionSP selection();
 
-    /// Set the selction of this adjustment layer to a copy of selection.
+    /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
 
 public:

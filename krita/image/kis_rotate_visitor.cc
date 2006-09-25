@@ -30,20 +30,20 @@
 #include "kis_selection.h"
 #include "kis_painter.h"
 
-void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *progress)
+void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCenter, KisProgressDisplayInterface *progress)
 {
-    KisPoint centreOfRotation;
+    KisPoint centerOfRotation;
 
-    if (rotateAboutImageCentre) {
-        centreOfRotation = KisPoint(m_dev->image()->width() / 2.0,  m_dev->image()->height() / 2.0);
+    if (rotateAboutImageCenter) {
+        centerOfRotation = KisPoint(m_dev->image()->width() / 2.0,  m_dev->image()->height() / 2.0);
     } else {
         QRect r = m_dev->exactBounds();
-        centreOfRotation = KisPoint(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
+        centerOfRotation = KisPoint(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
     }
 
     m_progress = progress;
 
-    KisPaintDeviceSP rotated = rotate(m_dev, angle, centreOfRotation);
+    KisPaintDeviceSP rotated = rotate(m_dev, angle, centerOfRotation);
 
     if (!m_dev->hasSelection()) {
         // Clear everything
@@ -192,7 +192,7 @@ KisPaintDeviceSP KisRotateVisitor::rotate180(KisPaintDeviceSP src)
     return dst;
 }
 
-KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, KisPoint centreOfRotation)
+KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, KisPoint centerOfRotation)
 {
     const double pi = 3.1415926535897932385;
 
@@ -261,12 +261,12 @@ KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, Ki
     double sinAngle = sin(angle * pi / 180);
     double cosAngle = cos(angle * pi / 180);
 
-    KisPoint rotatedCentreOfRotation(
-                                centreOfRotation.x() * cosAngle - centreOfRotation.y() * sinAngle,
-                                centreOfRotation.x() * sinAngle + centreOfRotation.y() * cosAngle);
+    KisPoint rotatedCenterOfRotation(
+                                centerOfRotation.x() * cosAngle - centerOfRotation.y() * sinAngle,
+                                centerOfRotation.x() * sinAngle + centerOfRotation.y() * cosAngle);
 
-    dst->setX((qint32)(dst->getX() + centreOfRotation.x() - rotatedCentreOfRotation.x()));
-    dst->setY((qint32)(dst->getY() + centreOfRotation.y() - rotatedCentreOfRotation.y()));
+    dst->setX((qint32)(dst->getX() + centerOfRotation.x() - rotatedCenterOfRotation.x()));
+    dst->setY((qint32)(dst->getY() + centerOfRotation.y() - rotatedCenterOfRotation.y()));
 
     setProgressDone();
 

@@ -762,7 +762,7 @@ void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
     /*
-        Any bugs in this fuction are probably also in thin_region
+        Any bugs in this function are probably also in thin_region
         Blame all bugs in this function on jaycox@gimp.org
     */
 

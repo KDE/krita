@@ -183,7 +183,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
                 press = pressure * 0.25;
             else
                 press = -1;
-            //kDebug() << "After mysterious line, press becomes: " << press << ", this is the same as in the orignal. Good" << endl;
+            //kDebug() << "After mysterious line, press becomes: " << press << ", this is the same as in the original. Good" << endl;
             // XXX - 192 is probably only useful for paper with a texture...
             eff_height = (currentData.h + currentData.w - 192.0) * (1.0 / 255.0);
             contact = (press + eff_height) * 0.2;

@@ -216,7 +216,7 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
             B = 0;
         }
 
-    // Swap red and blue back to get the correct colour.
+    // Swap red and blue back to get the correct color.
         color = qRgb (B, G, R);
 
         delete [] IntensityCount;        // free all the arrays

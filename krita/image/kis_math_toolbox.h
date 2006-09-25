@@ -82,12 +82,12 @@ class KRITAIMAGE_EXPORT KisMathToolbox : public QObject {
         void nextStep();
     protected:
         /**
-         * This function transform a paint device into a KisFloatRepresentation, this function is colorspace independant,
+         * This function transform a paint device into a KisFloatRepresentation, this function is colorspace independent,
          * for Wavelet, Pyramid and FFT the data is allways the exact value of the channel stored in a float.
          */
         void transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*, const QRect&);
         /**
-         * This function transform a KisFloatRepresentation into a paint device, this function is colorspace independant,
+         * This function transform a KisFloatRepresentation into a paint device, this function is colorspace independent,
          * for Wavelet, Pyramid and FFT the data is allways the exact value of the channel stored in a float.
          */
         void transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentation*, const QRect&);

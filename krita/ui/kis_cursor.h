@@ -44,7 +44,7 @@ public:
     static QCursor sizeAllCursor();       // all directions resize
     static QCursor blankCursor();         // blank/invisible cursor
     static QCursor splitVCursor();        // vertical splitting
-    static QCursor splitHCursor();        // horziontal splitting
+    static QCursor splitHCursor();        // horizontal splitting
     static QCursor pointingHandCursor();  // a pointing hand
 
     // Existing custom KimageShop cursors. Use the 'load' function for all new cursors.

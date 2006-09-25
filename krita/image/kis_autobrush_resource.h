@@ -45,7 +45,7 @@ class KRITAIMAGE_EXPORT KisAutobrushCircleShape : public KisAutobrushShape {
             return a*a + b * b;
         }
     private:
-        double m_xcentre, m_ycentre;
+        double m_xcenter, m_ycenter;
         double m_xcoef, m_ycoef;
         double m_xfadecoef, m_yfadecoef;
 };
@@ -57,7 +57,7 @@ class KRITAIMAGE_EXPORT KisAutobrushRectShape : public KisAutobrushShape {
     protected:
         virtual qint8 valueAt(qint32 x, qint32 y);
     private:
-        double m_xcentre, m_ycentre, m_c;
+        double m_xcenter, m_ycenter, m_c;
 };
 
 class KRITAIMAGE_EXPORT KisAutobrushResource : public KisBrush

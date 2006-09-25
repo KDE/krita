@@ -89,7 +89,7 @@ public:
     void shrink (qint32 xradius, qint32 yradius, bool edge_lock);
     void border(qint32 xradius, qint32 yradius);
     // the following functions are needed for the siox tool
-    // they might be also usefull on its own
+    // they might be also useful on its own
     void erode();
     void dilate();
 

@@ -593,7 +593,7 @@ private:
     OldToolBox * m_toolBox;
     KisControlFrame * m_brushesAndStuffToolBar;
 
-    // Current colours, brushes, patterns etc.
+    // Current colors, brushes, patterns etc.
 
     KoColor m_fg;
     KoColor m_bg;

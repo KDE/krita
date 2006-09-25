@@ -14,7 +14,7 @@ Wet and Sticky is free software; you can redistribute it and/or modify it under 
 
 */
 
-extern void DrawPoint(/* int x, int y; int colour*/);
+extern void DrawPoint(/* int x, int y; int color*/);
 extern int DrawVolumePoint(/* int x, int y; int attr*/);
 extern int DrawDrynessPoint(/* int x, int y; int attr*/);
 extern void ClearWindow();

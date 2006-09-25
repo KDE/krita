@@ -132,7 +132,7 @@ namespace Kross { namespace KritaCore {
             QObject* createHSVColor(int hue, int saturation, int value);
 
             /**
-             * This function return a \a Pattern taken from the list of ressources
+             * This function return a \a Pattern taken from the list of resources
              * of Krita.
              * It takes one argument :
              *  - the name of the pattern
@@ -146,7 +146,7 @@ namespace Kross { namespace KritaCore {
             QObject* pattern(const QString& patternname);
 
             /**
-             * This function return a \a Brush taken from the list of ressources
+             * This function return a \a Brush taken from the list of resources
              * of Krita.
              * It takes one argument :
              *  - the name of the brush
@@ -199,7 +199,7 @@ namespace Kross { namespace KritaCore {
 
             /**
              * This function return a \a Filter object taken from the list
-             * of ressources of Krita.
+             * of resources of Krita.
              * It takes one argument :
              *  - the name of the filter
              * 

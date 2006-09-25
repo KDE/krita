@@ -96,7 +96,7 @@ void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, K
             paint.w -= 1;
 
             // Adsorb: this means that the pigment is glued onto the paper. In real terms: pigment gets
-            // transfered to the adsorp layer. We don't yet simulate the reverse, although that's possible
+            // transferred to the adsorp layer. We don't yet simulate the reverse, although that's possible
             // with real watercolor paint.
             adsorbPixel(&paint, &adsorb);
 

@@ -292,7 +292,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
                             ++kcol;
                         }
                     }
-                    krow = 1; // we have allready done the first krow
+                    krow = 1; // we have already done the first krow
                     for(;krow < (khalfHeight - row); ++krow)
                     {
                         memcpy( pixelPtrCache.data() + krow * kw, pixelPtrCache.data(), kw*sizeof(quint8*)); //    Copy the first line in the current line

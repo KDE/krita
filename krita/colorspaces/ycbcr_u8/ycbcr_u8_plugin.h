@@ -22,7 +22,7 @@
 #include <kparts/plugin.h>
 
 /**
- * A plugin wrapper around the YCbCr U8 colour space strategy.
+ * A plugin wrapper around the YCbCr U8 color space strategy.
  */
 class YCbCrU8Plugin : public KParts::Plugin
 {

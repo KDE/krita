@@ -48,7 +48,7 @@ public:
  *
  * A brush contains a number of tufts. Depending on pressure, the tufts
  * will be more or less concentrated around the paint position. Tufts
- * mix with the colour under each tuft and load the tuft with the mixture
+ * mix with the color under each tuft and load the tuft with the mixture
  * for the next paint operation. The mixture is also dependent upon pressure.
  *
  * The paint load will run out after a certain number of paintAt's, depending

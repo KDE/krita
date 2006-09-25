@@ -51,7 +51,7 @@ class IteratorBase : public QObject
     public slots:
 
         /**
-         * Increment the positon, and go to the next pixel. The
+         * Increment the position, and go to the next pixel. The
          * returned value is true if the iterator reached the
          * end (so, it's like calling next() and after that asking
          * what isDone() returns).

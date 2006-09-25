@@ -34,8 +34,8 @@ void KisAutobrushShape::createBrush( QImage* img)
 
 KisAutobrushCircleShape::KisAutobrushCircleShape(qint32 w, qint32 h, double fh, double fv)
     : KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
-        m_xcentre ( w / 2.0 ),
-        m_ycentre ( h / 2.0 ),
+        m_xcenter ( w / 2.0 ),
+        m_ycenter ( h / 2.0 ),
         m_xcoef ( 2.0 / w ),
         m_ycoef ( 2.0 / h ),
         m_xfadecoef ( (m_fh == 0) ? 1 : ( 1.0 / m_fh)),
@@ -44,8 +44,8 @@ KisAutobrushCircleShape::KisAutobrushCircleShape(qint32 w, qint32 h, double fh, 
 }
 qint8 KisAutobrushCircleShape::valueAt(qint32 x, qint32 y)
 {
-    double xr = (x - m_xcentre) + 0.5;
-    double yr = (y - m_ycentre) + 0.5;
+    double xr = (x - m_xcenter) + 0.5;
+    double yr = (y - m_ycenter) + 0.5;
     double n = norme( xr * m_xcoef, yr * m_ycoef);
     if( n > 1 )
     {
@@ -82,15 +82,15 @@ qint8 KisAutobrushCircleShape::valueAt(qint32 x, qint32 y)
 
 KisAutobrushRectShape::KisAutobrushRectShape(qint32 w, qint32 h, double fh, double fv)
     : KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
-        m_xcentre ( w / 2.0 ),
-        m_ycentre ( h / 2.0 ),
+        m_xcenter ( w / 2.0 ),
+        m_ycenter ( h / 2.0 ),
         m_c( fv/fh)
 {
 }
 qint8 KisAutobrushRectShape::valueAt(qint32 x, qint32 y)
 {
-    double xr = QABS(x - m_xcentre);
-    double yr = QABS(y - m_ycentre);
+    double xr = QABS(x - m_xcenter);
+    double yr = QABS(y - m_ycenter);
     if( xr > m_fh || yr > m_fv )
     {
         if( yr <= ((xr - m_fh) * m_c + m_fv )  )

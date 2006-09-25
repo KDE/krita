@@ -63,7 +63,7 @@ extern void initialise_canvas();
 
 extern void blob( /* int */);
 /* This routine puts a square blob of black paint
-   of the given side length centred on the canvas.
+   of the given side length centered on the canvas.
    This is used for test purposes.  */
 
 extern void load_file(/*char *, int *, int * */);

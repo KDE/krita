@@ -22,7 +22,7 @@
 #include <kparts/plugin.h>
 
 /**
- * A plugin wrapper around the GRAY colour space strategy.
+ * A plugin wrapper around the GRAY color space strategy.
  */
 class GrayPlugin : public KParts::Plugin
 {

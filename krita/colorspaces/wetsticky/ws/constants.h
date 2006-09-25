@@ -28,7 +28,7 @@ Wet and Sticky is free software; you can redistribute it and/or modify it under 
 #define  DEBUG   1
 #define  VERSION "1.0" 
 
-/*  Define the constants for colours in the HLS space.  */
+/*  Define the constants for colors in the HLS space.  */
 
 #define  UNFILLED           -1
 #define  MAX_COLOUR_INDEX  255

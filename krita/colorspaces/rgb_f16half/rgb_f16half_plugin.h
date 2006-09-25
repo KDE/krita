@@ -23,7 +23,7 @@
 #include <kparts/plugin.h>
 
 /**
- * A plugin wrapper around the RGB F16Half colour space strategy.
+ * A plugin wrapper around the RGB F16Half color space strategy.
  */
 class RGBF16HalfPlugin : public KParts::Plugin
 {

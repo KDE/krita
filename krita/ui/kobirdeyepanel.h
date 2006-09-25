@@ -226,7 +226,7 @@ protected:
     enum enumDragHandle {
         DragHandleNone,
         DragHandleLeft,
-        DragHandleCentre,
+        DragHandleCenter,
         DragHandleRight,
         DragHandleTop,
         DragHandleBottom

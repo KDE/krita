@@ -28,7 +28,7 @@ class QCheckBox;
 class KisIntSpinbox;
 
 /**
- * Tool to select colours by pointing at a color on the image.
+ * Tool to select colors by pointing at a color on the image.
  * TODO:
  *       Implement shift/shift-ctrl keyboard shortcuts for
  *       temporary add/subtract selection mode.

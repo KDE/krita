@@ -123,7 +123,7 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // else if brush == image
     //          retrieve image
     // subsample (mask | image) for position -- pos should be double!
-    // apply filters to mask (colour | gradient | pattern | etc.
+    // apply filters to mask (color | gradient | pattern | etc.
     // composite filtered mask into temporary layer
     // composite temporary layer into target layer
     // @see: doc/brush.txt

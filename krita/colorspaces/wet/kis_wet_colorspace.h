@@ -28,7 +28,7 @@
 class KisFilter;
 
 /**
- * The wet colourspace is one of the more complicated colour spaces. Every
+ * The wet colorspace is one of the more complicated color spaces. Every
  * pixel actually consists of two pixels: the paint pixel and the adsorbtion
  * pixel. This corresponds to the two layers of the wetpack structure in the
  * original wetdreams code by Raph Levien.
@@ -63,7 +63,7 @@ struct _WetPix {
 
     quint16 w;   /*  Water volume */
     quint16 h;   /*  Height of paper surface XXX: This might just as well be a single
-                      channel in our colour model that has two of
+                      channel in our color model that has two of
                       these wetpix structs for every paint device pixels*/
 };
 

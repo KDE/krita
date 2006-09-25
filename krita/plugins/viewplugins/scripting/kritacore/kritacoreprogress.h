@@ -75,7 +75,7 @@ class KRITASCRIPTING_EXPORT KritaCoreProgress : public KisProgressSubject
          * If called, the progressbar will be disabled again do
          * indicate, that the operation is done. Please note, that
          * it's not needed to call this explicit since once the
-         * script finished, it's called automaticly.
+         * script finished, it's called automatically.
          */
         void progressDone();
 

@@ -90,7 +90,7 @@ bool KisPattern::save()
     file.open(QIODevice::WriteOnly | QIODevice::Truncate);
 
     QTextStream stream(&file);
-    // Header: header_size (24+name length),version,width,height,colourdepth of brush,magic,name
+    // Header: header_size (24+name length),version,width,height,colordepth of brush,magic,name
     // depth: 1 = greyscale, 2 = greyscale + A, 3 = RGB, 4 = RGBA
     // magic = "GPAT", as a single uint32, the docs are wrong here!
     // name is UTF-8 (\0-terminated! The docs say nothing about this!)

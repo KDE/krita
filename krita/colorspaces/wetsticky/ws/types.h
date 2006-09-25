@@ -20,17 +20,17 @@ Wet and Sticky is free software; you can redistribute it and/or modify it under 
 */
 
 
-/*  A colour is specified as a vector in HLS space.  Hue is a value
+/*  A color is specified as a vector in HLS space.  Hue is a value
     in the range 0..360 degrees with 0 degrees being red.  Saturation
     and Lightness are both in the range [0,1].  A lightness of 0 means
-    black, with 1 being white.  A totally saturated colour has saturation
+    black, with 1 being white.  A totally saturated color has saturation
     of 1.
 */
 
-typedef struct hls_colour { short int hue; float saturation, lightness; }
+typedef struct hls_color { short int hue; float saturation, lightness; }
 HLS_COLOUR;
 
-typedef struct rgb_colour {float r; float g; float b;}
+typedef struct rgb_color {float r; float g; float b;}
 RGB_COLOUR;
 
 
@@ -47,7 +47,7 @@ typedef short int BOOLEAN;  /*  FALSE or TRUE  */
 
 
 typedef struct paint {
-   HLS_COLOUR colour;
+   HLS_COLOUR color;
    int        liquid_content;  /*  [0,100].  */
    int        drying_rate;     /*  [0,100].  */
    int        miscibility;     /*  [0,inf].  */

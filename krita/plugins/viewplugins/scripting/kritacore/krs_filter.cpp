@@ -72,7 +72,7 @@ bool Filter::process(QObject* layer)
     PaintLayer* paintlayer = dynamic_cast< PaintLayer* >(layer);
     if(! paintlayer || ! m_filter->workWith( paintlayer->paintLayer()->paintDevice()->colorSpace()))
     {
-        kWarning() << i18n("An error has occured in %1",QString("process")) << endl;
+        kWarning() << i18n("An error has occurred in %1",QString("process")) << endl;
         return false;
     }
 
@@ -88,7 +88,7 @@ bool Filter::process(QObject* layer, int x, int y, int width, int height)
     PaintLayer* paintlayer = dynamic_cast< PaintLayer* >(layer);
     if(! paintlayer || ! m_filter->workWith( paintlayer->paintLayer()->paintDevice()->colorSpace()))
     {
-        kWarning() << i18n("An error has occured in %1",QString("process")) << endl;
+        kWarning() << i18n("An error has occurred in %1",QString("process")) << endl;
         return false;
     }
 

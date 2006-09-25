@@ -125,7 +125,7 @@ void KisPaintopBox::colorSpaceChanged(KoColorSpace *cs)
 
     if (index == -1) {
         // Must change the paintop as the current one is not supported
-        // by the new colourspace.
+        // by the new colorspace.
         index = 0;
     }
 
@@ -161,7 +161,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KisInputDevice & inputDevice)
 
     if (index == -1) {
         // Must change the paintop as the current one is not supported
-        // by the new colourspace.
+        // by the new colorspace.
         index = 0;
         paintop = m_displayedOps.at(index);
     }

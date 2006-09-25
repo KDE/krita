@@ -74,7 +74,7 @@ void Painter::convolve()
 
     QVariant firstlineVariant = *kernelH.begin();
     if(firstlineVariant.type() != QVariant::List)
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1",QString("applyConvolution"))) );
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occurred in %1",QString("applyConvolution"))) );
 
     QList<QVariant> firstline = firstlineVariant.toList();
 
@@ -86,10 +86,10 @@ void Painter::convolve()
     for(QList<QVariant>::iterator itK = kernelH.begin(); itK != kernelH.end(); itK++, i ++ ) {
         QVariant lineVariant = *kernelH.begin();
         if(lineVariant.type() != QVariant::List)
-            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1",QString("applyConvolution"))) );
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occurred in %1",QString("applyConvolution"))) );
         QList<QVariant> line = firstlineVariant.toList();
         if(line.size() != kernel.width)
-            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1",QString("applyConvolution"))) );
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occurred in %1",QString("applyConvolution"))) );
         uint j = 0;
         for(QList<QVariant>::iterator itLine = line.begin(); itLine != line.end(); itLine++, j ++ )
             kernel.data[ j + i * kernel.width ] = (*itLine).toInt();

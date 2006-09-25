@@ -265,7 +265,7 @@ public:
      * @param w Width of the rectangle in pixels
      * @param h Height of the rectangle in pixels
      * @param dstProfile RGB profile to use in conversion. May be 0, in which
-     * case it's up to the colour strategy to choose a profile (most
+     * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      * @param exposure The exposure setting used to render a preview of a high dynamic range image.
      */
@@ -275,7 +275,7 @@ public:
      * Create an RGBA QImage from a rectangle in the paint device. The rectangle is defined by the parent image's bounds.
      *
      * @param dstProfile RGB profile to use in conversion. May be 0, in which
-     * case it's up to the colour strategy to choose a profile (most
+     * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      * @param exposure The exposure setting used to render a preview of a high dynamic range image.
      */
@@ -302,7 +302,7 @@ public:
      * The color values will be transformed from the profile of
      * this paint device to the display profile.
      *
-     * @return true if the operation was succesful.
+     * @return true if the operation was successful.
      */
     bool pixel(qint32 x, qint32 y, QColor *c, quint8 *opacity);
 
@@ -314,7 +314,7 @@ public:
      * The color values will be transformed from the profile of
      * this paint device to the display profile.
      *
-     * @return true if the operation was succesful.
+     * @return true if the operation was successful.
      */
     bool pixel(qint32 x, qint32 y, KoColor * kc);
 
@@ -335,7 +335,7 @@ public:
      * Note that this will use 8-bit values and may cause a significant
      * degradation when used on 16-bit or hdr quality images.
      *
-     * @return true if the operation was succesful
+     * @return true if the operation was successful
      *
      */
     bool setPixel(qint32 x, qint32 y, const QColor& c, quint8 opacity);

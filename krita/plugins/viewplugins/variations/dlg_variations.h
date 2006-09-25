@@ -29,7 +29,7 @@
 
 /**
  * This dialog allows the user to modify a layer or a selection
- * by adding more colour in a particular channel or lighten or
+ * by adding more color in a particular channel or lighten or
  * darken an image.
  */
 class DlgVariations: public KDialogBase {

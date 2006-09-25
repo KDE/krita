@@ -22,7 +22,7 @@
 #include <kparts/plugin.h>
 
 /**
- * A plugin wrapper around the Wet & Sticky colour space strategy.
+ * A plugin wrapper around the Wet & Sticky color space strategy.
  *
  * The Wet & Sticky paint system was first designed in 1991 by Tunde Cockshott
  * and was further developed by David England and Kevin Waite. It was released

@@ -49,7 +49,7 @@ KUNITTEST_MODULE_REGISTER_TESTER( KisRgbU16ColorSpaceTester );
 
 void KisRgbU16ColorSpaceTester::allTests()
 {
-    // We need this so that the colour profile loading can operate without crashing.
+    // We need this so that the color profile loading can operate without crashing.
     KisFactory *factory = new KisFactory();
 
     testBasics();

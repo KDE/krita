@@ -1419,7 +1419,7 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
     m_vScroll->setUpdatesEnabled(false);
 
     if (x < 0 || y < 0) {
-        // Zoom about the centre of the current display
+        // Zoom about the center of the current display
         KisImageSP img = currentImg();
 
         if (img) {

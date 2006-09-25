@@ -737,7 +737,7 @@ void KisTiledDataManager::ensureTileMementoed(qint32 col, qint32 row, quint32 ti
         tile = tile->getNext();
     }
     if(tile)
-        return; // it has allready been stored
+        return; // it has already been stored
 
     tile = new KisTile(*refTile);
     Q_CHECK_PTR(tile);

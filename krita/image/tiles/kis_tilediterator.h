@@ -137,7 +137,7 @@ public:
     /// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
     KisTiledHLineIterator & operator++();
 
-    /// Returns the number of consequtive horizontal pixels that we point at
+    /// Returns the number of consecutive horizontal pixels that we point at
     /// This is useful for optimizing
     qint32 nConseqHPixels() const;
 
@@ -150,7 +150,7 @@ public:
     /// returns true when the iterator has reached the end
     bool isDone() const { return m_x > m_right; }
 
-    /// increment to the next row and rewind to the begining
+    /// increment to the next row and rewind to the beginning
     void nextRow();
 
 protected:
@@ -192,7 +192,7 @@ public:
     /// returns true when the iterator has reached the end
     bool isDone() const { return m_y > m_bottom; }
 
-    /// increment to the next column and rewind to the begining
+    /// increment to the next column and rewind to the beginning
     void nextCol();
 
 protected:

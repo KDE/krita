@@ -70,9 +70,9 @@ public:
     int imageTextureTileHeight() const;
 
     /**
-     * Select selection visualisation rendering.
+     * Select selection visualization rendering.
      *
-     * @param enable Set to true to enable selection visualisation rendering.
+     * @param enable Set to true to enable selection visualization rendering.
      */
     void setSelectionDisplayEnabled(bool enable);
 

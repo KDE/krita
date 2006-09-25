@@ -27,7 +27,7 @@ class KisView;
 class KisWetColorSpace;
 
 /**
- * A plugin wrapper around the WET colour space strategy.
+ * A plugin wrapper around the WET color space strategy.
  */
 class WetPlugin : public KParts::Plugin
 {

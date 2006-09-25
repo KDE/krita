@@ -52,7 +52,7 @@ void KisResourceMediator::connectServer(KisResourceServerBase* rServer)
     foreach (KisResource *resource, resources)
         rServerAddedResource(resource);
 
-    // And connect to the server permanently, so that we may recieve updates afterwards
+    // And connect to the server permanently, so that we may receive updates afterwards
     connect(rServer, SIGNAL(resourceAdded(KisResource*)),
             this, SLOT(rServerAddedResource(KisResource*)));
 }

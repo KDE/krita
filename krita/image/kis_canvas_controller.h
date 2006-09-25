@@ -113,7 +113,7 @@ public:
     virtual void zoomOut(qint32 x, qint32 y) = 0;
     
     /**
-     * To centre the view on the given point with the given zoom factor.
+     * To center the view on the given point with the given zoom factor.
      *
      * @param x the x coordinate of the center point in image coordinates
      * @param y the y coordinate of the center point in image coordinates

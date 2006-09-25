@@ -51,10 +51,10 @@ void KisImageTester::mergeTests()
 
     KoColor mergedPixel = image->mergedPixel(0, 0);
 
-    QColor colour;
+    QColor color;
     quint8 opacity;
 
-    mergedPixel.toQColor(&colour, &opacity);
+    mergedPixel.toQColor(&color, &opacity);
 
     CHECK(opacity, OPACITY_TRANSPARENT);
 
@@ -64,12 +64,12 @@ void KisImageTester::mergeTests()
     layer->paintDevice()->setPixel(0, 0, QColor(255, 128, 64), OPACITY_OPAQUE);
 
     mergedPixel = image->mergedPixel(0, 0);
-    mergedPixel.toQColor(&colour, &opacity);
+    mergedPixel.toQColor(&color, &opacity);
 
     CHECK(opacity, OPACITY_OPAQUE);
-    CHECK(colour.red(), 255);
-    CHECK(colour.green(), 128);
-    CHECK(colour.blue(), 64);
+    CHECK(color.red(), 255);
+    CHECK(color.green(), 128);
+    CHECK(color.blue(), 64);
 
     KisPaintLayer * layer2 = new KisPaintLayer(image, "layer 2", OPACITY_OPAQUE / 2);
     image->addLayer(layer2, image->rootLayer(), layer);
@@ -77,12 +77,12 @@ void KisImageTester::mergeTests()
     layer2->paintDevice()->setPixel(0, 0, QColor(255, 255, 255), OPACITY_OPAQUE);
 
     mergedPixel = image->mergedPixel(0, 0);
-    mergedPixel.toQColor(&colour, &opacity);
+    mergedPixel.toQColor(&color, &opacity);
 
     CHECK(opacity, OPACITY_OPAQUE);
-    CHECK(colour.red(), 255);
-    CHECK(colour.green(), 128 + ((255 - 128) / 2));
-    CHECK(colour.blue(), 64 + ((255 - 64) / 2));
+    CHECK(color.red(), 255);
+    CHECK(color.green(), 128 + ((255 - 128) / 2));
+    CHECK(color.blue(), 64 + ((255 - 64) / 2));
 }
 
 

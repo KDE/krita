@@ -36,7 +36,7 @@ public:
 
         void visitKisPaintDevice(KisPaintDevice* dev);
 
-        void rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *progress);
+        void rotate(double angle, bool rotateAboutImageCenter, KisProgressDisplayInterface *progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *progress);
 
 private:
@@ -58,7 +58,7 @@ private:
     KisPaintDeviceSP rotateRight90(KisPaintDeviceSP src);
     KisPaintDeviceSP rotateLeft90(KisPaintDeviceSP src);
     KisPaintDeviceSP rotate180(KisPaintDeviceSP src);
-    KisPaintDeviceSP rotate(KisPaintDeviceSP src, double angle, KisPoint centreOfRotation);
+    KisPaintDeviceSP rotate(KisPaintDeviceSP src, double angle, KisPoint centerOfRotation);
 
     KisPaintDeviceSP xShear(KisPaintDeviceSP src, double shearX);
     KisPaintDeviceSP yShear(KisPaintDeviceSP src, double shearY);

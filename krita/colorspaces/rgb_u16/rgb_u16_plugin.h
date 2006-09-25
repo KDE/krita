@@ -22,7 +22,7 @@
 #include <kparts/plugin.h>
 
 /**
- * A plugin wrapper around the RGB U16 colour space strategy.
+ * A plugin wrapper around the RGB U16 color space strategy.
  */
 class RGBU16Plugin : public KParts::Plugin
 {

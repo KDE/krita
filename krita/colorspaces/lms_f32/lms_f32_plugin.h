@@ -24,7 +24,7 @@
 #include <kparts/plugin.h>
 
 /**
- * A plugin wrapper around the LMS F32 colour space strategy.
+ * A plugin wrapper around the LMS F32 color space strategy.
  */
 class LMSF32Plugin : public KParts::Plugin
 {

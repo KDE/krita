@@ -147,7 +147,7 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
             virtual int type() const { return INTERP_LINEAR; }
 
             // This does the actual calculation and is made
-            // static as an optimisation for the other
+            // static as an optimization for the other
             // strategies that need this for their own calculation.
             static double calcValueAt(double t, double middle);
 

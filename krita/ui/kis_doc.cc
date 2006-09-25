@@ -428,7 +428,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     // Nota bene: If you add new properties to layers, you should
     // ALWAYS define a default value in case the property is not
     // present in the layer definition: this helps a LOT with backward
-    // compatibilty.
+    // compatibility.
     QString attr;
     QString name;
     qint32 x;

@@ -44,7 +44,7 @@ class KRITAIMAGE_EXPORT KisAlphaMask : public KShared {
 
     /**
        As above except quicker as the image does not need to be scanned
-       to see if it has any colour pixels.
+       to see if it has any color pixels.
     */
     KisAlphaMask(const QImage& img, bool hasColor);
 

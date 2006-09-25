@@ -55,17 +55,17 @@ class KRITAIMAGE_EXPORT KisPalette : public KisResource {
 
 public:
     /**
-     * Create a palette from the colours in an image
+     * Create a palette from the colors in an image
      */
     KisPalette(const QImage * img, qint32 nColors, const QString & name);
 
     /**
-     * Create a palette from the colours in a paint device
+     * Create a palette from the colors in a paint device
      */
     KisPalette(const KisPaintDeviceSP device, qint32 nColors, const QString & name);
 
     /**
-     * Create a palette from the colours in a gradient
+     * Create a palette from the colors in a gradient
      */
     KisPalette(const KisGradient * gradient, qint32 nColors, const QString & name);
 

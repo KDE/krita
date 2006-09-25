@@ -99,7 +99,7 @@ setXMLFile(KStandardDirs::locate("data","kritaplugins/wetplugin.rc"),
 true);
 
         m_view = dynamic_cast<KisView*>(parent);
-        // Wetness visualisation
+        // Wetness visualization
         WetnessVisualisationFilter * wf = new WetnessVisualisationFilter(m_view);
 
         KToggleAction *action = new KToggleAction(i18n("Wetness Visualisation"), actionCollection(), "wetnessvisualisation");

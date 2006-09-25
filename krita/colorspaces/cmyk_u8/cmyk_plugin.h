@@ -22,7 +22,7 @@
 #include <kparts/plugin.h>
 
 /**
- * A plugin wrapper around the CMYK colour space strategy.
+ * A plugin wrapper around the CMYK color space strategy.
  */
 class CMYKPlugin : public KParts::Plugin
 {

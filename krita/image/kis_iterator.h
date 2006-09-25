@@ -58,7 +58,7 @@ public:
     /// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
     const quint8 * oldRawData() const;
 
-    /// Returns the number of consequtive pixels that we point at
+    /// Returns the number of consecutive pixels that we point at
     /// This is useful for optimizing
     qint32 nConseqPixels() const;
 
@@ -105,7 +105,7 @@ public:
     /// Advances one pixel until it reaches the end of the line
     KisHLineIterator & operator++();
 
-    /// Returns the number of consequtive horizontal pixels that we point at
+    /// Returns the number of consecutive horizontal pixels that we point at
     /// This is useful for optimizing
     qint32 nConseqHPixels() const;
 
@@ -124,7 +124,7 @@ public:
     /// current y position
     qint32 y() const;
 
-    /// increment to the next row and rewind to the begining
+    /// increment to the next row and rewind to the beginning
     void nextRow();
 
 
@@ -162,7 +162,7 @@ public:
     /// current y position
     qint32 y() const;
 
-    /// increment to the next column and rewind to the begining
+    /// increment to the next column and rewind to the beginning
     void nextCol();
 
 private:

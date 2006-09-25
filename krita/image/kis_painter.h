@@ -46,7 +46,7 @@ class KisPattern;
  * itself, where you have QPainter and QPaintDevice.
  *
  * However, KisPainter works on a tiled image and supports different
- * colour models, and that's a lot more complicated.
+ * color models, and that's a lot more complicated.
  *
  * KisPainter supports transactions that can group various paint operations
  * in one undoable step.

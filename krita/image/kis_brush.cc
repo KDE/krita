@@ -528,7 +528,7 @@ KisPoint KisBrush::hotSpot(const KisPaintInformation& info) const
     }
 
     // XXX: This should take m_hotSpot into account, though it
-    // isn't specified by gimp brushes so it would default to the centre
+    // isn't specified by gimp brushes so it would default to the center
     // anyway.
     KisPoint p(w / 2, h / 2);
     return p;
@@ -1065,7 +1065,7 @@ QImage KisBrush::scaleSinglePixelImage(double scale, QRgb pixel, double subPixel
             // has 0.25 the value of the 1x1.
             alpha = static_cast<int>(alpha * scale * scale + 0.5);
 
-            // Apply to the colour channels too since we are
+            // Apply to the color channels too since we are
             // storing pre-multiplied by alpha.
             red = static_cast<int>(red * scale * scale + 0.5);
             green = static_cast<int>(green * scale * scale + 0.5);

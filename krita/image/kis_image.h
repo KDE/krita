@@ -219,7 +219,7 @@ public:
     KisPaintDeviceSP mergedImage();
 
     /*
-     * Returns the colour of the merged image at pixel (x, y).
+     * Returns the color of the merged image at pixel (x, y).
      */
     KoColor mergedPixel(qint32 x, qint32 y);
 
@@ -322,7 +322,7 @@ public:
 
     /**
      * Add an annotation for this image. This can be anything: Gamma, EXIF, etc.
-     * Note that the "icc" annotation is reserved for the colour strategies.
+     * Note that the "icc" annotation is reserved for the color strategies.
      * If the annotation already exists, overwrite it with this one.
      */
     void addAnnotation(KisAnnotationSP annotation);

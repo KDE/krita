@@ -395,7 +395,7 @@ KoBirdEyePanel::enumDragHandle KoBirdEyePanel::dragHandleAt(QPoint p)
     }
 
     if (m_visibleAreaInThumbnail.contains(p)) {
-        return DragHandleCentre;
+        return DragHandleCenter;
     }
 
     return DragHandleNone;
@@ -414,7 +414,7 @@ void KoBirdEyePanel::handleMouseMove(QPoint p)
     case DragHandleBottom:
         cursor = Qt::SizeHorCursor;
         break;
-    case DragHandleCentre:
+    case DragHandleCenter:
         cursor = Qt::SizeAllCursor;
         break;
     default:
@@ -458,7 +458,7 @@ void KoBirdEyePanel::handleMouseMoveAction(QPoint p)
             thumbnailRect.setBottom(thumbnailRect.bottom()+dy);
             break;
         }
-        case DragHandleCentre: {
+        case DragHandleCenter: {
             thumbnailRect.translate(dx, dy);
             break;
         }
@@ -480,13 +480,13 @@ void KoBirdEyePanel::handleMousePress(QPoint p)
         if (dragHandle == DragHandleNone) {
             if (m_thumbnail.rect().contains(p)) {
 
-                // Snap visible area centre to p and begin a centre drag.
+                // Snap visible area center to p and begin a center drag.
 
                 QRect thumbnailRect = m_visibleAreaInThumbnail;
                 thumbnailRect.moveCenter(p);
                 makeThumbnailRectVisible(thumbnailRect);
 
-                m_dragHandle = DragHandleCentre;
+                m_dragHandle = DragHandleCenter;
                 m_page->view->setCursor(Qt::SizeAllCursor);
                 m_dragging = true;
             }

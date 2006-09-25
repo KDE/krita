@@ -59,7 +59,7 @@ class KisSubPerspectiveGrid {
         inline KisPerspectiveGridNodeSP bottomRight() { return m_bottomRight; }
         inline int subdivisions() const { return m_subdivisions; }
         /**
-         * Return the index of the subgrid, the value is automaticaly set when the KisSubPerspectiveGrid, it is usefull for
+         * Return the index of the subgrid, the value is automatically set when the KisSubPerspectiveGrid, it is useful for
          * drawing the perspective grid, to avoid drawing twice the same border, or points
          */
         inline int index() const { return m_index; }

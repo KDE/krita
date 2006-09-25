@@ -22,7 +22,7 @@
 #include <kparts/plugin.h>
 
 /**
- * A plugin wrapper around the RGB colour space strategy.
+ * A plugin wrapper around the RGB color space strategy.
  */
 class RGBPlugin : public KParts::Plugin
 {

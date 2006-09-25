@@ -52,7 +52,7 @@
 
 namespace {
 
-// XXX: Poynton says: hsv/hls is not what one ought to use for colour calculations.
+// XXX: Poynton says: hsv/hls is not what one ought to use for color calculations.
 //      Unfortunately, I don't know enough to be able to use anything else.
 
     bool isReddish(int h)

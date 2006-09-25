@@ -173,7 +173,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
     }
 }
 
-// XXX: I don't wan this code duplication, but also don't want an
+// XXX: I don't want this code duplication, but also don't want an
 //      extra function call in this critical section of code. What to
 //      do?
 void KoColorSpace::bitBlt(quint8 *dst,

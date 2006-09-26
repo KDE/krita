@@ -208,8 +208,8 @@ void PythonType::supportSequenceType()
 		sequence_table->sq_item = sequence_item_handler;
 		sequence_table->sq_slice = sequence_slice_handler;
 
-		sequence_table->sq_ass_item = sequence_ass_item_handler;	// BAS setup seperately?
-		sequence_table->sq_ass_slice = sequence_ass_slice_handler;	// BAS setup seperately?
+		sequence_table->sq_ass_item = sequence_ass_item_handler;	// BAS setup separately?
+		sequence_table->sq_ass_slice = sequence_ass_slice_handler;	// BAS setup separately?
 		}
 	}
 
@@ -221,7 +221,7 @@ void PythonType::supportMappingType()
 		table->tp_as_mapping = mapping_table;
 		mapping_table->mp_length = mapping_length_handler;
 		mapping_table->mp_subscript = mapping_subscript_handler;
-		mapping_table->mp_ass_subscript = mapping_ass_subscript_handler;	// BAS setup seperately?
+		mapping_table->mp_ass_subscript = mapping_ass_subscript_handler;	// BAS setup separately?
 		}
 	}
 

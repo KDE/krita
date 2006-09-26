@@ -71,7 +71,7 @@ public:
   /**
    * Open a store (i.e. the representation on disk of a KOffice document).
    *
-   * @param window associated window (for the progress bar dialog and authentification)
+   * @param window associated window (for the progress bar dialog and authentication)
    * @param url URL of the file to open
    * @param mode if KoStore::Read, open an existing store to read it.
    *             if KoStore::Write, create or replace a store.

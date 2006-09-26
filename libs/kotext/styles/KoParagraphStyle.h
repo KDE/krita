@@ -162,7 +162,7 @@ public:
     int orphanThreshold() const { return propertyInt(OrphanThreshold); }
     /**
      * If true, make the first character span multiple lines.
-     * @see setDropCapsLenght
+     * @see setDropCapsLength
      * @see setDropCapsLines
      * @see dropCapsDistance
      */
@@ -177,15 +177,15 @@ public:
      * @see setDropCapsLines
      * @see dropCapsDistance
      */
-    void setDropCapsLenght(int characters) { setProperty(DropCapsLength, characters); }
+    void setDropCapsLength(int characters) { setProperty(DropCapsLength, characters); }
     /**
-     * set dropCaps Lenght in characters
-     * @see setDropCapsLenght
+     * set dropCaps Length in characters
+     * @see setDropCapsLength
      */
     int dropCapsLength() const { return propertyInt(DropCapsLength); }
     /**
      * Set the number of lines that the drop-caps span
-     * @see setDropCapsLenght
+     * @see setDropCapsLength
      * @see setDropCaps
      * @see dropCapsDistance
      */
@@ -197,7 +197,7 @@ public:
     int dropCapsLines() const { return propertyInt(DropCapsLines); }
     /**
      * set the distance between drop caps and text in pt
-     * @see setDropCapsLenght
+     * @see setDropCapsLength
      * @see setDropCaps
      * @see setDropCapsLines
      */

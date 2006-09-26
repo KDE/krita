@@ -127,7 +127,7 @@ private:
     QSize m_cachedSize; ///< size of the currently cached pixmap @see m_cachedPixmap
     QRect m_boundingBox; ///< Bounding box, as read from the EPS file
     uint m_psStreamStart; ///< Start position of the PostScript stream (like if it was a MS-DOS EPS file)
-    uint m_psStreamLength; ///< Lenght of the PostScript stream (like if it was a MS-DOS EPS file)
+    uint m_psStreamLength; ///< Length of the PostScript stream (like if it was a MS-DOS EPS file)
     /**
      * true, if the last cached image was done using fast mode.
      * false, if the last cached image was done using slow mode.

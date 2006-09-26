@@ -29,7 +29,7 @@
 /// the base command for commands altering a path shape
 class KoPathBaseCommand : public KCommand {
 public:
-    /// intialize the base command with the shape
+    /// initialize the base command with the shape
     KoPathBaseCommand( KoPathShape *shape );
 protected:
     /**

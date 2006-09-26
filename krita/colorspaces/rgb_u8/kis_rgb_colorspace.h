@@ -20,45 +20,26 @@
 
 #include "klocale.h"
 
-#include "KoU8ColorSpaceTrait.h"
-#include "KoLcmsColorSpaceTrait.h"
-#include "krita_export.h"
+#include "KoLcmsColorSpace.h"
+
+struct RgbU8Traits {
+    typedef quint8 channels_type;
+    static const quint32 channels_nb = 4;
+    static const qint32 alpha_pos = 3;
+};
 
 const quint8 PIXEL_BLUE = 0;
 const quint8 PIXEL_GREEN = 1;
 const quint8 PIXEL_RED = 2;
-const quint8 PIXEL_ALPHA = 3;
+const quint8 PIXEL_ALPHA = RgbU8Traits::alpha_pos;
 const qint32 MAX_CHANNEL_RGB = 3;
 const qint32 MAX_CHANNEL_RGBA = 4;
 
-class KRITACOLOR_EXPORT KisRgbColorSpace : public KoU8ColorSpaceTrait, public KoLcmsColorSpaceTrait {
-public:
-    KisRgbColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
-    virtual ~KisRgbColorSpace();
-
-    virtual bool willDegrade(ColorSpaceIndependence)
-        {
-            return false;
-        };
-
-
-public:
-    virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
-    virtual void invertColor(quint8 * src, qint32 nPixels);
-    virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
-    virtual quint8 intensity8(const quint8 * src) const;
-
-    virtual Q3ValueVector<KoChannelInfo *> channels() const;
-    virtual quint32 nChannels() const;
-    virtual quint32 nColorChannels() const;
-    virtual quint32 pixelSize() const;
-
-    virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                       KoColorProfile *  dstProfile = 0,
-                       qint32 renderingIntent = INTENT_PERCEPTUAL,
-                       float exposure = 0.0f);
-
+class KisRgbColorSpace : public KoLcmsColorSpace<RgbU8Traits>
+{
+    public:
+        KisRgbColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+        virtual bool willDegrade(ColorSpaceIndependence independence) { return false; }
 };
 
 class KisRgbColorSpaceFactory : public KoColorSpaceFactory

@@ -84,7 +84,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             m_qcolordata = new quint8[3];
             Q_CHECK_PTR(m_qcolordata);
 
-            if (m_profile == 0) { exit(0); return; }
+            if (m_profile == 0) { return; }
 
     // For conversions from default rgb
             m_lastFromRGB = cmsCreate_sRGBProfile();

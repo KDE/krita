@@ -8575,7 +8575,7 @@ namespace cimg_library {
     //! Return the image histogram.
     /**
        The histogram H of an image I is a 1D-function where H(x) is the number of
-       occurences of the value x in I.
+       occurrences of the value x in I.
        \param nblevels = Number of different levels of the computed histogram.
        For classical images, this value is 256 (default value). You should specify more levels
        if you are working with CImg<float> or images with high range of pixel values.
@@ -8586,7 +8586,7 @@ namespace cimg_library {
        \note If val_min==val_max==0 (default values), the function first estimates the minimum and maximum
        pixel values of the current image, then uses these values for the histogram computation.
        \result The histogram is returned as a 1D CImg<float> image H, having a size of (nblevels,1,1,1) such that
-       H(0) and H(nblevels-1) are respectively equal to the number of occurences of the values val_min and val_max in I.
+       H(0) and H(nblevels-1) are respectively equal to the number of occurrences of the values val_min and val_max in I.
        \note Histogram computation always returns a 1D function. Histogram of multi-valued (such as color) images
        are not multi-dimensional.
        \see get_equalize_histogram(), equalize_histogram()
@@ -18952,9 +18952,9 @@ namespace cimg {
   \c Ipp,\c Icp,\c Inp,\c Ipc,\c Icc,\c Inc,\c Ipn,\c Icn,\c Inn which correspond to each pixel value of
   a 3x3 neighborhood.
   Variable indices are \c p,\c c or \c n, and stand respectively for \e 'previous', \e 'current' and \e 'next'.
-  First indice denotes the \c x-axis, second indice denotes the \c y-axis.
+  First index denotes the \c x-axis, second index denotes the \c y-axis.
   Then, the names of the variables are directly related to the position of the corresponding pixels
-  in the neighborhood. For 3D neighborhoods, a third indice denotes the \c z-axis.
+  in the neighborhood. For 3D neighborhoods, a third index denotes the \c z-axis.
   Then, inside a neighborhood loop, you will have the following equivalence :
   - <tt>Ipp = img(x-1,y-1)</tt>
   - <tt>Icn = img(x,y+1)</tt>

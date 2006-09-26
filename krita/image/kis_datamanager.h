@@ -86,7 +86,7 @@ public:
 
 public:
     /**
-     * Reads and writes the tiles from/onto a KoStore (wich is simply a file within a zip file)
+     * Reads and writes the tiles from/onto a KoStore (which is simply a file within a zip file)
      *
      */
     inline bool write(KoStore *store) { return ACTUAL_DATAMGR::write(store); }

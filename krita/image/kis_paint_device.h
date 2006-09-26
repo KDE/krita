@@ -442,7 +442,7 @@ public:
     /**
      * This function creates a random accessor which allow to randomly access any pixels on
      * the paint device.
-     * <b>Note:</b> random access is way slower than iterators, allways use iterators whenever
+     * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
      * you can
      */
     KisRandomAccessorPixel createRandomAccessor(Q_INT32 x, Q_INT32 y, bool writable);

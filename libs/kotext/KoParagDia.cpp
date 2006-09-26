@@ -1026,7 +1026,7 @@ void KoIndentSpacingWidget::leftChanged( double val )
 {
     prev1->setLeft( val );
     // The minimum first-line margin is -leftMargin() (where leftMargin>=0)
-    eFirstLine->setMinimum( -QMAX( 0.0, val ) );
+    eFirstLine->setMinimum( -qMax( 0.0, val ) );
 }
 
 void KoIndentSpacingWidget::rightChanged( double val )

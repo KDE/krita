@@ -2,7 +2,7 @@
  *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
@@ -11,7 +11,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
@@ -22,7 +22,7 @@
 #include <qglobal.h>
 #include <ksharedptr.h>
 
-#include <krita_export.h>
+#include <koffice_export.h>
 
 #include <KoColorSpace.h>
 
@@ -49,10 +49,10 @@ class KoChannelInfo;
  * in which they are found in the channels() method. This is potentially different from
  * the order in which they are internally ordered!
  **/
-class KRITACOLOR_EXPORT KisHistogramProducer : public KShared {
+class /*PIGMEMT_EXPORT*/ KoHistogramProducer : public KShared {
 public:
-    KisHistogramProducer() : m_skipTransparent(true), m_skipUnselected(true) {}
-    virtual ~KisHistogramProducer() {}
+    KoHistogramProducer() : m_skipTransparent(true), m_skipUnselected(true) {}
+    virtual ~KoHistogramProducer() {}
 
     // Methods to change the bins
 
@@ -95,14 +95,14 @@ protected:
     bool m_skipUnselected;
 };
 
-typedef KSharedPtr<KisHistogramProducer> KisHistogramProducerSP;
+typedef KSharedPtr<KoHistogramProducer> KoHistogramProducerSP;
 
-class KRITACOLOR_EXPORT KisHistogramProducerFactory {
+class /*PIGMEMT_EXPORT*/ KoHistogramProducerFactory {
 public:
-    KisHistogramProducerFactory(const KoID& id) : m_id(id) {}
-    virtual ~KisHistogramProducerFactory() {}
-    /// Factory method, generates a new KisHistogramProducer
-    virtual KisHistogramProducerSP generate() = 0;
+    KoHistogramProducerFactory(const KoID& id) : m_id(id) {}
+    virtual ~KoHistogramProducerFactory() {}
+    /// Factory method, generates a new KoHistogramProducer
+    virtual KoHistogramProducerSP generate() = 0;
     /// Returns if a colorspace can be used with this producer
     virtual bool isCompatibleWith(KoColorSpace* colorSpace) const = 0;
     /// Returns a float in the [0.0, 1.0] range, 0.0 means this is a very generic method
@@ -112,20 +112,20 @@ protected:
     KoID m_id;
 };
 
-class KRITACOLOR_EXPORT KisHistogramProducerFactoryRegistry
-    : public KoGenericRegistry<KisHistogramProducerFactory*> {
+class /*PIGMEMT_EXPORT*/ KoHistogramProducerFactoryRegistry
+    : public KoGenericRegistry<KoHistogramProducerFactory*> {
 public:
-    virtual ~KisHistogramProducerFactoryRegistry();
-    static KisHistogramProducerFactoryRegistry* instance();
+    virtual ~KoHistogramProducerFactoryRegistry();
+    static KoHistogramProducerFactoryRegistry* instance();
     /// returns a list, sorted by preferrence: higher preferance comes first
     QList<KoID> listKeysCompatibleWith(KoColorSpace* colorSpace) const;
 
 private:
-   KisHistogramProducerFactoryRegistry();
-   KisHistogramProducerFactoryRegistry(const KisHistogramProducerFactoryRegistry&);
-   KisHistogramProducerFactoryRegistry operator=(const KisHistogramProducerFactoryRegistry&);
+   KoHistogramProducerFactoryRegistry();
+   KoHistogramProducerFactoryRegistry(const KoHistogramProducerFactoryRegistry&);
+   KoHistogramProducerFactoryRegistry operator=(const KoHistogramProducerFactoryRegistry&);
 
-   static KisHistogramProducerFactoryRegistry* m_singleton;
+   static KoHistogramProducerFactoryRegistry* m_singleton;
 };
 
 #endif // _KIS_HISTOGRAM_PRODUCER

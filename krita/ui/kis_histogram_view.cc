@@ -32,13 +32,14 @@
 #include <kdebug.h>
 
 #include "KoChannelInfo.h"
+#include "KoBasicHistogramProducers.h"
+
 #include "kis_histogram.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "KoColorSpace.h"
 #include "kis_histogram_view.h"
-#include "kis_basic_histogram_producers.h"
 #include "kis_paint_device.h"
 
 KisHistogramView::KisHistogramView(QWidget *parent, const char *name, Qt::WFlags f)
@@ -107,7 +108,7 @@ void KisHistogramView::setView(double from, double size)
     updateHistogram();
 }
 
-KisHistogramProducerSP KisHistogramView::currentProducer()
+KoHistogramProducerSP KisHistogramView::currentProducer()
 {
     return m_currentProducer;
 }
@@ -120,18 +121,18 @@ QStringList KisHistogramView::channelStrings()
 QList<KoID> KisHistogramView::listProducers()
 {
     if (m_cs)
-        return KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
+        return KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
     return QList<KoID>();
 }
 
 void KisHistogramView::setCurrentChannels(const KoID& producerID, Q3ValueVector<KoChannelInfo *> channels)
 {
     setCurrentChannels(
-        KisHistogramProducerFactoryRegistry::instance()->get(producerID)->generate(),
+        KoHistogramProducerFactoryRegistry::instance()->get(producerID)->generate(),
         channels);
 }
 
-void KisHistogramView::setCurrentChannels(KisHistogramProducerSP producer, Q3ValueVector<KoChannelInfo *> channels)
+void KisHistogramView::setCurrentChannels(KoHistogramProducerSP producer, Q3ValueVector<KoChannelInfo *> channels)
 {
     m_currentProducer = producer;
     m_currentProducer->setView(m_from, m_width);
@@ -228,16 +229,16 @@ void KisHistogramView::setChannels()
     m_channels.clear();
     m_channelToOffset.clear();
 
-    QList<KoID> list = KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
+    QList<KoID> list = KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
 
     if (list.count() == 0) {
         // XXX: No native histogram for this colorspace. Using converted RGB. We should have a warning
-        KisGenericRGBHistogramProducerFactory f;
+        KoGenericRGBHistogramProducerFactory f;
         addProducerChannels(f.generate());
     } else {
         for (int i = 0; i < list.count(); i++) {
             KoID id(list.at(i));
-            addProducerChannels( KisHistogramProducerFactoryRegistry::instance()->get(id)->generate() );
+            addProducerChannels( KoHistogramProducerFactoryRegistry::instance()->get(id)->generate() );
         }
     }
 
@@ -248,7 +249,7 @@ void KisHistogramView::setChannels()
     m_channelToOffset.append(0);
 }
 
-void KisHistogramView::addProducerChannels(KisHistogramProducerSP producer) {
+void KisHistogramView::addProducerChannels(KoHistogramProducerSP producer) {
         ComboboxInfo info;
         info.isProducer = true;
         info.producer = producer;

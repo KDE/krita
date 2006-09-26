@@ -47,6 +47,13 @@ public:
 
 
 public:
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+    {
+        if (independence == TO_RGBA8) 
+            return true;
+        else
+            return false;
+    };
     void setPixel(quint8 *pixel, float red, float green, float blue, float alpha) const;
     void getPixel(const quint8 *pixel, float *red, float *green, float *blue, float *alpha) const;
 

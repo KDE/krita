@@ -2,7 +2,7 @@
  *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
@@ -11,35 +11,35 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_histogram_producer.h"
-#include "kis_basic_histogram_producers.h"
+#include "KoHistogramProducer.h"
+#include "KoBasicHistogramProducers.h"
 //Added by qt3to4:
 #include <Q3ValueList>
 
-KisHistogramProducerFactoryRegistry* KisHistogramProducerFactoryRegistry::m_singleton = 0;
+KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::m_singleton = 0;
 
-KisHistogramProducerFactoryRegistry::KisHistogramProducerFactoryRegistry() {
-    Q_ASSERT(KisHistogramProducerFactoryRegistry::m_singleton == 0);
+KoHistogramProducerFactoryRegistry::KoHistogramProducerFactoryRegistry() {
+    Q_ASSERT(KoHistogramProducerFactoryRegistry::m_singleton == 0);
 }
 
-KisHistogramProducerFactoryRegistry::~KisHistogramProducerFactoryRegistry() {
+KoHistogramProducerFactoryRegistry::~KoHistogramProducerFactoryRegistry() {
 }
 
-KisHistogramProducerFactoryRegistry* KisHistogramProducerFactoryRegistry::instance() {
-    if(KisHistogramProducerFactoryRegistry::m_singleton == 0) {
-        KisHistogramProducerFactoryRegistry::m_singleton
-                = new KisHistogramProducerFactoryRegistry();
-        m_singleton->add( new KisGenericLabHistogramProducerFactory() );
+KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::instance() {
+    if(KoHistogramProducerFactoryRegistry::m_singleton == 0) {
+        KoHistogramProducerFactoryRegistry::m_singleton
+                = new KoHistogramProducerFactoryRegistry();
+        m_singleton->add( new KoGenericLabHistogramProducerFactory() );
     }
-    return KisHistogramProducerFactoryRegistry::m_singleton;
+    return KoHistogramProducerFactoryRegistry::m_singleton;
 }
 
-QList<KoID> KisHistogramProducerFactoryRegistry::listKeysCompatibleWith(
+QList<KoID> KoHistogramProducerFactoryRegistry::listKeysCompatibleWith(
         KoColorSpace* colorSpace) const
 {
     QList<KoID> list;

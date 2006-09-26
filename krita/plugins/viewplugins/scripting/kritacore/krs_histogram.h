@@ -48,7 +48,7 @@ class Histogram : public QObject
 {
         Q_OBJECT
     public:
-        Histogram(PaintLayer* layer, KisHistogramProducerSP producer, const enumHistogramType type);
+        Histogram(PaintLayer* layer, KoHistogramProducerSP producer, const enumHistogramType type);
         ~Histogram();
 
     public slots:

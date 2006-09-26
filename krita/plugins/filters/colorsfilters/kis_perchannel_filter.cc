@@ -25,17 +25,18 @@
 #include <qdom.h>
 #include <QHBoxLayout>
 
+#include "KoBasicHistogramProducers.h"
+#include "KoColorSpace.h"
+#include "KoID.h"
+
 #include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
 #include "kis_perchannel_filter.h"
-#include "KoColorSpace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "kcurve.h"
 #include "kis_histogram.h"
-#include "kis_basic_histogram_producers.h"
 #include "kis_painter.h"
-#include "KoID.h"
 
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     : KisFilterConfiguration( "perchannel", 1 )
@@ -340,9 +341,9 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_page->vgradient->setPixmap(vgradientpix);
 
     QList<KoID> keys =
-        KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
-    KisHistogramProducerFactory *hpf;
-    hpf = KisHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
+        KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
+    KoHistogramProducerFactory *hpf;
+    hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
     m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
 
     setActiveChannel(0);

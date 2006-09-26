@@ -104,7 +104,7 @@ QObject* PaintLayer::createVLineIterator(uint x, uint y, uint height)
 
 QObject* PaintLayer::createHistogram(const QString& histoname, uint typenr)
 {
-    KisHistogramProducerFactory* factory = KisHistogramProducerFactoryRegistry::instance()->get(histoname);
+    KoHistogramProducerFactory* factory = KoHistogramProducerFactoryRegistry::instance()->get(histoname);
 
     /*
     QList<KoID> listID = KisHistogramProducerFactoryRegistry::instance()->listKeys();

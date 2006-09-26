@@ -74,8 +74,6 @@ if (SHOULD_BUILD_KRITA)
 
         ${CMAKE_SOURCE_DIR}/krita/image
         ${CMAKE_SOURCE_DIR}/krita/image/tiles
-        ${CMAKE_SOURCE_DIR}/krita/kritacolor
-        ${CMAKE_SOURCE_DIR}/krita/kritacolor/colorspaces
         ${CMAKE_SOURCE_DIR}/krita/ui
         ${CMAKE_SOURCE_DIR}/krita/colorspaces/rgb_u8
 
@@ -102,7 +100,6 @@ if (SHOULD_BUILD_KRITA)
         include_directories(${X11_Xinput_INCLUDE_PATH})
     endif(HAVE_XINPUTEXT)
 
-    add_subdirectory( kritacolor )
     add_subdirectory( image )
     add_subdirectory( ui )
     add_subdirectory( dtd )
@@ -150,5 +147,5 @@ install( FILES  krita.desktop  DESTINATION ${XDG_APPS_DIR})
 install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  krita.rc krita_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/krita)
 
-    #kde4_create_doxygen_docs( EXCLUDE CImg.h colorspaces plugins kritacolor/colorspaces image/tiles  )
+    #kde4_create_doxygen_docs( EXCLUDE CImg.h colorspaces plugins  image/tiles  )
 endif (SHOULD_BUILD_KRITA)

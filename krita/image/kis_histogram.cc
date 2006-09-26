@@ -29,7 +29,7 @@
 #include "kis_debug_areas.h"
 
 KisHistogram::KisHistogram(KisPaintLayerSP layer,
-                           KisHistogramProducerSP producer,
+                           KoHistogramProducerSP producer,
                            const enumHistogramType type)
 {
     m_dev = layer->paintDevice();
@@ -42,7 +42,7 @@ KisHistogram::KisHistogram(KisPaintLayerSP layer,
 }
 
 KisHistogram::KisHistogram(KisPaintDeviceSP paintdev,
-                           KisHistogramProducerSP producer,
+                           KoHistogramProducerSP producer,
                            const enumHistogramType type)
 {
     m_dev = paintdev;

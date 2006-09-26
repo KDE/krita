@@ -27,7 +27,7 @@
 #include <QMouseEvent>
 #include <krita_export.h>
 #include "kis_types.h"
-#include "kis_histogram_producer.h"
+#include "KoHistogramProducer.h"
 #include "kis_histogram.h"
 
 class KoChannelInfo;
@@ -56,14 +56,14 @@ public:
     void setPaintDevice(KisPaintDeviceSP dev);
     void setHistogram(KisHistogramSP histogram);
     void setView(double from, double size);
-    KisHistogramProducerSP currentProducer();
+    KoHistogramProducerSP currentProducer();
     QStringList channelStrings();
     /** Lists all producers currently available */
     QList<KoID> listProducers();
     /** Sets the currently displayed channels to channels of the producer with producerID as ID*/
     void setCurrentChannels(const KoID& producerID, Q3ValueVector<KoChannelInfo *> channels);
     /** Be careful, producer will be modified */
-    void setCurrentChannels(KisHistogramProducerSP producer, Q3ValueVector<KoChannelInfo *> channels);
+    void setCurrentChannels(KoHistogramProducerSP producer, Q3ValueVector<KoChannelInfo *> channels);
     bool hasColor();
     void setColor(bool set);
 
@@ -80,11 +80,11 @@ protected:
 
 private:
     void setChannels();
-    void addProducerChannels(KisHistogramProducerSP producer);
+    void addProducerChannels(KoHistogramProducerSP producer);
 
     typedef struct {
         bool isProducer;
-        KisHistogramProducerSP producer;
+        KoHistogramProducerSP producer;
         KoChannelInfo * channel;
     } ComboboxInfo;
 
@@ -92,7 +92,7 @@ private:
     QPixmap m_pix;
     KisHistogramSP m_histogram;
     KoColorSpace* m_cs;
-    KisHistogramProducerSP m_currentProducer;
+    KoHistogramProducerSP m_currentProducer;
     Q3ValueVector<KoChannelInfo *> m_channels;
     // Maps the channels in m_channels to a real channel offset in the producer->channels()
     Q3ValueVector<qint32> m_channelToOffset;

@@ -22,7 +22,7 @@
 
 #include "kis_rgb_u8_compositeop.h"
 #include "kis_rgb_colorspace.h"
-#include "kis_color_conversions.h"
+#include "KoColorConversions.h"
 
 #define PixelIntensity(pixel) ((unsigned int) \
    (((double)306.0 * (pixel[PIXEL_RED]) + \

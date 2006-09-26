@@ -33,6 +33,10 @@
 #include <kdebug.h>
 #include <kaction.h>
 
+#include <KoColorConversions.h>
+#include <KoColorProfile.h>
+#include <KoColorSpace.h>
+
 #include <kis_canvas_subject.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
@@ -42,9 +46,6 @@
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 #include <kis_view.h>
-#include <KoColorSpace.h>
-#include <KoColorProfile.h>
-#include <kis_color_conversions.h>
 #include <kis_selected_transaction.h>
 #include <kis_cursor.h>
 

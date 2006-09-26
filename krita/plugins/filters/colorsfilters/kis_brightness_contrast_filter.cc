@@ -33,15 +33,16 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 
+#include "KoBasicHistogramProducers.h"
+#include "KoColorSpace.h"
+
 #include "kis_filter_config_widget.h"
 #include "kis_brightness_contrast_filter.h"
-#include "KoColorSpace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
 #include "kcurve.h"
 #include "kis_histogram.h"
-#include "kis_basic_histogram_producers.h"
 #include "kis_painter.h"
 
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
@@ -284,7 +285,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     }
     m_page->vgradient->setPixmap(vgradientpix);
 
-    KisHistogramProducerSP producer = KisHistogramProducerSP(new KisGenericLabHistogramProducer());
+    KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
     KisHistogram histogram(dev, producer, LINEAR);
     QPixmap pix(256, height);
     pix.fill();

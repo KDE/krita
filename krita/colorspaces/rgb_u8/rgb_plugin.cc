@@ -30,7 +30,7 @@
 #include <ktempfile.h>
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
-#include <kis_basic_histogram_producers.h>
+#include <KoBasicHistogramProducers.h>
 
 #include "rgb_plugin.h"
 #include "kis_rgb_colorspace.h"
@@ -56,8 +56,8 @@ RGBPlugin::RGBPlugin(QObject *parent, const QStringList &)
         f->add(csFactory);
 
         KoColorSpace * colorSpaceRGBA = new KisRgbColorSpace(f, 0);
-        KisHistogramProducerFactoryRegistry::instance()->add(
-                new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
+        KoHistogramProducerFactoryRegistry::instance()->add(
+                new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
                 (KoID("RGB8HISTO", i18n("RGB8 Histogram")), colorSpaceRGBA) );
     }
 

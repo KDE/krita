@@ -2,8 +2,8 @@
  *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  it under the terms of the GNU Lesser General Public License as published
+ *  by the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
@@ -11,7 +11,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
@@ -20,22 +20,30 @@
 #include <klocale.h>
 
 #include "config.h"
-#include <config-krita.h>
+// #include <config-krita.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
 #endif
 
-#include "kis_global.h"
-#include "kis_basic_histogram_producers.h"
+// #include "Ko_global.h"
+#include "KoBasicHistogramProducers.h"
 #include "KoIntegerMaths.h"
 #include "KoChannelInfo.h"
 #include "KoColorSpace.h"
-#include "KoLabColorSpace.h"
+#include "colorspaces/KoLabColorSpace.h"
 
-KoLabColorSpace* KisGenericLabHistogramProducer::m_labCs = 0;
+// TODO: get ride of this
+const quint8 quint8_MAX = UCHAR_MAX;
+const quint16 quint16_MAX = 65535;
+
+const qint32 qint32_MAX = (2147483647);
+const qint32 qint32_MIN = (-2147483647-1);
 
 
-KisBasicHistogramProducer::KisBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, KoColorSpace *cs)
+KoLabColorSpace* KoGenericLabHistogramProducer::m_labCs = 0;
+
+
+KoBasicHistogramProducer::KoBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, KoColorSpace *cs)
     : m_channels(channels),
       m_nrOfBins(nrOfBins),
       m_colorSpace(cs),
@@ -51,7 +59,7 @@ KisBasicHistogramProducer::KisBasicHistogramProducer(const KoID& id, int channel
     m_width = 1.0;
 }
 
-void KisBasicHistogramProducer::clear() {
+void KoBasicHistogramProducer::clear() {
     m_count = 0;
     for (int i = 0; i < m_channels; i++) {
         for (int j = 0; j < m_nrOfBins; j++) {
@@ -62,7 +70,7 @@ void KisBasicHistogramProducer::clear() {
     }
 }
 
-void KisBasicHistogramProducer::makeExternalToInternal() {
+void KoBasicHistogramProducer::makeExternalToInternal() {
     // This function assumes that the pixel is has no 'gaps'. That is to say: if we start
     // at byte 0, we can get to the end of the pixel by adding consecutive size()s of
     // the channels
@@ -83,16 +91,16 @@ void KisBasicHistogramProducer::makeExternalToInternal() {
 
 // ------------ U8 ---------------------
 
-KisBasicU8HistogramProducer::KisBasicU8HistogramProducer(const KoID& id, KoColorSpace *cs)
-    : KisBasicHistogramProducer(id, cs->nChannels(), 256, cs)
+KoBasicU8HistogramProducer::KoBasicU8HistogramProducer(const KoID& id, KoColorSpace *cs)
+    : KoBasicHistogramProducer(id, cs->nChannels(), 256, cs)
 {
 }
 
-QString KisBasicU8HistogramProducer::positionToString(double pos) const {
+QString KoBasicU8HistogramProducer::positionToString(double pos) const {
     return QString("%1").arg(static_cast<quint8>(pos * UINT8_MAX));
 }
 
-void KisBasicU8HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
+void KoBasicU8HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
 {
     qint32 pSize = cs->pixelSize();
 
@@ -132,22 +140,22 @@ void KisBasicU8HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selec
 
 // ------------ U16 ---------------------
 
-KisBasicU16HistogramProducer::KisBasicU16HistogramProducer(const KoID& id, KoColorSpace *cs)
-    : KisBasicHistogramProducer(id, cs->nChannels(), 256, cs)
+KoBasicU16HistogramProducer::KoBasicU16HistogramProducer(const KoID& id, KoColorSpace *cs)
+    : KoBasicHistogramProducer(id, cs->nChannels(), 256, cs)
 {
 }
 
-QString KisBasicU16HistogramProducer::positionToString(double pos) const
+QString KoBasicU16HistogramProducer::positionToString(double pos) const
 {
     return QString("%1").arg(static_cast<quint8>(pos * UINT8_MAX));
 }
 
-double KisBasicU16HistogramProducer::maximalZoom() const
+double KoBasicU16HistogramProducer::maximalZoom() const
 {
     return 1.0 / 255.0;
 }
 
-void KisBasicU16HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
+void KoBasicU16HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
 {
     // The view
     quint16 from = static_cast<quint16>(m_from * UINT16_MAX);
@@ -202,21 +210,21 @@ void KisBasicU16HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * sele
 }
 
 // ------------ Float32 ---------------------
-KisBasicF32HistogramProducer::KisBasicF32HistogramProducer(const KoID& id, KoColorSpace *cs)
-    : KisBasicHistogramProducer(id, cs->nChannels(), 256, cs)
+KoBasicF32HistogramProducer::KoBasicF32HistogramProducer(const KoID& id, KoColorSpace *cs)
+    : KoBasicHistogramProducer(id, cs->nChannels(), 256, cs)
 {
 }
 
-QString KisBasicF32HistogramProducer::positionToString(double pos) const {
+QString KoBasicF32HistogramProducer::positionToString(double pos) const {
     return QString("%1").arg(static_cast<float>(pos)); // XXX I doubt this is correct!
 }
 
-double KisBasicF32HistogramProducer::maximalZoom() const {
+double KoBasicF32HistogramProducer::maximalZoom() const {
     // XXX What _is_ the maximal zoom here? I don't think there is one with floats, so this seems a fine compromis for the moment
     return 1.0 / 255.0;
 }
 
-void KisBasicF32HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs) {
+void KoBasicF32HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs) {
     // The view
     float from = static_cast<float>(m_from);
     float width = static_cast<float>(m_width);
@@ -275,21 +283,21 @@ void KisBasicF32HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * sele
 
 #ifdef HAVE_OPENEXR
 // ------------ Float16 Half ---------------------
-KisBasicF16HalfHistogramProducer::KisBasicF16HalfHistogramProducer(const KoID& id,
+KoBasicF16HalfHistogramProducer::KoBasicF16HalfHistogramProducer(const KoID& id,
                                                                    KoColorSpace *cs)
-    : KisBasicHistogramProducer(id, cs->nChannels(), 256, cs) {
+    : KoBasicHistogramProducer(id, cs->nChannels(), 256, cs) {
 }
 
-QString KisBasicF16HalfHistogramProducer::positionToString(double pos) const {
+QString KoBasicF16HalfHistogramProducer::positionToString(double pos) const {
     return QString("%1").arg(static_cast<float>(pos)); // XXX I doubt this is correct!
 }
 
-double KisBasicF16HalfHistogramProducer::maximalZoom() const {
+double KoBasicF16HalfHistogramProducer::maximalZoom() const {
     // XXX What _is_ the maximal zoom here? I don't think there is one with floats, so this seems a fine compromis for the moment
     return 1.0 / 255.0;
 }
 
-void KisBasicF16HalfHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs) {
+void KoBasicF16HalfHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs) {
     // The view
     float from = static_cast<float>(m_from);
     float width = static_cast<float>(m_width);
@@ -341,8 +349,8 @@ void KisBasicF16HalfHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * 
 #endif
 
 // ------------ Generic RGB ---------------------
-KisGenericRGBHistogramProducer::KisGenericRGBHistogramProducer()
-    : KisBasicHistogramProducer(KoID("GENRGBHISTO", i18n("Generic RGB Histogram")),
+KoGenericRGBHistogramProducer::KoGenericRGBHistogramProducer()
+    : KoBasicHistogramProducer(KoID("GENRGBHISTO", i18n("Generic RGB Histogram")),
                                 3, 256, 0) {
     /* we set 0 as colorspece, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
@@ -351,20 +359,20 @@ KisGenericRGBHistogramProducer::KisGenericRGBHistogramProducer()
     m_channelsList.append(new KoChannelInfo(i18n("B"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,0,255)));
 }
 
-Q3ValueVector<KoChannelInfo *> KisGenericRGBHistogramProducer::channels() {
+Q3ValueVector<KoChannelInfo *> KoGenericRGBHistogramProducer::channels() {
     return m_channelsList;
 }
 
-QString KisGenericRGBHistogramProducer::positionToString(double pos) const {
+QString KoGenericRGBHistogramProducer::positionToString(double pos) const {
     return QString("%1").arg(static_cast<quint8>(pos * UINT8_MAX));
 }
 
-double KisGenericRGBHistogramProducer::maximalZoom() const {
+double KoGenericRGBHistogramProducer::maximalZoom() const {
     return 1.0;
 }
 
 
-void KisGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
+void KoGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
 {
     for (int i = 0; i < m_channels; i++) {
         m_outRight.at(i) = 0;
@@ -408,8 +416,8 @@ void KisGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * se
 }
 
 // ------------ Generic L*a*b* ---------------------
-KisGenericLabHistogramProducer::KisGenericLabHistogramProducer()
-    : KisBasicHistogramProducer(KoID("GENLABHISTO", i18n("L*a*b* Histogram")), 3, 256, 0) {
+KoGenericLabHistogramProducer::KoGenericLabHistogramProducer()
+    : KoBasicHistogramProducer(KoID("GENLABHISTO", i18n("L*a*b* Histogram")), 3, 256, 0) {
     /* we set 0 as colorspace, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
     m_channelsList.append(new KoChannelInfo(i18n("L*"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
@@ -422,27 +430,27 @@ KisGenericLabHistogramProducer::KisGenericLabHistogramProducer()
     }
     m_colorSpace = m_labCs;
 }
-KisGenericLabHistogramProducer::~KisGenericLabHistogramProducer()
+KoGenericLabHistogramProducer::~KoGenericLabHistogramProducer()
 {
     delete m_channelsList[0];
     delete m_channelsList[1];
     delete m_channelsList[2];
 }
 
-Q3ValueVector<KoChannelInfo *> KisGenericLabHistogramProducer::channels() {
+Q3ValueVector<KoChannelInfo *> KoGenericLabHistogramProducer::channels() {
     return m_channelsList;
 }
 
-QString KisGenericLabHistogramProducer::positionToString(double pos) const {
+QString KoGenericLabHistogramProducer::positionToString(double pos) const {
     return QString("%1").arg(static_cast<quint16>(pos * UINT16_MAX));
 }
 
-double KisGenericLabHistogramProducer::maximalZoom() const {
+double KoGenericLabHistogramProducer::maximalZoom() const {
     return 1.0;
 }
 
 
-void KisGenericLabHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels,  KoColorSpace *cs)
+void KoGenericLabHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels,  KoColorSpace *cs)
 {
     for (int i = 0; i < m_channels; i++) {
         m_outRight.at(i) = 0;

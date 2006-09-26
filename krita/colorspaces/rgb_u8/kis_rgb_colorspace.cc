@@ -33,7 +33,6 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_rgb_colorspace.h"
-#include "kis_color_conversions.h"
 
 #include "kis_rgb_u8_compositeop.h"
 

@@ -25,7 +25,7 @@
 //Added by qt3to4:
 #include <QCustomEvent>
 
-#include <kis_basic_histogram_producers.h>
+#include <KoBasicHistogramProducers.h>
 #include "kis_cachedhistogram.h"
 
 /**
@@ -36,7 +36,7 @@
  * of HistogramProducers if you'd take addRegionsToBinAsync = addRegionToBin, but since that is
  * already violated with the asynchronousity of it that is not really an issue anymore, I think)
  **/
-class KisAccumulatingHistogramProducer : public QObject, public KisBasicHistogramProducer {
+class KisAccumulatingHistogramProducer : public QObject, public KoBasicHistogramProducer {
 Q_OBJECT
 public:
     KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source);

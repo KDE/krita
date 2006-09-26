@@ -23,7 +23,7 @@
 
 using namespace Kross::KritaCore;
 
-Histogram::Histogram(PaintLayer* layer, KisHistogramProducerSP producer, const enumHistogramType type)
+Histogram::Histogram(PaintLayer* layer, KoHistogramProducerSP producer, const enumHistogramType type)
     : QObject(layer)
 {
     setObjectName("KritaHistogram");

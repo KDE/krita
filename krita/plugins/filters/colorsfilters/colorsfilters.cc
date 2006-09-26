@@ -17,6 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "colorsfilters.h"
 
 #include <math.h>
 
@@ -36,18 +37,18 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
+#include "KoBasicHistogramProducers.h"
+#include <KoColorSpace.h>
+
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_iterators_pixel.h>
-#include <KoColorSpace.h>
 #include <kis_painter.h>
 #include <kis_selection.h>
 #include "kis_histogram.h"
-#include "kis_basic_histogram_producers.h"
-#include "colorsfilters.h"
 #include "kis_brightness_contrast_filter.h"
 #include "kis_perchannel_filter.h"
 
@@ -88,7 +89,7 @@ bool KisAutoContrast::workWith(KoColorSpace* cs)
 void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* , const QRect& rect)
 {
     // initialize
-    KisHistogramProducerSP producer = KisHistogramProducerSP(new KisGenericLabHistogramProducer());
+    KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
     KisHistogram histogram(src, producer, LINEAR);
     int minvalue = int(255*histogram.calculations().getMin() + 0.5);
     int maxvalue = int(255*histogram.calculations().getMax() + 0.5);

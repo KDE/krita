@@ -23,7 +23,7 @@
 
 #include "kis_types.h"
 #include "KoColorSpace.h"
-#include "kis_histogram_producer.h"
+#include "KoHistogramProducer.h"
 
 enum enumHistogramType {
     LINEAR,
@@ -31,7 +31,7 @@ enum enumHistogramType {
 };
 /**
  * The histogram class computes the histogram data from the specified layer
- * for the specified channel, through the use of a KisHistogramProducer.
+ * for the specified channel, through the use of a KoHistogramProducer.
  * This class is only for layers and paintdevices. KisImages are not supported,
  * but you can use the mergedImage function to create a paintdevice and feed that to this class.
  *
@@ -42,7 +42,7 @@ enum enumHistogramType {
  * The calculations are done in the range 0 - 1, instead of the native range that a pixel
  * might have, so it's not always as precise as it could be. But you can't have it all...
  */
-class KRITAIMAGE_EXPORT KisHistogram : public KShared {
+class /*KRITAIMAGE_EXPORT*/ KisHistogram : public KShared {
 
 public:
     /**
@@ -87,11 +87,11 @@ public:
     };
 
     KisHistogram(KisPaintLayerSP layer,
-                 KisHistogramProducerSP producer,
+                 KoHistogramProducerSP producer,
                  const enumHistogramType type);
 
     KisHistogram(KisPaintDeviceSP paintdev,
-                 KisHistogramProducerSP producer,
+                 KoHistogramProducerSP producer,
                  const enumHistogramType type);
 
     virtual ~KisHistogram();
@@ -114,9 +114,9 @@ public:
 
     inline enumHistogramType getHistogramType() { return m_type; }
     inline void setHistogramType(enumHistogramType type) { m_type = type; }
-    inline void setProducer(KisHistogramProducerSP producer) { m_producer = producer; }
+    inline void setProducer(KoHistogramProducerSP producer) { m_producer = producer; }
     inline void setChannel(qint32 channel) { m_channel = channel; }
-    inline KisHistogramProducerSP producer() { return m_producer; }
+    inline KoHistogramProducerSP producer() { return m_producer; }
     inline qint32 channel() { return m_channel; }
 
     inline bool hasSelection() { return m_selection; }
@@ -135,7 +135,7 @@ private:
     Calculations calculateSingleRange(int channel, double from, double to);
 
     KisPaintDeviceSP m_device;
-    KisHistogramProducerSP m_producer;
+    KoHistogramProducerSP m_producer;
 
     enumHistogramType m_type;
 

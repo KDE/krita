@@ -27,19 +27,20 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
+#include "KoBasicHistogramProducers.h"
+#include "KoColorSpaceRegistry.h"
+#include "KoID.h"
+
 #include "kis_meta_registry.h"
 #include "kis_doc.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_view.h"
 
-#include "kis_basic_histogram_producers.h"
-#include "KoColorSpaceRegistry.h"
 
 #include "histogramdocker.h"
 #include "kis_imagerasteredcache.h"
 #include "kis_accumulating_producer.h"
-#include "KoID.h"
 
 typedef KGenericFactory<KritaHistogramDocker> KritaHistogramDockerFactory;
 K_EXPORT_COMPONENT_FACTORY( kritahistogramdocker, KritaHistogramDockerFactory( "krita" ) )
@@ -69,7 +70,7 @@ true);
         m_hview = new KisHistogramView(m_view);
         m_hview->setHistogram(m_histogram);
         m_hview->setColor(true);
-        m_hview->setCurrentChannels(KisHistogramProducerSP(m_producer), m_producer->channels());
+        m_hview->setCurrentChannels(KoHistogramProducerSP(m_producer), m_producer->channels());
         m_hview->setFixedSize(256, 100); // XXX if not it keeps expanding
         m_hview->setWindowTitle(i18n("Histogram"));
 
@@ -120,10 +121,10 @@ void KritaHistogramDocker::producerChanged(QAction *action)
     }
     m_producers.clear();
 
-    QList<KoID> keys = KisHistogramProducerFactoryRegistry::instance() ->
+    QList<KoID> keys = KoHistogramProducerFactoryRegistry::instance() ->
             listKeysCompatibleWith(m_cs);
 
-    m_factory = KisHistogramProducerFactoryRegistry::instance()->get(keys.at(pos));
+    m_factory = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(pos));
 
     KisCachedHistogramObserver observer(&m_producers, m_factory, 0, 0, 0, 0, false);
 
@@ -136,12 +137,12 @@ void KritaHistogramDocker::producerChanged(QAction *action)
     // use dummy layer as a source; we are not going to actually use or need it
     // All of these are SP, no need to delete them afterwards
     m_histogram = new KisHistogram( KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->alpha8(), "dummy histogram")),
-                                    KisHistogramProducerSP(m_producer), LOGARITHMIC);
+                                    KoHistogramProducerSP(m_producer), LOGARITHMIC);
 
     if (m_hview) {
         m_hview->setHistogram(m_histogram);
         m_hview->setColor(true);
-        m_hview->setCurrentChannels(KisHistogramProducerSP(m_producer), m_producer->channels());
+        m_hview->setCurrentChannels(KoHistogramProducerSP(m_producer), m_producer->channels());
 
         connect(m_cache, SIGNAL(cacheUpdated()),
                 new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
@@ -157,7 +158,7 @@ void KritaHistogramDocker::colorSpaceChanged(KoColorSpace* cs)
 {
     m_cs = cs;
 
-    QList<KoID> keys = KisHistogramProducerFactoryRegistry::instance() ->
+    QList<KoID> keys = KoHistogramProducerFactoryRegistry::instance() ->
             listKeysCompatibleWith(m_cs);
 
     m_popup.clear();

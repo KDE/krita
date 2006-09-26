@@ -43,7 +43,7 @@ public:
 };
 
 KisAccumulatingHistogramProducer::KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source)
-    : KisBasicHistogramProducer(
+    : KoBasicHistogramProducer(
         KoID("ACCHISTO", ""),
         source->at(0)->channels().count(),
         source->at(0)->numberOfBins(),
@@ -76,7 +76,7 @@ void KisAccumulatingHistogramProducer::ThreadedProducer::run() {
     int nrOfBins = m_source->m_nrOfBins;
 
     for (uint i = 0; i < count && !m_stop; i++) {
-        KisHistogramProducer* p = source->at(i);
+        KoHistogramProducer* p = source->at(i);
         m_source->m_count += p->count();
 
         for (int j = 0; j < channels && !m_stop; j++) {

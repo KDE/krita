@@ -131,7 +131,7 @@ KoEncryptedStore::~KoEncryptedStore() {
             if( !m_manifestBuffer.isEmpty( ) && !document.setContent( m_manifestBuffer ) ) {
                 // Oi! That's fresh XML we should have here!
                 // This is the only case we can't fix
-                KMessage::message( KMessage::Error, i18n( "The manifest file seems to be corrupted. It can not be modified and the document will remain unreadable. Please try and save the document again to prevent losing your work." ) );
+                KMessage::message( KMessage::Error, i18n( "The manifest file seems to be corrupted. It cannot be modified and the document will remain unreadable. Please try and save the document again to prevent losing your work." ) );
             }
             else {
                 QDomElement documentElement = document.documentElement( );
@@ -243,11 +243,11 @@ KoEncryptedStore::~KoEncryptedStore() {
                 m_manifestBuffer = document.toByteArray( );
                 printf( "\nNa:\n\n%s\n\n", m_manifestBuffer.data( ) );
                 if( !m_store->open( MANIFEST_FILE ) ) {
-                    KMessage::message( KMessage::Error, i18n( "The manifest file can't be opened. The document will remain unreadable. Please try and save the document again to prevent losing your work." ) );
+                    KMessage::message( KMessage::Error, i18n( "The manifest file cannot be opened. The document will remain unreadable. Please try and save the document again to prevent losing your work." ) );
                 }
                 else {
                     if( static_cast<KoStore *>( m_store )->write( m_manifestBuffer ) != m_manifestBuffer.size( ) ) {
-                        KMessage::message( KMessage::Error, i18n( "The manifest file can't be opened. The document will remain unreadable. Please try and save the document again to prevent losing your work." ) );
+                        KMessage::message( KMessage::Error, i18n( "The manifest file cannot be opened. The document will remain unreadable. Please try and save the document again to prevent losing your work." ) );
                     }
                     m_store->close( );
                 }

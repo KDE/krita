@@ -214,7 +214,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QStri
             return 0;
 
         KoColorProfile *p = profileByName(profileName);
-        if(!p && profileName != "")
+        if(!p && profileName.isEmpty())
             return 0;
         KoColorSpace *cs = csf->createColorSpace(this, p);
         if(!cs)

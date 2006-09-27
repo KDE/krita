@@ -90,6 +90,8 @@ protected:
 
     KisPainter * m_painter;
     KisPaintDeviceSP m_source; // use this layer as source layer for the operation
+private:
+    KisPaintDeviceSP m_dab;
 };
 
 class KisPaintOpSettings {

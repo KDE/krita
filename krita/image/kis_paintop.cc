@@ -32,7 +32,7 @@
 #include "kis_iterators_pixel.h"
 #include "KoColor.h"
 
-KisPaintOp::KisPaintOp(KisPainter * painter)
+KisPaintOp::KisPaintOp(KisPainter * painter) : m_dab(0)
 {
     m_painter = painter;
     setSource(painter->device());
@@ -55,12 +55,14 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KoColorSpace *cs)
     // the target layer. We only use a real temporary layer for things
     // like filter tools.
 
-    KisPaintDeviceSP dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
-    Q_CHECK_PTR(dab);
+
+    if(!m_dab || m_dab->colorSpace() != cs)
+        m_dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
+    Q_CHECK_PTR(m_dab);
 
     KoColor kc = m_painter->paintColor();
 
-    KoColorSpace * colorSpace = dab->colorSpace();
+    KoColorSpace * colorSpace = m_dab->colorSpace();
 
     qint32 pixelSize = colorSpace->pixelSize();
 
@@ -72,7 +74,7 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KoColorSpace *cs)
 
     for (int y = 0; y < maskHeight; y++)
     {
-        KisHLineIteratorPixel hiter = dab->createHLineIterator(0, y, maskWidth, true);
+        KisHLineIteratorPixel hiter = m_dab->createHLineIterator(0, y, maskWidth, true);
         int x=0;
         while(! hiter.isDone())
         {
@@ -83,7 +85,7 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KoColorSpace *cs)
         }
     }
 
-    return dab;
+    return m_dab;
 }
 
 void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fraction)

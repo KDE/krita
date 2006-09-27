@@ -38,7 +38,7 @@ public:
 
     /**
      * Change the zoom factor to @p z (e.g. 150 for 150%)
-     * and/or change the resolution, given in DPI.
+     * and/or change the resolution of the output device, given in DPI.
      * This is done on startup, when zooming, and when printing.
      * The same call combines both so that all the updating done behind
      * the scenes is done only once, even if both zoom and DPI must be changed.

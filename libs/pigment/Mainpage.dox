@@ -1,4 +1,11 @@
 /**
  * \mainpage
- * TODO Introduction + major classes + code examples
+ * Pigment is a colormanagement library with pluggable colorspaces. Colorspaces
+ * can be based on the <a href="http://www.littlecms.com">LCMS library</a>, but
+ * that is not a requirement. 
+ *
+ * Pigment colorspaces offers support for many common manipulations and for
+ * pixel composition. Pigment works on arrays of bytes: the colorspaces interpret
+ * the array of bytes as a pixel according to the pixel format defined by each
+ * colorspace.
  */

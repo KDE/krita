@@ -72,9 +72,9 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KoColorSpace *cs)
     // Convert the kiscolor to the right colorspace.
     kc.convertTo(colorSpace);
 
+    KisHLineIteratorPixel hiter = m_dab->createHLineIterator(0, 0, maskWidth, true);
     for (int y = 0; y < maskHeight; y++)
     {
-        KisHLineIteratorPixel hiter = m_dab->createHLineIterator(0, y, maskWidth, true);
         int x=0;
         while(! hiter.isDone())
         {
@@ -83,6 +83,7 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KoColorSpace *cs)
             memcpy(hiter.rawData(), kc.data(), pixelSize);
             ++hiter;
         }
+        hiter.nextRow();
     }
 
     return m_dab;

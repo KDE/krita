@@ -381,7 +381,6 @@ private:
     StrikeOutStyle m_strikeOutStyle;
     QString m_language;
     AttributeStyle m_attributeFont;
-    class KoTextFormatPrivate;
     KoTextFormatPrivate *d;
 
     QFont fn;

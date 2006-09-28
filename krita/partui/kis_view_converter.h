@@ -71,7 +71,7 @@ public:
      * @param outputDpiY the vertical resolution of the output device
      */
     KisViewConverter(double zoom, int documentDpi, int outputDpiX, int outputDpiY);
-    virtual ~KisViewConverter();
+    virtual ~KisViewConverter() {};
     
     void setDocumentDpi(int documentDpi) { m_documentDpi = documentDpi; }
     int documentDpi() { return m_documentDpi; }

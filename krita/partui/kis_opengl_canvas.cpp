@@ -17,36 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KoCanvasController.h>
 
-#include "kis_view_converter.h"
-#include "kis_canvas.h"
 #include "kis_opengl_canvas.h"
-#include "kis_qpainter_canvas.h"
-#include "kis_doc.h"
-#include "kis_view.h"
 
+#include <QWidget>
+#include <QGLWidget>
+#include <QGLContext>
 
-KisView::KisView(KisDoc * doc,  QWidget * parent)
-    : KoView(doc, parent)
-    , m_QPainterCanvas( 0 )
-    , m_openGLCanvas( 0 )
-    , m_doc( doc )
-    , m_zoomHandler( 0 )
-    , m_canvasController( new KoCanvasController( this ) )
-
-{
-
-    m_viewConverter = new KisViewConverter(1.0, 100, 96, 96);
-    m_openGLCanvas = new KisOpenGLCanvas(this);
-    m_QPainterCanvas = new KisQPainterCanvas(this);
-    m_canvas = new KisCanvas( m_viewConverter, m_QPainterCanvas );
-    m_canvasController->setCanvas( m_canvas );
-}
-
-
-KisView::~KisView()
+KisOpenGLCanvas::KisOpenGLCanvas( QWidget * parent )
+    : QGLWidget( parent )
 {
 }
 
-#include "kis_view.moc"
+KisOpenGLCanvas::KisOpenGLCanvas(QGLContext * context, QWidget * parent, QGLWidget *sharedContextWidget)
+    : QGLWidget( context, parent, sharedContextWidget )
+{
+}
+
+
+KisOpenGLCanvas::~KisOpenGLCanvas()
+{
+}
+
+
+#include "kis_opengl_canvas.moc"

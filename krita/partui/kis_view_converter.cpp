@@ -77,4 +77,6 @@ double KisViewConverter::viewToDocumentY( double viewY ) const
 
 void KisViewConverter::zoom(double *zoomX, double *zoomY) const
 {
+    Q_UNUSED(zoomX);
+    Q_UNUSED(zoomY);    
 }

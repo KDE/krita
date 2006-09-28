@@ -341,7 +341,7 @@ KoShapeUserData *KoShape::userData() const {
     return m_userData;
 }
 
-bool KoShape::hasTransparancy() {
+bool KoShape::hasTransparency() {
     if(m_backgroundBrush.style() == Qt::NoBrush)
         return true;
     return !m_backgroundBrush.isOpaque();

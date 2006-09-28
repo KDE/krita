@@ -108,7 +108,7 @@ kDebug() << "    appending" << endl;
 
     // paint caret.
     QPen pen(Qt::black);
-    if(! m_textShape->hasTransparancy()) {
+    if(! m_textShape->hasTransparency()) {
         QColor bg = m_textShape->background().color();
         QColor invert = QColor(255 - bg.red(), 255 - bg.green(), 255 - bg.blue());
         pen.setColor(invert);

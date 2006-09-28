@@ -253,7 +253,7 @@ public:
      * you should override it and always return true if your shape is not square.
      * @return if the shape is (partly) transparent.
      */
-    virtual bool hasTransparancy();
+    virtual bool hasTransparency();
 
     /**
      * Retrieve the z-coordinate of this shape.

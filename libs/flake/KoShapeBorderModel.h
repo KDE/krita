@@ -63,7 +63,7 @@ public:
      * Returns true if there is some transparency, false if the border is fully opaque.
      * @return if the border is transparent.
      */
-    virtual bool hasTransparancy() = 0;
+    virtual bool hasTransparency() = 0;
     /**
      * Paint the border.
      * This method should paint the border around shape.

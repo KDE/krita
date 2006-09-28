@@ -48,7 +48,7 @@ KoInsets* KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) {
     return &insets;
 }
 
-bool KoLineBorder::hasTransparancy() {
+bool KoLineBorder::hasTransparency() {
     return m_color.alpha() > 0;
 }
 

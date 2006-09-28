@@ -33,7 +33,6 @@
 class QString;
 class QHBoxLayout;
 
-class KWidgetAction;
 class KisView;
 class KisCanvasController;
 class KoID;

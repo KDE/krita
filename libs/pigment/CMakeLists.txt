@@ -3,7 +3,7 @@ include_directories( ${KOFFICECORE_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
-	set(FILE_OPENEXR_SOURCES KoF16HalfColorSpaceTrait.cpp) 
+#	set(FILE_OPENEXR_SOURCES KoF16HalfColorSpaceTrait.cpp) 
 	include_directories(${OPENEXR_INCLUDE_DIR})
 	set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
 endif(OPENEXR_FOUND)
@@ -15,14 +15,10 @@ set(pigment_SRCS
     KoColorSpaceMaths.cpp
     KoCompositeOp.cpp
     KoColorProfile.cpp
-    KoLcmsColorSpaceTrait.cpp
-    KoU8ColorSpaceTrait.cpp
-    KoU16ColorSpaceTrait.cpp
-    KoF32HalfColorSpaceTrait.cpp
     KoColorConversions.cpp
     KoBasicHistogramProducers.cpp
     KoHistogramProducer.cpp
-	${FILE_OPENEXR_SOURCES}
+#	${FILE_OPENEXR_SOURCES}
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoAlphaColorSpace.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoLabColorSpace.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU16ColorSpace.cpp

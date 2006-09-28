@@ -269,9 +269,7 @@ namespace {
 
 KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceRegistry * parent,
                                        KoColorProfile *p) :
-    KoColorSpace("ALPHA", i18n("Alpha mask"),  parent)
-    , KoU8ColorSpaceTrait(0)
-    , KoLcmsColorSpaceTrait(TYPE_GRAY_8, icSigGrayData, p)
+        KoLcmsColorSpace<AlphaU8Traits>("ALPHA", i18n("Alpha mask"),  parent, TYPE_GRAY_8, icSigGrayData, p)
 {
     m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
     m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver( this ) );

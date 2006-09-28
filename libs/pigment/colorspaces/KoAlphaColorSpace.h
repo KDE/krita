@@ -22,14 +22,20 @@
 
 #include <koffice_export.h>
 
-#include "KoU8ColorSpaceTrait.h"
-#include "KoLcmsColorSpaceTrait.h"
+#include "KoLcmsColorSpace.h"
+
+
+struct AlphaU8Traits {
+    typedef quint8 channels_type;
+    static const quint32 channels_nb = 1;
+    static const qint32 alpha_pos = 0;
+};
 
 /**
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a color common to the mask. The default color is white.
  */
-class PIGMENT_EXPORT KoAlphaColorSpace : public KoU8ColorSpaceTrait, public KoLcmsColorSpaceTrait {
+class PIGMENT_EXPORT KoAlphaColorSpace : public KoLcmsColorSpace<AlphaU8Traits> {
 public:
     KoAlphaColorSpace(KoColorSpaceRegistry * parent,
                        KoColorProfile *p);

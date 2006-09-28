@@ -768,7 +768,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
     KUrl suggestedURL = pDoc->url();
 
     QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export, pDoc->extraNativeMimeTypes() );
-    if( !mimeFilter.contains(oldOutputFormat) < 0 && !isExporting() )
+    if( !mimeFilter.contains(oldOutputFormat) && !isExporting() )
     {
         kDebug(30003) << "KoMainWindow::saveDocument no export filter for '" << oldOutputFormat << "'" << endl;
 

@@ -336,7 +336,7 @@ void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
             //const Q_UINT8 *srcData = srcdev->pixel(srcX, srcY);
             Q_INT32 srcRowStride = srcdev->rowStride(srcX, srcY);
             KisHLineIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns, false);
-            const Q_UINT8 *srcData = srcIt.oldRawData();
+            const Q_UINT8 *srcData = srcIt.rawData();
 
             //const Q_UINT8 *selData = seldev->pixel(dstX, dstY);
             Q_INT32 selRowStride = seldev->rowStride(dstX, dstY);

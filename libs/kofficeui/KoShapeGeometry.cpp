@@ -37,17 +37,55 @@ KoShapeGeometry::~KoShapeGeometry() {
 
 void KoShapeGeometry::open(KoShape *shape) {
     m_shape = shape;
-    QPointF absolutePosition = shape->absolutePosition();
-    widget.left->changeValue(absolutePosition.x());
-    widget.top->changeValue(absolutePosition.y());
-    widget.width->changeValue(shape->size().width());
-    widget.height->changeValue(shape->size().height());
+    mOriginalPosition = shape->absolutePosition();
+    mOriginalSize = shape->size();
+    widget.left->changeValue(mOriginalPosition.x());
+    widget.top->changeValue(mOriginalPosition.y());
+    widget.width->changeValue(mOriginalSize.width());
+    widget.height->changeValue(mOriginalSize.height());
+
+    connect(widget.protectSize, SIGNAL(stateChanged(int)),
+            this, SLOT(protectSizeChanged(int)));
+
+    if (shape->isLocked()) {
+        widget.protectSize->setCheckState(Qt::Checked);
+    }
+
+    connect(widget.left, SIGNAL(valueChanged(double)),
+            this, SLOT(updateShape()));
+    connect(widget.top, SIGNAL(valueChanged(double)),
+            this, SLOT(updateShape()));
+    connect(widget.width, SIGNAL(valueChanged(double)),
+            this, SLOT(updateShape()));
+    connect(widget.height, SIGNAL(valueChanged(double)),
+            this, SLOT(updateShape()));
+}
+
+void KoShapeGeometry::updateShape() {
+    m_shape->repaint();
+    QPointF pos(widget.left->value(), widget.top->value());
+    m_shape->setAbsolutePosition(pos);
+    QSizeF size(widget.width->value(), widget.height->value());
+    m_shape->resize(size);
+    m_shape->repaint();
+}
+
+void KoShapeGeometry::protectSizeChanged(int protectSizeState) {
+    bool lock = (protectSizeState == Qt::Checked);
+    widget.left->setDisabled(lock);
+    widget.top->setDisabled(lock);
+    widget.width->setDisabled(lock);
+    widget.height->setDisabled(lock);
 }
 
 void KoShapeGeometry::save() {
-    QPointF pos(widget.left->value(), widget.top->value());
-    m_shape->setAbsolutePosition(pos);
-    m_shape->resize(QSizeF(widget.width->value(), widget.height->value()));
+    bool lock = (widget.protectSize->checkState() == Qt::Checked);
+    m_shape->setLocked(lock);
+}
+
+void KoShapeGeometry::cancel() {
+    m_shape->setAbsolutePosition(mOriginalPosition);
+    m_shape->resize(mOriginalSize);
 }
 
 KAction *KoShapeGeometry::createAction() {

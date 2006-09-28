@@ -41,15 +41,22 @@ public:
     void open(KoShape *shape);
     /// reimplemented from KoShapeConfigWidgetBase
     void save();
+    void cancel();
     /// reimplemented from KoShapeConfigWidgetBase
     KAction *createAction();
 
     /// reimplemented from KoShapeConfigWidgetBase
     void setUnit(KoUnit::Unit unit);
 
+private slots:
+    void updateShape();
+    void protectSizeChanged(int protectSizeState);
+
 private:
     Ui::KoShapeGeometry widget;
     KoShape *m_shape;
+    QPointF mOriginalPosition;
+    QSizeF mOriginalSize;
 };
 
 #endif

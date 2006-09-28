@@ -537,8 +537,8 @@ void KoMainWindow::updateCaption()
         caption += i18n("(write protected)");
 
       setCaption( caption, rootDocument()->isModified() );
-      if ( !rootDocument()->url().fileName(false).isEmpty() )
-        d->m_paSave->setToolTip( i18n("Save as %1", rootDocument()->url().fileName(false)) );
+      if ( !rootDocument()->url().fileName(KUrl::ObeyTrailingSlash).isEmpty() )
+        d->m_paSave->setToolTip( i18n("Save as %1", rootDocument()->url().fileName(KUrl::ObeyTrailingSlash)) );
       else
         d->m_paSave->setToolTip( i18n("Save") );
   }
@@ -1636,7 +1636,7 @@ void KoMainWindow::slotEmailFile()
     else
     {
         fileURL = rootDocument()->url().url();
-        theSubject = i18n("Document - %1", rootDocument()->url().fileName(false));
+        theSubject = i18n("Document - %1", rootDocument()->url().fileName(KUrl::ObeyTrailingSlash));
         urls.append( fileURL );
     }
 

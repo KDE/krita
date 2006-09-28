@@ -36,7 +36,8 @@
 
 #include "kis_rgb_u8_compositeop.h"
 
-#include "KoCompositeOpImpl.h"
+#include "compositeops/KoCompositeOpOver.h"
+#include "compositeops/KoCompositeOpErase.h"
 
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
@@ -52,8 +53,8 @@ KisRgbColorSpace ::KisRgbColorSpace(KoColorSpaceRegistry * parent, KoColorProfil
 
     init();
 
-    m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver<RgbU8Traits>( this ) );
-    m_compositeOps.insert( COMPOSITE_ERASE, new CompositeErase<RgbU8Traits>( this ) );
+    m_compositeOps.insert( COMPOSITE_OVER, new KoCompositeOpOver<RgbU8Traits>( this ) );
+    m_compositeOps.insert( COMPOSITE_ERASE, new KoCompositeOpErase<RgbU8Traits>( this ) );
     m_compositeOps.insert(COMPOSITE_MULT, new KisRgbU8CompositeOp(this, COMPOSITE_MULT,  i18n( "Multiply" )) );
     m_compositeOps.insert(COMPOSITE_BURN, new KisRgbU8CompositeOp(this, COMPOSITE_BURN,  i18n( "Burn" )) );
     m_compositeOps.insert(COMPOSITE_DODGE, new KisRgbU8CompositeOp(this, COMPOSITE_DODGE,  i18n( "Dodge" )));

@@ -22,8 +22,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "KoCompositeOp.h"
-#include "KoCompositeOpImpl.h"
+#include "../compositeops/KoCompositeOpOver.h"
+#include "../compositeops/KoCompositeOpErase.h"
 
 
 KoLabColorSpace::KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
@@ -34,8 +34,8 @@ KoLabColorSpace::KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *
     m_channels.push_back(new KoChannelInfo(i18n("b*"), CHANNEL_B * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(200,200,200)));
     m_channels.push_back(new KoChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
     init();
-    m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver<LabU16Traits>( this ) );
-    m_compositeOps.insert( COMPOSITE_ERASE, new CompositeErase<LabU16Traits>( this ) );
+    m_compositeOps.insert( COMPOSITE_OVER, new KoCompositeOpOver<LabU16Traits>( this ) );
+    m_compositeOps.insert( COMPOSITE_ERASE, new KoCompositeOpErase<LabU16Traits>( this ) );
 }
 
 bool KoLabColorSpace::willDegrade(ColorSpaceIndependence independence)

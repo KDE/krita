@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOCOMPOSITEOPIMPL_H_
-#define KOCOMPOSITEOPIMPL_H_
+#ifndef KOCOMPOSITEOPOVER_H_
+#define KOCOMPOSITEOPOVER_H_
 
 #include "KoColorSpaceMaths.h"
 #include "KoCompositeOp.h"
@@ -26,13 +26,12 @@
 #define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::max()
 #define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::min()
 
-#if 1
 template<class _CSTraits>
-class CompositeOver : public KoCompositeOp {
+class KoCompositeOpOver : public KoCompositeOp {
     typedef typename _CSTraits::channels_type channels_type;
     public:
 
-        CompositeOver(KoColorSpace * cs)
+        KoCompositeOpOver(KoColorSpace * cs)
         : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal" ) )
         {
         }
@@ -132,68 +131,5 @@ class CompositeOver : public KoCompositeOp {
         }
 
 };
-
-
-template<class _CSTraits>
-class CompositeErase : public KoCompositeOp {
-    typedef typename _CSTraits::channels_type channels_type;
-
-public:
-
-    CompositeErase(KoColorSpace * cs)
-    : KoCompositeOp(cs, COMPOSITE_ERASE, i18n("Erase" ) )
-    {
-    }
-
-public:
-
-    void composite(quint8 *dstRowStart,
-                    qint32 dststride,
-                    const quint8 *srcRowStart,
-                    qint32 srcstride,
-                    const quint8 *maskRowStart,
-                    qint32 maskstride,
-                    qint32 rows,
-                    qint32 cols,
-                    quint8 U8_opacity,
-                    const QBitArray & channelFlags) const
-    {
-        Q_UNUSED( U8_opacity );
-        Q_UNUSED( channelFlags );
-        while (rows-- > 0)
-        {
-            const channels_type *s = reinterpret_cast<const channels_type *>(srcRowStart);
-            channels_type *d = reinterpret_cast<channels_type *>(dstRowStart);
-            const quint8 *mask = maskRowStart;
-
-            for (qint32 i = cols; i > 0; i--, s+=_CSTraits::channels_nb, d+=_CSTraits::channels_nb)
-            {
-                channels_type srcAlpha = s[_CSTraits::alpha_pos];
-
-            // apply the alphamask
-                if (mask != 0) {
-                    quint8 U8_mask = *mask;
-
-                    if (U8_mask != OPACITY_OPAQUE) {
-                        srcAlpha = UINT16_BLEND(srcAlpha, NATIVE_OPACITY_OPAQUE,
-                                KoColorSpaceMaths<quint8, channels_type>::scaleToA( U8_mask) );
-                    }
-                    mask++;
-                }
-                d[_CSTraits::alpha_pos] = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, d[_CSTraits::alpha_pos]);
-            }
-
-            dstRowStart += dststride;
-            srcRowStart += srcstride;
-            if(maskRowStart) {
-                maskRowStart += maskstride;
-            }
-        }
-    }
-};
-
-
-
-#endif
 
 #endif

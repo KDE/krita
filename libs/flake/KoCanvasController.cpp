@@ -167,4 +167,8 @@ void KoCanvasController::Viewport::centerCanvas(bool centered) {
 
 #include "KoCanvasController.moc"
 
-// TODO add a paintEvent here and paint a nice shadow to the bottom/right of the canvas
+// TODO add a paintEvent here and paint a nice shadow to the
+// bottom/right of the canvas. Also paint an optional gray border
+// around the image and make it possible to show the canvas widget
+// rotated.
+

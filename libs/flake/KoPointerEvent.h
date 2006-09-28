@@ -28,7 +28,7 @@
 
 /**
  * The event used in Flake to have both the original (canvas based) position as
- * well as the normalized position.
+ * well as the normalized position. 
  */
 class FLAKE_EXPORT KoPointerEvent
 {

@@ -127,7 +127,7 @@ public:
 
 
     virtual KoSelection * currentSelection() const 0;
-    
+
     /**
      * @return the value of the horizontal scrollbar.
      */
@@ -137,7 +137,7 @@ public:
      * @return the value of the vertical scrollbar
      */
     virtual qint32 verticalScrollbarValue() const  0;
-   
+
     /**
      * Sets the horizontal and vertical scrollbars to the specified values
      *
@@ -145,7 +145,7 @@ public:
      * @param y the value the vertical scrollbar is set to
      */
     virtual void scrollTo(qint32 x, qint32 y)  0;
-   
+
     /**
      * Tell all of the canvas to repaint itself.
      */
@@ -163,16 +163,16 @@ public:
     virtual void zoomIn()  0;
 
     /**
-      Increase the zoomlevel one step and make sure that x,y is the center 
+      Increase the zoomlevel one step and make sure that x,y is the center
        point of the view.
-     
-      @param x The x coordinate of the visible point in document 
+
+      @param x The x coordinate of the visible point in document
                coordinates
-      @param y the y coordinate of the visible point in document 
+      @param y the y coordinate of the visible point in document
                coordinates
      */
     virtual void zoomIn(qint32 x, qint32 y)  0;
-   
+
     /**
      * Decrease the zoomlevel one step
      */
@@ -186,7 +186,7 @@ public:
      * @param y the y coordinate of the visible point in document coordinates
      */
     virtual void zoomOut(qint32 x, qint32 y)  0;
-   
+
     /**
      * To center the view on the given point with the given zoom factor.
      *
@@ -209,14 +209,14 @@ public:
      * of the specified rect.
      */
     virtual void zoomTo(const QRect& r)  0;
-   
+
     /**
      * Make the rect defined by x, y, w and h visible, zooming in or
      * out as necessary. The view will be centered around the center point
      * of the specified rect.
      */
     virtual void zoomTo(const QRectF& r)  0;
-   
+
     /**
      * Conversion functions from view coordinates to document coordinates
      *
@@ -232,7 +232,7 @@ public:
     virtual QRect viewToWindow(const QRect& rc)  0;
     virtual QRectF viewToWindow(const QRectF& rc)  0;
     virtual void viewToWindow(qint32 *x, qint32 *y)  0;
-   
+
     /**
      * Conversion functions from document coordinates to view coordinates
      */
@@ -241,7 +241,7 @@ public:
     virtual QRect windowToView(const QRect& rc)  0;
     virtual QRectF windowToView(const QRectF& rc)  0;
     virtual void windowToView(qint32 *x, qint32 *y)  0;
-   
+
     /**
      * Set the cursor shown when the pointer is over the canvas widget to
      * the specified cursor.
@@ -250,7 +250,7 @@ public:
      * @return the old cursor
      */
     virtual QCursor setCanvasCursor(const QCursor & cursor)  0;
-   
+
     /**
      * Set the active input device to the specified input device, This
      * could be a mouse, a stylus, an eraser or any other pointing input

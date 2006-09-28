@@ -69,7 +69,9 @@ public:
         U_PI = 5, // pica
         U_DD = 6, // didot
         U_CC = 7, // cicero
-        U_LASTUNIT = U_CC // update when adding a new unit
+// XXX update U_LASTUNIT and rulers to allow for the new U_PIXEL!
+	U_PIXEL = 8,
+        U_LASTUNIT = U_CC// update when adding a new unit
         // when adding a new unit, make sure to implement support for it in koRuler too
     };
 

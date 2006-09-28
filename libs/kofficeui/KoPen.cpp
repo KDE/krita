@@ -19,7 +19,7 @@
 */
 #include "KoPen.h"
 
-#include <../kotext/KoTextZoomHandler.h>
+#include <KoZoomHandler.h>
 
 KoPen::KoPen()
  : QPen()

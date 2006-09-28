@@ -119,7 +119,7 @@ void KoAutoFormatExceptionWidget::slotAddException()
     if(!text.isEmpty())
     {
         if(text.at(text.length()-1)!='.' && m_bAbbreviation)
-            text=text+".";
+            text=text+'.';
         if( m_listException.findIndex( text )==-1)
         {
             m_listException<<text;

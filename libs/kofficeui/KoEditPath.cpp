@@ -72,7 +72,7 @@ QString KoEditPathDia::newPath()const
     for (; it != endIt; ++it)
     {
         if (!tmp.isEmpty())
-            tmp +=";";
+            tmp += ';';
         tmp += *it;
     }
     return tmp;

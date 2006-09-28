@@ -829,7 +829,7 @@ bool KoTextFormatterCore::format()
             assert( chr->lineStart );
         if ( chr->lineStart ) {
             ++numberOfLines;
-            charPosList += QString::number(i) + " ";
+            charPosList += QString::number(i) + ' ';
         }
     }
     kDebug(32500) << parag->lineStartList().count() << " lines. " << numberOfLines << " chars with lineStart set: " << charPosList << endl;

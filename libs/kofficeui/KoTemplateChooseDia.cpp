@@ -744,13 +744,13 @@ bool KoTemplateChooseDia::collectInfo()
 QString KoTemplateChooseDia::descriptionText(const QString &name, const QString &description)
 {
 	QString descrText(i18n("Name:"));
-	descrText += " " + name;
-	descrText += "\n";
+	descrText += ' ' + name;
+	descrText += '\n';
 	descrText += i18n("Description:");
 	if (description.isEmpty())
-	      descrText += " " + i18n("No description available");
+	      descrText += ' ' + i18n("No description available");
 	else
-              descrText += " " + description;
+              descrText += ' ' + description;
 	return descrText;
 }
 

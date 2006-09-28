@@ -1072,7 +1072,7 @@ QString KoVariable::convertKlocaleToQDateTimeFormat( const QString & _format )
         else if ( format.startsWith( "%n" ) )
         {
             addText( text, newFormat );
-            newFormat+="M";
+            newFormat+='M';
             format = format.remove( 0, 2 );
         }
         else if ( format.startsWith( "%m" ) )
@@ -1084,7 +1084,7 @@ QString KoVariable::convertKlocaleToQDateTimeFormat( const QString & _format )
         else if ( format.startsWith( "%e" ) )
         {
             addText( text, newFormat );
-            newFormat+="d";
+            newFormat+='d';
             format = format.remove( 0, 2 );
         }
         else if ( format.startsWith( "%d" ) )
@@ -1128,7 +1128,7 @@ QString KoVariable::convertKlocaleToQDateTimeFormat( const QString & _format )
         else if ( format.startsWith( "%k" ) )//h
         {
             addText( text, newFormat );
-            newFormat+="h";
+            newFormat+='h';
             format = format.remove( 0, 2 );
         }
         else if ( format.startsWith( "%I" ) )// ?????
@@ -1821,7 +1821,7 @@ QString KoMailMergeVariable::text(bool /*realValue*/)
     // ## should use a format maybe
     QString v = value();
     if ( v == name() )
-        return "<" + v + ">";
+        return '<' + v + '>';
     return v;
 }
 
@@ -2552,7 +2552,7 @@ void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
             if ( text.isElement() )
             {
                 QDomElement t = text.toElement();
-                note += t.text() + "\n";
+                note += t.text() + '\n';
             }
         }
     }

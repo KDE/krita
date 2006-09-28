@@ -245,7 +245,7 @@ QString KoTextDocument::plainText() const
         s = p->string()->toString();
         s.remove( s.length() - 1, 1 );
         if ( p->next() )
-            s += "\n";
+            s += '\n';
         buffer += s;
         p = p->next();
     }
@@ -616,18 +616,18 @@ QString KoTextDocument::selectedText( int id, bool withCustom ) const
 		if ( p->at( i )->isCustom() ) {
 #ifdef QTEXTTABLE_AVAILABLE
 		    if ( p->at( i )->customItem()->isNested() ) {
-			s += "\n";
+			s += '\n';
 			KoTextTable *t = (KoTextTable*)p->at( i )->customItem();
 			Q3PtrList<KoTextTableCell> cells = t->tableCells();
 			for ( KoTextTableCell *c = cells.first(); c; c = cells.next() )
-			    s += c->richText()->plainText() + "\n";
-			s += "\n";
+			    s += c->richText()->plainText() + '\n';
+			s += '\n';
 		    }
 #endif
 		} else {
 		    s += p->at( i )->c;
 		}
-		s += "\n";
+		s += '\n';
 	    }
 	}
 	return s;
@@ -643,24 +643,24 @@ QString KoTextDocument::selectedText( int id, bool withCustom ) const
 	if ( !withCustom || !p->customItems() ) {
 	    s += p->string()->toString().mid( start, end - start );
 	    if ( p != c2.parag() )
-		s += "\n";
+		s += '\n';
 	} else {
 	    for ( int i = start; i < end; ++i ) {
 		if ( p->at( i )->isCustom() ) {
 #ifdef QTEXTTABLE_AVAILABLE
 		    if ( p->at( i )->customItem()->isNested() ) {
-			s += "\n";
+			s += '\n';
 			KoTextTable *t = (KoTextTable*)p->at( i )->customItem();
 			Q3PtrList<KoTextTableCell> cells = t->tableCells();
 			for ( KoTextTableCell *c = cells.first(); c; c = cells.next() )
-			    s += c->richText()->plainText() + "\n";
-			s += "\n";
+			    s += c->richText()->plainText() + '\n';
+			s += '\n';
 		    }
 #endif
 		} else {
 		    s += p->at( i )->c;
 		}
-		s += "\n";
+		s += '\n';
 	    }
 	}
 	start = 0;
@@ -684,12 +684,12 @@ QString KoTextDocument::copySelection( KoXmlWriter& writer, KoSavingContext& con
     }
     else
     {
-        text += c1.parag()->toString( c1.index() ) + "\n";
+        text += c1.parag()->toString( c1.index() ) + '\n';
 
         c1.parag()->saveOasis( writer, context, c1.index(), c1.parag()->length()-2, true );
         KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
-            text += p->toString() + "\n";
+            text += p->toString() + '\n';
             p->saveOasis( writer, context, 0, p->length()-2, true );
             p = p->next();
         }

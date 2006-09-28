@@ -583,8 +583,8 @@ QStringList KoStore::addLocalDirectory( const QString &dirPath, const QString &d
   {
      if ( *it != dot && *it != dotdot )
      {
-        QString currentFile = dirPath + "/" + *it;
-        QString dest = destName.isEmpty() ? *it : (destName + "/" + *it);
+        QString currentFile = dirPath + '/' + *it;
+        QString dest = destName.isEmpty() ? *it : (destName + '/' + *it);
 
         QFileInfo fi ( currentFile );
         if ( fi.isFile() )
@@ -660,7 +660,7 @@ QString KoStore::expandEncodedPath( QString intern ) const
     if ( m_namingVersion == NAMING_VERSION_2_1 )
       result = result + "part" + intern + ".xml";
     else
-      result = result + "part" + intern + "/" + MAINNAME;
+      result = result + "part" + intern + '/' + MAINNAME;
   }
   else
     result += intern;

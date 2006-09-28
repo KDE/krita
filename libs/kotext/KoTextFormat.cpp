@@ -905,13 +905,13 @@ QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelle
     k += '/';
     k += "0.66"; //relative text size
     k += '/';
-    k += "0"; // no offset from base line
+    k += '0'; // no offset from base line
     k += '/';
-    k += "0"; //no wordbyword attribute
-    k += "0"; //no font attribute
+    k += '0'; //no wordbyword attribute
+    k += '0'; //no font attribute
     k += '/';
-    k += "0"; //no hyphen
-    k += "0"; //no ulw
+    k += '0'; //no hyphen
+    k += '0'; //no ulw
 
     ////
     return k;
@@ -1399,7 +1399,7 @@ QString KoTextFormat::shadowAsCss(  double shadowDistanceX, double shadowDistanc
     // => none or color length length
     if ( shadowDistanceX != 0 || shadowDistanceY != 0 )
     {
-        QString css = shadowColor.name() + " ";
+        QString css = shadowColor.name() + ' ';
         css += QString::number(shadowDistanceX) + "pt ";
         css += QString::number(shadowDistanceY) + "pt";
         return css;

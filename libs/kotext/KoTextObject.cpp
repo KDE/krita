@@ -455,7 +455,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
         if ( cursor->remove() ) {
             if ( old != cursor->parag() && m_lastFormatted == old ) // 'old' has been deleted
                 m_lastFormatted = cursor->parag() ? cursor->parag()->prev() : 0;
-            undoRedoInfo.text += "\n";
+            undoRedoInfo.text += '\n';
             undoRedoInfo.oldParagLayouts << paragLayout;
         } else
             emit paragraphModified( old, RemoveChar, cursor->index(), 1 );
@@ -506,7 +506,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
             undoRedoInfo.index = cursor->index();
             undoRedoInfo.text = QString::null;
         }
-        undoRedoInfo.text += "\n";
+        undoRedoInfo.text += '\n';
         if ( cursor->parag() )
         {
                 QString last_line = cursor->parag()->toString();
@@ -571,7 +571,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                 if ( cursor->remove() )
                 {
                     m_lastFormatted = cursor->parag();
-                    undoRedoInfo.text += "\n";
+                    undoRedoInfo.text += '\n';
                     undoRedoInfo.oldParagLayouts << paragLayout;
                 }
             } else {
@@ -2387,7 +2387,7 @@ bool KoTextObject::statistics( Q3ProgressDialog *progress, ulong & charsWithSpac
         s = s.trimmed();
         QChar lastchar = s.at(s.length());
         if( ! s.isEmpty() && ! KoAutoFormat::isMark( lastchar ) ) {  // e.g. for headlines
-            s = s + ".";
+            s = s + '.';
         }
         re.setPattern("[.?!]+");         // count "..." as only one "."
         s.replace(re, ".");

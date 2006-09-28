@@ -385,7 +385,7 @@ bool QWinMetaFile::paint( QPaintDevice* aTarget, bool absolute )
             for ( i=0 ; i < cmd->numParm ; i++ ) {
                 param.setNum( cmd->parm[ i ] );
                 str += param;
-                str += " ";
+                str += ' ';
             }
             kDebug() << str << endl;
         }

@@ -981,7 +981,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
             cursor.setIndex( start );
             KoTextDocument * textdoc = parag->textDocument();
             if( m_completionAppendSpace && !part)
-                word+=" ";
+                word += ' ';
             textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
             cursor.setIndex( start + lastword_length );
             textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );

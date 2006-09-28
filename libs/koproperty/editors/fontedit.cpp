@@ -100,9 +100,9 @@ FontEdit::value() const
 static QString sampleText(const QVariant &value)
 {
 	QFontInfo fi(value.value<QFont>());
-	return fi.family() + (fi.bold() ? " " + i18n("Bold") : QString()) +
-		(fi.italic() ? " " + i18n("Italic") : QString::null) +
-		" " + QString::number(fi.pointSize());
+	return fi.family() + (fi.bold() ? ' ' + i18n("Bold") : QString()) +
+		(fi.italic() ? ' ' + i18n("Italic") : QString::null) +
+		' ' + QString::number(fi.pointSize());
 }
 
 void

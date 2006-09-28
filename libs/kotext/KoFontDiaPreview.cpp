@@ -265,7 +265,7 @@ void KoFontDiaPreview::drawContents( QPainter* p )
             textDraw = (*it);
         }
         else {
-            textDraw = (*it) + " ";
+            textDraw = (*it) + ' ';
         }
 /*background*/
         if ( count == 1 ) boffset = QABS( int( m_shadowDistanceX ) );

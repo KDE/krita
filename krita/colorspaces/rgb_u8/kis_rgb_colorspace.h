@@ -39,7 +39,7 @@ class KisRgbColorSpace : public KoLcmsColorSpace<RgbU8Traits>
 {
     public:
         KisRgbColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence ) { return false; }
+        virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
 };
 
 class KisRgbColorSpaceFactory : public KoColorSpaceFactory

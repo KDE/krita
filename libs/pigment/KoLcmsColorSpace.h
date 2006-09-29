@@ -115,14 +115,14 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         }
     public:
         void setColorSpaceType(quint32 type) { m_cmType = type; }
-        quint32 colorSpaceType() { return m_cmType; }
+        quint32 colorSpaceType() const { return m_cmType; }
 
-        virtual icColorSpaceSignature colorSpaceSignature() { return m_colorSpaceSignature; }
+        virtual icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }
         
         virtual bool hasHighDynamicRange() const { return false; }
-        virtual KoColorProfile * getProfile() { return m_profile; };
+        virtual KoColorProfile * getProfile() const { return m_profile; };
         
-        virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile=0)
+        virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile=0) const
         {
             m_qcolordata[2] = color.red();
             m_qcolordata[1] = color.green();
@@ -149,13 +149,13 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             this->setAlpha(dst, OPACITY_OPAQUE, 1);
         }
 
-        virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, KoColorProfile * profile=0)
+        virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, KoColorProfile * profile=0) const
         {
             this->fromQColor(color, dst, profile);
             this->setAlpha(dst, opacity, 1);
         }
 
-        virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile =0)
+        virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile =0) const
         {
             if (profile == 0) {
 	// Default sRGB transform
@@ -174,14 +174,14 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             c->setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
         }
 
-        virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile =0)
+        virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile =0) const
         {
             this->toQColor(src, c, profile);
             *opacity = this->getAlpha(src);
         }
         virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                 KoColorProfile *dstProfile,
-                qint32 renderingIntent, float /*exposure*/)
+                qint32 renderingIntent, float /*exposure*/) const
 
         {
             QImage img = QImage(width, height, QImage::Format_ARGB32);
@@ -226,9 +226,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
         virtual bool convertPixelsTo(const quint8 * src,
                 quint8 * dst,
-                KoColorSpace * dstColorSpace,
+                const KoColorSpace * dstColorSpace,
                 quint32 numPixels,
-                qint32 renderingIntent)
+                qint32 renderingIntent) const
         {
 /*            kdDebug() << "new conversion" << endl;
             for(int i = 0; i < numPixels; i++)
@@ -307,7 +307,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent);
         }
 
-        virtual KoColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues)
+        virtual KoColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues) const
         {
             if (!m_profile) return 0;
 
@@ -331,7 +331,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         }
 
 
-        virtual KoColorAdjustment *createDesaturateAdjustment()
+        virtual KoColorAdjustment *createDesaturateAdjustment() const
         {
             if (!m_profile) return 0;
 
@@ -389,7 +389,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             return adj;
         }
 
-        virtual KoColorAdjustment *createPerChannelAdjustment(quint16 **transferValues)
+        virtual KoColorAdjustment *createPerChannelAdjustment(quint16 **transferValues) const
         {
             if (!m_profile) return 0;
 
@@ -415,7 +415,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         }
 
 
-        virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *adjustment, qint32 nPixels)
+        virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *adjustment, qint32 nPixels) const
         {
             KoColorAdjustmentImpl * adj = dynamic_cast<KoColorAdjustmentImpl*>(adjustment);
             if (adj)
@@ -423,7 +423,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         }
 
 
-        virtual void invertColor(quint8 * src, qint32 nPixels)
+        virtual void invertColor(quint8 * src, qint32 nPixels) const
         {
             quint16 rgba[4];
             quint32 psize = this->pixelSize();
@@ -438,7 +438,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             }
         }
 
-        virtual quint8 difference(const quint8* src1, const quint8* src2)
+        virtual quint8 difference(const quint8* src1, const quint8* src2) const
         {
             if (m_defaultToLab) {
 
@@ -531,7 +531,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         } BCHSWADJUSTS, *LPBCHSWADJUSTS;
 
 
-        static int desaturateSampler(register WORD In[], register WORD Out[], register LPVOID /*Cargo*/)
+        static int desaturateSampler(register WORD In[], register WORD Out[], register LPVOID /*Cargo*/) 
         {
             cmsCIELab LabIn, LabOut;
             cmsCIELCh LChIn, LChOut;
@@ -553,10 +553,10 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
             return true;
         }
-        cmsHTRANSFORM createTransform(KoColorSpace * dstColorSpace,
+        cmsHTRANSFORM createTransform(const KoColorSpace * dstColorSpace,
                 KoColorProfile *  srcProfile,
                 KoColorProfile *  dstProfile,
-                qint32 renderingIntent)
+                qint32 renderingIntent) const
         {
             KConfig * cfg = KGlobal::config();
             bool bpCompensation = cfg->readEntry("useBlackPointCompensation", false);
@@ -586,23 +586,23 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         cmsHTRANSFORM m_defaultToRGB16;    // Default transform to 16 bit sRGB
         cmsHTRANSFORM m_defaultFromRGB16;  // Default transform from 16 bit sRGB
 
-        cmsHPROFILE   m_lastRGBProfile;  // Last used profile to transform to/from RGB
-        cmsHTRANSFORM m_lastToRGB;       // Last used transform to transform to RGB
-        cmsHTRANSFORM m_lastFromRGB;     // Last used transform to transform from RGB
+        mutable cmsHPROFILE   m_lastRGBProfile;  // Last used profile to transform to/from RGB
+        mutable cmsHTRANSFORM m_lastToRGB;       // Last used transform to transform to RGB
+        mutable cmsHTRANSFORM m_lastFromRGB;     // Last used transform to transform from RGB
 
         cmsHTRANSFORM m_defaultToLab;
         cmsHTRANSFORM m_defaultFromLab;
 
         KoColorProfile *  m_profile;
-        KoColorSpace *m_lastUsedDstColorSpace;
-        cmsHTRANSFORM m_lastUsedTransform;
+        mutable const KoColorSpace *m_lastUsedDstColorSpace;
+        mutable cmsHTRANSFORM m_lastUsedTransform;
         
         DWORD m_cmType;                           // The colorspace type as defined by littlecms
         icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files
 
     // cmsHTRANSFORM is a void *, so this should work.
-        typedef QMap<KoColorSpace *, cmsHTRANSFORM>  TransformMap;
-        TransformMap m_transforms; // Cache for existing transforms
+        typedef QMap<const KoColorSpace *, cmsHTRANSFORM>  TransformMap;
+        mutable TransformMap m_transforms; // Cache for existing transforms
 
 };
 

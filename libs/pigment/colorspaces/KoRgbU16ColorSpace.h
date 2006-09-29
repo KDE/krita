@@ -32,7 +32,7 @@ class KoRgbU16ColorSpace : public KoLcmsColorSpace<RgbU16Traits>
 {
     public:
         KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence independence);
+        virtual bool willDegrade(ColorSpaceIndependence independence) const;
 };
 
 class KoRgbU16ColorSpaceFactory : public KoColorSpaceFactory

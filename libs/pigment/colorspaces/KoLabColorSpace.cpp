@@ -38,7 +38,7 @@ KoLabColorSpace::KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *
     m_compositeOps.insert( COMPOSITE_ERASE, new KoCompositeOpErase<LabU16Traits>( this ) );
 }
 
-bool KoLabColorSpace::willDegrade(ColorSpaceIndependence independence)
+bool KoLabColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
     if (independence == TO_RGBA8) 
         return true;

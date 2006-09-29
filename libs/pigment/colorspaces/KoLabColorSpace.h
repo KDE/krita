@@ -32,7 +32,7 @@ class KoLabColorSpace : public KoLcmsColorSpace<LabU16Traits>
 {
     public:
         KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence independence);
+        virtual bool willDegrade(ColorSpaceIndependence independence) const;
         virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
     private:
         static const quint32 CHANNEL_L = 0;

@@ -108,7 +108,7 @@ public:
     //========== Channels =====================================================//
 
     /// Return a vector describing all the channels this color model has.
-    virtual Q3ValueVector<KoChannelInfo *> channels()
+    virtual Q3ValueVector<KoChannelInfo *> channels() const
     {
         return m_channels;
     }
@@ -151,21 +151,21 @@ public:
      * an 8-bit value. The position is not the number of bytes, but
      * the position of the channel as defined in the channel info list.
      */
-    virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos) = 0;
+    virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos) const = 0;
 
     /**
      * Convert the value of the channel at the specified position into
      * a 16-bit value. This may be upscaling or downscaling, depending
      * on the defined value of the channel
      */
-     virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos) = 0;
+    virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos) const = 0;
 
      /**
       * Set dstPixel to the pixel containing only the given channel of srcPixel. The remaining channels
       * should be set to whatever makes sense for 'empty' channels of this color space,
       * with the intent being that the pixel should look like it only has the given channel.
       */
-     virtual void getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) = 0;
+    virtual void getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const = 0;
 
     //========== Identification ===============================================//
 
@@ -182,9 +182,9 @@ public:
     /**
      * lcms colorspace type definition.
      */
-    virtual quint32 colorSpaceType() = 0;
+    virtual quint32 colorSpaceType() const = 0;
 
-    virtual icColorSpaceSignature colorSpaceSignature() = 0;
+    virtual icColorSpaceSignature colorSpaceSignature() const = 0;
 
     /**
      * If false, images in this colorspace will degrade considerably by
@@ -196,7 +196,7 @@ public:
      * @return false if no degradation will take place, true if degradation will
      *         take place
      */
-    virtual bool willDegrade(ColorSpaceIndependence independence) = 0;
+    virtual bool willDegrade(ColorSpaceIndependence independence) const = 0;
 
     //========== Capabilities =================================================//
 
@@ -209,7 +209,7 @@ public:
      * Retrieve a single composite op from the ones this colorspace offers.
      * If the requeste composite op does not exist, COMPOSITE_OVER is returned.
      */
-    virtual const KoCompositeOp * compositeOp(const QString & id);
+    virtual const KoCompositeOp * compositeOp(const QString & id) const;
 
     /**
      * add a composite op to this colorspace.
@@ -228,7 +228,7 @@ public:
     /**
      * Return the profile of this color space. This may be 0
      */
-    virtual KoColorProfile * getProfile() = 0;
+    virtual KoColorProfile * getProfile() const = 0;
 
 //================= Conversion functions ==================================//
 
@@ -242,7 +242,7 @@ public:
      * @param dst a pointer to a pixel
      * @param profile the optional profile that describes the color values of QColor
      */
-    virtual void fromQColor(const QColor& c, quint8 *dst, KoColorProfile * profile = 0) = 0;
+    virtual void fromQColor(const QColor& c, quint8 *dst, KoColorProfile * profile = 0) const = 0;
 
     /**
      * The fromQColor methods take a given color defined as an RGB QColor
@@ -254,7 +254,7 @@ public:
      * @param dst a pointer to a pixel
      * @param profile the optional profile that describes the color values of QColor
      */
-    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0) = 0;
+    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0) const = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -265,7 +265,7 @@ public:
      * @param c the QColor that will be filled with the color at src
      * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
-    virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0) = 0;
+    virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0) const = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -277,7 +277,7 @@ public:
      * @param opacity a pointer to a byte that will be filled with the opacity a src
      * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
-    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0) = 0;
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0) const = 0;
 
     /**
      * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
@@ -295,7 +295,7 @@ public:
      */
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    KoColorProfile *  dstProfile, qint32 renderingIntent = INTENT_PERCEPTUAL,
-                                   float exposure = 0.0f) = 0;
+                                   float exposure = 0.0f) const = 0;
 
     /**
      * This functions allocates the ncessary memory for numPixels number of pixels.
@@ -348,9 +348,9 @@ public:
      * Returns false if the conversion failed, true if it succeeded
      */
     virtual bool convertPixelsTo(const quint8 * src,
-                                 quint8 * dst, KoColorSpace * dstColorSpace,
+                                 quint8 * dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 qint32 renderingIntent = INTENT_PERCEPTUAL) = 0;
+                                 qint32 renderingIntent = INTENT_PERCEPTUAL) const = 0;
 
 //============================== Manipulation functions ==========================//
 
@@ -383,54 +383,54 @@ public:
      * nPixels -- the number of pixels
      *
      */
-    virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) = 0;
+    virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const = 0;
 
     /**
      * Applies the specified 8-bit alpha mask to the pixels. We assume that there are just
      * as many alpha values as pixels but we do not check this; the alpha values
      * are assumed to be 8-bits.
      */
-    virtual void applyAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels) = 0;
+    virtual void applyAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels) const = 0;
 
     /**
      * Applies the inverted 8-bit alpha mask to the pixels. We assume that there are just
      * as many alpha values as pixels but we do not check this; the alpha values
      * are assumed to be 8-bits.
      */
-    virtual void applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels) = 0;
+    virtual void applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels) const = 0;
 
     /**
      * Create an adjustment object for adjusting the brightness and contrast
      * transferValues is a 256 bins array with values from 0 to 0xFFFF
      */
-    virtual KoColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues) = 0;
+    virtual KoColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues) const = 0;
 
     /**
      * Create an adjustment object for desaturating
      */
-    virtual KoColorAdjustment *createDesaturateAdjustment() = 0;
+    virtual KoColorAdjustment *createDesaturateAdjustment() const = 0;
 
     /**
      * Create an adjustment object for adjusting individual channels
      * transferValues is an array of nColorChannels number of 256 bins array with values from 0 to 0xFFFF
      */
-    virtual KoColorAdjustment *createPerChannelAdjustment(quint16 **transferValues) = 0;
+    virtual KoColorAdjustment *createPerChannelAdjustment(quint16 **transferValues) const = 0;
 
     /**
      * Apply the adjustment created with onr of the other functions
      */
-    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *, qint32 nPixels) = 0;
+    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *, qint32 nPixels) const = 0;
 
     /**
      * Invert color channels of the given pixels
      */
-    virtual void invertColor(quint8 * src, qint32 nPixels) = 0;
+    virtual void invertColor(quint8 * src, qint32 nPixels) const = 0;
 
     // XXX: What with alpha channels? YYY: Add an overloaded function that takes alpha into account?
     /**
      * Get the difference between 2 colors, normalized in the range (0,255)
      */
-    virtual quint8 difference(const quint8* src1, const quint8* src2) = 0;
+    virtual quint8 difference(const quint8* src1, const quint8* src2) const = 0;
 
 
     /**
@@ -493,7 +493,7 @@ public:
 			qint32 rows,
 			qint32 cols,
 			const KoCompositeOp * op,
-            const QBitArray & channelFlags);
+            const QBitArray & channelFlags) const;
     /**
      * Convenience function for the above where all channels are turned on.
      */
@@ -507,7 +507,7 @@ public:
 			quint8 opacity,
 			qint32 rows,
 			qint32 cols,
-            const KoCompositeOp * op);
+            const KoCompositeOp * op) const;
     
     /**
      * Convenience function for the above if you don't have the composite op object yet.
@@ -523,7 +523,7 @@ public:
 			qint32 rows,
 			qint32 cols,
 			const QString & op,
-			const QBitArray & channelFlags);
+            const QBitArray & channelFlags) const;
 
     /**
      * Convenience function for the above, if you simply want all channels composited
@@ -538,7 +538,7 @@ public:
 			quint8 opacity,
 			qint32 rows,
 			qint32 cols,
-			const QString& op);
+            const QString& op) const;
 
     
 
@@ -547,7 +547,7 @@ public:
      * created paint device. XXX: Currently this uses times and not
      * threads.
      */
-    virtual Q3ValueList<KisFilter*> createBackgroundFilters()
+    virtual Q3ValueList<KisFilter*> createBackgroundFilters() const
         { return Q3ValueList<KisFilter*>(); };
 
 private:
@@ -559,7 +559,7 @@ protected:
     KoColorSpaceRegistry * m_parent;
     Q3ValueVector<KoChannelInfo *> m_channels;
     QHash<QString, KoCompositeOp *> m_compositeOps;
-    Q3MemArray<quint8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
+    mutable Q3MemArray<quint8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
 
 };
 

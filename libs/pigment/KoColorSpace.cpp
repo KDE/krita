@@ -46,7 +46,7 @@ KoCompositeOpList KoColorSpace::userVisiblecompositeOps() const
     return m_compositeOps.values();
 }
 
-const KoCompositeOp * KoColorSpace::compositeOp(const QString & id)
+const KoCompositeOp * KoColorSpace::compositeOp(const QString & id) const
 {
     if ( m_compositeOps.contains( id ) )
         return m_compositeOps.value( id );
@@ -64,9 +64,9 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
 
 bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    quint8 * dst,
-                                   KoColorSpace * dstColorSpace,
+                                   const KoColorSpace * dstColorSpace,
                                    quint32 numPixels,
-                                   qint32 renderingIntent)
+                                   qint32 renderingIntent) const
 {
     Q_UNUSED(renderingIntent);
     // 4 channels: labA, 2 bytes per lab channel
@@ -91,7 +91,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           qint32 rows,
                           qint32 cols,
                           const QString & op,
-                          const QBitArray & channelFlags)
+                          const QBitArray & channelFlags) const
 {
     if ( m_compositeOps.contains( op ) ) {
         bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, m_compositeOps.value( op ), channelFlags);
@@ -112,7 +112,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           quint8 opacity,
                           qint32 rows,
                           qint32 cols,
-                          const QString& op)
+                          const QString& op) const
 {
     if ( m_compositeOps.contains( op ) ) {
         bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, m_compositeOps.value( op ));
@@ -133,7 +133,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
                                    qint32 rows,
                                    qint32 cols,
                                    const KoCompositeOp * op,
-                                   const QBitArray & channelFlags)
+                                   const QBitArray & channelFlags) const
 {
     if (rows <= 0 || cols <= 0)
         return;
@@ -186,7 +186,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
                                    quint8 opacity,
                                    qint32 rows,
                                    qint32 cols,
-                                   const KoCompositeOp * op)
+                                   const KoCompositeOp * op) const
 {
     if (rows <= 0 || cols <= 0)
         return;

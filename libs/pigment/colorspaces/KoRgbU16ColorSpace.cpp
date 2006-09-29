@@ -38,7 +38,7 @@ KoRgbU16ColorSpace::KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorPro
     m_compositeOps.insert( COMPOSITE_ERASE, new KoCompositeOpErase<RgbU16Traits>( this ) );
 }
 
-bool KoRgbU16ColorSpace::willDegrade(ColorSpaceIndependence independence)
+bool KoRgbU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
     if (independence == TO_RGBA8) 
         return true;

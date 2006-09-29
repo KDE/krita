@@ -29,7 +29,6 @@
 #include <lcms.h>
 
 #include "KoAlphaColorSpace.h"
-//#include "KoU8ColorSpaceTrait.h"
 #include "KoChannelInfo.h"
 #include "KoID.h"
 #include "KoIntegerMaths.h"

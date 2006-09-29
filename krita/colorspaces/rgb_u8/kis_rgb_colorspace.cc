@@ -28,7 +28,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <KoU8ColorSpaceTrait.h>
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
 

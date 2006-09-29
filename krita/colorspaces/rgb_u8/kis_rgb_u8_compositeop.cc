@@ -18,7 +18,6 @@
 
 #include <KoColorSpace.h>
 #include <KoIntegerMaths.h>
-#include <KoU8ColorSpaceTrait.h>
 
 #include "kis_rgb_u8_compositeop.h"
 #include "kis_rgb_colorspace.h"

@@ -59,7 +59,7 @@ class KOTEXT_EXPORT KoTextParag
     friend class KoTextCursor;
 
 public:
-    KoTextParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
+    KoTextParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = true );
     virtual ~KoTextParag();
 
     KoTextString *string() const;
@@ -89,12 +89,12 @@ public:
     void setNext( KoTextParag *s );
 
     void insert( int index, const QString &s );
-    void append( const QString &s, bool reallyAtEnd = FALSE );
+    void append( const QString &s, bool reallyAtEnd = false );
     void truncate( int index );
     void remove( int index, int len );
 
     void move( int &dy );
-    void format( int start = -1, bool doMove = TRUE );
+    void format( int start = -1, bool doMove = true );
 
     /// Call this to ensure that format() will be called on this paragraph later on
     void invalidate( int chr /*ignored*/ = 0 );
@@ -103,7 +103,7 @@ public:
 
     /// 'changed' tells the painting code what it needs to paint
     bool hasChanged() const;
-    void setChanged( bool b, bool recursive = FALSE );
+    void setChanged( bool b, bool recursive = false );
     short int lineChanged(); // first line that has been changed.
     void setLineChanged( short int line );
 
@@ -132,7 +132,7 @@ public:
 
     QMap<int, KoTextParagLineStart*> &lineStartList();
 
-    void setFormat( int index, int len, const KoTextFormat *f, bool useCollection = TRUE, int flags = -1 );
+    void setFormat( int index, int len, const KoTextFormat *f, bool useCollection = true, int flags = -1 );
 
     void setAlignment( uint a );
     void setAlignmentDirect( uint a ) { align = a; }
@@ -467,7 +467,7 @@ inline KoTextParag *KoTextParag::next() const
 
 inline bool KoTextParag::hasAnySelection() const
 {
-    return mSelections ? !selections().isEmpty() : FALSE;
+    return mSelections ? !selections().isEmpty() : false;
 }
 
 /*inline void KoTextParag::setEndState( int s )

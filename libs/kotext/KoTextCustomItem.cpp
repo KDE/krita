@@ -31,28 +31,28 @@
 
 bool KoTextCustomItem::enter( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy, bool atEnd )
 {
-    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; Q_UNUSED( atEnd ) return TRUE;
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; Q_UNUSED( atEnd ) return true;
 
 }
 bool KoTextCustomItem::enterAt( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy, const QPoint & )
 {
-    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return true;
 }
 bool KoTextCustomItem::next( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy )
 {
-    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return true;
 }
 bool KoTextCustomItem::prev( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy )
 {
-    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return true;
 }
 bool KoTextCustomItem::down( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy )
 {
-    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return true;
 }
 bool KoTextCustomItem::up( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy )
 {
-    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return true;
 }
 
 int KoTextCustomItem::index() const

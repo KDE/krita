@@ -54,12 +54,12 @@ public:
     virtual Placement placement() const { return PlaceInline; }
     bool placeInline() { return placement() == PlaceInline; }
 
-    virtual bool ownLine() const { return FALSE; }
+    virtual bool ownLine() const { return false; }
     // Called for "ownline" items
     virtual void resize( int nwidth ) { width = nwidth; }
     virtual void invalidate() {};
 
-    virtual bool isNested() const { return FALSE; }
+    virtual bool isNested() const { return false; }
     virtual int minimumWidth() const { return 0; }
     virtual int widthHint() const { return 0; }
     virtual int ascent() const { return height; }
@@ -71,7 +71,7 @@ public:
 
     QRect geometry() const { return QRect( xpos, ypos, width, height ); }
 
-    virtual bool enter( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy, bool atEnd = FALSE );
+    virtual bool enter( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy, bool atEnd = false );
     virtual bool enterAt( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy, const QPoint & );
     virtual bool next( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy );
     virtual bool prev( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy );

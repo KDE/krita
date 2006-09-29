@@ -121,7 +121,7 @@ public:
     bool isCustom() const { return type == Custom; }
     KoTextFormat *format() const;
     KoTextCustomItem *customItem() const;
-    void setFormat( KoTextFormat *f,bool setFormatAgain=TRUE );
+    void setFormat( KoTextFormat *f,bool setFormatAgain=true );
     void setCustomItem( KoTextCustomItem *i );
     void loseCustomItem();
     struct CustomData
@@ -176,13 +176,13 @@ public:
     void remove( int index, int len );
     void clear();
 
-    void setFormat( int index, KoTextFormat *f, bool useCollection, bool setFormatAgain = FALSE );
+    void setFormat( int index, KoTextFormat *f, bool useCollection, bool setFormatAgain = false );
 
     void setBidi( bool b ) { bidi = b; }
     bool isBidi() const;
     bool isRightToLeft() const;
     QChar::Direction direction() const;
-    void setDirection( QChar::Direction d ) { dir = d; bidiDirty = TRUE; }
+    void setDirection( QChar::Direction d ) { dir = d; bidiDirty = true; }
 
     /** Set dirty flag for background spell-checking */
     void setNeedsSpellCheck( bool b ) { bNeedsSpellCheck = b; }
@@ -250,7 +250,7 @@ public:
 
     KoTextParag *parag() const;
     int index() const;
-    void setParag( KoTextParag *s, bool restore = TRUE );
+    void setParag( KoTextParag *s, bool restore = true );
 
     void gotoLeft();
     void gotoRight();
@@ -270,7 +270,7 @@ public:
     void gotoWordRight();
 
     void insert( const QString &s, bool checkNewLine, Q3MemArray<KoTextStringChar> *formatting = 0 );
-    void splitAndInsertEmptyParag( bool ind = TRUE, bool updateIds = TRUE );
+    void splitAndInsertEmptyParag( bool ind = true, bool updateIds = true );
     bool remove();
     bool removePreviousChar();
     void killLine();
@@ -279,7 +279,7 @@ public:
     bool atParagStart() const;
     bool atParagEnd() const;
 
-    void setIndex( int i, bool restore = TRUE );
+    void setIndex( int i, bool restore = true );
 
     //void checkIndex();
 
@@ -328,7 +328,7 @@ template class Q3PtrList<KoTextDocCommand>;
 class KoTextDocCommandHistory
 {
 public:
-    KoTextDocCommandHistory( int s ) : current( -1 ), steps( s ) { history.setAutoDelete( TRUE ); }
+    KoTextDocCommandHistory( int s ) : current( -1 ), steps( s ) { history.setAutoDelete( true ); }
     virtual ~KoTextDocCommandHistory() { clear(); }
 
     void clear() { history.clear(); current = -1; }
@@ -402,7 +402,7 @@ public:
     void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
     QString richText() const;
 
-    bool ownLine() const { return TRUE; }
+    bool ownLine() const { return true; }
 
 private:
     int tmpheight;
@@ -554,15 +554,15 @@ public:
     void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch,
 	       const QColorGroup& cg, bool selected );
 
-    bool noErase() const { return TRUE; }
-    bool ownLine() const { return TRUE; }
+    bool noErase() const { return true; }
+    bool ownLine() const { return true; }
     Placement placement() const { return place; }
-    bool isNested() const { return TRUE; }
+    bool isNested() const { return true; }
     void resize( int nwidth );
     virtual void invalidate();
     /// ## QString anchorAt( QPainter* p, int x, int y );
 
-    virtual bool enter( KoTextCursor *c, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy, bool atEnd = FALSE );
+    virtual bool enter( KoTextCursor *c, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy, bool atEnd = false );
     virtual bool enterAt( KoTextCursor *c, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy, const QPoint &pos );
     virtual bool next( KoTextCursor *c, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy );
     virtual bool prev( KoTextCursor *c, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy );

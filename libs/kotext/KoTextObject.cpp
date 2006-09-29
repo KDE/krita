@@ -1064,7 +1064,7 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
         //kDebug(32500) << "KoTextObject::setFormatCommand index=" << cursor->index() << " length-1=" << cursor->parag()->length() - 1 << endl;
         if ( cursor && cursor->index() == cursor->parag()->length() - 1 ) {
             newFormat->addRef();
-            cursor->parag()->string()->setFormat( cursor->index(), newFormat, TRUE );
+            cursor->parag()->string()->setFormat( cursor->index(), newFormat, true );
             if ( cursor->parag()->length() == 1 ) {
                 newFormat->addRef();
                 cursor->parag()->setFormat( newFormat );
@@ -2183,7 +2183,7 @@ KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisC
                 // Now split this parag, to make room for the next paragraphs
                 resultCursor.setParag( lastParagraph );
                 resultCursor.setIndex( pos );
-                resultCursor.splitAndInsertEmptyParag( FALSE, TRUE );
+                resultCursor.splitAndInsertEmptyParag( false, true );
                 removeNewline = true;
 
                 // Done with first parag, remove it and exit loop

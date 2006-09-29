@@ -126,7 +126,7 @@ public:
     int numSelections() const { return nSelections; }
     void addSelection( int id );
 
-    QString selectedText( int id, bool withCustom = TRUE ) const;
+    QString selectedText( int id, bool withCustom = true ) const;
     //void copySelectedText( int id );
     void removeSelectedText( int id, KoTextCursor *cursor );
 
@@ -157,10 +157,10 @@ public:
     void draw( QPainter *p, const QRect& rect, const QColorGroup &cg, const QBrush *paper = 0 );
     void drawParag( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
 		    QPixmap *&doubleBuffer, const QColorGroup &cg,
-		    bool drawCursor, KoTextCursor *cursor, bool resetChanged = TRUE );
+		    bool drawCursor, KoTextCursor *cursor, bool resetChanged = true );
     KoTextParag *draw( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
-		      bool onlyChanged = FALSE, bool drawCursor = FALSE, KoTextCursor *cursor = 0,
-		      bool resetChanged = TRUE );
+		      bool onlyChanged = false, bool drawCursor = false, KoTextCursor *cursor = 0,
+		      bool resetChanged = true );
 #endif
 
     //void setDefaultFont( const QFont &f );
@@ -205,7 +205,7 @@ public:
     int undoDepth() const { return commandHistory->undoDepth(); }
 
     int length() const;
-    void clear( bool createEmptyParag = FALSE );
+    void clear( bool createEmptyParag = false );
 
     KoTextParag* loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph );
 
@@ -216,7 +216,7 @@ public:
 
     void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
 
-    virtual KoTextParag *createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
+    virtual KoTextParag *createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = true );
 
     // Whether margins are added or max'ed.
     int addMargins() const { return true; }
@@ -297,9 +297,9 @@ public:
     /** The main drawing method. Equivalent to KoTextDocument::draw, but reimplemented
      * for wysiwyg */
     KoTextParag *drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
-                              KoTextZoomHandler* zoomHandler, bool onlyChanged = FALSE,
-                              bool drawCursor = FALSE, KoTextCursor *cursor = 0,
-                              bool resetChanged = TRUE, uint drawingFlags = KoTextDocument::DrawSelections );
+                              KoTextZoomHandler* zoomHandler, bool onlyChanged = false,
+                              bool drawCursor = false, KoTextCursor *cursor = 0,
+                              bool resetChanged = true, uint drawingFlags = KoTextDocument::DrawSelections );
 
     /** Draw a single paragraph (used by drawWYSIWYG and by KWTextFrameSet::drawCursor).
      * Equivalent to KoTextDocument::draw, but modified for wysiwyg */
@@ -307,7 +307,7 @@ public:
                            QPixmap *&doubleBuffer, const QColorGroup &cg,
                            KoTextZoomHandler* zoomHandler,
                            bool drawCursor, KoTextCursor *cursor,
-                           bool resetChanged = TRUE,
+                           bool resetChanged = true,
                            uint drawingFlags = KoTextDocument::DrawSelections );
 
     /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagString */

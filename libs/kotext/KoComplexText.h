@@ -62,7 +62,7 @@ struct KOTEXT_EXPORT KoBidiStatus {
 
 struct KOTEXT_EXPORT KoBidiContext : public Q3Shared {
     // ### ref and deref parent?
-    KoBidiContext( uchar level, QChar::Direction embedding, KoBidiContext *parent = 0, bool override = FALSE );
+    KoBidiContext( uchar level, QChar::Direction embedding, KoBidiContext *parent = 0, bool override = false );
     ~KoBidiContext();
 
     unsigned char level;

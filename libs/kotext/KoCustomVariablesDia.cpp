@@ -172,7 +172,7 @@ int KoCustomVariablesListItem::width( const QFontMetrics & fm, const Q3ListView 
 KoCustomVariablesList::KoCustomVariablesList( QWidget *parent )
     : K3ListView( parent )
 {
-    header()->setMovingEnabled( FALSE );
+    header()->setMovingEnabled( false );
     addColumn( i18n( "Variable" ) );
     addColumn( i18n( "Value" ) );
     connect( header(), SIGNAL( sizeChange( int, int, int ) ),

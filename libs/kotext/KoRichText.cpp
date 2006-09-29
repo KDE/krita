@@ -64,7 +64,7 @@ void KoTextDocCommandHistory::addCommand( KoTextDocCommand *cmd )
 {
     if ( current < (int)history.count() - 1 ) {
 	Q3PtrList<KoTextDocCommand> commands;
-	commands.setAutoDelete( FALSE );
+	commands.setAutoDelete( false );
 
 	for( int i = 0; i <= current; ++i ) {
 	    commands.insert( i, history.at( 0 ) );
@@ -74,7 +74,7 @@ void KoTextDocCommandHistory::addCommand( KoTextDocCommand *cmd )
 	commands.append( cmd );
 	history.clear();
 	history = commands;
-	history.setAutoDelete( TRUE );
+	history.setAutoDelete( true );
     } else {
 	history.append( cmd );
     }
@@ -189,7 +189,7 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
     cursor.setParag( s );
     cursor.setIndex( index );
     QString str = KoTextString::toString( text );
-    cursor.insert( str, TRUE, &text );
+    cursor.insert( str, true, &text );
     cursor.setParag( s );
     cursor.setIndex( index );
     if ( c ) {
@@ -202,7 +202,7 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
     s = cursor.parag();
     while ( s ) {
 	s->format();
-	s->setChanged( TRUE );
+	s->setChanged( true );
 	if ( s == c->parag() )
 	    break;
 	s = s->next();
@@ -379,7 +379,7 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, Q3MemArray<KoT
 {
     string->invalidate( idx );
     tmpIndex = -1;
-    bool justInsert = TRUE;
+    bool justInsert = true;
     QString s( str );
 #if defined(Q_WS_WIN)
     if ( checkNewLine )
@@ -393,27 +393,27 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, Q3MemArray<KoT
 	    for ( int i = 0; i < (int)s.length(); ++i ) {
 		if ( formatting->at( i ).format() ) {
 		    formatting->at( i ).format()->addRef();
-		    string->string()->setFormat( idx + i, formatting->at( i ).format(), TRUE );
+		    string->string()->setFormat( idx + i, formatting->at( i ).format(), true );
 		}
 	    }
 	}
 	idx += s.length();
     } else {
-	QStringList lst = QStringList::split( '\n', s, TRUE );
+	QStringList lst = QStringList::split( '\n', s, true );
 	QStringList::Iterator it = lst.begin();
 	//int y = string->rect().y() + string->rect().height();
 	int lastIndex = 0;
 	KoTextFormat *lastFormat = 0;
 	for ( ; it != lst.end(); ) {
 	    if ( it != lst.begin() ) {
-		splitAndInsertEmptyParag( FALSE, TRUE );
+		splitAndInsertEmptyParag( false, true );
 		//string->setEndState( -1 );
 #if 0 // no!
-		string->prev()->format( -1, FALSE );
+		string->prev()->format( -1, false );
 #endif
 		if ( lastFormat && formatting && string->prev() ) {
 		    lastFormat->addRef();
-		    string->prev()->string()->setFormat( string->prev()->length() - 1, lastFormat, TRUE );
+		    string->prev()->string()->setFormat( string->prev()->length() - 1, lastFormat, true );
 		}
 	    }
 	    lastFormat = 0;
@@ -429,7 +429,7 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, Q3MemArray<KoT
 		for ( int i = 0; i < len; ++i ) {
 		    if ( formatting->at( i + lastIndex ).format() ) {
 			formatting->at( i + lastIndex ).format()->addRef();
-			string->string()->setFormat( i + idx, formatting->at( i + lastIndex ).format(), TRUE );
+			string->string()->setFormat( i + idx, formatting->at( i + lastIndex ).format(), true );
 		    }
 		}
 		if ( it != lst.end() )
@@ -441,7 +441,7 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, Q3MemArray<KoT
 	    idx += s.length();
 	}
 #if 0  //// useless and wrong. We'll format things and move them down correctly in KoTextObject::insert().
-	string->format( -1, FALSE );
+	string->format( -1, false );
 	int dy = string->rect().y() + string->rect().height() - y;
 #endif
 	KoTextParag *p = string;
@@ -457,7 +457,7 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, Q3MemArray<KoT
 
 #if 0  //// useless and slow
     int h = string->rect().height();
-    string->format( -1, TRUE );
+    string->format( -1, true );
 #endif
     fixCursorPosition();
 }
@@ -501,9 +501,9 @@ bool KoTextCursor::place( const QPoint &p, KoTextParag *s, bool link, int *custo
     }
 
     if ( !s )
-	return FALSE;
+	return false;
 
-    setParag( s, FALSE );
+    setParag( s, false );
     int y = s->rect().y();
     int lines = s->lines();
     KoTextStringChar *chr = 0;
@@ -516,7 +516,7 @@ bool KoTextCursor::place( const QPoint &p, KoTextParag *s, bool link, int *custo
 	cy = s->lineY( i );
 	//ch = s->lineHeight( i );
 	if ( !chr )
-	    return FALSE;
+	    return false;
 	if ( i < lines - 1 && pos.y() >= y + cy && pos.y() <= y + s->lineY( i+1 ) )
 	    break;
     }
@@ -547,7 +547,7 @@ bool KoTextCursor::place( const QPoint &p, KoTextParag *s, bool link, int *custo
             cpos += cw;
         int d = cpos - pos.x();
         bool dm = d < 0 ? !chr->rightToLeft : chr->rightToLeft;
-        if ( (QABS( d ) < dist || (dist == d && dm == TRUE )) && string->string()->validCursorPosition( i ) ) {
+        if ( (QABS( d ) < dist || (dist == d && dm == true )) && string->string()->validCursorPosition( i ) ) {
             dist = QABS( d );
             if ( !link || pos.x() >= x + chr->x ) {
                 curpos = i;
@@ -555,9 +555,9 @@ bool KoTextCursor::place( const QPoint &p, KoTextParag *s, bool link, int *custo
         }
 	i++;
     }
-    setIndex( curpos, FALSE );
+    setIndex( curpos, false );
 
-    return TRUE;
+    return true;
 }
 
 void KoTextCursor::gotoRight()
@@ -783,7 +783,7 @@ void KoTextCursor::gotoPreviousWord()
     gotoPreviousLetter();
     tmpIndex = -1;
     KoTextString *s = string->string();
-    bool allowSame = FALSE;
+    bool allowSame = false;
     if ( idx == ( (int)s->length()-1 ) )
         return;
     for ( int i = idx; i >= 0; --i ) {
@@ -796,7 +796,7 @@ void KoTextCursor::gotoPreviousWord()
 	}
 	if ( !allowSame && !( s->at( i ).c.isSpace() || s->at( i ).c == '\t' || s->at( i ).c == '.' ||
 			      s->at( i ).c == ',' || s->at( i ).c == ':' || s->at( i ).c == ';'  ) )
-	    allowSame = TRUE;
+	    allowSame = true;
     }
     idx = 0;
 }
@@ -805,7 +805,7 @@ void KoTextCursor::gotoNextWord()
 {
     tmpIndex = -1;
     KoTextString *s = string->string();
-    bool allowSame = FALSE;
+    bool allowSame = false;
     for ( int i = idx; i < (int)s->length(); ++i ) {
 	if ( ! ( s->at( i ).c.isSpace() || s->at( i ).c == '\t' || s->at( i ).c == '.' ||
 	     s->at( i ).c == ',' || s->at( i ).c == ':' || s->at( i ).c == ';' ) ) {
@@ -816,7 +816,7 @@ void KoTextCursor::gotoNextWord()
 	}
 	if ( !allowSame && ( s->at( i ).c.isSpace() || s->at( i ).c == '\t' || s->at( i ).c == '.' ||
 			      s->at( i ).c == ',' || s->at( i ).c == ':' || s->at( i ).c == ';'  ) )
-	    allowSame = TRUE;
+	    allowSame = true;
     }
 
     if ( idx < ((int)s->length()-1) ) {
@@ -862,7 +862,7 @@ void KoTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
 	KoTextParag *n = string->next();
 	KoTextParag *s = doc->createParag( doc, string, n, updateIds );
 	if ( f )
-	    s->setFormat( 0, 1, f, TRUE );
+	    s->setFormat( 0, 1, f, true );
 	s->copyParagData( string );
 #if 0
 	if ( ind ) {
@@ -880,7 +880,7 @@ void KoTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
 	KoTextParag *p = string->prev();
 	KoTextParag *s = doc->createParag( doc, p, string, updateIds );
 	if ( f )
-	    s->setFormat( 0, 1, f, TRUE );
+	    s->setFormat( 0, 1, f, true );
 	s->copyParagData( string );
 	if ( ind ) {
 	    //s->indent();
@@ -894,10 +894,10 @@ void KoTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
 	KoTextParag *s = doc->createParag( doc, string, n, updateIds );
 	s->copyParagData( string );
 	s->remove( 0, 1 );
-	s->append( str, TRUE );
+	s->append( str, true );
 	for ( uint i = 0; i < str.length(); ++i ) {
             KoTextStringChar* tsc = string->at( idx + i );
-	    s->setFormat( i, 1, tsc->format(), TRUE );
+	    s->setFormat( i, 1, tsc->format(), true );
 	    if ( tsc->isCustom() ) {
 		KoTextCustomItem * item = tsc->customItem();
 		s->at( i )->setCustomItem( item );
@@ -934,17 +934,17 @@ bool KoTextCursor::removePreviousChar()
 	idx--;
 	// shouldn't be needed, just to make sure.
 	fixCursorPosition();
-	string->format( -1, TRUE );
+	string->format( -1, true );
 	//else if ( string->document() && string->document()->parent() )
-	//    string->document()->nextDoubleBuffered = TRUE;
-	return FALSE;
+	//    string->document()->nextDoubleBuffered = true;
+	return false;
     } else if ( string->prev() ) {
 	string = string->prev();
 	string->join( string->next() );
 	string->invalidateCounters();
-	return TRUE;
+	return true;
     }
-    return FALSE;
+    return false;
 }
 
 bool KoTextCursor::remove()
@@ -953,10 +953,10 @@ bool KoTextCursor::remove()
     if ( !atParagEnd() ) {
 	int next = string->string()->nextCursorPosition( idx );
 	string->remove( idx, next-idx );
-	string->format( -1, TRUE );
+	string->format( -1, true );
 	//else if ( doc && doc->parent() )
-	//    doc->nextDoubleBuffered = TRUE;
-	return FALSE;
+	//    doc->nextDoubleBuffered = true;
+	return false;
     } else if ( string->next() ) {
 	if ( string->length() == 1 ) {
 	    string->next()->setPrev( string->prev() );
@@ -973,17 +973,17 @@ bool KoTextCursor::remove()
 	    while ( s ) {
 		s->id = s->p ? s->p->id + 1 : 0;
 		//s->state = -1;
-		//s->needPreProcess = TRUE;
-		s->changed = TRUE;
+		//s->needPreProcess = true;
+		s->changed = true;
 		s = s->n;
 	    }
 	    string->format();
 	} else {
 	    string->join( string->next() );
 	}
-	return TRUE;
+	return true;
     }
-    return FALSE;
+    return false;
 }
 
 void KoTextCursor::killLine()
@@ -991,9 +991,9 @@ void KoTextCursor::killLine()
     if ( atParagEnd() )
 	return;
     string->remove( idx, string->length() - idx - 1 );
-    string->format( -1, TRUE );
+    string->format( -1, true );
     //else if ( doc && doc->parent() )
-    //doc->nextDoubleBuffered = TRUE;
+    //doc->nextDoubleBuffered = true;
 }
 
 #if 0
@@ -1071,10 +1071,10 @@ void KoTextCursor::fixCursorPosition()
 
 KoTextString::KoTextString()
 {
-    bidiDirty = TRUE;
+    bidiDirty = true;
     bNeedsSpellCheck = true;
-    bidi = FALSE;
-    rightToLeft = FALSE;
+    bidi = false;
+    rightToLeft = false;
     dir = QChar::DirON;
 }
 
@@ -1119,7 +1119,7 @@ void KoTextString::insert( int index, const QString &s, KoTextFormat *f )
 #endif
 	ch.setFormat( f );
     }
-    bidiDirty = TRUE;
+    bidiDirty = true;
     bNeedsSpellCheck = true;
 }
 
@@ -1147,7 +1147,7 @@ void KoTextString::insert( int index, KoTextStringChar *c )
     ch.d.format = 0;
     ch.type = KoTextStringChar::Regular;
     ch.setFormat( c->format() );
-    bidiDirty = TRUE;
+    bidiDirty = true;
     bNeedsSpellCheck = true;
 }
 
@@ -1170,7 +1170,7 @@ void KoTextString::truncate( int index )
 	}
     }
     data.truncate( index );
-    bidiDirty = TRUE;
+    bidiDirty = true;
     bNeedsSpellCheck = true;
 }
 
@@ -1191,7 +1191,7 @@ void KoTextString::remove( int index, int len )
     memmove( data.data() + index, data.data() + index + len,
 	     sizeof( KoTextStringChar ) * ( data.size() - index - len ) );
     data.resize( data.size() - len, Q3GArray::SpeedOptim );
-    bidiDirty = TRUE;
+    bidiDirty = true;
     bNeedsSpellCheck = true;
 }
 
@@ -1234,10 +1234,10 @@ void KoTextString::setFormat( int index, KoTextFormat *f, bool useCollection, bo
 void KoTextString::checkBidi() const
 {
     KoTextString *that = (KoTextString *)this;
-    that->bidiDirty = FALSE;
+    that->bidiDirty = false;
     int length = data.size();
     if ( !length ) {
-        that->bidi = FALSE;
+        that->bidi = false;
         that->rightToLeft = dir == QChar::DirR;
         return;
     }
@@ -1261,7 +1261,7 @@ void KoTextString::checkBidi() const
             Q_ASSERT( item < &textEngine.items[textEngine.items.size()] );
             bidiLevel = item->analysis.bidiLevel;
             if ( bidiLevel )
-                that->bidi = TRUE;
+                that->bidi = true;
         }
 #endif
         // TODO ch->softBreak = ca->softBreak;
@@ -1275,12 +1275,12 @@ void KoTextString::checkBidi() const
     }
 
     if ( dir == QChar::DirR ) {
-        that->bidi = TRUE;
-        that->rightToLeft = TRUE;
+        that->bidi = true;
+        that->rightToLeft = true;
     } else if ( dir == QChar::DirL ) {
-        that->rightToLeft = FALSE;
+        that->rightToLeft = false;
     } else {
-	that->rightToLeft = FALSE; // TODO RTL: (textEngine.direction == QChar::DirR);
+	that->rightToLeft = false; // TODO RTL: (textEngine.direction == QChar::DirR);
     }
 #endif
 }
@@ -1478,7 +1478,7 @@ int KoTextStringChar::descent() const
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 KoTextFormatterBase::KoTextFormatterBase()
-    : wrapColumn( -1 ), //wrapEnabled( TRUE ),
+    : wrapColumn( -1 ), //wrapEnabled( true ),
       m_bViewFormattingChars( false ),
       biw( true /*default in kotext*/ )
 {
@@ -1536,7 +1536,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
 	}
     }
     int toAdd = 0;
-    bool first = TRUE;
+    bool first = true;
     KoTextRun *r = runs->first();
     int xmax = -0xffffff;
     while ( r ) {
@@ -1551,13 +1551,13 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
 		    space -= s;
 		    numSpaces--;
 		} else if ( first ) {
-		    first = FALSE;
+		    first = false;
 		    if ( c->c == ' ' )
 			x -= c->format()->width( ' ' );
 		}
 		c->x = x + toAdd;
-		c->rightToLeft = TRUE;
-		c->startOfRun = FALSE;
+		c->rightToLeft = true;
+		c->startOfRun = false;
 		int ww = 0;
 		if ( c->c.unicode() >= 32 || c->c == '\t' || c->c == '\n' || c->isCustom() ) {
 		    ww = c->width;
@@ -1578,13 +1578,13 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
 		    space -= s;
 		    numSpaces--;
 		} else if ( first ) {
-		    first = FALSE;
+		    first = false;
 		    if ( c->c == ' ' )
 			x -= c->format()->width( ' ' );
 		}
 		c->x = x + toAdd;
-		c->rightToLeft = FALSE;
-		c->startOfRun = FALSE;
+		c->rightToLeft = false;
+		c->startOfRun = false;
 		int ww = 0;
 		if ( c->c.unicode() >= 32 || c->c == '\t' || c->isCustom() ) {
 		    ww = c->width;
@@ -1597,7 +1597,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
 		pos++;
 	    }
 	}
-	text->at( r->start + start ).startOfRun = TRUE;
+	text->at( r->start + start ).startOfRun = true;
 	r = runs->next();
     }
 
@@ -1621,7 +1621,7 @@ bool KoTextFormatterBase::isStretchable( KoTextString *string, int pos ) const
 bool KoTextFormatterBase::isBreakable( KoTextString *string, int pos ) const
 {
     //if (string->at(pos).nobreak)
-    //    return FALSE;
+    //    return false;
     return (pos < string->length()-1 && string->at(pos+1).softBreak);
 }
 
@@ -1666,12 +1666,12 @@ int KoTextFormatterBase::formatVertically( KoTextDocument* doc, KoTextParag* par
 	    int delta = c->customItem()->height - h;
 	    ls->h += delta;
 	    if ( delta )
-		parag->setMovedDown( TRUE );
+		parag->setMovedDown( true );
 	} else {
 	    int shift = doc->flow()->adjustFlow( parag->rect().y() + ls->y, ls->w, ls->h );
 	    ls->y += shift;
 	    if ( shift )
-		parag->setMovedDown( TRUE );
+		parag->setMovedDown( true );
 	}
 	h = ls->y + ls->h;
     }
@@ -1700,8 +1700,8 @@ KoTextCustomItem::~KoTextCustomItem()
 KoTextFlow::KoTextFlow()
 {
     w = 0;
-    leftItems.setAutoDelete( FALSE );
-    rightItems.setAutoDelete( FALSE );
+    leftItems.setAutoDelete( false );
+    rightItems.setAutoDelete( false );
 }
 
 KoTextFlow::~KoTextFlow()

@@ -900,7 +900,7 @@ Q3PtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, co
     //printf("doing BiDi reordering from %d to %d!\n", start, last);
 
     Q3PtrList<KoTextRun> *runs = new Q3PtrList<KoTextRun>;
-    runs->setAutoDelete(TRUE);
+    runs->setAutoDelete(true);
 
     KoBidiContext *context = control->context;
     if ( !context ) {
@@ -985,7 +985,7 @@ Q3PtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, co
 		if(level < 61) {
 		    runs->append( new KoTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
-		    context = new KoBidiContext(level, QChar::DirR, context, TRUE);
+		    context = new KoBidiContext(level, QChar::DirR, context, true);
 		    dir = QChar::DirR;
 		    status.last = QChar::DirR;
 		    status.lastStrong = QChar::DirR;
@@ -1002,7 +1002,7 @@ Q3PtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, co
 		if(level < 61) {
 		    runs->append( new KoTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
-		    context = new KoBidiContext(level, QChar::DirL, context, TRUE);
+		    context = new KoBidiContext(level, QChar::DirL, context, true);
 		    dir = QChar::DirL;
 		    status.last = QChar::DirL;
 		    status.lastStrong = QChar::DirL;

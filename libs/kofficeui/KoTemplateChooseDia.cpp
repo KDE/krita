@@ -372,7 +372,7 @@ void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, QGridLayout * la
     foreach( QPushButton* button, buttons )
         button->hide();
 
-    d->m_filedialog->setSizeGripEnabled ( FALSE );
+    d->m_filedialog->setSizeGripEnabled ( false );
 
     const QStringList mimeFilter = KoFilterManager::mimeFilter( d->m_format,
                                                                 KoFilterManager::Import,
@@ -819,7 +819,7 @@ void KoTCDRecentFilesIconView::showToolTip( Q3IconViewItem* item )
         toolTip->move(toolTip->x(), screen.bottom()-toolTip->y()-toolTip->height()+toolTip->y());
     }
     toolTip->setFont( QToolTip::font() );
-    toolTip->setPalette( QToolTip::palette(), TRUE );
+    toolTip->setPalette( QToolTip::palette(), true );
     toolTip->show();
 #endif
 

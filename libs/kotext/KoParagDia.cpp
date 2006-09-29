@@ -475,7 +475,7 @@ int KoSpinBox::mapTextToValue( bool * ok )
     int ret;
     QString txt = text();
 
-    *ok = TRUE;
+    *ok = true;
     switch(m_Etype)
     {
         case NUM:
@@ -500,7 +500,7 @@ int KoSpinBox::mapTextToValue( bool * ok )
     }
 
     if (ret == -1)
-        *ok = FALSE;
+        *ok = false;
 
     return ret;
 }

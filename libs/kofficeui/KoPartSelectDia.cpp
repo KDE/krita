@@ -43,8 +43,8 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
     listview = new Q3ListView( this );
     listview->addColumn( i18n( "Object" ) );
     listview->addColumn( i18n( "Comment" ) );
-    listview->setAllColumnsShowFocus( TRUE );
-    listview->setShowSortIndicator( TRUE );
+    listview->setAllColumnsShowFocus( true );
+    listview->setShowSortIndicator( true );
     setMainWidget( listview );
     connect( listview, SIGNAL( doubleClicked( Q3ListViewItem * ) ),
 	     this, SLOT( slotOk() ) );

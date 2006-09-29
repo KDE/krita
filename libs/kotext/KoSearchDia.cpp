@@ -615,25 +615,25 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
 
 
     Q3ButtonGroup *grpBold = new Q3ButtonGroup( 1, Qt::Vertical, page );
-    grpBold->setRadioButtonExclusive( TRUE );
+    grpBold->setRadioButtonExclusive( true );
     grpBold->layout();
     m_boldYes=new QRadioButton( i18n("Yes"), grpBold );
     m_boldNo=new QRadioButton( i18n("No"), grpBold );
 
     Q3ButtonGroup *grpItalic = new Q3ButtonGroup( 1, Qt::Vertical, page );
-    grpItalic->setRadioButtonExclusive( TRUE );
+    grpItalic->setRadioButtonExclusive( true );
     grpItalic->layout();
     m_italicYes=new QRadioButton( i18n("Yes"), grpItalic );
     m_italicNo=new QRadioButton( i18n("No"), grpItalic );
 
     Q3ButtonGroup *grpShadow = new Q3ButtonGroup( 1, Qt::Vertical, page );
-    grpShadow->setRadioButtonExclusive( TRUE );
+    grpShadow->setRadioButtonExclusive( true );
     grpShadow->layout();
     m_shadowYes=new QRadioButton( i18n("Yes"), grpShadow );
     m_shadowNo=new QRadioButton( i18n("No"), grpShadow );
 
     Q3ButtonGroup *grpWordByWord = new Q3ButtonGroup( 1, Qt::Vertical, page );
-    grpWordByWord->setRadioButtonExclusive( TRUE );
+    grpWordByWord->setRadioButtonExclusive( true );
     grpWordByWord->layout();
     m_wordByWordYes=new QRadioButton( i18n("Yes"), grpWordByWord );
     m_wordByWordNo=new QRadioButton( i18n("No"), grpWordByWord );

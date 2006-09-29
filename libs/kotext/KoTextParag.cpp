@@ -44,11 +44,11 @@
 KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, bool updateIds )
     : p( pr ), n( nx ), doc( d ),
       m_invalid( true ),
-      changed( FALSE ),
-      fullWidth( TRUE ),
-      newLinesAllowed( TRUE ), // default in kotext
-      visible( TRUE ), //breakable( TRUE ),
-      movedDown( FALSE ),
+      changed( false ),
+      fullWidth( true ),
+      newLinesAllowed( true ), // default in kotext
+      visible( true ), //breakable( true ),
+      movedDown( false ),
       m_toc( false ),
       align( 0 ),
       m_lineChanged( -1 ),
@@ -75,10 +75,10 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
     if ( !n && doc )
 	doc->setLastParag( this );
 
-    //firstFormat = TRUE; //// unused
-    //firstPProcess = TRUE;
+    //firstFormat = true; //// unused
+    //firstPProcess = true;
     //state = -1;
-    //needPreProcess = FALSE;
+    //needPreProcess = false;
 
     if ( p )
 	id = p->id + 1;
@@ -191,14 +191,14 @@ void KoTextParag::insert( int index, const QString &s )
 {
     str->insert( index, s, formatCollection()->defaultFormat() );
     invalidate( index );
-    //needPreProcess = TRUE;
+    //needPreProcess = true;
 }
 
 void KoTextParag::truncate( int index )
 {
     str->truncate( index );
     insert( length(), " " );
-    //needPreProcess = TRUE;
+    //needPreProcess = true;
 }
 
 void KoTextParag::remove( int index, int len )
@@ -214,7 +214,7 @@ void KoTextParag::remove( int index, int len )
     }
     str->remove( index, len );
     invalidate( 0 );
-    //needPreProcess = TRUE;
+    //needPreProcess = true;
 }
 
 void KoTextParag::join( KoTextParag *s )
@@ -232,12 +232,12 @@ void KoTextParag::join( KoTextParag *s )
 	remove( length() - 1, 1 );
 	--start;
     }
-    append( s->str->toString(), TRUE );
+    append( s->str->toString(), true );
 
     for ( int i = 0; i < s->length(); ++i ) {
 	if ( !doc || doc->useFormatCollection() ) {
 	    s->str->at( i ).format()->addRef();
-	    str->setFormat( i + start, s->str->at( i ).format(), TRUE );
+	    str->setFormat( i + start, s->str->at( i ).format(), true );
 	}
 	if ( s->str->at( i ).isCustom() ) {
 	    KoTextCustomItem * item = s->str->at( i ).customItem();
@@ -261,14 +261,14 @@ void KoTextParag::join( KoTextParag *s )
     invalidateCounters();
     ////
     r.setHeight( oh );
-    //needPreProcess = TRUE;
+    //needPreProcess = true;
     if ( n ) {
 	KoTextParag *s = n;
 	while ( s ) {
 	    s->id = s->p->id + 1;
 	    //s->state = -1;
-	    //s->needPreProcess = TRUE;
-	    s->changed = TRUE;
+	    //s->needPreProcess = true;
+	    s->changed = true;
 	    s = s->n;
 	}
     }
@@ -281,7 +281,7 @@ void KoTextParag::move( int &dy )
     //kDebug(32500) << "KoTextParag::move paragId=" << paragId() << " dy=" << dy << endl;
     if ( dy == 0 )
 	return;
-    changed = TRUE;
+    changed = true;
     r.moveBy( 0, dy );
     if ( mFloatingItems ) {
 	for ( KoTextCustomItem *i = mFloatingItems->first(); i; i = mFloatingItems->next() ) {
@@ -289,16 +289,16 @@ void KoTextParag::move( int &dy )
 	}
     }
     //if ( p )
-    //    p->lastInFrame = TRUE; // Qt does this, but the loop at the end of format() calls move a lot!
+    //    p->lastInFrame = true; // Qt does this, but the loop at the end of format() calls move a lot!
 
-    movedDown = FALSE;
+    movedDown = false;
 
     // do page breaks if required
     if ( doc && doc->isPageBreakEnabled() ) {
 	int shift;
 	if ( ( shift = doc->formatter()->formatVertically(  doc, this ) ) ) {
 	    if ( p )
-		p->setChanged( TRUE );
+		p->setChanged( true );
 	    dy += shift;
 	}
     }
@@ -316,10 +316,10 @@ void KoTextParag::format( int start, bool doMove )
 
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     //if ( p )
-    //    p->lastInFrame = FALSE;
+    //    p->lastInFrame = false;
 
-    movedDown = FALSE;
-    bool formattedAgain = FALSE;
+    movedDown = false;
+    bool formattedAgain = false;
 
  formatAgain:
     r.setWidth( documentWidth() );
@@ -392,7 +392,7 @@ void KoTextParag::format( int start, bool doMove )
         int shift = doc->formatter()->formatVertically( doc, this );
         //kDebug(32500) << "formatVertically returned shift=" << shift << endl;
         if ( shift && !formattedAgain ) {
-            formattedAgain = TRUE;
+            formattedAgain = true;
             goto formatAgain;
         }
     }
@@ -412,12 +412,12 @@ void KoTextParag::format( int start, bool doMove )
                 break;
             }
 	    if ( !s->isFullWidth() )
-		makeInvalid = TRUE;
+		makeInvalid = true;
 	    if ( makeInvalid )
 		s->invalidate( 0 );
 	    s->move( dy );
 	    //if ( s->lastInFrame )
-            //    makeInvalid = TRUE;
+            //    makeInvalid = true;
   	    s = s->n;
 	}
     }
@@ -459,13 +459,13 @@ void KoTextParag::format( int start, bool doMove )
         }
     }
 
-    //firstFormat = FALSE; //// unused
+    //firstFormat = false; //// unused
     if ( formatterWorked ) // only if it worked, i.e. we had some width to format it
     {
         m_invalid = false;
     }
-    changed = TRUE;
-    //####   str->setTextChanged( FALSE );
+    changed = true;
+    //####   str->setTextChanged( false );
 }
 
 int KoTextParag::lineHeightOfChar( int i, int *bl, int *y ) const
@@ -585,7 +585,7 @@ void KoTextParag::setFormat( int index, int len, const KoTextFormat *_f, bool us
     for ( int i = 0; i < len; ++i ) {
 	of = str->at( i + index ).format();
 	if ( !changed && _f->key() != of->key() )
-	    changed = TRUE;
+	    changed = true;
         // Check things that need the textformatter to run
         // (e.g. not color changes)
         // ######## Is this test exhaustive?
@@ -680,14 +680,14 @@ void KoTextParag::show()
 {
     if ( visible || !doc )
 	return;
-    visible = TRUE;
+    visible = true;
 }
 
 void KoTextParag::hide()
 {
     if ( !visible || !doc )
 	return;
-    visible = FALSE;
+    visible = false;
 }
 
 void KoTextParag::setDirection( QChar::Direction d )
@@ -719,7 +719,7 @@ void KoTextParag::setSelection( int id, int start, int end )
     sel.start = start;
     sel.end = end;
     (*mSelections)[ id ] = sel;
-    setChanged( TRUE, TRUE );
+    setChanged( true, true );
 }
 
 void KoTextParag::removeSelection( int id )
@@ -728,7 +728,7 @@ void KoTextParag::removeSelection( int id )
 	return;
     if ( mSelections )
 	mSelections->remove( id );
-    setChanged( TRUE, TRUE );
+    setChanged( true, true );
 }
 
 int KoTextParag::selectionStart( int id ) const
@@ -754,20 +754,20 @@ int KoTextParag::selectionEnd( int id ) const
 bool KoTextParag::hasSelection( int id ) const
 {
     if ( !mSelections )
-	return FALSE;
+	return false;
     QMap<int, KoTextParagSelection>::ConstIterator it = mSelections->find( id );
     if ( it == mSelections->end() )
-	return FALSE;
+	return false;
     return ( *it ).start != ( *it ).end || length() == 1;
 }
 
 bool KoTextParag::fullSelected( int id ) const
 {
     if ( !mSelections )
-	return FALSE;
+	return false;
     QMap<int, KoTextParagSelection>::ConstIterator it = mSelections->find( id );
     if ( it == mSelections->end() )
-	return FALSE;
+	return false;
     return ( *it ).start == 0 && ( *it ).end == str->length() - 1;
 }
 
@@ -849,9 +849,9 @@ uint KoTextParag::alignment() const
 void KoTextParag::setFormat( KoTextFormat *fm )
 {
 #if 0
-    bool doUpdate = FALSE;
+    bool doUpdate = false;
     if (defFormat && (defFormat != formatCollection()->defaultFormat()))
-       doUpdate = TRUE;
+       doUpdate = true;
 #endif
     defFormat = formatCollection()->format( fm );
 #if 0
@@ -1519,13 +1519,13 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
     Q3MemArray<int> selectionStarts( nSels );
     Q3MemArray<int> selectionEnds( nSels );
     if ( drawSelections ) {
-	bool hasASelection = FALSE;
+	bool hasASelection = false;
 	for ( int i = 0; i < nSels; ++i ) {
 	    if ( !hasSelection( i ) ) {
 		selectionStarts[ i ] = -1;
 		selectionEnds[ i ] = -1;
 	    } else {
-		hasASelection = TRUE;
+		hasASelection = true;
 		selectionStarts[ i ] = selectionStart( i );
 		int end = selectionEnd( i );
 		if ( end == length() - 1 && n && n->hasSelection( i ) )
@@ -1534,7 +1534,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
 	    }
 	}
 	if ( !hasASelection )
-	    drawSelections = FALSE;
+	    drawSelections = false;
     }
 
     // Draw the lines!
@@ -1618,7 +1618,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
 	    // we flush when the selection state changes
 	    if ( drawSelections ) {
                 // check if selection state changed - TODO update from QRT
-		bool selectionChange = FALSE;
+		bool selectionChange = false;
 		if ( drawSelections ) {
 		    for ( int j = 0; j < nSels; ++j ) {
 			selectionChange = selectionStarts[ j ] == i+1 || selectionEnds[ j ] == i+1;
@@ -1790,7 +1790,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
                 drawParagStringInternal( painter, str, start, draw_len, draw_startX_pix,
                                          lastY_pix, baseLine_pix,
                                          draw_bw,
-                                         h_pix, FALSE /*drawSelections*/,
+                                         h_pix, false /*drawSelections*/,
                                          format, selectionStarts,
                                          selectionEnds, cg, rightToLeft, line, zh, true );
                 painter.restore();
@@ -2519,7 +2519,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoTextZoo
         p->drawLine( startX, y, startX + bw, y );
         p->restore();
         if ( font.underline() ) { // can this happen?
-            font.setUnderline( FALSE );
+            font.setUnderline( false );
             p->setFont( font );
         }
     }
@@ -2556,7 +2556,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoTextZoo
 
         p->drawLine( startX, y, startX + bw, y );
         p->restore();
-        font.setUnderline( FALSE );
+        font.setUnderline( false );
         p->setFont( font );
     }
     else if ( format->waveUnderline() )
@@ -2589,7 +2589,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoTextZoo
 	anc=acos(1.0-2*(static_cast<double>((startX+bw)%offset)/static_cast<double>(offset)))/3.1415*180;
 	p->drawArc( zigzag_x, y, offset, offset, 180*16, -qRound(pos*anc*16) );
 	p->restore();
-        font.setUnderline( FALSE );
+        font.setUnderline( false );
         p->setFont( font );
     }
 
@@ -2629,7 +2629,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoTextZoo
         y -= static_cast<int>(5*dimd);
         p->drawLine( startX, y, startX + bw, y );
         p->restore();
-        font.setStrikeOut( FALSE );
+        font.setStrikeOut( false );
         p->setFont( font );
     }
     else if ( format->strikeOutType() == KoTextFormat::S_DOUBLE )
@@ -2663,7 +2663,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoTextZoo
 	y -= static_cast<int>(2*dimd);
         p->drawLine( startX, y, startX + bw, y);
         p->restore();
-        font.setStrikeOut( FALSE );
+        font.setStrikeOut( false );
         p->setFont( font );
     }
 
@@ -2785,7 +2785,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             KoTextFormat f;
             f.load( context );
             //kDebug(32500) << "loadOasisSpan: applying formatting from " << pos << " to " << pos+length << "\n   format=" << f.key() << endl;
-            setFormat( pos, length, document()->formatCollection()->format( &f ), TRUE );
+            setFormat( pos, length, document()->formatCollection()->format( &f ), true );
             pos += length;
         }
         context.styleStack().restore();
@@ -2847,7 +2847,7 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
     // Apply default format to trailing space
     const int len = str->length();
     Q_ASSERT( len >= 1 );
-    setFormat( len - 1, 1, paragFormat(), TRUE );
+    setFormat( len - 1, 1, paragFormat(), true );
 
     setChanged( true );
     invalidate( 0 );

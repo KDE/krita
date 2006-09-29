@@ -228,7 +228,7 @@ bool KoTextFormatterCore::format()
     if ( maxY == 0 )
         kDebug(32500) << "KoTextFormatter::format " << parag->paragId() << " warning, maxY=0" << endl;
 #endif
-    bool fullWidth = TRUE;
+    bool fullWidth = true;
     //int marg = left + initialRMargin;
 
     // minw is the really minimum width needed for this paragraph, i.e.
@@ -251,7 +251,7 @@ bool KoTextFormatterCore::format()
     int tmpBaseLine = 0, tmph = 0;
     //int tminw = marg;
     int tmpWused = 0;
-    bool lastWasNonInlineCustom = FALSE;
+    bool lastWasNonInlineCustom = false;
     bool abort = false;
 
     int align = parag->alignment();
@@ -284,9 +284,9 @@ bool KoTextFormatterCore::format()
         }
 
         if ( c->isCustom() && c->customItem()->placement() != KoTextCustomItem::PlaceInline )
-            lastWasNonInlineCustom = TRUE;
+            lastWasNonInlineCustom = true;
         else
-            lastWasNonInlineCustom = FALSE;
+            lastWasNonInlineCustom = false;
 
         QPair<int, int> widths = determineCharWidth();
         ww = widths.first;
@@ -513,7 +513,7 @@ bool KoTextFormatterCore::format()
                             ww = nx - x;
                     }
                     if ( x != left || availableWidth != dw )
-                        fullWidth = FALSE;
+                        fullWidth = false;
                     lineStart->y = y;
                     parag->insertLineStart( i, lineStart );
                     tempWordData.clear();
@@ -606,7 +606,7 @@ bool KoTextFormatterCore::format()
                     initialLMargin = x;
                     availableWidth = dw - initialRMargin;
                     if ( x != left || availableWidth != dw )
-                        fullWidth = FALSE;
+                        fullWidth = false;
                     lineStart->y = y;
                     parag->insertLineStart( i + 1, lineStart );
                     tempWordData.clear();
@@ -1037,7 +1037,7 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
     int pixelx = zh->layoutUnitToPixelX( x );
     int toAdd = 0;
     int toAddPix = 0;
-    bool first = TRUE;
+    bool first = true;
     KoTextRun *r = runs->first();
     int xmax = -0xffffff;
     while ( r ) {
@@ -1058,7 +1058,7 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
                     chr.width += s;
                     chr.pixelwidth += zh->layoutUnitToPixelX( s ); // ### rounding problem, recalculate
                 } else if ( first ) {
-                    first = FALSE;
+                    first = false;
                     if ( chr.c == ' ' ) // trailing space
                     {
                         //x -= chr.format()->width( ' ' );
@@ -1071,8 +1071,8 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
 #ifdef DEBUG_FORMATTER
                 kDebug(32500) << "koBidiReorderLine: pos=" << pos << " x(LU)=" << x << " toAdd(LU)=" << toAdd << " -> chr.x=" << chr.x << " pixelx=" << pixelx << "+" << zh->layoutUnitToPixelX( toAdd ) << ", pixelxadj=" << pixelx+zh->layoutUnitToPixelX( toAdd )-zh->layoutUnitToPixelX( chr.x ) << endl;
 #endif
-                chr.rightToLeft = TRUE;
-                chr.startOfRun = FALSE;
+                chr.rightToLeft = true;
+                chr.startOfRun = false;
                 int ww = chr.width;
                 if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
                 x += ww;
@@ -1093,7 +1093,7 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
                     space -= s;
                     numSpaces--;
                 } else if ( first ) {
-                    first = FALSE;
+                    first = false;
                     if ( chr.c == ' ' ) // trailing space
                     {
                         //x -= chr.format()->width( ' ' );
@@ -1103,8 +1103,8 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
                 }
                 chr.x = x + toAdd;
                 chr.pixelxadj = pixelx + toAddPix - zh->layoutUnitToPixelX( chr.x );
-                chr.rightToLeft = FALSE;
-                chr.startOfRun = FALSE;
+                chr.rightToLeft = false;
+                chr.startOfRun = false;
                 int ww = chr.width;
                 //kDebug(32500) << "setting char " << pos << " at pos " << chr.x << endl;
                 if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
@@ -1113,7 +1113,7 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
                 pos++;
             }
         }
-        text->at( r->start + start ).startOfRun = TRUE;
+        text->at( r->start + start ).startOfRun = true;
         r = runs->next();
     }
 

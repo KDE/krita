@@ -56,9 +56,9 @@ void KoTextFormat::zoomChanged()
 
 KoTextFormat::KoTextFormat()
 {
-    //linkColor = TRUE;
+    //linkColor = true;
     ref = 0;
-    missp = FALSE;
+    missp = false;
     va = AlignNormal;
     collection = 0;
     //// kotext: WYSIWYG works much much better with scalable fonts -> force it to be scalable
@@ -85,7 +85,7 @@ KoTextFormat::KoTextFormat()
 }
 
 KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_language, bool hyphenation, KoTextFormatCollection *parent )
-    : fn( f ), col( c ) /*fm( QFontMetrics( f ) ),*/ //linkColor( TRUE )
+    : fn( f ), col( c ) /*fm( QFontMetrics( f ) ),*/ //linkColor( true )
 {
 #ifdef DEBUG_COLLECTION
     kDebug(32500) << "KoTextFormat with font & color & parent (" << parent << "), addRef. " << this << endl;
@@ -105,7 +105,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_lan
     //hei = fm.height();
     //asc = fm.ascent();
     //dsc = fm.descent();
-    missp = FALSE;
+    missp = false;
     va = AlignNormal;
     //// kotext
     d = new KoTextFormatPrivate;
@@ -1683,7 +1683,7 @@ KoTextFormatCollection::KoTextFormatCollection()
     defFormat = new KoTextFormat( QApplication::font(), QColor(), KGlobal::locale()->language(), false );
     lastFormat = cres = 0;
     cflags = -1;
-    cKey.setAutoDelete( TRUE );
+    cKey.setAutoDelete( true );
     cachedFormat = 0;
 }
 
@@ -1696,7 +1696,7 @@ KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const 
     defFormat = new KoTextFormat( defaultFont, defaultColor, defaultLanguage, defaultHyphenation );
     lastFormat = cres = 0;
     cflags = -1;
-    cKey.setAutoDelete( TRUE );
+    cKey.setAutoDelete( true );
     cachedFormat = 0;
 }
 
@@ -1815,7 +1815,7 @@ KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, c
 	return cachedFormat;
     }
 
-    QString key = KoTextFormat::getKey( f, c, FALSE, KoTextFormat::AlignNormal );
+    QString key = KoTextFormat::getKey( f, c, false, KoTextFormat::AlignNormal );
     cachedFormat = cKey.find( key );
     cfont = f;
     ccol = c;

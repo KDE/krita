@@ -49,7 +49,7 @@ KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettings */*setting
 
 
 KisDuplicateOp::KisDuplicateOp(KisPainter * painter)
-    : super(painter)
+    : super(painter), m_srcdev(0), m_target(0)
 {
 }
 
@@ -142,12 +142,15 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 
     if( srcPoint.y() < 0)
         srcPoint.setY(0);
-
-    KisPaintDeviceSP srcdev = new KisPaintDevice(device->colorSpace(), "duplicate source dev");
-    Q_CHECK_PTR(srcdev);
+    if( !(m_srcdev && m_srcdev->colorSpace() != device->colorSpace()) )
+    {
+        m_srcdev = new KisPaintDevice(device->colorSpace(), "duplicate source dev");
+        m_target = new KisPaintDevice(device->colorSpace(), "duplicate target dev");
+    }
+    Q_CHECK_PTR(m_srcdev);
 
     // Perspective correction ?
-    KisPainter copyPainter(srcdev);
+    KisPainter copyPainter(m_srcdev);
     if(m_painter->duplicatePerspectiveCorrection())
     {
         double startM[3][3];
@@ -206,7 +209,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         KisPoint positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_painter->duplicateStart() );
         KisPoint duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_painter->duplicateStart() - m_painter->duplicateOffset() );
         KisPoint translat = duplicateStartPoisitionT - positionStartPaintingT;
-        KisRectIteratorPixel dstIt = srcdev->createRectIterator(0, 0, sw, sh, true); 
+        KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh, true); 
         KisRandomSubAccessorPixel srcAcc = device->createRandomSubAccessor();
         //Action
         while(!dstIt.isDone())
@@ -237,7 +240,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         // First divide
         KisColorSpace* deviceCs = device->colorSpace();
         KisHLineIteratorPixel deviceIt = device->createHLineIterator(x, y, sw, false );
-        KisHLineIteratorPixel srcDevIt = srcdev->createHLineIterator(0, 0, sw, true );
+        KisHLineIteratorPixel srcDevIt = m_srcdev->createHLineIterator(0, 0, sw, true );
         double* matrixIt = matrix;
         for(int j = 0; j < sh; j++)
         {
@@ -271,7 +274,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         
         // Finaly multiply
         deviceIt = device->createHLineIterator(x, y, sw, false );
-        srcDevIt = srcdev->createHLineIterator(0, 0, sw, true );
+        srcDevIt = m_srcdev->createHLineIterator(0, 0, sw, true );
         matrixIt = matrix;
         for(int j = 0; j < sh; j++)
         {
@@ -301,11 +304,9 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 //     copySelection.end();
 
     // copy the srcdev onto a new device, after applying the dab selection
-    KisPaintDeviceSP target = srcdev ;//new KisPaintDevice(srcdev->colorSpace(), "duplicate target dev");
-    copyPainter.begin(target);
-    copyPainter.beginTransaction("bouuh");
+    copyPainter.begin(m_target);
 
-    copyPainter.bltMask(0, 0, COMPOSITE_OVER, srcdev, dab,
+    copyPainter.bltMask(0, 0, COMPOSITE_OVER, m_srcdev, dab,
                              OPACITY_OPAQUE, 0, 0, sw, sh);
     copyPainter.end();
 
@@ -326,11 +327,11 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     sh = dstRect.height();
     
     if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), target,
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), m_target,
                                 m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), target, m_painter->opacity(), sx, sy, sw, sh);
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), m_target, m_painter->opacity(), sx, sy, sw, sh);
     }
 
 

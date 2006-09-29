@@ -44,16 +44,18 @@ class KisDuplicateOp : public KisPaintOp {
 
     typedef KisPaintOp super;
 
+        
+    public:
+    
+        KisDuplicateOp(KisPainter * painter);
+        virtual ~KisDuplicateOp();
+    
+    
+        void paintAt(const KisPoint &pos, const KisPaintInformation& info);
     private:
         double minimizeEnergy(const double* m, double* sol, int w, int h);
-    
-public:
-
-    KisDuplicateOp(KisPainter * painter);
-    virtual ~KisDuplicateOp();
-
-
-    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
+    private:
+        KisPaintDeviceSP m_target, m_srcdev;
 
 };
 

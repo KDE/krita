@@ -67,18 +67,12 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* _instance, const QS
   d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate");
   connect(m_alwaysUseCheckBox, SIGNAL(clicked()), this, SLOT(alwaysUseClicked()));
 
-  QString dontShow = "imperial";
-
-  if(KGlobal::locale()->measureSystem() == KLocale::Imperial) {
-    dontShow = "metric";
-  }
-
   QStandardItem* selectItem = 0;
   QStandardItem* rootItem = model()->invisibleRootItem();
 
   for (KoTemplate* t = group->first(); t != 0L; t = group->next()) {
-    if(t->isHidden() || (t->measureSystem() == dontShow))
-          continue;
+    if(t->isHidden())
+      continue;
 
     QPixmap preview = t->loadPicture(instance());
     QImage icon = preview.toImage();

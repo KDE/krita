@@ -75,7 +75,8 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             m_defaultToRGB = 0;
             m_defaultFromLab = 0;
             m_defaultToLab = 0;
-
+            m_defaultToRGB16 = 0;
+            m_defaultFromRGB16 = 0;
         }
 
         void init()
@@ -580,7 +581,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             return 0;
         }
     private:
-        quint8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
+        mutable quint8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
         cmsHTRANSFORM m_defaultToRGB;    // Default transform to 8 bit sRGB
         cmsHTRANSFORM m_defaultFromRGB;  // Default transform from 8 bit sRGB
         cmsHTRANSFORM m_defaultToRGB16;    // Default transform to 16 bit sRGB

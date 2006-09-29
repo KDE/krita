@@ -271,6 +271,7 @@ KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceRegistry * parent,
         KoLcmsColorSpace<AlphaU8Traits>("ALPHA", i18n("Alpha mask"),  parent, TYPE_GRAY_8, icSigGrayData, p)
 {
     m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
+    init();
     m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver( this ) );
     m_compositeOps.insert( COMPOSITE_CLEAR,  new CompositeClear( this ) );
     m_compositeOps.insert( COMPOSITE_ERASE, new CompositeErase( this ) );

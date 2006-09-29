@@ -372,6 +372,27 @@ void KoPathShape::debugPath()
     }
 }
 
+QPointF KoPathShape::shapeToDocument( const QPointF &point ) const
+{
+    return transformationMatrix(0).map( point );
+}
+
+QRectF KoPathShape::shapeToDocument( const QRectF &rect ) const 
+{
+    return transformationMatrix(0).mapRect( rect );
+}
+
+QPointF KoPathShape::documentToShape( const QPointF &point ) const
+{
+    return transformationMatrix(0).inverted().map( point );
+}
+
+QRectF KoPathShape::documentToShape( const QRectF &rect ) const 
+{
+    return transformationMatrix(0).inverted().mapRect( rect );
+}
+
+
 void KoPathShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected)
 {
     if( ! selected ) return;
@@ -552,9 +573,31 @@ KoPathPoint * KoPathShape::arcTo( double rx, double ry, double startAngle, doubl
         moveTo( QPointF( 0, 0 ) );
     }
 
+    KoPathPoint * lastPoint = m_subpaths.last()->last();
+    if ( lastPoint->properties() & KoPathPoint::CloseSubpath )
+    {
+        lastPoint = m_subpaths.last()->first();
+    }
+    QPointF startpoint( lastPoint->point() );
+
+    KoPathPoint * newEndPoint = lastPoint;
+
+    QPointF curvePoints[12];
+    int pointCnt = arcToCurve( rx, ry, startAngle, sweepAngle, startpoint, curvePoints );
+    for ( int i = 0; i < pointCnt; i += 3 )
+    {
+        newEndPoint = curveTo( curvePoints[i], curvePoints[i+1], curvePoints[i+2] );
+    }
+    return newEndPoint;
+}
+
+int KoPathShape::arcToCurve( double rx, double ry, double startAngle, double sweepAngle, const QPointF & offset, QPointF * curvePoints ) const
+{
+    int pointCnt = 0;
+
     // check Parameters
     if ( sweepAngle == 0 )
-        return m_subpaths.last()->last();
+        return pointCnt;
     if (  sweepAngle > 360 )
         sweepAngle = 360;
     else if (  sweepAngle < -360 )
@@ -578,23 +621,17 @@ KoPathPoint * KoPathShape::arcTo( double rx, double ry, double startAngle, doubl
 
     // startpoint is at the last point is the path but when it is closed
     // it is at the first point
-    KoPathPoint * lastPoint = m_subpaths.last()->last();
-    if ( lastPoint->properties() & KoPathPoint::CloseSubpath )
-    {
-        lastPoint = m_subpaths.last()->first();
-    }
-    QPointF startpoint( lastPoint->point() );
+    QPointF startpoint( offset );
+
     //center berechnen
     QPointF center( startpoint - QPointF( cossa * rx, -sinsa * ry ) );
 
     qDebug() << "kappa" << kappa << "parts" << parts;
     
-    KoPathPoint * newEndPoint = lastPoint;
-        
     for ( int part = 0; part < parts; ++part )
     {
         // start tangent
-        QPointF controlpoint1( startpoint - QPointF( sinsa * rx * kappa, cossa * ry * kappa ) );
+        curvePoints[pointCnt++] = QPointF( startpoint - QPointF( sinsa * rx * kappa, cossa * ry * kappa ) );
 
         double sinse = sin( se_rad );
         double cosse = cos( se_rad );
@@ -602,9 +639,8 @@ KoPathPoint * KoPathShape::arcTo( double rx, double ry, double startAngle, doubl
         // end point
         QPointF endpoint( center + QPointF( cosse * rx, -sinse * ry ) );
         // end tangent
-        QPointF controlpoint2( endpoint - QPointF( -sinse * rx * kappa, -cosse * ry * kappa ) );
-
-        newEndPoint = curveTo( controlpoint1, controlpoint2, endpoint );
+        curvePoints[pointCnt++] = QPointF( endpoint - QPointF( -sinse * rx * kappa, -cosse * ry * kappa ) );
+        curvePoints[pointCnt++] = endpoint;
 
         // set the endpoint as next start point
         startpoint = endpoint;
@@ -614,7 +650,7 @@ KoPathPoint * KoPathShape::arcTo( double rx, double ry, double startAngle, doubl
         se_rad = endangle * M_PI / 180.0;
     }
 
-    return newEndPoint;
+    return pointCnt;
 }
 
 void KoPathShape::close()

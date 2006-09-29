@@ -48,14 +48,6 @@ private:
     /// returns a handle rect at the given position
     QRectF handleRect( const QPointF &p );
 
-    /// transform rect form local shape coordinates to world coordinates
-    QRectF transformed( const QRectF &r );
-    /// transform point form local shape coordinates to world coordinates
-    QPointF transformed( const QPointF &p );
-    /// transform rect form world coordinates to local shape coordinates
-    QRectF untransformed( const QRectF &r );
-    /// transform point form world coordinates to local shape coordinates
-    QPointF untransformed( const QPointF &p );
     /// snaps given point to grid point
     QPointF snapToGrid( const QPointF &p, Qt::KeyboardModifiers modifiers );
 private:

@@ -537,6 +537,43 @@ public:
      * @brief print debug information about a the points of the path
      */
     void debugPath();
+
+    /**
+     * @brief transform point from shape coordinates to document coordinates
+     *
+     * @param point in shape coordinates
+     *
+     * @return point in document coordinates
+     */
+    QPointF shapeToDocument( const QPointF &point ) const;
+    
+    /**
+     * @brief transform rect from shape coordinates to document coordinates
+     *
+     * @param rect in shape coordinates
+     *
+     * @return rect in document coordinates
+     */
+    QRectF shapeToDocument( const QRectF &rect ) const;
+    
+    /**
+     * @brief transform point from world coordinates to document coordinates
+     *
+     * @param point in document coordinates
+     *
+     * @return point in shape coordinates
+     */
+    QPointF documentToShape( const QPointF &point ) const;
+    
+    /**
+     * @brief transform rect from world coordinates to document coordinates
+     *
+     * @param rect in document coordinates
+     *
+     * @return rect in shape coordinates
+     */
+    QRectF documentToShape( const QRectF &rect ) const;
+
 private:
     void map( const QMatrix &matrix );
 
@@ -553,7 +590,24 @@ private:
 #ifndef NDEBUG
     void paintDebug( QPainter &painter );
 #endif
+
+protected:    
     QRectF handleRect( const QPointF &p ) const;
+    /**
+     * @brief add a arc.
+     *
+     * Adds an arc starting at the current point. The arc will be converted to bezier curves.
+     * @param rx x radius of the ellipse
+     * @param ry y radius of the ellipse
+     * @param startAngle the angle where the arc will be started
+     * @param sweepAngle the length of the angle
+     * TODO add param to have angle of the ellipse
+     * @param offset to the first point in the arc
+     * @param curvePoints a array which take the cuve points, pass a 'QPointF curvePoins[12]';
+     *
+     * @return number of points created by the curve
+     */
+    int arcToCurve( double rx, double ry, double startAngle, double sweepAngle, const QPointF & offset, QPointF * curvePoints ) const;
 
     KoSubpathList m_subpaths;
 };

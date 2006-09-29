@@ -107,7 +107,7 @@ KisTileManager::~KisTileManager() {
     for (int i = 0; i < 4; i++)
         delete m_poolFreeList[i];
 
-    delete [] m_poolFreeList
+    delete [] m_poolFreeList;
     delete [] m_poolPixelSizes;
     delete [] m_pools;
 

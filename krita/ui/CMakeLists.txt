@@ -79,6 +79,8 @@ set(kritaui_LIB_SRCS
    squeezedcombobox.cpp
    kis_matrix_widget.cpp
    kis_perspective_grid_manager.cpp
+   kis_oasis_save_visitor.cc
+   kis_oasis_load_visitor.cc
    )
 
 kde4_automoc(${kritaui_LIB_SRCS})

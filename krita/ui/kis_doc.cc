@@ -19,6 +19,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_doc.h"
+
 // Qt
 #include <QApplication>
 #include <qdom.h>
@@ -42,41 +44,43 @@
 #include <kmessagebox.h>
 
 // KOffice
+#include <KoApplication.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorProfile.h>
 #include <KoFilterManager.h>
+#include <KoID.h>
 #include <KoMainWindow.h>
+#include <KoOasisStore.h>
 #include <KoQueryTrader.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <KoApplication.h>
+#include <KoXmlWriter.h>
 
 // Local
-#include <kis_clipboard.h>
-#include <kis_meta_registry.h>
 #include "kis_annotation.h"
-#include "kis_types.h"
+#include "kis_clipboard.h"
 #include "kis_config.h"
+#include "kis_custom_image_widget.h"
 #include "kis_debug_areas.h"
-#include "kis_doc.h"
 #include "kis_factory.h"
+#include "kis_fill_painter.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_nameserver.h"
-#include "kis_painter.h"
-#include "kis_selection.h"
-#include "kis_fill_painter.h"
-#include "kis_command.h"
-#include "kis_view.h"
-#include "KoColorSpace.h"
-#include "KoColorSpaceRegistry.h"
-#include "KoColorProfile.h"
-#include "KoID.h"
-#include "kis_part_layer.h"
-#include "kis_paint_device_action.h"
-#include "kis_custom_image_widget.h"
 #include "kis_load_visitor.h"
+#include "kis_meta_registry.h"
+#include "kis_nameserver.h"
+#include "kis_oasis_save_visitor.h"
+#include "kis_paint_device_action.h"
+#include "kis_paint_layer.h"
+#include "kis_painter.h"
+#include "kis_part_layer.h"
 #include "kis_save_visitor.h"
 #include "kis_savexml_visitor.h"
+#include "kis_selection.h"
+#include "kis_types.h"
+#include "kis_command.h"
+#include "kis_view.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -232,14 +236,27 @@ QDomDocument KisDoc::saveXML()
 bool KisDoc::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )
 {
     //XXX: todo (and that includes defining an OASIS format for layered 2D raster data!)
-    return false;
+    kDebug() << "loading with OpenRaster" << endl;
+    return true;
 }
 
 
-bool KisDoc::saveOasis( KoStore*, KoXmlWriter* )
+bool KisDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
 {
     //XXX: todo (and that includes defining an OASIS format for layered 2D raster data!)
-    return false;
+    kDebug() << "saving with OpenRaster" << endl;
+    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    KoOasisStore* oasisStore =  new KoOasisStore( store );
+    KoXmlWriter* contentWriter = oasisStore->contentWriter();
+    if ( !contentWriter )
+        return false;
+    
+    KoXmlWriter* bodyWriter = oasisStore->bodyWriter();
+    KisOasisSaveVisitor osv(oasisStore);
+    m_currentImage->rootLayer()->accept(osv);
+    oasisStore->closeContentWriter();
+    delete oasisStore;
+    return true;
 }
 
 bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)

@@ -104,8 +104,10 @@ KisTileManager::~KisTileManager() {
     m_tempFile.close();
     m_tempFile.unlink();
 
-    for (int i = 0; i < 4; i++)
-        delete m_poolFreeList[i];
+    // TODO: fix memory leak -- this breaks compilation:
+    // type ‘class  Q3ValueList<quint8*>’ argument given to ‘delete’, expected pointer
+    // for (int i = 0; i < 4; i++)
+    //     delete m_poolFreeList[i];
 
     delete [] m_poolFreeList;
     delete [] m_poolPixelSizes;

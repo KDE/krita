@@ -33,7 +33,7 @@ FormulaShape::~FormulaShape()
 {
 }
 
-void FormulaShape::paint( QPainter &painter, KoViewConverter &converter )
+void FormulaShape::paint( QPainter &painter, KoViewConverter &converter ) const
 {
     // TODO adapt the QPainter's QMatrix to convert the points correctly to pixels
     m_formulaElement->paint( painter );

@@ -591,8 +591,8 @@ void ExifValue::convertToData(unsigned char ** data, unsigned int* size, ExifVal
             for(uint i = 0; i < components(); i++)
             {
                 ExifNumber n = asExifNumber(i);
-                set32Bit( (*data) + 4 * i, order, (quint32*)&asExifNumber(i).m_srational.numerator);
-                set32Bit( (*data) + 4 * i + 4, order, (quint32*)&asExifNumber(i).m_srational.denominator);
+                set32Bit( (*data) + 4 * i, order, (quint32*)&n.m_srational.numerator);
+                set32Bit( (*data) + 4 * i + 4, order, (quint32*)&n.m_srational.denominator);
             }
             return;
         case EXIF_TYPE_FLOAT:

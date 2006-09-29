@@ -123,6 +123,6 @@ void KisFilterNoise::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilt
         incProgress();
     }
     
-    delete interm;
+    delete [] interm;
     setProgressDone(); // Must be called even if you don't really support progression
 }

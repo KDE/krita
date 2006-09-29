@@ -22,7 +22,6 @@
 
 #include "KoDetailsPane.h"
 
-class Q3ListViewItem;
 class KFileItem;
 class QPixmap;
 class KJob;
@@ -48,8 +47,8 @@ class KoRecentDocumentsPane : public KoDetailsPane
     ~KoRecentDocumentsPane();
 
   protected slots:
-    void selectionChanged(Q3ListViewItem* item);
-    void openFile(Q3ListViewItem* item);
+    void selectionChanged(const QModelIndex& index);
+    void openFile(const QModelIndex& index);
 
     void previewResult(KJob* job);
     void updatePreview(const KFileItem* fileItem, const QPixmap& preview);

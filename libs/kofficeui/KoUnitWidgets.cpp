@@ -152,7 +152,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
     setAcceptLocalizedNumbers( true );
     setUnit( unit );
     changeValue( value );
-    setSingleStep( 0.5 );
+    setLineStepPt( step );
 
     connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
 }

@@ -23,8 +23,8 @@
 
 class QEvent;
 class KInstance;
-class Q3ListViewItem;
 class KUrl;
+class QStandardItemModel;
 
 class KoDetailsPanePrivate;
 
@@ -39,6 +39,9 @@ class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
 
     virtual bool eventFilter(QObject* watched, QEvent* e);
 
+    /// @return the model used in the document list
+    QStandardItemModel* model() const;
+
   signals:
     /// Emited when a file is requested to be opened
     void openUrl(const KUrl&);
@@ -52,9 +55,9 @@ class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
 
   protected slots:
     /// This is called when the selection in the listview changed
-    virtual void selectionChanged(Q3ListViewItem* item) = 0;
+    virtual void selectionChanged(const QModelIndex& index) = 0;
     virtual void openFile();
-    virtual void openFile(Q3ListViewItem* item) = 0;
+    virtual void openFile(const QModelIndex& index) = 0;
 
     void changePalette();
 

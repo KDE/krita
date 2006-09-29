@@ -28,10 +28,10 @@
 #include <QEvent>
 #include <QSplitter>
 #include <QPixmap>
+#include <QStandardItemModel>
 
 #include <kinstance.h>
 #include <klocale.h>
-#include <k3listview.h>
 #include <kpushbutton.h>
 #include <kconfig.h>
 #include <kurl.h>
@@ -57,6 +57,7 @@ class KoDetailsPanePrivate
     }
 
     KInstance* m_instance;
+    QStandardItemModel* m_model;
 };
 
 KoDetailsPane::KoDetailsPane(QWidget* parent, KInstance* _instance, const QString& header)
@@ -64,24 +65,24 @@ KoDetailsPane::KoDetailsPane(QWidget* parent, KInstance* _instance, const QStrin
 {
   d = new KoDetailsPanePrivate;
   d->m_instance = _instance;
+  d->m_model = new QStandardItemModel;
+  d->m_model->setHorizontalHeaderItem(0, new QStandardItem(header));
 
   setupUi(this);
 
   m_previewLabel->installEventFilter(this);
   m_documentList->installEventFilter(this);
-  m_documentList->setColumnText(0, header);
+  m_documentList->setIconSize(QSize(64, 64));
+  m_documentList->setModel(d->m_model);
+
   changePalette();
 
   connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
 
-  connect(m_documentList, SIGNAL(selectionChanged(Q3ListViewItem*)),
-  this, SLOT(selectionChanged(Q3ListViewItem*)));
-  connect(m_documentList, SIGNAL(clicked(Q3ListViewItem*)),
-  this, SLOT(selectionChanged(Q3ListViewItem*)));
-  connect(m_documentList, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)),
-  this, SLOT(openFile(Q3ListViewItem*)));
-  connect(m_documentList, SIGNAL(returnPressed(Q3ListViewItem*)),
-  this, SLOT(openFile(Q3ListViewItem*)));
+  connect(m_documentList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+          this, SLOT(selectionChanged(const QModelIndex&)));
+  connect(m_documentList, SIGNAL(doubleClicked(const QModelIndex&)),
+          this, SLOT(openFile(const QModelIndex&)));
   connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 }
 
@@ -107,6 +108,14 @@ bool KoDetailsPane::eventFilter(QObject* watched, QEvent* e)
     if((e->type() == QEvent::Resize) && isVisible()) {
       emit splitterResized(this, m_splitter->sizes());
     }
+
+    if((e->type() == QEvent::KeyPress)) {
+      QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+
+      if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
+        openFile();
+      }
+    }
   }
 
   return false;
@@ -122,8 +131,8 @@ void KoDetailsPane::resizeSplitter(KoDetailsPane* sender, const QList<int>& size
 
 void KoDetailsPane::openFile()
 {
-  Q3ListViewItem* item = m_documentList->selectedItem();
-  openFile(item);
+  QModelIndex index = m_documentList->selectionModel()->currentIndex();
+  openFile(index);
 }
 
 void KoDetailsPane::changePalette()
@@ -132,6 +141,11 @@ void KoDetailsPane::changePalette()
   p.setBrush(QColorGroup::Base, p.brush(QPalette::Normal, QColorGroup::Background));
   p.setColor(QColorGroup::Text, p.color(QPalette::Normal, QColorGroup::Foreground));
   m_detailsLabel->setPalette(p);
+}
+
+QStandardItemModel* KoDetailsPane::model() const
+{
+  return d->m_model;
 }
 
 #include "KoDetailsPane.moc"

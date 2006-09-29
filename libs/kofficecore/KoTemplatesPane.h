@@ -24,7 +24,6 @@
 
 class KoTemplate;
 class KoTemplateGroup;
-class Q3ListViewItem;
 
 class KoTemplatesPanePrivate;
 
@@ -58,8 +57,8 @@ class KoTemplatesPane : public KoDetailsPane
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
   protected slots:
-    void selectionChanged(Q3ListViewItem* item);
-    void openFile(Q3ListViewItem* item);
+    void selectionChanged(const QModelIndex& index);
+    void openFile(const QModelIndex& index);
     void alwaysUseClicked();
     void changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse);
 

@@ -28,10 +28,10 @@
 #include <QPainter>
 #include <QSplitter>
 #include <QPixmap>
+#include <QStandardItemModel>
 
 #include <kinstance.h>
 #include <klocale.h>
-#include <k3listview.h>
 #include <kpushbutton.h>
 #include <kconfig.h>
 #include <kurl.h>
@@ -40,18 +40,27 @@
 #include <kdebug.h>
 #include <ktextbrowser.h>
 
-class KoFileListItem : public K3ListViewItem
+class KoFileListItem : public QStandardItem
 {
   public:
-    KoFileListItem(K3ListView* listView, const QString& filename,
-                    const QString& fullPath, KFileItem* fileItem)
-      : K3ListViewItem(listView, filename, fullPath), m_fileItem(fileItem)
+    KoFileListItem(const QPixmap& pixmap, const QString& text)
+      : QStandardItem(pixmap, text)
     {
+      m_fileItem = 0;
     }
 
     ~KoFileListItem()
     {
       delete m_fileItem;
+    }
+
+    void setFileItem(KFileItem* item)
+    {
+      if(m_fileItem) {
+        delete m_fileItem;
+      }
+
+      m_fileItem = item;
     }
 
     KFileItem* fileItem() const
@@ -79,6 +88,7 @@ class KoRecentDocumentsPanePrivate
     }
 
     KIO::PreviewJob* m_previewJob;
+    QStandardItemModel* m_model;
 };
 
 
@@ -91,7 +101,8 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* _instan
   KGuiItem openGItem(i18n("Open This Document"), "fileopen");
   m_openButton->setGuiItem(openGItem);
   m_alwaysUseCheckBox->hide();
-  m_documentList->setSorting(-1); // Disable sorting
+
+  model()->setSortRole(0); // Disable sorting
 
   QString oldGroup = instance()->config()->group();
   instance()->config()->setGroup("RecentFiles");
@@ -99,6 +110,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* _instan
   int i = 0;
   QString value;
   KFileItemList fileList;
+  QStandardItem* rootItem = model()->invisibleRootItem();
 
   do {
     QString key = QString("File%1").arg(i);
@@ -123,24 +135,30 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* _instan
       if(!url.isLocalFile() || QFile::exists(url.path())) {
         KFileItem* fileItem = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
         fileList.append(fileItem);
-        KoFileListItem* item = new KoFileListItem(m_documentList, name, url.url(), fileItem);
         //center all icons in 64x64 area
         QImage icon = fileItem->pixmap(64).toImage();
         icon.convertToFormat(QImage::Format_ARGB32);
         icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
-        item->setPixmap(0, QPixmap::fromImage(icon));
-        item->setPixmap(2, fileItem->pixmap(128));
+        KoFileListItem* item = new KoFileListItem(QPixmap::fromImage(icon), name);
+        item->setEditable(false);
+        item->setData(fileItem->pixmap(128), Qt::UserRole);
+        item->setFileItem(fileItem);
+        rootItem->appendRow(item);
       }
     }
 
     i++;
   } while ( !value.isEmpty() || i<=10 );
 
+
   instance()->config()->setGroup( oldGroup );
 
-  m_documentList->setSelected(m_documentList->firstChild(), true);
+  //Select the first file
+  QModelIndex firstIndex = model()->indexFromItem(model()->item(0));
+  m_documentList->selectionModel()->select(firstIndex, QItemSelectionModel::Select);
+  m_documentList->selectionModel()->setCurrentIndex(firstIndex, QItemSelectionModel::Select);
 
-  d->m_previewJob = KIO::filePreview(fileList, 200, 200);
+  d->m_previewJob = KIO::filePreview(fileList, 200, 200, 0);
 
   connect(d->m_previewJob, SIGNAL(result(KJob*)), this, SLOT(previewResult(KJob*)));
   connect(d->m_previewJob, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
@@ -152,15 +170,16 @@ KoRecentDocumentsPane::~KoRecentDocumentsPane()
   delete d;
 }
 
-void KoRecentDocumentsPane::selectionChanged(Q3ListViewItem* item)
+void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
 {
-  if(item) {
+  if(index.isValid()) {
+    KoFileListItem* item = static_cast<KoFileListItem*>(model()->itemFromIndex(index));
     m_openButton->setEnabled(true);
-    m_titleLabel->setText(item->text(0));
-    m_previewLabel->setPixmap(*(item->pixmap(2)));
+    m_titleLabel->setText(item->data(Qt::DisplayRole).toString());
+    m_previewLabel->setPixmap(item->data(Qt::UserRole).value<QPixmap>());
+    KFileItem* fileItem = item->fileItem();
 
-    if(static_cast<KoFileListItem*>(item)->fileItem()) {
-      KFileItem* fileItem = static_cast<KoFileListItem*>(item)->fileItem();
+    if(fileItem) {
       QString details = "<center><table border=\"0\">";
       details += i18nc("File modification date and time. %1 is date time",
                         "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
@@ -181,14 +200,15 @@ void KoRecentDocumentsPane::selectionChanged(Q3ListViewItem* item)
   }
 }
 
-void KoRecentDocumentsPane::openFile(Q3ListViewItem* item)
+void KoRecentDocumentsPane::openFile(const QModelIndex& index)
 {
-  if(!item) return;
+  if(!index.isValid()) return;
 
   KConfigGroup cfgGrp(instance()->config(), "TemplateChooserDialog");
   cfgGrp.writeEntry("LastReturnType", "File");
 
-  KFileItem* fileItem = static_cast<KoFileListItem*>(item)->fileItem();
+  KoFileListItem* item = static_cast<KoFileListItem*>(model()->itemFromIndex(index));
+  KFileItem* fileItem = item->fileItem();
 
   if(fileItem) {
     emit openUrl(fileItem->url());
@@ -207,27 +227,24 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixm
     return;
   }
 
-  Q3ListViewItemIterator it(m_documentList);
-  KoFileListItem* item = 0;
+  QStandardItem* rootItem = model()->invisibleRootItem();
 
-  while(it.current()) {
-    item = static_cast<KoFileListItem*>(it.current());
+  for(int i = 0; i < rootItem->rowCount(); ++i) {
+    KoFileListItem* item = static_cast<KoFileListItem*>(rootItem->child(i));
     if(item->fileItem() == fileItem) {
-      item->setPixmap(2, preview);
+      item->setData(preview, Qt::UserRole);
       QImage icon = preview.toImage();
       icon = icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
       icon.convertToFormat(QImage::Format_ARGB32);
       icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
-      item->setPixmap(0, QPixmap::fromImage(icon));
+      item->setData(QPixmap::fromImage(icon), Qt::DecorationRole);
 
-      if(item->isSelected()) {
+      if(m_documentList->selectionModel()->currentIndex() == item->index()) {
         m_previewLabel->setPixmap(preview);
       }
 
       break;
     }
-
-    ++it;
   }
 }
 

@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>KoDetailsPaneBase</class>
  <widget class="QWidget" name="KoDetailsPaneBase" >
   <property name="geometry" >
@@ -15,35 +12,25 @@
   <property name="windowTitle" >
    <string>DetailsPaneBase</string>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QVBoxLayout" >
    <property name="margin" >
     <number>0</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>0</number>
    </property>
-   <item row="0" column="0" >
+   <item>
     <widget class="QSplitter" name="m_splitter" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="K3ListView" name="m_documentList" >
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>7</vsizetype>
-        <horstretch>30</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+     <widget class="QTreeView" name="m_documentList" >
+      <property name="rootIsDecorated" >
+       <bool>false</bool>
       </property>
-      <property name="resizeMode" >
-       <enum>Q3ListView::LastColumn</enum>
+      <property name="itemsExpandable" >
+       <bool>false</bool>
       </property>
-      <column>
-       <property name="text" >
-        <string/>
-       </property>
-      </column>
      </widget>
      <widget class="QWidget" name="layout2" >
       <layout class="QGridLayout" >
@@ -208,29 +195,17 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>K3ListView</class>
-   <extends>Q3ListView</extends>
-   <header>k3listview.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
    <class>KTextBrowser</class>
    <extends>QTextBrowser</extends>
    <header>ktextbrowser.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>m_documentList</tabstop>
   <tabstop>m_openButton</tabstop>
   <tabstop>m_alwaysUseCheckBox</tabstop>
   <tabstop>m_detailsLabel</tabstop>

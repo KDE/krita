@@ -40,18 +40,22 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
     }
     m_start = clicked;
 
-    KoShape *shp;
+    KoShape *shp = 0;
     if(canvas->shapeManager()->selection()->count()>1)
        shp = canvas->shapeManager()->selection();
     if(canvas->shapeManager()->selection()->count()==1)
         shp = canvas->shapeManager()->selection()->firstSelectedShape();
 
     m_unwindMatrix = QMatrix();
-    m_unwindMatrix.rotate( - shp->rotation());
+    if (shp)
+        m_unwindMatrix.rotate( - shp->rotation());
     m_windMatrix = QMatrix();
-    m_windMatrix.rotate(shp->rotation());
-    m_initialSize = shp->size();
-    m_initialPosition = shp->transformationMatrix(0).map(QPointF());
+    if (shp)
+        m_windMatrix.rotate(shp->rotation());
+    if (shp)
+        m_initialSize = shp->size();
+    if (shp)
+        m_initialPosition = shp->transformationMatrix(0).map(QPointF());
 
     switch(direction) {
         case KoFlake::TopMiddleHandle:

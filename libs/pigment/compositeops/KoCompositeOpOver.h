@@ -110,7 +110,7 @@ class KoCompositeOpOver : public KoCompositeOp {
                             } else {
                                 for(uint i = 0; i <  _CSTraits::channels_nb; i++)
                                 {
-                                    if(i != _CSTraits::alpha_pos)
+                                    if( (int)i != _CSTraits::alpha_pos)
                                         dstN[i] = KoColorSpaceMaths<channels_type>::blend(srcN[i], dstN[i], srcBlend);
                                 }
                             }

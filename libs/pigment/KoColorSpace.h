@@ -60,7 +60,6 @@ enum ColorSpaceIndependence {
     TO_RGBA16
 };
 // TODO: constify all function of KisColorSpace
-// TODO: RgbA16 convert function must be set to pure virtual
 /**
  * A KoColorSpace is the definition of a certain color space.
  * 
@@ -330,7 +329,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of source pixels
      */
-    virtual void toRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const {};
+    virtual void toRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const =0;
 
     /**
      * Convert the specified data from Rgb 16 bits. to this colorspace. All colorspaces are
@@ -340,7 +339,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of pixels in the array
      */
-    virtual void fromRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const {};
+    virtual void fromRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const =0;
     
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space

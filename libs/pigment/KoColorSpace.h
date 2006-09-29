@@ -109,7 +109,7 @@ public:
     //========== Channels =====================================================//
 
     /// Return a vector describing all the channels this color model has.
-    virtual Q3ValueVector<KoChannelInfo *> channels() const
+    virtual Q3ValueVector<KoChannelInfo *> channels()
     {
         return m_channels;
     }

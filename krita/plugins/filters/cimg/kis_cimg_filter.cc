@@ -515,7 +515,7 @@ void KisCImgFilter::compute_normalized_tensor()
             u = flow(x,y,0),
             v = flow(x,y,1),
             n = (float)std::pow(u*u+v*v,0.25f),
-            nn = 1; //n < 1e-5 ? 1 : nn;
+            nn =  n < 1e-5 ? 1 : n;
         G(x,y,0) = u*u/nn;
         G(x,y,1) = u*v/nn;
         G(x,y,2) = v*v/nn;

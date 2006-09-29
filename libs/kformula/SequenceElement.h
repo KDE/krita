@@ -34,9 +34,14 @@ class SequenceElement : public BasicElement {
 public:
     /// The standard constructor
     SequenceElement( BasicElement* parent = 0 );
-    
+   
+    /// The standard destructor 
     ~SequenceElement();
 
+    /**
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     */
     virtual void paint( QPainter& painter ) const;
 
     virtual void calculateSize();
@@ -54,7 +59,11 @@ public:
      */ 
     virtual void removeChild( BasicElement* element );
 
-    
+    /**
+     * Obtain a list of all child elements of this element
+     * reimplementated from @see BasicElement
+     * @return a QList with pointers to all child elements
+     */
     virtual const QList<BasicElement*> childElements();
 
     /// @return The child element at the position @p index - 0 if the sequence is empty

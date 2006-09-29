@@ -33,6 +33,8 @@ SequenceElement::SequenceElement( BasicElement* parent ) : BasicElement( parent 
 
 SequenceElement::~SequenceElement()
 {
+    foreach( BasicElement* element, m_sequenceElements )
+        removeChild( element ); 
 }
 
 void SequenceElement::paint( QPainter& painter ) const

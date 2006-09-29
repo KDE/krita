@@ -22,13 +22,7 @@
 #ifndef SPACEELEMENT_H
 #define SPACEELEMENT_H
 
-#include <QFont>
-#include <QString>
-
 #include "BasicElement.h"
-
-class SymbolTable;
-
 
 namespace KFormula {
 
@@ -37,52 +31,25 @@ namespace KFormula {
  */
 class SpaceElement : public BasicElement {
 public:
+    /// The standard constructor
     SpaceElement( BasicElement* parent = 0 );
 
     /**
-     * @returns the character that represents this element. Used for
-     * parsing a sequence.
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
      */
-    virtual QChar getCharacter() const { return ' '; }
-
-    /**
-     * Obtain a list of all child elements of this element
-     * @return a QList with pointers to all child elements
-     */
-    const QList<BasicElement*> childElements();
-
-    void readMathML( const QDomElement& element );
+    void paint( QPainter& painter ) const;
     
+    /// Calculate the element's sizes and the size of its children
+    void calculateSize();
+
+    /// Read the element from MathML
+    void readMathML( const QDomElement& element );
+
+    /// Save the element to MathML 
     void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
-
-
-    /**
-     * Calculates our width and height and
-     * our children's parentPosition.
-     */
-    virtual void calcSizes( const ContextStyle& context,
-                            ContextStyle::TextStyle tstyle,
-                            ContextStyle::IndexStyle istyle );
-
-    /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
-     */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       const LuPixelPoint& parentOrigin );
-
-
-
 protected:
-     void drawInternal();
-
-     void readMathMLAttributes( const QDomElement& element );
-
     /**
      * @returns the tag name of this element type.
      */
@@ -105,15 +72,6 @@ protected:
      * Returns false if it failed.
      */
     virtual bool readContentFromDom(QDomNode& node);
-
-private:
-
-    SpaceWidth spaceWidth;
-
-    /**
-     * Whether this space behaves like a tab.
-     */
-    bool m_tab;
 };
 
 } // namespace KFormula

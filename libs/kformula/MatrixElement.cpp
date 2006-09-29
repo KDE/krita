@@ -22,49 +22,124 @@
 #include "MatrixElement.h"
 #include "MatrixRowElement.h"
 #include "MatrixEntryElement.h"
-#include <KoXmlWriter.h>
-
-
-
-#include <QPainter>
-#include <QList>
-#include <QKeyEvent>
-
-#include <kdebug.h>
-#include <klocale.h>
-
-#include "MatrixDialog.h"
-#include "FormulaElement.h"
 #include "FormulaCursor.h"
-#include "FormulaContainer.h"
-#include "kformulacommand.h"
-#include "SequenceElement.h"
-#include "SpaceElement.h"
-
+#include <KoXmlWriter.h>
+#include <QPainter>
 
 namespace KFormula {
 
-MatrixElement::MatrixElement( int rows, int columns, BasicElement* parent ) : BasicElement( parent )
+MatrixElement::MatrixElement( BasicElement* parent ) : BasicElement( parent )
 {
-// TODO think about how to use matrizes best with the new element list!!
-	
-//    MatrixRowElement* tmp = 0;
-    
-//    for( int row = 0; row < rows; row++ )
-//    {
-//	tmp = new MatrixRowElement( columns, this );
-//        m_matrixRowElements.add( tmp );
-//    }
 }
 
 MatrixElement::~MatrixElement()
 {
 }
 
+void MatrixElement::paint( QPainter& painter ) const
+{
+    // TODO paint the frame, rowlines, columnlines
+    foreach( MatrixRowElement* tmpRow, m_matrixRowElements )
+        tmpRow->paint( painter );
+}
+
+void MatrixElement::calculateSize()
+{
+    // TODO implement rowspacing
+    double tmpHeight = 0.0;
+    double tmpWidth = 0.0;
+    QPointF tmpOrigin = origin();
+    foreach( MatrixRowElement* tmpRow, m_matrixRowElements )
+    {
+        tmpRow->calculateSize();
+        tmpWidth = qMax( tmpRow->width(), tmpWidth );
+	tmpHeight += tmpRow->height();
+	tmpRow->setOrigin( tmpOrigin );
+	tmpOrigin = origin() + QPointF( 0, tmpHeight ); 
+    }
+    setHeight( tmpHeight );
+    setWidth( tmpWidth );
+    setBaseLine( tmpHeight/2 + parentElement()->height()/2 );
+}
+
 const QList<BasicElement*> MatrixElement::childElements()
 {
-    return QList<BasicElement*>();
+    QList<BasicElement*> tmp;
+    foreach( MatrixRowElement* tmpRow, m_matrixRowElements )
+        tmp << tmpRow;
+    return tmp;
 }
+
+void MatrixElement::moveRight( FormulaCursor* cursor, BasicElement* from )
+{
+    if( from == parentElement() )
+        m_matrixRowElements[ 0 ]->moveRight( cursor, this ); // enter the matrix element
+    else
+        parentElement()->moveRight( cursor, this );
+}
+
+void MatrixElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
+{
+    if( from == parentElement() )
+        m_matrixRowElements.last()->moveLeft( cursor, this );// enter the matrix element
+    else
+	parentElement()->moveLeft( cursor, this );
+}
+
+void MatrixElement::moveDown( FormulaCursor* cursor, BasicElement* from )
+{
+    if( !childElements().contains( from ) )
+        return;
+
+    for( int i = 1; i < m_matrixRowElements.count()-1; i++ ) // end with the forlast
+    {                                                        // the last can't move down
+        if( m_matrixRowElements[ i ] == from )
+            m_matrixRowElements[ i++ ]->moveDown( cursor, this );
+    }
+}
+
+void MatrixElement::moveUp( FormulaCursor* cursor, BasicElement* from )
+{
+    if( !childElements().contains( from ) )
+        return;
+
+    for( int i = 1; i < m_matrixRowElements.count(); i++ ) // start with 1 because the
+    {                                                      // uppest can't move up
+        if( m_matrixRowElements[ i ] == from )
+            m_matrixRowElements[ i-- ]->moveUp( cursor, this );
+    }
+}
+
+void MatrixElement::readMathML( const QDomElement& element )
+{
+    readMathMLAttributes( element );
+   
+    MatrixRowElement* tmpElement = 0;
+    QDomElement tmp = element.firstChildElement();    // read each mtr element 
+    while( !tmp.isNull() )
+    {
+        tmpElement = new MatrixRowElement( this );
+        m_matrixRowElements << tmpElement;
+	tmpElement->readMathML( tmp );
+	tmp = tmp.nextSiblingElement();
+    }
+}
+
+void MatrixElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
+{
+    writer->startElement( oasisFormat ? "math:mtable" : "mtable" );
+    writeMathMLAttributes( writer );
+    
+    foreach( MatrixRowElement* tmpRow, m_matrixRowElements )  // write each mtr element
+	tmpRow->writeMathML( writer, oasisFormat );
+    
+    writer->endElement();
+}
+
+
+
+
+
 
 int MatrixElement::rows() const
 {
@@ -79,234 +154,6 @@ int MatrixElement::cols() const
 MatrixEntryElement* MatrixElement::matrixEntryAt( int row, int col )
 {
     return m_matrixRowElements[ row ]->entryAtPosition( col );
-}
-
-void MatrixElement::readMathML( const QDomElement& element )
-{
-}
-
-void MatrixElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
-{
-    writer->startElement( oasisFormat ? "math:mtable" : "mtable" );
-    writeMathMLAttributes( writer );
-    
-    foreach( MatrixRowElement* tmpRow, m_matrixRowElements )
-	tmpRow->writeMathML( writer, oasisFormat );
-    
-    writer->endElement();
-}
-
-void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
-{
-    QVector<luPixel> toMidlines( rows() );
-    QVector<luPixel> fromMidlines( rows() );
-    QVector<luPixel> widths( cols() );
-
-    toMidlines.fill(0);
-    fromMidlines.fill(0);
-    widths.fill(0);
-
-    int tmpRows = rows();
-    int tmpCols = cols();
-    
-    ContextStyle::TextStyle i_tstyle = style.convertTextStyleFraction(tstyle);
-    ContextStyle::IndexStyle i_istyle = style.convertIndexStyleUpper(istyle);
-
-/*    for (int r = 0; r < rows(); r++) {
-        QList<MatrixSequenceElement*>* list = content.at(r);
-        for (int c = 0; c < cols(); c++) {
-            SequenceElement* element = list->at(c);
-            element->calcSizes( style, i_tstyle, i_istyle );
-            toMidlines[r] = qMax(toMidlines[r], element->axis( style, i_tstyle ));
-            fromMidlines[r] = qMax(fromMidlines[r],
-                                   element->getHeight()-element->axis( style, i_tstyle ));
-            widths[c] = qMax(widths[c], element->getWidth());
-        }
-    }*/
-
-    luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
-
-    luPixel yPos = 0;
-/*    for (int r = 0; r < tmpRows; r++) {
-        QList<MatrixSequenceElement*>* list = content.at(r);
-        luPixel xPos = 0;
-        yPos += toMidlines[r];
-        for (int c = 0; c < tmpCols; c++) {
-            SequenceElement* element = list->at(c);
-            switch (style.getMatrixAlignment()) {
-            case ContextStyle::left:
-                element->setX(xPos);
-                break;
-            case ContextStyle::center:
-                element->setX(xPos + (widths[c] - element->getWidth())/2);
-                break;
-            case ContextStyle::right:
-                element->setX(xPos + widths[c] - element->getWidth());
-                break;
-            }
-            element->setY(yPos - element->axis( style, i_tstyle ));
-            xPos += widths[c] + distX;
-        }
-        yPos += fromMidlines[r] + distY;
-    }*/
-
-    luPixel width = distX * (tmpCols - 1);
-    luPixel height = distY * (tmpRows - 1);
-
-    for (int r = 0; r < tmpRows; r++) height += toMidlines[r] + fromMidlines[r];
-    for (int c = 0; c < tmpCols; c++) width += widths[c];
-
-    setWidth(width);
-    setHeight(height);
-    if ((tmpRows == 2) && (tmpCols == 1)) {
-        setBaseline( getMainChild()->getHeight() + distY / 2 + style.axisHeight( tstyle ) );
-    }
-    else {
-        setBaseline( height/2 + style.axisHeight( tstyle ) );
-    }
-}
-
-
-void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
-                          const ContextStyle& style,
-                          ContextStyle::TextStyle tstyle,
-                          ContextStyle::IndexStyle istyle,
-                          const LuPixelPoint& parentOrigin )
-{
-
-}
-
-/**
- * Enters this element while moving to the left starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the left of it.
- */
-void MatrixElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
-{
-/*    if( cursor->isSelectionMode() )
-        getParent()->moveLeft(cursor, this);
-    else
-    {
-        if (from == getParent())
-        	matrixEntryAt( rows()-1, cols()-1 )->moveLeft( cursor, this );
-        else
-       	{
-            bool linear = cursor->getLinearMovement();
-            int row = 0;
-            int column = 0;
-            if( searchElement( from, row, column ) )
-	    {
-                if (column > 0)
-                    matrixEntryAt( row, column-1 )->moveLeft( cursor, this );
-                else if( linear && ( row > 0 ) ) 
-                    matrixEntryAt( row-1, cols()-1 )->moveLeft( cursor, this );
-                else 
-                    getParent()->moveLeft(cursor, this);
-            }
-            else 
-                getParent()->moveLeft(cursor, this);
-        }
-    }*/
-}
-
-/**
- * Enters this element while moving to the right starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the right of it.
- */
-void MatrixElement::moveRight(FormulaCursor* cursor, BasicElement* from)
-{
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveRight(cursor, this);
-    }
-    else {
-        if (from == getParent()) {
-            matrixEntryAt(0, 0)->moveRight(cursor, this);
-        }
-        else {
-            bool linear = cursor->getLinearMovement();
-            int row = 0;
-            int column = 0;
-            if (searchElement(from, row, column)) {
-                if( column < cols()-1 ) {
-                    matrixEntryAt( row, column+1 )->moveRight(cursor, this);
-                }
-                else if ( linear && ( row < rows()-1) )
-                    matrixEntryAt( row+1, 0 )->moveRight(cursor, this);
-                else {
-                    getParent()->moveRight(cursor, this);
-                }
-            }
-            else {
-                getParent()->moveRight(cursor, this);
-            }
-        }
-    }*/
-}
-
-/**
- * Enters this element while moving up starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or above it.
- */
-void MatrixElement::moveUp(FormulaCursor* cursor, BasicElement* from)
-{
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveUp(cursor, this);
-    }
-    else {
-        if (from == getParent()) {
-            matrixEntryAt(0, 0)->moveRight(cursor, this);
-        }
-        else {
-            int row = 0;
-            int column = 0;
-            if (searchElement(from, row, column)) {
-                if (row > 0) {
-                    matrixEntryAt(row-1, column)->moveRight(cursor, this);
-                }
-                else {
-                    getParent()->moveUp(cursor, this);
-                }
-            }
-            else {
-                getParent()->moveUp(cursor, this);
-            }
-        }
-    }*/
-}
-
-/**
- * Enters this element while moving down starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or below it.
- */
-void MatrixElement::moveDown(FormulaCursor* cursor, BasicElement* from)
-{
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveDown(cursor, this);
-    }
-    else {
-        if (from == getParent()) {
-            matrixEntryAt(0, 0)->moveRight(cursor, this);
-        }
-        else {
-            int row = 0;
-            int column = 0;
-            if (searchElement(from, row, column)) {
-                if (row < rows()-1) {
-                    matrixEntryAt(row+1, column)->moveRight(cursor, this);
-                }
-                else {
-                    getParent()->moveDown(cursor, this);
-                }
-            }
-            else {
-                getParent()->moveDown(cursor, this);
-            }
-        }
-    }*/
 }
 
 /**

@@ -21,15 +21,9 @@
 
 #include "FractionElement.h"
 #include "ElementFactory.h"
-#include <KoXmlWriter.h>
-
-#include <QPainter>
-
-#include <kdebug.h>
-#include <klocale.h>
-
 #include "FormulaCursor.h"
-#include "SequenceElement.h"
+#include <KoXmlWriter.h>
+#include <QPainter>
 
 namespace KFormula {
 
@@ -41,14 +35,64 @@ FractionElement::FractionElement( BasicElement* parent ) : BasicElement( parent 
 
 FractionElement::~FractionElement()
 {
+    delete m_numerator;
+    delete m_denominator;
 }
 
-void FractionElement::insertInNumerator( int index, BasicElement* element )
+void FractionElement::paint( QPainter& painter ) const
 {
+    m_numerator->paint( painter );       // first paint the children
+    m_denominator->paint( painter );
+
+//    if( bevelled )
+//        paintBevelled( painter );
+    
+    // now paint the line
+/*    QPointF startPoint = origin() + QPointF( m_numerator->height()+distY );
+    QPointF endPoint = startPoint + QPointF( width(), 0 );
+    
+    painter.save();
+    painter.setPen();
+    painter.drawLine( startPoint, endPoint );
+    painter.restore();*/
 }
 
-void FractionElement::insertInDenominator( int index, BasicElement* element )
+void FractionElement::calculateSize()
 {
+/*    m_numerator->calculateSize();
+    m_denominator->calculateSize();
+
+    if( bevelled )
+        calculateSizeBevelled();
+    
+    QPointF numeratorOrigin;
+    QPointF denominatorOrigin;
+    double linethickness = AttributeManager::valueOf( attribute( "linethickness" ) );
+//    double distY = AttributeManager::valueOf( "" );
+    Align numalign = AttributeManager::valueOf( attribute( "numalign" ) ); 
+    Align denomalign = AttributeManager::valueOf( attribute( "denomalign" ) ); 
+    
+    setWidth( qMax( m_numerator->width(), m_denominator->width() ) );
+    setHeight( m_numerator->height() + m_denominator->height() +
+               linethickness + 2*distY );
+    setBaseline( m_numerator->height() + distY + 0.5*linethickness );
+
+    if( numalign == Left )
+        numeratorOrigin.setX( 0.0 )
+    else if( numalign == Right )
+        numeratorOrigin.setX( width() - m_numerator->width() );
+    else
+	numeratorOrigin.setX( ( width() - m_numerator->width() ) / 2 );
+
+    if( denomalign == Left )
+        denominatorOrigin.setX( 0.0 )
+    else if( denomalign == Right )
+        denominatorOrigin.setX( width() - m_denominator->width() );
+    else
+	denominatorOrigin.setX( ( width() - m_denominator->width() ) / 2 );
+		    
+    m_numerator->setOrigin( numeratorOrigin );
+    m_denominator->setOrigin( denominatorOrigin );*/
 }
 
 const QList<BasicElement*> FractionElement::childElements()
@@ -58,18 +102,36 @@ const QList<BasicElement*> FractionElement::childElements()
     return list;
 }
 
+void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+{
+}
+   
+void FractionElement::removeChild( BasicElement* element )
+{
+    if( element == m_numerator )         
+    {
+        delete m_numerator;                      // delete the numerator and
+        m_numerator = new BasicElement( this );  // assign a new empty BasicElement   
+    }
+    else if( element == m_denominator )
+    {
+        delete m_denominator;
+        m_denominator = new BasicElement( this );
+    }
+}
+
 void FractionElement::readMathML( const QDomElement& element )
 {
     readMathMLAttributes( element );
 
-    if( element.childNodes().count() != 2 )
+    if( element.childNodes().count() != 2 ) // a fraction element has always two children
 	return;
     
-    QDomElement tmp = element.firstChildElement();
+    QDomElement tmp = element.firstChildElement();  // create first the numerator
     m_numerator = ElementFactory::createElement( tmp.tagName(), this );
     m_numerator->readMathML( tmp );
     
-    tmp = element.lastChildElement();
+    tmp = element.lastChildElement();               // then the denominator
     m_denominator = ElementFactory::createElement( tmp.tagName(), this );
     m_denominator->readMathML( tmp );
 }
@@ -85,201 +147,43 @@ void FractionElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
     writer->endElement();
 }
 
-void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
+void FractionElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
 {
-    ContextStyle::TextStyle i_tstyle = style.convertTextStyleFraction( tstyle );
-    ContextStyle::IndexStyle u_istyle = style.convertIndexStyleUpper( istyle );
-    ContextStyle::IndexStyle l_istyle = style.convertIndexStyleLower( istyle );
-
-    m_numerator->calcSizes( style, i_tstyle, u_istyle );
-    m_denominator->calcSizes( style, i_tstyle, l_istyle );
-
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
-
-    setWidth( qMax( m_numerator->getWidth(), m_denominator->getWidth() ) );
-    setHeight( m_numerator->getHeight() + m_denominator->getHeight() +
-               2*distY + style.getLineWidth() );
-    setBaseline( qRound( m_numerator->getHeight() + distY + .5*style.getLineWidth() +
-                 style.axisHeight( tstyle ) ) );
-
-    m_numerator->setX( ( getWidth() - m_numerator->getWidth() ) / 2 );
-    m_denominator->setX( ( getWidth() - m_denominator->getWidth() ) / 2 );
-
-    m_numerator->setY( 0 );
-    m_denominator->setY( getHeight() - m_denominator->getHeight() );
+    if( from == parentElement() )
+        m_denominator->moveLeft( cursor, this );
+    else
+        parentElement()->moveLeft( cursor, this ); 
 }
 
-void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
-                            const ContextStyle& style,
-                            ContextStyle::TextStyle tstyle,
-                            ContextStyle::IndexStyle istyle,
-                            const LuPixelPoint& parentOrigin )
+void FractionElement::moveRight( FormulaCursor* cursor, BasicElement* from )
 {
-    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-    //    return;
-
-    m_numerator->draw(painter, r, style,
-		    style.convertTextStyleFraction( tstyle ),
-		    style.convertIndexStyleUpper( istyle ), myPos);
-    if (m_denominator) { // Can be temporarily 0 see FractionElement::remove
-        m_denominator->draw(painter, r, style,
-		      style.convertTextStyleFraction( tstyle ),
-		      style.convertIndexStyleLower( istyle ), myPos);
-    }
-
-
-        painter.setPen( QPen( style.getDefaultColor(),
-                              style.layoutUnitToPixelY( style.getLineWidth() ) ) );
-        painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
-                          style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle ) ),
-                          style.layoutUnitToPixelX( myPos.x() + getWidth() ),
-                          style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle ) ) );
-    
+    if( from == parentElement() )
+        m_numerator->moveRight( cursor, this );
+    else
+        parentElement()->moveRight( cursor, this ); 
 }
 
-void FractionElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
+void FractionElement::moveUp( FormulaCursor* cursor, BasicElement* from )
 {
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveLeft(cursor, this);
-    }
-    else {
-        bool linear = cursor->getLinearMovement();
-        if (from == getParent()) {
-            if (linear) {
-                m_denominator->moveLeft(cursor, this);
-            }
-            else {
-                m_numerator->moveLeft(cursor, this);
-            }
-        }
-        else if (from == m_denominator) {
-            m_numerator->moveLeft(cursor, this);
-        }
-        else {
-            getParent()->moveLeft(cursor, this);
-        }
-    }*/
-}
-
-void FractionElement::moveRight(FormulaCursor* cursor, BasicElement* from)
-{
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveRight(cursor, this);
-    }
-    else {
-        bool linear = cursor->getLinearMovement();
-        if (from == getParent()) {
-            m_numerator->moveRight(cursor, this);
-        }
-        else if (from == m_numerator) {
-            if (linear) {
-                m_denominator->moveRight(cursor, this);
-            }
-            else {
-                getParent()->moveRight(cursor, this);
-            }
-        }
-        else {
-            getParent()->moveRight(cursor, this);
-        }
-    }*/
-}
-
-void FractionElement::moveUp(FormulaCursor* cursor, BasicElement* from)
-{
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveUp(cursor, this);
-    }
-    else {
-        if (from == getParent()) {
-            m_denominator->moveRight(cursor, this);
-        }
-        else if (from == m_denominator) {
-            m_numerator->moveRight(cursor, this);
-        }
-        else {
-            getParent()->moveUp(cursor, this);
-        }
-    }*/
+    if( from == m_denominator )
+        m_numerator->moveUp( cursor, this );
+    else
+        parentElement()->moveUp( cursor, this );
 }
 
 void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 {
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveDown(cursor, this);
-    }
-    else {
-        if (from == getParent())
-            m_numerator->moveRight(cursor, this);
-        else if (from == m_numerator) 
-            m_denominator->moveRight(cursor, this);
-        else
-            getParent()->moveDown(cursor, this);
-    }*/
+    if( from == m_numerator )
+        m_denominator->moveDown( cursor, this );
+    else
+        parentElement()->moveDown( cursor, this );
 }
-/*
-void FractionElement::insert(FormulaCursor* cursor,
-                             QList<BasicElement*>& newChildren,
-                             Direction direction)
-{
-    if (cursor->getPos() == denominatorPos) {
-        m_denominator = static_cast<SequenceElement*>(newChildren.takeAt(0));
-        m_denominator->setParent(this);
 
-        if (direction == beforeCursor) {
-            m_denominator->moveLeft(cursor, this);
-        }
-        else {
-            m_denominator->moveRight(cursor, this);
-        }
-        cursor->setSelection(false);
-        formula()->changed();
-    }
-}
-*/
-void FractionElement::remove(FormulaCursor* cursor,
-                             QList<BasicElement*>& removedChildren,
-                             Direction direction)
-{
-/*    switch (cursor->getPos()) {
-    case numeratorPos:
-        getParent()->selectChild(cursor, this);
-        getParent()->remove(cursor, removedChildren, direction);
-        break;
-    case denominatorPos:
-        removedChildren.append(m_denominator);
-        //formula()->elementRemoval(m_denominator);
-        m_denominator = 0;
-        cursor->setTo(this, denominatorPos);
-        //formula()->changed();
-        break;
-    }*/
-}
-/*
-bool FractionElement::isSenseless()
-{
-    return m_denominator == 0;
-}*/
-/*
-SequenceElement* FractionElement::getMainChild()
-{
-    return m_numerator;
-}
-*/
-/**
- * Sets the cursor to select the child. The mark is placed before,
- * the position behind it.
- */
-void FractionElement::selectChild(FormulaCursor* cursor, BasicElement* child)
-{
-/*    if (child == m_numerator) {
-        cursor->setTo(this, numeratorPos);
-    }
-    else if (child == m_denominator) {
-        cursor->setTo(this, denominatorPos);
-    }*/
-}
+
+
+
+
+
 
 
 /**

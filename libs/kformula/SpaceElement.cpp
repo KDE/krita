@@ -22,24 +22,22 @@
 #include "SpaceElement.h"
 #include <KoXmlWriter.h>
 
-#include <QFontMetrics>
-#include <QPainter>
-
-#include <kdebug.h>
-
-#include "contextstyle.h"
-
 namespace KFormula {
 
-SpaceElement::SpaceElement( BasicElement* parent ) : BasicElement( parent ),
-						     spaceWidth( THIN ),
-						     m_tab( false )
+SpaceElement::SpaceElement( BasicElement* parent ) : BasicElement( parent )
 {
 }
 
-const QList<BasicElement*> SpaceElement::childElements()
+void SpaceElement::paint( QPainter& painter ) const
 {
-    return QList<BasicElement*>();
+    // paint perhaps some eye candy :-)
+}
+
+void SpaceElement::calculateSize()
+{
+// TODO fetch attributes width and height and set the values accordingly
+//    setWidth(  );
+//    setHeight();
 }
 
 void SpaceElement::readMathML( const QDomElement& element )
@@ -56,61 +54,11 @@ void SpaceElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 
 
 
-void SpaceElement::calcSizes( const ContextStyle& style,
-                              ContextStyle::TextStyle tstyle,
-                              ContextStyle::IndexStyle /*istyle*/ )
-{
-    luPt mySize = style.getAdjustedSize( tstyle );
-
-    QFont font = style.getDefaultFont();
-    font.setPointSize( mySize );
-
-    QFontMetrics fm( font );
-    QChar ch = 'x';
-    LuPixelRect bound = fm.boundingRect( ch );
-
-    setWidth( style.getSpace( tstyle, spaceWidth ) );
-    setHeight( bound.height() );
-    setBaseline( -bound.top() );
-    //setMidline( getBaseline() - fm.strikeOutPos() );
-
-    if ( m_tab ) {
-        getParent()->registerTab( this );
-    }
-}
-
-void SpaceElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
-                         const ContextStyle& style,
-                         ContextStyle::TextStyle /*tstyle*/,
-                         ContextStyle::IndexStyle /*istyle*/,
-                         const LuPixelPoint& parentOrigin )
-{
-    LuPixelPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    // there is such a thing as negative space!
-    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-    //    return;
-
-    if ( style.edit() ) {
-        painter.setPen( style.getEmptyColor() );
-        painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight() ),
-                          style.layoutUnitToPixelX( myPos.x()+getWidth()-1 ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight() ) );
-        painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight() ),
-                          style.layoutUnitToPixelX( myPos.x() ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight()-getHeight()/5 ) );
-        painter.drawLine( style.layoutUnitToPixelX( myPos.x()+getWidth()-1 ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight() ),
-                          style.layoutUnitToPixelX( myPos.x()+getWidth()-1 ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight()-getHeight()/5 ) );
-    }
-}
 
 
 void SpaceElement::writeDom(QDomElement element)
 {
-    BasicElement::writeDom(element);
+/*    BasicElement::writeDom(element);
     switch ( spaceWidth ) {
     case NEGTHIN:
         element.setAttribute( "WIDTH", "negthin" );
@@ -130,12 +78,12 @@ void SpaceElement::writeDom(QDomElement element)
     }
     if ( m_tab ) {
         element.setAttribute( "TAB", "true" );
-    }
+    }*/
 }
 
 bool SpaceElement::readAttributesFromDom( QDomElement element )
 {
-    if ( !BasicElement::readAttributesFromDom( element ) ) {
+/*    if ( !BasicElement::readAttributesFromDom( element ) ) {
         return false;
     }
     QString widthStr = element.attribute( "WIDTH" );
@@ -160,7 +108,7 @@ bool SpaceElement::readAttributesFromDom( QDomElement element )
         return false;
     }
     QString tabStr = element.attribute( "TAB" );
-    m_tab = !tabStr.isNull();
+    m_tab = !tabStr.isNull();*/
     return true;
 }
 

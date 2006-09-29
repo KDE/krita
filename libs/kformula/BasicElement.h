@@ -22,7 +22,7 @@
 #ifndef BASICELEMENT_H
 #define BASICELEMENT_H
 
-#include <QMap>
+#include <QHash>
 #include <QString>
 #include <QVariant>
 
@@ -42,11 +42,6 @@ class FontCommand;
 class FormulaCursor;
 class FormulaElement;
 class SequenceElement;
-/*
-struct UnitSize {
-    double data;
-    Unit unit;
-};*/
 
 enum ElementType {
     Basic,
@@ -178,6 +173,8 @@ public:
 
     /// @return The baseline of the element
     double baseLine() const;
+
+    const QPointF& origin() const;
 
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
@@ -400,8 +397,8 @@ private:
     /// The element's parent element - might not be null except of FormulaElement
     BasicElement* m_parentElement;
 
-    /// A map of all attributes where attribute name is assigned to a value
-    QMap<QString,QVariant> m_attributes;
+    /// A hash map of all attributes where attribute name is assigned to a value
+    QHash<QString,QString> m_attributes;
 
     /// The element's type, for example a Sequence, a Fraction etc
     ElementType m_elementType;

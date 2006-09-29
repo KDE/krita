@@ -29,14 +29,14 @@
 
 namespace KFormula {
 
-BasicElement::BasicElement( BasicElement* p ) : m_baseLine( 0 )
+BasicElement::BasicElement( BasicElement* p ) : m_baseLine( 0.0 ),
+						m_parentElement( p )
 {
-    m_parentElement = p;
-    m_boundingRect = QRectF( 0, 0, 0, 0 );
 }
 
 BasicElement::~BasicElement()
 {
+    // TODO delete m_attributes 
 }
 
 void BasicElement::paint( QPainter& painter ) const
@@ -54,12 +54,13 @@ void BasicElement::calculateSize()
     // m_boundingRect.setHeight( ); 
 }
 
-void BasicElement::insertChild( FormulaCursor* , BasicElement* )
+void BasicElement::insertChild( FormulaCursor* cursor, BasicElement* element )
 {
+    m_parentElement->insertChild( cursor, element );
 }
 
 void BasicElement::removeChild( BasicElement* )
-{
+{   // do nothing a BasicElement has no children
 }
 
 const QList<BasicElement*> BasicElement::childElements() 
@@ -87,6 +88,11 @@ double BasicElement::baseLine() const
     return m_baseLine;
 }
 
+const QPointF& BasicElement::origin() const
+{
+    return m_boundingRect.topLeft();
+}
+
 void BasicElement::setWidth( double width )
 {
     m_boundingRect.setWidth( width );
@@ -100,6 +106,11 @@ void BasicElement::setHeight( double height )
 void BasicElement::setOrigin( QPointF origin )
 {
     m_boundingRect.setTopLeft( origin );
+}
+
+void BasicElement::setBaseLine( double baseLine )
+{
+    m_baseLine = baseLine;
 }
 
 void BasicElement::setParentElement( BasicElement* parent )
@@ -173,8 +184,9 @@ void BasicElement::moveEnd( FormulaCursor* cursor )
     parentElement()->moveEnd( cursor );
 }
 
-void BasicElement::readMathML( const QDomElement& )
+void BasicElement::readMathML( const QDomElement& element )
 {
+    readMathMLAttributes( element );
 }
 
 void BasicElement::readMathMLAttributes( const QDomElement& element )
@@ -184,22 +196,7 @@ void BasicElement::readMathMLAttributes( const QDomElement& element )
     for( int i = 0; i < attributeCount; i++ )
     {
 	 attribute = element.attributes().item( i ).toAttr();
-         if( attribute.value() == "true" )
-             m_attributes.insert( attribute.name(), true );
-	 else if( attribute.value() == "false" )
-             m_attributes.insert( attribute.name(), false );
-/*	 else if( attribute.value().endsWith( "em" ) )
-             
-	 else if( attribute.value().endsWith( "ex" ) )
-	 else if( attribute.value().endsWith( "px" ) )
-	 else if( attribute.value().endsWith( "in" ) )
-	 else if( attribute.value().endsWith( "cm" ) )
-	 else if( attribute.value().endsWith( "mm" ) )
-	 else if( attribute.value().endsWith( "pt" ) )
-	 else if( attribute.value().endsWith( "pc" ) )
-	 else if( attribute.value().endsWith( "%" ) )*/
-	 else
-             m_attributes.insert( attribute.name(), attribute.value() );
+         m_attributes.insert( attribute.name(), attribute.value() );
     }
 }
 
@@ -209,19 +206,13 @@ void BasicElement::writeMathML( KoXmlWriter* , bool )
 
 void BasicElement::writeMathMLAttributes( KoXmlWriter* writer )
 {
-    QMapIterator<QString, QVariant> attr( m_attributes );
-    while( attr.hasNext() )
-    {
-        attr.next();
-	if( attr.value().canConvert( QVariant::Double ) )
-	    writer->addAttribute( attr.key().toLatin1(), attr.value().toDouble() );
-	else if( attr.value().canConvert( QVariant::Int ) )
-	    writer->addAttribute( attr.key().toLatin1(), attr.value().toInt() );
-	else if( attr.value().canConvert( QVariant::String ) )
-            writer->addAttribute( attr.key().toLatin1(), attr.value().toString() );
-        // combination of data and unit still missing 
-    }
+    foreach( QString value, m_attributes )
+        writer->addAttribute( m_attributes.key( value ).toLatin1(), value );
 }
+
+
+
+
 
 
 
@@ -237,14 +228,11 @@ void BasicElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyl
 
 void BasicElement::draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       const LuPixelPoint& parentOrigin )
+                             ContextStyle::TextStyle tstyle,
+                             ContextStyle::IndexStyle istyle,
+                            const LuPixelPoint& parentOrigin )
 
 {}
-
-
-
 
 bool BasicElement::readOnly( const BasicElement* /*child*/ ) const
 {

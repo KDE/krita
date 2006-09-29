@@ -43,26 +43,55 @@ class MatrixElement : public BasicElement {
 
 public:
     /// The standard constructor
-    MatrixElement( int rows = 1, int columns = 1, BasicElement* parent = 0);
+    MatrixElement( BasicElement* parent = 0);
     
     /// The standard destructor
     ~MatrixElement();
 
+    /**
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     */
+    void paint( QPainter& painter ) const;
+
+    /// Calculate the element's sizes and the size of its children
+    void calculateSize();
+    
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
     const QList<BasicElement*> childElements();
 
-    /// Return the number of the rows of this matrix
-    int rows() const;
+    /**
+     * Move the FormulaCursor left
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveLeft( FormulaCursor* cursor, BasicElement* from );
 
-    /// Return the number of the columns of this matrix
-    int cols() const;
+    /**
+     * Move the FormulaCursor right 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveRight( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor up 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveUp( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor down 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveDown( FormulaCursor* cursor, BasicElement* from );
     
-    /// Obtain a pointer to the element at @p row and @p col in the matrix
-    MatrixEntryElement* matrixEntryAt( int row, int col );
-
+    /// Read the element from MathML
     void readMathML( const QDomElement& element );
     
     /// Save this element to MathML
@@ -71,49 +100,15 @@ public:
 
 
 
+    /// Return the number of the rows of this matrix
+    int rows() const;
+
+    /// Return the number of the columns of this matrix
+    int cols() const;
+               
+    /// Obtain a pointer to the element at @p row and @p col in the matrix
+    MatrixEntryElement* matrixEntryAt( int row, int col );
     
-    /** Calculates our width and height and our children's parentPosition. */
-    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
-
-    /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
-     */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       const LuPixelPoint& parentOrigin );
-
-    /**
-     * Enters this element while moving to the left starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the left of it.
-     */
-    virtual void moveLeft(FormulaCursor* cursor, BasicElement* from);
-
-    /**
-     * Enters this element while moving to the right starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the right of it.
-     */
-    virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
-
-    /**
-     * Enters this element while moving up starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or above it.
-     */
-    virtual void moveUp(FormulaCursor*, BasicElement*);
-
-    /**
-     * Enters this element while moving down starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or below it.
-     */
-    virtual void moveDown(FormulaCursor*, BasicElement*);
-
     /**
      * Sets the cursor inside this element to its start position.
      * For most elements that is the main child.

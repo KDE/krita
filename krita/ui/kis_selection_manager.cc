@@ -1495,7 +1495,7 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
         }
         selection->writeBytes(out, layerSize.x(), layerSize.y() + y, layerSize.width(), 1);
     }
-    delete out;
+    delete [] out;
 
     for (qint32 i = 0; i < 3; i++)
         delete buf[i];

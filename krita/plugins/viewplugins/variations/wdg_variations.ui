@@ -37,9 +37,9 @@
         </property>
         <property name="paletteBackgroundColor">
             <color>
-                <Qt::red>166</Qt::red>
-                <Qt::green>188</Qt::green>
-                <Qt::blue>153</Qt::blue>
+                <red>166</red>
+                <green>188</green>
+                <blue>153</blue>
             </color>
         </property>
         <property name="frameShape">
@@ -295,9 +295,9 @@
                 </property>
                 <property name="paletteBackgroundColor">
                     <color>
-                        <Qt::red>166</Qt::red>
-                        <Qt::green>188</Qt::green>
-                        <Qt::blue>153</Qt::blue>
+                        <red>166</red>
+                        <green>188</green>
+                        <blue>153</blue>
                     </color>
                 </property>
                 <property name="frameShape">
@@ -474,9 +474,9 @@
         </property>
         <property name="paletteBackgroundColor">
             <color>
-                <Qt::red>166</Qt::red>
-                <Qt::green>188</Qt::green>
-                <Qt::blue>153</Qt::blue>
+                <red>166</red>
+                <green>188</green>
+                <blue>153</blue>
             </color>
         </property>
         <property name="frameShape">

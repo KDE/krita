@@ -378,6 +378,8 @@ KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
 void KisPerChannelConfigWidget::setConfiguration(KisFilterConfiguration * config)
 {
     KisPerChannelFilterConfiguration * cfg = dynamic_cast<KisPerChannelFilterConfiguration *>(config);
+    if (!cfg)
+        return;
 
     for(unsigned int ch = 0; ch < cfg->nTransfers; ch++)
     {

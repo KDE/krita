@@ -154,7 +154,8 @@ KoTextCursor *KoTextDocDeleteCommand::execute( KoTextCursor *c )
 {
     KoTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
-	kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
+        if (doc)
+	    kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
 	return 0;
     }
 
@@ -182,7 +183,8 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
 {
     KoTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
-	kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
+        if (doc)
+	    kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
 	return 0;
     }
 
@@ -203,7 +205,7 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
     while ( s ) {
 	s->format();
 	s->setChanged( true );
-	if ( s == c->parag() )
+	if ( c && s == c->parag() )
 	    break;
 	s = s->next();
     }

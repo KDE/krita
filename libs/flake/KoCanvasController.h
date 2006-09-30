@@ -30,6 +30,7 @@
 class QGridLayout;
 class QPaintEvent;
 class QEvent;
+class KoShape;
 
 /**
  * This widget is a wrapper around your canvas providing scrollbars.
@@ -101,6 +102,25 @@ public:
     bool isCanvasCentered() const;
 
     virtual bool eventFilter(QObject* watched, QEvent* event);
+
+    /**
+     * @brief Scrolls the content of the canvas so that the given rect is visible.
+     *
+     * The rect is to be specified in document coordinates. The scrollbar positions
+     * are changed so that the centerpoint of the rectangle is centered if possible.
+     *
+     * @param rect the rectangle to make visible
+     */
+    void ensureVisible( const QRectF &rect );
+
+    /**
+     * @brief Scrolls the content of the canvas so that the given shape is visible.
+     *
+     * This is just a wrapper function of the above function.
+     *
+     * @param shape the shape to make visible
+     */
+    void ensureVisible( KoShape *shape );
 
 signals:
     /**

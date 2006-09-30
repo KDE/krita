@@ -118,6 +118,13 @@ public:
      */
     virtual KoUnit::Unit unit() = 0;
 
+    /**
+     * Return the position of the document origin inside the canvas widget.
+     * By default the origin of the canvas widget and the position of the
+     * document origin are coincident, thus an empty point is returned.
+     */
+    virtual QPoint documentOrigin() { return QPoint(0,0); };
+
 #if 0
 /*  The next list of methods are naming taken from Krita, which means they have already been
     toughened by time.  So, if you ever need a method in this interface; please uncomment the

@@ -19,6 +19,7 @@
  */
 
 #include "KoCanvasController.h"
+#include "KoShape.h"
 
 #include <kdebug.h>
 
@@ -163,6 +164,40 @@ void KoCanvasController::Viewport::centerCanvas(bool centered) {
     m_layout->setColumnStretch(0,centered?1:0);
     m_layout->setColumnStretch(1,1);
     m_layout->setColumnStretch(2,centered?1:2);
+}
+
+void KoCanvasController::ensureVisible( KoShape *shape ) {
+    if( shape )
+        ensureVisible( shape->boundingRect() );
+}
+
+void KoCanvasController::ensureVisible( const QRectF &rect ) {
+    // convert the document based rect into a canvas based rect
+    QRect viewRect = m_canvas->viewConverter()->documentToView( rect ).toRect();
+
+    // calculate position of the centerpoint of the rect we want to make visible
+    QPoint cp = viewRect.center() + m_canvas->documentOrigin();
+    cp.rx() += m_canvas->canvasWidget()->x() + frameWidth();
+    cp.ry() += m_canvas->canvasWidget()->y() + frameWidth();
+
+    // calculate the differance to the viewport centerpoint
+    QPoint centerDiff = cp - 0.5 * QPoint( m_viewport->width(), m_viewport->height() );
+
+    QScrollBar *hBar = horizontalScrollBar();
+    // try to centralize the centerpoint of the rect which we want to make visible
+    if( hBar && hBar->isVisible() ) {
+        centerDiff.rx() += int( 0.5 * (float)hBar->maximum() );
+        centerDiff.rx() = qMax( centerDiff.x(), hBar->minimum() );
+        centerDiff.rx() = qMin( centerDiff.x(), hBar->maximum() );
+        hBar->setValue( centerDiff.x() );
+    }
+    QScrollBar *vBar = verticalScrollBar();
+    if( vBar && vBar->isVisible() ) {
+        centerDiff.ry() += int( 0.5 * (float)vBar->maximum() );
+        centerDiff.ry() = qMax( centerDiff.y(), vBar->minimum() );
+        centerDiff.ry() = qMin( centerDiff.y(), vBar->maximum() );
+        vBar->setValue( centerDiff.y() );
+    }
 }
 
 #include "KoCanvasController.moc"

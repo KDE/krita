@@ -81,14 +81,18 @@ KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoPointerEvent *eve
                 return new KoShapeShearStrategy(parent, canvas, event->point, handle);
             return new KoShapeRotateStrategy(parent, canvas, event->point);
         }
+        // This is wrong now when there is a single rotated object as you get it also when pressing outside of the object
         if(select->boundingRect().contains(event->point))
             return new KoShapeMoveStrategy(parent, canvas, event->point);
     }
 
     KoShape * object( shapeManager->shapeAt( event->point ) );
     if( !object && handle == KoFlake::NoHandle) {
-        parent->repaintDecorations();
-        select->deselectAll();
+        if ( ( event->modifiers() & Qt::ControlModifier ) == 0 )
+        {
+            parent->repaintDecorations();
+            select->deselectAll();
+        }
         return new KoShapeRubberSelectStrategy(parent, canvas, event->point);
     }
 

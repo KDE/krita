@@ -26,7 +26,7 @@
 #include "kis_paint_layer.h"
 
 KisOasisSaveVisitor::KisOasisSaveVisitor(KoOasisStore* os) : m_oasisStore(os), m_bodyWriter( m_oasisStore->bodyWriter())
-{};
+{}
 
 void KisOasisSaveVisitor::saveLayerInfo(KisLayer* layer)
 {

@@ -63,7 +63,7 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
             m_pathShape->border()->borderInsets( m_pathShape, insets );
             controlPointRect.adjust( -insets.left, -insets.top, insets.right, insets.bottom );
         }
-        QRect shape = converter.documentToView( m_pathShape->documentToShape( controlPointRect ) ).toRect();
+        QRect shape = converter.documentToView( m_pathShape->shapeToDocument( controlPointRect ) ).toRect();
         if(painter.clipRegion().intersect( QRegion(shape) ).isEmpty())
             return;
     }
@@ -119,7 +119,7 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
                     m_selectedPoints << m_activePoint;
                 }
             }
-            repaint( m_pathShape->documentToShape( m_pathShape->outline().controlPointRect() ) );
+            repaint( m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() ) );
         }
         else if( event->button() & Qt::RightButton )
         {
@@ -148,7 +148,7 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
         {
             if( event->modifiers() & Qt::ControlModifier == 0 )
                 m_selectedPoints.clear();
-            repaint( m_pathShape->documentToShape( m_pathShape->outline().controlPointRect() ) );
+            repaint( m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() ) );
             // starts rubberband selection
             Q_ASSERT(m_rubberSelect == 0);
             m_rubberSelect = new KoPointRubberSelectStrategy( this, m_canvas, event->point );
@@ -166,7 +166,7 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     if( m_pointMoving )
     {
         QPointF docPoint = snapToGrid( event->point, event->modifiers() );
-        QPointF move = m_pathShape->shapeToDocument( docPoint ) - m_pathShape->shapeToDocument( m_lastPosition );
+        QPointF move = m_pathShape->documentToShape( docPoint ) - m_pathShape->documentToShape( m_lastPosition );
         // as the last position can change when the top left is changed we have 
         // to save it in document pos and not in shape pos
         m_lastPosition = docPoint;
@@ -193,12 +193,12 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     {
         m_activePoint = 0;
 
-        QRectF roi = handleRect( m_pathShape->shapeToDocument( event->point ) );
+        QRectF roi = handleRect( m_pathShape->documentToShape( event->point ) );
         QList<KoPathPoint*> points = m_pathShape->pointsAt( roi );
         if( points.empty() )
         {
             useCursor(Qt::ArrowCursor);
-            repaint( m_pathShape->documentToShape( m_pathShape->outline().controlPointRect() ) );
+            repaint( m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() ) );
             return;
         }
 
@@ -214,7 +214,7 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
         else if( roi.contains( m_activePoint->point() ) )
             m_activePointType = KoPathPoint::Node;
 
-        repaint( m_pathShape->documentToShape( m_pathShape->outline().controlPointRect() ) );
+        repaint( m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() ) );
 
         if(event->buttons() == Qt::NoButton)
             return;
@@ -234,7 +234,7 @@ void KoPathTool::mouseReleaseEvent( KoPointerEvent *event ) {
                 // readd the active point
                 if( m_activePoint )
                     m_selectedPoints << m_activePoint;
-                repaint( m_pathShape->documentToShape( m_pathShape->outline().controlPointRect() ) );
+                repaint( m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() ) );
             }
         }
         else
@@ -255,17 +255,17 @@ void KoPathTool::mouseReleaseEvent( KoPointerEvent *event ) {
         QRectF selectRect = m_rubberSelect->selectionRect();
         if( event->modifiers() & Qt::ControlModifier )
         {
-            QList<KoPathPoint*> selected = m_pathShape->pointsAt( m_pathShape->shapeToDocument( selectRect ) );
+            QList<KoPathPoint*> selected = m_pathShape->pointsAt( m_pathShape->documentToShape( selectRect ) );
             foreach( KoPathPoint* point, selected )
                 if( ! m_selectedPoints.contains( point ) )
                     m_selectedPoints << point;
         }
         else
-            m_selectedPoints = m_pathShape->pointsAt( m_pathShape->shapeToDocument( selectRect ) );
+            m_selectedPoints = m_pathShape->pointsAt( m_pathShape->documentToShape( selectRect ) );
 
         delete m_rubberSelect;
         m_rubberSelect = 0;
-        repaint( selectRect.united( m_pathShape->documentToShape( m_pathShape->outline().controlPointRect() ) ) );
+        repaint( selectRect.united( m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() ) ) );
     }
 }
 
@@ -280,7 +280,7 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
             }
             else
                 m_handleRadius++;
-            repaint( m_pathShape->documentToShape( m_pathShape->outline().controlPointRect() ) );
+            repaint( m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() ) );
         break;
         case Qt::Key_Delete:
             m_pointMoving = false;
@@ -387,12 +387,12 @@ void KoPathTool::activate (bool temporary) {
         return;
     }
     useCursor(Qt::ArrowCursor, true);
-    repaint( m_pathShape->documentToShape( m_pathShape->outline().controlPointRect() ) );
+    repaint( m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() ) );
 }
 
 void KoPathTool::deactivate() {
     if(m_pathShape) {
-        QRectF repaintRect = m_pathShape->documentToShape( m_pathShape->outline().controlPointRect() );
+        QRectF repaintRect = m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() );
         m_selectedPoints.clear();
         repaint( repaintRect );
     }

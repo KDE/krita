@@ -16930,7 +16930,7 @@ namespace cimg_library {
 	throw CImgArgumentException("CImgl<%s>::insert() : Can't insert at position %u into a list with %u elements",
 				    pixel_type(),pos,size);
       CImg<T> *new_data = (++size>allocsize)?new CImg<T>[allocsize?(allocsize<<=1):(allocsize=1)]:NULL;
-      if (!size || !data) { data=new_data; *data=img; }
+      if ((!size || !data) && new_data) { data=new_data; *data=img; }
       else {
 	if (new_data) { // Insert with reallocation
 	  if (pos) std::memcpy(new_data,data,sizeof(CImg<T>)*pos);

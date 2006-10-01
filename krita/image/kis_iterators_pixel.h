@@ -23,12 +23,10 @@
 #include "kis_iteratorpixeltrait.h"
 
 /**
- * The pixel iterators are high level iterarators. The lower level iterators merely return a pointer to some memory
- * where a pixel begins; these iterators return KisPixels -- high-level representations of a pixel together with
- * color model, profile and selectedness. You can access individual channels using the KisPixel [] operator, and .
+ * This iterators will iterate over an horizontal line of the image, you can access to the data of the image using the
+ * rawData function.
+ * The function isSelected() and selectedness() gives you access to the selection of the current pixel.
  */
-
-
 class KisHLineIteratorPixel : public KisHLineIterator, public KisIteratorPixelTrait <KisHLineIterator>
 {
 
@@ -63,6 +61,11 @@ protected:
     qint32 m_offsetx, m_offsety;
 };
 
+/**
+ * This iterators will iterate over a vertical line of the image, you can access to the data of the image using the
+ * rawData function.
+ * The function isSelected() and selectedness() gives you access to the selection of the current pixel.
+ */
 class KisVLineIteratorPixel : public KisVLineIterator, public KisIteratorPixelTrait <KisVLineIterator>
 {
 public:
@@ -91,6 +94,14 @@ protected:
     qint32 m_offsetx, m_offsety;
 };
 
+/**
+ * This iterators will iterate over a rectangle area of the image, you can access to the data of the image using
+ * the rawData function.
+ * You must be carefull when using this iterator, while it is faster than the lines iterators, you can't predict the path
+ * that will be followed by the iterator. Which means for instance that you should avoid it if you need to have a synchronized
+ * iteration over two different paint device.
+ * The function isSelected() and selectedness() gives you access to the selection of the current pixel.
+ */
 class KisRectIteratorPixel : public KisRectIterator, public KisIteratorPixelTrait <KisRectIterator>
 {
 public:

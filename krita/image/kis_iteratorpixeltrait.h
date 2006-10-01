@@ -23,6 +23,9 @@
 #include "kis_iterator.h"
 #include <kis_paint_device.h>
 
+/**
+ * This class provided access to information about the selection through the iterators.
+ */
 template< typename _iTp>
 class KisIteratorPixelTrait
 {

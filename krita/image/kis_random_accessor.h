@@ -29,6 +29,10 @@ typedef KSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;
 
 class KisTiledDataManager;
 
+/**
+ * Gives a random access to the pixel of an image. Use the moveTo function, to select the pixel. And then rawData to
+ * access the value of a pixel.
+ */
 class KisRandomAccessor{
     public:
         KisRandomAccessor(KisTiledDataManager *ktm, Q_INT32 x, Q_INT32 y, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
@@ -37,22 +41,28 @@ class KisRandomAccessor{
     public:
         /// Move to a given x,y position, fetch tiles and data
         void moveTo(Q_INT32 x, Q_INT32 y);
+        /// @return a pointer to the pixel value
         Q_UINT8* rawData() const;
+        /// @return a pointer to the old pixel value
         const Q_UINT8* oldRawData() const;
     private:
         KisTiledRandomAccessorSP m_accessor;
         Q_INT32 m_offsetx, m_offsety;
 };
 
+/**
+ * This class provided access to information about the selection through the random accessor.
+ */
 class KisRandomAccessorPixelTrait {
     public:
         inline KisRandomAccessorPixelTrait(KisRandomAccessor* underlyingAccessor, KisRandomAccessor* selectionAccessor) : m_underlyingAccessor(underlyingAccessor), m_selectionAccessor(selectionAccessor)
         {
         }
-	~KisRandomAccessorPixelTrait() {
-		if(m_selectionAccessor)
-			delete m_selectionAccessor;
-	}
+        ~KisRandomAccessorPixelTrait() {
+            if(m_selectionAccessor)
+                delete m_selectionAccessor;
+        }
+        /// @return true if the pixel is selected
         inline bool isSelected() const
         {
             return (m_selectionAccessor) ? *(m_selectionAccessor->rawData()) > SELECTION_THRESHOLD : true;
@@ -84,6 +94,12 @@ class KisRandomAccessorPixelTrait {
         KisRandomAccessor* m_selectionAccessor;
 };
 
+/**
+ * Gives a random access to the pixel of an image. Use the moveTo function, to select the pixel. And then rawData to
+ * access the value of a pixel.
+ * The function isSelected() and selectedness() gives you access to the selection of the current pixel.
+ * Note, that you should use this class only if you need random access to a pixel. It is best to use iterators as much as possible.
+ */
 class KisRandomAccessorPixel : public KisRandomAccessor, public KisRandomAccessorPixelTrait {
     public:
         KisRandomAccessorPixel(KisTiledDataManager *ktm, KisTiledDataManager *ktmselect, Q_INT32 x, Q_INT32 y, Q_INT32 offsetx, Q_INT32 offsety, bool writable);

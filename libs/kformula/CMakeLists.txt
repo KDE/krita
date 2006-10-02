@@ -2,7 +2,6 @@
 
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 
-add_subdirectory( dtd ) 
 
 include_directories( ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES})
 

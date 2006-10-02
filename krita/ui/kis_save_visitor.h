@@ -26,6 +26,7 @@
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include "kis_adjustment_layer.h"
 
 class KisSaveVisitor : public KisLayerVisitor {
 public:

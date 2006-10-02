@@ -39,7 +39,8 @@
 #include "kis_group_layer.h"
 #include "kis_factory.h"
 #include "kis_paint_device.h"
-#include <kis_meta_registry.h>
+#include "kis_view.h"
+#include "kis_meta_registry.h"
 
 KisChildDoc::KisChildDoc ( KisDoc * kisDoc, const QRect & rect, KoDocument * childDoc )
     : KoDocumentChild( kisDoc, childDoc, rect )

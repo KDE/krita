@@ -20,18 +20,18 @@
 
 bool KisOasisLoadVisitor::visit(KisPaintLayer *layer)
 {
-    
+   return false;    
 }
 
 bool KisOasisLoadVisitor::visit(KisGroupLayer *layer)
 {
-    
+   return false; 
 }
 bool KisOasisLoadVisitor::visit(KisPartLayer *layer)
 {
-    
+   return false; 
 }
 bool KisOasisLoadVisitor::visit(KisAdjustmentLayer *layer)
 {
-    
+   return false; 
 }

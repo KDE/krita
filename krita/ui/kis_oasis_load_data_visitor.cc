@@ -15,38 +15,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_OASIS_SAVE_VISITOR_H_
-#define KIS_OASIS_SAVE_VISITOR_H_
 
-#include "kis_global.h"
-#include "kis_types.h"
+#include <kis_oasis_load_visitor.h>
 
-#include "kis_layer_visitor.h"
+bool KisOasisLoadVisitor::visit(KisPaintLayer *layer)
+{
+    
+}
 
-class KoOasisStore;
-class KoXmlWriter;
-
-class KisAdjustmentLayer;
-class KisGroupLayer;
-class KisPaintLayer;
-class KisPartLayer;
-
-class KisOasisSaveVisitor : public KisLayerVisitor {
-public:
-    KisOasisSaveVisitor(KoOasisStore* os);
-    virtual ~KisOasisSaveVisitor() {};
-
-public:
-    virtual bool visit(KisPaintLayer *layer);
-    virtual bool visit(KisGroupLayer *layer);
-    virtual bool visit(KisPartLayer *layer);
-    virtual bool visit(KisAdjustmentLayer *layer);
-private:
-    void saveLayerInfo(KisLayer* layer);
-    KoOasisStore* m_oasisStore;
-    KoXmlWriter* m_bodyWriter;
-};
-
-
-#endif // KIS_LAYER_VISITOR_H_
-
+bool KisOasisLoadVisitor::visit(KisGroupLayer *layer)
+{
+    
+}
+bool KisOasisLoadVisitor::visit(KisPartLayer *layer)
+{
+    
+}
+bool KisOasisLoadVisitor::visit(KisAdjustmentLayer *layer)
+{
+    
+}

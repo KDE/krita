@@ -70,6 +70,7 @@
 #include "kis_load_visitor.h"
 #include "kis_meta_registry.h"
 #include "kis_nameserver.h"
+#include "kis_oasis_save_data_visitor.h"
 #include "kis_oasis_save_visitor.h"
 #include "kis_paint_device_action.h"
 #include "kis_paint_layer.h"
@@ -251,10 +252,13 @@ bool KisDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
     if ( !contentWriter )
         return false;
     
-    KoXmlWriter* bodyWriter = oasisStore->bodyWriter();
+    manifestWriter->addManifestEntry( "data/", "" );
+//     KoXmlWriter* bodyWriter = oasisStore->bodyWriter();
     KisOasisSaveVisitor osv(oasisStore);
     m_currentImage->rootLayer()->accept(osv);
     oasisStore->closeContentWriter();
+    KisOasisSaveDataVisitor osdv(oasisStore, manifestWriter);
+    m_currentImage->rootLayer()->accept(osdv);
     delete oasisStore;
     return true;
 }

@@ -35,9 +35,13 @@ set(kritaui_LIB_SRCS
    kis_label_progress.cc
    kis_label_zoom.cc
    kis_layerbox.cc
+   kis_matrix_widget.cpp
    kis_multi_bool_filter_widget.cc
    kis_multi_double_filter_widget.cc
    kis_multi_integer_filter_widget.cc
+   kis_oasis_load_visitor.cc
+   kis_oasis_save_data_visitor.cc
+   kis_oasis_save_visitor.cc
    kis_opengl_canvas.cc
    kis_opengl_image_context.cc
    kis_paintop_box.cc
@@ -45,6 +49,7 @@ set(kritaui_LIB_SRCS
    kis_palette_widget.cc
    kis_part_layer.cc
    kis_pattern_chooser.cc
+   kis_perspective_grid_manager.cpp
    kis_previewdialog.cc
    kis_previewwidget.cc
    kis_qpaintdevice_canvas.cc
@@ -77,10 +82,6 @@ set(kritaui_LIB_SRCS
    kis_part_layer_handler.cc
    kis_dlg_adj_layer_props.cc
    squeezedcombobox.cpp
-   kis_matrix_widget.cpp
-   kis_perspective_grid_manager.cpp
-   kis_oasis_save_visitor.cc
-   kis_oasis_load_visitor.cc
    )
 
 kde4_automoc(${kritaui_LIB_SRCS})

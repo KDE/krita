@@ -18,7 +18,11 @@
 
 #include <kis_oasis_save_visitor.h>
 
+#include <QImage>
+
 #include <KoOasisStore.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 
 #include "kis_adjustment_layer.h"
@@ -37,8 +41,10 @@ void KisOasisSaveVisitor::saveLayerInfo(KisLayer* layer)
 
 bool KisOasisSaveVisitor::visit(KisPaintLayer *layer)
 {
+    QString filename = "data/" + layer->name() + ".png";
     m_bodyWriter->startElement("image:layer");
     saveLayerInfo(layer);
+    m_bodyWriter->addAttribute("src", filename);
     m_bodyWriter->endElement();
     return true;
 }
@@ -67,7 +73,6 @@ bool KisOasisSaveVisitor::visit(KisPartLayer *layer)
 }
 bool KisOasisSaveVisitor::visit(KisAdjustmentLayer *layer)
 {
-    Q_UNUSED(layer);
     saveLayerInfo(layer);
     return true;
 }

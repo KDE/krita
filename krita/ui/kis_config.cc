@@ -36,7 +36,7 @@ namespace {
     const qint32 IMG_DEFAULT_HEIGHT = 512;
     const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
     const qint32 DEFAULT_MAX_THREADS = 4;
-    const qint32 DEFAULT_MAX_TILES_MEM = 500; // 8192 kilobytes given 64x64 tiles with 32bpp
+    const qint32 DEFAULT_MAX_TILES_MEM = 5000; 
     const qint32 DEFAULT_SWAPPINESS = 100;
     const qint32 DEFAULT_PRESSURE_CORRECTION = 50;
     const qint32 DEFAULT_DOCKABILITY = 0;

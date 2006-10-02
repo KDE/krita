@@ -2,6 +2,7 @@
  *  kis_aboutdata.h - part of Krayon
  *
  *  Copyright (c) 1999-2000 Matthias Elter  <me@kde.org>
+ *  Copyright (c) 2003-2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

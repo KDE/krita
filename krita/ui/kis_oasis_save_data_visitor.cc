@@ -30,7 +30,7 @@
 #include "kis_paint_layer.h"
 
 KisOasisSaveDataVisitor::KisOasisSaveDataVisitor(KoOasisStore* os, KoXmlWriter* manifestWriter) : m_oasisStore(os), m_manifestWriter(manifestWriter)
-{};
+{}
 
 bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
 {

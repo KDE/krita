@@ -66,7 +66,7 @@ void FormulaTool::deactivate()
     m_formulaCursor = 0;
 }
 
-void FormulaTool::paint( QPainter &painter, KoViewConverter &converter) const
+void FormulaTool::paint( QPainter &painter, KoViewConverter &converter)
 {
     // TODO do view conversions with converter
     m_formulaCursor->paint( painter );

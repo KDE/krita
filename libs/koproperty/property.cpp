@@ -347,8 +347,8 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 			   || (t==QVariant::ULongLong && newt==QVariant::LongLong)
 			   || (t==QVariant::LongLong && newt==QVariant::ULongLong)
 		 )) {
-		kopropertywarn << "Property::setValue(): INCOMPAT TYPES! " << currentValue 
-			<< " and " << value << endl;
+		kopropertywarn << "Property::setValue(): INCOMPATIBLE TYPES! old=" << currentValue 
+			<< " new=" << value << endl;
 	}
 
 	//1. Check if the value should be changed

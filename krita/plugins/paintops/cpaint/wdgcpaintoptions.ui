@@ -1,0 +1,163 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgCPaintOptions</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgCPaintOptions</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>347</width>
+            <height>27</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>WdgCPaintOptions</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>lblBrush</cstring>
+            </property>
+            <property name="text">
+                <string>Brush:</string>
+            </property>
+        </widget>
+        <widget class="QComboBox">
+            <item>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>image0</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>image1</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>image2</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>image3</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>image4</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>image5</pixmap>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>cmbBrush</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="currentItem">
+                <number>2</number>
+            </property>
+        </widget>
+        <widget class="QToolButton">
+            <property name="name">
+                <cstring>bnInk</cstring>
+            </property>
+            <property name="text">
+                <string>Fill Brush</string>
+            </property>
+        </widget>
+        <widget class="KisIntSpinbox">
+            <property name="name">
+                <cstring>intInk</cstring>
+            </property>
+        </widget>
+        <widget class="KisIntSpinbox">
+            <property name="name">
+                <cstring>intWater</cstring>
+            </property>
+        </widget>
+    </hbox>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>KisIntSpinbox</class>
+        <header location="global">kis_int_spinbox.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image6</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="XPM.GZ" length="357">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232325130345030523054d2e152525648565036000310570fc44d030330170e944100ce439153862940c829c300927eb81c121fd964647de8f6e296c3aa4f199b99c81662f70342115ebfd75a730100c1b03f1e</data>
+    </image>
+    <image name="image1">
+        <data format="XPM.GZ" length="519">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232365030345630523054d2e152525648565036000310570fc44d030330171928830192009a0a981c9222b00d4800d92c24156806a02ac1a5026122aa2d986ec6a3022e46b619487cbcb6e00b0f2436f63045368f8878a9b5e602000cc158e1</data>
+    </image>
+    <image name="image2">
+        <data format="XPM.GZ" length="662">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232365530345530523054d2e152525648565036000310570fc44d03033017192843018aa01e9a32843caa52b05d4800cd5cecca506d4212022b43b71087321ca6217907af323da29421f98c0a962a93a08ca04f95712a43892af458403501c3422cca70a6905a6b2e00bc496f53</data>
+    </image>
+    <image name="image3">
+        <data format="XPM.GZ" length="1177">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232315330325230523054d2e152525648565036000310570fc44d030330171d282300869c1e161dcaa880b00e1455583481dd8cd7547431023ab00862e8c0f42a9a2d601d58bd806e0fb13a306d27c655a8be214a871e893ad04292900ef49027ac833c7f2893a0039b0cf13ed7235a07ba04a1b48b298857075653f0e7286c2ea546aec5e51ab88e5a6b2e00a69bc096</data>
+    </image>
+    <image name="image4">
+        <data format="XPM.GZ" length="1611">789cad94bf0ac23010c6f73cc5d16c41522dd4457c04c151108712111dba681d447c776904697397f48bf86d97ef7ebd3fd02b0dedb61b32a5ba754d7771e4cecd95ccf1deb68ffd61fd54455d53b5a48a16c54c159a1ce9b9571fda3e3c79f950901e4a4ab0564635138a06b9115a4259a25cda6f02e84f7847d08821a0ac62a4ae47c77e921cd8182a7605569546c2671df1b968c0c2a866c250cec128e7b3666539101ab6fa79055019fc65c33617155ce87f958d6934fac9a90393e805386bb11dfcfb98a61bfda2af957a03049d06ee</data>
+    </image>
+    <image name="image5">
+        <data format="XPM.GZ" length="3277">789ced96bd0ac2400cc7f77b8ad0db8ab455d0457c04c151108752111d5cb40e22bebbf44aeb7d24778de7223443cbd1fcf24f42492e4f61bb59439a8b5b5dd6e70aaa537985f470bf5c1ebbfdea29924501f30266304d26229150812c9435c7ac391e95a963848dfcc8877ca4613c5e9216e66d392c0992a7592306ce3b65a211485ea7e906a810088f687f22d95d51d301ed6c28fbd611e171753718a53f54bdaf5f9aae43b47b210e8fe5c9d6b71260f4cf76526f6eff6dd7283e22ffce97fdff686eccfa5d715efe4e18168f551fdb7f16ef8a370f9e7ee7f055fe3fa85ff721fbef1bbddaa99dd2e8fc1c3a8232727ebb033c33c65ebf5e88fd63e740a80fdb5f18dc7d0bee4f173472f3ef6f3c825e5af0fee0a5ffe3fe33f21efeb5146f47a92038</data>
+    </image>
+    <image name="image6">
+        <data format="PNG" length="1002">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003b149444154388dad945f4c5b551cc73fe7dc4b7b4bcba0762d45c43114323599ee6192609c51d883892ce083f1718b3ebb185f8dc91e972cf39d2d2a2f1af664b6f1e0fe3863a0718969700eb0c52142da0242a1bd6d696f7bcff101585203ceb8fd9ece39f99dcff9fe7edf939f88c562ec465f5f9fe609442c161362173c3e3eae7b7a7ac8e7f36432196cdbfe4f907c3e4f2291201e8fe338cec3737357e9e8e828aded1e229d650e1f2d51754b082110124c13a4dc5ea341eb9dc284c0558a853f3ce8cb0677ef500fde7d39d2596679e326597b8e9abb85d7a770ab16ab6983ec5a05b487a70e36f0f4e10afe408d6a558310980108478dba4a1e8233990c5d474b64ed39aa3a8fe5f3317fbf81dbd70bccfeb205947632fd74f6589c1c6ea2f70d03a58ba0c1f2c9bdc1b66de3b8256a6e11cbe7e3ee1d181b590124fe2693aeee08d223c82c3a2c24b7b874bec8f26288774f7bd054504aef0dde6e99c0eb83f9fb266323cb80a27fb0958141836044605a2ee5523393371cc646fee2da37195aa35d0c0c5b4859ac03d7e91712dcaac5adab3650a3ff9d08ef7dd8404bb48869e5d958b5b87dadc4c9a1464e9f0d0326df7ebd86bd2e310cb1bf62d384d59441f2d70a070e1c60e09489929b988681bdd9cc97170bcc4c65595f71f8e0e3301337fc24a7732467831875a47f289652b0be5e4151e6d07316c1b0c0340d8ab92023e76d66a6b2840e36d2fb7a13fee632475e6edc367ea98a90fb98b7dd6310ca0328a44761582e1bab41befabcc0ec940d28bc5e93b68e064cab84e1d9beaeb48934eac1f53b01c1b000fca496aa54b61a99fcde61662a4b4b4b23d1680be9d426173e4df3602a48ea411989a4fd590f52a8fd156b05ed9d350e3defe3cfdf4b4c7ce770ea7d3fb9f520afbe1620daeee5c26735d20b9b9cfb6811a754a439e4e5c5639a4caa1e5caf586bfc0197b78702005cb9b4cae4cd3267ce8638fe964bd72b393e39d74928d242617303a756a37f284447770dcdbffc6384a05a85de1306e9a52057c7527c7131c3c42d3f475eb2303c82d4fc3276d6811db37efeb148723082d9b08f79f97c1e5729109a9a28307cc622d2d6cdf52b2b24efe548dedb00142009862cfa879ee1a71f6cec928353511472fbf4389148b0b0e0c108081412458dfe21c9f11351e67e7358595468246d1d1e5e38a6e9e851bc39d84ab502a669331dafec0d8ec7e3e8cb06e1a881d727d1ae40180a434a8c9db129a54126ad48a7358c2b4c5352c8c374bcccdab2bb37d8719cba79fab8211f9df218e0582c261e95f8bfc04f1a1e8bc5c4dfe0a190172af6a9690000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kis_int_spinbox.h</includehint>
+    <includehint>kis_int_spinbox.h</includehint>
+</includehints>
+</UI>

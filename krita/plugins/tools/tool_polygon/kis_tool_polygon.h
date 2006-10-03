@@ -28,9 +28,7 @@
 #include "kis_tool_shape.h"
 
 class KisCanvas;
-class KisDoc;
 class KisPainter;
-class KisView;
 class KisRect;
 
 class KisToolPolygon : public KisToolShape {

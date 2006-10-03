@@ -1,14 +1,3 @@
-
-add_subdirectory(tests)
-
-    #kis_doc2.cc
-    #kis_view2.cpp
-    #kis_canvas2.cpp
-    #kis_opengl_canvas2.cpp
-    # kis_factory2.cc
-    #kis_view_converter.cpp
-    #kis_qpainter_canvas.cpp
-
 set(kritaui_LIB_SRCS
    kis_histogram_view.cc
    imageviewer.cc
@@ -152,7 +141,7 @@ install( FILES
     kis_color_cup.h
     kis_config.h
     kis_cursor.h
-    #kis_doc.h
+    kis_doc.h
     kis_double_click_event.h
     kis_double_widget.h
     kis_filter_manager.h
@@ -182,7 +171,7 @@ install( FILES
     kis_tool_manager.h
     kis_tool_types.h
     kis_tool_registry.h
-    #kis_view.h
+    kis_view.h
     kis_tool_factory.h
     kobirdeyepanel.h
     kis_filters_listview.h

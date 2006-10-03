@@ -25,9 +25,6 @@
 #include <klocale.h>
 
 #include "kis_filter.h"
-#include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_view.h"
 #include "kis_types.h"
 #include "kis_filter_configuration.h"
 #include "KoColorSpace.h"

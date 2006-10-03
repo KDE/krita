@@ -27,10 +27,10 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_doc.h>
+#include <kis_doc2.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 
 #include "historydocker.h"
 
@@ -40,10 +40,10 @@ K_EXPORT_COMPONENT_FACTORY( kritahistorydocker, KritaHistoryDockerFactory( "krit
 KritaHistoryDocker::KritaHistoryDocker(QObject *parent, const char *name, const QStringList &)
         : KParts::Plugin(parent, name)
 {
-    
 
 
-    if ( parent->inherits("KisView") )
+
+    if ( parent->inherits("KisView2") )
     {
         setInstance(KritaHistoryDockerFactory::instance());
         // Create history docker

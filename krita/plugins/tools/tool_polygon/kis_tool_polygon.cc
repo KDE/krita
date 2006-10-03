@@ -33,8 +33,7 @@
 #include <kdebug.h>
 #include <knuminput.h>
 
-#include "kis_doc.h"
-#include "kis_view.h"
+#include "kis_view.h" // XXX: Something that kis view includes is needed here, but I don't know what
 #include "kis_painter.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
@@ -45,6 +44,7 @@
 #include "kis_canvas.h"
 #include "QPainter"
 #include "kis_cursor.h"
+#include "kis_undo_adapter.h"
 
 #include "kis_tool_polygon.h"
 

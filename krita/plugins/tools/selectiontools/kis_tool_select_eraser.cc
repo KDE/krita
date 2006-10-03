@@ -38,13 +38,13 @@
 #include "kis_button_release_event.h"
 #include "kis_cmb_composite.h"
 #include "kis_cursor.h"
+#include "kis_canvas_subject.h"
 #include "kis_doc.h"
 #include "kis_move_event.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_tool_select_eraser.h"
 #include "kis_types.h"
-#include "kis_view.h"
 #include "kis_selection_options.h"
 
 KisToolSelectEraser::KisToolSelectEraser()

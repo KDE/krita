@@ -44,7 +44,7 @@ public:
     ~FormulaShape();
 
     /// inherited from KoShape
-    void paint( QPainter &painter, KoViewConverter &converter ) const;
+    void paint( QPainter &painter, KoViewConverter &converter );
 
     /// @return The BasicElement at the highest level in the formula tree
     BasicElement* formulaElement() const;

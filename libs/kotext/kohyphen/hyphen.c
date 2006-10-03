@@ -304,6 +304,8 @@ hnj_hyphen_load (const char *fn)
 	}
     }
 
+  fclose(f);
+
   /* Could do unioning of matches here (instead of the preprocessor script).
      If we did, the pseudocode would look something like this:
 

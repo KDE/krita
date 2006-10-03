@@ -48,21 +48,18 @@ public:
             return false;
         };
 
-    virtual void fromQColor(const QColor& c, quint8 *dst, KoColorProfile * profile = 0);
-    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 *dst, KoColorProfile * profile = 0) const;
+    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0) const;
 
     virtual void getAlpha(const quint8 *pixel, quint8 *alpha) const;
 
-    virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0);
-    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0) const;
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0) const;
 
-    virtual quint8 difference(const quint8 *src1, const quint8 *src2);
+    virtual quint8 difference(const quint8 *src1, const quint8 *src2) const;
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
-    virtual Q3ValueVector<KoChannelInfo *> channels() const;
-    virtual quint32 nChannels() const { return 1; };
     virtual quint32 nColorChannels() const { return 0; };
-    virtual quint32 pixelSize() const { return 1; };
 
     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
@@ -80,7 +77,7 @@ protected:
     virtual bool convertPixelsTo(const quint8 *src,
                      quint8 *dst, KoColorSpace * dstColorSpace,
                      quint32 numPixels,
-                     qint32 renderingIntent = INTENT_PERCEPTUAL);
+                     qint32 renderingIntent = INTENT_PERCEPTUAL) const;
 
 };
 

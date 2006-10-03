@@ -98,11 +98,6 @@ class KoColorSpaceAbstract : public KoColorSpace {
         virtual quint32 nChannels() const { return _CSTraits::channels_nb; };
         virtual quint32 pixelSize() const { return _CSTraits::channels_nb * sizeof(typename _CSTraits::channels_type); }
 
-        Q3ValueVector<KoChannelInfo *> channels()
-        {
-            return m_channels;
-        }
-
         virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const
         {
             if(channelIndex > _CSTraits::channels_nb) return QString("Error");

@@ -282,12 +282,12 @@ KoAlphaColorSpace::~KoAlphaColorSpace()
 {
 }
 
-void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 *dst, KoColorProfile * /*profile*/)
+void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 *dst, KoColorProfile * /*profile*/) const
 {
     dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 opacity, quint8 *dst, KoColorProfile * /*profile*/)
+void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 opacity, quint8 *dst, KoColorProfile * /*profile*/) const
 {
     dst[PIXEL_MASK] = opacity;
 }
@@ -297,18 +297,18 @@ void KoAlphaColorSpace::getAlpha(const quint8 *pixel, quint8 *alpha) const
     *alpha = *pixel;
 }
 
-void KoAlphaColorSpace::toQColor(const quint8 */*src*/, QColor *c, KoColorProfile * /*profile*/)
+void KoAlphaColorSpace::toQColor(const quint8 */*src*/, QColor *c, KoColorProfile * /*profile*/) const
 {
     c->setRgb(255, 255, 255);
 }
 
-void KoAlphaColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/)
+void KoAlphaColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/) const
 {
     c->setRgb(255, 255, 255);
     *opacity = src[PIXEL_MASK];
 }
 
-quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2)
+quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2) const
 {
     // Arithmetic operands smaller than int are converted to int automatically
     return QABS(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
@@ -328,15 +328,10 @@ void KoAlphaColorSpace::mixColors(const quint8 **colors, const quint8 *weights, 
     }
 }
 
-Q3ValueVector<KoChannelInfo *> KoAlphaColorSpace::channels() const
-{
-    return m_channels;
-}
-
 bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
                      quint8 *dst, KoColorSpace * dstColorSpace,
                      quint32 numPixels,
-                     qint32 /*renderingIntent*/)
+                     qint32 /*renderingIntent*/) const
 {
     // No lcms trickery here, we are only a opacity channel
     qint32 size = dstColorSpace->pixelSize();

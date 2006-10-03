@@ -249,8 +249,10 @@ bool KisDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
     KoOasisStore* oasisStore =  new KoOasisStore( store );
     KoXmlWriter* contentWriter = oasisStore->contentWriter();
-    if ( !contentWriter )
+    if ( !contentWriter ) {
+        delete oasisStore;
         return false;
+    }
     
     manifestWriter->addManifestEntry( "data/", "" );
 //     KoXmlWriter* bodyWriter = oasisStore->bodyWriter();

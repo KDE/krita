@@ -13,10 +13,6 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( flakeshapes )
 
-if(NOT Q_WS_MAC)
-add_subdirectory( screenshot )
-endif(NOT Q_WS_MAC)
-
 if(KOFFICE_ENABLE_SCRIPTING)
 	add_subdirectory(scripting)
 endif(KOFFICE_ENABLE_SCRIPTING)	

@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Screenshot
-Name[fr]=Capture d'écran
-Name[x-test]=xxScreenshotxx
-ServiceTypes=Krita/ViewPlugin
-Type=Service
-X-KDE-Library=kritascreenshot
-X-Krita-Version=2

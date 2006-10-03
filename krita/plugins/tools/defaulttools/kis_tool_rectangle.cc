@@ -25,6 +25,7 @@
 
 #include <kaction.h>
 #include <kdebug.h>
+#include <kactioncollection.h>
 #include <klocale.h>
 
 #include "kis_button_press_event.h"

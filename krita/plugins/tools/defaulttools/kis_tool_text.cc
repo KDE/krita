@@ -31,6 +31,7 @@
 #include <khbox.h>
 #include <kaction.h>
 #include <kinputdialog.h>
+#include <kactioncollection.h>
 #include <klocale.h>
 #include <kfontdialog.h>
 #include <ksqueezedtextlabel.h>

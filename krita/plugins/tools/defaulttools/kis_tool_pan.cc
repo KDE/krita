@@ -18,6 +18,7 @@
 
 #include <kaction.h>
 #include <klocale.h>
+#include <kactioncollection.h>
 
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"

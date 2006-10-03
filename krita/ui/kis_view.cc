@@ -123,7 +123,6 @@
 //#include "kis_guide.h"
 
 #include "kis_layerbox.h"
-
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_move_event.h"
@@ -177,6 +176,7 @@
 #include "kis_perspective_grid_manager.h"
 
 #include "kis_custom_palette.h"
+#include "kis_import_catcher.h"
 
 
 
@@ -1756,12 +1756,11 @@ qint32 KisView::importImage(const KUrl& urlArg)
     }
 
     KUrl::List urls;
-    qint32 rc = 0;
+    Q_INT32 rc = 0;
 
     if (urlArg.isEmpty()) {
         QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import).join(" ");
-        urls = KFileDialog::getOpenUrls(KUrl(QString::null), mimelist,
-0, i18n("Import Image"));
+        urls = KFileDialog::getOpenUrls(KUrl(QString::null), mimelist, 0, i18n("Import Image"));
     } else {
         urls.push_back(urlArg);
     }
@@ -1770,40 +1769,7 @@ qint32 KisView::importImage(const KUrl& urlArg)
         return 0;
 
     for (KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it) {
-        KUrl url = *it;
-        KisDoc d;
-        d.import(url);
-        KisImageSP importedImage = d.currentImage();
-
-        if (importedImage) {
-            KisLayerSP importedImageLayer = KisLayerSP(importedImage->rootLayer().data());
-
-            if (!importedImageLayer.isNull()) {
-
-                if (importedImageLayer->numLayers() == 2) {
-                    // Don't import the root if this is not a layered image (1 group layer
-                    // plus 1 other).
-                    importedImageLayer = importedImageLayer->firstChild();
-                    importedImageLayer->parent()->removeLayer(importedImageLayer);
-                }
-
-                importedImageLayer->setName(url.prettyUrl());
-
-                KisGroupLayerSP parent = KisGroupLayerSP(0);
-                KisLayerSP currentActiveLayer = currentImage->activeLayer();
-
-                if (currentActiveLayer) {
-                    parent = currentActiveLayer->parent();
-                }
-
-                if (parent.isNull()) {
-                    parent = currentImage->rootLayer();
-                }
-
-                currentImage->addLayer(importedImageLayer, parent, currentActiveLayer);
-                rc += importedImageLayer->numLayers();
-            }
-        }
+        new KisImportCatcher( *it, currentImage );
     }
 
     updateCanvas();
@@ -2712,6 +2678,30 @@ void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
     }
 }
 
+void KisView::insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
+                         KisGroupLayerSP parent, KisLayerSP above) {
+    KisImageSP img = currentImg();
+    if (!img) return;
+
+    KoDocument* doc = entry.createDoc(0, m_doc);
+    if ( !doc )
+        return;
+
+    if ( !doc->showEmbedInitDialog(this) )
+        return;
+
+    QRect rect = viewToWindow(viewRect);
+
+    KisChildDoc * childDoc = m_doc->createChildDoc(rect, doc);
+
+    KisPartLayerImpl* partLayer = new KisPartLayerImpl(img, childDoc);
+    partLayer->setDocType(entry.service()->genericName());
+    img->addLayer(KisLayerSP(partLayer), parent, above);
+    m_doc->setModified(true);
+
+    reconnectAfterPartInsert();
+}
+
 void KisView::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
 {
     KisImageSP img = currentImg();
@@ -2769,30 +2759,6 @@ void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDoc
             this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
     connect(m_partHandler, SIGNAL(handlerDone()),
             this, SLOT(reconnectAfterPartInsert()));
-}
-
-void KisView::insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
-                         KisGroupLayerSP parent, KisLayerSP above) {
-    KisImageSP img = currentImg();
-    if (!img) return;
-
-    KoDocument* doc = entry.createDoc(0, m_doc);
-    if ( !doc )
-        return;
-
-    if ( !doc->showEmbedInitDialog(this) )
-        return;
-
-    QRect rect = viewToWindow(viewRect);
-
-    KisChildDoc * childDoc = m_doc->createChildDoc(rect, doc);
-
-    KisPartLayerImpl* partLayer = new KisPartLayerImpl(img, childDoc);
-    partLayer->setDocType(entry.service()->genericName());
-    img->addLayer(KisLayerSP(partLayer), parent, above);
-    m_doc->setModified(true);
-
-    reconnectAfterPartInsert();
 }
 
 void KisView::reconnectAfterPartInsert() {
@@ -3845,4 +3811,3 @@ void KisView::slotInitialZoomTimeout()
 }
 
 #include "kis_view.moc"
-

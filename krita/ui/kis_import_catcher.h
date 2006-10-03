@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2006 Boudewijn Rempt  <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,42 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TOOL_FACTORY_H_
-#define KIS_TOOL_FACTORY_H_
+#ifndef KIS_IMPORT_CATCHER_H_
+#define KIS_IMPORT_CATCHER_H_
 
-#include <klocale.h>
+#include <QObject>
 
-#include "KoID.h"
-#include "kis_types.h"
+#include <kurl.h>
 
-class KActionCollection;
+#include <kis_types.h>
 
-class KisToolFactory  : public KShared
-{
+class KisView;
+class KisDoc;
+
+/**
+ * This small helper class takes an url and an image; tries to import
+ * the image at the url and shove the layers of the imported image
+ * into the first image after loading is done.
+ *
+ * Caveat: this class calls "delete this", which means that you new
+ * it and then never touch it again. Thanks you very much.
+ */
+class KisImportCatcher : QObject {
+
+    Q_OBJECT
 
 public:
-    KisToolFactory() {}
-    virtual ~KisToolFactory() {};
 
-    virtual KisTool * createTool(KActionCollection * ac) = 0;
-    virtual KoID id() { return KoID("Abstract Tool", i18n("Abstract Tool")); }
+    KisImportCatcher(KUrl url, KisImageSP image);
 
+public slots:
+
+    void slotLoadingFinished();
+
+private:
+    KisDoc * m_doc;
+    KisImageSP m_image;
+    KUrl m_url;
 };
 
-#endif // KIS_TOOL_FACTORY_H_
-
+#endif

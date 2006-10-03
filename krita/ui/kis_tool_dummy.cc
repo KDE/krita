@@ -23,6 +23,7 @@
 #include <kicon.h>
 
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <klocale.h>
 
 #include "kis_canvas_controller.h"

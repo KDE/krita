@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2006 Boudewijn Rempt
+ *  kis_factory.h - part of Krayon
+ *
+ *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,47 +18,40 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_VIEW_2
-#define KIS_VIEW_2
+#ifndef KIS_FACTORY_2_H_
+#define KIS_FACTORY_2_H_
 
-#include <KoView.h>
+#include <QStringList>
 
-class KisCanvas;
-class KisQPainterCanvas;
-class KisOpenGLCanvas;
-class KisImage;
-class KisViewConverter;
-class KisZoomHandler;
-class KoCanvasController;
-class KisDoc;
+#include <kparts/plugin.h>
 
-class KisView : public KoView {
+#include <KoFactory.h>
 
-Q_OBJECT
+#include <krita_export.h>
 
-public:
+class KInstance;
+class KAboutData;
 
-    KisView(KisDoc * doc, QWidget * parent);
-    virtual ~KisView();
+class KRITAUI_EXPORT KisFactory2 : public KoFactory
+{
+    Q_OBJECT
 
 public:
 
-    // KoView implementation
-    virtual void updateReadWrite( bool readwrite ) { Q_UNUSED(readwrite); }
+    KisFactory2( QObject* parent = 0 );
+    ~KisFactory2();
 
-public:
-    // Krita specific interfaces
+    virtual KParts::Part *createPartObject(QWidget *parentWidget = 0,
+					   QObject *parent = 0,
+					   const char *classname = "KoDocument",
+					   const QStringList &args = QStringList() );
+    
+    static KAboutData * aboutData();
+    static KInstance * instance();
 
 private:
-
-    KisCanvas * m_canvas;
-    KisQPainterCanvas * m_QPainterCanvas;
-    KisOpenGLCanvas * m_openGLCanvas;
-    KisDoc * m_doc;
-    KisZoomHandler * m_zoomHandler;
-    KisViewConverter * m_viewConverter;
-    KoCanvasController * m_canvasController;
-
+    static KInstance * s_instance;
+    static KAboutData * s_aboutData;
 };
 
 #endif

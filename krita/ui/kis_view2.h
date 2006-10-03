@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2006 Boudewijn Rempt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,45 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TOOL_FACTORY_H_
-#define KIS_TOOL_FACTORY_H_
+#ifndef KIS_VIEW_2
+#define KIS_VIEW_2
 
-#include <klocale.h>
+#include <KoView.h>
 
-#include "KoID.h"
-#include "kis_types.h"
+class KisCanvas2;
+class KisQPainterCanvas;
+class KisOpenGLCanvas2;
+class KisImage;
+class KisViewConverter;
+class KoCanvasController;
+class KisDoc2;
 
-class KActionCollection;
+class KisView2 : public KoView {
 
-class KisToolFactory  : public KShared
-{
+Q_OBJECT
 
 public:
-    KisToolFactory() {}
-    virtual ~KisToolFactory() {};
 
-    virtual KisTool * createTool(KActionCollection * ac) = 0;
-    virtual KoID id() { return KoID("Abstract Tool", i18n("Abstract Tool")); }
+    KisView2(KisDoc2 * doc, QWidget * parent);
+    virtual ~KisView2();
+
+public:
+
+    // KoView implementation
+    virtual void updateReadWrite( bool readwrite ) { Q_UNUSED(readwrite); }
+
+public:
+    // Krita specific interfaces
+
+private:
+
+    KisCanvas2 * m_canvas;
+    KisQPainterCanvas * m_QPainterCanvas;
+    KisOpenGLCanvas2 * m_openGLCanvas;
+    KisDoc2 * m_doc;
+    KisViewConverter * m_viewConverter;
+    KoCanvasController * m_canvasController;
 
 };
 
-#endif // KIS_TOOL_FACTORY_H_
-
+#endif

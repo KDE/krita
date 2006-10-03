@@ -15,6 +15,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 51
  *  Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_part_layer_handler.h"
 
 #include "kis_canvas.h"
 #include <fixx11h.h> // kis_canvas.h does X11 stuff
@@ -25,12 +26,11 @@
 #include <QKeyEvent>
 
 #include "kis_cursor.h"
-#include "QPainter"
 #include "kis_move_event.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_group_layer.h"
-#include "kis_part_layer_handler.h"
+#include "kis_view.h"
 
 KisPartLayerHandler::KisPartLayerHandler(KisView* view, const KoDocumentEntry& entry,
                                          KisGroupLayerSP parent, KisLayerSP above)
@@ -80,7 +80,6 @@ void KisPartLayerHandler::gotButtonReleaseEvent(KisButtonReleaseEvent* event) {
     m_end = event->pos().roundQPoint();
 
     QRect r(m_start, m_end);
-
     m_view->insertPart(r.normalized(), m_entry, m_parent, m_above);
     // We will get deleted by the view through the above
 }

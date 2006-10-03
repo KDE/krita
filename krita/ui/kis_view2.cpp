@@ -17,27 +17,35 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <KoCanvasController.h>
 
-#include "kis_opengl_canvas.h"
+#include "kis_view_converter.h"
+#include "kis_canvas2.h"
+#include "kis_opengl_canvas2.h"
+#include "kis_qpainter_canvas.h"
+#include "kis_doc2.h"
+#include "kis_view2.h"
 
-#include <QWidget>
-#include <QGLWidget>
-#include <QGLContext>
 
-KisOpenGLCanvas::KisOpenGLCanvas( QWidget * parent )
-    : QGLWidget( parent )
+KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
+    : KoView(doc, parent)
+    , m_QPainterCanvas( 0 )
+    , m_openGLCanvas( 0 )
+    , m_doc( doc )
+    , m_canvasController( new KoCanvasController( this ) )
+
+{
+
+    m_viewConverter = new KisViewConverter(1.0, 100, 96, 96);
+    m_openGLCanvas = new KisOpenGLCanvas2(this);
+    m_QPainterCanvas = new KisQPainterCanvas(this);
+    m_canvas = new KisCanvas2( m_viewConverter, m_QPainterCanvas );
+    m_canvasController->setCanvas( m_canvas );
+}
+
+
+KisView2::~KisView2()
 {
 }
 
-KisOpenGLCanvas::KisOpenGLCanvas(QGLContext * context, QWidget * parent, QGLWidget *sharedContextWidget)
-    : QGLWidget( context, parent, sharedContextWidget )
-{
-}
-
-
-KisOpenGLCanvas::~KisOpenGLCanvas()
-{
-}
-
-
-#include "kis_opengl_canvas.moc"
+#include "kis_view2.moc"

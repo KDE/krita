@@ -26,6 +26,7 @@
 #include <QListWidget>
 #include <QList>
 
+#include <kactioncollection.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <QColor>

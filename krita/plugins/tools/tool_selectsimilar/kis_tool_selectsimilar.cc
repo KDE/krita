@@ -28,6 +28,7 @@
 #include <QHBoxLayout>
 
 #include <kapplication.h>
+#include <kactioncollection.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <knuminput.h>

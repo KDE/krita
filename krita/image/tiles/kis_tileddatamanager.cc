@@ -930,7 +930,6 @@ void KisTiledDataManager::writeBytes(const quint8 * bytes,
                      qint32 w, qint32 h)
 {
     if (bytes == 0) return;
-    //Q_ASSERT(bytes != 0);
 
     // XXX: Is this correct?
     if (w < 0)

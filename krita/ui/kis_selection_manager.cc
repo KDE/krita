@@ -16,21 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QObject>
-#include <QApplication>
-#include <QClipboard>
-#include <QColor>
-
-#include <kdebug.h>
-#include <kaction.h>
-#include <ktoggleaction.h>
-#include <klocale.h>
-#include <kstdaction.h>
-
-#include <KoDocument.h>
-#include <KoMainWindow.h>
-#include <KoQueryTrader.h>
-
+#include "kis_selection_manager.h"
 #include "kis_part_layer.h"
 #include "kis_clipboard.h"
 #include "kis_types.h"
@@ -38,7 +24,6 @@
 #include "kis_doc.h"
 #include "kis_image.h"
 #include "kis_selection.h"
-#include "kis_selection_manager.h"
 #include "kis_painter.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"
@@ -57,6 +42,23 @@
 #include "KoIntegerMaths.h"
 #include "kis_fill_painter.h"
 #include "kis_canvas.h"
+#include "kis_view.h"
+
+#include <QObject>
+#include <QApplication>
+#include <QClipboard>
+#include <QColor>
+
+#include <kdebug.h>
+#include <kaction.h>
+#include <ktoggleaction.h>
+#include <klocale.h>
+#include <kstdaction.h>
+
+#include <KoDocument.h>
+#include <KoMainWindow.h>
+#include <KoQueryTrader.h>
+
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
     : m_parent(parent),

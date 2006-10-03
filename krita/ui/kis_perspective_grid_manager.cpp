@@ -31,21 +31,23 @@
 #include "kis_view.h"
 
 KisPerspectiveGridManager::KisPerspectiveGridManager(KisView * parent)
-    : QObject(), m_view(parent), m_toggleEdition(false)
+    : QObject()
+    , m_toggleEdition(false)
+    , m_view(parent)
 {
 }
 
 
 KisPerspectiveGridManager::~KisPerspectiveGridManager()
 {
-    
+
 }
 
 void KisPerspectiveGridManager::updateGUI()
 {
     KisImageSP image = m_view->canvasSubject()->currentImg();
 
-    
+
     if (image ) {
         KisPerspectiveGrid* pGrid = image->perspectiveGrid();
         m_toggleGrid->setEnabled( pGrid->hasSubGrids());
@@ -54,12 +56,12 @@ void KisPerspectiveGridManager::updateGUI()
 
 void KisPerspectiveGridManager::setup(KActionCollection * collection)
 {
-    
+
 
     kDebug() << "KisPerspectiveGridManager::setup(KActionCollection * collection)" << endl;
     m_toggleGrid = new KToggleAction(i18n("Show Perspective Grid"), collection, "view_toggle_perspective_grid");
     connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleGrid()));
-    
+
     m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Perspective Grid")));
     m_toggleGrid->setChecked(false);
     m_gridClear = new KAction(i18n("Clear Perspective Grid"), collection, "view_clear_perspective_grid");
@@ -70,7 +72,7 @@ void KisPerspectiveGridManager::setGridVisible(bool t)
 {
     KisImageSP image = m_view->canvasSubject()->currentImg();
 
-    
+
     if (t && image ) {
         KisPerspectiveGrid* pGrid = image->perspectiveGrid();
         if( pGrid->hasSubGrids())
@@ -88,7 +90,7 @@ void KisPerspectiveGridManager::toggleGrid()
 {
     KisImageSP image = m_view->canvasSubject()->currentImg();
 
-    
+
     if (image && m_toggleGrid->isChecked()) {
         KisPerspectiveGrid* pGrid = image->perspectiveGrid();
 
@@ -132,7 +134,7 @@ void KisPerspectiveGridManager::drawGrid(QRect wr, QPainter *p, bool openGL )
 {
     KisImageSP image = m_view->canvasSubject()->currentImg();
 
-    
+
     if (image && m_toggleGrid->isChecked() && !m_toggleEdition) {
         KisPerspectiveGrid* pGrid = image->perspectiveGrid();
 

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_OPENGL_CANVAS_H
-#define KIS_OPENGL_CANVAS_H
+#ifndef KIS_OPENGL_CANVAS_2_H
+#define KIS_OPENGL_CANVAS_2_H
 
 #include <QGLWidget>
 #include <KoCanvasBase.h>
@@ -30,18 +30,18 @@ class QGLContext;
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
  *
  */
-class KisOpenGLCanvas : public QGLWidget
+class KisOpenGLCanvas2 : public QGLWidget
 {
 
     Q_OBJECT
 
 public:
 
-    KisOpenGLCanvas( QWidget * parent );
+    KisOpenGLCanvas2( QWidget * parent );
 
-    KisOpenGLCanvas(QGLContext * context, QWidget * parent, QGLWidget *sharedContextWidget);
+    KisOpenGLCanvas2(QGLContext * context, QWidget * parent, QGLWidget *sharedContextWidget);
 
-    virtual ~KisOpenGLCanvas();
+    virtual ~KisOpenGLCanvas2();
 
 };
 

@@ -26,6 +26,7 @@
 
 class KAction;
 class KToggleAction;
+class KActionCollection;
 class KisView;
 class KisDoc;
 class KisClipboard;

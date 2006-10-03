@@ -26,6 +26,7 @@
 #include <qlayout.h>
 
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <kdebug.h>
 #include <kcommand.h>
 #include <klocale.h>
@@ -270,7 +271,7 @@ void KisToolPerspectiveGrid::buttonRelease(KisButtonReleaseEvent *event)
             if( m_points.size() == 4)
             { // wow we have a grid, isn't that cool ?
                 drawGridCreation(); // Clean
-                m_subject->currentImg()->perspectiveGrid()->addNewSubGrid( 
+                m_subject->currentImg()->perspectiveGrid()->addNewSubGrid(
                         new KisSubPerspectiveGrid(
                             KisPerspectiveGridNodeSP(new KisPerspectiveGridNode(m_points[0])),
                             KisPerspectiveGridNodeSP(new KisPerspectiveGridNode(m_points[1])),

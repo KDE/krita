@@ -28,12 +28,12 @@ class KisViewConverter;
 /**
  *
  */
-class KisCanvas : public QWidget, public KoCanvasBase
+class KisCanvas2 : public QWidget, public KoCanvasBase
 {
 public:
-    KisCanvas(KisViewConverter *, QWidget * canvasWidget);
+    KisCanvas2(KisViewConverter *, QWidget * canvasWidget);
 
-    virtual ~KisCanvas();
+    virtual ~KisCanvas2();
 
     void setCanvasWidget(QWidget * widget);
 

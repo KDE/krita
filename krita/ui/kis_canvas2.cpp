@@ -17,79 +17,79 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoUnit.h"
-#include "kis_canvas.h"
+#include "kis_canvas2.h"
 #include "kis_view_converter.h"
 
-KisCanvas::KisCanvas(KisViewConverter * viewConverter, QWidget * canvasWidget)
+KisCanvas2::KisCanvas2(KisViewConverter * viewConverter, QWidget * canvasWidget)
     : KoCanvasBase()
     , m_viewConverter( viewConverter )
     , m_canvasWidget( canvasWidget )
 {
 }
 
-void KisCanvas::setCanvasWidget(QWidget * widget)
+void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
     m_canvasWidget = widget;
 }
 
 
 
-KisCanvas::~KisCanvas()
+KisCanvas2::~KisCanvas2()
 {
 }
 
-void KisCanvas::gridSize(double *horizontal, double *vertical) const
+void KisCanvas2::gridSize(double *horizontal, double *vertical) const
 {
     Q_UNUSED( horizontal );
     Q_UNUSED( vertical );
 
 }
 
-bool KisCanvas::snapToGrid() const
+bool KisCanvas2::snapToGrid() const
 {
     return true;
 }
 
-void KisCanvas::addCommand(KCommand *command, bool execute)
+void KisCanvas2::addCommand(KCommand *command, bool execute)
 {
     Q_UNUSED( command );
     Q_UNUSED( execute );
 }
 
-KoShapeManager* KisCanvas::shapeManager() const
+KoShapeManager* KisCanvas2::shapeManager() const
 {
     return 0;
 }
 
 
-void KisCanvas::updateCanvas(const QRectF& rc)
+void KisCanvas2::updateCanvas(const QRectF& rc)
 {
     Q_UNUSED( rc );
 }
 
-KoTool* KisCanvas::tool()
+KoTool* KisCanvas2::tool()
 {
     return 0;
 }
 
-void KisCanvas::setTool(KoTool *tool)
+void KisCanvas2::setTool(KoTool *tool)
 {
     Q_UNUSED( tool );
 }
 
 
-KoViewConverter* KisCanvas::viewConverter()
+KoViewConverter* KisCanvas2::viewConverter()
 {
     return m_viewConverter;
 }
 
-QWidget* KisCanvas::canvasWidget()
+QWidget* KisCanvas2::canvasWidget()
 {
     return m_canvasWidget;
 }
 
 
-KoUnit::Unit KisCanvas::unit()
+KoUnit::Unit KisCanvas2::unit()
 {
     return KoUnit::U_PIXEL;
 }

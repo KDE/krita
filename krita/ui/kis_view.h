@@ -131,6 +131,8 @@ class KRITAUI_EXPORT KisView
 
     Q_OBJECT
 
+public:
+
     typedef KoView super;
 
     typedef std::list<KisCanvasObserver*> vKisCanvasObserver;
@@ -370,8 +372,9 @@ private:
      */
     void refreshKisCanvas();
 
+public:
     void selectionDisplayToggled(bool displaySelection);
-
+private:
     bool activeLayerHasSelection();
 
     /**

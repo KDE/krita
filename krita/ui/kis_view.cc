@@ -103,7 +103,7 @@
 //#include "kis_guide.h"
 
 #include "kis_layerbox.h"
-
+#include "kis_import_catcher.h"
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_move_event.h"
@@ -1758,40 +1758,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
         return 0;
 
     for (KURL::List::iterator it = urls.begin(); it != urls.end(); ++it) {
-        KURL url = *it;
-        KisDoc d;
-        d.import(url);
-        KisImageSP importedImage = d.currentImage();
-
-        if (importedImage) {
-            KisLayerSP importedImageLayer = importedImage->rootLayer().data();
-
-            if (importedImageLayer != 0) {
-
-                if (importedImageLayer->numLayers() == 2) {
-                    // Don't import the root if this is not a layered image (1 group layer
-                    // plus 1 other).
-                    importedImageLayer = importedImageLayer->firstChild();
-                    importedImageLayer->parent()->removeLayer(importedImageLayer);
-                }
-
-                importedImageLayer->setName(url.prettyURL());
-
-                KisGroupLayerSP parent = 0;
-                KisLayerSP currentActiveLayer = currentImage->activeLayer();
-
-                if (currentActiveLayer) {
-                    parent = currentActiveLayer->parent();
-                }
-
-                if (parent == 0) {
-                    parent = currentImage->rootLayer();
-                }
-
-                currentImage->addLayer(importedImageLayer.data(), parent, currentActiveLayer);
-                rc += importedImageLayer->numLayers();
-            }
-        }
+        new KisImportCatcher( *it, currentImage );
     }
 
     updateCanvas();

@@ -13,7 +13,7 @@ libkritaui_la_LDFLAGS =  -version-info 1:0:0 -no-undefined $(all_libraries)
 libkritaui_la_LIBADD = ../sdk/libkritasdk.la ../core/libkritaimage.la ../kritacolor/libkritacolor.la \
     $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT) $(GLLIB)
 
-libkritaui_la_SOURCES = kis_histogram_view.cc imageviewer.cc kcurve.cc \
+libkritaui_la_SOURCES = kis_import_catcher.cc kis_histogram_view.cc imageviewer.cc kcurve.cc \
 				kis_autobrush.cc kis_autogradient.cc kis_boundary_painter.cc kis_brush_chooser.cc \
 				kis_canvas.cc kis_canvas_painter.cc kis_clipboard.cc kis_cmb_composite.cc \
 				kis_cmb_idlist.cc kis_color_cup.cc kis_config.cc kis_controlframe.cc kis_cursor.cc \

@@ -88,7 +88,7 @@ double BasicElement::baseLine() const
     return m_baseLine;
 }
 
-const QPointF& BasicElement::origin() const
+QPointF BasicElement::origin() const
 {
     return m_boundingRect.topLeft();
 }

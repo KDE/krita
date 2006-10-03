@@ -174,7 +174,7 @@ public:
     /// @return The baseline of the element
     double baseLine() const;
 
-    const QPointF& origin() const;
+    QPointF origin() const;
 
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;

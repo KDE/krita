@@ -38,6 +38,7 @@ Name[pt_BR]=Filtro de Correção de Lentes
 Name[ru]=Убрать искажение линзы
 Name[sk]=Filter korekcie šošovky
 Name[sv]=Linskorrektionsfilter
+Name[uz]=Линзани тўғрилаш филтери
 Name[zh_TW]=LensCorrection 過濾器
 ServiceTypes=Krita/Filter
 Type=Service

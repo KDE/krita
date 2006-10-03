@@ -55,6 +55,7 @@ Comment[sr]=Омогући извршавање скрипти
 Comment[sr@Latn]=Omogući izvršavanje skripti
 Comment[sv]=Tillåt körning av skript
 Comment[uk]=Дає змогу виконувати скрипти
+Comment[uz]=Скриптларни ишга туширишга рухсат бериш
 Comment[zh_CN]=允许执行脚本
 Comment[zh_TW]=允許執行命令稿
 ServiceTypes=Krita/ViewPlugin

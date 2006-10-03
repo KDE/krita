@@ -23,6 +23,7 @@ Name[sl]=Vstavek Ostriži sliko
 Name[sr]=Прикључак за смицање слике
 Name[sr@Latn]=Priključak za smicanje slike
 Name[sv]=Insticksprogram för skjuva bild
+Name[uk]=Втулок викривлення зображення
 Name[zh_TW]=修剪圖片外掛程式
 ServiceTypes=Krita/ViewPlugin
 Type=Service

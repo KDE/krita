@@ -27,6 +27,7 @@ Name[sr]=RGB модел боја (16-битно реално „полу“)
 Name[sr@Latn]=RGB model boja (16-bitno realno „polu“)
 Name[sv]=RGB-färgmodell (16-bitars flyttal 'halva')
 Name[uk]=Модель кольору RGB (16-бітне дробове число "half")
+Name[uz]=RGB ранг усули (16-бит 'ярим' каср)
 Name[zh_TW]=RGB 色彩模型 (32-bit 浮點數「半」)
 Comment=Color model for 16-bit floating point 'half' per channel RGB images
 Comment[ca]=Model de color per a paleta 'mitja' de 16 bits-canal d'imatges RGB

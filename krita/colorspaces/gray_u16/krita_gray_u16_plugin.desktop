@@ -27,6 +27,7 @@ Name[sr]=Модел боја у сивим нијансама (16-битно ц�
 Name[sr@Latn]=Model boja u sivim nijansama (16-bitno celobrojno)
 Name[sv]=Färgmodell med gråskala (16-bitars heltal)
 Name[uk]=Модель кольору відтінків сірого (16-бітне ціле число)
+Name[uz]=Кул ранг усули (16-бит бутун)
 Name[zh_CN]=灰度色彩模型(16 位整数)
 Name[zh_TW]=灰階色彩模型 (16-bit 整數)
 Comment=Color model for 16-bit integer per channel Grayscale images

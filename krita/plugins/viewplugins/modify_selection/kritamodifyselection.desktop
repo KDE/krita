@@ -22,6 +22,7 @@ Name[ru]=Выделение
 Name[sk]=Zmeniť výber
 Name[sl]=Spremeni izbiro
 Name[sv]=Ändra markering
+Name[uk]=Зміна виділення
 Name[zh_TW]=變更選取
 ServiceTypes=Krita/ViewPlugin
 Type=Service

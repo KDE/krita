@@ -44,6 +44,7 @@ KoShapeRubberSelectStrategy::~KoShapeRubberSelectStrategy()
 
 void KoShapeRubberSelectStrategy::paint( QPainter &painter, KoViewConverter &converter)
 {
+    painter.save();
     painter.setRenderHint( QPainter::Antialiasing, false );
 
     QColor selectColor( Qt::blue ); // TODO make configurable
@@ -55,6 +56,7 @@ void KoShapeRubberSelectStrategy::paint( QPainter &painter, KoViewConverter &con
     if(painter.hasClipping())
         paintRect = paintRect.intersect(painter.clipRegion().boundingRect());
     painter.drawRect( paintRect);
+    painter.restore();
 }
 
 

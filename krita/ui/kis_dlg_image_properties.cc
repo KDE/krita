@@ -154,10 +154,12 @@ void KisDlgImageProperties::fillCmbProfiles(const KoID & s)
 {
     KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     m_page->cmbProfile->clear();
-    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    if (csf) {
+        QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
 
-    foreach (KoColorProfile *profile, profileList) {
-        m_page->cmbProfile->addSqueezedItem(profile->productName());
+        foreach (KoColorProfile *profile, profileList) {
+            m_page->cmbProfile->addSqueezedItem(profile->productName());
+        }
     }
 }
 

@@ -132,7 +132,6 @@ void KoBasicU8HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * select
             }
 
             pixels += pSize;
-            selectionMask++;
             nPixels--;
         }
     }
@@ -202,7 +201,6 @@ void KoBasicU16HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selec
                 m_count++;
             }
             pixels += pSize;
-            selectionMask++;
             nPixels--;
 
         }
@@ -274,7 +272,6 @@ void KoBasicF32HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selec
             }
 
             pixels += pSize;
-            selectionMask++;
             nPixels--;
 
         }
@@ -341,7 +338,6 @@ void KoBasicF16HalfHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * s
                 m_count++;
             }
             pixels += pSize;
-            selectionMask++;
             nPixels--;
         }
     }
@@ -409,7 +405,6 @@ void KoGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * sel
                 m_count++;
             }
             pixels += pSize;
-            selectionMask++;
             nPixels--;
         }
     }
@@ -486,7 +481,6 @@ void KoGenericLabHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * sel
                 m_count++;
             }
             pixels += pSize;
-            selectionMask++;
             nPixels--;
         }
     }

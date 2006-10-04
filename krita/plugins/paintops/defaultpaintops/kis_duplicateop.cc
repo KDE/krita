@@ -236,12 +236,12 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     {
         Q_UINT16 dataDevice[4];
         Q_UINT16 dataSrcDev[4];
-        double matrix [ 3 * sw * sh ];
+        QMemArray<double> matrix ( 3 * sw * sh );
         // First divide
         KisColorSpace* deviceCs = device->colorSpace();
         KisHLineIteratorPixel deviceIt = device->createHLineIterator(x, y, sw, false );
         KisHLineIteratorPixel srcDevIt = m_srcdev->createHLineIterator(0, 0, sw, true );
-        double* matrixIt = matrix;
+        double* matrixIt = &matrix[0];
         for(int j = 0; j < sh; j++)
         {
             for(int i= 0; !srcDevIt.isDone(); i++)
@@ -264,10 +264,10 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         {
             int iter = 0;
             double err;
-            double solution [ 3 * sw * sh ];
+            QMemArray<double> solution ( 3 * sw * sh );
             do {
-                err = minimizeEnergy(matrix, solution,sw,sh);
-                memcpy (matrix, solution, sw * sh * 3 * sizeof(double));
+                err = minimizeEnergy(&matrix[0], &solution[0],sw,sh);
+                memcpy (&matrix[0], &solution[0], sw * sh * 3 * sizeof(double));
                 iter++;
             } while( err < 0.00001 && iter < 100);
         }
@@ -275,7 +275,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         // Finaly multiply
         deviceIt = device->createHLineIterator(x, y, sw, false );
         srcDevIt = m_srcdev->createHLineIterator(0, 0, sw, true );
-        matrixIt = matrix;
+        matrixIt = &matrix[0];
         for(int j = 0; j < sh; j++)
         {
             for(int i= 0; !srcDevIt.isDone(); i++)

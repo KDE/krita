@@ -154,6 +154,7 @@ QObject* KritaCoreModule::createCircleBrush(uint w, uint h, uint hf, uint vf)
     KisAutobrushShape* kas = new KisAutobrushCircleShape(qMax(1u,w), qMax(1u,h), hf, vf);
     QImage* brsh = new QImage();
     kas->createBrush(brsh);
+    delete brsh;
     return new Brush(this, new KisAutobrushResource(*brsh), false);
 }
 
@@ -162,6 +163,7 @@ QObject* KritaCoreModule::createRectBrush(uint w, uint h, uint hf, uint vf)
     KisAutobrushShape* kas = new KisAutobrushRectShape(qMax(1u,w), qMax(1u,h), hf, vf);
     QImage* brsh = new QImage();
     kas->createBrush(brsh);
+    delete brsh;
     return new Brush(this, new KisAutobrushResource(*brsh), false);
 }
 

@@ -35,6 +35,7 @@ class KisDataManager;
 typedef KSharedPtr<KisDataManager> KisDataManagerSP;
 
 class KisTiledIterator;
+class KisTiledRandomAccessor;
 class KoStore;
 
 class KisTileDataWrapper : public KShared {
@@ -140,16 +141,17 @@ protected:
 
 
     /**
-     * Copy the bytes in the specified rect to a byte array. The caller is responsible
-     * for managing the byte array -- and for making it big enough.
+     * Copy the bytes in the specified rect to a vector. The caller is responsible
+     * for managing the vector.
      */
     void readBytes(quint8 * bytes,
                qint32 x, qint32 y,
                qint32 w, qint32 h);
     /**
-     * Copy the bytes in the byte array to the specified rect. If there are bytes left
-     * in the array after filling the rect, they will be ignored. If there are
-     * not enough bytes, the rest of the array will be filled with whatever comes in memory after the end of the array.
+     * Copy the bytes in the vector to the specified rect. If there are bytes left
+     * in the vector after filling the rect, they will be ignored. If there are
+     * not enough bytes, the rest of the rect will be filled with the default value
+     * given (by default, 0);
      */
     void writeBytes(const quint8 * bytes,
             qint32 x, qint32 y,

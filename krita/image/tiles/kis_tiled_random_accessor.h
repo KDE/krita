@@ -19,6 +19,7 @@
 #define KIS_TILED_RANDOM_ACCESSOR_H
 
 #include <QRect>
+#include <q3valuelist.h>
 
 #include <ksharedptr.h>
 
@@ -30,35 +31,35 @@ class KisTiledRandomAccessor : public KShared {
     struct KisTileInfo {
         KisTile* tile;
         KisTile* oldtile;
-        Q_UINT8* data;
-        const Q_UINT8* oldData;
-        Q_INT32 area_x1, area_y1, area_x2, area_y2;
+        quint8* data;
+        const quint8* oldData;
+        qint32 area_x1, area_y1, area_x2, area_y2;
     };
     public:
-        KisTiledRandomAccessor(KisTiledDataManager *ktm, Q_INT32 x, Q_INT32 y, bool writable);
+        KisTiledRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, bool writable);
         ~KisTiledRandomAccessor();
 
 
     private:
-        inline Q_UINT32 xToCol(Q_UINT32 x) const { if (m_ktm) return m_ktm->xToCol(x); else return 0; };
-        inline Q_UINT32 yToRow(Q_UINT32 y) const { if (m_ktm) return m_ktm->yToRow(y); else return 0; };
-        KisTileInfo* fetchTileData(Q_INT32 col, Q_INT32 row);
+        inline quint32 xToCol(quint32 x) const { if (m_ktm) return m_ktm->xToCol(x); else return 0; };
+        inline quint32 yToRow(quint32 y) const { if (m_ktm) return m_ktm->yToRow(y); else return 0; };
+        KisTileInfo* fetchTileData(qint32 col, qint32 row);
 
     public:
         /// Move to a given x,y position, fetch tiles and data
-        void moveTo(Q_INT32 x, Q_INT32 y);
-        Q_UINT8* rawData() const;
-        const Q_UINT8* oldRawData() const;
+        void moveTo(qint32 x, qint32 y);
+        quint8* rawData() const;
+        const quint8* oldRawData() const;
 
     private:
         KisTiledDataManager *m_ktm;
         KisTileInfo** m_tilesCache;
-        Q_UINT32 m_tilesCacheSize;
-        Q_INT32 m_pixelSize;
-        Q_UINT8* m_data;
-        const Q_UINT8* m_oldData;
+        quint32 m_tilesCacheSize;
+        qint32 m_pixelSize;
+        quint8* m_data;
+        const quint8* m_oldData;
         bool m_writable;
-        static const Q_UINT32 CACHESIZE; // Define the number of tiles we keep in cache
+        static const quint32 CACHESIZE; // Define the number of tiles we keep in cache
 
 };
 

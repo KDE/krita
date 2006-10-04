@@ -41,6 +41,7 @@ protected:
     quint8 *m_oldData;
     qint32 m_offset;
     KisTile *m_tile;
+    KisTile* m_oldTile;
     bool m_writable;
 
 protected:
@@ -84,10 +85,10 @@ public:
 
 public:
     qint32 nConseqPixels() const;
-
+    
     /// Advances a number of pixels until it reaches the end of the rect
     KisTiledRectIterator & operator+=(int n);
-
+    
     /// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
     KisTiledRectIterator & operator++();
 

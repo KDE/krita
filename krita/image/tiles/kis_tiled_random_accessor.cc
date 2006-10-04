@@ -18,9 +18,9 @@
 #include "kis_tiled_random_accessor.h"
 
 
-const Q_UINT32 KisTiledRandomAccessor::CACHESIZE = 4; // Define the number of tiles we keep in cache
+const quint32 KisTiledRandomAccessor::CACHESIZE = 4; // Define the number of tiles we keep in cache
 
-KisTiledRandomAccessor::KisTiledRandomAccessor(KisTiledDataManager *ktm, Q_INT32 x, Q_INT32 y, bool writable) : m_ktm(ktm), m_tilesCache(new KisTileInfo*[4]), m_tilesCacheSize(0), m_pixelSize (m_ktm->pixelSize()), m_writable(writable)
+KisTiledRandomAccessor::KisTiledRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, bool writable) : m_ktm(ktm), m_tilesCache(new KisTileInfo*[4]), m_tilesCacheSize(0), m_pixelSize (m_ktm->pixelSize()), m_writable(writable)
 {
     Q_ASSERT(ktm != 0);
     moveTo(x, y);
@@ -37,7 +37,7 @@ KisTiledRandomAccessor::~KisTiledRandomAccessor()
     delete m_tilesCache;
 }
 
-void KisTiledRandomAccessor::moveTo(Q_INT32 x, Q_INT32 y)
+void KisTiledRandomAccessor::moveTo(qint32 x, qint32 y)
 {
     // Look in the cache if the tile if the data is available
     for( uint i = 0; i < m_tilesCacheSize; i++)
@@ -46,7 +46,7 @@ void KisTiledRandomAccessor::moveTo(Q_INT32 x, Q_INT32 y)
             y >= m_tilesCache[i]->area_y1 && y <= m_tilesCache[i]->area_y2 )
         {
             KisTileInfo* kti = m_tilesCache[i];
-            Q_UINT32 offset = x - kti->area_x1 + (y -kti->area_y1) * KisTile::WIDTH;
+            quint32 offset = x - kti->area_x1 + (y -kti->area_y1) * KisTile::WIDTH;
             offset *= m_pixelSize;
             m_data = kti->data + offset;
             m_oldData = kti->oldData + offset;
@@ -67,10 +67,10 @@ void KisTiledRandomAccessor::moveTo(Q_INT32 x, Q_INT32 y)
     } else {
         m_tilesCacheSize++;
     }
-    Q_UINT32 col = xToCol( x );
-    Q_UINT32 row = yToRow( y );
+    quint32 col = xToCol( x );
+    quint32 row = yToRow( y );
     KisTileInfo* kti = fetchTileData(col, row);
-    Q_UINT32 offset = x - kti->area_x1 + (y - kti->area_y1) * KisTile::WIDTH;
+    quint32 offset = x - kti->area_x1 + (y - kti->area_y1) * KisTile::WIDTH;
     offset *= m_pixelSize;
     m_data = kti->data + offset;
     m_oldData = kti->oldData + offset;
@@ -79,13 +79,13 @@ void KisTiledRandomAccessor::moveTo(Q_INT32 x, Q_INT32 y)
 }
 
 
-Q_UINT8 * KisTiledRandomAccessor::rawData() const
+quint8 * KisTiledRandomAccessor::rawData() const
 {
     return m_data;
 }
 
 
-const Q_UINT8 * KisTiledRandomAccessor::oldRawData() const
+const quint8 * KisTiledRandomAccessor::oldRawData() const
 {
 #ifdef DEBUG
     kdWarning(!m_ktm->hasCurrentMemento(), DBG_AREA_TILES) << "Accessing oldRawData() when no transaction is in progress.\n";
@@ -93,7 +93,7 @@ const Q_UINT8 * KisTiledRandomAccessor::oldRawData() const
     return m_oldData;
 }
 
-KisTiledRandomAccessor::KisTileInfo* KisTiledRandomAccessor::fetchTileData(Q_INT32 col, Q_INT32 row)
+KisTiledRandomAccessor::KisTileInfo* KisTiledRandomAccessor::fetchTileData(qint32 col, qint32 row)
 {
     KisTileInfo* kti = new KisTileInfo;
     kti->tile = m_ktm->getTile(col, row, m_writable);

@@ -154,7 +154,9 @@ bool KisTiledDataManager::write(KoStore *store)
                             KisTile::WIDTH, KisTile::HEIGHT);
             store->write(str,strlen(str));
 
+            tile->addReader();
             store->write((char *)tile->m_data, KisTile::HEIGHT * KisTile::WIDTH * m_pixelSize);
+            tile->removeReader();
 
             tile = tile->getNext();
         }
@@ -195,7 +197,9 @@ bool KisTiledDataManager::read(KoStore *store)
 
         updateExtent(col,row);
 
+        tile->addReader();
         store->read((char *)tile->m_data, KisTile::HEIGHT * KisTile::WIDTH * m_pixelSize);
+        tile->removeReader();
 
         tile->setNext(m_hashTable[tileHash]);
         m_hashTable[tileHash] = tile;
@@ -272,6 +276,7 @@ void KisTiledDataManager::setExtent(qint32 x, qint32 y, qint32 w, qint32 h)
 
                     // This can be done a lot more efficiently, no doubt, by clearing runs of pixels to the left and the right of
                     // the intersecting line.
+                    tile->addReader();
                     for (int y = 0; y < KisTile::HEIGHT; ++y) {
                         for (int x = 0; x < KisTile::WIDTH; ++x) {
                             if (!intersection.contains(x,y)) {
@@ -280,6 +285,7 @@ void KisTiledDataManager::setExtent(qint32 x, qint32 y, qint32 w, qint32 h)
                             }
                         }
                     }
+                    tile->removeReader();
                     previousTile = tile;
                     tile = tile->getNext();
                 }
@@ -353,9 +359,7 @@ void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 c
             tile->addReader();
             if (clearTileRect == tileRect) {
                 // Clear whole tile
-                tile->addReader();
                 memset(tile->data(), clearValue, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
-                tile->removeReader();
             } else {
 
                 quint32 rowsRemaining = clearTileRect.height();
@@ -930,6 +934,7 @@ void KisTiledDataManager::writeBytes(const quint8 * bytes,
                      qint32 w, qint32 h)
 {
     if (bytes == 0) return;
+    //Q_ASSERT(bytes != 0);
 
     // XXX: Is this correct?
     if (w < 0)

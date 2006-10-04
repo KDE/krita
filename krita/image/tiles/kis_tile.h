@@ -56,9 +56,11 @@ public:
     void setNext(KisTile *);
     KisTile *getNext() const { return m_nextTile; }
 
-    /// Functions that are needed for locking the tiles into memory for caching
-    void addReader();
-    void removeReader();
+    // These are const because they don't change the external data the tile represents,
+    // although they do change internal representations. We need to be able to request
+    // access to a tile in a const enviroment (like copyconstructor and so)!
+    void addReader() const;
+    void removeReader() const;
     qint32 readers() { return m_nReadlock; }
 
     friend class KisTiledIterator;
@@ -70,7 +72,7 @@ private:
 
 private:
     quint8 *m_data;
-    qint32 m_nReadlock;
+    mutable qint32 m_nReadlock;
     qint32 m_row;
     qint32 m_col;
     qint32 m_pixelSize;

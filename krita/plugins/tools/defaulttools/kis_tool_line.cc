@@ -119,53 +119,54 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
 {
     if (m_dragging && e->button() == Qt::LeftButton) {
         m_dragging = false;
-        KisCanvasController *controller = m_subject->canvasController();
-        KisImageSP img = m_subject->currentImg();
-
-        if (m_startPos == m_endPos) {
-            controller->updateCanvas();
-            m_dragging = false;
-            return;
-        }
-
-        if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
-            m_endPos = straightLine(e->pos());
-        } else m_endPos = e->pos();
-
-        KisPaintDeviceSP device;
-        if (m_currentImage &&
-            (device = m_currentImage->activeDevice()) &&
-            m_subject &&
-            m_subject->currentBrush()) {
-            delete m_painter;
-            m_painter = new KisPainter( device );
-            Q_CHECK_PTR(m_painter);
-
-            if (m_currentImage->undo()) m_painter->beginTransaction(i18n("Line"));
-
-            m_painter->setPaintColor(m_subject->fgColor());
-            m_painter->setBrush(m_subject->currentBrush());
-            m_painter->setOpacity(m_opacity);
-            m_painter->setCompositeOp(m_compositeOp);
-            KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), m_painter);
-            m_painter->setPaintOp(op); // Painter takes ownership
-            m_painter->paintLine(m_startPos, PRESSURE_DEFAULT, 0, 0, m_endPos, PRESSURE_DEFAULT, 0, 0);
-            device->setDirty( m_painter->dirtyRect() );
-            notifyModified();
-
-            /* remove remains of the line drawn while moving */
-            if (controller->kiscanvas()) {
-                controller->kiscanvas()->update();
+        if(m_subject) {
+            KisCanvasController *controller = m_subject->canvasController();
+            KisImageSP img = m_subject->currentImg();
+    
+            if (m_startPos == m_endPos) {
+                controller->updateCanvas();
+                m_dragging = false;
+                return;
             }
-
-            if (m_currentImage->undo() && m_painter) {
-                m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
+    
+            if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
+                m_endPos = straightLine(e->pos());
+            } else m_endPos = e->pos();
+    
+            KisPaintDeviceSP device;
+            if (m_currentImage &&
+                (device = m_currentImage->activeDevice()) &&
+                m_subject->currentBrush()) {
+                delete m_painter;
+                m_painter = new KisPainter( device );
+                Q_CHECK_PTR(m_painter);
+    
+                if (m_currentImage->undo()) m_painter->beginTransaction(i18n("Line"));
+    
+                m_painter->setPaintColor(m_subject->fgColor());
+                m_painter->setBrush(m_subject->currentBrush());
+                m_painter->setOpacity(m_opacity);
+                m_painter->setCompositeOp(m_compositeOp);
+                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), m_painter);
+                m_painter->setPaintOp(op); // Painter takes ownership
+                m_painter->paintLine(m_startPos, PRESSURE_DEFAULT, 0, 0, m_endPos, PRESSURE_DEFAULT, 0, 0);
+                device->setDirty( m_painter->dirtyRect() );
+                notifyModified();
+    
+                /* remove remains of the line drawn while moving */
+                if (controller->kiscanvas()) {
+                    controller->kiscanvas()->update();
+                }
+    
+                if (m_currentImage->undo() && m_painter) {
+                    m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
+                }
+                delete m_painter;
+                m_painter = 0;
+            } else {
+                // m_painter can be 0 here...!!!
+                controller->updateCanvas(m_painter->dirtyRect()); // Removes the last remaining line.
             }
-            delete m_painter;
-            m_painter = 0;
-        } else {
-            // m_painter can be 0 here...!!!
-            controller->updateCanvas(m_painter->dirtyRect()); // Removes the last remaining line.
         }
     }
 

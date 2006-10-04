@@ -611,12 +611,14 @@ void KisToolTransform::move(KisMoveEvent *e)
 
 void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
 {
+    if(!m_subject)
+        return;
     KisImageSP img = m_subject->currentImg();
 
     if (!img)
         return;
 
-    if (m_subject && m_selecting) {
+    if (m_selecting) {
         m_selecting = false;
     }
     QApplication::setOverrideCursor(KisCursor::waitCursor());

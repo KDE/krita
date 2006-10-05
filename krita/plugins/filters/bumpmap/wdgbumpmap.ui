@@ -47,7 +47,7 @@
         <property name="text" >
          <string>&lt;b>Bumpmapping&lt;/b> is a process where two layers are 
 combined to give one layer the illusion of &lt;i>depth&lt;/i>. One layer 
-will contain your image, the other a grayscale or Qt::black-and-Qt::white
+will contain your image, the other a grayscale or black-and-white
 representation of height, which is the bumpmap. If you do not specify a bumpmap
 layer, the current layer will be used.</string>
         </property>

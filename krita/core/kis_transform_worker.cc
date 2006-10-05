@@ -146,7 +146,7 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
     }
 
     for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), y, r.width(), false);
+        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), y, r.width(), true);
         KisHLineIterator dstIt = dst->createHLineIterator(-r.x() - r.width(), -y, r.width(), true);
         KisHLineIterator dstSelIt = dstSelection->createHLineIterator(-r.x() - r.width(), -y, r.width(), true);
 
@@ -264,7 +264,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         dstLen = scale;
 
     // Calculate extra length (in each side) needed due to shear
-    Q_INT32 extraLen = (support+256)>>8;
+    Q_INT32 extraLen = (support+256)>>8 + 1;
 
     Q_UINT8 *tmpLine = new Q_UINT8[(srcLen +2*extraLen)* pixelSize];
     Q_CHECK_PTR(tmpLine);
@@ -344,14 +344,13 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         {
             Q_UINT8 *data;
 
-            if(srcIt.isSelected())
-            {
                 data = srcIt.rawData();
                 memcpy(&tmpLine[i*pixelSize], data, pixelSize);
 
                 // XXX: Should set alpha = alpha*(1-selectedness)
                 cs->setAlpha(data, 0, 1);
-
+            if(srcIt.isSelected())
+            {
                 tmpSel[i] = 255;
             }
             else

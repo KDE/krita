@@ -227,7 +227,15 @@ public:
     void insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
                     KisGroupLayerSP parent, KisLayerSP above);
 
-
+    /**
+     * Import an image as a layer. If there is more than
+     * one layer in the image, import all of them as separate
+     * layers.
+     *
+     * @param url the url to the image file
+     * @return the number of layers added
+     */
+    qint32 importImage(const KUrl& url = KUrl());
 protected:
 
     virtual void resizeEvent(QResizeEvent*); // From QWidget
@@ -388,15 +396,6 @@ private:
     void setupScrollBars();
     void setupStatusBar();
 
-    /**
-     * Import an image as a layer. If there is more than
-     * one layer in the image, import all of them as separate
-     * layers.
-     *
-     * @param url the url to the image file
-     * @return the number of layers added
-     */
-    qint32 importImage(const KUrl& url = KUrl());
     KisFilterManager * filterManager() { return m_filterManager; }
     void setCurrentImage(KisImageSP image);
 

@@ -146,13 +146,16 @@ namespace {
                         qint32 thumbnailY = r.y() + y;
                         qint32 thumbnailX = r.x();
                         qint32 imageY = (thumbnailY * imageHeight) / thumbnailSize.height();
+                        KisHLineIterator srcIt = mergedImage -> createHLineIterator(0, imageY, imageWidth, false);
 
                         while (!it.isDone()) {
 
                             qint32 imageX = (thumbnailX * imageWidth) / thumbnailSize.width();
+                            qint32 dx = imageX - srcIt.x();
+                            srcIt += dx;
 
-                            KoColor pixelColor = mergedImage->colorAt(imageX, imageY);
-                            memcpy(it.rawData(), pixelColor.data(), pixelSize);
+                            //KoColor pixelColor = mergedImage->colorAt(imageX, imageY);
+                            memcpy(it.rawData(), srcIt.rawData(), pixelSize);
 
                             ++it;
                             ++thumbnailX;

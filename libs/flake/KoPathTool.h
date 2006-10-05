@@ -21,9 +21,13 @@
 #define KOPATHTOOL_H
 
 #include "KoPathShape.h"
-#include "KoShapeRubberSelectStrategy.h"
 
 #include <KoTool.h>
+
+class KoCanvasBase;
+class KoInteractionStrategy;
+class KoPathPointMoveStrategy;
+class KoPathPointRubberSelectStrategy;
 
 class KoPathTool : public KoTool {
 public:
@@ -43,11 +47,21 @@ public:
     void deactivate();
 
 private:
+    /**
+     * @brief Select points in rect
+     *
+     * @param rect in document coordinated 
+     * @param clearSelection if set clear the current selection before the selection
+     */
+    void selectPoints( const QRectF &rect, bool clearSelection );
+
     /// repaints the specified rect
     void repaint( const QRectF &repaintRect );
     /// returns a handle rect at the given position
     QRectF handleRect( const QPointF &p );
 
+    // needed for interaction strategy
+    QPointF m_lastPoint;
     /// snaps given point to grid point
     QPointF snapToGrid( const QPointF &p, Qt::KeyboardModifiers modifiers );
 private:
@@ -55,21 +69,12 @@ private:
     KoPathPoint* m_activePoint;        ///< the currently active path point
     int m_handleRadius;                ///< the radius of the control point handles
     KoPathPoint::KoPointType m_activePointType; ///< the type of currently active path point
-    bool m_pointMoving;                ///< shows if points are actually moved
-    QPointF m_lastPosition;            ///< the last mouse position
     QList<KoPathPoint*> m_selectedPoints; ///< list of selected path points
-    QPointF m_move;                    ///< the accumulated point move amount
 
-    class KoPointRubberSelectStrategy : public KoShapeRubberSelectStrategy
-    {
-    public:
-        KoPointRubberSelectStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked )
-        : KoShapeRubberSelectStrategy( tool, canvas, clicked ) {};
-        virtual ~KoPointRubberSelectStrategy() {};
-        virtual void finishInteraction() { return; };
-        const QRectF selectionRect() const { return selectRect(); };
-    };
-    KoPointRubberSelectStrategy *m_rubberSelect; ///< the rubber selection strategy
+    friend class KoPathPointMoveStrategy;
+    friend class KoPathPointRubberSelectStrategy;
+
+    KoInteractionStrategy *m_currentStrategy; ///< the rubber selection strategy
 };
 
 #endif

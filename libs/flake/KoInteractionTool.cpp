@@ -243,7 +243,7 @@ void KoInteractionTool::mouseReleaseEvent( KoPointerEvent *event ) {
     Q_UNUSED(event);
     if ( m_currentStrategy )
     {
-        m_currentStrategy->finishInteraction();
+        m_currentStrategy->finishInteraction( event->modifiers() );
         KCommand *command = m_currentStrategy->createCommand();
         if(command)
             m_canvas->addCommand(command, false);

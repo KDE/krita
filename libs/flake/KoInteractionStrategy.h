@@ -77,7 +77,7 @@ public:
     /**
      * Override to make final changes to the data on the end of an interaction.
      */
-    virtual void finishInteraction() = 0;
+    virtual void finishInteraction( Qt::KeyboardModifiers modifiers ) = 0;
 
     /**
      * This instanciates a new strategy object and decides which one created based on the params.

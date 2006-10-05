@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,36 +18,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCREATESHAPESTRATEGY_H
-#define KOCREATESHAPESTRATEGY_H
+#ifndef KOPATHPOINTRUBBERSELECTSTRATEGY_H
+#define KOPATHPOINTRUBBERSELECTSTRATEGY_H
 
 #include "KoShapeRubberSelectStrategy.h"
 
-#include <QPointF>
-
+class KoPathTool;
 class KoCanvasBase;
-class KoCreateShapesTool;
 
 /**
- * A strategy for the KoCreateShapesTool.
+ * @brief Strategy to rubber select points of a path shape
  */
-class KoCreateShapeStrategy : public KoShapeRubberSelectStrategy {
+class KoPathPointRubberSelectStrategy : public KoShapeRubberSelectStrategy
+{
 public:
-    /**
-     * Constructor that starts to create a new shape.
-     * @param tool the parent tool which controls this strategy
-     * @param canvas the canvas interface which will supply things like a selection object
-     * @param clicked the initial point that the user depressed (in pt).
-     */
-    KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked );
-    virtual ~KoCreateShapeStrategy() {}
-
-    void finishInteraction( Qt::KeyboardModifiers modifiers );
-    KCommand* createCommand();
+    KoPathPointRubberSelectStrategy( KoPathTool *tool, KoCanvasBase *canvas, const QPointF &clicked );
+    virtual ~KoPathPointRubberSelectStrategy() {}
+    virtual void finishInteraction() { return; }
+    virtual void finishInteraction( Qt::KeyboardModifiers modifiers ); 
 
 private:
-    KoCreateShapesTool *m_tool;
+    /// pointer to the path tool
+    KoPathTool * m_tool;
 };
 
-#endif /* KOSHAPEROTATESTRATEGY_H */
-
+#endif /* KOPATHPOINTRUBBERSELECTSTRATEGY_H */

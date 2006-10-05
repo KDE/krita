@@ -118,6 +118,7 @@ KCommand* KoCreateShapeStrategy::createCommand() {
     return cmd;
 }
 
-void KoCreateShapeStrategy::finishInteraction() {
+void KoCreateShapeStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) {
+    Q_UNUSED( modifiers );
     m_canvas->updateCanvas(selectRect());
 }

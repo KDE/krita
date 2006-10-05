@@ -54,7 +54,7 @@ public:
     void paint( QPainter &painter, KoViewConverter &converter);
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual KCommand* createCommand() { return 0; }
-    virtual void finishInteraction();
+    virtual void finishInteraction( Qt::KeyboardModifiers modifiers );
 
 protected:
     /**

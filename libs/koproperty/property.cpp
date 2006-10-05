@@ -467,6 +467,12 @@ Property::isModified() const
 	return d->changed;
 }
 
+void
+Property::clearModifiedFlag()
+{
+	d->changed = false;
+}
+
 bool
 Property::isReadOnly() const
 {

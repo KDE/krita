@@ -331,6 +331,9 @@ class KOPROPERTY_EXPORT Property
 		//! \return true if this property value is changed.
 		bool isModified() const;
 
+		//! Clears "modified" flag, so isModified() will return false.
+		void clearModifiedFlag();
+
 		/*! \return true if the property is read-only. 
 		 The property can be read-write but still not editable because the property 
 		 set containing it may be set to read-only. 

@@ -219,10 +219,13 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
                 while(iter.selectedness()==MIN_SELECTED && maxpix)
                 {
                     --maxpix;
-                    ++iter;
+                    if (maxpix != 0)
+                        ++iter;
+
                     ++npix;
                 }
                 pixelsProcessed += npix;
+                ++iter;
                 break;
 
             case MAX_SELECTED:

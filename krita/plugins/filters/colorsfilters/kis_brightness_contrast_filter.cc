@@ -177,6 +177,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
     }
 
     KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
+    Q_ASSERT(config);
 
     if (src!=dst) {
         KisPainter gc(dst);
@@ -217,12 +218,14 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
                 while(iter.selectedness()==MAX_SELECTED && maxpix)
                 {
                     --maxpix;
-                    ++iter;
+                    if (maxpix != 0)
+                        ++iter;
                     ++npix;
                 }
                 // adjust
                 src->colorSpace()->applyAdjustment(firstPixel, firstPixel, configBC->m_adjustment, npix);
                 pixelsProcessed += npix;
+                ++iter;
                 break;
             }
 

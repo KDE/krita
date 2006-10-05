@@ -96,8 +96,9 @@ void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &point, Qt::Keyb
     m_canvas->updateCanvas(B);
 }
 
-void KoShapeRubberSelectStrategy::finishInteraction()
+void KoShapeRubberSelectStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
 {
+    Q_UNUSED( modifiers );
     KoSelection * selection = m_canvas->shapeManager()->selection();
     QList<KoShape *> shapes( m_canvas->shapeManager()->shapesAt( m_selectRect ) );
     foreach ( KoShape * shape, shapes )

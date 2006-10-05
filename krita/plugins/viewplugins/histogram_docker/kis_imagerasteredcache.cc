@@ -36,7 +36,7 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
 {
     m_busy = false;
     m_imageProjection = 0;
-    m_rasterSize = 64;
+    m_rasterSize = 64 * 4;
     m_timeOutMSec = 1000;
 
     m_timer.setSingleShot(true);

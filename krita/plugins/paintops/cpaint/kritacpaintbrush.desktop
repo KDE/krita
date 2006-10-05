@@ -1,7 +1,23 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Chinese Brush
+Name[da]=Kinesisk pensel
+Name[el]=Κινέζικη βούρτσα
+Name[it]=Pennello cinese
+Name[pl]=Pędzel chiński
+Name[pt]=Pincel Chinês
+Name[pt_BR]=Pincel Chinês
+Name[sv]=Kinesisk pensel
+Name[zh_TW]=中式筆刷
 Comment=Chinese Brush
+Comment[da]=Kinesisk pensel
+Comment[el]=Κινέζικη βούρτσα
+Comment[it]=Pennello cinese
+Comment[pl]=Pędzel chiński
+Comment[pt]=Pincel Chinês
+Comment[pt_BR]=Pincel Chinês
+Comment[sv]=Kinesisk pensel
+Comment[zh_TW]=中式筆刷
 ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacpaintbrush

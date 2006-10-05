@@ -12,6 +12,7 @@
 #endif
 
 #include "Python.h"
+#include "Version.hxx"
 #include "Config.hxx"
 #include "Exception.hxx"
 
@@ -32,7 +33,7 @@ namespace Py
 	class Type;
 	template<TEMPLATE_TYPENAME T> class SeqBase;
 	class String;
-    class List;
+	class List;
 	template<TEMPLATE_TYPENAME T> class MapBase;
 
 	// new_reference_to also overloaded below on Object
@@ -152,8 +153,8 @@ namespace Py
 					throw Exception();
 					}
 				// Better error message if RTTI available
-#if defined( _CPPRTTI )
-				std::string s("Error creating object of type ");
+#if defined( _CPPRTTI ) || defined(__GNUG__)
+				std::string s("CXX : Error creating object of type ");
 				s += (typeid (*this)).name();
 				throw TypeError (s);
 #else
@@ -248,7 +249,7 @@ namespace Py
 
 		String repr () const; // the repr () representation
 
-        List dir () const; // the dir() list
+		List dir () const; // the dir() list
 
 		bool hasAttr (const std::string& s) const
 			{
@@ -291,10 +292,10 @@ namespace Py
 			return PyCallable_Check (p) != 0;
 			}
 
-        bool isInstance () const
-            {
-            return PyInstance_Check (p) != 0;
-            }
+		bool isInstance () const
+			{
+			return PyInstance_Check (p) != 0;
+			}
 
 		bool isDict () const
 			{
@@ -514,7 +515,15 @@ namespace Py
 			validate();
 			}
 
-		Int (const Object& ob)
+		// create from bool
+		explicit Int (bool v)
+			{
+			long w = v ? 1 : 0;
+			set(PyInt_FromLong(w), true);
+			validate();
+			}
+
+		explicit Int (const Object& ob)
 			{
 			set(PyNumber_Int(*ob), true);
 			validate();
@@ -579,19 +588,18 @@ namespace Py
 			{
 			validate();
 			}
+		// create from unsigned long
+		explicit Long (unsigned long v)
+			: Object(PyLong_FromUnsignedLong(v), true)
+			{
+			validate();
+			}
 		// create from int
 		explicit Long (int v)
 			: Object(PyLong_FromLong(static_cast<long>(v)), true)
 			{
 			validate();
 			}
-
-        // create from unsigned long
-        explicit Long (unsigned long v)
-            : Object(PyLong_FromUnsignedLong(v), true)
-            {
-            validate();
-            }
 
 		// try to create from any object
 		Long (const Object& ob)
@@ -623,14 +631,15 @@ namespace Py
 			{
 			return PyLong_AsLong (ptr());
 			}
+		// convert to unsigned
+		operator unsigned long() const
+			{
+			return PyLong_AsUnsignedLong (ptr());
+			}
 		operator double() const
 			{
 			return PyLong_AsDouble (ptr());
 			}
-        operator unsigned long() const
-            {
-            return PyLong_AsUnsignedLong (ptr());
-            }
 		// assign from an int
 		Long& operator= (int v)
 			{
@@ -643,12 +652,12 @@ namespace Py
 			set(PyLong_FromLong (v), true);
 			return *this;
 			}
-        // assign from unsigned long
-        Long& operator= (unsigned long v)
-            {
-            set(PyLong_FromUnsignedLong (v), true);
-            return *this;
-            }
+		// assign from unsigned long
+		Long& operator= (unsigned long v)
+			{
+			set(PyLong_FromUnsignedLong (v), true);
+			return *this;
+			}
 		};
 
 	// ===============================================
@@ -926,11 +935,6 @@ namespace Py
 			{
 			return the_item.isCallable();
 			}
-
-        bool isInstance () const
-            {
-            return the_item.isInstance();
-            }
 
 		bool isDict () const
 			{
@@ -1448,7 +1452,7 @@ namespace Py
 	template <TEMPLATE_TYPENAME T> bool operator< (const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& left, const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& right);
 	template <TEMPLATE_TYPENAME T> bool operator> (const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& left, const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& right);
 	template <TEMPLATE_TYPENAME T> bool operator<=(const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& left, const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& right);
-	template <TEMPLATE_TYPENAME T> bool operator>=(const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& left, const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& right);
+	template <TEMPLATE_TYPENAME T> bool operator>=(const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& left, const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& right); 
 
 
 	extern bool operator==(const Sequence::iterator& left, const Sequence::iterator& right);
@@ -1463,7 +1467,7 @@ namespace Py
 	extern bool operator< (const Sequence::const_iterator& left, const Sequence::const_iterator& right);
 	extern bool operator> (const Sequence::const_iterator& left, const Sequence::const_iterator& right);
 	extern bool operator<=(const Sequence::const_iterator& left, const Sequence::const_iterator& right);
-	extern bool operator>=(const Sequence::const_iterator& left, const Sequence::const_iterator& right);
+	extern bool operator>=(const Sequence::const_iterator& left, const Sequence::const_iterator& right); 
 
 	// ==================================================
 	// class Char
@@ -1765,7 +1769,7 @@ namespace Py
 
 			set(PyTuple_New (limit), true);
 			validate();
-
+			
 			for(sequence_index_type i=0; i < limit; i++)
 				{
 				if(PyTuple_SetItem (ptr(), i, new_reference_to(s[i])) == -1)
@@ -2530,11 +2534,9 @@ namespace Py
 
 	class Callable: public Object
 		{
-	protected:
-		explicit Callable (): Object()
-			{}
 	public:
 		// Constructor
+		explicit Callable (): Object()  {}
 		explicit Callable (PyObject *pyob, bool owned = false): Object (pyob, owned)
 			{
 			validate();

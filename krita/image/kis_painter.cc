@@ -247,7 +247,8 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
 
     if (m_device.isNull()) return;
 
-    if (seldev->isTotallyUnselected(QRect(dx, dy, sw, sh))) {
+    // Better use a probablistic method than a too slow one
+    if (seldev->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
 /*
         kDebug() << "Blitting outside selection rect\n";
 

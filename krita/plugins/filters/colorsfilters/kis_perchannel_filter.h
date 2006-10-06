@@ -54,6 +54,10 @@ public:
     QList<KisCurve> curves;
     quint16 *transfers[256];
     quint16 nTransfers;
+    // Caching of adjustment
+    bool dirty;
+    KoColorSpace* oldCs;
+    KoColorAdjustment* adjustment;
 };
 
 

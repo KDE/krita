@@ -51,12 +51,16 @@ KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
         }
     }
     nTransfers = n;
+    dirty = true;
+    oldCs = 0;
+    adjustment = 0;
 }
 
 KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 {
     for(int i=0;i<nTransfers;i++)
         delete [] transfers[i];
+    delete adjustment;
 }
 
 void KisPerChannelFilterConfiguration::fromXML( const QString& s )
@@ -124,6 +128,7 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
             transfers[ch][i] = val;
         }
     }
+    dirty = true;
 }
 
 QString KisPerChannelFilterConfiguration::toString()
@@ -188,12 +193,23 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         return;
     }
 
-    KisPerChannelFilterConfiguration* configBC = (KisPerChannelFilterConfiguration*) config;
+    KisPerChannelFilterConfiguration* configBC =
+            dynamic_cast<KisPerChannelFilterConfiguration*>(config);
     if (configBC->nTransfers != src->colorSpace()->nColorChannels()) {
         // We got an illegal number of colorchannels.KisFilter
         return;
     }
-    KoColorAdjustment *adj = src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
+
+    if (configBC->dirty || (src->colorSpace() != configBC->oldCs)) {
+        delete configBC->adjustment;
+        configBC->adjustment =
+                src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
+        kDebug() << configBC->adjustment << endl;
+        configBC->oldCs = src->colorSpace();
+        configBC->dirty = false;
+    }
+
+    KoColorAdjustment *adj = configBC->adjustment;
 
 
     if (src!=dst) {
@@ -255,7 +271,7 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         }
         setProgress(pixelsProcessed);
     }
-    delete adj;
+
     setProgressDone();
 }
 
@@ -375,6 +391,9 @@ KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
             cfg->transfers[ch][i] = val;
         }
     }
+
+    cfg->dirty = true;
+
     return cfg;
 }
 

@@ -141,7 +141,11 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
 
     // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
 
-    QVector<quint8 *> pixelPtrCache(kw * kh);
+    int cacheSize = kw * kh;
+    int cdepth = cs -> pixelSize();
+    quint8** pixelPtrCache = new quint8*[cacheSize];
+    for (int i = 0; i < cacheSize; i++)
+        pixelPtrCache[i] = new quint8[cdepth];
 //     pixelPtrCache.fill(0);
 
     // row == the y position of the pixel we want to change in the paint device
@@ -170,7 +174,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
                     // Fill the cache with pointers to the pixels under the kernel
                     KisHLineIteratorPixel kit = m_device->createHLineIterator(col - khalfWidth, (row - khalfHeight) + krow, kw, false);
                     while (!kit.isDone()) {
-                        pixelPtrCache[i] = const_cast<quint8 *>(kit.oldRawData());
+                        memcpy(pixelPtrCache[i], kit.oldRawData(), cdepth);
                         ++kit;
                         ++i;
                     }
@@ -179,19 +183,22 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
                 Q_ASSERT (i==kw*kh);
             } else {
                 for (qint32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
-                    quint8** d = pixelPtrCache.data() + krow * kw;
-                    memmove( d, d + 1, (kw-1)*sizeof(quint8*));
+                    quint8** d = pixelPtrCache + krow * kw;
+                    //memmove( d, d + 1, (kw-1)*sizeof(quint8*));
+                    for (int i = 0; i < (kw-1); i++) {
+                        memcpy(d[i], d[i+1], cdepth);
+                    }
                 }
                 qint32 i = kw - 1;
                 KisVLineIteratorPixel kit = m_device->createVLineIterator(col + khalfWidth, row - khalfHeight, kh, false);
                 while (!kit.isDone()) {
-                    pixelPtrCache[i] = const_cast<quint8 *>(kit.oldRawData());
+                    memcpy(pixelPtrCache[i], kit.oldRawData(), cdepth);
                     ++kit;
                     i += kw;
                 }
             }
             if (hit.isSelected()) {
-                cs->convolveColors(pixelPtrCache.data(), kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
+                cs->convolveColors(pixelPtrCache, kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
 //                 pixelPtrCache.fill(0);
             }
             ++col;
@@ -205,6 +212,10 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
             lastProgressPercent = progressPercent;
 
             if (m_cancelRequested) {
+                for (int i = 0; i < cacheSize; i++)
+                    delete[] pixelPtrCache[i];
+                delete[] pixelPtrCache;
+
                 return;
             }
         }
@@ -214,6 +225,10 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
     addDirtyRect(QRect(x, y, w, h));
 
     emit notifyProgressDone();
+
+    for (int i = 0; i < cacheSize; i++)
+        delete[] pixelPtrCache[i];
+    delete[] pixelPtrCache;
 }
 
 void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
@@ -234,7 +249,11 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
 
     // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
 
-    QVector<quint8 *> pixelPtrCache(kw * kh);
+    int cacheSize = kw * kh;
+    int cdepth = cs -> pixelSize();
+    quint8** pixelPtrCache = new quint8*[cacheSize];
+    for (int i = 0; i < cacheSize; i++)
+        pixelPtrCache[i] = new quint8[cdepth];
 
     // row == the y position of the pixel we want to change in the paint device
     int row = y;
@@ -276,18 +295,18 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
                         KisHLineIteratorPixel kit = m_device->createHLineIterator(0, 0, kw, false);
                         for(; kcol < (khalfWidth - x) + 1; ++kcol)
                         { // First copy the address of the topleft pixel
-                            pixelPtrCache[kcol] = const_cast<quint8 *>(kit.oldRawData());
+                            memcpy(pixelPtrCache[kcol], kit.oldRawData(), cdepth);
                         }
                         for(; kcol < kw; ++kcol)
                         { // Then copy the address of the rest of the line
                             ++kit;
-                            pixelPtrCache[kcol] = const_cast<quint8 *>(kit.oldRawData());
+                            memcpy(pixelPtrCache[kcol], kit.oldRawData(), cdepth);
                         }
                     } else {
                         uint kcol = 0;
                         KisHLineIteratorPixel kit = m_device->createHLineIterator(col - khalfWidth, 0, kw, false);
                         while (!kit.isDone()) {
-                            pixelPtrCache[kcol] = const_cast<quint8 *>(kit.oldRawData());
+                            memcpy(pixelPtrCache[kcol], kit.oldRawData(), cdepth);
                             ++kit;
                             ++kcol;
                         }
@@ -295,7 +314,9 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
                     krow = 1; // we have already done the first krow
                     for(;krow < (khalfHeight - row); ++krow)
                     {
-                        memcpy( pixelPtrCache.data() + krow * kw, pixelPtrCache.data(), kw*sizeof(quint8*)); //    Copy the first line in the current line
+                        //    Copy the first line in the current line
+                        for (int i = 0; i < kw; i++)
+                            memcpy(pixelPtrCache[krow * kw + i], pixelPtrCache[i], cdepth);
                     }
                     i = krow * kw;
                 }
@@ -323,26 +344,30 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
                     {
                         for(; i <  krow * kw + ( kw - itW ); i+= 1)
                         {
-                            pixelPtrCache[i] = const_cast<quint8 *>(kit.oldRawData());
+                            memcpy(pixelPtrCache[i], kit.oldRawData(), cdepth);
                         }
                     }
                     while (!kit.isDone()) {
-                        pixelPtrCache[i] = const_cast<quint8 *>(kit.oldRawData());
+                        memcpy(pixelPtrCache[i], kit.oldRawData(), cdepth);
                         ++kit;
                         ++i;
                     }
                 }
                 qint32 lastvalid = i - kw;
                 for(; krow < kh; ++krow) {
-                    memcpy( pixelPtrCache.data() + krow * kw,
-                            pixelPtrCache.data() + lastvalid,
-                            kw * sizeof(quint8*)); // Copy the last valid line in the current line
+                    // Copy the last valid line in the current line
+                    for (int i = 0; i < kw; i++)
+                        memcpy(pixelPtrCache[krow * kw + i], pixelPtrCache[lastvalid + i],
+                               cdepth);
                 }
                 needFull = false;
             } else {
                 for (qint32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
-                    quint8** d = pixelPtrCache.data() + krow * kw;
-                    memmove( d, d + 1, (kw-1)*sizeof(quint8*));
+                    quint8** d = pixelPtrCache + krow * kw;
+                    //memmove( d, d + 1, (kw-1)*sizeof(quint8*));
+                    for (int i = 0; i < (kw-1); i++) {
+                        memcpy(d[i], d[i+1], cdepth);
+                    }
                 }
                 if(col < xLastMinuskhw)
                 {
@@ -353,23 +378,23 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
                     {
                         for(; i < (khalfHeight- row ) * kw; i+=kw)
                         {
-                            pixelPtrCache[i] = const_cast<quint8 *>(kit.oldRawData());
+                            memcpy(pixelPtrCache[i], kit.oldRawData(), cdepth);
                         }
                     }
                     while (!kit.isDone()) {
-                        pixelPtrCache[i] = const_cast<quint8 *>(kit.oldRawData());
+                        memcpy(pixelPtrCache[i], kit.oldRawData(), cdepth);
                         ++kit;
                         i += kw;
                     }
                     qint32 lastvalid = i - kw;
                     for(;i < kw*kh; i+=kw)
                     {
-                        pixelPtrCache[i] = pixelPtrCache[lastvalid];
+                        memcpy(pixelPtrCache[i], pixelPtrCache[lastvalid], cdepth);
                     }
                 }
             }
             if (hit.isSelected()) {
-                cs->convolveColors(pixelPtrCache.data(), kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
+                cs->convolveColors(pixelPtrCache, kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
             }
             ++col;
             ++hit;
@@ -382,6 +407,10 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
             lastProgressPercent = progressPercent;
 
             if (m_cancelRequested) {
+                for (int i = 0; i < cacheSize; i++)
+                    delete[] pixelPtrCache[i];
+                delete[] pixelPtrCache;
+
                 return;
             }
         }
@@ -391,4 +420,8 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
     addDirtyRect(QRect(x, y, w, h));
 
     emit notifyProgressDone();
+
+    for (int i = 0; i < cacheSize; i++)
+        delete[] pixelPtrCache[i];
+    delete[] pixelPtrCache;
 }

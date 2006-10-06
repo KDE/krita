@@ -142,11 +142,11 @@ namespace {
 
                     for (qint32 y = 0; y < r.height(); ++y) {
 
-                        KisHLineIterator it = thumbnailRect.createHLineIterator(0, y, r.width(), true);
+                        KisHLineIteratorPixel it = thumbnailRect.createHLineIterator(0, y, r.width(), true);
                         qint32 thumbnailY = r.y() + y;
                         qint32 thumbnailX = r.x();
                         qint32 imageY = (thumbnailY * imageHeight) / thumbnailSize.height();
-                        KisHLineIterator srcIt = mergedImage -> createHLineIterator(0, imageY, imageWidth, false);
+                        KisHLineIteratorPixel srcIt = mergedImage -> createHLineIterator(0, imageY, imageWidth, false);
 
                         while (!it.isDone()) {
 

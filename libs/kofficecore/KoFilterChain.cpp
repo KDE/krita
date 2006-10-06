@@ -22,7 +22,7 @@
 #include <Q3StrList>
 #include <Q3ValueList>
 #include <QByteArray>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kmimetype.h>
 #include <KoFilterChain.h>
 #include <KoQueryTrader.h>
@@ -405,7 +405,6 @@ void KoFilterChain::manageIO()
         m_inputStorage = 0;
     }
     if ( m_inputTempFile ) {
-        m_inputTempFile->close();
         delete m_inputTempFile;  // autodelete
         m_inputTempFile = 0;
     }
@@ -449,15 +448,15 @@ void KoFilterChain::finalizeIO()
     }
 }
 
-bool KoFilterChain::createTempFile( KTempFile** tempFile, bool autoDelete )
+bool KoFilterChain::createTempFile( KTemporaryFile** tempFile, bool autoDelete )
 {
     if ( *tempFile ) {
         kError( 30500 ) << "Ooops, why is there already a temp file???" << endl;
         return false;
     }
-    *tempFile = new KTempFile();
-    ( *tempFile )->setAutoDelete( autoDelete );
-    return ( *tempFile )->status() == 0;
+    *tempFile = new KTemporaryFile();
+    ( *tempFile )->setAutoRemove( autoDelete );
+    return ( *tempFile )->open();
 }
 
 void KoFilterChain::inputFileHelper( KoDocument* document, const QString& alternativeFile )
@@ -469,13 +468,13 @@ void KoFilterChain::inputFileHelper( KoDocument* document, const QString& altern
             m_inputFile = QString();
             return;
         }
-        if ( !document->saveNativeFormat( m_inputTempFile->name() ) ) {
+        if ( !document->saveNativeFormat( m_inputTempFile->fileName() ) ) {
             delete m_inputTempFile;
             m_inputTempFile = 0;
             m_inputFile = QString();
             return;
         }
-        m_inputFile = m_inputTempFile->name();
+        m_inputFile = m_inputTempFile->fileName();
     }
     else
         m_inputFile = alternativeFile;
@@ -489,7 +488,7 @@ void KoFilterChain::outputFileHelper( bool autoDelete )
         m_outputFile = QString();
     }
     else
-        m_outputFile = m_outputTempFile->name();
+        m_outputFile = m_outputTempFile->fileName();
 }
 
 KoStoreDevice* KoFilterChain::storageNewStreamHelper( KoStore** storage, KoStoreDevice** device,

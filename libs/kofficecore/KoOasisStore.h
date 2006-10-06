@@ -22,7 +22,7 @@
 
 class QString;
 class QDomDocument;
-class KTempFile;
+class KTemporaryFile;
 class KoXmlWriter;
 class KoStore;
 class KoStoreDevice;
@@ -92,7 +92,7 @@ private:
     KoXmlWriter* m_contentWriter;
     KoXmlWriter* m_bodyWriter;
     KoXmlWriter* m_manifestWriter;
-    KTempFile* m_contentTmpFile;
+    KTemporaryFile* m_contentTmpFile;
 };
 
 #endif /* KOOASISSTORE_H */

@@ -31,7 +31,7 @@
 #include <KoStoreDevice.h>
 #include <koffice_export.h>
 
-class KTempFile;
+class KTemporaryFile;
 class KoFilterManager;
 class KoDocument;
 class Q3StrList;
@@ -157,7 +157,7 @@ private:
     void manageIO();
     void finalizeIO();
 
-    bool createTempFile( KTempFile** tempFile, bool autoDelete = true );
+    bool createTempFile( KTemporaryFile** tempFile, bool autoDelete = true );
 
     void inputFileHelper( KoDocument* document, const QString& alternativeFile );
     void outputFileHelper( bool autoDelete );
@@ -240,8 +240,8 @@ private:
     KoDocument* m_inputDocument;      // ...or even documents?
     KoDocument* m_outputDocument;
 
-    KTempFile* m_inputTempFile;
-    KTempFile* m_outputTempFile;
+    KTemporaryFile* m_inputTempFile;
+    KTemporaryFile* m_outputTempFile;
 
     // These two flags keep track of the input/output the
     // filter (=user) asked for

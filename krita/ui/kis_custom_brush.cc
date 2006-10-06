@@ -28,7 +28,7 @@
 #include <QShowEvent>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include "kis_view.h"
 #include "kis_image.h"
@@ -93,11 +93,19 @@ void KisCustomBrush::slotAddPredefined() {
     } else {
         extension = ".gih";
     }
-    KTempFile file(dir, extension);
-    file.close(); // If we don't, and brush->save first, it might get truncated!
-
+    
+    QString tempFileName;
+    {
+        KTemporaryFile file;
+        file.setPrefix(dir);
+        file.setSuffix(extension);
+        file.setAutoRemove(false);
+        file.open();
+        tempFileName = file.fileName();
+    }
+    
     // Save it to that file
-    m_brush->setFilename(file.name());
+    m_brush->setFilename(tempFileName);
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to

@@ -27,7 +27,7 @@
 #include <QShowEvent>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include "kis_view.h"
 #include "kis_image.h"
@@ -86,11 +86,18 @@ void KisCustomPattern::slotAddPredefined() {
     QString dir = KGlobal::dirs()->saveLocation("data", "krita/patterns");
     QString extension;
 
-    KTempFile file(dir, ".pat");
-    file.close(); // If we don't, and pattern->save first, it might get truncated!
+    QString tempFileName;
+    {
+        KTemporaryFile file;
+        file.setPrefix(dir);
+        file.setSuffix(".pat");
+        file.setAutoRemove(false);
+        file.open();
+        tempFileName = file.fileName();
+    }
 
     // Save it to that file
-    m_pattern->setFilename(file.name());
+    m_pattern->setFilename(tempFileName);
 
     // Add it to the pattern server, so that it automatically gets to the mediators, and
     // so to the other pattern choosers can pick it up, if they want to

@@ -22,7 +22,7 @@
 #include <kinstance.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kdebug.h>
 #include <kscan.h>
 #include <KoView.h>
@@ -74,12 +74,16 @@ void Scan::slotScan()
 
 void Scan::slotShowImage(const QImage &img)
 {
-    KTempFile temp(KStandardDirs::locateLocal("tmp", "scandialog"), ".png");
-    img.save(temp.name(), "PNG");
+    KTemporaryFile temp;
+    temp.setPrefix("scandialog");
+    temp.setSuffix(".png");
+    temp.setAutoRemove(false);
+    temp.open();
+    img.save(temp.fileName(), "PNG");
 
     KoView *view = dynamic_cast<KoView *>(parent());
     if(!view)
 	return;
 
-    emit view->embeddImage(temp.name());
+    emit view->embeddImage(temp.fileName());
 }

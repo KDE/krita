@@ -104,7 +104,7 @@ KisTileManager::~KisTileManager() {
 
     for (FileList::iterator it = m_files.begin(); it != m_files.end(); ++it) {
         (*it).tempFile->close();
-        (*it).tempFile->unlink();
+        (*it).tempFile->setAutoRemove(true);
         delete (*it).tempFile;
     }
 
@@ -314,7 +314,9 @@ void KisTileManager::toSwap(TileInfo* info) {
             if (m_files.empty() || m_files.back().fileSize >= MaxSwapFileSize) {
                 m_files.push_back(TempFile());
                 tfile = &(m_files.back());
-                tfile->tempFile = new KTempFile();
+                tfile->tempFile = new KTemporaryFile();
+                tfile->tempFile->setAutoRemove(false);
+                tfile->tempFile->open();
                 tfile->fileSize = 0;
             } else {
                 tfile = &(m_files.back());
@@ -335,7 +337,7 @@ void KisTileManager::toSwap(TileInfo* info) {
                             << "the filesystem or disk can handle" << endl; break;
                     default: kWarning(DBG_AREA_TILES) << "Errno was: " << errno << endl;
                 }
-                kWarning(DBG_AREA_TILES) << "The swapfile is: " << tfile->tempFile->name() << endl;
+                kWarning(DBG_AREA_TILES) << "The swapfile is: " << tfile->tempFile->fileName() << endl;
                 kWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further" << endl;
 
                 kDebug(DBG_AREA_TILES) << "Failed ftruncate info: "
@@ -356,7 +358,7 @@ void KisTileManager::toSwap(TileInfo* info) {
         }
 
         //memcpy(data, tile->m_data, info->size);
-        QFile* file = info->file->file();
+        QFile* file = info->file;
         if(!file) {
             kWarning() << "Opening the file as QFile failed" << endl;
             m_swapForbidden = true;

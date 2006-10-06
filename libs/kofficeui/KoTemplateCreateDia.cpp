@@ -37,7 +37,7 @@
 #include <QFrame>
 #include <QByteArray>
 
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <klineedit.h>
 #include <k3listview.h>
 #include <klocale.h>
@@ -61,7 +61,7 @@
 class KoTemplateCreateDiaPrivate {
 public:
     KoTemplateCreateDiaPrivate( QWidget* /*parent*/, KInstance * instance)
-         : m_instance( instance ), m_tempFile( QString::null, ".png" )
+         : m_instance( instance )
     {
         m_tree=0L;
         m_name=0L;
@@ -73,7 +73,8 @@ public:
         m_add=0L;
         m_remove=0L;
         m_defaultTemplate=0L;
-        m_tempFile.setAutoDelete( true );
+        m_tempFile.setSuffix(".png");
+        m_tempFile.open();
     }
     ~KoTemplateCreateDiaPrivate() {
         delete m_tree;
@@ -92,7 +93,7 @@ public:
     KInstance *m_instance;
     bool m_changed;
     /// Temp file for remote picture file
-    KTempFile m_tempFile;
+    KTemporaryFile m_tempFile;
 };
 
 

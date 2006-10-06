@@ -34,7 +34,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <q3multilineedit.h>
 
@@ -201,12 +201,13 @@ void KoVersionDialog::slotOpen()
   if ( !version )
     return;
 
-    KTempFile tmp;
-    QFile *file = tmp.file();
-    file->write( version->data );
-    file->close();
-    file->setPermissions( QFile::ReadUser );
-    tmp.sync();
+    KTemporaryFile tmp;
+    tmp.setAutoRemove(false);
+    tmp.open();
+    tmp.write( version->data );
+    tmp.flush();
+    tmp.setPermissions( QFile::ReadUser );
+    tmp.flush();
 
     if ( !m_doc->shells().isEmpty() ) //open the version in a new window if possible
     {
@@ -219,13 +220,13 @@ void KoVersionDialog::slotOpen()
           return;
         }
         KoMainWindow *shell = new KoMainWindow( doc->instance() );
-        shell->openDocument( tmp.name() );
+        shell->openDocument( tmp.fileName() );
         shell->show();
     }
     else
-        m_doc->openURL( tmp.name() );
+        m_doc->openURL( tmp.fileName() );
 
-    tmp.unlink();
+    tmp.setAutoRemove(true);
     slotButtonClicked( Close );
 }
 

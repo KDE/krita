@@ -43,7 +43,7 @@
 #include <QProgressBar>
 #include <kpushbutton.h>
 #include <kdebug.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <krecentdocument.h>
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
@@ -1260,8 +1260,10 @@ void KoMainWindow::slotFilePrintPreview()
         return;
     }
     KPrinter printer( false );
-    KTempFile tmpFile;
+    KTemporaryFile tmpFile;
+    tmpFile.setAutoRemove(false);
     // The temp file is deleted by KoPrintPreview
+    tmpFile.open();
 
     // This line has to be before setupPrinter to let the apps decide what to
     // print and what not (if they want to :)
@@ -1270,7 +1272,7 @@ void KoMainWindow::slotFilePrintPreview()
     rootView()->setupPrinter( printer );
 
     QString oldFileName = printer.outputFileName();
-    printer.setOutputFileName( tmpFile.name() );
+    printer.setOutputFileName( tmpFile.fileName() );
     int oldNumCopies = printer.numCopies();
     printer.setNumCopies( 1 );
     // Disable kdeprint's own preview, we'd get two. This shows that KPrinter needs
@@ -1279,7 +1281,7 @@ void KoMainWindow::slotFilePrintPreview()
     printer.setOption( "kde-preview", "0" );
 
     rootView()->print(printer);
-    //KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.name());
+    //KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.fileName());
 
     // Restore previous values
     printer.setOutputFileName( oldFileName );
@@ -1616,16 +1618,18 @@ void KoMainWindow::slotEmailFile()
         bool const tmp_modified = rootDocument()->isModified();
         KUrl const tmp_url = rootDocument()->url();
         QByteArray const tmp_mimetype = rootDocument()->outputMimeType();
-        KTempFile tmpfile; //TODO: The temorary file should be deleted when the mail program is closed
+        KTemporaryFile tmpfile; //TODO: The temorary file should be deleted when the mail program is closed
+        tmpfile.setAutoRemove(false);
+        tmpfile.open();
         KUrl u;
-        u.setPath(tmpfile.name());
+        u.setPath(tmpfile.fileName());
         rootDocument()->setURL(u);
         rootDocument()->setModified(true);
         rootDocument()->setOutputMimeType(rootDocument()->nativeFormatMimeType());
 
         saveDocument(false, true);
 
-        fileURL = tmpfile.name();
+        fileURL = tmpfile.fileName();
         theSubject = i18n("Document");
         urls.append( fileURL );
 

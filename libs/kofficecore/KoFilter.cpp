@@ -24,7 +24,7 @@
 
 #include <kurl.h>
 #include <kmimetype.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kdebug.h>
 #include <KoFilterManager.h>
 
@@ -70,12 +70,11 @@ int KoEmbeddingFilter::embedPart( const QByteArray& from, QByteArray& to,
 {
     ++( m_partStack.top()->m_lruPartIndex );
 
-    KTempFile tempIn;
-    tempIn.setAutoDelete( true );
-    savePartContents( tempIn.file() );
-    tempIn.file()->close();
+    KTemporaryFile tempIn;
+    tempIn.open();
+    savePartContents( &tempIn );
 
-    KoFilterManager *manager = new KoFilterManager( tempIn.name(), from, m_chain );
+    KoFilterManager *manager = new KoFilterManager( tempIn.fileName(), from, m_chain );
     status = manager->exp0rt( QString::null, to );
     delete manager;
 

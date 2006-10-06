@@ -36,7 +36,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kdeversion.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kprocess.h>
 
 #include "KoPictureKey.h"
@@ -104,12 +104,10 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
 {
     kDebug(30003) << "Sampling with GhostScript, using device \"" << device << "\" (in KoPictureEps::tryScaleWithGhostScript)" << endl;
 
-    KTempFile tmpFile;
-    tmpFile.setAutoDelete(true);
-
-    if ( tmpFile.status() )
+    KTemporaryFile tmpFile;
+    if ( !tmpFile.open() )
     {
-        kError(30003) << "No KTempFile! (in KoPictureEps::tryScaleWithGhostScript)" << endl;
+        kError(30003) << "No KTemporaryFile! (in KoPictureEps::tryScaleWithGhostScript)" << endl;
         return 0; // error
     }
 
@@ -121,7 +119,7 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
     // create GS command line
 
     QString cmdBuf ( "gs -sOutputFile=" );
-    cmdBuf += KProcess::quote(tmpFile.name());
+    cmdBuf += KProcess::quote(tmpFile.fileName());
     cmdBuf += " -q -g";
     cmdBuf += QString::number( wantedWidth );
     cmdBuf += 'x';
@@ -166,7 +164,7 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
     pclose ( ghostfd );
 
     // load image
-    if( !image.load (tmpFile.name()) )
+    if( !image.load (tmpFile.fileName()) )
     {
         // It failed - maybe the device isn't supported by gs
         return -1;

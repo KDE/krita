@@ -26,7 +26,7 @@
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kcolordialog.h>
 #include <kinputdialog.h>
 #include <klocale.h>
@@ -125,11 +125,18 @@ void KisCustomPalette::slotAddPredefined() {
         QString extension;
 
         extension = ".gpl";
-        KTempFile file(dir, extension);
-        file.close(); // If we don't, and palette->save first, it might get truncated!
+        QString tempFileName;
+        {
+            KTemporaryFile file;
+            file.setPrefix(dir);
+            file.setSuffix(extension);
+            file.setAutoRemove(false);
+            file.open();
+            tempFileName = file.fileName();
+        }
 
         // Save it to that file
-        m_palette->setFilename(file.name());
+        m_palette->setFilename(tempFileName);
     } else {
         // The filename is already set
     }

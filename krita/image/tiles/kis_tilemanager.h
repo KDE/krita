@@ -25,7 +25,7 @@
 #include <q3valuelist.h>
 #include <QMutex>
 
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <krita_export.h>
 
 class KisTile;
@@ -75,7 +75,7 @@ private:
 
     // This keeps track of open swap files, and their associated filesizes
     struct TempFile {
-        KTempFile* tempFile;
+        KTemporaryFile* tempFile;
         off_t fileSize;
     };
     // validNode says if you can swap it (true) or not (false) mmapped, if this tile
@@ -84,10 +84,10 @@ private:
     // filePos is the position inside the file; size is the actual size, fsize is the size
     // being used in the swap for this tile (may be larger!)
     // The file points to 0 if it is not swapped, and to the relevant TempFile otherwise
-    struct TileInfo { KisTile *tile; KTempFile* file; off_t filePos; int size; int fsize;
+    struct TileInfo { KisTile *tile; KTemporaryFile* file; off_t filePos; int size; int fsize;
         Q3ValueList<TileInfo*>::iterator node;
         bool inMem; bool onFile; bool mmapped; bool validNode; };
-    typedef struct { KTempFile* file; off_t filePos; int size; } FreeInfo;
+    typedef struct { KTemporaryFile* file; off_t filePos; int size; } FreeInfo;
     typedef QMap<const KisTile*, TileInfo*> TileMap;
     typedef Q3ValueList<TileInfo*> TileList;
     typedef Q3ValueList<FreeInfo*> FreeList;

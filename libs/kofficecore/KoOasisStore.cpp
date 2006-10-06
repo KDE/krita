@@ -26,7 +26,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -77,9 +77,9 @@ KoXmlWriter* KoOasisStore::bodyWriter()
     if ( !m_bodyWriter )
     {
         Q_ASSERT( !m_contentTmpFile );
-        m_contentTmpFile = new KTempFile;
-        m_contentTmpFile->setAutoDelete( true );
-        m_bodyWriter = new KoXmlWriter( m_contentTmpFile->file(), 1 );
+        m_contentTmpFile = new KTemporaryFile;
+        m_contentTmpFile->open();
+        m_bodyWriter = new KoXmlWriter( m_contentTmpFile, 1 );
     }
     return m_bodyWriter;
 }
@@ -91,9 +91,8 @@ bool KoOasisStore::closeContentWriter()
 
     delete m_bodyWriter; m_bodyWriter = 0;
     // copy over the contents from the tempfile to the real one
-    QFile* tmpFile = m_contentTmpFile->file();
-    tmpFile->close();
-    m_contentWriter->addCompleteElement( tmpFile );
+    m_contentTmpFile->close();
+    m_contentWriter->addCompleteElement( m_contentTmpFile );
     m_contentTmpFile->close();
     delete m_contentTmpFile; m_contentTmpFile = 0;
 

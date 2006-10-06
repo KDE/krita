@@ -37,6 +37,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
     m_filterConfig = kfc;
     setSelection( selection );
     m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), name.toLatin1());
+    m_showSelection = true;
     Q_ASSERT(m_cachedPaintDev);
 }
 
@@ -49,6 +50,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
         m_selection->setParentLayer(this);
     }
     m_cachedPaintDev = new KisPaintDevice( *rhs.m_cachedPaintDev.data() );
+    m_showSelection = false;
 }
 
 
@@ -175,6 +177,68 @@ QRect KisAdjustmentLayer::exactBounds() const
 bool KisAdjustmentLayer::accept(KisLayerVisitor & v)
 {
     return v.visit( this );
+}
+
+void KisAdjustmentLayer::paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h)
+{
+    if (showSelection() && selection())
+        selection()->paintSelection(img, x, y, w, h);
+}
+
+void KisAdjustmentLayer::paintSelection(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize)
+{
+    if (showSelection() && selection())
+        selection()->paintSelection(img, scaledImageRect, scaledImageSize, imageSize);
+}
+
+QImage KisAdjustmentLayer::createThumbnail(qint32 w, qint32 h)
+{
+    if (!selection())
+        return QImage();
+
+    int srcw, srch;
+    if( image() )
+    {
+        srcw = image()->width();
+        srch = image()->height();
+    }
+    else
+    {
+        const QRect e = extent();
+        srcw = e.width();
+        srch = e.height();
+    }
+
+    if (w > srcw)
+    {
+        w = srcw;
+        h = qint32(double(srcw) / w * h);
+    }
+    if (h > srch)
+    {
+        h = srch;
+        w = qint32(double(srch) / h * w);
+    }
+
+    if (srcw > srch)
+        h = qint32(double(srch) / srcw * w);
+    else if (srch > srcw)
+        w = qint32(double(srcw) / srch * h);
+
+    QColor c;
+    Q_UINT8 opacity;
+    QImage img(w,h,32);
+
+    for (qint32 y=0; y < h; ++y) {
+        qint32 iY = (y * srch ) / h;
+        for (qint32 x=0; x < w; ++x) {
+            qint32 iX = (x * srcw ) / w;
+            m_selection->pixel(iX, iY, &c, &opacity);
+            img.setPixel(x, y, qRgb(opacity, opacity, opacity));
+        }
+    }
+
+    return img;
 }
 
 #include "kis_adjustment_layer.moc"

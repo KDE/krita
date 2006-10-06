@@ -153,31 +153,44 @@ public:
     {
         kDebug(41010) << "Visiting on adjustment layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
-        
+
         if (m_projection.isNull()) {
             return true;
         }
-        
+
         if (!layer->visible())
             return true;
 
         KisFilterConfiguration * cfg = layer->filter();
         if (!cfg) return false;
 
-        
+
         KisFilterSP f = KisFilterRegistry::instance()->get( cfg->name() );
         if (!f) return false;
-        
+
         KisSelectionSP selection = layer->selection();
 
-        // Copy of the projection -- use the copy-on-write trick.
-        KisPaintDeviceSP tmp = KisPaintDeviceSP(new KisPaintDevice(*m_projection));
+        // Copy of the projection -- use the copy-on-write trick. XXX NO COPY ON WRITE YET =(
+        //KisPaintDeviceSP tmp = new KisPaintDevice(*m_projection);
+        KisPaintDeviceSP tmp((KisPaintDevice*)0);
 
         // If there's a selection, only keep the selected bits
         if (!selection.isNull()) {
-            tmp->setSelection(selection);
+            tmp = new KisPaintDevice(m_projection->colorSpace());
+            KisPainter gc(tmp);
+            QRect selectedRect = selection->selectedRect();
+            selectedRect &= m_rc;
+            //kDebug() << k_funcinfo << selectedRect << endl;
+            tmp->setX(selection->getX());
+            tmp->setY(selection->getY());
+            gc.bitBlt(selectedRect.x(), selectedRect.y(), COMPOSITE_COPY, m_projection,
+                      selectedRect.x(), selectedRect.y(),
+                      selectedRect.width(), selectedRect.height());
+            gc.end();
+        } else {
+            tmp = new KisPaintDevice(*m_projection);
         }
-        
+
         // Filter the temporary paint device -- remember, these are only the selected bits,
         // if there was a selection.
         f->process(tmp, tmp, cfg, m_rc);

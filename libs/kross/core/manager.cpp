@@ -226,21 +226,18 @@ QWidget* Manager::createDialog(const QString& caption)
 
     return form;
 */
+/*
     KDialog* dialog = new KDialog();
     dialog->setCaption(caption);
     FormDialog* formdialog = new FormDialog(dialog);
     return formdialog;
+*/
+    return new Dialog(caption);
 }
 
 QWidget* Manager::createForm(QWidget* parent)
 {
-    Form* form = new Form(parent);
-    /*
-    KDialog* dialog = dynamic_cast<KDialog*>(parent);
-    if(dialog)
-        dialog->setMainWidget(form);
-    */
-    return form;
+    return new Form(parent);
 }
 
 #if 0

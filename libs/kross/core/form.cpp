@@ -23,10 +23,13 @@
 #include <QBuffer>
 #include <QFile>
 #include <QDialog>
+#include <QVBoxLayout>
+#include <QSizePolicy>
 #include <QtDesigner/QFormBuilder>
+#include <QMetaObject>
+#include <QMetaEnum>
 
 #include <kdebug.h>
-#include <kdialog.h>
 //#include <klocale.h>
 //#include <kicon.h>
 //#include <kmimetype.h>
@@ -64,6 +67,13 @@ Form::Form(QWidget* parent)
     : QWidget(parent)
     , d( new Private() )
 {
+    QVBoxLayout* boxlayout = new QVBoxLayout(this);
+    boxlayout->setSpacing(0);
+    boxlayout->setMargin(0);
+    setLayout(boxlayout);
+
+    if(parent->layout())
+        parent->layout()->addWidget(this);
 }
 
 Form::~Form()
@@ -134,31 +144,72 @@ bool Form::fromUiXml(const QString& xml)
     QBuffer buffer(&ba);
     buffer.open(QIODevice::ReadOnly);
     d->widget = d->formBuilder()->load(&buffer, this);
+    if(! d->widget) {
+        return false;
+    }
+    layout()->addWidget(d->widget);
     return true;
 }
 
 /*********************************************************************************
- * FormDialog
+ * Dialog
  */
 
-FormDialog::FormDialog(KDialog* dialog)
-    : Form(dialog->mainWidget())
-    , m_dialog(dialog)
+Dialog::Dialog(const QString& caption)
+    : KDialog()
+{
+    setCaption(caption);
+    KDialog::setButtons(KDialog::Ok);
+
+    m_form = new Form( mainWidget() );
+    setMainWidget(m_form);
+
+    //m_dialog->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred) );
+    setMinimumWidth(380);
+}
+
+Dialog::~Dialog()
 {
 }
 
-FormDialog::~FormDialog()
+bool Dialog::setButtons(QString buttons)
 {
-}
-
-int FormDialog::exec()
-{
-    return m_dialog->exec();
-}
-
-int FormDialog::exec_loop()
-{
-    exec();
+    int i = metaObject()->indexOfEnumerator("ButtonCode");
+    if(i < 0) {
+        kWarning() << "Kross::Dialog::setButtons No such enumerator \"ButtonCode\"" << endl;
+        return false;
+    }
+    QMetaEnum e = metaObject()->enumerator(i);
+    int v = e.keysToValue( buttons.toUtf8() );
+    if(v < 0) {
+        kWarning() << "Kross::Dialog::setButtons Invalid buttons \"" << buttons << "\" defined" << endl;
+        return false;
+    }
+    KDialog::setButtons( (KDialog::ButtonCode)v );
+    /*
+    QFlags<KDialog::ButtonCode> buttonmask;
+    foreach(QString b, buttons.split("|")) {
+        b = b.trimmed().toLower();
+        if(b == "ok")
+            buttonmask |= KDialog::Ok;
+        else if(b == "apply")
+            buttonmask |= KDialog::Apply;
+        else if(b == "try")
+            buttonmask |= KDialog::Try;
+        else if(b == "cancel")
+            buttonmask |= KDialog::Cancel;
+        else if(b == "close")
+            buttonmask |= KDialog::Close;
+        else if(b == "no")
+            buttonmask |= KDialog::No;
+        else if(b == "yes")
+            buttonmask |= KDialog::Yes;
+        else if(b == "details")
+            buttonmask |= KDialog::Details;
+    }
+    KDialog::setButtons( buttonmask );
+    */
+    return true;
 }
 
 #include "form.moc"

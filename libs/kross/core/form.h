@@ -23,23 +23,25 @@
 #include <QString>
 #include <QWidget>
 
-#include <koffice_export.h>
+#include <kdialog.h>
 
-class KDialog;
+#include <koffice_export.h>
 
 namespace Kross {
 
     /**
-     * The Forms class provides access to displayed QWidget objects.
+     * The Forms class offers access to the functionality provided by QFormBuilder
+     * to be able to work with UI-files.
      *
      * Example (in Python) :
      * \code
      * import Kross
      * window = Kross.activeWindow()
      * if window == None:
-     *     raise "No window active"
+     *     raise "No active window"
      * form = Kross.createForm(window)
-     * form.loadUiFile("/path/to/myuifile.ui")
+     * form.loadUiFile("./mywidget.ui")
+     * form.show()
      * \endcode
      */
     class KROSS_EXPORT Form : public QWidget
@@ -79,30 +81,72 @@ namespace Kross {
     };
 
     /**
-     * The DialogForms class provides access to KDialog objects.
+     * The Dialog class provides access to KDialog objects.
+     *
+     * Example (in Python) :
+     * \code
+     * import Kross
+     * dialog = Kross.createDialog("MyDialog")
+     * dialog.setButtons("Ok|Cancel")
+     * dialog.loadUiFile("./mydialog.ui")
+     * result = dialog.exec_loop()
+     * print result
+     * \endcode
      */
-    class KROSS_EXPORT FormDialog : public Form
+    class KROSS_EXPORT Dialog : public KDialog
     {
             Q_OBJECT
+
+
+            //Q_ENUMS(MyButtonCode)
+            //Q_ENUMS(KDialog::ButtonCode)
+
         public:
-            FormDialog(KDialog* dialog);
-            virtual ~FormDialog();
+            //enum MyButtonCode { Ok, Cancel };
+
+            Dialog(const QString& caption);
+            virtual ~Dialog();
 
         public slots:
 
             /**
-             * Shows the dialog as a modal dialog, blocking until the user
-             * closes it.
+             * Load the UI XML from the file \p filename .
              */
-            int exec();
+            bool loadUiFile(const QString& filename) { return m_form->loadUiFile(filename); }
+
+            /**
+             * Save the UI XML to the file \p filename .
+             */
+            bool saveUiFile(const QString& filename) { return m_form->saveUiFile(filename); }
+
+            /**
+             * \return the UI XML as a string.
+             */
+            QString toUiXml() { return m_form->toUiXml(); }
+
+            /**
+             * Set the UI XML from the string \p xml .
+             */
+            bool fromUiXml(const QString& xml) { return m_form->fromUiXml(xml); }
+
+            /**
+             * Set the buttons.
+             */
+            bool setButtons(QString buttons);
+
+            /**
+             * Shows the dialog as a modal dialog, blocking until the user
+             * closes it and returns the execution result (the buttonstate id).
+             */
+            int exec() { return KDialog::exec(); }
 
             /**
              * Same as the \a exec() method above provided for PyQt-lovers :)
              */
-            int exec_loop();
+            int exec_loop() { return exec(); }
 
         private:
-            KDialog* m_dialog;
+            Form* m_form;
     };
 
 }

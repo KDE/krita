@@ -188,13 +188,15 @@ namespace Kross {
             QWidget* activeWindow();
 
             /**
-             * Create and return a new KDialog instance.
+             * Create and return a new \a Dialog instance.
+             *
+             * \param caption The displayed caption of the dialog.
              */
             QWidget* createDialog(const QString& caption);
 
             /**
-             * \return a new \a Form instance which is child of the parent
-             * widget \p parent .
+             * Create and return a new \a Form instance which is child of the
+             * \p parent widget.
              */
             QWidget* createForm(QWidget* parent);
 

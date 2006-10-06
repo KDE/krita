@@ -2,25 +2,15 @@ project(krita)
 
 macro_optional_find_package(Kunittest)
 
-set(REQUIRED_LCMS_VERSION 112)
+set(REQUIRED_LCMS_VERSION 115)
 
 if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
     set(SHOULD_BUILD_KRITA TRUE)
-    if(LCMS_VERSION EQUAL 114)
-        message(STATUS "==============================================")
-        message(STATUS "WARNING: you are using version 1.14 of lcms")
-        message(STATUS " this version has a bug that break filling")
-        message(STATUS " and select similar colors in at least CMYK")
-        message(STATUS " you might want to use a newer version, or")
-        message(STATUS " an older")
-        message(STATUS "==============================================")
-    endif(LCMS_VERSION EQUAL 114)
 else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 	set(SHOULD_BUILD_KRITA FALSE)
-	message(STATUS  "krita requires LittleCMS 1.12 or greater. Krita will not be built.\n"
+	message(STATUS  "krita requires LittleCMS 1.15 or greater. Krita will not be built.\n"
 			"   If you want to compile Krita you should install:\n"
-			"   lcms 1.12 or newer (http://www.littlecms.com/)\n"
-			"   and avoid 1.14 as it has a major bug in CMYK")
+			"   lcms 1.15 or newer (http://www.littlecms.com/)")
 endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
 if (SHOULD_BUILD_KRITA)

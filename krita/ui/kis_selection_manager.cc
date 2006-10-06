@@ -394,8 +394,8 @@ void KisSelectionManager::copy()
     // Apply selection mask.
 
     for (qint32 y = 0; y < r.height(); y++) {
-        KisHLineIterator layerIt = clip->createHLineIterator(0, y, r.width(), true);
-        KisHLineIterator selectionIt = selection->createHLineIterator(r.x(), r.y() + y, r.width(), false);
+        KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, y, r.width(), true);
+        KisHLineIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y() + y, r.width(), false);
 
         while (!layerIt.isDone()) {
 
@@ -498,11 +498,12 @@ void KisSelectionManager::selectAll()
     if (!dev) return;
 
     KisSelectedTransaction * t = 0;
-    if (img->undo()) t = new KisSelectedTransaction(i18n("Select &All"), dev);
+    if (img->undo()) t = new KisSelectedTransaction(i18n("Select All"), dev);
     Q_CHECK_PTR(t);
 
     dev->selection()->clear();
     dev->selection()->invert();
+    dev->setDirty();
     dev->emitSelectionChanged();
 
     if (img->undo())
@@ -521,6 +522,7 @@ void KisSelectionManager::deselect()
     Q_CHECK_PTR(t);
 
     dev->deselect();
+    dev->setDirty();
     dev->emitSelectionChanged();
 
     if (img->undo())
@@ -545,6 +547,7 @@ void KisSelectionManager::clear()
     }
 
     dev->clearSelection();
+    dev->setDirty();
     dev->emitSelectionChanged();
 
     if (img->undo()) img->undoAdapter()->addCommand(t);
@@ -580,6 +583,7 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
     painter2.bltSelection(0, 0, COMPOSITE_OVER, filled, OPACITY_OPAQUE,
                           0, 0, img->width(), img->height());
 
+    dev->setDirty();
     dev->emitSelectionChanged();
 
     if (img->undo()) {
@@ -615,6 +619,7 @@ void KisSelectionManager::reselect()
     Q_CHECK_PTR(t);
 
     dev->reselect(); // sets hasSelection=true
+    dev->setDirty();
     dev->emitSelectionChanged();
 
     if (img->undo())
@@ -636,11 +641,12 @@ void KisSelectionManager::invert()
         KisSelectedTransaction * t = 0;
         if (img->undo())
         {
-            t = new KisSelectedTransaction(i18n("&Invert"), dev);
+            t = new KisSelectedTransaction(i18n("Invert"), dev);
             Q_CHECK_PTR(t);
         }
 
         s->invert();
+        dev->setDirty();
         dev->emitSelectionChanged();
 
         if (t) {
@@ -722,6 +728,7 @@ void KisSelectionManager::feather()
     painter.applyMatrix(k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, KoChannelInfo::FLAG_ALPHA);
     painter.end();
 
+    dev->setDirty();
     dev->emitSelectionChanged();
 
     if (img->undo())
@@ -892,6 +899,7 @@ void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
     delete[] buf;
     delete[] out;
 
+    dev->setDirty();
     dev->emitSelectionChanged();
 
     if (t) {
@@ -1058,6 +1066,7 @@ void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock
     delete[] buf;
     delete[] out;
 
+    dev->setDirty();
     dev->emitSelectionChanged();
 }
 
@@ -1126,6 +1135,7 @@ void KisSelectionManager::smooth()
 
     delete[] out;
 
+    dev->setDirty();
     dev->emitSelectionChanged();
 }
 
@@ -1200,6 +1210,7 @@ void KisSelectionManager::erode()
 
     delete[] out;
 
+    dev->setDirty();
     dev->emitSelectionChanged();
 }
 
@@ -1273,6 +1284,7 @@ void KisSelectionManager::dilate()
 
     delete[] out;
 
+    dev->setDirty();
     dev->emitSelectionChanged();
 }
 
@@ -1520,6 +1532,7 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
     density -= xradius;
     delete[] density;
 
+    dev->setDirty();
     dev->emitSelectionChanged();
 }
 

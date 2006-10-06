@@ -223,10 +223,13 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
                         break;
                 }
 
-                if(hasSelection)
+                if(hasSelection) {
+                    dev->setDirty(rc);
                     dev->emitSelectionChanged(rc);
-                else
+                } else {
+                    dev->setDirty();
                     dev->emitSelectionChanged();
+                }
 
                 if (img->undo())
                     img->undoAdapter()->addCommand(t);

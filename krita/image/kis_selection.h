@@ -103,11 +103,20 @@ public:
     void paintSelection(QImage img, qint32 x, qint32 y, qint32 w, qint32 h);
     void paintSelection(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
+    // if the parent layer is interested in keeping up to date with the dirtyness
+    // of this layer, set to true
+    void setInterestedInDirtyness(bool b) { m_dirty = b; }
+    bool interestedInDirtyness() const { return m_dirty; }
+
+    virtual void setDirty(const QRect & rc);
+    virtual void setDirty();
+
 private:
     void paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion);
 
 private:
     KisPaintDeviceSP m_parentPaintDevice;
+    bool m_dirty;
 };
 
 #endif // KIS_SELECTION_H_

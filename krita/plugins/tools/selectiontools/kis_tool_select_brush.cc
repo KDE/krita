@@ -92,6 +92,7 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
     }
     KisSelectionSP selection = dev->selection();
 
+    m_target = selection.data();
     m_painter = new KisPainter(KisPaintDeviceSP(selection.data()));
     Q_CHECK_PTR(m_painter);
     m_painter->setPaintColor(KoColor(Qt::black, selection->colorSpace()));

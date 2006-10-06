@@ -1444,6 +1444,22 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
     QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), profile, INTENT_PERCEPTUAL, exposure);
     delete [] scaledImageData;
 
+#ifdef __BIG_ENDIAN__
+    uchar * data = image.bits();
+    for (int i = 0; i < image.width() * image.height(); ++i) {
+      uchar r, g, b, a;
+      a = data[0];
+      b = data[1];
+      g = data[2];
+      r = data[3];
+      data[0] = r;
+      data[1] = g;
+      data[2] = b;
+      data[3] = a;
+      data += 4;
+    }
+#endif
+    
     if (paintFlags & PAINT_BACKGROUND) {
         m_bkg->paintBackground(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
     }
@@ -1459,21 +1475,6 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
             m_activeLayer->paintMaskInactiveLayers(img, x1, y1, w, h);
         }
     }*/
-#ifdef __BIG_ENDIAN__
-    uchar * data = image.bits();
-    for (int i = 0; i < image.width() * image.height(); ++i) {
-        uchar r, g, b, a;
-        a = data[0];
-        b = data[1];
-        g = data[2];
-        r = data[3];
-        data[0] = r;
-        data[1] = g;
-        data[2] = b;
-        data[3] = a;
-        data += 4;
-    }
-#endif
 
     return image;
 }

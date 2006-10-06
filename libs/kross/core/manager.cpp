@@ -18,16 +18,19 @@
  ***************************************************************************/
 
 #include "manager.h"
-#include "../core/action.h"
-#include "../core/interpreter.h"
+#include "action.h"
+#include "interpreter.h"
+#include "form.h"
 
 #include <QObject>
 #include <QFile>
 #include <QRegExp>
+#include <QApplication>
 
 #include <klibloader.h>
 #include <klocale.h>
 #include <kstaticdeleter.h>
+#include <kdialog.h>
 
 #if 0
 extern "C"
@@ -130,7 +133,7 @@ Manager::~Manager()
     delete d;
 }
 
-QMap<QString, InterpreterInfo*> Manager::getInterpreterInfos()
+QMap<QString, InterpreterInfo*> Manager::interpreterInfos()
 {
     return d->interpreterinfos;
 }
@@ -140,12 +143,12 @@ bool Manager::hasInterpreterInfo(const QString& interpretername) const
     return d->interpreterinfos.contains(interpretername);
 }
 
-InterpreterInfo* Manager::getInterpreterInfo(const QString& interpretername)
+InterpreterInfo* Manager::interpreterInfo(const QString& interpretername)
 {
     return d->interpreterinfos[interpretername];
 }
 
-const QString Manager::getInterpreternameForFile(const QString& file)
+const QString Manager::interpreternameForFile(const QString& file)
 {
     QRegExp rx;
     rx.setPatternSyntax(QRegExp::Wildcard);
@@ -167,7 +170,7 @@ KSharedPtr<Action> Manager::createAction(const QString& scriptname)
     return Action::Ptr( action );
 }
 
-Interpreter* Manager::getInterpreter(const QString& interpretername)
+Interpreter* Manager::interpreter(const QString& interpretername)
 {
     if(! d->interpreterinfos.contains(interpretername)) {
         krosswarning( QString("No such interpreter '%1'").arg(interpretername) );
@@ -176,13 +179,18 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
     return d->interpreterinfos[interpretername]->getInterpreter();
 }
 
-QStringList Manager::getInterpreters()
+QStringList Manager::interpreters()
 {
     QStringList list;
     QMap<QString, InterpreterInfo*>::Iterator it( d->interpreterinfos.begin() );
     for(; it != d->interpreterinfos.end(); ++it)
         list << it.key();
     return  list;
+}
+
+bool Manager::hasAction(const QString& name)
+{
+    return findChild< Action* >(name) != 0L;
 }
 
 QObject* Manager::action(const QString& name)
@@ -193,6 +201,46 @@ QObject* Manager::action(const QString& name)
         object->setParent(this);
     }
     return object;
+}
+
+QWidget* Manager::activeModalWidget()
+{
+    return QApplication::activeModalWidget();
+}
+
+QWidget* Manager::activeWindow()
+{
+    return QApplication::activeWindow();
+}
+
+QWidget* Manager::createDialog(const QString& caption)
+{
+/*
+    KDialog* dialog = new KDialog();
+    dialog->setCaption(caption);
+    dialog->setModal(true);
+    //dialog->setButtons( KDialog::Ok );
+
+    Form* form = new Form(dialog);
+    dialog->setMainWidget(form);
+
+    return form;
+*/
+    KDialog* dialog = new KDialog();
+    dialog->setCaption(caption);
+    FormDialog* formdialog = new FormDialog(dialog);
+    return formdialog;
+}
+
+QWidget* Manager::createForm(QWidget* parent)
+{
+    Form* form = new Form(parent);
+    /*
+    KDialog* dialog = dynamic_cast<KDialog*>(parent);
+    if(dialog)
+        dialog->setMainWidget(form);
+    */
+    return form;
 }
 
 #if 0

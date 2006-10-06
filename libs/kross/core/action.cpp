@@ -203,13 +203,13 @@ QVariant Action::getOption(const QString name, QVariant defaultvalue, bool /*rec
 {
     if(d->options.contains(name))
         return d->options[name];
-    InterpreterInfo* info = Manager::self().getInterpreterInfo( d->interpretername );
+    InterpreterInfo* info = Manager::self().interpreterInfo( d->interpretername );
     return info ? info->getOptionValue(name, defaultvalue) : defaultvalue;
 }
 
 bool Action::setOption(const QString name, const QVariant& value)
 {
-    InterpreterInfo* info = Manager::self().getInterpreterInfo( d->interpretername );
+    InterpreterInfo* info = Manager::self().interpreterInfo( d->interpretername );
     if(info) {
         if(info->hasOption(name)) {
             d->options.insert(name, value);
@@ -297,7 +297,7 @@ bool Action::initialize()
 
         krossdebug( QString("Kross::Action::initialize() file=%1").arg(file) );
         if(d->interpretername.isNull()) {
-            d->interpretername = Manager::self().getInterpreternameForFile(file);
+            d->interpretername = Manager::self().interpreternameForFile(file);
             if(d->interpretername.isNull()) {
                 setError(i18n("Failed to determinate interpreter for scriptfile '%1'",file));
                 return false;
@@ -312,7 +312,7 @@ bool Action::initialize()
         f.close();
     }
 
-    Interpreter* interpreter = Manager::self().getInterpreter(d->interpretername);
+    Interpreter* interpreter = Manager::self().interpreter(d->interpretername);
     if(! interpreter) {
         setError(i18n("Unknown interpreter '%1'",d->interpretername));
         return false;

@@ -64,7 +64,7 @@ static KCmdLineOptions options[] =
 
 QString getInterpreterName(const QString& scriptfile)
 {
-    Kross::InterpreterInfo* interpreterinfo = Kross::Manager::self().getInterpreterInfo( Kross::Manager::self().getInterpreternameForFile(scriptfile) );
+    Kross::InterpreterInfo* interpreterinfo = Kross::Manager::self().interpreterInfo( Kross::Manager::self().interpreternameForFile(scriptfile) );
     return interpreterinfo ? interpreterinfo->getInterpretername() : "python";
 }
 

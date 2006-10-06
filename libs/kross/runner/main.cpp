@@ -42,7 +42,6 @@
 #define ERROR_NOSUCHFILE -2
 #define ERROR_OPENFAILED -3
 #define ERROR_NOINTERPRETER -4
-#define ERROR_UNHALDEDEXCEPTION -5
 #define ERROR_EXCEPTION -6
 
 KApplication* app = 0;
@@ -63,7 +62,7 @@ int runScriptFile(const QString& scriptfile)
     f.close();
 
     // Determinate the matching interpreter
-    Kross::InterpreterInfo* interpreterinfo = Kross::Manager::self().getInterpreterInfo( Kross::Manager::self().getInterpreternameForFile(scriptfile) );
+    Kross::InterpreterInfo* interpreterinfo = Kross::Manager::self().interpreterInfo( Kross::Manager::self().interpreternameForFile(scriptfile) );
     if(! interpreterinfo) {
         std::cerr << "No interpreter for file: " << scriptfile.toLatin1().data() << std::endl;
         return ERROR_NOINTERPRETER;
@@ -71,23 +70,18 @@ int runScriptFile(const QString& scriptfile)
 
     // First we need a Action and fill it.
     Kross::Action::Ptr action = Kross::Manager::self().createAction(scriptfile);
-    action->setInterpreterName( interpreterinfo->getInterpretername() );
+    action->setInterpreter( interpreterinfo->getInterpretername() );
     action->setCode(scriptcode);
 
     // Now execute the Action.
-    action->execute();
-    if(action->hadException()) {
+    action->trigger();
+
+    if(action->hadError()) {
         // We had an exception.
-        QString errormessage = action->getException()->getError();
-        QString tracedetails = action->getException()->getTrace();
-        std::cerr << QString("%2\n%1").arg(tracedetails).arg(errormessage).toLatin1().data() << std::endl;
+        std::cerr << QString("%2\n%1").arg(action->errorTrace()).arg(action->errorMessage()).toLatin1().data() << std::endl;
         return ERROR_EXCEPTION;
     }
-    catch(Kross::Exception::Ptr e) {
-        // Normaly that shouldn't be the case...
-        std::cerr << QString("EXCEPTION %1").arg(e->toString()).toLatin1().data() << std::endl;
-        return ERROR_UNHALDEDEXCEPTION;
-    }
+
     return ERROR_OK;
 }
 

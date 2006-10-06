@@ -292,7 +292,7 @@ void GUIClient::executionFailed(const QString& errormessage, const QString& trac
 bool GUIClient::executeFile()
 {
     QStringList mimetypes;
-    QMap<QString, InterpreterInfo*> infos = Manager::self().getInterpreterInfos();
+    QMap<QString, InterpreterInfo*> infos = Manager::self().interpreterInfos();
     for(QMap<QString, InterpreterInfo*>::Iterator it = infos.begin(); it != infos.end(); ++it)
         mimetypes.append( it.value()->getMimeTypes().join(" ").trimmed() );
 

@@ -9,7 +9,7 @@ include_directories( ${KOFFICECORE_INCLUDES} )
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
 add_subdirectory( core )
-#add_subdirectory( runner )
+add_subdirectory( runner )
 add_subdirectory( test )
 
 # KDE Javascript

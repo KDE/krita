@@ -66,7 +66,7 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     new QVBoxLayout(interpretergrpbox);
     m_interpretercombo = new QComboBox(interpretergrpbox);
     interpretergrpbox->layout()->addWidget(m_interpretercombo);
-    m_interpretercombo->addItems( Kross::Manager::self().getInterpreters() );
+    m_interpretercombo->addItems( Kross::Manager::self().interpreters() );
     m_interpretercombo->setCurrentText(interpretername);
 
     QGroupBox* scriptgrpbox = new QGroupBox("Scripting code", mainbox);
@@ -93,7 +93,7 @@ TestWindow::~TestWindow()
 void TestWindow::execute()
 {
     m_action->setInterpreter( m_interpretercombo->currentText() );
-    m_action->setCode(m_codeedit->text());
+    m_action->setCode( m_codeedit->text() );
 
     m_action->trigger();
 

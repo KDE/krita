@@ -77,7 +77,7 @@ namespace Kross {
              * \return a map with \a InterpreterInfo* instances
              * used to describe interpreters.
              */
-            QMap<QString, InterpreterInfo*> getInterpreterInfos();
+            QMap<QString, InterpreterInfo*> interpreterInfos();
 
             /**
              * \return true if there exists an interpreter with the
@@ -90,7 +90,7 @@ namespace Kross {
              * \p interpretername or NULL if there does not exists such
              * a interpreter.
              */
-            InterpreterInfo* getInterpreterInfo(const QString& interpretername);
+            InterpreterInfo* interpreterInfo(const QString& interpretername);
 
             /**
              * \return the name of the \a Interpreter that feels responsible
@@ -102,7 +102,7 @@ namespace Kross {
              * to execute the file or QString::null if we failed to determinate
              * a matching interpreter for the file.
              */
-            const QString getInterpreternameForFile(const QString& file);
+            const QString interpreternameForFile(const QString& file);
 
             /**
              * Return the existing \a Action with scriptname
@@ -124,7 +124,7 @@ namespace Kross {
              * \return The Interpreter instance or NULL if there does not exists
              * an interpreter with such an interpretername.
              */
-            Interpreter* getInterpreter(const QString& interpretername);
+            Interpreter* interpreter(const QString& interpretername);
 
 #if 0
             /**
@@ -156,8 +156,17 @@ namespace Kross {
 
             /**
              * \return a list of names of all supported scripting interpreters.
+             * The list may contain for example "python", "ruby" and "kjs" depending
+             * on what interpreter-plugins are installed.
              */
-            QStringList getInterpreters();
+            QStringList interpreters();
+
+            /**
+            * \return true if there exists a \a Action QObject instance
+            * which is child of this \a Manager instance and is defined as \p name
+            * else false is returned.
+            */
+            bool hasAction(const QString& name);
 
             /**
             * \return the \a Action QObject instance defined with \p name which is
@@ -165,6 +174,29 @@ namespace Kross {
             * yet, create one.
             */
             QObject* action(const QString& name);
+
+            /**
+             * \return the active modal widget. Modal widgets are special top-level
+             * widgets which are subclasses of QDialog and are modal.
+             */
+            QWidget* activeModalWidget();
+
+            /**
+             * \return the application top-level window that has the keyboard input
+             * focus, or 0 if no application window has the focus.
+             */
+            QWidget* activeWindow();
+
+            /**
+             * Create and return a new KDialog instance.
+             */
+            QWidget* createDialog(const QString& caption);
+
+            /**
+             * \return a new \a Form instance which is child of the parent
+             * widget \p parent .
+             */
+            QWidget* createForm(QWidget* parent);
 
         private:
             /// Private d-pointer class.

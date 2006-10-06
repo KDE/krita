@@ -1,26 +1,15 @@
 // Print something on the console.
-println("Hello world from kjs :-)");
+println("Let's start the KjsEmbed Unittest :-)");
 
 /*TODO
 - KjsEmbed callAsFunction in qobject_binding.cpp does currently not eval returnvalues.
-- KjsEmbed crashes on unhandled types like uint, qlonglong, qulonglong, ...
-- We need some way to disable insecure functionality like e.g. the QFile-wrapper on demand (or
-  even better limit read/write access to defined directories/files + how to prevent filling
-  of the fs with >n GB files?).
-- scripts may need persistent configs vs. temp files.
-- network-access?
-- iosupport looks evil
-- there is no support for dynamic loadable modules?
-- IMHO KjsEmbed should come with a wrapper for KUnitTest/QUnitTest
-- May it make sense to refactor QVariant-handling? So, move it into an own class + add support
-  for metatypes?
-- maybe even introduce something like a SecurityDecorator?
-- don't publish protected+private slots + be sure they are not callable + same with slots (maybe
-  reuse Q_SCRIPTABLE?)
-- call-by-ref needed?
-- also optional limit parent/child hierachy + single calls like setParent?
-- how to prevent infiniv loops?
-- unittests++
+- KjsEmbed may still miss types like uint, qlonglong, qulonglong, ...
+- We need more security;
+  - insecure functionality like e.g. setParent or QFile
+  - limit read/write access to defined directories/files
+  - how to prevent filling of the fs with >n GB files?
+  - iosupport, network, dynamic loaded modules, ...
+  - how to prevent infiniv loops?
 */
 
 function UnitTest()
@@ -67,7 +56,6 @@ tester.assert(testobj1.func_int_int(0), 0);
 tester.assert(testobj1.func_int_int(177321), 177321);
 tester.assert(testobj1.func_int_int(-98765), -98765);
 
-/*
 // uint
 tester.assert(testobj1.func_uint_uint(0), 0);
 tester.assert(testobj1.func_uint_uint(177321), 177321);
@@ -77,20 +65,25 @@ tester.assert(testobj1.func_double_double(0.0), 0.0);
 tester.assert(testobj1.func_double_double(1773.2177), 1773.2177);
 tester.assert(testobj1.func_double_double(-548993.271993), -548993.271993);
 
+/*
 // longlong
 tester.assert(testobj1.func_qlonglong_qlonglong(0), 0);
 tester.assert(testobj1.func_qlonglong_qlonglong(7379), 7379);
 tester.assert(testobj1.func_qlonglong_qlonglong(-6384673), -6384673);
 tester.assert(testobj1.func_qlonglong_qlonglong(678324787843223472165), 678324787843223472165);
+*/
 
+/*
 // ulonglong
 tester.assert(testobj1.func_qulonglong_qulonglong(0), 0);
 tester.assert(testobj1.func_qulonglong_qulonglong(378972), 378972);
 */
 
+/*
 // bytearray
 tester.assert(testobj1.func_qbytearray_qbytearray("  Some String as ByteArray  "), "  Some String as ByteArray  ");
 tester.assert(testobj1.func_qbytearray_qbytearray(" \0\n\r\t\s\0 test "), " \0\n\r\t\s\0 test ");
+*/
 
 // string
 tester.assert(testobj1.func_qstring_qstring(""), "");

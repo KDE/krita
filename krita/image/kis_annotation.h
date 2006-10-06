@@ -21,7 +21,7 @@
 #ifndef _KIS_ANNOTATION_H_
 #define _KIS_ANNOTATION_H_
 
-#include <ksharedptr.h>
+#include <kis_shared_ptr.h>
 #include "kis_shared_ptr_vector.h"
 
 #include <QString>
@@ -81,7 +81,7 @@ private:
 
 };
 
-typedef KSharedPtr<KisAnnotation> KisAnnotationSP;
+typedef KisSharedPtr<KisAnnotation> KisAnnotationSP;
 typedef KisSharedPtrVector<KisAnnotation> vKisAnnotationSP;
 typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
 typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;

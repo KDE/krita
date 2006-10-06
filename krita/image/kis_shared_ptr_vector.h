@@ -21,19 +21,19 @@
 
 #include <q3valuevector.h>
 
-#include <ksharedptr.h>
+#include <kis_shared_ptr.h>
 
 /**
  * QValueVector does not always destroy an element when it is erased.
- * If the items it is holding are KSharedPtr, this can result in hidden
+ * If the items it is holding are KisSharedPtr, this can result in hidden
  * references to objects that cannot be accounted for. This class
- * sets the KSharedPtr to 0 on erase, which dereferences the object as
+ * sets the KisSharedPtr to 0 on erase, which dereferences the object as
  * expected.
  */
 template <class T>
-class KisSharedPtrVector : public Q3ValueVector< KSharedPtr<T> >
+class KisSharedPtrVector : public Q3ValueVector< KisSharedPtr<T> >
 {
-    typedef Q3ValueVector< KSharedPtr<T> > super;
+    typedef Q3ValueVector< KisSharedPtr<T> > super;
 public:
     KisSharedPtrVector() {}
 
@@ -57,7 +57,7 @@ public:
         return super::erase(first, last);
     }
 
-    bool contains(KSharedPtr<T> ptr) const
+    bool contains(KisSharedPtr<T> ptr) const
     {
         for (int i = 0, n = super::count(); i < n; ++i)
             if (super::at(i) == ptr)

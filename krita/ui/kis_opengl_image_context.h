@@ -38,7 +38,7 @@ class QRegion;
 // XXX: Qt 4.1 provides a QGLContext class that may be relevant here
 
 class KisOpenGLImageContext;
-typedef KSharedPtr<KisOpenGLImageContext> KisOpenGLImageContextSP;
+typedef KisSharedPtr<KisOpenGLImageContext> KisOpenGLImageContextSP;
 class KoColorSpace;
 
 class KRITAUI_EXPORT KisOpenGLImageContext : public QObject , public KShared {

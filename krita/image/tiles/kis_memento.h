@@ -22,13 +22,13 @@
 #include <qglobal.h>
 #include <QRect>
 
-#include <ksharedptr.h>
+#include <kis_shared_ptr.h>
 
 class KisTile;
 class KisTiledDataManager;
 
 class KisMemento;
-typedef KSharedPtr<KisMemento> KisMementoSP;
+typedef KisSharedPtr<KisMemento> KisMementoSP;
 
 class KisMemento : public KShared
 {

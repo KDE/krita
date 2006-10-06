@@ -22,7 +22,7 @@
 #include <QMap>
 #include <QPoint>
 
-#include <ksharedptr.h>
+#include <kis_shared_ptr.h>
 
 #include "kis_shared_ptr_vector.h"
 
@@ -35,53 +35,53 @@
  */
 
 class KisImage;
-typedef KSharedPtr<KisImage> KisImageSP;
+typedef KisSharedPtr<KisImage> KisImageSP;
 
 class KisPaintDevice;
-typedef KSharedPtr<KisPaintDevice> KisPaintDeviceSP;
+typedef KisSharedPtr<KisPaintDevice> KisPaintDeviceSP;
 typedef KisSharedPtrVector<KisPaintDevice> vKisPaintDeviceSP;
 typedef vKisPaintDeviceSP::iterator vKisPaintDeviceSP_it;
 typedef vKisPaintDeviceSP::const_iterator vKisPaintDeviceSP_cit;
 
 class KisLayer;
-typedef KSharedPtr<KisLayer> KisLayerSP;
+typedef KisSharedPtr<KisLayer> KisLayerSP;
 typedef KisSharedPtrVector<KisLayer> vKisLayerSP;
 typedef vKisLayerSP::iterator vKisLayerSP_it;
 typedef vKisLayerSP::const_iterator vKisLayerSP_cit;
 
 class KisPartLayer;
-typedef KSharedPtr<KisPartLayer> KisPartLayerSP;
+typedef KisSharedPtr<KisPartLayer> KisPartLayerSP;
 
 class KisPaintLayer;
-typedef KSharedPtr<KisPaintLayer> KisPaintLayerSP;
+typedef KisSharedPtr<KisPaintLayer> KisPaintLayerSP;
 
 class KisAdjustmentLayer;
-typedef KSharedPtr<KisAdjustmentLayer> KisAdjustmentLayerSP;
+typedef KisSharedPtr<KisAdjustmentLayer> KisAdjustmentLayerSP;
 
 class KisGroupLayer;
-typedef KSharedPtr<KisGroupLayer> KisGroupLayerSP;
+typedef KisSharedPtr<KisGroupLayer> KisGroupLayerSP;
 
 class KisSelection;
-typedef KSharedPtr<KisSelection> KisSelectionSP;
+typedef KisSharedPtr<KisSelection> KisSelectionSP;
 
 class KisBackground;
-typedef KSharedPtr<KisBackground> KisBackgroundSP;
+typedef KisSharedPtr<KisBackground> KisBackgroundSP;
 
 class KisHistogram;
-typedef KSharedPtr<KisHistogram> KisHistogramSP;
+typedef KisSharedPtr<KisHistogram> KisHistogramSP;
 
 class KisPaintOpFactory;
-typedef KSharedPtr<KisPaintOpFactory> KisPaintOpFactorySP;
+typedef KisSharedPtr<KisPaintOpFactory> KisPaintOpFactorySP;
 
 typedef QVector<QPoint> vKisSegments;
 
 //class KisGuide;
-//typedef KSharedPtr<KisGuide> KisGuideSP;
+//typedef KisSharedPtr<KisGuide> KisGuideSP;
 
 class KisAlphaMask;
-typedef KSharedPtr<KisAlphaMask> KisAlphaMaskSP;
+typedef KisSharedPtr<KisAlphaMask> KisAlphaMaskSP;
 
 class KisFilter;
-typedef KSharedPtr<KisFilter> KisFilterSP;
+typedef KisSharedPtr<KisFilter> KisFilterSP;
 
 #endif // KISTYPES_H_

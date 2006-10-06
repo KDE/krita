@@ -21,7 +21,7 @@
 #include <qglobal.h>
 #include <q3valuevector.h>
 
-#include <ksharedptr.h>
+#include <kis_shared_ptr.h>
 
 #include "kis_tile_global.h"
 #include "kis_tile.h"
@@ -29,10 +29,10 @@
 #include "krita_export.h"
 
 class KisTiledDataManager;
-typedef KSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
+typedef KisSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
 
 class KisDataManager;
-typedef KSharedPtr<KisDataManager> KisDataManagerSP;
+typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
 class KisTiledIterator;
 class KisTiledRandomAccessor;
@@ -47,7 +47,7 @@ public:
     quint8* data() const { return m_tile->data() + m_offset; }
 };
 
-typedef KSharedPtr<KisTileDataWrapper> KisTileDataWrapperSP;
+typedef KisSharedPtr<KisTileDataWrapper> KisTileDataWrapperSP;
 
 /**
  * KisTiledDataManager implements the interface that KisDataManager defines

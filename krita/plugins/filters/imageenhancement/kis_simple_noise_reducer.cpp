@@ -86,7 +86,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     
     KisKernelSP kernel = KisKernel::fromQImage(mask);
     
-    KisPaintDeviceSP interm = KSharedPtr<KisPaintDevice>(new KisPaintDevice(*src));
+    KisPaintDeviceSP interm = new KisPaintDevice(*src);
     KisConvolutionPainter painter( interm );
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);

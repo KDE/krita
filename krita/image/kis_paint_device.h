@@ -54,10 +54,10 @@ class KisVLineIteratorPixel;
 class KisUndoAdapter;
 class KisFilter;
 class KisDataManager;
-typedef KSharedPtr<KisDataManager> KisDataManagerSP;
+typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
 class KisMemento;
-typedef KSharedPtr<KisMemento> KisMementoSP;
+typedef KisSharedPtr<KisMemento> KisMementoSP;
 
 
 /**

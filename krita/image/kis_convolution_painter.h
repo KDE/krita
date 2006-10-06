@@ -20,7 +20,7 @@
 
 #include <QImage>
 
-#include "ksharedptr.h"
+#include "kis_shared_ptr.h"
 #include "kis_types.h"
 #include "kis_painter.h"
 
@@ -35,7 +35,7 @@ enum KisConvolutionBorderOp {
 };
 
 class KisKernel;
-typedef KSharedPtr<KisKernel> KisKernelSP;
+typedef KisSharedPtr<KisKernel> KisKernelSP;
 
 class KRITAIMAGE_EXPORT KisKernel : public KShared
 {

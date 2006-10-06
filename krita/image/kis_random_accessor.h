@@ -20,12 +20,12 @@
 #ifndef KIS_RANDOM_ACCESSOR_H
 #define KIS_RANDOM_ACCESSOR_H
 
-#include <ksharedptr.h>
+#include <kis_shared_ptr.h>
 
 #include <kis_global.h>
 
 class KisTiledRandomAccessor;
-typedef KSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;
+typedef KisSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;
 
 class KisTiledDataManager;
 

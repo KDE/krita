@@ -18,17 +18,17 @@
 #ifndef KIS_TOOL_TYPES_H_
 #define KIS_TOOL_TYPES_H_
 
-#include <ksharedptr.h>
+#include <kis_shared_ptr.h>
 #include "kis_shared_ptr_vector.h"
 
 
 class KisTool;
-typedef KSharedPtr<KisTool> KisToolSP;
+typedef KisSharedPtr<KisTool> KisToolSP;
 typedef KisSharedPtrVector<KisTool> vKisTool;
 typedef vKisTool::iterator vKisTool_it;
 typedef vKisTool::const_iterator vKisTool_cit;
 
 class KisToolFactory;
-typedef KSharedPtr<KisToolFactory> KisToolFactorySP;
+typedef KisSharedPtr<KisToolFactory> KisToolFactorySP;
 
 #endif // KIS_TOOL_TYPES_H_

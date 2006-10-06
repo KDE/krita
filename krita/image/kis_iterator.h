@@ -20,17 +20,17 @@
 #define KIS_ITERATOR_H_
 
 #include <qglobal.h>
-#include <ksharedptr.h>
+#include <kis_shared_ptr.h>
 #include <krita_export.h>
 
 class KisTiledRectIterator;
-typedef KSharedPtr<KisTiledRectIterator> KisTiledRectIteratorSP;
+typedef KisSharedPtr<KisTiledRectIterator> KisTiledRectIteratorSP;
 
 class KisTiledVLineIterator;
-typedef KSharedPtr<KisTiledVLineIterator> KisTiledVLineIteratorSP;
+typedef KisSharedPtr<KisTiledVLineIterator> KisTiledVLineIteratorSP;
 
 class KisTiledHLineIterator;
-typedef KSharedPtr<KisTiledHLineIterator> KisTiledHLineIteratorSP;
+typedef KisSharedPtr<KisTiledHLineIterator> KisTiledHLineIteratorSP;
 
 class KisDataManager;
 

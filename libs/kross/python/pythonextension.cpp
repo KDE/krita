@@ -119,10 +119,18 @@ Py::Object PythonExtension::getattr(const char* n)
             return PythonType<QString>::toPyObject( m_object->metaObject()->className() );
         }
 
-        #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
-            krossdebug( QString("PythonExtension::getattr name='%1' is internal.").arg(n) );
-        #endif
-        return Py::PythonExtension<PythonExtension>::getattr_methods(n);
+        /*
+        if(strcmp(n,"__toPointer__") == 0) {
+            PyObject* qobjectptr = PyLong_FromVoidPtr( (void*) m_object.data() );
+            //PyObject* o = Py_BuildValue ("N", mw);
+            return Py::asObject( qobjectptr );
+            //PythonPyQtExtension* pyqtextension = new PythonPyQtExtension(self, args);
+            //return pyqtextension;
+        }
+        if(strcmp(n,"__fromPointer__") == 0) {
+            QObject* object = dynamic_cast< QObject* >(PyLong_AsVoidPtr( args[0] ));
+        }
+        */
     }
 
     // look if the attribute is a method
@@ -139,28 +147,27 @@ Py::Object PythonExtension::getattr(const char* n)
         const int idx = metaobject->indexOfProperty(n);
         if(idx >= 0) {
             QMetaProperty property = metaobject->property(idx);
-            if(property.isReadable())
-                return PythonType<QVariant>::toPyObject( property.read(m_object) );
+
+            #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
+                krossdebug( QString("PythonExtension::getattr name='%1' is a property: type=%2 valid=%3 readable=%4 scriptable=%5 writable=%6 usertype=%7")
+                    .arg(n).arg(property.typeName()).arg(property.isValid())
+                    .arg(property.isReadable()).arg(property.isScriptable(m_object)).arg(property.isWritable())
+                    .arg(property.isUser(m_object)).arg(property.userType())
+                );
+            #endif
+
+            if(! property.isReadable()) {
+                Py::AttributeError( QString("Attribute \"%1\" is not readable.").arg(n).toLatin1().constData() );
+                return Py::None();
+            }
+
+            return PythonType<QVariant>::toPyObject( property.read(m_object) );
         }
     }
 
-    /*
-    if(strcmp(methodname,"toPointer") == 0) {
-        PyObject* qobjectptr = PyLong_FromVoidPtr( (void*) m_object.data() );
-        //PyObject* o = Py_BuildValue ("N", mw);
-        return Py::asObject( qobjectptr );
-        //PythonPyQtExtension* pyqtextension = new PythonPyQtExtension(self, args);
-        //return pyqtextension;
-    }
-    if(strcmp(methodname,"fromPointer") == 0) {
-        QObject* object = dynamic_cast< QObject* >(PyLong_AsVoidPtr( args[0] ));
-    }
-    */
-
-    #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
-        krossdebug( QString("PythonExtension::getattr name='%1' unknown. Returning None.").arg(n) );
-    #endif
-    return Py::None();
+    // finally redirect the unhandled attribute-request...
+    //return Py::PythonExtension<PythonExtension>::getattr_methods(n);
+    return Py::PythonExtension<PythonExtension>::getattr(n);
 }
 
 int PythonExtension::setattr(const char* n, const Py::Object& value)
@@ -173,7 +180,7 @@ int PythonExtension::setattr(const char* n, const Py::Object& value)
             QMetaProperty property = metaobject->property(idx);
 
             #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
-                krossdebug( QString("PythonExtension::setattr name=%1 type=%2 valid=%3 readable=%4 scriptable=%5 writable=%6 usertype=%7")
+                krossdebug( QString("PythonExtension::setattr name='%1' is a property: type=%2 valid=%3 readable=%4 scriptable=%5 writable=%6 usertype=%7")
                     .arg(n).arg(property.typeName()).arg(property.isValid())
                     .arg(property.isReadable()).arg(property.isScriptable(m_object)).arg(property.isWritable())
                     .arg(property.isUser(m_object)).arg(property.userType())
@@ -198,8 +205,9 @@ int PythonExtension::setattr(const char* n, const Py::Object& value)
         }
     }
 
-    Py::AttributeError( QString("Unknown attribute \"%1\"").arg(n).toLatin1().constData() );
-    return -1; // indicate error
+    // finally redirect the unhandled attribute-request...
+    //return Py::PythonExtension<PythonExtension>::setattr_methods(n, value);
+    return Py::PythonExtension<PythonExtension>::setattr(n, value);
 }
 
 /*

@@ -193,6 +193,8 @@ OldToolArea::OldToolArea(QWidget *parent)
     QWidget *w = new QWidget(this);
     m_layout->addWidget(w);
     QGridLayout *grid = new QGridLayout(w);
+    grid->setMargin(2);
+    grid->setSpacing(0);
     m_leftRow = new QWidget(w);
     grid->addWidget(m_leftRow, 0, 0);
     grid->setRowStretch(1, 1);
@@ -204,6 +206,8 @@ OldToolArea::OldToolArea(QWidget *parent)
     w = new QWidget(this);
     m_layout->addWidget(w);
     grid = new QGridLayout(w);
+    grid->setMargin(2);
+    grid->setSpacing(0);
     m_rightRow = new QWidget(w);
     grid->addWidget(m_rightRow, 0, 0);
     grid->setRowStretch(1, 1);

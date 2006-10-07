@@ -350,7 +350,7 @@ PythonType::~PythonType( )
 	delete mapping_table;
 	delete number_table;
 	delete buffer_table;
-	};
+	}
 
 PyTypeObject* PythonType::type_object( ) const
 	{return table;}

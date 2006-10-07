@@ -834,7 +834,7 @@ bool KoTextDocument::find( const QString &expr, bool cs, bool wo, bool forward,
 	int start = forward ? 0 : s.length() - 1;
 	if ( first && index )
 	    start = *index;
-	else if ( first )
+	else if ( first && cursor )
 	    start = cursor->index();
 	if ( !forward && first ) {
 	    start -= expr.length() + 1;

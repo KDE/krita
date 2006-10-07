@@ -128,7 +128,7 @@ void KisCanvas::createCanvasWidget(bool useOpenGL)
     m_useOpenGL = useOpenGL;
 
     Q_CHECK_PTR(m_canvasWidget);
-    QWidget *widget = dynamic_cast<QWidget *>(m_canvasWidget);
+    QWidget *widget = static_cast<QWidget *>(m_canvasWidget);
 
     widget->setAutoFillBackground(false);
     widget->setAttribute(Qt::WA_OpaquePaintEvent);

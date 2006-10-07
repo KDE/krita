@@ -110,7 +110,7 @@ public:
    *        *sizeIsRelativeState, user choice may be retrieved by
    *        calling sizeIsRelative().
    */
-  KFontChooser_local(QWidget *parent = 0L, const char *name = 0L,
+  KFontChooser_local(QWidget *parent = 0L,
 	       bool onlyFixed = false,
 	       const QStringList &fontList = QStringList(),
 	       bool makeFrame = true, int visibleListSize=8,

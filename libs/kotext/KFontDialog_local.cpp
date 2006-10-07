@@ -97,11 +97,11 @@ public:
     QPalette m_palette;
 };
 
-KFontChooser_local::KFontChooser_local(QWidget *parent, const char *name,
+KFontChooser_local::KFontChooser_local(QWidget *parent,
 			   bool onlyFixed, const QStringList &fontList,
 			   bool makeFrame, int visibleListSize, bool diff,
                            Qt::CheckState *sizeIsRelativeState )
-  : QWidget(parent, name), usingFixed(onlyFixed)
+  : QWidget(parent), usingFixed(onlyFixed)
 {
   charsetsCombo = 0;
 
@@ -774,7 +774,7 @@ KFontDialog_local::KFontDialog_local( QWidget *parent, const char* name,
   setButtons( Ok|Cancel );
   setDefaultButton( Ok );
 
-  chooser = new KFontChooser_local( this, "fontChooser",
+  chooser = new KFontChooser_local( this,
                               onlyFixed, fontList, makeFrame, 8,
                               diff, sizeIsRelativeState );
   setMainWidget(chooser);

@@ -757,7 +757,7 @@ void KoTextCursor::gotoPageDown( int visibleHeight )
 	return;
     }
 
-    if ( !s->isValid() )
+    if ( !s || !s->isValid() )
 	return;
 
     string = s;

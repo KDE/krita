@@ -1681,6 +1681,7 @@ void KisView::slotEditPalette()
 
     foreach (KisResource *resource, resources) {
         KisPalette* palette = dynamic_cast<KisPalette*>(resource);
+        if (!palette) continue;
 
         chooser.paletteList->addItem(palette->name());
         palettes.append(palette);

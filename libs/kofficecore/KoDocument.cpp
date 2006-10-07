@@ -555,7 +555,7 @@ bool KoDocument::isAutoErrorHandlingEnabled() const
 
 void KoDocument::slotAutoSave()
 {
-    if ( isModified() && d->modifiedAfterAutosave )
+    if ( isModified() && d->modifiedAfterAutosave && !d->m_bLoading )
     {
         connect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
         emit sigStatusBarMessage( i18n("Autosaving...") );

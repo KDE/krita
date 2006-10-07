@@ -193,7 +193,7 @@ extern "C"
 	static Py_ssize_t buffer_getreadbuffer_handler (PyObject*, Py_ssize_t, void**);
 	static Py_ssize_t buffer_getwritebuffer_handler (PyObject*, Py_ssize_t, void**);
 	static Py_ssize_t buffer_getsegcount_handler (PyObject*, Py_ssize_t*);
-	};
+	}
 
 
 extern "C" void standard_dealloc( PyObject* p )

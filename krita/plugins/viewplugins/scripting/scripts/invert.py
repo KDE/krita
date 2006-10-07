@@ -19,17 +19,14 @@ class Inverter:
             raise "Import of the Krita module failed."
 
         # fetch the image.
-        print "dir(Krita): %s" % dir(self.Krita)
         image = self.Krita.image()
-        print "dir(image): %s" % dir(image)
 
         # we like to manipulate the active painting layer.
         layer = image.activePaintLayer()
-        print "dir(layer): %s" % dir(layer)
 
         # currently the invert.py does not work with all supported colorspaces.
-        if(layer.colorSpaceId() != "RGBA" ):
-            raise("This script works only for 8bit RGBA layers")
+        if(not layer.colorSpaceId() in ["RGBA","RGBU8"]):
+            raise("This script works only for 8bit RGBA or RGBU layers")
 
         # get the height and the width the layer has.
         width = layer.width()
@@ -50,11 +47,11 @@ class Inverter:
         print "kikoo\n"
         finesh = it.isDone()
         while (not finesh):
-            #p = it.getRGBA()
+            #p = it.channel()
             #p[0] = 255 - p[0]
             #p[1] = 255 - p[1]
             #p[2] = 255 - p[2]
-            #it.setRGBA(p)
+            #it.setCannel(p)
 
             # invert the color of the pixel.
             it.invertColor()

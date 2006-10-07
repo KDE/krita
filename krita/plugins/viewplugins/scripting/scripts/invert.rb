@@ -16,8 +16,8 @@ image = Krita.image()
 layer = image.activePaintLayer()
 
 # currently the invert.rb does not work with all supported colorspaces.
-if(layer.colorSpaceId() != "RGBA" )
-    raise("This script works only for 8bit RGBA layers")
+if(layer.colorSpaceId() != "RGBA" and layer.colorSpaceId() != "RGBU8")
+    raise("This script works only for 8bit RGBA or RGBU layers")
 end
 
 # get the height and the width the layer has.

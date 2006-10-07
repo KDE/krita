@@ -211,7 +211,7 @@ bool KKbdAccessExtensions::eventFilter( QObject *o, QEvent *e )
         KShortcut fwdSc = d->fwdAction->shortcut();
         KShortcut revSc = d->revAction->shortcut();
         KShortcut accessKeysSc = d->accessKeysAction->shortcut();
-        QKeyEvent* kev = dynamic_cast<QKeyEvent *>(e);
+        QKeyEvent* kev = static_cast<QKeyEvent *>(e);
         KShortcut sc = KShortcut(kev->key());
         // kDebug() << "KKbdAccessExtensions::eventFilter: Key press " << sc << endl;
         if (!d->accessKeyLabels) {
@@ -267,7 +267,7 @@ bool KKbdAccessExtensions::eventFilter( QObject *o, QEvent *e )
     }*/
     else if (e->type() == QEvent::MouseMove && d->icon->isActive && d->panel) {
         // Resize according to mouse movement.
-        QMouseEvent* me = dynamic_cast<QMouseEvent *>(e);
+        QMouseEvent* me = static_cast<QMouseEvent *>(e);
         QSize s = d->icon->delta();
         int dx = s.width();
         int dy = s.height();
@@ -401,8 +401,8 @@ void KKbdAccessExtensions::showIcon()
     if (!d->panel) return;
     QPoint p;
     // kDebug() << "KKbdAccessExtensions::showIcon: topLevelWidget = " << d->panel->topLevelWidget()->name() << endl;
-    if (qobject_cast<QSplitter*>( d->panel )) {
-        QSplitter* splitter = dynamic_cast<QSplitter *>(d->panel);
+    QSplitter* splitter = qobject_cast<QSplitter *>(d->panel);
+    if (splitter) {
         int handleNdx = d->handleNdx - 1;
         Q3ValueList<int> sizes = splitter->sizes();
         // kDebug() << "KKbdAccessExtensions::showIcon: sizes = " << sizes << endl;
@@ -419,7 +419,10 @@ void KKbdAccessExtensions::showIcon()
         p = splitter->mapToGlobal(p);
         // kDebug() << "KKbdAccessExtensions::showIcon: mapToGlobal = " << p << endl;
     } else {
-        Q3DockWindow* dockWindow = dynamic_cast<Q3DockWindow *>(d->panel);
+        Q3DockWindow* dockWindow = qobject_cast<Q3DockWindow *>(d->panel);
+        if (!dockWindow) // assert
+            return;
+
         p = dockWindow->pos();
         if (dockWindow->area()) {
             // kDebug() << "KKbdAccessExtensions::showIcon: pos = " << p << " of window = " << dockWindow->parentWidget()->name() << endl;
@@ -471,8 +474,8 @@ void KKbdAccessExtensions::resizePanel(int dx, int dy, int state)
     int adj = dx + dy;
     if (adj == 0) return;
     // kDebug() << "KKbdAccessExtensions::resizePanel: panel = " << d->panel->name() << endl;
-    if (qobject_cast<QSplitter*>( d->panel )) {
-        QSplitter* splitter = dynamic_cast<QSplitter *>(d->panel);
+    QSplitter* splitter = qobject_cast<QSplitter*>( d->panel );
+    if (splitter) {
         int handleNdx = d->handleNdx - 1;
         Q3ValueList<int> sizes = splitter->sizes();
         // kDebug() << "KKbdAccessExtensions::resizePanel: before sizes = " << sizes << endl;
@@ -482,7 +485,10 @@ void KKbdAccessExtensions::resizePanel(int dx, int dy, int state)
         QApplication::postEvent(splitter, new QEvent(QEvent::LayoutRequest));
     } else {
         // TODO: How to get the handle width?
-        Q3DockWindow* dockWindow = dynamic_cast<Q3DockWindow *>(d->panel);
+        Q3DockWindow* dockWindow = qobject_cast<Q3DockWindow *>(d->panel);
+        if (!dockWindow)
+            return;
+
         if (dockWindow->area()) {
             // kDebug() << "KKbdAccessExtensions::resizePanel: fixedExtent = " << dockWindow->fixedExtent() << endl;
             QSize fe = dockWindow->fixedExtent();
@@ -544,11 +550,11 @@ void KKbdAccessExtensions::resizePanelFromKey(int key, int state)
     if (adj != 0)
         resizePanel(dx, dy, state);
     else {
-        if (key == Qt::Key_Enter && qobject_cast<Q3DockWindow*>( d->panel )) {
-            Q3DockWindow* dockWindow = dynamic_cast<Q3DockWindow *>(d->panel);
-            if (dockWindow->area())
+        if (key == Qt::Key_Enter) {
+            Q3DockWindow* dockWindow = qobject_cast<Q3DockWindow *>(d->panel);
+            if (dockWindow && dockWindow->area())
                 dockWindow->undock();
-            else
+            else if (dockWindow)
                 dockWindow->dock();
         }
     }

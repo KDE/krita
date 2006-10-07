@@ -71,20 +71,11 @@ QObject* PythonExtension::object() const
     return m_object;
 }
 
-Py::Object PythonExtension::str()
-{
-    return PythonType<QString>::toPyObject( m_object->objectName() );
-}
-
-Py::Object PythonExtension::repr()
-{
-    return PythonType<QString>::toPyObject( m_object->metaObject()->className() );
-}
-
 Py::List PythonExtension::updateMethods()
 {
     delete m_methods;
-    m_methods = new QHash<QByteArray, int>();
+    m_methods = new QHash<QByteArray, Py::Object>();
+
     Py::List list;
     if(m_object) {
         //list.append(Py::String("toPyQt")); // for PythonPyQtExtension
@@ -95,8 +86,13 @@ Py::List PythonExtension::updateMethods()
             const QString signature = member.signature();
             const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
             if(! m_methods->contains(name)) {
-                m_methods->insert(name, i);
-                list.append(Py::String(name));
+                Py::Tuple self(3);
+                self[0] = Py::Object(this); // reference to this instance
+                self[1] = Py::Int(i); // the first index used for faster access
+                self[2] = Py::String(name); // the name of the method
+
+                m_methods->insert(name, Py::Object(PyCFunction_New( &m_proxymethod->ext_meth_def, self.ptr() ), true));
+                list.append(self[2]);
             }
         }
     }
@@ -109,26 +105,63 @@ Py::Object PythonExtension::getattr(const char* n)
         krossdebug( QString("PythonExtension::getattr name='%1'").arg(n) );
     #endif
 
+    // handle internal methods
     if(n[0] == '_') {
         if(strcmp(n,"__methods__") == 0) {
             return updateMethods();
         }
 
-        //if(n == "__members__") { krosswarning( QString("PythonExtension::getattr(%1) __dict__").arg(n) ); }
-        //if(n == "__dict__") { krosswarning( QString("PythonExtension::getattr(%1) __dict__").arg(n) ); }
-        //if(n == "__class__") { krosswarning( QString("PythonExtension::getattr(%1) __class__").arg(n) ); }
+        /*
+        if(strcmp(n,"__members__") == 0) {
+            return PythonType<QStringList>::toPyObject( QStringList() << "__name__" );
+        }
+        if(strcmp(n,"__dict__") == 0) {
+            return PythonType<QStringList>::toPyObject( QStringList() );
+        }
+        */
+
+        if(strcmp(n,"__name__") == 0) {
+            return PythonType<QString>::toPyObject( m_object->objectName() );
+        }
+        if(strcmp(n,"__class__") == 0) {
+            return PythonType<QString>::toPyObject( m_object->metaObject()->className() );
+        }
 
         #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
-            krossdebug( QString("PythonExtension::getattr name='%1' is a internal name.").arg(n) );
+            krossdebug( QString("PythonExtension::getattr name='%1' is internal.").arg(n) );
         #endif
         return Py::PythonExtension<PythonExtension>::getattr_methods(n);
     }
 
-    // Redirect the call to our static proxy method which will handling it.
-    Py::Tuple self(2);
-    self[0] = Py::Object(this);
-    self[1] = Py::String(n);
-    return Py::Object(PyCFunction_New( &m_proxymethod->ext_meth_def, self.ptr() ), true);
+    // look if the attribute is a method
+    if(! m_methods)
+        updateMethods();
+
+    if(m_methods->contains(n)) {
+        #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
+            krossdebug( QString("PythonExtension::getattr name='%1' is a method.").arg(n) );
+        #endif
+        return m_methods->operator[]( n );
+    }
+
+    // look if the attribute is a property
+    //TODO
+
+    /*
+    if(strcmp(methodname,"toPointer") == 0) {
+        PyObject* qobjectptr = PyLong_FromVoidPtr( (void*) m_object.data() );
+        //PyObject* o = Py_BuildValue ("N", mw);
+        return Py::asObject( qobjectptr );
+        //PythonPyQtExtension* pyqtextension = new PythonPyQtExtension(self, args);
+        //return pyqtextension;
+    }
+    if(strcmp(methodname,"fromPointer") == 0) {
+        QObject* object = dynamic_cast< QObject* >(PyLong_AsVoidPtr( args[0] ));
+    }
+    */
+
+    krosswarning( QString("PythonExtension::getattr name='%1' TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!").arg(n) );
+    return Py::None();
 }
 
 /*
@@ -181,31 +214,11 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
         Py::Tuple selftuple(_self_and_name_tuple);
         PythonExtension *self = static_cast<PythonExtension*>( selftuple[0].ptr() );
 
-        QByteArray ba = Py::String(selftuple[1]).as_string().c_str();
+        int methodindex = Py::Int(selftuple[1]);
+
+        QByteArray ba = Py::String(selftuple[2]).as_string().c_str();
         const char* methodname = ba.constData();
 
-        if(! self->m_methods)
-            self->updateMethods();
-
-        if(! self->m_methods->contains(methodname)) {
-            /*
-            if(strcmp(methodname,"toPointer") == 0) {
-                PyObject* qobjectptr = PyLong_FromVoidPtr( (void*) m_object.data() );
-                //PyObject* o = Py_BuildValue ("N", mw);
-                return Py::asObject( qobjectptr );
-                PythonPyQtExtension* pyqtextension = new PythonPyQtExtension(self, args);
-                return pyqtextension;
-            }
-            if(strcmp(methodname,"fromPointer") == 0) {
-                QObject* object = dynamic_cast< QObject* >(PyLong_AsVoidPtr( args[0] ));
-            }
-            */
-            krosswarning( QString("PythonExtension::proxyhandler No such method '%1'").arg(methodname) );
-            throw Py::NameError( QString("No such method %1").arg(methodname).toLatin1().constData() );
-        }
-
-        int methodindex = self->m_methods->operator[](methodname);
-        Q_ASSERT(methodindex >= 0);
         #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
             krossdebug( QString("PythonExtension::proxyhandler methodname=%1 methodindex=%2").arg(methodname).arg(methodindex) );
         #endif
@@ -361,7 +374,13 @@ Py::Object PythonExtension::sequence_item(int index)
 
 Py::Object PythonExtension::sequence_slice(int from, int to)
 {
-    throw Py::RuntimeError( QString("Unsupported: PythonExtension::sequence_slice %1 %2").arg(from).arg(to).toLatin1().constData() );
+    Py::List list;
+    if(from >= 0) {
+        const int count = m_object->children().count();
+        for(int i = from; i <= to && i < count; ++i)
+            list.append( Py::asObject(new PythonExtension( m_object->children().at(i) )) );
+    }
+    return list;
 }
 
 int PythonExtension::sequence_ass_item(int index, const Py::Object& obj)

@@ -64,22 +64,6 @@ namespace Kross {
             QObject* object() const;
 
             /**
-             * Overloaded method to return the string-representation
-             * of this object.
-             *
-             * \return The string representation.
-             */
-            virtual Py::Object str();
-
-            /**
-             * Overloaded method to return the string-representation
-             * of the value this object has.
-             *
-             * \return A string representation of the value.
-             */
-            virtual Py::Object repr();
-
-            /**
              * Overloaded method to handle attribute calls from within python.
              *
              * \param name The name of the attribute that should be handled.
@@ -109,7 +93,7 @@ namespace Kross {
             /// \internal string for debugging.
             QString m_debuginfo;
             /// The cached list of methods.
-            QHash<QByteArray, int>* m_methods;
+            QHash<QByteArray, Py::Object>* m_methods;
             /// Update the cached list of methods.
             Py::List updateMethods();
             /// The proxymethod which will handle all calls to our \a PythonExtension instance.

@@ -97,13 +97,7 @@ namespace Kross {
     {
             Q_OBJECT
 
-
-            //Q_ENUMS(MyButtonCode)
-            //Q_ENUMS(KDialog::ButtonCode)
-
         public:
-            //enum MyButtonCode { Ok, Cancel };
-
             Dialog(const QString& caption);
             virtual ~Dialog();
 
@@ -131,12 +125,18 @@ namespace Kross {
 
             /**
              * Set the buttons.
+             *
+             * \param buttons string that defines the displayed buttons. For example the
+             * string may look like "Ok" or "Ok|Cancel" or "Yes|No|Cancel".
+             * \return true if the passed \p buttons string was valid and setting the
+             * buttons was successfully else false is returned.
              */
-            bool setButtons(QString buttons);
+            bool setButtons(const QString& buttons);
 
             /**
              * Shows the dialog as a modal dialog, blocking until the user
-             * closes it and returns the execution result (the buttonstate id).
+             * closes it and returns the execution result. The result may
+             * for example "Ok", "Cancel", "Yes" or "No".
              */
             int exec() { return KDialog::exec(); }
 
@@ -145,8 +145,14 @@ namespace Kross {
              */
             int exec_loop() { return exec(); }
 
+
+            QString result();
+
+        private slots:
+            virtual void slotButtonClicked(int button);
         private:
             Form* m_form;
+            KDialog::ButtonCode m_code;
     };
 
 }

@@ -98,22 +98,27 @@
     </layout>
    </item>
   </layout>
+  <action name="actionAction1" >
+   <property name="text" >
+    <string>action1</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
-   <receiver></receiver>
-   <slot></slot>
+   <receiver>actionAction1</receiver>
+   <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel" >
      <x>338</x>
      <y>55</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>205</x>
-     <y>45</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>

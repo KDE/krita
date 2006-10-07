@@ -172,7 +172,7 @@ Dialog::~Dialog()
 {
 }
 
-bool Dialog::setButtons(QString buttons)
+bool Dialog::setButtons(const QString& buttons)
 {
     int i = metaObject()->indexOfEnumerator("ButtonCode");
     if(i < 0) {
@@ -182,7 +182,7 @@ bool Dialog::setButtons(QString buttons)
     QMetaEnum e = metaObject()->enumerator(i);
     int v = e.keysToValue( buttons.toUtf8() );
     if(v < 0) {
-        kWarning() << "Kross::Dialog::setButtons Invalid buttons \"" << buttons << "\" defined" << endl;
+        kDebug() << "Kross::Dialog::setButtons Invalid buttons \"" << buttons << "\" defined" << endl;
         return false;
     }
     KDialog::setButtons( (KDialog::ButtonCode)v );
@@ -210,6 +210,23 @@ bool Dialog::setButtons(QString buttons)
     KDialog::setButtons( buttonmask );
     */
     return true;
+}
+
+QString Dialog::result()
+{
+    int i = metaObject()->indexOfEnumerator("ButtonCode");
+    if(i < 0) {
+        kWarning() << "Kross::Dialog::setButtons No such enumerator \"ButtonCode\"" << endl;
+        return QString::null;
+    }
+    QMetaEnum e = metaObject()->enumerator(i);
+    return e.valueToKey(m_code);
+}
+
+void Dialog::slotButtonClicked(int button)
+{
+    m_code = (KDialog::ButtonCode) button;
+    KDialog::slotButtonClicked(button);
 }
 
 #include "form.moc"

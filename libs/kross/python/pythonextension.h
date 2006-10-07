@@ -64,7 +64,8 @@ namespace Kross {
             QObject* object() const;
 
             /**
-             * Overloaded method to handle attribute calls from within python.
+             * Handle getting of attributes. An attribute could be a property
+             * as well as a pointer to a callable memberfunction.
              *
              * \param name The name of the attribute that should be handled.
              * \return An \a Py::Object that could be a value or a callable
@@ -72,6 +73,14 @@ namespace Kross {
              */
             virtual Py::Object getattr(const char* name);
             //virtual Py::Object getattr_methods(const char* name);
+
+            /**
+             * Handle setting of attributes.
+             *
+             * \param name The name of the attribute.
+             * \param value The value to set the attribute.
+             * \return -1 on failure else something != -1 is returned.
+             */
             virtual int setattr(const char* name, const Py::Object& value);
 
             virtual int sequence_length();

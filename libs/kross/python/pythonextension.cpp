@@ -165,32 +165,40 @@ Py::Object PythonExtension::getattr(const char* n)
 
 int PythonExtension::setattr(const char* n, const Py::Object& value)
 {
-    #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
-        krossdebug( QString("PythonExtension::setattr name='%1'").arg(n) );
-    #endif
-
     // look if the attribute is a property
     if(m_object) {
         const QMetaObject* metaobject = m_object->metaObject();
         const int idx = metaobject->indexOfProperty(n);
         if(idx >= 0) {
             QMetaProperty property = metaobject->property(idx);
-            if(property.isWritable()) {
-                QVariant v = PythonType<QVariant>::toVariant(value);
-                if(property.write(m_object, v))
-                    return idx; // successfully written
 
-                #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
-                    krossdebug( QString("PythonExtension::setattr name='%1' setting the property failed.").arg(n) );
-                #endif
+            #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
+                krossdebug( QString("PythonExtension::setattr name=%1 type=%2 valid=%3 readable=%4 scriptable=%5 writable=%6 usertype=%7")
+                    .arg(n).arg(property.typeName()).arg(property.isValid())
+                    .arg(property.isReadable()).arg(property.isScriptable(m_object)).arg(property.isWritable())
+                    .arg(property.isUser(m_object)).arg(property.userType())
+                );
+            #endif
+
+            if(! property.isWritable()) {
+                Py::AttributeError( QString("Attribute \"%1\" is not writable.").arg(n).toLatin1().constData() );
                 return -1; // indicate error
             }
+
+            QVariant v = PythonType<QVariant>::toVariant(value);
+            if(! property.write(m_object, v)) {
+                Py::AttributeError( QString("Setting attribute \"%1\" failed.").arg(n).toLatin1().constData() );
+                return -1; // indicate error
+            }
+
+            #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
+                krossdebug( QString("PythonExtension::setattr name='%1' value='%2'").arg(n).arg(v.toString()) );
+            #endif
+            return idx; // indicate success
         }
     }
 
-    #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
-        krossdebug( QString("PythonExtension::setattr name='%1' unknown. Nothing done.").arg(n) );
-    #endif
+    Py::AttributeError( QString("Unknown attribute \"%1\"").arg(n).toLatin1().constData() );
     return -1; // indicate error
 }
 

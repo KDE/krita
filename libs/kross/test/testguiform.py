@@ -10,12 +10,13 @@ import Kross
 #    print "Using active window"
 
 dialog = Kross.createDialog("TestGuiFormDialog")
-dialog.setButtons("Ok|Cancel")
 print "===> dialog %s %s" % (dialog,dir(dialog))
 
-form = dialog
-#print "===> form %s %s" % (form,dir(form))
-form.loadUiFile("/home/kde4/koffice/libs/kross/test/testguiform.ui")
+dialog.setButtons("Ok|Cancel")
+dialog.loadUiFile("/home/kde4/koffice/libs/kross/test/testguiform.ui")
+
+combo = dialog["Kross::Form"]["QWidget"]["QGroupBox"]["QComboBox"]
+combo.setEditText("Hello World")
 
 result = dialog.exec_loop()
 if result:
@@ -28,8 +29,4 @@ if result:
         obj = widget[ idx:idx ][0]
         print "...... idx=%s obj=%s name=%s class=%s" % ( idx , obj , obj.__name__ , obj.__class__ )
 
-    combo = widget["QComboBox"]
-    print "aaaaaaaaaaaaaaa %s" % dir(combo)
     print ">>>>>>>>>>>>>>>>>>>>>>> %s" % combo.currentText
-    #combo.currentText = "gaga"
-    #print ">>>>>>>>>>>>>>>>>>>>>>> %s" % combo.currentText

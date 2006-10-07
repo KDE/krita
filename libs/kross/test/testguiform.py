@@ -23,7 +23,7 @@ if result:
 
     #dialog.actions()
 
-    widget = dialog #dialog["Kross::Form"]["QWidget"]["QGroupBox"]
+    widget = dialog["Kross::Form"]["QWidget"]["QGroupBox"]
     for idx in range( len(widget) ):
         obj = widget[ idx:idx ][0]
         print "...... idx=%s obj=%s name=%s class=%s" % ( idx , obj , obj.__name__ , obj.__class__ )
@@ -31,4 +31,5 @@ if result:
     combo = widget["QComboBox"]
     print "aaaaaaaaaaaaaaa %s" % dir(combo)
     print ">>>>>>>>>>>>>>>>>>>>>>> %s" % combo.currentText
-
+    #combo.currentText = "gaga"
+    #print ">>>>>>>>>>>>>>>>>>>>>>> %s" % combo.currentText

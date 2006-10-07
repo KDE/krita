@@ -72,7 +72,7 @@ namespace Kross {
              */
             virtual Py::Object getattr(const char* name);
             //virtual Py::Object getattr_methods(const char* name);
-            //virtual int setattr(const char* name, const Py::Object& value);
+            virtual int setattr(const char* name, const Py::Object& value);
 
             virtual int sequence_length();
             virtual Py::Object sequence_concat(const Py::Object&);
@@ -93,9 +93,9 @@ namespace Kross {
             /// \internal string for debugging.
             QString m_debuginfo;
             /// The cached list of methods.
-            QHash<QByteArray, Py::Object>* m_methods;
-            /// Update the cached list of methods.
-            Py::List updateMethods();
+            QHash<QByteArray, Py::Object> m_methods;
+            /// The cached list of methodnames.
+            Py::List m_methodnames;
             /// The proxymethod which will handle all calls to our \a PythonExtension instance.
             Py::MethodDefExt<PythonExtension>* m_proxymethod;
 

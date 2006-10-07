@@ -89,8 +89,8 @@ namespace Kross {
      * dialog = Kross.createDialog("MyDialog")
      * dialog.setButtons("Ok|Cancel")
      * dialog.loadUiFile("./mydialog.ui")
-     * result = dialog.exec_loop()
-     * print result
+     * if dialog.exec_loop():
+     *     print dialog.result()
      * \endcode
      */
     class KROSS_EXPORT Dialog : public KDialog
@@ -135,17 +135,24 @@ namespace Kross {
 
             /**
              * Shows the dialog as a modal dialog, blocking until the user
-             * closes it and returns the execution result. The result may
-             * for example "Ok", "Cancel", "Yes" or "No".
+             * closes it and returns the execution result.
+             *
+             * \return >=1 if the dialog was accepted (e.g. "Ok" pressed) else
+             * the user rejected the dialog (e.g. by pressing "Cancel" or just
+             * closing the dialog by pressing the escape-key).
              */
             int exec() { return KDialog::exec(); }
 
             /**
-             * Same as the \a exec() method above provided for PyQt-lovers :)
+             * Same as the \a exec() method above provided for Python-lovers (python
+             * does not like functions named "exec" and PyQt named it "exec_loop", so
+             * just let's do the same).
              */
             int exec_loop() { return exec(); }
 
-
+            /**
+             * \return the result. The result may for example "Ok", "Cancel", "Yes" or "No".
+             */
             QString result();
 
         private slots:

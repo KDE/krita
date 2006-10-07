@@ -30,7 +30,6 @@ PythonExtension::PythonExtension(QObject* object)
     : Py::PythonExtension<PythonExtension>()
     , m_object(object)
     , m_debuginfo(object ? QString("%1(%2)").arg(object->objectName()).arg(object->metaObject()->className()) : "NULL")
-    , m_methods(0)
 {
     #ifdef KROSS_PYTHON_EXTENSION_CTOR_DEBUG
         krossdebug( QString("PythonExtension::Constructor object=%1").arg(m_debuginfo) );
@@ -46,6 +45,7 @@ PythonExtension::PythonExtension(QObject* object)
     */
     //behaviors().supportRepr();
     behaviors().supportGetattr();
+    behaviors().supportSetattr();
     behaviors().supportSequenceType();
     behaviors().supportMappingType();
 
@@ -55,6 +55,27 @@ PythonExtension::PythonExtension(QObject* object)
         Py::method_varargs_call_handler_t( proxyhandler ), // callback handler
         "" // documentation
     );
+
+    if(m_object) {
+        // initialize methods.
+        const QMetaObject* metaobject = m_object->metaObject();
+        //list.append(Py::String("toPyQt")); // for PythonPyQtExtension
+        const int count = metaobject->methodCount();
+        for(int i = 0; i < count; ++i) {
+            QMetaMethod member = metaobject->method(i);
+            const QString signature = member.signature();
+            const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
+            if(! m_methods.contains(name)) {
+                Py::Tuple self(3);
+                self[0] = Py::Object(this); // reference to this instance
+                self[1] = Py::Int(i); // the first index used for faster access
+                self[2] = Py::String(name); // the name of the method
+
+                m_methods.insert(name, Py::Object(PyCFunction_New( &m_proxymethod->ext_meth_def, self.ptr() ), true));
+                m_methodnames.append(self[2]);
+            }
+        }
+    }
 }
 
 PythonExtension::~PythonExtension()
@@ -63,40 +84,11 @@ PythonExtension::~PythonExtension()
         krossdebug( QString("PythonExtension::Destructor object=%1").arg(m_debuginfo) );
     #endif
     delete m_proxymethod;
-    delete m_methods;
 }
 
 QObject* PythonExtension::object() const
 {
     return m_object;
-}
-
-Py::List PythonExtension::updateMethods()
-{
-    delete m_methods;
-    m_methods = new QHash<QByteArray, Py::Object>();
-
-    Py::List list;
-    if(m_object) {
-        //list.append(Py::String("toPyQt")); // for PythonPyQtExtension
-        const QMetaObject* metaobject = m_object->metaObject();
-        const int count = metaobject->methodCount();
-        for(int i = 0; i < count; ++i) {
-            QMetaMethod member = metaobject->method(i);
-            const QString signature = member.signature();
-            const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
-            if(! m_methods->contains(name)) {
-                Py::Tuple self(3);
-                self[0] = Py::Object(this); // reference to this instance
-                self[1] = Py::Int(i); // the first index used for faster access
-                self[2] = Py::String(name); // the name of the method
-
-                m_methods->insert(name, Py::Object(PyCFunction_New( &m_proxymethod->ext_meth_def, self.ptr() ), true));
-                list.append(self[2]);
-            }
-        }
-    }
-    return list;
 }
 
 Py::Object PythonExtension::getattr(const char* n)
@@ -108,7 +100,7 @@ Py::Object PythonExtension::getattr(const char* n)
     // handle internal methods
     if(n[0] == '_') {
         if(strcmp(n,"__methods__") == 0) {
-            return updateMethods();
+            return m_methodnames;
         }
 
         /*
@@ -134,18 +126,23 @@ Py::Object PythonExtension::getattr(const char* n)
     }
 
     // look if the attribute is a method
-    if(! m_methods)
-        updateMethods();
-
-    if(m_methods->contains(n)) {
+    if(m_methods.contains(n)) {
         #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
             krossdebug( QString("PythonExtension::getattr name='%1' is a method.").arg(n) );
         #endif
-        return m_methods->operator[]( n );
+        return m_methods[n];
     }
 
     // look if the attribute is a property
-    //TODO
+    if(m_object) {
+        const QMetaObject* metaobject = m_object->metaObject();
+        const int idx = metaobject->indexOfProperty(n);
+        if(idx >= 0) {
+            QMetaProperty property = metaobject->property(idx);
+            if(property.isReadable())
+                return PythonType<QVariant>::toPyObject( property.read(m_object) );
+        }
+    }
 
     /*
     if(strcmp(methodname,"toPointer") == 0) {
@@ -160,8 +157,41 @@ Py::Object PythonExtension::getattr(const char* n)
     }
     */
 
-    krosswarning( QString("PythonExtension::getattr name='%1' TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!").arg(n) );
+    #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
+        krossdebug( QString("PythonExtension::getattr name='%1' unknown. Returning None.").arg(n) );
+    #endif
     return Py::None();
+}
+
+int PythonExtension::setattr(const char* n, const Py::Object& value)
+{
+    #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
+        krossdebug( QString("PythonExtension::setattr name='%1'").arg(n) );
+    #endif
+
+    // look if the attribute is a property
+    if(m_object) {
+        const QMetaObject* metaobject = m_object->metaObject();
+        const int idx = metaobject->indexOfProperty(n);
+        if(idx >= 0) {
+            QMetaProperty property = metaobject->property(idx);
+            if(property.isWritable()) {
+                QVariant v = PythonType<QVariant>::toVariant(value);
+                if(property.write(m_object, v))
+                    return idx; // successfully written
+
+                #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
+                    krossdebug( QString("PythonExtension::setattr name='%1' setting the property failed.").arg(n) );
+                #endif
+                return -1; // indicate error
+            }
+        }
+    }
+
+    #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
+        krossdebug( QString("PythonExtension::setattr name='%1' unknown. Nothing done.").arg(n) );
+    #endif
+    return -1; // indicate error
 }
 
 /*

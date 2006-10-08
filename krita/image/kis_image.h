@@ -345,6 +345,7 @@ signals:
 
     void sigActiveSelectionChanged(KisImageSP image);
     void sigSelectionChanged(KisImageSP image);
+    void sigSelectionChanged(KisImageSP image, const QRect& rect);
 
     /// Emitted after a different layer is made active.
     void sigLayerActivated(KisLayerSP layer);
@@ -401,7 +402,8 @@ signals:
     void sigSizeChanged(qint32 w, qint32 h);
     void sigProfileChanged(KoColorProfile *  profile);
     void sigColorSpaceChanged(KoColorSpace*  cs);
-
+    /// Emitted when any layer's mask info got updated (or when the current layer changes)
+    void sigMaskInfoChanged();
 
 public slots:
     void slotSelectionChanged();

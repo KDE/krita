@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="12">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="13">
 
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
@@ -77,6 +77,17 @@
   <Action name="duplicate_layer"/>
   <Action name="hide_layer"/>
   <Action name="link_layer"/>
+  <Separator/>
+  <Menu name="LayerNew"><text>Mask</text>
+    <Action name="create_mask"/>
+    <Action name="mask_fromsel"/>
+    <Action name="mask_tosel"/>
+    <Action name="apply_mask"/>
+    <Action name="remove_mask"/>
+    <Seperator/>
+    <Action name="edit_mask"/>
+    <Action name="show_mask"/>
+  </Menu>
   <Separator/>
   <Action name="raiselayer"/>
   <Action name="lowerlayer"/>

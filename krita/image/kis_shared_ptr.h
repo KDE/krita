@@ -85,9 +85,9 @@ public:
     inline bool operator== ( const T* p ) const { return ( d == p ); }
     inline bool operator!= ( const T* p ) const { return ( d != p ); }
 
+    inline operator const T* () const { return d; }
     
-    inline operator void* () { return d; }
-    inline operator const void* () const { return d; }
+    template< class T2> inline operator KisSharedPtr<T2>() const { return KisSharedPtr<T2>(d); }
     
     /**
      * @return the pointer

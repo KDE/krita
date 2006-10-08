@@ -36,7 +36,7 @@ public:
 
     void paint( QPainter &painter, KoViewConverter &converter );
 
-    void mousePressEvent( KoPointerEvent *event ) ;
+    void mousePressEvent( KoPointerEvent *event );
     void mouseDoubleClickEvent( KoPointerEvent *event );
     void mouseMoveEvent( KoPointerEvent *event );
     void mouseReleaseEvent( KoPointerEvent *event );
@@ -65,12 +65,29 @@ private:
     /// snaps given point to grid point
     QPointF snapToGrid( const QPointF &p, Qt::KeyboardModifiers modifiers );
 private:
+    class ActiveHandle
+    {
+    public:    
+        ActiveHandle( KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::KoPointType activePointType )
+        : m_tool( tool )
+        , m_activePoint( activePoint )
+        , m_activePointType( activePointType )
+        {}
+        bool isActive() { return m_activePoint != 0; }
+        void deactivate() { m_activePoint = 0; }
+        void paint( QPainter &painter, KoViewConverter &converter ); 
+        KoPathTool *m_tool;
+        KoPathPoint *m_activePoint;
+        KoPathPoint::KoPointType m_activePointType;
+    };
+
+    
     KoPathShape *m_pathShape;          ///< the actual selected path shape
-    KoPathPoint* m_activePoint;        ///< the currently active path point
+    ActiveHandle m_activeHandle;       ///< the currently active handle
     int m_handleRadius;                ///< the radius of the control point handles
-    KoPathPoint::KoPointType m_activePointType; ///< the type of currently active path point
     QList<KoPathPoint*> m_selectedPoints; ///< list of selected path points
 
+    friend class ActiveHandle;
     friend class KoPathPointMoveStrategy;
     friend class KoPathPointRubberSelectStrategy;
 

@@ -322,7 +322,7 @@ public:
     virtual ~KoPathShape();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected);
+    virtual void paintPoints( QPainter &painter, const KoViewConverter &converter );
     virtual const QPainterPath outline() const;
     virtual QRectF boundingRect() const;
     virtual QSizeF size() const;

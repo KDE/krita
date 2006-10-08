@@ -24,6 +24,7 @@
 #include "KoShapeManager.h"
 #include "KoPointerEvent.h"
 #include "KoPathCommand.h"
+#include "KoParameterShape.h"
 #include "KoInsets.h"
 #include "KoShapeBorderModel.h"
 #include "KoPathPointMoveStrategy.h"
@@ -34,7 +35,7 @@
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
 : KoTool(canvas)
 , m_pathShape(0)
-, m_activePoint(0)
+, m_activeHandle( this, 0, KoPathPoint::Node )    
 , m_handleRadius( 3 )
 , m_currentStrategy(0)
 {
@@ -49,6 +50,36 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
     if( ! m_pathShape )
         return;
 
+    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+
+    painter.save();
+    painter.setRenderHint( QPainter::Antialiasing, true );
+    painter.setBrush( Qt::blue ); //TODO make configurable
+    painter.setPen( Qt::blue );
+
+    foreach( KoShape *shape, selectedShapes ) 
+    {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape*>( shape );
+
+        if ( !shape->isLocked() && pathShape )
+        {
+            painter.save();
+            painter.setMatrix( shape->transformationMatrix( &converter ) * painter.matrix() );
+            KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
+            if ( parameterShape )
+            {
+                painter.setBrush( Qt::red ); //TODO make configureable
+                parameterShape->paintHandles( painter, converter );
+            }
+            else
+            {
+                pathShape->paintPoints( painter, converter );
+            }
+            painter.restore();
+        }
+    }
+
+    painter.restore();
 
     QPainterPath outline = m_pathShape->outline();
     if(painter.hasClipping()) {
@@ -85,40 +116,35 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
     foreach( KoPathPoint *p, m_selectedPoints )
         p->paint( painter, handle.size(), true );
 
-    if( m_activePoint )
-    {
-        painter.setBrush( Qt::red ); // TODO make color configurable
-        painter.setPen( Qt::NoPen );
-        m_activePoint->paint( painter, handle.size(), m_selectedPoints.contains( m_activePoint ) );
-    }
+    m_activeHandle.paint( painter, converter );
     painter.restore();
 }
 
 void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
     // we are moving if we hit a point and use the left mouse button
-    if( m_activePoint )
+    if( m_activeHandle.isActive() )
     {
         if( event->button() & Qt::LeftButton )
         {
             // control select adds/removes points to/from the selection
             if( event->modifiers() & Qt::ControlModifier )
             {
-                if( m_selectedPoints.contains( m_activePoint ) )
+                if( m_selectedPoints.contains( m_activeHandle.m_activePoint ) )
                 {
                     // active point is already selected, so deselect it
-                    int index = m_selectedPoints.indexOf( m_activePoint );
+                    int index = m_selectedPoints.indexOf( m_activeHandle.m_activePoint );
                     m_selectedPoints.removeAt( index );
                 }
                 else
-                    m_selectedPoints << m_activePoint;
+                    m_selectedPoints << m_activeHandle.m_activePoint;
             }
             else
             {
                 // no control modifier, so clear selection and select active point
-                if( ! m_selectedPoints.contains( m_activePoint ) )
+                if( ! m_selectedPoints.contains( m_activeHandle.m_activePoint ) )
                 {
                     m_selectedPoints.clear();
-                    m_selectedPoints << m_activePoint;
+                    m_selectedPoints << m_activeHandle.m_activePoint;
                 }
             }
             repaint( m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() ) );
@@ -129,7 +155,7 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
         }
         else if( event->button() & Qt::RightButton )
         {
-            KoPathPoint::KoPointProperties props = m_activePoint->properties();
+            KoPathPoint::KoPointProperties props = m_activeHandle.m_activePoint->properties();
             if( (props & KoPathPoint::HasControlPoint1) == 0 || (props & KoPathPoint::HasControlPoint2) == 0 )
                 return;
 
@@ -144,7 +170,7 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
             else
                 props |= KoPathPoint::IsSmooth;
 
-            KoPointPropertyCommand *cmd = new KoPointPropertyCommand( m_pathShape, m_activePoint, props );
+            KoPointPropertyCommand *cmd = new KoPointPropertyCommand( m_pathShape, m_activeHandle.m_activePoint, props );
             m_canvas->addCommand( cmd, true );
         }
     }
@@ -182,9 +208,9 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     if( points.empty() )
     {
         useCursor(Qt::ArrowCursor);
-        if ( m_activePoint )
+        if ( m_activeHandle.m_activePoint )
         {
-            m_activePoint = 0;
+            m_activeHandle.deactivate();
             repaint( m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() ) );
         }
         return;
@@ -192,15 +218,17 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
 
     useCursor(Qt::SizeAllCursor);
 
-    m_activePoint = points.first();
-    // check first for the control points as otherwise it is no longer 
+    KoPathPoint *p = points.first();
+    KoPathPoint::KoPointType type = KoPathPoint::Node;
+
+    // check for the control points as otherwise it is no longer 
     // possible to change the control points when they are the same as the point
-    if( m_activePoint->properties() & KoPathPoint::HasControlPoint1 && roi.contains( m_activePoint->controlPoint1() ) )
-        m_activePointType = KoPathPoint::ControlPoint1;
-    else if( m_activePoint->properties() & KoPathPoint::HasControlPoint2 && roi.contains( m_activePoint->controlPoint2() ) )
-        m_activePointType = KoPathPoint::ControlPoint2;
-    else if( roi.contains( m_activePoint->point() ) )
-        m_activePointType = KoPathPoint::Node;
+    if( p->properties() & KoPathPoint::HasControlPoint1 && roi.contains( p->controlPoint1() ) )
+        type = KoPathPoint::ControlPoint1;
+    else if( p->properties() & KoPathPoint::HasControlPoint2 && roi.contains( p->controlPoint2() ) )
+        type = KoPathPoint::ControlPoint2;
+
+    m_activeHandle = ActiveHandle( this, p, type );
 
     repaint( m_pathShape->shapeToDocument( m_pathShape->outline().controlPointRect() ) );
 }
@@ -256,8 +284,10 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 if( m_selectedPoints.size() )
                 {
                     KoPointRemoveCommand *cmd = new KoPointRemoveCommand( m_pathShape, m_selectedPoints );
-                    if( m_selectedPoints.contains( m_activePoint ) )
-                        m_activePoint = 0;
+                    if( m_selectedPoints.contains( m_activeHandle.m_activePoint ) )
+                    {
+                        m_activeHandle.deactivate();
+                    }
                     m_selectedPoints.clear();
                     m_canvas->addCommand( cmd, true );
                 }
@@ -367,7 +397,7 @@ void KoPathTool::deactivate() {
         repaint( repaintRect );
     }
     m_pathShape = 0;
-    m_activePoint = 0;
+    m_activeHandle.deactivate();
     delete m_currentStrategy;
     m_currentStrategy = 0;
 }
@@ -404,4 +434,15 @@ QPointF KoPathTool::snapToGrid( const QPointF &p, Qt::KeyboardModifiers modifier
     m_canvas->gridSize( &gridX, &gridY );
     return QPointF( static_cast<int>( p.x() / gridX + 1e-10 ) * gridX,
                     static_cast<int>( p.y() / gridY + 1e-10 ) * gridY );
+}
+
+void KoPathTool::ActiveHandle::paint( QPainter &painter, KoViewConverter &converter )
+{ 
+    if ( m_activePoint )
+    {
+        QRectF handle = converter.viewToDocument( m_tool->handleRect( QPoint(0,0) ) );
+        painter.setBrush( Qt::red ); // TODO make color configurable
+        painter.setPen( Qt::NoPen );
+        m_activePoint->paint( painter, handle.size(), m_tool->m_selectedPoints.contains( m_activePoint ) );
+    }
 }

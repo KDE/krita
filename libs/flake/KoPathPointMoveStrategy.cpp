@@ -46,14 +46,14 @@ void KoPathPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt:
     m_move += move;
 
     // only multiple nodes can be moved at once
-    if( m_tool->m_activePointType == KoPathPoint::Node )
+    if( m_tool->m_activeHandle.m_activePointType == KoPathPoint::Node )
     {
         KoPointMoveCommand cmd( m_tool->m_pathShape, m_tool->m_selectedPoints, move );
         cmd.execute();
     }
     else
     {
-        KoPointMoveCommand cmd( m_tool->m_pathShape, m_tool->m_activePoint, move, m_tool->m_activePointType );
+        KoPointMoveCommand cmd( m_tool->m_pathShape, m_tool->m_activeHandle.m_activePoint, move, m_tool->m_activeHandle.m_activePointType );
         cmd.execute();
     }
 }
@@ -69,10 +69,10 @@ KCommand* KoPathPointMoveStrategy::createCommand()
     if( !m_move.isNull() )
     {
         // only multiple nodes can be moved at once
-        if( m_tool->m_activePointType == KoPathPoint::Node )
+        if( m_tool->m_activeHandle.m_activePointType == KoPathPoint::Node )
             cmd = new KoPointMoveCommand( m_tool->m_pathShape, m_tool->m_selectedPoints, m_move );
         else
-            cmd = new KoPointMoveCommand( m_tool->m_pathShape, m_tool->m_activePoint, m_move, m_tool->m_activePointType );
+            cmd = new KoPointMoveCommand( m_tool->m_pathShape, m_tool->m_activeHandle.m_activePoint, m_move, m_tool->m_activeHandle.m_activePointType );
     }
     return cmd;
 }

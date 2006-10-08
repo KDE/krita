@@ -393,18 +393,11 @@ QRectF KoPathShape::documentToShape( const QRectF &rect ) const
 }
 
 
-void KoPathShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected)
+void KoPathShape::paintPoints( QPainter &painter, const KoViewConverter &converter )
 {
-    if( ! selected ) return;
-
     applyConversion( painter, converter );
 
     KoSubpathList::const_iterator pathIt( m_subpaths.begin() );
-
-    painter.save();
-    painter.setRenderHint( QPainter::Antialiasing, true );
-    painter.setBrush( Qt::blue );
-    painter.setPen( Qt::blue );
 
     QRectF handle = converter.viewToDocument( handleRect( QPoint(0,0) ) );
 
@@ -417,7 +410,6 @@ void KoPathShape::paintDecorations(QPainter &painter, const KoViewConverter &con
             point->paint( painter, handle.size(), false );
         }
     }
-    painter.restore();
 }
 
 QRectF KoPathShape::handleRect( const QPointF &p ) const

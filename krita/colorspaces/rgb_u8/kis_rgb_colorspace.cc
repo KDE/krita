@@ -43,7 +43,7 @@
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))
 
 KisRgbColorSpace ::KisRgbColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-            KoLcmsColorSpace<RgbU8Traits>("RGBU8", i18n("RGB 8-bit integer/channel)"), parent, TYPE_BGRA_8, icSigRgbData, p)
+            KoLcmsColorSpace<RgbU8Traits>("RGBA", i18n("RGB 8-bit integer/channel)"), parent, TYPE_BGRA_8, icSigRgbData, p)
 {
     m_channels.push_back(new KoChannelInfo(i18n("Red"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255,0,0)));
     m_channels.push_back(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,255,0)));

@@ -23,7 +23,7 @@
 #include "KoDocumentInfoDlg.h"
 #include <KoXmlReader.h>
 #include <ktar.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kdeversion.h>
 #include <kfilterdev.h>
 
@@ -110,22 +110,16 @@ void KoDocumentInfoPropsPage::applyChanges()
     if ( !root )
         return;
 
-    struct stat statBuff;
+    QFileInfo fileInfo(d->m_url.path());
 
-    if ( stat( QFile::encodeName( d->m_url.path() ), &statBuff ) != 0 )
+    KTemporaryFile tempFile;
+    tempFile.setPrefix(d->m_url.path());
+
+    if ( !tempFile.open() )
         return;
+    tempFile.setPermissions(fileInfo.permissions());
 
-    KTempFile tempFile( d->m_url.path(), QString::null, statBuff.st_mode );
-
-    tempFile.setAutoDelete( true );
-
-    if ( tempFile.status() != 0 )
-        return;
-
-    if ( !tempFile.close() )
-        return;
-
-    d->m_dst = new KTar( tempFile.name(), "application/x-gzip" );
+    d->m_dst = new KTar( tempFile.fileName(), "application/x-gzip" );
 
     if ( !d->m_dst->open( QIODevice::WriteOnly ) )
         return;
@@ -175,7 +169,7 @@ void KoDocumentInfoPropsPage::applyChanges()
     d->m_dst->close();
 
     QDir dir;
-    dir.rename( tempFile.name(), d->m_url.path() );
+    dir.rename( tempFile.fileName(), d->m_url.path() );
 
     delete d->m_dst;
     d->m_dst = 0;

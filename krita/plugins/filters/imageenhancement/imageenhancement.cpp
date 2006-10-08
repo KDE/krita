@@ -27,7 +27,7 @@
 #include <kinstance.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
 

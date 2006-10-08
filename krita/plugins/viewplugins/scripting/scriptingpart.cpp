@@ -36,7 +36,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <kis_doc.h>
 #include <kis_global.h>

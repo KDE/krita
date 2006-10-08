@@ -86,8 +86,8 @@ public:
     inline bool operator!= ( const T* p ) const { return ( d != p ); }
 
     
-    inline operator T* () { return d; }
-    inline operator const T* () const { return d; }
+    inline operator void* () { return d; }
+    inline operator const void* () const { return d; }
     
     /**
      * @return the pointer

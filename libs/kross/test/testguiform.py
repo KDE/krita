@@ -15,40 +15,37 @@ dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
 #print "===> dialog %s %s" % (dialog,dir(dialog))
 
-page0 = dialog.addPage("Welcome","Welcome","about_kde")
-#widget0 = Kross.forms().createWidgetFromUIFile(page0, "/home/kde4/koffice/libs/kross/test/testguiform.ui")
-
-#widget0 = Kross.forms().createWidget(page0, 'QWidget', 'MyForm1', {})
-#widget0label = Kross.forms().createWidget(page0, 'QLabel', 'label', {'text':'Testlabel'})
-
-widget0 = Kross.forms().createWidgetFromUI(page0,
-    '<ui version="4.0" >'
-    ' <class>Form</class>'
-    ' <widget class="QWidget" name="Form" >'
-    '  <layout class="QHBoxLayout" >'
-    '   <property name="margin" >'
-    '    <number>9</number>'
-    '   </property>'
-    '   <property name="spacing" >'
-    '    <number>6</number>'
-    '   </property>'
-    '   <item>'
-    '    <widget class="QLabel" name="label" >'
-    '     <property name="text" >'
-    '      <string>Testlabel</string>'
-    '     </property>'
-    '     <property name="alignment" >'
-    '      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>'
-    '     </property>'
-    '    </widget>'
-    '   </item>'
-    '  </layout>'
-    ' </widget>'
-    '</ui>')
+#page0 = dialog.addPage("Welcome","Welcome","about_kde")
+##widget0 = Kross.forms().createWidget(page0, 'QWidget', 'MyForm1', {})
+##widget0label = Kross.forms().createWidget(page0, 'QLabel', 'label', {'text':'Testlabel'})
+#widget0 = Kross.forms().createWidgetFromUI(page0,
+    #'<ui version="4.0" >'
+    #' <class>Form</class>'
+    #' <widget class="QWidget" name="Form" >'
+    #'  <layout class="QHBoxLayout" >'
+    #'   <property name="margin" >'
+    #'    <number>9</number>'
+    #'   </property>'
+    #'   <property name="spacing" >'
+    #'    <number>6</number>'
+    #'   </property>'
+    #'   <item>'
+    #'    <widget class="QLabel" name="label" >'
+    #'     <property name="text" >'
+    #'      <string>Testlabel</string>'
+    #'     </property>'
+    #'     <property name="alignment" >'
+    #'      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>'
+    #'     </property>'
+    #'    </widget>'
+    #'   </item>'
+    #'  </layout>'
+    #' </widget>'
+    #'</ui>')
 
 page1 = dialog.addPage("Source","Read From File","fileopen")
 widget1 = Kross.forms().createFileWidget(page1, "kfiledialog:///mytestthingy1")
-widget1.setMode("Opening")
+widget1.setMode("Saving") #("Opening")
 widget1.setFilter("*.cpp|C++ Source Files\n*.h|Header files")
 
 page2 = dialog.addPage("Options","Options","configure")

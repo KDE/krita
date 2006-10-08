@@ -16,10 +16,13 @@ except:
 
 try:
 	import Image, ImageFile
+	Image.init()
 except:
 	raise "Failed to import the Python Image Library (PIL)."
 
 def loadFromFile(filename):
+	print "trying to load file: %s" % filename
+
 	import Krita, Image, ImageFile
 
 	pilimage = Image.open(filename)
@@ -66,16 +69,48 @@ def loadFromFile(filename):
 		finesh = it.next()
 	krtlayer.endPainting()
 
-import Tkinter, tkFileDialog
-Image.init()
+#######################################################################################
+# Following code uses TkInter to display a fileopen-dialog.
+
+#filters = []
+#for i in Image.ID:
+	#try:
+		#factory, accept = Image.OPEN[i]
+		#filters.append( (factory.format_description,".%s .%s" % (factory.format,factory.format.lower())) )
+	#except KeyError:
+		#pass
+
+#import Tkinter, tkFileDialog
+#Tkinter.Tk().withdraw()
+#filename = tkFileDialog.askopenfilename(filetypes=filters)
+#if filename:
+	#loadFromFile(filename)
+
+#######################################################################################
+# Following code uses the Kross::FormModule to display a fileopen-dialog.
+
 filters = []
+allfilters = ""
 for i in Image.ID:
 	try:
 		factory, accept = Image.OPEN[i]
-		filters.append( (factory.format_description,".%s .%s" % (factory.format,factory.format.lower())) )
+		filters.append( "*.%s|%s (*.%s)" % (factory.format,factory.format_description,factory.format.lower()) )
+		allfilters += "*.%s " % factory.format
 	except KeyError:
 		pass
-Tkinter.Tk().withdraw()
-filename = tkFileDialog.askopenfilename(filetypes=filters)
-if filename:
-	loadFromFile(filename)
+if len(filters) > 0:
+	filters.insert(0, "%s|All Supported Files" % allfilters)
+
+import Kross
+dialog = Kross.forms().createDialog("Python Imaging Library Import")
+try:
+	dialog.setButtons("Ok|Cancel")
+	page = dialog.addPage("File","Import Image From File","fileopen")
+	widget = Kross.forms().createFileWidget(page, "kfiledialog:///kritapilimport")
+	widget.setMode("Opening")
+	widget.setFilter( "\n".join(filters) )
+	if dialog.exec_loop():
+		file = widget.selectedFile()
+		loadFromFile(file)
+finally:
+	dialog.delayedDestruct()

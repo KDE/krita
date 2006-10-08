@@ -39,11 +39,14 @@
 #include <kdiroperator.h>
 #include <kshell.h>
 #include <kicon.h>
+#include <kurlbar.h>
 //#include <kio/netaccess.h>
 //#include <klocale.h>
 //#include <kicon.h>
 //#include <kmimetype.h>
 //#include <kstandarddirs.h>
+#include <kaction.h>
+#include <kactioncollection.h>
 
 using namespace Kross;
 
@@ -62,19 +65,29 @@ namespace Kross {
             {
                 setModal( false );
                 setParent( parent, windowFlags() & ~Qt::WindowType_Mask );
+                //setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                 setGeometry(0, 0, width(), height());
                 setFocusProxy( locationEdit );
-                setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-                parent->setMinimumSize( QSize(width(), height()) );
+                //parent->setMinimumSize( QSize(width(), height()) );
 
                 if( layout() )
                     layout()->setMargin(0);
                 if( parent->layout() )
                     parent->layout()->addWidget(this);
 
+                if( KFileDialog::okButton() )
+                    KFileDialog::okButton()->setVisible(false);
+                if( KFileDialog::cancelButton() )
+                    KFileDialog::cancelButton()->setVisible(false);
+
                 KFileDialog::setMode( KFile::File | KFile::LocalOnly );
-                KFileDialog::okButton()->setVisible(false);
-                KFileDialog::cancelButton()->setVisible(false);
+
+                if( actionCollection() ) {
+                    KAction* a = actionCollection()->action("toggleSpeedbar");
+                    if(a && a->isCheckable() && a->isChecked()) a->toggle();
+                    a = actionCollection()->action("toggleBookmarks");
+                    if(a && a->isCheckable() && a->isChecked()) a->toggle();
+                }
             }
 
             virtual ~FormFileWidgetImpl() {}
@@ -135,7 +148,6 @@ namespace Kross {
     };
 
 }
-
 
 FormFileWidget::FormFileWidget(QWidget* parent, const QString& startDirOrVariable)
     : QWidget(parent)

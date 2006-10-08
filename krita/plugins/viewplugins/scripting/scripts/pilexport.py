@@ -15,7 +15,8 @@ except:
 	raise "Failed to import the Krita module."
 
 try:
-	import Image, ImageFile
+	import Image, ImageFile, string
+	Image.init()
 except:
 	raise "Failed to import the Python Image Library (PIL)."
 
@@ -43,18 +44,46 @@ def saveToFile(filename):
 	#pilimage.save(filename,"JPEG")
 	pilimage.save(filename)
 
-import string, Tkinter, tkFileDialog
-Image.init()
+#######################################################################################
+# Following code uses TkInter to display a fileopen-dialog.
+
+#import Tkinter, tkFileDialog
+#filters = []
+#for i in Image.ID:
+	#try:
+		#driver = Image.SAVE[string.upper(i)]
+		#factory, accept = Image.OPEN[i]
+		#filters.append( (factory.format_description,".%s .%s" % (factory.format,factory.format.lower())) )
+	#except KeyError:
+		#pass
+#Tkinter.Tk().withdraw()
+#filename = tkFileDialog.asksaveasfilename(filetypes=filters)
+#if filename:
+	#saveToFile(filename)
+
 filters = []
+allfilters = ""
 for i in Image.ID:
 	try:
 		driver = Image.SAVE[string.upper(i)]
 		factory, accept = Image.OPEN[i]
-		filters.append( (factory.format_description,".%s .%s" % (factory.format,factory.format.lower())) )
+		filters.append( "*.%s|%s (*.%s)" % (factory.format,factory.format_description,factory.format.lower()) )
+		allfilters += "*.%s " % factory.format
 	except KeyError:
 		pass
+if len(filters) > 0:
+	filters.insert(0, "%s|All Supported Files" % allfilters)
 
-Tkinter.Tk().withdraw()
-filename = tkFileDialog.asksaveasfilename(filetypes=filters)
-if filename:
-	saveToFile(filename)
+import Kross
+dialog = Kross.forms().createDialog("Python Imaging Library Export")
+try:
+	dialog.setButtons("Ok|Cancel")
+	page = dialog.addPage("File","Export Image to File","filesave")
+	widget = Kross.forms().createFileWidget(page, "kfiledialog:///kritapilexport")
+	widget.setMode("Saving")
+	widget.setFilter( "\n".join(filters) )
+	if dialog.exec_loop():
+		file = widget.selectedFile()
+		saveToFile(file)
+finally:
+	dialog.delayedDestruct()

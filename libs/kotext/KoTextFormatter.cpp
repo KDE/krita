@@ -159,7 +159,7 @@ bool KoTextFormatterCore::format()
         c = 0;
 
     KoTextStringChar *firstChar = 0;
-    int left = doc ? leftMargin( true, false ) : 0;
+    int left = leftMargin( true, false );
     int initialLMargin = leftMargin( true );
 
     y = parag->breakableTopMargin();

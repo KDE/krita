@@ -85,6 +85,10 @@ public:
     inline bool operator== ( const T* p ) const { return ( d == p ); }
     inline bool operator!= ( const T* p ) const { return ( d != p ); }
 
+    
+    inline operator T* () { return d; }
+    inline operator const T* () const { return d; }
+    
     /**
      * Test if the shared pointer is NOT null.
      * @return true if the shared pointer is NOT null, false otherwise.

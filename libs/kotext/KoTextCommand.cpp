@@ -192,6 +192,8 @@ KoTextCursor * KoTextParagCommand::unexecute( KoTextCursor *c )
         p = p->next();
         ++lit;
     }
+    if (!p) // should only be the exception
+        return c;
     // Set cursor to end of selection. Like in KoTextFormatCommand::[un]execute...
     c->setParag( p );
     c->setIndex( p->length()-1 );

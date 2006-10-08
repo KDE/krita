@@ -143,6 +143,17 @@ public:
 	bitBlt(dx, dy, m_colorSpace->compositeOp(op), src, opacity, sx, sy, sw, sh);
     }
 
+    /**
+     * A version of bitBlt that renders using an external mask, ignoring
+     * the src device's own selection, if it has one.
+     */
+    void bltMask(Q_INT32 dx, Q_INT32 dy,
+                      const KoCompositeOp *op,
+                      KisPaintDeviceSP src,
+                      KisPaintDeviceSP selMask,
+                      Q_UINT8 opacity,
+                      Q_INT32 sx, Q_INT32 sy,
+                      Q_INT32 sw, Q_INT32 sh);
 
     /**
      * A version of bitBlt that renders using an external selection mask, ignoring
@@ -357,10 +368,23 @@ public:
      * The offset for paint operations that use it (like KisDuplicateOp). It will use as source
      * the part of the layer that is at its paintedPosition - duplicateOffset
      */
+    // TODO: this is an hack ! it must be fix, the following functions have nothing to do here
     void setDuplicateOffset(const KisPoint& offset) { m_duplicateOffset = offset; }
     /// Returns the offset for duplication
     KisPoint duplicateOffset(){ return m_duplicateOffset; }
 
+    inline void setDuplicateHealing(bool v) { m_duplicateHealing = v; }
+    inline bool duplicateHealing() { return m_duplicateHealing; }
+    
+    inline void setDuplicateHealingRadius(int r) { m_duplicateHealingRadius = r; }
+    inline int duplicateHealingRadius() { return m_duplicateHealingRadius; }
+    
+    inline void setDuplicatePerspectiveCorrection(bool v) { m_duplicatePerspectiveCorrection = v; }
+    inline bool duplicatePerspectiveCorrection() { return m_duplicatePerspectiveCorrection; }
+    
+    void setDuplicateStart(const KisPoint start) { m_duplicateStart = start;}
+    KisPoint duplicateStart() { return m_duplicateStart;}
+    
     /// Sets the current pressure for things that like to use this
     void setPressure(double pressure) { m_pressure = pressure; }
     /// Returns the current pressure
@@ -413,7 +437,11 @@ protected:
     KisBrush *m_brush;
     KisPattern *m_pattern;
     KisPoint m_duplicateOffset;
-    quint8 m_opacity;
+    KisPoint m_duplicateStart;
+    bool m_duplicateHealing;
+    int m_duplicateHealingRadius;
+    bool m_duplicatePerspectiveCorrection;
+    Q_UINT8 m_opacity;
     KisFilterSP m_filter;
     KisPaintOp * m_paintOp;
     double m_pressure;

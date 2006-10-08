@@ -233,32 +233,20 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     }
 }
 
-void KisPainter::bltSelection(qint32 dx, qint32 dy,
-                  const KoCompositeOp * op,
-                  KisPaintDeviceSP srcdev,
-                  KisSelectionSP seldev,
-                  quint8 opacity,
-                  qint32 sx, qint32 sy,
-                  qint32 sw, qint32 sh)
+void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
+                 const KoCompositeOp *op,
+                 KisPaintDeviceSP srcdev,
+                 KisPaintDeviceSP selMask,
+                 Q_UINT8 opacity,
+                 Q_INT32 sx, Q_INT32 sy,
+                 Q_INT32 sw, Q_INT32 sh)
 {
     if (srcdev.isNull()) return;
 
-    if (seldev.isNull()) return;
+    if (selMask.isNull()) return;
 
     if (m_device.isNull()) return;
 
-    // Better use a probablistic method than a too slow one
-    if (seldev->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
-/*
-        kDebug() << "Blitting outside selection rect\n";
-
-        kDebug() << "srcdev: " << srcdev << " (" << srcdev->name() << ")"
-                << ", seldev: " << seldev << " (" << seldev->name() << ")"
-                << ". dx, dy " << dx << "," << dy
-                << ". sx, sy : sw, sy " << sx << "," << sy << " : " << sw << "," << sh << endl;
-*/
-        return;
-    }
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
@@ -293,7 +281,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
         qint32 columnsRemaining = sw;
         qint32 numContiguousDstRows = m_device->numContiguousRows(dstY, dstX, dstX + sw - 1);
         qint32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
-        qint32 numContiguousSelRows = seldev->numContiguousRows(dstY, dstX, dstX + sw - 1);
+        qint32 numContiguousSelRows = selMask->numContiguousRows(dstY, dstX, dstX + sw - 1);
 
         qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
         rows = qMin(numContiguousSelRows, rows);
@@ -303,7 +291,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
 
             qint32 numContiguousDstColumns = m_device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
             qint32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
-            qint32 numContiguousSelColumns = seldev->numContiguousColumns(dstX, dstY, dstY + rows - 1);
+            qint32 numContiguousSelColumns = selMask->numContiguousColumns(dstX, dstY, dstY + rows - 1);
 
             qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
             columns = qMin(numContiguousSelColumns, columns);
@@ -317,8 +305,8 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
             KisHLineIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns, false);
             const quint8 *srcData = srcIt.rawData();
 
-            qint32 selRowStride = seldev->rowStride(dstX, dstY);
-            KisHLineIteratorPixel selIt = seldev->createHLineIterator(dstX, dstY, columns, false);
+            qint32 selRowStride = selMask->rowStride(dstX, dstY);
+            KisHLineIteratorPixel selIt = selMask->createHLineIterator(dstX, dstY, columns, false);
             const quint8 *selData = selIt.rawData();
 
             m_colorSpace->bitBlt(dstData,
@@ -344,6 +332,31 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
     }
 }
 
+
+void KisPainter::bltSelection(qint32 dx, qint32 dy,
+                              const KoCompositeOp * op,
+                              KisPaintDeviceSP srcdev,
+                              KisSelectionSP seldev,
+                              quint8 opacity,
+                              qint32 sx, qint32 sy,
+                              qint32 sw, qint32 sh)
+{
+    if (!seldev) return;
+        // Better use a probablistic method than a too slow one
+    if (seldev->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
+/*
+        kDebug() << "Blitting outside selection rect\n";
+
+        kDebug() << "srcdev: " << srcdev << " (" << srcdev->name() << ")"
+        << ", seldev: " << seldev << " (" << seldev->name() << ")"
+        << ". dx, dy " << dx << "," << dy
+        << ". sx, sy : sw, sy " << sx << "," << sy << " : " << sw << "," << sh << endl;
+*/
+        return;
+    }
+    bltMask(dx, dy, op, srcdev, seldev, opacity, sx, sy, sw, sh);
+    
+}
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
                   const KoCompositeOp* op,

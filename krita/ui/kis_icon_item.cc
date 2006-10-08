@@ -77,6 +77,8 @@ void KisIconItem::updatePixmaps()
             if (!thumb.isNull())
                 setIcon(QIcon(QPixmap::fromImage(thumb)));
         }
+        else
+            setIcon(QIcon(QPixmap::fromImage(img)));
 
         img = img.convertToFormat(QImage::Format_RGB32);
 

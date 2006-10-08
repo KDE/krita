@@ -166,7 +166,7 @@ FactoryManager::createWidgetForProperty(Property *property)
 			return new DoubleEdit(property);
 		case Boolean: {
 			//boolean editors can optionally accept 3rd state:
-			QVariant thirdState = property ? property->option("3rdState") : QVariant();
+			QVariant thirdState = property->option("3rdState");
 			if (thirdState.toString().isEmpty())
 				return new BoolEdit(property);
 			else

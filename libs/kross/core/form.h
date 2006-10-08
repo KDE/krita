@@ -62,7 +62,6 @@ namespace Kross {
             //QString selectedUrl() const { return KFileDialog::selectedUrl().toLocalFile(); }
 
         private:
-            virtual bool eventFilter(QObject* watched, QEvent* e);
             virtual void showEvent(QShowEvent* event);
             virtual void hideEvent(QHideEvent* event);
 
@@ -144,10 +143,6 @@ namespace Kross {
              * \return the result. The result may for example "Ok", "Cancel", "Yes" or "No".
              */
             QString result();
-
-        protected:
-            virtual void showEvent(QShowEvent* event);
-            virtual void hideEvent(QHideEvent* event);
 
         private slots:
             virtual void slotButtonClicked(int button);

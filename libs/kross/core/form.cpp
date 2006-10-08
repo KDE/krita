@@ -60,31 +60,24 @@ namespace Kross {
             FormFileWidgetImpl(QWidget* parent, const QString& startDirOrVariable)
                 : KFileDialog(KUrl(startDirOrVariable), "", parent, 0)
             {
-                kDebug()<<"~~~~~ FormFileWidgetImpl CTOR ~~~~~"<<endl;
-
-                //setParent( parentWidget() );
-                //parentWidget()->setParent(this);
-                //reparent(parentWidget(), QPoint(0,0));
-
-                KFileDialog::setMode( KFile::File | KFile::LocalOnly );
-                //setFocusProxy( locationEdit );
-
-                if( layout() )
-                    layout()->setMargin(0);
-
-                KFileDialog::okButton()->setVisible(false);
-                KFileDialog::cancelButton()->setVisible(false);
-
+                setModal( false );
+                setParent( parent, windowFlags() & ~Qt::WindowType_Mask );
+                setGeometry(0, 0, width(), height());
+                setFocusProxy( locationEdit );
                 setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
                 parent->setMinimumSize( QSize(width(), height()) );
 
-                foreach(QWidget* widget, findChildren< QWidget* >(""))
-                    widget->installEventFilter( parent );
+                if( layout() )
+                    layout()->setMargin(0);
+                if( parent->layout() )
+                    parent->layout()->addWidget(this);
+
+                KFileDialog::setMode( KFile::File | KFile::LocalOnly );
+                KFileDialog::okButton()->setVisible(false);
+                KFileDialog::cancelButton()->setVisible(false);
             }
 
-            virtual ~FormFileWidgetImpl() {
-                kDebug()<<"~~~~~ FormFileWidgetImpl DTOR ~~~~~"<<endl;
-            }
+            virtual ~FormFileWidgetImpl() {}
 
             QString selectedFile() const
             {
@@ -105,26 +98,21 @@ namespace Kross {
             virtual void accept()
             {
                 kDebug() << "FormFileWidget::accept m_file=" << selectedFile() << endl;
-                //setResult( QDialog::Accepted );
+                setResult( QDialog::Accepted );
                 //emit fileSelected( selectedFile() );
                 //KFileDialog::accept();
-                KFileDialog::accept();
             }
 
             virtual void reject()
             {
                 kDebug() << "FormFileWidget::reject" << endl;
-                /*
                 for(QWidget* parent = parentWidget(); parent; parent = parent->parentWidget()) {
                     FormDialog* dialog = qobject_cast<FormDialog*>(parent);
                     if(dialog) { dialog->reject(); break; }
+                    if(parent == QApplication::activeModalWidget() || parent == QApplication::activeWindow()) break;
                 }
-                */
-                KFileDialog::reject();
+                //KFileDialog::reject();
             }
-
-            //virtual void showEvent(QShowEvent* event);
-            //virtual void hideEvent(QHideEvent* event);
     };
 
     /// \internal d-pointer class.
@@ -132,6 +120,7 @@ namespace Kross {
     {
         public:
             FormFileWidgetImpl* impl;
+
             QString startDirOrVariable;
             KFileDialog::OperationMode mode;
 
@@ -203,7 +192,6 @@ QString FormFileWidget::selectedFile() const
 
 void FormFileWidget::showEvent(QShowEvent* event)
 {
-    kDebug() << "FormFileWidget::showEvent" << endl;
     QWidget::showEvent(event);
     if(! d->impl) {
         d->impl = new FormFileWidgetImpl(this, d->startDirOrVariable);
@@ -212,39 +200,21 @@ void FormFileWidget::showEvent(QShowEvent* event)
             d->impl->setMimeFilter(d->mimeFilter);
         else if(! d->filter.isEmpty())
             d->impl->setFilter(d->filter);
-
-        d->impl->reparent(d->impl->parentWidget(), QPoint(0,0));
-        layout()->addWidget(d->impl);
         d->impl->show();
     }
 }
 
 void FormFileWidget::hideEvent(QHideEvent* event)
 {
-    kDebug() << "FormFileWidget::hideEvent" << endl;
+    QWidget::hideEvent(event);
+    /*
     if(d->impl) {
         d->selectedFile = selectedFile();
         d->currentFilter = currentFilter();
         d->currentMimeFilter = currentMimeFilter();
-
-        //d->impl->parentWidget()->hide();
-        //hide();
-
-        //d->impl->cancelButton()->click();
-        //d->impl->reject();
-        //d->impl->close();
-
-        //delete d->impl;
-        //d->impl->delayedDestruct();
-        //d->impl = 0;
+        delete d->impl; d->impl = 0;
     }
-    QWidget::hideEvent(event);
-}
-
-bool FormFileWidget::eventFilter(QObject* watched, QEvent* e)
-{
-    kDebug() << "FormFileWidget::eventFilter watched.name=" << watched->objectName() << " watched.class=" << watched->metaObject()->className() << " event.type=" << e->type() << endl;
-    return QWidget::eventFilter(watched, e);
+    */
 }
 
 /*********************************************************************************
@@ -268,15 +238,11 @@ FormDialog::FormDialog(const QString& caption)
     , d( new Private() )
 {
     setCaption(caption);
-    //setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     KDialog::setButtons(KDialog::Ok);
 
-//setFaceType(KPageDialog::Tabbed);
-//setFaceType(KPageDialog::List);
-//setFaceType(KPageDialog::Tree);
-
     //m_dialog->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred) );
-    setMinimumWidth(380);
+    setMinimumSize( QSize(580,420) );
 
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
             this, SLOT(slotCurrentPageChanged(KPageWidgetItem*)));
@@ -376,20 +342,6 @@ void FormDialog::slotCurrentPageChanged(KPageWidgetItem* current)
 {
     kDebug() << "FormDialog::slotCurrentPageChanged current=" << current->name() << endl;
     //foreach(QWidget* widget, current->widget()->findChildren< QWidget* >("")) widget->setFocus();
-    //foreach(QWidget* widget, current->widget()->findChildren< QWidget* >("")) foreach(QWidget* w, widget->findChildren< QWidget* >("")) w->setFocus();
-}
-
-void FormDialog::showEvent(QShowEvent* event)
-{
-    kDebug() << "FormDialog::showEvent" << endl;
-    //setCurrentPage("MyName2");
-    KPageDialog::showEvent(event);
-}
-
-void FormDialog::hideEvent(QHideEvent* event)
-{
-    kDebug() << "FormDialog::hideEvent" << endl;
-    KPageDialog::hideEvent(event);
 }
 
 /*********************************************************************************

@@ -90,13 +90,6 @@ public:
     inline operator const T* () const { return d; }
     
     /**
-     * Test if the shared pointer is NOT null.
-     * @return true if the shared pointer is NOT null, false otherwise.
-     * @see isNull
-     */
-    inline operator bool() const { return ( d != 0 ); }
-
-    /**
      * @return the pointer
      */
     inline T* data() { return d; }

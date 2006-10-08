@@ -116,10 +116,36 @@ namespace Kross {
              */
             bool setFaceType(const QString& facetype);
 
+            /**
+             * \return the name of the currently selected page. Use the \a page()
+             * method to get the matching page QWidget instance.
+             */
             QString currentPage() const;
+
+            /**
+             * Set the current page to \p name . If there exists no page with
+             * such a pagename the method does nothing.
+             */
             void setCurrentPage(const QString& name);
 
+            /**
+             * \return the QWidget page instance which has the pagename \p name
+             * or NULL if there exists no such page.
+             */
             QWidget* page(const QString& name) const;
+
+            /**
+             * Add and return a new page.
+             *
+             * \param name The name the page has. This name is for example returned
+             * at the \a currentPage() method and should be unique. The name is also
+             * used to display a short title for the page.
+             * \param header The longer header title text used for display purposes.
+             * \param iconname The name of the icon which the page have. This could
+             * be for example "about_kde", "fileopen", "configure" or any other
+             * iconname known by KDE.
+             * \return the new QWidget page instance.
+             */
             QWidget* addPage(const QString& name, const QString& header, const QString& iconname);
 
             /**

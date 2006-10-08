@@ -34,7 +34,6 @@ class KoPathPointRubberSelectStrategy : public KoShapeRubberSelectStrategy
 public:
     KoPathPointRubberSelectStrategy( KoPathTool *tool, KoCanvasBase *canvas, const QPointF &clicked );
     virtual ~KoPathPointRubberSelectStrategy() {}
-    virtual void finishInteraction() { return; }
     virtual void finishInteraction( Qt::KeyboardModifiers modifiers ); 
 
 private:

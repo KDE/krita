@@ -536,7 +536,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
         Q_CHECK_PTR(m_bkg);
 
         m_rootLayer = static_cast<KisGroupLayer*>(rhs.m_rootLayer->clone().data());
-        connect(m_rootLayer.data(), SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+        connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
 
         m_annotations = rhs.m_annotations; // XXX the annotations would probably need to be deep-copied
 

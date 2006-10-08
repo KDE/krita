@@ -947,7 +947,7 @@ void KisPaintDevice::reselect()
 
 void KisPaintDevice::addSelection(KisSelectionSP selection) {
 
-    KisPainter painter(KisPaintDeviceSP(this->selection().data()));
+    KisPainter painter(this->selection());
     QRect r = selection->selectedExactRect();
     painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, KisPaintDeviceSP(selection.data()), r.x(), r.y(), r.width(), r.height());
     painter.end();

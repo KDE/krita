@@ -23,55 +23,48 @@
 #include <QString>
 #include <QWidget>
 
-#include <kdialog.h>
+#include <kpagedialog.h>
+#include <kfiledialog.h>
 
 #include <koffice_export.h>
 
 namespace Kross {
 
+    /// \internal implementation of the customized KFileDialog
+    class FormFileWidgetImpl;
+
     /**
-     * The Forms class offers access to the functionality provided by QFormBuilder
-     * to be able to work with UI-files.
-     *
-     * Example (in Python) :
-     * \code
-     * import Kross
-     * window = Kross.activeWindow()
-     * if window == None:
-     *     raise "No active window"
-     * form = Kross.createForm(window)
-     * form.loadUiFile("./mywidget.ui")
-     * form.show()
-     * \endcode
+     * The FormFileWidget class provides a in a widget embedded KFileDialog.
      */
-    class KROSS_EXPORT Form : public QWidget
+    class KROSS_EXPORT FormFileWidget : public QWidget
     {
             Q_OBJECT
+            Q_ENUMS(Mode)
+
         public:
-            Form(QWidget* parent);
-            virtual ~Form();
+            typedef enum Mode { Other = 0, Opening, Saving };
+
+            FormFileWidget(QWidget* parent, const QString& startDirOrVariable);
+            virtual ~FormFileWidget();
 
         public slots:
 
-            /**
-             * Load the UI XML from the file \p filename .
-             */
-            bool loadUiFile(const QString& filename);
+            void setMode(const QString& mode);
 
-            /**
-             * Save the UI XML to the file \p filename .
-             */
-            bool saveUiFile(const QString& filename);
+            QString currentFilter() const;
+            void setFilter(QString filter);
 
-            /**
-             * \return the UI XML as a string.
-             */
-            QString toUiXml();
+            QString currentMimeFilter() const;
+            void setMimeFilter(const QStringList& filter);
 
-            /**
-             * Set the UI XML from the string \p xml .
-             */
-            bool fromUiXml(const QString& xml);
+            QString selectedFile() const;
+            //QStringList selectedFiles() const { return KFileDialog::selectedFiles(); }
+            //QString selectedUrl() const { return KFileDialog::selectedUrl().toLocalFile(); }
+
+        private:
+            virtual bool eventFilter(QObject* watched, QEvent* e);
+            virtual void showEvent(QShowEvent* event);
+            virtual void hideEvent(QHideEvent* event);
 
         private:
             /// \internal d-pointer class.
@@ -81,47 +74,30 @@ namespace Kross {
     };
 
     /**
-     * The Dialog class provides access to KDialog objects.
+     * The FormDialog class provides access to KDialog objects as
+     * top-level containers.
      *
      * Example (in Python) :
      * \code
      * import Kross
-     * dialog = Kross.createDialog("MyDialog")
-     * dialog.setButtons("Ok|Cancel")
-     * dialog.loadUiFile("./mydialog.ui")
-     * if dialog.exec_loop():
-     *     print dialog.result()
+     * mydialog = Kross.forms().createDialog("MyDialog")
+     * mydialog.setButtons("Ok|Cancel")
+     * mywidget = Kross.forms().createWidgetFromUIFile(mydialog, "./mywidget.ui")
+     * mywidget["QLineEdit"].setText("some string")
+     * if mydialog.exec_loop():
+     *     if mydialog.result() == "Ok":
+     *         print mywidget["QLineEdit"].text
      * \endcode
      */
-    class KROSS_EXPORT Dialog : public KDialog
+    class KROSS_EXPORT FormDialog : public KPageDialog
     {
             Q_OBJECT
 
         public:
-            Dialog(const QString& caption);
-            virtual ~Dialog();
+            FormDialog(const QString& caption);
+            virtual ~FormDialog();
 
         public slots:
-
-            /**
-             * Load the UI XML from the file \p filename .
-             */
-            bool loadUiFile(const QString& filename) { return m_form->loadUiFile(filename); }
-
-            /**
-             * Save the UI XML to the file \p filename .
-             */
-            bool saveUiFile(const QString& filename) { return m_form->saveUiFile(filename); }
-
-            /**
-             * \return the UI XML as a string.
-             */
-            QString toUiXml() { return m_form->toUiXml(); }
-
-            /**
-             * Set the UI XML from the string \p xml .
-             */
-            bool fromUiXml(const QString& xml) { return m_form->fromUiXml(xml); }
 
             /**
              * Set the buttons.
@@ -132,6 +108,20 @@ namespace Kross {
              * buttons was successfully else false is returned.
              */
             bool setButtons(const QString& buttons);
+
+            /**
+             * Set the face type of the dialog.
+             *
+             * \param facetype the face type which could be "Auto", "Plain", "List",
+             * "Tree" or "Tabbed" as defined in \a KPageView::FaceType .
+             */
+            bool setFaceType(const QString& facetype);
+
+            QString currentPage() const;
+            void setCurrentPage(const QString& name);
+
+            QWidget* page(const QString& name) const;
+            QWidget* addPage(const QString& name, const QString& header, const QString& iconname);
 
             /**
              * Shows the dialog as a modal dialog, blocking until the user
@@ -155,13 +145,99 @@ namespace Kross {
              */
             QString result();
 
+        protected:
+            virtual void showEvent(QShowEvent* event);
+            virtual void hideEvent(QHideEvent* event);
+
         private slots:
             virtual void slotButtonClicked(int button);
+            void slotCurrentPageChanged(KPageWidgetItem* current);
+
         private:
-            Form* m_form;
-            KDialog::ButtonCode m_code;
+            /// \internal d-pointer class.
+            class Private;
+            /// \internal d-pointer instance.
+            Private* const d;
     };
 
+    /**
+     * The FormModule provides access to UI functionality.
+     */
+    class KROSS_EXPORT FormModule : public QObject
+    {
+            Q_OBJECT
+
+        public:
+            FormModule(QObject* parent);
+            virtual ~FormModule();
+
+        public slots:
+
+            /**
+             * \return the active modal widget. Modal widgets are special top-level
+             * widgets which are subclasses of QDialog and are modal.
+             */
+            QWidget* activeModalWidget();
+
+            /**
+             * \return the application top-level window that has the keyboard input
+             * focus, or NULL if no application window has the focus.
+             */
+            QWidget* activeWindow();
+
+            /**
+             * Create and return a new \a FormDialog instance.
+             *
+             * \param caption The displayed caption of the dialog.
+             */
+            QWidget* createDialog(const QString& caption);
+
+#if 0
+            /**
+             * Create and return a new QWidget instance.
+             *
+             * \param parent the new QWidget is a child of parent.
+             * \param classname the name of the class that should be
+             * created. For example "QComboBox" or "QPushButton".
+             * \return the new QWidget instance or NULL.
+             */
+            QWidget* createWidget(QWidget* parent, const QString& classname);
+#endif
+
+            /**
+             * Create and return a new \a FormFileWidget instance.
+             *
+             * \param parent the parent QWidget the new \a FormFileWidget instance
+             * is a child of.
+             * \param startDirOrVariable the start-directory or -variable.
+             * \return the new \a FormFileWidget instance or NULL.
+             */
+            QWidget* createFileWidget(QWidget* parent, const QString& startDirOrVariable);
+
+            /**
+             * Create and return a new QWidget instance.
+             *
+             * \param parent the new QWidget is a child of parent.
+             * \param xml the UI XML string used to construct the new widget.
+             * \return the new QWidget instance or NULL.
+             */
+            QWidget* createWidgetFromUI(QWidget* parent, const QString& xml);
+
+            /**
+             * Create and return a new QWidget instance.
+             *
+             * \param parent the new QWidget is a child of parent.
+             * \param filename the full filename of the UI file which is readed
+             * and it's UI XML content is used to construct the new widget.
+             */
+            QWidget* createWidgetFromUIFile(QWidget* parent, const QString& filename);
+
+        private:
+            /// \internal d-pointer class.
+            class Private;
+            /// \internal d-pointer instance.
+            Private* const d;
+    };
 }
 
 #endif

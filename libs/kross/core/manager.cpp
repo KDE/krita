@@ -25,7 +25,6 @@
 #include <QObject>
 #include <QFile>
 #include <QRegExp>
-#include <QApplication>
 
 #include <klibloader.h>
 #include <klocale.h>
@@ -50,8 +49,14 @@ namespace Kross {
             /// List of \a InterpreterInfo instances.
             QMap<QString, InterpreterInfo*> interpreterinfos;
 
+            /// The \a FormModule that provides UI functionality.
+            FormModule* formmodule;
+
             /// Loaded modules.
             //QMap<QString, Module::Ptr> modules;
+
+            ManagerPrivate() : formmodule(0) {}
+            ~ManagerPrivate() {}
     };
 
 }
@@ -203,41 +208,11 @@ QObject* Manager::action(const QString& name)
     return object;
 }
 
-QWidget* Manager::activeModalWidget()
+QObject* Manager::forms()
 {
-    return QApplication::activeModalWidget();
-}
-
-QWidget* Manager::activeWindow()
-{
-    return QApplication::activeWindow();
-}
-
-QWidget* Manager::createDialog(const QString& caption)
-{
-/*
-    KDialog* dialog = new KDialog();
-    dialog->setCaption(caption);
-    dialog->setModal(true);
-    //dialog->setButtons( KDialog::Ok );
-
-    Form* form = new Form(dialog);
-    dialog->setMainWidget(form);
-
-    return form;
-*/
-/*
-    KDialog* dialog = new KDialog();
-    dialog->setCaption(caption);
-    FormDialog* formdialog = new FormDialog(dialog);
-    return formdialog;
-*/
-    return new Dialog(caption);
-}
-
-QWidget* Manager::createForm(QWidget* parent)
-{
-    return new Form(parent);
+    if(! d->formmodule)
+        d->formmodule = new FormModule(this);
+    return d->formmodule;
 }
 
 #if 0

@@ -197,16 +197,14 @@ int PythonExtension::setattr(const char* n, const Py::Object& value)
                 Py::AttributeError( QString("Setting attribute \"%1\" failed.").arg(n).toLatin1().constData() );
                 return -1; // indicate error
             }
-
             #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
                 krossdebug( QString("PythonExtension::setattr name='%1' value='%2'").arg(n).arg(v.toString()) );
             #endif
-            return idx; // indicate success
+            return 0; // indicate success
         }
     }
 
     // finally redirect the unhandled attribute-request...
-    //return Py::PythonExtension<PythonExtension>::setattr_methods(n, value);
     return Py::PythonExtension<PythonExtension>::setattr(n, value);
 }
 

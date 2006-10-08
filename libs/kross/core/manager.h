@@ -176,29 +176,9 @@ namespace Kross {
             QObject* action(const QString& name);
 
             /**
-             * \return the active modal widget. Modal widgets are special top-level
-             * widgets which are subclasses of QDialog and are modal.
+             * \return the \a Forms module that provides UI functionality.
              */
-            QWidget* activeModalWidget();
-
-            /**
-             * \return the application top-level window that has the keyboard input
-             * focus, or 0 if no application window has the focus.
-             */
-            QWidget* activeWindow();
-
-            /**
-             * Create and return a new \a Dialog instance.
-             *
-             * \param caption The displayed caption of the dialog.
-             */
-            QWidget* createDialog(const QString& caption);
-
-            /**
-             * Create and return a new \a Form instance which is child of the
-             * \p parent widget.
-             */
-            QWidget* createForm(QWidget* parent);
+            QObject* forms();
 
         private:
             /// Private d-pointer class.

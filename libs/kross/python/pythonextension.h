@@ -79,7 +79,7 @@ namespace Kross {
              *
              * \param name The name of the attribute.
              * \param value The value to set the attribute.
-             * \return -1 on failure else something != -1 is returned.
+             * \return -1 on failure and 0 on success.
              */
             virtual int setattr(const char* name, const Py::Object& value);
 

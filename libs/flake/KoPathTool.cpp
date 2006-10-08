@@ -24,7 +24,6 @@
 #include "KoShapeManager.h"
 #include "KoPointerEvent.h"
 #include "KoPathCommand.h"
-#include "KoParameterShape.h"
 #include "KoInsets.h"
 #include "KoShapeBorderModel.h"
 #include "KoPathPointMoveStrategy.h"
@@ -65,16 +64,7 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
         {
             painter.save();
             painter.setMatrix( shape->transformationMatrix( &converter ) * painter.matrix() );
-            KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
-            if ( parameterShape )
-            {
-                painter.setBrush( Qt::red ); //TODO make configureable
-                parameterShape->paintHandles( painter, converter );
-            }
-            else
-            {
-                pathShape->paintPoints( painter, converter );
-            }
+            pathShape->paintPoints( painter, converter );
             painter.restore();
         }
     }

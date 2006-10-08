@@ -10,7 +10,7 @@ add_subdirectory( tool_selectsimilar )
 add_subdirectory( tool_star )
 add_subdirectory( tool_transform )
 add_subdirectory( tool_perspectivegrid )
-
+add_subdirectory( tool_perspectivetransform )
 
 
 ########### install files ###############

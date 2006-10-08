@@ -15,22 +15,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TOOL_PERSPECTIVE_GRID_H_
-#define TOOL_PERSPECTIVE_GRID_H_
+#ifndef TOOL_PERSPECTIVE_TRANSFORM_H_
+#define TOOL_PERSPECTIVE_TRANSFORM_H_
 
 #include <kparts/plugin.h>
 
 class KisView;
 
 /**
- * A module that provides a tool for editing the perspective grid.
+ * A module that provides a tool for doinge perspective transformation.
  */
-class ToolPerspectiveGrid : public KParts::Plugin
+class ToolPerspectiveTransform : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ToolPerspectiveGrid(QObject *parent, const QStringList &);
-    virtual ~ToolPerspectiveGrid();
+    ToolPerspectiveTransform(QObject *parent, const QStringList &);
+    virtual ~ToolPerspectiveTransform();
 
 private:
 
@@ -38,4 +38,4 @@ private:
 
 };
 
-#endif // TOOL_PERSPECTIVE_GRID_H_
+#endif // TOOL_PERSPECTIVE_TRANSFORM_H_

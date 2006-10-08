@@ -1,5 +1,5 @@
 /*
- * tool_perspectivegrid.cc -- Part of Krita
+ * tool_perspectivetransform.cc -- Part of Krita
  *
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qpoint.h>
+#include <QPoint>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -33,29 +33,30 @@
 #include <kis_types.h>
 #include <kis_tool_registry.h>
 
-#include "tool_perspectivegrid.h"
-#include "kis_tool_perspectivegrid.h"
+#include "tool_perspectivetransform.h"
+#include "kis_tool_perspectivetransform.h"
 
 
-typedef KGenericFactory<ToolPerspectiveGrid> ToolPerspectiveGridFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatoolperspectivegrid, ToolPerspectiveGridFactory( "krita" ) )
+typedef KGenericFactory<ToolPerspectiveTransform> ToolPerspectiveTransformFactory;
+K_EXPORT_COMPONENT_FACTORY( kritatoolperspectivetransform, ToolPerspectiveTransformFactory( "krita" ) )
 
 
-ToolPerspectiveGrid::ToolPerspectiveGrid(QObject *parent, const QStringList &)
+ToolPerspectiveTransform::ToolPerspectiveTransform(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(ToolPerspectiveGridFactory::instance());
+    setInstance(ToolPerspectiveTransformFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )
     {
+        kdDebug() << " add perspective transform tool to the registry" << endl;
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
-        r->add(KisToolFactorySP(new KisToolPerspectiveGridFactory()));
+        r->add(new KisToolPerspectiveTransformFactory());
     }
 
 }
 
-ToolPerspectiveGrid::~ToolPerspectiveGrid()
+ToolPerspectiveTransform::~ToolPerspectiveTransform()
 {
 }
 
-#include "tool_perspectivegrid.moc"
+#include "tool_perspectivetransform.moc"

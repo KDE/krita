@@ -211,6 +211,12 @@ public:
     void setParent( KoPathShape* parent );
 
     /**
+     * @brief Get the path shape the point belongs to
+     * @return the path shape the point belongs to
+     */
+    KoPathShape * parent() { return m_shape; }
+
+    /**
      * @brief Reverses the path point.
      *
      * The control points are swapped and the point properties are adjusted.

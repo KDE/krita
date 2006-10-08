@@ -60,10 +60,7 @@ void KoPathPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt:
 
 void KoPathPointMoveStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) 
 { 
-    if( m_move.isNull() )
-    {
-        m_tool->selectPoints( m_tool->handleRect( m_lastPosition ), !( modifiers & Qt::ControlModifier ) );
-    }
+    Q_UNUSED( modifiers );
 }
 
 KCommand* KoPathPointMoveStrategy::createCommand()

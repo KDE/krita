@@ -56,8 +56,8 @@ KisFilterConfiguration* KisUnsharpFilter::configuration(QWidget* w)
 
 void KisUnsharpFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-//     Q_ASSERT(src != 0);
-//     Q_ASSERT(dst != 0);
+    Q_ASSERT(src != 0);
+    Q_ASSERT(dst != 0);
     
     setProgressTotalSteps(rect.width() * rect.height());
 

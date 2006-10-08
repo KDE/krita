@@ -53,8 +53,8 @@ KisFilterConfiguration* KisFilterColorToAlpha::configuration(QWidget* w)
 
 void KisFilterColorToAlpha::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-//     Q_ASSERT(src != 0);
-//     Q_ASSERT(dst != 0);
+    Q_ASSERT(src != 0);
+    Q_ASSERT(dst != 0);
     
     if(config == 0) config = new KisFilterConfiguration("colortoalpha", 1);
     

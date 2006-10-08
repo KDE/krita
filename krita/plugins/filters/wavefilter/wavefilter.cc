@@ -128,8 +128,8 @@ KisFilterConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent
 
 void KisFilterWave::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-//     Q_ASSERT(src.data() != 0);
-//     Q_ASSERT(dst.data() != 0);
+    Q_ASSERT(src.data() != 0);
+    Q_ASSERT(dst.data() != 0);
 
     setProgressTotalSteps(rect.width() * rect.height());
 

@@ -95,8 +95,8 @@ KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidg
 
 void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rawrect)
 {
-//     Q_ASSERT(src != 0);
-//     Q_ASSERT(dst != 0);
+    Q_ASSERT(src != 0);
+    Q_ASSERT(dst != 0);
 
     QRect layerrect = src->exactBounds();
 

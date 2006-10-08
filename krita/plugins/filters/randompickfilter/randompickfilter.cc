@@ -89,8 +89,8 @@ KisFilterConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* 
 
 void KisFilterRandomPick::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-/*    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);*/
+    Q_ASSERT(src != 0);
+    Q_ASSERT(dst != 0);
     
     setProgressTotalSteps(rect.height() * rect.width());
 

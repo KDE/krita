@@ -76,8 +76,8 @@ KisFilterConfiguration* KisBlurFilter::configuration(QWidget* w)
 
 void KisBlurFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-//     Q_ASSERT(src != 0);
-//     Q_ASSERT(dst != 0);
+    Q_ASSERT(src != 0);
+    Q_ASSERT(dst != 0);
     
     setProgressTotalSteps(rect.width() * rect.height());
 
@@ -96,7 +96,7 @@ void KisBlurFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     int vFade = (halfHeight * strength) / 100;
     
     KisAutobrushShape* kas;
-    kdDebug() << width << " " << height << " " << hFade << " " << vFade << endl;
+    kDebug() << width << " " << height << " " << hFade << " " << vFade << endl;
     switch(shape)
     {
         case 1:

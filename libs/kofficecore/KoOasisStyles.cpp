@@ -295,13 +295,13 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
             format += e.text();
         } else if ( localName == "suffix" ) {
             suffix = e.text();
-            kDebug()<<" suffix :"<<suffix<<endl;
+            kDebug(30003)<<" suffix :"<<suffix<<endl;
         } else if ( localName == "prefix" ) {
             prefix = e.text();
-            kDebug()<<" prefix :"<<prefix<<endl;
+            kDebug(30003)<<" prefix :"<<prefix<<endl;
         } else if ( localName == "currency-symbol" ) {
             dataStyle.currencySymbol = e.text();
-            kDebug()<<" currency-symbol: "<<dataStyle.currencySymbol<<endl;
+            kDebug(30003)<<" currency-symbol: "<<dataStyle.currencySymbol<<endl;
             format += e.text();
             //TODO
             // number:language="de" number:country="DE">€</number:currency-symbol>
@@ -474,7 +474,7 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
     dataStyle.prefix=prefix;
     dataStyle.suffix=suffix;
     dataStyle.precision = precision;
-    kDebug()<<" finish insert format :"<<format<<" prefix :"<<prefix<<" suffix :"<<suffix<<endl;
+    kDebug(30003)<<" finish insert format :"<<format<<" prefix :"<<prefix<<" suffix :"<<suffix<<endl;
     m_dataFormats.insert( styleName, dataStyle );
 }
 
@@ -1473,29 +1473,29 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
 
             }
             else
-                kDebug()<<" transparency is not defined into kpresenter :"<<transparency<<endl;
+                kDebug(30003)<<" transparency is not defined into kpresenter :"<<transparency<<endl;
         }
     }
     else if ( fill == "hatch" )
     {
         QString style = styleStack.attributeNS( KoXmlNS::draw, "fill-hatch-name" );
-        kDebug()<<" hatch style is  : "<<style<<endl;
+        kDebug(30003)<<" hatch style is  : "<<style<<endl;
 
         //type not defined by default
         //try to use style.
         KoXmlElement* draw = oasisStyles.drawStyles()[style];
         if ( draw)
         {
-            kDebug()<<"We have a style\n";
+            kDebug(30003)<<"We have a style\n";
             int angle = 0;
             if( draw->hasAttributeNS( KoXmlNS::draw, "rotation" ))
             {
                 angle = (draw->attributeNS( KoXmlNS::draw, "rotation", QString::null ).toInt())/10;
-                kDebug()<<"angle :"<<angle<<endl;
+                kDebug(30003)<<"angle :"<<angle<<endl;
             }
             if(draw->hasAttributeNS( KoXmlNS::draw, "color" ) )
             {
-                //kDebug()<<" draw:color :"<<draw->attributeNS( KoXmlNS::draw, "color", QString::null )<<endl;
+                //kDebug(30003)<<" draw:color :"<<draw->attributeNS( KoXmlNS::draw, "color", QString::null )<<endl;
                 tmpBrush.setColor(draw->attributeNS( KoXmlNS::draw, "color", QString::null ) );
             }
             if( draw->hasAttributeNS( KoXmlNS::draw, "distance" ))
@@ -1532,7 +1532,7 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
                         break;
                     default:
                         //todo fixme when we will have a kopaint
-                        kDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                        kDebug(30003)<<" draw:rotation 'angle' : "<<angle<<endl;
                         break;
                     }
                 }
@@ -1554,14 +1554,14 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
                         break;
                     default:
                         //todo fixme when we will have a kopaint
-                        kDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                        kDebug(30003)<<" draw:rotation 'angle' : "<<angle<<endl;
                         break;
                     }
 
                 }
                 else if( styleHash == "triple")
                 {
-                    kDebug()<<" it is not implemented :( \n";
+                    kDebug(30003)<<" it is not implemented :( \n";
                 }
             }
         }

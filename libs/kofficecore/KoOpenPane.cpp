@@ -300,7 +300,7 @@ void KoOpenPane::selectionChanged(Q3ListViewItem* item)
 {
   KoSectionListItem* section = dynamic_cast<KoSectionListItem*>(item);
 
-  if(!item)
+  if(!section)
     return;
 
   d->m_widgetStack->raiseWidget(section->widgetIndex());

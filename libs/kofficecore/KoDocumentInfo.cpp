@@ -272,7 +272,7 @@ bool KoDocumentInfo::saveOasisAboutInfo( KoXmlWriter &xmlWriter )
             {
               if ( tag == "title" && aboutInfo( tag ).isEmpty() )
                 {
-                  KoDocument* doc = dynamic_cast< KoDocument* >( parent() );
+                  KoDocument* doc = static_cast< KoDocument* >( parent() );
                   setAboutInfo( "title", doc->url().fileName() );
                 }
                 QByteArray elementName( QString( "dc:" + tag ).toLatin1() );

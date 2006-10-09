@@ -78,7 +78,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="Q3WidgetStack" name="m_widgetStack" >
+     <widget class="QStackedWidget" name="m_widgetStack" >
       <widget class="QWidget" name="WStackPage" >
        <property name="geometry" >
         <rect>
@@ -103,13 +103,6 @@
    <extends>Q3ListView</extends>
    <header>k3listview.h</header>
    <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
-   <class>Q3WidgetStack</class>
-   <extends>Q3WidgetStack</extends>
-   <header>q3widgetstack.h</header>
-   <container>1</container>
    <pixmap></pixmap>
   </customwidget>
   <customwidget>

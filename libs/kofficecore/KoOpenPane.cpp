@@ -303,7 +303,7 @@ void KoOpenPane::selectionChanged(Q3ListViewItem* item)
   if(!section)
     return;
 
-  d->m_widgetStack->raiseWidget(section->widgetIndex());
+  d->m_widgetStack->setCurrentIndex(section->widgetIndex());
 }
 
 void KoOpenPane::saveSplitterSizes(KoDetailsPane* sender, const QList<int>& sizes)

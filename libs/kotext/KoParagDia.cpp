@@ -831,7 +831,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWi
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
-    sSpacingStack = new Q3WidgetStack( spacingFrame );
+    sSpacingStack = new QStackedWidget( spacingFrame );
 
     eSpacing = new KoUnitDoubleSpinBox( spacingFrame, 0, 9999, CM_TO_POINT(1),
 					0.0, m_unit );
@@ -1047,11 +1047,11 @@ void KoIndentSpacingWidget::updateLineSpacing( KoParagLayout::SpacingType _type 
 
     if ( _type == KoParagLayout::LS_MULTIPLE )
     {
-        sSpacingStack->raiseWidget( eSpacingPercent );
+        sSpacingStack->setCurrentWidget( eSpacingPercent );
     }
     else
     {
-        sSpacingStack->raiseWidget( eSpacing );
+        sSpacingStack->setCurrentWidget( eSpacing );
     }
     eSpacing->setEnabled( needsValue );
     if ( needsValue )
@@ -1756,7 +1756,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
 
     eWidth = new KoUnitDoubleSpinBox( gTabLeader );
     eWidth->setUnit( m_unit );
-    eWidth->setMinValue(0.0);
+    eWidth->setMinimum(0.0);
     TextLabel3->setBuddy( eWidth );
     fillingGrid->addWidget( eWidth, 1, 1 );
 

@@ -38,7 +38,7 @@
 #include <knuminput.h>
 #include <q3groupbox.h>
 #include <koffice_export.h>
-
+#include <QStackedWidget>
 class QListWidget;
 class KoTextZoomHandler;
 class KButtonBox;
@@ -59,7 +59,6 @@ class Q3ListBox;
 class QPushButton;
 class QRadioButton;
 class QWidget;
-class Q3WidgetStack;
 class KIntNumInput;
 class KDoubleNumInput;
 class KComboBox;
@@ -138,7 +137,7 @@ private slots:
 private:
     void updateLineSpacing( KoParagLayout::SpacingType _type );
 
-    Q3WidgetStack *sSpacingStack;
+    QStackedWidget *sSpacingStack;
     KIntNumInput *eSpacingPercent;
     KoUnitDoubleSpinBox *eBefore, *eAfter, *eSpacing;
     KoUnitDoubleSpinBox *eLeft, *eRight, *eFirstLine;

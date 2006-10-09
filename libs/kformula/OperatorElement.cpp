@@ -68,7 +68,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_form = PostfixForm;
         }
         else {
-            kdWarning( DEBUGID ) << "Invalid value for attribute `form': " << formStr << endl;
+            kWarning( DEBUGID ) << "Invalid value for attribute `form': " << formStr << endl;
             m_customForm = false;
         }
     }
@@ -82,7 +82,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_fence = false;
         }
         else {
-            kdWarning( DEBUGID ) << "Invalid value for attribute `fence': " << fenceStr << endl;
+            kWarning( DEBUGID ) << "Invalid value for attribute `fence': " << fenceStr << endl;
             m_customFence = false;
         }
     }
@@ -96,7 +96,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_separator = false;
         }
         else {
-            kdWarning( DEBUGID ) << "Invalid value for attribute `separator': " << separatorStr << endl;
+            kWarning( DEBUGID ) << "Invalid value for attribute `separator': " << separatorStr << endl;
             m_customSeparator = false;
         }
     }
@@ -126,7 +126,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_stretchy = false;
         }
         else {
-            kdWarning( DEBUGID ) << "Invalid value for attribute `stretchy': " << stretchyStr << endl;
+            kWarning( DEBUGID ) << "Invalid value for attribute `stretchy': " << stretchyStr << endl;
             m_customStretchy = false;
         }
     }
@@ -140,7 +140,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_symmetric = false;
         }
         else {
-            kdWarning( DEBUGID ) << "Invalid value for attribute `symmetric': " << symmetricStr << endl;
+            kWarning( DEBUGID ) << "Invalid value for attribute `symmetric': " << symmetricStr << endl;
             m_customSymmetric = false;
         }
     }
@@ -175,7 +175,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_largeOp = false;
         }
         else {
-            kdWarning( DEBUGID ) << "Invalid value for attribute `largeop': " << largeopStr << endl;
+            kWarning( DEBUGID ) << "Invalid value for attribute `largeop': " << largeopStr << endl;
             m_customLargeOp = false;
         }
     }
@@ -189,7 +189,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_movableLimits = false;
         }
         else {
-            kdWarning( DEBUGID ) << "Invalid value for attribute `movablelimits': " << movablelimitsStr << endl;
+            kWarning( DEBUGID ) << "Invalid value for attribute `movablelimits': " << movablelimitsStr << endl;
             m_customMovableLimits = false;
         }
     }
@@ -203,7 +203,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_accent = false;
         }
         else {
-            kdWarning( DEBUGID ) << "Invalid value for attribute `accent': " << accentStr << endl;
+            kWarning( DEBUGID ) << "Invalid value for attribute `accent': " << accentStr << endl;
             m_customAccent = false;
         }
     }

@@ -42,7 +42,7 @@ public:
     KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source);
     ~KisAccumulatingHistogramProducer();
     /// Does _nothing_, use addRegionsToBinAsync
-    virtual void addRegionToBin(quint8 *, quint8*, quint32, KoColorSpace *) {}
+    virtual void addRegionToBin(const quint8 *, const quint8*, quint32, KoColorSpace *) {}
     virtual void addRegionsToBinAsync();
     virtual QString positionToString(double pos) const
         { return m_source->at(0)->positionToString(pos); }

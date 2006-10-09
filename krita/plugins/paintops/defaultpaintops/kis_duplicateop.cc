@@ -238,7 +238,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     {
         Q_UINT16 dataDevice[4];
         Q_UINT16 dataSrcDev[4];
-        double matrix [ 3 * sw * sh ];
+        double* matrix = new double[ 3 * sw * sh ];
         // First divide
         KoColorSpace* deviceCs = device->colorSpace();
         KisHLineIteratorPixel deviceIt = device->createHLineIterator(x, y, sw, false );
@@ -266,12 +266,13 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         {
             int iter = 0;
             double err;
-            double solution [ 3 * sw * sh ];
+            double* solution = new double [ 3 * sw * sh ];
             do {
                 err = minimizeEnergy(matrix, solution,sw,sh);
                 memcpy (matrix, solution, sw * sh * 3 * sizeof(double));
                 iter++;
             } while( err < 0.00001 && iter < 100);
+            delete solution;
         }
         
         // Finaly multiply
@@ -297,6 +298,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
             deviceIt.nextRow();
             srcDevIt.nextRow();
         }
+        delete matrix;
     }
     
     

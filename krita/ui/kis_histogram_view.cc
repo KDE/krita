@@ -27,7 +27,7 @@
 #include <qscrollbar.h>
 //Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3Frame>
+#include <QFrame>
 
 #include <kdebug.h>
 
@@ -49,7 +49,7 @@ KisHistogramView::KisHistogramView(QWidget *parent, const char *name, Qt::WFlags
     // This is needed until we can computationally scale it well. Until then, this is needed
     // And when we have it, it won't hurt to have it around
     setScaledContents(true);
-    setFrameShape(Q3Frame::Box); // Draw a box around ourselves
+    setFrameShape(QFrame::Box); // Draw a box around ourselves
 }
 
 KisHistogramView::~KisHistogramView()

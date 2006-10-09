@@ -20,8 +20,8 @@
 #include <QList>
 
 #include "KoColorSpace.h"
-#include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
+#include "kis_iterators_pixel.h"
 #include "kis_boundary.h"
 
 KisBoundary::KisBoundary(KisPaintDevice* dev) {
@@ -41,8 +41,8 @@ void KisBoundary::generateBoundary(int w, int h) {
 
     // Horizontal
     for (int currentY = - 1; currentY < h; currentY++) {
-        KisHLineIteratorPixel topIt = m_device->createHLineIterator(0, currentY, w, false);
-        KisHLineIteratorPixel botIt = m_device->createHLineIterator(0, currentY + 1, w, false);
+        KisHLineConstIteratorPixel topIt = m_device->createHLineIterator(0, currentY, w);
+        KisHLineConstIteratorPixel botIt = m_device->createHLineIterator(0, currentY + 1, w);
         bool darkTop;
         bool darkBot;
 
@@ -62,8 +62,8 @@ void KisBoundary::generateBoundary(int w, int h) {
 
     // Vertical
     for (int currentX = - 1; currentX < w; currentX++) {
-        KisVLineIteratorPixel leftIt = m_device->createVLineIterator(currentX, 0, h, false);
-        KisVLineIteratorPixel rightIt = m_device->createVLineIterator(currentX + 1, 0, h, false);
+        KisVLineConstIteratorPixel leftIt = m_device->createVLineIterator(currentX, 0, h);
+        KisVLineConstIteratorPixel rightIt = m_device->createVLineIterator(currentX + 1, 0, h);
         bool darkLeft;
         bool darkRight;
 

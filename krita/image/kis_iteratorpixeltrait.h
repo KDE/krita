@@ -21,18 +21,20 @@
 #define KIS_ITERATORPIXELTRAIT_H_
 
 #include "kis_iterator.h"
-#include <kis_paint_device.h>
+#include "kis_global.h"
+// #include <kis_paint_device.h>
+
+class KisPaintDevice;
 
 /**
  * This class provided access to information about the selection through the iterators.
  */
-template< typename _iTp>
+template< typename _iTp, typename TSelect>
 class KisIteratorPixelTrait
 {
 public:
-    KisIteratorPixelTrait(KisPaintDevice * ndevice, _iTp *underlyingIterator)
-    :    m_device(ndevice),
-        m_underlyingIterator(underlyingIterator)
+    KisIteratorPixelTrait(_iTp *underlyingIterator)
+    : m_underlyingIterator(underlyingIterator)
     {
         m_selectionIterator = NULL;
     };
@@ -46,7 +48,7 @@ public:
     {
         if (this == &rhs)
             return;
-        m_device = rhs.m_device;
+//         m_device = rhs.m_device;
         m_underlyingIterator = rhs.m_underlyingIterator;
 
         if (rhs.m_selectionIterator) {
@@ -60,7 +62,7 @@ public:
     {
         if (this == &rhs)
             return *this;
-        m_device = rhs.m_device;
+//         m_device = rhs.m_device;
         m_underlyingIterator = rhs.m_underlyingIterator;
 
         delete m_selectionIterator;
@@ -110,7 +112,7 @@ public:
      * to have the same number of consecutive pixels that the iterator has
      * at a given point. It return a 0 if there is no selection.
      */
-    inline quint8 * selectionMask() const
+    inline TSelect selectionMask() const
         {
             if ( m_selectionIterator )
                 return m_selectionIterator->rawData();
@@ -118,10 +120,8 @@ public:
                 return 0;
         }
 
-
+        _iTp* selectionIterator() const { return m_selectionIterator; }
 protected:
-    KisPaintDevice *m_device;
-
     inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) ++(*m_selectionIterator);};
 
     void setSelectionIterator(_iTp *si){m_selectionIterator = si;};

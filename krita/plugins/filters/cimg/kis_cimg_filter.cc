@@ -181,9 +181,9 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     {
         srcRGB16 = new KisPaintDevice(*src.data());
         srcRGB16->convertTo(rgb16CS);
-        KisRectIteratorPixel it = srcRGB16->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+        KisRectConstIteratorPixel it = srcRGB16->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
         while (!it.isDone()) {
-            Q_UINT16* data = reinterpret_cast<Q_UINT16*>(it.rawData());
+            const Q_UINT16* data = reinterpret_cast<const Q_UINT16*>(it.rawData());
     
             Q_INT32 x = it.x() - rect.x();
             Q_INT32 y = it.y() - rect.y();
@@ -196,7 +196,7 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
         }
     } else {
         kdDebug() << "The RGB16 colorspace is not available, will work in 8bit." << endl;
-        KisRectIteratorPixel it = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+        KisRectConstIteratorPixel it = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
         while (!it.isDone()) {
     
             QColor color;
@@ -234,7 +234,7 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
         if(rgb16CS)
         {
             {
-                KisRectIteratorPixel it = srcRGB16->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
+                KisRectIteratorPixel it = srcRGB16->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
                 while (!it.isDone()) {
                     Q_INT32 x = it.x() - rect.x();
                     Q_INT32 y = it.y() - rect.y();
@@ -252,7 +252,7 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
             KisPainter p(dst);
             p.bitBlt(rect.x(), rect.y(), COMPOSITE_OVER, srcRGB16, rect.x(), rect.y(), rect.width(), rect.height() );
         } else {
-            KisRectIteratorPixel it = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
+            KisRectIteratorPixel it = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
 
             while (!it.isDone()) {
     

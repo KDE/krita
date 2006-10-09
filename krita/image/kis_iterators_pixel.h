@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004-2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,112 +22,82 @@
 #include "kis_iterator.h"
 #include "kis_iteratorpixeltrait.h"
 
-/**
- * This iterators will iterate over an horizontal line of the image, you can access to the data of the image using the
- * rawData function.
- * The function isSelected() and selectedness() gives you access to the selection of the current pixel.
- */
-class KisHLineIteratorPixel : public KisHLineIterator, public KisIteratorPixelTrait <KisHLineIterator>
+template<class T, typename TSelect>
+class KisLineIteratorPixelBase : public T, public KisIteratorPixelTrait<T, TSelect>
 {
-
-public:
-
-    KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
-                           qint32 x , qint32 y , qint32 w, qint32 offsetx, qint32 offsety,
-                           bool writable);
-
-    KisHLineIteratorPixel(const KisHLineIteratorPixel& rhs) : KisHLineIterator(rhs), KisIteratorPixelTrait<KisHLineIterator>(rhs)
-        { m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
-
-    KisHLineIteratorPixel& operator=(const KisHLineIteratorPixel& rhs)
+    template<class T2, typename TSelect2> friend class KisLineIteratorPixelBase;
+    public:
+        KisLineIteratorPixelBase( KisDataManager *dm, KisDataManager *sel_dm, qint32 x, qint32 y, qint32 s, qint32 offsetx, qint32 offsety) :
+            T(dm, x - offsetx, y - offsety, s),
+        KisIteratorPixelTrait <T, TSelect> ( this ),
+            m_offsetx(offsetx), m_offsety(offsety)
         {
-          KisHLineIterator::operator=(rhs);
-          KisIteratorPixelTrait<KisHLineIterator>::operator=(rhs);
-          m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
-          return *this;
+            if(sel_dm) {
+                T * i = new T(sel_dm, x - offsetx, y - offsety, s);
+                Q_CHECK_PTR(i);
+                KisIteratorPixelTrait <T, TSelect>::setSelectionIterator(i);
+            }
         }
+        template<class T2, typename TSelect2>
+        KisLineIteratorPixelBase(const KisLineIteratorPixelBase<T2,TSelect2>& rhs) :
+                T(rhs), KisIteratorPixelTrait <T, TSelect> (this)
+        {
+            if(rhs.selectionIterator())
+            {
+                KisIteratorPixelTrait <T, TSelect>::setSelectionIterator(new T(*rhs.selectionIterator()));
+            }
+            m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
+        }
+        /// increment the position of the iterator
+        inline KisLineIteratorPixelBase<T, TSelect> & operator ++() { T::operator++(); KisIteratorPixelTrait<T, TSelect>::advance(1); return *this;}
 
-    inline KisHLineIteratorPixel & operator ++() { KisHLineIterator::operator++(); advance(1); return *this;}
-
-    /// Advances a number of pixels until it reaches the end of the line
-    KisHLineIteratorPixel & operator+=(int n) { KisHLineIterator::operator+=(n); advance(n); return *this; };
-
-    qint32 x() const { return KisHLineIterator::x() + m_offsetx; }
-
-    qint32 y() const { return KisHLineIterator::y() + m_offsety; }
-
-protected:
-
-    qint32 m_offsetx, m_offsety;
+        /// Advances a number of pixels until it reaches the end of the line
+        KisLineIteratorPixelBase<T, TSelect> & operator+=(int n) { T::operator+=(n); KisIteratorPixelTrait<T, TSelect>::advance(n); return *this; };
+        /// @return the x coordinate in the image referential
+        qint32 x() const { return T::x() + m_offsetx; }
+        /// @return the y coordinate in the image referential
+        qint32 y() const { return T::y() + m_offsety; }
+    private:
+        qint32 m_offsetx, m_offsety;
 };
 
-/**
- * This iterators will iterate over a vertical line of the image, you can access to the data of the image using the
- * rawData function.
- * The function isSelected() and selectedness() gives you access to the selection of the current pixel.
- */
-class KisVLineIteratorPixel : public KisVLineIterator, public KisIteratorPixelTrait <KisVLineIterator>
+template<class T, typename TSelect>
+class KisRectIteratorPixelBase : public T, public KisIteratorPixelTrait<T, TSelect>
 {
-public:
-    KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
-                           qint32 xpos , qint32 ypos , qint32 height, qint32 offsetx, qint32 offsety,
-                           bool writable);
-
-    KisVLineIteratorPixel(const KisVLineIteratorPixel& rhs) : KisVLineIterator(rhs), KisIteratorPixelTrait<KisVLineIterator>(rhs)
-        { m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
-
-    KisVLineIteratorPixel& operator=(const KisVLineIteratorPixel& rhs)
+    template<class T2, typename TSelect2> friend class KisRectIteratorPixelBase;
+    public:
+        KisRectIteratorPixelBase( KisDataManager *dm, KisDataManager *sel_dm, qint32 x, qint32 y, qint32 w, qint32 h, qint32 offsetx, qint32 offsety) :
+            T(dm, x - offsetx, y - offsety, w, h),
+        KisIteratorPixelTrait <T, TSelect> ( this ),
+        m_offsetx(offsetx), m_offsety(offsety)
         {
-          KisVLineIterator::operator=(rhs);
-          KisIteratorPixelTrait<KisVLineIterator>::operator=(rhs);
-          m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
-          return *this; }
-
-    inline KisVLineIteratorPixel & operator ++() { KisVLineIterator::operator++(); advance(1); return *this;}
-
-    qint32 x() const { return KisVLineIterator::x() + m_offsetx; }
-
-    qint32 y() const { return KisVLineIterator::y() + m_offsety; }
-
-protected:
-
-    qint32 m_offsetx, m_offsety;
-};
-
-/**
- * This iterators will iterate over a rectangle area of the image, you can access to the data of the image using
- * the rawData function.
- * You must be carefull when using this iterator, while it is faster than the lines iterators, you can't predict the path
- * that will be followed by the iterator. Which means for instance that you should avoid it if you need to have a synchronized
- * iteration over two different paint device.
- * The function isSelected() and selectedness() gives you access to the selection of the current pixel.
- */
-class KisRectIteratorPixel : public KisRectIterator, public KisIteratorPixelTrait <KisRectIterator>
-{
-public:
-    KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
-                          qint32 x, qint32 y, qint32 w, qint32 h, qint32 offsetx, qint32 offsety,
-                          bool writable);
-
-    KisRectIteratorPixel(const KisRectIteratorPixel& rhs) : KisRectIterator(rhs), KisIteratorPixelTrait<KisRectIterator>(rhs)
-        { m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
-
-    KisRectIteratorPixel& operator=(const KisRectIteratorPixel& rhs)
+            if(sel_dm) {
+                T * i = new T(sel_dm, x - offsetx, y - offsety, w, h);
+                Q_CHECK_PTR(i);
+                KisIteratorPixelTrait <T, TSelect>::setSelectionIterator(i);
+            }
+        }
+        template<class T2, typename TSelect2>
+        KisRectIteratorPixelBase(const KisRectIteratorPixelBase<T2, TSelect2>& rhs) :
+                T(rhs), KisIteratorPixelTrait <T, TSelect> (this)
         {
-          KisRectIterator::operator=(rhs);
-          KisIteratorPixelTrait<KisRectIterator>::operator=(rhs);
-          m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
-          return *this; }
+            if(rhs.selectionIterator())
+            {
+                KisIteratorPixelTrait <T, TSelect>::setSelectionIterator(new T(*rhs.selectionIterator()));
+            }
+            m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
+        }
+        /// increment the position of the iterator
+        inline KisRectIteratorPixelBase<T, TSelect> & operator ++() { T::operator++(); KisIteratorPixelTrait<T, TSelect>::advance(1); return *this;}
 
-    inline KisRectIteratorPixel & operator ++() { KisRectIterator::operator++(); advance(1); return *this;}
-
-    qint32 x() const { return KisRectIterator::x() + m_offsetx; }
-
-    qint32 y() const { return KisRectIterator::y() + m_offsety; }
-
-protected:
-
-    qint32 m_offsetx, m_offsety;
+        /// Advances a number of pixels until it reaches the end of the line
+        KisRectIteratorPixelBase<T, TSelect> & operator+=(int n) { T::operator+=(n); KisIteratorPixelTrait<T, TSelect>::advance(n); return *this; };
+        /// @return the x coordinate in the image referential
+        qint32 x() const { return T::x() + m_offsetx; }
+        /// @return the y coordinate in the image referential
+        qint32 y() const { return T::y() + m_offsety; }
+    private:
+        qint32 m_offsetx, m_offsety;
 };
 
 #endif

@@ -249,7 +249,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     KoColorSpace * devColorSpace = sourceDevice->colorSpace();
 
     quint8* source = new quint8[sourceDevice->pixelSize()];
-    KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);
+    KisHLineConstIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1);
 
     memcpy(source, pixelIt.rawData(), sourceDevice->pixelSize());
 
@@ -283,7 +283,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 
         /* We need an iterator that is valid in the range (0,y) - (width,y). Therefore,
         it is needed to start the iterator at the first position, and then skip to (x,y). */
-        pixelIt = sourceDevice->createHLineIterator(0, y, m_width, false);
+        pixelIt = sourceDevice->createHLineIterator(0, y, m_width);
         pixelIt += x;
         quint8 diff = devColorSpace->difference(source, pixelIt.rawData());
 
@@ -294,7 +294,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         }
 
         // Here as well: start the iterator at (0,y)
-        KisHLineIteratorPixel selIt = selection->createHLineIterator(0, y, m_width, true);
+        KisHLineIteratorPixel selIt = selection->createHLineIterator(0, y, m_width);
         selIt += x;
         if (m_fuzzy)
             colorSpace->fromQColor(Qt::white, MAX_SELECTED - diff, selIt.rawData());
@@ -354,8 +354,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
             continue;
 
         // and go to the right
-        pixelIt = sourceDevice->createHLineIterator(x, y, m_width, false);
-        selIt = selection->createHLineIterator(x, y, m_width, true);
+        pixelIt = sourceDevice->createHLineIterator(x, y, m_width);
+        selIt = selection->createHLineIterator(x, y, m_width);
 
         stop = false;
         while(!stop && x < m_width && (map[m_width * y + x] != Checked) ) {

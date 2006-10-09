@@ -89,11 +89,14 @@ void KisUnsharpFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
         cancel();
     }
     
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width(), true );
-    KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y(), rect.width(), false);
-    KisHLineIteratorPixel intermIt = interm->createHLineIterator(rect.x(), rect.y(), rect.width(), false);
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width());
+    KisHLineConstIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y(), rect.width());
+    KisHLineConstIteratorPixel intermIt = interm->createHLineIterator(rect.x(), rect.y(), rect.width());
 
+    int cdepth = cs -> pixelSize();
     Q_UINT8 *colors[2];
+    colors[0] = new Q_UINT8[cdepth];
+    colors[1] = new Q_UINT8[cdepth];
     
     int pixelsProcessed = 0;
     Q_INT32 weights[2];
@@ -110,8 +113,8 @@ void KisUnsharpFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
                 Q_UINT8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
                 if( diff > threshold)
                 {
-                    colors[0] = srcIt.rawData();
-                    colors[1] = intermIt.rawData();
+                    memcpy(colors[0],srcIt.rawData(), cdepth);
+                    memcpy(colors[1],intermIt.rawData(), cdepth);
                     cs->convolveColors(colors, weights, KoChannelInfo::FLAG_COLOR, dstIt.rawData(),  factor, 0, 2 );
                 }
             }
@@ -124,6 +127,8 @@ void KisUnsharpFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
         dstIt.nextRow();
         intermIt.nextRow();
     }
+    delete colors[0];
+    delete colors[1];
 
 
     setProgressDone(); // Must be called even if you don't really support progression

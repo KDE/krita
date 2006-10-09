@@ -113,7 +113,7 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
     double correctionnearedges = (config && config->getProperty("correctionnearedges", value)) ? value.toDouble() : 0.;
     double brightness = ( (config && config->getProperty("brightness", value)) ? value.toDouble() : 0. );
 
-    KisRectIteratorPixel dstIt = dst->createRectIterator(workingrect.x(), workingrect.y(), workingrect.width(), workingrect.height(), true );
+    KisRectIteratorPixel dstIt = dst->createRectIterator(workingrect.x(), workingrect.y(), workingrect.width(), workingrect.height() );
     KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor();
 
     double normallise_radius_sq = 4.0 / (layerrect.width() * layerrect.width() + layerrect.height() * layerrect.height());

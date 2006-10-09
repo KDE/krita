@@ -394,8 +394,8 @@ void KisSelectionManager::copy()
     // Apply selection mask.
 
     for (qint32 y = 0; y < r.height(); y++) {
-        KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, y, r.width(), true);
-        KisHLineIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y() + y, r.width(), false);
+        KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, y, r.width());
+        KisHLineConstIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y() + y, r.width());
 
         while (!layerIt.isDone()) {
 

@@ -123,7 +123,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
             count = 0;
 
             //read
-            KisRectIteratorPixel srcIt = src->createRectIterator(x, y, w, h, false);
+            KisRectConstIteratorPixel srcIt = src->createRectIterator(x, y, w, h);
             while( ! srcIt.isDone() ) {
                 if(srcIt.isSelected())
                 {
@@ -143,8 +143,8 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
                     average[i] /= count;
             }
             //write
-            srcIt = src->createRectIterator(x, y, w, h, false);
-            KisRectIteratorPixel dstIt = dst->createRectIterator(x, y, w, h, true );
+            srcIt = src->createRectIterator(x, y, w, h);
+            KisRectIteratorPixel dstIt = dst->createRectIterator(x, y, w, h );
             while( ! srcIt.isDone() )
             {
                 if(srcIt.isSelected())

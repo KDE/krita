@@ -132,7 +132,7 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qin
     KoColorSpace *cs = m_paintdev->colorSpace();
 
     for (qint32 y2 = y; y2 < h + y; ++y2) {
-        KisHLineIteratorPixel it = m_paintdev->createHLineIterator(x, y2, w, false);
+        KisHLineConstIteratorPixel it = m_paintdev->createHLineIterator(x, y2, w);
         while ( ! it.isDone()) {
             quint8 s = cs->getAlpha(it.rawData());
             if(s==0)
@@ -270,10 +270,10 @@ void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
     if (from) {
         QRect r(extent());
 
-        KisRectIteratorPixel srcIt = from->createRectIterator(r.x(), r.y(),
-                r.width(), r.height(), false);
+        KisRectConstIteratorPixel srcIt = from->createRectIterator(r.x(), r.y(),
+                r.width(), r.height());
         KisRectIteratorPixel dstIt = m_mask->createRectIterator(r.x(), r.y(),
-                r.width(), r.height(), true);
+                r.width(), r.height());
 
         while(!dstIt.isDone()) {
             // XXX same remark as in convertMaskToSelection
@@ -317,10 +317,10 @@ void KisPaintLayer::setRenderMask(bool b) {
 }
 
 void KisPaintLayer::convertMaskToSelection(const QRect& r) {
-    KisRectIteratorPixel srcIt = m_mask->createRectIterator(r.x(), r.y(),
-            r.width(), r.height(), false);
+    KisRectConstIteratorPixel srcIt = m_mask->createRectIterator(r.x(), r.y(),
+            r.width(), r.height());
     KisRectIteratorPixel dstIt = m_maskAsSelection->createRectIterator(r.x(), r.y(),
-            r.width(), r.height(), true);
+            r.width(), r.height());
 
     while(!dstIt.isDone()) {
         // src is grey8 (grey + alpha), dst is alpha8. We convert the grey value to

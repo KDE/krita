@@ -156,7 +156,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
         // col = the x position of the pixel we want to change
         int col = x;
 
-        KisHLineIteratorPixel hit = m_device->createHLineIterator(x, row, w, true);
+        KisHLineIteratorPixel hit = m_device->createHLineIterator(x, row, w);
         bool needFull = true;
         while (!hit.isDone()) {
 
@@ -172,7 +172,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
                     // kw = the width of the kernel
 
                     // Fill the cache with pointers to the pixels under the kernel
-                    KisHLineIteratorPixel kit = m_device->createHLineIterator(col - khalfWidth, (row - khalfHeight) + krow, kw, false);
+                    KisHLineConstIteratorPixel kit = m_device->createHLineIterator(col - khalfWidth, (row - khalfHeight) + krow, kw);
                     while (!kit.isDone()) {
                         memcpy(pixelPtrCache[i], kit.oldRawData(), cdepth);
                         ++kit;
@@ -190,7 +190,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
                     }
                 }
                 qint32 i = kw - 1;
-                KisVLineIteratorPixel kit = m_device->createVLineIterator(col + khalfWidth, row - khalfHeight, kh, false);
+                KisVLineConstIteratorPixel kit = m_device->createVLineIterator(col + khalfWidth, row - khalfHeight, kh);
                 while (!kit.isDone()) {
                     memcpy(pixelPtrCache[i], kit.oldRawData(), cdepth);
                     ++kit;
@@ -263,7 +263,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
         // col = the x position of the pixel we want to change
         int col = x;
 
-        KisHLineIteratorPixel hit = m_device->createHLineIterator(x, row, w, true);
+        KisHLineIteratorPixel hit = m_device->createHLineIterator(x, row, w);
         bool needFull = true;
         
         qint32 itStart = row - khalfHeight;
@@ -276,7 +276,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
         {
             itH -= itStart + kh - yLastMinuskhh;
         }
-        KisVLineIteratorPixel kit = m_device->createVLineIterator(col + khalfWidth, itStart, itH, false);
+        KisVLineConstIteratorPixel kit = m_device->createVLineIterator(col + khalfWidth, itStart, itH);
         while (!hit.isDone()) {
 
             // Iterate over all contributing pixels that are covered by the kernel
@@ -292,7 +292,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
                     if( x < khalfWidth)
                     { // the left pixels are outside of the layer, in the corner
                         qint32 kcol = 0;
-                        KisHLineIteratorPixel kit = m_device->createHLineIterator(0, 0, kw, false);
+                        KisHLineConstIteratorPixel kit = m_device->createHLineIterator(0, 0, kw);
                         for(; kcol < (khalfWidth - x) + 1; ++kcol)
                         { // First copy the address of the topleft pixel
                             memcpy(pixelPtrCache[kcol], kit.oldRawData(), cdepth);
@@ -304,7 +304,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
                         }
                     } else {
                         uint kcol = 0;
-                        KisHLineIteratorPixel kit = m_device->createHLineIterator(col - khalfWidth, 0, kw, false);
+                        KisHLineConstIteratorPixel kit = m_device->createHLineIterator(col - khalfWidth, 0, kw);
                         while (!kit.isDone()) {
                             memcpy(pixelPtrCache[kcol], kit.oldRawData(), cdepth);
                             ++kit;
@@ -339,7 +339,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
                         itW += itHStart;
                         itHStart = 0;
                     }
-                    KisHLineIteratorPixel kit = m_device->createHLineIterator(itHStart, (row - khalfHeight) + krow, itW, false);
+                    KisHLineConstIteratorPixel kit = m_device->createHLineIterator(itHStart, (row - khalfHeight) + krow, itW);
                     if( col < khalfWidth )
                     {
                         for(; i <  krow * kw + ( kw - itW ); i+= 1)

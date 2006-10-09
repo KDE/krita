@@ -141,8 +141,8 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
         for (qint32 row = 0; row < rect.height(); ++row) {
 
-            KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y() + row, rect.width(), false);
-            KisHLineIteratorPixel dstIt = dev->createHLineIterator(rect.x(), rect.y() + row, rect.width(), true);
+            KisHLineConstIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y() + row, rect.width());
+            KisHLineIteratorPixel dstIt = dev->createHLineIterator(rect.x(), rect.y() + row, rect.width());
 
             while( ! srcIt.isDone() )
             {

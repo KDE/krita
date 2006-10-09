@@ -189,7 +189,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
         configBC->m_adjustment = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
     }
 
-    KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+    KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
 
     setProgressTotalSteps(rect.width() * rect.height());
     qint32 pixelsProcessed = 0;

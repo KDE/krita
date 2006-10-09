@@ -25,8 +25,6 @@
 
 class KisPaintDevice;
 class KisProgressDisplayInterface;
-class KisHLineIteratorPixel;
-class KisVLineIteratorPixel;
 class KisFilterStrategy;
 
 class KRITAIMAGE_EXPORT KisTransformWorker : public KisProgressSubject {

@@ -99,8 +99,8 @@ void KisFilterNoise::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilt
     int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
     int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
     
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-    KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height() );
+    KisRectConstIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
     
     Q_UINT8* interm = new Q_UINT8[ cs->pixelSize() ];
     Q_UINT32 threshold = (RAND_MAX / 100) * (100 - level);

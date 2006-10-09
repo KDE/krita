@@ -60,8 +60,8 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const quint8 
     KoColorSpace * cs = dev->colorSpace();
 
     for (int y2 = y; y2 < y + h; ++y2) {
-        KisHLineIterator hiter = dev->createHLineIterator(x, y2, w, false);
-        KisHLineIterator selIter = selection->createHLineIterator(x, y2, w, true);
+        KisHLineConstIterator hiter = dev->createHLineIterator(x, y2, w);
+        KisHLineIterator selIter = selection->createHLineIterator(x, y2, w);
         while (!hiter.isDone()) {
             //if (dev->colorSpace()->hasAlpha())
             //    opacity = dev->colorSpace()->getAlpha(hiter.rawData());

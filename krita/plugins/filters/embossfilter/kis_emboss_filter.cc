@@ -43,6 +43,7 @@
 #include <kis_iterators_pixel.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
+#include <kis_paint_device.h>
 #include <kis_types.h>
 
 #include "kis_multi_integer_filter_widget.h"
@@ -93,8 +94,8 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
 
         for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
         {
-        KisHLineIteratorPixel it = src->createHLineIterator(rect.x(), rect.y() + y, rect.width(), false);
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y() + y, rect.width(), true);
+        KisHLineConstIteratorPixel it = src->createHLineIterator(rect.x(), rect.y() + y, rect.width());
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y() + y, rect.width());
 
         for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it, ++dstIt)
         {

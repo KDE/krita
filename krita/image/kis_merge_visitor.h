@@ -110,7 +110,7 @@ public:
                     // do not exist. If they do, they'll remain untouched since we don't
                     // actually write data to it.
                     // XXX Admission: this is actually kind of a hack :-(
-                    KisRectIteratorPixel it = mask->createRectIterator(sx, sy, w, h, true);
+                    KisRectIteratorPixel it = mask->createRectIterator(sx, sy, w, h);
                     while (!it.isDone())
                         ++it;
                 }

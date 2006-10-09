@@ -47,7 +47,6 @@ set(kritaimage_LIB_SRCS
    kis_image.cc
    kis_imagepipe_brush.cc
    kis_iterator.cc
-   kis_iterators_pixel.cc
    kis_layer.cc
    kis_group_layer.cc
    kis_paint_layer.cc

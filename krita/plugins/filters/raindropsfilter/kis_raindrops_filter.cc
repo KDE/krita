@@ -45,6 +45,7 @@
 #include <kis_filter.h>
 #include <kis_global.h>
 #include <kis_types.h>
+#include <kis_paint_device.h>
 #include <kis_progress_display_interface.h>
 
 #include "kis_multi_integer_filter_widget.h"
@@ -262,7 +263,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, c
 
                             QColor originalColor;
 
-                            KisHLineIterator oldIt = src->createHLineIterator(rect.x() + l, rect.y() + k, 1, false);
+                            KisHLineConstIterator oldIt = src->createHLineIterator(rect.x() + l, rect.y() + k, 1);
                             cs->toQColor(oldIt.oldRawData(), &originalColor);
 
                             int newRed = CLAMP(originalColor.red() + Bright, 0, quint8_MAX);
@@ -272,7 +273,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, c
                             QColor newColor;
                             newColor.setRgb(newRed, newGreen, newBlue);
 
-                            KisHLineIterator dstIt = dst->createHLineIterator(rect.x() + n, rect.y() + m, 1, true);
+                            KisHLineIterator dstIt = dst->createHLineIterator(rect.x() + n, rect.y() + m, 1);
                             cs->fromQColor(newColor, dstIt.rawData());
                         }
                     }
@@ -302,7 +303,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, c
                             if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
                             {
                                 QColor color;
-                                KisHLineIterator dstIt = dst->createHLineIterator(rect.x() + n, rect.y() + m, 1, false);
+                                KisHLineConstIterator dstIt = dst->createHLineIterator(rect.x() + n, rect.y() + m, 1);
                                 cs->toQColor(dstIt.rawData(), &color);
 
                                 R += color.red();
@@ -320,7 +321,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, c
                         QColor color;
 
                         color.setRgb((int)(R / BlurPixels), (int)(G / BlurPixels), (int)(B / BlurPixels));
-                        KisHLineIterator dstIt = dst->createHLineIterator(rect.x() + n, rect.y() + m, 1, true);
+                        KisHLineIterator dstIt = dst->createHLineIterator(rect.x() + n, rect.y() + m, 1);
                         cs->fromQColor(color, dstIt.rawData());
                     }
                 }
@@ -330,8 +331,8 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, c
         setProgress(NumBlurs);
     }
 
-    KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-    KisRectIteratorPixel dstIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
+    KisRectConstIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectIteratorPixel dstIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
 
     while (!srcIt.isDone()) {
 

@@ -128,11 +128,11 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 
             int i = 0;
             // dummy init
-            KisHLineIteratorPixel iter = dev->createHLineIterator(0, 0, 1, false);;
+            KisHLineConstIteratorPixel iter = dev->createHLineIterator(0, 0, 1);;
             for (int y = - m_radius; y <= m_radius; y++) {
                 for (int x = - m_radius; x <= m_radius; x++) {
                     if (x*x + y*y < m_radius * m_radius) {
-                        iter = dev->createHLineIterator(pos.x() + x, pos.y() + y, 1, false);
+                        iter = dev->createHLineIterator(pos.x() + x, pos.y() + y, 1);
 
                         pixels[i] = new quint8[pixelSize];
                         memcpy(pixels[i], iter.rawData(), pixelSize);

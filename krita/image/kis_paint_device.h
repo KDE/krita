@@ -45,12 +45,9 @@ class KNamedCommand;
 class KoStore;
 
 class KisExifInfo;
-class KisHLineIteratorPixel;
 class KisImage;
 class KisRandomAccessorPixel;
 class KisRandomSubAccessorPixel;
-class KisRectIteratorPixel;
-class KisVLineIteratorPixel;
 class KisUndoAdapter;
 class KisFilter;
 class KisDataManager;
@@ -425,19 +422,44 @@ public:
     void rollforward(KisMementoSP memento);
 
     /**
-     * This function return an iterator which points to the first pixel of an rectangle
+     * Create an iterator over a rectangle section of a paint device, the path followed by
+     * the iterator is not guaranted, it is optimized for speed, which means that you shouldn't
+     * use this type of iterator if you are combining two differents layers.
+     * @param w width
+     * @param h height
+     * @return an iterator which points to the first pixel of an rectangle
      */
-    KisRectIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, bool writable);
+    KisRectIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h);
+    /**
+     * Create an iterator over a rectangle section of a paint device, the path followed by
+     * the iterator is not guaranted, it is optimized for speed, which means that you shouldn't
+     * use this type of iterator if you are combining two differents layers.
+     * @param w width
+     * @param h height
+     * @return an iterator which points to the first pixel of an rectangle, this iterator
+     * does not allow to change the pixel values
+     */
+    KisRectConstIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h) const;
 
     /**
-     * This function return an iterator which points to the first pixel of a horizontal line
+     * @return an iterator which points to the first pixel of a horizontal line, this iterator
+     * does not allow to change the pixel values
      */
-    KisHLineIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w, bool writable);
-
+    KisHLineConstIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w) const;
+    /**
+     * @return an iterator which points to the first pixel of a horizontal line
+     */
+    KisHLineIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w);
+    
     /**
      * This function return an iterator which points to the first pixel of a vertical line
      */
-    KisVLineIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h, bool writable);
+    KisVLineIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h);
+    
+    /**
+     * This function return an iterator which points to the first pixel of a vertical line
+     */
+    KisVLineConstIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h) const;
 
     /**
      * This function creates a random accessor which allow to randomly access any pixels on
@@ -463,7 +485,7 @@ public:
     void subtractSelection(KisSelectionSP selection);
 
     /** Whether there is a valid selection for this paintdevice. */
-    bool hasSelection();
+    bool hasSelection() const;
 
    /** Whether the previous selection was deselected. */
     bool selectionDeselected();

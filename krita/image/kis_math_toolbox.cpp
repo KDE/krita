@@ -46,12 +46,12 @@ KisMathToolboxFactoryRegistry::~KisMathToolboxFactoryRegistry()
 {
 }
 template<typename T>
-double toDouble(quint8* data, int channelpos )
+double toDouble(const quint8* data, int channelpos )
 {
     return (float)( *((T*)(data + channelpos)) );
 }
 
-typedef double (*PtrToDouble)(quint8*, int);
+typedef double (*PtrToDouble)(const quint8*, int);
 
 template<typename T>
 void fromDouble(quint8* data, int channelpos, double v )
@@ -99,11 +99,11 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
     
     for(int i = rect.y(); i < rect.height(); i++)
     {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), i, rect.width(), false );
+        KisHLineConstIteratorPixel srcIt = src->createHLineIterator(rect.x(), i, rect.width());
         float *dstIt = fr->coeffs + (i-rect.y()) * fr->size * fr->depth;
         while( ! srcIt.isDone() )
         {
-            quint8* v1 = srcIt.rawData();
+            const quint8* v1 = srcIt.rawData();
             for( int k = 0; k < depth; k++)
             {
                 *dstIt = f[k](v1, cis[k]->pos());
@@ -150,7 +150,7 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
     }
     for(int i = rect.y(); i < rect.height(); i++)
     {
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), i, rect.width(), true );
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), i, rect.width());
         float *srcIt = fr->coeffs + (i-rect.y()) * fr->size * fr->depth;
         while( ! dstIt.isDone() )
         {

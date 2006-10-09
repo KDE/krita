@@ -218,7 +218,7 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         gc.end();
     }
 
-    KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+    KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height() );
 
     setProgressTotalSteps(rect.width() * rect.height());
     qint32 pixelsProcessed = 0;

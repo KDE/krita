@@ -87,19 +87,19 @@ bool PaintLayer::convertToColorspace(const QString& colorspacename)
 QObject* PaintLayer::createRectIterator(uint x, uint y, uint width, uint height)
 {
     return new Iterator<KisRectIteratorPixel>(this,
-            paintLayer()->paintDevice()->createRectIterator(x, y, width, height, true));
+            paintLayer()->paintDevice()->createRectIterator(x, y, width, height));
 }
 
 QObject* PaintLayer::createHLineIterator(uint x, uint y, uint width)
 {
     return new Iterator<KisHLineIteratorPixel>(this,
-            paintLayer()->paintDevice()->createHLineIterator(x, y, width, true));
+            paintLayer()->paintDevice()->createHLineIterator(x, y, width));
 }
 
 QObject* PaintLayer::createVLineIterator(uint x, uint y, uint height)
 {
     return new Iterator<KisVLineIteratorPixel>(this,
-            paintLayer()->paintDevice()->createVLineIterator(x, y, height, true));
+            paintLayer()->paintDevice()->createVLineIterator(x, y, height));
 }
 
 QObject* PaintLayer::createHistogram(const QString& histoname, uint typenr)

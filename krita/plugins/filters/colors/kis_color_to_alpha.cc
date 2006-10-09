@@ -26,6 +26,7 @@
 #include <kcolorbutton.h>
 
 #include <kis_iterators_pixel.h>
+#include <kis_paint_device.h>
 
 #include "ui_wdgcolortoalphabase.h"
 #include "kis_wdg_color_to_alpha.h"
@@ -62,8 +63,8 @@ void KisFilterColorToAlpha::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     QColor cTA = (config->getProperty("targetcolor", value)) ? value.value<QColor>() : QColor(255,255,255);
     int threshold = (config->getProperty("threshold", value)) ? value.toInt() : 0;
     
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-    KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height() );
+    KisRectConstIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
 
     int pixelsProcessed = 0;
     setProgressTotalSteps(rect.width() * rect.height());

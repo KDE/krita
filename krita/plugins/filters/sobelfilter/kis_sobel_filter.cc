@@ -177,7 +177,7 @@ void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDevic
 
             if ( makeOpaque )
                 {
-                    KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, row, width, true);
+                    KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, row, width);
                     while( ! dstIt.isDone() )
                         {
                             dstIt.rawData()[pixelSize-1]=255; //XXXX: is the alpha channel always 8 bit? Otherwise this is wrong!

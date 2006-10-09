@@ -77,7 +77,7 @@ void KisPerspectiveTransformWorker::run()
     KoColorSpace * cs = m_dev->colorSpace();
 
     kDebug() << "r = " << m_r << endl;
-    KisRectIteratorPixel dstIt = m_dev->createRectIterator(m_r.x(), m_r.y(), m_r.width(), m_r.height(), true);
+    KisRectIteratorPixel dstIt = m_dev->createRectIterator(m_r.x(), m_r.y(), m_r.width(), m_r.height());
     KisPaintDeviceSP srcdev = new KisPaintDevice(*m_dev.data());
     { // ensure that the random sub accessor is deleted first
         KisRandomSubAccessorPixel srcAcc = srcdev->createRandomSubAccessor();

@@ -60,16 +60,16 @@ KisSelection::~KisSelection()
 
 quint8 KisSelection::selected(qint32 x, qint32 y)
 {
-    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
+    KisHLineConstIteratorPixel iter = createHLineIterator(x, y, 1);
 
-    quint8 *pix = iter.rawData();
+    const quint8 *pix = iter.rawData();
 
     return *pix;
 }
 
 void KisSelection::setSelected(qint32 x, qint32 y, quint8 s)
 {
-    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
+    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1);
 
     quint8 *pix = iter.rawData();
 
@@ -95,7 +95,7 @@ QImage KisSelection::maskImage()
     }
 
     for (y2 = y; y2 < h - y; ++y2) {
-            KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
+            KisHLineConstIteratorPixel it = createHLineIterator(x, y2, w);
             x2 = 0;
             while (!it.isDone()) {
                     quint8 s = MAX_SELECTED - *(it.rawData());
@@ -135,7 +135,7 @@ void KisSelection::invert()
     qint32 x,y,w,h;
 
     extent(x, y, w, h);
-    KisRectIterator it = createRectIterator(x, y, w, h, true);
+    KisRectIterator it = createRectIterator(x, y, w, h);
     while ( ! it.isDone() )
     {
         // CBR this is wrong only first byte is inverted

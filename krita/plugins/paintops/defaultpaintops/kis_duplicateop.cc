@@ -211,7 +211,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_painter->duplicateStart().toPointF() );
         QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_painter->duplicateStart().toPointF() - m_painter->duplicateOffset().toPointF() );
         QPointF translat = duplicateStartPoisitionT - positionStartPaintingT;
-        KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh, true); 
+        KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh); 
         KisRandomSubAccessorPixel srcAcc = device->createRandomSubAccessor();
         //Action
         while(!dstIt.isDone())
@@ -241,8 +241,8 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         double* matrix = new double[ 3 * sw * sh ];
         // First divide
         KoColorSpace* deviceCs = device->colorSpace();
-        KisHLineIteratorPixel deviceIt = device->createHLineIterator(x, y, sw, false );
-        KisHLineIteratorPixel srcDevIt = m_srcdev->createHLineIterator(0, 0, sw, true );
+        KisHLineConstIteratorPixel deviceIt = device->createHLineIterator(x, y, sw );
+        KisHLineIteratorPixel srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
         double* matrixIt = matrix;
         for(int j = 0; j < sh; j++)
         {
@@ -276,8 +276,8 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         }
         
         // Finaly multiply
-        deviceIt = device->createHLineIterator(x, y, sw, false );
-        srcDevIt = m_srcdev->createHLineIterator(0, 0, sw, true );
+        deviceIt = device->createHLineIterator(x, y, sw);
+        srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
         matrixIt = matrix;
         for(int j = 0; j < sh; j++)
         {

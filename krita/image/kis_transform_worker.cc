@@ -65,9 +65,9 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
     }
 
     for (qint32 y = r.bottom(); y >= r.top(); --y) {
-        KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width(), true);
-        KisVLineIterator vit = dst->createVLineIterator(-y, r.x(), r.width(), true);
-        KisVLineIterator dstSelIt = dstSelection->createVLineIterator(-y, r.x(), r.width(), true);
+        KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width());
+        KisVLineIterator vit = dst->createVLineIterator(-y, r.x(), r.width());
+        KisVLineIterator dstSelIt = dstSelection->createVLineIterator(-y, r.x(), r.width());
 
             while (!hit.isDone()) {
             if (hit.isSelected())  {
@@ -105,9 +105,9 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
 
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
         // Read the horizontal line from back to front, write onto the vertical column
-        KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width(), true);
-        KisVLineIterator vit = dst->createVLineIterator(y, -r.x() - r.width(), r.width(), true);
-        KisVLineIterator dstSelIt = dstSelection->createVLineIterator(y, -r.x() - r.width(), r.width(), true);
+        KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width());
+        KisVLineIterator vit = dst->createVLineIterator(y, -r.x() - r.width(), r.width());
+        KisVLineIterator dstSelIt = dstSelection->createVLineIterator(y, -r.x() - r.width(), r.width());
 
         hit += r.width() - 1;
         while (!vit.isDone()) {
@@ -145,9 +145,9 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
     }
 
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), y, r.width(), false);
-        KisHLineIterator dstIt = dst->createHLineIterator(-r.x() - r.width(), -y, r.width(), true);
-        KisHLineIterator dstSelIt = dstSelection->createHLineIterator(-r.x() - r.width(), -y, r.width(), true);
+        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), y, r.width());
+        KisHLineIterator dstIt = dst->createHLineIterator(-r.x() - r.width(), -y, r.width());
+        KisHLineIterator dstSelIt = dstSelection->createHLineIterator(-r.x() - r.width(), -y, r.width());
 
         srcIt += r.width() - 1;
         while (!dstIt.isDone()) {
@@ -170,13 +170,13 @@ template <class iter> iter createIterator(KisPaintDevice *dev, qint32 start, qin
 template <> KisHLineIteratorPixel createIterator <KisHLineIteratorPixel>
 (KisPaintDevice *dev, qint32 start, qint32 lineNum, qint32 len)
 {
-    return dev->createHLineIterator(start, lineNum, len, true);
+    return dev->createHLineIterator(start, lineNum, len);
 }
 
 template <> KisVLineIteratorPixel createIterator <KisVLineIteratorPixel>
 (KisPaintDevice *dev, qint32 start, qint32 lineNum, qint32 len)
 {
-    return dev->createVLineIterator(lineNum, start, len, true);
+    return dev->createVLineIterator(lineNum, start, len);
 }
 
 template <class iter> void calcDimensions (KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines);

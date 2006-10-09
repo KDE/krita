@@ -563,7 +563,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
     for (int y = starty; y <= endy; y++) {
 
-        KisHLineIteratorPixel hit = dev->createHLineIterator(startx, y, width, true);
+        KisHLineIteratorPixel hit = dev->createHLineIterator(startx, y, width);
         for (int x = startx; x <= endx; x++) {
 
             double t = shapeStrategy->valueAt( x, y);

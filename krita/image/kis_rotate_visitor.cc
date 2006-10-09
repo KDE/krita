@@ -120,8 +120,8 @@ KisPaintDeviceSP KisRotateVisitor::rotateRight90(KisPaintDeviceSP src)
     qint32 x = 0;
 
     for (qint32 y = r.bottom(); y >= r.top(); --y) {
-        KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width(), false);
-        KisVLineIterator vit = dst->createVLineIterator(-y, r.x(), r.width(), true);
+        KisHLineConstIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width());
+        KisVLineIterator vit = dst->createVLineIterator(-y, r.x(), r.width());
 
             while (!hit.isDone()) {
             if (hit.isSelected())  {
@@ -147,8 +147,8 @@ KisPaintDeviceSP KisRotateVisitor::rotateLeft90(KisPaintDeviceSP src)
 
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
         // Read the horizontal line from back to front, write onto the vertical column
-        KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width(), false);
-        KisVLineIterator vit = dst->createVLineIterator(y, -r.x() - r.width(), r.width(), true);
+        KisHLineConstIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width());
+        KisVLineIterator vit = dst->createVLineIterator(y, -r.x() - r.width(), r.width());
 
         hit += r.width() - 1;
         while (!vit.isDone()) {
@@ -175,8 +175,8 @@ KisPaintDeviceSP KisRotateVisitor::rotate180(KisPaintDeviceSP src)
     QRect r = src->exactBounds();
 
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), y, r.width(), false);
-        KisHLineIterator dstIt = dst->createHLineIterator( -r.x() - r.width(), -y, r.width(), true);
+        KisHLineConstIteratorPixel srcIt = src->createHLineIterator(r.x(), y, r.width());
+        KisHLineIterator dstIt = dst->createHLineIterator( -r.x() - r.width(), -y, r.width());
 
         srcIt += r.width() - 1;
         while (!dstIt.isDone()) {
@@ -298,9 +298,9 @@ KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
         pixelWeights[0] = static_cast<quint8>(weight * 255 + 0.5);
         pixelWeights[1] = 255 - pixelWeights[0];
 
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), y, r.width() + 1, false);
-        KisHLineIteratorPixel leftSrcIt = src->createHLineIterator(r.x() - 1, y, r.width() + 1, false);
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(r.x() + displacementInt, y, r.width() + 1, true);
+        KisHLineConstIteratorPixel srcIt = src->createHLineIterator(r.x(), y, r.width() + 1);
+        KisHLineConstIteratorPixel leftSrcIt = src->createHLineIterator(r.x() - 1, y, r.width() + 1);
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(r.x() + displacementInt, y, r.width() + 1);
 
         while (!srcIt.isDone()) {
 
@@ -346,9 +346,9 @@ KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
         pixelWeights[0] = static_cast<quint8>(weight * 255 + 0.5);
         pixelWeights[1] = 255 - pixelWeights[0];
 
-        KisVLineIteratorPixel srcIt = src->createVLineIterator(x, r.y(), r.height() + 1, false);
-        KisVLineIteratorPixel leftSrcIt = src->createVLineIterator(x, r.y() - 1, r.height() + 1, false);
-        KisVLineIteratorPixel dstIt = dst->createVLineIterator(x, r.y() + displacementInt, r.height() + 1, true);
+        KisVLineConstIteratorPixel srcIt = src->createVLineIterator(x, r.y(), r.height() + 1);
+        KisVLineIteratorPixel leftSrcIt = src->createVLineIterator(x, r.y() - 1, r.height() + 1);
+        KisVLineIteratorPixel dstIt = dst->createVLineIterator(x, r.y() + displacementInt, r.height() + 1);
 
         while (!srcIt.isDone()) {
 

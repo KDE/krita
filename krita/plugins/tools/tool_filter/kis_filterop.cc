@@ -108,7 +108,7 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
     for (int y = 0; y < maskHeight; y++)
     {
-        KisHLineIterator hiter = tmpDev->createHLineIterator(0, y, maskWidth, false);
+        KisHLineIterator hiter = tmpDev->createHLineIterator(0, y, maskWidth);
         int x=0;
         while(! hiter.isDone())
         {

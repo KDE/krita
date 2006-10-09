@@ -101,7 +101,7 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // Set all alpha > opaque/2 to opaque, the rest to transparent.
     // XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.
 
-    KisRectIteratorPixel pixelIt = dab->createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height(), true);
+    KisRectIteratorPixel pixelIt = dab->createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height());
 
     while (!pixelIt.isDone()) {
         quint8 alpha = cs->getAlpha(pixelIt.rawData());

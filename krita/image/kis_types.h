@@ -84,4 +84,20 @@ typedef KisSharedPtr<KisAlphaMask> KisAlphaMaskSP;
 class KisFilter;
 typedef KisSharedPtr<KisFilter> KisFilterSP;
 
+
+// #include <kis_iterators_pixel.h>
+template<class T, typename TSelect> class KisLineIteratorPixelBase;
+class KisHLineConstIterator;
+typedef KisLineIteratorPixelBase<KisHLineConstIterator, const quint8*> KisHLineConstIteratorPixel;
+class KisHLineIterator;
+typedef KisLineIteratorPixelBase<KisHLineIterator, quint8*> KisHLineIteratorPixel;
+class KisVLineConstIterator;
+typedef KisLineIteratorPixelBase<KisVLineConstIterator, const quint8*> KisVLineConstIteratorPixel;
+class KisVLineIterator;
+typedef KisLineIteratorPixelBase<KisVLineIterator, quint8*> KisVLineIteratorPixel;
+template<class T, typename TSelect> class KisRectIteratorPixelBase;
+class KisRectConstIterator;
+typedef KisRectIteratorPixelBase<KisRectConstIterator, const quint8*> KisRectConstIteratorPixel;
+class KisRectIterator;
+typedef KisRectIteratorPixelBase<KisRectIterator, quint8*> KisRectIteratorPixel;
 #endif // KISTYPES_H_

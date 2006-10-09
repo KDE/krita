@@ -203,11 +203,11 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
             columns = qMin(columns, columnsRemaining);
 
             qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
-            KisHLineIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns, false);
+            KisHLineConstIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns);
             const quint8 *srcData = srcIt.rawData();
 
             qint32 dstRowStride = m_device->rowStride(dstX, dstY);
-            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns, true);
+            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns);
             quint8 *dstData = dstIt.rawData();
 
             m_colorSpace->bitBlt(dstData,
@@ -298,15 +298,15 @@ void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
             columns = qMin(columns, columnsRemaining);
 
             qint32 dstRowStride = m_device->rowStride(dstX, dstY);
-            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns, true);
+            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns);
             quint8 *dstData = dstIt.rawData();
 
             qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
-            KisHLineIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns, false);
+            KisHLineConstIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns);
             const quint8 *srcData = srcIt.rawData();
 
             qint32 selRowStride = selMask->rowStride(dstX, dstY);
-            KisHLineIteratorPixel selIt = selMask->createHLineIterator(dstX, dstY, columns, false);
+            KisHLineConstIteratorPixel selIt = selMask->createHLineIterator(dstX, dstY, columns);
             const quint8 *selData = selIt.rawData();
 
             m_colorSpace->bitBlt(dstData,
@@ -861,7 +861,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
             xr = static_cast<int>(floor(active[j+1].x-.5));        /* right end of span */
 
             if (xl<=xr) {
-                KisHLineIterator it = polygonMask->createHLineIterator(xl, y, xr - xl + 1, true);
+                KisHLineIterator it = polygonMask->createHLineIterator(xl, y, xr - xl + 1);
 
                 while (!it.isDone()) {
                     // We're using a selection here, that means alpha colorspace, that means one byte.

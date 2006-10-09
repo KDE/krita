@@ -21,6 +21,7 @@
 #include "kis_minmax_filters.h"
 
 #include <kis_iterators_pixel.h>
+#include <kis_paint_device.h>
 
 typedef void (*funcMaxMin)(const Q_UINT8* , Q_UINT8* , uint );
 
@@ -77,8 +78,8 @@ void KisFilterMax::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilter
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-    KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height() );
+    KisRectConstIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
 
     int pixelsProcessed = 0;
     setProgressTotalSteps(rect.width() * rect.height());
@@ -123,8 +124,8 @@ void KisFilterMin::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilter
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-    KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectConstIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
 
     int pixelsProcessed = 0;
     setProgressTotalSteps(rect.width() * rect.height());

@@ -293,8 +293,8 @@ void DlgColorRange::slotSelectClicked()
     KoColorSpace * cs = m_dev->colorSpace();
     quint8 opacity;
     for (int y2 = y; y2 < h - y; ++y2) {
-        KisHLineIterator hiter = m_dev->createHLineIterator(x, y2, w, false);
-        KisHLineIterator selIter = m_selection ->createHLineIterator(x, y2, w, true);
+        KisHLineConstIterator hiter = m_dev->createHLineIterator(x, y2, w);
+        KisHLineIterator selIter = m_selection ->createHLineIterator(x, y2, w);
         while (!hiter.isDone()) {
             QColor c;
 

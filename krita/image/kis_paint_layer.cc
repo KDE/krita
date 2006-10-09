@@ -367,7 +367,7 @@ namespace {
         KisCreateMaskCommand(const QString& name, KisPaintLayer* layer)
             : super(name), m_layer(layer) {}
         virtual void execute() {
-            kdDebug() << k_funcinfo << endl;
+            kDebug() << k_funcinfo << endl;
             if (!m_mask)
                 m_mask = m_layer->createMask();
             else

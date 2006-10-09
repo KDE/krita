@@ -390,14 +390,14 @@ public:
      * as many alpha values as pixels but we do not check this; the alpha values
      * are assumed to be 8-bits.
      */
-    virtual void applyAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels) const = 0;
+    virtual void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const = 0;
 
     /**
      * Applies the inverted 8-bit alpha mask to the pixels. We assume that there are just
      * as many alpha values as pixels but we do not check this; the alpha values
      * are assumed to be 8-bits.
      */
-    virtual void applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels) const = 0;
+    virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const = 0;
 
     /**
      * Create an adjustment object for adjusting the brightness and contrast

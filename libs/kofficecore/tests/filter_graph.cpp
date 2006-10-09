@@ -19,8 +19,9 @@
 
 #include <QFile>
 //Added by qt3to4:
-#include <QList>
+#include <Q3ValueList>
 #include <Q3CString>
+#include <QList>
 #include <KoQueryTrader.h>
 #include <KoFilterManager.h>
 #include <kinstance.h>

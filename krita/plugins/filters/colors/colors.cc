@@ -34,7 +34,7 @@ KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QStringList 
     setInstance(KritaExtensionsColorsFactory::instance());
 
 
-    kdDebug(41006) << "Extensions Colors Filter plugin. Class: "
+    kDebug(41006) << "Extensions Colors Filter plugin. Class: "
           << className()
           << ", Parent: "
           << parent -> className()

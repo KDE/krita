@@ -174,14 +174,14 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 #if 1
         if(subGridStart)
         {
-//             kdDebug() << "fgrid" << endl;
-//             kdDebug() << *subGridStart->topLeft() << " " << *subGridStart->topRight() << " " << *subGridStart->bottomLeft() << " " <<  *subGridStart->bottomRight() << endl;
+//             kDebug() << "fgrid" << endl;
+//             kDebug() << *subGridStart->topLeft() << " " << *subGridStart->topRight() << " " << *subGridStart->bottomLeft() << " " <<  *subGridStart->bottomRight() << endl;
             double* b = KisPerspectiveMath::computeMatrixTransfoFromPerspective( r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
             for(int i = 0; i < 3; i++)
             {
                 for(int j = 0; j < 3; j++)
                 {
-//                     kdDebug() << "sol[" << 3*i+j << "]=" << b[3*i+j] << endl;
+//                     kDebug() << "sol[" << 3*i+j << "]=" << b[3*i+j] << endl;
                     startM[i][j] = b[3*i+j];
                 }
             }
@@ -193,19 +193,19 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         KisSubPerspectiveGrid* subGridEnd = *device->image()->perspectiveGrid()->begin();// device->image()->perspectiveGrid()->gridAt(pos);
         if(subGridEnd)
         {
-//             kdDebug() << "second grid" << endl;
+//             kDebug() << "second grid" << endl;
             double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
             for(int i = 0; i < 3; i++)
             {
                 for(int j = 0; j < 3; j++)
                 {
-//                     kdDebug() << "sol[" << 3*i+j << "]=" << b[3*i+j] << endl;
+//                     kDebug() << "sol[" << 3*i+j << "]=" << b[3*i+j] << endl;
                     endM[i][j] = b[3*i+j];
                 }
             }
         }
 #endif
-//         kdDebug()<< " oouuuuh" << srcPointF << KisPerspectiveMath::matProd(startM,  KisPerspectiveMath::matProd(endM, srcPointF ) ) << KisPerspectiveMath::matProd(endM,  KisPerspectiveMath::matProd(startM, srcPointF ) );
+//         kDebug()<< " oouuuuh" << srcPointF << KisPerspectiveMath::matProd(startM,  KisPerspectiveMath::matProd(endM, srcPointF ) ) << KisPerspectiveMath::matProd(endM,  KisPerspectiveMath::matProd(startM, srcPointF ) );
         
         // Compute the translation in the perspective transformation space:
         QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_painter->duplicateStart().toPointF() );

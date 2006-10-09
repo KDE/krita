@@ -36,19 +36,19 @@ bool KisSubPerspectiveGrid::contains(const QPointF p) const
     return true;
 #if 0
     KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation( topLeft().data(), topRight().data() );
-//     kdDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+//     kDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
     if( p.y() >= p.x() * d1.a + d1.b)
     {
         d1 = KisPerspectiveMath::computeLineEquation( topRight().data(), bottomRight().data() );
-        kdDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+        kDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
         if( p.y() >= p.x() * d1.a + d1.b)
         {
             d1 = KisPerspectiveMath::computeLineEquation( bottomRight().data(), bottomLeft().data() );
-            kdDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+            kDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
             if( p.y() <= p.x() * d1.a + d1.b)
             {
                 d1 = KisPerspectiveMath::computeLineEquation( bottomLeft().data(), topLeft().data() );
-                kdDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+                kDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
                 if( p.y() <= p.x() * d1.a + d1.b)
                 {
                     return true;

@@ -110,7 +110,7 @@ Test::Test()
 	m_set->addProperty(new Property("LineStyle", 3, "Line Style", "", LineStyle), group);
 	m_set->addProperty(new Property("SizePolicy", sizePolicy(), "Size Policy"), group);
 
-//	kdDebug() << m_set->groupNames() << endl;
+//	kDebug() << m_set->groupNames() << endl;
 
 	Editor *edit = new Editor(this,true/*autosync*/);
 	setCentralWidget(edit);

@@ -33,7 +33,7 @@ BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QStringList &)
     setInstance(BlurFilterPluginFactory::instance());
 
 
-    kdDebug(41006) << "Extensions Convolution Filters plugin. Class: "
+    kDebug(41006) << "Extensions Convolution Filters plugin. Class: "
           << className()
           << ", Parent: "
           << parent -> className()

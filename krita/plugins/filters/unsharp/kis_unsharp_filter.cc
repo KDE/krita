@@ -69,7 +69,7 @@ void KisUnsharpFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     double amount = (config->getProperty("amount", value)) ? value.toDouble() : 0.1;
     uint threshold = (config->getProperty("threshold", value)) ? value.toUInt() : 20;
     
-    kdDebug() << " brush size = " << size << " " << halfSize << endl;
+    kDebug() << " brush size = " << size << " " << halfSize << endl;
     KisAutobrushShape* kas = new KisAutobrushCircleShape(size, size , halfSize, halfSize);
     
     QImage mask;
@@ -100,7 +100,7 @@ void KisUnsharpFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     weights[0] = 128;
     Q_INT32 factor = (Q_UINT32) 128 / amount;
     weights[1] = (factor - 128);
-    kdDebug() << (int) weights[0] << " " << (int)weights[1] << " " << factor << endl;
+    kDebug() << (int) weights[0] << " " << (int)weights[1] << " " << factor << endl;
     for( int j = 0; j < rect.height(); j++)
     {
         while( ! srcIt.isDone() )

@@ -41,12 +41,12 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
         KoStoreDevice io ( m_oasisStore->store() );
         if ( !io.open( QIODevice::WriteOnly ) )
         {
-            kdDebug() << "Couldn't open for writing: " << filename << endl;
+            kDebug() << "Couldn't open for writing: " << filename << endl;
             return false;
         }
         if ( ! img.save( &io, "PNG", 0 ) )
         {
-            kdDebug() << "Saving PNG failed: " << filename << endl;
+            kDebug() << "Saving PNG failed: " << filename << endl;
             return false;
         }
         io.close();
@@ -54,14 +54,14 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
         {
             m_manifestWriter->addManifestEntry( filename, "" );
         } else {
-            kdDebug() << "Closing of data file failed: " << filename << endl;
+            kDebug() << "Closing of data file failed: " << filename << endl;
             return false;
         }
     } else {
-        kdDebug() << "Opening of data file failed :" << filename << endl;
+        kDebug() << "Opening of data file failed :" << filename << endl;
         return false;
     }
-    kdDebug() << "Successfull saving of layer: " << layer->name() << endl;
+    kDebug() << "Successfull saving of layer: " << layer->name() << endl;
     return true;
 }
 

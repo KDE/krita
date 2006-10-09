@@ -33,7 +33,7 @@ UnsharpPlugin::UnsharpPlugin(QObject *parent, const QStringList &)
     setInstance(UnsharpPluginFactory::instance());
 
 
-    kdDebug(41006) << "Extensions Image enhancement Filters plugin. Class: "
+    kDebug(41006) << "Extensions Image enhancement Filters plugin. Class: "
           << className()
           << ", Parent: "
           << parent -> className()

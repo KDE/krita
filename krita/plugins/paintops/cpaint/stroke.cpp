@@ -105,14 +105,14 @@ void drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2,
 
     KisVector2D step(0, 0);
 
-    kdDebug() << "drawLine " << x1 << ", " << y1 << " : " << x2 << ", " << y2 << ". Width: " << width << ", dist: " << dist << endl;
+    kDebug() << "drawLine " << x1 << ", " << y1 << " : " << x2 << ", " << y2 << ". Width: " << width << ", dist: " << dist << endl;
 
     while (dist >= 1) {
 
         step += dragVec;
 
         KisPoint p(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale));
-        kdDebug() << "paint at: " << p.roundX() << ", " << p.roundY() << endl;
+        kDebug() << "paint at: " << p.roundX() << ", " << p.roundY() << endl;
         dev->setPixel(p.roundX(), p.roundY(), Qt::blue, OPACITY_OPAQUE);
         dist -= 1;
     }

@@ -19,7 +19,7 @@
 
 #include <QFile>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <Q3CString>
 #include <KoQueryTrader.h>
 #include <KoFilterManager.h>
@@ -36,7 +36,7 @@ int main( int /*argc*/, char ** /*argv*/ )
     // It wasn't feasible to do some serious changes in the lib for that tiny bit
     // of duplicated code in a test file.
 
-    Q3ValueList<QString> vertices; // to keep track of already inserted values, not performance critical
+    QList<QString> vertices; // to keep track of already inserted values, not performance critical
 
     // Make sure that all available parts are added to the graph
     Q3ValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
@@ -54,9 +54,9 @@ int main( int /*argc*/, char ** /*argv*/ )
             //kDebug() << "    " << key << endl;
             if ( !key.isEmpty() ) {
                 output += "    \"";
-                output += key.latin1();
+                output += key.toLatin1();
                 output += "\" [shape=box, style=filled, fillcolor=lightblue];\n";
-                if ( vertices.find( key ) == vertices.end() )
+                if ( ! vertices.contains( key ) )
                     vertices.append( key );
             }
         }
@@ -74,10 +74,10 @@ int main( int /*argc*/, char ** /*argv*/ )
         QStringList::ConstIterator importEnd = ( *it )->import.end();
         for ( ; importIt != importEnd; ++importIt ) {
             // already there?
-            if ( vertices.find( *importIt ) == vertices.end() ) {
+            if ( ! vertices.contains( *importIt ) ) {
                 vertices.append( *importIt );
                 output += "    \"";
-                output += ( *importIt ).latin1();
+                output += ( *importIt ).toLatin1();
                 output += "\";\n";
             }
         }
@@ -87,9 +87,9 @@ int main( int /*argc*/, char ** /*argv*/ )
 
         for ( ; exportIt != exportEnd; ++exportIt ) {
             // First make sure the export vertex is in place
-            if ( vertices.find( *exportIt ) == vertices.end() ) {
+            if ( ! vertices.contains( *exportIt ) ) {
                 output += "    \"";
-                output += ( *exportIt ).latin1();
+                output += ( *exportIt ).toLatin1();
                 output += "\";\n";
                 vertices.append( *exportIt );
             }
@@ -97,9 +97,9 @@ int main( int /*argc*/, char ** /*argv*/ )
             importIt = ( *it )->import.begin();
             for ( ; importIt != importEnd; ++importIt ) {
                 output += "    \"";
-                output += ( *importIt ).latin1();
+                output += ( *importIt ).toLatin1();
                 output += "\" -> \"";
-                output += ( *exportIt ).latin1();
+                output += ( *exportIt ).toLatin1();
                 if ( KoFilterManager::filterAvailable( *it ) )
                     output += "\";\n";
                 else

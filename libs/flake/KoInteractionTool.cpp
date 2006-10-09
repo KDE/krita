@@ -402,6 +402,7 @@ void KoInteractionTool::recalcSelectionBox() {
 }
 
 void KoInteractionTool::activate(bool temporary) {
+    Q_UNUSED(temporary);
     m_mouseWasInsideHandles = false;
     m_lastHandle = KoFlake::NoHandle;
     useCursor(Qt::ArrowCursor, true);

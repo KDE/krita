@@ -89,6 +89,7 @@ kDebug() << " PREsol.x=" << m_solidPoint.x() << " sol.y=" << m_solidPoint.y() <<
 
 void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
+    Q_UNUSED(modifiers);
     QPointF shearVector = point - m_solidPoint;
 
     QMatrix matrix;

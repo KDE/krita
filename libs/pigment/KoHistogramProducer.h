@@ -28,7 +28,6 @@
 
 #include "KoGenericRegistry.h"
 
-class KisRectIteratorPixel;
 class QString;
 class KoChannelInfo;
 

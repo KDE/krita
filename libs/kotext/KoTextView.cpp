@@ -885,8 +885,7 @@ bool KoTextView::insertParagraph(const QPoint &pos)
     for (int i = 0; i < nbParag ;i++)
     {
         KoTextParag *s=textDocument()->createParag( textDocument(), last );
-        if ( f )
-	    s->setFormat( 0, 1, f, true );
+	s->setFormat( 0, 1, f, true );
         if ( style )
             s->setStyle( style );
         s->setCounter( counter );

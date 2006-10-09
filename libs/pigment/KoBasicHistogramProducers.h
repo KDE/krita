@@ -86,7 +86,7 @@ protected:
 class /*PIGMENT_EXPORT*/ KoBasicU8HistogramProducer : public KoBasicHistogramProducer {
 public:
     KoBasicU8HistogramProducer(const KoID& id, KoColorSpace *colorSpace);
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
+    virtual void addRegionToBin(const quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const { return 1.0; }
 };
@@ -94,7 +94,7 @@ public:
 class /*PIGMENT_EXPORT*/ KoBasicU16HistogramProducer : public KoBasicHistogramProducer {
 public:
     KoBasicU16HistogramProducer(const KoID& id, KoColorSpace *colorSpace);
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
+    virtual void addRegionToBin(const quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
@@ -102,7 +102,7 @@ public:
 class /*PIGMENT_EXPORT*/ KoBasicF32HistogramProducer : public KoBasicHistogramProducer {
 public:
     KoBasicF32HistogramProducer(const KoID& id, KoColorSpace *colorSpace);
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
+    virtual void addRegionToBin(const quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
@@ -111,7 +111,7 @@ public:
 class /*PIGMENT_EXPORT*/ KoBasicF16HalfHistogramProducer : public KoBasicHistogramProducer {
 public:
     KoBasicF16HalfHistogramProducer(const KoID& id, KoColorSpace *colorSpace);
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
+    virtual void addRegionToBin(const quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
@@ -144,7 +144,7 @@ protected:
 class /*PIGMENT_EXPORT*/ KoGenericRGBHistogramProducer : public KoBasicHistogramProducer {
 public:
     KoGenericRGBHistogramProducer();
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
+    virtual void addRegionToBin(const quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
     virtual Q3ValueVector<KoChannelInfo *> channels();
@@ -173,7 +173,7 @@ class  /*PIGMENT_EXPORT*/ KoGenericLabHistogramProducer : public KoBasicHistogra
     public:
         KoGenericLabHistogramProducer();
         virtual ~KoGenericLabHistogramProducer();
-        virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
+        virtual void addRegionToBin(const quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
         virtual QString positionToString(double pos) const;
         virtual double maximalZoom() const;
         virtual Q3ValueVector<KoChannelInfo *> channels();

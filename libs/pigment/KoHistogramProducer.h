@@ -68,7 +68,7 @@ public:
      * @param nPixels The number of pixels
      * @param colorSpace the colorspace that can decode the pixel data.
      */
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace* colorSpace) = 0;
+    virtual void addRegionToBin(const quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace* colorSpace) = 0;
 
     // Methods to set what exactly is being added to the bins
     virtual void setView(double from, double width) = 0;

@@ -81,9 +81,4 @@ private:
 
 };
 
-typedef KisSharedPtr<KisAnnotation> KisAnnotationSP;
-typedef KisSharedPtrVector<KisAnnotation> vKisAnnotationSP;
-typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
-typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
-
 #endif // _KIS_ANNOTATION_H_

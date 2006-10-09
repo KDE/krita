@@ -2,19 +2,6 @@
 
 add_subdirectory( defaultpaintops )
 add_subdirectory( smearybrush )
+MESSAGE(STATUS "Readd cpaint directory")
+#add_subdirectory( cpaint )
 
-
-
-
-########### install files ###############
-
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = \
-#    defaultpaintops \
-#    smearybrush

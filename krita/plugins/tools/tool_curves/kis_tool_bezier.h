@@ -21,16 +21,16 @@
 #ifndef KIS_TOOL_BEZIER_H_
 #define KIS_TOOL_BEZIER_H_
 
+#include <QPointF>
+
 #include "kis_tool_factory.h"
 #include "kis_tool_curve.h"
-#include "kis_point.h"
 
 class CurvePoint;
-class KisPoint;
+class QPointF;
 class KisCanvas;
 class KisCurve;
 class KisPainter;
-class KisPoint;
 
 const int BEZIERENDHINT = 0x0010;
 const int BEZIERPREVCONTROLHINT = 0x0020;
@@ -43,9 +43,9 @@ class KisCurveBezier : public KisCurve {
 
     typedef KisCurve super;
 
-    void recursiveCurve (const KisPoint& P1, const KisPoint& P2, const KisPoint& P3,
-                         const KisPoint& P4, int level, iterator it);
-    KisPoint midpoint (const KisPoint&, const KisPoint&);
+    void recursiveCurve (const QPointF& P1, const QPointF& P2, const QPointF& P3,
+                         const QPointF& P4, int level, iterator it);
+    QPointF midpoint (const QPointF&, const QPointF&);
 
     int m_maxLevel;
     
@@ -56,8 +56,8 @@ public:
     ~KisCurveBezier() {}
 
     virtual void calculateCurve(iterator, iterator, iterator);
-    virtual iterator pushPivot(const KisPoint&);
-    virtual iterator movePivot(iterator, const KisPoint&);
+    virtual iterator pushPivot(const QPointF&);
+    virtual iterator movePivot(iterator, const QPointF&);
     virtual void deletePivot(iterator);
 
 public:
@@ -85,8 +85,8 @@ public:
 protected:
 
     virtual KisCurve::iterator handleUnderMouse(const QPoint& pos);
-    virtual void drawPivotHandle(KisCanvasPainter& gc, KisCurve::iterator point);
-    virtual KisCurve::iterator drawPoint(KisCanvasPainter& gc, KisCurve::iterator point);
+    virtual void drawPivotHandle(QPainter& gc, KisCurve::iterator point);
+    virtual KisCurve::iterator drawPoint(QPainter& gc, KisCurve::iterator point);
 
 protected:
 

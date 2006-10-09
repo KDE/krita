@@ -27,7 +27,7 @@ class ToolCurves : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ToolCurves(QObject *parent, const char *name, const QStringList &);
+    ToolCurves(QObject *parent, const QStringList &);
     virtual ~ToolCurves();
 
 };

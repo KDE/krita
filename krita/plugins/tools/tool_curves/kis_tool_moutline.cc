@@ -21,33 +21,30 @@
 #include <math.h>
 #include <set>
 
-#include <qpainter.h>
-#include <qlayout.h>
-#include <qrect.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qslider.h>
+#include <QPainter>
+#include <QLayout>
+#include <QRect>
+#include <QLabel>
+#include <QPushButton>
+#include <QSlider>
+#include <QPointF>
+#include <QList>
 
-#include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <knuminput.h>
+#include <kaction.h>
+#include <kactioncollection.h>
 
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"
-#include "kis_colorspace.h"
-#include "kis_channelinfo.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
-#include "kis_point.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
-#include "kis_canvas.h"
-#include "kis_canvas_painter.h"
 #include "kis_cursor.h"
 #include "kis_tool_controller.h"
 #include "kis_vec.h"
@@ -56,6 +53,7 @@
 #include "kis_selected_transaction.h"
 #include "kis_paintop_registry.h"
 #include "kis_convolution_painter.h"
+#include "kis_canvas.h"
 
 #include "kis_tool_moutline.h"
 
@@ -170,10 +168,10 @@ public:
         return m_tCost > n2.tCost();
     }
 
-    QValueList<Node> getNeighbor(const GrayMatrix& src, const Node& end)
+    QList<Node> getNeighbor(const GrayMatrix& src, const Node& end)
     {
         QPoint tmpdist;
-        QValueList<Node> temp;
+        QList<Node> temp;
         int dcol, drow;
         int g, h;
         bool malus;
@@ -204,10 +202,10 @@ public:
 
 };
 
-KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2,
-                          Q_INT32 i3, Q_INT32 i4, Q_INT32 i5,
-                          Q_INT32 i6, Q_INT32 i7, Q_INT32 i8,
-                          Q_INT32 factor, Q_INT32 offset )
+KisKernelSP createKernel( qint32 i0, qint32 i1, qint32 i2,
+                          qint32 i3, qint32 i4, qint32 i5,
+                          qint32 i6, qint32 i7, qint32 i8,
+                          qint32 factor, qint32 offset )
 {
     KisKernelSP kernel = new KisKernel();
     kernel->width = 3;
@@ -216,7 +214,7 @@ KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2,
     kernel->factor = factor;
     kernel->offset = offset;
 
-    kernel->data = new Q_INT32[9];
+    kernel->data = new qint32[9];
     kernel->data[0] = i0;
     kernel->data[1] = i1;
     kernel->data[2] = i2;
@@ -241,12 +239,12 @@ KisCurveMagnetic::~KisCurveMagnetic ()
 
 }
 
-KisCurve::iterator KisCurveMagnetic::addPivot (KisCurve::iterator it, const KisPoint& point)
+KisCurve::iterator KisCurveMagnetic::addPivot (KisCurve::iterator it, const QPointF& point)
 {
     return iterator(*this,m_curve.insert(it.position(), CurvePoint(point,true,false,LINEHINT)));
 }
 
-KisCurve::iterator KisCurveMagnetic::pushPivot (const KisPoint& point)
+KisCurve::iterator KisCurveMagnetic::pushPivot (const QPointF& point)
 {
     iterator it;
 
@@ -263,8 +261,8 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
         return;
     if (m_parent->editingMode())
         return;
-    QPoint start = (*p1).point().roundQPoint();
-    QPoint end = (*p2).point().roundQPoint();
+    QPoint start = (*p1).point().toPoint();
+    QPoint end = (*p2).point().toPoint();
     QRect rc = QRect(start,end).normalize();
     rc.setTopLeft(rc.topLeft()+QPoint(-8,-8));         // Enlarge the view, so problems with gaussian blur can be removed
     rc.setBottomRight(rc.bottomRight()+QPoint(8,8));   // and we are able to find paths that go beyond the rect.
@@ -294,8 +292,8 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
         openSet.erase(openSet.begin());
         openMatrix[current.col()][current.row()].clear();
 
-        QValueList<Node> successors = current.getNeighbor(dst,endNode);
-        for (QValueList<Node>::iterator i = successors.begin(); i != successors.end(); i++) {
+        QList<Node> successors = current.getNeighbor(dst,endNode);
+        for (QList<Node>::iterator i = successors.begin(); i != successors.end(); i++) {
             int col = (*i).col();
             int row = (*i).row();
             if ((*i) == endNode) {
@@ -417,10 +415,10 @@ void KisCurveMagnetic::toGrayScale (const QRect& rect, KisPaintDeviceSP src, Gra
     int grectw = rect.width();
     int grecth = rect.height();
     QColor c;
-    KisColorSpace *cs = src->colorSpace();
+    KoColorSpace *cs = src->colorSpace();
 
     for (int row = 0; row < grecth; row++) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(grectx, grecty+row, grectw, false);
+        KisHLineIteratorPixel srcIt = src->createHLineIterator(grectx, grecty+row, grectw);
         for (int col = 0; col < grectw; col++) {
             cs->toQColor(srcIt.rawData(),&c);
             dst[col][row] = qGray(c.rgb());
@@ -432,7 +430,7 @@ void KisCurveMagnetic::toGrayScale (const QRect& rect, KisPaintDeviceSP src, Gra
 void KisCurveMagnetic::getDeltas (const GrayMatrix& src, GrayMatrix& xdelta, GrayMatrix& ydelta)
 {
     uint start = 1, xend = src[0].count()-1, yend = src.count()-1;
-    Q_INT16 deri;
+    qint16 deri;
     for (uint col = 0; col < src.count(); col++) {
         for (uint row = 0; row < src[col].count(); row++) {
             if (row >= start && row < xend) {
@@ -453,7 +451,7 @@ void KisCurveMagnetic::getMagnitude (const GrayMatrix& xdelta, const GrayMatrix&
 {
     for (uint col = 0; col < xdelta.count(); col++) {
         for (uint row = 0; row < xdelta[col].count(); row++)
-            gradient[col][row] = (Q_INT16)(ROUND(RMS(xdelta[col][row],ydelta[col][row])));
+            gradient[col][row] = (qint16)(ROUND(RMS(xdelta[col][row],ydelta[col][row])));
     }
 }
 
@@ -471,12 +469,12 @@ void KisCurveMagnetic::nonMaxSupp (const GrayMatrix& magnitude, const GrayMatrix
     // For this reason: first direction is relative to Gy only and third direction to Gx only
     
     double  theta;      // theta = invtan (|Gy| / |Gx|) This give the direction relative to a quadrant
-    Q_INT16 mag;        // Current magnitude
-    Q_INT16 lmag;       // Magnitude at the left (So this pixel is "more internal" than the current
-    Q_INT16 rmag;       // Magnitude at the right (So this pixel is "more external")
+    qint16 mag;        // Current magnitude
+    qint16 lmag;       // Magnitude at the left (So this pixel is "more internal" than the current
+    qint16 rmag;       // Magnitude at the right (So this pixel is "more external")
     double  xdel;       // Current xdelta
     double  ydel;       // Current ydelta
-    Q_INT16 result;
+    qint16 result;
 
     for (uint col = 0; col < magnitude.count(); col++) {
         for (uint row = 0; row < magnitude[col].count(); row++) {
@@ -640,15 +638,15 @@ void KisToolMagnetic::buttonRelease(KisButtonReleaseEvent *event)
 
 void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
 {
-    updateOptions(event->state());
+    updateOptions(event->modifiers());
     if (!m_currentImage)
         return;
     if (event->button() == Qt::LeftButton) {
         m_dragging = true;
-        m_currentPoint = event->pos();
+        m_currentPoint = event->pos().toPointF();
         PointPair temp(m_curve->end(),false);
         if (m_editingMode)
-            temp = pointUnderMouse (m_subject->canvasController()->windowToView(event->pos().toQPoint()));
+            temp = pointUnderMouse (m_subject->canvasController()->windowToView(event->pos()).toPointF());
         if (temp.first == m_curve->end() && !(m_actionOptions)) {
             if (m_editingMode) {
                 draw(true, true);
@@ -658,9 +656,9 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
             draw(m_curve->end());
             if (!m_curve->isEmpty()) {
                 m_previous = m_current;
-                m_current = m_curve->pushPivot(event->pos());
+                m_current = m_curve->pushPivot(event->pos().toPointF());
             } else {
-                m_previous = m_current = m_curve->pushPivot(event->pos());
+                m_previous = m_current = m_curve->pushPivot(event->pos().toPointF());
             }
             if (m_curve->pivots().count() > 1)
                 m_curve->calculateCurve(m_previous,m_current,m_current);
@@ -690,11 +688,11 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
 
 void KisToolMagnetic::move(KisMoveEvent *event)
 {
-    updateOptions(event->state());
+    updateOptions(event->modifiers());
     if (m_currentPoint == event->pos().floorQPoint())
         return;
     if (m_editingMode) {
-        PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos().toQPoint()));
+        PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos()).toPointF());
         if (temp.first == m_curve->end() && !m_dragging) {
             if (m_editingCursor || m_draggingCursor) {
                 setCursor(KisCursor::load("tool_moutline_cursor.png", 6, 6));
@@ -723,26 +721,26 @@ void KisToolMagnetic::move(KisMoveEvent *event)
     if (m_curve->selectedPivots().isEmpty())
         return;
 
-    KisPoint trans = event->pos() - m_currentPoint;
-    KisPoint dist;
+    QPointF trans = event->pos().toPointF() - m_currentPoint;
+    QPointF dist;
     dist = (*m_current).point() - (*m_current.previousPivot()).point();
     if ((m_distance >= MINDIST && (fabs(dist.x()) + fabs(dist.y())) > m_distance && !(m_editingMode))
         || m_curve->pivots().count() == 1) {
         draw(m_curve->end());
         m_previous = m_current;
-        m_current = m_curve->pushPivot(event->pos());
+        m_current = m_curve->pushPivot(event->pos().toPointF());
     } else if ((*m_previous).point() == (*m_current).point() && (*m_previous).point() == m_curve->last().point())
         draw(m_curve->end());
     else
         draw(m_current);
-    m_curve->movePivot(m_current,event->pos());
+    m_curve->movePivot(m_current,event->pos().toPointF());
     m_currentPoint = event->pos().floorQPoint();
     draw(m_current);
 }
 
 KisCurve::iterator KisToolMagnetic::selectByMouse(KisCurve::iterator it)
 {
-    KisCurve::iterator currPivot = m_curve->selectPivot(m_curve->addPivot(it, KisPoint(0,0)));
+    KisCurve::iterator currPivot = m_curve->selectPivot(m_curve->addPivot(it, QPointF(0,0)));
     m_curve->movePivot(currPivot,(*it).point());
 
     return currPivot;
@@ -786,22 +784,18 @@ QWidget* KisToolMagnetic::createOptionWidget(QWidget* parent)
 
 void KisToolMagnetic::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(KShortcut(Qt::Key_F9));
-        m_action = new KRadioAction(i18n("Magnetic Outline"),
-                                    "tool_moutline",
-                                    shortcut,
-                                    this,
-                                    SLOT(activate()),
-                                    collection,
-                                    name());
+        m_action = new KAction(KIcon("moutline"),
+                               i18n("&Magnetic Outline Selection"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
-
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Magnetic Selection: move around an edge to select it. Hit Ctrl to enter/quit manual mode, and double click to finish."));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
+
         m_ownAction = true;
     }
 }

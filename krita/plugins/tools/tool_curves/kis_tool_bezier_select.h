@@ -21,9 +21,10 @@
 #ifndef KIS_TOOL_BEZIER_SELECT_H_
 #define KIS_TOOL_BEZIER_SELECT_H_
 
+#include "kis_point.h"
+
 #include "kis_tool_factory.h"
 #include "kis_tool_bezier.h"
-#include "kis_point.h"
 
 class KisToolBezierSelect : public KisToolBezier {
 
@@ -40,7 +41,7 @@ public:
 
 protected:
 
-    virtual QValueVector<KisPoint> convertCurve();
+    virtual QVector<KisPoint> convertCurve();
 
 };
 
@@ -56,7 +57,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("bezierselection", i18n("Bezier Selection Tool")); }
+    virtual KoID id() { return KoID("bezierselection", i18n("Bezier Selection Tool")); }
 };
 
 #endif //__KIS_TOOL_CURVE_PAINT_H_

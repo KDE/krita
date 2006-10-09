@@ -21,13 +21,13 @@
 #ifndef KIS_TOOL_CURVE_H_
 #define KIS_TOOL_CURVE_H_
 
-#include <qpen.h>
-#include <qcursor.h>
+#include <QPen>
+#include <QPointF>
+#include <QCursor>
 
+#include "kis_canvas_subject.h"
 #include "kis_selection.h"
 #include "kis_tool_paint.h"
-#include "kis_canvas_subject.h"
-#include "kis_point.h"
 
 #include "kis_curve_framework.h"
 
@@ -38,7 +38,7 @@ class KisSelectionOptions;
 typedef QPair<KisCurve::iterator,bool> PointPair;
 
 const double MAXDISTANCE = 2.5;
-double pointToSegmentDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
+double pointToSegmentDistance(const QPointF& p, const QPointF& l0, const QPointF& l1);
 
 class KisToolCurve : public KisToolPaint {
 
@@ -65,8 +65,8 @@ public slots:
 
 protected:
 
-    virtual void paint(KisCanvasPainter&);
-    virtual void paint(KisCanvasPainter&, const QRect&);
+    virtual void paint(QPainter&);
+    virtual void paint(QPainter&, const QRect&);
 
     /* ********************** *
      * KisToolCurve interface *
@@ -77,8 +77,8 @@ protected:
      */
     virtual int updateOptions(int);
 
-    virtual PointPair pointUnderMouse(const QPoint& pos);
-    virtual KisCurve::iterator handleUnderMouse(const QPoint& pos);
+    virtual PointPair pointUnderMouse(const QPointF& pos);
+    virtual KisCurve::iterator handleUnderMouse(const QPointF& pos);
 
     /*
      * Select the needed points; called after pointUnderMouse
@@ -86,7 +86,7 @@ protected:
     virtual KisCurve::iterator selectByMouse(KisCurve::iterator it);
 
     /*
-     * draw() initializes the KisCanvasPainter and then loop on the points of the curve for drawing them.
+     * draw() initializes the QPainter and then loop on the points of the curve for drawing them.
      */
     virtual void draw(bool = true, bool = false);
     virtual void draw(KisCurve::iterator inf, bool = false, bool = true);
@@ -94,21 +94,21 @@ protected:
     /*
      * Used by draw() to draw the current point of the curve. Can draw more than one point and then returns the last one
      */
-    virtual KisCurve::iterator drawPoint(KisCanvasPainter& gc, KisCurve::iterator point);
+    virtual KisCurve::iterator drawPoint(QPainter& gc, KisCurve::iterator point);
 
     /*
      * Used by draw(), if a point is a pivot, this draw the handle around it (if m_drawPivots is set to true)
      */
-    virtual void drawPivotHandle(KisCanvasPainter& gc, KisCurve::iterator point);
+    virtual void drawPivotHandle(QPainter& gc, KisCurve::iterator point);
 
     /*
      * Methods for commiting the curve
      */
 
     /*
-     * Called by selectCurve(), this convert m_curve to a vector of KisPoint in order to be used by paintPolygon()
+     * Called by selectCurve(), this convert m_curve to a vector of QPointF in order to be used by paintPolygon()
      */
-    virtual QValueVector<KisPoint> convertCurve();
+    virtual QVector<KisPoint> convertCurve();
 
     /*
      * Called by paintCurve(), it behaves essentially like drawPoint(), but this uses a KisPainter
@@ -133,12 +133,12 @@ protected:
     /*
      * Return the rect around a given point, assuming that that point is an unselected pivot
      */
-    QRect pivotRect (const QPoint&);
+    QRect pivotRect (const QPointF&);
 
     /*
      * Same as above for selected pivots
      */
-    QRect selectedPivotRect (const QPoint&);
+    QRect selectedPivotRect (const QPointF&);
 
 protected:
 
@@ -147,7 +147,7 @@ protected:
     KisCurve *m_curve;
     KisCurve::iterator m_current;
     KisCurve::iterator m_previous;
-    KisPoint m_currentPoint;
+    QPointF m_currentPoint;
     
     bool m_dragging;
     bool m_drawPivots;

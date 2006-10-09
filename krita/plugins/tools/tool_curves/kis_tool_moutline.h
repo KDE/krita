@@ -30,10 +30,10 @@ class KisToolMagnetic;
 class KisVector2D;
 class Node;
 
-typedef QValueVector<Node> NodeCol;
-typedef QValueVector<NodeCol> NodeMatrix;
-typedef QValueVector<Q_INT16> GrayCol;
-typedef QValueVector<GrayCol> GrayMatrix;
+typedef QVector<Node> NodeCol;
+typedef QVector<NodeCol> NodeMatrix;
+typedef QVector<qint16> GrayCol;
+typedef QVector<GrayCol> GrayMatrix;
 
 class KisCurveMagnetic : public KisCurve {
 
@@ -56,8 +56,8 @@ public:
     KisCurveMagnetic (KisToolMagnetic *parent);
     ~KisCurveMagnetic ();
 
-    virtual KisCurve::iterator addPivot (iterator, const KisPoint&);
-    virtual KisCurve::iterator pushPivot (const KisPoint&);
+    virtual KisCurve::iterator addPivot (iterator, const QPointF&);
+    virtual KisCurve::iterator pushPivot (const QPointF&);
     virtual void calculateCurve (iterator, iterator, iterator);
 
 };
@@ -125,7 +125,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("magneticoutline", i18n("Magnetic Outline Selection Tool")); }
+    virtual KoID id() { return KoID("magneticoutline", i18n("Magnetic Outline Selection Tool")); }
 };
 
 #endif // KIS_TOOL_MOUTLINE_H_

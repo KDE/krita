@@ -21,12 +21,12 @@
 #include <math.h>
 #include <limits.h>
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qlayout.h>
-#include <qrect.h>
+#include <QApplication>
+#include <QPainter>
+#include <QLayout>
+#include <QRect>
+#include <QPointF>
 
-#include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -34,14 +34,11 @@
 #include "kis_global.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
-#include "kis_point.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
-#include "kis_canvas.h"
-#include "kis_canvas_painter.h"
 #include "kis_cursor.h"
 #include "kis_tool_controller.h"
 #include "kis_vec.h"
@@ -49,18 +46,19 @@
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
 #include "kis_paintop_registry.h"
+#include "kis_canvas.h"
 
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 
-QRect KisToolCurve::pivotRect (const QPoint& pos)
+QRect KisToolCurve::pivotRect (const QPointF& pos)
 {
-    return QRect (pos-QPoint(4,4),pos+QPoint(4,4));
+    return QRect ((pos-QPointF(4,4)).toPoint(),(pos+QPointF(4,4)).toPoint());
 }
 
-QRect KisToolCurve::selectedPivotRect (const QPoint& pos)
+QRect KisToolCurve::selectedPivotRect (const QPointF& pos)
 {
-    return QRect (pos-QPoint(5,5),pos+QPoint(5,5));
+    return QRect ((pos-QPointF(5,5)).toPoint(),(pos+QPointF(5,5)).toPoint());
 }
 
 KisToolCurve::KisToolCurve(const QString& UIName)
@@ -112,20 +110,23 @@ void KisToolCurve::deactivate()
 
 void KisToolCurve::buttonPress(KisButtonPressEvent *event)
 {
-    updateOptions(event->state());
+    updateOptions(event->modifiers());
     if (!m_currentImage)
         return;
     if (event->button() == Qt::LeftButton) {
         m_dragging = true;
-        m_currentPoint = event->pos();
-        PointPair temp = pointUnderMouse (m_subject->canvasController()->windowToView(event->pos().toQPoint()));
+        m_currentPoint = event->pos().toPointF();
+        PointPair temp = pointUnderMouse (m_subject->canvasController()->windowToView(event->pos()).toPointF());
         if (temp.first == m_curve->end() && !(m_actionOptions)) {
             draw(true, true);
             m_curve->selectAll(false);
             draw(true, true);
             draw(m_curve->end());
-            m_previous = m_curve->find(m_curve->last());
-            m_current = m_curve->pushPivot(event->pos());
+	    if (!m_curve->isEmpty())
+                m_previous = m_curve->find(m_curve->last());
+	    else
+		m_previous = m_curve->end();
+            m_current = m_curve->pushPivot(event->pos().toPointF());
             if (m_curve->pivots().count() > 1)
                 m_curve->calculateCurve(m_previous,m_current,m_current);
             draw(m_current);
@@ -171,7 +172,7 @@ void KisToolCurve::keyRelease(QKeyEvent *)
 
 void KisToolCurve::buttonRelease(KisButtonReleaseEvent *event)
 {
-    updateOptions(event->state());
+    updateOptions(event->modifiers());
     m_dragging = false;
 }
 
@@ -182,8 +183,8 @@ void KisToolCurve::doubleClick(KisDoubleClickEvent *)
 
 void KisToolCurve::move(KisMoveEvent *event)
 {
-    updateOptions(event->state());
-    PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos().toQPoint()));
+    updateOptions(event->modifiers());
+    PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos()).toPointF());
     if (temp.first == m_curve->end() && !m_dragging) {
         if (m_draggingCursor) {
             setCursor(KisCursor::load(m_cursor, 6, 6));
@@ -195,15 +196,16 @@ void KisToolCurve::move(KisMoveEvent *event)
     }
     if (m_dragging) {
         draw();
-        KisPoint trans = event->pos() - m_currentPoint;
+        QPointF trans = event->pos().toPointF() - m_currentPoint;
         m_curve->moveSelected(trans);
-        m_currentPoint = event->pos();
+        m_currentPoint = event->pos().toPointF();
         draw();
     }
 }
 
-double pointToSegmentDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1)
+double pointToSegmentDistance(const QPointF& pp, const QPointF& pl0, const QPointF& pl1)
 {
+    KisPoint l0 = pl0, l1 = pl1, p = pp;
     double lineLength = sqrt((l1.x() - l0.x()) * (l1.x() - l0.x()) + (l1.y() - l0.y()) * (l1.y() - l0.y()));
     double distance = 0;
     KisVector2D v0(l0), v1(l1), v(p), seg(v0-v1), dist0(v0-p), dist1(v1-p);
@@ -220,10 +222,10 @@ double pointToSegmentDistance(const KisPoint& p, const KisPoint& l0, const KisPo
     return distance;
 }
 
-PointPair KisToolCurve::pointUnderMouse(const QPoint& pos)
+PointPair KisToolCurve::pointUnderMouse(const QPointF& pos)
 {
     KisCurve::iterator it, next;
-    QPoint pos1, pos2;
+    QPointF pos1, pos2;
     it = handleUnderMouse(pos);
     if (it != m_curve->end())
         return PointPair(it,true);
@@ -234,8 +236,8 @@ PointPair KisToolCurve::pointUnderMouse(const QPoint& pos)
             return PointPair(m_curve->end(),false);
         if ((*it).hint() > LINEHINT || (*next).hint() > LINEHINT)
             continue;
-        pos1 = m_subject->canvasController()->windowToView((*it).point().toQPoint());
-        pos2 = m_subject->canvasController()->windowToView((*next).point().toQPoint());
+        pos1 = m_subject->canvasController()->windowToView((*it).point()).toPointF();
+        pos2 = m_subject->canvasController()->windowToView((*next).point()).toPointF();
         if (pos1 == pos2)
             continue;
         if (pointToSegmentDistance(pos,pos1,pos2) <= MAXDISTANCE)
@@ -245,12 +247,12 @@ PointPair KisToolCurve::pointUnderMouse(const QPoint& pos)
     return PointPair(it,false);
 }
 
-KisCurve::iterator KisToolCurve::handleUnderMouse(const QPoint& pos)
+KisCurve::iterator KisToolCurve::handleUnderMouse(const QPointF& pos)
 {
     KisCurve pivs = m_curve->pivots(), inHandle;
     KisCurve::iterator it;
     for (it = pivs.begin(); it != pivs.end(); it++) {
-        if (pivotRect(m_subject->canvasController()->windowToView((*it).point().toQPoint())).contains(pos))
+        if (pivotRect(m_subject->canvasController()->windowToView((*it).point()).toPointF()).contains(pos.toPoint()))
             inHandle.pushPoint((*it));
     }
     if (inHandle.isEmpty())
@@ -306,18 +308,18 @@ void KisToolCurve::draw(KisCurve::iterator inf, bool pivotonly, bool minimal)
 {
     if (m_curve->isEmpty())
         return;
-    KisCanvasPainter *gc;
+    QPainter *gc;
     KisCanvasController *controller;
     KisCanvas *canvas;
     if (m_subject && m_currentImage) {
         controller = m_subject->canvasController();
         canvas = controller->kiscanvas();
-        gc = new KisCanvasPainter(canvas);
+        gc = new QPainter(canvas->canvasWidget());
     } else
         return;
 
     gc->setPen(m_drawingPen);
-    gc->setRasterOp(Qt::XorROP);
+//    gc->setRasterOp(Qt::XorROP);
 
     KisCurve::iterator it, finish;
 
@@ -370,12 +372,12 @@ void KisToolCurve::draw(KisCurve::iterator inf, bool pivotonly, bool minimal)
     delete gc;
 }
 
-KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::iterator point)
+KisCurve::iterator KisToolCurve::drawPoint(QPainter& gc, KisCurve::iterator point)
 {
     KisCanvasController *controller = m_subject->canvasController();
 
-    QPoint pos1, pos2;
-    pos1 = controller->windowToView((*point).point().toQPoint());
+    QPointF pos1, pos2;
+    pos1 = controller->windowToView((*point).point()).toPointF();
 
     switch ((*point).hint()) {
     case POINTHINT:
@@ -385,7 +387,7 @@ KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::itera
     case LINEHINT:
         gc.drawPoint(pos1);
         if (++point != m_curve->end() && (*point).hint() <= LINEHINT) {
-            pos2 = controller->windowToView((*point).point().toQPoint());
+            pos2 = controller->windowToView((*point).point()).toPointF();
             gc.drawLine(pos1,pos2);
         }
         break;
@@ -396,12 +398,12 @@ KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::itera
     return point;
 }
 
-void KisToolCurve::drawPivotHandle(KisCanvasPainter& gc, KisCurve::iterator point)
+void KisToolCurve::drawPivotHandle(QPainter& gc, KisCurve::iterator point)
 {
     KisCanvasController *controller = m_subject->canvasController();
 
     if (m_drawPivots) {
-        QPoint pos = controller->windowToView((*point).point().toQPoint());
+        QPointF pos = controller->windowToView((*point).point()).toPointF();
         if ((*point).isSelected()) {
             gc.setPen(m_selectedPivotPen);
             gc.drawRoundRect(selectedPivotRect(pos),m_selectedPivotRounding,m_selectedPivotRounding);
@@ -413,12 +415,12 @@ void KisToolCurve::drawPivotHandle(KisCanvasPainter& gc, KisCurve::iterator poin
     }
 }
 
-void KisToolCurve::paint(KisCanvasPainter&)
+void KisToolCurve::paint(QPainter&)
 {
     draw(false);
 }
 
-void KisToolCurve::paint(KisCanvasPainter&, const QRect&)
+void KisToolCurve::paint(QPainter&, const QRect&)
 {
     draw(false);
 }
@@ -487,9 +489,9 @@ KisCurve::iterator KisToolCurve::paintPoint (KisPainter& painter, KisCurve::iter
     return point;
 }
 
-QValueVector<KisPoint> KisToolCurve::convertCurve()
+QVector<KisPoint> KisToolCurve::convertCurve()
 {
-    QValueVector<KisPoint> points;
+    QVector<KisPoint> points;
 
     for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); i++)
         if ((*i).hint() != NOHINTS)
@@ -513,7 +515,7 @@ void KisToolCurve::selectCurve()
 
     KisPainter painter(selection.data());
 
-    painter.setPaintColor(KisColor(Qt::black, selection->colorSpace()));
+    painter.setPaintColor(KoColor(Qt::black, selection->colorSpace()));
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
     painter.setStrokeStyle(KisPainter::StrokeStyleNone);
     painter.setBrush(m_subject->currentBrush());
@@ -523,10 +525,10 @@ void KisToolCurve::selectCurve()
 
     switch (m_selectAction) {
     case SELECTION_ADD:
-        painter.setCompositeOp(COMPOSITE_OVER);
+        painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
         break;
     case SELECTION_SUBTRACT:
-        painter.setCompositeOp(COMPOSITE_SUBTRACT);
+        painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
         break;
     default:
         break;

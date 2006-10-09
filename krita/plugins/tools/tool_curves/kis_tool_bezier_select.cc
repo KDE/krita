@@ -19,21 +19,22 @@
  */
 
 
-#include <qpainter.h>
-#include <qlayout.h>
-#include <qrect.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qwhatsthis.h>
-#include <qcheckbox.h>
+#include <QPainter>
+#include <QLayout>
+#include <QRect>
+#include <QLabel>
+#include <QPushButton>
+#include <QWhatsThis>
+#include <QCheckBox>
+#include <QPointF>
 
 #include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kactioncollection.h>
 
 #include "kis_cmb_composite.h"
-#include "kis_colorspace.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
@@ -43,12 +44,10 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
-#include "kis_point.h"
 #include "kis_tool_controller.h"
 #include "kis_tool_paint.h"
 
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
 #include "kis_canvas_subject.h"
 
 #include "kis_curve_framework.h"
@@ -67,9 +66,9 @@ KisToolBezierSelect::~KisToolBezierSelect()
 
 }
 
-QValueVector<KisPoint> KisToolBezierSelect::convertCurve()
+QVector<KisPoint> KisToolBezierSelect::convertCurve()
 {
-    QValueVector<KisPoint> points;
+    QVector<KisPoint> points;
 
     for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); i++) {
         if (((*i).hint() != BEZIERPREVCONTROLHINT) && ((*i).hint() != BEZIERNEXTCONTROLHINT))
@@ -81,22 +80,18 @@ QValueVector<KisPoint> KisToolBezierSelect::convertCurve()
 
 void KisToolBezierSelect::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(KShortcut(Qt::Key_F9));
-        m_action = new KRadioAction(i18n("&Bezier"),
-                                    "tool_bezier_select",
-                                    shortcut,
-                                    this,
-                                    SLOT(activate()),
-                                    collection,
-                                    name());
+        m_action = new KAction(KIcon("bezier_select"),
+                               i18n("&Bezier Path"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
-
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Select areas of the image with bezier paths."));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
+
         m_ownAction = true;
     }
 }

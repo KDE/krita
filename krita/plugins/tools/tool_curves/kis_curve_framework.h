@@ -19,7 +19,7 @@
 #ifndef KIS_CURVE_FRAMEWORK_H_
 #define KIS_CURVE_FRAMEWORK_H_
 
-#include "kis_point.h"
+#include <QPointF>
 
 const int NOHINTS = 0x0000;
 const int POINTHINT = 0x0001;
@@ -34,7 +34,7 @@ const int KEEPSELECTEDOPTION = CONTROLOPTION;
 
 class CurvePoint {
 
-    KisPoint m_point;
+    QPointF m_point;
     bool m_pivot;
     bool m_selected; // Only pivots can be selected
 
@@ -45,7 +45,7 @@ public:
     /* Constructors and Destructor */
     
     CurvePoint ();
-    CurvePoint (const KisPoint&, bool = false, bool = false, int = POINTHINT);
+    CurvePoint (const QPointF&, bool = false, bool = false, int = POINTHINT);
     CurvePoint (double, double, bool = false, bool = false, int = POINTHINT);
     
     ~CurvePoint () {}
@@ -54,19 +54,19 @@ public:
 
     /* Generic Functions */
 
-    bool operator!= (KisPoint p2) const { if (p2 != m_point) return true; else return false; }
+    bool operator!= (QPointF p2) const { if (p2 != m_point) return true; else return false; }
     bool operator!= (CurvePoint p2) const { if (p2.point() != m_point ||
                                                 p2.isPivot() != m_pivot ||
                                                 p2.hint() != m_hint) return true; else return false; }
 
-    bool operator== (KisPoint p2) const { if (p2 == m_point) return true; else return false; }
+    bool operator== (QPointF p2) const { if (p2 == m_point) return true; else return false; }
     bool operator== (CurvePoint p2) const { if (p2.point() == m_point &&
                                                 p2.isPivot() == m_pivot &&
                                                 p2.hint() == m_hint) return true; else return false; }
 
-    KisPoint point() const {return m_point;}
+    QPointF point() const {return m_point;}
     
-    void setPoint(const KisPoint&);
+    void setPoint(const QPointF&);
     void setPoint(double, double);
 
     bool isPivot() const {return m_pivot;}
@@ -78,8 +78,8 @@ public:
     void setHint(int h) {m_hint = h;}
 };
 
-typedef QValueList<CurvePoint> PointList;
-typedef QValueList<CurvePoint>::iterator BaseIterator;
+typedef QList<CurvePoint> PointList;
+typedef QList<CurvePoint>::iterator BaseIterator;
 
 class CurveIterator;
 
@@ -112,13 +112,13 @@ public:
     CurvePoint& operator[](int i) {return m_curve[i];}
 
     iterator addPoint(iterator, const CurvePoint&);
-    iterator addPoint(iterator, const KisPoint&, bool = false, bool = false, int = POINTHINT);
+    iterator addPoint(iterator, const QPointF&, bool = false, bool = false, int = POINTHINT);
 
     iterator pushPoint(const CurvePoint&);
-    iterator pushPoint(const KisPoint&, bool = false, bool = false, int = POINTHINT);
+    iterator pushPoint(const QPointF&, bool = false, bool = false, int = POINTHINT);
 
-    virtual iterator addPivot(iterator, const KisPoint&);
-    virtual iterator pushPivot(const KisPoint&);
+    virtual iterator addPivot(iterator, const QPointF&);
+    virtual iterator pushPivot(const QPointF&);
 
     int count() const {return m_curve.count();}
     bool isEmpty() const {return m_curve.isEmpty();}
@@ -131,16 +131,16 @@ public:
     iterator lastIterator() const;
     iterator end() const;
     iterator find(const CurvePoint& pt);
-    iterator find(const KisPoint& pt);
+    iterator find(const QPointF& pt);
     iterator find(iterator it, const CurvePoint& pt);
-    iterator find(iterator it, const KisPoint& pt);
+    iterator find(iterator it, const QPointF& pt);
     
     KisCurve pivots();
     KisCurve selectedPivots(bool = true);
-    KisCurve subCurve(const KisPoint&);
+    KisCurve subCurve(const QPointF&);
     KisCurve subCurve(const CurvePoint&);
     KisCurve subCurve(iterator);
-    KisCurve subCurve(const KisPoint&, const KisPoint&);
+    KisCurve subCurve(const QPointF&, const QPointF&);
     KisCurve subCurve(const CurvePoint&, const CurvePoint&);
     KisCurve subCurve(iterator,iterator);
 
@@ -148,30 +148,30 @@ public:
     virtual void deleteFirstPivot();
     virtual void deleteLastPivot();
     
-    virtual iterator deleteCurve(const KisPoint&, const KisPoint&);
+    virtual iterator deleteCurve(const QPointF&, const QPointF&);
     virtual iterator deleteCurve(const CurvePoint&, const CurvePoint&);
     virtual iterator deleteCurve(iterator, iterator);
 
     /* Core of the Core, calculateCurve is the only function that *needs* an implementation in the derived curves */
-    virtual void calculateCurve(const KisPoint&, const KisPoint&, iterator);
+    virtual void calculateCurve(const QPointF&, const QPointF&, iterator);
     virtual void calculateCurve(const CurvePoint&, const CurvePoint&, iterator);
     virtual void calculateCurve(iterator, iterator, iterator);
     virtual void calculateCurve(iterator*);
     virtual void calculateCurve();
 
     virtual iterator selectPivot(const CurvePoint&, bool = true);
-    virtual iterator selectPivot(const KisPoint&, bool = true);
+    virtual iterator selectPivot(const QPointF&, bool = true);
     virtual iterator selectPivot(iterator, bool = true);
 
-    virtual iterator movePivot(const CurvePoint&, const KisPoint&);
-    virtual iterator movePivot(const KisPoint&, const KisPoint&);
-    virtual iterator movePivot(iterator, const KisPoint&);
+    virtual iterator movePivot(const CurvePoint&, const QPointF&);
+    virtual iterator movePivot(const QPointF&, const QPointF&);
+    virtual iterator movePivot(iterator, const QPointF&);
 
     virtual void deletePivot(const CurvePoint&);
-    virtual void deletePivot(const KisPoint&);
+    virtual void deletePivot(const QPointF&);
     virtual void deletePivot(iterator);
 
-    virtual void moveSelected(const KisPoint&);
+    virtual void moveSelected(const QPointF&);
     virtual void deleteSelected();
     virtual void selectAll(bool = true);
 };
@@ -241,8 +241,12 @@ public:
     CurveIterator nextPivot()
     {
         CurveIterator it = *this;
-        while (it != m_target->m_curve.end()) {
+	if (it == m_target->m_curve.end())
+	    return it;
+        while ( 1 ) {
             it+=1;
+	    if (it == m_target->m_curve.end())
+	    	return it;
             if ((*it).isPivot())
                 return it;
         }
@@ -260,7 +264,7 @@ inline CurvePoint::CurvePoint ()
 
 }
     
-inline CurvePoint::CurvePoint (const KisPoint& pt, bool p, bool s, int h)
+inline CurvePoint::CurvePoint (const QPointF& pt, bool p, bool s, int h)
     : m_pivot(p), m_selected((p) ? s : false), m_hint(h)
 {
     m_point = pt;
@@ -269,18 +273,18 @@ inline CurvePoint::CurvePoint (const KisPoint& pt, bool p, bool s, int h)
 inline CurvePoint::CurvePoint (double x, double y, bool p, bool s, int h)
     : m_pivot(p), m_selected((p) ? s : false), m_hint(h)
 {
-    KisPoint tmp(x,y);
+    QPointF tmp(x,y);
     m_point = tmp;
 }
 
-inline void CurvePoint::setPoint(const KisPoint& p)
+inline void CurvePoint::setPoint(const QPointF& p)
 {
     m_point = p;
 }
 
 inline void CurvePoint::setPoint(double x, double y)
 {
-    KisPoint tmp(x,y);
+    QPointF tmp(x,y);
     m_point = tmp;
 }
 
@@ -317,7 +321,7 @@ inline KisCurve::iterator KisCurve::find (const CurvePoint& pt)
     return iterator(*this,m_curve.find(pt));
 }
 
-inline KisCurve::iterator KisCurve::find (const KisPoint& pt)
+inline KisCurve::iterator KisCurve::find (const QPointF& pt)
 {
     return iterator(*this,m_curve.find(CurvePoint(pt)));
 }
@@ -327,12 +331,12 @@ inline KisCurve::iterator KisCurve::find (KisCurve::iterator it, const CurvePoin
     return iterator(*this,m_curve.find(it.position(),pt));
 }
 
-inline KisCurve::iterator KisCurve::find (iterator it, const KisPoint& pt)
+inline KisCurve::iterator KisCurve::find (iterator it, const QPointF& pt)
 {
     return iterator(*this,m_curve.find(it.position(),CurvePoint(pt)));
 }
 
-inline void KisCurve::calculateCurve(const KisPoint& start, const KisPoint& end, KisCurve::iterator it)
+inline void KisCurve::calculateCurve(const QPointF& start, const QPointF& end, KisCurve::iterator it)
 {
     calculateCurve(find(CurvePoint(start)),find(CurvePoint(end)),it);
 }

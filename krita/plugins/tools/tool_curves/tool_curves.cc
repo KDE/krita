@@ -19,9 +19,6 @@
  */
 
 #include <stdlib.h>
-#include <vector>
-
-#include <qpoint.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -40,13 +37,11 @@
 #include "kis_tool_bezier_select.h"
 #include "kis_tool_moutline.h"
 
-
 typedef KGenericFactory<ToolCurves> ToolCurvesFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatoolcurves, ToolCurvesFactory( "krita" ) )
 
-
-ToolCurves::ToolCurves(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+ToolCurves::ToolCurves(QObject *parent, const QStringList &)
+    : KParts::Plugin(parent)
 {
     setInstance(ToolCurvesFactory::instance());
 

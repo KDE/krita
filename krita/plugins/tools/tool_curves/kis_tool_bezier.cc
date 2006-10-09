@@ -20,9 +20,11 @@
 
 #include <math.h>
 
-#include <qpainter.h>
-#include <qlayout.h>
-#include <qrect.h>
+#include <QPainter>
+#include <QLayout>
+#include <QRect>
+#include <QPointF>
+#include <QPolygon>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -33,11 +35,9 @@
 #include "kis_global.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
-#include "kis_point.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
 #include "kis_cursor.h"
 #include "kis_vec.h"
 
@@ -116,24 +116,24 @@ KisCurve::iterator KisCurveBezier::prevGroupEndpoint (KisCurve::iterator it) con
     return temp;
 }
 
-KisPoint KisCurveBezier::midpoint (const KisPoint& P1, const KisPoint& P2)
+QPointF KisCurveBezier::midpoint (const QPointF& P1, const QPointF& P2)
 {
-    KisPoint temp;
+    QPointF temp;
     temp.setX((P1.x()+P2.x())/2);
     temp.setY((P1.y()+P2.y())/2);
     return temp;
 }
 
-void KisCurveBezier::recursiveCurve (const KisPoint& P1, const KisPoint& P2, const KisPoint& P3,
-                                     const KisPoint& P4, int level, KisCurve::iterator it)
+void KisCurveBezier::recursiveCurve (const QPointF& P1, const QPointF& P2, const QPointF& P3,
+                                     const QPointF& P4, int level, KisCurve::iterator it)
 {
     if (level > m_maxLevel) {
         addPoint(it,midpoint(P1,P4),false,false,LINEHINT);
         return;
     }
 
-    KisPoint L1, L2, L3, L4;
-    KisPoint H, R1, R2, R3, R4;
+    QPointF L1, L2, L3, L4;
+    QPointF H, R1, R2, R3, R4;
 
     L1 = P1;
     L2 = midpoint(P1, P2);
@@ -184,7 +184,7 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
     
 }
 
-KisCurve::iterator KisCurveBezier::pushPivot (const KisPoint& point)
+KisCurve::iterator KisCurveBezier::pushPivot (const QPointF& point)
 {
     iterator it;
 
@@ -197,7 +197,7 @@ KisCurve::iterator KisCurveBezier::pushPivot (const KisPoint& point)
     return selectPivot(it);
 }
 
-KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const KisPoint& newPt)
+KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const QPointF& newPt)
 {
     if (!(*it).isPivot())
         return end();
@@ -210,7 +210,7 @@ KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const KisPoi
     nextEnd = nextGroupEndpoint(it);
 
     if (hint == BEZIERENDHINT) {
-        KisPoint trans = newPt - (*it).point();
+        QPointF trans = newPt - (*it).point();
         (*thisEnd).setPoint((*thisEnd).point()+trans);
         (*thisEnd.previous()).setPoint((*thisEnd.previous()).point()+trans);
         (*thisEnd.next()).setPoint((*thisEnd.next()).point()+trans);
@@ -218,8 +218,8 @@ KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const KisPoi
         (*it).setPoint(newPt);
     if (!(m_actionOptions & KEEPSELECTEDOPTION) && hint != BEZIERENDHINT) {
         if (nextEnd == end() || (m_actionOptions & SYMMETRICALCONTROLSOPTION)) {
-            KisPoint trans = (*it).point() - (*thisEnd).point();
-            trans = KisPoint(-trans.x()*2,-trans.y()*2);
+            QPointF trans = (*it).point() - (*thisEnd).point();
+            trans = QPointF(-trans.x()*2,-trans.y()*2);
             if (hint == BEZIERNEXTCONTROLHINT)
                 (*groupPrevControl(it)).setPoint(newPt+trans);
             else
@@ -283,7 +283,7 @@ KisCurve::iterator KisToolBezier::handleUnderMouse(const QPoint& pos)
     KisCurve::iterator it;
     int hint;
     for (it = pivs.begin(); it != pivs.end(); it++) {
-        qpos = m_subject->canvasController()->windowToView((*it).point().toQPoint());
+        qpos = m_subject->canvasController()->windowToView((*it).point()).toQPoint();
         hint = (*it).hint();
         if (hint != BEZIERENDHINT && !m_derivated->groupSelected(it))
             continue;
@@ -303,7 +303,7 @@ KisCurve::iterator KisToolBezier::handleUnderMouse(const QPoint& pos)
     return m_curve->find(inHandle.last());
 }
 
-KisCurve::iterator KisToolBezier::drawPoint (KisCanvasPainter& gc, KisCurve::iterator point)
+KisCurve::iterator KisToolBezier::drawPoint (QPainter& gc, KisCurve::iterator point)
 {
     if ((*point).hint() != BEZIERENDHINT)
         return ++point;
@@ -321,11 +321,11 @@ KisCurve::iterator KisToolBezier::drawPoint (KisCanvasPainter& gc, KisCurve::ite
 
     if (control2 != m_curve->end()) {
         point = control2;
-        QPointArray vec(4);
-        vec[0] = controller->windowToView((*origin).point().toQPoint());
-        vec[1] = controller->windowToView((*control1).point().toQPoint());
-        vec[2] = controller->windowToView((*control2).point().toQPoint());
-        vec[3] = controller->windowToView((*destination).point().toQPoint());
+        QPolygon vec(4);
+        vec[0] = controller->windowToView((*origin).point()).toQPoint();
+        vec[1] = controller->windowToView((*control1).point()).toQPoint();
+        vec[2] = controller->windowToView((*control2).point()).toQPoint();
+        vec[3] = controller->windowToView((*destination).point()).toQPoint();
         gc.drawCubicBezier(vec);
     }
 
@@ -334,21 +334,21 @@ KisCurve::iterator KisToolBezier::drawPoint (KisCanvasPainter& gc, KisCurve::ite
     return point;
 }
 
-void KisToolBezier::drawPivotHandle (KisCanvasPainter& gc, KisCurve::iterator point)
+void KisToolBezier::drawPivotHandle (QPainter& gc, KisCurve::iterator point)
 {
     if ((*point).hint() != BEZIERENDHINT)
         return;
 
     KisCanvasController *controller = m_subject->canvasController();
 
-    QPoint endpPos = controller->windowToView((*point).point().toQPoint());
+    QPoint endpPos = controller->windowToView((*point).point()).toQPoint();
 
     if (!m_derivated->groupSelected(point)) {
         gc.setPen(m_pivotPen);
         gc.drawRoundRect(pivotRect(endpPos),m_pivotRounding,m_pivotRounding);
     } else {
-        QPoint nextControlPos = controller->windowToView((*point.next()).point().toQPoint());
-        QPoint prevControlPos = controller->windowToView((*point.previousPivot()).point().toQPoint());
+        QPoint nextControlPos = controller->windowToView((*point.next()).point()).toQPoint();
+        QPoint prevControlPos = controller->windowToView((*point.previousPivot()).point()).toQPoint();
 
         gc.setPen(m_selectedPivotPen);
         gc.drawRoundRect(selectedPivotRect(endpPos),m_selectedPivotRounding,m_selectedPivotRounding);

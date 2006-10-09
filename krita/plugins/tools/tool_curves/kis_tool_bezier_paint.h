@@ -23,7 +23,6 @@
 
 #include "kis_tool_factory.h"
 #include "kis_tool_bezier.h"
-#include "kis_point.h"
 
 class KisToolBezierPaint : public KisToolBezier {
 
@@ -56,7 +55,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("beziershape", i18n("Bezier Painting Tool")); }
+    virtual KoID id() { return KoID("beziershape", i18n("Bezier Painting Tool")); }
 };
 
 #endif //__KIS_TOOL_CURVE_PAINT_H_

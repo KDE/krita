@@ -1,0 +1,65 @@
+
+set(krita_ycbcr_u8_LIB_SRCS kis_ycbcr_u8_colorspace.cc )
+
+kde4_automoc(${krita_ycbcr_u8_LIB_SRCS})
+
+kde4_add_library(krita_ycbcr_u8 SHARED ${krita_ycbcr_u8_LIB_SRCS})
+
+target_link_libraries(krita_ycbcr_u8  ${KDE4_KDECORE_LIBS} kritacolor )
+
+set_target_properties(krita_ycbcr_u8 PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+install(TARGETS krita_ycbcr_u8 DESTINATION ${LIB_INSTALL_DIR} )
+
+
+########### next target ###############
+
+set(krita_ycbcr_u8_plugin_PART_SRCS ycbcr_u8_plugin.cc )
+
+kde4_automoc(${krita_ycbcr_u8_plugin_PART_SRCS})
+
+kde4_add_plugin(krita_ycbcr_u8_plugin ${krita_ycbcr_u8_plugin_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_ycbcr_u8_plugin )
+
+target_link_libraries(krita_ycbcr_u8_plugin  ${KDE4_KDECORE_LIBS} krita_ycbcr_u8 kritacolor )
+
+install(TARGETS krita_ycbcr_u8_plugin DESTINATION ${PLUGIN_INSTALL_DIR} )
+
+
+########### install files ###############
+
+install( FILES  krita_ycbcr_u8_plugin.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+
+
+
+#original Makefile.am contents follow:
+
+## Install the desktop file needed to detect the plugin
+#
+#
+#INCLUDES  =  -I$(srcdir)/../../sdk \
+#	-I$(srcdir)/../../kritacolor/color_strategy/ \
+#	-I$(srcdir)/../../kritacolor/ \
+#	$(KOFFICE_INCLUDES) \
+#	$(all_includes)
+#
+#lib_LTLIBRARIES = libkrita_ycbcr_u8.la
+#
+#libkrita_ycbcr_u8_la_LDFLAGS = $(all_libraries)
+#libkrita_ycbcr_u8_la_LIBADD =  ../../kritacolor/libkritacolor.la
+#
+## Install this plugin in the KDE modules directory
+#kde_module_LTLIBRARIES = krita_ycbcr_u8_plugin.la
+#
+## Srcs for the plugin
+#krita_ycbcr_u8_plugin_la_SOURCES = ycbcr_u8_plugin.cc
+#noinst_HEADERS = ycbcr_u8_plugin.h kis_ycbcr_u8_colorspace.h
+#
+#krita_ycbcr_u8_plugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+#krita_ycbcr_u8_plugin_la_LIBADD =  libkrita_ycbcr_u8.la ../../kritacolor/libkritacolor.la
+#
+#METASOURCES = AUTO
+#
+#
+#libkrita_ycbcr_u8_la_SOURCES = kis_ycbcr_u8_colorspace.cc
+#kde_services_DATA = krita_ycbcr_u8_plugin.desktop

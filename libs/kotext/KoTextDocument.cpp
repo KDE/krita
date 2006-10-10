@@ -956,7 +956,10 @@ QPixmap *KoTextDocument::bufferPixmap( const QSize &s )
 
 void KoTextDocument::registerCustomItem( KoTextCustomItem *i, KoTextParag *p )
 {
-    if ( i && i->placement() != KoTextCustomItem::PlaceInline )
+    if (!i)
+        return;
+
+    if ( i->placement() != KoTextCustomItem::PlaceInline )
 	flow_->registerFloatingItem( i );
     p->registerFloatingItem( i );
     i->setParagraph( p );

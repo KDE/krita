@@ -601,6 +601,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
     if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
+        QColor color;
         emit notifyProgressStage(i18n("Anti-aliasing gradient..."), lastProgressPercent);
         Q_UINT8 * layerPointer = layer.bits();
         for (int y = starty; y <= endy; y++) {
@@ -670,7 +671,6 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
                             Q_UINT8 opacity;
 
-                            QColor color;
                             m_gradient->colorAt(t, &color, &opacity);
 
                             totalRed += color.red();

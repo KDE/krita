@@ -29,8 +29,8 @@
 
 #include "KoDecorationTab.moc"
 
-KoDecorationTab::KoDecorationTab( QWidget* parent, const char* name, Qt::WFlags fl )
-    : KoDecorationTabBase( parent, name, fl )
+KoDecorationTab::KoDecorationTab( QWidget* parent )
+    : KoDecorationTabBase( parent )
 {
     shadowDistanceKDoubleNumInput->setRange(0, 9, 0.5, false);
 

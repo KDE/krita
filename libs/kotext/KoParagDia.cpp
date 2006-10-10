@@ -26,7 +26,6 @@
 #include "KoTextParag.h"
 #include "KoTextDocument.h"
 #include "KoTextZoomHandler.h"
-#include "KoParagDecorationTab.h"
 #include "KoBorderPreview.h"
 
 #include <KoCharSelectDia.h>

@@ -20,16 +20,25 @@
 #ifndef __kohigdecorationtab_h__
 #define __kohigdecorationtab_h__
 
-#include <kodecorationtabbase.h>
+#include <ui_kodecorationtabbase.h>
 
 #include <QColor>
+
+class KoDecorationTabBase : public QWidget, public Ui::KoDecorationTabBase
+{
+public:
+  KoDecorationTabBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class KoDecorationTab : public KoDecorationTabBase
 {
     Q_OBJECT
 
 public:
-    KoDecorationTab( QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
+    KoDecorationTab( QWidget* parent=0);
     ~KoDecorationTab();
 
     QColor getTextColor() const;

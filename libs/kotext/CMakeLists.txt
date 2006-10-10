@@ -80,16 +80,17 @@ kde4_automoc(${kotext_LIB_SRCS})
 
 kde4_add_ui_files(kotext_LIB_SRCS 
    timedateformatwidget.ui
+   kolanguagetabbase.ui
+   kodecorationtabbase.ui
+   KoParagDecorationTab.ui
 )
 
 kde4_add_ui3_files(kotext_LIB_SRCS 
    kofonttabbase.ui 
    kohighlightingtabbase.ui 
-   kodecorationtabbase.ui 
    kolayouttabbase.ui 
-   kolanguagetabbase.ui 
-   KoCompletionBase.ui 
-   KoParagDecorationTab.ui )
+   KoCompletionBase.ui )
+
 
 # kde4_add_dcop_skels(kotext_LIB_SRCS KoTextViewIface.h )
 

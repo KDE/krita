@@ -39,6 +39,7 @@
 #include <q3groupbox.h>
 #include <koffice_export.h>
 #include <QStackedWidget>
+#include "ui_KoParagDecorationTab.h"
 class QListWidget;
 class KoTextZoomHandler;
 class KButtonBox;
@@ -64,7 +65,15 @@ class KDoubleNumInput;
 class KComboBox;
 class Q3VBoxLayout;
 class KoUnitDoubleSpinBox;
-class KoParagDecorationTab; // From KoParagDecorationTab.ui
+
+class KoParagDecorationTab : public QWidget, public Ui::KoParagDecorationTab
+{
+public:
+  KoParagDecorationTab( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 /**
  * This is the base class for any widget [usually used in a tab]

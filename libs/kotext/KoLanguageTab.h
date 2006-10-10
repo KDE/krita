@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2001,2002,2003,2006 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,9 +20,18 @@
 #ifndef __kolanguagetab_h__
 #define __kolanguagetab_h__
 
-#include <kolanguagetabbase.h>
+#include <ui_kolanguagetabbase.h>
 
 #include <sonnet/loader.h>
+
+class KoLanguageTabBase : public QWidget, public Ui::KoLanguageTabBase
+{
+public:
+  KoLanguageTabBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class KoLanguageTab : public KoLanguageTabBase
 {

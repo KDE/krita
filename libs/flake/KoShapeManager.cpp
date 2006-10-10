@@ -104,7 +104,7 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
     const QRegion clipRegion = painter.clipRegion();
 
     foreach ( KoShape * shape, sorterdShapes ) {
-        if(! shape->isVisible())
+        if(! shape->isVisible() || ( shape->parent() && ! shape->parent()->isVisible() ) )
             continue;
         if(shape->parent() != 0 && shape->parent()->childClipped(shape))
             continue;

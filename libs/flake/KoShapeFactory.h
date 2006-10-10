@@ -197,8 +197,9 @@ private:
 
     QList<KoShapeTemplate> m_templates;
     QList<KoShapeConfigFactory*> m_configPanels;
-    QString m_tooltip, m_iconName;
     const QString m_id, m_name;
+    QString m_tooltip;
+    QString m_iconName;
 };
 
 #endif // _KO_SHAPE_FACTORY_

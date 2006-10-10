@@ -155,26 +155,17 @@ void KisGradient::setImage(const QImage& img)
 
 KisGradientSegment *KisGradient::segmentAt(double t) const
 {
-    if (t < DBL_EPSILON) {
-        t = 0;
-    }
-    else
-    if (t > 1 - DBL_EPSILON) {
-        t = 1;
-    }
+    Q_ASSERT(t >= 0 || t <= 1);
+    Q_ASSERT(!m_segments.empty());
 
-    Q_ASSERT(m_segments.count() != 0);
-
-    KisGradientSegment *segment = 0;
-
-    for (int i = 0; i < m_segments.count(); i++) {
-        if (t > m_segments[i]->startOffset() - DBL_EPSILON && t < m_segments[i]->endOffset() + DBL_EPSILON) {
-            segment = m_segments[i];
-            break;
+    for(QList<KisGradientSegment *>::const_iterator it = m_segments.begin(); it!= m_segments.end(); ++it)
+    {
+        if (t > (*it)->startOffset() - DBL_EPSILON && t < (*it)->endOffset() + DBL_EPSILON) {
+            return *it;
         }
     }
 
-    return segment;
+    return 0;
 }
 
 KoColor KisGradient::colorAt(double t) const

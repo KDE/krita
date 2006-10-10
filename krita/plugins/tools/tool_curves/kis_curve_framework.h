@@ -231,7 +231,7 @@ public:
     CurveIterator previousPivot()
     {
         CurveIterator it = *this;
-        while (it != m_target->m_curve.begin()) {
+        while (it != m_target->begin()) {
             it-=1;
             if ((*it).isPivot())
                 return it;
@@ -242,16 +242,15 @@ public:
 
     CurveIterator nextPivot()
     {
-        CurveIterator it = *this;
-	if (it == m_target->m_curve.end())
-	    return it;
-        while ( 1 ) {
+        BaseIterator it = m_position;
+        while ( it != m_target->m_curve.end()) {
             it+=1;
 	    if (it == m_target->m_curve.end())
-	    	return it;
+	    	return CurveIterator(*m_target,it);
             if ((*it).isPivot())
-                return it;
+                return CurveIterator(*m_target,it);
         }
+	return CurveIterator(*m_target,it);
     }
 };
 

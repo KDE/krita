@@ -159,29 +159,29 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
 
     if ((*tstart).hint() == BEZIERENDHINT) {
         origin = tstart;
-        control1 = tstart.nextPivot();
+        control1 = tstart.next();
     } else if ((*tstart).hint() == BEZIERNEXTCONTROLHINT) {
-        origin = tstart.previousPivot();
+        origin = tstart.previous();
         control1 = tstart;
     } else if ((*tstart).hint() == BEZIERPREVCONTROLHINT) {
-        origin = tstart.nextPivot();
-        control1 = origin.nextPivot();
+        origin = tstart.next();
+        control1 = origin.next();
     } else
         return;
         
     if ((*tend).hint() == BEZIERENDHINT) {
         dest = tend;
-        control2 = tend.previousPivot();
+        control2 = tend.previous();
     } else if ((*tend).hint() == BEZIERPREVCONTROLHINT) {
-        dest = tend.nextPivot();
+        dest = tend.next();
         control2 = tend;
     } else if ((*tend).hint() == BEZIERNEXTCONTROLHINT) {
-        dest = tend.previousPivot();
-        control2 = dest.previousPivot();
+        dest = tend.previous();
+        control2 = dest.previous();
     } else
         return;
 
-    deleteCurve(control1,control2);
+    deleteCurve(control1, control2);
     recursiveCurve((*origin).point(),(*control1).point(),(*control2).point(),(*dest).point(),1,control2);
     
 }
@@ -190,17 +190,32 @@ KisCurve::iterator KisCurveBezier::pushPivot (const QPointF& point)
 {
     iterator it;
 
-    it = pushPoint(point,true,false,BEZIERPREVCONTROLHINT);
-#if 0
+    int i;
+    if (isEmpty())
+	i = 0;
+    else
+	i = pivots().count() % 3;
+
+    switch (i) {
+    case 0:
+	it = pushPoint(point,true,false,BEZIERENDHINT);
+	break;
+    case 1:
+	it = pushPoint(point,true,false,BEZIERNEXTCONTROLHINT);
+	break;
+    case 2:
+	it = pushPoint(point,true,false,BEZIERPREVCONTROLHINT);
+	break;
+    }
+/*
+    it = pushPoint(point,true,false,BEZIERENDHINT);
     if (count() > 1) {
 	kdDebug(0) << "QUI" << endl;
         addPoint(it,point,true,false,BEZIERPREVCONTROLHINT);
     }
-#endif
-    it = pushPoint(point,true,false,BEZIERENDHINT);
     
     it = pushPoint(point,true,false,BEZIERNEXTCONTROLHINT);
-    
+*/
     return selectPivot(it);
 }
 

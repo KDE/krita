@@ -124,9 +124,10 @@ namespace Kross {
 
             /**
              * Set the current page to \p name . If there exists no page with
-             * such a pagename the method does nothing.
+             * such a pagename the method returns false else (if the page was
+             * successfully set) true is returned.
              */
-            void setCurrentPage(const QString& name);
+            bool setCurrentPage(const QString& name);
 
             /**
              * \return the QWidget page instance which has the pagename \p name

@@ -65,10 +65,10 @@ namespace Kross {
             {
                 setModal( false );
                 setParent( parent, windowFlags() & ~Qt::WindowType_Mask );
-                //setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                 setGeometry(0, 0, width(), height());
                 setFocusProxy( locationEdit );
-                //parent->setMinimumSize( QSize(width(), height()) );
+                //setMinimumSize( QSize(width(), height()) );
+                setMinimumSize( QSize(480,360) );
 
                 if( layout() )
                     layout()->setMargin(0);
@@ -84,9 +84,9 @@ namespace Kross {
 
                 if( actionCollection() ) {
                     KAction* a = actionCollection()->action("toggleSpeedbar");
-                    if(a && a->isCheckable() && a->isChecked()) a->toggle();
+                    if( a && a->isCheckable() && a->isChecked() ) a->toggle();
                     a = actionCollection()->action("toggleBookmarks");
-                    if(a && a->isCheckable() && a->isChecked()) a->toggle();
+                    if( a && a->isCheckable() && a->isChecked() ) a->toggle();
                 }
             }
 
@@ -96,7 +96,7 @@ namespace Kross {
             {
                 KUrl selectedUrl;
                 QString locationText = locationEdit->currentText();
-                if(locationText.contains( '/' )) { // relative path? -> prepend the current directory
+                if( locationText.contains( '/' ) ) { // relative path? -> prepend the current directory
                     KUrl u( ops->url(), KShell::tildeExpand(locationText) );
                     selectedUrl = u.isValid() ? u : selectedUrl = ops->url();
                 }
@@ -121,8 +121,8 @@ namespace Kross {
                 kDebug() << "FormFileWidget::reject" << endl;
                 for(QWidget* parent = parentWidget(); parent; parent = parent->parentWidget()) {
                     FormDialog* dialog = qobject_cast<FormDialog*>(parent);
-                    if(dialog) { dialog->reject(); break; }
-                    if(parent == QApplication::activeModalWidget() || parent == QApplication::activeWindow()) break;
+                    if( dialog ) { dialog->reject(); break; }
+                    if( parent == QApplication::activeModalWidget() || parent == QApplication::activeWindow() ) break;
                 }
                 //KFileDialog::reject();
             }
@@ -136,12 +136,10 @@ namespace Kross {
 
             QString startDirOrVariable;
             KFileDialog::OperationMode mode;
-
             QString currentFilter;
             QString filter;
             QString currentMimeFilter;
             QStringList mimeFilter;
-
             QString selectedFile;
 
             Private(const QString& startDirOrVariable) : impl(0), startDirOrVariable(startDirOrVariable) {}
@@ -179,7 +177,7 @@ QString FormFileWidget::currentFilter() const
 
 void FormFileWidget::setFilter(QString filter)
 {
-    filter.replace(QRegExp("([^\\\\]{1,1})/"), "\\1\\/");
+    filter.replace(QRegExp("([^\\\\]{1,1})/"), "\\1\\/"); // escape '/' chars else KFileDialog assumes they are mimetypes :-/
     d->filter = filter;
     if( d->impl )
         d->impl->setFilter(d->filter);
@@ -205,12 +203,12 @@ QString FormFileWidget::selectedFile() const
 void FormFileWidget::showEvent(QShowEvent* event)
 {
     QWidget::showEvent(event);
-    if(! d->impl) {
+    if( ! d->impl ) {
         d->impl = new FormFileWidgetImpl(this, d->startDirOrVariable);
         d->impl->setOperationMode(d->mode);
-        if(d->mimeFilter.count() > 0)
+        if( d->mimeFilter.count() > 0 )
             d->impl->setMimeFilter(d->mimeFilter);
-        else if(! d->filter.isEmpty())
+        else if( ! d->filter.isEmpty() )
             d->impl->setFilter(d->filter);
         d->impl->show();
     }
@@ -220,7 +218,7 @@ void FormFileWidget::hideEvent(QHideEvent* event)
 {
     QWidget::hideEvent(event);
     /*
-    if(d->impl) {
+    if( d->impl ) {
         d->selectedFile = selectedFile();
         d->currentFilter = currentFilter();
         d->currentMimeFilter = currentMimeFilter();
@@ -250,11 +248,8 @@ FormDialog::FormDialog(const QString& caption)
     , d( new Private() )
 {
     setCaption(caption);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     KDialog::setButtons(KDialog::Ok);
-
-    //m_dialog->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred) );
-    setMinimumSize( QSize(580,420) );
+    setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding) );
 
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
             this, SLOT(slotCurrentPageChanged(KPageWidgetItem*)));
@@ -268,16 +263,11 @@ FormDialog::~FormDialog()
 bool FormDialog::setButtons(const QString& buttons)
 {
     int i = metaObject()->indexOfEnumerator("ButtonCode");
-    if(i < 0) {
-        kWarning() << "Kross::FormDialog::setButtons No such enumerator \"ButtonCode\"" << endl;
-        return false;
-    }
+    Q_ASSERT( i >= 0 );
     QMetaEnum e = metaObject()->enumerator(i);
     int v = e.keysToValue( buttons.toUtf8() );
-    if(v < 0) {
-        kDebug() << "Kross::FormDialog::setButtons Invalid buttons \"" << buttons << "\" defined" << endl;
+    if( v < 0 )
         return false;
-    }
     KDialog::setButtons( (KDialog::ButtonCode) v );
     return true;
 }
@@ -285,16 +275,11 @@ bool FormDialog::setButtons(const QString& buttons)
 bool FormDialog::setFaceType(const QString& facetype)
 {
     int i = KPageView::staticMetaObject.indexOfEnumerator("FaceType");
-    if(i < 0) {
-        kWarning() << "Kross::FormDialog::setFaceType No such enumerator \"FaceType\"" << endl;
-        return false;
-    }
+    Q_ASSERT( i >= 0 );
     QMetaEnum e = KPageView::staticMetaObject.enumerator(i);
     int v = e.keysToValue( facetype.toUtf8() );
-    if(v < 0) {
-        kDebug() << "Kross::FormDialog::setFaceType Invalid facetype \"" << facetype << "\" defined" << endl;
+    if( v < 0 )
         return false;
-    }
     KPageDialog::setFaceType( (KPageDialog::FaceType) v );
     return true;
 }
@@ -302,13 +287,15 @@ bool FormDialog::setFaceType(const QString& facetype)
 QString FormDialog::currentPage() const
 {
     KPageWidgetItem* item = KPageDialog::currentPage();
-    return item ? item->name() : 0;
+    return item ? item->name() : QString::null;
 }
 
-void FormDialog::setCurrentPage(const QString& name)
+bool FormDialog::setCurrentPage(const QString& name)
 {
-    if( d->items.contains(name) )
-        KPageDialog::setCurrentPage( d->items[name] );
+    if( ! d->items.contains(name) )
+        return false;
+    KPageDialog::setCurrentPage( d->items[name] );
+    return true;
 }
 
 QWidget* FormDialog::page(const QString& name) const
@@ -326,7 +313,7 @@ QWidget* FormDialog::addPage(const QString& name, const QString& header, const Q
 
     KPageWidgetItem* item = KPageDialog::addPage(widget, name);
     item->setHeader(header);
-    if(! iconname.isEmpty())
+    if( ! iconname.isEmpty() )
         item->setIcon( KIcon(iconname) );
     d->items.insert(name, item);
 
@@ -336,7 +323,7 @@ QWidget* FormDialog::addPage(const QString& name, const QString& header, const Q
 QString FormDialog::result()
 {
     int i = metaObject()->indexOfEnumerator("ButtonCode");
-    if(i < 0) {
+    if( i < 0 ) {
         kWarning() << "Kross::FormDialog::setButtons No such enumerator \"ButtonCode\"" << endl;
         return QString::null;
     }
@@ -352,7 +339,7 @@ void FormDialog::slotButtonClicked(int button)
 
 void FormDialog::slotCurrentPageChanged(KPageWidgetItem* current)
 {
-    kDebug() << "FormDialog::slotCurrentPageChanged current=" << current->name() << endl;
+    //kDebug() << "FormDialog::slotCurrentPageChanged current=" << current->name() << endl;
     //foreach(QWidget* widget, current->widget()->findChildren< QWidget* >("")) widget->setFocus();
 }
 
@@ -366,16 +353,9 @@ namespace Kross {
     class FormModule::Private
     {
         public:
-            QFormBuilder* formBuilder() {
-                if(! m_formbuilder)
-                    m_formbuilder = new QFormBuilder();
-                return m_formbuilder;
-            }
-
-            Private() : m_formbuilder(0) {}
-            ~Private() { delete m_formbuilder; m_formbuilder = 0; }
-        private:
-            QFormBuilder* m_formbuilder;
+            QFormBuilder* builder;
+            Private() : builder( new QFormBuilder() ) {}
+            ~Private() { delete builder; }
     };
 
 }
@@ -415,38 +395,37 @@ QWidget* FormModule::createWidget(QWidget* parent, const QString& classname)
 
 QWidget* FormModule::createFileWidget(QWidget* parent, const QString& startDirOrVariable)
 {
+    if( ! parent )
+        return 0;
     FormFileWidget* widget = new FormFileWidget(parent, startDirOrVariable);
-    //KDialog* dialog = qobject_cast<KDialog*>(parent);
-    //if(parent->inherits("KDialog"))
-    //    parent = static_cast<KDialog*>(parent)->mainWidget();
-    //if(parent->layout())
+    if( parent->layout() )
         parent->layout()->addWidget(widget);
     return widget;
 }
 
 QWidget* FormModule::createWidgetFromUI(QWidget* parent, const QString& xml)
 {
+    if( ! parent )
+        return 0;
     QByteArray ba = xml.toUtf8();
     QBuffer buffer(&ba);
     buffer.open(QIODevice::ReadOnly);
-    QWidget* widget = d->formBuilder()->load(&buffer, parent);
-    if(widget && parent) {
-        //if(parent->inherits("KDialog"))
-        //    parent = static_cast<KDialog*>(parent)->mainWidget();
-        //if(parent->layout())
-            parent->layout()->addWidget(widget);
-    }
+    QWidget* widget = d->builder->load(&buffer, parent);
+    if( widget && parent->layout() )
+        parent->layout()->addWidget(widget);
     return widget;
 }
 
 QWidget* FormModule::createWidgetFromUIFile(QWidget* parent, const QString& filename)
 {
+    if( ! parent )
+        return 0;
     QFile file(filename);
-    if(! file.exists()) {
+    if( ! file.exists() ) {
         kDebug() << QString("Kross::FormModule::createWidgetFromUIFile: There exists no such file \"%1\"").arg(filename) << endl;
         return false;
     }
-    if(! file.open(QFile::ReadOnly)) {
+    if( ! file.open(QFile::ReadOnly) ) {
         kDebug() << QString("Kross::FormModule::createWidgetFromUIFile: Failed to open the file \"%1\"").arg(filename) << endl;
         return false;
     }

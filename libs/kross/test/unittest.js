@@ -1,17 +1,6 @@
 // Print something on the console.
 println("Let's start the KjsEmbed Unittest :-)");
 
-/*TODO
-- KjsEmbed callAsFunction in qobject_binding.cpp does currently not eval returnvalues.
-- KjsEmbed may still miss types like uint, qlonglong, qulonglong, ...
-- We need more security;
-  - insecure functionality like e.g. setParent or QFile
-  - limit read/write access to defined directories/files
-  - how to prevent filling of the fs with >n GB files?
-  - iosupport, network, dynamic loaded modules, ...
-  - how to prevent infiniv loops?
-*/
-
 function UnitTest()
 {
 	var numpassed = 0;

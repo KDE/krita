@@ -1,5 +1,5 @@
 """
-Python Image Library script.
+Python script to export a Krita image using the Python Imaging Library.
 
 This python script uses the Python Image Library ( PIL, see
 http://www.pythonware.com/library/ ) to import and export
@@ -18,7 +18,7 @@ try:
 	import Image, ImageFile, string
 	Image.init()
 except:
-	raise "Failed to import the Python Image Library (PIL)."
+	raise "Failed to import the Python Imaging Library (PIL)."
 
 def saveToFile(filename):
 	import Krita, Image, ImageFile
@@ -60,6 +60,9 @@ def saveToFile(filename):
 #filename = tkFileDialog.asksaveasfilename(filetypes=filters)
 #if filename:
 	#saveToFile(filename)
+
+#######################################################################################
+# Following code uses the Kross::FormModule to display a fileopen-dialog.
 
 filters = []
 allfilters = ""

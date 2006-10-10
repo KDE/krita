@@ -1,5 +1,5 @@
 """
-Python Image Library script.
+Python script to import an image into Krita using the Python Imaging Library.
 
 This python script uses the Python Image Library ( PIL, see
 http://www.pythonware.com/library/ ) to import and export
@@ -9,108 +9,113 @@ Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
 Published under the GNU GPL >=v2
 """
 
-try:
-	import Krita
-except:
-	raise "Failed to import the Krita module."
+class Importer:
+    """ The Importer class encapsulates the whole import a by the PIL module
+    supported image file format into Krita functionality. """
 
-try:
-	import Image, ImageFile
-	Image.init()
-except:
-	raise "Failed to import the Python Image Library (PIL)."
+    def __init__(self):
+        """ The constructor called if the Importer class got instanciated and
+        imports our needed modules to be sure there are available. """
 
-def loadFromFile(filename):
-	print "trying to load file: %s" % filename
+        try:
+            import Kross
+        except:
+            raise "Failed to import the Kross module."
 
-	import Krita, Image, ImageFile
+        try:
+            import Krita
+        except:
+            raise "Failed to import the Krita module."
 
-	pilimage = Image.open(filename)
-	pilimage = pilimage.convert("RGB")
+        try:
+            import Image, ImageFile
+            Image.init()
+        except:
+            raise "Failed to import the Python Imaging Library (PIL)."
 
-	(height, width) = pilimage.size
+        self.showDialog()
 
-	krtprogress = Krita.progress()
-	krtprogress.setProgressTotalSteps(width * height)
+    def showDialog(self):
+        """ Shows the import-dialog and let the user define the imagefile which
+        should be imported as well as some additional import-options. """
 
-	krtimage = Krita.image()
-	if krtimage.width() != width or krtimage.height() != height:
-		krtimage.resize(width, height, 0, 0)
+        import Kross
+        dialog = Kross.forms().createDialog("Python Imaging Library Import")
+        try:
+            dialog.setButtons("Ok|Cancel")
+            page = dialog.addPage("File","Import Image From File","fileopen")
+            widget = Kross.forms().createFileWidget(page, "kfiledialog:///kritapilimport")
+            widget.setMode("Opening")
+            widget.setFilter(self.getFilters())
+            if dialog.exec_loop():
+                self.filename = widget.selectedFile()
+                self.doImport()
+        finally:
+            dialog.delayedDestruct()
 
-	krtlayer = krtimage.activePaintLayer()
+    def getFilters(self):
+        """ Returns a filters-string of the readable fileformats supported by PIL. """
 
-	#krtcolorspaceid = krtlayer.colorSpaceId()
-	#krtlayer.convertToColorspace()
+        import Image
+        filters = []
+        allfilters = ""
+        for i in Image.ID:
+            try:
+                factory, accept = Image.OPEN[i]
+                filters.append( "*.%s|%s (*.%s)" % (factory.format,factory.format_description,factory.format.lower()) )
+                allfilters += "*.%s " % factory.format
+            except KeyError:
+                pass
+        if len(filters) > 0:
+            filters.insert(0, "%s|All Supported Files" % allfilters)
+        return "\n".join(filters)
 
-	#if colorspaceid == "RGBA": # RGB (8-bit integer/channel)
-		#self.mode = "P" # 8-bit palette-mapped image.
-	##elif colorspaceid == "RGBA16": # RGB (16-bit integer/channel)
-	##elif colorspaceid == "RGBAF16HALF": # "RGB (16-bit float/channel)
-	##elif colorspaceid == "RGBAF32": # RGB (32-bit float/channel)
-	##elif colorspaceid == "GRAYA": # Grayscale (8-bit integer/channel)
-	##elif colorspaceid == "GRAYA16": # Grayscale (16-bit integer/channel)
-	##elif colorspaceid == "CMYK": # CMYK (8-bit integer/channel)
-	##elif colorspaceid == "CMYKA16": # CMYK (16-bit integer/channel)
-	##elif colorspaceid == "LMSAF32": # "LMS Cone Space (32-bit float/channel)"
-	##elif colorspaceid == "YCbCrAU16": # YCBCR (16-bit integer/channel)
-	##elif colorspaceid == "YCbCrAU8": # YCBCR (8-bit integer/channel)
-	##elif colorspaceid == "WET": # Watercolors
-	##elif colorspaceid == "W&S": # Wet & Sticky
-	#else:
-		#raise "The Krita colorspace \"%s\" is not supported by the KritaPil-plugin"
+    def doImport(self):
+        """ Loads the image from the defined filename and imports it. """
 
-	krtlayer.beginPainting("PIL import")
-	it = krtlayer.createRectIterator(0, 0, width, height)
-	finesh = it.isDone()
-	while (not finesh):
-		data = pilimage.getpixel( (it.x(),it.y()) )
-		it.setPixel( list(data) )
-		krtprogress.incProgress()
-		finesh = it.next()
-	krtlayer.endPainting()
+        import Krita, Image, ImageFile
 
-#######################################################################################
-# Following code uses TkInter to display a fileopen-dialog.
+        pilimage = Image.open(self.filename)
+        pilimage = pilimage.convert("RGB")
 
-#filters = []
-#for i in Image.ID:
-	#try:
-		#factory, accept = Image.OPEN[i]
-		#filters.append( (factory.format_description,".%s .%s" % (factory.format,factory.format.lower())) )
-	#except KeyError:
-		#pass
+        (height, width) = pilimage.size
 
-#import Tkinter, tkFileDialog
-#Tkinter.Tk().withdraw()
-#filename = tkFileDialog.askopenfilename(filetypes=filters)
-#if filename:
-	#loadFromFile(filename)
+        krtprogress = Krita.progress()
+        krtprogress.setProgressTotalSteps(width * height)
 
-#######################################################################################
-# Following code uses the Kross::FormModule to display a fileopen-dialog.
+        krtimage = Krita.image()
+        if krtimage.width() != width or krtimage.height() != height:
+            krtimage.resize(width, height, 0, 0)
 
-filters = []
-allfilters = ""
-for i in Image.ID:
-	try:
-		factory, accept = Image.OPEN[i]
-		filters.append( "*.%s|%s (*.%s)" % (factory.format,factory.format_description,factory.format.lower()) )
-		allfilters += "*.%s " % factory.format
-	except KeyError:
-		pass
-if len(filters) > 0:
-	filters.insert(0, "%s|All Supported Files" % allfilters)
+        krtlayer = krtimage.activePaintLayer()
 
-import Kross
-dialog = Kross.forms().createDialog("Python Imaging Library Import")
-try:
-	dialog.setButtons("Ok|Cancel")
-	page = dialog.addPage("File","Import Image From File","fileopen")
-	widget = Kross.forms().createFileWidget(page, "kfiledialog:///kritapilimport")
-	widget.setMode("Opening")
-	widget.setFilter( "\n".join(filters) )
-	if dialog.exec_loop():
-		file = widget.selectedFile()
-		loadFromFile(file)
-finally:
-	dialog.delayedDestruct()
+        #krtcolorspaceid = krtlayer.colorSpaceId()
+        #krtlayer.convertToColorspace()
+        #if colorspaceid == "RGBA": # RGB (8-bit integer/channel)
+            #self.mode = "P" # 8-bit palette-mapped image.
+        ##elif colorspaceid == "RGBA16": # RGB (16-bit integer/channel)
+        ##elif colorspaceid == "RGBAF16HALF": # "RGB (16-bit float/channel)
+        ##elif colorspaceid == "RGBAF32": # RGB (32-bit float/channel)
+        ##elif colorspaceid == "GRAYA": # Grayscale (8-bit integer/channel)
+        ##elif colorspaceid == "GRAYA16": # Grayscale (16-bit integer/channel)
+        ##elif colorspaceid == "CMYK": # CMYK (8-bit integer/channel)
+        ##elif colorspaceid == "CMYKA16": # CMYK (16-bit integer/channel)
+        ##elif colorspaceid == "LMSAF32": # "LMS Cone Space (32-bit float/channel)"
+        ##elif colorspaceid == "YCbCrAU16": # YCBCR (16-bit integer/channel)
+        ##elif colorspaceid == "YCbCrAU8": # YCBCR (8-bit integer/channel)
+        ##elif colorspaceid == "WET": # Watercolors
+        ##elif colorspaceid == "W&S": # Wet & Sticky
+        #else:
+            #raise "The Krita colorspace \"%s\" is not supported by the KritaPil-plugin"
+
+        krtlayer.beginPainting("PIL import")
+        it = krtlayer.createRectIterator(0, 0, width, height)
+        finesh = it.isDone()
+        while (not finesh):
+            data = pilimage.getpixel( (it.x(),it.y()) )
+            it.setPixel( list(data) )
+            krtprogress.incProgress()
+            finesh = it.next()
+        krtlayer.endPainting()
+
+Importer()

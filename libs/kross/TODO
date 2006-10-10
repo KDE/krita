@@ -1,0 +1,46 @@
+== Kross TODO ==
+
+Always valid:
+* more performance
+* more documentations, tutorials, examples, ...
+* more unittests
+* maybe one day we like to be able to execute untrusted scripts what
+  in turn means, that we could need a secure interpreter-backend.
+  KjsEmbed does not fit into that category currently and is insecure
+  like Python. Ruby comes at least with security-levels. So, either
+  extend KjsEmbed to be as secure as Kjs, eval and propably use Ruby
+  security-levels, reintroduce Zope's RestrictedPython for python or
+  just implement a Java-backend and use it's strong sandbox.
+* add Kross-support to other KOffice-applications.
+
+Core:
+* refactor Action::functionNames and Action::callFunction to offer the
+  functions a script provides either as KActionCollection where each
+  function is a KAction or let Action dynamicly build slots where
+  each slot represents a function.
+* extend forms + maybe move that functionality into an own dynamic
+  loadable module.
+* add KConfig-module to provide persistent configurations where all
+  scripts are able to operate on.
+* add KStandardDirs-module to be able to reuse e.g. the resource-stuff
+  from within all scripts without much pain.
+
+Ruby:
+* support access to the QObject-hierachy
+* support Q_PROPERTY and Q_ENUMS
+* reimplement signals+slots support
+* add better dynamic Korundum integration (e.g. trade QObject-instances
+  around between QtRuby and Kross). Korundum misses SIP-like functionality
+  here but since at the end everything is a pointer, it's just a matter
+  of dirty code to get that support done.
+
+Python:
+* support Q_ENUMS
+* reimplement signals+slots support
+* uncomment dynamic PyQt-support + regressiontest just every case
+
+KjsEmbed:
+* there is still a lot of functionality missing within KjsEmbed to
+  have it as first class citizen within Kross. What is needed are
+  more tests + a list of functionality that is still needed + a list
+  of bugs that need to be fixed + someone who does solve them all :)

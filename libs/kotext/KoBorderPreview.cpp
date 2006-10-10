@@ -23,7 +23,7 @@
 #include <QPainter>
 
 KoBorderPreview::KoBorderPreview( QWidget* parent )
-    :Q3Frame(parent)
+    :QFrame(parent)
 {
 }
 

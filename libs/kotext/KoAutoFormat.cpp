@@ -46,7 +46,7 @@
 #include <q3whatsthis.h>
 #include <QRegExp>
 #include <QTextStream>
-#include <Q3Frame>
+#include <QFrame>
 #include <QMouseEvent>
 
 
@@ -55,7 +55,7 @@ KoCompletionBox::KoCompletionBox( QWidget * parent, const char* /*name*/, Qt::WF
 {
 //  setBackground(QColor("#FFFFE6"));    still needed in Qt4 ??
   setFocusPolicy(Qt::NoFocus);
-  setFrameShape(Q3Frame::Box);
+  setFrameShape(QFrame::Box);
 }
 
 KoCompletionBox::~KoCompletionBox()

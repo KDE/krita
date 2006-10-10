@@ -22,10 +22,10 @@
 #ifndef KOBORDERPREVIEW_H
 #define KOBORDERPREVIEW_H
 
-#include <Q3Frame>
+#include <QFrame>
 #include "KoBorder.h"
 
-class KOTEXT_EXPORT KoBorderPreview : public Q3Frame/*QGroupBox*/
+class KOTEXT_EXPORT KoBorderPreview : public QFrame/*QGroupBox*/
 {
     Q_OBJECT
 

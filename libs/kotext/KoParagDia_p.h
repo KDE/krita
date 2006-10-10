@@ -26,7 +26,6 @@
 #include <q3groupbox.h>
 //Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3Frame>
 #include <KoParagCounter.h>
 #include <QSpinBox>
 class QWidget;

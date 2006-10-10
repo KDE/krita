@@ -38,7 +38,7 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3PtrList>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3ValueList>
 #include <QResizeEvent>
 

@@ -113,7 +113,7 @@ modified in the preview.&lt;/p></string>
                   </widget>
                 </item>
                 <item>
-                  <widget class="Q3Frame" name="borderPreview" >
+                  <widget class="QFrame" name="borderPreview" >
                     <property name="sizePolicy" >
                       <sizepolicy>
                         <hsizetype>5</hsizetype>
@@ -139,7 +139,7 @@ modified in the preview.&lt;/p></string>
               </layout>
             </item>
             <item row="0" column="0" >
-              <widget class="Q3Frame" name="borderControlFrame" >
+              <widget class="QFrame" name="borderControlFrame" >
                 <property name="sizePolicy" >
                   <sizepolicy>
                     <hsizetype>5</hsizetype>

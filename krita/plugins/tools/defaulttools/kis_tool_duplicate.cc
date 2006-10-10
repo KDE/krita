@@ -18,26 +18,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_duplicate.h"
+
 #include <QBitmap>
+#include <QCheckBox>
+#include <QLabel>
 #include <QPainter>
+#include <QSpinBox>
 
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 
 #include "kis_brush.h"
-#include "kis_cursor.h"
-#include "kis_image.h"
-#include "kis_tool_duplicate.h"
-#include "kis_painter.h"
-#include "kis_vec.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
+#include "kis_canvas_subject.h"
+#include "kis_cursor.h"
+#include "kis_image.h"
+#include "kis_painter.h"
 #include "kis_move_event.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
-#include "kis_canvas_subject.h"
+#include "kis_perspective_grid.h"
+#include "kis_vec.h"
 
 #include "QPainter"
 #include "kis_boundary_painter.h"
@@ -58,6 +63,13 @@ void KisToolDuplicate::activate()
 {
     m_position = QPoint(-1,-1);
     super::activate();
+    if( m_subject->currentImg()->perspectiveGrid()->countSubGrids() != 1 )
+    {
+        m_perspectiveCorrection->setEnabled( false );
+        m_perspectiveCorrection->setChecked( false );
+    } else {
+        m_perspectiveCorrection->setEnabled( true );
+    }
 }
 
 void KisToolDuplicate::buttonPress(KisButtonPressEvent *e)
@@ -107,12 +119,13 @@ void KisToolDuplicate::initPaint(KisEvent *e)
             op->setSource(m_source);
             painter()->setPaintOp(op);
         }
+        m_positionStartPainting = e->pos();
+        painter()->setDuplicateStart( e->pos() );
     }
 }
 
 void KisToolDuplicate::move(KisMoveEvent *e)
 {
-    super::move(e);
 
     // Paint the outline where we will (or are) copying from
     if( m_position == QPoint(-1,-1) )
@@ -120,7 +133,65 @@ void KisToolDuplicate::move(KisMoveEvent *e)
 
     QPoint srcPos;
     if (m_mode == PAINT) {
-        srcPos = painter()->duplicateOffset().floorQPoint();
+        // if we are in perspective correction mode, update the offset when moving
+        if(m_perspectiveCorrection->isChecked())
+        {
+            double startM[3][3];
+            double endM[3][3];
+            for(int i = 0; i < 3; i++)
+            {
+                for(int j = 0; j < 3; j++)
+                {
+                    startM[i][j] = 0.;
+                    endM[i][j] = 0.;
+                }
+                startM[i][i] = 1.;
+                endM[i][i] = 1.;
+            }
+        
+        // First look for the grid corresponding to the start point
+            KisSubPerspectiveGrid* subGridStart = *m_subject->currentImg()->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(KisPoint(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
+            QRect r = QRect(0,0, m_subject->currentImg()->width(), m_subject->currentImg()->height());
+        
+            if(subGridStart)
+            {
+                double* b = KisPerspectiveMath::computeMatrixTransfoFromPerspective( r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
+                for(int i = 0; i < 3; i++)
+                {
+                    for(int j = 0; j < 3; j++)
+                    {
+                        startM[i][j] = b[3*i+j];
+                    }
+                }
+
+            }
+        // Second look for the grid corresponding to the end point
+            KisSubPerspectiveGrid* subGridEnd = *m_subject->currentImg()->perspectiveGrid()->begin();// device->image()->perspectiveGrid()->gridAt(pos);
+            if(subGridEnd)
+            {
+                double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
+                for(int i = 0; i < 3; i++)
+                {
+                    for(int j = 0; j < 3; j++)
+                    {
+                        endM[i][j] = b[3*i+j];
+                    }
+                }
+            }
+        // Compute the translation in the perspective transformation space:
+            KisPoint translat;
+            {
+                KisPoint positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF());
+                KisPoint currentPositionT = KisPerspectiveMath::matProd(endM, e->pos().toPointF() );
+                KisPoint duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF() - m_offset.toPointF());
+                KisPoint duplicateRealPosition = KisPerspectiveMath::matProd(startM, duplicateStartPoisitionT.toPointF() + (currentPositionT.toPointF() - positionStartPaintingT.toPointF()) );
+                KisPoint p = e->pos() - duplicateRealPosition;
+                srcPos = p.floorQPoint();
+            }
+
+        }else {
+            srcPos = painter()->duplicateOffset().floorQPoint();
+        }
     } else {
         if(m_isOffsetNotUptodate)
             srcPos = e->pos().floorQPoint() - m_position.floorQPoint();
@@ -137,6 +208,7 @@ void KisToolDuplicate::move(KisMoveEvent *e)
     srcPos = QPoint(x - srcPos.x(), y - srcPos.y());
 
     paintOutline(srcPos);
+    super::move(e);
 }
 
 void KisToolDuplicate::paintAt(const KisPoint &pos,
@@ -151,12 +223,37 @@ void KisToolDuplicate::paintAt(const KisPoint &pos,
             m_offset = pos - m_position;
             m_isOffsetNotUptodate = false;
         }
+        painter()->setDuplicateHealing( m_healing->isChecked() );
+        painter()->setDuplicateHealingRadius( m_healingRadius->value() );
+        painter()->setDuplicatePerspectiveCorrection( m_perspectiveCorrection->isChecked() );
         painter()->paintAt( pos, pressure, xtilt, ytilt);
     }
 }
 
 QString KisToolDuplicate::quickHelp() const {
     return i18n("To start, shift-click on the place you want to duplicate from. Then you can start painting. An indication of where you are copying from will be displayed while drawing and moving the mouse.");
+}
+
+QWidget* KisToolDuplicate::createOptionWidget(QWidget* parent)
+{
+    QWidget* widget = KisToolPaint::createOptionWidget(parent);
+    m_healing = new QCheckBox(widget);
+    m_healing->setChecked( false);
+    addOptionWidgetOption(m_healing, new QLabel(i18n("Healing"), widget ));
+    m_healingRadius = new QSpinBox(widget);
+    
+    KisBrush *brush = m_subject->currentBrush();
+    int healingradius = 20;
+    if( brush )
+    {
+        healingradius = 2 * QMAX(brush->width(),brush->height());
+    }
+    
+    m_healingRadius->setValue( healingradius );
+    addOptionWidgetOption(m_healingRadius, new QLabel(i18n("Healing radius"), widget ));
+    m_perspectiveCorrection =  new QCheckBox(widget);
+    addOptionWidgetOption(m_perspectiveCorrection, new QLabel(i18n("Correct the perspective"), widget ));
+    return widget;
 }
 
 #include "kis_tool_duplicate.moc"

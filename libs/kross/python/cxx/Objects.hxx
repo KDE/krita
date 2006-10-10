@@ -1942,8 +1942,10 @@ namespace Py
 			if(map.hasKey(key)) the_item = map.getItem(key);
 			};
 
+/*
 		~mapref<T>()
 			{}
+*/
 
 		// MapBase<T> stuff
 		// lvalue

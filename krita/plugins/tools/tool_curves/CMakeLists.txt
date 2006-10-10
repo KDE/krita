@@ -8,6 +8,7 @@ set(kritatoolcurves_PART_SRCS
     kis_tool_bezier_paint.cc
     kis_tool_bezier_select.cc
     kis_tool_moutline.cc
+    kis_tool_example.cc
     )
 
 kde4_automoc(${kritatoolcurves_PART_SRCS})

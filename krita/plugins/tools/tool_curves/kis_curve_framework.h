@@ -20,6 +20,8 @@
 #define KIS_CURVE_FRAMEWORK_H_
 
 #include <QPointF>
+#include <QList>
+#include <algorithm>
 
 const int NOHINTS = 0x0000;
 const int POINTHINT = 0x0001;
@@ -120,8 +122,8 @@ public:
     virtual iterator addPivot(iterator, const QPointF&);
     virtual iterator pushPivot(const QPointF&);
 
-    int count() const {return m_curve.count();}
-    bool isEmpty() const {return m_curve.isEmpty();}
+    int count() const {return m_curve.size();}
+    bool isEmpty() const {return m_curve.empty();}
     CurvePoint first() {return m_curve.front();}
     CurvePoint last() {return m_curve.back();}
     void clear() {m_curve.clear();}
@@ -135,7 +137,7 @@ public:
     iterator find(iterator it, const CurvePoint& pt);
     iterator find(iterator it, const QPointF& pt);
     
-    KisCurve pivots();
+    KisCurve pivots() const;
     KisCurve selectedPivots(bool = true);
     KisCurve subCurve(const QPointF&);
     KisCurve subCurve(const CurvePoint&);
@@ -250,7 +252,6 @@ public:
             if ((*it).isPivot())
                 return it;
         }
-        return it;
     }
 };
 
@@ -318,22 +319,22 @@ inline KisCurve::iterator KisCurve::end() const
 
 inline KisCurve::iterator KisCurve::find (const CurvePoint& pt)
 {
-    return iterator(*this,m_curve.find(pt));
+    return iterator(*this,std::find(m_curve.begin(), m_curve.end(), pt));
 }
 
 inline KisCurve::iterator KisCurve::find (const QPointF& pt)
 {
-    return iterator(*this,m_curve.find(CurvePoint(pt)));
+    return iterator(*this,std::find(m_curve.begin(), m_curve.end(), CurvePoint(pt)));
 }
 
 inline KisCurve::iterator KisCurve::find (KisCurve::iterator it, const CurvePoint& pt)
 {
-    return iterator(*this,m_curve.find(it.position(),pt));
+    return iterator(*this,std::find(it.position(),m_curve.end(),pt));
 }
 
 inline KisCurve::iterator KisCurve::find (iterator it, const QPointF& pt)
 {
-    return iterator(*this,m_curve.find(it.position(),CurvePoint(pt)));
+    return iterator(*this,std::find(it.position(),m_curve.end(),CurvePoint(pt)));
 }
 
 inline void KisCurve::calculateCurve(const QPointF& start, const QPointF& end, KisCurve::iterator it)

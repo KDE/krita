@@ -73,9 +73,9 @@ KisToolCurve::KisToolCurve(const QString& UIName)
     m_dragging = false;
     m_draggingCursor = false;
     m_drawPivots = true;
-    m_drawingPen = QPen(Qt::white, 0, Qt::SolidLine);
+    m_drawingPen = QPen(Qt::black, 0, Qt::SolidLine);
     m_pivotPen = QPen(Qt::gray, 0, Qt::SolidLine);
-    m_selectedPivotPen = QPen(Qt::yellow, 0, Qt::SolidLine);
+    m_selectedPivotPen = QPen(Qt::blue, 0, Qt::SolidLine);
     m_pivotRounding = m_selectedPivotRounding = 55;
 
     m_actionOptions = NOOPTIONS;
@@ -97,7 +97,6 @@ void KisToolCurve::update (KisCanvasSubject *subject)
 
 void KisToolCurve::deactivate()
 {
-    draw(false);
     if (m_curve) {
         m_curve->clear();
         m_curve->endActionOptions();
@@ -110,7 +109,7 @@ void KisToolCurve::deactivate()
 
 void KisToolCurve::buttonPress(KisButtonPressEvent *event)
 {
-    updateOptions(event->modifiers());
+    updateOptions(QApplication::keyboardModifiers());
     if (!m_currentImage)
         return;
     if (event->button() == Qt::LeftButton) {
@@ -118,10 +117,7 @@ void KisToolCurve::buttonPress(KisButtonPressEvent *event)
         m_currentPoint = event->pos().toPointF();
         PointPair temp = pointUnderMouse (m_subject->canvasController()->windowToView(event->pos()).toPointF());
         if (temp.first == m_curve->end() && !(m_actionOptions)) {
-            draw(true, true);
             m_curve->selectAll(false);
-            draw(true, true);
-            draw(m_curve->end());
 	    if (!m_curve->isEmpty())
                 m_previous = m_curve->find(m_curve->last());
 	    else
@@ -131,7 +127,6 @@ void KisToolCurve::buttonPress(KisButtonPressEvent *event)
                 m_curve->calculateCurve(m_previous,m_current,m_current);
             draw(m_current);
         } else {
-            draw(true, true);
             if (temp.second)
                 m_current = m_curve->selectPivot(temp.first);
             else
@@ -152,11 +147,9 @@ void KisToolCurve::keyPress(QKeyEvent *event)
     } else
     if (event->key() == Qt::Key_Escape) {
         m_dragging = false;
-        draw(false);
         m_curve->clear();
     } else
     if (event->key() == Qt::Key_Delete) {
-        draw(false);
         m_dragging = false;
         m_curve->deleteSelected();
         m_current = m_curve->find(m_curve->last());
@@ -172,7 +165,7 @@ void KisToolCurve::keyRelease(QKeyEvent *)
 
 void KisToolCurve::buttonRelease(KisButtonReleaseEvent *event)
 {
-    updateOptions(event->modifiers());
+    updateOptions(QApplication::keyboardModifiers());
     m_dragging = false;
 }
 
@@ -183,7 +176,8 @@ void KisToolCurve::doubleClick(KisDoubleClickEvent *)
 
 void KisToolCurve::move(KisMoveEvent *event)
 {
-    updateOptions(event->modifiers());
+    int i = 1;
+    updateOptions(QApplication::keyboardModifiers());
     PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos()).toPointF());
     if (temp.first == m_curve->end() && !m_dragging) {
         if (m_draggingCursor) {
@@ -195,7 +189,6 @@ void KisToolCurve::move(KisMoveEvent *event)
         m_draggingCursor = true;
     }
     if (m_dragging) {
-        draw();
         QPointF trans = event->pos().toPointF() - m_currentPoint;
         m_curve->moveSelected(trans);
         m_currentPoint = event->pos().toPointF();
@@ -280,17 +273,16 @@ int KisToolCurve::updateOptions(int key)
 {
     int options = 0x0000;
     
-    if (key & Qt::ControlButton)
+    if (key & Qt::ControlModifier)
             options |= CONTROLOPTION;
 
-    if (key & Qt::ShiftButton)
+    if (key & Qt::ShiftModifier)
             options |= SHIFTOPTION;
 
-    if (key & Qt::AltButton)
+    if (key & Qt::AltModifier)
             options |= ALTOPTION;
 
     if (options != m_actionOptions) {
-        draw(false);
         m_actionOptions = options;
         m_curve->setActionOptions(m_actionOptions);
         draw(false);
@@ -323,7 +315,7 @@ void KisToolCurve::draw(KisCurve::iterator inf, bool pivotonly, bool minimal)
 
     KisCurve::iterator it, finish;
 
-    if (minimal && m_supportMinimalDraw) {
+    if (minimal && m_supportMinimalDraw && 0) {
         if (pivotonly) {
             KisCurve p = m_curve->pivots();
             for (KisCurve::iterator i = p.begin(); i != p.end(); i++)

@@ -787,7 +787,7 @@ void KisToolMagnetic::setup(KActionCollection *collection)
     m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(KIcon("moutline"),
+        m_action = new KAction(KIcon("tool_moutline"),
                                i18n("&Magnetic Outline Selection"),
                                collection,
                                objectName());

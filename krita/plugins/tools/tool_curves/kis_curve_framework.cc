@@ -20,7 +20,10 @@
 #include <QRect>
 #include <QPointF>
 
+#include <kdebug.h>
 #include "kis_curve_framework.h"
+
+using namespace std;
 
 /* **************************** *
  * KisCurve methods definitions *
@@ -33,7 +36,6 @@ KisCurve::iterator KisCurve::addPivot (KisCurve::iterator it, const QPointF& poi
 
 KisCurve::iterator KisCurve::pushPivot (const QPointF& point)
 {
-//    m_curve << CurvePoint(point,true,false,NOHINTS);
     return selectPivot(iterator(*this,m_curve.insert(m_curve.end(),CurvePoint(point,true,false,NOHINTS))),true);
 }
 
@@ -49,17 +51,15 @@ KisCurve::iterator KisCurve::addPoint (KisCurve::iterator it, const CurvePoint& 
 
 KisCurve::iterator KisCurve::pushPoint (const QPointF& point, bool pivot, bool selected,int hint)
 {
-//    m_curve << CurvePoint(point,pivot,selected,hint);
     return iterator(*this,m_curve.insert(m_curve.end(),CurvePoint(point,pivot,selected,hint)));
 }
 
 KisCurve::iterator KisCurve::pushPoint (const CurvePoint& point)
 {
-//    m_curve << point;
     return iterator(*this,m_curve.insert(m_curve.end(),point));
 }
 
-KisCurve KisCurve::pivots()
+KisCurve KisCurve::pivots() const
 {
     KisCurve temp;
 
@@ -120,18 +120,18 @@ KisCurve KisCurve::subCurve(iterator tstart, iterator tend)
 
 void KisCurve::deleteFirstPivot ()
 {
-    if (!m_curve.isEmpty()) {
-        m_curve.pop_front();
-        while (m_curve.count() > 1 && !first().isPivot())
-            m_curve.pop_front();
+    if (!m_curve.empty()) {
+        m_curve.erase(m_curve.begin());
+        while (m_curve.size() > 1 && !first().isPivot())
+            m_curve.erase(m_curve.begin());
     }
 }
 
 void KisCurve::deleteLastPivot ()
 {
-    if (!m_curve.isEmpty()) {
+    if (!m_curve.empty()) {
         m_curve.pop_back();
-        while (m_curve.count() > 1 && !last().isPivot())
+        while (m_curve.size() > 1 && !last().isPivot())
             m_curve.pop_back();
     }
 }

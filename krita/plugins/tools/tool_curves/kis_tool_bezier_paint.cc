@@ -95,7 +95,7 @@ void KisToolBezierPaint::setup(KActionCollection *collection)
     m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(KIcon("bezier_paint"),
+        m_action = new KAction(KIcon("tool_bezier_paint"),
                                i18n("&Crop"),
                                collection,
                                objectName());

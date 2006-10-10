@@ -22,12 +22,13 @@
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qrect.h>
+#include <QPointF>
 
-#include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <knuminput.h>
+#include <kaction.h>
+#include <kactioncollection.h>
 
 #include "kis_global.h"
 #include "kis_doc.h"
@@ -39,10 +40,9 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_paintop_registry.h"
-#include "kis_canvas.h"
-#include "kis_canvas_painter.h"
 #include "kis_cursor.h"
 #include "kis_vec.h"
+#include "kis_canvas.h"
 
 #include "kis_curve_framework.h"
 
@@ -59,13 +59,13 @@ public:
 
     ~KisCurveExample() {}
 
-    virtual iterator pushPivot (const KisPoint&);
+    virtual iterator pushPivot (const QPointF&);
 
 };
 
-KisCurve::iterator KisCurveExample::pushPivot (const KisPoint& point)
+KisCurve::iterator KisCurveExample::pushPivot (const QPointF& point)
 {
-    return selectPivot(iterator(*this,m_curve.append(CurvePoint(point,true,false,LINEHINT))), true);
+    return selectPivot(iterator(*this,m_curve.insert(m_curve.end(),CurvePoint(point,true,false,LINEHINT))), true);
 }
 
 KisToolExample::KisToolExample()
@@ -85,22 +85,18 @@ KisToolExample::~KisToolExample()
 
 void KisToolExample::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(KShortcut(Qt::Key_F9));
-        m_action = new KRadioAction(i18n("&Example"),
-                                    "tool_example",
-                                    shortcut,
-                                    this,
-                                    SLOT(activate()),
-                                    collection,
-                                    name());
+        m_action = new KAction(KIcon("tool_example"),
+                               i18n("&Example Tool"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
-
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("This is a test tool for the Curve Framework."));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
+
         m_ownAction = true;
     }
 }

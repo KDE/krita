@@ -76,6 +76,8 @@ KisCurve::iterator KisCurveBezier::groupNextControl (KisCurve::iterator it) cons
 
 bool KisCurveBezier::groupSelected (KisCurve::iterator it) const
 {
+    if (pivots().count() < 3)
+	return true;
     if ((*groupPrevControl(it)).isSelected() || (*groupEndpoint(it)).isSelected() || (*groupNextControl(it)).isSelected())
         return true;
     return false;
@@ -188,9 +190,14 @@ KisCurve::iterator KisCurveBezier::pushPivot (const QPointF& point)
 {
     iterator it;
 
-    it = pushPoint(point,true,false,BEZIERENDHINT);
-    if (count() > 1)
+    it = pushPoint(point,true,false,BEZIERPREVCONTROLHINT);
+#if 0
+    if (count() > 1) {
+	kdDebug(0) << "QUI" << endl;
         addPoint(it,point,true,false,BEZIERPREVCONTROLHINT);
+    }
+#endif
+    it = pushPoint(point,true,false,BEZIERENDHINT);
     
     it = pushPoint(point,true,false,BEZIERNEXTCONTROLHINT);
     

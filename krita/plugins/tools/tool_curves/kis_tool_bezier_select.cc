@@ -83,7 +83,7 @@ void KisToolBezierSelect::setup(KActionCollection *collection)
     m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(KIcon("bezier_select"),
+        m_action = new KAction(KIcon("tool_bezier_select"),
                                i18n("&Bezier Path"),
                                collection,
                                objectName());

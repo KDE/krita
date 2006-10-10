@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
  
-#include <QVector>
 #include <QRect>
 #include <QPointF>
 
@@ -59,7 +58,7 @@ KisCurve::iterator KisCurve::pushPoint (const CurvePoint& point)
     return iterator(*this,m_curve.insert(m_curve.end(),point));
 }
 
-KisCurve KisCurve::pivots() const
+KisCurve KisCurve::pivots()
 {
     KisCurve temp;
 
@@ -72,9 +71,6 @@ KisCurve KisCurve::pivots() const
 KisCurve KisCurve::selectedPivots(bool selected)
 {
     KisCurve temp;
-
-    if (isEmpty())
-	return temp;
 
     for (iterator it = begin(); it != end(); it = it.nextPivot())
         if ((*it).isSelected() == selected)

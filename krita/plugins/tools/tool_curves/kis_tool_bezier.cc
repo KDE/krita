@@ -76,7 +76,7 @@ KisCurve::iterator KisCurveBezier::groupNextControl (KisCurve::iterator it) cons
 
 bool KisCurveBezier::groupSelected (KisCurve::iterator it) const
 {
-    if (pivots().count() < 3)
+    if (m_curve.count() < 3)
 	return true;
     if ((*groupPrevControl(it)).isSelected() || (*groupEndpoint(it)).isSelected() || (*groupNextControl(it)).isSelected())
         return true;
@@ -155,34 +155,34 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
     if (pivots().count() < 4)
         return;
 
-    BaseIterator origin, dest, control1, control2;
+    iterator origin, dest, control1, control2;
 
     if ((*tstart).hint() == BEZIERENDHINT) {
-        origin = tstart.position();
-        control1 = tstart.next().position();
+        origin = tstart;
+        control1 = tstart.next();
     } else if ((*tstart).hint() == BEZIERNEXTCONTROLHINT) {
-        origin = tstart.previous().position();
-        control1 = tstart.position();
+        origin = tstart.previous();
+        control1 = tstart;
     } else if ((*tstart).hint() == BEZIERPREVCONTROLHINT) {
-        origin = tstart.next().position();
+        origin = tstart.next();
         control1 = ++origin;
     } else
         return;
         
     if ((*tend).hint() == BEZIERENDHINT) {
-        dest = tend.position();
-        control2 = tend.previous().position();
+        dest = tend;
+        control2 = tend.previous();
     } else if ((*tend).hint() == BEZIERPREVCONTROLHINT) {
-        dest = tend.next().position();
-        control2 = tend.position();
+        dest = tend.next();
+        control2 = tend;
     } else if ((*tend).hint() == BEZIERNEXTCONTROLHINT) {
-        dest = tend.previous().position();
+        dest = tend.previous();
         control2 = --dest;
     } else
         return;
 
-//    deleteCurve((*control1), (*control2));
-    recursiveCurve((*origin).point(),(*control1).point(),(*control2).point(),(*dest).point(),1,iterator(*this,control2));
+    deleteCurve(control1, control2);
+    recursiveCurve((*origin).point(),(*control1).point(),(*control2).point(),(*dest).point(),1,control2);
     
 }
 

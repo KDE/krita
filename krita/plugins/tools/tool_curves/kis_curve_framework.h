@@ -138,7 +138,7 @@ public:
     iterator find(iterator it, const CurvePoint& pt);
     iterator find(iterator it, const QPointF& pt);
     
-    KisCurve pivots() const;
+    KisCurve pivots();
     KisCurve selectedPivots(bool = true);
     KisCurve subCurve(const QPointF&);
     KisCurve subCurve(const CurvePoint&);

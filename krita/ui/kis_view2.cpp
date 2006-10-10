@@ -16,36 +16,107 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "kis_view2.h"
 
+#include <QHBoxLayout>
+#include <QScrollArea>
+#include <QRegion>
+#include <QRect>
+
+#include <kstdaction.h>
+#include <kxmlguifactory.h>
+
+#include <KoMainWindow.h>
 #include <KoCanvasController.h>
 
+#include <kis_image.h>
+
+#include "kis_factory2.h"
 #include "kis_view_converter.h"
 #include "kis_canvas2.h"
 #include "kis_opengl_canvas2.h"
 #include "kis_qpainter_canvas.h"
 #include "kis_doc2.h"
-#include "kis_view2.h"
 
+class KisView2::KisView2Private {
+
+public:
+
+    KisView2Private(KisView2 * view)
+        {
+            viewConverter = new KisViewConverter( 1.0, 100, 96, 96 );
+
+            canvas = new KisCanvas2( viewConverter, QPAINTER, view );
+
+            // The canvas controller handles the scrollbars
+            canvasController = new KoCanvasController( view );
+            canvasController->setCanvas( canvas );
+        }
+
+    ~KisView2Private()
+        {
+            delete viewConverter;
+            delete canvas;
+        }
+
+public:
+
+    KisCanvas2 * canvas;
+    KisDoc2 * doc;
+    KisViewConverter * viewConverter;
+    KoCanvasController * canvasController;
+    QScrollArea * scrollArea;
+};
 
 KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     : KoView(doc, parent)
-    , m_QPainterCanvas( 0 )
-    , m_openGLCanvas( 0 )
-    , m_doc( doc )
-    , m_canvasController( new KoCanvasController( this ) )
-
 {
+    m_d = new KisView2Private(this);
+    m_d->doc = doc;
 
-    m_viewConverter = new KisViewConverter(1.0, 100, 96, 96);
-    m_openGLCanvas = new KisOpenGLCanvas2(this);
-    m_QPainterCanvas = new KisQPainterCanvas(this);
-    m_canvas = new KisCanvas2( m_viewConverter, m_QPainterCanvas );
-    m_canvasController->setCanvas( m_canvas );
+    // Part stuff
+    setInstance(KisFactory2::instance(), false);
+    if (!doc->isReadWrite())
+        setXMLFile("krita_readonly.rc");
+    else
+        setXMLFile("krita.rc");
+    KStdAction::keyBindings( mainWindow()->guiFactory(),
+                             SLOT( configureShortcuts() ),
+                             actionCollection() );
+
+    // Put the canvascontroller in a layout so it resizes with us
+    QHBoxLayout * layout = new QHBoxLayout( this );
+    layout->addWidget( m_d->canvasController );
+
+    // Wait for the async image to have loaded
+    if ( m_d->doc->isLoading() ) {
+        connect( m_d->doc, SIGNAL( sigLoadingFinished() ),
+                 this, SLOT( slotInitializeCanvas() ) );
+    }
+    else {
+        slotInitializeCanvas();
+    }
 }
 
 
 KisView2::~KisView2()
 {
+    delete m_d;
+}
+
+KisImageSP KisView2::image()
+{
+    return m_d->doc->currentImage();
+}
+
+void KisView2::slotInitializeCanvas()
+{
+    kDebug() << "Image completely loaded! W: "
+             << image()->width() << ", H: "
+             << image()->height() << endl;
+    QRegion rg = image()->extent();
+    QRect rc = rg.boundingRect();
+    m_d->canvas->setCanvasSize( rc.width(), rc.height() );
 }
 
 #include "kis_view2.moc"

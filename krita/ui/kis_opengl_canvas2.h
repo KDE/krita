@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* 
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
  *
  * This library is free software; you can redistribute it and/or
@@ -21,27 +21,51 @@
 #define KIS_OPENGL_CANVAS_2_H
 
 #include <QGLWidget>
+
 #include <KoCanvasBase.h>
+
+#include "kis_abstract_canvas_widget.h"
 
 class QWidget;
 class QGLContext;
+class QPaintEvent;
+class QImage;
+class QBrush;
+class KisCanvas2;
 
 /**
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
  *
  */
-class KisOpenGLCanvas2 : public QGLWidget
+class KisOpenGLCanvas2 : public QGLWidget, public KisAbstractCanvasWidget
 {
 
     Q_OBJECT
 
 public:
 
-    KisOpenGLCanvas2( QWidget * parent );
+    KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent );
 
-    KisOpenGLCanvas2(QGLContext * context, QWidget * parent, QGLWidget *sharedContextWidget);
+    KisOpenGLCanvas2(KisCanvas2 * canvas, QGLContext * context, QWidget * parent, QGLWidget *sharedContextWidget);
 
     virtual ~KisOpenGLCanvas2();
+
+protected:
+    void initializeGL();
+    void resizeGL(int w, int h);
+
+public: // QWidget 
+
+    void paintEvent ( QPaintEvent * event );
+
+public: // KisAbstractCanvasWidget
+
+    QWidget * widget() { return this; }
+
+private:
+    KisCanvas2 * m_canvas;
+    QImage * m_checkTexture;
+    QBrush * m_checkBrush;
 
 };
 

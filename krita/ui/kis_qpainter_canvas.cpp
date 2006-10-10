@@ -19,12 +19,164 @@
 
 #include "kis_qpainter_canvas.h"
 
-KisQPainterCanvas::KisQPainterCanvas(QWidget * parent)
-    : QWidget(parent)
+#include <QPaintEvent>
+#include <QRect>
+#include <QPainter>
+#include <QImage>
+#include <QBrush>
+#include <QColor>
+#include <QString>
+
+#include <kdebug.h>
+
+#include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
+
+#include <kis_meta_registry.h>
+#include <kis_image.h>
+
+#include "kis_config.h"
+#include "kis_canvas2.h"
+
+#define PATTERN_WIDTH 256
+#define PATTERN_HEIGHT 256
+
+KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
+    : QWidget( parent )
+    , m_monitorProfile( 0 )
+    , m_checkTexture( 0 )
+    , m_checkBrush( 0 )
+    , m_canvas( canvas )
 {
+    setAttribute(Qt::WA_NoSystemBackground);
+    setAutoFillBackground(false);
+    m_checkTexture = new QImage(PATTERN_WIDTH, PATTERN_HEIGHT, QImage::Format_RGB32);
+
+    for (int y = 0; y < PATTERN_HEIGHT; y++)
+    {
+        for (int x = 0; x < PATTERN_WIDTH; x++)
+        {
+            // XXX: make size of checks configurable
+            quint8 v = 128 + 63 * ((x / 16 + y / 16) % 2);
+            m_checkTexture->setPixel(x, y, qRgb(v, v, v));
+        }
+    }
+
+    m_checkBrush = new QBrush( *m_checkTexture );
+
+    m_monitorProfile = KoColorProfile::getScreenProfile();
+
+    if (m_monitorProfile == 0) {
+        KisConfig cfg;
+        QString monitorProfileName = cfg.monitorProfile();
+        m_monitorProfile = KisMetaRegistry::instance()->csRegistry()->profileByName(monitorProfileName);
+    }
+
 }
 
 
 KisQPainterCanvas::~KisQPainterCanvas()
 {
+    delete m_checkTexture;
+    delete m_checkBrush;
 }
+
+void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
+{
+    KisImageSP img = m_canvas->image();
+    if (img == 0) return;
+
+    setAutoFillBackground(false);
+    QRegion paintRegion = ev->region();
+    QPainter gc( this );
+
+    QRegion imageRegion = m_canvas->image()->extent();
+
+    // The widget origin is 0,0 -- the image may well have a negative x, y, so we need to move all rects.
+    qint32 xoffset = -imageRegion.boundingRect().x();
+    qint32 yoffset = -imageRegion.boundingRect().y();
+
+    imageRegion.translate(xoffset, yoffset);
+
+    // Only the part that intersects with the bit we want to paint is interesting
+    QRect imageRect = QRect(xoffset, yoffset, img->width(), img->height());
+
+    kDebug() << "image: " << imageRect << ", image extent " << imageRegion.boundingRect() << " paint rect: " << ev->rect() 
+            << " x offset " << xoffset << ", y offset " << yoffset << endl;
+
+    // If we're in the border area, draw the border. 
+    // The border region is the set of rects around the image where there may be
+    // layer data, but that is outside the user-defined dimensions of the image.
+    // But we are only interested in the region that intersects with the region
+    // we need to repaint.
+    QRegion borderRegion = QRegion(imageRegion.boundingRect())
+        .subtracted(QRegion(imageRect))
+        .intersected(paintRegion);
+
+    QVector<QRect> borderRects = borderRegion.rects();
+
+    QVector<QRect>::iterator it = borderRects.begin();
+    QVector<QRect>::iterator end = borderRects.end();
+
+    while (it != end) {
+        gc.fillRect((*it), palette().dark());
+        ++it;
+    }
+
+    // Then draw the checks in the rects that are inside the the image
+    // and which we need to repaint. We must paint all checks because we
+    // don't know where our image is transparent. In the same loop, ask
+    // the image to paint itself. (And later, the selections and so on.)
+    if (paintRegion.intersects(imageRect)) {
+        QVector<QRect> checkRects = paintRegion.intersected(QRegion(imageRect)).rects();
+
+        QVector<QRect>::iterator it = checkRects.begin();
+        QVector<QRect>::iterator end = checkRects.end();
+
+        while (it != end) {
+            // Checks
+            gc.fillRect((*it), *m_checkBrush );
+            // Image
+            img->renderToPainter((*it).x() - xoffset, 
+                                 (*it).y() - yoffset,
+                                 (*it).x(), (*it).y(),
+                                 (*it).width(), (*it).height(), gc,
+                                 m_monitorProfile,
+                                 0);
+            ++it;
+        }
+    }
+    // Paint the bits of the layers that are outside the real image, with
+    // a gray wash
+    QVector<QRect>outsideRects = imageRegion
+                                    .subtracted(QRegion(imageRect))
+                                    .intersected(paintRegion).rects();
+
+    it = outsideRects.begin();
+    end = outsideRects.end();
+    while (it != end) {
+        kDebug() << "Outlier rect: " << *it << endl;
+        img->renderToPainter((*it).x() - xoffset, 
+                             (*it).y() - yoffset,
+                             (*it).x(), (*it).y(),
+                             (*it).width(), (*it).height(), gc,
+                             m_monitorProfile,
+                             0);
+        gc.save();
+        gc.setOpacity(0.95);
+        gc.fillRect(*it, palette().dark());
+        gc.restore();
+        ++it;
+    }
+    // ask the current layer to paint its masks (selection, masks,
+    // wetness, height map, etc.
+
+    // ask the guides, grids, etc to paint themselves
+
+    // Give the tool a chance tool paint its stuff
+
+    gc.end();
+}
+
+#include "kis_qpainter_canvas.moc"

@@ -63,7 +63,6 @@ KParts::Part* KisFactory2::createPartObject( QWidget *parentWidget,
                         QObject* parent,
                         const char* classname, const QStringList & )
 {
-    kDebug() << "---------> Creating part object\n";
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     KisDoc2 *doc = new KisDoc2( parentWidget, parent, !bWantKoDocument );

@@ -57,31 +57,33 @@
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 
-// Local
+// Krita Image
 #include "kis_annotation.h"
-#include "kis_clipboard.h"
-#include "kis_config.h"
-#include "kis_custom_image_widget.h"
 #include "kis_debug_areas.h"
-#include "kis_factory.h"
 #include "kis_fill_painter.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_load_visitor.h"
-#include "kis_meta_registry.h"
-#include "kis_nameserver.h"
-#include "kis_oasis_save_data_visitor.h"
-#include "kis_oasis_save_visitor.h"
 #include "kis_paint_device_action.h"
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
-#include "kis_part_layer.h"
-#include "kis_save_visitor.h"
-#include "kis_savexml_visitor.h"
 #include "kis_selection.h"
 #include "kis_types.h"
 #include "kis_command.h"
+#include "kis_meta_registry.h"
+#include "kis_nameserver.h"
+
+// Local
+#include "kis_factory2.h"
 #include "kis_view2.h"
+#include "kis_clipboard.h"
+#include "kis_config.h"
+#include "kis_custom_image_widget.h"
+#include "kis_load_visitor.h"
+#include "kis_oasis_save_data_visitor.h"
+#include "kis_oasis_save_visitor.h"
+#include "kis_part_layer.h"
+#include "kis_save_visitor.h"
+#include "kis_savexml_visitor.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -141,8 +143,6 @@ namespace {
 KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode) :
     super(parentWidget, parent, singleViewMode)
 {
-    kDebug() << "-------------------> Creating document\n";
-
     m_undo = false;
     m_cmdHistory = 0;
     m_nserver = 0;
@@ -152,7 +152,7 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode) :
     m_ioProgressBase = 0;
     m_ioProgressTotalSteps = 0;
 
-    setInstance( KisFactory::instance(), false );
+    setInstance( KisFactory2::instance(), false );
     setTemplateType( "krita_template" );
 
     init();
@@ -255,7 +255,7 @@ bool KisDoc2::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
         return false;
 
     manifestWriter->addManifestEntry( "data/", "" );
-//     KoXmlWriter* bodyWriter = oasisStore->bodyWriter();
+    KoXmlWriter* bodyWriter = oasisStore->bodyWriter();
     KisOasisSaveVisitor osv(oasisStore);
     m_currentImage->rootLayer()->accept(osv);
     oasisStore->closeContentWriter();
@@ -304,7 +304,7 @@ bool KisDoc2::loadXML(QIODevice *, const QDomDocument& doc)
         }
     }
 
-    emit loadingFinished();
+    emit sigLoadingFinished();
     return true;
 }
 
@@ -626,7 +626,7 @@ KisPartLayerSP KisDoc2::loadPartLayer(const QDomElement& element, KisImageSP img
                                      QString name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
                                       bool visible, bool locked,
                                       const QString & compositeOp) {
-#if 0    
+#if 0
     KisChildDoc* child = new KisChildDoc(this);
     QString filename(element.attribute("filename"));
     QDomElement partElement = element.namedItem("object").toElement();
@@ -649,7 +649,7 @@ KisPartLayerSP KisDoc2::loadPartLayer(const QDomElement& element, KisImageSP img
     layer->setName(name);
 
     return layer;
-#endif    
+#endif
 }
 
 bool KisDoc2::completeSaving(KoStore *store)
@@ -674,7 +674,6 @@ bool KisDoc2::completeSaving(KoStore *store)
         visitor.setExternalUri(uri);
 
     m_currentImage->rootLayer()->accept(visitor);
-#if 0
     // saving annotations
     // XXX this only saves EXIF and ICC info. This would probably need
     // a redesign of the dtd of the krita file to do this more generally correct
@@ -708,14 +707,12 @@ bool KisDoc2::completeSaving(KoStore *store)
             }
         }
     }
-#endif
     IODone();
     return true;
 }
 
 bool KisDoc2::completeLoading(KoStore *store)
 {
-#if 0
     QString uri = url().url();
     QString location;
     bool external = isStoredExtern();
@@ -753,7 +750,7 @@ bool KisDoc2::completeLoading(KoStore *store)
         store->close();
         (m_currentImage)->setProfile(new KoColorProfile(data));
     }
-#endif
+
     IODone();
 
     setModified( false );
@@ -763,7 +760,6 @@ bool KisDoc2::completeLoading(KoStore *store)
 
 QWidget* KisDoc2::createCustomDocumentWidget(QWidget *parent)
 {
-#if 0
     KisConfig cfg;
 
     int w = cfg.defImgWidth();
@@ -775,7 +771,6 @@ QWidget* KisDoc2::createCustomDocumentWidget(QWidget *parent)
         h = sz.height();
     }
     return new KisCustomImageWidget(parent, this, w, h, cfg.defImgResolution(), cfg.workingColorSpace(),"unnamed");
-#endif
     return 0;
 }
 
@@ -904,27 +899,18 @@ void KisDoc2::paintContent(QPainter& painter, const QRect& rc, bool transparent,
     KoColorProfile *  profile = KisMetaRegistry::instance()->csRegistry()->profileByName(monitorProfileName);
     painter.scale(zoomX, zoomY);
     QRect rect = rc & m_currentImage->bounds();
-    KisImage::PaintFlags paintFlags;
-    if (transparent) {
-        paintFlags = KisImage::PAINT_SELECTION;
-    } else {
-        paintFlags = (KisImage::PaintFlags)(KisImage::PAINT_BACKGROUND|KisImage::PAINT_SELECTION);
-    }
-
-    paintFlags = (KisImage::PaintFlags)(paintFlags | KisImage::PAINT_EMBEDDED_RECT);
-
-    m_currentImage->renderToPainter(rect.left(), rect.top(), rect.right(), rect.bottom(), painter, profile, paintFlags);
+    m_currentImage->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
 }
 
 void KisDoc2::slotImageUpdated()
 {
-    emit docUpdated();
+    emit sigDocUpdated();
     setModified(true);
 }
 
 void KisDoc2::slotImageUpdated(const QRect& rect)
 {
-    emit docUpdated(rect);
+    emit sigDocUpdated(rect);
 }
 
 void KisDoc2::beginMacro(const QString& macroName)
@@ -1051,7 +1037,7 @@ void KisDoc2::slotUpdate(KisImageSP, quint32 x, quint32 y, quint32 w, quint32 h)
 {
     QRect rc(x, y, w, h);
 
-    emit docUpdated(rc);
+    emit sigDocUpdated(rc);
 }
 
 bool KisDoc2::undo() const
@@ -1092,7 +1078,7 @@ void KisDoc2::slotIOProgress(qint8 percentage)
 
 KisChildDoc * KisDoc2::createChildDoc( const QRect & rect, KoDocument* childDoc )
 {
-#if 0    
+#if 0
     KisChildDoc * ch = new KisChildDoc( this, rect, childDoc );
     insertChild( ch );
     ch->document()->setStoreInternal(true);
@@ -1118,7 +1104,7 @@ void KisDoc2::setCurrentImage(KisImageSP image)
     m_currentImage = image;
     setUndo(true);
     image->notifyImageLoaded();
-    emit loadingFinished();
+    emit sigLoadingFinished();
 }
 
 void KisDoc2::initEmpty()

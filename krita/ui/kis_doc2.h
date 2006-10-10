@@ -153,9 +153,9 @@ public slots:
     void slotCommandExecuted(KCommand *command);
 
 signals:
-    void docUpdated();
-    void docUpdated(QRect rect);
-    void loadingFinished();
+    void sigDocUpdated();
+    void sigDocUpdated(QRect rect);
+    void sigLoadingFinished();
 
     /*
      * Emitted every time a command is added to the undo history, or executed

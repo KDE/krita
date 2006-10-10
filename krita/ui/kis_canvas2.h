@@ -23,15 +23,37 @@
 #include <QWidget>
 #include <KoCanvasBase.h>
 
+#include <kis_types.h>
+
+class KisView2;
+
+enum KisCanvasType {
+    QPAINTER,
+    OPENGL,
+    MITSHM
+};
+
 class KisViewConverter;
 
 /**
- *
+ * KisCanvas2 is not an actual widget class, but rather an adapter for
+ * the widget it contains, which may be either a QPainter based
+ * canvas, or an OpenGL based canvas: that are the real widgets.
  */
-class KisCanvas2 : public QWidget, public KoCanvasBase
+class KisCanvas2 : public KoCanvasBase
 {
 public:
-    KisCanvas2(KisViewConverter *, QWidget * canvasWidget);
+
+    /**
+     * Create a new canvas. The canvas manages a widget that will do
+     * the actual painting: the canvas itself is not a widget.
+     *
+     * @param viewConverter the viewconverter for converting between
+     *                       window and document coordinates.
+     * @param canvasType determines which kind of canvas widget the
+     *                   canvas initially creates.
+     */
+    KisCanvas2(KisViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view);
 
     virtual ~KisCanvas2();
 
@@ -59,10 +81,21 @@ public: // KoCanvasBase implementation
 
     virtual KoUnit::Unit unit();
 
-private:
-    KisViewConverter * m_viewConverter;
-    QWidget * m_canvasWidget;
+public: // KisCanvas2 methods
 
+    void setCanvasSize(int w, int h);
+
+    KisImageSP image();
+
+
+private:
+    
+    KisCanvas2::KisCanvas2(const KisCanvas2&);
+
+private:
+    
+    class KisCanvas2Private;
+    KisCanvas2Private * m_d;
 };
 
 #endif

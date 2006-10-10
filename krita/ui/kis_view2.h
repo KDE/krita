@@ -21,6 +21,8 @@
 
 #include <KoView.h>
 
+#include <kis_types.h>
+
 class KisCanvas2;
 class KisQPainterCanvas;
 class KisOpenGLCanvas2;
@@ -44,17 +46,18 @@ public:
     virtual void updateReadWrite( bool readwrite ) { Q_UNUSED(readwrite); }
 
 public:
+
     // Krita specific interfaces
+    KisImageSP image();
+
+
+private slots:
+
+    void slotInitializeCanvas();
 
 private:
-
-    KisCanvas2 * m_canvas;
-    KisQPainterCanvas * m_QPainterCanvas;
-    KisOpenGLCanvas2 * m_openGLCanvas;
-    KisDoc2 * m_doc;
-    KisViewConverter * m_viewConverter;
-    KoCanvasController * m_canvasController;
-
+    class KisView2Private;
+    KisView2Private * m_d;
 };
 
 #endif

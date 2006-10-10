@@ -16,26 +16,68 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "KoUnit.h"
 #include "kis_canvas2.h"
-#include "kis_view_converter.h"
 
-KisCanvas2::KisCanvas2(KisViewConverter * viewConverter, QWidget * canvasWidget)
+#include <QWidget>
+
+#include <KoTool.h>
+#include <KoUnit.h>
+
+#include <kis_image.h>
+
+#include "kis_view2.h"
+#include "kis_config.h"
+#include "kis_view_converter.h"
+#include "kis_abstract_canvas_widget.h"
+#include "kis_qpainter_canvas.h"
+#include "kis_opengl_canvas2.h"
+
+class KisCanvas2::KisCanvas2Private {
+
+public:
+
+    KisCanvas2Private( KisViewConverter * viewConverter, KisView2 * view )
+        : viewConverter( viewConverter )
+        , view( view )
+        , currentTool( 0 )
+        , canvasWidget( 0 )
+        {
+        }
+
+    KisViewConverter * viewConverter;
+    KisView2 * view;
+    KoTool * currentTool;
+    KisAbstractCanvasWidget * canvasWidget;
+};
+
+KisCanvas2::KisCanvas2(KisViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view)
     : KoCanvasBase()
-    , m_viewConverter( viewConverter )
-    , m_canvasWidget( canvasWidget )
 {
+    m_d = new KisCanvas2Private(viewConverter, view);
+
+
+    switch( canvasType ) {
+    case OPENGL:
+        setCanvasWidget( new KisOpenGLCanvas2( this, view ) );
+        break;
+    case MITSHM:
+    case QPAINTER:
+    default:
+        setCanvasWidget( new KisQPainterCanvas( this, view ) );
+    }
 }
 
 void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
-    m_canvasWidget = widget;
+    KisAbstractCanvasWidget * tmp = dynamic_cast<KisAbstractCanvasWidget*>( widget );
+    Q_ASSERT_X( tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget" );
+    m_d->canvasWidget = tmp;
 }
-
 
 
 KisCanvas2::~KisCanvas2()
 {
+    delete m_d;
 }
 
 void KisCanvas2::gridSize(double *horizontal, double *vertical) const
@@ -64,32 +106,44 @@ KoShapeManager* KisCanvas2::shapeManager() const
 
 void KisCanvas2::updateCanvas(const QRectF& rc)
 {
-    Q_UNUSED( rc );
+    m_d->canvasWidget->widget()->update( rc.toRect() );
 }
 
 KoTool* KisCanvas2::tool()
 {
-    return 0;
+    return m_d->currentTool;
 }
 
 void KisCanvas2::setTool(KoTool *tool)
 {
-    Q_UNUSED( tool );
+    m_d->currentTool = tool;
 }
 
 
 KoViewConverter* KisCanvas2::viewConverter()
 {
-    return m_viewConverter;
+    return m_d->viewConverter;
 }
 
 QWidget* KisCanvas2::canvasWidget()
 {
-    return m_canvasWidget;
+    return m_d->canvasWidget->widget();
 }
 
 
 KoUnit::Unit KisCanvas2::unit()
 {
     return KoUnit::U_PIXEL;
+}
+
+
+void KisCanvas2::setCanvasSize(int w, int h)
+{
+    m_d->canvasWidget->widget()->setMinimumSize( w, h );
+}
+
+KisImageSP KisCanvas2::image()
+{
+    return m_d->view->image();
+
 }

@@ -20,23 +20,75 @@
 
 #include "kis_opengl_canvas2.h"
 
+#include <QtOpenGL>
 #include <QWidget>
 #include <QGLWidget>
 #include <QGLContext>
+#include <QImage>
+#include <QBrush>
+#include <QPainter>
+#include <QPaintEvent>
 
-KisOpenGLCanvas2::KisOpenGLCanvas2( QWidget * parent )
-    : QGLWidget( parent )
+#include <kdebug.h>
+
+#define PATTERN_WIDTH 64
+#define PATTERN_HEIGHT 64
+
+KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent )
+    : QGLWidget( QGLFormat(QGL::SampleBuffers), parent )
+    , m_canvas( canvas )
 {
+
+    setAttribute(Qt::WA_NoSystemBackground);
+
+    m_checkTexture = new QImage(PATTERN_WIDTH, PATTERN_HEIGHT, QImage::Format_RGB32);
+
+    for (int y = 0; y < PATTERN_HEIGHT; y++)
+    {
+        for (int x = 0; x < PATTERN_WIDTH; x++)
+        {
+            quint8 v = 128 + 63 * ((x / 16 + y / 16) % 2);
+            m_checkTexture->setPixel(x, y, qRgb(v, v, v));
+        }
+    }
+
+    m_checkBrush = new QBrush( *m_checkTexture );
 }
 
-KisOpenGLCanvas2::KisOpenGLCanvas2(QGLContext * context, QWidget * parent, QGLWidget *sharedContextWidget)
+KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, QGLContext * context, QWidget * parent, QGLWidget *sharedContextWidget)
     : QGLWidget( context, parent, sharedContextWidget )
+    , m_canvas( canvas )
 {
 }
 
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
+    delete m_checkTexture;
+    delete m_checkBrush;
+}
+
+void KisOpenGLCanvas2::initializeGL()
+{
+    qglClearColor(QColor::fromCmykF(0.40, 0.0, 1.0, 0.0));
+    glShadeModel(GL_FLAT);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+}
+
+void KisOpenGLCanvas2::resizeGL(int w, int h)
+{
+    kDebug() << "Resize gl to " << w << ", " << h << endl;
+    glViewport(0, 0, (GLint)w, (GLint)h);
+}
+
+void KisOpenGLCanvas2::paintEvent( QPaintEvent * ev )
+{
+    QPainter gc;
+    gc.setRenderHint(QPainter::Antialiasing);
+    gc.begin( this );
+    gc.fillRect( ev->rect(), *m_checkBrush );
+    gc.end();
 }
 
 

@@ -127,7 +127,7 @@ QPair<int, int> KoTextFormatterCore::determineCharWidth()
 
 int KoTextFormatterCore::leftMargin( bool firstLine, bool includeFirstLineMargin /* = true */ ) const
 {
-    int left = /*doc ?*/ parag->leftMargin() + doc->leftMargin() /*: 0*/;
+    int left = parag->leftMargin() + doc->leftMargin();
     if ( firstLine && !parag->string()->isRightToLeft() )
     {
         if ( includeFirstLineMargin )
@@ -144,7 +144,7 @@ int KoTextFormatterCore::leftMargin( bool firstLine, bool includeFirstLineMargin
 int KoTextFormatterCore::rightMargin( bool firstLine ) const
 {
     int right = parag->rightMargin(); // 'rm' in QRT
-    if ( /*doc &&*/ firstLine && parag->string()->isRightToLeft() )
+    if ( firstLine && parag->string()->isRightToLeft() )
         right += parag->firstLineMargin();
     return right;
 }
@@ -207,7 +207,6 @@ bool KoTextFormatterCore::format()
     // dw is the document width, i.e. the maximum available width, all included.
     // We are in a variable-width design, so it is returned by each call to adjustMargins.
     int dw = 0;
-    //if (doc) // always true in kotext
     doc->flow()->adjustMargins( y + parag->rect().y(), initialHeight, // input params
                                 ww, initialLMargin, initialRMargin, dw,  // output params
                                 parag );
@@ -215,7 +214,7 @@ bool KoTextFormatterCore::format()
 
     x = initialLMargin; // as modified by adjustMargins
 
-    int maxY = doc ? doc->flow()->availableHeight() : -1;
+    int maxY = doc->flow()->availableHeight();
 
     availableWidth = dw - initialRMargin; // 'w' in QRT
 #if defined(DEBUG_FORMATTER) || defined(DEBUG_FORMATTER_WIDTH)
@@ -255,7 +254,7 @@ bool KoTextFormatterCore::format()
     bool abort = false;
 
     int align = parag->alignment();
-    if ( align == Qt::AlignLeft && doc && doc->alignment() != Qt::AlignLeft )
+    if ( align == Qt::AlignLeft && doc->alignment() != Qt::AlignLeft )
         align = doc->alignment();
 
     int col = 0;
@@ -308,15 +307,14 @@ bool KoTextFormatterCore::format()
 #endif
             int rightMargin = currentRightMargin;
             x = left;
-            if ( doc )
-                doc->flow()->adjustMargins( y + parag->rect().y(), parag->rect().height(), 15,
-                                            x, rightMargin, dw, parag );
+            doc->flow()->adjustMargins( y + parag->rect().y(), parag->rect().height(), 15,
+                                        x, rightMargin, dw, parag );
             int w = dw - rightMargin;
             c->customItem()->resize( w - x );
             y += lineStart->h;
             lineStart = new KoTextParagLineStart( y, c->ascent(), c->height() );
             // Added for kotext (to be tested)
-            lineStart->lineSpacing = doc ? parag->calculateLineSpacing( (int)parag->lineStartList().count()-1, i, i ) : 0;
+            lineStart->lineSpacing = parag->calculateLineSpacing( (int)parag->lineStartList().count()-1, i, i );
             lineStart->h += lineStart->lineSpacing;
             lineStart->w = dw;
             parag->insertLineStart( i, lineStart );
@@ -496,10 +494,9 @@ bool KoTextFormatterCore::format()
 
                     initialRMargin = currentRightMargin;
                     x = left;
-                    if ( doc )
-                        doc->flow()->adjustMargins( y + parag->rect().y(), tmph,
-                                                    ww, // ## correct?
-                                                    x, initialRMargin, dw, parag );
+                    doc->flow()->adjustMargins( y + parag->rect().y(), tmph,
+                                                ww, // ## correct?
+                                                x, initialRMargin, dw, parag );
 
                     pixelx = zh->layoutUnitToPixelX( x );
                     initialHeight = tmph;
@@ -596,10 +593,9 @@ bool KoTextFormatterCore::format()
 
                     initialRMargin = currentRightMargin;
                     x = left;
-                    if ( doc )
-                        doc->flow()->adjustMargins( y + parag->rect().y(), tmph,
-                                                    c->width,
-                                                    x, initialRMargin, dw, parag );
+                    doc->flow()->adjustMargins( y + parag->rect().y(), tmph,
+                                                c->width,
+                                                x, initialRMargin, dw, parag );
 
                     pixelx = zh->layoutUnitToPixelX( x );
                     initialHeight = tmph;
@@ -659,7 +655,7 @@ bool KoTextFormatterCore::format()
 #endif
             // if h > initialHeight,  call adjustMargins, and if the result is != initial[LR]Margin,
             // format this line again
-            if ( doc && lineStart->h > initialHeight )
+            if ( lineStart->h > initialHeight )
             {
                 bool firstLine = ( firstChar == &string->at( 0 ) );
                 int newLMargin = leftMargin( firstLine );
@@ -804,7 +800,7 @@ bool KoTextFormatterCore::format()
 
     int m = parag->bottomMargin();
     // ##### Does OOo add margins or does it max them?
-    //if ( parag->next() && doc && !doc->addMargins() )
+    //if ( parag->next() && !doc->addMargins() )
     //  m = qMax( m, parag->next()->topMargin() );
     parag->setFullWidth( fullWidth );
     //if ( parag->next() && parag->next()->isLineBreak() )

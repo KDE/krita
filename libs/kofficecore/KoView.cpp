@@ -158,8 +158,8 @@ KoView::KoView( KoDocument *document, QWidget *parent )
 
   actionCollection()->setAssociatedWidget(this);
   setupGlobalActions();
-  KActionCollection *coll = actionCollection();
   /**** not needed anymore, according to David (Werner)
+  KActionCollection *coll = actionCollection();
   QValueList<KAction*> docActions = document->actionCollection()->actions();
   QValueList<KAction*>::ConstIterator it = docActions.begin();
   QValueList<KAction*>::ConstIterator end = docActions.end();

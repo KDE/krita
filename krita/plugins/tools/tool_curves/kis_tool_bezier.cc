@@ -155,34 +155,34 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
     if (pivots().count() < 4)
         return;
 
-    iterator origin, dest, control1, control2;
+    BaseIterator origin, dest, control1, control2;
 
     if ((*tstart).hint() == BEZIERENDHINT) {
-        origin = tstart;
-        control1 = tstart.next();
+        origin = tstart.position();
+        control1 = tstart.next().position();
     } else if ((*tstart).hint() == BEZIERNEXTCONTROLHINT) {
-        origin = tstart.previous();
-        control1 = tstart;
+        origin = tstart.previous().position();
+        control1 = tstart.position();
     } else if ((*tstart).hint() == BEZIERPREVCONTROLHINT) {
-        origin = tstart.next();
-        control1 = origin.next();
+        origin = tstart.next().position();
+        control1 = ++origin;
     } else
         return;
         
     if ((*tend).hint() == BEZIERENDHINT) {
-        dest = tend;
-        control2 = tend.previous();
+        dest = tend.position();
+        control2 = tend.previous().position();
     } else if ((*tend).hint() == BEZIERPREVCONTROLHINT) {
-        dest = tend.next();
-        control2 = tend;
+        dest = tend.next().position();
+        control2 = tend.position();
     } else if ((*tend).hint() == BEZIERNEXTCONTROLHINT) {
-        dest = tend.previous();
-        control2 = dest.previous();
+        dest = tend.previous().position();
+        control2 = --dest;
     } else
         return;
 
-    deleteCurve(control1, control2);
-    recursiveCurve((*origin).point(),(*control1).point(),(*control2).point(),(*dest).point(),1,control2);
+//    deleteCurve((*control1), (*control2));
+    recursiveCurve((*origin).point(),(*control1).point(),(*control2).point(),(*dest).point(),1,iterator(*this,control2));
     
 }
 
@@ -198,13 +198,13 @@ KisCurve::iterator KisCurveBezier::pushPivot (const QPointF& point)
 
     switch (i) {
     case 0:
-	it = pushPoint(point,true,false,BEZIERENDHINT);
-	break;
-    case 1:
+	pushPoint(point,true,false,BEZIERENDHINT);
 	it = pushPoint(point,true,false,BEZIERNEXTCONTROLHINT);
 	break;
     case 2:
-	it = pushPoint(point,true,false,BEZIERPREVCONTROLHINT);
+	pushPoint(point,true,false,BEZIERPREVCONTROLHINT);
+	pushPoint(point,true,false,BEZIERENDHINT);
+        it = pushPoint(point,true,false,BEZIERNEXTCONTROLHINT);
 	break;
     }
 /*

@@ -21,6 +21,7 @@
 
 #include <QPointF>
 #include <QList>
+#include <QListIterator>
 #include <algorithm>
 
 const int NOHINTS = 0x0000;
@@ -81,7 +82,7 @@ public:
 };
 
 typedef QList<CurvePoint> PointList;
-typedef QList<CurvePoint>::iterator BaseIterator;
+typedef PointList::iterator BaseIterator;
 
 class CurveIterator;
 
@@ -181,7 +182,7 @@ public:
 class CurveIterator {
 
     const KisCurve *m_target;
-    
+
     BaseIterator m_position;
 
 public:
@@ -190,7 +191,7 @@ public:
 
     CurveIterator (const KisCurve &target)
         {m_target = &target;}
-        
+
     CurveIterator (const CurveIterator &it)
         {m_position = it.position(); m_target = it.target();}
 
@@ -318,22 +319,22 @@ inline KisCurve::iterator KisCurve::end() const
 
 inline KisCurve::iterator KisCurve::find (const CurvePoint& pt)
 {
-    return iterator(*this,std::find(m_curve.begin(), m_curve.end(), pt));
+    return iterator(*this,m_curve.find(pt));
 }
 
 inline KisCurve::iterator KisCurve::find (const QPointF& pt)
 {
-    return iterator(*this,std::find(m_curve.begin(), m_curve.end(), CurvePoint(pt)));
+    return iterator(*this,m_curve.find(CurvePoint(pt)));
 }
 
 inline KisCurve::iterator KisCurve::find (KisCurve::iterator it, const CurvePoint& pt)
 {
-    return iterator(*this,std::find(it.position(),m_curve.end(),pt));
+    return iterator(*this,m_curve.find(it.position(),pt));
 }
 
 inline KisCurve::iterator KisCurve::find (iterator it, const QPointF& pt)
 {
-    return iterator(*this,std::find(it.position(),m_curve.end(),CurvePoint(pt)));
+    return iterator(*this,m_curve.find(it.position(),CurvePoint(pt)));
 }
 
 inline void KisCurve::calculateCurve(const QPointF& start, const QPointF& end, KisCurve::iterator it)

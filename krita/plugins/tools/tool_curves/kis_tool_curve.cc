@@ -119,9 +119,9 @@ void KisToolCurve::buttonPress(KisButtonPressEvent *event)
         if (temp.first == m_curve->end() && !(m_actionOptions)) {
             m_curve->selectAll(false);
 	    if (!m_curve->isEmpty())
-                m_previous = m_curve->find(m_curve->last());
+                m_previous = --(m_curve->end());
 	    else
-		m_previous = m_curve->end();
+		m_previous = 0;
             m_current = m_curve->pushPivot(event->pos().toPointF());
             if (m_curve->pivots().count() > 1)
                 m_curve->calculateCurve(m_previous,m_current,m_current);
@@ -152,7 +152,7 @@ void KisToolCurve::keyPress(QKeyEvent *event)
     if (event->key() == Qt::Key_Delete) {
         m_dragging = false;
         m_curve->deleteSelected();
-        m_current = m_curve->find(m_curve->last());
+        m_current = m_curve->lastIterator();
         m_previous = m_curve->selectPivot(m_current);
         draw(false);
     }
@@ -176,7 +176,6 @@ void KisToolCurve::doubleClick(KisDoubleClickEvent *)
 
 void KisToolCurve::move(KisMoveEvent *event)
 {
-    int i = 1;
     updateOptions(QApplication::keyboardModifiers());
     PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos()).toPointF());
     if (temp.first == m_curve->end() && !m_dragging) {

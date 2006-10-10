@@ -860,7 +860,7 @@ bool KoTextDocument::find( const QString &expr, bool cs, bool wo, bool forward,
 		else
 		    ok = false;
 	    }
-	    if ( ok ) {
+	    if ( ok && cursor ) {
 		cursor->setParag( p );
 		cursor->setIndex( res );
 		setSelectionStart( Standard, cursor );

@@ -152,10 +152,9 @@ KoTextDocDeleteCommand::~KoTextDocDeleteCommand()
 
 KoTextCursor *KoTextDocDeleteCommand::execute( KoTextCursor *c )
 {
-    KoTextParag *s = doc ? doc->paragAt( id ) : parag;
+    KoTextParag *s = doc->paragAt( id );
     if ( !s ) {
-        if (doc)
-	    kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
+        kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
 	return 0;
     }
 
@@ -164,27 +163,22 @@ KoTextCursor *KoTextDocDeleteCommand::execute( KoTextCursor *c )
     int len = text.size();
     if ( c )
 	*c = cursor;
-    if ( doc ) {
-	doc->setSelectionStart( KoTextDocument::Temp, &cursor );
-	for ( int i = 0; i < len; ++i )
-	    cursor.gotoNextLetter();
-	doc->setSelectionEnd( KoTextDocument::Temp, &cursor );
-	doc->removeSelectedText( KoTextDocument::Temp, &cursor );
-	if ( c )
-	    *c = cursor;
-    } else {
-	s->remove( index, len );
-    }
+    doc->setSelectionStart( KoTextDocument::Temp, &cursor );
+    for ( int i = 0; i < len; ++i )
+        cursor.gotoNextLetter();
+    doc->setSelectionEnd( KoTextDocument::Temp, &cursor );
+    doc->removeSelectedText( KoTextDocument::Temp, &cursor );
+    if ( c )
+        *c = cursor;
 
     return c;
 }
 
 KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
 {
-    KoTextParag *s = doc ? doc->paragAt( id ) : parag;
+    KoTextParag *s = doc->paragAt( id );
     if ( !s ) {
-        if (doc)
-	    kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
+	kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
 	return 0;
     }
 
@@ -1678,7 +1672,7 @@ int KoTextFormatterBase::formatVertically( KoTextDocument* doc, KoTextParag* par
 	h = ls->y + ls->h;
     }
     int m = parag->bottomMargin();
-    if ( parag->next() && doc && !doc->addMargins() )
+    if ( parag->next() && !doc->addMargins() )
 	m = qMax( m, parag->next()->topMargin() );
     //if ( parag->next() && parag->next()->isLineBreak() )
     //	m = 0;

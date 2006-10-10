@@ -351,7 +351,7 @@ bool KoTextFormatterCore::format()
              /////////// && ( firstChar != c )
 
              // Or maybe we simply encountered a '\n'
-             || lastChr->c == '\n' && parag->isNewLinesAllowed() && lastBreak > -1 )
+             || lastChr && lastChr->c == '\n' && parag->isNewLinesAllowed() && lastBreak > -1 )
         {
 #ifdef DEBUG_FORMATTER
             kDebug(32500) << "BREAKING" << endl;

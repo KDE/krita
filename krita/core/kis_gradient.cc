@@ -142,26 +142,17 @@ void KisGradient::setImage(const QImage& img)
 
 KisGradientSegment *KisGradient::segmentAt(double t) const
 {
-    if (t < DBL_EPSILON) {
-        t = 0;
-    }
-    else
-    if (t > 1 - DBL_EPSILON) {
-        t = 1;
-    }
+    Q_ASSERT(t >= 0 || t <= 1);
+    Q_ASSERT(!m_segments.empty());
 
-    Q_ASSERT(m_segments.count() != 0);
-
-    KisGradientSegment *segment = 0;
-
-    for (uint i = 0; i < m_segments.count(); i++) {
-        if (t > m_segments[i]->startOffset() - DBL_EPSILON && t < m_segments[i]->endOffset() + DBL_EPSILON) {
-            segment = m_segments[i];
-            break;
+    for(QValueVector<KisGradientSegment *>::const_iterator it = m_segments.begin(); it!= m_segments.end(); ++it)
+    {
+        if (t > (*it)->startOffset() - DBL_EPSILON && t < (*it)->endOffset() + DBL_EPSILON) {
+            return *it;
         }
     }
 
-    return segment;
+    return 0;
 }
 
 void KisGradient::colorAt(double t, QColor *color, Q_UINT8 *opacity) const
@@ -435,10 +426,14 @@ KisGradientSegment::RGBColorInterpolationStrategy *KisGradientSegment::RGBColorI
 
 Color KisGradientSegment::RGBColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
 {
-    int red = static_cast<int>(start.color().red() + t * (end.color().red() - start.color().red()) + 0.5);
-    int green = static_cast<int>(start.color().green() + t * (end.color().green() - start.color().green()) + 0.5);
-    int blue = static_cast<int>(start.color().blue() + t * (end.color().blue() - start.color().blue()) + 0.5);
-    double alpha = start.alpha() + t * (end.alpha() - start.alpha());
+    int startRed = start.color().red();
+    int startGreen = start.color().green();
+    int startBlue = start.color().blue();
+    double startAlpha = start.alpha();
+    int red = static_cast<int>(startRed + t * (end.color().red() - startRed) + 0.5);
+    int green = static_cast<int>(startGreen + t * (end.color().green() - startGreen) + 0.5);
+    int blue = static_cast<int>(startBlue + t * (end.color().blue() - startBlue) + 0.5);
+    double alpha = startAlpha + t * (end.alpha() - startAlpha);
 
     return Color(QColor(red, green, blue), alpha);
 }

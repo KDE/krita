@@ -608,7 +608,9 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
                 double maxDistance = 0;
 
-                QColor thisPixel(layerPointer[2], layerPointer[1], layerPointer[0]);
+                Q_UINT8 redThis = layerPointer[2];
+                Q_UINT8 greenThis = layerPointer[1];
+                Q_UINT8 blueThis = layerPointer[0];
                 Q_UINT8 thisPixelOpacity = layerPointer[3];
 
                 for (int yOffset = -1; yOffset < 2; yOffset++) {
@@ -622,16 +624,18 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                                 uint x = sampleX - startx;
                                 uint y = sampleY - starty;
                                 Q_UINT8 * pixelPos = layer.bits() + (y * width * 4) + (x * 4);
-                                QColor color(*(pixelPos +2), *(pixelPos + 1), *pixelPos);
+                                Q_UINT8 red = *(pixelPos +2);
+                                Q_UINT8 green = *(pixelPos + 1);
+                                Q_UINT8 blue = *pixelPos;
                                 Q_UINT8 opacity = *(pixelPos + 3);
 
-                                double dRed = (color.red() * opacity - thisPixel.red() * thisPixelOpacity) / 65535.0;
-                                double dGreen = (color.green() * opacity - thisPixel.green() * thisPixelOpacity) / 65535.0;
-                                double dBlue = (color.blue() * opacity - thisPixel.blue() * thisPixelOpacity) / 65535.0;
+                                double dRed = (red * opacity - redThis * thisPixelOpacity) / 65535.0;
+                                double dGreen = (green * opacity - greenThis * thisPixelOpacity) / 65535.0;
+                                double dBlue = (blue * opacity - blueThis * thisPixelOpacity) / 65535.0;
 
                                 #define SQRT_3 1.7320508
 
-                                double distance = sqrt(dRed * dRed + dGreen * dGreen + dBlue * dBlue) / SQRT_3;
+                                double distance =/* sqrt(*/dRed * dRed + dGreen * dGreen + dBlue * dBlue/*) / SQRT_3*/;
 
                                 if (distance > maxDistance) {
                                     maxDistance = distance;
@@ -641,7 +645,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                     }
                 }
 
-                if (maxDistance > antiAliasThreshold) {
+                if (maxDistance > 3.*antiAliasThreshold*antiAliasThreshold) {
                     const int numSamples = 4;
 
                     int totalRed = 0;
@@ -664,9 +668,9 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                                 t = 1 - t;
                             }
 
-                            QColor color;
                             Q_UINT8 opacity;
 
+                            QColor color;
                             m_gradient->colorAt(t, &color, &opacity);
 
                             totalRed += color.red();

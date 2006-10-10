@@ -351,7 +351,7 @@ void Action::slotTriggered()
     }
 
     if(hadError()) {
-        krossdebug( QString("Action::slotTriggered() name=%1 had errors: %2").arg(objectName()).arg(errorMessage()) );
+        krossdebug( QString("Action::slotTriggered() name=%1 errorMessage=%2").arg(objectName()).arg(errorMessage()) );
         emit failed(errorMessage(), errorTrace());
         return;
     }

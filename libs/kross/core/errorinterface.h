@@ -51,12 +51,12 @@ namespace Kross {
             /**
              * \return the trace message.
              */
-            const QString errorMessage() const { return m_trace; }
+            const QString errorMessage() const { return m_error; }
 
             /**
              * \return the error message.
              */
-            const QString errorTrace() const { return m_error; }
+            const QString errorTrace() const { return m_trace; }
 
             /**
              * \return the line number in the scripting code where the

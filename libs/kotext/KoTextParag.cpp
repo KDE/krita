@@ -58,10 +58,6 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
       tArray( 0 )
 {
     defFormat = formatCollection()->defaultFormat();
-    /*if ( !doc ) {
-	tabStopWidth = defFormat->width( 'x' ) * 8;
-	commandHistory = new KoTextDocCommandHistory( 100 );
-    }*/
 
     if ( p ) {
 	p->n = this;
@@ -118,10 +114,6 @@ KoTextParag::~KoTextParag()
 //	doc->minwParag = 0;
 //	doc->minw = 0;
 //    }
-    if ( !doc ) {
-	//delete pFormatter;
-	//delete commandHistory;
-    }
     delete [] tArray;
     //delete eData;
     QMap<int, KoTextParagLineStart*>::Iterator it = lineStarts.begin();
@@ -136,7 +128,7 @@ KoTextParag::~KoTextParag()
        n->setPrev(p);
 
     //// kotext
-    if ( doc && !doc->isDestroying() )
+    if ( !doc->isDestroying() )
     {
         doc->informParagraphDeleted( this );
     }
@@ -235,7 +227,7 @@ void KoTextParag::join( KoTextParag *s )
     append( s->str->toString(), true );
 
     for ( int i = 0; i < s->length(); ++i ) {
-	if ( !doc || doc->useFormatCollection() ) {
+	if ( doc->useFormatCollection() ) {
 	    s->str->at( i ).format()->addRef();
 	    str->setFormat( i + start, s->str->at( i ).format(), true );
 	}
@@ -678,14 +670,14 @@ KoTextFormatCollection *KoTextParag::formatCollection() const
 
 void KoTextParag::show()
 {
-    if ( visible || !doc )
+    if ( visible )
 	return;
     visible = true;
 }
 
 void KoTextParag::hide()
 {
-    if ( !visible || !doc )
+    if ( !visible )
 	return;
     visible = false;
 }
@@ -1862,7 +1854,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	const int nSels = doc ? doc->numSelections() : 1;
 	for ( int j = 0; j < nSels; ++j ) {
 	    if ( start >= selectionStarts[ j ] && start < selectionEnds[ j ] ) {
-		if ( !doc || doc->invertSelectionText( j ) )
+		if ( doc->invertSelectionText( j ) )
 		    textColor = cg.color( QColorGroup::HighlightedText );
 		    painter.setPen( QPen( textColor ) );
                     break;

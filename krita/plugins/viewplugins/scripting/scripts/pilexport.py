@@ -13,7 +13,7 @@ class Exporter:
     """ The Exporter class encapsulates the whole export from a Krita image
     to a by the PIL module supported image file format functionality. """
 
-    def __init__(self):
+    def __init__(self, scriptaction):
         """ The constructor called if the Exporter class got instanciated and
         imports our needed modules to be sure there are available. """
 
@@ -33,6 +33,7 @@ class Exporter:
         except:
             raise "Failed to import the Python Imaging Library (PIL)."
 
+        self.scriptaction = scriptaction
         self.showDialog()
 
     def showDialog(self):
@@ -97,4 +98,4 @@ class Exporter:
         #pilimage.save(self.filename,"JPEG")
         pilimage.save(self.filename)
 
-Exporter()
+Exporter( self )

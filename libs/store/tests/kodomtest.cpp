@@ -17,8 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoDom.h"
-#include "KoXmlNS.h"
+#include "KoXmlReader.h"
+
+static const char* const KoXmlNS_office = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
+static const char* const KoXmlNS_text = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
 
 #include <QApplication>
 //Added by qt3to4:
@@ -38,15 +40,15 @@ void testQDom( const KoXmlDocument& doc )
     assert( docElem.tagName() == "document-content" );
     assert( docElem.localName() == "document-content" );
     assert( docElem.prefix() == "o" );
-    assert( docElem.namespaceURI() == KoXmlNS::office );
+    assert( docElem.namespaceURI() == KoXmlNS_office );
 
-    KoXmlElement elem = KoXml::namedItemNS( docElem, KoXmlNS::office, "body" );
+    KoXmlElement elem = KoXml::namedItemNS( docElem, KoXmlNS_office, "body" );
 
     //debugElemNS( elem );
     assert( elem.tagName() == "body" );
     assert( elem.localName() == "body" );
     assert( elem.prefix() == "o" );
-    assert( elem.namespaceURI() == KoXmlNS::office );
+    assert( elem.namespaceURI() == KoXmlNS_office );
 
     KoXmlNode n = elem.firstChild();
     for ( ; !n.isNull() ; n = n.nextSibling() ) {
@@ -57,7 +59,7 @@ void testQDom( const KoXmlDocument& doc )
         assert( e.tagName() == "p" );
         assert( e.localName() == "p" );
         assert( e.prefix().isEmpty() );
-        assert( e.namespaceURI() == KoXmlNS::text );
+        assert( e.namespaceURI() == KoXmlNS_text );
     }
 
     qDebug("testQDom... ok");
@@ -65,40 +67,40 @@ void testQDom( const KoXmlDocument& doc )
 
 void testKoDom( const KoXmlDocument& doc )
 {
-    KoXmlElement docElem = KoDom::namedItemNS( doc, KoXmlNS::office, "document-content" );
+    KoXmlElement docElem = KoXml::namedItemNS( doc, KoXmlNS_office, "document-content" );
     assert( !docElem.isNull() );
     assert( docElem.localName() == "document-content" );
-    assert( docElem.namespaceURI() == KoXmlNS::office );
+    assert( docElem.namespaceURI() == KoXmlNS_office );
 
-    KoXmlElement body = KoDom::namedItemNS( docElem, KoXmlNS::office, "body" );
+    KoXmlElement body = KoXml::namedItemNS( docElem, KoXmlNS_office, "body" );
     assert( !body.isNull() );
     assert( body.localName() == "body" );
-    assert( body.namespaceURI() == KoXmlNS::office );
+    assert( body.namespaceURI() == KoXmlNS_office );
 
-    KoXmlElement p = KoDom::namedItemNS( body, KoXmlNS::text, "p" );
+    KoXmlElement p = KoXml::namedItemNS( body, KoXmlNS_text, "p" );
     assert( !p.isNull() );
     assert( p.localName() == "p" );
-    assert( p.namespaceURI() == KoXmlNS::text );
+    assert( p.namespaceURI() == KoXmlNS_text );
 
-    const KoXmlElement officeStyle = KoDom::namedItemNS( docElem, KoXmlNS::office, "styles" );
+    const KoXmlElement officeStyle = KoXml::namedItemNS( docElem, KoXmlNS_office, "styles" );
     assert( !officeStyle.isNull() );
 
     // Look for a non-existing element
-    KoXmlElement notexist = KoDom::namedItemNS( body, KoXmlNS::text, "notexist" );
+    KoXmlElement notexist = KoXml::namedItemNS( body, KoXmlNS_text, "notexist" );
     assert( notexist.isNull() );
 
     int count = 0;
     KoXmlElement elem;
     forEachElement( elem, body ) {
         assert( elem.localName() == "p" );
-        assert( elem.namespaceURI() == KoXmlNS::text );
+        assert( elem.namespaceURI() == KoXmlNS_text );
         ++count;
     }
     assert( count == 2 );
 
     // Attributes
     // ### Qt bug: it doesn't work if using style-name instead of text:style-name in the XML
-    const QString styleName = p.attributeNS( KoXmlNS::text, "style-name", QString::null );
+    const QString styleName = p.attributeNS( KoXmlNS_text, "style-name", QString::null );
     qDebug( "%s", qPrintable( styleName ) );
     assert( styleName == "L1" );
 
@@ -110,9 +112,9 @@ int main( int argc, char** argv ) {
 
     const QByteArray xml = QByteArray( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                                    "<o:document-content xmlns:o=\"" )
-                         + KoXmlNS::office
-                         + "\" xmlns=\"" + KoXmlNS::text
-                         + "\" xmlns:text=\"" + KoXmlNS::text
+                         + KoXmlNS_office
+                         + "\" xmlns=\"" + KoXmlNS_text
+                         + "\" xmlns:text=\"" + KoXmlNS_text
                          + "\">\n"
 		"<o:body><p text:style-name=\"L1\">foobar</p><p>2nd</p></o:body><o:styles></o:styles>\n"
 		"</o:document-content>\n";

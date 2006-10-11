@@ -1,6 +1,4 @@
 
-include_directories (${CMAKE_SOURCE_DIR}/libs/kofficecore)
-
 if(KDE4_BUILD_TESTS)
 
 ########### next target ###############
@@ -45,9 +43,9 @@ kde4_automoc(${kodomtest_SRCS})
 
 kde4_add_executable(kodomtest RUN_UNINSTALLED ${kodomtest_SRCS})
 
-target_link_libraries(kodomtest  ${KDE4_KDECORE_LIBS} kstore kofficecore )
+target_link_libraries(kodomtest ${KDE4_KDECORE_LIBS} kstore )
 
-add_test(kofficecore-kodomtest kodomtest)
+add_test(kostore-kodomtest kodomtest)
 
 ########### end ###############
 

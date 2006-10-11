@@ -23,7 +23,7 @@
 // use standard QDom, useful to test KoXml classes against Qt's QDom
 #define KOXML_USE_QDOM
 
-#include <qdom.h> 
+#include <qdom.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <koffice_export.h>
@@ -56,26 +56,26 @@ class KoXmlNodeData;
  *
  * KoXmlNode is a base class for KoXmlElement, KoXmlText.
  * Often, these subclasses are used for getting the data instead of KoXmlNode.
- * However, as base class, KoXmlNode is very helpful when for example iterating 
+ * However, as base class, KoXmlNode is very helpful when for example iterating
  * all child nodes within one parent node.
  *
- * KoXmlNode implements an explicit sharing, a node shares its data with 
+ * KoXmlNode implements an explicit sharing, a node shares its data with
  * other copies (if exist).
  *
  * @author Ariya Hidayat <ariya@kde.org>
  */
-class KOFFICECORE_EXPORT KoXmlNode
+class KOSTORE_EXPORT KoXmlNode
 {
 public:
 
-  enum NodeType 
+  enum NodeType
   {
     NullNode = 0,
     ElementNode,
     TextNode,
     CDATASectionNode,
     ProcessingInstructionNode,
-    DocumentNode 
+    DocumentNode
   };
 
   KoXmlNode();
@@ -117,13 +117,13 @@ public:
 
   /**
    * Loads all child nodes (if any) of this node. Normally you do not need
-   * to call this function as the child nodes will be automatically 
+   * to call this function as the child nodes will be automatically
    * loaded when necessary.
    */
   void load( int depth=1 );
 
   /**
-   * Releases all child nodes of this node. 
+   * Releases all child nodes of this node.
    */
   void unload();
 
@@ -140,7 +140,7 @@ protected:
  * @author Ariya Hidayat <ariya@kde.org>
  */
 
-class KOFFICECORE_EXPORT KoXmlElement: public KoXmlNode
+class KOSTORE_EXPORT KoXmlElement: public KoXmlNode
 {
 public:
   KoXmlElement();
@@ -156,7 +156,7 @@ public:
 
   QString attribute( const QString& name ) const;
   QString attribute( const QString& name, const QString& defaultValue ) const;
-  QString attributeNS( const QString& namespaceURI, const QString& localName, 
+  QString attributeNS( const QString& namespaceURI, const QString& localName,
     const QString& defaultValue ) const;
   bool hasAttribute( const QString& name ) const;
   bool hasAttributeNS( const QString& namespaceURI, const QString& localName ) const;
@@ -171,7 +171,7 @@ private:
  * KoXmlText represents a text in a DOM tree.
  * @author Ariya Hidayat <ariya@kde.org>
  */
-class KOFFICECORE_EXPORT KoXmlText: public KoXmlNode
+class KOSTORE_EXPORT KoXmlText: public KoXmlNode
 {
 public:
   KoXmlText();
@@ -193,7 +193,7 @@ private:
  * KoXmlCDATASection represents a CDATA section in a DOM tree.
  * @author Ariya Hidayat <ariya@kde.org>
  */
-class KOFFICECORE_EXPORT KoXmlCDATASection: public KoXmlText
+class KOSTORE_EXPORT KoXmlCDATASection: public KoXmlText
 {
 public:
   KoXmlCDATASection();
@@ -212,7 +212,7 @@ private:
 /**
  * KoXmlDocument represents an XML document, structured in a DOM tree.
  *
- * KoXmlDocument is designed to be memory efficient. Unlike QDomDocument from 
+ * KoXmlDocument is designed to be memory efficient. Unlike QDomDocument from
  * Qt's XML module, KoXmlDocument does not store all nodes in the DOM tree.
  * Some nodes will be loaded and parsed on-demand only.
  *
@@ -221,7 +221,7 @@ private:
  * @author Ariya Hidayat <ariya@kde.org>
  */
 
-class KOFFICECORE_EXPORT KoXmlDocument: public KoXmlNode
+class KOSTORE_EXPORT KoXmlDocument: public KoXmlNode
 {
 public:
   KoXmlDocument();
@@ -238,11 +238,11 @@ public:
   void setFastLoading( bool f );
   bool fastLoading() const;
 
-  bool setContent( QIODevice* device, bool namespaceProcessing, 
+  bool setContent( QIODevice* device, bool namespaceProcessing,
     QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0 );
-  bool setContent( QIODevice* device, 
+  bool setContent( QIODevice* device,
     QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0 );
-  bool setContent( QXmlInputSource *source, QXmlReader *reader, 
+  bool setContent( QXmlInputSource *source, QXmlReader *reader,
     QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0 );
   bool setContent( const QByteArray& text, bool namespaceProcessing,
     QString *errorMsg=0, int *errorLine=0, int *errorColumn=0  );
@@ -252,10 +252,10 @@ public:
 //  bool setContent( QIODevice* dev, bool namespaceProcessing, QString *errorMsg=0, int *errorLine=0, int *errorColumn=0  );
 //  bool setContent( const QCString& text, QString *errorMsg=0, int *errorLine=0, int *errorColumn=0 );
 //  bool setContent( const QByteArray& text, QString *errorMsg=0, int *errorLine=0, int *errorColumn=0  );
-//  bool setContent( const QString& text, QString *errorMsg=0, int *errorLine=0, 
+//  bool setContent( const QString& text, QString *errorMsg=0, int *errorLine=0,
 //    int *errorColumn=0  );
 
-    
+
 private:
   friend class KoXmlNode;
   KoXmlDocument( KoXmlNodeData* );
@@ -299,20 +299,20 @@ namespace KoXml {
      *
      * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
      */
-    KOFFICECORE_EXPORT KoXmlElement namedItemNS( const KoXmlNode& node, 
+    KOSTORE_EXPORT KoXmlElement namedItemNS( const KoXmlNode& node,
         const char* nsURI, const char* localName );
 
     /**
      * Explicitly load child nodes of specified node, up to given depth.
      * This function has no effect if QDom is used.
      */
-    KOFFICECORE_EXPORT void load( KoXmlNode& node, int depth = 1 );
+    KOSTORE_EXPORT void load( KoXmlNode& node, int depth = 1 );
 
     /**
      * Unload child nodes of specified node.
      * This function has no effect if QDom is used.
      */
-    KOFFICECORE_EXPORT void unload( KoXmlNode& node );
+    KOSTORE_EXPORT void unload( KoXmlNode& node );
 
 }
 

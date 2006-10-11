@@ -148,14 +148,14 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QByteArray & 
 
 KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification, Backend backend )
 {
-  bool automatic = ( backend == Auto );
+  const bool automatic = ( backend == Auto );
   if ( url.isLocalFile() )
     return createStore(url.path(), mode,  appIdentification, backend );
 
   QString tmpFile;
   if ( mode == KoStore::Write )
   {
-    if ( backend == Auto )
+    if ( automatic )
       backend = DefaultFormat;
   }
   else
@@ -168,7 +168,7 @@ KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, cons
       kError(s_area) << "Could not download file!" << endl;
       backend = DefaultFormat; // will create a "bad" store (bad()==true)
     }
-    else if ( backend == Auto )
+    else if ( automatic )
     {
       QFile file( tmpFile );
       if ( file.open( QIODevice::ReadOnly ) )

@@ -79,9 +79,10 @@ KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
             it++)
     {
         KMimeType::Ptr mime = KMimeType::mimeType (*it);
-        if ( ! mime )
+        Q_ASSERT( mime );
+        if ( !mime )
 	    mime = KMimeType::defaultMimeTypePtr();
-        m_filterList->insertItem (mime->comment ());
+        m_filterList->insertItem(mime->comment());
     }
 
     if (nativeFormat == "application/x-kword")
@@ -97,7 +98,7 @@ KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
     m_filterList->centerCurrentItem ();
     m_filterList->setFocus ();
 
-    connect (m_filterList, SIGNAL (selected (int)), this, SLOT (slotOk ()));
+    connect (m_filterList, SIGNAL (selected (int)), this, SLOT (accept()));
 }
 
 KoFilterChooser::~KoFilterChooser ()
@@ -152,13 +153,8 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     KUrl u;
     u.setPath( url );
     KMimeType::Ptr t = KMimeType::findByUrl( u, 0, true );
-    if ( t->name() == KMimeType::defaultMimeType() ) {
-        kError(s_area) << "No mimetype found for " << url << endl;
-        status = KoFilter::BadMimeType;
-        return QString();
-    }
-
-    m_graph.setSourceMimeType( t->name().toLatin1() );  // .latin1() is okay here (Werner)
+    if ( t )
+        m_graph.setSourceMimeType( t->name().toLatin1() );  // .latin1() is okay here (Werner)
     if ( !m_graph.isValid() ) {
         bool userCancelled = false;
 
@@ -276,7 +272,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QByteArr
         KUrl u;
         u.setPath( m_importUrl );
         KMimeType::Ptr t = KMimeType::findByUrl( u, 0, true );
-        if ( t->name() == KMimeType::defaultMimeType() ) {
+        if ( !t || t->name() == KMimeType::defaultMimeType() ) {
             kError(s_area) << "No mimetype found for " << m_importUrl << endl;
             return KoFilter::BadMimeType;
         }

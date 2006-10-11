@@ -1461,7 +1461,7 @@ bool KoDocument::openFile()
     {
         QString path = u.path();
 	KMimeType::Ptr mime = KMimeType::mimeType( typeName );
-        QStringList patterns = mime ? mime->patterns() : KMimeType::defaultMimeTypePtr()->patterns();
+        QStringList patterns = mime ? mime->patterns() : QStringList();
         // Find the extension that makes it a backup file, and remove it
         for( QStringList::Iterator it = patterns.begin(); it != patterns.end(); ++it ) {
             QString ext = *it;
@@ -1487,15 +1487,6 @@ bool KoDocument::openFile()
     kDebug(30003) << "KoDocument::openFile " << m_file << " type:" << typeName << endl;
 
     QString importedFile = m_file;
-
-    if ( typeName == KMimeType::defaultMimeType() ) {
-        kError(30003) << "No mimetype found for " << m_file << endl;
-        QApplication::restoreOverrideCursor();
-        if ( d->m_autoErrorHandlingEnabled )
-            KMessageBox::error( 0L, i18n( "Could not open\n%1",url().pathOrUrl() ) );
-        d->m_bLoading = false;
-        return false;
-    }
 
     if ( !isNativeFormat( typeName.toLatin1() ) ) {
         if ( !d->filterManager )

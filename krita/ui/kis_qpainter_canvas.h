@@ -20,19 +20,46 @@
 #define KIS_QPAINTER_CANVAS_H
 
 #include <QWidget>
-#include <KoCanvasBase.h>
+
+#include "kis_abstract_canvas_widget.h"
+
+class QBrush;
+class QImage;
+class QPaintEvent;
+class KisCanvas2;
+class KoColorProfile;
+
 /**
  *
  * KisQPainterCanvas is the widget that shows the actual image using arthur.
  *
  * @author Boudewijn Rempt <boud@valdyas.org>
 */
-class KisQPainterCanvas : public QWidget
+class KisQPainterCanvas : public QWidget, public KisAbstractCanvasWidget
 {
+
+    Q_OBJECT
+
 public:
-    KisQPainterCanvas(QWidget * parent);
+
+    KisQPainterCanvas( KisCanvas2 * canvas, QWidget * parent );
 
     virtual ~KisQPainterCanvas();
+
+
+public: // QWidget
+
+    void paintEvent ( QPaintEvent * event );
+
+public: // KisAbstractCanvasWidget
+
+    QWidget * widget() { return this; }
+
+private:
+    KoColorProfile *  m_monitorProfile;
+    QImage * m_checkTexture;
+    QBrush * m_checkBrush;
+    KisCanvas2 * m_canvas;
 
 };
 

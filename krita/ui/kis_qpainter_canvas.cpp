@@ -102,9 +102,6 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     // Only the part that intersects with the bit we want to paint is interesting
     QRect imageRect = QRect(xoffset, yoffset, img->width(), img->height());
 
-    kDebug() << "image: " << imageRect << ", image extent " << imageRegion.boundingRect() << " paint rect: " << ev->rect() 
-            << " x offset " << xoffset << ", y offset " << yoffset << endl;
-
     // If we're in the border area, draw the border. 
     // The border region is the set of rects around the image where there may be
     // layer data, but that is outside the user-defined dimensions of the image.
@@ -147,6 +144,23 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
             ++it;
         }
     }
+
+    // ask the current layer to paint its selection (and potentially
+    // other things, like wetness and active-layer outline
+    KisLayerSP currentLayer = img->activeLayer();
+    QVector<QRect>layerRects = QRegion(currentLayer->extent().translate(xoffset, yoffset))
+                                .intersected(paintRegions);
+    
+    it = outsideRects.begin();
+    end = outsideRects.end();
+    while (it != end) {
+            currentLayer->renderDecorationsToPainter((*it).x() - xoffset, 
+                                                     (*it).y() - yoffset,
+                                                     (*it).x(), (*it).y(),
+                                                     (*it).width(), (*it).height(),
+                                                     gc);
+    }
+
     // Paint the bits of the layers that are outside the real image, with
     // a gray wash
     QVector<QRect>outsideRects = imageRegion
@@ -156,7 +170,6 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     it = outsideRects.begin();
     end = outsideRects.end();
     while (it != end) {
-        kDebug() << "Outlier rect: " << *it << endl;
         img->renderToPainter((*it).x() - xoffset, 
                              (*it).y() - yoffset,
                              (*it).x(), (*it).y(),
@@ -169,9 +182,6 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
         gc.restore();
         ++it;
     }
-    // ask the current layer to paint its masks (selection, masks,
-    // wetness, height map, etc.
-
     // ask the guides, grids, etc to paint themselves
 
     // Give the tool a chance tool paint its stuff

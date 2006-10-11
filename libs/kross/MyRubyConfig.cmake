@@ -7,6 +7,10 @@
 #  RUBY_EXECUTABLE   = full path to the ruby binary
 #
 
+#TODO why the heck following command does not work any longer as expected (so, prints out the ruby version)?
+#EXECUTE_PROCESS(COMMAND ruby -r rbconfig -e "'printf(\"%s\",Config::CONFIG[\"ruby_version\"])'" OUTPUT_VARIABLE _test_var)
+#MESSAGE(STATUS "===================> |${_test_var}|")
+
 FIND_PROGRAM(RUBY_EXECUTABLE
   NAMES ruby ruby1.8 ruby1.9
   PATHS /usr/bin /usr/local/bin

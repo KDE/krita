@@ -1,16 +1,13 @@
-# temporary to work around a bug in the FindRUBY.cmake as deployed with cmake.
-#macro_optional_find_package(RUBY)
-
-set(MyRuby_DIR ${CMAKE_SOURCE_DIR}/libs/kross )
-find_package(MyRuby)
-
 include_directories( ${KOFFICECORE_INCLUDES} )
-
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
 add_subdirectory( core )
 add_subdirectory( runner )
-add_subdirectory( test )
+
+# unittests and such stuff
+if (KDE4_BUILD_TESTS)
+	add_subdirectory( test )
+endif (KDE4_BUILD_TESTS)
 
 # KDE Javascript
 # test kjsembed I think
@@ -23,6 +20,12 @@ if(PYTHON_INCLUDE_PATH)
 endif(PYTHON_INCLUDE_PATH)		
 
 # Ruby
+
+# temporary to work around a bug in the FindRUBY.cmake as deployed with cmake.
+#macro_optional_find_package(RUBY)
+set(MyRuby_DIR ${CMAKE_SOURCE_DIR}/libs/kross )
+find_package(MyRuby)
+
 if(RUBY_LIBRARY AND RUBY_INCLUDE_PATH)
 	add_subdirectory(ruby)
 endif(RUBY_LIBRARY AND RUBY_INCLUDE_PATH)

@@ -21,135 +21,148 @@
 #  IMAGEMAGICK_PATCH_VERSION, The patch version number
 #  IMAGEMAGICK_FOUND, If false, do not try to use ImageMagick.
 
-SET(HAVE_MAGICK 0)
+if(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
 
-if (WIN32)
+  # in cache already
+  set(HAVE_MAGICK 1)
+  set(IMAGEMAGICK_FOUND TRUE)
 
-  # Try to find the ImageMagick binary path.
+  # and the executables are in the cache too, if they were found.
 
-  FIND_PATH(IMAGEMAGICK_BINARY_PATH mogrify.exe
-    [HKEY_LOCAL_MACHINE\\SOFTWARE\\ImageMagick\\Current;BinPath]
-    DOC "Path to the ImageMagick binary directory where all executable should be found."
-  )
+else(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
 
-  # Be extra-careful here: we do NOT want CMake to look in the system's PATH
-  # env var to search for convert.exe, otherwise it is going to pick
-  # Window's own convert.exe, and you may say good-bye to your disk.
+  SET(HAVE_MAGICK 0)
 
-  FIND_PROGRAM(IMAGEMAGICK_CONVERT_EXECUTABLE
-    NAMES convert
+  if (WIN32)
+
+    # Try to find the ImageMagick binary path.
+
+    FIND_PATH(IMAGEMAGICK_BINARY_PATH mogrify.exe
+      [HKEY_LOCAL_MACHINE\\SOFTWARE\\ImageMagick\\Current;BinPath]
+      DOC "Path to the ImageMagick binary directory where all executable should be found."
+    )
+
+    # Be extra-careful here: we do NOT want CMake to look in the system's PATH
+    # env var to search for convert.exe, otherwise it is going to pick
+    # Window's own convert.exe, and you may say good-bye to your disk.
+
+    FIND_PROGRAM(IMAGEMAGICK_CONVERT_EXECUTABLE
+      NAMES convert
+      PATHS ${IMAGEMAGICK_BINARY_PATH}
+      NO_SYSTEM_PATH
+      DOC "Path to ImageMagick's convert executable. WARNING: note that this tool, named convert.exe, conflicts with Microsoft Window's own convert.exe, which is used to convert FAT partitions to NTFS format ! Therefore, be extra-careful and make sure the right convert.exe has been picked."
+    )
+
+  ELSE (WIN32)
+
+    SET (IMAGEMAGICK_BINARY_PATH "")
+
+    FIND_PROGRAM(IMAGEMAGICK_CONVERT_EXECUTABLE
+      NAMES convert
+      PATHS ${IMAGEMAGICK_BINARY_PATH}
+      DOC "Path to ImageMagick's convert executable."
+    )
+
+  ENDIF (WIN32)
+
+  # Find mogrify, import, montage, composite
+
+  FIND_PROGRAM(IMAGEMAGICK_MOGRIFY_EXECUTABLE
+    NAMES mogrify
     PATHS ${IMAGEMAGICK_BINARY_PATH}
-    NO_SYSTEM_PATH
-    DOC "Path to ImageMagick's convert executable. WARNING: note that this tool, named convert.exe, conflicts with Microsoft Window's own convert.exe, which is used to convert FAT partitions to NTFS format ! Therefore, be extra-careful and make sure the right convert.exe has been picked."
+    DOC "Path to ImageMagick's mogrify executable."
   )
 
-ELSE (WIN32)
-
-  SET (IMAGEMAGICK_BINARY_PATH "")
-
-  FIND_PROGRAM(IMAGEMAGICK_CONVERT_EXECUTABLE
-    NAMES convert
+  FIND_PROGRAM(IMAGEMAGICK_IMPORT_EXECUTABLE
+    NAMES import
     PATHS ${IMAGEMAGICK_BINARY_PATH}
-    DOC "Path to ImageMagick's convert executable."
+    DOC "Path to ImageMagick's import executable."
   )
 
-ENDIF (WIN32)
+  FIND_PROGRAM(IMAGEMAGICK_MONTAGE_EXECUTABLE
+    NAMES montage
+    PATHS ${IMAGEMAGICK_BINARY_PATH}
+    DOC "Path to ImageMagick's montage executable."
+  )
 
-# Find mogrify, import, montage, composite
+  FIND_PROGRAM(IMAGEMAGICK_COMPOSITE_EXECUTABLE
+    NAMES composite
+    PATHS ${IMAGEMAGICK_BINARY_PATH}
+    DOC "Path to ImageMagick's composite executable."
+  )
 
-FIND_PROGRAM(IMAGEMAGICK_MOGRIFY_EXECUTABLE
-  NAMES mogrify
-  PATHS ${IMAGEMAGICK_BINARY_PATH}
-  DOC "Path to ImageMagick's mogrify executable."
-)
+  find_program(MAGICK_CONFIG_EXECUTABLE
+     NAMES Magick-config
+     PATHS
+     ${IMAGEMAGICK_BINARY_PATH}
+     /usr/bin
+     /usr/local/bin
+     /opt/local/bin
+  )
 
-FIND_PROGRAM(IMAGEMAGICK_IMPORT_EXECUTABLE
-  NAMES import
-  PATHS ${IMAGEMAGICK_BINARY_PATH}
-  DOC "Path to ImageMagick's import executable."
-)
+  set(IMAGEMAGICK_FOUND FALSE)
 
-FIND_PROGRAM(IMAGEMAGICK_MONTAGE_EXECUTABLE
-  NAMES montage
-  PATHS ${IMAGEMAGICK_BINARY_PATH}
-  DOC "Path to ImageMagick's montage executable."
-)
+  if(MAGICK_CONFIG_EXECUTABLE)
 
-FIND_PROGRAM(IMAGEMAGICK_COMPOSITE_EXECUTABLE
-  NAMES composite
-  PATHS ${IMAGEMAGICK_BINARY_PATH}
-  DOC "Path to ImageMagick's composite executable."
-)
+     # use pkg-config to get the directories and then use these values
+     # in the FIND_PATH() and FIND_LIBRARY() calls
+     INCLUDE(UsePkgConfig)
+     PKGCONFIG(ImageMagick _libMagickIncDir _libMagickLinkDir _libMagickLinkFlags _libMagickCflags)
 
-find_program(MAGICK_CONFIG_EXECUTABLE
-   NAMES Magick-config
-   PATHS
-   ${IMAGEMAGICK_BINARY_PATH}
-   /usr/bin
-   /usr/local/bin
-   /opt/local/bin
-)
+     find_path(IMAGEMAGICK_INCLUDE_DIR magick/api.h
+        /usr/include
+        /usr/local/include
+        /opt/local/include
+     )
 
-set(IMAGEMAGICK_FOUND FALSE)
+     set(IMAGEMAGICK_LIBRARIES ${_libMagickLinkFlags})
+     #   find_library(IMAGEMAGICK_LIBRARIES Magick
+     #   /usr/lib
+     #   /usr/local/lib
+     #   /opt/local/lib
+     # )
 
-if(MAGICK_CONFIG_EXECUTABLE)
+     exec_program(${MAGICK_CONFIG_EXECUTABLE} ARGS --version OUTPUT_VARIABLE IMAGEMAGICK_VERSION)
 
-   # use pkg-config to get the directories and then use these values
-   # in the FIND_PATH() and FIND_LIBRARY() calls
-   INCLUDE(UsePkgConfig)
-   PKGCONFIG(ImageMagick _libMagickIncDir _libMagickLinkDir _libMagickLinkFlags _libMagickCflags)
+     string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" IMAGEMAGICK_MAJOR_VERSION "${IMAGEMAGICK_VERSION}")
+     string(REGEX REPLACE "[0-9]+\\.([0-9])+\\.[0-9]+" "\\1" IMAGEMAGICK_MINOR_VERSION "${IMAGEMAGICK_VERSION}")
+     string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" IMAGEMAGICK_PATCH_VERSION "${IMAGEMAGICK_VERSION}")
 
-   find_path(IMAGEMAGICK_INCLUDE_DIR magick/api.h
-      /usr/include
-      /usr/local/include
-      /opt/local/include
-   )
+     set(IMAGEMAGICK_VERSION ${IMAGEMAGICK_VERSION} CACHE INTERNAL "The image magick version")
 
-   set(IMAGEMAGICK_LIBRARIES ${_libMagickLinkFlags})
-   #   find_library(IMAGEMAGICK_LIBRARIES Magick
-   #   /usr/lib
-   #   /usr/local/lib
-   #   /opt/local/lib
-   # )
+     if(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
+        set(IMAGEMAGICK_FOUND TRUE)
+     endif(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
+  endif(MAGICK_CONFIG_EXECUTABLE)
 
-   exec_program(${MAGICK_CONFIG_EXECUTABLE} ARGS --version OUTPUT_VARIABLE IMAGEMAGICK_VERSION)
+  if(IMAGEMAGICK_FOUND)
+     set(HAVE_MAGICK 1)
+     if(NOT IMAGEMAGICK_FIND_QUIETLY)
+        message(STATUS "Found Image Magick version ${IMAGEMAGICK_VERSION}: ${IMAGEMAGICK_LIBRARIES}")
+     endif(NOT IMAGEMAGICK_FIND_QUIETLY)
+  else(IMAGEMAGICK_FOUND)
+     if(NOT IMAGEMAGICK_FIND_QUIETLY)
+        if(IMAGEMAGICK_FIND_REQUIRED)
+           message(FATAL_ERROR "Required package Image Magick NOT found")
+        else(IMAGEMAGICK_FIND_REQUIRED)
+           message(STATUS "Image Magick NOT found")
+        endif(IMAGEMAGICK_FIND_REQUIRED)
+     endif(NOT IMAGEMAGICK_FIND_QUIETLY)
+  endif(IMAGEMAGICK_FOUND)
 
-   string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" IMAGEMAGICK_MAJOR_VERSION "${IMAGEMAGICK_VERSION}")
-   string(REGEX REPLACE "[0-9]+\\.([0-9])+\\.[0-9]+" "\\1" IMAGEMAGICK_MINOR_VERSION "${IMAGEMAGICK_VERSION}")
-   string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" IMAGEMAGICK_PATCH_VERSION "${IMAGEMAGICK_VERSION}")
+  mark_as_advanced(
+    IMAGEMAGICK_BINARY_PATH
+    IMAGEMAGICK_CONVERT_EXECUTABLE
+    IMAGEMAGICK_MOGRIFY_EXECUTABLE
+    IMAGEMAGICK_IMPORT_EXECUTABLE
+    IMAGEMAGICK_MONTAGE_EXECUTABLE
+    IMAGEMAGICK_COMPOSITE_EXECUTABLE
+    IMAGEMAGICK_INCLUDE_DIR
+    IMAGEMAGICK_LIBRARIES
+    IMAGEMAGICK_VERSION
+    IMAGEMAGICK_MAJOR_VERSION
+    IMAGEMAGICK_MINOR_VERSION
+    IMAGEMAGICK_PATCH_VERSION
+  )
 
-   if(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
-      set(IMAGEMAGICK_FOUND TRUE)
-   endif(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
-endif(MAGICK_CONFIG_EXECUTABLE)
-
-if(IMAGEMAGICK_FOUND)
-   set(HAVE_MAGICK 1)
-   if(NOT IMAGEMAGICK_FIND_QUIETLY)
-      message(STATUS "Found Image Magick version ${IMAGEMAGICK_VERSION}: ${IMAGEMAGICK_LIBRARIES}")
-   endif(NOT IMAGEMAGICK_FIND_QUIETLY)
-else(IMAGEMAGICK_FOUND)
-   if(NOT IMAGEMAGICK_FIND_QUIETLY)
-      if(IMAGEMAGICK_FIND_REQUIRED)
-         message(FATAL_ERROR "Required package Image Magick NOT found")
-      else(IMAGEMAGICK_FIND_REQUIRED)
-         message(STATUS "Image Magick NOT found")
-      endif(IMAGEMAGICK_FIND_REQUIRED)
-   endif(NOT IMAGEMAGICK_FIND_QUIETLY)
-endif(IMAGEMAGICK_FOUND)
-
-mark_as_advanced(
-  IMAGEMAGICK_BINARY_PATH
-  IMAGEMAGICK_CONVERT_EXECUTABLE
-  IMAGEMAGICK_MOGRIFY_EXECUTABLE
-  IMAGEMAGICK_IMPORT_EXECUTABLE
-  IMAGEMAGICK_MONTAGE_EXECUTABLE
-  IMAGEMAGICK_COMPOSITE_EXECUTABLE
-  IMAGEMAGICK_INCLUDE_DIR
-  IMAGEMAGICK_LIBRARIES
-  IMAGEMAGICK_VERSION
-  IMAGEMAGICK_MAJOR_VERSION
-  IMAGEMAGICK_MINOR_VERSION
-  IMAGEMAGICK_PATCH_VERSION
-)
-
+endif(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)

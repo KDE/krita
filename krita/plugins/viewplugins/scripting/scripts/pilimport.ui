@@ -5,15 +5,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>442</width>
-    <height>334</height>
+    <width>466</width>
+    <height>377</height>
    </rect>
-  </property>
-  <property name="minimumSize" >
-   <size>
-    <width>400</width>
-    <height>0</height>
-   </size>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
@@ -34,19 +28,19 @@
       <number>6</number>
      </property>
      <item>
-      <widget class="QGroupBox" name="groupBox" >
+      <widget class="QGroupBox" name="Colorspace" >
        <property name="sizePolicy" >
         <sizepolicy>
-         <hsizetype>7</hsizetype>
+         <hsizetype>5</hsizetype>
          <vsizetype>5</vsizetype>
          <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="title" >
-        <string>File:</string>
+        <string>Colorspace</string>
        </property>
-       <layout class="QVBoxLayout" >
+       <layout class="QHBoxLayout" >
         <property name="margin" >
          <number>9</number>
         </property>
@@ -54,7 +48,7 @@
          <number>6</number>
         </property>
         <item>
-         <layout class="QHBoxLayout" >
+         <layout class="QVBoxLayout" >
           <property name="margin" >
            <number>0</number>
           </property>
@@ -62,24 +56,35 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="QComboBox" name="comboBox" >
+           <widget class="QRadioButton" name="RGB" >
             <property name="sizePolicy" >
              <sizepolicy>
-              <hsizetype>5</hsizetype>
+              <hsizetype>1</hsizetype>
               <vsizetype>0</vsizetype>
-              <horstretch>1</horstretch>
+              <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="editable" >
+            <property name="text" >
+             <string>RGB</string>
+            </property>
+            <property name="checked" >
              <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton" >
+           <widget class="QRadioButton" name="CMYK" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>1</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text" >
-             <string>...</string>
+             <string>CMYK</string>
             </property>
            </widget>
           </item>
@@ -89,7 +94,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_2" >
+      <widget class="QGroupBox" name="Destination" >
        <property name="sizePolicy" >
         <sizepolicy>
          <hsizetype>5</hsizetype>
@@ -99,7 +104,7 @@
         </sizepolicy>
        </property>
        <property name="title" >
-        <string>GroupBox 1</string>
+        <string>Destination</string>
        </property>
        <layout class="QHBoxLayout" >
         <property name="margin" >
@@ -117,32 +122,22 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="QCheckBox" name="checkBox" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>1</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>1</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+           <widget class="QRadioButton" name="ActiveLayer" >
             <property name="text" >
-             <string>CheckBox</string>
+             <string>Active Layer</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="checkBox_2" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>1</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>1</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+           <widget class="QRadioButton" name="NewLayer" >
             <property name="text" >
-             <string>CheckBox</string>
+             <string>New Layer</string>
+            </property>
+            <property name="checked" >
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -152,7 +147,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_3" >
+      <widget class="QGroupBox" name="Size" >
        <property name="sizePolicy" >
         <sizepolicy>
          <hsizetype>5</hsizetype>
@@ -162,7 +157,7 @@
         </sizepolicy>
        </property>
        <property name="title" >
-        <string>Other GroupBox</string>
+        <string>Size</string>
        </property>
        <layout class="QHBoxLayout" >
         <property name="margin" >
@@ -180,32 +175,29 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="QRadioButton" name="radioButton" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>1</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>1</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+           <widget class="QRadioButton" name="Ignore" >
             <property name="text" >
-             <string>RadioButton</string>
+             <string>Ignore size of imported image and keep current size</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="radioButton_2" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>1</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>1</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+           <widget class="QRadioButton" name="Resize" >
             <property name="text" >
-             <string>RadioButton</string>
+             <string>Resize current size to size of the imported image</string>
+            </property>
+            <property name="checked" >
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="Scale" >
+            <property name="text" >
+             <string>Scale imported image to fit to current size</string>
             </property>
            </widget>
           </item>
@@ -221,8 +213,8 @@
        </property>
        <property name="sizeHint" >
         <size>
-         <width>20</width>
-         <height>40</height>
+         <width>446</width>
+         <height>16</height>
         </size>
        </property>
       </spacer>
@@ -230,29 +222,7 @@
     </layout>
    </item>
   </layout>
-  <action name="actionAction1" >
-   <property name="text" >
-    <string>action1</string>
-   </property>
-  </action>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>actionAction1</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>338</x>
-     <y>55</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

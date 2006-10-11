@@ -27,6 +27,7 @@
 //#include <QVariant>
 
 #include <ksharedptr.h>
+#include <kurl.h>
 
 #include "../core/krossconfig.h"
 #include "../core/childreninterface.h"
@@ -103,17 +104,6 @@ namespace Kross {
              * a matching interpreter for the file.
              */
             const QString interpreternameForFile(const QString& file);
-
-            /**
-             * Return the existing \a Action with scriptname
-             * or create a new \a Action instance and associate
-             * the passed scriptname with it.
-             *
-             * \param scriptname The name of the action. This should be unique
-             * for each \a Action and could be something like the filename.
-             * \return The \a Action instance matching to scriptname.
-             */
-            KSharedPtr<Action> createAction(const QString& scriptname);
 
             /**
              * Return the \a Interpreter instance defined by

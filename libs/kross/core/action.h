@@ -240,6 +240,12 @@ namespace Kross {
              */
             void setInterpreter(const QString& interpretername);
 
+            /**
+             * \return the current path the script is running in or
+             * an empty string if there is no current path defined.
+             */
+            QString currentPath() const;
+
         signals:
             void activated(Kross::Action*);
             void success();

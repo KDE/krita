@@ -120,9 +120,9 @@ int runScriptFile(const QString& scriptfile)
     TestObject* testobj4 = new TestObject("TestObject4");
 
     // First we need a Action and fill it.
-    Kross::Action::Ptr action = Kross::Manager::self().createAction(scriptfile);
-    action->setInterpreter(interpretername);
-    action->setCode(scriptcode);
+    Kross::Action::Ptr action( new Kross::Action( KUrl(scriptfile) ) );
+    action->setInterpreter( interpretername );
+    action->setCode( scriptcode );
 
     // Publish other both testobject instance to the script.
     action->addObject( testobj3 );

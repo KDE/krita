@@ -104,24 +104,19 @@ bool PythonScript::initialize()
             krossdebug( QString("PythonScript::initialize() module='%1' refcount='%2'").arg(d->m_module->as_string().c_str()).arg(d->m_module->reference_count()) );
         #endif
 
-        { // Add the Object instances to the modules dictonary.
+        { // Add additional stuff to the modules dictonary of this PythonScript.
             Py::Dict moduledict = d->m_module->getDict();
+
+            // Add our Action instance as "self" to the modules dictonary.
+            moduledict[ "self" ] = Py::asObject(new PythonExtension(m_action));
+
+            // Add the QObject instances to the modules dictonary.
             QHashIterator< QString, QObject* > objectsit( m_action->objects() );
             while(objectsit.hasNext()) {
                 objectsit.next();
                 moduledict[ objectsit.key().toLatin1().data() ] = Py::asObject(new PythonExtension(objectsit.value()));
             }
         }
-
-#if 0
-        // Set the "self" variable to point to the Action
-        // we are using for the script. That way we are able to
-        // simply access the Action itself from within
-        // python scripting code.
-        Py::Dict moduledict = d->m_module->getDict();
-        moduledict["self"] = PythonExtension::toPyObject( m_action );
-        //moduledict["parent"] = PythonExtension::toPyObject( m_manager );
-#endif
 
         /*
         // Prepare the local context.

@@ -42,9 +42,8 @@ namespace Kross {
         public:
 
             /**
-            * The \a Script instance the \a Action uses
-            * if initialized. It will be NULL as long as we
-            * didn't initialized it what will be done on
+            * The \a Script instance the \a Action uses if initialized. It will
+            * be NULL as long as we didn't initialized it what will be done on
             * demand.
             */
             Script* script;
@@ -61,20 +60,24 @@ namespace Kross {
             QString code;
 
             /**
-            * The name of the interpreter. This could be
-            * something like "python" for the python
-            * binding.
+            * The name of the interpreter. This could be something
+            * like for example "python" for the python binding.
             */
             QString interpretername;
 
             /**
-            * The name of the scriptfile that should be
-            * executed. Those scriptfile will be readed
-            * and the content will be used to set the
-            * scripting code and, if not defined, the
-            * used interpreter.
+            * The name of the scriptfile that should be executed. Those
+            * scriptfile will be readed and the content will be used to
+            * set the scripting code and, if not defined, the used
+            * interpreter.
             */
             KUrl scriptfile;
+
+            /**
+            * The current path the \a Script is running in or
+            * an empty string if there is no path current defined.
+            */
+            QString currentpath;
 
             /**
             * Map of options that overwritte the \a InterpreterInfo::Option::Map
@@ -107,6 +110,7 @@ Action::Action(const KUrl& file)
     , d( new ActionPrivate() )
 {
     d->scriptfile = file;
+    d->currentpath = file.directory();
     setText(file.fileName());
     setIcon( KIcon( KMimeType::iconNameForUrl(file) ) );
 }
@@ -119,6 +123,7 @@ Action::Action(KActionCollection* collection, const QString& name, const KUrl& f
     , d( new ActionPrivate() )
 {
     d->scriptfile = file;
+    d->currentpath = file.directory();
 }
 
 Action::Action(KActionCollection* collection, const QDomElement& element, const QDir& packagepath)
@@ -142,6 +147,10 @@ Action::Action(KActionCollection* collection, const QDomElement& element, const 
                 setEnabled(false);
         }
         d->scriptfile = KUrl(file);
+        d->currentpath = d->scriptfile.directory();
+    }
+    else {
+        d->currentpath = packagepath.absolutePath();
     }
 
     QString icon = element.attribute("icon");
@@ -192,6 +201,11 @@ void Action::setInterpreter(const QString& interpretername)
 KUrl Action::getFile() const
 {
     return d->scriptfile;
+}
+
+QString Action::currentPath() const
+{
+    return d->currentpath;
 }
 
 QMap<QString, QVariant>& Action::getOptions()

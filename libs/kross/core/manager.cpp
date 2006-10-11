@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 #include "manager.h"
-#include "action.h"
 #include "interpreter.h"
+#include "action.h"
 #include "form.h"
 
 #include <QObject>
@@ -165,16 +165,6 @@ const QString Manager::interpreternameForFile(const QString& file)
     return QString::null;
 }
 
-KSharedPtr<Action> Manager::createAction(const QString& scriptname)
-{
-    //if(d->m_Actions.contains(scriptname))
-    //    return d->m_Actions[scriptname];
-    Action* action = new Action(scriptname);
-    //Action script(this, scriptname);
-    //d->m_Actions.insert(scriptname, Action);
-    return Action::Ptr( action );
-}
-
 Interpreter* Manager::interpreter(const QString& interpretername)
 {
     if(! d->interpreterinfos.contains(interpretername)) {
@@ -200,12 +190,12 @@ bool Manager::hasAction(const QString& name)
 
 QObject* Manager::action(const QString& name)
 {
-    QObject* object = findChild< Action* >(name);
-    if(! object) {
-        object = new Action(name);
-        object->setParent(this);
+    Action* action = findChild< Action* >(name);
+    if(! action) {
+        action = new Action(name);
+        action->setParent(this);
     }
-    return object;
+    return action;
 }
 
 QObject* Manager::forms()

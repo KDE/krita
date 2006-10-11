@@ -31,6 +31,7 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <ksharedptr.h>
+#include <kurl.h>
 
 // Kross
 #include "../core/manager.h"
@@ -69,7 +70,7 @@ int runScriptFile(const QString& scriptfile)
     }
 
     // First we need a Action and fill it.
-    Kross::Action::Ptr action = Kross::Manager::self().createAction(scriptfile);
+    Kross::Action::Ptr action( new Kross::Action( KUrl(scriptfile) ) );
     action->setInterpreter( interpreterinfo->getInterpretername() );
     action->setCode(scriptcode);
 

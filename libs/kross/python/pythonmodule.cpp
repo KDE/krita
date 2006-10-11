@@ -37,12 +37,6 @@ namespace Kross {
              */
             PythonInterpreter* const m_interpreter;
 
-            /**
-             * List of \a PythonExtension instances accessible
-             * via this \a PythonModule instance.
-             */
-            //QMap<QString, PythonExtension*> m_modules;
-
             PythonModulePrivate(PythonInterpreter* const interpreter)
                 : m_interpreter(interpreter) {}
     };

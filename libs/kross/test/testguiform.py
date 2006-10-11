@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import Kross
+import Kross, os
 
 #window = Kross.activeWindow()
 #if window == None:
@@ -43,17 +43,18 @@ dialog.setFaceType("List") #Auto Plain List Tree Tabbed
     #' </widget>'
     #'</ui>')
 
+page3 = dialog.addPage("Options","Options","configure")
+uifile = os.path.join( self.currentPath(), "testguiform.ui" )
+widget3 = Kross.forms().createWidgetFromUIFile(page3, uifile)
+
 page1 = dialog.addPage("File","Import From Image File","fileopen")
 widget1 = Kross.forms().createFileWidget(page1, "kfiledialog:///mytestthingy1")
 #widget1.setMode("Saving")
 widget1.setMode("Opening")
 widget1.setFilter("*.cpp|C++ Source Files\n*.h|Header files")
 
-optionspage = dialog.addPage("Options","Import Options","configure")
-optionswidget = Kross.forms().createWidgetFromUIFile(optionspage, "/home/kde4/koffice/krita/plugins/viewplugins/scripting/scripts/pilimport.ui")
-
-#page3 = dialog.addPage("Options","Options","configure")
-#widget3 = Kross.forms().createWidgetFromUIFile(page3, "/home/kde4/koffice/libs/kross/test/testguiform.ui")
+#optionspage = dialog.addPage("Options","Import Options","configure")
+#optionswidget = Kross.forms().createWidgetFromUIFile(optionspage, "/home/kde4/koffice/krita/plugins/viewplugins/scripting/scripts/pilimport.ui")
 
 #w = widget #widget["KFileDialog::mainWidget"]
 #print dir(w)
@@ -65,14 +66,29 @@ optionswidget = Kross.forms().createWidgetFromUIFile(optionspage, "/home/kde4/ko
 #combo = widget["QGroupBox"]["QComboBox"]
 #combo.setEditText("Hello World")
 
+print "######################################## self.currentPath=\"%s\"" % self.currentPath()
+
 result = dialog.exec_loop()
 if result:
     print "===> result=%s" % dialog.result()
 
-    colorspacewidget = optionswidget["Colorspace"]
-    for cs in ["RGB","CMYK"]:
-        if colorspacewidget[cs].checked:
-            colorspace = cs
+    def getOption(widget, optionname, optionlist):
+        try:
+            childwidget = widget[ optionname ]
+            for option in optionlist:
+                radiobutton = childwidget[ option ]
+                if radiobutton.checked:
+                    return option
+        except:
+            import sys, traceback
+            raise "\n".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) )
+        raise "No such option \"%s\"" % optionname
+
+    colorspace = getOption(optionswidget, "Colorspace", ["RGB","CMYK"])
+    destination = getOption(optionswidget, "Destination", ["NewLayer","ActiveLayer"])
+    size = getOption(optionswidget, "Size", ["Resize","Scale","Ignore"])
+
+    print "===> colorspace=%s destination=%s size=%s" % (colorspace,destination,size)
 
     #destinationwidget = optionswidget["Destination"]
     #if destinationwidget["NewLayer"].checked:

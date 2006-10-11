@@ -26,9 +26,14 @@ Core:
   from within all scripts without much pain.
 
 Ruby:
-* support access to the QObject-hierachy
-* support Q_PROPERTY and Q_ENUMS
-* reimplement signals+slots support
+* support access to the QObject-hierachy. That means each RubyExtension
+  used to wrap a QObject instance should provide access to the child
+  QObject instances the wrapped QObject has.
+* support Q_PROPERTY
+* support access to the Kross::Manager (global) and Kross::Action (self/this)
+  instances if not done already.
+* support Q_ENUMS
+* reimplement connect signal<=>slot support
 * add better dynamic Korundum integration (e.g. trade QObject-instances
   around between QtRuby and Kross). Korundum misses SIP-like functionality
   here but since at the end everything is a pointer, it's just a matter
@@ -36,7 +41,7 @@ Ruby:
 
 Python:
 * support Q_ENUMS
-* reimplement signals+slots support
+* reimplement connect signal<=>slot support
 * uncomment dynamic PyQt-support + regressiontest just every case
 
 KjsEmbed:

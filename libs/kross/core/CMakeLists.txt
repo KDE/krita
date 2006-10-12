@@ -8,7 +8,6 @@ set(krosscore_LIB_SRCS
    script.cpp 
    action.cpp
    manager.cpp
-   form.cpp
    guiclient.cpp
    guimanager.cpp
    )

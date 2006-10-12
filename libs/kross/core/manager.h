@@ -116,32 +116,6 @@ namespace Kross {
              */
             Interpreter* interpreter(const QString& interpretername);
 
-#if 0
-            /**
-             * Add the an external module to the global shared list of 
-             * loaded modules.
-             *
-             * \param modulename the name of the module
-             * \param module The @a Module instace to add.
-             * \return true if the module was added successfully else false.
-             */
-            bool addModule(const QString& modulename, Module::Ptr module);
-
-            /**
-             * Load an external module and return it. We don't keep
-             * a copy of the module-instance. So, once the caller
-             * doesn't hold a sharedptr any longer, the module will
-             * get unloaded.
-             *
-             * \param modulename The name of the library we should try to 
-             *        load. Those library needs to be a valid kross module.
-             * \return The loaded \a Object or NULL if loading
-             *        failed. The loaded Module isn't added to the global
-             *        shared list of modules.
-             */
-            Module::Ptr loadModule(const QString& modulename);
-#endif
-
         public slots:
 
             /**
@@ -166,9 +140,15 @@ namespace Kross {
             QObject* action(const QString& name);
 
             /**
-             * \return the \a Forms module that provides UI functionality.
+             * Load and return an external module. Modules are dynamic loadable
+             * plugins which could be loaded on demand to provide additional
+             * functionality.
+             *
+             * \param modulename The name of the module we should try to load.
+             * \return The QObject instance that repesents the module or NULL
+             * if loading failed.
              */
-            QObject* forms();
+            QObject* module(const QString& modulename);
 
         private:
             /// Private d-pointer class.

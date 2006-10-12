@@ -1,7 +1,13 @@
 include_directories( ${KOFFICECORE_INCLUDES} )
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
+# the core library
 add_subdirectory( core )
+
+# optional modules
+add_subdirectory( modules )
+
+# commandline-prog to run scripts
 add_subdirectory( runner )
 
 # unittests and such stuff

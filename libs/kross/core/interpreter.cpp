@@ -26,7 +26,7 @@
 
 extern "C"
 {
-    typedef int (*def_interpreter_func)(Kross::InterpreterInfo*);
+    typedef void* (*def_interpreter_func)(Kross::InterpreterInfo*);
 }
 
 using namespace Kross;
@@ -135,7 +135,7 @@ Interpreter* InterpreterInfo::getInterpreter()
     }
 
     // finally unload the library.
-    library->unload();
+    //library->unload();
 
     return m_interpreter;
 }

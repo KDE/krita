@@ -41,11 +41,12 @@ class Exporter:
         which the Krita image should be exported. """
 
         import Kross
-        dialog = Kross.forms().createDialog("Python Imaging Library Export")
+        forms = Kross.module("forms")
+        dialog = forms.createDialog("Python Imaging Library Export")
         try:
             dialog.setButtons("Ok|Cancel")
             page = dialog.addPage("File","Export Image to File","filesave")
-            widget = Kross.forms().createFileWidget(page, "kfiledialog:///kritapilexport")
+            widget = forms.createFileWidget(page, "kfiledialog:///kritapilexport")
             widget.setMode("Saving")
             widget.setFilter(self.getFilters())
             if dialog.exec_loop():

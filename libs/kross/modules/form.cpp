@@ -48,6 +48,14 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 
+extern "C"
+{
+    void* krossmodule()
+    {
+        return new Kross::FormModule();
+    }
+}
+
 using namespace Kross;
 
 /*********************************************************************************

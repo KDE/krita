@@ -41,20 +41,21 @@ class Importer:
         should be imported. """
 
         import Kross, os
-        dialog = Kross.forms().createDialog("Python Imaging Library Import")
+        forms = Kross.module("forms")
+        dialog = forms.createDialog("Python Imaging Library Import")
         try:
             dialog.setFaceType("List")
             dialog.setButtons("Ok|Cancel")
 
             filepage = dialog.addPage("File","Import Image From File","fileopen")
-            filewidget = Kross.forms().createFileWidget(filepage, "kfiledialog:///kritapilimport")
+            filewidget = forms.createFileWidget(filepage, "kfiledialog:///kritapilimport")
             filewidget.setMode("Opening")
             filewidget.setFilter(self.getFilters())
 
             optionspage = dialog.addPage("Options","Import Options","configure")
             currentpath = self.scriptaction.currentPath()
             uifile = os.path.join(currentpath, "pilimport.ui")
-            optionswidget = Kross.forms().createWidgetFromUIFile(optionspage, uifile)
+            optionswidget = forms.createWidgetFromUIFile(optionspage, uifile)
 
             if dialog.exec_loop():
                 self.filename = filewidget.selectedFile()

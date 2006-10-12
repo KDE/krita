@@ -9,7 +9,13 @@ import Kross, os
 #else:
 #    print "Using active window"
 
-dialog = Kross.forms().createDialog("TestGuiFormDialog")
+print "1................"
+forms = Kross.module("forms")
+print "2................"
+print "===================================> %s" % forms
+print dir(forms)
+
+dialog = forms.createDialog("TestGuiFormDialog")
 dialog.setButtons("Ok|Cancel")
 dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
@@ -45,10 +51,10 @@ dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
 page3 = dialog.addPage("Options","Options","configure")
 uifile = os.path.join( self.currentPath(), "testguiform.ui" )
-widget3 = Kross.forms().createWidgetFromUIFile(page3, uifile)
+widget3 = forms.createWidgetFromUIFile(page3, uifile)
 
 page1 = dialog.addPage("File","Import From Image File","fileopen")
-widget1 = Kross.forms().createFileWidget(page1, "kfiledialog:///mytestthingy1")
+widget1 = forms.createFileWidget(page1, "kfiledialog:///mytestthingy1")
 #widget1.setMode("Saving")
 widget1.setMode("Opening")
 widget1.setFilter("*.cpp|C++ Source Files\n*.h|Header files")

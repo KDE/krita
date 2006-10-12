@@ -20,9 +20,9 @@
 #include "manager.h"
 #include "interpreter.h"
 #include "action.h"
-#include "form.h"
 
 #include <QObject>
+#include <QMetaObject>
 #include <QFile>
 #include <QRegExp>
 
@@ -31,12 +31,10 @@
 #include <kstaticdeleter.h>
 #include <kdialog.h>
 
-#if 0
 extern "C"
 {
-    typedef Kross::Api::Object* (*def_module_func)(Kross::Api::Manager*);
+    typedef QObject* (*def_module_func)();
 }
-#endif
 
 using namespace Kross;
 
@@ -49,14 +47,8 @@ namespace Kross {
             /// List of \a InterpreterInfo instances.
             QMap<QString, InterpreterInfo*> interpreterinfos;
 
-            /// The \a FormModule that provides UI functionality.
-            FormModule* formmodule;
-
             /// Loaded modules.
-            //QMap<QString, Module::Ptr> modules;
-
-            ManagerPrivate() : formmodule(0) {}
-            ~ManagerPrivate() {}
+            QMap<QString, QObject* > modules;
     };
 
 }
@@ -198,65 +190,44 @@ QObject* Manager::action(const QString& name)
     return action;
 }
 
-QObject* Manager::forms()
+QObject* Manager::module(const QString& modulename)
 {
-    if(! d->formmodule)
-        d->formmodule = new FormModule(this);
-    return d->formmodule;
-}
-
-#if 0
-bool Manager::addModule(const QString& modulename, Module::Ptr module)
-{
-    Q_ASSERT(! d->modules.contains(modulename));
-    //if( d->modules.contains(name) ) return false;
-    d->modules.insert(modulename, module);
-    return true;
-}
-
-Module::Ptr Manager::loadModule(const QString& modulename)
-{
-    if(d->modules.contains(modulename)) {
+    if( d->modules.contains(modulename) ) {
         return d->modules[modulename];
     }
 
-    KLibLoader* loader = KLibLoader::self();
-    KLibrary* lib = loader->globalLibrary( modulename.toLatin1().data() );
-    if(! lib) {
-        krosswarning( QString("Failed to load module '%1': %2").arg(modulename).arg(loader->lastErrorMessage()) );
-        return Module::Ptr(0);
+    if( modulename.isEmpty() || modulename.contains( QRegExp("[^a-zA-Z0-9]") ) ) {
+        krosswarning( QString("Invalid module name '%1'").arg(modulename) );
+        return 0;
     }
-    krossdebug( QString("Successfully loaded module '%1'").arg(modulename) );
+
+    QByteArray libraryname = QString("krossmodule%1").arg(modulename).toLower().toLatin1();
+
+    KLibLoader* loader = KLibLoader::self();
+    KLibrary* lib = loader->globalLibrary( libraryname );
+    if( ! lib ) {
+        krosswarning( QString("Failed to load module '%1': %2").arg(modulename).arg(loader->lastErrorMessage()) );
+        return 0;
+    }
 
     def_module_func func;
-    func = (def_module_func) lib->symbol("init_module");
-
-    if(! func) {
+    func = (def_module_func) lib->symbol("krossmodule");
+    if( ! func ) {
         krosswarning( QString("Failed to determinate init function in module '%1'").arg(modulename) );
-        return Module::Ptr(0);
+        return 0;
     }
 
-    Kross::Api::Module* module;
-    try {
-        module = (Kross::Api::Module*) (func)(this);
-    }
-    catch(Kross::Api::Exception::Ptr e) {
-        krosswarning( e->toString() );
-        module = 0;
-    }
-    lib->unload();
+    QObject* module = (QObject*) (func)(); // call the function
+    //lib->unload(); // unload the library.
 
-    if(! module) {
-        krosswarning( QString("Failed to load module '%1'").arg(modulename) );
-        return Module::Ptr(0);
+    if( ! module ) {
+        krosswarning( QString("Failed to load module object '%1'").arg(modulename) );
+        return 0;
     }
 
-    // Don't remember module cause we like to have freeing it handled by the caller.
-    //d->modules.insert(modulename, module);
-
-    //krossdebug( QString("Kross::Api::Manager::loadModule modulename='%1' module='%2'").arg(modulename).arg(module->toString()) );
-    return Module::Ptr(module);
+    //krossdebug( QString("Manager::module Module successfully loaded: modulename=%1 module.objectName=%2 module.className=%3").arg(modulename).arg(module->objectName()).arg(module->metaObject()->className()) );
+    d->modules.insert(modulename, module);
+    return module;
 }
-#endif
 
 #include "manager.moc"

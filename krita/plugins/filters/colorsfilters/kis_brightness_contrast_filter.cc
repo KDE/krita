@@ -132,7 +132,7 @@ QString KisBrightnessContrastFilterConfiguration::toString()
 }
 
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
-    : KisFilter( id(), "adjust", i18n("&Brightness/Contrast..."))
+    : KisFilter( id(), "adjust", i18n("&Brightness/Contrast curve..."))
 {
 
 }

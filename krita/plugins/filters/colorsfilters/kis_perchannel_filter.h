@@ -68,7 +68,7 @@ class KisPerChannelFilter
     : public KisFilter
 {
 public:
-    KisPerChannelFilter() : KisFilter( id(), "adjust", i18n("&Color Adjustment...")) {};
+    KisPerChannelFilter() : KisFilter( id(), "adjust", i18n("&Color Adjustment curves...")) {};
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);

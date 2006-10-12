@@ -457,7 +457,7 @@ void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
         painter.setPen(pen);
         painter.drawPolygon(outline);
     }
-    else
+    else if( m_selection->firstSelectedShape() )
     {
         QMatrix matrix = m_selection->firstSelectedShape()->transformationMatrix(0);
         outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), m_selection->firstSelectedShape()->size())));

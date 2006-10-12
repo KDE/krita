@@ -171,6 +171,7 @@ protected:
     QList<KoShape*> m_shapes; ///<list of shapes to be grouped
     QList<bool> m_clipped; ///< list of booleas to specify the shape of the same index to eb clipped
     KoShapeContainer *m_container; ///< the container where the grouping should be for.
+    QList<KoShapeContainer*> m_oldParents; ///< the old parents of the shapes
 };
 
 /// The undo / redo command for ungrouping shapes

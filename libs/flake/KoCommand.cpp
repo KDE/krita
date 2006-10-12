@@ -170,14 +170,19 @@ KoGroupShapesCommand::KoGroupShapesCommand(KoShapeContainer *container, QList<Ko
 , m_container(container)
 {
     Q_ASSERT(m_clipped.count() == m_shapes.count());
+    foreach( KoShape* shape, m_shapes )
+        m_oldParents.append( shape->parent() );
 }
 
 KoGroupShapesCommand::KoGroupShapesCommand(KoShapeGroup *container, QList<KoShape *> shapes)
 : m_shapes(shapes)
 , m_container(container)
 {
-    for(int i=m_shapes.count(); i > 0; i--)
+    foreach( KoShape* shape, m_shapes )
+    {
         m_clipped.append(false);
+        m_oldParents.append( shape->parent() );
+    }
 }
 
 KoGroupShapesCommand::KoGroupShapesCommand() {
@@ -218,6 +223,8 @@ void KoGroupShapesCommand::unexecute () {
     for(int i=0; i < m_shapes.count(); i++) {
         m_container->removeChild(m_shapes[i]);
         m_shapes[i]->setAbsolutePosition( positions[i] );
+        if( m_oldParents.at( i ) )
+            m_oldParents.at( i )->addChild( m_shapes[i] );
     }
 }
 
@@ -233,6 +240,7 @@ KoUngroupShapesCommand::KoUngroupShapesCommand(KoShapeContainer *container, QLis
     m_container = container;
     foreach(KoShape *shape, m_shapes) {
         m_clipped.append( m_container->childClipped(shape) );
+        m_oldParents.append( m_container->parent() );
     }
 }
 

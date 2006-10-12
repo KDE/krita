@@ -40,6 +40,8 @@ void KoShapeContainer::addChild(KoShape *shape) {
     if(m_children == 0)
         m_children = new ChildrenData();
     m_children->add(shape);
+    if( shape->parent() )
+        shape->parent()->removeChild( shape );
     shape->setParent(this);
     childCountChanged();
 }

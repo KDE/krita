@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Dynamic Brush
+Comment=Dynamic brush
+ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritadynamicbrush
+X-Krita-Version=2
+

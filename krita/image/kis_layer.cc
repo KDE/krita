@@ -791,4 +791,30 @@ bool KisLayer::setData(const QModelIndex &index, const QVariant &value, int role
     return false;
 }
 
+
+void KisLayerSupportsIndirectPainting::setTemporaryTarget(KisPaintDeviceSP t) {
+    m_temporaryTarget = t;
+}
+
+void KisLayerSupportsIndirectPainting::setTemporaryCompositeOp(const KoCompositeOp* c) {
+    m_compositeOp = c;
+}
+
+void KisLayerSupportsIndirectPainting::setTemporaryOpacity(Q_UINT8 o) {
+    m_compositeOpacity = o;
+}
+
+KisPaintDeviceSP KisLayerSupportsIndirectPainting::temporaryTarget() {
+    return m_temporaryTarget;
+}
+
+const KoCompositeOp* KisLayerSupportsIndirectPainting::temporaryCompositeOp() const {
+    return m_compositeOp;
+}
+
+Q_UINT8 KisLayerSupportsIndirectPainting::temporaryOpacity() const {
+    return m_compositeOpacity;
+}
+
+
 #include "kis_layer.moc"

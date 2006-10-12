@@ -92,7 +92,8 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
     // paint device as the projection if the child is visible and 100% opaque
     if (parent().isNull() && childCount() == 1) {
         KisPaintLayerSP l = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(firstChild().data()));
-        if (l && l->paintDevice()->colorSpace() == m_image->colorSpace() && l->visible() && l->opacity() == OPACITY_OPAQUE) {
+        if (l && l->paintDevice()->colorSpace() == m_image->colorSpace() && l->visible()
+            && l->opacity() == OPACITY_OPAQUE && !l->temporaryTarget()) {
             l->setClean(rect);
             setClean(rect);
             return l->paintDevice();

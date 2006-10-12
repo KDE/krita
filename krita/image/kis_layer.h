@@ -27,6 +27,7 @@
 #include "kis_layer_visitor.h"
 #include "KoCompositeOp.h"
 #include "KoDocumentSectionModel.h"
+#include "kis_paint_device.h"
 
 class KNamedCommand;
 class QIcon;
@@ -274,6 +275,23 @@ private:
 
     // Operation used to composite this layer with the layers _under_ this layer
     const KoCompositeOp * m_compositeOp;
+};
+
+// For classes that support indirect painting
+class KRITAIMAGE_EXPORT KisLayerSupportsIndirectPainting {
+    // To simulate the indirect painting
+    KisPaintDeviceSP m_temporaryTarget;
+    const KoCompositeOp* m_compositeOp;
+    Q_UINT8 m_compositeOpacity;
+public:
+    KisLayerSupportsIndirectPainting() : m_compositeOp(0) { }
+    // Indirect painting
+    void setTemporaryTarget(KisPaintDeviceSP t);
+    void setTemporaryCompositeOp(const KoCompositeOp* c);
+    void setTemporaryOpacity(Q_UINT8 o);
+    KisPaintDeviceSP temporaryTarget();
+    const KoCompositeOp* temporaryCompositeOp() const;
+    Q_UINT8 temporaryOpacity() const;
 };
 
 #endif // KIS_LAYER_H_

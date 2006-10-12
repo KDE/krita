@@ -37,7 +37,7 @@ class KisFilterConfiguration;
  * is used by to influence the rendering of the layers under this layer in the
  * layerstack
  **/
-class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer
+class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer, public KisLayerSupportsIndirectPainting
 {
     typedef KisLayer super;
     Q_OBJECT

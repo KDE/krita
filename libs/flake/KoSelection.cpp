@@ -67,19 +67,23 @@ void KoSelection::selectGroupChilds( KoShapeGroup *group )
 void KoSelection::select(KoShape * object)
 {
     Q_ASSERT(object != this);
-    if(m_selectedObjects.contains(object))
-        return;
-    m_selectedObjects << object;
+    Q_ASSERT(object);
+    if(!m_selectedObjects.contains(object))
+        m_selectedObjects << object;
+
+    KoShapeGroup* group = dynamic_cast<KoShapeGroup*>(object);
+    if( group )
+        selectGroupChilds( group );
 
     KoShapeContainer *parent = object->parent();
     while( parent ) {
-        KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(parent);
-        if( ! group ) break;
-        if( ! m_selectedObjects.contains(group) ) {
-            m_selectedObjects << group;
-            selectGroupChilds( group );
+        KoShapeGroup *parentGroup = dynamic_cast<KoShapeGroup*>(parent);
+        if( ! parentGroup ) break;
+        if( ! m_selectedObjects.contains(parentGroup) ) {
+            m_selectedObjects << parentGroup;
+            selectGroupChilds( parentGroup );
         }
-        parent = group->parent();
+        parent = parentGroup->parent();
     }
 
     if(m_selectedObjects.count() == 1)

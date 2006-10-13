@@ -235,19 +235,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                 quint32 numPixels,
                 qint32 renderingIntent) const
         {
-/*            kDebug() << "new conversion" << endl;
-            for(int i = 0; i < numPixels; i++)
-            {
-                typename _CSTraits::channels_type* srcNative = this->nativeArray( const_cast<quint8*>( src + i * this->pixelSize()) );
-                kDebug() << this->pixelSize() <<  dstColorSpace->pixelSize() << " " << srcNative[0] << " " << srcNative[1] << " " << srcNative[2] << " " << srcNative[3] << endl;
-                srcNative[0] = 0xFFF0;
-                srcNative[1] = 0x5FFF;
-                srcNative[2] = 0x2FFF;
-                srcNative[3] = 0xFFFF;
-                kDebug() << srcNative[0] << " " << srcNative[1] << " " << srcNative[2] << " " << srcNative[3] << endl;
-            }*/
-            
-            
             if (dstColorSpace->colorSpaceType() == colorSpaceType()
                 && dstColorSpace->getProfile() == getProfile())
             {

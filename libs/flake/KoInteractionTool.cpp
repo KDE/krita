@@ -406,6 +406,7 @@ void KoInteractionTool::activate(bool temporary) {
     m_mouseWasInsideHandles = false;
     m_lastHandle = KoFlake::NoHandle;
     useCursor(Qt::ArrowCursor, true);
+    repaintDecorations();
 }
 
 // ##########  SelectionDecorator ############

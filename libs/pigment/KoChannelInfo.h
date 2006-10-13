@@ -30,12 +30,14 @@
  */
 class KoChannelInfo : public KShared {
 public:
+    /// enum to define the type of the channel
     enum enumChannelType {
-        COLOR, // The channel represents a color
-        ALPHA, // The channel represents the opacity of a pixel
-        SUBSTANCE, // The channel represents a real-world substance like pigments or medium
-        SUBSTRATE // The channel represents a real-world painting substrate like a canvas
+        COLOR, /// The channel represents a color
+        ALPHA, /// The channel represents the opacity of a pixel
+        SUBSTANCE, /// The channel represents a real-world substance like pigments or medium
+        SUBSTRATE /// The channel represents a real-world painting substrate like a canvas
     };
+    /// enum to define the value of the channel
     enum enumChannelValueType {
         UINT8,
         UINT16,

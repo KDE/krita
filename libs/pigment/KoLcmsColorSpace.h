@@ -57,6 +57,10 @@ struct KoColorAdjustmentImpl : public KoColorAdjustment
     cmsHTRANSFORM transform;
 };
 
+/**
+ * This is the base class for all colorspaces that are based on the lcms library, for instance
+ * RGB 8bits and 16bits, CMYK 8bits and 16bits, LAB...
+ */
 template<class _CSTraits>
 class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
     protected:

@@ -26,6 +26,9 @@
 #define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::max()
 #define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::min()
 
+/**
+ * A template version of the erase composite operation to use in colorspaces<
+ */
 template<class _CSTraits>
 class KoCompositeOpErase : public KoCompositeOp {
     typedef typename _CSTraits::channels_type channels_type;

@@ -70,10 +70,12 @@ public:
 protected:
 
     // paint page
-    void drawContents( QPainter* );
-
+    virtual void paintEvent ( QPaintEvent * event );
+    virtual void resizeEvent ( QResizeEvent * event );
+    void updateZoomedSize();
     double m_pageHeight, m_pageWidth, m_textFrameX, m_textFrameY, m_textFrameWidth, m_textFrameHeight;
     int columns;
+    KoPageLayout m_layout;
 };
 
 class KoPageLayoutDiaPrivate;

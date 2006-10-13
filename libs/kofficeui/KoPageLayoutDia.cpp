@@ -62,26 +62,33 @@ KoPagePreview::~KoPagePreview()
 /*=================== set layout =================================*/
 void KoPagePreview::setPageLayout( const KoPageLayout &layout )
 {
+    m_layout = layout;
+    updateZoomedSize();
+    update();
+}
+
+void KoPagePreview::updateZoomedSize()
+{
     // resolution[XY] is in pixel per pt
     double resolutionX = POINT_TO_INCH( static_cast<double>(KoGlobal::dpiX()) );
     double resolutionY = POINT_TO_INCH( static_cast<double>(KoGlobal::dpiY()) );
 
-    m_pageWidth = layout.ptWidth * resolutionX;
-    m_pageHeight = layout.ptHeight * resolutionY;
+    m_pageWidth = m_layout.ptWidth * resolutionX;
+    m_pageHeight = m_layout.ptHeight * resolutionY;
 
-    double zh = 110.0 / m_pageHeight;
-    double zw = 110.0 / m_pageWidth;
+    QRect cr = contentsRect();
+
+    double zh = (cr.height()-30) / m_pageHeight;
+    double zw = (cr.width()-30) / m_pageWidth;
     double z = qMin( zw, zh );
 
     m_pageWidth *= z;
     m_pageHeight *= z;
 
-    m_textFrameX = layout.ptLeft * resolutionX * z;
-    m_textFrameY = layout.ptTop * resolutionY * z;
-    m_textFrameWidth = m_pageWidth - ( layout.ptLeft + layout.ptRight ) * resolutionX * z;
-    m_textFrameHeight = m_pageHeight - ( layout.ptTop + layout.ptBottom ) * resolutionY * z;
-
-    update();
+    m_textFrameX = m_layout.ptLeft * resolutionX * z;
+    m_textFrameY = m_layout.ptTop * resolutionY * z;
+    m_textFrameWidth = m_pageWidth - ( m_layout.ptLeft + m_layout.ptRight ) * resolutionX * z;
+    m_textFrameHeight = m_pageHeight - ( m_layout.ptTop + m_layout.ptBottom ) * resolutionY * z;
 }
 
 /*=================== set layout =================================*/
@@ -92,32 +99,43 @@ void KoPagePreview::setPageColumns( const KoColumns &_columns )
 }
 
 /*======================== draw contents =========================*/
-void KoPagePreview::drawContents( QPainter *painter )
+
+void KoPagePreview::paintEvent( QPaintEvent * event )
 {
+    QGroupBox::paintEvent( event );
+    QPainter painter( this );
+
     double cw = m_textFrameWidth;
     if(columns!=1)
         cw/=static_cast<double>(columns);
 
-    painter->setBrush( Qt::white );
-    painter->setPen( QPen( Qt::black ) );
+    painter.setBrush( Qt::white );
+    painter.setPen( QPen( Qt::black ) );
 
-    int x=static_cast<int>( ( width() - m_pageWidth ) * 0.5 );
-    int y=static_cast<int>( ( height() - m_pageHeight ) * 0.5 );
+    QRect cr = contentsRect();
+
+    int x=static_cast<int>( cr.left() + ( cr.width() - m_pageWidth ) * 0.5 );
+    int y=static_cast<int>( cr.top() + ( cr.height() - m_pageHeight ) * 0.5 );
     int w=static_cast<int>(m_pageWidth);
     int h=static_cast<int>(m_pageHeight);
     //painter->drawRect( x + 1, y + 1, w, h);
-    painter->drawRect( x, y, w, h );
+    painter.drawRect( x, y, w, h );
 
-    painter->setBrush( QBrush( Qt::black, Qt::HorPattern ) );
+    painter.setBrush( QBrush( Qt::black, Qt::HorPattern ) );
     if ( m_textFrameWidth == m_pageWidth || m_textFrameHeight == m_pageHeight )
-        painter->setPen( Qt::NoPen );
+        painter.setPen( Qt::NoPen );
     else
-        painter->setPen( Qt::lightGray );
+        painter.setPen( Qt::lightGray );
 
     for ( int i = 0; i < columns; ++i )
-        painter->drawRect( x + static_cast<int>(m_textFrameX) + static_cast<int>(i * cw),
-                           y + static_cast<int>(m_textFrameY), static_cast<int>(cw),
-                           static_cast<int>(m_textFrameHeight) );
+        painter.drawRect( x + static_cast<int>(m_textFrameX) + static_cast<int>(i * cw),
+                          y + static_cast<int>(m_textFrameY), static_cast<int>(cw),
+                          static_cast<int>(m_textFrameHeight) );
+}
+
+void KoPagePreview::resizeEvent ( QResizeEvent * event )
+{
+    updateZoomedSize();
 }
 
 /******************************************************************/

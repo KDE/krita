@@ -47,10 +47,10 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     grid1->setSpacing( KDialog::spacingHint() );
     if ( unitChooser ) {
         // ------------- unit---------------
-	QWidget* unitFrame = new QWidget( this );
+        QWidget* unitFrame = new QWidget( this );
         grid1->addWidget( unitFrame, 0, 0, Qt::AlignLeft );
         QHBoxLayout* unitLayout = new QHBoxLayout( unitFrame );
-	unitLayout->setSpacing( KDialog::spacingHint() );
+        unitLayout->setSpacing( KDialog::spacingHint() );
 
         // label unit
         QLabel *lpgUnit = new QLabel( i18n( "Unit:" ), unitFrame );
@@ -58,7 +58,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
 
         // combo unit
         QComboBox *cpgUnit = new QComboBox( unitFrame );
-	cpgUnit->setEditable( false );
+        cpgUnit->setEditable( false );
         lpgUnit->setBuddy( cpgUnit );
         cpgUnit->addItems( KoUnit::listOfUnitName() );
         cpgUnit->setCurrentIndex( unit );
@@ -76,61 +76,72 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     QGroupBox *formatFrame = new QGroupBox( i18n( "Page Size" ), this );
     grid1->addWidget( formatFrame, 1, 0 );
 
-    KHBox *formatPageSize = new KHBox( formatFrame );
-    formatPageSize->setSpacing( KDialog::spacingHint() );
+    QGridLayout *layoutPageSize = new QGridLayout( formatFrame );
+    layoutPageSize->setSpacing( KDialog::spacingHint() );
 
     // label page size
-    QLabel *lpgFormat = new QLabel( i18n( "&Size:" ), formatPageSize );
-
+    QLabel *lpgFormat = new QLabel( i18n( "&Size:" ), formatFrame );
+    layoutPageSize->addWidget( lpgFormat, 0, 0 );
     // combo size
-    cpgFormat = new QComboBox( formatPageSize );
+    cpgFormat = new QComboBox( formatFrame );
     cpgFormat->setEditable( false );
     cpgFormat->addItems( KoPageFormat::allFormats() );
     lpgFormat->setBuddy( cpgFormat );
+    layoutPageSize->addWidget( cpgFormat, 0, 1 );
     connect( cpgFormat, SIGNAL( activated( int ) ), this, SLOT( formatChanged( int ) ) );
 
     // spacer
-    formatPageSize->setStretchFactor( new QWidget( formatPageSize ), 10 );
-
-    KHBox *formatCustomSize = new KHBox( formatFrame );
-    formatCustomSize->setSpacing( KDialog::spacingHint() );
+    //layoutPageSize->setStretchFactor( new QWidget( formatPageSize ), 10 );
 
     // label width
-    QLabel *lpgWidth = new QLabel( i18n( "&Width:" ), formatCustomSize );
+    QLabel *lpgWidth = new QLabel( i18n( "&Width:" ), formatFrame );
+    layoutPageSize->addWidget( lpgWidth, 1, 0 );
 
     // linedit width
-    epgWidth = new KoUnitDoubleSpinBox( formatCustomSize, "Width" );
+    epgWidth = new KoUnitDoubleSpinBox( formatFrame, "Width" );
     lpgWidth->setBuddy( epgWidth );
     if ( m_layout.format != PG_CUSTOM )
         epgWidth->setEnabled( false );
+    layoutPageSize->addWidget( epgWidth, 1, 1 );
     connect( epgWidth, SIGNAL( valueChangedPt(double) ), this, SLOT( widthChanged(double) ) );
 
     // label height
-    QLabel *lpgHeight = new QLabel( i18n( "&Height:" ), formatCustomSize );
+    QLabel *lpgHeight = new QLabel( i18n( "&Height:" ), formatFrame );
+    layoutPageSize->addWidget( lpgHeight, 1, 2 );
 
     // linedit height
-    epgHeight = new KoUnitDoubleSpinBox( formatCustomSize, "Height" );
+    epgHeight = new KoUnitDoubleSpinBox( formatFrame, "Height" );
     lpgHeight->setBuddy( epgHeight );
     if ( m_layout.format != PG_CUSTOM )
         epgHeight->setEnabled( false );
+    layoutPageSize->addWidget( epgHeight, 1, 3 );
     connect( epgHeight, SIGNAL( valueChangedPt(double ) ), this, SLOT( heightChanged(double) ) );
 
     // --------------- orientation ---------------
     m_orientBox = new QGroupBox( i18n( "Orientation" ), this );
-    m_orientGroup = new QButtonGroup( m_orientBox );
+    QGridLayout *layoutOrientation =new QGridLayout( m_orientBox );
+
     grid1->addWidget( m_orientBox, 2, 0 );
 
     QLabel* lbPortrait = new QLabel( m_orientBox );
     lbPortrait->setPixmap( QPixmap( UserIcon( "koPortrait" ) ) );
     lbPortrait->setMaximumWidth( lbPortrait->pixmap()->width() );
+    layoutOrientation->addWidget( lbPortrait, 0, 0 );
+
+    QRadioButton *rbPortrait = new QRadioButton( i18n("&Portrait"), m_orientBox );
+    layoutOrientation->addWidget( rbPortrait, 0, 1 );
 
     QLabel* lbLandscape = new QLabel( m_orientBox );
     lbLandscape->setPixmap( QPixmap( UserIcon( "koLandscape" ) ) );
     lbLandscape->setMaximumWidth( lbLandscape->pixmap()->width() );
+    layoutOrientation->addWidget( lbLandscape, 0, 2 );
 
-    m_orientGroup->addButton( new QRadioButton( i18n("&Portrait"), m_orientBox ), 0 );
-    m_orientGroup->addButton( new QRadioButton( i18n("La&ndscape"), m_orientBox ), 1 );
+    QRadioButton *rbLandscape = new QRadioButton( i18n("La&ndscape"), m_orientBox );
+    layoutOrientation->addWidget( rbLandscape, 0, 3 );
 
+    m_orientGroup = new QButtonGroup( m_orientBox );
+    m_orientGroup->addButton( rbPortrait, 0 );
+    m_orientGroup->addButton( rbLandscape, 1 );
     connect( m_orientGroup, SIGNAL (clicked (int)), this, SLOT( orientationChanged(int) ));
 
     // --------------- page margins ---------------
@@ -163,7 +174,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
 
     // ------------- preview -----------
     pgPreview = new KoPagePreview( this, "Preview", m_layout );
-    grid1->addWidget( pgPreview, 1, 1, 3, 1 );
+    grid1->addWidget( pgPreview, 1, 1, 3, 2 );
 
     // ------------- spacers -----------
     QWidget* spacer1 = new QWidget( this );

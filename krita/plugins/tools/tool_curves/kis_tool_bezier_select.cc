@@ -66,9 +66,9 @@ KisToolBezierSelect::~KisToolBezierSelect()
 
 }
 
-QVector<KisPoint> KisToolBezierSelect::convertCurve()
+Q3ValueVector<KisPoint> KisToolBezierSelect::convertCurve()
 {
-    QVector<KisPoint> points;
+    Q3ValueVector<KisPoint> points;
 
     for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); i++) {
         if (((*i).hint() != BEZIERPREVCONTROLHINT) && ((*i).hint() != BEZIERNEXTCONTROLHINT))

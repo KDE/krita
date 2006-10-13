@@ -41,7 +41,7 @@ public:
 
 protected:
 
-    virtual QVector<KisPoint> convertCurve();
+    virtual Q3ValueVector<KisPoint> convertCurve();
 
 };
 

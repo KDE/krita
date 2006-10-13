@@ -20,8 +20,7 @@
 #define KIS_CURVE_FRAMEWORK_H_
 
 #include <QPointF>
-#include <QList>
-#include <QListIterator>
+#include <Q3ValueList>
 #include <algorithm>
 
 const int NOHINTS = 0x0000;
@@ -81,7 +80,7 @@ public:
     void setHint(int h) {m_hint = h;}
 };
 
-typedef QList<CurvePoint> PointList;
+typedef Q3ValueList<CurvePoint> PointList;
 typedef PointList::iterator BaseIterator;
 
 class CurveIterator;
@@ -187,7 +186,7 @@ class CurveIterator {
 
 public:
 
-    CurveIterator () { m_target = 0; m_position = 0;}
+    CurveIterator () { m_target = 0;}
 
     CurveIterator (const KisCurve &target)
         {m_target = &target;}

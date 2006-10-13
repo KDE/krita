@@ -28,7 +28,7 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QPointF>
-#include <QList>
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -168,10 +168,10 @@ public:
         return m_tCost > n2.tCost();
     }
 
-    QList<Node> getNeighbor(const GrayMatrix& src, const Node& end)
+    Q3ValueList<Node> getNeighbor(const GrayMatrix& src, const Node& end)
     {
         QPoint tmpdist;
-        QList<Node> temp;
+        Q3ValueList<Node> temp;
         int dcol, drow;
         int g, h;
         bool malus;
@@ -292,8 +292,8 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
         openSet.erase(openSet.begin());
         openMatrix[current.col()][current.row()].clear();
 
-        QList<Node> successors = current.getNeighbor(dst,endNode);
-        for (QList<Node>::iterator i = successors.begin(); i != successors.end(); i++) {
+        Q3ValueList<Node> successors = current.getNeighbor(dst,endNode);
+        for (Q3ValueList<Node>::iterator i = successors.begin(); i != successors.end(); i++) {
             int col = (*i).col();
             int row = (*i).row();
             if ((*i) == endNode) {
@@ -553,7 +553,7 @@ KisToolMagnetic::KisToolMagnetic ()
 
     m_mode = 0;
     m_curve = m_derived = 0;
-    m_current = m_previous = 0;
+//    m_current = m_previous = 0;
 
     m_distance = DEFAULTDIST;
 
@@ -594,7 +594,7 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
         draw(false);
         if (m_editingMode) {
             m_editingMode = false;
-            if (m_current != 0)
+//            if (m_current != 0)
                 m_curve->selectPivot(m_current,false);
             m_mode->setText(i18n("Automatic Mode"));
         } else {

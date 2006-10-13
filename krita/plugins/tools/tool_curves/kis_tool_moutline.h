@@ -30,10 +30,10 @@ class KisToolMagnetic;
 class KisVector2D;
 class Node;
 
-typedef QVector<Node> NodeCol;
-typedef QVector<NodeCol> NodeMatrix;
-typedef QVector<qint16> GrayCol;
-typedef QVector<GrayCol> GrayMatrix;
+typedef Q3ValueVector<Node> NodeCol;
+typedef Q3ValueVector<NodeCol> NodeMatrix;
+typedef Q3ValueVector<qint16> GrayCol;
+typedef Q3ValueVector<GrayCol> GrayMatrix;
 
 class KisCurveMagnetic : public KisCurve {
 

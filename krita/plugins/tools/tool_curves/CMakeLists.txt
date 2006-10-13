@@ -9,6 +9,7 @@ set(kritatoolcurves_PART_SRCS
     kis_tool_bezier_select.cc
     kis_tool_moutline.cc
     kis_tool_example.cc
+    kis_curve_framework2.cpp
     )
 
 kde4_automoc(kritatoolcurves ${kritatoolcurves_PART_SRCS})
@@ -26,13 +27,4 @@ install(TARGETS kritatoolcurves  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  tool_bezier_paint.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  tool_bezier_select.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  tool_example_cursor.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  tool_moutline_cursor.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  tool_moutline.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  tool_curve_dragging.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  tool_example.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  tool_moutline_editing.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  tool_bezier_cursor.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  kritatoolcurves.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  tool_bezier_paint.png tool_bezier_select.png tool_example_cursor.png tool_moutline_cursor.png tool_moutline.png tool_curve_dragging.png tool_example.png tool_moutline_editing.png tool_bezier_cursor.png kritatoolcurves.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

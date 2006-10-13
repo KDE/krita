@@ -24,6 +24,7 @@
 #include <QPen>
 #include <QPointF>
 #include <QCursor>
+#include <Q3ValueVector>
 
 #include "kis_canvas_subject.h"
 #include "kis_selection.h"
@@ -108,7 +109,7 @@ protected:
     /*
      * Called by selectCurve(), this convert m_curve to a vector of QPointF in order to be used by paintPolygon()
      */
-    virtual QVector<KisPoint> convertCurve();
+    virtual Q3ValueVector<KisPoint> convertCurve();
 
     /*
      * Called by paintCurve(), it behaves essentially like drawPoint(), but this uses a KisPainter

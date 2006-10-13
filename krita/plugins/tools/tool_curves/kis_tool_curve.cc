@@ -120,8 +120,6 @@ void KisToolCurve::buttonPress(KisButtonPressEvent *event)
             m_curve->selectAll(false);
 	    if (!m_curve->isEmpty())
                 m_previous = --(m_curve->end());
-	    else
-		m_previous = 0;
             m_current = m_curve->pushPivot(event->pos().toPointF());
             if (m_curve->pivots().count() > 1)
                 m_curve->calculateCurve(m_previous,m_current,m_current);
@@ -480,9 +478,9 @@ KisCurve::iterator KisToolCurve::paintPoint (KisPainter& painter, KisCurve::iter
     return point;
 }
 
-QVector<KisPoint> KisToolCurve::convertCurve()
+Q3ValueVector<KisPoint> KisToolCurve::convertCurve()
 {
-    QVector<KisPoint> points;
+    Q3ValueVector<KisPoint> points;
 
     for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); i++)
         if ((*i).hint() != NOHINTS)

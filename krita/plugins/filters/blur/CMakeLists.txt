@@ -6,7 +6,7 @@ set(kritablurfilter_PART_SRCS
     kis_wdg_blur.cc
     )
 
-kde4_automoc(${kritablurfilter_PART_SRCS})
+kde4_automoc(kritablurfilter ${kritablurfilter_PART_SRCS})
 
 kde4_add_ui_files(kritablurfilter_PART_SRCS
     wdgblur.ui

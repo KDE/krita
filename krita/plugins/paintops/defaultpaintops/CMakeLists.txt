@@ -9,7 +9,7 @@ set(kritadefaultpaintops_PART_SRCS
 	kis_penop.cc
     )
 
-kde4_automoc(${kritadefaultpaintops_PART_SRCS})
+kde4_automoc(kritadefaultpaintops ${kritadefaultpaintops_PART_SRCS})
 
 kde4_add_plugin(kritadefaultpaintops ${kritadefaultpaintops_PART_SRCS})
 

@@ -6,7 +6,7 @@ add_subdirectory( brushop )
 
 set(kritawsplugin_PART_SRCS wet_sticky_plugin.cc kis_wet_sticky_colorspace.cc kis_ws_engine_filter.cc )
 
-kde4_automoc(${kritawsplugin_PART_SRCS})
+kde4_automoc(kritawsplugin ${kritawsplugin_PART_SRCS})
 
 kde4_add_plugin(kritawsplugin ${kritawsplugin_PART_SRCS})
 

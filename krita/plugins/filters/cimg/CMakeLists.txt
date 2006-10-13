@@ -4,7 +4,7 @@ set(kritacimg_PART_SRCS
     kis_cimgconfig_widget.cc
     )
 
-kde4_automoc(${kritacimg_PART_SRCS})
+kde4_automoc(kritacimg ${kritacimg_PART_SRCS})
 
 kde4_add_ui_files(kritacimg_PART_SRCS wdg_cimg.ui)
 

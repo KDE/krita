@@ -10,7 +10,7 @@ endif(KUNITTEST_FOUND)
 
 set(kritagrayscale_LIB_SRCS kis_gray_colorspace.cc )
 
-kde4_automoc(${kritagrayscale_LIB_SRCS})
+kde4_automoc(kritagrayscale ${kritagrayscale_LIB_SRCS})
 
 kde4_add_library(kritagrayscale SHARED ${kritagrayscale_LIB_SRCS})
 
@@ -24,7 +24,7 @@ install(TARGETS kritagrayscale  DESTINATION ${LIB_INSTALL_DIR})
 
 set(kritagrayplugin_PART_SRCS gray_plugin.cc )
 
-kde4_automoc(${kritagrayplugin_PART_SRCS})
+kde4_automoc(kritagrayplugin ${kritagrayplugin_PART_SRCS})
 
 kde4_add_plugin(kritagrayplugin ${kritagrayplugin_PART_SRCS})
 

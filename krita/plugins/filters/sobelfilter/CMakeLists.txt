@@ -7,7 +7,7 @@
 
 set(kritasobelfilter_PART_SRCS kis_sobel_filter_plugin.cc kis_sobel_filter.cc )
 
-kde4_automoc(${kritasobelfilter_PART_SRCS})
+kde4_automoc(kritasobelfilter ${kritasobelfilter_PART_SRCS})
 
 kde4_add_plugin(kritasobelfilter ${kritasobelfilter_PART_SRCS})
 

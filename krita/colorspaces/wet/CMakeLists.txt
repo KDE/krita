@@ -10,7 +10,7 @@ set(kritawetplugin_PART_SRCS
    kis_texture_filter.cc
    wetphysicsfilter.cc )
 
-kde4_automoc(${kritawetplugin_PART_SRCS})
+kde4_automoc(kritawetplugin ${kritawetplugin_PART_SRCS})
 
 kde4_add_ui_files(kritawetplugin_PART_SRCS wdgpressure.ui )
 

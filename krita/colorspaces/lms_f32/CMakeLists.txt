@@ -7,7 +7,7 @@
 
 set(krita_lms_f32_LIB_SRCS kis_lms_f32_colorspace.cc )
 
-kde4_automoc(${krita_lms_f32_LIB_SRCS})
+kde4_automoc(krita_lms_f32 ${krita_lms_f32_LIB_SRCS})
 
 kde4_add_library(krita_lms_f32 SHARED ${krita_lms_f32_LIB_SRCS})
 
@@ -21,7 +21,7 @@ install(TARGETS krita_lms_f32  DESTINATION ${LIB_INSTALL_DIR})
 
 set(krita_lms_f32_plugin_PART_SRCS lms_f32_plugin.cc )
 
-kde4_automoc(${krita_lms_f32_plugin_PART_SRCS})
+kde4_automoc(krita_lms_f32_plugin ${krita_lms_f32_plugin_PART_SRCS})
 
 kde4_add_plugin(krita_lms_f32_plugin ${krita_lms_f32_plugin_PART_SRCS})
 

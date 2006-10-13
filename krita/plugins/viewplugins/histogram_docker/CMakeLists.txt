@@ -7,7 +7,7 @@ set(kritahistogramdocker_PART_SRCS
     kis_accumulating_producer.cc
     )
 
-kde4_automoc(${kritahistogramdocker_PART_SRCS})
+kde4_automoc(kritahistogramdocker ${kritahistogramdocker_PART_SRCS})
 
 kde4_add_plugin(kritahistogramdocker ${kritahistogramdocker_PART_SRCS})
 

@@ -28,7 +28,7 @@ if(KUNITTEST_FOUND)
     add_subdirectory(tests)
 endif(KUNITTEST_FOUND)
 
-kde4_automoc(${pigment_SRCS})
+kde4_automoc(pigment ${pigment_SRCS})
 
 kde4_add_library(pigment SHARED ${pigment_SRCS})
 

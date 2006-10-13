@@ -3,7 +3,7 @@
 
 set(kritaflakeshapes_PART_SRCS kis_image_shape.cc  kis_paint_device_shape.cc)
 
-kde4_automoc(${kritaflakeshapes_PART_SRCS})
+kde4_automoc(kritaflakeshapes ${kritaflakeshapes_PART_SRCS})
 
 kde4_add_plugin(kritaflakeshapes ${kritaflakeshapes_PART_SRCS})
 

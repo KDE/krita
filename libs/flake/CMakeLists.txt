@@ -36,7 +36,7 @@ set(flake_SRCS
     KoPathPointMoveStrategy.cpp
 )
 
-kde4_automoc(${flake_SRCS})
+kde4_automoc(flake ${flake_SRCS})
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 

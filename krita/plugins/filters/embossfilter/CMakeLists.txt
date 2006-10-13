@@ -1,7 +1,7 @@
 
 set(kritaembossfilter_PART_SRCS kis_emboss_filter_plugin.cc kis_emboss_filter.cc )
 
-kde4_automoc(${kritaembossfilter_PART_SRCS})
+kde4_automoc(kritaembossfilter ${kritaembossfilter_PART_SRCS})
 
 kde4_add_plugin(kritaembossfilter ${kritaembossfilter_PART_SRCS})
 

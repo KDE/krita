@@ -6,7 +6,7 @@ set(kritaimagesize_PART_SRCS
     dlg_layersize.cc
     )
 
-kde4_automoc(${kritaimagesize_PART_SRCS})
+kde4_automoc(kritaimagesize ${kritaimagesize_PART_SRCS})
 
 kde4_add_ui_files(kritaimagesize_PART_SRCS
     wdg_resolution.ui

@@ -4,7 +4,7 @@ set(kritacpaintbrush_PART_SRCS bristle.cpp brush.cpp gauss.cpp sample.cpp stroke
 
 kde4_add_ui3_files(kritacpaintbrush_PART_SRCS  wdgcpaintoptions.ui)
 
-kde4_automoc(${kritacpaintbrush_PART_SRCS})
+kde4_automoc(kritacpaintbrush ${kritacpaintbrush_PART_SRCS})
 
 kde4_add_plugin(kritacpaintbrush ${kritacpaintbrush_PART_SRCS})
 

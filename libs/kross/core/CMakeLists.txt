@@ -12,7 +12,7 @@ set(krosscore_LIB_SRCS
    guimanager.cpp
    )
 
-kde4_automoc(${krosscore_LIB_SRCS})
+kde4_automoc(krosscore ${krosscore_LIB_SRCS})
 
 kde4_add_library(krosscore SHARED ${krosscore_LIB_SRCS})
 

@@ -5,7 +5,7 @@ set(kritalenscorrectionfilter_PART_SRCS
     kis_wdg_lens_correction.cpp
     )
 
-kde4_automoc(${kritalenscorrectionfilter_PART_SRCS})
+kde4_automoc(kritalenscorrectionfilter ${kritalenscorrectionfilter_PART_SRCS})
 
 kde4_add_ui_files(kritalenscorrectionfilter_PART_SRCS
     wdglenscorrectionoptions.ui

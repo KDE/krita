@@ -2,7 +2,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/libs/kross ${KDE4_INCLUDES} )
 
 # the forms module
 set(krossmoduleforms_PART_SRCS form.cpp)
-kde4_automoc(${krossmoduleforms_PART_SRCS})
+kde4_automoc(krossmoduleforms ${krossmoduleforms_PART_SRCS})
 kde4_add_plugin(krossmoduleforms ${krossmoduleforms_PART_SRCS})
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} krossmoduleforms)
 target_link_libraries(krossmoduleforms ${QT_QTDESIGNER_LIBRARY} ${KDE4_KDECORE_LIBS} krosscore)

@@ -6,7 +6,7 @@ set(kritatoolperspectivetransform_PART_SRCS
     kis_perspectivetransform_worker.cpp
     )
 
-kde4_automoc(${kritatoolperspectivetransform_PART_SRCS})
+kde4_automoc(kritatoolperspectivetransform ${kritatoolperspectivetransform_PART_SRCS})
 
 kde4_add_plugin(kritatoolperspectivetransform ${kritatoolperspectivetransform_PART_SRCS})
 

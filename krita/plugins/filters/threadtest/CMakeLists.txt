@@ -2,7 +2,7 @@
 
 set(kritathreadtest_PART_SRCS threadtest.cc )
 
-kde4_automoc(${kritathreadtest_PART_SRCS})
+kde4_automoc(kritathreadtest ${kritathreadtest_PART_SRCS})
 
 kde4_add_plugin(kritathreadtest ${kritathreadtest_PART_SRCS})
 

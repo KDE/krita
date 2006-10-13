@@ -2,7 +2,7 @@
 
 set(kritahistorydocker_PART_SRCS historydocker.cc )
 
-kde4_automoc(${kritahistorydocker_PART_SRCS})
+kde4_automoc(kritahistorydocker ${kritahistorydocker_PART_SRCS})
 
 kde4_add_plugin(kritahistorydocker ${kritahistorydocker_PART_SRCS})
 

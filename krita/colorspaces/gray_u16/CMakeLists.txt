@@ -7,7 +7,7 @@
 
 set(krita_gray_u16_LIB_SRCS kis_gray_u16_colorspace.cc )
 
-kde4_automoc(${krita_gray_u16_LIB_SRCS})
+kde4_automoc(krita_gray_u16 ${krita_gray_u16_LIB_SRCS})
 
 kde4_add_library(krita_gray_u16 SHARED ${krita_gray_u16_LIB_SRCS})
 
@@ -21,7 +21,7 @@ install(TARGETS krita_gray_u16  DESTINATION ${LIB_INSTALL_DIR})
 
 set(krita_gray_u16_plugin_PART_SRCS gray_u16_plugin.cc )
 
-kde4_automoc(${krita_gray_u16_plugin_PART_SRCS})
+kde4_automoc(krita_gray_u16_plugin ${krita_gray_u16_plugin_PART_SRCS})
 
 kde4_add_plugin(krita_gray_u16_plugin ${krita_gray_u16_plugin_PART_SRCS})
 

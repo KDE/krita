@@ -9,7 +9,7 @@ add_subdirectory( templates )
 
 set(kritacmykplugin_PART_SRCS cmyk_plugin.cc kis_cmyk_colorspace.cc )
 
-kde4_automoc(${kritacmykplugin_PART_SRCS})
+kde4_automoc(kritacmykplugin ${kritacmykplugin_PART_SRCS})
 
 kde4_add_plugin(kritacmykplugin ${kritacmykplugin_PART_SRCS})
 

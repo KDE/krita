@@ -7,7 +7,7 @@ include_directories( ${FLAKE_INCLUDES} )
 
 set(TestPosition_test_SRCS TestPosition.cpp )
 
-kde4_automoc(${TestPosition_test_SRCS})
+kde4_automoc(TestPosition_test ${TestPosition_test_SRCS})
 
 kde4_add_executable(TestPosition RUN_UNINSTALLED ${TestPosition_test_SRCS})
 
@@ -19,7 +19,7 @@ add_test(flake-TestPosition ${EXECUTABLE_OUTPUT_PATH}/TestPosition)
 
 set(TestSelection_test_SRCS TestSelection.cpp )
 
-kde4_automoc(${TestSelection_test_SRCS})
+kde4_automoc(TestSelection_test ${TestSelection_test_SRCS})
 
 kde4_add_executable(TestSelection RUN_UNINSTALLED ${TestSelection_test_SRCS})
 

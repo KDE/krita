@@ -10,7 +10,7 @@ endif(KUNITTEST_FOUND)
 
 set(krita_rgb_u16_LIB_SRCS kis_rgb_u16_colorspace.cc )
 
-kde4_automoc(${krita_rgb_u16_LIB_SRCS})
+kde4_automoc(krita_rgb_u16 ${krita_rgb_u16_LIB_SRCS})
 
 kde4_add_library(krita_rgb_u16 SHARED ${krita_rgb_u16_LIB_SRCS})
 
@@ -24,7 +24,7 @@ install(TARGETS krita_rgb_u16  DESTINATION ${LIB_INSTALL_DIR})
 
 set(krita_rgb_u16_plugin_PART_SRCS rgb_u16_plugin.cc )
 
-kde4_automoc(${krita_rgb_u16_plugin_PART_SRCS})
+kde4_automoc(krita_rgb_u16_plugin ${krita_rgb_u16_plugin_PART_SRCS})
 
 kde4_add_plugin(krita_rgb_u16_plugin ${krita_rgb_u16_plugin_PART_SRCS})
 

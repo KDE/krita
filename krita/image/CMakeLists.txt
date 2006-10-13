@@ -79,7 +79,7 @@ set(kritaimage_LIB_SRCS
    kis_perspective_math.cpp
 )
 
-kde4_automoc(${kritaimage_LIB_SRCS})
+kde4_automoc(kritaimage ${kritaimage_LIB_SRCS})
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 

@@ -23,7 +23,7 @@ set(krosspython_PART_SRCS ${libkrosspythoncxx_SRCS}
    pythoninterpreter.cpp
 )
 
-kde4_automoc(${krosspython_PART_SRCS})
+kde4_automoc(krosspython ${krosspython_PART_SRCS})
 
 kde4_add_plugin(krosspython ${krosspython_PART_SRCS})
 

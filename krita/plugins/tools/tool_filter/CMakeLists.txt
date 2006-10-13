@@ -6,7 +6,7 @@ set(kritatoolfilter_PART_SRCS
     tool_filter.cc
     )
 
-kde4_automoc(${kritatoolfilter_PART_SRCS})
+kde4_automoc(kritatoolfilter ${kritatoolfilter_PART_SRCS})
 
 kde4_add_plugin(kritatoolfilter ${kritatoolfilter_PART_SRCS})
 

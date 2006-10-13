@@ -7,7 +7,7 @@
 
 set(kritavariations_PART_SRCS variations.cc dlg_variations.cc )
 
-kde4_automoc(${kritavariations_PART_SRCS})
+kde4_automoc(kritavariations ${kritavariations_PART_SRCS})
 
 kde4_add_ui3_files(kritavariations_PART_SRCS wdg_variations.ui )
 

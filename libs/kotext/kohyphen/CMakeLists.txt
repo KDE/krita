@@ -13,7 +13,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
 set(kohyphentest_SRCS kohyphentest.cpp )
 
-kde4_automoc(${kohyphentest_SRCS})
+kde4_automoc(kohyphentest ${kohyphentest_SRCS})
 
 kde4_add_executable(kohyphentest RUN_UNINSTALLED ${kohyphentest_SRCS})
 

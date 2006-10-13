@@ -8,7 +8,7 @@ set(kritadynamicbrush_PART_SRCS
     kis_darken_transformation.cc
     )
 
-kde4_automoc(${kritadynamicbrush_PART_SRCS})
+kde4_automoc(kritadynamicbrush ${kritadynamicbrush_PART_SRCS})
 
 kde4_add_plugin(kritadynamicbrush ${kritadynamicbrush_PART_SRCS})
 

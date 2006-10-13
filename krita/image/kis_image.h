@@ -56,7 +56,7 @@ class KisPaintLayer;
 class KisPerspectiveGrid;
 
 /**
- * This is the image class, it contains the layer stack and meta information about the image. And it provides some functions
+ * This is the image class, it contains a tree of KisLayer stack and meta information about the image. And it also provides some functions
  * to manipulate the whole image.
  */
 class KRITAIMAGE_EXPORT KisImage : public QObject, public KShared {

@@ -160,6 +160,8 @@ private:
     QMap<KoTool*, int> m_uniqueToolIds; // for the changedTool signal
     QMap<KoCanvasController*, QMap<QString, KoTool*> > m_allTools;
     QStack<QString> m_stack; // stack of temporary tools
+
+    QList<KoShape*> m_lastSelectedShapes;
 };
 
 #endif

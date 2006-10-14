@@ -681,6 +681,11 @@ void KoPathShape::closeMerge()
     closeMergeSubpath( m_subpaths.last() );
 }
 
+void KoPathShape::update()
+{
+    updateTree();
+}
+
 QPointF KoPathShape::normalize()
 {
     QPointF oldTL( boundingRect().topLeft() );

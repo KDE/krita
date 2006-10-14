@@ -411,7 +411,7 @@ public:
      * This is called when a point of the path is updated. It will be used 
      * to make it possible to cache things.
      */
-    void update() {}
+    void update();
 
     /**
      * @brief Normalizes the path data.

@@ -163,12 +163,12 @@ void KoPathPoint::unsetProperty( KoPointProperty property )
     m_properties &= ~property;
 }
 
-bool KoPathPoint::activeControlPoint1()
+bool KoPathPoint::activeControlPoint1() const
 {
     return ( properties() & HasControlPoint1 && properties() & CanHaveControlPoint1 );
 }
 
-bool KoPathPoint::activeControlPoint2()
+bool KoPathPoint::activeControlPoint2() const
 {
     return ( properties() & HasControlPoint2 && properties() & CanHaveControlPoint2 );
 }

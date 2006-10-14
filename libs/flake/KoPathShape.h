@@ -101,7 +101,7 @@ public:
      *
      * @return point
      */
-    QPointF point() { return m_point; }
+    QPointF point() const { return m_point; }
 
     /**
      * @brief get the control point 1
@@ -110,7 +110,7 @@ public:
      *
      * @return control point 1 of this point
      */
-    QPointF controlPoint1() { return m_controlPoint1; }
+    QPointF controlPoint1() const { return m_controlPoint1; }
 
     /**
      * @brief get the second control point
@@ -119,7 +119,7 @@ public:
      *
      * @return control point 2 of this point
      */
-    QPointF controlPoint2() { return m_controlPoint2; }
+    QPointF controlPoint2() const { return m_controlPoint2; }
 
     /**
      * @brief alter the point
@@ -150,7 +150,7 @@ public:
      *
      * @return properties of the point
      */
-    KoPointProperties properties() { return m_properties; }
+    KoPointProperties properties() const { return m_properties; }
 
     /**
      * @brief Set the properties of a point
@@ -176,7 +176,7 @@ public:
      * @return true when CanHaveControlPoint1 and HasControlPoint1 is set
      * @return false otherwise
      */
-    bool activeControlPoint1();
+    bool activeControlPoint1() const;
 
     /**
      * @brief check if there is a controlPoint2
@@ -184,7 +184,7 @@ public:
      * @return true when CanHaveControlPoint2 and HasControlPoint2 is set
      * @return false otherwise
      */
-    bool activeControlPoint2();
+    bool activeControlPoint2() const;
 
     /**
      * @brief apply matrix on the point
@@ -214,7 +214,7 @@ public:
      * @brief Get the path shape the point belongs to
      * @return the path shape the point belongs to
      */
-    KoPathShape * parent() { return m_shape; }
+    KoPathShape * parent() const { return m_shape; }
 
     /**
      * @brief Reverses the path point.

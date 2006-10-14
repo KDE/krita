@@ -356,7 +356,7 @@ void Action::finalize()
 
 void Action::slotTriggered()
 {
-    krossdebug( QString("Action::slotTriggered()") );
+    //krossdebug( QString("Action::slotTriggered()") );
     emit activated(this);
 
     if(! d->script) {

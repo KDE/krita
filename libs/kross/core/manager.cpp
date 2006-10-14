@@ -25,11 +25,21 @@
 #include <QMetaObject>
 #include <QFile>
 #include <QRegExp>
+#include <QAbstractItemModel>
+#include <QFileInfo>
 
+#include <kapplication.h>
+#include <kactioncollection.h>
 #include <klibloader.h>
 #include <klocale.h>
 #include <kstaticdeleter.h>
 #include <kdialog.h>
+#include <kicon.h>
+#include <kconfig.h>
+#include <kmenu.h>
+#include <kstandarddirs.h>
+#include <kmimetype.h>
+#include <kmenu.h>
 
 extern "C"
 {
@@ -49,6 +59,12 @@ namespace Kross {
 
             /// Loaded modules.
             QMap<QString, QObject* > modules;
+
+            /// The collection of all \a Action instances.
+            KActionCollection* actioncollection;
+
+            /// The menu of enabled \a Action instances.
+            KMenu* actionmenu;
     };
 
 }
@@ -68,6 +84,8 @@ Manager::Manager()
     , ChildrenInterface()
     , d( new ManagerPrivate() )
 {
+    d->actioncollection = new KActionCollection(this);
+    d->actionmenu = new KMenu();
 
 #ifdef KROSS_PYTHON_LIBRARY
     QString pythonlib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_PYTHON_LIBRARY) );
@@ -81,6 +99,10 @@ Manager::Manager()
                 pythonoptions // options
             )
         );
+    } else {
+        #ifdef KROSS_INTERPRETER_DEBUG
+            krossdebug("Python interpreter for kross is unavailable");
+        #endif
     }
 #endif
 
@@ -100,7 +122,9 @@ Manager::Manager()
                                                      )
                                  );
     } else {
-        krossdebug("Ruby interpreter for kross is unavailable");
+        #ifdef KROSS_INTERPRETER_DEBUG
+            krossdebug("Ruby interpreter for kross is unavailable");
+        #endif
     }
 #endif
 
@@ -116,6 +140,10 @@ Manager::Manager()
                 kjsoptions // options
             )
         );
+    } else {
+        #ifdef KROSS_INTERPRETER_DEBUG
+            krossdebug("KDE JavaScript interpreter for kross is unavailable");
+        #endif
     }
 #endif
 
@@ -127,6 +155,9 @@ Manager::~Manager()
 {
     for(QMap<QString, InterpreterInfo*>::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it)
         delete it.value();
+    for(QMap<QString, QObject* >::Iterator it = d->modules.begin(); it != d->modules.end(); ++it)
+        delete it.value();
+    delete d->actionmenu;
     delete d;
 }
 
@@ -175,6 +206,101 @@ QStringList Manager::interpreters()
     return  list;
 }
 
+bool Manager::readConfig()
+{
+    KConfig* config = KApplication::kApplication()->sessionConfig();
+    krossdebug( QString("Manager::readConfig hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
+    if(! config->hasGroup("scripts"))
+        return false;
+
+    d->actioncollection->clear();
+    d->actionmenu->clear();
+
+    config->setGroup("scripts");
+    foreach(QString name, config->readEntry("names", QStringList())) {
+        QString text = config->readEntry(QString("%1_text").arg(name).toLatin1());
+        QString description = config->readEntry(QString("%1_description").arg(name).toLatin1());
+        QString icon = config->readEntry(QString("%1_icon").arg(name).toLatin1());
+        QString file = config->readEntry(QString("%1_file").arg(name).toLatin1());
+        QString interpreter = config->readEntry(QString("%1_interpreter").arg(name).toLatin1());
+
+        QFileInfo fi(file);
+        if(! fi.exists()) {
+            QString resource = KGlobal::dirs()->findResource("appdata", QString("scripts/%1/%2").arg(name).arg(file));
+            if(! resource.isNull())
+                file = resource;
+        }
+
+        if(text.isEmpty())
+            text = file;
+
+        if(description.isEmpty())
+            description = text.isEmpty() ? name : text;
+
+        if(icon.isEmpty())
+            icon = KMimeType::iconNameForUrl( KUrl(file) );
+
+        krossdebug( QString("Manager::readConfig Add scriptaction name='%1' file='%2'").arg(name).arg(file) );
+
+        Action* action = new Action(d->actioncollection, name, file);
+        action->setText(text);
+        action->setDescription(description);
+        if(! icon.isNull())
+            action->setIcon(KIcon(icon));
+        if(! interpreter.isNull())
+            action->setInterpreter(interpreter);
+        action->setVisible( config->readEntry(QString("%1_enabled").arg(name), true) );
+        //connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
+        //connect(action, SIGNAL( success() ), this, SLOT( executionSuccessful() ));
+        //connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
+
+        d->actionmenu->addAction(action);
+    }
+    return true;
+}
+
+bool Manager::writeConfig()
+{
+    KConfig* config = KApplication::kApplication()->sessionConfig();
+    krossdebug( QString("Manager::write hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
+    if(config->isReadOnly())
+        return false;
+
+    config->deleteGroup("scripts"); // remove old entries
+    config->setGroup("scripts"); // according to the documentation it's needed to re-set the group after delete.
+
+    QStringList names;
+    foreach(KAction* a, d->actioncollection->actions(QString::null)) {
+        Action* action = static_cast< Action* >(a);
+        const QString name = action->objectName();
+        names << name;
+        config->writeEntry(QString("%1_text").arg(name).toLatin1(), action->text());
+        config->writeEntry(QString("%1_description").arg(name).toLatin1(), action->description());
+
+        //TODO hmmm... kde4's KIcon / Qt4's QIcon does not allow to reproduce the iconname?
+        //config->writeEntry(QString("%1_icon").arg(name).toLatin1(), action->icon());
+
+        config->writeEntry(QString("%1_file").arg(name).toLatin1(), action->getFile().path());
+        config->writeEntry(QString("%1_interpreter").arg(name).toLatin1(), action->interpreter());
+        if(! action->isVisible())
+            config->writeEntry(QString("%1_enabled").arg(name), action->isVisible());
+    }
+
+    config->writeEntry("names", names);
+    //config->sync();
+    return true;
+}
+
+KActionCollection* Manager::actionCollection()
+{
+    return d->actioncollection;
+}
+
+KMenu* Manager::actionMenu()
+{
+    return d->actionmenu;
+}
+
 bool Manager::hasAction(const QString& name)
 {
     return findChild< Action* >(name) != 0L;
@@ -186,6 +312,7 @@ QObject* Manager::action(const QString& name)
     if(! action) {
         action = new Action(name);
         action->setParent(this);
+        d->actioncollection->insert(action);
     }
     return action;
 }
@@ -218,7 +345,7 @@ QObject* Manager::module(const QString& modulename)
     }
 
     QObject* module = (QObject*) (func)(); // call the function
-    //lib->unload(); // unload the library.
+    lib->unload(); // unload the library
 
     if( ! module ) {
         krosswarning( QString("Failed to load module object '%1'").arg(modulename) );

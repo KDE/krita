@@ -24,11 +24,9 @@
 #include "../core/action.h"
 
 #include <QObject>
-//#include <QList>
-#include <qdom.h>
+
 #include <kurl.h>
 #include <kxmlguiclient.h>
-//class QWdiget;
 
 namespace Kross {
 
@@ -77,21 +75,10 @@ namespace Kross {
             KActionCollection* scriptsActionCollection() const;
 
             /**
-             * Read the configurations like e.g. the installed script-packages
-             * from the KConfig \p config configuration-backend.
-             */
-            void readConfig();
-
-            /**
-             * Write the configurations to the \p config configuration-backend.
-             */
-            void writeConfig();
-
-            /**
              * This method tries to determinate all available packages and fills
              * the configuration with actions defined there.
              */
-            void readConfigFromPackages();
+            bool writeConfigFromPackages();
 
         public slots:
 
@@ -113,32 +100,7 @@ namespace Kross {
              * call \a Action::trigger and redirect the success/failed signals
              * to our internal slots.
              */
-            bool executeAction(Action::Ptr action);
-
-            /**
-            * A KFileDialog will be displayed to let the user choose a scriptpackage
-            * that should be installed.
-            */
-            bool installPackage();
-
-            /**
-            * Install the scriptpackage \p file . The scriptpackage should be a
-            * tar.gz or tar.bzip archivefile.
-            *
-            * \param file The tar.gz or tar.bzip archivfile which contains
-            * the files that should be installed.
-            * \return true if installing was successfully else false.
-            */
-            bool installPackage(const KUrl& file);
-
-            /**
-            * Uninstalls the scriptpackage \p action and removes all to the package
-            * belonging files.
-            *
-            * \param action The \a Action that should be removed.
-            * \return true if the uninstall was successfully else false.
-            */
-            bool uninstallPackage(Action* action);
+            bool executeAction(Action* action);
 
             /**
             * The \a ScriptManagerGUI dialog will be displayed to
@@ -159,10 +121,6 @@ namespace Kross {
             void executionSuccessful();
 
         signals:
-#if 0
-            /// Emitted if a \a ScriptActionCollection instances changed.
-            void collectionChanged(ScriptActionCollection*);
-#endif
 
             /**
              * This signal is emited when the execution of a script is started.

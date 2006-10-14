@@ -85,6 +85,7 @@ bool KjsScript::initialize()
     d->engine = new KJSEmbed::Engine();
 
     KJS::Interpreter* kjsinterpreter = d->engine->interpreter();
+    Q_UNUSED(kjsinterpreter);
 
     { // publish the global objects.
         QHash< QString, QObject* > objects = Kross::Manager::self().objects();

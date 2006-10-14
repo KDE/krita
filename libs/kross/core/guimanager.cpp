@@ -19,140 +19,36 @@
  ***************************************************************************/
 
 #include "guimanager.h"
+#include "manager.h"
+#include "action.h"
 #include "guiclient.h"
-//#include "action.h"
+#include "model.h"
 
-//#include <QFile>
-//#include <QFileInfo>
-//#include <QObject>
-//#include <QMenu>
-//#include <QToolTip>
-//#include <QPixmap>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QHeaderView>
+#include <QFileInfo>
+#include <QDir>
 
 #include <kapplication.h>
 //#include <kdeversion.h>
 #include <kconfig.h>
-//#include <kicon.h>
-//#include <kfiledialog.h>
-//#include <kiconloader.h>
 #include <klocale.h>
 #include <kicon.h>
+#include <kstandarddirs.h>
 #include <kmessagebox.h>
-//#include <kpushbutton.h>
-//#include <kstandarddirs.h>
 #include <kpushbutton.h>
-//#include <ktoolbar.h>
+#include <kfiledialog.h>
+#include <kmenu.h>
 
+#include <ktar.h>
+#include <kio/netaccess.h>
 #include <knewstuff/provider.h>
 #include <knewstuff/engine.h>
 #include <knewstuff/downloaddialog.h>
 #include <knewstuff/knewstuffsecure.h>
 
 using namespace Kross;
-
-/******************************************************************************
- * GUIManagerModel
- */
-
-namespace Kross {
-
-    /// \internal d-pointer class.
-    class GUIManagerModel::Private
-    {
-        public:
-            KActionCollection* collection;
-            bool editable;
-            Private(KActionCollection* collection, bool editable) : collection(collection), editable(editable) {}
-    };
-
-}
-
-GUIManagerModel::GUIManagerModel(KActionCollection* collection, QObject* parent, bool editable)
-    : QAbstractItemModel(parent)
-    , d(new Private(collection, editable))
-{
-}
-
-GUIManagerModel::~GUIManagerModel()
-{
-    delete d;
-}
-
-int GUIManagerModel::columnCount(const QModelIndex& parent) const
-{
-    Q_UNUSED(parent);
-    return 1;
-}
-
-int GUIManagerModel::rowCount(const QModelIndex& parent) const
-{
-    Q_UNUSED(parent);
-    return d->collection->actions(QString::null).count();
-}
-
-QModelIndex GUIManagerModel::index(int row, int column, const QModelIndex& parent) const
-{
-    if(parent.isValid())
-        return QModelIndex();
-    return createIndex(row, column, d->collection->actions().value(row));
-}
-
-QModelIndex GUIManagerModel::parent(const QModelIndex& index) const
-{
-    Q_UNUSED(index);
-    return QModelIndex();
-}
-
-Qt::ItemFlags GUIManagerModel::flags(const QModelIndex &index) const
-{
-    if(! index.isValid())
-        return Qt::ItemIsEnabled;
-    if(index.column() == 0 && d->editable)
-        return QAbstractItemModel::flags(index) | Qt::ItemIsUserCheckable;
-    return QAbstractItemModel::flags(index); // | Qt::ItemIsEditable;
-}
-
-QVariant GUIManagerModel::data(const QModelIndex& index, int role) const
-{
-    if(! index.isValid())
-        return QVariant();
-    Action* action = static_cast< Action* >( index.internalPointer() );
-    switch( role ) {
-        case Qt::DecorationRole:
-            return action->icon();
-        case Qt::DisplayRole:
-            return action->text().replace("&","");
-        case Qt::ToolTipRole: // fall through
-        case Qt::WhatsThisRole:
-            return action->description();
-        case Qt::CheckStateRole:
-            return d->editable ? action->isVisible() : QVariant();
-        default:
-            return QVariant();
-    }
-}
-
-bool GUIManagerModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    if(! index.isValid() || ! d->editable)
-        return false;
-    Action* action = static_cast< Action* >( index.internalPointer() );
-    switch( role ) {
-        case Qt::EditRole: {
-            action->setText( value.toString() );
-        } break;
-        case Qt::CheckStateRole: {
-            action->setVisible( ! action->isVisible() );
-        } break;
-        default:
-            return false;
-    }
-    emit dataChanged(index, index);
-    return true;
-}
 
 /******************************************************************************
  * GUIManagerView
@@ -164,33 +60,32 @@ namespace Kross {
     class GUIManagerNewStuff : public KNewStuffSecure
     {
         public:
-            GUIManagerNewStuff(GUIClient* guiclient, const QString& type, QWidget *parentWidget = 0)
+            GUIManagerNewStuff(GUIManagerModule* module, const QString& type, QWidget *parentWidget = 0)
                 : KNewStuffSecure(type, parentWidget)
-                , m_guiclient(guiclient) {}
+                , m_module(module) {}
             virtual ~GUIManagerNewStuff() {}
         private:
-            GUIClient* m_guiclient;
-            virtual void installResource() { m_guiclient->installPackage( m_tarName ); }
+            GUIManagerModule* m_module;
+            virtual void installResource() { m_module->installPackage( m_tarName ); }
     };
 
     /// \internal d-pointer class.
     class GUIManagerView::Private
     {
         public:
-            GUIClient* guiclient;
-            GUIManagerModel* model;
+            GUIManagerModule* module;
             QItemSelectionModel* selectionmodel;
             KActionCollection* collection;
             GUIManagerNewStuff* newstuff;
 
-            Private() : newstuff(0) {}
+            Private(GUIManagerModule* m) : module(m), newstuff(0) {}
     };
 
 }
 
-GUIManagerView::GUIManagerView(GUIClient* guiclient, QWidget* parent, bool editable)
+GUIManagerView::GUIManagerView(GUIManagerModule* module, QWidget* parent)
     : QTreeView(parent)
-    , d(new Private())
+    , d(new Private(module))
 {
     setAlternatingRowColors(true);
     setRootIsDecorated(false);
@@ -198,10 +93,10 @@ GUIManagerView::GUIManagerView(GUIClient* guiclient, QWidget* parent, bool edita
     setItemsExpandable(false);
     header()->hide();
 
-    d->model = new GUIManagerModel(guiclient->scriptsActionCollection(), this, editable);
-    setModel(d->model);
+    ActionCollectionModel* model = new ActionCollectionModel(this, Kross::Manager::self().actionCollection());
+    setModel(model);
 
-    d->selectionmodel = new QItemSelectionModel(d->model, this);
+    d->selectionmodel = new QItemSelectionModel(model, this);
     connect(d->selectionmodel, SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), this, SLOT(slotSelectionChanged()));
     setSelectionModel(d->selectionmodel);
 
@@ -265,14 +160,14 @@ void GUIManagerView::slotStop()
 
 void GUIManagerView::slotInstall()
 {
-    d->guiclient->installPackage();
+    d->module->showInstallPackageDialog();
 }
 
 void GUIManagerView::slotUninstall()
 {
     foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
         if(index.isValid())
-            if(! d->guiclient->uninstallPackage( static_cast< Action* >(index.internalPointer()) ))
+            if(! d->module->uninstallPackage( static_cast< Action* >(index.internalPointer()) ))
                 break;
 }
 
@@ -282,7 +177,7 @@ void GUIManagerView::slotNewScripts()
     const QString type = QString("%1/script").arg(appname);
     krossdebug( QString("GUIManagerView::slotNewScripts %1").arg(type) );
     if(! d->newstuff) {
-        d->newstuff = new GUIManagerNewStuff(d->guiclient, type);
+        d->newstuff = new GUIManagerNewStuff(d->module, type);
         connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotNewScriptsInstallFinished()));
     }
     KNS::Engine *engine = new KNS::Engine(d->newstuff, type, this);
@@ -303,36 +198,143 @@ void GUIManagerView::slotNewScriptsInstallFinished()
 }
 
 /******************************************************************************
- * GUIManagerDialog
+ * GUIManagerModule
  */
 
 namespace Kross {
 
     /// \internal d-pointer class.
-    class GUIManagerDialog::Private
+    class GUIManagerModule::Private
     {
         public:
-            GUIClient* guiclient;
-            GUIManagerView* view;
-            Private(GUIClient* gc) : guiclient(gc) {}
     };
 
 }
 
-GUIManagerDialog::GUIManagerDialog(GUIClient* guiclient, QWidget* parent)
-    : KDialog(parent)
-    , d(new Private(guiclient))
+GUIManagerModule::GUIManagerModule()
+    : QObject()
+    , d(new Private())
 {
-    setCaption( i18n("Scripts Manager") );
-    setButtons( KDialog::Close );
+}
 
-    QWidget* mainwidget = mainWidget();
+GUIManagerModule::~GUIManagerModule()
+{
+    delete d;
+}
+
+bool GUIManagerModule::installPackage(const QString& scriptpackagefile)
+{
+    KTar archive( scriptpackagefile );
+    if(! archive.open(QIODevice::ReadOnly)) {
+        KMessageBox::sorry(0, i18n("Could not read the package \"%1\".", scriptpackagefile));
+        return false;
+    }
+
+    const KArchiveDirectory* archivedir = archive.directory();
+    const KArchiveEntry* entry = archivedir->entry("install.rc");
+    if(! entry || ! entry->isFile()) {
+        KMessageBox::sorry(0, i18n("The package \"%1\" does not contain a valid install.rc file.", scriptpackagefile));
+        return false;
+    }
+
+    QString xml = static_cast< const KArchiveFile* >(entry)->data();
+    QDomDocument domdoc;
+    if(! domdoc.setContent(xml)) {
+        KMessageBox::sorry(0, i18n("Failed to parse the install.rc file at package \"%1\".", scriptpackagefile));
+        return false;
+    }
+
+    QString destination = KGlobal::dirs()->saveLocation("appdata", "scripts/", true);
+    if(destination.isNull()) {
+        KMessageBox::sorry(0, i18n("Failed to determinate location where the package \"%1\" should be installed to.", scriptpackagefile));
+        return false;
+    }
+
+    QString packagename = QFileInfo(scriptpackagefile).baseName();
+    destination += packagename; // add the packagename to the name of the destination-directory.
+
+    QDir packagepath(destination);
+    if( packagepath.exists() ) {
+        if( KMessageBox::warningContinueCancel(0,
+            i18n("A script package with the name \"%1\" already exists. Replace this package?", packagename),
+            i18n("Replace")) != KMessageBox::Continue )
+                return false;
+        if(! KIO::NetAccess::del(destination, 0) ) {
+            KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".", destination));
+            return false;
+        }
+    }
+
+    krossdebug( QString("Copy script-package to destination directory: %1").arg(destination) );
+    archivedir->copyTo(destination, true);
+
+    QDomNodeList nodelist = domdoc.elementsByTagName("ScriptAction");
+    int nodelistcount = nodelist.count();
+    for(int i = 0; i < nodelistcount; ++i) {
+        QDomElement element = nodelist.item(i).toElement();
+
+        Action* action = new Action(Manager::self().actionCollection(), element, packagepath);
+        connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
+        connect(action, SIGNAL( success() ), this, SLOT( executionSuccessful() ));
+        connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
+        Manager::self().actionMenu()->addAction(action);
+    }
+
+    Manager::self().writeConfig();
+    return true;
+}
+
+bool GUIManagerModule::uninstallPackage(Action* action)
+{
+    const QString name = action->objectName();
+
+    KUrl url = action->getFile();
+    if(! url.isValid() || ! url.isLocalFile()) {
+        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\" since the script is not installed.").arg(action->objectName()));
+        return false;
+    }
+
+    QDir dir = QFileInfo( url.path() ).dir();
+    const QString scriptpackagepath = dir.absolutePath();
+    krossdebug( QString("Uninstall script-package with destination directory: %1").arg(scriptpackagepath) );
+
+    if(! KIO::NetAccess::del(scriptpackagepath, 0) ) {
+        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\". You may not have sufficient permissions to delete the folder \"%1\".").arg(action->objectName()).arg(scriptpackagepath));
+        return false;
+    }
+
+    Manager::self().actionMenu()->removeAction(action);
+    delete action; action = 0; // removes the action from d->actions as well
+
+    Manager::self().writeConfig();
+    return true;
+}
+
+bool GUIManagerModule::showInstallPackageDialog()
+{
+    KFileDialog* filedialog = new KFileDialog(
+        KUrl("kfiledialog:///KrossInstallPackage"), // startdir
+        "*.tar.gz *.tgz *.bz2", // filter
+        0, // custom widget
+        0 // parent
+    );
+    filedialog->setCaption(i18n("Install Script Package"));
+    return filedialog->exec() ? installPackage(filedialog->selectedUrl().path()) : false;
+}
+
+void GUIManagerModule::showManagerDialog()
+{
+    KDialog* dialog = new KDialog();
+    dialog->setCaption( i18n("Script Manager") );
+    dialog->setButtons( KDialog::Close );
+
+    QWidget* mainwidget = dialog->mainWidget();
     QHBoxLayout* mainlayout = new QHBoxLayout();
     mainlayout->setMargin(0);
     mainwidget->setLayout(mainlayout);
 
-    d->view = new GUIManagerView(guiclient, mainwidget, true);
-    mainlayout->addWidget(d->view);
+    GUIManagerView* view = new GUIManagerView(this, mainwidget);
+    mainlayout->addWidget(view);
 
     QWidget* btnwidget = new QWidget(mainwidget);
     QVBoxLayout* btnlayout = new QVBoxLayout();
@@ -340,7 +342,7 @@ GUIManagerDialog::GUIManagerDialog(GUIClient* guiclient, QWidget* parent)
     btnwidget->setLayout(btnlayout);
     mainlayout->addWidget(btnwidget);
 
-    foreach(KAction* action, d->view->actionCollection()->actions(QString::null)) {
+    foreach(KAction* action, view->actionCollection()->actions(QString::null)) {
         KPushButton* btn = new KPushButton(action->icon(), action->text(), btnwidget);
         btn->setToolTip( action->toolTip() );
         btnlayout->addWidget(btn);
@@ -349,19 +351,11 @@ GUIManagerDialog::GUIManagerDialog(GUIClient* guiclient, QWidget* parent)
     }
 
     btnlayout->addStretch(1);
-    resize( QSize(460, 340).expandedTo(minimumSizeHint()) );
+    dialog->resize( QSize(460, 340).expandedTo( dialog->minimumSizeHint() ) );
 
-    connect(this, SIGNAL(closeClicked()), this, SLOT(saveChanges()));
-}
-
-GUIManagerDialog::~GUIManagerDialog()
-{
-    delete d;
-}
-
-void GUIManagerDialog::saveChanges()
-{
-    d->guiclient->writeConfig();
+    dialog->exec();
+    Manager::self().writeConfig();
+    dialog->delayedDestruct();
 }
 
 #include "guimanager.moc"

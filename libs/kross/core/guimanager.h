@@ -21,6 +21,7 @@
 #ifndef KROSS_GUIMANAGER_H
 #define KROSS_GUIMANAGER_H
 
+#include <QObject>
 #include <QWidget>
 #include <QAbstractItemModel>
 #include <QItemSelectionModel>
@@ -31,12 +32,13 @@
 
 #include <koffice_export.h>
 
-class Scripting;
-
 namespace Kross {
 
+    class Action;
     class GUIClient;
+    class GUIManagerModule;
 
+#if 0
     /**
     * This class implements a abstract model to display the \a Action
     * instances provided by a \a GUIClient .
@@ -59,6 +61,7 @@ namespace Kross {
             class Private;
             Private* const d;
     };
+#endif
 
     /**
     * The listview that displays the items provided by the \a GUIManagerModel
@@ -69,12 +72,13 @@ namespace Kross {
     {
             Q_OBJECT
         public:
-            GUIManagerView(GUIClient* guiclient, QWidget* parent, bool editable);
+            GUIManagerView(GUIManagerModule* module, QWidget* parent);
             virtual ~GUIManagerView();
 
             KActionCollection* actionCollection() const;
 
         private slots:
+
             void slotSelectionChanged();
             void slotRun();
             void slotStop();
@@ -89,24 +93,54 @@ namespace Kross {
     };
 
     /**
-    * The "Scripts Manager" dialog that displays the \a GUIManagerView
-    * and buttons to run, stop, install, uninstall and to get new scripts.
+    * The GUIManagerModule class provides access to the GUIManager
+    * functionality.
     */
-    class KROSS_EXPORT GUIManagerDialog : public KDialog
+    class KROSS_EXPORT GUIManagerModule : public QObject
     {
             Q_OBJECT
         public:
-            GUIManagerDialog(GUIClient* guiclient, QWidget* parent);
-            virtual ~GUIManagerDialog();
+            GUIManagerModule();
+            virtual ~GUIManagerModule();
 
-        private slots:
-            void saveChanges();
+            //GUIClient* guiClient() const;
+
+            /**
+            * Install the scriptpackage \p file . The scriptpackage should be a
+            * tar.gz or tar.bzip archivefile.
+            *
+            * \param scriptpackagefile The local tar.gz or tar.bzip archivfile
+            * which contains the files that should be installed.
+            * \return true if installing was successfully else false.
+            */
+            bool installPackage(const QString& scriptpackagefile);
+
+            /**
+            * Uninstalls the scriptpackage \p action and removes all to the package
+            * belonging files.
+            *
+            * \param action The \a Action that should be removed.
+            * \return true if the uninstall was successfully else false.
+            */
+            bool uninstallPackage(Action* action);
+
+        public slots:
+
+            /**
+            * A KFileDialog will be displayed to let the user choose a scriptpackage
+            * that should be installed.
+            */
+            bool showInstallPackageDialog();
+
+            /**
+            * The "Script Manager" KDialog is displayed.
+            */
+            void showManagerDialog();
 
         private:
             class Private;
             Private* const d;
     };
-
 }
 
 #endif

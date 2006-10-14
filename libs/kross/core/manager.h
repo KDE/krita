@@ -24,13 +24,13 @@
 #include <QStringList>
 #include <QMap>
 #include <QObject>
-//#include <QVariant>
 
-#include <ksharedptr.h>
-#include <kurl.h>
+#include "krossconfig.h"
+#include "childreninterface.h"
 
-#include "../core/krossconfig.h"
-#include "../core/childreninterface.h"
+class QAbstractItemModel;
+class KActionCollection;
+class KMenu;
 
 namespace Kross {
 
@@ -56,8 +56,8 @@ namespace Kross {
         protected:
 
             /**
-             * Constructor. Use \a scriptManager() to access
-             * the Manager singleton instance.
+             * Protected constructor. Use \a self() to access the Manager
+             * singleton instance.
              */
             Manager();
 
@@ -94,7 +94,7 @@ namespace Kross {
             InterpreterInfo* interpreterInfo(const QString& interpretername);
 
             /**
-             * \return the name of the \a Interpreter that feels responsible
+             * Return the name of the \a Interpreter that feels responsible
              * for the defined \p file .
              *
              * \param file The filename we should try to determinate the
@@ -115,6 +115,27 @@ namespace Kross {
              * an interpreter with such an interpretername.
              */
             Interpreter* interpreter(const QString& interpretername);
+
+            /**
+             * Read the configurations like e.g. the installed script-packages
+             * from the KConfig configuration-backend.
+             */
+            bool readConfig();
+
+            /**
+             * Write the configurations to the KConfig configuration-backend.
+             */
+            bool writeConfig();
+
+            /**
+             * \return the collection of all \a Action instances.
+             */
+            KActionCollection* actionCollection();
+
+            /**
+             * \return a menu of enabled \a Action instances.
+             */
+            KMenu* actionMenu();
 
         public slots:
 

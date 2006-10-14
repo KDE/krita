@@ -50,7 +50,7 @@
 
 extern "C"
 {
-    void* krossmodule()
+    QObject* krossmodule()
     {
         return new Kross::FormModule();
     }
@@ -368,8 +368,8 @@ namespace Kross {
 
 }
 
-FormModule::FormModule(QObject* parent)
-    : QObject(parent)
+FormModule::FormModule()
+    : QObject()
     , d( new Private() )
 {
 }

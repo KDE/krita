@@ -190,7 +190,7 @@ namespace Kross {
             Q_OBJECT
 
         public:
-            FormModule(QObject* parent = 0);
+            FormModule();
             virtual ~FormModule();
 
         public slots:

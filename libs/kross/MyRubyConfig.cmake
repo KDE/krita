@@ -7,10 +7,6 @@
 #  RUBY_EXECUTABLE   = full path to the ruby binary
 #
 
-#TODO why the heck following command does not work any longer as expected (so, prints out the ruby version)?
-#EXECUTE_PROCESS(COMMAND ruby -r rbconfig -e "'printf(\"%s\",Config::CONFIG[\"ruby_version\"])'" OUTPUT_VARIABLE _test_var)
-#MESSAGE(STATUS "===================> |${_test_var}|")
-
 FIND_PROGRAM(RUBY_EXECUTABLE
   NAMES ruby ruby1.8 ruby1.9
   PATHS /usr/bin /usr/local/bin
@@ -19,6 +15,20 @@ FIND_PROGRAM(RUBY_EXECUTABLE
 MESSAGE(STATUS "s :RUBY_EXECUTABLE :<${RUBY_EXECUTABLE}")
 
 IF (RUBY_EXECUTABLE)
+
+
+
+    #TODO why this does not work any longer? The output-variable ${MYVAR} should
+    #     contain the 'WORKS NOW !' string. The funny thing is, that it works
+    #     working at least once. Hmmmm...
+
+    #EXECUTE_PROCESS(COMMAND ruby -r rbconfig -e "'printf(\"%s\",Config::CONFIG[\"ruby_version\"])'" OUTPUT_VARIABLE _test_var)
+    #EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS -e 'print \"AAAAAAA\"' OUTPUT_VARIABLE MYVAR)
+    EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-e print 'WORKS NOW !'" OUTPUT_VARIABLE MYVAR)
+    MESSAGE(STATUS "Fix Ruby detection. cmake EXEC_PROGRAM does not seem to work as expected whyever :-/ ${MYVAR}")
+
+
+
     EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"libdir\"])'" OUTPUT_VARIABLE EXPECTED_RUBY_LIBRARY_PATH)
     EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"rubyincludedir\"] || Config::CONFIG[\"archdir\"])'" OUTPUT_VARIABLE EXPECTED_RUBY_INCLUDE_PATH)
     EXEC_PROGRAM(${RUBY_EXECUTABLE} ARGS "-r rbconfig -e 'printf(\"%s\",Config::CONFIG[\"ruby_version\"])'" OUTPUT_VARIABLE RUBY_VERSION)

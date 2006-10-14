@@ -48,6 +48,7 @@
 #define KROSS_MAIN_EXPORT KDE_EXPORT
 
 #include <core/manager.h>
+#include <core/model.h>
 #include <core/guiclient.h>
 #include <core/guimanager.h>
 
@@ -80,6 +81,11 @@ class ScriptingDocker : public QWidget
             layout->setMargin(0);
             setLayout(layout);
 
+            QListView* view = new QListView(this);
+            view->setModel( new Kross::ActionMenuModel(this, Kross::Manager::self().actionMenu()) );
+            layout->addWidget(view, 1);
+
+/*
             Kross::GUIManagerView* view = new Kross::GUIManagerView(guiclient, this, false);
             layout->addWidget(view, 1);
             KActionCollection* collection = view->actionCollection();
@@ -91,6 +97,8 @@ class ScriptingDocker : public QWidget
             //tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
             tb->addAction( collection->action("runscript") );
             tb->addAction( collection->action("stopscript") );
+*/
+
         }
 
         virtual ~ScriptingDocker() {}

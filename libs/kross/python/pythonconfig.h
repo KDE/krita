@@ -51,7 +51,8 @@ namespace Kross {
     // this number only if you really know what you're doing.
     #define KROSS_PYTHON_VERSION 1
 
-    // Enable debugging for Kross::Python::PythonScript
+    //#define KROSS_PYTHON_INTERPRETER_DEBUG
+
     //#define KROSS_PYTHON_SCRIPT_CTOR_DEBUG
     //#define KROSS_PYTHON_SCRIPT_DTOR_DEBUG
     //#define KROSS_PYTHON_SCRIPT_INIT_DEBUG

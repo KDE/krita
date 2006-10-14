@@ -112,14 +112,16 @@ PythonInterpreter::PythonInterpreter(Kross::InterpreterInfo* info)
     // Set the extended sys.path.
     PySys_SetPath( (char*) path.toLatin1().data() );
 
-    krossdebug(QString("Python ProgramName: %1").arg(Py_GetProgramName()));
-    krossdebug(QString("Python ProgramFullPath: %1").arg(Py_GetProgramFullPath()));
-    krossdebug(QString("Python Version: %1").arg(Py_GetVersion()));
-    krossdebug(QString("Python Platform: %1").arg(Py_GetPlatform()));
-    krossdebug(QString("Python Prefix: %1").arg(Py_GetPrefix()));
-    krossdebug(QString("Python ExecPrefix: %1").arg(Py_GetExecPrefix()));
-    //krossdebug(QString("Python Path: %1").arg(Py_GetPath()));
-    //krossdebug(QString("Python System Path: %1").arg(path));
+    #ifdef KROSS_PYTHON_INTERPRETER_DEBUG
+        krossdebug(QString("Python ProgramName: %1").arg(Py_GetProgramName()));
+        krossdebug(QString("Python ProgramFullPath: %1").arg(Py_GetProgramFullPath()));
+        krossdebug(QString("Python Version: %1").arg(Py_GetVersion()));
+        krossdebug(QString("Python Platform: %1").arg(Py_GetPlatform()));
+        krossdebug(QString("Python Prefix: %1").arg(Py_GetPrefix()));
+        krossdebug(QString("Python ExecPrefix: %1").arg(Py_GetExecPrefix()));
+        //krossdebug(QString("Python Path: %1").arg(Py_GetPath()));
+        //krossdebug(QString("Python System Path: %1").arg(path));
+    #endif
 
     // Initialize the main module.
     d->mainmodule = new PythonModule(this);

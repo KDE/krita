@@ -37,24 +37,31 @@ KoPathPointMoveStrategy::~KoPathPointMoveStrategy()
 
 void KoPathPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers )
 {
-    QPointF docPoint = m_tool->snapToGrid( mouseLocation, modifiers );
-    QPointF move = m_tool->m_pathShape->documentToShape( docPoint ) - m_tool->m_pathShape->documentToShape( m_lastPosition );
-    // as the last position can change when the top left is changed we have
-    // to save it in document pos and not in shape pos
-    m_lastPosition = docPoint;
-
-    m_move += move;
-
-    // only multiple nodes can be moved at once
-    if( m_tool->m_activeHandle.m_activePointType == KoPathPoint::Node )
+    // TODO remove this constrained
+    if ( m_tool->m_pointSelection.objectCount() == 1 )
     {
-        KoPointMoveCommand cmd( m_tool->m_pathShape, m_tool->m_selectedPoints, move );
-        cmd.execute();
-    }
-    else
-    {
-        KoPointMoveCommand cmd( m_tool->m_pathShape, m_tool->m_activeHandle.m_activePoint, move, m_tool->m_activeHandle.m_activePointType );
-        cmd.execute();
+        QList<KoPathPoint*> selectedPoints = m_tool->m_pointSelection.selectedPoints().toList();
+        KoPathShape * pathShape = selectedPoints[0]->parent();
+
+        QPointF docPoint = m_tool->snapToGrid( mouseLocation, modifiers );
+        QPointF move = pathShape->documentToShape( docPoint ) - pathShape->documentToShape( m_lastPosition );
+        // as the last position can change when the top left is changed we have
+        // to save it in document pos and not in shape pos
+        m_lastPosition = docPoint;
+
+        m_move += move;
+
+        // only multiple nodes can be moved at once
+        if( m_tool->m_activeHandle.m_activePointType == KoPathPoint::Node )
+        {
+            KoPointMoveCommand cmd( pathShape, selectedPoints, move );
+            cmd.execute();
+        }
+        else
+        {
+            KoPointMoveCommand cmd( pathShape, m_tool->m_activeHandle.m_activePoint, move, m_tool->m_activeHandle.m_activePointType );
+            cmd.execute();
+        }
     }
 }
 
@@ -65,14 +72,21 @@ void KoPathPointMoveStrategy::finishInteraction( Qt::KeyboardModifiers modifiers
 
 KCommand* KoPathPointMoveStrategy::createCommand()
 {
-    KoPointMoveCommand *cmd = 0;
-    if( !m_move.isNull() )
+    if ( m_tool->m_pointSelection.objectCount() == 1 )
     {
-        // only multiple nodes can be moved at once
-        if( m_tool->m_activeHandle.m_activePointType == KoPathPoint::Node )
-            cmd = new KoPointMoveCommand( m_tool->m_pathShape, m_tool->m_selectedPoints, m_move );
-        else
-            cmd = new KoPointMoveCommand( m_tool->m_pathShape, m_tool->m_activeHandle.m_activePoint, m_move, m_tool->m_activeHandle.m_activePointType );
+        QList<KoPathPoint*> selectedPoints = m_tool->m_pointSelection.selectedPoints().toList();
+        KoPathShape * pathShape = selectedPoints[0]->parent();
+
+        KoPointMoveCommand *cmd = 0;
+        if( !m_move.isNull() )
+        {
+            // only multiple nodes can be moved at once
+            if( m_tool->m_activeHandle.m_activePointType == KoPathPoint::Node )
+                cmd = new KoPointMoveCommand( pathShape, selectedPoints, m_move );
+            else
+                cmd = new KoPointMoveCommand( pathShape, m_tool->m_activeHandle.m_activePoint, m_move, m_tool->m_activeHandle.m_activePointType );
+        }
+        return cmd;
     }
-    return cmd;
+    return 0;
 }

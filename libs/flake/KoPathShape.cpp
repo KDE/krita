@@ -226,6 +226,24 @@ void KoPathPoint::setParent( KoPathShape* parent )
     m_shape = parent;
 }
 
+QRectF KoPathPoint::boundingRect() const
+{
+    QRectF rect( m_point, QSize( 1, 1 ) );
+    if ( activeControlPoint1() )
+    {
+        QRectF r1( m_point, QSize( 1, 1 ) );
+        r1.setBottomRight( m_controlPoint1 );
+        rect = rect.unite( r1 );
+    }
+    if ( activeControlPoint2() )
+    {
+        QRectF r2( m_point, QSize( 1, 1 ) );
+        r2.setBottomRight( m_controlPoint2 );
+        rect = rect.unite( r2 );
+    }
+    return m_shape->shapeToDocument( rect );
+}
+
 void KoPathPoint::reverse()
 {
     qSwap( m_controlPoint1, m_controlPoint2 );

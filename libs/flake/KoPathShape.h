@@ -217,6 +217,15 @@ public:
     KoPathShape * parent() const { return m_shape; }
 
     /**
+     * @brief Get the bounding rect of the point.
+     * 
+     * This takes into acount if there are controlpoints 
+     *
+     * @return bounding rect in document coordinates
+     */
+    QRectF boundingRect() const;
+
+    /**
      * @brief Reverses the path point.
      *
      * The control points are swapped and the point properties are adjusted.

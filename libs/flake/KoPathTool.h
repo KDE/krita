@@ -23,6 +23,8 @@
 #include "KoPathShape.h"
 
 #include <KoTool.h>
+#include <QMap>
+#include <QSet>
 
 class KoCanvasBase;
 class KoInteractionStrategy;
@@ -81,13 +83,94 @@ private:
         KoPathPoint::KoPointType m_activePointType;
     };
 
+    /**
+     * @brief Handle the selection of points
+     *
+     * This class handles the selection of points. It makes sure 
+     * the canvas is repainted when the selection changes.
+     */
+    class KoPathPointSelection
+    {
+    public:    
+        typedef QMap<KoPathShape *, QSet<KoPathPoint *> > KoSelectedPointMap;
+        KoPathPointSelection( KoPathTool * tool )
+        : m_tool( tool )
+        {}
+        ~KoPathPointSelection() {}
+
+        /// @brief Draw the selected points
+        void paint( QPainter &painter, KoViewConverter &converter ); 
+        
+        /**
+         * @brief Add a point to the selection
+         *
+         * @param point to add to the selection
+         * @param clear if true the selection will be cleared before adding the point
+         */
+        void add( KoPathPoint * point, bool clear );
+        
+        /**
+         * @brief Remove a point form the selection
+         *
+         * @param point to remove from the selection
+         */
+        void remove( KoPathPoint * point );
+        
+        /**
+         * @brief Clear the selection
+         */
+        void clear();
+
+        /**
+         * @brief Get the number of path objects in the selection
+         *
+         * @return number of path object in the point selection
+         */
+        int objectCount() const { return m_shapePointMap.size(); }
+
+        /**
+         * @brief Get the number of path objects in the selection
+         *
+         * @return number of points in the selection
+         */
+        int size() const { return m_selectedPoints.size(); }
+
+        /**
+         * @brief Check if a point is in the selection
+         *
+         * @return true when the point is in the selection, false otherwise
+         */
+        bool contains( KoPathPoint * point ) { return m_selectedPoints.contains( point ); }
+
+        /**
+         * @brief Get all selected points
+         *
+         * @return set of selected points
+         */
+        const QSet<KoPathPoint *> & selectedPoints() const { return m_selectedPoints; }
+
+        /**
+         * @brief Get the selected point map
+         *
+         * @return KoSelectedPointMap containing all objects and selected points 
+         * typedef QMap<KoPathShape *, QSet<KoPathPoint *> > KoSelectedPointMap;
+         */
+        const KoSelectedPointMap & selectedPointMap() const { return m_shapePointMap; }
+
+    private:
+        QSet<KoPathPoint *> m_selectedPoints;
+        KoSelectedPointMap m_shapePointMap;
+        KoPathTool * m_tool;
+    };
+
     
-    KoPathShape *m_pathShape;          ///< the actual selected path shape
     ActiveHandle m_activeHandle;       ///< the currently active handle
     int m_handleRadius;                ///< the radius of the control point handles
-    QList<KoPathPoint*> m_selectedPoints; ///< list of selected path points
+    /// the point selection 
+    KoPathPointSelection m_pointSelection;
 
     friend class ActiveHandle;
+    friend class KoPathPointSelection;
     friend class KoPathPointMoveStrategy;
     friend class KoPathPointRubberSelectStrategy;
 

@@ -262,7 +262,7 @@ bool Manager::readConfig()
 bool Manager::writeConfig()
 {
     KConfig* config = KApplication::kApplication()->sessionConfig();
-    krossdebug( QString("Manager::write hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
+    krossdebug( QString("Manager::writeConfig hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
     if(config->isReadOnly())
         return false;
 

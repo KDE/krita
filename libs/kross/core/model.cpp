@@ -172,15 +172,6 @@ QModelIndex ActionMenuModel::parent(const QModelIndex&) const
     return QModelIndex();
 }
 
-#if 0
-Qt::ItemFlags ActionMenuModel::flags(const QModelIndex &index) const
-{
-    if(! index.isValid())
-        return Qt::ItemIsEnabled;
-    return QAbstractItemModel::flags(index);
-}
-#endif
-
 QVariant ActionMenuModel::data(const QModelIndex& index, int role) const
 {
     if(! index.isValid())

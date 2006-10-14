@@ -19,6 +19,7 @@
 
 #include "scriptingpart.h"
 #include "scriptingmonitor.h"
+#include "scriptingdocker.h"
 
 #include <stdlib.h>
 #include <vector>
@@ -26,7 +27,6 @@
 #include <QApplication>
 #include <QPoint>
 #include <QPointer>
-#include <QToolBar>
 
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -50,7 +50,6 @@
 #include <core/manager.h>
 #include <core/model.h>
 #include <core/guiclient.h>
-#include <core/guimanager.h>
 
 #include "kritacore/kritacoremodule.h"
 #include "kritacore/kritacoreprogress.h"
@@ -70,38 +69,6 @@ class ScriptingPart::Private
             //Kross::Manager::self().removeObject(module);
             delete module; module = 0;
         }
-};
-
-class ScriptingDocker : public QWidget
-{
-    public:
-        ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient) : QWidget(parent)
-        {
-            QBoxLayout* layout = new QVBoxLayout(this);
-            layout->setMargin(0);
-            setLayout(layout);
-
-            QListView* view = new QListView(this);
-            view->setModel( new Kross::ActionMenuModel(this, Kross::Manager::self().actionMenu()) );
-            layout->addWidget(view, 1);
-
-/*
-            Kross::GUIManagerView* view = new Kross::GUIManagerView(guiclient, this, false);
-            layout->addWidget(view, 1);
-            KActionCollection* collection = view->actionCollection();
-
-            QToolBar* tb = new QToolBar(this);
-            layout->addWidget(tb);
-            tb->setMovable(false);
-            //tb->setOrientation(Qt::Vertical);
-            //tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-            tb->addAction( collection->action("runscript") );
-            tb->addAction( collection->action("stopscript") );
-*/
-
-        }
-
-        virtual ~ScriptingDocker() {}
 };
 
 ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
@@ -166,10 +133,9 @@ void ScriptingPart::executionStarted(Kross::Action* action)
         delete d->module;
     d->module = new Kross::KritaCore::KritaCoreModule(d->view);
     Kross::Manager::self().addObject(d->module, "Krita");
-#if 0
-    kDebug(41011) << act->getPackagePath() << endl;
-    progress->setPackagePath( act->getPackagePath() );
-#endif
+
+    //kDebug(41011) << act->getPackagePath() << endl;
+    //progress->setPackagePath( act->getPackagePath() );
 }
 
 

@@ -111,6 +111,13 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 #endif
 }
 
+void KisToolSelectEraser::endPaint() {
+    super::endPaint();
+    if (m_currentImage && m_currentImage->activeDevice())
+        m_currentImage->activeDevice()->emitSelectionChanged();
+}
+
+
 void KisToolSelectEraser::setup(KActionCollection *collection)
 {
     m_action = collection->action(objectName());

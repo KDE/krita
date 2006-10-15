@@ -53,6 +53,7 @@ public slots:
 protected:
 
     virtual void initPaint(KisEvent *e);
+    virtual void endPaint();
 private:
     KisSelectionOptions * m_optWidget;
 

@@ -122,10 +122,11 @@ void KisToolSelectBrush::endPaint()
         }
         delete m_painter;
         m_painter = 0;
+        if (m_currentImage->activeDevice())
+            m_currentImage->activeDevice()->emitSelectionChanged();
         notifyModified();
     }
 }
-
 
 void KisToolSelectBrush::setup(KActionCollection *collection)
 {

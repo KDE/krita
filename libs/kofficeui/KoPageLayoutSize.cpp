@@ -140,9 +140,9 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     layoutOrientation->addWidget( rbLandscape, 0, 3 );
 
     m_orientGroup = new QButtonGroup( m_orientBox );
-    m_orientGroup->addButton( rbPortrait, 0 );
-    m_orientGroup->addButton( rbLandscape, 1 );
-    connect( m_orientGroup, SIGNAL (clicked (int)), this, SLOT( orientationChanged(int) ));
+    m_orientGroup->addButton( rbPortrait, PG_PORTRAIT );
+    m_orientGroup->addButton( rbLandscape, PG_LANDSCAPE );
+    connect( m_orientGroup, SIGNAL (buttonClicked (int)), this, SLOT( orientationChanged(int) ));
 
     // --------------- page margins ---------------
     QGroupBox *marginsFrame = new QGroupBox( i18n( "Margins" ), this );
@@ -218,7 +218,7 @@ void KoPageLayoutSize::setValues() {
     // page format
     cpgFormat->setCurrentIndex( m_layout.format );
     // orientation
-    m_orientGroup->button( m_layout.orientation == PG_PORTRAIT ? 0: 1 )->setChecked( true );
+    m_orientGroup->button( m_layout.orientation )->setChecked( true );
 
     setUnit( m_unit );
     updatePreview();
@@ -284,7 +284,7 @@ void KoPageLayoutSize::formatChanged( int format ) {
 }
 
 void KoPageLayoutSize::orientationChanged(int which) {
-    m_layout.orientation = which == 0 ? PG_PORTRAIT : PG_LANDSCAPE;
+    m_layout.orientation = which == PG_PORTRAIT ? PG_PORTRAIT : PG_LANDSCAPE;
 
     // swap dimension
     double val = epgWidth->value();

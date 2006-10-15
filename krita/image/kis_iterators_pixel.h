@@ -57,6 +57,17 @@ class KisLineIteratorPixelBase : public T, public KisIteratorPixelTrait<T, TSele
         qint32 x() const { return T::x() + m_offsetx; }
         /// @return the y coordinate in the image referential
         qint32 y() const { return T::y() + m_offsety; }
+        /// @return the minimum of the regular underlying iterator's and the selection iterator's nConseqHPixels
+        qint32 nConseqHPixels() const {
+            if (this->m_selectionIterator) {
+                qint32 parent = T::nConseqHPixels();
+                qint32 selection = this->m_selectionIterator->nConseqHPixels();
+                if (parent < selection)
+                    return parent;
+                return selection;
+            }
+            return T::nConseqHPixels();
+        }
     private:
         qint32 m_offsetx, m_offsety;
 };
@@ -96,6 +107,17 @@ class KisRectIteratorPixelBase : public T, public KisIteratorPixelTrait<T, TSele
         qint32 x() const { return T::x() + m_offsetx; }
         /// @return the y coordinate in the image referential
         qint32 y() const { return T::y() + m_offsety; }
+        /// @return the minimum of the regular underlying iterator's and the selection iterator's nConseqHPixels
+        qint32 nConseqPixels() const {
+            if (this->m_selectionIterator) {
+                qint32 parent = T::nConseqPixels();
+                qint32 selection = this->m_selectionIterator->nConseqPixels();
+                if (parent < selection)
+                    return parent;
+                return selection;
+            }
+            return T::nConseqPixels();
+        }
     private:
         qint32 m_offsetx, m_offsety;
 };

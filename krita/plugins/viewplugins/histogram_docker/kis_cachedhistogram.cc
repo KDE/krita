@@ -31,5 +31,7 @@ void KisCachedHistogramObserver::regionUpdated(KisPaintDeviceSP dev) {
         i = srcIt.nConseqPixels();
         m_producer->addRegionToBin(srcIt.rawData(), srcIt.selectionMask(), i, dev->colorSpace());
         srcIt += i;
+        if (i == 0)
+            ++srcIt;
     }
 }

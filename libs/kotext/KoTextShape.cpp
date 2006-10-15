@@ -38,8 +38,7 @@ KoTextShape::~KoTextShape() {
 }
 
 void KoTextShape::paint(QPainter &painter, const KoViewConverter &converter) {
-// TODO reenable this when Qt is fixed so this is not a big black block no more ;)
-    //painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
+    painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
     applyConversion(painter, converter);
     QAbstractTextDocumentLayout::PaintContext pc;
     pc.cursorPosition = -1;

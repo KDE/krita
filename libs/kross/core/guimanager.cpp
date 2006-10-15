@@ -60,13 +60,13 @@ namespace Kross {
     class GUIManagerNewStuff : public KNewStuffSecure
     {
         public:
-            GUIManagerNewStuff(GUIManagerModule* module, const QString& type, QWidget *parentWidget = 0)
+            GUIManagerNewStuff(GUIManagerView* view, const QString& type, QWidget *parentWidget = 0)
                 : KNewStuffSecure(type, parentWidget)
-                , m_module(module) {}
+                , m_view(view) {}
             virtual ~GUIManagerNewStuff() {}
         private:
-            GUIManagerModule* m_module;
-            virtual void installResource() { m_module->installPackage( m_tarName ); }
+            GUIManagerView* m_view;
+            virtual void installResource() { m_view->installPackage( m_tarName ); }
     };
 
     /// \internal d-pointer class.
@@ -75,10 +75,10 @@ namespace Kross {
         public:
             GUIManagerModule* module;
             QItemSelectionModel* selectionmodel;
-            KActionCollection* collection;
             GUIManagerNewStuff* newstuff;
+            bool modified;
 
-            Private(GUIManagerModule* m) : module(m), newstuff(0) {}
+            Private(GUIManagerModule* m) : module(m), newstuff(0), modified(false) {}
     };
 
 }
@@ -96,34 +96,12 @@ GUIManagerView::GUIManagerView(GUIManagerModule* module, QWidget* parent)
     ActionCollectionModel* model = new ActionCollectionModel(this, Kross::Manager::self().actionCollection());
     setModel(model);
 
+    connect(model, SIGNAL(dataChanged(const QModelIndex&,const QModelIndex&)),
+            this, SLOT(slotDataChanged(const QModelIndex&,const QModelIndex&)));
+
     d->selectionmodel = new QItemSelectionModel(model, this);
     connect(d->selectionmodel, SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), this, SLOT(slotSelectionChanged()));
     setSelectionModel(d->selectionmodel);
-
-    d->collection = new KActionCollection(this);
-
-    KAction* runaction = new KAction(KIcon("player_play"), i18n("Run"), d->collection, "runscript");
-    runaction->setToolTip( i18n("Execute the selected script.") );
-    connect(runaction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotRun()) );
-
-    KAction* stopaction = new KAction(KIcon("player_stop"), i18n("Stop"), d->collection, "stopscript");
-    stopaction->setToolTip( i18n("Stop execution of the selected script.") );
-    connect(stopaction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotStop()) );
-
-    KAction* installaction = new KAction(KIcon("fileimport"), i18n("Install"), d->collection, "installscript");
-    installaction->setToolTip( i18n("Install a script-package.") );
-    connect(installaction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotInstall()) );
-
-    KAction* uninstallaction = new KAction(KIcon("fileclose"), i18n("Uninstall"), d->collection, "uninstallscript");
-    uninstallaction->setToolTip( i18n("Uninstall the selected script-package.") );
-    connect(uninstallaction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotUninstall()) );
-
-    KAction* newstuffaction = new KAction(KIcon("knewstuff"), i18n("Get New Scripts"), d->collection, "newscript");
-    newstuffaction->setToolTip( i18n("Get new scripts from the internet.") );
-    connect(newstuffaction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotNewScripts()) );
-
-    //new KAction(KIcon(""), i18n("About"), d->collection);
-    //new KAction(KIcon(""), i18n("Configure"), d->collection);
 }
 
 GUIManagerView::~GUIManagerView()
@@ -131,98 +109,12 @@ GUIManagerView::~GUIManagerView()
     delete d;
 }
 
-KActionCollection* GUIManagerView::actionCollection() const
+bool GUIManagerView::isModified() const
 {
-    return d->collection;
+    return d->modified;
 }
 
-void GUIManagerView::slotSelectionChanged()
-{
-    bool isselected = d->selectionmodel->hasSelection();
-    d->collection->action("runscript")->setEnabled(isselected);
-    d->collection->action("stopscript")->setEnabled(isselected);
-    d->collection->action("uninstallscript")->setEnabled(isselected);
-}
-
-void GUIManagerView::slotRun()
-{
-    foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
-        if(index.isValid())
-            static_cast< Action* >(index.internalPointer())->trigger();
-}
-
-void GUIManagerView::slotStop()
-{
-    foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
-        if(index.isValid())
-            static_cast< Action* >(index.internalPointer())->finalize();
-}
-
-void GUIManagerView::slotInstall()
-{
-    d->module->showInstallPackageDialog();
-}
-
-void GUIManagerView::slotUninstall()
-{
-    foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
-        if(index.isValid())
-            if(! d->module->uninstallPackage( static_cast< Action* >(index.internalPointer()) ))
-                break;
-}
-
-void GUIManagerView::slotNewScripts()
-{
-    const QString appname = KApplication::kApplication()->objectName();
-    const QString type = QString("%1/script").arg(appname);
-    krossdebug( QString("GUIManagerView::slotNewScripts %1").arg(type) );
-    if(! d->newstuff) {
-        d->newstuff = new GUIManagerNewStuff(d->module, type);
-        connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotNewScriptsInstallFinished()));
-    }
-    KNS::Engine *engine = new KNS::Engine(d->newstuff, type, this);
-    KNS::DownloadDialog *d = new KNS::DownloadDialog(engine, this);
-    d->setCategory(type);
-    KNS::ProviderLoader *p = new KNS::ProviderLoader(this);
-    QObject::connect(p, SIGNAL(providersLoaded(Provider::List*)), d, SLOT(slotProviders(Provider::List*)));
-    p->load(type, QString("http://download.kde.org/khotnewstuff/%1scripts-providers.xml").arg(appname));
-    d->exec();
-}
-
-void GUIManagerView::slotNewScriptsInstallFinished()
-{
-    // Delete KNewStuff's configuration entries. These entries reflect what has
-    // already been installed. As we cannot yet keep them in sync after uninstalling
-    // scripts, we deactivate the check marks entirely.
-    KGlobal::config()->deleteGroup("KNewStuffStatus");
-}
-
-/******************************************************************************
- * GUIManagerModule
- */
-
-namespace Kross {
-
-    /// \internal d-pointer class.
-    class GUIManagerModule::Private
-    {
-        public:
-    };
-
-}
-
-GUIManagerModule::GUIManagerModule()
-    : QObject()
-    , d(new Private())
-{
-}
-
-GUIManagerModule::~GUIManagerModule()
-{
-    delete d;
-}
-
-bool GUIManagerModule::installPackage(const QString& scriptpackagefile)
+bool GUIManagerView::installPackage(const QString& scriptpackagefile)
 {
     KTar archive( scriptpackagefile );
     if(! archive.open(QIODevice::ReadOnly)) {
@@ -280,11 +172,11 @@ bool GUIManagerModule::installPackage(const QString& scriptpackagefile)
         Manager::self().actionMenu()->addAction(action);
     }
 
-    Manager::self().writeConfig();
+    d->modified = true;
     return true;
 }
 
-bool GUIManagerModule::uninstallPackage(Action* action)
+bool GUIManagerView::uninstallPackage(Action* action)
 {
     const QString name = action->objectName();
 
@@ -306,11 +198,40 @@ bool GUIManagerModule::uninstallPackage(Action* action)
     Manager::self().actionMenu()->removeAction(action);
     delete action; action = 0; // removes the action from d->actions as well
 
-    Manager::self().writeConfig();
+    d->modified = true;
     return true;
 }
 
-bool GUIManagerModule::showInstallPackageDialog()
+void GUIManagerView::slotSelectionChanged()
+{
+    /*TODO
+    bool isselected = d->selectionmodel->hasSelection();
+    d->collection->action("runscript")->setEnabled(isselected);
+    d->collection->action("stopscript")->setEnabled(isselected);
+    d->collection->action("uninstallscript")->setEnabled(isselected);
+    */
+}
+
+void GUIManagerView::slotDataChanged(const QModelIndex&, const QModelIndex&)
+{
+    d->modified = true;
+}
+
+void GUIManagerView::slotRun()
+{
+    foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
+        if(index.isValid())
+            static_cast< Action* >(index.internalPointer())->trigger();
+}
+
+void GUIManagerView::slotStop()
+{
+    foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
+        if(index.isValid())
+            static_cast< Action* >(index.internalPointer())->finalize();
+}
+
+bool GUIManagerView::slotInstall()
 {
     KFileDialog* filedialog = new KFileDialog(
         KUrl("kfiledialog:///KrossInstallPackage"), // startdir
@@ -322,11 +243,70 @@ bool GUIManagerModule::showInstallPackageDialog()
     return filedialog->exec() ? installPackage(filedialog->selectedUrl().path()) : false;
 }
 
+void GUIManagerView::slotUninstall()
+{
+    foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
+        if(index.isValid())
+            if(! uninstallPackage( static_cast< Action* >(index.internalPointer()) ))
+                break;
+}
+
+void GUIManagerView::slotNewScripts()
+{
+    const QString appname = KApplication::kApplication()->objectName();
+    const QString type = QString("%1/script").arg(appname);
+    krossdebug( QString("GUIManagerView::slotNewScripts %1").arg(type) );
+    if(! d->newstuff) {
+        d->newstuff = new GUIManagerNewStuff(this, type);
+        connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotNewScriptsInstallFinished()));
+    }
+    KNS::Engine *engine = new KNS::Engine(d->newstuff, type, this);
+    KNS::DownloadDialog *d = new KNS::DownloadDialog(engine, this);
+    d->setCategory(type);
+    KNS::ProviderLoader *p = new KNS::ProviderLoader(this);
+    QObject::connect(p, SIGNAL(providersLoaded(Provider::List*)), d, SLOT(slotProviders(Provider::List*)));
+    p->load(type, QString("http://download.kde.org/khotnewstuff/%1scripts-providers.xml").arg(appname));
+    d->exec();
+}
+
+void GUIManagerView::slotNewScriptsInstallFinished()
+{
+    // Delete KNewStuff's configuration entries. These entries reflect what has
+    // already been installed. As we cannot yet keep them in sync after uninstalling
+    // scripts, we deactivate the check marks entirely.
+    KGlobal::config()->deleteGroup("KNewStuffStatus");
+}
+
+/******************************************************************************
+ * GUIManagerModule
+ */
+
+namespace Kross {
+
+    /// \internal d-pointer class.
+    class GUIManagerModule::Private
+    {
+        public:
+    };
+
+}
+
+GUIManagerModule::GUIManagerModule()
+    : QObject()
+    , d(new Private())
+{
+}
+
+GUIManagerModule::~GUIManagerModule()
+{
+    delete d;
+}
+
 void GUIManagerModule::showManagerDialog()
 {
     KDialog* dialog = new KDialog();
     dialog->setCaption( i18n("Script Manager") );
-    dialog->setButtons( KDialog::Close );
+    dialog->setButtons( KDialog::Ok | KDialog::Cancel );
 
     QWidget* mainwidget = dialog->mainWidget();
     QHBoxLayout* mainlayout = new QHBoxLayout();
@@ -342,19 +322,48 @@ void GUIManagerModule::showManagerDialog()
     btnwidget->setLayout(btnlayout);
     mainlayout->addWidget(btnwidget);
 
-    foreach(KAction* action, view->actionCollection()->actions(QString::null)) {
-        KPushButton* btn = new KPushButton(action->icon(), action->text(), btnwidget);
-        btn->setToolTip( action->toolTip() );
-        btnlayout->addWidget(btn);
-        connect(btn, SIGNAL(clicked()), action, SLOT(trigger()));
-        //connect(action, SLOT(setEnabled(bool)), btn, SLOT(setEnabled(bool)));
-    }
+    KPushButton* runbtn = new KPushButton(KIcon("player_play"), i18n("Run"), btnwidget);
+    runbtn->setToolTip( i18n("Execute the selected script.") );
+    btnlayout->addWidget(runbtn);
+    connect(runbtn, SIGNAL(clicked()), view, SLOT(slotRun()) );
+
+    KPushButton* stopbtn = new KPushButton(KIcon("player_stop"), i18n("Stop"), btnwidget);
+    stopbtn->setToolTip( i18n("Stop execution of the selected script.") );
+    btnlayout->addWidget(stopbtn);
+    connect(stopbtn, SIGNAL(clicked()), view, SLOT(slotStop()) );
+
+    KPushButton* installbtn = new KPushButton(KIcon("fileimport"), i18n("Install"), btnwidget);
+    installbtn->setToolTip( i18n("Install a script-package.") );
+    btnlayout->addWidget(installbtn);
+    connect(installbtn, SIGNAL(clicked()), view, SLOT(slotInstall()) );
+
+    KPushButton* uninstallbtn = new KPushButton(KIcon("fileclose"), i18n("Uninstall"), btnwidget);
+    uninstallbtn->setToolTip( i18n("Uninstall the selected script-package.") );
+    btnlayout->addWidget(uninstallbtn);
+    connect(uninstallbtn, SIGNAL(clicked()), view, SLOT(slotUninstall()) );
+
+    KPushButton* newstuffbtn = new KPushButton(KIcon("knewstuff"), i18n("Get New Scripts"), btnwidget);
+    newstuffbtn->setToolTip( i18n("Get new scripts from the internet.") );
+    btnlayout->addWidget(newstuffbtn);
+    connect(newstuffbtn, SIGNAL(clicked()), view, SLOT(slotNewScripts()) );
+
+    //i18n("About") i18n("Configure") ...
 
     btnlayout->addStretch(1);
     dialog->resize( QSize(460, 340).expandedTo( dialog->minimumSizeHint() ) );
 
-    dialog->exec();
-    Manager::self().writeConfig();
+    int result = dialog->exec();
+    if ( view->isModified() ) {
+        if( result == QDialog::Accepted /*&& dialog->result() == KDialog::Ok*/ ) {
+            // save new config
+            Manager::self().writeConfig();
+        }
+        else {
+            // restore old config
+            Manager::self().readConfig();
+        }
+        QMetaObject::invokeMethod(&Manager::self(), "configChanged");
+    }
     dialog->delayedDestruct();
 }
 

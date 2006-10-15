@@ -171,6 +171,13 @@ namespace Kross {
              */
             QObject* module(const QString& modulename);
 
+        signals:
+
+            /**
+            * This signal is emitted if the configuration changed.
+            */
+            void configChanged();
+
         private:
             /// Private d-pointer class.
             ManagerPrivate* d;

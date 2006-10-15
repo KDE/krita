@@ -55,10 +55,10 @@ namespace Kross {
     {
         public:
             /// List of \a InterpreterInfo instances.
-            QMap<QString, InterpreterInfo*> interpreterinfos;
+            QMap<QString, InterpreterInfo* > interpreterinfos;
 
             /// Loaded modules.
-            QMap<QString, QObject* > modules;
+            QMap<QString, QPointer<QObject> > modules;
 
             /// The collection of all \a Action instances.
             KActionCollection* actioncollection;
@@ -153,9 +153,9 @@ Manager::Manager()
 
 Manager::~Manager()
 {
-    for(QMap<QString, InterpreterInfo*>::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it)
+    for(QMap<QString, InterpreterInfo* >::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it)
         delete it.value();
-    for(QMap<QString, QObject* >::Iterator it = d->modules.begin(); it != d->modules.end(); ++it)
+    for(QMap<QString, QPointer<QObject> >::Iterator it = d->modules.begin(); it != d->modules.end(); ++it)
         delete it.value();
     delete d->actionmenu;
     delete d;
@@ -249,12 +249,13 @@ bool Manager::readConfig()
             action->setIcon(KIcon(icon));
         if(! interpreter.isNull())
             action->setInterpreter(interpreter);
-        action->setVisible( config->readEntry(QString("%1_enabled").arg(name), true) );
+        bool enabled = config->readEntry(QString("%1_enabled").arg(name), true);
         //connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
         //connect(action, SIGNAL( success() ), this, SLOT( executionSuccessful() ));
         //connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
 
-        d->actionmenu->addAction(action);
+        if (enabled)
+            d->actionmenu->addAction(action);
     }
     return true;
 }
@@ -282,7 +283,7 @@ bool Manager::writeConfig()
 
         config->writeEntry(QString("%1_file").arg(name).toLatin1(), action->getFile().path());
         config->writeEntry(QString("%1_interpreter").arg(name).toLatin1(), action->interpreter());
-        if(! action->isVisible())
+        if( d->actionmenu->actions().contains(action) )
             config->writeEntry(QString("%1_enabled").arg(name), action->isVisible());
     }
 
@@ -320,7 +321,9 @@ QObject* Manager::action(const QString& name)
 QObject* Manager::module(const QString& modulename)
 {
     if( d->modules.contains(modulename) ) {
-        return d->modules[modulename];
+        QObject* obj = d->modules[modulename];
+        if( obj )
+            return obj;
     }
 
     if( modulename.isEmpty() || modulename.contains( QRegExp("[^a-zA-Z0-9]") ) ) {

@@ -19,6 +19,9 @@
 
 #include "model.h"
 #include "action.h"
+#include "manager.h"
+
+#include <QEvent>
 
 #include <kicon.h>
 #include <kmenu.h>

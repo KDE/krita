@@ -75,35 +75,11 @@ namespace Kross {
             GUIManagerView(GUIManagerModule* module, QWidget* parent);
             virtual ~GUIManagerView();
 
-            KActionCollection* actionCollection() const;
-
-        private slots:
-
-            void slotSelectionChanged();
-            void slotRun();
-            void slotStop();
-            void slotInstall();
-            void slotUninstall();
-            void slotNewScripts();
-            void slotNewScriptsInstallFinished();
-
-        private:
-            class Private;
-            Private* const d;
-    };
-
-    /**
-    * The GUIManagerModule class provides access to the GUIManager
-    * functionality.
-    */
-    class KROSS_EXPORT GUIManagerModule : public QObject
-    {
-            Q_OBJECT
-        public:
-            GUIManagerModule();
-            virtual ~GUIManagerModule();
-
-            //GUIClient* guiClient() const;
+            /**
+            * \return true if the user changed some data else if the data
+            * was not changed at all return false.
+            */
+            bool isModified() const;
 
             /**
             * Install the scriptpackage \p file . The scriptpackage should be a
@@ -125,15 +101,37 @@ namespace Kross {
             bool uninstallPackage(Action* action);
 
         public slots:
+            void slotRun();
+            void slotStop();
+            bool slotInstall();
+            void slotUninstall();
+            void slotNewScripts();
+
+        private slots:
+            void slotSelectionChanged();
+            void slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+            void slotNewScriptsInstallFinished();
+
+        private:
+            class Private;
+            Private* const d;
+    };
+
+    /**
+    * The GUIManagerModule class provides access to the GUIManager
+    * functionality.
+    */
+    class KROSS_EXPORT GUIManagerModule : public QObject
+    {
+            Q_OBJECT
+        public:
+            GUIManagerModule();
+            virtual ~GUIManagerModule();
+
+        public slots:
 
             /**
-            * A KFileDialog will be displayed to let the user choose a scriptpackage
-            * that should be installed.
-            */
-            bool showInstallPackageDialog();
-
-            /**
-            * The "Script Manager" KDialog is displayed.
+            * Display the "Script Manager" KDialog.
             */
             void showManagerDialog();
 

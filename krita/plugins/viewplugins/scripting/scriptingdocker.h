@@ -28,6 +28,7 @@ class QListView;
 
 namespace Kross {
     class GUIClient;
+    class ActionMenuModel;
 }
 
 class ScriptingDocker : public QWidget
@@ -36,11 +37,15 @@ class ScriptingDocker : public QWidget
     public:
         ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient);
         virtual ~ScriptingDocker();
+
     private slots:
         void runScript();
         void stopScript();
+        void dataChanged() const;
+
     private:
         Kross::GUIClient* m_guiclient;
+        Kross::ActionMenuModel* m_model;
         QListView* m_view;
 };
 

@@ -119,6 +119,16 @@ KisFiltersListView::KisFiltersListView(QWidget* parent, bool filterForAdjustment
     init();
 }
 
+KisFiltersListView::KisFiltersListView(QWidget* parent, Qt::WFlags f, bool filterForAdjustmentLayers)
+    : K3IconView(parent, "", f)
+    , m_original(0)
+    , m_profile(0)
+    , m_filterForAdjustmentLayers(filterForAdjustmentLayers)
+{
+    init();
+}
+
+
 KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, bool filterForAdjustmentLayers, const char * name)
     : K3IconView(parent, name)
     , m_original(0)

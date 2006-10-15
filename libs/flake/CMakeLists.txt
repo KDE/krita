@@ -5,6 +5,7 @@ add_subdirectory(tests)
 set(flake_SRCS
     KoCommand.cpp
     KoInteractionStrategy.cpp
+    KoInputDevice.cpp
     KoInteractionTool.cpp
     KoLineBorder.cpp
     KoPathShape.cpp

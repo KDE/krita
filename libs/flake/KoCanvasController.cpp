@@ -36,7 +36,6 @@ KoCanvasController::KoCanvasController(QWidget *parent)
     setWidget(m_viewport);
     setWidgetResizable(true);
     setAutoFillBackground(false);
-
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetX()));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetY()));
 }
@@ -143,7 +142,7 @@ KoCanvasController::Viewport::Viewport()
 : QWidget()
 {
     setBackgroundRole(QPalette::Dark);
-    setAutoFillBackground(true);
+    setAutoFillBackground(false);
     m_layout = new QGridLayout(this);
     m_layout->setSpacing(0);
     m_layout->setMargin(0);
@@ -152,7 +151,7 @@ KoCanvasController::Viewport::Viewport()
 }
 
 void KoCanvasController::Viewport::setCanvas(QWidget *canvas) {
-    canvas->setAutoFillBackground(true);
+    canvas->setAutoFillBackground(false);
     m_layout->addWidget(canvas, 0, 1, Qt::AlignHCenter);
 }
 
@@ -202,8 +201,5 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
 
 #include "KoCanvasController.moc"
 
-// TODO add a paintEvent here and paint a nice shadow to the
-// bottom/right of the canvas. Also paint an optional gray border
-// around the image and make it possible to show the canvas widget
-// rotated.
-
+// TODO add a paintEvent here and optionally paint a nice shadow to the
+// bottom/right of the canvas.

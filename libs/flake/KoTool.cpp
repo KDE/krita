@@ -23,11 +23,11 @@
 #include "KoCanvasBase.h"
 #include "KoViewConverter.h"
 #include "KoPointerEvent.h"
-#include "KoTool.moc"
 
 KoTool::KoTool(KoCanvasBase *canvas )
-:m_canvas(canvas)
-, m_previousCursor(Qt::ArrowCursor)
+    : m_canvas(canvas)
+    , m_previousCursor(Qt::ArrowCursor)
+    , m_optionWidget( 0 )
 {
 }
 
@@ -60,3 +60,12 @@ void KoTool::useCursor(QCursor cursor, bool force) {
     m_previousCursor = cursor;
     emit sigCursorChanged(m_previousCursor);
 }
+
+QWidget * KoTool::optionWidget(QWidget * parent) {
+    if ( !m_optionWidget )
+        m_optionWidget = new QWidget( parent );
+
+    return m_optionWidget;
+}
+
+#include "KoTool.moc"

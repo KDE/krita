@@ -95,7 +95,7 @@ public:
     virtual KoTool* tool() = 0;
 
     /**
-     * Set the new ative tool.
+     * Set the new active tool.
      * @param tool the new tool to be used on the canvas.
      */
     virtual void setTool(KoTool *tool) = 0;

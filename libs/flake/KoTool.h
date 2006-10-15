@@ -53,7 +53,12 @@ public:
     virtual ~KoTool() {}
 
 public:
-    /// request a repaint of the decorations to be made.
+
+    /**
+     * request a repaint of the decorations to be made.
+     *
+     * XXX: What are decorations?
+     */
     virtual void repaintDecorations() {};
 
 public slots:
@@ -97,6 +102,15 @@ public:
      * @param converter to convert between internal and view coordinates.
      */
     virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0;
+
+    /**   
+     * Return the option widget for this tool. Create it if it   
+     * does not exist yet.   
+     *   
+     * Note: by default an empty widget is created.   
+     * @see m_optionWidget   
+     */   
+    virtual QWidget * optionWidget(QWidget * parent);
 
 public: // Events
 
@@ -177,6 +191,8 @@ signals:
      */
     void sigCursorChanged(QCursor cursor);
 
+
+
 protected:
     /**
      * Classes inheriting from this one can call this method to signify which cursor
@@ -194,6 +210,7 @@ private:
     KoTool(const KoTool&);
     KoTool& operator=(const KoTool&);
     QCursor m_previousCursor;
+    QWidget * m_optionWidget;
 };
 
 #endif /* KOTOOL_H */

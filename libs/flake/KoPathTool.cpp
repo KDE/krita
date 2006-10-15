@@ -113,11 +113,7 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
                     m_pointSelection.add( m_activeHandle.m_activePoint, true ); 
                 }
             }
-            // TODO remove this constrained
-            if ( m_pointSelection.objectCount() == 1 )
-            {
-                m_currentStrategy = new KoPathPointMoveStrategy( this, m_canvas, event->point );
-            }
+            m_currentStrategy = new KoPathPointMoveStrategy( this, m_canvas, event->point );
         }
         else if( event->button() & Qt::RightButton )
         {
@@ -162,6 +158,12 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     if( event->button() & Qt::RightButton )
         return;
 
+    m_pointSelection.repaint();
+    if ( m_activeHandle.isActive() )
+    {
+        repaint( m_activeHandle.m_activePoint->boundingRect() );
+    }
+    
     if ( m_currentStrategy )
     {
         m_lastPoint = event->point;
@@ -203,7 +205,6 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     useCursor(Qt::ArrowCursor);
     if ( m_activeHandle.isActive() )
     {
-        repaint( m_activeHandle.m_activePoint->parent()->shapeToDocument( m_activeHandle.m_activePoint->parent()->outline().controlPointRect() ) );
         m_activeHandle.deactivate();
     }
 }
@@ -436,7 +437,7 @@ void KoPathTool::ActiveHandle::paint( QPainter &painter, KoViewConverter &conver
 
 void KoPathTool::KoPathPointSelection::paint( QPainter &painter, KoViewConverter &converter )
 {
-    KoSelectedPointMap::iterator it( m_shapePointMap.begin() );
+    KoPathShapePointMap::iterator it( m_shapePointMap.begin() );
     for ( ; it != m_shapePointMap.end(); ++it )
     {
         painter.save();
@@ -481,7 +482,7 @@ void KoPathTool::KoPathPointSelection::add( KoPathPoint * point, bool clear )
     {
         m_selectedPoints.insert( point );
         KoPathShape * pathShape = point->parent();
-        KoSelectedPointMap::iterator it( m_shapePointMap.find( pathShape ) );
+        KoPathShapePointMap::iterator it( m_shapePointMap.find( pathShape ) );
         if ( it == m_shapePointMap.end() )
         {
             it = m_shapePointMap.insert( pathShape, QSet<KoPathPoint *>() );
@@ -507,10 +508,15 @@ void KoPathTool::KoPathPointSelection::remove( KoPathPoint * point )
 
 void KoPathTool::KoPathPointSelection::clear()
 {
+    repaint();
+    m_selectedPoints.clear();
+    m_shapePointMap.clear();
+}
+
+void KoPathTool::KoPathPointSelection::repaint()
+{
     foreach ( KoPathPoint *p, m_selectedPoints )
     {
         m_tool->repaint( p->boundingRect() );
     }
-    m_selectedPoints.clear();
-    m_shapePointMap.clear();
 }

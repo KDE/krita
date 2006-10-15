@@ -33,6 +33,9 @@
 
 class KoPathShape;
 class KoPointGroup;
+class KoPathPoint;
+
+typedef QMap<KoPathShape *, QSet<KoPathPoint *> > KoPathShapePointMap;
 
 /**
  * @brief A KoPathPoint represents a point in a path.

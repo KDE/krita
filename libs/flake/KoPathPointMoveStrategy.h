@@ -25,7 +25,6 @@
 #include <KoInteractionStrategy.h>
 
 
-class KoCommand;
 class KoPathTool;
 class KoCanvasBase;
 

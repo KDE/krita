@@ -24,7 +24,7 @@
 #include <QList>
 #include <QMap>
 #include <QPointF>
-#include <KoPathShape.h>
+#include "KoPathShape.h"
 
 /// the base command for commands altering a path shape
 class KoPathBaseCommand : public KCommand {
@@ -41,23 +41,16 @@ protected:
 };
 
 /// The undo / redo command for path point moving.
-class KoPointMoveCommand : public KoPathBaseCommand {
+class KoPointMoveCommand : public KCommand 
+{
 public:
     /**
-     * Command to move single path point.
-     * @param shape the path shape containing the point
-     * @param point the path point to move
-     * @param offset the offset by which the point is moved
-     * @param pointType the type of the point to move
+     * Command to move path point.
+     * @param pointMap map of the path point to move
+     * @param offset the offset by which the point is moved in document coordinates
      */
-    KoPointMoveCommand( KoPathShape *shape, KoPathPoint *point, const QPointF &offset, KoPathPoint::KoPointType pointType );
-    /**
-     * Command to move multiple points at once.
-     * @param shape the path shape containing the points
-     * @param points the path points to move
-     * @param offset the offset by which the points are moved
-     */
-    KoPointMoveCommand( KoPathShape *shape, const QList<KoPathPoint*> &points, const QPointF &offset );
+    KoPointMoveCommand( const KoPathShapePointMap &pointMap, const QPointF &offset );
+
     /// execute the command
     void execute();
     /// revert the actions done in execute
@@ -65,7 +58,30 @@ public:
     /// return the name of this command
     QString name() const;
 private:
-    QList<KoPathPoint*> m_points;
+    KoPathShapePointMap m_pointMap;
+    QPointF m_offset;
+};
+
+/// The undo / redo command for path point moving.
+class KoControlPointMoveCommand : public KCommand
+{
+public:
+    /**
+     * Command to move one control path point.
+     * @param point the path point to control point belongs to
+     * @param offset the offset by which the point is moved in document coordinates
+     * @param pointType the type of the point to move
+     */
+    KoControlPointMoveCommand( KoPathPoint *point, const QPointF &offset, KoPathPoint::KoPointType pointType );
+    /// execute the command
+    void execute();
+    /// revert the actions done in execute
+    void unexecute();
+    /// return the name of this command
+    QString name() const;
+private:
+    KoPathPoint * m_point;
+    // the offset in shape coordinates
     QPointF m_offset;
     KoPathPoint::KoPointType m_pointType;
 };
@@ -308,4 +324,5 @@ private:
     QList<KoPathShape*> m_separatedPaths;
     bool m_isSeparated;
 };
+
 #endif

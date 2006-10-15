@@ -225,7 +225,7 @@ void KoShape::repaint() const {
     {
         foreach( KoShapeManager * manager, m_shapeManagers )
         {
-            QRectF rect(QPointF(0, 0), m_size);
+            QRectF rect(QPointF(0, 0), size() );
             if(m_border) {
                 KoInsets insets(0, 0, 0, 0);
                 m_border->borderInsets(this, insets);

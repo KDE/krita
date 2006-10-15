@@ -92,7 +92,6 @@ private:
     class KoPathPointSelection
     {
     public:    
-        typedef QMap<KoPathShape *, QSet<KoPathPoint *> > KoSelectedPointMap;
         KoPathPointSelection( KoPathTool * tool )
         : m_tool( tool )
         {}
@@ -155,11 +154,16 @@ private:
          * @return KoSelectedPointMap containing all objects and selected points 
          * typedef QMap<KoPathShape *, QSet<KoPathPoint *> > KoSelectedPointMap;
          */
-        const KoSelectedPointMap & selectedPointMap() const { return m_shapePointMap; }
+        const KoPathShapePointMap & selectedPointMap() const { return m_shapePointMap; }
+
+        /**
+         * @brief trigger a repaint
+         */
+        void repaint();
 
     private:
         QSet<KoPathPoint *> m_selectedPoints;
-        KoSelectedPointMap m_shapePointMap;
+        KoPathShapePointMap m_shapePointMap;
         KoPathTool * m_tool;
     };
 

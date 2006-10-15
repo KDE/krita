@@ -41,12 +41,12 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
         KoStoreDevice io ( m_oasisStore->store() );
         if ( !io.open( QIODevice::WriteOnly ) )
         {
-            kDebug() << "Couldn't open for writing: " << filename << endl;
+            kDebug(41008) << "Couldn't open for writing: " << filename << endl;
             return false;
         }
         if ( ! img.save( &io, "PNG", 0 ) )
         {
-            kDebug() << "Saving PNG failed: " << filename << endl;
+            kDebug(41008) << "Saving PNG failed: " << filename << endl;
             return false;
         }
         io.close();
@@ -54,14 +54,14 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
         {
             m_manifestWriter->addManifestEntry( filename, "" );
         } else {
-            kDebug() << "Closing of data file failed: " << filename << endl;
+            kDebug(41008) << "Closing of data file failed: " << filename << endl;
             return false;
         }
     } else {
-        kDebug() << "Opening of data file failed :" << filename << endl;
+        kDebug(41008) << "Opening of data file failed :" << filename << endl;
         return false;
     }
-    kDebug() << "Successfull saving of layer: " << layer->name() << endl;
+    kDebug(41008) << "Successfull saving of layer: " << layer->name() << endl;
     return true;
 }
 
@@ -78,7 +78,7 @@ bool KisOasisSaveDataVisitor::visit(KisGroupLayer *layer)
 bool KisOasisSaveDataVisitor::visit(KisPartLayer *layer)
 {
     Q_UNUSED(layer);
-    kDebug() << "not supported by OpenRaster" << endl;
+    kDebug(41008) << "not supported by OpenRaster" << endl;
     return false;
 }
 bool KisOasisSaveDataVisitor::visit(KisAdjustmentLayer *layer)

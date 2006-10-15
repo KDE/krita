@@ -33,13 +33,16 @@ public:
     virtual ~KisOasisLoadVisitor() {};
 
 public:
-    KisImageSP loadImage(const QDomElement& elem);
+    void loadImage(const QDomElement& elem);
     void loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL);
     void loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL);
+    inline KisImageSP image() { return m_image; }
+    QMap<KisLayer *, QString>& layerFilenames() { return m_layerFilenames; }
 private:
     void loadLayerInfo(const QDomElement& elem, KisLayer* layer);
     KisImageSP m_image;
     KisDoc* m_doc;
+    QMap<KisLayer *, QString> m_layerFilenames;
 };
 
 

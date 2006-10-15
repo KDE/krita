@@ -31,18 +31,18 @@
 
 #include "kis_doc.h"
 
-KisImageSP KisOasisLoadVisitor::loadImage(const QDomElement& elem)
+void KisOasisLoadVisitor::loadImage(const QDomElement& elem)
 {
-    m_image = new KisImage(m_doc->undoAdapter(), 1, 1, KisMetaRegistry::instance()->csRegistry()->colorSpace("RGBA",""), "OpenRaster Image (name)"); // TODO: take into account width and height parameters, and metadata
+    m_image = new KisImage(m_doc->undoAdapter(), 100, 100, KisMetaRegistry::instance()->csRegistry()->colorSpace("RGBA",""), "OpenRaster Image (name)"); // TODO: take into account width and height parameters, and metadata, when width = height = 0 use the new function from boud to get the size of the image after the layers have been loaded
     for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "image:layer") { // it's the root layer !
             QDomElement subelem = node.toElement();
             loadGroupLayer(subelem, m_image->rootLayer());
-            return m_image;
+            return;
         }
     }
 
-    return KisImageSP(0);
+    m_image = KisImageSP(0);
 }
 
 void KisOasisLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayer* layer)
@@ -80,6 +80,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerS
                     loadGroupLayer(subelem, layer);
                 } else { // paint layer
                     KisPaintLayerSP layer = new KisPaintLayer( m_image.data(), "", opacity); // TODO: support of colorspacess
+                    m_layerFilenames[layer.data()] = srcAttr;
                     gL->addLayer(layer, gL->childCount() );
                     loadPaintLayer(subelem, layer);
                 }

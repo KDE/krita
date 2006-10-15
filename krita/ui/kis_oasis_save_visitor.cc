@@ -69,7 +69,7 @@ bool KisOasisSaveVisitor::visit(KisGroupLayer *layer)
 bool KisOasisSaveVisitor::visit(KisPartLayer *layer)
 {
     Q_UNUSED(layer);
-    kDebug() << "not supported by OpenRaster" << endl;
+    kDebug(41008) << "not supported by OpenRaster" << endl;
     return false;
 }
 bool KisOasisSaveVisitor::visit(KisAdjustmentLayer *layer)

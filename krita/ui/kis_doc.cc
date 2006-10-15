@@ -70,6 +70,7 @@
 #include "kis_load_visitor.h"
 #include "kis_meta_registry.h"
 #include "kis_nameserver.h"
+#include "kis_oasis_load_data_visitor.h"
 #include "kis_oasis_load_visitor.h"
 #include "kis_oasis_save_data_visitor.h"
 #include "kis_oasis_save_visitor.h"
@@ -238,15 +239,18 @@ QDomDocument KisDoc::saveXML()
 bool KisDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocument&, KoStore* store )
 {
     //XXX: todo (and that includes defining an OASIS format for layered 2D raster data!)
-    kDebug() << "loading with OpenRaster" << endl;
+    kDebug(41008) << "loading with OpenRaster" << endl;
     KoOasisStore* oasisStore =  new KoOasisStore( store );
     QDomNode root = doc.documentElement();
     for (QDomNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "office:body") {
             QDomElement elem = node.toElement();
             KisOasisLoadVisitor olv(this);
-            if (!(m_currentImage = olv.loadImage(elem)))
+            olv.loadImage(elem);
+            if (!(m_currentImage = olv.image() ))
                 return false;
+            KisOasisLoadDataVisitor oldv(oasisStore, olv.layerFilenames());
+            m_currentImage->rootLayer()->accept(oldv);
             return true;
         }
     }
@@ -257,7 +261,7 @@ bool KisDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocum
 bool KisDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
 {
     //XXX: todo (and that includes defining an OASIS format for layered 2D raster data!)
-    kDebug() << "saving with OpenRaster" << endl;
+    kDebug(41008) << "saving with OpenRaster" << endl;
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
     KoOasisStore* oasisStore =  new KoOasisStore( store );
     KoXmlWriter* contentWriter = oasisStore->contentWriter();

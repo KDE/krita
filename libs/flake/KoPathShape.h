@@ -222,7 +222,7 @@ public:
     /**
      * @brief Get the bounding rect of the point.
      * 
-     * This takes into acount if there are controlpoints 
+     * This takes into account if there are controlpoints 
      *
      * @return bounding rect in document coordinates
      */

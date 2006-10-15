@@ -65,7 +65,7 @@ public:
     virtual bool load();
     /**
      * Override this function to save the profile.
-     * @return allways return false
+     * @return always return false
      */
     virtual bool save();
 

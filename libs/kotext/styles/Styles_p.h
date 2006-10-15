@@ -16,6 +16,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef KOTEXT_STYLES_PRIVATE_H
+#define KOTEXT_STYLES_PRIVATE_H
+
 #include <QVariant>
 #include <QVector>
 
@@ -52,4 +55,4 @@ public:
 private:
     QVector<Property> m_properties;
 };
-
+#endif

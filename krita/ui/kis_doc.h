@@ -183,16 +183,16 @@ private:
     void loadLayers(const QDomElement& element, KisImageSP img, KisGroupLayerSP parent);
     KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
     KisLayerSP loadPaintLayer(const QDomElement& elem, KisImageSP img,
-                QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
+                const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                 const QString & compositeOp);
     KisGroupLayerSP loadGroupLayer(const QDomElement& elem, KisImageSP img,
-                QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
+                const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                 const QString &compositeOp);
     KisAdjustmentLayerSP loadAdjustmentLayer(const QDomElement& elem, KisImageSP img,
-                                             QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
+                                             const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                                              const QString & compositeOp);
     KisPartLayerSP loadPartLayer(const QDomElement& elem, KisImageSP img,
-                                  QString name, qint32 x, qint32 y, qint32 opacity,
+                                  const QString & name, qint32 x, qint32 y, qint32 opacity,
                                   bool visible, bool locked, const QString &compositeOp);
     bool init();
 

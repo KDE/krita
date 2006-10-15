@@ -42,7 +42,7 @@ namespace Kross {
 
 }
 
-RubyModule::RubyModule(QObject* object, QString modname)
+RubyModule::RubyModule(QObject* object, const QString & modname)
     : d(new RubyModulePrivate())
 {
     Q_ASSERT(object);

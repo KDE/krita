@@ -38,7 +38,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 defWidth, qint32 defHeight, double resolution, QString defColorSpaceName, QString imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorSpaceName, const QString & imageName)
     : WdgNewImage(parent) {
     m_doc = doc;
 

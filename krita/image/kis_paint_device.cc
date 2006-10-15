@@ -199,7 +199,7 @@ namespace {
 
 }
 
-KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, QString name) :
+KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name) :
         QObject(0), KShared(), m_exifInfo(0)
 {
     setObjectName(name);
@@ -234,7 +234,7 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, QString name) :
 
 }
 
-KisPaintDevice::KisPaintDevice(KisLayer *parent, KoColorSpace * colorSpace, QString name) :
+KisPaintDevice::KisPaintDevice(KisLayer *parent, KoColorSpace * colorSpace, const QString& name) :
         QObject(0), KShared(), m_exifInfo(0)
 {
     setObjectName(name);

@@ -71,7 +71,7 @@ Compatibility::Compatibility()
 }
 
 
-QDomDocument Compatibility::buildDOM(QString text)
+QDomDocument Compatibility::buildDOM(const QString & text)
 {
     QDomDocument doc("KFORMULA");
     pos = 0;

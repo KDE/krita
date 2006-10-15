@@ -48,7 +48,7 @@ namespace Kross {
             *        wraps.
             * @param modname The name the module will be published as.
             */
-            RubyModule(QObject* object, QString modname);
+            RubyModule(QObject* object, const QString & modname);
 
             /**
             * Destructor.

@@ -278,7 +278,7 @@ void KoHelpView::paintEvent( QPaintEvent* )
 	currentText->draw( &p, 0, 0, QRect(), palette() );
 } // KoHelpView::paintEvent
 
-KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
+KoHelpWidget::KoHelpWidget( const QString & help, QWidget* parent )
 		: QWidget( parent )
 {
 	QGridLayout* layout = new QGridLayout( this );
@@ -308,7 +308,7 @@ void KoHelpWidget::updateButtons()
 	m_downButton->setEnabled( m_helpViewport->height() - m_ypos < m_helpView->height() );
 } // KoHelpWidget::updateButtons
 
-void KoHelpWidget::setText( QString text )
+void KoHelpWidget::setText( const QString & text )
 {
 	m_helpView->setText( text );
 	m_helpView->move( 0, 0 );

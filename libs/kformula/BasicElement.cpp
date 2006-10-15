@@ -333,7 +333,7 @@ bool BasicElement::readContentFromDom(QDomNode&)
  * Returns a SequenceElement constructed from the nodes first child
  * if the nodes name matches the given name.
  */
-bool BasicElement::buildChild( SequenceElement* child, QDomNode node, QString name )
+bool BasicElement::buildChild( SequenceElement* child, QDomNode node, const QString & name )
 {
     if (node.isElement()) {
         QDomElement e = node.toElement();

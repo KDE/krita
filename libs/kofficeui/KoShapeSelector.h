@@ -39,7 +39,7 @@ class QPainter;
 class KOFFICEUI_EXPORT KoShapeSelector : public QWidget {
     Q_OBJECT
 public:
-    KoShapeSelector(QWidget *parent, KoCanvasController *cc, QString regExp);
+    KoShapeSelector(QWidget *parent, KoCanvasController *cc, const QString & regExp);
     ~KoShapeSelector();
 
 protected: // event handlers

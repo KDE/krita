@@ -205,7 +205,7 @@ QByteArray PaintLayer::bytes()
     return bytearray;
 }
 
-bool PaintLayer::setBytes(QByteArray bytearray)
+bool PaintLayer::setBytes(const QByteArray& bytearray)
 {
     qint32 pixelsize = paintLayer()->paintDevice()->colorSpace()->pixelSize();
     const int w = width();

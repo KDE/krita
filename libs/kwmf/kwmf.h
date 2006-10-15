@@ -155,7 +155,7 @@ private:
     QSize normaliseSize(
         QDataStream &operands);
     void genericArc(
-        QString type,
+        const QString &type,
         QDataStream &operands);
 
     // Opcode handling and painter methods.

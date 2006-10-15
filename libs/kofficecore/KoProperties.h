@@ -98,20 +98,20 @@ public:
      *  @endcode
      * @return an integer property by name
      * @param name the name (or key) with which the variant was registered.
-     * @param def the default value, should there not be no propery by the name this will be returned.
+     * @param def the default value, should there not be any property by the name this will be returned.
      * @see getProperty() getString()
      */
     int getInt(const QString & name, int def = 0) const;
     /**
      * Return a double property by name.
      * @param name the name (or key) with which the variant was registered.
-     * @param def the default value, should there not be no propery by the name this will be returned.
+     * @param def the default value, should there not be any property by the name this will be returned.
      */
     double getDouble(const QString & name, double def = 0.0) const;
     /**
      * Return a boolean property by name.
      * @param name the name (or key) with which the variant was registered.
-     * @param def the default value, should there not be no propery by the name this will be returned.
+     * @param def the default value, should there not be any property by the name this will be returned.
      */
     bool getBool(const QString & name, bool def = false) const;
     /**
@@ -125,9 +125,9 @@ public:
      * @return an QString property by name
      * @param name the name (or key) with which the variant was registered.
      * @see getProperty() getInt()
-     * @param def the default value, should there not be no propery by the name this will be returned.
+     * @param def the default value, should there not be any property by the name this will be returned.
      */
-    QString getString(const QString & name, QString def = QString::null) const;
+    QString getString(const QString & name, const QString & def = QString::null) const;
 
 private:
     void dump();

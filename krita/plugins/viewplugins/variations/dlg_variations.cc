@@ -46,7 +46,7 @@ DlgVariations::~DlgVariations()
     delete m_page;
 }
 
-void DlgVariations::setPixmap(QPixmap pix) 
+void DlgVariations::setPixmap(const QPixmap& pix) 
 {
     m_previewPix = pix;
     m_previewPix.detach();

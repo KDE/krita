@@ -348,7 +348,7 @@ public:
     /**
      * Insert data from the document.
      */
-    void paste( const QDomDocument& document, QString desc );
+    void paste( const QDomDocument& document, const QString& desc );
 
     /**
      * Copy the current selection to the clipboard.

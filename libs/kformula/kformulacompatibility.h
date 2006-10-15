@@ -36,7 +36,7 @@ public:
     /**
      * Builds a kformula DOM from a old formula string.
      */
-    QDomDocument buildDOM(QString text);
+    QDomDocument buildDOM(const QString& text);
 
 private:
 

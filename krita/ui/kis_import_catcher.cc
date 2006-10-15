@@ -26,7 +26,7 @@
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 
-KisImportCatcher::KisImportCatcher(KUrl url, KisImageSP image)
+KisImportCatcher::KisImportCatcher(const KUrl & url, KisImageSP image)
     : m_doc( new KisDoc() )
     , m_image( image )
     , m_url( url )

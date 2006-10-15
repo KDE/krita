@@ -127,7 +127,7 @@ bool KoProperties::getBool(const QString & name, bool def) const
         return def;
 }
 
-QString KoProperties::getString(const QString & name, QString def) const
+QString KoProperties::getString(const QString & name, const QString & def) const
 {
     const QVariant v = getProperty(name);
     if (v.isValid())

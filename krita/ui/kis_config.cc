@@ -143,7 +143,7 @@ QString KisConfig::monitorProfile() const
     return m_cfg->readEntry("monitorProfile", "");
 }
 
-void KisConfig::setMonitorProfile(QString monitorProfile)
+void KisConfig::setMonitorProfile(const QString & monitorProfile)
 {
     m_cfg->writeEntry("monitorProfile", monitorProfile);
 }
@@ -154,7 +154,7 @@ QString KisConfig::workingColorSpace() const
     return m_cfg->readEntry("workingColorSpace", "RGBA");
 }
 
-void KisConfig::setWorkingColorSpace(QString workingColorSpace)
+void KisConfig::setWorkingColorSpace(const QString & workingColorSpace)
 {
     m_cfg->writeEntry(workingColorSpace, workingColorSpace);
 }
@@ -165,7 +165,7 @@ QString KisConfig::printerColorSpace() const
     return m_cfg->readEntry("printerColorSpace", "CMYK");
 }
 
-void KisConfig::setPrinterColorSpace(QString printerColorSpace)
+void KisConfig::setPrinterColorSpace(const QString & printerColorSpace)
 {
     m_cfg->writeEntry("printerColorSpace", printerColorSpace);
 }
@@ -176,7 +176,7 @@ QString KisConfig::printerProfile() const
     return m_cfg->readEntry("printerProfile", "");
 }
 
-void KisConfig::setPrinterProfile(QString printerProfile)
+void KisConfig::setPrinterProfile(const QString & printerProfile)
 {
     m_cfg->writeEntry("printerProfile", printerProfile);
 }

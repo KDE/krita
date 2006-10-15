@@ -47,7 +47,7 @@
 #include "kis_boundary_painter.h"
 #include "kis_brush.h"
 
-KisToolFreehand::KisToolFreehand(QString transactionText)
+KisToolFreehand::KisToolFreehand(const QString & transactionText)
         : super(transactionText),
         m_dragDist ( 0 ),
         m_transactionText(transactionText),

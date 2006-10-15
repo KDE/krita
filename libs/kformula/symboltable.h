@@ -107,13 +107,13 @@ class KOFORMULA_EXPORT SymbolTable
      */
     void init( ContextStyle* context );
 
-    bool contains( QString name ) const;
+    bool contains( const QString & name ) const;
 
     /**
      * @returns the char in the symbol font that belongs to
      * the given name.
      */
-    QChar unicode( QString name ) const;
+    QChar unicode( const QString & name ) const;
     QString name( QChar symbol ) const;
 
     const CharTableEntry& entry( QChar symbol, CharStyle style=normalChar ) const;

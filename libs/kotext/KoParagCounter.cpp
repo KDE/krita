@@ -530,7 +530,7 @@ void KoParagCounter::save( QDomElement & element )
     element.setAttribute( "align", m_align );
 }
 
-void KoParagCounter::setCustom( QString c )
+void KoParagCounter::setCustom( const QString & c )
 {
     m_custom = c;
     invalidate();
@@ -542,7 +542,7 @@ void KoParagCounter::setCustomBulletCharacter( QChar c )
     invalidate();
 }
 
-void KoParagCounter::setCustomBulletFont( QString f )
+void KoParagCounter::setCustomBulletFont( const QString & f )
 {
     m_customBulletFont = f;
     invalidate();
@@ -560,7 +560,7 @@ void KoParagCounter::setNumbering( Numbering n )
     invalidate();
 }
 
-void KoParagCounter::setPrefix( QString p )
+void KoParagCounter::setPrefix( const QString & p )
 {
     m_prefix = p;
     invalidate();
@@ -589,7 +589,7 @@ void KoParagCounter::setStyle( Style s )
     invalidate();
 }
 
-void KoParagCounter::setSuffix( QString s )
+void KoParagCounter::setSuffix( const QString & s )
 {
     m_suffix = s;
     invalidate();

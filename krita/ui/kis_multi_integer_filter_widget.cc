@@ -26,7 +26,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 
-KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, QString name)
+KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, const QString & name)
         : KIntNumInput(parent)
 {
     setObjectName(name);
@@ -52,7 +52,7 @@ void KisDelayedActionIntegerInput::cancelDelayedSignal()
     m_timer->stop();
 }
 
-KisIntegerWidgetParam::KisIntegerWidgetParam(  qint32 nmin, qint32 nmax, qint32 ninitvalue, QString label, QString nname) :
+KisIntegerWidgetParam::KisIntegerWidgetParam(  qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString & label, const QString & nname) :
     min(nmin),
     max(nmax),
     initvalue(ninitvalue),
@@ -63,7 +63,7 @@ KisIntegerWidgetParam::KisIntegerWidgetParam(  qint32 nmin, qint32 nmax, qint32 
 
 KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent,
                                                          const char * name,
-                                                         QString caption,
+                                                         const QString & caption,
                                                          vKisIntegerWidgetParam iwparam)
     : KisFilterConfigWidget( parent, name )
 {

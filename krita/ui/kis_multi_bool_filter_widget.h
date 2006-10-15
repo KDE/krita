@@ -29,7 +29,7 @@
 class KIntNumInput;
 
 struct KisBoolWidgetParam {
-    KRITAUI_EXPORT KisBoolWidgetParam(  bool ninitvalue, QString label, QString name);
+    KRITAUI_EXPORT KisBoolWidgetParam(  bool ninitvalue, const QString & label, const QString & name);
     bool initvalue;
     QString label;
     QString name;
@@ -42,7 +42,7 @@ class KRITAUI_EXPORT KisMultiBoolFilterWidget : public KisFilterConfigWidget
 {
     Q_OBJECT
 public:
-    KisMultiBoolFilterWidget(QWidget * parent,  const char * name, QString caption, vKisBoolWidgetParam iwparam);
+    KisMultiBoolFilterWidget(QWidget * parent,  const char * name, const QString & caption, vKisBoolWidgetParam iwparam);
     virtual void setConfiguration(KisFilterConfiguration * cfg);
 public:
     inline qint32 nbValues() { return m_nbboolWidgets; };

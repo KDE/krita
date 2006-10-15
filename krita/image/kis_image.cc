@@ -1602,7 +1602,7 @@ void KisImage::addAnnotation(KisAnnotationSP annotation)
     m_annotations.push_back(annotation);
 }
 
-KisAnnotationSP KisImage::annotation(QString type)
+KisAnnotationSP KisImage::annotation(const QString& type)
 {
     vKisAnnotationSP_it it = m_annotations.begin();
     while (it != m_annotations.end()) {
@@ -1614,7 +1614,7 @@ KisAnnotationSP KisImage::annotation(QString type)
     return KisAnnotationSP(0);
 }
 
-void KisImage::removeAnnotation(QString type)
+void KisImage::removeAnnotation(const QString& type)
 {
     vKisAnnotationSP_it it = m_annotations.begin();
     while (it != m_annotations.end()) {

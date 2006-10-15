@@ -339,7 +339,7 @@ void Container::paste()
     }*/
 }
 
-void Container::paste( const QDomDocument& document, QString desc )
+void Container::paste( const QDomDocument& document, const QString& desc )
 {
 /*    FormulaCursor* cursor = activeCursor();
     QList<BasicElement*> list;

@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint {
     typedef KisToolPaint super;
 
 public:
-    KisToolFreehand(const QString transactionText);
+    KisToolFreehand(const QString & transactionText);
     virtual ~KisToolFreehand();
 
     virtual void update(KisCanvasSubject *subject);

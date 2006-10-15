@@ -49,19 +49,19 @@ public:
     void setCursorStyle(enumCursorStyle style);
 
     QString monitorProfile() const;
-    void setMonitorProfile(QString monitorProfile);
+    void setMonitorProfile(const QString & monitorProfile);
 
     QString workingColorSpace() const;
-    void setWorkingColorSpace(QString workingColorSpace);
+    void setWorkingColorSpace(const QString & workingColorSpace);
 
     QString importProfile() const;
-    void setImportProfile(QString importProfile);
+    void setImportProfile(const QString & importProfile);
 
     QString printerColorSpace() const;
-    void setPrinterColorSpace(QString printerColorSpace);
+    void setPrinterColorSpace(const QString & printerColorSpace);
 
     QString printerProfile() const;
-    void setPrinterProfile(QString printerProfile);
+    void setPrinterProfile(const QString & printerProfile);
 
     bool useBlackPointCompensation() const;
     void setUseBlackPointCompensation(bool useBlackPointCompensation);

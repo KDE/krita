@@ -64,7 +64,7 @@ k_dcop:
      * Warning: this is asynchronous. The document might not be loaded yet when
      * this call returns. See isLoading.
      */
-    void openURL( QString url );
+    void openURL( const QString & url );
 
     /**
      * @return TRUE is the document is still loading

@@ -156,7 +156,7 @@ public:
     /**
      * Updates the window caption based on the document info and path.
      */
-    virtual void updateCaption( const QString caption, bool mod );
+    virtual void updateCaption( const QString & caption, bool mod );
     void updateReloadFileAction(KoDocument *doc);
     void updateVersionsFileAction(KoDocument *doc);
 

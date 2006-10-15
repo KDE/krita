@@ -196,7 +196,7 @@ class PaintLayer : public QObject
          * @endcode
          */
         QByteArray bytes();
-        bool setBytes(QByteArray bytearray);
+        bool setBytes(const QByteArray& bytearray);
 #endif
 
     public:

@@ -156,21 +156,21 @@ public:
     /** Prefix and suffix strings.
      */
     QString prefix() const;
-    void setPrefix( QString p );
+    void setPrefix( const QString & p );
     QString suffix() const;
-    void setSuffix( QString s );
+    void setSuffix( const QString & s );
 
     /** The character and font for STYLE_CUSTOMBULLET.
      */
     QChar customBulletCharacter() const;
     void setCustomBulletCharacter( QChar c );
     QString customBulletFont() const;
-    void setCustomBulletFont( QString f );
+    void setCustomBulletFont( const QString & f );
 
     /** The string STYLE_CUSTOM.
      */
     QString custom() const;
-    void setCustom( QString c );
+    void setCustom( const QString & c );
 
     /** Counter alignment
      */

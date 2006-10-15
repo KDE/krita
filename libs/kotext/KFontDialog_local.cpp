@@ -739,7 +739,7 @@ void KFontChooser_local::fillFamilyListBox(bool onlyFixedFonts)
   familyListBox->insertStringList(fontList);
 }
 
-void KFontChooser_local::setFamilyList( QStringList list )
+void KFontChooser_local::setFamilyList( const QStringList & list )
 {
   familyListBox->blockSignals( true );
   familyListBox->clear();

@@ -42,7 +42,7 @@
 #include "kis_palette.h"
 #include <kogradientmanager.h>
 
-KisResourceServerBase::KisResourceServerBase(QString type)
+KisResourceServerBase::KisResourceServerBase(const QString & type)
     : m_type(type), m_loaded(false)
 {
 }
@@ -108,7 +108,7 @@ class ResourceLoaderThread : public QThread {
 
 public:
 
-    ResourceLoaderThread(KisResourceServerBase * server, QStringList files)
+    ResourceLoaderThread(KisResourceServerBase * server, const QStringList & files)
         : QThread()
         , m_server(server)
         , m_fileNames( files )
@@ -128,7 +128,7 @@ private:
 
 };
 
-QStringList getFileNames( QString extensions, QString type )
+QStringList getFileNames( const QString & extensions, const QString & type )
 {
     QStringList extensionList = extensions.split(":");
     QStringList fileNames;

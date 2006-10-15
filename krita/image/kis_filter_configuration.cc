@@ -167,7 +167,7 @@ bool KisFilterConfiguration::getBool(const QString & name, bool def)
         return def;
 }
 
-QString KisFilterConfiguration::getString(const QString & name, QString def)
+QString KisFilterConfiguration::getString(const QString & name, const QString & def)
 {
     QVariant v = getProperty(name);
     if (v.isValid())

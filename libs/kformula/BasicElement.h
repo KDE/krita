@@ -391,7 +391,7 @@ protected:
      *
      * This is a service for all subclasses that contain children.
      */
-    bool buildChild( SequenceElement* child, QDomNode node, QString name );
+    bool buildChild( SequenceElement* child, QDomNode node, const QString & name );
 
 private:
     /// The element's parent element - might not be null except of FormulaElement

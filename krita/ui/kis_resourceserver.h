@@ -34,7 +34,7 @@ class KisResource;
 class KRITAUI_EXPORT KisResourceServerBase : public QObject {
     Q_OBJECT
 public:
-    KisResourceServerBase(QString type);
+    KisResourceServerBase(const QString & type);
     virtual ~KisResourceServerBase();
 
     void loadResources(QStringList filenames);
@@ -47,7 +47,7 @@ signals:
     void resourceAdded(KisResource*);
 
 protected:
-    virtual KisResource* createResource( QString filename ) = 0;
+    virtual KisResource* createResource( const QString & filename ) = 0;
 
 private:
     QList<KisResource*> m_resources;
@@ -61,11 +61,11 @@ template <class T> class KisResourceServer : public KisResourceServerBase {
     typedef KisResourceServerBase super;
 
 public:
-    KisResourceServer(QString type) :super(type) {}
+    KisResourceServer(const QString & type) :super(type) {}
     virtual ~KisResourceServer() {}
 
 private:
-    KisResource* createResource(QString filename) { return new T(filename); }
+    KisResource* createResource(const QString & filename) { return new T(filename); }
 };
 
 class KRITAUI_EXPORT KisResourceServerRegistry : public KoGenericRegistry<KisResourceServerBase*>

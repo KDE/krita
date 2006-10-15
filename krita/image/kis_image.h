@@ -332,10 +332,10 @@ public:
     void addAnnotation(KisAnnotationSP annotation);
 
     /** get the annotation with the given type, can return 0 */
-    KisAnnotationSP annotation(QString type);
+    KisAnnotationSP annotation(const QString& type);
 
     /** delete the annotation, if the image contains it */
-    void removeAnnotation(QString type);
+    void removeAnnotation(const QString& type);
 
     /**
      * Start of an iteration over the annotations of this image (including the ICC Profile)

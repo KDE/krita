@@ -80,7 +80,7 @@ void OldToolBox::registerTool( KAction *tool, int toolType, quint32 priority )
     (*tl)[prio] = tool;
 }
 
-QToolButton *OldToolBox::createButton(QWidget * parent, const QIcon& icon, QString tooltip)
+QToolButton *OldToolBox::createButton(QWidget * parent, const QIcon& icon, const QString& tooltip)
 {
     QToolButton *button = new QToolButton(parent);
 

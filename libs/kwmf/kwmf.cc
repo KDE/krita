@@ -71,7 +71,7 @@ unsigned KWmf::getColor(
 }
 
 void KWmf::genericArc(
-    QString type,
+    const QString & type,
     QDataStream &operands)
 {
     QPoint topLeft;

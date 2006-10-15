@@ -29,7 +29,7 @@ class KisDelayedActionDoubleInput : public KDoubleNumInput
     Q_OBJECT
 
 public:
-    KisDelayedActionDoubleInput(QWidget * parent, QString name);
+    KisDelayedActionDoubleInput(QWidget * parent, const QString & name);
 
     void cancelDelayedSignal();
 
@@ -47,7 +47,7 @@ private:
 
 
 struct KRITAUI_EXPORT KisDoubleWidgetParam {
-    KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, QString label, QString nname);
+    KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, const QString & label, const QString & nname);
     double min;
     double max;
     double initvalue;
@@ -61,7 +61,7 @@ class KRITAUI_EXPORT KisMultiDoubleFilterWidget : public KisFilterConfigWidget
 {
     Q_OBJECT
 public:
-    KisMultiDoubleFilterWidget(QWidget * parent, const char * name, QString caption, vKisDoubleWidgetParam dwparam);
+    KisMultiDoubleFilterWidget(QWidget * parent, const char * name, const QString & caption, vKisDoubleWidgetParam dwparam);
     virtual void setConfiguration(KisFilterConfiguration * cfg);
 public:
     inline qint32 nbValues() { return m_nbdoubleWidgets; };

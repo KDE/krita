@@ -90,12 +90,12 @@ void SymbolTable::initFont( const InternFontTable* table,
 }
 
 
-bool SymbolTable::contains(QString name) const
+bool SymbolTable::contains(const QString & name) const
 {
     return entries.find( name ) != entries.end();
 }
 
-QChar SymbolTable::unicode(QString name) const
+QChar SymbolTable::unicode(const QString & name) const
 {
     return entries[ name ];
 }

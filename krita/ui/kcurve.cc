@@ -85,7 +85,7 @@ void KCurve::setCurveGuide(QColor color)
     repaint();
 }
 
-void KCurve::setPixmap(QPixmap pix)
+void KCurve::setPixmap(const QPixmap & pix)
 {
     m_pix = pix;
     repaint();

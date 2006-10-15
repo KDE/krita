@@ -27,7 +27,7 @@
 #include <kis_filter_config_widget.h>
 #include <klocale.h>
 
-KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, QString name)
+KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const QString & name)
     : KDoubleNumInput(parent)
 {
     setObjectName(name);
@@ -53,7 +53,7 @@ void KisDelayedActionDoubleInput::cancelDelayedSignal()
     m_timer->stop();
 }
 
-KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, QString nlabel, QString nname) :
+KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, const QString & nlabel, const QString & nname) :
     min(nmin),
     max(nmax),
     initvalue(ninitvalue),
@@ -63,7 +63,7 @@ KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double nini
 
 }
 
-KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const char * name, QString caption, vKisDoubleWidgetParam dwparam)
+KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const char * name, const QString & caption, vKisDoubleWidgetParam dwparam)
     : KisFilterConfigWidget( parent, name )
 {
     qint32 m_nbdoubleWidgets = dwparam.size();

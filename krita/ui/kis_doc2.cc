@@ -515,7 +515,7 @@ KisLayerSP KisDoc2::loadLayer(const QDomElement& element, KisImageSP img)
 
 
 KisLayerSP KisDoc2::loadPaintLayer(const QDomElement& element, KisImageSP img,
-                                  QString name, qint32 x, qint32 y,
+                                  const QString & name, qint32 x, qint32 y,
                                   qint32 opacity, bool visible, bool locked, const QString & compositeOp)
 {
     QString attr;
@@ -560,7 +560,7 @@ KisLayerSP KisDoc2::loadPaintLayer(const QDomElement& element, KisImageSP img,
 }
 
 KisGroupLayerSP KisDoc2::loadGroupLayer(const QDomElement& element, KisImageSP img,
-                                       QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
+                                       const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                                        const QString & compositeOp)
 {
     QString attr;
@@ -581,7 +581,7 @@ KisGroupLayerSP KisDoc2::loadGroupLayer(const QDomElement& element, KisImageSP i
 }
 
 KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const QDomElement& element, KisImageSP img,
-                                             QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
+                                             const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                                              const QString & compositeOp)
 {
     QString attr;
@@ -623,7 +623,7 @@ KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const QDomElement& element, Ki
 }
 
 KisPartLayerSP KisDoc2::loadPartLayer(const QDomElement& element, KisImageSP img,
-                                     QString name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
+                                     const QString & name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
                                       bool visible, bool locked,
                                       const QString & compositeOp) {
 #if 0

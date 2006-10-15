@@ -52,7 +52,7 @@ KoDocumentIface::~KoDocumentIface()
     delete m_actionProxy;
 }
 
-void KoDocumentIface::openURL( QString url )
+void KoDocumentIface::openURL( const QString & url )
 {
   m_pDoc->openURL( KUrl( url ) );
 }

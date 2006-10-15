@@ -142,9 +142,9 @@ class KoHelpWidget : public QWidget
 	Q_OBJECT
 
 	public:
-		KoHelpWidget( QString help, QWidget* parent );
+		KoHelpWidget( const QString& help, QWidget* parent );
 
-		void setText( QString text );
+		void setText( const QString& text );
 		void timerEvent( QTimerEvent* );
 		void updateButtons();
 

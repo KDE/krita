@@ -259,7 +259,7 @@ public:
    *
    * @param list The font list.
    */
-  void setFamilyList( QStringList list );
+  void setFamilyList( const QStringList & list );
 
   /**
    * Reimplemented for internal reasons.

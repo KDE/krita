@@ -544,7 +544,7 @@ void KoMainWindow::updateCaption()
   }
 }
 
-void KoMainWindow::updateCaption( QString caption, bool mod )
+void KoMainWindow::updateCaption( const QString & caption, bool mod )
 {
   //kDebug(30003)<<"KoMainWindow::updateCaption("<<caption<<","<<mod<<")"<<endl;
   setCaption( caption, mod );

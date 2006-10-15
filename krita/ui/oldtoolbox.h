@@ -72,7 +72,7 @@ public slots:
 
 private:
 
-    QToolButton * createButton(QWidget * parent, const QIcon& icon, QString tooltip);
+    QToolButton * createButton(QWidget * parent, const QIcon& icon, const QString& tooltip);
 
 private:
 

@@ -93,7 +93,7 @@ public:
     int getInt(const QString & name, int def = 0);
     double getDouble(const QString & name, double def = 0.0);
     bool getBool(const QString & name, bool def = false);
-    QString getString(const QString & name, QString def = QString::null);
+    QString getString(const QString & name, const QString & def = QString::null);
 
     QMap<QString, QVariant> getProperties() { return m_properties; }
 

@@ -82,7 +82,7 @@ protected slots:
 private:
 
     QPushButton* buildFontLine( QWidget* fontWidget, Q3GridLayout* layout, int number,
-                                QFont font, QString name, QLabel*& fontName );
+                                QFont font, const QString& name, QLabel*& fontName );
 
     void updateFontLabel( QFont font, QLabel* label );
 

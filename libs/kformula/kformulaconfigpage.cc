@@ -199,7 +199,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
 QPushButton* ConfigurePage::buildFontLine( QWidget* parent,
-            Q3GridLayout* layout, int number, QFont font, QString name,
+            Q3GridLayout* layout, int number, QFont font, const QString & name,
             QLabel*& fontName )
 {
     QLabel* fontTitle = new QLabel( name, parent );

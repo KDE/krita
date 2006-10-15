@@ -47,7 +47,7 @@
 /// \internal
 class IconShape : public KoShape {
 public:
-    IconShape(QString icon) {
+    IconShape(const QString &icon) {
         m_icon = KIcon(icon).pixmap(22);
         resize(m_icon.size());
     }
@@ -130,7 +130,7 @@ public:
 
 
 // ************** KoShapeSelector ************
-KoShapeSelector::KoShapeSelector(QWidget *parent, KoCanvasController *cc, QString regExp)
+KoShapeSelector::KoShapeSelector(QWidget *parent, KoCanvasController *cc, const QString & regExp)
 : QWidget(parent)
 , m_canvasController(cc)
 {

@@ -45,7 +45,7 @@ KoDocumentAdaptor::~KoDocumentAdaptor()
 //     delete m_actionProxy;
 }
 
-void KoDocumentAdaptor::openURL( QString url )
+void KoDocumentAdaptor::openURL( const QString & url )
 {
   m_pDoc->openURL( KUrl( url ) );
 }

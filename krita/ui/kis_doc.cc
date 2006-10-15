@@ -533,7 +533,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
 
 KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
-                                  QString name, qint32 x, qint32 y,
+                                  const QString & name, qint32 x, qint32 y,
                                   qint32 opacity, bool visible, bool locked, const QString & compositeOp)
 {
     QString attr;
@@ -586,7 +586,7 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
 }
 
 KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP img,
-                                       QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
+                                       const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                                        const QString & compositeOp)
 {
     QString attr;
@@ -607,7 +607,7 @@ KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP im
 }
 
 KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, KisImageSP img,
-                                             QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
+                                             const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                                              const QString & compositeOp)
 {
     QString attr;
@@ -649,7 +649,7 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
 }
 
 KisPartLayerSP KisDoc::loadPartLayer(const QDomElement& element, KisImageSP img,
-                                     QString name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
+                                     const QString & name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
                                       bool visible, bool locked,
                                       const QString & compositeOp) {
     KisChildDoc* child = new KisChildDoc(this);

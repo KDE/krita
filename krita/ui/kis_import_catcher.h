@@ -42,7 +42,7 @@ class KisImportCatcher : QObject {
 
 public:
 
-    KisImportCatcher(KUrl url, KisImageSP image);
+    KisImportCatcher(const KUrl & url, KisImageSP image);
 
 public slots:
 

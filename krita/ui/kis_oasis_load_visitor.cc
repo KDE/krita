@@ -18,20 +18,73 @@
 
 #include <kis_oasis_load_visitor.h>
 
-bool KisOasisLoadVisitor::visit(KisPaintLayer *layer)
+#include <QDomElement>
+#include <QDomNode>
+
+#include <KoColorSpaceRegistry.h>
+
+// Includes from krita/image
+#include <kis_image.h>
+#include <kis_group_layer.h>
+#include <kis_meta_registry.h>
+#include <kis_paint_layer.h>
+
+#include "kis_doc.h"
+
+KisImageSP KisOasisLoadVisitor::loadImage(const QDomElement& elem)
 {
-   return false;    
+    m_image = new KisImage(m_doc->undoAdapter(), 1, 1, KisMetaRegistry::instance()->csRegistry()->colorSpace("RGBA",""), "OpenRaster Image (name)"); // TODO: take into account width and height parameters, and metadata
+    for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        if (node.isElement() && node.nodeName() == "image:layer") { // it's the root layer !
+            QDomElement subelem = node.toElement();
+            loadGroupLayer(subelem, m_image->rootLayer());
+            return m_image;
+        }
+    }
+
+    return KisImageSP(0);
 }
 
-bool KisOasisLoadVisitor::visit(KisGroupLayer *layer)
+void KisOasisLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayer* layer)
 {
-   return false; 
+    layer->setName(elem.attribute("name"));
+    layer->setX(elem.attribute("x").toInt());
+    layer->setY(elem.attribute("y").toInt());
 }
-bool KisOasisLoadVisitor::visit(KisPartLayer *layer)
+
+
+void KisOasisLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL)
 {
-   return false; 
+    loadLayerInfo(elem, pL.data());
 }
-bool KisOasisLoadVisitor::visit(KisAdjustmentLayer *layer)
+
+void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL)
 {
-   return false; 
+    loadLayerInfo(elem, gL.data());
+    for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        if (node.isElement())
+        {
+            QDomElement subelem = node.toElement();
+            if(node.nodeName()== "image:layer")
+            {
+                quint8 opacity = 255;
+                if(!subelem.attribute("opacity").isNull())
+                {
+                    opacity = subelem.attribute("opacity").toInt();
+                }
+                QString srcAttr = subelem.attribute("src");
+                if( srcAttr.isNull() )
+                { // Group layer
+                    KisGroupLayerSP layer = new KisGroupLayer(m_image.data(), "", opacity);
+                    gL->addLayer(layer, gL->childCount() );
+                    loadGroupLayer(subelem, layer);
+                } else { // paint layer
+                    KisPaintLayerSP layer = new KisPaintLayer( m_image.data(), "", opacity); // TODO: support of colorspacess
+                    gL->addLayer(layer, gL->childCount() );
+                    loadPaintLayer(subelem, layer);
+                }
+            }
+        }
+    }
+    
 }

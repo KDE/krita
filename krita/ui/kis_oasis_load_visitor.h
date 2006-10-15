@@ -21,23 +21,25 @@
 #include "kis_global.h"
 #include "kis_types.h"
 
-#include "kis_layer_visitor.h"
-
+class QDomElement;
 class KisPaintLayer;
 class KisGroupLayer;
-class KisPartLayer;
 class KisAdjustmentLayer;
+class KisDoc;
 
-class KisOasisLoadVisitor : public KisLayerVisitor {
+class KisOasisLoadVisitor {
 public:
-    KisOasisLoadVisitor() {};
+    KisOasisLoadVisitor(KisDoc* doc) : m_doc(doc) {};
     virtual ~KisOasisLoadVisitor() {};
 
 public:
-    virtual bool visit(KisPaintLayer *layer);
-    virtual bool visit(KisGroupLayer *layer);
-    virtual bool visit(KisPartLayer *layer);
-    virtual bool visit(KisAdjustmentLayer *layer);
+    KisImageSP loadImage(const QDomElement& elem);
+    void loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL);
+    void loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL);
+private:
+    void loadLayerInfo(const QDomElement& elem, KisLayer* layer);
+    KisImageSP m_image;
+    KisDoc* m_doc;
 };
 
 

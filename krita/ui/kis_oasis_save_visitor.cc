@@ -37,6 +37,7 @@ void KisOasisSaveVisitor::saveLayerInfo(KisLayer* layer)
     m_bodyWriter->addAttribute("name", layer->name());
     m_bodyWriter->addAttribute("x", layer->x());
     m_bodyWriter->addAttribute("y", layer->y());
+    m_bodyWriter->addAttribute("opacity", layer->opacity());
 }
 
 bool KisOasisSaveVisitor::visit(KisPaintLayer *layer)
@@ -54,12 +55,12 @@ bool KisOasisSaveVisitor::visit(KisGroupLayer *layer)
     m_bodyWriter->startElement("image:layer");
     saveLayerInfo(layer);
     
-    KisLayerSP child = layer->firstChild();
+    KisLayerSP child = layer->lastChild();
 
     while(child)
     {
         child->accept(*this);
-        child = child->nextSibling();
+        child = child->prevSibling();
     }
 
     m_bodyWriter->endElement();

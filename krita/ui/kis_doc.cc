@@ -70,6 +70,7 @@
 #include "kis_load_visitor.h"
 #include "kis_meta_registry.h"
 #include "kis_nameserver.h"
+#include "kis_oasis_load_visitor.h"
 #include "kis_oasis_save_data_visitor.h"
 #include "kis_oasis_save_visitor.h"
 #include "kis_paint_device_action.h"
@@ -234,11 +235,22 @@ QDomDocument KisDoc::saveXML()
     return doc;
 }
 
-bool KisDoc::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )
+bool KisDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocument&, KoStore* store )
 {
     //XXX: todo (and that includes defining an OASIS format for layered 2D raster data!)
     kDebug() << "loading with OpenRaster" << endl;
-    return true;
+    KoOasisStore* oasisStore =  new KoOasisStore( store );
+    QDomNode root = doc.documentElement();
+    for (QDomNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        if (node.isElement() && node.nodeName() == "office:body") {
+            QDomElement elem = node.toElement();
+            KisOasisLoadVisitor olv(this);
+            if (!(m_currentImage = olv.loadImage(elem)))
+                return false;
+            return true;
+        }
+    }
+    return false;
 }
 
 
@@ -255,10 +267,14 @@ bool KisDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
     }
     
     manifestWriter->addManifestEntry( "data/", "" );
-//     KoXmlWriter* bodyWriter = oasisStore->bodyWriter();
+    KoXmlWriter* bodyWriter = oasisStore->bodyWriter();
+    // Save the structure
     KisOasisSaveVisitor osv(oasisStore);
+    bodyWriter->startElement("office:body");
     m_currentImage->rootLayer()->accept(osv);
+    bodyWriter->endElement();
     oasisStore->closeContentWriter();
+    // Sqve the data
     KisOasisSaveDataVisitor osdv(oasisStore, manifestWriter);
     m_currentImage->rootLayer()->accept(osdv);
     delete oasisStore;

@@ -117,14 +117,19 @@ KisPaintLayer::~KisPaintLayer()
 
 void KisPaintLayer::paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h)
 {
-    if (m_paintdev->hasSelection())
-            m_paintdev->selection()->paintSelection(img, x, y, w, h);
+    if (m_paintdev && m_paintdev->hasSelection()) {
+        m_paintdev->selection()->paintSelection(img, x, y, w, h);
+    } else if (m_mask && m_editMask && m_mask->hasSelection()) {
+        m_mask->selection()->paintSelection(img, x, y, w, h);
+    }
 }
 
 void KisPaintLayer::paintSelection(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize)
 {
     if (m_paintdev && m_paintdev->hasSelection()) {
         m_paintdev->selection()->paintSelection(img, scaledImageRect, scaledImageSize, imageSize);
+    } else if (m_mask && m_editMask && m_mask->hasSelection()) {
+        m_mask->selection()->paintSelection(img, scaledImageRect, scaledImageSize, imageSize);
     }
 }
 

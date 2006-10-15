@@ -103,7 +103,7 @@ protected:
     virtual void drawPivotHandle(QPainter& gc, KisCurve::iterator point);
 
     /*
-     * Methods for commiting the curve
+     * Methods for committing the curve
      */
 
     /*

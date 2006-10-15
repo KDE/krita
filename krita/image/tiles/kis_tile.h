@@ -58,7 +58,7 @@ public:
 
     // These are const because they don't change the external data the tile represents,
     // although they do change internal representations. We need to be able to request
-    // access to a tile in a const enviroment (like copyconstructor and so)!
+    // access to a tile in a const environment (like copyconstructor and so)!
     void addReader() const;
     void removeReader() const;
     qint32 readers() { return m_nReadlock; }

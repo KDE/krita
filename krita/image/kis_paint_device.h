@@ -423,7 +423,7 @@ public:
 
     /**
      * Create an iterator over a rectangle section of a paint device, the path followed by
-     * the iterator is not guaranted, it is optimized for speed, which means that you shouldn't
+     * the iterator is not guaranteed, it is optimized for speed, which means that you shouldn't
      * use this type of iterator if you are combining two differents layers.
      * @param w width
      * @param h height
@@ -432,7 +432,7 @@ public:
     KisRectIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h);
     /**
      * Create an iterator over a rectangle section of a paint device, the path followed by
-     * the iterator is not guaranted, it is optimized for speed, which means that you shouldn't
+     * the iterator is not guaranteed, it is optimized for speed, which means that you shouldn't
      * use this type of iterator if you are combining two differents layers.
      * @param w width
      * @param h height

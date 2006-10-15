@@ -118,7 +118,7 @@ public:
     /**
      * When this returns true, the KisPaintDevice returned in paintDevice will actually
      * be the layer mask (if there is one). This is so that tools can draw on the mask
-     * without needing to know its existance.
+     * without needing to know its existence.
      */
     bool editMask() const { return m_editMask; }
     /// Sets the editMask property

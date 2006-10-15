@@ -30,6 +30,8 @@ class QCheckBox;
 class QLabel;
 class KisPoint;
 class KisPainter;
+class KCurve;
+namespace Ui { class WdgBrushCurveControl; }
 
 class KisBrushOpFactory : public KisPaintOpFactory  {
 
@@ -43,7 +45,8 @@ public:
     virtual KisPaintOpSettings *settings(QWidget * parent, const KisInputDevice& inputDevice);
 };
 
-class KisBrushOpSettings : public KisPaintOpSettings {
+class KisBrushOpSettings : public QObject, public KisPaintOpSettings {
+    Q_OBJECT
     typedef KisPaintOpSettings super;
 public:
     KisBrushOpSettings(QWidget *parent);
@@ -52,14 +55,33 @@ public:
     bool varyOpacity() const;
     bool varyDarken() const;
 
+    bool customSize() const { return m_customSize; }
+    bool customOpacity() const { return m_customOpacity; }
+    bool customDarken() const { return m_customDarken; }
+    const double* sizeCurve() const { return m_sizeCurve; }
+    const double* opacityCurve() const { return m_opacityCurve; }
+    const double* darkenCurve() const { return m_darkenCurve; }
+
     virtual QWidget *widget() const { return m_optionsWidget; }
+private slots:
+    void slotCustomCurves();
 
 private:
+    void transferCurve(KCurve* curve, double* target);
     QWidget *m_optionsWidget;
     QLabel * m_pressureVariation;
     QCheckBox * m_size;
     QCheckBox * m_opacity;
     QCheckBox * m_darken;
+    Ui::WdgBrushCurveControl* m_curveControl;
+    QDialog* m_curveControlWidget;
+
+    bool m_customSize;
+    bool m_customOpacity;
+    bool m_customDarken;
+    double m_sizeCurve[256];
+    double m_opacityCurve[256];
+    double m_darkenCurve[256];
 };
 
 class KisBrushOp : public KisPaintOp {
@@ -74,10 +96,23 @@ public:
     void paintAt(const KisPoint &pos, const KisPaintInformation& info);
 
 private:
-
+    inline double scaleToCurve(double pressure, double* curve) const {
+        int offset = int(255.0 * pressure);
+        if (offset < 0)
+            offset = 0;
+        if (offset > 255)
+            offset =  255; // Was: clamp(..., 0, 255);
+        return curve[offset];
+    }
     bool m_pressureSize;
     bool m_pressureOpacity;
     bool m_pressureDarken;
+    bool m_customSize;
+    bool m_customOpacity;
+    bool m_customDarken;
+    double m_sizeCurve[256];
+    double m_opacityCurve[256];
+    double m_darkenCurve[256];
 };
 
 #endif // KIS_BRUSHOP_H_

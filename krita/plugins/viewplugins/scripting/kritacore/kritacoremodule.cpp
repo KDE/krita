@@ -154,8 +154,9 @@ QObject* KritaCoreModule::createCircleBrush(uint w, uint h, uint hf, uint vf)
     KisAutobrushShape* kas = new KisAutobrushCircleShape(qMax(1u,w), qMax(1u,h), hf, vf);
     QImage* brsh = new QImage();
     kas->createBrush(brsh);
+    KisAutobrushResource *thing = new KisAutobrushResource(*brsh);
     delete brsh;
-    return new Brush(this, new KisAutobrushResource(*brsh), false);
+    return new Brush(this, thing, false);
 }
 
 QObject* KritaCoreModule::createRectBrush(uint w, uint h, uint hf, uint vf)
@@ -163,8 +164,9 @@ QObject* KritaCoreModule::createRectBrush(uint w, uint h, uint hf, uint vf)
     KisAutobrushShape* kas = new KisAutobrushRectShape(qMax(1u,w), qMax(1u,h), hf, vf);
     QImage* brsh = new QImage();
     kas->createBrush(brsh);
+    KisAutobrushResource *thing = new KisAutobrushResource(*brsh);
     delete brsh;
-    return new Brush(this, new KisAutobrushResource(*brsh), false);
+    return new Brush(this, thing, false);
 }
 
 QObject* KritaCoreModule::loadPattern(const QString& filename)

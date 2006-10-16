@@ -38,7 +38,7 @@ class KOFFICEUI_EXPORT KoLineStyleAction : public KoSelectAction
      * @param text The text that will be displayed.
      * @param icon The dynamically loaded icon that goes with this action.
      * @param receiver The SLOT's parent.
-     * @param slot The SLOT to invoke when a selectionChanged(int) signal is emited.
+     * @param slot The SLOT to invoke when a selectionChanged(int) signal is emitted.
      * @param parent This action's parent.
      * @param name An internal name for this action.
      */

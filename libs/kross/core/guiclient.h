@@ -116,19 +116,19 @@ namespace Kross {
             void executionFailed(const QString& errormessage, const QString& tracedetails);
 
             /**
-             * Called if execution was successfully.
+             * Called if execution was successful.
              */
             void executionSuccessful();
 
         signals:
 
             /**
-             * This signal is emited when the execution of a script is started.
+             * This signal is emitted when the execution of a script is started.
              */
             void executionStarted(Kross::Action*);
 
             /**
-             * This signal is emited when the execution of a script is finished.
+             * This signal is emitted when the execution of a script is finished.
              */
             void executionFinished(Kross::Action*);
 

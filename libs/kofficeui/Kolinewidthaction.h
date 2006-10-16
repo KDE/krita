@@ -42,7 +42,7 @@ class KOFFICEUI_EXPORT KoLineWidthAction : public KoSelectAction
      * @param text The text that will be displayed.
      * @param icon The dynamically loaded icon that goes with this action.
      * @param receiver The SLOT's parent.
-     * @param slot The SLOT to invoke when a lineWidthChanged(double) signal is emited.
+     * @param slot The SLOT to invoke when a lineWidthChanged(double) signal is emitted.
      * @param parent This action's parent.
      * @param name An internal name for this action.
      */
@@ -54,7 +54,7 @@ class KOFFICEUI_EXPORT KoLineWidthAction : public KoSelectAction
     double currentWidth() const;
 
   signals:
-    /** Emited when a new line width have been selected */
+    /** Emitted when a new line width has been selected */
     void lineWidthChanged(double);
 
   public slots:

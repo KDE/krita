@@ -43,7 +43,7 @@ class KOFFICEUI_EXPORT KoSelectAction : public KAction
      * @param text The text that will be displayed.
      * @param icon The dynamically loaded icon that goes with this action.
      * @param receiver The SLOT's parent.
-     * @param slot The SLOT to invoke when a selectionChanged(int) signal is emited.
+     * @param slot The SLOT to invoke when a selectionChanged(int) signal is emitted.
      * @param parent This action's parent.
      * @param name An internal name for this action.
      */
@@ -67,7 +67,7 @@ class KOFFICEUI_EXPORT KoSelectAction : public KAction
     void setShowCurrentSelection(bool show);
 
   signals:
-    /** Emited when the selection changed */
+    /** Emitted when the selection changed */
     void selectionChanged(int);
 
   public slots:

@@ -24,6 +24,8 @@
 #include <QBoxLayout>
 #include <QListView>
 
+#include <QRect>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kicon.h>
@@ -41,8 +43,8 @@ ScriptingDocker::ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
     setLayout(layout);
 
     m_view = new QListView(this);
-    m_model = new Kross::ActionMenuModel(this, Kross::Manager::self().actionMenu());
-    m_view->setModel(m_model);
+    //m_view->setModel( new Kross::ActionCollectionModel(this) );
+    m_view->setModel( new Kross::ActionCollectionProxyModel(this) );
     layout->addWidget(m_view, 1);
 
     QToolBar* tb = new QToolBar(this);
@@ -54,7 +56,6 @@ ScriptingDocker::ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
     tb->addAction(KIcon("player_stop"), i18n("Stop"), this, SLOT(stopScript()) );
 
     connect(m_view, SIGNAL(doubleClicked(const QModelIndex&)), SLOT(runScript()));
-    connect(&Kross::Manager::self(), SIGNAL(configChanged()), this, SLOT(dataChanged()));
 }
 
 ScriptingDocker::~ScriptingDocker()
@@ -77,15 +78,6 @@ void ScriptingDocker::stopScript()
         if( action )
             action->finalize();
     }
-}
-
-void ScriptingDocker::dataChanged() const
-{
-    kDebug() << "GUIManagerView::dataChanged() ----------------------------- !!!!!!!!!!!!!!!!!!" << endl;
-    //m_view->dataChanged( QModelIndex(), QModelIndex() );
-    m_view->update();
-    //m_view->executeDelayedItemsLayout();
-    m_view->setModel(m_model);
 }
 
 #include "scriptingdocker.moc"

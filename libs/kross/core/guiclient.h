@@ -111,6 +111,11 @@ namespace Kross {
         private slots:
 
             /**
+             * Called before the "Scripts" menu is shown to update the list of displayed scripts.
+             */
+            void slotMenuAboutToShow();
+
+            /**
              * Called if execution failed and displays an errormessage-dialog.
              */
             void executionFailed(const QString& errormessage, const QString& tracedetails);

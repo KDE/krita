@@ -60,11 +60,8 @@ namespace Kross {
             /// Loaded modules.
             QMap<QString, QPointer<QObject> > modules;
 
-            /// The collection of all \a Action instances.
+            /// The collection of \a Action instances.
             KActionCollection* actioncollection;
-
-            /// The menu of enabled \a Action instances.
-            KMenu* actionmenu;
     };
 
 }
@@ -85,7 +82,6 @@ Manager::Manager()
     , d( new ManagerPrivate() )
 {
     d->actioncollection = new KActionCollection(this);
-    d->actionmenu = new KMenu();
 
 #ifdef KROSS_PYTHON_LIBRARY
     QString pythonlib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_PYTHON_LIBRARY) );
@@ -157,7 +153,6 @@ Manager::~Manager()
         delete it.value();
     for(QMap<QString, QPointer<QObject> >::Iterator it = d->modules.begin(); it != d->modules.end(); ++it)
         delete it.value();
-    delete d->actionmenu;
     delete d;
 }
 
@@ -213,50 +208,57 @@ bool Manager::readConfig()
     if(! config->hasGroup("scripts"))
         return false;
 
-    d->actioncollection->clear();
-    d->actionmenu->clear();
+    // we need to remember the current names, to be able to remove "expired" actions later.
+    QStringList actionnames;
+    foreach(KAction* a, d->actioncollection->actions())
+        actionnames.append( a->objectName() );
 
+    // iterate now through the items in the [scripts]-section
     config->setGroup("scripts");
     foreach(QString name, config->readEntry("names", QStringList())) {
+        bool needsupdate = actionnames.contains( name );
+        if( needsupdate )
+            actionnames.removeAll( name );
+
         QString text = config->readEntry(QString("%1_text").arg(name).toLatin1());
         QString description = config->readEntry(QString("%1_description").arg(name).toLatin1());
         QString icon = config->readEntry(QString("%1_icon").arg(name).toLatin1());
         QString file = config->readEntry(QString("%1_file").arg(name).toLatin1());
         QString interpreter = config->readEntry(QString("%1_interpreter").arg(name).toLatin1());
 
-        QFileInfo fi(file);
-        if(! fi.exists()) {
-            QString resource = KGlobal::dirs()->findResource("appdata", QString("scripts/%1/%2").arg(name).arg(file));
-            if(! resource.isNull())
-                file = resource;
-        }
-
-        if(text.isEmpty())
+        if( text.isEmpty() )
             text = file;
-
-        if(description.isEmpty())
+        if( description.isEmpty() )
             description = text.isEmpty() ? name : text;
-
-        if(icon.isEmpty())
+        if( icon.isEmpty() )
             icon = KMimeType::iconNameForUrl( KUrl(file) );
 
-        krossdebug( QString("Manager::readConfig Add scriptaction name='%1' file='%2'").arg(name).arg(file) );
+        Action* action = needsupdate
+            ? dynamic_cast< Action* >( d->actioncollection->action(name) )
+            : new Action(d->actioncollection, name);
+        Q_ASSERT(action);
 
-        Action* action = new Action(d->actioncollection, name, file);
         action->setText(text);
         action->setDescription(description);
-        if(! icon.isNull())
+        if( ! icon.isNull() )
             action->setIcon(KIcon(icon));
-        if(! interpreter.isNull())
+        if( ! interpreter.isNull() )
             action->setInterpreter(interpreter);
-        bool enabled = config->readEntry(QString("%1_enabled").arg(name), true);
+        action->setFile(file);
+
         //connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
         //connect(action, SIGNAL( success() ), this, SLOT( executionSuccessful() ));
         //connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
-
-        if (enabled)
-            d->actionmenu->addAction(action);
     }
+
+    // remove actions that are not valid anymore
+    foreach(QString n, actionnames) {
+        KAction* a = d->actioncollection->action(n);
+        Q_ASSERT(a);
+        d->actioncollection->remove(a);
+        delete a;
+    }
+
     return true;
 }
 
@@ -281,10 +283,8 @@ bool Manager::writeConfig()
         //TODO hmmm... kde4's KIcon / Qt4's QIcon does not allow to reproduce the iconname?
         //config->writeEntry(QString("%1_icon").arg(name).toLatin1(), action->icon());
 
-        config->writeEntry(QString("%1_file").arg(name).toLatin1(), action->getFile().path());
+        config->writeEntry(QString("%1_file").arg(name).toLatin1(), action->file());
         config->writeEntry(QString("%1_interpreter").arg(name).toLatin1(), action->interpreter());
-        if( d->actionmenu->actions().contains(action) )
-            config->writeEntry(QString("%1_enabled").arg(name), action->isVisible());
     }
 
     config->writeEntry("names", names);
@@ -292,14 +292,9 @@ bool Manager::writeConfig()
     return true;
 }
 
-KActionCollection* Manager::actionCollection()
+KActionCollection* Manager::actionCollection() const
 {
     return d->actioncollection;
-}
-
-KMenu* Manager::actionMenu()
-{
-    return d->actionmenu;
 }
 
 bool Manager::hasAction(const QString& name)
@@ -313,7 +308,7 @@ QObject* Manager::action(const QString& name)
     if(! action) {
         action = new Action(name);
         action->setParent(this);
-        d->actioncollection->insert(action);
+        d->actioncollection->insert(action); //FIXME should we really remember the action?
     }
     return action;
 }

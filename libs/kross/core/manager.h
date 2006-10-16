@@ -128,14 +128,9 @@ namespace Kross {
             bool writeConfig();
 
             /**
-             * \return the collection of all \a Action instances.
+             * \return a collection of all \a Action instances.
              */
-            KActionCollection* actionCollection();
-
-            /**
-             * \return a menu of enabled \a Action instances.
-             */
-            KMenu* actionMenu();
+            KActionCollection* actionCollection() const;
 
         public slots:
 
@@ -170,13 +165,6 @@ namespace Kross {
              * if loading failed.
              */
             QObject* module(const QString& modulename);
-
-        signals:
-
-            /**
-            * This signal is emitted if the configuration changed.
-            */
-            void configChanged();
 
         private:
             /// Private d-pointer class.

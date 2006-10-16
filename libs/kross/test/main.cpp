@@ -120,7 +120,7 @@ int runScriptFile(const QString& scriptfile)
     TestObject* testobj4 = new TestObject("TestObject4");
 
     // First we need a Action and fill it.
-    Kross::Action::Ptr action( new Kross::Action( KUrl(scriptfile) ) );
+    Kross::Action* action = new Kross::Action( scriptfile );
     action->setInterpreter( interpretername );
     action->setCode( scriptcode );
 
@@ -143,6 +143,7 @@ int runScriptFile(const QString& scriptfile)
     }
     */
 
+    delete action;
     delete testobj3;
     delete testobj4;
 

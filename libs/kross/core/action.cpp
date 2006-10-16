@@ -71,7 +71,7 @@ namespace Kross {
             * set the scripting code and, if not defined, the used
             * interpreter.
             */
-            KUrl scriptfile;
+            QString scriptfile;
 
             /**
             * The current path the \a Script is running in or
@@ -90,45 +90,29 @@ namespace Kross {
 
 }
 
-Action::Action(const QString& name)
-    : KAction( 0 /* no parent KActionCollection */, name )
-    , KShared()
-    , ChildrenInterface()
-    , ErrorInterface()
-    , d( new ActionPrivate() )
-{
-    //krossdebug( QString("Action::Action() Ctor name='%1'").arg(objectName()) );
-    //connect(this, SIGNAL(triggered(bool)), this, SLOT(slotTriggered()));
-    //connect(this, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotTriggered()));
-}
-
-Action::Action(const KUrl& file)
-    : KAction( 0 /* no parent KActionCollection */, file.path() )
-    , KShared()
-    , ChildrenInterface()
-    , ErrorInterface()
-    , d( new ActionPrivate() )
-{
-    d->scriptfile = file;
-    d->currentpath = file.directory();
-    setText(file.fileName());
-    setIcon( KIcon( KMimeType::iconNameForUrl(file) ) );
-}
-
-Action::Action(KActionCollection* collection, const QString& name, const KUrl& file)
+Action::Action(KActionCollection* collection, const QString& name)
     : KAction( collection, name )
-    , KShared()
     , ChildrenInterface()
     , ErrorInterface()
     , d( new ActionPrivate() )
 {
-    d->scriptfile = file;
-    d->currentpath = file.directory();
+    setEnabled( false );
+}
+
+Action::Action(const QString& file)
+    : KAction( 0 /* no parent KActionCollection */, file )
+    , ChildrenInterface()
+    , ErrorInterface()
+    , d( new ActionPrivate() )
+{
+    KUrl url(file);
+    setText( url.fileName() );
+    setIcon( KIcon(KMimeType::iconNameForUrl(url)) );
+    setFile( file );
 }
 
 Action::Action(KActionCollection* collection, const QDomElement& element, const QDir& packagepath)
     : KAction( collection, element.attribute("name") )
-    , KShared()
     , ChildrenInterface()
     , ErrorInterface()
     , d( new ActionPrivate() )
@@ -138,7 +122,7 @@ Action::Action(KActionCollection* collection, const QDomElement& element, const 
     setInterpreter( element.attribute("interpreter") );
 
     QString file = element.attribute("file");
-    if(! file.isEmpty()) {
+    if( ! file.isEmpty() ) {
         if(! QFileInfo(file).exists()) {
             QFileInfo fi(packagepath, file);
             if(fi.exists())
@@ -146,16 +130,15 @@ Action::Action(KActionCollection* collection, const QDomElement& element, const 
             else
                 setEnabled(false);
         }
-        d->scriptfile = KUrl(file);
-        d->currentpath = d->scriptfile.directory();
+        setFile(file);
     }
     else {
         d->currentpath = packagepath.absolutePath();
     }
 
     QString icon = element.attribute("icon");
-    if(icon.isEmpty() && d->scriptfile.isValid())
-        icon = KMimeType::iconNameForUrl(d->scriptfile);
+    if( icon.isEmpty() && ! d->scriptfile.isNull() )
+        icon = KMimeType::iconNameForUrl( KUrl(d->scriptfile) );
     setIcon( KIcon(icon) );
 }
 
@@ -183,8 +166,10 @@ QString Action::code() const
 
 void Action::setCode(const QString& code)
 {
-    finalize();
-    d->code = code;
+    if( d->code != code ) {
+        finalize();
+        d->code = code;
+    }
 }
 
 QString Action::interpreter() const
@@ -194,13 +179,37 @@ QString Action::interpreter() const
 
 void Action::setInterpreter(const QString& interpretername)
 {
-    finalize();
-    d->interpretername = interpretername;
+    if( d->interpretername != interpretername ) {
+        finalize();
+        d->interpretername = interpretername;
+        setEnabled( Manager::self().interpreters().contains(interpretername) );
+    }
 }
 
-KUrl Action::getFile() const
+QString Action::file() const
 {
     return d->scriptfile;
+}
+
+bool Action::setFile(const QString& scriptfile)
+{
+    if( d->scriptfile != scriptfile ) {
+        finalize();
+        if ( scriptfile.isNull() ) {
+            if( ! d->scriptfile.isNull() )
+                d->interpretername.clear();
+            d->scriptfile.clear();
+            d->currentpath.clear();
+        }
+        else {
+            d->scriptfile = scriptfile;
+            d->currentpath = QFileInfo(scriptfile).absolutePath();
+            d->interpretername = Manager::self().interpreternameForFile(scriptfile);
+            if( d->interpretername.isNull() )
+                return false;
+        }
+    }
+    return true;
 }
 
 QString Action::currentPath() const
@@ -251,75 +260,22 @@ QVariant Action::callFunction(const QString& name, const QVariantList& args)
     return d->script->callFunction(name, args);
 }
 
-#if 0
-const QStringList getFunctionNames()
-{
-    return d->script ? d->script->getFunctionNames() : QStringList(); //FIXME init before if needed?
-}
-Object::Ptr Action::callFunction(const QString& functionname, List::Ptr arguments)
-{
-    if(! d->script)
-        if(! initialize())
-            return Object::Ptr();
-    if(hadException())
-        return Object::Ptr();
-    if(functionname.isEmpty()) {
-        setException( new Exception(QString(i18n("No functionname defined for Action::callFunction()."))) );
-        finalize();
-        return Object::Ptr();
-    }
-    Object::Ptr r = d->script->callFunction(functionname, arguments);
-    if(d->script->hadException()) {
-        setException( d->script->getException() );
-        finalize();
-        return Object::Ptr();
-    }
-    return r;
-}
-QStringList Action::getClassNames()
-{
-    return d->script ? d->script->getClassNames() : QStringList(); //FIXME init before if needed?
-}
-Object::Ptr Action::classInstance(const QString& classname)
-{
-    if(! d->script)
-        if(! initialize())
-            return Object::Ptr();
-    if(hadException())
-        return Object::Ptr();
-    Object::Ptr r = d->script->classInstance(classname);
-    if(d->script->hadException()) {
-        setException( d->script->getException() );
-        finalize();
-        return Object::Ptr();
-    }
-    return r;
-}
-#endif
-
 bool Action::initialize()
 {
     finalize();
 
-    if(d->scriptfile.isValid()) {
-        const QString file = d->scriptfile.toLocalFile();
-        QFile f(file);
-        if(! f.exists()) {
-            setError(i18n("There exists no such scriptfile '%1'",file));
+    if( ! d->scriptfile.isNull() ) {
+        QFile f( d->scriptfile );
+        if( ! f.exists() ) {
+            setError(i18n("There exists no such scriptfile '%1'", d->scriptfile));
             return false;
         }
-
-        krossdebug( QString("Kross::Action::initialize() file=%1").arg(file) );
-        if(d->interpretername.isNull()) {
-            d->interpretername = Manager::self().interpreternameForFile(file);
-            if(d->interpretername.isNull()) {
-                setError(i18n("Failed to determinate interpreter for scriptfile '%1'",file));
-                return false;
-            }
+        if( d->interpretername.isNull() ) {
+            setError(i18n("Failed to determinate interpreter for scriptfile '%1'", d->scriptfile));
+            return false;
         }
-
-        if(! f.open(QIODevice::ReadOnly)) {
-            setError(i18n("Failed to open scriptfile '%1'",file));
+        if( ! f.open(QIODevice::ReadOnly) ) {
+            setError(i18n("Failed to open scriptfile '%1'", d->scriptfile));
             return false;
         }
         d->code = QString( f.readAll() );
@@ -327,14 +283,14 @@ bool Action::initialize()
     }
 
     Interpreter* interpreter = Manager::self().interpreter(d->interpretername);
-    if(! interpreter) {
-        setError(i18n("Unknown interpreter '%1'",d->interpretername));
+    if( ! interpreter ) {
+        setError(i18n("Unknown interpreter '%1'", d->interpretername));
         return false;
     }
 
     d->script = interpreter->createScript(this);
-    if(! d->script) {
-        setError(i18n("Failed to create script for interpreter '%1'",d->interpretername));
+    if( ! d->script ) {
+        setError(i18n("Failed to create script for interpreter '%1'", d->interpretername));
         return false;
     }
 
@@ -359,12 +315,12 @@ void Action::slotTriggered()
     //krossdebug( QString("Action::slotTriggered()") );
     emit activated(this);
 
-    if(! d->script) {
-        if(! initialize())
+    if( ! d->script ) {
+        if( ! initialize() )
             Q_ASSERT( hadError() );
     }
 
-    if(hadError()) {
+    if( hadError() ) {
         krossdebug( QString("Action::slotTriggered() name=%1 errorMessage=%2").arg(objectName()).arg(errorMessage()) );
         emit failed(errorMessage(), errorTrace());
         return;
@@ -373,7 +329,7 @@ void Action::slotTriggered()
     //what to do with data() ?
 
     d->script->execute();
-    if(d->script->hadError()) {
+    if( d->script->hadError() ) {
         setError(d->script);
         finalize();
         emit failed(errorMessage(), errorTrace());

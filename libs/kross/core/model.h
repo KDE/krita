@@ -24,18 +24,22 @@
 //#include "../core/action.h"
 
 #include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
+
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 
 namespace Kross {
 
     /**
-     *
+     * The ActionCollectionModel class implements a QAbstractItemModel to provide
+     * a model for views of the with \a Manager::actionCollection avaiable \a Action
+     * instances.
      */
     class KDE_EXPORT ActionCollectionModel : public QAbstractItemModel
     {
         public:
-            ActionCollectionModel(QObject* parent, KActionCollection* actioncollection);
+            ActionCollectionModel(QObject* parent);
             virtual ~ActionCollectionModel();
 
             virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
@@ -54,25 +58,18 @@ namespace Kross {
     };
 
     /**
-     *
+     * The ActionCollectionProxyModel class implements a QSortFilterProxyModel 
+     * for a \a ActionCollectionModel instance.
      */
-    class KDE_EXPORT ActionMenuModel : public QAbstractItemModel
+    class ActionCollectionProxyModel : public QSortFilterProxyModel
     {
         public:
-            ActionMenuModel(QObject* parent, KMenu* menu);
-            virtual ~ActionMenuModel();
-
-            virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-            virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-            virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-            virtual QModelIndex parent(const QModelIndex& index) const;
-            virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+            ActionCollectionProxyModel(QObject* parent);
+            virtual ~ActionCollectionProxyModel();
 
         private:
-            /// \internal d-pointer class.
-            class Private;
-            /// \internal d-pointer instance.
-            Private* const d;
+            virtual void setSourceModel(QAbstractItemModel* sourceModel);
+            //virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
     };
 
 }

@@ -43,11 +43,11 @@ namespace Kross {
 
 }
 
-ActionCollectionModel::ActionCollectionModel(QObject* parent, KActionCollection* actioncollection)
+ActionCollectionModel::ActionCollectionModel(QObject* parent)
     : QAbstractItemModel(parent)
     , d( new Private() )
 {
-    d->actioncollection = actioncollection;
+    d->actioncollection = Manager::self().actionCollection();
 }
 
 ActionCollectionModel::~ActionCollectionModel()
@@ -67,9 +67,10 @@ int ActionCollectionModel::rowCount(const QModelIndex&) const
 
 QModelIndex ActionCollectionModel::index(int row, int column, const QModelIndex& parent) const
 {
-    if(parent.isValid())
+    Action* action = dynamic_cast< Action* >( d->actioncollection->actions().value(row) );
+    if( ! action || parent.isValid() )
         return QModelIndex();
-    return createIndex(row, column, d->actioncollection->actions().value(row));
+    return createIndex(row, column, action);
 }
 
 QModelIndex ActionCollectionModel::parent(const QModelIndex&) const
@@ -79,16 +80,15 @@ QModelIndex ActionCollectionModel::parent(const QModelIndex&) const
 
 Qt::ItemFlags ActionCollectionModel::flags(const QModelIndex &index) const
 {
-    if(! index.isValid())
+    if( ! index.isValid() )
         return Qt::ItemIsEnabled;
-    if(index.column() == 0 /*&& d->editable*/)
-        return QAbstractItemModel::flags(index) | Qt::ItemIsUserCheckable;
+    //if(index.column() == 0 /*&& d->editable*/) return QAbstractItemModel::flags(index); // | Qt::ItemIsUserCheckable;
     return QAbstractItemModel::flags(index); // | Qt::ItemIsEditable;
 }
 
 QVariant ActionCollectionModel::data(const QModelIndex& index, int role) const
 {
-    if(! index.isValid())
+    if( ! index.isValid() )
         return QVariant();
     Action* action = static_cast< Action* >( index.internalPointer() );
     switch( role ) {
@@ -99,9 +99,8 @@ QVariant ActionCollectionModel::data(const QModelIndex& index, int role) const
         case Qt::ToolTipRole: // fall through
         case Qt::WhatsThisRole:
             return action->description();
-        case Qt::CheckStateRole:
-            //return d->editable ? action->isVisible() : QVariant();
-            return action->isVisible();
+        //case Qt::CheckStateRole:
+        //    return action->isVisible();
         default:
             return QVariant();
     }
@@ -109,7 +108,7 @@ QVariant ActionCollectionModel::data(const QModelIndex& index, int role) const
 
 bool ActionCollectionModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(! index.isValid() /*|| ! d->editable*/)
+    if( ! index.isValid() /*|| ! d->editable*/ )
         return false;
     Action* action = static_cast< Action* >( index.internalPointer() );
     switch( role ) {
@@ -125,6 +124,38 @@ bool ActionCollectionModel::setData(const QModelIndex &index, const QVariant &va
     emit dataChanged(index, index);
     return true;
 }
+
+/******************************************************************************
+ * ActionCollectionProxyModel
+ */
+
+ActionCollectionProxyModel::ActionCollectionProxyModel(QObject* parent)
+    : QSortFilterProxyModel(parent)
+{
+    setSourceModel( new ActionCollectionModel(this) );
+}
+
+ActionCollectionProxyModel::~ActionCollectionProxyModel()
+{
+}
+
+void ActionCollectionProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
+{
+    QSortFilterProxyModel::setSourceModel(sourceModel);
+}
+
+/*
+bool ActionCollectionProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+{
+    QModelIndex index = sourceModel()->index(index.row(), 0, source_parent);
+    if( ! index.isValid() )
+        return false;
+    Action* action = static_cast< Action* >( index.internalPointer() );
+    return action->isEnabled();
+}
+*/
+
+#if 0
 
 /******************************************************************************
  * ActionMenuModel
@@ -194,3 +225,5 @@ QVariant ActionMenuModel::data(const QModelIndex& index, int role) const
             return QVariant();
     }
 }
+
+#endif

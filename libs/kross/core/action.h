@@ -26,7 +26,6 @@
 //#include <qdom.h>
 
 #include <kaction.h>
-#include <ksharedptr.h>
 #include <kurl.h>
 #include <koffice_export.h>
 
@@ -48,38 +47,11 @@ namespace Kross {
      * with it like to execute scripting code. The \a Manager takes care of
      * handling the Action instances application width.
      */
-    class KROSS_EXPORT Action : public KAction, public KShared, public ChildrenInterface, public ErrorInterface
+    class KROSS_EXPORT Action : public KAction, public ChildrenInterface, public ErrorInterface
     {
             Q_OBJECT
 
         public:
-
-            /// Shared pointer to implement reference-counting.
-            typedef KSharedPtr<Action> Ptr;
-
-            /**
-             * Constructor.
-             *
-             * \param name The unique name this Action has. It's used
-             * e.g. at the \a Manager to identify the Action. The
-             * name is accessible via \a QObject::objectName .
-             */
-            Action(const QString& name = QString::null);
-
-            /**
-             * Constructor.
-             *
-             * \param file The in the KUrl defined path() should point
-             * to a valid scriptingfile. This \a Action will be filled
-             * with the content of the file (e.g. the file is readed
-             * and \a getCode should return it's content and it's also
-             * tried to determinate the \a getInterpreterName ).
-             *
-             * The \p file needs to be a valid local file and can't be
-             * changed later cause the file.path() will be used as
-             * name for this KAction.
-             */
-            Action(const KUrl& file);
 
            /**
              * Constructor.
@@ -89,13 +61,19 @@ namespace Kross {
              * \param name The unique name this Action has. It's used
              * e.g. at the \a Manager to identify the Action. The
              * name is accessible via \a QObject::objectName .
+             */
+            Action(KActionCollection* collection, const QString& name);
+
+            /**
+             * Constructor.
+             *
              * \param file The in the KUrl defined path() should point
              * to a valid scriptingfile. This \a Action will be filled
              * with the content of the file (e.g. the file is readed
              * and \a getCode should return it's content and it's also
              * tried to determinate the \a getInterpreterName ).
              */
-            Action(KActionCollection* collection, const QString& name, const KUrl& file);
+            Action(const QString& file);
 
             /**
              * Constructor.
@@ -116,9 +94,14 @@ namespace Kross {
             virtual ~Action();
 
             /**
-             * \return the filename which will be executed.
+             * \return the scriptfile that should be executed.
              */
-            KUrl getFile() const;
+            QString file() const;
+
+            /**
+             * Set the scriptfile that should be executed.
+             */
+            bool setFile(const QString& scriptfile);
 
             /**
              * \return a map of options this \a Action defines.
@@ -155,38 +138,6 @@ namespace Kross {
              * \param args The optional list of arguments.
              */
             QVariant callFunction(const QString& name, const QVariantList& args = QVariantList());
-
-#if 0
-            /**
-             * Execute the script container.
-             */
-            Object::Ptr execute();
-
-            /**
-             * Return a list of functionnames the with
-             * \a setCode defined scriptcode spends.
-             */
-            const QStringList getFunctionNames();
-
-            /**
-             * Call a function in the script container.
-             *
-             * \param functionname The name of the function to call.
-             * \param arguments Optional list of arguments passed to the function.
-             * \return \a Object instance representing the functioncall returnvalue.
-             */
-            KSharedPtr<Object> callFunction(const QString& functionname, KSharedPtr<List> arguments = KSharedPtr<List>());
-
-            /**
-             * Return a list of classes.
-             */
-            QStringList getClassNames();
-
-            /**
-             * Create and return a new class instance.
-             */
-            KSharedPtr<Object> classInstance(const QString& classname);
-#endif
 
             /**
              * Initialize the \a Script instance.

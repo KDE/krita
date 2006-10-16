@@ -93,7 +93,7 @@ GUIManagerView::GUIManagerView(GUIManagerModule* module, QWidget* parent)
     setItemsExpandable(false);
     header()->hide();
 
-    ActionCollectionModel* model = new ActionCollectionModel(this, Kross::Manager::self().actionCollection());
+    ActionCollectionModel* model = new ActionCollectionModel(this);
     setModel(model);
 
     connect(model, SIGNAL(dataChanged(const QModelIndex&,const QModelIndex&)),
@@ -169,7 +169,6 @@ bool GUIManagerView::installPackage(const QString& scriptpackagefile)
         connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
         connect(action, SIGNAL( success() ), this, SLOT( executionSuccessful() ));
         connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
-        Manager::self().actionMenu()->addAction(action);
     }
 
     d->modified = true;
@@ -180,14 +179,15 @@ bool GUIManagerView::uninstallPackage(Action* action)
 {
     const QString name = action->objectName();
 
-    KUrl url = action->getFile();
-    if(! url.isValid() || ! url.isLocalFile()) {
+    QString file = action->file();
+    QFileInfo fi(file);
+
+    if(file.isNull() || ! fi.exists()) {
         KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\" since the script is not installed.").arg(action->objectName()));
         return false;
     }
 
-    QDir dir = QFileInfo( url.path() ).dir();
-    const QString scriptpackagepath = dir.absolutePath();
+    const QString scriptpackagepath = fi.absolutePath();
     krossdebug( QString("Uninstall script-package with destination directory: %1").arg(scriptpackagepath) );
 
     if(! KIO::NetAccess::del(scriptpackagepath, 0) ) {
@@ -195,7 +195,6 @@ bool GUIManagerView::uninstallPackage(Action* action)
         return false;
     }
 
-    Manager::self().actionMenu()->removeAction(action);
     delete action; action = 0; // removes the action from d->actions as well
 
     d->modified = true;
@@ -347,7 +346,8 @@ void GUIManagerModule::showManagerDialog()
     btnlayout->addWidget(newstuffbtn);
     connect(newstuffbtn, SIGNAL(clicked()), view, SLOT(slotNewScripts()) );
 
-    //i18n("About") i18n("Configure") ...
+    //i18n("About")
+    //i18n("Configure")
 
     btnlayout->addStretch(1);
     dialog->resize( QSize(460, 340).expandedTo( dialog->minimumSizeHint() ) );

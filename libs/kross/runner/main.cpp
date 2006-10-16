@@ -70,7 +70,7 @@ int runScriptFile(const QString& scriptfile)
     }
 
     // First we need a Action and fill it.
-    Kross::Action::Ptr action( new Kross::Action( KUrl(scriptfile) ) );
+    Kross::Action* action = new Kross::Action( scriptfile );
     action->setInterpreter( interpreterinfo->getInterpretername() );
     action->setCode(scriptcode);
 
@@ -80,9 +80,11 @@ int runScriptFile(const QString& scriptfile)
     if(action->hadError()) {
         // We had an exception.
         std::cerr << QString("%2\n%1").arg(action->errorTrace()).arg(action->errorMessage()).toLatin1().data() << std::endl;
+        delete action;
         return ERROR_EXCEPTION;
     }
 
+    delete action;
     return ERROR_OK;
 }
 

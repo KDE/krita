@@ -22,13 +22,11 @@
 #define SCRIPTINGDOCKER_H
 
 #include <QWidget>
-#include <QModelIndex>
 
 class QListView;
 
 namespace Kross {
     class GUIClient;
-    class ActionMenuModel;
 }
 
 class ScriptingDocker : public QWidget
@@ -41,11 +39,9 @@ class ScriptingDocker : public QWidget
     private slots:
         void runScript();
         void stopScript();
-        void dataChanged() const;
 
     private:
         Kross::GUIClient* m_guiclient;
-        Kross::ActionMenuModel* m_model;
         QListView* m_view;
 };
 

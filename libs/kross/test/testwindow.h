@@ -45,7 +45,7 @@ class TestWindow : public KMainWindow
         QString m_interpretername;
         QString m_scriptcode;
 
-        Kross::Action::Ptr m_action;
+        Kross::Action* m_action;
         Kross::GUIClient* m_scriptextension;
 
         QComboBox* m_interpretercombo;

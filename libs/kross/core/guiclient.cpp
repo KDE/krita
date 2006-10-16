@@ -72,7 +72,7 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     d->actions = Manager::self().actionCollection();
 
     d->scriptsmenu = new KActionMenu(i18n("Scripts"), actionCollection(), "scripts");
-    d->scriptsmenu->setMenu( Manager::self().actionMenu() );
+    connect(d->scriptsmenu->menu(), SIGNAL(aboutToShow()), this, SLOT(slotMenuAboutToShow()));
     //connect(d->actions, SIGNAL(inserted(KAction*)), scriptsmenu, SLOT(addAction(QAction*)));
     //connect(d->actions, SIGNAL(removed(KAction*)), scriptsmenu, SLOT(removeAction(QAction*)));
 
@@ -131,8 +131,6 @@ bool GUIClient::writeConfigFromPackages()
     QStringList files = KGlobal::dirs()->findAllResources("data", partname + "/scripts/*/install.rc");
     files.sort();
     foreach(QString file, files) {
-        const QDir packagepath = QFileInfo(file).dir();
-
         krossdebug( QString("GUIClient::readConfigFromPackages trying to read \"%1\"").arg(file) );
         QFile f(file);
         if(! f.open(QIODevice::ReadOnly)) {
@@ -166,10 +164,18 @@ bool GUIClient::writeConfigFromPackages()
             config->writeEntry(QString("%1_interpreter").arg(name).toLatin1(), element.attribute("interpreter"));
 
             QString file = element.attribute("file");
-            if(! QFileInfo(file).exists()) {
-                QFileInfo fi(packagepath, file);
-                if(fi.exists())
-                    file = fi.absoluteFilePath();
+            QFileInfo fi(file);
+            if(! fi.exists()) {
+                const QDir packagepath = fi.dir();
+                QFileInfo fi2(packagepath, file);
+                if( fi2.exists() ) {
+                    file = fi2.absoluteFilePath();
+                }
+                else {
+                    QString resource = KGlobal::dirs()->findResource("appdata", QString("scripts/%1/%2").arg(name).arg(file));
+                    if( ! resource.isNull() )
+                        file = resource;
+                }
             }
             config->writeEntry(QString("%1_file").arg(name).toLatin1(), file);
         }
@@ -193,6 +199,13 @@ void GUIClient::setDOMDocument(const QDomDocument &document, bool merge)
     loadScriptConfigDocument(xmlFile(), document);
 }
 #endif
+
+void GUIClient::slotMenuAboutToShow()
+{
+    d->scriptsmenu->menu()->clear();
+    foreach(KAction* a, Manager::self().actionCollection()->actions())
+        d->scriptsmenu->menu()->addAction(a);
+}
 
 void GUIClient::executionSuccessful()
 {
@@ -232,7 +245,7 @@ bool GUIClient::executeFile()
 bool GUIClient::executeFile(const KUrl& file)
 {
     krossdebug( QString("GUIClient::executeFile() file='%1'").arg(file.path()) );
-    Action* action = new Action(file);
+    Action* action = new Action( file.path() );
     bool ok = executeAction(action);
     delete action;
     return ok;

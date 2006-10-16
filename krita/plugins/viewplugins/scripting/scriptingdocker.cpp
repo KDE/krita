@@ -23,6 +23,7 @@
 #include <QToolBar>
 #include <QBoxLayout>
 #include <QListView>
+#include <QModelIndex>
 
 #include <QRect>
 
@@ -43,8 +44,8 @@ ScriptingDocker::ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
     setLayout(layout);
 
     m_view = new QListView(this);
-    //m_view->setModel( new Kross::ActionCollectionModel(this) );
-    m_view->setModel( new Kross::ActionCollectionProxyModel(this) );
+    m_model = new Kross::ActionCollectionProxyModel(this);
+    m_view->setModel(m_model);
     layout->addWidget(m_view, 1);
 
     QToolBar* tb = new QToolBar(this);
@@ -64,19 +65,19 @@ ScriptingDocker::~ScriptingDocker()
 
 void ScriptingDocker::runScript()
 {
-    if( m_view->currentIndex().isValid() ) {
-        Kross::Action* action = dynamic_cast< Kross::Action* >( static_cast< KAction* >( m_view->currentIndex().internalPointer() ) );
-        if( action )
-            m_guiclient->executeAction(action);
+    QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
+    if( index.isValid() ) {
+        Kross::Action* action = static_cast< Kross::Action* >( index.internalPointer() );
+        m_guiclient->executeAction(action);
     }
 }
 
 void ScriptingDocker::stopScript()
 {
-    if( m_view->currentIndex().isValid() ) {
-        Kross::Action* action = dynamic_cast< Kross::Action* >( static_cast< KAction* >( m_view->currentIndex().internalPointer() ) );
-        if( action )
-            action->finalize();
+    QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
+    if( index.isValid() ) {
+        Kross::Action* action = static_cast< Kross::Action* >( index.internalPointer() );
+        action->finalize();
     }
 }
 

@@ -69,7 +69,7 @@ namespace Kross {
 
         private:
             virtual void setSourceModel(QAbstractItemModel* sourceModel);
-            //virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+            virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
     };
 
 }

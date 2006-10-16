@@ -144,86 +144,11 @@ void ActionCollectionProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
     QSortFilterProxyModel::setSourceModel(sourceModel);
 }
 
-/*
 bool ActionCollectionProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
-    QModelIndex index = sourceModel()->index(index.row(), 0, source_parent);
+    QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
     if( ! index.isValid() )
         return false;
     Action* action = static_cast< Action* >( index.internalPointer() );
     return action->isEnabled();
 }
-*/
-
-#if 0
-
-/******************************************************************************
- * ActionMenuModel
- */
-
-namespace Kross {
-
-    /// \internal d-pointer class.
-    class ActionMenuModel::Private
-    {
-        public:
-            KMenu* menu;
-    };
-
-}
-
-ActionMenuModel::ActionMenuModel(QObject* parent, KMenu* menu)
-    : QAbstractItemModel(parent)
-    , d( new Private() )
-{
-    d->menu = menu;
-}
-
-ActionMenuModel::~ActionMenuModel()
-{
-    delete d;
-}
-
-int ActionMenuModel::columnCount(const QModelIndex&) const
-{
-    return 1;
-}
-
-int ActionMenuModel::rowCount(const QModelIndex&) const
-{
-    return d->menu->actions().count();
-}
-
-QModelIndex ActionMenuModel::index(int row, int column, const QModelIndex& parent) const
-{
-    if(parent.isValid())
-        return QModelIndex();
-    return createIndex(row, column, d->menu->actions().value(row));
-}
-
-QModelIndex ActionMenuModel::parent(const QModelIndex&) const
-{
-    return QModelIndex();
-}
-
-QVariant ActionMenuModel::data(const QModelIndex& index, int role) const
-{
-    if(! index.isValid())
-        return QVariant();
-    KAction* action = static_cast< KAction* >( index.internalPointer() );
-    switch( role ) {
-        case Qt::DecorationRole:
-            return action->icon();
-        case Qt::DisplayRole:
-            return action->text().replace("&","");
-        case Qt::ToolTipRole: // fall through
-        case Qt::WhatsThisRole: {
-            Action* a = dynamic_cast< Action* >(action);
-            return a ? a->description() : QVariant();
-        }
-        default:
-            return QVariant();
-    }
-}
-
-#endif

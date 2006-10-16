@@ -27,6 +27,7 @@ class QListView;
 
 namespace Kross {
     class GUIClient;
+    class ActionCollectionProxyModel;
 }
 
 class ScriptingDocker : public QWidget
@@ -42,6 +43,7 @@ class ScriptingDocker : public QWidget
 
     private:
         Kross::GUIClient* m_guiclient;
+        Kross::ActionCollectionProxyModel* m_model;
         QListView* m_view;
 };
 

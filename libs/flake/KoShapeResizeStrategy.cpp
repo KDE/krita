@@ -29,6 +29,7 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
         const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool, canvas)
 {
+    Q_ASSERT( canvas->shapeManager()->selection()->count() > 0);
     KoSelectionSet selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
         m_selectedShapes << shape;

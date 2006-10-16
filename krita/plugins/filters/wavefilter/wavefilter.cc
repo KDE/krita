@@ -34,7 +34,6 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
 
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>

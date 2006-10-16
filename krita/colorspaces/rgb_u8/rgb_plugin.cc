@@ -27,7 +27,6 @@
 #include <kinstance.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoBasicHistogramProducers.h>

@@ -1498,7 +1498,7 @@ void KoTextView::updateStyleFromSelection( KoParagStyle* style )
 void KoTextView::addBookmarks(const QString &url)
 {
     QString filename = KStandardDirs::locateLocal( "data", QString::fromLatin1("konqueror/bookmarks.xml") );
-    KBookmarkManager *bookManager = KBookmarkManager::managerForFile( filename,false );
+    KBookmarkManager *bookManager = KBookmarkManager::managerForFile( filename, QString("konqueror"), false );
     KBookmarkGroup group = bookManager->root();
     group.addBookmark( bookManager, url, KUrl( url));
     bookManager->save();

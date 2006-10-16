@@ -61,7 +61,7 @@ namespace Kross {
      * The ActionCollectionProxyModel class implements a QSortFilterProxyModel 
      * for a \a ActionCollectionModel instance.
      */
-    class ActionCollectionProxyModel : public QSortFilterProxyModel
+    class KDE_EXPORT ActionCollectionProxyModel : public QSortFilterProxyModel
     {
         public:
             ActionCollectionProxyModel(QObject* parent);

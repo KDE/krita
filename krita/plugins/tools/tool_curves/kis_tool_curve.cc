@@ -567,7 +567,7 @@ QWidget* KisToolCurve::createSelectionOptionWidget(QWidget* parent)
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    QVBoxLayout * l = static_cast<QVBoxLayout*>(m_optWidget->layout());
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     return m_optWidget;

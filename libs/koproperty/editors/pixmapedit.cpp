@@ -39,7 +39,7 @@
 #include <QPixmap>
 #include <QEvent>
 #include <QKeyEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QResizeEvent>
 #include <QMouseEvent>
 
@@ -82,7 +82,7 @@ PixmapEdit::PixmapEdit(Property *property, QWidget *parent)
 
 	m_popup = new QLabel(0, Qt::WStyle_Customize|Qt::WStyle_NoBorder|Qt::WX11BypassWM|Qt::WStyle_StaysOnTop);
 	m_popup->setBackgroundRole( QPalette::Base );
-	m_popup->setFrameStyle(Q3Frame::Plain|Q3Frame::Box);
+	m_popup->setFrameStyle(QFrame::Plain|QFrame::Box);
 	m_popup->setMargin(2);
 	m_popup->setLineWidth(1);
 	m_popup->hide();

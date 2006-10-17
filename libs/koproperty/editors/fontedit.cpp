@@ -32,7 +32,7 @@
 #include <QToolTip>
 #include <QEvent>
 #include <QKeyEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QResizeEvent>
 
 #include <kdeversion.h>
@@ -52,7 +52,7 @@ class FontEditRequester : public KFontRequester
 			pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
 			label()->setPalette(pal);
 			label()->setMinimumWidth(0);
-			label()->setFrameShape(Q3Frame::Box);
+			label()->setFrameShape(QFrame::Box);
 			label()->setIndent(-1);
 			label()->setFocusPolicy(Qt::ClickFocus);
 			KAcceleratorManager::setNoAccel(label());

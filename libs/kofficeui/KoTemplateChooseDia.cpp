@@ -61,7 +61,7 @@
 #include <QByteArray>
 #include <QHideEvent>
 #include <QGridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <QLabel>
 #include <QGroupBox>
 
@@ -805,7 +805,7 @@ void KoTCDRecentFilesIconView::showToolTip( Q3IconViewItem* item )
     toolTip = new QLabel( QString::fromLatin1(" %1 ").arg(toolTipText), 0,
                           "myToolTip",
                           WStyle_StaysOnTop | WStyle_Customize | WStyle_NoBorder | WStyle_Tool | WX11BypassWM );
-    toolTip->setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
+    toolTip->setFrameStyle( QFrame::Plain | QFrame::Box );
     toolTip->setLineWidth( 1 );
     toolTip->setAlignment( Qt::AlignLeft | Qt::AlignTop );
     toolTip->move( QCursor::pos() + QPoint( 14, 14 ) );

@@ -31,7 +31,7 @@
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <QKeyEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3ValueList>
 #include <QMouseEvent>
 
@@ -604,7 +604,7 @@ void KKbdAccessExtensions::displayAccessKeys()
 		lab->setBuddy( widget );
                 lab->setPalette(QToolTip::palette());
                 lab->setLineWidth(2);
-                lab->setFrameStyle(Q3Frame::Box | Q3Frame::Plain);
+                lab->setFrameStyle(QFrame::Box | QFrame::Plain);
                 lab->setMargin(3);
                 lab->adjustSize();
                 lab->move(p);

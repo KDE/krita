@@ -163,7 +163,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
             }
         }
 
-        virtual void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const
+        virtual void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels)
         {
             if (_CSTraits::alpha_pos < 0) return;
             qint32 psize = pixelSize();

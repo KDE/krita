@@ -216,7 +216,7 @@ void KoTextParag::join( KoTextParag *s )
     n = s->n;
     if ( n )
 	n->p = this;
-    else if ( doc )
+    else 
 	doc->setLastParag( this );
 
     int start = str->length();

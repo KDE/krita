@@ -198,7 +198,8 @@ void KisToolPerspectiveTransform::activate()
             initHandles();
         }
     }
-    connect(m_subject->currentImg(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayerActivated(KisLayerSP)));
+    if (m_subject)
+        connect(m_subject->currentImg(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayerActivated(KisLayerSP)));
 }
 
 void KisToolPerspectiveTransform::initHandles()

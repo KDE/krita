@@ -272,7 +272,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
                 memcpy (matrix, solution, sw * sh * 3 * sizeof(double));
                 iter++;
             } while( err < 0.00001 && iter < 100);
-            delete solution;
+            delete [] solution;
         }
         
         // Finaly multiply
@@ -298,7 +298,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
             deviceIt.nextRow();
             srcDevIt.nextRow();
         }
-        delete matrix;
+        delete [] matrix;
     }
     
     

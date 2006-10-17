@@ -150,7 +150,9 @@ KisToolPerspectiveTransform::~KisToolPerspectiveTransform()
 
 void KisToolPerspectiveTransform::deactivate()
 {
-    if (m_subject && m_subject->undoAdapter()) m_subject->undoAdapter()->removeCommandHistoryListener( this );
+    if (!m_subject) return;
+
+    if (m_subject->undoAdapter()) m_subject->undoAdapter()->removeCommandHistoryListener( this );
 
     KisImageSP img = m_subject->currentImg();
     if (!img) return;

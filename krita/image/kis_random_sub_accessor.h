@@ -39,7 +39,7 @@ class KisRandomSubAccessorPixel{
         KisPaintDeviceSP m_device;
         int m_position, m_end;
         KisPoint m_currentPoint;
-        KisRandomAccessorPixel m_randomAccessor;
+        KisRandomConstAccessorPixel m_randomAccessor;
 };
 
 #endif

@@ -29,7 +29,7 @@ class KisLineIteratorPixelBase : public T, public KisIteratorPixelTrait<T, TSele
     public:
         KisLineIteratorPixelBase( KisDataManager *dm, KisDataManager *sel_dm, qint32 x, qint32 y, qint32 s, qint32 offsetx, qint32 offsety) :
             T(dm, x - offsetx, y - offsety, s),
-        KisIteratorPixelTrait <T, TSelect> ( this ),
+            KisIteratorPixelTrait <T, TSelect> ( this ),
             m_offsetx(offsetx), m_offsety(offsety)
         {
             if(sel_dm) {

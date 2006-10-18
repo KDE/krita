@@ -46,7 +46,6 @@ class KoStore;
 
 class KisExifInfo;
 class KisImage;
-class KisRandomAccessorPixel;
 class KisRandomSubAccessorPixel;
 class KisUndoAdapter;
 class KisFilter;
@@ -467,8 +466,16 @@ public:
      * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
      * you can
      */
-    KisRandomAccessorPixel createRandomAccessor(Q_INT32 x, Q_INT32 y, bool writable);
+    KisRandomAccessorPixel createRandomAccessor(Q_INT32 x, Q_INT32 y);
     
+    /**
+     * This function creates a random accessor which allow to randomly access any pixels on
+     * the paint device.
+     * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
+     * you can
+     */
+    KisRandomConstAccessorPixel createRandomAccessor(Q_INT32 x, Q_INT32 y) const;
+
     /**
      * This function create a random accessor which can easily access to sub pixel values.
      */

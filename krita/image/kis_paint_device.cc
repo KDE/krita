@@ -914,11 +914,22 @@ KisVLineConstIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32
 
 }
 
-KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(Q_INT32 x, Q_INT32 y, bool writable) {
-  if(hasSelection())
-    return KisRandomAccessorPixel(m_datamanager.data(), m_selection->m_datamanager.data(), x, y, m_x, m_y, writable);
-  else
-    return KisRandomAccessorPixel(m_datamanager.data(), NULL, x, y, m_x, m_y, writable);
+KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(Q_INT32 x, Q_INT32 y) {
+    if(hasSelection())
+        return KisRandomAccessorPixel(m_datamanager.data(), m_selection->m_datamanager.data(), x, y, m_x, m_y);
+    else
+        return KisRandomAccessorPixel(m_datamanager.data(), NULL, x, y, m_x, m_y);
+}
+
+KisRandomConstAccessorPixel KisPaintDevice::createRandomAccessor(Q_INT32 x, Q_INT32 y) const {
+    KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
+    if(hasSelection())
+    {
+        KisDataManager* sm = const_cast< KisDataManager*>(m_selection->m_datamanager.data());
+        return KisRandomConstAccessorPixel(dm, sm, x, y, m_x, m_y);
+    }
+    else
+        return KisRandomConstAccessorPixel(dm, NULL, x, y, m_x, m_y);
 }
 
 KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor()

@@ -120,7 +120,7 @@ public:
                 return 0;
         }
 
-        _iTp* selectionIterator() const { return m_selectionIterator; }
+        const _iTp* selectionIterator() const { return m_selectionIterator; }
 protected:
     inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) ++(*m_selectionIterator);};
 

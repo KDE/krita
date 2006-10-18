@@ -19,6 +19,8 @@
 
 #include "kis_random_sub_accessor.h"
 
+#include <stdlib.h>
+
 #include "kis_paint_device.h"
 
 KisRandomSubAccessorPixel::KisRandomSubAccessorPixel(KisPaintDeviceSP device) :

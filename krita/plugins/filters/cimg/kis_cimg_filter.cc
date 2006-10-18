@@ -354,6 +354,7 @@ bool KisCImgFilter::prepare_restore()
 
 bool KisCImgFilter::prepare_inpaint()
 {
+    // TODO: dead function
     const char *file_m         = NULL; //cimg_option("-m",(const char*)NULL,"Input inpainting mask");
     if (!file_m)
     {

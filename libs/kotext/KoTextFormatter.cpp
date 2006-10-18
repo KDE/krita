@@ -739,7 +739,7 @@ bool KoTextFormatterCore::format()
 
         x += ww;
 
-        if ( i > 0 )
+        if ( i > 0 && lastChr )
             lastChr->pixelwidth = pixelx - lastPixelx;
         if ( i < len - 1 )
             tmpWused = qMax( tmpWused, x );

@@ -19,7 +19,7 @@
 
 #include "kis_random_sub_accessor.h"
 
-#include <stdlib.h>
+#include <math.h>
 
 #include "kis_paint_device.h"
 

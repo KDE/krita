@@ -99,46 +99,6 @@ std::map<XID, KisCanvasWidget::X11TabletDevice> KisCanvasWidget::X11TabletDevice
 
 #endif // Q_WS_X11
 
-namespace {
-
-    static Q_INT32 correctPressureScale( Q_INT32 inPressure )
-    {
-        KisConfig cfg;
-        Q_INT32 correction = cfg.getPressureCorrection();
-
-        Q_INT32 x1, y1, x2, y2;
-
-        if ( correction == 0 ) {
-            x1 = 20;
-            y1 = 0;
-            x2 = 80;
-            y2 = 100;
-        } else if ( correction < 50 ) {
-            x1 = 20 - ( correction / 50 * 20 );
-            y1 = 0;
-            x2 = 80 + ( correction / 50 * 20 );
-            y2 = 100;
-        } else if ( correction == 50 ) {
-            x1 = 0;
-            y1 = 0;
-            x2 = 100;
-            y2 = 100;
-        } else if ( correction > 50 && correction < 100 ){
-            x1 = 0;
-            y1 = correction / 50 * 20;
-            x2 = 100;
-            y2 = 100 - ( correction / 50 * 20 );
-        } else {
-            x1 = 0;
-            y1 = 20;
-            x2 = 100;
-            y2 = 80;
-        }
-
-        return inPressure;
-    }
-}
-
 KisCanvasWidget::KisCanvasWidget()
 {
     m_enableMoveEventCompressionHint = false;
@@ -205,7 +165,7 @@ void KisCanvasWidget::widgetGotTabletEvent(QTabletEvent *e)
         break;
     }
 
-    double pressure = correctPressureScale( e->pressure() ) / 255.0;
+    double pressure = e->pressure() / 255.0;
 
     if (e->type() == QEvent::TabletPress) {
         KisButtonPressEvent ke(device, e->pos(), e->globalPos(), pressure, e->xTilt(), e->yTilt(), Qt::LeftButton, Qt::NoButton);

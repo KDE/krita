@@ -19,56 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
-            <property name="name">
-                <cstring>groupBox3</cstring>
-            </property>
-            <property name="title">
-                <string>Pressure</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout3</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel3</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Softer</string>
-                            </property>
-                        </widget>
-                        <widget class="QSlider">
-                            <property name="name">
-                                <cstring>slPressure</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="tickmarks">
-                                <enum>NoMarks</enum>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Firmer</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </hbox>
-        </widget>
         <widget class="QGroupBox" row="1" column="0">
             <property name="name">
                 <cstring>grpTabletDevices</cstring>

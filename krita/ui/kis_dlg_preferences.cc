@@ -219,10 +219,6 @@ void PerformanceTab::setDefault()
 TabletSettingsTab::TabletSettingsTab( QWidget *parent, const char *name)
     : WdgTabletSettings( parent, name )
 {
-    KisConfig cfg;
-    // XXX: Bad me -- hard-coded constant.
-    slPressure->setValue( 100 - cfg.getPressureCorrection() );
-
 #ifdef EXTENDED_X11_TABLET_SUPPORT
     initTabletDevices();
 #else
@@ -232,17 +228,10 @@ TabletSettingsTab::TabletSettingsTab( QWidget *parent, const char *name)
 
 void TabletSettingsTab::setDefault()
 {
-    KisConfig cfg;
-    // XXX: Bad me -- hard-coded constant.
-    slPressure->setValue(100 - cfg.getDefaultPressureCorrection());
 }
 
 void TabletSettingsTab::applySettings()
 {
-    KisConfig cfg;
-
-    // Pressure sensitivity setting == between 0 and 99
-    cfg.setPressureCorrection(100 - slPressure->value());
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
     applyTabletDeviceSettings();

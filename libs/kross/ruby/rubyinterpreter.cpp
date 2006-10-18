@@ -50,7 +50,7 @@ extern "C"
 #endif
         return new Kross::RubyInterpreter(info);
     }
-};
+}
 
 using namespace Kross;
 
@@ -64,7 +64,7 @@ namespace Kross {
     class RubyInterpreterPrivate {
         friend class RubyInterpreter;
     };
-};
+}
 
 RubyInterpreterPrivate* RubyInterpreter::d = 0;
 

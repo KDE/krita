@@ -73,8 +73,8 @@ public:
     virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
     virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels);
 
-    virtual void applyAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels);
-    virtual void applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels);
+    virtual void applyAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels) const;
+    virtual void applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels) const;
 
     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;

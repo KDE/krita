@@ -61,7 +61,7 @@ void KoF16HalfColorSpaceTrait::multiplyAlpha(quint8 *U8_pixel, quint8 U8_alpha, 
     }
 }
 
-void KoF16HalfColorSpaceTrait::applyAlphaU8Mask(quint8 * U8_pixel, quint8 * alpha8, qint32 nPixels)
+void KoF16HalfColorSpaceTrait::applyAlphaU8Mask(quint8 * U8_pixel, quint8 * alpha8, qint32 nPixels) const
 {
     if (m_alphaPos < 0) return;
 
@@ -77,7 +77,7 @@ void KoF16HalfColorSpaceTrait::applyAlphaU8Mask(quint8 * U8_pixel, quint8 * alph
     }
 }
 
-void KoF16HalfColorSpaceTrait::applyInverseAlphaU8Mask(quint8 * U8_pixels, quint8 * alpha8, qint32 nPixels)
+void KoF16HalfColorSpaceTrait::applyInverseAlphaU8Mask(quint8 * U8_pixels, quint8 * alpha8, qint32 nPixels) const
 {
     if (m_alphaPos < 0) return;
 

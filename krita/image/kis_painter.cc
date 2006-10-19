@@ -236,7 +236,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
                  const KoCompositeOp *op,
                  const KisPaintDeviceSP srcdev,
-                 KisPaintDeviceSP selMask,
+                 const KisPaintDeviceSP selMask,
                  Q_UINT8 opacity,
                  Q_INT32 sx, Q_INT32 sy,
                  Q_INT32 sw, Q_INT32 sh)
@@ -306,7 +306,7 @@ void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
             const quint8 *srcData = srcIt.rawData();
 
             qint32 selRowStride = selMask->rowStride(dstX, dstY);
-            KisHLineConstIteratorPixel selIt = selMask->createHLineIterator(dstX, dstY, columns);
+            KisHLineConstIteratorPixel selIt = selMask->createHLineConstIterator(dstX, dstY, columns);
             const quint8 *selData = selIt.rawData();
 
             m_colorSpace->bitBlt(dstData,
@@ -336,7 +336,7 @@ void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
                               const KoCompositeOp * op,
                               const KisPaintDeviceSP srcdev,
-                              KisSelectionSP seldev,
+                              const KisSelectionSP seldev,
                               quint8 opacity,
                               qint32 sx, qint32 sy,
                               qint32 sw, qint32 sh)

@@ -58,9 +58,9 @@ KisSelection::~KisSelection()
 {
 }
 
-quint8 KisSelection::selected(qint32 x, qint32 y)
+quint8 KisSelection::selected(qint32 x, qint32 y) const
 {
-    KisHLineConstIteratorPixel iter = createHLineIterator(x, y, 1);
+    KisHLineConstIteratorPixel iter = createHLineConstIterator(x, y, 1);
 
     const quint8 *pix = iter.rawData();
 
@@ -76,7 +76,7 @@ void KisSelection::setSelected(qint32 x, qint32 y, quint8 s)
     *pix = s;
 }
 
-QImage KisSelection::maskImage()
+QImage KisSelection::maskImage() const
 {
     // If part of a KisAdjustmentLayer, there may be no parent device.
     QImage img;
@@ -95,7 +95,7 @@ QImage KisSelection::maskImage()
     }
 
     for (y2 = y; y2 < h - y; ++y2) {
-            KisHLineConstIteratorPixel it = createHLineIterator(x, y2, w);
+            KisHLineConstIteratorPixel it = createHLineConstIterator(x, y2, w);
             x2 = 0;
             while (!it.isDone()) {
                     quint8 s = MAX_SELECTED - *(it.rawData());
@@ -147,7 +147,7 @@ void KisSelection::invert()
     m_datamanager->setDefaultPixel(&defPixel);
 }
 
-bool KisSelection::isTotallyUnselected(QRect r)
+bool KisSelection::isTotallyUnselected(QRect r) const
 {
     if(*(m_datamanager->defaultPixel()) != MIN_SELECTED)
         return false;
@@ -155,7 +155,7 @@ bool KisSelection::isTotallyUnselected(QRect r)
     return ! r.intersects(sr);
 }
 
-bool KisSelection::isProbablyTotallyUnselected(QRect r)
+bool KisSelection::isProbablyTotallyUnselected(QRect r) const
 {
     if(*(m_datamanager->defaultPixel()) != MIN_SELECTED)
         return false;
@@ -165,7 +165,7 @@ bool KisSelection::isProbablyTotallyUnselected(QRect r)
 
 
 
-QRect KisSelection::selectedRect()
+QRect KisSelection::selectedRect() const
 {
     if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
         return extent();
@@ -173,7 +173,7 @@ QRect KisSelection::selectedRect()
         return extent().unite(m_parentPaintDevice->extent());
 }
 
-QRect KisSelection::selectedExactRect()
+QRect KisSelection::selectedExactRect() const
 {
     if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
         return exactBounds();

@@ -65,11 +65,11 @@ public:
     virtual ~KisSelection();
 
     // Returns selectedness, or 0 if invalid coordinates
-    quint8 selected(qint32 x, qint32 y);
+    quint8 selected(qint32 x, qint32 y) const;
 
     void setSelected(qint32 x, qint32 y, quint8 s);
 
-    QImage maskImage();
+    QImage maskImage() const;
 
     void select(QRect r);
 
@@ -80,25 +80,25 @@ public:
     void clear();
 
     /// Tests if the the rect is totally outside the selection
-    bool isTotallyUnselected(QRect r);
+    bool isTotallyUnselected(QRect r) const;
 
     /**
      * Tests if the the rect is totally outside the selection, but uses selectedRect
      * instead of selectedRect, and this is faster (but might deliver false positives!)
      */
-    bool isProbablyTotallyUnselected(QRect r);
+    bool isProbablyTotallyUnselected(QRect r) const;
 
     /**
      * Rough, but fastish way of determining the area
      * of the tiles used by the selection.
      */
-    QRect selectedRect();
+    QRect selectedRect() const;
 
     /**
      * Slow, but exact way of determining the rectangle
      * that encloses the selection
      */
-    QRect selectedExactRect();
+    QRect selectedExactRect() const;
 
     void paintSelection(QImage img, qint32 x, qint32 y, qint32 w, qint32 h);
     void paintSelection(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);

@@ -22,7 +22,6 @@
 #include <map>
 
 #include <QRegExp>
-#include <ksharedptr.h>
 
 //#include "../core/exception.h"
 //#include "../core/module.h"

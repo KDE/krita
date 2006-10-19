@@ -18,7 +18,7 @@ kde4_add_plugin(krossruby ${krossruby_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krossruby )
 
-target_link_libraries(krossruby  ${KDE4_KDECORE_LIBS} ${RUBY_LIBRARY} krosscore )
+target_link_libraries(krossruby ${RUBY_LIBRARY} krosscore )
 
 install(TARGETS krossruby  DESTINATION ${PLUGIN_INSTALL_DIR})
 

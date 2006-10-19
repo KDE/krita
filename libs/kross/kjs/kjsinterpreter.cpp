@@ -20,8 +20,8 @@
 #include "kjsinterpreter.h"
 #include "kjsscript.h"
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
+//#include <kglobal.h>
+//#include <kstandarddirs.h>
 
 extern "C"
 {

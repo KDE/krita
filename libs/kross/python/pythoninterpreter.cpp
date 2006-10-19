@@ -22,8 +22,8 @@
 #include "pythonmodule.h"
 //#include "pythonextension.h"
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
+//#include <kglobal.h>
+//#include <kstandarddirs.h>
 
 #if defined(Q_WS_WIN)
   #define PYPATHDELIMITER ";"
@@ -99,6 +99,7 @@ PythonInterpreter::PythonInterpreter(Kross::InterpreterInfo* info)
     else
         path = Py_GetPath();
 
+#if 0
     // Determinate additional module-paths we like to add.
     // First add the global Kross modules-path.
     QStringList krossdirs = KGlobal::dirs()->findDirs("data", "kross/python");
@@ -108,6 +109,7 @@ PythonInterpreter::PythonInterpreter(Kross::InterpreterInfo* info)
     QStringList appdirs = KGlobal::dirs()->findDirs("appdata", "kross/python");
     for(QStringList::Iterator appit = appdirs.begin(); appit != appdirs.end(); ++appit)
         path.append(*appit + PYPATHDELIMITER);
+#endif
 
     // Set the extended sys.path.
     PySys_SetPath( (char*) path.toLatin1().data() );

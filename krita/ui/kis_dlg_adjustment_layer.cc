@@ -159,7 +159,7 @@ void KisDlgAdjustmentLayer::refreshPreview()
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
 
     QRect rect = layer->extent();
-    m_currentFilter->process(layer, layer, config, rect);
+    m_currentFilter->process(layer, rect, layer, rect, config);
     m_preview->slotUpdate();
     cmd.unexecute();
 }

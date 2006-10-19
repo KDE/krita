@@ -111,7 +111,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
 
             KisTransaction * cmd = new KisTransaction(filter->id().name(), dev);
 
-            filter->process(dev,dev, config, rect);
+            filter->process(dev, rect, dev, rect, config);
 
             delete config;
             if (filter->cancelRequested()) {

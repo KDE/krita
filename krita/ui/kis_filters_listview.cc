@@ -66,7 +66,7 @@ void KisFiltersThumbnailThread::run()
 
     KisPaintDeviceSP thumbPreview = KisPaintDeviceSP(new KisPaintDevice(*m_dev));
     m_filter->disableProgress();
-    m_filter->process(thumbPreview, thumbPreview, m_config, m_bounds);
+    m_filter->process(thumbPreview, m_bounds, thumbPreview, m_bounds, m_config);
 
     if (!m_canceled) {
         m_image = thumbPreview->convertToQImage(m_profile);

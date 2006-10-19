@@ -79,7 +79,7 @@ bool Filter::process(QObject* layer)
     QRect r1 = paintlayer->paintLayer()->paintDevice()->extent();
     QRect r2 = paintlayer->paintLayer()->image()->bounds();
     QRect rect = r1.intersect(r2);
-    m_filter->process(paintlayer->paintLayer()->paintDevice(), paintlayer->paintLayer()->paintDevice(), m_filter->configuration(), rect);
+    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, paintlayer->paintLayer()->paintDevice(), rect, m_filter->configuration());
     return true;
 }
 
@@ -91,8 +91,8 @@ bool Filter::process(QObject* layer, int x, int y, int width, int height)
         kWarning() << i18n("An error has occurred in %1",QString("process")) << endl;
         return false;
     }
-
-    m_filter->process(paintlayer->paintLayer()->paintDevice(), paintlayer->paintLayer()->paintDevice(), m_filter->configuration(), QRect(x, y, width, height));
+    QRect rect(x, y, width, height);
+    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, paintlayer->paintLayer()->paintDevice(),  rect, m_filter->configuration());
     return true;
 }
 

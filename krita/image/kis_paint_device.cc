@@ -1203,7 +1203,7 @@ void KisPaintDevice::runBackgroundFilters()
         QList<KisFilter*>::iterator it;
         QList<KisFilter*>::iterator end = m_longRunningFilters.end();
         for (it = m_longRunningFilters.begin(); it != end; ++it) {
-            (*it)->process(KisPaintDeviceSP(this), KisPaintDeviceSP(this), 0, rc);
+            (*it)->process(this, rc, this, rc, 0);
         }
     }
     if (m_parentLayer) m_parentLayer->setDirty(rc);

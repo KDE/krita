@@ -56,7 +56,15 @@ public:
 
     virtual void setProgressDisplay(KisProgressDisplayInterface * progressDisplay);
 
-    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&) = 0;
+    /**
+     * Override this function with the implementation of your filter.
+     * @param src the source paint device
+     * @param srcRect the area of the source pixel to consider
+     * @param dst the destination paint device
+     * @param dstRect the area on the destination paint device
+     * @param config the parameters of the filter
+     */
+    virtual void process(const KisPaintDeviceSP src, const QRect& srcRect, KisPaintDeviceSP dst, const QRect& dstRect, KisFilterConfiguration* config) = 0;
 
 public:
     virtual KisFilterConfiguration * configuration(QWidget*);

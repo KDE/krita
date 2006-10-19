@@ -190,19 +190,19 @@ public:
 
     // Get the number of contiguous columns starting at x, valid for all values
     // of y between minY and maxY.
-    inline qint32 numContiguousColumns(qint32 x, qint32 minY, qint32 maxY)
+    inline qint32 numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const
         { return ACTUAL_DATAMGR::numContiguousColumns(x, minY, maxY); }
 
 
     // Get the number of contiguous rows starting at y, valid for all values
     // of x between minX and maxX.
-    inline qint32 numContiguousRows(qint32 y, qint32 minX, qint32 maxX)
+    inline qint32 numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const
         { return ACTUAL_DATAMGR::numContiguousRows(y, minX, maxX); }
 
 
     // Get the row stride at pixel (x, y). This is the number of bytes to add to a
     // pointer to pixel (x, y) to access (x, y + 1).
-    inline qint32 rowStride(qint32 x, qint32 y)
+    inline qint32 rowStride(qint32 x, qint32 y) const
         { return ACTUAL_DATAMGR::rowStride(x, y); }
 
 protected:

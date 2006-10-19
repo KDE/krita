@@ -105,7 +105,7 @@ public:
      */
     void bitBlt(qint32 dx, qint32 dy,
                 const KoCompositeOp* op,
-                KisPaintDeviceSP src,
+                const KisPaintDeviceSP src,
                 qint32 sx, qint32 sy,
                 qint32 sw, qint32 sh)
     {
@@ -114,7 +114,7 @@ public:
 
     void bitBlt(qint32 dx, qint32 dy,
                 const QString & op,
-                KisPaintDeviceSP src,
+                const KisPaintDeviceSP src,
                 qint32 sx, qint32 sy,
                 qint32 sw, qint32 sh)
     {
@@ -128,14 +128,14 @@ public:
      */
     void bitBlt(qint32 dx, qint32 dy,
                 const KoCompositeOp* op,
-                KisPaintDeviceSP src,
+                const KisPaintDeviceSP src,
                 quint8 opacity,
                 qint32 sx, qint32 sy,
                 qint32 sw, qint32 sh);
 
     void bitBlt(qint32 dx, qint32 dy,
                 const QString & op,
-                KisPaintDeviceSP src,
+                const KisPaintDeviceSP src,
                 quint8 opacity,
                 qint32 sx, qint32 sy,
                 qint32 sw, qint32 sh)
@@ -149,7 +149,7 @@ public:
      */
     void bltMask(Q_INT32 dx, Q_INT32 dy,
                       const KoCompositeOp *op,
-                      KisPaintDeviceSP src,
+                      const KisPaintDeviceSP src,
                       KisPaintDeviceSP selMask,
                       Q_UINT8 opacity,
                       Q_INT32 sx, Q_INT32 sy,
@@ -161,7 +161,7 @@ public:
      */
     void bltSelection(qint32 dx, qint32 dy,
                       const KoCompositeOp  *op,
-                      KisPaintDeviceSP src,
+                      const KisPaintDeviceSP src,
                       KisSelectionSP selMask,
                       quint8 opacity,
                       qint32 sx, qint32 sy,
@@ -169,7 +169,7 @@ public:
 
     void bltSelection(qint32 dx, qint32 dy,
                       const QString & op,
-                      KisPaintDeviceSP src,
+                      const KisPaintDeviceSP src,
                       KisSelectionSP selMask,
                       quint8 opacity,
                       qint32 sx, qint32 sy,
@@ -183,14 +183,14 @@ public:
      */
     void bltSelection(qint32 dx, qint32 dy,
                       const KoCompositeOp *op,
-                      KisPaintDeviceSP src,
+                      const KisPaintDeviceSP src,
                       quint8 opacity,
                       qint32 sx, qint32 sy,
                       qint32 sw, qint32 sh);
 
     void bltSelection(qint32 dx, qint32 dy,
                       const QString & op,
-                      KisPaintDeviceSP src,
+                      const KisPaintDeviceSP src,
                       quint8 opacity,
                       qint32 sx, qint32 sy,
                       qint32 sw, qint32 sh)

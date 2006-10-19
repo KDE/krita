@@ -148,7 +148,7 @@ QRect KisPainter::dirtyRect() {
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         const KoCompositeOp* op,
-                        KisPaintDeviceSP srcdev,
+                        const KisPaintDeviceSP srcdev,
                         quint8 opacity,
                         qint32 sx, qint32 sy,
                         qint32 sw, qint32 sh)
@@ -203,7 +203,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
             columns = qMin(columns, columnsRemaining);
 
             qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
-            KisHLineConstIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns);
+            KisHLineConstIteratorPixel srcIt = srcdev->createHLineConstIterator(srcX, srcY, columns);
             const quint8 *srcData = srcIt.rawData();
 
             qint32 dstRowStride = m_device->rowStride(dstX, dstY);
@@ -235,7 +235,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
 void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
                  const KoCompositeOp *op,
-                 KisPaintDeviceSP srcdev,
+                 const KisPaintDeviceSP srcdev,
                  KisPaintDeviceSP selMask,
                  Q_UINT8 opacity,
                  Q_INT32 sx, Q_INT32 sy,
@@ -302,7 +302,7 @@ void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
             quint8 *dstData = dstIt.rawData();
 
             qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
-            KisHLineConstIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns);
+            KisHLineConstIteratorPixel srcIt = srcdev->createHLineConstIterator(srcX, srcY, columns);
             const quint8 *srcData = srcIt.rawData();
 
             qint32 selRowStride = selMask->rowStride(dstX, dstY);
@@ -335,7 +335,7 @@ void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
                               const KoCompositeOp * op,
-                              KisPaintDeviceSP srcdev,
+                              const KisPaintDeviceSP srcdev,
                               KisSelectionSP seldev,
                               quint8 opacity,
                               qint32 sx, qint32 sy,
@@ -360,7 +360,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
                   const KoCompositeOp* op,
-                  KisPaintDeviceSP srcdev,
+                  const KisPaintDeviceSP srcdev,
                   quint8 opacity,
                   qint32 sx, qint32 sy,
                   qint32 sw, qint32 sh)

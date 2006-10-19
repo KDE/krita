@@ -987,7 +987,7 @@ void KisTiledDataManager::writeBytes(const quint8 * bytes,
     }
 }
 
-qint32 KisTiledDataManager::numContiguousColumns(qint32 x, qint32 minY, qint32 maxY)
+qint32 KisTiledDataManager::numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const
 {
     qint32 numColumns;
 
@@ -1003,7 +1003,7 @@ qint32 KisTiledDataManager::numContiguousColumns(qint32 x, qint32 minY, qint32 m
     return numColumns;
 }
 
-qint32 KisTiledDataManager::numContiguousRows(qint32 y, qint32 minX, qint32 maxX)
+qint32 KisTiledDataManager::numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const
 {
     qint32 numRows;
 
@@ -1019,7 +1019,7 @@ qint32 KisTiledDataManager::numContiguousRows(qint32 y, qint32 minX, qint32 maxX
     return numRows;
 }
 
-qint32 KisTiledDataManager::rowStride(qint32 x, qint32 y)
+qint32 KisTiledDataManager::rowStride(qint32 x, qint32 y) const
 {
     Q_UNUSED(x);
     Q_UNUSED(y);

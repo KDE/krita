@@ -1133,17 +1133,17 @@ bool KisPaintDevice::setPixel(qint32 x, qint32 y, const KoColor& kc)
 }
 
 
-qint32 KisPaintDevice::numContiguousColumns(qint32 x, qint32 minY, qint32 maxY)
+qint32 KisPaintDevice::numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const
 {
     return m_datamanager->numContiguousColumns(x - m_x, minY - m_y, maxY - m_y);
 }
 
-qint32 KisPaintDevice::numContiguousRows(qint32 y, qint32 minX, qint32 maxX)
+qint32 KisPaintDevice::numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const
 {
     return m_datamanager->numContiguousRows(y - m_y, minX - m_x, maxX - m_x);
 }
 
-qint32 KisPaintDevice::rowStride(qint32 x, qint32 y)
+qint32 KisPaintDevice::rowStride(qint32 x, qint32 y) const
 {
     return m_datamanager->rowStride(x - m_x, y - m_y);
 }

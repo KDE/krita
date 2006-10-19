@@ -32,7 +32,7 @@
 #include <kis_brush.h>
 #include <kis_global.h>
 #include <kis_iterators_pixel.h>
-#include <kis_input_device.h>
+#include <KoInputDevice.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
@@ -64,7 +64,7 @@ KisDynamicOp::~KisDynamicOp()
     delete m_firstTransfo;
 }
 
-void KisDynamicOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
+void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 {
     KisPaintInformation adjustedInfo(info);
 
@@ -87,7 +87,7 @@ void KisDynamicOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisPaintDeviceSP device = m_painter->device();
 
-    KisPoint pt = pos;
+    KoPoint pt = pos;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines

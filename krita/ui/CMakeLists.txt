@@ -18,6 +18,7 @@ set(kritaui_LIB_SRCS
     kis_part_layer.cc
     imageviewer.cc
     kis_cursor.cc
+    kcurve.cc
     #    kis_tool.cc
     #    kis_tool_dummy.cc
     #    kis_tool_freehand.cc
@@ -32,7 +33,6 @@ set(kritaui_LIB_SRCS
 #   kis_birdeye_box.cc
 #   kis_histogram_view.cc
 #   imageviewer.cc
-#   kcurve.cc
 #   oldtoolbox.cc
 #   kis_autobrush.cc
 #   kis_autogradient.cc
@@ -101,7 +101,7 @@ set(kritaui_LIB_SRCS
 #   kis_filters_listview.cc
 #   kis_grid_manager.cpp
 #   kis_grid_drawer.cpp
-#   kis_input_device.cc
+#   KoInputDevice.cc
 #   kis_part_layer_handler.cc
 #   kis_dlg_adj_layer_props.cc
 #   squeezedcombobox.cpp
@@ -201,6 +201,6 @@ install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})
 #    kis_tool_factory.h
 #    kobirdeyepanel.h
 #    kis_filters_listview.h
-#    kis_input_device.h
+#    KoInputDevice.h
 #    kis_perspective_grid_manager.h
 #    DESTINATION ${INCLUDE_INSTALL_DIR})

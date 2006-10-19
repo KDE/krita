@@ -23,7 +23,7 @@
 class QWidget;
 class QCheckBox;
 class QLabel;
-class KisPoint;
+class KoPoint;
 class KisPainter;
 
 class KisDynamicTransformation;
@@ -48,7 +48,7 @@ public:
     KisDynamicOp(KisPainter * painter);
     virtual ~KisDynamicOp();
 
-    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
+    void paintAt(const KoPoint &pos, const KisPaintInformation& info);
 
 private:
     KisDynamicTransformation* m_firstTransfo;

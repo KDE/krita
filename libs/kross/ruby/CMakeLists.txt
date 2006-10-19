@@ -1,6 +1,6 @@
 
 
-include_directories( ${RUBY_INCLUDE_PATH} ${CMAKE_SOURCE_DIR}/libs/kross ${KDE4_INCLUDES} )
+include_directories( ${RUBY_INCLUDE_PATH} ${CMAKE_SOURCE_DIR}/libs/kross )
 
 
 ########### next target ###############

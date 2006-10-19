@@ -89,7 +89,7 @@ public: // KisCanvas2 methods
 
 private:
 
-    KisCanvas2::KisCanvas2(const KisCanvas2&);
+    KisCanvas2(const KisCanvas2&);
 
 private:
 

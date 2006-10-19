@@ -253,7 +253,7 @@ bool GUIClient::executeFile(const KUrl& file)
     krossdebug( QString("GUIClient::executeFile() file='%1'").arg(file.path()) );
     Action* action = new Action( file.path() );
     action->trigger();
-    bool ok = action->hadError();
+    bool ok = ! action->hadError();
     delete action;
     return ok;
 }

@@ -96,13 +96,6 @@ namespace Kross {
             bool executeFile(const KUrl& file);
 
             /**
-             * This method executes the \a Action \p action . Internaly we just
-             * call \a Action::trigger and redirect the success/failed signals
-             * to our internal slots.
-             */
-            bool executeAction(Action* action);
-
-            /**
             * The \a ScriptManagerGUI dialog will be displayed to
             * let the user manage the scriptfiles.
             */
@@ -116,26 +109,14 @@ namespace Kross {
             void slotMenuAboutToShow();
 
             /**
-             * Called if execution failed and displays an errormessage-dialog.
+             * Called if execution started.
              */
-            void executionFailed(const QString& errormessage, const QString& tracedetails);
+            void started(Kross::Action*);
 
             /**
-             * Called if execution was successful.
+             * Called if execution finished.
              */
-            void executionSuccessful();
-
-        signals:
-
-            /**
-             * This signal is emitted when the execution of a script is started.
-             */
-            void executionStarted(Kross::Action*);
-
-            /**
-             * This signal is emitted when the execution of a script is finished.
-             */
-            void executionFinished(Kross::Action*);
+            void finished(Kross::Action*);
 
         private:
             /// \internal d-pointer class.

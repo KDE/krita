@@ -246,9 +246,8 @@ bool Manager::readConfig()
             action->setInterpreter(interpreter);
         action->setFile(file);
 
-        //connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
-        //connect(action, SIGNAL( success() ), this, SLOT( executionSuccessful() ));
-        //connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
+        connect(action, SIGNAL( started(Kross::Action*) ), this, SIGNAL( started(Kross::Action*)) );
+        connect(action, SIGNAL( finished(Kross::Action*) ), this, SIGNAL( finished(Kross::Action*) ));
     }
 
     // remove actions that are not valid anymore

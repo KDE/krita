@@ -198,9 +198,16 @@ namespace Kross {
             QString currentPath() const;
 
         signals:
-            void activated(Kross::Action*);
-            void success();
-            void failed(const QString& errormessage, const QString& tracedetails);
+
+            /**
+             * This signal is emitted before the script got executed.
+             */
+            void started(Kross::Action*);
+
+            /**
+             * This signal is emitted after the script got executed.
+             */
+            void finished(Kross::Action*);
 
         private slots:
 

@@ -313,7 +313,7 @@ void Action::finalize()
 void Action::slotTriggered()
 {
     //krossdebug( QString("Action::slotTriggered()") );
-    emit activated(this);
+    emit started(this);
 
     if( ! d->script ) {
         if( ! initialize() )
@@ -322,22 +322,17 @@ void Action::slotTriggered()
 
     if( hadError() ) {
         krossdebug( QString("Action::slotTriggered() name=%1 errorMessage=%2").arg(objectName()).arg(errorMessage()) );
-        emit failed(errorMessage(), errorTrace());
+        emit finished(this);
         return;
     }
-
-    //what to do with data() ?
 
     d->script->execute();
     if( d->script->hadError() ) {
         setError(d->script);
         finalize();
-        emit failed(errorMessage(), errorTrace());
     }
-    else {
-        clearError();
-        emit success();
-    }
+
+    emit finished(this);
 }
 
 #include "action.moc"

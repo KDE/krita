@@ -98,8 +98,8 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
 
     d->view->createDock(i18n("Scripts"), new ScriptingDocker(d->view, d->guiclient));
 
-    connect(d->guiclient, SIGNAL(executionFinished(Kross::Action*)), this, SLOT(executionFinished(Kross::Action*)));
-    connect(d->guiclient, SIGNAL(executionStarted(Kross::Action*)), this, SLOT(executionStarted(Kross::Action*)));
+    connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
+    connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
 
     // do we still need the monitor?
     ScriptingMonitor::instance()->monitor( d->guiclient );
@@ -114,17 +114,7 @@ ScriptingPart::~ScriptingPart()
     delete d;
 }
 
-void ScriptingPart::executionFinished(Kross::Action*)
-{
-    kDebug() << "ScriptingPart::executionFinished" << endl;
-    d->view->canvasSubject()->document()->setModified(true);
-    d->view->canvasSubject()->document()->currentImage()->activeLayer()->setDirty();
-    static_cast< Kross::KritaCore::KritaCoreProgress* >( d->module->progress() )->progressDone();
-    QApplication::restoreOverrideCursor();
-    //d->module->deleteLater();
-}
-
-void ScriptingPart::executionStarted(Kross::Action* action)
+void ScriptingPart::started(Kross::Action* action)
 {
     Q_UNUSED(action);
     kDebug() << "ScriptingPart::executionStarted" << endl;
@@ -138,5 +128,14 @@ void ScriptingPart::executionStarted(Kross::Action* action)
     //progress->setPackagePath( act->getPackagePath() );
 }
 
+void ScriptingPart::finished(Kross::Action*)
+{
+    kDebug() << "ScriptingPart::executionFinished" << endl;
+    d->view->canvasSubject()->document()->setModified(true);
+    d->view->canvasSubject()->document()->currentImage()->activeLayer()->setDirty();
+    static_cast< Kross::KritaCore::KritaCoreProgress* >( d->module->progress() )->progressDone();
+    QApplication::restoreOverrideCursor();
+    //d->module->deleteLater();
+}
 
 #include "scriptingpart.moc"

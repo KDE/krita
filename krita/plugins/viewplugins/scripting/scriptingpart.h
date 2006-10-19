@@ -40,8 +40,8 @@ class ScriptingPart : public KParts::Plugin
         ScriptingPart(QObject *parent, const QStringList &);
         virtual ~ScriptingPart();
     private slots:
-        void executionFinished(Kross::Action*);
-        void executionStarted(Kross::Action*);
+        void started(Kross::Action*);
+        void finished(Kross::Action*);
     private:
         class Private;
         Private* const d;

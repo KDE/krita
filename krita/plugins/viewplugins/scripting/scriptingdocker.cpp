@@ -68,7 +68,7 @@ void ScriptingDocker::runScript()
     QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
     if( index.isValid() ) {
         Kross::Action* action = static_cast< Kross::Action* >( index.internalPointer() );
-        m_guiclient->executeAction(action);
+        action->trigger(); // execute the script
     }
 }
 

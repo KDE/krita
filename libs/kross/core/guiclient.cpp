@@ -91,6 +91,10 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
         if (writeConfigFromPackages())
             Manager::self().readConfig();
     }
+
+    // The GUIClient provides feedback if e.g. an execution failed.
+    connect(&Manager::self(), SIGNAL( started(Kross::Action*) ), this, SLOT( started(Kross::Action*) ));
+    connect(&Manager::self(), SIGNAL( finished(Kross::Action*) ), this, SLOT( finished(Kross::Action*) ));
 }
 
 GUIClient::~GUIClient()
@@ -207,20 +211,22 @@ void GUIClient::slotMenuAboutToShow()
         d->scriptsmenu->menu()->addAction(a);
 }
 
-void GUIClient::executionSuccessful()
+void GUIClient::started(Kross::Action* action)
 {
-    Action* action = dynamic_cast< Action* >( QObject::sender() );
-    emit executionFinished(action);
+    Q_UNUSED(action);
+    krossdebug( QString("GUIClient::started(Kross::Action*) name='%1'").arg(action->objectName()) );
 }
 
-void GUIClient::executionFailed(const QString& errormessage, const QString& tracedetails)
+void GUIClient::finished(Kross::Action* action)
 {
-    Action* action = dynamic_cast< Action* >( QObject::sender() );
-    emit executionFinished(action);
-    if(tracedetails.isEmpty())
-        KMessageBox::error(0, errormessage);
-    else
-        KMessageBox::detailedError(0, errormessage, tracedetails);
+    krossdebug( QString("GUIClient::finished(Kross::Action*) name='%1'").arg(action->objectName()) );
+    if( action->hadError() ) {
+        if( action->errorTrace().isNull() )
+            KMessageBox::error(0, action->errorMessage());
+        else
+            KMessageBox::detailedError(0, action->errorMessage(), action->errorTrace());
+    }
+    //emit executionFinished(action);
 }
 
 bool GUIClient::executeFile()
@@ -246,21 +252,9 @@ bool GUIClient::executeFile(const KUrl& file)
 {
     krossdebug( QString("GUIClient::executeFile() file='%1'").arg(file.path()) );
     Action* action = new Action( file.path() );
-    bool ok = executeAction(action);
-    delete action;
-    return ok;
-}
-
-bool GUIClient::executeAction(Action* action)
-{
-    connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
-    connect(action, SIGNAL( success() ), this, SLOT( executionSuccessful() ));
-    connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
-
-    action->trigger(); // activate the action and execute the script that way
-
+    action->trigger();
     bool ok = action->hadError();
-    action->finalize(); // execution is done.
+    delete action;
     return ok;
 }
 

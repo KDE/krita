@@ -166,6 +166,18 @@ namespace Kross {
              */
             QObject* module(const QString& modulename);
 
+        signals:
+
+            /**
+             * This signal is emitted when the execution of a script is started.
+             */
+            void started(Kross::Action*);
+
+            /**
+             * This signal is emitted when the execution of a script is finished.
+             */
+            void finished(Kross::Action*);
+
         private:
             /// Private d-pointer class.
             ManagerPrivate* d;

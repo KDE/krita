@@ -18,6 +18,7 @@
 
 #include "scriptingmonitor.h"
 
+#include <core/manager.h>
 #include <core/action.h>
 #include <core/guiclient.h>
 
@@ -34,8 +35,9 @@ ScriptingMonitor::~ScriptingMonitor()
 
 void ScriptingMonitor::monitor(Kross::GUIClient* guiClient)
 {
-    connect(guiClient, SIGNAL(executionFinished(Kross::Action*)), SIGNAL(executionFinished(Kross::Action*)));
-    connect(guiClient, SIGNAL(executionStarted(Kross::Action*)), SIGNAL(executionStarted(Kross::Action*)));
+    Q_UNUSED(guiClient);
+    connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), SIGNAL(started(Kross::Action*)));
+    connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), SIGNAL(finished(Kross::Action*)));
 }
 
 ScriptingMonitor* ScriptingMonitor::s_instance = 0;

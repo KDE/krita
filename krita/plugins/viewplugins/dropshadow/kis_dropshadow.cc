@@ -94,7 +94,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
 
     for (qint32 row = 0; row < rect.height(); ++row)
     {
-        KisHLineConstIteratorPixel srcIt = dev->createHLineIterator(rect.x(), rect.y() + row, rect.width());
+        KisHLineConstIteratorPixel srcIt = dev->createHLineConstIterator(rect.x(), rect.y() + row, rect.width());
         KisHLineIteratorPixel dstIt = shadowDev->createHLineIterator(rect.x(), rect.y() + row, rect.width());
         while( ! srcIt.isDone() )
         {

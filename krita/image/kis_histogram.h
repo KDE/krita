@@ -143,7 +143,7 @@ private:
     double m_selFrom, m_selTo;
     bool m_selection;
 
-    KisPaintDeviceSP m_dev;
+    const KisPaintDeviceSP m_dev;
 
     QVector<Calculations> m_completeCalculations, m_selectionCalculations;
 };

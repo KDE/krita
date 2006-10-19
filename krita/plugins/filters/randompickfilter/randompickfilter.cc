@@ -102,8 +102,8 @@ void KisFilterRandomPick::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
     int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
     
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
-    KisRectConstIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
-    KisRandomConstAccessorPixel srcRA = src->createRandomAccessor(0, 0);
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRandomConstAccessorPixel srcRA = src->createRandomConstAccessor(0, 0);
     
     Q_UINT32 threshold = (RAND_MAX / 100) * (100 - level);
     

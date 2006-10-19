@@ -140,7 +140,7 @@ public:
                     KisPaintDeviceSP temp = new KisPaintDevice(maskSrc->colorSpace());
                     temp = paintIndirect(maskSrc, temp, layer, sx, sy, dx, dy, w, h);
                     // Blegh
-                    KisRectConstIteratorPixel srcIt = temp->createRectIterator(sx, sy, w, h);
+                    KisRectConstIteratorPixel srcIt = temp->createRectConstIterator(sx, sy, w, h);
                     KisRectIteratorPixel dstIt = mask->createRectIterator(sx, sy, w, h);
 
                     while(!dstIt.isDone()) {

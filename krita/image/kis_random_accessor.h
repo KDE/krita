@@ -121,11 +121,11 @@ class KisRandomAccessorPixelBase : public T, public KisRandomAccessorPixelTrait<
         KisRandomAccessorPixelBase(KisTiledDataManager *ktm, KisTiledDataManager *ktmselect, Q_INT32 x, Q_INT32 y, Q_INT32 offsetx, Q_INT32 offsety) : T( ktm, x, y, offsetx, offsety), KisRandomAccessorPixelTrait<T, TSelect>( this, (ktmselect) ? new T(ktm, x, y, offsetx, offsety) : 0 )
         {
         }
-        template<class T2, typename TSelect2>
+/*        template<class T2, typename TSelect2>
         KisRandomAccessorPixelBase(const KisRandomAccessorPixelBase<T2,TSelect2>& rhs) :
                 T(rhs), KisRandomAccessorPixelTrait <T, TSelect> (this, (rhs.selectionAccessor()) ? new T(*rhs.selectionAccessor()) : 0)
         {
-        }
+        }*/
     public:
         inline void moveTo(Q_INT32 x, Q_INT32 y) { T::moveTo(x,y); KisRandomAccessorPixelTrait<T, TSelect>::moveTo(x,y); }
 };

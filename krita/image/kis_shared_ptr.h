@@ -77,6 +77,10 @@ public:
     inline ~KisSharedPtr() { if (d && !d->ref.deref()) delete d; }
 
     inline KisSharedPtr<T>& operator= ( const KisSharedPtr& o ) { attach(o.d); return *this; }
+    inline const KisSharedPtr<T>& operator= ( const KisSharedPtr& o ) const {
+        attach(o.d); 
+        return *this;
+    }
     inline bool operator== ( const KisSharedPtr& o ) const { return ( d == o.d ); }
     inline bool operator!= ( const KisSharedPtr& o ) const { return ( d != o.d ); }
     inline bool operator< ( const KisSharedPtr& o ) const { return ( d < o.d ); }
@@ -114,7 +118,7 @@ public:
      * If the previous shared pointer is not owned by any KisSharedPtr,
      * it is deleted.
      */
-    void attach(T* p);
+    void attach(T* p) const;
 
     /**
      * Clear the pointer, i.e. make it a null pointer.
@@ -181,7 +185,7 @@ public:
     }
 
 private:
-    T* d;
+    mutable T* d;
 };
 
 template <class T>
@@ -197,7 +201,7 @@ Q_INLINE_TEMPLATE bool operator!= (const T* p, const KisSharedPtr<T>& o)
 }
 
 template <class T>
-Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T* p)
+Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T* p) const
 {
     if (d != p) {
         T *x = p;

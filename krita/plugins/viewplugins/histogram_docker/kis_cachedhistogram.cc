@@ -25,7 +25,7 @@
 
 void KisCachedHistogramObserver::regionUpdated(KisPaintDeviceSP dev) {
     m_producer->clear();
-    KisRectConstIteratorPixel srcIt = dev->createRectIterator(m_x, m_y, m_w, m_h);
+    KisRectConstIteratorPixel srcIt = dev->createRectConstIterator(m_x, m_y, m_w, m_h);
     int i;
     while ( !srcIt.isDone() ) {
         i = srcIt.nConseqPixels();

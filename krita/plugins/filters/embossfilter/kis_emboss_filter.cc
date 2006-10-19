@@ -93,7 +93,7 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
 
         for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
         {
-        KisHLineConstIteratorPixel it = src->createHLineIterator(rect.x(), rect.y() + y, rect.width());
+        KisHLineConstIteratorPixel it = src->createHLineConstIterator(rect.x(), rect.y() + y, rect.width());
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y() + y, rect.width());
 
         for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it, ++dstIt)

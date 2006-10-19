@@ -88,7 +88,7 @@ class KisRectIteratorPixelBase : public T, public KisIteratorPixelTrait<T, TSele
                 KisIteratorPixelTrait <T, TSelect>::setSelectionIterator(i);
             }
         }
-        template<class T2, typename TSelect2>
+/*        template<class T2, typename TSelect2>
         KisRectIteratorPixelBase(const KisRectIteratorPixelBase<T2, TSelect2>& rhs) :
                 T(rhs), KisIteratorPixelTrait <T, TSelect> (this)
         {
@@ -97,7 +97,7 @@ class KisRectIteratorPixelBase : public T, public KisIteratorPixelTrait<T, TSele
                 KisIteratorPixelTrait <T, TSelect>::setSelectionIterator(new T(*rhs.selectionIterator()));
             }
             m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
-        }
+        }*/
         /// increment the position of the iterator
         inline KisRectIteratorPixelBase<T, TSelect> & operator ++() { T::operator++(); KisIteratorPixelTrait<T, TSelect>::advance(1); return *this;}
 

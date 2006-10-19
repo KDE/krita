@@ -128,7 +128,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 
             int i = 0;
             // dummy init
-            KisHLineConstIteratorPixel iter = dev->createHLineIterator(0, 0, 1);;
+            KisHLineConstIteratorPixel iter = dev->createHLineConstIterator(0, 0, 1);;
             for (int y = - m_radius; y <= m_radius; y++) {
                 for (int x = - m_radius; x <= m_radius; x++) {
                     if (x*x + y*y < m_radius * m_radius) {

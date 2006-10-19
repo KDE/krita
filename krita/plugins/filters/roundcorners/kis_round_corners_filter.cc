@@ -72,7 +72,7 @@ void KisRoundCornersFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
         qint32 width = rect.width();
         qint32 height = rect.height();
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, y, width );
-        KisHLineConstIteratorPixel srcIt = src->createHLineIterator(x, y, width);
+        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(x, y, width);
         while( ! srcIt.isDone() )
         {
             if(srcIt.isSelected())

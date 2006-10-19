@@ -262,7 +262,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, c
 
                             QColor originalColor;
 
-                            KisHLineConstIterator oldIt = src->createHLineIterator(rect.x() + l, rect.y() + k, 1);
+                            KisHLineConstIterator oldIt = src->createHLineConstIterator(rect.x() + l, rect.y() + k, 1);
                             cs->toQColor(oldIt.oldRawData(), &originalColor);
 
                             int newRed = CLAMP(originalColor.red() + Bright, 0, quint8_MAX);
@@ -302,7 +302,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, c
                             if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
                             {
                                 QColor color;
-                                KisHLineConstIterator dstIt = dst->createHLineIterator(rect.x() + n, rect.y() + m, 1);
+                                KisHLineConstIterator dstIt = dst->createHLineConstIterator(rect.x() + n, rect.y() + m, 1);
                                 cs->toQColor(dstIt.rawData(), &color);
 
                                 R += color.red();
@@ -330,7 +330,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, c
         setProgress(NumBlurs);
     }
 
-    KisRectConstIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
     KisRectIteratorPixel dstIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
 
     while (!srcIt.isDone()) {

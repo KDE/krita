@@ -180,7 +180,7 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     {
         srcRGB16 = new KisPaintDevice(*src.data());
         srcRGB16->convertTo(rgb16CS);
-        KisRectConstIteratorPixel it = srcRGB16->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+        KisRectConstIteratorPixel it = srcRGB16->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
         while (!it.isDone()) {
             const Q_UINT16* data = reinterpret_cast<const Q_UINT16*>(it.rawData());
     
@@ -195,7 +195,7 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
         }
     } else {
         kdDebug() << "The RGB16 colorspace is not available, will work in 8bit." << endl;
-        KisRectConstIteratorPixel it = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+        KisRectConstIteratorPixel it = src->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
         while (!it.isDone()) {
     
             QColor color;

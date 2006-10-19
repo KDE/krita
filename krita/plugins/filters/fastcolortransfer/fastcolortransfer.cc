@@ -129,7 +129,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
     // Compute the means and sigmas of src
     double meanL_src = 0., meanA_src = 0., meanB_src = 0.;
     double sigmaL_src = 0., sigmaA_src = 0., sigmaB_src = 0.;
-    KisRectConstIteratorPixel srcLABIt = srcLAB->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectConstIteratorPixel srcLABIt = srcLAB->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
     while(!srcLABIt.isDone())
     {
         const Q_UINT16* data = reinterpret_cast<const Q_UINT16*>(srcLABIt.oldRawData());
@@ -155,7 +155,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
     // Compute the means and sigmas of src
     double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
     double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
-    KisRectConstIteratorPixel refIt = ref->createRectIterator(0, 0, importedImage->width(), importedImage->height());
+    KisRectConstIteratorPixel refIt = ref->createRectConstIterator(0, 0, importedImage->width(), importedImage->height());
     while(!refIt.isDone())
     {
         const Q_UINT16* data = reinterpret_cast<const Q_UINT16*>(refIt.oldRawData());

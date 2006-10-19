@@ -438,13 +438,13 @@ public:
      * @return an iterator which points to the first pixel of an rectangle, this iterator
      * does not allow to change the pixel values
      */
-    KisRectConstIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h) const;
+    KisRectConstIteratorPixel createRectConstIterator(qint32 left, qint32 top, qint32 w, qint32 h) const;
 
     /**
      * @return an iterator which points to the first pixel of a horizontal line, this iterator
      * does not allow to change the pixel values
      */
-    KisHLineConstIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w) const;
+    KisHLineConstIteratorPixel createHLineConstIterator(qint32 x, qint32 y, qint32 w) const;
     /**
      * @return an iterator which points to the first pixel of a horizontal line
      */
@@ -458,7 +458,7 @@ public:
     /**
      * This function return an iterator which points to the first pixel of a vertical line
      */
-    KisVLineConstIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h) const;
+    KisVLineConstIteratorPixel createVLineConstIterator(qint32 x, qint32 y, qint32 h) const;
 
     /**
      * This function creates a random accessor which allow to randomly access any pixels on
@@ -474,7 +474,7 @@ public:
      * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
      * you can
      */
-    KisRandomConstAccessorPixel createRandomAccessor(Q_INT32 x, Q_INT32 y) const;
+    KisRandomConstAccessorPixel createRandomConstAccessor(Q_INT32 x, Q_INT32 y) const;
 
     /**
      * This function create a random accessor which can easily access to sub pixel values.

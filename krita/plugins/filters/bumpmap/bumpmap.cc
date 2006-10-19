@@ -95,7 +95,7 @@ namespace {
     {
         KoColorSpace * csOrig = orig->colorSpace();
 
-        KisHLineConstIteratorPixel origIt = orig->createHLineIterator(x, y, w);
+        KisHLineConstIteratorPixel origIt = orig->createHLineConstIterator(x, y, w);
         for (int i = 0; i < w; ++i) {
             row[0] = csOrig->intensity8(origIt.rawData());
             row[0] = lut[waterlevel + ((row[0] -  waterlevel) * csOrig->getAlpha(origIt.rawData())) / 255];
@@ -273,7 +273,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
         // Bumpmap
 
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, sel_w);
-        KisHLineConstIteratorPixel srcIt = src->createHLineIterator(rect.x(), y, sel_w);
+        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(rect.x(), y, sel_w);
 
         qint32 tmp = config->xofs + sel_x;
         xofs2 = MOD (tmp, bm_w);

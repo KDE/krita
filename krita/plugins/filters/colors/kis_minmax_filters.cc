@@ -79,7 +79,7 @@ void KisFilterMax::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilter
     Q_ASSERT(dst != 0);
     
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height() );
-    KisRectConstIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
 
     int pixelsProcessed = 0;
     setProgressTotalSteps(rect.width() * rect.height());
@@ -125,7 +125,7 @@ void KisFilterMin::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilter
     Q_ASSERT(dst != 0);
     
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
-    KisRectConstIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
 
     int pixelsProcessed = 0;
     setProgressTotalSteps(rect.width() * rect.height());

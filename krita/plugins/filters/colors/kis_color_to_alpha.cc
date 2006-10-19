@@ -64,7 +64,7 @@ void KisFilterColorToAlpha::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     int threshold = (config->getProperty("threshold", value)) ? value.toInt() : 0;
     
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height() );
-    KisRectConstIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
 
     int pixelsProcessed = 0;
     setProgressTotalSteps(rect.width() * rect.height());

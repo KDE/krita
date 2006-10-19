@@ -98,7 +98,7 @@ void KisOilPaintFilter::OilPaint(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
 
     for (qint32 yOffset = 0; yOffset < h; yOffset++) {
 
-        KisHLineConstIteratorPixel it = src->createHLineIterator(x, y + yOffset, w);
+        KisHLineConstIteratorPixel it = src->createHLineConstIterator(x, y + yOffset, w);
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, y + yOffset, w);
 
         while (!it.isDone() && !cancelRequested()) {
@@ -154,7 +154,7 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
         /*for (i = 0; i <= Intensity; ++i)
       IntensityCount[i] = 0;*/
 
-    KisRectConstIteratorPixel it = src->createRectIterator(X - Radius, Y - Radius, (2 * Radius) + 1, (2 * Radius) + 1);
+    KisRectConstIteratorPixel it = src->createRectConstIterator(X - Radius, Y - Radius, (2 * Radius) + 1, (2 * Radius) + 1);
 
     while (!it.isDone()) {
 

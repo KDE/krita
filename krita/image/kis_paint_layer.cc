@@ -327,7 +327,7 @@ void KisPaintLayer::setRenderMask(bool b) {
 }
 
 void KisPaintLayer::convertMaskToSelection(const QRect& r) {
-    KisRectConstIteratorPixel srcIt = m_mask->createRectIterator(r.x(), r.y(),
+    KisRectConstIteratorPixel srcIt = m_mask->createRectConstIterator(r.x(), r.y(),
             r.width(), r.height());
     KisRectIteratorPixel dstIt = m_maskAsSelection->createRectIterator(r.x(), r.y(),
             r.width(), r.height());

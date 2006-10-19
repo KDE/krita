@@ -26,7 +26,7 @@
 
 class KisRandomSubAccessorPixel{
     public:
-        KisRandomSubAccessorPixel(KisPaintDeviceSP device);
+        KisRandomSubAccessorPixel(const KisPaintDeviceSP device);
         ~KisRandomSubAccessorPixel();
         /**
          * Copy the sampled old value to destination

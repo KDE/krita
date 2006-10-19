@@ -90,8 +90,8 @@ void KisUnsharpFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     }
     
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width());
-    KisHLineConstIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y(), rect.width());
-    KisHLineConstIteratorPixel intermIt = interm->createHLineIterator(rect.x(), rect.y(), rect.width());
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(rect.x(), rect.y(), rect.width());
+    KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(rect.x(), rect.y(), rect.width());
 
     int cdepth = cs -> pixelSize();
     Q_UINT8 *colors[2];

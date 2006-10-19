@@ -28,11 +28,12 @@
 #include "KoColorSpace.h"
 #include "kis_debug_areas.h"
 
-KisHistogram::KisHistogram(KisPaintLayerSP layer,
+KisHistogram::KisHistogram(const KisPaintLayerSP layer,
                            KoHistogramProducerSP producer,
                            const enumHistogramType type)
 {
-    m_dev = layer->paintDevice();
+    KisPaintDeviceSP pd = layer->paintDevice();
+    m_dev = pd;
     m_type = type;
     m_producer = producer;
     m_selection = false;
@@ -41,7 +42,7 @@ KisHistogram::KisHistogram(KisPaintLayerSP layer,
     updateHistogram();
 }
 
-KisHistogram::KisHistogram(KisPaintDeviceSP paintdev,
+KisHistogram::KisHistogram(const KisPaintDeviceSP paintdev,
                            KoHistogramProducerSP producer,
                            const enumHistogramType type)
 {
@@ -62,7 +63,7 @@ void KisHistogram::updateHistogram()
 {
     qint32 x,y,w,h;
     m_dev->exactBounds(x,y,w,h);
-    KisRectConstIteratorPixel srcIt = m_dev->createRectIterator(x,y,w,h);
+    KisRectConstIteratorPixel srcIt = m_dev->createRectConstIterator(x,y,w,h);
     KoColorSpace* cs = m_dev->colorSpace();
 
     QTime t;

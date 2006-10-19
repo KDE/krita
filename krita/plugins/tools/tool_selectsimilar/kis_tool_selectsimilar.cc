@@ -60,7 +60,7 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const quint8 
     KoColorSpace * cs = dev->colorSpace();
 
     for (int y2 = y; y2 < y + h; ++y2) {
-        KisHLineConstIterator hiter = dev->createHLineIterator(x, y2, w);
+        KisHLineConstIterator hiter = dev->createHLineConstIterator(x, y2, w);
         KisHLineIterator selIter = selection->createHLineIterator(x, y2, w);
         while (!hiter.isDone()) {
             //if (dev->colorSpace()->hasAlpha())

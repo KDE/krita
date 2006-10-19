@@ -34,9 +34,9 @@
 #include "kis_paint_device.h"
 #include "kis_tool_move.h"
 #include "kis_tool_move.moc"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
 #include "kis_layer.h"
@@ -60,7 +60,7 @@ void KisToolMove::update(KisCanvasSubject *subject)
     super::update(subject);
 }
 
-void KisToolMove::buttonPress(KisButtonPressEvent *e)
+void KisToolMove::buttonPress(KoPointerEvent *e)
 {
     if (m_subject && e->button() == Qt::LeftButton) {
         QPoint pos = e->pos().floorQPoint();
@@ -75,7 +75,7 @@ void KisToolMove::buttonPress(KisButtonPressEvent *e)
     }
 }
 
-void KisToolMove::move(KisMoveEvent *e)
+void KisToolMove::move(KoPointerEvent *e)
 {
     if (m_subject) {
         QPoint pos = e->pos().floorQPoint();

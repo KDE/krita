@@ -51,17 +51,17 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 3; }
     virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual void buttonPress(KisButtonPressEvent *event);
-    virtual void move(KisMoveEvent *event);
+    virtual void buttonPress(KoPointerEvent *event);
+    virtual void move(KoPointerEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
-    virtual void draw(const KisPoint& start, const KisPoint& stop);
+    virtual void draw(const KoPoint& start, const KoPoint& stop);
 
 protected:
-    KisPoint m_dragCenter;
-    KisPoint m_dragStart;
-    KisPoint m_dragEnd;
+    KoPoint m_dragCenter;
+    KoPoint m_dragStart;
+    KoPoint m_dragEnd;
 
     bool m_dragging;
     KisImageSP m_currentImage;

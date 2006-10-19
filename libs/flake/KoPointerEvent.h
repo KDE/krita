@@ -25,8 +25,7 @@
 
 #include <QTabletEvent>
 #include <QMouseEvent>
-
-#include <KoInputDevice.h>
+#include <QWheelEvent>
 
 #include <koffice_export.h>
 
@@ -47,9 +46,10 @@ public:
      * @param pnt the zoomed point in the normal coordinate system.
      */
     KoPointerEvent( QMouseEvent *ev, const QPointF &pnt )
-	    : point( pnt )
+        : point( pnt )
         , m_tabletEvent( 0 )
         , m_mouseEvent( ev )
+        , m_wheelEvent( 0 )
         , m_event( ev )
     {
     }
@@ -64,10 +64,25 @@ public:
         : point( pnt )
         , m_tabletEvent( ev )
         , m_mouseEvent( 0 )
+        , m_wheelEvent( 0 )
         , m_event( ev )
     {
     }    
 
+    /**
+     * Constructor.
+     * 
+     * @param ev the tablet event that is the base of this event.
+     * @param pnt the zoomed point in the normal coordiante system.
+     */
+    KoPointerEvent( QWheelEvent *ev, const QPointF &pnt )
+        : point( pnt )
+        , m_tabletEvent( 0 )
+        , m_mouseEvent( 0 )
+        , m_wheelEvent( ev )
+        , m_event( ev )
+    {
+    }    
     /**
      * For classes that are handed this event, you can choose to accept (default) this event.
      * Acceptance signifies that you have handled this event and found it useful, the effect
@@ -108,6 +123,8 @@ public:
         { 
             if (m_mouseEvent)
                 return m_mouseEvent->buttons(); 
+            else if (m_wheelEvent)
+                return m_wheelEvent->buttons();
             else
                 return Qt::NoButton;
         }
@@ -126,6 +143,8 @@ public:
         {
             if (m_mouseEvent)
                 return m_mouseEvent->globalPos();
+            else if (m_wheelEvent)
+                return m_wheelEvent->globalPos();
             else
                 return m_tabletEvent->globalPos();
         }
@@ -135,6 +154,8 @@ public:
         {
             if (m_mouseEvent)
                 return m_mouseEvent->pos();
+            else if (m_wheelEvent)
+                return m_wheelEvent->pos();
             else
                 return m_tabletEvent->pos();
         }
@@ -177,6 +198,8 @@ public:
         {
             if (m_tabletEvent)
                 return m_tabletEvent->x();
+            if (m_wheelEvent)
+                return m_wheelEvent->x();
             else
                 return m_mouseEvent->x();
         }
@@ -200,6 +223,8 @@ public:
         {
             if (m_tabletEvent)
                 return m_tabletEvent->y();
+            if (m_wheelEvent)
+                return m_wheelEvent->y();
             else
                 return m_mouseEvent->y();
         }
@@ -231,6 +256,21 @@ public:
                 return 0;
         }
 
+    int delta() const 
+        {
+            if (m_wheelEvent)
+                return m_wheelEvent->delta();
+            else
+                return 0;
+        }
+
+    Qt::Orientation orientation() const
+        {
+            if (m_wheelEvent)
+                return m_wheelEvent->orientation();
+            else
+                return Qt::Horizontal;
+        }
 
     /// The point in normal space.
     const QPointF &point;
@@ -238,6 +278,7 @@ public:
 private:
     QTabletEvent * m_tabletEvent;
     QMouseEvent * m_mouseEvent;
+    QWheelEvent * m_wheelEvent;
     QInputEvent * m_event;
 };
 

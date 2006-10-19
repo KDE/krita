@@ -16,6 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "kis_custom_image_widget.h"
 
 #include <QPushButton>
 #include <QSlider>
@@ -24,21 +25,20 @@
 #include <kdebug.h>
 
 #include "KoUnitWidgets.h"
-
-#include "kis_custom_image_widget.h"
-#include "kis_doc.h"
-#include "kis_meta_registry.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "KoID.h"
+#include "KoColor.h"
+
+#include "kis_doc2.h"
+#include "kis_meta_registry.h"
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
-#include "KoColor.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorSpaceName, const QString & imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorSpaceName, const QString & imageName)
     : WdgNewImage(parent) {
     m_doc = doc;
 

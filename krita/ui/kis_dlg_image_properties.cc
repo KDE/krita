@@ -28,16 +28,17 @@
 #include <kcolorcombo.h>
 
 #include <KoUnitWidgets.h>
-
-#include "kis_factory.h"
-#include "kis_meta_registry.h"
 #include "KoColorSpaceRegistry.h"
-#include "kis_dlg_image_properties.h"
 #include "KoColorProfile.h"
+#include "KoID.h"
+
+#include "kis_meta_registry.h"
+#include "kis_dlg_image_properties.h"
 #include "kis_types.h"
 #include "kis_image.h"
+
 #include "kis_config.h"
-#include "KoID.h"
+#include "kis_factory2.h"
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 

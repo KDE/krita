@@ -27,7 +27,7 @@
 #include <QWidget>
 #include "kis_paintop.h"
 
-class KisPoint;
+class KoPoint;
 class KisPainter;
 
 class KisPenOpFactory  : public KisPaintOpFactory  {
@@ -51,7 +51,7 @@ public:
     KisPenOp(KisPainter * painter);
     virtual ~KisPenOp();
 
-    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
+    void paintAt(const KoPoint &pos, const KisPaintInformation& info);
 
 };
 

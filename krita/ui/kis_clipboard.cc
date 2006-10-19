@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_clipboard.h"
+
 #include <QApplication>
 #include <QClipboard>
 #include <QObject>
@@ -28,15 +30,18 @@
 
 #include "KoStore.h"
 #include "KoStoreDrag.h"
-
-#include "kis_types.h"
-#include "kis_paint_device.h"
-#include "kis_config.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
-#include "kis_factory.h"
+
+// kritaimage
+#include <kis_types.h>
+#include <kis_paint_device.h>
 #include <kis_meta_registry.h>
-#include "kis_clipboard.h"
+#include <kis_annotation.h>
+
+// local
+#include "kis_factory2.h"
+#include "kis_config.h"
 
 KisClipboard *KisClipboard::m_singleton = 0;
 

@@ -33,9 +33,9 @@
 #include "kis_cursor.h"
 #include "kis_painter.h"
 #include "kis_tool_line.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
 #include "kis_canvas_subject.h"
 #include "kis_undo_adapter.h"
@@ -53,8 +53,8 @@ KisToolLine::KisToolLine()
 
     m_painter = 0;
     m_currentImage = 0;
-    m_startPos = KisPoint(0, 0);
-    m_endPos = KisPoint(0, 0);
+    m_startPos = KoPoint(0, 0);
+    m_endPos = KoPoint(0, 0);
 }
 
 KisToolLine::~KisToolLine()
@@ -82,7 +82,7 @@ void KisToolLine::paint(QPainter& gc, const QRect& rc)
         paintLine(gc, rc);
 }
 
-void KisToolLine::buttonPress(KisButtonPressEvent *e)
+void KisToolLine::buttonPress(KoPointerEvent *e)
 {
     if (!m_subject || !m_currentImage) return;
 
@@ -96,7 +96,7 @@ void KisToolLine::buttonPress(KisButtonPressEvent *e)
     }
 }
 
-void KisToolLine::move(KisMoveEvent *e)
+void KisToolLine::move(KoPointerEvent *e)
 {
     if (m_dragging) {
         if (m_startPos != m_endPos)
@@ -104,7 +104,7 @@ void KisToolLine::move(KisMoveEvent *e)
         //KisCanvasController *controller = m_subject->canvasController();
 
         if (e->modifiers() & Qt::AltModifier) {
-            KisPoint trans = e->pos() - m_endPos;
+            KoPoint trans = e->pos() - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
         } else if (e->modifiers() & Qt::ShiftModifier)
@@ -172,10 +172,10 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
 
 }
 
-KisPoint KisToolLine::straightLine(KisPoint point)
+KoPoint KisToolLine::straightLine(KoPoint point)
 {
-    KisPoint comparison = point - m_startPos;
-    KisPoint result;
+    KoPoint comparison = point - m_startPos;
+    KoPoint result;
 
     if ( fabs(comparison.x()) > fabs(comparison.y())) {
         result.setX(point.x());
@@ -207,8 +207,8 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         //RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
-        KisPoint start;
-        KisPoint end;
+        KoPoint start;
+        KoPoint end;
 
 //        Q_ASSERT(controller);
         start = controller->windowToView(m_startPos);

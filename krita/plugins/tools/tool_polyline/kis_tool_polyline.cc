@@ -37,9 +37,9 @@
 #include "kis_painter.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
 #include "kis_canvas.h"
 #include "QPainter"
@@ -67,7 +67,7 @@ void KisToolPolyline::update (KisCanvasSubject *subject)
             m_currentImage = m_subject->currentImg ();
 }
 
-void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
+void KisToolPolyline::buttonPress(KoPointerEvent *event)
 {
     if (m_currentImage) {
         if (event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier ) {
@@ -116,8 +116,8 @@ void KisToolPolyline::finish()
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
     painter.setPaintOp(op); // Painter takes ownership
 
-    KisPoint start,end;
-    KisPointVector::iterator it;
+    KoPoint start,end;
+    KoPointVector::iterator it;
     for( it = m_points.begin(); it != m_points.end(); ++it )
     {
         if( it == m_points.begin() )
@@ -139,7 +139,7 @@ void KisToolPolyline::finish()
     }
 
 }
-void KisToolPolyline::move(KisMoveEvent *event)
+void KisToolPolyline::move(KoPointerEvent *event)
 {
     if (m_dragging) {
         // erase old lines on canvas
@@ -167,7 +167,7 @@ void KisToolPolyline::buttonRelease(KisButtonReleaseEvent *event)
 }
 
 
-void KisToolPolyline::doubleClick(KisDoubleClickEvent *)
+void KisToolPolyline::doubleClick(KoPointerEvent *)
 {
     finish();
 }
@@ -205,7 +205,7 @@ void KisToolPolyline::draw(QPainter& gc)
     //gc.setRasterOp(Qt::XorROP);
 
     KisCanvasController *controller = m_subject->canvasController();
-    KisPoint start, end;
+    KoPoint start, end;
     QPoint startPos;
     QPoint endPos;
 
@@ -214,7 +214,7 @@ void KisToolPolyline::draw(QPainter& gc)
         endPos = controller->windowToView(m_dragEnd.floorQPoint());
         gc.drawLine(startPos, endPos);
     } else {
-        for (KisPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+        for (KoPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
             if (it == m_points.begin())
             {

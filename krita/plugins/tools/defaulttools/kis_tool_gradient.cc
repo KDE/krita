@@ -33,14 +33,14 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_canvas_subject.h"
 #include "kis_cmb_composite.h"
 #include "kis_cursor.h"
 #include "kis_double_widget.h"
 #include "kis_gradient_painter.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
 #include "kis_painter.h"
 #include "kis_progress_display_interface.h"
 #include "kis_tool_gradient.h"
@@ -55,8 +55,8 @@ KisToolGradient::KisToolGradient()
     setObjectName("tool_gradient");
     setCursor(KisCursor::load("tool_gradient_cursor.png", 6, 6));
 
-    m_startPos = KisPoint(0, 0);
-    m_endPos = KisPoint(0, 0);
+    m_startPos = KoPoint(0, 0);
+    m_endPos = KoPoint(0, 0);
 
     m_reverse = false;
     m_shape = KisGradientPainter::GradientShapeLinear;
@@ -86,7 +86,7 @@ void KisToolGradient::paint(QPainter& gc, const QRect&)
         paintLine(gc);
 }
 
-void KisToolGradient::buttonPress(KisButtonPressEvent *e)
+void KisToolGradient::buttonPress(KoPointerEvent *e)
 {
     if (!m_subject || !m_subject->currentImg()) {
         return;
@@ -99,7 +99,7 @@ void KisToolGradient::buttonPress(KisButtonPressEvent *e)
     }
 }
 
-void KisToolGradient::move(KisMoveEvent *e)
+void KisToolGradient::move(KoPointerEvent *e)
 {
     if (m_dragging) {
         if (m_startPos != m_endPos) {
@@ -180,10 +180,10 @@ void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
     }
 }
 
-KisPoint KisToolGradient::straightLine(KisPoint point)
+KoPoint KisToolGradient::straightLine(KoPoint point)
 {
-    KisPoint comparison = point - m_startPos;
-    KisPoint result;
+    KoPoint comparison = point - m_startPos;
+    KoPoint result;
 
     if ( fabs(comparison.x()) > fabs(comparison.y())) {
         result.setX(point.x());
@@ -212,8 +212,8 @@ void KisToolGradient::paintLine(QPainter& gc)
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
 
-        KisPoint start = controller->windowToView(m_startPos);
-        KisPoint end = controller->windowToView(m_endPos);
+        KoPoint start = controller->windowToView(m_startPos);
+        KoPoint end = controller->windowToView(m_endPos);
 
         //RasterOp op = gc.rasterOp();
         QPen old = gc.pen();

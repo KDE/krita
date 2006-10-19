@@ -54,6 +54,11 @@ void KoTool::keyReleaseEvent(QKeyEvent *e) {
     e->ignore();
 }
 
+void KoTool::wheelEvent( KoPointerEvent * e ) {
+    e->ignore();
+}
+
+
 void KoTool::useCursor(QCursor cursor, bool force) {
     if(!force && cursor.shape() == m_previousCursor.shape())
         return;

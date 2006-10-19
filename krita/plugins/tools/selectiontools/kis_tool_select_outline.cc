@@ -41,9 +41,9 @@
 #include <kis_tool_select_outline.h>
 #include <kis_vec.h>
 #include <kis_undo_adapter.h>
-#include <kis_button_press_event.h>
-#include <kis_button_release_event.h>
-#include <kis_move_event.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
 #include "kis_selected_transaction.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
@@ -82,7 +82,7 @@ void KisToolSelectOutline::update (KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
-void KisToolSelectOutline::buttonPress(KisButtonPressEvent *event)
+void KisToolSelectOutline::buttonPress(KoPointerEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         m_dragging = true;
@@ -94,7 +94,7 @@ void KisToolSelectOutline::buttonPress(KisButtonPressEvent *event)
     }
 }
 
-void KisToolSelectOutline::move(KisMoveEvent *event)
+void KisToolSelectOutline::move(KoPointerEvent *event)
 {
     if (m_dragging) {
         m_dragStart = m_dragEnd;
@@ -204,7 +204,7 @@ void KisToolSelectOutline::draw(QPainter& gc)
         //gc.setRasterOp(Qt::XorROP);
 
         KisCanvasController *controller = m_subject->canvasController();
-        KisPoint start, end;
+        KoPoint start, end;
         QPoint startPos;
         QPoint endPos;
 
@@ -226,11 +226,11 @@ void KisToolSelectOutline::deactivate()
         gc.setPen(pen);
         //gc.setRasterOp(Qt::XorROP);
 
-        KisPoint start, end;
+        KoPoint start, end;
         QPoint startPos;
         QPoint endPos;
 
-        for (KisPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+        for (KoPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
             if (it == m_points.begin())
             {

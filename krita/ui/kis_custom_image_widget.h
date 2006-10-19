@@ -22,7 +22,7 @@
 #include "kis_global.h"
 #include "kis_dlg_image_properties.h"
 
-class KisDoc;
+class KisDoc2;
 class KoID;
 
 /**
@@ -38,7 +38,7 @@ public:
      * @param parent the parent widget
      * @param doc the document that wants to be altered
      */
-    KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorSpaceName, const QString & imageName);
+    KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorSpaceName, const QString & imageName);
 
 private slots:
     void buttonClicked();
@@ -51,7 +51,7 @@ signals:
 private:
     quint8 backgroundOpacity() const;
 
-    KisDoc *m_doc;
+    KisDoc2 *m_doc;
 };
 
 #endif

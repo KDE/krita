@@ -24,9 +24,9 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_tool_pan.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 
 KisToolPan::KisToolPan()
     : super(i18n("Pan Tool"))
@@ -49,7 +49,7 @@ void KisToolPan::update(KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
-void KisToolPan::buttonPress(KisButtonPressEvent *e)
+void KisToolPan::buttonPress(KoPointerEvent *e)
 {
     if (m_subject && !m_dragging && e->button() == Qt::LeftButton) {
         KisCanvasController *controller = m_subject->canvasController();
@@ -62,13 +62,13 @@ void KisToolPan::buttonPress(KisButtonPressEvent *e)
     }
 }
 
-void KisToolPan::move(KisMoveEvent *e)
+void KisToolPan::move(KoPointerEvent *e)
 {
     if (m_subject && m_dragging) {
         KisCanvasController *controller = m_subject->canvasController();
 
-        KisPoint currPos = controller->windowToView(e->pos());
-        KisPoint delta = currPos - m_dragPos;
+        KoPoint currPos = controller->windowToView(e->pos());
+        KoPoint delta = currPos - m_dragPos;
         controller->scrollTo(m_origScrollX - delta.floorX(), m_origScrollY - delta.floorY());
     }
 }

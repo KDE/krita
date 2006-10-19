@@ -43,9 +43,9 @@
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
 #include <kis_selected_transaction.h>
-#include <kis_button_press_event.h>
-#include <kis_button_release_event.h>
-#include <kis_move_event.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
 #include <kis_selection.h>
 #include <kis_filter_strategy.h>
 #include <kis_cmb_idlist.h>
@@ -244,7 +244,7 @@ void KisToolTransform::paint(QPainter& gc, const QRect& rc)
 }
 
 
-void KisToolTransform::buttonPress(KisButtonPressEvent *e)
+void KisToolTransform::buttonPress(KoPointerEvent *e)
 {
     if (m_subject) {
         KisImageSP img = m_subject->currentImg();
@@ -351,7 +351,7 @@ void KisToolTransform::setFunctionalCursor()
     }
 }
 
-void KisToolTransform::move(KisMoveEvent *e)
+void KisToolTransform::move(KoPointerEvent *e)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();

@@ -53,13 +53,13 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual quint32 priority() { return 4; }
-    virtual void buttonPress(KisButtonPressEvent *event);
-    virtual void move(KisMoveEvent *event);
+    virtual void buttonPress(KoPointerEvent *event);
+    virtual void move(KoPointerEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
     virtual QString quickHelp() const {
         return i18n("Shift-click will end the polygon.");
     }
-    virtual void doubleClick(KisDoubleClickEvent * event);
+    virtual void doubleClick(KoPointerEvent * event);
 
 protected:
     virtual void paint(QPainter& gc);
@@ -69,14 +69,14 @@ protected:
     void finish();
     virtual void keyPress(QKeyEvent *e);
 protected:
-    KisPoint m_dragStart;
-    KisPoint m_dragEnd;
+    KoPoint m_dragStart;
+    KoPoint m_dragEnd;
 
     bool m_dragging;
     KisImageSP m_currentImage;
 private:
-    typedef Q3ValueVector<KisPoint> KisPointVector;
-    KisPointVector m_points;
+    typedef Q3ValueVector<KoPoint> KoPointVector;
+    KoPointVector m_points;
 };
 
 

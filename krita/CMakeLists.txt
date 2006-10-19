@@ -94,7 +94,7 @@ if (SHOULD_BUILD_KRITA)
     add_subdirectory( ui )
     add_subdirectory( dtd )
     add_subdirectory( colorspaces )
-    add_subdirectory( plugins )
+    #add_subdirectory( plugins )
     add_subdirectory( data )
     add_subdirectory( pics )
 

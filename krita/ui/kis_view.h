@@ -62,7 +62,7 @@
 #include "KoID.h"
 #include "krita_export.h"
 #include "KoColor.h"
-#include "kis_input_device.h"
+#include "KoInputDevice.h"
 #include "ui_wdgpalettechooser.h"
 
 class QLabel;
@@ -90,14 +90,14 @@ class KoDocumentSectionView;
 
 class KisBirdEyeBox;
 class KisBrush;
-class KisButtonPressEvent;
+class KoPointerEvent;
 class KisButtonReleaseEvent;
 class KisCanvas;
 class KisCanvasObserver;
 class KoCompositeOp;
 class KisControlFrame;
 class KisDoc;
-class KisDoubleClickEvent;
+class KoPointerEvent;
 class KisFilterManager;
 class KisFilterStrategy;
 class KisGradient;
@@ -105,10 +105,10 @@ class KisGridManager;
 class KisPerspectiveGridManager;
 class KisLabelProgress;
 class KisLayerBox;
-class KisMoveEvent;
+class KoPointerEvent;
 class KisPaletteWidget;
 class KisPattern;
-class KisPoint;
+class KoPoint;
 class KisRect;
 class KisResource;
 class KisResourceMediator;
@@ -189,7 +189,7 @@ signals:
     void sigFGColorChanged(const KoColor &);
     void sigBGColorChanged(const KoColor &);
 
-    void sigInputDeviceChanged(const KisInputDevice& inputDevice);
+    void sigInputDeviceChanged(const KoInputDevice& inputDevice);
 
     /*
      * Emitted whenever the zoom or scroll values change.
@@ -308,7 +308,7 @@ private:
 public:
 
     virtual KisCanvasController *canvasController() const;
-    KisInputDevice currentInputDevice() const;
+    KoInputDevice currentInputDevice() const;
 
 private slots:
     virtual void updateCanvas();
@@ -340,21 +340,21 @@ private:
 
     virtual QPoint viewToWindow(const QPoint& pt);
     virtual QPoint viewToWindow(const QPoint& pt) const;
-    virtual KisPoint viewToWindow(const KisPoint& pt);
+    virtual KoPoint viewToWindow(const KoPoint& pt);
     virtual QRect viewToWindow(const QRect& rc);
     virtual KisRect viewToWindow(const KisRect& rc);
     virtual void viewToWindow(qint32 *x, qint32 *y);
 
     virtual QPoint windowToView(const QPoint& pt);
     virtual QPoint windowToView(const QPoint& pt) const;
-    virtual KisPoint windowToView(const KisPoint& pt);
+    virtual KoPoint windowToView(const KoPoint& pt);
     virtual QRect windowToView(const QRect& rc);
     virtual KisRect windowToView(const KisRect& rc);
     virtual void windowToView(qint32 *x, qint32 *y);
 
     virtual QCursor setCanvasCursor(const QCursor & cursor);
 
-    void setInputDevice(KisInputDevice inputDevice);
+    void setInputDevice(KoInputDevice inputDevice);
 
 // -------------------------------------------------------------------------//
 //                      KisView internals
@@ -443,10 +443,10 @@ private slots:
 
     void imgResizeToActiveLayer();
 
-    void canvasGotMoveEvent(KisMoveEvent *e);
-    void canvasGotButtonPressEvent(KisButtonPressEvent *e);
+    void canvasGotMoveEvent(KoPointerEvent *e);
+    void canvasGotButtonPressEvent(KoPointerEvent *e);
     void canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e);
-    void canvasGotDoubleClickEvent(KisDoubleClickEvent *e);
+    void canvasGotDoubleClickEvent(KoPointerEvent *e);
     void canvasGotPaintEvent(QPaintEvent *e);
     void canvasGotMouseWheelEvent(QWheelEvent *e);
     void canvasGotKeyPressEvent(QKeyEvent*);
@@ -642,7 +642,7 @@ private:
     float m_HDRExposure;
 
     // Currently active input device (mouse, stylus, eraser...)
-    KisInputDevice m_inputDevice;
+    KoInputDevice m_inputDevice;
 
     KisBirdEyeBox * m_birdEyeBox;
     KoUniColorChooser *m_colorchooser;

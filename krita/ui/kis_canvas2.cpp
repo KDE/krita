@@ -20,7 +20,6 @@
 
 #include <QWidget>
 
-#include <KoTool.h>
 #include <KoUnit.h>
 
 #include <kis_image.h>
@@ -39,14 +38,12 @@ public:
     KisCanvas2Private( KisViewConverter * viewConverter, KisView2 * view )
         : viewConverter( viewConverter )
         , view( view )
-        , currentTool( 0 )
         , canvasWidget( 0 )
         {
         }
 
     KisViewConverter * viewConverter;
     KisView2 * view;
-    KoTool * currentTool;
     KisAbstractCanvasWidget * canvasWidget;
 };
 
@@ -109,16 +106,6 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     m_d->canvasWidget->widget()->update( rc.toRect() );
 }
 
-KoTool* KisCanvas2::tool()
-{
-    return m_d->currentTool;
-}
-
-void KisCanvas2::setTool(KoTool *tool)
-{
-    m_d->currentTool = tool;
-}
-
 
 KoViewConverter* KisCanvas2::viewConverter()
 {
@@ -136,6 +123,9 @@ KoUnit::Unit KisCanvas2::unit()
     return KoUnit::U_PIXEL;
 }
 
+KoToolProxy * KisCanvas2::toolProxy() {
+    return m_d->canvasWidget->toolProxy();
+}
 
 void KisCanvas2::setCanvasSize(int w, int h)
 {

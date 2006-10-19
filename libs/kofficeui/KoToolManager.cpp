@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- *  Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
+ *
+ * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -20,6 +21,13 @@
 #include "KoToolManager.h"
 #include "KoToolManager_p.h"
 
+#include <QWidget>
+#include <QEvent>
+#include <QWheelEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
+#include <QTabletEvent>
+#include <QKeyEvent>
 
 #include "KoToolRegistry.h"
 #include <KoTool.h>
@@ -27,6 +35,7 @@
 #include <KoCreateShapesToolFactory.h>
 #include <KoCreateShapesTool.h>
 #include <KoInteractionToolFactory.h>
+#include <KoPointerEvent.h>
 #include <KoShapeControllerBase.h>
 #include <KoCanvasController.h>
 #include <KoShapeRegistry.h>
@@ -40,36 +49,153 @@
 #include <QAbstractButton>
 #include <QApplication>
 
+namespace {
+
+    // Time in ms that must pass after a tablet event before a mouse event is allowed to
+    // change the input device to the mouse. This is needed because mouse events are always
+    // sent to a receiver if it does not accept the tablet event.
+    static const int MOUSE_CHANGE_EVENT_DELAY = 100;
+
+
+    // Helper class to determine when the user might switch between
+    // tablet and mouse.
+    class TabletProximityFilter {
+    public:
+
+        TabletProximityFilter( KoToolManager * manager )
+            : m_manager( manager )
+            {
+            }
+
+        virtual ~TabletProximityFilter();
+
+        bool eventFilter( QObject * object,  QEvent * event ) {
+
+            if ( object == qApp ) {
+                switch( event->type() ) {
+                    case QEvent::TabletEnterProximity:
+                        break;
+                    case QEvent::TabletLeaveProximity:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return false;
+        }
+
+    private:
+
+        KoToolManager * m_manager;
+    };
+
+}
+
 // ******** DummyTool **********
 class DummyTool : public KoTool {
+
 public:
+
     DummyTool() : KoTool(0) {}
     ~DummyTool() {}
     void paint( QPainter &, KoViewConverter &) {}
     void mousePressEvent( KoPointerEvent *) {}
     void mouseMoveEvent( KoPointerEvent *) {}
     void mouseReleaseEvent( KoPointerEvent *) {}
+
 };
+
+
 
 // ******** KoToolManager **********
 KoToolManager::KoToolManager()
-: QObject()
-, m_activeCanvas(0)
-, m_activeTool(0)
+    : QObject()
+    , m_activeCanvas(0)
+    , m_activeTool(0)
 {
     m_dummyTool = new DummyTool();
     connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*,QWidget*)),
-        this, SLOT(movedFocus(QWidget*,QWidget*)));
+            this, SLOT(movedFocus(QWidget*,QWidget*)));
 }
 
 KoToolManager::~KoToolManager() {
     delete m_dummyTool;
 }
 
+void KoToolManager::paint( QPainter &painter, KoViewConverter &converter )
+{
+    if (m_activeTool) m_activeTool->paint(painter, converter);
+}
+
+void KoToolManager::repaintDecorations()
+{
+    if (m_activeTool) m_activeTool->repaintDecorations();
+}
+
+void KoToolManager::tabletEvent( QTabletEvent *event, const QPointF &pnt )
+{
+    KoPointerEvent ev( event, pnt );
+    switch( event->type() ) {
+    case ( QEvent::TabletPress ):
+        if (m_activeTool) m_activeTool->mousePressEvent( &ev );
+        break;
+    case ( QEvent::TabletRelease ):
+        if (m_activeTool) m_activeTool->mouseReleaseEvent( &ev );
+        break;
+    case ( QEvent::TabletMove ):
+    default:
+        if (m_activeTool) m_activeTool->mouseMoveEvent( &ev );
+    }
+}
+
+void KoToolManager::mousePressEvent( QMouseEvent *event, const QPointF &pnt )
+{
+    KoPointerEvent ev( event, pnt );
+    if (m_activeTool) m_activeTool->mousePressEvent( &ev );
+}
+
+void KoToolManager::mouseDoubleClickEvent( QMouseEvent *event, const QPointF &pnt )
+{
+    KoPointerEvent ev( event, pnt );
+    if (m_activeTool) m_activeTool->mouseDoubleClickEvent( &ev );
+}
+
+void KoToolManager::mouseMoveEvent( QMouseEvent *event, const QPointF &pnt )
+{
+    KoPointerEvent ev( event, pnt );
+    if (m_activeTool) m_activeTool->mouseMoveEvent( &ev );
+}
+
+void KoToolManager::mouseReleaseEvent( QMouseEvent *event, const QPointF &pnt )
+{
+    KoPointerEvent ev( event, pnt );
+    if (m_activeTool) m_activeTool->mouseReleaseEvent( &ev );
+}
+
+void KoToolManager::keyPressEvent(QKeyEvent *event)
+{
+    if (m_activeTool) m_activeTool->keyPressEvent( event );
+}
+
+void KoToolManager::keyReleaseEvent(QKeyEvent *event)
+{
+    if (m_activeTool) m_activeTool->keyReleaseEvent( event );
+}
+
+void KoToolManager::wheelEvent ( QWheelEvent * event, const QPointF &pnt )
+{
+    KoPointerEvent ev( event, pnt );
+    if (m_activeTool) m_activeTool->wheelEvent( &ev );
+}
+
+
 void KoToolManager::setup() {
-    if(m_tools.size() > 0)
+    if (m_tools.size() > 0)
         return;
-    // add defaults
+
+    // add defaults. XXX: Make these settable? We have not yet solved
+    // the problem of application-specific versus generic flake tools,
+    // have we?
     m_tools.append( new ToolHelper(new KoCreateShapesToolFactory(this, QStringList())) );
     m_defaultTool = new ToolHelper(new KoInteractionToolFactory(this, QStringList()));
     m_tools.append(m_defaultTool);
@@ -93,7 +219,7 @@ KoToolBox *KoToolManager::toolBox(const QString &applicationName) {
     foreach(ToolHelper *tool, m_tools) {
         QAbstractButton *but = tool->createButton();
         toolBox->addButton(but, tool->toolType(), tool->priority(), tool->uniqueId());
-        if(tool->toolType() == KoToolFactory::dynamicToolType())
+        if (tool->toolType() == KoToolFactory::dynamicToolType())
             toolBox->setVisibilityCode(but, tool->activationShapeId());
     }
 
@@ -110,19 +236,20 @@ KoToolBox *KoToolManager::toolBox(const QString &applicationName) {
 }
 
 void KoToolManager::registerTools(KActionCollection *ac) {
+    Q_UNUSED(ac);
     setup();
     // TODO
 }
 
 void KoToolManager::addControllers(KoCanvasController *controller, KoShapeControllerBase *sc) {
-    if(m_canvases.contains(controller))
+    if (m_canvases.contains(controller))
         return;
     setup();
     m_canvases.append(controller);
     m_shapeControllers.insert(controller, sc);
-    if(m_activeCanvas == 0)
+    if (m_activeCanvas == 0)
         m_activeCanvas = controller;
-    if(controller->canvas())
+    if (controller->canvas())
         attachCanvas(controller);
     connect(controller, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
     connect(controller, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
@@ -137,7 +264,7 @@ void KoToolManager::removeCanvasController(KoCanvasController *controller) {
         delete tool;
     }
     m_allTools.remove(controller);
-    if(controller->canvas())
+    if (controller->canvas())
         detachCanvas(controller);
     disconnect(controller, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
     disconnect(controller, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
@@ -147,13 +274,15 @@ void KoToolManager::toolActivated(ToolHelper *tool) {
     kDebug(30004) << "ToolActivated: '" << tool->name() << "'\n";
     QMap<QString, KoTool*> toolsMap = m_allTools.value(m_activeCanvas);
     KoTool *t = toolsMap.value(tool->id());
+
     m_activeToolId = tool->id();
+
     // cache all the selected shapes relevant to the activated tool
-    if( m_activeToolId != KoInteractionTool_ID ) {
+    if ( m_activeToolId != KoInteractionTool_ID ) {
         m_lastSelectedShapes.clear();
         KoSelection *selection = m_activeCanvas->canvas()->shapeManager()->selection();
         foreach( KoShape *shape, selection->selectedShapes() ) {
-            if( tool->activationShapeId().isNull() || tool->activationShapeId() == shape->shapeId() )
+            if ( tool->activationShapeId().isNull() || tool->activationShapeId() == shape->shapeId() )
                 m_lastSelectedShapes.append( shape );
         }
     }
@@ -162,13 +291,14 @@ void KoToolManager::toolActivated(ToolHelper *tool) {
 }
 
 void KoToolManager::switchTool(const QString &id, bool temporary) {
+    if (!m_activeCanvas) kDebug() << kBacktrace();
     Q_ASSERT(m_activeCanvas);
-    if(m_activeTool && temporary)
+    if (m_activeTool && temporary)
         m_stack.push(m_activeToolId);
     m_activeToolId = id;
     QMap<QString, KoTool*> toolsMap = m_allTools.value(m_activeCanvas);
     KoTool *tool = toolsMap.value(id);
-    if(! tool) {
+    if (! tool) {
         kWarning(30004) << "Tool requested " << (temporary?"temporary":"") << "switch to unknown tool: '" << id << "'\n";
         return;
     }
@@ -176,11 +306,12 @@ void KoToolManager::switchTool(const QString &id, bool temporary) {
 }
 
 void KoToolManager::switchTool(KoTool *tool) {
+    if (!tool) kDebug() << kBacktrace();
     Q_ASSERT(tool);
-    if(m_activeCanvas == 0) {
+    if (m_activeCanvas == 0) {
         return;
     }
-    if(m_activeTool) {
+    if (m_activeTool) {
         m_activeTool->deactivate();
         disconnect(m_activeTool, SIGNAL(sigCursorChanged(QCursor)),
                 this, SLOT(updateCursor(QCursor)));
@@ -201,10 +332,11 @@ void KoToolManager::switchTool(KoTool *tool) {
 
     // and set it.
     foreach(KoCanvasController *controller, m_canvases) {
-        if(!controller->canvas())
+        if (!controller->canvas())
             continue;
-        controller->canvas()->setTool(controller==m_activeCanvas ? m_activeTool : m_dummyTool);
-        // we expect the tool to emit a cursur on activation.  This is for quick-fail :)
+        // XXX: Obsolete with toolproxy?
+        // controller->canvas()->setTool(controller==m_activeCanvas ? m_activeTool : m_dummyTool);
+        // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
         controller->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     }
     m_activeTool->activate();
@@ -229,21 +361,22 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
     m_allTools.remove(controller);
     m_allTools.insert(controller, toolsMap);
 
-    if(m_activeTool == 0)
+    if (m_activeTool == 0)
         toolActivated(m_defaultTool);
     else {
-        controller->canvas()->setTool(m_dummyTool);
+        // XXX: Obsolete?
+        // controller->canvas()->setTool(m_dummyTool);
         controller->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     }
 
     Connector *connector = new Connector(controller->canvas()->shapeManager());
     connect(connector, SIGNAL(selectionChanged(QList<KoShape*>)), this,
-        SLOT(selectionChanged(QList<KoShape*>)));
+            SLOT(selectionChanged(QList<KoShape*>)));
 }
 
 void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
     Q_UNUSED(from);
-    if(to == 0 || to == m_activeCanvas)
+    if (to == 0 || to == m_activeCanvas)
         return;
     QWidget *newMainWindow = to;
     while(newMainWindow->parentWidget())
@@ -252,24 +385,25 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
     KoCanvasController *newCanvas = 0;
     // if the 'to' is one of our canvasses, or one of its children, then switch.
     foreach(KoCanvasController* canvas, m_canvases) {
-        if(canvas == m_activeCanvas)
+        if (canvas == m_activeCanvas)
             continue;
         // make sure we are not just talking about overlapping windows.
         QWidget *root = canvas;
         while(root->parentWidget())
             root = root->parentWidget();
-        if(newMainWindow == root) {
+        if (newMainWindow == root) {
             // this canvas is the new 'To'
             newCanvas = canvas;
             break;
         }
     }
-    if(newCanvas == 0)
+    if (newCanvas == 0)
         return;
-    if(newCanvas == m_activeCanvas)
+    if (newCanvas == m_activeCanvas)
         return;
-    if(m_activeCanvas) {
-        m_activeCanvas->canvas()->setTool(m_dummyTool);
+    if (m_activeCanvas) {
+        // XXX: Obsolete?
+        // m_activeCanvas->canvas()->setTool(m_dummyTool);
         m_activeCanvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     }
     m_activeCanvas = newCanvas;
@@ -279,14 +413,15 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
 }
 
 void KoToolManager::detachCanvas(KoCanvasController *controller) {
-    if(m_activeCanvas == controller)
+    if (m_activeCanvas == controller)
         m_activeCanvas = 0;
     m_activeTool = 0;
     QMap<QString, KoTool*> toolsMap = m_allTools.value(controller);
     foreach(KoTool *tool, toolsMap.values())
         delete tool;
     toolsMap.clear();
-    controller->canvas()->setTool(m_dummyTool);
+    // XXX: Obsolete?
+    //controller->canvas()->setTool(m_dummyTool);
 }
 
 void KoToolManager::updateCursor(QCursor cursor) {
@@ -306,7 +441,7 @@ void KoToolManager::switchToolTemporaryRequested(const QString &id) {
 }
 
 void KoToolManager::switchBackRequested() {
-    if(m_stack.isEmpty()) {
+    if (m_stack.isEmpty()) {
         // default to changing to the interactionTool
         switchTool(KoInteractionTool_ID, false);
         return;
@@ -316,7 +451,7 @@ void KoToolManager::switchBackRequested() {
 
 KoCreateShapesTool *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const {
     foreach(KoCanvasController *controller, m_canvases) {
-        if(controller->canvas() == canvas) {
+        if (controller->canvas() == canvas) {
             QMap<QString, KoTool*> tools = m_allTools.value(controller);
             KoCreateShapesTool *tool =
                 dynamic_cast<KoCreateShapesTool*>(tools.value(KoCreateShapesTool_ID));
@@ -331,14 +466,14 @@ KoCreateShapesTool *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const 
 void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
     QList<QString> types;
     foreach(KoShape *shape, shapes) {
-       if(! types.contains(shape->shapeId()))
+       if (! types.contains(shape->shapeId()))
             types.append(shape->shapeId());
     }
     // check if all previous selected shapes are still selected
     // if not change the current tool to the default tool
-    if( m_activeToolId != KoInteractionTool_ID ) {
+    if ( m_activeToolId != KoInteractionTool_ID ) {
         foreach( KoShape* shape, m_lastSelectedShapes ) {
-            if( ! shapes.contains( shape ) ) {
+            if ( ! shapes.contains( shape ) ) {
                 switchTool(KoInteractionTool_ID, false);
                 break;
             }
@@ -353,7 +488,7 @@ KoToolManager* KoToolManager::s_instance = 0;
 static KStaticDeleter<KoToolManager> staticToolManagerDeleter;
 
 KoToolManager* KoToolManager::instance() {
-    if(s_instance == 0)
+    if (s_instance == 0)
         staticToolManagerDeleter.setObject(s_instance, new KoToolManager());
     return s_instance;
 }

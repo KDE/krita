@@ -40,7 +40,7 @@
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_paintop.h"
-#include "kis_input_device.h"
+#include "KoInputDevice.h"
 #include "kis_selection.h"
 #include "kis_brushop.h"
 #include "ui_kis_dlgbrushcurvecontrol.h"
@@ -131,9 +131,9 @@ bool KisBrushOpSettings::varyDarken() const
     return m_darken->isChecked();
 }
 
-KisPaintOpSettings* KisBrushOpFactory::settings(QWidget * parent, const KisInputDevice& inputDevice)
+KisPaintOpSettings* KisBrushOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice)
 {
-    if (inputDevice == KisInputDevice::mouse()) {
+    if (inputDevice == KoInputDevice::mouse()) {
         // No options for mouse, only tablet devices
         return 0;
     } else {
@@ -173,7 +173,7 @@ KisBrushOp::~KisBrushOp()
 {
 }
 
-void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
+void KisBrushOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 {
     KisPaintInformation adjustedInfo(info);
     if (!m_pressureSize)
@@ -203,8 +203,8 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisPaintDeviceSP device = m_painter->device();
 
-    KisPoint hotSpot = brush->hotSpot(adjustedInfo);
-    KisPoint pt = pos - hotSpot;
+    KoPoint hotSpot = brush->hotSpot(adjustedInfo);
+    KoPoint pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines

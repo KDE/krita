@@ -60,8 +60,8 @@ public:
     virtual Q_UINT32 priority() { return 4; }
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);
-    virtual void buttonPress(KisButtonPressEvent *e);
-    virtual void move(KisMoveEvent *e);
+    virtual void buttonPress(KoPointerEvent *e);
+    virtual void move(KoPointerEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
     void paintOutline();
 

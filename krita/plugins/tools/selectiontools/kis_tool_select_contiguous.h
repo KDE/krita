@@ -57,7 +57,7 @@ public:
     virtual QWidget* createOptionWidget(QWidget* parent);
         virtual QWidget* optionWidget();
 
-    virtual void buttonPress(KisButtonPressEvent *event);
+    virtual void buttonPress(KoPointerEvent *event);
 
 public slots:
     virtual void slotSetFuzziness(int);

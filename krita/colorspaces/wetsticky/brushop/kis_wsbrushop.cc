@@ -45,7 +45,7 @@ KisWSBrushOp::~KisWSBrushOp()
 {
 }
 
-void KisWSBrushOp::paintAt(const KisPoint &pos,
+void KisWSBrushOp::paintAt(const KoPoint &pos,
              const double pressure,
              const double /*xTilt*/,
              const double /*yTilt*/)
@@ -71,8 +71,8 @@ void KisWSBrushOp::paintAt(const KisPoint &pos,
     
     KisPaintDeviceSP device = m_painter -> device();
 
-    KisPoint hotSpot = brush -> hotSpot(pressure);
-    KisPoint pt = pos - hotSpot;
+    KoPoint hotSpot = brush -> hotSpot(pressure);
+    KoPoint pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines

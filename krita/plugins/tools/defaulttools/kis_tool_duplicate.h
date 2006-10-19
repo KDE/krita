@@ -24,8 +24,8 @@
 #include "kis_tool_freehand.h"
 #include "kis_tool_factory.h"
 
-class KisEvent;
-class KisButtonPressEvent;
+class KoPointerEvent;
+class KoPointerEvent;
 
 class QCheckBox;
 class QSpinBox;
@@ -41,10 +41,10 @@ public:
   
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_FREEHAND; }
-    virtual void buttonPress(KisButtonPressEvent *e);
-    virtual void move(KisMoveEvent *e);
+    virtual void buttonPress(KoPointerEvent *e);
+    virtual void move(KoPointerEvent *e);
     
-    virtual void paintAt(const KisPoint &pos,
+    virtual void paintAt(const KoPoint &pos,
                  const double pressure,
                  const double xTilt,
                  const double yTilt);
@@ -56,13 +56,13 @@ protected slots:
     virtual void activate();
 
 protected:
-    virtual void initPaint(KisEvent *e);
+    virtual void initPaint(KoPointerEvent *e);
 
     // Tool starting duplicate
-    KisPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
+    KoPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
     bool m_isOffsetNotUptodate; // Tells if the offset is update
-    KisPoint m_position; // Give the position of the last alt-click
-    KisPoint m_positionStartPainting;
+    KoPoint m_position; // Give the position of the last alt-click
+    KoPoint m_positionStartPainting;
     QCheckBox* m_healing;
     QSpinBox* m_healingRadius;
     QCheckBox* m_perspectiveCorrection;

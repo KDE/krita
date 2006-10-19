@@ -23,7 +23,7 @@
 #include "kis_tool_factory.h"
 #include <krita_export.h>
 
-#include "kis_point.h"
+#include "KoPoint.h"
 //Added by qt3to4:
 #include <QLabel>
 
@@ -50,8 +50,8 @@ public:
     virtual void update(KisCanvasSubject *subject);
 
     virtual void setup(KActionCollection *collection);
-    virtual void buttonPress(KisButtonPressEvent *e);
-    virtual void move(KisMoveEvent *e);
+    virtual void buttonPress(KoPointerEvent *e);
+    virtual void move(KoPointerEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
     virtual QWidget* createOptionWidget(QWidget* parent);
@@ -60,7 +60,7 @@ public:
 private:
     QLabel * m_optionWidget;
     KisCanvasSubject *m_subject;
-    KisPoint m_dragPos;
+    KoPoint m_dragPos;
     qint32 m_origScrollX;
     qint32 m_origScrollY;
     bool m_dragging;

@@ -21,7 +21,6 @@
 
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
-//#include <KoTool.h>
 #include <KoShapeRegistry.h>
 #include <KoToolManager.h>
 #include <KoShapeFactory.h>
@@ -290,6 +289,7 @@ double KoShapeSelector::DummyViewConverter::viewToDocumentY (double viewY) const
 KoShapeSelector::Canvas::Canvas(KoShapeSelector *parent)
 : m_parent(parent)
 {
+    m_toolProxy = KoToolManager::instance()->toolProxy();
 }
 
 void KoShapeSelector::Canvas::gridSize (double *horizontal, double *vertical) const {

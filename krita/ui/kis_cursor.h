@@ -21,8 +21,10 @@
 
 #ifndef __kis_cursor_h__
 #define __kis_cursor_h__
+
 #include <krita_export.h>
-class QCursor;
+
+#include <QCursor>
 
 class KRITAUI_EXPORT KisCursor
 {

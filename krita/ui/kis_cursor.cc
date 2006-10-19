@@ -18,6 +18,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_cursor.h"
 
 #include <QBitmap>
 #include <QCursor>
@@ -29,8 +30,7 @@
 #include <kinstance.h>
 #include <kstandarddirs.h>
 
-#include "kis_cursor.h"
-#include "kis_factory.h"
+#include "kis_factory2.h"
 
 KisCursor::KisCursor() {}
 
@@ -334,7 +334,7 @@ QCursor KisCursor::rotateCursor()
 
 QCursor KisCursor::load(const QString & iconName, int hotspotX, int hotspotY)
 {
-    QString filename = KisFactory::instance()->dirs()->findResource("kis_pics", iconName);
+    QString filename = KisFactory2::instance()->dirs()->findResource("kis_pics", iconName);
     QImage cursorImage;
 
     cursorImage.load(filename);

@@ -31,7 +31,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_selection.h"
 #include "kis_smearyop.h"
-#include "kis_point.h"
+#include "KoPoint.h"
 
 
 const qint32 STARTING_PAINTLOAD = 100;
@@ -59,7 +59,7 @@ public:
      * Mix the current paint color with the color found
      * at pos in dev.
      */
-        void mixAt(const KisPoint & /*pos*/, double /*pressure*/, KisPaintDeviceSP /*dev*/)
+        void mixAt(const KoPoint & /*pos*/, double /*pressure*/, KisPaintDeviceSP /*dev*/)
     {
         // Get the image background color
         // Get the color at pos
@@ -72,7 +72,7 @@ public:
     /**
      * Paint the tuft footprint (calculated from the pressure) at the given position
      */
-    void paintAt(const KisPoint & /*pos*/, double /*pressure*/, KisPaintDeviceSP /*dev*/)
+    void paintAt(const KoPoint & /*pos*/, double /*pressure*/, KisPaintDeviceSP /*dev*/)
     {
         //
     };
@@ -100,7 +100,7 @@ KisSmearyOp::~KisSmearyOp()
 {
 }
 
-void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
+void KisSmearyOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter->device()) return;
 
@@ -118,8 +118,8 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KoColor kc = m_painter->paintColor();
     kc.convertTo(colorSpace);
 
-    KisPoint hotSpot = brush->hotSpot(info);
-    KisPoint pt = pos - hotSpot;
+    KoPoint hotSpot = brush->hotSpot(info);
+    KoPoint pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
@@ -140,7 +140,7 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // the current position and the previous position.
     // The tufts are spread out through the pressure
 
-    KisPoint previousPoint = info.movement.toKisPoint();
+    KoPoint previousPoint = info.movement.toKoPoint();
     KisVector2D brushVector(-previousPoint.y(), previousPoint.x());
     KisVector2D currentPointVector = KisVector2D(pos);
     brushVector.normalize();
@@ -150,11 +150,11 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     for (int i = 0; i < (NUMBER_OF_TUFTS / 2); ++i) {
         // Compute the positions on the new vector.
         vl = currentPointVector + i * brushVector;
-        KisPoint pl = vl.toKisPoint();
+        KoPoint pl = vl.toKoPoint();
         dab->setPixel(pl.roundX(), pl.roundY(), kc);
 
         vr = currentPointVector - i * brushVector;
-        KisPoint pr = vr.toKisPoint();
+        KoPoint pr = vr.toKoPoint();
         dab->setPixel(pr.roundX(), pr.roundY(), kc);
     }
 

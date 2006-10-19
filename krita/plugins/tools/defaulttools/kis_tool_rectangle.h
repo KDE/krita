@@ -29,7 +29,7 @@
 #include "kis_tool_shape.h"
 #include "kis_types.h"
 #include "kis_tool_factory.h"
-#include "kis_point.h"
+#include "KoPoint.h"
 
 class QPainter;
 class KisPainter;
@@ -56,19 +56,19 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual quint32 priority() { return 2; }
-    virtual void buttonPress(KisButtonPressEvent *event);
-    virtual void move(KisMoveEvent *event);
+    virtual void buttonPress(KoPointerEvent *event);
+    virtual void move(KoPointerEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
-    virtual void draw(const KisPoint&, const KisPoint&);
+    virtual void draw(const KoPoint&, const KoPoint&);
 
 protected:
     int m_lineThickness;
 
-    KisPoint m_dragCenter;
-    KisPoint m_dragStart;
-    KisPoint m_dragEnd;
+    KoPoint m_dragCenter;
+    KoPoint m_dragStart;
+    KoPoint m_dragEnd;
     QRect m_final_lines;
 
     bool m_dragging;

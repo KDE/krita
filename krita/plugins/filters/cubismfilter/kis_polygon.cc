@@ -24,13 +24,13 @@
 #include <math.h>
 #include <q3valuevector.h>
 
-#include <kis_point.h>
+#include <KoPoint.h>
 
 #include "kis_polygon.h"
 
 void KisPolygon::addPoint(double x, double y)
 {
-        KisPoint point(x, y);
+        KoPoint point(x, y);
         append(point);
 }
 
@@ -41,7 +41,7 @@ void KisPolygon::rotate(double theta)
         ct = cos( theta );
         st = sin( theta );
         
-        KisPointVector::iterator it;
+        KoPointVector::iterator it;
         for( it = begin(); it != end(); ++it )
         {
                 ox = (*it).x();
@@ -53,7 +53,7 @@ void KisPolygon::rotate(double theta)
 
 void KisPolygon::translate(double tx, double ty)
 {
-        KisPointVector::iterator it;
+        KoPointVector::iterator it;
         
         for( it = begin(); it != end(); ++it )
         {
@@ -71,7 +71,7 @@ qint32 KisPolygon::extents (double& x1, double& y1, double& x2, double& y2)
         x1 = x2 = front().x();
         y1 = y2 = front().y();
 
-        KisPointVector::iterator it;
+        KoPointVector::iterator it;
         
         for( it = begin(); it != end(); ++it )
         {

@@ -61,25 +61,25 @@ public:
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual void buttonPress(KisButtonPressEvent *event);
-    virtual void move(KisMoveEvent *event);
+    virtual void buttonPress(KoPointerEvent *event);
+    virtual void move(KoPointerEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
-    virtual void draw(const KisPoint& start, const KisPoint& stop);
+    virtual void draw(const KoPoint& start, const KoPoint& stop);
     //virtual void draw(KisPainter *gc, const QRect& rc);
 
 protected:
     int m_lineThickness;
 
-    KisPoint m_dragStart;
-    KisPoint m_dragEnd;
+    KoPoint m_dragStart;
+    KoPoint m_dragEnd;
     QRect m_final_lines;
 
     bool m_dragging;
     KisImageSP m_currentImage;
 private:
-    vKisPoint starCoordinates(int N, double mx, double my, double x, double y);
+    vKoPoint starCoordinates(int N, double mx, double my, double x, double y);
     qint32 m_innerOuterRatio;
     qint32 m_vertices;
     WdgToolStar* m_optWidget;

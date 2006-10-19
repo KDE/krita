@@ -21,7 +21,9 @@
 #include <kis_shared_ptr.h>
 #include "kis_shared_ptr_vector.h"
 
-
+/**
+ * Shared pointer versions of our tools
+ */
 class KisTool;
 typedef KisSharedPtr<KisTool> KisToolSP;
 typedef KisSharedPtrVector<KisTool> vKisTool;

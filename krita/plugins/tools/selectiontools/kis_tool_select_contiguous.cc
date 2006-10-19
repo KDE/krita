@@ -41,7 +41,7 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
-#include <kis_button_press_event.h>
+#include <KoPointerEvent.h>
 #include <kis_canvas_subject.h>
 #include <kis_selection_options.h>
 #include <kis_selection.h>
@@ -81,7 +81,7 @@ void KisToolSelectContiguous::activate()
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
+void KisToolSelectContiguous::buttonPress(KoPointerEvent * e)
 {
     if (m_subject) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());

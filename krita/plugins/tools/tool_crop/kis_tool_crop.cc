@@ -44,9 +44,9 @@
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
-#include <kis_button_press_event.h>
-#include <kis_button_release_event.h>
-#include <kis_move_event.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
 #include <kis_selected_transaction.h>
 #include <kis_selection.h>
 #include <kis_layer.h>
@@ -143,7 +143,7 @@ void KisToolCrop::clearRect()
     }
 }
 
-void KisToolCrop::buttonPress(KisButtonPressEvent *e)
+void KisToolCrop::buttonPress(KoPointerEvent *e)
 {
     if (m_subject) {
         KisImageSP img = m_subject->currentImg();
@@ -173,7 +173,7 @@ void KisToolCrop::buttonPress(KisButtonPressEvent *e)
     }
 }
 
-void KisToolCrop::move(KisMoveEvent *e)
+void KisToolCrop::move(KoPointerEvent *e)
 {
     if ( m_subject && m_subject->currentImg())
     {
@@ -397,7 +397,7 @@ void KisToolCrop::buttonRelease(KisButtonReleaseEvent *e)
     }
 }
 
-void KisToolCrop::doubleClick(KisDoubleClickEvent *)
+void KisToolCrop::doubleClick(KoPointerEvent *)
 {
     if (m_haveCropSelection) crop();
 }

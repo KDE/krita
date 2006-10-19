@@ -26,6 +26,8 @@
 #include <QCursor>
 #include <QStack>
 
+#include <KoToolProxy.h>
+
 class ToolHelper;
 class KoCanvasController;
 class KoCanvasBase;
@@ -36,9 +38,11 @@ class KoCreateShapesTool;
 class KActionCollection;
 class KoShape;
 
+
 /**
  * This class manages the activation and deactivation of tools for
  * each input device.
+ *
  * Managing the active tool and switching tool based on various variables.
  *
  * The state of the toolbox will be the same for all views in the process so practically
@@ -46,8 +50,8 @@ class KoShape;
  * does not allow one widget to be in more then one view, so we just make sure the toolbox
  * is hidden in not-in-focus views.
  *
- * The ToolManager is a singleton, but it will manage all views in all applications that
- * are loaded.  This means you will have to register and unregister your view.
+ * The ToolManager is a singleton and will manage all views in all applications that
+ * are loaded in this process.  his means you will have to register and unregister your view.
  * When creating your new view you should use a KoCanvasController() and register that
  * with the ToolManager like this:
 @code
@@ -60,11 +64,36 @@ class KoShape;
         KoToolManager::instance()->removeCanvasController(m_canvasController);
     }
 @endcode
-
+ *
  * For a new view that extends KoView all you need to do is implement KoView::createToolBox()
  *
+ * KoToolManager also keeps track of the current tool based on a
+   complex set of conditions and heuristics:
+
+   - there is one active tool per canvas
+   - for every pointing device (determined by the unique id of tablet,
+     or 0 for mice -- you may have more than one mouse attached, but
+     Qt cannot distinquish between them, there is an associated too.
+   - depending on things like tablet leave/enter proximity, incoming
+     mouse or tablet events and a little timer (that gets stopped when
+     we know what is what), the active pointing device is determined,
+     and the active tool is set accordingly.
+
+   Nota bene: if you use KoToolManager and register your canvases with
+   it you no longer have to manually implement methods to route mouse,
+   tablet, key or wheel events to the active tool. In fact, it's no
+   longer interesting to you which tool is active; you can safely
+   route the paint event through KoToolManager::paint().
+
+
+   (The reason the input events are handled completely by the
+   toolmanager and the paint events not is that, generally speaking,
+   it's okay if the tools get the input events first, but you want to
+   paint your shapes or other canvas stuff first and only then paint
+   the tool stuff.)
+
  */
-class KOFFICEUI_EXPORT KoToolManager : public QObject {
+class KOFFICEUI_EXPORT KoToolManager : public QObject, public KoToolProxy {
     Q_OBJECT
 
 public:
@@ -72,6 +101,25 @@ public:
     static KoToolManager* instance();
     ~KoToolManager();
 
+
+public: // KoToolProxy implementation
+
+    KoToolProxy * toolProxy() { return this; }
+
+private:
+
+    void paint( QPainter &painter, KoViewConverter &converter );
+    void repaintDecorations();
+    void tabletEvent( QTabletEvent *event, const QPointF &pnt );
+    void mousePressEvent( QMouseEvent *event, const QPointF &pnt );
+    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &pnt );
+    void mouseMoveEvent( QMouseEvent *event, const QPointF &pnt );
+    void mouseReleaseEvent( QMouseEvent *event, const QPointF &pnt );
+    void keyPressEvent(QKeyEvent *event );
+    void keyReleaseEvent(QKeyEvent *event);
+    void wheelEvent ( QWheelEvent * event, const QPointF &pnt );
+
+public:
     /**
      * Create a new ToolBox with title.
      * This creates a new toolbox that is initialized with all tools registered for you
@@ -128,6 +176,7 @@ signals:
     void toolCodesSelected(QList<QString> types);
 
 private:
+
     KoToolManager();
     KoToolManager(const KoToolManager&);
     KoToolManager operator=(const KoToolManager&);
@@ -136,6 +185,7 @@ private:
     void switchTool(const QString &id, bool temporary);
 
 private slots:
+
     void toolActivated(ToolHelper *tool);
     void detachCanvas(KoCanvasController *controller);
     void attachCanvas(KoCanvasController *controller);
@@ -147,6 +197,7 @@ private slots:
     void selectionChanged(QList<KoShape*> shapes);
 
 private:
+
     static KoToolManager* s_instance;
 
     QList<ToolHelper*> m_tools;

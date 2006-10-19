@@ -25,7 +25,7 @@
 
 #include "kis_paintop.h"
 
-class KisPoint;
+class KoPoint;
 class KisPainter;
 
 class KisEraseOpFactory : public KisPaintOpFactory {
@@ -49,7 +49,7 @@ public:
     KisEraseOp(KisPainter * painter);
     virtual ~KisEraseOp();
 
-    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
+    void paintAt(const KoPoint &pos, const KisPaintInformation& info);
 
 };
 

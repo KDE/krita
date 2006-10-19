@@ -36,9 +36,9 @@
 #include "kis_fill_painter.h"
 #include "kis_tool_freehand.h"
 #include "kis_cursor.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
@@ -71,7 +71,7 @@ void KisToolFreehand::update(KisCanvasSubject *subject)
     m_currentImage = m_subject->currentImg();
 }
 
-void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
+void KisToolFreehand::buttonPress(KoPointerEvent *e)
 {
     if (!m_subject) return;
 
@@ -121,7 +121,7 @@ void KisToolFreehand::buttonRelease(KisButtonReleaseEvent* e)
     }
 }
 
-void KisToolFreehand::move(KisMoveEvent *e)
+void KisToolFreehand::move(KoPointerEvent *e)
 {
     if (m_mode == PAINT) {
 
@@ -150,7 +150,7 @@ void KisToolFreehand::move(KisMoveEvent *e)
     }
 }
 
-void KisToolFreehand::initPaint(KisEvent *)
+void KisToolFreehand::initPaint(KoPointerEvent *)
 {
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
 
@@ -268,7 +268,7 @@ void KisToolFreehand::endPaint()
     }
 }
 
-void KisToolFreehand::paintAt(const KisPoint &pos,
+void KisToolFreehand::paintAt(const KoPoint &pos,
                const double pressure,
                const double xTilt,
                const double yTilt)
@@ -276,11 +276,11 @@ void KisToolFreehand::paintAt(const KisPoint &pos,
     painter()->paintAt(pos, pressure, xTilt, yTilt);
 }
 
-void KisToolFreehand::paintLine(const KisPoint & pos1,
+void KisToolFreehand::paintLine(const KoPoint & pos1,
                  const double pressure1,
                  const double xtilt1,
                  const double ytilt1,
-                 const KisPoint & pos2,
+                 const KoPoint & pos2,
                  const double pressure2,
                  const double xtilt2,
                  const double ytilt2)
@@ -295,7 +295,7 @@ KisImageSP KisToolFreehand::currentImage()
 }
 
 
-void KisToolFreehand::paintOutline(const KisPoint& point) {
+void KisToolFreehand::paintOutline(const KoPoint& point) {
     if (!m_subject) {
         return;
     }
@@ -319,7 +319,7 @@ void KisToolFreehand::paintOutline(const KisPoint& point) {
         QPainter gc( canvas->canvasWidget() );
         QPen pen(Qt::SolidLine);
 
-        KisPoint hotSpot = brush->hotSpot();
+        KoPoint hotSpot = brush->hotSpot();
 
         //gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
@@ -328,7 +328,7 @@ void KisToolFreehand::paintOutline(const KisPoint& point) {
         gc.translate((- controller->horzValue()) / m_subject->zoomFactor(),
                         (- controller->vertValue()) / m_subject->zoomFactor());
 
-        KisPoint topLeft = point - hotSpot;
+        KoPoint topLeft = point - hotSpot;
 
         if (m_subject->currentPaintop().id() == "pen") {
             // Pen paints on whole pixels only.

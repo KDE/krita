@@ -27,31 +27,35 @@
 #include <kinstance.h>
 #include <klocale.h>
 
-#include "KoDocument.h"
-#include "KoDocumentChild.h"
-#include "KoFrame.h"
-#include "KoView.h"
+#include <KoDocument.h>
+#include <KoDocumentChild.h>
+#include <KoFrame.h>
+#include <KoView.h>
+#include <KoColorSpaceRegistry.h>
 
-#include "kis_layer.h"
-#include "kis_types.h"
-#include "KoColorSpaceRegistry.h"
-#include "kis_part_layer.h"
-#include "kis_group_layer.h"
-#include "kis_factory.h"
-#include "kis_paint_device.h"
-#include "kis_view.h"
-#include "kis_meta_registry.h"
+// kritaimage
+#include <kis_layer.h>
+#include <kis_types.h>
+#include <kis_part_layer.h>
+#include <kis_group_layer.h>
+#include <kis_paint_device.h>
+#include <kis_meta_registry.h>
 
-KisChildDoc::KisChildDoc ( KisDoc * kisDoc, const QRect & rect, KoDocument * childDoc )
-    : KoDocumentChild( kisDoc, childDoc, rect )
-    , m_doc(kisDoc)
+// local
+#include "kis_factory2.h"
+#include "kis_view2.h"
+#include "kis_doc2.h"
+
+KisChildDoc::KisChildDoc ( KisDoc2 * KisDoc2, const QRect & rect, KoDocument * childDoc )
+    : KoDocumentChild( KisDoc2, childDoc, rect )
+    , m_doc(KisDoc2)
     , m_partLayer(0)
 {
 }
 
 
-KisChildDoc::KisChildDoc ( KisDoc * kisDoc )
-    : KoDocumentChild( kisDoc)
+KisChildDoc::KisChildDoc ( KisDoc2 * KisDoc2 )
+    : KoDocumentChild( KisDoc2)
     , m_partLayer(0)
 {
 }
@@ -240,7 +244,7 @@ bool KisPartLayerImpl::saveToXML(QDomDocument doc, QDomElement elem)
     return true;
 }
 
-KisConnectPartLayerVisitor::KisConnectPartLayerVisitor(KisImageSP img, KisView* view, bool mode)
+KisConnectPartLayerVisitor::KisConnectPartLayerVisitor(KisImageSP img, KisView2* view, bool mode)
     : m_img(img), m_view(view), m_connect(mode)
 {
 }

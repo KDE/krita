@@ -28,11 +28,11 @@
 #include <kactioncollection.h>
 #include <klocale.h>
 
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "kis_tool_rectangle.h"
@@ -62,7 +62,7 @@ void KisToolRectangle::update (KisCanvasSubject *subject)
             m_currentImage = m_subject->currentImg ();
 }
 
-void KisToolRectangle::buttonPress(KisButtonPressEvent *event)
+void KisToolRectangle::buttonPress(KoPointerEvent *event)
 {
     if (m_currentImage && event->button() == Qt::LeftButton) {
         m_dragging = true;
@@ -71,25 +71,25 @@ void KisToolRectangle::buttonPress(KisButtonPressEvent *event)
     }
 }
 
-void KisToolRectangle::move(KisMoveEvent *event)
+void KisToolRectangle::move(KoPointerEvent *event)
 {
     if (m_dragging) {
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         // move (alt) or resize rectangle
         if (event->modifiers() & Qt::AltModifier) {
-            KisPoint trans = event->pos() - m_dragEnd;
+            KoPoint trans = event->pos() - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
         } else {
-            KisPoint diag = event->pos() - (event->modifiers() & Qt::ControlModifier
+            KoPoint diag = event->pos() - (event->modifiers() & Qt::ControlModifier
                     ? m_dragCenter : m_dragStart);
             // square?
             if (event->modifiers() & Qt::ShiftModifier) {
                 double size = qMax(fabs(diag.x()), fabs(diag.y()));
                 double w = diag.x() < 0 ? -size : size;
                 double h = diag.y() < 0 ? -size : size;
-                diag = KisPoint(w, h);
+                diag = KoPoint(w, h);
             }
 
             // resize around center point?
@@ -102,7 +102,7 @@ void KisToolRectangle::move(KisMoveEvent *event)
         }
         // draw new lines on canvas
         draw(m_dragStart, m_dragEnd);
-        m_dragCenter = KisPoint((m_dragStart.x() + m_dragEnd.x()) / 2,
+        m_dragCenter = KoPoint((m_dragStart.x() + m_dragEnd.x()) / 2,
                 (m_dragStart.y() + m_dragEnd.y()) / 2);
     }
 }
@@ -153,7 +153,7 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
     }
 }
 
-void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
+void KisToolRectangle::draw(const KoPoint& start, const KoPoint& end )
 {
     if (!m_subject)
         return;

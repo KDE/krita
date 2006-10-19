@@ -10,6 +10,7 @@ include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} )
 
 set(kofficeui_LIB_SRCS
    KoBrush.cpp 
+   KoInputDevice.cpp
    KoCharSelectDia.cpp
    KoContextHelp.cpp
    KoCsvImportDialog.cpp

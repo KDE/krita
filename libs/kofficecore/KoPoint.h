@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,19 +21,28 @@
 #ifndef koPoint_h
 #define koPoint_h
 
-#include <QMatrix>
 #include <math.h>
+
+#include <QVector>
+#include <QMatrix>
+
 
 /**
  * A point whose coordinates are floating-point values ( "double"s ).
- * The API isn't documented, it's a perfect mirror of QPoint.
+ * 
+ * KoPoint differs from QPointF in that there are a number of
+ * convenience methods that QPointF lacks and that it mirrors more
+ * closely than QPointF the api of QPoint.
  */
 class KoPoint {
 
 public:
+
     KoPoint() { m_x = 0; m_y = 0; }
     KoPoint(const double &x, const double &y) : m_x(x), m_y(y) {}
-    explicit KoPoint(const QPoint & p) : m_x(p.x()), m_y(p.y()) {}
+    KoPoint(const QPoint & p) : m_x(p.x()), m_y(p.y()) {}
+    KoPoint(const QPointF& pt) : m_x(pt.x()), m_y(pt.y()) { }
+
     ~KoPoint() {}
 
     bool operator==(const KoPoint &rhs) const { return QABS(m_x-rhs.x()) < 1E-10 && QABS(m_y-rhs.y()) < 1E-10; }
@@ -61,6 +71,15 @@ public:
 
     // Not in QPoint:
     void setCoords(const double &x, const double &y) { m_x = x; m_y = y; }
+
+    int floorX() const { return static_cast<int>(x()); }
+    int floorY() const { return static_cast<int>(y()); }
+    int roundX() const { return qRound(x()); }
+    int roundY() const { return qRound(y()); }
+    
+    QPoint floorQPoint() const { return QPoint(static_cast<int>(x()), static_cast<int>(y())); }
+    QPoint roundQPoint() const { return QPoint(qRound(x()), qRound(y())); }
+    
     KoPoint transform (const QMatrix &m) const
     {
       double x, y;
@@ -78,6 +97,8 @@ public:
 	return ( ( - ( a * 360 ) / ( 2 * M_PI ) - 90 ) - 180 );
     }
 
+    // In QPoint, but not used
+
     double manhattanLength() const
     {
       return QABS( m_x ) + QABS( m_y );
@@ -88,6 +109,9 @@ public:
     {
       return QPoint( qRound( m_x ), qRound( m_y ) );
     }
+
+    /// Convert to a Qt4 floating point QPoint.
+    QPointF toPointF() const { return QPointF(x(),y()); }
 
 private:
     double m_x, m_y;
@@ -124,5 +148,7 @@ inline kdbgstream operator<<( kdbgstream str, const KoPoint & r )  {
 }
 
 inline kndbgstream operator<<( kndbgstream str, const KoPoint & )  { return str; }
+
+typedef QVector<KoPoint> vKoPoint;
 
 #endif

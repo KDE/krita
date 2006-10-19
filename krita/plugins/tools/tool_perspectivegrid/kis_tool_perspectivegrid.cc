@@ -30,13 +30,13 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-#include <kis_button_press_event.h>
-#include <kis_button_release_event.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
 #include <kis_canvas_controller.h>
 #include <kis_canvas_subject.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
-#include <kis_move_event.h>
+#include <KoPointerEvent.h>
 #include <kis_perspective_grid_manager.h>
 #include <kis_selected_transaction.h>
 #include <kis_painter.h>
@@ -99,7 +99,7 @@ bool KisToolPerspectiveGrid::mouseNear(const QPoint& mousep, const QPoint point)
     return (QRect( (point.x() - m_handleHalfSize), (point.y() - m_handleHalfSize), m_handleSize, m_handleSize).contains(mousep) );
 }
 
-void KisToolPerspectiveGrid::buttonPress(KisButtonPressEvent *event)
+void KisToolPerspectiveGrid::buttonPress(KoPointerEvent *event)
 {
     KisPerspectiveGrid* pGrid = m_subject->currentImg()->perspectiveGrid();
     if(!pGrid->hasSubGrids() && m_mode != MODE_CREATION)
@@ -160,7 +160,7 @@ void KisToolPerspectiveGrid::buttonPress(KisButtonPressEvent *event)
                 m_selectedNode1 = grid->bottomRight();
                 break;
             }
-            else if( !grid->leftGrid() && mouseNear( mousep, controller->windowToView( KisPoint( ((*grid->topLeft() + *grid->bottomLeft() )*0.5) ) ).roundQPoint() ) )
+            else if( !grid->leftGrid() && mouseNear( mousep, controller->windowToView( KoPoint( ((*grid->topLeft() + *grid->bottomLeft() )*0.5) ) ).roundQPoint() ) )
             {
                 kDebug() << " PRESS LEFT HANDLE " << endl;
                 m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
@@ -225,7 +225,7 @@ void KisToolPerspectiveGrid::buttonPress(KisButtonPressEvent *event)
 }
 
 
-void KisToolPerspectiveGrid::move(KisMoveEvent *event)
+void KisToolPerspectiveGrid::move(KoPointerEvent *event)
 {
     if( m_mode == MODE_CREATION )
     {

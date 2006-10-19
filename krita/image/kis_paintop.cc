@@ -26,7 +26,7 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_alpha_mask.h"
-#include "kis_point.h"
+#include "KoPoint.h"
 #include "KoColorSpace.h"
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"
@@ -111,5 +111,5 @@ void KisPaintOp::setSource(KisPaintDeviceSP p) {
 }
 
 
-KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KisInputDevice& /*inputDevice*/) { return 0; }
+KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/) { return 0; }
 

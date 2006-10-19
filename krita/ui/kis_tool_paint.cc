@@ -87,11 +87,11 @@ void KisToolPaint::deactivate()
 {
 }
 
-void KisToolPaint::buttonPress(KisButtonPressEvent *)
+void KisToolPaint::buttonPress(KoPointerEvent *)
 {
 }
 
-void KisToolPaint::move(KisMoveEvent *)
+void KisToolPaint::move(KoPointerEvent *)
 {
 }
 
@@ -99,7 +99,7 @@ void KisToolPaint::buttonRelease(KisButtonReleaseEvent *)
 {
 }
 
-void KisToolPaint::doubleClick(KisDoubleClickEvent *)
+void KisToolPaint::doubleClick(KoPointerEvent *)
 {
 }
 

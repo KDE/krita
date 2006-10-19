@@ -138,7 +138,7 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
 
         double brighten = 1.0 + mag * brightness;
 
-        srcRSA.moveTo( KisPoint( srcX, srcY ) );
+        srcRSA.moveTo( KoPoint( srcX, srcY ) );
         srcRSA.sampledOldRawData( dstIt.rawData() );
         cs->toLabA16( dstIt.rawData(), (Q_UINT8*)lab, 1);
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))

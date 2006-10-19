@@ -40,9 +40,9 @@
 #include "kis_cmb_composite.h"
 #include "kis_tool_fill.h"
 #include "KoColorSpace.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_pattern.h"
 #include "kis_fill_painter.h"
 #include "kis_progress_display_interface.h"
@@ -138,7 +138,7 @@ bool KisToolFill::flood(int startX, int startY)
     return true;
 }
 
-void KisToolFill::buttonPress(KisButtonPressEvent *e)
+void KisToolFill::buttonPress(KoPointerEvent *e)
 {
     m_startPos = e->pos();
 }

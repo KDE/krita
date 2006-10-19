@@ -20,7 +20,7 @@
 
 #include <QRect>
 #include <KoRect.h>
-#include "kis_point.h"
+#include "KoPoint.h"
 
 /**
  * A double-based rect class that can return a QRect that encloses the KisRect.
@@ -31,7 +31,7 @@ class KisRect : public KoRect
 public:
     KisRect() {}
     KisRect(double x, double y, double w, double h) : super(x, y, w, h) {}
-    KisRect(const KisPoint& topLeft, const KisPoint& bottomRight) : super(topLeft, bottomRight) {}
+    KisRect(const KoPoint& topLeft, const KoPoint& bottomRight) : super(topLeft, bottomRight) {}
     KisRect(const QRect& qr) : super(qr.x(), qr.y(), qr.width(), qr.height()) {}
     KisRect(const KoRect& r) : super(r) {}
 

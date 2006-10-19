@@ -30,9 +30,9 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_tool_dummy.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 
 KisToolDummy::KisToolDummy()
     : super(i18n("No Active Tool"))
@@ -54,7 +54,7 @@ void KisToolDummy::update(KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
-void KisToolDummy::buttonPress(KisButtonPressEvent *e)
+void KisToolDummy::buttonPress(KoPointerEvent *e)
 {
     if (m_subject && !m_dragging && e->button() == Qt::LeftButton) {
         KisCanvasController *controller = m_subject->canvasController();
@@ -66,13 +66,13 @@ void KisToolDummy::buttonPress(KisButtonPressEvent *e)
     }
 }
 
-void KisToolDummy::move(KisMoveEvent *e)
+void KisToolDummy::move(KoPointerEvent *e)
 {
     if (m_subject && m_dragging) {
         KisCanvasController *controller = m_subject->canvasController();
 
-        KisPoint currPos = controller->windowToView(e->pos());
-        KisPoint delta = currPos - m_dragPos;
+        KoPoint currPos = controller->windowToView(e->pos());
+        KoPoint delta = currPos - m_dragPos;
         controller->scrollTo(m_origScrollX - delta.floorX(), m_origScrollY - delta.floorY());
     }
 }

@@ -23,7 +23,7 @@
 #include "kis_tool_factory.h"
 
 class QTimer;
-class KisPoint;
+class KoPoint;
 class QPainter;
 class QRect;
 class QCheckBox;
@@ -44,9 +44,9 @@ public:
 
 protected:
 
-    virtual void initPaint(KisEvent *e);
+    virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
-    virtual void move(KisMoveEvent *e);
+    virtual void move(KoPointerEvent *e);
     virtual void leave(QEvent *e);
 
 private slots:

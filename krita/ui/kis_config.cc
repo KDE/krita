@@ -36,11 +36,12 @@ namespace {
     const qint32 IMG_DEFAULT_HEIGHT = 512;
     const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
     const qint32 DEFAULT_MAX_THREADS = 4;
-    const qint32 DEFAULT_MAX_TILES_MEM = 5000; 
+    const qint32 DEFAULT_MAX_TILES_MEM = 5000;
     const qint32 DEFAULT_SWAPPINESS = 100;
     const qint32 DEFAULT_PRESSURE_CORRECTION = 50;
     const qint32 DEFAULT_DOCKABILITY = 0;
     const qint32 DEFAULT_UNDO_LIMIT = 50;
+    const qint32 DEFAULT_BORDER_SIZE = 128;
 }
 
 KisConfig::KisConfig()
@@ -60,6 +61,16 @@ KisConfig::~KisConfig()
     m_cfg->sync();
 }
 
+
+int KisConfig::borderSize() const
+{
+    return m_cfg->readEntry( "borderSize", DEFAULT_BORDER_SIZE );
+}
+
+void KisConfig::setBorderSize( int borderSize )
+{
+    m_cfg->writeEntry( "borderSize", borderSize );
+}
 
 bool KisConfig::fixDockerWidth() const
 {

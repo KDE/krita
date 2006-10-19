@@ -18,6 +18,7 @@
 #ifndef _KIS_PART_LAYER_
 #define _KIS_PART_LAYER_
 
+#include <QObject>
 #include <QRect>
 
 #include <KoDocument.h>
@@ -30,8 +31,8 @@
 #include "kis_layer_visitor.h"
 
 class KoFrame;
-class KoDocument;
-class KisView;
+class KisView2;
+class KisDoc2;
 
 
 /**
@@ -41,19 +42,20 @@ class KisChildDoc : public KoDocumentChild
 {
 
 public:
-    KisChildDoc ( KisDoc * kisDoc, const QRect& rect, KoDocument * childDoc );
-    KisChildDoc ( KisDoc * kisDdoc );
+
+    KisChildDoc ( KisDoc2 * KisDoc2, const QRect& rect, KoDocument * childDoc );
+    KisChildDoc ( KisDoc2 * kisDdoc );
 
     virtual ~KisChildDoc();
 
-    KisDoc * parent() const { return m_doc; }
+    KisDoc2 * parent() const { return m_doc; }
 
     void setPartLayer (KisPartLayerSP layer) { m_partLayer = layer; }
 
     KisPartLayerSP partLayer() const { return m_partLayer; }
 protected:
 
-    KisDoc * m_doc;
+    KisDoc2 * m_doc;
     KisPartLayerSP m_partLayer;
 };
 
@@ -65,7 +67,7 @@ protected:
  * The part is rendered into an RBGA8 paint device so we can composite it with
  * the other layers.
  *
- * When it is activated (see activate()), it draws a rectangle around itself on the kisdoc,
+ * When it is activated (see activate()), it draws a rectangle around itself on the KisDoc2,
  * whereas when it is deactivated (deactivate()), it removes that rectangle and commits
  * the child to the paint device.
  *
@@ -81,7 +83,7 @@ public:
     virtual PropertyList properties() const;
     virtual KisLayerSP clone() const;
 
-    /// Returns the childDoc so that we can access the doc from other places, if need be (KisDoc)
+    /// Returns the childDoc so that we can access the doc from other places, if need be (KisDoc2)
     virtual KisChildDoc* childDoc() const { return m_doc; }
 
     void setDocType(const QString& type) { m_docType = type; }
@@ -123,14 +125,14 @@ private:
 };
 
 /**
- * Visitor that connects all partlayers in an image to a KisView's signals
+ * Visitor that connects all partlayers in an image to a KisView2's signals
  */
 class KisConnectPartLayerVisitor : public KisLayerVisitor {
     KisImageSP m_img;
-    KisView* m_view;
+    KisView2* m_view;
     bool m_connect; // connects, or disconnects signals
 public:
-    KisConnectPartLayerVisitor(KisImageSP img, KisView* view, bool mode);
+    KisConnectPartLayerVisitor(KisImageSP img, KisView2* view, bool mode);
     virtual ~KisConnectPartLayerVisitor() {}
 
     virtual bool visit(KisPaintLayer *layer);

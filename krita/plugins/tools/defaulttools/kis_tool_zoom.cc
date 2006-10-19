@@ -30,9 +30,9 @@
 #include "kis_canvas.h"
 #include "QPainter"
 #include "kis_cursor.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_tool_zoom.h"
 
 
@@ -72,7 +72,7 @@ void KisToolZoom::paint(QPainter& gc, const QRect& rc)
         paintOutline(gc, rc);
 }
 
-void KisToolZoom::buttonPress(KisButtonPressEvent *e)
+void KisToolZoom::buttonPress(KoPointerEvent *e)
 {
     if (m_subject && m_subject->currentImg() && !m_dragging) {
         if (e->button() == Qt::LeftButton) {
@@ -83,7 +83,7 @@ void KisToolZoom::buttonPress(KisButtonPressEvent *e)
     }
 }
 
-void KisToolZoom::move(KisMoveEvent *e)
+void KisToolZoom::move(KoPointerEvent *e)
 {
     if (m_subject && m_dragging) {
         if (m_startPos != m_endPos)

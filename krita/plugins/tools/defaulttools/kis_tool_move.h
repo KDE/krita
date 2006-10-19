@@ -43,8 +43,8 @@ public:
     virtual enumToolType toolType() { return TOOL_TRANSFORM; }
     virtual quint32 priority() { return 2; }
 
-    virtual void buttonPress(KisButtonPressEvent *e);
-    virtual void move(KisMoveEvent *e);
+    virtual void buttonPress(KoPointerEvent *e);
+    virtual void move(KoPointerEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 private:

@@ -57,7 +57,7 @@ KisPenOp::~KisPenOp()
 {
 }
 
-void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
+void KisPenOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
     KisPaintDeviceSP device = m_painter->device();
@@ -67,8 +67,8 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (! brush->canPaintFor(info) )
         return;
 
-    KisPoint hotSpot = brush->hotSpot(info);
-    KisPoint pt = pos - hotSpot;
+    KoPoint hotSpot = brush->hotSpot(info);
+    KoPoint pt = pos - hotSpot;
 
     qint32 x = pt.roundX();
     qint32 y = pt.roundY();

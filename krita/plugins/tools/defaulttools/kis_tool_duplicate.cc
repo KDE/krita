@@ -32,13 +32,13 @@
 #include <klocale.h>
 
 #include "kis_brush.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_painter.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 #include "kis_perspective_grid.h"
@@ -72,7 +72,7 @@ void KisToolDuplicate::activate()
     }
 }
 
-void KisToolDuplicate::buttonPress(KisButtonPressEvent *e)
+void KisToolDuplicate::buttonPress(KoPointerEvent *e)
 {
     if (e->modifiers() == Qt::ShiftModifier) {
         m_position = e->pos();
@@ -102,7 +102,7 @@ void KisToolDuplicate::setup(KActionCollection *collection)
     }
 }
 
-void KisToolDuplicate::initPaint(KisEvent *e)
+void KisToolDuplicate::initPaint(KoPointerEvent *e)
 {
     if( m_position != QPoint(-1,-1))
     {
@@ -124,7 +124,7 @@ void KisToolDuplicate::initPaint(KisEvent *e)
     }
 }
 
-void KisToolDuplicate::move(KisMoveEvent *e)
+void KisToolDuplicate::move(KoPointerEvent *e)
 {
 
     // Paint the outline where we will (or are) copying from
@@ -150,7 +150,7 @@ void KisToolDuplicate::move(KisMoveEvent *e)
             }
         
         // First look for the grid corresponding to the start point
-            KisSubPerspectiveGrid* subGridStart = *m_subject->currentImg()->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(KisPoint(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
+            KisSubPerspectiveGrid* subGridStart = *m_subject->currentImg()->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(KoPoint(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
             QRect r = QRect(0,0, m_subject->currentImg()->width(), m_subject->currentImg()->height());
         
             if(subGridStart)
@@ -179,13 +179,13 @@ void KisToolDuplicate::move(KisMoveEvent *e)
                 }
             }
         // Compute the translation in the perspective transformation space:
-            KisPoint translat;
+            KoPoint translat;
             {
-                KisPoint positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF());
-                KisPoint currentPositionT = KisPerspectiveMath::matProd(endM, e->pos().toPointF() );
-                KisPoint duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF() - m_offset.toPointF());
-                KisPoint duplicateRealPosition = KisPerspectiveMath::matProd(startM, duplicateStartPoisitionT.toPointF() + (currentPositionT.toPointF() - positionStartPaintingT.toPointF()) );
-                KisPoint p = e->pos() - duplicateRealPosition;
+                KoPoint positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF());
+                KoPoint currentPositionT = KisPerspectiveMath::matProd(endM, e->pos().toPointF() );
+                KoPoint duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF() - m_offset.toPointF());
+                KoPoint duplicateRealPosition = KisPerspectiveMath::matProd(startM, duplicateStartPoisitionT.toPointF() + (currentPositionT.toPointF() - positionStartPaintingT.toPointF()) );
+                KoPoint p = e->pos() - duplicateRealPosition;
                 srcPos = p.floorQPoint();
             }
 
@@ -211,7 +211,7 @@ void KisToolDuplicate::move(KisMoveEvent *e)
     super::move(e);
 }
 
-void KisToolDuplicate::paintAt(const KisPoint &pos,
+void KisToolDuplicate::paintAt(const KoPoint &pos,
                    const double pressure,
                    const double xtilt,
                    const double ytilt)

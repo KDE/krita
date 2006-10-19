@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Boudewijn Rempt
+ *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,11 @@
 #ifndef KIS_VIEW_2
 #define KIS_VIEW_2
 
+#include <QDockWidget>
+
 #include <KoView.h>
+#include <KoToolBox.h>
+#include <KoToolManager.h>
 
 #include <kis_types.h>
 
@@ -44,6 +48,10 @@ public:
 
     // KoView implementation
     virtual void updateReadWrite( bool readwrite ) { Q_UNUSED(readwrite); }
+    virtual QDockWidget *createToolBox() 
+        { 
+            return KoToolManager::instance()->toolBox("krita");
+        }
 
 public:
 

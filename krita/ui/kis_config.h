@@ -18,6 +18,9 @@
 #ifndef KIS_CONFIG_H_
 #define KIS_CONFIG_H_
 
+#include <QString>
+#include <QColor>
+
 #include "kis_global.h"
 #include "krita_export.h"
 
@@ -25,6 +28,9 @@ class KRITAUI_EXPORT KisConfig {
 public:
     KisConfig();
     ~KisConfig();
+
+    int borderSize() const;
+    void setBorderSize(int borderSize);
 
     bool fixDockerWidth() const;
     void setFixedDockerWidth(bool fix);

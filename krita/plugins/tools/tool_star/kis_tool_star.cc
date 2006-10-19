@@ -39,9 +39,9 @@
 #include "kis_int_spinbox.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
 #include "kis_canvas.h"
 #include "QPainter"
@@ -72,7 +72,7 @@ void KisToolStar::update (KisCanvasSubject *subject)
         m_currentImage = m_subject->currentImg ();
 }
 
-void KisToolStar::buttonPress(KisButtonPressEvent *event)
+void KisToolStar::buttonPress(KoPointerEvent *event)
 {
     if (m_currentImage && event->button() == Qt::LeftButton) {
         m_dragging = true;
@@ -83,14 +83,14 @@ void KisToolStar::buttonPress(KisButtonPressEvent *event)
     }
 }
 
-void KisToolStar::move(KisMoveEvent *event)
+void KisToolStar::move(KoPointerEvent *event)
 {
     if (m_dragging) {
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         // move (alt) or resize star
         if (event->modifiers() & Qt::AltModifier) {
-            KisPoint trans = event->pos() - m_dragEnd;
+            KoPoint trans = event->pos() - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
         } else {
@@ -134,7 +134,7 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
         KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
         painter.setPaintOp(op); // Painter takes ownership
 
-        vKisPoint coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
+        vKoPoint coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
         painter.paintPolygon(coord);
 
@@ -147,7 +147,7 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
     }
 }
 
-void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
+void KisToolStar::draw(const KoPoint& start, const KoPoint& end )
 {
     if (!m_subject || !m_currentImage)
         return;
@@ -157,14 +157,14 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
     QPainter p (canvas->canvasWidget());
     QPen pen(Qt::SolidLine);
 
-    KisPoint startPos;
-    KisPoint endPos;
+    KoPoint startPos;
+    KoPoint endPos;
     startPos = controller->windowToView(start);
     endPos = controller->windowToView(end);
 
     //p.setRasterOp(Qt::NotROP);
 
-    vKisPoint points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
+    vKoPoint points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
 
     for (int i = 0; i < points.count() - 1; i++) {
         p.drawLine(points[i].floorQPoint(), points[i + 1].floorQPoint());
@@ -194,13 +194,13 @@ void KisToolStar::setup(KActionCollection *collection)
     }
 }
 
-vKisPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
+vKoPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
 {
     double R=0, r=0;
     qint32 n=0;
     double angle;
 
-    vKisPoint starCoordinatesArray(2*N);
+    vKoPoint starCoordinatesArray(2*N);
 
     // the radius of the outer edges
     R=sqrt((x-mx)*(x-mx)+(y-my)*(y-my));
@@ -213,12 +213,12 @@ vKisPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, do
 
     //set outer edges
     for(n=0;n<N;n++){
-        starCoordinatesArray[2*n] = KisPoint(mx+R*cos(n * 2.0 * M_PI / N + angle),my+R*sin(n *2.0 * M_PI / N+angle));
+        starCoordinatesArray[2*n] = KoPoint(mx+R*cos(n * 2.0 * M_PI / N + angle),my+R*sin(n *2.0 * M_PI / N+angle));
     }
 
     //set inner edges
     for(n=0;n<N;n++){
-        starCoordinatesArray[2*n+1] = KisPoint(mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle));
+        starCoordinatesArray[2*n+1] = KoPoint(mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle));
     }
 
     return starCoordinatesArray;

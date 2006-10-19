@@ -33,8 +33,12 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
+#include <KoToolProxy.h>
+#include <KoToolManager.h>
+
 #include <kis_meta_registry.h>
 #include <kis_image.h>
+#include <kis_layer.h>
 
 #include "kis_config.h"
 #include "kis_canvas2.h"
@@ -48,7 +52,10 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     , m_checkTexture( 0 )
     , m_checkBrush( 0 )
     , m_canvas( canvas )
+    , m_viewConverter( canvas->viewConverter() )
 {
+    m_toolProxy = KoToolManager::instance()->toolProxy();
+
     setAttribute(Qt::WA_NoSystemBackground);
     setAutoFillBackground(false);
     m_checkTexture = new QImage(PATTERN_WIDTH, PATTERN_HEIGHT, QImage::Format_RGB32);
@@ -102,7 +109,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     // Only the part that intersects with the bit we want to paint is interesting
     QRect imageRect = QRect(xoffset, yoffset, img->width(), img->height());
 
-    // If we're in the border area, draw the border. 
+    // If we're in the border area, draw the border.
     // The border region is the set of rects around the image where there may be
     // layer data, but that is outside the user-defined dimensions of the image.
     // But we are only interested in the region that intersects with the region
@@ -135,7 +142,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
             // Checks
             gc.fillRect((*it), *m_checkBrush );
             // Image
-            img->renderToPainter((*it).x() - xoffset, 
+            img->renderToPainter((*it).x() - xoffset,
                                  (*it).y() - yoffset,
                                  (*it).x(), (*it).y(),
                                  (*it).width(), (*it).height(), gc,
@@ -144,23 +151,23 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
             ++it;
         }
     }
-
+#if 0
     // ask the current layer to paint its selection (and potentially
     // other things, like wetness and active-layer outline
     KisLayerSP currentLayer = img->activeLayer();
     QVector<QRect>layerRects = QRegion(currentLayer->extent().translate(xoffset, yoffset))
                                 .intersected(paintRegions);
-    
+
     it = outsideRects.begin();
     end = outsideRects.end();
     while (it != end) {
-            currentLayer->renderDecorationsToPainter((*it).x() - xoffset, 
+            currentLayer->renderDecorationsToPainter((*it).x() - xoffset,
                                                      (*it).y() - yoffset,
                                                      (*it).x(), (*it).y(),
                                                      (*it).width(), (*it).height(),
                                                      gc);
     }
-
+#endif
     // Paint the bits of the layers that are outside the real image, with
     // a gray wash
     QVector<QRect>outsideRects = imageRegion
@@ -170,7 +177,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     it = outsideRects.begin();
     end = outsideRects.end();
     while (it != end) {
-        img->renderToPainter((*it).x() - xoffset, 
+        img->renderToPainter((*it).x() - xoffset,
                              (*it).y() - yoffset,
                              (*it).x(), (*it).y(),
                              (*it).width(), (*it).height(), gc,
@@ -184,9 +191,43 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     }
     // ask the guides, grids, etc to paint themselves
 
-    // Give the tool a chance tool paint its stuff
+    // Give the tool a chance to paint its stuff
+    m_toolProxy->paint(gc, *m_viewConverter );
 
     gc.end();
 }
+
+
+void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {
+    m_toolProxy->mouseMoveEvent( e, m_viewConverter->viewToDocument(e->pos()) );
+}
+
+void KisQPainterCanvas::mousePressEvent(QMouseEvent *e) {
+    m_toolProxy->mousePressEvent( e, m_viewConverter->viewToDocument(e->pos()) );
+}
+
+void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e) {
+    m_toolProxy->mouseReleaseEvent( e, m_viewConverter->viewToDocument(e->pos()) );
+}
+
+void KisQPainterCanvas::keyPressEvent( QKeyEvent *e ) {
+    m_toolProxy->keyPressEvent(e);
+}
+
+void KisQPainterCanvas::keyReleaseEvent (QKeyEvent *e) {
+    m_toolProxy->keyReleaseEvent(e);
+}
+
+void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
+{
+    m_toolProxy->tabletEvent( e, m_viewConverter->viewToDocument(  e->pos() ) );
+}
+
+void KisQPainterCanvas::wheelEvent( QWheelEvent *e )
+{
+    m_toolProxy->wheelEvent( e, m_viewConverter->viewToDocument( e->pos()  ) );
+}
+
+
 
 #include "kis_qpainter_canvas.moc"

@@ -29,7 +29,7 @@
 #include "oldtoolbox.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_input_device.h"
+#include "KoInputDevice.h"
 
 
 KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasController * controller)
@@ -66,13 +66,13 @@ void KisToolManager::setUp(OldToolBox * toolbox, QDockWidget * toolPaletteWidget
     if (!m_dummyTool)
         m_dummyTool = KisToolDummyFactory().createTool(actionCollection);
 
-    QList<KisInputDevice> inputDevices = KisInputDevice::inputDevices();
+    QList<KoInputDevice> inputDevices = KoInputDevice::inputDevices();
 
     for (qint32 inputDevice = 0; inputDevice < inputDevices.count(); inputDevice++) {
         m_inputDeviceToolSetMap[inputDevices[inputDevice]] = KisToolRegistry::instance()->createTools(actionCollection, m_subject);
     }
 
-    m_tools = m_inputDeviceToolSetMap[KisInputDevice::mouse()];
+    m_tools = m_inputDeviceToolSetMap[KoInputDevice::mouse()];
     for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); ++it) {
         KisToolSP t = *it;
         if (!t) continue;
@@ -99,7 +99,7 @@ void KisToolManager::resetToolBox(OldToolBox * toolbox)
 {
     m_toolBox = toolbox;
 
-    m_tools = m_inputDeviceToolSetMap[KisInputDevice::mouse()];
+    m_tools = m_inputDeviceToolSetMap[KoInputDevice::mouse()];
     for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); ++it) {
         KisToolSP t = *it;
         if (!t) continue;
@@ -232,7 +232,7 @@ KisTool * KisToolManager::currentTool() const
 }
 
 
-void KisToolManager::setToolForInputDevice(KisInputDevice oldDevice, KisInputDevice newDevice)
+void KisToolManager::setToolForInputDevice(KoInputDevice oldDevice, KoInputDevice newDevice)
 {
     InputDeviceToolSetMap::iterator vit = m_inputDeviceToolSetMap.find(oldDevice);
 
@@ -273,9 +273,9 @@ void KisToolManager::activateCurrentTool()
     }
 }
 
-KisTool * KisToolManager::findTool(const QString &toolName, KisInputDevice inputDevice) const
+KisTool * KisToolManager::findTool(const QString &toolName, KoInputDevice inputDevice) const
 {
-    if (inputDevice == KisInputDevice::unknown()) {
+    if (inputDevice == KoInputDevice::unknown()) {
         inputDevice = m_controller->currentInputDevice();
     }
 

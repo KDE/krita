@@ -26,9 +26,9 @@
 #include <QKeyEvent>
 
 #include "kis_cursor.h"
-#include "kis_move_event.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_group_layer.h"
 #include "kis_view.h"
 
@@ -43,7 +43,7 @@ void KisPartLayerHandler::done() {
     emit handlerDone(); // We will get deleted by the view
 }
 
-void KisPartLayerHandler::gotMoveEvent(KisMoveEvent* event) {
+void KisPartLayerHandler::gotMoveEvent(KoPointerEvent* event) {
     if (!m_started) {
         emit sigGotMoveEvent(event);
         return;
@@ -65,7 +65,7 @@ void KisPartLayerHandler::gotMoveEvent(KisMoveEvent* event) {
     painter.end();
 }
 
-void KisPartLayerHandler::gotButtonPressEvent(KisButtonPressEvent* event) {
+void KisPartLayerHandler::gotButtonPressEvent(KoPointerEvent* event) {
     m_start = event->pos().roundQPoint();
     m_end = m_start;
     m_started = true;

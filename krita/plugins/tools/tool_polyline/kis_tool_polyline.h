@@ -27,7 +27,7 @@
 #include <QKeyEvent>
 
 #include "kis_tool_paint.h"
-#include "kis_point.h"
+#include "KoPoint.h"
 
 class KisCanvas;
 class KisDoc;
@@ -59,9 +59,9 @@ public:
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual quint32 priority() { return 5; }
 
-    virtual void buttonPress(KisButtonPressEvent *event);
-    virtual void doubleClick(KisDoubleClickEvent *e);
-    virtual void move(KisMoveEvent *event);
+    virtual void buttonPress(KoPointerEvent *event);
+    virtual void doubleClick(KoPointerEvent *e);
+    virtual void move(KoPointerEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
     virtual QString quickHelp() const;
     void finish();
@@ -78,14 +78,14 @@ protected:
     void draw();
 
 protected:
-    KisPoint m_dragStart;
-    KisPoint m_dragEnd;
+    KoPoint m_dragStart;
+    KoPoint m_dragEnd;
 
     bool m_dragging;
     KisImageSP m_currentImage;
 private:
-    typedef Q3ValueVector<KisPoint> KisPointVector;
-    KisPointVector m_points;
+    typedef Q3ValueVector<KoPoint> KoPointVector;
+    KoPointVector m_points;
 };
 
 

@@ -24,7 +24,7 @@
 #include <kis_tool_factory.h>
 #include <kis_tool_freehand.h>
 
-class KisPoint;
+class KoPoint;
 class KisSelectionOptions;
 
 
@@ -52,7 +52,7 @@ public slots:
 
 protected:
 
-    virtual void initPaint(KisEvent *e);
+    virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
 private:
     KisSelectionOptions * m_optWidget;

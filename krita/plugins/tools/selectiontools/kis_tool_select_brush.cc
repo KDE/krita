@@ -32,14 +32,14 @@
 #include <klocale.h>
 
 #include "kis_brush.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_cmb_composite.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_tool_select_brush.h"
@@ -72,7 +72,7 @@ void KisToolSelectBrush::activate()
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
+void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
 {
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
 

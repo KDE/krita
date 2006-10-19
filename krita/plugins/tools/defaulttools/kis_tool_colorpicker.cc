@@ -39,7 +39,7 @@
 #include "kis_paint_device.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_colorpicker.moc"
-#include "kis_button_press_event.h"
+#include "KoPointerEvent.h"
 #include "kis_canvas_subject.h"
 #include "kis_iterators_pixel.h"
 #include "KoColor.h"
@@ -75,7 +75,7 @@ void KisToolColorPicker::update(KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
-void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
+void KisToolColorPicker::buttonPress(KoPointerEvent *e)
 {
     if (m_subject) {
         if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)

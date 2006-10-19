@@ -47,10 +47,10 @@ class KDialog;
 class KisBrush;
 class KisGradient;
 class KisPattern;
-class KisButtonPressEvent;
+class KoPointerEvent;
 class KisButtonReleaseEvent;
-class KisDoubleClickEvent;
-class KisMoveEvent;
+class KoPointerEvent;
+class KoPointerEvent;
 class QPainter;
 
 enum enumToolType {
@@ -88,10 +88,10 @@ public:
      */
     virtual void setup(KActionCollection *collection) = 0;
 
-    virtual void buttonPress(KisButtonPressEvent *e) = 0;
-    virtual void move(KisMoveEvent *e) = 0;
+    virtual void buttonPress(KoPointerEvent *e) = 0;
+    virtual void move(KoPointerEvent *e) = 0;
     virtual void buttonRelease(KisButtonReleaseEvent *e) = 0;
-    virtual void doubleClick(KisDoubleClickEvent *e) = 0;
+    virtual void doubleClick(KoPointerEvent *e) = 0;
     virtual void keyPress(QKeyEvent *e) = 0;
     virtual void keyRelease(QKeyEvent *e) = 0;
 

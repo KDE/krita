@@ -86,7 +86,7 @@ double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
+void KisDuplicateOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
 
@@ -102,8 +102,8 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     if (! brush->canPaintFor(info) )
         return;
 
-    KisPoint hotSpot = brush->hotSpot(info);
-    KisPoint pt = pos - hotSpot;
+    KoPoint hotSpot = brush->hotSpot(info);
+    KoPoint pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
@@ -131,7 +131,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 
     m_painter->setPressure(info.pressure);
 
-    KisPoint srcPointF = pt - m_painter->duplicateOffset();
+    KoPoint srcPointF = pt - m_painter->duplicateOffset();
     QPoint srcPoint = QPoint(x - static_cast<Q_INT32>(m_painter->duplicateOffset().x()),
                              y - static_cast<Q_INT32>(m_painter->duplicateOffset().y()));
 
@@ -243,7 +243,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         KoColorSpace* deviceCs = device->colorSpace();
         KisHLineConstIteratorPixel deviceIt = device->createHLineConstIterator(x, y, sw );
         KisHLineIteratorPixel srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
-        double* matrixIt = matrix;
+        double* matrixIt = &matrix[0];
         for(int j = 0; j < sh; j++)
         {
             for(int i= 0; !srcDevIt.isDone(); i++)
@@ -268,8 +268,8 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
             double err;
             double* solution = new double [ 3 * sw * sh ];
             do {
-                err = minimizeEnergy(matrix, solution,sw,sh);
-                memcpy (matrix, solution, sw * sh * 3 * sizeof(double));
+                err = minimizeEnergy(&matrix[0], &solution[0], sw, sh);
+                memcpy (&matrix[0], &solution[0], sw * sh * 3 * sizeof(double));
                 iter++;
             } while( err < 0.00001 && iter < 100);
             delete [] solution;
@@ -278,7 +278,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         // Finaly multiply
         deviceIt = device->createHLineIterator(x, y, sw);
         srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
-        matrixIt = matrix;
+        matrixIt = &matrix[0];
         for(int j = 0; j < sh; j++)
         {
             for(int i= 0; !srcDevIt.isDone(); i++)

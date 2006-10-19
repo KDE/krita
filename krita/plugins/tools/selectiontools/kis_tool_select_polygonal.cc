@@ -41,9 +41,9 @@
 #include <kis_tool_select_polygonal.h>
 #include <kis_vec.h>
 #include <kis_undo_adapter.h>
-#include <kis_button_press_event.h>
-#include <kis_button_release_event.h>
-#include <kis_move_event.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
 #include "kis_selected_transaction.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
@@ -91,7 +91,7 @@ void KisToolSelectPolygonal::update (KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
-void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
+void KisToolSelectPolygonal::buttonPress(KoPointerEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         m_dragging = true;
@@ -112,7 +112,7 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 }
 
 
-void KisToolSelectPolygonal::doubleClick( KisDoubleClickEvent * )
+void KisToolSelectPolygonal::doubleClick( KoPointerEvent * )
 {
     finish();
 }
@@ -180,7 +180,7 @@ void KisToolSelectPolygonal::finish()
 
 }
 
-void KisToolSelectPolygonal::move(KisMoveEvent *event)
+void KisToolSelectPolygonal::move(KoPointerEvent *event)
 {
     if (m_dragging) {
         // erase old lines on canvas
@@ -239,7 +239,7 @@ void KisToolSelectPolygonal::draw(QPainter& gc)
     //gc.setRasterOp(Qt::XorROP);
 
     KisCanvasController *controller = m_subject->canvasController();
-    KisPoint start, end;
+    KoPoint start, end;
     QPoint startPos;
     QPoint endPos;
 
@@ -248,7 +248,7 @@ void KisToolSelectPolygonal::draw(QPainter& gc)
         endPos = controller->windowToView(m_dragEnd.floorQPoint());
         gc.drawLine(startPos, endPos);
     } else {
-        for (KisPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+        for (KoPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
             if (it == m_points.begin())
             {

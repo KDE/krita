@@ -23,12 +23,12 @@
 
 #include "kis_types.h"
 #include "kis_tool_paint.h"
-#include "kis_point.h"
+#include "KoPoint.h"
 #include "krita_export.h"
 
 class KisPainter;
 class KisBrush;
-class KisEvent;
+class KoPointerEvent;
 class KisPaintLayer;
 
 
@@ -42,23 +42,23 @@ public:
 
     virtual void update(KisCanvasSubject *subject);
 
-    virtual void buttonPress(KisButtonPressEvent *e);
-    virtual void move(KisMoveEvent *e);
+    virtual void buttonPress(KoPointerEvent *e);
+    virtual void move(KoPointerEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
     virtual enumToolType toolType() { return TOOL_FREEHAND; }
 
 protected:
-    virtual void paintAt(const KisPoint &pos,
+    virtual void paintAt(const KoPoint &pos,
                  const double pressure,
                  const double xTilt,
                  const double yTilt);
 
-    virtual void paintLine(const KisPoint & pos1,
+    virtual void paintLine(const KoPoint & pos1,
                    const double pressure1,
                    const double xtilt1,
                    const double ytilt1,
-                   const KisPoint & pos2,
+                   const KoPoint & pos2,
                    const double pressure2,
                    const double xtilt2,
                    const double ytilt2);
@@ -66,15 +66,15 @@ protected:
     // XXX: why not make this a protected member attribute for the
     // use of subclasses? BSAR.
     inline KisPainter * painter() { return m_painter; };
-    virtual void initPaint(KisEvent *e);
+    virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
 
     KisImageSP currentImage();
 
-    void paintOutline(const KisPoint& point);
+    void paintOutline(const KoPoint& point);
 
 protected:
-    KisPoint m_prevPos;
+    KoPoint m_prevPos;
     double m_prevPressure;
     double m_prevXTilt;
     double m_prevYTilt;

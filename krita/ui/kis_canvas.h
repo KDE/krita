@@ -41,9 +41,9 @@
 
 #include "kis_canvas_widget.h"
 #include "kis_global.h"
-#include "kis_point.h"
+#include "KoPoint.h"
 #include "kis_vec.h"
-#include "kis_input_device.h"
+#include "KoInputDevice.h"
 
 #ifdef Q_WS_X11
 
@@ -63,11 +63,11 @@
 
 #endif // Q_WS_X11
 
-class KisEvent;
-class KisMoveEvent;
-class KisButtonPressEvent;
+class KoPointerEvent;
+class KoPointerEvent;
+class KoPointerEvent;
 class KisButtonReleaseEvent;
-class KisDoubleClickEvent;
+class KoPointerEvent;
 class KisCanvasWidgetPainter;
 
 /**
@@ -129,10 +129,10 @@ signals:
     void sigGotKeyReleaseEvent(QKeyEvent*);
     void sigGotDragEnterEvent(QDragEnterEvent*);
     void sigGotDropEvent(QDropEvent*);
-    void sigGotMoveEvent(KisMoveEvent *);
-    void sigGotButtonPressEvent(KisButtonPressEvent *);
+    void sigGotMoveEvent(KoPointerEvent *);
+    void sigGotButtonPressEvent(KoPointerEvent *);
     void sigGotButtonReleaseEvent(KisButtonReleaseEvent *);
-    void sigGotDoubleClickEvent(KisDoubleClickEvent *);
+    void sigGotDoubleClickEvent(KoPointerEvent *);
 
 protected:
     // Allow KisView to render on the widget directly, but everything else

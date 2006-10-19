@@ -35,14 +35,14 @@ public:
     KisPartLayerHandler(KisView* view, const KoDocumentEntry& entry,
                         KisGroupLayerSP parent, KisLayerSP above);
 signals:
-    void sigGotMoveEvent(KisMoveEvent* event);
+    void sigGotMoveEvent(KoPointerEvent* event);
     void sigGotKeyPressEvent(QKeyEvent* event);
     void handlerDone();
 
 protected slots:
 
-    void gotMoveEvent(KisMoveEvent* event);
-    void gotButtonPressEvent(KisButtonPressEvent* event);
+    void gotMoveEvent(KoPointerEvent* event);
+    void gotButtonPressEvent(KoPointerEvent* event);
     void gotButtonReleaseEvent(KisButtonReleaseEvent* event);
     void gotKeyPressEvent(QKeyEvent* event);
 protected:

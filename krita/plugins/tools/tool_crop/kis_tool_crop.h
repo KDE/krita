@@ -67,10 +67,10 @@ public:
     virtual quint32 priority() { return 1; }
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);
-    virtual void buttonPress(KisButtonPressEvent *e);
-    virtual void move(KisMoveEvent *e);
+    virtual void buttonPress(KoPointerEvent *e);
+    virtual void move(KoPointerEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
-    virtual void doubleClick(KisDoubleClickEvent *);
+    virtual void doubleClick(KoPointerEvent *);
 
 public slots:
 

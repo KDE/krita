@@ -26,7 +26,7 @@
 
 #include "wdgcpaintoptions.h"
 
-class KisPoint;
+class KoPoint;
 class KisPainter;
 class Brush;
 class Stroke;
@@ -39,7 +39,7 @@ public:
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
     virtual KisID id() { return KisID("paintCPaint", i18n("Chinese Brush")); }
-    virtual KisPaintOpSettings *settings(QWidget * parent, const KisInputDevice& inputDevice);
+    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice);
 
 private:
 
@@ -81,7 +81,7 @@ public:
     KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, KisPainter * painter);
     virtual ~KisCPaintOp();
 
-    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
+    void paintAt(const KoPoint &pos, const KisPaintInformation& info);
 
 private:
 

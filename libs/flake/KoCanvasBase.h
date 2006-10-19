@@ -33,7 +33,7 @@
 class KoSelection;
 class KCommand;
 class KoShapeManager;
-class KoTool;
+class KoToolProxy;
 class KoViewConverter;
 
 /**
@@ -89,16 +89,11 @@ public:
     virtual void updateCanvas(const QRectF& rc) = 0;
 
     /**
-     * Return the curently active tool, or 0 if non active.
-     * @return the curently active tool, or 0 if non active.
+     * Return the proxy to the active tool (determining which tool
+     * is really, really active is hard when tablets are involved,
+     * so leave that to others.
      */
-    virtual KoTool* tool() = 0;
-
-    /**
-     * Set the new active tool.
-     * @param tool the new tool to be used on the canvas.
-     */
-    virtual void setTool(KoTool *tool) = 0;
+    virtual KoToolProxy * toolProxy() = 0;
 
     /**
      * Return the viewConverter for this view.

@@ -56,6 +56,7 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
+#include <KoToolManager.h>
 
 // Local
 #include "kis_annotation.h"
@@ -155,6 +156,8 @@ KisDoc::KisDoc(QWidget *parentWidget, QObject *parent, bool singleViewMode) :
 
     setInstance( KisFactory::instance(), false );
     setTemplateType( "krita_template" );
+
+    KoToolManager::instance()->toolBox()->show();
 
     init();
 

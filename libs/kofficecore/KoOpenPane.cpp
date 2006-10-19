@@ -162,6 +162,11 @@ void KoOpenPane::showOpenFileDialog()
   const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
       KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
 
+  if (mimeFilter.isEmpty()) 
+  {
+      kDebug() << "No mime types found!\n";  
+      return;
+  }
   KUrl url = KFileDialog::getOpenUrl(KUrl("kfiledialog:///OpenDialog"), mimeFilter.join(" "), this);
 
   if(!url.isEmpty()) {

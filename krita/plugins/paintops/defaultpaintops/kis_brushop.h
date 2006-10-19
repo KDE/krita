@@ -28,7 +28,7 @@
 class QWidget;
 class QCheckBox;
 class QLabel;
-class KisPoint;
+class KoPoint;
 class KisPainter;
 class KCurve;
 namespace Ui { class WdgBrushCurveControl; }
@@ -42,7 +42,7 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
     virtual KoID id() { return KoID("paintbrush", i18n("Pixel Brush")); }
     virtual QString pixmap() { return "paintbrush.png"; }
-    virtual KisPaintOpSettings *settings(QWidget * parent, const KisInputDevice& inputDevice);
+    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice);
 };
 
 class KisBrushOpSettings : public QObject, public KisPaintOpSettings {
@@ -93,7 +93,7 @@ public:
     KisBrushOp(const KisBrushOpSettings *settings, KisPainter * painter);
     virtual ~KisBrushOp();
 
-    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
+    void paintAt(const KoPoint &pos, const KisPaintInformation& info);
 
 private:
     inline double scaleToCurve(double pressure, double* curve) const {

@@ -81,8 +81,7 @@ private:
             void addCommand (KCommand *command, bool execute=true);
             KoShapeManager * shapeManager () const { return m_parent->m_shapeManager; }
             void updateCanvas (const QRectF &rc);
-            KoTool *tool () { return m_parent->m_tool; }
-            void setTool (KoTool *tool) { Q_UNUSED(tool); }
+            KoToolProxy *toolProxy () { return m_toolProxy; }
             KoViewConverter * viewConverter() { return &m_converter; }
             QWidget *canvasWidget () { return m_parent; }
             KoUnit::Unit unit() { return KoUnit::U_MM; }
@@ -90,6 +89,8 @@ private:
         private:
             DummyViewConverter m_converter;
             KoShapeSelector *m_parent;
+            KoToolProxy * m_toolProxy;
+            KoTool * m_tool;
     };
 
     friend class Canvas;

@@ -50,9 +50,9 @@
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
 #include <kis_selected_transaction.h>
-#include <kis_button_press_event.h>
-#include <kis_button_release_event.h>
-#include <kis_move_event.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
 #include <kis_selection.h>
 #include <kis_filter_strategy.h>
 #include <kis_cmb_idlist.h>
@@ -246,7 +246,7 @@ bool KisToolPerspectiveTransform::mouseNear(const QPoint& mousep, const QPoint p
     return (QRect( (point.x() - m_handleHalfSize), (point.y() - m_handleHalfSize), m_handleSize, m_handleSize).contains(mousep) );
 }
 
-void KisToolPerspectiveTransform::buttonPress(KisButtonPressEvent *event)
+void KisToolPerspectiveTransform::buttonPress(KoPointerEvent *event)
 {
     if (m_subject) {
         switch(m_interractionMode)
@@ -322,7 +322,7 @@ void KisToolPerspectiveTransform::buttonPress(KisButtonPressEvent *event)
     }
 }
 
-void KisToolPerspectiveTransform::move(KisMoveEvent *event)
+void KisToolPerspectiveTransform::move(KoPointerEvent *event)
 {
     switch(m_interractionMode)
     {

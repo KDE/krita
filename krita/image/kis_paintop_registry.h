@@ -32,7 +32,7 @@ class KisPaintOp;
 class KisPaintOpSettings;
 class KisPainter;
 class KoColorSpace;
-class KisInputDevice;
+class KoInputDevice;
 
 class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KoGenericRegistry<KisPaintOpFactorySP>
 {
@@ -58,7 +58,7 @@ public:
      * with the specified parent as widget parent. Returns 0 if there
      * are no settings available for the given device.
      */
-    KisPaintOpSettings * settings(const KoID& id, QWidget * parent, const KisInputDevice& inputDevice) const;
+    KisPaintOpSettings * settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice) const;
 
     // Whether we should show this paintop in the toolchest
     bool userVisible(const KoID & id, KoColorSpace* cs) const;

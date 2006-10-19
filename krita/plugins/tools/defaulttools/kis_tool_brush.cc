@@ -44,7 +44,7 @@
 #include "kis_tool_brush.h"
 #include "kis_canvas_subject.h"
 #include "kis_boundary.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
 #include "kis_canvas.h"
 #include "kis_layer.h"
 
@@ -81,7 +81,7 @@ void KisToolBrush::update(KisCanvasSubject *subject)
     super::update(subject);
 }
 
-void KisToolBrush::initPaint(KisEvent *e)
+void KisToolBrush::initPaint(KoPointerEvent *e)
 {
     super::initPaint(e);
 
@@ -127,7 +127,7 @@ void KisToolBrush::setup(KActionCollection *collection)
     }
 }
 
-void KisToolBrush::move(KisMoveEvent *e) {
+void KisToolBrush::move(KoPointerEvent *e) {
     KisToolFreehand::move(e);
     KisConfig cfg;
     if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE)

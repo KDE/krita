@@ -55,16 +55,15 @@ public:
 public:
 
     /**
-     * request a repaint of the decorations to be made.
-     *
-     * XXX: What are decorations?
+     * request a repaint of the decorations to be made. This triggers
+     * an update call on the canvas, but does not paint directly.
      */
     virtual void repaintDecorations() {};
 
 public slots:
     /**
      * This method is called when this tool instance is activated.
-     * For any application there is only one tool active at a time, which then gets all
+     * For any main window there is only one tool active at a time, which then gets all
      * user input.  Switching between tools will call deactivate on one and activate on the
      * new tool allowing the tool to flush items (like a selection) when it is not in use.
      * <p>There is one case where two tools are activated at the same.  This is the case
@@ -103,13 +102,13 @@ public:
      */
     virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0;
 
-    /**   
-     * Return the option widget for this tool. Create it if it   
-     * does not exist yet.   
-     *   
-     * Note: by default an empty widget is created.   
-     * @see m_optionWidget   
-     */   
+    /**
+     * Return the option widget for this tool. Create it if it
+     * does not exist yet.
+     *
+     * Note: by default an empty widget is created.
+     * @see m_optionWidget
+     */
     virtual QWidget * optionWidget(QWidget * parent);
 
 public: // Events
@@ -158,6 +157,13 @@ public: // Events
      * @param event state and reason of this key release
      */
     virtual void keyReleaseEvent(QKeyEvent *event);
+
+    /**
+     * Called when the scrollwheel is used
+     * Implementors should call event->ignore() if they do not actually use the event
+     * @param event state of this wheel event
+     */
+    virtual void wheelEvent ( KoPointerEvent * event );
 
 signals:
 

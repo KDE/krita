@@ -20,7 +20,7 @@
 #ifndef KIS_CURVE_ITERATOR_H
 #define KIS_CURVE_ITERATOR_H
 
-#include "kis_point.h"
+#include "KoPoint.h"
 #include "kis_random_accessor.h"
 #include "kis_types.h"
 
@@ -34,11 +34,11 @@ class KisRandomSubAccessorPixel{
         void sampledOldRawData(Q_UINT8* dst);
         void sampledRawData(Q_UINT8* dst);
         inline void moveTo(double x, double y) { m_currentPoint.setX(x); m_currentPoint.setY(y); }
-        inline void moveTo(const KisPoint& p ) { m_currentPoint = p; }
+        inline void moveTo(const KoPoint& p ) { m_currentPoint = p; }
     private:
         KisPaintDeviceSP m_device;
         int m_position, m_end;
-        KisPoint m_currentPoint;
+        KoPoint m_currentPoint;
         KisRandomConstAccessorPixel m_randomAccessor;
 };
 

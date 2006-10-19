@@ -30,7 +30,7 @@
 
 #include "kis_resource.h"
 #include "kis_types.h"
-#include "kis_point.h"
+#include "KoPoint.h"
 #include "kis_alpha_mask.h"
 #include "krita_export.h"
 #include "kis_boundary.h"
@@ -85,8 +85,8 @@ public:
     virtual KisPaintDeviceSP image(KoColorSpace * colorSpace, const KisPaintInformation& info,
                              double subPixelX = 0, double subPixelY = 0) const;
 
-    void setHotSpot(KisPoint);
-    KisPoint hotSpot(const KisPaintInformation& info = KisPaintInformation()) const;
+    void setHotSpot(KoPoint);
+    KoPoint hotSpot(const KisPaintInformation& info = KisPaintInformation()) const;
 
     void setSpacing(double s) { m_spacing = s; }
     double spacing() const { return m_spacing; }
@@ -167,7 +167,7 @@ private:
 
     QByteArray m_data;
     bool m_ownData;
-    KisPoint m_hotSpot;
+    KoPoint m_hotSpot;
     double m_spacing;
     bool m_useColorAsMask;
     bool m_hasColor;

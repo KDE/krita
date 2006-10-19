@@ -53,10 +53,10 @@ public:
     virtual void update (KisCanvasSubject *subject);
     virtual QWidget* createOptionWidget(QWidget* parent);
 
-    virtual void buttonPress(KisButtonPressEvent *event);
-    virtual void move(KisMoveEvent *event);
+    virtual void buttonPress(KoPointerEvent *event);
+    virtual void move(KoPointerEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
-    virtual void doubleClick(KisDoubleClickEvent *event);
+    virtual void doubleClick(KoPointerEvent *event);
     virtual void keyPress(QKeyEvent *event);
     virtual void keyRelease(QKeyEvent *event);
 
@@ -109,7 +109,7 @@ protected:
     /*
      * Called by selectCurve(), this convert m_curve to a vector of QPointF in order to be used by paintPolygon()
      */
-    virtual Q3ValueVector<KisPoint> convertCurve();
+    virtual Q3ValueVector<KoPoint> convertCurve();
 
     /*
      * Called by paintCurve(), it behaves essentially like drawPoint(), but this uses a KisPainter

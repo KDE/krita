@@ -39,9 +39,9 @@
 #include "kis_tool_select_elliptical.h"
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_selection.h"
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
@@ -56,9 +56,9 @@ KisToolSelectElliptical::KisToolSelectElliptical()
 
     m_subject = 0;
     m_selecting = false;
-    m_centerPos = KisPoint(0, 0);
-    m_startPos = KisPoint(0, 0);
-    m_endPos = KisPoint(0, 0);
+    m_centerPos = KoPoint(0, 0);
+    m_startPos = KoPoint(0, 0);
+    m_endPos = KoPoint(0, 0);
     m_optWidget = 0;
     m_selectAction = SELECTION_ADD;
 }
@@ -108,13 +108,13 @@ void KisToolSelectElliptical::clearSelection()
 //                         controller->canvas()->update();
 //         }
 
-        m_startPos = KisPoint(0, 0);
-        m_endPos = KisPoint(0, 0);
+        m_startPos = KoPoint(0, 0);
+        m_endPos = KoPoint(0, 0);
         m_selecting = false;
     }
 }
 
-void KisToolSelectElliptical::buttonPress(KisButtonPressEvent *e)
+void KisToolSelectElliptical::buttonPress(KoPointerEvent *e)
 {
     if (m_subject) {
         KisImageSP img = m_subject->currentImg();
@@ -128,24 +128,24 @@ void KisToolSelectElliptical::buttonPress(KisButtonPressEvent *e)
     }
 }
 
-void KisToolSelectElliptical::move(KisMoveEvent *e)
+void KisToolSelectElliptical::move(KoPointerEvent *e)
 {
     if (m_subject && m_selecting) {
         paintOutline();
         // move (alt) or resize ellipse
         if (e->modifiers() & Qt::AltModifier) {
-            KisPoint trans = e->pos() - m_endPos;
+            KoPoint trans = e->pos() - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
         } else {
-            KisPoint diag = e->pos() - (e->modifiers() & Qt::ControlModifier
+            KoPoint diag = e->pos() - (e->modifiers() & Qt::ControlModifier
                     ? m_centerPos : m_startPos);
             // circle?
             if (e->modifiers() & Qt::ShiftModifier) {
                 double size = qMax(fabs(diag.x()), fabs(diag.y()));
                 double w = diag.x() < 0 ? -size : size;
                 double h = diag.y() < 0 ? -size : size;
-                diag = KisPoint(w, h);
+                diag = KoPoint(w, h);
             }
 
             // resize around center point?
@@ -157,7 +157,7 @@ void KisToolSelectElliptical::move(KisMoveEvent *e)
             }
         }
         paintOutline();
-        m_centerPos = KisPoint((m_startPos.x() + m_endPos.x()) / 2,
+        m_centerPos = KoPoint((m_startPos.x() + m_endPos.x()) / 2,
                 (m_startPos.y() + m_endPos.y()) / 2);
     }
 }

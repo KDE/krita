@@ -34,13 +34,13 @@
 #include "kis_layer.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_cmb_composite.h"
 #include "kis_cursor.h"
 #include "kis_canvas_subject.h"
 #include "kis_doc.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_tool_select_eraser.h"
@@ -70,7 +70,7 @@ void KisToolSelectEraser::activate()
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectEraser::initPaint(KisEvent */*e*/)
+void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
 {
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
 

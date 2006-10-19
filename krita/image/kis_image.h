@@ -20,7 +20,9 @@
 
 #include <QObject>
 #include <QString>
-#include <QMutex>
+#include <QPainter>
+#include <QRect>
+#include <QRegion>
 
 #include <config.h>
 
@@ -29,25 +31,21 @@
 
 #include "KoUnit.h"
 
-#include "KoCompositeOp.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_annotation.h"
-#include "kis_paint_device.h"
 
 #include <krita_export.h>
-
 
 class KCommand;
 
 class KoCommandHistory;
-
 class KoColorSpace;
+class KoCompositeOp;
+class KoColor;
+
 class KisNameServer;
 class KisUndoAdapter;
 class KisPainter;
-class KCommand;
-class KoColor;
 class KisFilterStrategy;
 class KisImageIface;
 class KoColorProfile;
@@ -60,48 +58,50 @@ class KisPerspectiveGrid;
  * to manipulate the whole image.
  */
 class KRITAIMAGE_EXPORT KisImage : public QObject, public KShared {
-    Q_OBJECT
 
+    Q_OBJECT
+        
 public:
     KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, KoColorSpace * colorSpace, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
-
+    
 public:
-    typedef enum enumPaintFlags {
-        PAINT_IMAGE_ONLY = 0,
-        PAINT_BACKGROUND = 1,
-        PAINT_SELECTION = 2,
-        PAINT_MASKINACTIVELAYERS = 4,
-        PAINT_EMBEDDED_RECT = 8 // If the current layer is an embedded part draw a rect around it
-    } PaintFlags;
+    
 
-    /// Paint the specified rect onto the painter, adjusting the colors using the
-    /// given profile. The exposure setting is used if the image has a high dynamic range.
-    virtual void renderToPainter(qint32 x1,
-                     qint32 y1,
-                     qint32 x2,
-                     qint32 y2,
+    /**
+     * Paint the specified rect onto the painter, adjusting the colors 
+     * using the given profile. The exposure setting is used if the image 
+     * has a high dynamic range.
+     */
+    virtual void renderToPainter(qint32 srcX,
+                     qint32 srcY,
+                     qint32 dstX,
+                     qint32 dstY,
+                     qint32 width,
+                     qint32 height,
                      QPainter &painter,
                      KoColorProfile *profile,
-                     PaintFlags paintFlags,
                      float exposure = 0.0f);
     /**
-     * Render the projection onto a QImage. In contrast with the above method, the
-     * selection is not rendered.
+     * Render the projection onto a QImage.
      */
      virtual QImage convertToQImage(qint32 x1,
                                     qint32 y1,
-                                    qint32 x2,
-                                    qint32 y2,
+                                    qint32 width,
+                                    qint32 height,
                                     KoColorProfile * profile,
                                     float exposure = 0.0f);
 
-     virtual QImage convertToQImage(const QRect& r, const QSize& fullImageSize, KoColorProfile *profile, PaintFlags paintFlags, float exposure = 0.0f);
-
-     KisBackgroundSP background() const;
-
-public:
+     /**
+      * Render the projection scaled onto a QImage. Use this when
+      * zoom < 100% to avoid color-adjusting pixels that will be 
+      * filtered away anyway.
+      */
+     virtual QImage convertToQImage(const QRect& r, 
+                                    const QSize& fullImageSize, 
+                                    KoColorProfile *profile, 
+                                    float exposure = 0.0f);
 
     /**
      * Lock the image to make sure no recompositing-causing signals get emitted
@@ -130,13 +130,21 @@ public:
     QString description() const;
     void setDescription(const QString& description);
 
+    /**
+     * Retrieve the next automatic layername.
+     */
     QString nextLayerName() const;
+
+    /**
+     * Set the automatic layer name counter one back.
+     */
     void rollBackLayerName();
     
     /**
      * @return the perspective grid associated to this image
      */
     KisPerspectiveGrid* perspectiveGrid();
+    
     /**
      * Resize the image to the specified width and height. The resize
      * method handles the creating on an undo step itself.
@@ -158,8 +166,19 @@ public:
      */
     void resize(const QRect& rc, bool cropLayers = false);
 
+    /**
+     * Execute a scale transform on all layers in this image.
+     */
     void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
+
+    /**
+     * Execute a rotate transform on all layers in this image.
+     */
     void rotate(double angle, KisProgressDisplayInterface *m_progress);
+
+    /**
+     * Execute a shear transform on all layers in this image.
+     */
     void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 
     /**
@@ -177,8 +196,7 @@ public:
      *
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
-      */
-
+     */
     void setProfile(const KoColorProfile * profile);
 
     /**
@@ -197,24 +215,53 @@ public:
      * Returns true if this image wants undo information, false otherwise
      */
     bool undo() const;
+
     /**
      * Tell the image it's modified; this emits the sigImageModified signal. This happens
      *  when the image needs to be saved
      */
     void setModified();
 
+    /**
+     * The default colorspace of this image: new layers will have this colorspace
+     * and the projection will have this colorspace.
+     */
     KoColorSpace * colorSpace() const;
 
-    // Resolution of the image == XXX: per inch?
+    /**
+     * X resolution in pixels per inch (or KoUnit?
+     */
     double xRes();
+
+    /**
+     * Y resolution in pixels per inch (or KoUnit?
+     */
     double yRes();
+
+    /**
+     * Set the resolution in pixels per inch.
+     */
     void setResolution(double xres, double yres);
 
+    /**
+     * Return the width of the image
+     */
     qint32 width() const;
+
+    /**
+     * Return the height of the image
+     */
     qint32 height() const;
+
+    /**
+     * Return the size of the image
+     */
     QSize size() const { return QSize( width(), height() ); }
 
-    bool empty() const;
+    /**
+     * @return a region built from the extents of all layers in this image.
+     */
+    QRegion extent() const;
 
     /**
      *  returns a paintdevice that contains the merged layers of this image, within
@@ -322,8 +369,6 @@ public:
     void setColorSpace(KoColorSpace * colorSpace);
     void setRootLayer(KisGroupLayerSP rootLayer);
 
-    //KisGuideMgr *guides() const;
-
     /**
      * Add an annotation for this image. This can be anything: Gamma, EXIF, etc.
      * Note that the "icc" annotation is reserved for the color strategies.
@@ -421,38 +466,8 @@ private:
     void emitSizeChanged();
 
 private:
-
-    KUrl m_uri;
-    QString m_name;
-    QString m_description;
-
-    qint32 m_width;
-    qint32 m_height;
-
-    double m_xres;
-    double m_yres;
-
-    KoUnit::Unit m_unit;
-
-    KoColorSpace * m_colorSpace;
-
-    bool m_dirty;
-    QRect m_dirtyRect;
-
-    KisBackgroundSP m_bkg;
-
-    KisGroupLayerSP m_rootLayer; // The layers are contained in here
-    KisLayerSP m_activeLayer;
-    QList<KisLayer*> m_dirtyLayers; // for thumbnails
-
-    KisNameServer *m_nserver;
-    KisUndoAdapter *m_adapter;
-    //KisGuideMgr m_guides;
-
-    vKisAnnotationSP m_annotations;
-
     class KisImagePrivate;
-    KisImagePrivate * m_private;
+    KisImagePrivate * m_d;
 };
 
 #endif // KIS_IMAGE_H_

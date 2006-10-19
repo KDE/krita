@@ -77,8 +77,8 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
 
     connect(view, SIGNAL(currentColorSpaceChanged(KoColorSpace*)),
             this, SLOT(colorSpaceChanged(KoColorSpace*)));
-    connect(view, SIGNAL(sigInputDeviceChanged(const KisInputDevice&)),
-            this, SLOT(slotInputDeviceChanged(const KisInputDevice&)));
+    connect(view, SIGNAL(sigInputDeviceChanged(const KoInputDevice&)),
+            this, SLOT(slotInputDeviceChanged(const KoInputDevice&)));
 
     setCurrentPaintop(defaultPaintop(view->currentInputDevice()));
 }
@@ -146,7 +146,7 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
     return QPixmap(fname);
 }
 
-void KisPaintopBox::slotInputDeviceChanged(const KisInputDevice & inputDevice)
+void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
 {
     KoID paintop;
     InputDevicePaintopMap::iterator it = m_currentID.find(inputDevice);
@@ -204,16 +204,16 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     emit selected(paintop, paintopSettings(paintop, m_canvasController->currentInputDevice()));
 }
 
-KoID KisPaintopBox::defaultPaintop(const KisInputDevice& inputDevice)
+KoID KisPaintopBox::defaultPaintop(const KoInputDevice& inputDevice)
 {
-    if (inputDevice == KisInputDevice::eraser()) {
+    if (inputDevice == KoInputDevice::eraser()) {
         return KoID("eraser","");
     } else {
         return KoID("paintbrush","");
     }
 }
 
-const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, const KisInputDevice & inputDevice)
+const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice)
 {
     QList<KisPaintOpSettings *> settingsArray;
     InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find(inputDevice);

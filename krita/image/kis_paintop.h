@@ -36,11 +36,11 @@
 
 #include <krita_export.h>
 
-class KisPoint;
+class KoPoint;
 class KisAlphaMask;
 class KisPainter;
 class KoColorSpace;
-class KisInputDevice;
+class KoInputDevice;
 class QWidget;
 
 /**
@@ -71,7 +71,7 @@ public:
     KisPaintOp(KisPainter * painter);
     virtual ~KisPaintOp();
 
-    virtual void paintAt(const KisPoint &pos, const KisPaintInformation& info) = 0;
+    virtual void paintAt(const KoPoint &pos, const KisPaintInformation& info) = 0;
     void setSource(KisPaintDeviceSP p);
 
     /**
@@ -138,7 +138,7 @@ public:
      * specified input device. Return 0 if there are no settings available for the given
      * device.
      */
-    virtual KisPaintOpSettings* settings(QWidget* parent, const KisInputDevice& inputDevice);
+    virtual KisPaintOpSettings* settings(QWidget* parent, const KoInputDevice& inputDevice);
 
 };
 #endif // KIS_PAINTOP_H_

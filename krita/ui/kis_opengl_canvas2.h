@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
  *
  * This library is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ protected:
     void initializeGL();
     void resizeGL(int w, int h);
 
-public: // QWidget 
+public: // QWidget
 
     void paintEvent ( QPaintEvent * event );
 
@@ -62,10 +62,14 @@ public: // KisAbstractCanvasWidget
 
     QWidget * widget() { return this; }
 
+    KoToolProxy * toolProxy() {
+        return m_toolProxy;
+    }
 private:
     KisCanvas2 * m_canvas;
     QImage * m_checkTexture;
     QBrush * m_checkBrush;
+    KoToolProxy * m_toolProxy;
 
 };
 

@@ -33,8 +33,8 @@
 #include "kis_filter_config_widget.h"
 #include "kis_tool_filter.h"
 #include <kis_brush.h>
-#include <kis_button_press_event.h>
-#include <kis_button_release_event.h>
+#include <KoPointerEvent.h>
+#include <KoPointerEvent.h>
 #include <kis_canvas_subject.h>
 #include <kis_cmb_idlist.h>
 #include <kis_cursor.h>
@@ -44,7 +44,7 @@
 #include <KoID.h>
 #include <kis_image.h>
 #include <kis_layer.h>
-#include <kis_move_event.h>
+#include <KoPointerEvent.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>
 #include <kis_paintop_registry.h>
@@ -79,7 +79,7 @@ void KisToolFilter::setup(KActionCollection *collection)
     }
 }
 
-void KisToolFilter::initPaint(KisEvent *e)
+void KisToolFilter::initPaint(KoPointerEvent *e)
 {
     // Some filters want to paint directly on the current state of
     // the canvas, others cannot handle that and need a temporary layer

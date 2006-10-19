@@ -58,17 +58,17 @@ namespace {
 
     class GradientShapeStrategy {
     public:
-        GradientShapeStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+        GradientShapeStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd);
         virtual ~GradientShapeStrategy() {}
 
         virtual double valueAt(double x, double y) const = 0;
 
     protected:
-        KisPoint m_gradientVectorStart;
-        KisPoint m_gradientVectorEnd;
+        KoPoint m_gradientVectorStart;
+        KoPoint m_gradientVectorEnd;
     };
 
-    GradientShapeStrategy::GradientShapeStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+    GradientShapeStrategy::GradientShapeStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd)
         : m_gradientVectorStart(gradientVectorStart), m_gradientVectorEnd(gradientVectorEnd)
     {
     }
@@ -77,7 +77,7 @@ namespace {
     class LinearGradientStrategy : public GradientShapeStrategy {
         typedef GradientShapeStrategy super;
     public:
-        LinearGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+        LinearGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd);
 
         virtual double valueAt(double x, double y) const;
 
@@ -87,7 +87,7 @@ namespace {
         double m_vectorLength;
     };
 
-    LinearGradientStrategy::LinearGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+    LinearGradientStrategy::LinearGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd)
         : super(gradientVectorStart, gradientVectorEnd)
     {
         double dx = gradientVectorEnd.x() - gradientVectorStart.x();
@@ -128,12 +128,12 @@ namespace {
     class BiLinearGradientStrategy : public LinearGradientStrategy {
         typedef LinearGradientStrategy super;
     public:
-        BiLinearGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+        BiLinearGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd);
 
         virtual double valueAt(double x, double y) const;
     };
 
-    BiLinearGradientStrategy::BiLinearGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+    BiLinearGradientStrategy::BiLinearGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd)
         : super(gradientVectorStart, gradientVectorEnd)
     {
     }
@@ -154,7 +154,7 @@ namespace {
     class RadialGradientStrategy : public GradientShapeStrategy {
         typedef GradientShapeStrategy super;
     public:
-        RadialGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+        RadialGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd);
 
         virtual double valueAt(double x, double y) const;
 
@@ -162,7 +162,7 @@ namespace {
         double m_radius;
     };
 
-    RadialGradientStrategy::RadialGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+    RadialGradientStrategy::RadialGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd)
         : super(gradientVectorStart, gradientVectorEnd)
     {
         double dx = gradientVectorEnd.x() - gradientVectorStart.x();
@@ -194,7 +194,7 @@ namespace {
     class SquareGradientStrategy : public GradientShapeStrategy {
         typedef GradientShapeStrategy super;
     public:
-        SquareGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+        SquareGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd);
 
         virtual double valueAt(double x, double y) const;
 
@@ -204,7 +204,7 @@ namespace {
         double m_vectorLength;
     };
 
-    SquareGradientStrategy::SquareGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+    SquareGradientStrategy::SquareGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd)
         : super(gradientVectorStart, gradientVectorEnd)
     {
         double dx = gradientVectorEnd.x() - gradientVectorStart.x();
@@ -254,7 +254,7 @@ namespace {
     class ConicalGradientStrategy : public GradientShapeStrategy {
         typedef GradientShapeStrategy super;
     public:
-        ConicalGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+        ConicalGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd);
 
         virtual double valueAt(double x, double y) const;
 
@@ -262,7 +262,7 @@ namespace {
         double m_vectorAngle;
     };
 
-    ConicalGradientStrategy::ConicalGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+    ConicalGradientStrategy::ConicalGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd)
         : super(gradientVectorStart, gradientVectorEnd)
     {
         double dx = gradientVectorEnd.x() - gradientVectorStart.x();
@@ -294,7 +294,7 @@ namespace {
     class ConicalSymetricGradientStrategy : public GradientShapeStrategy {
         typedef GradientShapeStrategy super;
     public:
-        ConicalSymetricGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+        ConicalSymetricGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd);
 
         virtual double valueAt(double x, double y) const;
 
@@ -302,7 +302,7 @@ namespace {
         double m_vectorAngle;
     };
 
-    ConicalSymetricGradientStrategy::ConicalSymetricGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+    ConicalSymetricGradientStrategy::ConicalSymetricGradientStrategy(const KoPoint& gradientVectorStart, const KoPoint& gradientVectorEnd)
         : super(gradientVectorStart, gradientVectorEnd)
     {
         double dx = gradientVectorEnd.x() - gradientVectorStart.x();
@@ -480,8 +480,8 @@ KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device) : super(device),
 {
 }
 
-bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
-                       const KisPoint& gradientVectorEnd,
+bool KisGradientPainter::paintGradient(const KoPoint& gradientVectorStart,
+                       const KoPoint& gradientVectorEnd,
                        enumGradientShape shape,
                        enumGradientRepeat repeat,
                        double antiAliasThreshold,

@@ -24,7 +24,7 @@
 #include <math.h>
 #include <cfloat>
 #include <QPoint>
-#include "kis_point.h"
+#include "KoPoint.h"
 #include <krita_export.h>
 
 /*
@@ -38,7 +38,7 @@ public:
     KisVector2D();
     KisVector2D(double x, double y);
     KisVector2D(const QPoint& p);
-    KisVector2D(const KisPoint& p);
+    KisVector2D(const KoPoint& p);
 
     bool isNull()    const;
 
@@ -76,7 +76,7 @@ public:
     friend inline KisVector2D operator/(const KisVector2D &, long);
     friend inline KisVector2D operator/(const KisVector2D &, double);
 
-    KisPoint toKisPoint() const;
+    KoPoint toKoPoint() const;
 
 private:
     double m_x;
@@ -94,7 +94,7 @@ inline KisVector2D::KisVector2D(const QPoint& p)
     m_x=p.x(); m_y=p.y();
 }
 
-inline KisVector2D::KisVector2D(const KisPoint& p)
+inline KisVector2D::KisVector2D(const KoPoint& p)
 {
     m_x=p.x(); m_y=p.y();
 }
@@ -225,9 +225,9 @@ inline KisVector2D &KisVector2D::operator/=(double c)
     return *this;
 }
 
-inline KisPoint KisVector2D::toKisPoint() const
+inline KoPoint KisVector2D::toKoPoint() const
 {
-    return KisPoint(m_x, m_y);
+    return KoPoint(m_x, m_y);
 }
 
 class KisVector3D

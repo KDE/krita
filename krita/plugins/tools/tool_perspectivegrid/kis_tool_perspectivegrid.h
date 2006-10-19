@@ -49,8 +49,8 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual Q_UINT32 priority() { return 3; }
     virtual enumToolType toolType() { return TOOL_VIEW; }
-    virtual void buttonPress(KisButtonPressEvent *event);
-    virtual void move(KisMoveEvent *event);
+    virtual void buttonPress(KoPointerEvent *event);
+    virtual void move(KoPointerEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
     
 //     QWidget* createOptionWidget(QWidget* parent);

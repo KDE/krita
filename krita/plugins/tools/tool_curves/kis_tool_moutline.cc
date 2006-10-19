@@ -42,9 +42,9 @@
 #include "kis_painter.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_cursor.h"
 #include "kis_tool_controller.h"
 #include "kis_vec.h"
@@ -636,7 +636,7 @@ void KisToolMagnetic::buttonRelease(KisButtonReleaseEvent *event)
     super::buttonRelease(event);
 }
 
-void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
+void KisToolMagnetic::buttonPress(KoPointerEvent *event)
 {
     updateOptions(event->modifiers());
     if (!m_currentImage)
@@ -686,7 +686,7 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
     }
 }
 
-void KisToolMagnetic::move(KisMoveEvent *event)
+void KisToolMagnetic::move(KoPointerEvent *event)
 {
     updateOptions(event->modifiers());
     if (m_currentPoint == event->pos().floorQPoint())

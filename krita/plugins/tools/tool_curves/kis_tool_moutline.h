@@ -80,9 +80,9 @@ public:
     virtual Q_UINT32 priority() { return 9; }
 
     virtual void keyPress(QKeyEvent*);
-    virtual void buttonPress(KisButtonPressEvent*);
+    virtual void buttonPress(KoPointerEvent*);
     virtual void buttonRelease(KisButtonReleaseEvent*);
-    virtual void move(KisMoveEvent*);
+    virtual void move(KoPointerEvent*);
 
     virtual KisCurve::iterator selectByMouse(KisCurve::iterator it);
 

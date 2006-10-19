@@ -20,6 +20,8 @@
 #define KIS_LOAD_VISITOR_H_
 
 #include <QRect>
+
+// kritaimage
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
 #include "kis_image.h"
@@ -29,7 +31,6 @@
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_filter_configuration.h"
-
 #include "kis_datamanager.h"
 
 class KisLoadVisitor : public KisLayerVisitor {

@@ -30,7 +30,7 @@
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
 #include <KoColorSpaceRegistry.h>
-#include "kis_input_device.h"
+#include "KoInputDevice.h"
 
 #include "kis_wetop.h"
 #include "kis_wet_colorspace.h"
@@ -66,9 +66,9 @@ KisPaintOp * KisWetOpFactory::createOp(const KisPaintOpSettings *settings, KisPa
     return op;
 }
 
-KisPaintOpSettings* KisWetOpFactory::settings(QWidget * parent, const KisInputDevice& inputDevice)
+KisPaintOpSettings* KisWetOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice)
 {
-    if (inputDevice == KisInputDevice::mouse()) {
+    if (inputDevice == KoInputDevice::mouse()) {
         // No options for mouse, only tablet devices
         return 0;
     } else {
@@ -94,7 +94,7 @@ KisWetOp::~KisWetOp()
 {
 }
 
-void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
+void KisWetOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
 

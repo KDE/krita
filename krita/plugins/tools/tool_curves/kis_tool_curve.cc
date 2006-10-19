@@ -36,9 +36,9 @@
 #include "kis_painter.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_cursor.h"
 #include "kis_tool_controller.h"
 #include "kis_vec.h"
@@ -69,7 +69,7 @@ KisToolCurve::KisToolCurve(const QString& UIName)
     m_optWidget = 0;
 
     m_curve = 0;
-    
+
     m_dragging = false;
     m_draggingCursor = false;
     m_drawPivots = true;
@@ -107,7 +107,7 @@ void KisToolCurve::deactivate()
     m_drawPivots = true;
 }
 
-void KisToolCurve::buttonPress(KisButtonPressEvent *event)
+void KisToolCurve::buttonPress(KoPointerEvent *event)
 {
     updateOptions(QApplication::keyboardModifiers());
     if (!m_currentImage)
@@ -129,7 +129,7 @@ void KisToolCurve::buttonPress(KisButtonPressEvent *event)
                 m_current = m_curve->selectPivot(temp.first);
             else
                 m_current = selectByMouse(temp.first);
-                
+
             if (!(*m_current).isSelected())
                 m_dragging = false;
             draw(true, true);
@@ -167,12 +167,12 @@ void KisToolCurve::buttonRelease(KisButtonReleaseEvent *event)
     m_dragging = false;
 }
 
-void KisToolCurve::doubleClick(KisDoubleClickEvent *)
+void KisToolCurve::doubleClick(KoPointerEvent *)
 {
     commitCurve();
 }
 
-void KisToolCurve::move(KisMoveEvent *event)
+void KisToolCurve::move(KoPointerEvent *event)
 {
     updateOptions(QApplication::keyboardModifiers());
     PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos()).toPointF());
@@ -195,7 +195,7 @@ void KisToolCurve::move(KisMoveEvent *event)
 
 double pointToSegmentDistance(const QPointF& pp, const QPointF& pl0, const QPointF& pl1)
 {
-    KisPoint l0 = pl0, l1 = pl1, p = pp;
+    KoPoint l0 = pl0, l1 = pl1, p = pp;
     double lineLength = sqrt((l1.x() - l0.x()) * (l1.x() - l0.x()) + (l1.y() - l0.y()) * (l1.y() - l0.y()));
     double distance = 0;
     KisVector2D v0(l0), v1(l1), v(p), seg(v0-v1), dist0(v0-p), dist1(v1-p);
@@ -269,7 +269,7 @@ KisCurve::iterator KisToolCurve::selectByMouse(KisCurve::iterator it)
 int KisToolCurve::updateOptions(int key)
 {
     int options = 0x0000;
-    
+
     if (key & Qt::ControlModifier)
             options |= CONTROLOPTION;
 
@@ -357,7 +357,7 @@ void KisToolCurve::draw(KisCurve::iterator inf, bool pivotonly, bool minimal)
             drawPivotHandle (*gc, it);
         it = drawPoint (*gc, it);
     }
-    
+
     delete gc;
 }
 
@@ -431,7 +431,7 @@ void KisToolCurve::paintCurve()
 {
     KisPaintDeviceSP device = m_currentImage->activeDevice ();
     if (!device) return;
-    
+
     KisPainter painter (device);
     if (m_currentImage->undo()) painter.beginTransaction (m_transactionMessage);
 
@@ -478,9 +478,9 @@ KisCurve::iterator KisToolCurve::paintPoint (KisPainter& painter, KisCurve::iter
     return point;
 }
 
-Q3ValueVector<KisPoint> KisToolCurve::convertCurve()
+Q3ValueVector<KoPoint> KisToolCurve::convertCurve()
 {
-    Q3ValueVector<KisPoint> points;
+    Q3ValueVector<KoPoint> points;
 
     for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); i++)
         if ((*i).hint() != NOHINTS)

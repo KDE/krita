@@ -71,15 +71,15 @@
 
 #include "kis_canvas.h"
 #include "kis_cursor.h"
-#include "kis_move_event.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "kis_double_click_event.h"
 #include "kis_config.h"
 #include "kis_qpaintdevice_canvas.h"
 #include "kis_opengl_canvas.h"
 #include "kis_config.h"
-#include "kis_input_device.h"
+#include "KoInputDevice.h"
 #include "fixx11h.h"
 #include "kis_canvas_widget.h"
 
@@ -149,10 +149,10 @@ void KisCanvas::createCanvasWidget(bool useOpenGL)
     connect(m_canvasWidget, SIGNAL(sigGotKeyReleaseEvent(QKeyEvent*)), SIGNAL(sigGotKeyReleaseEvent(QKeyEvent*)));
     connect(m_canvasWidget, SIGNAL(sigGotDragEnterEvent(QDragEnterEvent*)), SIGNAL(sigGotDragEnterEvent(QDragEnterEvent*)));
     connect(m_canvasWidget, SIGNAL(sigGotDropEvent(QDropEvent*)), SIGNAL(sigGotDropEvent(QDropEvent*)));
-    connect(m_canvasWidget, SIGNAL(sigGotMoveEvent(KisMoveEvent *)), SIGNAL(sigGotMoveEvent(KisMoveEvent *)));
-    connect(m_canvasWidget, SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent *)), SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent *)));
+    connect(m_canvasWidget, SIGNAL(sigGotMoveEvent(KoPointerEvent *)), SIGNAL(sigGotMoveEvent(KoPointerEvent *)));
+    connect(m_canvasWidget, SIGNAL(sigGotButtonPressEvent(KoPointerEvent *)), SIGNAL(sigGotButtonPressEvent(KoPointerEvent *)));
     connect(m_canvasWidget, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent *)), SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent *)));
-    connect(m_canvasWidget, SIGNAL(sigGotDoubleClickEvent(KisDoubleClickEvent *)), SIGNAL(sigGotDoubleClickEvent(KisDoubleClickEvent *)));
+    connect(m_canvasWidget, SIGNAL(sigGotDoubleClickEvent(KoPointerEvent *)), SIGNAL(sigGotDoubleClickEvent(KoPointerEvent *)));
 
 }
 

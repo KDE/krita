@@ -137,6 +137,11 @@ public:
      */
     void prepareForImport();
 
+    /**
+     * Return the image of this document.
+     * XXX: rename to image(), we no longer have more than one image
+     * in a Krita document.
+     */
     KisImageSP currentImage();
 
     /**

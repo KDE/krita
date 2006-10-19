@@ -19,13 +19,13 @@
 #ifndef KIS_TOOL_PAN_H_
 #define KIS_TOOL_PAN_H_
 
-#include "kis_point.h"
+#include "KoPoint.h"
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
 #include <koffice_export.h>
 
 class KisCanvasSubject;
-class KisPoint;
+class KoPoint;
 
 class KRITATOOL_EXPORT KisToolPan : public KisToolNonPaint
 {
@@ -42,15 +42,15 @@ public:
     virtual void setup(KActionCollection *collection);
         virtual enumToolType toolType() { return TOOL_VIEW; }
 
-    virtual void buttonPress(KisButtonPressEvent *e);
-    virtual void move(KisMoveEvent *e);
+    virtual void buttonPress(KoPointerEvent *e);
+    virtual void move(KoPointerEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
     virtual bool wantsAutoScroll() const { return false; }
 
 private:
     KisCanvasSubject *m_subject;
-    KisPoint m_dragPos;
+    KoPoint m_dragPos;
     qint32 m_origScrollX;
     qint32 m_origScrollY;
     bool m_dragging;

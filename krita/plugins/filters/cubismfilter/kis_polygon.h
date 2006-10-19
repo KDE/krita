@@ -23,8 +23,8 @@
 
 #include <q3valuevector.h>
 
-typedef Q3ValueVector<KisPoint> KisPointVector;
-class KisPolygon : public KisPointVector
+typedef Q3ValueVector<KoPoint> KoPointVector;
+class KisPolygon : public KoPointVector
 {
         public:
                 void addPoint(double x, double y);

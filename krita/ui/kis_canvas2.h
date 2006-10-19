@@ -26,6 +26,7 @@
 #include <kis_types.h>
 
 class KisView2;
+class KoToolProxy;
 
 enum KisCanvasType {
     QPAINTER,
@@ -71,15 +72,13 @@ public: // KoCanvasBase implementation
 
     virtual void updateCanvas(const QRectF& rc);
 
-    virtual KoTool* tool();
-
-    virtual void setTool(KoTool *tool);
-
     virtual KoViewConverter *viewConverter();
 
     virtual QWidget* canvasWidget();
 
     virtual KoUnit::Unit unit();
+ 
+    virtual KoToolProxy* toolProxy();
 
 public: // KisCanvas2 methods
 
@@ -89,11 +88,11 @@ public: // KisCanvas2 methods
 
 
 private:
-    
+
     KisCanvas2::KisCanvas2(const KisCanvas2&);
 
 private:
-    
+
     class KisCanvas2Private;
     KisCanvas2Private * m_d;
 };

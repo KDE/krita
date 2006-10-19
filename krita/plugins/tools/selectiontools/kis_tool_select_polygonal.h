@@ -23,7 +23,7 @@
 #ifndef __selecttoolpolygonal_h__
 #define __selecttoolpolygonal_h__
 
-#include "kis_point.h"
+#include "KoPoint.h"
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
 #include "kis_selection.h"
@@ -51,10 +51,10 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 5; }
     virtual enumToolType toolType() { return TOOL_SELECT; }
-    virtual void buttonPress(KisButtonPressEvent *event);
-    virtual void move(KisMoveEvent *event);
+    virtual void buttonPress(KoPointerEvent *event);
+    virtual void move(KoPointerEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
-    virtual void doubleClick(KisDoubleClickEvent * event);
+    virtual void doubleClick(KoPointerEvent * event);
     
     void finish();
     QWidget* createOptionWidget(QWidget* parent);
@@ -72,14 +72,14 @@ protected:
     void draw();
 
 protected:
-    KisPoint m_dragStart;
-    KisPoint m_dragEnd;
+    KoPoint m_dragStart;
+    KoPoint m_dragEnd;
 
     bool m_dragging;
 private:
-    typedef Q3ValueVector<KisPoint> KisPointVector;
+    typedef Q3ValueVector<KoPoint> KoPointVector;
     KisCanvasSubject *m_subject;
-    KisPointVector m_points;
+    KoPointVector m_points;
     KisSelectionOptions * m_optWidget;
     enumSelectionMode m_selectAction;
 };

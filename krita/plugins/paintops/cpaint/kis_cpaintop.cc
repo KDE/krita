@@ -31,7 +31,7 @@
 #include <kis_iterator.h>
 #include <kis_iterators_pixel.h>
 #include <kis_selection.h>
-#include <kis_point.h>
+#include <KoPoint.h>
 #include <kis_int_spinbox.h>
 
 #include "kis_cpaintop.h"
@@ -78,7 +78,7 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
     return op;
 }
 
-KisPaintOpSettings *KisCPaintOpFactory::settings(QWidget * parent, const KisInputDevice& inputDevice)
+KisPaintOpSettings *KisCPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice)
 {
     return new KisCPaintOpSettings( parent,  m_brushes);
 }
@@ -139,7 +139,7 @@ KisCPaintOp::~KisCPaintOp()
 
 
 
-void KisCPaintOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
+void KisCPaintOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter->device()) return;
 

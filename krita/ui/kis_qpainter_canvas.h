@@ -28,6 +28,8 @@ class QImage;
 class QPaintEvent;
 class KisCanvas2;
 class KoColorProfile;
+class KoViewConverter;
+class KoToolProxy;
 
 /**
  *
@@ -49,17 +51,45 @@ public:
 
 public: // QWidget
 
-    void paintEvent ( QPaintEvent * event );
+    /// reimplemented method from superclass
+    void keyPressEvent( QKeyEvent *e );
+
+    /// reimplemented method from superclass
+    void mouseMoveEvent(QMouseEvent *e);
+
+    /// reimplemented method from superclass
+    void mousePressEvent(QMouseEvent *e);
+
+    /// reimplemented method from superclass
+    void mouseReleaseEvent(QMouseEvent *e);
+
+    /// reimplemented method from superclass
+    void keyReleaseEvent (QKeyEvent *e);
+
+    /// reimplemented method from superclass
+    void paintEvent(QPaintEvent * ev);
+
+    /// reimplemented method from superclass
+    void tabletEvent( QTabletEvent *e );
+
+    /// reimplemented method from superclass
+    void wheelEvent( QWheelEvent *e );
 
 public: // KisAbstractCanvasWidget
 
     QWidget * widget() { return this; }
 
+    KoToolProxy * toolProxy() {
+        return m_toolProxy;
+    }
+
 private:
+    KoToolProxy * m_toolProxy;
+    KisCanvas2 * m_canvas;
+    KoViewConverter * m_viewConverter;
     KoColorProfile *  m_monitorProfile;
     QImage * m_checkTexture;
     QBrush * m_checkBrush;
-    KisCanvas2 * m_canvas;
 
 };
 

@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_BEZIER_SELECT_H_
 #define KIS_TOOL_BEZIER_SELECT_H_
 
-#include "kis_point.h"
+#include "KoPoint.h"
 
 #include "kis_tool_factory.h"
 #include "kis_tool_bezier.h"
@@ -41,7 +41,8 @@ public:
 
 protected:
 
-    virtual Q3ValueVector<KisPoint> convertCurve();
+    virtual Q3ValueVector<KoPoint> convertCurve();
+
 
 };
 

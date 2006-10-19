@@ -28,7 +28,7 @@
 #include <QList>
 #include <QPixmap>
 
-#include "kis_input_device.h"
+#include "KoInputDevice.h"
 
 class QString;
 class QHBoxLayout;
@@ -72,15 +72,15 @@ private slots:
 
     void slotItemSelected(int index);
     void colorSpaceChanged(KoColorSpace *cs);
-    void slotInputDeviceChanged(const KisInputDevice & inputDevice);
+    void slotInputDeviceChanged(const KoInputDevice & inputDevice);
 
 private:
     QPixmap paintopPixmap(const KoID & paintop);
     void updateOptionWidget();
     const KoID & currentPaintop();
     void setCurrentPaintop(const KoID & paintop);
-    KoID defaultPaintop(const KisInputDevice& inputDevice);
-    const KisPaintOpSettings *paintopSettings(const KoID & paintop, const KisInputDevice & inputDevice);
+    KoID defaultPaintop(const KoInputDevice& inputDevice);
+    const KisPaintOpSettings *paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice);
 
 private:
     KisCanvasController *m_canvasController;
@@ -91,10 +91,10 @@ private:
     QList<KoID> m_paintops;
     QList<KoID> m_displayedOps;
 
-    typedef std::map<KisInputDevice, KoID> InputDevicePaintopMap;
+    typedef std::map<KoInputDevice, KoID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;
 
-    typedef std::map<KisInputDevice, QList<KisPaintOpSettings *> > InputDevicePaintopSettingsMap;
+    typedef std::map<KoInputDevice, QList<KisPaintOpSettings *> > InputDevicePaintopSettingsMap;
     InputDevicePaintopSettingsMap m_inputDevicePaintopSettings;
 };
 

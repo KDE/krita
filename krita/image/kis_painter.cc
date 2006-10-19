@@ -373,11 +373,11 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
         bltSelection(dx,dy,op,srcdev, m_device->selection(),opacity,sx,sy,sw,sh);
 }
 
-double KisPainter::paintLine(const KisPoint & pos1,
+double KisPainter::paintLine(const KoPoint & pos1,
                  const double pressure1,
                  const double xTilt1,
                  const double yTilt1,
-                 const KisPoint & pos2,
+                 const KoPoint & pos2,
                  const double pressure2,
                  const double xTilt2,
                  const double yTilt2,
@@ -450,7 +450,7 @@ double KisPainter::paintLine(const KisPoint & pos1,
             step += dragVec * spacing;
         }
 
-        KisPoint p(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale));
+        KoPoint p(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale));
 
         double distanceMoved = step.length();
         double t = 0;
@@ -473,7 +473,7 @@ double KisPainter::paintLine(const KisPoint & pos1,
         return 0;
 }
 
-void KisPainter::paintPolyline (const vKisPoint &points,
+void KisPainter::paintPolyline (const vKoPoint &points,
                                 int index, int numPoints)
 {
     if (index >= (int) points.count ())
@@ -493,11 +493,11 @@ void KisPainter::paintPolyline (const vKisPoint &points,
     }
 }
 
-void KisPainter::getBezierCurvePoints(const KisPoint &pos1,
-                      const KisPoint &control1,
-                      const KisPoint &control2,
-                      const KisPoint &pos2,
-                      vKisPoint& points)
+void KisPainter::getBezierCurvePoints(const KoPoint &pos1,
+                      const KoPoint &control1,
+                      const KoPoint &control2,
+                      const KoPoint &pos2,
+                      vKoPoint& points)
 {
     double d1 = pointToLineDistance(control1, pos1, pos2);
     double d2 = pointToLineDistance(control2, pos1, pos2);
@@ -521,18 +521,18 @@ void KisPainter::getBezierCurvePoints(const KisPoint &pos1,
         KisVector2D l1 = p1;
         KisVector2D r4 = p4;
 
-        getBezierCurvePoints(l1.toKisPoint(), l2.toKisPoint(), l3.toKisPoint(), l4.toKisPoint(), points);
-        getBezierCurvePoints(r1.toKisPoint(), r2.toKisPoint(), r3.toKisPoint(), r4.toKisPoint(), points);
+        getBezierCurvePoints(l1.toKoPoint(), l2.toKoPoint(), l3.toKoPoint(), l4.toKoPoint(), points);
+        getBezierCurvePoints(r1.toKoPoint(), r2.toKoPoint(), r3.toKoPoint(), r4.toKoPoint(), points);
     }
 }
 
-double KisPainter::paintBezierCurve(const KisPoint &pos1,
+double KisPainter::paintBezierCurve(const KoPoint &pos1,
                     const double pressure1,
                     const double xTilt1,
                     const double yTilt1,
-                    const KisPoint &control1,
-                    const KisPoint &control2,
-                    const KisPoint &pos2,
+                    const KoPoint &control1,
+                    const KoPoint &control2,
+                    const KoPoint &pos2,
                     const double pressure2,
                     const double xTilt2,
                     const double yTilt2,
@@ -565,28 +565,28 @@ double KisPainter::paintBezierCurve(const KisPoint &pos1,
         double midXTilt = (xTilt1 + xTilt2) / 2;
         double midYTilt = (yTilt1 + yTilt2) / 2;
 
-        newDistance = paintBezierCurve(l1.toKisPoint(), pressure1, xTilt1, yTilt1,
-                           l2.toKisPoint(), l3.toKisPoint(),
-                           l4.toKisPoint(), midPressure, midXTilt, midYTilt,
+        newDistance = paintBezierCurve(l1.toKoPoint(), pressure1, xTilt1, yTilt1,
+                           l2.toKoPoint(), l3.toKoPoint(),
+                           l4.toKoPoint(), midPressure, midXTilt, midYTilt,
                            savedDist);
-        newDistance = paintBezierCurve(r1.toKisPoint(), midPressure, midXTilt, midYTilt,
-                           r2.toKisPoint(),
-                           r3.toKisPoint(),
-                           r4.toKisPoint(), pressure2, xTilt2, yTilt2, newDistance);
+        newDistance = paintBezierCurve(r1.toKoPoint(), midPressure, midXTilt, midYTilt,
+                           r2.toKoPoint(),
+                           r3.toKoPoint(),
+                           r4.toKoPoint(), pressure2, xTilt2, yTilt2, newDistance);
     }
 
     return newDistance;
 }
 
-void KisPainter::paintRect (const KisPoint &startPoint,
-                            const KisPoint &endPoint,
+void KisPainter::paintRect (const KoPoint &startPoint,
+                            const KoPoint &endPoint,
                             const double /*pressure*/,
                 const double /*xTilt*/,
                 const double /*yTilt*/)
 {
     KoRect normalizedRect = KisRect (startPoint, endPoint).normalize ();
 
-    vKisPoint points;
+    vKoPoint points;
 
     points.push_back(normalizedRect.topLeft());
     points.push_back(normalizedRect.bottomLeft());
@@ -596,8 +596,8 @@ void KisPainter::paintRect (const KisPoint &startPoint,
     paintPolygon(points);
 }
 
-void KisPainter::paintEllipse (const KisPoint &startPoint,
-                               const KisPoint &endPoint,
+void KisPainter::paintEllipse (const KoPoint &startPoint,
+                               const KoPoint &endPoint,
                                const double /*pressure*/,
                    const double /*xTilt*/,
                    const double /*yTilt*/)
@@ -610,38 +610,38 @@ void KisPainter::paintEllipse (const KisPoint &startPoint,
     const double lx = (r.width() / 2) * kappa;
     const double ly = (r.height() / 2) * kappa;
 
-    KisPoint center = r.center();
+    KoPoint center = r.center();
 
-    KisPoint p0(r.left(), center.y());
-    KisPoint p1(r.left(), center.y() - ly);
-    KisPoint p2(center.x() - lx, r.top());
-    KisPoint p3(center.x(), r.top());
+    KoPoint p0(r.left(), center.y());
+    KoPoint p1(r.left(), center.y() - ly);
+    KoPoint p2(center.x() - lx, r.top());
+    KoPoint p3(center.x(), r.top());
 
-    vKisPoint points;
+    vKoPoint points;
 
     getBezierCurvePoints(p0, p1, p2, p3, points);
 
-    KisPoint p4(center.x() + lx, r.top());
-    KisPoint p5(r.right(), center.y() - ly);
-    KisPoint p6(r.right(), center.y());
+    KoPoint p4(center.x() + lx, r.top());
+    KoPoint p5(r.right(), center.y() - ly);
+    KoPoint p6(r.right(), center.y());
 
     getBezierCurvePoints(p3, p4, p5, p6, points);
 
-    KisPoint p7(r.right(), center.y() + ly);
-    KisPoint p8(center.x() + lx, r.bottom());
-    KisPoint p9(center.x(), r.bottom());
+    KoPoint p7(r.right(), center.y() + ly);
+    KoPoint p8(center.x() + lx, r.bottom());
+    KoPoint p9(center.x(), r.bottom());
 
     getBezierCurvePoints(p6, p7, p8, p9, points);
 
-    KisPoint p10(center.x() - lx, r.bottom());
-    KisPoint p11(r.left(), center.y() + ly);
+    KoPoint p10(center.x() - lx, r.bottom());
+    KoPoint p11(r.left(), center.y() + ly);
 
     getBezierCurvePoints(p9, p10, p11, p0, points);
 
     paintPolygon(points);
 }
 
-void KisPainter::paintAt(const KisPoint & pos,
+void KisPainter::paintAt(const KoPoint & pos,
                          const double pressure,
                          const double xTilt,
                          const double yTilt)
@@ -650,7 +650,7 @@ void KisPainter::paintAt(const KisPoint & pos,
     m_paintOp->paintAt(pos, KisPaintInformation(pressure, xTilt, yTilt, KisVector2D()));
 }
 
-double KisPainter::pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1)
+double KisPainter::pointToLineDistance(const KoPoint& p, const KoPoint& l0, const KoPoint& l1)
 {
     double lineLength = sqrt((l1.x() - l0.x()) * (l1.x() - l0.x()) + (l1.y() - l0.y()) * (l1.y() - l0.y()));
     double distance = 0;
@@ -697,7 +697,7 @@ typedef struct {    /* a polygon edge */
 } Edge;
 
 static int n;            /* number of vertices */
-static const KisPoint *pt;    /* vertices */
+static const KoPoint *pt;    /* vertices */
 
 static int nact;        /* number of active edges */
 static Edge *active;        /* active edge list:edges crossing scanline y */
@@ -733,7 +733,7 @@ static void cinsert(int i, int y)        /* append edge i to end of active list 
 {
     int j;
     double dx;
-    const KisPoint *p, *q;
+    const KoPoint *p, *q;
 
     j = i<n-1 ? i+1 : 0;
     if (pt[i].y() < pt[j].y()) {
@@ -748,7 +748,7 @@ static void cinsert(int i, int y)        /* append edge i to end of active list 
     nact++;
 }
 
-void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
+void KisPainter::fillPolygon(const vKoPoint& points, FillStyle fillStyle)
 {
     int nvert = points.count();
     int k, y0, y1, y, i, j, xl, xr;
@@ -888,7 +888,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
     bltSelection(r.x(), r.y(), m_compositeOp, polygon, opacity(), r.x(), r.y(), r.width(), r.height());
 }
 
-void KisPainter::paintPolygon(const vKisPoint& points)
+void KisPainter::paintPolygon(const vKoPoint& points)
 {
     if (m_fillStyle != FillStyleNone) {
         fillPolygon(points, m_fillStyle);

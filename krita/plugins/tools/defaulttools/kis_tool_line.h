@@ -50,8 +50,8 @@ class KisToolLine : public KisToolPaint {
     virtual quint32 priority() { return 1; }
     virtual void update(KisCanvasSubject *subject);
 
-    virtual void buttonPress(KisButtonPressEvent *event);
-    virtual void move(KisMoveEvent *event);
+    virtual void buttonPress(KoPointerEvent *event);
+    virtual void move(KoPointerEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
 
     virtual void paint(QPainter& gc);
@@ -63,13 +63,13 @@ class KisToolLine : public KisToolPaint {
     void paintLine();
     void paintLine(QPainter& gc, const QRect& rc);
 
-    KisPoint straightLine(KisPoint point);
+    KoPoint straightLine(KoPoint point);
 
 
     bool m_dragging;
 
-    KisPoint m_startPos;
-    KisPoint m_endPos;
+    KoPoint m_startPos;
+    KoPoint m_endPos;
 
     KisCanvasSubject *m_subject;
     KisImageSP m_currentImage;

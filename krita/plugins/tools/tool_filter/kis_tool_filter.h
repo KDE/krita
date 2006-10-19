@@ -26,9 +26,9 @@
 
 class QComboBox;
 class QGridLayout;
-class KisEvent;
+class KoPointerEvent;
 class KisFilterConfigurationWidget;
-class KisButtonPressEvent;
+class KoPointerEvent;
 class KisView;
 class KoID;
 class KisCmbIDList;
@@ -50,7 +50,7 @@ public slots:
     void changeFilter( const KoID & filter);
 
 protected:
-    virtual void initPaint(KisEvent *e);
+    virtual void initPaint(KoPointerEvent *e);
 
 private:
     KisFilterSP m_filter;

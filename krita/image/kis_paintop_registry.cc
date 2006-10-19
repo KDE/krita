@@ -103,7 +103,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
     return paintOp(KoID(id, ""), settings, painter);
 }
 
-KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KisInputDevice& inputDevice) const
+KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice) const
 {
     KisPaintOpFactorySP f = get(id);
     if (f)

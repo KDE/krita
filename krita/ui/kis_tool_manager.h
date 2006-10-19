@@ -25,7 +25,7 @@
 #include "kis_tool_controller.h"
 #include "kis_global.h"
 #include "kis_tool_types.h"
-#include "kis_input_device.h"
+#include "KoInputDevice.h"
 
 class QDockWidget;
 class KoView;
@@ -63,9 +63,9 @@ public:
     
     virtual KisTool *currentTool() const;
     
-    void setToolForInputDevice(KisInputDevice oldDevice, KisInputDevice newDevice);
+    void setToolForInputDevice(KoInputDevice oldDevice, KoInputDevice newDevice);
 
-    KisTool *findTool(const QString &toolName, KisInputDevice inputDevice = KisInputDevice::unknown()) const;
+    KisTool *findTool(const QString &toolName, KoInputDevice inputDevice = KoInputDevice::unknown()) const;
 
     void activateCurrentTool();
 
@@ -75,8 +75,8 @@ private:
     
 private:
 
-    typedef std::map<KisInputDevice, KisTool *> InputDeviceToolMap;
-    typedef std::map<KisInputDevice, vKisTool> InputDeviceToolSetMap;
+    typedef std::map<KoInputDevice, KisTool *> InputDeviceToolMap;
+    typedef std::map<KoInputDevice, vKisTool> InputDeviceToolSetMap;
 
     InputDeviceToolMap m_inputDeviceToolMap;
     InputDeviceToolSetMap m_inputDeviceToolSetMap;

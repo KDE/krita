@@ -25,7 +25,7 @@
 
 #include <QPoint>
 
-#include "kis_point.h"
+#include "KoPoint.h"
 #include "kis_selection.h"
 #include "kis_tool_factory.h"
 #include "kis_tool_non_paint.h"
@@ -51,8 +51,8 @@ public:
 
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);
-    virtual void buttonPress(KisButtonPressEvent *e);
-    virtual void move(KisMoveEvent *e);
+    virtual void buttonPress(KoPointerEvent *e);
+    virtual void move(KoPointerEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 public slots:
@@ -67,9 +67,9 @@ private:
 
 private:
     KisCanvasSubject *m_subject;
-    KisPoint m_centerPos;
-    KisPoint m_startPos;
-    KisPoint m_endPos;
+    KoPoint m_centerPos;
+    KoPoint m_startPos;
+    KoPoint m_endPos;
     bool m_selecting;
     KisSelectionOptions * m_optWidget;
     enumSelectionMode m_selectAction;

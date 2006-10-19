@@ -24,9 +24,9 @@
 #include "KoColorSpace.h"
 #include "ui_wdgpressure.h"
 
-class KisPoint;
+class KoPoint;
 class KisPainter;
-class KisInputDevice;
+class KoInputDevice;
 
 class WetPaintOptions : public QWidget, public Ui::WetPaintOptions
 {
@@ -44,7 +44,7 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
     virtual KoID id() { return KoID("wetbrush", i18n("Watercolor Brush")); }
     virtual bool userVisible(KoColorSpace* cs) { return cs->id() == KoID("WET", ""); }
-    virtual KisPaintOpSettings *settings(QWidget * parent, const KisInputDevice& inputDevice);
+    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice);
 };
 
 class KisWetOpSettings : public KisPaintOpSettings {
@@ -74,7 +74,7 @@ public:
     KisWetOp(const KisWetOpSettings *settings, KisPainter * painter);
     virtual ~KisWetOp();
 
-    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
+    void paintAt(const KoPoint &pos, const KisPaintInformation& info);
 
 };
 

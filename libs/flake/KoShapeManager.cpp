@@ -26,7 +26,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeBorderModel.h"
 #include "KoShapeGroup.h"
-#include "KoTool.h"
+#include "KoToolProxy.h"
 
 #include <QPainter>
 
@@ -223,8 +223,8 @@ void KoShapeManager::repaint( QRectF &rect, const KoShape *shape, bool selection
     m_canvas->updateCanvas( rect );
     if ( selectionHandles && m_selection->isSelected( shape ) )
     {
-        if ( m_canvas->tool() )
-            m_canvas->tool()->repaintDecorations();
+        if ( m_canvas->toolProxy() )
+            m_canvas->toolProxy()->repaintDecorations();
     }
 }
 

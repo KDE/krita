@@ -23,7 +23,7 @@
 //Added by qt3to4:
 #include <Q3PtrList>
 
-class KisPoint;
+class KoPoint;
 class KisPainter;
 
 
@@ -63,7 +63,7 @@ public:
     KisSmearyOp(KisPainter * painter);
     virtual ~KisSmearyOp();
 
-    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
+    void paintAt(const KoPoint &pos, const KisPaintInformation& info);
 
 
 private:

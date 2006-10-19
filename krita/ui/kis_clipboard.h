@@ -17,11 +17,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #ifndef __KIS_CLIPBOARD_H_
 #define __KIS_CLIPBOARD_H_
 
-
+#include <QObject>
 #include <QSize>
 #include "kis_types.h"
 #include <krita_export.h>

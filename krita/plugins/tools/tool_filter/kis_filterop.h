@@ -26,7 +26,7 @@
 #include "kis_paintop.h"
 #include <koffice_export.h>
 
-class KisPoint;
+class KoPoint;
 class KisPainter;
 class KisFilterConfiguration;
 
@@ -52,7 +52,7 @@ public:
     KisFilterOp(KisPainter * painter);
     virtual ~KisFilterOp();
 
-    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
+    void paintAt(const KoPoint &pos, const KisPaintInformation& info);
 public:
     void setFilterConfiguration(KisFilterConfiguration*);
 private:

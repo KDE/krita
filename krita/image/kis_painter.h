@@ -26,7 +26,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
-#include "kis_point.h"
+#include "KoPoint.h"
 #include "kis_filter.h"
 #include "kis_progress_subject.h"
 #include "kis_paintop.h"
@@ -312,7 +312,7 @@ public:
     /**
      * Paint a line that connects the dots in points
      */
-    void paintPolyline(const QVector <KisPoint> &points,
+    void paintPolyline(const QVector <KoPoint> &points,
                        int index = 0, int numPoints = -1);
 
     /**
@@ -322,11 +322,11 @@ public:
      * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
      * because the currenlty set brush has a spacing greater than that distance.
      */
-    double paintLine(const KisPoint &pos1,
+    double paintLine(const KoPoint &pos1,
              const double pressure1,
              const double xTilt1,
              const double yTilt1,
-             const KisPoint &pos2,
+             const KoPoint &pos2,
              const double pressure2,
              const double xTilt2,
              const double yTilt2,
@@ -339,13 +339,13 @@ public:
      * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
      * because the currenlty set brush has a spacing greater than that distance.
      */
-    double paintBezierCurve(const KisPoint &pos1,
+    double paintBezierCurve(const KoPoint &pos1,
                 const double pressure1,
                 const double xTilt1,
                 const double yTilt1,
-                const KisPoint &control1,
-                const KisPoint &control2,
-                const KisPoint &pos2,
+                const KoPoint &control1,
+                const KoPoint &control2,
+                const KoPoint &pos2,
                 const double pressure2,
                 const double xTilt2,
                 const double yTilt2,
@@ -355,18 +355,18 @@ public:
      * Fill the given vector points with the points needed to draw the Bezier curve between
      * pos1 and pos2 using control points 1 and 2, excluding the final pos2.
      */
-    void getBezierCurvePoints(const KisPoint &pos1,
-                  const KisPoint &control1,
-                  const KisPoint &control2,
-                  const KisPoint &pos2,
-                  vKisPoint& points);
+    void getBezierCurvePoints(const KoPoint &pos1,
+                  const KoPoint &control1,
+                  const KoPoint &control2,
+                  const KoPoint &pos2,
+                  vKoPoint& points);
 
 
     /**
      * Paint the rectangle with given begin and end points
      */
-    void paintRect(const KisPoint &startPoint,
-               const KisPoint &endPoint,
+    void paintRect(const KoPoint &startPoint,
+               const KoPoint &endPoint,
                const double pressure,
                const double xTilt,
                const double yTilt);
@@ -375,8 +375,8 @@ public:
     /**
      * Paint the ellipse with given begin and end points
      */
-    void paintEllipse(const KisPoint &startPoint,
-                      const KisPoint &endPoint,
+    void paintEllipse(const KoPoint &startPoint,
+                      const KoPoint &endPoint,
                       const double pressure,
                       const double /*xTilt*/,
                       const double /*yTilt*/);
@@ -385,10 +385,10 @@ public:
      * Paint the polygon with the points given in points. It automatically closes the polygon
      * by drawing the line from the last point to the first.
      */
-    void paintPolygon(const vKisPoint& points);
+    void paintPolygon(const vKoPoint& points);
 
     /** Draw a spot at pos using the currently set paint op, brush and color */
-    void paintAt(const KisPoint &pos,
+    void paintAt(const KoPoint &pos,
                  const double pressure,
                  const double /*xTilt*/,
                  const double /*yTilt*/);
@@ -463,9 +463,9 @@ public:
      * the part of the layer that is at its paintedPosition - duplicateOffset
      */
     // TODO: this is an hack ! it must be fix, the following functions have nothing to do here
-    void setDuplicateOffset(const KisPoint& offset) { m_duplicateOffset = offset; }
+    void setDuplicateOffset(const KoPoint& offset) { m_duplicateOffset = offset; }
     /// Returns the offset for duplication
-    KisPoint duplicateOffset(){ return m_duplicateOffset; }
+    KoPoint duplicateOffset(){ return m_duplicateOffset; }
 
     inline void setDuplicateHealing(bool v) { m_duplicateHealing = v; }
     inline bool duplicateHealing() { return m_duplicateHealing; }
@@ -476,8 +476,8 @@ public:
     inline void setDuplicatePerspectiveCorrection(bool v) { m_duplicatePerspectiveCorrection = v; }
     inline bool duplicatePerspectiveCorrection() { return m_duplicatePerspectiveCorrection; }
     
-    void setDuplicateStart(const KisPoint start) { m_duplicateStart = start;}
-    KisPoint duplicateStart() { return m_duplicateStart;}
+    void setDuplicateStart(const KoPoint start) { m_duplicateStart = start;}
+    KoPoint duplicateStart() { return m_duplicateStart;}
     
     /// Sets the current pressure for things that like to use this
     void setPressure(double pressure) { m_pressure = pressure; }
@@ -512,10 +512,10 @@ protected:
     KisPainter& operator=(const KisPainter&);
 
     /// Calculate the distance that point p is from the line made by connecting l0 and l1
-    static double pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
+    static double pointToLineDistance(const KoPoint& p, const KoPoint& l0, const KoPoint& l1);
 
     /// Fill the polygon defined by points with the fillStyle
-    void fillPolygon(const vKisPoint& points, FillStyle fillStyle);
+    void fillPolygon(const vKoPoint& points, FillStyle fillStyle);
 
 protected:
     KisPaintDeviceSP m_device;
@@ -530,8 +530,8 @@ protected:
     StrokeStyle m_strokeStyle;
     KisBrush *m_brush;
     KisPattern *m_pattern;
-    KisPoint m_duplicateOffset;
-    KisPoint m_duplicateStart;
+    KoPoint m_duplicateOffset;
+    KoPoint m_duplicateStart;
     bool m_duplicateHealing;
     int m_duplicateHealingRadius;
     bool m_duplicatePerspectiveCorrection;

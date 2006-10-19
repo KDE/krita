@@ -58,7 +58,7 @@ private:
     KisPaintDeviceSP rotateRight90(KisPaintDeviceSP src);
     KisPaintDeviceSP rotateLeft90(KisPaintDeviceSP src);
     KisPaintDeviceSP rotate180(KisPaintDeviceSP src);
-    KisPaintDeviceSP rotate(KisPaintDeviceSP src, double angle, KisPoint centerOfRotation);
+    KisPaintDeviceSP rotate(KisPaintDeviceSP src, double angle, KoPoint centerOfRotation);
 
     KisPaintDeviceSP xShear(KisPaintDeviceSP src, double shearX);
     KisPaintDeviceSP yShear(KisPaintDeviceSP src, double shearY);

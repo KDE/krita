@@ -97,7 +97,7 @@ bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) {
 KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
 {
     // We don't have a parent, and we've got only one child: abuse the child's
-    // paint device as the projection if the child is visible and 100% opaque
+    // paint device as the projection if the child is visible
     if (parent().isNull() && childCount() == 1) {
         KisPaintLayerSP l = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(firstChild().data()));
         if (paintLayerInducesProjectionOptimization(l)) {

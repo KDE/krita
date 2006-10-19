@@ -40,10 +40,10 @@
 #include <QMouseEvent>
 
 #include "kis_global.h"
-#include "kis_point.h"
+#include "KoPoint.h"
 #include "kis_vec.h"
 #include "kis_canvas.h"
-#include "kis_input_device.h"
+#include "KoInputDevice.h"
 
 #ifdef Q_WS_X11
 
@@ -63,11 +63,11 @@
 
 #endif // Q_WS_X11
 
-class KisEvent;
-class KisMoveEvent;
-class KisButtonPressEvent;
+class KoPointerEvent;
+class KoPointerEvent;
+class KoPointerEvent;
 class KisButtonReleaseEvent;
-class KisDoubleClickEvent;
+class KoPointerEvent;
 
 class KisCanvasWidget : public QObject {
     Q_OBJECT
@@ -82,7 +82,7 @@ public:
     void enableMoveEventCompressionHint(bool enableMoveCompression) { m_enableMoveEventCompressionHint = enableMoveCompression; }
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
-    static KisInputDevice findActiveInputDevice();
+    static KoInputDevice findActiveInputDevice();
     virtual void selectTabletDeviceEvents() = 0;
 
     static void selectTabletDeviceEvents(QWidget *widget);
@@ -99,10 +99,10 @@ signals:
     void sigGotKeyReleaseEvent(QKeyEvent*);
     void sigGotDragEnterEvent(QDragEnterEvent*);
     void sigGotDropEvent(QDropEvent*);
-    void sigGotMoveEvent(KisMoveEvent *);
-    void sigGotButtonPressEvent(KisButtonPressEvent *);
+    void sigGotMoveEvent(KoPointerEvent *);
+    void sigGotButtonPressEvent(KoPointerEvent *);
     void sigGotButtonReleaseEvent(KisButtonReleaseEvent *);
-    void sigGotDoubleClickEvent(KisDoubleClickEvent *);
+    void sigGotDoubleClickEvent(KoPointerEvent *);
     void sigGotEnterEvent(QEvent *);
     void sigGotLeaveEvent(QEvent *);
 
@@ -120,11 +120,11 @@ protected:
     void widgetGotDropEvent(QDropEvent *event);
     void widgetGotEnterEvent(QEvent * event);
     void widgetGotLeaveEvent(QEvent * event);
-    void moveEvent(KisMoveEvent *event);
-    void buttonPressEvent(KisButtonPressEvent *event);
+    void moveEvent(KoPointerEvent *event);
+    void buttonPressEvent(KoPointerEvent *event);
     void buttonReleaseEvent(KisButtonReleaseEvent *event);
-    void doubleClickEvent(KisDoubleClickEvent *event);
-    void translateTabletEvent(KisEvent *event);
+    void doubleClickEvent(KoPointerEvent *event);
+    void translateTabletEvent(KoPointerEvent *event);
     
 protected:
 
@@ -166,8 +166,8 @@ public:
         XDevice *xDevice() const { return m_XDevice; }
         QString name() const { return m_name; }
 
-        KisInputDevice inputDevice() const { return m_inputDevice; }
-        void setInputDevice(KisInputDevice inputDevice) { m_inputDevice = inputDevice; }
+        KoInputDevice inputDevice() const { return m_inputDevice; }
+        void setInputDevice(KoInputDevice inputDevice) { m_inputDevice = inputDevice; }
 
         void setEnabled(bool enabled);
         bool enabled() const;
@@ -211,11 +211,11 @@ public:
         {
         public:
             State() {}
-            State(const KisPoint& pos, double pressure, const KisVector2D& tilt, double wheel,
+            State(const KoPoint& pos, double pressure, const KisVector2D& tilt, double wheel,
                   quint32 toolID, quint32 serialNumber);
 
             // Position, pressure and wheel are normalised to 0 - 1
-            KisPoint pos() const { return m_pos; }
+            KoPoint pos() const { return m_pos; }
             double pressure() const { return m_pressure; }
             // Tilt is normalised to -1->+1
             KisVector2D tilt() const { return m_tilt; }
@@ -225,7 +225,7 @@ public:
             quint32 serialNumber() const { return m_serialNumber; }
 
         private:
-            KisPoint m_pos;
+            KoPoint m_pos;
             double m_pressure;
             KisVector2D m_tilt;
             double m_wheel;
@@ -244,7 +244,7 @@ public:
         QString m_name;
 
         bool m_mightBeTabletDevice;
-        KisInputDevice m_inputDevice;
+        KoInputDevice m_inputDevice;
 
         bool m_enabled;
 

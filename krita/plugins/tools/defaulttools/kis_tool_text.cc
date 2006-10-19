@@ -38,7 +38,7 @@
 
 #include <QColor>
 
-#include "kis_point.h"
+#include "KoPoint.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
@@ -47,7 +47,7 @@
 #include "kis_tool_text.h"
 #include "kis_paint_device.h"
 #include "kis_canvas_subject.h"
-#include "kis_button_release_event.h"
+#include "KoPointerEvent.h"
 #include "KoColor.h"
 #include "kis_undo_adapter.h"
 

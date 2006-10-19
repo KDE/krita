@@ -104,8 +104,8 @@
 #endif
 
 #include "kis_brush.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
+#include "KoPointerEvent.h"
+#include "KoPointerEvent.h"
 #include "QPainter"
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"
@@ -125,7 +125,7 @@
 #include "kis_layerbox.h"
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
-#include "kis_move_event.h"
+#include "KoPointerEvent.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
@@ -146,7 +146,6 @@
 #include "kis_view.h"
 #include "kis_label_progress.h"
 #include "kis_opengl_image_context.h"
-#include "kis_background.h"
 #include "kis_paint_device_action.h"
 #include "kis_filter_configuration.h"
 #include "kis_transform_worker.h"
@@ -272,7 +271,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent)
     qApp->installEventFilter(this);
 
     m_tabletEventTimer.start();
-    m_inputDevice = KisInputDevice::mouse();
+    m_inputDevice = KoInputDevice::mouse();
 
     connect(&m_initialZoomTimer, SIGNAL(timeout()), SLOT(slotInitialZoomTimeout()));
     m_initialZoomTimer.setSingleShot(true);
@@ -1209,7 +1208,7 @@ void KisView::paintOpenGLView(const QRect& canvasRect)
 #endif
 }
 
-void KisView::setInputDevice(KisInputDevice inputDevice)
+void KisView::setInputDevice(KoInputDevice inputDevice)
 {
     if (inputDevice != m_inputDevice) {
         m_inputDevice = inputDevice;
@@ -1229,7 +1228,7 @@ void KisView::setInputDevice(KisInputDevice inputDevice)
 
 }
 
-KisInputDevice KisView::currentInputDevice() const
+KoInputDevice KisView::currentInputDevice() const
 {
     return m_inputDevice;
 }
@@ -1440,7 +1439,7 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
 
         if (img) {
             if (m_hScroll->isVisible()) {
-                KisPoint c = viewToWindow(KisPoint(m_canvas->width() / 2.0, m_canvas->height() / 2.0));
+                KoPoint c = viewToWindow(KoPoint(m_canvas->width() / 2.0, m_canvas->height() / 2.0));
                 x = c.x();
             }
             else {
@@ -1448,7 +1447,7 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
             }
 
             if (m_vScroll->isVisible()) {
-                KisPoint c = viewToWindow(KisPoint(m_canvas->width() / 2.0, m_canvas->height() / 2.0));
+                KoPoint c = viewToWindow(KoPoint(m_canvas->width() / 2.0, m_canvas->height() / 2.0));
                 y = c.y();
             }
             else {
@@ -2258,19 +2257,19 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
     }
 }
 
-void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
+void KisView::canvasGotButtonPressEvent(KoPointerEvent *e)
 {
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     // The event filter doesn't see tablet events going to the canvas.
-    if (e->device() != KisInputDevice::mouse()) {
+    if (e->device() != KoInputDevice::mouse()) {
         m_tabletEventTimer.start();
     }
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
     if (e->device() != currentInputDevice()) {
-        if (e->device() == KisInputDevice::mouse()) {
+        if (e->device() == KoInputDevice::mouse()) {
             if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
-                setInputDevice(KisInputDevice::mouse());
+                setInputDevice(KoInputDevice::mouse());
             }
         } else {
             setInputDevice(e->device());
@@ -2318,7 +2317,7 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
         if (m_popup) m_popup->popup(e->globalPos().roundQPoint());
     }
     else if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
-        KisPoint p = viewToWindow(e->pos());
+        KoPoint p = viewToWindow(e->pos());
         // somewhat of a hack: we should actually test if we intersect with the scrollers,
         // but the globalPos seems to be off by a few pixels
         if (m_vScroll->isSliderDown() || m_hScroll->isSliderDown())
@@ -2328,24 +2327,24 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
             enableAutoScroll();
         }
 
-        KisButtonPressEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
+        KoPointerEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
         m_toolManager->currentTool()->buttonPress(&ev);
     }
 }
 
-void KisView::canvasGotMoveEvent(KisMoveEvent *e)
+void KisView::canvasGotMoveEvent(KoPointerEvent *e)
 {
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     // The event filter doesn't see tablet events going to the canvas.
-    if (e->device() != KisInputDevice::mouse()) {
+    if (e->device() != KoInputDevice::mouse()) {
         m_tabletEventTimer.start();
     }
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
     if (e->device() != currentInputDevice()) {
-        if (e->device() == KisInputDevice::mouse()) {
+        if (e->device() == KoInputDevice::mouse()) {
             if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
-                setInputDevice(KisInputDevice::mouse());
+                setInputDevice(KoInputDevice::mouse());
             }
         } else {
             setInputDevice(e->device());
@@ -2357,7 +2356,7 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
     m_hRuler->updatePointer(e->pos().floorX() - m_canvasXOffset, e->pos().floorY() - m_canvasYOffset);
     m_vRuler->updatePointer(e->pos().floorX() - m_canvasXOffset, e->pos().floorY() - m_canvasYOffset);
 
-    KisPoint wp = viewToWindow(e->pos());
+    KoPoint wp = viewToWindow(e->pos());
 
 #if 0
     if (img && m_currentGuide) {
@@ -2380,7 +2379,7 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
     } else
 #endif
     if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
-        KisMoveEvent ev(e->device(), wp, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->buttons(), e->modifiers());
+        KoPointerEvent ev(e->device(), wp, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->buttons(), e->modifiers());
 
         m_toolManager->currentTool()->move(&ev);
     }
@@ -2411,7 +2410,7 @@ int KisView::bottomBorder() const
 
 void KisView::mouseMoveEvent(QMouseEvent *e)
 {
-    KisMoveEvent ke(currentInputDevice(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->buttons(), e->modifiers());
+    KoPointerEvent ke(currentInputDevice(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->buttons(), e->modifiers());
     canvasGotMoveEvent(&ke);
 }
 
@@ -2424,15 +2423,15 @@ void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 {
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     // The event filter doesn't see tablet events going to the canvas.
-    if (e->device() != KisInputDevice::mouse()) {
+    if (e->device() != KoInputDevice::mouse()) {
         m_tabletEventTimer.start();
     }
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
     if (e->device() != currentInputDevice()) {
-        if (e->device() == KisInputDevice::mouse()) {
+        if (e->device() == KoInputDevice::mouse()) {
             if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
-                setInputDevice(KisInputDevice::mouse());
+                setInputDevice(KoInputDevice::mouse());
             }
         } else {
             setInputDevice(e->device());
@@ -2445,7 +2444,7 @@ void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 //        m_currentGuide = 0;
 //    } else
     if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
-        KisPoint p = viewToWindow(e->pos());
+        KoPoint p = viewToWindow(e->pos());
         KisButtonReleaseEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
 
         disableAutoScroll();
@@ -2455,19 +2454,19 @@ void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
     }
 }
 
-void KisView::canvasGotDoubleClickEvent(KisDoubleClickEvent *e)
+void KisView::canvasGotDoubleClickEvent(KoPointerEvent *e)
 {
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     // The event filter doesn't see tablet events going to the canvas.
-    if (e->device() != KisInputDevice::mouse()) {
+    if (e->device() != KoInputDevice::mouse()) {
         m_tabletEventTimer.start();
     }
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
     if (e->device() != currentInputDevice()) {
-        if (e->device() == KisInputDevice::mouse()) {
+        if (e->device() == KoInputDevice::mouse()) {
             if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
-                setInputDevice(KisInputDevice::mouse());
+                setInputDevice(KoInputDevice::mouse());
             }
         } else {
             setInputDevice(e->device());
@@ -2475,8 +2474,8 @@ void KisView::canvasGotDoubleClickEvent(KisDoubleClickEvent *e)
     }
 
     if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
-        KisPoint p = viewToWindow(e->pos());
-        KisDoubleClickEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
+        KoPoint p = viewToWindow(e->pos());
+        KoPointerEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
 
         if (m_toolManager->currentTool()) {
             m_toolManager->currentTool()->doubleClick(&ev);
@@ -2804,22 +2803,22 @@ void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDoc
     delete m_partHandler; // Only one at a time
     m_partHandler = new KisPartLayerHandler(this, entry, parent, above);
 
-    disconnect(m_canvas, SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent*)), this, 0);
+    disconnect(m_canvas, SIGNAL(sigGotButtonPressEvent(KoPointerEvent*)), this, 0);
     disconnect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)), this, 0);
-    disconnect(m_canvas, SIGNAL(sigGotMoveEvent(KisMoveEvent*)), this, 0);
+    disconnect(m_canvas, SIGNAL(sigGotMoveEvent(KoPointerEvent*)), this, 0);
     disconnect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)), this, 0);
 
-    connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent*)),
-            m_partHandler, SLOT(gotButtonPressEvent(KisButtonPressEvent*)));
+    connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KoPointerEvent*)),
+            m_partHandler, SLOT(gotButtonPressEvent(KoPointerEvent*)));
     connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)),
             m_partHandler, SLOT(gotButtonReleaseEvent(KisButtonReleaseEvent*)));
-    connect(m_canvas, SIGNAL(sigGotMoveEvent(KisMoveEvent*)),
-            m_partHandler, SLOT(gotMoveEvent(KisMoveEvent*)));
+    connect(m_canvas, SIGNAL(sigGotMoveEvent(KoPointerEvent*)),
+            m_partHandler, SLOT(gotMoveEvent(KoPointerEvent*)));
     connect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)),
             m_partHandler, SLOT(gotKeyPressEvent(QKeyEvent*)));
 
-    connect(m_partHandler, SIGNAL(sigGotMoveEvent(KisMoveEvent*)),
-            this, SLOT(canvasGotMoveEvent(KisMoveEvent*)));
+    connect(m_partHandler, SIGNAL(sigGotMoveEvent(KoPointerEvent*)),
+            this, SLOT(canvasGotMoveEvent(KoPointerEvent*)));
     connect(m_partHandler, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)),
             this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
     connect(m_partHandler, SIGNAL(handlerDone()),
@@ -2827,12 +2826,12 @@ void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDoc
 }
 
 void KisView::reconnectAfterPartInsert() {
-    connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent*)),
-            this, SLOT(canvasGotButtonPressEvent(KisButtonPressEvent*)));
+    connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KoPointerEvent*)),
+            this, SLOT(canvasGotButtonPressEvent(KoPointerEvent*)));
     connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)),
             this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
-    connect(m_canvas, SIGNAL(sigGotMoveEvent(KisMoveEvent*)),
-            this, SLOT(canvasGotMoveEvent(KisMoveEvent*)));
+    connect(m_canvas, SIGNAL(sigGotMoveEvent(KoPointerEvent*)),
+            this, SLOT(canvasGotMoveEvent(KoPointerEvent*)));
     connect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)),
             this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
 
@@ -3149,10 +3148,10 @@ void KisView::setupCanvas()
 {
     m_canvas = new KisCanvas(this, "kis_canvas");
     m_canvas->setFocusPolicy( Qt::StrongFocus );
-    QObject::connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent*)), this, SLOT(canvasGotButtonPressEvent(KisButtonPressEvent*)));
+    QObject::connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KoPointerEvent*)), this, SLOT(canvasGotButtonPressEvent(KoPointerEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)), this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
-    QObject::connect(m_canvas, SIGNAL(sigGotDoubleClickEvent(KisDoubleClickEvent*)), this, SLOT(canvasGotDoubleClickEvent(KisDoubleClickEvent*)));
-    QObject::connect(m_canvas, SIGNAL(sigGotMoveEvent(KisMoveEvent*)), this, SLOT(canvasGotMoveEvent(KisMoveEvent*)));
+    QObject::connect(m_canvas, SIGNAL(sigGotDoubleClickEvent(KoPointerEvent*)), this, SLOT(canvasGotDoubleClickEvent(KoPointerEvent*)));
+    QObject::connect(m_canvas, SIGNAL(sigGotMoveEvent(KoPointerEvent*)), this, SLOT(canvasGotMoveEvent(KoPointerEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotPaintEvent(QPaintEvent*)), this, SLOT(canvasGotPaintEvent(QPaintEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotMouseWheelEvent(QWheelEvent*)), this, SLOT(canvasGotMouseWheelEvent(QWheelEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)), this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
@@ -3306,9 +3305,9 @@ QPoint KisView::viewToWindow(const QPoint& pt) const
     return converted;
 }
 
-KisPoint KisView::viewToWindow(const KisPoint& pt)
+KoPoint KisView::viewToWindow(const KoPoint& pt)
 {
-    KisPoint converted;
+    KoPoint converted;
 
     converted.setX((pt.x() + horzValue()) / zoom());
     converted.setY((pt.y() + vertValue()) / zoom());
@@ -3330,7 +3329,7 @@ QRect KisView::viewToWindow(const QRect& rc)
 KisRect KisView::viewToWindow(const KisRect& rc)
 {
     KisRect r;
-    KisPoint p = viewToWindow(KisPoint(rc.x(), rc.y()));
+    KoPoint p = viewToWindow(KoPoint(rc.x(), rc.y()));
     r.setX(p.x());
     r.setY(p.y());
     r.setWidth(rc.width() / zoom());
@@ -3366,9 +3365,9 @@ QPoint KisView::windowToView(const QPoint& pt) const
     return p;
 }
 
-KisPoint KisView::windowToView(const KisPoint& pt)
+KoPoint KisView::windowToView(const KoPoint& pt)
 {
-    KisPoint p;
+    KoPoint p;
     p.setX(pt.x() * zoom() - horzValue());
     p.setY(pt.y() * zoom() - vertValue());
 
@@ -3389,7 +3388,7 @@ QRect KisView::windowToView(const QRect& rc)
 KisRect KisView::windowToView(const KisRect& rc)
 {
     KisRect r;
-    KisPoint p = windowToView(KisPoint(rc.x(), rc.y()));
+    KoPoint p = windowToView(KoPoint(rc.x(), rc.y()));
     r.setX(p.x());
     r.setY(p.y());
     r.setWidth(rc.width() * zoom());
@@ -3438,19 +3437,19 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
     case QEvent::TabletRelease:
     {
         QTabletEvent *te = static_cast<QTabletEvent *>(e);
-        KisInputDevice device;
+        KoInputDevice device;
 
         switch (te->device()) {
         default:
         case QTabletEvent::Stylus:
         case QTabletEvent::NoDevice:
-            device = KisInputDevice::stylus();
+            device = KoInputDevice::stylus();
             break;
         case QTabletEvent::Puck:
-            device = KisInputDevice::puck();
+            device = KoInputDevice::puck();
             break;
         case QTabletEvent::Eraser:
-            device = KisInputDevice::eraser();
+            device = KoInputDevice::eraser();
             break;
         }
 
@@ -3467,16 +3466,16 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
     case QEvent::MouseButtonRelease:
     {
 #ifdef EXTENDED_X11_TABLET_SUPPORT
-        KisInputDevice device = KisCanvasWidget::findActiveInputDevice();
+        KoInputDevice device = KisCanvasWidget::findActiveInputDevice();
 
-        if (device != KisInputDevice::mouse()) {
+        if (device != KoInputDevice::mouse()) {
             setInputDevice(device);
             m_tabletEventTimer.start();
         } else
 #endif
         {
-            if (currentInputDevice() != KisInputDevice::mouse() && m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
-                setInputDevice(KisInputDevice::mouse());
+            if (currentInputDevice() != KoInputDevice::mouse() && m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
+                setInputDevice(KoInputDevice::mouse());
             }
         }
         break;
@@ -3548,7 +3547,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
             } else if (m_currentGuide) {
                 if (flag) {
                     // moved an existing guide.
-                    KisMoveEvent kme(currentInputDevice(), pt, me->globalPos(), PRESSURE_DEFAULT, 0, 0, me->state());
+                    KoPointerEvent kme(currentInputDevice(), pt, me->globalPos(), PRESSURE_DEFAULT, 0, 0, me->state());
                     canvasGotMoveEvent(&kme);
                 } else {
                     //  moved a guide out of the frame, destroy it
@@ -3565,7 +3564,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
             paintGuides();
             m_currentGuide = 0;
             enterEvent(0);
-            KisMoveEvent kme(currentInputDevice(), pt, me->globalPos(), PRESSURE_DEFAULT, 0, 0, Qt::NoButton);
+            KoPointerEvent kme(currentInputDevice(), pt, me->globalPos(), PRESSURE_DEFAULT, 0, 0, Qt::NoButton);
             canvasGotMoveEvent(&kme);
         }
     }

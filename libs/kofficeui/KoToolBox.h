@@ -32,11 +32,15 @@ class ToolArea;
 
 
 /**
- * KoToolBox is a kind of super-specialized toolbox that can order
+ * KoToolBox is a kind of super-specialized toolbar that can order
  * tools according to type and priority.
- * The ToolBox is a container for tool buttons which are themselves divided into sections.
+ *
+ * The ToolBox is a container for tool buttons which are themselves
+ * divided into sections.
+ *
  * Adding buttons using addButton() will allow you to show those buttons.  You should connect
  * the button to your handling method yourself.
+ *
  * The unique property of this toolbox is that it can be shown horizontal as well as vertical,
  * rotating in a smart way to show the buttons optimally.
  * @see KoToolManager
@@ -50,8 +54,9 @@ public:
 
     /**
      * Add a button to the toolbox.
-     * The buttons should all be added before the fist showing since adding will not really add
+     * The buttons should all be added before the first showing since adding will not really add
      * them to the UI until setup() is called.
+     *
      * @param button the new button.  Please make sure you connect to the button yourself.
      * @param section the section in which this button will be shown.  Each section will be its own
      *        widget.

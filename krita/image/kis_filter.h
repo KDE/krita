@@ -71,7 +71,7 @@ public:
     /**
      * Provided for convenience only when source and destination are the same
      */
-    inline void process(KisPaintDeviceSP device, const QRect rect,  KisFilterConfiguration* config)
+    inline void process(KisPaintDeviceSP device, const QRect& rect,  KisFilterConfiguration* config)
     {
         process(device, rect.topLeft(), device, rect.topLeft(), rect.size(), config);
     }

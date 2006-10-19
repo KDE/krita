@@ -310,7 +310,7 @@ public:
 
         // Filter the temporary paint device -- remember, these are only the selected bits,
         // if there was a selection.
-        f->process(tmp, m_rc, tmp, m_rc, cfg);
+        f->process(tmp, m_rc, cfg);
 
         delete cmd;
 

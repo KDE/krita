@@ -178,7 +178,7 @@ void KisDlgAdjLayerProps::refreshPreview()
 
     QRect rect = layer->extent();
     KisTransaction cmd("Temporary transaction", layer);
-    m_currentFilter->process(layer, rect, layer, rect, config);
+    m_currentFilter->process(layer, rect, config);
     m_preview->slotUpdate();
     cmd.unexecute();
 }

@@ -267,7 +267,7 @@ bool KisFilterManager::apply()
     KisTransaction * cmd = 0;
     if (img->undo()) cmd = new KisTransaction(m_lastFilter->id().name(), dev);
 
-    m_lastFilter->process(dev, rect, dev, rect, m_lastFilterConfig);
+    m_lastFilter->process(dev, rect, m_lastFilterConfig);
     m_reapplyAction->setEnabled(m_lastFilterConfig);
     if (m_lastFilterConfig)
         m_reapplyAction->setText(i18n("Apply Filter Again") + ": "
@@ -406,7 +406,7 @@ void KisFilterManager::refreshPreview( )
 
     QRect rect = dev->extent();
     KisTransaction cmd("Temporary transaction", dev);
-    m_lastFilter->process(dev, rect, dev, rect, config);
+    m_lastFilter->process(dev, rect, config);
     m_lastDialog->previewWidget()->slotUpdate();
     cmd.unexecute();
 }

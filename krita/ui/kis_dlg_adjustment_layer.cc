@@ -159,7 +159,7 @@ void KisDlgAdjustmentLayer::refreshPreview()
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
 
     QRect rect = layer->extent();
-    m_currentFilter->process(layer, rect, layer, rect, config);
+    m_currentFilter->process(layer, rect, config);
     m_preview->slotUpdate();
     cmd.unexecute();
 }
@@ -187,7 +187,7 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( Q3IconViewItem * item )
                                                                            m_dev);
     }
 
-    if (m_currentConfigWidget != 0)
+    if (m_configWidgetHolder != 0)
     {
         m_configWidgetHolder->layout()->addWidget(m_currentConfigWidget);
         m_currentConfigWidget->show();

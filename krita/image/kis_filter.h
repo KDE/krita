@@ -28,6 +28,7 @@
 #include "kis_types.h"
 #include "kis_filter_registry.h"
 #include "KoID.h"
+#include "kis_paint_device.h"
 #include "kis_progress_subject.h"
 #include "kis_filter_configuration.h"
 #include "KoColorSpace.h"
@@ -59,13 +60,21 @@ public:
     /**
      * Override this function with the implementation of your filter.
      * @param src the source paint device
-     * @param srcRect the area of the source pixel to consider
+     * @param srcTopLeft the top left coordinate where the filter starts to be applied
      * @param dst the destination paint device
-     * @param dstRect the area on the destination paint device
+     * @param dstTopLeft he top left coordinate for the destination paint device
+     * @param size the size of the area that is filtered
      * @param config the parameters of the filter
      */
-    virtual void process(const KisPaintDeviceSP src, const QRect& srcRect, KisPaintDeviceSP dst, const QRect& dstRect, KisFilterConfiguration* config) = 0;
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config) = 0;
 
+    /**
+     * Provided for convenience only when source and destination are the same
+     */
+    inline void process(KisPaintDeviceSP device, const QRect rect,  KisFilterConfiguration* config)
+    {
+        process(device, rect.topLeft(), device, rect.topLeft(), rect.size(), config);
+    }
 public:
     virtual KisFilterConfiguration * configuration(QWidget*);
     virtual KisFilterConfiguration * configuration();

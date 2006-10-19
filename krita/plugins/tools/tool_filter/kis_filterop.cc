@@ -103,7 +103,7 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // Filter the paint device
     filter->disableProgress();
     QRect r( 0, 0, maskWidth, maskHeight );
-    filter->process( tmpDev, r, tmpDev, r, m_filterConfiguration);
+    filter->process( tmpDev, r, m_filterConfiguration);
     filter->enableProgress();
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)

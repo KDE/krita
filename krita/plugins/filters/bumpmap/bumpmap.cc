@@ -91,7 +91,7 @@ KisFilterBumpmap::KisFilterBumpmap() : KisFilter(id(), "map", i18n("&Bumpmap..."
 }
 
 namespace {
-    void convertRow(KisPaintDevice * orig, quint8 * row, qint32 x, qint32 y, qint32 w,  quint8 * lut, qint32 waterlevel)
+    void convertRow(const KisPaintDevice * orig, quint8 * row, qint32 x, qint32 y, qint32 w,  quint8 * lut, qint32 waterlevel)
     {
         KoColorSpace * csOrig = orig->colorSpace();
 
@@ -107,14 +107,16 @@ namespace {
 
 }
 
-void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rect)
+void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QRect& srcRect, KisPaintDeviceSP dst, const QRect& dstRect, KisFilterConfiguration* cfg)
 {
     if (!src) return;
     if (!dst) return;
     if (!cfg) return;
-    if (!rect.isValid()) return;
-    if (rect.isNull()) return;
-    if (rect.isEmpty()) return;
+    if (!srcRect.isValid()) return;
+    if (!dstRect.isValid()) return;
+    if (dstRect.isNull()) return;
+    if (dstRect.isEmpty()) return;
+    Q_ASSERT(dstRect.width() == srcRect.width() && dstRect.height() == srcRect.height());
 
     KisBumpmapConfiguration * config = (KisBumpmapConfiguration*)cfg;
 
@@ -182,7 +184,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
     // Crate a grayscale layer from the bumpmap layer.
     QRect bmRect;
-    KisPaintDevice * bumpmap;
+    const KisPaintDevice * bumpmap;
 
     if (!config->bumpmap.isNull() && src->image()) {
         KisLayerSP l = src->image()->findLayer(config->bumpmap);
@@ -208,23 +210,21 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
         if (bumplayer) {
             bmRect = bumplayer->exactBounds();
-            bumpmap = bumplayer.data();
+            bumpmap = bumplayer;
         }
         else {
-            bmRect = rect;
-            bumpmap = src.data();
+            bmRect = srcRect;
+            bumpmap = src;
         }
      }
      else {
-         bmRect = rect;
-         bumpmap = src.data();
+         bmRect = srcRect;
+         bumpmap = src;
     }
 
 
-    qint32 sel_h = rect.height();
-    qint32 sel_w = rect.width();
-    qint32 sel_x = rect.x();
-    qint32 sel_y = rect.y();
+    qint32 sel_h = dstRect.height();
+    qint32 sel_w = dstRect.width();
 
     qint32 bm_h = bmRect.height();
     qint32 bm_w = bmRect.width();
@@ -237,12 +237,12 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
     // ------------------- Initialize offsets
     if (config->tiled) {
-        yofs2 = MOD (config->yofs + sel_y, bm_h);
+        yofs2 = MOD (config->yofs + dstRect.y(), bm_h);
         yofs1 = MOD (yofs2 - 1, bm_h);
         yofs3 = MOD (yofs2 + 1,  bm_h);
     }
     else {
-          yofs2 = CLAMP (config->yofs + sel_y, 0, bm_h - 1);
+          yofs2 = CLAMP (config->yofs + dstRect.y(), 0, bm_h - 1);
           yofs1 = yofs2;
           yofs3 = CLAMP (yofs2 + 1, 0, bm_h - 1);
 
@@ -266,16 +266,16 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     bool row_in_bumpmap;
 
     qint32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
-    for (int y = sel_y; y < sel_h + sel_y; y++) {
+    for (int y = 0; y < sel_h; y++) {
 
         row_in_bumpmap = (y >= - config->yofs && y < - config->yofs + bm_h);
 
         // Bumpmap
 
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, sel_w);
-        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(rect.x(), y, sel_w);
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstRect.x(), dstRect.y() + y, sel_w);
+        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcRect.x(), srcRect.y() + y, sel_w);
 
-        qint32 tmp = config->xofs + sel_x;
+        qint32 tmp = config->xofs + dstRect.x();
         xofs2 = MOD (tmp, bm_w);
 
         qint32 x = 0;

@@ -128,7 +128,7 @@ void KisDlgFiltersGallery::refreshPreview( )
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
 
     QRect rect = layer->exactBounds();
-    m_currentFilter->process(layer, rect, layer, rect, config);
+    m_currentFilter->process(layer, rect, config);
     m_widget->previewWidget->slotUpdate();
     cmd.unexecute();
 

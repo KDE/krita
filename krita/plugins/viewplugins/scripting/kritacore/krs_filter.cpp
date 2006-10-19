@@ -79,7 +79,7 @@ bool Filter::process(QObject* layer)
     QRect r1 = paintlayer->paintLayer()->paintDevice()->extent();
     QRect r2 = paintlayer->paintLayer()->image()->bounds();
     QRect rect = r1.intersect(r2);
-    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, paintlayer->paintLayer()->paintDevice(), rect, m_filter->configuration());
+    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, m_filter->configuration());
     return true;
 }
 
@@ -92,7 +92,7 @@ bool Filter::process(QObject* layer, int x, int y, int width, int height)
         return false;
     }
     QRect rect(x, y, width, height);
-    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, paintlayer->paintLayer()->paintDevice(),  rect, m_filter->configuration());
+    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, m_filter->configuration());
     return true;
 }
 

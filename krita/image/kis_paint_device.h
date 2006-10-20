@@ -282,7 +282,7 @@ public:
      * The width and height of the returned device won't exceed \p maxw and \p maxw, but they may be smaller.
      */
 
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h);
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
@@ -479,11 +479,14 @@ public:
     /**
      * This function create a random accessor which can easily access to sub pixel values.
      */
-    KisRandomSubAccessorPixel createRandomSubAccessor();
+    KisRandomSubAccessorPixel createRandomSubAccessor() const;
 
 
-    /** Get the current selection or create one if this paintdevice hasn't got a selection yet. */
+    /**
+     * @return the current selection or create one if this paintdevice hasn't got a selection yet. */
     KisSelectionSP selection();
+    /** @return the current selection or create one if this paintdevice hasn't got a selection yet. */
+    const KisSelectionSP selection() const;
 
     /** Adds the specified selection to the currently active selection for this paintdevice */
     void addSelection(KisSelectionSP selection);
@@ -575,12 +578,12 @@ private:
     qint32 m_nChannels;
 
     // Whether the selection is active
-    bool m_hasSelection;
-    bool m_selectionDeselected;
+    mutable bool m_hasSelection;
+    mutable bool m_selectionDeselected;
 
     // Contains the actual selection. For now, there can be only
     // one selection per layer. XXX: is this a limitation?
-    KisSelectionSP m_selection;
+    mutable KisSelectionSP m_selection;
 
     KisExifInfo* m_exifInfo;
 

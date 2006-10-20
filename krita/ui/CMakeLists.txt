@@ -17,6 +17,7 @@ set(kritaui_LIB_SRCS
     kis_oasis_save_data_visitor.cc
     kis_oasis_save_visitor.cc
     kis_part_layer.cc
+    kis_matrix_widget.cpp
     imageviewer.cc
     kis_cursor.cc
     kcurve.cc

@@ -25,7 +25,7 @@
 
 #include <KoColorSpaceRegistry.h>
 
-#include <kis_doc.h>
+#include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_meta_registry.h>
@@ -100,7 +100,7 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
     
     KisPaintDeviceSP ref;
     
-    KisDoc d;
+    KisDoc2 d;
     d.import(fileName);
     KisImageSP importedImage = d.currentImage();
     

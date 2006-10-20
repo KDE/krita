@@ -852,7 +852,7 @@ KisTileDataWrapperSP KisTiledDataManager::pixelPtrSafe(qint32 x, qint32 y, bool 
 
     KisTile *tile = getTile(col, row, writable);
 
-    return KisTileDataWrapperSP(new KisTileDataWrapper(tile, offset));
+    return new KisTileDataWrapper(tile, offset);
 }
 
 const quint8* KisTiledDataManager::pixel(qint32 x, qint32 y)

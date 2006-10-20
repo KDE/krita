@@ -757,7 +757,7 @@ QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, qint32 x1, 
     return image;
 }
 
-KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h)
+KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
 {
     KisPaintDeviceSP thumbnail = KisPaintDeviceSP(new KisPaintDevice(colorSpace(), "thumbnail"));
     thumbnail->clear();
@@ -795,7 +795,8 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h)
         qint32 iY = (y * srch ) / h;
         for (qint32 x=0; x < w; ++x) {
             qint32 iX = (x * srcw ) / w;
-            thumbnail->setPixel(x, y, colorAt(iX, iY));
+        // TODO: FIXME: use KisRandomAccessor instead !
+//             thumbnail->setPixel(x, y, colorAt(iX, iY));
         }
     }
 
@@ -932,9 +933,10 @@ KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(Q_INT32 x,
         return KisRandomConstAccessorPixel(dm, NULL, x, y, m_x, m_y);
 }
 
-KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor()
+KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor() const
 {
-  return KisRandomSubAccessorPixel(this);
+    KisPaintDevice* pd = const_cast<KisPaintDevice*>(this);
+    return KisRandomSubAccessorPixel(pd);
 }
 
 void KisPaintDevice::emitSelectionChanged()
@@ -958,6 +960,22 @@ KisSelectionSP KisPaintDevice::selection()
     }
     else if (!m_selection) {
         m_selection = KisSelectionSP(new KisSelection(KisPaintDeviceSP(this)));
+        Q_CHECK_PTR(m_selection);
+        m_selection->setX(m_x);
+        m_selection->setY(m_y);
+    }
+    m_hasSelection = true;
+
+    return m_selection;
+}
+
+const KisSelectionSP KisPaintDevice::selection() const
+{
+    if ( m_selectionDeselected && m_selection ) {
+        m_selectionDeselected = false;
+    }
+    else if (!m_selection) {
+        m_selection = KisSelectionSP(new KisSelection(const_cast<KisPaintDevice*>(this)));
         Q_CHECK_PTR(m_selection);
         m_selection->setX(m_x);
         m_selection->setY(m_y);

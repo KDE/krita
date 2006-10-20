@@ -85,7 +85,7 @@ bool KisAutoContrast::workWith(KoColorSpace* cs)
     return (cs->getProfile() != 0);
 }
 
-void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* , const QRect& rect)
+void KisAutoContrast::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* )
 {
     // initialize
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
@@ -154,7 +154,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
     KisSelectionSP dstSel;
     if (dst != src) {
         KisPainter gc(dst);
-        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
         if (src->hasSelection()) {
             dstSel = dst->selection();
@@ -165,9 +165,9 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
     // apply
     KoColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(cfg->transfer);
 
-    KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
 
-    setProgressTotalSteps(rect.width() * rect.height());
+    setProgressTotalSteps(size.width() * size.height());
     qint32 pixelsProcessed = 0;
 
     while( ! iter.isDone()  && !cancelRequested())
@@ -245,11 +245,11 @@ bool KisDesaturateFilter::workWith(KoColorSpace* cs)
     return (cs->getProfile() != 0);
 }
 
-void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
+void KisDesaturateFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
     if (dst != src) {
         KisPainter gc(dst);
-        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
 
@@ -258,9 +258,9 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         m_lastCS = src->colorSpace();
     }
 
-    KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
 
-    setProgressTotalSteps(rect.width() * rect.height());
+    setProgressTotalSteps(size.width() * size.height());
     qint32 pixelsProcessed = 0;
 
     while( ! iter.isDone()  && !cancelRequested())

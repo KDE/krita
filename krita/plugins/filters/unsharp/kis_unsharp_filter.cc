@@ -54,12 +54,12 @@ KisFilterConfiguration* KisUnsharpFilter::configuration(QWidget* w)
     return 0;
 }
 
-void KisUnsharpFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& areaSize, KisFilterConfiguration* config)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     
-    setProgressTotalSteps(rect.width() * rect.height());
+    setProgressTotalSteps(areaSize.width() * areaSize.height());
 
     if(!config) config = new KisFilterConfiguration(id().id(), 1);
     
@@ -83,15 +83,15 @@ void KisUnsharpFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
     KisConvolutionPainter painter( interm );
     painter.beginTransaction("bouuh");
-    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
+    painter.applyMatrix(kernel, srcTopLeft.x(), srcTopLeft.y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
     
     if (painter.cancelRequested()) {
         cancel();
     }
     
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width());
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(rect.x(), rect.y(), rect.width());
-    KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(rect.x(), rect.y(), rect.width());
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), areaSize.width());
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), areaSize.width());
+    KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), areaSize.width());
 
     int cdepth = cs -> pixelSize();
     Q_UINT8 *colors[2];
@@ -104,7 +104,7 @@ void KisUnsharpFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     Q_INT32 factor = (Q_UINT32) 128 / amount;
     weights[1] = (factor - 128);
     kDebug() << (int) weights[0] << " " << (int)weights[1] << " " << factor << endl;
-    for( int j = 0; j < rect.height(); j++)
+    for( int j = 0; j < areaSize.height(); j++)
     {
         while( ! srcIt.isDone() )
         {

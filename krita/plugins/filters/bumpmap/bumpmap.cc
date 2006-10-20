@@ -107,16 +107,14 @@ namespace {
 
 }
 
-void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QRect& srcRect, KisPaintDeviceSP dst, const QRect& dstRect, KisFilterConfiguration* cfg)
+void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* cfg)
 {
     if (!src) return;
     if (!dst) return;
     if (!cfg) return;
-    if (!srcRect.isValid()) return;
-    if (!dstRect.isValid()) return;
-    if (dstRect.isNull()) return;
-    if (dstRect.isEmpty()) return;
-    Q_ASSERT(dstRect.width() == srcRect.width() && dstRect.height() == srcRect.height());
+    if (!size.isValid()) return;
+    if (size.isNull()) return;
+    if (size.isEmpty()) return;
 
     KisBumpmapConfiguration * config = (KisBumpmapConfiguration*)cfg;
 
@@ -213,18 +211,18 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QRect& srcRect,
             bumpmap = bumplayer;
         }
         else {
-            bmRect = srcRect;
+            bmRect = QRect(srcTopLeft, size) ;
             bumpmap = src;
         }
      }
      else {
-         bmRect = srcRect;
+         bmRect = QRect(srcTopLeft, size);
          bumpmap = src;
     }
 
 
-    qint32 sel_h = dstRect.height();
-    qint32 sel_w = dstRect.width();
+    qint32 sel_h = size.height();
+    qint32 sel_w = size.width();
 
     qint32 bm_h = bmRect.height();
     qint32 bm_w = bmRect.width();
@@ -237,12 +235,12 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QRect& srcRect,
 
     // ------------------- Initialize offsets
     if (config->tiled) {
-        yofs2 = MOD (config->yofs + dstRect.y(), bm_h);
+        yofs2 = MOD (config->yofs + dstTopLeft.y(), bm_h);
         yofs1 = MOD (yofs2 - 1, bm_h);
         yofs3 = MOD (yofs2 + 1,  bm_h);
     }
     else {
-          yofs2 = CLAMP (config->yofs + dstRect.y(), 0, bm_h - 1);
+          yofs2 = CLAMP (config->yofs + dstTopLeft.y(), 0, bm_h - 1);
           yofs1 = yofs2;
           yofs3 = CLAMP (yofs2 + 1, 0, bm_h - 1);
 
@@ -272,10 +270,10 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QRect& srcRect,
 
         // Bumpmap
 
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstRect.x(), dstRect.y() + y, sel_w);
-        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcRect.x(), srcRect.y() + y, sel_w);
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y() + y, sel_w);
+        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y() + y, sel_w);
 
-        qint32 tmp = config->xofs + dstRect.x();
+        qint32 tmp = config->xofs + dstTopLeft.x();
         xofs2 = MOD (tmp, bm_w);
 
         qint32 x = 0;

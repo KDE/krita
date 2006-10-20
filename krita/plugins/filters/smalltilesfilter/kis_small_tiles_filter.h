@@ -49,7 +49,7 @@ public:
     KisSmallTilesFilter();
 
 public:
-    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     static inline KoID id() { return KoID("smalltiles", i18n("Small Tiles")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }

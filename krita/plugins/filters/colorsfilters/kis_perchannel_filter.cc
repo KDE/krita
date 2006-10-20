@@ -186,7 +186,7 @@ std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfigurat
 }
 
 
-void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
     if (!config) {
         kWarning() << "No configuration object for per-channel filter\n";
@@ -214,13 +214,13 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 
     if (src!=dst) {
         KisPainter gc(dst);
-        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
 
-    KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height() );
+    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height() );
 
-    setProgressTotalSteps(rect.width() * rect.height());
+    setProgressTotalSteps(size.width() * size.height());
     qint32 pixelsProcessed = 0;
 
     while( ! iter.isDone()  && !cancelRequested())

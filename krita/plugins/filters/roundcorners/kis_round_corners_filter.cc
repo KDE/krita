@@ -55,24 +55,24 @@ KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), "map", i18n("&R
 {
 }
 
-void KisRoundCornersFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisRoundCornersFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
 {
     //read the filter configuration values from the KisFilterConfiguration object
     qint32 radius = (qint32)((KisRoundCornersFilterConfiguration*)configuration)->radius();
     quint32 pixelSize = src->pixelSize();
 
-    setProgressTotalSteps( rect.height() );
+    setProgressTotalSteps( size.height() );
     setProgressStage(i18n("Applying pixelize filter..."),0);
 
-    for (qint32 y = rect.y(); y < rect.height(); y++)
+    qint32 width = size.width();
+    qint32 height = size.height();
+    for (qint32 y = 0; y < size.height(); y++)
     {
-        qint32 x = rect.x();
-        qint32 x0 = rect.x();
-        qint32 y0 = rect.x();
-        qint32 width = rect.width();
-        qint32 height = rect.height();
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, y, width );
-        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(x, y, width);
+        qint32 x = dstTopLeft.x();
+        qint32 x0 = dstTopLeft.x();
+        qint32 y0 = dstTopLeft.x();
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(srcTopLeft.x(), srcTopLeft.y(), width );
+        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(dstTopLeft.x(), dstTopLeft.y(), width);
         while( ! srcIt.isDone() )
         {
             if(srcIt.isSelected())

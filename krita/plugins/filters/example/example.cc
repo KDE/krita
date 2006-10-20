@@ -63,16 +63,16 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), "adjust", i18n("&Invert"))
 {
 }
 
-void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
+void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
 
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
-    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
 
     int pixelsProcessed = 0;
-    setProgressTotalSteps(rect.width() * rect.height());
+    setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
     qint32 psize = cs->pixelSize();

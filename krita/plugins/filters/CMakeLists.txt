@@ -1,5 +1,6 @@
 add_subdirectory( bumpmap )
-add_subdirectory( cimg )
+MESSAGE(STATUS "Remember to port cimg and fix it")
+#add_subdirectory( cimg )
 add_subdirectory( convolutionfilters )
 add_subdirectory( embossfilter )
 add_subdirectory( example )

@@ -51,7 +51,7 @@ public:
     ~KisWaveletNoiseReduction();
 
 public:
-    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     virtual KisFilterConfiguration * configuration(QWidget* nwidget);
     virtual KisFilterConfiguration * configuration() {return new KisWaveletNoiseReductionConfiguration( BEST_WAVELET_THRESHOLD_VALUE );};
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);

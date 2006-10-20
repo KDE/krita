@@ -56,7 +56,7 @@ KisFilterConfiguration* KisWaveletNoiseReduction::configuration(QWidget* nwidget
     }
 }
 
-void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& areaSize, KisFilterConfiguration* config)
 {
 
     float threshold = 1.0;
@@ -72,29 +72,30 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
     qint32 depth = src->colorSpace()->nColorChannels();
 
     int size;
-    int maxrectsize = (rect.height() < rect.width()) ? rect.width() : rect.height();
+    int maxrectsize = qMax( areaSize.width(), areaSize.height());
     for(size = 2; size < maxrectsize; size *= 2) ;
 
     KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( src->colorSpace()->mathToolboxID() );
-    setProgressTotalSteps(mathToolbox->fastWaveletTotalSteps(rect) * 2 + size*size*depth );
+    QRect srcRect(srcTopLeft, areaSize);
+    setProgressTotalSteps(mathToolbox->fastWaveletTotalSteps(srcRect) * 2 + size*size*depth );
     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
 
 
-    kDebug(41005) << size << " " << maxrectsize << " " << rect.x() << " " << rect.y() << endl;
+    kDebug(41005) << size << " " << maxrectsize << " " << srcTopLeft.x() << " " << srcTopLeft.y() << endl;
 
     kDebug(41005) << "Transforming..." << endl;
     setProgressStage( i18n("Fast wavelet transformation") ,progress());
     KisMathToolbox::KisWavelet* buff = 0;
     KisMathToolbox::KisWavelet* wav = 0;
     try {
-        buff = mathToolbox->initWavelet(src, rect);
+        buff = mathToolbox->initWavelet(src, srcRect);
     } catch(std::bad_alloc)
     {
         if(buff) delete buff;
         return;
     }
     try {
-        wav = mathToolbox->fastWaveletTransformation(src, rect, buff);
+        wav = mathToolbox->fastWaveletTransformation(src, srcRect, buff);
     } catch(std::bad_alloc)
     {
         if(wav) delete wav;
@@ -120,7 +121,7 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
     kDebug(41005) << "Untransforming..." << endl;
 
     setProgressStage( i18n("Fast wavelet untransformation") ,progress());
-    mathToolbox->fastWaveletUntransformation( dst, rect, wav, buff);
+    mathToolbox->fastWaveletUntransformation( dst, QRect(dstTopLeft, areaSize ), wav, buff);
 
     delete wav;
     delete buff;

@@ -38,7 +38,7 @@ class KisFilterRandomPick : public KisFilter
     public:
         KisFilterRandomPick();
     public:
-        virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
+        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft,  const QSize& size, KisFilterConfiguration* config);
         virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; };
         static inline KoID id() { return KoID("randompick", i18n("Random Pick")); };
         virtual bool supportsPainting() { return true; }

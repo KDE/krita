@@ -74,12 +74,20 @@ KisFilterConfiguration* KisBlurFilter::configuration(QWidget* w)
     return config;
 }
 
-void KisBlurFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisBlurFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     
-    setProgressTotalSteps(rect.width() * rect.height());
+
+    if (dst != src) { // TODO: fix the convolution painter to avoid that stupid copy
+        kDebug() << "src != dst\n";
+        KisPainter gc(dst);
+        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
+        gc.end();
+    }
+    
+    setProgressTotalSteps(size.width() * size.height());
 
     if(!config) config = new KisFilterConfiguration(id().id(), 1);
     
@@ -125,7 +133,7 @@ void KisBlurFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     
     KisKernelSP kernel = KisKernelSP(KisKernel::fromQImage(mask)); 
     KisConvolutionPainter painter( dst );
-    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
+    painter.applyMatrix(kernel, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
     
     if (painter.cancelRequested()) {
         cancel();

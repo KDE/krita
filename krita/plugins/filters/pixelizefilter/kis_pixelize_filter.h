@@ -43,7 +43,7 @@ class KisPixelizeFilter : public KisFilter
 public:
     KisPixelizeFilter();
 public:
-    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     static inline KoID id() { return KoID("pixelize", i18n("Pixelize")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
@@ -53,8 +53,6 @@ public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
     virtual KisFilterConfiguration * configuration();
-private:
-    void pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int x, int y, int w, int h, int pixelWidth, int pixelHeight);
 };
 
 #endif

@@ -82,7 +82,7 @@ KisFilterConfiguration* KisFilterFastColorTransfer::configuration(QWidget* w)
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
@@ -129,7 +129,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
     // Compute the means and sigmas of src
     double meanL_src = 0., meanA_src = 0., meanB_src = 0.;
     double sigmaL_src = 0., sigmaA_src = 0., sigmaB_src = 0.;
-    KisRectConstIteratorPixel srcLABIt = srcLAB->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectConstIteratorPixel srcLABIt = srcLAB->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
     while(!srcLABIt.isDone())
     {
         const Q_UINT16* data = reinterpret_cast<const Q_UINT16*>(srcLABIt.oldRawData());
@@ -144,14 +144,14 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
         sigmaB_src += B*B;
         ++srcLABIt;
     }
-    double size = 1. / ( rect.width() * rect.height() );
-    meanL_src *= size;
-    meanA_src *= size;
-    meanB_src *= size;
-    sigmaL_src *= size;
-    sigmaA_src *= size;
-    sigmaB_src *= size;
-    kDebug() << size << " " << meanL_src << " " << meanA_src << " " << meanB_src << " " << sigmaL_src << " " << sigmaA_src << " " << sigmaB_src << endl;
+    double totalSize = 1. / ( size.width() * size.height() );
+    meanL_src *= totalSize;
+    meanA_src *= totalSize;
+    meanB_src *= totalSize;
+    sigmaL_src *= totalSize;
+    sigmaA_src *= totalSize;
+    sigmaB_src *= totalSize;
+    kDebug() << totalSize << " " << meanL_src << " " << meanA_src << " " << meanB_src << " " << sigmaL_src << " " << sigmaA_src << " " << sigmaB_src << endl;
     // Compute the means and sigmas of src
     double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
     double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
@@ -170,23 +170,23 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
         sigmaB_ref += B*B;
         ++refIt;
     }
-    size = 1. / ( importedImage->width() * importedImage->height() );
-    meanL_ref *= size;
-    meanA_ref *= size;
-    meanB_ref *= size;
-    sigmaL_ref *= size;
-    sigmaA_ref *= size;
-    sigmaB_ref *= size;
-    kDebug() << size << " " << meanL_ref << " " << meanA_ref << " " << meanB_ref << " " << sigmaL_ref << " " << sigmaA_ref << " " << sigmaB_ref << endl;
+    totalSize = 1. / ( importedImage->width() * importedImage->height() );
+    meanL_ref *= totalSize;
+    meanA_ref *= totalSize;
+    meanB_ref *= totalSize;
+    sigmaL_ref *= totalSize;
+    sigmaA_ref *= totalSize;
+    sigmaB_ref *= totalSize;
+    kDebug() << totalSize << " " << meanL_ref << " " << meanA_ref << " " << meanB_ref << " " << sigmaL_ref << " " << sigmaA_ref << " " << sigmaB_ref << endl;
     
     // Transfer colors
-    dst->convertTo(labCS);
+    dst->convertTo(labCS); // FIXME: DON'T CONVERT to LAB !
     {
         double coefL = sqrt((sigmaL_ref - meanL_ref * meanL_ref) / (sigmaL_src - meanL_src * meanL_src));
         double coefA = sqrt((sigmaA_ref - meanA_ref * meanA_ref) / (sigmaA_src - meanA_src * meanA_src));
         double coefB = sqrt((sigmaB_ref - meanB_ref * meanB_ref) / (sigmaB_src - meanB_src * meanB_src));
         kDebug() << coefL << " " << coefA << " " << coefB << endl;
-        KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+        KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
         while(!dstIt.isDone())
         {
             Q_UINT16* data = reinterpret_cast<Q_UINT16*>(dstIt.rawData());

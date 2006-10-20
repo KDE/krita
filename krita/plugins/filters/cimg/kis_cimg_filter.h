@@ -54,7 +54,7 @@ class KisCImgFilter : public KisFilter
 public:
     KisCImgFilter();
 public:
-    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     static inline KoID id() { return KoID("cimg", i18n("Image Restauration (cimg-based)")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return false; }

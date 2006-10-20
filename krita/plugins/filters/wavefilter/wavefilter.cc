@@ -125,12 +125,12 @@ KisFilterConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent, i18n("Configuration of wave filter").ascii());
 }
 
-void KisFilterWave::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisFilterWave::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
     Q_ASSERT(src.data() != 0);
     Q_ASSERT(dst.data() != 0);
 
-    setProgressTotalSteps(rect.width() * rect.height());
+    setProgressTotalSteps(size.width() * size.height());
 
     QVariant value;
     int horizontalwavelength = (config && config->getProperty("horizontalwavelength", value)) ? value.toInt() : 50;
@@ -141,7 +141,7 @@ void KisFilterWave::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     int verticalshift = (config && config->getProperty("verticalshift", value)) ? value.toInt() : 50;
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
     int verticalshape = (config && config->getProperty("verticalshape", value)) ? value.toInt() : 0;
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
     KisWaveCurve* verticalcurve;
     if(verticalshape == 1)
         verticalcurve = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
@@ -153,11 +153,13 @@ void KisFilterWave::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     else
         horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor();
+    int tx = srcTopLeft.x() - dstTopLeft.x();
+    int ty = srcTopLeft.y() - dstTopLeft.y();
     while(!dstIt.isDone())
     {
         double xv = horizontalcurve->valueAt( dstIt.y(), dstIt.x() );
         double yv = verticalcurve->valueAt( dstIt.x(), dstIt.y() );
-        srcRSA.moveTo( KoPoint( xv, yv ) );
+        srcRSA.moveTo( KoPoint( xv - tx, yv - ty ) );
         srcRSA.sampledOldRawData(dstIt.rawData());
         ++dstIt;
         incProgress();

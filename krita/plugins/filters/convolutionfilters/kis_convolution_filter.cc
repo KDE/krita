@@ -88,10 +88,7 @@ QString KisConvolutionConfiguration::toString()
 
 }
 
-void KisConvolutionFilter::process(KisPaintDeviceSP src,
-                                   KisPaintDeviceSP dst,
-                                   KisFilterConfiguration* configuration,
-                                   const QRect& rect)
+void KisConvolutionFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
 {
     if (!configuration) {
         setProgressDone();
@@ -99,10 +96,10 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
     }
 
 
-    if (dst != src) {
+    if (dst != src) { // TODO: fix the convolution painter to avoid that stupid copy
         kDebug() << "src != dst\n";
         KisPainter gc(dst);
-        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
 
@@ -111,7 +108,7 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
         m_progressDisplay->setSubject( &painter, true, true );
 
     KisKernelSP kernel = ((KisConvolutionConfiguration*)configuration)->matrix();
-    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
+    painter.applyMatrix(kernel, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
     if (painter.cancelRequested()) {
         cancel();

@@ -92,14 +92,14 @@ KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidg
     return new KisWdgLensCorrection((KisFilter*)this, (QWidget*)parent, i18n("Configuration of lens correction filter").ascii());
 }
 
-void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rawrect)
+void KisFilterLensCorrection::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft,  const QSize& size, KisFilterConfiguration* config)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
     QRect layerrect = src->exactBounds();
 
-    QRect workingrect = layerrect.intersect( rawrect );
+    QRect workingrect = layerrect.intersect( QRect(srcTopLeft, size) );
 
     setProgressTotalSteps(workingrect.width() * workingrect.height());
 
@@ -112,7 +112,7 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
     double correctionnearedges = (config && config->getProperty("correctionnearedges", value)) ? value.toDouble() : 0.;
     double brightness = ( (config && config->getProperty("brightness", value)) ? value.toDouble() : 0. );
 
-    KisRectIteratorPixel dstIt = dst->createRectIterator(workingrect.x(), workingrect.y(), workingrect.width(), workingrect.height() );
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), workingrect.width(), workingrect.height() );
     KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor();
 
     double normallise_radius_sq = 4.0 / (layerrect.width() * layerrect.width() + layerrect.height() * layerrect.height());
@@ -123,6 +123,9 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
 
     Q_UINT16 lab[4];
 
+    int tx = dstTopLeft.x() - srcTopLeft.x();
+    int ty = dstTopLeft.y() - srcTopLeft.y();
+    
     while(!dstIt.isDone())
     {
         double off_x = dstIt.x() - xcenter;
@@ -138,7 +141,7 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
 
         double brighten = 1.0 + mag * brightness;
 
-        srcRSA.moveTo( KoPoint( srcX, srcY ) );
+        srcRSA.moveTo( KoPoint( srcX + tx, srcY+ty ) );
         srcRSA.sampledOldRawData( dstIt.rawData() );
         cs->toLabA16( dstIt.rawData(), (Q_UINT8*)lab, 1);
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))

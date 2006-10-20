@@ -46,7 +46,7 @@ class KisRainDropsFilter : public KisFilter
 public:
     KisRainDropsFilter();
 public:
-    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     static inline KoID id() { return KoID("raindrops", i18n("Raindrops")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
@@ -57,7 +57,6 @@ public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
 private:
-    void   rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, int DropSize, int Amount, int Coeff);
     bool** CreateBoolArray (uint Columns, uint Rows);
     void   FreeBoolArray (bool** lpbArray, uint Columns);
     uchar  LimitValues (int ColorValue);

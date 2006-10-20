@@ -73,16 +73,16 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), "colors", i18n("M&aximize Channel
 {
 }
 
-void KisFilterMax::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
+void KisFilterMax::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* /*config*/)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height() );
-    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height() );
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
 
     int pixelsProcessed = 0;
-    setProgressTotalSteps(rect.width() * rect.height());
+    setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
     Q_INT32 nC = cs->nColorChannels();
@@ -119,16 +119,16 @@ KisFilterMin::KisFilterMin() : KisFilter(id(), "colors", i18n("M&inimize Channel
 {
 }
 
-void KisFilterMin::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
+void KisFilterMin::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* /*config*/)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
-    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
 
     int pixelsProcessed = 0;
-    setProgressTotalSteps(rect.width() * rect.height());
+    setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
     Q_INT32 nC = cs->nColorChannels();

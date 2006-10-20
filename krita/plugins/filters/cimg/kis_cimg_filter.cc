@@ -160,9 +160,9 @@ KisCImgFilter::KisCImgFilter()
 }
 
 
-void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisCImgFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
-    Q_UNUSED(dst);
+    Q_UNUSED(dst); ///////////////////// WTF !
 
     qint32 width = rect.width();
     qint32 height = rect.height();

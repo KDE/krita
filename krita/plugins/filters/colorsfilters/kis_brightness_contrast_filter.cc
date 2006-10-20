@@ -172,7 +172,7 @@ bool KisBrightnessContrastFilter::workWith(KoColorSpace* cs)
 }
 
 
-void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisBrightnessContrastFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
 
     if (!config) {
@@ -185,7 +185,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 
     if (src!=dst) {
         KisPainter gc(dst);
-        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
 
@@ -193,9 +193,9 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
         configBC->m_adjustment = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
     }
 
-    KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+    KisRectIteratorPixel iter = dst->createRectIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
 
-    setProgressTotalSteps(rect.width() * rect.height());
+    setProgressTotalSteps(size.width() * size.height());
     qint32 pixelsProcessed = 0;
 
     while( ! iter.isDone()  && !cancelRequested())

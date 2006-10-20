@@ -40,6 +40,7 @@
 #include "KoIntegerMaths.h"
 
 #include <kis_iterators_pixel.h>
+#include <kis_random_accessor.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_paint_device.h>
@@ -50,20 +51,6 @@
 
 KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), "emboss", i18n("&Emboss with Variable Depth..."))
 {
-}
-
-void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
-{
-    Q_UNUSED(dst);
-
-
-    //read the filter configuration values from the KisFilterConfiguration object
-    quint32 embossdepth = ((KisEmbossFilterConfiguration*)configuration)->depth();
-
-    //the actual filter function from digikam. It needs a pointer to a quint8 array
-    //with the actual pixel data.
-
-    Emboss(src, dst, rect, embossdepth);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -79,35 +66,43 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
  *                     understand. You get the diference between the colors and
  *                     increase it. After this, get the gray tone
  */
-
-void KisEmbossFilter::Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, int d)
+void KisEmbossFilter::KisEmbossFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
 {
-    float Depth = d / 10.0;
+
+    //read the filter configuration values from the KisFilterConfiguration object
+    quint32 embossdepth = ((KisEmbossFilterConfiguration*)configuration)->depth();
+
+    //the actual filter function from digikam. It needs a pointer to a quint8 array
+    //with the actual pixel data.
+
+    float Depth = embossdepth / 10.0;
     int    R = 0, G = 0, B = 0;
     uchar  Gray = 0;
-    int Width = rect.width();
-    int Height = rect.height();
+    int Width = size.width();
+    int Height = size.height();
 
     setProgressTotalSteps(Height);
     setProgressStage(i18n("Applying emboss filter..."),0);
 
         for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
         {
-        KisHLineConstIteratorPixel it = src->createHLineConstIterator(rect.x(), rect.y() + y, rect.width());
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y() + y, rect.width());
+        KisRandomConstAccessorPixel acc = src->createRandomConstAccessor(srcTopLeft.x(), srcTopLeft.y());
+        KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y() + y, size.width());
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y() + y, size.width());
 
         for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it, ++dstIt)
         {
-            if (it.isSelected()) {
+            if (dstIt.isSelected()) {
 
-// XXX: COLORSPACE_INDEPENDENCE
+// FIXME: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
 
                 QColor color1;
-                src->colorSpace()->toQColor(it.rawData(), &color1);
+                src->colorSpace()->toQColor(it.oldRawData(), &color1);
 
                 QColor color2;
-                quint8 opacity2;
-                src->pixel(rect.x() + x + Lim_Max(x, 1, Width), rect.y() + y + Lim_Max(y, 1, Height), &color2, &opacity2);
+                acc.moveTo(srcTopLeft.x() + x + Lim_Max(x, 1, Width), srcTopLeft.y() + y + Lim_Max(y, 1, Height) );
+                
+                src->colorSpace()->toQColor(acc.oldRawData(), &color2);
 
                 R = abs((int)((color1.red() - color2.red()) * Depth + (quint8_MAX / 2)));
                 G = abs((int)((color1.green() - color2.green()) * Depth + (quint8_MAX / 2)));

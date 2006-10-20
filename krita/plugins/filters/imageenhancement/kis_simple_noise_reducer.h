@@ -44,7 +44,7 @@ class KisSimpleNoiseReducer : public KisFilter
         KisSimpleNoiseReducer();
         ~KisSimpleNoiseReducer();
     public:
-        virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
+        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
         virtual KisFilterConfiguration * configuration(QWidget* nwidget);
         virtual KisFilterConfiguration * configuration() { return new KisSimpleNoiseReducerConfiguration( 50, 1); };
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);

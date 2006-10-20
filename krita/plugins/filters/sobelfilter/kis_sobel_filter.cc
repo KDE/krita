@@ -73,17 +73,6 @@ KisSobelFilter::KisSobelFilter() : KisFilter(id(), "edge", i18n("&Sobel..."))
 {
 }
 
-void KisSobelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
-{
-    //read the filter configuration values from the KisFilterConfiguration object
-    bool doHorizontally = ((KisSobelFilterConfiguration*)configuration)->doHorizontally();
-    bool doVertically = ((KisSobelFilterConfiguration*)configuration)->doVertically();
-    bool keepSign = ((KisSobelFilterConfiguration*)configuration)->keepSign();
-    bool makeOpaque = ((KisSobelFilterConfiguration*)configuration)->makeOpaque();
-
-    //pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
-    sobel(rect, src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
-}
 
 void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h)
 {
@@ -102,13 +91,25 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
+void KisSobelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
 {
-    QRect rect = rc; //src->exactBounds();
-    quint32 x = rect.x();
-    quint32 y = rect.y();
-    quint32 width = rect.width();
-    quint32 height = rect.height();
+    //read the filter configuration values from the KisFilterConfiguration object
+    bool doHorizontal = ((KisSobelFilterConfiguration*)configuration)->doHorizontally();
+    bool doVertical = ((KisSobelFilterConfiguration*)configuration)->doVertically();
+    bool keepSign = ((KisSobelFilterConfiguration*)configuration)->keepSign();
+    bool makeOpaque = ((KisSobelFilterConfiguration*)configuration)->makeOpaque();
+
+    //pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
+/*    sobel(rect, src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
+}
+
+void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
+{*/
+//     QRect rect(); //src->exactBounds();
+//     quint32 x = rect.x();
+//     quint32 y = rect.y();
+    quint32 width = size.width();
+    quint32 height = size.height();
     quint32 pixelSize = src->pixelSize();
 
     setProgressTotalSteps( height );
@@ -128,8 +129,8 @@ void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDevic
     quint8* cr = curRow + pixelSize;
     quint8* nr = nextRow + pixelSize;
 
-    prepareRow (src, pr, x, y - 1, width, height);
-    prepareRow (src, cr, x, y, width, height);
+    prepareRow (src, pr, srcTopLeft.x(), srcTopLeft.y() - 1, width, height);
+    prepareRow (src, cr, srcTopLeft.x(), srcTopLeft.y(), width, height);
 
     quint32 counter =0;
     quint8* d;
@@ -140,7 +141,7 @@ void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDevic
         {
 
             // prepare the next row
-            prepareRow (src, nr, x, row + 1, width, height);
+            prepareRow (src, nr, srcTopLeft.x(), srcTopLeft.y() + row + 1, width, height);
             d = dest;
 
             for (quint32 col = 0; col < width * pixelSize; col++)
@@ -172,14 +173,14 @@ void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDevic
             nr = tmp;
 
             //store the dest
-            dst->writeBytes(dest, x, row, width, 1);
+            dst->writeBytes(dest, dstTopLeft.x(), row, width, 1);
 
             if ( makeOpaque )
                 {
-                    KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, row, width);
+                    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y() + row, width);
                     while( ! dstIt.isDone() )
                         {
-                            dstIt.rawData()[pixelSize-1]=255; //XXXX: is the alpha channel always 8 bit? Otherwise this is wrong!
+                            dst->colorSpace()->setAlpha(dstIt.rawData(), 255,1);
                             ++dstIt;
                         }
                 }

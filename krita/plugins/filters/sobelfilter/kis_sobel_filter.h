@@ -56,7 +56,7 @@ class KisSobelFilter : public KisFilter
 public:
     KisSobelFilter();
 public:
-    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     static inline KoID id() { return KoID("sobel", i18n("Sobel")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
@@ -67,8 +67,7 @@ public:
     virtual KisFilterConfiguration* configuration(QWidget*);
     virtual KisFilterConfiguration * configuration() { return new KisSobelFilterConfiguration( true, true, true, true); };
 private:
-    void prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h);
-    void sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque);
+    void prepareRow (const KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h);
 };
 
 #endif

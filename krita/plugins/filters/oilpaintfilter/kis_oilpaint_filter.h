@@ -48,7 +48,7 @@ class KisOilPaintFilter : public KisFilter
 public:
     KisOilPaintFilter();
 public:
-    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     static inline KoID id() { return KoID("oilpaint", i18n("Oilpaint")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
@@ -58,7 +58,7 @@ public:
     virtual KisFilterConfiguration * configuration(QWidget*);
     virtual KisFilterConfiguration * configuration() { return new KisOilPaintFilterConfiguration( 1, 30); };
 private:
-    void OilPaint(KisPaintDeviceSP src, KisPaintDeviceSP dst, int x, int y, int w, int h, int BrushSize, int Smoothness);
+    void OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h, int BrushSize, int Smoothness);
     uint MostFrequentColor(KisPaintDeviceSP, const QRect& bounds, int X, int Y, int Radius, int Intensity);
     // Function to calcule the color intensity and return the luminance (Y)
     // component of YIQ color model.

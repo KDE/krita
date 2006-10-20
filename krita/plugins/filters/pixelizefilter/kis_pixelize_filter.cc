@@ -56,31 +56,20 @@ KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), "artistic", i18n("&Pixe
 {
 }
 
-void KisPixelizeFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisPixelizeFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
 {
+// FIXME THIS FILTER DOESN'T WORK WELL IF SRC != DST !!!
     Q_ASSERT( src );
     Q_ASSERT( dst );
     Q_ASSERT( configuration );
-    Q_ASSERT( rect.isValid() );
+    Q_ASSERT( size.isValid() );
 
-    qint32 x = rect.x(), y = rect.y();
-    qint32 width = rect.width();
-    qint32 height = rect.height();
+    qint32 width = size.width();
+    qint32 height = size.height();
 
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 pixelWidth = ((KisPixelizeFilterConfiguration*)configuration)->pixelWidth();
     quint32 pixelHeight = ((KisPixelizeFilterConfiguration*)configuration)->pixelHeight();
-
-    pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
-}
-
-void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int startx, int starty, int width, int height, int pixelWidth, int pixelHeight)
-{
-    Q_ASSERT(src);
-    Q_ASSERT(dst);
-
-    if (!src) return;
-    if (!dst) return;
 
     qint32 pixelSize = src->pixelSize();
     Q3MemArray<qint32> average(  pixelSize );
@@ -91,11 +80,11 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
     qint32 numX=0;
     qint32 numY=0;
 
-    for (qint32 x = startx; x < startx + width; x += pixelWidth - (x % pixelWidth))
+    for (qint32 x = srcTopLeft.x(); x < srcTopLeft.x() + width; x += pixelWidth - (x % pixelWidth))
     {
         numX++;
     }
-    for (qint32 y = starty; y < starty + height; y += pixelHeight - (y % pixelHeight))
+    for (qint32 y = srcTopLeft.y(); y < srcTopLeft.y() + height; y += pixelHeight - (y % pixelHeight))
     {
         numY++;
     }
@@ -105,15 +94,15 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
 
     qint32 numberOfPixelsProcessed = 0;
 
-    for (qint32 y = starty; y < starty + height; y += pixelHeight - (y % pixelHeight))
+    for (qint32 y = 0; y < height; y += pixelHeight - ((srcTopLeft.y() + y) % pixelHeight))
     {
-        qint32 h = pixelHeight - (y % pixelHeight);
-        h = MIN(h, starty + height - y);
+        qint32 h = pixelHeight - ( ( srcTopLeft.y() + y) % pixelHeight);
+        h = MIN(h, height - y);
 
-        for (qint32 x = startx; x < startx + width; x += pixelWidth - (x % pixelWidth))
+        for (qint32 x = 0; x < width; x += pixelWidth - ( (srcTopLeft.x() + x) % pixelWidth))
         {
-            qint32 w = pixelWidth - (x % pixelWidth);
-            w = MIN(w, startx + width - x);
+            qint32 w = pixelWidth - ( (srcTopLeft.x() + x) % pixelWidth);
+            w = MIN(w, width - x);
 
             for (qint32 i = 0; i < pixelSize; i++)
             {
@@ -122,7 +111,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
             count = 0;
 
             //read
-            KisRectConstIteratorPixel srcIt = src->createRectConstIterator(x, y, w, h);
+            KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x() + x, srcTopLeft.y() + y, w, h);
             while( ! srcIt.isDone() ) {
                 if(srcIt.isSelected())
                 {
@@ -142,8 +131,8 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
                     average[i] /= count;
             }
             //write
-            srcIt = src->createRectConstIterator(x, y, w, h);
-            KisRectIteratorPixel dstIt = dst->createRectIterator(x, y, w, h );
+            srcIt = src->createRectConstIterator(srcTopLeft.x() + x, srcTopLeft.y() + y, w, h);
+            KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x() + x, dstTopLeft.y() + y, w, h );
             while( ! srcIt.isDone() )
             {
                 if(srcIt.isSelected())

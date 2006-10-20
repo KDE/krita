@@ -53,7 +53,7 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), "artistic", i18n("&Oilp
 {
 }
 
-void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisOilPaintFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
 {
 
     if (!configuration) {
@@ -63,16 +63,15 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 
     Q_UNUSED(dst);
 
-    qint32 x = rect.x(), y = rect.y();
-    qint32 width = rect.width();
-    qint32 height = rect.height();
+    qint32 width = size.width();
+    qint32 height = size.height();
 
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 brushSize = ((KisOilPaintFilterConfiguration*)configuration)->brushSize();
     quint32 smooth = ((KisOilPaintFilterConfiguration*)configuration)->smooth();
 
 
-    OilPaint(src, dst, x, y, width, height, brushSize, smooth);
+    OilPaint(src, dst, srcTopLeft, dstTopLeft, width, height, brushSize, smooth);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -89,17 +88,17 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
  *                     a matrix and simply write at the original position.
  */
 
-void KisOilPaintFilter::OilPaint(KisPaintDeviceSP src, KisPaintDeviceSP dst, int x, int y, int w, int h, int BrushSize, int Smoothness)
+void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h, int BrushSize, int Smoothness)
 {
     setProgressTotalSteps(h);
     setProgressStage(i18n("Applying oilpaint filter..."),0);
 
-    QRect bounds(x, y, w, h);
+    QRect bounds(srcTopLeft.x(), srcTopLeft.y(), w, h);
 
     for (qint32 yOffset = 0; yOffset < h; yOffset++) {
 
-        KisHLineConstIteratorPixel it = src->createHLineConstIterator(x, y + yOffset, w);
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, y + yOffset, w);
+        KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y() + yOffset, w);
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y() + yOffset, w);
 
         while (!it.isDone() && !cancelRequested()) {
 

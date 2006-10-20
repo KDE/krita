@@ -58,7 +58,7 @@ public:
 
 public:
 
-    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     virtual bool supportsIncrementalPainting() { return false; }
     virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; }
     virtual int overlapMarginNeeded(KisFilterConfiguration* c) const;

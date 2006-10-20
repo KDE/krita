@@ -20,7 +20,7 @@
 #include <klocale.h>
 #include <QButtonGroup>
 
-#include "kis_factory.h"
+#include "kis_factory2.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_types.h"
 #include "KoColorProfile.h"

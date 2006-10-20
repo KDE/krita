@@ -29,8 +29,8 @@
 
 #include <klocale.h>
 
-#include "kis_view.h"
-#include "kis_doc.h"
+#include "kis_view2.h"
+#include "kis_doc2.h"
 #include "kis_canvas_controller.h"
 #include "kis_birdeye_box.h"
 #include "kis_double_widget.h"

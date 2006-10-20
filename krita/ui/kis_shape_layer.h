@@ -25,9 +25,9 @@
 
 #include "kis_paint_layer.h"
 #include "kis_types.h"
-#include "kis_doc.h"
+#include "kis_doc2.h"
 #include "kis_Shape_layer_iface.h"
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_layer_visitor.h"
 
 class KoFrame;
@@ -41,19 +41,19 @@ class KisChildDoc : public KoDocumentChild
 {
 
 public:
-    KisChildDoc ( KisDoc * kisDoc, const QRect& rect, KoDocument * childDoc );
-    KisChildDoc ( KisDoc * kisDdoc );
+    KisChildDoc ( KisDoc2 * kisDoc, const QRect& rect, KoDocument * childDoc );
+    KisChildDoc ( KisDoc2 * kisDdoc );
 
     virtual ~KisChildDoc();
 
-    KisDoc * parent() const { return m_doc; }
+    KisDoc2 * parent() const { return m_doc; }
 
     void setShapeLayer (KisShapeLayerSP layer) { m_ShapeLayer = layer; }
 
     KisShapeLayerSP ShapeLayer() const { return m_ShapeLayer; }
 protected:
 
-    KisDoc * m_doc;
+    KisDoc2 * m_doc;
     KisShapeLayerSP m_ShapeLayer;
 };
 

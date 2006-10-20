@@ -27,7 +27,7 @@
 #include <knuminput.h>
 #include <kpushbutton.h>
 
-#include "kis_factory.h"
+#include "kis_factory2.h"
 #include "kis_global.h"
 #include "kis_cmb_composite.h"
 #include "kis_cmb_idlist.h"

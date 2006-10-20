@@ -32,7 +32,7 @@
 #include <kinstance.h>
 
 #include "kis_resource.h"
-#include "kis_factory.h"
+#include "kis_factory2.h"
 #include "KoGenericRegistry.h"
 #include "kis_resourceserver.h"
 #include "kis_brush.h"

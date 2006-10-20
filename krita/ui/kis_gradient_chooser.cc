@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"
 #include "kis_gradient.h"

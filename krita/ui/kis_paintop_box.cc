@@ -39,7 +39,7 @@
 #include <kis_painter.h>
 #include <kis_paintop.h>
 #include <kis_layer.h>
-#include <kis_factory.h>
+#include <kis_factory2.h>
 
 #include "kis_paintop_box.h"
 

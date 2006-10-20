@@ -56,7 +56,7 @@
 
 #include <kis_meta_registry.h>
 #include <KoColor.h>
-#include <kis_factory.h>
+#include <kis_factory2.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_palette_view.h"
 #include "kis_resource.h"

@@ -41,7 +41,7 @@ class KRITAUI_EXPORT KisSelectionManager : public QObject {
 
 public:
 
-    KisSelectionManager(KisView * parent, KisDoc * doc);
+    KisSelectionManager(KisView * parent, KisDoc2 * doc);
     virtual ~KisSelectionManager();
 
     void setup(KActionCollection * collection);
@@ -102,7 +102,7 @@ private:
     void computeTransition (quint8* transition, quint8** buf, qint32 width);
 
     KisView * m_parent;
-    KisDoc * m_doc;
+    KisDoc2 * m_doc;
 
     KisClipboard * m_clipboard;
 

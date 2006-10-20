@@ -20,8 +20,6 @@
 
 #include "kis_boundary.h"
 #include "kis_boundary_painter.h"
-#include "kis_canvas.h"
-#include "QPainter"
 
 QPixmap KisBoundaryPainter::createPixmap(const KisBoundary& boundary, int w, int h)
 {

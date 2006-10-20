@@ -1,5 +1,5 @@
 /*
- *  kis_factory.h - part of Krayon
+ *  kis_factory2.h - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *

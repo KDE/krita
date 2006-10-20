@@ -25,11 +25,11 @@ class QDomElement;
 class KisPaintLayer;
 class KisGroupLayer;
 class KisAdjustmentLayer;
-class KisDoc;
+class KisDoc2;
 
 class KisOasisLoadVisitor {
 public:
-    KisOasisLoadVisitor(KisDoc* doc) : m_doc(doc) {};
+    KisOasisLoadVisitor(KisDoc2* doc) : m_doc(doc) {};
     virtual ~KisOasisLoadVisitor() {};
 
 public:
@@ -41,7 +41,7 @@ public:
 private:
     void loadLayerInfo(const QDomElement& elem, KisLayer* layer);
     KisImageSP m_image;
-    KisDoc* m_doc;
+    KisDoc2* m_doc;
     QMap<KisLayer *, QString> m_layerFilenames;
 };
 

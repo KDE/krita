@@ -26,7 +26,7 @@
 
 #include "kis_paint_layer.h"
 #include "kis_types.h"
-#include "kis_doc.h"
+#include "kis_doc2.h"
 #include "kis_part_layer_iface.h"
 #include "kis_layer_visitor.h"
 

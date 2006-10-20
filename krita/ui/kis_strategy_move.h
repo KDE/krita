@@ -23,18 +23,16 @@
 #include <QRect>
 
 #include <krita_export.h>
-
-class KisCanvasController;
-class KisCanvasSubject;
+#include <kis_types.h>
 
 class KRITAUI_EXPORT KisStrategyMove {
 public:
     KisStrategyMove();
-    explicit KisStrategyMove(KisCanvasSubject *subject);
+    explicit KisStrategyMove(KisImageSP image);
     virtual ~KisStrategyMove();
 
 public:
-    void reset(KisCanvasSubject *subject);
+
     void startDrag(const QPoint& pos);
     void drag(const QPoint& pos);
     void endDrag(const QPoint& pos, bool undo = true);
@@ -46,8 +44,7 @@ private:
     KisStrategyMove& operator=(const KisStrategyMove&);
 
 private:
-    KisCanvasController *m_controller;
-    KisCanvasSubject *m_subject;
+    KisImageSP m_image;
     QRect m_deviceBounds;
     QPoint m_dragStart;
     QPoint m_layerStart;

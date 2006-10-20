@@ -20,8 +20,8 @@
 #include "kis_import_catcher.h"
 #include "kis_types.h"
 
-#include "kis_view.h"
-#include "kis_doc.h"
+#include "kis_view2.h"
+#include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"

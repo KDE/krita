@@ -22,38 +22,34 @@
 #include <QCursor>
 #include <QApplication>
 #include <QGridLayout>
+
 #include <kmessagebox.h>
 #include <kguiitem.h>
-
 #include <kactionmenu.h>
 #include <kactionmenu.h>
 
-#include "kis_part_layer.h"
 #include "KoID.h"
-#include "kis_view.h"
-#include "kis_doc.h"
+
+#include "kis_canvas_subject.h"
+#include "kis_doc2.h"
 #include "kis_filter.h"
+#include "kis_filter_config_widget.h"
+#include "kis_filter_manager.h"
+#include "kis_filter_registry.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
-#include "kis_filter_manager.h"
-#include "kis_filter_config_widget.h"
-#include "kis_previewwidget.h"
+#include "kis_painter.h"
+#include "kis_part_layer.h"
 #include "kis_previewdialog.h"
-#include "kis_filter_registry.h"
+#include "kis_previewwidget.h"
+#include "kis_selection.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
-#include "kis_previewdialog.h"
-#include "kis_previewwidget.h"
-#include "kis_painter.h"
-#include "kis_selection.h"
-#include "KoID.h"
-#include "kis_canvas_subject.h"
-#include "kis_doc.h"
-#include "kis_transaction.h"
+#include "kis_view2.h"
 #include <kis_progress_display_interface.h>
 
-KisFilterManager::KisFilterManager(KisView * view, KisDoc * doc)
+KisFilterManager::KisFilterManager(KisView * view, KisDoc2 * doc)
     : m_view(view),
     m_doc(doc)
 {

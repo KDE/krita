@@ -17,35 +17,7 @@
  */
 
 #include "kis_selection_manager.h"
-#include "kis_part_layer.h"
-#include "kis_adjustment_layer.h"
-#include "kis_clipboard.h"
-#include "kis_types.h"
-#include "kis_view.h"
-#include "kis_doc.h"
-#include "kis_image.h"
-#include "kis_selection.h"
-#include "kis_painter.h"
-#include "kis_iterators_pixel.h"
-#include "kis_iteratorpixeltrait.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_paint_device.h"
-#include "KoChannelInfo.h"
-#include "kis_dlg_apply_profile.h"
-#include "kis_config.h"
-#include "kis_debug_areas.h"
-#include "kis_transaction.h"
-#include "kis_undo_adapter.h"
-#include "kis_selected_transaction.h"
-#include "kis_convolution_painter.h"
-#include "KoIntegerMaths.h"
-#include "kis_fill_painter.h"
-#include "kis_canvas.h"
-#include "kis_view.h"
 
-#include <QObject>
 #include <QApplication>
 #include <QClipboard>
 #include <QColor>
@@ -56,12 +28,41 @@
 #include <klocale.h>
 #include <kstdaction.h>
 
+#include "KoChannelInfo.h"
+#include "KoIntegerMaths.h"
 #include <KoDocument.h>
 #include <KoMainWindow.h>
 #include <KoQueryTrader.h>
 
+#include "kis_adjustment_layer.h"
+#include "kis_canvas.h"
+#include "kis_clipboard.h"
+#include "kis_config.h"
+#include "kis_convolution_painter.h"
+#include "kis_debug_areas.h"
+#include "kis_dlg_apply_profile.h"
+#include "kis_doc2.h"
+#include "kis_fill_painter.h"
+#include "kis_group_layer.h"
+#include "kis_image.h"
+#include "kis_iteratorpixeltrait.h"
+#include "kis_iterators_pixel.h"
+#include "kis_layer.h"
+#include "kis_paint_device.h"
+#include "kis_paint_layer.h"
+#include "kis_painter.h"
+#include "kis_part_layer.h"
+#include "kis_selected_transaction.h"
+#include "kis_selection.h"
+#include "kis_transaction.h"
+#include "kis_types.h"
+#include "kis_undo_adapter.h"
+#include "kis_view.h"
+#include "kis_view2.h"
 
-KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
+
+
+KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc2 * doc)
     : m_parent(parent),
       m_doc(doc),
       m_copy(0),
@@ -471,7 +472,7 @@ void KisSelectionManager::pasteNew()
 
     const QByteArray mimetype = KoDocument::readNativeFormatMimeType();
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( mimetype );
-    KisDoc * doc = (KisDoc*) entry.createDoc();
+    KisDoc2 * doc = (KisDoc*) entry.createDoc();
 
     Q_ASSERT(doc->undoAdapter() != 0);
     doc->undoAdapter()->setUndo(false);

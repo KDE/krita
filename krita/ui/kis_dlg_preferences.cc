@@ -57,12 +57,14 @@
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_dlg_preferences.h"
-#include "kis_factory.h"
+#include "kis_factory2.h"
 #include "KoID.h"
 #include "kis_meta_registry.h"
 #include "KoColorProfile.h"
 
+#ifdef EXTENDED_X11_TABLET_SUPPORT
 #include "kis_canvas.h"
+#endif
 
 // for the performance update
 #include "tiles/kis_tilemanager.h"

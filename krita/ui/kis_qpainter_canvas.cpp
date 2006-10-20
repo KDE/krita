@@ -48,11 +48,12 @@
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     : QWidget( parent )
+    , m_canvas( canvas )
+    , m_viewConverter( canvas->viewConverter() )
     , m_monitorProfile( 0 )
     , m_checkTexture( 0 )
     , m_checkBrush( 0 )
-    , m_canvas( canvas )
-    , m_viewConverter( canvas->viewConverter() )
+
 {
     m_toolProxy = KoToolManager::instance()->toolProxy();
 

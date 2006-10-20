@@ -33,12 +33,12 @@
 
 #include "KoChannelInfo.h"
 #include "KoBasicHistogramProducers.h"
+#include "KoColorSpace.h"
 
 #include "kis_histogram.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
-#include "KoColorSpace.h"
 #include "kis_histogram_view.h"
 #include "kis_paint_device.h"
 

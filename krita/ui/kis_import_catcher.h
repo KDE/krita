@@ -34,7 +34,7 @@ class KisDoc;
  * into the first image after loading is done.
  *
  * Caveat: this class calls "delete this", which means that you new
- * it and then never touch it again. Thanks you very much.
+ * it and then never touch it again. Thank you very much.
  */
 class KisImportCatcher : QObject {
 
@@ -49,7 +49,7 @@ public slots:
     void slotLoadingFinished();
 
 private:
-    KisDoc * m_doc;
+    KisDoc2 * m_doc;
     KisImageSP m_image;
     KUrl m_url;
 };

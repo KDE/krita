@@ -29,7 +29,7 @@
 #include <kis_meta_registry.h>
 #include <kis_paint_layer.h>
 
-#include "kis_doc.h"
+#include "kis_doc2.h"
 
 void KisOasisLoadVisitor::loadImage(const QDomElement& elem)
 {
@@ -87,5 +87,5 @@ void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerS
             }
         }
     }
-    
+
 }

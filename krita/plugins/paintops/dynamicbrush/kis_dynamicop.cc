@@ -118,7 +118,7 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
         m_firstTransfo->transformDab(*dabsrc, adjustedInfo);
         transfo = transfo->nextTransformation();
     }
-    
+
     // Then to the coloring source
     KisColoringSource coloringsrc;
     coloringsrc.type = KisColoringSource::ColoringPlainColor;
@@ -129,7 +129,7 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
         transfo->transformColoring(coloringsrc, adjustedInfo);
         transfo = transfo->nextTransformation();
     }
-    
+
     // Transform into the paintdevice to apply
     switch(dabsrc->type)
     {
@@ -149,7 +149,7 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
         case KisDabSource::DabAlphaMask:
             break;
     }
-    
+
     // Apply the coloring
     switch(coloringsrc.type)
     {
@@ -176,17 +176,17 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
                 }
                 hiter.nextRow();
             }
-            
+
         }
             break;
         case KisColoringSource::ColoringPaintDevice:
             // TODO: implement it
             break;
     }
-    
 
 
-    
+
+
 //     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
 //         dab = brush->image(device->colorSpace(), adjustedInfo, xFraction, yFraction);
 //     }
@@ -194,7 +194,7 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 //         KisAlphaMaskSP mask = brush->mask(adjustedInfo, xFraction, yFraction);
 //         dab = computeDab(mask);
 //     }
-    
+
 //     m_painter->setPressure(adjustedInfo.pressure);
 
     QRect dabRect = QRect(0, 0, dabsrc->autoDab.width, dabsrc->autoDab.height); // cheating again
@@ -212,7 +212,7 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     qint32 sy = dstRect.y() - y;
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
-    kdDebug() << sx << " " << sy << " " << sw << " " << sh << endl;
+    kDebug() << sx << " " << sy << " " << sw << " " << sh << endl;
     if (m_source->hasSelection()) {
         m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab,
                                 m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);

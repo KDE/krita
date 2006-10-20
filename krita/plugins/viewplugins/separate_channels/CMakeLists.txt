@@ -9,7 +9,7 @@ set(kritaseparatechannels_PART_SRCS kis_channel_separator.cc dlg_separate.cc kis
 
 kde4_automoc(kritaseparatechannels ${kritaseparatechannels_PART_SRCS})
 
-kde4_add_ui3_files(kritaseparatechannels_PART_SRCS wdg_separations.ui )
+kde4_add_ui_files(kritaseparatechannels_PART_SRCS wdg_separations.ui )
 
 kde4_add_plugin(kritaseparatechannels ${kritaseparatechannels_PART_SRCS})
 

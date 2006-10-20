@@ -22,8 +22,15 @@
 
 #include <kdialog.h>
 #include <kis_channel_separator.h>
+#include "ui_wdg_separations.h"
 
-class WdgSeparations;
+class WdgSeparations : public QWidget, public Ui::WdgSeparations
+{
+public:
+  WdgSeparations( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 /**
  * This dialog allows the user to configure the decomposition of an image

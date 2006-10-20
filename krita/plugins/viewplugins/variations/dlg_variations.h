@@ -24,8 +24,15 @@
 
 #include <kdialogbase.h>
 
-#include "wdg_variations.h"
+#include "ui_wdg_variations.h"
 
+class WdgVariations : public QWidget, public Ui::WdgVariations
+{
+public:
+  WdgVariations( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 /**
  * This dialog allows the user to modify a layer or a selection

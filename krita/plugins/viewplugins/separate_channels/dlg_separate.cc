@@ -30,7 +30,6 @@
 #include <kdebug.h>
 
 #include "dlg_separate.h"
-#include "wdg_separations.h"
 
 DlgSeparate::DlgSeparate( const QString & imageCS,
                           const QString & layerCS,

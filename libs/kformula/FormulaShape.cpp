@@ -18,8 +18,7 @@
 */
 
 #include "FormulaShape.h"
-#include "BasicElement.h"
-
+#include "FormulaElement.h"
 #include <KoXmlWriter.h>
 
 namespace KFormula {
@@ -31,32 +30,54 @@ FormulaShape::FormulaShape()
 
 FormulaShape::~FormulaShape()
 {
+    if( m_formulaElement )
+        delete m_formulaElement;
 }
 
 void FormulaShape::paint( QPainter &painter, KoViewConverter &converter ) 
 {
-    // TODO adapt the QPainter's QMatrix to convert the points correctly to pixels
-    m_formulaElement->paint( painter );
-}
-
-BasicElement* FormulaShape::formulaElement() const
-{
-    return m_formulaElement;
-}
-   
-void FormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
-{
-    if( !m_formulaElement )
+    if( !m_formulaElement )                  // if nothing to paint, return
         return;
 
-    // TODO start a MathML doc or the OASIS pendant
-    
-    m_formulaElement->writeMathML( writer, oasisFormat );
+    applyConversion( painter, converter );   // apply zooming and coordinate translation
+    m_formulaElement->paint( painter );      // paint the formula
+}
+
+BasicElement* FormulaShape::elementAt( const QPointF& p )
+{
+    return m_formulaElement->childElementAt( p );
+}
+
+QSizeF FormulaShape::size() const
+{
+    return m_formulaElement->boundingRect().size();
+}
+
+void FormulaShape::resize( const QSizeF& )
+{
+    // do nothing as FormulaShape is fixed size
+}
+
+QRectF FormulaShape::boundingRect() const
+{
+    return m_invMatrix.inverted().map( m_formulaElement->boundingRect() );
 }
 
 void FormulaShape::loadMathML( const QDomDocument &doc, bool oasisFormat )
 {
-    // TODO combine the implementations of FormulaContainer and FormulaElement
+    if( !m_formulaElement )
+        delete m_formulaElement;
+
+    m_formulaElement = new FormulaElement();
+    m_formulaElement->loadMathML( doc.documentElement );
+}
+
+void FormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
+{
+    if( !m_formulaElement )    // if there is nothing, don't try to save something
+	return;
+    
+    m_formulaElement->writeMathML( writer, oasisFormat );
 }
 
 } // namespace KFormula

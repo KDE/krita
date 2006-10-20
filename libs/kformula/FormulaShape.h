@@ -46,22 +46,31 @@ public:
     /// inherited from KoShape
     void paint( QPainter &painter, KoViewConverter &converter );
 
-    /// @return The BasicElement at the highest level in the formula tree
-    BasicElement* formulaElement() const;
+    /// @return The element at the point @p p
+    BasicElement* elementAt( const QPointF& p );
 
-    /**
-     * Save the formula as MathML
-     * @param writer 
-     * @param oasisFormat If true the MathMl is saved to OASIS conform MathML
-    */
-    void saveMathML( KoXmlWriter* writer, bool oasisFormat = false );
+    /// Resize the shape. 
+    void resize( const QSizeF &size );
+    
+    /// @return Get the size of the shape in pt. 
+    QSizeF size() const; 
 
+    /// @return Get the bounding box of the shape.
+    QRectF boudingRect() const;
+    
     /**
      * Load the formula from the specified file containing MathML
      * @param doc The DomDocument to load from
      * @param oasisFormat If true the formula is read from OASIS conform MathML
      */
     void loadMathML( const QDomDocument &doc, bool oasisFormat = false );
+    
+    /**
+     * Save the formula as MathML
+     * @param writer 
+     * @param oasisFormat If true the MathMl is saved to OASIS conform MathML
+     */
+    void saveMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
 private:
     /// The element at the highest level in the formula tree

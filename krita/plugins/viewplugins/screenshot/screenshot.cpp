@@ -30,6 +30,7 @@
 #include <KoView.h>
 #include <KoDocument.h>
 #include <kgenericfactory.h>
+#include <klocale.h>
 
 #include "ksnapshot.h"
 #include <kimageio.h>
@@ -43,6 +44,7 @@ K_EXPORT_COMPONENT_FACTORY( kritascreenshot, KGenericFactory<Screenshot>( "krita
 Screenshot::Screenshot(QObject *parent, const char *name, const QStringList &)
         : KParts::Plugin(parent, name)
 {
+    KGlobal::locale()->insertCatalogue("kscreenshot_plugin");
     setInstance(KGenericFactory<Screenshot>::instance());
     setXMLFile(locate("data","kritaplugins/screenshot-krita.rc"), true);
     KImageIO::registerFormats();

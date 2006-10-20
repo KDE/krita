@@ -31,6 +31,7 @@
 #include <klocale.h>
 #include <kicon.h>
 
+#include <core/manager.h>
 #include <core/model.h>
 #include <core/guiclient.h>
 

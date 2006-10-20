@@ -19,7 +19,6 @@
 
 #include "guiclient.h"
 #include "manager.h"
-#include "guimanager.h"
 
 #include "../core/interpreter.h"
 
@@ -260,16 +259,14 @@ bool GUIClient::executeFile(const KUrl& file)
 
 void GUIClient::showManager()
 {
-    krossdebug( QString("GUIClient::showManagerDialog() TODO!") );
-
-    GUIManagerModule* module = new GUIManagerModule();
-    module->showManagerDialog();
-    delete module;
-
-    /*TODO
-    GUIManagerDialog* dialog = new GUIManagerDialog(this, d->parent);
-    dialog->show();
-    */
+    krossdebug( QString("GUIClient::showManagerDialog()") );
+    QObject* obj = Manager::self().module("scriptmanager");
+    if( obj ) {
+        if( QMetaObject::invokeMethod(obj, "showManagerDialog") )
+            return; // successfully called the method.
+        krosswarning( QString("GUIClient::showManagerDialog() No such method.") );
+    }
+    KMessageBox::sorry(0, i18n("Failed to load the Script Manager."));
 }
 
 #include "guiclient.moc"

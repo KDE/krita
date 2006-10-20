@@ -1,5 +1,5 @@
 /***************************************************************************
- * guimanager.h
+ * scriptmanager.h
  * This file is part of the KDE project
  * copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
  * copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
@@ -18,11 +18,12 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#include "guimanager.h"
-#include "manager.h"
-#include "action.h"
-#include "guiclient.h"
-#include "model.h"
+#include "scriptmanager.h"
+
+#include "../core/manager.h"
+#include "../core/action.h"
+#include "../core/guiclient.h"
+#include "../core/model.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -48,42 +49,50 @@
 #include <knewstuff/downloaddialog.h>
 #include <knewstuff/knewstuffsecure.h>
 
+extern "C"
+{
+    QObject* krossmodule()
+    {
+        return new Kross::ScriptManagerModule();
+    }
+}
+
 using namespace Kross;
 
 /******************************************************************************
- * GUIManagerView
+ * ScriptManagerView
  */
 
 namespace Kross {
 
     /// \internal class that inherits \a KNewStuffSecure to implement the GHNS-functionality.
-    class GUIManagerNewStuff : public KNewStuffSecure
+    class ScriptManagerNewStuff : public KNewStuffSecure
     {
         public:
-            GUIManagerNewStuff(GUIManagerView* view, const QString& type, QWidget *parentWidget = 0)
+            ScriptManagerNewStuff(ScriptManagerView* view, const QString& type, QWidget *parentWidget = 0)
                 : KNewStuffSecure(type, parentWidget)
                 , m_view(view) {}
-            virtual ~GUIManagerNewStuff() {}
+            virtual ~ScriptManagerNewStuff() {}
         private:
-            GUIManagerView* m_view;
+            ScriptManagerView* m_view;
             virtual void installResource() { m_view->installPackage( m_tarName ); }
     };
 
     /// \internal d-pointer class.
-    class GUIManagerView::Private
+    class ScriptManagerView::Private
     {
         public:
-            GUIManagerModule* module;
+            ScriptManagerModule* module;
             QItemSelectionModel* selectionmodel;
-            GUIManagerNewStuff* newstuff;
+            ScriptManagerNewStuff* newstuff;
             bool modified;
 
-            Private(GUIManagerModule* m) : module(m), newstuff(0), modified(false) {}
+            Private(ScriptManagerModule* m) : module(m), newstuff(0), modified(false) {}
     };
 
 }
 
-GUIManagerView::GUIManagerView(GUIManagerModule* module, QWidget* parent)
+ScriptManagerView::ScriptManagerView(ScriptManagerModule* module, QWidget* parent)
     : QTreeView(parent)
     , d(new Private(module))
 {
@@ -104,17 +113,17 @@ GUIManagerView::GUIManagerView(GUIManagerModule* module, QWidget* parent)
     setSelectionModel(d->selectionmodel);
 }
 
-GUIManagerView::~GUIManagerView()
+ScriptManagerView::~ScriptManagerView()
 {
     delete d;
 }
 
-bool GUIManagerView::isModified() const
+bool ScriptManagerView::isModified() const
 {
     return d->modified;
 }
 
-bool GUIManagerView::installPackage(const QString& scriptpackagefile)
+bool ScriptManagerView::installPackage(const QString& scriptpackagefile)
 {
     KTar archive( scriptpackagefile );
     if(! archive.open(QIODevice::ReadOnly)) {
@@ -176,7 +185,7 @@ bool GUIManagerView::installPackage(const QString& scriptpackagefile)
     return true;
 }
 
-bool GUIManagerView::uninstallPackage(Action* action)
+bool ScriptManagerView::uninstallPackage(Action* action)
 {
     const QString name = action->objectName();
 
@@ -202,7 +211,7 @@ bool GUIManagerView::uninstallPackage(Action* action)
     return true;
 }
 
-void GUIManagerView::slotSelectionChanged()
+void ScriptManagerView::slotSelectionChanged()
 {
     /*TODO
     bool isselected = d->selectionmodel->hasSelection();
@@ -212,26 +221,26 @@ void GUIManagerView::slotSelectionChanged()
     */
 }
 
-void GUIManagerView::slotDataChanged(const QModelIndex&, const QModelIndex&)
+void ScriptManagerView::slotDataChanged(const QModelIndex&, const QModelIndex&)
 {
     d->modified = true;
 }
 
-void GUIManagerView::slotRun()
+void ScriptManagerView::slotRun()
 {
     foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
         if(index.isValid())
             static_cast< Action* >(index.internalPointer())->trigger();
 }
 
-void GUIManagerView::slotStop()
+void ScriptManagerView::slotStop()
 {
     foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
         if(index.isValid())
             static_cast< Action* >(index.internalPointer())->finalize();
 }
 
-bool GUIManagerView::slotInstall()
+bool ScriptManagerView::slotInstall()
 {
     KFileDialog* filedialog = new KFileDialog(
         KUrl("kfiledialog:///KrossInstallPackage"), // startdir
@@ -243,7 +252,7 @@ bool GUIManagerView::slotInstall()
     return filedialog->exec() ? installPackage(filedialog->selectedUrl().path()) : false;
 }
 
-void GUIManagerView::slotUninstall()
+void ScriptManagerView::slotUninstall()
 {
     foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
         if(index.isValid())
@@ -251,13 +260,13 @@ void GUIManagerView::slotUninstall()
                 break;
 }
 
-void GUIManagerView::slotNewScripts()
+void ScriptManagerView::slotNewScripts()
 {
     const QString appname = KApplication::kApplication()->objectName();
     const QString type = QString("%1/script").arg(appname);
-    krossdebug( QString("GUIManagerView::slotNewScripts %1").arg(type) );
+    krossdebug( QString("ScriptManagerView::slotNewScripts %1").arg(type) );
     if(! d->newstuff) {
-        d->newstuff = new GUIManagerNewStuff(this, type);
+        d->newstuff = new ScriptManagerNewStuff(this, type);
         connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotNewScriptsInstallFinished()));
     }
     KNS::Engine *engine = new KNS::Engine(d->newstuff, type, this);
@@ -269,7 +278,7 @@ void GUIManagerView::slotNewScripts()
     d->exec();
 }
 
-void GUIManagerView::slotNewScriptsInstallFinished()
+void ScriptManagerView::slotNewScriptsInstallFinished()
 {
     // Delete KNewStuff's configuration entries. These entries reflect what has
     // already been installed. As we cannot yet keep them in sync after uninstalling
@@ -278,31 +287,31 @@ void GUIManagerView::slotNewScriptsInstallFinished()
 }
 
 /******************************************************************************
- * GUIManagerModule
+ * ScriptManagerModule
  */
 
 namespace Kross {
 
     /// \internal d-pointer class.
-    class GUIManagerModule::Private
+    class ScriptManagerModule::Private
     {
         public:
     };
 
 }
 
-GUIManagerModule::GUIManagerModule()
+ScriptManagerModule::ScriptManagerModule()
     : QObject()
     , d(new Private())
 {
 }
 
-GUIManagerModule::~GUIManagerModule()
+ScriptManagerModule::~ScriptManagerModule()
 {
     delete d;
 }
 
-void GUIManagerModule::showManagerDialog()
+void ScriptManagerModule::showManagerDialog()
 {
     KDialog* dialog = new KDialog();
     dialog->setCaption( i18n("Script Manager") );
@@ -313,7 +322,7 @@ void GUIManagerModule::showManagerDialog()
     mainlayout->setMargin(0);
     mainwidget->setLayout(mainlayout);
 
-    GUIManagerView* view = new GUIManagerView(this, mainwidget);
+    ScriptManagerView* view = new ScriptManagerView(this, mainwidget);
     mainlayout->addWidget(view);
 
     QWidget* btnwidget = new QWidget(mainwidget);
@@ -368,4 +377,4 @@ void GUIManagerModule::showManagerDialog()
     dialog->delayedDestruct();
 }
 
-#include "guimanager.moc"
+#include "scriptmanager.moc"

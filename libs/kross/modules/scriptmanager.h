@@ -1,5 +1,5 @@
 /***************************************************************************
- * guimanager.h
+ * scriptmanager.h
  * This file is part of the KDE project
  * copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
  * copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_GUIMANAGER_H
-#define KROSS_GUIMANAGER_H
+#ifndef KROSS_SCRIPTMANAGER_H
+#define KROSS_SCRIPTMANAGER_H
 
 #include <QObject>
 #include <QWidget>
@@ -36,44 +36,19 @@ namespace Kross {
 
     class Action;
     class GUIClient;
-    class GUIManagerModule;
-
-#if 0
-    /**
-    * This class implements a abstract model to display the \a Action
-    * instances provided by a \a GUIClient .
-    */
-    class KROSS_EXPORT GUIManagerModel : public QAbstractItemModel
-    {
-        public:
-            GUIManagerModel(KActionCollection* collection, QObject* parent, bool editable);
-            virtual ~GUIManagerModel();
-
-            virtual int columnCount(const QModelIndex& parent = QModelIndex()) const; 
-            virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-            virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-            virtual QModelIndex parent(const QModelIndex& index) const;
-            virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-            virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-            virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-
-        private:
-            class Private;
-            Private* const d;
-    };
-#endif
+    class ScriptManagerModule;
 
     /**
-    * The listview that displays the items provided by the \a GUIManagerModel
+    * The listview that displays the items provided by the \a ScriptManagerModel
     * model and offers a collection of actions to run, stop, install, uninstall
     * and to get new scripts.
     */
-    class KROSS_EXPORT GUIManagerView : public QTreeView
+    class KROSS_EXPORT ScriptManagerView : public QTreeView
     {
             Q_OBJECT
         public:
-            GUIManagerView(GUIManagerModule* module, QWidget* parent);
-            virtual ~GUIManagerView();
+            ScriptManagerView(ScriptManagerModule* module, QWidget* parent);
+            virtual ~ScriptManagerView();
 
             /**
             * \return true if the user changed some data else if the data
@@ -118,15 +93,15 @@ namespace Kross {
     };
 
     /**
-    * The GUIManagerModule class provides access to the GUIManager
+    * The ScriptManagerModule class provides access to the ScriptManager
     * functionality.
     */
-    class KROSS_EXPORT GUIManagerModule : public QObject
+    class KROSS_EXPORT ScriptManagerModule : public QObject
     {
             Q_OBJECT
         public:
-            GUIManagerModule();
-            virtual ~GUIManagerModule();
+            ScriptManagerModule();
+            virtual ~ScriptManagerModule();
 
         public slots:
 

@@ -247,7 +247,7 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect( m_page->outgradient, SIGNAL(modifiedBlack(int)), m_page->outblackspin, SLOT(setValue(int)));
     connect( m_page->outgradient, SIGNAL(modifiedWhite(int)), m_page->outwhitespin, SLOT(setValue(int)));
 
-    connect( (QObject*)(m_page->logbutton), SIGNAL(toggled(bool)), this, SLOT(drawHistogram(bool)));
+    connect( (QObject*)(m_page->chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(drawHistogram(bool)));
 
     KisHistogramProducerSP producer = new KisGenericLabHistogramProducer();
     histogram = new KisHistogram(dev, producer, LINEAR);

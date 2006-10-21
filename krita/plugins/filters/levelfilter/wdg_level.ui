@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>258</width>
-            <height>442</height>
+            <width>269</width>
+            <height>479</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -22,65 +22,35 @@
     </property>
     <property name="minimumSize">
         <size>
-            <width>258</width>
-            <height>442</height>
+            <width>0</width>
+            <height>0</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
-            <width>500</width>
-            <height>500</height>
+            <width>32767</width>
+            <height>32767</height>
         </size>
     </property>
     <property name="caption">
         <string>Levels</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QCheckBox" row="0" column="0">
             <property name="name">
-                <cstring>layout3</cstring>
+                <cstring>chkLogarithmic</cstring>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer4</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>MinimumExpanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>180</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>logbutton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Logarithmic</string>
-                    </property>
-                    <property name="toggleButton">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-            </hbox>
+            <property name="text">
+                <string>Logarithmic</string>
+            </property>
         </widget>
-        <widget class="QLabel">
+        <widget class="QLabel" row="1" column="0">
             <property name="name">
                 <cstring>textLabel2</cstring>
             </property>
@@ -88,183 +58,247 @@
                 <string>&lt;b&gt;Input levels&lt;/b&gt;</string>
             </property>
         </widget>
-        <widget class="QLabel">
+        <widget class="QLayoutWidget" row="2" column="0">
             <property name="name">
-                <cstring>histview</cstring>
+                <cstring>layout7</cstring>
             </property>
-            <property name="minimumSize">
-                <size>
-                    <width>256</width>
-                    <height>256</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>256</width>
-                    <height>256</height>
-                </size>
-            </property>
-            <property name="scaledContents">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="KGradientSlider">
-            <property name="name">
-                <cstring>ingradient</cstring>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>256</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout5</cstring>
-            </property>
-            <hbox>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>blackspin</cstring>
-                    </property>
-                    <property name="buttonSymbols">
-                        <enum>PlusMinus</enum>
-                    </property>
-                    <property name="maxValue">
-                        <number>255</number>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer5</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>MinimumExpanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>50</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>gammaspin</cstring>
+                        <cstring>histview</cstring>
                     </property>
-                    <property name="text">
-                        <string>1.0</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignCenter</set>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer6</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>MinimumExpanding</enum>
-                    </property>
-                    <property name="sizeHint">
+                    <property name="minimumSize">
                         <size>
-                            <width>50</width>
-                            <height>20</height>
+                            <width>256</width>
+                            <height>256</height>
                         </size>
                     </property>
-                </spacer>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>whitespin</cstring>
+                    <property name="maximumSize">
+                        <size>
+                            <width>256</width>
+                            <height>256</height>
+                        </size>
                     </property>
-                    <property name="buttonSymbols">
-                        <enum>PlusMinus</enum>
-                    </property>
-                    <property name="maxValue">
-                        <number>255</number>
+                    <property name="scaledContents">
+                        <bool>true</bool>
                     </property>
                 </widget>
-            </hbox>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KGradientSlider">
+                            <property name="name">
+                                <cstring>ingradient</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>256</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout5</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>blackspin</cstring>
+                                    </property>
+                                    <property name="buttonSymbols">
+                                        <enum>PlusMinus</enum>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>255</number>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer5</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>MinimumExpanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>25</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>gammaspin</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>1.0</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignCenter</set>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer6</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>MinimumExpanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>25</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>whitespin</cstring>
+                                    </property>
+                                    <property name="buttonSymbols">
+                                        <enum>PlusMinus</enum>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>255</number>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&lt;b&gt;Output levels&lt;/b&gt;</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout6</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KGradientSlider">
+                            <property name="name">
+                                <cstring>outgradient</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>256</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout2</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>outblackspin</cstring>
+                                    </property>
+                                    <property name="buttonSymbols">
+                                        <enum>PlusMinus</enum>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>255</number>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer3</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>MinimumExpanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>50</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>outwhitespin</cstring>
+                                    </property>
+                                    <property name="buttonSymbols">
+                                        <enum>PlusMinus</enum>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>255</number>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+            </vbox>
         </widget>
-        <widget class="QLabel">
+        <spacer row="2" column="1">
             <property name="name">
-                <cstring>textLabel3</cstring>
+                <cstring>spacer5_2</cstring>
             </property>
-            <property name="text">
-                <string>&lt;b&gt;Output levels&lt;/b&gt;</string>
+            <property name="orientation">
+                <enum>Horizontal</enum>
             </property>
-        </widget>
-        <widget class="KGradientSlider">
-            <property name="name">
-                <cstring>outgradient</cstring>
+            <property name="sizeType">
+                <enum>Expanding</enum>
             </property>
-            <property name="minimumSize">
+            <property name="sizeHint">
                 <size>
-                    <width>256</width>
+                    <width>21</width>
                     <height>20</height>
                 </size>
             </property>
-        </widget>
-        <widget class="QLayoutWidget">
+        </spacer>
+        <spacer row="3" column="0">
             <property name="name">
-                <cstring>layout2</cstring>
+                <cstring>spacer6_2</cstring>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>outblackspin</cstring>
-                    </property>
-                    <property name="buttonSymbols">
-                        <enum>PlusMinus</enum>
-                    </property>
-                    <property name="maxValue">
-                        <number>255</number>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer3</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>MinimumExpanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>151</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>outwhitespin</cstring>
-                    </property>
-                    <property name="buttonSymbols">
-                        <enum>PlusMinus</enum>
-                    </property>
-                    <property name="maxValue">
-                        <number>255</number>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
 </widget>
 <customwidgets>
     <customwidget>

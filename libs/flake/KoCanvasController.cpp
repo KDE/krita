@@ -151,7 +151,6 @@ KoCanvasController::Viewport::Viewport()
 }
 
 void KoCanvasController::Viewport::setCanvas(QWidget *canvas) {
-    canvas->setAutoFillBackground(false);
     m_layout->addWidget(canvas, 0, 1, Qt::AlignHCenter);
 }
 

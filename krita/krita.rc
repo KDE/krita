@@ -30,6 +30,7 @@
   <ActionList name="view_closeallviews"/>
   <Separator/>
   <ActionList name="view_split"/>
+  <Action name="zoom"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
   <Action name="actual_pixels"/>
@@ -160,11 +161,12 @@
   <Action name="paste_special"/>
 </ToolBar-->
 
-<!--ToolBar name="navigation" position="top"><Text>Navigation</Text>
+<ToolBar name="navigation" position="top"><Text>Navigation</Text>
   <Action name="refresh_canvas"/>
+  <Action name="zoom"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
-</ToolBar-->
+</ToolBar>
 
 <ToolBar name="ToolBox" position="left">
     <Text>Krita</Text>

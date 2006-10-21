@@ -34,7 +34,7 @@ enum KisCanvasType {
     MITSHM
 };
 
-class KisViewConverter;
+class KoViewConverter;
 
 /**
  * KisCanvas2 is not an actual widget class, but rather an adapter for
@@ -54,7 +54,7 @@ public:
      * @param canvasType determines which kind of canvas widget the
      *                   canvas initially creates.
      */
-    KisCanvas2(KisViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view);
+    KisCanvas2(KoViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view);
 
     virtual ~KisCanvas2();
 

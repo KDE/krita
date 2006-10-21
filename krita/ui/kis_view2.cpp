@@ -25,15 +25,18 @@
 
 #include <kstdaction.h>
 #include <kxmlguifactory.h>
+#include <kicon.h>
+#include <klocale.h>
 
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
+#include <KoZoomAction.h>
+#include <KoZoomHandler.h>
 
 #include <kis_image.h>
 
 #include "kis_resource_provider.h"
 #include "kis_factory2.h"
-#include "kis_view_converter.h"
 #include "kis_canvas2.h"
 #include "kis_opengl_canvas2.h"
 #include "kis_qpainter_canvas.h"
@@ -46,7 +49,7 @@ public:
 
     KisView2Private(KisView2 * view)
         {
-            viewConverter = new KisViewConverter( 1.0, 100, 96, 96 );
+            viewConverter = new KoZoomHandler( );
 
             canvas = new KisCanvas2( viewConverter, QPAINTER, view );
 
@@ -54,7 +57,6 @@ public:
             canvasController = new KoCanvasController( view );
             canvasController->setCanvas( canvas );
 
-            resourceProvider = new KisResourceProvider( view );
         }
 
     ~KisView2Private()
@@ -65,11 +67,17 @@ public:
 
 public:
 
-    KisCanvas2 * canvas;
-    KisDoc2 * doc;
-    KisViewConverter * viewConverter;
+    KisCanvas2 *canvas;
+    KisDoc2 *doc;
+    KoViewConverter *viewConverter;
     KoCanvasController * canvasController;
     KisResourceProvider * resourceProvider;
+    KAction *zoomAction;
+    KAction *zoomIn;
+    KAction *zoomOut;
+    KAction *actualPixels;
+    KAction *actualSize;
+    KAction *fitToCanvas;
 };
 
 KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
@@ -77,6 +85,7 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
 {
     m_d = new KisView2Private(this);
     m_d->doc = doc;
+    m_d->resourceProvider = new KisResourceProvider( this );
 
     // Part stuff
     setInstance(KisFactory2::instance(), false);
@@ -87,6 +96,23 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     KStdAction::keyBindings( mainWindow()->guiFactory(),
                              SLOT( configureShortcuts() ),
                              actionCollection() );
+
+    // view actions
+    m_d->zoomAction = new KoZoomAction(0, i18n("Zoom"), KIcon("14_zoom"), 0, actionCollection(), "zoom" );
+    connect(m_d->zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
+          this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
+    m_d->zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
+    m_d->zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
+
+/*
+    m_d->actualPixels = new KAction(i18n("Actual Pixels"), actionCollection(), "actual_pixels");
+    m_d->actualPixels->setShortcut(Qt::CTRL+Qt::Key_0);
+    connect(m_d->actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
+
+    m_d->actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection(), "actual_size");
+    m_d->actualSize->setEnabled(false);
+    m_d->fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection(), "fit_to_canvas");
+*/
 
     // Put the canvascontroller in a layout so it resizes with us
     QHBoxLayout * layout = new QHBoxLayout( this );
@@ -131,6 +157,25 @@ void KisView2::slotInitializeCanvas()
     QRegion rg = image()->extent();
     QRect rc = rg.boundingRect();
     m_d->canvas->setCanvasSize( rc.width(), rc.height() );
+}
+
+void KisView2::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
+{
+    KoZoomHandler *zoomHandler = (KoZoomHandler*)m_d->viewConverter;
+
+    if(mode == KoZoomMode::ZOOM_CONSTANT)
+    {
+        double zoomF = zoom / 100.0;
+        if(zoomF == 0.0) return;
+        KoView::setZoom(zoomF);
+        zoomHandler->setZoom(zoomF);
+    }
+    kDebug() << "zoom changed to: " << zoom <<  endl;
+
+    zoomHandler->setZoomMode(mode);
+//    QRectF imageRect = QRectF(0, 0, m_d->canvas->width(), m_d->canvas->height());
+//    m_d->canvas->updateCanvas(imageRect);
+    m_d->canvas->updateCanvas(QRectF(0, 0, 300,300));
 }
 
 #include "kis_view2.moc"

@@ -24,6 +24,7 @@
 #include <KoView.h>
 #include <KoToolBox.h>
 #include <KoToolManager.h>
+#include <KoZoomMode.h>
 
 #include <kis_types.h>
 
@@ -31,7 +32,6 @@ class KisCanvas2;
 class KisQPainterCanvas;
 class KisOpenGLCanvas2;
 class KisImage;
-class KisViewConverter;
 class KoCanvasController;
 class KisDoc2;
 class KisResourceProvider;
@@ -65,6 +65,7 @@ public:
 private slots:
 
     void slotInitializeCanvas();
+    void slotZoomChanged(KoZoomMode::Mode mode, int zoom);
 
 private:
     class KisView2Private;

@@ -21,12 +21,12 @@
 #include <QWidget>
 
 #include <KoUnit.h>
+#include "KoViewConverter.h"
 
 #include <kis_image.h>
 
 #include "kis_view2.h"
 #include "kis_config.h"
-#include "kis_view_converter.h"
 #include "kis_abstract_canvas_widget.h"
 #include "kis_qpainter_canvas.h"
 #include "kis_opengl_canvas2.h"
@@ -35,19 +35,19 @@ class KisCanvas2::KisCanvas2Private {
 
 public:
 
-    KisCanvas2Private( KisViewConverter * viewConverter, KisView2 * view )
+    KisCanvas2Private( KoViewConverter * viewConverter, KisView2 * view )
         : viewConverter( viewConverter )
         , view( view )
         , canvasWidget( 0 )
         {
         }
 
-    KisViewConverter * viewConverter;
+    KoViewConverter * viewConverter;
     KisView2 * view;
     KisAbstractCanvasWidget * canvasWidget;
 };
 
-KisCanvas2::KisCanvas2(KisViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view)
+KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view)
     : KoCanvasBase()
 {
     m_d = new KisCanvas2Private(viewConverter, view);

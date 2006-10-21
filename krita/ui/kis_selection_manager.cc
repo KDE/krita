@@ -57,7 +57,7 @@
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_undo_adapter.h"
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_view2.h"
 
 

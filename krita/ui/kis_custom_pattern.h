@@ -26,8 +26,9 @@
 
 
 class KisResource;
-class KisView;
+class KisView2;
 class KisResourceServerBase;
+class KisResourceMediator;
 
 class KisWdgCustomPattern : public QWidget, public Ui::KisWdgCustomPattern
 {
@@ -41,7 +42,7 @@ class KisCustomPattern : public KisWdgCustomPattern
 {
     Q_OBJECT
 public:
-    KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView* view);
+    KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView2* view);
     virtual ~KisCustomPattern();
     void setResourceServer(KisResourceServerBase* server) { m_server = server; }
 
@@ -59,7 +60,7 @@ private slots:
 
 private:
     void createPattern();
-    KisView* m_view;
+    KisView2* m_view;
     KisPattern* m_pattern;
     KisResourceMediator* m_mediator;
     KisResourceServerBase* m_server;

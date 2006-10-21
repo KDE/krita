@@ -30,7 +30,7 @@
 
 class KActionMenu;
 class KAction;
-class KisView;
+class KisView2;
 class KisDoc;
 class KisFilter;
 class KisFilterConfiguration;
@@ -46,7 +46,7 @@ class KRITAUI_EXPORT KisFilterManager : public QObject {
 
 public:
 
-    KisFilterManager(KisView * parent, KisDoc2 * doc);
+    KisFilterManager(KisView2 * parent, KisDoc2 * doc);
     ~KisFilterManager();
 
     void setup(KActionCollection * ac);
@@ -64,7 +64,7 @@ protected slots:
 
 private:
 
-    KisView * m_view;
+    KisView2 * m_view;
     KisDoc2 * m_doc;
 
     KAction * m_reapplyAction;

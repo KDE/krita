@@ -17,8 +17,8 @@
  */
 #include "kis_part_layer_handler.h"
 
-#include "kis_canvas.h"
-#include <fixx11h.h> // kis_canvas.h does X11 stuff
+//#include "kis_canvas.h"
+//#include <fixx11h.h> // kis_canvas.h does X11 stuff
 
 #include <QPainter>
 #include <QCursor>
@@ -27,16 +27,14 @@
 
 #include "kis_cursor.h"
 #include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
 #include "kis_group_layer.h"
-#include "kis_view.h"
+#include "kis_view2.h"
 
-KisPartLayerHandler::KisPartLayerHandler(KisView* view, const KoDocumentEntry& entry,
+KisPartLayerHandler::KisPartLayerHandler(KisView2* view, const KoDocumentEntry& entry,
                                          KisGroupLayerSP parent, KisLayerSP above)
     : m_parent(parent), m_above(above), m_view(view), m_entry(entry) {
     m_started = false;
-    view->canvasController()->setCanvasCursor( KisCursor::selectCursor() );
+    //view->canvasController()->setCanvasCursor( KisCursor::selectCursor() );
 }
 
 void KisPartLayerHandler::done() {
@@ -49,8 +47,10 @@ void KisPartLayerHandler::gotMoveEvent(KoPointerEvent* event) {
         return;
     }
 
+#warning Port this!
+# if 0    
     QPainter painter( m_view->canvasController()->kiscanvas()->canvasWidget() );
-    //painter.setRasterOp( NotROP );
+    painter.setRasterOp( NotROP );
 
     // erase old lines
     QRect r(m_start, m_end);
@@ -63,25 +63,29 @@ void KisPartLayerHandler::gotMoveEvent(KoPointerEvent* event) {
 
     painter.drawRect(r);
     painter.end();
+#endif    
 }
 
 void KisPartLayerHandler::gotButtonPressEvent(KoPointerEvent* event) {
+#if 0
     m_start = event->pos().roundQPoint();
     m_end = m_start;
     m_started = true;
+#endif    
 }
 
-void KisPartLayerHandler::gotButtonReleaseEvent(KisButtonReleaseEvent* event) {
+void KisPartLayerHandler::gotButtonReleaseEvent(KoPointerEvent* event) {
     if (!m_started) {
         done();
         return;
     }
-
+#if 0
     m_end = event->pos().roundQPoint();
 
     QRect r(m_start, m_end);
     m_view->insertPart(r.normalized(), m_entry, m_parent, m_above);
     // We will get deleted by the view through the above
+#endif 
 }
 
 void KisPartLayerHandler::gotKeyPressEvent(QKeyEvent* event) {

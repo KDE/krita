@@ -118,6 +118,10 @@ KisResourceProvider * KisView2::resourceProvider()
     return m_d->resourceProvider;
 }
 
+KisCanvas2 * KisView2::canvas()
+{
+    return m_d->canvas;
+}
 
 void KisView2::slotInitializeCanvas()
 {

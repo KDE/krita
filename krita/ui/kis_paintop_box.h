@@ -33,7 +33,7 @@
 class QString;
 class QHBoxLayout;
 
-class KisView;
+class KisView2;
 class KisCanvasController;
 class KoID;
 class KoColorSpace;
@@ -55,7 +55,7 @@ class KisPaintopBox : public QWidget {
     typedef QWidget super;
 
 public:
-    KisPaintopBox (KisView * view,  QWidget * parent, const char * name = 0);
+    KisPaintopBox (KisView2 * view,  QWidget * parent, const char * name = 0);
 
     ~KisPaintopBox();
 

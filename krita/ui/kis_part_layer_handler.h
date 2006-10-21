@@ -31,11 +31,12 @@
 #include "kis_view2.h"
 
 class QKeyEvent;
+class KoPointerEvent;
 
 class KisPartLayerHandler : public QObject {
 Q_OBJECT
 public:
-    KisPartLayerHandler(KisView* view, const KoDocumentEntry& entry,
+    KisPartLayerHandler(KisView2* view, const KoDocumentEntry& entry,
                         KisGroupLayerSP parent, KisLayerSP above);
 signals:
     void sigGotMoveEvent(KoPointerEvent* event);
@@ -46,13 +47,13 @@ protected slots:
 
     void gotMoveEvent(KoPointerEvent* event);
     void gotButtonPressEvent(KoPointerEvent* event);
-    void gotButtonReleaseEvent(KisButtonReleaseEvent* event);
+    void gotButtonReleaseEvent(KoPointerEvent* event);
     void gotKeyPressEvent(QKeyEvent* event);
 protected:
     void done();
     KisGroupLayerSP m_parent;
     KisLayerSP m_above;
-    KisView* m_view;
+    KisView2* m_view;
     KoDocumentEntry m_entry;
     QPoint m_start;
     QPoint m_end;

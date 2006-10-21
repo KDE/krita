@@ -25,9 +25,10 @@
 
 
 class KisResource;
-class KisView;
+class KisView2;
 class KisPalette;
 class KisResourceServerBase;
+class KisResourceMediator;
 
 class KisWdgCustomPalette : public QWidget, public Ui::KisWdgCustomPalette
 {
@@ -41,7 +42,7 @@ class KisCustomPalette : public KisWdgCustomPalette
 {
     Q_OBJECT
 public:
-    KisCustomPalette(QWidget *parent, const char* name, const QString& caption, KisView* view);
+    KisCustomPalette(QWidget *parent, const char* name, const QString& caption, KisView2* view);
     virtual ~KisCustomPalette();
     void setResourceServer(KisResourceServerBase* server) { m_server = server; }
     void setEditMode(bool b);
@@ -59,7 +60,7 @@ private slots:
 private:
     bool m_ownPalette;
     bool m_editMode;
-    KisView* m_view;
+    KisView2* m_view;
     KisPalette* m_palette;
     KisResourceMediator* m_mediator;
     KisResourceServerBase* m_server;

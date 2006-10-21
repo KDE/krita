@@ -27,7 +27,7 @@
 class KAction;
 class KActionCollection;
 class KToggleAction;
-class KisView;
+class KisView2;
 
 class KisPerspectiveGridManager : public QObject
 {
@@ -35,7 +35,7 @@ class KisPerspectiveGridManager : public QObject
     public:
         /** Create a perspective manager for this view
          */
-        KisPerspectiveGridManager(KisView * parent);
+        KisPerspectiveGridManager(KisView2 * parent);
         ~KisPerspectiveGridManager();
         void setup(KActionCollection * collection);
         /** Redraw the perspective grid for the current image of the view using the specified painter
@@ -61,7 +61,7 @@ class KisPerspectiveGridManager : public QObject
         void toggleGrid();
     private:
         bool m_toggleEdition;
-        KisView* m_view;
+        KisView2* m_view;
         KToggleAction* m_toggleGrid;
         KAction* m_gridClear;
 };

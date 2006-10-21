@@ -47,7 +47,7 @@ class KisItemChooser;
 class KisPattern;
 class KisResourceMediator;
 class KisPaintopBox;
-class KisView;
+class KisView2;
 
 class KisPopupFrame : public QMenu {
 
@@ -77,7 +77,7 @@ class KisControlFrame : public QObject  //: public KToolBar
     Q_OBJECT
 
 public:
-    KisControlFrame(KMainWindow * window, KisView * view, const char *name = 0 );
+    KisControlFrame(KMainWindow * window, KisView2 * view, const char *name = 0 );
     virtual ~KisControlFrame() {};
 
 public slots:
@@ -92,14 +92,14 @@ public slots:
 
 private:
 
-    void createBrushesChooser(KisView * view);
-    void createPatternsChooser(KisView * view);
-    void createGradientsChooser(KisView * view);
+    void createBrushesChooser(KisView2 * view);
+    void createPatternsChooser(KisView2 * view);
+    void createGradientsChooser(KisView2 * view);
 
 
 private:
     QFont m_font;
-    KisView * m_view;
+    KisView2 * m_view;
 
     QTabWidget * m_brushesTab;
     QTabWidget * m_gradientTab;

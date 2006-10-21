@@ -44,6 +44,7 @@
 #include <KoDualColorButton.h>
 
 #include "kis_resourceserver.h"
+#include "kis_resource_provider.h"
 #include "kis_controlframe.h"
 #include "kis_resource_mediator.h"
 #include "kis_itemchooser.h"
@@ -55,7 +56,7 @@
 #include "kis_pattern.h"
 #include "kis_gradient.h"
 #include "kis_brush_chooser.h"
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_autobrush.h"
 #include "kis_autogradient.h"
 #include "kis_config.h"
@@ -86,7 +87,7 @@ void KisPopupFrame::keyPressEvent(QKeyEvent * e)
 }
 
 
-KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, const char* name )
+KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView2 * view, const char* name )
     : QObject(view)
     //: KToolBar ( window, Qt::DockTop, false, name, true, true )
     , m_view(view)
@@ -126,17 +127,17 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
     action = new KAction( i18n("&Gradients"), view->actionCollection(), "gradients");
     action->setDefaultWidget( m_gradientWidget );
 
-    m_paintopBox = new KisPaintopBox( view, view, "paintopbox" );
+    //m_paintopBox = new KisPaintopBox( view, view, "paintopbox" );
     action = new KAction(i18n("&Painter's Tools"), view->actionCollection(), "paintops");
-    action->setDefaultWidget( m_paintopBox );
+    //action->setDefaultWidget( m_paintopBox );
 
 /**** Temporary hack to test the KoDualColorButton ***/
-   KoDualColorButton * dual = new KoDualColorButton(view->canvasSubject()->fgColor(), view->canvasSubject()->fgColor(), view, view);
+   KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->fgColor(), view, view);
     action = new KAction(i18n("&Painter's Tools"), view->actionCollection(), "dual");
     action->setDefaultWidget( dual );
-    connect(dual, SIGNAL(foregroundColorChanged(const KoColor &)), view, SLOT(slotSetFGColor(const KoColor &)));
-    connect(dual, SIGNAL(backgroundColorChanged(const KoColor &)), view, SLOT(slotSetBGColor(const KoColor &)));
-    connect(view, SIGNAL(sigFGColorChanged(const KoColor &)), dual, SLOT(setForegroundColor(const KoColor &)));
+    connect(dual, SIGNAL(foregroundColorChanged(const KoColor &)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor &)));
+    connect(dual, SIGNAL(backgroundColorChanged(const KoColor &)), view->resourceProvider(), SLOT(slotSetBGColor(const KoColor &)));
+    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor &)), dual, SLOT(setForegroundColor(const KoColor &)));
     dual->setFixedSize( 26, 26 );
 /*******/
     m_brushWidget->setFixedSize( 26, 26 );
@@ -217,7 +218,7 @@ void KisControlFrame::slotGradientChanged(KisGradient * gradient)
         m_gradientChooserPopup->hide();
 }
 
-void KisControlFrame::createBrushesChooser(KisView * view)
+void KisControlFrame::createBrushesChooser(KisView2 * view)
 {
 
     m_brushChooserPopup = new KisPopupFrame(m_brushWidget, "brush_chooser_popup");
@@ -275,7 +276,7 @@ void KisControlFrame::createBrushesChooser(KisView * view)
     m_autobrush->activate();
 }
 
-void KisControlFrame::createPatternsChooser(KisView * view)
+void KisControlFrame::createPatternsChooser(KisView2 * view)
 {
     m_patternChooserPopup = new KisPopupFrame(m_patternWidget, "pattern_chooser_popup");
 
@@ -319,7 +320,7 @@ void KisControlFrame::createPatternsChooser(KisView * view)
 }
 
 
-void KisControlFrame::createGradientsChooser(KisView * view)
+void KisControlFrame::createGradientsChooser(KisView2 * view)
 {
     m_gradientChooserPopup = new KisPopupFrame(m_gradientWidget, "gradient_chooser_popup");
 

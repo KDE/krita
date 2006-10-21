@@ -29,7 +29,7 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
@@ -39,7 +39,7 @@
 #include "kis_resourceserver.h"
 #include "kis_paint_layer.h"
 
-KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView* view)
+KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView2* view)
     : KisWdgCustomPattern(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
@@ -66,7 +66,7 @@ void KisCustomPattern::showEvent(QShowEvent *) {
 void KisCustomPattern::slotUpdateCurrentPattern(int) {
     delete m_pattern;
     m_pattern = 0;
-    if (m_view->canvasSubject() && m_view->canvasSubject()->currentImg()) {
+    if (m_view && m_view->image()) {
         createPattern();
         if (m_pattern)
             preview->setPixmap(QPixmap::fromImage(m_pattern->img()));
@@ -116,7 +116,7 @@ void KisCustomPattern::slotUsePattern() {
 }
 
 void KisCustomPattern::createPattern() {
-    KisImageSP img = m_view->canvasSubject()->currentImg();
+    KisImageSP img = m_view->image();
 
     if (!img)
         return;

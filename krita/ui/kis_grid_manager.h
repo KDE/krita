@@ -26,7 +26,7 @@
 
 #include "kis_types.h"
 
-class KisView;
+class KisView2;
 class KActionCollection;
 class KToggleAction;
 class KAction;
@@ -35,7 +35,7 @@ class KisGridManager : public QObject
 {
     Q_OBJECT
     public:
-        KisGridManager(KisView * parent);
+        KisGridManager(KisView2 * parent);
         ~KisGridManager();
     public:
         void setup(KActionCollection * collection);
@@ -51,7 +51,7 @@ class KisGridManager : public QObject
         void fastConfig20x20();
         void fastConfig40x40();
     private:
-        KisView* m_view;
+        KisView2* m_view;
         KToggleAction* m_toggleGrid;
         KAction* m_gridConfig;
         KAction* m_gridFastConfig1x1;

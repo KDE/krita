@@ -35,7 +35,7 @@
 #include <kinstance.h>
 
 #include <kis_paintop_registry.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>
 #include <kis_layer.h>
@@ -43,7 +43,7 @@
 
 #include "kis_paintop_box.h"
 
-KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name)
+KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * name)
     : super (parent),
       m_canvasController(view->canvasController())
 {

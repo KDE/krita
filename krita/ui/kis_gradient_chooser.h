@@ -24,7 +24,7 @@
 
 class QLabel;
 class QPushButton;
-class KisView;
+class KisView2;
 
 class KisCustomGradientDialog : public KDialog {
 
@@ -32,7 +32,7 @@ class KisCustomGradientDialog : public KDialog {
 
 public:
 
-    KisCustomGradientDialog(KisView * view, QWidget * parent, const char *name);
+    KisCustomGradientDialog(KisView2 * view, QWidget * parent, const char *name);
 
 private:
 
@@ -46,7 +46,7 @@ class KisGradientChooser : public KisItemChooser {
 
 public:
     // XXX: On library redesign, remove m_view parameter here, it's just a temporary hack for the autogradient dialog!
-    KisGradientChooser(KisView * view, QWidget *parent = 0, const char *name = 0);
+    KisGradientChooser(KisView2 * view, QWidget *parent = 0, const char *name = 0);
     virtual ~KisGradientChooser();
 
 protected:

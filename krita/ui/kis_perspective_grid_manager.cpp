@@ -28,9 +28,9 @@
 #include "kis_image.h"
 #include "kis_grid_drawer.h"
 #include "kis_perspective_grid.h"
-#include "kis_view.h"
+#include "kis_view2.h"
 
-KisPerspectiveGridManager::KisPerspectiveGridManager(KisView * parent)
+KisPerspectiveGridManager::KisPerspectiveGridManager(KisView2 * parent)
     : QObject()
     , m_toggleEdition(false)
     , m_view(parent)
@@ -45,7 +45,7 @@ KisPerspectiveGridManager::~KisPerspectiveGridManager()
 
 void KisPerspectiveGridManager::updateGUI()
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
 
     if (image ) {
@@ -58,7 +58,6 @@ void KisPerspectiveGridManager::setup(KActionCollection * collection)
 {
 
 
-    kDebug() << "KisPerspectiveGridManager::setup(KActionCollection * collection)" << endl;
     m_toggleGrid = new KToggleAction(i18n("Show Perspective Grid"), collection, "view_toggle_perspective_grid");
     connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleGrid()));
 
@@ -70,7 +69,7 @@ void KisPerspectiveGridManager::setup(KActionCollection * collection)
 
 void KisPerspectiveGridManager::setGridVisible(bool t)
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
 
     if (t && image ) {
@@ -82,13 +81,13 @@ void KisPerspectiveGridManager::setGridVisible(bool t)
     } else {
         m_toggleGrid->setChecked(false);
     }
-    m_view->updateCanvas();
+//    m_view->updateCanvas();
 }
 
 
 void KisPerspectiveGridManager::toggleGrid()
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
 
     if (image && m_toggleGrid->isChecked()) {
@@ -100,15 +99,15 @@ void KisPerspectiveGridManager::toggleGrid()
             m_toggleGrid->setChecked(false);
         }
     }
-    m_view->updateCanvas();
+//    m_view->updateCanvas();
 }
 
 void KisPerspectiveGridManager::clearPerspectiveGrid()
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
     if (image ) {
         image->perspectiveGrid()->clearSubGrids();
-        m_view->updateCanvas();
+//        m_view->updateCanvas();
         m_toggleGrid->setChecked(false);
         m_toggleGrid->setEnabled(false);
     }
@@ -118,21 +117,21 @@ void KisPerspectiveGridManager::startEdition()
 {
     m_toggleEdition = true;
     m_toggleGrid->setEnabled( false );
-    if( m_toggleGrid->isChecked() )
-        m_view->updateCanvas();
+//    if( m_toggleGrid->isChecked() )
+//        m_view->updateCanvas();
 }
 
 void KisPerspectiveGridManager::stopEdition()
 {
     m_toggleEdition = false;
     m_toggleGrid->setEnabled( true );
-    if( m_toggleGrid->isChecked() )
-        m_view->updateCanvas();
+//    if( m_toggleGrid->isChecked() )
+//       m_view->updateCanvas();
 }
 
 void KisPerspectiveGridManager::drawGrid(QRect wr, QPainter *p, bool openGL )
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
 
     if (image && m_toggleGrid->isChecked() && !m_toggleEdition) {

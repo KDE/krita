@@ -31,7 +31,7 @@
 
 #include "kis_gradient_chooser.h"
 
-KisCustomGradientDialog::KisCustomGradientDialog(KisView * view, QWidget * parent, const char *name)
+KisCustomGradientDialog::KisCustomGradientDialog(KisView2 * view, QWidget * parent, const char *name)
     : KDialog(parent)
 {
     setCaption( i18n("Custom Gradient") );
@@ -44,7 +44,7 @@ KisCustomGradientDialog::KisCustomGradientDialog(KisView * view, QWidget * paren
     connect(m_page, SIGNAL(activatedResource(KisResource *)), view, SLOT(gradientActivated(KisResource*)));
 }
 
-KisGradientChooser::KisGradientChooser(KisView * view, QWidget *parent, const char *name) : super(parent, name)
+KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const char *name) : super(parent, name)
 {
     m_lbName = new QLabel();
 

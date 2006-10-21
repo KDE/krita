@@ -49,7 +49,7 @@
 #include "kis_view2.h"
 #include <kis_progress_display_interface.h>
 
-KisFilterManager::KisFilterManager(KisView * view, KisDoc2 * doc)
+KisFilterManager::KisFilterManager(KisView2 * view, KisDoc2 * doc)
     : m_view(view),
     m_doc(doc)
 {
@@ -189,7 +189,7 @@ void KisFilterManager::setup(KActionCollection * ac)
 
 void KisFilterManager::updateGUI()
 {
-    KisImageSP img = m_view->currentImg();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
     KisLayerSP layer = img->activeLayer();
@@ -233,7 +233,7 @@ bool KisFilterManager::apply()
 {
     if (!m_lastFilter) return false;
 
-    KisImageSP img = m_view->currentImg();
+    KisImageSP img = m_view->image();
     if (!img) return false;
 
     KisPaintDeviceSP dev = img->activeDevice();
@@ -257,8 +257,8 @@ bool KisFilterManager::apply()
 
     m_lastFilter->enableProgress();
 
-    m_view->progressDisplay()->setSubject(m_lastFilter, true, true);
-    m_lastFilter->setProgressDisplay( m_view->progressDisplay());
+    //m_view->progressDisplay()->setSubject(m_lastFilter, true, true);
+    //m_lastFilter->setProgressDisplay( m_view->progressDisplay());
 
     KisTransaction * cmd = 0;
     if (img->undo()) cmd = new KisTransaction(m_lastFilter->id().name(), dev);
@@ -305,7 +305,7 @@ void KisFilterManager::slotApplyFilter(int i)
         return;
     }
 
-    KisImageSP img = m_view->currentImg();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
     KisPaintDeviceSP dev = img->activeDevice();

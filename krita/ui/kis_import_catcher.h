@@ -26,7 +26,7 @@
 #include <kis_types.h>
 
 class KisView;
-class KisDoc;
+class KisDoc2;
 
 /**
  * This small helper class takes an url and an image; tries to import

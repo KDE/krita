@@ -1,32 +1,45 @@
 set(kritaui_LIB_SRCS
-    kis_itemchooser.cc
-    kis_icon_item.cc
-    kis_iconwidget.cc
     imageviewer.cc
     kcurve.cc
     kis_autobrush.cc
     kis_autogradient.cc
+    #kis_birdeye_box.cc
     kis_boundary_painter.cc
+    kis_brush_chooser.cc
     kis_canvas2.cpp
     kis_clipboard.cc
     kis_cmb_composite.cc
     kis_cmb_idlist.cc
     kis_color_cup.cc
     kis_config.cc
+    kis_controlframe.cc
     kis_cursor.cc
     kis_custom_brush.cc
     kis_custom_image_widget.cc
+    kis_custom_palette.cc
+    kis_custom_pattern.cc
+    kis_dlg_adj_layer_props.cc
+    kis_dlg_adjustment_layer.cc
     kis_dlg_apply_profile.cc
     kis_dlg_image_properties.cc
     kis_dlg_layer_properties.cc
     kis_dlg_new_layer.cc
     kis_dlg_preferences.cc
     kis_doc2.cc
+    kis_double_widget.cc
     kis_factory2.cc
+    kis_filter_manager.cc
+    kis_filters_listview.cc
+    kis_gradient_chooser.cc
     kis_gradient_slider_widget.cc
     kis_grid_drawer.cpp
+    kis_grid_manager.cpp
     kis_histogram_view.cc
+    kis_icon_item.cc
+    kis_iconwidget.cc
+    kis_import_catcher.cc
     kis_int_spinbox.cc
+    kis_itemchooser.cc
     kis_label_cursor_pos.cc
     kis_label_progress.cc
     kis_label_zoom.cc
@@ -40,16 +53,27 @@ set(kritaui_LIB_SRCS
     kis_oasis_save_data_visitor.cc
     kis_oasis_save_visitor.cc
     kis_opengl_canvas2.cpp
+    #kis_paintop_box.cc
+    kis_palette_view.cc
+    kis_palette_widget.cc
     kis_part_layer.cc
+    kis_part_layer_handler.cc
+    kis_pattern_chooser.cc
+    kis_perspective_grid_manager.cpp
+    kis_previewdialog.cc
+    kis_previewwidget.cc
     kis_qpainter_canvas.cpp
+    kis_resource_mediator.cc
     kis_resource_provider.cc
+    kis_resourceserver.cc
+    #kis_selection_manager.cc
+    kis_selection_options.cc
     kis_strategy_move.cc
     kis_text_brush.cc
     kis_view2.cpp
     kis_view_converter.cpp
+    kobirdeyepanel.cpp
     squeezedcombobox.cpp
-    kis_resource_mediator.cc
-    kis_resourceserver.cc
     #    kis_tool.cc
     #    kis_tool_dummy.cc
     #    kis_tool_freehand.cc
@@ -60,36 +84,6 @@ set(kritaui_LIB_SRCS
     #    kis_tool_shape.cc
 )
 
-#set(kritaui_LIB_SRCS
-#   kis_gradient_chooser.cc
-#   kis_birdeye_box.cc
-#   kis_brush_chooser.cc
-#   kis_controlframe.cc
-#   kis_custom_palette.cc
-#   kis_custom_pattern.cc
-#   kis_dlg_adj_layer_props.cc
-#   kis_dlg_adjustment_layer.cc
-#   kis_double_widget.cc
-#   kis_filter_manager.cc
-#   kis_filters_listview.cc
-#   kis_grid_manager.cpp
-#   kis_import_catcher.cc
-#   kis_matrix_widget.cpp
-#   kis_paintop_box.cc
-#   kis_palette_view.cc
-#   kis_palette_widget.cc
-#   kis_part_layer.cc
-#   kis_part_layer_handler.cc
-#   kis_pattern_chooser.cc
-#   kis_perspective_grid_manager.cpp
-#   kis_previewdialog.cc
-#   kis_previewwidget.cc
-#   kis_qpaintdevice_canvas.cc
-#   kis_ruler.cc
-#   kis_selection_manager.cc
-#   kis_selection_options.cc
-#   kobirdeyepanel.cpp
-#   )
 
 kde4_automoc(kritaui ${kritaui_LIB_SRCS})
 
@@ -175,7 +169,7 @@ install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})
 #    kis_tool_manager.h
 #    kis_tool_types.h
 #    kis_tool_registry.h
-#    kis_view.h
+#    kis_view2.h
 #    kis_tool_factory.h
 #    kobirdeyepanel.h
 #    kis_filters_listview.h

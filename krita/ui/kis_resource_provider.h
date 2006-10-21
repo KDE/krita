@@ -37,7 +37,7 @@ class KisResource;
    KisResourceProvider contains the per-view current settings that
    influence painting, like paintop, color, gradients and so on.
  */
-class KisResourceProvider : QObject {
+class KisResourceProvider : public QObject {
 
     Q_OBJECT
 

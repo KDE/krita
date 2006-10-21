@@ -59,6 +59,7 @@ public:
     // Krita specific interfaces
     KisImageSP image();
     KisResourceProvider * resourceProvider();
+    KisCanvas2 * canvas();
 
 
 private slots:

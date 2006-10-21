@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>                  
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef CONTEXTSTYLE_H
@@ -25,6 +26,7 @@
 #include <QFont>
 #include <QString>
 #include <QStringList>
+#include <QValueStack>
 #include <kconfig.h>
 #include <KoZoomHandler.h>
 
@@ -175,12 +177,16 @@ public:
     QString getFontStyle() const { return m_fontStyleName; }
     void setFontStyle( const QString& fontStyle, bool init = true );
 
+    QFont getMathFont()       const { return mathFont; }
+    QFont getBracketFont()    const { return bracketFont; }
     QFont getDefaultFont()    const { return defaultFont; }
     QFont getNameFont()       const { return nameFont; }
     QFont getNumberFont()     const { return numberFont; }
     QFont getOperatorFont()   const { return operatorFont; }
     QFont getSymbolFont()     const { return symbolFont; }
 
+    void setMathFont( QFont f )     { defaultFont = f; }
+    void setBracketFont( QFont f )  { bracketFont = f; }
     void setDefaultFont( QFont f )  { defaultFont = f; }
     void setNameFont( QFont f )     { nameFont = f; }
     void setNumberFont( QFont f )   { numberFont = f; }
@@ -203,26 +209,26 @@ public:
     /**
      * TeX like spacings.
      */
-    luPixel getSpace( TextStyle tstyle, SpaceWidth space ) const;
-    luPixel getThinSpace( TextStyle tstyle ) const;
-    luPixel getMediumSpace( TextStyle tstyle ) const;
-    luPixel getThickSpace( TextStyle tstyle ) const;
-    luPixel getQuadSpace( TextStyle tstyle ) const;
+    luPixel getSpace( TextStyle tstyle, SpaceWidth space, double factor ) const;
+    luPixel getThinSpace( TextStyle tstyle, double factor ) const;
+    luPixel getMediumSpace( TextStyle tstyle, double factor ) const;
+    luPixel getThickSpace( TextStyle tstyle, double factor ) const;
+    luPixel getQuadSpace( TextStyle tstyle, double factor ) const;
 
-    luPixel axisHeight( TextStyle tstyle ) const;
+    luPixel axisHeight( TextStyle tstyle, double factor ) const;
 
     /**
      * Calculates the font size corresponding to the given TextStyle.
      */
-    luPt getAdjustedSize( TextStyle tstyle ) const;
+    luPt getAdjustedSize( TextStyle tstyle, double factor ) const;
 
     /**
      * All simple lines like the one that makes up a fraction.
      */
-    luPixel getLineWidth() const;
+    luPixel getLineWidth( double factor ) const;
 
-    luPixel getEmptyRectWidth() const;
-    luPixel getEmptyRectHeight() const;
+    luPixel getEmptyRectWidth( double factor ) const;
+    luPixel getEmptyRectHeight( double factor ) const;
 
     Alignment getMatrixAlignment() const { return center; }
 
@@ -288,6 +294,8 @@ private:
 
     TextStyleValues textStyleValues[ 4 ];
 
+    QFont mathFont;
+    QFont bracketFont;
     QFont defaultFont;
     QFont nameFont;
     QFont numberFont;
@@ -364,6 +372,147 @@ private:
     FontStyle* m_fontStyle;
     QString m_fontStyleName;
 };
+
+// Section 3.3.4.2, default values
+const double scriptsizemultiplier   = 0.71;
+const double scriptminsize          = 8;
+const double veryverythinmathspace  = 0.0555556;
+const double verythinmathspace      = 0.111111;
+const double thinmathspace          = 0.166667;
+const double mediummathspace        = 0.222222;
+const double thickmathspace         = 0.277778;
+const double verythickmathspace     = 0.333333;
+const double veryverythickmathspace = 0.388889;
+
+class StyleAttributes {
+ public:
+    double sizeFactor() const ;
+    bool customMathVariant() const ;
+    CharStyle charStyle() const ;
+    CharFamily charFamily() const ;
+    QColor color() const ;
+    QColor background() const ;
+    QFont font() const ;
+    bool fontWeight() const ;
+    bool customFontWeight() const ;
+    bool fontStyle() const ;
+    bool customFontStyle() const ;
+    bool customFont() const ;
+
+    int scriptLevel() const ;
+    double scriptSizeMultiplier() const ;
+    double scriptMinSize() const ;
+    double veryVeryThinMathSpace() const ;
+    double veryThinMathSpace() const ;
+    double thinMathSpace() const ;
+    double mediumMathSpace() const ;
+    double thickMathSpace() const ;
+    double veryThickMathSpace() const ;
+    double veryVeryThickMathSpace() const ;
+    bool displayStyle() const ;
+    bool customDisplayStyle() const ;
+
+    double getSpace( SizeType type, double length ) const ;
+
+    void setSizeFactor( double s ) { m_size.push( s ); }
+    void setCustomMathVariant( bool cmv ) { m_customMathVariant.push( cmv ); }
+    void setCharStyle( CharStyle cs ) { m_charStyle.push( cs ); }
+    void setCharFamily( CharFamily cf ) { m_charFamily.push( cf ); }
+    void setColor( const QColor& c ) { m_color.push( c ); }
+    void setBackground( const QColor& bg ) { m_background.push( bg ); }
+    void setFont( const QFont& f ) { m_font.push( f ); }
+    void setCustomFont( bool cf ) { m_customFontFamily.push ( cf ); }
+    void setCustomFontWeight( bool cfw ) { m_customFontWeight.push( cfw ); }
+    void setFontWeight( bool fw ) { m_fontWeight.push( fw ); }
+    void setCustomFontStyle( bool cfs ) { m_customFontStyle.push( cfs ); }
+    void setFontStyle( bool fs ) { m_fontStyle.push( fs ); }
+
+    void setScriptLevel( int s ) { m_scriptLevel.push( s ); }
+    void setScriptSizeMultiplier( double s ) { m_scriptSizeMultiplier.push( s ); }
+    void setScriptMinSize( double s ) { m_scriptMinSize.push( s ); }
+    void setVeryVeryThinMathSpace( double s ) { m_veryVeryThinMathSpace.push( s ); }
+    void setVeryThinMathSpace( double s ) { m_veryThinMathSpace.push( s ); }
+    void setThinMathSpace( double s ) { m_thinMathSpace.push( s ); }
+    void setMediumMathSpace( double s ) { m_mediumMathSpace.push( s ); }
+    void setThickMathSpace( double s ) { m_thickMathSpace.push( s ); }
+    void setVeryThickMathSpace( double s ) { m_veryThickMathSpace.push( s ); }
+    void setVeryVeryThickMathSpace( double s ) { m_veryVeryThickMathSpace.push( s ); }
+    void setDisplayStyle( bool ds ) { m_displayStyle.push( ds ); }
+    void setCustomDisplayStyle( bool cds ) { m_customDisplayStyle.push( cds ); }
+
+    void reset();
+    void resetSize();
+    void resetCharStyle();
+    void resetCharFamily();
+    void resetColor();
+    void resetBackground();
+    void resetFontFamily();
+    void resetFontWeight();
+    void resetFontStyle();
+
+    void resetScriptLevel();
+    void resetScriptSizeMultiplier();
+    void resetScriptMinSize();
+    void resetVeryVeryThinMathSpace();
+    void resetVeryThinMathSpace();
+    void resetThinMathSpace();
+    void resetMediumMathSpace();
+    void resetThickMathSpace();
+    void resetVeryThickMathSpace();
+    void resetVeryVeryThickMathSpace();
+    void resetDisplayStyle();
+
+ private:
+    // Size of the font in points (mathsize / fontsize)
+    QValueStack<double> m_size;
+
+    // Whether a custom mathvariant attribute is in use
+    QValueStack<bool> m_customMathVariant;
+
+    // Font style (mathvariant, fontweight, fontstyle)
+    QValueStack<CharStyle> m_charStyle;
+
+    // Font family (mathvariant)
+    QValueStack<CharFamily> m_charFamily;
+
+    // Foreground color (mathcolor, color)
+    QValueStack<QColor> m_color;
+
+    // Background color (mathbackground)
+    QValueStack<QColor> m_background;
+
+    // Font family (fontfamily)
+    QValueStack<QFont> m_font;
+
+    // Whether a custom fontfamily attribute is in use (instead of CharFamily)
+    QValueStack<bool> m_customFontFamily;
+
+    // Font Weight (fontweight)
+    QValueStack<bool> m_fontWeight;
+
+    // Whether a custom fontweight attribute is in use
+    QValueStack<bool> m_customFontWeight;
+
+    // Font Style (fontstyle)
+    QValueStack<bool> m_fontStyle;
+
+    // Whether a custom fontstyle attribute is in use
+    QValueStack<bool> m_customFontStyle;
+
+    QValueStack<int> m_scriptLevel;
+    QValueStack<double> m_scriptSizeMultiplier;
+    QValueStack<double> m_scriptMinSize;
+    QValueStack<double> m_veryVeryThinMathSpace;
+    QValueStack<double> m_veryThinMathSpace;
+    QValueStack<double> m_thinMathSpace;
+    QValueStack<double> m_mediumMathSpace;
+    QValueStack<double> m_thickMathSpace;
+    QValueStack<double> m_veryThickMathSpace;
+    QValueStack<double> m_veryVeryThickMathSpace;
+    QValueStack<bool> m_displayStyle;
+    QValueStack<bool> m_customDisplayStyle;
+};
+
 
 KFORMULA_NAMESPACE_END
 

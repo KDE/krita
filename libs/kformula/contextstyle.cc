@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,10 +26,8 @@
 #include <kdebug.h>
 #include <KoGlobal.h>
 
-#include "cmstyle.h"
+#include "fontstyle.h"
 #include "contextstyle.h"
-#include "esstixfontstyle.h"
-#include "symbolfontstyle.h"
 
 
 KFORMULA_NAMESPACE_BEGIN
@@ -38,8 +37,7 @@ ContextStyle::ContextStyle()
     : symbolFont( "Symbol" ),
       defaultColor(Qt::black), numberColor(Qt::blue),
       operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
-      emptyColor(Qt::blue), helpColor( Qt::gray ),
-      m_sizeFactor( 0 )
+      emptyColor(Qt::blue), helpColor( Qt::gray ), m_sizeFactor( 0 )
 {
     textStyleValues[ displayStyle      ].setup( 1. );
     textStyleValues[ textStyle         ].setup( 1. );
@@ -74,21 +72,8 @@ void ContextStyle::setFontStyle( const QString& fontStyle, bool init )
 {
     delete m_fontStyle;
     m_fontStyleName = fontStyle;
-    if ( m_fontStyleName == "tex" ) {
-        m_fontStyle = new CMStyle();
-        if ( !m_fontStyle->init( this , init ) ) {
-        }
-    }
-    else if ( m_fontStyleName == "esstix" ) {
-        m_fontStyle = new EsstixFontStyle();
-        if ( !m_fontStyle->init( this ) ) {
-        }
-    }
-    else {
-        // The SymbolFontStyle is always expected to work.
-        m_fontStyle = new SymbolFontStyle();
-        m_fontStyle->init( this );
-    }
+    m_fontStyle = new FontStyle();
+    m_fontStyle->init( this, init );
 }
 
 
@@ -112,16 +97,11 @@ void ContextStyle::readConfig( KConfig* config, bool init )
     QString baseSize = config->readEntry( "baseSize", "20" );
     m_baseSize = baseSize.toInt();
 
-    m_fontStyleName = config->readEntry( "fontStyle" );
-
-    if ( m_fontStyleName.isEmpty() ) {
-        if (CMStyle::missingFonts( init ).isEmpty())
-            m_fontStyleName = "tex";
-        else if (EsstixFontStyle::missingFonts().isEmpty())
-    	    m_fontStyleName = "esstix";
-        else
-            m_fontStyleName = "symbol";
+    if ( ! FontStyle::missingFonts( init ).isEmpty() ) {
+        kdWarning( DEBUGID) << "Not all basic fonts found\n";
     }
+    mathFont.fromString("Arev Sans");
+    bracketFont.fromString("cmex10");
 
     // There's no gui right anymore but I'll leave it here...
     config->setGroup( "kformula Color" );
@@ -232,47 +212,58 @@ double ContextStyle::getReductionFactor( TextStyle tstyle ) const
     return textStyleValues[ tstyle ].reductionFactor;
 }
 
-luPt ContextStyle::getAdjustedSize( TextStyle tstyle ) const
+luPt ContextStyle::getAdjustedSize( TextStyle tstyle, double factor ) const
 {
-    return ptToLayoutUnitPt( m_sizeFactor*m_baseSize*getReductionFactor( tstyle ) );
+    return ptToLayoutUnitPt( m_sizeFactor * m_baseSize 
+                             * getReductionFactor( tstyle ) * factor );
 }
 
-luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
+luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space, double factor ) const
 {
     switch ( space ) {
-    case NEGTHIN: return -getThinSpace( tstyle );
-    case THIN:    return getThinSpace( tstyle );
-    case MEDIUM:  return getMediumSpace( tstyle );
-    case THICK:   return getThickSpace( tstyle );
-    case QUAD:    return getQuadSpace( tstyle );
+    case NEGTHIN: return -getThinSpace( tstyle, factor );
+    case THIN:    return getThinSpace( tstyle, factor );
+    case MEDIUM:  return getMediumSpace( tstyle, factor );
+    case THICK:   return getThickSpace( tstyle, factor );
+    case QUAD:    return getQuadSpace( tstyle, factor );
     }
     return 0;
 }
 
-luPixel ContextStyle::getThinSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getThinSpace( TextStyle tstyle, double factor ) const
 {
-    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].thinSpace( quad ) );
+    return ptToPixelX( m_sizeFactor 
+                       * textStyleValues[ tstyle ].thinSpace( quad ) 
+                       * factor );
 }
 
-luPixel ContextStyle::getMediumSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getMediumSpace( TextStyle tstyle, double factor ) const
 {
-    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].mediumSpace( quad ) );
+    return ptToPixelX( m_sizeFactor
+                       * textStyleValues[ tstyle ].mediumSpace( quad )
+                       * factor );
 }
 
-luPixel ContextStyle::getThickSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getThickSpace( TextStyle tstyle, double factor ) const
 {
-    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].thickSpace( quad ) );
+    return ptToPixelX( m_sizeFactor
+                       * textStyleValues[ tstyle ].thickSpace( quad )
+                       * factor );
 }
 
-luPixel ContextStyle::getQuadSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getQuadSpace( TextStyle tstyle, double factor ) const
 {
-    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].quadSpace( quad ) );
+    return ptToPixelX( m_sizeFactor 
+                       * textStyleValues[ tstyle ].quadSpace( quad ) 
+                       * factor );
 }
 
-luPixel ContextStyle::axisHeight( TextStyle tstyle ) const
+luPixel ContextStyle::axisHeight( TextStyle tstyle, double factor ) const
 {
     //return ptToPixelY( textStyleValues[ tstyle ].axisHeight( m_axisHeight ) );
-    return static_cast<luPixel>( m_sizeFactor*textStyleValues[ tstyle ].axisHeight( m_axisHeight ) );
+    return static_cast<luPixel>( m_sizeFactor
+                                 * textStyleValues[ tstyle ].axisHeight( m_axisHeight )
+                                 * factor );
 }
 
 luPt ContextStyle::getBaseSize() const
@@ -295,19 +286,19 @@ void ContextStyle::setSizeFactor( double factor )
 }
 
 
-luPixel ContextStyle::getLineWidth() const
+luPixel ContextStyle::getLineWidth( double factor ) const
 {
-    return ptToLayoutUnitPixX( m_sizeFactor*lineWidth );
+    return ptToLayoutUnitPixX( m_sizeFactor * lineWidth * factor );
 }
 
-luPixel ContextStyle::getEmptyRectWidth() const
+luPixel ContextStyle::getEmptyRectWidth( double factor ) const
 {
-    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize/1.8 );
+    return ptToLayoutUnitPixX( m_sizeFactor * m_baseSize * factor / 1.8 );
 }
 
-luPixel ContextStyle::getEmptyRectHeight() const
+luPixel ContextStyle::getEmptyRectHeight( double factor ) const
 {
-    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize/1.8 );
+    return ptToLayoutUnitPixX( m_sizeFactor * m_baseSize * factor / 1.8 );
 }
 
 
@@ -418,5 +409,390 @@ double ContextStyle::layoutUnitToFontSize( double luSize, bool /*forPrint*/ ) co
     #endif
       ;*/
 }
+
+double StyleAttributes::sizeFactor() const
+{
+    if ( m_size.empty() ) {
+//        kdWarning( DEBUGID ) << "SizeFactor stack is empty.\n";
+        return 1.0;
+    }
+    return m_size.top();
+}
+
+bool StyleAttributes::customMathVariant() const
+{
+    if ( m_customMathVariant.empty() ) {
+        return false;
+    }
+    return m_customMathVariant.top();
+}
+
+CharStyle StyleAttributes::charStyle() const
+{
+    if ( m_charStyle.empty() ) {
+//        kdWarning( DEBUGID ) << "CharStyle stack is empty.\n";
+        return anyChar;
+    }
+    return m_charStyle.top();
+}
+
+CharFamily StyleAttributes::charFamily() const
+{
+    if ( m_charFamily.empty() ) {
+//        kdWarning( DEBUGID ) << "CharFamily stack is empty.\n";
+        return anyFamily;
+    }
+    return m_charFamily.top();
+}
+
+QColor StyleAttributes::color() const
+{
+    if ( m_color.empty() ) {
+//        kdWarning( DEBUGID ) << "Color stack is empty.\n";
+        return QColor( Qt::black );
+        //return getDefaultColor();
+    }
+    return m_color.top();
+}
+
+QColor StyleAttributes::background() const
+{
+    if ( m_background.empty() ) {
+//        kdWarning( DEBUGID ) << "Background stack is empty.\n";
+        return QColor( Qt::color0 );
+    }
+    return m_background.top();
+}
+
+QFont StyleAttributes::font() const
+{
+    if ( m_font.empty() ) {
+        return QFont();
+    }
+    return m_font.top();
+}
+
+bool StyleAttributes::fontWeight() const
+{
+    if ( m_fontWeight.empty() ) {
+        return false;
+    }
+    return m_fontWeight.top();
+}
+
+bool StyleAttributes::customFontWeight() const
+{
+    if ( m_customFontWeight.empty() ) {
+        return false;
+    }
+    return m_customFontWeight.top();
+}
+
+bool StyleAttributes::fontStyle() const
+{
+    if ( m_fontStyle.empty() ) {
+        return false;
+    }
+    return m_fontStyle.top();
+}
+
+bool StyleAttributes::customFontStyle() const
+{
+    if ( m_customFontStyle.empty() ) {
+        return false;
+    }
+    return m_customFontStyle.top();
+}
+
+bool StyleAttributes::customFont() const
+{
+    if ( m_customFontFamily.empty() ) {
+        return false;
+    }
+    return m_customFontFamily.top();
+}
+
+int StyleAttributes::scriptLevel() const
+{
+    if ( m_scriptLevel.empty() ) {
+        return 0;
+    }
+    return m_scriptLevel.top();
+}
+
+double StyleAttributes::scriptSizeMultiplier() const
+{
+    if ( m_scriptSizeMultiplier.empty() ) {
+        return scriptsizemultiplier;
+    }
+    return m_scriptSizeMultiplier.top();
+}
+
+double StyleAttributes::scriptMinSize() const
+{
+    if ( m_scriptMinSize.empty() ) {
+        return scriptminsize;
+    }
+    return m_scriptMinSize.top();
+}
+
+double StyleAttributes::veryVeryThinMathSpace() const
+{
+    if ( m_veryVeryThinMathSpace.empty() ) {
+        return veryverythinmathspace;
+    }
+    return m_veryVeryThinMathSpace.top();
+}
+
+double StyleAttributes::veryThinMathSpace() const
+{
+    if ( m_veryThinMathSpace.empty() ) {
+        return verythinmathspace;
+    }
+    return m_veryThinMathSpace.top();
+}
+
+double StyleAttributes::thinMathSpace() const
+{
+    if ( m_thinMathSpace.empty() ) {
+        return thinmathspace;
+    }
+    return m_thinMathSpace.top();
+}
+
+double StyleAttributes::mediumMathSpace() const
+{
+    if ( m_mediumMathSpace.empty() ) {
+        return mediummathspace;
+    }
+    return m_mediumMathSpace.top();
+}
+
+double StyleAttributes::thickMathSpace() const
+{
+    if ( m_thickMathSpace.empty() ) {
+        return thickmathspace;
+    }
+    return m_thickMathSpace.top();
+}
+
+double StyleAttributes::veryThickMathSpace() const
+{
+    if ( m_veryThickMathSpace.empty() ) {
+        return verythickmathspace;
+    }
+    return m_veryThickMathSpace.top();
+}
+
+double StyleAttributes::veryVeryThickMathSpace() const
+{
+    if ( m_veryVeryThickMathSpace.empty() ) {
+        return veryverythickmathspace;
+    }
+    return m_veryVeryThickMathSpace.top();
+}
+
+bool StyleAttributes::displayStyle() const
+{
+    if ( m_displayStyle.empty() ) {
+        return true;
+    }
+    return m_displayStyle.top();
+}
+
+bool StyleAttributes::customDisplayStyle() const
+{
+    if ( m_customDisplayStyle.empty() ) {
+        return false;
+    }
+    return m_customDisplayStyle.top();
+}
+
+double StyleAttributes::getSpace( SizeType type, double length ) const
+{
+    switch ( type ) {
+    case NegativeVeryVeryThinMathSpace:
+        return - veryVeryThinMathSpace();
+    case NegativeVeryThinMathSpace:
+        return - veryThinMathSpace();
+    case NegativeThinMathSpace:
+        return - thinMathSpace();
+    case NegativeMediumMathSpace:
+        return - mediumMathSpace();
+    case NegativeThickMathSpace:
+        return - thickMathSpace();
+    case NegativeVeryThickMathSpace:
+        return - veryThickMathSpace();
+    case NegativeVeryVeryThickMathSpace:
+        return - veryVeryThickMathSpace();
+    case VeryVeryThinMathSpace:
+        return veryVeryThinMathSpace();
+    case VeryThinMathSpace:
+        return veryThinMathSpace();
+    case ThinMathSpace:
+        return thinMathSpace();
+    case MediumMathSpace:
+        return mediumMathSpace();
+    case ThickMathSpace:
+        return thickMathSpace();
+    case VeryThickMathSpace:
+        return veryThickMathSpace();
+    case VeryVeryThickMathSpace:
+        return veryVeryThickMathSpace();
+    default:
+        break;
+    }
+    return length;
+}
+
+void StyleAttributes::resetSize()
+{
+    if ( ! m_size.empty() ) {
+        m_size.pop();
+    }
+}
+
+void StyleAttributes::resetCharStyle()
+{
+    if ( ! m_charStyle.empty() ) {
+        m_charStyle.pop();
+    }
+}
+
+void StyleAttributes::resetCharFamily()
+{
+    if ( ! m_charFamily.empty() ) {
+        m_charFamily.pop();
+    }
+}
+
+void StyleAttributes::resetColor()
+{
+    if ( ! m_color.empty() ) {
+        m_color.pop();
+    }
+}
+
+void StyleAttributes::resetBackground()
+{
+    if ( ! m_background.empty() ) {
+        m_background.pop();
+    }
+}
+
+void StyleAttributes::resetFontFamily()
+{
+    if ( ! m_customFontFamily.empty() ) {
+        if ( m_customFontFamily.pop() ) {
+            if ( ! m_font.empty() ) {
+                m_font.pop();
+            }
+        }
+    }
+}
+
+void StyleAttributes::resetFontWeight()
+{
+    if ( ! m_customFontWeight.empty() ) {
+        if ( m_customFontWeight.pop() ) {
+            if ( ! m_fontWeight.empty() ) {
+                m_fontWeight.pop();
+            }
+        }
+    }
+}
+
+void StyleAttributes::resetFontStyle()
+{
+    if ( ! m_customFontStyle.empty() ) {
+        if ( m_customFontStyle.pop() ) {
+            if ( ! m_fontStyle.empty() ) {
+                m_fontStyle.pop();
+            }
+        }
+    }
+}
+
+void StyleAttributes::resetScriptLevel()
+{
+    if ( ! m_scriptLevel.empty() ) {
+        m_scriptLevel.pop();
+    }
+}
+
+void StyleAttributes::resetScriptSizeMultiplier()
+{
+    if ( ! m_scriptSizeMultiplier.empty() ) {
+        m_scriptSizeMultiplier.pop();
+    }
+}
+
+void StyleAttributes::resetScriptMinSize()
+{
+    if ( ! m_scriptMinSize.empty() ) {
+        m_scriptMinSize.pop();
+    }
+}
+
+void StyleAttributes::resetVeryVeryThinMathSpace()
+{
+    if ( ! m_veryVeryThinMathSpace.empty() ) {
+        m_veryVeryThinMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetVeryThinMathSpace()
+{
+    if ( ! m_veryThinMathSpace.empty() ) {
+        m_veryThinMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetThinMathSpace()
+{
+    if ( ! m_thinMathSpace.empty() ) {
+        m_thinMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetMediumMathSpace()
+{
+    if ( ! m_mediumMathSpace.empty() ) {
+        m_mediumMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetThickMathSpace()
+{
+    if ( ! m_thickMathSpace.empty() ) {
+        m_thickMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetVeryThickMathSpace()
+{
+    if ( ! m_veryThickMathSpace.empty() ) {
+        m_veryThickMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetVeryVeryThickMathSpace()
+{
+    if ( ! m_veryVeryThickMathSpace.empty() ) {
+        m_veryVeryThickMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetDisplayStyle()
+{
+    if ( ! m_customDisplayStyle.empty() ) {
+        if ( m_customDisplayStyle.pop() ) {
+            if ( ! m_displayStyle.empty() ) {
+                m_displayStyle.pop();
+            }
+        }
+    }
+}
+
 
 KFORMULA_NAMESPACE_END

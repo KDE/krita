@@ -153,7 +153,7 @@ void BasicElement::moveLeft( FormulaCursor* cursor, BasicElement* )
     if( cursor->currentElement() == this )
         parentElement()->moveLeft( cursor, this );
     else
-        cursor->setCursorTo( this, 1 );
+        cursor->setCursorTo( this, 0 );
 }
 
 void BasicElement::moveRight( FormulaCursor* cursor, BasicElement* )
@@ -161,17 +161,23 @@ void BasicElement::moveRight( FormulaCursor* cursor, BasicElement* )
     if( cursor->currentElement() == this )
         parentElement()->moveRight( cursor, this );
     else
-        cursor->setCursorTo( this, 1 );
+        cursor->setCursorTo( this, 0 );
 }
 
 void BasicElement::moveUp( FormulaCursor* cursor, BasicElement* )
 {
-    parentElement()->moveUp( cursor, this );
+    if( cursor->currentElement() == this )
+        parentElement()->moveUp( cursor, this );
+    else
+        cursor->setCursorTo( this, 0 );
 }
 
 void BasicElement::moveDown( FormulaCursor* cursor, BasicElement* )
 {
-    parentElement()->moveDown( cursor, this );
+    if( cursor->currentElement() == this )
+        parentElement()->moveDown( cursor, this );
+    else
+        cursor->setCursorTo( this, 0 );
 }
 
 void BasicElement::moveHome( FormulaCursor* cursor )

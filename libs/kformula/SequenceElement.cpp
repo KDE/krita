@@ -84,19 +84,21 @@ void SequenceElement::removeChild( BasicElement* element )
 
 void SequenceElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
 {
-    // the parent element enters the seqeunce from the left
-    if( from == parentElement() )
+    if( from == parentElement() )  // parent element enters the seqeunce from the left
         cursor->setCursorTo( this, m_sequenceElements.count() );
-    else   // the cursor comes from a child element
+    else if( from == this )        // moveLeft was invoked in this element
+        m_sequenceElements[ cursor->position()-1 ]->moveLeft( cursor, this );
+    else                           // the cursor comes from a child element
         cursor->setCursorTo( this, m_sequenceElements.indexOf( from ) );
 }
 
 void SequenceElement::moveRight( FormulaCursor* cursor, BasicElement* from )
 {
-    // the parent element enters the seqeunce from the right 
-    if( from == parentElement() )
+    if( from == parentElement() )  // parent element enters the seqeunce from the right 
         cursor->setCursorTo( this, 0 );
-    else   // the cursor comes from a child element
+    else if( from == this )        // moveRight was invoked in this element
+        m_sequenceElements[ cursor->position() ]->moveRight( cursor, this );
+    else                           // the cursor comes from a child element
         cursor->setCursorTo( this, m_sequenceElements.indexOf( from )+1 );
 }
 
@@ -115,12 +117,12 @@ void SequenceElement::readMathML( const QDomElement& element )
     readMathMLAttributes( element );
    
     BasicElement* tmpElement = 0;
-    QDomElement tmp = element.firstChildElement();
-    while( !tmp.isNull() )
+    QDomElement tmp = element.firstChildElement();   
+    while( !tmp.isNull() )    // for each child element, create a element
     {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         m_sequenceElements << tmpElement;
-	tmpElement->readMathML( tmp );
+	tmpElement->readMathML( tmp );       // and read the MathML
 	tmp = tmp.nextSiblingElement();
     }
 }
@@ -128,10 +130,10 @@ void SequenceElement::readMathML( const QDomElement& element )
 void SequenceElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
     writer->startElement( oasisFormat ? "math:mrow" : "mrow" );
-    writeMathMLAttributes( writer );
+    writeMathMLAttributes( writer );                            // write the attributes
 
-    foreach( BasicElement* tmpChild, m_sequenceElements )
-        tmpChild->writeMathML( writer, oasisFormat );
+    foreach( BasicElement* tmpChild, m_sequenceElements )       // just write all
+        tmpChild->writeMathML( writer, oasisFormat );           // children elements
    
     writer->endElement();
 }

@@ -83,21 +83,20 @@ void FormulaCursor::setCursorTo( BasicElement* current, int position )
 
 void FormulaCursor::moveLeft()
 {
-    if( m_wordMovement && !isHome() )                 // move only if the 
-        m_positionInElement--;                        // positionallows it
+    if( m_wordMovement && !isHome() )               
+        m_positionInElement--;                       
+    else if( isHome() )
+        m_currentElement->parentElement()->moveLeft( this, m_currentElement );
     else 
         m_currentElement->moveLeft( this, m_currentElement );
 }
 
 void FormulaCursor::moveRight()
 {
-    if( m_wordMovement )
-    {
-        if( !isEnd() )
-            m_positionInElement++;
-        else
-            m_currentElement->moveRight( this, m_currentElement );
-    }
+    if( m_wordMovement && !isEnd() )
+        m_positionInElement++;
+    else if( isEnd() )           // if the cursor is at the end move it out
+        m_currentElement->parentElement()->moveRight( this, m_currentElement );
     else 
         m_currentElement->moveRight( this, m_currentElement );
 }

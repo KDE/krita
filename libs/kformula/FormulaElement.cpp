@@ -31,14 +31,15 @@
 
 namespace KFormula {
 
-FormulaElement::FormulaElement() : BasicElement( 0 ) , baseSize( 20 ), ownBaseSize( false )
+FormulaElement::FormulaElement() : BasicElement( 0 ),
+				   baseSize( 20 ),
+				   ownBaseSize( false )
 {
 }
 
 FormulaElement::~FormulaElement()
 {
-    // delete all child elements
-    foreach( BasicElement* tmpElement, m_childElements )
+    foreach( BasicElement* tmpElement, m_childElements )    // delete all child elements
 	delete tmpElement;
 }
 
@@ -49,6 +50,7 @@ const QList<BasicElement*> FormulaElement::childElements()
 
 void FormulaElement::readMathML( const QDomElement& element )
 {
+    readMathMLAttributes( element );
 }
 
 void FormulaElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
@@ -181,17 +183,6 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
     draw( painter, r, context, context.getBaseTextStyle(),
           ContextStyle::normal, LuPixelPoint() );
 }
-/*
-KCommand* FormulaElement::buildCommand( Container* container, Request* request )
-{
-    switch ( *request ) {
-    case req_compactExpression:
-        return 0;
-    default:
-        break;
-    }
-    return BasicElement::buildCommand( container, request );
-}*/
 
 QDomElement FormulaElement::emptyFormulaElement( QDomDocument& doc )
 {
@@ -204,27 +195,6 @@ QDomElement FormulaElement::emptyFormulaElement( QDomDocument& doc )
     */
     return element;
 }
-/*
-KCommand* FormulaElement::input( Container* container, QKeyEvent* event )
-{
-    QChar ch = event->text().at( 0 );
-    if ( !ch.isPrint() ) {
-        int action = event->key();
-        //int state = event->state();
-        //MoveFlag flag = movementFlag(state);
-
-	switch ( action ) {
-        case Qt::Key_Return:
-        case Qt::Key_Enter: {
-            FormulaCursor* cursor = container->activeCursor();
-            insertFormula( cursor );
-            return 0;
-        }
-        }
-    }
-    return BasicElement::input( container, event );
-}*/
-
 /**
  * Appends our attributes to the dom element.
  */

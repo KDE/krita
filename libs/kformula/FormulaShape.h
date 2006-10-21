@@ -56,7 +56,10 @@ public:
     QSizeF size() const; 
 
     /// @return Get the bounding box of the shape.
-    QRectF boudingRect() const;
+    QRectF boundingRect() const;
+
+    /// @return The formula's root element
+    BasicElement* formulaElement() const;
     
     /**
      * Load the formula from the specified file containing MathML

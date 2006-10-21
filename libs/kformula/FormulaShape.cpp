@@ -25,20 +25,16 @@ namespace KFormula {
 	
 FormulaShape::FormulaShape()
 {
-    m_formulaElement = 0;
+    m_formulaElement = new FormulaElement();
 }
 
 FormulaShape::~FormulaShape()
 {
-    if( m_formulaElement )
-        delete m_formulaElement;
+    delete m_formulaElement;
 }
 
 void FormulaShape::paint( QPainter &painter, KoViewConverter &converter ) 
 {
-    if( !m_formulaElement )                  // if nothing to paint, return
-        return;
-
     applyConversion( painter, converter );   // apply zooming and coordinate translation
     m_formulaElement->paint( painter );      // paint the formula
 }
@@ -60,22 +56,25 @@ void FormulaShape::resize( const QSizeF& )
 
 QRectF FormulaShape::boundingRect() const
 {
-    return m_invMatrix.inverted().map( m_formulaElement->boundingRect() );
+    return m_invMatrix.inverted().mapRect( m_formulaElement->boundingRect() );
 }
 
-void FormulaShape::loadMathML( const QDomDocument &doc, bool oasisFormat )
+BasicElement* FormulaShape::formulaElement() const
 {
-    if( !m_formulaElement )
-        delete m_formulaElement;
+    return m_formulaElement;
+}
 
-    m_formulaElement = new FormulaElement();
-    m_formulaElement->loadMathML( doc.documentElement );
+void FormulaShape::loadMathML( const QDomDocument &doc, bool )
+{
+    delete m_formulaElement;                                // delete the old formula
+    m_formulaElement = new FormulaElement();                // create a new root element
+    m_formulaElement->readMathML( doc.documentElement() );  // and load the new formula
 }
 
 void FormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-    if( !m_formulaElement )    // if there is nothing, don't try to save something
-	return;
+    if( m_formulaElement->childElements().isEmpty() )  // if the formula is empty
+	return;                                        // do not save it
     
     m_formulaElement->writeMathML( writer, oasisFormat );
 }

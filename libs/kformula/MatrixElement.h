@@ -101,14 +101,14 @@ public:
 
 
     /// Return the number of the rows of this matrix
-    int rows() const;
+/*    int rows() const;
 
     /// Return the number of the columns of this matrix
     int cols() const;
                
     /// Obtain a pointer to the element at @p row and @p col in the matrix
     MatrixEntryElement* matrixEntryAt( int row, int col );
-    
+  */  
     /**
      * Sets the cursor inside this element to its start position.
      * For most elements that is the main child.
@@ -136,18 +136,11 @@ protected:
     virtual bool readContentFromDom(QDomNode& node);
 
 private:
+    /// @return The index of @p row in m_matrixRowElements
+    int indexOfRow( BasicElement* row ) const;
+    
     /// The rows a matrix contains
     QList<MatrixRowElement*> m_matrixRowElements;
-
-
-
-    
-    /**
-     * Searches through the matrix for the element. Sets the
-     * row and column if found.
-     * Returns true if the element was found. false otherwise.
-     */
-    bool searchElement( BasicElement* element, int& row, int& column );
 };
 
 } // namespace KFormula

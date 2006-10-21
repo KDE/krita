@@ -40,12 +40,14 @@ MatrixRowElement::~MatrixRowElement()
 {
 }
 
-int MatrixRowElement::numberOfEntries() const
+int MatrixRowElement::positionOfEntry( BasicElement* entry ) const
 {
-    return m_matrixEntryElements.count();
+    for( int i = 0; i < m_matrixEntryElements.count(); i++ )
+         if( m_matrixEntryElements[ i ] == entry )
+             return i;
 }
 
-MatrixEntryElement* MatrixRowElement::entryAtPosition( int pos )
+MatrixEntryElement* MatrixRowElement::entryAt( int pos )
 {
     return m_matrixEntryElements[ pos ];
 }
@@ -59,8 +61,45 @@ const QList<BasicElement*> MatrixRowElement::childElements()
     return tmp;
 }
 
+void MatrixRowElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
+{
+    if( from == parentElement() )   // coming from the parent go to the very right entry
+        m_matrixEntryElements.last()->moveLeft( cursor, this );
+    else                            // coming from a child go to the parent
+        parentElement()->moveLeft( cursor, from );
+}
+
+void MatrixRowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
+{
+    if( from == parentElement() )
+        m_matrixEntryElements.first()->moveRight( cursor, this );
+    else
+        parentElement()->moveRight( cursor, this );
+}
+
+void MatrixRowElement::moveUp( FormulaCursor* cursor, BasicElement* from )
+{
+    parentElement()->moveUp( cursor, from );   // just forward the call to MatrixElement   
+}
+
+void MatrixRowElement::moveDown( FormulaCursor* cursor, BasicElement* from )
+{
+    parentElement()->moveDown( cursor, from ); // just forward the call to MatrixElement
+}
+
 void MatrixRowElement::readMathML( const QDomElement& element )
 {
+    readMathMLAttributes( element );
+   
+    MatrixEntryElement* tmpEntry = 0;
+    QDomElement tmp = element.firstChildElement();
+    while( !tmp.isNull() )
+    {
+        tmpEntry = new MatrixEntryElement( this );
+	m_matrixEntryElements << tmpEntry;
+	tmpEntry->readMathML( tmp );
+	tmp = tmp.nextSiblingElement();
+    }
 }
 
 void MatrixRowElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
@@ -82,187 +121,7 @@ void MatrixRowElement::goInside( FormulaCursor* cursor )
     m_matrixEntryElements.at( 0 )->goInside( cursor );
 }
 
-void MatrixRowElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
-{
-/*    // If you want to select more than one line you'll have to
-    // select the whole element.
-    if (cursor->isSelectionMode()) {
-        getParent()->moveLeft(cursor, this);
-    }
-    else {
-        // Coming from the parent (sequence) we go to
-        // the very last position
-        if (from == getParent()) {
-            m_matrixEntryElements.at( m_matrixEntryElements.count()-1 )->moveLeft(cursor, this);
-        }
-        else {
-            // Coming from one of the lines we go to the previous line
-            // or to the parent if there is none.
-            int pos = m_matrixEntryElements.indexOf( static_cast<MatrixEntryElement*>( from ) );
-            if ( pos > -1 ) {
-                if ( pos > 0 ) {
-                    m_matrixEntryElements.at( pos-1 )->moveLeft( cursor, this );
-                }
-                else {
-                    getParent()->moveLeft(cursor, this);
-                }
-            }
-            else {
-                kDebug( DEBUGID ) << k_funcinfo << endl;
-                kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
-            }
-        }
-    }*/
-}
 
-void MatrixRowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
-{
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveRight(cursor, this);
-    }
-    else {
-        if (from == getParent()) {
-            m_matrixEntryElements.at( 0 )->moveRight(cursor, this);
-        }
-        else {
-            int pos = m_matrixEntryElements.indexOf( static_cast<MatrixEntryElement*>( from ) );
-            if ( pos > -1 ) {
-                int upos = pos;
-                if ( upos < m_matrixEntryElements.count() ) {
-                    if ( upos < m_matrixEntryElements.count()-1 ) {
-                        m_matrixEntryElements.at( upos+1 )->moveRight( cursor, this );
-                    }
-                    else {
-                        getParent()->moveRight(cursor, this);
-                    }
-                    return;
-                }
-            }
-            kDebug( DEBUGID ) << k_funcinfo << endl;
-            kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
-        }
-    }*/
-}
-
-void MatrixRowElement::moveUp( FormulaCursor* cursor, BasicElement* from )
-{
-/*    // If you want to select more than one line you'll have to
-    // select the whole element.
-    if (cursor->isSelectionMode()) {
-        getParent()->moveLeft(cursor, this);
-    }
-    else {
-        // Coming from the parent (sequence) we go to
-        // the very last position
-        if (from == getParent()) {
-            m_matrixEntryElements.last()->moveLeft(cursor, this);
-        }
-        else {
-            // Coming from one of the lines we go to the previous line
-            // or to the parent if there is none.
-            int pos = m_matrixEntryElements.indexOf( static_cast<MatrixEntryElement*>( from ) );
-            if ( pos > -1 ) {
-                if ( pos > 0 ) {
-                    //content.at( pos-1 )->moveLeft( cursor, this );
-                    // This is rather hackish.
-                    // But we know what elements we have here.
-                    int cursorPos = cursor->getPos();
-                    MatrixEntryElement* current = m_matrixEntryElements.at( pos );
-                    MatrixEntryElement* newLine = m_matrixEntryElements.at( pos-1 );
-                    int tabNum = current->tabBefore( cursorPos );
-                    if ( tabNum > -1 ) {
-                        int oldTabPos = current->tabPos( tabNum );
-                        int newTabPos = newLine->tabPos( tabNum );
-                        if ( newTabPos > -1 ) {
-                            cursorPos += newTabPos-oldTabPos;
-                            int nextNewTabPos = newLine->tabPos( tabNum+1 );
-                            if ( nextNewTabPos > -1 ) {
-                                cursorPos = qMin( cursorPos, nextNewTabPos );
-                            }
-                        }
-                        else {
-                            cursorPos = newLine->countChildren();
-                        }
-                    }
-                    else {
-                        int nextNewTabPos = newLine->tabPos( 0 );
-                        if ( nextNewTabPos > -1 ) {
-                            cursorPos = qMin( cursorPos, nextNewTabPos );
-                        }
-                    }
-                    cursor->setTo( newLine,
-                                   qMin( cursorPos,
-                                         newLine->countChildren() ) );
-                }
-                else {
-                    getParent()->moveLeft(cursor, this);
-                }
-            }
-            else {
-                kDebug( DEBUGID ) << k_funcinfo << endl;
-                kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
-            }
-        }
-    }*/
-}
-
-void MatrixRowElement::moveDown( FormulaCursor* cursor, BasicElement* from )
-{
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveRight(cursor, this);
-    }
-    else {
-        if (from == getParent()) {
-            m_matrixEntryElements.first()->moveRight(cursor, this);
-        }
-        else {
-            int pos = m_matrixEntryElements.indexOf( static_cast<MatrixEntryElement*>( from ) );
-            if ( pos > -1 ) {
-                int upos = pos;
-                if ( upos < m_matrixEntryElements.count() ) {
-                    if ( upos < m_matrixEntryElements.count()-1 ) {
-                        //content.at( upos+1 )->moveRight( cursor, this );
-                        // This is rather hackish.
-                        // But we know what elements we have here.
-                        int cursorPos = cursor->getPos();
-                        MatrixEntryElement* current = m_matrixEntryElements.at( upos );
-                        MatrixEntryElement* newLine = m_matrixEntryElements.at( upos+1 );
-                        int tabNum = current->tabBefore( cursorPos );
-                        if ( tabNum > -1 ) {
-                            int oldTabPos = current->tabPos( tabNum );
-                            int newTabPos = newLine->tabPos( tabNum );
-                            if ( newTabPos > -1 ) {
-                                cursorPos += newTabPos-oldTabPos;
-                                int nextNewTabPos = newLine->tabPos( tabNum+1 );
-                                if ( nextNewTabPos > -1 ) {
-                                    cursorPos = qMin( cursorPos, nextNewTabPos );
-                                }
-                            }
-                            else {
-                                cursorPos = newLine->countChildren();
-                            }
-                        }
-                        else {
-                            int nextNewTabPos = newLine->tabPos( 0 );
-                            if ( nextNewTabPos > -1 ) {
-                                cursorPos = qMin( cursorPos, nextNewTabPos );
-                            }
-                        }
-                        cursor->setTo( newLine,
-                                       qMin( cursorPos,
-                                             newLine->countChildren() ) );
-                    }
-                    else {
-                        getParent()->moveRight(cursor, this);
-                    }
-                    return;
-                }
-            }
-            kDebug( DEBUGID ) << k_funcinfo << endl;
-            kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
-        }
-    }*/
-}
 
 
 void MatrixRowElement::calcSizes( const ContextStyle& context,

@@ -14,6 +14,14 @@ The size might difer because of the fontsize chosen for the numbers or operators
 If an application want 
 
 
+--- The coordinate system ---
+As all of KOffice KFormula uses a postscript-point based coordinate system. Internally
+each element paints using that postscript coordinates. The translation from other units
+to postscript points is done by the class AttributeManager. For the formula the internal
+canvas has always the same size because the zooming conversions are done using the 
+painter matrix. This QMatrix is alter in the paint() method of FormulaShape according to
+the values passed with KoViewConverter.
+
 
 The element tree itself
 #######################

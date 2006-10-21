@@ -32,7 +32,7 @@ namespace KFormula {
 class MatrixEntryElement;
 
 /**
- * Any number of lines. Representing the MathML mtr element.
+ * @short Representing the MathML mtr element.
  */
 class MatrixRowElement : public BasicElement {
     friend class KFCNewLine;
@@ -49,15 +49,45 @@ public:
      * @return a QList with pointers to all child elements
      */
     const QList<BasicElement*> childElements();
-    
-    /// @return The number of @see MatrixEntryElement in this MatrixRowElement
-    int numberOfEntries() const;
+ 
+    /// @return The position of the given @p entry   
+    int positionOfEntry( BasicElement* entry ) const;
 
     /// @return The MatrixEntryElement at the @p pos position in the MatrixRowElement
-    MatrixEntryElement* entryAtPosition( int pos );
+    MatrixEntryElement* entryAt( int pos );
 
+    /**
+     * Move the FormulaCursor left
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveLeft( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor right 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveRight( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor up 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveUp( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor down 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveDown( FormulaCursor* cursor, BasicElement* from );
+    
+    /// Read the element from MathML
     void readMathML( const QDomElement& element );
     
+    /// Save this element to MathML
     void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
 
@@ -70,33 +100,6 @@ public:
      */
     virtual void goInside(FormulaCursor* cursor);
 
-    /**
-     * Enters this element while moving to the left starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the left of it.
-     */
-    virtual void moveLeft( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Enters this element while moving to the right starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the right of it.
-     */
-    virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Enters this element while moving up starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or above it.
-     */
-    virtual void moveUp( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Enters this element while moving down starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or below it.
-     */
-    virtual void moveDown( FormulaCursor* cursor, BasicElement* from );
 
     /// Calculates our width and height and our children's parentPosition.
     virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
@@ -112,11 +115,6 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
-    /**
-     * Dispatch this FontCommand to all our TextElement children.
-     */
- //   virtual void dispatchFontCommand( FontCommand* cmd );
-
     virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
     virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
@@ -128,13 +126,6 @@ public:
 
 
 protected:
-    /// Draws the element internally, means it paints into m_elementPath
-    void drawInternal();
-
-    void readMathMLAttributes( const QDomElement& element );
-
-
-    
     /// Returns the tag name of this element type.
     virtual QString getTagName() const { return "MULTILINE"; }
 
@@ -150,9 +141,8 @@ protected:
      */
     virtual bool readContentFromDom( QDomNode& node );
 
-
 private:
-    /// The list of sequences. Each one is a line.
+    /// The list of entries in this row of the matrix 
     QList<MatrixEntryElement*> m_matrixEntryElements;
 };
 

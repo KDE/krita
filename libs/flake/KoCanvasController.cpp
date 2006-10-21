@@ -146,12 +146,11 @@ KoCanvasController::Viewport::Viewport()
     m_layout = new QGridLayout(this);
     m_layout->setSpacing(0);
     m_layout->setMargin(0);
-    m_layout->setRowStretch(1,1);
     centerCanvas(true);
 }
 
 void KoCanvasController::Viewport::setCanvas(QWidget *canvas) {
-    m_layout->addWidget(canvas, 0, 1, Qt::AlignHCenter);
+    m_layout->addWidget(canvas, 1, 1, Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
 void KoCanvasController::Viewport::removeCanvas(QWidget *canvas) {
@@ -162,6 +161,9 @@ void KoCanvasController::Viewport::centerCanvas(bool centered) {
     m_layout->setColumnStretch(0,centered?1:0);
     m_layout->setColumnStretch(1,1);
     m_layout->setColumnStretch(2,centered?1:2);
+    m_layout->setRowStretch(0,centered?1:0);
+    m_layout->setRowStretch(1,1);
+    m_layout->setRowStretch(2,centered?1:2);
 }
 
 void KoCanvasController::ensureVisible( KoShape *shape ) {

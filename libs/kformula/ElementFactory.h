@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Ulrich Kuettler <ulrich.kuettler@gmx.de>
-                 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,15 +24,52 @@
 
 #include <QString>
 
+#include "kformuladefs.h"
+
 namespace KFormula {
 	
 class BasicElement;
+class BracketElement;
+class EmptyElement;
+class FractionElement;
+class IdentifierElement;
+class IndexElement;
+class MatrixElement;
+class MultilineElement;
+class NameSequence;
+class NumberElement;
+class OperatorElement;
+class OverlineElement;
+class RootElement;
+class SpaceElement;
+class SymbolElement;
+class TextElement;
+class UnderlineElement;
 
 class ElementFactory {
 public:
     ElementFactory();
 
     static BasicElement* createElement( const QString& tagName, BasicElement* parent );
+
+    static TextElement* createTextElement( const QChar& ch, bool symbol=false );
+    static EmptyElement* createEmptyElement();
+    static NameSequence* createNameSequence();
+    static BracketElement* createBracketElement( SymbolType lhs, SymbolType rhs );
+    static OverlineElement* createOverlineElement();
+    static UnderlineElement* createUnderlineElement();
+    static MultilineElement* createMultilineElement();
+    static SpaceElement* createSpaceElement( SpaceWidth width );
+    static FractionElement* createFractionElement();
+    static RootElement* createRootElement();
+    static SymbolElement* createSymbolElement( SymbolType type );
+    static MatrixElement* createMatrixElement( uint rows, uint columns );
+    static IndexElement* createIndexElement();
+    static IdentifierElement* createIdentifierElement();
+    static OperatorElement* createOperatorElement();
+    static NumberElement* createNumberElement();
+
+    BasicElement* createOperatorElement( const QDomElement& element );
 };
 
 } // namespace KFormula

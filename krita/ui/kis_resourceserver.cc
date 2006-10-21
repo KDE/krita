@@ -134,7 +134,7 @@ QStringList getFileNames( const QString & extensions, const QString & type )
     QStringList fileNames;
 
     foreach (QString extension, extensionList) {
-        fileNames += KisFactory::instance()->dirs()->findAllResources(type.toAscii(), extension);
+        fileNames += KisFactory2::instance()->dirs()->findAllResources(type.toAscii(), extension);
     }
     return fileNames;
 }

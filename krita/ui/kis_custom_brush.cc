@@ -30,7 +30,7 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
@@ -42,7 +42,7 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 
-KisCustomBrush::KisCustomBrush(QWidget *parent, const char* name, const QString& caption, KisView* view)
+KisCustomBrush::KisCustomBrush(QWidget *parent, const char* name, const QString& caption, KisView2* view)
     : KisWdgCustomBrush(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
@@ -71,7 +71,7 @@ void KisCustomBrush::showEvent(QShowEvent *) {
 void KisCustomBrush::slotUpdateCurrentBrush(int) {
     delete m_brush;
     m_brush = 0;
-    if (m_view->canvasSubject() && m_view->canvasSubject()->currentImg()) {
+    if (m_view->image()) {
         createBrush();
         if (m_brush)
             preview->setPixmap(QPixmap::fromImage(m_brush->img()));
@@ -122,7 +122,7 @@ void KisCustomBrush::slotUseBrush() {
 }
 
 void KisCustomBrush::createBrush() {
-    KisImageSP img = m_view->canvasSubject()->currentImg();
+    KisImageSP img = m_view->image();
 
     if (!img)
         return;

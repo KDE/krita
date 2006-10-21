@@ -1,46 +1,55 @@
 set(kritaui_LIB_SRCS
+    kis_itemchooser.cc
+    kis_icon_item.cc
+    kis_iconwidget.cc
+    imageviewer.cc
+    kcurve.cc
+    kis_autobrush.cc
+    kis_autogradient.cc
+    kis_boundary_painter.cc
+    kis_canvas2.cpp
+    kis_clipboard.cc
+    kis_cmb_composite.cc
+    kis_cmb_idlist.cc
+    kis_color_cup.cc
+    kis_config.cc
+    kis_cursor.cc
+    kis_custom_brush.cc
+    kis_custom_image_widget.cc
+    kis_dlg_apply_profile.cc
+    kis_dlg_image_properties.cc
+    kis_dlg_layer_properties.cc
+    kis_dlg_new_layer.cc
+    kis_dlg_preferences.cc
     kis_doc2.cc
     kis_factory2.cc
-    kis_canvas2.cpp
-    kis_opengl_canvas2.cpp
-    kis_qpainter_canvas.cpp
-    kis_view_converter.cpp
-    kis_view2.cpp
-    kis_custom_image_widget.cc
-    squeezedcombobox.cpp
-    kis_cmb_idlist.cc
-    kis_dlg_image_properties.cc
-    kis_config.cc
-    kis_clipboard.cc
+    kis_gradient_slider_widget.cc
+    kis_grid_drawer.cpp
+    kis_histogram_view.cc
+    kis_int_spinbox.cc
+    kis_label_cursor_pos.cc
+    kis_label_progress.cc
+    kis_label_zoom.cc
+    kis_layerbox.cc
+    kis_matrix_widget.cpp
+    kis_multi_bool_filter_widget.cc
+    kis_multi_double_filter_widget.cc
+    kis_multi_integer_filter_widget.cc
     kis_oasis_load_data_visitor.cc
     kis_oasis_load_visitor.cc
     kis_oasis_save_data_visitor.cc
     kis_oasis_save_visitor.cc
+    kis_opengl_canvas2.cpp
     kis_part_layer.cc
-    kis_matrix_widget.cpp
-    imageviewer.cc
-    kis_cursor.cc
-    kcurve.cc
+    kis_qpainter_canvas.cpp
+    kis_resource_provider.cc
     kis_strategy_move.cc
-    kis_dlg_apply_profile.cc
-    kis_dlg_layer_properties.cc
-    kis_dlg_new_layer.cc
-    kis_dlg_preferences.cc
-    kis_int_spinbox.cc
-    kis_cmb_composite.cc
-    kis_layerbox.cc
-    imageviewer.cc
-    kis_color_cup.cc
-    kis_histogram_view.cc
-    kis_autobrush.cc
-    kis_autogradient.cc
-    kis_boundary_painter.cc
-    kis_gradient_slider_widget.cc
-    kis_grid_drawer.cpp
-    kis_multi_bool_filter_widget.cc
-    kis_multi_double_filter_widget.cc
-    kis_multi_integer_filter_widget.cc
     kis_text_brush.cc
+    kis_view2.cpp
+    kis_view_converter.cpp
+    squeezedcombobox.cpp
+    kis_resource_mediator.cc
+    kis_resourceserver.cc
     #    kis_tool.cc
     #    kis_tool_dummy.cc
     #    kis_tool_freehand.cc
@@ -56,8 +65,6 @@ set(kritaui_LIB_SRCS
 #   kis_birdeye_box.cc
 #   kis_brush_chooser.cc
 #   kis_controlframe.cc
-#   kis_custom_brush.cc
-#   kis_custom_image_widget.cc
 #   kis_custom_palette.cc
 #   kis_custom_pattern.cc
 #   kis_dlg_adj_layer_props.cc
@@ -66,13 +73,7 @@ set(kritaui_LIB_SRCS
 #   kis_filter_manager.cc
 #   kis_filters_listview.cc
 #   kis_grid_manager.cpp
-#   kis_icon_item.cc
-#   kis_iconwidget.cc
 #   kis_import_catcher.cc
-#   kis_itemchooser.cc
-#   kis_label_cursor_pos.cc
-#   kis_label_progress.cc
-#   kis_label_zoom.cc
 #   kis_matrix_widget.cpp
 #   kis_paintop_box.cc
 #   kis_palette_view.cc
@@ -84,8 +85,6 @@ set(kritaui_LIB_SRCS
 #   kis_previewdialog.cc
 #   kis_previewwidget.cc
 #   kis_qpaintdevice_canvas.cc
-#   kis_resource_mediator.cc
-#   kis_resourceserver.cc
 #   kis_ruler.cc
 #   kis_selection_manager.cc
 #   kis_selection_options.cc

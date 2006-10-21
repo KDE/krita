@@ -27,8 +27,6 @@
 #include "kis_painter.h"
 #include "kis_selection.h"
 #include "KoID.h"
-#include "kis_canvas_subject.h"
-#include "kis_progress_display_interface.h"
 #include "kis_types.h"
 #include "kis_filter_config_widget.h"
 

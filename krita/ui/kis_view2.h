@@ -34,6 +34,7 @@ class KisImage;
 class KisViewConverter;
 class KoCanvasController;
 class KisDoc2;
+class KisResourceProvider;
 
 class KisView2 : public KoView {
 
@@ -48,8 +49,8 @@ public:
 
     // KoView implementation
     virtual void updateReadWrite( bool readwrite ) { Q_UNUSED(readwrite); }
-    virtual QDockWidget *createToolBox() 
-        { 
+    virtual QDockWidget *createToolBox()
+        {
             return KoToolManager::instance()->toolBox("krita");
         }
 
@@ -57,6 +58,7 @@ public:
 
     // Krita specific interfaces
     KisImageSP image();
+    KisResourceProvider * resourceProvider();
 
 
 private slots:

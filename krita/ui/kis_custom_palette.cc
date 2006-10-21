@@ -32,14 +32,14 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_palette.h"
 #include "kis_palette_view.h"
 #include "kis_custom_palette.h"
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
 
-KisCustomPalette::KisCustomPalette(QWidget *parent, const char* name, const QString& caption, KisView* view)
+KisCustomPalette::KisCustomPalette(QWidget *parent, const char* name, const QString& caption, KisView2* view)
     : KisWdgCustomPalette(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);

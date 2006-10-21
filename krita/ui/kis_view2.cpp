@@ -31,12 +31,14 @@
 
 #include <kis_image.h>
 
+#include "kis_resource_provider.h"
 #include "kis_factory2.h"
 #include "kis_view_converter.h"
 #include "kis_canvas2.h"
 #include "kis_opengl_canvas2.h"
 #include "kis_qpainter_canvas.h"
 #include "kis_doc2.h"
+#include "kis_resource_provider.h"
 
 class KisView2::KisView2Private {
 
@@ -51,6 +53,8 @@ public:
             // The canvas controller handles the scrollbars
             canvasController = new KoCanvasController( view );
             canvasController->setCanvas( canvas );
+
+            resourceProvider = new KisResourceProvider( view );
         }
 
     ~KisView2Private()
@@ -65,7 +69,7 @@ public:
     KisDoc2 * doc;
     KisViewConverter * viewConverter;
     KoCanvasController * canvasController;
-    QScrollArea * scrollArea;
+    KisResourceProvider * resourceProvider;
 };
 
 KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
@@ -108,6 +112,12 @@ KisImageSP KisView2::image()
 {
     return m_d->doc->currentImage();
 }
+
+KisResourceProvider * KisView2::resourceProvider()
+{
+    return m_d->resourceProvider;
+}
+
 
 void KisView2::slotInitializeCanvas()
 {

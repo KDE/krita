@@ -154,9 +154,7 @@ void KisView2::slotInitializeCanvas()
     kDebug() << "Image completely loaded! W: "
              << image()->width() << ", H: "
              << image()->height() << endl;
-    QRegion rg = image()->extent();
-    QRect rc = rg.boundingRect();
-    m_d->canvas->setCanvasSize( rc.width(), rc.height() );
+    m_d->canvas->setCanvasSize( image()->width(), image()->height() );
 }
 
 void KisView2::slotZoomChanged(KoZoomMode::Mode mode, int zoom)

@@ -99,35 +99,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     QRegion paintRegion = ev->region();
     QPainter gc( this );
 
-    QRegion imageRegion = m_canvas->image()->extent();
-
-    // The widget origin is 0,0 -- the image may well have a negative x, y, so we need to move all rects.
-    qint32 xoffset = -imageRegion.boundingRect().x();
-    qint32 yoffset = -imageRegion.boundingRect().y();
-
-    imageRegion.translate(xoffset, yoffset);
-
-    // Only the part that intersects with the bit we want to paint is interesting
-    QRect imageRect = QRect(xoffset, yoffset, img->width(), img->height());
-
-    // If we're in the border area, draw the border.
-    // The border region is the set of rects around the image where there may be
-    // layer data, but that is outside the user-defined dimensions of the image.
-    // But we are only interested in the region that intersects with the region
-    // we need to repaint.
-    QRegion borderRegion = QRegion(imageRegion.boundingRect())
-        .subtracted(QRegion(imageRect))
-        .intersected(paintRegion);
-
-    QVector<QRect> borderRects = borderRegion.rects();
-
-    QVector<QRect>::iterator it = borderRects.begin();
-    QVector<QRect>::iterator end = borderRects.end();
-
-    while (it != end) {
-        gc.fillRect((*it), palette().dark());
-        ++it;
-    }
+    QRect imageRect(0,0,img->width(), img->height());
 
     // Then draw the checks in the rects that are inside the the image
     // and which we need to repaint. We must paint all checks because we
@@ -143,8 +115,8 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
             // Checks
             gc.fillRect((*it), *m_checkBrush );
             // Image
-            img->renderToPainter((*it).x() - xoffset,
-                                 (*it).y() - yoffset,
+            img->renderToPainter((*it).x(),
+                                 (*it).y(),
                                  (*it).x(), (*it).y(),
                                  (*it).width(), (*it).height(), gc,
                                  m_monitorProfile,
@@ -169,27 +141,6 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
                                                      gc);
     }
 #endif
-    // Paint the bits of the layers that are outside the real image, with
-    // a gray wash
-    QVector<QRect>outsideRects = imageRegion
-                                    .subtracted(QRegion(imageRect))
-                                    .intersected(paintRegion).rects();
-
-    it = outsideRects.begin();
-    end = outsideRects.end();
-    while (it != end) {
-        img->renderToPainter((*it).x() - xoffset,
-                             (*it).y() - yoffset,
-                             (*it).x(), (*it).y(),
-                             (*it).width(), (*it).height(), gc,
-                             m_monitorProfile,
-                             0);
-        gc.save();
-        gc.setOpacity(0.95);
-        gc.fillRect(*it, palette().dark());
-        gc.restore();
-        ++it;
-    }
     // ask the guides, grids, etc to paint themselves
 
     // Give the tool a chance to paint its stuff

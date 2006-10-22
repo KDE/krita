@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,9 +31,41 @@ namespace KFormula {
  * A element that represents a space.
  */
 class SpaceElement : public BasicElement {
+    enum LineBreakType {
+        NoBreakType,
+        AutoBreak,
+        NewLineBreak,
+        IndentingNewLineBreak,
+        NoBreak,
+        GoodBreak,
+        BadBreak
+    };
 public:
     /// The standard constructor
     SpaceElement( BasicElement* parent = 0 );
+
+    /**
+     * Calculates our width and height and
+     * our children's parentPosition.
+     * DEPRECATED: use calculateSize()
+     */
+    virtual void calcSizes( const ContextStyle& style,
+						    ContextStyle::TextStyle tstyle,
+						    ContextStyle::IndexStyle istyle,
+							StyleAttributes& style );
+
+    /**
+     * Draws the whole element including its children.
+     * The `parentOrigin' is the point this element's parent starts.
+     * We can use our parentPosition to get our own origin then.
+     * DEPRECATED: Use paint()
+     */
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+					   StyleAttributes& style,
+                       const LuPixelPoint& parentOrigin );
 
     /**
      * Render the element to the given QPainter
@@ -72,6 +105,30 @@ protected:
      * Returns false if it failed.
      */
     virtual bool readContentFromDom(QDomNode& node);
+    /**
+     * Reads our attributes from the MathML element.
+     * Returns false if it failed.
+     */
+	virtual bool readAttributesFromMathMLDom(const QDomElement& element);
+
+private:
+
+    virtual QString getElementName() const { return "mspace"; }
+    virtual void writeMathMLAttributes( QDomElement& element ) const ;
+
+    /**
+     * Whether this space behaves like a tab.
+     */
+    bool m_tab;
+
+    // MathML Attributes, Section 3.2.7.2
+    SizeType m_widthType;
+    double m_width;
+    SizeType m_heightType;
+    double m_height;
+    SizeType m_depthType;
+    double m_depth;
+    LineBreakType m_lineBreak;
 };
 
 } // namespace KFormula

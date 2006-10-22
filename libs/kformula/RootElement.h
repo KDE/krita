@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,9 +23,9 @@
 #ifndef ROOTELEMENT_H
 #define ROOTELEMENT_H
 
-#include "BasicElement.h"
-
 #include <QPoint>
+
+#include "BasicElement.h"
 
 namespace KFormula {
 
@@ -48,17 +49,14 @@ public:
      */
     const QList<BasicElement*> childElements();
 
-    void readMathML( const QDomElement& element );
-    
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
-
-
-    
     /**
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
+    virtual void calcSizes( const ContextStyle& style, 
+                            ContextStyle::TextStyle tstyle, 
+                            ContextStyle::IndexStyle istyle,
+                            StyleAttributes& style );
 
     /**
      * Draws the whole element including its children.
@@ -69,6 +67,7 @@ public:
                        const ContextStyle& style,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
+                       StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
     /**
@@ -132,6 +131,8 @@ public:
     // we want to insert them.
     void setToIndex(FormulaCursor*);
 
+    bool hasIndex() const { return m_exponent != 0; }
+
 protected:
     //Save/load support
 
@@ -158,7 +159,24 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
+    /**
+     * Reads our attributes from the MathML element.
+     * Also checks whether it's a msqrt or mroot.
+     */
+    virtual void readMathMLAttributes( const QDomElement& element );
+
+    /**
+     * Reads our content from the MathML node. Sets the node to the next node
+     * that needs to be read.
+     */
+    virtual int readMathMLContent( QDomNode& node );
+
 private:
+    virtual QString getElementName() const { return hasIndex() ? "mroot" : "msqrt"; }
+    virtual void writeMathMLContent( QDomDocument& doc, 
+                                     QDomElement& element,
+                                     bool oasisFormat ) const ;
+
     /// The element that is the radicand of the root
     BasicElement* m_radicand;
 
@@ -167,6 +185,13 @@ private:
 
     /// The point the artwork relates to.
     LuPixelPoint rootOffset;
+
+	/**
+	 * Whether it is msqrt or mroot element. It is only used while reading
+	 * from MathML. When reading element contents we must know which of them
+	 * it is. After reading, hasIndex() should be used instead.
+	 */
+	bool square;
 };
 
 } // namespace KFormula

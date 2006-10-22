@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -73,7 +74,10 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
+    virtual void calcSizes(const ContextStyle& context, 
+                           ContextStyle::TextStyle tstyle, 
+                           ContextStyle::IndexStyle istyle
+                           StyleAttributes& style );
 
     /**
      * Draws the whole element including its children.
@@ -84,6 +88,7 @@ public:
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
+                       StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
     /**
@@ -138,7 +143,7 @@ protected:
     /**
      * @returns the font to be used for the element.
      */
-    QFont getFont(const ContextStyle& context);
+    QFont getFont(const ContextStyle& context, const StyleAttributes& style);
 
     /**
      * Sets up the painter to be used for drawing.

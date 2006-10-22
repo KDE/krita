@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,21 +20,23 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "FormulaElement.h"
-#include "FormulaCursor.h"
-#include <KoXmlWriter.h>
+#include <QKeyEvent>
 //#include <QPainter>
 
-#include <QKeyEvent>
 #include <kdebug.h>
+
+#include <KoXmlWriter.h>
+
 #include "contextstyle.h"
 #include "FormulaContainer.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
 
 namespace KFormula {
 
 FormulaElement::FormulaElement() : BasicElement( 0 ),
-				   baseSize( 20 ),
-				   ownBaseSize( false )
+                                   baseSize( 20 ),
+                                   ownBaseSize( false )
 {
 }
 
@@ -56,7 +59,7 @@ void FormulaElement::readMathML( const QDomElement& element )
 void FormulaElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
     if( oasisFormat )
-	writer->startElement( "math:semantics" );
+        writer->startElement( "math:semantics" );
     else
         writer->startDocument( "math", "http://www.w3.org/1998/Math/MathML" );
 
@@ -64,9 +67,9 @@ void FormulaElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
         tmpElement->writeMathML( writer, oasisFormat );
     
     if( oasisFormat )
-	writer->endElement();
+        writer->endElement();
     else
-	writer->endDocument();
+        writer->endDocument();
 }
 
 
@@ -135,7 +138,8 @@ void FormulaElement::insertFormula( FormulaCursor* cursor )
 
 void FormulaElement::calcSizes( const ContextStyle& style,
                                 ContextStyle::TextStyle tstyle,
-                                ContextStyle::IndexStyle istyle )
+                                ContextStyle::IndexStyle istyle,
+                                StyleAttributes& style )
 {
     //BasicElement::calcSizes( style, tstyle, istyle );
 }
@@ -145,6 +149,7 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
                            const ContextStyle& context,
                            ContextStyle::TextStyle tstyle,
                            ContextStyle::IndexStyle istyle,
+                           StyleAttributes& style,
                            const LuPixelPoint& parentOrigin )
 {
 //    BasicElement::draw( painter, r, context, tstyle, istyle, parentOrigin );
@@ -163,8 +168,9 @@ void FormulaElement::calcSizes( ContextStyle& context )
     else {
         context.setSizeFactor( 1 );
     }
+    StyleAttributes style;
     calcSizes( context, context.getBaseTextStyle(),
-               ContextStyle::normal );
+               ContextStyle::normal, style );
 }
 
 /**
@@ -181,7 +187,7 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
         context.setSizeFactor( 1 );
     }
     draw( painter, r, context, context.getBaseTextStyle(),
-          ContextStyle::normal, LuPixelPoint() );
+          ContextStyle::normal, style, LuPixelPoint() );
 }
 
 QDomElement FormulaElement::emptyFormulaElement( QDomDocument& doc )

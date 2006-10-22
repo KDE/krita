@@ -74,6 +74,10 @@ private:
     bool m_dragging;
     double m_grabOffsetX;
     double m_grabOffsetY;
+    double m_grabOriginalX;
+    double m_grabOriginalY;
+    QPair<double,double>m_draggedawaypoint;
+    int m_draggedawaypointindex;
 
     bool m_readOnlyMode;
     bool m_guideVisible;

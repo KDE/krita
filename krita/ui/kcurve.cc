@@ -118,6 +118,18 @@ void KCurve::keyPressEvent(QKeyEvent *e)
         }
         repaint();
     }
+    else if(e->key() == Qt::Key_Escape)
+    {
+        if(m_dragging)
+        {
+            m_points[m_grab_point_index].first = m_grabOriginalX;
+            m_points[m_grab_point_index].second = m_grabOriginalY;
+            setCursor( KCursor::arrowCursor() );
+            m_dragging = false;
+            repaint();
+            emit modified();
+        }
+    }
     else
         QWidget::keyPressEvent(e);
 }
@@ -250,11 +262,14 @@ void KCurve::mousePressEvent ( QMouseEvent * e )
         m_grab_point_index = closest_point_index;
     }
 
+    m_grabOriginalX = m_points[m_grab_point_index].first;
+    m_grabOriginalY = m_points[m_grab_point_index].second;
     m_grabOffsetX = m_points[m_grab_point_index].first - x;
     m_grabOffsetY = m_points[m_grab_point_index].second - y;
     m_points[m_grab_point_index].first = x + m_grabOffsetX;
     m_points[m_grab_point_index].second = y + m_grabOffsetY;
     m_dragging = true;
+    m_draggedawaypointindex = -1;
 
     setCursor( KCursor::crossCursor() );
     repaint();
@@ -291,34 +306,53 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
     }
     else  // Else, drag the selected point
     {
+        bool removepoint = e->pos().x() - width() >15 || e->pos().x()< -15 || e->pos().y() - height() >15 || e->pos().y()< -15;
+
+        if (removepoint == false && m_draggedawaypointindex != -1)
+        {
+            // point is no longer dragged away so reinsert it
+            QPair<double,double> newPoint(m_draggedawaypoint);
+            m_points.insert(m_draggedawaypointindex, newPoint);
+            m_grab_point_index = m_draggedawaypointindex;
+            m_draggedawaypointindex = -1;
+        }
+
+        if (removepoint == true && m_draggedawaypointindex != -1)
+            return;
+
         setCursor( KCursor::crossCursor() );
 
         x += m_grabOffsetX;
         y += m_grabOffsetY;
 
+        double leftX;
+        double rightX;
         if (m_grab_point_index == 0)
         {
-            x = 0;
+            leftX = 0.0;
+            rightX = m_points[m_grab_point_index + 1].first + 1E-4;
         }
         else if (m_grab_point_index == m_points.count() - 1)
         {
-            x = 1;
+            leftX = m_points[m_grab_point_index - 1].first + 1E-4;
+            rightX = 0.0;
         }
         else
         {
             Q_ASSERT(m_grab_point_index > 0 && m_grab_point_index < m_points.count() - 1);
 
-            double leftX = m_points[m_grab_point_index - 1].first;
-            double rightX = m_points[m_grab_point_index + 1].first;
+            // the 1E-4 addition so we can grab the dot later.
+            leftX = m_points[m_grab_point_index - 1].first + 1E-4;
+            rightX = m_points[m_grab_point_index + 1].first + 1E-4;
+        }
 
-            if (x <= leftX)
-            {
-                x = leftX + 1E-4; // the addition so we can grab the dot later.
-            }
-            else if (x >= rightX)
-            {
-                x = rightX - 1E-4;
-            }
+        if (x <= leftX)
+        {
+            x = leftX;
+        }
+        else if (x >= rightX)
+        {
+            x = rightX;
         }
 
         if(y > 1.0)
@@ -329,6 +363,14 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
 
         m_points[m_grab_point_index].first = x;
         m_points[m_grab_point_index].second = y;
+
+        if (removepoint)
+        {
+            m_draggedawaypoint.first = m_points[m_grab_point_index].first;
+            m_draggedawaypoint.second = m_points[m_grab_point_index].second;
+            m_draggedawaypointindex = m_grab_point_index;
+            m_points.removeAt(m_grab_point_index);
+        }
 
         emit modified();
     }

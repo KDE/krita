@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,11 +42,16 @@ public:
      */
     const QList<BasicElement*> childElements();
 
-    void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
+    void calcSizes( const ContextStyle& context, 
+                    ContextStyle::TextStyle tstyle, 
+                    ContextStyle::IndexStyle istyle,
+                    StyleAttributes& style );
+
     virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
+                       StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
     void readMathML( const QDomElement& element );
@@ -53,6 +59,20 @@ public:
     void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
     
 private:
+    virtual QString getElementName() const ;
+    virtual void writeMathMLAttributes( QDomElement& element ) const ;
+    virtual void writeMathMLContent( QDomDocument& doc, 
+                                     QDomElement& element,
+                                     bool oasisFormat ) const ;
+    virtual bool readAttributesFromMathMLDom( const QDomElement& element );
+    /**
+     * Reads our content from the MathML node. Sets the node to the next node
+     * that needs to be read. It is sometimes needed to read more than one node
+     * (e. g. for fence operators).
+     * Returns the number of nodes processed or -1 if it failed.
+     */
+    virtual int readContentFromMathMLDom( QDomNode& node );
+
     BasicElement* m_baseElement;
     BasicElement* m_preSubscript;
     BasicElement* m_preSuperscript;

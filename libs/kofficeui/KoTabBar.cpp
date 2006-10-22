@@ -291,7 +291,7 @@ void KoTabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& te
     painter.setPen( tabbar->palette().color( QPalette::Dark) );
     if( !active )
       painter.drawLine( rect.x()-25, rect.y(), rect.right()+25, rect.top() );
-    // Qt4: painter.setRenderHint( QPainter::Antialiasing );
+    painter.setRenderHint( QPainter::Antialiasing );
     painter.drawPolyline( polygon );
 
     painter.setPen( tabbar->palette().color( QPalette::ButtonText ) );

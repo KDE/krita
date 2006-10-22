@@ -50,7 +50,8 @@ enum ElementType {
     Matrix,
     MatrixRow,
     MatrixEntry,
-    UnderOver
+    UnderOver,
+    MultiScript
 };
 
 
@@ -174,23 +175,32 @@ public:
     /// @return The baseline of the element
     double baseLine() const;
 
+    /// @return The element's origin 
     QPointF origin() const;
 
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
 
+    /// Set the element's width to @p width
     void setWidth( double width );
 
+    /// Set the element's height to @p height
     void setHeight( double height );
     
+    /// Set the element's baseline to @p baseLine
     void setBaseLine( double baseLine );
 
+    /// Set the element's origin inside the m_parentElement to @p origin
     void setOrigin( QPointF origin );
 
+    /// Set the element's m_parentElement to @p parent
     void setParentElement( BasicElement* parent );
 
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
+
+    /// @return The value of the attribute if it is inherited
+    QString inheritAttribute( const QString& attribute ) const;
     
     /// Read the element from MathML
     virtual void readMathML( const QDomElement& element );
@@ -227,14 +237,6 @@ public:
      */
     LuPixelPoint widgetPos();
 
-
-    // drawing
-    //
-    // Drawing depends on a context which knows the required properties like
-    // fonts, spaces and such.
-    // It is essential to calculate elements size with the same context
-    // before you draw.
-
     /// Calculates our width and height and our children's parentPosition
     virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
 
@@ -254,7 +256,6 @@ public:
      * Dispatch this FontCommand to all our TextElement children.
      */
     virtual void dispatchFontCommand( FontCommand* /*cmd*/ ) {}
-
     
     /**
      * Sets the cursor inside this element to its start position.
@@ -284,7 +285,6 @@ public:
      */
     virtual void normalize(FormulaCursor*, Direction);
 
-
     /**
      * Returns wether the element has no more useful
      * children (except its main child) and should therefore
@@ -297,20 +297,17 @@ public:
      */
     virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor) { return 0; }
 
-
     /**
      * Sets the cursor to select the child. The mark is placed before,
      * the position behind it.
      */
     virtual void selectChild(FormulaCursor*, BasicElement*) {}
 
-
     /**
      * Moves the cursor away from the given child. The cursor is
      * guaranteed to be inside this element.
      */
     virtual void childWillVanish(FormulaCursor*, BasicElement*) {}
-
 
     /**
      * Callback for the tabs among our children. Needed for alignment.
@@ -322,16 +319,12 @@ public:
     const BasicElement* getParent() const { return m_parentElement; }
     BasicElement* getParent() { return m_parentElement; }
     void setParent(BasicElement* p) { m_parentElement = p; }
-
     double getX() const;
     double getY() const;
-
     void setX( double x );
     void setY( double y );
     double getWidth() const;
     double getHeight() const;
-
-    
     luPixel getBaseline() const { return m_baseLine; }
     void setBaseline( luPixel line ) { m_baseLine = line; }
 

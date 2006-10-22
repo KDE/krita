@@ -148,6 +148,14 @@ BasicElement* BasicElement::childElementAt( const QPointF& p )
     return this;    // if no child contains the point, it's the FormulaElement itsself
 }
 
+QString BasicElement::inheritAttribute( const QString& attribute ) const
+{
+    if( !m_attributes.contains( attribute ) )
+        return QString();
+    else
+        m_attributes.value( attribute );
+}
+
 void BasicElement::moveLeft( FormulaCursor* cursor, BasicElement* )
 {
     if( cursor->currentElement() == this )

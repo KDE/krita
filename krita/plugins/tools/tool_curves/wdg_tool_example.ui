@@ -123,6 +123,5 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

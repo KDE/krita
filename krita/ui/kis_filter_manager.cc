@@ -30,7 +30,6 @@
 
 #include "KoID.h"
 
-#include "kis_canvas_subject.h"
 #include "kis_doc2.h"
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"

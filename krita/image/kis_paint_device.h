@@ -30,7 +30,6 @@
 #include "kis_global.h"
 #include "kis_image.h"
 #include "KoColorSpace.h"
-#include "kis_canvas_controller.h"
 #include "KoColor.h"
 #include <krita_export.h>
 #include <kis_shared.h>

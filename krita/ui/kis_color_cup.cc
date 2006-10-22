@@ -39,7 +39,6 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include <kis_canvas_subject.h>
 #include <KoColor.h>
 #include <kis_color_cup.h>
 

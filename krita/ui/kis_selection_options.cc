@@ -22,7 +22,6 @@
 #include <QVBoxLayout>
 #include <QLayout>
 
-#include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_selection_options.h"
 #include "kis_types.h"

@@ -732,9 +732,7 @@ void KoTabBar::resizeEvent( QResizeEvent* )
 
 QSize KoTabBar::sizeHint() const
 {
-#warning "kde4: port it !"
-    //return QSize( 40, style().pixelMetric( QStyle::PM_ScrollBarExtent, this ) );
-	return QSize();
+    return QSize( 40, style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
 }
 
 void KoTabBar::renameTab( const QString& old_name, const QString& new_name )

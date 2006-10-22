@@ -19,25 +19,20 @@
 #ifndef _KIS_SHARED_H_
 #define _KIS_SHARED_H_
 
+#include <QAtomic>
 #include <kis_shared_ptr.h>
+
 
 class KisSharedData;
 
 class KisShared {
     friend class KisSharedData;
-    friend class KisWeakSharedPtr;
     protected:
-        KisShared() { }
+        KisShared();
+        ~KisShared();
     public:
         QAtomic ref;
-    private:
         KisSharedPtr< KisSharedData > dataPtr;
-};
-
-class KisSharedData : public KisShared {
-    public:
-        KisSharedData() : valid(true) { }
-        bool valid;
 };
 
 #endif

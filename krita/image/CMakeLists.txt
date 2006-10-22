@@ -63,6 +63,7 @@ set(kritaimage_LIB_SRCS
    kis_rotate_visitor.cc
    kis_selected_transaction.cc
    kis_selection.cc
+   kis_shared.cc
    kis_transaction.cc
    kis_transform_worker.cc
    kis_vec.cc

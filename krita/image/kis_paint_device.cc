@@ -345,7 +345,7 @@ void KisPaintDevice::setDirty()
     if (m_parentLayer) m_parentLayer->setDirty();
 }
 
-KisImage *KisPaintDevice::image() const
+KisImageSP KisPaintDevice::image() const
 {
     if (m_parentLayer) {
         return m_parentLayer->image();

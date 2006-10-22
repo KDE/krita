@@ -88,7 +88,7 @@ void KisPenOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    KisImage * image = device->image();
+    KisImageSP image = device->image();
 
     if (image != 0) {
         dstRect &= image->bounds();

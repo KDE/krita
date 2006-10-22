@@ -32,7 +32,7 @@
 #include "kis_merge_visitor.h"
 #include "kis_fill_painter.h"
 
-KisGroupLayer::KisGroupLayer(KisImage *img, const QString &name, quint8 opacity) :
+KisGroupLayer::KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacity) :
     super(img, name, opacity),
     m_x(0),
     m_y(0)
@@ -238,7 +238,7 @@ bool KisGroupLayer::removeLayer(KisLayerSP layer)
     return removeLayer(layer->index());
 }
 
-void KisGroupLayer::setImage(KisImage *image)
+void KisGroupLayer::setImage(KisImageWSP image)
 {
     super::setImage(image);
     for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); ++it)

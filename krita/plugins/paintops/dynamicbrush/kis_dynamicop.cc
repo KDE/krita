@@ -200,7 +200,7 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     QRect dabRect = QRect(0, 0, dabsrc->autoDab.width, dabsrc->autoDab.height); // cheating again
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    KisImage * image = device->image();
+    KisImageSP image = device->image();
 
     if (image != 0) {
         dstRect &= image->bounds();

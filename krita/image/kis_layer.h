@@ -50,7 +50,7 @@ class KRITAIMAGE_EXPORT KisLayer: public KoDocumentSectionModel, public KisShare
     Q_OBJECT
 
 public:
-    KisLayer(KisImage *img, const QString &name, quint8 opacity);
+    KisLayer(KisImageWSP img, const QString &name, quint8 opacity);
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
@@ -222,8 +222,8 @@ public:
     void setCompositeOp(const KoCompositeOp * compositeOp);
     KNamedCommand * setCompositeOpCommand(const KoCompositeOp * compositeOp);
 
-    KisImage *image() const { return m_image; }
-    virtual void setImage(KisImage *image) { m_image = image; }
+    KisImageSP image() const { return m_image; }
+    virtual void setImage(KisImageWSP image) { m_image = image; }
 
     KisUndoAdapter *undoAdapter() const;
 
@@ -272,7 +272,7 @@ private:
     QRect m_dirtyRect;
     QString m_name;
     KisGroupLayerSP m_parent;
-    KisImage *m_image;
+    KisImageWSP m_image;
 
     // Operation used to composite this layer with the layers _under_ this layer
     const KoCompositeOp * m_compositeOp;

@@ -383,7 +383,7 @@ public:
      * Return the image that contains this paint device, or 0 if it is not
      * part of an image. This is the same as calling parentLayer()->image().
      */
-    KisImage *image() const;
+    KisImageSP image() const;
 
     /**
      * Returns the KisLayer that contains this paint device, or 0 if this is not

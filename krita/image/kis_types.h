@@ -36,6 +36,7 @@
 
 class KisImage;
 typedef KisSharedPtr<KisImage> KisImageSP;
+typedef KisWeakSharedPtr<KisImage> KisImageWSP;
 
 class KisAnnotation;
 typedef KisSharedPtr<KisAnnotation> KisAnnotationSP;
@@ -45,6 +46,7 @@ typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
 
 class KisPaintDevice;
 typedef KisSharedPtr<KisPaintDevice> KisPaintDeviceSP;
+typedef KisWeakSharedPtr<KisPaintDevice> KisPaintDeviceWSP;
 typedef KisSharedPtrVector<KisPaintDevice> vKisPaintDeviceSP;
 typedef vKisPaintDeviceSP::iterator vKisPaintDeviceSP_it;
 typedef vKisPaintDeviceSP::const_iterator vKisPaintDeviceSP_cit;

@@ -28,7 +28,7 @@
 class KisPartLayer : public KisLayer {
     typedef KisLayer super;
 public:
-    KisPartLayer(KisImage *img, const QString &name, quint8 opacity)
+    KisPartLayer(KisImageWSP img, const QString &name, quint8 opacity)
         : super(img, name, opacity) {}
     virtual QIcon icon() const { return KIcon("gear"); }
     virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r) = 0;

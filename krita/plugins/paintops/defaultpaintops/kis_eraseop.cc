@@ -114,7 +114,7 @@ void KisEraseOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
     dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
 
-    KisImage * image = device->image();
+    KisImageSP image = device->image();
 
     if (image != 0) {
         dstRect &= image->bounds();

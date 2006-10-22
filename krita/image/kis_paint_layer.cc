@@ -34,7 +34,7 @@
 #include "kis_datamanager.h"
 #include "kis_undo_adapter.h"
 
-KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
+KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
     : super(img, name, opacity)
 {
     Q_ASSERT(img);
@@ -45,7 +45,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity,
 }
 
 
-KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity)
+KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity)
     : super(img, name, opacity)
 {
     Q_ASSERT(img);
@@ -53,7 +53,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity)
     init();
 }
 
-KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KoColorSpace * colorSpace)
+KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, KoColorSpace * colorSpace)
     : super(img, name, opacity)
 {
     Q_ASSERT(img);

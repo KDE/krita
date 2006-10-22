@@ -115,7 +115,7 @@ private:
     void paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion);
 
 private:
-    KisPaintDeviceSP m_parentPaintDevice;
+    KisPaintDeviceWSP m_parentPaintDevice;
     bool m_dirty;
 };
 

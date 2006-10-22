@@ -39,7 +39,7 @@ class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer {
     Q_OBJECT
 
 public:
-    KisGroupLayer(KisImage *img, const QString &name, quint8 opacity);
+    KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacity);
     KisGroupLayer(const KisGroupLayer& rhs);
     virtual ~KisGroupLayer();
 
@@ -68,7 +68,7 @@ public:
     virtual void setY(qint32);
 
     // Sets this layer and all its descendants' owner image to the given image.
-    virtual void setImage(KisImage *image);
+    virtual void setImage(KisImageWSP image);
 
     virtual QRect extent() const;
     virtual QRect exactBounds() const;

@@ -539,7 +539,7 @@ public:
 
 
 KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace, const QString& name)
-    : QObject(0)
+    : QObject(0), KisShared()
 {
     setObjectName(name);
     init(adapter, width, height, colorSpace, name);
@@ -653,7 +653,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
     m_d->name = name;
 
     m_d->colorSpace = colorSpace;
-\
+
     m_d->rootLayer = new KisGroupLayer(this,"root", OPACITY_OPAQUE);
     connect(m_d->rootLayer.data(), SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
 

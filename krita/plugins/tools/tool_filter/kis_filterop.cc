@@ -124,7 +124,7 @@ void KisFilterOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    KisImage * image = m_painter->device()->image();
+    KisImageSP image = m_painter->device()->image();
 
     if (image != 0) {
         dstRect &= image->bounds();

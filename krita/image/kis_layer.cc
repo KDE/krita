@@ -268,7 +268,7 @@ static int getID()
 }
 
 
-KisLayer::KisLayer(KisImage *img, const QString &name, quint8 opacity) :
+KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity) :
     KoDocumentSectionModel(0),
     m_id(getID()),
     m_index(-1),

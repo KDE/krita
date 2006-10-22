@@ -1,1 +1,1 @@
-SKIP /colorspaces/wetsticky/ws/\|/colorspaces/wet/wetdreams/\|/plugins/filters/cimg/CImg\.h
+SKIP /colorspaces/wetsticky/ws/\|/colorspaces/wet/wetdreams/\|/plugins/filters/cimg/CImg\.h\|/ui/obsolete

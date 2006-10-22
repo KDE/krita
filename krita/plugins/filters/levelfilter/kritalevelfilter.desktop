@@ -1,9 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Levels
-Name[fr]=Niveaux
 Comment=Levels
-Comment[fr]=Niveaux
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritalevelfilter

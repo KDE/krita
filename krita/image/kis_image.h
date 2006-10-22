@@ -26,7 +26,7 @@
 
 #include <config.h>
 
-#include <ksharedptr.h>
+#include <kis_shared.h>
 #include <kurl.h>
 
 #include "KoUnit.h"
@@ -57,7 +57,7 @@ class KisPerspectiveGrid;
  * This is the image class, it contains a tree of KisLayer stack and meta information about the image. And it also provides some functions
  * to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KShared {
+class KRITAIMAGE_EXPORT KisImage : public QObject, public KisShared {
 
     Q_OBJECT
         

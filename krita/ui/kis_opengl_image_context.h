@@ -31,6 +31,7 @@
 
 #include <krita_export.h>
 
+#include "kis_shared.h"
 #include "kis_types.h"
 
 class QRegion;
@@ -41,7 +42,7 @@ class KisOpenGLImageContext;
 typedef KisSharedPtr<KisOpenGLImageContext> KisOpenGLImageContextSP;
 class KoColorSpace;
 
-class KRITAUI_EXPORT KisOpenGLImageContext : public QObject , public KShared {
+class KRITAUI_EXPORT KisOpenGLImageContext : public QObject , public KisShared {
 
     Q_OBJECT
 

@@ -23,7 +23,7 @@
 #include <ksharedptr.h>
 #include <krita_export.h>
 
-class KRITAIMAGE_EXPORT KisBackground : public KShared {
+class KRITAIMAGE_EXPORT KisBackground : public KisShared<KisBackground> {
 
 public:
     KisBackground();

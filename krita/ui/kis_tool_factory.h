@@ -21,12 +21,14 @@
 
 #include <klocale.h>
 
-#include "KoID.h"
+#include <kis_shared.h>
+#include <KoID.h>
+
 #include "kis_types.h"
 
 class KActionCollection;
 
-class KisToolFactory  : public KShared
+class KisToolFactory  : public KisShared
 {
 
 public:

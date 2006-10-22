@@ -200,7 +200,7 @@ namespace {
 }
 
 KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name) :
-        QObject(0), KShared(), m_exifInfo(0)
+        QObject(0), m_exifInfo(0)
 {
     setObjectName(name);
     if (colorSpace == 0) {
@@ -235,7 +235,7 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name) :
 }
 
 KisPaintDevice::KisPaintDevice(KisLayer *parent, KoColorSpace * colorSpace, const QString& name) :
-        QObject(0), KShared(), m_exifInfo(0)
+        QObject(0), m_exifInfo(0)
 {
     setObjectName(name);
     Q_ASSERT( colorSpace );
@@ -271,7 +271,7 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KoColorSpace * colorSpace, cons
 }
 
  
-KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(rhs)
+KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KisShared(rhs)
 {
     if (this != &rhs) {
         m_longRunningFilterTimer = 0;

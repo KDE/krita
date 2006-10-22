@@ -27,6 +27,7 @@
 #include <QEvent>
 #include <kicon.h>
 
+#include "kis_shared.h"
 #include <ksharedptr.h>
 #include <kaction.h>
 #include <kicon.h>
@@ -65,7 +66,7 @@ enum enumToolType {
 
 const quint8 NUMBER_OF_TOOLTYPES = 6;
 
-class KRITAUI_EXPORT KisTool : public QObject, public KisCanvasObserver, public KShared {
+class KRITAUI_EXPORT KisTool : public QObject, public KisCanvasObserver, public KisShared {
     Q_OBJECT
 
 public:

@@ -61,7 +61,6 @@ KisTiledDataManager::KisTiledDataManager(quint32 pixelSize, const quint8 *defPix
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
-    : KShared()
 {
     m_pixelSize = dm.m_pixelSize;
 
@@ -537,10 +536,10 @@ KisMementoSP KisTiledDataManager::getMemento()
 
 void KisTiledDataManager::rollback(KisMementoSP memento)
 {
-    if (memento.isNull()) return;
+    if (!memento) return;
     //Q_ASSERT(memento != 0);
 
-    if (!m_currentMemento.isNull()) {
+    if (m_currentMemento) {
         // Undo means our current memento is no longer valid so remove it.
         m_currentMemento = 0;
     }

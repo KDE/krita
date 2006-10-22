@@ -270,7 +270,6 @@ static int getID()
 
 KisLayer::KisLayer(KisImage *img, const QString &name, quint8 opacity) :
     KoDocumentSectionModel(0),
-    KShared(),
     m_id(getID()),
     m_index(-1),
     m_opacity(opacity),
@@ -287,7 +286,7 @@ KisLayer::KisLayer(KisImage *img, const QString &name, quint8 opacity) :
 
 KisLayer::KisLayer(const KisLayer& rhs) :
     KoDocumentSectionModel(0),
-    KShared(rhs)
+    KisShared(rhs)
 {
     if (this != &rhs) {
         m_id = getID();

@@ -37,7 +37,7 @@ enum KisConvolutionBorderOp {
 class KisKernel;
 typedef KisSharedPtr<KisKernel> KisKernelSP;
 
-class KRITAIMAGE_EXPORT KisKernel : public KShared
+class KRITAIMAGE_EXPORT KisKernel : public KisShared
 {
 
 public:

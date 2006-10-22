@@ -25,9 +25,10 @@
 #include <QPointF>
 
 #include <kis_perspective_math.h>
+#include <kis_shared.h>
 #include <kis_shared_ptr.h>
 
-class KisPerspectiveGridNode : public QPointF, public KShared {
+class KisPerspectiveGridNode : public QPointF, public KisShared {
     public:
         inline KisPerspectiveGridNode(double x, double y) : QPointF(x,y)  { }
         inline KisPerspectiveGridNode(QPointF p) : QPointF(p)  { }

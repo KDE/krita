@@ -20,7 +20,6 @@
 #include "KoIntegerMaths.h"
 
 KisBackground::KisBackground()
-    : KShared()
 {
     m_patternTile = QImage(PATTERN_WIDTH, PATTERN_HEIGHT, QImage::Format_RGB32);
 

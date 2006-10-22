@@ -43,7 +43,7 @@ class QWidget;
 /**
  * Basic interface of a Krita filter.
  */
-class KRITAIMAGE_EXPORT KisFilter : public KisProgressSubject, public KShared {
+class KRITAIMAGE_EXPORT KisFilter : public KisProgressSubject, public KisShared {
     Q_OBJECT
 public:
 

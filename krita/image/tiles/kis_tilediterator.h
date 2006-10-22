@@ -20,7 +20,7 @@
 
 #include <qglobal.h>
 
-#include <ksharedptr.h>
+#include <kis_shared.h>
 
 #include "kis_tile.h"
 #include "kis_tileddatamanager.h"
@@ -28,7 +28,7 @@
 /**
  * The KisIterator class iterates through the pixels of a KisPaintDevice hiding the tile structure
  */
-class KRITAIMAGE_EXPORT KisTiledIterator : public KShared {
+class KRITAIMAGE_EXPORT KisTiledIterator : public KisShared {
 
 protected:
     KisTiledDataManager *m_ktm;

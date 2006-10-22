@@ -28,11 +28,13 @@
 #include <ksharedptr.h>
 #include <klocale.h>
 
+#include "kis_shared.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "KoID.h"
 #include "kis_vec.h"
 #include "KoColorSpace.h"
+
 
 #include <krita_export.h>
 
@@ -63,7 +65,7 @@ public:
     KisVector2D movement;
 };
 
-class KRITAIMAGE_EXPORT KisPaintOp : public KShared
+class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
 {
 
 public:
@@ -111,7 +113,7 @@ public:
  * If there is an optionWidget, the derived paintop itself must support settings,
  * and it's up to the factory to do that.
  */
-class KRITAIMAGE_EXPORT KisPaintOpFactory  : public KShared
+class KRITAIMAGE_EXPORT KisPaintOpFactory  : public KisShared
 {
 
 public:

@@ -22,6 +22,7 @@
 #include <qglobal.h>
 #include <QRect>
 
+#include <kis_shared.h>
 #include <kis_shared_ptr.h>
 
 class KisTile;
@@ -30,7 +31,7 @@ class KisTiledDataManager;
 class KisMemento;
 typedef KisSharedPtr<KisMemento> KisMementoSP;
 
-class KisMemento : public KShared
+class KisMemento : public KisShared
 {
 public:
     KisMemento(quint32 pixelSize);

@@ -21,6 +21,7 @@
 #include <qglobal.h>
 #include <q3valuevector.h>
 
+#include <kis_shared.h>
 #include <kis_shared_ptr.h>
 
 #include "kis_tile_global.h"
@@ -38,7 +39,7 @@ class KisTiledIterator;
 class KisTiledRandomAccessor;
 class KoStore;
 
-class KisTileDataWrapper : public KShared {
+class KisTileDataWrapper : public KisShared {
     KisTile* m_tile;
     qint32 m_offset;
 public:
@@ -65,7 +66,7 @@ typedef KisSharedPtr<KisTileDataWrapper> KisTileDataWrapperSP;
  * how many quint8's a single pixel takes.
  */
 
-class KRITAIMAGE_EXPORT KisTiledDataManager : public KShared {
+class KRITAIMAGE_EXPORT KisTiledDataManager : public KisShared {
 
 protected:
     KisTiledDataManager(quint32 pixelSize, const quint8 *defPixel);
@@ -89,7 +90,7 @@ protected:
     void rollforward(KisMementoSP memento);
 
     // For debugging use.
-    bool hasCurrentMemento() const { return !m_currentMemento.isNull(); }
+    bool hasCurrentMemento() const { return !m_currentMemento; }
 
 protected:
     /**

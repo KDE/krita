@@ -21,6 +21,7 @@
 
 #include <QVector>
 
+#include "kis_shared.h"
 #include "kis_types.h"
 #include "KoColorSpace.h"
 #include "KoHistogramProducer.h"
@@ -42,7 +43,7 @@ enum enumHistogramType {
  * The calculations are done in the range 0 - 1, instead of the native range that a pixel
  * might have, so it's not always as precise as it could be. But you can't have it all...
  */
-class /*KRITAIMAGE_EXPORT*/ KisHistogram : public KShared {
+class /*KRITAIMAGE_EXPORT*/ KisHistogram : public KisShared {
 
 public:
     /**

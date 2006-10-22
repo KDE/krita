@@ -21,7 +21,7 @@
 #ifndef _KIS_ANNOTATION_H_
 #define _KIS_ANNOTATION_H_
 
-#include <kis_shared_ptr.h>
+#include <kis_shared.h>
 #include "kis_shared_ptr_vector.h"
 
 #include <QString>
@@ -40,7 +40,7 @@
  *
  * Examples of annotations are EXIF data and ICC profiles.
  */
-class KisAnnotation : public KShared {
+class KisAnnotation : public KisShared {
 
 
 public:

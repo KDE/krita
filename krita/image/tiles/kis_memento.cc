@@ -20,7 +20,7 @@
 #include "kis_tile.h"
 #include "kis_tile_global.h"
 
-KisMemento::KisMemento(quint32 pixelSize) : KShared()
+KisMemento::KisMemento(quint32 pixelSize)
 {
     m_hashTable = new KisTile * [1024];
     Q_CHECK_PTR(m_hashTable);

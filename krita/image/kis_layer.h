@@ -23,6 +23,7 @@
 
 #include "krita_export.h"
 
+#include "kis_shared.h"
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
 #include "KoCompositeOp.h"
@@ -43,7 +44,7 @@ class KisGroupLayer;
  * is at the top of the group in the layerlist, using next will iterate to the bottom to last,
  * whereas previous will go up to first again.
  **/
-class KRITAIMAGE_EXPORT KisLayer: public KoDocumentSectionModel, public KShared
+class KRITAIMAGE_EXPORT KisLayer: public KoDocumentSectionModel, public KisShared
 {
     typedef KoDocumentSectionModel super;
     Q_OBJECT

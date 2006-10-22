@@ -539,14 +539,14 @@ public:
 
 
 KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace, const QString& name)
-    : QObject(0), KShared()
+    : QObject(0)
 {
     setObjectName(name);
     init(adapter, width, height, colorSpace, name);
     setName(name);
 }
 
-KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
+KisImage::KisImage(const KisImage& rhs) : QObject(), KisShared(rhs)
 {
     if (this != &rhs) {
         m_d = new KisImagePrivate(*rhs.m_d);

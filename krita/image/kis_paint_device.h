@@ -33,7 +33,8 @@
 #include "kis_canvas_controller.h"
 #include "KoColor.h"
 #include <krita_export.h>
-
+#include <kis_shared.h>
+        
 class QImage;
 class QSize;
 class QPoint;
@@ -65,7 +66,7 @@ typedef KisSharedPtr<KisMemento> KisMementoSP;
  */
 class KRITAIMAGE_EXPORT KisPaintDevice
     : public QObject
-    , public KShared
+    , public KisShared
 {
 
         Q_OBJECT

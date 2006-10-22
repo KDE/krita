@@ -111,6 +111,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgshapeoptions.ui
     wdgcustompalette.ui
     wdgtextbrush.ui
+    wdgnewimage.ui
 	)
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS})

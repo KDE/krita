@@ -24,6 +24,7 @@
 
 #include <kcommand.h>
 #include <QList>
+#include <QHash>
 
 namespace KFormula {
 class BasicElement;
@@ -38,7 +39,7 @@ class BasicElement;
  * 
  * @since 2.0
  */
-class FormulaCommandAdd : public KNamedCommand {
+class FormulaCommandAdd : public KCommand {
 public:
     /**
      * The constructor
@@ -52,6 +53,9 @@ public:
 
     /// Revert the actions done in execute()
     void unexecute();
+
+    /// @return The name of this command 
+    QString name() const;
 
 private:
     /// The BasicElement that owns the newly added elements
@@ -72,7 +76,7 @@ private:
  * 
  * @since 2.0
  */
-class FormulaCommandRemove : public KNamedCommand {
+class FormulaCommandRemove : public KCommand {
 public:
     /**
      * The constructor
@@ -86,6 +90,9 @@ public:
 
     /// Revert the actions done in execute()
     void unexecute();
+
+    /// @return The name of this command 
+    QString name() const;
 
 private:
     /// The BasicElement that owned the removed elements
@@ -106,7 +113,7 @@ private:
  *
  * @since 2.0
  */
-class FormulaCommandReplace : public KNamedCommand {
+class FormulaCommandReplace : public KCommand {
 public:
     /**
      * The constructor
@@ -122,6 +129,9 @@ public:
 
     /// Revert the actions done in execute()
     void unexecute();
+
+    /// @return The name of this command 
+    QString name() const;
 
 private:
     /// The BasicElement that owned the replaced elements
@@ -144,7 +154,7 @@ private:
  * 
  * @since 2.0
  */
-class FormulaCommandAttribute : public KNamedCommand {
+class FormulaCommandAttribute : public KCommand {
 public:
     /**
      * The constructor
@@ -158,6 +168,9 @@ public:
 
     /// Revert the actions done in execute()
     void unexecute();
+
+    /// @return The name of this command 
+    QString name() const;
     
 private:
     /// The BasicElement whose attributes have been changed

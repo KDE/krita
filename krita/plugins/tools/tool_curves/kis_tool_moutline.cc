@@ -38,7 +38,7 @@
 
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"
-#include "kis_doc.h"
+//#include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"

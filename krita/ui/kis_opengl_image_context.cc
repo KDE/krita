@@ -32,7 +32,7 @@
 #include "kis_layer.h"
 #include "kis_selection.h"
 #include "kis_background.h"
-#include "kis_opengl_canvas.h"
+//#include "kis_opengl_canvas.h"
 #include "kis_opengl_image_context.h"
 
 using namespace std;

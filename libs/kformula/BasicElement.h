@@ -159,7 +159,7 @@ public:
 
     /**
      * Move the FormulaCursor at the end of the line
-     * @param from The FormulaCursor to be moved 
+     * @param cursor The FormulaCursor to be moved 
      */
     virtual void moveEnd( FormulaCursor* cursor );
 

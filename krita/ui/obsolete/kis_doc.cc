@@ -243,7 +243,6 @@ bool KisDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocum
 {
     //XXX: todo (and that includes defining an OASIS format for layered 2D raster data!)
     kDebug(41008) << "loading with OpenRaster" << endl;
-    KoOasisStore* oasisStore =  new KoOasisStore( store );
     QDomNode root = doc.documentElement();
     for (QDomNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "office:body") {
@@ -252,6 +251,7 @@ bool KisDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocum
             olv.loadImage(elem);
             if (!(m_currentImage = olv.image() ))
                 return false;
+            KoOasisStore* oasisStore =  new KoOasisStore( store );
             KisOasisLoadDataVisitor oldv(oasisStore, olv.layerFilenames());
             m_currentImage->rootLayer()->accept(oldv);
             return true;

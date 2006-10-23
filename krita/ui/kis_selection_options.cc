@@ -22,7 +22,7 @@
 #include <QVBoxLayout>
 #include <QLayout>
 
-#include "kis_canvas_subject.h"
+// #include "kis_canvas_subject.h"
 #include "kis_selection_options.h"
 #include "kis_types.h"
 #include "kis_layer.h"
@@ -54,15 +54,16 @@ int KisSelectionOptions::action()
 
 void KisSelectionOptions::slotActivated()
 {
-
+#if 0
     if (!m_subject) return;
-    KisImageSP img = m_subject->currentImg();
+//     KisImageSP img = m_subject->currentImg(); TODO: FIXME !
     if (!img) return;
     KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return;
 
     if (dev->hasSelection()) {
     }
+#endif
 }
 
 #include "kis_selection_options.moc"

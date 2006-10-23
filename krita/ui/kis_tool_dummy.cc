@@ -26,8 +26,8 @@
 #include <kactioncollection.h>
 #include <klocale.h>
 
-#include "kis_canvas_controller.h"
-#include "kis_canvas_subject.h"
+// #include "kis_canvas_controller.h"
+// #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_tool_dummy.h"
 #include "KoPointerEvent.h"

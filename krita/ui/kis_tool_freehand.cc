@@ -29,7 +29,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-#include "kis_canvas_subject.h"
+// #include "kis_canvas_subject.h"
 #include "kis_undo_adapter.h"
 #include "kis_selection.h"
 #include "kis_painter.h"

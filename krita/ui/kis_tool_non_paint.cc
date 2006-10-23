@@ -20,8 +20,8 @@
 #include <kdebug.h>
 
 #include "kis_image.h"
-#include "kis_canvas_subject.h"
-#include "kis_canvas_controller.h"
+// #include "kis_canvas_subject.h"
+// #include "kis_canvas_controller.h"
 #include "kis_tool_controller.h"
 #include "kis_tool_non_paint.h"
 //Added by qt3to4:

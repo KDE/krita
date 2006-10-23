@@ -24,22 +24,20 @@
 
 #include "KoTabBar.h"
 
-#include <qdrawutil.h>
 #include <QList>
+#include <QMouseEvent>
+#include <QPaintEvent>
 #include <QPainter>
+#include <QPolygon>
+#include <QPixmap>
+#include <QResizeEvent>
 #include <QString>
 #include <QStringList>
 #include <QStyle>
 #include <QTimer>
 #include <QToolButton>
 #include <QWidget>
-//Added by qt3to4:
 #include <QWheelEvent>
-#include <QPixmap>
-#include <QPaintEvent>
-#include <Q3PointArray>
-#include <QResizeEvent>
-#include <QMouseEvent>
 
 // TODO
 // improvement possibilities
@@ -260,22 +258,22 @@ int KoTabBarPrivate::tabAt( const QPoint& pos )
 
 void KoTabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& text, bool active )
 {
-    Q3PointArray polygon;
+    QPolygon polygon;
     
     if( !reverseLayout )
-        polygon.setPoints( 6, rect.x(), rect.y(),
-            rect.x(), rect.bottom()-3,
-            rect.x()+2, rect.bottom(),
-            rect.right()-4, rect.bottom(),
-            rect.right()-2, rect.bottom()-2,
-            rect.right()+5, rect.top() );
+        polygon << QPoint( rect.x(), rect.y() )
+           << QPoint( rect.x(), rect.bottom()-3 )
+           << QPoint( rect.x()+2, rect.bottom() )
+           << QPoint( rect.right()-4, rect.bottom() )
+           << QPoint( rect.right()-2, rect.bottom()-2 )
+           << QPoint( rect.right()+5, rect.top() );
     else      
-        polygon.setPoints( 6, rect.right(), rect.top(),
-            rect.right(), rect.bottom()-3,
-            rect.right()-2, rect.bottom(),
-            rect.x()+4, rect.bottom(),
-            rect.x()+2, rect.bottom()-2,
-            rect.x()-5, rect.top() );
+        polygon << QPoint( rect.right(), rect.top() )
+           << QPoint( rect.right(), rect.bottom()-3 )
+           << QPoint( rect.right()-2, rect.bottom() )
+           << QPoint( rect.x()+4, rect.bottom() )
+           << QPoint( rect.x()+2, rect.bottom()-2 )
+           << QPoint( rect.x()-5, rect.top() );
 
     painter.save();
 
@@ -308,8 +306,9 @@ void KoTabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& te
 
 void KoTabBarPrivate::drawMoveMarker( QPainter& painter, int x, int y )
 {
-    Q3PointArray movmark;
-    movmark.setPoints( 3, x, y, x + 7, y, x + 4, y + 6);
+    QPolygon movmark;
+
+    movmark << QPoint( x, y ) << QPoint( x+7, y ) << QPoint( x+4, y+6 );
     QBrush oldBrush = painter.brush();
     painter.setBrush( Qt::black );
     painter.drawPolygon(movmark);

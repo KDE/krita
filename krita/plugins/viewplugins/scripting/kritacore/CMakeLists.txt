@@ -13,7 +13,7 @@ set(krosskritacore_LIB_SRCS
    krs_wavelet.cpp
    )
 
-kde4_automoc(krosskritacore ${krosskritacore_LIB_SRCS})
+kde4_automoc(${krosskritacore_LIB_SRCS})
 
 qt4_wrap_cpp(krosskritacore_LIB_SRCS krs_iterator.h)
 

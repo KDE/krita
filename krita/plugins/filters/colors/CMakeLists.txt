@@ -7,7 +7,7 @@ set(kritaextensioncolorsfilters_PART_SRCS
     kis_minmax_filters.cc
     )
 
-kde4_automoc(kritaextensioncolorsfilters ${kritaextensioncolorsfilters_PART_SRCS})
+kde4_automoc(${kritaextensioncolorsfilters_PART_SRCS})
 
 kde4_add_ui_files(kritaextensioncolorsfilters_PART_SRCS
     wdgcolortoalphabase.ui

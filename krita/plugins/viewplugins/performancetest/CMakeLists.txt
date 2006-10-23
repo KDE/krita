@@ -1,7 +1,7 @@
 
 set(kritaperftest_PART_SRCS perftest.cc dlg_perftest.cc )
 
-kde4_automoc(kritaperftest ${kritaperftest_PART_SRCS})
+kde4_automoc(${kritaperftest_PART_SRCS})
 
 kde4_add_ui_files(kritaperftest_PART_SRCS wdg_perftest.ui )
 

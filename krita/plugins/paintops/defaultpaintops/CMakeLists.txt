@@ -9,9 +9,8 @@ set(kritadefaultpaintops_PART_SRCS
 	kis_penop.cc
     )
 
+kde4_automoc(${kritadefaultpaintops_PART_SRCS})
 kde4_add_ui_files(kritadefaultpaintops_PART_SRCS kis_dlgbrushcurvecontrol.ui)
-
-kde4_automoc(kritadefaultpaintops ${kritadefaultpaintops_PART_SRCS})
 
 kde4_add_plugin(kritadefaultpaintops ${kritadefaultpaintops_PART_SRCS})
 

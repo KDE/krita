@@ -5,7 +5,7 @@ set(kritafastcolortransferfilter_PART_SRCS
     kis_wdg_fastcolortransfer.cpp
     )
 
-kde4_automoc(kritafastcolortransferfilter ${kritafastcolortransferfilter_PART_SRCS})
+kde4_automoc(${kritafastcolortransferfilter_PART_SRCS})
 
 kde4_add_ui_files(kritafastcolortransferfilter_PART_SRCS
     wdgfastcolortransfer.ui

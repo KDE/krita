@@ -7,7 +7,7 @@
 
 set(kritacubismfilter_PART_SRCS kis_cubism_filter_plugin.cc kis_cubism_filter.cc kis_polygon.cc )
 
-kde4_automoc(kritacubismfilter ${kritacubismfilter_PART_SRCS})
+kde4_automoc(${kritacubismfilter_PART_SRCS})
 
 kde4_add_plugin(kritacubismfilter ${kritacubismfilter_PART_SRCS})
 

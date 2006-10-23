@@ -37,7 +37,7 @@ set(kstore_LIB_SRCS
    )
 endif( QCA2_FOUND )
 
-kde4_automoc(kstore ${kstore_LIB_SRCS})
+kde4_automoc(${kstore_LIB_SRCS})
 
 kde4_add_library(kstore SHARED ${kstore_LIB_SRCS})
 

@@ -12,7 +12,7 @@ include_directories(
 ########### next target ###############
 
 set(TestStyles_test_SRCS TestStyles.cpp)
-kde4_automoc(TestStyles_test ${TestStyles_test_SRCS})
+kde4_automoc(${TestStyles_test_SRCS})
 kde4_add_executable(TestStyles RUN_UNINSTALLED ${TestStyles_test_SRCS})
 target_link_libraries(TestStyles kotext ${QT_QTTEST_LIBRARY})
 

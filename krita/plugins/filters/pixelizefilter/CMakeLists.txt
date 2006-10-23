@@ -1,7 +1,7 @@
 
 set(kritapixelizefilter_PART_SRCS kis_pixelize_filter_plugin.cc kis_pixelize_filter.cc )
 
-kde4_automoc(kritapixelizefilter ${kritapixelizefilter_PART_SRCS})
+kde4_automoc(${kritapixelizefilter_PART_SRCS})
 
 kde4_add_plugin(kritapixelizefilter ${kritapixelizefilter_PART_SRCS})
 

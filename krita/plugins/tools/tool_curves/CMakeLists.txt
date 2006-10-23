@@ -12,7 +12,7 @@ set(kritatoolcurves_PART_SRCS
     kis_curve_framework2.cpp
     )
 
-kde4_automoc(kritatoolcurves ${kritatoolcurves_PART_SRCS})
+kde4_automoc(${kritatoolcurves_PART_SRCS})
 
 #kde4_add_ui_files(kritatoolcurves_PART_SRCS wdg_tool_crop.ui)
 

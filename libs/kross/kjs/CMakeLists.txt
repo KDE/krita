@@ -7,7 +7,7 @@ set(krosskjs_PART_SRCS
    kjsinterpreter.cpp
 )
 
-kde4_automoc(krosskjs ${krosskjs_PART_SRCS})
+kde4_automoc(${krosskjs_PART_SRCS})
 
 kde4_add_plugin(krosskjs ${krosskjs_PART_SRCS})
 

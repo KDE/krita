@@ -54,7 +54,7 @@ set(kofficeui_LIB_SRCS
    tktoolbarbutton.cpp 
 )
 
-kde4_automoc(kofficeui ${kofficeui_LIB_SRCS})
+kde4_automoc(${kofficeui_LIB_SRCS})
 
 kde4_add_ui_files( kofficeui_LIB_SRCS
     KoCsvImportDialog.ui

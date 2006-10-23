@@ -1,7 +1,7 @@
 
 set(kritasmalltilesfilter_PART_SRCS kis_small_tiles_filter_plugin.cc kis_small_tiles_filter.cc )
 
-kde4_automoc(kritasmalltilesfilter ${kritasmalltilesfilter_PART_SRCS})
+kde4_automoc(${kritasmalltilesfilter_PART_SRCS})
 
 kde4_add_plugin(kritasmalltilesfilter ${kritasmalltilesfilter_PART_SRCS})
 

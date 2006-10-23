@@ -105,7 +105,7 @@ if (SHOULD_BUILD_KRITA)
 
     set(kritapart_PART_SRCS krita_part_init.cc)
 
-    kde4_automoc(kritapart ${kritapart_PART_SRCS})
+    kde4_automoc(${kritapart_PART_SRCS})
 
     kde4_add_plugin(kritapart WITH_PREFIX ${kritapart_PART_SRCS})
 
@@ -121,7 +121,7 @@ install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
     set(krita_KDEINIT_SRCS main.cc)
 
-    kde4_automoc(krita ${krita_KDEINIT_SRCS})
+    kde4_automoc(${krita_KDEINIT_SRCS})
 
     kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 

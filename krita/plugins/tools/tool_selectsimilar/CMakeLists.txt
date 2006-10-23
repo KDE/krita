@@ -5,7 +5,7 @@ set(kritatoolselectsimilar_PART_SRCS
     kis_tool_selectsimilar.cc
     )
 
-kde4_automoc(kritatoolselectsimilar ${kritatoolselectsimilar_PART_SRCS})
+kde4_automoc(${kritatoolselectsimilar_PART_SRCS})
 
 kde4_add_plugin(kritatoolselectsimilar ${kritatoolselectsimilar_PART_SRCS})
 

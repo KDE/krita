@@ -5,7 +5,7 @@ set(kritasmearybrush_PART_SRCS
     kis_smearyop.cc
     )
 
-kde4_automoc(kritasmearybrush ${kritasmearybrush_PART_SRCS})
+kde4_automoc(${kritasmearybrush_PART_SRCS})
 
 kde4_add_plugin(kritasmearybrush ${kritasmearybrush_PART_SRCS})
 

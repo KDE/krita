@@ -8,7 +8,7 @@ include_directories( ${KOFFICECORE_INCLUDES} )
 
 set(priorityqueue_test_SRCS priorityqueue_test.cpp )
 
-kde4_automoc(priorityqueue_test ${priorityqueue_test_SRCS})
+kde4_automoc(${priorityqueue_test_SRCS})
 
 kde4_add_executable(priorityqueue_test RUN_UNINSTALLED ${priorityqueue_test_SRCS})
 
@@ -18,7 +18,7 @@ target_link_libraries(priorityqueue_test  ${KDE4_KDECORE_LIBS} kofficecore )
 
 set(filterchain_test_SRCS filterchain_test.cpp )
 
-kde4_automoc(filterchain_test ${filterchain_test_SRCS})
+kde4_automoc(${filterchain_test_SRCS})
 
 kde4_add_executable(filterchain_test RUN_UNINSTALLED ${filterchain_test_SRCS})
 
@@ -28,7 +28,7 @@ target_link_libraries(filterchain_test  ${KDE4_KDECORE_LIBS} kofficecore )
 
 set(filter_graph_SRCS filter_graph.cpp )
 
-kde4_automoc(filter_graph ${filter_graph_SRCS})
+kde4_automoc(${filter_graph_SRCS})
 
 kde4_add_executable(filter_graph RUN_UNINSTALLED ${filter_graph_SRCS})
 
@@ -38,7 +38,7 @@ target_link_libraries(filter_graph  ${KDE4_KDECORE_LIBS} kofficecore )
 
 set(kogenstylestest_SRCS kogenstylestest.cpp )
 
-kde4_automoc(kogenstylestest ${kogenstylestest_SRCS})
+kde4_automoc(${kogenstylestest_SRCS})
 
 kde4_add_executable(kogenstylestest RUN_UNINSTALLED ${kogenstylestest_SRCS})
 
@@ -50,7 +50,7 @@ add_test(kofficecore-kogenstylestest kogenstylestest)
 
 set(kooasissettingstest_SRCS kooasissettingstest.cpp )
 
-kde4_automoc(kooasissettingstest ${kooasissettingstest_SRCS})
+kde4_automoc(${kooasissettingstest_SRCS})
 
 kde4_add_executable(kooasissettingstest RUN_UNINSTALLED ${kooasissettingstest_SRCS})
 
@@ -62,7 +62,7 @@ add_test(kofficecore-kooasissettingstest kooasissettingstest)
 
 set(kooasisstoretest_SRCS kooasisstoretest.cpp )
 
-kde4_automoc(kooasisstoretest ${kooasisstoretest_SRCS})
+kde4_automoc(${kooasisstoretest_SRCS})
 
 kde4_add_executable(kooasisstoretest RUN_UNINSTALLED ${kooasisstoretest_SRCS})
 
@@ -74,7 +74,7 @@ add_test(kofficecore-kooasisstoretest kooasisstoretest)
 
 set(kopointtest_SRCS kopointtest.cpp )
 
-kde4_automoc(kopointtest ${kopointtest_SRCS})
+kde4_automoc(${kopointtest_SRCS})
 
 kde4_add_executable(kopointtest RUN_UNINSTALLED ${kopointtest_SRCS})
 
@@ -86,7 +86,7 @@ add_test(kofficecore-kopointtest kopointtest)
 
 set(korecttest_SRCS korecttest.cpp )
 
-kde4_automoc(korecttest ${korecttest_SRCS})
+kde4_automoc(${korecttest_SRCS})
 
 kde4_add_executable(korecttest RUN_UNINSTALLED ${korecttest_SRCS})
 
@@ -98,7 +98,7 @@ add_test(kofficecore-korecttest korecttest)
 
 set(rtreetestapp_SRCS rtreetestapp.cpp Tool.cpp )
 
-kde4_automoc(rtreetestapp ${rtreetestapp_SRCS})
+kde4_automoc(${rtreetestapp_SRCS})
 
 kde4_add_executable(rtreetestapp RUN_UNINSTALLED ${rtreetestapp_SRCS})
 
@@ -108,7 +108,7 @@ target_link_libraries(rtreetestapp kofficecore ${QT_QTTEST_LIBRARY} )
 
 set(koxmlreader_SRCS koxmlreadertest.cpp )
 
-kde4_automoc(koxmlreader ${koxmlreader_SRCS})
+kde4_automoc(${koxmlreader_SRCS})
 
 kde4_add_executable(koxmlreadertest RUN_UNINSTALLED ${koxmlreader_SRCS})
 

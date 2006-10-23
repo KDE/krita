@@ -5,7 +5,7 @@ set(kritatoolcrop_PART_SRCS
     kis_tool_crop.cc
     )
 
-kde4_automoc(kritatoolcrop ${kritatoolcrop_PART_SRCS})
+kde4_automoc(${kritatoolcrop_PART_SRCS})
 
 kde4_add_ui_files(kritatoolcrop_PART_SRCS wdg_tool_crop.ui)
 

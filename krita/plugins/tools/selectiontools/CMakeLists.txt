@@ -11,7 +11,7 @@ set(kritaselectiontools_PART_SRCS
     kis_tool_select_outline.cc
     )
 
-kde4_automoc(kritaselectiontools ${kritaselectiontools_PART_SRCS})
+kde4_automoc(${kritaselectiontools_PART_SRCS})
 
 kde4_add_plugin(kritaselectiontools ${kritaselectiontools_PART_SRCS})
 

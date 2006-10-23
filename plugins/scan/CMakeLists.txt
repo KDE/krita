@@ -7,7 +7,7 @@ include_directories( ${KOFFICECORE_INCLUDES} )
 
 set(kofficescan_PART_SRCS scan.cpp )
 
-kde4_automoc(kofficescan ${kofficescan_PART_SRCS})
+kde4_automoc(${kofficescan_PART_SRCS})
 
 kde4_add_plugin(kofficescan ${kofficescan_PART_SRCS})
 

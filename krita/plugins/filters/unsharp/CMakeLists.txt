@@ -6,7 +6,7 @@ set(kritaunsharpfilter_PART_SRCS
     kis_unsharp_filter.cc
     )
 
-kde4_automoc(kritaunsharpfilter ${kritaunsharpfilter_PART_SRCS})
+kde4_automoc(${kritaunsharpfilter_PART_SRCS})
 
 kde4_add_ui_files(kritaunsharpfilter_PART_SRCS
     wdgunsharp.ui

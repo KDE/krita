@@ -1,7 +1,7 @@
 
 set(krita_ycbcr_u8_LIB_SRCS kis_ycbcr_u8_colorspace.cc )
 
-kde4_automoc(krita_ycbcr_u8 ${krita_ycbcr_u8_LIB_SRCS})
+kde4_automoc(${krita_ycbcr_u8_LIB_SRCS})
 
 kde4_add_library(krita_ycbcr_u8 SHARED ${krita_ycbcr_u8_LIB_SRCS})
 
@@ -15,7 +15,7 @@ install(TARGETS krita_ycbcr_u8 DESTINATION ${LIB_INSTALL_DIR} )
 
 set(krita_ycbcr_u8_plugin_PART_SRCS ycbcr_u8_plugin.cc )
 
-kde4_automoc(krita_ycbcr_u8_plugin ${krita_ycbcr_u8_plugin_PART_SRCS})
+kde4_automoc(${krita_ycbcr_u8_plugin_PART_SRCS})
 
 kde4_add_plugin(krita_ycbcr_u8_plugin ${krita_ycbcr_u8_plugin_PART_SRCS})
 

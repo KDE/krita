@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KOFFICECORE_INCLUDES} 
 
 set(kochart_LIB_SRCS koChart.cc )
 
-kde4_automoc(kochart ${kochart_LIB_SRCS})
+kde4_automoc(${kochart_LIB_SRCS})
 
 kde4_add_library(kochart SHARED ${kochart_LIB_SRCS})
 

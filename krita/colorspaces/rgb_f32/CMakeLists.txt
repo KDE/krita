@@ -11,7 +11,7 @@ endif(KUNITTEST_FOUND)
 
 set(krita_rgb_f32_LIB_SRCS kis_rgb_f32_colorspace.cc )
 
-kde4_automoc(krita_rgb_f32 ${krita_rgb_f32_LIB_SRCS})
+kde4_automoc(${krita_rgb_f32_LIB_SRCS})
 
 kde4_add_library(krita_rgb_f32 SHARED ${krita_rgb_f32_LIB_SRCS})
 
@@ -25,7 +25,7 @@ install(TARGETS krita_rgb_f32  DESTINATION ${LIB_INSTALL_DIR})
 
 set(krita_rgb_f32_plugin_PART_SRCS rgb_f32_plugin.cc )
 
-kde4_automoc(krita_rgb_f32_plugin ${krita_rgb_f32_plugin_PART_SRCS})
+kde4_automoc(${krita_rgb_f32_plugin_PART_SRCS})
 
 kde4_add_plugin(krita_rgb_f32_plugin ${krita_rgb_f32_plugin_PART_SRCS})
 

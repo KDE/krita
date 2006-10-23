@@ -6,7 +6,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty ${KOFFICECORE_INCLUDES}
 
 set(propertytest_SRCS main.cpp test.cpp )
 
-kde4_automoc(propertytest ${propertytest_SRCS})
+kde4_automoc(${propertytest_SRCS})
 
 kde4_add_executable(propertytest ${propertytest_SRCS})
 

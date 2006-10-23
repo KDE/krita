@@ -12,7 +12,7 @@ set(krossruby_PART_SRCS
    rubyscript.cpp 
    rubymodule.cpp )
 
-kde4_automoc(krossruby ${krossruby_PART_SRCS})
+kde4_automoc(${krossruby_PART_SRCS})
 
 kde4_add_plugin(krossruby ${krossruby_PART_SRCS})
 

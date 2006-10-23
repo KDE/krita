@@ -7,7 +7,7 @@ include_directories( ${KOFFICECORE_INCLUDES} )
 
 set(kwmf_LIB_SRCS kwmf.cc qwmf.cc )
 
-kde4_automoc(kwmf ${kwmf_LIB_SRCS})
+kde4_automoc(${kwmf_LIB_SRCS})
 
 kde4_add_library(kwmf SHARED ${kwmf_LIB_SRCS})
 
@@ -26,7 +26,7 @@ set(kowmf_LIB_SRCS
    kowmfwrite.cc 
    kowmfpaint.cc )
 
-kde4_automoc(kowmf ${kowmf_LIB_SRCS})
+kde4_automoc(${kowmf_LIB_SRCS})
 
 kde4_add_library(kowmf SHARED ${kowmf_LIB_SRCS})
 

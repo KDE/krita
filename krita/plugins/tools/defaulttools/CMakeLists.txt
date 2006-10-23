@@ -16,7 +16,7 @@ set(kritadefaulttools_PART_SRCS
     #kis_tool_gradient.cc
     )
 
-kde4_automoc(kritadefaulttools ${kritadefaulttools_PART_SRCS})
+kde4_automoc(${kritadefaulttools_PART_SRCS})
 
 kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui)
 

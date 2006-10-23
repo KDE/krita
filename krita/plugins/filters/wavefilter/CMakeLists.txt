@@ -5,7 +5,7 @@ set(kritawavefilter_PART_SRCS
     kis_wdg_wave.cpp
     )
 
-kde4_automoc(kritawavefilter ${kritawavefilter_PART_SRCS})
+kde4_automoc(${kritawavefilter_PART_SRCS})
 
 kde4_add_ui_files(kritawavefilter_PART_SRCS
     wdgwaveoptions.ui

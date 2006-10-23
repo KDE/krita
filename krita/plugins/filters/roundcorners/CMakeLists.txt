@@ -1,6 +1,6 @@
 set(kritaroundcornersfilter_PART_SRCS kis_round_corners_filter_plugin.cc kis_round_corners_filter.cc )
 
-kde4_automoc(kritaroundcornersfilter ${kritaroundcornersfilter_PART_SRCS})
+kde4_automoc(${kritaroundcornersfilter_PART_SRCS})
 
 kde4_add_plugin(kritaroundcornersfilter ${kritaroundcornersfilter_PART_SRCS})
 

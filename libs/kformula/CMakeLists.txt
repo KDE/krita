@@ -42,7 +42,7 @@ set(kformulalib_LIB_SRCS
    symbolfontstyle.cc 
    esstixfontstyle.cc )
 
-kde4_automoc(kformulalib ${kformulalib_LIB_SRCS})
+kde4_automoc(${kformulalib_LIB_SRCS})
 
 kde4_add_library(kformulalib SHARED ${kformulalib_LIB_SRCS})
 

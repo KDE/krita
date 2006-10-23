@@ -5,7 +5,7 @@ set(kritatooltransform_PART_SRCS
     kis_tool_transform.cc
     )
 
-kde4_automoc(kritatooltransform ${kritatooltransform_PART_SRCS})
+kde4_automoc(${kritatooltransform_PART_SRCS})
 
 kde4_add_ui_files(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
 

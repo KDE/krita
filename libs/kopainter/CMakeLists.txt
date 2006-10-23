@@ -15,7 +15,7 @@ set(kopainter_LIB_SRCS
    KoDualColorButton.cpp
 )
 
-kde4_automoc(kopainter ${kopainter_LIB_SRCS})
+kde4_automoc(${kopainter_LIB_SRCS})
 
 kde4_add_library(kopainter SHARED ${kopainter_LIB_SRCS})
 

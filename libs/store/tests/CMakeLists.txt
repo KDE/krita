@@ -5,7 +5,7 @@ if(KDE4_BUILD_TESTS)
 
 set(storage_test_SRCS storage_test.cpp )
 
-kde4_automoc(storage_test ${storage_test_SRCS})
+kde4_automoc(${storage_test_SRCS})
 
 kde4_add_executable(storage_test RUN_UNINSTALLED ${storage_test_SRCS})
 
@@ -17,7 +17,7 @@ add_test(kostore-storage_test storage_test)
 
 set(xmlwritertest_SRCS xmlwritertest.cpp )
 
-kde4_automoc(xmlwritertest ${xmlwritertest_SRCS})
+kde4_automoc(${xmlwritertest_SRCS})
 
 kde4_add_executable(xmlwritertest RUN_UNINSTALLED ${xmlwritertest_SRCS})
 
@@ -29,7 +29,7 @@ add_test(kostore-xmlwritertest xmlwritertest)
 
 set(storedroptest_SRCS storedroptest.cpp )
 
-kde4_automoc(storedroptest ${storedroptest_SRCS})
+kde4_automoc(${storedroptest_SRCS})
 
 kde4_add_executable(storedroptest RUN_UNINSTALLED ${storedroptest_SRCS})
 
@@ -39,7 +39,7 @@ target_link_libraries(storedroptest  ${KDE4_KDECORE_LIBS} kstore )
 
 set(kodomtest_SRCS kodomtest.cpp )
 
-kde4_automoc(kodomtest ${kodomtest_SRCS})
+kde4_automoc(${kodomtest_SRCS})
 
 kde4_add_executable(kodomtest RUN_UNINSTALLED ${kodomtest_SRCS})
 

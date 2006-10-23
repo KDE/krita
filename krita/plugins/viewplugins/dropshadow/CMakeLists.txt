@@ -1,7 +1,7 @@
 
 set(kritadropshadow_PART_SRCS kis_dropshadow.cc dlg_dropshadow.cc kis_dropshadow_plugin.cc )
 
-kde4_automoc(kritadropshadow ${kritadropshadow_PART_SRCS})
+kde4_automoc(${kritadropshadow_PART_SRCS})
 
 kde4_add_ui_files(kritadropshadow_PART_SRCS wdg_dropshadow.ui )
 

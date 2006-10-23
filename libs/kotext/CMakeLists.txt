@@ -76,7 +76,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     styles/ChangeFollower.cpp
  )
 
-kde4_automoc(kotext ${kotext_LIB_SRCS})
+kde4_automoc(${kotext_LIB_SRCS})
 
 kde4_add_ui_files(kotext_LIB_SRCS 
    timedateformatwidget.ui
@@ -111,7 +111,7 @@ set(kotext2_PART_SRCS
     KoTextToolFactory.cpp
  )
 
-kde4_automoc(kotext2 ${kotext2_PART_SRCS})
+kde4_automoc(${kotext2_PART_SRCS})
 
 kde4_add_plugin(kotext2 ${kotext2_PART_SRCS})
 

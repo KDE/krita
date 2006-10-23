@@ -25,13 +25,13 @@
 #include "KoTabBar.h"
 
 #include <qdrawutil.h>
+#include <QList>
 #include <QPainter>
 #include <QString>
 #include <QStringList>
 #include <QStyle>
 #include <QTimer>
 #include <QToolButton>
-#include <q3valuevector.h>
 #include <QWidget>
 //Added by qt3to4:
 #include <QWheelEvent>
@@ -71,7 +71,7 @@ public:
     QStringList tabs;
 
     // array of QRect for each visible tabs
-    Q3ValueVector<QRect> tabRects;
+    QList<QRect> tabRects;
 
     // leftmost tab (or rightmost if reverseLayout)
     int firstTab;

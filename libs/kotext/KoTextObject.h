@@ -33,7 +33,7 @@
 class KoSavingContext;
 class KCommand;
 class KoTextFormat;
-class Q3ProgressDialog;
+class QProgressDialog;
 class KoLinkVariable;
 class KoVariable;
 class QMimeData;
@@ -461,7 +461,7 @@ public:
     void printRTDebug(int);
 #endif
 
-    bool statistics( Q3ProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences, ulong & syllables, ulong & lines, bool selected );
+    bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences, ulong & syllables, ulong & lines, bool selected );
     int numberOfparagraphLineSelected( KoTextParag *parag);
 
     /**

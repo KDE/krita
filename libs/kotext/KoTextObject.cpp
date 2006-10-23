@@ -37,7 +37,7 @@
 
 #include <QTimer>
 #include <QRegExp>
-#include <q3progressdialog.h>
+#include <QProgressDialog>
 //Added by qt3to4:
 #include <QByteArray>
 #include <Q3MemArray>
@@ -2267,7 +2267,7 @@ void KoTextObject::setNeedSpellCheck(bool b)
         parag->string()->setNeedsSpellCheck( b );
 }
 
-bool KoTextObject::statistics( Q3ProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences, ulong & syllables, ulong & lines, bool selected )
+bool KoTextObject::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences, ulong & syllables, ulong & lines, bool selected )
 {
     // parts of words for better counting of syllables:
     // (only use reg exp if necessary -> speed up)
@@ -2289,7 +2289,7 @@ bool KoTextObject::statistics( Q3ProgressDialog *progress, ulong & charsWithSpac
     {
         if (  progress )
         {
-            progress->setProgress(progress->progress()+1);
+            progress->setValue(progress->value()+1);
             // MA: resizing if KWStatisticsDialog does not work correct with this enabled, don't know why
             kapp->processEvents();
             if ( progress->wasCanceled() )

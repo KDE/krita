@@ -1,3 +1,4 @@
+
 set(kritaoilpaintfilter_PART_SRCS kis_oilpaint_filter_plugin.cc kis_oilpaint_filter.cc )
 
 kde4_automoc(${kritaoilpaintfilter_PART_SRCS})

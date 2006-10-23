@@ -1,3 +1,4 @@
+include_directories(${CMAKE_SOURCE_DIR}/krita/ui/obsolete/)
 set(kritaui_LIB_SRCS
     imageviewer.cc
     kcurve.cc

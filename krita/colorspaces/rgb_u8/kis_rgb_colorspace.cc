@@ -127,26 +127,45 @@ void KisRgbColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
 void KisRgbColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
 {
     Q_INT32 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
-
+    Q_INT32 totalWeight = 0, totalWeightTransparent = 0;
     while (nColors--)
     {
         Q_INT32 weight = *kernelValues;
 
         if (weight != 0) {
-            totalRed += (*colors)[PIXEL_RED] * weight;
-            totalGreen += (*colors)[PIXEL_GREEN] * weight;
-            totalBlue += (*colors)[PIXEL_BLUE] * weight;
+            if((*colors)[PIXEL_ALPHA] == 0)
+            {
+              totalWeightTransparent += weight;
+            } else {
+              totalRed += (*colors)[PIXEL_RED] * weight;
+              totalGreen += (*colors)[PIXEL_GREEN] * weight;
+              totalBlue += (*colors)[PIXEL_BLUE] * weight;
+            }
             totalAlpha += (*colors)[PIXEL_ALPHA] * weight;
+            totalWeight += weight;
         }
         colors++;
         kernelValues++;
     }
 
-
-    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
-        dst[PIXEL_RED] = CLAMP((totalRed / factor) + offset, 0, Q_UINT8_MAX);
-        dst[PIXEL_GREEN] = CLAMP((totalGreen / factor) + offset, 0, Q_UINT8_MAX);
-        dst[PIXEL_BLUE] =  CLAMP((totalBlue / factor) + offset, 0, Q_UINT8_MAX);
+    if(totalWeightTransparent == 0)
+    {
+      if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+          dst[PIXEL_RED] = CLAMP((totalRed / factor) + offset, 0, Q_UINT8_MAX);
+          dst[PIXEL_GREEN] = CLAMP((totalGreen / factor) + offset, 0, Q_UINT8_MAX);
+          dst[PIXEL_BLUE] =  CLAMP((totalBlue / factor) + offset, 0, Q_UINT8_MAX);
+      }
+      if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+          dst[PIXEL_ALPHA] = CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT8_MAX);
+      }
+    } else if(totalWeightTransparent != totalWeight) {
+      Q_INT32 a = factor * ( totalWeight - totalWeightTransparent );
+      
+      if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+          dst[PIXEL_RED] = CLAMP((totalRed * totalWeight  / a) + offset, 0, Q_UINT8_MAX);
+          dst[PIXEL_GREEN] = CLAMP((totalGreen * totalWeight / a) + offset, 0, Q_UINT8_MAX);
+          dst[PIXEL_BLUE] =  CLAMP((totalBlue * totalWeight / a) + offset, 0, Q_UINT8_MAX);
+      }
     }
     if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
         dst[PIXEL_ALPHA] = CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT8_MAX);

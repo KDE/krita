@@ -112,8 +112,9 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
 
     KisKernelSP kernel = ((KisConvolutionConfiguration*)configuration)->matrix();
 
-    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
-
+    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT, KisChannelInfo::FLAG_COLOR );
+    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT, KisChannelInfo::FLAG_ALPHA ); // THAT'S SUXX ^10 !
+    
     if (painter.cancelRequested()) {
         cancel();
     }

@@ -19,6 +19,7 @@
  */
 
 #include "KoPathCommand.h"
+#include "KoParameterShape.h"
 #include "KoShapeControllerBase.h"
 #include <klocale.h>
 #include <kdebug.h>
@@ -644,6 +645,62 @@ void KoPathCombineCommand::unexecute()
 QString KoPathCombineCommand::name() const
 {
     return i18n( "Combine paths" );
+}
+
+KoParameterChangeCommand::KoParameterChangeCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint )
+: m_shape( shape )
+, m_handleId( handleId )    
+, m_startPoint( startPoint )    
+, m_endPoint( endPoint )    
+{
+}
+
+KoParameterChangeCommand::~KoParameterChangeCommand()
+{
+}
+
+/// execute the command
+void KoParameterChangeCommand::execute()
+{
+    m_shape->moveHandle( m_handleId, m_endPoint );
+    m_shape->repaint();
+}
+
+/// revert the actions done in execute
+void KoParameterChangeCommand::unexecute()
+{
+    m_shape->moveHandle( m_handleId, m_startPoint );
+    m_shape->repaint();
+}
+
+/// return the name of this command
+QString KoParameterChangeCommand::name() const
+{
+    return i18n( "Change parameter" );
+}
+
+KoParameterToPathCommand::KoParameterToPathCommand( KoParameterShape *shape )
+: m_shape( shape )    
+{
+}
+
+KoParameterToPathCommand::~KoParameterToPathCommand()
+{
+}
+
+void KoParameterToPathCommand::execute()
+{
+    m_shape->setModified( true );
+}
+
+void KoParameterToPathCommand::unexecute()
+{
+    m_shape->setModified( false );
+}
+
+QString KoParameterToPathCommand::name() const
+{
+    return i18n( "Modify path" );
 }
 
 KoPathSeparateCommand::KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths )

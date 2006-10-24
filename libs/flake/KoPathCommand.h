@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +26,8 @@
 #include <QMap>
 #include <QPointF>
 #include "KoPathShape.h"
+
+class KoParameterShape;
 
 /// the base command for commands altering a path shape
 class KoPathBaseCommand : public KCommand {
@@ -299,6 +302,43 @@ private:
     QList<KoPathShape*> m_paths;
     KoPathShape *m_combinedPath;
     bool m_isCombined;
+};
+
+/// The undo / redo command for changing a parameter
+class KoParameterChangeCommand : public KCommand
+{
+public:
+    KoParameterChangeCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint );
+    virtual ~KoParameterChangeCommand();
+
+    /// execute the command
+    void execute();
+    /// revert the actions done in execute
+    void unexecute();
+    /// return the name of this command
+    QString name() const;
+private:
+    KoParameterShape *m_shape;
+    int m_handleId;
+    QPointF m_startPoint;
+    QPointF m_endPoint;
+};
+
+/// The undo / redo command for changing a KoParameterShape into a KoPathShape
+class KoParameterToPathCommand : public KCommand
+{
+public:
+    KoParameterToPathCommand( KoParameterShape *shape );
+    virtual ~KoParameterToPathCommand();
+
+    /// execute the command
+    void execute();
+    /// revert the actions done in execute
+    void unexecute();
+    /// return the name of this command
+    QString name() const;
+private:
+    KoParameterShape *m_shape;
 };
 
 /// The undo / redo command for separating subpaths into different paths

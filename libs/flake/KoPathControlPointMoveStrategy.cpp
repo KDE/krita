@@ -18,24 +18,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoPathPointMoveStrategy.h"
+#include "KoPathControlPointMoveStrategy.h"
 
-#include "KoPathCommand.h"
 #include "KoPathTool.h"
+#include "KoPathCommand.h"
 
-KoPathPointMoveStrategy::KoPathPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, const QPointF &pos )
+KoPathControlPointMoveStrategy::KoPathControlPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, KoPathPoint *point, KoPathPoint::KoPointType type, const QPointF &pos )
 : KoInteractionStrategy( tool, canvas )
 , m_lastPosition( pos )
 , m_move( 0, 0 )
-, m_tool( tool )
+, m_tool( tool )    
+, m_point( point )    
+, m_pointType( type )    
 {
 }
 
-KoPathPointMoveStrategy::~KoPathPointMoveStrategy() 
+KoPathControlPointMoveStrategy::~KoPathControlPointMoveStrategy() 
 {
 }
 
-void KoPathPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers )
+void KoPathControlPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers )
 {
     QPointF docPoint = m_tool->snapToGrid( mouseLocation, modifiers );
     QPointF move = docPoint - m_lastPosition;
@@ -45,21 +47,21 @@ void KoPathPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt:
 
     m_move += move;
 
-    KoPointMoveCommand cmd( m_tool->m_pointSelection.selectedPointMap(), move );
+    KoControlPointMoveCommand cmd( m_point, move, m_pointType );
     cmd.execute();
 }
 
-void KoPathPointMoveStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) 
+void KoPathControlPointMoveStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) 
 { 
     Q_UNUSED( modifiers );
 }
 
-KCommand* KoPathPointMoveStrategy::createCommand()
+KCommand* KoPathControlPointMoveStrategy::createCommand()
 {
     KCommand *cmd = 0;
     if( !m_move.isNull() )
     {
-        cmd = new KoPointMoveCommand( m_tool->m_pointSelection.selectedPointMap(), m_move );
+        cmd = new KoControlPointMoveCommand( m_point, m_move, m_pointType );
     }
     return cmd;
 }

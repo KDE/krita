@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 
 #include <KoShapeRegistry.h>
 #include <KoPathShapeFactory.h>
+#include <KoRectangleShapeFactory.h>
 
 #include <QString>
 
@@ -54,6 +56,7 @@ void KoShapeRegistry::init() {
 
     // Also add our hard-coded basic shape
     add( new KoPathShapeFactory(this, QStringList()) );
+    add( new KoRectangleShapeFactory(this, QStringList()) );
 }
 
 

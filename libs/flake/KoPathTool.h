@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@
 #include <QSet>
 
 class KoCanvasBase;
+class KoParameterShape;
 class KoInteractionStrategy;
 class KoPathPointMoveStrategy;
 class KoPathPointRubberSelectStrategy;
@@ -67,20 +69,51 @@ private:
     /// snaps given point to grid point
     QPointF snapToGrid( const QPointF &p, Qt::KeyboardModifiers modifiers );
 private:
+
     class ActiveHandle
     {
     public:    
-        ActiveHandle( KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::KoPointType activePointType )
+        ActiveHandle( KoPathTool *tool )
         : m_tool( tool )
+        {}
+        virtual ~ActiveHandle() {};
+        virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0; 
+        virtual void repaint() const = 0;
+        virtual void mousePressEvent( KoPointerEvent *event ) = 0;
+
+        KoPathTool *m_tool;
+    };
+
+    class ActivePointHandle : public ActiveHandle
+    {
+    public:    
+        ActivePointHandle( KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::KoPointType activePointType )
+        : ActiveHandle( tool )
         , m_activePoint( activePoint )
         , m_activePointType( activePointType )
         {}
-        bool isActive() { return m_activePoint != 0; }
-        void deactivate() { m_activePoint = 0; }
-        void paint( QPainter &painter, KoViewConverter &converter ); 
-        KoPathTool *m_tool;
+        void paint( QPainter &painter, KoViewConverter &converter );
+        void repaint() const;
+        void mousePressEvent( KoPointerEvent *event );
+
         KoPathPoint *m_activePoint;
         KoPathPoint::KoPointType m_activePointType;
+    };
+
+    class ActiveParameterHandle : public ActiveHandle
+    {
+    public:    
+        ActiveParameterHandle( KoPathTool *tool, KoParameterShape *parameterShape, int handleId )
+        : ActiveHandle( tool )
+        , m_parameterShape( parameterShape )
+        , m_handleId( handleId )
+        {}
+        void paint( QPainter &painter, KoViewConverter &converter );
+        void repaint() const;
+        void mousePressEvent( KoPointerEvent *event );
+
+        KoParameterShape *m_parameterShape;
+        int m_handleId;
     };
 
     /**
@@ -168,14 +201,16 @@ private:
     };
 
     
-    ActiveHandle m_activeHandle;       ///< the currently active handle
+    ActiveHandle * m_activeHandle;       ///< the currently active handle
     int m_handleRadius;                ///< the radius of the control point handles
     /// the point selection 
     KoPathPointSelection m_pointSelection;
 
-    friend class ActiveHandle;
+    friend class ActiveNoHandle;
+    friend class ActivePointHandle;
     friend class KoPathPointSelection;
     friend class KoPathPointMoveStrategy;
+    friend class KoPathControlPointMoveStrategy;
     friend class KoPathPointRubberSelectStrategy;
 
     KoInteractionStrategy *m_currentStrategy; ///< the rubber selection strategy

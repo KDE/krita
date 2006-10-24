@@ -34,6 +34,11 @@ set(flake_SRCS
     KoPathCommand.cpp
     KoPathPointRubberSelectStrategy.cpp
     KoPathPointMoveStrategy.cpp
+    KoPathControlPointMoveStrategy.cpp
+    KoParameterShape.cpp
+    KoParameterChangeStrategy.cpp
+    KoRectangleShape.cpp
+    KoRectangleShapeFactory.cpp
 )
 
 kde4_automoc(${flake_SRCS})

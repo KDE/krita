@@ -53,14 +53,11 @@ bool KoLineBorder::hasTransparency() {
 }
 
 void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter) {
-    double zoomX, zoomY;
-    converter.zoom(&zoomX, &zoomY);
-    painter.scale(zoomX, zoomY);
+    KoShape::applyConversion( painter, converter );
 
     QPen pen;
     pen.setColor(m_color);
     pen.setWidthF(qMax(0.0, m_lineSize));
     pen.setJoinStyle(Qt::MiterJoin);
-    painter.setPen(pen);
-    painter.drawPath(shape->outline());
+    painter.strokePath( shape->outline(), pen );
 }

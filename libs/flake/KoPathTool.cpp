@@ -461,9 +461,7 @@ void KoPathTool::ActivePointHandle::paint( QPainter &painter, KoViewConverter &c
 { 
     painter.save();
     painter.setMatrix( m_activePoint->parent()->transformationMatrix(&converter) * painter.matrix() );
-    double zoomX, zoomY;
-    converter.zoom(&zoomX, &zoomY);
-    painter.scale(zoomX, zoomY);
+    KoShape::applyConversion( painter, converter );
 
     QRectF handle = converter.viewToDocument( m_tool->handleRect( QPoint(0,0) ) );
     m_activePoint->paint( painter, handle.size(), m_tool->m_pointSelection.contains( m_activePoint ) );
@@ -564,9 +562,7 @@ void KoPathTool::KoPathPointSelection::paint( QPainter &painter, KoViewConverter
         painter.save();
 
         painter.setMatrix( it.key()->transformationMatrix(&converter) * painter.matrix() );
-        double zoomX, zoomY;
-        converter.zoom(&zoomX, &zoomY);
-        painter.scale(zoomX, zoomY);
+        KoShape::applyConversion( painter, converter );
 
         QRectF handle = converter.viewToDocument( m_tool->handleRect( QPoint(0,0) ) );
 

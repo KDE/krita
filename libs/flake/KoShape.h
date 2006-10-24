@@ -473,11 +473,6 @@ public:
      */
     virtual void copySettings(const KoShape *shape);
 
-protected:
-    QMatrix m_invMatrix; ///< The inverted matrix; for convenience
-    QBrush m_backgroundBrush; ///< Stands for the background color / fill etc.
-    KoShapeBorderModel *m_border; ///< points to a border, or 0 if there is no border
-
     /**
      * Convenience method that allows people implementing paint() to use the shape
      * internal coordinate system directly to paint itself instead of considering the
@@ -486,6 +481,11 @@ protected:
      * @param converter the converter for the current views zoom.
      */
     static void applyConversion(QPainter &painter, const KoViewConverter &converter);
+
+protected:
+    QMatrix m_invMatrix; ///< The inverted matrix; for convenience
+    QBrush m_backgroundBrush; ///< Stands for the background color / fill etc.
+    KoShapeBorderModel *m_border; ///< points to a border, or 0 if there is no border
 
     /**
      * Update the position of the shape in the tree of the KoShapeManager.

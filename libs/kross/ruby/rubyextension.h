@@ -69,7 +69,8 @@ namespace Kross {
             static VALUE method_missing(int argc, VALUE *argv, VALUE self);
 
             /**
-            * This function will call a function in a \a RubyExtension object
+            * This function will call a function in a \a RubyExtension object.
+            *
             * @param extension the \a RubyExtension object which contains the function
             * @param argc the number of argument
             * @param argv the lists of arguments (the first argument is the Ruby ID of the function)
@@ -77,13 +78,13 @@ namespace Kross {
             static VALUE call_method(RubyExtension* extension, int argc, VALUE *argv);
 
             /**
-            * This function is called by ruby to delete a RubyExtension object
+            * This function is called by ruby to delete a RubyExtension object.
             */
             static void delete_object(void* object);
 
 #if 0
             /**
-            * This function is called by ruby to delete a RubyExtension object
+            * This function is called by ruby to delete a RubyException object.
             */
             static void delete_exception(void* object);
 #endif
@@ -95,7 +96,7 @@ namespace Kross {
             */
             static bool isRubyExtension(VALUE obj);
 
-            #if 0
+#if 0
             /**
             * Test if the ruby object is an exception.
             */
@@ -110,66 +111,6 @@ namespace Kross {
             * Wrap an exception in a ruby object.
             */
             static VALUE convertFromException(Kross::Exception::Ptr exc);
-            #endif
-
-#if 0
-            /**
-            * This function iterats through a ruby hash
-            */
-            static int convertHash_i(VALUE key, VALUE value, VALUE vmap);
-
-            /**
-            * Converts a \a VALUE into a QVariant.
-            * \param value The ruby VALUE to convert.
-            * \return The to a QVariant converted Ruby VALUE.
-            */
-            static QVariant toVariant(VALUE value);
-
-            /**
-            * Converts a QString to a VALUE. If
-            * the QString isNull() then a "" will
-            * be returned.
-            * \param s The QString to convert.
-            * \return The to a VALUE converted QString.
-            */
-            static VALUE toVALUE(const QString& s);
-
-            /**
-            * Converts a QStringList to a VALUE.
-            * \param list The QStringList to convert.
-            * \return The to a VALUE converted QStringList.
-            */
-            static VALUE toVALUE(QStringList list);
-
-            /**
-            * Converts a QMap to a VALUE.
-            * \param map The QMap to convert.
-            * \return The to a VALUE converted QMap.
-            */
-            static VALUE toVALUE(QVariantMap map);
-
-            /**
-            * Converts a QList to a VALUE.
-            * \param list The QValueList to convert.
-            * \return The to a VALUE converted QValueList.
-            */
-            static VALUE toVALUE(QVariantList list);
-
-            /**
-            * Converts a QVariant to a VALUE.
-            * \param variant The QVariant to convert.
-            * \return The to a VALUE converted QVariant.
-            */
-            static VALUE toVALUE(const QVariant& variant);
-#endif
-
-#if 0
-            /**
-            * Converts a QObject to a VALUE.
-            * \param object The QObject to convert.
-            * \return The to a VALUE converted QObject.
-            */
-            static VALUE toVALUE(QObject* object);
 #endif
 
             /**
@@ -180,9 +121,9 @@ namespace Kross {
             static VALUE toVALUE(RubyExtension* object);
 
         private:
-            /// Private d-pointer.
+            /// @internal private d-pointer.
             RubyExtensionPrivate* d;
-            /// Unwanted copy-ctor.
+            /// @internal unwanted copy-ctor.
             RubyExtension(const RubyExtension&) {}
     };
 

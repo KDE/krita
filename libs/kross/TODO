@@ -18,12 +18,11 @@ Core:
   functions a script provides either as KActionCollection where each
   function is a KAction or let Action dynamicly build slots where
   each slot represents a function.
-* extend forms + maybe move that functionality into an own dynamic
-  loadable module.
 * add KConfig-module to provide persistent configurations where all
   scripts are able to operate on.
 * add KStandardDirs-module to be able to reuse e.g. the resource-stuff
   from within all scripts without much pain.
+* extend forms
 
 Ruby:
 * support access to the QObject-hierachy. That means each RubyExtension

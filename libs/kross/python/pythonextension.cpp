@@ -208,50 +208,6 @@ int PythonExtension::setattr(const char* n, const Py::Object& value)
     return Py::PythonExtension<PythonExtension>::setattr(n, value);
 }
 
-/*
-const Py::Object PythonExtension::toPyObject(Kross::Object* object)
-{
-    if(! object) {
-        #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
-            krossdebug("PythonExtension::toPyObject(Kross::Object) is NULL => Py::None");
-        #endif
-        return Py::None();
-    }
-    {
-        Kross::Variant* variant = dynamic_cast<Kross::Variant*>( object );
-        if(variant) return toPyObject( variant->getValue() );
-    }
-    {
-        Kross::List* list = dynamic_cast<Kross::List*>( object );
-        if(list) {
-            Py::List pylist;
-            foreach(QVariant v, list->getValue()) {
-                Kross::Object::Ptr obj = qVariantValue< Kross::Object::Ptr >(v);
-                pylist.append( toPyObject( obj.data() ) ); // recursive
-            }
-            return pylist;
-        }
-    }
-    {
-        Kross::Dict* dict = dynamic_cast<Kross::Dict*>( object );
-        if(dict) {
-            Py::Dict pydict;
-            QMap<QString, QVariant> valuedict = dict->getValue();
-            for(QMap<QString, QVariant>::Iterator it = valuedict.begin(); it != valuedict.end(); ++it) {
-                const char* n = it.key().toLatin1().data();
-                Kross::Object::Ptr obj = qVariantValue< Kross::Object::Ptr >( it.value() );
-                pydict[ n ] = toPyObject( obj.data() ); // recursive
-            }
-            return pydict;
-        }
-    }
-    #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
-        krossdebug( QString("Trying to handle PythonExtension::toPyObject() as PythonExtension") );
-    #endif
-    return Py::asObject( new PythonExtension(object) );
-}
-*/
-
 PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject *args)
 {
     try {

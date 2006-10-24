@@ -36,7 +36,7 @@ using namespace Kross;
 
 namespace Kross {
 
-    /// \internal
+    /// @internal d-pointer class.
     class RubyExtensionPrivate {
         friend class RubyExtension;
 
@@ -49,28 +49,9 @@ namespace Kross {
         //static VALUE s_krossException;
 
         /// The cached list of methods.
-        QHash<QByteArray, int>* m_methods;
+        QHash<QByteArray, int> m_methods;
 
-        RubyExtensionPrivate(QObject* object) : m_object(object), m_methods(0) {}
-        ~RubyExtensionPrivate() { delete m_methods; }
-
-        /// Update the cached list of methods.
-        void updateMethods() {
-            delete m_methods;
-            m_methods = new QHash<QByteArray, int>();
-            if(m_object) {
-                const QMetaObject* metaobject = m_object->metaObject();
-                const int count = metaobject->methodCount();
-                for(int i = 0; i < count; ++i) {
-                    QMetaMethod member = metaobject->method(i);
-                    const QString signature = member.signature();
-                    const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
-                    if(! m_methods->contains(name)) {
-                        m_methods->insert(name, i);
-                    }
-                }
-            }
-        }
+        RubyExtensionPrivate(QObject* object) : m_object(object) {}
     };
 
 }
@@ -84,6 +65,19 @@ RubyExtension::RubyExtension(QObject* object)
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
         krossdebug(QString("RubyExtension Ctor QObject=%1").arg( object ? QString("%1 %2").arg(object->objectName()).arg(object->metaObject()->className()) : "NULL" ));
     #endif
+
+    if(d->m_object) {
+        const QMetaObject* metaobject = d->m_object->metaObject();
+        const int count = metaobject->methodCount();
+        for(int i = 0; i < count; ++i) {
+            QMetaMethod member = metaobject->method(i);
+            const QString signature = member.signature();
+            const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
+            if(! d->m_methods.contains(name)) {
+                d->m_methods.insert(name, i);
+            }
+        }
+    }
 }
 
 RubyExtension::~RubyExtension()
@@ -91,7 +85,6 @@ RubyExtension::~RubyExtension()
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
         krossdebug("RubyExtension Dtor");
     #endif
-
     delete d;
 }
 
@@ -129,20 +122,12 @@ VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv
         }
     #endif
 
-    Q_ASSERT(extension);
-    Q_ASSERT(extension->d->m_object);
-
-    if(! extension->d->m_methods) {
-        extension->d->updateMethods();
-        Q_ASSERT(extension->d->m_methods);
-    }
-
-    if(! extension->d->m_methods->contains(funcname)) {
+    if(! extension->d->m_methods.contains(funcname)) {
         krosswarning( QString("RubyExtension::call_method No such method '%1'").arg(funcname.constData()) );
         return Qfalse;
     }
 
-    int methodindex = extension->d->m_methods->operator[](funcname);
+    int methodindex = extension->d->m_methods[funcname];
     if(methodindex < 0) {
         krosswarning(QString("No such function '%1'").arg(funcname.constData()));
         return Qfalse;
@@ -366,3 +351,4 @@ VALUE RubyExtension::toVALUE(RubyExtension* extension)
 
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, extension);
 }
+

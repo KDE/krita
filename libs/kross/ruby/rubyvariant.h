@@ -96,7 +96,7 @@ namespace Kross {
     struct RubyType
     {
         // template-specialisations need to implement following both static
-        // functions to translate between QVariant and VALUE valueects.
+        // functions to translate between QVariant and Ruby's VALUE values.
 
         //inline static RBTYPE toVALUE(const VARIANTTYPE&) { return Py::None(); }
         //inline static QVARIANTTYPE toVariant(const VARIANTTYPE&) { return QVariant(); }

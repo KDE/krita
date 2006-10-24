@@ -59,7 +59,8 @@ public:
     // Krita specific interfaces
     KisImageSP image();
     KisResourceProvider * resourceProvider();
-    KisCanvas2 * canvas() const;
+    KisCanvas2 * canvasBase() const;
+    QWidget* canvas() const;
 
 
 private slots:

@@ -144,9 +144,14 @@ KisResourceProvider * KisView2::resourceProvider()
     return m_d->resourceProvider;
 }
 
-KisCanvas2 * KisView2::canvas() const
+KisCanvas2 * KisView2::canvasBase() const
 {
     return m_d->canvas;
+}
+
+QWidget* KisView2::canvas() const
+{
+    return m_d->canvas->canvasWidget();
 }
 
 void KisView2::slotInitializeCanvas()

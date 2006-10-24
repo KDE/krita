@@ -20,18 +20,16 @@ endif (KDE4_BUILD_TESTS)
 add_subdirectory( kjs )
 
 # Python
-MESSAGE(STATUS "s :PYTHON_INCLUDE_PATH :<${PYTHON_INCLUDE_PATH}")
-if(PYTHON_INCLUDE_PATH)
+#message(STATUS "s :PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
+#message(STATUS "s :PYTHON_INCLUDE_PATH: ${PYTHON_INCLUDE_PATH}")
+if(PYTHON_LIBRARIES AND PYTHON_INCLUDE_PATH)
 	add_subdirectory(python)
-endif(PYTHON_INCLUDE_PATH)		
+endif(PYTHON_LIBRARIES AND PYTHON_INCLUDE_PATH)
 
 # Ruby
-
-# temporary to work around a bug in the FindRUBY.cmake as deployed with cmake.
-#macro_optional_find_package(RUBY)
-set(MyRuby_DIR ${CMAKE_SOURCE_DIR}/libs/kross )
-find_package(MyRuby)
-
+macro_optional_find_package(RUBY)
+message(STATUS "s :RUBY_LIBRARY: ${RUBY_LIBRARY}")
+message(STATUS "s :RUBY_INCLUDE_PATH: ${RUBY_INCLUDE_PATH}")
 if(RUBY_LIBRARY AND RUBY_INCLUDE_PATH)
 	add_subdirectory(ruby)
 endif(RUBY_LIBRARY AND RUBY_INCLUDE_PATH)

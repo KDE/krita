@@ -24,7 +24,7 @@
 #include <KoViewConverter.h>
 #include <koffice_export.h>
 
-#include <QWidget>
+#include <QDockWidget>
 #include <QRectF>
 
 class KoTool;
@@ -36,20 +36,11 @@ class KoShapeManager;
 class QKeyEvent;
 class QPainter;
 
-class KOFFICEUI_EXPORT KoShapeSelector : public QWidget {
+class KOFFICEUI_EXPORT KoShapeSelector : public QDockWidget {
     Q_OBJECT
 public:
-    KoShapeSelector(QWidget *parent, KoCanvasController *cc, const QString & regExp);
+    KoShapeSelector(QWidget *parent, const QString & regExp);
     ~KoShapeSelector();
-
-protected: // event handlers
-    void mouseMoveEvent(QMouseEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    void keyReleaseEvent (QKeyEvent *e);
-    void keyPressEvent( QKeyEvent *e );
-    void paintEvent(QPaintEvent * e);
-    bool event(QEvent *e);
 
 private slots:
     void itemSelected();
@@ -73,7 +64,7 @@ private:
     };
 
     /// \internal
-    class Canvas : public KoCanvasBase {
+    class Canvas : public QWidget, public KoCanvasBase {
         public:
             Canvas(KoShapeSelector *parent);
             void gridSize (double *horizontal, double *vertical) const;
@@ -86,6 +77,15 @@ private:
             QWidget *canvasWidget () { return m_parent; }
             KoUnit::Unit unit() { return KoUnit::U_MM; }
 
+        protected: // event handlers
+            void mouseMoveEvent(QMouseEvent *e);
+            void mousePressEvent(QMouseEvent *e);
+            void mouseReleaseEvent(QMouseEvent *e);
+            void keyReleaseEvent (QKeyEvent *e);
+            void keyPressEvent( QKeyEvent *e );
+            void paintEvent(QPaintEvent * e);
+            bool event(QEvent *e);
+
         private:
             DummyViewConverter m_converter;
             KoShapeSelector *m_parent;
@@ -96,9 +96,7 @@ private:
     friend class Canvas;
 
     KoShapeManager *m_shapeManager;
-    KoCanvasController *m_canvasController;
     Canvas *m_canvas;
-    KoTool *m_tool;
 };
 
 #endif

@@ -483,6 +483,10 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
     emit toolCodesSelected(types);
 }
 
+KoCanvasController *KoToolManager::activeCanvasController() const {
+    return m_activeCanvas;
+}
+
 //static
 KoToolManager* KoToolManager::s_instance = 0;
 static KStaticDeleter<KoToolManager> staticToolManagerDeleter;

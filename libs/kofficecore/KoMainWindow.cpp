@@ -132,6 +132,7 @@ public:
     m_lastExportSpecialOutputFlag = 0;
     m_readOnly = false;
     m_toolBox = 0;
+    m_shapeSelector = 0;
   }
   ~KoMainWindowPrivate()
   {
@@ -188,6 +189,7 @@ public:
   int m_lastExportSpecialOutputFlag;
 
     QDockWidget *m_toolBox;
+    QDockWidget *m_shapeSelector;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance )
@@ -393,6 +395,14 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
             addDockWidget(Qt::LeftDockWidgetArea, d->m_toolBox);
     } else
         d->m_toolBox->setVisible(true);
+
+    if( !d->m_shapeSelector ) { // no shape selector yet, create one
+        d->m_shapeSelector = view->createShapeSelector();
+        if(d->m_shapeSelector) // if the app wants one, add it
+            addDockWidget( Qt::LeftDockWidgetArea, d->m_shapeSelector );
+    } else {
+        d->m_shapeSelector->setVisible(true);
+    }
 
     view->show();
     // The addShell has been done already if using openURL

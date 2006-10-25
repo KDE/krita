@@ -89,7 +89,7 @@ add_subdirectory(kchart)
 # Disabled while libs/kformula is disabled
 #add_subdirectory(kformula)
 add_subdirectory(kivio)
-add_subdirectory(koshell)
+#add_subdirectory(koshell)
 add_subdirectory(kounavail)
 add_subdirectory(kplato)
 add_subdirectory(kpresenter)

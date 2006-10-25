@@ -152,6 +152,9 @@ public:
      */
     void removeCanvasController(KoCanvasController *controller);
 
+    /// @return the active canvas controller
+    KoCanvasController *activeCanvasController() const;
+
     /**
      * Return the tool that is able to create shapes for this param canvas.
      * This is typically used by the KoShapeSelector to set which shape to create next.

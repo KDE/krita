@@ -384,6 +384,12 @@ public:
      */
     virtual QDockWidget *createToolBox() { return 0; }
 
+    /**
+     * Create a shape selector for your view. Will only be called on the first view in a mainWindow.
+     * The default implementation return 0, to have no shape selector.
+     */
+    virtual QDockWidget *createShapeSelector() { return 0; }
+
    /**
     * Check to see if the view is currently in the middle of an operation which means
     * that there will be no screen refreshes until a signal from the document hits

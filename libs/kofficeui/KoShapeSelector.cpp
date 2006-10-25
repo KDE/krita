@@ -41,6 +41,7 @@
 
 #include <kdebug.h>
 #include <kicon.h>
+#include <klocale.h>
 
 // ******** IconShape *********
 /// \internal
@@ -129,16 +130,14 @@ public:
 
 
 // ************** KoShapeSelector ************
-KoShapeSelector::KoShapeSelector(QWidget *parent, KoCanvasController *cc, const QString & regExp)
-: QWidget(parent)
-, m_canvasController(cc)
+KoShapeSelector::KoShapeSelector(QWidget *parent, const QString & regExp)
+: QDockWidget(i18n("Shapes"), parent)
 {
     m_canvas = new Canvas(this);
-    m_tool = new MoveTool(m_canvas);
+    setWidget(m_canvas);
     m_shapeManager = new KoShapeManager(m_canvas);
     setMinimumSize(30, 200);
-    setAutoFillBackground(true);
-    setBackgroundRole(QPalette::Base);
+    setFeatures(DockWidgetMovable|DockWidgetFloatable);
 
     QTimer::singleShot(0, this, SLOT(loadShapeTypes()));
 }
@@ -169,7 +168,8 @@ void KoShapeSelector::itemSelected() {
     if(allSelected.isEmpty())
         return;
     IconShape *shape= static_cast<IconShape*> (allSelected.first());
-    shape->visit( KoToolManager::instance()->shapeCreatorTool(m_canvasController->canvas()) );
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    shape->visit( KoToolManager::instance()->shapeCreatorTool(canvasController->canvas()) );
 }
 
 void KoShapeSelector::add(KoShape *shape) {
@@ -197,54 +197,6 @@ void KoShapeSelector::add(KoShape *shape) {
     m_shapeManager->add(shape);
 }
 
-// event handlers
-void KoShapeSelector::mouseMoveEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( m_canvas->viewConverter()->viewToDocument(e->pos()) ));
-    m_tool->mouseMoveEvent( &ev );
-}
-
-void KoShapeSelector::mousePressEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( m_canvas->viewConverter()->viewToDocument(e->pos()) ));
-    m_tool->mousePressEvent( &ev );
-}
-
-void KoShapeSelector::mouseReleaseEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( m_canvas->viewConverter()->viewToDocument(e->pos()) ));
-    m_tool->mouseReleaseEvent( &ev );
-}
-
-void KoShapeSelector::keyReleaseEvent (QKeyEvent *e) {
-    m_tool->keyReleaseEvent(e);
-}
-
-void KoShapeSelector::keyPressEvent( QKeyEvent *e ) {
-    m_tool->keyPressEvent(e);
-}
-
-void KoShapeSelector::paintEvent(QPaintEvent * e) {
-    QPainter painter( this );
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setClipRect(e->rect());
-
-    m_shapeManager->paint( painter, *(m_canvas->viewConverter()), false );
-    painter.end();
-}
-
-bool KoShapeSelector::event(QEvent *e) {
-    if (e->type() == QEvent::ToolTip) {
-        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
-
-        const QPointF pos(helpEvent->x(), helpEvent->y());
-        KoShape *shape = m_shapeManager->shapeAt(pos);
-        if(shape) {
-            IconShape *is = static_cast<IconShape*> (shape);
-            QToolTip::showText(helpEvent->globalPos(), is->toolTip());
-        }
-        else
-            QToolTip::showText(helpEvent->globalPos(), "");
-    }
-    return QWidget::event(e);
-}
 
 // ************ DummyViewConverter **********
 QPointF KoShapeSelector::DummyViewConverter::documentToView (const QPointF &documentPoint) const {
@@ -287,9 +239,13 @@ double KoShapeSelector::DummyViewConverter::viewToDocumentY (double viewY) const
 
 // ********* Canvas **********
 KoShapeSelector::Canvas::Canvas(KoShapeSelector *parent)
-: m_parent(parent)
+: QWidget(parent), m_parent(parent)
 {
     m_toolProxy = KoToolManager::instance()->toolProxy();
+    m_tool = new MoveTool(this);
+
+    setAutoFillBackground(true);
+    setBackgroundRole(QPalette::Base);
 }
 
 void KoShapeSelector::Canvas::gridSize (double *horizontal, double *vertical) const {
@@ -300,13 +256,62 @@ void KoShapeSelector::Canvas::gridSize (double *horizontal, double *vertical) co
 void KoShapeSelector::Canvas::updateCanvas (const QRectF &rc) {
     QRect rect = rc.toRect();
     rect.adjust(-2, -2, 2, 2); // grow for to anti-aliasing
-    m_parent->update(rect);
+    update(rect);
 }
 
 void  KoShapeSelector::Canvas::addCommand (KCommand *command, bool execute) {
     if(execute)
         command->execute();
     delete command;
+}
+
+// event handlers
+void KoShapeSelector::Canvas::mouseMoveEvent(QMouseEvent *e) {
+    KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
+    m_tool->mouseMoveEvent( &ev );
+}
+
+void KoShapeSelector::Canvas::mousePressEvent(QMouseEvent *e) {
+    KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
+    m_tool->mousePressEvent( &ev );
+}
+
+void KoShapeSelector::Canvas::mouseReleaseEvent(QMouseEvent *e) {
+    KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
+    m_tool->mouseReleaseEvent( &ev );
+}
+
+void KoShapeSelector::Canvas::keyReleaseEvent (QKeyEvent *e) {
+    m_tool->keyReleaseEvent(e);
+}
+
+void KoShapeSelector::Canvas::keyPressEvent( QKeyEvent *e ) {
+    m_tool->keyPressEvent(e);
+}
+
+void KoShapeSelector::Canvas::paintEvent(QPaintEvent * e) {
+    QPainter painter( this );
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setClipRect(e->rect());
+
+    m_parent->m_shapeManager->paint( painter, *(viewConverter()), false );
+    painter.end();
+}
+
+bool KoShapeSelector::Canvas::event(QEvent *e) {
+    if (e->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
+
+        const QPointF pos(helpEvent->x(), helpEvent->y());
+        KoShape *shape = m_parent->m_shapeManager->shapeAt(pos);
+        if(shape) {
+            IconShape *is = static_cast<IconShape*> (shape);
+            QToolTip::showText(helpEvent->globalPos(), is->toolTip());
+        }
+        else
+            QToolTip::showText(helpEvent->globalPos(), "");
+    }
+    return QWidget::event(e);
 }
 
 #include "KoShapeSelector.moc"

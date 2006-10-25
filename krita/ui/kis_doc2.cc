@@ -650,6 +650,7 @@ KisPartLayerSP KisDoc2::loadPartLayer(const QDomElement& element, KisImageSP img
 
     return layer;
 #endif
+    return KisPartLayerSP();
 }
 
 bool KisDoc2::completeSaving(KoStore *store)

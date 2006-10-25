@@ -223,6 +223,8 @@ void KoPathPoint::paint(QPainter &painter, const QSizeF &size, bool selected)
 
 void KoPathPoint::setParent( KoPathShape* parent )
 {
+    // don't set to zero
+    Q_ASSERT( parent );
     m_shape = parent;
 }
 
@@ -768,7 +770,6 @@ KoPointPosition KoPathShape::removePoint( KoPathPoint *point )
         if( index != -1 )
         {
             ( *pathIt )->removeAt( index );
-            point->setParent( 0 );
 
             if ( !( *pathIt )->isEmpty() )
             {
@@ -814,7 +815,6 @@ void KoPathShape::insertPoint( KoPathPoint* point, KoSubpath* subpath, int posit
         subpath->last()->setProperties( subpath->last()->properties() & ~KoPathPoint::CloseSubpath | KoPathPoint::CanHaveControlPoint2 );
     }
     subpath->insert( position, point );
-    point->setParent( this );
 }
 
 KoPathPoint* KoPathShape::nextPoint( KoPathPoint* point )

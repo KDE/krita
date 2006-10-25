@@ -217,17 +217,17 @@ QString Action::currentPath() const
     return d->currentpath;
 }
 
-QMap<QString, QVariant>& Action::getOptions()
+QMap<QString, QVariant>& Action::options() const
 {
     return d->options;
 }
 
-QVariant Action::getOption(const QString name, QVariant defaultvalue, bool /*recursive*/)
+QVariant Action::option(const QString name, QVariant defaultvalue)
 {
     if(d->options.contains(name))
         return d->options[name];
     InterpreterInfo* info = Manager::self().interpreterInfo( d->interpretername );
-    return info ? info->getOptionValue(name, defaultvalue) : defaultvalue;
+    return info ? info->optionValue(name, defaultvalue) : defaultvalue;
 }
 
 bool Action::setOption(const QString name, const QVariant& value)

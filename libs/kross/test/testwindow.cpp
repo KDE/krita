@@ -80,7 +80,6 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     scriptgrpbox->layout()->addWidget(m_codeedit);
     m_codeedit->setText(m_scriptcode);
     m_codeedit->setWordWrapMode(QTextOption::NoWrap);
-    m_codeedit->setTextFormat(Qt::PlainText);
 
     KPushButton* execbtn = new KPushButton("Execute", mainbox);
     layout->addWidget(execbtn);
@@ -97,7 +96,7 @@ TestWindow::~TestWindow()
 void TestWindow::execute()
 {
     m_action->setInterpreter( m_interpretercombo->currentText() );
-    m_action->setCode( m_codeedit->text() );
+    m_action->setCode( m_codeedit->toPlainText() );
 
     m_action->trigger();
 

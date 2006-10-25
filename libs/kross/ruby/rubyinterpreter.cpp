@@ -62,12 +62,14 @@ namespace Kross {
     /// \internal
     class RubyInterpreterPrivate {
         friend class RubyInterpreter;
+        QHash<QString, RubyModule* > modules;
     };
 }
 
 RubyInterpreterPrivate* RubyInterpreter::d = 0;
 
-RubyInterpreter::RubyInterpreter(Kross::InterpreterInfo* info): Kross::Interpreter(info)
+RubyInterpreter::RubyInterpreter(Kross::InterpreterInfo* info)
+    : Kross::Interpreter(info)
 {
 #ifdef KROSS_RUBY_INTERPRETER_DEBUG
     krossdebug("RubyInterpreter::RubyInterpreter(info)");
@@ -78,10 +80,8 @@ RubyInterpreter::RubyInterpreter(Kross::InterpreterInfo* info): Kross::Interpret
         initRuby();
     }
 
-    if(info->hasOption("safelevel") )
-        rb_set_safe_level( info->getOption("safelevel")->value.toInt() );
-    else
-        rb_set_safe_level(4); // if the safelevel option is undefined, set it to maximum level
+    const int defaultsafelevel = 4; // per default use the maximum safelevel
+    rb_set_safe_level( info->optionValue("safelevel", defaultsafelevel).toInt() );
 }
 
 RubyInterpreter::~RubyInterpreter()
@@ -104,6 +104,12 @@ void RubyInterpreter::initRuby()
 
 void RubyInterpreter::finalizeRuby()
 {
+    if(d) {
+        for(QHash<QString, RubyModule* >::Iterator it = d->modules.begin(); it != d->modules.end(); ++it)
+            delete it.value();
+        d->modules.clear();
+    }
+
     delete d;
     d = 0;
     ruby_finalize();
@@ -117,14 +123,16 @@ VALUE RubyInterpreter::require (VALUE obj, VALUE name)
             krossdebug( QString("RubyInterpreter::require() module=%1 is internal").arg(modname) );
         #endif
 
-        QObject* obj = Kross::Manager::self().object(modname);
-        Q_ASSERT(obj);
-
-        new RubyModule(obj, modname);
-        //VALUE rmodule = rb_define_module(modname.ascii());
-        //rb_define_module_function();
-        //VALUE rm = RubyExtension::toVALUE(module);
-        //rb_define_variable( ("$" + modname).ascii(), & RubyInterpreter::d->m_modules.insert( mStrVALUE::value_type( modname, rm) ).first->second );
+        if(! d->modules.contains(modname)) {
+            QObject* obj = Kross::Manager::self().object(modname);
+            Q_ASSERT(obj);
+            RubyModule* module = new RubyModule(obj, modname);
+            //VALUE rmodule = rb_define_module(modname.ascii());
+            //rb_define_module_function();
+            //VALUE rm = RubyExtension::toVALUE(module);
+            //rb_define_variable( ("$" + modname).ascii(), & RubyInterpreter::d->m_modules.insert( mStrVALUE::value_type( modname, rm) ).first->second );
+            d->modules.insert(modname, module);
+        }
 
         return Qtrue;
     }

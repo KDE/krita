@@ -56,7 +56,7 @@ namespace Kross {
                     /**
                     * Map of options.
                     */
-                    typedef QMap<QString, Option*> Map;
+                    typedef QMap<QString, Option* > Map;
 
                     /**
                      * Constructor.
@@ -92,7 +92,7 @@ namespace Kross {
             /**
              * \return the name of the interpreter. For example "python" or "kjs".
              */
-            const QString getInterpretername();
+            const QString interpreterName();
 
             /**
              * \return the file-wildcard used to determinate by this interpreter
@@ -100,7 +100,7 @@ namespace Kross {
              * KGlobal::dirs()->findAllResources() as filtermask. For example
              * python just defines it as "*py".
              */
-            const QString getWildcard();
+            const QString wildcard();
 
             /**
              * List of mimetypes this interpreter supports.
@@ -108,7 +108,7 @@ namespace Kross {
              * \return QStringList with mimetypes like
              *         "application/x-javascript".
              */
-            const QStringList getMimeTypes();
+            const QStringList mimeTypes();
 
             /**
              * \return true if an \a Option with that \p key exists else false.
@@ -118,25 +118,25 @@ namespace Kross {
             /**
              * \return the option defined with \p name .
              */
-            Option* getOption(const QString name);
+            Option* option(const QString name);
 
             /**
              * \return the value of the option defined with \p name . If there
              * doesn't exists an option with such a name, the \p defaultvalue
              * is returned.
              */
-            const QVariant getOptionValue(const QString name, QVariant defaultvalue = QVariant());
+            const QVariant optionValue(const QString name, QVariant defaultvalue = QVariant());
 
             /**
              * \return a map of options.
              */
-            Option::Map getOptions();
+            Option::Map options();
 
             /**
              * \return the \a Interpreter instance this \a InterpreterInfo
              * is the describer for.
              */
-            Interpreter* getInterpreter();
+            Interpreter* interpreter();
 
         private:
             /// The name the interpreter has. Could be something like "python" or "kjs".

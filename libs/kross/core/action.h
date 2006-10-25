@@ -108,18 +108,14 @@ namespace Kross {
              * The options are returned call-by-ref, so you are able to
              * manipulate them.
              */
-            QMap<QString, QVariant>& getOptions();
+            QMap<QString, QVariant>& options() const;
 
             /**
              * \return the value of the option defined with \p name .
              * If there doesn't exists an option with such a name,
-             * the \p defaultvalue is returned. If \p recursive is
-             * true then first the \a Action options are
-             * seeked for the matching \p name and if not found
-             * the \a Manager options are seeked for the \p name and
-             * if not found either the \p defaultvalue is returned.
+             * the \p defaultvalue is returned.
              */
-            QVariant getOption(const QString name, QVariant defaultvalue = QVariant(), bool recursive = false);
+            QVariant option(const QString name, QVariant defaultvalue = QVariant());
 
             /**
              * Set the \a Interpreter::Option value.

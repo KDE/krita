@@ -65,7 +65,9 @@ RubyModule::~RubyModule()
         krossdebug(QString("Dtor Module: %1").arg(d->modulename));
     #endif
 
-    delete d->extension;
+    // Don't delete the RubyExtension object since it will be deleted by Ruby if not needed any longer.
+    //delete d->extension;
+
     delete d;
 }
 

@@ -26,7 +26,6 @@
 #include <koffice_export.h>
 
 #include "krossconfig.h"
-//#include "object.h"
 
 namespace Kross {
 
@@ -38,8 +37,6 @@ namespace Kross {
         public:
 
             inline void addObject(QObject* object, const QString& name = QString::null) {
-                //Object* obj = new Object(object, name);
-                //m_objects.insert(obj->objectName(), Object::Ptr(obj));
                 m_objects.insert(name.isNull() ? object->objectName() : name, object);
             }
 

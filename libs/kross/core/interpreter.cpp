@@ -55,17 +55,17 @@ InterpreterInfo::~InterpreterInfo()
     m_interpreter = 0;
 }
 
-const QString InterpreterInfo::getInterpretername()
+const QString InterpreterInfo::interpreterName()
 {
     return m_interpretername;
 }
 
-const QString InterpreterInfo::getWildcard()
+const QString InterpreterInfo::wildcard()
 {
     return m_wildcard;
 }
 
-const QStringList InterpreterInfo::getMimeTypes()
+const QStringList InterpreterInfo::mimeTypes()
 {
     return m_mimetypes;
 }
@@ -75,23 +75,23 @@ bool InterpreterInfo::hasOption(const QString& key)
     return m_options.contains(key);
 }
 
-InterpreterInfo::Option* InterpreterInfo::getOption(const QString name)
+InterpreterInfo::Option* InterpreterInfo::option(const QString name)
 {
-    return m_options[name];
+    return m_options.contains(name) ? m_options[name] : 0;
 }
 
-const QVariant InterpreterInfo::getOptionValue(const QString name, QVariant defaultvalue)
+const QVariant InterpreterInfo::optionValue(const QString name, QVariant defaultvalue)
 {
-    Option* o = m_options[name];
+    Option* o = option(name);
     return o ? o->value : defaultvalue;
 }
 
-InterpreterInfo::Option::Map InterpreterInfo::getOptions()
+InterpreterInfo::Option::Map InterpreterInfo::options()
 {
     return m_options;
 }
 
-Interpreter* InterpreterInfo::getInterpreter()
+Interpreter* InterpreterInfo::interpreter()
 {
     if(m_interpreter) // buffered
         return m_interpreter;

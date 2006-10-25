@@ -233,7 +233,7 @@ bool GUIClient::executeFile()
     QStringList mimetypes;
     QMap<QString, InterpreterInfo*> infos = Manager::self().interpreterInfos();
     for(QMap<QString, InterpreterInfo*>::Iterator it = infos.begin(); it != infos.end(); ++it)
-        mimetypes.append( it.value()->getMimeTypes().join(" ").trimmed() );
+        mimetypes.append( it.value()->mimeTypes().join(" ").trimmed() );
 
     KFileDialog* filedialog = new KFileDialog(
         KUrl("kfiledialog:///KrossExecuteScript"), // startdir

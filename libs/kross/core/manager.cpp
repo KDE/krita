@@ -176,9 +176,9 @@ const QString Manager::interpreternameForFile(const QString& file)
     QRegExp rx;
     rx.setPatternSyntax(QRegExp::Wildcard);
     for(QMap<QString, InterpreterInfo*>::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it) {
-        rx.setPattern((*it)->getWildcard());
+        rx.setPattern((*it)->wildcard());
         if( file.contains(rx) )
-            return (*it)->getInterpretername();
+            return (*it)->interpreterName();
     }
     return QString::null;
 }
@@ -189,7 +189,7 @@ Interpreter* Manager::interpreter(const QString& interpretername)
         krosswarning( QString("No such interpreter '%1'").arg(interpretername) );
         return 0;
     }
-    return d->interpreterinfos[interpretername]->getInterpreter();
+    return d->interpreterinfos[interpretername]->interpreter();
 }
 
 QStringList Manager::interpreters()

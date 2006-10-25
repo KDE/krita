@@ -43,7 +43,7 @@ class TestKross < Test::Unit::TestCase
 	end
  
 	def testByteArray
-		#assert( TestObject1.func_qbytearray_qbytearray("  Some String as ByteArray  ") == "  Some String as ByteArray  " )
+		assert( TestObject1.func_qbytearray_qbytearray("  Some String as ByteArray  ") == "  Some String as ByteArray  " )
 		#assert( TestObject1.func_qbytearray_qbytearray(" \0\n\r\t\s\0 test ") == " \0\n\r\t\s\0 test " )
 	end
 
@@ -86,7 +86,14 @@ class TestKross < Test::Unit::TestCase
 	end
 
 	def testObject
-		assert( TestObject1.name() == "TestObject1" && TestObject2.name() == "TestObject2" )
+		assert( TestObject1.name() == "TestObject1" )
+		assert( TestObject2.name() == "TestObject2" )
+
+		assert( TestObject1.func_bool_bool(true) == TestObject2.func_bool_bool(true) )
+		assert( TestObject2.func_bool_bool(false) == TestObject2.func_bool_bool(false) )
+		assert( TestObject1.func_int_int(82396) == TestObject2.func_int_int(82396) )
+		assert( TestObject1.func_int_int(-672) == TestObject2.func_int_int(-672) )
+		assert( TestObject1.func_qstringlist_qstringlist( ["s1","s2"] ) == TestObject2.func_qstringlist_qstringlist( ["s1","s2"] ) )
 	end
 
 end

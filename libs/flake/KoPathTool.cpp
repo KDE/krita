@@ -257,12 +257,15 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 break;
             case Qt::Key_Delete:
                 // TODO finish current action or should this not possible during actions???
-                if ( m_pointSelection.objectCount() == 1 )
+                if ( m_pointSelection.size() > 0 )
                 {
-                    KoPointRemoveCommand *cmd = new KoPointRemoveCommand( pathShape, selectedPoints );
-                    //TODO only when handle is in selection
-                    delete m_activeHandle;
-                    m_activeHandle = 0;
+                    KoPointRemoveCommand *cmd = new KoPointRemoveCommand( m_pointSelection.selectedPointMap() );
+                    ActivePointHandle *pointHandle = dynamic_cast<ActivePointHandle*>( m_activeHandle );
+                    if ( pointHandle && m_pointSelection.contains( pointHandle->m_activePoint ) )
+                    {
+                        delete m_activeHandle;
+                        m_activeHandle = 0;
+                    }
                     m_pointSelection.clear();
                     m_canvas->addCommand( cmd, true );
                 }

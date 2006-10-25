@@ -114,20 +114,13 @@ private:
 };
 
 /// The undo / redo command for removing path points.
-class KoPointRemoveCommand : public KoPathBaseCommand {
+class KoPointRemoveCommand : public KCommand {
 public:
     /**
-     * Command to remove a single point from a path shape
-     * @param shape the path shape containing the point
-     * @param point the path point to remove
+     * @brief Command to remove a points from path shapes
+     * @param pointMap map of the path points to remove
      */
-    KoPointRemoveCommand( KoPathShape *shape, KoPathPoint *point );
-    /**
-     * Command to remove multiple points from a path shape
-     * @param shape the path shape containing the points
-     * @param points the path points to remove
-     */
-    KoPointRemoveCommand( KoPathShape *shape, const QList<KoPathPoint*> &points );
+    KoPointRemoveCommand( const KoPathShapePointMap &pointMap );
     /// execute the command
     void execute();
     /// revert the actions done in execute
@@ -137,15 +130,16 @@ public:
 private:
     struct KoPointRemoveData
     {
-        KoPointRemoveData( KoPathPoint * point )
+        KoPointRemoveData( KoPathPoint * point, KoSubpath * subpath, int position )
         : m_point( point )
-        , m_subpath( 0 )
-        , m_position( 0 )
+        , m_subpath( subpath )
+        , m_position( position )
         {}
         KoPathPoint * m_point;
         KoSubpath * m_subpath;///< the position in the path 
         int m_position;
     };
+    KoPathShapePointMap m_pointMap;
     QList<KoPointRemoveData> m_data;
 };
 

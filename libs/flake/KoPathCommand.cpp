@@ -226,50 +226,59 @@ QString KoPointPropertyCommand::name() const
     return i18n( "Set point properties" );
 }
 
-KoPointRemoveCommand::KoPointRemoveCommand( KoPathShape *shape, KoPathPoint *point )
-: KoPathBaseCommand( shape )
+KoPointRemoveCommand::KoPointRemoveCommand( const KoPathShapePointMap &pointMap )
+: m_pointMap( pointMap )
 {
-    m_data << KoPointRemoveData( point );
-}
-
-KoPointRemoveCommand::KoPointRemoveCommand( KoPathShape *shape, const QList<KoPathPoint*> &points )
-: KoPathBaseCommand( shape )
-{
-    foreach( KoPathPoint* point, points )
-        m_data << KoPointRemoveData( point );
 }
 
 void KoPointRemoveCommand::execute()
 {
-    QRectF oldControlRect = m_shape->outline().controlPointRect();
-
-    for( int i = 0; i < m_data.size(); ++i )
+    KoPathShapePointMap::iterator it( m_pointMap.begin() );
+    m_data.clear();
+    for ( ; it != m_pointMap.end(); ++it )
     {
-        KoPointRemoveData &data = m_data[i];
-        QPair<KoSubpath*, int> pointdata = m_shape->removePoint( data.m_point );
-        data.m_subpath = pointdata.first;
-        data.m_position = pointdata.second;
+        it.key()->repaint();
+
+        foreach( KoPathPoint *p, it.value() )
+        {
+            QPair<KoSubpath*, int> pointdata = it.key()->removePoint( p );
+            m_data.push_back( KoPointRemoveData( p, pointdata.first, pointdata.second ) );
+        }
+
+        QPointF offset = it.key()->normalize();
+
+        QMatrix matrix;
+        matrix.translate( -offset.x(), -offset.y() );
+        foreach( KoPathPoint *p, it.value() )
+        {
+            p->map( matrix );
+        }
+        // repaint new bounding rect
+        // TODO is this really needed
+        it.key()->repaint();
     }
-
-    QPointF offset = m_shape->normalize();
-    QMatrix matrix;
-    matrix.translate( -offset.x(), -offset.y() );
-    for( int i = 0; i < m_data.size(); ++i )
-        m_data[i].m_point->map( matrix );
-
-    repaint( oldControlRect.translated( -offset ) );
 }
 
 void KoPointRemoveCommand::unexecute()
 {
-    QRectF oldControlRect = m_shape->outline().controlPointRect();
     // insert the points in inverse order
+    KoPathShape * pathShape = 0;
     for( int i = m_data.size()-1; i >= 0; --i )
     {
         KoPointRemoveData &data = m_data[i];
-        m_shape->insertPoint( data.m_point, data.m_subpath, data.m_position );
+        if ( pathShape && pathShape != data.m_point->parent() )
+        {
+            pathShape->normalize();
+            pathShape->repaint();
+        }
+        pathShape = data.m_point->parent();
+        pathShape->insertPoint( data.m_point, data.m_subpath, data.m_position );
     }
-    repaint( oldControlRect );
+    if ( pathShape )
+    {
+        pathShape->normalize();
+        pathShape->repaint();
+    }
 }
 
 QString KoPointRemoveCommand::name() const

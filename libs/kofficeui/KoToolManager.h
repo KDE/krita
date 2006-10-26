@@ -164,6 +164,13 @@ public:
      */
     KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 
+public slots:
+    /**
+     * Request switching tool
+     * @param id the id of the tool
+     */
+    void switchToolRequested(const QString &id);
+
 signals:
     /**
      * Emitted when a new tool was selected or became active.
@@ -194,7 +201,6 @@ private slots:
     void attachCanvas(KoCanvasController *controller);
     void movedFocus(QWidget *from, QWidget *to);
     void updateCursor(QCursor cursor);
-    void switchToolRequested(const QString &id);
     void switchToolTemporaryRequested(const QString &id);
     void switchBackRequested();
     void selectionChanged(QList<KoShape*> shapes);

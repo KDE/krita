@@ -171,8 +171,11 @@ void KoShapeSelector::itemSelected() {
     IconShape *shape= static_cast<IconShape*> (allSelected.first());
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
-    if(canvasController)
-        shape->visit( KoToolManager::instance()->shapeCreatorTool(canvasController->canvas()) );
+    if(canvasController) {
+        KoCreateShapesTool* createTool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
+        shape->visit(createTool);
+        KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);
+    }
 }
 
 void KoShapeSelector::add(KoShape *shape) {

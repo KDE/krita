@@ -133,6 +133,7 @@ public:
 KoShapeSelector::KoShapeSelector(QWidget *parent, const QString & regExp)
 : QDockWidget(i18n("Shapes"), parent)
 {
+    setObjectName("ShapeSelector");
     m_canvas = new Canvas(this);
     setWidget(m_canvas);
     m_shapeManager = new KoShapeManager(m_canvas);
@@ -169,7 +170,9 @@ void KoShapeSelector::itemSelected() {
         return;
     IconShape *shape= static_cast<IconShape*> (allSelected.first());
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    shape->visit( KoToolManager::instance()->shapeCreatorTool(canvasController->canvas()) );
+
+    if(canvasController)
+        shape->visit( KoToolManager::instance()->shapeCreatorTool(canvasController->canvas()) );
 }
 
 void KoShapeSelector::add(KoShape *shape) {

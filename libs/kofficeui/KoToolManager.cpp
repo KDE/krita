@@ -353,10 +353,8 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
     KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsMap.value(KoCreateShapesTool_ID));
     Q_ASSERT(createTool);
     createTool->setShapeController(m_shapeControllers[controller]);
-    foreach(QString id, KoShapeRegistry::instance()->keys()) {
-        createTool->setShapeId(id);
-        break;
-    }
+    QString id = KoShapeRegistry::instance()->keys()[0];
+    createTool->setShapeId(id);
 
     m_allTools.remove(controller);
     m_allTools.insert(controller, toolsMap);
@@ -378,25 +376,16 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
     Q_UNUSED(from);
     if (to == 0 || to == m_activeCanvas)
         return;
-    QWidget *newMainWindow = to;
-    while(newMainWindow->parentWidget())
-        newMainWindow = newMainWindow->parentWidget();
 
     KoCanvasController *newCanvas = 0;
     // if the 'to' is one of our canvasses, or one of its children, then switch.
     foreach(KoCanvasController* canvas, m_canvases) {
-        if (canvas == m_activeCanvas)
-            continue;
-        // make sure we are not just talking about overlapping windows.
-        QWidget *root = canvas;
-        while(root->parentWidget())
-            root = root->parentWidget();
-        if (newMainWindow == root) {
-            // this canvas is the new 'To'
+        if (canvas == to || canvas->canvas()->canvasWidget() == to) {
             newCanvas = canvas;
             break;
         }
     }
+
     if (newCanvas == 0)
         return;
     if (newCanvas == m_activeCanvas)

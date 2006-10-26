@@ -61,16 +61,11 @@ namespace Kross {
                     /**
                      * Constructor.
                      *
-                     * \param name The name the option has. This is the
-                     *        displayed title and isn't used internaly.
                      * \param comment A comment that describes the option.
                      * \param value The QVariant value this option has.
                      */
-                    Option(const QString& name, const QString& comment, const QVariant& value)
-                        : name(name), comment(comment), value(value) {}
-
-                    /// The short name of the option.
-                    QString name;
+                    Option(const QString& comment, const QVariant& value)
+                        : comment(comment), value(value) {}
 
                     /// A description of the option.
                     QString comment;
@@ -92,7 +87,7 @@ namespace Kross {
             /**
              * \return the name of the interpreter. For example "python" or "kjs".
              */
-            const QString interpreterName();
+            const QString interpreterName() const;
 
             /**
              * \return the file-wildcard used to determinate by this interpreter
@@ -100,7 +95,7 @@ namespace Kross {
              * KGlobal::dirs()->findAllResources() as filtermask. For example
              * python just defines it as "*py".
              */
-            const QString wildcard();
+            const QString wildcard() const;
 
             /**
              * List of mimetypes this interpreter supports.
@@ -108,24 +103,24 @@ namespace Kross {
              * \return QStringList with mimetypes like
              *         "application/x-javascript".
              */
-            const QStringList mimeTypes();
+            const QStringList mimeTypes() const;
 
             /**
              * \return true if an \a Option with that \p key exists else false.
              */
-            bool hasOption(const QString& key);
+            bool hasOption(const QString& key) const;
 
             /**
              * \return the option defined with \p name .
              */
-            Option* option(const QString name);
+            Option* option(const QString name) const;
 
             /**
              * \return the value of the option defined with \p name . If there
              * doesn't exists an option with such a name, the \p defaultvalue
              * is returned.
              */
-            const QVariant optionValue(const QString name, QVariant defaultvalue = QVariant());
+            const QVariant optionValue(const QString name, QVariant defaultvalue = QVariant()) const;
 
             /**
              * \return a map of options.
@@ -139,18 +134,10 @@ namespace Kross {
             Interpreter* interpreter();
 
         private:
-            /// The name the interpreter has. Could be something like "python" or "kjs".
-            QString m_interpretername;
-            /// The name of the library to load for the interpreter.
-            QString m_library;
-            /// The file wildcard used to determinate extensions.
-            QString m_wildcard;
-            /// List of mimetypes this interpreter supports.
-            QStringList m_mimetypes;
-            /// A \a Option::Map with options.
-            Option::Map m_options;
-            /// The \a Interpreter instance.
-            Interpreter* m_interpreter;
+            /// \internal d-pointer class.
+            class Private;
+            /// \internal d-pointer instance.
+            Private* const d;
     };
 
     /**
@@ -180,6 +167,12 @@ namespace Kross {
             virtual ~Interpreter();
 
             /**
+             * \return the \a InterpreterInfo that represents
+             * this \a Interpreter .
+             */
+            InterpreterInfo* interpreterInfo() const;
+
+            /**
              * Create and return a new interpreter dependent
              * \a Script instance.
              *
@@ -190,8 +183,13 @@ namespace Kross {
             virtual Script* createScript(Action* Action) = 0;
 
         protected:
-            /// The \a InterpreterInfo instance this interpreter belongs to.
-            InterpreterInfo* m_interpreterinfo;
+            virtual void virtual_hook(int id, void* data);
+
+        private:
+            /// \internal d-pointer class.
+            class Private;
+            /// \internal d-pointer instance.
+            Private* const d;
     };
 
 }

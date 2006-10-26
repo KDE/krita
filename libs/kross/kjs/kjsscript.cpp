@@ -20,6 +20,7 @@
 #include "kjsscript.h"
 #include "../core/action.h"
 #include "../core/manager.h"
+#include "../core/interpreter.h"
 
 // for Kjs
 #include <kjs/interpreter.h>
@@ -29,13 +30,14 @@
 
 // for KjsEmbed
 #include <kjsembed/kjsembed.h>
+//#include <kjsembed/qobject_binding.h>
 
 using namespace Kross;
 
 namespace Kross {
 
     /// Extract an errormessage from a \a KJS::Completion object.
-    static QString extractError(const KJS::Completion& completion, KJS::ExecState* exec)
+    static ErrorInterface extractError(const KJS::Completion& completion, KJS::ExecState* exec)
     {
         QString type;
         switch( completion.complType() ) {
@@ -43,12 +45,26 @@ namespace Kross {
             case KJS::Break: type = "Break"; break;
             case KJS::Continue: type = "Continue"; break;
             case KJS::ReturnValue: type = "ReturnValue"; break;
-            case KJS::Throw: type = "Throw"; break;
+            case KJS::Throw: {
+                type = "Throw";
+            } break;
             case KJS::Interrupted: type = "Interrupted"; break;
             default: type = "Unknown"; break;
         }
+
         KJS::JSValue* value = completion.value();
-        return QString("%1: %2").arg(type).arg(value ? value->toString(exec).qstring() : "NULL");
+        Q_ASSERT(value);
+        int lineno = -1;
+        if( value->type() == KJS::ObjectType ) {
+            KJS::JSValue* linevalue = value->getObject()->get(exec, "line");
+            if( linevalue && linevalue->type() == KJS::NumberType )
+                lineno = linevalue->toInt32(exec);
+        }
+        const QString message = QString("%1%2: %3").arg( type ).arg( (lineno >= 0) ? QString(" line%1").arg(lineno) : "" ).arg( value->toString(exec).qstring() );
+
+        ErrorInterface err;
+        err.setError(message, QString::null, lineno);
+        return err;
     }
 
     /// \internal d-pointer class.
@@ -67,12 +83,12 @@ KjsScript::KjsScript(Kross::Interpreter* interpreter, Kross::Action* action)
     : Kross::Script(interpreter, action)
     , d(new KjsScriptPrivate())
 {
-    Kross::krossdebug( QString("KjsScript::KjsScript Ctor") );
+    Kross::krossdebug( QString("KjsScript::KjsScript") );
 }
 
 KjsScript::~KjsScript()
 {
-    Kross::krossdebug( QString("KjsScript::~KjsScript Dtor") );
+    Kross::krossdebug( QString("KjsScript::~KjsScript") );
     finalize();
     delete d;
 }
@@ -82,16 +98,40 @@ bool KjsScript::initialize()
     finalize(); // finalize before initialize
     clearError(); // clear previous errors.
 
+    bool restricted = m_interpreter->interpreterInfo()->optionValue("restricted", true).toBool();
+
+    Kross::krossdebug( QString("KjsScript::initialize restricted=%1").arg(restricted) );
+
     d->engine = new KJSEmbed::Engine();
 
     KJS::Interpreter* kjsinterpreter = d->engine->interpreter();
-    Q_UNUSED(kjsinterpreter);
+    KJS::ExecState* exec = kjsinterpreter->globalExec();
 
     { // publish the global objects.
         QHash< QString, QObject* > objects = Kross::Manager::self().objects();
         QHash< QString, QObject* >::Iterator it(objects.begin()), end(objects.end());
-        for(; it != end; ++it)
-            d->engine->addObject( it.value(), it.key() );
+        for(; it != end; ++it) {
+            KJS::JSObject* object = d->engine->addObject( it.value(), it.key() );
+            if(restricted) {
+
+/*FIXME needs fix for #include <kjs/object.h> which does #include "internal.h"
+                KJSEmbed::QObjectBinding* objectImp = KJSEmbed::extractBindingImp<KJSEmbed::QObjectBinding>(exec, object);
+                objectImp->setAccess(
+                    KJSEmbed::QObjectBinding::ScriptableSlots |
+                    KJSEmbed::QObjectBinding::NonScriptableSlots |
+                    KJSEmbed::QObjectBinding::PublicSlots |
+                    KJSEmbed::QObjectBinding::ScriptableSignals |
+                    KJSEmbed::QObjectBinding::NonScriptableSignals |
+                    KJSEmbed::QObjectBinding::PublicSignals |
+                    KJSEmbed::QObjectBinding::ScriptableProperties |
+                    KJSEmbed::QObjectBinding::NonScriptableProperties |
+                    KJSEmbed::QObjectBinding::GetParentObject |
+                    KJSEmbed::QObjectBinding::ChildObjects
+                );
+*/
+
+            }
+        }
     }
 
     /*
@@ -130,7 +170,8 @@ void KjsScript::execute()
     if(exitstatus != KJSEmbed::Engine::Success) {
         KJS::Interpreter* kjsinterpreter = d->engine->interpreter();
         KJS::ExecState* exec = kjsinterpreter->globalExec();
-        setError( extractError(completion, exec) );
+        ErrorInterface error = extractError(completion, exec);
+        setError(&error);
     }
 }
 

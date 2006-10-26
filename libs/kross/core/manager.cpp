@@ -105,18 +105,21 @@ Manager::Manager()
 #ifdef KROSS_RUBY_LIBRARY
     QString rubylib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_RUBY_LIBRARY) );
     if(! rubylib.isEmpty()) { // If the Kross Ruby plugin exists we offer is as supported scripting language.
-      InterpreterInfo::Option::Map rubyoptions;
-      rubyoptions.insert("safelevel",
-                          new InterpreterInfo::Option("safelevel", "Level of safety of the Ruby interpreter", QVariant(0)) // 0 -> unsafe, 4 -> very safe
-                           );
-      d->interpreterinfos.insert("ruby",
-                                  new InterpreterInfo("ruby",
-                                      rubylib, // library
-                                      "*.rb", // file filter-wildcard
-                                      QStringList() << /* "text/x-ruby" << */ "application/x-ruby", // mimetypes
-                                      rubyoptions // options
-                                                     )
-                                 );
+        InterpreterInfo::Option::Map rubyoptions;
+        rubyoptions.insert("safelevel",
+            new InterpreterInfo::Option(
+                i18n("Level of safety of the Ruby interpreter"),
+                QVariant(0) // 0 -> unsafe, 4 -> very safe
+            )
+        );
+        d->interpreterinfos.insert("ruby",
+            new InterpreterInfo("ruby",
+                rubylib, // library
+                "*.rb", // file filter-wildcard
+                QStringList() << /* "text/x-ruby" << */ "application/x-ruby", // mimetypes
+                rubyoptions // options
+            )
+        );
     } else {
         #ifdef KROSS_INTERPRETER_DEBUG
             krossdebug("Ruby interpreter for kross is unavailable");
@@ -128,6 +131,12 @@ Manager::Manager()
     QString kjslib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_KJS_LIBRARY) );
     if(! kjslib.isEmpty()) { // If the Kjs plugin exists we offer is as supported scripting language.
         InterpreterInfo::Option::Map kjsoptions;
+        kjsoptions.insert("restricted",
+            new InterpreterInfo::Option(
+                i18n("Restricted mode for untrusted scripts"),
+                QVariant(true) // per default enabled
+            )
+        );
         d->interpreterinfos.insert("javascript",
             new InterpreterInfo("javascript",
                 kjslib, // library

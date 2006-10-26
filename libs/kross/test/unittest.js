@@ -80,9 +80,8 @@ tester.assert(testobj1.func_qstring_qstring(" "), " ");
 tester.assert(testobj1.func_qstring_qstring(" Another \n\r Test!   $%&\" "), " Another \n\r Test!   $%&\" ");
 
 // stringlist
-//tester.assert(testobj1.func_qstringlist_qstringlist([]), []);
-//tester.assert(testobj1.func_qstringlist_qstringlist(["string1"]), ["string1"]);
-//tester.assert(testobj1.func_qstringlist_qstringlist([" string1","string2 "]), [" string1","string2 "]);
+//var a = new Array("string1","string");
+//tester.assert(testobj1.func_qstringlist_qstringlist(a, a));
 
 // variantlist
 //tester.assert(testobj1.func_qvariantlist_qvariantlist([]), []);

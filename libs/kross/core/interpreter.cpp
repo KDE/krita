@@ -35,52 +35,72 @@ using namespace Kross;
  * InterpreterInfo
  */
 
+namespace Kross {
+
+    /// \internal d-pointer class.
+    class InterpreterInfo::Private
+    {
+        public:
+            /// The name the interpreter has. Could be something like "python" or "kjs".
+            QString interpretername;
+            /// The name of the library to load for the interpreter.
+            QString library;
+            /// The file wildcard used to determinate extensions.
+            QString wildcard;
+            /// List of mimetypes this interpreter supports.
+            QStringList mimetypes;
+            /// A \a Option::Map with options.
+            Option::Map options;
+            /// The \a Interpreter instance.
+            Interpreter* interpreter;
+    };
+
+}
+
 InterpreterInfo::InterpreterInfo(const QString& interpretername, const QString& library, const QString& wildcard, QStringList mimetypes, Option::Map options)
-    : m_interpretername(interpretername)
-    , m_library(library)
-    , m_wildcard(wildcard)
-    , m_mimetypes(mimetypes)
-    , m_options(options)
-    , m_interpreter(0)
+    : d( new Private() )
 {
+    d->interpretername = interpretername;
+    d->library = library;
+    d->wildcard = wildcard;
+    d->mimetypes = mimetypes;
+    d->options = options;
+    d->interpreter = 0;
 }
 
 InterpreterInfo::~InterpreterInfo()
 {
-    for(Option::Map::Iterator it = m_options.begin(); it != m_options.end(); ++it) {
-        delete it.value();
-    }
-
-    delete m_interpreter;
-    m_interpreter = 0;
+    delete d->interpreter;
+    //d->interpreter = 0;
+    delete d;
 }
 
-const QString InterpreterInfo::interpreterName()
+const QString InterpreterInfo::interpreterName() const
 {
-    return m_interpretername;
+    return d->interpretername;
 }
 
-const QString InterpreterInfo::wildcard()
+const QString InterpreterInfo::wildcard() const
 {
-    return m_wildcard;
+    return d->wildcard;
 }
 
-const QStringList InterpreterInfo::mimeTypes()
+const QStringList InterpreterInfo::mimeTypes() const
 {
-    return m_mimetypes;
+    return d->mimetypes;
 }
 
-bool InterpreterInfo::hasOption(const QString& key)
+bool InterpreterInfo::hasOption(const QString& key) const
 {
-    return m_options.contains(key);
+    return d->options.contains(key);
 }
 
-InterpreterInfo::Option* InterpreterInfo::option(const QString name)
+InterpreterInfo::Option* InterpreterInfo::option(const QString name) const
 {
-    return m_options.contains(name) ? m_options[name] : 0;
+    return d->options[name];
 }
 
-const QVariant InterpreterInfo::optionValue(const QString name, QVariant defaultvalue)
+const QVariant InterpreterInfo::optionValue(const QString name, QVariant defaultvalue) const
 {
     Option* o = option(name);
     return o ? o->value : defaultvalue;
@@ -88,28 +108,28 @@ const QVariant InterpreterInfo::optionValue(const QString name, QVariant default
 
 InterpreterInfo::Option::Map InterpreterInfo::options()
 {
-    return m_options;
+    return d->options;
 }
 
 Interpreter* InterpreterInfo::interpreter()
 {
-    if(m_interpreter) // buffered
-        return m_interpreter;
+    if(d->interpreter) // buffered
+        return d->interpreter;
 
 #ifdef KROSS_INTERPRETER_DEBUG
-    krossdebug( QString("Loading the interpreter library for %1").arg(m_interpretername) );
+    krossdebug( QString("Loading the interpreter library for %1").arg(d->interpretername) );
 #endif
     // Load the krosspython library.
     KLibLoader *libloader = KLibLoader::self();
 
-    KLibrary* library = libloader->globalLibrary( m_library.toLatin1().data() );
+    KLibrary* library = libloader->globalLibrary( d->library.toLatin1().data() );
     if(! library) {
         /*
         setException(
-            new Exception( QString("Could not load library \"%1\" for the \"%2\" interpreter.").arg(m_library).arg(m_interpretername) )
+            new Exception( QString("Could not load library \"%1\" for the \"%2\" interpreter.").arg(d->library).arg(d->interpretername) )
         );
         */
-        krosswarning( QString("Could not load library \"%1\" for the \"%2\" interpreter.").arg(m_library).arg(m_interpretername) );
+        krosswarning( QString("Could not load library \"%1\" for the \"%2\" interpreter.").arg(d->library).arg(d->interpretername) );
         return 0;
     }
 
@@ -122,8 +142,8 @@ Interpreter* InterpreterInfo::interpreter()
     }
     else {
         // and execute the extern krosspython_instance function.
-        m_interpreter = (Interpreter*) (interpreter_func)(this);
-        if(! m_interpreter) {
+        d->interpreter = (Interpreter*) (interpreter_func)(this);
+        if(! d->interpreter) {
             krosswarning("Failed to load the Interpreter instance from library.");
         }
         else {
@@ -138,19 +158,45 @@ Interpreter* InterpreterInfo::interpreter()
     // finally unload the library.
     library->unload();
 
-    return m_interpreter;
+    return d->interpreter;
 }
 
 /*************************************************************************
  * Interpreter
  */
 
+namespace Kross {
+
+    /// \internal d-pointer class.
+    class Interpreter::Private
+    {
+        public:
+            /// The \a InterpreterInfo instance this interpreter belongs to.
+            InterpreterInfo* interpreterinfo;
+
+            Private(InterpreterInfo* info) : interpreterinfo(info) {}
+    };
+
+}
+
 Interpreter::Interpreter(InterpreterInfo* info)
     : ErrorInterface()
-    , m_interpreterinfo(info)
+    , d( new Private(info) )
 {
 }
 
 Interpreter::~Interpreter()
 {
+    delete d;
+}
+
+InterpreterInfo* Interpreter::interpreterInfo() const
+{
+    return d->interpreterinfo;
+}
+
+void Interpreter::virtual_hook(int id, void* data)
+{
+    Q_UNUSED(id);
+    Q_UNUSED(data);
 }

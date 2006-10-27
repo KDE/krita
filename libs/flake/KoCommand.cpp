@@ -77,6 +77,15 @@ KoShapeRotateCommand::KoShapeRotateCommand(const KoSelectionSet &shapes, QList<d
     Q_ASSERT(m_shapes.count() == m_newAngles.count());
 }
 
+KoShapeRotateCommand::KoShapeRotateCommand(const QList<KoShape*> &shapes, QList<double> &previousAngles, QList<double> &newAngles)
+: m_previousAngles(previousAngles)
+, m_newAngles(newAngles)
+{
+    m_shapes = shapes;
+    Q_ASSERT(m_shapes.count() == m_previousAngles.count());
+    Q_ASSERT(m_shapes.count() == m_newAngles.count());
+}
+
 void KoShapeRotateCommand::execute() {
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->repaint();
@@ -137,6 +146,15 @@ KoShapeSizeCommand::KoShapeSizeCommand(const KoSelectionSet &shapes, QList<QSize
 , m_newSizes(newSizes)
 {
     m_shapes = shapes.toList();
+    Q_ASSERT(m_shapes.count() == m_previousSizes.count());
+    Q_ASSERT(m_shapes.count() == m_newSizes.count());
+}
+
+KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes)
+: m_previousSizes(previousSizes)
+, m_newSizes(newSizes)
+{
+    m_shapes = shapes;
     Q_ASSERT(m_shapes.count() == m_previousSizes.count());
     Q_ASSERT(m_shapes.count() == m_newSizes.count());
 }
@@ -562,4 +580,47 @@ double KoShapeDistributeCommand::getAvailableSpace( KoShape *first, KoShape *las
             break;
     }
     return 0.0;
+}
+
+KoShapeLockCommand::KoShapeLockCommand(const KoSelectionSet &shapes, const QList<bool> &oldLock, const QList<bool> &newLock)
+{
+    m_shapes = shapes.toList();
+    m_oldLock = oldLock;
+    m_newLock = newLock;
+
+    Q_ASSERT(m_shapes.count() == m_oldLock.count());
+    Q_ASSERT(m_shapes.count() == m_newLock.count());
+}
+
+KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock)
+{
+    m_shapes = shapes;
+    m_oldLock = oldLock;
+    m_newLock = newLock;
+
+    Q_ASSERT(m_shapes.count() == m_oldLock.count());
+    Q_ASSERT(m_shapes.count() == m_newLock.count());
+}
+
+KoShapeLockCommand::~KoShapeLockCommand()
+{
+}
+
+void KoShapeLockCommand::execute()
+{
+    for(int i = 0; i < m_shapes.count(); ++i) {
+        m_shapes[i]->setLocked(m_newLock[i]);
+    }
+}
+
+void KoShapeLockCommand::unexecute()
+{
+    for(int i = 0; i < m_shapes.count(); ++i) {
+        m_shapes[i]->setLocked(m_oldLock[i]);
+    }
+}
+
+QString KoShapeLockCommand::name () const
+{
+    return i18n("Lock shapes");
 }

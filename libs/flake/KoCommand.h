@@ -82,6 +82,15 @@ public:
      * @param newAngles a list with the same amount of items as shapes with the new angles.
      */
     KoShapeRotateCommand(const KoSelectionSet &shapes, QList<double> &previousAngles, QList<double> &newAngles);
+    /**
+     * Comand to rotate a selection of shapes.  Note that it just alters the rotated
+     * property of those shapes, and nothing more.
+     * @param shapes all the shapes that should be rotated
+     * @param previousAngles a list with the same amount of items as shapes with the
+     *        old rotation angles
+     * @param newAngles a list with the same amount of items as shapes with the new angles.
+     */
+    KoShapeRotateCommand(const QList<KoShape*> &shapes, QList<double> &previousAngles, QList<double> &newAngles);
     /// execute the command
     void execute ();
     /// revert the actions done in execute
@@ -129,6 +138,13 @@ public:
      * @param newSizes the new sizes; in a list with a member for each shape
      */
     KoShapeSizeCommand(const KoSelectionSet &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes);
+    /**
+     * The undo / redo command for shape sizing.
+     * @param shapes all the shapes that will be rezised at the same time
+     * @param previousSizes the old sizes; in a list with a member for each shape
+     * @param newSizes the new sizes; in a list with a member for each shape
+     */
+    KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes);
     /// execute the command
     void execute ();
     /// revert the actions done in execute
@@ -330,5 +346,36 @@ private:
     KoShapeMoveCommand *m_command;
 };
 
+class KoShapeLockCommand : public KCommand
+{
+public:
+    /**
+     * Command to lock a set of shapes position and size
+     * @param shapes a set of shapes that should change lock state
+     * @param oldLock list of old lock states the same length as @p shapes
+     * @param newLock list of new lock states the same length as @p shapes
+     */
+    KoShapeLockCommand(const KoSelectionSet &shapes, const QList<bool> &oldLock, const QList<bool> &newLock);
+    /**
+     * Command to lock a set of shapes position and size
+     * @param shapes a set of shapes that should change lock state
+     * @param oldLock list of old lock states the same length as @p shapes
+     * @param newLock list of new lock states the same length as @p shapes
+     */
+    KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock);
+    ~KoShapeLockCommand();
+
+    /// execute the command
+    virtual void execute();
+    /// revert the actions done in execute
+    virtual void unexecute();
+    /// return the name of this command
+    virtual QString name () const;
+
+private:
+    QList<KoShape*> m_shapes;    /// the shapes to set background for
+    QList<bool> m_oldLock;       /// old lock states
+    QList<bool> m_newLock;       /// new lock states
+};
 
 #endif

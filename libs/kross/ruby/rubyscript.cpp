@@ -79,12 +79,12 @@ void RubyScript::compile()
 
     ruby_nerrs = 0;
     ruby_errinfo = Qnil;
-    VALUE src = RubyType<QString>::toVALUE( m_action->code() );
+    VALUE src = RubyType<QString>::toVALUE( action()->code() );
     StringValue(src);
     critical = rb_thread_critical;
     rb_thread_critical = Qtrue;
     ruby_in_eval++;
-    d->m_compile = rb_compile_string((char*) m_action->objectName().toLatin1().data(), src, 0);
+    d->m_compile = rb_compile_string((char*) action()->objectName().toLatin1().data(), src, 0);
     ruby_in_eval--;
     rb_thread_critical = critical;
 

@@ -40,6 +40,7 @@
 #include <kshell.h>
 #include <kicon.h>
 #include <kurlbar.h>
+#include <kmessagebox.h>
 //#include <kio/netaccess.h>
 //#include <klocale.h>
 //#include <kicon.h>
@@ -347,6 +348,7 @@ void FormDialog::slotButtonClicked(int button)
 
 void FormDialog::slotCurrentPageChanged(KPageWidgetItem* current)
 {
+    Q_UNUSED(current);
     //kDebug() << "FormDialog::slotCurrentPageChanged current=" << current->name() << endl;
     //foreach(QWidget* widget, current->widget()->findChildren< QWidget* >("")) widget->setFocus();
 }
@@ -387,6 +389,28 @@ QWidget* FormModule::activeModalWidget()
 QWidget* FormModule::activeWindow()
 {
     return QApplication::activeWindow();
+}
+
+QString FormModule::showMessageBox(const QString& dialogtype, const QString& caption, const QString& message)
+{
+    KMessageBox::DialogType type;
+    if(dialogtype == "QuestionYesNo") type = KMessageBox::QuestionYesNo;
+    else if(dialogtype == "WarningYesNo") type = KMessageBox::WarningYesNo;
+    else if(dialogtype == "WarningContinueCancel") type = KMessageBox::WarningContinueCancel;
+    else if(dialogtype == "WarningYesNoCancel") type = KMessageBox::WarningYesNoCancel;
+    else if(dialogtype == "Sorry") type = KMessageBox::Sorry;
+    else if(dialogtype == "Error") type = KMessageBox::Error;
+    else if(dialogtype == "QuestionYesNoCancel") type = KMessageBox::QuestionYesNoCancel;
+    else /*if(dialogtype == "Information")*/ type = KMessageBox::Information;
+
+    switch( KMessageBox::messageBox(0, type, message, caption) ) {
+        case KMessageBox::Ok: return "Ok";
+        case KMessageBox::Cancel: return "Cancel";
+        case KMessageBox::Yes: return "Yes";
+        case KMessageBox::No: return "No";
+        case KMessageBox::Continue: return "Continue";
+        default: return QString();
+    }
 }
 
 QWidget* FormModule::createDialog(const QString& caption)

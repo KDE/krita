@@ -208,6 +208,30 @@ namespace Kross {
             QWidget* activeWindow();
 
             /**
+             * Show a messagebox.
+             *
+             * \param dialogtype The type of the dialog which could be one
+             * of the following;
+             *      \li QuestionYesNo
+             *      \li WarningYesNo
+             *      \li WarningContinueCancel
+             *      \li WarningYesNoCancel
+             *      \li Information
+             *      \li Sorry
+             *      \li Error
+             *      \li QuestionYesNoCancel
+             * \param caption The caption the messagedialog displays.
+             * \param message The message that is displayed in the messagedialog.
+             * \return The buttoncode which chould be one of the following;
+             *      \li Ok
+             *      \li Cancel
+             *      \li Yes
+             *      \li No
+             *      \li Continue
+             */
+            QString showMessageBox(const QString& dialogtype, const QString& caption, const QString& message);
+
+            /**
              * Create and return a new \a FormDialog instance.
              *
              * \param caption The displayed caption of the dialog.

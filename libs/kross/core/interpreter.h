@@ -182,7 +182,7 @@ namespace Kross {
              */
             virtual Script* createScript(Action* Action) = 0;
 
-        protected:
+            /// \internal hook to keep easier binary compatibility.
             virtual void virtual_hook(int id, void* data);
 
         private:

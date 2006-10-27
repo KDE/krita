@@ -82,20 +82,20 @@ bool PythonScript::initialize()
     clearError(); // clear previous errors.
 
     try {
-        if(m_action->code().isNull()) {
-            setError( QString("Invalid scripting code for script '%1'").arg(m_action->objectName()) );
+        if(action()->code().isNull()) {
+            setError( QString("Invalid scripting code for script '%1'").arg(action()->objectName()) );
             return false;
         }
-        if(m_action->objectName().isNull()) {
+        if(action()->objectName().isNull()) {
             setError( QString("Name for the script is invalid!") );
             return false;
         }
 
         { // Each Action uses an own module as scope.
-            PyObject* pymod = PyModule_New( const_cast< char* >( m_action->objectName().toLatin1().data() ) );
+            PyObject* pymod = PyModule_New( const_cast< char* >( action()->objectName().toLatin1().data() ) );
             d->m_module = new Py::Module(pymod, true);
             if(! d->m_module) {
-                setError( QString("Failed to initialize local module context for script '%1'").arg(m_action->objectName()) );
+                setError( QString("Failed to initialize local module context for script '%1'").arg(action()->objectName()) );
                 return false;
             }
         }
@@ -108,10 +108,10 @@ bool PythonScript::initialize()
             Py::Dict moduledict = d->m_module->getDict();
 
             // Add our Action instance as "self" to the modules dictonary.
-            moduledict[ "self" ] = Py::asObject(new PythonExtension(m_action));
+            moduledict[ "self" ] = Py::asObject(new PythonExtension(action()));
 
             // Add the QObject instances to the modules dictonary.
-            QHashIterator< QString, QObject* > objectsit( m_action->objects() );
+            QHashIterator< QString, QObject* > objectsit( action()->objects() );
             while(objectsit.hasNext()) {
                 objectsit.next();
                 moduledict[ objectsit.key().toLatin1().data() ] = Py::asObject(new PythonExtension(objectsit.value()));
@@ -127,21 +127,21 @@ bool PythonScript::initialize()
             //"if self.has(\"stderr\"):\n"
             //"  self.stderr = Redirect( self.get(\"stderr\") )\n"
             ;
-        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->mainModule()->getDict();
+        Py::Dict mainmoduledict = ((PythonInterpreter*)interpreter())->mainModule()->getDict();
         PyObject* pyrun = PyRun_StringFlags((char*)s.toLatin1().data(), Py_file_input, mainmoduledict.ptr(), moduledict.ptr());
         if(! pyrun)
             throw Py::Exception(); // throw exception
         Py_XDECREF(pyrun); // free the reference.
         */
 
-        krossdebug( QString("PythonScript::initialize() name=%1").arg(m_action->objectName()) );
+        krossdebug( QString("PythonScript::initialize() name=%1").arg(action()->objectName()) );
         //PyCompilerFlags* cf = new PyCompilerFlags;
         //cf->cf_flags |= PyCF_SOURCE_IS_UTF8;
 
         { // Compile the python script code. It will be later on request executed. That way we cache the compiled code.
             PyObject* code = Py_CompileString(
-                (char*) m_action->code().toLatin1().data(),
-                (char*) m_action->objectName().toLatin1().data(),
+                (char*) action()->code().toLatin1().data(),
+                (char*) action()->objectName().toLatin1().data(),
                 Py_file_input
             );
             if(! code)
@@ -256,7 +256,7 @@ void PythonScript::execute()
     try {
 
         // the main module dictonary.
-        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->mainModule()->getDict();
+        Py::Dict mainmoduledict = ((PythonInterpreter*)interpreter())->mainModule()->getDict();
         // the local context dictonary.
         Py::Dict moduledict( d->m_module->getDict().ptr() );
 

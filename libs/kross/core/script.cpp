@@ -24,37 +24,45 @@
 
 using namespace Kross;
 
-Script::Script(Interpreter* const interpreter, Action* const action)
-    : QObject()
-    , ErrorInterface()
-    , m_interpreter(interpreter)
-    , m_action(action)
-    //, m_exception(0)
+namespace Kross {
+
+    /// \internal d-pointer class.
+    class Script::Private
+    {
+        public:
+            /// The \a Interpreter used to create this Script instance.
+            Interpreter* interpreter;
+            /// The \a Action associated with this Script.
+            Action* action;
+    };
+
+}
+
+Script::Script(Interpreter* interpreter, Action* action)
+    : ErrorInterface()
+    , d( new Private() )
 {
+    d->interpreter = interpreter;
+    d->action = action;
 }
 
 Script::~Script()
 {
+    delete d;
 }
 
-#if 0
-bool Script::hadException()
+Interpreter* Script::interpreter() const
 {
-    return m_exception.data() != 0;
+    return d->interpreter;
 }
 
-Exception* Script::getException()
+Action* Script::action() const
 {
-    return m_exception.data();
+    return d->action;
 }
 
-void Script::setException(Exception* e)
+void Script::virtual_hook(int id, void* data)
 {
-    m_exception = Exception::Ptr(e);
+    Q_UNUSED(id);
+    Q_UNUSED(data);
 }
-
-void Script::clearException()
-{
-    m_exception = Exception::Ptr(0);
-}
-#endif

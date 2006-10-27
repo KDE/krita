@@ -23,7 +23,6 @@
 #include <QString>
 #include <QStringList>
 #include <QVariant>
-#include <QObject>
 #include <koffice_export.h>
 
 #include "errorinterface.h"
@@ -42,24 +41,35 @@ namespace Kross {
      * that implements the \a Script functionality for the
      * defined \a Interpreter .
      */
-    class KROSS_EXPORT Script : public QObject, public ErrorInterface
+    class KROSS_EXPORT Script : public ErrorInterface
     {
         public:
 
             /**
              * Constructor.
              *
-             * \param interpreter The \a Interpreter instance
-             *       that uses this \a Script instance.
-             * \param Action The \a Action instance
-             *       this script is associated with.
+             * \param interpreter The \a Interpreter instance that
+             *        was used to created this \a Script instance.
+             * \param Action The \a Action instance this script is
+             *        associated with.
              */
-            Script(Interpreter* const interpreter, Action* const action);
+            Script(Interpreter* interpreter, Action* action);
 
             /**
              * Destructor.
              */
             virtual ~Script();
+
+            /**
+             * \return the \a Interpreter instance that was used to created
+             * this \a Script .
+             */
+            Interpreter* interpreter() const;
+
+            /**
+             * \return the \a Action instance associated with this \a Script .
+             */
+            Action* action() const;
 
             /**
              * Execute the script.
@@ -79,11 +89,14 @@ namespace Kross {
              */
             virtual QVariant callFunction(const QString& name, const QVariantList& args = QVariantList()) = 0;
 
-        protected:
-            /// The \a Interpreter used to create this Script instance.
-            Interpreter* const m_interpreter;
-            /// The \a Action associated with this Script.
-            Action* const m_action;
+            /// \internal hook to keep easier binary compatibility.
+            virtual void virtual_hook(int id, void* data);
+
+        private:
+            /// \internal d-pointer class.
+            class Private;
+            /// \internal d-pointer instance.
+            Private* const d;
     };
 
 }

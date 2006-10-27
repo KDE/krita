@@ -37,7 +37,6 @@ namespace Kross {
     // Forward declarations.
     class Interpreter;
     class Action;
-    class ManagerPrivate;
     class InterpreterInfo;
 
     /**
@@ -179,8 +178,10 @@ namespace Kross {
             void finished(Kross::Action*);
 
         private:
-            /// Private d-pointer class.
-            ManagerPrivate* d;
+            /// \internal d-pointer class.
+            class Private;
+            /// \internal d-pointer instance.
+            Private* const d;
     };
 
 }

@@ -51,7 +51,7 @@ using namespace Kross;
 namespace Kross {
 
     /// @internal
-    class ManagerPrivate
+    class Manager::Private
     {
         public:
             /// List of \a InterpreterInfo instances.
@@ -79,7 +79,7 @@ Manager& Manager::self()
 Manager::Manager()
     : QObject()
     , ChildrenInterface()
-    , d( new ManagerPrivate() )
+    , d( new Private() )
 {
     d->actioncollection = new KActionCollection(this);
 

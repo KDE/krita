@@ -54,8 +54,8 @@ KjsInterpreter::~KjsInterpreter()
     delete d;
 }
 
-Kross::Script* KjsInterpreter::createScript(Kross::Action* Action)
+Kross::Script* KjsInterpreter::createScript(Kross::Action* action)
 {
-    return new KjsScript(this, Action);
+    return new KjsScript(this, action);
 }
 

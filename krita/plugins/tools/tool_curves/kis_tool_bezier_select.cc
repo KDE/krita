@@ -44,7 +44,6 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
-#include "kis_tool_controller.h"
 #include "kis_tool_paint.h"
 
 #include "kis_canvas.h"

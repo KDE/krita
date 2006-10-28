@@ -90,7 +90,6 @@ private:
     KoColorProfile *  m_monitorProfile;
     QImage * m_checkTexture;
     QBrush * m_checkBrush;
-
 };
 
 #endif

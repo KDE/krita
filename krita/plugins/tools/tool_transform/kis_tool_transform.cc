@@ -50,7 +50,6 @@
 #include <kis_filter_strategy.h>
 #include <kis_cmb_idlist.h>
 #include <KoID.h>
-#include <kis_tool_controller.h>
 #include <kis_transform_worker.h>
 
 #include "kis_tool_transform.h"
@@ -172,11 +171,6 @@ void KisToolTransform::activate()
     {
         //connect(m_subject, commandExecuted(KCommand *c), this, notifyCommandAdded( KCommand * c));
         m_subject->undoAdapter()->setCommandHistoryListener( this );
-
-        KisToolControllerInterface *controller = m_subject->toolController();
-
-        if (controller)
-            controller->setCurrentTool(this);
 
         TransformCmd * cmd=0;
 
@@ -610,7 +604,7 @@ void KisToolTransform::move(KoPointerEvent *e)
     }
 }
 
-void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
+void KisToolTransform::buttonRelease(KoPointerEvent */*e*/)
 {
     if(!m_subject)
         return;

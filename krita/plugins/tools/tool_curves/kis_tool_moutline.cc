@@ -40,13 +40,10 @@
 #include "kis_iterators_pixel.h"
 //#include "kis_doc.h"
 #include "kis_painter.h"
-#include "kis_canvas_subject.h"
-#include "kis_canvas_controller.h"
 #include "KoPointerEvent.h"
 #include "KoPointerEvent.h"
 #include "KoPointerEvent.h"
 #include "kis_cursor.h"
-#include "kis_tool_controller.h"
 #include "kis_vec.h"
 #include "kis_selection.h"
 #include "kis_selection_options.h"
@@ -177,7 +174,7 @@ public:
         bool malus;
         int x[8] = { 1, 1, 0,-1,-1,-1, 0, 1},
             y[8] = { 0,-1,-1,-1, 0, 1, 1, 1};
-    
+
         for (int i = 0; i < 8; i++) {
             dcol = m_pos.x() + x[i];
             drow = m_pos.y() + y[i];
@@ -251,7 +248,7 @@ KisCurve::iterator KisCurveMagnetic::pushPivot (const QPointF& point)
     it = pushPoint(point,true,false,LINEHINT);
 //     if (count() == 1 && !m_parent->editingMode())
 //         addPoint(it,point,true,false,LINEHINT);
-    
+
     return selectPivot(it);
 }
 
@@ -288,7 +285,7 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
 
     while (!openSet.empty()) {
         Node current = *openSet.begin();
-        
+
         openSet.erase(openSet.begin());
         openMatrix[current.col()][current.row()].clear();
 
@@ -467,7 +464,7 @@ void KisCurveMagnetic::nonMaxSupp (const GrayMatrix& magnitude, const GrayMatrix
     // Third quadrant:  Gx >= 0 & Gy < 0
     // Fourth quadrant: Gx >= 0 & Gy >= 0
     // For this reason: first direction is relative to Gy only and third direction to Gx only
-    
+
     double  theta;      // theta = invtan (|Gy| / |Gx|) This give the direction relative to a quadrant
     qint16 mag;        // Current magnitude
     qint16 lmag;       // Magnitude at the left (So this pixel is "more internal" than the current
@@ -623,7 +620,7 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
         super::keyPress(event);
 }
 
-void KisToolMagnetic::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolMagnetic::buttonRelease(KoPointerEvent *event)
 {
     if (m_editingMode) {
         draw(m_current);

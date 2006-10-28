@@ -2419,7 +2419,7 @@ void KisView::slotAutoScroll(const QPoint &p)
     scrollTo(horzValue()+p.x(), vertValue()+p.y());
 }
 
-void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
+void KisView::canvasGotButtonReleaseEvent(KoPointerEvent *e)
 {
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     // The event filter doesn't see tablet events going to the canvas.
@@ -2445,7 +2445,7 @@ void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 //    } else
     if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
         KoPoint p = viewToWindow(e->pos());
-        KisButtonReleaseEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
+        KoPointerEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
 
         disableAutoScroll();
         if (m_toolManager->currentTool()) {
@@ -2804,14 +2804,14 @@ void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDoc
     m_partHandler = new KisPartLayerHandler(this, entry, parent, above);
 
     disconnect(m_canvas, SIGNAL(sigGotButtonPressEvent(KoPointerEvent*)), this, 0);
-    disconnect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)), this, 0);
+    disconnect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KoPointerEvent*)), this, 0);
     disconnect(m_canvas, SIGNAL(sigGotMoveEvent(KoPointerEvent*)), this, 0);
     disconnect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)), this, 0);
 
     connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KoPointerEvent*)),
             m_partHandler, SLOT(gotButtonPressEvent(KoPointerEvent*)));
-    connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)),
-            m_partHandler, SLOT(gotButtonReleaseEvent(KisButtonReleaseEvent*)));
+    connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KoPointerEvent*)),
+            m_partHandler, SLOT(gotButtonReleaseEvent(KoPointerEvent*)));
     connect(m_canvas, SIGNAL(sigGotMoveEvent(KoPointerEvent*)),
             m_partHandler, SLOT(gotMoveEvent(KoPointerEvent*)));
     connect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)),
@@ -2828,8 +2828,8 @@ void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDoc
 void KisView::reconnectAfterPartInsert() {
     connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KoPointerEvent*)),
             this, SLOT(canvasGotButtonPressEvent(KoPointerEvent*)));
-    connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)),
-            this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
+    connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KoPointerEvent*)),
+            this, SLOT(canvasGotButtonReleaseEvent(KoPointerEvent*)));
     connect(m_canvas, SIGNAL(sigGotMoveEvent(KoPointerEvent*)),
             this, SLOT(canvasGotMoveEvent(KoPointerEvent*)));
     connect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)),
@@ -3149,7 +3149,7 @@ void KisView::setupCanvas()
     m_canvas = new KisCanvas(this, "kis_canvas");
     m_canvas->setFocusPolicy( Qt::StrongFocus );
     QObject::connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KoPointerEvent*)), this, SLOT(canvasGotButtonPressEvent(KoPointerEvent*)));
-    QObject::connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)), this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
+    QObject::connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KoPointerEvent*)), this, SLOT(canvasGotButtonReleaseEvent(KoPointerEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotDoubleClickEvent(KoPointerEvent*)), this, SLOT(canvasGotDoubleClickEvent(KoPointerEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotMoveEvent(KoPointerEvent*)), this, SLOT(canvasGotMoveEvent(KoPointerEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotPaintEvent(QPaintEvent*)), this, SLOT(canvasGotPaintEvent(QPaintEvent*)));

@@ -53,7 +53,7 @@ public:
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonRelease(KoPointerEvent *event);
 
 protected:
     virtual void draw(const KoPoint& start, const KoPoint& stop);
@@ -68,21 +68,26 @@ protected:
 };
 
 
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
-class KisToolEllipseFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolEllipseFactory : public KoToolFactory {
+
 public:
-    KisToolEllipseFactory() : super() {};
+    KisToolEllipseFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolEllipse", i18n( "Ellipse" ))
+        {
+            setToolTip( i18n( "Draw an ellipse" ) );
+            setToolType( TOOL_TYPE_SHAPE );
+            setIcon( "tool_ellipse" );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolEllipseFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolEllipse(); 
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t; 
+
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return  new KisToolEllipse(canvas);
     }
-    virtual KoID id() { return KoID("ellipse", i18n("Ellipse Tool")); }
+
 };
 
 

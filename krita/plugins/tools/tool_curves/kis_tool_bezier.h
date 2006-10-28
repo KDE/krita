@@ -23,7 +23,6 @@
 
 #include <QPointF>
 
-#include "kis_tool_factory.h"
 #include "kis_tool_curve.h"
 
 class CurvePoint;
@@ -48,7 +47,7 @@ class KisCurveBezier : public KisCurve {
     QPointF midpoint (const QPointF&, const QPointF&);
 
     int m_maxLevel;
-    
+
 public:
 
     KisCurveBezier() : super() {m_maxLevel = 5;}

@@ -27,7 +27,7 @@
 #include "kis_types.h"
 #include "kis_tool_registry.h"
 #include "kis_tool.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include "kis_canvas_subject.h"
 #include "KoID.h"
 #include "kis_debug_areas.h"
@@ -88,7 +88,7 @@ vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *
 
     for (QList<KoID>::Iterator it = factories.begin(); it != factories.end(); ++it )
     {
-        KisToolFactorySP f = get(*it);
+        KoToolFactorySP f = get(*it);
 
         KisTool * tool = f->createTool(ac);
         subject->attach(tool);
@@ -100,9 +100,9 @@ vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *
     return tools;
 }
 
-KisTool * KisToolRegistry::createTool(KActionCollection * ac, KisCanvasSubject * subject, KoID & id) const
+KisTool * KisToolRegistry::createTool(KoCanvasBase *canvas, KisCanvasSubject * subject, KoID & id) const
 {
-    KisToolFactorySP f = get(id);
+    KoToolFactorySP f = get(id);
     KisTool * t = f->createTool(ac);
     subject->attach(t);
     return t;

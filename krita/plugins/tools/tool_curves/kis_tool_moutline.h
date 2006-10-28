@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_MOUTLINE_H_
 #define KIS_TOOL_MOUTLINE_H_
 
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 
@@ -81,7 +81,7 @@ public:
 
     virtual void keyPress(QKeyEvent*);
     virtual void buttonPress(KoPointerEvent*);
-    virtual void buttonRelease(KisButtonReleaseEvent*);
+    virtual void buttonRelease(KoPointerEvent*);
     virtual void move(KoPointerEvent*);
 
     virtual KisCurve::iterator selectByMouse(KisCurve::iterator it);
@@ -113,19 +113,24 @@ private:
 
 };
 
-class KisToolMagneticFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolMagneticFactory : public KoToolFactory {
+
 public:
-    KisToolMagneticFactory() : super() {};
+    KisToolMagneticFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolMagnetic", i18n( "Magnetic Outline Selection")
+        {
+            setToolTip( i18n( "Magnetic Selection: move around an edge to select it. Hit Ctrl to enter/quit manual mode, and double click to finish." ) );
+            setToolType( TOOL_TYPE_SELECTED );
+            setIcon( "tool_moutline" );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolMagneticFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolMagnetic();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolMagnetic(canvas);
     }
-    virtual KoID id() { return KoID("magneticoutline", i18n("Magnetic Outline Selection Tool")); }
+
 };
 
 #endif // KIS_TOOL_MOUTLINE_H_

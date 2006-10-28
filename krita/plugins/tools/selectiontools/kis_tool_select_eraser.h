@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_SELECT_ERASER_H_
 #define KIS_TOOL_SELECT_ERASER_H_
 
-#include <kis_tool_factory.h>
+#include <KoToolFactory.h>
 #include <kis_tool_freehand.h>
 
 class KoPoint;
@@ -60,19 +60,25 @@ private:
 };
 
 
-class KisToolSelectEraserFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolSelectEraserFactory : public KoToolFactory {
+    typedef KoToolFactory super;
 public:
-    KisToolSelectEraserFactory() : super() {};
+    KisToolSelectEraserFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent,  "KisToolSelectEraser", i18n( "Selection Eraser" ))
+        {
+            setToolTip( i18n( "Erase parts of a selection with a brush" ) );
+            setToolType( TOOL_TYPE_SELECTED );
+            setIcon( "tool_eraser_selection" );
+            setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
+            setPriority( 0 );
+        };
+
     virtual ~KisToolSelectEraserFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolSelectEraser(); 
-        Q_CHECK_PTR(t);
-        t->setup(ac); 
-        return t; 
+
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return  new KisToolSelectEraser(canvas);
     }
-    virtual KoID id() { return KoID("eraserselect", i18n("Eraser Select Tool")); }
+
 };
 
 

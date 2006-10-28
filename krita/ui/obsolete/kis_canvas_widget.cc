@@ -180,7 +180,7 @@ void KisCanvasWidget::widgetGotMousePressEvent(QMouseEvent *e)
 
 void KisCanvasWidget::widgetGotMouseReleaseEvent(QMouseEvent *e)
 {
-    KisButtonReleaseEvent ke(KoInputDevice::mouse(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->button(), e->buttons(), e->modifiers());
+    KoPointerEvent ke(KoInputDevice::mouse(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->button(), e->buttons(), e->modifiers());
     buttonReleaseEvent(&ke);
 }
 
@@ -222,7 +222,7 @@ void KisCanvasWidget::widgetGotTabletEvent(QTabletEvent *e)
     }
     else
     if (e->type() == QEvent::TabletRelease) {
-        KisButtonReleaseEvent ke(device, e->pos(), e->globalPos(), pressure, e->xTilt(), e->yTilt(), Qt::LeftButton, Qt::NoButton, e->modifiers());
+        KoPointerEvent ke(device, e->pos(), e->globalPos(), pressure, e->xTilt(), e->yTilt(), Qt::LeftButton, Qt::NoButton, e->modifiers());
         translateTabletEvent(&ke);
     }
     else {
@@ -293,7 +293,7 @@ void KisCanvasWidget::buttonPressEvent(KoPointerEvent *e)
     emit sigGotButtonPressEvent(e);
 }
 
-void KisCanvasWidget::buttonReleaseEvent(KisButtonReleaseEvent *e)
+void KisCanvasWidget::buttonReleaseEvent(KoPointerEvent *e)
 {
     emit sigGotButtonReleaseEvent(e);
 }
@@ -317,7 +317,7 @@ void KisCanvasWidget::translateTabletEvent(KoPointerEvent *e)
                 if (e->type() == KoPointerEvent::ButtonPressEvent) {
                     buttonPressEvent(static_cast<KoPointerEvent *>(e));
                 } else {
-                    buttonReleaseEvent(static_cast<KisButtonReleaseEvent *>(e));
+                    buttonReleaseEvent(static_cast<KoPointerEvent *>(e));
                 }
 
                 checkThresholdOnly = true;
@@ -336,7 +336,7 @@ void KisCanvasWidget::translateTabletEvent(KoPointerEvent *e)
             KoPointerEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), Qt::LeftButton, e->buttons(), e->modifiers());
             buttonPressEvent(&ke);
         } else if (e->pressure() < PRESSURE_THRESHOLD && previousPressure >= PRESSURE_THRESHOLD) {
-            KisButtonReleaseEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), Qt::LeftButton, e->buttons(), e->modifiers());
+            KoPointerEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), Qt::LeftButton, e->buttons(), e->modifiers());
             buttonReleaseEvent(&ke);
         } else {
             if (!checkThresholdOnly) {
@@ -1073,7 +1073,7 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
                     translateTabletEvent(&e);
                 }
                 else {
-                    KisButtonReleaseEvent e(tabletDevice.inputDevice(), pos, globalPos, deviceState.pressure(), tilt.x(), tilt.y(),
+                    KoPointerEvent e(tabletDevice.inputDevice(), pos, globalPos, deviceState.pressure(), tilt.x(), tilt.y(),
                                             button, buttons, modifiers);
                     translateTabletEvent(&e);
                 }

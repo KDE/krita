@@ -25,7 +25,7 @@
 
 #include "KoPoint.h"
 #include "kis_tool_non_paint.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include "kis_selection.h"
 
 class KisSelectionOptions;
@@ -53,9 +53,9 @@ public:
     virtual enumToolType toolType() { return TOOL_SELECT; }
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonRelease(KoPointerEvent *event);
     virtual void doubleClick(KoPointerEvent * event);
-    
+
     void finish();
     QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();
@@ -85,19 +85,24 @@ private:
 };
 
 
-class KisToolSelectPolygonalFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolSelectPolygonalFactory : public KoToolFactory {
+
 public:
-    KisToolSelectPolygonalFactory() : super() {};
+    KisToolSelectPolygonalFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolSelectPolygonal",
+            i18n( "Polygonal Selection") )
+        {
+            setToolTip( i18n( "Select a polygonal region" ) );
+            setToolType( TOOL_TYPE_SELECTED );
+            setIcon( "tool_polygonal_selection" );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolSelectPolygonalFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolSelectPolygonal();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return =  new KisToolSelectPolygonal(canvas);
     }
-    virtual KoID id() { return KoID("polygonalselect", i18n("Polygonal Select Tool")); }
 };
 
 

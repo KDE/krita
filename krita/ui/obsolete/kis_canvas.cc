@@ -151,7 +151,7 @@ void KisCanvas::createCanvasWidget(bool useOpenGL)
     connect(m_canvasWidget, SIGNAL(sigGotDropEvent(QDropEvent*)), SIGNAL(sigGotDropEvent(QDropEvent*)));
     connect(m_canvasWidget, SIGNAL(sigGotMoveEvent(KoPointerEvent *)), SIGNAL(sigGotMoveEvent(KoPointerEvent *)));
     connect(m_canvasWidget, SIGNAL(sigGotButtonPressEvent(KoPointerEvent *)), SIGNAL(sigGotButtonPressEvent(KoPointerEvent *)));
-    connect(m_canvasWidget, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent *)), SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent *)));
+    connect(m_canvasWidget, SIGNAL(sigGotButtonReleaseEvent(KoPointerEvent *)), SIGNAL(sigGotButtonReleaseEvent(KoPointerEvent *)));
     connect(m_canvasWidget, SIGNAL(sigGotDoubleClickEvent(KoPointerEvent *)), SIGNAL(sigGotDoubleClickEvent(KoPointerEvent *)));
 
 }

@@ -91,7 +91,7 @@ class KoDocumentSectionView;
 class KisBirdEyeBox;
 class KisBrush;
 class KoPointerEvent;
-class KisButtonReleaseEvent;
+class KoPointerEvent;
 class KisCanvas;
 class KisCanvasObserver;
 class KoCompositeOp;
@@ -445,7 +445,7 @@ private slots:
 
     void canvasGotMoveEvent(KoPointerEvent *e);
     void canvasGotButtonPressEvent(KoPointerEvent *e);
-    void canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e);
+    void canvasGotButtonReleaseEvent(KoPointerEvent *e);
     void canvasGotDoubleClickEvent(KoPointerEvent *e);
     void canvasGotPaintEvent(QPaintEvent *e);
     void canvasGotMouseWheelEvent(QWheelEvent *e);

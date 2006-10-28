@@ -18,6 +18,9 @@
  */
 
 #include <QWidget>
+#include <QLabel>
+
+#include <klocale.h>
 
 #include "KoTool.h"
 #include "KoCanvasBase.h"
@@ -67,9 +70,17 @@ void KoTool::useCursor(QCursor cursor, bool force) {
 }
 
 QWidget * KoTool::optionWidget(QWidget * parent) {
-    if ( !m_optionWidget )
-        m_optionWidget = new QWidget( parent );
+    if ( !m_optionWidget ) {
+        // XXX: Re-add the ui tool name  to show in this label. It probably
+        //      was removed post moving KisTool to KoTool and I'm too fed up
+        //      to re-add it right now.
+        //m_optionWidget = new QLabel(i18n("No options for %1.", m_visibleName), parent);
+        QLabel * l = new QLabel(i18n("No options for the current tool"), parent);
+        //m_optionWidget->setWindowTitle(m_visibleName);
+        l->setAlignment(Qt::AlignCenter);
+        m_optionWidget = l;
 
+    }
     return m_optionWidget;
 }
 

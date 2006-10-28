@@ -94,7 +94,7 @@ void KisToolZoom::move(KoPointerEvent *e)
     }
 }
 
-void KisToolZoom::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolZoom::buttonRelease(KoPointerEvent *e)
 {
     if (m_subject && m_dragging && e->button() == Qt::LeftButton) {
 

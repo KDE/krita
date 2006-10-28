@@ -162,7 +162,7 @@ void KisToolSelectElliptical::move(KoPointerEvent *e)
     }
 }
 
-void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolSelectElliptical::buttonRelease(KoPointerEvent *e)
 {
      if (m_subject && m_selecting && e->button() == Qt::LeftButton) {
 

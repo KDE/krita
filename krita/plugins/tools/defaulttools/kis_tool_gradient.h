@@ -29,7 +29,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_gradient_painter.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
 class KIntNumInput;
 class KDoubleNumInput;
@@ -58,7 +58,7 @@ public:
 
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonRelease(KoPointerEvent *event);
 
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);
@@ -99,19 +99,25 @@ private:
     KDoubleNumInput *m_slAntiAliasThreshold;
 };
 
-class KisToolGradientFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolGradientFactory : public KoToolFactory {
+
 public:
-    KisToolGradientFactory() : super() {};
+    KisToolGradientFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolGradient", i18n( "Gradient" ))
+        {
+            setToolTip( i18n( "Draw a gradient." ) );
+            setToolType( TOOL_TYPE_FILL );
+            setIcon( "tool_gradient" );
+            setShortcut( Qt::Key_G );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolGradientFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolGradient();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return  new KisToolGradient(canvas);
     }
-    virtual KoID id() { return KoID("gradient", i18n("Gradient Tool")); }
+
 };
 
 

@@ -117,7 +117,7 @@ void KisToolGradient::move(KoPointerEvent *e)
     }
 }
 
-void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolGradient::buttonRelease(KoPointerEvent *e)
 {
     if (m_dragging && e->button() == Qt::LeftButton) {
 

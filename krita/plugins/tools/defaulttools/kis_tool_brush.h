@@ -20,7 +20,7 @@
 #define KIS_TOOL_BRUSH_H_
 
 #include "kis_tool_freehand.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
 class QTimer;
 class KoPoint;
@@ -62,19 +62,25 @@ private:
     QCheckBox * m_chkDirect;
 };
 
-class KisToolBrushFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolBrushFactory : public KoToolFactory {
+
 public:
-    KisToolBrushFactory() : super() {};
+    KisToolBrushFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolBrush", i18n( "Paint" ))
+        {
+            setToolTip( i18n( "Paint freely" ) );
+            setToolType( TOOL_TYPE_SHAPE );
+            setIcon( "tool_freehand" );
+            setShortcut( Qt::Key_B );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolBrushFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolBrush();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolBrush(canvas);
     }
-    virtual KoID id() { return KoID("brush", i18n("Brush Tool")); }
+
 };
 
 

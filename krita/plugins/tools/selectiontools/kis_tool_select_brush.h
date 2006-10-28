@@ -23,7 +23,7 @@
 
 #include <kis_tool.h>
 #include <kis_tool_freehand.h>
-#include <kis_tool_factory.h>
+#include <KoToolFactory.h>
 
 class QWidget;
 class KoPoint;
@@ -32,7 +32,7 @@ class KisSelectionOptions;
 
 /**
  * The selection brush creates a selection by painting with the current
- * brush shape. Not sure what kind of an icon could represent this... 
+ * brush shape. Not sure what kind of an icon could represent this...
  * Depends a bit on how we're going to visualize selections.
  */
 class KisToolSelectBrush : public KisToolFreehand {
@@ -62,19 +62,25 @@ private:
     KisSelectedTransaction *m_transaction;
 };
 
-class KisToolSelectBrushFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolSelectBrushFactory : public KoToolFactory {
+
 public:
-    KisToolSelectBrushFactory() : super() {};
+    KisToolSelectBrushFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolSelectBrush", i18n( "Selection Brush" ))
+        {
+            setToolTip( i18n( "Paint a selection with a brush" ) );
+            setToolType( TOOL_TYPE_SELECTED );
+            setIcon( "tool_brush_selection" );
+            setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B);
+            setPriority( 0 );
+        };
+
     virtual ~KisToolSelectBrushFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolSelectBrush();
-        Q_CHECK_PTR(t);
-        t->setup(ac); 
-        return t; 
+
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return  new KisToolSelectBrush(canvas);
     }
-    virtual KoID id() { return KoID("brushselect", i18n("Brush Select Tool")); }
+
 };
 
 

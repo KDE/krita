@@ -31,7 +31,7 @@
 
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_tool_registry.h>
+#include <KoToolRegistry.h>
 
 #include "tool_perspectivetransform.h"
 #include "kis_tool_perspectivetransform.h"
@@ -46,10 +46,10 @@ ToolPerspectiveTransform::ToolPerspectiveTransform(QObject *parent, const QStrin
 {
     setInstance(ToolPerspectiveTransformFactory::instance());
 
-    if ( parent->inherits("KisToolRegistry") )
+    if ( parent->inherits("KoToolRegistry") )
     {
         kDebug() << " add perspective transform tool to the registry" << endl;
-        KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
+        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
         r->add(new KisToolPerspectiveTransformFactory());
     }
 

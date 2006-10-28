@@ -27,7 +27,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
 class KisBrush;
 class KisPainter;
@@ -52,7 +52,7 @@ class KisToolLine : public KisToolPaint {
 
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonRelease(KoPointerEvent *event);
 
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);
@@ -77,19 +77,25 @@ class KisToolLine : public KisToolPaint {
 };
 
 
-class KisToolLineFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolLineFactory : public KoToolFactory {
+
 public:
-    KisToolLineFactory() : super() {};
+
+    KisToolLineFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolLine", i18n( "Line" ))
+        {
+            setToolTip(i18n("Draw a line with the current brush"));
+            setToolType(TOOL_TYPE_SHAPE);
+            setPriority(0);
+            setIcon("tool_line");
+        };
+
     virtual ~KisToolLineFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolLine(); 
-        Q_CHECK_PTR(t);
-        t->setup(ac); 
-        return t; 
+
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolLine(canvas);
     }
-    virtual KoID id() { return KoID("line", i18n("Line Tool")); }
+
 };
 
 

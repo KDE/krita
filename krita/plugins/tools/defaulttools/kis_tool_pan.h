@@ -21,7 +21,7 @@
 
 #include "KoPoint.h"
 #include "kis_tool_non_paint.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include <koffice_export.h>
 
 class KisCanvasSubject;
@@ -44,7 +44,7 @@ public:
 
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
 
     virtual bool wantsAutoScroll() const { return false; }
 
@@ -58,19 +58,25 @@ private:
     QCursor m_closedHandCursor;
 };
 
-class KisToolPanFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolPanFactory : public KoToolFactory {
+
 public:
-    KisToolPanFactory() : super() {};
+    KisToolPanFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolPan", i18n( "Pan" ))
+        {
+            setToolTip( i18n( "Pan the current view" ) );
+            setToolType( TOOL_TYPE_VIEW );
+            setIcon( "tool_pan" );
+            setPriority( 0 );
+            setShortcut( Qt::SHIFT + Qt::Key_H );
+        };
+
     virtual ~KisToolPanFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolPan();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolPan(canvas);
     }
-    virtual KoID id() { return KoID("pan", i18n("Pan Tool")); }
+
 };
 
 

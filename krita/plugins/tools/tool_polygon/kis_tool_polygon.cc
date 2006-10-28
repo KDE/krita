@@ -142,7 +142,7 @@ void KisToolPolygon::move(KoPointerEvent *event)
     }
 }
 
-void KisToolPolygon::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolPolygon::buttonRelease(KoPointerEvent *event)
 {
         if (!m_subject || !m_currentImage)
             return;

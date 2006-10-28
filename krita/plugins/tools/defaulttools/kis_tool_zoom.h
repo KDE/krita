@@ -25,7 +25,7 @@
 
 #include "kis_tool_non_paint.h"
 
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
 class KisCanvasSubject;
 
@@ -48,7 +48,7 @@ public:
 
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
 
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);
@@ -78,19 +78,25 @@ private:
 };
 
 
-class KisToolZoomFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolZoomFactory : public KoToolFactory {
+
 public:
-    KisToolZoomFactory() : super() {};
+    KisToolZoomFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent,  "KisToolZoom", i18n( "Zoom tool") )
+        {
+            setToolTip( i18n( "Zoom" ) );
+            setToolType( TOOL_TYPE_VIEW );
+            setIcon( "viewmag" );
+            setPriority( 0 );
+            setShortcut( Qt:Key_Z );
+        };
+
     virtual ~KisToolZoomFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t = new KisToolZoom(); 
-        Q_CHECK_PTR(t);
-        t->setup(ac); 
-        return t; 
+
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolZoom(canvas);
     }
-    virtual KoID id() { return KoID("zoom", i18n("Zoom Tool")); }
+
 };
 
 

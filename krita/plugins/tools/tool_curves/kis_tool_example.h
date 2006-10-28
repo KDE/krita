@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_EXAMPLE_H_
 #define KIS_TOOL_EXAMPLE_H_
 
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include "kis_tool_curve.h"
 #include "KoPoint.h"
 
@@ -47,19 +47,23 @@ public:
 
 };
 
-class KisToolExampleFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolExampleFactory : public KoToolFactory {
+
 public:
-    KisToolExampleFactory() : super() {};
+    KisToolExampleFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolExample", i18n( "Example curves tool" ))
+        {
+            setToolTip( i18n( "Exanmple tool for the curves framework" ) );
+            setToolType( TOOL_TYPE_SHAPE );
+            setIcon( "tool-example" );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolExampleFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolExample();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolExample(canvas);
     }
-    virtual KoID id() { return KoID("exampleshape", i18n("Example Tool")); }
 };
 
 

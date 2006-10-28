@@ -69,7 +69,7 @@ void KisToolText::update(KisCanvasSubject *subject)
     super::update(subject);
 }
 
-void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolText::buttonRelease(KoPointerEvent *e)
 {
     if (m_subject && e->button() == Qt::LeftButton) {
         KisImageSP img = m_subject->currentImg();

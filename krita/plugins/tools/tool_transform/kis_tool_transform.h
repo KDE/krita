@@ -25,7 +25,7 @@
 #include <QPoint>
 
 #include <kis_tool_non_paint.h>
-#include <kis_tool_factory.h>
+#include <KoToolFactory.h>
 #include <kis_undo_adapter.h>
 
 #include "ui_wdg_tool_transform.h"
@@ -65,7 +65,7 @@ public:
     virtual void paint(QPainter& gc, const QRect& rc);
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
     void setScaleX(double sx) { m_scaleX = sx; }
     void setScaleY(double sy) { m_scaleY = sy; }
     void setTranslateX(double tx) { m_translateX = tx; }
@@ -138,19 +138,25 @@ private:
 
 };
 
-class KisToolTransformFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolTransformFactory : public KoToolFactory {
+
 
 public:
-    KisToolTransformFactory() : super() {};
+
+    KisToolTransformFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolTransform", i18n( "Transform" ))
+        {
+            setToolTip( i18n( "Transform a layer or a selection" ) );
+            setToolType( TOOL_TYPE_TRANSFORM );
+            setIcon( "transform" );
+            setPriority( 0 );
+        };
     virtual ~KisToolTransformFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t = new KisToolTransform();
-        Q_CHECK_PTR(t);
-        t->setup(ac); return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolTransform(canvas);
     }
-    virtual KoID id() { return KoID("transform", i18n("Transform Tool")); }
+
 };
 
 

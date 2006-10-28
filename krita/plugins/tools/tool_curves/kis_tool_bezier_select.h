@@ -23,7 +23,7 @@
 
 #include "KoPoint.h"
 
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include "kis_tool_bezier.h"
 
 class KisToolBezierSelect : public KisToolBezier {
@@ -46,19 +46,24 @@ protected:
 
 };
 
-class KisToolBezierSelectFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolBezierSelectFactory : public KoToolFactory {
+
 public:
-    KisToolBezierSelectFactory() : super() {};
+    KisToolBezierSelectFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolBezierSelect", i18n( "Select with curves" ))
+        {
+            setToolTip(i18n("Select an area of the image with curves"));
+            setToolType(TOOL_TYPE_SELECTED);
+            setPriority(0);
+            setIcon("tool_bezier_select");
+        };
+
     virtual ~KisToolBezierSelectFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolBezierSelect();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolBezierSelect(canvas);
     }
-    virtual KoID id() { return KoID("bezierselection", i18n("Bezier Selection Tool")); }
+
 };
 
 #endif //__KIS_TOOL_CURVE_PAINT_H_

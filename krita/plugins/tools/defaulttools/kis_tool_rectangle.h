@@ -28,7 +28,7 @@
 
 #include "kis_tool_shape.h"
 #include "kis_types.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include "KoPoint.h"
 
 class QPainter;
@@ -58,7 +58,7 @@ public:
     virtual quint32 priority() { return 2; }
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonRelease(KoPointerEvent *event);
 
 protected:
     virtual void draw(const KoPoint&, const KoPoint&);
@@ -75,19 +75,25 @@ protected:
     KisImageSP m_currentImage;
 };
 
-class KisToolRectangleFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolRectangleFactory : public KoToolFactory {
+
 public:
-    KisToolRectangleFactory() : super() {};
+    KisToolRectangleFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolRectangle", i18n( "Rectangle" ))
+        {
+            setToolTip( i18n( "Draw a rectangle" ) );
+            setToolType( TOOL_TYPE_SHAPE );
+            setIcon( "tool_rectange" );
+            setShortcut( Qt::Key_F6 );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolRectangleFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolRectangle();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return  new KisToolRectangle(canvas);
     }
-    virtual KoID id() { return KoID("rectangle", i18n("Rectangle Tool")); }
+
 };
 
 

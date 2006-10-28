@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_tool_registry.h>
+#include <KoToolRegistry.h>
 
 #include "selectsimilar.h"
 #include "kis_tool_selectsimilar.h"
@@ -45,10 +45,10 @@ SelectSimilar::SelectSimilar(QObject *parent, const QStringList &)
 {
     setInstance(SelectSimilarFactory::instance());
 
-    if ( parent->inherits("KisToolRegistry") )
+    if ( parent->inherits("KoToolRegistry") )
     {
-        KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
-        r->add(KisToolFactorySP(new KisToolSelectSimilarFactory()));
+        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
+        r->add(KoToolFactorySP(new KisToolSelectSimilarFactory()));
     }
 }
 

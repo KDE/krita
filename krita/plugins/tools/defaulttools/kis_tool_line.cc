@@ -115,7 +115,7 @@ void KisToolLine::move(KoPointerEvent *e)
     }
 }
 
-void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolLine::buttonRelease(KoPointerEvent *e)
 {
     if (m_dragging && e->button() == Qt::LeftButton) {
         m_dragging = false;

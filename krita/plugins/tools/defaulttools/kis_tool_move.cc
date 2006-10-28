@@ -89,7 +89,7 @@ void KisToolMove::move(KoPointerEvent *e)
     }
 }
 
-void KisToolMove::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolMove::buttonRelease(KoPointerEvent *e)
 {
     if (m_subject && e->button() == Qt::LeftButton) {
         m_strategy.endDrag(e->pos().floorQPoint());

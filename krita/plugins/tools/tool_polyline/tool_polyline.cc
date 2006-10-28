@@ -32,7 +32,7 @@
 
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_tool_registry.h>
+#include <KoToolRegistry.h>
 
 #include "tool_polyline.h"
 #include "kis_tool_polyline.h"
@@ -47,11 +47,11 @@ ToolPolyline::ToolPolyline(QObject *parent, const QStringList &)
 {
     setInstance(ToolPolylineFactory::instance());
 
-    if ( parent->inherits("KisToolRegistry") )
+    if ( parent->inherits("KoToolRegistry") )
     {
-        KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
+        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
 
-        r->add(KisToolFactorySP(new KisToolPolylineFactory()));
+        r->add(KoToolFactorySP(new KisToolPolylineFactory()));
     }
 
 }

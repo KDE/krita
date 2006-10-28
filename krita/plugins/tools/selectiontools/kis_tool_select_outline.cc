@@ -105,7 +105,7 @@ void KisToolSelectOutline::move(KoPointerEvent *event)
     }
 }
 
-void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolSelectOutline::buttonRelease(KoPointerEvent *event)
 {
     if (!m_subject)
         return;

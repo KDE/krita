@@ -107,7 +107,7 @@ void KisToolRectangle::move(KoPointerEvent *event)
     }
 }
 
-void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolRectangle::buttonRelease(KoPointerEvent *event)
 {
     if (!m_subject)
         return;

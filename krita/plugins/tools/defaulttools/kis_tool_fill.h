@@ -51,7 +51,7 @@ public:
     virtual void update(KisCanvasSubject *subject);
 
     virtual void buttonPress(KoPointerEvent*);
-    virtual void buttonRelease(KisButtonReleaseEvent*);
+    virtual void buttonRelease(KoPointerEvent*);
 
     bool flood(int startX, int startY);
 
@@ -83,21 +83,27 @@ private:
 };
 
 
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
-class KisToolFillFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolFillFactory : public KoToolFactory {
+
 public:
-    KisToolFillFactory() : super() {};
+    KisToolFillFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisTooLFill", i18n( "Contiguous Fill" ))
+        {
+            setToolTip( i18n( "Fill a contiguous area of color with a color, or fill a selection." ) );
+            setToolType( TOOL_TYPE_FILL );
+            setIcon( "color_fill" );
+            setShortcut( Qt::Key_F );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolFillFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisToolFill * t = new KisToolFill();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolFill(canvas);
     }
-    virtual KoID id() { return KoID("fill", i18n("Fill Tool")); }
+
 
 };
 

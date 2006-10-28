@@ -58,7 +58,7 @@ void KoToolBox::setup() {
 
     // loop over all sections.
     QList<QString> sections = m_buttons.keys();
-    // but first make the main and dynamic be the first and last respectively.
+    // but first make the main and dynamic be the first and second respectively.
     sections.removeAll(KoToolFactory::mainToolType());
     sections.insert(0, KoToolFactory::mainToolType());
     sections.removeAll(KoToolFactory::dynamicToolType());

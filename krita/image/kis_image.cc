@@ -29,6 +29,8 @@
 #include <QApplication>
 #include <QThread>
 #include <QDateTime>
+#include <QRect>
+#include <QRegion>
 
 #include <kcommand.h>
 #include <kdebug.h>
@@ -992,6 +994,11 @@ QRegion KisImage::extent() const
     KisExtentVisitor v(QRect(0, 0, width(), height()), false);
     m_d->rootLayer->accept(v);
     return v.region();
+}
+
+QRegion KisImage::dirtyRegion() const
+{
+    return QRegion(m_d->dirtyRect);
 }
 
 KisPaintDeviceSP KisImage::activeDevice()

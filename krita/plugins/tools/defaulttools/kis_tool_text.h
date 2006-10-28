@@ -21,7 +21,7 @@
 
 #include "kis_tool_paint.h"
 
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
 class QFont;
 class QLabel;
@@ -40,7 +40,7 @@ public:
     virtual void update(KisCanvasSubject *subject);
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_FILL; }
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
 
     virtual QWidget* createOptionWidget(QWidget* parent);
 public slots:
@@ -55,19 +55,24 @@ private:
 };
 
 
-class KisToolTextFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolTextFactory : public KoToolFactory {
+
 public:
-    KisToolTextFactory() : super() {};
+    KisToolTextFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolText", i18n( "Text" ))
+        {
+            setToolTip(i18n("Place a single line of uneditable text on the canvas"));
+            setToolType(TOOL_TYPE_FILL);
+            setPriority(0);
+            setIcon("tool_text");
+        };
+
     virtual ~KisToolTextFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolText();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolText(canvas);
     }
-    virtual KoID id() { return KoID("text", i18n("Text Tool")); }
+
 };
 
 

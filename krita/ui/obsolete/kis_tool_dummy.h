@@ -20,7 +20,7 @@
 #define KIS_TOOL_DUMMY_H_
 
 #include "kis_tool_non_paint.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include <krita_export.h>
 
 #include "KoPoint.h"
@@ -52,7 +52,7 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
 
     virtual QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();
@@ -66,13 +66,13 @@ private:
     bool m_dragging;
 };
 
-class KisToolDummyFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolDummyFactory : public KoToolFactory {
+    typedef KoToolFactory super;
 public:
     KisToolDummyFactory() : super() {};
     virtual ~KisToolDummyFactory() {};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
+    virtual KisTool * createTool(KoCanvasBase *canvas) {
         KisTool * t =  new KisToolDummy();
         Q_CHECK_PTR(t);
         t->setup(ac);

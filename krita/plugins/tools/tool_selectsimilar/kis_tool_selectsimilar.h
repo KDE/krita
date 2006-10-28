@@ -19,7 +19,7 @@
 #define KIS_TOOL_SELECT_PICKER_H_
 
 #include <kis_tool_non_paint.h>
-#include <kis_tool_factory.h>
+#include <KoToolFactory.h>
 #include <kis_selection.h>
 
 class KisCanvasSubject;
@@ -80,19 +80,25 @@ private slots:
     void slotTimer();
 };
 
-class KisToolSelectSimilarFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolSelectSimilarFactory : public KoToolFactory {
+
 public:
-    KisToolSelectSimilarFactory() : super() {};
+    KisToolSelectSimilarFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolSelectSimilar", i18n( "Select similar colors")
+        {
+            setToolTip( i18n( "Select similar colors" ) );
+            setToolType( TOOL_TYPE_SELECTED );
+            setIcon( "tool_similar_selection" );
+            setShortcut( Qt::CTRL + Qt::Key_E );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolSelectSimilarFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolSelectSimilar();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return  new KisToolSelectSimilar(canvas);
     }
-    virtual KoID id() { return KoID("selectsimilar", i18n("Select Similar")); }
+
 };
 
 

@@ -25,7 +25,7 @@
 #include "KoPoint.h"
 #include "kis_tool_non_paint.h"
 #include "kis_selection.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
 class KisSelectionOptions;
 
@@ -50,7 +50,7 @@ public:
     virtual void paint(QPainter& gc, const QRect& rc);
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
 
 public slots:
     virtual void slotSetAction(int);
@@ -73,19 +73,24 @@ private:
 
 };
 
-class KisToolSelectRectangularFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolSelectRectangularFactory : public KoToolFactory {
+
 public:
-    KisToolSelectRectangularFactory() : super() {};
+    KisToolSelectRectangularFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolSelectRectangular", i18n( "Rectangular Selection" ))
+        {
+            setToolTip( i18n( "Select a rectangular area" ) );
+            setToolType( TOOL_TYPE_SELECTED );
+            setIcon( "tool_rect_selection" );
+            setShortcut( Qt::Key_R );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolSelectRectangularFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolSelectRectangular();
-        t->setup(ac);
-        Q_CHECK_PTR(t);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return  new KisToolSelectRectangular(canvas);
     }
-    virtual KoID id() { return KoID("rectangularselect", i18n("Rectangular Select Tool")); }
 };
 
 

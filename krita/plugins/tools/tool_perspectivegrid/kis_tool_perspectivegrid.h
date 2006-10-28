@@ -22,7 +22,7 @@
 
 #include <kis_perspective_grid.h>
 #include <kis_tool_non_paint.h>
-#include <kis_tool_factory.h>
+#include <KoToolFactory.h>
 
 class KisToolPerspectiveGrid : public KisToolNonPaint {
     Q_OBJECT
@@ -51,8 +51,8 @@ public:
     virtual enumToolType toolType() { return TOOL_VIEW; }
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
-    
+    virtual void buttonRelease(KoPointerEvent *event);
+
 //     QWidget* createOptionWidget(QWidget* parent);
 //     virtual QWidget* optionWidget();
 
@@ -88,19 +88,25 @@ private:
 };
 
 
-class KisToolPerspectiveGridFactory : public KisToolFactory {
-    typedef KisToolFactory super;
-public:
-    KisToolPerspectiveGridFactory() : super() {};
-    virtual ~KisToolPerspectiveGridFactory(){};
+class KisToolPerspectiveGridFactory : public KoToolFactory {
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolPerspectiveGrid();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+public:
+    KisToolPerspectiveGridFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolPerspectiveGrid", i18n( "Perspective grid" ))
+        {
+            setToolTip( i18n( "Edit the perspective grid" ) );
+            setToolType( TOOL_TYPE_VIEW );
+            setIcon( "tool_perspectivegrid" );
+            setPriority( 0 );
+        };
+
+
+    virtual ~KisToolPerspectiveGridFactory() {};
+
+    virtual KoTool * createTool(KoCanvasBase * canvas) {
+        return new KisToolPerspectiveGrid(canvas);
     }
-    virtual KoID id() { return KoID("perspectivegridtool", i18n("Perspective Grid Tool")); }
+
 };
 
 

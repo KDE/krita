@@ -192,7 +192,7 @@ void KisToolSelectPolygonal::move(KoPointerEvent *event)
     }
 }
 
-void KisToolSelectPolygonal::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolSelectPolygonal::buttonRelease(KoPointerEvent *event)
 {
     if (!m_subject)
         return;

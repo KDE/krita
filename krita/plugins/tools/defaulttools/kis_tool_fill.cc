@@ -143,7 +143,7 @@ void KisToolFill::buttonPress(KoPointerEvent *e)
     m_startPos = e->pos();
 }
 
-void KisToolFill::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolFill::buttonRelease(KoPointerEvent *e)
 {
     if (!m_subject) return;
     if (!m_currentImage || !m_currentImage->activeDevice()) return;

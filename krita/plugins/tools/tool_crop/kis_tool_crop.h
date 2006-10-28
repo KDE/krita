@@ -25,7 +25,7 @@
 #include <qregion.h>
 
 #include <kis_tool_non_paint.h>
-#include <kis_tool_factory.h>
+#include <KoToolFactory.h>
 
 #include "ui_wdg_tool_crop.h"
 
@@ -69,7 +69,7 @@ public:
     virtual void paint(QPainter& gc, const QRect& rc);
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
     virtual void doubleClick(KoPointerEvent *);
 
 public slots:
@@ -136,19 +136,24 @@ private:
     };
 };
 
-class KisToolCropFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolCropFactory : public KoToolFactory {
+
 public:
-    KisToolCropFactory() : super() {};
+    KisToolCropFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolCrop", i18n( "Crop" ))
+        {
+            setToolTip(i18n("Crop the image to an area"));
+            setToolType(TOOL_TYPE_TRANSFORM);
+            setPriority(0);
+            setIcon("tool_crop");
+        };
+
     virtual ~KisToolCropFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t = new KisToolCrop();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolCrop(canvas);
     }
-    virtual KoID id() { return KoID("crop", i18n("Crop Tool")); }
+
 };
 
 

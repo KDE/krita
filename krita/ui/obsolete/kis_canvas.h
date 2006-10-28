@@ -66,7 +66,7 @@
 class KoPointerEvent;
 class KoPointerEvent;
 class KoPointerEvent;
-class KisButtonReleaseEvent;
+class KoPointerEvent;
 class KoPointerEvent;
 class KisCanvasWidgetPainter;
 
@@ -131,7 +131,7 @@ signals:
     void sigGotDropEvent(QDropEvent*);
     void sigGotMoveEvent(KoPointerEvent *);
     void sigGotButtonPressEvent(KoPointerEvent *);
-    void sigGotButtonReleaseEvent(KisButtonReleaseEvent *);
+    void sigGotButtonReleaseEvent(KoPointerEvent *);
     void sigGotDoubleClickEvent(KoPointerEvent *);
 
 protected:

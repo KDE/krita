@@ -32,7 +32,7 @@
 
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_tool_registry.h>
+#include <KoToolRegistry.h>
 
 #include "tool_star.h"
 #include "kis_tool_star.h"
@@ -47,10 +47,10 @@ ToolStar::ToolStar(QObject *parent, const QStringList &)
 {
     setInstance(ToolStarFactory::instance());
 
-    if ( parent->inherits("KisToolRegistry") )
+    if ( parent->inherits("KoToolRegistry") )
     {
-        KisToolRegistry * r = dynamic_cast<KisToolRegistry*>( parent );
-        r->add(KisToolFactorySP(new KisToolStarFactory()));
+        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>( parent );
+        r->add(KoToolFactorySP(new KisToolStarFactory()));
     }
 
 }

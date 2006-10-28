@@ -28,7 +28,7 @@
 
 #include "KoPoint.h"
 #include "kis_tool_non_paint.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include "kis_selection.h"
 
 class KisSelectionOptions;
@@ -49,7 +49,7 @@ public:
 
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonRelease(KoPointerEvent *event);
 
     QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();
@@ -80,19 +80,24 @@ private:
 };
 
 
-class KisToolSelectOutlineFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolSelectOutlineFactory : public KoToolFactory {
+    typedef KoToolFactory super;
 public:
-    KisToolSelectOutlineFactory() : super() {};
+    KisToolSelectOutlineFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolSelectOutline", i18n("Outline Selection"))
+        {
+            setToolTip( i18n( "Select an area by its outline" ) );
+            setToolType( TOOL_TYPE_SELECTED );
+            setIcon( "tool_outline_selection" );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolSelectOutlineFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolSelectOutline();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolSelectOutline(canvas);
     }
-    virtual KoID id() { return KoID("selectoutline", i18n("Select Outline tool")); }
+
 };
 
 

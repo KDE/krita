@@ -114,7 +114,7 @@ void KisToolFreehand::buttonPress(KoPointerEvent *e)
     }
 }
 
-void KisToolFreehand::buttonRelease(KisButtonReleaseEvent* e)
+void KisToolFreehand::buttonRelease(KoPointerEvent* e)
 {
     if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();

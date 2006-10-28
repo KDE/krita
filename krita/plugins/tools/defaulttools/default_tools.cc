@@ -33,7 +33,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_tool.h>
-#include <kis_tool_registry.h>
+#include <KoToolRegistry.h>
 #include "default_tools.h"
 
 //#include "kis_tool_fill.h"
@@ -60,22 +60,22 @@ DefaultTools::DefaultTools(QObject *parent, const QStringList &)
 {
     setInstance(DefaultToolsFactory::instance());
 
-    if ( parent->inherits("KisToolRegistry") )
+    if ( parent->inherits("KoToolRegistry") )
     {
-        KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
+        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
 
-        //r->add(KisToolFactorySP(new KisToolFillFactory()));
-        //r->add(KisToolFactorySP(new KisToolGradientFactory()));
-        r->add(KisToolFactorySP(new KisToolBrushFactory()));
-        //r->add(KisToolFactorySP(new KisToolColorPickerFactory()));
-        //r->add(KisToolFactorySP(new KisToolLineFactory()));
-        //r->add(KisToolFactorySP(new KisToolTextFactory()));
-        //r->add(KisToolFactorySP(new KisToolDuplicateFactory()));
-        //r->add(KisToolFactorySP(new KisToolMoveFactory()));
-        //r->add(KisToolFactorySP(new KisToolZoomFactory()));
-        //r->add(KisToolFactorySP(new KisToolEllipseFactory()));
-        //r->add(KisToolFactorySP(new KisToolRectangleFactory()));
-        //r->add(KisToolFactorySP(new KisToolPanFactory()));
+        //r->add(KoToolFactorySP(new KisToolFillFactory()));
+        //r->add(KoToolFactorySP(new KisToolGradientFactory()));
+        r->add(KoToolFactorySP(new KisToolBrushFactory()));
+        //r->add(KoToolFactorySP(new KisToolColorPickerFactory()));
+        //r->add(KoToolFactorySP(new KisToolLineFactory()));
+        //r->add(KoToolFactorySP(new KisToolTextFactory()));
+        //r->add(KoToolFactorySP(new KisToolDuplicateFactory()));
+        //r->add(KoToolFactorySP(new KisToolMoveFactory()));
+        //r->add(KoToolFactorySP(new KisToolZoomFactory()));
+        //r->add(KoToolFactorySP(new KisToolEllipseFactory()));
+        //r->add(KoToolFactorySP(new KisToolRectangleFactory()));
+        //r->add(KoToolFactorySP(new KisToolPanFactory()));
     }
 }
 

@@ -151,7 +151,7 @@ void KisToolPolyline::move(KoPointerEvent *event)
     }
 }
 
-void KisToolPolyline::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolPolyline::buttonRelease(KoPointerEvent *event)
 {
         if (!m_subject || !m_currentImage)
             return;

@@ -106,7 +106,7 @@ void KisToolEllipse::move(KoPointerEvent *event)
     }
 }
 
-void KisToolEllipse::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolEllipse::buttonRelease(KoPointerEvent *event)
 {
     if (!m_subject || !m_currentImage)
         return;

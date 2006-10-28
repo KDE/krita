@@ -32,7 +32,7 @@
 
 #include <kis_debug_areas.h>
 #include <kis_types.h>
-#include <kis_tool_registry.h>
+#include <KoToolRegistry.h>
 #include <kis_paintop_registry.h>
 
 #include "tool_filter.h"
@@ -49,10 +49,10 @@ ToolFilter::ToolFilter(QObject *parent, const QStringList &)
 {
     setInstance(ToolFilterFactory::instance());
 
-    if ( parent->inherits("KisToolRegistry") )
+    if ( parent->inherits("KoToolRegistry") )
     {
-        KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
-        r->add(KisToolFactorySP(new KisToolFilterFactory()));
+        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
+        r->add(KoToolFactorySP(new KisToolFilterFactory()));
 
         // XXX: Put this in a separate plugin?
         KisPaintOpRegistry * pr = KisPaintOpRegistry::instance();

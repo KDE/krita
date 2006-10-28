@@ -32,7 +32,7 @@
 
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_tool_registry.h>
+#include <KoToolRegistry.h>
 
 #include "tool_crop.h"
 #include "kis_tool_crop.h"
@@ -47,10 +47,10 @@ ToolCrop::ToolCrop(QObject *parent, const QStringList &)
 {
     setInstance(ToolCropFactory::instance());
 
-    if ( parent->inherits("KisToolRegistry") )
+    if ( parent->inherits("KoToolRegistry") )
     {
-        KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
-        r->add(KisToolFactorySP(new KisToolCropFactory()));
+        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
+        r->add(KoToolFactorySP(new KisToolCropFactory()));
     }
 
 }

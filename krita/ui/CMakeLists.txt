@@ -75,13 +75,9 @@ set(kritaui_LIB_SRCS
     kis_view_converter.cpp
     kobirdeyepanel.cpp
     squeezedcombobox.cpp
-    #    kis_tool.cc
-    #    kis_tool_dummy.cc
     #    kis_tool_freehand.cc
-    #    kis_tool_manager.cc
     #    kis_tool_non_paint.cc
     #    kis_tool_paint.cc
-    #    kis_tool_registry.cc
     #    kis_tool_shape.cc
 )
 
@@ -162,7 +158,6 @@ install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})
 #    kis_palette_widget.h
 #    kis_previewdialog.h
 #    kis_previewwidget.h
-#    kis_tool_controller.h
 #    kis_tool.h
 #    kis_tool_non_paint.h
 #    kis_tool_paint.h
@@ -172,7 +167,6 @@ install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})
 #    kis_tool_types.h
 #    kis_tool_registry.h
 #    kis_view2.h
-#    kis_tool_factory.h
 #    kobirdeyepanel.h
 #    kis_filters_listview.h
 #    KoInputDevice.h

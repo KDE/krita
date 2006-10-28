@@ -264,6 +264,11 @@ public:
     QRegion extent() const;
 
     /**
+     * @return a region built from all the dirty rects in all layers in this image
+     */
+    QRegion dirtyRegion() const;
+
+    /**
      *  returns a paintdevice that contains the merged layers of this image, within
      * the bounds of this image (with the colorspace and profile of this image)
      */

@@ -384,7 +384,7 @@ void KisToolCrop::updateWidgetValues(bool updateratio)
         setOptionWidgetRatio((double)r.width() / (double)r.height() );
 }
 
-void KisToolCrop::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolCrop::buttonRelease(KoPointerEvent *e)
 {
     if (m_subject && m_subject->currentImg() && m_selecting && e->button() == Qt::LeftButton) {
 

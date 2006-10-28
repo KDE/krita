@@ -44,7 +44,7 @@ public:
 
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
 
     virtual enumToolType toolType() { return TOOL_FREEHAND; }
 

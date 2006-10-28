@@ -158,7 +158,7 @@ void KisToolSelectRectangular::move(KoPointerEvent *e)
     }
 }
 
-void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolSelectRectangular::buttonRelease(KoPointerEvent *e)
 {
     if (m_subject && m_selecting && e->button() == Qt::LeftButton) {
 

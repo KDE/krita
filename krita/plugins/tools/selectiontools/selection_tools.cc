@@ -33,7 +33,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_tool.h>
-#include <kis_tool_registry.h>
+#include <KoToolRegistry.h>
 
 #include "selection_tools.h"
 
@@ -54,16 +54,16 @@ SelectionTools::SelectionTools(QObject *parent, const QStringList &)
 {
     setInstance(SelectionToolsFactory::instance());
 
-    if ( parent->inherits("KisToolRegistry") )
+    if ( parent->inherits("KoToolRegistry") )
     {
-        KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
-        r->add(KisToolFactorySP(new KisToolSelectOutlineFactory()));
-        r->add(KisToolFactorySP(new KisToolSelectPolygonalFactory()));
-        r->add(KisToolFactorySP(new KisToolSelectRectangularFactory()));
-        r->add(KisToolFactorySP(new KisToolSelectBrushFactory()));
-        r->add(KisToolFactorySP(new KisToolSelectContiguousFactory()));
-        r->add(KisToolFactorySP(new KisToolSelectEllipticalFactory()));
-        r->add(KisToolFactorySP(new KisToolSelectEraserFactory()));
+        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
+        r->add(KoToolFactorySP(new KisToolSelectOutlineFactory()));
+        r->add(KoToolFactorySP(new KisToolSelectPolygonalFactory()));
+        r->add(KoToolFactorySP(new KisToolSelectRectangularFactory()));
+        r->add(KoToolFactorySP(new KisToolSelectBrushFactory()));
+        r->add(KoToolFactorySP(new KisToolSelectContiguousFactory()));
+        r->add(KoToolFactorySP(new KisToolSelectEllipticalFactory()));
+        r->add(KoToolFactorySP(new KisToolSelectEraserFactory()));
     }
 }
 

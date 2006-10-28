@@ -28,14 +28,14 @@
 
 class KActionCollection;
 
-class KisToolFactory  : public KisShared
+class KoToolFactory  : public KisShared
 {
 
 public:
-    KisToolFactory() {}
-    virtual ~KisToolFactory() {};
+    KoToolFactory() {}
+    virtual ~KoToolFactory() {};
 
-    virtual KisTool * createTool(KActionCollection * ac) = 0;
+    virtual KisTool * createTool(KoCanvasBase *canvas) = 0;
     virtual KoID id() { return KoID("Abstract Tool", i18n("Abstract Tool")); }
 
 };

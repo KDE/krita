@@ -32,7 +32,7 @@
 
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_tool_registry.h>
+#include <KoToolRegistry.h>
 
 #include "tool_transform.h"
 #include "kis_tool_transform.h"
@@ -47,12 +47,12 @@ ToolTransform::ToolTransform(QObject *parent, const QStringList &)
 {
     setInstance(ToolTransformFactory::instance());
 
-    if ( parent->inherits("KisToolRegistry") )
+    if ( parent->inherits("KoToolRegistry") )
     {
-        KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
+        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
         KisToolTransformFactory * f = new KisToolTransformFactory();
         Q_CHECK_PTR(f);
-        r->add(KisToolFactorySP(f));
+        r->add(KoToolFactorySP(f));
     }
 
 }

@@ -26,8 +26,8 @@
 #include <kactioncollection.h>
 #include <klocale.h>
 
-// #include "kis_canvas_controller.h"
-// #include "kis_canvas_subject.h"
+#include "kis_canvas_controller.h"
+#include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_tool_dummy.h"
 #include "KoPointerEvent.h"
@@ -77,7 +77,7 @@ void KisToolDummy::move(KoPointerEvent *e)
     }
 }
 
-void KisToolDummy::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolDummy::buttonRelease(KoPointerEvent *e)
 {
     if (m_subject && m_dragging && e->button() == Qt::LeftButton) {
         m_dragging = false;

@@ -40,7 +40,6 @@
 #include "KoPointerEvent.h"
 #include "KoPointerEvent.h"
 #include "kis_cursor.h"
-#include "kis_tool_controller.h"
 #include "kis_vec.h"
 #include "kis_selection.h"
 #include "kis_selection_options.h"
@@ -161,7 +160,7 @@ void KisToolCurve::keyRelease(QKeyEvent *)
 
 }
 
-void KisToolCurve::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolCurve::buttonRelease(KoPointerEvent *event)
 {
     updateOptions(QApplication::keyboardModifiers());
     m_dragging = false;

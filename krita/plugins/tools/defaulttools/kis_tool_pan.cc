@@ -73,7 +73,7 @@ void KisToolPan::move(KoPointerEvent *e)
     }
 }
 
-void KisToolPan::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolPan::buttonRelease(KoPointerEvent *e)
 {
     if (m_subject && m_dragging && e->button() == Qt::LeftButton) {
         setCursor(m_openHandCursor);

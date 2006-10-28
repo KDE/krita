@@ -257,7 +257,7 @@ void KisToolPerspectiveGrid::move(KoPointerEvent *event)
     }
 }
 
-void KisToolPerspectiveGrid::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolPerspectiveGrid::buttonRelease(KoPointerEvent *event)
 {
     if (!m_subject)
         return;

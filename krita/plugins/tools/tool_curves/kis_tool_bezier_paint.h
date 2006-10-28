@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_BEZIER_PAINT_H_
 #define KIS_TOOL_BEZIER_PAINT_H_
 
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include "kis_tool_bezier.h"
 
 class KisToolBezierPaint : public KisToolBezier {
@@ -36,26 +36,31 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual Q_UINT32 priority() { return 7; }
-    
+
 protected:
 
     virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);
 
 };
 
-class KisToolBezierPaintFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolBezierPaintFactory : public KoToolFactory {
+
 public:
-    KisToolBezierPaintFactory() : super() {};
+    KisToolBezierPaintFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolBezierPaint", i18n( "Paint with curves" ))
+        {
+            setToolTip(i18n("Draw cubic beziers. Keep Alt, Control or Shift pressed for options. Return or double-click to finish."));
+            setToolType(TOOL_TYPE_SHAPE);
+            setPriority(0);
+            setIcon("tool_bezier_paint");
+        };
+
     virtual ~KisToolBezierPaintFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolBezierPaint();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolBezierPaint(canvas);
     }
-    virtual KoID id() { return KoID("beziershape", i18n("Bezier Painting Tool")); }
+
 };
 
 #endif //__KIS_TOOL_CURVE_PAINT_H_

@@ -62,7 +62,7 @@ public:
     virtual void buttonPress(KoPointerEvent *event);
     virtual void doubleClick(KoPointerEvent *e);
     virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonRelease(KoPointerEvent *event);
     virtual QString quickHelp() const;
     void finish();
     virtual void keyPress(QKeyEvent *e);
@@ -70,7 +70,7 @@ public:
 public slots:
 
     void deactivate();
-    
+
 protected:
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);
@@ -89,21 +89,26 @@ private:
 };
 
 
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
-class KisToolPolylineFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolPolylineFactory : public KoToolFactory {
+
 public:
-    KisToolPolylineFactory() : super() {};
+    KisToolPolylineFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolPolyline", i18n( "Polyline" ))
+        {
+            setToolTip( i18n( "Draw a polyline. Shift-mouseclick ends the polyline." ) );
+            setToolType( TOOL_TYPE_SHAPE );
+            setIcon( "polyline" );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolPolylineFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolPolyline();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolPolyline(canvas);
     }
-    virtual KoID id() { return KoID("polyline", i18n("Polyline Tool")); }
+
 };
 
 

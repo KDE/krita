@@ -27,6 +27,7 @@
 
 #include <klocale.h>
 #include <QObject>
+#include <QKeySequence>
 
 /**
  * A factory for KoTool objects.
@@ -57,7 +58,7 @@ class FLAKE_EXPORT KoToolFactory : public QObject {
 public:
     /**
      * Create the new factory
-     * @param parent the parent QWidget for memory management usage.
+     * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the tool, for
      *   example for use by the KoTool::sigActivateTemporary.
      * @param name the user visible name of the tool this factory creates.
@@ -114,9 +115,19 @@ public:
     const QString &activationShapeId() const;
 
     /**
+     * Return the default keyboard shortcut for activation of this tool (if
+     * the shape this tool belongs to is active). 
+     *
+     * @return the shortcut 
+     */
+    QKeySequence shortcut() const;
+
+    /**
      * Returns the main toolType
      * Each tool has a toolType which it uses to be grouped in the toolbox.
-     * The predefined areas are main and dynamic.
+     * The predefined areas are main and dynamic. "main" tools are always
+     * shown.
+     *
      * @see toolType()
      * @see setToolType()
      */
@@ -124,7 +135,11 @@ public:
     /**
      * Returns the dynamic toolType
      * Each tool has a toolType which it uses to be grouped in the toolbox.
-     * The predefined areas are main and dynamic.
+     * The predefined areas are main and dynamic. Dynamic tools are hidden
+     * until the shape they belong to is activated. XXX: hiding and showing
+     * buttons is a no-no from a usability pov, so we should discuss this
+     * with KDE's usability group.
+     *
      * @see toolType()
      * @see setToolType()
      */
@@ -162,6 +177,11 @@ protected:
      */
     void setActivationShapeID(const QString &activationShapeId);
 
+    /**
+     * Set the default shortcut for activation of this tool.
+     */
+    void setShortcut(const QKeySequence & shortcut);
+
 private:
     QString m_toolType;
     QString m_tooltip;
@@ -169,6 +189,7 @@ private:
     QString m_icon;
     const QString m_name, m_id;
     int m_priority;
+    QKeySequence m_shortcut;
 };
 
 #endif

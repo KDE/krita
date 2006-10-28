@@ -23,7 +23,7 @@
 
 #include "kis_strategy_move.h"
 #include "kis_tool_non_paint.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
 // XXX: Moving is not nearly smooth enough!
 class KisToolMove : public KisToolNonPaint {
@@ -45,7 +45,7 @@ public:
 
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
 
 private:
     KisCanvasSubject *m_subject;
@@ -54,19 +54,25 @@ private:
 };
 
 
-class KisToolMoveFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolMoveFactory : public KoToolFactory {
+
 public:
-    KisToolMoveFactory() : super() {};
+    KisToolMoveFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolMove", i18n( "Move" ))
+        {
+            setToolTip(i18n("Move a layer"));
+            setToolType(TOOL_TYPE_TRANSFORM);
+            setPriority(0);
+            setIcon("tool_move");
+            setShortcut( Qt::SHIFT + Qt::Key_V );
+        };
+
     virtual ~KisToolMoveFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolMove(); 
-        Q_CHECK_PTR(t);
-        t->setup(ac); 
-        return t; 
+
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolMove(canvas);
     }
-    virtual KoID id() { return KoID("move", i18n("Move Tool")); }
+
 };
 
 

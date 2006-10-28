@@ -22,7 +22,7 @@
 #define __KIS_TOOL_DUPLICATE_H__
 
 #include "kis_tool_freehand.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
 class KoPointerEvent;
 class KoPointerEvent;
@@ -38,12 +38,12 @@ class KisToolDuplicate : public KisToolFreehand {
 public:
     KisToolDuplicate();
     virtual ~KisToolDuplicate();
-  
+
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_FREEHAND; }
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    
+
     virtual void paintAt(const KoPoint &pos,
                  const double pressure,
                  const double xTilt,
@@ -69,19 +69,25 @@ protected:
 };
 
 
-class KisToolDuplicateFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolDuplicateFactory : public KoToolFactory {
+
 public:
-    KisToolDuplicateFactory() : super() {};
+
+    KisToolDuplicateFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolDuplicate", i18n( "Duplicate Brush" ))
+        {
+            setToolTip( i18n( "Duplicate parts of the image. Shift-click to select the point to duplicate from to begin." ) );
+            setToolType( TOOL_TYPE_FREEHAND );
+            setIcon( "tool_duplicate" );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolDuplicateFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolDuplicate();
-        Q_CHECK_PTR(t);
-        t->setup(ac); 
-        return t; 
+
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return  new KisToolDuplicate(canvas);
     }
-    virtual KoID id() { return KoID("duplicate", i18n("Duplicate Tool")); }
+
 };
 
 

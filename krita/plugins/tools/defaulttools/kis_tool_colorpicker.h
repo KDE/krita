@@ -23,7 +23,7 @@
 #include <QList>
 
 #include "kis_tool_non_paint.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include "ui_wdgcolorpicker.h"
 
 class KisResource;
@@ -76,19 +76,25 @@ private:
     QList<KisPalette*> m_palettes;
 };
 
-class KisToolColorPickerFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolColorPickerFactory : public KoToolFactory {
+
 public:
-    KisToolColorPickerFactory() : super() {};
+    KisToolColorPickerFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolColorPicker", i18n( "Color Picker" ))
+        {
+            setToolTip(i18n("Select a color from the image or current layer"));
+            setToolType(TOOL_TYPE_SELECTED);
+            setPriority(0);
+            setIcon("colorpicker");
+            setShortcut( Qt::Key_P );
+        };
+
+
     virtual ~KisToolColorPickerFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolColorPicker();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolColorPicker(canvas);
     }
-    virtual KoID id() { return KoID("colorpicker", i18n("Color Picker")); }
 };
 
 

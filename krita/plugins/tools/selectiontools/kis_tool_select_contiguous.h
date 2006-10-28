@@ -24,7 +24,7 @@
 
 #include <kis_tool.h>
 #include <kis_tool_non_paint.h>
-#include <kis_tool_factory.h>
+#include <KoToolFactory.h>
 #include <kis_selection.h>
 
 class QWidget;
@@ -75,19 +75,24 @@ private:
     bool m_sampleMerged;
 };
 
-class KisToolSelectContiguousFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolSelectContiguousFactory : public KoToolFactory {
+
 public:
-    KisToolSelectContiguousFactory() : super() {};
+    KisToolSelectContiguousFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolSelectContiguous", i18n( "Select Contiguous Area" ))
+        {
+            setToolTip( i18n( "Select a contiguous area of colors" ) );
+            setToolType( TOOL_TYPE_SELECTED );
+            setIcon( "tool_contiguous_selection" );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolSelectContiguousFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolSelectContiguous();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return  new KisToolSelectContiguous(canvas);
     }
-    virtual KoID id() { return KoID("contiguousselect", i18n("Contiguous Select Tool")); }
+
 };
 
 

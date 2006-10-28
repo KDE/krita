@@ -27,7 +27,7 @@
 
 #include "KoPoint.h"
 #include "kis_selection.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 #include "kis_tool_non_paint.h"
 
 class KisSelectionOptions;
@@ -53,7 +53,7 @@ public:
     virtual void paint(QPainter& gc, const QRect& rc);
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
 
 public slots:
     virtual void slotSetAction(int);
@@ -75,19 +75,25 @@ private:
     enumSelectionMode m_selectAction;
 };
 
-class KisToolSelectEllipticalFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolSelectEllipticalFactory : public KoToolFactory {
+
 public:
-    KisToolSelectEllipticalFactory() : super() {};
+    KisToolSelectEllipticalFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolSelectElliptical", i18n( "Elliptical Selection" ))
+        {
+            setToolTip( i18n( "Select an elliptical area" ) );
+            setToolType( TOOL_TYPE_SELECTED);
+            setIcon( "tool_elliptical_selection" );
+            setShortcut( Qt::Key_J );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolSelectEllipticalFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolSelectElliptical();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return  new KisToolSelectElliptical(canvas);
     }
-    virtual KoID id() { return KoID("ellipticalselect", i18n("Elliptical Select Tool")); }
+
 };
 
 

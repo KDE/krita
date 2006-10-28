@@ -101,7 +101,7 @@ void KisToolStar::move(KoPointerEvent *event)
     }
 }
 
-void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolStar::buttonRelease(KoPointerEvent *event)
 {
     if (!m_subject || !m_currentImage)
         return;

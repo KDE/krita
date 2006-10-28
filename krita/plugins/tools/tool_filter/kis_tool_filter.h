@@ -22,7 +22,7 @@
 #define __KIS_TOOL_FILTER_H__
 
 #include "kis_tool_freehand.h"
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
 class QComboBox;
 class QGridLayout;
@@ -60,19 +60,24 @@ private:
 };
 
 
-class KisToolFilterFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolFilterFactory : public KoToolFactory {
+
 public:
-    KisToolFilterFactory() : super() {};
+    KisToolFilterFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolFilter", i18n( "Filter Brush" ) )
+        {
+            setToolTip( i18n( "Paint with a filter and the the current brush" ) );
+            setToolType( TOOL_TYPE_FREEHAND );
+            setIcon( "tool_filter" );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolFilterFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolFilter();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolFilter(canvas);
     }
-    virtual KoID id() { return KoID("filter", i18n("Filter Tool")); }
+
 };
 
 #endif //__KIS_TOOL_FILTER_H__

@@ -56,7 +56,6 @@
 #include <kis_selection.h>
 #include <kis_filter_strategy.h>
 #include <kis_cmb_idlist.h>
-#include <kis_tool_controller.h>
 #include <kis_perspectivetransform_worker.h>
 
 
@@ -170,10 +169,6 @@ void KisToolPerspectiveTransform::activate()
     {
         //connect(m_subject, commandExecuted(KCommand *c), this, notifyCommandAdded( KCommand * c));
         m_subject->undoAdapter()->setCommandHistoryListener( this );
-
-//         KisToolControllerInterface *controller = m_subject->toolController();
-//         if (controller)
-//             controller->setCurrentTool(this);
 
         PerspectiveTransformCmd * cmd=0;
 
@@ -422,7 +417,7 @@ void KisToolPerspectiveTransform::move(KoPointerEvent *event)
     };
 }
 
-void KisToolPerspectiveTransform::buttonRelease(KisButtonReleaseEvent * event)
+void KisToolPerspectiveTransform::buttonRelease(KoPointerEvent * event)
 {
     KisImageSP img = m_subject->currentImg();
 

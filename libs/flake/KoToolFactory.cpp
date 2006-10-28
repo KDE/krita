@@ -55,6 +55,10 @@ const QString &KoToolFactory::activationShapeId() const {
     return m_activationId;
 }
 
+QKeySequence KoToolFactory::shortcut() const {
+    return m_shortcut;
+}
+
 void KoToolFactory::setActivationShapeID(const QString &activationShapeId) {
     m_activationId = activationShapeId;
 }
@@ -74,6 +78,12 @@ void KoToolFactory::setIcon(const QString & icon) {
 void KoToolFactory::setPriority(int newPriority) {
     m_priority = newPriority;
 }
+
+void KoToolFactory::setShortcut(const QKeySequence & shortcut)
+{
+    m_shortcut = shortcut;
+}
+
 
 const KoID KoToolFactory::id() const {
     return KoID(m_id, m_name);

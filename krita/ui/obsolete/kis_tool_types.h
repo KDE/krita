@@ -30,7 +30,7 @@ typedef KisSharedPtrVector<KisTool> vKisTool;
 typedef vKisTool::iterator vKisTool_it;
 typedef vKisTool::const_iterator vKisTool_cit;
 
-class KisToolFactory;
-typedef KisSharedPtr<KisToolFactory> KisToolFactorySP;
+class KoToolFactory;
+typedef KisSharedPtr<KoToolFactory> KoToolFactorySP;
 
 #endif // KIS_TOOL_TYPES_H_

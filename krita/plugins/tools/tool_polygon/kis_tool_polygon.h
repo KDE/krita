@@ -55,7 +55,7 @@ public:
     virtual quint32 priority() { return 4; }
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonRelease(KoPointerEvent *event);
     virtual QString quickHelp() const {
         return i18n("Shift-click will end the polygon.");
     }
@@ -80,21 +80,26 @@ private:
 };
 
 
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
-class KisToolPolygonFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolPolygonFactory : public KoToolFactory {
+
 public:
-    KisToolPolygonFactory() : super() {};
+    KisToolPolygonFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolPolygon", i18n( "Polygon" ))
+        {
+            setToolTip( i18n( "Draw a polygon. Shift-mouseclick ends the polygon." ) );
+            setToolType( TOOL_TYPE_SHAPE );
+            setIcon( "tool_polygon" );
+            setPriority( 0 );
+        };
+
     virtual ~KisToolPolygonFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolPolygon();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolPolygon(canvas);
     }
-    virtual KoID id() { return KoID("polygon", i18n("Polygon Tool")); }
+
 };
 
 

@@ -39,7 +39,6 @@
 #include "kis_config.h"
 #include "kis_cursor.h"
 // #include "kis_canvas_subject.h"
-#include "kis_tool_controller.h"
 #include "kis_tool_paint.h"
 #include "kis_cmb_composite.h"
 #include "kis_image.h"
@@ -95,7 +94,7 @@ void KisToolPaint::move(KoPointerEvent *)
 {
 }
 
-void KisToolPaint::buttonRelease(KisButtonReleaseEvent *)
+void KisToolPaint::buttonRelease(KoPointerEvent *)
 {
 }
 
@@ -198,22 +197,18 @@ void KisToolPaint::setCursor(const QCursor& cursor)
 {
     m_cursor = cursor;
 
-    if (m_subject) {
-        KisToolControllerInterface *controller = m_subject->toolController();
+//     if (m_subject) {
+//         KisToolControllerInterface *controller = m_subject->toolController();
 
-        if (controller && controller->currentTool() == this) {
-            m_subject->canvasController()->setCanvasCursor(m_cursor);
-        }
-    }
+//         if (controller && controller->currentTool() == this) {
+//             m_subject->canvasController()->setCanvasCursor(m_cursor);
+//         }
+//     }
 }
 
 void KisToolPaint::activate()
 {
     if (m_subject) {
-        KisToolControllerInterface *controller = m_subject->toolController();
-
-        if (controller)
-            controller->setCurrentTool(this);
 
         updateCompositeOpComboBox();
 

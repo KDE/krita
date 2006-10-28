@@ -63,7 +63,7 @@ void KisToolNonPaint::move(KoPointerEvent *)
 {
 }
 
-void KisToolNonPaint::buttonRelease(KisButtonReleaseEvent *)
+void KisToolNonPaint::buttonRelease(KoPointerEvent *)
 {
 }
 
@@ -89,22 +89,18 @@ void KisToolNonPaint::setCursor(const QCursor& cursor)
     m_cursor = cursor;
 
     if (m_subject) {
-        KisToolControllerInterface *controller = m_subject->toolController();
-
-        if (controller && controller->currentTool() == this) {
-            m_subject->canvasController()->setCanvasCursor(m_cursor);
-        }
+        m_subject->canvasController()->setCanvasCursor(m_cursor);
     }
 }
 
 void KisToolNonPaint::activate()
 {
-    if (m_subject) {
-        KisToolControllerInterface *controller = m_subject->toolController();
+//     if (m_subject) {
+//         KisToolControllerInterface *controller = m_subject->toolController();
 
-        if (controller)
-            controller->setCurrentTool(this);
-    }
+//         if (controller)
+//             controller->setCurrentTool(this);
+//     }
 }
 
 void KisToolNonPaint::notifyModified() const

@@ -70,7 +70,7 @@ public:
 
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
     virtual void doubleClick(KoPointerEvent *e);
     virtual void keyPress(QKeyEvent *e);
     virtual void keyRelease(QKeyEvent *e);

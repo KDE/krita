@@ -63,7 +63,7 @@ public:
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonRelease(KoPointerEvent *event);
 
 protected:
     virtual void draw(const KoPoint& start, const KoPoint& stop);
@@ -86,21 +86,26 @@ private:
 };
 
 
-#include "kis_tool_factory.h"
+#include "KoToolFactory.h"
 
-class KisToolStarFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolStarFactory : public KoToolFactory {
+
 public:
-    KisToolStarFactory() : super() {};
+    KisToolStarFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolStar", i18n( "Star" ))
+        {
+            setToolTip(i18n("Draw a star with the current brush"));
+            setToolType(TOOL_TYPE_SHAPE);
+            setPriority(0);
+            setIcon("tool_star");
+        };
+
     virtual ~KisToolStarFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolStar();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return new KisToolStar(canvas);
     }
-    virtual KoID id() { return KoID("starshape", i18n("Star Tool")); }
+
 };
 
 

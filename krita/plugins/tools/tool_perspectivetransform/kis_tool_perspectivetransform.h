@@ -29,7 +29,7 @@
 
 #include <kis_layer.h>
 #include <kis_tool_non_paint.h>
-#include <kis_tool_factory.h>
+#include <KoToolFactory.h>
 #include <kis_undo_adapter.h>
 #include <kis_perspective_math.h>
 
@@ -62,7 +62,7 @@ public:
     virtual void paint(QPainter& gc, const QRect& rc);
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonRelease(KoPointerEvent *e);
     void paintOutline();
 
 public:
@@ -94,34 +94,39 @@ private:
     QPointF m_topleft, m_topright, m_bottomleft, m_bottomright;
     QPointF* m_currentSelectedPoint;
     bool m_actualyMoveWhileSelected;
-    
+
     WdgToolPerspectiveTransform *m_optWidget;
-    
+
     KisPaintDeviceSP m_origDevice;
     KisSelectionSP m_origSelection;
     int m_handleHalfSize, m_handleSize;
-    
+
     // The following variables are used in during the draw rect interraction mode
     typedef QVector<QPointF> QPointFVector;
     QPointFVector m_points;
     // The following variables are used when moving a middle handle
     HandleSelected m_handleSelected;
-    
+
 };
 
-class KisToolPerspectiveTransformFactory : public KisToolFactory {
-    typedef KisToolFactory super;
+class KisToolPerspectiveTransformFactory : public KoToolFactory {
 
 public:
-    KisToolPerspectiveTransformFactory() : super() {};
-    virtual ~KisToolPerspectiveTransformFactory(){};
+    KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisToolPerspectiveTransform", i18n( "Perspective Transform" ))
+        {
+            setToolTip( i18n( "Transform the perspectival appearance3 of a layer or a selection" ) );
+            setToolType( TOOL_TYPE_TRANSFORM );
+            setIcon( "tool_perspectivetransform" );
+            setPriority( 0 );
+        };
 
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t = new KisToolPerspectiveTransform();
-        Q_CHECK_PTR(t);
-        t->setup(ac); return t;
+    virtual ~KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&){};
+
+    virtual KoTool * createTool(KoCanvasBase *canvas) {
+        return KisToolPerspectiveTransform(canvas);
     }
-    virtual KoID id() { return KoID("perspective transform", i18n("Perspective transform Tool")); }
+
 };
 
 

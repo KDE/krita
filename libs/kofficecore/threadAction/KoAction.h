@@ -19,7 +19,7 @@
 #ifndef TW_ACTION_H
 #define TW_ACTION_H
 
-#include <WeaverInterface.h>
+#include <ThreadWeaver.h>
 
 #include <koffice_export.h>
 

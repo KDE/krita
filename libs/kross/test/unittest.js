@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 // Print something on the console.
 println("Let's start the KjsEmbed Unittest :-)");
 

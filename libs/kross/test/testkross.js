@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 var kross = Kross
 var kjsaction = kross.action("MyKjsScript")
 

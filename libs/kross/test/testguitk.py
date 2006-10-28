@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env kross
 
 class TkTest:
 	def __init__(self):

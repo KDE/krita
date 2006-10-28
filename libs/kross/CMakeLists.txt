@@ -8,7 +8,7 @@ add_subdirectory( core )
 add_subdirectory( modules )
 
 # commandline-prog to run scripts
-add_subdirectory( runner )
+add_subdirectory( console )
 
 # unittests and such stuff
 if (KDE4_BUILD_TESTS)

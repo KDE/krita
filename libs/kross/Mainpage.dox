@@ -6,6 +6,18 @@
  * way. The application that uses Kross should not need to know
  * anything about the used interpreter-language.
  *
+ * The main parts of Kross:
+ * @ref core The core of Kross
+ * @ref modules The optional Kross modules
+ * @ref console The Kross console application
+ * @ref test The unit- and regression tests.
+ *
+ * The by Kross supported interpreter backends:
+ * @ref python The Python interpreter backend
+ * @ref ruby The Ruby interpreter backend
+ * @ref kjs The KDE JavaScript interpreter backend
+ *
+ * Links:
  * @see http://kross.dipe.org
  * @see http://www.kexi-project.org/wiki/wikiview/index.php?Scripting
  * @see http://www.koffice.org

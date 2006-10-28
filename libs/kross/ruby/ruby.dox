@@ -1,0 +1,4 @@
+/** @section ruby The Ruby interpreter backend
+ *
+ * The Ruby interpreter backend implements scripting with Ruby.
+ */

@@ -1,0 +1,5 @@
+/** @section kjs The KDE JavaScript interpreter backend
+ *
+ * The KDE JavaScript interpreter backend uses the in kdelibs included
+ * kjs and kjsembed libraries to provide a JavaScript backend.
+ */

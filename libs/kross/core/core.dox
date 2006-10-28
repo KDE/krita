@@ -1,0 +1,6 @@
+/** @section core The core of Kross
+ *
+ * The core of Kross provides the framework to deal transparently
+ * with interpreter-backends and offers abstract functionality
+ * to deal with scripts.
+ */

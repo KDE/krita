@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env kross
 
 """
   This Python script is used as performance-tester and profiler

@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 require 'Kross'
 
 dialog = Kross.createDialog("TestGuiFormDialog")

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env kross
 
 """
   This Python script is used to test the Kross scripting framework.

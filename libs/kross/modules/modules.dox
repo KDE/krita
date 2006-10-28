@@ -1,0 +1,5 @@
+/** @section modules The optional Kross modules
+ *
+ * Kross is able to optional dynamic load modules witch provide then
+ * additional functionality for scripts.
+ */

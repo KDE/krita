@@ -1,0 +1,5 @@
+/** @section console The Kross console application
+ *
+ * The Kross console application provides an executable application
+ * to run by Kross supported scripts from within the commandline.
+ */

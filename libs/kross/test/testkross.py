@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env kross
 
 """
   This Python script demonstrates how Kross could be used from

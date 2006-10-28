@@ -1,0 +1,4 @@
+/** @section test The unit- and regression tests.
+ *
+ * Some internal testcases used to prevent regressions.
+ */

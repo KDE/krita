@@ -92,8 +92,8 @@ int main(int argc, char **argv)
 {
     int result = ERROR_OK;
 
-    KAboutData about("krossrunner",
-                     "krossrunner",
+    KAboutData about("kross",
+                     "kross",
                      "0.1",
                      "KDE application to run Kross scripts.",
                      KAboutData::License_LGPL,

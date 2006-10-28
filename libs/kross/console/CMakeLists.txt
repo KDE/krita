@@ -1,0 +1,5 @@
+set(kross_SRCS main.cpp )
+kde4_automoc(${kross_SRCS})
+kde4_add_executable(kross ${kross_SRCS})
+target_link_libraries(kross  ${KDE4_KDECORE_LIBS} krosscore )
+install(TARGETS kross DESTINATION ${BIN_INSTALL_DIR})

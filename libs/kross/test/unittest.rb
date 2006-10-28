@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 require 'test/unit'
 
 class TestKross < Test::Unit::TestCase

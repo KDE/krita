@@ -43,10 +43,10 @@ class FormulaCommandAdd : public KCommand {
 public:
     /**
      * The constructor
-     * @param owner The BasicElement which owns the added elements
-     * @param elements The list of elements that has been added
+     * @param cursor The FormulaCursor where the elements will be added
+     * @param added The list of elements that has been added
      */
-    FormulaCommandAdd( BasicElement* owner, QList<BasicElement*> elements );
+    FormulaCommandAdd( FormulaCursor* cursor, QList<BasicElement*> added );
 
     /// Execute the command
     void execute();
@@ -60,6 +60,9 @@ public:
 private:
     /// The BasicElement that owns the newly added elements
     BasicElement* m_ownerElement;
+
+    /// The position inside m_ownerElement
+    int m_positionInElement;
     
     /// The list of added elements
     QList<BasicElement*> m_addedElements;
@@ -80,10 +83,10 @@ class FormulaCommandRemove : public KCommand {
 public:
     /**
      * The constructor
-     * @param owner The BasicElement which owned the removed elements
+     * @param cursor The FormulaCursor where the elements will be removed
      * @param elements The list of removed elements
      */
-    FormulaCommandRemove( BasicElement* owner, QList<BasicElement*> elements );
+    FormulaCommandRemove( FormulaCursor* cursor, QList<BasicElement*> elements );
 
     /// Execute the command
     void execute();
@@ -97,7 +100,10 @@ public:
 private:
     /// The BasicElement that owned the removed elements
     BasicElement* m_ownerElement;
-    
+ 
+    /// The position inside m_ownerElement
+    int m_positionInElement;
+
     /// The list of removed elements
     QList<BasicElement*> m_removedElements;
 };
@@ -117,12 +123,12 @@ class FormulaCommandReplace : public KCommand {
 public:
     /**
      * The constructor
-     * @param owner The BasicElement which owns the replaced elements 
+     * @param cursor The FormulaCursor where the elements will be replaced 
      * @param replaced The list of elements that have been replaced
      * @param replacing The list of elements that has replaced the old elements
      */
-    FormulaCommandReplace( BasicElement* owner, QList<BasicElement*> replaced,
-                                                QList<BasicElement*> replacing );
+    FormulaCommandReplace( FormulaCursor* cursor, QList<BasicElement*> replaced,
+                                                  QList<BasicElement*> replacing );
 
     /// Execute the command
     void execute();
@@ -136,6 +142,9 @@ public:
 private:
     /// The BasicElement that owned the replaced elements
     BasicElement* m_ownerElement;
+
+    /// The position inside m_ownerElement
+    int m_positionInElement;
 
     /// The list of the new elements
     QList<BasicElement*> m_replacingElements;
@@ -161,7 +170,7 @@ public:
      * @param owner The BasicElement which owns the changed attributes
      * @param attributes The list of the old attributes
      */
-    FormulaCommandAttribute( BasicElement* owner, QHash<QString,QString> attributes );
+    FormulaCommandAttribute( FormulaCursor* cursor, QHash<QString,QString> attributes );
 
     /// Execute the command
     void execute();
@@ -176,8 +185,11 @@ private:
     /// The BasicElement whose attributes have been changed
     BasicElement* m_ownerElement;
     
+    /// All attributes that are set newly
+    QHash<QString,QString> m_attributes;
+    
     /// All attributes the element had before
-    QHash<QString,QString> m_oldAttributes;  
+    QHash<QString,QString> m_oldAttributes;
 };
 
 } //namespace KFormula

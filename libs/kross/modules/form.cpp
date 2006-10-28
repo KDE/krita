@@ -30,6 +30,7 @@
 #include <QVBoxLayout>
 #include <QSizePolicy>
 #include <QApplication>
+#include <QProgressDialog>
 #include <QtDesigner/QFormBuilder>
 
 #include <kdebug.h>
@@ -411,6 +412,22 @@ QString FormModule::showMessageBox(const QString& dialogtype, const QString& cap
         case KMessageBox::Continue: return "Continue";
         default: return QString();
     }
+}
+
+QWidget* FormModule::showProgressDialog(const QString& caption, const QString& labelText)
+{
+    QProgressDialog* progress = new QProgressDialog();
+    //progress->setWindowModality(Qt::WindowModal);
+    progress->setModal(true);
+    progress->setWindowTitle(caption);
+    progress->setLabelText(labelText);
+    progress->setAutoClose(true);
+    progress->setAutoReset(true);
+    progress->setCancelButtonText(QString());
+    progress->setMinimumWidth(300);
+    progress->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+    progress->show();
+    return progress;
 }
 
 QWidget* FormModule::createDialog(const QString& caption)

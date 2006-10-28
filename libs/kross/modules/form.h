@@ -232,6 +232,16 @@ namespace Kross {
             QString showMessageBox(const QString& dialogtype, const QString& caption, const QString& message);
 
             /**
+             * Show a progressdialog to provide visible feedback on the progress
+             * of a slow operation.
+             *
+             * \param caption The caption the progressdialog displays.
+             * \param labelText The displayed label.
+             * \return The QProgressDialog widget instance.
+             */
+            QWidget* showProgressDialog(const QString& caption, const QString& labelText);
+
+            /**
              * Create and return a new \a FormDialog instance.
              *
              * \param caption The displayed caption of the dialog.

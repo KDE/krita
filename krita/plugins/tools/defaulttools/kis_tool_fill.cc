@@ -50,7 +50,7 @@
 #include "kis_selection.h"
 
 KisToolFill::KisToolFill()
-    : super(i18n("Fill"))
+    : super(i18n("Fill")), m_wasPressed(false)
 {
     setName("tool_fill");
     m_subject = 0;
@@ -138,10 +138,13 @@ bool KisToolFill::flood(int startX, int startY)
 void KisToolFill::buttonPress(KisButtonPressEvent *e)
 {
     m_startPos = e->pos();
+    m_wasPressed = true;
 }
 
 void KisToolFill::buttonRelease(KisButtonReleaseEvent *e)
 {
+    if(!m_wasPressed) return;
+    m_wasPressed = false;
     if (!m_subject) return;
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
     if (e->button() != QMouseEvent::LeftButton) return;

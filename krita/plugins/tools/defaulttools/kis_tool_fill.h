@@ -79,6 +79,7 @@ private:
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkSampleMerged;
     QCheckBox *m_checkFillSelection;
+    bool m_wasPressed; // use for preventing bug:133148
 };
 
 

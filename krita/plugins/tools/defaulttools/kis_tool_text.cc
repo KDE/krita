@@ -45,12 +45,13 @@
 #include "kis_tool_text.h"
 #include "kis_paint_device.h"
 #include "kis_canvas_subject.h"
+#include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_color.h"
 #include "kis_undo_adapter.h"
 
 KisToolText::KisToolText()
-    : super(i18n("Text"))
+    : super(i18n("Text")), m_wasPressed(false)
 {
     setName("tool_text");
     m_subject = 0;
@@ -67,9 +68,18 @@ void KisToolText::update(KisCanvasSubject *subject)
     super::update(subject);
 }
 
+void KisToolText::buttonPress(KisButtonPressEvent *e)
+{
+    if (m_subject && e->button() == QMouseEvent::LeftButton) {
+      m_wasPressed = true;
+    }
+}
+
 void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 {
     if (m_subject && e->button() == QMouseEvent::LeftButton) {
+        if(!m_wasPressed) return;
+        m_wasPressed = false;
         KisImageSP img = m_subject->currentImg();
 
         bool ok;

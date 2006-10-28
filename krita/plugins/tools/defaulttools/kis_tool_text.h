@@ -43,6 +43,7 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_FILL; }
     virtual Q_UINT32 priority() { return 2; }
+    virtual void buttonPress(KisButtonPressEvent*);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
     virtual QWidget* createOptionWidget(QWidget* parent);
@@ -55,6 +56,7 @@ private:
     QLabel *m_lbFont;
     KSqueezedTextLabel *m_lbFontName;
     QPushButton *m_btnMoreFonts;
+    bool m_wasPressed; // use for preventing bug:136151
 };
 
 

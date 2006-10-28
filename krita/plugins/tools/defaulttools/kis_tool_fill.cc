@@ -143,11 +143,11 @@ void KisToolFill::buttonPress(KisButtonPressEvent *e)
 
 void KisToolFill::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if(!m_wasPressed) return;
-    m_wasPressed = false;
     if (!m_subject) return;
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
     if (e->button() != QMouseEvent::LeftButton) return;
+    if(!m_wasPressed) return;
+    m_wasPressed = false;
     int x, y;
     x = m_startPos.floorX();
     y = m_startPos.floorY();

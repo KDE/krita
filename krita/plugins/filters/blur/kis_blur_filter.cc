@@ -62,6 +62,7 @@ KisFilterConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent
 KisFilterConfiguration* KisBlurFilter::configuration(QWidget* w)
 {
     KisWdgBlur * wCTA = dynamic_cast<KisWdgBlur*>(w);
+    if(!wCTA) return 0;
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
     if(wCTA)
     {

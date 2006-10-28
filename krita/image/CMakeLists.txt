@@ -22,6 +22,7 @@ set(libkritatile_SRCS
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilemanager.cc
 )
 
+include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
@@ -76,13 +77,17 @@ set(kritaimage_LIB_SRCS
    kis_filter_strategy.h
    kis_perspective_grid.cpp
    kis_perspective_math.cpp
+   kis_progress_updater.cpp
+   kis_progress_updater_p.cpp
 )
 
 kde4_automoc(${kritaimage_LIB_SRCS})
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KDECORE_LIBS} pigment kofficecore kopainter)
+target_link_libraries(kritaimage ${KDE4_KDECORE_LIBS} pigment kofficecore kopainter
+    threadweaver
+)
 
 set_target_properties(kritaimage PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kritaimage  DESTINATION ${LIB_INSTALL_DIR})

@@ -18,26 +18,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoCreateShapesTool.h"
+#include "KoShapeController.h"
 
-#include <QMouseEvent>
-#include <QPainter>
-
-#include "KoInteractionStrategy.h"
-
-#include <kcommand.h>
-
-KoCreateShapesTool::KoCreateShapesTool(KoCanvasBase *canvas)
-: KoShapeController( canvas ), KoInteractionTool( canvas )
+KoShapeController::KoShapeController(KoCanvasBase *canvas)
+ : m_canvas( canvas )
 {
-}
-
-void KoCreateShapesTool::paint( QPainter &painter, KoViewConverter &converter) {
-    if ( m_currentStrategy )
-        m_currentStrategy->paint( painter, converter);
-}
-
-void KoCreateShapesTool::mouseReleaseEvent( KoPointerEvent *event ) {
-    KoInteractionTool::mouseReleaseEvent(event);
-    emit KoTool::sigDone();
 }

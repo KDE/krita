@@ -438,14 +438,18 @@ void KoToolManager::switchBackRequested() {
     switchTool(m_stack.pop(), false);
 }
 
-KoCreateShapesTool *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const {
+KoShapeController *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const {
+    return shapeController(canvas);
+}
+
+KoShapeController *KoToolManager::shapeController(KoCanvasBase *canvas) const {
     foreach(KoCanvasController *controller, m_canvases) {
         if (controller->canvas() == canvas) {
             QMap<QString, KoTool*> tools = m_allTools.value(controller);
-            KoCreateShapesTool *tool =
-                dynamic_cast<KoCreateShapesTool*>(tools.value(KoCreateShapesTool_ID));
-            Q_ASSERT(tool /* ID changed? */);
-            return tool;
+            KoShapeController *sc =
+                dynamic_cast<KoShapeController*>(tools.value(KoCreateShapesTool_ID));
+            Q_ASSERT(sc /* ID changed? */);
+            return sc;
         }
     }
     kWarning(30004) << "KoToolManager: can't find the canvas, did you register it?" << endl;

@@ -29,6 +29,7 @@
 #include <KoInteractionTool.h>
 #include <KoShapeMoveStrategy.h>
 #include <KoCreateShapesTool.h>
+#include <KoShapeController.h>
 #include <KoCanvasController.h>
 
 #include <QKeyEvent>
@@ -52,7 +53,7 @@ public:
         resize(m_icon.size());
     }
 
-    virtual void visit(KoCreateShapesTool *tool) = 0;
+    virtual void visit(KoShapeController *tool) = 0;
     virtual QString toolTip() = 0;
 
     void paint(QPainter &painter, const KoViewConverter &converter) {
@@ -73,7 +74,7 @@ public:
         m_shapeTemplate = shapeTemplate;
     }
 
-    void visit(KoCreateShapesTool *tool) {
+    void visit(KoShapeController *tool) {
         tool->setShapeId(m_shapeTemplate.id);
         tool->setShapeProperties(m_shapeTemplate.properties);
     }
@@ -95,7 +96,7 @@ public:
         m_shapeFactory = shapeFactory;
     }
 
-    void visit(KoCreateShapesTool *tool) {
+    void visit(KoShapeController *tool) {
         tool->setShapeId(m_shapeFactory->shapeId());
         tool->setShapeProperties(0);
     }
@@ -172,8 +173,8 @@ void KoShapeSelector::itemSelected() {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
     if(canvasController) {
-        KoCreateShapesTool* createTool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
-        shape->visit(createTool);
+        KoShapeController* controller = KoToolManager::instance()->shapeController(canvasController->canvas());
+        shape->visit(controller);
         KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);
     }
 }

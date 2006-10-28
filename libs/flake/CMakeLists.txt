@@ -39,6 +39,7 @@ set(flake_SRCS
     KoParameterChangeStrategy.cpp
     KoRectangleShape.cpp
     KoRectangleShapeFactory.cpp
+    KoShapeController.cpp
 )
 
 kde4_automoc(${flake_SRCS})

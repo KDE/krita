@@ -34,7 +34,7 @@ class KoCanvasBase;
 class KoTool;
 class KoShapeControllerBase;
 class KoToolBox;
-class KoCreateShapesTool;
+class KoShapeController;
 class KActionCollection;
 class KoShape;
 
@@ -155,6 +155,8 @@ public:
     /// @return the active canvas controller
     KoCanvasController *activeCanvasController() const;
 
+    /// @deprecated. Method is renamed to shapeController()
+    KoShapeController *shapeCreatorTool(KoCanvasBase *canvas) const;
     /**
      * Return the tool that is able to create shapes for this param canvas.
      * This is typically used by the KoShapeSelector to set which shape to create next.
@@ -162,7 +164,7 @@ public:
      *    who's tool you want.
      * @see addControllers()
      */
-    KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
+    KoShapeController *shapeController(KoCanvasBase *canvas) const;
 
 public slots:
     /**

@@ -79,23 +79,21 @@ QImage KisSelection::maskImage()
 {
     // If part of a KisAdjustmentLayer, there may be no parent device.
     QImage img;
-    Q_INT32 x, y, w, h, y2, x2;
+    QRect bounds;
     if (m_parentPaintDevice) {
 
-        m_parentPaintDevice->exactBounds(x, y, w, h);
-        img = QImage(w, h, 32);
+        bounds = m_parentPaintDevice->exactBounds();
+        bounds = bounds.intersect( m_parentPaintDevice->image()->bounds() );
+        img = QImage(bounds.width(), bounds.height(), 32);
     }
     else {
-        x = 0;
-        y = 0;
-        w = image()->width();
-        h = image()->width();
-        img = QImage(w, h, 32);
+        bounds = QRect( 0, 0, image()->width(), image()->height());
+        img = QImage(bounds.width(), bounds.height(), 32);
     }
 
-    for (y2 = y; y2 < h - y; ++y2) {
-            KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
-            x2 = 0;
+    KisHLineIteratorPixel it = createHLineIterator(bounds.x(), bounds.y(), bounds.width(), false);
+    for (int y2 = bounds.y(); y2 < bounds.height() - bounds.y(); ++y2) {
+            int x2 = 0;
             while (!it.isDone()) {
                     Q_UINT8 s = MAX_SELECTED - *(it.rawData());
                     Q_INT32 c = qRgb(s, s, s);
@@ -103,6 +101,7 @@ QImage KisSelection::maskImage()
                     ++x2;
                     ++it;
             }
+            it.nextRow();
     }
     return img;
 }

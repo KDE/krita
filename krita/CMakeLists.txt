@@ -2,17 +2,6 @@ project(krita)
 
 macro_optional_find_package(Kunittest)
 
-set(REQUIRED_LCMS_VERSION 115)
-
-if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(SHOULD_BUILD_KRITA TRUE)
-else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-	set(SHOULD_BUILD_KRITA FALSE)
-	message(STATUS  "krita requires LittleCMS 1.15 or greater. Krita will not be built.\n"
-			"   If you want to compile Krita you should install:\n"
-			"   lcms 1.15 or newer (http://www.littlecms.com/)")
-endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-
 if (SHOULD_BUILD_KRITA)
 
     macro_optional_find_package(OpenGL)

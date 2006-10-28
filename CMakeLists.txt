@@ -78,6 +78,20 @@ set(libkdgantt_SRCS
 	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttXMLTools.cpp
 	)
 
+# check if build krita there to be able to test if we can build filters/krita
+set(REQUIRED_LCMS_VERSION 115)
+
+if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+    set(SHOULD_BUILD_KRITA TRUE)
+else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+        set(SHOULD_BUILD_KRITA FALSE)
+        message(STATUS  "krita requires LittleCMS 1.15 or greater. Krita will not be built.\n"
+                        "   If you want to compile Krita you should install:\n"
+                        "   lcms 1.15 or newer (http://www.littlecms.com/)")
+endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+
+
+
 add_subdirectory(libs)
 MESSAGE(STATUS "Before koffice-2.0 disable compile of example subdir, not necessary for official release")
 add_subdirectory(example)

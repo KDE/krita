@@ -32,22 +32,31 @@ class KoShape;
 class KoShapeControllerBase;
 class KoProperties;
 
+/**
+ * Class used by tools to maintain the list of shapes.
+ * All applications have some sort of list of all shapes that belong to the document.
+ * The applications implement the KoShapeControllerBase interface (all pure virtuals)
+ * to add and remove shapes from the document.  To ensure that an application can expect
+ * a certain protocol to be adhered to when adding/removing shapes, all tools use the API
+ * from this class for maintaining the list of shapes in the document.  So no tool gets
+ * to acess the application directly.
+ */
 class FLAKE_EXPORT KoShapeController {
 public:
     /**
-     * Create a new tool; typically not called by applications, only by the KoToolManager
-     * @param canvas the canvas this tool works for.
+     * Create a new Controller; typically not called by applications, only by the KoToolManager
+     * @param canvas the canvas this controller works for.
      */
     KoShapeController(KoCanvasBase *canvas);
     /// destructor
     ~KoShapeController() {};
 
     /**
-     * Set the shape controller that this tool adds its created shapes to.
-     * This tool will create a shape after user input and that shape has to be
+     * Set the shape controller that this controller adds its created shapes to.
+     * This controller will create a shape after user input and that shape has to be
      * registered to the hosting application.  We add/remove the shape via the
      * KoShapeControllerBase interface.<br>
-     * Note that this tool will create a command that can be used for undo/redo.
+     * Note that this controller will create a command that can be used for undo/redo.
      * The undo will actually call the remove.
      * @param sc the controller that will be used to add/remove the created shape.
      */
@@ -55,7 +64,7 @@ public:
 
     /**
      * Each shape-type has an Id; as found in KoShapeFactory::id().id(), to choose which
-     * shape this tool should actually create; set the id before the user starts to
+     * shape this controller should actually create; set the id before the user starts to
      * create the new shape.
      * @param id the SHAPEID of the to be generated shape
      */
@@ -67,7 +76,7 @@ public:
     const QString &shapeId() const { return m_shapeId; }
 
     /**
-     * Set the shape properties that the create tool will use for the next shape it will
+     * Set the shape properties that the create controller will use for the next shape it will
      * create.
      * @param properties the properties or 0 if the default shape should be created.
      */
@@ -87,7 +96,7 @@ public:
 protected:
     friend class KoCreateShapeStrategy;
     /**
-     * Returns the shape Controller that is registered to hold the shapes this tool creates.
+     * Returns the shape Controller that is registered to hold the shapes this class creates.
      * @return the shape controller.
      */
     KoShapeControllerBase* controller() const { return m_shapeController; }

@@ -19,13 +19,13 @@
 #ifndef TW_ACTION_H
 #define TW_ACTION_H
 
-#include "KoJobsListPolicy.h"
 #include <WeaverInterface.h>
 
 #include <koffice_export.h>
 
 class KoExecutePolicy;
 class DirectPolicy;
+class KoJobsListPolicy;
 
 /**
  * This class represent the glue between a user event and a piece of controlling logic.
@@ -57,10 +57,11 @@ class KOFFICECORE_EXPORT KoAction : public QObject {
 public:
     /**
      * Create a new Action object.
+     * The action will start with a SimpleQueuedPolicy.
      * @param parent the parent QObject, for memory mangement purposes.
      */
     KoAction(QObject *parent = 0);
-    virtual ~KoAction() {}
+    virtual ~KoAction();
 
     /**
      * Set a ThreadWeaver on this action which is used to execute the action in a
@@ -94,7 +95,7 @@ public:
     /**
      * Return te amount of executes there are still to finish.
      */
-    int jobCount() { return m_jobsQueue.count(); }
+    int jobCount();
 
 signals:
     /**
@@ -136,7 +137,7 @@ private:
     KoExecutePolicy *m_policy;
     ThreadWeaver::WeaverInterface *m_weaver;
     bool m_enabled;
-    KoJobsListPolicy m_jobsQueue;
+    KoJobsListPolicy *m_jobsQueue;
 };
 
 #endif

@@ -16,9 +16,12 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "KoJobsListPolicy.h"
 #include "KoAction.h"
 #include "KoExecutePolicy.h"
 #include "ActionJob_p.h"
+
+#include <WeaverInterface.h>
 
 #include <QVariant>
 
@@ -28,6 +31,11 @@ KoAction::KoAction(QObject *parent)
     m_weaver(0),
     m_enabled(true)
 {
+    m_jobsQueue = new KoJobsListPolicy();
+}
+KoAction::~KoAction() {
+    delete m_jobsQueue;
+    m_jobsQueue = 0;
 }
 
 void KoAction::execute() {
@@ -38,7 +46,7 @@ void KoAction::execute(QVariant *params) {
     if(!m_enabled)
         return;
     Q_ASSERT(m_weaver);
-    m_policy->schedule(this, &m_jobsQueue, params);
+    m_policy->schedule(this, m_jobsQueue, params);
 }
 
 void KoAction::doAction(QVariant *params) {
@@ -57,6 +65,10 @@ void KoAction::doActionUi(QVariant *params) {
         QVariant variant(0);
         emit updateUi(&variant);
     }
+}
+
+int KoAction::jobCount() {
+    return m_jobsQueue->count();
 }
 
 #include "KoAction.moc"

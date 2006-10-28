@@ -447,9 +447,12 @@ KisLayerSP KisSelectionManager::paste()
             if (dlg->exec() == QDialog::Accepted)
                 layer->convertTo(img->colorSpace());
 */
-        img->addLayer(layer, img->rootLayer(), img->activeLayer());
-
-        return layer;
+        if(img->addLayer(layer, img->rootLayer(), img->activeLayer()))
+        {
+          return layer;
+        } else {
+          return 0;
+        }
     }
     return 0;
 }

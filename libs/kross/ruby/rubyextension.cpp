@@ -179,16 +179,22 @@ VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv
                 returntype = new MetaTypeVariant< QVariant >( QVariant( (QVariant::Type) typeId ) );
             }
             else {
-                // crashes on shared containers like e.g. QStringList and QList which are handled above already
                 typeId = QMetaType::type( metamethod.typeName() );
-                //Q_ASSERT(typeId != QMetaType::Void);
-                #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                    krossdebug( QString("RubyExtension::call_method typeName=%1 metatype.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
-                #endif
-                //if (id != -1) {
-                void* myClassPtr = QMetaType::construct(typeId, 0);
-                //QMetaType::destroy(id, myClassPtr);
-                returntype = new MetaTypeVoidStar( typeId, myClassPtr );
+                if(typeId == QMetaType::Void) {
+                    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+                        krossdebug( QString("RubyExtension::call_method typeName=%1 metatype.typeid is QMetaType::Void").arg(metamethod.typeName()) );
+                    #endif
+                    returntype = new MetaTypeVariant< QVariant >( QVariant() );
+                }
+                else {
+                    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+                        krossdebug( QString("RubyExtension::call_method typeName=%1 metatype.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
+                    #endif
+                    //if (id != -1) {
+                    void* myClassPtr = QMetaType::construct(typeId, 0);
+                    //QMetaType::destroy(id, myClassPtr);
+                    returntype = new MetaTypeVoidStar( typeId, myClassPtr );
+                }
             }
 
             variantargs[0] = returntype;

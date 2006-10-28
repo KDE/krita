@@ -65,6 +65,13 @@ namespace Kross {
              */
             virtual Kross::Script* createScript(Kross::Action* Action);
 
+            /**
+             * Extract the current exception and fill the passed \p errorlist with
+             * the errortrace and \p lineno with the line-number where the exception
+             * got raised (-1 if not known else >= 0).
+             */
+            static void extractException(QStringList& errorlist, int& lineno);
+
         private:
             /// \internal d-pointer instance.
             PythonInterpreterPrivate* d;

@@ -242,3 +242,68 @@ PythonModule* PythonInterpreter::mainModule() const
     return d->mainmodule;
 }
 
+void PythonInterpreter::extractException(QStringList& errorlist, int& lineno)
+{
+    lineno = -1;
+
+    PyObject *type, *value, *traceback;
+    PyErr_Fetch(&type, &value, &traceback);
+    Py_FlushLine();
+    PyErr_NormalizeException(&type, &value, &traceback);
+
+    if(traceback) {
+        Py::List tblist;
+        try {
+            Py::Module tbmodule( PyImport_Import(Py::String("traceback").ptr()), true );
+            Py::Dict tbdict = tbmodule.getDict();
+            Py::Callable tbfunc(tbdict.getItem("format_tb"));
+            Py::Tuple args(1);
+            args.setItem(0, Py::Object(traceback));
+            tblist = tbfunc.apply(args);
+            uint length = tblist.length();
+            for(Py::List::size_type i = 0; i < length; ++i)
+                errorlist.append( Py::Object(tblist[i]).as_string().c_str() );
+        }
+        catch(Py::Exception& e) {
+            QString err = Py::value(e).as_string().c_str();
+            e.clear(); // exception is handled. clear it now.
+            krosswarning( QString("Kross::PythonScript::toException() Failed to fetch a traceback: %1").arg(err) );
+        }
+
+        PyObject *next;
+        while (traceback && traceback != Py_None) {
+            PyFrameObject *frame = (PyFrameObject*)PyObject_GetAttrString(traceback, const_cast< char* >("tb_frame"));
+            Py_DECREF(frame);
+            {
+                PyObject *getobj = PyObject_GetAttrString(traceback, const_cast< char* >("tb_lineno") );
+                lineno = PyInt_AsLong(getobj);
+                Py_DECREF(getobj);
+            }
+            if(Py_OptimizeFlag) {
+                PyObject *getobj = PyObject_GetAttrString(traceback, const_cast< char* >("tb_lasti") );
+                int lasti = PyInt_AsLong(getobj);
+                Py_DECREF(getobj);
+                lineno = PyCode_Addr2Line(frame->f_code, lasti);
+            }
+
+            //const char* filename = PyString_AsString(frame->f_code->co_filename);
+            //const char* name = PyString_AsString(frame->f_code->co_name);
+            //errorlist.append( QString("%1#%2: \"%3\"").arg(filename).arg(lineno).arg(name) );
+
+            next = PyObject_GetAttrString(traceback, const_cast< char* >("tb_next") );
+            Py_DECREF(traceback);
+            traceback = next;
+        }
+    }
+
+    if(lineno < 0 && value && PyObject_HasAttrString(value, "lineno")) {
+        PyObject *getobj = PyObject_GetAttrString(value, const_cast< char* >("lineno") );
+        if(getobj) {
+            lineno = PyInt_AsLong(getobj);
+            Py_DECREF(getobj);
+        }
+    }
+
+    krossdebug( QString("PythonInterpreter::extractException: %1").arg( Py::Object(value).as_string().c_str() ) );
+    PyErr_Restore(type, value, traceback);
+}

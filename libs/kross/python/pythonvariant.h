@@ -204,6 +204,7 @@ namespace Kross {
         inline static QString toVariant(const Py::Object& obj) {
             /*
             #ifdef Py_USING_UNICODE
+                //if(obj.isUnicode())
                 PyTypeObject *type = (PyTypeObject*) object.type().ptr();
                 if(type == &PyUnicode_Type) {
                     Py::unicodestring u = Py::String(object).as_unicodestring();
@@ -213,7 +214,7 @@ namespace Kross {
                 }
             #endif
             */
-            return Py::String(obj).as_string().c_str();
+            return obj.isString() ? Py::String(obj).as_string().c_str() : QString();
         }
     };
 

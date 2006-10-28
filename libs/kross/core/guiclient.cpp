@@ -166,21 +166,21 @@ bool GUIClient::writeConfigFromPackages()
             config->writeEntry(QString("%1_icon").arg(name).toLatin1(), element.attribute("icon"));
             config->writeEntry(QString("%1_interpreter").arg(name).toLatin1(), element.attribute("interpreter"));
 
-            QString file = element.attribute("file");
-            QFileInfo fi(file);
-            if(! fi.exists()) {
-                const QDir packagepath = fi.dir();
-                QFileInfo fi2(packagepath, file);
+            QString f = element.attribute("file");
+            QFileInfo fi(f);
+            if(! QFileInfo(f).exists()) {
+                const QDir packagepath = QFileInfo(file).dir();
+                QFileInfo fi2(packagepath, f);
                 if( fi2.exists() ) {
-                    file = fi2.absoluteFilePath();
+                    f = fi2.absoluteFilePath();
                 }
                 else {
-                    QString resource = KGlobal::dirs()->findResource("appdata", QString("scripts/%1/%2").arg(name).arg(file));
+                    QString resource = KGlobal::dirs()->findResource("appdata", QString("scripts/%1/%2").arg(name).arg(f));
                     if( ! resource.isNull() )
-                        file = resource;
+                        f = resource;
                 }
             }
-            config->writeEntry(QString("%1_file").arg(name).toLatin1(), file);
+            config->writeEntry(QString("%1_file").arg(name).toLatin1(), f);
         }
     }
 

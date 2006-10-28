@@ -58,8 +58,9 @@ Py::Object PythonType<QVariant>::toPyObject(const QVariant& v)
             #ifdef KROSS_PYTHON_VARIANT_DEBUG
                 krossdebug( QString("PythonType<QVariant>::toPyObject variant=%1 is QVariant::Invalid. Returning Py:None.").arg(v.toString()) );
             #endif
-            //return Py::None();
-        } // fall through
+            //return Py::Object();
+            return Py::None(); //FIXME should we fall through here?
+        } break;
 
         case QVariant::UserType: {
             #ifdef KROSS_PYTHON_VARIANT_DEBUG

@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "pythonextension.h"
+#include "pythoninterpreter.h"
 #include "pythonvariant.h"
 
 #include <QWidget>
@@ -276,16 +277,22 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
                     returntype = new MetaTypeVariant< QVariant >( QVariant( (QVariant::Type) typeId ) );
                 }
                 else {
-                    // crashes on shared containers like e.g. QStringList and QList
                     typeId = QMetaType::type( metamethod.typeName() );
-                    //Q_ASSERT(typeId != QMetaType::Void);
-                    #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
-                        krossdebug( QString("PythonExtension::proxyhandler typeName=%1 metatype.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
-                    #endif
-                    //if (id != -1) {
-                    void* myClassPtr = QMetaType::construct(typeId, 0);
-                    //QMetaType::destroy(id, myClassPtr);
-                    returntype = new MetaTypeVoidStar( typeId, myClassPtr );
+                    if(typeId == QMetaType::Void) {
+                        #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+                            krossdebug( QString("PythonExtension::proxyhandler typeName=%1 metatype.typeid is QMetaType::Void").arg(metamethod.typeName()) );
+                        #endif
+                        returntype = new MetaTypeVariant< QVariant >( QVariant() );
+                    }
+                    else {
+                        #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+                            krossdebug( QString("PythonExtension::proxyhandler typeName=%1 metatype.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
+                        #endif
+                        //if (id != -1) {
+                        void* myClassPtr = QMetaType::construct(typeId, 0);
+                        //QMetaType::destroy(id, myClassPtr);
+                        returntype = new MetaTypeVoidStar( typeId, myClassPtr );
+                    }
                 }
 
                 variantargs[0] = returntype;
@@ -344,7 +351,10 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
         return pyresult.ptr();
     }
     catch(Py::Exception& e) {
-        krosswarning( QString("PythonExtension::proxyhandler Had exception: %1").arg(Py::value(e).as_string().c_str()) );
+        QStringList trace;
+        int lineno;
+        PythonInterpreter::extractException(trace, lineno);
+        krosswarning( QString("PythonExtension::proxyhandler Had exception on line %1:\n%2 \n%3").arg(lineno).arg(Py::value(e).as_string().c_str()).arg(trace.join("\n")) );
     }
 
     return Py_None;

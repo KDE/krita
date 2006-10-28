@@ -63,6 +63,7 @@ KisFilterManager::KisFilterManager(KisView2 * view, KisDoc2 * doc)
 
     connect(m_filterMapper, SIGNAL(mapped(int)), this, SLOT(slotApplyFilter(int)));
 
+    setup( view->actionCollection() );
 }
 
 KisFilterManager::~KisFilterManager()

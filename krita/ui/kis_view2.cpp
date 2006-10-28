@@ -42,12 +42,14 @@
 #include "kis_qpainter_canvas.h"
 #include "kis_doc2.h"
 #include "kis_resource_provider.h"
+#include "kis_filter_manager.h"
 
 class KisView2::KisView2Private {
 
 public:
 
     KisView2Private(KisView2 * view)
+        : filterManager( 0 )
         {
             viewConverter = new KoZoomHandler( );
 
@@ -63,6 +65,7 @@ public:
         {
             delete viewConverter;
             delete canvas;
+            delete filterManager;
         }
 
 public:
@@ -72,6 +75,7 @@ public:
     KoViewConverter *viewConverter;
     KoCanvasController * canvasController;
     KisResourceProvider * resourceProvider;
+    KisFilterManager * filterManager;
     KAction *zoomAction;
     KAction *zoomIn;
     KAction *zoomOut;
@@ -113,6 +117,10 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     m_d->actualSize->setEnabled(false);
     m_d->fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection(), "fit_to_canvas");
 */
+
+    // Create the managers for filters, selections, layers etc.
+    // XXX: When the currentlayer changes, call updateGUI on all managers
+    m_d->filterManager = new KisFilterManager(this, m_d->doc);
 
     // Put the canvascontroller in a layout so it resizes with us
     QHBoxLayout * layout = new QHBoxLayout( this );
@@ -160,6 +168,7 @@ void KisView2::slotInitializeCanvas()
              << image()->width() << ", H: "
              << image()->height() << endl;
     m_d->canvas->setCanvasSize( image()->width(), image()->height() );
+    m_d->filterManager->updateGUI();
 }
 
 void KisView2::slotZoomChanged(KoZoomMode::Mode mode, int zoom)

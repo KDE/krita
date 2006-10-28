@@ -34,6 +34,7 @@ class KisView2;
 class KisDoc;
 class KisFilter;
 class KisFilterConfiguration;
+class KisFilterConfigWidget;
 class KActionCollection;
 class KisPreviewDialog;
 

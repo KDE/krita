@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2005-2006 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,17 +16,18 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 */
 
-//  xmlreadertest.cpp - test KoXml classes
-//  Ariya Hidayat, November 2005
+//  koxmlreadertest.cpp - test KoXml classes
+//  Ariya Hidayat, November 2005, last updated October 2006
 
-#include <QString>
-#include <q3cstring.h>
 #include <QBuffer>
-#include <QTextStream>
-#include <QDateTime>
 #include <QFile>
+#include <QDateTime>
+#include <QProcess>
+#include <QString>
+#include <QTextStream>
 
-#include "KoXmlReader.h"
+#include <KoXmlReader.h>
+
 #include <QtXml>
 
 #define CHECK(x,y)  check(__FILE__,__LINE__,#x,x,y)
@@ -84,18 +85,18 @@ void testNode()
   xmldevice.open( QIODevice::WriteOnly );
   QTextStream xmlstream( &xmldevice );
   xmlstream << "<earth>";
-  xmlstream << "<continents>";
-  xmlstream << "<asia/>";
-  xmlstream << "<africa/>";
-  xmlstream << "<europe/>";
-  xmlstream << "<america/>";
-  xmlstream << "<australia/>";
-  xmlstream << "<antartic/>";
-  xmlstream << "</continents>";
-  xmlstream << "<oceans>";
-  xmlstream << "<pacific/>";
-  xmlstream << "<atlantic/>";
-  xmlstream << "</oceans>";
+  xmlstream << " <continents>";
+  xmlstream << "  <asia/>";
+  xmlstream << "  <africa/>";
+  xmlstream << "  <europe/>";
+  xmlstream << "  <america/>";
+  xmlstream << "  <australia/>";
+  xmlstream << "  <antartic/>";
+  xmlstream << " </continents>";
+  xmlstream << " <oceans>";
+  xmlstream << "  <pacific/>";
+  xmlstream << "  <atlantic/>";
+  xmlstream << " </oceans>";
   xmlstream << "</earth>";
   xmldevice.close();
 
@@ -114,11 +115,12 @@ void testNode()
   CHECK( node1.ownerDocument().isNull(), true );
   CHECK( node1.parentNode().isNull(), true );
   CHECK( node1.hasChildNodes(), false );
+  CHECK( KoXml::childNodesCount(node1), 0 );
   CHECK( node1.firstChild().isNull(), true );
   CHECK( node1.lastChild().isNull(), true );
   CHECK( node1.previousSibling().isNull(), true );
   CHECK( node1.nextSibling().isNull(), true );
-
+  
   // compare with another null node
   KoXmlNode node2;
   CHECK( node2.isNull(), true );
@@ -135,6 +137,7 @@ void testNode()
   CHECK( node3.ownerDocument().isNull(), false );
   CHECK( node3.ownerDocument()==doc, true );
   CHECK( node3.toDocument()==doc, true );
+  CHECK( KoXml::childNodesCount(node3), 1 );
 
   // convert to document and the compare
   KoXmlDocument doc2 = node3.toDocument();
@@ -142,12 +145,13 @@ void testNode()
   CHECK( doc2.isNull(), false );
   CHECK( doc2.isDocument(), true );
   CHECK( node3==doc2, true );
+  CHECK( KoXml::childNodesCount(doc2), 1 );
 
   // a document is of course can't be converted to element
   KoXmlElement invalidElement = node3.toElement();
   CHECK( invalidElement.nodeName(), QString() );
   CHECK( invalidElement.isNull(), true );
-  CHECK( invalidElement.isElement(), true );
+  CHECK( invalidElement.isElement(), false );
   CHECK( invalidElement.isText(), false );
   CHECK( invalidElement.isDocument(), false );
 
@@ -169,6 +173,7 @@ void testNode()
   CHECK( node4.isText(), false );
   CHECK( node4.isDocument(), false );
   CHECK( node4.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(node4), 2 );
   CHECK( node4.ownerDocument()==doc, true );
   CHECK( node4.toElement()==doc.firstChild().toElement(), true );
 
@@ -180,6 +185,7 @@ void testNode()
   CHECK( node4.isDocument(), false );
   CHECK( node4==node1, true );
   CHECK( node4!=node1, false );
+  CHECK( KoXml::childNodesCount(node4), 0 );
 
   // a node which is an element for <continents>
   KoXmlNode node5 = doc.firstChild().firstChild();
@@ -189,6 +195,7 @@ void testNode()
   CHECK( node5.isText(), false );
   CHECK( node5.isDocument(), false );
   CHECK( node5.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(node5), 6 );
   CHECK( node5.ownerDocument()==doc, true );
 
   // convert to element and the compare
@@ -198,6 +205,7 @@ void testNode()
   CHECK( continentsElement.isElement(), true );
   CHECK( continentsElement.isText(), false );
   CHECK( continentsElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(continentsElement), 6 );
   CHECK( continentsElement.ownerDocument()==doc, true );
 
   // and it doesn't make sense to convert that node to document
@@ -205,7 +213,7 @@ void testNode()
   CHECK( invalidDoc.isNull(), true );
   CHECK( invalidDoc.isElement(), false );
   CHECK( invalidDoc.isText(), false );
-  CHECK( invalidDoc.isDocument(), true );
+  CHECK( invalidDoc.isDocument(), false );
 
   // node for <europe> using namedItem() function
   KoXmlNode europeNode = continentsElement.namedItem( QString("europe") );
@@ -214,6 +222,7 @@ void testNode()
   CHECK( europeNode.isElement(), true );
   CHECK( europeNode.isText(), false );
   CHECK( europeNode.hasChildNodes(), false );
+  CHECK( KoXml::childNodesCount(europeNode), 0 );
   CHECK( europeNode.ownerDocument()==doc, true );
 
   // search non-existing node
@@ -222,6 +231,7 @@ void testNode()
   CHECK( fooNode.isElement(), false );
   CHECK( fooNode.isText(), false );
   CHECK( fooNode.isCDATASection(), false );
+  CHECK( KoXml::childNodesCount(fooNode), 0 );
 }
 
 void testElement()
@@ -260,6 +270,7 @@ void testElement()
   CHECK( rootElement.parentNode().isNull(), false );
   CHECK( rootElement.parentNode().toDocument()==doc, true );
   CHECK( rootElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(rootElement), 1 );
   CHECK( rootElement.tagName(), QString("html") );
   CHECK( rootElement.prefix().isNull(), true );
  
@@ -275,6 +286,7 @@ void testElement()
   CHECK( bodyElement.parentNode().isNull(), false );
   CHECK( bodyElement.parentNode()==rootElement, true );
   CHECK( bodyElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(bodyElement), 1 );
   CHECK( bodyElement.tagName(), QString("body") );
   CHECK( bodyElement.prefix().isNull(), true );
   CHECK( bodyElement.hasAttribute("bgcolor"), true );
@@ -292,6 +304,7 @@ void testElement()
   CHECK( body2Element==bodyElement, true );
   CHECK( body2Element!=bodyElement, false );
   CHECK( body2Element.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(body2Element), 1 );
   CHECK( body2Element.tagName(), QString("body") );
   CHECK( body2Element.prefix().isNull(), true );
   CHECK( body2Element.hasAttribute("bgcolor"), true );
@@ -301,7 +314,7 @@ void testElement()
   KoXmlElement testElement; 
   CHECK( testElement.nodeName(), QString() );
   CHECK( testElement.isNull(), true );
-  CHECK( testElement.isElement(), true );
+  CHECK( testElement.isElement(), false );
   CHECK( testElement.isDocument(), false );
   CHECK( testElement.ownerDocument().isNull(), true );
   CHECK( testElement.ownerDocument()!=doc, true );
@@ -309,6 +322,7 @@ void testElement()
   CHECK( testElement!=rootElement, true );
   CHECK( testElement.parentNode().isNull(), true );
   CHECK( testElement.hasChildNodes(), false );
+  CHECK( KoXml::childNodesCount(testElement), 0 );
 
   // check assignment operator
   testElement = rootElement;
@@ -322,6 +336,7 @@ void testElement()
   CHECK( testElement.parentNode().toDocument()==doc, true );
   CHECK( testElement.tagName(), QString("html") );
   CHECK( testElement.prefix().isNull(), true );
+  CHECK( KoXml::childNodesCount(testElement), 1 );
 
   // assigned from another empty element
   testElement = KoXmlElement();
@@ -340,6 +355,7 @@ void testElement()
   CHECK( testElement.tagName(), QString("body") );
   CHECK( testElement.prefix().isNull(), true );
   CHECK( testElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(testElement), 1 );
 
   // copy constructor  
   KoXmlElement dummyElement( rootElement ); 
@@ -351,17 +367,19 @@ void testElement()
   CHECK( dummyElement==rootElement, true );
   CHECK( dummyElement.parentNode().isNull(), false );
   CHECK( dummyElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(dummyElement), 1 );
   CHECK( dummyElement.tagName(), QString("html") );
   CHECK( dummyElement.prefix().isNull(), true );
 
   // clear() turns element to null node
   dummyElement.clear();
   CHECK( dummyElement.isNull(), true );
-  CHECK( dummyElement.isElement(), true );
+  CHECK( dummyElement.isElement(), false );
   CHECK( dummyElement.isDocument(), false );
   CHECK( dummyElement.ownerDocument().isNull(), true );
   CHECK( dummyElement.ownerDocument()==doc, false );
   CHECK( dummyElement.hasChildNodes(), false );
+  CHECK( KoXml::childNodesCount(dummyElement), 0 );
   CHECK( dummyElement==rootElement, false );
   CHECK( dummyElement!=rootElement, true );
   
@@ -369,10 +387,11 @@ void testElement()
   KoXmlNode dummyNode;
   dummyElement = dummyNode.toElement();
   CHECK( dummyElement.isNull(), true );
-  CHECK( dummyElement.isElement(), true );
+  CHECK( dummyElement.isElement(), false );
   CHECK( dummyElement.isDocument(), false );
   CHECK( dummyElement.ownerDocument().isNull(), true );
   CHECK( dummyElement.hasChildNodes(), false );
+  CHECK( KoXml::childNodesCount(dummyElement), 0 );
   CHECK( dummyElement.ownerDocument()==doc, false );
 }
 
@@ -404,6 +423,7 @@ void testAttributes()
   CHECK( rootElement.parentNode().toDocument()==doc, true );
   CHECK( rootElement.tagName(), QString("p") );
   CHECK( rootElement.prefix().isNull(), true );
+  CHECK( KoXml::childNodesCount(rootElement), 1 );
 
   KoXmlElement imgElement;
   imgElement = rootElement.firstChild().toElement();
@@ -411,6 +431,7 @@ void testAttributes()
   CHECK( imgElement.isElement(), true );
   CHECK( imgElement.tagName(), QString("img") );
   CHECK( imgElement.prefix().isNull(), true );
+  CHECK( KoXml::childNodesCount(imgElement), 0 );
   CHECK( imgElement.hasAttribute("src"), true );
   CHECK( imgElement.hasAttribute("width"), true );
   CHECK( imgElement.hasAttribute("height"), true );
@@ -459,6 +480,7 @@ void testText()
   CHECK( parElement.parentNode().isNull(), false );
   CHECK( parElement.parentNode().toDocument()==doc, true );
   CHECK( parElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(parElement), 2 ); // <b> and text node "Hello "
   CHECK( parElement.tagName(), QString("p") );
   CHECK( parElement.prefix().isNull(), true );
   CHECK( parElement.text(), QString("Hello world") );
@@ -471,7 +493,9 @@ void testText()
   CHECK( helloNode.isElement(), false );
   CHECK( helloNode.isText(), true );
   CHECK( helloNode.isDocument(), false );
-
+  CHECK( helloNode.hasChildNodes(), false );
+  CHECK( KoXml::childNodesCount(helloNode), 0 );
+  
   // "Hello" text
   KoXmlText helloText;
   helloText = helloNode.toText();
@@ -481,6 +505,7 @@ void testText()
   CHECK( helloText.isText(), true );
   CHECK( helloText.isDocument(), false );
   CHECK( helloText.data(), QString("Hello ") );
+  CHECK( KoXml::childNodesCount(helloText), 0 );
 
   // shared copy of the text
   KoXmlText hello2Text;
@@ -490,6 +515,7 @@ void testText()
   CHECK( hello2Text.isText(), true );
   CHECK( hello2Text.isDocument(), false );
   CHECK( hello2Text.data(), QString("Hello ") );
+  CHECK( KoXml::childNodesCount(hello2Text), 0 );
 
   // element for <b>
   KoXmlElement boldElement;
@@ -502,6 +528,7 @@ void testText()
   CHECK( boldElement.ownerDocument()==doc, true );
   CHECK( boldElement.parentNode().isNull(), false );
   CHECK( boldElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(boldElement), 1 ); // text node "world"
   CHECK( boldElement.tagName(), QString("b") );
   CHECK( boldElement.prefix().isNull(), true );
 
@@ -513,6 +540,7 @@ void testText()
   CHECK( worldText.isText(), true );
   CHECK( worldText.isDocument(), false );
   CHECK( worldText.data(), QString("world") );
+  CHECK( KoXml::childNodesCount(worldText), 0 );
 }
 
 void testCDATA()
@@ -548,6 +576,7 @@ void testCDATA()
   CHECK( parElement.parentNode().isNull(), false );
   CHECK( parElement.parentNode().toDocument()==doc, true );
   CHECK( parElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(parElement), 2 );
   CHECK( parElement.tagName(), QString("p") );
   CHECK( parElement.prefix().isNull(), true );
   CHECK( parElement.text(), QString("Hello world") );
@@ -612,10 +641,10 @@ void testDocument()
   KoXmlDocument doc;
 
   // empty document
-  CHECK( doc.nodeName(), QString("#document") );
+  CHECK( doc.nodeName(), QString() );
   CHECK( doc.isNull(), true );
   CHECK( doc.isElement(), false );
-  CHECK( doc.isDocument(), true );
+  CHECK( doc.isDocument(), false );
   CHECK( doc.parentNode().isNull(), true );
   CHECK( doc.firstChild().isNull(), true );
   CHECK( doc.lastChild().isNull(), true );
@@ -659,7 +688,7 @@ void testDocument()
   CHECK( doc.nodeName(), QString() );
   CHECK( doc.isNull(), true );
   CHECK( doc.isElement(), false );
-  CHECK( doc.isDocument(), true );
+  CHECK( doc.isDocument(), false );
   CHECK( doc.parentNode().isNull(), true );
   CHECK( doc.firstChild().isNull(), true );
   CHECK( doc.lastChild().isNull(), true );
@@ -668,10 +697,11 @@ void testDocument()
 
   // assigned from another empty document
   doc = KoXmlDocument();
-  CHECK( doc.nodeName(), QString("#document") );
+  CHECK( doc.nodeName(), QString() );
+  CHECK( doc.nodeName().isEmpty(), true );
   CHECK( doc.isNull(), true );
   CHECK( doc.isElement(), false );
-  CHECK( doc.isDocument(), true );
+  CHECK( doc.isDocument(), false );
   CHECK( doc.parentNode().isNull(), true );
 }
 
@@ -844,6 +874,133 @@ void testNamespace()
   CHECK( bookAuthorElement.attributeNS(fnordNS,"name",QString()).isEmpty(), true );
 }
 
+// mostly similar to testNamespace above, but parse from a QString
+void testParseQString()
+{
+  QString errorMsg;
+  int errorLine = 0;
+  int errorColumn = 0;
+
+  QString xmlText;
+  xmlText +=  "<document xmlns:book = \"http://trolltech.com/fnord/book/\"";
+  xmlText +=  "          xmlns      = \"http://trolltech.com/fnord/\" >";
+  xmlText +=  "<book>";
+  xmlText +=  "  <book:title>Practical XML</book:title>";
+  xmlText +=  "  <book:author xmlns:fnord = \"http://trolltech.com/fnord/\"";
+  xmlText +=  "               title=\"Ms\"";
+  xmlText +=  "               fnord:title=\"Goddess\"";
+  xmlText +=  "               name=\"Eris Kallisti\"/>";
+  xmlText +=  "  <chapter>";
+  xmlText +=  "    <title>A Namespace Called fnord</title>";
+  xmlText +=  "  </chapter>";
+  xmlText +=  "</book>";
+  xmlText +=  "</document>";
+
+  KoXmlDocument doc;
+  KoXmlElement rootElement;
+  KoXmlElement bookElement;
+  KoXmlElement bookTitleElement;
+  KoXmlElement bookAuthorElement;
+
+  CHECK( doc.setContent( xmlText, true, &errorMsg, &errorLine, &errorColumn ), true );
+  CHECK( errorMsg.isEmpty(), true );
+  CHECK( errorLine, 0 );
+  CHECK( errorColumn, 0 );
+
+  const char* defaultNS = "http://trolltech.com/fnord/";
+  const char* bookNS = "http://trolltech.com/fnord/book/";
+  const char* fnordNS = "http://trolltech.com/fnord/";
+
+  // <document>
+  rootElement = doc.documentElement();
+  CHECK( rootElement.isNull(), false );
+  CHECK( rootElement.isElement(), true );
+  CHECK( rootElement.tagName(), QString("document") );
+  CHECK( rootElement.prefix().isEmpty(), true );
+  CHECK( rootElement.namespaceURI(), QString( defaultNS ) );
+  CHECK( rootElement.localName(), QString("document") );
+
+  // <book>
+  bookElement = rootElement.firstChild().toElement();
+  CHECK( bookElement.isNull(), false );
+  CHECK( bookElement.isElement(), true );
+  CHECK( bookElement.tagName(), QString("book") );
+  CHECK( bookElement.prefix().isEmpty(), true );
+  CHECK( bookElement.namespaceURI(), QString( defaultNS ) );
+  CHECK( bookElement.localName(), QString("book") );
+
+  // <book:title>
+  bookTitleElement = bookElement.firstChild().toElement();
+  CHECK( bookTitleElement.isNull(), false );
+  CHECK( bookTitleElement.isElement(), true );
+  CHECK( bookTitleElement.tagName(), QString("title") );
+  CHECK( bookTitleElement.prefix(), QString("book") );
+  CHECK( bookTitleElement.namespaceURI(), QString(bookNS) );
+  CHECK( bookTitleElement.localName(), QString("title") );
+
+  // another way, find it using namedItemNS()
+  KoXmlElement book2TitleElement;
+  book2TitleElement = KoXml::namedItemNS( rootElement.firstChild(), bookNS, "title" );
+  //book2TitleElement = bookElement.namedItemNS( bookNS, "title" ).toElement();
+  CHECK( book2TitleElement==bookTitleElement, true );
+  CHECK( book2TitleElement.isNull(), false );
+  CHECK( book2TitleElement.isElement(), true );
+  CHECK( book2TitleElement.tagName(), QString("title") );
+
+  // <book:author>
+  bookAuthorElement = bookTitleElement.nextSibling().toElement();
+  CHECK( bookAuthorElement.isNull(), false );
+  CHECK( bookAuthorElement.isElement(), true );
+  CHECK( bookAuthorElement.tagName(), QString("author") );
+  CHECK( bookAuthorElement.prefix(), QString("book") );
+  CHECK( bookAuthorElement.namespaceURI(), QString(bookNS) );
+  CHECK( bookAuthorElement.localName(), QString("author") );
+
+  // another way, find it using namedItemNS()
+  KoXmlElement book2AuthorElement;
+  book2AuthorElement = KoXml::namedItemNS( bookElement, bookNS, "author" );
+  //book2AuthorElement = bookElement.namedItemNS( bookNS, "author" ).toElement();
+  CHECK( book2AuthorElement==bookAuthorElement, true );
+  CHECK( book2AuthorElement.isNull(), false );
+  CHECK( book2AuthorElement.isElement(), true );
+  CHECK( book2AuthorElement.tagName(), QString("author") );
+
+  // attributes in <book:author>
+  // Note: with namespace processing, attribute's prefix is taken out and
+  // hence "fnord:title" will simply override "title"
+  // and searching attribute with prefix will give no result
+  CHECK( bookAuthorElement.hasAttribute("title"), true );
+  CHECK( bookAuthorElement.hasAttribute("fnord:title"), false );
+  CHECK( bookAuthorElement.hasAttribute("name"), true );
+  CHECK( bookAuthorElement.attribute("title"), QString("Goddess") );
+  CHECK( bookAuthorElement.attribute("fnord:title").isEmpty(), true );
+  CHECK( bookAuthorElement.attribute("name"), QString("Eris Kallisti") );
+
+  // attributes in <book:author>, with NS family of functions
+  // those without prefix are not accessible at all, because they do not belong
+  // to any namespace at all.
+  // Note: default namespace does not apply to attribute names!
+  CHECK( bookAuthorElement.hasAttributeNS(defaultNS,"title"), true );
+  CHECK( bookAuthorElement.hasAttributeNS(bookNS,"title"), false );
+  CHECK( bookAuthorElement.hasAttributeNS(fnordNS,"title"), true );
+
+  CHECK( bookAuthorElement.attributeNS(defaultNS,"title",""), QString("Goddess") );
+  CHECK( bookAuthorElement.attributeNS(bookNS,"title",""), QString("") );
+  CHECK( bookAuthorElement.attributeNS(fnordNS,"title",""), QString("Goddess") );
+
+  CHECK( bookAuthorElement.hasAttributeNS(defaultNS,"fnord:title"), false );
+  CHECK( bookAuthorElement.hasAttributeNS(bookNS,"fnord:title"), false );
+  CHECK( bookAuthorElement.hasAttributeNS(fnordNS,"fnord:title"), false );
+  
+  CHECK( bookAuthorElement.hasAttributeNS(defaultNS,"name"), false );
+  CHECK( bookAuthorElement.hasAttributeNS(bookNS,"name"), false );
+  CHECK( bookAuthorElement.hasAttributeNS(fnordNS,"name"), false );
+  
+  CHECK( bookAuthorElement.attributeNS(defaultNS,"name",QString()).isEmpty(), true );
+  CHECK( bookAuthorElement.attributeNS(bookNS,"name",QString()).isEmpty(), true );
+  CHECK( bookAuthorElement.attributeNS(fnordNS,"name",QString()).isEmpty(), true );
+}
+
 void testUnload()
 {
   QString errorMsg;
@@ -882,6 +1039,7 @@ void testUnload()
   CHECK( earthElement.isElement(), true );
   CHECK( earthElement.parentNode().isNull(), false );
   CHECK( earthElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(earthElement), 2 );
   CHECK( earthElement.tagName(), QString("earth") );
   CHECK( earthElement.prefix().isNull(), true );
 
@@ -899,7 +1057,8 @@ void testUnload()
   CHECK( continentsElement.isText(), false );
   CHECK( continentsElement.isDocument(), false );
   CHECK( continentsElement.hasChildNodes(), true );
-
+  CHECK( KoXml::childNodesCount(continentsElement), 6 );
+  
   // let us unload everything again
   KoXml::unload( earthElement );
 
@@ -911,6 +1070,7 @@ void testUnload()
   CHECK( oceansElement.isText(), false );
   CHECK( oceansElement.isDocument(), false );
   CHECK( oceansElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(continentsElement), 6 );
 }
 
 void testSimpleXML()
@@ -926,7 +1086,7 @@ void testSimpleXML()
   xmlstream << "  <mercurius/>\n";
   xmlstream << "  <venus/>\n";
   xmlstream << "  <earth>\n";
-  xmlstream << "  <moon/>\n";
+  xmlstream << "    <moon/>\n";
   xmlstream << "  </earth>\n";
   xmlstream << "  <mars/>\n";
   xmlstream << "  <jupiter/>\n";
@@ -946,6 +1106,7 @@ void testSimpleXML()
   CHECK( rootElement.isElement(), true );
   CHECK( rootElement.parentNode().isNull(), false );
   CHECK( rootElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(rootElement), 5 );
   CHECK( rootElement.tagName(), QString("solarsystem") );
   CHECK( rootElement.prefix().isNull(), true );
 
@@ -960,6 +1121,7 @@ void testSimpleXML()
   CHECK( firstPlanetNode.parentNode()==rootElement, true );
   CHECK( firstPlanetNode.parentNode()!=rootElement, false );
   CHECK( firstPlanetNode.hasChildNodes(), false );
+  CHECK( KoXml::childNodesCount(firstPlanetNode), 0 );
   CHECK( firstPlanetNode.firstChild().isNull(), true );
   CHECK( firstPlanetNode.lastChild().isNull(), true );
 
@@ -971,6 +1133,7 @@ void testSimpleXML()
   CHECK( firstPlanetElement.parentNode().isNull(), false );
   CHECK( firstPlanetElement.parentNode()==rootElement, true );
   CHECK( firstPlanetElement.hasChildNodes(), false );
+  CHECK( KoXml::childNodesCount(firstPlanetNode), 0 );
   CHECK( firstPlanetElement.firstChild().isNull(), true );
   CHECK( firstPlanetElement.lastChild().isNull(), true );
   CHECK( firstPlanetElement.tagName(), QString("mercurius") );
@@ -989,6 +1152,7 @@ void testSimpleXML()
   CHECK( secondPlanetNode.parentNode()==rootElement, true );
   CHECK( secondPlanetNode.parentNode()!=rootElement, false );
   CHECK( secondPlanetNode.hasChildNodes(), false );
+  CHECK( KoXml::childNodesCount(secondPlanetNode), 0 );
   CHECK( secondPlanetNode.firstChild().isNull(), true );
   CHECK( secondPlanetNode.lastChild().isNull(), true );
 
@@ -1005,6 +1169,7 @@ void testSimpleXML()
   CHECK( secondPlanetElement.parentNode()==rootElement, true );
   CHECK( secondPlanetElement.parentNode()!=rootElement, false );
   CHECK( secondPlanetElement.hasChildNodes(), false );
+  CHECK( KoXml::childNodesCount(secondPlanetNode), 0 );
   CHECK( secondPlanetElement.firstChild().isNull(), true );
   CHECK( secondPlanetElement.lastChild().isNull(), true );
   CHECK( secondPlanetElement.tagName(), QString("venus") );
@@ -1052,6 +1217,83 @@ void testMismatchedTag()
   CHECK( errorColumn, 11 );
 }
 
+void testConvertQDomElement()
+{
+  QString errorMsg;
+  int errorLine = 0;
+  int errorColumn = 0;
+
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
+  xmlstream << "<solarsystem star=\"sun\">";
+  xmlstream << "  <mercurius/>\n";
+  xmlstream << "  <venus/>\n";
+  xmlstream << "  <earth habitable=\"true\"><p>The best place</p>";
+  xmlstream << "    <moon  habitable=\"possible\"/>\n";
+  xmlstream << "  </earth>\n";
+  xmlstream << "  <mars/>\n";
+  xmlstream << "  <jupiter/>\n";
+  xmlstream << "</solarsystem>";
+  xmldevice.close();
+
+  KoXmlDocument doc;
+  CHECK( doc.setContent(&xmldevice,&errorMsg,&errorLine,&errorColumn ), true );
+  CHECK( errorMsg.isEmpty(), true );
+  CHECK( errorLine, 0 );
+  CHECK( errorColumn, 0 );
+  
+  // <solarsystem>
+  KoXmlElement rootElement;
+  rootElement = doc.documentElement();
+  CHECK( rootElement.isNull(), false );
+  CHECK( rootElement.isElement(), true );
+  CHECK( rootElement.parentNode().isNull(), false );
+  CHECK( rootElement.hasChildNodes(), true );
+  CHECK( KoXml::childNodesCount(rootElement), 5 );
+  CHECK( rootElement.tagName(), QString("solarsystem") );
+  CHECK( rootElement.prefix().isNull(), true );
+
+  // now test converting KoXmlElement to QDomElement
+  QDomDocument universeDoc;
+  QDomElement universeRoot = universeDoc.createElement("universe");
+  universeDoc.appendChild( universeRoot );
+  universeRoot.appendChild( KoXml::asQDomNode( universeDoc, rootElement ) );
+  
+  // <solarsystem>
+  QDomElement solarSystemElement = universeRoot.firstChild().toElement();
+  CHECK( solarSystemElement.isNull(), false );
+  CHECK( solarSystemElement.isElement(), true );
+  CHECK( solarSystemElement.parentNode().isNull(), false );
+  CHECK( solarSystemElement.hasChildNodes(), true );
+  CHECK( solarSystemElement.tagName(), QString("solarsystem") );
+  CHECK( solarSystemElement.prefix().isNull(), true );
+  
+  // <earth>
+  QDomElement earthElement = solarSystemElement.namedItem("earth").toElement();
+  CHECK( earthElement.isNull(), false );
+  CHECK( earthElement.isElement(), true );
+  CHECK( earthElement.parentNode().isNull(), false );
+  CHECK( earthElement.hasAttribute("habitable"), true );
+  CHECK( earthElement.hasChildNodes(), true );
+  CHECK( earthElement.tagName(), QString("earth") );
+  CHECK( earthElement.prefix().isNull(), true );
+  
+  // <p> in <earth>
+  QDomNode placeNode = earthElement.firstChild();
+  CHECK( placeNode.isNull(), false );
+  CHECK( placeNode.isElement(), true );
+  CHECK( placeNode.toElement().text(), QString("The best place") );
+  CHECK( placeNode.nextSibling().isNull(), false );
+  CHECK( placeNode.previousSibling().isNull(), true );
+  CHECK( placeNode.parentNode().isNull(), false );
+  CHECK( placeNode.parentNode()==earthElement, true );
+  CHECK( placeNode.hasChildNodes(), true );
+  CHECK( placeNode.childNodes().count(), 1 );
+  
+  //printf("Result:\n%s\n\n", qPrintable(universeDoc.toString()));
+}
+
 void testSimpleOpenDocumentText()
 {
   QString errorMsg;
@@ -1068,7 +1310,7 @@ void testSimpleOpenDocumentText()
   xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
   xmlstream << "<office:document-content ";
   xmlstream << " xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\"";
-  xmlstream << " xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\""; 
+  xmlstream << " xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\"";
   xmlstream << " xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" ";
   xmlstream << "   office:version=\"1.0\">";
   xmlstream << " <office:automatic-styles/>";
@@ -1096,6 +1338,7 @@ void testSimpleOpenDocumentText()
   CHECK( contentElement.isElement(), true );
   CHECK( contentElement.parentNode().isNull(), false );
   CHECK( contentElement.parentNode().toDocument()==doc, true );
+  CHECK( KoXml::childNodesCount(contentElement), 2 );
   CHECK( contentElement.firstChild().isNull(), false );
   CHECK( contentElement.lastChild().isNull(), false );
   CHECK( contentElement.previousSibling().isNull(), false );
@@ -1111,6 +1354,7 @@ void testSimpleOpenDocumentText()
   CHECK( stylesElement.isElement(), true );
   CHECK( stylesElement.parentNode().isNull(), false );
   CHECK( stylesElement.parentNode()==contentElement, true );
+  CHECK( KoXml::childNodesCount(stylesElement), 0 );
   CHECK( stylesElement.firstChild().isNull(), true );
   CHECK( stylesElement.lastChild().isNull(), true );
   CHECK( stylesElement.previousSibling().isNull(), true );
@@ -1124,6 +1368,7 @@ void testSimpleOpenDocumentText()
   CHECK( styles2Element.isElement(), true );
   CHECK( styles2Element.parentNode().isNull(), false );
   CHECK( styles2Element.parentNode()==contentElement, true );
+  CHECK( KoXml::childNodesCount(styles2Element), 0 );
   CHECK( styles2Element.firstChild().isNull(), true );
   CHECK( styles2Element.lastChild().isNull(), true );
   CHECK( styles2Element.previousSibling().isNull(), true );
@@ -1137,6 +1382,7 @@ void testSimpleOpenDocumentText()
   CHECK( bodyElement.isElement(), true );
   CHECK( bodyElement.parentNode().isNull(), false );
   CHECK( bodyElement.parentNode()==contentElement, true );
+  CHECK( KoXml::childNodesCount(bodyElement), 1 );
   CHECK( bodyElement.firstChild().isNull(), false );
   CHECK( bodyElement.lastChild().isNull(), false );
   CHECK( bodyElement.previousSibling().isNull(), false );
@@ -1150,6 +1396,7 @@ void testSimpleOpenDocumentText()
   CHECK( body2Element.isElement(), true );
   CHECK( body2Element.parentNode().isNull(), false );
   CHECK( body2Element.parentNode()==contentElement, true );
+  CHECK( KoXml::childNodesCount(body2Element), 1 );
   CHECK( body2Element.firstChild().isNull(), false );
   CHECK( body2Element.lastChild().isNull(), false );
   CHECK( body2Element.previousSibling().isNull(), false );
@@ -1163,6 +1410,7 @@ void testSimpleOpenDocumentText()
   CHECK( textElement.isElement(), true );
   CHECK( textElement.parentNode().isNull(), false );
   CHECK( textElement.parentNode()==bodyElement, true );
+  CHECK( KoXml::childNodesCount(textElement), 1 );
   CHECK( textElement.firstChild().isNull(), false );
   CHECK( textElement.lastChild().isNull(), false );
   CHECK( textElement.previousSibling().isNull(), true );
@@ -1176,6 +1424,7 @@ void testSimpleOpenDocumentText()
   CHECK( text2Element.isElement(), true );
   CHECK( text2Element.parentNode().isNull(), false );
   CHECK( text2Element.parentNode()==bodyElement, true );
+  CHECK( KoXml::childNodesCount(text2Element), 1 );
   CHECK( text2Element.firstChild().isNull(), false );
   CHECK( text2Element.lastChild().isNull(), false );
   CHECK( text2Element.previousSibling().isNull(), true );
@@ -1189,6 +1438,7 @@ void testSimpleOpenDocumentText()
   CHECK( parElement.isElement(), true );
   CHECK( parElement.parentNode().isNull(), false );
   CHECK( parElement.parentNode()==textElement, true );
+  CHECK( KoXml::childNodesCount(parElement), 1 );
   CHECK( parElement.firstChild().isNull(), false );
   CHECK( parElement.lastChild().isNull(), false );
   CHECK( parElement.previousSibling().isNull(), true );
@@ -1215,7 +1465,7 @@ void testSimpleOpenDocumentSpreadsheet()
 
   xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
   xmlstream << "<office:document-content ";
-  xmlstream << "xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\""; 
+  xmlstream << "xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\"";
   xmlstream << "xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" ";
   xmlstream << "xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\">";
   xmlstream << "<office:body>";
@@ -1262,6 +1512,7 @@ void testSimpleOpenDocumentSpreadsheet()
   CHECK( contentElement.isElement(), true );
   CHECK( contentElement.parentNode().isNull(), false );
   CHECK( contentElement.parentNode().toDocument()==doc, true );
+  CHECK( KoXml::childNodesCount(contentElement), 1 );
   CHECK( contentElement.firstChild().isNull(), false );
   CHECK( contentElement.lastChild().isNull(), false );
   CHECK( contentElement.previousSibling().isNull(), false );
@@ -1275,6 +1526,7 @@ void testSimpleOpenDocumentSpreadsheet()
   CHECK( bodyElement.isElement(), true );
   CHECK( bodyElement.parentNode().isNull(), false );
   CHECK( bodyElement.parentNode()==contentElement, true );
+  CHECK( KoXml::childNodesCount(bodyElement), 1 );
   CHECK( bodyElement.firstChild().isNull(), false );
   CHECK( bodyElement.lastChild().isNull(), false );
   CHECK( bodyElement.previousSibling().isNull(), true );
@@ -1288,6 +1540,7 @@ void testSimpleOpenDocumentSpreadsheet()
   CHECK( spreadsheetElement.isElement(), true );
   CHECK( spreadsheetElement.parentNode().isNull(), false );
   CHECK( spreadsheetElement.parentNode()==bodyElement, true );
+  CHECK( KoXml::childNodesCount(spreadsheetElement), 3 );
   CHECK( spreadsheetElement.firstChild().isNull(), false );
   CHECK( spreadsheetElement.lastChild().isNull(), false );
   CHECK( spreadsheetElement.previousSibling().isNull(), true );
@@ -1301,6 +1554,7 @@ void testSimpleOpenDocumentSpreadsheet()
   CHECK( sheet1Element.isElement(), true );
   CHECK( sheet1Element.parentNode().isNull(), false );
   CHECK( sheet1Element.parentNode()==spreadsheetElement, true );
+  CHECK( KoXml::childNodesCount(sheet1Element), 2 );
   CHECK( sheet1Element.firstChild().isNull(), false );
   CHECK( sheet1Element.lastChild().isNull(), false );
   CHECK( sheet1Element.previousSibling().isNull(), true );
@@ -1311,7 +1565,7 @@ void testSimpleOpenDocumentSpreadsheet()
   CHECK( sheet1Element.attributeNS(tableNS,"style-name",""), QString("ta1") );
   CHECK( sheet1Element.attributeNS(tableNS,"print",""), QString("false") );
 
-    KoXml::load( sheet1Element, 100 );
+  //  KoXml::load( sheet1Element, 100 );
 
   // <table:table-column>
   KoXmlElement columnElement;
@@ -1320,6 +1574,7 @@ void testSimpleOpenDocumentSpreadsheet()
   CHECK( columnElement.isElement(), true );
   CHECK( columnElement.parentNode().isNull(), false );
   CHECK( columnElement.parentNode()==sheet1Element, true );
+  CHECK( KoXml::childNodesCount(columnElement), 0 );
   CHECK( columnElement.firstChild().isNull(), true );
   CHECK( columnElement.lastChild().isNull(), true );
   CHECK( columnElement.previousSibling().isNull(), true );
@@ -1335,6 +1590,7 @@ void testSimpleOpenDocumentSpreadsheet()
   CHECK( rowElement.isElement(), true );
   CHECK( rowElement.parentNode().isNull(), false );
   CHECK( rowElement.parentNode()==sheet1Element, true );
+  CHECK( KoXml::childNodesCount(rowElement), 1 );
   CHECK( rowElement.firstChild().isNull(), false );
   CHECK( rowElement.lastChild().isNull(), false );
   CHECK( rowElement.previousSibling().isNull(), false );
@@ -1349,6 +1605,7 @@ void testSimpleOpenDocumentSpreadsheet()
   CHECK( cellElement.isElement(), true );
   CHECK( cellElement.parentNode().isNull(), false );
   CHECK( cellElement.parentNode()==rowElement, true );
+  CHECK( KoXml::childNodesCount(cellElement), 1 );
   CHECK( cellElement.firstChild().isNull(), false );
   CHECK( cellElement.lastChild().isNull(), false );
   CHECK( cellElement.previousSibling().isNull(), true );
@@ -1363,6 +1620,7 @@ void testSimpleOpenDocumentSpreadsheet()
   CHECK( parElement.isElement(), true );
   CHECK( parElement.parentNode().isNull(), false );
   CHECK( parElement.parentNode()==cellElement, true );
+  CHECK( KoXml::childNodesCount(parElement), 1 );
   CHECK( parElement.firstChild().isNull(), false );
   CHECK( parElement.lastChild().isNull(), false );
   CHECK( parElement.previousSibling().isNull(), true );
@@ -1377,6 +1635,7 @@ void testSimpleOpenDocumentSpreadsheet()
   CHECK( sheet2Element.isElement(), true );
   CHECK( sheet2Element.parentNode().isNull(), false );
   CHECK( sheet2Element.parentNode()==spreadsheetElement, true );
+  CHECK( KoXml::childNodesCount(sheet2Element), 2 );
   CHECK( sheet2Element.firstChild().isNull(), false );
   CHECK( sheet2Element.lastChild().isNull(), false );
   CHECK( sheet2Element.previousSibling().isNull(), false );
@@ -1390,6 +1649,7 @@ void testSimpleOpenDocumentSpreadsheet()
   CHECK( sheet3Element.isElement(), true );
   CHECK( sheet3Element.parentNode().isNull(), false );
   CHECK( sheet3Element.parentNode()==spreadsheetElement, true );
+  CHECK( KoXml::childNodesCount(sheet3Element), 2 );
   CHECK( sheet3Element.firstChild().isNull(), false );
   CHECK( sheet3Element.lastChild().isNull(), false );
   CHECK( sheet3Element.previousSibling().isNull(), false );
@@ -1479,10 +1739,10 @@ void testSimpleOpenDocumentPresentation()
   CHECK( contentElement.isElement(), true );
   CHECK( contentElement.parentNode().isNull(), false );
   CHECK( contentElement.parentNode().toDocument()==doc, true );
+  CHECK( KoXml::childNodesCount(contentElement), 3 );
   CHECK( contentElement.firstChild().isNull(), false );
   CHECK( contentElement.lastChild().isNull(), false );
   CHECK( contentElement.previousSibling().isNull(), false );
-  
   CHECK( contentElement.nextSibling().isNull(), true );
   CHECK( contentElement.localName(), QString("document-content") );
   CHECK( contentElement.hasAttributeNS(officeNS,"version"), true );
@@ -1495,6 +1755,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( scriptsElement.isElement(), true );
   CHECK( scriptsElement.parentNode().isNull(), false );
   CHECK( scriptsElement.parentNode()==contentElement, true );
+  CHECK( KoXml::childNodesCount(scriptsElement), 0 );
   CHECK( scriptsElement.firstChild().isNull(), true );
   CHECK( scriptsElement.lastChild().isNull(), true );
   CHECK( scriptsElement.previousSibling().isNull(), true );
@@ -1508,6 +1769,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( stylesElement.isElement(), true );
   CHECK( stylesElement.parentNode().isNull(), false );
   CHECK( stylesElement.parentNode()==contentElement, true );
+  CHECK( KoXml::childNodesCount(stylesElement), 0 );
   CHECK( stylesElement.firstChild().isNull(), true );
   CHECK( stylesElement.lastChild().isNull(), true );
   CHECK( stylesElement.previousSibling().isNull(), false );
@@ -1521,6 +1783,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( styles2Element.isElement(), true );
   CHECK( styles2Element.parentNode().isNull(), false );
   CHECK( styles2Element.parentNode()==contentElement, true );
+  CHECK( KoXml::childNodesCount(styles2Element), 0 );
   CHECK( styles2Element.firstChild().isNull(), true );
   CHECK( styles2Element.lastChild().isNull(), true );
   CHECK( styles2Element.previousSibling().isNull(), false );
@@ -1534,6 +1797,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( bodyElement.isElement(), true );
   CHECK( bodyElement.parentNode().isNull(), false );
   CHECK( bodyElement.parentNode()==contentElement, true );
+  CHECK( KoXml::childNodesCount(bodyElement), 1 );
   CHECK( bodyElement.firstChild().isNull(), false );
   CHECK( bodyElement.lastChild().isNull(), false );
   CHECK( bodyElement.previousSibling().isNull(), false );
@@ -1547,6 +1811,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( body2Element.isElement(), true );
   CHECK( body2Element.parentNode().isNull(), false );
   CHECK( body2Element.parentNode()==contentElement, true );
+  CHECK( KoXml::childNodesCount(body2Element), 1 );
   CHECK( body2Element.firstChild().isNull(), false );
   CHECK( body2Element.lastChild().isNull(), false );
   CHECK( body2Element.previousSibling().isNull(), false );
@@ -1560,6 +1825,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( presentationElement.isElement(), true );
   CHECK( presentationElement.parentNode().isNull(), false );
   CHECK( presentationElement.parentNode()==bodyElement, true );
+  CHECK( KoXml::childNodesCount(presentationElement), 2 );
   CHECK( presentationElement.firstChild().isNull(), false );
   CHECK( presentationElement.lastChild().isNull(), false );
   CHECK( presentationElement.previousSibling().isNull(), true );
@@ -1573,6 +1839,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( presentation2Element.isElement(), true );
   CHECK( presentation2Element.parentNode().isNull(), false );
   CHECK( presentation2Element.parentNode()==bodyElement, true );
+  CHECK( KoXml::childNodesCount(presentation2Element), 2 );
   CHECK( presentation2Element.firstChild().isNull(), false );
   CHECK( presentation2Element.lastChild().isNull(), false );
   CHECK( presentation2Element.previousSibling().isNull(), true );
@@ -1586,6 +1853,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( titlePageElement.isElement(), true );
   CHECK( titlePageElement.parentNode().isNull(), false );
   CHECK( titlePageElement.parentNode()==presentationElement, true );
+  CHECK( KoXml::childNodesCount(titlePageElement), 3 );
   CHECK( titlePageElement.firstChild().isNull(), false );
   CHECK( titlePageElement.lastChild().isNull(), false );
   CHECK( titlePageElement.previousSibling().isNull(), true );
@@ -1604,6 +1872,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( titleFrameElement.isElement(), true );
   CHECK( titleFrameElement.parentNode().isNull(), false );
   CHECK( titleFrameElement.parentNode()==titlePageElement, true );
+  CHECK( KoXml::childNodesCount(titleFrameElement), 1 );
   CHECK( titleFrameElement.firstChild().isNull(), false );
   CHECK( titleFrameElement.lastChild().isNull(), false );
   CHECK( titleFrameElement.previousSibling().isNull(), true );
@@ -1626,6 +1895,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( titleBoxElement.isElement(), true );
   CHECK( titleBoxElement.parentNode().isNull(), false );
   CHECK( titleBoxElement.parentNode()==titleFrameElement, true );
+  CHECK( KoXml::childNodesCount(titleBoxElement), 1 );
   CHECK( titleBoxElement.firstChild().isNull(), false );
   CHECK( titleBoxElement.lastChild().isNull(), false );
   CHECK( titleBoxElement.previousSibling().isNull(), true );
@@ -1639,6 +1909,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( titleParElement.isElement(), true );
   CHECK( titleParElement.parentNode().isNull(), false );
   CHECK( titleParElement.parentNode()==titleBoxElement, true );
+  CHECK( KoXml::childNodesCount(titleParElement), 1 );
   CHECK( titleParElement.firstChild().isNull(), false );
   CHECK( titleParElement.lastChild().isNull(), false );
   CHECK( titleParElement.previousSibling().isNull(), true );
@@ -1654,6 +1925,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( subtitleFrameElement.isElement(), true );
   CHECK( subtitleFrameElement.parentNode().isNull(), false );
   CHECK( subtitleFrameElement.parentNode()==titlePageElement, true );
+  CHECK( KoXml::childNodesCount(subtitleFrameElement), 1 );
   CHECK( subtitleFrameElement.firstChild().isNull(), false );
   CHECK( subtitleFrameElement.lastChild().isNull(), false );
   CHECK( subtitleFrameElement.previousSibling().isNull(), false );
@@ -1676,6 +1948,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( subtitleBoxElement.isElement(), true );
   CHECK( subtitleBoxElement.parentNode().isNull(), false );
   CHECK( subtitleBoxElement.parentNode()==subtitleFrameElement, true );
+  CHECK( KoXml::childNodesCount(subtitleBoxElement), 1 );
   CHECK( subtitleBoxElement.firstChild().isNull(), false );
   CHECK( subtitleBoxElement.lastChild().isNull(), false );
   CHECK( subtitleBoxElement.previousSibling().isNull(), true );
@@ -1689,6 +1962,7 @@ void testSimpleOpenDocumentPresentation()
   CHECK( subtitleParElement.isElement(), true );
   CHECK( subtitleParElement.parentNode().isNull(), false );
   CHECK( subtitleParElement.parentNode()==subtitleBoxElement, true );
+  CHECK( KoXml::childNodesCount(subtitleParElement), 1 );
   CHECK( subtitleParElement.firstChild().isNull(), false );
   CHECK( subtitleParElement.lastChild().isNull(), false );
   CHECK( subtitleParElement.previousSibling().isNull(), true );
@@ -1880,49 +2154,49 @@ void testLargeOpenDocumentSpreadsheet()
 
   int sheetCount = 4;
   int rowCount = 200;
-  int colCount = 200*2;
+  int colCount = 200/16;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-  QTextStream xmlstream( &xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   
   // content.xml
-  xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+  xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
   xmlstream << "<office:document-content ";
-  xmlstream << "xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" "; 
+  xmlstream << "xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" ";
   xmlstream << "xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" ";
-  xmlstream << "xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" >";
-  xmlstream << "<office:body>";
-  xmlstream << "<office:spreadsheet>";
+  xmlstream << "xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" >\n";
+  xmlstream << "<office:body>\n";
+  xmlstream << "<office:spreadsheet>\n";
   for( int i = 0; i < sheetCount; i++ )
   {
     QString sheetName = QString("Sheet%1").arg(i+1);
     xmlstream << "<table:table table:name=\"" << sheetName;
-    xmlstream << "\" table:print=\"false\">";
+    xmlstream << "\" table:print=\"false\">\n";
     for( int j = 0; j < rowCount; j++ )
     {
-      xmlstream << "<table:table-row>";
+      xmlstream << "<table:table-row>\n";
       for( int k = 0; k < colCount; k++ )
       {
         xmlstream << "<table:table-cell office:value-type=\"string\">";
         xmlstream << "<text:p>Hello, world</text:p>";
-        xmlstream << "</table:table-cell>";
+        xmlstream << "</table:table-cell>\n";
       }
-      xmlstream << "</table:table-row>";
+      xmlstream << "</table:table-row>\n";
     }
-    xmlstream << "</table:table>";
+    xmlstream << "</table:table>\n";
   }
-  xmlstream << "</office:spreadsheet>";
-  xmlstream << "</office:body>";
-  xmlstream << "</office:document-content>";
+  xmlstream << "</office:spreadsheet>\n";
+  xmlstream << "</office:body>\n";
+  xmlstream << "</office:document-content>\n";
   xmldevice.close();
 
-  printf("Raw XML size: %d KB\n", xmlbuf.size()/1024 );
+  printf("Raw XML size: %lld KB\n", xmldevice.size()/1024 );
+
 
   QTime timer;
-  timer.start();
 
-#if 1
+#if 0
   // just to test parsing speed with plain dumb handler
   QXmlSimpleReader* reader = new QXmlSimpleReader;
   reader->setFeature( "http://xml.org/sax/features/namespaces", true );
@@ -1932,32 +2206,32 @@ void testLargeOpenDocumentSpreadsheet()
   reader->setLexicalHandler( &handler );
   reader->setDeclHandler( &handler );
   reader->setDTDHandler( &handler );
-  QXmlInputSource xmlSource;
-  xmlSource.setData( QString::fromUtf8( xmlbuf.data(), xmlbuf.size() ) );
+  QXmlInputSource xmlSource( &xmldevice );
   timer.start();
   reader->parse( &xmlSource ); 
   printf("Large spreadsheet: QXmlDefaultHandler parsing time is %d ms\n", timer.elapsed() );
   delete reader;
+  xmldevice.seek( 0 );
 #endif
 
-  timer.start();
   KoXmlDocument doc;
 
-  // uncomment to see the performance if on-demand/lazy loading is not used
-  // will definitely eat more memory
-#ifndef KOXML_USE_QDOM
-  doc.setFastLoading( true );
-#endif
-
+  timer.start();
   CHECK( doc.setContent( &xmldevice, true, &errorMsg, &errorLine, &errorColumn ), true );
   CHECK( errorMsg.isEmpty(), true );
   CHECK( errorLine, 0 );
   CHECK( errorColumn, 0 );
+  
+  if( !errorMsg.isEmpty() )
+  {
+    qDebug("Error: %s", qPrintable( errorMsg ) );
+    return;
+  }
 
-  printf("Large spreadsheet: parsing time is %d ms\n", timer.elapsed() );
-
+  printf("Large spreadsheet: KoXmlDocument parsing time is %d ms\n", timer.elapsed() );
+  
   // release memory taken by the XML document content
-  xmlbuf.resize( 0 );
+  //xmlstream.setDevice( 0 );
 
   // namespaces that will be used  
   QString officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0"; 
@@ -2000,7 +2274,7 @@ void testLargeOpenDocumentSpreadsheet()
     CHECK( tableElement.attributeNS(tableNS,"print",""), QString("false") );
 
     // load everything for this table
-    KoXml::load( tableElement, 99 );
+    //KoXml::load( tableElement, 99 );
 
     CHECK( tableElement.parentNode().isNull(), false );
     CHECK( tableElement.parentNode()==spreadsheetElement, true );
@@ -2047,31 +2321,232 @@ void testLargeOpenDocumentSpreadsheet()
   printf("Large spreadsheet: iterating time is %d ms\n", timer.elapsed() );
 }
 
+
+void testExternalOpenDocumentSpreadsheet(const QString& filename)
+{
+  QProcess unzip;
+  QStringList arguments;
+  arguments << "-o" << filename << "content.xml";
+  
+  printf( "Unzipping content.xml from %s...\n", qPrintable( filename ) );
+  
+  unzip.start( "unzip", arguments );
+  if( !unzip.waitForStarted() )
+  {
+    printf( "Error: can't invoke unzip. Check your PATH and installation!\n\n" );
+    return;
+  }
+  
+  if( !unzip.waitForFinished() )
+  {
+    printf( "Error: unzip failed, can't continue!\n\n" );
+    return;
+  }
+  
+  printf( "Procesing content.xml....\n" );
+  
+  QString errorMsg;
+  int errorLine = 0;
+  int errorColumn = 0;
+  
+  QFile xmlfile( "content.xml" );
+  if( !xmlfile.open(QFile::ReadOnly) )
+  {
+    printf("Can not open file '%s'\n", qPrintable(filename));
+    return;
+  }
+  
+  printf("Test external file: %s   %lld KB\n", qPrintable(filename), xmlfile.size()/1024);
+  
+  QTime timer;
+  timer.start();
+
+  KoXmlDocument doc;
+  
+  CHECK( KoXml::setDocument( doc, &xmlfile, true, &errorMsg, &errorLine, &errorColumn ), true );
+  CHECK( errorMsg.isEmpty(), true );
+  CHECK( errorLine, 0 );
+  CHECK( errorColumn, 0 );
+
+  printf("External spreadsheet: parsing time is %d ms\n", timer.elapsed() );
+
+  // namespaces that will be used  
+  QString officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0"; 
+  QString tableNS = "urn:oasis:names:tc:opendocument:xmlns:table:1.0";
+  QString textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+
+  // <office:document-content>
+  KoXmlElement contentElement;
+  contentElement = doc.documentElement();
+  CHECK( contentElement.isNull(), false );
+  CHECK( contentElement.isElement(), true );
+  CHECK( contentElement.localName(), QString("document-content") );
+  
+  long totalCellCount = 0;
+  
+  KoXmlElement bodyElement;
+  forEachElement( bodyElement, contentElement )
+  {
+    // <office:body>
+    if( bodyElement.localName() != QString("body") )
+      continue;
+      
+    // now we iterate inside the body
+    timer.start();
+      
+    // <office:spreadsheet>
+    KoXmlElement spreadsheetElement;
+    spreadsheetElement = bodyElement.firstChild().toElement();
+    CHECK( spreadsheetElement.isNull(), false );
+    CHECK( spreadsheetElement.isElement(), true );
+    CHECK( spreadsheetElement.localName(), QString("spreadsheet") );
+    
+    // now we visit every sheet
+    long tableCount = -1;
+    KoXmlElement tableElement;
+    tableElement = spreadsheetElement.firstChild().toElement();
+    for(;;)
+    {
+        if( tableElement.isNull() ) 
+          break;
+          
+        if( tableElement.localName() != QString("table") )
+        {
+          tableElement = tableElement.nextSibling().toElement();
+          continue;
+        }  
+        
+        QString tableName = tableElement.attributeNS(tableNS,"name","");
+        tableCount++;  
+    
+        printf( " sheet #%ld (%s): ", tableCount+1, qPrintable(tableName) );
+    
+        // use to preload everything in this sheet, will slow it down!
+        // KoXml::load( tableElement, 50 );
+        
+        long rowCount = -1;
+        long cellCount = -1;
+        
+        KoXmlElement rowElement;
+        rowElement = tableElement.firstChild().toElement();
+        for(;;)
+        {
+          if( rowElement.isNull() )
+            break;
+            
+          if( rowElement.localName() != QString("table-row") )
+          {
+            rowElement = rowElement.nextSibling().toElement();
+            continue;
+          }
+            
+          rowCount++;   
+          KoXml::load( rowElement, 4 );
+            
+          CHECK( rowElement.isElement(), true );
+          CHECK( rowElement.localName(), QString("table-row") );
+          CHECK( rowElement.parentNode().isNull(), false );
+          CHECK( rowElement.parentNode()==tableElement, true );
+    
+          KoXmlElement cellElement;
+          cellElement = rowElement.firstChild().toElement();
+          for( ; ; )
+          {
+            if( cellElement.isNull() )
+              break;
+            
+            if( cellElement.localName() != QString("table-cell") )
+            {
+              cellElement = cellElement.nextSibling().toElement();
+              continue;
+            }
+            
+            cellCount++;
+            
+            CHECK( cellElement.isNull(), false );
+            CHECK( cellElement.isElement(), true );
+            CHECK( cellElement.localName(), QString("table-cell") );
+            QString text1 = cellElement.text();
+            QString text2 = cellElement.text();
+            CHECK( text1, text2 );
+            QString type1 = cellElement.attributeNS(officeNS,"value-type",QString());
+            QString type2 = cellElement.attributeNS(officeNS,"value-type",QString());
+            CHECK( type1, type2 );
+            QString style1 = cellElement.attributeNS(tableNS,"style-name",QString());
+            QString style2 = cellElement.attributeNS(tableNS,"style-name",QString());
+            CHECK( style1, style2 );
+            
+            CHECK( cellElement.parentNode().isNull(), false );
+            CHECK( cellElement.parentNode()==rowElement, true );
+            
+            cellElement = cellElement.nextSibling().toElement();
+          }
+    
+    
+          // better not to unload, freeing memory takes time
+          KoXml::unload( rowElement );
+    
+          rowElement = rowElement.nextSibling().toElement();
+        }
+            
+        printf( " %ld rows, %ld cells\n", rowCount+1, cellCount+1 );
+        totalCellCount += (cellCount + 1);
+    
+        // IMPORTANT: helps minimizing memory usage !!
+        // we do not need that element anymore, so just throw it away
+        KoXml::unload( tableElement );
+        
+        tableElement = tableElement.nextSibling().toElement();
+    }
+    
+    KoXml::unload( spreadsheetElement );
+  }
+  
+  printf("Total number of cells: %ld\n", totalCellCount);
+  
+  int elapsed = timer.elapsed();
+  printf("External spreadsheet: iterating time is %d ms\n", elapsed );
+  if( elapsed > 0 )
+    printf("  approx. %ld cells/second\n", totalCellCount*1000/elapsed);
+  
+  // uncomment to check the XML
+  xmlfile.remove();
+}
+
 int main( int argc, char** argv )
 {
-  Q_UNUSED( argc );
-  Q_UNUSED( argv );
+  if( argc < 2 )
+  {
+    testNode();
+    testElement();
+    testAttributes();
+    testText();
+    testCDATA();
+    testDocument();
+    testNamespace();
+    
+    testParseQString();
 
-  testNode();
-  testElement();
-  testAttributes();
-  testText();
-  testCDATA();
-  testDocument();
-  testNamespace();
-
-  testUnload();
-
-  testSimpleXML();
-  testRootError();
-  testMismatchedTag();
-
-  testSimpleOpenDocumentText();
-  testSimpleOpenDocumentSpreadsheet();
-  testSimpleOpenDocumentPresentation();
-  testSimpleOpenDocumentFormula();
-
-//  testLargeOpenDocumentSpreadsheet();
+    testUnload();
+    
+    testSimpleXML();
+    testRootError();
+    testMismatchedTag();
+    
+    testConvertQDomElement();
+    
+    testSimpleOpenDocumentText();
+    testSimpleOpenDocumentSpreadsheet();
+    testSimpleOpenDocumentPresentation();
+    testSimpleOpenDocumentFormula();
+  
+    //testLargeOpenDocumentSpreadsheet();
+  }
+  else
+  {
+    QString fname( argv[1] );
+    testExternalOpenDocumentSpreadsheet( fname );
+  }  
 
 #ifdef KOXML_USE_QDOM
   printf("Using QDom: ");

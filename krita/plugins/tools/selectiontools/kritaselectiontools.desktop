@@ -6,4 +6,4 @@ Name[x-test]=xxSelection Toolsxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritaselectiontools
-X-Krita-Version=2
+X-Krita-Version=3

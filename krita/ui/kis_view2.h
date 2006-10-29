@@ -69,6 +69,11 @@ private slots:
     void slotZoomChanged(KoZoomMode::Mode mode, int zoom);
 
 private:
+
+    void createActions();
+    void createManagers();
+
+private:
     class KisView2Private;
     KisView2Private * m_d;
 };

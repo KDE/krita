@@ -9,4 +9,4 @@ Comment[x-test]=xxColor filtersxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacolorsfilters
-X-Krita-Version=2
+X-Krita-Version=3

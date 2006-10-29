@@ -4,4 +4,4 @@ Name=Curves Tool
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolcurves
-X-Krita-Version=2
+X-Krita-Version=3

@@ -6,4 +6,4 @@ Name[x-test]=xxStar Toolxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolstar
-X-Krita-Version=2
+X-Krita-Version=3

@@ -6,4 +6,4 @@ Name[x-test]=xxPerformance Testxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaperftest
-X-Krita-Version=2
+X-Krita-Version=3

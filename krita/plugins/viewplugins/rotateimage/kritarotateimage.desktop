@@ -6,4 +6,4 @@ Name[x-test]=xxRotate Image Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritarotateimage
-X-Krita-Version=2
+X-Krita-Version=3

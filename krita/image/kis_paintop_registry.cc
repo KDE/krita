@@ -43,11 +43,12 @@ KisPaintOpRegistry::KisPaintOpRegistry()
     Q_ASSERT(KisPaintOpRegistry::m_singleton == 0);
     KisPaintOpRegistry::m_singleton = this;
 
-	KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Paintop"),
-                                                         QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-Krita-Version] == 2)"));
 
-     KService::List::ConstIterator iter;
+    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Paintop"),
+                                                              QString::fromLatin1("(Type == 'Service') and "
+                                                                                  "([X-Krita-Version] == 3)"));
+
+    KService::List::ConstIterator iter;
 
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {

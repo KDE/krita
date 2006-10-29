@@ -5,4 +5,4 @@ Name=Perspective transform Tool
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolperspectivetransform
-X-Krita-Version=2
+X-Krita-Version=3

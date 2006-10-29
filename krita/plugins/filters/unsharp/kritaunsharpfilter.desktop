@@ -5,4 +5,4 @@ Name=Image enhancement Filters (Extension)
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaunsharpfilter
-X-Krita-Version=2
+X-Krita-Version=3

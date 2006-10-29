@@ -29,6 +29,10 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kparts/plugin.h>
+#include <kservice.h>
+#include <kservicetypetrader.h>
+#include <kparts/componentfactory.h>
 
 #include "kis_aboutdata.h"
 
@@ -121,6 +125,34 @@ KInstance* KisFactory2::instance()
 
         // Tell the iconloader about share/apps/koffice/icons
         s_instance->iconLoader()->addAppDir("koffice");
+
+
+        // Load the Krita-specific tools. XXX: Move the krita tools to
+        // flake tools once the interaction design has been sorted
+        // out.
+        KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Tool"),
+                                                         QString::fromLatin1("(Type == 'Service') and "
+                                                                             "([X-Krita-Version] == 3)"));
+
+        KService::List::ConstIterator iter;
+        for(iter = offers.begin(); iter != offers.end(); ++iter)
+        {
+            KService::Ptr service = *iter;
+            int errCode = 0;
+            KParts::Plugin* plugin =
+                KService::createInstance<KParts::Plugin> ( service, 0, QStringList(), &errCode);
+            if ( plugin )
+                kDebug(30008) <<"found plugin '"<< service->name() << "'" << endl;
+            else {
+                if( errCode == KLibLoader::ErrNoLibrary)
+                {
+                    kWarning(30008) <<"loading plugin '" << service->name() <<
+                        "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")" << endl;
+                }
+            }
+
+        }
+
     }
 
     return s_instance;

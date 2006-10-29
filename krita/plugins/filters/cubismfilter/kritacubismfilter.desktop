@@ -9,4 +9,4 @@ Comment[x-test]=xxCubism filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacubismfilter
-X-Krita-Version=2
+X-Krita-Version=3

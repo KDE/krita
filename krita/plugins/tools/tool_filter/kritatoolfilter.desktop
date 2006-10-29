@@ -9,4 +9,4 @@ Comment[x-test]=xxFilter tool and paint operationxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolfilter
-X-Krita-Version=2
+X-Krita-Version=3

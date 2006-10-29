@@ -6,4 +6,4 @@ Name[x-test]=xxPolyline Toolxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolpolyline
-X-Krita-Version=2
+X-Krita-Version=3

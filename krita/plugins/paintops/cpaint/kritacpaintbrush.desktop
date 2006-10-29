@@ -5,5 +5,5 @@ Comment=Chinese Brush
 ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacpaintbrush
-X-Krita-Version=2
+X-Krita-Version=3
 

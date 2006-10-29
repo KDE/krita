@@ -6,4 +6,4 @@ Name=Wave Filter
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritawavefilter
-X-Krita-Version=2
+X-Krita-Version=3

@@ -6,4 +6,4 @@ Name[x-test]=xxSmall Tiles Filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasmalltilesfilter
-X-Krita-Version=2
+X-Krita-Version=3

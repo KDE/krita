@@ -4,4 +4,4 @@ Name=Perspective Grid Tool
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolperspectivegrid
-X-Krita-Version=2
+X-Krita-Version=3

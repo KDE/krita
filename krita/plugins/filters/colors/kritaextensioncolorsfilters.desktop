@@ -5,4 +5,4 @@ Name=Color Filters (Extension)
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaextensioncolorsfilters
-X-Krita-Version=2
+X-Krita-Version=3

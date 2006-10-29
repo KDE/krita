@@ -5,5 +5,5 @@ Comment=Dynamic brush
 ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritadynamicbrush
-X-Krita-Version=2
+X-Krita-Version=3
 

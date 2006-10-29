@@ -6,4 +6,4 @@ Name[x-test]=xxPolygon Toolxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolpolygon
-X-Krita-Version=2
+X-Krita-Version=3

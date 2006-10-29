@@ -6,4 +6,4 @@ Name[x-test]=xxCrop Toolxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolcrop
-X-Krita-Version=2
+X-Krita-Version=3

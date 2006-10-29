@@ -6,4 +6,4 @@ Name[x-test]=xxSeparate Channels Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaseparatechannels
-X-Krita-Version=2
+X-Krita-Version=3

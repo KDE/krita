@@ -5,4 +5,4 @@ Comment=Add noise to an image
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritanoisefilter
-X-Krita-Version=2
+X-Krita-Version=3

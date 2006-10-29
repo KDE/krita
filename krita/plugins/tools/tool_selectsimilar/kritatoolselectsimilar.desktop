@@ -6,4 +6,4 @@ Name[x-test]=xxSelect Similar Colors Toolxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolselectsimilar
-X-Krita-Version=2
+X-Krita-Version=3

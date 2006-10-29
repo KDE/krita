@@ -9,4 +9,4 @@ Comment[x-test]=xxInvert the colors of an imagexx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaexample
-X-Krita-Version=2
+X-Krita-Version=3

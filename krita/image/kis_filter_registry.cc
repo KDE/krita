@@ -40,11 +40,11 @@ KisFilterRegistry::KisFilterRegistry()
     Q_ASSERT(KisFilterRegistry::m_singleton == 0);
     KisFilterRegistry::m_singleton = this;
 
-	KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Filter"),
+    KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Filter"),
                                                          QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-Krita-Version] == 2)"));
+                                                                             "([X-Krita-Version] == 3)"));
 
-	KService::List::ConstIterator iter;
+    KService::List::ConstIterator iter;
 
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
@@ -63,7 +63,6 @@ KisFilterRegistry::KisFilterRegistry()
         }
 
     }
-
 }
 
 KisFilterRegistry::~KisFilterRegistry()

@@ -6,4 +6,4 @@ Name[x-test]=xxDefault Toolsxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritadefaulttools
-X-Krita-Version=2
+X-Krita-Version=3

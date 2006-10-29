@@ -9,4 +9,4 @@ Comment[x-test]=xxDefault paint operationsxx
 ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritadefaultpaintops
-X-Krita-Version=2
+X-Krita-Version=3

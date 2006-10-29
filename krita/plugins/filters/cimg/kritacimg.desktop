@@ -9,4 +9,4 @@ Comment[x-test]=xxCImg Image restoration filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacimg
-X-Krita-Version=2
+X-Krita-Version=3

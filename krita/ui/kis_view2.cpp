@@ -22,16 +22,22 @@
 #include <QScrollArea>
 #include <QRegion>
 #include <QRect>
+#include <QStringList>
 
 #include <kstdaction.h>
 #include <kxmlguifactory.h>
 #include <kicon.h>
 #include <klocale.h>
+#include <kparts/plugin.h>
+#include <kservice.h>
+#include <kservicetypetrader.h>
+#include <kparts/componentfactory.h>
 
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
+#include <KoToolRegistry.h>
 
 #include <kis_image.h>
 
@@ -84,6 +90,8 @@ public:
     KAction *fitToCanvas;
 };
 
+
+
 KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     : KoView(doc, parent)
 {
@@ -101,30 +109,15 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
                              SLOT( configureShortcuts() ),
                              actionCollection() );
 
-    // view actions
-    m_d->zoomAction = new KoZoomAction(0, i18n("Zoom"), KIcon("14_zoom"), 0, actionCollection(), "zoom" );
-    connect(m_d->zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
-          this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
-    m_d->zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
-    m_d->zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
 
-/*
-    m_d->actualPixels = new KAction(i18n("Actual Pixels"), actionCollection(), "actual_pixels");
-    m_d->actualPixels->setShortcut(Qt::CTRL+Qt::Key_0);
-    connect(m_d->actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
-
-    m_d->actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection(), "actual_size");
-    m_d->actualSize->setEnabled(false);
-    m_d->fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection(), "fit_to_canvas");
-*/
-
-    // Create the managers for filters, selections, layers etc.
-    // XXX: When the currentlayer changes, call updateGUI on all managers
-    m_d->filterManager = new KisFilterManager(this, m_d->doc);
+    createActions();
+    createManagers();
 
     // Put the canvascontroller in a layout so it resizes with us
     QHBoxLayout * layout = new QHBoxLayout( this );
     layout->addWidget( m_d->canvasController );
+
+    show();
 
     // Wait for the async image to have loaded
     if ( m_d->doc->isLoading() ) {
@@ -188,6 +181,37 @@ void KisView2::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
 //    QRectF imageRect = QRectF(0, 0, m_d->canvas->width(), m_d->canvas->height());
 //    m_d->canvas->updateCanvas(imageRect);
     m_d->canvas->updateCanvas(QRectF(0, 0, 300,300));
+}
+
+void KisView2::createActions()
+{
+
+    // view actions
+    m_d->zoomAction = new KoZoomAction(0, i18n("Zoom"), KIcon("14_zoom"), 0, actionCollection(), "zoom" );
+    connect(m_d->zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
+          this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
+    m_d->zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
+    m_d->zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
+
+/*
+    m_d->actualPixels = new KAction(i18n("Actual Pixels"), actionCollection(), "actual_pixels");
+    m_d->actualPixels->setShortcut(Qt::CTRL+Qt::Key_0);
+    connect(m_d->actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
+
+    m_d->actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection(), "actual_size");
+    m_d->actualSize->setEnabled(false);
+    m_d->fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection(), "fit_to_canvas");
+*/
+
+}
+
+
+void KisView2::createManagers()
+{
+    // Create the managers for filters, selections, layers etc.
+    // XXX: When the currentlayer changes, call updateGUI on all managers
+    m_d->filterManager = new KisFilterManager(this, m_d->doc);
+
 }
 
 #include "kis_view2.moc"

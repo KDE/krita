@@ -9,4 +9,4 @@ Comment[x-test]=xxBumpmap filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritabumpmap
-X-Krita-Version=2
+X-Krita-Version=3

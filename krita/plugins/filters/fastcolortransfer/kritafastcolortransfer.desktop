@@ -6,4 +6,4 @@ Name=Color Transfer Filter
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritafastcolortransfer
-X-Krita-Version=2
+X-Krita-Version=3

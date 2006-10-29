@@ -4,4 +4,4 @@ Name=Modify Selection
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritamodifyselection
-X-Krita-Version=2
+X-Krita-Version=3

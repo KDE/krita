@@ -9,5 +9,5 @@ Comment[x-test]=xxSmeary brushxx
 ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritasmearybrush
-X-Krita-Version=2
+X-Krita-Version=3
 

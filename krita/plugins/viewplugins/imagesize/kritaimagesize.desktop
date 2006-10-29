@@ -6,4 +6,4 @@ Name[x-test]=xxImage Resize and Scale Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaimagesize
-X-Krita-Version=2
+X-Krita-Version=3

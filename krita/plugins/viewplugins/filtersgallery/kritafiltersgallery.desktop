@@ -6,4 +6,4 @@ Name[x-test]=xxFilters Galleryxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritafiltersgallery
-X-Krita-Version=2
+X-Krita-Version=3

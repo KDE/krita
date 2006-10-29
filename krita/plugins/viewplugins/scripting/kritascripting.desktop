@@ -9,4 +9,4 @@ Comment[x-test]=xxAllow execution of scriptsxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascripting
-X-Krita-Version=2
+X-Krita-Version=3

@@ -6,4 +6,4 @@ Name[x-test]=xxHistogram Dockerxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritahistogramdocker
-X-Krita-Version=2
+X-Krita-Version=3

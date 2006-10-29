@@ -93,10 +93,10 @@ public:
   virtual bool isDocument() const;
 
   virtual void clear();
-  KoXmlElement toElement();
-  KoXmlText toText();
-  KoXmlCDATASection toCDATASection();
-  KoXmlDocument toDocument();
+  KoXmlElement toElement() const;
+  KoXmlText toText() const;
+  KoXmlCDATASection toCDATASection() const;
+  KoXmlDocument toDocument() const;
 
   virtual QString nodeName() const;
   virtual QString namespaceURI() const;

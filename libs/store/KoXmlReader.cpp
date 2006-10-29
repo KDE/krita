@@ -1433,23 +1433,23 @@ KoXmlNode KoXmlNode::namedItemNS( const QString& nsURI, const QString& name ) co
   return KoXmlNode();
 }
 
-KoXmlElement KoXmlNode::toElement()
+KoXmlElement KoXmlNode::toElement() const
 {
   return isElement() ? KoXmlElement( d ) : KoXmlElement( new KoXmlNodeData );
 }
 
-KoXmlText KoXmlNode::toText()
+KoXmlText KoXmlNode::toText() const
 {
   return isText() ? KoXmlText( d ) : KoXmlText();
 }
 
-KoXmlCDATASection KoXmlNode::toCDATASection()
+KoXmlCDATASection KoXmlNode::toCDATASection() const
 {
   return isCDATASection() ? KoXmlCDATASection( (KoXmlNodeData*)d ) :
     KoXmlCDATASection();
 }
 
-KoXmlDocument KoXmlNode::toDocument()
+KoXmlDocument KoXmlNode::toDocument() const
 {
   KoXmlNodeData* data = d;
   if( !isDocument() )

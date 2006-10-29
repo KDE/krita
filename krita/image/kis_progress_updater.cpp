@@ -20,6 +20,7 @@
 
 #include <KoAction.h>
 #include <KoExecutePolicy.h>
+#include <threadweaver/ThreadWeaver.h>
 
 #include <QProgressBar>
 #include <QString>

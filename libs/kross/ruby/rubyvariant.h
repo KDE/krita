@@ -197,6 +197,8 @@ namespace Kross {
             switch( TYPE(value) ) {
                 case T_STRING: {
                     long length = LONG2NUM( RSTRING(value)->len );
+                    if( length < 0 )
+                        return QByteArray("");
                     char* ca = rb_str2cstr(value, &length);
                     return QByteArray(ca, length);
                 } break;

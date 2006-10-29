@@ -37,9 +37,9 @@ namespace Kross {
     class Interpreter;
 
     /**
-     * While the \a Interpreter is the implemented interpreter this class
-     * is used to provide some abstract information about each interpreter
-     * we are able to use within the \a Manager singleton.
+     * The InterpreterInfo class provides abstract information about
+     * a \a Interpreter before the interpreter-backend itself is
+     * loaded.
      */
     class KROSS_EXPORT InterpreterInfo
     {
@@ -141,11 +141,11 @@ namespace Kross {
     };
 
     /**
-     * Base class for interpreters.
+     * Base class for interpreter implementations.
      *
      * Each scripting backend needs to inheritate it's own
-     * interpreter from this class and implementate there
-     * backend related stuff.
+     * interpreter and implement it.
+     *
      * The Interpreter will be managed by the \a Kross::Manager
      * class.
      */

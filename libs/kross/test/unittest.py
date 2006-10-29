@@ -93,10 +93,27 @@ class TestKross(unittest.TestCase):
 	def testObject(self):
 		self.assert_( self.object1.name() == "TestObject1" and self.object2.name() == "TestObject2" )
 		#self.assert_( self.object1.func_testobject_testobject(self.object1).name() == self.object1.name() )
-		#self.assert_( self.object1.func_testobject_testobject(self.object2).name() == self.object2.name() )
-		#self.assert_( self.object2.func_testobject_testobject(self.object1).name() == self.object1.name() )
-		#self.assert_( self.object2.func_testobject_testobject(self.object2).name() == self.object2.name() )
-		pass
+
+	def testProperties(self):
+		self.object1.boolProperty = True
+		self.assert_( self.object1.boolProperty == True )
+		self.object1.boolProperty = False
+		self.assert_( self.object1.boolProperty == False )
+
+		self.object1.intProperty = 20
+		self.assert_( self.object1.intProperty == 20 )
+
+		self.object1.doubleProperty = 7436.671
+		self.assert_( self.object1.doubleProperty == 7436.671 )
+
+		self.object1.stringProperty = " SoMe StRiNg "
+		self.assert_( self.object1.stringProperty == " SoMe StRiNg " )
+
+		self.object1.stringListProperty = [ "TestString", " Other String " ]
+		self.assert_( self.object1.stringListProperty == [ "TestString", " Other String " ] )
+
+		self.object1.listProperty = [ True, [2464, -8295], -572.07516, "test", [] ]
+		self.assert_( self.object1.listProperty == [ True, [2464, -8295], -572.07516, "test", [] ] )
 
 	#def testExpectedFailures(self):
 		# to less arguments

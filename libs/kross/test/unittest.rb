@@ -110,6 +110,28 @@ class TestKross < Test::Unit::TestCase
 		assert( TestObject1.func_qstringlist_qstringlist( ["s1","s2"] ) == TestObject2.func_qstringlist_qstringlist( ["s1","s2"] ) )
 	end
 
+	def testProperties
+		#TestObject1.boolProperty = True
+		#assert( TestObject1.boolProperty == True )
+		#TestObject1.boolProperty = False
+		#assert( TestObject1.boolProperty == False )
+
+		#TestObject1.intProperty = 20
+		#assert( TestObject1.intProperty == 20 )
+
+		#TestObject1.doubleProperty = 7436.671
+		#assert( TestObject1.doubleProperty == 7436.671 )
+
+		#TestObject1.stringProperty = " SoMe StRiNg "
+		#assert( TestObject1.stringProperty == " SoMe StRiNg " )
+
+		#TestObject1.stringListProperty = [ "TestString", " Other String " ]
+		#assert( TestObject1.stringListProperty == [ "TestString", " Other String " ] )
+
+		#TestObject1.listProperty = [ True, [2464, -8295], -572.07516, "test", [] ]
+		#assert( TestObject1.listProperty == [ True, [2464, -8295], -572.07516, "test", [] ] )
+	end
+
 end
 
 require 'test/unit/ui/console/testrunner'

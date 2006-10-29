@@ -64,7 +64,7 @@ void TestObject::func_void()
     //kDebug() << "TestObject::func_void" << endl;
 }
 
-void TestObject::func_void_int(int i)
+void TestObject::func_void_int(int)
 {
     //kDebug() << "TestObject::func_void_int i=" << i << endl;
 }
@@ -105,12 +105,12 @@ qulonglong TestObject::func_qulonglong_qulonglong(qulonglong l)
     return l;
 }
 
-void TestObject::func_void_qstring_int(QString s, int i)
+void TestObject::func_void_qstring_int(QString, int)
 {
     //kDebug() << "TestObject::func_void_qstring_int s=" << s << " i=" << i << endl;
 }
 
-void TestObject::func_void_qstringlist(QStringList sl)
+void TestObject::func_void_qstringlist(QStringList)
 {
     //kDebug() << "TestObject::func_void_qstringlist sl=" << sl.join(",") << endl;
 }
@@ -171,7 +171,7 @@ Kross::Object::Ptr TestObject::func_krossobject_krossobject(Kross::Object::Ptr o
 }
 */
 
-void TestObject::func_void_qobject(QObject* obj)
+void TestObject::func_void_qobject(QObject*)
 {
     //kDebug() << "TestObject::func_void_qobject " << (obj ? QString("objectName=%1 className=%2").arg(obj->objectName()).arg(obj->metaObject()->className()) : "NULL") << endl;
 }
@@ -182,7 +182,7 @@ QObject* TestObject::func_qobject_qobject(QObject* obj)
     return obj;
 }
 
-void TestObject::func_void_testobject(TestObject* obj)
+void TestObject::func_void_testobject(TestObject*)
 {
     //kDebug() << "TestObject::func_void_testobject " << (obj ? QString("objectName=%1 className=%2").arg(obj->objectName()).arg(obj->metaObject()->className()) : "NULL") << endl;
 }

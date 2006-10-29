@@ -415,7 +415,7 @@ namespace Kross {
     */
 
     /**
-     * The PythonMetaTypeFactory helper class us used as factory within
+     * The PythonMetaTypeFactory helper class is used as factory within
      * \a PythonExtension to translate an argument into a \a MetaType
      * needed for QGenericArgument's data pointer.
      */

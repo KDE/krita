@@ -38,8 +38,9 @@ namespace Kross {
     /**
      * Python interpreter bridge.
      *
-     * Implements an \a Kross::Interpreter for the python
-     * interpreter.
+     * Implements the \a Kross::Interpreter for the python interpreter
+     * backend and provides with the \a Kross::PythonInterpreter::createScript
+     * a factory method to create \a Kross::PythonScript instances.
      */
     class PythonInterpreter : public Kross::Interpreter
     {

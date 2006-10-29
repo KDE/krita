@@ -41,11 +41,16 @@ namespace Kross {
     class ActionPrivate;
 
     /**
-     * The Action class is something like a single standalone scriptfile.
+     * The Action class is an abstract container to deal with scripts
+     * like a single standalone scriptfile. Each action holds a reference
+     * to by the matching @a Kross::Interpreter created @a Kross::Script
+     * instance.
      *
      * Once you've such a Action instance you're able to perform actions
-     * with it like to execute scripting code. The \a Manager takes care of
-     * handling the Action instances application width.
+     * with it like to execute scripting code.
+     *
+     * The \a Manager takes care of handling the Action instances
+     * application width.
      */
     class KROSS_EXPORT Action : public KAction, public ChildrenInterface, public ErrorInterface
     {

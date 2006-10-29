@@ -1,4 +1,8 @@
 /** @section test The unit- and regression tests.
  *
- * Some internal testcases used to prevent regressions.
+ * Some internal testcases used to prevent regressions. To build
+ * and run them compile with;
+ * @code
+ * cmake -DKDE4_BUILD_TESTS=1 ...
+ * @endcode
  */

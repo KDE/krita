@@ -1,4 +1,27 @@
 /** @section ruby The Ruby interpreter backend
  *
  * The Ruby interpreter backend implements scripting with Ruby.
+ *
+ * The @a Kross::RubyInterpreter class implements @a Kross::Interpreter
+ * for the Ruby interpreter backend and provides with the
+ * @a Kross::RubyInterpreter::createScript a factory method to create
+ * @a Kross::RubyScript instances.
+ *
+ * The @a Kross::RubyScript class implements @a Kross::Script for the
+ * Ruby backend to provide the functionality to execute Ruby code
+ * within a script-container.
+ *
+ * The @a Kross::RubyModule class is the __main__ Ruby environment used
+ * as global object namespace. This module is shared between the different
+ * @a Kross::RubyScript instances which run in there own module namespace.
+ * The @a Kross::RubyModule also spends access to the the whole Kross
+ * functionality and manages all the @a Kross::RubyExtension modules.
+ *
+ * The @a Kross::RubyExtension class implements a Ruby VALUE object to wrap a
+ * QObject instance into the world of Ruby.
+ *
+ * Within RubyVariant the @a Kross::RubyType helper class is used to cast
+ * between QVariant and Ruby VALUE values while the @a Kross::RubyMetaTypeFactory
+ * helper class is used as factory within @a Kross::RubyExtension to translate
+ * an argument into a @a Kross::MetaType needed for QGenericArgument's data pointer.
  */

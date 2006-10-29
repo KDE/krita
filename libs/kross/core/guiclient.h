@@ -31,8 +31,9 @@
 namespace Kross {
 
     /**
-     * The GUIClient class provides abstract access to
-     * scripting code used to extend an applications functionality.
+     * The GUIClient class implements a KXMLGUIClient to provide
+     * abstract access to the Kross Scripting Framework to an
+     * application.
      */
     class KDE_EXPORT GUIClient
         : public QObject

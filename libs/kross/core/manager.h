@@ -40,13 +40,12 @@ namespace Kross {
     class InterpreterInfo;
 
     /**
-     * The Manager class is the main entry point to work with
-     * Kross. It spends an abstraction layer between what is
-     * under the hood of Kross and the functionality you need
-     * to access.
+     * The Manager class is a singleton that provides the main entry
+     * point to deal with the Kross Scripting Framework.
+     *
      * Use \a Interpreter to just work with some implementated
-     * interpreter like python. While \a Script spends a more
-     * flexible container.
+     * interpreter like python or ruby. While \a Action implements
+     * a flexible abstract container to deal with single script files.
      */
     class KDE_EXPORT Manager : public QObject, public ChildrenInterface
     {

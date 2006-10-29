@@ -35,10 +35,8 @@ namespace Kross {
     class PythonScript;
 
     /**
-     * The PythonExtension is a wrapper-object to let C++ and
-     * Python interact together.
-     * Instances of this class are used every time if we send
-     * or got something to/from python.
+     * The PythonExtension class implements a Py::Object to wrap a
+     * QObject instance into the world of Python.
      */
     class PythonExtension : public Py::PythonExtension<PythonExtension>
     {

@@ -30,8 +30,11 @@ namespace Kross {
     class PythonScriptPrivate;
 
     /**
-     * Handle python scripts. This class implements
-     * \a Kross::Script for python.
+     * Python script.
+     *
+     * The PythonScript class implements @a Kross::Script for the
+     * python backend to provide the functionality to execute
+     * python code within a script-container.
      */
     class PythonScript : public Kross::Script
     {

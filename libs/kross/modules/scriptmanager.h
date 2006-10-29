@@ -93,8 +93,8 @@ namespace Kross {
     };
 
     /**
-    * The ScriptManagerModule class provides access to the ScriptManager
-    * functionality.
+    * The ScriptManagerModule provides access to the Script Manager
+    * functionality like the "Script Manager" KDialog.
     */
     class KROSS_EXPORT ScriptManagerModule : public QObject
     {

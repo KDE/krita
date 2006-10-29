@@ -3,4 +3,27 @@
  * The core of Kross provides the framework to deal transparently
  * with interpreter-backends and offers abstract functionality
  * to deal with scripts.
+ *
+ * The @a Kross::Manager class is a singleton that provides the
+ * main entry point to deal with the Kross Scripting Framework.
+ *
+ * The @a Kross::Interpreter class is the base for interpreter
+ * implementations. Each scripting backend needs to inheritate
+ * it's own interpreter and implement it.
+ * The @a Kross::InterpreterInfo class provides abstract information
+ * about a \a Interpreter before the interpreter-backend itself is
+ * loaded.
+ *
+ * The @a Kross::Action class is an abstract container to deal with
+ * scripts like a single standalone scriptfile. Each action holds
+ * a reference to by the matching @a Kross::Interpreter created
+ * @a Kross::Script instance.
+ *
+ * The @a Kross::GuiClient class implements a KXMLGUIClient to provide
+ * abstract access to the Kross Scripting Framework to an application.
+ *
+ * The @a Kross::ActionCollectionProxyModel class implements a
+ * QSortFilterProxyModel for a \a Kross::ActionCollectionModel instance
+ * which provides the model of a Model/View/Control to display the
+ * @a Kross::Action instances.
  */

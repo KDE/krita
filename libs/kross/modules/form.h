@@ -183,7 +183,7 @@ namespace Kross {
     };
 
     /**
-     * The FormModule provides access to UI functionality.
+     * The FormModule provides access to UI functionality like dialogs or widgets.
      */
     class KROSS_EXPORT FormModule : public QObject
     {

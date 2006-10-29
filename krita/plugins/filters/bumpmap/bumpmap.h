@@ -80,49 +80,18 @@ public:
     virtual bool supportsIncrementalPainting() { return true; }
 
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration * configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration();
-
 };
-
-
-
-class KisBumpmapConfiguration : public KisFilterConfiguration {
-
-public:
-
-    KisBumpmapConfiguration();
-    virtual void fromXML( const QString&  );
-    virtual QString toString();
-
-public:
-
-    QString bumpmap;
-    double  azimuth;
-    double  elevation;
-    double  depth;
-    qint32 xofs;
-    qint32 yofs;
-    qint32 waterlevel;
-    qint32 ambient;
-    bool    compensate;
-    bool    invert;
-    bool    tiled;
-    enumBumpmapType type;
-
-};
-
 
 class KisBumpmapConfigWidget : public KisFilterConfigWidget {
 
     Q_OBJECT
 
 public:
-    KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name = 0, Qt::WFlags f = 0 );
+    KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f = 0 );
     virtual ~KisBumpmapConfigWidget() {};
 
-    KisBumpmapConfiguration * config();
     void setConfiguration(KisFilterConfiguration * config);
+    KisFilterConfiguration* configuration() const;
 
     WdgBumpmap * m_page;
 

@@ -31,8 +31,8 @@
 #include "kis_convolution_filter.h"
 #include "kis_matrix_widget.h"
 
-KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* /*nfilter*/, QWidget * parent, const char * name)
-    : KisFilterConfigWidget ( parent, name )
+KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* /*nfilter*/, QWidget * parent)
+    : KisFilterConfigWidget ( parent )
 {
     QGridLayout *widgetLayout = new QGridLayout(this);
     Q_CHECK_PTR(widgetLayout);
@@ -75,6 +75,33 @@ void KisCustomConvolutionFilterConfigurationWidget::setConfiguration(KisFilterCo
     m_ccfcws->matrixWidget->m31->setValue(config->matrix()->data[6]);
     m_ccfcws->matrixWidget->m32->setValue(config->matrix()->data[7]);
     m_ccfcws->matrixWidget->m33->setValue(config->matrix()->data[8]);
+}
+
+KisFilterConfiguration* KisCustomConvolutionFilterConfigurationWidget::configuration() const
+{
+    KisKernelSP kernel = KisKernelSP(new KisKernel());
+    kernel->width = 3;
+    kernel->height = 3;
+
+    kernel->data = new qint32[9];
+
+    KisCustomConvolutionFilterConfigurationBaseWidget* mw = matrixWidget();
+
+    kernel->data[0] = mw->matrixWidget->m11->value();
+    kernel->data[1] = mw->matrixWidget->m21->value();
+    kernel->data[2] = mw->matrixWidget->m31->value();
+    kernel->data[3] = mw->matrixWidget->m12->value();
+    kernel->data[4] = mw->matrixWidget->m22->value();
+    kernel->data[5] = mw->matrixWidget->m32->value();
+    kernel->data[6] = mw->matrixWidget->m13->value();
+    kernel->data[7] = mw->matrixWidget->m23->value();
+    kernel->data[8] = mw->matrixWidget->m33->value();
+
+    kernel->factor = mw->spinBoxFactor->value();
+    kernel->offset = mw->spinBoxOffset->value();
+
+    return new KisConvolutionConfiguration( "custom convolution", kernel.data() );
+
 }
 
 #include "kis_custom_convolution_filter_configuration_widget.moc"

@@ -77,8 +77,8 @@ set(kritaimage_LIB_SRCS
    kis_filter_strategy.h
    kis_perspective_grid.cpp
    kis_perspective_math.cpp
-   kis_progress_updater.cpp
-   kis_progress_updater_p.cpp
+#   kis_progress_updater.cpp
+#   kis_progress_updater_p.cpp
 )
 
 kde4_automoc(${kritaimage_LIB_SRCS})

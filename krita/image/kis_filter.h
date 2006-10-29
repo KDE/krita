@@ -76,7 +76,9 @@ public:
         process(device, rect.topLeft(), device, rect.topLeft(), rect.size(), config);
     }
 public:
-    virtual KisFilterConfiguration * configuration(QWidget*);
+    /**
+     * @return the default configuration of this widget
+     */
     virtual KisFilterConfiguration * configuration();
 
     /**

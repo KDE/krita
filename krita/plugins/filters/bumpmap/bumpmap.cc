@@ -106,17 +106,77 @@ namespace {
     }
 
 }
+// KisBumpmapConfiguration::KisBumpmapConfiguration()
+//     : KisFilterConfiguration( "bumpmap", 1 )
+// {
+//     bumpmap.clear();
+//     azimuth = 135.0;
+//     elevation = 45.0;
+//     depth = 3;
+//     xofs = 0;
+//     yofs = 0;
+//     waterlevel = 0;
+//     ambient = 0;
+//     compensate = true;
+//     invert = false;
+//     tiled = true;
+//     type = krita::LINEAR;
+// }
+// void KisBumpmapConfiguration::fromXML(const QString & s)
+// {
+//     KisFilterConfiguration::fromXML( s );
+// 
+//     bumpmap.clear();
+//     azimuth = 135.0;
+//     elevation = 45.0;
+//     depth = 3;
+//     xofs = 0;
+//     yofs = 0;
+//     waterlevel = 0;
+//     ambient = 0;
+//     compensate = true;
+//     invert = false;
+//     tiled = true;
+//     type = krita::LINEAR;
+// 
+//     QVariant v;
+// 
+//     v = getProperty("bumpmap");
+//     if (v.isValid()) { bumpmap = v.toString(); }
+//     v = getProperty("azimuth");
+//     if (v.isValid()) { azimuth = v.toDouble(); }
+//     v = getProperty("elevation");
+//     if (v.isValid()) { elevation = v.toDouble();}
+//     v = getProperty("depth");
+//     if (v.isValid()) { depth = v.toDouble(); }
+//     v = getProperty("xofs");
+//     if (v.isValid()) { xofs = v.toInt(); }
+//     v = getProperty("yofs");
+//     if (v.isValid()) { yofs = v.toInt();}
+//     v = getProperty("waterlevel");
+//     if (v.isValid()) { waterlevel = v.toInt();}
+//     v = getProperty("ambient");
+//     if (v.isValid()) { ambient = v.toInt();}
+//     v = getProperty("compensate");
+//     if (v.isValid()) { compensate = v.toBool(); }
+//     v = getProperty("invert");
+//     if (v.isValid()) { invert = v.toBool(); }
+//     v = getProperty("tiled");
+//     if (v.isValid()) { tiled = v.toBool();}
+//     v = getProperty("type");
+//     if (v.isValid()) { type = (enumBumpmapType)v.toInt(); }
+// 
+// }
 
-void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* cfg)
+
+void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
     if (!src) return;
     if (!dst) return;
-    if (!cfg) return;
+    if (!config) return;
     if (!size.isValid()) return;
     if (size.isNull()) return;
     if (size.isEmpty()) return;
-
-    KisBumpmapConfiguration * config = (KisBumpmapConfiguration*)cfg;
 
     qint32 lx, ly;       /* X and Y components of light vector */
     qint32 nz2, nzlz;    /* nz^2, nz*lz */
@@ -124,8 +184,8 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     double  compensation; /* Background compensation */
     quint8 lut[256];     /* Look-up table for modes */
 
-    double azimuth;
-    double elevation;
+    double azimuth = config->getDouble("azimuth", 135.0);
+    double elevation = config->getDouble("elevation", 45.0);
     qint32 lz, nz;
     qint32 i;
     double n;
@@ -133,8 +193,8 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     // ------------------ Prepare parameters
 
     /* Convert to radians */
-    azimuth   = M_PI * config->azimuth / 180.0;
-    elevation = M_PI * config->elevation / 180.0;
+    azimuth   = M_PI * azimuth / 180.0;
+    elevation = M_PI * elevation / 180.0;
 
     /* Calculate the light vector */
     lx = (qint32)(cos(azimuth) * cos(elevation) * 255.0);
@@ -143,7 +203,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     lz = (qint32)(sin(elevation) * 255.0);
 
     /* Calculate constant Z component of surface normal */
-    nz = (qint32)((6 * 255) / config->depth);
+    nz = (qint32)((6 * 255) / config->getDouble("depth", 3));
     nz2  = nz * nz;
     nzlz = nz * lz;
 
@@ -156,7 +216,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     /* Create look-up table for map type */
     for (i = 0; i < 256; i++)
     {
-        switch (config->type)
+        switch ((enumBumpmapType)config->getInt("type",krita::LINEAR  ))
         {
         case SPHERICAL:
             n = i / 255.0 - 1.0;
@@ -175,7 +235,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
             lut[i] = i;
         }
 
-        if (config->invert)
+        if (config->getBool("invert", false))
             lut[i] = 255 - lut[i];
     }
 
@@ -184,8 +244,9 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     QRect bmRect;
     const KisPaintDevice * bumpmap;
 
-    if (!config->bumpmap.isNull() && src->image()) {
-        KisLayerSP l = src->image()->findLayer(config->bumpmap);
+    QString bumpmapname = config->getString("bumpmap", "");
+    if (!bumpmapname.isNull() && src->image()) {
+        KisLayerSP l = src->image()->findLayer(bumpmapname);
         KisPaintDeviceSP bumplayer = KisPaintDeviceSP(0);
 
         KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(l.data());
@@ -234,13 +295,13 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     qint32 yofs1, yofs2, yofs3;
 
     // ------------------- Initialize offsets
-    if (config->tiled) {
-        yofs2 = MOD (config->yofs + dstTopLeft.y(), bm_h);
+    if (config->getBool("tiled", true) ) {
+        yofs2 = MOD (config->getInt("yofs", 0) + dstTopLeft.y(), bm_h);
         yofs1 = MOD (yofs2 - 1, bm_h);
         yofs3 = MOD (yofs2 + 1,  bm_h);
     }
     else {
-          yofs2 = CLAMP (config->yofs + dstTopLeft.y(), 0, bm_h - 1);
+          yofs2 = CLAMP (config->getInt("yofs", 0) + dstTopLeft.y(), 0, bm_h - 1);
           yofs1 = yofs2;
           yofs3 = CLAMP (yofs2 + 1, 0, bm_h - 1);
 
@@ -257,23 +318,23 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     quint8 * bm_row3 = new quint8[bm_w];
     quint8 * tmp_row;
 
-    convertRow(bumpmap, bm_row1, bm_x, yofs1, bm_w, lut, config->waterlevel);
-    convertRow(bumpmap, bm_row2, bm_x, yofs2, bm_w, lut, config->waterlevel);
-    convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->waterlevel);
+    convertRow(bumpmap, bm_row1, bm_x, yofs1, bm_w, lut, config->getInt("waterlevel",0));
+    convertRow(bumpmap, bm_row2, bm_x, yofs2, bm_w, lut, config->getInt("waterlevel",0));
+    convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->getInt("waterlevel",0));
 
     bool row_in_bumpmap;
 
     qint32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
     for (int y = 0; y < sel_h; y++) {
 
-        row_in_bumpmap = (y >= - config->yofs && y < - config->yofs + bm_h);
+        row_in_bumpmap = (y >= - config->getInt("yofs",0) && y < - config->getInt("yofs",0) + bm_h);
 
         // Bumpmap
 
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y() + y, sel_w);
         KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y() + y, sel_w);
 
-        qint32 tmp = config->xofs + dstTopLeft.x();
+        qint32 tmp = config->getInt("xofs",0) + dstTopLeft.x();
         xofs2 = MOD (tmp, bm_w);
 
         qint32 x = 0;
@@ -281,10 +342,10 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
         while (!srcIt.isDone() && !cancelRequested()) {
             if (srcIt.isSelected()) {
                 // Calculate surface normal from bumpmap
-                if (config->tiled || row_in_bumpmap &&
+                if (config->getBool("tiled", true) || row_in_bumpmap &&
                     x >= - tmp&& x < - tmp + bm_w) {
 
-                    if (config->tiled) {
+                    if (config->getBool("tiled", true)) {
                         xofs1 = MOD (xofs2 - 1, bm_w);
                         xofs3 = MOD (xofs2 + 1, bm_w);
                     }
@@ -314,16 +375,16 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
                     ndotl = (nx * lx) + (ny * ly) + nzlz;
 
                     if (ndotl < 0) {
-                        shade = (qint32)(compensation * config->ambient);
+                        shade = (qint32)(compensation * config->getInt("ambient", 0));
                     }
                     else {
                         shade = (qint32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
-                        shade = (qint32)(shade + qMax(0, (int)((255 * compensation - shade)) * config->ambient / 255));
+                        shade = (qint32)(shade + qMax(0, (int)((255 * compensation - shade)) * config->getInt("ambient",0) / 255));
                     }
                 }
 
                 // Paint
-                srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->compensate, compensation, 1);
+                srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->getBool("compensate", true), compensation, 1);
             }
               if (++xofs2 == bm_w)
                 xofs2 = 0;
@@ -334,7 +395,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
 
 
         // Next line
-        if (config->tiled || row_in_bumpmap) {
+        if (config->getBool("tiled", true) || row_in_bumpmap) {
             tmp_row = bm_row1;
             bm_row1 = bm_row2;
             bm_row2 = bm_row3;
@@ -343,14 +404,14 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
             if (++yofs2 == bm_h) {
                 yofs2 = 0;
             }
-            if (config->tiled) {
+            if (config->getBool("tiled", true)) {
                 yofs3 = MOD(yofs2 + 1, bm_h);
             }
             else {
                 yofs3 = CLAMP(yofs2 + 1, 0, bm_h - 1);
             }
 
-            convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->waterlevel);
+            convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->getInt("waterlevel", 0));
         }
 
         incProgress();
@@ -371,109 +432,9 @@ KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* par
     return w;
 }
 
-KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w)
-{
 
-    KisBumpmapConfigWidget * widget = dynamic_cast<KisBumpmapConfigWidget *>(w);
-    if (widget == 0) {
-        return new KisBumpmapConfiguration();
-    }
-    else {
-        return widget->config();
-    }
-}
-
-KisFilterConfiguration * KisFilterBumpmap::configuration()
-{
-    return new KisBumpmapConfiguration();
-}
-
-
-KisBumpmapConfiguration::KisBumpmapConfiguration()
-    : KisFilterConfiguration( "bumpmap", 1 )
-{
-    bumpmap.clear();
-    azimuth = 135.0;
-    elevation = 45.0;
-    depth = 3;
-    xofs = 0;
-    yofs = 0;
-    waterlevel = 0;
-    ambient = 0;
-    compensate = true;
-    invert = false;
-    tiled = true;
-    type = krita::LINEAR;
-}
-void KisBumpmapConfiguration::fromXML(const QString & s)
-{
-    KisFilterConfiguration::fromXML( s );
-
-    bumpmap.clear();
-    azimuth = 135.0;
-    elevation = 45.0;
-    depth = 3;
-    xofs = 0;
-    yofs = 0;
-    waterlevel = 0;
-    ambient = 0;
-    compensate = true;
-    invert = false;
-    tiled = true;
-    type = krita::LINEAR;
-
-    QVariant v;
-
-    v = getProperty("bumpmap");
-    if (v.isValid()) { bumpmap = v.toString(); }
-    v = getProperty("azimuth");
-    if (v.isValid()) { azimuth = v.toDouble(); }
-    v = getProperty("elevation");
-    if (v.isValid()) { elevation = v.toDouble();}
-    v = getProperty("depth");
-    if (v.isValid()) { depth = v.toDouble(); }
-    v = getProperty("xofs");
-    if (v.isValid()) { xofs = v.toInt(); }
-    v = getProperty("yofs");
-    if (v.isValid()) { yofs = v.toInt();}
-    v = getProperty("waterlevel");
-    if (v.isValid()) { waterlevel = v.toInt();}
-    v = getProperty("ambient");
-    if (v.isValid()) { ambient = v.toInt();}
-    v = getProperty("compensate");
-    if (v.isValid()) { compensate = v.toBool(); }
-    v = getProperty("invert");
-    if (v.isValid()) { invert = v.toBool(); }
-    v = getProperty("tiled");
-    if (v.isValid()) { tiled = v.toBool();}
-    v = getProperty("type");
-    if (v.isValid()) { type = (enumBumpmapType)v.toInt(); }
-
-}
-
-
-QString KisBumpmapConfiguration::toString()
-{
-    m_properties.clear();
-
-    //setProperty("bumpmap", QVariant(bumpmap));
-    setProperty("azimuth", QVariant(azimuth));
-    setProperty("elevation", QVariant(elevation));
-    setProperty("depth", QVariant(depth));
-    setProperty("xofs", QVariant(xofs));
-    setProperty("yofs", QVariant(yofs));
-    setProperty("waterlevel", QVariant(waterlevel));
-    setProperty("ambient", QVariant(ambient));
-    setProperty("compensate", QVariant(compensate));
-    setProperty("invert", QVariant(invert));
-    setProperty("tiled", QVariant(tiled));
-    setProperty("type", QVariant(type));
-
-    return KisFilterConfiguration::toString();
-}
-
-KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name, Qt::WFlags f)
-    : KisFilterConfigWidget(parent, name, f),
+KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f)
+    : KisFilterConfigWidget(parent, f),
       m_filter(filter),
       m_device(dev)
 {
@@ -490,51 +451,23 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
     connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
 }
 
-KisBumpmapConfiguration * KisBumpmapConfigWidget::config()
+void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * cfg)
 {
-    KisBumpmapConfiguration * cfg = new KisBumpmapConfiguration();
-    cfg->bumpmap = m_page->txtSourceLayer->text();
-    cfg->azimuth = m_page->dblAzimuth->value();
-    cfg->elevation = m_page->dblElevation->value();
-    cfg->depth = m_page->dblDepth->value();
-    cfg->xofs = m_page->intXOffset->value();
-    cfg->yofs = m_page->intYOffset->value();
-    cfg->waterlevel = m_page->intWaterLevel->value();
-    cfg->ambient = m_page->intAmbient->value();
-    cfg->compensate = m_page->chkCompensate->isChecked();
-    cfg->invert = m_page->chkInvert->isChecked();
-    cfg->tiled = m_page->chkTiled->isChecked();
-
-    if (m_page->radioLinear->isChecked()) {
-        cfg->type = LINEAR;
-    } else if (m_page->radioSpherical->isChecked()) {
-        cfg->type = SPHERICAL;
-    } else {
-        Q_ASSERT(m_page->radioSinusoidal->isChecked());
-        cfg->type = SINUSOIDAL;
-    }
-
-    return cfg;
-}
-
-void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * config)
-{
-    KisBumpmapConfiguration * cfg = dynamic_cast<KisBumpmapConfiguration*>(config);
     if (!cfg) return;
+    
+    m_page->txtSourceLayer->setText( cfg->getString("bumpmap", "") );
+    m_page->dblAzimuth->setValue(cfg->getDouble("azimuth", 135.0) );
+    m_page->dblElevation->setValue(cfg->getDouble("elevation", 45.0));
+    m_page->dblDepth->setValue(cfg->getInt("depth", 3));
+    m_page->intXOffset->setValue(cfg->getInt("xofs",0));
+    m_page->intYOffset->setValue(cfg->getInt("yofs",0));
+    m_page->intWaterLevel->setValue(cfg->getInt("waterlevel",0));
+    m_page->intAmbient->setValue(cfg->getInt("ambient", 0));
+    m_page->chkCompensate->setChecked(cfg->getBool("compensate", true));
+    m_page->chkInvert->setChecked(cfg->getBool("invert", false));
+    m_page->chkTiled->setChecked(cfg->getBool("tiled", true));
 
-    m_page->txtSourceLayer->setText( cfg->bumpmap );
-    m_page->dblAzimuth->setValue(cfg->azimuth);
-    m_page->dblElevation->setValue(cfg->elevation);
-    m_page->dblDepth->setValue(cfg->depth);
-    m_page->intXOffset->setValue(cfg->xofs);
-    m_page->intYOffset->setValue(cfg->yofs);
-    m_page->intWaterLevel->setValue(cfg->waterlevel);
-    m_page->intAmbient->setValue(cfg->ambient);
-    m_page->chkCompensate->setChecked(cfg->compensate);
-    m_page->chkInvert->setChecked(cfg->invert);
-    m_page->chkTiled->setChecked(cfg->tiled);
-
-    switch (cfg->type) {
+    switch (cfg->getInt("type", krita::LINEAR) ) {
     default:
     case LINEAR:
         m_page->radioLinear->setChecked(true);
@@ -546,6 +479,33 @@ void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * config)
         m_page->radioSinusoidal->setChecked(true);
         break;
     }
+}
+
+KisFilterConfiguration* KisBumpmapConfigWidget::configuration() const
+{
+    KisFilterConfiguration * cfg = new KisFilterConfiguration("bumpmap", 1);
+    cfg->setProperty("bumpmap", m_page->txtSourceLayer->text());
+    cfg->setProperty("azimuth",m_page->dblAzimuth->value());
+    cfg->setProperty("elevation",m_page->dblElevation->value());
+    cfg->setProperty("depth",m_page->dblDepth->value());
+    cfg->setProperty("xofs",m_page->intXOffset->value());
+    cfg->setProperty("yofs",m_page->intYOffset->value());
+    cfg->setProperty("waterlevel",m_page->intWaterLevel->value());
+    cfg->setProperty("ambient",m_page->intAmbient->value());
+    cfg->setProperty("compensate",m_page->chkCompensate->isChecked());
+    cfg->setProperty("invert",m_page->chkInvert->isChecked());
+    cfg->setProperty("tiled",m_page->chkTiled->isChecked());
+
+    if (m_page->radioLinear->isChecked()) {
+        cfg->setProperty("type", LINEAR);
+    } else if (m_page->radioSpherical->isChecked()) {
+        cfg->setProperty("type", SPHERICAL);
+    } else {
+        Q_ASSERT(m_page->radioSinusoidal->isChecked());
+        cfg->setProperty("type", SINUSOIDAL);
+    }
+
+    return cfg;
 }
 
 #include "bumpmap.moc"

@@ -63,8 +63,8 @@ KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double nini
 
 }
 
-KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const char * name, const QString & caption, vKisDoubleWidgetParam dwparam)
-    : KisFilterConfigWidget( parent, name )
+KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const QString & caption, vKisDoubleWidgetParam dwparam)
+    : KisFilterConfigWidget( parent )
 {
     qint32 m_nbdoubleWidgets = dwparam.size();
 

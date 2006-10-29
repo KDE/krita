@@ -133,7 +133,7 @@ void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
 
 KisFilterConfiguration * KisDlgAdjustmentLayer::filterConfiguration() const
 {
-    return m_currentFilter->configuration(m_currentConfigWidget);
+    return m_currentConfigWidget->configuration();
 }
 
 QString KisDlgAdjustmentLayer::layerName() const
@@ -156,7 +156,7 @@ void KisDlgAdjustmentLayer::refreshPreview()
     KisPaintDeviceSP layer =  m_preview->getDevice();
 
     KisTransaction cmd("Temporary transaction", layer);
-    KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
+    KisFilterConfiguration* config = m_currentConfigWidget->configuration();
 
     QRect rect = layer->extent();
     m_currentFilter->process(layer, rect, config);

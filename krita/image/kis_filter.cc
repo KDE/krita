@@ -31,11 +31,6 @@ KisFilter::KisFilter(const KoID& id, const QString & category, const QString & e
 {
 }
 
-KisFilterConfiguration * KisFilter::configuration(QWidget*)
-{
-    return new KisFilterConfiguration(m_id.id(), 0);
-}
-
 KisFilterConfiguration * KisFilter::configuration()
 {
     return new KisFilterConfiguration(m_id.id(), 0);

@@ -30,6 +30,7 @@ class KisFiltersListView;
 class KisFilterConfiguration;
 class KisImage;
 class QGroupBox;
+class KisFilterConfigWidget;
 
 /**
  * Create a new adjustment layer.
@@ -74,7 +75,7 @@ private:
     KisFiltersListView * m_filtersList;
     KisPreviewWidget * m_preview;
     QGroupBox * m_configWidgetHolder;
-    QWidget * m_currentConfigWidget;
+    KisFilterConfigWidget * m_currentConfigWidget;
     KisFilter* m_currentFilter;
     KLineEdit * m_layerName;
     QLabel* m_labelNoConfigWidget;

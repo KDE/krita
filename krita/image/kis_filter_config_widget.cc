@@ -19,10 +19,9 @@
 #include "kis_filter_config_widget.h"
 
 
-KisFilterConfigWidget::KisFilterConfigWidget(QWidget * parent, const char * name, Qt::WFlags f)
+KisFilterConfigWidget::KisFilterConfigWidget(QWidget * parent, Qt::WFlags f)
     : QWidget(parent, f) 
 {
-    setObjectName(name);
 }
 
 KisFilterConfigWidget::~KisFilterConfigWidget()

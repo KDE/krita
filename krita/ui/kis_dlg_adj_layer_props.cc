@@ -140,7 +140,7 @@ void KisDlgAdjLayerProps::slotNameChanged( const QString & text )
 
 KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const
 {
-    return m_currentFilter->configuration(m_currentConfigWidget);
+    return m_currentConfigWidget->configuration();
 }
 
 QString KisDlgAdjLayerProps::layerName() const
@@ -174,7 +174,7 @@ void KisDlgAdjLayerProps::refreshPreview()
     if (!m_currentFilter) {
         return;
     }
-    KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
+    KisFilterConfiguration* config = m_currentConfigWidget->configuration();
 
     QRect rect = layer->extent();
     KisTransaction cmd("Temporary transaction", layer);

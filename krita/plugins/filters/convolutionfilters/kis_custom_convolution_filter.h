@@ -40,8 +40,7 @@ public:
 
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration * configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration() { return configuration(0); }; 
+    virtual KisFilterConfiguration * configuration();
 protected:
     virtual KisKernelSP matrix() { return m_matrix; };
 private:

@@ -45,8 +45,12 @@ class TestKross < Test::Unit::TestCase
 	end
  
 	def testByteArray
+		#TODO crashes
+		#assert( TestObject1.func_qbytearray_qbytearray(nil) == nil )
+
+		assert( TestObject1.func_qbytearray_qbytearray("") == "" )
 		assert( TestObject1.func_qbytearray_qbytearray("  Some String as ByteArray  ") == "  Some String as ByteArray  " )
-		#assert( TestObject1.func_qbytearray_qbytearray(" \0\n\r\t\s\0 test ") == " \0\n\r\t\s\0 test " )
+		assert( TestObject1.func_qbytearray_qbytearray(" \0\n\r\t\s\0 test ") == " \0\n\r\t\s\0 test " )
 	end
 
 	def testString

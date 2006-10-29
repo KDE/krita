@@ -58,22 +58,45 @@ PythonExtension::PythonExtension(QObject* object)
     );
 
     if(m_object) {
-        // initialize methods.
         const QMetaObject* metaobject = m_object->metaObject();
-        //list.append(Py::String("toPyQt")); // for PythonPyQtExtension
-        const int count = metaobject->methodCount();
-        for(int i = 0; i < count; ++i) {
-            QMetaMethod member = metaobject->method(i);
-            const QString signature = member.signature();
-            const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
-            if(! m_methods.contains(name)) {
-                Py::Tuple self(3);
-                self[0] = Py::Object(this); // reference to this instance
-                self[1] = Py::Int(i); // the first index used for faster access
-                self[2] = Py::String(name); // the name of the method
 
-                m_methods.insert(name, Py::Object(PyCFunction_New( &m_proxymethod->ext_meth_def, self.ptr() ), true));
-                m_methodnames.append(self[2]);
+        { // initialize methods.
+            const int count = metaobject->methodCount();
+            for(int i = 0; i < count; ++i) {
+                QMetaMethod member = metaobject->method(i);
+                const QString signature = member.signature();
+                const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
+                if(! m_methods.contains(name)) {
+                    Py::Tuple self(3);
+                    self[0] = Py::Object(this); // reference to this instance
+                    self[1] = Py::Int(i); // the first index used for faster access
+                    self[2] = Py::String(name); // the name of the method
+
+                    m_methods.insert(name, Py::Object(PyCFunction_New( &m_proxymethod->ext_meth_def, self.ptr() ), true));
+                    m_methodnames.append(self[2]);
+                }
+            }
+        }
+
+        { // initialize properties
+            const int count = metaobject->propertyCount();
+            for(int i = 0; i < count; ++i) {
+                QMetaProperty prop = metaobject->property(i);
+                m_properties.insert(prop.name(), prop);
+                m_membernames.append( Py::String(prop.name()) );
+            }
+        }
+
+        { // initialize enumerations
+            const int count = metaobject->enumeratorCount();
+            for(int i = 0; i < count; ++i) {
+                QMetaEnum e = metaobject->enumerator(i);
+                const int kc = e.keyCount();
+                for(int k = 0; k < kc; ++k) {
+                    const QByteArray name = /*e.name() +*/ e.key(k);
+                    m_enumerations.insert(name, e.value(k));
+                    m_membernames.append( Py::String(name) );
+                }
             }
         }
     }
@@ -100,25 +123,16 @@ Py::Object PythonExtension::getattr(const char* n)
 
     // handle internal methods
     if(n[0] == '_') {
-        if(strcmp(n,"__methods__") == 0) {
+        if(strcmp(n,"__methods__") == 0)
             return m_methodnames;
-        }
-
-        /*
-        if(strcmp(n,"__members__") == 0) {
-            return PythonType<QStringList>::toPyObject( QStringList() << "__name__" );
-        }
-        if(strcmp(n,"__dict__") == 0) {
-            return PythonType<QStringList>::toPyObject( QStringList() );
-        }
-        */
-
-        if(strcmp(n,"__name__") == 0) {
+        if(strcmp(n,"__members__") == 0)
+            return m_membernames;
+        //if(strcmp(n,"__dict__") == 0)
+        //    return PythonType<QStringList>::toPyObject( QStringList() );
+        if(strcmp(n,"__name__") == 0)
             return PythonType<QString>::toPyObject( m_object->objectName() );
-        }
-        if(strcmp(n,"__class__") == 0) {
+        if(strcmp(n,"__class__") == 0)
             return PythonType<QString>::toPyObject( m_object->metaObject()->className() );
-        }
 
         /*
         if(strcmp(n,"__toPointer__") == 0) {
@@ -143,27 +157,28 @@ Py::Object PythonExtension::getattr(const char* n)
     }
 
     // look if the attribute is a property
-    if(m_object) {
-        const QMetaObject* metaobject = m_object->metaObject();
-        const int idx = metaobject->indexOfProperty(n);
-        if(idx >= 0) {
-            QMetaProperty property = metaobject->property(idx);
+    if(m_properties.contains(n) && m_object) {
+        QMetaProperty property = m_properties[n];
 
-            #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
-                krossdebug( QString("PythonExtension::getattr name='%1' is a property: type=%2 valid=%3 readable=%4 scriptable=%5 writable=%6 usertype=%7")
-                    .arg(n).arg(property.typeName()).arg(property.isValid())
-                    .arg(property.isReadable()).arg(property.isScriptable(m_object)).arg(property.isWritable())
-                    .arg(property.isUser(m_object)).arg(property.userType())
-                );
-            #endif
+        #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
+            krossdebug( QString("PythonExtension::getattr name='%1' is a property: type=%2 valid=%3 readable=%4 scriptable=%5 writable=%6 usertype=%7")
+                        .arg(n).arg(property.typeName()).arg(property.isValid())
+                        .arg(property.isReadable()).arg(property.isScriptable(m_object)).arg(property.isWritable())
+                        .arg(property.isUser(m_object)).arg(property.userType())
+            );
+        #endif
 
-            if(! property.isReadable()) {
-                Py::AttributeError( QString("Attribute \"%1\" is not readable.").arg(n).toLatin1().constData() );
-                return Py::None();
-            }
-
-            return PythonType<QVariant>::toPyObject( property.read(m_object) );
+        if(! property.isReadable()) {
+            Py::AttributeError( QString("Attribute \"%1\" is not readable.").arg(n).toLatin1().constData() );
+            return Py::None();
         }
+
+        return PythonType<QVariant>::toPyObject( property.read(m_object) );
+    }
+
+    // look if the attribute is an enumerator
+    if(m_enumerations.contains(n)) {
+        return Py::Int(m_enumerations[n]);
     }
 
     // finally redirect the unhandled attribute-request...
@@ -174,35 +189,31 @@ Py::Object PythonExtension::getattr(const char* n)
 int PythonExtension::setattr(const char* n, const Py::Object& value)
 {
     // look if the attribute is a property
-    if(m_object) {
-        const QMetaObject* metaobject = m_object->metaObject();
-        const int idx = metaobject->indexOfProperty(n);
-        if(idx >= 0) {
-            QMetaProperty property = metaobject->property(idx);
+    if(m_properties.contains(n) && m_object) {
+        QMetaProperty property = m_properties[n];
 
-            #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
-                krossdebug( QString("PythonExtension::setattr name='%1' is a property: type=%2 valid=%3 readable=%4 scriptable=%5 writable=%6 usertype=%7")
-                    .arg(n).arg(property.typeName()).arg(property.isValid())
-                    .arg(property.isReadable()).arg(property.isScriptable(m_object)).arg(property.isWritable())
-                    .arg(property.isUser(m_object)).arg(property.userType())
-                );
-            #endif
+        #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
+            krossdebug( QString("PythonExtension::setattr name='%1' is a property: type=%2 valid=%3 readable=%4 scriptable=%5 writable=%6 usertype=%7")
+                .arg(n).arg(property.typeName()).arg(property.isValid())
+                .arg(property.isReadable()).arg(property.isScriptable(m_object)).arg(property.isWritable())
+                .arg(property.isUser(m_object)).arg(property.userType())
+            );
+        #endif
 
-            if(! property.isWritable()) {
-                Py::AttributeError( QString("Attribute \"%1\" is not writable.").arg(n).toLatin1().constData() );
-                return -1; // indicate error
-            }
-
-            QVariant v = PythonType<QVariant>::toVariant(value);
-            if(! property.write(m_object, v)) {
-                Py::AttributeError( QString("Setting attribute \"%1\" failed.").arg(n).toLatin1().constData() );
-                return -1; // indicate error
-            }
-            #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
-                krossdebug( QString("PythonExtension::setattr name='%1' value='%2'").arg(n).arg(v.toString()) );
-            #endif
-            return 0; // indicate success
+        if(! property.isWritable()) {
+            Py::AttributeError( QString("Attribute \"%1\" is not writable.").arg(n).toLatin1().constData() );
+            return -1; // indicate error
         }
+
+        QVariant v = PythonType<QVariant>::toVariant(value);
+        if(! property.write(m_object, v)) {
+            Py::AttributeError( QString("Setting attribute \"%1\" failed.").arg(n).toLatin1().constData() );
+            return -1; // indicate error
+        }
+        #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
+            krossdebug( QString("PythonExtension::setattr name='%1' value='%2'").arg(n).arg(v.toString()) );
+        #endif
+        return 0; // indicate success
     }
 
     // finally redirect the unhandled attribute-request...

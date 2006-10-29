@@ -30,9 +30,6 @@
 
 namespace Kross {
 
-    /// \internal implementation of the customized KFileDialog
-    class FormFileWidgetImpl;
-
     /**
      * The FormFileWidget class provides a in a widget embedded KFileDialog.
      */
@@ -42,22 +39,47 @@ namespace Kross {
             Q_ENUMS(Mode)
 
         public:
-            typedef enum Mode { Other = 0, Opening, Saving };
-
             FormFileWidget(QWidget* parent, const QString& startDirOrVariable);
             virtual ~FormFileWidget();
 
+            /**
+             * The Mode the FormFileWidget could have.
+             */
+            typedef enum Mode { Other = 0, Opening, Saving };
+
         public slots:
 
+            /**
+             * Set the \a Mode the FormFileWidget should have to \p mode .
+             * Valid modes are "Other", "Opening" or "Saving".
+             */
             void setMode(const QString& mode);
 
+            /**
+             * \return the current filter.
+             */
             QString currentFilter() const;
+
+            /**
+             * Set the filter to \p filter .
+             */
             void setFilter(QString filter);
 
+            /**
+             * \return the current mimetype filter.
+             */
             QString currentMimeFilter() const;
+
+            /**
+             * Set the mimetype filter to \p filter .
+             */
             void setMimeFilter(const QStringList& filter);
 
+            /**
+             * \return the currently selected file.
+             */
             QString selectedFile() const;
+
             //QStringList selectedFiles() const { return KFileDialog::selectedFiles(); }
             //QString selectedUrl() const { return KFileDialog::selectedUrl().toLocalFile(); }
 
@@ -79,9 +101,11 @@ namespace Kross {
      * Example (in Python) :
      * \code
      * import Kross
-     * mydialog = Kross.forms().createDialog("MyDialog")
+     * forms = Kross.module("forms")
+     * mydialog = forms.createDialog("MyDialog")
      * mydialog.setButtons("Ok|Cancel")
-     * mywidget = Kross.forms().createWidgetFromUIFile(mydialog, "./mywidget.ui")
+     * mydialog.setFaceType("Plain") #Auto Plain List Tree Tabbed
+     * mywidget = forms.createWidgetFromUIFile(mydialog, "./mywidget.ui")
      * mywidget["QLineEdit"].setText("some string")
      * if mydialog.exec_loop():
      *     if mydialog.result() == "Ok":
@@ -184,6 +208,19 @@ namespace Kross {
 
     /**
      * The FormModule provides access to UI functionality like dialogs or widgets.
+     *
+     * Example (in Python) :
+     * \code
+     * import Kross
+     * forms = Kross.module("forms")
+     * dialog = forms.createDialog("My Dialog")
+     * dialog.setButtons("Ok|Cancel")
+     * page = dialog.addPage("Welcome","Welcome Page","fileopen")
+     * label = self.forms.createWidget("QLabel", page)
+     * label.text = "Hello World Label"
+     * if self.dialog.exec_loop():
+     *     forms.showMessageBox("Information", "Okay...", "The Ok-button was pressed")
+     * \endcode
      */
     class KROSS_EXPORT FormModule : public QObject
     {
@@ -248,27 +285,15 @@ namespace Kross {
              */
             QWidget* createDialog(const QString& caption);
 
-#if 0
             /**
              * Create and return a new QWidget instance.
              *
-             * \param parent the new QWidget is a child of parent.
-             * \param classname the name of the class that should be
-             * created. For example "QComboBox" or "QPushButton".
-             * \return the new QWidget instance or NULL.
+             * \param parent the parent QWidget the new QWidget is a child of.
+             * \param className the name of the class that should be created
+             * and returned. For example "QLabel" or "QForm".
+             * \param name the objectName the new widget has.
              */
-            QWidget* createWidget(QWidget* parent, const QString& classname);
-#endif
-
-            /**
-             * Create and return a new \a FormFileWidget instance.
-             *
-             * \param parent the parent QWidget the new \a FormFileWidget instance
-             * is a child of.
-             * \param startDirOrVariable the start-directory or -variable.
-             * \return the new \a FormFileWidget instance or NULL.
-             */
-            QWidget* createFileWidget(QWidget* parent, const QString& startDirOrVariable);
+            QWidget* createWidget(QWidget* parent, const QString& className, const QString& name = QString());
 
             /**
              * Create and return a new QWidget instance.
@@ -282,11 +307,21 @@ namespace Kross {
             /**
              * Create and return a new QWidget instance.
              *
-             * \param parent the new QWidget is a child of parent.
+             * \param parent the parent QWidget the new QWidget is a child of.
              * \param filename the full filename of the UI file which is readed
              * and it's UI XML content is used to construct the new widget.
              */
             QWidget* createWidgetFromUIFile(QWidget* parent, const QString& filename);
+
+            /**
+             * Create and return a new \a FormFileWidget instance.
+             *
+             * \param parent the parent QWidget the new \a FormFileWidget instance
+             * is a child of.
+             * \param startDirOrVariable the start-directory or -variable.
+             * \return the new \a FormFileWidget instance or NULL.
+             */
+            QWidget* createFileWidget(QWidget* parent, const QString& startDirOrVariable);
 
         private:
             /// \internal d-pointer class.

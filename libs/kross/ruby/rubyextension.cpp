@@ -43,15 +43,17 @@ namespace Kross {
         /// The wrapped QObject.
         QPointer<QObject> m_object;
 
-        /// The wrapped krossobject
+        /// The wrapped krossobject VALUE type.
         static VALUE s_krossObject;
 
         //static VALUE s_krossException;
 
         /// The cached list of methods.
         QHash<QByteArray, int> m_methods;
-
-        RubyExtensionPrivate(QObject* object) : m_object(object) {}
+        /// The cached list of properties.
+        QHash<QByteArray, int> m_properties;
+        /// The cached list of enumerations.
+        QHash<QByteArray, int> m_enumerations;
     };
 
 }
@@ -60,21 +62,48 @@ VALUE RubyExtensionPrivate::s_krossObject = 0;
 //VALUE RubyExtensionPrivate::s_krossException = 0;
 
 RubyExtension::RubyExtension(QObject* object)
-    : d(new RubyExtensionPrivate(object))
+    : d(new RubyExtensionPrivate())
 {
+    d->m_object = object;
+
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
         krossdebug(QString("RubyExtension Ctor QObject=%1").arg( object ? QString("%1 %2").arg(object->objectName()).arg(object->metaObject()->className()) : "NULL" ));
     #endif
 
     if(d->m_object) {
         const QMetaObject* metaobject = d->m_object->metaObject();
-        const int count = metaobject->methodCount();
-        for(int i = 0; i < count; ++i) {
-            QMetaMethod member = metaobject->method(i);
-            const QString signature = member.signature();
-            const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
-            if(! d->m_methods.contains(name)) {
-                d->m_methods.insert(name, i);
+
+        { // initialize methods.
+            const int count = metaobject->methodCount();
+            for(int i = 0; i < count; ++i) {
+                QMetaMethod member = metaobject->method(i);
+                const QString signature = member.signature();
+                const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
+                if(! d->m_methods.contains(name)) {
+                    d->m_methods.insert(name, i);
+                }
+            }
+        }
+
+        { // initialize properties
+            const int count = metaobject->propertyCount();
+            for(int i = 0; i < count; ++i) {
+                QMetaProperty prop = metaobject->property(i);
+                d->m_properties.insert(prop.name(), i);
+                if(prop.isWritable())
+                    d->m_properties.insert(QByteArray(prop.name()).append('='), i);
+            }
+        }
+
+        { // initialize enumerations
+            const int count = metaobject->enumeratorCount();
+            for(int i = 0; i < count; ++i) {
+                QMetaEnum e = metaobject->enumerator(i);
+                const int kc = e.keyCount();
+                for(int k = 0; k < kc; ++k) {
+                    const QByteArray name = /*e.name() +*/ e.key(k);
+                    d->m_enumerations.insert(name, e.value(k));
+                }
             }
         }
     }
@@ -109,31 +138,25 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
     return RubyExtension::call_method(extension, argc, argv);
 }
 
-VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv)
+VALUE RubyExtension::callMethod(const QByteArray& funcname, int argc, VALUE *argv)
 {
-    QByteArray funcname = rb_id2name(SYM2ID(argv[0]));
     const int argumentcount = argc - 1;
 
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
-        krossdebug(QString("RubyExtension::call_method method=%1 argumentcount=%2").arg(funcname.constData()).arg(argumentcount));
+        krossdebug(QString("RubyExtension::callMethod method=%1 argumentcount=%2").arg(funcname.constData()).arg(argumentcount));
         for(int i = 1; i < argc; i++) {
             QVariant v = RubyType<QVariant>::toVariant(argv[i]);
             krossdebug(QString("  argument #%1: variant.toString=%2 variant.typeName=%3").arg(i).arg(v.toString()).arg(v.typeName()));
         }
     #endif
 
-    if(! extension->d->m_methods.contains(funcname)) {
-        krosswarning( QString("RubyExtension::call_method No such method '%1'").arg(funcname.constData()) );
-        return Qfalse;
-    }
-
-    int methodindex = extension->d->m_methods[funcname];
+    int methodindex = d->m_methods[funcname];
     if(methodindex < 0) {
         krosswarning(QString("No such function '%1'").arg(funcname.constData()));
         return Qfalse;
     }
 
-    QObject* object = extension->d->m_object;
+    QObject* object = d->m_object;
     QMetaMethod metamethod = object->metaObject()->method( methodindex );
     if(metamethod.parameterTypes().size() != argumentcount) {
         bool found = false;
@@ -174,7 +197,7 @@ VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv
             int typeId = QVariant::nameToType( metamethod.typeName() );
             if(typeId != QVariant::Invalid) {
                 #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                    krossdebug( QString("RubyExtension::call_method typeName=%1 variant.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
+                    krossdebug( QString("RubyExtension::callMethod typeName=%1 variant.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
                 #endif
                 returntype = new MetaTypeVariant< QVariant >( QVariant( (QVariant::Type) typeId ) );
             }
@@ -182,13 +205,13 @@ VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv
                 typeId = QMetaType::type( metamethod.typeName() );
                 if(typeId == QMetaType::Void) {
                     #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                        krossdebug( QString("RubyExtension::call_method typeName=%1 metatype.typeid is QMetaType::Void").arg(metamethod.typeName()) );
+                        krossdebug( QString("RubyExtension::callMethod typeName=%1 metatype.typeid is QMetaType::Void").arg(metamethod.typeName()) );
                     #endif
                     returntype = new MetaTypeVariant< QVariant >( QVariant() );
                 }
                 else {
                     #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                        krossdebug( QString("RubyExtension::call_method typeName=%1 metatype.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
+                        krossdebug( QString("RubyExtension::callMethod typeName=%1 metatype.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
                     #endif
                     //if (id != -1) {
                     void* myClassPtr = QMetaType::construct(typeId, 0);
@@ -211,7 +234,7 @@ VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv
             MetaType* metatype = RubyMetaTypeFactory::create(typelist[idx - 1].constData(), argv[idx]);
             if(! metatype) {
                 // Seems RubyMetaTypeFactory::create returned an invalid RubyType.
-                krosswarning( QString("RubyExtension::call_method Aborting cause RubyMetaTypeFactory::create returned NULL.") );
+                krosswarning( QString("RubyExtension::callMethod Aborting cause RubyMetaTypeFactory::create returned NULL.") );
                 for(int i = 0; i < idx; ++i) // Clear already allocated instances.
                     delete variantargs[i];
                 return Qfalse; // abort execution.
@@ -247,44 +270,49 @@ VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv
     }
 
     return result.isNull() ? 0 : RubyType<QVariant>::toVALUE(result);
+}
 
-#if 0
-    QList<Api::Object::Ptr> argsList;
-    for(int i = 1; i < argc; i++) {
-        QObject* obj = toObject(argv[i]);
-        if(obj) argsList.append(obj);
+VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv)
+{
+    QByteArray name = rb_id2name(SYM2ID(argv[0]));
+
+    // look if the name is a method
+    if( extension->d->m_methods.contains(name) ) {
+        return extension->callMethod(name, argc, argv);
     }
-    QObject* result;
-    try { // We need a double try/catch because, the cleaning is only done at the end of the catch, so if we had only one try/catch, kross would crash after the call to rb_exc_raise
-        try { // We can't let a C++ exceptions propagate in the C mechanism
-            Kross::Callable* callable = dynamic_cast<Kross::Callable*>(object.data());
-            if(callable && callable->hasChild(funcname)) {
-                #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                    krossdebug( QString("RubyExtension::method_missing name='%1' is a child object of '%2'.").arg(funcname).arg(object->getName()) );
-                #endif
-                result = callable->getChild(funcname)->call(QString::null, KSharedPtr<Kross::List>(new Api::List(argsList)));
+
+    // look if the name is a property
+    if( extension->d->m_properties.contains(name) /* && extension->d->m_object */ ) {
+        const QMetaObject* metaobject = extension->d->m_object->metaObject();
+        QMetaProperty property = metaobject->property( extension->d->m_properties[name] );
+        if( name.endsWith('=') ) { // setter
+            if(argc < 2) {
+                rb_raise(rb_eNameError, QString("Expected value-argument for \"%1\" setter.").arg(name.constData()).toLatin1().constData());
+                return Qnil;
             }
-            else {
-                #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                    krossdebug( QString("RubyExtension::method_missing try to call function with name '%1' in object '%2'.").arg(funcname).arg(object->getName()) );
-                #endif
-                result = object->call(funcname, Api::List::Ptr(new Api::List(argsList)));
+            QVariant v = RubyType<QVariant>::toVariant(argv[1]);
+            if(! property.write(extension->d->m_object, v)) {
+                rb_raise(rb_eNameError, QString("Setting attribute \"%1\" failed.").arg(name.constData()).toLatin1().constData());
+                return Qnil;
             }
-        } catch(Kross::Exception::Ptr exception) {
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                krossdebug("c++ exception caught, raise a ruby error");
-            #endif
-            throw convertFromException(exception);
-        }  catch(...) {
-            Kross::Exception::Ptr e = Kross::Exception::Ptr( new Kross::Exception( "Unknow error" ) );
-            throw convertFromException(e); // TODO: fix //i18n
+            return Qnil;
         }
-    } catch(VALUE v) {
-         rb_exc_raise(v );
+        else { // getter
+            if(! property.isReadable()) {
+                rb_raise(rb_eNameError, QString("Attribute \"%1\" is not readable.").arg(name.constData()).toLatin1().constData());
+                return Qnil;
+            }
+            return RubyType<QVariant>::toVALUE( property.read(extension->d->m_object) );
+        }
     }
-    return toVALUE(result);
-    return Qfalse;
-#endif
+
+    // look if the name is a enumeration
+    if( extension->d->m_enumerations.contains(name) ) {
+        return RubyType<int>::toVALUE( extension->d->m_enumerations[name] );
+    }
+
+    rb_raise(rb_eNameError, QString("No such method or variable \"%1\".").arg(name.constData()).toLatin1().constData());
+    return Qnil;
 }
 
 void RubyExtension::delete_object(void* object)

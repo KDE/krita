@@ -99,10 +99,19 @@ namespace Kross {
             QPointer<QObject> m_object;
             /// \internal string for debugging.
             QString m_debuginfo;
+
             /// The cached list of methods.
             QHash<QByteArray, Py::Object> m_methods;
+            /// The cached list of properties.
+            QHash<QByteArray, QMetaProperty> m_properties;
+            /// The cached list of enumerations.
+            QHash<QByteArray, int> m_enumerations;
+
             /// The cached list of methodnames.
             Py::List m_methodnames;
+            /// The cached list of membernames.
+            Py::List m_membernames;
+
             /// The proxymethod which will handle all calls to our \a PythonExtension instance.
             Py::MethodDefExt<PythonExtension>* m_proxymethod;
 

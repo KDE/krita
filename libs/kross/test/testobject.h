@@ -40,13 +40,18 @@ class TestObject : public QObject
         Q_PROPERTY(QStringList stringListProperty READ stringListProperty WRITE setStringListProperty)
         Q_PROPERTY(QVariantList listProperty READ listProperty WRITE setListProperty)
 
+        Q_ENUMS(TestEnum)
+
     public:
         TestObject();
         TestObject(const QString& name);
         TestObject(const TestObject& obj);
         virtual ~TestObject();
 
+        enum TestEnum { TESTENUM1 = 1, TESTENUM2 = 2, TESTENUM3 = 4, TESTENUM4 = 8 };
+
     private:
+
         bool m_boolproperty;
         bool boolProperty() const { return m_boolproperty; }
         void setBoolProperty(bool prop) { m_boolproperty = prop; }
@@ -80,6 +85,9 @@ class TestObject : public QObject
 
         // return the objectname
         QString name();
+
+        // test the enumerator
+        //TestEnum testEnum(TestEnum e) const { return e; }
 
         // to test basic datatypes
         int func_int_int(int);

@@ -28,10 +28,8 @@ Ruby:
 * support access to the QObject-hierachy. That means each RubyExtension
   used to wrap a QObject instance should provide access to the child
   QObject instances the wrapped QObject has.
-* support Q_PROPERTY
 * support access to the Kross::Manager (global) and Kross::Action (self/this)
   instances if not done already.
-* support Q_ENUMS
 * reimplement connect signal<=>slot support
 * add better dynamic Korundum integration (e.g. trade QObject-instances
   around between QtRuby and Kross). Korundum misses SIP-like functionality
@@ -39,12 +37,9 @@ Ruby:
   of dirty code to get that support done.
 
 Python:
-* support Q_ENUMS
 * reimplement connect signal<=>slot support
 * uncomment dynamic PyQt-support + regressiontest just every case
 
 KjsEmbed:
-* there is still a lot of functionality missing within KjsEmbed to
-  have it as first class citizen within Kross. What is needed are
-  more tests + a list of functionality that is still needed + a list
-  of bugs that need to be fixed + someone who does solve them all :)
+* work has started but still misses a lot of functionality to have it as
+  first class citizen like Python or Ruby within Kross.

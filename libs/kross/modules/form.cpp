@@ -31,6 +31,7 @@
 #include <QSizePolicy>
 #include <QApplication>
 #include <QProgressDialog>
+#include <QUiLoader>
 #include <QtDesigner/QFormBuilder>
 
 #include <kdebug.h>
@@ -360,13 +361,56 @@ void FormDialog::slotCurrentPageChanged(KPageWidgetItem* current)
 
 namespace Kross {
 
+    /// \internal extension of the QUiLoader class.
+    class UiLoader : public QUiLoader
+    {
+        public:
+            UiLoader() : QUiLoader() {}
+            virtual ~UiLoader() {}
+
+            /*
+            virtual QAction* createAction(QObject* parent = 0, const QString& name = QString())
+            {
+            }
+
+            virtual QActionGroup* createActionGroup(QObject* parent = 0, const QString& name = QString())
+            {
+            }
+
+            virtual QLayout* createLayout(const QString& className, QObject* parent = 0, const QString& name = QString())
+            {
+            }
+
+            virtual QWidget* createWidget(const QString& className, QWidget* parent = 0, const QString& name = QString())
+            {
+            }
+            */
+    };
+
     /// \internal d-pointer class.
     class FormModule::Private
     {
         public:
-            QFormBuilder* builder;
-            Private() : builder( new QFormBuilder() ) {}
-            ~Private() { delete builder; }
+            Private() : m_builder(0), m_loader(0) {}
+            ~Private() { delete m_builder; delete m_loader; }
+
+            QFormBuilder* builder()
+            {
+                if( ! m_builder )
+                    m_builder = new QFormBuilder();
+                return m_builder;
+            }
+
+            UiLoader* loader()
+            {
+                if( ! m_loader )
+                    m_loader = new UiLoader();
+                return m_loader;
+            }
+
+        private:
+            QFormBuilder* m_builder;
+            UiLoader* m_loader;
     };
 
 }
@@ -435,18 +479,11 @@ QWidget* FormModule::createDialog(const QString& caption)
     return new FormDialog(caption);
 }
 
-#if 0
-QWidget* FormModule::createWidget(QWidget* parent, const QString& classname)
-{
-    //return new FormWidget(parent);
-}
-#endif
-
-QWidget* FormModule::createFileWidget(QWidget* parent, const QString& startDirOrVariable)
+QWidget* FormModule::createWidget(QWidget* parent, const QString& className, const QString& name)
 {
     if( ! parent )
         return 0;
-    FormFileWidget* widget = new FormFileWidget(parent, startDirOrVariable);
+    QWidget* widget = d->loader()->createWidget(className, parent, name);
     if( parent->layout() )
         parent->layout()->addWidget(widget);
     return widget;
@@ -459,7 +496,7 @@ QWidget* FormModule::createWidgetFromUI(QWidget* parent, const QString& xml)
     QByteArray ba = xml.toUtf8();
     QBuffer buffer(&ba);
     buffer.open(QIODevice::ReadOnly);
-    QWidget* widget = d->builder->load(&buffer, parent);
+    QWidget* widget = d->builder()->load(&buffer, parent);
     if( widget && parent->layout() )
         parent->layout()->addWidget(widget);
     return widget;
@@ -481,6 +518,16 @@ QWidget* FormModule::createWidgetFromUIFile(QWidget* parent, const QString& file
     const QString xml = file.readAll();
     file.close();
     return createWidgetFromUI(parent, xml);
+}
+
+QWidget* FormModule::createFileWidget(QWidget* parent, const QString& startDirOrVariable)
+{
+    if( ! parent )
+        return 0;
+    FormFileWidget* widget = new FormFileWidget(parent, startDirOrVariable);
+    if( parent->layout() )
+        parent->layout()->addWidget(widget);
+    return widget;
 }
 
 #include "form.moc"

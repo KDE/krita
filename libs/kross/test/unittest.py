@@ -115,6 +115,13 @@ class TestKross(unittest.TestCase):
 		self.object1.listProperty = [ True, [2464, -8295], -572.07516, "test", [] ]
 		self.assert_( self.object1.listProperty == [ True, [2464, -8295], -572.07516, "test", [] ] )
 
+	def testEnumerations(self):
+		self.assert_( self.object1.TESTENUM1 == 1 )
+		self.assert_( self.object1.TESTENUM2 == 2 )
+		self.assert_( self.object1.TESTENUM3 == 4 )
+		self.assert_( self.object1.TESTENUM4 == 8 )
+		#self.assert_( self.object1.testEnum( self.object1.TESTENUM3 ) == 4 )
+
 	#def testExpectedFailures(self):
 		# to less arguments
 		#self.assertRaises(ValueError, self.pluginobject1.uintfunc)

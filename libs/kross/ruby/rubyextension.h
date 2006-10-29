@@ -64,6 +64,11 @@ namespace Kross {
         private:
 
             /**
+            * Handle the function call.
+            */
+            VALUE callMethod(const QByteArray& funcname, int argc, VALUE *argv);
+
+            /**
             * This function will catch functions that are undefined.
             */
             static VALUE method_missing(int argc, VALUE *argv, VALUE self);

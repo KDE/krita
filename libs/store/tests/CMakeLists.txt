@@ -27,6 +27,18 @@ add_test(kostore-xmlwritertest xmlwritertest)
 
 ########### next target ###############
 
+set(koxmlreader_SRCS koxmlreadertest.cpp )
+
+kde4_automoc(${koxmlreader_SRCS})
+
+kde4_add_executable(koxmlreadertest RUN_UNINSTALLED ${koxmlreader_SRCS})
+
+target_link_libraries(koxmlreadertest kofficecore ${QT_QTTEST_LIBRARY} )
+
+add_test(kofficecore-koxmlreadertest koxmlreadertest)
+
+########### next target ###############
+
 set(storedroptest_SRCS storedroptest.cpp )
 
 kde4_automoc(${storedroptest_SRCS})

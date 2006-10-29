@@ -43,11 +43,9 @@ class TestKross < Test::Unit::TestCase
 		assert( TestObject1.func_qulonglong_qulonglong(378972) == 378972 )
 		#assert( TestObject1.func_qulonglong_qulonglong(-8540276823902375665225676321823) == -8540276823902375665225676321823 )
 	end
- 
-	def testByteArray
-		#TODO crashes
-		#assert( TestObject1.func_qbytearray_qbytearray(nil) == nil )
 
+	def testByteArray
+		assert( TestObject1.func_qbytearray_qbytearray(nil) == "" )
 		assert( TestObject1.func_qbytearray_qbytearray("") == "" )
 		assert( TestObject1.func_qbytearray_qbytearray("  Some String as ByteArray  ") == "  Some String as ByteArray  " )
 		assert( TestObject1.func_qbytearray_qbytearray(" \0\n\r\t\s\0 test ") == " \0\n\r\t\s\0 test " )

@@ -191,15 +191,20 @@ namespace Kross {
     struct RubyType<QByteArray>
     {
         inline static VALUE toVALUE(const QByteArray& ba) {
-            //return rb_str_new2(ba.constData());
             return rb_str_new(ba.constData(), ba.size());
         }
         inline static QByteArray toVariant(VALUE value) {
-            //QByteArray ba = STR2CSTR( rb_inspect(value) );
-            //bool isstring = ( TYPE(value) == T_STRING );
-            long length = LONG2NUM( RSTRING(value)->len );
-            char* ca = rb_str2cstr(value, &length);
-            return QByteArray(ca, length);
+            switch( TYPE(value) ) {
+                case T_STRING: {
+                    long length = LONG2NUM( RSTRING(value)->len );
+                    char* ca = rb_str2cstr(value, &length);
+                    return QByteArray(ca, length);
+                } break;
+                case T_NIL:
+                    return QByteArray("");
+                default:
+                    return STR2CSTR( rb_inspect(value) );
+            }
         }
     };
 

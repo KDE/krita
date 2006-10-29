@@ -154,7 +154,12 @@ Kross::Api::Object::Ptr KritaCoreFactory::getFilter(Kross::Api::List::Ptr args)
 {
     QString name = Kross::Api::Variant::toString(args->item(0));
     KisFilter* filter = KisFilterRegistry::instance()->get(name);
-    return new Filter(filter);
+    if(filter)
+    {
+      return new Filter(filter);
+    } else {
+      return 0;
+    }
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::newCircleBrush(Kross::Api::List::Ptr args)

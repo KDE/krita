@@ -192,7 +192,12 @@ QObject* KritaCoreModule::loadBrush(const QString& filename)
 QObject* KritaCoreModule::filter(const QString& filtername)
 {
     KisFilter* filter = KisFilterRegistry::instance()->get(filtername).data();
-    return new Filter(this, filter);
+    if(filter)
+    {
+        return new Filter(this, filter);
+    } else {
+      return 0;
+    }
 }
 
 QObject* KritaCoreModule::createImage(int width, int height, const QString& colorspace, const QString& name)

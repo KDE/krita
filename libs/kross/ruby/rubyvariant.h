@@ -118,8 +118,10 @@ namespace Kross {
             return INT2FIX(i);
         }
         inline static int toVariant(VALUE value) {
-            if(TYPE(value) == T_FLOAT) // ruby is not able to convert double into int :-/
-                return int(NUM2DBL(value));
+            if(TYPE(value) != T_FIXNUM) {
+                rb_raise(rb_eTypeError, "Integer must be a fixed number");
+                return 0;
+            }
             return FIX2INT(value);
         }
     };
@@ -132,8 +134,10 @@ namespace Kross {
             return UINT2NUM(i);
         }
         inline static uint toVariant(VALUE value) {
-            if(TYPE(value) == T_FLOAT) // ruby is not able to convert double into uint :-/
-                return uint(NUM2DBL(value));
+            if(TYPE(value) != T_FIXNUM) {
+                rb_raise(rb_eTypeError, "Unsigned integer must be a fixed number");
+                return 0;
+            }
             return FIX2UINT(value);
         }
     };
@@ -157,8 +161,17 @@ namespace Kross {
         inline static VALUE toVALUE(bool b) {
             return b ? Qtrue : Qfalse;
         }
-        inline static double toVariant(VALUE value) {
-            return TYPE(value) == T_TRUE;
+        inline static bool toVariant(VALUE value) {
+            switch( TYPE(value) ) {
+                case T_TRUE:
+                    return true;
+                case T_FALSE:
+                    return false;
+                default: {
+                    rb_raise(rb_eTypeError, "Boolean value expected");
+                    return false;
+                } break;
+            }
         }
     };
 
@@ -194,19 +207,16 @@ namespace Kross {
             return rb_str_new(ba.constData(), ba.size());
         }
         inline static QByteArray toVariant(VALUE value) {
-            switch( TYPE(value) ) {
-                case T_STRING: {
-                    long length = LONG2NUM( RSTRING(value)->len );
-                    if( length < 0 )
-                        return QByteArray("");
-                    char* ca = rb_str2cstr(value, &length);
-                    return QByteArray(ca, length);
-                } break;
-                case T_NIL:
-                    return QByteArray("");
-                default:
-                    return STR2CSTR( rb_inspect(value) );
+            if( TYPE(value) != T_STRING ) {
+                rb_raise(rb_eTypeError, "ByteArray must be a string");
+                //return STR2CSTR( rb_inspect(value) );
+                return QByteArray("");
             }
+            long length = LONG2NUM( RSTRING(value)->len );
+            if( length < 0 )
+                return QByteArray("");
+            char* ca = rb_str2cstr(value, &length);
+            return QByteArray(ca, length);
         }
     };
 
@@ -233,6 +243,10 @@ namespace Kross {
             return l;
         }
         inline static QStringList toVariant(VALUE value) {
+            if( TYPE(value) != T_ARRAY ) {
+                rb_raise(rb_eTypeError, "StringList must be an array");
+                return QStringList();
+            }
             QStringList l;
             for(int i = 0; i < RARRAY(value)->len; i++)
                 l.append( RubyType<QString>::toVariant( rb_ary_entry(value, i) ) );
@@ -251,6 +265,10 @@ namespace Kross {
             return l;
         }
         inline static QVariantList toVariant(VALUE value) {
+            if( TYPE(value) != T_ARRAY ) {
+                rb_raise(rb_eTypeError, "VariantList must be an array");
+                return QVariantList();
+            }
             QVariantList l;
             for(int i = 0; i < RARRAY(value)->len; i++)
                 l.append( RubyType<QVariant>::toVariant( rb_ary_entry(value, i) ) );
@@ -277,6 +295,10 @@ namespace Kross {
             return ST_CONTINUE;
         }
         inline static QVariantMap toVariant(VALUE value) {
+            if( TYPE(value) != T_HASH ) {
+                rb_raise(rb_eTypeError, "VariantMap must be a hash");
+                return QVariantMap();
+            }
             QVariantMap map;
             VALUE vmap = Data_Wrap_Struct(rb_cObject, 0,0, &map);
             rb_hash_foreach(value, (int (*)(...))convertHash, vmap);

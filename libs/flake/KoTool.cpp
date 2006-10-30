@@ -70,21 +70,15 @@ void KoTool::useCursor(QCursor cursor, bool force) {
 }
 
 QWidget * KoTool::optionWidget(QWidget * parent) {
-    if ( !m_optionWidget ) {
-        // XXX: Re-add the ui tool name  to show in this label. It probably
-        //      was removed post moving KisTool to KoTool and I'm too fed up
-        //      to re-add it right now. (boud)
-        // TZ: On the other hand, just returning any widget here will loose the
-        //     information whether we actually have options or not. I'd much rather
-        //     return 0 if there are no options and let the GUI show a better default.
-        //     Especially since I expect to have an interface soon where we can extract
-        //     the options from the option-panel instance and persist them between restarts.
-        //m_optionWidget = new QLabel(i18n("No options for %1.", m_visibleName), parent);
-        QLabel * l = new QLabel(i18n("No options for the current tool"), parent);
-        //m_optionWidget->setWindowTitle(m_visibleName);
-        l->setAlignment(Qt::AlignCenter);
-        m_optionWidget = l;
-
+    // Create the optionwidget if it doesn't exist yet
+    if (m_optionWidget == 0) {
+        createOptionWidget(parent);
+    }
+    // If there is an optionwidget, but it is owned by a different widget,
+    // reparent. Note: is setParent correct here, or should I use reParent?
+    // The Qt dox are not conclusive.
+    if (m_optionWidget != 0 && m_optionWidget->parent() != parent) {
+        m_optionWidget->setParent(parent);
     }
     return m_optionWidget;
 }

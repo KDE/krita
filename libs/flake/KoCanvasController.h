@@ -41,6 +41,9 @@ class KoShape;
  * <p>The using application can intantiate this class and add its canvas using the
  * setCanvas() call. Which is designed so it can be called multiple times for those
  * that wish to exchange one canvas widget for another.
+ *
+ * Effectively, there is _one_ KoCanvasController per KoView in your application.
+ *
  */
 class FLAKE_EXPORT KoCanvasController : public QScrollArea {
     Q_OBJECT

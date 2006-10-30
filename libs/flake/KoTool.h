@@ -37,8 +37,13 @@ class QWidget;
 class QPainter;
 
 /**
- * Abstract base class for all tools that manipulate flake objects.
+ * Abstract base class for all tools. Tools can create or manipulate
+ * flake shapes, canvas state or any other thing that a user may wish
+ * to do to his document or his view on a document with a pointing 
+ * device.
+ *
  * There exists an instance of every tool for every pointer device.
+ * These instances are managed by the toolmanager..
  */
 class FLAKE_EXPORT KoTool : public QObject
 {
@@ -104,9 +109,10 @@ public:
 
     /**
      * Return the option widget for this tool. Create it if it
-     * does not exist yet.
+     * does not exist yet. If the tool does not have an option widget,
+     * this method return 0. (After discussion with Thomas, who prefers
+     * the toolmanager to handle that case.)
      *
-     * Note: by default an empty widget is created.
      * @see m_optionWidget
      */
     virtual QWidget * optionWidget(QWidget * parent);
@@ -209,14 +215,23 @@ protected:
      * @param force if true the cursor will be set no matter what.
      */
     void useCursor(QCursor cursor, bool force=false);
+
+    /**
+     * Reimplement this if your tool actually has an option widget.
+     * Sets the option widget to 0 by default.
+     */
+    virtual void createOptionWidget(QWidget * parent) { m_optionWidget = 0; }
+
+protected:    
+
     KoCanvasBase *m_canvas; ///< the canvas interface this tool will work for.
+    QWidget * m_optionWidget; ///< the optionwidget this tool will show in the option widget palette
 
 private:
     KoTool();
     KoTool(const KoTool&);
     KoTool& operator=(const KoTool&);
     QCursor m_previousCursor;
-    QWidget * m_optionWidget;
 };
 
 #endif /* KOTOOL_H */

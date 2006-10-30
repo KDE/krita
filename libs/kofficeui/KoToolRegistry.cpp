@@ -31,6 +31,7 @@ KoToolRegistry::KoToolRegistry() {
     const KService::List offers = KServiceTypeTrader::self()->query(
         QString::fromLatin1("KOffice/Tool"),
         QString::fromLatin1("(Type == 'Service') and ([X-Flake-Version] == 1)"));
+
     kDebug(30008) << "KoToolRegistry searching for plugins, " << offers.count() << " found\n";
 
     foreach(KService::Ptr service, offers) {

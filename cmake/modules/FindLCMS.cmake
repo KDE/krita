@@ -6,21 +6,35 @@
 #  LCMS_VERSION, The value of LCMS_VERSION defined in lcms.h
 #  LCMS_FOUND, If false, do not try to use LCMS.
 
+# use pkg-config to get the directories and then use these values
+# in the FIND_PATH() and FIND_LIBRARY() calls
+INCLUDE(UsePkgConfig)
+PKGCONFIG(lcms _LcmsIncDir _LcmsLinkDir _LcmsLinkFlags _LcmsCflags)
+SET(LCMS_DEFINITIONS ${_LcmsCflags})
+    
 find_path(LCMS_INCLUDE_DIR lcms.h
+   ${_LcmsIncDir}
    ${CMAKE_INSTALL_PREFIX}/include
    /usr/include
    /usr/include/lcms
    /usr/local/include
    /usr/local/include/lcms
+   NO_DEFAULT_PATH
+)
+find_path(LCMS_INCLUDE_DIR lcms.h
 )
 
 find_library(LCMS_LIBRARIES NAMES lcms liblcms
-   PATHS
+   PATHS     
+   ${_LcmsLinkDir}     
    ${CMAKE_INSTALL_PREFIX}/lib
    /usr/lib
    /usr/lib/lcms
    /usr/local/lib
    /usr/local/lib/lcms
+   NO_DEFAULT_PATH
+)
+find_library(LCMS_LIBRARIES NAMES lcms liblcms
 )
 
 if(LCMS_INCLUDE_DIR AND LCMS_LIBRARIES)

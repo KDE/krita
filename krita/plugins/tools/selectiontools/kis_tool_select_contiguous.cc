@@ -156,12 +156,6 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
     }
 }
 
-void KisToolSelectContiguous::update(KisCanvasSubject *subject)
-{
-    super::update(subject);
-    m_subject = subject;
-}
-
 void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
 {
     m_fuzziness = fuzziness;

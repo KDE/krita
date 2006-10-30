@@ -48,7 +48,6 @@ class KisToolLine : public KisToolPaint {
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual quint32 priority() { return 1; }
-    virtual void update(KisCanvasSubject *subject);
 
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);

@@ -54,13 +54,6 @@ KisToolEllipse::~KisToolEllipse()
 {
 }
 
-void KisToolEllipse::update (KisCanvasSubject *subject)
-{
-    super::update (subject);
-    if (m_subject)
-        m_currentImage = m_subject->currentImg ();
-}
-
 void KisToolEllipse::buttonPress(KoPointerEvent *event)
 {
     if (m_currentImage && event->button() == Qt::LeftButton) {

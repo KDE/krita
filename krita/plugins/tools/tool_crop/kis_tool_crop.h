@@ -57,8 +57,6 @@ public:
     KisToolCrop();
     virtual ~KisToolCrop();
 
-    virtual void update(KisCanvasSubject *subject);
-
     virtual QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();
 

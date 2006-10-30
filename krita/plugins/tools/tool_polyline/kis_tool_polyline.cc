@@ -60,13 +60,6 @@ KisToolPolyline::~KisToolPolyline()
 {
 }
 
-void KisToolPolyline::update (KisCanvasSubject *subject)
-{
-        super::update (subject);
-        if (m_subject)
-            m_currentImage = m_subject->currentImg ();
-}
-
 void KisToolPolyline::buttonPress(KoPointerEvent *event)
 {
     if (m_currentImage) {

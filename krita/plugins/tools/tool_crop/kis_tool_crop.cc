@@ -77,12 +77,6 @@ KisToolCrop::~KisToolCrop()
 {
 }
 
-void KisToolCrop::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    super::update(m_subject);
-}
-
 void KisToolCrop::activate()
 {
     super::activate();

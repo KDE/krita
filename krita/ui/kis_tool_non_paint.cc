@@ -38,11 +38,6 @@ KisToolNonPaint::~KisToolNonPaint()
 {
 }
 
-void KisToolNonPaint::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-}
-
 void KisToolNonPaint::paint(QPainter&)
 {
 }

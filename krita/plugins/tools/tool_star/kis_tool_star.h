@@ -47,12 +47,6 @@ public:
     KisToolStar();
     virtual ~KisToolStar();
 
-    //
-    // KisCanvasObserver interface
-    //
-
-    virtual void update (KisCanvasSubject *subject);
-
     virtual QWidget* createOptionWidget(QWidget* parent);
 
     //

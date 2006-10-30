@@ -41,8 +41,6 @@ public:
     KisToolSelectOutline();
     virtual ~KisToolSelectOutline();
 
-    virtual void update (KisCanvasSubject *subject);
-
     virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 6; }
     virtual enumToolType toolType() { return TOOL_SELECT; }

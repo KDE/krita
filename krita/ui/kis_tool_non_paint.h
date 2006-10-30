@@ -49,9 +49,6 @@ public:
     KisToolNonPaint(const QString & UIName);
     virtual ~KisToolNonPaint();
 
-// CanvasObserver
-public:
-    virtual void update(KisCanvasSubject *subject);
 
 // KisTool
 public:

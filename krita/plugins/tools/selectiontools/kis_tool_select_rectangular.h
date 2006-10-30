@@ -38,8 +38,6 @@ public:
     KisToolSelectRectangular();
     virtual ~KisToolSelectRectangular();
 
-    virtual void update(KisCanvasSubject *subject);
-
     virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 3; }
     virtual enumToolType toolType() { return TOOL_SELECT; }

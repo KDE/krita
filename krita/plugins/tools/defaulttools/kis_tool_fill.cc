@@ -64,14 +64,6 @@ KisToolFill::KisToolFill()
     setCursor(KisCursor::load("tool_fill_cursor.png", 6, 6));
 }
 
-void KisToolFill::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    m_currentImage = subject->currentImg();
-
-    super::update(m_subject);
-}
-
 KisToolFill::~KisToolFill()
 {
 }

@@ -63,12 +63,6 @@ KisToolText::~KisToolText()
 {
 }
 
-void KisToolText::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    super::update(subject);
-}
-
 void KisToolText::buttonRelease(KoPointerEvent *e)
 {
     if (m_subject && e->button() == Qt::LeftButton) {

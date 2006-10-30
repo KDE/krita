@@ -40,16 +40,6 @@ public:
     KisToolPolygon();
     virtual ~KisToolPolygon();
 
-    //
-    // KisCanvasObserver interface
-    //
-
-    virtual void update (KisCanvasSubject *subject);
-
-    //
-    // KisToolPaint interface
-    //
-
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual quint32 priority() { return 4; }

@@ -77,12 +77,6 @@ void KisToolSelectElliptical::activate()
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectElliptical::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    super::update(m_subject);
-}
-
 void KisToolSelectElliptical::paint(QPainter& gc)
 {
     if (m_selecting)

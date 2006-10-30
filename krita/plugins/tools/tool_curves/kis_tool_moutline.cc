@@ -563,11 +563,6 @@ KisToolMagnetic::~KisToolMagnetic ()
     delete m_derived;
 }
 
-void KisToolMagnetic::update (KisCanvasSubject *subject)
-{
-    super::update(subject);
-}
-
 void KisToolMagnetic::activate ()
 {
     super::activate();

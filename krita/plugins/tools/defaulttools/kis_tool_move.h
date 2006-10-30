@@ -35,8 +35,6 @@ public:
     KisToolMove();
     virtual ~KisToolMove();
 
-public:
-    virtual void update(KisCanvasSubject *subject);
 
 public:
     virtual void setup(KActionCollection *collection);

@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_tool_paint.h"
 
 #include <QWidget>
 #include <QRect>
@@ -35,22 +36,19 @@
 #include <kiconloader.h>
 
 #include "KoColorSpace.h"
+
 #include "kis_global.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
-// #include "kis_canvas_subject.h"
-#include "kis_tool_paint.h"
 #include "kis_cmb_composite.h"
 #include "kis_image.h"
 #include "kis_int_spinbox.h"
 #include "kis_paint_device.h"
 
-KisToolPaint::KisToolPaint(const QString& UIName)
-    : super(UIName)
+KisToolPaint::KisToolPaint(KoCanvasBase * canvas)
+    : KoTool(canvas)
 {
     m_subject = 0;
-
-    m_UIName = UIName;
 
     m_optionWidget = 0;
     m_optionWidgetLayout = 0;
@@ -68,19 +66,22 @@ KisToolPaint::~KisToolPaint()
 {
 }
 
-void KisToolPaint::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    updateCompositeOpComboBox();
-}
-
 void KisToolPaint::paint(QPainter&)
 {
 }
 
-void KisToolPaint::paint(QPainter&, const QRect&)
+void KisToolPaint::activate()
 {
+    if (m_subject) {
+
+        updateCompositeOpComboBox();
+
+        KisConfig cfg;
+        m_paintOutline = (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE);
+    }
 }
+
+
 
 void KisToolPaint::deactivate()
 {
@@ -204,17 +205,6 @@ void KisToolPaint::setCursor(const QCursor& cursor)
 //             m_subject->canvasController()->setCanvasCursor(m_cursor);
 //         }
 //     }
-}
-
-void KisToolPaint::activate()
-{
-    if (m_subject) {
-
-        updateCompositeOpComboBox();
-
-        KisConfig cfg;
-        m_paintOutline = (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE);
-    }
 }
 
 void KisToolPaint::notifyModified() const

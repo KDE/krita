@@ -19,11 +19,14 @@
 #ifndef KIS_TOOL_SHAPE_H_
 #define KIS_TOOL_SHAPE_H_
 
+
 #include <krita_export.h>
 
 #include "kis_tool_paint.h"
 #include "kis_painter.h"
 #include "ui_wdgshapeoptions.h"
+
+class KoCanvasBase;
 
 class QGridLayout;
 
@@ -35,18 +38,19 @@ class WdgGeometryOptions : public QWidget, public Ui::WdgGeometryOptions
         WdgGeometryOptions(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
+/**
+ * Base for tools specialized in drawing shapes
+ */
 class KRITAUI_EXPORT KisToolShape : public KisToolPaint {
 
     Q_OBJECT
-    typedef KisToolPaint super;
 
 public:
-    KisToolShape(const QString& UIName);
+    KisToolShape(KoCanvasBase * canvas);
     virtual ~KisToolShape();
 
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
-
 protected:
+
     virtual QWidget* createOptionWidget(QWidget* parent);
 
     KisPainter::FillStyle fillStyle();

@@ -38,16 +38,6 @@ public:
     KisToolEllipse();
     virtual ~KisToolEllipse();
 
-        //
-        // KisCanvasObserver interface
-        //
-
-        virtual void update (KisCanvasSubject *subject);
-
-        //
-        // KisToolPaint interface
-        //
-
     virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 3; }
     virtual enumToolType toolType() { return TOOL_SHAPE; }

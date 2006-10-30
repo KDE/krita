@@ -45,7 +45,6 @@ public:
     KisToolSelectSimilar();
     virtual ~KisToolSelectSimilar();
 
-    virtual void update(KisCanvasSubject *subject);
     virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 8; }
     virtual enumToolType toolType() { return TOOL_SELECT; }

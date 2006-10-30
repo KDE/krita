@@ -40,8 +40,6 @@ public:
     KisToolFreehand(const QString & transactionText);
     virtual ~KisToolFreehand();
 
-    virtual void update(KisCanvasSubject *subject);
-
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
     virtual void buttonRelease(KoPointerEvent *e);

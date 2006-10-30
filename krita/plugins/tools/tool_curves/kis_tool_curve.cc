@@ -87,13 +87,6 @@ KisToolCurve::~KisToolCurve()
 
 }
 
-void KisToolCurve::update (KisCanvasSubject *subject)
-{
-    super::update(subject);
-    if (m_subject)
-        m_currentImage = m_subject->currentImg();
-}
-
 void KisToolCurve::deactivate()
 {
     if (m_curve) {

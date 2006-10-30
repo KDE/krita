@@ -21,6 +21,12 @@
 #include "kis_brush.h"
 #include "kis_pattern.h"
 #include "kis_gradient.h"
+#include "kis_view2.h"
+
+KoCanvasBase * KisResourceProvider::canvas() const
+{
+    return m_view->canvasBase();
+}
 
 KoColor KisResourceProvider::bgColor() const
 {

@@ -37,10 +37,8 @@ public:
     KisToolPan();
     virtual ~KisToolPan();
 
-    virtual void update(KisCanvasSubject *subject);
-
     virtual void setup(KActionCollection *collection);
-        virtual enumToolType toolType() { return TOOL_VIEW; }
+    virtual enumToolType toolType() { return TOOL_VIEW; }
 
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);

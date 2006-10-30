@@ -78,12 +78,6 @@ void KisToolSelectRectangular::activate()
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectRectangular::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    super::update(m_subject);
-}
-
 void KisToolSelectRectangular::paint(QPainter& gc)
 {
     if (m_selecting)

@@ -36,15 +36,10 @@ class KisToolPerspectiveGrid : public KisToolNonPaint {
 public:
     KisToolPerspectiveGrid();
     virtual ~KisToolPerspectiveGrid();
-        //
-        // KisCanvasObserver interface
-        //
 
-    virtual void update (KisCanvasSubject *subject);
-
-        //
-        // KisToolPaint interface
-        //
+    //
+    // KisToolPaint interface
+    //
 
     virtual void setup(KActionCollection *collection);
     virtual Q_UINT32 priority() { return 3; }

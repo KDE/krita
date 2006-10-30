@@ -76,11 +76,6 @@ void KisToolBrush::timeoutPaint()
 }
 
 
-void KisToolBrush::update(KisCanvasSubject *subject)
-{
-    super::update(subject);
-}
-
 void KisToolBrush::initPaint(KoPointerEvent *e)
 {
     super::initPaint(e);

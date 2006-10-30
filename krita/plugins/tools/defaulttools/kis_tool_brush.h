@@ -36,7 +36,6 @@ class KisToolBrush : public KisToolFreehand {
 public:
     KisToolBrush();
     virtual ~KisToolBrush();
-    virtual void update(KisCanvasSubject *subject);
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual quint32 priority() { return 0; }

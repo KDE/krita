@@ -47,7 +47,6 @@ public:
     virtual ~KisToolColorPicker();
 
 public:
-    virtual void update(KisCanvasSubject *subject);
     virtual void setup(KActionCollection *collection);
     virtual void buttonPress(KoPointerEvent *e);
     virtual QWidget* createOptionWidget(QWidget* parent);

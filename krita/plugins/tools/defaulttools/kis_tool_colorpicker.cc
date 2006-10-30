@@ -69,12 +69,6 @@ KisToolColorPicker::~KisToolColorPicker()
 {
 }
 
-void KisToolColorPicker::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    super::update(m_subject);
-}
-
 void KisToolColorPicker::buttonPress(KoPointerEvent *e)
 {
     if (m_subject) {

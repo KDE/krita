@@ -27,6 +27,9 @@
 #include <QEvent>
 #include <QPaintEvent>
 
+
+#include <KoTool.h>
+
 #include <krita_export.h>
 
 #include "kis_tool.h"
@@ -39,9 +42,12 @@ class QComboBox;
 class QPaintEvent;
 class QRect;
 class QGridLayout;
-class KDialog;
-class KisCanvasSubject;
 class QLabel;
+
+class KDialog;
+
+class KoCanvasBase;
+
 class KisCmbComposite;
 class KisIntSpinbox;
 
@@ -53,37 +59,37 @@ enum enumBrushMode {
     HOVER
 };
 
-class KRITAUI_EXPORT KisToolPaint : public KisTool {
+class KRITAUI_EXPORT KisToolPaint
+    : public KoTool {
 
     Q_OBJECT
-    typedef KisTool super;
 
 public:
-    KisToolPaint(const QString& UIName);
+    KisToolPaint(KoCanvasBase * canvas);
     virtual ~KisToolPaint();
 
+public slots:
+
+    virtual void activate(bool temporary = false);
+    virtual void deactivate();
+
+
 public:
-    virtual void update(KisCanvasSubject *subject);
 
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void paint(QPainter& gc, KoViewConverter &converter);
 
-    virtual void buttonPress(KoPointerEvent *e);
-    virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KoPointerEvent *e);
-    virtual void doubleClick(KoPointerEvent *e);
-    virtual void keyPress(QKeyEvent *e);
-    virtual void keyRelease(QKeyEvent *e);
+    virtual void mousePressEvent( KoPointerEvent *event );
+    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void keyReleaseEvent(QKeyEvent *event);
+    virtual void wheelEvent ( KoPointerEvent * event );
+
 
     virtual QCursor cursor();
     virtual void setCursor(const QCursor& cursor);
-    virtual QWidget* createOptionWidget(QWidget* parent);
-    virtual QWidget* optionWidget();
     virtual void addOptionWidgetOption(QWidget *control, QWidget *label = 0);
-
-public slots:
-    virtual void activate();
-    virtual void deactivate();
 
     void slotSetOpacity(int opacityPerCent);
     void slotSetCompositeMode(const KoCompositeOp* compositeOp);
@@ -95,22 +101,22 @@ protected:
     // Add the tool-specific layout to the default option widget's layout.
     void addOptionWidgetLayout(QLayout *layout);
 
+    virtual QWidget* createOptionWidget(QWidget* parent);
+
 private:
+    // XXX: Call this when the layer changes (this used to be called in KisCanvasObserver::update)
     void updateCompositeOpComboBox();
 
 protected:
-    KisCanvasSubject *m_subject;
+
     QRect m_dirtyRect;
     quint8 m_opacity;
     const KoCompositeOp * m_compositeOp;
     bool m_paintOutline;
 
 private:
-    QString m_UIName;
-
     QCursor m_cursor;
 
-    QWidget *m_optionWidget;
     QGridLayout *m_optionWidgetLayout;
 
     QLabel *m_lbOpacity;

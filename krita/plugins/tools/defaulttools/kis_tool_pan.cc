@@ -43,12 +43,6 @@ KisToolPan::~KisToolPan()
 {
 }
 
-void KisToolPan::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    super::update(m_subject);
-}
-
 void KisToolPan::buttonPress(KoPointerEvent *e)
 {
     if (m_subject && !m_dragging && e->button() == Qt::LeftButton) {

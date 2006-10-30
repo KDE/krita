@@ -76,11 +76,6 @@ void KisToolSelectOutline::activate()
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectOutline::update (KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    super::update(m_subject);
-}
 
 void KisToolSelectOutline::buttonPress(KoPointerEvent *event)
 {

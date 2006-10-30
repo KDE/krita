@@ -77,7 +77,7 @@ set(kritaui_LIB_SRCS
     squeezedcombobox.cpp
     #    kis_tool_freehand.cc
     #    kis_tool_non_paint.cc
-    #    kis_tool_paint.cc
+    #kis_tool_paint.cc
     #    kis_tool_shape.cc
 )
 

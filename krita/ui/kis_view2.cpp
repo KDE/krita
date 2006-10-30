@@ -145,7 +145,7 @@ KisResourceProvider * KisView2::resourceProvider()
     return m_d->resourceProvider;
 }
 
-KisCanvas2 * KisView2::canvasBase() const
+KoCanvasBase * KisView2::canvasBase() const
 {
     return m_d->canvas;
 }

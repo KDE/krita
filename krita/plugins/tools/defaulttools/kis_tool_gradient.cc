@@ -68,12 +68,6 @@ KisToolGradient::~KisToolGradient()
 {
 }
 
-void KisToolGradient::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    super::update(m_subject);
-}
-
 void KisToolGradient::paint(QPainter& gc)
 {
     if (m_dragging)

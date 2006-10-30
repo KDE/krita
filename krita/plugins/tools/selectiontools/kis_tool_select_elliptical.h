@@ -41,8 +41,6 @@ public:
     KisToolSelectElliptical();
     virtual ~KisToolSelectElliptical();
 
-    virtual void update(KisCanvasSubject *subject);
-
     virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 4; }
     virtual QWidget * createOptionWidget(QWidget* parent);

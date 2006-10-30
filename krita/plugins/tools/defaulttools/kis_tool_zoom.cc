@@ -54,12 +54,6 @@ KisToolZoom::~KisToolZoom()
 {
 }
 
-void KisToolZoom::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    super::update(m_subject);
-}
-
 void KisToolZoom::paint(QPainter& gc)
 {
     if (m_dragging)

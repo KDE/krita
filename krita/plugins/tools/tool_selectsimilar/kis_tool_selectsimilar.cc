@@ -213,12 +213,6 @@ void KisToolSelectSimilar::setup(KActionCollection *collection)
     }
 }
 
-void KisToolSelectSimilar::update(KisCanvasSubject *subject)
-{
-    super::update(subject);
-    m_subject = subject;
-}
-
 void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
 {
     m_fuzziness = fuzziness;

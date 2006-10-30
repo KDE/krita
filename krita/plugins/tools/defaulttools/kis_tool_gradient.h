@@ -54,8 +54,6 @@ public:
     virtual void setup(KActionCollection *collection);
         virtual enumToolType toolType() { return TOOL_FILL; }
 
-    virtual void update(KisCanvasSubject *subject);
-
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);
     virtual void buttonRelease(KoPointerEvent *event);

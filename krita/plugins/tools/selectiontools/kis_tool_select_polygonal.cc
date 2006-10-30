@@ -84,13 +84,6 @@ void KisToolSelectPolygonal::deactivate()
     m_dragging = false;
 }
 
-
-void KisToolSelectPolygonal::update (KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    super::update(m_subject);
-}
-
 void KisToolSelectPolygonal::buttonPress(KoPointerEvent *event)
 {
     if (event->button() == Qt::LeftButton) {

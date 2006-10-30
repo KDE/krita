@@ -38,16 +38,6 @@ public:
     KisToolSelectPolygonal();
     virtual ~KisToolSelectPolygonal();
 
-        //
-        // KisCanvasObserver interface
-        //
-
-    virtual void update (KisCanvasSubject *subject);
-
-        //
-        // KisToolPaint interface
-        //
-
     virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 5; }
     virtual enumToolType toolType() { return TOOL_SELECT; }

@@ -37,7 +37,6 @@ public:
     KisToolText();
     virtual ~KisToolText();
 
-    virtual void update(KisCanvasSubject *subject);
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_FILL; }
     virtual void buttonRelease(KoPointerEvent *e);

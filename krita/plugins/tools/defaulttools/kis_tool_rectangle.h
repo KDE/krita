@@ -43,15 +43,6 @@ public:
     KisToolRectangle();
     virtual ~KisToolRectangle();
 
-        //
-        // KisCanvasObserver interface
-        //
-
-        virtual void update (KisCanvasSubject *subject);
-
-        //
-        // KisToolPaint interface
-        //
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }

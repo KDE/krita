@@ -39,9 +39,6 @@ public:
     virtual ~KisToolZoom();
 
 public:
-    virtual void update(KisCanvasSubject *subject);
-
-public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_VIEW; }
     virtual quint32 priority() { return 3; }

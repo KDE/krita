@@ -53,13 +53,6 @@ KisToolMove::~KisToolMove()
 {
 }
 
-void KisToolMove::update(KisCanvasSubject *subject)
-{
-    m_subject = subject;
-    m_strategy.reset(subject);
-    super::update(subject);
-}
-
 void KisToolMove::buttonPress(KoPointerEvent *e)
 {
     if (m_subject && e->button() == Qt::LeftButton) {

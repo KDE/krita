@@ -60,7 +60,7 @@ protected:
 
     // Tool starting duplicate
     KoPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
-    bool m_isOffsetNotUptodate; // Tells if the offset is update
+    bool m_isOffsetNotUptodate; // Tells if the offset is updated
     KoPoint m_position; // Give the position of the last alt-click
     KoPoint m_positionStartPainting;
     QCheckBox* m_healing;

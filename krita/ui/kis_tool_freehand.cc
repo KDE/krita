@@ -65,12 +65,6 @@ KisToolFreehand::~KisToolFreehand()
 {
 }
 
-void KisToolFreehand::update(KisCanvasSubject *subject)
-{
-    super::update(subject);
-    m_currentImage = m_subject->currentImg();
-}
-
 void KisToolFreehand::buttonPress(KoPointerEvent *e)
 {
     if (!m_subject) return;

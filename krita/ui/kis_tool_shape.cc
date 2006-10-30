@@ -27,7 +27,8 @@
 
 #include "kis_tool_shape.h"
 
-KisToolShape::KisToolShape(const QString& UIName) : super(UIName)
+KisToolShape::KisToolShape(KoCanvasBase * canvas)
+    : KisPaintTool(canvas)
 {
     m_shapeOptionsWidget = 0;
     m_optionLayout = 0;
@@ -39,13 +40,12 @@ KisToolShape::~KisToolShape()
 
 QWidget* KisToolShape::createOptionWidget(QWidget* parent)
 {
-    QWidget *widget = super::createOptionWidget(parent);
+    QWidget *widget = KisPaintTool::createOptionWidget(parent);
 
     m_shapeOptionsWidget = new WdgGeometryOptions(0);
     Q_CHECK_PTR(m_shapeOptionsWidget);
 
     m_optionLayout = new QGridLayout(widget);
-   // super::addOptionWidgetLayout(m_optionLayout);
 
     m_shapeOptionsWidget->cmbFill->setParent(widget);
     m_shapeOptionsWidget->cmbFill->move(QPoint(0, 0));

@@ -55,6 +55,8 @@ public:
             m_bgColor = KoColor(Qt::white, view->image()->colorSpace());
         }
 
+    KoCanvasBase * canvas() const;
+
     KoColor bgColor() const;
     void setBGColor(const KoColor& c);
 

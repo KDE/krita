@@ -4,13 +4,6 @@ Always valid:
 * more performance
 * more documentations, tutorials, examples, ...
 * more unittests
-* maybe one day we like to be able to execute untrusted scripts what
-  in turn means, that we could need a secure interpreter-backend.
-  KjsEmbed does not fit into that category currently and is insecure
-  like Python. Ruby comes at least with security-levels. So, either
-  extend KjsEmbed to be as secure as Kjs, eval and propably use Ruby
-  security-levels, reintroduce Zope's RestrictedPython for python or
-  just implement a Java-backend and use it's strong sandbox.
 * add Kross-support to other KOffice-applications.
 
 Core:
@@ -18,11 +11,14 @@ Core:
   functions a script provides either as KActionCollection where each
   function is a KAction or let Action dynamicly build slots where
   each slot represents a function.
+
+Modules:
 * add KConfig-module to provide persistent configurations where all
   scripts are able to operate on.
 * add KStandardDirs-module to be able to reuse e.g. the resource-stuff
   from within all scripts without much pain.
-* extend forms
+* add KPart module to optional load KPart's.
+* extend forms, e.g. with a wizard?!
 
 Ruby:
 * support access to the QObject-hierachy. That means each RubyExtension
@@ -43,3 +39,5 @@ Python:
 KjsEmbed:
 * work has started but still misses a lot of functionality to have it as
   first class citizen like Python or Ruby within Kross.
+* extend KjsEmbed to be able to deal with untrusted scripts coming from
+  untrusted sources like e.g. via internet distributed OpenDocument files.

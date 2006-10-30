@@ -27,38 +27,67 @@
 
 using namespace Kross;
 
+namespace Kross {
+
+    /// \internal d-pointer class.
+    class PythonExtension::Private
+    {
+        public:
+            /// The QObject this PythonExtension wraps.
+            QPointer<QObject> object;
+
+            #ifdef KROSS_PYTHON_EXTENSION_CTORDTOR_DEBUG
+                /// \internal string for debugging.
+                QString debuginfo;
+            #endif
+
+            /// The cached list of methods.
+            QHash<QByteArray, Py::Object> methods;
+            /// The cached list of properties.
+            QHash<QByteArray, QMetaProperty> properties;
+            /// The cached list of enumerations.
+            QHash<QByteArray, int> enumerations;
+
+            /// The cached list of methodnames.
+            Py::List methodnames;
+            /// The cached list of membernames.
+            Py::List membernames;
+
+            /// The proxymethod which will handle all calls to our \a PythonExtension instance.
+            Py::MethodDefExt<PythonExtension>* proxymethod;
+
+    };
+
+}
+
 PythonExtension::PythonExtension(QObject* object)
     : Py::PythonExtension<PythonExtension>()
-    , m_object(object)
-    , m_debuginfo(object ? QString("%1(%2)").arg(object->objectName()).arg(object->metaObject()->className()) : "NULL")
+    , d( new Private() )
 {
-    #ifdef KROSS_PYTHON_EXTENSION_CTOR_DEBUG
-        krossdebug( QString("PythonExtension::Constructor object=%1").arg(m_debuginfo) );
+    d->object = object;
+
+    #ifdef KROSS_PYTHON_EXTENSION_CTORDTOR_DEBUG
+        d->debuginfo = object ? QString("%1 (%2)").arg(object->objectName()).arg(object->metaObject()->className()) : "NULL";
+        krossdebug( QString("PythonExtension::Constructor object=%1").arg(d->debuginfo) );
     #endif
 
     behaviors().name("KrossPythonExtension");
-    /*
-    behaviors().doc(
-        "The common KrossPythonExtension object enables passing "
-        "of Kross::Object's from C/C++ to Python and "
-        "backwards in a transparent way."
-    );
-    */
+    behaviors().doc("The KrossPythonExtension object wraps a QObject into the world of python.");
     //behaviors().supportRepr();
     behaviors().supportGetattr();
     behaviors().supportSetattr();
     behaviors().supportSequenceType();
     behaviors().supportMappingType();
 
-    m_proxymethod = new Py::MethodDefExt<PythonExtension>(
+    d->proxymethod = new Py::MethodDefExt<PythonExtension>(
         "", // methodname, not needed cause we use the method only internaly.
         0, // method that should handle the callback, not needed cause proxyhandler will handle it.
         Py::method_varargs_call_handler_t( proxyhandler ), // callback handler
         "" // documentation
     );
 
-    if(m_object) {
-        const QMetaObject* metaobject = m_object->metaObject();
+    if(d->object) {
+        const QMetaObject* metaobject = d->object->metaObject();
 
         { // initialize methods.
             const int count = metaobject->methodCount();
@@ -66,14 +95,14 @@ PythonExtension::PythonExtension(QObject* object)
                 QMetaMethod member = metaobject->method(i);
                 const QString signature = member.signature();
                 const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
-                if(! m_methods.contains(name)) {
+                if(! d->methods.contains(name)) {
                     Py::Tuple self(3);
                     self[0] = Py::Object(this); // reference to this instance
                     self[1] = Py::Int(i); // the first index used for faster access
                     self[2] = Py::String(name); // the name of the method
 
-                    m_methods.insert(name, Py::Object(PyCFunction_New( &m_proxymethod->ext_meth_def, self.ptr() ), true));
-                    m_methodnames.append(self[2]);
+                    d->methods.insert(name, Py::Object(PyCFunction_New( &d->proxymethod->ext_meth_def, self.ptr() ), true));
+                    d->methodnames.append(self[2]);
                 }
             }
         }
@@ -82,8 +111,8 @@ PythonExtension::PythonExtension(QObject* object)
             const int count = metaobject->propertyCount();
             for(int i = 0; i < count; ++i) {
                 QMetaProperty prop = metaobject->property(i);
-                m_properties.insert(prop.name(), prop);
-                m_membernames.append( Py::String(prop.name()) );
+                d->properties.insert(prop.name(), prop);
+                d->membernames.append( Py::String(prop.name()) );
             }
         }
 
@@ -94,8 +123,8 @@ PythonExtension::PythonExtension(QObject* object)
                 const int kc = e.keyCount();
                 for(int k = 0; k < kc; ++k) {
                     const QByteArray name = /*e.name() +*/ e.key(k);
-                    m_enumerations.insert(name, e.value(k));
-                    m_membernames.append( Py::String(name) );
+                    d->enumerations.insert(name, e.value(k));
+                    d->membernames.append( Py::String(name) );
                 }
             }
         }
@@ -104,15 +133,16 @@ PythonExtension::PythonExtension(QObject* object)
 
 PythonExtension::~PythonExtension()
 {
-    #ifdef KROSS_PYTHON_EXTENSION_DTOR_DEBUG
-        krossdebug( QString("PythonExtension::Destructor object=%1").arg(m_debuginfo) );
+    #ifdef KROSS_PYTHON_EXTENSION_CTORDTOR_DEBUG
+        krossdebug( QString("PythonExtension::Destructor object=%1").arg(d->debuginfo) );
     #endif
-    delete m_proxymethod;
+    delete d->proxymethod;
+    delete d;
 }
 
 QObject* PythonExtension::object() const
 {
-    return m_object;
+    return d->object;
 }
 
 Py::Object PythonExtension::getattr(const char* n)
@@ -124,19 +154,19 @@ Py::Object PythonExtension::getattr(const char* n)
     // handle internal methods
     if(n[0] == '_') {
         if(strcmp(n,"__methods__") == 0)
-            return m_methodnames;
+            return d->methodnames;
         if(strcmp(n,"__members__") == 0)
-            return m_membernames;
+            return d->membernames;
         //if(strcmp(n,"__dict__") == 0)
         //    return PythonType<QStringList>::toPyObject( QStringList() );
         if(strcmp(n,"__name__") == 0)
-            return PythonType<QString>::toPyObject( m_object->objectName() );
+            return PythonType<QString>::toPyObject( d->object->objectName() );
         if(strcmp(n,"__class__") == 0)
-            return PythonType<QString>::toPyObject( m_object->metaObject()->className() );
+            return PythonType<QString>::toPyObject( d->object->metaObject()->className() );
 
         /*
         if(strcmp(n,"__toPointer__") == 0) {
-            PyObject* qobjectptr = PyLong_FromVoidPtr( (void*) m_object.data() );
+            PyObject* qobjectptr = PyLong_FromVoidPtr( (void*) d->object.data() );
             //PyObject* o = Py_BuildValue ("N", mw);
             return Py::asObject( qobjectptr );
             //PythonPyQtExtension* pyqtextension = new PythonPyQtExtension(self, args);
@@ -149,22 +179,22 @@ Py::Object PythonExtension::getattr(const char* n)
     }
 
     // look if the attribute is a method
-    if(m_methods.contains(n)) {
+    if(d->methods.contains(n)) {
         #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
             krossdebug( QString("PythonExtension::getattr name='%1' is a method.").arg(n) );
         #endif
-        return m_methods[n];
+        return d->methods[n];
     }
 
     // look if the attribute is a property
-    if(m_properties.contains(n) && m_object) {
-        QMetaProperty property = m_properties[n];
+    if(d->properties.contains(n) && d->object) {
+        QMetaProperty property = d->properties[n];
 
         #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
             krossdebug( QString("PythonExtension::getattr name='%1' is a property: type=%2 valid=%3 readable=%4 scriptable=%5 writable=%6 usertype=%7")
                         .arg(n).arg(property.typeName()).arg(property.isValid())
-                        .arg(property.isReadable()).arg(property.isScriptable(m_object)).arg(property.isWritable())
-                        .arg(property.isUser(m_object)).arg(property.userType())
+                        .arg(property.isReadable()).arg(property.isScriptable(d->object)).arg(property.isWritable())
+                        .arg(property.isUser(d->object)).arg(property.userType())
             );
         #endif
 
@@ -173,12 +203,12 @@ Py::Object PythonExtension::getattr(const char* n)
             return Py::None();
         }
 
-        return PythonType<QVariant>::toPyObject( property.read(m_object) );
+        return PythonType<QVariant>::toPyObject( property.read(d->object) );
     }
 
     // look if the attribute is an enumerator
-    if(m_enumerations.contains(n)) {
-        return Py::Int(m_enumerations[n]);
+    if(d->enumerations.contains(n)) {
+        return Py::Int(d->enumerations[n]);
     }
 
     // finally redirect the unhandled attribute-request...
@@ -189,14 +219,14 @@ Py::Object PythonExtension::getattr(const char* n)
 int PythonExtension::setattr(const char* n, const Py::Object& value)
 {
     // look if the attribute is a property
-    if(m_properties.contains(n) && m_object) {
-        QMetaProperty property = m_properties[n];
+    if(d->properties.contains(n) && d->object) {
+        QMetaProperty property = d->properties[n];
 
         #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
             krossdebug( QString("PythonExtension::setattr name='%1' is a property: type=%2 valid=%3 readable=%4 scriptable=%5 writable=%6 usertype=%7")
                 .arg(n).arg(property.typeName()).arg(property.isValid())
-                .arg(property.isReadable()).arg(property.isScriptable(m_object)).arg(property.isWritable())
-                .arg(property.isUser(m_object)).arg(property.userType())
+                .arg(property.isReadable()).arg(property.isScriptable(d->object)).arg(property.isWritable())
+                .arg(property.isUser(d->object)).arg(property.userType())
             );
         #endif
 
@@ -206,7 +236,7 @@ int PythonExtension::setattr(const char* n, const Py::Object& value)
         }
 
         QVariant v = PythonType<QVariant>::toVariant(value);
-        if(! property.write(m_object, v)) {
+        if(! property.write(d->object, v)) {
             Py::AttributeError( QString("Setting attribute \"%1\" failed.").arg(n).toLatin1().constData() );
             return -1; // indicate error
         }
@@ -237,12 +267,12 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
         Py::Tuple argstuple(args);
         const int argssize = int( argstuple.size() );
-        QMetaMethod metamethod = self->m_object->metaObject()->method( methodindex );
+        QMetaMethod metamethod = self->d->object->metaObject()->method( methodindex );
         if(metamethod.parameterTypes().size() != argssize) {
             bool found = false;
-            const int count = self->m_object->metaObject()->methodCount();
+            const int count = self->d->object->metaObject()->methodCount();
             for(++methodindex; methodindex < count; ++methodindex) {
-                metamethod = self->m_object->metaObject()->method( methodindex );
+                metamethod = self->d->object->metaObject()->method( methodindex );
                 const QString signature = metamethod.signature();
                 const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
                 if(name == methodname) {
@@ -331,7 +361,7 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
             }
 
             // call the method now
-            int r = self->m_object->qt_metacall(QMetaObject::InvokeMetaMethod, methodindex,
+            int r = self->d->object->qt_metacall(QMetaObject::InvokeMetaMethod, methodindex,
                     &voidstarargs[0]);
             #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
                 krossdebug( QString("RESULT nr=%1").arg(r) );
@@ -373,7 +403,7 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
 int PythonExtension::sequence_length()
 {
-    return m_object->children().count();
+    return d->object->children().count();
 }
 
 Py::Object PythonExtension::sequence_concat(const Py::Object& obj)
@@ -388,8 +418,8 @@ Py::Object PythonExtension::sequence_repeat(int index)
 
 Py::Object PythonExtension::sequence_item(int index)
 {
-    if(index < m_object->children().count())
-        return Py::asObject(new PythonExtension( m_object->children().at(index) ));
+    if(index < d->object->children().count())
+        return Py::asObject(new PythonExtension( d->object->children().at(index) ));
     return Py::asObject( Py::new_reference_to( NULL ) );
 }
 
@@ -397,9 +427,9 @@ Py::Object PythonExtension::sequence_slice(int from, int to)
 {
     Py::List list;
     if(from >= 0) {
-        const int count = m_object->children().count();
+        const int count = d->object->children().count();
         for(int i = from; i <= to && i < count; ++i)
-            list.append( Py::asObject(new PythonExtension( m_object->children().at(i) )) );
+            list.append( Py::asObject(new PythonExtension( d->object->children().at(i) )) );
     }
     return list;
 }
@@ -416,15 +446,15 @@ int PythonExtension::sequence_ass_slice(int from, int to, const Py::Object& obj)
 
 int PythonExtension::mapping_length()
 {
-    return m_object->children().count();
+    return d->object->children().count();
 }
 
 Py::Object PythonExtension::mapping_subscript(const Py::Object& obj)
 {
     QString name = Py::String(obj).as_string().c_str();
-    QObject* object = m_object->findChild< QObject* >( name );
+    QObject* object = d->object->findChild< QObject* >( name );
     if(! object) {
-        foreach(QObject* o, m_object->children()) {
+        foreach(QObject* o, d->object->children()) {
             if(name == o->metaObject()->className()) {
                 object = o;
                 break;

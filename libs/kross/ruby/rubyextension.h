@@ -66,10 +66,13 @@ namespace Kross {
             /**
             * Handle the function call.
             */
-            VALUE callMethod(const QByteArray& funcname, int argc, VALUE *argv);
+            VALUE callMetaMethod(const QByteArray& funcname, int argc, VALUE *argv);
 
             /**
-            * This function will catch functions that are undefined.
+            * This function will catch functions that are undefined, extracts
+            * the matching @a RubyExtension instance and redirects the call
+            * to @a call_method_missing .
+            * 
             */
             static VALUE method_missing(int argc, VALUE *argv, VALUE self);
 
@@ -80,7 +83,15 @@ namespace Kross {
             * @param argc the number of argument
             * @param argv the lists of arguments (the first argument is the Ruby ID of the function)
             */
-            static VALUE call_method(RubyExtension* extension, int argc, VALUE *argv);
+            static VALUE call_method_missing(RubyExtension* extension, int argc, VALUE *argv);
+
+#if 0
+            /**
+            * This function handles "each" calls in a \a RubyExtension object to
+            * provide access to children QObject's the wrapped QObject instance has.
+            */
+            static VALUE call_each(int argc, VALUE *argv, VALUE self);
+#endif
 
             /**
             * This function is called by ruby to delete a RubyExtension object.

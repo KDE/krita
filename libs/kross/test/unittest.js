@@ -35,8 +35,12 @@ tester = new UnitTest();
 // We have 2 instances of TestObject which is inherits QObject.
 var testobj1 = TestObject1
 var testobj2 = TestObject2
-//println("TestObject1: " + testobj1);
-//println("TestObject2: " + testobj1);
+
+// object
+tester.assert(testobj1, "TestObject");
+tester.assert(testobj2, "TestObject");
+tester.assert(testobj1.name(), "TestObject1");
+tester.assert(testobj2.name(), "TestObject2");
 
 // bool
 tester.assert(testobj1.func_bool_bool(true), true);
@@ -56,25 +60,22 @@ tester.assert(testobj1.func_double_double(0.0), 0.0);
 tester.assert(testobj1.func_double_double(1773.2177), 1773.2177);
 tester.assert(testobj1.func_double_double(-548993.271993), -548993.271993);
 
-/*
 // longlong
-tester.assert(testobj1.func_qlonglong_qlonglong(0), 0);
-tester.assert(testobj1.func_qlonglong_qlonglong(7379), 7379);
-tester.assert(testobj1.func_qlonglong_qlonglong(-6384673), -6384673);
-tester.assert(testobj1.func_qlonglong_qlonglong(678324787843223472165), 678324787843223472165);
-*/
+//TODO segfault
+//tester.assert(testobj1.func_qlonglong_qlonglong(0), 0);
+//tester.assert(testobj1.func_qlonglong_qlonglong(7379), 7379);
+//tester.assert(testobj1.func_qlonglong_qlonglong(-6384673), -6384673);
+//tester.assert(testobj1.func_qlonglong_qlonglong(678324787843223472165), 678324787843223472165);
 
-/*
 // ulonglong
-tester.assert(testobj1.func_qulonglong_qulonglong(0), 0);
-tester.assert(testobj1.func_qulonglong_qulonglong(378972), 378972);
-*/
+//TODO segfault
+//tester.assert(testobj1.func_qulonglong_qulonglong(0), 0);
+//tester.assert(testobj1.func_qulonglong_qulonglong(378972), 378972);
 
-/*
 // bytearray
-tester.assert(testobj1.func_qbytearray_qbytearray("  Some String as ByteArray  "), "  Some String as ByteArray  ");
-tester.assert(testobj1.func_qbytearray_qbytearray(" \0\n\r\t\s\0 test "), " \0\n\r\t\s\0 test ");
-*/
+//TODO func_qbytearray_qbytearray-method returns always an empty bytearray
+//tester.assert(testobj1.func_qbytearray_qbytearray("  Some String as ByteArray  "), "  Some String as ByteArray  ");
+//tester.assert(testobj1.func_qbytearray_qbytearray(" \0\n\r\t\s\0 test "), " \0\n\r\t\s\0 test ");
 
 // string
 tester.assert(testobj1.func_qstring_qstring(""), "");
@@ -82,14 +83,14 @@ tester.assert(testobj1.func_qstring_qstring(" "), " ");
 tester.assert(testobj1.func_qstring_qstring(" Another \n\r Test!   $%&\" "), " Another \n\r Test!   $%&\" ");
 
 // stringlist
+//TODO Cast failure QStringList value Type 6
 //var a = new Array("string1","string");
-//tester.assert(testobj1.func_qstringlist_qstringlist(a, a));
+//tester.assert(testobj1.func_qstringlist_qstringlist(a), a);
 
 // variantlist
-//tester.assert(testobj1.func_qvariantlist_qvariantlist([]), []);
-//tester.assert(testobj1.func_qvariantlist_qvariantlist([[[[]],[]]]), [[[[]],[]]]);
-//tester.assert(testobj1.func_qvariantlist_qvariantlist(["A string",[17539,-8591],[5.32,-842.775]]), ["A string",[17539,-8591],[5.32,-842.775]]);
-//tester.assert(testobj1.func_qvariantlist_qvariantlist([[true,[],false,"Other String"],"test"]), [[true,[],false,"Other String"],"test"]);
+//TODO Cast failure QVariantList value Type 6
+//var a = new Array("string1","string");
+//tester.assert(testobj1.func_qvariantlist_qvariantlist(a), a);
 
 // print the test-results
 tester.printResult();

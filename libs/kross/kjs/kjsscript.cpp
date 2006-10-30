@@ -60,7 +60,7 @@ namespace Kross {
             if( linevalue && linevalue->type() == KJS::NumberType )
                 lineno = linevalue->toInt32(exec);
         }
-        const QString message = QString("%1%2: %3").arg( type ).arg( (lineno >= 0) ? QString(" line%1").arg(lineno) : "" ).arg( value->toString(exec).qstring() );
+        const QString message = QString("%1%2: %3").arg( type ).arg((lineno >= 0) ? QString(" line %1").arg(lineno) : "").arg(value->toString(exec).qstring());
 
         ErrorInterface err;
         err.setError(message, QString::null, lineno);
@@ -72,11 +72,11 @@ namespace Kross {
     {
         KJS::JSObject* obj = engine->addObject(object, name.isEmpty() ? object->objectName() : name);
         if( ! obj ) {
-            krossdebug( QString("Failed to publish the QObject name=\"%1\" objectName=\"%2\" restricted=\"%3\"").arg(name).arg(object ? object->objectName() : "NULL").arg(restricted) );
+            krosswarning( QString("Failed to publish the QObject name=\"%1\" objectName=\"%2\" restricted=\"%3\"").arg(name).arg(object ? object->objectName() : "NULL").arg(restricted) );
             return;
         }
-        if( restricted ) {
 
+        if( restricted ) {
 /*FIXME needs fix for #include <kjs/object.h> which does #include "internal.h"
             KJSEmbed::QObjectBinding* objImp = KJSEmbed::extractBindingImp<KJSEmbed::QObjectBinding>(exec, obj);
             objImp->setAccess(
@@ -92,7 +92,6 @@ namespace Kross {
                 KJSEmbed::QObjectBinding::ChildObjects
             );
 */
-
         }
     }
 
@@ -173,13 +172,16 @@ void KjsScript::finalize()
 void KjsScript::execute()
 {
     if(! initialize()) {
-        krossdebug( QString("KjsScript::execute aborted cause initialize failed.") );
+        krosswarning( QString("KjsScript::execute aborted cause initialize failed.") );
         return;
     }
 
-    KJS::UString code = action()->code();
+    QString code = action()->code();
+    if(code.startsWith("#!")) // remove optional shebang-line
+        code.remove(0, code.indexOf('\n'));
+
     //krossdebug( QString("KjsScript::execute code=\n%1").arg(code.qstring()) );
-    KJSEmbed::Engine::ExitStatus exitstatus = d->engine->execute(code);
+    KJSEmbed::Engine::ExitStatus exitstatus = d->engine->execute( KJS::UString(code) );
     KJS::Completion completion = d->engine->completion();
 
     if(exitstatus != KJSEmbed::Engine::Success) {

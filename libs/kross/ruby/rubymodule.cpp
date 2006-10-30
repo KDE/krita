@@ -55,8 +55,8 @@ RubyModule::RubyModule(QObject* object, const QString & modname)
 
     VALUE rmodule = rb_define_module(d->modulename.toAscii());
     rb_define_module_function(rmodule,"method_missing",  (VALUE (*)(...))RubyModule::method_missing, -1);
-    VALUE rm = RubyExtension::toVALUE( d->extension );
-    rb_define_const(rmodule, "MODULEOBJ", rm);
+    VALUE extension = RubyExtension::toVALUE( d->extension );
+    rb_define_const(rmodule, "MODULEOBJ", extension);
 }
 
 RubyModule::~RubyModule()
@@ -75,7 +75,7 @@ VALUE RubyModule::method_missing(int argc, VALUE *argv, VALUE self)
 {
     #ifdef KROSS_RUBY_MODULE_DEBUG
         QString funcname = rb_id2name(SYM2ID(argv[0]));
-        krossdebug(QString("Function %1 missing in a module. Redirect it to the RubyExtension...").arg(funcname));
+        krossdebug(QString("RubyModule::method_missing \"%1\" missing, redirect to RubyExtension").arg(funcname));
     #endif
 
     /*
@@ -93,5 +93,5 @@ VALUE RubyModule::method_missing(int argc, VALUE *argv, VALUE self)
     RubyExtension* extension;
     Data_Get_Struct(extensionvalue, RubyExtension /*RubyModule*/, extension);
     Q_ASSERT(extension);
-    return RubyExtension::call_method(extension, argc, argv);
+    return RubyExtension::call_method_missing(extension, argc, argv);
 }

@@ -51,8 +51,10 @@ namespace Kross {
     // this number only if you really know what you're doing.
     #define KROSS_PYTHON_VERSION 1
 
+    // Enable debugging for Kross::PythonInterpreter
     //#define KROSS_PYTHON_INTERPRETER_DEBUG
 
+    // Enable debugging for Kross::PythonScript
     //#define KROSS_PYTHON_SCRIPT_CTOR_DEBUG
     //#define KROSS_PYTHON_SCRIPT_DTOR_DEBUG
     //#define KROSS_PYTHON_SCRIPT_INIT_DEBUG
@@ -61,20 +63,17 @@ namespace Kross {
     //#define KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
     //#define KROSS_PYTHON_SCRIPT_CLASSINSTANCE_DEBUG
 
-    // Enable debugging for Kross::Python::PythonModule
+    // Enable debugging for Kross::PythonModule
     //#define KROSS_PYTHON_MODULE_DEBUG
 
-    // Enable debugging for Kross::Python::PythonExtension
-    //#define KROSS_PYTHON_EXTENSION_CTOR_DEBUG
-    //#define KROSS_PYTHON_EXTENSION_DTOR_DEBUG
-
+    // Enable debugging for Kross::PythonExtension
+    //#define KROSS_PYTHON_EXTENSION_CTORDTOR_DEBUG
     //#define KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
-
     //#define KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
     //#define KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
-
     //#define KROSS_PYTHON_EXTENSION_CALL_DEBUG
 
+    // Enable debugging for Kross::PythonType and Kross::PythonMetaTypeFactory
     //#define KROSS_PYTHON_VARIANT_DEBUG
 
 }

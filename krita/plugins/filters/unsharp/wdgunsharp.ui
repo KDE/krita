@@ -12,6 +12,9 @@
             <height>81</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>WdgUnsharp</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -49,7 +52,7 @@
                 <cstring>doubleAmount</cstring>
             </property>
             <property name="value">
-                <number>2</number>
+                <number>0.5</number>
             </property>
             <property name="maxValue">
                 <number>5</number>

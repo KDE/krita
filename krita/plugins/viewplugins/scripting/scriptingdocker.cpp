@@ -39,7 +39,6 @@ ScriptingDocker::ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
     : QWidget(parent)
     , m_guiclient(guiclient)
 {
-#if 0
     QBoxLayout* layout = new QVBoxLayout(this);
     layout->setMargin(0);
     setLayout(layout);
@@ -58,7 +57,6 @@ ScriptingDocker::ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
     tb->addAction(KIcon("player_stop"), i18n("Stop"), this, SLOT(stopScript()) );
 
     connect(m_view, SIGNAL(doubleClicked(const QModelIndex&)), SLOT(runScript()));
-#endif
 }
 
 ScriptingDocker::~ScriptingDocker()
@@ -67,24 +65,20 @@ ScriptingDocker::~ScriptingDocker()
 
 void ScriptingDocker::runScript()
 {
-#if 0
     QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
     if( index.isValid() ) {
         Kross::Action* action = static_cast< Kross::Action* >( index.internalPointer() );
         action->trigger(); // execute the script
     }
-#endif
 }
 
 void ScriptingDocker::stopScript()
 {
-#if 0
     QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
     if( index.isValid() ) {
         Kross::Action* action = static_cast< Kross::Action* >( index.internalPointer() );
         action->finalize();
     }
-#endif
 }
 
 #include "scriptingdocker.moc"

@@ -344,16 +344,22 @@ void ScriptManagerModule::showManagerDialog()
 
     KPushButton* installbtn = new KPushButton(KIcon("fileimport"), i18n("Install"), btnwidget);
     installbtn->setToolTip( i18n("Install a script-package.") );
+//TODO
+installbtn->setEnabled(false);
     btnlayout->addWidget(installbtn);
     connect(installbtn, SIGNAL(clicked()), view, SLOT(slotInstall()) );
 
     KPushButton* uninstallbtn = new KPushButton(KIcon("fileclose"), i18n("Uninstall"), btnwidget);
     uninstallbtn->setToolTip( i18n("Uninstall the selected script-package.") );
+//TODO
+uninstallbtn->setEnabled(false);
     btnlayout->addWidget(uninstallbtn);
     connect(uninstallbtn, SIGNAL(clicked()), view, SLOT(slotUninstall()) );
 
     KPushButton* newstuffbtn = new KPushButton(KIcon("knewstuff"), i18n("Get New Scripts"), btnwidget);
     newstuffbtn->setToolTip( i18n("Get new scripts from the internet.") );
+//TODO
+newstuffbtn->setEnabled(false);
     btnlayout->addWidget(newstuffbtn);
     connect(newstuffbtn, SIGNAL(clicked()), view, SLOT(slotNewScripts()) );
 

@@ -1,7 +1,7 @@
 /***************************************************************************
  * krossconfig.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -49,6 +49,7 @@ namespace Kross {
     #define KROSS_OBJECT_METACALL_DEBUG
     //#define KROSS_METATYPE_DEBUG
     //#define KROSS_INTERPRETER_DEBUG
+    #define KROSS_ACTIONCOLLECTION_DEBUG
 
     // The name of the interpreter's library. Those library got loaded
     // dynamically during runtime. Comment out to disable compiling of

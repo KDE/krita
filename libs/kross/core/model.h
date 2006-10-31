@@ -26,20 +26,20 @@
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
 
-#include <kactioncollection.h>
-#include <kactionmenu.h>
-
 namespace Kross {
+
+    // Forward declarations.
+    class ActionCollection;
 
     /**
      * The ActionCollectionModel class implements a QAbstractItemModel to provide
-     * a model for views of the with \a Manager::actionCollection avaiable \a Action
-     * instances.
+     * a model for views of a \a ActionCollection instance that manages a
+     * collection of \a Action instances.
      */
     class KDE_EXPORT ActionCollectionModel : public QAbstractItemModel
     {
         public:
-            ActionCollectionModel(QObject* parent);
+            ActionCollectionModel(QObject* parent, ActionCollection* collection = 0);
             virtual ~ActionCollectionModel();
 
             virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
@@ -64,7 +64,7 @@ namespace Kross {
     class KDE_EXPORT ActionCollectionProxyModel : public QSortFilterProxyModel
     {
         public:
-            ActionCollectionProxyModel(QObject* parent);
+            ActionCollectionProxyModel(QObject* parent, ActionCollection* collection = 0);
             virtual ~ActionCollectionProxyModel();
 
         private:

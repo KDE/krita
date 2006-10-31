@@ -34,6 +34,7 @@
 #include <core/manager.h>
 #include <core/model.h>
 #include <core/guiclient.h>
+//#include <core/actioncollection.h>
 
 ScriptingDocker::ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
     : QWidget(parent)

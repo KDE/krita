@@ -1,7 +1,7 @@
 /***************************************************************************
  * action.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,9 +36,6 @@ class QDir;
 class QDomElement;
 
 namespace Kross {
-
-    // Forward declarations.
-    class ActionPrivate;
 
     /**
      * The Action class is an abstract container to deal with scripts
@@ -220,8 +217,10 @@ namespace Kross {
             void slotTriggered();
 
         private:
-            /// Internaly used private d-pointer.
-            ActionPrivate* d;
+            /// \internal d-pointer class.
+            class Private;
+            /// \internal d-pointer instance.
+            Private* const d;
     };
 
 }

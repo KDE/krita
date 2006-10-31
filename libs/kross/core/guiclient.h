@@ -70,6 +70,7 @@ namespace Kross {
              */
             virtual void setDOMDocument(const QDomDocument &document, bool merge = false);
 
+#if 0
             /**
              * \return the KActionCollection which holds the list of \a Action instances.
              */
@@ -80,6 +81,7 @@ namespace Kross {
              * the configuration with actions defined there.
              */
             bool writeConfigFromPackages();
+#endif
 
         public slots:
 

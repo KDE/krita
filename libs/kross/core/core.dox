@@ -23,7 +23,10 @@
  * abstract access to the Kross Scripting Framework to an application.
  *
  * The @a Kross::ActionCollectionProxyModel class implements a
- * QSortFilterProxyModel for a \a Kross::ActionCollectionModel instance
- * which provides the model of a Model/View/Control to display the
+ * QSortFilterProxyModel for a @a Kross::ActionCollectionModel instance
+ * which implements QAbstractItemModel to provide a model for views
+ * on a @a Kross::ActionCollection instance.
+ *
+ * The @a Kross::ActionCollection class manages collections of
  * @a Kross::Action instances.
  */

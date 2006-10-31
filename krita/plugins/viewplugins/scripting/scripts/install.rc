@@ -1,72 +1,72 @@
 <KrossScripting>
 
-	<ScriptAction
+	<script
 		name="pilimport"
 		text="Python Imaging Library Import"
-		description="Import images with the Python Imaging Library (PIL)"
+		comment="Import images with the Python Imaging Library (PIL)"
 		interpreter="python"
 		file="pilimport.py" />
 
-	<ScriptAction
+	<script
 		name="pilexport"
 		text="Python Imaging Library Export"
-		description="Export images with the Python Imaging Library (PIL)"
+		comment="Export images with the Python Imaging Library (PIL)"
 		interpreter="python"
 		file="pilexport.py" />
 
-	<ScriptAction
+	<script
 		name="rbinvert"
 		text="Invert with Ruby"
-		description="Invert the pixel of an image with Ruby"
+		comment="Invert the pixel of an image with Ruby"
 		interpreter="ruby"
 		file="invert.rb" />
 
-	<ScriptAction
+	<script
 		name="pyinvert"
 		text="Invert with Python"
-		description="Invert the pixel of an image with Python"
+		comment="Invert the pixel of an image with Python"
 		interpreter="python"
 		file="invert.py" />
 
-	<ScriptAction
+	<script
 		name="rbrandompaint"
 		text="Random painting"
-		description="Demonstrate how to use the Painter scripting API and paint random shape on screen"
+		comment="Demonstrate how to use the Painter scripting API and paint random shape on screen"
 		interpreter="ruby"
 		file="randompaint.rb" />
 
-	<ScriptAction
+	<script
 		name="rbfilterstest"
 		text="Filters test"
-		description="Test of filters in a ruby-scripting"
+		comment="Test of filters in a ruby-scripting"
 		interpreter="ruby"
 		file="filterstest.rb" />
 
-	<ScriptAction
+	<script
 		name="rbchangecs"
 		text="Change colorspace"
-		description="Demonstrate how to change the colorspace in a script"
+		comment="Demonstrate how to change the colorspace in a script"
 		interpreter="ruby"
 		file="changecs.rb" />
 	
-	<ScriptAction
+	<script
 		name="pyreshapehisto"
 		text="Reshape Histogram"
-		description="It's an experimental script to try to reshape histogram, while the results are far to be convincing yet it is still an example on how to use histogram in a script."
+		comment="It's an experimental script to try to reshape histogram, while the results are far to be convincing yet it is still an example on how to use histogram in a script."
 		interpreter="python"
 		file="reshapehisto.py" />
 
-	<ScriptAction
+	<script
 		name="rbtorturepainting"
 		text="Torture Krita with painting"
-		description="Paint on an image and create multiple layers"
+		comment="Paint on an image and create multiple layers"
 		interpreter="ruby"
 		file="torture-painting.rb" />
 
-	<ScriptAction
+	<script
 		name="rbtorturefilters"
 		text="Torture Krita with filters"
-		description="Test all filters with all colorspaces"
+		comment="Test all filters with all colorspaces"
 		interpreter="ruby"
 		file="torture-filters.rb" />
 

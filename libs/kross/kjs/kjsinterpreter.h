@@ -34,10 +34,8 @@ namespace Kross {
     class KjsInterpreterPrivate;
 
     /**
-     * Kjs interpreter bridge.
-     *
-     * Implements an \a Kross::Interpreter for the KDE Javascript
-     * interpreter.
+     * The KjsInterpreter class implements \a Kross::Interpreter
+     * for the KDE Javascript interpreter backend.
      */
     class KjsInterpreter : public Kross::Interpreter
     {

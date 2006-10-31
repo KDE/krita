@@ -19,25 +19,24 @@
 
 #include "guiclient.h"
 #include "manager.h"
+#include "interpreter.h"
+#include "actioncollection.h"
 
-#include "../core/interpreter.h"
-
-#include <QRegExp>
-#include <qdom.h>
+//#include <QRegExp>
+//#include <qdom.h>
 
 #include <kapplication.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
 //#include <kdialog.h>
-#include <kstandarddirs.h>
+//#include <kstandarddirs.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kicon.h>
-#include <kstandarddirs.h>
 
 using namespace Kross;
 
@@ -52,7 +51,7 @@ namespace Kross {
             /// The optional parent QWidget widget.
             QWidget* parent;
             /// The collection of installed script-packages.
-            KActionCollection* actions;
+            //KActionCollection* actions;
             /// The menu used to display the scripts.
             KActionMenu* scriptsmenu;
     };
@@ -68,7 +67,7 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
 
     d->guiclient = guiclient;
     d->parent = parent;
-    d->actions = Manager::self().actionCollection();
+    //d->actions = Manager::self().actionCollection();
 
     d->scriptsmenu = new KActionMenu(i18n("Scripts"), actionCollection(), "scripts");
     connect(d->scriptsmenu->menu(), SIGNAL(aboutToShow()), this, SLOT(slotMenuAboutToShow()));
@@ -83,17 +82,13 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     KAction* manageraction =  new KAction(i18n("Script Manager..."), actionCollection(), "configurescripts");
     connect(manageraction, SIGNAL(triggered(Qt::MouseButtons, Qt::KeyboardModifiers)), SLOT(showManager()));
 
-    // read the script-actions.
-    if (! Manager::self().readConfig()) {
-        // if there is no scripts-section in the configfile yet, we assume that the user uses a fresh
-        // configfile. So, we just try to read all available script-packages and add them to the config.
-        if (writeConfigFromPackages())
-            Manager::self().readConfig();
-    }
-
     // The GUIClient provides feedback if e.g. an execution failed.
     connect(&Manager::self(), SIGNAL( started(Kross::Action*) ), this, SLOT( started(Kross::Action*) ));
     connect(&Manager::self(), SIGNAL( finished(Kross::Action*) ), this, SLOT( finished(Kross::Action*) ));
+
+    // try to read the main ActionCollection.
+    QByteArray partname = d->guiclient->instance()->instanceName(); //KApplication::kApplication()->objectName()
+    Manager::self().actionCollection()->readXmlResource("data", partname + "/scripts/*/*.rc");
 }
 
 GUIClient::~GUIClient()
@@ -115,6 +110,7 @@ void GUIClient::setDOMDocument(const QDomDocument &document, bool merge)
     //loadScriptConfigDocument(xmlFile(), document);
 }
 
+#if 0
 KActionCollection* GUIClient::scriptsActionCollection() const
 {
     return d->actions;
@@ -188,6 +184,7 @@ bool GUIClient::writeConfigFromPackages()
     config->sync();
     return true;
 }
+#endif
 
 #if 0
 void GUIClient::setXMLFile(const QString& file, bool merge, bool setXMLDoc)
@@ -231,10 +228,11 @@ void GUIClient::finished(Kross::Action* action)
 bool GUIClient::executeFile()
 {
     QStringList mimetypes;
-    QMap<QString, InterpreterInfo*> infos = Manager::self().interpreterInfos();
-    for(QMap<QString, InterpreterInfo*>::Iterator it = infos.begin(); it != infos.end(); ++it)
-        mimetypes.append( it.value()->mimeTypes().join(" ").trimmed() );
-
+    foreach(QString interpretername, Manager::self().interpreters()) {
+        InterpreterInfo* info = Manager::self().interpreterInfo(interpretername);
+        Q_ASSERT( info );
+        mimetypes.append( info->mimeTypes().join(" ").trimmed() );
+    }
     KFileDialog* filedialog = new KFileDialog(
         KUrl("kfiledialog:///KrossExecuteScript"), // startdir
         mimetypes.join(" "), // filter

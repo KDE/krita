@@ -22,6 +22,7 @@
 
 #include "../core/manager.h"
 #include "../core/action.h"
+#include "../core/actioncollection.h"
 #include "../core/guiclient.h"
 #include "../core/model.h"
 
@@ -102,7 +103,7 @@ ScriptManagerView::ScriptManagerView(ScriptManagerModule* module, QWidget* paren
     setItemsExpandable(false);
     header()->hide();
 
-    ActionCollectionModel* model = new ActionCollectionModel(this);
+    ActionCollectionModel* model = new ActionCollectionModel(this, Kross::Manager::self().actionCollection());
     setModel(model);
 
     connect(model, SIGNAL(dataChanged(const QModelIndex&,const QModelIndex&)),
@@ -364,6 +365,7 @@ void ScriptManagerModule::showManagerDialog()
 
     int result = dialog->exec();
     if ( view->isModified() ) {
+#if 0
         if( result == QDialog::Accepted /*&& dialog->result() == KDialog::Ok*/ ) {
             // save new config
             Manager::self().writeConfig();
@@ -373,6 +375,7 @@ void ScriptManagerModule::showManagerDialog()
             Manager::self().readConfig();
         }
         QMetaObject::invokeMethod(&Manager::self(), "configChanged");
+#endif
     }
     dialog->delayedDestruct();
 }

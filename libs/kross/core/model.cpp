@@ -19,12 +19,15 @@
 
 #include "model.h"
 #include "action.h"
+#include "actioncollection.h"
 #include "manager.h"
 
 #include <QEvent>
 
 #include <kicon.h>
 #include <kmenu.h>
+//#include <kactioncollection.h>
+//#include <kactionmenu.h>
 
 using namespace Kross;
 
@@ -38,16 +41,16 @@ namespace Kross {
     class ActionCollectionModel::Private
     {
         public:
-            KActionCollection* actioncollection;
+            ActionCollection* collection;
     };
 
 }
 
-ActionCollectionModel::ActionCollectionModel(QObject* parent)
+ActionCollectionModel::ActionCollectionModel(QObject* parent, ActionCollection* collection)
     : QAbstractItemModel(parent)
     , d( new Private() )
 {
-    d->actioncollection = Manager::self().actionCollection();
+    d->collection = collection ? collection : Kross::Manager::self().actionCollection();
 }
 
 ActionCollectionModel::~ActionCollectionModel()
@@ -62,12 +65,12 @@ int ActionCollectionModel::columnCount(const QModelIndex&) const
 
 int ActionCollectionModel::rowCount(const QModelIndex&) const
 {
-    return d->actioncollection->actions(QString::null).count();
+    return d->collection->actions(QString::null).count();
 }
 
 QModelIndex ActionCollectionModel::index(int row, int column, const QModelIndex& parent) const
 {
-    Action* action = dynamic_cast< Action* >( d->actioncollection->actions().value(row) );
+    Action* action = dynamic_cast< Action* >( d->collection->actions().value(row) );
     if( ! action || parent.isValid() )
         return QModelIndex();
     return createIndex(row, column, action);
@@ -129,10 +132,10 @@ bool ActionCollectionModel::setData(const QModelIndex &index, const QVariant &va
  * ActionCollectionProxyModel
  */
 
-ActionCollectionProxyModel::ActionCollectionProxyModel(QObject* parent)
+ActionCollectionProxyModel::ActionCollectionProxyModel(QObject* parent, ActionCollection* collection)
     : QSortFilterProxyModel(parent)
 {
-    setSourceModel( new ActionCollectionModel(this) );
+    setSourceModel( new ActionCollectionModel(this, collection) );
 }
 
 ActionCollectionProxyModel::~ActionCollectionProxyModel()

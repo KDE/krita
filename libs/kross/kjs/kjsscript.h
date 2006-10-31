@@ -29,8 +29,8 @@ namespace Kross {
     class KjsScriptPrivate;
 
     /**
-     * Handle python scripts. This class implements
-     * \a Kross::Script for python.
+     * The KjsScript class implements \a Kross::Script to provide
+     * scripts for the KDE JavaScript interpreter backend.
      */
     class KjsScript : public Kross::Script
     {

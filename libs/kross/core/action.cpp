@@ -1,7 +1,7 @@
 /***************************************************************************
  * action.cpp
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,8 +36,8 @@ using namespace Kross;
 
 namespace Kross {
 
-    /// @internal
-    class ActionPrivate
+    /// \internal d-pointer class.
+    class Action::Private
     {
         public:
 
@@ -85,7 +85,7 @@ namespace Kross {
             */
             QMap<QString, QVariant> options;
 
-            ActionPrivate() : script(0) {}
+            Private() : script(0) {}
     };
 
 }
@@ -94,7 +94,7 @@ Action::Action(KActionCollection* collection, const QString& name)
     : KAction( collection, name )
     , ChildrenInterface()
     , ErrorInterface()
-    , d( new ActionPrivate() )
+    , d( new Private() )
 {
     setEnabled( false );
 }
@@ -103,7 +103,7 @@ Action::Action(const QString& file)
     : KAction( 0 /* no parent KActionCollection */, file )
     , ChildrenInterface()
     , ErrorInterface()
-    , d( new ActionPrivate() )
+    , d( new Private() )
 {
     KUrl url(file);
     setText( url.fileName() );
@@ -115,7 +115,7 @@ Action::Action(KActionCollection* collection, const QDomElement& element, const 
     : KAction( collection, element.attribute("name") )
     , ChildrenInterface()
     , ErrorInterface()
-    , d( new ActionPrivate() )
+    , d( new Private() )
 {
     setText( element.attribute("text") );
     setDescription( element.attribute("description") );

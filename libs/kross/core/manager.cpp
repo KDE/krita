@@ -1,7 +1,7 @@
 /***************************************************************************
  * manager.cpp
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "manager.h"
 #include "interpreter.h"
 #include "action.h"
+#include "actioncollection.h"
 
 #include <QObject>
 #include <QMetaObject>
@@ -55,13 +56,16 @@ namespace Kross {
     {
         public:
             /// List of \a InterpreterInfo instances.
-            QMap<QString, InterpreterInfo* > interpreterinfos;
+            QHash< QString, InterpreterInfo* > interpreterinfos;
+
+            /// List of the interpreter names.
+            QStringList interpreters;
 
             /// Loaded modules.
-            QMap<QString, QPointer<QObject> > modules;
+            QHash< QString, QPointer<QObject> > modules;
 
             /// The collection of \a Action instances.
-            KActionCollection* actioncollection;
+            ActionCollection* collection;
     };
 
 }
@@ -81,7 +85,7 @@ Manager::Manager()
     , ChildrenInterface()
     , d( new Private() )
 {
-    d->actioncollection = new KActionCollection(this);
+    d->collection = new ActionCollection("main");
 
 #ifdef KROSS_PYTHON_LIBRARY
     QString pythonlib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_PYTHON_LIBRARY) );
@@ -152,20 +156,27 @@ Manager::Manager()
     }
 #endif
 
+    // fill the list of supported interpreternames.
+    QHash<QString, InterpreterInfo*>::Iterator it( d->interpreterinfos.begin() );
+    for(; it != d->interpreterinfos.end(); ++it)
+        d->interpreters << it.key();
+    //d->interpreters.sort();
+
     // publish ourself.
     ChildrenInterface::addObject(this, "Kross");
 }
 
 Manager::~Manager()
 {
-    for(QMap<QString, InterpreterInfo* >::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it)
+    for(QHash<QString, InterpreterInfo* >::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it)
         delete it.value();
-    for(QMap<QString, QPointer<QObject> >::Iterator it = d->modules.begin(); it != d->modules.end(); ++it)
+    for(QHash<QString, QPointer<QObject> >::Iterator it = d->modules.begin(); it != d->modules.end(); ++it)
         delete it.value();
+    delete d->collection;
     delete d;
 }
 
-QMap<QString, InterpreterInfo*> Manager::interpreterInfos()
+QHash< QString, InterpreterInfo* > Manager::interpreterInfos() const
 {
     return d->interpreterinfos;
 }
@@ -175,7 +186,7 @@ bool Manager::hasInterpreterInfo(const QString& interpretername) const
     return d->interpreterinfos.contains(interpretername);
 }
 
-InterpreterInfo* Manager::interpreterInfo(const QString& interpretername)
+InterpreterInfo* Manager::interpreterInfo(const QString& interpretername) const
 {
     return d->interpreterinfos[interpretername];
 }
@@ -184,7 +195,7 @@ const QString Manager::interpreternameForFile(const QString& file)
 {
     QRegExp rx;
     rx.setPatternSyntax(QRegExp::Wildcard);
-    for(QMap<QString, InterpreterInfo*>::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it) {
+    for(QHash<QString, InterpreterInfo*>::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it) {
         rx.setPattern((*it)->wildcard());
         if( file.contains(rx) )
             return (*it)->interpreterName();
@@ -192,7 +203,7 @@ const QString Manager::interpreternameForFile(const QString& file)
     return QString::null;
 }
 
-Interpreter* Manager::interpreter(const QString& interpretername)
+Interpreter* Manager::interpreter(const QString& interpretername) const
 {
     if(! d->interpreterinfos.contains(interpretername)) {
         krosswarning( QString("No such interpreter '%1'").arg(interpretername) );
@@ -201,108 +212,14 @@ Interpreter* Manager::interpreter(const QString& interpretername)
     return d->interpreterinfos[interpretername]->interpreter();
 }
 
-QStringList Manager::interpreters()
+QStringList Manager::interpreters() const
 {
-    QStringList list;
-    QMap<QString, InterpreterInfo*>::Iterator it( d->interpreterinfos.begin() );
-    for(; it != d->interpreterinfos.end(); ++it)
-        list << it.key();
-    return  list;
+    return d->interpreters;
 }
 
-bool Manager::readConfig()
+ActionCollection* Manager::actionCollection() const
 {
-    KConfig* config = KApplication::kApplication()->sessionConfig();
-    krossdebug( QString("Manager::readConfig hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
-    if(! config->hasGroup("scripts"))
-        return false;
-
-    // we need to remember the current names, to be able to remove "expired" actions later.
-    QStringList actionnames;
-    foreach(KAction* a, d->actioncollection->actions())
-        actionnames.append( a->objectName() );
-
-    // iterate now through the items in the [scripts]-section
-    config->setGroup("scripts");
-    foreach(QString name, config->readEntry("names", QStringList())) {
-        bool needsupdate = actionnames.contains( name );
-        if( needsupdate )
-            actionnames.removeAll( name );
-
-        QString text = config->readEntry(QString("%1_text").arg(name).toLatin1());
-        QString description = config->readEntry(QString("%1_description").arg(name).toLatin1());
-        QString icon = config->readEntry(QString("%1_icon").arg(name).toLatin1());
-        QString file = config->readEntry(QString("%1_file").arg(name).toLatin1());
-        QString interpreter = config->readEntry(QString("%1_interpreter").arg(name).toLatin1());
-
-        if( text.isEmpty() )
-            text = file;
-        if( description.isEmpty() )
-            description = text.isEmpty() ? name : text;
-        if( icon.isEmpty() )
-            icon = KMimeType::iconNameForUrl( KUrl(file) );
-
-        Action* action = needsupdate
-            ? dynamic_cast< Action* >( d->actioncollection->action(name) )
-            : new Action(d->actioncollection, name);
-        Q_ASSERT(action);
-
-        action->setText(text);
-        action->setDescription(description);
-        if( ! icon.isNull() )
-            action->setIcon(KIcon(icon));
-        if( ! interpreter.isNull() )
-            action->setInterpreter(interpreter);
-        action->setFile(file);
-
-        connect(action, SIGNAL( started(Kross::Action*) ), this, SIGNAL( started(Kross::Action*)) );
-        connect(action, SIGNAL( finished(Kross::Action*) ), this, SIGNAL( finished(Kross::Action*) ));
-    }
-
-    // remove actions that are not valid anymore
-    foreach(QString n, actionnames) {
-        KAction* a = d->actioncollection->action(n);
-        Q_ASSERT(a);
-        d->actioncollection->remove(a);
-        delete a;
-    }
-
-    return true;
-}
-
-bool Manager::writeConfig()
-{
-    KConfig* config = KApplication::kApplication()->sessionConfig();
-    krossdebug( QString("Manager::writeConfig hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
-    if(config->isReadOnly())
-        return false;
-
-    config->deleteGroup("scripts"); // remove old entries
-    config->setGroup("scripts"); // according to the documentation it's needed to re-set the group after delete.
-
-    QStringList names;
-    foreach(KAction* a, d->actioncollection->actions(QString::null)) {
-        Action* action = static_cast< Action* >(a);
-        const QString name = action->objectName();
-        names << name;
-        config->writeEntry(QString("%1_text").arg(name).toLatin1(), action->text());
-        config->writeEntry(QString("%1_description").arg(name).toLatin1(), action->description());
-
-        //TODO hmmm... kde4's KIcon / Qt4's QIcon does not allow to reproduce the iconname?
-        //config->writeEntry(QString("%1_icon").arg(name).toLatin1(), action->icon());
-
-        config->writeEntry(QString("%1_file").arg(name).toLatin1(), action->file());
-        config->writeEntry(QString("%1_interpreter").arg(name).toLatin1(), action->interpreter());
-    }
-
-    config->writeEntry("names", names);
-    //config->sync();
-    return true;
-}
-
-KActionCollection* Manager::actionCollection() const
-{
-    return d->actioncollection;
+    return d->collection;
 }
 
 bool Manager::hasAction(const QString& name)
@@ -316,7 +233,9 @@ QObject* Manager::action(const QString& name)
     if(! action) {
         action = new Action(name);
         action->setParent(this);
+#if 0
         d->actioncollection->insert(action); //FIXME should we really remember the action?
+#endif
     }
     return action;
 }

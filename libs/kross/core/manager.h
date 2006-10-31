@@ -1,7 +1,7 @@
 /***************************************************************************
  * manager.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,6 +37,7 @@ namespace Kross {
     // Forward declarations.
     class Interpreter;
     class Action;
+    class ActionCollection;
     class InterpreterInfo;
 
     /**
@@ -76,7 +77,7 @@ namespace Kross {
              * \return a map with \a InterpreterInfo* instances
              * used to describe interpreters.
              */
-            QMap<QString, InterpreterInfo*> interpreterInfos();
+            QHash<QString, InterpreterInfo*> interpreterInfos() const;
 
             /**
              * \return true if there exists an interpreter with the
@@ -89,7 +90,7 @@ namespace Kross {
              * \p interpretername or NULL if there does not exists such
              * a interpreter.
              */
-            InterpreterInfo* interpreterInfo(const QString& interpretername);
+            InterpreterInfo* interpreterInfo(const QString& interpretername) const;
 
             /**
              * Return the name of the \a Interpreter that feels responsible
@@ -112,8 +113,9 @@ namespace Kross {
              * \return The Interpreter instance or NULL if there does not exists
              * an interpreter with such an interpretername.
              */
-            Interpreter* interpreter(const QString& interpretername);
+            Interpreter* interpreter(const QString& interpretername) const;
 
+#if 0
             /**
              * Read the configurations like e.g. the installed script-packages
              * from the KConfig configuration-backend.
@@ -124,11 +126,14 @@ namespace Kross {
              * Write the configurations to the KConfig configuration-backend.
              */
             bool writeConfig();
+#endif
 
             /**
-             * \return a collection of all \a Action instances.
+             * \return the root \a ActionCollection instance. Each collection
+             * could have children of other collections and/or
+             * \a Action instances.
              */
-            KActionCollection* actionCollection() const;
+            ActionCollection* actionCollection() const;
 
         public slots:
 
@@ -137,7 +142,7 @@ namespace Kross {
              * The list may contain for example "python", "ruby" and "kjs" depending
              * on what interpreter-plugins are installed.
              */
-            QStringList interpreters();
+            QStringList interpreters() const;
 
             /**
             * \return true if there exists a \a Action QObject instance

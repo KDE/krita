@@ -69,10 +69,9 @@ void KisFilterColorToAlpha::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     setProgressTotalSteps(rect.width() * rect.height());
 
     KisColorSpace * cs = src->colorSpace();
-//     Q_INT32 nchannels = cs->nChannels();
-    Q_INT32 ncolors = cs->nColorChannels();
+    Q_INT32 pixelsize = cs->pixelSize();
     
-    Q_UINT8* color = new Q_UINT8[ncolors];
+    Q_UINT8* color = new Q_UINT8[pixelsize];
     cs->fromQColor(cTA, color);
     
     while( ! srcIt.isDone() )
@@ -91,5 +90,6 @@ void KisFilterColorToAlpha::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
         ++srcIt;
         ++dstIt;
     }
+    delete[] color;
     setProgressDone(); // Must be called even if you don't really support progression
 }

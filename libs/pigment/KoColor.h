@@ -20,6 +20,8 @@
 #define KOCOLOR_H
 
 #include <QColor>
+#include <QMetaType>
+
 #include <koffice_export.h>
 
 #include "KoColorProfile.h"
@@ -86,5 +88,7 @@ private:
 
     KoColorSpace * m_colorSpace;
 };
+
+Q_DECLARE_METATYPE( KoColor )
 
 #endif

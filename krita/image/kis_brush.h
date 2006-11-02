@@ -56,14 +56,18 @@ class KRITAIMAGE_EXPORT KisBrush : public KisResource {
     Q_OBJECT
 
 public:
+
     /// Construct brush to load filename later as brush
     KisBrush(const QString& filename);
+
     /// Load brush from the specified data, at position dataPos, and set the filename
     KisBrush(const QString& filename,
          const QByteArray & data,
          qint32 & dataPos);
+
     /// Load brush from the specified paint device, in the specified region
     KisBrush(KisPaintDevice* image, int x, int y, int w, int h);
+
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
     KisBrush(const QImage& image, const QString& name = QString(""));
 

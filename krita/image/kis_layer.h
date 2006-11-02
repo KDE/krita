@@ -20,6 +20,7 @@
 #define KIS_LAYER_H_
 
 #include <QRect>
+#include <QMetaType>
 
 #include "krita_export.h"
 
@@ -300,6 +301,8 @@ public:
     // I'm sure virtual diamond inheritance isn't as appreciated as this
     virtual KisLayer* layer() = 0;
 };
+
+Q_DECLARE_METATYPE( KisLayerSP )
 
 #endif // KIS_LAYER_H_
 

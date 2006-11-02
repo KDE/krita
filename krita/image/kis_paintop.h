@@ -24,6 +24,7 @@
 #define KIS_PAINTOP_H_
 
 #include <QString>
+#include <QMetaType>
 
 #include <ksharedptr.h>
 #include <klocale.h>
@@ -101,7 +102,9 @@ private:
 };
 
 class KisPaintOpSettings {
+
 public:
+    KisPaintOpSettings() {}
     KisPaintOpSettings(QWidget *parent) { Q_UNUSED(parent); }
     virtual ~KisPaintOpSettings() {}
 

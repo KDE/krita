@@ -153,7 +153,7 @@ public:
      * @return the value of the vertical scrollbar
      */
     virtual qint32 verticalScrollbarValue() const  0;
-
+q
     /**
      * Sets the horizontal and vertical scrollbars to the specified values
      *

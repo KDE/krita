@@ -23,6 +23,7 @@
 
 #include <KoColor.h>
 #include <KoID.h>
+#include <KoCanvasResourceProvider.h>
 
 #include "kis_view2.h"
 #include "kis_image.h"
@@ -36,6 +37,12 @@ class KisResource;
 /**
    KisResourceProvider contains the per-view current settings that
    influence painting, like paintop, color, gradients and so on.
+
+   XXX: KisBrush, KisGradient, KisPattern and the other pointers
+   should really be shared pointers. That would be much safer. Also
+   note: we should have a koffice-wide provider of brushes, patterns
+   and gradients.
+
  */
 class KisResourceProvider : public QObject {
 
@@ -43,17 +50,7 @@ class KisResourceProvider : public QObject {
 
 public:
 
-    KisResourceProvider(KisView2 * view)
-        : m_view( view )
-        , m_brush( 0 )
-        , m_pattern( 0 )
-        , m_gradient( 0 )
-        , m_paintopSettings( 0 )
-        , m_HDRExposure( 0 )
-        {
-            m_fgColor = KoColor(Qt::black, view->image()->colorSpace());
-            m_bgColor = KoColor(Qt::white, view->image()->colorSpace());
-        }
+    KisResourceProvider(KisView2 * view);
 
     KoCanvasBase * canvas() const;
 
@@ -73,35 +70,33 @@ public:
     KoID currentPaintop() const;
     const KisPaintOpSettings *currentPaintopSettings() const;
 
+    KisLayerSP currentLayer() const;
+
+
 public slots:
 
     void slotSetFGColor(const KoColor& c);
     void slotSetBGColor(const KoColor& c);
-    void brushActivated(KisResource *brush);
-    void patternActivated(KisResource *pattern);
-    void gradientActivated(KisResource *gradient);
-    void paintopActivated(const KoID & paintop, const KisPaintOpSettings *paintopSettings);
+    void slotBrushActivated(KisResource *brush);
+    void slotPatternActivated(KisResource *pattern);
+    void slotGradientActivated(KisResource *gradient);
+    void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettings *paintopSettings);
+    void slotLayerActivated( const KisLayerSP layer );
 
 signals:
 
     void sigFGColorChanged(const KoColor &);
     void sigBGColorChanged(const KoColor &);
-    void brushChanged(KisBrush * brush);
-    void gradientChanged(KisGradient * gradient);
-    void patternChanged(KisPattern * pattern);
-    void paintopChanged(KoID paintop, const KisPaintOpSettings *paintopSettings);
+    void sigBrushChanged(KisBrush * brush);
+    void sigGradientChanged(KisGradient * gradient);
+    void sigPatternChanged(KisPattern * pattern);
+    void sigPaintopChanged(KoID paintop, const KisPaintOpSettings *paintopSettings);
+    void sigLayerChanged( const KisLayerSP layer );
 
 private:
 
     KisView2 * m_view;
-    KisBrush * m_brush;
-    KisPattern * m_pattern;
-    KisGradient * m_gradient;
-    KoColor m_fgColor;
-    KoColor m_bgColor;
-    KoID m_paintop;
-    const KisPaintOpSettings *m_paintopSettings;
-    float m_HDRExposure;
+    KoCanvasResourceProvider * m_resourceProvider;
 };
 
 #endif

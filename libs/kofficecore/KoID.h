@@ -23,7 +23,7 @@
 #define _KO_ID_H_
 
 #include <QString>
-
+#include <QMetaType>
 
 /**
  * A KoID is a combination of a user-visible string and a string that uniquely
@@ -52,6 +52,8 @@ private:
 
 };
 
+Q_DECLARE_METATYPE( KoID )
+
 inline bool operator==(const KoID &v1, const KoID &v2)
 {
      return v1.m_id == v2.m_id;
@@ -73,5 +75,6 @@ inline bool operator>(const KoID &v1, const KoID &v2)
 {
     return v1.m_id < v2.m_id;
 }
+
 
 #endif

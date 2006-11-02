@@ -362,13 +362,16 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_I
                 }
                 needFull = false;
             } else {
-                for (Q_INT32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
+/*                for (Q_INT32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
                     Q_UINT8** d = pixelPtrCache + krow * kw;
-                    //memmove( d, d + 1, (kw-1)*sizeof(Q_UINT8*));
+//                     memmove( d, d + 1, (kw-1)*sizeof(Q_UINT8*));
                     for (int i = 0; i < (kw-1); i++) {
                         memcpy(d[i], d[i+1], cdepth);
                     }
-                }
+                }*/
+                Q_UINT8* firstincache = pixelPtrCache[0];
+                memmove(pixelPtrCache, pixelPtrCache + 1, (cacheSize - 1) * sizeof(Q_UINT8*) );
+                pixelPtrCache[cacheSize - 1] = firstincache;
                 if(col < xLastMinuskhw)
                 {
                     Q_INT32 i = kw - 1;

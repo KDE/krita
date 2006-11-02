@@ -25,6 +25,8 @@
 
 #include <koffice_export.h>
 
+#include <KoCanvasResourceProvider.h>
+
 class KoCanvasBase;
 class KoPointerEvent;
 class KoViewConverter;
@@ -39,7 +41,7 @@ class QPainter;
 /**
  * Abstract base class for all tools. Tools can create or manipulate
  * flake shapes, canvas state or any other thing that a user may wish
- * to do to his document or his view on a document with a pointing 
+ * to do to his document or his view on a document with a pointing
  * device.
  *
  * There exists an instance of every tool for every pointer device.
@@ -89,6 +91,13 @@ public slots:
      * @see activate()
      */
     virtual void deactivate();
+
+    /**
+     * This method is called whenever a property in the resource
+     * provider associated with the canvas this tool belongs to
+     * changes. An example is currently selected foreground color.
+     */
+    virtual void resourceChanged( const KoCanvasResource & res );
 
 public:
 
@@ -220,9 +229,13 @@ protected:
      * Reimplement this if your tool actually has an option widget.
      * Sets the option widget to 0 by default.
      */
-    virtual void createOptionWidget(QWidget * parent) { m_optionWidget = 0; }
+    virtual void createOptionWidget(QWidget * parent)
+        {
+            Q_UNUSED( parent );
+            m_optionWidget = 0;
+        }
 
-protected:    
+protected:
 
     KoCanvasBase *m_canvas; ///< the canvas interface this tool will work for.
     QWidget * m_optionWidget; ///< the optionwidget this tool will show in the option widget palette
@@ -231,6 +244,7 @@ private:
     KoTool();
     KoTool(const KoTool&);
     KoTool& operator=(const KoTool&);
+
     QCursor m_previousCursor;
 };
 

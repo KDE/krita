@@ -29,9 +29,14 @@
 
 KoTool::KoTool(KoCanvasBase *canvas )
     : m_canvas(canvas)
-    , m_previousCursor(Qt::ArrowCursor)
     , m_optionWidget( 0 )
+    , m_previousCursor(Qt::ArrowCursor)
 {
+    connect( m_canvas->resourceProvider(),
+             SIGNAL( sigResourceChanged(const KoCanvasResource & res) ),
+             this,
+             SLOT( resourceChanged( const KoCanvasResource & res ) ) );
+
 }
 
 void KoTool::activate(bool temporary) {
@@ -39,6 +44,11 @@ void KoTool::activate(bool temporary) {
 }
 
 void KoTool::deactivate() {
+}
+
+void KoTool::resourceChanged( const KoCanvasResource & res )
+{
+    Q_UNUSED( res );
 }
 
 bool KoTool::wantsAutoScroll() {

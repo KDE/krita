@@ -16,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KOCANVASBASE_H
@@ -30,6 +30,8 @@
 #include <QRect>
 #include <QWidget>
 
+#include <KoCanvasResourceProvider.h>
+
 class KoSelection;
 class KCommand;
 class KoShapeManager;
@@ -42,7 +44,9 @@ class KoViewConverter;
  * do things like scroll, redraw, set a cursor etc.
  */
 class KoCanvasBase {
+
 public:
+
     KoCanvasBase() {};
     virtual ~KoCanvasBase() {};
 
@@ -119,6 +123,16 @@ public:
      * document origin are coincident, thus an empty point is returned.
      */
     virtual QPoint documentOrigin() { return QPoint(0,0); };
+
+    /**
+     * Return a pointer to the resource provider associated with this
+     * canvas. The resource provider contains per-canvas settings such
+     * as current foreground and background color.
+     */
+    virtual KoCanvasResourceProvider * resourceProvider()
+        {
+            return m_resourceProvider;
+        }
 
 #if 0
 /*  The next list of methods are naming taken from Krita, which means they have already been
@@ -267,6 +281,12 @@ public:
      */
     virtual KoInputDevice currentInputDevice() const  0;
 #endif
+
+private:
+
+    KoCanvasResourceProvider * m_resourceProvider;
 };
 
-#endif
+
+
+#endif // KOCANVASBASE_H

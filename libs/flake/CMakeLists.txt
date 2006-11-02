@@ -3,6 +3,7 @@ include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOFFICECORE_INCLUDES})
 add_subdirectory(tests)
 
 set(flake_SRCS
+    KoCanvasResourceProvider.cpp
     KoCommand.cpp
     KoInteractionStrategy.cpp
     KoInteractionTool.cpp

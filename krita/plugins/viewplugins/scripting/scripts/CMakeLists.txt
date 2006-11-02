@@ -1,5 +1,6 @@
+install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/krita/scripts)
+
 install(FILES
-    install.rc
     pilexport.py pilimport.py pilimport.ui
     invert.py invert.rb
     randompaint.rb
@@ -7,4 +8,4 @@ install(FILES
     changecs.rb
     reshapehisto.py
     torture-painting.rb torture-filters.rb
-    DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/default)
+    DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/extensions)

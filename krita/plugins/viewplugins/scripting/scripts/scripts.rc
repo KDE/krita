@@ -5,69 +5,69 @@
 		text="Python Imaging Library Import"
 		comment="Import images with the Python Imaging Library (PIL)"
 		interpreter="python"
-		file="pilimport.py" />
+		file="extensions/pilimport.py" />
 
 	<script
 		name="pilexport"
 		text="Python Imaging Library Export"
 		comment="Export images with the Python Imaging Library (PIL)"
 		interpreter="python"
-		file="pilexport.py" />
+		file="extensions/pilexport.py" />
 
 	<script
 		name="rbinvert"
 		text="Invert with Ruby"
 		comment="Invert the pixel of an image with Ruby"
 		interpreter="ruby"
-		file="invert.rb" />
+		file="extensions/invert.rb" />
 
 	<script
 		name="pyinvert"
 		text="Invert with Python"
 		comment="Invert the pixel of an image with Python"
 		interpreter="python"
-		file="invert.py" />
+		file="extensions/invert.py" />
 
 	<script
 		name="rbrandompaint"
 		text="Random painting"
 		comment="Demonstrate how to use the Painter scripting API and paint random shape on screen"
 		interpreter="ruby"
-		file="randompaint.rb" />
+		file="extensions/randompaint.rb" />
 
 	<script
 		name="rbfilterstest"
 		text="Filters test"
 		comment="Test of filters in a ruby-scripting"
 		interpreter="ruby"
-		file="filterstest.rb" />
+		file="extensions/filterstest.rb" />
 
 	<script
 		name="rbchangecs"
 		text="Change colorspace"
 		comment="Demonstrate how to change the colorspace in a script"
 		interpreter="ruby"
-		file="changecs.rb" />
+		file="extensions/changecs.rb" />
 	
 	<script
 		name="pyreshapehisto"
 		text="Reshape Histogram"
 		comment="It's an experimental script to try to reshape histogram, while the results are far to be convincing yet it is still an example on how to use histogram in a script."
 		interpreter="python"
-		file="reshapehisto.py" />
+		file="extensions/reshapehisto.py" />
 
 	<script
 		name="rbtorturepainting"
 		text="Torture Krita with painting"
 		comment="Paint on an image and create multiple layers"
 		interpreter="ruby"
-		file="torture-painting.rb" />
+		file="extensions/torture-painting.rb" />
 
 	<script
 		name="rbtorturefilters"
 		text="Torture Krita with filters"
 		comment="Test all filters with all colorspaces"
 		interpreter="ruby"
-		file="torture-filters.rb" />
+		file="extensions/torture-filters.rb" />
 
 </KrossScripting>

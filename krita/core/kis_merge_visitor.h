@@ -54,6 +54,23 @@ public:
         m_rc = rc;
     }
 
+private:
+    // Helper for the indirect painting (keep above to inhibit gcc-2.95 ICE)
+    template<class Target>
+    KSharedPtr<Target> paintIndirect(KisPaintDeviceSP source,
+                                     KSharedPtr<Target> target,
+                                     KisLayerSupportsIndirectPainting* layer,
+                                     Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
+                                     Q_INT32 w, Q_INT32 h) {
+        KisPainter gc2(target.data());
+        gc2.bitBlt(dx, dy, COMPOSITE_COPY, source,
+                   OPACITY_OPAQUE, sx, sy, w, h);
+        gc2.bitBlt(dx, dy, layer->temporaryCompositeOp(), layer->temporaryTarget(),
+                   layer->temporaryOpacity(), sx, sy, w, h);
+        gc2.end();
+        return target;
+    }
+
 public:
     virtual bool visit(KisPaintLayer *layer)
     {
@@ -333,21 +350,6 @@ public:
     }
 
 private:
-    // Helper for the indirect painting
-    template<class Target>
-    KSharedPtr<Target> paintIndirect(KisPaintDeviceSP source,
-                                     KSharedPtr<Target> target,
-                                     KisLayerSupportsIndirectPainting* layer,
-                                     Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
-                                     Q_INT32 w, Q_INT32 h) {
-        KisPainter gc2(target.data());
-        gc2.bitBlt(dx, dy, COMPOSITE_COPY, source,
-                   OPACITY_OPAQUE, sx, sy, w, h);
-        gc2.bitBlt(dx, dy, layer->temporaryCompositeOp(), layer->temporaryTarget(),
-                   layer->temporaryOpacity(), sx, sy, w, h);
-        gc2.end();
-        return target;
-    }
     KisPaintDeviceSP m_projection;
     QRect m_rc;
 };

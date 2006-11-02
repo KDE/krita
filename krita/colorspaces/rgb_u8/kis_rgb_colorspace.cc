@@ -126,7 +126,7 @@ void KisRgbColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
 
 void KisRgbColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
 {
-    Q_INT32 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
+    Q_INT64 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
     Q_INT32 totalWeight = 0, totalWeightTransparent = 0;
     while (nColors--)
     {
@@ -147,7 +147,6 @@ void KisRgbColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, K
         colors++;
         kernelValues++;
     }
-
     if(totalWeightTransparent == 0)
     {
       if (channelFlags & KisChannelInfo::FLAG_COLOR) {
@@ -158,13 +157,18 @@ void KisRgbColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, K
       if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
           dst[PIXEL_ALPHA] = CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT8_MAX);
       }
-    } else if(totalWeightTransparent != totalWeight) {
-      Q_INT32 a = factor * ( totalWeight - totalWeightTransparent );
-      
-      if (channelFlags & KisChannelInfo::FLAG_COLOR) {
-          dst[PIXEL_RED] = CLAMP((totalRed * totalWeight  / a) + offset, 0, Q_UINT8_MAX);
-          dst[PIXEL_GREEN] = CLAMP((totalGreen * totalWeight / a) + offset, 0, Q_UINT8_MAX);
-          dst[PIXEL_BLUE] =  CLAMP((totalBlue * totalWeight / a) + offset, 0, Q_UINT8_MAX);
+    } else if(totalWeightTransparent != totalWeight && (channelFlags & KisChannelInfo::FLAG_COLOR)) {
+      if(totalWeight == factor)
+      {
+        Q_INT64 a = ( totalWeight - totalWeightTransparent );
+        dst[PIXEL_RED] = CLAMP((totalRed / a) + offset, 0, Q_UINT8_MAX);
+        dst[PIXEL_GREEN] = CLAMP((totalGreen / a) + offset, 0, Q_UINT8_MAX);
+        dst[PIXEL_BLUE] =  CLAMP((totalBlue / a) + offset, 0, Q_UINT8_MAX);
+      } else {
+        double a = totalWeight / ( factor * ( totalWeight - totalWeightTransparent ) ); // use double as it can saturate
+        dst[PIXEL_RED] = CLAMP( (Q_UINT8)(totalRed * a) + offset, 0, Q_UINT8_MAX);
+        dst[PIXEL_GREEN] = CLAMP( (Q_UINT8)(totalGreen * a) + offset, 0, Q_UINT8_MAX);
+        dst[PIXEL_BLUE] =  CLAMP( (Q_UINT8)(totalBlue * a) + offset, 0, Q_UINT8_MAX);
       }
     }
     if (channelFlags & KisChannelInfo::FLAG_ALPHA) {

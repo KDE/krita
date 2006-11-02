@@ -126,7 +126,7 @@ void KisBlurFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     
     KisKernelSP kernel = kernelFromQImage(mask); // TODO: for 1.6 reuse the krita's core function for creating kernel : KisKernel::fromQImage
     KisConvolutionPainter painter( dst );
-    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
+    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT, KisChannelInfo::FLAG_COLOR_AND_ALPHA);
     
     if (painter.cancelRequested()) {
         cancel();

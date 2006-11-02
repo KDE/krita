@@ -49,7 +49,8 @@ public:
         FLAG_COLOR = 1,
         FLAG_ALPHA = (1 << 1),
         FLAG_SUBSTANCE = (1 << 2),
-        FLAG_SUBSTRATE = (1 << 3)
+        FLAG_SUBSTRATE = (1 << 3),
+        FLAG_COLOR_AND_ALPHA = FLAG_ALPHA | FLAG_COLOR // HACK to be able to use convolution of color and alpha at the same time
     };
 
 public:

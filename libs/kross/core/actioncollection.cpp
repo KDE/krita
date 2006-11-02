@@ -46,6 +46,8 @@ namespace Kross {
             QHash< QString, QPointer<ActionCollection> > collections;
             QStringList collectionnames;
 
+            QString text;
+
             Private(ActionCollection* const p) : parent(p) {}
     };
 
@@ -56,6 +58,7 @@ ActionCollection::ActionCollection(const QString& name, ActionCollection* parent
     , d( new Private(parent) )
 {
     setObjectName(name);
+    d->text = name;
     if( d->parent )
         d->parent->registerCollection(this);
 }
@@ -66,6 +69,9 @@ ActionCollection::~ActionCollection()
         d->parent->unregisterCollection(objectName());
     delete d;
 }
+
+QString ActionCollection::text() const { return d->text; }
+void ActionCollection::setText(const QString& text) { d->text = text; }
 
 ActionCollection* ActionCollection::parentCollection() const
 {
@@ -125,9 +131,12 @@ bool ActionCollection::readXml(const QDomElement& element, const QDir& directory
 
         if( elem.tagName() == "collection") {
             const QString name = elem.attribute("name");
+            const QString text = elem.attribute("text");
             ActionCollection* c = d->collections.contains(name) ? d->collections[name] : 0;
             if( ! c )
                 c = new ActionCollection(name, this);
+            if( ! text.isNull() )
+                c->setText(text);
             if( ! c->readXml(elem) )
                 ok = false;
         }
@@ -234,7 +243,7 @@ bool ActionCollection::readXmlFile(const QString& file)
 
 bool ActionCollection::readXmlResource(const QByteArray& resource, const QString& filer)
 {
-    //filer = KApplication::kApplication()->objectName() + "/scripts/*/*.rc";
+    //filer = KApplication::kApplication()->objectName() + "/scripts/*.rc";
     QStringList files = KGlobal::dirs()->findAllResources(resource, filer);
     //files.sort();
     bool ok = true;
@@ -259,6 +268,8 @@ QDomElement ActionCollection::writeXml()
     QDomElement element = document.createElement("collection");
     if( ! objectName().isNull() )
         element.setAttribute("name", objectName());
+    if( ! text().isNull() && text() != objectName() )
+        element.setAttribute("text", text());
 
     foreach(QString name, d->collectionnames) {
         ActionCollection* c = d->collections[name];

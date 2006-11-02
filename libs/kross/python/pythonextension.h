@@ -32,6 +32,7 @@
 namespace Kross {
 
     // Forward declaration.
+    class PythonExtension;
     class PythonScript;
 
     /**
@@ -98,6 +99,23 @@ namespace Kross {
             class Private;
             /// \internal d-pointer instance.
             Private* const d;
+
+            /// Return the objectName.
+            Py::Object getObjectName(const Py::Tuple&);
+            /// Return the className.
+            Py::Object getClassName(const Py::Tuple&);
+            /// Return list of signal names.
+            Py::Object getSignalNames(const Py::Tuple&);
+            /// Return list of slot names.
+            Py::Object getSlotNames(const Py::Tuple&);
+            /// Return list of property names.
+            Py::Object getPropertyNames(const Py::Tuple&);
+
+            //Py::Object toPointer(const Py::Tuple&);
+            //Py::Object fromPointer(const Py::Tuple&);
+
+            /// Connect signal with python function.
+            Py::Object doConnect(const Py::Tuple&);
 
             /**
              * The static proxy-handler which will be used to dispatch

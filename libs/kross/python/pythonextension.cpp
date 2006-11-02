@@ -23,7 +23,8 @@
 
 #include <QWidget>
 #include <QMetaMethod>
-#include <qvarlengtharray.h>
+#include <QSignalSpy>
+#include <QVarLengthArray>
 
 using namespace Kross;
 
@@ -78,6 +79,16 @@ PythonExtension::PythonExtension(QObject* object)
     behaviors().supportSetattr();
     behaviors().supportSequenceType();
     behaviors().supportMappingType();
+
+    add_varargs_method("__name__", &PythonExtension::getObjectName, "Return the objectName.");
+    add_varargs_method("__class__", &PythonExtension::getClassName, "Return the className.");
+    //add_varargs_method("__classinfos__", &PythonExtension::getClassInfos, "Return a list of key,value-tuples of class informations.");
+    add_varargs_method("__signals__", &PythonExtension::getSignalNames, "Return list of signal names.");
+    add_varargs_method("__slots__", &PythonExtension::getSlotNames, "Return list of slot names.");
+    add_varargs_method("__properties__", &PythonExtension::getPropertyNames, "Return list of property names.");
+    //add_varargs_method("__toPointer__", &PythonExtension::toPointer, "Return the void* pointer of the QObject.");
+    //add_varargs_method("__fromPointer__", &PythonExtension::fromPointer, "Set the QObject* to the passed void* pointer.");
+    //add_varargs_method("__connect__", &PythonExtension::doConnect, "Connect signal with python function.");
 
     d->proxymethod = new Py::MethodDefExt<PythonExtension>(
         "", // methodname, not needed cause we use the method only internaly.
@@ -159,23 +170,6 @@ Py::Object PythonExtension::getattr(const char* n)
             return d->membernames;
         //if(strcmp(n,"__dict__") == 0)
         //    return PythonType<QStringList>::toPyObject( QStringList() );
-        if(strcmp(n,"__name__") == 0)
-            return PythonType<QString>::toPyObject( d->object->objectName() );
-        if(strcmp(n,"__class__") == 0)
-            return PythonType<QString>::toPyObject( d->object->metaObject()->className() );
-
-        /*
-        if(strcmp(n,"__toPointer__") == 0) {
-            PyObject* qobjectptr = PyLong_FromVoidPtr( (void*) d->object.data() );
-            //PyObject* o = Py_BuildValue ("N", mw);
-            return Py::asObject( qobjectptr );
-            //PythonPyQtExtension* pyqtextension = new PythonPyQtExtension(self, args);
-            //return pyqtextension;
-        }
-        if(strcmp(n,"__fromPointer__") == 0) {
-            QObject* object = dynamic_cast< QObject* >(PyLong_AsVoidPtr( args[0] ));
-        }
-        */
     }
 
     // look if the attribute is a method
@@ -249,6 +243,105 @@ int PythonExtension::setattr(const char* n, const Py::Object& value)
     // finally redirect the unhandled attribute-request...
     return Py::PythonExtension<PythonExtension>::setattr(n, value);
 }
+
+Py::Object PythonExtension::getObjectName(const Py::Tuple&)
+{
+    return PythonType<QString>::toPyObject( d->object->objectName() );
+}
+
+Py::Object PythonExtension::getClassName(const Py::Tuple&)
+{
+    return PythonType<QString>::toPyObject( d->object->metaObject()->className() );
+}
+
+Py::Object PythonExtension::getSignalNames(const Py::Tuple&)
+{
+    Py::List list;
+    const QMetaObject* metaobject = d->object->metaObject();
+    const int count = metaobject->methodCount();
+    for(int i = 0; i < count; ++i) {
+        QMetaMethod m = metaobject->method(i);
+        if( m.methodType() == QMetaMethod::Signal)
+            list.append( Py::String(m.signature()) );
+    }
+    return list;
+}
+
+Py::Object PythonExtension::getSlotNames(const Py::Tuple&)
+{
+    Py::List list;
+    const QMetaObject* metaobject = d->object->metaObject();
+    const int count = metaobject->methodCount();
+    for(int i = 0; i < count; ++i) {
+        QMetaMethod m = metaobject->method(i);
+        if( m.methodType() == QMetaMethod::Slot)
+            list.append( Py::String(m.signature()) );
+    }
+    return list;
+}
+
+Py::Object PythonExtension::getPropertyNames(const Py::Tuple&)
+{
+    Py::List list;
+    const QMetaObject* metaobject = d->object->metaObject();
+    const int count = metaobject->propertyCount();
+    for(int i = 0; i < count; ++i)
+        list.append( Py::String(metaobject->property(i).name()) );
+    return list;
+}
+
+/*
+Py::Object PythonExtension::toPointer(const Py::Tuple&)
+{
+    PyObject* qobjectptr = PyLong_FromVoidPtr( (void*) d->object.data() );
+    //PyObject* o = Py_BuildValue ("N", mw);
+    return Py::asObject( qobjectptr );
+    //PythonPyQtExtension* pyqtextension = new PythonPyQtExtension(self, args);
+    //return pyqtextension;
+}
+
+Py::Object PythonExtension::toPointer(fromPointer(const Py::Tuple&)
+{
+    QObject* object = dynamic_cast< QObject* >(PyLong_AsVoidPtr( args[0] ));
+}
+*/
+
+#if 0
+Py::Object PythonExtension::doConnect(const Py::Tuple& args)
+{
+    if( args.size() < 2 ) {
+        Py::AttributeError("The connect-method expects at least 2 arguments.");
+        return PythonType<bool>::toPyObject(false);
+    }
+
+    QByteArray signalname = PythonType<QByteArray>::toVariant( args[0] );
+    krossdebug( QString("====================================> signalname=%1 typeName=%2").arg(signalname).arg(args[1].type().as_string().c_str()) );
+
+    if( args[1].isCallable() ) {
+        Py::Callable funcobject(args[1]);
+
+QVariantList args = d->signalspy.takeFirst();
+Py::Object result = d->callable.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
+
+//connect(d->object, "2" + signalname, , SIGNAL(handleEmitted));
+//QSignalSpy spy(d->object, signalname);
+/*
+COMPARE(spy.count(), 1); // make sure the signal was emitted exactly one time
+QVariantList arguments = spy.takeFirst(); // take the first signal
+VERIFY(arguments.at(0).toBool() == true); // verify the first argument
+*/
+
+//TODO
+
+    }
+    else {
+        Py::AttributeError("The connect-method expects as second argument something that is callable (e.g. a function).");
+        return PythonType<bool>::toPyObject(false);
+    }
+
+    return PythonType<bool>::toPyObject(true);
+}
+#endif
 
 PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject *args)
 {
@@ -470,4 +563,3 @@ int PythonExtension::mapping_ass_subscript(const Py::Object& obj1, const Py::Obj
 {
     throw Py::RuntimeError( QString("Unsupported: PythonExtension::mapping_ass_subscript %1 %2").arg(obj1.as_string().c_str()).arg(obj2.as_string().c_str()).toLatin1().constData() );
 }
-

@@ -62,6 +62,16 @@ namespace Kross {
             virtual ~ActionCollection();
 
             /**
+             * \return the display text
+             */
+            QString text() const;
+
+            /**
+             * Set the display text to \p text .
+             */
+            void setText(const QString& text);
+
+            /**
              * \return the parent \a ActionCollection instance this
              * \collection is child of or NULL oif this collection
              * does not have a parent.

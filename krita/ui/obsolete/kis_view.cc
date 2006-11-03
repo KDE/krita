@@ -630,10 +630,11 @@ void KisView::setupActions()
     m_layerDup = new KAction(i18n("Duplicate"), actionCollection(), "duplicate_layer");
     connect(m_layerDup, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 
-    m_layerHide = new KAction(i18n("&Hide/Show"), actionCollection(), "hide_layer");
-    connect(m_layerHide, SIGNAL(triggered()), this, SLOT(layerToggleVisible()));
 
-    m_layerRaise = new KAction(KIcon("raise"), i18n("Raise"), actionCollection(), "raiselayer");
+    m_layerHide = new KToggleAction(i18n("&Hide"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
+    m_layerHide->setCheckedState(KGuiItem(i18n("&Show")));
+    m_layerHide->setChecked(false)_layerRaise = new KAction(KIcon("raise"), i18n("Raise"), actionCollection(), "raiselayer");
+
     m_layerRaise->setShortcut(Qt::CTRL+Qt::Key_BracketRight);
     connect(m_layerRaise, SIGNAL(triggered()), this, SLOT(layerRaise()));
 

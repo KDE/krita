@@ -100,16 +100,18 @@ namespace Kross {
             /// \internal d-pointer instance.
             Private* const d;
 
-            /// Return the objectName.
-            Py::Object getObjectName(const Py::Tuple&);
-            /// Return the className.
+            /// Return the name of the QObject class.
             Py::Object getClassName(const Py::Tuple&);
-            /// Return list of signal names.
+            /// Return list of signal names the QObject provides.
             Py::Object getSignalNames(const Py::Tuple&);
-            /// Return list of slot names.
+            /// Return list of slot names the QObject provides.
             Py::Object getSlotNames(const Py::Tuple&);
-            /// Return list of property names.
+            /// Return list of property names the QObject provides.
             Py::Object getPropertyNames(const Py::Tuple&);
+            /// Return a property value.
+            Py::Object getProperty(const Py::Tuple&);
+            /// Set a property value.
+            Py::Object setProperty(const Py::Tuple&);
 
             //Py::Object toPointer(const Py::Tuple&);
             //Py::Object fromPointer(const Py::Tuple&);

@@ -30,7 +30,7 @@ class KoTextDocument;
 #include <QPixmap>
 #include <QByteArray>
 #include <Q3PtrList>
-#include <Q3ValueList>
+#include <QList>
 
 #include <kparts/part.h>
 #include <kurl.h>
@@ -873,7 +873,7 @@ public:
      * This is used by some text-analyzer plugins.
      * @since 1.5
      */
-    virtual Q3ValueList<KoTextDocument *> allTextDocuments() const;
+    virtual QList<KoTextDocument *> allTextDocuments() const;
 
     /**
      * Returns the unit used to display all measures/distances.

@@ -70,7 +70,6 @@
 #include <QChildEvent>
 #include <Q3PtrList>
 #include <QEvent>
-#include <Q3ValueList>
 #include <QResizeEvent>
 #include <QDateTime>
 #include <config.h>
@@ -142,7 +141,7 @@ public:
     QList<KoView*> m_views;
     Q3PtrList<KoDocumentChild> m_children;
     Q3PtrList<KoMainWindow> m_shells;
-    Q3ValueList<QDomDocument> m_viewBuildDocuments;
+    QList<QDomDocument> m_viewBuildDocuments;
 
     KoViewWrapperWidget *m_wrapperWidget;
 //     KoDocumentIface * m_dcopObject;
@@ -2652,9 +2651,9 @@ QString KoDocument::tagNameToDocumentType( const QString& localName )
     return localName;
 }
 
-Q3ValueList<KoTextDocument *> KoDocument::allTextDocuments() const
+QList<KoTextDocument *> KoDocument::allTextDocuments() const
 {
-    return Q3ValueList<KoTextDocument *>();
+    return QList<KoTextDocument *>();
 }
 
 KoPageLayout KoDocument::pageLayout(int /*pageNumber*/) const

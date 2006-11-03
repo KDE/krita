@@ -80,15 +80,18 @@ PythonExtension::PythonExtension(QObject* object)
     behaviors().supportSequenceType();
     behaviors().supportMappingType();
 
-    add_varargs_method("__name__", &PythonExtension::getObjectName, "Return the objectName.");
-    add_varargs_method("__class__", &PythonExtension::getClassName, "Return the className.");
-    //add_varargs_method("__classinfos__", &PythonExtension::getClassInfos, "Return a list of key,value-tuples of class informations.");
-    add_varargs_method("__signals__", &PythonExtension::getSignalNames, "Return list of signal names.");
-    add_varargs_method("__slots__", &PythonExtension::getSlotNames, "Return list of slot names.");
-    add_varargs_method("__properties__", &PythonExtension::getPropertyNames, "Return list of property names.");
+    add_varargs_method("className", &PythonExtension::getClassName, "Return the name of the QObject class.");
+    //add_varargs_method("classInfo", &PythonExtension::getClassInfo, "Return a list of key,value-tuples of class informations.");
+    add_varargs_method("signalNames", &PythonExtension::getSignalNames, "Return list of signal names the QObject provides.");
+    add_varargs_method("slotNames", &PythonExtension::getSlotNames, "Return list of slot names the QObject provides.");
+    add_varargs_method("propertyNames", &PythonExtension::getPropertyNames, "Return list of property names the QObject provides.");
+    //add_varargs_method("dynamicPropertyNames", &PythonExtension::getDynamicPropertyNames, "");
+    add_varargs_method("property", &PythonExtension::getProperty, "Return a property value.");
+    add_varargs_method("setProperty", &PythonExtension::setProperty, "Set a property value.");
     //add_varargs_method("__toPointer__", &PythonExtension::toPointer, "Return the void* pointer of the QObject.");
     //add_varargs_method("__fromPointer__", &PythonExtension::fromPointer, "Set the QObject* to the passed void* pointer.");
-    //add_varargs_method("__connect__", &PythonExtension::doConnect, "Connect signal with python function.");
+    add_varargs_method("connect", &PythonExtension::doConnect, "Connect signal, slots or python functions together.");
+    //add_varargs_method("emit", &PythonExtension::emitSignal, "Emit a signal the QObject provides.");
 
     d->proxymethod = new Py::MethodDefExt<PythonExtension>(
         "", // methodname, not needed cause we use the method only internaly.
@@ -244,10 +247,12 @@ int PythonExtension::setattr(const char* n, const Py::Object& value)
     return Py::PythonExtension<PythonExtension>::setattr(n, value);
 }
 
+/* objectName is a property anyway and therefore already accessible
 Py::Object PythonExtension::getObjectName(const Py::Tuple&)
 {
     return PythonType<QString>::toPyObject( d->object->objectName() );
 }
+*/
 
 Py::Object PythonExtension::getClassName(const Py::Tuple&)
 {
@@ -290,6 +295,29 @@ Py::Object PythonExtension::getPropertyNames(const Py::Tuple&)
     return list;
 }
 
+Py::Object PythonExtension::getProperty(const Py::Tuple& args)
+{
+    if( args.size() != 1 ) {
+        Py::TypeError("Expected the propertyname as argument.");
+        return Py::None();
+    }
+    return PythonType<QVariant>::toPyObject( d->object->property(
+        PythonType<QByteArray>::toVariant(args[0]).constData()
+    ) );
+}
+
+Py::Object PythonExtension::setProperty(const Py::Tuple& args)
+{
+    if( args.size() != 2 ) {
+        Py::TypeError("Expected the propertyname and the value as arguments.");
+        return Py::None();
+    }
+    return PythonType<bool>::toPyObject( d->object->setProperty(
+        PythonType<QByteArray>::toVariant(args[0]).constData(),
+        PythonType<QVariant>::toVariant(args[1])
+    ) );
+}
+
 /*
 Py::Object PythonExtension::toPointer(const Py::Tuple&)
 {
@@ -300,48 +328,104 @@ Py::Object PythonExtension::toPointer(const Py::Tuple&)
     //return pyqtextension;
 }
 
-Py::Object PythonExtension::toPointer(fromPointer(const Py::Tuple&)
+Py::Object PythonExtension::fromPointer(fromPointer(const Py::Tuple&)
 {
     QObject* object = dynamic_cast< QObject* >(PyLong_AsVoidPtr( args[0] ));
 }
 */
 
-#if 0
 Py::Object PythonExtension::doConnect(const Py::Tuple& args)
 {
     if( args.size() < 2 ) {
-        Py::AttributeError("The connect-method expects at least 2 arguments.");
+        Py::TypeError("Expected at least 2 arguments.");
         return PythonType<bool>::toPyObject(false);
     }
 
-    QByteArray signalname = PythonType<QByteArray>::toVariant( args[0] );
-    krossdebug( QString("====================================> signalname=%1 typeName=%2").arg(signalname).arg(args[1].type().as_string().c_str()) );
+    uint idx; // next argument to check
+    QObject* sender; // the sender object
+    QByteArray sendersignal; // the sender signal
+    if( args[0].isString() ) { // connect(signal, ...)
+        sender = d->object;
+        sendersignal = PythonType<QByteArray>::toVariant( args[0] );
+        idx = 1;
+    }
+    else { // connect(sender, signal, ...)
+        Py::ExtensionObject<PythonExtension> extobj(args[0]);
+        PythonExtension* extension = extobj.extensionObject();
+        if(! extension) {
+            Py::TypeError( QString("First argument needs to be a signalname or a sender-object.").toLatin1().constData() );
+            return PythonType<bool>::toPyObject(false);
+        }
+        sender = extension->object();
+        if( ! args[1].isString() ) {
+            Py::TypeError( QString("Second argument needs to be a signalname.").toLatin1().constData() );
+            return PythonType<bool>::toPyObject(false);
+        }
+        sendersignal = PythonType<QByteArray>::toVariant( args[1] );
+        idx = 2;
+        if( args.size() <= idx ) {
+            Py::TypeError( QString("Expected at least %1 arguments.").arg(idx+1).toLatin1().constData() );
+            return PythonType<bool>::toPyObject(false);
+        }
+    }
 
-    if( args[1].isCallable() ) {
-        Py::Callable funcobject(args[1]);
+    if( args[idx].isCallable() ) { // connect(..., pyfunction)
+        Py::Callable func(args[idx]);
 
-QVariantList args = d->signalspy.takeFirst();
-Py::Object result = d->callable.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
+        //TODO add adaptor
+        //Py::Object result = func.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
 
-//connect(d->object, "2" + signalname, , SIGNAL(handleEmitted));
-//QSignalSpy spy(d->object, signalname);
-/*
-COMPARE(spy.count(), 1); // make sure the signal was emitted exactly one time
-QVariantList arguments = spy.takeFirst(); // take the first signal
-VERIFY(arguments.at(0).toBool() == true); // verify the first argument
-*/
-
-//TODO
-
+        krossdebug( QString("TOOOOOOOOOOO-DOOOOOOOOOOOO PythonExtension::doConnect sender=%1 signal=%2 pyfunction=%3").arg(sender->objectName()).arg(sendersignal.constData()).arg(func.as_string().c_str()).toLatin1().constData() );
     }
     else {
-        Py::AttributeError("The connect-method expects as second argument something that is callable (e.g. a function).");
-        return PythonType<bool>::toPyObject(false);
+        QObject* receiver; // the receiver object
+        QByteArray receiverslot; // the receiver slot
+        if( args[idx].isString() ) { // connect(..., slot)
+            receiver = d->object;
+            receiverslot = PythonType<QByteArray>::toVariant( args[idx] );
+        }
+        else { // connect(..., receiver, slot)
+            Py::ExtensionObject<PythonExtension> extobj(args[idx]);
+            PythonExtension* extension = extobj.extensionObject();
+            if(! extension) {
+                Py::TypeError( QString("Receiver argument needs to be a slotname or a receiver-object.").toLatin1().constData() );
+                return PythonType<bool>::toPyObject(false);
+            }
+            receiver = extension->object();
+            idx++;
+            if( args.size() < idx ) {
+                Py::TypeError( QString("Expected at least %1 arguments.").arg(idx+1).toLatin1().constData() );
+                return PythonType<bool>::toPyObject(false);
+            }
+            if( ! args[idx].isString() ) {
+                Py::TypeError( QString("Expected receiver slotname as argument %1.").arg(idx+1).toLatin1().constData() );
+                return PythonType<bool>::toPyObject(false);
+            }
+            receiverslot = PythonType<QByteArray>::toVariant( args[idx] );
+        }
+        if( args.size() > idx + 1 ) {
+            Py::TypeError( QString("To much arguments specified.").toLatin1().constData() );
+            return PythonType<bool>::toPyObject(false);
+        }
+
+        // Dirty hack to replace SIGNAL() and SLOT() macros. If the user doesn't
+        // defined them explicit, we assume it's wanted to connect from a signal to
+        // a slot. This seems to be the most flexible solution so far...
+        if( ! sendersignal.startsWith('1') && ! sendersignal.startsWith('2') )
+            sendersignal.prepend('2'); // prepending 2 means SIGNAL(...)
+        if( ! receiverslot.startsWith('1') && ! receiverslot.startsWith('2') )
+            receiverslot.prepend('1'); // prepending 1 means SLOT(...)
+
+        krossdebug( QString("PythonExtension::doConnect sender=%1 signal=%2 receiver=%3 slot=%4").arg(sender->objectName()).arg(sendersignal.constData()).arg(receiver->objectName()).arg(receiverslot.constData()).toLatin1().constData() );
+
+        if(! QObject::connect(sender, sendersignal, receiver, receiverslot) ) {
+            krosswarning( QString("PythonExtension::doConnect Failed to connect").toLatin1().constData() );
+            return PythonType<bool>::toPyObject(false);
+        }
     }
 
     return PythonType<bool>::toPyObject(true);
 }
-#endif
 
 PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject *args)
 {

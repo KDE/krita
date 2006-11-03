@@ -1,6 +1,11 @@
 #ifndef __CXX_INDIRECT_PYTHON_INTERFACE__HXX__
 #define __CXX_INDIRECT_PYTHON_INTERFACE__HXX__
 
+// Prevent warnings
+#if defined(_XOPEN_SOURCE)
+#undef _XOPEN_SOURCE
+#endif
+
 #include <Python.h>
 
 namespace Py

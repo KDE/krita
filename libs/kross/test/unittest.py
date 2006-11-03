@@ -92,9 +92,10 @@ class TestKross(unittest.TestCase):
 
 	def testObject(self):
 		self.assert_( self.object1.name() == "TestObject1" and self.object2.name() == "TestObject2" )
-		#self.assert_( self.object1.func_testobject_testobject(self.object1).name() == self.object1.name() )
+		self.assert_( self.object1.objectName == "TestObject1" and self.object2.objectName == "TestObject2" )
+		self.assert_( self.object1.className() == "TestObject" and self.object2.className() == "TestObject" )
 
-	def testProperties(self):
+	def testPropertyMembers(self):
 		self.object1.boolProperty = True
 		self.assert_( self.object1.boolProperty == True )
 		self.object1.boolProperty = False
@@ -115,12 +116,38 @@ class TestKross(unittest.TestCase):
 		self.object1.listProperty = [ True, [2464, -8295], -572.07516, "test", [] ]
 		self.assert_( self.object1.listProperty == [ True, [2464, -8295], -572.07516, "test", [] ] )
 
-	def testEnumerations(self):
+	def testPropertyMethods(self):
+		self.object1.setProperty("boolProperty", False)
+		self.assert_( self.object1.property("boolProperty") == False )
+		self.object1.setProperty("boolProperty", True)
+		self.assert_( self.object1.property("boolProperty") == True )
+
+		self.object1.setProperty("intProperty", -75825)
+		self.assert_( self.object1.property("intProperty") == -75825 )
+
+		self.object1.setProperty("doubleProperty", -9373.8721)
+		self.assert_( self.object1.property("doubleProperty") == -9373.8721 )
+
+		self.object1.setProperty("stringProperty", " AnOtHeR sTrInG ")
+		self.assert_( self.object1.property("stringProperty") == " AnOtHeR sTrInG " )
+
+		self.object1.setProperty("stringListProperty", ["s1","s2",""])
+		self.assert_( self.object1.property("stringListProperty") == ["s1","s2",""] )
+
+		self.object1.setProperty("listProperty", [[True,False],"abc",[846,-573.02],[]])
+		self.assert_( self.object1.property("listProperty") == [[True,False],"abc",[846,-573.02],[]] )
+
+	def testEnumerationMembers(self):
 		self.assert_( self.object1.TESTENUM1 == 1 )
 		self.assert_( self.object1.TESTENUM2 == 2 )
 		self.assert_( self.object1.TESTENUM3 == 4 )
 		self.assert_( self.object1.TESTENUM4 == 8 )
 		#self.assert_( self.object1.testEnum( self.object1.TESTENUM3 ) == 4 )
+
+	def testSignalsSlots(self):
+		ok = self.object1.connect("signalString(const QString&)", self.object2, "func_qstring_qstring(const QString&)")
+		print "============================> %s\n" % ok
+		#self.assert_( self.object1.TESTENUM1 == 1 )
 
 	#def testExpectedFailures(self):
 		# to less arguments

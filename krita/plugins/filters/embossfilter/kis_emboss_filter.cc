@@ -97,6 +97,7 @@ void KisEmbossFilter::KisEmbossFilter::process(const KisPaintDeviceSP src, const
 // FIXME: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
 
                 QColor color1;
+                quint8 opacity;
                 src->colorSpace()->toQColor(it.oldRawData(), &color1);
 
                 QColor color2;
@@ -110,7 +111,7 @@ void KisEmbossFilter::KisEmbossFilter::process(const KisPaintDeviceSP src, const
 
                 Gray = CLAMP((R + G + B) / 3, 0, quint8_MAX);
 
-                dst->colorSpace()->fromQColor(QColor(Gray, Gray, Gray), dstIt.rawData());
+                dst->colorSpace()->fromQColor(QColor(Gray, Gray, Gray), opacity, dstIt.rawData());
             }
         }
 

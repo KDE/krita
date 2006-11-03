@@ -143,26 +143,34 @@ void KisToolCrop::buttonPress(KoPointerEvent *e)
         KisImageSP img = m_subject->currentImg();
 
         if (img && img->activeDevice() && e->button() == Qt::LeftButton) {
+            QPoint pos = e->pos().floorQPoint();
+            QRect b = img->bounds();
 
-            if (img->bounds().contains(e->pos().floorQPoint())) {
+            if (pos.x() < b.x())
+                pos.setX(b.x());
+            else if (pos.x() > b.x() + b.width())
+                pos.setX(b.x() + b.width());
 
-                m_selecting = true;
+            if (pos.y() < b.y())
+                pos.setY(b.y());
+            else if (pos.y() > b.y() + b.height())
+                pos.setY(b.y() + b.height());
 
-                if( !m_haveCropSelection ) //if the selection is not set
-                {
-                    QPoint p = e->pos().floorQPoint();
-                    m_rectCrop = QRect( p.x(), p.y(), 0, 0);
-                    paintOutlineWithHandles();
-                }
-                else
-                {
-                    KisCanvasController *controller = m_subject->canvasController();
-                    m_mouseOnHandleType = mouseOnHandle(controller ->windowToView(e->pos().floorQPoint()));
-                    m_dragStart = e->pos().floorQPoint();
-                }
+            m_selecting = true;
 
-                updateWidgetValues();
+            if( !m_haveCropSelection ) //if the selection is not set
+            {
+                m_rectCrop = QRect( pos.x(), pos.y(), 0, 0);
+                paintOutlineWithHandles();
             }
+            else
+            {
+                KisCanvasController *controller = m_subject->canvasController();
+                m_mouseOnHandleType = mouseOnHandle(controller ->windowToView(pos));
+                m_dragStart = pos;
+            }
+
+
         }
     }
 }

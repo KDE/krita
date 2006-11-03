@@ -105,7 +105,8 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
 // XXX: COLORSPACE_INDEPENDENCE
 
                 QColor color1;
-                src->colorSpace()->toQColor(it.rawData(), &color1);
+                Q_UINT8 opacity;
+                src->colorSpace()->toQColor(it.rawData(), &color1, &opacity);
 
                 QColor color2;
                 Q_UINT8 opacity2;
@@ -117,7 +118,7 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
 
                 Gray = CLAMP((R + G + B) / 3, 0, Q_UINT8_MAX);
 
-                dst->colorSpace()->fromQColor(QColor(Gray, Gray, Gray), dstIt.rawData());
+                dst->colorSpace()->fromQColor(QColor(Gray, Gray, Gray), opacity, dstIt.rawData());
             }
         }
 

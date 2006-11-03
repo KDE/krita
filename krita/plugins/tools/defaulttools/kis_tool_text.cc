@@ -131,11 +131,12 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         layer->setOpacity(m_opacity);
         layer->setCompositeOp(m_compositeOp);
 
+        layer->setVisible(false);
         Q_INT32 x = QMAX(0, static_cast<int>(e->x() - width/2));
         Q_INT32 y = QMAX(0, static_cast<int>(e->y() - height/2));
         layer->setX(x);
         layer->setY(y);
-
+        layer->setVisible(true);
         layer->setDirty();
 
         if (undoAdapter) {

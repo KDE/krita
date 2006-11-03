@@ -1033,7 +1033,6 @@ void KoRTree<T>::LeafNode::contains( const QPointF & point, QMap<int,T> & result
     {
         if ( this->m_childBoundingBox[i].contains( point ) )
         {
-            qDebug() << m_dataIds[i];
             result.insert( m_dataIds[i], m_data[i] );
         }
     }

@@ -32,11 +32,12 @@ KoTool::KoTool(KoCanvasBase *canvas )
     , m_optionWidget( 0 )
     , m_previousCursor(Qt::ArrowCursor)
 {
-    connect( m_canvas->resourceProvider(),
+    if(m_canvas) { // canvas can be NULL e.g. see kofficeui/KoToolManager.cpp DummyTool():KoTool(0){}
+        connect( m_canvas->resourceProvider(),
              SIGNAL( sigResourceChanged(const KoCanvasResource & res) ),
              this,
              SLOT( resourceChanged( const KoCanvasResource & res ) ) );
-
+    }
 }
 
 void KoTool::activate(bool temporary) {

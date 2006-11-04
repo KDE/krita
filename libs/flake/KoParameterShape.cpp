@@ -38,6 +38,8 @@ void KoParameterShape::moveHandle( int handleId, const QPointF & point, Qt::Keyb
         qWarning() << "handleId out of bounds";
         return;
     }
+
+    repaint();
     // function to do special stuff
     moveHandleAction( handleId, point, modifiers );
 

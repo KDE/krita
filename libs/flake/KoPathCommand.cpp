@@ -671,6 +671,7 @@ KoParameterChangeCommand::~KoParameterChangeCommand()
 /// execute the command
 void KoParameterChangeCommand::execute()
 {
+    m_shape->repaint();
     m_shape->moveHandle( m_handleId, m_endPoint );
     m_shape->repaint();
 }
@@ -678,6 +679,7 @@ void KoParameterChangeCommand::execute()
 /// revert the actions done in execute
 void KoParameterChangeCommand::unexecute()
 {
+    m_shape->repaint();
     m_shape->moveHandle( m_handleId, m_startPoint );
     m_shape->repaint();
 }

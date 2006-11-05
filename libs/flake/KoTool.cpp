@@ -21,22 +21,26 @@
 #include <QLabel>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "KoTool.h"
 #include "KoCanvasBase.h"
 #include "KoViewConverter.h"
 #include "KoPointerEvent.h"
+#include "KoCanvasResourceProvider.h"
 
 KoTool::KoTool(KoCanvasBase *canvas )
     : m_canvas(canvas)
     , m_optionWidget( 0 )
     , m_previousCursor(Qt::ArrowCursor)
 {
-    if(m_canvas) { // canvas can be NULL e.g. see kofficeui/KoToolManager.cpp DummyTool():KoTool(0){}
-        connect( m_canvas->resourceProvider(),
-             SIGNAL( sigResourceChanged(const KoCanvasResource & res) ),
-             this,
-             SLOT( resourceChanged( const KoCanvasResource & res ) ) );
+    if(m_canvas) { 
+        KoCanvasResourceProvider * crp = m_canvas->resourceProvider();
+        if (crp)
+            connect( m_canvas->resourceProvider(),
+                 SIGNAL( sigResourceChanged(const KoCanvasResource & ) ),
+                 this,
+                 SLOT( resourceChanged( const KoCanvasResource &  ) ) );
     }
 }
 

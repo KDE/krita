@@ -47,7 +47,7 @@ class KoCanvasBase {
 
 public:
 
-    KoCanvasBase() {};
+    KoCanvasBase() { m_resourceProvider = new KoCanvasResourceProvider(0); }
     virtual ~KoCanvasBase() {};
 
 public:

@@ -66,6 +66,7 @@ public:
      * @param shapes the new shapes to manage.
      */
     void setShapes( const QList<KoShape *> &shapes );
+
     /// returns the list of maintained shapes
     const QList<KoShape *> & shapes() const { return m_shapes; }
 
@@ -74,6 +75,7 @@ public:
      * @param shape the shape to add
      */
     void add(KoShape *shape);
+
     /**
      * Remove a KoShape from this manager
      * @param shape the shape to remove
@@ -117,7 +119,7 @@ public:
      * @param omitHiddenShapes if true, only visible shapes are considered
      */
     QList<KoShape *> shapesAt( const QRectF &rect, bool omitHiddenShapes = false );
-    
+
     /**
      * Request a repaint to be queued.
      * The repaint will be restricted to the parameters rectangle, which is expected to be
@@ -134,7 +136,7 @@ public:
 
     /**
      * Update the tree for finding the shapes.
-     * This will remove the shape form the tree and will reinsert it again. 
+     * This will remove the shape from the tree and will reinsert it again.
      * The update to the tree will be posponed until it is needed so that successive calles
      * will be merged into one.
      * @param shape the shape to updated its position in the tree.
@@ -143,8 +145,8 @@ public:
 
 protected:
     /**
-     * Update the tree when there are shapes in m_aggregate4update. This is done so not all 
-     * updates to the tree are done when they are asked for but when they are needed. 
+     * Update the tree when there are shapes in m_aggregate4update. This is done so not all
+     * updates to the tree are done when they are asked for but when they are needed.
      */
     void updateTree();
 

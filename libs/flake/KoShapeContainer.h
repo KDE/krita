@@ -101,33 +101,43 @@ public:
  * Like the KoShape class, this object is a visible class with
  * a position and a size. It can paint itself as well if you implement
  * the paintComponent() method.
+ *
  * <p>The most important feature of this class is that you can make
  * other KoShape classes to be children of this container.
+ *
  * <p>The effect of grouping those objects is that their position
  * is relative to the position of the container. Move the container and
  * all children move with it.
+ *
  * <p>Each child can optionally be said to be 'clipped' by the container.
  * This feature will give the effect that even if the child has a size and
  * position outside the container, it will not be shown.  This is especially useful
  * for showing cutouts of content, like images, without changing the actual content.
+ *
  * <p>For so called clipped children any modification made to the container is
- * propagated to the child. This includes rotation as well as scaling and shearing.
+ * propagated to the child. This includes rotation as well as scaling
+ * and shearing.
+ *
  * <p>Maintaining the list of children can be done using the supplied methods
  * addChild() and removeChild(). However, they only forward their requests to the
  * data model KoGraphicsContainerModel and if you provide a custom implementation
  * of that model any means can be used to maintain a list of children, as long as
  * you will take care to register them with the appropriate object manager.
+ *
  * <p>An example usage where a custom model might be useful is when you have a
  * container for text areas which are split into columns.  If you resize the container
  * and the width of the individual columns gets too small, the model can choose to
  * remove a child or add one when the width allows another column.
  */
 class FLAKE_EXPORT KoShapeContainer : public KoShape {
+
 public:
+
     /**
      * Default constructor; uses simple internal model.
      */
     KoShapeContainer();
+
     /**
      * Constructor with custom model to be used for maintaining the list of children.
      * @param model the custom model to be used for maintaining the list of children.

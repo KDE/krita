@@ -81,7 +81,7 @@ PythonExtension::PythonExtension(QObject* object)
     behaviors().supportMappingType();
 
     add_varargs_method("className", &PythonExtension::getClassName, "Return the name of the QObject class.");
-    //add_varargs_method("classInfo", &PythonExtension::getClassInfo, "Return a list of key,value-tuples of class informations.");
+    //add_varargs_method("classInfo", &PythonExtension::getClassInfo, "Return a list of key,value-tuples of class information.");
     add_varargs_method("signalNames", &PythonExtension::getSignalNames, "Return list of signal names the QObject provides.");
     add_varargs_method("slotNames", &PythonExtension::getSlotNames, "Return list of slot names the QObject provides.");
     add_varargs_method("propertyNames", &PythonExtension::getPropertyNames, "Return list of property names the QObject provides.");

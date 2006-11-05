@@ -1841,7 +1841,7 @@ QString *errorMsg, int *errorLine, int *errorColumn)
 // ==================================================================
 
 /*
-  This is the size of buffer everytime we read a chunk of data from the device.
+  This is the size of buffer every time we read a chunk of data from the device.
 
   Note 1: maximum allocated space is thus 2*KOXML_BUFSIZE due to the
   stringData (a QString instance).

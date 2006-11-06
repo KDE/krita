@@ -91,13 +91,13 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
         kdDebug() << "No file name for the reference image was specified." << endl;
         return;
     }
-    
+
     KisPaintDeviceSP ref;
-    
+
     KisDoc d;
     d.import(fileName);
     KisImageSP importedImage = d.currentImage();
-    
+
     if(importedImage)
     {
         ref = importedImage->projection();
@@ -107,7 +107,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
         kdDebug() << "No reference image was specified." << endl;
         return;
     }
-    
+
     // Convert ref and src to LAB
     KisColorSpace* labCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("LABA"),"");
     if(!labCS)
@@ -115,11 +115,16 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
         kdDebug() << "The LAB colorspace is not available." << endl;
         return;
     }
+
+    setProgressTotalSteps(5);
+
     KisColorSpace* oldCS = src->colorSpace();
     KisPaintDeviceSP srcLAB = new KisPaintDevice(*src.data());
     srcLAB->convertTo(labCS);
     ref->convertTo(labCS);
-    
+
+    setProgress( 1 );
+
     // Compute the means and sigmas of src
     double meanL_src = 0., meanA_src = 0., meanB_src = 0.;
     double sigmaL_src = 0., sigmaA_src = 0., sigmaB_src = 0.;
@@ -138,6 +143,9 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
         sigmaB_src += B*B;
         ++srcLABIt;
     }
+
+    setProgress( 3 );
+
     double size = 1. / ( rect.width() * rect.height() );
     meanL_src *= size;
     meanA_src *= size;
@@ -164,6 +172,9 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
         sigmaB_ref += B*B;
         ++refIt;
     }
+
+    setProgress( 4 );
+
     size = 1. / ( importedImage->width() * importedImage->height() );
     meanL_ref *= size;
     meanA_ref *= size;
@@ -172,7 +183,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
     sigmaA_ref *= size;
     sigmaB_ref *= size;
     kdDebug() << size << " " << meanL_ref << " " << meanA_ref << " " << meanB_ref << " " << sigmaL_ref << " " << sigmaA_ref << " " << sigmaB_ref << endl;
-    
+
     // Transfer colors
     dst->convertTo(labCS);
     {

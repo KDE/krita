@@ -27,7 +27,7 @@
 #include <QEvent>
 #include <QPaintEvent>
 
-
+#include <KoCanvasResourceProvider.h>
 #include <KoTool.h>
 
 #include <krita_export.h>
@@ -101,7 +101,7 @@ protected:
     // Add the tool-specific layout to the default option widget's layout.
     void addOptionWidgetLayout(QLayout *layout);
 
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual void createOptionWidget(QWidget* parent);
 
 private:
     // XXX: Call this when the layer changes (this used to be called in KisCanvasObserver::update)
@@ -123,6 +123,7 @@ private:
     KisIntSpinbox *m_slOpacity;
     QLabel *m_lbComposite;
     KisCmbComposite *m_cmbComposite;
+    KoCanvasResourceProvider * m_resourceProvider;
 };
 
 #endif // KIS_TOOL_PAINT_H_

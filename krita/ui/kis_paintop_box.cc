@@ -17,6 +17,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_paintop_box.h"
+
 #include <QWidget>
 #include <QString>
 #include <QPixmap>
@@ -35,17 +38,17 @@
 #include <kinstance.h>
 
 #include <kis_paintop_registry.h>
+#include <kis_resource_provider.h>
 #include <kis_view2.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>
 #include <kis_layer.h>
 #include <kis_factory2.h>
 
-#include "kis_paintop_box.h"
 
 KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * name)
     : super (parent),
-      m_canvasController(view->canvasController())
+      m_resourceProvider(view->resourceProvider())
 {
     setObjectName(name);
 
@@ -65,7 +68,7 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
     m_layout->setSpacing(1);
     m_layout->addWidget(m_cmbPaintops);
 
-    connect(this, SIGNAL(selected(const KoID &, const KisPaintOpSettings *)), view, SLOT(paintopActivated(const KoID &, const KisPaintOpSettings *)));
+    connect(this, SIGNAL(selected(const KoID &, const KisPaintOpSettings *)), m_resourceProvider, SLOT(slotPaintopActivated(const KoID &, const KisPaintOpSettings *)));
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
     // XXX: Let's see... Are all paintops loaded and ready?
@@ -74,13 +77,14 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
         // add all paintops, and show/hide them afterwards
         addItem(*it);
     }
-
+#if 0 // XXX: Port once the view (or resourceprovider) has regained these settings
     connect(view, SIGNAL(currentColorSpaceChanged(KoColorSpace*)),
             this, SLOT(colorSpaceChanged(KoColorSpace*)));
     connect(view, SIGNAL(sigInputDeviceChanged(const KoInputDevice&)),
             this, SLOT(slotInputDeviceChanged(const KoInputDevice&)));
 
     setCurrentPaintop(defaultPaintop(view->currentInputDevice()));
+#endif
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -217,7 +221,6 @@ const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, c
 {
     QList<KisPaintOpSettings *> settingsArray;
     InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find(inputDevice);
-
     if (it == m_inputDevicePaintopSettings.end()) {
         // Create settings for each paintop.
 

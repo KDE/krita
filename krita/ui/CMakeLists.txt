@@ -4,7 +4,6 @@ set(kritaui_LIB_SRCS
     kcurve.cc
     kis_autobrush.cc
     kis_autogradient.cc
-    #kis_birdeye_box.cc
     kis_boundary_painter.cc
     kis_brush_chooser.cc
     kis_canvas2.cpp
@@ -54,7 +53,6 @@ set(kritaui_LIB_SRCS
     kis_oasis_save_data_visitor.cc
     kis_oasis_save_visitor.cc
     kis_opengl_canvas2.cpp
-    #kis_paintop_box.cc
     kis_palette_view.cc
     kis_palette_widget.cc
     kis_part_layer.cc
@@ -67,7 +65,6 @@ set(kritaui_LIB_SRCS
     kis_resource_mediator.cc
     kis_resource_provider.cc
     kis_resourceserver.cc
-    #kis_selection_manager.cc
     kis_selection_options.cc
     kis_strategy_move.cc
     kis_text_brush.cc
@@ -75,10 +72,13 @@ set(kritaui_LIB_SRCS
     kis_view_converter.cpp
     kobirdeyepanel.cpp
     squeezedcombobox.cpp
+    #    kis_paintop_box.cc # Needs to know about the active input device a lot
     #    kis_tool_freehand.cc
-    #    kis_tool_non_paint.cc
+    #kis_tool_non_paint.cc
     #kis_tool_paint.cc
     #    kis_tool_shape.cc
+    #    kis_birdeye_box.cc
+    #    kis_selection_manager.cc
 )
 
 

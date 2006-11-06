@@ -34,7 +34,7 @@ class QString;
 class QHBoxLayout;
 
 class KisView2;
-class KisCanvasController;
+class KisResourceProvider;
 class KoID;
 class KoColorSpace;
 
@@ -83,7 +83,7 @@ private:
     const KisPaintOpSettings *paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice);
 
 private:
-    KisCanvasController *m_canvasController;
+    KisResourceProvider *m_resourceProvider;
     QComboBox * m_cmbPaintops;
     QHBoxLayout * m_layout;
     QWidget * m_optionWidget;

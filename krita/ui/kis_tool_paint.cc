@@ -48,7 +48,7 @@
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas)
     : KoTool(canvas)
 {
-    m_subject = 0;
+    m_resourceProvider = 0;
 
     m_optionWidget = 0;
     m_optionWidgetLayout = 0;
@@ -66,48 +66,20 @@ KisToolPaint::~KisToolPaint()
 {
 }
 
-void KisToolPaint::paint(QPainter&)
+void KisToolPaint::paint(QPainter&, KoViewConverter &)
 {
 }
 
-void KisToolPaint::activate()
+void KisToolPaint::activate(bool )
 {
-    if (m_subject) {
-
-        updateCompositeOpComboBox();
-
-        KisConfig cfg;
-        m_paintOutline = (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE);
-    }
+    updateCompositeOpComboBox();
+    KisConfig cfg;
+    m_paintOutline = (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE);
 }
 
 
 
 void KisToolPaint::deactivate()
-{
-}
-
-void KisToolPaint::buttonPress(KoPointerEvent *)
-{
-}
-
-void KisToolPaint::move(KoPointerEvent *)
-{
-}
-
-void KisToolPaint::buttonRelease(KoPointerEvent *)
-{
-}
-
-void KisToolPaint::doubleClick(KoPointerEvent *)
-{
-}
-
-void KisToolPaint::keyPress(QKeyEvent *)
-{
-}
-
-void KisToolPaint::keyRelease(QKeyEvent *)
 {
 }
 

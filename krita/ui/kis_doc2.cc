@@ -79,11 +79,14 @@
 #include "kis_config.h"
 #include "kis_custom_image_widget.h"
 #include "kis_load_visitor.h"
-#include "kis_oasis_save_data_visitor.h"
-#include "kis_oasis_save_visitor.h"
 #include "kis_part_layer.h"
 #include "kis_save_visitor.h"
 #include "kis_savexml_visitor.h"
+#include "kis_oasis_load_data_visitor.h"
+#include "kis_oasis_load_visitor.h"
+#include "kis_oasis_save_data_visitor.h"
+#include "kis_oasis_save_visitor.h"
+
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -235,34 +238,50 @@ QDomDocument KisDoc2::saveXML()
     return doc;
 }
 
-bool KisDoc2::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )
+bool KisDoc2::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocument&, KoStore* store)
 {
-    //XXX: todo (and that includes defining an OASIS format for layered 2D raster data!)
-    kDebug() << "loading with OpenRaster" << endl;
-    return true;
+    kDebug(41008) << "loading with OpenRaster" << endl;
+    QDomNode root = doc.documentElement();
+    for (QDomNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        if (node.isElement() && node.nodeName() == "office:body") {
+            QDomElement elem = node.toElement();
+            KisOasisLoadVisitor olv(this);
+            olv.loadImage(elem);
+            if (!(m_currentImage = olv.image() ))
+                return false;
+            KoOasisStore* oasisStore =  new KoOasisStore( store );
+            KisOasisLoadDataVisitor oldv(oasisStore, olv.layerFilenames());
+            m_currentImage->rootLayer()->accept(oldv);
+            return true;
+        }
+    }
+    return false;
 }
 
 
 bool KisDoc2::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
 {
-#if 0
-    //XXX: todo (and that includes defining an OASIS format for layered 2D raster data!)
-    kDebug() << "saving with OpenRaster" << endl;
+    kDebug(41008) << "saving with OpenRaster" << endl;
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
     KoOasisStore* oasisStore =  new KoOasisStore( store );
     KoXmlWriter* contentWriter = oasisStore->contentWriter();
-    if ( !contentWriter )
+    if ( !contentWriter ) {
+        delete oasisStore;
         return false;
+    }
 
     manifestWriter->addManifestEntry( "data/", "" );
     KoXmlWriter* bodyWriter = oasisStore->bodyWriter();
+    // Save the structure
     KisOasisSaveVisitor osv(oasisStore);
+    bodyWriter->startElement("office:body");
     m_currentImage->rootLayer()->accept(osv);
+    bodyWriter->endElement();
     oasisStore->closeContentWriter();
+    // Sqve the data
     KisOasisSaveDataVisitor osdv(oasisStore, manifestWriter);
     m_currentImage->rootLayer()->accept(osdv);
     delete oasisStore;
-#endif
     return true;
 }
 

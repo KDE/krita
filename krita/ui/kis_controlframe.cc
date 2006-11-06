@@ -237,12 +237,12 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
 
     l->addWidget(m_brushesTab);
 
-    KisBrushChooser * m_brushChooser = new KisBrushChooser(0, "brush_chooser");
-    m_brushesTab->addTab( m_brushChooser, i18n("Predefined Brushes"));
-
     KisAutobrush * m_autobrush = new KisAutobrush(0, "autobrush", i18n("Autobrush"));
     m_brushesTab->addTab( m_autobrush, i18n("Autobrush"));
     connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated( KisResource* )));
+
+    KisBrushChooser * m_brushChooser = new KisBrushChooser(0, "brush_chooser");
+    m_brushesTab->addTab( m_brushChooser, i18n("Predefined Brushes"));
 
     KisCustomBrush* customBrushes = new KisCustomBrush(0, "custombrush",
             i18n("Custom Brush"), m_view);

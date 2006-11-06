@@ -41,6 +41,7 @@
 #include "cxx/Config.hxx"
 #include "cxx/Objects.hxx"
 #include "cxx/Extensions.hxx"
+#include "cxx/Exception.hxx"
 
 namespace Kross {
 

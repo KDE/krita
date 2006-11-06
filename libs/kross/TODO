@@ -33,7 +33,6 @@ Ruby:
   of dirty code to get that support done.
 
 Python:
-* reimplement connect signal<=>slot support
 * uncomment dynamic PyQt-support + regressiontest just every case
 
 KjsEmbed:

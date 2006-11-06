@@ -146,6 +146,7 @@ namespace {
 
 KisToolTransform::KisToolTransform()
     : super(i18n("Transform"))
+    , m_wasPressed( false )
 {
     setName("tool_transform");
     setCursor(KisCursor::selectCursor());
@@ -274,6 +275,10 @@ void KisToolTransform::paint(KisCanvasPainter& gc, const QRect& rc)
 
 void KisToolTransform::buttonPress(KisButtonPressEvent *e)
 {
+    if (m_subject && e->button() == QMouseEvent::LeftButton) {
+        m_wasPressed = true;
+    }
+
     if (m_subject) {
         KisImageSP img = m_subject->currentImg();
 
@@ -639,21 +644,26 @@ void KisToolTransform::move(KisMoveEvent *e)
     }
 }
 
-void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
+void KisToolTransform::buttonRelease(KisButtonReleaseEvent *e)
 {
-    KisImageSP img = m_subject->currentImg();
+    if (m_subject && e->button() == QMouseEvent::LeftButton) {
+        if(!m_wasPressed) return;
+        m_wasPressed = false;
 
-    if (!img)
-        return;
+        KisImageSP img = m_subject->currentImg();
 
-    m_selecting = false;
+        if (!img)
+            return;
 
-    if(m_actualyMoveWhileSelected)
-    {
-        paintOutline();
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
-        transform();
-        QApplication::restoreOverrideCursor();
+        m_selecting = false;
+
+        if(m_actualyMoveWhileSelected)
+        {
+            paintOutline();
+            QApplication::setOverrideCursor(KisCursor::waitCursor());
+            transform();
+            QApplication::restoreOverrideCursor();
+        }
     }
 }
 

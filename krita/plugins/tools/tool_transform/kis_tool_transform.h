@@ -101,7 +101,7 @@ protected slots:
 
 private:
     enum function {ROTATE,MOVE,TOPLEFTSCALE,TOPSCALE,TOPRIGHTSCALE,RIGHTSCALE,
-                BOTTOMRIGHTSCALE, BOTTOMSCALE,BOTTOMLEFTSCALE, LEFTSCALE};
+		   BOTTOMRIGHTSCALE, BOTTOMSCALE,BOTTOMLEFTSCALE, LEFTSCALE};
     QCursor m_sizeCursors[8];
     function m_function;
     QPoint m_startPos;
@@ -130,6 +130,7 @@ private:
     KisPaintDeviceSP m_origDevice;
     KisSelectionSP m_origSelection;
 
+    bool m_wasPressed;
 };
 
 class KisToolTransformFactory : public KisToolFactory {

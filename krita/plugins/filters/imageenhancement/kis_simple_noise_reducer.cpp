@@ -24,6 +24,8 @@
 #include <kis_colorspace_factory_registry.h>
 #include <kis_multi_integer_filter_widget.h>
 #include <kis_meta_registry.h>
+#include <kis_progress_display_interface.h>
+#include <kis_progress_subject.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
     : KisFilter(id(), "enhance", i18n("&Gaussian Noise Reduction..."))
@@ -86,13 +88,16 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     
     KisPaintDeviceSP interm = new KisPaintDevice(*src);
     KisConvolutionPainter painter( interm );
+
+    if (m_progressDisplay)
+        m_progressDisplay->setSubject( &painter, true, true );    
+
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
     
     if (painter.cancelRequested()) {
         cancel();
     }
-    
 
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width(), true );
     KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y(), rect.width(), false);
@@ -110,7 +115,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
                     cs->bitBlt( dstIt.rawData(), 0, cs, intermIt.rawData(), 0, 0, 0, 255, 1, 1, KisCompositeOp(COMPOSITE_COPY) );
                 }
             }
-            incProgress();
+            //incProgress();
             ++srcIt;
             ++dstIt;
             ++intermIt;

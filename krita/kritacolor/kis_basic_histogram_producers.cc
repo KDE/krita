@@ -94,6 +94,11 @@ QString KisBasicU8HistogramProducer::positionToString(double pos) const {
 
 void KisBasicU8HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs)
 {
+    if (!pixels) return;
+    if (!cs) return;
+    if (!selectionMask) return;
+    if (nPixels == 0) return;
+
     Q_INT32 pSize = cs->pixelSize();
 
     if ( selectionMask ) {

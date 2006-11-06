@@ -152,8 +152,34 @@ void KisLabColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
 void KisLabColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags,
                                       Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
 {
-    // XXX: Either do this native, or do this in 16 bit rgba, not this, which is going back to QColor!
-    KisAbstractColorSpace::convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nColors);
+    Q_INT32 totalL = 0, totalA = 0, totalB = 0, totalAlpha = 0;
+
+    while ( nColors -- )
+    {
+        const Pixel * pixel = reinterpret_cast<const Pixel *>( *colors );
+        Q_INT32 weight = *kernelValues;
+        if ( weight != 0 ) {
+            totalL += pixel->lightness * weight;
+            totalA += pixel->a * weight;
+            totalB += pixel->b * weight;
+            totalAlpha += pixel->alpha * weight;
+        }
+        colors++;
+        kernelValues++;
+    }
+
+
+    Pixel * p = reinterpret_cast< Pixel *>( dst );
+
+    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+        p->lightness = CLAMP( ( totalL / factor) + offset, 0, Q_UINT16_MAX);
+        p->a = CLAMP( ( totalA / factor) + offset, 0, Q_UINT16_MAX);
+        p->b = CLAMP( ( totalB / factor) + offset, 0, Q_UINT16_MAX);
+    }
+    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+        p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT16_MAX);
+    }
+
 }
 
 void KisLabColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const

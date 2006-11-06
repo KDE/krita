@@ -37,10 +37,10 @@ public:
     {
         setProperty("tileSize", tileSize);
         setProperty("tileSaturation", tileSaturation);
-    };
+    }
 public:
-    inline quint32 tileSize() { return getInt("tileSize"); };
-    inline quint32 tileSaturation() {return getInt("tileSaturation"); };
+    inline quint32 tileSize() { return getInt("tileSize"); }
+    inline quint32 tileSaturation() {return getInt("tileSaturation"); }
 private:
     quint32 m_tileSize;
     quint32 m_tileSaturation;
@@ -52,17 +52,17 @@ public:
     KisCubismFilter();
 public:
     virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-    static inline KoID id() { return KoID("cubism", i18n("Cubism")); };
+    static inline KoID id() { return KoID("cubism", i18n("Cubism")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisCubismFilterConfiguration(10,10)); return list; }
     virtual bool workWith(KoColorSpace* cs);
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_RGBA8; };
+    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_RGBA8; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
-    virtual KisFilterConfiguration* configuration() { return new KisCubismFilterConfiguration( 10, 10); };
+    virtual KisFilterConfiguration* configuration() { return new KisCubismFilterConfiguration( 10, 10); }
 private:
     //this function takes an array of ordered indices i1,i2,i3,... and randomizes them i3,i1,i2,...
         void randomizeIndices (qint32 count, qint32* indices);

@@ -33,7 +33,7 @@ class KisWdgWave : public KisFilterConfigWidget
         KisWdgWave(KisFilter* nfilter, QWidget* parent = 0, const char* name = 0);
         ~KisWdgWave();
     public:
-        inline Ui_WdgWaveOptions* widget() { return m_widget; };
+        inline Ui_WdgWaveOptions* widget() { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
     private:
       Ui_WdgWaveOptions* m_widget;

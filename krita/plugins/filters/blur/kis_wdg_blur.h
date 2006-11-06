@@ -31,7 +31,7 @@ class KisWdgBlur : public KisFilterConfigWidget
     Q_OBJECT
     public:
         KisWdgBlur( KisFilter* nfilter, QWidget * parent, const char * name);
-        inline Ui_WdgBlur* widget() { return m_widget; };
+        inline Ui_WdgBlur* widget() { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
     private slots:
         void linkSpacingToggled(bool);

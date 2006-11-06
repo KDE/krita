@@ -64,9 +64,9 @@ public:
             setToolType(TOOL_TYPE_FILL);
             setPriority(0);
             setIcon("tool_text");
-        };
+        }
 
-    virtual ~KisToolTextFactory(){};
+    virtual ~KisToolTextFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolText(canvas);
@@ -76,3 +76,4 @@ public:
 
 
 #endif // KIS_TOOL_TEXT_H_
+

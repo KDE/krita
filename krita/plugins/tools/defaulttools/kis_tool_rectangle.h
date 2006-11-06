@@ -77,9 +77,9 @@ public:
             setIcon( "tool_rectange" );
             setShortcut( Qt::Key_F6 );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolRectangleFactory(){};
+    virtual ~KisToolRectangleFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolRectangle(canvas);

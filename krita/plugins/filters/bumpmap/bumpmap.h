@@ -73,8 +73,8 @@ public:
     KisFilterBumpmap();
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
-    static inline KoID id() { return KoID("bumpmap", i18n("Bumpmap")); };
+    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
+    static inline KoID id() { return KoID("bumpmap", i18n("Bumpmap")); }
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return true; }
@@ -88,7 +88,7 @@ class KisBumpmapConfigWidget : public KisFilterConfigWidget {
 
 public:
     KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f = 0 );
-    virtual ~KisBumpmapConfigWidget() {};
+    virtual ~KisBumpmapConfigWidget() {}
 
     void setConfiguration(KisFilterConfiguration * config);
     KisFilterConfiguration* configuration() const;

@@ -33,16 +33,16 @@ public:
         , m_doVertically(doVertically)
         , m_keepSign(keepSign)
         , m_makeOpaque(makeOpaque)
-        {};
+        {}
 
     virtual void fromXML( const QString&  );
     virtual QString toString();
 
 public:
-    inline bool doHorizontally() { return m_doHorizontally; };
-    inline bool doVertically() {return m_doVertically; };
-    inline bool keepSign() {return m_keepSign; };
-    inline bool makeOpaque() {return m_makeOpaque; };
+    inline bool doHorizontally() { return m_doHorizontally; }
+    inline bool doVertically() {return m_doVertically; }
+    inline bool keepSign() {return m_keepSign; }
+    inline bool makeOpaque() {return m_makeOpaque; }
     
 private:
     bool m_doHorizontally;
@@ -57,7 +57,7 @@ public:
     KisSobelFilter();
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    static inline KoID id() { return KoID("sobel", i18n("Sobel")); };
+    static inline KoID id() { return KoID("sobel", i18n("Sobel")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
@@ -65,7 +65,7 @@ public:
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration() { return new KisSobelFilterConfiguration( true, true, true, true); };
+    virtual KisFilterConfiguration * configuration() { return new KisSobelFilterConfiguration( true, true, true, true); }
 private:
     void prepareRow (const KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h);
 };

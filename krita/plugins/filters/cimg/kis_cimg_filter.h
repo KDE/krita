@@ -55,14 +55,14 @@ public:
     KisCImgFilter();
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    static inline KoID id() { return KoID("cimg", i18n("Image Restoration (cimg-based)")); };
+    static inline KoID id() { return KoID("cimg", i18n("Image Restoration (cimg-based)")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return false; }
     virtual ColorSpaceIndependence colorSpaceIndependence();
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration * configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration() { return new KisCImgFilterConfiguration();};
+    virtual KisFilterConfiguration * configuration() { return new KisCImgFilterConfiguration();}
 private:
 
     bool process();
@@ -116,8 +116,6 @@ private:
         cimg_library::CImg<> img, img0, flow,G;
         cimg_library::CImgl<> eigen;
         cimg_library::CImg<unsigned char> mask;
-
-
 
 };
 

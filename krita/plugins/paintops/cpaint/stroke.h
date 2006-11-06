@@ -54,7 +54,7 @@ class Stroke {
     vector<Sample*> sampleV;
 
     Stroke (Brush *brush);
-    virtual ~Stroke() {};
+    virtual ~Stroke() {}
 
     void Draw (KisPaintDeviceSP);
     void Redraw ();

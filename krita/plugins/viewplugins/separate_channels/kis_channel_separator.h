@@ -52,7 +52,7 @@ class KisChannelSeparator : public KisProgressSubject {
 public:
 
     KisChannelSeparator(KisView * view);
-    virtual ~KisChannelSeparator() {};
+    virtual ~KisChannelSeparator() {}
 
     void separate(KisProgressDisplayInterface * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor);
 

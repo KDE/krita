@@ -36,7 +36,7 @@ public:
            setProperty("threshold", nt);
     }
         
-    double threshold() { return getDouble("threshold"); };
+    double threshold() { return getDouble("threshold"); }
 };
 
 
@@ -53,14 +53,14 @@ public:
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     virtual KisFilterConfiguration * configuration(QWidget* nwidget);
-    virtual KisFilterConfiguration * configuration() {return new KisWaveletNoiseReductionConfiguration( BEST_WAVELET_THRESHOLD_VALUE );};
+    virtual KisFilterConfiguration * configuration() {return new KisWaveletNoiseReductionConfiguration( BEST_WAVELET_THRESHOLD_VALUE );}
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
-    static inline KoID id() { return KoID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); };
+    static inline KoID id() { return KoID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }
-    virtual bool supportsThreading() { return false; };
+    virtual bool supportsThreading() { return false; }
 
 };
 

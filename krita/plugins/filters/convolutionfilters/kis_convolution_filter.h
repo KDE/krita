@@ -30,14 +30,14 @@ public:
     KisConvolutionConfiguration(const QString & name, KisKernel * matrix)
         : KisFilterConfiguration( name, 1 )
         , m_matrix(matrix)
-    {};
+    {}
 
     void fromXML(const QString & s);
     QString toString();
 
 public:
 
-    inline KisKernelSP matrix() { return m_matrix; };
+    inline KisKernelSP matrix() { return m_matrix; }
 
 private:
 
@@ -54,7 +54,7 @@ public:
 
     KisConvolutionFilter(const KoID& id, const QString & category, const QString & entry)
         : KisFilter( id, category, entry )
-        {};
+        {}
 
 public:
 
@@ -74,14 +74,14 @@ public:
 
     KisConvolutionConstFilter(const KoID& id, const QString & category, const QString & entry) 
 	: KisConvolutionFilter(id, category, entry) 
-    {};
+    {}
 
-    virtual ~KisConvolutionConstFilter() {};
+    virtual ~KisConvolutionConstFilter() {}
 
 public:
 
     virtual KisFilterConfiguration * configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration() { return configuration(0); };
+    virtual KisFilterConfiguration * configuration() { return configuration(0); }
 
 protected:
 

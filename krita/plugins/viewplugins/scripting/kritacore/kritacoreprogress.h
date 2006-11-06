@@ -79,7 +79,7 @@ class KRITASCRIPTING_EXPORT KritaCoreProgress : public KisProgressSubject
          */
         void progressDone();
 
-        //inline void setPackagePath(QString path) { m_packagePath = path; };
+        //inline void setPackagePath(QString path) { m_packagePath = path; }
         //inline QString packagePath() { return m_packagePath; }
 
     private:

@@ -37,8 +37,8 @@ class KisFilterFastColorTransfer : public KisFilter
         KisFilterFastColorTransfer();
     public:
         virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-        virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; };
-        static inline KoID id() { return KoID("colortransfer", i18n("Color Transfer")); };
+        virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; }
+        static inline KoID id() { return KoID("colortransfer", i18n("Color Transfer")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }

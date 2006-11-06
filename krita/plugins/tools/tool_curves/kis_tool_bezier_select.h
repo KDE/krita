@@ -58,7 +58,7 @@ public:
             setIcon("tool_bezier_select");
         };
 
-    virtual ~KisToolBezierSelectFactory(){};
+    virtual ~KisToolBezierSelectFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolBezierSelect(canvas);

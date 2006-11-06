@@ -63,17 +63,15 @@ public:
             setPriority(0);
             setIcon("tool_move");
             setShortcut( Qt::SHIFT + Qt::Key_V );
-        };
+        }
 
-    virtual ~KisToolMoveFactory(){};
+    virtual ~KisToolMoveFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolMove(canvas);
     }
 
 };
-
-
 
 #endif // KIS_TOOL_MOVE_H_
 

@@ -53,7 +53,7 @@ class KisDlgFiltersGallery : public KDialog
         KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name = "");
         ~KisDlgFiltersGallery();
     public:
-        inline KisFilter* currentFilter() { return m_currentFilter; };
+        inline KisFilter* currentFilter() { return m_currentFilter; }
         inline  QWidget* currentConfigWidget() { return m_currentConfigWidget; }
     private slots:
         void slotConfigChanged();

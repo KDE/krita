@@ -33,11 +33,11 @@ public:
             setProperty("dropsize", dropSize);
             setProperty("number", number);
             setProperty("fishEyes", fishEyes);
-        };
+        }
 public:
-    inline quint32 dropSize() { return getInt("dropsize"); };
-    inline quint32 number() {return getInt("number"); };
-    inline quint32 fishEyes() {return getInt("fishEyes"); };
+    inline quint32 dropSize() { return getInt("dropsize"); }
+    inline quint32 number() {return getInt("number"); }
+    inline quint32 fishEyes() {return getInt("fishEyes"); }
     
 };
 
@@ -47,7 +47,7 @@ public:
     KisRainDropsFilter();
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    static inline KoID id() { return KoID("raindrops", i18n("Raindrops")); };
+    static inline KoID id() { return KoID("raindrops", i18n("Raindrops")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )

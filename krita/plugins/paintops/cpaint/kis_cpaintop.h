@@ -52,7 +52,7 @@ class KisCPaintOpSettings : public KisPaintOpSettings {
 
 public:
     KisCPaintOpSettings(QWidget * parent,  QValueVector<Brush*> m_brushes);
-    virtual ~KisCPaintOpSettings() {};
+    virtual ~KisCPaintOpSettings() {}
 
     int brush() const;
     int ink() const;

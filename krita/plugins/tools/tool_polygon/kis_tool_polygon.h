@@ -82,9 +82,9 @@ public:
             setToolType( TOOL_TYPE_SHAPE );
             setIcon( "tool_polygon" );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolPolygonFactory(){};
+    virtual ~KisToolPolygonFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolPolygon(canvas);

@@ -96,7 +96,7 @@ public:
         };
 
 
-    virtual ~KisToolPerspectiveGridFactory() {};
+    virtual ~KisToolPerspectiveGridFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase * canvas) {
         return new KisToolPerspectiveGrid(canvas);

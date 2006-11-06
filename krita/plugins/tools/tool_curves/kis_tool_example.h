@@ -59,7 +59,7 @@ public:
             setPriority( 0 );
         };
 
-    virtual ~KisToolExampleFactory(){};
+    virtual ~KisToolExampleFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolExample(canvas);

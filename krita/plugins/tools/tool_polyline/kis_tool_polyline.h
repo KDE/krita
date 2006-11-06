@@ -92,9 +92,9 @@ public:
             setToolType( TOOL_TYPE_SHAPE );
             setIcon( "polyline" );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolPolylineFactory(){};
+    virtual ~KisToolPolylineFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolPolyline(canvas);

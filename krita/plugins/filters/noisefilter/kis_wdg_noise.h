@@ -33,7 +33,7 @@ class KisWdgNoise : public KisFilterConfigWidget
         KisWdgNoise(KisFilter* nfilter, QWidget* parent = 0, const char* name = 0);
         ~KisWdgNoise();
     public:
-        inline Ui_WdgNoiseOptions* widget() { return m_widget; };
+        inline Ui_WdgNoiseOptions* widget() { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
     private:
         Ui_WdgNoiseOptions* m_widget;

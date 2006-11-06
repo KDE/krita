@@ -108,17 +108,15 @@ public:
             setIcon( "tool_gradient" );
             setShortcut( Qt::Key_G );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolGradientFactory(){};
+    virtual ~KisToolGradientFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolGradient(canvas);
     }
 
 };
-
-
 
 #endif //KIS_TOOL_GRADIENT_H_
 

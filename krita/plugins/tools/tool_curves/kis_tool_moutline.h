@@ -124,7 +124,7 @@ public:
             setPriority( 0 );
         };
 
-    virtual ~KisToolMagneticFactory(){};
+    virtual ~KisToolMagneticFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolMagnetic(canvas);

@@ -70,9 +70,9 @@ public:
             setToolType( TOOL_TYPE_SHAPE );
             setIcon( "tool_ellipse" );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolEllipseFactory(){};
+    virtual ~KisToolEllipseFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolEllipse(canvas);

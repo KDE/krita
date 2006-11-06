@@ -38,12 +38,12 @@ public:
     KisAutoContrast();
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    static inline KoID id() { return KoID("autocontrast", i18n("Auto Contrast")); };
+    static inline KoID id() { return KoID("autocontrast", i18n("Auto Contrast")); }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsPainting() { return false; }
-    virtual bool supportsThreading() { return false; };
+    virtual bool supportsThreading() { return false; }
 
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
+    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
     virtual bool workWith(KoColorSpace* cs);
 
 };
@@ -55,12 +55,12 @@ class KisDesaturateFilter : public KisFilter {
         ~KisDesaturateFilter();
     public:
         virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-        static inline KoID id() { return KoID("desaturate", i18n("Desaturate")); };
+        static inline KoID id() { return KoID("desaturate", i18n("Desaturate")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
 
-        virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
+        virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
         virtual bool workWith(KoColorSpace* cs);
 
     private:

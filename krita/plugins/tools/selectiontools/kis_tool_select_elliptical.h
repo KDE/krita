@@ -84,9 +84,9 @@ public:
             setIcon( "tool_elliptical_selection" );
             setShortcut( Qt::Key_J );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolSelectEllipticalFactory(){};
+    virtual ~KisToolSelectEllipticalFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectElliptical(canvas);

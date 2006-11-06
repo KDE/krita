@@ -33,7 +33,7 @@ class KisWdgRandomPick : public KisFilterConfigWidget
         KisWdgRandomPick(KisFilter* nfilter, QWidget* parent = 0, const char* name = 0);
         ~KisWdgRandomPick();
     public:
-        inline Ui_WdgRandomPickOptions* widget() { return m_widget; };
+        inline Ui_WdgRandomPickOptions* widget() { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
     private:
         Ui_WdgRandomPickOptions* m_widget;

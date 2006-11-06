@@ -86,10 +86,9 @@ public:
             setPriority(0);
             setIcon("colorpicker");
             setShortcut( Qt::Key_P );
-        };
+        }
 
-
-    virtual ~KisToolColorPickerFactory(){};
+    virtual ~KisToolColorPickerFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolColorPicker(canvas);

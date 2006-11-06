@@ -42,7 +42,7 @@ class KisDropshadow : public KisProgressSubject {
 public:
 
     KisDropshadow(KisView * view);
-    virtual ~KisDropshadow() {};
+    virtual ~KisDropshadow() {}
 
     void dropshadow(KisProgressDisplayInterface * progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, QColor color, quint8 opacity, bool allowResize);
 

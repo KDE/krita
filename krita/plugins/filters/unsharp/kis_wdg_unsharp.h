@@ -31,7 +31,7 @@ class KisWdgUnsharp : public KisFilterConfigWidget
     Q_OBJECT
     public:
         KisWdgUnsharp( KisFilter* nfilter, QWidget * parent, const char * name);
-        inline Ui_WdgUnsharp* widget() { return m_widget; };
+        inline Ui_WdgUnsharp* widget() { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
     private:
         Ui_WdgUnsharp* m_widget;

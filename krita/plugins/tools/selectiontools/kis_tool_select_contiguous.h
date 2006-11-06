@@ -51,7 +51,7 @@ public:
 
     virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 7; }
-    virtual enumToolType toolType() { return TOOL_SELECT; };
+    virtual enumToolType toolType() { return TOOL_SELECT; }
 
     virtual QWidget* createOptionWidget(QWidget* parent);
         virtual QWidget* optionWidget();
@@ -84,9 +84,9 @@ public:
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_contiguous_selection" );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolSelectContiguousFactory(){};
+    virtual ~KisToolSelectContiguousFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectContiguous(canvas);

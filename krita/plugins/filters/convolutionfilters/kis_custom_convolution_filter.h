@@ -31,10 +31,10 @@ class QWidget;
 class KisCustomConvolutionFilter : public KisConvolutionFilter {
 
 public:
-    KisCustomConvolutionFilter() : KisConvolutionFilter(id(), "enhance", i18n("&Custom Convolution...")) {};
+    KisCustomConvolutionFilter() : KisConvolutionFilter(id(), "enhance", i18n("&Custom Convolution...")) {}
     
 public:
-    static inline KoID id() { return KoID("custom convolution", i18n("Custom Convolution")); };
+    static inline KoID id() { return KoID("custom convolution", i18n("Custom Convolution")); }
     virtual bool supportsPainting() { return true; }
     virtual bool supportsIncrementalPainting() { return true; }
 
@@ -42,7 +42,7 @@ public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration * configuration();
 protected:
-    virtual KisKernelSP matrix() { return m_matrix; };
+    virtual KisKernelSP matrix() { return m_matrix; }
 private:
     KisKernelSP m_matrix;
 };

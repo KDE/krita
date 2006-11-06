@@ -92,9 +92,9 @@ public:
             setToolType(TOOL_TYPE_SHAPE);
             setPriority(0);
             setIcon("tool_star");
-        };
+        }
 
-    virtual ~KisToolStarFactory(){};
+    virtual ~KisToolStarFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolStar(canvas);

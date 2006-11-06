@@ -82,9 +82,9 @@ public:
             setIcon( "tool_rect_selection" );
             setShortcut( Qt::Key_R );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolSelectRectangularFactory(){};
+    virtual ~KisToolSelectRectangularFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectRectangular(canvas);

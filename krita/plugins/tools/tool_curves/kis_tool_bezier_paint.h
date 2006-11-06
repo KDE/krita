@@ -55,7 +55,7 @@ public:
             setIcon("tool_bezier_paint");
         };
 
-    virtual ~KisToolBezierPaintFactory(){};
+    virtual ~KisToolBezierPaintFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolBezierPaint(canvas);

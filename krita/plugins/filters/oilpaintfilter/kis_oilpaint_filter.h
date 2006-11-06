@@ -34,11 +34,11 @@ public:
         {
             setProperty("brushSize", brushSize);
             setProperty("smooth", smooth);
-        };
+        }
 public:
 
-    inline quint32 brushSize() { return getInt("brushSize"); };
-    inline quint32 smooth() {return getInt("smooth"); };
+    inline quint32 brushSize() { return getInt("brushSize"); }
+    inline quint32 smooth() {return getInt("smooth"); }
 
 };
 
@@ -49,14 +49,14 @@ public:
     KisOilPaintFilter();
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    static inline KoID id() { return KoID("oilpaint", i18n("Oilpaint")); };
+    static inline KoID id() { return KoID("oilpaint", i18n("Oilpaint")); }
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
     public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration * configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration() { return new KisOilPaintFilterConfiguration( 1, 30); };
+    virtual KisFilterConfiguration * configuration() { return new KisOilPaintFilterConfiguration( 1, 30); }
 private:
     void OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h, int BrushSize, int Smoothness);
     uint MostFrequentColor(KisPaintDeviceSP, const QRect& bounds, int X, int Y, int Radius, int Intensity);

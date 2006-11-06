@@ -42,7 +42,7 @@ class KisCustomConvolutionFilterConfigurationWidget : public KisFilterConfigWidg
 public:
 
     KisCustomConvolutionFilterConfigurationWidget( KisFilter* nfilter, QWidget * parent);
-    inline KisCustomConvolutionFilterConfigurationBaseWidget* matrixWidget() const { return m_ccfcws; };
+    inline KisCustomConvolutionFilterConfigurationBaseWidget* matrixWidget() const { return m_ccfcws; }
     void setConfiguration(KisFilterConfiguration * config);
     KisFilterConfiguration* configuration() const;
 

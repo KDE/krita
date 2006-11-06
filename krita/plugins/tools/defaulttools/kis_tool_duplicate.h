@@ -80,17 +80,15 @@ public:
             setToolType( TOOL_TYPE_FREEHAND );
             setIcon( "tool_duplicate" );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolDuplicateFactory(){};
+    virtual ~KisToolDuplicateFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolDuplicate(canvas);
     }
 
 };
-
-
 
 #endif //__KIS_TOOL_DUPLICATE_H__
 

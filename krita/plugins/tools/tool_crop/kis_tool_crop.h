@@ -146,7 +146,7 @@ public:
             setIcon("tool_crop");
         };
 
-    virtual ~KisToolCropFactory(){};
+    virtual ~KisToolCropFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolCrop(canvas);

@@ -56,7 +56,7 @@ class KisPaintDeviceShapeFactory : public KoShapeFactory {
 public:
 
     KisPaintDeviceShapeFactory(QObject *parent,  const QStringList &);
-    virtual ~KisPaintDeviceShapeFactory() {};
+    virtual ~KisPaintDeviceShapeFactory() {}
 
 public:
 

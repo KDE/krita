@@ -29,11 +29,11 @@ class KisFilterMax : public KisFilter
         KisFilterMax();
     public:
         virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-        static inline KoID id() { return KoID("maximize", i18n("Maximize Channel")); };
+        static inline KoID id() { return KoID("maximize", i18n("Maximize Channel")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
-        virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; };
+        virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
 };
 
 class KisFilterMin : public KisFilter
@@ -42,11 +42,11 @@ class KisFilterMin : public KisFilter
         KisFilterMin();
     public:
         virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-        static inline KoID id() { return KoID("minimize", i18n("Minimize Channel")); };
+        static inline KoID id() { return KoID("minimize", i18n("Minimize Channel")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
-        virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; };
+        virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
 };
 
 #endif

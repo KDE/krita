@@ -67,9 +67,9 @@ public:
             setIcon( "tool_pan" );
             setPriority( 0 );
             setShortcut( Qt::SHIFT + Qt::Key_H );
-        };
+        }
 
-    virtual ~KisToolPanFactory(){};
+    virtual ~KisToolPanFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolPan(canvas);

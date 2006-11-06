@@ -72,9 +72,9 @@ public:
             setIcon( "tool_freehand" );
             setShortcut( Qt::Key_B );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolBrushFactory(){};
+    virtual ~KisToolBrushFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolBrush(canvas);

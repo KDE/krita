@@ -94,19 +94,15 @@ public:
             setIcon( "color_fill" );
             setShortcut( Qt::Key_F );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolFillFactory(){};
+    virtual ~KisToolFillFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolFill(canvas);
     }
 
-
 };
-
-
-
 
 #endif //__filltool_h__
 

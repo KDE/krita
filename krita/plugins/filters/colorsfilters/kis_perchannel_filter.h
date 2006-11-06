@@ -68,19 +68,19 @@ class KisPerChannelFilter
     : public KisFilter
 {
 public:
-    KisPerChannelFilter() : KisFilter( id(), "adjust", i18n("&Color Adjustment curves...")) {};
+    KisPerChannelFilter() : KisFilter( id(), "adjust", i18n("&Color Adjustment curves...")) {}
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
-    virtual KisFilterConfiguration* configuration() { return new KisPerChannelFilterConfiguration(0); };
+    virtual KisFilterConfiguration* configuration() { return new KisPerChannelFilterConfiguration(0); }
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    static inline KoID id() { return KoID("perchannel", i18n("Color Adjustment")); };
+    static inline KoID id() { return KoID("perchannel", i18n("Color Adjustment")); }
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
 
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
+    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
 private:
 };
 
@@ -91,7 +91,7 @@ class KisPerChannelConfigWidget : public KisFilterConfigWidget {
 
 public:
     KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name = 0, Qt::WFlags f = 0 );
-    virtual ~KisPerChannelConfigWidget() {};
+    virtual ~KisPerChannelConfigWidget() {}
 
     KisPerChannelFilterConfiguration * config();
     void setConfiguration(KisFilterConfiguration * config);

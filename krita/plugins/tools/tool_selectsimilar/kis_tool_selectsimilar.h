@@ -92,7 +92,7 @@ public:
             setPriority( 0 );
         };
 
-    virtual ~KisToolSelectSimilarFactory(){};
+    virtual ~KisToolSelectSimilarFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectSimilar(canvas);

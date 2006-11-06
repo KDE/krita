@@ -71,9 +71,9 @@ public:
             setIcon( "tool_eraser_selection" );
             setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolSelectEraserFactory(){};
+    virtual ~KisToolSelectEraserFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectEraser(canvas);

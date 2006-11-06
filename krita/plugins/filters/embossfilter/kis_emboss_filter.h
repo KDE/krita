@@ -31,9 +31,9 @@ public:
         : KisFilterConfiguration( "emboss", 1 )
     {
         setProperty("depth", depth);
-    };
+    }
 public:
-    inline quint32 depth() { return getInt("depth"); };
+    inline quint32 depth() { return getInt("depth"); }
 };
 
 class KisEmbossFilter : public KisFilter
@@ -42,7 +42,7 @@ public:
     KisEmbossFilter();
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    static inline KoID id() { return KoID("emboss", i18n("Emboss")); };
+    static inline KoID id() { return KoID("emboss", i18n("Emboss")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
@@ -50,7 +50,7 @@ public:
     public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
-    virtual KisFilterConfiguration* configuration() {return new KisEmbossFilterConfiguration( 30 );};
+    virtual KisFilterConfiguration* configuration() {return new KisEmbossFilterConfiguration( 30 );}
 
 private:
     inline int Lim_Max (int Now, int Up, int Max);

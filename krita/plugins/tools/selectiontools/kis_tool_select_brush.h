@@ -73,9 +73,9 @@ public:
             setIcon( "tool_brush_selection" );
             setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B);
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolSelectBrushFactory(){};
+    virtual ~KisToolSelectBrushFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectBrush(canvas);

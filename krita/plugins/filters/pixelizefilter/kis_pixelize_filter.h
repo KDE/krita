@@ -32,10 +32,10 @@ public:
         {
             setProperty("pixelWidth", pixelWidth);
             setProperty("pixelHeight", pixelHeight);
-        };
+        }
 public:
-    inline quint32 pixelWidth() { return getInt("pixelWidth"); };
-    inline quint32 pixelHeight() {return getInt("pixelHeight"); };
+    inline quint32 pixelWidth() { return getInt("pixelWidth"); }
+    inline quint32 pixelHeight() {return getInt("pixelHeight"); }
 };
 
 class KisPixelizeFilter : public KisFilter
@@ -44,7 +44,7 @@ public:
     KisPixelizeFilter();
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    static inline KoID id() { return KoID("pixelize", i18n("Pixelize")); };
+    static inline KoID id() { return KoID("pixelize", i18n("Pixelize")); }
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )

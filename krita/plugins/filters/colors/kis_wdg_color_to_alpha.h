@@ -31,7 +31,7 @@ class KisWdgColorToAlpha : public KisFilterConfigWidget
     Q_OBJECT
     public:
         KisWdgColorToAlpha( KisFilter* nfilter, QWidget * parent, const char * name);
-        inline Ui_WdgColorToAlphaBase* widget() { return m_widget; };
+        inline Ui_WdgColorToAlphaBase* widget() { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
     private:
         Ui_WdgColorToAlphaBase* m_widget;

@@ -86,9 +86,9 @@ public:
             setIcon( "viewmag" );
             setPriority( 0 );
             setShortcut( Qt:Key_Z );
-        };
+        }
 
-    virtual ~KisToolZoomFactory(){};
+    virtual ~KisToolZoomFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolZoom(canvas);

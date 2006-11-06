@@ -151,7 +151,8 @@ public:
             setIcon( "transform" );
             setPriority( 0 );
         };
-    virtual ~KisToolTransformFactory(){};
+
+    virtual ~KisToolTransformFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolTransform(canvas);

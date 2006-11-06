@@ -86,9 +86,9 @@ public:
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_polygonal_selection" );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolSelectPolygonalFactory(){};
+    virtual ~KisToolSelectPolygonalFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return =  new KisToolSelectPolygonal(canvas);

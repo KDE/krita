@@ -58,7 +58,7 @@ class KisImageShapeFactory : public KoShapeFactory {
 public:
 
     KisImageShapeFactory(QObject *parent,  const QStringList &);
-    virtual ~KisImageShapeFactory() {};
+    virtual ~KisImageShapeFactory() {}
 
 public:
 

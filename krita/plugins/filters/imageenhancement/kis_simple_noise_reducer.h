@@ -34,8 +34,8 @@ class KisSimpleNoiseReducerConfiguration
             setProperty("threshold", nt);
             setProperty("windowsize", ws);
         }
-        int threshold() { return getInt("threshold"); };
-        int windowsize() { return getInt("windowsize"); };
+        int threshold() { return getInt("threshold"); }
+        int windowsize() { return getInt("windowsize"); }
 };
 
 class KisSimpleNoiseReducer : public KisFilter
@@ -46,10 +46,10 @@ class KisSimpleNoiseReducer : public KisFilter
     public:
         virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
         virtual KisFilterConfiguration * configuration(QWidget* nwidget);
-        virtual KisFilterConfiguration * configuration() { return new KisSimpleNoiseReducerConfiguration( 50, 1); };
+        virtual KisFilterConfiguration * configuration() { return new KisSimpleNoiseReducerConfiguration( 50, 1); }
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
-        static inline KoID id() { return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer")); };
+        static inline KoID id() { return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer")); }
         virtual bool supportsPainting() { return false; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }

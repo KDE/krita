@@ -31,9 +31,9 @@ public:
         : KisFilterConfiguration( "roundcorners", 1 )
     {
         setProperty("radius", radius);
-    };
+    }
 public:
-    inline qint32 radius() { return getInt("radius"); };
+    inline qint32 radius() { return getInt("radius"); }
 };
 
 class KisRoundCornersFilter : public KisFilter
@@ -42,7 +42,7 @@ public:
     KisRoundCornersFilter();
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    static inline KoID id() { return KoID("roundcorners", i18n("Round Corners")); };
+    static inline KoID id() { return KoID("roundcorners", i18n("Round Corners")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
@@ -50,7 +50,7 @@ public:
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration() { return new KisRoundCornersFilterConfiguration( 30 ); };
+    virtual KisFilterConfiguration * configuration() { return new KisRoundCornersFilterConfiguration( 30 ); }
 private:
 };
 

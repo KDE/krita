@@ -121,7 +121,7 @@ public:
             setPriority( 0 );
         };
 
-    virtual ~KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&){};
+    virtual ~KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return KisToolPerspectiveTransform(canvas);

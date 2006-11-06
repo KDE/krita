@@ -87,9 +87,9 @@ public:
             setToolType(TOOL_TYPE_SHAPE);
             setPriority(0);
             setIcon("tool_line");
-        };
+        }
 
-    virtual ~KisToolLineFactory(){};
+    virtual ~KisToolLineFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolLine(canvas);

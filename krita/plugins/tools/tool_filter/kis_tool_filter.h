@@ -70,9 +70,9 @@ public:
             setToolType( TOOL_TYPE_FREEHAND );
             setIcon( "tool_filter" );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolFilterFactory(){};
+    virtual ~KisToolFilterFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolFilter(canvas);

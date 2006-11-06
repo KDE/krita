@@ -88,9 +88,9 @@ public:
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_outline_selection" );
             setPriority( 0 );
-        };
+        }
 
-    virtual ~KisToolSelectOutlineFactory(){};
+    virtual ~KisToolSelectOutlineFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolSelectOutline(canvas);

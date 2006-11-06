@@ -87,6 +87,7 @@ class KoCanvasResourceProvider : public QObject {
 public:
 
     KoCanvasResourceProvider(QObject * parent);
+    ~KoCanvasResourceProvider() {}
 
     // XXX: Who is going to delete the resource objects? This class?
     // The QHash hashmap? The creator?
@@ -104,7 +105,6 @@ signals:
 
 private:
 
-    ~KoCanvasResourceProvider() {};
     KoCanvasResourceProvider(const KoCanvasResourceProvider&);
     KoCanvasResourceProvider& operator=(const KoCanvasResourceProvider&);
 

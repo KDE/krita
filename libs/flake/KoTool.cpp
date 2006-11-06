@@ -36,6 +36,7 @@ KoTool::KoTool(KoCanvasBase *canvas )
 {
     if(m_canvas) { 
         KoCanvasResourceProvider * crp = m_canvas->resourceProvider();
+        Q_ASSERT_X(crp, "KoTool::KoTool", "No KoCanvasResourceProvider");
         if (crp)
             connect( m_canvas->resourceProvider(),
                  SIGNAL( sigResourceChanged(const KoCanvasResource & ) ),

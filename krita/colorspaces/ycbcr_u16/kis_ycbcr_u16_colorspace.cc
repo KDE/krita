@@ -26,8 +26,8 @@
 const Q_INT32 MAX_CHANNEL_YCbCr = 3;
 const Q_INT32 MAX_CHANNEL_YCbCrA = 4;
 
-KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace(KisColorSpaceFactoryRegistry* parent, KisProfile* p)
-    : KisU16BaseColorSpace(KisID("YCbCrAU16", i18n("YCbCr (16-bit integer/channel)")), TYPE_YCbCr_16, icSigYCbCrData, parent, p)
+KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace(KisColorSpaceFactoryRegistry* parent, KisProfile* /*p*/)
+    : KisU16BaseColorSpace(KisID("YCbCrAU16", i18n("YCbCr (16-bit integer/channel)")), TYPE_YCbCr_16, icSigYCbCrData, parent, 0)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Y"), "Y", PIXEL_Y * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
     m_channels.push_back(new KisChannelInfo(i18n("Cb"), "Cb", PIXEL_Cb * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
@@ -35,6 +35,7 @@ KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace(KisColorSpaceFactoryRegistry* paren
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), "A", PIXEL_ALPHA * sizeof(Q_UINT16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
 
     m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
+    KisAbstractColorSpace::init();
 }
 
 
@@ -67,7 +68,7 @@ void KisYCbCrU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfi
 {
     if(getProfile())
     {
-        KisYCbCrU16ColorSpace::fromQColor(c, dstU8, profile);
+        KisU16BaseColorSpace::fromQColor(c, dstU8, profile);
     } else {
         Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
         dst->Y = computeY( c.red(), c.green(), c.blue());
@@ -80,7 +81,7 @@ void KisYCbCrU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8
 {
     if(getProfile())
     {
-        KisYCbCrU16ColorSpace::fromQColor(c, opacity, dstU8, profile);
+        KisU16BaseColorSpace::fromQColor(c, opacity, dstU8, profile);
     } else {
         Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
         dst->Y = computeY( c.red(), c.green(), c.blue());
@@ -94,7 +95,7 @@ void KisYCbCrU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile
 {
     if(getProfile())
     {
-        KisYCbCrU16ColorSpace::toQColor(srcU8, c, profile);
+        KisU16BaseColorSpace::toQColor(srcU8, c, profile);
         
     } else {
         const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
@@ -106,7 +107,7 @@ void KisYCbCrU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *o
 {
     if(getProfile())
     {
-        KisYCbCrU16ColorSpace::toQColor(srcU8, c, opacity, profile);
+        KisU16BaseColorSpace::toQColor(srcU8, c, opacity, profile);
     } else {
         const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
         c->setRgb(computeRed(src->Y,src->Cb,src->Cr) >> 8, computeGreen(src->Y,src->Cb,src->Cr) >> 8, computeBlue(src->Y,src->Cb,src->Cr) >> 8);
@@ -117,7 +118,7 @@ void KisYCbCrU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *o
 Q_UINT8 KisYCbCrU16ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
 {
     if(getProfile())
-        return KisYCbCrU16ColorSpace::difference(src1U8, src2U8);
+        return KisU16BaseColorSpace::difference(src1U8, src2U8);
     const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
     const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
 
@@ -180,7 +181,7 @@ Q_UINT32 KisYCbCrU16ColorSpace::pixelSize() const {
 QImage KisYCbCrU16ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height, KisProfile *  dstProfile, Q_INT32 renderingIntent, float exposure )
 {
     if(getProfile())
-        return KisYCbCrU16ColorSpace::convertToQImage( data, width, height, dstProfile, renderingIntent, exposure);
+        return KisU16BaseColorSpace::convertToQImage( data, width, height, dstProfile, renderingIntent, exposure);
     
     QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
     img.setAlphaBuffer(true);
@@ -192,22 +193,12 @@ QImage KisYCbCrU16ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width
         Q_UINT16 Y = *( data + i + PIXEL_Y );
         Q_UINT16 Cb = *( data + i + PIXEL_Cb );
         Q_UINT16 Cr = *( data + i + PIXEL_Cr );
-#ifdef __BIG_ENDIAN__
-        *( j + 0)  = *( data + i + PIXEL_ALPHA ) >> 8;
-        *( j + 1 ) = computeRed(Y,Cb,Cr) >> 8;
-        *( j + 2 ) = computeGreen(Y,Cb,Cr) >> 8;
-        *( j + 3 ) = computeBlue(Y,Cr,Cr) >> 8;
-#else
         *( j + 3)  = *( data + i + PIXEL_ALPHA ) >> 8;
         *( j + 2 ) = computeRed(Y,Cb,Cr) >> 8;
         *( j + 1 ) = computeGreen(Y,Cb,Cr) >> 8;
         *( j + 0 ) = computeBlue(Y,Cb,Cr) >> 8;
-/*        *( j + 2 ) = Y;
-        *( j + 1 ) = Cb;
-        *( j + 0 ) = Cr;*/
-#endif
         i += MAX_CHANNEL_YCbCrA;
-        j += MAX_CHANNEL_YCbCrA;
+        j += 4;
     }
     return img;
 }

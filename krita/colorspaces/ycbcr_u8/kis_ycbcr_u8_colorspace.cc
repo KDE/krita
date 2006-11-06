@@ -26,8 +26,8 @@
 const Q_INT32 MAX_CHANNEL_YCbCr = 3;
 const Q_INT32 MAX_CHANNEL_YCbCrA = 4;
 
-KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace(KisColorSpaceFactoryRegistry* parent, KisProfile* p)
-    : KisU8BaseColorSpace(KisID("YCbCrAU8", i18n("YCbCr (8-bit integer/channel)")), TYPE_YCbCr_8, icSigYCbCrData, parent, p)
+KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace(KisColorSpaceFactoryRegistry* parent, KisProfile* /*p*/)
+    : KisU8BaseColorSpace(KisID("YCbCrAU8", i18n("YCbCr (8-bit integer/channel)")), TYPE_YCbCr_8, icSigYCbCrData, parent, 0)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Y"), "Y", PIXEL_Y * sizeof(Q_UINT8), KisChannelInfo::COLOR, KisChannelInfo::UINT8, sizeof(Q_UINT8)));
     m_channels.push_back(new KisChannelInfo(i18n("Cb"), "Cb", PIXEL_Cb * sizeof(Q_UINT8), KisChannelInfo::COLOR, KisChannelInfo::UINT8, sizeof(Q_UINT8)));
@@ -35,6 +35,7 @@ KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace(KisColorSpaceFactoryRegistry* parent,
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), "A", PIXEL_ALPHA * sizeof(Q_UINT8), KisChannelInfo::ALPHA, KisChannelInfo::UINT8, sizeof(Q_UINT8)));
 
     m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT8);
+    KisAbstractColorSpace::init();
 }
 
 
@@ -192,22 +193,12 @@ QImage KisYCbCrU8ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width,
         Q_UINT8 Y = *( data + i + PIXEL_Y );
         Q_UINT8 Cb = *( data + i + PIXEL_Cb );
         Q_UINT8 Cr = *( data + i + PIXEL_Cr );
-#ifdef __BIG_ENDIAN__
-        *( j + 0)  = *( data + i + PIXEL_ALPHA );
-        *( j + 1 ) = computeRed(Y,Cb,Cr);
-        *( j + 2 ) = computeGreen(Y,Cb,Cr);
-        *( j + 3 ) = computeBlue(Y,Cr,Cr);
-#else
         *( j + 3)  = *( data + i + PIXEL_ALPHA );
         *( j + 2 ) = computeRed(Y,Cb,Cr);
         *( j + 1 ) = computeGreen(Y,Cb,Cr);
         *( j + 0 ) = computeBlue(Y,Cb,Cr);
-/*        *( j + 2 ) = Y;
-        *( j + 1 ) = Cb;
-        *( j + 0 ) = Cr;*/
-#endif
         i += MAX_CHANNEL_YCbCrA;
-        j += MAX_CHANNEL_YCbCrA;
+        j += 4;
     }
     return img;
 }

@@ -81,7 +81,7 @@ bool KisToolFill::flood(int startX, int startY)
     if (!device) return false;
 
     if (m_fillOnlySelection) {
-        QRect rc = device->selection()->exactBounds();
+        QRect rc = device->selection()->selectedRect();
         KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace(),  "filled");
         KisFillPainter painter(filled);
         if (m_usePattern)

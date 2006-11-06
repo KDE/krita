@@ -138,21 +138,21 @@ void KGradientSlider::mousePressEvent ( QMouseEvent * e )
 
     distance = 1000; // just a big number
 
-    if (abs(x - m_blackcursor) < distance)
+    if (abs((int)(x - m_blackcursor)) < distance)
     {
-        distance = abs(x - m_blackcursor);
+        distance = abs((int)(x - m_blackcursor));
         closest_cursor = BlackCursor;
     }
 
-    if (abs(x - m_whitecursor) < distance)
+    if (abs((int)(x - m_whitecursor)) < distance)
     {
-        distance = abs(x - m_whitecursor);
+        distance = abs((int)(x - m_whitecursor));
         closest_cursor = WhiteCursor;
     }
 
-    if (m_gammaEnabled && (abs(x - m_gammacursor) < distance))
+    if (m_gammaEnabled && (abs((int)(x - m_gammacursor)) < distance))
     {
-        distance = abs(x - m_gammacursor);
+        distance = abs((int)(x - m_gammacursor));
         closest_cursor = GammaCursor;
     }
 

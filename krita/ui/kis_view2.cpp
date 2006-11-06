@@ -38,9 +38,12 @@
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
 #include <KoToolRegistry.h>
+#include <KoShapeManager.h>
+#include <KoShape.h>
 
 #include <kis_image.h>
 
+#include "kis_dummy_shape.h"
 #include "kis_resource_provider.h"
 #include "kis_factory2.h"
 #include "kis_canvas2.h"
@@ -160,6 +163,8 @@ void KisView2::slotInitializeCanvas()
     kDebug() << "Image completely loaded! W: "
              << image()->width() << ", H: "
              << image()->height() << endl;
+
+    m_d->canvas->shapeManager()->add( m_d->doc->imageShape() );
     m_d->canvas->setCanvasSize( image()->width(), image()->height() );
     m_d->filterManager->updateGUI();
 }

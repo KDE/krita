@@ -149,26 +149,16 @@ class KisDoc2::KisDocPrivate
 
 public:
 
-    KisDocPrivate( bool u,
-                   KCommandHistory * cmdH,
-                   KisImageSP img,
-                   KisNameServer * nameServer,
-                   KMacroCommand * curMacro,
-                   qint32 nestDepth,
-                   qint32 conversionDepth,
-                   int progressTotalSteps,
-                   int progressBase,
-                   KisDummyShape * shape
-        ) : undo( u )
-          , cmdHistory( cmdH )
-          , currentImage( img )
-          , nserver( nameServer )
-          , currentMacro( curMacro )
-          , macroNestDepth( nestDepth )
-          , conversionDepth( conversionDepth )
-          , ioProgressTotalSteps( progressTotalSteps )
-          , ioProgressBase( progressBase )
-          , imageShape( shape )
+    KisDocPrivate(
+        ) : undo( false )
+          , cmdHistory( 0 )
+          , nserver( 0 )
+          , currentMacro( 0 )
+          , macroNestDepth( 0 )
+          , conversionDepth( 0 )
+          , ioProgressTotalSteps( 0 )
+          , ioProgressBase( 0 )
+          , m_imageShape( new KisDummyShape() )
         {
         }
 
@@ -176,13 +166,13 @@ public:
         {
             delete cmdHistory;
             delete nserver;
+            delete m_imageShape;
             undoListeners.setAutoDelete( false );
         }
 
     bool undo;
     KCommandHistory *cmdHistory;
     Q3PtrList<KisCommandHistoryListener> undoListeners;
-    KisImageSP currentImage;
     KisNameServer *nserver;
     KMacroCommand *currentMacro;
     qint32 macroNestDepth;
@@ -190,14 +180,34 @@ public:
     int ioProgressTotalSteps;
     int ioProgressBase;
     QMap<KisLayer *, QString> layerFilenames; // temp storage during load
-    KisDummyShape * imageShape; // the master shape containing the image
+
+    void setImage( KisImageSP currentImage )
+        {
+            m_currentImage = currentImage;
+            m_imageShape->setImage( currentImage );
+        }
+
+    KisImageSP currentImage()
+        {
+            return m_currentImage ;
+        }
+
+    KisDummyShape * imageShape()
+        {
+            return m_imageShape;
+        }
+private:
+
+    KisImageSP m_currentImage;
+    KisDummyShape * m_imageShape; // the master shape containing the image
+
 
 };
 
 
 KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
     : super(parentWidget, parent, singleViewMode)
-    , m_d( new KisDocPrivate( false, 0, 0, 0, 0, 0, 0, 0, 0, new KisDummyShape() ) )
+    , m_d( new KisDocPrivate() )
 {
 
     setInstance( KisFactory2::instance(), false );
@@ -276,7 +286,7 @@ QDomDocument KisDoc2::saveXML()
     root.setAttribute("depth", (uint)sizeof(quint8));
     root.setAttribute("syntaxVersion", "1");
 
-    root.appendChild(saveImage(doc, m_d->currentImage));
+    root.appendChild(saveImage(doc, m_d->currentImage()));
 
     return doc;
 }
@@ -290,11 +300,12 @@ bool KisDoc2::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocu
             QDomElement elem = node.toElement();
             KisOasisLoadVisitor olv(this);
             olv.loadImage(elem);
-            if (!(m_d->currentImage = olv.image() ))
+            if (!olv.image() )
                 return false;
+            m_d->setImage( olv.image() );
             KoOasisStore* oasisStore =  new KoOasisStore( store );
             KisOasisLoadDataVisitor oldv(oasisStore, olv.layerFilenames());
-            m_d->currentImage->rootLayer()->accept(oldv);
+            m_d->currentImage()->rootLayer()->accept(oldv);
             return true;
         }
     }
@@ -318,12 +329,12 @@ bool KisDoc2::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
     // Save the structure
     KisOasisSaveVisitor osv(oasisStore);
     bodyWriter->startElement("office:body");
-    m_d->currentImage->rootLayer()->accept(osv);
+    m_d->currentImage()->rootLayer()->accept(osv);
     bodyWriter->endElement();
     oasisStore->closeContentWriter();
     // Sqve the data
     KisOasisSaveDataVisitor osdv(oasisStore, manifestWriter);
-    m_d->currentImage->rootLayer()->accept(osdv);
+    m_d->currentImage()->rootLayer()->accept(osdv);
     delete oasisStore;
     return true;
 }
@@ -353,13 +364,14 @@ bool KisDoc2::loadXML(QIODevice *, const QDomDocument& doc)
 
     setUndo(false);
 
+    // XXX: This still handles multi-image .kra files?
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {
                 QDomElement elem = node.toElement();
                 if (!(img = loadImage(elem)))
                     return false;
-                m_d->currentImage = img;
+                m_d->setImage( img );
             } else {
                 return false;
             }
@@ -400,7 +412,7 @@ QDomElement KisDoc2::saveImage(QDomDocument& doc, KisImageSP img)
     quint32 count=0;
     KisSaveXmlVisitor visitor(doc, image, count, true);
 
-    m_d->currentImage->rootLayer()->accept(visitor);
+    m_d->currentImage()->rootLayer()->accept(visitor);
 
     return image;
 }
@@ -722,36 +734,38 @@ bool KisDoc2::completeSaving(KoStore *store)
     bool external = isStoredExtern();
     qint32 totalSteps = 0;
 
-    if (!m_d->currentImage) return false;
+    KisImageSP img = m_d->currentImage();
 
-    totalSteps = (m_d->currentImage)->nlayers();
+    if (!img) return false;
+
+    totalSteps = img->nlayers();
 
 
     setIOSteps(totalSteps + 1);
 
     // Save the layers data
     quint32 count=0;
-    KisSaveVisitor visitor(m_d->currentImage, store, count);
+    KisSaveVisitor visitor( img, store, count);
 
     if(external)
         visitor.setExternalUri(uri);
 
-    m_d->currentImage->rootLayer()->accept(visitor);
+    img->rootLayer()->accept(visitor);
     // saving annotations
     // XXX this only saves EXIF and ICC info. This would probably need
     // a redesign of the dtd of the krita file to do this more generally correct
     // e.g. have <ANNOTATION> tags or so.
-    KisAnnotationSP annotation = (m_d->currentImage)->annotation("exif");
+    KisAnnotationSP annotation = img->annotation("exif");
     if (annotation) {
         location = external ? QString::null : uri;
-        location += (m_d->currentImage)->name() + "/annotations/exif";
+        location += (m_d->currentImage())->name() + "/annotations/exif";
         if (store->open(location)) {
             store->write(annotation->annotation());
             store->close();
         }
     }
-    if (m_d->currentImage->getProfile()) {
-        KoColorProfile *profile = m_d->currentImage->getProfile();
+    if (img->getProfile()) {
+        KoColorProfile *profile = img->getProfile();
         KisAnnotationSP annotation;
         if (profile)
         {
@@ -763,7 +777,7 @@ bool KisDoc2::completeSaving(KoStore *store)
 
         if (annotation) {
             location = external ? QString::null : uri;
-            location += m_d->currentImage->name() + "/annotations/icc";
+            location += img->name() + "/annotations/icc";
             if (store->open(location)) {
                 store->write(annotation->annotation());
                 store->close();
@@ -781,37 +795,40 @@ bool KisDoc2::completeLoading(KoStore *store)
     bool external = isStoredExtern();
     qint32 totalSteps = 0;
 
-    totalSteps = (m_d->currentImage)->nlayers();
+    KisImageSP img = m_d->currentImage();
+    if ( !img ) return false;
+
+    totalSteps = img->nlayers();
 
     setIOSteps(totalSteps);
 
     // Load the layers data
-    KisLoadVisitor visitor(m_d->currentImage, store, m_d->layerFilenames);
+    KisLoadVisitor visitor(img, store, m_d->layerFilenames);
 
     if(external)
         visitor.setExternalUri(uri);
 
-    m_d->currentImage->rootLayer()->accept(visitor);
+    img->rootLayer()->accept(visitor);
     // annotations
     // exif
     location = external ? QString::null : uri;
-    location += (m_d->currentImage)->name() + "/annotations/exif";
+    location += (img)->name() + "/annotations/exif";
     if (store->hasFile(location)) {
         QByteArray data;
         store->open(location);
         data = store->read(store->size());
         store->close();
-        (m_d->currentImage)->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
+        img->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
     }
     // icc profile
     location = external ? QString::null : uri;
-    location += (m_d->currentImage)->name() + "/annotations/icc";
+    location += (img)->name() + "/annotations/icc";
     if (store->hasFile(location)) {
         QByteArray data;
         store->open(location);
         data = store->read(store->size());
         store->close();
-        (m_d->currentImage)->setProfile(new KoColorProfile(data));
+        img->setProfile(new KoColorProfile(data));
     }
 
     IODone();
@@ -859,7 +876,7 @@ KoDocument* KisDoc2::hitTest(const QPoint &pos, KoView* view, const QMatrix& mat
 
 void KisDoc2::renameImage(const QString& oldName, const QString& newName)
 {
-    (m_d->currentImage)->setName(newName);
+    m_d->currentImage()->setName(newName);
 
     if (undo())
         addCommand(new KisCommandImageMv(this, this, newName, oldName));
@@ -890,7 +907,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
     img->activate(KisLayerSP(layer));
 
-    m_d->currentImage = img;
+    m_d->setImage( img );
 
     setUndo(true);
 
@@ -936,7 +953,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
     img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
     img->activate(KisLayerSP(layer));
 
-    m_d->currentImage = img;
+    m_d->setImage( img );
 
     cfg.defImgWidth(width);
     cfg.defImgHeight(height);
@@ -961,8 +978,8 @@ void KisDoc2::paintContent(QPainter& painter, const QRect& rc, bool transparent,
     QString monitorProfileName = cfg.monitorProfile();
     KoColorProfile *  profile = KisMetaRegistry::instance()->csRegistry()->profileByName(monitorProfileName);
     painter.scale(zoomX, zoomY);
-    QRect rect = rc & m_d->currentImage->bounds();
-    m_d->currentImage->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
+    QRect rect = rc & m_d->currentImage()->bounds();
+    m_d->currentImage()->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
 }
 
 void KisDoc2::slotImageUpdated()
@@ -1159,17 +1176,17 @@ void KisDoc2::prepareForImport()
 
 KisImageSP KisDoc2::currentImage()
 {
-    return m_d->currentImage;
+    return m_d->currentImage();
 }
 
 KisDummyShape * KisDoc2::imageShape()
 {
-    return m_d->imageShape;
+    return m_d->imageShape();
 }
 
 void KisDoc2::setCurrentImage(KisImageSP image)
 {
-    m_d->currentImage = image;
+    m_d->setImage( image );
     setUndo(true);
     image->notifyImageLoaded();
     emit sigLoadingFinished();

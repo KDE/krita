@@ -116,8 +116,10 @@ namespace Kross {
             //Py::Object toPointer(const Py::Tuple&);
             //Py::Object fromPointer(const Py::Tuple&);
 
-            /// Connect signal with python function.
+            /// Connect signal, slots or python functions together.
             Py::Object doConnect(const Py::Tuple&);
+            /// Disconnect signal, slots or python functions that are connected together.
+            Py::Object doDisconnect(const Py::Tuple&);
 
             /**
              * The static proxy-handler which will be used to dispatch

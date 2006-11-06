@@ -1,0 +1,149 @@
+/***************************************************************************
+ * pythonfunction.cpp
+ * This file is part of the KDE project
+ * copyright (C)2006 by Sebastian Sauer (mail@dipe.org)
+ *
+ * Parts of the code are from kjsembed4 SlotProxy
+ * Copyright (C) 2005, 2006 KJSEmbed Authors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ * You should have received a copy of the GNU Library General Public License
+ * along with this program; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ ***************************************************************************/
+
+#include "pythonfunction.h"
+#include "pythonvariant.h"
+#include "../core/metatype.h"
+
+#include <QByteArray>
+#include <QPointer>
+#include <QVariant>
+#include <QMetaMethod>
+#include <QMetaObject>
+
+using namespace Kross;
+
+namespace Kross {
+
+    /// \internal d-pointer class.
+    class PythonFunction::Private
+    {
+        public:
+            QPointer<QObject> sender;
+            QByteArray signature;
+            Py::Callable callable;
+            QByteArray stringData;
+            uint data[21];
+    };
+
+}
+
+PythonFunction::PythonFunction(QObject* sender, const QByteArray& sendersignal, const Py::Callable& callable)
+    : QObject()
+    , d( new Private() )
+{
+    d->sender = sender;
+    d->signature = QMetaObject::normalizedSignature( sendersignal );
+    d->callable = callable;
+
+    //krossdebug(QString("PythonFunction::PythonFunction sender=\"%1\" signal=\"%2\"").arg(sender->objectName()).arg(d->signature.constData()));
+
+    uint signatureSize = d->signature.size() + 1;
+
+    // content
+    d->data[0] = 1;  // revision
+    d->data[1] = 0;  // classname
+    d->data[2] = 0;  // classinfo
+    d->data[3] = 0;  // classinfo
+    d->data[4] = 1;  // methods
+    d->data[5] = 15; // methods
+    d->data[6] = 0;  // properties
+    d->data[7] = 0;  // properties
+    d->data[8] = 0;  // enums/sets
+    d->data[9] = 0;  // enums/sets
+
+    // slots
+    d->data[15] = 15;  // signature start
+    d->data[16] = 15 + signatureSize;  // parameters start
+    d->data[17] = 15 + signatureSize;  // type start
+    d->data[18] = 15 + signatureSize;  // tag start
+    d->data[19] = 0x0a; // flags
+    d->data[20] = 0;    // eod
+
+    // data
+    d->stringData = QByteArray("PythonFunction\0", 15);
+    d->stringData += d->signature;
+    d->stringData += QByteArray("\0\0", 2);
+
+    // static metaobject
+    staticMetaObject.d.superdata = &QObject::staticMetaObject;
+    staticMetaObject.d.stringdata = d->stringData.data();
+    staticMetaObject.d.data = d->data;
+    staticMetaObject.d.extradata = 0;
+}
+
+PythonFunction::~PythonFunction()
+{
+    //krossdebug("PythonFunction::~PythonFunction");
+    delete d;
+}
+
+const QMetaObject* PythonFunction::metaObject() const
+{
+    return &staticMetaObject;
+}
+
+void* PythonFunction::qt_metacast(const char *_clname)
+{
+    if (! _clname)
+        return 0;
+    if (! strcmp(_clname, d->stringData))
+        return static_cast<void*>( const_cast<PythonFunction*>(this) );
+    return QObject::qt_metacast(_clname);
+}
+
+int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    //krossdebug(QString("PythonFunction::qt_metacall id=%1").arg(_id));
+    if (_id >= 0 && _c == QMetaObject::InvokeMetaMethod) {
+        switch (_id) {
+            case 0: {
+                // convert the arguments
+                QVariantList args;
+                QMetaMethod method = metaObject()->method( metaObject()->indexOfMethod(d->signature) );
+                QList<QByteArray> params = method.parameterTypes();
+                int idx = 1;
+                foreach(QByteArray param, params) {
+                    int tp = QVariant::nameToType( param.constData() );
+                    if(tp != QVariant::Invalid) {
+                        args.append( QVariant(tp, _a[idx]) );
+                    }
+                    else {
+                        krosswarning("PythonFunction::qt_metacall: Not supported yet!");
+                        //TODO implement
+                    }
+                    ++idx;
+                }
+
+                // call the python function
+                Py::Object result = d->callable.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
+
+                //TODO finally set the returnvalue
+                //QVariant v = PythonType<QVariant>::toVariant(result);
+                //_a[0] = Kross::MetaTypeVariant<QVariant>(v).toVoidStar();
+            } break;
+        }
+        _id -= 1;
+    }
+    return _id;
+}

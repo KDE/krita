@@ -20,6 +20,7 @@
 #include "pythonextension.h"
 #include "pythoninterpreter.h"
 #include "pythonvariant.h"
+#include "pythonfunction.h"
 
 #include <QWidget>
 #include <QMetaMethod>
@@ -48,6 +49,9 @@ namespace Kross {
             QHash<QByteArray, QMetaProperty> properties;
             /// The cached list of enumerations.
             QHash<QByteArray, int> enumerations;
+
+            /// The \a PythonFunction instances.
+            QHash<QByteArray, PythonFunction*> functions;
 
             /// The cached list of methodnames.
             Py::List methodnames;
@@ -91,7 +95,7 @@ PythonExtension::PythonExtension(QObject* object)
     //add_varargs_method("__toPointer__", &PythonExtension::toPointer, "Return the void* pointer of the QObject.");
     //add_varargs_method("__fromPointer__", &PythonExtension::fromPointer, "Set the QObject* to the passed void* pointer.");
     add_varargs_method("connect", &PythonExtension::doConnect, "Connect signal, slots or python functions together.");
-    //add_varargs_method("emit", &PythonExtension::emitSignal, "Emit a signal the QObject provides.");
+    add_varargs_method("disconnect", &PythonExtension::doDisconnect, "Disconnect signal, slots or python functions that are connected together.");
 
     d->proxymethod = new Py::MethodDefExt<PythonExtension>(
         "", // methodname, not needed cause we use the method only internaly.
@@ -114,7 +118,6 @@ PythonExtension::PythonExtension(QObject* object)
                     self[0] = Py::Object(this); // reference to this instance
                     self[1] = Py::Int(i); // the first index used for faster access
                     self[2] = Py::String(name); // the name of the method
-
                     d->methods.insert(name, Py::Object(PyCFunction_New( &d->proxymethod->ext_meth_def, self.ptr() ), true));
                     d->methodnames.append(self[2]);
                 }
@@ -150,6 +153,7 @@ PythonExtension::~PythonExtension()
     #ifdef KROSS_PYTHON_EXTENSION_CTORDTOR_DEBUG
         krossdebug( QString("PythonExtension::Destructor object=%1").arg(d->debuginfo) );
     #endif
+    qDeleteAll(d->functions);
     delete d->proxymethod;
     delete d;
 }
@@ -369,17 +373,16 @@ Py::Object PythonExtension::doConnect(const Py::Tuple& args)
         }
     }
 
-    if( args[idx].isCallable() ) { // connect(..., pyfunction)
-        Py::Callable func(args[idx]);
-
-        //TODO add adaptor
-        //Py::Object result = func.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
-
-        krossdebug( QString("TOOOOOOOOOOO-DOOOOOOOOOOOO PythonExtension::doConnect sender=%1 signal=%2 pyfunction=%3").arg(sender->objectName()).arg(sendersignal.constData()).arg(func.as_string().c_str()).toLatin1().constData() );
+    QObject* receiver; // the receiver object
+    QByteArray receiverslot; // the receiver slot
+    if( args[idx].isCallable() ) { // connect with python function
+        Py::Callable func(args[idx]); // the callable python function
+        PythonFunction* function = new PythonFunction(sender, sendersignal, func);
+        d->functions.insertMulti(sendersignal, function);
+        receiver = function;
+        receiverslot = sendersignal;
     }
-    else {
-        QObject* receiver; // the receiver object
-        QByteArray receiverslot; // the receiver slot
+    else { // connect with receiver+slot
         if( args[idx].isString() ) { // connect(..., slot)
             receiver = d->object;
             receiverslot = PythonType<QByteArray>::toVariant( args[idx] );
@@ -403,28 +406,29 @@ Py::Object PythonExtension::doConnect(const Py::Tuple& args)
             }
             receiverslot = PythonType<QByteArray>::toVariant( args[idx] );
         }
-        if( args.size() > idx + 1 ) {
-            Py::TypeError( QString("To much arguments specified.").toLatin1().constData() );
-            return PythonType<bool>::toPyObject(false);
-        }
-
-        // Dirty hack to replace SIGNAL() and SLOT() macros. If the user doesn't
-        // defined them explicit, we assume it's wanted to connect from a signal to
-        // a slot. This seems to be the most flexible solution so far...
-        if( ! sendersignal.startsWith('1') && ! sendersignal.startsWith('2') )
-            sendersignal.prepend('2'); // prepending 2 means SIGNAL(...)
-        if( ! receiverslot.startsWith('1') && ! receiverslot.startsWith('2') )
-            receiverslot.prepend('1'); // prepending 1 means SLOT(...)
-
-        krossdebug( QString("PythonExtension::doConnect sender=%1 signal=%2 receiver=%3 slot=%4").arg(sender->objectName()).arg(sendersignal.constData()).arg(receiver->objectName()).arg(receiverslot.constData()).toLatin1().constData() );
-
-        if(! QObject::connect(sender, sendersignal, receiver, receiverslot) ) {
-            krosswarning( QString("PythonExtension::doConnect Failed to connect").toLatin1().constData() );
-            return PythonType<bool>::toPyObject(false);
-        }
     }
 
+    // Dirty hack to replace SIGNAL() and SLOT() macros. If the user doesn't
+    // defined them explicit, we assume it's wanted to connect from a signal to
+    // a slot. This seems to be the most flexible solution so far...
+    if( ! sendersignal.startsWith('1') && ! sendersignal.startsWith('2') )
+        sendersignal.prepend('2'); // prepending 2 means SIGNAL(...)
+    if( ! receiverslot.startsWith('1') && ! receiverslot.startsWith('2') )
+        receiverslot.prepend('1'); // prepending 1 means SLOT(...)
+
+    krossdebug( QString("PythonExtension::doConnect sender=%1 signal=%2 receiver=%3 slot=%4").arg(sender->objectName()).arg(sendersignal.constData()).arg(receiver->objectName()).arg(receiverslot.constData()).toLatin1().constData() );
+
+    if(! QObject::connect(sender, sendersignal, receiver, receiverslot) ) {
+        krosswarning( QString("PythonExtension::doConnect Failed to connect").toLatin1().constData() );
+        return PythonType<bool>::toPyObject(false);
+    }
     return PythonType<bool>::toPyObject(true);
+}
+
+Py::Object PythonExtension::doDisconnect(const Py::Tuple&)
+{
+    //TODO
+    return PythonType<bool>::toPyObject(false);
 }
 
 PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject *args)

@@ -17,9 +17,10 @@ set(libkrosspythoncxx_SRCS
 
 set(krosspython_PART_SRCS ${libkrosspythoncxx_SRCS}
    pythonvariant.cpp
+   pythonfunction.cpp
    pythonextension.cpp
-   pythonmodule.cpp 
-   pythonscript.cpp 
+   pythonmodule.cpp
+   pythonscript.cpp
    pythoninterpreter.cpp
 )
 

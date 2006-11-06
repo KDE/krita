@@ -145,9 +145,13 @@ class TestKross(unittest.TestCase):
 		#self.assert_( self.object1.testEnum( self.object1.TESTENUM3 ) == 4 )
 
 	def testSignalsSlots(self):
-		ok = self.object1.connect("signalString(const QString&)", self.object2, "func_qstring_qstring(const QString&)")
-		print "============================> %s\n" % ok
-		#self.assert_( self.object1.TESTENUM1 == 1 )
+		self.assert_( self.object1.connect("signalBool(bool)", "func_bool_bool(bool)") )
+		self.assert_( self.object1.connect("signalInt(int)", self.object2, "func_int_int(int)") )
+
+		def callback(s):
+			self.assert_(s == " The Argument String ")
+		self.assert_( self.object1.connect("signalString(const QString&)", callback) )
+		self.object1.signalString(" The Argument String ")
 
 	#def testExpectedFailures(self):
 		# to less arguments

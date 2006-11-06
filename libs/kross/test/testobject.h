@@ -78,6 +78,7 @@ class TestObject : public QObject
 
     signals:
         void signalVoid();
+        void signalBool(bool);
         void signalInt(int);
         void signalString(const QString&);
 

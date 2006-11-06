@@ -111,9 +111,10 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
         m_progressDisplay->setSubject( &painter, true, true );
 
     KisKernelSP kernel = ((KisConvolutionConfiguration*)configuration)->matrix();
+    KisChannelInfo::enumChannelFlags channels = ((KisConvolutionConfiguration*)configuration)->channels();
 
-    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT, KisChannelInfo::FLAG_COLOR_AND_ALPHA );
-    
+    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT, channels );
+
     if (painter.cancelRequested()) {
         cancel();
     }
@@ -131,7 +132,7 @@ int KisConvolutionFilter::overlapMarginNeeded(KisFilterConfiguration* c) const {
 
 KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*)
 {
-    return new KisConvolutionConfiguration( id().id(), m_matrix );
+    return new KisConvolutionConfiguration( id().id(), m_matrix, m_channelFlags);
 }
 
 #include "kis_convolution_filter.moc"

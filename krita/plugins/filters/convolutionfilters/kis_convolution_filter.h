@@ -27,9 +27,11 @@
 
 class KisConvolutionConfiguration : public KisFilterConfiguration {
 public:
-    KisConvolutionConfiguration(const QString & name, KisKernel * matrix)
+    KisConvolutionConfiguration(const QString & name, KisKernel * matrix, 
+				KisChannelInfo::enumChannelFlags channelFlags = KisChannelInfo::FLAG_COLOR_AND_ALPHA)
         : KisFilterConfiguration( name, 1 )
         , m_matrix(matrix)
+	, m_channelFlags(channelFlags)
     {};
 
     void fromXML(const QString & s);
@@ -37,11 +39,13 @@ public:
 
 public:
 
-    inline KisKernelSP matrix() { return m_matrix; };
+    inline KisKernelSP matrix() { return m_matrix; }
+    inline KisChannelInfo::enumChannelFlags channels() { return m_channelFlags; }
 
 private:
 
     KisKernelSP m_matrix;
+    KisChannelInfo::enumChannelFlags m_channelFlags;
 
 };
 
@@ -74,7 +78,9 @@ public:
 
     KisConvolutionConstFilter(const KisID& id, const QString & category, const QString & entry) 
 	: KisConvolutionFilter(id, category, entry) 
-    {};
+    {
+	m_channelFlags = KisChannelInfo::FLAG_COLOR_AND_ALPHA;
+    };
 
     virtual ~KisConvolutionConstFilter() {};
 
@@ -86,6 +92,7 @@ public:
 protected:
 
     KisKernelSP m_matrix;
+    KisChannelInfo::enumChannelFlags m_channelFlags;
 };
 
 #endif

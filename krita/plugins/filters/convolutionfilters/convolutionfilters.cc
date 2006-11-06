@@ -110,18 +110,21 @@ KisEmbossLaplascianFilter::KisEmbossLaplascianFilter()
     : KisConvolutionConstFilter(id(), "emboss", i18n("Emboss Laplascian"))
 {
     m_matrix = createKernel( -1, 0, -1 , 0, 4, 0 , -1, 0, -1, 1, 127);
+    m_channelFlags = KisChannelInfo::FLAG_COLOR;
 }
 
 KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter()
     : KisConvolutionConstFilter(id(), "emboss", i18n("Emboss in All Directions"))
 {
     m_matrix = createKernel( -1, -1, -1 , -1, 8, -1 , -1, -1, -1, 1, 127);
+    m_channelFlags = KisChannelInfo::FLAG_COLOR;
 }
 
 KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter()
     : KisConvolutionConstFilter(id(), "emboss", i18n("Emboss Horizontal && Vertical"))
 {
     m_matrix = createKernel( 0, -1, 0 , -1, 4, -1 , 0, -1, 0, 1, 127);
+    m_channelFlags = KisChannelInfo::FLAG_COLOR;
 }
 
 KisEmbossVerticalFilter::KisEmbossVerticalFilter()
@@ -141,6 +144,7 @@ KisEmbossDiagonalFilter::KisEmbossDiagonalFilter()
     : KisConvolutionConstFilter(id(), "edge", i18n("Top Edge Detection"))
 {
     m_matrix = createKernel( -1, 0, -1 , 0, 4, 0 , -1, 0, -1, 1, 127);
+    m_channelFlags = KisChannelInfo::FLAG_COLOR;
 }
 
 
@@ -148,6 +152,7 @@ KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter()
     : KisConvolutionConstFilter(id(), "edge", i18n("Top Edge Detection"))
 {
     m_matrix = createKernel( 1, 1, 1 , 0, 0, 0 , -1, -1, -1, 1, 127);
+    m_channelFlags = KisChannelInfo::FLAG_COLOR;
 
 }
 
@@ -155,14 +160,17 @@ KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter()
     : KisConvolutionConstFilter(id(), "edge", i18n("Right Edge Detection"))
 {
     m_matrix = createKernel(  -1, 0, 1 , -1, 0, 1 , -1, 0, 1,  1, 127);
+    m_channelFlags = KisChannelInfo::FLAG_COLOR;
 }
 
 KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter() : KisConvolutionConstFilter(id(), "edge", i18n("Bottom Edge Detection"))
 {
     m_matrix = createKernel( -1, -1, -1 , 0, 0, 0 , 1, 1, 1, 1, 127);
+    m_channelFlags = KisChannelInfo::FLAG_COLOR;
 }
 
 KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionConstFilter(id(), "edge", i18n("Left Edge Detection"))
 {
     m_matrix = createKernel( 1, 0, -1 , 1, 0, -1 , 1, 0, -1, 1, 127);
+    m_channelFlags = KisChannelInfo::FLAG_COLOR;
 }

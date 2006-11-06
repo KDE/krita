@@ -26,6 +26,8 @@
 #include <kis_autobrush_resource.h>
 #include <kis_convolution_painter.h>
 #include <kis_iterators_pixel.h>
+#include <kis_progress_display_interface.h>
+#include <kis_progress_subject.h>
 
 
 #include "kis_wdg_blur.h"
@@ -79,11 +81,11 @@ void KisBlurFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
-    
+
     setProgressTotalSteps(rect.width() * rect.height());
 
     if(!config) config = new KisFilterConfiguration(id().id(), 1);
-    
+
     QVariant value;
     int shape = (config->getProperty("shape", value)) ? value.toInt() : 0;
     uint halfWidth = (config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
@@ -92,10 +94,10 @@ void KisBlurFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     uint height = 2 * halfHeight + 1;
     int rotate = (config->getProperty("rotate", value)) ? value.toInt() : 0;
     int strength = 100 - (config->getProperty("strength", value)) ? value.toUInt() : 0;
-    
+
     int hFade = (halfWidth * strength) / 100;
     int vFade = (halfHeight * strength) / 100;
-    
+
     KisAutobrushShape* kas;
     kdDebug() << width << " " << height << " " << hFade << " " << vFade << endl;
     switch(shape)
@@ -110,9 +112,9 @@ void KisBlurFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     }
     QImage mask;
     kas->createBrush(&mask);
-    
-    mask.convertDepth(1); 
-    
+
+    mask.convertDepth(1);
+
     if( rotate != 0)
     {
         QWMatrix m;
@@ -123,11 +125,15 @@ void KisBlurFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
             mask.smoothScale( mask.width() + !(mask.width() & 1), mask.height() + !(mask.height() & 1) );
         }
     }
-    
-    KisKernelSP kernel = kernelFromQImage(mask); // TODO: for 1.6 reuse the krita's core function for creating kernel : KisKernel::fromQImage
+
     KisConvolutionPainter painter( dst );
+    if (m_progressDisplay)
+        m_progressDisplay->setSubject( &painter, true, true );
+
+    KisKernelSP kernel = kernelFromQImage(mask); // TODO: for 1.6 reuse the krita's core function for creating kernel : KisKernel::fromQImage
+
     painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT, KisChannelInfo::FLAG_COLOR_AND_ALPHA);
-    
+
     if (painter.cancelRequested()) {
         cancel();
     }

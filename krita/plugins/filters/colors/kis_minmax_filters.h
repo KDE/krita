@@ -33,7 +33,7 @@ class KisFilterMax : public KisFilter
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
-        virtual ColorSpaceIndependence colorSpaceIndendendence() { return FULLY_INDEPENDENT; };
+        virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; };
 };
 
 class KisFilterMin : public KisFilter
@@ -46,7 +46,7 @@ class KisFilterMin : public KisFilter
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
-        virtual ColorSpaceIndependence colorSpaceIndendendence() { return FULLY_INDEPENDENT; };
+        virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; };
 };
 
 #endif

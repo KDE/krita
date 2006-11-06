@@ -86,7 +86,7 @@
 #include "kis_oasis_load_visitor.h"
 #include "kis_oasis_save_data_visitor.h"
 #include "kis_oasis_save_visitor.h"
-
+#include "kis_dummy_shape.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -103,6 +103,7 @@ static const char *CURRENT_DTD_VERSION = "1.3";
 #define NATIVE_MIMETYPE "application/x-kra"
 
 namespace {
+
     class KisCommandImageMv : public KisCommand {
         typedef KisCommand super;
 
@@ -143,17 +144,61 @@ namespace {
 
 }
 
-KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode) :
-    super(parentWidget, parent, singleViewMode)
+class KisDoc2::KisDocPrivate
 {
-    m_undo = false;
-    m_cmdHistory = 0;
-    m_nserver = 0;
-    m_currentImage = 0;
-    m_currentMacro = 0;
-    m_macroNestDepth = 0;
-    m_ioProgressBase = 0;
-    m_ioProgressTotalSteps = 0;
+
+public:
+
+    KisDocPrivate( bool u,
+                   KCommandHistory * cmdH,
+                   KisImageSP img,
+                   KisNameServer * nameServer,
+                   KMacroCommand * curMacro,
+                   qint32 nestDepth,
+                   qint32 conversionDepth,
+                   int progressTotalSteps,
+                   int progressBase,
+                   KisDummyShape * shape
+        ) : undo( u )
+          , cmdHistory( cmdH )
+          , currentImage( img )
+          , nserver( nameServer )
+          , currentMacro( curMacro )
+          , macroNestDepth( nestDepth )
+          , conversionDepth( conversionDepth )
+          , ioProgressTotalSteps( progressTotalSteps )
+          , ioProgressBase( progressBase )
+          , imageShape( shape )
+        {
+        }
+
+    ~KisDocPrivate()
+        {
+            delete cmdHistory;
+            delete nserver;
+            undoListeners.setAutoDelete( false );
+        }
+
+    bool undo;
+    KCommandHistory *cmdHistory;
+    Q3PtrList<KisCommandHistoryListener> undoListeners;
+    KisImageSP currentImage;
+    KisNameServer *nserver;
+    KMacroCommand *currentMacro;
+    qint32 macroNestDepth;
+    qint32 conversionDepth;
+    int ioProgressTotalSteps;
+    int ioProgressBase;
+    QMap<KisLayer *, QString> layerFilenames; // temp storage during load
+    KisDummyShape * imageShape; // the master shape containing the image
+
+};
+
+
+KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
+    : super(parentWidget, parent, singleViewMode)
+    , m_d( new KisDocPrivate( false, 0, 0, 0, 0, 0, 0, 0, 0, new KisDummyShape() ) )
+{
 
     setInstance( KisFactory2::instance(), false );
     setTemplateType( "krita_template" );
@@ -164,9 +209,7 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode) :
 
 KisDoc2::~KisDoc2()
 {
-    delete m_cmdHistory;
-    delete m_nserver;
-    m_undoListeners.setAutoDelete(false);
+    delete m_d;
 }
 
 QByteArray KisDoc2::mimeType() const
@@ -194,32 +237,32 @@ void KisDoc2::openTemplate(const KUrl& url)
 
 bool KisDoc2::init()
 {
-    if (m_cmdHistory) {
-        delete m_cmdHistory;
-        m_cmdHistory = 0;
+    if (m_d->cmdHistory) {
+        delete m_d->cmdHistory;
+        m_d->cmdHistory = 0;
     }
 
-    if (m_nserver) {
-        delete m_nserver;
-        m_nserver = 0;
+    if (m_d->nserver) {
+        delete m_d->nserver;
+        m_d->nserver = 0;
     }
 
-    m_cmdHistory = new KCommandHistory(actionCollection(), true);
-    Q_CHECK_PTR(m_cmdHistory);
+    m_d->cmdHistory = new KCommandHistory(actionCollection(), true);
+    Q_CHECK_PTR(m_d->cmdHistory);
 
-    connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
-    connect(m_cmdHistory, SIGNAL(commandExecuted(KCommand *)), this, SLOT(slotCommandExecuted(KCommand *)));
+    connect(m_d->cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
+    connect(m_d->cmdHistory, SIGNAL(commandExecuted(KCommand *)), this, SLOT(slotCommandExecuted(KCommand *)));
     setUndo(true);
 
-    m_nserver = new KisNameServer(i18n("Image %1"), 1);
-    Q_CHECK_PTR(m_nserver);
+    m_d->nserver = new KisNameServer(i18n("Image %1"), 1);
+    Q_CHECK_PTR(m_d->nserver);
 
     if (!KisMetaRegistry::instance()->csRegistry()->exists(KoID("RGBA",""))) {
         KMessageBox::sorry(0, i18n("No colorspace modules loaded: cannot run Krita"));
         return false;
     }
 
-    m_undoListeners.setAutoDelete(false);
+    m_d->undoListeners.setAutoDelete(false);
 
     return true;
 }
@@ -233,7 +276,7 @@ QDomDocument KisDoc2::saveXML()
     root.setAttribute("depth", (uint)sizeof(quint8));
     root.setAttribute("syntaxVersion", "1");
 
-    root.appendChild(saveImage(doc, m_currentImage));
+    root.appendChild(saveImage(doc, m_d->currentImage));
 
     return doc;
 }
@@ -247,11 +290,11 @@ bool KisDoc2::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocu
             QDomElement elem = node.toElement();
             KisOasisLoadVisitor olv(this);
             olv.loadImage(elem);
-            if (!(m_currentImage = olv.image() ))
+            if (!(m_d->currentImage = olv.image() ))
                 return false;
             KoOasisStore* oasisStore =  new KoOasisStore( store );
             KisOasisLoadDataVisitor oldv(oasisStore, olv.layerFilenames());
-            m_currentImage->rootLayer()->accept(oldv);
+            m_d->currentImage->rootLayer()->accept(oldv);
             return true;
         }
     }
@@ -275,12 +318,12 @@ bool KisDoc2::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
     // Save the structure
     KisOasisSaveVisitor osv(oasisStore);
     bodyWriter->startElement("office:body");
-    m_currentImage->rootLayer()->accept(osv);
+    m_d->currentImage->rootLayer()->accept(osv);
     bodyWriter->endElement();
     oasisStore->closeContentWriter();
     // Sqve the data
     KisOasisSaveDataVisitor osdv(oasisStore, manifestWriter);
-    m_currentImage->rootLayer()->accept(osdv);
+    m_d->currentImage->rootLayer()->accept(osdv);
     delete oasisStore;
     return true;
 }
@@ -302,7 +345,7 @@ bool KisDoc2::loadXML(QIODevice *, const QDomDocument& doc)
          return false;
     if ((attr = root.attribute("depth")).isNull())
         return false;
-    m_conversionDepth = attr.toInt();
+    m_d->conversionDepth = attr.toInt();
 
     if (!root.hasChildNodes()) {
         return false; // XXX used to be: return slotNewImage();
@@ -316,7 +359,7 @@ bool KisDoc2::loadXML(QIODevice *, const QDomDocument& doc)
                 QDomElement elem = node.toElement();
                 if (!(img = loadImage(elem)))
                     return false;
-                m_currentImage = img;
+                m_d->currentImage = img;
             } else {
                 return false;
             }
@@ -357,7 +400,7 @@ QDomElement KisDoc2::saveImage(QDomDocument& doc, KisImageSP img)
     quint32 count=0;
     KisSaveXmlVisitor visitor(doc, image, count, true);
 
-    m_currentImage->rootLayer()->accept(visitor);
+    m_d->currentImage->rootLayer()->accept(visitor);
 
     return image;
 }
@@ -562,9 +605,9 @@ KisLayerSP KisDoc2::loadPaintLayer(const QDomElement& element, KisImageSP img,
     layer->setY(y);
 
     if ((element.attribute("filename")).isNull())
-        m_layerFilenames[layer.data()] = name;
+        m_d->layerFilenames[layer.data()] = name;
     else
-        m_layerFilenames[layer.data()] = QString(element.attribute("filename"));
+        m_d->layerFilenames[layer.data()] = QString(element.attribute("filename"));
 
     // Load exif info
     for( QDomNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() )
@@ -634,15 +677,15 @@ KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const QDomElement& element, Ki
     layer->setOpacity(opacity);
 
     if ((element.attribute("filename")).isNull())
-        m_layerFilenames[layer.data()] = name;
+        m_d->layerFilenames[layer.data()] = name;
     else
-        m_layerFilenames[layer.data()] = QString(element.attribute("filename"));
+        m_d->layerFilenames[layer.data()] = QString(element.attribute("filename"));
 
     return layer;
 }
 
 KisPartLayerSP KisDoc2::loadPartLayer(const QDomElement& element, KisImageSP img,
-                                     const QString & name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
+                                      const QString & name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
                                       bool visible, bool locked,
                                       const QString & compositeOp) {
 #if 0
@@ -679,36 +722,36 @@ bool KisDoc2::completeSaving(KoStore *store)
     bool external = isStoredExtern();
     qint32 totalSteps = 0;
 
-    if (!m_currentImage) return false;
+    if (!m_d->currentImage) return false;
 
-    totalSteps = (m_currentImage)->nlayers();
+    totalSteps = (m_d->currentImage)->nlayers();
 
 
     setIOSteps(totalSteps + 1);
 
     // Save the layers data
     quint32 count=0;
-    KisSaveVisitor visitor(m_currentImage, store, count);
+    KisSaveVisitor visitor(m_d->currentImage, store, count);
 
     if(external)
         visitor.setExternalUri(uri);
 
-    m_currentImage->rootLayer()->accept(visitor);
+    m_d->currentImage->rootLayer()->accept(visitor);
     // saving annotations
     // XXX this only saves EXIF and ICC info. This would probably need
     // a redesign of the dtd of the krita file to do this more generally correct
     // e.g. have <ANNOTATION> tags or so.
-    KisAnnotationSP annotation = (m_currentImage)->annotation("exif");
+    KisAnnotationSP annotation = (m_d->currentImage)->annotation("exif");
     if (annotation) {
         location = external ? QString::null : uri;
-        location += (m_currentImage)->name() + "/annotations/exif";
+        location += (m_d->currentImage)->name() + "/annotations/exif";
         if (store->open(location)) {
             store->write(annotation->annotation());
             store->close();
         }
     }
-    if (m_currentImage->getProfile()) {
-        KoColorProfile *profile = m_currentImage->getProfile();
+    if (m_d->currentImage->getProfile()) {
+        KoColorProfile *profile = m_d->currentImage->getProfile();
         KisAnnotationSP annotation;
         if (profile)
         {
@@ -720,7 +763,7 @@ bool KisDoc2::completeSaving(KoStore *store)
 
         if (annotation) {
             location = external ? QString::null : uri;
-            location += m_currentImage->name() + "/annotations/icc";
+            location += m_d->currentImage->name() + "/annotations/icc";
             if (store->open(location)) {
                 store->write(annotation->annotation());
                 store->close();
@@ -738,37 +781,37 @@ bool KisDoc2::completeLoading(KoStore *store)
     bool external = isStoredExtern();
     qint32 totalSteps = 0;
 
-    totalSteps = (m_currentImage)->nlayers();
+    totalSteps = (m_d->currentImage)->nlayers();
 
     setIOSteps(totalSteps);
 
     // Load the layers data
-    KisLoadVisitor visitor(m_currentImage, store, m_layerFilenames);
+    KisLoadVisitor visitor(m_d->currentImage, store, m_d->layerFilenames);
 
     if(external)
         visitor.setExternalUri(uri);
 
-    m_currentImage->rootLayer()->accept(visitor);
+    m_d->currentImage->rootLayer()->accept(visitor);
     // annotations
     // exif
     location = external ? QString::null : uri;
-    location += (m_currentImage)->name() + "/annotations/exif";
+    location += (m_d->currentImage)->name() + "/annotations/exif";
     if (store->hasFile(location)) {
         QByteArray data;
         store->open(location);
         data = store->read(store->size());
         store->close();
-        (m_currentImage)->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
+        (m_d->currentImage)->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
     }
     // icc profile
     location = external ? QString::null : uri;
-    location += (m_currentImage)->name() + "/annotations/icc";
+    location += (m_d->currentImage)->name() + "/annotations/icc";
     if (store->hasFile(location)) {
         QByteArray data;
         store->open(location);
         data = store->read(store->size());
         store->close();
-        (m_currentImage)->setProfile(new KoColorProfile(data));
+        (m_d->currentImage)->setProfile(new KoColorProfile(data));
     }
 
     IODone();
@@ -816,7 +859,7 @@ KoDocument* KisDoc2::hitTest(const QPoint &pos, KoView* view, const QMatrix& mat
 
 void KisDoc2::renameImage(const QString& oldName, const QString& newName)
 {
-    (m_currentImage)->setName(newName);
+    (m_d->currentImage)->setName(newName);
 
     if (undo())
         addCommand(new KisCommandImageMv(this, this, newName, oldName));
@@ -847,7 +890,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
     img->activate(KisLayerSP(layer));
 
-    m_currentImage = img;
+    m_d->currentImage = img;
 
     setUndo(true);
 
@@ -893,7 +936,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
     img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
     img->activate(KisLayerSP(layer));
 
-    m_currentImage = img;
+    m_d->currentImage = img;
 
     cfg.defImgWidth(width);
     cfg.defImgHeight(height);
@@ -918,8 +961,8 @@ void KisDoc2::paintContent(QPainter& painter, const QRect& rc, bool transparent,
     QString monitorProfileName = cfg.monitorProfile();
     KoColorProfile *  profile = KisMetaRegistry::instance()->csRegistry()->profileByName(monitorProfileName);
     painter.scale(zoomX, zoomY);
-    QRect rect = rc & m_currentImage->bounds();
-    m_currentImage->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
+    QRect rect = rc & m_d->currentImage->bounds();
+    m_d->currentImage->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
 }
 
 void KisDoc2::slotImageUpdated()
@@ -935,29 +978,29 @@ void KisDoc2::slotImageUpdated(const QRect& rect)
 
 void KisDoc2::beginMacro(const QString& macroName)
 {
-    if (m_undo) {
-        if (m_macroNestDepth == 0) {
-            Q_ASSERT(m_currentMacro == 0);
-            m_currentMacro = new KMacroCommand(macroName);
-            Q_CHECK_PTR(m_currentMacro);
+    if (m_d->undo) {
+        if (m_d->macroNestDepth == 0) {
+            Q_ASSERT(m_d->currentMacro == 0);
+            m_d->currentMacro = new KMacroCommand(macroName);
+            Q_CHECK_PTR(m_d->currentMacro);
         }
 
-        m_macroNestDepth++;
+        m_d->macroNestDepth++;
     }
 }
 
 void KisDoc2::endMacro()
 {
-    if (m_undo) {
-        Q_ASSERT(m_macroNestDepth > 0);
-        if (m_macroNestDepth > 0) {
-            m_macroNestDepth--;
+    if (m_d->undo) {
+        Q_ASSERT(m_d->macroNestDepth > 0);
+        if (m_d->macroNestDepth > 0) {
+            m_d->macroNestDepth--;
 
-            if (m_macroNestDepth == 0) {
-                Q_ASSERT(m_currentMacro != 0);
+            if (m_d->macroNestDepth == 0) {
+                Q_ASSERT(m_d->currentMacro != 0);
 
-                m_cmdHistory->addCommand(m_currentMacro, false);
-                m_currentMacro = 0;
+                m_d->cmdHistory->addCommand(m_d->currentMacro, false);
+                m_d->currentMacro = 0;
                 emit sigCommandExecuted();
             }
         }
@@ -967,18 +1010,18 @@ void KisDoc2::endMacro()
 void KisDoc2::setCommandHistoryListener(const KisCommandHistoryListener * l)
 {
    // Never have more than one instance of a listener around. Qt should prove a Set class for this...
-    m_undoListeners.removeRef(l);
-    m_undoListeners.append(l);
+    m_d->undoListeners.removeRef(l);
+    m_d->undoListeners.append(l);
 }
 
 void KisDoc2::removeCommandHistoryListener(const KisCommandHistoryListener * l)
 {
-   m_undoListeners.removeRef(l);
+   m_d->undoListeners.removeRef(l);
 }
 
 KCommand * KisDoc2::presentCommand()
 {
-    return m_cmdHistory->presentCommand();
+    return m_d->cmdHistory->presentCommand();
 }
 
 void KisDoc2::addCommand(KCommand *cmd)
@@ -987,17 +1030,17 @@ void KisDoc2::addCommand(KCommand *cmd)
 
     KisCommandHistoryListener* l = 0;
 
-    for (l = m_undoListeners.first(); l; l = m_undoListeners.next()) {
+    for (l = m_d->undoListeners.first(); l; l = m_d->undoListeners.next()) {
         l->notifyCommandAdded(cmd);
     }
 
     setModified(true);
 
-    if (m_undo) {
-        if (m_currentMacro)
-            m_currentMacro->addCommand(cmd);
+    if (m_d->undo) {
+        if (m_d->currentMacro)
+            m_d->currentMacro->addCommand(cmd);
         else {
-            m_cmdHistory->addCommand(cmd, false);
+            m_d->cmdHistory->addCommand(cmd, false);
             emit sigCommandExecuted();
         }
     } else {
@@ -1008,8 +1051,8 @@ void KisDoc2::addCommand(KCommand *cmd)
 
 void KisDoc2::setUndo(bool undo)
 {
-    m_undo = undo;
-    if (m_undo && m_cmdHistory->undoLimit() == 50 /*default*/) {
+    m_d->undo = undo;
+    if (m_d->undo && m_d->cmdHistory->undoLimit() == 50 /*default*/) {
         KisConfig cfg;
         setUndoLimit( cfg.defUndoLimit() );
     }
@@ -1017,22 +1060,22 @@ void KisDoc2::setUndo(bool undo)
 
 qint32 KisDoc2::undoLimit() const
 {
-    return m_cmdHistory->undoLimit();
+    return m_d->cmdHistory->undoLimit();
 }
 
 void KisDoc2::setUndoLimit(qint32 limit)
 {
-    m_cmdHistory->setUndoLimit(limit);
+    m_d->cmdHistory->setUndoLimit(limit);
 }
 
 qint32 KisDoc2::redoLimit() const
 {
-    return m_cmdHistory->redoLimit();
+    return m_d->cmdHistory->redoLimit();
 }
 
 void KisDoc2::setRedoLimit(qint32 limit)
 {
-    m_cmdHistory->setRedoLimit(limit);
+    m_d->cmdHistory->setRedoLimit(limit);
 }
 
 void KisDoc2::slotDocumentRestored()
@@ -1047,7 +1090,7 @@ void KisDoc2::slotCommandExecuted(KCommand *command)
 
     KisCommandHistoryListener* l = 0;
 
-    for (l = m_undoListeners.first(); l; l = m_undoListeners.next()) {
+    for (l = m_d->undoListeners.first(); l; l = m_d->undoListeners.next()) {
         l->notifyCommandExecuted(command);
     }
 
@@ -1062,19 +1105,19 @@ void KisDoc2::slotUpdate(KisImageSP, quint32 x, quint32 y, quint32 w, quint32 h)
 
 bool KisDoc2::undo() const
 {
-    return m_undo;
+    return m_d->undo;
 }
 
 void KisDoc2::setIOSteps(qint32 nsteps)
 {
-    m_ioProgressTotalSteps = nsteps * 100;
-    m_ioProgressBase = 0;
+    m_d->ioProgressTotalSteps = nsteps * 100;
+    m_d->ioProgressBase = 0;
     emitProgress(0);
 }
 
 void KisDoc2::IOCompletedStep()
 {
-    m_ioProgressBase += 100;
+    m_d->ioProgressBase += 100;
 }
 
 void KisDoc2::IODone()
@@ -1091,7 +1134,7 @@ void KisDoc2::slotIOProgress(qint8 percentage)
     if (app->hasPendingEvents())
         app->processEvents();
 
-    int totalPercentage = ((m_ioProgressBase + percentage) * 100) / m_ioProgressTotalSteps;
+    int totalPercentage = ((m_d->ioProgressBase + percentage) * 100) / m_d->ioProgressTotalSteps;
 
     emitProgress(totalPercentage);
 }
@@ -1109,19 +1152,24 @@ return 0;
 
 void KisDoc2::prepareForImport()
 {
-    if (m_nserver == 0)
+    if (m_d->nserver == 0)
         init();
     setUndo(false);
 }
 
 KisImageSP KisDoc2::currentImage()
 {
-    return m_currentImage;
+    return m_d->currentImage;
+}
+
+KisDummyShape * KisDoc2::imageShape()
+{
+    return m_d->imageShape;
 }
 
 void KisDoc2::setCurrentImage(KisImageSP image)
 {
-    m_currentImage = image;
+    m_d->currentImage = image;
     setUndo(true);
     image->notifyImageLoaded();
     emit sigLoadingFinished();

@@ -45,6 +45,7 @@ class KisNameServer;
 class KisChildDoc;
 class KoColorSpace;
 class KoColor;
+class KisDummyShape;
 
 class KRITAUI_EXPORT KisDoc2 : public KoDocument, private KisUndoAdapter {
 
@@ -124,7 +125,6 @@ public:
 
     void renameImage(const QString& oldName, const QString& newName);
 
-
     /**
      * Adds the specified child document to this document; this
      * is not done with KoDocument::insertChild() because that
@@ -138,6 +138,7 @@ public:
     void prepareForImport();
 
     KisImageSP currentImage();
+    KisDummyShape * imageShape();
 
     /**
      * Set the current image to the specified image and turn undo on.
@@ -202,17 +203,8 @@ private:
 
 private:
 
-    bool m_undo;
-    KCommandHistory *m_cmdHistory;
-    Q3PtrList<KisCommandHistoryListener> m_undoListeners;
-    KisImageSP m_currentImage;
-    KisNameServer *m_nserver;
-    KMacroCommand *m_currentMacro;
-    qint32 m_macroNestDepth;
-    qint32 m_conversionDepth;
-    int m_ioProgressTotalSteps;
-    int m_ioProgressBase;
-    QMap<KisLayer *, QString> m_layerFilenames; // temp storage during load
+    class KisDocPrivate;
+    KisDocPrivate * m_d;
 
 };
 

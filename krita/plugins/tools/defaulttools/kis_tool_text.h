@@ -57,6 +57,7 @@ private:
     KSqueezedTextLabel *m_lbFontName;
     QPushButton *m_btnMoreFonts;
     bool m_wasPressed; // use for preventing bug:136151
+    bool m_windowIsBeingShown;
 };
 
 

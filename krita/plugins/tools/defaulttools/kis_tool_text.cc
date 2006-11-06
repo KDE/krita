@@ -19,7 +19,7 @@
 #include <qfont.h>
 #include <qrect.h>
 #include <qimage.h>
-#include <qlayout.h> 
+#include <qlayout.h>
 #include <qwidget.h>
 #include <qstring.h>
 #include <qpixmap.h>
@@ -51,7 +51,9 @@
 #include "kis_undo_adapter.h"
 
 KisToolText::KisToolText()
-    : super(i18n("Text")), m_wasPressed(false)
+    : super(i18n("Text"))
+    , m_wasPressed( false )
+    , m_windowIsBeingShown( false )
 {
     setName("tool_text");
     m_subject = 0;
@@ -71,17 +73,21 @@ void KisToolText::update(KisCanvasSubject *subject)
 void KisToolText::buttonPress(KisButtonPressEvent *e)
 {
     if (m_subject && e->button() == QMouseEvent::LeftButton) {
-      m_wasPressed = true;
+        m_wasPressed = true;
     }
 }
 
 void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 {
+    if ( m_windowIsBeingShown ) return;
+
     if (m_subject && e->button() == QMouseEvent::LeftButton) {
         if(!m_wasPressed) return;
+        m_windowIsBeingShown = true;
         m_wasPressed = false;
         KisImageSP img = m_subject->currentImg();
 
+        m_windowIsBeingShown = true;
         bool ok;
         QString text = KInputDialog::getText(i18n("Font Tool"), i18n("Enter text:"),
              QString::null, &ok);
@@ -142,6 +148,8 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         if (undoAdapter) {
             undoAdapter->endMacro();
         }
+
+        m_windowIsBeingShown = false;
     }
 }
 
@@ -173,9 +181,9 @@ void KisToolText::setup(KActionCollection *collection)
     m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("T&ext"), 
-                        "tool_text", 
-                        Qt::SHIFT+Qt::Key_T, 
+        m_action = new KRadioAction(i18n("T&ext"),
+                        "tool_text",
+                        Qt::SHIFT+Qt::Key_T,
                         this,
                         SLOT(activate()),
                         collection,

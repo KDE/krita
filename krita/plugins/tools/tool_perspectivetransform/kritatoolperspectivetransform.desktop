@@ -23,6 +23,7 @@ Name[sl]=Orodje za transformacijo perspektive
 Name[sr]=Алати за трансформацију перспективе
 Name[sr@Latn]=Alati za transformaciju perspektive
 Name[sv]=Perspektivtransformverktyg
+Name[uk]=Засіб перспективи
 Name[zh_TW]=透視轉換工具
 ServiceTypes=Krita/Tool
 Type=Service

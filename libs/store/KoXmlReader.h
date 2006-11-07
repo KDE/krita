@@ -190,6 +190,7 @@ public:
 
 private:
   friend class KoXmlNode;
+  friend class KoXmlCDATASection;
   friend class KoXmlDocument;
   KoXmlText( KoXmlNodeData* );
 };

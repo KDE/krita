@@ -62,25 +62,13 @@ protected slots:
     void slotConfigChanged();
     void slotApplyFilter(int);
     void refreshPreview();
+    void slotDelayedRefreshPreview();
 
 private:
 
-    KisView2 * m_view;
-    KisDoc2 * m_doc;
+    class KisFilterManagerPrivate;
+    KisFilterManagerPrivate * m_d;
 
-    KAction * m_reapplyAction;
-
-    Q3PtrList<KAction> m_filterActions;
-
-    KisFilterConfiguration * m_lastFilterConfig;
-    KisFilter * m_lastFilter;
-    KisPreviewDialog * m_lastDialog;
-    KisFilterConfigWidget * m_lastWidget;
-
-    QList<KoID> m_filterList; // Map the actions in the signalmapper to the filters
-    QSignalMapper * m_filterMapper;
-
-    Q3Dict<KActionMenu> m_filterActionMenus;
 };
 
 #endif

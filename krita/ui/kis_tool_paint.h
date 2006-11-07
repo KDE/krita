@@ -86,14 +86,10 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *event);
     virtual void wheelEvent ( KoPointerEvent * event );
 
-
     virtual QCursor cursor();
     virtual void setCursor(const QCursor& cursor);
     virtual void addOptionWidgetOption(QWidget *control, QWidget *label = 0);
 
-    void slotSetOpacity(int opacityPerCent);
-    void slotSetCompositeMode(const KoCompositeOp* compositeOp);
-    void slotPopupQuickHelp();
 
 protected:
     void notifyModified() const;
@@ -104,8 +100,15 @@ protected:
     virtual void createOptionWidget(QWidget* parent);
 
 private:
+
     // XXX: Call this when the layer changes (this used to be called in KisCanvasObserver::update)
     void updateCompositeOpComboBox();
+
+private slots:
+
+    void slotPopupQuickHelp();
+    void slotSetOpacity(int opacityPerCent);
+    void slotSetCompositeMode(const KoCompositeOp* compositeOp);
 
 protected:
 

@@ -43,7 +43,6 @@
 
 #include <kis_image.h>
 
-#include "kis_dummy_shape.h"
 #include "kis_resource_provider.h"
 #include "kis_factory2.h"
 #include "kis_canvas2.h"
@@ -52,6 +51,7 @@
 #include "kis_doc2.h"
 #include "kis_resource_provider.h"
 #include "kis_filter_manager.h"
+#include "kis_dummy_shape.h"
 
 class KisView2::KisView2Private {
 
@@ -63,7 +63,8 @@ public:
             viewConverter = new KoZoomHandler( );
 
             canvas = new KisCanvas2( viewConverter, QPAINTER, view );
-
+            shapeManager = canvas->shapeManager();
+            kDebug() << ">>>>>>>>>>>>>>>>> In viewprivate: " << shapeManager << endl;
             // The canvas controller handles the scrollbars
             canvasController = new KoCanvasController( view );
             canvasController->setCanvas( canvas );
@@ -82,6 +83,7 @@ public:
     KisCanvas2 *canvas;
     KisDoc2 *doc;
     KoViewConverter *viewConverter;
+    KoShapeManager * shapeManager;
     KoCanvasController * canvasController;
     KisResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
@@ -99,7 +101,9 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     : KoView(doc, parent)
 {
     m_d = new KisView2Private(this);
+
     m_d->doc = doc;
+    m_d->shapeManager->add( doc->imageShape() );
     m_d->resourceProvider = new KisResourceProvider( this );
 
     // Part stuff
@@ -160,11 +164,10 @@ QWidget* KisView2::canvas() const
 
 void KisView2::slotInitializeCanvas()
 {
-    kDebug() << "Image completely loaded! W: "
+    kDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>> Image completely loaded! W: "
              << image()->width() << ", H: "
              << image()->height() << endl;
-
-    m_d->canvas->shapeManager()->add( m_d->doc->imageShape() );
+;
     m_d->canvas->setCanvasSize( image()->width(), image()->height() );
     m_d->filterManager->updateGUI();
 }

@@ -28,6 +28,8 @@
 class KisView2;
 class KoToolProxy;
 
+class KisDummyShape;
+
 enum KisCanvasType {
     QPAINTER,
     OPENGL,
@@ -77,7 +79,7 @@ public: // KoCanvasBase implementation
     virtual QWidget* canvasWidget();
 
     virtual KoUnit::Unit unit();
- 
+
     virtual KoToolProxy* toolProxy();
 
 public: // KisCanvas2 methods

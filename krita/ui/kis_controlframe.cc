@@ -28,7 +28,6 @@
 #include <QFrame>
 #include <QWidget>
 #include <QEvent>
-#include <QTimer>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QMenu>

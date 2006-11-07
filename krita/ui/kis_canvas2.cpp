@@ -20,6 +20,8 @@
 
 #include <QWidget>
 
+#include <kdebug.h>
+
 #include <KoUnit.h>
 #include <KoViewConverter.h>
 #include <KoShapeManager.h>
@@ -31,6 +33,7 @@
 #include "kis_abstract_canvas_widget.h"
 #include "kis_qpainter_canvas.h"
 #include "kis_opengl_canvas2.h"
+#include "kis_dummy_shape.h"
 
 class KisCanvas2::KisCanvas2Private {
 
@@ -42,6 +45,7 @@ public:
         , canvasWidget( 0 )
         , shapeManager( new KoShapeManager(parent) )
         {
+            kDebug() << ">>>>>>>>>>>>> " << shapeManager << endl;
         }
 
     ~KisCanvas2Private()
@@ -60,7 +64,6 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisCanvasType canvasType
 {
     m_d = new KisCanvas2Private(this, viewConverter, view);
 
-
     switch( canvasType ) {
     case OPENGL:
         setCanvasWidget( new KisOpenGLCanvas2( this, view ) );
@@ -78,7 +81,6 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     Q_ASSERT_X( tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget" );
     m_d->canvasWidget = tmp;
 }
-
 
 KisCanvas2::~KisCanvas2()
 {
@@ -105,7 +107,7 @@ void KisCanvas2::addCommand(KCommand *command, bool execute)
 
 KoShapeManager* KisCanvas2::shapeManager() const
 {
-    return 0;
+    return m_d->shapeManager;
 }
 
 

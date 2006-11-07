@@ -32,6 +32,8 @@ class KoStoreDevice : public QIODevice
 public:
   /// Note: KoStore::open() should be called before calling this.
   KoStoreDevice( KoStore * store ) : m_store(store) {
+      // koffice-1.x behavior compat: a KoStoreDevice is automatically open
+      setOpenMode( m_store->mode() == KoStore::Read ? QIODevice::ReadOnly : QIODevice::WriteOnly );
   }
   ~KoStoreDevice() {}
 

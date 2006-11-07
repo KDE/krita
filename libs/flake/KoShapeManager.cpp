@@ -151,12 +151,12 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
         m_selection->paint( painter, converter );
 }
 
-KoShape * KoShapeManager::shapeAt( const QPointF &position, SelectionType selection, bool omitHiddenShapes )
+KoShape * KoShapeManager::shapeAt( const QPointF &position, KoFlake::ShapeSelection selection, bool omitHiddenShapes )
 {
     updateTree();
     QList<KoShape*> sorterdShapes( m_tree.contains( position ) );
     qSort(sorterdShapes.begin(), sorterdShapes.end(), KoShape::compareShapeZIndex);
-    KoShape *firstUnselectedShape = 0L; 
+    KoShape *firstUnselectedShape = 0;
     for(int count = sorterdShapes.count()-1; count >= 0; count--) {
         KoShape *shape = sorterdShapes.at(count);
         if ( omitHiddenShapes && ! shape->isVisible() )
@@ -166,22 +166,22 @@ KoShape * KoShapeManager::shapeAt( const QPointF &position, SelectionType select
 
         switch ( selection )
         {
-            case shapeOnTop:
+            case KoFlake::ShapeOnTop:
                 return shape;
-            case selected:
+            case KoFlake::Selected:
                 if ( m_selection->isSelected( shape ) )
                     return shape;
                 break;
-            case unselected:
+            case KoFlake::Unselected:
                 if ( ! m_selection->isSelected( shape ) )
                     return shape;
                 break;
-            case nextUnselected:
+            case KoFlake::NextUnselected:
                 // we want an unselected shape
                 if ( m_selection->isSelected( shape ) )
                     continue;
                 // memorize the first unselected shape
-                if( ! firstUnselectedShape ) 
+                if( ! firstUnselectedShape )
                     firstUnselectedShape = shape;
                 // check if the shape above is selected
                 if( count < sorterdShapes.count() && m_selection->isSelected( sorterdShapes.at(count+1) ) )
@@ -191,7 +191,7 @@ KoShape * KoShapeManager::shapeAt( const QPointF &position, SelectionType select
     }
     // if we want the next unselected below a selected but there was none selected, 
     // return the first found unselected shape
-    if( selection == nextUnselected && firstUnselectedShape )
+    if( selection == KoFlake::NextUnselected && firstUnselectedShape )
         return firstUnselectedShape;
 
     if ( m_selection->hitTest( position ) )

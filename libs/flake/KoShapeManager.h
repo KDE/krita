@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QSet>
 
+#include "KoFlake.h"
 #include <koffice_export.h>
 #include <KoRTree.h>
 
@@ -94,16 +95,6 @@ public:
     virtual void paint( QPainter &painter, const KoViewConverter &converter, bool forPrint );
 
     /**
-     * Used to change the behavior of shapeAt()
-     */
-    enum SelectionType {
-        selected,   ///< return the first selected with the highest z-ordering (i.e. on top).
-        unselected, ///< return the first unselected on top.
-        nextUnselected, ///< return the first unselected directly under a selected shape, or the top most one if nothing is selected.
-        shapeOnTop  ///< return the shape highest z-ordering, regardless of selection.
-    };
-
-    /**
      * Returns the shape located at a specific point in the document.
      * If more than one shape is located at the specific point, the given selection type
      * controls which of them is returned.
@@ -111,7 +102,7 @@ public:
      * @param selection controls which shape is returned when more than one shape is at the specific point
      * @param omitHiddenShapes if true, only visible shapes are considered
      */
-    KoShape * shapeAt( const QPointF &position, SelectionType selection = shapeOnTop, bool omitHiddenShapes = false );
+    KoShape * shapeAt( const QPointF &position, KoFlake::ShapeSelection selection = KoFlake::ShapeOnTop, bool omitHiddenShapes = false );
 
     /**
      * Returns the shapes which intersects the specific rect in the document.

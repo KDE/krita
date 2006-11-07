@@ -16,6 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KOFLAKE_H
+#define KOFLAKE_H
 
 /**
  * Flake reference
@@ -42,6 +44,19 @@ public:
         NoHandle            ///< Value to indicate no handle
     };
 
+    /**
+     * Used to change the behavior of KoShapeManager::shapeAt()
+     */
+    enum ShapeSelection {
+        Selected,   ///< return the first selected with the highest z-ordering (i.e. on top).
+        Unselected, ///< return the first unselected on top.
+        NextUnselected, ///< return the first unselected directly under a selected shape, or the top most one if nothing is selected.
+        ShapeOnTop  ///< return the shape highest z-ordering, regardless of selection.
+    };
+
+
 private:
     KoFlake();
 };
+
+#endif

@@ -75,7 +75,7 @@ set(kritaui_LIB_SRCS
     #    kis_paintop_box.cc # Needs to know about the active input device a lot
     #    kis_tool_freehand.cc
     #kis_tool_non_paint.cc
-    #kis_tool_paint.cc
+    kis_tool_paint.cc
     #    kis_tool_shape.cc
     #    kis_birdeye_box.cc
     #    kis_selection_manager.cc

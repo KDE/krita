@@ -32,6 +32,9 @@
 
 #include <krita_export.h>
 
+#include <kis_types.h>
+#include <kis_image.h>
+
 #include "kis_tool.h"
 #include "KoCompositeOp.h"
 
@@ -60,7 +63,8 @@ enum enumBrushMode {
 };
 
 class KRITAUI_EXPORT KisToolPaint
-    : public KoTool {
+    : public KoTool
+{
 
     Q_OBJECT
 
@@ -68,34 +72,34 @@ public:
     KisToolPaint(KoCanvasBase * canvas);
     virtual ~KisToolPaint();
 
+// KoTool Implementation.
+
 public slots:
 
     virtual void activate(bool temporary = false);
     virtual void deactivate();
-
+    virtual void resourceChanged( const KoCanvasResource & res );
 
 public:
 
     virtual void paint(QPainter& gc, KoViewConverter &converter);
 
-    virtual void mousePressEvent( KoPointerEvent *event );
-    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
-    virtual void mouseMoveEvent( KoPointerEvent *event );
     virtual void mouseReleaseEvent( KoPointerEvent *event );
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent *event);
-    virtual void wheelEvent ( KoPointerEvent * event );
-
-    virtual QCursor cursor();
-    virtual void setCursor(const QCursor& cursor);
-    virtual void addOptionWidgetOption(QWidget *control, QWidget *label = 0);
-
 
 protected:
+
+    /// @return the image wrapped in the dummy shape in the shape
+    /// manager. XXX: This is probably wrong!
+    KisImageSP image() const;
+
+    /// Call this to set the document modified
     void notifyModified() const;
 
-    // Add the tool-specific layout to the default option widget's layout.
+    /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
+
+    /// Add a widget and a label to the current option widget layout.
+    virtual void addOptionWidgetOption(QWidget *control, QWidget *label = 0);
 
     virtual void createOptionWidget(QWidget* parent);
 
@@ -118,6 +122,7 @@ protected:
     bool m_paintOutline;
 
 private:
+
     QCursor m_cursor;
 
     QGridLayout *m_optionWidgetLayout;
@@ -126,7 +131,6 @@ private:
     KisIntSpinbox *m_slOpacity;
     QLabel *m_lbComposite;
     KisCmbComposite *m_cmbComposite;
-    KoCanvasResourceProvider * m_resourceProvider;
 };
 
 #endif // KIS_TOOL_PAINT_H_

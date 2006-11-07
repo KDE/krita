@@ -29,27 +29,34 @@
 #include <QGridLayout>
 #include <QKeyEvent>
 #include <QEvent>
+#include <QVariant>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kiconloader.h>
 
-#include "KoColorSpace.h"
+#include <KoShape.h>
+#include <KoShapeManager.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoColorSpace.h>
+#include <KoPointerEvent.h>
+#include <KoCanvasBase.h>
 
-#include "kis_global.h"
+#include <kis_types.h>
+#include <kis_global.h>
+#include <kis_image.h>
+
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_cmb_composite.h"
-#include "kis_image.h"
 #include "kis_int_spinbox.h"
 #include "kis_paint_device.h"
+#include "kis_dummy_shape.h"
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas)
     : KoTool(canvas)
 {
-    m_resourceProvider = 0;
-
     m_optionWidget = 0;
     m_optionWidgetLayout = 0;
 
@@ -62,13 +69,11 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas)
     m_compositeOp = 0;
 }
 
+
 KisToolPaint::~KisToolPaint()
 {
 }
 
-void KisToolPaint::paint(QPainter&, KoViewConverter &)
-{
-}
 
 void KisToolPaint::activate(bool )
 {
@@ -83,10 +88,36 @@ void KisToolPaint::deactivate()
 {
 }
 
-QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
+void KisToolPaint::resourceChanged( const KoCanvasResource & res )
+{
+    if ( res.key == CURRENT_KIS_LAYER ) updateCompositeOpComboBox();
+}
+
+
+void KisToolPaint::paint(QPainter&, KoViewConverter &)
+{
+}
+
+void KisToolPaint::mouseReleaseEvent( KoPointerEvent *e )
+{
+    if(e->button() == Qt::MidButton)
+    {
+        KoCanvasResourceProvider * resourceProvider = 0;
+        if ( m_canvas && ( resourceProvider = m_canvas->resourceProvider() ) ) {
+            QVariant fg = resourceProvider->resource( FOREGROUND_COLOR );
+            if ( !fg.isValid() ) return;
+            QVariant bg = resourceProvider->resource( BACKGROUND_COLOR );
+            if ( !bg.isValid() ) return;
+            resourceProvider->setResource( FOREGROUND_COLOR, bg );
+            resourceProvider->setResource( BACKGROUND_COLOR, fg );
+        }
+    }
+
+}
+
+void KisToolPaint::createOptionWidget(QWidget* parent)
 {
     m_optionWidget = new QWidget(parent);
-    m_optionWidget->setWindowTitle(m_UIName);
 
     m_lbOpacity = new QLabel(i18n("Opacity: "), m_optionWidget);
     m_slOpacity = new KisIntSpinbox( m_optionWidget, "int_m_optionwidget");
@@ -123,13 +154,8 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
         hLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         verticalLayout->addLayout(hLayout);
     }
-    return m_optionWidget;
 }
 
-QWidget* KisToolPaint::optionWidget()
-{
-    return m_optionWidget;
-}
 
 void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 {
@@ -161,48 +187,43 @@ void KisToolPaint::slotSetCompositeMode(const KoCompositeOp* compositeOp)
     m_compositeOp = compositeOp;
 }
 
-QCursor KisToolPaint::cursor()
+KisImageSP KisToolPaint::image() const
 {
-    return m_cursor;
-}
+    KoShapeManager * shapeManager = m_canvas->shapeManager();
+    if ( !shapeManager ) return 0;
 
-void KisToolPaint::setCursor(const QCursor& cursor)
-{
-    m_cursor = cursor;
+    KisDummyShape * imageShape = dynamic_cast<KisDummyShape *>( shapeManager->shapeAt(QPointF( 0, 0 )) );
+    kDebug() << "Current shape: " << imageShape << endl;
 
-//     if (m_subject) {
-//         KisToolControllerInterface *controller = m_subject->toolController();
+    if ( !imageShape ) return 0;
 
-//         if (controller && controller->currentTool() == this) {
-//             m_subject->canvasController()->setCanvasCursor(m_cursor);
-//         }
-//     }
+    KisImageSP img = imageShape->image();
+    return img;
+
 }
 
 void KisToolPaint::notifyModified() const
 {
-    if (m_subject && m_subject->currentImg()) {
-        m_subject->currentImg()->setModified();
+    KisImageSP img = image();
+    if ( img ) {
+        img->setModified();
     }
 }
 
 void KisToolPaint::updateCompositeOpComboBox()
 {
-    if (m_optionWidget && m_subject) {
-        KisImageSP img = m_subject->currentImg();
+    KisImageSP img = image();
+    if (m_optionWidget && img) {
+        KisPaintDeviceSP device = img->activeDevice();
 
-        if (img) {
-            KisPaintDeviceSP device = img->activeDevice();
+        if (device) {
+            KoCompositeOpList compositeOps = device->colorSpace()->userVisiblecompositeOps();
+            m_cmbComposite->setCompositeOpList(compositeOps);
 
-            if (device) {
-                KoCompositeOpList compositeOps = device->colorSpace()->userVisiblecompositeOps();
-                m_cmbComposite->setCompositeOpList(compositeOps);
-
-                if (m_compositeOp == 0 || compositeOps.indexOf(const_cast<KoCompositeOp*>(m_compositeOp)) < 0) {
-                    m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
-                }
-                m_cmbComposite->setCurrent(m_compositeOp);
+            if (m_compositeOp == 0 || compositeOps.indexOf(const_cast<KoCompositeOp*>(m_compositeOp)) < 0) {
+                m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
             }
+            m_cmbComposite->setCurrent(m_compositeOp);
         }
     }
 }

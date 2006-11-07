@@ -50,7 +50,7 @@ YCbCrU8Plugin::YCbCrU8Plugin(QObject *parent, const char *name, const QStringLis
         f->add(csf);
         KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("YCBR8HISTO", i18n("YCBR8 Histogram")), colorSpaceYCbCrU8) );
+                (KisID("YCBR8HISTO", i18n("YCBR8")), colorSpaceYCbCrU8) );
     }
 
 }

@@ -86,7 +86,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
         // histogram producer
         KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("WETHISTO", i18n("Wet Histogram")), colorSpaceWet) );
+                (KisID("WETHISTO", i18n("Wet")), colorSpaceWet) );
 
         // wet brush op
         KisPaintOpRegistry::instance()->add(new KisWetOpFactory);

@@ -12,6 +12,9 @@
             <height>380</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>WdgHistogram</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -74,6 +77,12 @@
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>200</width>
+                            <height>0</height>
+                        </size>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0" rowspan="2" colspan="1">
@@ -217,4 +226,7 @@
     </image>
 </images>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kis_histogram_view.h</includehint>
+</includehints>
 </UI>

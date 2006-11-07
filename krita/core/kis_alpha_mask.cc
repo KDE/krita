@@ -59,7 +59,7 @@ KisAlphaMask::KisAlphaMask(Q_INT32 width, Q_INT32 height)
     m_data.resize(width * height, OPACITY_TRANSPARENT);
 }
 
-KisAlphaMask::~KisAlphaMask() 
+KisAlphaMask::~KisAlphaMask()
 {
 }
 
@@ -73,16 +73,6 @@ Q_INT32 KisAlphaMask::height() const
     return m_height;
 }
 
-Q_UINT8 KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
-{
-    if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
-        return m_data[(y * m_width) + x];
-    }
-    else {
-        return OPACITY_TRANSPARENT;
-    }
-}
-
 void KisAlphaMask::setAlphaAt(Q_INT32 x, Q_INT32 y, Q_UINT8 alpha)
 {
     if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
@@ -90,7 +80,7 @@ void KisAlphaMask::setAlphaAt(Q_INT32 x, Q_INT32 y, Q_UINT8 alpha)
     }
 }
 
-void KisAlphaMask::copyAlpha(const QImage& img) 
+void KisAlphaMask::copyAlpha(const QImage& img)
 {
     for (int y = 0; y < img.height(); y++) {
         for (int x = 0; x < img.width(); x++) {
@@ -102,7 +92,7 @@ void KisAlphaMask::copyAlpha(const QImage& img)
     }
 }
 
-void KisAlphaMask::computeAlpha(const QImage& img) 
+void KisAlphaMask::computeAlpha(const QImage& img)
 {
     // The brushes are mostly grayscale on a white background,
     // although some do have a colors. The alpha channel is seldom

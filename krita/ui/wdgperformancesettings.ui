@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>373</width>
+            <width>495</width>
             <height>220</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>WdgPerformanceSettings</string>
     </property>
     <vbox>
         <property name="name">
@@ -93,6 +96,12 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
                     <property name="name">
                         <cstring>m_swappiness</cstring>
                     </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>600</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
                     <property name="maxValue">
                         <number>6</number>
                     </property>
@@ -134,6 +143,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
 </customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

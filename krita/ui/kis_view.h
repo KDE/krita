@@ -551,7 +551,7 @@ private:
     KAction *m_layerAdd;
     KAction *m_layerBottom;
     KAction *m_layerDup;
-    KAction *m_layerHide;
+    KToggleAction *m_layerHide;
     KAction *m_layerLower;
     KAction *m_layerProperties;
     KAction *m_layerRaise;

@@ -62,7 +62,7 @@ RGBPlugin::RGBPlugin(QObject *parent, const char *name, const QStringList &)
         KisColorSpace * colorSpaceRGBA = new KisRgbColorSpace(f, 0);
         KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
-                (KisID("RGB8HISTO", i18n("RGB8 Histogram")), colorSpaceRGBA) );
+                (KisID("RGB8HISTO", i18n("RGB8")), colorSpaceRGBA) );
     }
 
 }

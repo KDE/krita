@@ -54,7 +54,7 @@ CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
 
         KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
-                (KisID("CMYKHISTO", i18n("CMYK Histogram")), colorSpaceCMYK) );
+                (KisID("CMYKHISTO", i18n("CMYK")), colorSpaceCMYK) );
     }
 
 }

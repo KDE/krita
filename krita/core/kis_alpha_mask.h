@@ -77,7 +77,15 @@ class KisAlphaMask : public KShared {
        Q_INT32 alphaPos). That would be fastest, or we could
        provide an iterator over the mask, that would be nice, too.
     */
-    Q_UINT8 alphaAt(Q_INT32 x, Q_INT32 y) const;
+    inline Q_UINT8 alphaAt(Q_INT32 x, Q_INT32 y) const
+    {
+	if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
+	    return m_data[(y * m_width) + x];
+	}
+	else {
+	    return OPACITY_TRANSPARENT;
+	}
+    }
 
     void setAlphaAt(Q_INT32 x, Q_INT32 y, Q_UINT8 alpha);
 

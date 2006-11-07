@@ -52,7 +52,7 @@ LMSF32Plugin::LMSF32Plugin(QObject *parent, const char *name, const QStringList 
 
         KisHistogramProducerFactoryRegistry::instance()->add(
             new KisBasicHistogramProducerFactory<KisBasicF32HistogramProducer>
-            (KisID("LMSF32HISTO", i18n("Float32 Histogram")), colorSpaceLMSF32) );
+            (KisID("LMSF32HISTO", i18n("Float32")), colorSpaceLMSF32) );
     }
 
 }

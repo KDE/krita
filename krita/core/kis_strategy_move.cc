@@ -96,8 +96,10 @@ void KisStrategyMove::drag(const QPoint& original)
 
             pos -= m_dragStart; // convert to delta
             rc = dev->extent();
+            kdDebug() << "Before move extent: " << rc << endl;
             dev->setX(dev->x() + pos.x());
             dev->setY(dev->y() + pos.y());
+            kdDebug() << "Extent afdter move: " << dev->extent() << endl;
             rc = rc.unite(dev->extent());
 
             m_layerPosition = QPoint(dev->x(), dev->y());
@@ -110,6 +112,7 @@ void KisStrategyMove::drag(const QPoint& original)
 
 void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
 {
+    kdDebug() << "Done dragging\n";
     if (m_subject && m_dragging) {
         KisImageSP img = m_subject->currentImg();
         KisLayerSP dev;

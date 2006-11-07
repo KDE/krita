@@ -49,7 +49,7 @@ CMYKU16Plugin::CMYKU16Plugin(QObject *parent, const char *name, const QStringLis
         f->add(csf);
         KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("CMYK16HISTO", i18n("CMYK16 Histogram")), colorSpaceCMYKU16) );
+                (KisID("CMYK16HISTO", i18n("CMYK16")), colorSpaceCMYKU16) );
     }
 
 }

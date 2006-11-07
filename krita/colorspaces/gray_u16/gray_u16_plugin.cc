@@ -51,7 +51,7 @@ GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const char *name, const QStringLis
 
         KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), colorSpaceGRAYU16) );
+                (KisID("GRAYA16HISTO", i18n("GRAY/Alpha16")), colorSpaceGRAYU16) );
     }
 
 }

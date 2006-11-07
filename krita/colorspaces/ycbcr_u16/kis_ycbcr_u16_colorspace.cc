@@ -174,7 +174,7 @@ Q_UINT32 KisYCbCrU16ColorSpace::nColorChannels() const {
 }
 
 Q_UINT32 KisYCbCrU16ColorSpace::pixelSize() const {
-    return MAX_CHANNEL_YCbCrA*sizeof(Q_UINT16);
+    return MAX_CHANNEL_YCbCrA * sizeof(Q_UINT16);
 }
 
 

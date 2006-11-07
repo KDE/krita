@@ -631,7 +631,10 @@ void KisView::setupActions()
 
     m_layerRm = new KAction(i18n("&Remove"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
     m_layerDup = new KAction(i18n("Duplicate"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
-    m_layerHide = new KAction(i18n("&Hide/Show"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
+    m_layerHide = new KToggleAction(i18n("&Hide"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
+    m_layerHide->setCheckedState(KGuiItem(i18n("&Show")));
+    m_layerHide->setChecked(false);
+
     m_layerRaise = new KAction(i18n("Raise"), "raise", "Ctrl+]", this, SLOT(layerRaise()), actionCollection(), "raiselayer");
     m_layerLower = new KAction(i18n("Lower"), "lower", "Ctrl+[", this, SLOT(layerLower()), actionCollection(), "lowerlayer");
     m_layerTop = new KAction(i18n("To Top"), "bring_forward", "Ctrl+Shift+]", this, SLOT(layerFront()), actionCollection(), "toplayer");

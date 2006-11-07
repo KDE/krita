@@ -155,7 +155,7 @@ protected:
 class KisGenericRGBHistogramProducerFactory : public KisHistogramProducerFactory {
 public:
     KisGenericRGBHistogramProducerFactory()
-        : KisHistogramProducerFactory(KisID("GENRGBHISTO", i18n("Generic RGB Histogram"))) {}
+        : KisHistogramProducerFactory(KisID("GENRGBHISTO", i18n("Generic RGB"))) {}
     virtual ~KisGenericRGBHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return new KisGenericRGBHistogramProducer(); }
     virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
@@ -186,7 +186,7 @@ class KisGenericLabHistogramProducer : public KisBasicHistogramProducer {
 class KisGenericLabHistogramProducerFactory : public KisHistogramProducerFactory {
     public:
         KisGenericLabHistogramProducerFactory()
-    : KisHistogramProducerFactory(KisID("GENLABHISTO", i18n("Generic L*a*b* Histogram"))) {}
+    : KisHistogramProducerFactory(KisID("GENLABHISTO", i18n("Generic L*a*b*"))) {}
         virtual ~KisGenericLabHistogramProducerFactory() {}
         virtual KisHistogramProducerSP generate() { return new KisGenericLabHistogramProducer(); }
         virtual bool isCompatibleWith(KisColorSpace*) const { return true; }

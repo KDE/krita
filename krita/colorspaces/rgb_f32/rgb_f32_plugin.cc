@@ -51,7 +51,7 @@ RGBF32Plugin::RGBF32Plugin(QObject *parent, const char *name, const QStringList 
 
         KisHistogramProducerFactoryRegistry::instance()->add(
             new KisBasicHistogramProducerFactory<KisBasicF32HistogramProducer>
-            (KisID("RGBF32HISTO", i18n("Float32 Histogram")), colorSpaceRGBF32) );
+            (KisID("RGBF32HISTO", i18n("Float32")), colorSpaceRGBF32) );
     }
 
 }

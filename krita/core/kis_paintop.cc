@@ -31,7 +31,8 @@
 #include "kis_iterators_pixel.h"
 #include "kis_color.h"
 
-KisPaintOp::KisPaintOp(KisPainter * painter) : m_dab(0)
+KisPaintOp::KisPaintOp(KisPainter * painter) 
+    : m_dab(0)
 {
     m_painter = painter;
     setSource(painter->device());

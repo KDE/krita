@@ -150,6 +150,7 @@ class TestKross(unittest.TestCase):
 
 		def callback(s):
 			self.assert_(s == " The Argument String ")
+			return "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!"
 		self.assert_( self.object1.connect("signalString(const QString&)", callback) )
 		self.object1.signalString(" The Argument String ")
 

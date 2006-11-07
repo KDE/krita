@@ -39,12 +39,45 @@ namespace Kross {
     class PythonFunction : public QObject
     {
         public:
-            PythonFunction(QObject* sender, const QByteArray& sendersignal, const Py::Callable& callable);
+
+            /**
+            * Constructor.
+            *
+            * \param sender The QObject instance that sends the signal.
+            * \param signal The signature of the signal the QObject emits.
+            * \param callable The callable python function that should
+            * be executed if the QObject emits the signal.
+            */
+            PythonFunction(QObject* sender, const QByteArray& signal, const Py::Callable& callable);
+
+            /**
+            * Destructor.
+            */
             virtual ~PythonFunction();
 
+            /**
+            * The static \a QMetaObject instance that provides the
+            * QMeta-information for this QObject class.
+            */
             QMetaObject staticMetaObject;
+
+            /**
+            * \return the dynamic build \a QMetaObject instance
+            * for this QObject instance.
+            */
             const QMetaObject *metaObject() const;
+
+            /**
+            * Try to cast this QObject instance into the class with
+            * name \p _clname and return the casted pointer or NULL
+            * if casting failed.
+            */
             void *qt_metacast(const char *_clname);
+
+            /**
+            * This method got called if a method this QObject instance
+            * defines should be invoked.
+            */
             int qt_metacall(QMetaObject::Call _c, int _id, void **_a);
 
         private:

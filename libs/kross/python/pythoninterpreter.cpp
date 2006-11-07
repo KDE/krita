@@ -296,7 +296,7 @@ void PythonInterpreter::extractException(QStringList& errorlist, int& lineno)
         }
     }
 
-    if(lineno < 0 && value && PyObject_HasAttrString(value, "lineno")) {
+    if(lineno < 0 && value && PyObject_HasAttrString(value, const_cast< char* >("lineno"))) {
         PyObject *getobj = PyObject_GetAttrString(value, const_cast< char* >("lineno") );
         if(getobj) {
             lineno = PyInt_AsLong(getobj);

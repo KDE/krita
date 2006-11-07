@@ -43,16 +43,17 @@ namespace Kross {
             Py::Callable callable;
             QByteArray stringData;
             uint data[21];
+            QVariant tmpResult;
     };
 
 }
 
-PythonFunction::PythonFunction(QObject* sender, const QByteArray& sendersignal, const Py::Callable& callable)
+PythonFunction::PythonFunction(QObject* sender, const QByteArray& signal, const Py::Callable& callable)
     : QObject()
     , d( new Private() )
 {
     d->sender = sender;
-    d->signature = QMetaObject::normalizedSignature( sendersignal );
+    d->signature = QMetaObject::normalizedSignature( signal );
     d->callable = callable;
 
     //krossdebug(QString("PythonFunction::PythonFunction sender=\"%1\" signal=\"%2\"").arg(sender->objectName()).arg(d->signature.constData()));
@@ -115,8 +116,8 @@ int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QObject::qt_metacall(_c, _id, _a);
     //krossdebug(QString("PythonFunction::qt_metacall id=%1").arg(_id));
-    if (_id >= 0 && _c == QMetaObject::InvokeMetaMethod) {
-        switch (_id) {
+    if(_id >= 0 && _c == QMetaObject::InvokeMetaMethod) {
+        switch(_id) {
             case 0: {
                 // convert the arguments
                 QVariantList args;
@@ -131,6 +132,7 @@ int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
                     else {
                         krosswarning("PythonFunction::qt_metacall: Not supported yet!");
                         //TODO implement
+                        args.append( QVariant() );
                     }
                     ++idx;
                 }
@@ -138,9 +140,12 @@ int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
                 // call the python function
                 Py::Object result = d->callable.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
 
-                //TODO finally set the returnvalue
-                //QVariant v = PythonType<QVariant>::toVariant(result);
-                //_a[0] = Kross::MetaTypeVariant<QVariant>(v).toVoidStar();
+                // finally set the returnvalue
+                QObject* sender = QObject::sender();
+                d->tmpResult = PythonType<QVariant>::toVariant(result);
+                krossdebug( QString("PythonFunction::qt_metacall sender.objectName=%1 sender.className=%2 pyresult=%3 variantresult=%4").arg(sender->objectName()).arg(sender->metaObject()->className()).arg(result.as_string().c_str()).arg(d->tmpResult.toString()) );
+                //_a[0] = Kross::MetaTypeVariant<QVariant>(d->tmpResult).toVoidStar();
+                _a[0] = &(d->tmpResult);
             } break;
         }
         _id -= 1;

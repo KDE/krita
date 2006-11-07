@@ -42,7 +42,6 @@ namespace Kross {
     class PythonExtension : public Py::PythonExtension<PythonExtension>
     {
             friend class PythonScript;
-            //friend class PythonModule;
         public:
 
             /**

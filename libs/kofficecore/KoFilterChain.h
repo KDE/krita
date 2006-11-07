@@ -19,12 +19,9 @@
 #ifndef __koffice_filter_chain_h__
 #define __koffice_filter_chain_h__
 
-#include <q3cstring.h>
 #include <q3asciidict.h>
 #include <q3ptrlist.h>
 #include <QStringList>
-//Added by qt3to4:
-#include <Q3StrList>
 
 #include <KoFilter.h>
 #include <KoQueryTrader.h>
@@ -34,7 +31,6 @@
 class KTemporaryFile;
 class KoFilterManager;
 class KoDocument;
-class Q3StrList;
 
 namespace KOffice {
     class Graph;

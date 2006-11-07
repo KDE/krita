@@ -131,7 +131,7 @@ public:
 
 
 // ************** KoShapeSelector ************
-KoShapeSelector::KoShapeSelector(QWidget *parent, const QString & regExp)
+KoShapeSelector::KoShapeSelector(QWidget *parent)
 : QDockWidget(i18n("Shapes"), parent)
 {
     setObjectName("ShapeSelector");

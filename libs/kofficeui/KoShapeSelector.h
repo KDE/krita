@@ -39,7 +39,7 @@ class QPainter;
 class KOFFICEUI_EXPORT KoShapeSelector : public QDockWidget {
     Q_OBJECT
 public:
-    KoShapeSelector(QWidget *parent, const QString & regExp);
+    KoShapeSelector(QWidget *parent);
     ~KoShapeSelector();
 
 private slots:

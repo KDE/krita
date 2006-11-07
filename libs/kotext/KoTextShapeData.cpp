@@ -28,7 +28,7 @@ KoTextShapeData::KoTextShapeData()
 , m_endPosition(-1)
 {
     m_document = new QTextDocument();
-    //m_document->setUseDesignMetrics(true); // TODO remove the comment when Qt fixes the first-parag-won't-break bug.
+    m_document->setUseDesignMetrics(true);
 }
 
 KoTextShapeData::~KoTextShapeData() {

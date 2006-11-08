@@ -124,36 +124,41 @@ public:
      *
      * @see m_optionWidget
      */
-    virtual QWidget * optionWidget(QWidget * parent);
+    QWidget * optionWidget(QWidget * parent);
+
+    /**
+     * Quick help is a short help text about the way the tool functions.
+     */
+    virtual QString quickHelp() const { return ""; }
 
 public: // Events
 
     /**
-     * Called when (one of) the mouse buttons is pressed.
+     * Called when (one of) the mouse or stylus buttons is pressed.
      * Implementors should call event->ignore() if they do not actually use the event.
-     * @param event state and reason of this mouse press
+     * @param event state and reason of this mouse or stylus press
      */
     virtual void mousePressEvent( KoPointerEvent *event ) = 0;
 
     /**
-     * Called when (one of) the mouse buttons is double clicked.
+     * Called when (one of) the mouse or stylus buttons is double clicked.
      * Implementors should call event->ignore() if they do not actually use the event.
      * Default implementation ignores this event.
-     * @param event state and reason of this mouse press
+     * @param event state and reason of this mouse or stylus press
      */
     virtual void mouseDoubleClickEvent( KoPointerEvent *event );
 
     /**
-     * Called when the mouse moved over the canvas.
+     * Called when the mouse or stylus moved over the canvas.
      * Implementors should call event->ignore() if they do not actually use the event.
-     * @param event state and reason of this mouse move
+     * @param event state and reason of this mouse or stylus move
      */
     virtual void mouseMoveEvent( KoPointerEvent *event ) = 0;
 
     /**
-     * Called when (one of) the mouse buttons is released.
+     * Called when (one of) the mouse or stylus buttons is released.
      * Implementors should call event->ignore() if they do not actually use the event.
-     * @param event state and reason of this mouse release
+     * @param event state and reason of this mouse or stylus release
      */
     virtual void mouseReleaseEvent( KoPointerEvent *event ) = 0;
 

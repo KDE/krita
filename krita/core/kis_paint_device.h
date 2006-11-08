@@ -148,7 +148,7 @@ public:
      * For instance, the tiled datamanager keeps the extent to the nearest
      * multiple of 64.
      */
-    void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+    virtual void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
     virtual QRect extent() const;
 
     /**
@@ -167,7 +167,7 @@ public:
      * Get the exact bounds of this paint device. This may be very slow,
      * especially on larger paint devices because it does a linear scanline search.
      */
-    void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+    virtual void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
     virtual QRect exactBounds() const;
     virtual QRect exactBoundsOldMethod() const;
     virtual QRect exactBoundsImprovedOldMethod() const;

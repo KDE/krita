@@ -30,7 +30,9 @@
 #include "kis_view.h"
 
 KisPerspectiveGridManager::KisPerspectiveGridManager(KisView * parent)
-    : QObject(), m_view(parent), m_toggleEdition(false)
+    : QObject()
+    , m_toggleEdition(false)
+    , m_view(parent)
 {
     
 }

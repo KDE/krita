@@ -636,7 +636,7 @@ void KisPaintDevice::mirrorX()
 {
     QRect r;
     if (hasSelection()) {
-        r = selection()->exactBounds();
+        r = selection()->selectedRect();
     }
     else {
         r = exactBounds();
@@ -667,7 +667,7 @@ void KisPaintDevice::mirrorY()
     /* Read a line from bottom to top and and from top to bottom and write their values to each other */
     QRect r;
     if (hasSelection()) {
-        r = selection()->exactBounds();
+        r = selection()->selectedRect();
     }
     else {
         r = exactBounds();
@@ -1113,7 +1113,7 @@ void KisPaintDevice::clearSelection()
 
 void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
 {
-    QRect r = mask->extent();
+    QRect r = mask->selectedRect();
     crop(r);
 
     for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {

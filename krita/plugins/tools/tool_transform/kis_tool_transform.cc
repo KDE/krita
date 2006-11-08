@@ -769,7 +769,8 @@ void KisToolTransform::transform()
     // Also restore the original selection.
     if(m_origSelection)
     {
-        QRect rc = m_origSelection->extent();
+        //QRect rc = m_origSelection->extent();
+        QRect rc = m_origSelection->selectedRect();
         rc = rc.normalize();
         img->activeDevice()->selection()->clear();
         KisPainter sgc(img->activeDevice()->selection().data());

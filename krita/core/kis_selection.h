@@ -119,6 +119,37 @@ private:
     void paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion);
 
 private:
+
+    // We don't want these methods to be used on selections:
+    void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const 
+        { 
+            KisPaintDevice::extent(x,y,w,h);
+        }
+    
+    QRect extent() const { return KisPaintDevice::extent(); }
+    
+    void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const 
+        {
+            return KisPaintDevice::exactBounds(x,y,w,h);
+        }   
+
+    QRect exactBounds() const
+        {
+            return KisPaintDevice::extent();
+        }
+
+    QRect exactBoundsOldMethod() const 
+        {
+            return KisPaintDevice::exactBoundsOldMethod();
+        }
+
+    QRect exactBoundsImprovedOldMethod() const
+        {
+            return KisPaintDevice::exactBoundsImprovedOldMethod();
+        }
+
+
+private:
     KisPaintDeviceSP m_parentPaintDevice;
     bool m_doCacheExactRect;
     QRect m_cachedExactRect;

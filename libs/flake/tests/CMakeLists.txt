@@ -29,4 +29,16 @@ add_test(flake-TestSelection ${EXECUTABLE_OUTPUT_PATH}/TestSelection)
 
 ########### next target ###############
 
+set(TestSelection_test_SRCS TestShapeAt.cpp )
+
+kde4_automoc(${TestSelection_test_SRCS})
+
+kde4_add_executable(TestShapeAt RUN_UNINSTALLED ${TestSelection_test_SRCS})
+
+target_link_libraries(TestShapeAt  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+add_test(flake-TestShapeAt ${EXECUTABLE_OUTPUT_PATH}/TestShapeAt)
+
+########### next target ###############
+
 endif(KDE4_BUILD_TESTS)

@@ -28,7 +28,6 @@
 #include <qframe.h>
 #include <qwidget.h>
 #include <qevent.h>
-#include <qtimer.h>
 
 #include <ktoolbar.h>
 #include <kmainwindow.h>

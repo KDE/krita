@@ -29,7 +29,6 @@
 #include <koFrameButton.h>
 
 class QWidget;
-class QTimer;
 class QTabWidget;
 
 class KToolBar;

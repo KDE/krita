@@ -35,7 +35,6 @@ class KisView;
 class KisFilter;
 class KisFilterConfiguration;
 class KisPreviewView;
-class QTimer;
 class KisFiltersIconViewItem;
 class KisFiltersListView;
 class KisThreadPool;

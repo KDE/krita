@@ -92,17 +92,17 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, Q_INT32 x, Q_INT32 y
     // Make the area we cover as small as possible
     if (m_device->hasSelection()) {
 
-        if (m_device->selection()->isTotallyUnselected(QRect(x, y, w, h))) {
-            return;
-        }
 
-        QRect r = m_device->selection()->extent().intersect(QRect(x, y, w, h));
+
+        QRect r =  m_device->selection()->selectedRect().intersect(QRect(x, y, w, h));
         x = r.x();
         y = r.y();
         w = r.width();
         h = r.height();
 
     }
+
+    if ( w == 0 && h == 0 ) return;
 
     // Determine the kernel's extent from the center pixel
     Q_INT32 kw, kh, khalfWidth, khalfHeight, xLastMinuskhw, yLastMinuskhh;
@@ -265,7 +265,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_I
 
         KisHLineIteratorPixel hit = m_device->createHLineIterator(x, row, w, true);
         bool needFull = true;
-        
+
         Q_INT32 itStart = row - khalfHeight;
         Q_INT32 itH = kh;
         if(itStart < 0)

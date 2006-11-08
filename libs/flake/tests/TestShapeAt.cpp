@@ -6,9 +6,12 @@
 #include <KoSelection.h>
 
 void TestShapeAt::test() {
+    MockShape shape1;
+    MockShape shape2;
+    MockShape shape3;
+
     MockCanvas canvas;
     KoShapeManager manager(&canvas);
-    MockShape shape1;
     shape1.setPosition(QPointF(100, 100));
     shape1.resize(QSizeF(50, 50));
     shape1.setZIndex(0);
@@ -21,9 +24,6 @@ void TestShapeAt::test() {
     QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::Unselected) != 0 );
     QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::NextUnselected) != 0 );
 
-    //QCOMPARE
-    //QVERIFY
-    MockShape shape2;
     shape2.setPosition(QPointF(80, 80));
     shape2.resize(QSizeF(50, 50));
     shape2.setZIndex(1);
@@ -46,7 +46,6 @@ void TestShapeAt::test() {
     QCOMPARE(manager.shapeAt(QPointF(105, 105), KoFlake::Unselected), &shape1);
     QCOMPARE(manager.shapeAt(QPointF(105, 105), KoFlake::NextUnselected), &shape1);
 
-    MockShape shape3;
     shape3.setPosition(QPointF(120, 80));
     shape3.resize(QSizeF(50, 50));
     shape3.setZIndex(2);

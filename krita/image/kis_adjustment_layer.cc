@@ -40,7 +40,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
     m_showSelection = true;
     Q_ASSERT(m_cachedPaintDev);
     connect(img.data(), SIGNAL(sigSelectionChanged(KisImageSP)),
-            this, SLOT(sigSelectionChanged(KisImageSP)));
+            this, SLOT(slotSelectionChanged(KisImageSP)));
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
@@ -54,7 +54,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
         if (!m_selection->hasSelection())
             m_selection->setSelection(m_selection);
         connect(rhs.image(), SIGNAL(sigSelectionChanged(KisImageSP)),
-                this, SLOT(sigSelectionChanged(KisImageSP)));
+                this, SLOT(slotSelectionChanged(KisImageSP)));
     }
     m_cachedPaintDev = new KisPaintDevice( *rhs.m_cachedPaintDev.data() );
     m_showSelection = false;

@@ -85,6 +85,8 @@ public:
     /**
      * Tests if the the rect is totally outside the selection, but uses selectedRect
      * instead of selectedRect, and this is faster (but might deliver false positives!)
+     *
+     * XXX: This comment makes no sense anymore! (BSAR)
      */
     bool isProbablyTotallyUnselected(QRect r);
 
@@ -92,13 +94,13 @@ public:
      * Rough, but fastish way of determining the area
      * of the tiles used by the selection.
      */
-    QRect selectedRect();
+    QRect selectedRect() const;
 
     /**
      * Slow, but exact way of determining the rectangle
      * that encloses the selection
      */
-    QRect selectedExactRect();
+    QRect selectedExactRect() const;
 
     void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     void paintSelection(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);

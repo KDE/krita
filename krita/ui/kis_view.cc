@@ -2477,10 +2477,12 @@ void KisView::canvasGotDoubleClickEvent(KisDoubleClickEvent *e)
 
 void KisView::canvasGotEnterEvent(QEvent *e)
 {
+    Q_UNUSED( e );
 }
 
 void KisView::canvasGotLeaveEvent (QEvent *e)
 {
+    Q_UNUSED( e );
 }
 
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)

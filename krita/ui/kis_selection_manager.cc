@@ -499,7 +499,7 @@ void KisSelectionManager::selectAll()
 
     KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return;
-    
+
     KisSelectedTransaction * t = 0;
     if (img->undo()) t = new KisSelectedTransaction(i18n("Select All"), dev);
     Q_CHECK_PTR(t);
@@ -728,7 +728,7 @@ void KisSelectionManager::feather()
     k->data[7] = 2;
     k->data[8] = 1;
 
-    QRect rect = selection->extent();
+    QRect rect = selection->selectedRect();
     // Make sure we've got enough space around the edges.
     rect = QRect(rect.x() - 3, rect.y() - 3, rect.width() + 6, rect.height() + 6);
     rect &= QRect(0, 0, img->width(), img->height());

@@ -208,7 +208,7 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
     }
     m_longRunningFilterTimer = 0;
     m_dcop = 0;
-    
+
     m_x = 0;
     m_y = 0;
 
@@ -243,7 +243,7 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
 KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, const char * name) :
         QObject(0, name), KShared(), m_exifInfo(0)
 {
-    
+
     m_longRunningFilterTimer = 0;
     m_dcop = 0;
 
@@ -264,7 +264,7 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, con
     }
 
     Q_ASSERT( m_colorSpace );
-    
+
     m_pixelSize = m_colorSpace->pixelSize();
     m_nChannels = m_colorSpace->nChannels();
 
@@ -276,7 +276,7 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, con
     Q_CHECK_PTR(m_datamanager);
     m_extentIsValid = true;
 
-    
+
     m_longRunningFilters = m_colorSpace->createBackgroundFilters();
     if (!m_longRunningFilters.isEmpty()) {
         m_longRunningFilterTimer = new QTimer(this);
@@ -285,7 +285,7 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, con
     }
 }
 
- 
+
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(rhs)
 {
     if (this != &rhs) {
@@ -520,7 +520,7 @@ QRect KisPaintDevice::exactBoundsImprovedOldMethod() const
     Q_INT32  x, y, w, h, boundX2, boundY2, boundW2, boundH2;
     extent(x, y, w, h);
     extent(boundX2, boundY2, boundW2, boundH2);
-    
+
     const Q_UINT8* defaultPixel = m_datamanager->defaultPixel();
     bool found = false;
     {
@@ -600,12 +600,14 @@ QRect KisPaintDevice::exactBoundsImprovedOldMethod() const
 
 QRect KisPaintDevice::exactBounds() const
 {
-    QRect r1 = exactBoundsOldMethod();
+    // XXX: Look, this code should never have gone into a release,
+    // right?
+    //QRect r1 = exactBoundsOldMethod();
     QRect r2 = exactBoundsImprovedOldMethod();
-    if(r1 != r2)
-    {
-        kdDebug() << "EXACTBOUNDSERROR : " << r1 << " " << r2 << endl;
-    }
+    //if(r1 != r2)
+    //{
+    //    kdDebug() << "EXACTBOUNDSERROR : " << r1 << " " << r2 << endl;
+    //}
     return r2;
 }
 
@@ -1075,7 +1077,7 @@ void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
 
     QRect r = selection->selectedExactRect();
     painter.bitBlt(r.x(), r.y(), COMPOSITE_ERASE, selection.data(), r.x(), r.y(), r.width(), r.height());
-    
+
     selection->invert();
     painter.end();
 }

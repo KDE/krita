@@ -74,27 +74,26 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
         threshold = 50;
         windowsize = 1;
     }
-    
+
     KisColorSpace* cs = src->colorSpace();
-    Q_INT32 depth = cs->nColorChannels();
-    
+
     // Compute the blur mask
     KisAutobrushShape* kas = new KisAutobrushCircleShape(2*windowsize+1, 2*windowsize+1, windowsize, windowsize);
-    
+
     QImage mask;
     kas->createBrush(&mask);
-    
+
     KisKernelSP kernel = KisKernel::fromQImage(mask);
-    
+
     KisPaintDeviceSP interm = new KisPaintDevice(*src);
     KisConvolutionPainter painter( interm );
 
     if (m_progressDisplay)
-        m_progressDisplay->setSubject( &painter, true, true );    
+        m_progressDisplay->setSubject( &painter, true, true );
 
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
-    
+
     if (painter.cancelRequested()) {
         cancel();
     }
@@ -102,7 +101,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width(), true );
     KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y(), rect.width(), false);
     KisHLineIteratorPixel intermIt = interm->createHLineIterator(rect.x(), rect.y(), rect.width(), false);
-    
+
     for( int j = 0; j < rect.height(); j++)
     {
         while( ! srcIt.isDone() )
@@ -124,7 +123,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
         dstIt.nextRow();
         intermIt.nextRow();
     }
-    
+
     setProgressDone(); // Must be called even if you don't really support progression
 }
 

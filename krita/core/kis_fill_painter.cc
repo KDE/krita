@@ -192,11 +192,10 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
         return;
     }
 
-    int x, y, w, h;
-    m_selection->extent(x, y, w, h);
+    QRect rc = m_selection->selectedRect();
 
-    bltSelection(x, y, m_compositeOp, filled, m_selection, m_opacity,
-                 x, y, w, h);
+    bltSelection(rc.x(), rc.y(), m_compositeOp, filled, m_selection, m_opacity,
+                 rc.x(), rc.y(), rc.width(), rc.height());
 
     emit notifyProgressDone();
 
@@ -215,13 +214,16 @@ typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     if (m_width < 0 || m_height < 0) {
         if (m_device->hasSelection() && m_careForSelection) {
-            Q_INT32 x,y,w,h;
-            m_device->selection()->extent(x,y,w,h);
-            m_width = w - (startX - x);
-            m_height = h - (startY - y);
+
+            QRect rc = m_device->selection()->selectedRect();
+            m_width = rc.width() - (startX - rc.x());
+            m_height = rc.height() - (startY - rc.y());
+
         } else if (m_device->image()) {
+
             m_width = m_device->image()->width();
             m_height = m_device->image()->height();
+
         } else {
             m_width = m_height = 500;
         }

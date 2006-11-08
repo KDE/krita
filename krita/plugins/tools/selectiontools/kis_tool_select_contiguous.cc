@@ -86,7 +86,7 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
         KisPaintDeviceSP dev;
         QPoint pos;
 
-        if (e->button() != QMouseEvent::LeftButton && e->button() != QMouseEvent::RightButton) 
+        if (e->button() != QMouseEvent::LeftButton && e->button() != QMouseEvent::RightButton)
             return;
 
         if (!(img = m_subject->currentImg()))
@@ -107,31 +107,31 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
         KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y());
         KisSelectedTransaction *t = 0;
         if (img->undo()) t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
-        
+
         if (!dev->hasSelection()) {
             dev->selection()->clear();
             if(m_selectAction==SELECTION_SUBTRACT)
                 selection->invert();
         }
-        
+
         switch (m_selectAction) {
             case SELECTION_SUBTRACT:
                 dev->subtractSelection(selection);
                 break;
             case SELECTION_ADD:
-            default: 
+            default:
                 dev->addSelection(selection);
                 break;
 
         }
 
-        dev->setDirty(selection->extent()); // A bit too wide, but that's not that bad
+        dev->setDirty(selection->selectedRect()); // A bit too wide, but that's not that bad
         dev->emitSelectionChanged();
 
 
         if (img->undo())
             img->undoAdapter()->addCommand(t);
-            
+
         QApplication::restoreOverrideCursor();
     }
 
@@ -215,7 +215,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
             this, SLOT(slotSetSampleMerged(int)));
 
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
-    
+
     return m_optWidget;
 }
 

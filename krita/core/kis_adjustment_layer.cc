@@ -39,7 +39,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
     m_showSelection = true;
     Q_ASSERT(m_cachedPaintDev);
     connect(img, SIGNAL(sigSelectionChanged(KisImageSP)),
-            this, SLOT(sigSelectionChanged(KisImageSP)));
+            this, SLOT(slotSelectionChanged(KisImageSP)));
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
@@ -53,7 +53,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
         if (!m_selection->hasSelection())
             m_selection->setSelection(m_selection);
         connect(rhs.image(), SIGNAL(sigSelectionChanged(KisImageSP)),
-                this, SLOT(sigSelectionChanged(KisImageSP)));
+                this, SLOT(slotSelectionChanged(KisImageSP)));
     }
     m_cachedPaintDev = new KisPaintDevice( *rhs.m_cachedPaintDev.data() );
     m_showSelection = false;
@@ -155,7 +155,7 @@ void KisAdjustmentLayer::setY(Q_INT32 y)
 QRect KisAdjustmentLayer::extent() const
 {
     if (m_selection)
-        return m_selection->extent();
+        return m_selection->selectedRect();
     else if (image())
         return image()->bounds();
     else
@@ -165,7 +165,7 @@ QRect KisAdjustmentLayer::extent() const
 QRect KisAdjustmentLayer::exactBounds() const
 {
     if (m_selection)
-        return m_selection->exactBounds();
+        return m_selection->selectedRect();
     else if (image())
         return image()->bounds();
     else

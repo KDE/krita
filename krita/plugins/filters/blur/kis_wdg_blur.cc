@@ -34,12 +34,14 @@
 
 KisWdgBlur::KisWdgBlur( KisFilter* nfilter, QWidget * parent, const char * name) : KisFilterConfigWidget ( parent, name )
 {
+    Q_UNUSED( nfilter );
+
     QGridLayout *widgetLayout = new QGridLayout(this, 1, 1);
     m_widget = new WdgBlur(this);
     widgetLayout -> addWidget(m_widget,0,0);
-    
+
     linkSpacingToggled(true);
-    
+
     connect( widget()->bnLinkSize, SIGNAL(toggled(bool)), this, SLOT(linkSpacingToggled( bool )));
     connect( widget()->intHalfWidth, SIGNAL(valueChanged(int)),this,SLOT(spinBoxHalfWidthChanged(int)));
     connect( widget()->intHalfHeight, SIGNAL(valueChanged(int)),this,SLOT(spinBoxHalfHeightChanged(int)));

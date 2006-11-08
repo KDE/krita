@@ -98,7 +98,7 @@ void KisToolCrop::activate()
         }
         else {
 
-            m_rectCrop = device->selection()->exactBounds();
+            m_rectCrop = device->selection()->selectedRect();
             validateSelection();
             crop();
         }
@@ -150,16 +150,16 @@ void KisToolCrop::buttonPress(KisButtonPressEvent *e)
             QPoint pos = e->pos().floorQPoint();
             QRect b = img->bounds();
 
-            if (pos.x() < b.x()) 
+            if (pos.x() < b.x())
                 pos.setX(b.x());
-            else if (pos.x() > b.x() + b.width()) 
+            else if (pos.x() > b.x() + b.width())
                 pos.setX(b.x() + b.width());
 
             if (pos.y() < b.y())
                 pos.setY(b.y());
             else if (pos.y() > b.y() + b.height())
                 pos.setY(b.y() + b.height());
-            
+
             m_selecting = true;
 
             if( !m_haveCropSelection ) //if the selection is not set
@@ -357,7 +357,7 @@ void KisToolCrop::move(KisMoveEvent *e)
                         else if( m_mouseOnHandleType == LowerLeft)
                             m_mouseOnHandleType = LowerRight;
                     }
-                    
+
                     m_rectCrop = m_rectCrop.normalize();
                     m_rectCrop = m_rectCrop.intersect( QRect(0,0, imageWidth + 1, imageHeight + 1 ) );
                     m_dragStart = e->pos().floorQPoint();

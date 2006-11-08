@@ -186,7 +186,7 @@ KoShape * KoShapeManager::shapeAt( const QPointF &position, KoFlake::ShapeSelect
                 if( ! firstUnselectedShape )
                     firstUnselectedShape = shape;
                 // check if the shape above is selected
-                if( count < sorterdShapes.count() && m_selection->isSelected( sorterdShapes.at(count+1) ) )
+                if( count + 1 < sorterdShapes.count() && m_selection->isSelected( sorterdShapes.at(count + 1) ) )
                     return shape;
                 break;
         }

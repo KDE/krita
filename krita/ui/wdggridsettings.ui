@@ -78,13 +78,6 @@
                             <blue>99</blue>
                         </color>
                     </property>
-                    <property name="defaultColor">
-                        <color>
-                            <red>99</red>
-                            <green>99</green>
-                            <blue>99</blue>
-                        </color>
-                    </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
                     <property name="name">
@@ -110,13 +103,6 @@
                         <string></string>
                     </property>
                     <property name="color">
-                        <color>
-                            <red>200</red>
-                            <green>200</green>
-                            <blue>200</blue>
-                        </color>
-                    </property>
-                    <property name="defaultColor">
                         <color>
                             <red>200</red>
                             <green>200</green>

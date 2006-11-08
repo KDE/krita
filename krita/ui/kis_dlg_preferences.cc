@@ -652,6 +652,10 @@ GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
     selectMainStyle->setCurrentItem(cfg.getGridMainStyle());
     selectSubdivisionStyle->setCurrentItem(cfg.getGridSubdivisionStyle());
 
+#if KDE_IS_VERSION(3,4,0)
+    colorMain->setDefaultColor( QColor( 99, 99, 99 ) );
+    colorSubdivision->setDefaultColor( QColor( 200, 200, 200 ) );
+#endif
     colorMain->setColor(cfg.getGridMainColor());
     colorSubdivision->setColor(cfg.getGridSubdivisionColor());
 

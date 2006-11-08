@@ -129,10 +129,10 @@ public:
      * canvas. The resource provider contains per-canvas settings such
      * as current foreground and background color.
      */
-    virtual KoCanvasResourceProvider * resourceProvider()
-        {
-            return m_resourceProvider;
-        }
+    KoCanvasResourceProvider * resourceProvider()
+    {
+        return m_resourceProvider;
+    }
 
 #if 0
 /*  The next list of methods are naming taken from Krita, which means they have already been

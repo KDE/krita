@@ -32,9 +32,10 @@
 
 KoShapeManager::KoShapeManager( KoCanvasBase *canvas, const QList<KoShape *> &shapes )
 : m_selection( new KoSelection() )
-, m_canvas( canvas )    
+, m_canvas( canvas )
 , m_tree( 4, 2 )
 {
+    Q_ASSERT(m_canvas); // not optional.
     connect( m_selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()) );
     setShapes(shapes);
     m_selection->addShapeManager( this );
@@ -43,9 +44,10 @@ KoShapeManager::KoShapeManager( KoCanvasBase *canvas, const QList<KoShape *> &sh
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 : m_shapes()
 , m_selection( new KoSelection() )
-, m_canvas( canvas )    
+, m_canvas( canvas )
 , m_tree( 4, 2 )
 {
+    Q_ASSERT(m_canvas); // not optional.
     connect( m_selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()) );
     m_selection->addShapeManager( this );
 }

@@ -26,7 +26,6 @@
 #include <QToolButton>
 //Added by qt3to4:
 #include <QEvent>
-#include <Q3PopupMenu>
 #include <kglobal.h>
 
 class KToolBar;

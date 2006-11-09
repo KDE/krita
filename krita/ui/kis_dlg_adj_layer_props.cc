@@ -126,9 +126,9 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     else {
         v1->addWidget( m_currentConfigWidget );
         connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
+        refreshPreview();
     }
 
-    refreshPreview();
     enableButtonOk( !m_layerName->text().isEmpty() );
 
 }

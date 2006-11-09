@@ -404,7 +404,8 @@ void KisFilterManager::slotApplyFilter(int i)
         }
     }
 
-    if (!apply()) {
+    // apply will crash if lastWidget == 0
+    if (!m_d->lastWidget || !apply()) {
         delete m_d->lastDialog;
         m_d->lastFilterConfig = oldConfig;
         m_d->lastDialog = oldDialog;

@@ -43,7 +43,7 @@ public:
 
     virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 4; }
-    virtual QWidget * createOptionWidget(QWidget* parent);
+    virtual QWidget * createOptionWidget();
         virtual QWidget* optionWidget();
     virtual enumToolType toolType() { return TOOL_SELECT; }
 

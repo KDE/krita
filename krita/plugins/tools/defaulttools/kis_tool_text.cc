@@ -116,12 +116,12 @@ void KisToolText::buttonRelease(KoPointerEvent *e)
 
         layer->setOpacity(m_opacity);
         layer->setCompositeOp(m_compositeOp);
-
+        layer->setVisible(false);
         qint32 x = qMax(0, static_cast<int>(e->x() - width/2));
         qint32 y = qMax(0, static_cast<int>(e->y() - height/2));
         layer->setX(x);
         layer->setY(y);
-
+        layer->setVisible(true);
         layer->setDirty();
 
         if (undoAdapter) {
@@ -135,7 +135,7 @@ void KisToolText::setFont() {
     m_lbFontName->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
 }
 
-QWidget* KisToolText::createOptionWidget(QWidget* parent)
+QWidget* KisToolText::createOptionWidget()
 {
     QWidget *widget = super::createOptionWidget(parent);
 

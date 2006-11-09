@@ -221,7 +221,7 @@ void KisToolColorPicker::setup(KActionCollection *collection)
     }
 }
 
-QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
+QWidget* KisToolColorPicker::createOptionWidget()
 {
     m_optionsWidget = new ColorPickerOptionsWidget(parent);
 

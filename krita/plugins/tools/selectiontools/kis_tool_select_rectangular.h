@@ -41,7 +41,7 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 3; }
     virtual enumToolType toolType() { return TOOL_SELECT; }
-    virtual QWidget * createOptionWidget(QWidget* parent);
+    virtual QWidget * createOptionWidget();
         virtual QWidget* optionWidget();
 
     virtual void paint(QPainter& gc);

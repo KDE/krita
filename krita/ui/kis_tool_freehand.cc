@@ -23,38 +23,37 @@
 #include <QLayout>
 #include <QWidget>
 #include <QRect>
+#include "QPainter"
 
 #include <kdebug.h>
 #include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
 
-// #include "kis_canvas_subject.h"
-#include "kis_undo_adapter.h"
-#include "kis_selection.h"
-#include "kis_painter.h"
-#include "kis_fill_painter.h"
-#include "kis_tool_freehand.h"
-#include "kis_cursor.h"
 #include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_canvas.h"
-#include "QPainter"
+#include "KoCanvasBase.h"
+
 #include "kis_boundary_painter.h"
 #include "kis_brush.h"
+#include "kis_canvas.h"
+#include "kis_cursor.h"
+#include "kis_fill_painter.h"
+#include "kis_group_layer.h"
+#include "kis_layer.h"
+#include "kis_paint_layer.h"
+#include "kis_painter.h"
+#include "kis_selection.h"
+#include "kis_tool_freehand.h"
+#include "kis_undo_adapter.h"
 
-KisToolFreehand::KisToolFreehand(const QString & transactionText)
-        : super(transactionText),
-        m_dragDist ( 0 ),
-        m_transactionText(transactionText),
-        m_mode( HOVER )
+KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QString & transactionText)
+        : KisToolPaint(canvas, transactionText)
+        , m_dragDist ( 0 )
+        , m_transactionText(transactionText)
+        , m_mode( HOVER )
 {
     m_painter = 0;
-    m_currentImage = 0;
+    m_currentImage = image();
     m_tempLayer = 0;
     m_paintIncremental = true;
     m_paintOnSelection = false;
@@ -65,7 +64,7 @@ KisToolFreehand::~KisToolFreehand()
 {
 }
 
-void KisToolFreehand::buttonPress(KoPointerEvent *e)
+void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
     if (!m_subject) return;
 
@@ -101,21 +100,15 @@ void KisToolFreehand::buttonPress(KoPointerEvent *e)
             }
             else {
                 m_target->setDirty(r);
-                // Just update the canvas. XXX: After 1.5, find a better way to make sure tools don't set dirty what they didn't touch.
+                // Just update the canvas.
+                // XXX: After 1.5, find a better way to make sure tools don't set dirty what they didn't touch.
                 m_subject->canvasController()->updateCanvas( r );
             }
         }
     }
 }
 
-void KisToolFreehand::buttonRelease(KoPointerEvent* e)
-{
-    if (e->button() == Qt::LeftButton && m_mode == PAINT) {
-        endPaint();
-    }
-}
-
-void KisToolFreehand::move(KoPointerEvent *e)
+void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_mode == PAINT) {
 
@@ -143,6 +136,15 @@ void KisToolFreehand::move(KoPointerEvent *e)
         }
     }
 }
+
+void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
+{
+    if (e->button() == Qt::LeftButton && m_mode == PAINT) {
+        endPaint();
+    }
+}
+
+
 
 void KisToolFreehand::initPaint(KoPointerEvent *)
 {
@@ -194,7 +196,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         m_painter = new KisPainter( m_target );
         Q_CHECK_PTR(m_painter);
         m_source = device;
-        if (currentImage()->undo()) m_painter->beginTransaction(m_transactionText);
+        if (m_currentImage->undo()) m_painter->beginTransaction(m_transactionText);
     }
 
     m_painter->setPaintColor(m_subject->fgColor());
@@ -283,12 +285,6 @@ void KisToolFreehand::paintLine(const KoPoint & pos1,
 }
 
 
-KisImageSP KisToolFreehand::currentImage()
-{
-    return m_currentImage;
-}
-
-
 void KisToolFreehand::paintOutline(const KoPoint& point) {
     if (!m_subject) {
         return;
@@ -296,7 +292,7 @@ void KisToolFreehand::paintOutline(const KoPoint& point) {
 
     KisCanvasController *controller = m_subject->canvasController();
 
-    if (currentImage() && !currentImage()->bounds().contains(point.floorQPoint())) {
+    if (m_currentImage && !m_currentImage->bounds().contains(point.floorQPoint())) {
         if (m_paintedOutline) {
             controller->kiscanvas()->update();
             m_paintedOutline = false;

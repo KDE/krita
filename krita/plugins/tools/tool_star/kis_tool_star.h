@@ -47,7 +47,7 @@ public:
     KisToolStar();
     virtual ~KisToolStar();
 
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
 
     //
     // KisToolPaint interface

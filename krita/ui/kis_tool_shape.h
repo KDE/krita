@@ -51,7 +51,7 @@ public:
 
 protected:
 
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
 
     KisPainter::FillStyle fillStyle();
 

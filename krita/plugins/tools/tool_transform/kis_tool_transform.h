@@ -55,7 +55,7 @@ public:
     KisToolTransform();
     virtual ~KisToolTransform();
 
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
     virtual void setup(KActionCollection *collection);

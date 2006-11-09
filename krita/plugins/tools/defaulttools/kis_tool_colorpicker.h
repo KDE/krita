@@ -49,7 +49,7 @@ public:
 public:
     virtual void setup(KActionCollection *collection);
     virtual void buttonPress(KoPointerEvent *e);
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
     virtual enumToolType toolType() { return TOOL_FILL; }
     virtual quint32 priority() { return 3; }

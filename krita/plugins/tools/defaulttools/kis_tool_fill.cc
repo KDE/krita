@@ -74,6 +74,8 @@ bool KisToolFill::flood(int startX, int startY)
     if (!device) return false;
 
     if (m_fillOnlySelection) {
+#warning Port the fixes for filling the selection from 1.6!
+        QRect rc = device->selection()->selectedRect();
         KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device->colorSpace(),  "filled"));
         KisFillPainter painter(filled);
         // XXX: The fillRect methods should either set the dirty rect or return it,
@@ -150,7 +152,7 @@ void KisToolFill::buttonRelease(KoPointerEvent *e)
     notifyModified();
 }
 
-QWidget* KisToolFill::createOptionWidget(QWidget* parent)
+QWidget* KisToolFill::createOptionWidget()
 {
     QWidget *widget = super::createOptionWidget(parent);
 

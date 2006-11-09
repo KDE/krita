@@ -47,7 +47,7 @@ public:
     virtual void doubleClick(KoPointerEvent * event);
 
     void finish();
-    QWidget* createOptionWidget(QWidget* parent);
+    QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
 public slots:

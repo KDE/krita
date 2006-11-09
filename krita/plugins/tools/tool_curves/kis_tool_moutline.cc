@@ -749,7 +749,7 @@ void KisToolMagnetic::slotSetDistance (int dist)
     m_distance = dist;
 }
 
-QWidget* KisToolMagnetic::createOptionWidget(QWidget* parent)
+QWidget* KisToolMagnetic::createOptionWidget()
 {
     m_optWidget = super::createOptionWidget(parent);
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());

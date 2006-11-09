@@ -26,25 +26,27 @@
 #include "KoPoint.h"
 #include "krita_export.h"
 
+class KoPointerEvent;
+class KoCanvasBase;
+
 class KisPainter;
 class KisBrush;
-class KoPointerEvent;
 class KisPaintLayer;
 
 
-class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint {
+class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
+{
+
     Q_OBJECT
-    typedef KisToolPaint super;
 
 public:
-    KisToolFreehand(const QString & transactionText);
+
+    KisToolFreehand(KoCanvasBase * canvas, const QString & transactionText);
     virtual ~KisToolFreehand();
 
-    virtual void buttonPress(KoPointerEvent *e);
-    virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KoPointerEvent *e);
-
-    virtual enumToolType toolType() { return TOOL_FREEHAND; }
+    virtual void mousePressEvent( KoPointerEvent *e );
+    virtual void mouseMoveEvent(KoPointerEvent *e);
+    virtual void mouseReleaseEvent(KoPointerEvent *e);
 
 protected:
     virtual void paintAt(const KoPoint &pos,
@@ -61,17 +63,13 @@ protected:
                    const double xtilt2,
                    const double ytilt2);
 
-    // XXX: why not make this a protected member attribute for the
-    // use of subclasses? BSAR.
-    inline KisPainter * painter() { return m_painter; };
     virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
-
-    KisImageSP currentImage();
 
     void paintOutline(const KoPoint& point);
 
 protected:
+
     KoPoint m_prevPos;
     double m_prevPressure;
     double m_prevXTilt;
@@ -90,7 +88,9 @@ protected:
     KisPainter *m_painter;
 
     KisImageSP m_currentImage;
+
 private:
+
     bool m_paintedOutline;
 };
 

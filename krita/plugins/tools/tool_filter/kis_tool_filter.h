@@ -44,7 +44,7 @@ public:
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_FREEHAND; }
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
 
 public slots:
     void changeFilter( const KoID & filter);

@@ -61,7 +61,7 @@ public:
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);
 
-    QWidget* createOptionWidget(QWidget* parent);
+    QWidget* createOptionWidget();
 
 public slots:
     void slotSetShape(int);

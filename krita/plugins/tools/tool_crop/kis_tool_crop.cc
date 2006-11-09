@@ -692,7 +692,7 @@ void KisToolCrop::setOptionWidgetRatio(double ratio)
 }
 
 
-QWidget* KisToolCrop::createOptionWidget(QWidget* parent)
+QWidget* KisToolCrop::createOptionWidget()
 {
     m_optWidget = new WdgToolCrop(parent);
     Q_CHECK_PTR(m_optWidget);

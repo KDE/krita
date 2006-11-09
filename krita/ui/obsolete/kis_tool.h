@@ -93,7 +93,7 @@ public:
      * This function is called to create the configuration widget of the tool.
      * @param parent the parent of the widget
      */
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
     /**
      * @return the current configuration widget.
      */

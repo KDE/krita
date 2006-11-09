@@ -535,7 +535,7 @@ void KisToolCurve::selectCurve()
     draw(false);
 }
 
-QWidget* KisToolCurve::createOptionWidget(QWidget* parent)
+QWidget* KisToolCurve::createOptionWidget()
 {
     if (toolType() == TOOL_SHAPE || toolType() == TOOL_FREEHAND)
         return super::createOptionWidget(parent);

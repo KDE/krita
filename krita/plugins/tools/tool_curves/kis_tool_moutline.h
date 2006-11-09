@@ -86,7 +86,7 @@ public:
     virtual KisCurve::iterator selectByMouse(KisCurve::iterator it);
 
     bool editingMode() {return m_editingMode;}
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
 
 public slots:
 

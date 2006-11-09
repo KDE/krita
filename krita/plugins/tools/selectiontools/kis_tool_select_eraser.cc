@@ -136,7 +136,7 @@ void KisToolSelectEraser::setup(KActionCollection *collection)
     }
 }
 
-QWidget* KisToolSelectEraser::createOptionWidget(QWidget* parent)
+QWidget* KisToolSelectEraser::createOptionWidget()
 {
     // Commented out due to the fact that this doesn't actually work if you change the action
 #if 0

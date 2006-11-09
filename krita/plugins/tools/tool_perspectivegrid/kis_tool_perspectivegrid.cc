@@ -487,7 +487,7 @@ void KisToolPerspectiveGrid::setup(KActionCollection *collection)
 }
 
 
-// QWidget* KisToolPerspectiveGrid::createOptionWidget(QWidget* parent)
+// QWidget* KisToolPerspectiveGrid::createOptionWidget()
 // {
 //     return 0;
 // }

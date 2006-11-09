@@ -801,7 +801,7 @@ void KisToolTransform::slotSetFilter(const KoID &filterID)
     m_filter = KisFilterStrategyRegistry::instance()->get(filterID);
 }
 
-QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
+QWidget* KisToolTransform::createOptionWidget()
 {
 
     m_optWidget = new WdgToolTransform(parent);

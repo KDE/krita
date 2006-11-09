@@ -224,7 +224,7 @@ vKoPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, dou
     return starCoordinatesArray;
 }
 
-QWidget* KisToolStar::createOptionWidget(QWidget* parent)
+QWidget* KisToolStar::createOptionWidget()
 {
     QWidget *widget = super::createOptionWidget(parent);
 

@@ -85,16 +85,10 @@ void KoTool::useCursor(QCursor cursor, bool force) {
     emit sigCursorChanged(m_previousCursor);
 }
 
-QWidget * KoTool::optionWidget(QWidget * parent) {
+QWidget * KoTool::optionWidget() {
     // Create the optionwidget if it doesn't exist yet
     if (m_optionWidget == 0) {
-        createOptionWidget(parent);
-    }
-    // If there is an optionwidget, but it is owned by a different widget,
-    // reparent. Note: is setParent correct here, or should I use reParent?
-    // The Qt dox are not conclusive.
-    if (m_optionWidget != 0 && m_optionWidget->parent() != parent) {
-        m_optionWidget->setParent(parent);
+        createOptionWidget();
     }
     return m_optionWidget;
 }

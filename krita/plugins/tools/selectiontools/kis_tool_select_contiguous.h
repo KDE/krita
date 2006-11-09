@@ -53,7 +53,7 @@ public:
     virtual quint32 priority() { return 7; }
     virtual enumToolType toolType() { return TOOL_SELECT; }
 
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
         virtual QWidget* optionWidget();
 
     virtual void buttonPress(KoPointerEvent *event);

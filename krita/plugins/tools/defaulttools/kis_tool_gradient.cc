@@ -221,7 +221,7 @@ void KisToolGradient::paintLine(QPainter& gc)
     }
 }
 
-QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
+QWidget* KisToolGradient::createOptionWidget()
 {
     QWidget *widget = super::createOptionWidget(parent);
     Q_CHECK_PTR(widget);

@@ -223,7 +223,7 @@ void KisToolSelectSimilar::slotSetAction(int action)
     m_defaultSelectAction = (enumSelectionMode)action;
 }
 
-QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
+QWidget* KisToolSelectSimilar::createOptionWidget()
 {
     m_optWidget = new QWidget(parent);
     Q_CHECK_PTR(m_optWidget);

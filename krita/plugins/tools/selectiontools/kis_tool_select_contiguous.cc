@@ -177,7 +177,7 @@ void KisToolSelectContiguous::slotSetAction(int action)
 }
 
 
-QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
+QWidget* KisToolSelectContiguous::createOptionWidget()
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);

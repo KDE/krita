@@ -39,7 +39,7 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual quint32 priority() { return 0; }
-    QWidget* createOptionWidget(QWidget* parent);
+    QWidget* createOptionWidget();
 
 protected:
 

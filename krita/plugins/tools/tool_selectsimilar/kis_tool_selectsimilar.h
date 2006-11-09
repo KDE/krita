@@ -58,7 +58,7 @@ public slots:
     virtual void slotSetAction(int);
 
 private:
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
     virtual void buttonPress(KoPointerEvent *e);

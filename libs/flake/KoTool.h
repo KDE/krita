@@ -120,11 +120,11 @@ public:
      * Return the option widget for this tool. Create it if it
      * does not exist yet. If the tool does not have an option widget,
      * this method return 0. (After discussion with Thomas, who prefers
-     * the toolmanager to handle that case.)
+     * the toolmanager to handle that case.) 
      *
      * @see m_optionWidget
      */
-    QWidget * optionWidget(QWidget * parent);
+    QWidget * optionWidget();
 
     /**
      * Quick help is a short help text about the way the tool functions.
@@ -234,9 +234,8 @@ protected:
      * Reimplement this if your tool actually has an option widget.
      * Sets the option widget to 0 by default.
      */
-    virtual void createOptionWidget(QWidget * parent)
+    virtual void createOptionWidget()
         {
-            Q_UNUSED( parent );
             m_optionWidget = 0;
         }
 

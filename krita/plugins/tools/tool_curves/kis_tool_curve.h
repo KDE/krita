@@ -51,7 +51,7 @@ public:
     virtual ~KisToolCurve();
 
     virtual void update (KisCanvasSubject *subject);
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
 
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);

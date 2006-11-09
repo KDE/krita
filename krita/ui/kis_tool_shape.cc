@@ -38,7 +38,7 @@ KisToolShape::~KisToolShape()
 {
 }
 
-QWidget* KisToolShape::createOptionWidget(QWidget* parent)
+QWidget* KisToolShape::createOptionWidget()
 {
     QWidget *widget = KisPaintTool::createOptionWidget(parent);
 

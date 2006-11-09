@@ -50,7 +50,7 @@ public:
                  const double yTilt);
 
     virtual QString quickHelp() const;
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
 
 protected slots:
     virtual void activate();

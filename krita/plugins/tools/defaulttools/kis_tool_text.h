@@ -41,7 +41,7 @@ public:
     virtual enumToolType toolType() { return TOOL_FILL; }
     virtual void buttonRelease(KoPointerEvent *e);
 
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
 public slots:
     virtual void setFont();
 

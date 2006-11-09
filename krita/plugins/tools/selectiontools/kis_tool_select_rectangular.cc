@@ -291,7 +291,7 @@ void KisToolSelectRectangular::setup(KActionCollection *collection)
     }
 }
 
-QWidget* KisToolSelectRectangular::createOptionWidget(QWidget* parent)
+QWidget* KisToolSelectRectangular::createOptionWidget()
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);

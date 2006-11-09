@@ -292,7 +292,7 @@ void KisToolSelectElliptical::setup(KActionCollection *collection)
     }
 }
 
-QWidget* KisToolSelectElliptical::createOptionWidget(QWidget* parent)
+QWidget* KisToolSelectElliptical::createOptionWidget()
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);

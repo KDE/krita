@@ -279,7 +279,7 @@ void KisToolSelectPolygonal::setup(KActionCollection *collection)
 }
 
 
-QWidget* KisToolSelectPolygonal::createOptionWidget(QWidget* parent)
+QWidget* KisToolSelectPolygonal::createOptionWidget()
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);

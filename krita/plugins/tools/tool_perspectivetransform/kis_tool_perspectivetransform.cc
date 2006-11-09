@@ -676,7 +676,7 @@ void KisToolPerspectiveTransform::slotLayerActivated(KisLayerSP)
 }
 
 
-QWidget* KisToolPerspectiveTransform::createOptionWidget(QWidget* /*parent*/)
+QWidget* KisToolPerspectiveTransform::createOptionWidget()
 {
 #if 0
     m_optWidget = new WdgToolPerspectiveTransform(parent);

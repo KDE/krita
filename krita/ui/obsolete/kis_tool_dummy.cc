@@ -98,7 +98,7 @@ void KisToolDummy::setup(KActionCollection *collection)
 }
 
 
-QWidget* KisToolDummy::createOptionWidget(QWidget* parent)
+QWidget* KisToolDummy::createOptionWidget()
 {
     m_optionWidget = new QLabel(i18n("Layer is locked or invisible."), parent);
     m_optionWidget->setWindowTitle(i18n("No Active Tool"));

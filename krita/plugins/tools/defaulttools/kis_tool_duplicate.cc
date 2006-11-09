@@ -234,7 +234,7 @@ QString KisToolDuplicate::quickHelp() const {
     return i18n("To start, shift-click on the place you want to duplicate from. Then you can start painting. An indication of where you are copying from will be displayed while drawing and moving the mouse.");
 }
 
-QWidget* KisToolDuplicate::createOptionWidget(QWidget* parent)
+QWidget* KisToolDuplicate::createOptionWidget()
 {
     QWidget* widget = KisToolPaint::createOptionWidget(parent);
     m_healing = new QCheckBox(widget);

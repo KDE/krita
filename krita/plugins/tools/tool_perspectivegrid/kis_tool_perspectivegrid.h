@@ -48,7 +48,7 @@ public:
     virtual void move(KoPointerEvent *event);
     virtual void buttonRelease(KoPointerEvent *event);
 
-//     QWidget* createOptionWidget(QWidget* parent);
+//     QWidget* createOptionWidget();
 //     virtual QWidget* optionWidget();
 
 public slots:

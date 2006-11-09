@@ -99,7 +99,7 @@ void KisToolFilter::initPaint(KoPointerEvent *e)
     dynamic_cast<KisFilterOp *>(op)->setFilterConfiguration( m_filter->configuration( m_filterConfigurationWidget) );
 }
 
-QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
+QWidget* KisToolFilter::createOptionWidget()
 {
     QWidget *widget = super::createOptionWidget(parent);
 

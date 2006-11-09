@@ -145,7 +145,7 @@ void KisToolSelectBrush::setup(KActionCollection *collection)
     }
 }
 
-QWidget* KisToolSelectBrush::createOptionWidget(QWidget* parent)
+QWidget* KisToolSelectBrush::createOptionWidget()
 {
     // Commented out due to the fact that this doesn't actually work if you change the action
 #if 0

@@ -56,7 +56,7 @@ KisTool::~KisTool()
     delete d;
 }
 
-QWidget* KisTool::createOptionWidget(QWidget* parent)
+QWidget* KisTool::createOptionWidget()
 {
 
     d->optionWidget = new QLabel(i18n("No options for %1.",d->uiname), parent);

@@ -262,7 +262,7 @@ void KisToolSelectOutline::setup(KActionCollection *collection)
 }
 
 
-QWidget* KisToolSelectOutline::createOptionWidget(QWidget* parent)
+QWidget* KisToolSelectOutline::createOptionWidget()
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);

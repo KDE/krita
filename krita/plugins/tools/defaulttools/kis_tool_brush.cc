@@ -146,7 +146,7 @@ void KisToolBrush::slotSetPaintingMode( int mode )
 }
 
 
-QWidget* KisToolBrush::createOptionWidget(QWidget* parent)
+QWidget* KisToolBrush::createOptionWidget()
 {
     QWidget *widget = super::createOptionWidget(parent);
     m_chkDirect = new QCheckBox(i18n("Paint incrementally"), widget);

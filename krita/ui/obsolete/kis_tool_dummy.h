@@ -54,7 +54,7 @@ public:
     virtual void move(KoPointerEvent *e);
     virtual void buttonRelease(KoPointerEvent *e);
 
-    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
 private:

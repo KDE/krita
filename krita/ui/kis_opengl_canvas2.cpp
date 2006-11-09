@@ -16,6 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifdef HAVE_OPENGL
 
 
 #include "kis_opengl_canvas2.h"
@@ -93,3 +94,4 @@ void KisOpenGLCanvas2::paintEvent( QPaintEvent * ev )
 
 
 #include "kis_opengl_canvas2.moc"
+#endif // HAVE_OPENGL

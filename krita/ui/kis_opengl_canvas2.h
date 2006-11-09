@@ -19,6 +19,7 @@
 
 #ifndef KIS_OPENGL_CANVAS_2_H
 #define KIS_OPENGL_CANVAS_2_H
+#ifdef HAVE_OPENGL
 
 #include <QGLWidget>
 
@@ -73,4 +74,5 @@ private:
 
 };
 
+#endif
 #endif

@@ -66,8 +66,13 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisCanvasType canvasType
 
     switch( canvasType ) {
     case OPENGL:
+#ifdef HAVE_OPENGL
         setCanvasWidget( new KisOpenGLCanvas2( this, view ) );
         break;
+#else
+        kWarning() << "OpenGL requested while its not available";
+        Q_ASSERT(false);
+#endif
     case MITSHM:
     case QPAINTER:
     default:

@@ -20,6 +20,9 @@ macro_optional_find_package(OpenEXR)
 macro_optional_find_package(Exif)
 macro_optional_find_package(PythonLibs)
 macro_optional_find_package(LibArt)
+macro_optional_find_package(Freetype)
+macro_optional_find_package(Fontconfig)
+
 macro_log_feature(QCA2_FOUND "libqca2" "QCA2 is needed to compile support for encrypted OpenDocument files" "Module into kdesupport" FALSE "2.0" "" )
 
 if (APPLE)
@@ -96,7 +99,11 @@ add_subdirectory(libs)
 MESSAGE(STATUS "Before koffice-2.0 disable compile of example subdir, not necessary for official release")
 add_subdirectory(example)
 add_subdirectory(interfaces)
-add_subdirectory(karbon)
+
+if(FREETYPE_FOUND AND FONTCONFIG_FOUND )
+	add_subdirectory(karbon)
+endif(FREETYPE_FOUND AND FONTCONFIG_FOUND)
+
 add_subdirectory(kdgantt)
 add_subdirectory(kchart)
 #add_subdirectory(kexi)

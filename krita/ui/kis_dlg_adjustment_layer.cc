@@ -187,7 +187,7 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( Q3IconViewItem * item )
                                                                            m_dev);
     }
 
-    if (m_configWidgetHolder != 0)
+    if (m_configWidgetHolder != 0 && m_currentConfigWidget != 0)
     {
         m_configWidgetHolder->layout()->addWidget(m_currentConfigWidget);
         m_currentConfigWidget->show();

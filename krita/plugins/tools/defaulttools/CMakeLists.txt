@@ -22,7 +22,7 @@ kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui)
 
 kde4_add_plugin(kritadefaulttools ${kritadefaulttools_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritadefaulttools )
+
 
 target_link_libraries(kritadefaulttools kritaui)
 

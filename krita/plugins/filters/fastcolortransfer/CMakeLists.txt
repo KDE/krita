@@ -13,7 +13,7 @@ kde4_add_ui_files(kritafastcolortransferfilter_PART_SRCS
 
 kde4_add_plugin(kritafastcolortransferfilter ${kritafastcolortransferfilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritafastcolortransferfilter )
+
 
 target_link_libraries(kritafastcolortransferfilter kritaui)
 

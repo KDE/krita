@@ -11,7 +11,7 @@ kde4_automoc(${krosskjs_PART_SRCS})
 
 kde4_add_plugin(krosskjs ${krosskjs_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosskjs )
+
 
 #target_link_libraries(krosskjs  ${KDE4_KDECORE_LIBS} krosscore kjs)
 target_link_libraries(krosskjs  ${KDE4_KDECORE_LIBS} krosscore kjs kjsembed)

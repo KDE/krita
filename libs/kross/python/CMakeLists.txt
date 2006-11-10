@@ -28,7 +28,7 @@ kde4_automoc(${krosspython_PART_SRCS})
 
 kde4_add_plugin(krosspython ${krosspython_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosspython )
+
 
 target_link_libraries(krosspython krosscore ${PYTHON_LIBRARIES})
 

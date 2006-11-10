@@ -18,7 +18,7 @@ kde4_automoc(${kritatoolcurves_PART_SRCS})
 
 kde4_add_plugin(kritatoolcurves ${kritatoolcurves_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolcurves )
+
 
 target_link_libraries(kritatoolcurves kritaui)
 

@@ -14,7 +14,7 @@ kde4_add_ui_files(kritadefaultpaintops_PART_SRCS kis_dlgbrushcurvecontrol.ui)
 
 kde4_add_plugin(kritadefaultpaintops ${kritadefaultpaintops_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritadefaultpaintops )
+
 
 target_link_libraries(kritadefaultpaintops kritaui)
 

@@ -5,7 +5,7 @@ kde4_automoc(${kritaraindropsfilter_PART_SRCS})
 
 kde4_add_plugin(kritaraindropsfilter ${kritaraindropsfilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaraindropsfilter )
+
 
 target_link_libraries(kritaraindropsfilter kritaui)
 

@@ -13,7 +13,7 @@ kde4_add_ui_files(kritalenscorrectionfilter_PART_SRCS
 
 kde4_add_plugin(kritalenscorrectionfilter ${kritalenscorrectionfilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritalenscorrectionfilter )
+
 
 target_link_libraries(kritalenscorrectionfilter kritaui)
 

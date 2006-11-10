@@ -10,7 +10,7 @@ kde4_add_ui_files(kritabumpmap_PART_SRCS wdgbumpmap.ui)
 
 kde4_add_plugin(kritabumpmap ${kritabumpmap_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritabumpmap )
+
 
 target_link_libraries(kritabumpmap kritaui)
 

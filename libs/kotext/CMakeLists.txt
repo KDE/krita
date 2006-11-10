@@ -115,7 +115,7 @@ kde4_automoc(${kotext2_PART_SRCS})
 
 kde4_add_plugin(kotext2 ${kotext2_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kotext2 )
+
 
 target_link_libraries(kotext2 kotext flake kofficeui)
 

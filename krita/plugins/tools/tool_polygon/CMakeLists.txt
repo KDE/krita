@@ -9,7 +9,7 @@ kde4_automoc(${kritatoolpolygon_PART_SRCS})
 
 kde4_add_plugin(kritatoolpolygon ${kritatoolpolygon_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolpolygon )
+
 
 target_link_libraries(kritatoolpolygon kritaui)
 

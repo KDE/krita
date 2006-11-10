@@ -11,7 +11,7 @@ kde4_automoc(${kritahistogramdocker_PART_SRCS})
 
 kde4_add_plugin(kritahistogramdocker ${kritahistogramdocker_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritahistogramdocker )
+
 
 target_link_libraries(kritahistogramdocker kritaui)
 

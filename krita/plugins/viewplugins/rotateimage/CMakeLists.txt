@@ -13,7 +13,7 @@ kde4_add_ui_files(kritarotateimage_PART_SRCS wdg_rotateimage.ui )
 
 kde4_add_plugin(kritarotateimage ${kritarotateimage_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritarotateimage )
+
 
 target_link_libraries(kritarotateimage kritaui)
 

@@ -11,7 +11,7 @@ kde4_automoc(${kritasobelfilter_PART_SRCS})
 
 kde4_add_plugin(kritasobelfilter ${kritasobelfilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritasobelfilter )
+
 
 target_link_libraries(kritasobelfilter kritaui)
 

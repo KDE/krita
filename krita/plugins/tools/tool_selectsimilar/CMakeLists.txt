@@ -9,7 +9,7 @@ kde4_automoc(${kritatoolselectsimilar_PART_SRCS})
 
 kde4_add_plugin(kritatoolselectsimilar ${kritatoolselectsimilar_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolselectsimilar )
+
 
 target_link_libraries(kritatoolselectsimilar kritaui)
 

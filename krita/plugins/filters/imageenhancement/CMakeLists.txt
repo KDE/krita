@@ -10,7 +10,7 @@ kde4_automoc(${kritaimageenhancement_PART_SRCS})
 
 kde4_add_plugin(kritaimageenhancement ${kritaimageenhancement_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaimageenhancement )
+
 
 target_link_libraries(kritaimageenhancement kritaui)
 

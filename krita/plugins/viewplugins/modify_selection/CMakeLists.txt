@@ -17,7 +17,7 @@ kde4_add_ui_files(kritamodifyselection_PART_SRCS
 
 kde4_add_plugin(kritamodifyselection ${kritamodifyselection_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritamodifyselection )
+
 
 target_link_libraries(kritamodifyselection kritaui)
 

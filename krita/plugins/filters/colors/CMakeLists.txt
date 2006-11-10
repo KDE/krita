@@ -15,7 +15,7 @@ kde4_add_ui_files(kritaextensioncolorsfilters_PART_SRCS
 
 kde4_add_plugin(kritaextensioncolorsfilters ${kritaextensioncolorsfilters_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaextensioncolorsfilters )
+
 
 target_link_libraries(kritaextensioncolorsfilters kritaui)
 

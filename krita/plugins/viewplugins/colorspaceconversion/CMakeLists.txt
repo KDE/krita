@@ -7,7 +7,7 @@ kde4_add_ui_files(kritacolorspaceconversion_PART_SRCS wdgconvertcolorspace.ui )
 
 kde4_add_plugin(kritacolorspaceconversion ${kritacolorspaceconversion_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacolorspaceconversion )
+
 
 target_link_libraries(kritacolorspaceconversion kritaui)
 

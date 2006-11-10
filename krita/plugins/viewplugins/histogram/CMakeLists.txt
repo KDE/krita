@@ -7,7 +7,7 @@ kde4_add_ui_files(kritahistogram_PART_SRCS wdghistogram.ui )
 
 kde4_add_plugin(kritahistogram ${kritahistogram_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritahistogram )
+
 
 target_link_libraries(kritahistogram kritaui)
 

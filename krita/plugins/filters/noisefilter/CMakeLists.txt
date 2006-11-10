@@ -13,7 +13,7 @@ kde4_add_ui_files(kritanoisefilter_PART_SRCS
 
 kde4_add_plugin(kritanoisefilter ${kritanoisefilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritanoisefilter )
+
 
 target_link_libraries(kritanoisefilter kritaui)
 

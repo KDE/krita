@@ -11,7 +11,7 @@ kde4_add_ui_files(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
 
 kde4_add_plugin(kritatooltransform ${kritatooltransform_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatooltransform )
+
 
 target_link_libraries(kritatooltransform kritaui)
 

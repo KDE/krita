@@ -5,7 +5,7 @@ kde4_automoc(${kritaembossfilter_PART_SRCS})
 
 kde4_add_plugin(kritaembossfilter ${kritaembossfilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaembossfilter )
+
 
 target_link_libraries(kritaembossfilter kritaui)
 

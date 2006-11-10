@@ -11,7 +11,7 @@ kde4_add_ui_files(kritatoolcrop_PART_SRCS wdg_tool_crop.ui)
 
 kde4_add_plugin(kritatoolcrop ${kritatoolcrop_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolcrop )
+
 
 target_link_libraries(kritatoolcrop kritaui)
 

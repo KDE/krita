@@ -11,7 +11,7 @@ kde4_add_ui_files(kritatoolstar_PART_SRCS wdg_tool_star.ui)
 
 kde4_add_plugin(kritatoolstar ${kritatoolstar_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolstar )
+
 
 target_link_libraries(kritatoolstar kritaui)
 

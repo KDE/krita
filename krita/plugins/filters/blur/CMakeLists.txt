@@ -14,7 +14,7 @@ kde4_add_ui_files(kritablurfilter_PART_SRCS
 
 kde4_add_plugin(kritablurfilter ${kritablurfilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritablurfilter )
+
 
 target_link_libraries(kritablurfilter kritaui)
 

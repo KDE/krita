@@ -7,7 +7,7 @@ kde4_add_ui_files(kritaperftest_PART_SRCS wdg_perftest.ui )
 
 kde4_add_plugin(kritaperftest ${kritaperftest_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaperftest )
+
 
 target_link_libraries(kritaperftest kritaui)
 

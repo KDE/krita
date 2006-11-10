@@ -97,7 +97,7 @@ kde4_automoc(${kodocinfopropspage_PART_SRCS})
 
 kde4_add_plugin(kodocinfopropspage ${kodocinfopropspage_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kodocinfopropspage )
+
 
 target_link_libraries(kodocinfopropspage  ${KDE4_KDECORE_LIBS} kofficecore )
 

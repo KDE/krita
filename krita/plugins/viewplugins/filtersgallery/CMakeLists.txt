@@ -11,7 +11,7 @@ kde4_add_ui_files(kritafiltersgallery_PART_SRCS kis_wdg_filtersgallery.ui)
 
 kde4_add_plugin(kritafiltersgallery ${kritafiltersgallery_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritafiltersgallery )
+
 
 target_link_libraries(kritafiltersgallery kritaui)
 

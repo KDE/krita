@@ -9,7 +9,7 @@ kde4_automoc(${kritawsbrushpaintop_PART_SRCS})
 
 kde4_add_plugin(kritawsbrushpaintop ${kritawsbrushpaintop_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritawsbrushpaintop )
+
 
 target_link_libraries(kritawsbrushpaintop kritaui)
 

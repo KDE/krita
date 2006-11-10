@@ -5,7 +5,7 @@ kde4_automoc(${kritaoilpaintfilter_PART_SRCS})
 
 kde4_add_plugin(kritaoilpaintfilter ${kritaoilpaintfilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaoilpaintfilter )
+
 
 target_link_libraries(kritaoilpaintfilter kritaui)
 

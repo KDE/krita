@@ -14,7 +14,7 @@ kde4_add_ui_files(kritaunsharpfilter_PART_SRCS
 
 kde4_add_plugin(kritaunsharpfilter ${kritaunsharpfilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaunsharpfilter )
+
 
 target_link_libraries(kritaunsharpfilter kritaui)
 

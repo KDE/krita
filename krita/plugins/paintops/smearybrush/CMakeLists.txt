@@ -9,7 +9,7 @@ kde4_automoc(${kritasmearybrush_PART_SRCS})
 
 kde4_add_plugin(kritasmearybrush ${kritasmearybrush_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritasmearybrush )
+
 
 target_link_libraries(kritasmearybrush kritaui)
 

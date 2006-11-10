@@ -19,7 +19,7 @@ kde4_automoc(${krita_ycbcr_u8_plugin_PART_SRCS})
 
 kde4_add_plugin(krita_ycbcr_u8_plugin ${krita_ycbcr_u8_plugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_ycbcr_u8_plugin )
+
 
 target_link_libraries(krita_ycbcr_u8_plugin  ${KDE4_KDECORE_LIBS} krita_ycbcr_u8 kritacolor )
 

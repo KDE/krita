@@ -12,7 +12,7 @@ kde4_automoc(kritadynamicbrush ${kritadynamicbrush_PART_SRCS})
 
 kde4_add_plugin(kritadynamicbrush ${kritadynamicbrush_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritadynamicbrush )
+
 
 target_link_libraries(kritadynamicbrush kritaui)
 

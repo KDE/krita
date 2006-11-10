@@ -10,7 +10,7 @@ kde4_automoc(${kritatoolperspectivetransform_PART_SRCS})
 
 kde4_add_plugin(kritatoolperspectivetransform ${kritatoolperspectivetransform_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolperspectivetransform )
+
 
 target_link_libraries(kritatoolperspectivetransform kritaui)
 

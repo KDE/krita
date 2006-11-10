@@ -11,7 +11,7 @@ kde4_add_ui_files(kritaconvolutionfilters_PART_SRCS kis_custom_convolution_filte
 
 kde4_add_plugin(kritaconvolutionfilters ${kritaconvolutionfilters_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaconvolutionfilters )
+
 
 target_link_libraries(kritaconvolutionfilters kritaui)
 

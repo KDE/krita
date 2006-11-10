@@ -28,7 +28,7 @@ kde4_automoc(${kritagrayplugin_PART_SRCS})
 
 kde4_add_plugin(kritagrayplugin ${kritagrayplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritagrayplugin )
+
 
 target_link_libraries(kritagrayplugin  ${KDE4_KDECORE_LIBS} kritagrayscale kritacolor )
 

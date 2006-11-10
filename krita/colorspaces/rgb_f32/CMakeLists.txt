@@ -29,7 +29,7 @@ kde4_automoc(${krita_rgb_f32_plugin_PART_SRCS})
 
 kde4_add_plugin(krita_rgb_f32_plugin ${krita_rgb_f32_plugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_rgb_f32_plugin )
+
 
 target_link_libraries(krita_rgb_f32_plugin  ${KDE4_KDECORE_LIBS} krita_rgb_f32 kritacolor )
 

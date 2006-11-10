@@ -5,7 +5,7 @@ kde4_automoc(${kritapixelizefilter_PART_SRCS})
 
 kde4_add_plugin(kritapixelizefilter ${kritapixelizefilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritapixelizefilter )
+
 
 target_link_libraries(kritapixelizefilter kritaui)
 

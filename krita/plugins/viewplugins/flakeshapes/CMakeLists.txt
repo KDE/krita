@@ -7,7 +7,7 @@ kde4_automoc(${kritaflakeshapes_PART_SRCS})
 
 kde4_add_plugin(kritaflakeshapes ${kritaflakeshapes_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaflakeshapes )
+
 
 target_link_libraries(kritaflakeshapes kritaui flake)
 

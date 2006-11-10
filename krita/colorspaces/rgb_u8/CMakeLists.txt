@@ -30,7 +30,7 @@ kde4_automoc(${kritargbplugin_PART_SRCS})
 
 kde4_add_plugin(kritargbplugin ${kritargbplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritargbplugin )
+
 
 target_link_libraries(kritargbplugin  ${KDE4_KDECORE_LIBS} kritargb pigment)
 

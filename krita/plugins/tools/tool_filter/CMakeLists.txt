@@ -10,7 +10,7 @@ kde4_automoc(${kritatoolfilter_PART_SRCS})
 
 kde4_add_plugin(kritatoolfilter ${kritatoolfilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolfilter )
+
 
 target_link_libraries(kritatoolfilter kritaui)
 

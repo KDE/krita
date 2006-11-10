@@ -15,7 +15,7 @@ kde4_automoc(${kritaselectiontools_PART_SRCS})
 
 kde4_add_plugin(kritaselectiontools ${kritaselectiontools_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaselectiontools )
+
 
 target_link_libraries(kritaselectiontools kritaui)
 

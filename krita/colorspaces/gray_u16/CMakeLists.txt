@@ -25,7 +25,7 @@ kde4_automoc(${krita_gray_u16_plugin_PART_SRCS})
 
 kde4_add_plugin(krita_gray_u16_plugin ${krita_gray_u16_plugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_gray_u16_plugin )
+
 
 target_link_libraries(krita_gray_u16_plugin  ${KDE4_KDECORE_LIBS} krita_gray_u16 kritacolor )
 

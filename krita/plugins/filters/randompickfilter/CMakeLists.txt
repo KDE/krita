@@ -13,7 +13,7 @@ kde4_add_ui_files(kritarandompickfilter_PART_SRCS
 
 kde4_add_plugin(kritarandompickfilter ${kritarandompickfilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritarandompickfilter )
+
 
 target_link_libraries(kritarandompickfilter kritaui)
 

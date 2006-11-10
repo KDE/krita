@@ -98,7 +98,7 @@ if (SHOULD_BUILD_KRITA)
 
     kde4_add_plugin(kritapart WITH_PREFIX ${kritapart_PART_SRCS})
 
-    kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritapart )
+    
 
     target_link_libraries(kritapart kritaui)
 

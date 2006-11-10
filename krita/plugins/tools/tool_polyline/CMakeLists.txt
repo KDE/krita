@@ -9,7 +9,7 @@ kde4_automoc(${kritatoolpolyline_PART_SRCS})
 
 kde4_add_plugin(kritatoolpolyline ${kritatoolpolyline_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolpolyline )
+
 
 target_link_libraries(kritatoolpolyline kritaui)
 

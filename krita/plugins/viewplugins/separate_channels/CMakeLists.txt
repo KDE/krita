@@ -13,7 +13,7 @@ kde4_add_ui_files(kritaseparatechannels_PART_SRCS wdg_separations.ui )
 
 kde4_add_plugin(kritaseparatechannels ${kritaseparatechannels_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaseparatechannels )
+
 
 target_link_libraries(kritaseparatechannels kritaui)
 

@@ -19,7 +19,7 @@ qt4_wrap_cpp(krosskritacore_LIB_SRCS krs_iterator.h)
 
 kde4_add_library(krosskritacore SHARED ${krosskritacore_LIB_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosskritacore )
+
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 

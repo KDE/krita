@@ -7,7 +7,7 @@ kde4_add_ui_files(kritacolorrange_PART_SRCS wdg_colorrange.ui )
 
 kde4_add_plugin(kritacolorrange ${kritacolorrange_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacolorrange )
+
 
 target_link_libraries(kritacolorrange kritaui)
 

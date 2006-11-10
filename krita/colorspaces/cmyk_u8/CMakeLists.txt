@@ -13,7 +13,7 @@ kde4_automoc(${kritacmykplugin_PART_SRCS})
 
 kde4_add_plugin(kritacmykplugin ${kritacmykplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacmykplugin )
+
 
 target_link_libraries(kritacmykplugin  ${KDE4_KDECORE_LIBS} kritacolor )
 

@@ -13,7 +13,7 @@ kde4_add_ui_files(kritavariations_PART_SRCS wdg_variations.ui )
 
 kde4_add_plugin(kritavariations ${kritavariations_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritavariations )
+
 
 target_link_libraries(kritavariations kritaui)
 

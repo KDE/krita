@@ -253,7 +253,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
         m_opacityLabel = new QLabel(i18n( "Opacity:" ), this);
 
         m_opacitySlider = new KoColorSlider(Qt::Horizontal, this);
-        m_opacitySlider->setFixedSize(100, 25);
+        m_opacitySlider->setFixedHeight(25);
         m_opacitySlider->setRange(0, 100);
 
         m_opacityIn = new QSpinBox(this);
@@ -264,8 +264,8 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
 
         mGrid->addItem( new QSpacerItem( 4, 4, QSizePolicy::Fixed, QSizePolicy::Fixed), 8, 5 );
 
-        mGrid->addWidget(m_opacityLabel, 9, 2, Qt::AlignTop);
-        mGrid->addWidget(m_opacitySlider, 9, 3, 1, 4, Qt::AlignTop);
+        mGrid->addWidget(m_opacityLabel, 9, 0, Qt::AlignRight | Qt::AlignTop);
+        mGrid->addWidget(m_opacitySlider, 9, 1, 1, 7, Qt::AlignTop);
         mGrid->addWidget(m_opacityIn, 9, 8, Qt::AlignTop);
 
         connect(m_opacitySlider, SIGNAL(valueChanged(int)), this, SLOT(slotOpacityChanged(int)));

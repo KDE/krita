@@ -48,8 +48,8 @@
 #include "kis_cursor.h"
 #include "kis_tool_freehand.h"
 
-KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QString & transactionText)
-        : KisToolPaint(canvas)
+KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
+        : KisToolPaint(canvas, cursor)
         , m_dragDist ( 0 )
         , m_transactionText(transactionText)
         , m_mode( HOVER )

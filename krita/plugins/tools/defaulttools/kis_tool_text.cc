@@ -66,7 +66,7 @@ KisToolText::~KisToolText()
 void KisToolText::buttonRelease(KoPointerEvent *e)
 {
     if (m_subject && e->button() == Qt::LeftButton) {
-        KisImageSP img = m_subject->currentImg();
+        
 
         bool ok;
         QString text = KInputDialog::getText(i18n("Font Tool"), i18n("Enter text:"),
@@ -74,7 +74,7 @@ void KisToolText::buttonRelease(KoPointerEvent *e)
         if (!ok)
             return;
 
-        KisUndoAdapter *undoAdapter = img->undoAdapter();
+        KisUndoAdapter *undoAdapter = m_currentImage->undoAdapter();
         if (undoAdapter) {
             undoAdapter->beginMacro(i18n("Text"));
         }
@@ -99,11 +99,11 @@ void KisToolText::buttonRelease(KoPointerEvent *e)
 
         qint32 height = boundingRect.height();
         qint32 width = boundingRect.width();
-        KisPaintLayer *layer = new KisPaintLayer(img.data(), '"' + text + '"', OPACITY_OPAQUE);
-        KisGroupLayerSP parent = img->rootLayer();
-        if (img->activeLayer())
-            parent = img->activeLayer()->parent();
-        img->addLayer(KisLayerSP(layer), parent, img->activeLayer());
+        KisPaintLayer *layer = new KisPaintLayer(m_currentImage.data(), '"' + text + '"', OPACITY_OPAQUE);
+        KisGroupLayerSP parent = m_currentImage->rootLayer();
+        if (m_currentImage->activeLayer())
+            parent = m_currentImage->activeLayer()->parent();
+        m_currentImage->addLayer(KisLayerSP(layer), parent, m_currentImage->activeLayer());
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 QRgb pixel = image.pixel(x, y);

@@ -80,7 +80,7 @@ private:
     KoPoint m_startPos;
     KoPoint m_endPos;
 
-    KisCanvasSubject *m_subject;
+    
 
     KisGradientPainter::enumGradientShape m_shape;
     KisGradientPainter::enumGradientRepeat m_repeat;

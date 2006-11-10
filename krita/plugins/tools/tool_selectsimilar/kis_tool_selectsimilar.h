@@ -64,7 +64,7 @@ private:
     virtual void buttonPress(KoPointerEvent *e);
     void setPickerCursor(enumSelectionMode);
 
-    KisCanvasSubject *m_subject;
+    
     QWidget *m_optWidget;
     KisSelectionOptions *m_selectionOptionsWidget;
 

@@ -65,7 +65,7 @@ private slots:
     void slotTimer();
 
 private:
-    KisCanvasSubject *m_subject;
+    
     QPoint m_startPos;
     QPoint m_endPos;
     bool m_dragging;

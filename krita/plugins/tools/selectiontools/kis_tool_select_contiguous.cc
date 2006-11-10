@@ -86,19 +86,19 @@ void KisToolSelectContiguous::buttonPress(KoPointerEvent * e)
     if (m_subject) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-        KisImageSP img;
+        KisImageSP m_currentImage;
         KisPaintDeviceSP dev;
         QPoint pos;
 
         if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
             return;
 
-        if (!(img = m_subject->currentImg()))
+        if (!(m_currentImage = m_currentImage))
             return;
 
-        dev = img->activeDevice();
+        dev = m_currentImage->activeDevice();
 
-        if (!dev || !img->activeLayer()->visible())
+        if (!dev || !m_currentImage->activeLayer()->visible())
             return;
 
 
@@ -109,7 +109,7 @@ void KisToolSelectContiguous::buttonPress(KoPointerEvent * e)
         fillpainter.setSampleMerged(m_sampleMerged);
         KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y());
         KisSelectedTransaction *t = 0;
-        if (img->undo()) t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
+        if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
 
         if (!dev->hasSelection()) {
             dev->selection()->clear();
@@ -131,8 +131,8 @@ void KisToolSelectContiguous::buttonPress(KoPointerEvent * e)
         dev->setDirty(selection->extent()); // A bit too wide, but that's not that bad
         dev->emitSelectionChanged();
 
-        if (img->undo())
-            img->undoAdapter()->addCommand(t);
+        if (m_currentImage->undo())
+            m_currentImage->undoAdapter()->addCommand(t);
 
         QApplication::restoreOverrideCursor();
     }

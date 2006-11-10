@@ -66,7 +66,7 @@ DefaultTools::DefaultTools(QObject *parent, const QStringList &)
 
         //r->add(KoToolFactorySP(new KisToolFillFactory()));
         //r->add(KoToolFactorySP(new KisToolGradientFactory()));
-        r->add(KoToolFactorySP(new KisToolBrushFactory()));
+        r->add(new KisToolBrushFactory(r, QStringList()));
         //r->add(KoToolFactorySP(new KisToolColorPickerFactory()));
         //r->add(KoToolFactorySP(new KisToolLineFactory()));
         //r->add(KoToolFactorySP(new KisToolTextFactory()));

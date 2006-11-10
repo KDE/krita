@@ -82,8 +82,8 @@ void KisToolCrop::activate()
     super::activate();
 
     // No current crop rectangle, try to use the selection of the device to make a rectangle
-    if (m_subject && m_subject->currentImg() && m_subject->currentImg()->activeDevice()) {
-        KisPaintDeviceSP device = m_subject->currentImg()->activeDevice();
+    if (m_subject && m_currentImage && m_currentImage->activeDevice()) {
+        KisPaintDeviceSP device = m_currentImage->activeDevice();
         if (!device->hasSelection())
             return;
 
@@ -97,11 +97,11 @@ void KisToolCrop::deactivate()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
-        KisImageSP img = m_subject->currentImg();
+        
 
         Q_ASSERT(controller);
 
-        controller->kiscanvas()->update();
+        m_canvas->updateCanvas();
 
         m_rectCrop = QRect(0,0,0,0);
 
@@ -124,11 +124,11 @@ void KisToolCrop::clearRect()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
-        KisImageSP img = m_subject->currentImg();
+        
 
         Q_ASSERT(controller);
 
-        controller->kiscanvas()->update();
+        m_canvas->updateCanvas();
 
         m_rectCrop = QRect(0,0,0,0);
 
@@ -140,11 +140,11 @@ void KisToolCrop::clearRect()
 void KisToolCrop::buttonPress(KoPointerEvent *e)
 {
     if (m_subject) {
-        KisImageSP img = m_subject->currentImg();
+        
 
-        if (img && img->activeDevice() && e->button() == Qt::LeftButton) {
+        if (m_currentImage && m_currentImage->activeDevice() && e->button() == Qt::LeftButton) {
             QPoint pos = e->pos().floorQPoint();
-            QRect b = img->bounds();
+            QRect b = m_currentImage->bounds();
 
             if (pos.x() < b.x())
                 pos.setX(b.x());
@@ -177,7 +177,7 @@ void KisToolCrop::buttonPress(KoPointerEvent *e)
 
 void KisToolCrop::move(KoPointerEvent *e)
 {
-    if ( m_subject && m_subject->currentImg())
+    if ( m_subject && m_currentImage)
     {
         if( m_selecting ) //if the user selects
         {
@@ -187,7 +187,7 @@ void KisToolCrop::move(KoPointerEvent *e)
 
                 m_rectCrop.setBottomRight( e->pos().floorQPoint());
 
-                KisImageSP image = m_subject->currentImg();
+                KisImageSP image = m_currentImage;
 
                 m_rectCrop.setRight( qMin(m_rectCrop.right(), image->width()));
                 m_rectCrop.setBottom( qMin(m_rectCrop.bottom(), image->width()));
@@ -201,8 +201,8 @@ void KisToolCrop::move(KoPointerEvent *e)
                 if (m_mouseOnHandleType != None && m_dragStart != m_dragStop ) {
 
 
-                    qint32 imageWidth = m_subject->currentImg()->width();
-                    qint32 imageHeight = m_subject->currentImg()->height();
+                    qint32 imageWidth = m_currentImage->width();
+                    qint32 imageHeight = m_currentImage->height();
 
                     paintOutlineWithHandles();
 
@@ -388,7 +388,7 @@ void KisToolCrop::updateWidgetValues(bool updateratio)
 
 void KisToolCrop::buttonRelease(KoPointerEvent *e)
 {
-    if (m_subject && m_subject->currentImg() && m_selecting && e->button() == Qt::LeftButton) {
+    if (m_subject && m_currentImage && m_selecting && e->button() == Qt::LeftButton) {
 
         m_selecting = false;
         m_haveCropSelection = true;
@@ -407,7 +407,7 @@ void KisToolCrop::doubleClick(KoPointerEvent *)
 void KisToolCrop::validateSelection(bool updateratio)
 {
     if (m_subject) {
-        KisImageSP image = m_subject->currentImg();
+        KisImageSP image = m_currentImage;
 
         if (image) {
             qint32 imageWidth = image->width();
@@ -514,9 +514,9 @@ void KisToolCrop::crop() {
     m_haveCropSelection = false;
     setCursor(m_cropCursor);
 
-    KisImageSP img = m_subject->currentImg();
+    
 
-    if (!img)
+    if (!m_currentImage)
         return;
 
     QRect rc =  realRectCrop().normalized();
@@ -526,20 +526,20 @@ void KisToolCrop::crop() {
     if (m_optWidget->cmbType->currentIndex() == 0) {
         // The layer(s) under the current layer will take care of adding
         // undo information to the Crop macro.
-        if (img->undo())
-            img->undoAdapter()->beginMacro(i18n("Crop"));
+        if (m_currentImage->undo())
+            m_currentImage->undoAdapter()->beginMacro(i18n("Crop"));
 
         KisCropVisitor v(rc, false);
-        KisLayerSP layer = img->activeLayer();
+        KisLayerSP layer = m_currentImage->activeLayer();
         layer->accept(v);
 
-        if (img->undo())
-            img->undoAdapter()->endMacro();
+        if (m_currentImage->undo())
+            m_currentImage->undoAdapter()->endMacro();
 
     }
     else {
         // Resize creates the undo macro itself
-        img->resize(rc, true);
+        m_currentImage->resize(rc, true);
     }
 
     m_rectCrop = QRect(0,0,0,0);

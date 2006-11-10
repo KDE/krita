@@ -1,5 +1,3 @@
-
-
 set(kritadefaulttools_PART_SRCS
     default_tools.cc
     #kis_tool_colorpicker.cc

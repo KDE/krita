@@ -109,14 +109,14 @@ void KisToolSelectOutline::buttonRelease(KoPointerEvent *event)
         m_dragging = false;
         deactivate();
 
-        KisImageSP img = m_subject->currentImg();
+        
 
-        if (img && img->activeDevice()) {
+        if (m_currentImage && m_currentImage->activeDevice()) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KisPaintDeviceSP dev = img->activeDevice();
+            KisPaintDeviceSP dev = m_currentImage->activeDevice();
             bool hasSelection = dev->hasSelection();
             KisSelectedTransaction *t = 0;
-            if (img->undo()) t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
+            if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
             KisSelectionSP selection = dev->selection();
 
             if (!hasSelection) {
@@ -156,8 +156,8 @@ void KisToolSelectOutline::buttonRelease(KoPointerEvent *event)
                 dev->emitSelectionChanged();
             }
 
-            if (img->undo())
-                img->undoAdapter()->addCommand(t);
+            if (m_currentImage->undo())
+                m_currentImage->undoAdapter()->addCommand(t);
 
             QApplication::restoreOverrideCursor();
         }

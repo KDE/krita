@@ -43,15 +43,16 @@
 
 #include <kis_image.h>
 
-#include "kis_resource_provider.h"
-#include "kis_factory2.h"
 #include "kis_canvas2.h"
+#include "kis_doc2.h"
+#include "kis_dummy_shape.h"
+#include "kis_factory2.h"
+#include "kis_filter_manager.h"
 #include "kis_opengl_canvas2.h"
 #include "kis_qpainter_canvas.h"
-#include "kis_doc2.h"
 #include "kis_resource_provider.h"
-#include "kis_filter_manager.h"
-#include "kis_dummy_shape.h"
+#include "kis_resource_provider.h"
+#include "kis_tool_registry.h"
 
 class KisView2::KisView2Private {
 
@@ -116,6 +117,10 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
                              SLOT( configureShortcuts() ),
                              actionCollection() );
 
+
+    KisToolRegistry::instance(); // Load the tools, if they're not
+                                 // already loaded. The tools register
+                                 // themselves with
 
     createActions();
     createManagers();

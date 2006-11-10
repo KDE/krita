@@ -41,7 +41,7 @@ class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 
 public:
 
-    KisToolFreehand(KoCanvasBase * canvas, const QString & transactionText);
+    KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
     virtual ~KisToolFreehand();
 
     virtual void mousePressEvent( KoPointerEvent *e );

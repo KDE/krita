@@ -57,10 +57,10 @@ void KisToolMove::buttonPress(KoPointerEvent *e)
 {
     if (m_subject && e->button() == Qt::LeftButton) {
         QPoint pos = e->pos().floorQPoint();
-        KisImageSP img = m_subject->currentImg();
+        
         KisLayerSP dev;
 
-        if (!img || !(dev = img->activeLayer()))
+        if (!m_currentImage || !(dev = m_currentImage->activeLayer()))
             return;
 
         m_dragStart = pos;

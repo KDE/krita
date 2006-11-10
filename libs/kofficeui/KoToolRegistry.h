@@ -31,6 +31,9 @@
  * This singleton class keeps a register of all available flake tools,
  * or rather, of the factories that the KoToolBox (and KoToolManager) will use
  * to create flake tools.
+ *
+ * XXX: Make it possible for this class to load not just flake tools,
+   but also the app-specific KoTool-based tools. (BSAR)
  */
 class KOFFICEUI_EXPORT KoToolRegistry : public QObject, public KoGenericRegistry<KoToolFactory*> {
     Q_OBJECT

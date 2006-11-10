@@ -66,7 +66,7 @@ public slots:
 
 
 private:
-    KisCanvasSubject *m_subject;
+    
     KisSelectionOptions * m_optWidget;
 
     int m_fuzziness;

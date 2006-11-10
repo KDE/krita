@@ -1,5 +1,10 @@
 include_directories(${CMAKE_SOURCE_DIR}/krita/ui/obsolete/)
 set(kritaui_LIB_SRCS
+    #    kis_birdeye_box.cc
+    #    kis_paintop_box.cc # Needs to know about the active input device a lot
+    #    kis_selection_manager.cc
+    #    kis_tool_shape.cc
+    #kis_tool_non_paint.cc
     imageviewer.cc
     kcurve.cc
     kis_autobrush.cc
@@ -68,17 +73,13 @@ set(kritaui_LIB_SRCS
     kis_selection_options.cc
     kis_strategy_move.cc
     kis_text_brush.cc
+    kis_tool_freehand.cc
+    kis_tool_paint.cc
+    kis_tool_registry.cc	
     kis_view2.cpp
     kis_view_converter.cpp
     kobirdeyepanel.cpp
     squeezedcombobox.cpp
-    #    kis_paintop_box.cc # Needs to know about the active input device a lot
-    kis_tool_freehand.cc
-    #kis_tool_non_paint.cc
-    kis_tool_paint.cc
-    #    kis_tool_shape.cc
-    #    kis_birdeye_box.cc
-    #    kis_selection_manager.cc
 )
 
 

@@ -71,7 +71,7 @@ private:
     KoColor m_pickedColor;
 
     ColorPickerOptionsWidget *m_optionsWidget;
-    KisCanvasSubject *m_subject;
+    
     QList<KisPalette*> m_palettes;
 };
 

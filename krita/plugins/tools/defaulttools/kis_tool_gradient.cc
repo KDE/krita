@@ -82,7 +82,7 @@ void KisToolGradient::paint(QPainter& gc, const QRect&)
 
 void KisToolGradient::buttonPress(KoPointerEvent *e)
 {
-    if (!m_subject || !m_subject->currentImg()) {
+    if (!m_subject || !m_currentImage) {
         return;
     }
 
@@ -116,7 +116,7 @@ void KisToolGradient::buttonRelease(KoPointerEvent *e)
     if (m_dragging && e->button() == Qt::LeftButton) {
 
         KisCanvasController *controller = m_subject->canvasController();
-        KisImageSP img = m_subject->currentImg();
+        
 
         m_dragging = false;
 
@@ -135,11 +135,11 @@ void KisToolGradient::buttonRelease(KoPointerEvent *e)
 
         KisPaintDeviceSP device;
 
-        if (img && (device = img->activeDevice())) {
+        if (m_currentImage && (device = m_currentImage->activeDevice())) {
 
             KisGradientPainter painter(device);
 
-            if (img->undo())  painter.beginTransaction(i18n("Gradient"));
+            if (m_currentImage->undo())  painter.beginTransaction(i18n("Gradient"));
 
             painter.setPaintColor(m_subject->fgColor());
             painter.setGradient(*(m_subject->currentGradient()));
@@ -152,7 +152,7 @@ void KisToolGradient::buttonRelease(KoPointerEvent *e)
                 progress->setSubject(&painter, true, true);
             }
 
-            bool painted = painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, m_subject->currentImg()->width(), m_subject->currentImg()->height());
+            bool painted = painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, m_currentImage->width(), m_currentImage->height());
 
             if (painted) {
                 // does whole thing at moment
@@ -160,14 +160,14 @@ void KisToolGradient::buttonRelease(KoPointerEvent *e)
 
                 notifyModified();
 
-                if (img->undo()) {
-                    img->undoAdapter()->addCommand(painter.endTransaction());
+                if (m_currentImage->undo()) {
+                    m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
                 }
             }
 
             /* remove remains of the line drawn while moving */
             if (controller->kiscanvas()) {
-                controller->kiscanvas()->update();
+                m_canvas->updateCanvas();
             }
 
         }

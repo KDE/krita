@@ -128,7 +128,7 @@ void KisToolSelectSimilar::buttonPress(KoPointerEvent *e)
 
     if (m_subject) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        KisImageSP img;
+        KisImageSP m_currentImage;
         KisPaintDeviceSP dev;
         QPoint pos;
         quint8 opacity = OPACITY_OPAQUE;
@@ -136,17 +136,17 @@ void KisToolSelectSimilar::buttonPress(KoPointerEvent *e)
         if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
             return;
 
-        if (!(img = m_subject->currentImg()))
+        if (!(m_currentImage = m_currentImage))
             return;
 
-        dev = img->activeDevice();
+        dev = m_currentImage->activeDevice();
 
-        if (!dev || !img->activeLayer()->visible())
+        if (!dev || !m_currentImage->activeLayer()->visible())
             return;
 
         pos = QPoint(e->pos().floorX(), e->pos().floorY());
         KisSelectedTransaction *t = 0;
-        if (img->undo()) t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
+        if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
 
         KoColor c = dev->colorAt(pos.x(), pos.y());
         opacity = dev->colorSpace()->getAlpha(c.data());
@@ -158,8 +158,8 @@ void KisToolSelectSimilar::buttonPress(KoPointerEvent *e)
         dev->setDirty();
         dev->emitSelectionChanged();
 
-        if(img->undo())
-            img->undoAdapter()->addCommand(t);
+        if(m_currentImage->undo())
+            m_currentImage->undoAdapter()->addCommand(t);
         m_subject->canvasController()->updateCanvas();
 
         QApplication::restoreOverrideCursor();

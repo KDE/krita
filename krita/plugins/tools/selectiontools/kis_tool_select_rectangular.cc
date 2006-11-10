@@ -94,7 +94,7 @@ void KisToolSelectRectangular::clearSelection()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
-        KisImageSP img = m_subject->currentImg();
+        
 
         Q_ASSERT(controller);
 
@@ -108,9 +108,9 @@ void KisToolSelectRectangular::clearSelection()
 void KisToolSelectRectangular::buttonPress(KoPointerEvent *e)
 {
     if (m_subject) {
-        KisImageSP img = m_subject->currentImg();
+        
 
-        if (img && img->activeDevice() && e->button() == Qt::LeftButton) {
+        if (m_currentImage && m_currentImage->activeDevice() && e->button() == Qt::LeftButton) {
             clearSelection();
             m_startPos = m_endPos = m_centerPos = e->pos();
             m_selecting = true;
@@ -161,30 +161,30 @@ void KisToolSelectRectangular::buttonRelease(KoPointerEvent *e)
         if (m_startPos == m_endPos) {
             clearSelection();
         } else {
-            KisImageSP img = m_subject->currentImg();
+            
 
-            if (!img)
+            if (!m_currentImage)
                 return;
 
             if (m_endPos.y() < 0)
                 m_endPos.setY(0);
 
-            if (m_endPos.y() > img->height())
-                m_endPos.setY(img->height());
+            if (m_endPos.y() > m_currentImage->height())
+                m_endPos.setY(m_currentImage->height());
 
             if (m_endPos.x() < 0)
                 m_endPos.setX(0);
 
-            if (m_endPos.x() > img->width())
-                m_endPos.setX(img->width());
-            if (img && img->activeDevice()) {
+            if (m_endPos.x() > m_currentImage->width())
+                m_endPos.setX(m_currentImage->width());
+            if (m_currentImage && m_currentImage->activeDevice()) {
 
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
-                KisPaintDeviceSP dev = img->activeDevice();
+                KisPaintDeviceSP dev = m_currentImage->activeDevice();
                 bool hasSelection = dev->hasSelection();
 
                 KisSelectedTransaction *t = 0;
-                if (img->undo())  t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);
+                if (m_currentImage->undo())  t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);
                 KisSelectionSP selection = dev->selection();
                 QRect rc(m_startPos.floorQPoint(), m_endPos.floorQPoint());
                 rc = rc.normalized();
@@ -221,8 +221,8 @@ void KisToolSelectRectangular::buttonRelease(KoPointerEvent *e)
                     dev->emitSelectionChanged();
                 }
 
-                if (img->undo())
-                    img->undoAdapter()->addCommand(t);
+                if (m_currentImage->undo())
+                    m_currentImage->undoAdapter()->addCommand(t);
 
                 KisCanvasController *controller = m_subject -> canvasController();
                 controller -> kiscanvas() -> update();

@@ -68,7 +68,7 @@ protected:
     bool m_dragging;
 private:
     typedef Q3ValueVector<KoPoint> KoPointVector;
-    KisCanvasSubject *m_subject;
+    
     KoPointVector m_points;
     KisSelectionOptions * m_optWidget;
     enumSelectionMode m_selectAction;

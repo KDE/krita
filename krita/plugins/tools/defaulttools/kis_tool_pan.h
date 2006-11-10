@@ -47,7 +47,7 @@ public:
     virtual bool wantsAutoScroll() const { return false; }
 
 private:
-    KisCanvasSubject *m_subject;
+    
     KoPoint m_dragPos;
     qint32 m_origScrollX;
     qint32 m_origScrollY;

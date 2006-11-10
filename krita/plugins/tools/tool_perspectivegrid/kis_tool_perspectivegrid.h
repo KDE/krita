@@ -74,7 +74,7 @@ protected:
     bool m_dragging;
 private:
     typedef QVector<QPointF> QPointFVector;
-    KisCanvasSubject *m_subject;
+    
     QPointFVector m_points;
     PerspectiveGridEditionMode m_mode;
     Q_INT32 m_handleSize, m_handleHalfSize;

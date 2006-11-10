@@ -64,7 +64,7 @@ private:
     void paintOutline(QPainter& gc, const QRect& rc);
 
 private:
-    KisCanvasSubject *m_subject;
+    
     KoPoint m_centerPos;
     KoPoint m_startPos;
     KoPoint m_endPos;

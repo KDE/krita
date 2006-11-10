@@ -70,7 +70,7 @@ class KisToolLine : public KisToolPaint {
     KoPoint m_startPos;
     KoPoint m_endPos;
 
-    KisCanvasSubject *m_subject;
+    
     KisImageSP m_currentImage;
     KisPainter *m_painter;
 };

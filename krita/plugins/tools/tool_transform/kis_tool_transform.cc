@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QLabel>
 #include <QComboBox>
-#include <QApplication>
+#include <QApplication
 
 #include <kdebug.h>
 #include <kactioncollection.h>
@@ -35,26 +35,21 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+#include <KoPointerEvent.h>
+#include <KoID.h>
+#include <KoCanvasBase.h>
+
 #include <kis_global.h>
 #include <kis_painter.h>
-#include <kis_canvas_controller.h>
-#include <kis_canvas_subject.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
 #include <kis_selected_transaction.h>
-#include <KoPointerEvent.h>
-#include <KoPointerEvent.h>
-#include <KoPointerEvent.h>
 #include <kis_selection.h>
 #include <kis_filter_strategy.h>
 #include <kis_cmb_idlist.h>
-#include <KoID.h>
 #include <kis_transform_worker.h>
-
 #include "kis_tool_transform.h"
-#include "kis_canvas.h"
-#include "QPainter"
 
 namespace {
     class TransformCmd : public KisSelectedTransaction {
@@ -132,7 +127,6 @@ KisToolTransform::KisToolTransform()
 {
     setObjectName("tool_transform");
     setCursor(KisCursor::selectCursor());
-    m_subject = 0;
     m_selecting = false;
     m_startPos = QPoint(0, 0);
     m_endPos = QPoint(0, 0);
@@ -156,26 +150,25 @@ KisToolTransform::~KisToolTransform()
 
 void KisToolTransform::deactivate()
 {
-    if (m_subject) return;
-    if (m_subject->undoAdapter()) m_subject->undoAdapter()->removeCommandHistoryListener( this );
+    if (m_currentImage->undoAdapter())
+        m_currentImage->undoAdapter()->removeCommandHistoryListener( this );
 
-    KisImageSP img = m_subject->currentImg();
-    if (!img) return;
+    if (m_currentImage) return;
 
     paintOutline();
 }
 
 void KisToolTransform::activate()
 {
-    if(m_subject && m_subject->currentImg() && m_subject->currentImg()->activeDevice())
+    if(m_subject && m_currentImage && m_currentImage->activeDevice())
     {
         //connect(m_subject, commandExecuted(KCommand *c), this, notifyCommandAdded( KCommand * c));
         m_subject->undoAdapter()->setCommandHistoryListener( this );
 
         TransformCmd * cmd=0;
 
-        if(m_subject->currentImg()->undoAdapter()->presentCommand())
-            cmd = dynamic_cast<TransformCmd*>(m_subject->currentImg()->undoAdapter()->presentCommand());
+        if(m_currentImage->undoAdapter()->presentCommand())
+            cmd = dynamic_cast<TransformCmd*>(m_currentImage->undoAdapter()->presentCommand());
 
         if (cmd == 0) {
             initHandles();
@@ -194,9 +187,9 @@ void KisToolTransform::activate()
 void KisToolTransform::initHandles()
 {
     qint32 x,y,w,h;
-    KisImageSP img = m_subject->currentImg();
+    
 
-    KisPaintDeviceSP dev = img->activeDevice();
+    KisPaintDeviceSP dev = m_currentImage->activeDevice();
 
     // Create a lazy copy of the current state
     m_origDevice = new KisPaintDevice(*dev.data());
@@ -241,9 +234,9 @@ void KisToolTransform::paint(QPainter& gc, const QRect& rc)
 void KisToolTransform::buttonPress(KoPointerEvent *e)
 {
     if (m_subject) {
-        KisImageSP img = m_subject->currentImg();
+        
 
-        if (img && img->activeDevice() && e->button() == Qt::LeftButton) {
+        if (m_currentImage && m_currentImage->activeDevice() && e->button() == Qt::LeftButton) {
             switch(m_function)
             {
                 case ROTATE:
@@ -608,9 +601,9 @@ void KisToolTransform::buttonRelease(KoPointerEvent */*e*/)
 {
     if(!m_subject)
         return;
-    KisImageSP img = m_subject->currentImg();
+    
 
-    if (!img)
+    if (!m_currentImage)
         return;
 
     if (m_selecting) {
@@ -700,9 +693,9 @@ void KisToolTransform::paintOutline(QPainter& gc, const QRect&)
 void KisToolTransform::transform()
 {
 
-    KisImageSP img = m_subject->currentImg();
+    
 
-    if (!img || !img->activeDevice())
+    if (!m_currentImage || !m_currentImage->activeDevice())
         return;
 
     double tx = m_translateX - rotX(m_org_cenX * m_scaleX, m_org_cenY * m_scaleY);
@@ -710,14 +703,14 @@ void KisToolTransform::transform()
     KisProgressDisplayInterface *progress = m_subject->progressDisplay();
 
     // This mementoes the current state of the active device.
-    TransformCmd * transaction = new TransformCmd(this, img->activeDevice(), m_scaleX,
+    TransformCmd * transaction = new TransformCmd(this, m_currentImage->activeDevice(), m_scaleX,
                                                   m_scaleY, m_translateX, m_translateY, m_a, m_origSelection, m_startPos, m_endPos);
 
     // Copy the original state back.
     QRect rc = m_origDevice->extent();
     rc = rc.normalized();
-    img->activeDevice()->clear();
-    KisPainter gc(img->activeDevice());
+    m_currentImage->activeDevice()->clear();
+    KisPainter gc(m_currentImage->activeDevice());
     gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origDevice, rc.x(), rc.y(), rc.width(), rc.height());
     gc.end();
 
@@ -726,19 +719,19 @@ void KisToolTransform::transform()
     {
         QRect rc = m_origSelection->extent();
         rc = rc.normalized();
-        img->activeDevice()->selection()->clear();
-        KisPainter sgc(KisPaintDeviceSP(img->activeDevice()->selection().data()));
+        m_currentImage->activeDevice()->selection()->clear();
+        KisPainter sgc(KisPaintDeviceSP(m_currentImage->activeDevice()->selection().data()));
         sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, KisPaintDeviceSP(m_origSelection.data()), rc.x(), rc.y(), rc.width(), rc.height());
         sgc.end();
     }
     else
-        if(img->activeDevice()->hasSelection())
-            img->activeDevice()->selection()->clear();
+        if(m_currentImage->activeDevice()->hasSelection())
+            m_currentImage->activeDevice()->selection()->clear();
 
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
     // has the previous state.
-    KisTransformWorker t(img->activeDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), progress, m_filter);
+    KisTransformWorker t(m_currentImage->activeDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), progress, m_filter);
     t.run();
 
     // If canceled, go back to the memento
@@ -749,14 +742,14 @@ void KisToolTransform::transform()
         return;
     }
 
-    img->activeDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
+    m_currentImage->activeDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
 
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()
     // method.
     if (transaction) {
-        if (img->undo())
-            img->undoAdapter()->addCommand(transaction);
+        if (m_currentImage->undo())
+            m_currentImage->undoAdapter()->addCommand(transaction);
         else
             delete transaction;
     }
@@ -778,8 +771,8 @@ void KisToolTransform::notifyCommandExecuted( KCommand * command)
     Q_UNUSED(command);
     TransformCmd * cmd=0;
 
-    if(m_subject->currentImg()->undoAdapter()->presentCommand())
-        cmd = dynamic_cast<TransformCmd*>(m_subject->currentImg()->undoAdapter()->presentCommand());
+    if(m_currentImage->undoAdapter()->presentCommand())
+        cmd = dynamic_cast<TransformCmd*>(m_currentImage->undoAdapter()->presentCommand());
 
     if (cmd == 0) {
         // The command now on the top of the stack isn't one of ours

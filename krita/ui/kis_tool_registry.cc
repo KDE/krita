@@ -23,25 +23,22 @@
 #include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 
-#include "KoGenericRegistry.h"
-#include "kis_types.h"
-#include "kis_tool_registry.h"
-#include "kis_tool.h"
-#include "KoToolFactory.h"
-#include "kis_canvas_subject.h"
-#include "KoID.h"
 #include "kis_debug_areas.h"
+#include "kis_tool_registry.h"
 
 KisToolRegistry *KisToolRegistry::m_singleton = 0;
 
 KisToolRegistry::KisToolRegistry()
 {
     // Load all modules: color models, paintops, filters
-	KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Tool"),
+    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Tool"),
                                                          QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-Krita-Version] == 2)"));
+                                                                             "([X-Krita-Version] == 3)"));
+    kDebug() << "\n\n\n#########################\n"
+             << "######### " << offers.count() << "\n\n\n\n";
 
-	KService::List::ConstIterator iter;
+
+    KService::List::ConstIterator iter;
 
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
@@ -76,36 +73,5 @@ KisToolRegistry* KisToolRegistry::instance()
     return KisToolRegistry::m_singleton;
 }
 
-
-
-vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *subject) const
-{
-    Q_ASSERT(subject);
-
-    vKisTool tools;
-
-    QList<KoID> factories = listKeys();
-
-    for (QList<KoID>::Iterator it = factories.begin(); it != factories.end(); ++it )
-    {
-        KoToolFactorySP f = get(*it);
-
-        KisTool * tool = f->createTool(ac);
-        subject->attach(tool);
-        tools.push_back(KisToolSP(tool));
-    }
-
-    subject->notifyObservers();
-
-    return tools;
-}
-
-KisTool * KisToolRegistry::createTool(KoCanvasBase *canvas, KisCanvasSubject * subject, KoID & id) const
-{
-    KoToolFactorySP f = get(id);
-    KisTool * t = f->createTool(ac);
-    subject->attach(t);
-    return t;
-}
 
 #include "kis_tool_registry.moc"

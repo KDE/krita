@@ -58,8 +58,9 @@
 #include "kis_dummy_shape.h"
 
 
-KisToolPaint::KisToolPaint(KoCanvasBase * canvas)
+KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     : KoTool(canvas)
+    , m_cursor( cursor )
 {
     m_optionWidget = 0;
     m_optionWidgetLayout = 0;
@@ -81,6 +82,8 @@ KisToolPaint::~KisToolPaint()
 
 void KisToolPaint::activate(bool )
 {
+    emit sigCursorChanged( m_cursor );
+
     m_currentFgColor = m_canvas->resourceProvider()->resource( FOREGROUND_COLOR ).value<KoColor>();
     m_currentBgColor = m_canvas->resourceProvider()->resource( BACKGROUND_COLOR ).value<KoColor>();
     m_currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( CURRENT_BRUSH ).value<void *>() );

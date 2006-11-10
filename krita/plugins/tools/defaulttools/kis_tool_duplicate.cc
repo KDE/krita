@@ -63,7 +63,7 @@ void KisToolDuplicate::activate()
 {
     m_position = QPoint(-1,-1);
     super::activate();
-    if( m_subject->currentImg()->perspectiveGrid()->countSubGrids() != 1 )
+    if( m_currentImage->perspectiveGrid()->countSubGrids() != 1 )
     {
         m_perspectiveCorrection->setEnabled( false );
         m_perspectiveCorrection->setChecked( false );
@@ -150,8 +150,8 @@ void KisToolDuplicate::move(KoPointerEvent *e)
             }
         
         // First look for the grid corresponding to the start point
-            KisSubPerspectiveGrid* subGridStart = *m_subject->currentImg()->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(KoPoint(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
-            QRect r = QRect(0,0, m_subject->currentImg()->width(), m_subject->currentImg()->height());
+            KisSubPerspectiveGrid* subGridStart = *m_currentImage->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(KoPoint(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
+            QRect r = QRect(0,0, m_currentImage->width(), m_currentImage->height());
         
             if(subGridStart)
             {
@@ -166,7 +166,7 @@ void KisToolDuplicate::move(KoPointerEvent *e)
 
             }
         // Second look for the grid corresponding to the end point
-            KisSubPerspectiveGrid* subGridEnd = *m_subject->currentImg()->perspectiveGrid()->begin();// device->image()->perspectiveGrid()->gridAt(pos);
+            KisSubPerspectiveGrid* subGridEnd = *m_currentImage->perspectiveGrid()->begin();// device->image()->perspectiveGrid()->gridAt(pos);
             if(subGridEnd)
             {
                 double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);

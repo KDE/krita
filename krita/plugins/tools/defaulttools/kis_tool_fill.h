@@ -68,7 +68,7 @@ private:
     KisLayerSP m_lay;
     quint8* m_oldColor, *m_color;
     KisPainter *m_painter;
-    KisCanvasSubject *m_subject;
+    
     KisImageSP m_currentImage;
     bool *m_map, m_unmerged, m_usePattern, m_fillOnlySelection;
     KisSelectionSP m_selection;

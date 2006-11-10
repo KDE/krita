@@ -21,21 +21,14 @@
 
 #include <QObject>
 
-#include "kis_tool_types.h"
-#include "KoGenericRegistry.h"
 #include <krita_export.h>
 
-class KActionCollection;
-class KisCanvasSubject;
-class QStringList;
-
 /**
- * A registry, similar to the tool and colormodel registry
- * where new tool plugins can register themselves. KisToolRegistry
- * in contrast to the paintop and colormodel registries, creates
- * a vector containing instances of all registered tools.
+ * XXX: Rename to KisToolLoader; this class loads the Krita-specific
+ * tool plugins and adds them to the KoToolRegistry.
  */
-class KRITAUI_EXPORT KisToolRegistry : public QObject, public KoGenericRegistry<KoToolFactorySP>{
+class KRITAUI_EXPORT KisToolRegistry : public QObject
+{
 
     Q_OBJECT
 
@@ -43,9 +36,6 @@ public:
     virtual ~KisToolRegistry();
 
      static KisToolRegistry* instance();
-
-    vKisTool createTools(KActionCollection * ac, KisCanvasSubject *subject) const;
-    KisTool * createTool(KoCanvasBase *canvas, KisCanvasSubject * subject, KoID & id) const;
 
 private:
     KisToolRegistry();

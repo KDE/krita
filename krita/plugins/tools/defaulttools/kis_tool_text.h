@@ -46,7 +46,7 @@ public slots:
     virtual void setFont();
 
 private:
-    KisCanvasSubject *m_subject;
+    
     QFont m_font;
     QLabel *m_lbFont;
     KSqueezedTextLabel *m_lbFontName;

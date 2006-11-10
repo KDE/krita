@@ -31,9 +31,6 @@
 #include <klocale.h>
 
 #include <KoPointerEvent.h>
-#include <KoPointerEvent.h>
-#include <kis_canvas_controller.h>
-#include <kis_canvas_subject.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <KoPointerEvent.h>
@@ -51,7 +48,7 @@ KisToolPerspectiveGrid::KisToolPerspectiveGrid()
 {
     setName("tool_perspectivegrid");
 
-    m_subject = 0;
+
     m_dragging = false;
 }
 
@@ -62,7 +59,7 @@ KisToolPerspectiveGrid::~KisToolPerspectiveGrid()
 void KisToolPerspectiveGrid::activate()
 {
     m_subject->perspectiveGridManager()->startEdition();
-    if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
+    if( ! m_currentImage->perspectiveGrid()->hasSubGrids() )
     {
         m_mode = MODE_CREATION;
         m_points.clear();
@@ -101,7 +98,7 @@ bool KisToolPerspectiveGrid::mouseNear(const QPoint& mousep, const QPoint point)
 
 void KisToolPerspectiveGrid::buttonPress(KoPointerEvent *event)
 {
-    KisPerspectiveGrid* pGrid = m_subject->currentImg()->perspectiveGrid();
+    KisPerspectiveGrid* pGrid = m_currentImage->perspectiveGrid();
     if(!pGrid->hasSubGrids() && m_mode != MODE_CREATION)
     { // it's possible that the perspectiv grid was cleared
         m_mode = MODE_CREATION;
@@ -270,7 +267,7 @@ void KisToolPerspectiveGrid::buttonRelease(KoPointerEvent *event)
             if( m_points.size() == 4)
             { // wow we have a grid, isn't that cool ?
                 drawGridCreation(); // Clean
-                m_subject->currentImg()->perspectiveGrid()->addNewSubGrid(
+                m_currentImage->perspectiveGrid()->addNewSubGrid(
                         new KisSubPerspectiveGrid(
                             KisPerspectiveGridNodeSP(new KisPerspectiveGridNode(m_points[0])),
                             KisPerspectiveGridNodeSP(new KisPerspectiveGridNode(m_points[1])),
@@ -381,7 +378,7 @@ void KisToolPerspectiveGrid::drawGrid(QPainter& gc)
 
     gc.setPen(pen);
 //     gc.setRasterOp(Qt::XorROP);
-    KisPerspectiveGrid* pGrid = m_subject->currentImg()->perspectiveGrid();
+    KisPerspectiveGrid* pGrid = m_currentImage->perspectiveGrid();
 
     for( QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
     {

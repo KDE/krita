@@ -74,7 +74,7 @@ class KRITAUI_EXPORT KisToolPaint
     Q_OBJECT
 
 public:
-    KisToolPaint(KoCanvasBase * canvas);
+    KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisToolPaint();
 
 // KoTool Implementation.
@@ -127,6 +127,7 @@ protected:
     bool m_paintOutline;
 
     KisImageSP m_currentImage;
+    QCursor m_cursor; // the cursor that should be shown on tool activation.
 
     // From the canvas resources
     KisBrush * m_currentBrush;
@@ -140,8 +141,6 @@ protected:
     float m_currentExposure;
 
 private:
-
-    QCursor m_cursor;
 
     QGridLayout *m_optionWidgetLayout;
 

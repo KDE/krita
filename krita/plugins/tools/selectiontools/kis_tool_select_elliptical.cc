@@ -93,12 +93,12 @@ void KisToolSelectElliptical::clearSelection()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
-        KisImageSP img = m_subject->currentImg();
+        
 
         Q_ASSERT(controller);
 
-//         if (img && img->floatingSelection().data() != 0) {
-//             img->unsetFloatingSelection();
+//         if (m_currentImage && m_currentImage->floatingSelection().data() != 0) {
+//             m_currentImage->unsetFloatingSelection();
 //                         controller->canvas()->update();
 //         }
 
@@ -111,9 +111,9 @@ void KisToolSelectElliptical::clearSelection()
 void KisToolSelectElliptical::buttonPress(KoPointerEvent *e)
 {
     if (m_subject) {
-        KisImageSP img = m_subject->currentImg();
+        
 
-        if (img && img->activeDevice() && e->button() == Qt::LeftButton) {
+        if (m_currentImage && m_currentImage->activeDevice() && e->button() == Qt::LeftButton) {
             clearSelection();
             m_startPos = m_endPos = m_centerPos = e->pos();
             m_selecting = true;
@@ -166,27 +166,27 @@ void KisToolSelectElliptical::buttonRelease(KoPointerEvent *e)
             clearSelection();
         } else {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KisImageSP img = m_subject->currentImg();
+            
 
-            if (!img)
+            if (!m_currentImage)
                 return;
 
             if (m_endPos.y() < 0)
                 m_endPos.setY(0);
 
-            if (m_endPos.y() > img->height())
-                m_endPos.setY(img->height());
+            if (m_endPos.y() > m_currentImage->height())
+                m_endPos.setY(m_currentImage->height());
 
             if (m_endPos.x() < 0)
                 m_endPos.setX(0);
 
-            if (m_endPos.x() > img->width())
-                m_endPos.setX(img->width());
+            if (m_endPos.x() > m_currentImage->width())
+                m_endPos.setX(m_currentImage->width());
 
-            if (img && img->activeDevice()) {
-                KisPaintDeviceSP dev = img->activeDevice();
+            if (m_currentImage && m_currentImage->activeDevice()) {
+                KisPaintDeviceSP dev = m_currentImage->activeDevice();
                 KisSelectedTransaction *t = 0;
-                if (img->undo()) t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
+                if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
 
                 bool hasSelection = dev->hasSelection();
                 if(! hasSelection)
@@ -225,8 +225,8 @@ void KisToolSelectElliptical::buttonRelease(KoPointerEvent *e)
                     dev->emitSelectionChanged();
                 }
 
-                if (img->undo())
-                    img->undoAdapter()->addCommand(t);
+                if (m_currentImage->undo())
+                    m_currentImage->undoAdapter()->addCommand(t);
 
                 QApplication::restoreOverrideCursor();
             }

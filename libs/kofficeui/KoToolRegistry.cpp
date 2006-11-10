@@ -36,6 +36,11 @@ KoToolRegistry::KoToolRegistry() {
 
     foreach(KService::Ptr service, offers) {
         int errCode = 0;
+
+        // XXX: Doesn't this assume that there can be only one tool
+        // per kpart plugin? (BSAR) In Krita, we used a default
+        // constructor for the plugin. In the constructor we added
+        // possibly many tools using the registry::add method.
         KoToolFactory* plugin =
             KService::createInstance<KoToolFactory>(
                 service, this, QStringList(), &errCode );

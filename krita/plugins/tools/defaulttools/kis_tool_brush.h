@@ -29,24 +29,24 @@ class QRect;
 class QCheckBox;
 class QGridLayout;
 
+class KoCanvasBase;
+
 class KisToolBrush : public KisToolFreehand {
     Q_OBJECT
-    typedef KisToolFreehand super;
 
 public:
-    KisToolBrush();
+    KisToolBrush(KoCanvasBase * canvas);
     virtual ~KisToolBrush();
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual quint32 priority() { return 0; }
-    QWidget* createOptionWidget();
+
+    void createOptionWidget();
+
+    virtual void mouseMoveEvent(KoPointerEvent *e);
 
 protected:
 
     virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
-    virtual void move(KoPointerEvent *e);
-    virtual void leave(QEvent *e);
+
 
 private slots:
 
@@ -59,7 +59,9 @@ private:
     QTimer * m_timer;
     QGridLayout* m_optionLayout;
     QCheckBox * m_chkDirect;
+
 };
+
 
 class KisToolBrushFactory : public KoToolFactory {
 

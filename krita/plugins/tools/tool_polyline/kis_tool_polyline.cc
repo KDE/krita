@@ -106,7 +106,7 @@ void KisToolPolyline::finish()
     painter.setBrush(m_subject->currentBrush());
     painter.setOpacity(m_opacity);
     painter.setCompositeOp(m_compositeOp);
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintOp(), m_subject->currentPaintOpSettings(), &painter);
     painter.setPaintOp(op); // Painter takes ownership
 
     KoPoint start,end;

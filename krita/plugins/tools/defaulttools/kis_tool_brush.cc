@@ -34,6 +34,9 @@
 #include <kcommand.h>
 #include <klocale.h>
 
+#include "KoPointerEvent.h"
+#include "KoCanvasBase.h"
+
 #include "kis_config.h"
 #include "kis_brush.h"
 #include "kis_paintop.h"
@@ -42,23 +45,19 @@
 #include "kis_cursor.h"
 #include "kis_painter.h"
 #include "kis_tool_brush.h"
-#include "kis_canvas_subject.h"
 #include "kis_boundary.h"
-#include "KoPointerEvent.h"
-#include "kis_canvas.h"
 #include "kis_layer.h"
 
-KisToolBrush::KisToolBrush()
-        : super(i18n("Brush"))
+KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
+        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18n("Brush"))
 {
     setObjectName("tool_brush");
-    setCursor(KisCursor::load("tool_freehand_cursor.png", 5, 5));
+
     m_rate = 100; // Conveniently hardcoded for now
     m_timer = new QTimer(this);
     Q_CHECK_PTR(m_timer);
 
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
-
 }
 
 KisToolBrush::~KisToolBrush()
@@ -69,27 +68,28 @@ KisToolBrush::~KisToolBrush()
 
 void KisToolBrush::timeoutPaint()
 {
-    if (currentImage() && painter()) {
-        painter()->paintAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
-        currentImage()->activeLayer()->setDirty(painter()->dirtyRect());
+    if (m_currentImage && m_painter) {
+        m_painter->paintAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
+        m_currentImage->activeLayer()->setDirty(m_painter->dirtyRect());
     }
 }
 
 
 void KisToolBrush::initPaint(KoPointerEvent *e)
 {
-    super::initPaint(e);
+    KisToolFreehand::initPaint(e);
 
     if (!m_painter) {
         kWarning() << "Didn't create a painter! Something is wrong!\n";
         return;
     }
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), m_painter);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, m_painter);
     if (!op) return;
-
-    m_subject->canvasController()->kiscanvas()->update(); // remove the outline
-
-    painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
+#if 0
+    // XXX: TOOL_REFACTOR: how to update all of the canvas?
+    m_canvas->updateCanvas(); // remove the outline
+#endif
+    m_painter->setPaintOp(op); // And now the painter owns the op and will destroy it.
 
     if (op->incremental()) {
         m_timer->start( m_rate );
@@ -100,39 +100,23 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
 void KisToolBrush::endPaint()
 {
     m_timer->stop();
-    super::endPaint();
+    KisToolFreehand::endPaint();
 }
 
 
-void KisToolBrush::setup(KActionCollection *collection)
-{
-
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_freehand"),
-                               i18n("&Brush"),
-                               collection,
-                               objectName());
-        m_action->setShortcut(Qt::Key_B);
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Draw freehand"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
-}
-
-void KisToolBrush::move(KoPointerEvent *e) {
-    KisToolFreehand::move(e);
+void KisToolBrush::mouseMoveEvent(KoPointerEvent *e) {
+    KisToolFreehand::mouseMoveEvent(e);
     KisConfig cfg;
     if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE)
         paintOutline(e->pos());
 }
 
+#if 0
+// XXX: TOOL_REFACTOR
 void KisToolBrush::leave(QEvent */*e*/) {
-    m_subject->canvasController()->kiscanvas()->update(); // remove the outline
+    m_canvs->updateCanvas(); // remove the outline
 }
-
+#endif
 
 void KisToolBrush::slotSetPaintingMode( int mode )
 {
@@ -146,24 +130,23 @@ void KisToolBrush::slotSetPaintingMode( int mode )
 }
 
 
-QWidget* KisToolBrush::createOptionWidget()
+void KisToolBrush::createOptionWidget()
 {
-    QWidget *widget = super::createOptionWidget(parent);
-    m_chkDirect = new QCheckBox(i18n("Paint incrementally"), widget);
+    KisToolFreehand::createOptionWidget();
+    m_chkDirect = new QCheckBox(i18n("Paint incrementally"), m_optionWidget);
     m_chkDirect->setObjectName("chkDirect");
     m_chkDirect->setChecked(true);
     connect(m_chkDirect, SIGNAL(stateChanged(int)), this, SLOT(slotSetPaintingMode(int)));
 
-    m_optionLayout = new QGridLayout(widget);
+    m_optionLayout = new QGridLayout(m_optionWidget);
     Q_CHECK_PTR(m_optionLayout);
 
     m_optionLayout->setMargin(0);
     m_optionLayout->setSpacing(6);
 
-    super::addOptionWidgetLayout(m_optionLayout);
+    KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
     m_optionLayout->addWidget(m_chkDirect, 0, 0);
 
-    return widget;
 }
 
 #include "kis_tool_brush.moc"

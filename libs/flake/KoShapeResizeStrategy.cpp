@@ -81,13 +81,14 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
 }
 
 void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
-    QPointF distance = point - m_start;
+    QPointF newPos = point;
+    if(m_canvas->snapToGrid() && (modifiers & Qt::ShiftModifier) == 0)
+        applyGrid(newPos);
+    QPointF distance = newPos - m_start;
+
     bool keepAspect = modifiers & Qt::AltModifier;
     foreach(KoShape *shape, m_selectedShapes)
         keepAspect = keepAspect || shape->keepAspectRatio();
-
-    if(m_canvas->snapToGrid() && (modifiers & Qt::ShiftModifier) == 0)
-        applyGrid(distance);
 
     double startWidth = m_initialSize.width();
     double startHeight = m_initialSize.height();

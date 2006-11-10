@@ -49,11 +49,14 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
 
 protected:
+
+    /// Paint a single brush footprint on the current layer
     virtual void paintAt(const KoPoint &pos,
                  const double pressure,
                  const double xTilt,
                  const double yTilt);
 
+    /// Paint a line between the specified positions on the current layer
     virtual void paintLine(const KoPoint & pos1,
                    const double pressure1,
                    const double xtilt1,
@@ -86,8 +89,6 @@ protected:
     QString m_transactionText;
     enumBrushMode m_mode;
     KisPainter *m_painter;
-
-    KisImageSP m_currentImage;
 
 private:
 

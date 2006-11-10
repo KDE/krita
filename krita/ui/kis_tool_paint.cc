@@ -41,18 +41,22 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoColorSpace.h>
 #include <KoPointerEvent.h>
+#include <KoColor.h>
 #include <KoCanvasBase.h>
 
 #include <kis_types.h>
 #include <kis_global.h>
 #include <kis_image.h>
+#include <kis_paint_device.h>
+#include <kis_layer.h>
+#include <kis_paintop.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_cmb_composite.h"
 #include "kis_int_spinbox.h"
-#include "kis_paint_device.h"
 #include "kis_dummy_shape.h"
+
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas)
     : KoTool(canvas)
@@ -77,9 +81,21 @@ KisToolPaint::~KisToolPaint()
 
 void KisToolPaint::activate(bool )
 {
+    m_currentFgColor = m_canvas->resourceProvider()->resource( FOREGROUND_COLOR ).value<KoColor>();
+    m_currentBgColor = m_canvas->resourceProvider()->resource( BACKGROUND_COLOR ).value<KoColor>();
+    m_currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( CURRENT_BRUSH ).value<void *>() );
+    m_currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( CURRENT_PATTERN).value<void *>() );
+    m_currentGradient = static_cast<KisGradient *>( m_canvas->resourceProvider()->resource( CURRENT_GRADIENT ).value<void *>() );
+    m_currentPaintOp = m_canvas->resourceProvider()->resource( CURRENT_PAINTOP ).value<KoID >();
+    m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( CURRENT_PAINTOP_SETTINGS ).value<void *>() );
+    m_currentLayer = m_canvas->resourceProvider()->resource( CURRENT_KIS_LAYER ).value<KisLayerSP>();
+    m_currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( HDR_EXPOSURE ).toDouble() );
+
     updateCompositeOpComboBox();
     KisConfig cfg;
     m_paintOutline = (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE);
+
+    m_currentImage = image();
 }
 
 
@@ -90,7 +106,40 @@ void KisToolPaint::deactivate()
 
 void KisToolPaint::resourceChanged( const KoCanvasResource & res )
 {
-    if ( res.key == CURRENT_KIS_LAYER ) updateCompositeOpComboBox();
+    QVariant v = res.value;
+
+    switch ( res.key ) {
+    case ( FOREGROUND_COLOR ):
+        m_currentFgColor = v.value<KoColor>();
+        break;
+    case ( BACKGROUND_COLOR ):
+        m_currentBgColor = v.value<KoColor>();
+        break;
+    case ( CURRENT_BRUSH ):
+        m_currentBrush = static_cast<KisBrush *>( v.value<void *>() );
+        break;
+    case ( CURRENT_PATTERN ):
+        m_currentPattern = static_cast<KisPattern *>( v.value<void *>() );
+        break;
+    case ( CURRENT_GRADIENT ):
+        m_currentGradient = static_cast<KisGradient *>( v.value<void *>() );
+        break;
+    case ( CURRENT_PAINTOP ):
+        m_currentPaintOp = v.value<KoID >();
+        break;
+    case ( CURRENT_PAINTOP_SETTINGS ):
+        m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( v.value<void *>() );
+        break;
+    case ( CURRENT_KIS_LAYER ):
+        m_currentLayer = v.value<KisLayerSP>();
+        updateCompositeOpComboBox();
+        break;
+    case ( HDR_EXPOSURE ):
+        m_currentExposure = static_cast<float>( v.toDouble() );
+    default:
+        ;
+        // Do nothing
+    };
 }
 
 

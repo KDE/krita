@@ -26,13 +26,13 @@
 enum enumCanvasResource {
     FOREGROUND_COLOR = 0,
     BACKGROUND_COLOR = 1,
-    COMPOSITE_OPERARION = 2,
+    COMPOSITE_OPERATION = 2,
     COMPOSITE_OPACITY = 4,
     // XXX: Extend with necessary items, or make base numbers per canvas type as with QEvent::type?
     // like:
     KRITA_CANVAS_BASE = 1000,
     HDR_EXPOSURE = 1001,
-    CURRENT_KIS_BRUSH = 1002,
+    CURRENT_BRUSH = 1002,
     CURRENT_PATTERN = 1003,
     CURRENT_GRADIENT = 1004,
     CURRENT_PAINTOP = 1005,

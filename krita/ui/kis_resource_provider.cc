@@ -69,7 +69,7 @@ void KisResourceProvider::setHDRExposure(float exposure)
 
 KisBrush * KisResourceProvider::currentBrush() const
 {
-    return static_cast<KisBrush *>( m_resourceProvider->resource( CURRENT_KIS_BRUSH ).value<void *>() );
+    return static_cast<KisBrush *>( m_resourceProvider->resource( CURRENT_BRUSH ).value<void *>() );
 }
 
 
@@ -107,7 +107,7 @@ void KisResourceProvider::slotBrushActivated(KisResource *res)
 
     KisBrush * brush = dynamic_cast<KisBrush*>(res);
     QVariant v = qVariantFromValue( ( void * ) brush );
-    m_resourceProvider->setResource( CURRENT_KIS_BRUSH, v );
+    m_resourceProvider->setResource( CURRENT_BRUSH, v );
     if (brush )
     {
         emit sigBrushChanged(brush);

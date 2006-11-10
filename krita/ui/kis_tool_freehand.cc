@@ -30,30 +30,31 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-#include "KoPointerEvent.h"
-#include "KoCanvasBase.h"
+#include <KoPointerEvent.h>
+#include <KoCanvasBase.h>
+#include <KoCanvasResourceProvider.h>
 
-#include "kis_boundary_painter.h"
 #include "kis_brush.h"
-#include "kis_canvas.h"
-#include "kis_cursor.h"
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
-#include "kis_tool_freehand.h"
 #include "kis_undo_adapter.h"
 
+#include "kis_boundary_painter.h"
+#include "kis_canvas.h"
+#include "kis_cursor.h"
+#include "kis_tool_freehand.h"
+
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QString & transactionText)
-        : KisToolPaint(canvas, transactionText)
+        : KisToolPaint(canvas)
         , m_dragDist ( 0 )
         , m_transactionText(transactionText)
         , m_mode( HOVER )
 {
     m_painter = 0;
-    m_currentImage = image();
     m_tempLayer = 0;
     m_paintIncremental = true;
     m_paintOnSelection = false;
@@ -64,16 +65,16 @@ KisToolFreehand::~KisToolFreehand()
 {
 }
 
+
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-    if (!m_subject) return;
+    if (!m_currentImage) return;
 
-    if (!m_subject->currentBrush()) return;
+    if (!m_currentBrush) return;
 
-    if (!m_currentImage || !m_currentImage->activeDevice()) return;
+    if (!m_currentImage->activeDevice()) return;
 
     if (e->button() == Qt::LeftButton) {
-
 
         // People complain that they can't start brush strokes outside of the image boundaries.
         // This makes sense, especially when combined with BUG:132759, so commenting out the
@@ -99,10 +100,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
                 }
             }
             else {
-                m_target->setDirty(r);
+                m_target->setDirty( r );
                 // Just update the canvas.
                 // XXX: After 1.5, find a better way to make sure tools don't set dirty what they didn't touch.
-                m_subject->canvasController()->updateCanvas( r );
+                m_canvas->updateCanvas( r ); // XXX are we working in the
+                                       // right coordinates?
             }
         }
     }
@@ -131,7 +133,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
                 // Just update the canvas
                 r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
                 m_target->setDirty(r);
-                m_subject->canvasController()->updateCanvas( r );
+                m_canvas->updateCanvas( r );
             }
         }
     }
@@ -199,9 +201,9 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         if (m_currentImage->undo()) m_painter->beginTransaction(m_transactionText);
     }
 
-    m_painter->setPaintColor(m_subject->fgColor());
-    m_painter->setBackgroundColor(m_subject->bgColor());
-    m_painter->setBrush(m_subject->currentBrush());
+    m_painter->setPaintColor(m_currentFgColor);
+    m_painter->setBackgroundColor(m_currentBgColor);
+    m_painter->setBrush(m_currentBrush);
 
 
     // if you're drawing on a temporary layer, the layer already sets this
@@ -269,7 +271,7 @@ void KisToolFreehand::paintAt(const KoPoint &pos,
                const double xTilt,
                const double yTilt)
 {
-    painter()->paintAt(pos, pressure, xTilt, yTilt);
+    m_painter->paintAt(pos, pressure, xTilt, yTilt);
 }
 
 void KisToolFreehand::paintLine(const KoPoint & pos1,
@@ -281,20 +283,27 @@ void KisToolFreehand::paintLine(const KoPoint & pos1,
                  const double xtilt2,
                  const double ytilt2)
 {
-    m_dragDist = painter()->paintLine(pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
+    m_dragDist = m_painter->paintLine(pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
 }
 
 
 void KisToolFreehand::paintOutline(const KoPoint& point) {
-    if (!m_subject) {
+    Q_UNUSED( point );
+#if 0
+    // XXX TOOL_PORT
+    // I don't get this 1.6 code: we update the whole canvas, and then
+    // repaint all of it again? It's incompatible with qt4 anyway --
+    // rework later.
+
+    if (!m_canvas) {
         return;
     }
 
-    KisCanvasController *controller = m_subject->canvasController();
-
     if (m_currentImage && !m_currentImage->bounds().contains(point.floorQPoint())) {
         if (m_paintedOutline) {
-            controller->kiscanvas()->update();
+            m_canvas->updateCanvas(); // Huh? The _whole_ canvas needs to be
+                                // repainted for this outline cursor?
+                                // It was this way in 1.6, btw.
             m_paintedOutline = false;
         }
         return;
@@ -331,6 +340,7 @@ void KisToolFreehand::paintOutline(const KoPoint& point) {
 
         m_paintedOutline = true;
     }
+#endif
 }
 
 

@@ -35,6 +35,10 @@
 #include <kis_types.h>
 #include <kis_image.h>
 
+#include <kis_brush.h>
+#include <kis_gradient.h>
+#include <kis_pattern.h>
+
 #include "kis_tool.h"
 #include "KoCompositeOp.h"
 
@@ -53,6 +57,7 @@ class KoCanvasBase;
 
 class KisCmbComposite;
 class KisIntSpinbox;
+class KisPaintOpSettings;
 
 enum enumBrushMode {
     PAINT,
@@ -120,6 +125,19 @@ protected:
     quint8 m_opacity;
     const KoCompositeOp * m_compositeOp;
     bool m_paintOutline;
+
+    KisImageSP m_currentImage;
+
+    // From the canvas resources
+    KisBrush * m_currentBrush;
+    KisPattern * m_currentPattern;
+    KisGradient * m_currentGradient;
+    KoColor m_currentFgColor;
+    KoColor m_currentBgColor;
+    KoID m_currentPaintOp;
+    KisPaintOpSettings * m_currentPaintOpSettings;
+    KisLayerSP m_currentLayer;
+    float m_currentExposure;
 
 private:
 

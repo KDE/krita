@@ -73,7 +73,7 @@ set(kritaui_LIB_SRCS
     kobirdeyepanel.cpp
     squeezedcombobox.cpp
     #    kis_paintop_box.cc # Needs to know about the active input device a lot
-    #kis_tool_freehand.cc
+    kis_tool_freehand.cc
     #kis_tool_non_paint.cc
     kis_tool_paint.cc
     #    kis_tool_shape.cc
@@ -109,7 +109,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgcustompalette.ui
     wdgtextbrush.ui
     wdgnewimage.ui
-	)
+)
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS})
 

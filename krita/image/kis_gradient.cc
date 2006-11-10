@@ -5,7 +5,7 @@
  *                2001 John Califf
  *                2004 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Adrian Page <adrian@pagenet.plus.com>
- *                2004 Sven Langkamp <longamp@reallygood.de>
+ *                2004 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

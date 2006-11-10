@@ -108,7 +108,7 @@
                </font>
               </property>
               <property name="text" >
-               <string>Qt::DockLeft:</string>
+               <string>Left:</string>
               </property>
              </widget>
             </item>
@@ -168,7 +168,7 @@
                </font>
               </property>
               <property name="text" >
-               <string>Qt::DockRight:</string>
+               <string>Right:</string>
               </property>
              </widget>
             </item>

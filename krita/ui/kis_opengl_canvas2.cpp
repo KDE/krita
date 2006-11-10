@@ -16,9 +16,9 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "kis_opengl_canvas2.h"
 #ifdef HAVE_OPENGL
 
-#include "kis_opengl_canvas2.h"
 
 #include <QtOpenGL>
 #include <QWidget>

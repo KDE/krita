@@ -101,8 +101,12 @@ add_subdirectory(example)
 add_subdirectory(interfaces)
 
 if(FREETYPE_FOUND AND FONTCONFIG_FOUND )
-	add_subdirectory(karbon)
+   set(SHOULD_BUILD_KARBON true)
 endif(FREETYPE_FOUND AND FONTCONFIG_FOUND)
+
+if(SHOULD_BUILD_KARBON)
+	add_subdirectory(karbon)
+endif(SHOULD_BUILD_KARBON)	
 
 add_subdirectory(kdgantt)
 add_subdirectory(kchart)

@@ -28,7 +28,7 @@
 KoRectangleShapeFactory::KoRectangleShapeFactory( QObject *parent, const QStringList& )
 : KoShapeFactory( parent, KoRectangleShapeId, i18n( "A simple path shape" ) )
 {
-    setToolTip( i18n( "A rectange" ) );
+    setToolTip( i18n( "A rectangle" ) );
     setIcon("rectangle");
 }
 

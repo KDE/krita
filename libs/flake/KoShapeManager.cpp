@@ -91,6 +91,7 @@ void KoShapeManager::add( KoShape *shape )
 void KoShapeManager::remove( KoShape *shape )
 {
     shape->removeShapeManager( this );
+    m_selection->deselect( shape );
     m_aggregate4update.remove( shape );
     m_tree.remove( shape );
     m_shapes.removeAll(shape);

@@ -44,6 +44,7 @@ class QTabletEvent;
 class KoToolProxy {
 
 public:
+    KoToolProxy() {}
     virtual ~KoToolProxy(){}
 
     /**

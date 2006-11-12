@@ -15,5 +15,5 @@ Icon=krita
 Categories=Qt;KDE;Office;Graphics;
 X-KDE-NativeMimeType=application/x-krita
 X-KDE-StartupNotify=true
-X-DCOP-ServiceType=Multi
+X-DBUS-StartupType=Multi
 X-Krita-Version=2

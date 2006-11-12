@@ -67,6 +67,16 @@ void TestShapeAt::test() {
     QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::Selected), &shape2);
     QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::Unselected), &shape3);
     QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::NextUnselected), &shape1);
+
+    // test omitHiddenShapes
+    QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::Selected, true), &shape2);
+    QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::Unselected, true), &shape3);
+    QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::NextUnselected, true), &shape1);
+
+    shape3.setVisible(false);
+    QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::Selected, true), &shape2);
+    QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::Unselected, true), &shape1);
+    QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::NextUnselected, true), &shape1);
 }
 
 QTEST_MAIN(TestShapeAt)

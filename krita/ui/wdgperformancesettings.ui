@@ -12,9 +12,6 @@
             <height>220</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>WdgPerformanceSettings</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>

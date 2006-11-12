@@ -48,6 +48,7 @@ KoShape::KoShape()
 , m_visible( true )
 , m_locked( false )
 , m_keepAspect( false )
+, m_selectable( true )
 , m_userData(0)
 {
     recalcMatrix();

@@ -293,6 +293,18 @@ public:
     bool isVisible() const { return m_visible; }
 
     /**
+     * Makes it possible for the user to select this shape.
+     * This parameter defaults to true.
+     * @param locked when true; set the shape to be selectable.
+     */
+    void setSelectable(bool selectable) { m_selectable = selectable; }
+    /**
+     * Returns wheather this shape can be selected by the user.
+     * @return true only when the object is selectable.
+     */
+    bool isSelectable() const { return m_selectable; }
+
+    /**
      * Changes the Shape to be locked in place.
      * Being locked means the shape can no longer change shape or position.
      * @param locked when true; set the shape to be locked.
@@ -527,7 +539,7 @@ private:
     int m_zIndex;
     KoShapeContainer *m_parent;
 
-    bool m_visible, m_locked, m_keepAspect;
+    bool m_visible, m_locked, m_keepAspect, m_selectable;
 
 
     QSet<KoShapeManager *> m_shapeManagers;

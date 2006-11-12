@@ -68,6 +68,8 @@ void KoSelection::select(KoShape * object)
 {
     Q_ASSERT(object != this);
     Q_ASSERT(object);
+    if(! object->isSelectable())
+        return;
     if(!m_selectedObjects.contains(object))
         m_selectedObjects << object;
 

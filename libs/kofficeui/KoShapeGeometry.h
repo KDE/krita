@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWFRAMEGEOMETRY_H
-#define KWFRAMEGEOMETRY_H
+#ifndef KOFRAMEGEOMETRY_H
+#define KOFRAMEGEOMETRY_H
 
 #include "ui_KoShapeGeometry.h"
 

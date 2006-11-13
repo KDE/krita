@@ -30,6 +30,7 @@
 #include "KoFileDialog.h"
 #include "KoVersionDialog.h"
 #include "kkbdaccessextensions.h"
+#include "KoDockFactory.h"
 
 #include <kprinter.h>
 #include <kdeversion.h>
@@ -72,6 +73,7 @@
 
 // qt includes
 #include <QDockWidget>
+#include <QMap>
 
 class KoPartManager : public KParts::PartManager
 {
@@ -190,6 +192,8 @@ public:
 
     QDockWidget *m_toolBox;
     QDockWidget *m_shapeSelector;
+
+    QMap<QString, QDockWidget*> m_dockWidgetMap;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance )
@@ -377,8 +381,13 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   d->m_rootViews.clear();
   KoDocument *oldRootDoc = d->m_rootDoc;
 
-  if ( oldRootDoc )
+  if ( oldRootDoc ) {
     oldRootDoc->removeShell( this );
+
+    // Remove the dock widgets created by the old doc's views
+    qDeleteAll( d->m_dockWidgetMap.values() );
+    d->m_dockWidgetMap.clear();
+  }
 
   d->m_rootDoc = doc;
 
@@ -1730,6 +1739,22 @@ bool KoMainWindow::isExporting() const
 void KoMainWindow::setDocToOpen( KoDocument *doc )
 {
   d->m_docToOpen = doc;
+}
+
+QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
+{
+    QDockWidget* dockWidget = 0;
+
+    if( !d->m_dockWidgetMap.contains( factory->dockId() ) ) {
+        dockWidget = factory->createDockWidget();
+        dockWidget->setParent(this);
+        addDockWidget( factory->defaultDockWidgetArea(), dockWidget );
+        d->m_dockWidgetMap.insert( factory->dockId(), dockWidget );
+    } else {
+        dockWidget = d->m_dockWidgetMap[ factory->dockId() ];
+    }
+
+    return dockWidget;
 }
 
 #include "KoMainWindow.moc"

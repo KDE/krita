@@ -39,6 +39,8 @@ class KUrl;
 class KRecentFilesAction;
 class KoFilterManager;
 // class DCOPObject;
+class QDockWidget;
+class KoDockFactory;
 
 namespace KParts
 {
@@ -161,6 +163,8 @@ public:
     void updateVersionsFileAction(KoDocument *doc);
 
     void setReadWrite( bool readwrite );
+
+    QDockWidget* createDockWidget(KoDockFactory* factory);
 
 signals:
     /**

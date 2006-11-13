@@ -152,5 +152,6 @@ install( FILES
     threadAction/KoJobsListPolicy.h
     threadAction/KoExecutePolicy.h
     threadAction/KoAction.h
+    KoDockFactory.h
 DESTINATION ${INCLUDE_INSTALL_DIR})
 

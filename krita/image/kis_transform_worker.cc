@@ -86,6 +86,7 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
 
 void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
+    kDebug() << "rotateLeft90 called\n";
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
@@ -128,6 +129,7 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
 
 void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
+    kDebug() << "Rotating 180\n";
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
@@ -179,30 +181,37 @@ template <> KisVLineIteratorPixel createIterator <KisVLineIteratorPixel>
     return dev->createVLineIterator(lineNum, start, len);
 }
 
-template <class iter> void calcDimensions (KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines);
+template <class iter> void calcDimensions (KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines, qint32 &srcStartData, qint32 &srcLenData);
 
 template <> void calcDimensions <KisHLineIteratorPixel>
-(KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
+(KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines, qint32 &srcStartData, qint32 &srcLenData)
 {
+    dev->exactBounds(srcStartData, firstLine, srcLenData, numLines);
     if(dev->hasSelection())
     {
         QRect r = dev->selection()->selectedExactRect();
         r.getRect(&srcStart, &firstLine, &srcLen, &numLines);
     }
     else
-        dev->exactBounds(srcStart, firstLine, srcLen, numLines);
+    {
+        srcStart = srcStartData;
+        srcLen = srcLenData;
+    }
 }
 
 template <> void calcDimensions <KisVLineIteratorPixel>
-(KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
+(KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines, qint32 &srcStartData, qint32 &srcLenData)
 {
-    if(dev->hasSelection())
+dev->exactBounds(firstLine, srcStartData, numLines, srcLenData);    if(dev->hasSelection())
     {
         QRect r = dev->selection()->selectedExactRect();
         r.getRect(&firstLine, &srcStart, &numLines, &srcLen);
     }
     else
-        dev->exactBounds(firstLine, srcStart, numLines, srcLen);
+    {
+        srcStart = srcStartData;
+        srcLen = srcLenData;
+    }
 }
 
 struct FilterValues
@@ -214,7 +223,7 @@ struct FilterValues
 
 template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, double shear, qint32 dx, KisFilterStrategy *filterStrategy)
 {
-    qint32 lineNum,srcStart,firstLine,srcLen,numLines;
+    qint32 lineNum,srcStart,firstLine,srcLen,numLines,srcStartData,srcLenData;
     qint32 center, begin, end;    /* filter calculation variables */
     quint8 *data;
     quint8 pixelSize = src->pixelSize();
@@ -229,7 +238,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     else
         dstSelection = KisSelectionSP(new KisSelection(KisPaintDeviceSP(dst))); // essentially a dummy to be deleted
 
-    calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines);
+    calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines,  srcStartData, srcLenData);
 
     scale = int(floatscale*srcLen);
     scaleDenom = srcLen;
@@ -258,12 +267,12 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
 
     // handle mirroring
     if(scale < 0)
-        dstLen = -srcLen * scale / scaleDenom;
+        dstLen = -scale;
     else
-        dstLen = srcLen * scale / scaleDenom;
+        dstLen = scale;
 
     // Calculate extra length (in each side) needed due to shear
-    qint32 extraLen = (support+256)>>8;
+    qint32 extraLen = (support+256)>>8  + 1;
 
     quint8 *tmpLine = new quint8[(srcLen +2*extraLen)* pixelSize];
     Q_CHECK_PTR(tmpLine);
@@ -285,14 +294,14 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         qint32 dt = invfscale;
         filterWeights[center].weight = new quint8[span];
 //printf("%d (",center);
-        int sum=0;
+        quint32 sum=0;
         for(int num = 0; num<span; ++num)
         {
             quint32 tmpw = filterStrategy->intValueAt(t) * invfscale;
 
             tmpw >>=8;
             filterWeights[center].weight[num] = tmpw;
-//printf(" %d=%d",t,filterWeights[center].weight[num]);
+//printf(" %d=%d,%d",t,filterWeights[center].weight[num],tmpw);
             t += dt;
             sum+=tmpw;
         }
@@ -307,7 +316,21 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
                 sum+=filterWeights[center].weight[num];
             }
         }
-//printf("  sum2 =%d\n",sum);
+
+//printf("  sum2 =%d",sum);
+        int num = 0;
+        while(sum<255 && num*2<span)
+        {
+            filterWeights[center].weight[span/2 + num]++;
+            ++sum;
+            if(sum<255 && num<span/2)
+            {
+                filterWeights[center].weight[span/2 - num - 1]++;
+                ++sum;
+            }
+            ++num;
+        }
+//printf("  sum3 =%d\n",sum);
 
         filterWeights[center].numWeights = span;
     }
@@ -323,26 +346,34 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         dstStart += int(floor(lineNum * shear));
 
         // Build a temporary line
-        T srcIt = createIterator <T>(src, srcStart - extraLen, lineNum, srcLen+2*extraLen);
-        int i = 0;
-        while(!srcIt.isDone())
+        T srcIt = createIterator <T>(src, QMAX(srcStart - extraLen, srcStartData), lineNum, srcLen+2*extraLen);
+        qint32 i = 0;
+        qint32 x = srcStart - extraLen;
+
+        while(i < srcLen + 2*extraLen)
         {
             quint8 *data;
 
+            data = srcIt.rawData();
+            memcpy(&tmpLine[i*pixelSize], data, pixelSize);
+
             if(srcIt.isSelected())
             {
-                data = srcIt.rawData();
-                memcpy(&tmpLine[i*pixelSize], data, pixelSize);
-
-                // XXX: Should set alpha = alpha*(1-selectedness)
-                cs->setAlpha(data, 0, 1);
 
                 tmpSel[i] = 255;
             }
             else
+            {
                 tmpSel[i] = 0;
-            ++srcIt;
+            }
+             if(x >= srcStartData && x < srcStartData + srcLenData - 1)
+             {
+                 // XXX: Should set alpha = alpha*(1-selectedness)
+                 cs->setAlpha(data, 0, 1);
+                 ++srcIt;
+             }
             i++;
+            x++;
         }
 
         T dstIt = createIterator <T>(dst, dstStart, lineNum, dstLen);
@@ -351,11 +382,20 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         i=0;
         while(!dstIt.isDone())
         {
-            if(scale < 0)
-                center = (srcLen<<8) + (((i<<8)) * scaleDenom) / scale;
+            if(scaleDenom<2500)
+                center = ((i<<8) * scaleDenom) / scale;
             else
-                center = (((i<<8)) * scaleDenom) / scale;
+            {
+                if(scaleDenom<46000) // real limit is actually 46340 pixels
+                    center = ((i * scaleDenom) / scale)<<8;
+                else
+                    center = ((i<<8)/scale * scaleDenom) / scale; // XXX fails for sizes over 2^23 pixels src width
+            }
 
+            if(scale < 0)
+                center += srcLen<<8;
+
+            center += 128*scaleDenom/scale;//xxx doesn't work for scale<0;
             center += (extraLen<<8) + shearFracOffset;
 
             // find contributing pixels
@@ -499,7 +539,6 @@ bool KisTransformWorker::run()
     if (m_dev->parentLayer()) {
         m_dev->parentLayer()->setDirty();
     }
-
     //progress info
     emit notifyProgressDone();
     m_dev->emitSelectionChanged();

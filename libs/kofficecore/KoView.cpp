@@ -24,6 +24,7 @@
 // #include <KoViewIface.h>
 #include "KoViewAdaptor.h"
 #include <KoDocumentChild.h>
+#include <KoDockFactory.h>
 #include <kactioncollection.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -746,6 +747,15 @@ void KoView::slotClearStatusText()
 //         d->m_dcopObject = new KoViewIface( this );
 //     return d->m_dcopObject;
 // }
+
+QDockWidget *KoView::createDockWidget(KoDockFactory* factory)
+{
+    if( !shell() )
+        return 0;
+
+    return shell()->createDockWidget(factory);
+}
+
 
 class KoViewChild::KoViewChildPrivate
 {

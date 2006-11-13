@@ -35,6 +35,7 @@ class KoMainWindow;
 class KoViewPrivate;
 class KoViewChild;
 class KoDocumentChild;
+class KoDockFactory;
 
 // KDE classes
 class KStatusBar;
@@ -389,6 +390,15 @@ public:
      * The default implementation return 0, to have no shape selector.
      */
     virtual QDockWidget *createShapeSelector() { return 0; }
+
+    /**
+     * Creates a dockwidget if needed from @p factory if the mainwindow is a KoMainWindow by calling
+     * @link KoMainWindow::createDockWidget
+     *
+     * @param factory the factory used to the create the dockwidget
+     * @return the created dockwidget or NULL if the mainwindow isn't a KoMainWindow
+     */
+    QDockWidget *createDockWidget(KoDockFactory* factory);
 
    /**
     * Check to see if the view is currently in the middle of an operation which means

@@ -1,0 +1,3 @@
+the plugin arch is changed: all colorspaces need to follow
+rgb_u8's lead when they are enabled again. (Ie, not be
+a kpart, not assume they are loaded by the registry)

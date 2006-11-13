@@ -43,7 +43,7 @@ class FLAKE_EXPORT KoPluginLoader : public QObject
 
 public:
 
-    virtual ~KoPluginLoader();
+    ~KoPluginLoader();
 
     /**
      * Return an instance of the KoPluginLoader

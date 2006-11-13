@@ -40,7 +40,6 @@
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3VBoxLayout>
-#include <Q3Frame>
 #include <QKeyEvent>
 #include <Q3GridLayout>
 #include <Q3PtrList>

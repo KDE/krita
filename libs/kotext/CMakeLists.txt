@@ -83,14 +83,11 @@ kde4_add_ui_files(kotext_LIB_SRCS
    kolanguagetabbase.ui
    kodecorationtabbase.ui
    KoParagDecorationTab.ui
+   KoCompletionBase.ui
+   kofonttabbase.ui
+   kohighlightingtabbase.ui
+   kolayouttabbase.ui
 )
-
-kde4_add_ui3_files(kotext_LIB_SRCS 
-   kofonttabbase.ui 
-   kohighlightingtabbase.ui 
-   kolayouttabbase.ui 
-   KoCompletionBase.ui )
-
 
 # kde4_add_dcop_skels(kotext_LIB_SRCS KoTextViewIface.h )
 

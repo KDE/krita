@@ -1,302 +1,285 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KoLayoutTabBase</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>koLayoutTabBase</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KoLayoutTabBase</class>
+  <widget class="QWidget" name="KoLayoutTabBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>356</width>
+        <height>206</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>356</width>
-            <height>206</height>
-        </rect>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>positionButtonGroup</cstring>
+    <layout class="QVBoxLayout" >
+      <item>
+        <widget class="Q3ButtonGroup" name="positionButtonGroup" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="title" >
+            <string>Position</string>
+          </property>
+          <property name="exclusive" >
+            <bool>true</bool>
+          </property>
+          <layout class="QHBoxLayout" >
+            <property name="margin" >
+              <number>0</number>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string>Position</string>
-            </property>
-            <property name="exclusive">
-                <bool>true</bool>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+            <item>
+              <layout class="QVBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
                 </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout3</cstring>
+                <item>
+                  <widget class="QRadioButton" name="normalPosRadioButton" >
+                    <property name="text" >
+                      <string>Normal</string>
                     </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>normalPosRadioButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Normal</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>0</number>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>Superscript</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Superscript</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>2</number>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>subscriptRadioButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Subscript</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>1</number>
-                            </property>
-                        </widget>
-                    </vbox>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer3</cstring>
+                    <property name="checked" >
+                      <bool>true</bool>
                     </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
+                    <property name="buttonGroupId" >
+                      <number>0</number>
                     </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QRadioButton" name="Superscript" >
+                    <property name="text" >
+                      <string>Superscript</string>
                     </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>61</width>
-                            <height>20</height>
-                        </size>
+                    <property name="buttonGroupId" >
+                      <number>2</number>
                     </property>
-                </spacer>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout2</cstring>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QRadioButton" name="subscriptRadioButton" >
+                    <property name="text" >
+                      <string>Subscript</string>
                     </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="KDoubleSpinBox" row="2" column="1">
-                            <property name="name">
-                                <cstring>relativeSizeKDoubleSpinBox</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="suffix">
-                                <string> %</string>
-                            </property>
-                            <property name="maximum">
-                                <number>100</number>
-                            </property>
-                            <property name="minimum">
-                                <number>1</number>
-                            </property>
-                            <property name="value">
-                                <number>66</number>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>customRadioButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Custom</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>3</number>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="0">
-                            <property name="name">
-                                <cstring>offsetLabel</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="text">
-                                <string>Offset:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="2" column="0">
-                            <property name="name">
-                                <cstring>relativeSizeLabel</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="text">
-                                <string>Relative size:</string>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox" row="1" column="1">
-                            <property name="name">
-                                <cstring>offsetSpinBox</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="suffix">
-                                <string> pts</string>
-                            </property>
-                            <property name="maximum">
-                                <number>9</number>
-                            </property>
-                            <property name="minimum">
-                                <number>-9</number>
-                            </property>
-                            <property name="value">
-                                <number>0</number>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>hyphenGroupBox</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string>Hyphenation</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+                    <property name="buttonGroupId" >
+                      <number>1</number>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+            <item>
+              <spacer name="spacer3" >
+                <property name="sizeHint" >
+                  <size>
+                    <width>61</width>
+                    <height>20</height>
+                  </size>
                 </property>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>hyphenateCheckBox</cstring>
+                <property name="sizeType" >
+                  <enum>Expanding</enum>
+                </property>
+                <property name="orientation" >
+                  <enum>Horizontal</enum>
+                </property>
+              </spacer>
+            </item>
+            <item>
+              <layout class="QGridLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item row="2" column="1" >
+                  <widget class="KDoubleSpinBox" name="relativeSizeKDoubleSpinBox" >
+                    <property name="enabled" >
+                      <bool>false</bool>
                     </property>
-                    <property name="text">
-                        <string>Auto hyphenation</string>
+                    <property name="suffix" >
+                      <string> %</string>
                     </property>
-                </widget>
-            </vbox>
+                    <property name="maximum" >
+                      <number>100</number>
+                    </property>
+                    <property name="minimum" >
+                      <number>1</number>
+                    </property>
+                    <property name="value" >
+                      <number>66</number>
+                    </property>
+                  </widget>
+                </item>
+                <item rowspan="1" row="0" column="0" colspan="2" >
+                  <widget class="QRadioButton" name="customRadioButton" >
+                    <property name="text" >
+                      <string>Custom</string>
+                    </property>
+                    <property name="buttonGroupId" >
+                      <number>3</number>
+                    </property>
+                  </widget>
+                </item>
+                <item row="1" column="0" >
+                  <widget class="QLabel" name="offsetLabel" >
+                    <property name="enabled" >
+                      <bool>false</bool>
+                    </property>
+                    <property name="text" >
+                      <string>Offset:</string>
+                    </property>
+                    <property name="wordWrap" >
+                      <bool>false</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item row="2" column="0" >
+                  <widget class="QLabel" name="relativeSizeLabel" >
+                    <property name="enabled" >
+                      <bool>false</bool>
+                    </property>
+                    <property name="text" >
+                      <string>Relative size:</string>
+                    </property>
+                    <property name="wordWrap" >
+                      <bool>false</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item row="1" column="1" >
+                  <widget class="QSpinBox" name="offsetSpinBox" >
+                    <property name="enabled" >
+                      <bool>false</bool>
+                    </property>
+                    <property name="suffix" >
+                      <string> pts</string>
+                    </property>
+                    <property name="maximum" >
+                      <number>9</number>
+                    </property>
+                    <property name="minimum" >
+                      <number>-9</number>
+                    </property>
+                    <property name="value" >
+                      <number>0</number>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+          </layout>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>spacer2</cstring>
+      </item>
+      <item>
+        <widget class="Q3GroupBox" name="hyphenGroupBox" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="title" >
+            <string>Hyphenation</string>
+          </property>
+          <layout class="QVBoxLayout" >
+            <property name="margin" >
+              <number>0</number>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
+            <item>
+              <widget class="QCheckBox" name="hyphenateCheckBox" >
+                <property name="text" >
+                  <string>Auto hyphenation</string>
+                </property>
+              </widget>
+            </item>
+          </layout>
+        </widget>
+      </item>
+      <item>
+        <spacer name="spacer2" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>16</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Vertical</enum>
+          </property>
         </spacer>
-    </vbox>
-</widget>
-<connections>
-    <connection>
-        <sender>customRadioButton</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>offsetSpinBox</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>customRadioButton</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>offsetLabel</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>customRadioButton</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>relativeSizeLabel</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>customRadioButton</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>relativeSizeKDoubleSpinBox</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>Superscript</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>relativeSizeLabel</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>Superscript</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>relativeSizeKDoubleSpinBox</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>subscriptRadioButton</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>relativeSizeLabel</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>subscriptRadioButton</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>relativeSizeKDoubleSpinBox</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-</connections>
-<customwidgets>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <customwidgets>
     <customwidget>
-        <class>KDoubleSpinBox</class>
-        <header location="global">knuminput.h</header>
-        <container>0</container>
+      <class>KDoubleSpinBox</class>
+      <header location="global" >knuminput.h</header>
+      <container>0</container>
     </customwidget>
-</customwidgets>
-<includes>
-    <include location="global" impldecl="in declaration">knuminput.h</include>
-    <include location="global" impldecl="in declaration">klocale.h</include>
-</includes>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-</includehints>
-</UI>
+  </customwidgets>
+  <includes>
+    <include location="global" >knuminput.h</include>
+    <include location="global" >klocale.h</include>
+    <include location="local" >knuminput.h</include>
+  </includes>
+  <connections>
+    <connection>
+      <sender>customRadioButton</sender>
+      <signal>toggled(bool)</signal>
+      <receiver>offsetSpinBox</receiver>
+      <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+      <sender>customRadioButton</sender>
+      <signal>toggled(bool)</signal>
+      <receiver>offsetLabel</receiver>
+      <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+      <sender>customRadioButton</sender>
+      <signal>toggled(bool)</signal>
+      <receiver>relativeSizeLabel</receiver>
+      <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+      <sender>customRadioButton</sender>
+      <signal>toggled(bool)</signal>
+      <receiver>relativeSizeKDoubleSpinBox</receiver>
+      <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+      <sender>Superscript</sender>
+      <signal>toggled(bool)</signal>
+      <receiver>relativeSizeLabel</receiver>
+      <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+      <sender>Superscript</sender>
+      <signal>toggled(bool)</signal>
+      <receiver>relativeSizeKDoubleSpinBox</receiver>
+      <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+      <sender>subscriptRadioButton</sender>
+      <signal>toggled(bool)</signal>
+      <receiver>relativeSizeLabel</receiver>
+      <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+      <sender>subscriptRadioButton</sender>
+      <signal>toggled(bool)</signal>
+      <receiver>relativeSizeKDoubleSpinBox</receiver>
+      <slot>setEnabled(bool)</slot>
+    </connection>
+  </connections>
+</ui>

@@ -29,7 +29,7 @@
 #include "KoLayoutTab.moc"
 
 KoLayoutTab::KoLayoutTab( bool withSubSuperScript, QWidget* parent, const char* name, Qt::WFlags fl ) 
-        : KoLayoutTabBase( parent, name, fl )
+        : KoLayoutTabBase( parent/*, name, fl*/ )
 {
     if ( !withSubSuperScript ) positionButtonGroup->hide();
 

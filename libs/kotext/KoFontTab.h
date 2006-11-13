@@ -20,8 +20,17 @@
 #ifndef __kofonttab_h__
 #define __kofonttab_h__
 
-#include <kofonttabbase.h>
+#include "ui_kofonttabbase.h"
 #include <QFont>
+
+class KoFontTabBase : public QWidget, public Ui::KoFontTabBase
+{
+public:
+ KoFontTabBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class KoFontTab : public KoFontTabBase
 {

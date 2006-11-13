@@ -20,8 +20,17 @@
 #ifndef __kolayouttab_h__
 #define __kolayouttab_h__
 
-#include <kolayouttabbase.h>
+#include "ui_kolayouttabbase.h"
 #include <KoTextFormat.h>
+
+class KoLayoutTabBase : public QWidget, public Ui::KoLayoutTabBase
+{
+public:
+  KoLayoutTabBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class KoLayoutTab : public KoLayoutTabBase
 {

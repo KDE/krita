@@ -32,7 +32,7 @@
 
 
 KoHighlightingTab::KoHighlightingTab( QWidget* parent, const char* name, Qt::WFlags fl ) 
-        : KoHighlightingTabBase( parent, name, fl )
+        : KoHighlightingTabBase( parent/*, name, fl*/ )
 {
     underlineStyleKComboBox->addItems( KoTextFormat::underlineTypeList() );
     underlineLineStyleKComboBox->addItems( KoTextFormat::underlineStyleList() );

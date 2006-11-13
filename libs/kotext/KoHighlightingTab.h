@@ -20,10 +20,19 @@
 #ifndef __kohighlightingtab_h__
 #define __kohighlightingtab_h__
 
-#include <kohighlightingtabbase.h>
+#include "ui_kohighlightingtabbase.h"
 #include <KoTextFormat.h>
 
 #include <QColor>
+
+class KoHighlightingTabBase: public QWidget, public Ui::KoHighlightingTabBase
+{
+public:
+  KoHighlightingTabBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class KoHighlightingTab : public KoHighlightingTabBase
 {

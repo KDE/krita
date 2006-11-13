@@ -19,9 +19,18 @@
 #ifndef kocompletiondia_h
 #define kocompletiondia_h
 
-#include "KoCompletionBase.h"
+#include "ui_KoCompletionBase.h"
 #include <kdialog.h>
 #include <KoAutoFormat.h>
+
+class KoCompletionBase : public QWidget, public Ui::KoCompletionBase
+{
+public:
+  KoCompletionBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 /**
  * Completion configuration widget.

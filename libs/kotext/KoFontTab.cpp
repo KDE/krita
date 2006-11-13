@@ -20,7 +20,7 @@
 #include "KoFontTab.h"
 
 KoFontTab::KoFontTab( uint fontListCriteria, QWidget* parent, const char* name, Qt::WFlags fl ) 
-        : KoFontTabBase( parent, name, fl )
+        : KoFontTabBase( parent/*, name, fl*/ ) //FIXME apply fl argument
 {
     QStringList list;
     KFontChooser_local::getFontList(list, fontListCriteria);

@@ -20,39 +20,15 @@
 
 #include "KoToolRegistry.h"
 #include "kdebug.h"
-#include <kparts/plugin.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
-#include <kparts/componentfactory.h>
 #include <kstaticdeleter.h>
+
 #include <KoPathToolFactory.h>
+#include <KoPluginLoader.h>
 
 KoToolRegistry::KoToolRegistry() {
-    const KService::List offers = KServiceTypeTrader::self()->query(
-        QString::fromLatin1("KOffice/Tool"),
-        QString::fromLatin1("(Type == 'Service') and ([X-Flake-Version] == 1)"));
+    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Tool"),
+                                      QString::fromLatin1("[X-Flake-Version] == 1"));
 
-    kDebug(30008) << "KoToolRegistry searching for plugins, " << offers.count() << " found\n";
-
-    foreach(KService::Ptr service, offers) {
-        int errCode = 0;
-
-        // XXX: Doesn't this assume that there can be only one tool
-        // per kpart plugin? (BSAR) In Krita, we used a default
-        // constructor for the plugin. In the constructor we added
-        // possibly many tools using the registry::add method.
-        KoToolFactory* plugin =
-            KService::createInstance<KoToolFactory>(
-                service, this, QStringList(), &errCode );
-        if ( plugin ) {
-            kDebug(30008) <<"found plugin '"<< service->name() << "'\n";
-            add(plugin);
-        }
-        else {
-            kWarning(30008) <<"loading plugin '" << service->name() <<
-                "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")\n";
-        }
-    }
     // path tool is always there
     add( new KoPathToolFactory(this, QStringList()) );
 }

@@ -16,23 +16,33 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-#include "KoProperties.h"
-#include "KoTextShape.h"
-#include "KoTextShapeData.h"
-#include "KoTextToolFactory.h"
-#include "KoToolRegistry.h"
 #include <KoTextShapeFactory.h>
-#include <KoShapeGeometry.h>
 
 #include <klocale.h>
 #include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(kotext2,
-         KGenericFactory<KoTextShapeFactory>( "TextShape" ) )
+#include "KoProperties.h"
+#include "KoShapeRegistry.h"
+#include "KoToolRegistry.h"
+#include <KoShapeGeometry.h>
+#include <KoShape.h>
 
-KoTextShapeFactory::KoTextShapeFactory(QObject *parent, const QStringList& list)
-: KoShapeFactory(parent, KoTextShape_SHAPEID, i18n("Text"))
+#include "KoTextShapeData.h"
+#include "KoTextShape.h"
+#include "KoTextToolFactory.h"
+
+typedef KGenericFactory<KoTextPlugin> KoTextPluginFactory;
+K_EXPORT_COMPONENT_FACTORY(kotext2, KoTextPluginFactory( "TextShape" ) )
+
+KoTextPlugin::KoTextPlugin(QObject * parent, const QStringList & l)
+    : QObject(parent)
+{
+    KoToolRegistry::instance()->add(new KoTextToolFactory(parent, l));
+    KoShapeRegistry::instance()->add(new KoTextShapeFactory(parent));
+}
+
+KoTextShapeFactory::KoTextShapeFactory(QObject *parent)
+    : KoShapeFactory(parent, KoTextShape_SHAPEID, i18n("Text"))
 {
     setToolTip(i18n("A Shape That Shows Text"));
 
@@ -44,8 +54,6 @@ KoTextShapeFactory::KoTextShapeFactory(QObject *parent, const QStringList& list)
     props->setProperty("text", "<b>Koffie</b>, koffie... Querelanten\ndrinken geen KOffice maar groene thee.");
     addTemplate(t);
 
-    // init tool factory here, since this is the only public factory in the lib
-    KoToolRegistry::instance()->add(new KoTextToolFactory(parent, list));
 }
 
 KoShape *KoTextShapeFactory::createDefaultShape() {

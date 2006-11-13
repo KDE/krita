@@ -24,6 +24,8 @@
 #include <kis_types.h>
 #include <kis_image.h>
 
+#define KisDummyShape_SHAPEID "KisDummyShapeID"
+
 class KisShapeUserData : public KoShapeUserData {
 
 public:
@@ -56,6 +58,7 @@ public:
     */
     KisDummyShape()
         {
+            setShapeId(KisDummyShape_SHAPEID);
         }
 
     void setImage( KisImageSP image)

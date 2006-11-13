@@ -20,18 +20,33 @@
 #ifndef TEXTSHAPEFACTORY_H
 #define TEXTSHAPEFACTORY_H
 
-#include <KoShapeFactory.h>
-#include <KoShape.h>
-
 #include <QWidget>
+#include <QObject>
+
+#include <KoShapeFactory.h>
 
 #include <koffice_export.h>
 
-class KOTEXT_EXPORT KoTextShapeFactory : public KoShapeFactory {
+class KoShape;
+
+class KoTextPlugin : public QObject {
+
     Q_OBJECT
+
+public:
+
+    KoTextPlugin(QObject * parent, const QStringList &);
+    ~KoTextPlugin() {};
+
+};
+
+class KoTextShapeFactory : public KoShapeFactory {
+
+    Q_OBJECT
+
 public:
     /// constructor
-    KoTextShapeFactory(QObject *parent, const QStringList&);
+    KoTextShapeFactory(QObject *parent);
     ~KoTextShapeFactory() {}
 
     KoShape *createDefaultShape();

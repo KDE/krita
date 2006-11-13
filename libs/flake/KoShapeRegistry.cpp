@@ -20,10 +20,9 @@
  */
 
 #include <kdebug.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
 #include <kstaticdeleter.h>
 
+#include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
 #include <KoPathShapeFactory.h>
 #include <KoRectangleShapeFactory.h>
@@ -35,24 +34,8 @@ KoShapeRegistry::KoShapeRegistry()
 }
 
 void KoShapeRegistry::init() {
-    const KService::List offers = KServiceTypeTrader::self()->query(
-        QString::fromLatin1("KOffice/Shape"),
-        QString::fromLatin1("(Type == 'Service') and ([X-Flake-Version] == 1)"));
-    kDebug(30008) << "KoShapeRegistry searching for plugins, " << offers.count() << " found\n";
-
-    foreach(KService::Ptr service, offers) {
-        int errCode = 0;
-        KoShapeFactory* plugin =
-            KService::createInstance<KoShapeFactory>(
-                service, this, QStringList(), &errCode );
-        if ( plugin ) {
-            kDebug(30008) <<"found plugin '"<< service->name() << "'\n";
-            add(plugin);
-        }
-        else
-            kWarning(30008) <<"loading plugin '" << service->name() <<
-                "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")\n";
-    }
+    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Shape"),
+                                     QString::fromLatin1("[X-Flake-Version] == 1"));
 
     // Also add our hard-coded basic shape
     add( new KoPathShapeFactory(this, QStringList()) );

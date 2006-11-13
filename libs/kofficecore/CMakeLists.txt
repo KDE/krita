@@ -8,6 +8,7 @@ include_directories( ${KWMF_INCLUDES} ${KOSTORE_INCLUDES} ${KDE4_INCLUDE_DIR}/th
 
 set(kofficecore_LIB_SRCS
    KoDocument.cpp
+   KoPluginLoader.cpp
    KoDocumentAdaptor.cpp
    KoProperties.cpp
    KoGlobal.cpp

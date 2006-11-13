@@ -40,6 +40,7 @@
 #include <KoToolRegistry.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
+#include <KoPluginLoader.h>
 
 #include <kis_image.h>
 
@@ -52,7 +53,6 @@
 #include "kis_qpainter_canvas.h"
 #include "kis_resource_provider.h"
 #include "kis_resource_provider.h"
-#include "kis_tool_registry.h"
 
 class KisView2::KisView2Private {
 
@@ -65,7 +65,6 @@ public:
 
             canvas = new KisCanvas2( viewConverter, QPAINTER, view );
             shapeManager = canvas->shapeManager();
-            kDebug() << ">>>>>>>>>>>>>>>>> In viewprivate: " << shapeManager << endl;
             // The canvas controller handles the scrollbars
             canvasController = new KoCanvasController( view );
             canvasController->setCanvas( canvas );
@@ -118,9 +117,9 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
                              actionCollection() );
 
 
-    KisToolRegistry::instance(); // Load the tools, if they're not
-                                 // already loaded. The tools register
-                                 // themselves with
+    // Load the krita-specific tools
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
+                                     QString::fromLatin1("[X-Krita-Version] == 3"));
 
     createActions();
     createManagers();

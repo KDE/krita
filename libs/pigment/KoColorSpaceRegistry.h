@@ -34,6 +34,9 @@ class QStringList;
 class KisPaintDeviceAction;
 
 /**
+ *
+ * XXX: USE STATIC DELETER! USE STATIC DELETER!
+ *
  * The registry for colorspaces and profiles.
  * This class contains:
  *      - a registry of colorspace instantiated with specific profiles.

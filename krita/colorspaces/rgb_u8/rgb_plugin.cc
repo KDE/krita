@@ -39,27 +39,21 @@ K_EXPORT_COMPONENT_FACTORY( kritargbplugin, RGBPluginFactory( "krita" ) )
 
 
 RGBPlugin::RGBPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+    : QObject(parent)
 {
-    setInstance(RGBPluginFactory::instance());
+    KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
 
-    if ( parent->inherits("KoColorSpaceRegistry") )
-    {
-	KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>(parent);
-
-        KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());
-        f->addProfile(defProfile);
+    KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());
+    f->addProfile(defProfile);
 
 
-        KoColorSpaceFactory * csFactory = new KisRgbColorSpaceFactory();
-        f->add(csFactory);
+    KoColorSpaceFactory * csFactory = new KisRgbColorSpaceFactory();
+    f->add(csFactory);
 
-        KoColorSpace * colorSpaceRGBA = new KisRgbColorSpace(f, 0);
-        KoHistogramProducerFactoryRegistry::instance()->add(
-                new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
+    KoColorSpace * colorSpaceRGBA = new KisRgbColorSpace(f, 0);
+    KoHistogramProducerFactoryRegistry::instance()->add(
+    new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
                 (KoID("RGB8HISTO", i18n("RGB8 Histogram")), colorSpaceRGBA) );
-    }
-
 }
 
 RGBPlugin::~RGBPlugin()

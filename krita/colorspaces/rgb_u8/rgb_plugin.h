@@ -19,12 +19,12 @@
 #ifndef RGB_PLUGIN_H_
 #define RGB_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
 
 /**
  * A plugin wrapper around the RGB color space strategy.
  */
-class RGBPlugin : public KParts::Plugin
+class RGBPlugin : public QObject
 {
     Q_OBJECT
 public:

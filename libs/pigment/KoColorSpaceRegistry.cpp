@@ -24,15 +24,14 @@
 #include <kinstance.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kparts/plugin.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
-#include <kparts/componentfactory.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kservice.h>
+#include <kservicetypetrader.h>
 
 #include <lcms.h>
 
+#include <KoPluginLoader.h>
 #include "KoColorSpace.h"
 #include "KoColorProfile.h"
 #include "KoColorSpaceRegistry.h"
@@ -111,7 +110,7 @@ void KoColorSpaceRegistry::init()
     m_alphaCs = new KoAlphaColorSpace(this, 0);
 
     // Load all colorspace modules
-     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/ColorSpace"),
+    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/ColorSpace"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Pigment-Version] == 1)"));
 
@@ -120,23 +119,7 @@ void KoColorSpaceRegistry::init()
         abort();
     }
 
-    KService::List::ConstIterator iter;
-    for(iter = offers.begin(); iter != offers.end(); ++iter)
-    {
-        KService::Ptr service = *iter;
-        int errCode = 0;
-        KParts::Plugin* plugin =
-             KService::createInstance<KParts::Plugin> ( service, this, QStringList(), &errCode);
-        if ( plugin )
-            kDebug(41006) << "found colorspace " << service->property("Name").toString() << "\n";
-        else {
-            kDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
-            if( errCode == KLibLoader::ErrNoLibrary)
-            {
-                kWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
-            }
-        }
-    }
+    KoPluginLoader::instance()->load("KOffice/ColorSpace","[X-Pigment-Version] == 1");
 }
 
 KoColorSpaceRegistry::KoColorSpaceRegistry()

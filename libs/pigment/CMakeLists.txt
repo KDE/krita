@@ -32,7 +32,7 @@ kde4_automoc(${pigment_SRCS})
 
 kde4_add_library(pigment SHARED ${pigment_SRCS})
 
-target_link_libraries(pigment ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB})
+target_link_libraries(pigment ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB} kofficecore)
 
 set_target_properties(pigment PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 

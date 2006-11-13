@@ -54,6 +54,7 @@
 #include "kis_colorspace_convert_visitor.h"
 #include "kis_background.h"
 #include "kis_substrate.h"
+#include "kis_scale_visitor.h"
 #include "kis_nameserver.h"
 #include "kis_undo_adapter.h"
 #include "kis_merge_visitor.h"
@@ -638,7 +639,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_private->selectionChangedWhileLocked = false;
     m_private->substrate = 0;
     m_private->perspectiveGrid = new KisPerspectiveGrid();
-            
+
     m_adapter = adapter;
 
     m_nserver = new KisNameServer(i18n("Layer %1"), 1);
@@ -770,7 +771,12 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
             m_adapter->addCommand(new LockImageCommand(this, true));
         }
 
-        {
+        if ( colorSpace()->id() == KisID("RGBA") || colorSpace()->id() == KisID("CMYK") || colorSpace()->id() == KisID("GRAYA")) {
+          KisScaleVisitor v (this, sx, sy, progress, filterStrategy);
+            m_rootLayer->accept( v );
+        }
+        else {
+
             KisTransformVisitor visitor (this, sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy);
             m_rootLayer->accept(visitor);
         }
@@ -1496,7 +1502,7 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
       data += 4;
     }
 #endif
-    
+
     if (paintFlags & PAINT_BACKGROUND) {
         m_bkg->paintBackground(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
         image.setAlphaBuffer(false);

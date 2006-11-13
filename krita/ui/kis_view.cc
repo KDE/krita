@@ -101,7 +101,7 @@
 #include "kis_paint_device.h"
 #include "kis_tool_freehand.h"
 //#include "kis_guide.h"
-
+#include "kis_scale_visitor.h"
 #include "kis_layerbox.h"
 #include "kis_import_catcher.h"
 #include "kis_layer.h"
@@ -1838,9 +1838,15 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
         t = new KisTransaction(i18n("Scale Layer"), dev);
         Q_CHECK_PTR(t);
     }
+    if ( dev->colorSpace()->id() == KisID("RGBA") || dev->colorSpace()->id() == KisID("CMYK") || dev->colorSpace()->id() == KisID("GRAYA")) {
+        KisScaleWorker w (dev, sx, sy, filterStrategy);
+        w.run();
+    }
+    else {
 
-    KisTransformWorker worker(dev, sx, sy, 0, 0, 0.0, 0, 0, m_progress, filterStrategy);
-    worker.run();
+        KisTransformWorker worker(dev, sx, sy, 0, 0, 0.0, 0, 0, m_progress, filterStrategy);
+        worker.run();
+    }
 
     if (t) undoAdapter()->addCommand(t);
 

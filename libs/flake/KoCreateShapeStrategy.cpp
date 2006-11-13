@@ -55,11 +55,10 @@ KCommand* KoCreateShapeStrategy::createCommand() {
     QRectF rect = selectRect();
     shape->setPosition(rect.topLeft());
     QSizeF newSize = rect.size();
-    if(newSize.width() < 1.0 || newSize.height() < 1.0) { // if user clicked instead of dragged
-        newSize.setWidth(100);
-        newSize.setHeight(100);
-    }
-    shape->resize(newSize);
+    // if the user has dragged when creating the shape,
+    // resize the shape to the dragged size
+    if(newSize.width() > 1.0 && newSize.height() > 1.0) 
+        shape->resize(newSize);
 
     Q_ASSERT(m_canvas->shapeManager());
     int z=0;

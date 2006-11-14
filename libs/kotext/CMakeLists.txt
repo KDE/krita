@@ -106,6 +106,7 @@ set(kotext2_PART_SRCS
     KoTextShapeFactory.cpp
     KoTextTool.cpp
     KoTextToolFactory.cpp
+    KoTextPlugin.cpp
  )
 
 kde4_automoc(${kotext2_PART_SRCS})

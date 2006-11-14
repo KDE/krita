@@ -20,25 +20,12 @@
 #ifndef TEXTSHAPEFACTORY_H
 #define TEXTSHAPEFACTORY_H
 
-#include <QWidget>
-#include <QObject>
-
+//#include <QWidget>
 #include <KoShapeFactory.h>
 
-#include <koffice_export.h>
+//#include <koffice_export.h>
 
 class KoShape;
-
-class KoTextPlugin : public QObject {
-
-    Q_OBJECT
-
-public:
-
-    KoTextPlugin(QObject * parent, const QStringList &);
-    ~KoTextPlugin() {};
-
-};
 
 class KoTextShapeFactory : public KoShapeFactory {
 

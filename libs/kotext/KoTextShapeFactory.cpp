@@ -19,27 +19,14 @@
 #include <KoTextShapeFactory.h>
 
 #include <klocale.h>
-#include <kgenericfactory.h>
 
-#include "KoProperties.h"
-#include "KoShapeRegistry.h"
-#include "KoToolRegistry.h"
+#include <KoProperties.h>
 #include <KoShapeGeometry.h>
 #include <KoShape.h>
 
 #include "KoTextShapeData.h"
 #include "KoTextShape.h"
 #include "KoTextToolFactory.h"
-
-typedef KGenericFactory<KoTextPlugin> KoTextPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kotext2, KoTextPluginFactory( "TextShape" ) )
-
-KoTextPlugin::KoTextPlugin(QObject * parent, const QStringList & l)
-    : QObject(parent)
-{
-    KoToolRegistry::instance()->add(new KoTextToolFactory(parent, l));
-    KoShapeRegistry::instance()->add(new KoTextShapeFactory(parent));
-}
 
 KoTextShapeFactory::KoTextShapeFactory(QObject *parent)
     : KoShapeFactory(parent, KoTextShape_SHAPEID, i18n("Text"))

@@ -16,28 +16,16 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef TEXTPLUGIN_H
+#define TEXTPLUGIN_H
 
-#include "KoTextToolFactory.h"
-#include "KoTextTool.h"
-#include "KoTextShape.h"
+#include <QObject>
 
-#include <klocale.h>
+class KoTextPlugin : public QObject {
+    Q_OBJECT
 
-KoTextToolFactory::KoTextToolFactory(QObject *parent)
-: KoToolFactory(parent, "TextToolFactory_ID", i18n("Text tool"))
-{
-    setToolTip (i18n("Text editing tool"));
-    setToolType (dynamicToolType());
-    setIcon ("edittext");
-    setPriority (1);
-    setActivationShapeID (KoTextShape_SHAPEID);
-}
-
-KoTextToolFactory::~KoTextToolFactory() {
-}
-
-KoTool * KoTextToolFactory::createTool(KoCanvasBase *canvas) {
-    return new KoTextTool(canvas);
-}
-
-#include "KoTextToolFactory.moc"
+public:
+    KoTextPlugin(QObject * parent, const QStringList &);
+    ~KoTextPlugin() {};
+};
+#endif

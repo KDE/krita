@@ -30,6 +30,7 @@
 #include <koffice_export.h>
 #include <KoDocumentChild.h>
 #include <KoFrame.h>
+#include <KoViewChild.h>
 class KoDocument;
 class KoMainWindow;
 class KoViewPrivate;
@@ -509,39 +510,6 @@ private:
   virtual void setupGlobalActions( void );
   KoViewPrivate *d;
   int autoScrollAcceleration( int offset ) const;
-};
-
-/**
- * This class represents an active embedded document.
- */
-class KoViewChild : public KoChild
-{
-  Q_OBJECT
-public:
-  KoViewChild( KoDocumentChild *child, KoView *_parentView );
-  virtual ~KoViewChild();
-
-  KoDocumentChild *documentChild() const { return m_child; }
-  KoView *parentView() const { return m_parentView; }
-  KoFrame *frame() const { return m_frame; }
-
-  void setInitialFrameGeometry();
-
-public slots:
-
-  // Call this when the view transformations change
-  void reposition() { slotDocGeometryChanged(); }
-
-private slots:
-  void slotFrameGeometryChanged();
-  void slotDocGeometryChanged();
-
-private:
-  QPointer<KoDocumentChild> m_child;
-  QPointer<KoFrame> m_frame;
-  QPointer<KoView> m_parentView;
-  class KoViewChildPrivate;
-  KoViewChildPrivate *d;
 };
 
 #endif

@@ -63,6 +63,7 @@ set(kofficecore_LIB_SRCS
     threadAction/KoAction.cpp
     threadAction/KoExecutePolicy.cpp
     threadAction/KoJobsListPolicy.cpp
+    KoViewChild.cpp
 )
 
 kde4_automoc(${kofficecore_LIB_SRCS})
@@ -154,5 +155,6 @@ install( FILES
     threadAction/KoExecutePolicy.h
     threadAction/KoAction.h
     KoDockFactory.h
+    KoViewChild.h
 DESTINATION ${INCLUDE_INSTALL_DIR})
 

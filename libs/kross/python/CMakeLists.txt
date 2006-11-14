@@ -30,7 +30,7 @@ kde4_add_plugin(krosspython ${krosspython_PART_SRCS})
 
 
 
-target_link_libraries(krosspython krosscore ${PYTHON_LIBRARIES})
+target_link_libraries(krosspython krosscore ${PYTHON_LIBRARIES} -ldl)
 
 install(TARGETS krosspython  DESTINATION ${PLUGIN_INSTALL_DIR})
 

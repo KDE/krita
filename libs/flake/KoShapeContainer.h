@@ -37,13 +37,13 @@ class QPointF;
  * for the KoShapeContainer.
  * @see KoShapeContainer
  */
-class FLAKE_EXPORT KoGraphicsContainerModel {
+class FLAKE_EXPORT KoShapeContainerModel {
 public:
     /// default constructor
-    KoGraphicsContainerModel() {} ;
+    KoShapeContainerModel() {} ;
 
     /// destructor
-    virtual ~KoGraphicsContainerModel() {} ;
+    virtual ~KoShapeContainerModel() {} ;
 
     /**
      * Add a child to this models store.
@@ -60,14 +60,14 @@ public:
     /**
      * Set the argument child to have its 'clipping' property set.
      * @param child the child for which the property will be changed.
-     * @param clipping the property; see KoGraphicsContainerModel for an explenation of what
+     * @param clipping the property; see KoShapeContainerModel for an explenation of what
      *        this bool is for.
      */
     virtual void setClipping(const KoShape *child, bool clipping) = 0;
 
     /**
      * Returns if the argument child has its 'clipping' property set.
-     * See KoGraphicsContainerModel for an explenation of what this bool is for.
+     * See KoShapeContainerModel for an explenation of what this bool is for.
      * @return if the argument child has its 'clipping' property set.
      * @param child the child for which the property will be returned.
      */
@@ -120,7 +120,7 @@ public:
  *
  * <p>Maintaining the list of children can be done using the supplied methods
  * addChild() and removeChild(). However, they only forward their requests to the
- * data model KoGraphicsContainerModel and if you provide a custom implementation
+ * data model KoShapeContainerModel and if you provide a custom implementation
  * of that model any means can be used to maintain a list of children, as long as
  * you will take care to register them with the appropriate object manager.
  *
@@ -142,7 +142,7 @@ public:
      * Constructor with custom model to be used for maintaining the list of children.
      * @param model the custom model to be used for maintaining the list of children.
      */
-    KoShapeContainer(KoGraphicsContainerModel *model);
+    KoShapeContainer(KoShapeContainerModel *model);
 
     /// destructor
     virtual ~KoShapeContainer();
@@ -212,7 +212,7 @@ protected:
 private:
     /**
      */
-    class ChildrenData : public KoGraphicsContainerModel {
+    class ChildrenData : public KoShapeContainerModel {
         public:
             ChildrenData();
             ~ChildrenData();
@@ -245,7 +245,7 @@ private:
     void shapeChanged(ChangeType type);
 
 private: // members
-    KoGraphicsContainerModel *m_children;
+    KoShapeContainerModel *m_children;
 };
 
 #endif

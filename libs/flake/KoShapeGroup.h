@@ -49,7 +49,7 @@ public:
     bool hitTest( const QPointF &position ) const;
 
 private:
-    class GroupMembers: public KoGraphicsContainerModel {
+    class GroupMembers: public KoShapeContainerModel {
         public:
             GroupMembers() {};
             ~GroupMembers() {};

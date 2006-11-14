@@ -26,7 +26,7 @@ KoShapeContainer::KoShapeContainer() : KoShape() {
     m_children = 0;
 }
 
-KoShapeContainer::KoShapeContainer(KoGraphicsContainerModel *model)
+KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
 : KoShape()
 , m_children(model) {
 }
@@ -194,7 +194,7 @@ QList<KoShape*> KoShapeContainer::iterator() const {
     return m_children->iterator();
 }
 
-// ## inner class KoGraphicsContainerModel::Relation
+// ## inner class KoShapeContainerModel::Relation
 KoShapeContainer::ChildrenData::Relation::Relation(KoShape *child)
 :m_inside(false)
 , m_child(child) {

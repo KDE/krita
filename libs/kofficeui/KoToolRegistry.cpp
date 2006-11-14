@@ -26,6 +26,8 @@
 #include <KoPluginLoader.h>
 
 KoToolRegistry::KoToolRegistry() {
+    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Flake"),
+                                      QString::fromLatin1("[X-Flake-Version] == 1"));
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Tool"),
                                       QString::fromLatin1("[X-Flake-Version] == 1"));
 

@@ -34,6 +34,8 @@ KoShapeRegistry::KoShapeRegistry()
 }
 
 void KoShapeRegistry::init() {
+    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Flake"),
+                                      QString::fromLatin1("[X-Flake-Version] == 1"));
     KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Shape"),
                                      QString::fromLatin1("[X-Flake-Version] == 1"));
 

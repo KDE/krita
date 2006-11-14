@@ -54,7 +54,7 @@ set_target_properties(flake PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SO
 ########### install files ###############
 
 install(TARGETS flake  DESTINATION ${LIB_INSTALL_DIR})
-install( FILES flaketool.desktop flakeshape.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES flake.desktop flaketool.desktop flakeshape.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons )
 

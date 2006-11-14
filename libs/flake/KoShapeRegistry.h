@@ -42,7 +42,7 @@ class FLAKE_EXPORT KoShapeRegistry : public QObject,  public KoGenericRegistry<K
 
 public:
 
-    virtual ~KoShapeRegistry();
+    ~KoShapeRegistry();
 
     /**
      * Return an instance of the KoShapeRegistry

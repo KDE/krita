@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Flake Plugin
+Type=ServiceType
+X-KDE-ServiceType=KOffice/Flake
+Comment=A plugin that contains a set of a shape and a tool
+[PropertyDef::X-Flake-Version]
+Type=int

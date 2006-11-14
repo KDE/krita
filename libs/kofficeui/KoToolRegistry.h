@@ -39,7 +39,7 @@ class KOFFICEUI_EXPORT KoToolRegistry : public QObject, public KoGenericRegistry
     Q_OBJECT
 
 public:
-    virtual ~KoToolRegistry();
+    ~KoToolRegistry();
 
     /**
      * Return an instance of the KoToolRegistry

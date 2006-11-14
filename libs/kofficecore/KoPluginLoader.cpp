@@ -53,6 +53,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     if (m_loadedServiceTypes.contains(serviceType)) {
         return;
     }
+    m_loadedServiceTypes << serviceType;
 
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType,
                                  QString::fromLatin1("(Type == 'Service') and (%1)").arg(versionString));
@@ -70,6 +71,5 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             kWarning(30008) <<"loading plugin '" << service->name() << "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")\n";
         }
     }
-    m_loadedServiceTypes << serviceType;
 }
 #include "KoPluginLoader.moc"

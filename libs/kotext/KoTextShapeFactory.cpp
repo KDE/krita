@@ -58,13 +58,11 @@ KoTextShapeFactory::KoTextShapeFactory(QObject *parent)
 
 KoShape *KoTextShapeFactory::createDefaultShape() {
     KoTextShape *text = new KoTextShape();
-    text->setShapeId(shapeId());
     return text;
 }
 
 KoShape *KoTextShapeFactory::createShape(const KoProperties * params) const {
     KoTextShape *shape = new KoTextShape();
-    shape->setShapeId(shapeId());
     QTextDocument *doc = new QTextDocument();
     doc->setDefaultFont(QFont("Sans", 10, QFont::Normal, false));
     doc->setHtml( params->getProperty("text").toString() );

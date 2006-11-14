@@ -32,6 +32,7 @@ KoTextShape::KoTextShape()
 {
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
+    setShapeId(KoTextShape_SHAPEID);
 }
 
 KoTextShape::~KoTextShape() {

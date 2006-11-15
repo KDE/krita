@@ -23,6 +23,10 @@
 #include <QHash>
 #include <QVariant>
 
+#include <KoColor.h> // Zut, do we want this? It's convenient, but
+                     // also makes flake dependent on pigment. (BSAR)
+#include <KoID.h>
+
 enum enumCanvasResource {
     FOREGROUND_COLOR = 0,
     BACKGROUND_COLOR = 1,
@@ -98,6 +102,19 @@ public:
     /// @return a pointer to the specified resource or 0 if the
     /// specified resource does not exist.
     QVariant resource(enumCanvasResource key);
+
+
+    void setKoColor( enumCanvasResource key, const KoColor & color );
+    KoColor koColor( enumCanvasResource key );
+
+    void setForegroundColor( const KoColor & color );
+    KoColor foregroundColor();
+
+    void setBackgroundColor( const KoColor & color );
+    KoColor backgroundColor();
+
+    void setKoID( enumCanvasResource key, const KoID & id );
+    KoID koID(enumCanvasResource key);
 
 signals:
 

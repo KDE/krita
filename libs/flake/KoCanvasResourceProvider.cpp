@@ -18,6 +18,9 @@
  */
 #include "KoCanvasResourceProvider.h"
 
+#include <QVariant>
+#include <KoColor.h>
+
 KoCanvasResourceProvider::KoCanvasResourceProvider(QObject * parent)
     : QObject( parent )
 {
@@ -47,5 +50,60 @@ QVariant KoCanvasResourceProvider::resource(enumCanvasResource key)
     else
         return m_resources.value( key ).value;
 }
+
+void KoCanvasResourceProvider::setKoColor( enumCanvasResource key, const KoColor & color )
+{
+    QVariant v;
+    v.setValue( color );
+    setResource( key, v );
+}
+
+KoColor KoCanvasResourceProvider::koColor( enumCanvasResource key )
+{
+    return resource( key ).value<KoColor>();
+}
+
+
+void KoCanvasResourceProvider::setForegroundColor( const KoColor & color )
+{
+    QVariant v;
+    v.setValue( color );
+    setResource( FOREGROUND_COLOR, v );
+
+}
+
+KoColor KoCanvasResourceProvider::foregroundColor()
+{
+    return resource( FOREGROUND_COLOR ).value<KoColor>();
+}
+
+
+void KoCanvasResourceProvider::setBackgroundColor( const KoColor & color )
+{
+    QVariant v;
+    v.setValue( color );
+    setResource( BACKGROUND_COLOR, v );
+
+}
+
+KoColor KoCanvasResourceProvider::backgroundColor()
+{
+    return resource( BACKGROUND_COLOR ).value<KoColor>();
+}
+
+
+void KoCanvasResourceProvider::setKoID( enumCanvasResource key, const KoID & id )
+{
+    QVariant  v;
+    v.setValue( id );
+    setResource( key, v );
+
+}
+
+KoID KoCanvasResourceProvider::koID(enumCanvasResource key)
+{
+    return resource( key ).value<KoID>();
+}
+
 
 #include "KoCanvasResourceProvider.moc"

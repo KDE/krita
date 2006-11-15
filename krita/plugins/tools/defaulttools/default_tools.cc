@@ -17,21 +17,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <stdlib.h>
-#include <vector>
+#include <QStringList>
 
-#include <QPoint>
-
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kinstance.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_global.h>
-#include <kis_types.h>
 #include <kis_tool.h>
 #include <KoToolRegistry.h>
 #include "default_tools.h"
@@ -56,27 +46,22 @@ K_EXPORT_COMPONENT_FACTORY( kritadefaulttools, DefaultToolsFactory( "krita" ) )
 
 
 DefaultTools::DefaultTools(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+    : QObject(parent)
 {
-    setInstance(DefaultToolsFactory::instance());
+    KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
 
-    if ( parent->inherits("KoToolRegistry") )
-    {
-        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
-
-        //r->add(KoToolFactorySP(new KisToolFillFactory()));
-        //r->add(KoToolFactorySP(new KisToolGradientFactory()));
-        r->add(new KisToolBrushFactory(r, QStringList()));
-        //r->add(KoToolFactorySP(new KisToolColorPickerFactory()));
-        //r->add(KoToolFactorySP(new KisToolLineFactory()));
-        //r->add(KoToolFactorySP(new KisToolTextFactory()));
-        //r->add(KoToolFactorySP(new KisToolDuplicateFactory()));
-        //r->add(KoToolFactorySP(new KisToolMoveFactory()));
-        //r->add(KoToolFactorySP(new KisToolZoomFactory()));
-        //r->add(KoToolFactorySP(new KisToolEllipseFactory()));
-        //r->add(KoToolFactorySP(new KisToolRectangleFactory()));
-        //r->add(KoToolFactorySP(new KisToolPanFactory()));
-    }
+    //r->add(KoToolFactorySP(new KisToolFillFactory()));
+    //r->add(KoToolFactorySP(new KisToolGradientFactory()));
+    r->add(new KisToolBrushFactory(r, QStringList()));
+    //r->add(KoToolFactorySP(new KisToolColorPickerFactory()));
+    //r->add(KoToolFactorySP(new KisToolLineFactory()));
+    //r->add(KoToolFactorySP(new KisToolTextFactory()));
+    //r->add(KoToolFactorySP(new KisToolDuplicateFactory()));
+    //r->add(KoToolFactorySP(new KisToolMoveFactory()));
+    //r->add(KoToolFactorySP(new KisToolZoomFactory()));
+    //r->add(KoToolFactorySP(new KisToolEllipseFactory()));
+    //r->add(KoToolFactorySP(new KisToolRectangleFactory()));
+    //r->add(KoToolFactorySP(new KisToolPanFactory()));
 }
 
 DefaultTools::~DefaultTools()

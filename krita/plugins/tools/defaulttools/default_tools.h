@@ -19,7 +19,7 @@
 #ifndef DEFAULT_TOOLS_H_
 #define DEFAULT_TOOLS_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
 
 /**
  * A module wrapper around Krita's default tools.
@@ -31,7 +31,7 @@
  * class that is registered with the tool registry, and that is used to create
  * new instances of the tools.
  */
-class DefaultTools : public KParts::Plugin
+class DefaultTools : public QObject
 {
     Q_OBJECT
 public:

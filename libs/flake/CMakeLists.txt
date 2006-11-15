@@ -45,7 +45,7 @@ kde4_automoc(${flake_SRCS})
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} kofficecore)
+target_link_libraries(flake ${KDE4_KDEUI_LIBS} kofficecore pigment)
 
 set_target_properties(flake PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

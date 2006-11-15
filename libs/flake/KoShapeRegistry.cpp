@@ -25,7 +25,6 @@
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
 #include <KoPathShapeFactory.h>
-#include <KoRectangleShapeFactory.h>
 
 #include <QString>
 
@@ -41,7 +40,6 @@ void KoShapeRegistry::init() {
 
     // Also add our hard-coded basic shape
     add( new KoPathShapeFactory(this, QStringList()) );
-    add( new KoRectangleShapeFactory(this, QStringList()) );
 }
 
 

@@ -72,17 +72,21 @@ void KoParameterShape::paintHandles( QPainter & painter, const KoViewConverter &
 {
     applyConversion( painter, converter );
 
+    QMatrix worldMatrix = painter.worldMatrix();
+    painter.setMatrix( QMatrix() );
+
     QWMatrix matrix;
     matrix.rotate( 45.0 );
-    QPolygonF poly( converter.viewToDocument( handleRect( QPointF( 0, 0 ) ) ) );
+    QPolygonF poly( handleRect( QPointF( 0, 0 ) ) );
     poly = matrix.map( poly );
 
     QList<QPointF>::const_iterator it( m_handles.begin() );
     for ( ; it != m_handles.end(); ++it ) 
     {
-        QPolygonF p( poly );
-        p.translate( *it );
-        painter.drawPolygon( p );
+        QPointF moveVector = worldMatrix.map( *it );
+        poly.translate( moveVector.x(), moveVector.y() );
+        painter.drawPolygon( poly );
+        poly.translate( -moveVector.x(), -moveVector.y() );
     }
 }
 
@@ -90,11 +94,14 @@ void KoParameterShape::paintHandle( QPainter & painter, const KoViewConverter & 
 {
     applyConversion( painter, converter );
 
+    QMatrix worldMatrix = painter.worldMatrix();
+    painter.setMatrix( QMatrix() );
+
     QWMatrix matrix;
     matrix.rotate( 45.0 );
-    QPolygonF poly( converter.viewToDocument( handleRect( QPointF( 0, 0 ) ) ) );
+    QPolygonF poly( handleRect( QPointF( 0, 0 ) ) );
     poly = matrix.map( poly );
-    poly.translate( m_handles[handleId] );
+    poly.translate( worldMatrix.map( m_handles[handleId] ) );
     painter.drawPolygon( poly );
 }
 

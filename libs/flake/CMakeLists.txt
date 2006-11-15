@@ -38,8 +38,6 @@ set(flake_SRCS
     KoPathControlPointMoveStrategy.cpp
     KoParameterShape.cpp
     KoParameterChangeStrategy.cpp
-    KoRectangleShape.cpp
-    KoRectangleShapeFactory.cpp
     KoShapeController.cpp
 )
 

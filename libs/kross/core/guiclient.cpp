@@ -48,8 +48,6 @@ namespace Kross {
         public:
             /// The \a KXMLGUIClient that is parent of the \a GUIClient instance.
             KXMLGUIClient* guiclient;
-            /// The optional parent QWidget widget.
-            QWidget* parent;
             /// The collection of installed script-packages.
             //KActionCollection* actions;
             /// The menu used to display the scripts.
@@ -58,7 +56,7 @@ namespace Kross {
 
 }
 
-GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
+GUIClient::GUIClient(KXMLGUIClient* guiclient, QObject* parent)
     : QObject(parent)
     , KXMLGUIClient(guiclient)
     , d(new Private())
@@ -66,7 +64,6 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     setInstance( GUIClient::instance() );
 
     d->guiclient = guiclient;
-    d->parent = parent;
     //d->actions = Manager::self().actionCollection();
 
     d->scriptsmenu = new KActionMenu(i18n("Scripts"), actionCollection(), "scripts");
@@ -93,6 +90,7 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
 
 GUIClient::~GUIClient()
 {
+    krossdebug("..........................GUIClient::~GUIClient()");
     delete d;
 }
 
@@ -251,6 +249,12 @@ bool GUIClient::executeFile(const KUrl& file)
     Action* action = new Action( file.path() );
     action->trigger();
     bool ok = ! action->hadError();
+
+/*TODO don't "delete action" here?!
+koffice (lib kofficecore): KoView::~KoView [KoView pointer(0x081382f0) to widget view_0, geometry=962x364+0+0]
+kspread: ..................ScriptingFunction::~ScriptingFunction
+*/
+
     delete action;
     return ok;
 }

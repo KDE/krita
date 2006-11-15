@@ -48,12 +48,12 @@ namespace Kross {
              *
              * \param guiclient The KXMLGUIClient this \a GUIClient
              *        is a child of.
-             * \param parent The parent QWidget. If defined Qt will handle
+             * \param parent The parent QObject. If defined Qt will handle
              *        freeing this \a GUIClient instance else the
              *        caller has to take care of freeing this instance
              *        if not needed any longer.
              */
-            explicit GUIClient(KXMLGUIClient* guiclient, QWidget* parent = 0);
+            explicit GUIClient(KXMLGUIClient* guiclient, QObject* parent = 0);
 
             /**
              * Destructor.

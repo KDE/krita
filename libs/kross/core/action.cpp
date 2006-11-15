@@ -144,7 +144,7 @@ Action::Action(KActionCollection* collection, const QDomElement& element, const 
 
 Action::~Action()
 {
-    //krossdebug( QString("Action::~Action() Dtor name='%1'").arg(objectName()) );
+    krossdebug( QString("Action::~Action() Dtor name='%1'").arg(objectName()) );
     finalize();
     delete d;
 }

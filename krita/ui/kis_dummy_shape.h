@@ -20,6 +20,7 @@
 
 #include <KoShape.h>
 #include <KoShapeUserData.h>
+#include <KoShapeControllerBase.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -49,7 +50,7 @@ private:
    contains a reference to the KisImage object -- this way Krita tools
    can get the image from the canvas, using the KoShapeUserData route
  */
-class KisDummyShape : public KoShape {
+class KisDummyShape : public KoShape, public KoShapeControllerBase {
 
 public:
 
@@ -78,6 +79,18 @@ public:
         {
             Q_UNUSED( painter );
             Q_UNUSED( converter );
+        }
+
+    /// Temporary implementation of KoShapeControllerBase, awaiting
+    /// the shapification of the krita layer hierarchy
+    virtual void addShape( KoShape* shape )
+        {
+            // We don't want no shapes
+        }
+
+    virtual void removeShape( KoShape* shape )
+        {
+            // You ain't gonna remove any of my kids!
         }
 
 };

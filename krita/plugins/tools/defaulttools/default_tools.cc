@@ -48,7 +48,7 @@ K_EXPORT_COMPONENT_FACTORY( kritadefaulttools, DefaultToolsFactory( "krita" ) )
 DefaultTools::DefaultTools(QObject *parent, const QStringList &)
     : QObject(parent)
 {
-    KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
+    KoToolRegistry * r = KoToolRegistry::instance();
 
     //r->add(KoToolFactorySP(new KisToolFillFactory()));
     //r->add(KoToolFactorySP(new KisToolGradientFactory()));

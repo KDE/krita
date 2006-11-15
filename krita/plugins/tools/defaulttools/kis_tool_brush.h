@@ -20,7 +20,10 @@
 #define KIS_TOOL_BRUSH_H_
 
 #include "kis_tool_freehand.h"
+
 #include "KoToolFactory.h"
+
+#include <kis_dummy_shape.h>
 
 class QTimer;
 class KoPoint;
@@ -74,6 +77,7 @@ public:
             setIcon( "tool_freehand" );
             setShortcut( Qt::Key_B );
             setPriority( 0 );
+            setActivationShapeID( KisDummyShape_SHAPEID );
         }
 
     virtual ~KisToolBrushFactory(){}

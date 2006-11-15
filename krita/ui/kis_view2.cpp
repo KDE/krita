@@ -103,11 +103,16 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     m_d = new KisView2Private(this);
 
     m_d->doc = doc;
-    m_d->shapeManager->add( doc->imageShape() );
     m_d->resourceProvider = new KisResourceProvider( this );
+
+    KoToolManager::instance()->addControllers(m_d->canvasController,
+                                              static_cast<KoShapeControllerBase*>( m_d->doc->imageShape()) );
+
+    m_d->shapeManager->add( doc->imageShape() );
 
     // Part stuff
     setInstance(KisFactory2::instance(), false);
+
     if (!doc->isReadWrite())
         setXMLFile("krita_readonly.rc");
     else

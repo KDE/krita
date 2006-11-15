@@ -90,7 +90,7 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QObject* parent)
 
 GUIClient::~GUIClient()
 {
-    krossdebug("..........................GUIClient::~GUIClient()");
+    krossdebug("GUIClient::~GUIClient()");
     delete d;
 }
 

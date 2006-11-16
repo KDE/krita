@@ -106,7 +106,7 @@ public:
 
     void setResource( KoCanvasResource::EnumCanvasResource key, const QVariant & value );
 
-    /// @return a pointer to the specified resource or 0 if the
+    /// @return a qvariant containing the specified resource or 0 if the
     /// specified resource does not exist.
     QVariant resource(KoCanvasResource::EnumCanvasResource key);
 

@@ -381,6 +381,20 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
 }
 
 void KoPathTool::keyReleaseEvent(QKeyEvent *event) {
+    if ( m_currentStrategy )
+    {
+        switch ( event->key() )
+        {
+            case Qt::Key_Control:
+            case Qt::Key_Alt:
+            case Qt::Key_Shift:
+            case Qt::Key_Meta:
+                m_currentStrategy->handleMouseMove( m_lastPoint, Qt::NoModifier );
+                break;
+            default:
+                break;
+        }
+    }
     event->accept();
 }
 

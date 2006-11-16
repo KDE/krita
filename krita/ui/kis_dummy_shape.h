@@ -87,11 +87,13 @@ public:
     /// the shapification of the krita layer hierarchy
     virtual void addShape( KoShape* shape )
         {
+            Q_UNUSED(shape);
             // We don't want no shapes
         }
 
     virtual void removeShape( KoShape* shape )
         {
+            Q_UNUSED(shape);
             // You ain't gonna remove any of my kids!
         }
 

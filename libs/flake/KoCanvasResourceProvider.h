@@ -27,31 +27,6 @@
                      // also makes flake dependent on pigment. (BSAR)
 #include <KoID.h>
 
-enum EnumCanvasResource {
-    ForegroundColor,    ///< The active forground color selected for this canvas.
-    BackgroundColor,    ///< The active background color selected for this canvas.
-    CompositeOperation,
-    CompositeOpacity,
-    KarbonStart = 1000,      ///< Base number for karbon specific values.
-    KexiStart = 2000,        ///< Base number for kexi specific values.
-    KivioStart = 3000,       ///< Base number for kivio specific values.
-    KPlatoStart = 4000,      ///< Base number for kplato specific values.
-    KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
-    KritaStart = 6000,       ///< Base number for krita specific values.
-    // XXX: Maybe we should move the next section to Kritas classes.
-    //      (where there is a new enum with the first value being
-    //          Foo = KoCanvasResourceProvider::Krita+1
-    HdrExposure,
-    CurrentBrush,
-    CurrentPattern,
-    CurrentGradient,
-    CurrentPaintop,
-    CurrentPaintopSettings,
-    CurrentKritaLayer,
-    KSpreadStart = 7000,     ///< Base number for kspread specific values.
-    KWordStart = 8000        ///< Base number for kword specific values.
-};
-
 /**
  * A single resource, lika a color.
  *
@@ -62,6 +37,31 @@ enum EnumCanvasResource {
 class KoCanvasResource {
 
 public:
+
+    enum EnumCanvasResource {
+        ForegroundColor,    ///< The active forground color selected for this canvas.
+        BackgroundColor,    ///< The active background color selected for this canvas.
+        CompositeOperation,
+        CompositeOpacity,
+        KarbonStart = 1000,      ///< Base number for karbon specific values.
+        KexiStart = 2000,        ///< Base number for kexi specific values.
+        KivioStart = 3000,       ///< Base number for kivio specific values.
+        KPlatoStart = 4000,      ///< Base number for kplato specific values.
+        KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
+        KritaStart = 6000,       ///< Base number for krita specific values.
+        // XXX: Maybe we should move the next section to Kritas classes.
+        //      (where there is a new enum with the first value being
+        //          Foo = KoCanvasResourceProvider::Krita+1
+        HdrExposure,
+        CurrentBrush,
+        CurrentPattern,
+        CurrentGradient,
+        CurrentPaintop,
+        CurrentPaintopSettings,
+        CurrentKritaLayer,
+        KSpreadStart = 7000,     ///< Base number for kspread specific values.
+        KWordStart = 8000        ///< Base number for kword specific values.
+    };
 
     KoCanvasResource() {}
 
@@ -104,15 +104,15 @@ public:
     // The QHash hashmap? The creator?
     void setResource( KoCanvasResource & res);
 
-    void setResource( EnumCanvasResource key, const QVariant & value );
+    void setResource( KoCanvasResource::EnumCanvasResource key, const QVariant & value );
 
     /// @return a pointer to the specified resource or 0 if the
     /// specified resource does not exist.
-    QVariant resource(EnumCanvasResource key);
+    QVariant resource(KoCanvasResource::EnumCanvasResource key);
 
 
-    void setKoColor( EnumCanvasResource key, const KoColor & color );
-    KoColor koColor( EnumCanvasResource key );
+    void setKoColor( KoCanvasResource::EnumCanvasResource key, const KoColor & color );
+    KoColor koColor( KoCanvasResource::EnumCanvasResource key );
 
     void setForegroundColor( const KoColor & color );
     KoColor foregroundColor();
@@ -120,8 +120,8 @@ public:
     void setBackgroundColor( const KoColor & color );
     KoColor backgroundColor();
 
-    void setKoID( EnumCanvasResource key, const KoID & id );
-    KoID koID(EnumCanvasResource key);
+    void setKoID( KoCanvasResource::EnumCanvasResource key, const KoID & id );
+    KoID koID(KoCanvasResource::EnumCanvasResource key);
 
 signals:
 

@@ -46,12 +46,12 @@ class KRITAUI_EXPORT KisToolShape : public KisToolPaint {
     Q_OBJECT
 
 public:
-    KisToolShape(KoCanvasBase * canvas);
+    KisToolShape(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisToolShape();
 
 protected:
 
-    virtual QWidget* createOptionWidget();
+    virtual void createOptionWidget();
 
     KisPainter::FillStyle fillStyle();
 

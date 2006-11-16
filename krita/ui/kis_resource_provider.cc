@@ -18,6 +18,9 @@
 
 #include "kis_resource_provider.h"
 
+#include <QImage>
+#include <QPainter>
+
 #include <KoCanvasBase.h>
 #include <KoID.h>
 
@@ -34,9 +37,35 @@ KisResourceProvider::KisResourceProvider(KisView2 * view )
     QVariant v;
     v.setValue( KoColor(Qt::black, view->image()->colorSpace()) );
     m_resourceProvider->setResource( ForegroundColor, v );
+
     v.setValue( KoColor(Qt::white, view->image()->colorSpace()) );
     m_resourceProvider->setResource( BackgroundColor, v );
 
+    m_resourceProvider->setKoID(CurrentPaintop, KoID( "paintbrush" ) );
+    v = qVariantFromValue( ( void * ) 0 );
+    m_resourceProvider->setResource( CurrentPaintopSettings, v );
+
+    // Create a big default brush. XXX: We really need to have a way
+    // to get at the loaded brushes, gradients etc. The data structure
+    // is now completely hidden behind the gui in really, really old
+    // code.
+    QImage img( 100, 100, QImage::Format_ARGB32 );
+    QPainter p( &img );
+    p.setRenderHint( QPainter::Antialiasing );
+    p.fillRect( 0, 0, 100, 100, QBrush(QColor( 255, 255, 255, 0) ) );
+    p.setBrush( QBrush( QColor( 0, 0, 0, 255 ) ) );
+    p.drawEllipse( 0, 0, 100, 100 );
+    p.end();
+
+    m_defaultBrush = new KisBrush( img );
+    v = qVariantFromValue( static_cast<void *>( m_defaultBrush ) );
+    m_resourceProvider->setResource( CurrentBrush, v );
+
+}
+
+KisResourceProvider::~KisResourceProvider()
+{
+    delete m_defaultBrush;
 }
 
 

@@ -118,6 +118,7 @@ KoShapeManager* KisCanvas2::shapeManager() const
 
 void KisCanvas2::updateCanvas(const QRectF& rc)
 {
+    kDebug() << "KisCanvas2::updateCanvas: " << rc << endl;
     m_d->canvasWidget->widget()->update( rc.toRect() );
 }
 

@@ -51,6 +51,7 @@ class KisResourceProvider : public QObject {
 public:
 
     KisResourceProvider(KisView2 * view);
+    ~KisResourceProvider();
 
     KoCanvasBase * canvas() const;
 
@@ -97,6 +98,7 @@ private:
 
     KisView2 * m_view;
     KoCanvasResourceProvider * m_resourceProvider;
+    KisBrush * m_defaultBrush;
 };
 
 #endif

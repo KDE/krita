@@ -169,7 +169,7 @@ void KisToolPaint::mouseReleaseEvent( KoPointerEvent *e )
 
 void KisToolPaint::createOptionWidget()
 {
-    m_optionWidget = new QWidget();
+    KoTool::createOptionWidget();
 
     m_lbOpacity = new QLabel(i18n("Opacity: "), m_optionWidget);
     m_slOpacity = new KisIntSpinbox( m_optionWidget, "int_m_optionwidget");

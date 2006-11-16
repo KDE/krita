@@ -41,7 +41,6 @@
 #include "kis_brush.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
-#include "kis_cmb_composite.h"
 #include "kis_cursor.h"
 #include "kis_painter.h"
 #include "kis_tool_brush.h"
@@ -85,10 +84,14 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
     }
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, m_painter);
     if (!op) return;
+
 #if 0
-    // XXX: TOOL_REFACTOR: how to update all of the canvas?
+    // XXX: TOOL_REFACTOR: how to update all of the canvas? Or how to
+    // find out the cursor area around the cursor so we can remove the
+    // outline?
     m_canvas->updateCanvas(); // remove the outline
 #endif
+
     m_painter->setPaintOp(op); // And now the painter owns the op and will destroy it.
 
     if (op->incremental()) {

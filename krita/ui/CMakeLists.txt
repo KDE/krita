@@ -3,8 +3,7 @@ set(kritaui_LIB_SRCS
     #    kis_birdeye_box.cc
     #    kis_paintop_box.cc # Needs to know about the active input device a lot
     #    kis_selection_manager.cc
-    #    kis_tool_shape.cc
-    #kis_tool_non_paint.cc
+    kis_tool_shape.cc
     imageviewer.cc
     kcurve.cc
     kis_autobrush.cc

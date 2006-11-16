@@ -87,7 +87,7 @@ public:
     virtual KoShapeManager *shapeManager() const = 0;
 
     /**
-     * Tell the canvas repaint the specified rectangle. The coordinates
+     * Tell the canvas to repaint the specified rectangle. The coordinates
      * are document coordinates, not view coordinates.
      */
     virtual void updateCanvas(const QRectF& rc) = 0;

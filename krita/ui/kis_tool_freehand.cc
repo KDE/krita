@@ -101,11 +101,10 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             }
             else {
                 m_target->setDirty( r );
-                // Just update the canvas.
-                // XXX: After 1.5, find a better way to make sure tools don't set dirty what they didn't touch.
-                m_canvas->updateCanvas( r ); // XXX are we working in the
-                                       // right coordinates?
             }
+            m_canvas->updateCanvas( r ); // XXX are we working in the
+                            // right coordinates?
+
         }
     }
 }
@@ -127,14 +126,15 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
             m_dirtyRect |= r;
 
             if (!m_paintOnSelection) {
-                    m_currentImage->activeLayer()->setDirty(r);
+                m_currentImage->activeLayer()->setDirty(r);
             }
             else {
                 // Just update the canvas
                 r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
                 m_target->setDirty(r);
-                m_canvas->updateCanvas( r );
             }
+            m_canvas->updateCanvas( r );
+
         }
     }
 }
@@ -151,6 +151,13 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 void KisToolFreehand::initPaint(KoPointerEvent *)
 {
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
+
+    if (m_compositeOp == 0 ) {
+        KisPaintDeviceSP device = m_currentImage->activeDevice();
+        if (device) {
+            m_compositeOp = device->colorSpace()->compositeOp( COMPOSITE_OVER );
+        }
+    }
 
     m_mode = PAINT;
     m_dragDist = 0;

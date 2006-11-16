@@ -27,8 +27,8 @@
 
 #include "kis_tool_shape.h"
 
-KisToolShape::KisToolShape(KoCanvasBase * canvas)
-    : KisPaintTool(canvas)
+KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
+    : KisToolPaint(canvas, cursor)
 {
     m_shapeOptionsWidget = 0;
     m_optionLayout = 0;
@@ -38,24 +38,22 @@ KisToolShape::~KisToolShape()
 {
 }
 
-QWidget* KisToolShape::createOptionWidget()
+void KisToolShape::createOptionWidget()
 {
-    QWidget *widget = KisPaintTool::createOptionWidget(parent);
+    KisToolPaint::createOptionWidget();
 
     m_shapeOptionsWidget = new WdgGeometryOptions(0);
     Q_CHECK_PTR(m_shapeOptionsWidget);
 
-    m_optionLayout = new QGridLayout(widget);
+    m_optionLayout = new QGridLayout(m_optionWidget);
 
-    m_shapeOptionsWidget->cmbFill->setParent(widget);
+    m_shapeOptionsWidget->cmbFill->setParent(m_optionWidget);
     m_shapeOptionsWidget->cmbFill->move(QPoint(0, 0));
     m_shapeOptionsWidget->cmbFill->show();
-    m_shapeOptionsWidget->textLabel3->setParent(widget);
+    m_shapeOptionsWidget->textLabel3->setParent(m_optionWidget);
     m_shapeOptionsWidget->textLabel3->move(QPoint(0, 0));
     m_shapeOptionsWidget->textLabel3->show();
     addOptionWidgetOption(m_shapeOptionsWidget->cmbFill, m_shapeOptionsWidget->textLabel3);
-
-    return widget;
 }
 
 KisPainter::FillStyle KisToolShape::fillStyle(void)

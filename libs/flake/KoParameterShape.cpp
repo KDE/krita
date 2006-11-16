@@ -117,3 +117,18 @@ void KoParameterShape::resize( const QSizeF &newSize )
 
     KoPathShape::resize( newSize );
 }
+
+QPointF KoParameterShape::normalize()
+{
+    QPointF offset( KoPathShape::normalize() );
+    QMatrix matrix;
+    matrix.translate( -offset.x(), -offset.y() );
+
+    for( int i = 0; i < m_handles.size(); ++i )
+    {
+        m_handles[i] = matrix.map( m_handles[i] );
+    }
+
+    return offset;
+}
+

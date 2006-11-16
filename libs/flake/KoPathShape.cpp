@@ -701,7 +701,7 @@ QPointF KoPathShape::normalize()
     QPointF newTL( boundingRect().topLeft() );
     QPointF diff( oldTL - newTL );
     moveBy( diff.x(), diff.y() );
-    return diff;
+    return tl;
 }
 
 void KoPathShape::map( const QMatrix &matrix )

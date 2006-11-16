@@ -32,11 +32,15 @@ KoPathBaseCommand::KoPathBaseCommand( KoPathShape *shape )
 
 void KoPathBaseCommand::repaint( const QRectF &oldControlPointRect )
 {
+    QRectF repaintRect( oldControlPointRect );
+    repaintRect.adjust( -5.0, -5.0, 5.0, 5.0 );
+    m_shape->repaint( oldControlPointRect );
+
     // the bounding rect has changed -> normalize
-    QPointF offset = m_shape->normalize();
+    m_shape->normalize();
 
     // adjust the old control rect as the repainting is relative to the new shape position
-    QRectF repaintRect = oldControlPointRect.translated( -offset ).unite( m_shape->outline().controlPointRect() );
+    repaintRect = m_shape->outline().controlPointRect();
     // TODO use the proper adjustment if the actual point size could be retrieved
     repaintRect.adjust( -5.0, -5.0, 5.0, 5.0 );
     m_shape->repaint( repaintRect );

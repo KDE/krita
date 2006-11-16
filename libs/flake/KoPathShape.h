@@ -36,6 +36,8 @@ class KoPointGroup;
 class KoPathPoint;
 
 typedef QMap<KoPathShape *, QSet<KoPathPoint *> > KoPathShapePointMap;
+typedef QPair<int,int> KoPathPointIndex;
+typedef QMap<KoPathShape *, QSet<KoPathPointIndex> > KoPathShapePointIndexMap;
 
 /**
  * @brief A KoPathPoint represents a point in a path.
@@ -422,9 +424,9 @@ public:
      * The path points are transformed so that the top-left corner
      * of the bounding rect is (0,0).
      * This should be called after adding points to the path.
-     * @return the offset by which the points are moved.
+     * @return the offset by which the points are moved in shape coordinates.
      */
-    QPointF normalize();
+    virtual QPointF normalize();
 
     /**
      * @brief Returns the path points within the given rectangle.

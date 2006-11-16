@@ -93,6 +93,8 @@ public:
      */
     void setModified( bool modified ) { m_modified = modified; }
 
+    virtual QPointF normalize();
+
 protected:
     /**
      * @brief Updates the internal state of a KoParameterShape.

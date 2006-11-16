@@ -142,14 +142,12 @@ bool KoShape::hitTest( const QPointF &position ) const
         return false;
 
     QPointF point( position * m_invMatrix );
-    KoInsets *insets = new KoInsets(0, 0, 0, 0);
+    KoInsets insets(0, 0, 0, 0);
     if(m_border)
-        m_border->borderInsets(this, *insets);
+        m_border->borderInsets(this, insets);
 
-    bool hit = point.x() >= -insets->left && point.x() <= m_size.width() + insets->right &&
-             point.y() >= -insets->top && point.y() <= m_size.height() + insets->bottom;
-    delete insets;
-    return hit;
+    return point.x() >= -insets.left && point.x() <= m_size.width() + insets.right &&
+             point.y() >= -insets.top && point.y() <= m_size.height() + insets.bottom;
 }
 
 QRectF KoShape::boundingRect() const

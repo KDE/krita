@@ -60,10 +60,13 @@ public:
 
     /// add a selected object
     virtual void select(KoShape * object);
+
     /// remove a selected object
     virtual void deselect(KoShape * object);
+
     /// clear the selections list
     virtual void deselectAll();
+
     /**
      * Return the list of selected shapes
      * @return the list of selected shapes
@@ -71,14 +74,17 @@ public:
      *    of a container shape if the container-parent is itself also in the set.
      */
     virtual const KoSelectionSet selectedShapes(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
+
     /**
      * Return the first selected shape, or 0 if there is nothing selected.
      * @param strip if StrippedSelection, the returned list will not include any children
      *    of a grouped shape if the group-parent is itself also in the set.
      */
     KoShape *firstSelectedShape(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
-    /// return if the shape is selected
+
+    /// return true if the shape is selected
     virtual bool isSelected(const KoShape *object) const;
+
     /// return the selection count
     virtual int count() const;
 
@@ -86,7 +92,7 @@ public:
 
     virtual QRectF boundingRect() const;
 
-protected:    
+protected:
     virtual void updateTree() {}
 
 signals:

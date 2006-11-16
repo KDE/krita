@@ -34,6 +34,9 @@
 #include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 
+
+#include <KoPluginLoader.h>
+
 #include "kis_aboutdata.h"
 
 #include "kis_doc2.h"
@@ -90,8 +93,14 @@ KInstance* KisFactory2::instance()
 
     if ( !s_instance )
     {
+
         s_instance = new KInstance(s_aboutData);
         Q_CHECK_PTR(s_instance);
+
+        // Load the krita-specific tools
+        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
+                                         QString::fromLatin1("[X-Krita-Version] == 3"));
+
 
         s_instance->dirs()->addResourceType("krita_template", KStandardDirs::kde_default("data") + "krita/templates");
 

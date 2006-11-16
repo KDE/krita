@@ -40,7 +40,7 @@
 #include <KoToolRegistry.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
-#include <KoPluginLoader.h>
+#include <KoSelection.h>
 
 #include <kis_image.h>
 
@@ -108,6 +108,8 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     KoToolManager::instance()->addControllers(m_d->canvasController,
                                               static_cast<KoShapeControllerBase*>( m_d->doc->imageShape()) );
 
+    // Add the image and select it immediately (later, we'll select
+    // the first layer)
     m_d->shapeManager->add( doc->imageShape() );
 
     // Part stuff
@@ -117,14 +119,11 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
         setXMLFile("krita_readonly.rc");
     else
         setXMLFile("krita.rc");
+
     KStdAction::keyBindings( mainWindow()->guiFactory(),
                              SLOT( configureShortcuts() ),
                              actionCollection() );
 
-
-    // Load the krita-specific tools
-    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                     QString::fromLatin1("[X-Krita-Version] == 3"));
 
     createActions();
     createManagers();
@@ -143,6 +142,7 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     else {
         slotInitializeCanvas();
     }
+
 }
 
 
@@ -176,9 +176,12 @@ void KisView2::slotInitializeCanvas()
     kDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>> Image completely loaded! W: "
              << image()->width() << ", H: "
              << image()->height() << endl;
-;
+
     m_d->canvas->setCanvasSize( image()->width(), image()->height() );
     m_d->filterManager->updateGUI();
+
+    KoSelection *select = m_d->shapeManager->selection();
+    select->select( m_d->doc->imageShape() );
 }
 
 void KisView2::slotZoomChanged(KoZoomMode::Mode mode, int zoom)

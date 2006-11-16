@@ -73,7 +73,8 @@ public:
         : KoToolFactory(parent, "KisToolBrush", i18n( "Paint" ))
         {
             setToolTip( i18n( "Paint freely" ) );
-            setToolType( TOOL_TYPE_SHAPE );
+            //setToolType( TOOL_TYPE_SHAPE );
+            setToolType( dynamicToolType() );
             setIcon( "tool_freehand" );
             setShortcut( Qt::Key_B );
             setPriority( 0 );

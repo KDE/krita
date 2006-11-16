@@ -19,7 +19,6 @@
  */
 
 #include "KoToolRegistry.h"
-#include "kdebug.h"
 #include <kstaticdeleter.h>
 
 #include <KoPathToolFactory.h>

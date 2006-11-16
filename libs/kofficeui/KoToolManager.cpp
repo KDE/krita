@@ -271,7 +271,7 @@ void KoToolManager::removeCanvasController(KoCanvasController *controller) {
 }
 
 void KoToolManager::toolActivated(ToolHelper *tool) {
-    kDebug(30004) << "ToolActivated: '" << tool->name() << "'\n";
+
     QMap<QString, KoTool*> toolsMap = m_allTools.value(m_activeCanvas);
     KoTool *t = toolsMap.value(tool->id());
 
@@ -291,6 +291,7 @@ void KoToolManager::toolActivated(ToolHelper *tool) {
 }
 
 void KoToolManager::switchTool(const QString &id, bool temporary) {
+
     if (!m_activeCanvas) kDebug() << kBacktrace();
     Q_ASSERT(m_activeCanvas);
     if (m_activeTool && temporary)
@@ -306,6 +307,7 @@ void KoToolManager::switchTool(const QString &id, bool temporary) {
 }
 
 void KoToolManager::switchTool(KoTool *tool) {
+
     if (!tool) kDebug() << kBacktrace();
     Q_ASSERT(tool);
     if (m_activeCanvas == 0) {
@@ -334,7 +336,7 @@ void KoToolManager::switchTool(KoTool *tool) {
     foreach(KoCanvasController *controller, m_canvases) {
         if (!controller->canvas())
             continue;
-        // XXX: Obsolete with toolproxy?
+        // XXX: Obsolete with toolproxy? (Did I write this XXX? BSAR)
         // controller->canvas()->setTool(controller==m_activeCanvas ? m_activeTool : m_dummyTool);
         // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
         controller->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
@@ -346,6 +348,7 @@ void KoToolManager::switchTool(KoTool *tool) {
 void KoToolManager::attachCanvas(KoCanvasController *controller) {
     QMap<QString, KoTool*> toolsMap;
     foreach(ToolHelper *tool, m_tools) {
+        kDebug() << "Creating tool " << tool->id() << ", " << tool->activationShapeId() << endl;
         KoTool *tl = tool->createTool(controller->canvas());
         m_uniqueToolIds.insert(tl, tool->uniqueId());
         toolsMap.insert(tool->id(), tl);
@@ -457,11 +460,16 @@ KoShapeController *KoToolManager::shapeController(KoCanvasBase *canvas) const {
 }
 
 void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
+
+
+
     QList<QString> types;
     foreach(KoShape *shape, shapes) {
-       if (! types.contains(shape->shapeId()))
+        if (! types.contains(shape->shapeId())) {
             types.append(shape->shapeId());
+        }
     }
+
     // check if all previous selected shapes are still selected
     // if not change the current tool to the default tool
     if ( m_activeToolId != KoInteractionTool_ID ) {
@@ -473,6 +481,7 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
         }
     }
     m_lastSelectedShapes = shapes;
+
     emit toolCodesSelected(types);
 }
 

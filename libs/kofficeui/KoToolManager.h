@@ -137,7 +137,7 @@ public:
 
     /**
      * Register a new pair of view controllers
-     * @param controller the view controller that this toolmanager will manager the tools for
+     * @param controller the view controller that this toolmanager will manage the tools for
      * @param sc the shape controller instance that is associated with the controller and which
      *      will be used for things like registring new shapes if a tool creates one.
      */

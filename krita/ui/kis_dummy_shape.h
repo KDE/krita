@@ -36,7 +36,7 @@ public:
             m_image = image;
         }
 
-    KisImageSP image()
+    KisImageSP image() const
         {
             return m_image;
         }
@@ -67,10 +67,12 @@ public:
             setUserData( new KisShapeUserData( image ) );
         }
 
-    KisImageSP image()
+    KisImageSP image() const
         {
             return static_cast<KisShapeUserData*>( userData() )->image();
         }
+
+    QSizeF size() const { return QSizeF( 320000,320000 ); }
 
     /**
        Don't paint this shape: it's a mere dummy shape

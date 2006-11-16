@@ -121,8 +121,9 @@ void KoToolBox::setVisibilityCode(QAbstractButton *button, const QString &code) 
 }
 
 void KoToolBox::setButtonsVisible(const QList<QString> &codes) {
-    foreach(QAbstractButton *button, m_visibilityCodes.keys())
+    foreach(QAbstractButton *button, m_visibilityCodes.keys()) {
         button->setVisible( codes.contains(m_visibilityCodes.value(button)) );
+    }
 }
 
 void KoToolBox::enableTools(bool enable) {

@@ -27,22 +27,29 @@
                      // also makes flake dependent on pigment. (BSAR)
 #include <KoID.h>
 
-enum enumCanvasResource {
-    FOREGROUND_COLOR = 0,
-    BACKGROUND_COLOR = 1,
-    COMPOSITE_OPERATION = 2,
-    COMPOSITE_OPACITY = 4,
-    // XXX: Extend with necessary items, or make base numbers per canvas type as with QEvent::type?
-    // like:
-    KRITA_CANVAS_BASE = 1000,
-    HDR_EXPOSURE = 1001,
-    CURRENT_BRUSH = 1002,
-    CURRENT_PATTERN = 1003,
-    CURRENT_GRADIENT = 1004,
-    CURRENT_PAINTOP = 1005,
-    CURRENT_PAINTOP_SETTINGS = 1007,
-    CURRENT_KIS_LAYER = 1008,
-    KIVIO_CANVAS_BASE = 2000
+enum EnumCanvasResource {
+    ForegroundColor,    ///< The active forground color selected for this canvas.
+    BackgroundColor,    ///< The active background color selected for this canvas.
+    CompositeOperation,
+    CompositeOpacity,
+    Karbon = 1000,      ///< Base number for karbon specific values.
+    Kexi = 2000,        ///< Base number for kexi specific values.
+    Kivio = 3000,       ///< Base number for kivio specific values.
+    KPlato = 4000,      ///< Base number for kplato specific values.
+    KPresenter = 5000,  ///< Base number for kpresenter specific values.
+    Krita = 6000,       ///< Base number for krita specific values.
+    // XXX: Maybe we should move the next section to Kritas classes.
+    //      (where there is a new enum with the first value being
+    //          Foo = KoCanvasResourceProvider::Krita+1
+    HdrExposure,
+    CurrentBrush,
+    CurrentPattern,
+    CurrentGradient,
+    CurrentPaintop,
+    CurrentPaintopSettings,
+    CurrentKritaLayer,
+    KSpread = 7000,     ///< Base number for kspread specific values.
+    KWord = 8000        ///< Base number for kword specific values.
 };
 
 /**
@@ -58,7 +65,7 @@ public:
 
     KoCanvasResource() {}
 
-    KoCanvasResource(enumCanvasResource key, const QVariant &value)
+    KoCanvasResource(EnumCanvasResource key, const QVariant &value)
         {
             this->key = key;
             this->value = value;
@@ -74,7 +81,7 @@ public:
             return res.key != key || res.value != value;
         }
 
-    enumCanvasResource key;
+    EnumCanvasResource key;
     QVariant value;
 };
 
@@ -97,15 +104,15 @@ public:
     // The QHash hashmap? The creator?
     void setResource( KoCanvasResource & res);
 
-    void setResource( enumCanvasResource key, const QVariant & value );
+    void setResource( EnumCanvasResource key, const QVariant & value );
 
     /// @return a pointer to the specified resource or 0 if the
     /// specified resource does not exist.
-    QVariant resource(enumCanvasResource key);
+    QVariant resource(EnumCanvasResource key);
 
 
-    void setKoColor( enumCanvasResource key, const KoColor & color );
-    KoColor koColor( enumCanvasResource key );
+    void setKoColor( EnumCanvasResource key, const KoColor & color );
+    KoColor koColor( EnumCanvasResource key );
 
     void setForegroundColor( const KoColor & color );
     KoColor foregroundColor();
@@ -113,8 +120,8 @@ public:
     void setBackgroundColor( const KoColor & color );
     KoColor backgroundColor();
 
-    void setKoID( enumCanvasResource key, const KoID & id );
-    KoID koID(enumCanvasResource key);
+    void setKoID( EnumCanvasResource key, const KoID & id );
+    KoID koID(EnumCanvasResource key);
 
 signals:
 

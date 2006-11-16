@@ -84,15 +84,15 @@ void KisToolPaint::activate(bool )
 {
     emit sigCursorChanged( m_cursor );
 
-    m_currentFgColor = m_canvas->resourceProvider()->resource( FOREGROUND_COLOR ).value<KoColor>();
-    m_currentBgColor = m_canvas->resourceProvider()->resource( BACKGROUND_COLOR ).value<KoColor>();
-    m_currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( CURRENT_BRUSH ).value<void *>() );
-    m_currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( CURRENT_PATTERN).value<void *>() );
-    m_currentGradient = static_cast<KisGradient *>( m_canvas->resourceProvider()->resource( CURRENT_GRADIENT ).value<void *>() );
-    m_currentPaintOp = m_canvas->resourceProvider()->resource( CURRENT_PAINTOP ).value<KoID >();
-    m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( CURRENT_PAINTOP_SETTINGS ).value<void *>() );
-    m_currentLayer = m_canvas->resourceProvider()->resource( CURRENT_KIS_LAYER ).value<KisLayerSP>();
-    m_currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( HDR_EXPOSURE ).toDouble() );
+    m_currentFgColor = m_canvas->resourceProvider()->resource( ForegroundColor ).value<KoColor>();
+    m_currentBgColor = m_canvas->resourceProvider()->resource( BackgroundColor ).value<KoColor>();
+    m_currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( CurrentBrush ).value<void *>() );
+    m_currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( CurrentPattern).value<void *>() );
+    m_currentGradient = static_cast<KisGradient *>( m_canvas->resourceProvider()->resource( CurrentGradient ).value<void *>() );
+    m_currentPaintOp = m_canvas->resourceProvider()->resource( CurrentPaintop ).value<KoID >();
+    m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( CurrentPaintopSettings ).value<void *>() );
+    m_currentLayer = m_canvas->resourceProvider()->resource( CurrentKritaLayer ).value<KisLayerSP>();
+    m_currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( HdrExposure ).toDouble() );
 
     updateCompositeOpComboBox();
     KisConfig cfg;
@@ -112,32 +112,32 @@ void KisToolPaint::resourceChanged( const KoCanvasResource & res )
     QVariant v = res.value;
 
     switch ( res.key ) {
-    case ( FOREGROUND_COLOR ):
+    case ( ForegroundColor ):
         m_currentFgColor = v.value<KoColor>();
         break;
-    case ( BACKGROUND_COLOR ):
+    case ( BackgroundColor ):
         m_currentBgColor = v.value<KoColor>();
         break;
-    case ( CURRENT_BRUSH ):
+    case ( CurrentBrush ):
         m_currentBrush = static_cast<KisBrush *>( v.value<void *>() );
         break;
-    case ( CURRENT_PATTERN ):
+    case ( CurrentPattern ):
         m_currentPattern = static_cast<KisPattern *>( v.value<void *>() );
         break;
-    case ( CURRENT_GRADIENT ):
+    case ( CurrentGradient ):
         m_currentGradient = static_cast<KisGradient *>( v.value<void *>() );
         break;
-    case ( CURRENT_PAINTOP ):
+    case ( CurrentPaintop ):
         m_currentPaintOp = v.value<KoID >();
         break;
-    case ( CURRENT_PAINTOP_SETTINGS ):
+    case ( CurrentPaintopSettings ):
         m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( v.value<void *>() );
         break;
-    case ( CURRENT_KIS_LAYER ):
+    case ( CurrentKritaLayer ):
         m_currentLayer = v.value<KisLayerSP>();
         updateCompositeOpComboBox();
         break;
-    case ( HDR_EXPOSURE ):
+    case ( HdrExposure ):
         m_currentExposure = static_cast<float>( v.toDouble() );
     default:
         ;
@@ -156,12 +156,12 @@ void KisToolPaint::mouseReleaseEvent( KoPointerEvent *e )
     {
         KoCanvasResourceProvider * resourceProvider = 0;
         if ( m_canvas && ( resourceProvider = m_canvas->resourceProvider() ) ) {
-            QVariant fg = resourceProvider->resource( FOREGROUND_COLOR );
+            QVariant fg = resourceProvider->resource( ForegroundColor );
             if ( !fg.isValid() ) return;
-            QVariant bg = resourceProvider->resource( BACKGROUND_COLOR );
+            QVariant bg = resourceProvider->resource( BackgroundColor );
             if ( !bg.isValid() ) return;
-            resourceProvider->setResource( FOREGROUND_COLOR, bg );
-            resourceProvider->setResource( BACKGROUND_COLOR, fg );
+            resourceProvider->setResource( ForegroundColor, bg );
+            resourceProvider->setResource( BackgroundColor, fg );
         }
     }
 

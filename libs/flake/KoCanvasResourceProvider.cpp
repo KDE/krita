@@ -26,7 +26,7 @@ KoCanvasResourceProvider::KoCanvasResourceProvider(QObject * parent)
 {
 }
 
-void KoCanvasResourceProvider::setResource( enumCanvasResource key, const QVariant & value )
+void KoCanvasResourceProvider::setResource( EnumCanvasResource key, const QVariant & value )
 {
     KoCanvasResource r ( key, value );
     setResource( r );
@@ -43,7 +43,7 @@ void KoCanvasResourceProvider::setResource( KoCanvasResource & res)
     emit sigResourceChanged( res );
 }
 
-QVariant KoCanvasResourceProvider::resource(enumCanvasResource key)
+QVariant KoCanvasResourceProvider::resource(EnumCanvasResource key)
 {
     if ( !m_resources.contains( key ) )
         return m_empty;
@@ -51,14 +51,14 @@ QVariant KoCanvasResourceProvider::resource(enumCanvasResource key)
         return m_resources.value( key ).value;
 }
 
-void KoCanvasResourceProvider::setKoColor( enumCanvasResource key, const KoColor & color )
+void KoCanvasResourceProvider::setKoColor( EnumCanvasResource key, const KoColor & color )
 {
     QVariant v;
     v.setValue( color );
     setResource( key, v );
 }
 
-KoColor KoCanvasResourceProvider::koColor( enumCanvasResource key )
+KoColor KoCanvasResourceProvider::koColor( EnumCanvasResource key )
 {
     return resource( key ).value<KoColor>();
 }
@@ -68,13 +68,13 @@ void KoCanvasResourceProvider::setForegroundColor( const KoColor & color )
 {
     QVariant v;
     v.setValue( color );
-    setResource( FOREGROUND_COLOR, v );
+    setResource( ForegroundColor, v );
 
 }
 
 KoColor KoCanvasResourceProvider::foregroundColor()
 {
-    return resource( FOREGROUND_COLOR ).value<KoColor>();
+    return resource( ForegroundColor ).value<KoColor>();
 }
 
 
@@ -82,17 +82,17 @@ void KoCanvasResourceProvider::setBackgroundColor( const KoColor & color )
 {
     QVariant v;
     v.setValue( color );
-    setResource( BACKGROUND_COLOR, v );
+    setResource( BackgroundColor, v );
 
 }
 
 KoColor KoCanvasResourceProvider::backgroundColor()
 {
-    return resource( BACKGROUND_COLOR ).value<KoColor>();
+    return resource( BackgroundColor ).value<KoColor>();
 }
 
 
-void KoCanvasResourceProvider::setKoID( enumCanvasResource key, const KoID & id )
+void KoCanvasResourceProvider::setKoID( EnumCanvasResource key, const KoID & id )
 {
     QVariant  v;
     v.setValue( id );
@@ -100,7 +100,7 @@ void KoCanvasResourceProvider::setKoID( enumCanvasResource key, const KoID & id 
 
 }
 
-KoID KoCanvasResourceProvider::koID(enumCanvasResource key)
+KoID KoCanvasResourceProvider::koID(EnumCanvasResource key)
 {
     return resource( key ).value<KoID>();
 }

@@ -24,6 +24,7 @@
 #include <QFont>
 #include <QAbstractTextDocumentLayout>
 #include <kdebug.h>
+#include <KoViewConverter.h>
 
 
 // ############ KoTextShape ################

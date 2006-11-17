@@ -19,6 +19,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#define KOFFICE_RTREE_DEBUG
+
 #include <QMainWindow>
 #include <QtGui>
 #include <QLinkedList>

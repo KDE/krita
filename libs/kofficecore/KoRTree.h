@@ -115,6 +115,7 @@ public:
      */
     QList<T> values() const;
 
+#ifdef KOFFICE_RTREE_DEBUG
     /**
      * @brief Paint the tree
      *
@@ -126,6 +127,7 @@ public:
      * @brief Print the tree using qdebug
      */
     void debug() const;
+#endif
 
 protected:
     class NoneLeafNode;
@@ -134,8 +136,9 @@ protected:
     class Node
     {
     public:
+#ifdef KOFFICE_RTREE_DEBUG
         static int nodeIdCnt;
-
+#endif
         Node( int capacity, int level, Node * parent );
         virtual ~Node() {}
 
@@ -170,10 +173,11 @@ protected:
         virtual int place() const { return m_place; }
         virtual void setPlace( int place ) { m_place = place; }
 
-        virtual int nodeId() const { return m_nodeId; }
-
         virtual int level() const { return m_level; }
         virtual void setLevel( int level ) { m_level = level; }
+
+#ifdef KOFFICE_RTREE_DEBUG
+        virtual int nodeId() const { return m_nodeId; }
 
         virtual void paint( QPainter & p, int level ) const = 0;
         virtual void debug( QString line ) const = 0;
@@ -181,14 +185,17 @@ protected:
     protected:
         static QColor levelColor[];
         virtual void paintRect( QPainter & p, int level ) const;
-
+#endif
+    protected:
         Node * m_parent;
         QRectF m_boundingBox;
         QVector<QRectF> m_childBoundingBox;
         int m_counter;
         // the position in the parent
         int m_place;
+#ifdef KOFFICE_RTREE_DEBUG
         int m_nodeId;
+#endif
         int m_level;
     };
 
@@ -213,9 +220,10 @@ protected:
 
         virtual Node * getNode( int index ) const;
 
+#ifdef KOFFICE_RTREE_DEBUG
         virtual void paint( QPainter & p, int level ) const;
         virtual void debug( QString line ) const;
-
+#endif
     protected:
         virtual Node * getLeastEnlargement( const QRectF& bb ) const;
 
@@ -249,10 +257,10 @@ protected:
 
         virtual bool isLeaf() const { return true; }
 
+#ifdef KOFFICE_RTREE_DEBUG
         virtual void debug( QString line ) const;
-
         virtual void paint( QPainter & p, int level ) const;
-
+#endif
     protected:
         QVector<T> m_data;
         QVector<int> m_dataIds;
@@ -441,6 +449,7 @@ QList<T> KoRTree<T>::values() const
     return found.values();
 }
 
+#ifdef KOFFICE_RTREE_DEBUG
 template <typename T>
 void KoRTree<T>::paint( QPainter & p ) const
 {
@@ -456,6 +465,7 @@ void KoRTree<T>::debug() const
     QString prefix( "" );
     m_root->debug( prefix );
 }
+#endif
 
 template <typename T>
 QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::splitNode( KoRTree<T>::Node* node )
@@ -706,6 +716,7 @@ void KoRTree<T>::condenseTree( Node *node, QVector<Node*> & reinsert )
     //qDebug() << "KoRTree::condenseTree end reinsert.size()" << reinsert.size();
 }
 
+#ifdef KOFFICE_RTREE_DEBUG
 template <typename T>
 QColor KoRTree<T>::Node::levelColor[] = {
     QColor(Qt::green),
@@ -717,13 +728,16 @@ QColor KoRTree<T>::Node::levelColor[] = {
 
 template <class T>
 int KoRTree<T>::Node::nodeIdCnt = 0;
+#endif
 
 template <typename T>
 KoRTree<T>::Node::Node( int capacity, int level, Node * parent )
 : m_parent( parent )
 , m_childBoundingBox( capacity )
 , m_counter( 0 )
+#ifdef KOFFICE_RTREE_DEBUG
 , m_nodeId( nodeIdCnt++ )
+#endif
 , m_level( level )
 {
 }
@@ -757,7 +771,7 @@ void KoRTree<T>::Node::clear()
     m_boundingBox = QRectF();
 }
 
-
+#ifdef KOFFICE_RTREE_DEBUG
 template <typename T>
 void KoRTree<T>::Node::paintRect( QPainter & p, int level ) const
 {
@@ -774,6 +788,7 @@ void KoRTree<T>::Node::paintRect( QPainter & p, int level ) const
     bbdraw.adjust( level * 2, level * 2, -level * 2, -level * 2 );
     p.drawRect( bbdraw );
 }
+#endif
 
 template <typename T>
 KoRTree<T>::NoneLeafNode::NoneLeafNode( int capacity, int level, Node * parent )
@@ -913,6 +928,7 @@ typename KoRTree<T>::Node * KoRTree<T>::NoneLeafNode::getLeastEnlargement( const
     return m_childs[minIndex];
 }
 
+#ifdef KOFFICE_RTREE_DEBUG
 template <typename T>
 void KoRTree<T>::NoneLeafNode::debug( QString line ) const
 {
@@ -933,6 +949,7 @@ void KoRTree<T>::NoneLeafNode::paint( QPainter & p, int level ) const
     }
 
 }
+#endif
 
 template <class T>
 int KoRTree<T>::LeafNode::dataIdCounter = 0;
@@ -1068,6 +1085,7 @@ int KoRTree<T>::LeafNode::getDataId( int index ) const
     return m_dataIds[ index ];
 }
 
+#ifdef KOFFICE_RTREE_DEBUG
 template <typename T>
 void KoRTree<T>::LeafNode::debug( QString line ) const
 {
@@ -1086,5 +1104,6 @@ void KoRTree<T>::LeafNode::paint( QPainter & p, int level ) const
         this->paintRect( p, level );
     }
 }
+#endif
 
 #endif /* KORTREE_H */

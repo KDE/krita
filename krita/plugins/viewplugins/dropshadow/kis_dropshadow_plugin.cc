@@ -60,7 +60,7 @@ KisDropshadowPlugin::~KisDropshadowPlugin()
 
 void KisDropshadowPlugin::slotDropshadow()
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
     if (!image) return;
 
     KisPaintDeviceSP dev = image->activeDevice();

@@ -34,7 +34,7 @@ KoTool::KoTool(KoCanvasBase *canvas )
     , m_optionWidget( 0 )
     , m_previousCursor(Qt::ArrowCursor)
 {
-    if(m_canvas) { 
+    if(m_canvas) {
         KoCanvasResourceProvider * crp = m_canvas->resourceProvider();
         Q_ASSERT_X(crp, "KoTool::KoTool", "No KoCanvasResourceProvider");
         if (crp)
@@ -52,8 +52,9 @@ void KoTool::activate(bool temporary) {
 void KoTool::deactivate() {
 }
 
-void KoTool::resourceChanged( const KoCanvasResource & res )
+void KoTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
 {
+    Q_UNUSED( key );
     Q_UNUSED( res );
 }
 

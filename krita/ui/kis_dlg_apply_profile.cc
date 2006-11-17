@@ -15,22 +15,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_dlg_apply_profile.h"
 
 #include <QComboBox>
-#include <klocale.h>
 #include <QButtonGroup>
 
-#include "kis_factory2.h"
-#include "KoColorSpaceRegistry.h"
-#include "kis_types.h"
+#include <klocale.h>
+
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
-#include "kis_dlg_apply_profile.h"
-#include "kis_config.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoID.h"
-#include <kis_meta_registry.h>
+
 #include "kis_cmb_idlist.h"
+#include "kis_config.h"
+#include "kis_factory2.h"
+#include "kis_types.h"
+
+#include <kis_meta_registry.h>
+
 #include "squeezedcombobox.h"
+
 
 // XXX: Hardcode RGBA name. This should be a constant, somewhere.
 KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
@@ -105,4 +110,3 @@ void KisDlgApplyProfile::fillCmbProfiles(const KoID & s)
 }
 
 #include "kis_dlg_apply_profile.moc"
-

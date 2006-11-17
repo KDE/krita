@@ -55,7 +55,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
 setXMLFile(KStandardDirs::locate("data","kritaplugins/kritahistogramdocker.rc"),
 true);
 
-        KisImageSP img = m_view->canvasSubject()->currentImg();
+        KisImageSP img = m_view->image();
         if (!img) {
             m_cache = 0;
             return;

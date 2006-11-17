@@ -65,7 +65,7 @@ true);
         connect(m_action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
 
         m_view = (KisView*) parent;
-        if (KisImageSP img = m_view->canvasSubject()->currentImg()) {
+        if (KisImageSP img = m_view->image()) {
             connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged()));
             connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayersChanged()));
             connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayersChanged()));
@@ -92,7 +92,7 @@ void Histogram::slotActivated()
     DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
     Q_CHECK_PTR(dlgHistogram);
 
-    KisPaintDeviceSP dev = m_view->canvasSubject()->currentImg()->activeDevice();
+    KisPaintDeviceSP dev = m_view->image()->activeDevice();
     if (dev)
         dlgHistogram->setPaintDevice(dev);
 

@@ -21,12 +21,12 @@
 
 #include <QWidget>
 #include <QEvent>
+#include <QTime>
 
 #include "kis_progress_display_interface.h"
 
 class QToolButton;
 class QProgressBar;
-class QTime;
 
 class KisLabelProgress : public QWidget, public KisProgressDisplayInterface {
     Q_OBJECT

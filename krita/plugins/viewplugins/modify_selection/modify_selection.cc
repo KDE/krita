@@ -92,7 +92,7 @@ ModifySelection::~ModifySelection()
 
 void ModifySelection::slotGrowSelection()
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
     if (!image) return;
 
@@ -115,7 +115,7 @@ void ModifySelection::slotGrowSelection()
 
 void ModifySelection::slotShrinkSelection()
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
     if (!image) return;
 
@@ -139,7 +139,7 @@ void ModifySelection::slotShrinkSelection()
 
 void ModifySelection::slotBorderSelection()
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
     if (!image) return;
 

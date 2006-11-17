@@ -28,19 +28,13 @@ KoCanvasResourceProvider::KoCanvasResourceProvider(QObject * parent)
 
 void KoCanvasResourceProvider::setResource( KoCanvasResource::EnumCanvasResource key, const QVariant & value )
 {
-    KoCanvasResource r ( key, value );
-    setResource( r );
-}
-
-void KoCanvasResourceProvider::setResource( KoCanvasResource & res)
-{
-    if ( m_resources.contains( res.key ) ) {
-        m_resources[res.key] = res;
+    if ( m_resources.contains( key ) ) {
+        m_resources[key] = value;
     }
     else {
-        m_resources.insert( res.key, res );
+        m_resources.insert( key, value );
     }
-    emit sigResourceChanged( res );
+    emit sigResourceChanged( key, value );
 }
 
 QVariant KoCanvasResourceProvider::resource(KoCanvasResource::EnumCanvasResource key)
@@ -48,7 +42,7 @@ QVariant KoCanvasResourceProvider::resource(KoCanvasResource::EnumCanvasResource
     if ( !m_resources.contains( key ) )
         return m_empty;
     else
-        return m_resources.value( key ).value;
+        return m_resources.value( key );
 }
 
 void KoCanvasResourceProvider::setKoColor( KoCanvasResource::EnumCanvasResource key, const KoColor & color )

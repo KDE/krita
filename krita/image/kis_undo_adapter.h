@@ -19,9 +19,8 @@
 #ifndef KIS_UNDO_ADAPTER_H_
 #define KIS_UNDO_ADAPTER_H_
 
-#include <qglobal.h>
+#include <QString>
 
-class QString;
 class KCommand;
 
 /**
@@ -35,7 +34,7 @@ class KisCommandHistoryListener {
 public:
 
     KisCommandHistoryListener(){};
-   	virtual ~KisCommandHistoryListener() {} 
+    virtual ~KisCommandHistoryListener() {}
     virtual void notifyCommandAdded(KCommand * cmd) = 0;
     virtual void notifyCommandExecuted(KCommand * cmd) = 0;
 };
@@ -46,10 +45,10 @@ public:
     virtual ~KisUndoAdapter() {};
 
 public:
-    
+
     virtual void setCommandHistoryListener(const KisCommandHistoryListener *) = 0;
     virtual void removeCommandHistoryListener(const KisCommandHistoryListener *) = 0;
-    
+
     virtual KCommand * presentCommand() = 0;
     virtual void addCommand(KCommand *cmd) = 0;
     virtual void setUndo(bool undo) = 0;

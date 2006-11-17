@@ -18,7 +18,7 @@
  */
 #include "kis_view2.h"
 
-#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QScrollArea>
 #include <QRegion>
 #include <QRect>
@@ -40,10 +40,12 @@
 #include <KoToolRegistry.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
+#include <KoRuler.h>
 #include <KoSelection.h>
 
 #include <kis_image.h>
 
+#include "kis_statusbar.h"
 #include "kis_canvas2.h"
 #include "kis_doc2.h"
 #include "kis_dummy_shape.h"
@@ -53,6 +55,7 @@
 #include "kis_qpainter_canvas.h"
 #include "kis_resource_provider.h"
 #include "kis_resource_provider.h"
+#include "kis_selection_manager.h"
 
 class KisView2::KisView2Private {
 
@@ -60,6 +63,8 @@ public:
 
     KisView2Private(KisView2 * view)
         : filterManager( 0 )
+        , horizontalRuler( 0 )
+        , verticalRuler( 0 )
         {
             viewConverter = new KoZoomHandler( );
 
@@ -73,6 +78,7 @@ public:
 
     ~KisView2Private()
         {
+            KoToolManager::instance()->removeCanvasController( canvasController );
             delete viewConverter;
             delete canvas;
             delete filterManager;
@@ -87,12 +93,16 @@ public:
     KoCanvasController * canvasController;
     KisResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
+    KoRuler * horizontalRuler;
+    KoRuler * verticalRuler;
+    KisStatusBar * statusBar;
     KAction *zoomAction;
     KAction *zoomIn;
     KAction *zoomOut;
     KAction *actualPixels;
     KAction *actualSize;
     KAction *fitToCanvas;
+
 };
 
 
@@ -104,9 +114,6 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
 
     m_d->doc = doc;
     m_d->resourceProvider = new KisResourceProvider( this );
-
-    KoToolManager::instance()->addControllers(m_d->canvasController,
-                                              static_cast<KoShapeControllerBase*>( m_d->doc->imageShape()) );
 
     // Add the image and select it immediately (later, we'll select
     // the first layer)
@@ -127,12 +134,8 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
 
     createActions();
     createManagers();
+    createGUI();
 
-    // Put the canvascontroller in a layout so it resizes with us
-    QHBoxLayout * layout = new QHBoxLayout( this );
-    layout->addWidget( m_d->canvasController );
-
-    show();
 
     // Wait for the async image to have loaded
     if ( m_d->doc->isLoading() ) {
@@ -171,6 +174,11 @@ QWidget* KisView2::canvas() const
     return m_d->canvas->canvasWidget();
 }
 
+KisStatusBar * KisView2::statusBar() const
+{
+    return m_d->statusBar;
+}
+
 void KisView2::slotInitializeCanvas()
 {
     kDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>> Image completely loaded! W: "
@@ -202,6 +210,41 @@ void KisView2::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
 //    m_d->canvas->updateCanvas(imageRect);
     m_d->canvas->updateCanvas(QRectF(0, 0, 300,300));
 }
+
+void KisView2::createGUI()
+{
+    // Put the canvascontroller in a layout so it resizes with us
+    QGridLayout * layout = new QGridLayout( this );
+    layout->setSpacing(0);
+    layout->setMargin(0);
+    setLayout(layout);
+
+    m_d->horizontalRuler = new KoRuler(this, Qt::Horizontal, (KoZoomHandler*)m_d->viewConverter);
+    m_d->horizontalRuler->setShowMousePosition(true);
+    m_d->verticalRuler = new KoRuler(this, Qt::Vertical, (KoZoomHandler*)m_d->viewConverter);
+    m_d->verticalRuler->setShowMousePosition(true);
+
+    layout->addWidget(m_d->horizontalRuler, 0, 1);
+    layout->addWidget(m_d->verticalRuler, 1, 0);
+    layout->addWidget(m_d->canvasController, 1, 1);
+
+    KoToolManager::instance()->addControllers(m_d->canvasController,
+                                              static_cast<KoShapeControllerBase*>( m_d->doc->imageShape()) );
+
+    connect(m_d->canvasController, SIGNAL(canvasOffsetXChanged(int)),
+            m_d->horizontalRuler, SLOT(setOffset(int)));
+    connect(m_d->canvasController, SIGNAL(canvasOffsetYChanged(int)),
+            m_d->verticalRuler, SLOT(setOffset(int)));
+
+    // Example from kivio for using the new dockwidget api of KoView
+    //m_geometryDocker = qobject_cast<KivioShapeGeometry*>(createDockWidget(&geometryFactory));
+
+    m_d->statusBar = new KisStatusBar( KoView::statusBar() );
+
+    show();
+
+}
+
 
 void KisView2::createActions()
 {

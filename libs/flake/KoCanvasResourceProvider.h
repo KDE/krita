@@ -27,16 +27,7 @@
                      // also makes flake dependent on pigment. (BSAR)
 #include <KoID.h>
 
-/**
- * A single resource, lika a color.
- *
- * XXX: This is a copy of libs/kotext/styles/Styles_p.h -- should
- *      we generalize this, or does Qt already have something
- *      suitable?
- */
-class KoCanvasResource {
-
-public:
+namespace KoCanvasResource {
 
     enum EnumCanvasResource {
         ForegroundColor,    ///< The active forground color selected for this canvas.
@@ -63,27 +54,7 @@ public:
         KWordStart = 8000        ///< Base number for kword specific values.
     };
 
-    KoCanvasResource() {}
-
-    KoCanvasResource(EnumCanvasResource key, const QVariant &value)
-        {
-            this->key = key;
-            this->value = value;
-        }
-
-    inline bool operator==(const KoCanvasResource &res) const
-        {
-            return res.key == key && res.value == value;
-        }
-
-    inline bool operator!=(const KoCanvasResource &res) const
-        {
-            return res.key != key || res.value != value;
-        }
-
-    EnumCanvasResource key;
-    QVariant value;
-};
+}
 
 /**
  * The KoCanvasResourceProvider contains a set of per-canvas
@@ -99,10 +70,6 @@ public:
 
     KoCanvasResourceProvider(QObject * parent);
     ~KoCanvasResourceProvider() {}
-
-    // XXX: Who is going to delete the resource objects? This class?
-    // The QHash hashmap? The creator?
-    void setResource( KoCanvasResource & res);
 
     void setResource( KoCanvasResource::EnumCanvasResource key, const QVariant & value );
 
@@ -125,7 +92,7 @@ public:
 
 signals:
 
-    void sigResourceChanged(const KoCanvasResource & res);
+    void sigResourceChanged(KoCanvasResource::EnumCanvasResource key, const QVariant & res);
 
 private:
 
@@ -134,7 +101,7 @@ private:
 
 private:
     QVariant m_empty;
-    QHash<int, KoCanvasResource> m_resources;
+    QHash<int, QVariant> m_resources;
 
 };
 

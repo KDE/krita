@@ -41,7 +41,7 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
 
     m_timer.setSingleShot(true);
 
-    KisImageSP img = view->canvasSubject()->currentImg();
+    KisImageSP img = view->image();
 
     if (!img) {
         return;
@@ -97,7 +97,7 @@ void KisImageRasteredCache::imageUpdated(QRect rc) {
 
 void KisImageRasteredCache::imageSizeChanged(qint32 w, qint32 h) {
 
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
     cleanUpElements();
     m_busy = false;
@@ -127,7 +127,7 @@ void KisImageRasteredCache::imageSizeChanged(qint32 w, qint32 h) {
 
 void KisImageRasteredCache::timeOut() {
     m_busy = true;
-    KisImageSP img = m_view->canvasSubject()->currentImg();
+    KisImageSP img = m_view->image();
 
     // Temporary cache: while we are busy, we won't get the mergeImage time and again.
     if (!m_imageProjection)

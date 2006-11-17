@@ -25,7 +25,8 @@
 
 #include <koffice_export.h>
 
-class KoCanvasResource;
+#include <KoCanvasResourceProvider.h>
+
 class KoCanvasBase;
 class KoPointerEvent;
 class KoViewConverter;
@@ -96,7 +97,7 @@ public slots:
      * provider associated with the canvas this tool belongs to
      * changes. An example is currently selected foreground color.
      */
-    virtual void resourceChanged( const KoCanvasResource & res );
+    virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
 
 public:
 
@@ -119,7 +120,7 @@ public:
      * Return the option widget for this tool. Create it if it
      * does not exist yet. If the tool does not have an option widget,
      * this method return 0. (After discussion with Thomas, who prefers
-     * the toolmanager to handle that case.) 
+     * the toolmanager to handle that case.)
      *
      * @see m_optionWidget
      */

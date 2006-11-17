@@ -26,6 +26,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <QPaintEvent>
+#include <QVariant>
 
 #include <KoCanvasResourceProvider.h>
 #include <KoTool.h>
@@ -90,7 +91,7 @@ public slots:
 
     virtual void activate(bool temporary = false);
     virtual void deactivate();
-    virtual void resourceChanged( const KoCanvasResource & res );
+    virtual void resourceChanged( int key, const QVariant & res );
 
 public:
 

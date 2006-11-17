@@ -18,11 +18,16 @@
 #ifndef KIS_DLG_APPLY_PROFILE_H_
 #define KIS_DLG_APPLY_PROFILE_H_
 
+#include <QWidget>
+
 #include <kdialog.h>
 
-#include "ui_wdgapplyprofile.h"
-
+class KoColorProfile;
+class QButtonGroup;
+class WdgApplyProfile;
 class KoID;
+
+#include "ui_wdgapplyprofile.h"
 
 class WdgApplyProfile : public QWidget, public Ui::WdgApplyProfile
 {
@@ -32,7 +37,8 @@ class WdgApplyProfile : public QWidget, public Ui::WdgApplyProfile
         WdgApplyProfile(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
-class KisDlgApplyProfile : public KDialog {
+class KisDlgApplyProfile : public KDialog
+{
     typedef KDialog super;
 
     Q_OBJECT

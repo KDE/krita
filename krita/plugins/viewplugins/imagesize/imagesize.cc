@@ -88,7 +88,7 @@ ImageSize::~ImageSize()
 
 void ImageSize::slotImageSize()
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
     if (!image) return;
 
@@ -121,7 +121,7 @@ void ImageSize::slotImageSize()
 
 void ImageSize::slotLayerSize()
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
     if (!image) return;
 
@@ -151,7 +151,7 @@ void ImageSize::slotSelectionScale()
     // XXX: figure out a way to add selection actions to the selection
     // manager to enable/disable
 
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
     if (!image) return;
 

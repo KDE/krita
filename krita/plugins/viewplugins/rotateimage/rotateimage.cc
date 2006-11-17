@@ -93,7 +93,7 @@ RotateImage::~RotateImage()
 
 void RotateImage::slotRotateImage()
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
     if (!image) return;
 
@@ -127,7 +127,7 @@ void RotateImage::slotRotateImage270()
 
 void RotateImage::slotRotateLayer()
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
 
     if (!image) return;
 

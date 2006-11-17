@@ -48,7 +48,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     setObjectName(name);
    // Initialize main widget
     m_widget = new KisWdgFiltersGallery(this);
-    m_widget->filtersList->setLayer(view->canvasSubject()->currentImg()->activeLayer());
+    m_widget->filtersList->setLayer(view->image()->activeLayer());
     m_widget->filtersList->setProfile(view->canvasSubject()->monitorProfile());
 
     setMainWidget(m_widget);
@@ -58,9 +58,9 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     //m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     // Initialize preview widget
 
-    if (m_view->canvasSubject()->currentImg() && m_view->canvasSubject()->currentImg()->activeDevice())
+    if (m_view->image() && m_view->image()->activeDevice())
     {
-        m_widget->previewWidget->slotSetDevice( m_view->canvasSubject()->currentImg()->activeDevice() );
+        m_widget->previewWidget->slotSetDevice( m_view->image()->activeDevice() );
     }
     connect( m_widget->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
     resize( minimumSizeHint());
@@ -87,7 +87,7 @@ void KisDlgFiltersGallery::selectionHasChanged ( Q3IconViewItem * item )
     } else {
         m_labelNoCW->hide();
     }
-    KisImageSP img = m_view->canvasSubject()->currentImg();
+    KisImageSP img = m_view->image();
     KisPaintLayerSP activeLayer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(img->activeLayer().data()));
 
     if (activeLayer)

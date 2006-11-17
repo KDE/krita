@@ -34,28 +34,6 @@
 
 #include "squeezedcombobox.h"
 
-#warning kde4 port
-// SqueezedComboBoxTip::SqueezedComboBoxTip( QWidget * parent, SqueezedComboBox* name )
-//     : QToolTip( parent )
-// {
-//     m_originalWidget = name;
-// }
-//
-// void SqueezedComboBoxTip::maybeTip( const QPoint &pos )
-// {
-//     Q3ListBox* listBox = m_originalWidget->listBox();
-//     if (!listBox)
-//         return;
-//
-//     Q3ListBoxItem* selectedItem = listBox->itemAt( pos );
-//     if (selectedItem)
-//     {
-//         QRect positionToolTip = listBox->itemRect( selectedItem );
-//         QString toolTipText = m_originalWidget->itemHighlighted();
-//         if (!toolTipText.isNull())
-//             tip(positionToolTip, toolTipText);
-//     }
-// }
 
 SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
     : QComboBox(parent)

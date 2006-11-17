@@ -18,16 +18,20 @@
 #ifndef KIS_SELECTION_MANAGER_
 #define KIS_SELECTION_MANAGER_
 
-#include "qobject.h"
-#include "q3ptrlist.h"
+#include <QObject>
+#include <QList>
 
-#include "kis_image.h"
+#include <kis_image.h>
+
+#include "kis_doc2.h"
+
 #include <krita_export.h>
 
 class KAction;
 class KToggleAction;
 class KActionCollection;
-class KisView;
+
+class KisView2;
 class KisDoc;
 class KisClipboard;
 
@@ -41,7 +45,7 @@ class KRITAUI_EXPORT KisSelectionManager : public QObject {
 
 public:
 
-    KisSelectionManager(KisView * parent, KisDoc2 * doc);
+    KisSelectionManager(KisView2 * parent, KisDoc2 * doc);
     virtual ~KisSelectionManager();
 
     void setup(KActionCollection * collection);
@@ -96,12 +100,13 @@ public:
 
 private:
     void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);
+    void updateStatusBar();
 
     void computeBorder (qint32  *circ, qint32  xradius, qint32  yradius);
     inline void rotatePointers (quint8  **p, quint32 n);
     void computeTransition (quint8* transition, quint8** buf, qint32 width);
 
-    KisView * m_parent;
+    KisView2 * m_parent;
     KisDoc2 * m_doc;
 
     KisClipboard * m_clipboard;
@@ -131,7 +136,7 @@ private:
     KAction *m_fillPattern;
     KToggleAction *m_toggleDisplaySelection;
 
-    Q3PtrList<KAction> m_pluginActions;
+    QList<KAction*> m_pluginActions;
 
 };
 

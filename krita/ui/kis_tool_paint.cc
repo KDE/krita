@@ -107,11 +107,10 @@ void KisToolPaint::deactivate()
 {
 }
 
-void KisToolPaint::resourceChanged( const KoCanvasResource & res )
+void KisToolPaint::resourceChanged( int key, const QVariant & v )
 {
-    QVariant v = res.value;
 
-    switch ( res.key ) {
+    switch ( key ) {
     case ( KoCanvasResource::ForegroundColor ):
         m_currentFgColor = v.value<KoColor>();
         break;

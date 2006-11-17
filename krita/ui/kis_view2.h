@@ -35,6 +35,7 @@ class KisImage;
 class KoCanvasController;
 class KisDoc2;
 class KisResourceProvider;
+class KisStatusBar;
 
 class KisView2 : public KoView {
 
@@ -57,10 +58,16 @@ public:
 public:
 
     // Krita specific interfaces
+
     KisImageSP image();
+
     KisResourceProvider * resourceProvider();
+
     KoCanvasBase * canvasBase() const;
+
     QWidget* canvas() const;
+
+    KisStatusBar * statusBar() const;
 
 
 private slots:
@@ -70,6 +77,7 @@ private slots:
 
 private:
 
+    void createGUI();
     void createActions();
     void createManagers();
 

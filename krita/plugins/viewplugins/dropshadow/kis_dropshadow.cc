@@ -68,7 +68,7 @@ KisDropshadow::KisDropshadow(KisView * view)
 
 void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, QColor color, quint8 opacity, bool allowResize)
 {
-    KisImageSP image = m_view->canvasSubject()->currentImg();
+    KisImageSP image = m_view->image();
     if (!image) return;
 
     KisLayerSP src = image->activeLayer();

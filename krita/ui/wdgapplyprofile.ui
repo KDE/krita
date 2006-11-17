@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>WdgApplyProfile</class>
  <widget class="QWidget" name="WdgApplyProfile" >
   <property name="geometry" >
@@ -71,7 +68,7 @@
          </widget>
         </item>
         <item>
-         <widget class="SqueezedComboBox" name="cmbProfile" >
+         <widget class="SqueezedComboBox" native="1" name="cmbProfile" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>7</hsizetype>
@@ -151,14 +148,11 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>SqueezedComboBox</class>
-   <extends></extends>
+   <extends>QWidget</extends>
    <header>squeezedcombobox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -89,7 +89,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
         KisFilter* filter = dlg.currentFilter();
         if(filter )
         {
-            KisImageSP img = m_view->canvasSubject()->currentImg();
+            KisImageSP img = m_view->image();
             if (!img) return;
 
             KisPaintDeviceSP dev = img->activeDevice();

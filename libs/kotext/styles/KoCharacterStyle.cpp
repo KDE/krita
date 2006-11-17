@@ -22,6 +22,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
+
 KoCharacterStyle::KoCharacterStyle(QObject *parent)
     : QObject(parent)
 {
@@ -30,6 +31,7 @@ KoCharacterStyle::KoCharacterStyle(QObject *parent)
     setFontWeight(QFont::Normal);
     setVerticalAlignment(QTextCharFormat::AlignNormal);
     setTextOutline(QPen(Qt::NoPen));
+    setForeground(Qt::black);
 }
 
 KoCharacterStyle::~KoCharacterStyle() {
@@ -56,7 +58,7 @@ QPen KoCharacterStyle::textOutline () const {
         QPen pen(Qt::NoPen);
         return pen;
     }
-    return qvariant_cast<QPen>(variant);
+    return qvariant_cast<QPen>(*variant);
 }
 
 QColor KoCharacterStyle::underlineColor () const {
@@ -65,7 +67,7 @@ QColor KoCharacterStyle::underlineColor () const {
         QColor color;
         return color;
     }
-    return qvariant_cast<QColor>(variant);
+    return qvariant_cast<QColor>(*variant);
 }
 
 QBrush KoCharacterStyle::background() const {
@@ -74,7 +76,7 @@ QBrush KoCharacterStyle::background() const {
         QBrush brush;
         return brush;
     }
-    return qvariant_cast<QBrush>(variant);
+    return qvariant_cast<QBrush>(*variant);
 }
 
 void KoCharacterStyle::clearBackground() {
@@ -87,7 +89,7 @@ QBrush KoCharacterStyle::foreground() const {
         QBrush brush;
         return brush;
     }
-    return qvariant_cast<QBrush>(variant);
+    return qvariant_cast<QBrush>(*variant);
 }
 
 void KoCharacterStyle::clearForeground() {
@@ -113,6 +115,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
     static const int properties[] = {
         StyleId,
         QTextFormat::FontPointSize,
+        QTextCharFormat::ForegroundBrush,
         -1
     };
 
@@ -147,7 +150,7 @@ QString KoCharacterStyle::propertyString(int key) const {
     const QVariant *variant = m_stylesPrivate->get(key);
     if(variant == 0)
         return QString();
-    return qvariant_cast<QString>(variant);
+    return qvariant_cast<QString>(*variant);
 }
 
 #include "KoCharacterStyle.moc"

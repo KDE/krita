@@ -19,14 +19,13 @@
 #ifndef KOTOOL_H
 #define KOTOOL_H
 
-#include "KoCanvasResourceProvider.h"
-
 #include <QString>
 #include <QObject>
 #include <QCursor>
 
 #include <koffice_export.h>
 
+class KoCanvasResource;
 class KoCanvasBase;
 class KoPointerEvent;
 class KoViewConverter;

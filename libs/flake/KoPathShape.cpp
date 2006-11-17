@@ -21,6 +21,7 @@
 #include "KoPathShape.h"
 #include "KoInsets.h"
 #include "KoShapeBorderModel.h"
+#include "KoViewConverter.h"
 
 #include <QDebug>
 #include <QPainter>

@@ -27,7 +27,6 @@
 #include <QSet>
 #include <QBrush>
 
-#include "KoViewConverter.h"
 #include <koffice_export.h>
 
 class QPainter;
@@ -41,6 +40,7 @@ class KoShapeContainer;
 class KoShapeBorderModel;
 class KoShapeManager;
 class KoShapeUserData;
+class KoViewConverter;
 
 /**
  *

@@ -2,6 +2,7 @@
 
    Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,8 +31,8 @@
 #include <QRect>
 #include <QWidget>
 
-#include <KoCanvasResourceProvider.h>
 
+class KoCanvasResourceProvider;
 class KoSelection;
 class KCommand;
 class KoShapeManager;
@@ -47,8 +48,8 @@ class KoCanvasBase {
 
 public:
 
-    KoCanvasBase() { m_resourceProvider = new KoCanvasResourceProvider(0); }
-    virtual ~KoCanvasBase() { delete m_resourceProvider; }
+    KoCanvasBase();
+    virtual ~KoCanvasBase();
 
 public:
 

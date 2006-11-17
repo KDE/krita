@@ -27,6 +27,7 @@
 #include "KoShapeBorderModel.h"
 #include "KoShapeManager.h"
 #include "KoShapeUserData.h"
+#include "KoViewConverter.h"
 
 #include <QPainter>
 #include <QtDebug>

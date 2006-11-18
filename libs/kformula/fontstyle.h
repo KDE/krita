@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Ulrich Kuettler <ulrich.kuettler@gmx.de>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,9 +31,7 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-class AlphaTable;
 class Artwork;
-class ContextStyle;
 class SymbolTable;
 
 
@@ -42,61 +41,33 @@ class SymbolTable;
 class FontStyle {
 public:
 
-    virtual ~FontStyle() {}
+    ~FontStyle() {}
 
     /**
      * lazy init support. Needs to be run before anything else.
      * @param install if true fonts may be installed if needed
      */
-    virtual bool init( ContextStyle* context, bool install = true ) = 0;
+    bool init( ContextStyle* context, bool install = true );
 
     /// the table for ordinary symbols (those that have a unicode value)
-    virtual const SymbolTable* symbolTable() const { return &m_symbolTable; }
-    virtual SymbolTable* symbolTable() { return &m_symbolTable; }
+    const SymbolTable* symbolTable() const { return &m_symbolTable; }
+    SymbolTable* symbolTable() { return &m_symbolTable; }
 
-    /// the table for special alphabets.
-    virtual const AlphaTable* alphaTable() const { return 0; };
+    Artwork* createArtwork(SymbolType type = EmptyBracket) const;
 
-    virtual Artwork* createArtwork(SymbolType type = EmptyBracket) const = 0;
+    static QStringList missingFonts( bool install = true );
 
-protected:
-
-    // This is going to disappear in favor of a real macro facility some day.
-    void fillNameTable( SymbolTable::NameTable& names );
+    static bool m_installed;
 
     static void testFont( QStringList& missing, const QString& fontName );
 
 private:
 
+    static QStringList missingFontsInternal();
+    static void installFonts();
+
     SymbolTable m_symbolTable;
 };
-
-
-/**
- * The information our AlphaTable contains.
- */
-class AlphaTableEntry {
-public:
-
-    AlphaTableEntry() : pos( -1 ) {}
-
-    bool valid() const { return pos > -1; }
-
-    QFont font;
-    short pos;
-};
-
-
-/**
- * The table for special alphabets.
- */
-class AlphaTable {
-public:
-
-    virtual ~AlphaTable() {}
-    virtual AlphaTableEntry entry( short pos, CharFamily family, CharStyle style ) const = 0;
-};
-
 
 const QChar spaceChar = 0x0020;
 const QChar leftParenthesisChar = 0x0028;
@@ -113,6 +84,9 @@ const QChar backSlashChar = 0x005C;
 const QChar integralChar = 0x222B;
 const QChar summationChar = 0x2211;
 const QChar productChar = 0x220F;
+const QChar applyFunctionChar = 0x2061;
+const QChar invisibleTimes = 0x2062;
+const QChar invisibleComma = 0x2063;
 
 extern const QChar leftRoundBracket[];
 extern const QChar leftSquareBracket[];
@@ -136,17 +110,21 @@ public:
 
     virtual void calcSizes( const ContextStyle& style,
                             ContextStyle::TextStyle tstyle,
-                            luPt parentSize ) = 0;
+                            double factor,
+                            luPt parentSize );
     virtual void calcSizes( const ContextStyle& style,
-                            ContextStyle::TextStyle tstyle );
+                            ContextStyle::TextStyle tstyle,
+                            double factor );
 
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
-                       luPt parentSize, const LuPixelPoint& origin ) = 0;
+					   StyleAttributes& style,
+                       luPt parentSize, const LuPixelPoint& origin );
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
     luPixel getWidth() const { return size.width(); }
@@ -167,7 +145,7 @@ public:
     SymbolType getType() const { return type; }
     void setType(SymbolType t) { type = t; }
 
-    virtual bool isNormalChar() const { return getBaseline() != -1; }
+    virtual bool isNormalChar() const { return getBaseline() != -1 && ( cmChar == -1 ); }
 
     virtual double slant() const { return 0; }
 
@@ -177,11 +155,10 @@ protected:
     void drawCharacter( QPainter& painter, const ContextStyle& style,
                         luPixel x, luPixel y, luPt height, QChar ch );
 
-    void calcCharSize( const ContextStyle& style, QFont f,
-                       luPt height, QChar c );
+    void calcCharSize( const ContextStyle& style, QFont f, QChar c );
     void drawCharacter( QPainter& painter, const ContextStyle& style,
                         QFont f,
-                        luPixel x, luPixel y, luPt height, QChar c );
+                        luPixel x, luPixel y, luPt height, uchar c );
 
     void calcRoundBracket( const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );
     void calcCurlyBracket( const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );
@@ -200,6 +177,14 @@ private:
     luPixel baseline;
 
     SymbolType type;
+
+    bool calcCMDelimiterSize( const ContextStyle& context, uchar c,
+                              luPt fontSize, luPt parentSize );
+    void calcLargest( const ContextStyle& context, uchar c, luPt fontSize );
+    void drawCMDelimiter( QPainter& painter, const ContextStyle& style,
+                          luPixel x, luPixel y, luPt height );
+
+    short cmChar;
 };
 
 

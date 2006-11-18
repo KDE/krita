@@ -19,7 +19,8 @@
 #include "KoCanvasResourceProvider.h"
 
 #include <QVariant>
-#include <KoColor.h>
+#include <KoColor.h> // Zut, do we want this? It's convenient, but
+                     // also makes flake dependent on pigment. (BSAR)
 
 KoCanvasResourceProvider::KoCanvasResourceProvider(QObject * parent)
     : QObject( parent )

@@ -45,7 +45,7 @@ class KoColor;
  *
  * @author Daniel M. Duley <mosfet@kde.org>
  */
-class KDEUI_EXPORT KoDualColorButton : public QWidget
+class KOPAINTER_EXPORT KoDualColorButton : public QWidget
 {
     Q_OBJECT
     Q_ENUMS( Selection )

@@ -72,7 +72,7 @@ namespace KoPictureType
  * @note In case of a remote path, the "original path" is the name of the temporary file that was
  *  used to download the file.
  */
-class KOFFICEUI_EXPORT KoPictureKey
+class KOFFICECORE_EXPORT KoPictureKey
 {
 public:
     /**

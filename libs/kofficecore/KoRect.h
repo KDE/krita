@@ -28,7 +28,7 @@
  * A rect whose coordinates are floating-point values ( "double"s ).
  * The API isn't documented, it's a perfect mirror of QRect.
  */
-class KOFFICEUI_EXPORT KoRect {
+class KOFFICECORE_EXPORT KoRect {
 
 public:
     KoRect()
@@ -127,10 +127,10 @@ private:
     KoPoint m_tl, m_br;
 };
 
-KOFFICEUI_EXPORT KoRect operator|(const KoRect &lhs, const KoRect &rhs);
-KOFFICEUI_EXPORT KoRect operator&(const KoRect &lhs, const KoRect &rhs);
-KOFFICEUI_EXPORT bool operator==(const KoRect &lhs, const KoRect &rhs);
-KOFFICEUI_EXPORT bool operator!=(const KoRect &lhs, const KoRect &rhs);
+KOFFICECORE_EXPORT KoRect operator|(const KoRect &lhs, const KoRect &rhs);
+KOFFICECORE_EXPORT KoRect operator&(const KoRect &lhs, const KoRect &rhs);
+KOFFICECORE_EXPORT bool operator==(const KoRect &lhs, const KoRect &rhs);
+KOFFICECORE_EXPORT bool operator!=(const KoRect &lhs, const KoRect &rhs);
 
 
 /** Show the position and size of a rectangle (use within kDebug) */

@@ -164,13 +164,13 @@ public:
     /**
      * @brief Resize the shape
      *
-     * @param size the new size of the shape.  This is different from scaling as
+     * @param newSize the new size of the shape.  This is different from scaling as
      * scaling is a so called secondairy operation which is comparable to zooming in
      * instead of changing the size of the basic shape.
      * Easiest example of this difference is that using this method will not distort the
      * size of pattern-fills and borders.
      */
-    virtual void resize( const QSizeF &size );
+    virtual void resize( const QSizeF &newSize );
 
     /**
      * @brief Get the size of the shape in pt.

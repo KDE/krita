@@ -108,15 +108,16 @@ void KoShape::shear( double sx, double sy )
     shapeChanged(ShearChanged);
 }
 
-void KoShape::resize( const QSizeF &size )
+void KoShape::resize( const QSizeF &newSize )
 {
-    if(m_size == size)
+    QSizeF s( size() );
+    if(s == newSize)
         return;
 
-    double fx = size.width() / m_size.width();
-    double fy = size.height() / m_size.height();
+    double fx = newSize.width() / s.width();
+    double fy = newSize.height() / s.height();
 
-    m_size = size;
+    m_size = newSize;
 
     for ( int i = 0; i < m_connectors.size(); ++i )
     {
@@ -147,13 +148,14 @@ bool KoShape::hitTest( const QPointF &position ) const
     if(m_border)
         m_border->borderInsets(this, insets);
 
-    return point.x() >= -insets.left && point.x() <= m_size.width() + insets.right &&
-             point.y() >= -insets.top && point.y() <= m_size.height() + insets.bottom;
+    QSizeF s( size() );
+    return point.x() >= -insets.left && point.x() <= s.width() + insets.right &&
+             point.y() >= -insets.top && point.y() <= s.height() + insets.bottom;
 }
 
 QRectF KoShape::boundingRect() const
 {
-    QRectF bb( QPointF(0, 0), m_size );
+    QRectF bb( QPointF(0, 0), size() );
     return m_matrix.mapRect( bb );
 }
 
@@ -255,7 +257,7 @@ void KoShape::repaint(double x, double y, double width, double height) const {
 
 const QPainterPath KoShape::outline() const {
     QPainterPath path;
-    path.addRect(QRectF( QPointF(0, 0), m_size ));
+    path.addRect(QRectF( QPointF(0, 0), size() ));
     return path;
 }
 

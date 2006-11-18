@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +44,54 @@ const QList<BasicElement*> UnderOverElement::childElements()
     return tmp << m_baseElement << m_underElement << m_overElement;
 }
 
+/* 
+ * TODO: Upgrade to new API
+ */
+bool UnderOverElement::readAttributesFromMathMLDom( const QDomElement& element )
+{
+    if ( !BasicElement::readAttributesFromMathMLDom( element ) ) {
+        return false;
+    }
+
+    QString tag = element.tagName().stripWhiteSpace().lower();
+
+    if ( tag == "munder" || tag == "munderover" ) {
+        QString accentunderStr = element.attribute( "accentunder" ).stripWhiteSpace().lower();
+        if ( ! accentunderStr.isNull() ) {
+            if ( accentunderStr == "true" ) {
+                m_customAccentUnder = true;
+                m_accentUnder = true;
+            }
+            else if ( accentunderStr == "false" ) {
+                m_customAccentUnder = true;
+                m_accentUnder = false;
+            }
+            else {
+                kdWarning( DEBUGID ) << "Invalid value for attribute `accentunder': " 
+                                     << accentunderStr << endl;
+            }
+        }
+    }
+    if ( tag == "mover" || tag == "munderover" ) {
+        QString accentStr = element.attribute( "accent" ).stripWhiteSpace().lower();
+        if ( ! accentStr.isNull() ) {
+            if ( accentStr == "true" ) {
+                m_customAccent = true;
+                m_accent = true;
+            }
+            else if ( accentStr == "false" ) {
+                m_customAccent = true;
+                m_accent = false;
+            }
+            else {
+                kdWarning( DEBUGID ) << "Invalid value for attribute `accent': " 
+                                     << accentStr << endl;
+            }
+        }
+    }
+    return true;
+}
+
 void UnderOverElement::readMathML( const QDomElement& element )
 {
     readMathMLAttributes( element );
@@ -78,6 +127,25 @@ void UnderOverElement::readMathML( const QDomElement& element )
     }
 }
 
+/*
+ * TODO: Upgrade to new API
+ */
+void UnderOverElement::writeMathMLAttributes( QDomElement& element ) const
+{
+    QString tag = getElementName();
+    if ( tag == "munder" || tag == "munderover" ) {
+        if ( m_customAccentUnder ) {
+            element.setAttribute( "accentunder", m_accentUnder ? "true" : "false" );
+        }
+    }
+    if ( tag == "mover" || tag == "munderover" ) {
+        if ( m_customAccent ) {
+            element.setAttribute( "accent", m_accent ? "true" : "false" );
+        }
+    }
+}
+
+
 void UnderOverElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
     if( m_underElement->elementType() != Basic && m_overElement->elementType() == Basic )
@@ -107,15 +175,16 @@ void UnderOverElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 }
 
 void UnderOverElement::calcSizes( const ContextStyle& context, ContextStyle::TextStyle tstyle,
-                                          ContextStyle::IndexStyle istyle )
+                                  ContextStyle::IndexStyle istyle, StyleAttributes& style)
 {
 }
 
 void UnderOverElement::draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       const LuPixelPoint& parentOrigin )
+                             const ContextStyle& context,
+                             ContextStyle::TextStyle tstyle,
+                             ContextStyle::IndexStyle istyle,
+                             StyleAttributes& style,
+                             const LuPixelPoint& parentOrigin )
 {}
 
 

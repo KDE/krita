@@ -347,6 +347,10 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
         KoFlake::TopMiddleHandle,
         KoFlake::NoHandle
     };
+
+    if( selection()->count() == 0 )
+        return KoFlake::NoHandle;
+
     recalcSelectionBox();
     KoViewConverter *converter = m_canvas->viewConverter();
 

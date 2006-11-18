@@ -59,14 +59,7 @@ class KoCanvasBase;
 class KisCmbComposite;
 class KisIntSpinbox;
 class KisPaintOpSettings;
-/*
-static const QString TOOL_TYPE_SHAPE = "Krita/Shape"; // Geometric shapes like ellipses and lines
-static const QString TOOL_TYPE_FREEHAND = "Krita/Freehand"; // Freehand drawing tools
-static const QString TOOL_TYPE_TRANSFORM = "Krita/Transform"; // Tools that transform the layer;
-static const QString TOOL_TYPE_FILL = "Krita/Fill"; // Tools that fill parts of the canvas
-static const QString TOOL_TYPE_VIEW = "Krita/View"; // Tools that affect the canvas: pan, zoom, etc.
-static const QString TOOL_TYPE_SELECTED = "Krita/Select"; // Tools that select pixels
-*/
+
 enum enumBrushMode {
     PAINT,
     PAINT_STYLUS,
@@ -76,7 +69,7 @@ enum enumBrushMode {
 };
 
 class KRITAUI_EXPORT KisToolPaint
-    : public KoTool
+    : public KisTool
 {
 
     Q_OBJECT
@@ -85,28 +78,16 @@ public:
     KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisToolPaint();
 
-// KoTool Implementation.
-
-public slots:
-
-    virtual void activate(bool temporary = false);
-    virtual void deactivate();
-    virtual void resourceChanged( int key, const QVariant & res );
 
 public:
+
+    virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & v );
 
     virtual void paint(QPainter& gc, KoViewConverter &converter);
 
     virtual void mouseReleaseEvent( KoPointerEvent *event );
 
 protected:
-
-    /// @return the image wrapped in the dummy shape in the shape
-    /// manager. XXX: This is probably wrong!
-    KisImageSP image() const;
-
-    /// Call this to set the document modified
-    void notifyModified() const;
 
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
@@ -133,20 +114,6 @@ protected:
     quint8 m_opacity;
     const KoCompositeOp * m_compositeOp;
     bool m_paintOutline;
-
-    KisImageSP m_currentImage;
-    QCursor m_cursor; // the cursor that should be shown on tool activation.
-
-    // From the canvas resources
-    KisBrush * m_currentBrush;
-    KisPattern * m_currentPattern;
-    KisGradient * m_currentGradient;
-    KoColor m_currentFgColor;
-    KoColor m_currentBgColor;
-    KoID m_currentPaintOp;
-    KisPaintOpSettings * m_currentPaintOpSettings;
-    KisLayerSP m_currentLayer;
-    float m_currentExposure;
 
 private:
 

@@ -27,7 +27,7 @@
 
 class KoBirdEyePanel;
 class KisDoubleWidget;
-class KisView;
+class KisView2;
 class KisCanvasSubject;
 class KoZoomAdapter;
 class KoColorSpace;
@@ -58,7 +58,7 @@ private:
     KoBirdEyePanel * m_birdEyePanel;
     KisDoubleWidget * m_exposureDoubleWidget;
     QLabel *m_exposureLabel;
-    KisView * m_view;
+    KisView2 * m_view;
     KisCanvasSubject * m_subject;
     bool m_draggingExposureSlider;
     KoZoomAdapter * m_zoomAdapter;

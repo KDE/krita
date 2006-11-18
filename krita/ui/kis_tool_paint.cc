@@ -59,8 +59,7 @@
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
-    : KoTool(canvas)
-    , m_cursor( cursor )
+    : KisTool(canvas, cursor)
 {
     m_optionWidget = 0;
     m_optionWidgetLayout = 0;
@@ -79,69 +78,18 @@ KisToolPaint::~KisToolPaint()
 {
 }
 
-
-void KisToolPaint::activate(bool )
+void KisToolPaint::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & v )
 {
-    emit sigCursorChanged( m_cursor );
-
-    m_currentFgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::ForegroundColor ).value<KoColor>();
-    m_currentBgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::BackgroundColor ).value<KoColor>();
-    m_currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentBrush ).value<void *>() );
-    m_currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentPattern).value<void *>() );
-    m_currentGradient = static_cast<KisGradient *>( m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentGradient ).value<void *>() );
-    m_currentPaintOp = m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentPaintop ).value<KoID >();
-    m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentPaintopSettings ).value<void *>() );
-    m_currentLayer = m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentKritaLayer ).value<KisLayerSP>();
-    m_currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( KoCanvasResource::HdrExposure ).toDouble() );
-
-    updateCompositeOpComboBox();
-    KisConfig cfg;
-    m_paintOutline = (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE);
-
-    m_currentImage = image();
-}
-
-
-
-void KisToolPaint::deactivate()
-{
-}
-
-void KisToolPaint::resourceChanged( int key, const QVariant & v )
-{
+    KisTool::resourceChanged( key, v );
 
     switch ( key ) {
-    case ( KoCanvasResource::ForegroundColor ):
-        m_currentFgColor = v.value<KoColor>();
-        break;
-    case ( KoCanvasResource::BackgroundColor ):
-        m_currentBgColor = v.value<KoColor>();
-        break;
-    case ( KoCanvasResource::CurrentBrush ):
-        m_currentBrush = static_cast<KisBrush *>( v.value<void *>() );
-        break;
-    case ( KoCanvasResource::CurrentPattern ):
-        m_currentPattern = static_cast<KisPattern *>( v.value<void *>() );
-        break;
-    case ( KoCanvasResource::CurrentGradient ):
-        m_currentGradient = static_cast<KisGradient *>( v.value<void *>() );
-        break;
-    case ( KoCanvasResource::CurrentPaintop ):
-        m_currentPaintOp = v.value<KoID >();
-        break;
-    case ( KoCanvasResource::CurrentPaintopSettings ):
-        m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( v.value<void *>() );
-        break;
     case ( KoCanvasResource::CurrentKritaLayer ):
         m_currentLayer = v.value<KisLayerSP>();
         updateCompositeOpComboBox();
         break;
-    case ( KoCanvasResource::HdrExposure ):
-        m_currentExposure = static_cast<float>( v.toDouble() );
     default:
-        ;
-        // Do nothing
-    };
+        ; // Do nothing
+    }
 }
 
 
@@ -238,28 +186,6 @@ void KisToolPaint::slotSetCompositeMode(const KoCompositeOp* compositeOp)
     m_compositeOp = compositeOp;
 }
 
-KisImageSP KisToolPaint::image() const
-{
-    KoShapeManager * shapeManager = m_canvas->shapeManager();
-    if ( !shapeManager ) return 0;
-
-    KisDummyShape * imageShape = dynamic_cast<KisDummyShape *>( shapeManager->shapeAt(QPointF( 0, 0 )) );
-    kDebug() << "Current shape: " << imageShape << endl;
-
-    if ( !imageShape ) return 0;
-
-    KisImageSP img = imageShape->image();
-    return img;
-
-}
-
-void KisToolPaint::notifyModified() const
-{
-    KisImageSP img = image();
-    if ( img ) {
-        img->setModified();
-    }
-}
 
 void KisToolPaint::updateCompositeOpComboBox()
 {

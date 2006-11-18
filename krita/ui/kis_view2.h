@@ -36,6 +36,7 @@ class KoCanvasController;
 class KisDoc2;
 class KisResourceProvider;
 class KisStatusBar;
+class KisSelectionManager;
 
 class KisView2 : public KoView {
 
@@ -55,20 +56,27 @@ public:
             return KoToolManager::instance()->toolBox("krita");
         }
 
-public:
+public:  // Krita specific interfaces
 
-    // Krita specific interfaces
-
+    /// Return the image this view is displaying
     KisImageSP image();
 
+    /// The resource provider contains all per-view settings, such as
+    /// current color, current paint op etc.
     KisResourceProvider * resourceProvider();
 
+    /// Return the canvasbase class
     KoCanvasBase * canvasBase() const;
 
+    /// Return the actual widget that is displaying the current image
     QWidget* canvas() const;
 
+    /// Return the wrapper class around the statusbar
     KisStatusBar * statusBar() const;
 
+    /// The selection managers handles everything action related to
+    /// selections.
+    KisSelectionManager * selectionManager();
 
 private slots:
 

@@ -21,10 +21,10 @@
 #define _KIS_TOOL_PERSPECTIVE_GRID_H_
 
 #include <kis_perspective_grid.h>
-#include <kis_tool_non_paint.h>
+#include <kis_tool.h>
 #include <KoToolFactory.h>
 
-class KisToolPerspectiveGrid : public KisToolNonPaint {
+class KisToolPerspectiveGrid : public KisPaint {
     Q_OBJECT
     enum PerspectiveGridEditionMode {
         MODE_CREATION, // This is the mode when there is not yet a perspective grid
@@ -74,7 +74,7 @@ protected:
     bool m_dragging;
 private:
     typedef QVector<QPointF> QPointFVector;
-    
+
     QPointFVector m_points;
     PerspectiveGridEditionMode m_mode;
     Q_INT32 m_handleSize, m_handleHalfSize;

@@ -19,10 +19,7 @@
 #include "kis_view2.h"
 
 #include <QGridLayout>
-#include <QScrollArea>
-#include <QRegion>
 #include <QRect>
-#include <QStringList>
 
 #include <kstdaction.h>
 #include <kxmlguifactory.h>
@@ -82,6 +79,7 @@ public:
             delete viewConverter;
             delete canvas;
             delete filterManager;
+            delete selectionManager;
         }
 
 public:
@@ -102,6 +100,7 @@ public:
     KAction *actualPixels;
     KAction *actualSize;
     KAction *fitToCanvas;
+    KisSelectionManager *selectionManager;
 
 };
 
@@ -110,14 +109,6 @@ public:
 KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     : KoView(doc, parent)
 {
-    m_d = new KisView2Private(this);
-
-    m_d->doc = doc;
-    m_d->resourceProvider = new KisResourceProvider( this );
-
-    // Add the image and select it immediately (later, we'll select
-    // the first layer)
-    m_d->shapeManager->add( doc->imageShape() );
 
     // Part stuff
     setInstance(KisFactory2::instance(), false);
@@ -131,6 +122,14 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
                              SLOT( configureShortcuts() ),
                              actionCollection() );
 
+    m_d = new KisView2Private(this);
+
+    m_d->doc = doc;
+    m_d->resourceProvider = new KisResourceProvider( this );
+
+    // Add the image and select it immediately (later, we'll select
+    // the first layer)
+    m_d->shapeManager->add( doc->imageShape() );
 
     createActions();
     createManagers();
@@ -179,14 +178,17 @@ KisStatusBar * KisView2::statusBar() const
     return m_d->statusBar;
 }
 
+KisSelectionManager * KisView2::selectionManager()
+{
+    return m_d->selectionManager;
+}
+
 void KisView2::slotInitializeCanvas()
 {
-    kDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>> Image completely loaded! W: "
-             << image()->width() << ", H: "
-             << image()->height() << endl;
 
     m_d->canvas->setCanvasSize( image()->width(), image()->height() );
     m_d->filterManager->updateGUI();
+    m_d->selectionManager->updateGUI();
 
     KoSelection *select = m_d->shapeManager->selection();
     select->select( m_d->doc->imageShape() );
@@ -272,8 +274,16 @@ void KisView2::createActions()
 void KisView2::createManagers()
 {
     // Create the managers for filters, selections, layers etc.
-    // XXX: When the currentlayer changes, call updateGUI on all managers
+    // XXX: When the currentlayer changes, call updateGUI on all
+    // managers
+
     m_d->filterManager = new KisFilterManager(this, m_d->doc);
+    m_d->filterManager->setup(actionCollection());
+
+    m_d->selectionManager = new KisSelectionManager( this, m_d->doc );
+    m_d->selectionManager->setup( actionCollection() );
+
+
 
 }
 

@@ -225,6 +225,10 @@ void KisFilterManager::setup(KActionCollection * ac)
 
 void KisFilterManager::updateGUI()
 {
+    kDebug() << "Filter actions: " << m_d->filterActions.isEmpty() << endl;
+
+    if ( m_d->filterActions.isEmpty() ) return;
+
     KisImageSP img = m_d->view->image();
     if (!img) return;
 
@@ -248,15 +252,20 @@ void KisFilterManager::updateGUI()
 
     KAction * a;
     int i = 0;
-    for (a = m_d->filterActions.first(); a; a = m_d->filterActions.next() , i++) {
-        KisFilterSP filter = KisFilterRegistry::instance()->get(m_d->filterList[i]);
-        if(player && filter->workWith( player->paintDevice()->colorSpace()))
-        {
-            a->setEnabled(enable);
-        } else {
-            a->setEnabled(false);
+    kDebug() << "XXXXXXXXXXXXXXXXXXXXXX\n";
+    for (a = m_d->filterActions.first(); a; a = m_d->filterActions.next(), i++) {
+        // XXX: This should always be true: investigate later! BSAR
+        if (i < m_d->filterList.count()) {
+            KisFilterSP filter = KisFilterRegistry::instance()->get(m_d->filterList[i]);
+            if(player && filter->workWith( player->paintDevice()->colorSpace()))
+            {
+                a->setEnabled(enable);
+            } else {
+                a->setEnabled(false);
+            }
         }
     }
+    kDebug() << "XXXXXXXXXXXXXXXXXXXXXX\n";
 
 }
 

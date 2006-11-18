@@ -35,7 +35,7 @@ namespace Kross {
      * abstract access to the Kross Scripting Framework to an
      * application.
      */
-    class KDE_EXPORT GUIClient
+    class KROSSCORE_EXPORT GUIClient
         : public QObject
         , public KXMLGUIClient
     {

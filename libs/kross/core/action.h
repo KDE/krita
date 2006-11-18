@@ -49,7 +49,7 @@ namespace Kross {
      * The \a Manager takes care of handling the Action instances
      * application width.
      */
-    class KROSS_EXPORT Action : public KAction, public ChildrenInterface, public ErrorInterface
+    class KROSSCORE_EXPORT Action : public KAction, public ChildrenInterface, public ErrorInterface
     {
             Q_OBJECT
 

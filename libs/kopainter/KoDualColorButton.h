@@ -21,7 +21,7 @@
 #ifndef KDUALCOLORBUTTON_H
 #define KDUALCOLORBUTTON_H
 
-#include <kdelibs_export.h>
+#include <koffice_export.h>
 
 #include <QtGui/QWidget>
 

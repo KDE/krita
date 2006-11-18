@@ -33,12 +33,12 @@ namespace Kross {
         /**
          * Debugging function.
          */
-        KROSS_EXPORT void krossdebug(const QString &s);
+        KROSSCORE_EXPORT void krossdebug(const QString &s);
 
         /**
          * Warning function.
          */
-        KROSS_EXPORT void krosswarning(const QString &s);
+        KROSSCORE_EXPORT void krosswarning(const QString &s);
 
     #else
         // Define these to an empty statement if debugging is disabled.

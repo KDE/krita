@@ -32,7 +32,7 @@ namespace Kross {
     /**
      * Interface for managing \a Object collections.
      */
-    class KROSS_EXPORT ChildrenInterface
+    class KROSSCORE_EXPORT ChildrenInterface
     {
         public:
 

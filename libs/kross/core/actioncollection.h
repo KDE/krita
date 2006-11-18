@@ -38,7 +38,7 @@ namespace Kross {
      * The ActionCollection class manages collections of \a Action
      * instances.
      */
-    class KROSS_EXPORT ActionCollection : public KActionCollection
+    class KROSSCORE_EXPORT ActionCollection : public KActionCollection
     {
             Q_OBJECT
 

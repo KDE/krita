@@ -41,7 +41,7 @@ namespace Kross {
      * that implements the \a Script functionality for the
      * defined \a Interpreter .
      */
-    class KROSS_EXPORT Script : public ErrorInterface
+    class KROSSCORE_EXPORT Script : public ErrorInterface
     {
         public:
 

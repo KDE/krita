@@ -36,7 +36,7 @@ namespace Kross {
      * a model for views of a \a ActionCollection instance that manages a
      * collection of \a Action instances.
      */
-    class KDE_EXPORT ActionCollectionModel : public QAbstractItemModel
+    class KROSSCORE_EXPORT ActionCollectionModel : public QAbstractItemModel
     {
         public:
             ActionCollectionModel(QObject* parent, ActionCollection* collection = 0);
@@ -61,7 +61,7 @@ namespace Kross {
      * The ActionCollectionProxyModel class implements a QSortFilterProxyModel 
      * for a \a ActionCollectionModel instance.
      */
-    class KDE_EXPORT ActionCollectionProxyModel : public QSortFilterProxyModel
+    class KROSSCORE_EXPORT ActionCollectionProxyModel : public QSortFilterProxyModel
     {
         public:
             ActionCollectionProxyModel(QObject* parent, ActionCollection* collection = 0);

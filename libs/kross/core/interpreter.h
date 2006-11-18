@@ -41,7 +41,7 @@ namespace Kross {
      * a \a Interpreter before the interpreter-backend itself is
      * loaded.
      */
-    class KROSS_EXPORT InterpreterInfo
+    class KROSSCORE_EXPORT InterpreterInfo
     {
         public:
 
@@ -149,7 +149,7 @@ namespace Kross {
      * The Interpreter will be managed by the \a Kross::Manager
      * class.
      */
-    class KROSS_EXPORT Interpreter : public ErrorInterface
+    class KROSSCORE_EXPORT Interpreter : public ErrorInterface
     {
         public:
 

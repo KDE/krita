@@ -389,6 +389,7 @@ void KisFilterManager::slotApplyFilter(int i)
 
     if( m_d->lastWidget != 0)
     {
+        m_d->lastWidget->setConfiguration(m_d->lastFilter->defaultConfiguration(dev));
         connect(m_d->lastWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
 
         m_d->lastDialog->previewWidget()->slotSetDevice( dev );

@@ -77,13 +77,17 @@ public:
     }
 public:
     /**
+     * This function return the configuration set as the default by the user or the default configuration from
+     * the filter writer as returned by designerConfiguration.
+     * This configuration is used by default for the configuration widget and to the process function if there is no
+     * configuration widget.
      * @return the default configuration of this widget
      */
-    virtual KisFilterConfiguration * configuration();
+    KisFilterConfiguration * defaultConfiguration(KisPaintDeviceSP);
 
     /**
-         * If true, this filter can be used in painting tools as a paint operation
-         */
+     * If true, this filter can be used in painting tools as a paint operation
+     */
     virtual bool supportsPainting() { return false; };
 
     /// This filter can be displayed in a preview dialog
@@ -96,8 +100,8 @@ public:
      * Return a list of default configuration to demonstrates the use of the filter
      * @return a list with a null element if the filter do not use a configuration
      */
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-    { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), 0); return list; }
+    virtual QHash<QString, KisFilterConfiguration*> bookmarkedConfigurations( KisPaintDeviceSP )
+    {  return m_bookmarkedConfig; }
 
     /**
      * Can this filter work incrementally when painting, or do we need to work
@@ -176,7 +180,8 @@ public:
     virtual void setAutoUpdate(bool set);
     bool progressEnabled() const { return m_progressEnabled; }
     inline bool cancelRequested() const { return m_progressEnabled && m_cancelRequested; }
-
+protected:
+    virtual KisFilterConfiguration* designerConfiguration(KisPaintDeviceSP); // FIXME: this name sucks so much
 protected slots:
 
     // Convenience functions for progress display.
@@ -200,7 +205,7 @@ protected:
     KisProgressDisplayInterface * m_progressDisplay;
     QString m_category; // The category in the filter menu this filter fits
     QString m_entry; // the i18n'ed accelerated menu text
-
+    QHash<QString, KisFilterConfiguration*> m_bookmarkedConfig;
 };
 
 

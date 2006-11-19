@@ -674,7 +674,7 @@ KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const QDomElement& element, Ki
         return KisAdjustmentLayerSP(0); // XXX: We don't have this filter. We should warn about it!
     }
 
-    KisFilterConfiguration * kfc = f->configuration();
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
 
     // We'll load the configuration and the selection later.
     layer = KisAdjustmentLayerSP(new KisAdjustmentLayer(img, name, kfc, KisSelectionSP(0)));

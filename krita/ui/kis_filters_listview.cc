@@ -200,13 +200,13 @@ void KisFiltersListView::buildPreview()
 
             if (m_filterForAdjustmentLayers && !f->supportsAdjustmentLayers()) continue;
 
-            std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration(m_thumb);
+             const QHash<QString, KisFilterConfiguration*>& configlist = f->bookmarkedConfigurations(m_thumb);
             // apply the filter for each of example of configuration
-            for(std::list<KisFilterConfiguration*>::iterator itc = configlist.begin();
+            for(QHash<QString, KisFilterConfiguration*>::const_iterator itc = configlist.begin();
                 itc != configlist.end();
                 itc++)
             {
-                KisFiltersIconViewItem * icon = new KisFiltersIconViewItem( this, (*it).name(), pm, *it, f.data(), *itc, m_thumb, bounds, m_profile );
+                KisFiltersIconViewItem * icon = new KisFiltersIconViewItem( this, (*it).name(), pm, *it, f.data(), itc.value(), m_thumb, bounds, m_profile );
                 //KisThreadPool::instance()->enqueue(icon->thread());
                 icon->thread()->runDirectly();
             }

@@ -29,9 +29,10 @@ KisFilter::KisFilter(const KoID& id, const QString & category, const QString & e
     , m_category(category)
     , m_entry(entry)
 {
+    m_bookmarkedConfig.insert(i18n("default configuration"), designerConfiguration(0));
 }
 
-KisFilterConfiguration * KisFilter::configuration()
+KisFilterConfiguration * KisFilter::designerConfiguration(KisPaintDeviceSP)
 {
     return new KisFilterConfiguration(m_id.id(), 0);
 }
@@ -39,6 +40,11 @@ KisFilterConfiguration * KisFilter::configuration()
 KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, KisPaintDeviceSP)
 {
     return 0;
+}
+
+KisFilterConfiguration * KisFilter::defaultConfiguration(KisPaintDeviceSP pd)
+{
+ return designerConfiguration(pd); //TODO: implement the bookmarking mechanism
 }
 
 void KisFilter::setProgressDisplay(KisProgressDisplayInterface * progressDisplay)

@@ -40,7 +40,7 @@
 #include <KoCanvasController.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
-
+#include <KoInputDevice.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <kstaticdeleter.h>
@@ -457,6 +457,11 @@ KoShapeController *KoToolManager::shapeController(KoCanvasBase *canvas) const {
     }
     kWarning(30004) << "KoToolManager: can't find the canvas, did you register it?" << endl;
     return 0;
+}
+
+KoInputDevice KoToolManager::currentInputDevice() const
+{
+    return KoInputDevice::mouse();
 }
 
 void KoToolManager::selectionChanged(QList<KoShape*> shapes) {

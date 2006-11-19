@@ -27,6 +27,7 @@
 #include <QStack>
 
 #include <KoToolProxy.h>
+#include <KoInputDevice.h>
 
 class ToolHelper;
 class KoCanvasController;
@@ -166,6 +167,9 @@ public:
      */
     KoShapeController *shapeController(KoCanvasBase *canvas) const;
 
+    /// @return the currently active pointing device
+    KoInputDevice currentInputDevice() const;
+
 public slots:
     /**
      * Request switching tool
@@ -186,6 +190,12 @@ signals:
      * @param types a list of string that are the shape types of the selected objects.
      */
     void toolCodesSelected(QList<QString> types);
+
+    /**
+     * Emitted whenever it becomes likely that the user is now holding
+     * a different pointer device in his hands
+     */
+    void inputDeviceChanged( const KoInputDevice & );
 
 private:
 

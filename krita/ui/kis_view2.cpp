@@ -53,6 +53,7 @@
 #include "kis_resource_provider.h"
 #include "kis_selection_manager.h"
 #include "kis_controlframe.h"
+#include "kis_birdeye_box.h"
 
 class KisView2::KisView2Private {
 
@@ -102,6 +103,7 @@ public:
     KAction *fitToCanvas;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
+    KisBirdEyeBox * birdEyeBox;
 };
 
 
@@ -238,8 +240,8 @@ void KisView2::createGUI()
     connect(m_d->canvasController, SIGNAL(canvasOffsetYChanged(int)),
             m_d->verticalRuler, SLOT(setOffset(int)));
 
-    // Example from kivio for using the new dockwidget api of KoView
-    //m_geometryDocker = qobject_cast<KivioShapeGeometry*>(createDockWidget(&geometryFactory));
+    KisBirdEyeBoxFactory birdeyeFactory(this);
+    m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>( createDockWidget( &birdeyeFactory ) );
 
     m_d->statusBar = new KisStatusBar( KoView::statusBar() );
     m_d->controlFrame = new KisControlFrame( mainWindow(), this );

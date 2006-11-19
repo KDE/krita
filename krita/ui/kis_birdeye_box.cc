@@ -29,19 +29,21 @@
 
 #include <klocale.h>
 
+#include <KoColorSpace.h>
+
 #include "kis_view2.h"
 #include "kis_doc2.h"
-#include "kis_canvas_controller.h"
 #include "kis_birdeye_box.h"
 #include "kis_double_widget.h"
-#include "kis_canvas.h"
+#include "kis_canvas2.h"
 #include "kis_image.h"
 #include "kis_rect.h"
 #include "kis_iterators_pixel.h"
-
+#include "kis_resource_provider.h"
 #include "kobirdeyepanel.h"
 
 namespace {
+#if 0 // XXX: Redo when zooming is implemented again (BSAR)
 
     class CanvasAdapter : public KoCanvasAdapter {
 
@@ -176,22 +178,23 @@ namespace {
             KisCanvasSubject * m_canvasSubject;
 
     };
-
+#endif
 }
 
-KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
-    : QWidget(parent)
-        , m_view(view)
-        , m_subject(view->canvasSubject())
+KisBirdEyeBox::KisBirdEyeBox(KisView2 * view)
+    : QDockWidget(i18n( "Overview" ) )
+    , m_view(view)
 {
-    setObjectName(name);
 
-    QVBoxLayout * l = new QVBoxLayout(this);
+    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-    if (!m_subject) return;
+    QWidget * w = new QWidget( this );
+    setWidget( w );
 
-    m_image = m_subject->currentImg();
+    QVBoxLayout * l = new QVBoxLayout(w);
 
+    m_image = m_view->image();
+#if 0 // XXX: Redo when zooming is implemented again (BSAR)
     m_zoomAdapter = new ZoomListener(m_subject->canvasController()); // The birdeye panel deletes
     KoThumbnailAdapter * ktp = new ThumbnailProvider(m_image, m_subject);  // The birdeye panel deletes
     KoCanvasAdapter * kpc = new CanvasAdapter(m_subject);  // The birdeye panel deletes
@@ -202,14 +205,15 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
     connect(view, SIGNAL(viewTransformationsChanged()), m_birdEyePanel, SLOT(slotViewTransformationChanged()));
 
     l->addWidget(m_birdEyePanel);
+#endif
 
     QHBoxLayout * hl = new QHBoxLayout();
     l->addLayout(hl);
 
-    m_exposureLabel = new QLabel(i18n("Exposure:"), this);
+    m_exposureLabel = new QLabel(i18n("Exposure:"), w);
     hl->addWidget(m_exposureLabel);
 
-    m_exposureDoubleWidget = new KisDoubleWidget(-10, 10, this);
+    m_exposureDoubleWidget = new KisDoubleWidget(-10, 10, w);
     m_exposureDoubleWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_exposureDoubleWidget->setToolTip("Select the exposure (stops) for HDR images");
     hl->addWidget(m_exposureDoubleWidget);
@@ -226,19 +230,18 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
     connect(m_exposureDoubleWidget, SIGNAL(sliderReleased()), SLOT(exposureSliderReleased()));
 
     m_draggingExposureSlider = false;
-
+#if 0 // XXX: Redo when zooming is implemented again (BSAR)
     Q_ASSERT(m_subject->document() != 0);
     connect(m_subject->document(), SIGNAL(sigCommandExecuted()), SLOT(slotDocCommandExecuted()));
-
+#endif
     if (m_image) {
         connect(m_image.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
     }
+
 }
 
 KisBirdEyeBox::~KisBirdEyeBox()
 {
-    // Huh? Why does this cause a crash?
-    // delete m_zoomAdapter;
 }
 
 void KisBirdEyeBox::setImage(KisImageSP image)
@@ -248,7 +251,7 @@ void KisBirdEyeBox::setImage(KisImageSP image)
     }
 
     m_image = image;
-
+#if 0 // XXX: Redo when zooming is implemented again (BSAR)
     KoThumbnailAdapter * ktp = new ThumbnailProvider(m_image, m_subject);
     m_birdEyePanel->setThumbnailProvider(ktp);
 
@@ -259,16 +262,19 @@ void KisBirdEyeBox::setImage(KisImageSP image)
         m_birdEyePanel->slotUpdate(m_image->bounds());
         slotImageColorSpaceChanged(m_image->colorSpace());
     }
+#endif
 }
 
 void KisBirdEyeBox::slotDocCommandExecuted()
 {
+#if 0 // XXX: Redo when zooming is implemented again (BSAR)
     if (m_image) {
         if (!m_dirtyRect.isEmpty()) {
             m_birdEyePanel->slotUpdate(m_dirtyRect);
         }
         m_dirtyRect = QRect();
     }
+#endif
 }
 
 void KisBirdEyeBox::slotImageUpdated(QRect r)
@@ -278,9 +284,11 @@ void KisBirdEyeBox::slotImageUpdated(QRect r)
 
 void KisBirdEyeBox::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
 {
+#if 0 // XXX: Redo when zooming is implemented again (BSAR)
     if (m_image) {
         m_birdEyePanel->slotUpdate(m_image->bounds());
     }
+#endif
 }
 
 void KisBirdEyeBox::slotImageColorSpaceChanged(KoColorSpace *cs)
@@ -297,7 +305,7 @@ void KisBirdEyeBox::slotImageColorSpaceChanged(KoColorSpace *cs)
 void KisBirdEyeBox::exposureValueChanged(double exposure)
 {
     if (!m_draggingExposureSlider) {
-        m_subject->setHDRExposure(exposure);
+        m_view->resourceProvider()->setHDRExposure(exposure);
 
         if (m_image && m_image->colorSpace()->hasHighDynamicRange()) {
             m_birdEyePanel->slotUpdate(m_image->bounds());

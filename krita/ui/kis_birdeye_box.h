@@ -23,6 +23,8 @@
 #include <QWidget>
 #include <QLabel>
 
+#include <KoDockFactory.h>
+
 #include "kis_types.h"
 
 class KoBirdEyePanel;
@@ -31,13 +33,13 @@ class KisView2;
 class KoZoomAdapter;
 class KoColorSpace;
 
-class KisBirdEyeBox : public QWidget
+class KisBirdEyeBox : public QDockWidget
 {
     Q_OBJECT
 
 public:
 
-    KisBirdEyeBox(KisView * view, QWidget * parent = 0, const char* name=0);
+    KisBirdEyeBox(KisView2 * view);
     ~KisBirdEyeBox();
 
     void setImage(KisImageSP image);
@@ -54,6 +56,7 @@ protected slots:
     void exposureSliderReleased();
 
 private:
+
     KoBirdEyePanel * m_birdEyePanel;
     KisDoubleWidget * m_exposureDoubleWidget;
     QLabel *m_exposureLabel;
@@ -62,6 +65,37 @@ private:
     KoZoomAdapter * m_zoomAdapter;
     KisImageSP m_image;
     QRect m_dirtyRect;
+};
+
+
+class KisBirdEyeBoxFactory : public KoDockFactory
+{
+public:
+    KisBirdEyeBoxFactory(KisView2 * view)
+        {
+            m_view = view;
+        }
+
+    virtual QString dockId() const
+        {
+            return QString( "KisBirdeyeBox" );
+        }
+
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+        {
+            return Qt::RightDockWidgetArea;
+        }
+
+    virtual QDockWidget* createDockWidget()
+        {
+            KisBirdEyeBox * dockWidget = new KisBirdEyeBox(m_view);
+            dockWidget->setObjectName(dockId());
+
+            return dockWidget;
+        }
+
+private:
+    KisView2 * m_view;
 };
 
 #endif // KIS_BIRDEYE_BOX_H

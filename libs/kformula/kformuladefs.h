@@ -138,6 +138,8 @@ enum CharFamily {
     scriptFamily,
     frakturFamily,
     doubleStruckFamily,
+	sansSerifFamily, // TODO: Currently unsupported
+	monospaceFamily, // TODO: Currently unsupported
     anyFamily
 };
 

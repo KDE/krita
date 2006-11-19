@@ -69,9 +69,46 @@ public:
         LeftPadding,    ///< distance between text and border
         TopPadding,     ///< distance between text and border
         RightPadding,   ///< distance between text and border
-        BottomPadding   ///< distance between text and border
+        BottomPadding,   ///< distance between text and border
+        LeftBorderWidth,        ///< The thickness of the border, or 0 if there is no border
+        LeftInnerBorderWidth,   ///< In case of style being 'double' the thickness of the inner border line
+        LeftBorderSpacing,      ///< In case of style being 'double' the space between the inner and outer border lines
+        LeftBorderStyle,        ///< The border style. (see BorderStyle)
+        TopBorderWidth,         ///< The thickness of the border, or 0 if there is no border
+        TopInnerBorderWidth,    ///< In case of style being 'double' the thickness of the inner border line
+        TopBorderSpacing,       ///< In case of style being 'double' the space between the inner and outer border lines
+        TopBorderStyle,         ///< The border style. (see BorderStyle)
+        RightBorderWidth,       ///< The thickness of the border, or 0 if there is no border
+        RightInnerBorderWidth,  ///< In case of style being 'double' the thickness of the inner border line
+        RightBorderSpacing,     ///< In case of style being 'double' the space between the inner and outer border lines
+        RightBorderStyle,       ///< The border style. (see BorderStyle)
+        BottomBorderWidth,      ///< The thickness of the border, or 0 if there is no border
+        BottomInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
+        BottomBorderSpacing,    ///< In case of style being 'double' the space between the inner and outer border lines
+        BottomBorderStyle      ///< The border style. (see BorderStyle)
+
+// do 15.5.24
 // continue at 15.5.28
     };
+
+    enum BorderStyle {
+        None,   ///< no border. This value forces the computed value of 'border-width' to be '0'.
+        BorderDotted,   ///< The border is a series of dots.
+        BorderDashed,   ///< The border is a series of short line segments.
+        BorderSolid,    ///< The border is a single line segment.
+        BorderDouble,   ///< The border is two solid lines. The sum of the two lines and the space between them equals the value of 'border-width'.
+        BorderGroove,   ///< The border looks as though it were carved into the canvas.
+        BorderRidge,    ///< The opposite of 'groove': the border looks as though it were coming out of the canvas.
+        BorderInset,    ///< The border makes the entire box look as though it were embedded in the canvas.
+        BorderOutset,   ///< The opposite of 'inset': the border makes the entire box look as though it were coming out of the canvas.
+
+        // kword lagacy
+        BorderDashPattern,
+        BorderDotsPattern,
+        BorderDashDotPattern,
+        BorderDashDotDotPattern
+    };
+
 
     KoParagraphStyle();
     /// Copy constructor
@@ -221,20 +258,6 @@ public:
     bool breakBefore() { return propertyBoolean(BreakBefore); }
     void setBreakAfter(bool on) { setProperty(BreakAfter, on); }
     bool breakAfter() { return propertyBoolean(BreakAfter); }
-    void setHasLeftBorder(bool on) { setProperty(HasLeftBorder, on); }
-    bool hasLeftBorder() { return propertyBoolean(HasLeftBorder); }
-    void setHasTopBorder(bool on) { setProperty(HasTopBorder, on); }
-    bool hasTopBorder() { return propertyBoolean(HasTopBorder); }
-    void setHasRightBorder(bool on) { setProperty(HasRightBorder, on); }
-    bool hasRightBorder() { return propertyBoolean(HasRightBorder); }
-    void setHasBottomBorder(bool on) { setProperty(HasBottomBorder, on); }
-    bool hasBottomBorder() { return propertyBoolean(HasBottomBorder); }
-    void setBorderLineWidth(double width) { setProperty(BorderLineWidth, width); }
-    double borderLineWidth() { return propertyDouble(BorderLineWidth); }
-    void setSecondBorderLineWidth(double width) { setProperty(SecondBorderLineWidth, width); }
-    double secondBorderLineWidth() { return propertyDouble(SecondBorderLineWidth); }
-    void setDistanceToSecondBorder(double distance) { setProperty(DistanceToSecondBorder, distance); }
-    double distanceToSecondBorder() { return propertyDouble(DistanceToSecondBorder); }
     void setLeftPadding(double padding) { setProperty(LeftPadding, padding); }
     double leftPadding() { return propertyDouble(LeftPadding); }
     void setTopPadding(double padding) { setProperty(TopPadding, padding); }
@@ -244,7 +267,38 @@ public:
     void setBottomPadding(double padding) { setProperty(BottomPadding, padding); }
     double bottomPadding() { return propertyDouble(BottomPadding); }
 
-
+    void setLeftBorderWidth(double width) { setProperty(LeftBorderWidth, width); }
+    double leftBorderWidth() { return propertyDouble(LeftBorderWidth); }
+    void setLeftInnerBorderWidth(double width) { setProperty(LeftInnerBorderWidth, width); }
+    double leftInnerBorderWidth() { return propertyDouble(LeftInnerBorderWidth); }
+    void setLeftBorderSpacing(double width) { setProperty(LeftBorderSpacing, width); }
+    double leftBorderSpacing() { return propertyDouble(LeftBorderSpacing); }
+    void setLeftBorderStyle(BorderStyle style) { setProperty(LeftBorderStyle, style); }
+    BorderStyle leftBorderStyle() { return static_cast<BorderStyle> (propertyInt(LeftBorderStyle)); }
+    void setTopBorderWidth(double width) { setProperty(TopBorderWidth, width); }
+    double topBorderWidth() { return propertyDouble(TopBorderWidth); }
+    void setTopInnerBorderWidth(double width) { setProperty(TopInnerBorderWidth, width); }
+    double topInnerBorderWidth() { return propertyDouble(TopInnerBorderWidth); }
+    void setTopBorderSpacing(double width) { setProperty(TopBorderSpacing, width); }
+    double topBorderSpacing() { return propertyDouble(TopBorderSpacing); }
+    void setTopBorderStyle(BorderStyle style) { setProperty(TopBorderStyle, style); }
+    BorderStyle topBorderStyle() { return static_cast<BorderStyle> (propertyInt(TopBorderStyle)); }
+    void setRightBorderWidth(double width) { setProperty(RightBorderWidth, width); }
+    double rightBorderWidth() { return propertyDouble(RightBorderWidth); }
+    void setRightInnerBorderWidth(double width) { setProperty(RightInnerBorderWidth, width); }
+    double rightInnerBorderWidth() { return propertyDouble(RightInnerBorderWidth); }
+    void setRightBorderSpacing(double width) { setProperty(RightBorderSpacing, width); }
+    double rightBorderSpacing() { return propertyDouble(RightBorderSpacing); }
+    void setRightBorderStyle(BorderStyle style) { setProperty(RightBorderStyle, style); }
+    BorderStyle rightBorderStyle() { return static_cast<BorderStyle> (propertyInt(RightBorderStyle)); }
+    void setBottomBorderWidth(double width) { setProperty(BottomBorderWidth, width); }
+    double bottomBorderWidth() { return propertyDouble(BottomBorderWidth); }
+    void setBottomInnerBorderWidth(double width) { setProperty(BottomInnerBorderWidth, width); }
+    double bottomInnerBorderWidth() { return propertyDouble(BottomInnerBorderWidth); }
+    void setBottomBorderSpacing(double width) { setProperty(BottomBorderSpacing, width); }
+    double bottomBorderSpacing() { return propertyDouble(BottomBorderSpacing); }
+    void setBottomBorderStyle(BorderStyle style) { setProperty(BottomBorderStyle, style); }
+    BorderStyle bottomBorderStyle() { return static_cast<BorderStyle> (propertyInt(BottomBorderStyle)); }
 
 
     // ************ properties from QTextFormat

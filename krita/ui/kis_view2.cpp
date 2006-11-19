@@ -34,7 +34,6 @@
 #include <KoCanvasController.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
-#include <KoToolRegistry.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoRuler.h>
@@ -53,6 +52,7 @@
 #include "kis_resource_provider.h"
 #include "kis_resource_provider.h"
 #include "kis_selection_manager.h"
+#include "kis_controlframe.h"
 
 class KisView2::KisView2Private {
 
@@ -101,7 +101,7 @@ public:
     KAction *actualSize;
     KAction *fitToCanvas;
     KisSelectionManager *selectionManager;
-
+    KisControlFrame * controlFrame;
 };
 
 
@@ -242,7 +242,7 @@ void KisView2::createGUI()
     //m_geometryDocker = qobject_cast<KivioShapeGeometry*>(createDockWidget(&geometryFactory));
 
     m_d->statusBar = new KisStatusBar( KoView::statusBar() );
-
+    m_d->controlFrame = new KisControlFrame( mainWindow(), this );
     show();
 
 }

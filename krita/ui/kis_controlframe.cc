@@ -4,6 +4,7 @@
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2004 Sven Langkamp  <sven.langkamp@gmail.com>
+ *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -126,9 +127,9 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView2 * view, con
     action = new KAction( i18n("&Gradients"), view->actionCollection(), "gradients");
     action->setDefaultWidget( m_gradientWidget );
 
-    //m_paintopBox = new KisPaintopBox( view, view, "paintopbox" );
+    m_paintopBox = new KisPaintopBox( view, view, "paintopbox" );
     action = new KAction(i18n("&Painter's Tools"), view->actionCollection(), "paintops");
-    //action->setDefaultWidget( m_paintopBox );
+    action->setDefaultWidget( m_paintopBox );
 
 /**** Temporary hack to test the KoDualColorButton ***/
    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->fgColor(), view, view);
@@ -238,7 +239,11 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
 
     KisAutobrush * m_autobrush = new KisAutobrush(0, "autobrush", i18n("Autobrush"));
     m_brushesTab->addTab( m_autobrush, i18n("Autobrush"));
-    connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated( KisResource* )));
+
+    connect(m_autobrush,
+            SIGNAL(activatedResource(KisResource*)),
+            m_view->resourceProvider(),
+            SLOT(slotBrushActivated( KisResource* )));
 
     KisBrushChooser * m_brushChooser = new KisBrushChooser(0, "brush_chooser");
     m_brushesTab->addTab( m_brushChooser, i18n("Predefined Brushes"));
@@ -246,20 +251,28 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
     KisCustomBrush* customBrushes = new KisCustomBrush(0, "custombrush",
             i18n("Custom Brush"), m_view);
     m_brushesTab->addTab( customBrushes, i18n("Custom Brush"));
-    connect(customBrushes, SIGNAL(activatedResource(KisResource*)),
-            m_view, SLOT(brushActivated(KisResource*)));
+
+    connect(customBrushes,
+            SIGNAL(activatedResource(KisResource*)),
+            m_view->resourceProvider(),
+            SLOT(slotBrushActivated(KisResource*)));
+
 #ifdef HAVE_TEXT_BRUSH
     KisTextBrush* textBrushes = new KisTextBrush(0, "textbrush",
             i18n("Text Brush")/*, m_view*/);
     m_brushesTab->addTab( textBrushes, i18n("Text Brush"));
-    connect(textBrushes, SIGNAL(activatedResource(KisResource*)),
-            m_view, SLOT(brushActivated(KisResource*)));
+
+    connect(textBrushes,
+            SIGNAL(activatedResource(KisResource*)),
+            m_view->resourceProvider(),
+            SLOT(slotBrushActivated(KisResource*)));
 #endif
 
     m_brushChooserPopup->setLayout(l);
     m_brushChooser->setFont(m_font);
     m_brushMediator = new KisResourceMediator( m_brushChooser, this);
-    connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
+    connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)),
+            m_view->resourceProvider(), SLOT(slotBrushActivated(KisResource*)));
 
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->get("ImagePipeBrushServer");
@@ -267,7 +280,9 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
     rServer = KisResourceServerRegistry::instance()->get("BrushServer");
     m_brushMediator->connectServer(rServer);
 
-    KisControlFrame::connect(view, SIGNAL(brushChanged(KisBrush *)), this, SLOT(slotBrushChanged( KisBrush *)));
+    KisControlFrame::connect(view->resourceProvider(), SIGNAL(sigBrushChanged(KisBrush *)),
+                             this, SLOT(slotBrushChanged( KisBrush *)));
+
     m_brushChooser->setCurrent( 0 );
     m_brushMediator->setActiveItem( m_brushChooser->currentItem() );
     customBrushes->setResourceServer(rServer);
@@ -303,15 +318,19 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
 
 
     m_patternMediator = new KisResourceMediator( chooser, view);
-    connect( m_patternMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(patternActivated(KisResource*)));
+    connect( m_patternMediator, SIGNAL(activatedResource(KisResource*)),
+             view->resourceProvider(), SLOT(slotPatternActivated(KisResource*)));
+
     connect(customPatterns, SIGNAL(activatedResource(KisResource*)),
-            view, SLOT(patternActivated(KisResource*)));
+            view->resourceProvider(), SLOT(slotPatternActivated(KisResource*)));
 
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->get("PatternServer");
     m_patternMediator->connectServer(rServer);
 
-    KisControlFrame::connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged( KisPattern *)));
+    KisControlFrame::connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern *)),
+                             this, SLOT(slotPatternChanged( KisPattern *)));
+
     chooser->setCurrent( 0 );
     m_patternMediator->setActiveItem( chooser->currentItem() );
 
@@ -341,16 +360,17 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     m_gradientTab->addTab( m_gradientChooser, i18n("Gradients"));
 
     m_gradientMediator = new KisResourceMediator( m_gradientChooser, view);
-    connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(gradientActivated(KisResource*)));
+    connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)),
+            view->resourceProvider(), SLOT(slotGradientActivated(KisResource*)));
 
 
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->get("GradientServer");
     m_gradientMediator->connectServer(rServer);
 
-    connect(m_gradientChooser, SIGNAL(selected(QTableWidgetItem*)), this, SLOT(slotGradientChanged( )));
+    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KisGradient *)),
+            this, SLOT(slotGradientChanged( KisGradient *)));
 
-    connect(view, SIGNAL(gradientChanged(KisGradient *)), this, SLOT(slotGradientChanged( KisGradient *)));
     m_gradientChooser->setCurrent( 0 );
     m_gradientMediator->setActiveItem( m_gradientChooser->currentItem() );
 }

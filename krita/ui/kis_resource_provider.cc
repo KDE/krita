@@ -216,4 +216,35 @@ void KisResourceProvider::slotLayerActivated( const KisLayerSP l )
 
 }
 
+
+void KisResourceProvider::slotResourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
+{
+    switch ( key ) {
+    case ( KoCanvasResource::ForegroundColor ):
+        emit sigFGColorChanged( res.value<KoColor>() );
+        break;
+    case ( KoCanvasResource::BackgroundColor ):
+        emit sigBGColorChanged( res.value<KoColor>() );
+        break;
+    case ( KoCanvasResource::CurrentBrush ):
+        emit sigBrushChanged( static_cast<KisBrush *>( res.value<void *>() ) );
+        break;
+    case ( KoCanvasResource::CurrentPattern ):
+        emit sigPatternChanged( static_cast<KisPattern *>( res.value<void *>() ) );
+        break;
+    case ( KoCanvasResource::CurrentGradient ):
+        emit sigGradientChanged( static_cast<KisGradient *>( res.value<void *>() ) );
+        break;
+    case ( KoCanvasResource::CurrentPaintop ):
+        emit sigPaintopChanged(res.value<KoID >(), currentPaintopSettings());
+        break;
+    case ( KoCanvasResource::CurrentPaintopSettings ):
+        emit sigPaintopChanged(currentPaintop(), currentPaintopSettings() );
+        break;
+    default:
+        ;
+        // Do nothing
+    };
+}
+
 #include "kis_resource_provider.moc"

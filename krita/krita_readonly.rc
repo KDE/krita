@@ -1,14 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="1">
 
 <MenuBar>
- <Menu name="edit"><text>Edit</text>
-  <Separator/>
-  <Action name="copy"/>
-  <Separator/>
-  <Action name="select_all"/>
-  <Action name="select_none"/>
-  <Action name="flip_selection"/>  
- </Menu>
 
  <Menu name="view"><text>View</text>
   <Action name="zoom_in"/>

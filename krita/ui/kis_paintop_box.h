@@ -28,15 +28,17 @@
 #include <QList>
 #include <QPixmap>
 
-#include "KoInputDevice.h"
+#include <KoInputDevice.h>
 
 class QString;
 class QHBoxLayout;
 
-class KisView2;
-class KisResourceProvider;
 class KoID;
 class KoColorSpace;
+
+class KisView2;
+class KisResourceProvider;
+class KisPaintOpSettings;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -58,7 +60,6 @@ public:
     KisPaintopBox (KisView2 * view,  QWidget * parent, const char * name = 0);
 
     ~KisPaintopBox();
-
 
 signals:
 

@@ -37,6 +37,8 @@
 #include <kstandarddirs.h>
 #include <kinstance.h>
 
+#include <KoToolManager.h>
+
 #include <kis_paintop_registry.h>
 #include <kis_resource_provider.h>
 #include <kis_view2.h>
@@ -50,11 +52,11 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
     : super (parent),
       m_resourceProvider(view->resourceProvider())
 {
+    Q_ASSERT(view != 0);
+
     setObjectName(name);
 
     KAcceleratorManager::setNoAccel(this);
-
-    Q_ASSERT(m_canvasController != 0);
 
     setWindowTitle(i18n("Painter's Toolchest"));
     m_optionWidget = 0;
@@ -77,14 +79,19 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
         // add all paintops, and show/hide them afterwards
         addItem(*it);
     }
-#if 0 // XXX: Port once the view (or resourceprovider) has regained these settings
+
+#if 0 // XXX: Fix this when we have the layerbox and everything else
+      // that can change the current colorspace back (BSAR)
     connect(view, SIGNAL(currentColorSpaceChanged(KoColorSpace*)),
             this, SLOT(colorSpaceChanged(KoColorSpace*)));
-    connect(view, SIGNAL(sigInputDeviceChanged(const KoInputDevice&)),
-            this, SLOT(slotInputDeviceChanged(const KoInputDevice&)));
-
-    setCurrentPaintop(defaultPaintop(view->currentInputDevice()));
 #endif
+    connect(KoToolManager::instance(),
+            SIGNAL(inputDeviceChanged(const KoInputDevice&)),
+            this,
+            SLOT(slotInputDeviceChanged(const KoInputDevice&)));
+
+    setCurrentPaintop(defaultPaintop(KoToolManager::instance()->currentInputDevice()));
+
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -145,7 +152,7 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
         return QPixmap();
     }
 
-    QString fname = KisFactory::instance()->dirs()->findResource("kis_images", pixmapName);
+    QString fname = KisFactory2::instance()->dirs()->findResource("kis_images", pixmapName);
 
     return QPixmap(fname);
 }
@@ -182,7 +189,7 @@ void KisPaintopBox::updateOptionWidget()
         m_layout->invalidate();
     }
 
-    const KisPaintOpSettings *settings = paintopSettings(currentPaintop(), m_canvasController->currentInputDevice());
+    const KisPaintOpSettings *settings = paintopSettings(currentPaintop(), KoToolManager::instance()->currentInputDevice());
 
     if (settings != 0) {
         m_optionWidget = settings->widget();
@@ -196,16 +203,16 @@ void KisPaintopBox::updateOptionWidget()
 
 const KoID& KisPaintopBox::currentPaintop()
 {
-    return m_currentID[m_canvasController->currentInputDevice()];
+    return m_currentID[KoToolManager::instance()->currentInputDevice()];
 }
 
 void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 {
-    m_currentID[m_canvasController->currentInputDevice()] = paintop;
+    m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
 
     updateOptionWidget();
 
-    emit selected(paintop, paintopSettings(paintop, m_canvasController->currentInputDevice()));
+    emit selected(paintop, paintopSettings(paintop, KoToolManager::instance()->currentInputDevice()));
 }
 
 KoID KisPaintopBox::defaultPaintop(const KoInputDevice& inputDevice)

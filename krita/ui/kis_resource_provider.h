@@ -84,6 +84,10 @@ public slots:
     void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettings *paintopSettings);
     void slotLayerActivated( const KisLayerSP layer );
 
+private slots:
+
+    void slotResourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
+
 signals:
 
     void sigFGColorChanged(const KoColor &);

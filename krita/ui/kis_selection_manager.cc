@@ -104,8 +104,6 @@ KisSelectionManager::~KisSelectionManager()
 
 void KisSelectionManager::setup(KActionCollection * collection)
 {
-    kDebug() << "Setup actions\n";
-
     // XXX: setup shortcuts!
 
     m_cut = KStdAction::cut(this,
@@ -247,7 +245,6 @@ void KisSelectionManager::setup(KActionCollection * collection)
     QClipboard *cb = QApplication::clipboard();
     connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
 
-    kdDebug() << "end setup actions\n";
 }
 
 void KisSelectionManager::clipboardDataChanged()
@@ -264,7 +261,6 @@ void KisSelectionManager::addSelectionAction(KAction * action)
 
 void KisSelectionManager::updateGUI()
 {
-    kDebug() << "###########################3 In updateGUI\n";
     Q_ASSERT(m_parent);
     Q_ASSERT(m_clipboard);
 
@@ -321,7 +317,6 @@ void KisSelectionManager::updateGUI()
 //    m_save->setEnabled(enable);
 
 
-    kDebug() << "plugin actions: " << m_pluginActions.count() << endl;
     if ( !m_pluginActions.isEmpty() ) {
         QListIterator<KAction*> i( m_pluginActions );
 
@@ -344,7 +339,6 @@ void KisSelectionManager::updateGUI()
 
     updateStatusBar();
 
-    kDebug() << "#############################33 End update gui\n";
 }
 
 void KisSelectionManager::updateStatusBar()

@@ -27,8 +27,6 @@
 #include <kis_convolution_painter.h>
 #include "convolutionfilters.h"
 
-#include "kis_custom_convolution_filter.h"
-
 KisKernelSP createKernel( qint32 i0, qint32 i1, qint32 i2,
                           qint32 i3, qint32 i4, qint32 i5,
                           qint32 i6, qint32 i7, qint32 i8,
@@ -79,7 +77,6 @@ KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QStringL
         manager->add(KisFilterSP(new KisRightEdgeDetectionFilter()));
         manager->add(KisFilterSP(new KisBottomEdgeDetectionFilter()));
         manager->add(KisFilterSP(new KisLeftEdgeDetectionFilter()));
-        manager->add(KisFilterSP(new KisCustomConvolutionFilter()));
     }
 }
 
@@ -88,81 +85,81 @@ KritaConvolutionFilters::~KritaConvolutionFilters()
 }
 
 KisGaussianBlurFilter::KisGaussianBlurFilter()
-    : KisConvolutionConstFilter(id(), "blur", i18n("&Gaussian Blur"))
+    : KisConvolutionFilter(id(), "blur", i18n("&Gaussian Blur"))
 {
     m_matrix = createKernel( 1, 2, 1, 2, 4, 2, 1, 2, 1, 16, 0);
 }
 
 
 KisSharpenFilter::KisSharpenFilter()
-    : KisConvolutionConstFilter(id(), "enhance", i18n("&Sharpen"))
+    : KisConvolutionFilter(id(), "enhance", i18n("&Sharpen"))
 {
     m_matrix = createKernel( 0, -2, 0, -2, 11, -2, 0, -2, 0, 3, 0);
 }
 
 KisMeanRemovalFilter::KisMeanRemovalFilter()
-    : KisConvolutionConstFilter(id(), "enhance", i18n("&Mean Removal"))
+    : KisConvolutionFilter(id(), "enhance", i18n("&Mean Removal"))
 {
     m_matrix = createKernel( -1, -1, -1, -1, 9, -1, -1, -1, -1, 1, 0);
 }
 
 KisEmbossLaplascianFilter::KisEmbossLaplascianFilter()
-    : KisConvolutionConstFilter(id(), "emboss", i18n("Emboss Laplascian"))
+    : KisConvolutionFilter(id(), "emboss", i18n("Emboss Laplascian"))
 {
     m_matrix = createKernel( -1, 0, -1 , 0, 4, 0 , -1, 0, -1, 1, 127);
 }
 
 KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter()
-    : KisConvolutionConstFilter(id(), "emboss", i18n("Emboss in All Directions"))
+    : KisConvolutionFilter(id(), "emboss", i18n("Emboss in All Directions"))
 {
     m_matrix = createKernel( -1, -1, -1 , -1, 8, -1 , -1, -1, -1, 1, 127);
 }
 
 KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter()
-    : KisConvolutionConstFilter(id(), "emboss", i18n("Emboss Horizontal && Vertical"))
+    : KisConvolutionFilter(id(), "emboss", i18n("Emboss Horizontal && Vertical"))
 {
     m_matrix = createKernel( 0, -1, 0 , -1, 4, -1 , 0, -1, 0, 1, 127);
 }
 
 KisEmbossVerticalFilter::KisEmbossVerticalFilter()
-    : KisConvolutionConstFilter(id(), "emboss", i18n("Emboss Vertical Only"))
+    : KisConvolutionFilter(id(), "emboss", i18n("Emboss Vertical Only"))
 {
     m_matrix = createKernel( 0, -1, 0 , 0, 2, 0 , 0, -1, 0, 1, 127);
 }
 
 KisEmbossHorizontalFilter::KisEmbossHorizontalFilter() :
-    KisConvolutionConstFilter(id(), "emboss", i18n("Emboss Horizontal Only"))
+    KisConvolutionFilter(id(), "emboss", i18n("Emboss Horizontal Only"))
 {
     m_matrix = createKernel( 0, 0, 0 , -1, 4, -1 , 0, 0, 0, 1, 127);
 
 }
 
 KisEmbossDiagonalFilter::KisEmbossDiagonalFilter()
-    : KisConvolutionConstFilter(id(), "edge", i18n("Top Edge Detection"))
+    : KisConvolutionFilter(id(), "edge", i18n("Top Edge Detection"))
 {
     m_matrix = createKernel( -1, 0, -1 , 0, 4, 0 , -1, 0, -1, 1, 127);
 }
 
 
 KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter()
-    : KisConvolutionConstFilter(id(), "edge", i18n("Top Edge Detection"))
+    : KisConvolutionFilter(id(), "edge", i18n("Top Edge Detection"))
 {
     m_matrix = createKernel( 1, 1, 1 , 0, 0, 0 , -1, -1, -1, 1, 127);
 
 }
 
 KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter()
-    : KisConvolutionConstFilter(id(), "edge", i18n("Right Edge Detection"))
+    : KisConvolutionFilter(id(), "edge", i18n("Right Edge Detection"))
 {
     m_matrix = createKernel(  -1, 0, 1 , -1, 0, 1 , -1, 0, 1,  1, 127);
 }
 
-KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter() : KisConvolutionConstFilter(id(), "edge", i18n("Bottom Edge Detection"))
+KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter() : KisConvolutionFilter(id(), "edge", i18n("Bottom Edge Detection"))
 {
     m_matrix = createKernel( -1, -1, -1 , 0, 0, 0 , 1, 1, 1, 1, 127);
 }
 
-KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionConstFilter(id(), "edge", i18n("Left Edge Detection"))
+KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionFilter(id(), "edge", i18n("Left Edge Detection"))
 {
     m_matrix = createKernel( 1, 0, -1 , 1, 0, -1 , 1, 0, -1, 1, 127);
 }

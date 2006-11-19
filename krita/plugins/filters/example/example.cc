@@ -63,7 +63,7 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), "adjust", i18n("&Invert"))
 {
 }
 
-void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* /*config*/)
 {
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());

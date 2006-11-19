@@ -25,64 +25,17 @@
 #include "kis_filter_configuration.h"
 #include "kis_convolution_painter.h"
 
-class KisConvolutionConfiguration : public KisFilterConfiguration {
-public:
-    KisConvolutionConfiguration(const QString & name, KisKernel * matrix)
-        : KisFilterConfiguration( name, 1 )
-        , m_matrix(matrix)
-    {}
-
-    void fromXML(const QString & s);
-    QString toString();
-
-public:
-
-    inline KisKernelSP matrix() { return m_matrix; }
-
-private:
-
-    KisKernelSP m_matrix;
-
-};
-
-
 class KisConvolutionFilter : public KisFilter {
-
     Q_OBJECT
-
 public:
-
     KisConvolutionFilter(const KoID& id, const QString & category, const QString & entry)
         : KisFilter( id, category, entry )
         {}
-
 public:
-
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     virtual bool supportsIncrementalPainting() { return false; }
     virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; }
     virtual int overlapMarginNeeded(KisFilterConfiguration* c) const;
-};
-
-
-/**
- * This class is used for a convolution filter with a constant matrix
- */
-class KisConvolutionConstFilter : public KisConvolutionFilter {
-
-public:
-
-    KisConvolutionConstFilter(const KoID& id, const QString & category, const QString & entry) 
-	: KisConvolutionFilter(id, category, entry) 
-    {}
-
-    virtual ~KisConvolutionConstFilter() {}
-
-public:
-
-    virtual KisFilterConfiguration * configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration() { return configuration(0); }
-
 protected:
 
     KisKernelSP m_matrix;

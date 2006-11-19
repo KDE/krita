@@ -24,7 +24,7 @@
 #include <kparts/plugin.h>
 #include "kis_convolution_filter.h"
 
-class KisGaussianBlurFilter : public KisConvolutionConstFilter {
+class KisGaussianBlurFilter : public KisConvolutionFilter {
 public:
     KisGaussianBlurFilter();
 public:
@@ -33,7 +33,7 @@ public:
     virtual bool supportsIncrementalPainting() { return false; }
 };
 
-class KisSharpenFilter : public KisConvolutionConstFilter {
+class KisSharpenFilter : public KisConvolutionFilter {
 public:
     KisSharpenFilter();
 public:
@@ -42,7 +42,7 @@ public:
     virtual bool supportsIncrementalPainting() { return false; }
 };
 
-class KisMeanRemovalFilter : public KisConvolutionConstFilter {
+class KisMeanRemovalFilter : public KisConvolutionFilter {
 public:
     KisMeanRemovalFilter();
 public:
@@ -51,7 +51,7 @@ public:
 
 };
 
-class KisEmbossLaplascianFilter : public KisConvolutionConstFilter {
+class KisEmbossLaplascianFilter : public KisConvolutionFilter {
 public:
     KisEmbossLaplascianFilter();
 public:
@@ -60,7 +60,7 @@ public:
 
 };
 
-class KisEmbossInAllDirectionsFilter : public KisConvolutionConstFilter {
+class KisEmbossInAllDirectionsFilter : public KisConvolutionFilter {
 public:
     KisEmbossInAllDirectionsFilter();
 public:
@@ -69,7 +69,7 @@ public:
 
 };
 
-class KisEmbossHorizontalVerticalFilter : public KisConvolutionConstFilter {
+class KisEmbossHorizontalVerticalFilter : public KisConvolutionFilter {
 public:
     KisEmbossHorizontalVerticalFilter();
 public:
@@ -78,7 +78,7 @@ public:
 
 };
 
-class KisEmbossVerticalFilter : public KisConvolutionConstFilter {
+class KisEmbossVerticalFilter : public KisConvolutionFilter {
 public:
     KisEmbossVerticalFilter();
 public:
@@ -87,7 +87,7 @@ public:
 
 };
 
-class KisEmbossHorizontalFilter : public KisConvolutionConstFilter {
+class KisEmbossHorizontalFilter : public KisConvolutionFilter {
 public:
     KisEmbossHorizontalFilter();
 public:
@@ -96,7 +96,7 @@ public:
 
 };
 
-class KisEmbossDiagonalFilter : public KisConvolutionConstFilter {
+class KisEmbossDiagonalFilter : public KisConvolutionFilter {
 public:
     KisEmbossDiagonalFilter();
 public:
@@ -105,7 +105,7 @@ public:
 
 };
 
-class KisTopEdgeDetectionFilter : public KisConvolutionConstFilter {
+class KisTopEdgeDetectionFilter : public KisConvolutionFilter {
 public:
     KisTopEdgeDetectionFilter();
 public:
@@ -114,7 +114,7 @@ public:
 
 };
 
-class KisRightEdgeDetectionFilter : public KisConvolutionConstFilter {
+class KisRightEdgeDetectionFilter : public KisConvolutionFilter {
 public:
     KisRightEdgeDetectionFilter();
 public:
@@ -123,7 +123,7 @@ public:
 
 };
 
-class KisBottomEdgeDetectionFilter : public KisConvolutionConstFilter {
+class KisBottomEdgeDetectionFilter : public KisConvolutionFilter {
 public:
     KisBottomEdgeDetectionFilter();
 public:
@@ -132,7 +132,7 @@ public:
 
 };
 
-class KisLeftEdgeDetectionFilter : public KisConvolutionConstFilter {
+class KisLeftEdgeDetectionFilter : public KisConvolutionFilter {
 public:
     KisLeftEdgeDetectionFilter();
 public:

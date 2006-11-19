@@ -106,67 +106,23 @@ namespace {
     }
 
 }
-// KisBumpmapConfiguration::KisBumpmapConfiguration()
-//     : KisFilterConfiguration( "bumpmap", 1 )
-// {
-//     bumpmap.clear();
-//     azimuth = 135.0;
-//     elevation = 45.0;
-//     depth = 3;
-//     xofs = 0;
-//     yofs = 0;
-//     waterlevel = 0;
-//     ambient = 0;
-//     compensate = true;
-//     invert = false;
-//     tiled = true;
-//     type = krita::LINEAR;
-// }
-// void KisBumpmapConfiguration::fromXML(const QString & s)
-// {
-//     KisFilterConfiguration::fromXML( s );
-// 
-//     bumpmap.clear();
-//     azimuth = 135.0;
-//     elevation = 45.0;
-//     depth = 3;
-//     xofs = 0;
-//     yofs = 0;
-//     waterlevel = 0;
-//     ambient = 0;
-//     compensate = true;
-//     invert = false;
-//     tiled = true;
-//     type = krita::LINEAR;
-// 
-//     QVariant v;
-// 
-//     v = getProperty("bumpmap");
-//     if (v.isValid()) { bumpmap = v.toString(); }
-//     v = getProperty("azimuth");
-//     if (v.isValid()) { azimuth = v.toDouble(); }
-//     v = getProperty("elevation");
-//     if (v.isValid()) { elevation = v.toDouble();}
-//     v = getProperty("depth");
-//     if (v.isValid()) { depth = v.toDouble(); }
-//     v = getProperty("xofs");
-//     if (v.isValid()) { xofs = v.toInt(); }
-//     v = getProperty("yofs");
-//     if (v.isValid()) { yofs = v.toInt();}
-//     v = getProperty("waterlevel");
-//     if (v.isValid()) { waterlevel = v.toInt();}
-//     v = getProperty("ambient");
-//     if (v.isValid()) { ambient = v.toInt();}
-//     v = getProperty("compensate");
-//     if (v.isValid()) { compensate = v.toBool(); }
-//     v = getProperty("invert");
-//     if (v.isValid()) { invert = v.toBool(); }
-//     v = getProperty("tiled");
-//     if (v.isValid()) { tiled = v.toBool();}
-//     v = getProperty("type");
-//     if (v.isValid()) { type = (enumBumpmapType)v.toInt(); }
-// 
-// }
+
+KisFilterConfiguration* KisFilterBumpmap::designerConfiguration(KisPaintDeviceSP)
+{
+    KisFilterConfiguration* config = new KisFilterConfiguration(m_id.id(), 0);
+    config->setProperty("bumpmap", "");
+    config->setProperty("azimuth", 135.0);
+    config->setProperty("elevation", 45.0);
+    config->setProperty("depth", 3);
+    config->setProperty("xofs", 0);
+    config->setProperty("yofs", 0);
+    config->setProperty("waterlevel",0);
+    config->setProperty("ambient", 0);
+    config->setProperty("compensate", true);
+    config->setProperty("invert", false);
+    config->setProperty("tiled", true);
+    config->setProperty("type",krita::LINEAR);
+}
 
 
 void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)

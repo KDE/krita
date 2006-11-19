@@ -80,6 +80,7 @@ public:
     virtual bool supportsIncrementalPainting() { return true; }
 
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* designerConfiguration(KisPaintDeviceSP);
 };
 
 class KisBumpmapConfigWidget : public KisFilterConfigWidget {

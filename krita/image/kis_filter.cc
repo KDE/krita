@@ -32,17 +32,17 @@ KisFilter::KisFilter(const KoID& id, const QString & category, const QString & e
     m_bookmarkedConfig.insert(i18n("default configuration"), designerConfiguration(0));
 }
 
-KisFilterConfiguration * KisFilter::designerConfiguration(KisPaintDeviceSP)
+KisFilterConfiguration * KisFilter::designerConfiguration(const KisPaintDeviceSP)
 {
     return new KisFilterConfiguration(m_id.id(), 0);
 }
 
-KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, KisPaintDeviceSP)
+KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, const KisPaintDeviceSP)
 {
     return 0;
 }
 
-KisFilterConfiguration * KisFilter::defaultConfiguration(KisPaintDeviceSP pd)
+KisFilterConfiguration * KisFilter::defaultConfiguration(const KisPaintDeviceSP pd)
 {
  return designerConfiguration(pd); //TODO: implement the bookmarking mechanism
 }

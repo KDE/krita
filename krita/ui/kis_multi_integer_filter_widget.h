@@ -65,17 +65,19 @@ class KRITAUI_EXPORT KisMultiIntegerFilterWidget : public KisFilterConfigWidget
 {
     Q_OBJECT
 public:
-    KisMultiIntegerFilterWidget(QWidget * parent, const QString & caption, vKisIntegerWidgetParam iwparam);
+    KisMultiIntegerFilterWidget(QString filterid, QWidget * parent, const QString & caption, vKisIntegerWidgetParam iwparam);
 
     virtual void setConfiguration(KisFilterConfiguration * config);
+    virtual KisFilterConfiguration* configuration() const;
 
 public:
-    inline qint32 nbValues() { return m_nbintegerWidgets; };
+    inline qint32 nbValues() const { return m_nbintegerWidgets; };
     inline qint32 valueAt( qint32 i ) { return m_integerWidgets[i]->value(); };
 
 private:
     qint32 m_nbintegerWidgets;
     KisDelayedActionIntegerInput** m_integerWidgets;
+    QString m_filterid;
 };
 
 #endif

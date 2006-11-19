@@ -83,7 +83,7 @@ public:
      * configuration widget.
      * @return the default configuration of this widget
      */
-    KisFilterConfiguration * defaultConfiguration(KisPaintDeviceSP);
+    virtual KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP);
 
     /**
      * If true, this filter can be used in painting tools as a paint operation
@@ -100,7 +100,7 @@ public:
      * Return a list of default configuration to demonstrates the use of the filter
      * @return a list with a null element if the filter do not use a configuration
      */
-    virtual QHash<QString, KisFilterConfiguration*> bookmarkedConfigurations( KisPaintDeviceSP )
+    virtual QHash<QString, KisFilterConfiguration*> bookmarkedConfigurations( const KisPaintDeviceSP )
     {  return m_bookmarkedConfig; }
 
     /**
@@ -173,7 +173,7 @@ public:
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
      */
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev);
 
     virtual void cancel() { m_cancelRequested = true; }
 
@@ -181,7 +181,7 @@ public:
     bool progressEnabled() const { return m_progressEnabled; }
     inline bool cancelRequested() const { return m_progressEnabled && m_cancelRequested; }
 protected:
-    virtual KisFilterConfiguration* designerConfiguration(KisPaintDeviceSP); // FIXME: this name sucks so much
+    virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP); // FIXME: this name sucks so much
 protected slots:
 
     // Convenience functions for progress display.

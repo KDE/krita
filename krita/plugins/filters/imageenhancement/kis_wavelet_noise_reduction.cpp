@@ -42,32 +42,27 @@ KisFilterConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWid
 {
     vKisDoubleWidgetParam param;
     param.push_back( KisDoubleWidgetParam( 0.0, 256.0, BEST_WAVELET_THRESHOLD_VALUE, i18n("Threshold"), "threshold" ) );
-    return new KisMultiDoubleFilterWidget(parent, id().id().toAscii(), id().id(), param );
+    return new KisMultiDoubleFilterWidget(id().id(), parent, id().id(), param );
 }
 
-KisFilterConfiguration* KisWaveletNoiseReduction::configuration(QWidget* nwidget )
+KisFilterConfiguration* KisWaveletNoiseReduction::designerConfiguration(const KisPaintDeviceSP)
 {
-    KisMultiDoubleFilterWidget* widget = (KisMultiDoubleFilterWidget*) nwidget;
-    if( widget == 0 )
-    {
-        return new KisWaveletNoiseReductionConfiguration( BEST_WAVELET_THRESHOLD_VALUE );
-    } else {
-        return new KisWaveletNoiseReductionConfiguration( widget->valueAt( 0 ) );
-    }
+    KisFilterConfiguration* config = new KisFilterConfiguration(m_id.id(), 0);
+    config->setProperty("threshold", BEST_WAVELET_THRESHOLD_VALUE);
+    return config;
 }
 
 void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& areaSize, KisFilterConfiguration* config)
 {
 
-    float threshold = 1.0;
+    float threshold;
 
-    if(config !=0)
+    if(!config)
     {
-        KisWaveletNoiseReductionConfiguration* configWNRC = (KisWaveletNoiseReductionConfiguration*)config;
-        kDebug() << "threshold: " << configWNRC->threshold() << endl;
-        threshold = configWNRC->threshold();
+        config = defaultConfiguration(src);
     }
-
+    
+    threshold = config->getDouble("threshold", BEST_WAVELET_THRESHOLD_VALUE);
 
     qint32 depth = src->colorSpace()->nColorChannels();
 

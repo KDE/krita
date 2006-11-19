@@ -53,6 +53,12 @@ KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), "emboss", i18n("&Emboss wit
 {
 }
 
+KisFilterConfiguration* KisEmbossFilter::designerConfiguration(const KisPaintDeviceSP)
+{
+    KisFilterConfiguration* config = new KisFilterConfiguration(m_id.id(), 0);
+    config->setProperty("depth",30);
+}
+
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
 
 /* Function to apply the Emboss effect
@@ -70,7 +76,7 @@ void KisEmbossFilter::KisEmbossFilter::process(const KisPaintDeviceSP src, const
 {
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 embossdepth = ((KisEmbossFilterConfiguration*)configuration)->depth();
+    quint32 embossdepth = configuration->getInt("depth",30);
 
     //the actual filter function from digikam. It needs a pointer to a quint8 array
     //with the actual pixel data.
@@ -146,22 +152,11 @@ int KisEmbossFilter::Lim_Max (int Now, int Up, int Max)
     return (Up);
 }
 
-KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
+KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth"), "depth" ) );
-    KisFilterConfigWidget * w = new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
+    KisFilterConfigWidget * w = new KisMultiIntegerFilterWidget( id().id(), parent, id().id(), param );
     Q_CHECK_PTR(w);
     return w;
-}
-
-KisFilterConfiguration* KisEmbossFilter::configuration(QWidget* nwidget)
-{
-    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-    if( widget == 0 )
-    {
-        return new KisEmbossFilterConfiguration( 30 );
-    } else {
-        return new KisEmbossFilterConfiguration( widget->valueAt( 0 ) );
-    }
 }

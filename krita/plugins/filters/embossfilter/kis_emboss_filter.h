@@ -24,18 +24,6 @@
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
 
-class KisEmbossFilterConfiguration : public KisFilterConfiguration
-{
-public:
-    KisEmbossFilterConfiguration(quint32 depth)
-        : KisFilterConfiguration( "emboss", 1 )
-    {
-        setProperty("depth", depth);
-    }
-public:
-    inline quint32 depth() { return getInt("depth"); }
-};
-
 class KisEmbossFilter : public KisFilter
 {
 public:
@@ -45,12 +33,10 @@ public:
     static inline KoID id() { return KoID("emboss", i18n("Emboss")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-    { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisEmbossFilterConfiguration(100)); return list; }
-    public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*);
-    virtual KisFilterConfiguration* configuration() {return new KisEmbossFilterConfiguration( 30 );}
+public:
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+protected:
+    virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP);
 
 private:
     inline int Lim_Max (int Now, int Up, int Max);

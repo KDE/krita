@@ -79,8 +79,8 @@ public:
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return true; }
 
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* designerConfiguration(KisPaintDeviceSP);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP);
 };
 
 class KisBumpmapConfigWidget : public KisFilterConfigWidget {
@@ -88,7 +88,7 @@ class KisBumpmapConfigWidget : public KisFilterConfigWidget {
     Q_OBJECT
 
 public:
-    KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f = 0 );
+    KisBumpmapConfigWidget(KisFilter * filter, const KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f = 0 );
     virtual ~KisBumpmapConfigWidget() {}
 
     void setConfiguration(KisFilterConfiguration * config);

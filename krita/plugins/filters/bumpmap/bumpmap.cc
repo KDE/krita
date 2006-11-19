@@ -107,7 +107,7 @@ namespace {
 
 }
 
-KisFilterConfiguration* KisFilterBumpmap::designerConfiguration(KisPaintDeviceSP)
+KisFilterConfiguration* KisFilterBumpmap::designerConfiguration(const KisPaintDeviceSP)
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(m_id.id(), 0);
     config->setProperty("bumpmap", "");
@@ -380,7 +380,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
 
 }
 
-KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev)
 {
     KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(this, dev, parent);
 
@@ -389,7 +389,7 @@ KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* par
 }
 
 
-KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f)
+KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, const KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f)
     : KisFilterConfigWidget(parent, f),
       m_filter(filter),
       m_device(dev)

@@ -61,14 +61,16 @@ class KRITAUI_EXPORT KisMultiDoubleFilterWidget : public KisFilterConfigWidget
 {
     Q_OBJECT
 public:
-    KisMultiDoubleFilterWidget(QWidget * parent, const QString & caption, vKisDoubleWidgetParam dwparam);
+    KisMultiDoubleFilterWidget(QString filterid, QWidget * parent, const QString & caption, vKisDoubleWidgetParam dwparam);
     virtual void setConfiguration(KisFilterConfiguration * cfg);
+    virtual KisFilterConfiguration* configuration() const;
 public:
-    inline qint32 nbValues() { return m_nbdoubleWidgets; };
+    inline qint32 nbValues() const { return m_nbdoubleWidgets; };
     inline double valueAt( qint32 i ) { return m_doubleWidgets[i]->value(); };
 private:
     KisDelayedActionDoubleInput** m_doubleWidgets;
     qint32 m_nbdoubleWidgets;
+    QString m_filterid;
 };
 
 #endif

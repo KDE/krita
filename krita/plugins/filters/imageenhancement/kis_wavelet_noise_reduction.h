@@ -26,20 +26,6 @@
 
 #define BEST_WAVELET_THRESHOLD_VALUE 7.0
 
-class KisWaveletNoiseReductionConfiguration
-    : public KisFilterConfiguration
-{
-public:
-    KisWaveletNoiseReductionConfiguration(double nt)
-        : KisFilterConfiguration( "waveletnoisereducer",  1 )
-    {
-           setProperty("threshold", nt);
-    }
-        
-    double threshold() { return getDouble("threshold"); }
-};
-
-
 /**
 @author Cyrille Berger
 */
@@ -52,8 +38,6 @@ public:
 
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    virtual KisFilterConfiguration * configuration(QWidget* nwidget);
-    virtual KisFilterConfiguration * configuration() {return new KisWaveletNoiseReductionConfiguration( BEST_WAVELET_THRESHOLD_VALUE );}
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
     static inline KoID id() { return KoID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); }
@@ -61,6 +45,8 @@ public:
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }
     virtual bool supportsThreading() { return false; }
+private:
+    virtual KisFilterConfiguration * designerConfiguration(const KisPaintDeviceSP);
 
 };
 

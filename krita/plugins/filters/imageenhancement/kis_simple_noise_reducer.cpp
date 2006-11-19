@@ -37,23 +37,20 @@ KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 {
 }
 
-KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
+KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 0, 255, 50, i18n("Threshold"), "threshold" ) );
     param.push_back( KisIntegerWidgetParam( 0, 10, 1, i18n("Window size"), "windowsize") );
-    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param );
 }
 
-KisFilterConfiguration* KisSimpleNoiseReducer::configuration(QWidget* nwidget)
+KisFilterConfiguration * KisSimpleNoiseReducer::designerConfiguration(const KisPaintDeviceSP)
 {
-    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-    if( widget == 0 )
-    {
-        return new KisSimpleNoiseReducerConfiguration( 50, 1);
-    } else {
-        return new KisSimpleNoiseReducerConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
-    }
+    KisFilterConfiguration* config = new KisFilterConfiguration(m_id.id(), 0);
+    config->setProperty("threshold", 50);
+    config->setProperty("windowsize", 1);
+    return config;
 }
 
 inline int ABS(int v)
@@ -65,15 +62,13 @@ inline int ABS(int v)
 void KisSimpleNoiseReducer::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
     int threshold, windowsize;
-    if(config !=0)
+    if(config ==0)
     {
-        KisSimpleNoiseReducerConfiguration* configSNRC = (KisSimpleNoiseReducerConfiguration*)config;
-        threshold = configSNRC->threshold();
-        windowsize = configSNRC->windowsize();
-    } else {
-        threshold = 50;
-        windowsize = 1;
+        config = defaultConfiguration(src);
     }
+    
+    threshold = config->getInt("threshold", 50);
+    windowsize = config->getInt("windowsize", 1);
     
     KoColorSpace* cs = src->colorSpace();
     

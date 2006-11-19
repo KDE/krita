@@ -305,10 +305,10 @@ public:
     /// set a user-visible name on the style.
     void setName(const QString &name) { m_name = name; }
 
-    /// each style has a unique ID (non persistant) given out by the styleManager
+    /// each style has a unique ID (non persistent) given out by the styleManager
     int styleId() const { return propertyInt(StyleId); }
 
-    /// each style has a unique ID (non persistant) given out by the styleManager
+    /// each style has a unique ID (non persistent) given out by the styleManager
     void setStyleId(int id) { setProperty(StyleId, id); if(m_next == 0) m_next=id; }
 
     /**

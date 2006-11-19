@@ -74,25 +74,29 @@ public:
         LeftInnerBorderWidth,   ///< In case of style being 'double' the thickness of the inner border line
         LeftBorderSpacing,      ///< In case of style being 'double' the space between the inner and outer border lines
         LeftBorderStyle,        ///< The border style. (see BorderStyle)
+        LeftBorderColor,        ///< The border Color
         TopBorderWidth,         ///< The thickness of the border, or 0 if there is no border
         TopInnerBorderWidth,    ///< In case of style being 'double' the thickness of the inner border line
         TopBorderSpacing,       ///< In case of style being 'double' the space between the inner and outer border lines
         TopBorderStyle,         ///< The border style. (see BorderStyle)
+        TopBorderColor,         ///< The border Color
         RightBorderWidth,       ///< The thickness of the border, or 0 if there is no border
         RightInnerBorderWidth,  ///< In case of style being 'double' the thickness of the inner border line
         RightBorderSpacing,     ///< In case of style being 'double' the space between the inner and outer border lines
         RightBorderStyle,       ///< The border style. (see BorderStyle)
+        RightBorderColor,       ///< The border Color
         BottomBorderWidth,      ///< The thickness of the border, or 0 if there is no border
         BottomInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
         BottomBorderSpacing,    ///< In case of style being 'double' the space between the inner and outer border lines
-        BottomBorderStyle      ///< The border style. (see BorderStyle)
+        BottomBorderStyle,      ///< The border style. (see BorderStyle)
+        BottomBorderColor,      ///< The border Color
 
 // do 15.5.24
 // continue at 15.5.28
     };
 
     enum BorderStyle {
-        None,   ///< no border. This value forces the computed value of 'border-width' to be '0'.
+        BorderNone,   ///< no border. This value forces the computed value of 'border-width' to be '0'.
         BorderDotted,   ///< The border is a series of dots.
         BorderDashed,   ///< The border is a series of short line segments.
         BorderSolid,    ///< The border is a single line segment.
@@ -103,7 +107,6 @@ public:
         BorderOutset,   ///< The opposite of 'inset': the border makes the entire box look as though it were coming out of the canvas.
 
         // kword lagacy
-        BorderDotsPattern,
         BorderDashDotPattern,
         BorderDashDotDotPattern
     };
@@ -274,6 +277,8 @@ public:
     double leftBorderSpacing() { return propertyDouble(LeftBorderSpacing); }
     void setLeftBorderStyle(BorderStyle style) { setProperty(LeftBorderStyle, style); }
     BorderStyle leftBorderStyle() { return static_cast<BorderStyle> (propertyInt(LeftBorderStyle)); }
+    void setLeftBorderColor(QColor color) { setProperty(LeftBorderColor, color); }
+    QColor leftBorderColor() { return propertyColor(LeftBorderColor); }
     void setTopBorderWidth(double width) { setProperty(TopBorderWidth, width); }
     double topBorderWidth() { return propertyDouble(TopBorderWidth); }
     void setTopInnerBorderWidth(double width) { setProperty(TopInnerBorderWidth, width); }
@@ -282,6 +287,8 @@ public:
     double topBorderSpacing() { return propertyDouble(TopBorderSpacing); }
     void setTopBorderStyle(BorderStyle style) { setProperty(TopBorderStyle, style); }
     BorderStyle topBorderStyle() { return static_cast<BorderStyle> (propertyInt(TopBorderStyle)); }
+    void setTopBorderColor(QColor color) { setProperty(TopBorderColor, color); }
+    QColor topBorderColor() { return propertyColor(TopBorderColor); }
     void setRightBorderWidth(double width) { setProperty(RightBorderWidth, width); }
     double rightBorderWidth() { return propertyDouble(RightBorderWidth); }
     void setRightInnerBorderWidth(double width) { setProperty(RightInnerBorderWidth, width); }
@@ -290,6 +297,8 @@ public:
     double rightBorderSpacing() { return propertyDouble(RightBorderSpacing); }
     void setRightBorderStyle(BorderStyle style) { setProperty(RightBorderStyle, style); }
     BorderStyle rightBorderStyle() { return static_cast<BorderStyle> (propertyInt(RightBorderStyle)); }
+    void setRightBorderColor(QColor color) { setProperty(RightBorderColor, color); }
+    QColor rightBorderColor() { return propertyColor(RightBorderColor); }
     void setBottomBorderWidth(double width) { setProperty(BottomBorderWidth, width); }
     double bottomBorderWidth() { return propertyDouble(BottomBorderWidth); }
     void setBottomInnerBorderWidth(double width) { setProperty(BottomInnerBorderWidth, width); }
@@ -298,6 +307,8 @@ public:
     double bottomBorderSpacing() { return propertyDouble(BottomBorderSpacing); }
     void setBottomBorderStyle(BorderStyle style) { setProperty(BottomBorderStyle, style); }
     BorderStyle bottomBorderStyle() { return static_cast<BorderStyle> (propertyInt(BottomBorderStyle)); }
+    void setBottomBorderColor(QColor color) { setProperty(BottomBorderColor, color); }
+    QColor bottomBorderColor() { return propertyColor(BottomBorderColor); }
 
 
     // ************ properties from QTextFormat
@@ -392,6 +403,7 @@ private:
     double propertyDouble(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
+    QColor propertyColor(int key) const;
     QVariant const *get(int key) const;
 
 private:

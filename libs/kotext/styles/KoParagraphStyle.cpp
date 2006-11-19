@@ -118,6 +118,15 @@ bool KoParagraphStyle::propertyBoolean(int key) const {
     return variant->toBool();
 }
 
+QColor KoParagraphStyle::propertyColor(int key) const {
+    const QVariant *variant = get(key);
+    if(variant == 0) {
+        QColor color;
+        return color;
+    }
+    return qvariant_cast<QColor>(*variant);
+}
+
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
     // copy all relevant properties.
     static const int properties[] = {
@@ -171,6 +180,10 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
         BottomInnerBorderWidth,
         BottomBorderSpacing,
         BottomBorderStyle,
+        LeftBorderColor,
+        TopBorderColor,
+        RightBorderColor,
+        BottomBorderColor,
         -1
     };
 

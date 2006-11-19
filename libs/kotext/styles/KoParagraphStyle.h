@@ -103,7 +103,6 @@ public:
         BorderOutset,   ///< The opposite of 'inset': the border makes the entire box look as though it were coming out of the canvas.
 
         // kword lagacy
-        BorderDashPattern,
         BorderDotsPattern,
         BorderDashDotPattern,
         BorderDashDotDotPattern

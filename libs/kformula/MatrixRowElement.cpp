@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2001 Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -126,7 +127,8 @@ void MatrixRowElement::goInside( FormulaCursor* cursor )
 
 void MatrixRowElement::calcSizes( const ContextStyle& context,
                                   ContextStyle::TextStyle tstyle,
-                                  ContextStyle::IndexStyle istyle )
+                                  ContextStyle::IndexStyle istyle,
+                                  StyleAttributes& style )
 {
     luPt mySize = context.getAdjustedSize( tstyle );
     QFont font = context.getDefaultFont();
@@ -141,7 +143,7 @@ void MatrixRowElement::calcSizes( const ContextStyle& context,
     int tabCount = 0;
     for ( int i = 0; i < count; ++i ) {
         MatrixEntryElement* line = m_matrixEntryElements[i];
-        line->calcSizes( context, tstyle, istyle );
+        line->calcSizes( context, tstyle, istyle, style );
         tabCount = qMax( tabCount, line->tabCount() );
 
         height += leading;
@@ -187,6 +189,7 @@ void MatrixRowElement::draw( QPainter& painter, const LuPixelRect& r,
                              const ContextStyle& context,
                              ContextStyle::TextStyle tstyle,
                              ContextStyle::IndexStyle istyle,
+                             StyleAttributes& style,
                              const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
@@ -212,7 +215,7 @@ void MatrixRowElement::draw( QPainter& painter, const LuPixelRect& r,
 
     for ( int i = 0; i < count; ++i ) {
         MatrixEntryElement* line = m_matrixEntryElements[i];
-        line->draw( painter, r, context, tstyle, istyle, myPos );
+        line->draw( painter, r, context, tstyle, istyle, style, myPos );
     }
 }
 

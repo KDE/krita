@@ -56,11 +56,13 @@ void MatrixEntryElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 
 
 
-void MatrixEntryElement::calcSizes( const ContextStyle& context, ContextStyle::TextStyle tstyle,
-                                          ContextStyle::IndexStyle istyle )
+void MatrixEntryElement::calcSizes( const ContextStyle& context, 
+                                    ContextStyle::TextStyle tstyle,
+                                    ContextStyle::IndexStyle istyle,
+                                    StyleAttributes& style )
 {
     tabs.clear();
-    SequenceElement::calcSizes( context, tstyle, istyle );
+    SequenceElement::calcSizes( context, tstyle, istyle, style );
 }
 
 

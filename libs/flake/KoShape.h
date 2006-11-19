@@ -295,7 +295,7 @@ public:
     /**
      * Makes it possible for the user to select this shape.
      * This parameter defaults to true.
-     * @param locked when true; set the shape to be selectable.
+     * @param selectable when true; set the shape to be selectable.
      */
     void setSelectable(bool selectable) { m_selectable = selectable; }
     /**

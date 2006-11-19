@@ -38,6 +38,11 @@ namespace {
 
 #include "kis_integer_maths.h"
 
+#ifndef HAVE_POWF
+#undef powf
+#define powf pow
+#endif
+
 //#define HALF_MAX ((half)1.0f) //temp
 
 #define EPSILON HALF_EPSILON

@@ -39,6 +39,11 @@ namespace {
 
 #include "kis_integer_maths.h"
 
+#ifndef HAVE_POWF
+#undef powf
+#define powf pow
+#endif
+
 #define FLOAT_MAX 1.0f //temp
 
 #define EPSILON 1e-6

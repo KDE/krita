@@ -40,6 +40,8 @@ KoTextShape::~KoTextShape() {
 }
 
 void KoTextShape::paint(QPainter &painter, const KoViewConverter &converter) {
+    if(m_textShapeData->endPosition() < 0) // not layouted yet.
+        return;
     painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
     applyConversion(painter, converter);
     QAbstractTextDocumentLayout::PaintContext pc;

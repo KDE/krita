@@ -38,6 +38,8 @@
 #include <KoShape.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
+#include <KoToolBoxFactory.h>
+#include <KoShapeSelectorFactory.h>
 
 #include <kis_image.h>
 
@@ -217,6 +219,12 @@ void KisView2::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
 
 void KisView2::createGUI()
 {
+
+    KoToolBoxFactory toolBoxFactory( "Krita" );
+    createDockWidget( &toolBoxFactory );
+    KoShapeSelectorFactory shapeSelectorFactory;
+    createDockWidget( &shapeSelectorFactory );
+
     // Put the canvascontroller in a layout so it resizes with us
     QGridLayout * layout = new QGridLayout( this );
     layout->setSpacing(0);

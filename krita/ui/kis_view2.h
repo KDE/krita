@@ -51,10 +51,6 @@ public:
 
     // KoView implementation
     virtual void updateReadWrite( bool readwrite ) { Q_UNUSED(readwrite); }
-    virtual QDockWidget *createToolBox()
-        {
-            return KoToolManager::instance()->toolBox("krita");
-        }
 
 public:  // Krita specific interfaces
 

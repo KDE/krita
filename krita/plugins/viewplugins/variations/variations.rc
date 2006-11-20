@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritavariations" version="6">
-<MenuBar>
-    <Menu name="Image"><text>Image</text>
-	<Action name="variations"/>
-    </Menu>
-</MenuBar>
-</kpartgui>

@@ -41,7 +41,7 @@
 #include <kis_doc.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 
@@ -60,7 +60,7 @@ K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
 class ScriptingPart::Private
 {
     public:
-        KisView* view;
+        KisView2* view;
         Kross::GUIClient* guiclient;
         QPointer< Kross::KritaCore::KritaCoreModule > module;
 
@@ -77,7 +77,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
 {
     setInstance(ScriptingPart::instance());
 
-    d->view = dynamic_cast< KisView* >(parent);
+    d->view = dynamic_cast< KisView2* >(parent);
     Q_ASSERT(d->view);
 
     d->guiclient = new Kross::GUIClient( d->view, d->view );

@@ -53,13 +53,13 @@
 #include <kis_progress_display_interface.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 #include <kis_paint_device.h>
 #include <KoChannelInfo.h>
 
 #include "kis_channel_separator.h"
 
-KisChannelSeparator::KisChannelSeparator(KisView * view)
+KisChannelSeparator::KisChannelSeparator(KisView2 * view)
     : m_view(view)
 {
 }

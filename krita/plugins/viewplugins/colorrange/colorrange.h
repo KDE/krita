@@ -23,7 +23,7 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
+class KisView2;
 
 class ColorRange : public KParts::Plugin
 {
@@ -36,7 +36,7 @@ class ColorRange : public KParts::Plugin
         void slotActivated();
 
     private:
-        KisView * m_view;
+        KisView2 * m_view;
         KisPainter * m_painter;
 
 };

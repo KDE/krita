@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_view.h>
+#include <kis_view2.h>
 #include <kis_types.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
@@ -41,12 +41,12 @@ K_EXPORT_COMPONENT_FACTORY( kritaseparatechannels, KGenericFactory<KisSeparateCh
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView") ) {
+    if ( parent->inherits("KisView2") ) {
         setInstance(KGenericFactory<KisSeparateChannelsPlugin>::instance());
         
 setXMLFile(KStandardDirs::locate("data","kritaplugins/imageseparate.rc"), 
 true);
-        m_view = (KisView*) parent;
+        m_view = (KisView2*) parent;
         KAction *action = new KAction(i18n("Separate Image..."), actionCollection(), "separate");
         connect(action, SIGNAL(triggered(bool) ), SLOT(slotSeparate()));
     }

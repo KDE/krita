@@ -27,11 +27,11 @@
 #include <kis_doc.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 
 #include "kis_imagerasteredcache.h"
 
-KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
+KisImageRasteredCache::KisImageRasteredCache(KisView2* view, Observer* o)
     : m_observer(o->createNew(0, 0, 0, 0)), m_view(view)
 {
     m_busy = false;

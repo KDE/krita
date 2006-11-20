@@ -24,38 +24,37 @@
 
 #include <QFrame>
 #include <QList>
+#include <QDockWidget>
 
 #include <kdebug.h>
 
-#include "kis_types.h"
-#include "KoColorSpace.h"
+#include <KoColorSpace.h>
+#include <KoDockFactory.h>
+
+#include <kis_types.h>
 
 #include "ui_wdglayerbox.h"
-
-class WdgLayerBox : public QWidget, public Ui::WdgLayerBox
-{
-    Q_OBJECT
-
-public:
-    WdgLayerBox(QWidget *parent) : QWidget(parent) { setupUi(this); }
-};
+#include "kis_view2.h"
 
 class QModelIndex;
+
 typedef QList<QModelIndex> QModelIndexList;
+
 class QPainter;
 class QWidget;
 class KIconLoader;
 class KMenu;
 class KoDocumentEntry;
 class KoCompositeOp;
-class KisCanvasSubject;
+class KoPartSelectAction;
 
-class KisLayerBox : public QFrame {
-        typedef QFrame super;
-        Q_OBJECT
+class KisLayerBox : public QDockWidget, public Ui::WdgLayerBox {
+
+    Q_OBJECT
 
 public:
-    KisLayerBox(QWidget *parent = 0, const char *name = 0);
+
+    KisLayerBox(KisView2 * view, const char *name = 0);
     virtual ~KisLayerBox();
 
     void setUpdatesAndSignalsEnabled(bool enable);
@@ -108,9 +107,42 @@ private:
     KMenu *m_viewModeMenu;
     KMenu *m_newLayerMenu;
     KoPartSelectAction *m_partLayerAction;
-    KisImageSP m_image;
-    WdgLayerBox *m_lst;
+    KisView2 * m_view;
 };
+
+class KisLayerBoxFactory : public KoDockFactory
+{
+
+public:
+    KisLayerBoxFactory(KisView2 * view)
+        {
+            m_view = view;
+        }
+
+    virtual QString dockId() const
+        {
+            return QString( "Layers" );
+        }
+
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+        {
+            return Qt::RightDockWidgetArea;
+        }
+
+    virtual QDockWidget* createDockWidget()
+        {
+            KisLayerBox * dockWidget = new KisLayerBox(m_view);
+
+            dockWidget->setObjectName(dockId());
+
+            return dockWidget;
+        }
+
+private:
+    KisView2 * m_view;
+};
+
+
 
 #endif // KIS_LAYERBOX_H
 

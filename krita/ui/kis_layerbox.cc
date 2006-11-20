@@ -21,16 +21,12 @@
 
 #include <QtDebug>
 #include <QToolButton>
-#include <QBrush>
-#include <QFont>
-#include <QFontMetrics>
 #include <QLayout>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPoint>
 #include <QRect>
 #include <QString>
-#include <QStyle>
 #include <QToolTip>
 #include <QWidget>
 #include <QComboBox>
@@ -50,32 +46,38 @@
 #include <kicontheme.h>
 #include <klocale.h>
 #include <khbox.h>
-#include <kicon.h> 
+#include <kicon.h>
 #include <KoDocumentSectionView.h>
 #include <KoPartSelectAction.h>
 
 #include "kis_cmb_composite.h"
 #include "kis_int_spinbox.h"
+#include "kis_view2.h"
 #include "KoColorSpace.h"
 #include "kis_paint_device.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
+#include "kis_layer_manager.h"
 
 #include "kis_layerbox.h"
 
-KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
-    : super(parent), m_image(0)
+KisLayerBox::KisLayerBox(KisView2 *view, const char *name)
+    : QDockWidget( i18n("Layers" ) )
+    , Ui::WdgLayerBox()
+    , m_view( view )
 {
-    setObjectName(name);
-    QVBoxLayout *vbox = new QVBoxLayout(this);
+    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-    m_lst = new WdgLayerBox(this);
-    setMinimumSize(m_lst->minimumSizeHint());
-    vbox->addWidget(m_lst);
+    QWidget* mainWidget = new QWidget(this);
+    setWidget(mainWidget);
 
-    m_lst->listLayers->viewport()->installEventFilter(this);
-    connect(m_lst->listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
+    setupUi(mainWidget);
+
+    setMinimumSize(mainWidget->minimumSizeHint());
+
+    listLayers->viewport()->installEventFilter(this);
+    connect(listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
             this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
 
     m_viewModeMenu = new KMenu( this );
@@ -94,26 +96,26 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
     }
     actions[1]->trigger(); //TODO save/load previous state
 
-    m_lst->bnViewMode->setMenu(m_viewModeMenu);
-    m_lst->bnViewMode->setPopupMode(QToolButton::InstantPopup);
-    m_lst->bnViewMode->setIcon(KIcon("view_choose"));
-    m_lst->bnViewMode->setText(i18n("View mode"));
+    bnViewMode->setMenu(m_viewModeMenu);
+    bnViewMode->setPopupMode(QToolButton::InstantPopup);
+    bnViewMode->setIcon(KIcon("view_choose"));
+    bnViewMode->setText(i18n("View mode"));
 
-    m_lst->bnAdd->setToolTip(i18n("Create new layer"));
+    bnAdd->setToolTip(i18n("Create new layer"));
 
-    m_lst->bnDelete->setToolTip(i18n("Remove current layer"));
+    bnDelete->setToolTip(i18n("Remove current layer"));
 
-    m_lst->bnRaise->setToolTip(i18n("Raise current layer"));
-    m_lst->bnRaise->setEnabled(false);
+    bnRaise->setToolTip(i18n("Raise current layer"));
+    bnRaise->setEnabled(false);
 
-    m_lst->bnLower->setEnabled(false);
-    m_lst->bnLower->setToolTip(i18n("Lower current layer"));
+    bnLower->setEnabled(false);
+    bnLower->setToolTip(i18n("Lower current layer"));
 
-    m_lst->bnProperties->setToolTip(i18n("Properties for layer"));
+    bnProperties->setToolTip(i18n("Properties for layer"));
 
     m_newLayerMenu = new KMenu(this);
-    m_lst->bnAdd->setMenu(m_newLayerMenu);
-    m_lst->bnAdd->setPopupMode(QToolButton::InstantPopup);
+    bnAdd->setMenu(m_newLayerMenu);
+    bnAdd->setPopupMode(QToolButton::InstantPopup);
 
     m_newLayerMenu->addAction(SmallIconSet("filenew"), i18n("&New Layer..."), this, SLOT(slotNewLayer()));
     m_newLayerMenu->addAction(SmallIconSet("folder"), i18n("New &Group Layer..."), this, SLOT(slotNewGroupLayer()));
@@ -123,13 +125,39 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
     m_newLayerMenu->addAction(m_partLayerAction);
     connect(m_partLayerAction, SIGNAL(triggered()), this, SLOT(slotNewPartLayer()));
 
-    connect(m_lst->bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
-    connect(m_lst->bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
-    connect(m_lst->bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
-    connect(m_lst->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
-    connect(m_lst->intOpacity, SIGNAL(valueChanged(int, bool)), SIGNAL(sigOpacityChanged(int, bool)));
-    connect(m_lst->intOpacity, SIGNAL(finishedChanging(int, int)), SIGNAL(sigOpacityFinishedChanging(int, int)));
-    connect(m_lst->cmbComposite, SIGNAL(activated(const KoCompositeOp*)), SIGNAL(sigItemComposite(const KoCompositeOp*)));
+    connect(bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
+    connect(bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
+    connect(bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
+    connect(bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
+    connect(intOpacity, SIGNAL(valueChanged(int, bool)), SIGNAL(sigOpacityChanged(int, bool)));
+    connect(intOpacity, SIGNAL(finishedChanging(int, int)), SIGNAL(sigOpacityFinishedChanging(int, int)));
+    connect(cmbComposite, SIGNAL(activated(const KoCompositeOp*)), SIGNAL(sigItemComposite(const KoCompositeOp*)));
+
+
+    connect(this, SIGNAL(sigRequestLayer(KisGroupLayerSP, KisLayerSP)),
+            m_view->layerManager(), SLOT(addLayer(KisGroupLayerSP, KisLayerSP)));
+
+    connect(this, SIGNAL(sigRequestGroupLayer(KisGroupLayerSP, KisLayerSP)),
+            m_view->layerManager(), SLOT(addGroupLayer(KisGroupLayerSP, KisLayerSP)));
+
+    connect(this, SIGNAL(sigRequestAdjustmentLayer(KisGroupLayerSP, KisLayerSP)),
+            m_view->layerManager(), SLOT(addAdjustmentLayer(KisGroupLayerSP, KisLayerSP)));
+
+    connect(this, SIGNAL(sigRequestPartLayer(KisGroupLayerSP, KisLayerSP, const KoDocumentEntry&)),
+            m_view->layerManager(), SLOT(addPartLayer(KisGroupLayerSP, KisLayerSP, const KoDocumentEntry&)));
+
+    connect(this, SIGNAL(sigRequestLayerProperties(KisLayerSP)),
+            m_view->layerManager(), SLOT(showLayerProperties(KisLayerSP)));
+
+    connect(this, SIGNAL(sigOpacityChanged(int, bool)),
+            m_view->layerManager(), SLOT(layerOpacity(int, bool)));
+
+    connect(this, SIGNAL(sigOpacityFinishedChanging(int, int)),
+            m_view->layerManager(), SLOT(layerOpacityFinishedChanging(int, int)));
+
+    connect(this, SIGNAL(sigItemComposite(const KoCompositeOp*)),
+            m_view->layerManager(), SLOT(layerCompositeOp(const KoCompositeOp*)));
+
 }
 
 KisLayerBox::~KisLayerBox()
@@ -138,13 +166,13 @@ KisLayerBox::~KisLayerBox()
 
 void KisLayerBox::setImage(KisImageSP img)
 {
-    if (m_image == img)
+    if (m_view->image() == img)
         return;
 
-    if (m_image)
-        m_image->disconnect(this);
+    if (m_view->image())
+        m_view->image()->disconnect(this);
 
-    m_image = img;
+    m_view->image() = img;
 
     if (img)
     {
@@ -158,22 +186,22 @@ void KisLayerBox::setImage(KisImageSP img)
         connect(img.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                 this, SLOT(updateUI()));
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(updateUI()));
-        m_lst->listLayers->setModel(m_image->rootLayer().data());
+        listLayers->setModel(m_view->image()->rootLayer().data());
     }
     else
     {
-        m_lst->listLayers->setModel(0);
+        listLayers->setModel(0);
     }
 }
 
 bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 {
-    Q_ASSERT(o == m_lst->listLayers->viewport());
+    Q_ASSERT(o == listLayers->viewport());
 
     if (e->type() == QEvent::MouseButtonDblClick)
     {
         QMouseEvent *me = static_cast<QMouseEvent*>(e);
-        QModelIndex mi = m_lst->listLayers->indexAt(me->pos());
+        QModelIndex mi = listLayers->indexAt(me->pos());
         if (mi.isValid())
             slotPropertiesClicked();
         else
@@ -181,23 +209,23 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
         return true;
     }
 
-    return super::eventFilter(o, e);
+    return QDockWidget::eventFilter(o, e);
 }
 
 void KisLayerBox::updateUI()
 {
-    m_lst->bnDelete->setEnabled(m_image->activeLayer());
-    m_lst->bnRaise->setEnabled(m_image->activeLayer() && (m_image->activeLayer()->prevSibling() || m_image->activeLayer()->parent()));
-    m_lst->bnLower->setEnabled(m_image->activeLayer() && m_image->activeLayer()->nextSibling());
-    m_lst->intOpacity->setEnabled(m_image->activeLayer());
-    m_lst->cmbComposite->setEnabled(m_image->activeLayer());
-    if (m_image)
-        if (KisLayerSP active = m_image->activeLayer())
+    bnDelete->setEnabled(m_view->image()->activeLayer());
+    bnRaise->setEnabled(m_view->image()->activeLayer() && (m_view->image()->activeLayer()->prevSibling() || m_view->image()->activeLayer()->parent()));
+    bnLower->setEnabled(m_view->image()->activeLayer() && m_view->image()->activeLayer()->nextSibling());
+    intOpacity->setEnabled(m_view->image()->activeLayer());
+    cmbComposite->setEnabled(m_view->image()->activeLayer());
+    if (m_view->image())
+        if (KisLayerSP active = m_view->image()->activeLayer())
         {
-            if (m_image->activeDevice())
-                slotSetColorSpace(m_image->activeDevice()->colorSpace());
+            if (m_view->image()->activeDevice())
+                slotSetColorSpace(m_view->image()->activeDevice()->colorSpace());
             else
-                slotSetColorSpace(m_image->colorSpace());
+                slotSetColorSpace(m_view->image()->colorSpace());
             slotSetOpacity(int(float(active->opacity() * 100) / 255 + 0.5));
             slotSetCompositeOp(active->compositeOp());
         }
@@ -205,24 +233,24 @@ void KisLayerBox::updateUI()
 
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
-    m_lst->cmbComposite->blockSignals(true);
-    m_lst->cmbComposite->setCurrent(compositeOp);
-    m_lst->cmbComposite->blockSignals(false);
+    cmbComposite->blockSignals(true);
+    cmbComposite->setCurrent(compositeOp);
+    cmbComposite->blockSignals(false);
 }
 
 void KisLayerBox::slotSetColorSpace(const KoColorSpace * colorSpace)
 {
-    m_lst->cmbComposite->blockSignals(true);
-    m_lst->cmbComposite->setCompositeOpList(colorSpace->userVisiblecompositeOps());
-    m_lst->cmbComposite->blockSignals(false);
+    cmbComposite->blockSignals(true);
+    cmbComposite->setCompositeOpList(colorSpace->userVisiblecompositeOps());
+    cmbComposite->blockSignals(false);
 }
 
 // range: 0-100
 void KisLayerBox::slotSetOpacity(int opacity)
 {
-    m_lst->intOpacity->blockSignals(true);
-    m_lst->intOpacity->setValue(opacity);
-    m_lst->intOpacity->blockSignals(false);
+    intOpacity->blockSignals(true);
+    intOpacity->setValue(opacity);
+    intOpacity->blockSignals(false);
 }
 
 void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &index)
@@ -230,7 +258,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     QMenu menu;
     if (index.isValid())
     {
-        m_lst->listLayers->addPropertyActions(&menu, index);
+        listLayers->addPropertyActions(&menu, index);
         menu.addAction(KIcon("info"), i18n("&Properties..."), this, SLOT(slotPropertiesClicked()));
         menu.addSeparator();
         menu.addAction(KIcon("editdelete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
@@ -254,23 +282,23 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
 
 void KisLayerBox::slotMinimalView()
 {
-    m_lst->listLayers->setDisplayMode(KoDocumentSectionView::MinimalMode);
+    listLayers->setDisplayMode(KoDocumentSectionView::MinimalMode);
 }
 
 void KisLayerBox::slotDetailedView()
 {
-    m_lst->listLayers->setDisplayMode(KoDocumentSectionView::DetailedMode);
+    listLayers->setDisplayMode(KoDocumentSectionView::DetailedMode);
 }
 
 void KisLayerBox::slotThumbnailView()
 {
-    m_lst->listLayers->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
+    listLayers->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
 }
 
 void KisLayerBox::getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above)
 {
-    KisGroupLayerSP root = m_image->rootLayer();
-    if (KisLayerSP active = m_image->activeLayer())
+    KisGroupLayerSP root = m_view->image()->rootLayer();
+    if (KisLayerSP active = m_view->image()->activeLayer())
     {
         if (KisGroupLayer* pactive = qobject_cast<KisGroupLayer*>(active.data()))
         {
@@ -288,7 +316,7 @@ void KisLayerBox::getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above
     else
     {
         parent = root;
-        above = m_image->rootLayer()->firstChild();
+        above = m_view->image()->rootLayer()->firstChild();
     }
 }
 
@@ -337,29 +365,29 @@ void KisLayerBox::slotRmClicked()
     QModelIndexList l = selectedLayers();
 
     for (int i = 0, n = l.count(); i < n; ++i)
-        m_image->removeLayer(m_image->rootLayer()->layerFromIndex(l.at(i)));
+        m_view->image()->removeLayer(m_view->image()->rootLayer()->layerFromIndex(l.at(i)));
 }
 
 void KisLayerBox::slotRaiseClicked()
 {
     QModelIndexList l = selectedLayers();
 
-    KisLayerSP layer = m_image->rootLayer()->layerFromIndex(l.first());
-    if( l.count() == 1 && layer == layer->parent()->firstChild() && layer->parent() != m_image->rootLayer())
+    KisLayerSP layer = m_view->image()->rootLayer()->layerFromIndex(l.first());
+    if( l.count() == 1 && layer == layer->parent()->firstChild() && layer->parent() != m_view->image()->rootLayer())
     {
         if (KisGroupLayerSP grandparent = layer->parent()->parent())
-            m_image->moveLayer(layer, grandparent, KisLayerSP(layer->parent().data()));
+            m_view->image()->moveLayer(layer, grandparent, KisLayerSP(layer->parent().data()));
     }
     else
     {
         for (int i = 0, n = l.count(); i < n; ++i)
-            if (KisLayerSP li = m_image->rootLayer()->layerFromIndex(l[i]))
+            if (KisLayerSP li = m_view->image()->rootLayer()->layerFromIndex(l[i]))
                 if (li->prevSibling())
-                    m_image->moveLayer(li, li->parent(), li->prevSibling());
+                    m_view->image()->moveLayer(li, li->parent(), li->prevSibling());
     }
 
     if( !l.isEmpty() )
-        m_lst->listLayers->scrollTo( l.first() );
+        listLayers->scrollTo( l.first() );
 }
 
 void KisLayerBox::slotLowerClicked()
@@ -367,42 +395,42 @@ void KisLayerBox::slotLowerClicked()
     QModelIndexList l = selectedLayers();
 
     for (int i = l.count() - 1; i >= 0; --i)
-        if (KisLayerSP layer = m_image->rootLayer()->layerFromIndex(l[i]))
+        if (KisLayerSP layer = m_view->image()->rootLayer()->layerFromIndex(l[i]))
             if (layer->nextSibling())
             {
                 if (layer->nextSibling()->nextSibling())
-                    m_image->moveLayer(layer, layer->parent(), layer->nextSibling()->nextSibling());
+                    m_view->image()->moveLayer(layer, layer->parent(), layer->nextSibling()->nextSibling());
                 else
-                    m_image->moveLayer(layer, layer->parent(), KisLayerSP(0));
+                    m_view->image()->moveLayer(layer, layer->parent(), KisLayerSP(0));
             }
 
     if( !l.isEmpty() )
-        m_lst->listLayers->scrollTo( l.last() );
+        listLayers->scrollTo( l.last() );
 }
 
 void KisLayerBox::slotPropertiesClicked()
 {
-    if (KisLayerSP active = m_image->activeLayer())
+    if (KisLayerSP active = m_view->image()->activeLayer())
         emit sigRequestLayerProperties(active);
 }
 
 void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
 {
     setUpdatesEnabled(enable);
-    m_lst->intOpacity->setUpdatesEnabled(enable);
-    m_lst->cmbComposite->setUpdatesEnabled(enable);
+    intOpacity->setUpdatesEnabled(enable);
+    cmbComposite->setUpdatesEnabled(enable);
 
-    m_lst->intOpacity->blockSignals(!enable);
-    m_lst->cmbComposite->blockSignals(!enable);
+    intOpacity->blockSignals(!enable);
+    cmbComposite->blockSignals(!enable);
 }
 
 QModelIndexList KisLayerBox::selectedLayers() const
 {
-    QModelIndexList l = m_lst->listLayers->selectionModel()->selectedIndexes();
-    if (l.count() < 2 && m_image->activeLayer() && !l.contains(m_lst->listLayers->currentIndex()))
+    QModelIndexList l = listLayers->selectionModel()->selectedIndexes();
+    if (l.count() < 2 && m_view->image()->activeLayer() && !l.contains(listLayers->currentIndex()))
     {
         l.clear();
-        l.append(m_lst->listLayers->currentIndex());
+        l.append(listLayers->currentIndex());
     }
     return l;
 }

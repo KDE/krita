@@ -23,7 +23,7 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
+class KisView2;
 
 /**
  * Dialog for converting between color models.
@@ -42,7 +42,7 @@ private slots:
 
 private:
 
-    KisView * m_view;
+    KisView2 * m_view;
     KisPainter * m_painter;
 
 };

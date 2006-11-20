@@ -40,7 +40,7 @@
 #include "kis_paint_device.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
 #include "colorrange.h"
@@ -52,12 +52,12 @@ K_EXPORT_COMPONENT_FACTORY( kritacolorrange, ColorRangeFactory( "krita" ) )
 ColorRange::ColorRange(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    if (parent->inherits("KisView")) {
+    if (parent->inherits("KisView2")) {
         setInstance(ColorRangeFactory::instance());
         
 setXMLFile(KStandardDirs::locate("data","kritaplugins/colorrange.rc"), 
 true);
-        m_view = dynamic_cast<KisView*>(parent);
+        m_view = dynamic_cast<KisView2*>(parent);
         KAction *action = new KAction(i18n("&Color Range..."), actionCollection(), "colorrange");
         connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
         m_view->canvasSubject()->selectionManager()->addSelectionAction(action);

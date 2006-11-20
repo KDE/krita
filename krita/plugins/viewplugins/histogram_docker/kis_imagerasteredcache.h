@@ -28,7 +28,7 @@
 
 #include <kis_paint_device.h>
 
-class KisView;
+class KisView2;
 
 class KisImageRasteredCache : public QObject {
 Q_OBJECT
@@ -41,7 +41,7 @@ public:
         virtual ~Observer() {}
     };
 
-    KisImageRasteredCache(KisView* view, Observer* o);
+    KisImageRasteredCache(KisView2* view, Observer* o);
     virtual ~KisImageRasteredCache();
 
 signals:
@@ -71,7 +71,7 @@ private:
     int m_timeOutMSec;
     int m_rasterSize;
     int m_width, m_height;
-    KisView * m_view;
+    KisView2 * m_view;
     bool m_busy;
 
     KisPaintDeviceSP m_imageProjection;

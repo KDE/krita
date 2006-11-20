@@ -569,7 +569,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisShared(rhs)
 
         m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied
 
-        m_d->nserver = new KisNameServer(i18n("Layer %1"), rhs.m_d->nserver->currentSeed() + 1);
+        m_d->nserver = new KisNameServer( i18n("Layer ") + rhs.m_d->nserver->currentSeed() + 1);
         Q_CHECK_PTR(m_d->nserver);
 
     }

@@ -34,7 +34,7 @@
 #include <KoColorSpaceRegistry.h>
 
 // krita
-#include <kis_view.h>
+#include <kis_view2.h>
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_autobrush_resource.h>
@@ -68,16 +68,16 @@ namespace Kross { namespace KritaCore {
 	class KritaCoreModule::Private
 	{
 		public:
-			KisView* view;
+			KisView2* view;
 			KritaCoreProgress* progress;
 
-			Private(KisView* v) : view(v), progress(0) {}
+			Private(KisView2* v) : view(v), progress(0) {}
 			~Private() { delete progress; }
 	};
 
 }}
 
-KritaCoreModule::KritaCoreModule(KisView* view)
+KritaCoreModule::KritaCoreModule(KisView2* view)
 	: QObject()
 	, d(new Private(view))
 {

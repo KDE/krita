@@ -24,7 +24,6 @@
 #include <KoView.h>
 #include <KoToolBox.h>
 #include <KoToolManager.h>
-#include <KoZoomMode.h>
 
 #include <kis_types.h>
 
@@ -37,6 +36,10 @@ class KisDoc2;
 class KisResourceProvider;
 class KisStatusBar;
 class KisSelectionManager;
+class KisLayerManager;
+class KisUndoAdapter;
+class KisZoomManager;
+class KisFilterManager;
 
 class KisView2 : public KoView {
 
@@ -51,6 +54,7 @@ public:
 
     // KoView implementation
     virtual void updateReadWrite( bool readwrite ) { Q_UNUSED(readwrite); }
+    void slotChildActivated(bool a);
 
 public:  // Krita specific interfaces
 
@@ -70,14 +74,27 @@ public:  // Krita specific interfaces
     /// Return the wrapper class around the statusbar
     KisStatusBar * statusBar() const;
 
-    /// The selection managers handles everything action related to
+    /// The selection manager handles everything action related to
     /// selections.
     KisSelectionManager * selectionManager();
+
+    /// The layer manager handles everything action related to
+    /// layers
+    KisLayerManager * layerManager();
+
+    /// The zoommaanger handles everything action-related to zooming
+    KisZoomManager * zoomManager();
+
+    /// The filtermanager handles everything action-related to filters
+    KisFilterManager * filterManager();
+
+    /// The undo adapter is used to add commands to the undo stack
+    KisUndoAdapter * undoAdapter();
 
 private slots:
 
     void slotInitializeCanvas();
-    void slotZoomChanged(KoZoomMode::Mode mode, int zoom);
+
 
 private:
 

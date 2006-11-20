@@ -25,7 +25,7 @@
 
 #define KROSS_MAIN_EXPORT KDE_EXPORT
 
-class KisView;
+class KisView2;
 
 namespace Kross { namespace KritaCore {
 
@@ -38,7 +38,7 @@ namespace Kross { namespace KritaCore {
     {
             Q_OBJECT
         public:
-            KritaCoreModule(KisView* view);
+            KritaCoreModule(KisView2* view);
             virtual ~KritaCoreModule();
 
         public slots:
@@ -49,7 +49,7 @@ namespace Kross { namespace KritaCore {
             QObject* application();
 
 #if 0
-            //TODO KisView::document() needs to be public to have this working!
+            //TODO KisView2::document() needs to be public to have this working!
             /**
             * Returns the \a KoDocumentAdaptor object.
             */

@@ -40,7 +40,7 @@
 #include <kis_paint_device.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 #include <kis_selection.h>
 
 #include "histogram.h"
@@ -54,7 +54,7 @@ K_EXPORT_COMPONENT_FACTORY( kritahistogram, HistogramFactory( "krita" ) )
 Histogram::Histogram(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView") ) {
+    if ( parent->inherits("KisView2") ) {
 
         setInstance(HistogramFactory::instance());
         
@@ -64,7 +64,7 @@ true);
         m_action = new KAction(i18n("&Histogram..."), actionCollection(), "histogram");
         connect(m_action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
 
-        m_view = (KisView*) parent;
+        m_view = (KisView2*) parent;
         if (KisImageSP img = m_view->image()) {
             connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged()));
             connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayersChanged()));

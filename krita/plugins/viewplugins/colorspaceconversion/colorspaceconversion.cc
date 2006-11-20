@@ -42,7 +42,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_meta_registry.h"
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_paint_device.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_cmb_idlist.h"
@@ -58,9 +58,9 @@ K_EXPORT_COMPONENT_FACTORY( kritacolorspaceconversion, ColorSpaceConversionFacto
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView") )
+    if ( parent->inherits("KisView2") )
     {
-        m_view = (KisView*) parent;
+        m_view = (KisView2*) parent;
 
         setInstance(ColorSpaceConversionFactory::instance());
         

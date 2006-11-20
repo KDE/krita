@@ -28,7 +28,7 @@
 class Q3IconViewItem;
 class QLabel;
 
-class KisView;
+class KisView2;
 class KisFilter;
 
 class KisWdgFiltersGallery : public QWidget, public Ui::KisWdgFiltersGallery
@@ -50,7 +50,7 @@ class KisDlgFiltersGallery : public KDialog
 {
     Q_OBJECT
     public:
-        KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name = "");
+        KisDlgFiltersGallery(KisView2* view, QWidget* parent,const char *name = "");
         ~KisDlgFiltersGallery();
     public:
         inline KisFilter* currentFilter() { return m_currentFilter; }
@@ -61,7 +61,7 @@ class KisDlgFiltersGallery : public KDialog
         void selectionHasChanged ( Q3IconViewItem * item );
     private:
         KisWdgFiltersGallery* m_widget;
-        KisView* m_view;
+        KisView2* m_view;
         QWidget* m_currentConfigWidget;
         KisFilter* m_currentFilter;
         QLabel* m_labelNoCW;

@@ -45,6 +45,11 @@ public:
     void setProfile( const QString & t );
     void setHelp( const QString &t );
 
+    KisLabelProgress * progress()
+        {
+            return m_progress;
+        }
+
 private:
 
     KStatusBar * m_statusbar;

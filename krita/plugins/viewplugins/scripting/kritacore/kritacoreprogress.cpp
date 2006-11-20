@@ -19,11 +19,11 @@
 #include "kritacoreprogress.h"
 
 #include <kis_progress_display_interface.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 
 using namespace Kross::KritaCore;
 
-KritaCoreProgress::KritaCoreProgress(KisView* view)
+KritaCoreProgress::KritaCoreProgress(KisView2* view)
     : KisProgressSubject()
     , m_view(view)
     , m_progressTotalSteps(0)

@@ -33,7 +33,7 @@ class QMenu;
 class KisAccumulatingHistogramProducer;
 class KoColorSpace;
 class KisHistogramView;
-class KisView;
+class KisView2;
 class KoColorSpace;
 
 class KritaHistogramDocker : public KParts::Plugin
@@ -51,7 +51,7 @@ private:
     KisCachedHistogramObserver::Producers m_producers;
     KisAccumulatingHistogramProducer* m_producer;
     KoColorSpace* m_cs;
-    KisView* m_view;
+    KisView2* m_view;
     KisHistogramView* m_hview;
     KisImageRasteredCache* m_cache;
     QMenu m_popup;

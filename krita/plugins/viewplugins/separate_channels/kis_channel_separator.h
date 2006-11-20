@@ -23,7 +23,7 @@
 
 #include <kis_progress_subject.h>
 
-class KisView;
+class KisView2;
 class KisProgressDisplayInterface;
 
 
@@ -51,7 +51,7 @@ class KisChannelSeparator : public KisProgressSubject {
 
 public:
 
-    KisChannelSeparator(KisView * view);
+    KisChannelSeparator(KisView2 * view);
     virtual ~KisChannelSeparator() {}
 
     void separate(KisProgressDisplayInterface * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor);
@@ -61,7 +61,7 @@ public: // Implement KisProgressSubject
 
             
 private:
-    KisView * m_view;
+    KisView2 * m_view;
     bool m_cancelRequested;
 
 };

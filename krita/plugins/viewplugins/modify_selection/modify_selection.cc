@@ -41,7 +41,7 @@
 #include "kis_layer.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
 #include "kis_transaction.h"
@@ -57,14 +57,14 @@ K_EXPORT_COMPONENT_FACTORY( kritamodifyselection, ModifySelectionFactory( "krita
 ModifySelection::ModifySelection(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView") )
+    if ( parent->inherits("KisView2") )
     {
         setInstance(ModifySelectionFactory::instance());
         
 setXMLFile(KStandardDirs::locate("data","kritaplugins/modify_selection.rc"), 
 true);
 
-        m_view = (KisView*) parent;
+        m_view = (KisView2*) parent;
 
         // Selection manager takes ownership?
         KAction* a = new KAction(i18n("Grow selection..."), actionCollection(), "growselection");

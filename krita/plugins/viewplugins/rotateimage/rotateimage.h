@@ -22,7 +22,7 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
+class KisView2;
 
 class RotateImage : public KParts::Plugin
 {
@@ -41,7 +41,7 @@ private slots:
 
 private:
 
-    KisView * m_view;
+    KisView2 * m_view;
     KisPainter * m_painter;
 
 };

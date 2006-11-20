@@ -23,7 +23,7 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
+class KisView2;
 class KisScript;
 class ScriptingProgress;
 class ScriptingModule;

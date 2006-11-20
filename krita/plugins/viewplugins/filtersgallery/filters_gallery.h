@@ -24,7 +24,7 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
+class KisView2;
 
 namespace Krita {
 namespace Plugins {
@@ -39,7 +39,7 @@ namespace FiltersGallery {
             void showFiltersGalleryDialog();
         private:
 
-            KisView * m_view;
+            KisView2 * m_view;
 
 
     };

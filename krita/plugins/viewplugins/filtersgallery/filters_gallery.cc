@@ -36,7 +36,7 @@
 #include "kis_meta_registry.h"
 #include "kis_paint_device.h"
 #include "kis_selection.h"
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_transaction.h"
 
 namespace Krita {
@@ -49,14 +49,14 @@ K_EXPORT_COMPONENT_FACTORY( kritafiltersgallery, KritaFiltersGalleryFactory( "kr
 KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView") )
+    if ( parent->inherits("KisView2") )
     {
         setInstance(KritaFiltersGallery::instance());
 
 setXMLFile(KStandardDirs::locate("data","kritaplugins/kritafiltersgallery.rc"),
 true);
 
-        m_view = (KisView*) parent;
+        m_view = (KisView2*) parent;
 
         KAction *action = new KAction(i18n("&Filters Gallery"), actionCollection(), "krita_filters_gallery");
         connect(action, SIGNAL(triggered()), this, SLOT(showFiltersGalleryDialog()));

@@ -40,7 +40,7 @@
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 #include <kis_selection.h>
 
 #include "shearimage.h"
@@ -53,7 +53,7 @@ K_EXPORT_COMPONENT_FACTORY( kritashearimage, ShearImageFactory( "krita" ) )
 ShearImage::ShearImage(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView") )
+    if ( parent->inherits("KisView2") )
     {
         setInstance(ShearImageFactory::instance());
         
@@ -66,7 +66,7 @@ true);
         action = new KAction(i18n("&Shear Layer..."), actionCollection(), "shearlayer");
         connect(action,  SIGNAL(triggered()), this, SLOT(slotShearLayer()));
 
-        m_view = (KisView*) parent;
+        m_view = (KisView2*) parent;
     }
 }
 

@@ -30,7 +30,7 @@
 #include <kis_previewwidget.h>
 #include <kis_transaction.h>
 #include <kis_types.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 
 #include "kis_dlg_filtersgallery.h"
 
@@ -39,7 +39,7 @@ namespace Plugins {
 namespace FiltersGallery {
 
 
-KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name)
+KisDlgFiltersGallery::KisDlgFiltersGallery(KisView2* view, QWidget* parent,const char *name)
   : KDialog(parent), m_view(view), m_currentConfigWidget(0), m_currentFilter(0)
 {
     setCaption( i18n("Filters Gallery") );

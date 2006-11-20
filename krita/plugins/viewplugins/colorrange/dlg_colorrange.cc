@@ -45,7 +45,7 @@
 #include <kis_selection_manager.h>
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 #include <kis_selected_transaction.h>
 #include <kis_cursor.h>
 
@@ -174,7 +174,7 @@ quint32 matchColors(const QColor & c, enumAction action)
 
 
 
-DlgColorRange::DlgColorRange( KisView * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
+DlgColorRange::DlgColorRange( KisView2 * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
     : super (parent)
 {
     setCaption( i18n("Color Range") );

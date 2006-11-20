@@ -41,7 +41,7 @@
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
 #include <kis_transaction.h>
@@ -57,7 +57,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaimagesize, ImageSizeFactory( "krita" ) )
 ImageSize::ImageSize(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView") )
+    if ( parent->inherits("KisView2") )
     {
         setInstance(ImageSizeFactory::instance());
         
@@ -71,7 +71,7 @@ true);
         action = new KAction(i18n("Change &Layer Size..."), actionCollection(), "layersize");
         connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
-        m_view = (KisView*) parent;
+        m_view = (KisView2*) parent;
         // Selection manager takes ownership?
         action = new KAction(i18n("&Layer Size..."), actionCollection(), "selectionScale");
         Q_CHECK_PTR(action);

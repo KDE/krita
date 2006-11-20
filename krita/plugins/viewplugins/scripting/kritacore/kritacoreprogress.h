@@ -22,7 +22,7 @@
 #include <kis_progress_subject.h>
 #include <krita_export.h>
 
-class KisView;
+class KisView2;
 
 namespace Kross { namespace KritaCore {
 
@@ -34,7 +34,7 @@ class KRITASCRIPTING_EXPORT KritaCoreProgress : public KisProgressSubject
 {
         Q_OBJECT
     public:
-        KritaCoreProgress(KisView* view);
+        KritaCoreProgress(KisView2* view);
         virtual ~KritaCoreProgress();
 
     public:
@@ -83,7 +83,7 @@ class KRITASCRIPTING_EXPORT KritaCoreProgress : public KisProgressSubject
         //inline QString packagePath() { return m_packagePath; }
 
     private:
-        KisView * m_view;
+        KisView2 * m_view;
         uint m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
         //QString m_packagePath;
 };

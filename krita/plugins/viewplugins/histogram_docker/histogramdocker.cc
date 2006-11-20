@@ -34,7 +34,7 @@
 #include "kis_doc.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_view.h"
+#include "kis_view2.h"
 
 
 #include "histogramdocker.h"
@@ -47,8 +47,8 @@ K_EXPORT_COMPONENT_FACTORY( kritahistogramdocker, KritaHistogramDockerFactory( "
 KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
         : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView") ) {
-        m_view = dynamic_cast<KisView*>(parent);
+    if ( parent->inherits("KisView2") ) {
+        m_view = dynamic_cast<KisView2*>(parent);
 
         setInstance(KritaHistogramDockerFactory::instance());
 

@@ -25,7 +25,7 @@
 #include <kis_types.h>
 #include <kis_global.h>
 
-class KisView;
+class KisView2;
 class KoID;
 
 class PerfTest : public KParts::Plugin
@@ -67,7 +67,7 @@ private:
 
 private:
 
-    KisView * m_view;
+    KisView2 * m_view;
     KisPainter * m_painter;
 
 };

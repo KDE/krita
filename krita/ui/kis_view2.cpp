@@ -20,28 +20,31 @@
 
 #include <QGridLayout>
 #include <QRect>
+#include <QWidget>
 
 #include <kstdaction.h>
 #include <kxmlguifactory.h>
-#include <kicon.h>
 #include <klocale.h>
-#include <kparts/plugin.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
-#include <kparts/componentfactory.h>
+//#include <kparts/plugin.h>
+//#include <kservice.h>
+//#include <kservicetypetrader.h>
+//#include <kparts/componentfactory.h>
 
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
-#include <KoZoomAction.h>
-#include <KoZoomHandler.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeSelectorFactory.h>
+#include <KoZoomHandler.h>
+#include <KoViewConverter.h>
+#include <KoView.h>
 
 #include <kis_image.h>
+#include <kis_undo_adapter.h>
+#include <kis_layer.h>
 
 #include "kis_statusbar.h"
 #include "kis_canvas2.h"
@@ -56,6 +59,9 @@
 #include "kis_selection_manager.h"
 #include "kis_controlframe.h"
 #include "kis_birdeye_box.h"
+#include "kis_layerbox.h"
+#include "kis_layer_manager.h"
+#include "kis_zoom_manager.h"
 
 class KisView2::KisView2Private {
 
@@ -83,6 +89,8 @@ public:
             delete canvas;
             delete filterManager;
             delete selectionManager;
+            delete layerManager;
+            delete zoomManager;
         }
 
 public:
@@ -97,24 +105,20 @@ public:
     KoRuler * horizontalRuler;
     KoRuler * verticalRuler;
     KisStatusBar * statusBar;
-    KAction *zoomAction;
-    KAction *zoomIn;
-    KAction *zoomOut;
-    KAction *actualPixels;
-    KAction *actualSize;
-    KAction *fitToCanvas;
+
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisBirdEyeBox * birdEyeBox;
+    KisLayerBox * layerBox;
+    KisLayerManager * layerManager;
+    KisZoomManager * zoomManager;
 };
-
 
 
 KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     : KoView(doc, parent)
 {
 
-    // Part stuff
     setInstance(KisFactory2::instance(), false);
 
     if (!doc->isReadWrite())
@@ -157,6 +161,25 @@ KisView2::~KisView2()
     delete m_d;
 }
 
+void KisView2::slotChildActivated(bool a) {
+
+    // It should be so that the only part (child) we can activate, is
+    // the current layer:
+    KisImageSP img = image();
+    if ( img && img->activeLayer())
+    {
+        if (a) {
+            img->activeLayer()->activate();
+        } else {
+            img->activeLayer()->deactivate();
+        }
+    }
+
+    KoView::slotChildActivated(a);
+}
+
+
+
 KisImageSP KisView2::image()
 {
     return m_d->doc->currentImage();
@@ -187,41 +210,46 @@ KisSelectionManager * KisView2::selectionManager()
     return m_d->selectionManager;
 }
 
+KisLayerManager * KisView2::layerManager()
+{
+    return m_d->layerManager;
+}
+
+KisZoomManager * KisView2::zoomManager()
+{
+    return m_d->zoomManager;
+}
+
+KisFilterManager * KisView2::filterManager()
+{
+    return m_d->filterManager;
+}
+
+KisUndoAdapter * KisView2::undoAdapter()
+{
+    return m_d->doc->undoAdapter();
+}
+
 void KisView2::slotInitializeCanvas()
 {
 
     m_d->canvas->setCanvasSize( image()->width(), image()->height() );
     m_d->filterManager->updateGUI();
     m_d->selectionManager->updateGUI();
+    //m_d->layerManager->updateGUI(true);
+    m_d->zoomManager->updateGUI();
 
     KoSelection *select = m_d->shapeManager->selection();
     select->select( m_d->doc->imageShape() );
 }
 
-void KisView2::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
-{
-    KoZoomHandler *zoomHandler = (KoZoomHandler*)m_d->viewConverter;
-
-    if(mode == KoZoomMode::ZOOM_CONSTANT)
-    {
-        double zoomF = zoom / 100.0;
-        if(zoomF == 0.0) return;
-        KoView::setZoom(zoomF);
-        zoomHandler->setZoom(zoomF);
-    }
-    kDebug() << "zoom changed to: " << zoom <<  endl;
-
-    zoomHandler->setZoomMode(mode);
-//    QRectF imageRect = QRectF(0, 0, m_d->canvas->width(), m_d->canvas->height());
-//    m_d->canvas->updateCanvas(imageRect);
-    m_d->canvas->updateCanvas(QRectF(0, 0, 300,300));
-}
 
 void KisView2::createGUI()
 {
 
     KoToolBoxFactory toolBoxFactory( "Krita" );
     createDockWidget( &toolBoxFactory );
+
     KoShapeSelectorFactory shapeSelectorFactory;
     createDockWidget( &shapeSelectorFactory );
 
@@ -245,14 +273,19 @@ void KisView2::createGUI()
 
     connect(m_d->canvasController, SIGNAL(canvasOffsetXChanged(int)),
             m_d->horizontalRuler, SLOT(setOffset(int)));
+
     connect(m_d->canvasController, SIGNAL(canvasOffsetYChanged(int)),
             m_d->verticalRuler, SLOT(setOffset(int)));
 
     KisBirdEyeBoxFactory birdeyeFactory(this);
     m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>( createDockWidget( &birdeyeFactory ) );
 
+    KisLayerBoxFactory layerboxFactory( this );
+    m_d->layerBox = qobject_cast<KisLayerBox*>( createDockWidget( &layerboxFactory ) );
+
     m_d->statusBar = new KisStatusBar( KoView::statusBar() );
     m_d->controlFrame = new KisControlFrame( mainWindow(), this );
+
     show();
 
 }
@@ -260,24 +293,6 @@ void KisView2::createGUI()
 
 void KisView2::createActions()
 {
-
-    // view actions
-    m_d->zoomAction = new KoZoomAction(0, i18n("Zoom"), KIcon("14_zoom"), 0, actionCollection(), "zoom" );
-    connect(m_d->zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
-          this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
-    m_d->zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
-    m_d->zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
-
-/*
-    m_d->actualPixels = new KAction(i18n("Actual Pixels"), actionCollection(), "actual_pixels");
-    m_d->actualPixels->setShortcut(Qt::CTRL+Qt::Key_0);
-    connect(m_d->actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
-
-    m_d->actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection(), "actual_size");
-    m_d->actualSize->setEnabled(false);
-    m_d->fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection(), "fit_to_canvas");
-*/
-
 }
 
 
@@ -293,6 +308,11 @@ void KisView2::createManagers()
     m_d->selectionManager = new KisSelectionManager( this, m_d->doc );
     m_d->selectionManager->setup( actionCollection() );
 
+    m_d->layerManager = new KisLayerManager( this, m_d->doc );
+    m_d->layerManager->setup( actionCollection() );
+
+    m_d->zoomManager = new KisZoomManager( this, m_d->viewConverter );
+    m_d->zoomManager->setup( actionCollection() );
 
 
 }

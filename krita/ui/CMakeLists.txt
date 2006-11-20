@@ -1,16 +1,10 @@
 include_directories(${CMAKE_SOURCE_DIR}/krita/ui/obsolete/)
 set(kritaui_LIB_SRCS
-    kis_birdeye_box.cc
-    kis_paintop_box.cc # Needs to know about the active input  device a lot
-    kis_tool.cc
-    squeezedcombobox.cpp
-    kis_statusbar.cc
-    kis_selection_manager.cc
-    kis_tool_shape.cc
     imageviewer.cc
     kcurve.cc
     kis_autobrush.cc
     kis_autogradient.cc
+    kis_birdeye_box.cc
     kis_boundary_painter.cc
     kis_brush_chooser.cc
     kis_canvas2.cpp
@@ -50,6 +44,7 @@ set(kritaui_LIB_SRCS
     kis_label_cursor_pos.cc
     kis_label_progress.cc
     kis_label_zoom.cc
+    kis_layer_manager.cc
     kis_layerbox.cc
     kis_matrix_widget.cpp
     kis_multi_bool_filter_widget.cc
@@ -60,6 +55,7 @@ set(kritaui_LIB_SRCS
     kis_oasis_save_data_visitor.cc
     kis_oasis_save_visitor.cc
     kis_opengl_canvas2.cpp
+    kis_paintop_box.cc 
     kis_palette_view.cc
     kis_palette_widget.cc
     kis_part_layer.cc
@@ -72,15 +68,21 @@ set(kritaui_LIB_SRCS
     kis_resource_mediator.cc
     kis_resource_provider.cc
     kis_resourceserver.cc
+    kis_selection_manager.cc
     kis_selection_options.cc
+    kis_statusbar.cc
     kis_strategy_move.cc
     kis_text_brush.cc
+    kis_tool.cc
     kis_tool_freehand.cc
     kis_tool_paint.cc
     kis_tool_registry.cc	
+    kis_tool_shape.cc
     kis_view2.cpp
     kis_view_converter.cpp
+    kis_zoom_manager.cc
     kobirdeyepanel.cpp
+    squeezedcombobox.cpp
 )
 
 

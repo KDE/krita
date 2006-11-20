@@ -22,7 +22,7 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
+class KisView2;
 
 class ModifySelection : public KParts::Plugin
 {
@@ -39,7 +39,7 @@ private slots:
 
 private:
 
-    KisView * m_view;
+    KisView2 * m_view;
 
 };
 

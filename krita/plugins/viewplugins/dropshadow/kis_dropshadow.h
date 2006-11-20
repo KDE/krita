@@ -32,7 +32,7 @@ typedef enum
 
 
 class QColor;
-class KisView;
+class KisView2;
 class KisProgressDisplayInterface;
 
 class KisDropshadow : public KisProgressSubject {
@@ -41,7 +41,7 @@ class KisDropshadow : public KisProgressSubject {
 
 public:
 
-    KisDropshadow(KisView * view);
+    KisDropshadow(KisView2 * view);
     virtual ~KisDropshadow() {}
 
     void dropshadow(KisProgressDisplayInterface * progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, QColor color, quint8 opacity, bool allowResize);
@@ -63,7 +63,7 @@ private:
     void separate_alpha (quint8 *buf, qint32 width, qint32 bytes);
 
 private:
-    KisView * m_view;
+    KisView2 * m_view;
     bool m_cancelRequested;
 
 };

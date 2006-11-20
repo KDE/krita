@@ -32,7 +32,7 @@
 
 #include "ui_wdg_colorrange.h"
 
-class KisView;
+class KisView2;
 class KisCanvasSubject;
 class DlgColorRange;
 class KisSelectedTransaction;
@@ -67,7 +67,7 @@ class DlgColorRange: public KDialog {
 
 public:
 
-    DlgColorRange(KisView * view, KisPaintDeviceSP layer, QWidget * parent = 0, const char* name = 0);
+    DlgColorRange(KisView2 * view, KisPaintDeviceSP layer, QWidget * parent = 0, const char* name = 0);
     ~DlgColorRange();
 
 private slots:
@@ -91,7 +91,7 @@ private:
     WdgColorRange * m_page;
     KisSelectionSP m_selection;
     KisPaintDeviceSP m_dev;
-    KisView * m_view;
+    KisView2 * m_view;
     KisCanvasSubject * m_subject;
     enumSelectionMode m_mode;
     QCursor m_oldCursor;

@@ -23,7 +23,7 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
+class KisView2;
 class KAction;
 class KisImage;
 
@@ -40,7 +40,7 @@ class Histogram : public KParts::Plugin
 
     private:
         KisImage* m_img;
-        KisView * m_view;
+        KisView2 * m_view;
         KisPainter * m_painter;
         KAction* m_action;
 

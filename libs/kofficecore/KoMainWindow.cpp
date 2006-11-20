@@ -70,6 +70,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <ktoolbar.h>
+#include <kactionmenu.h>
 
 // qt includes
 #include <QDockWidget>
@@ -133,8 +134,7 @@ public:
     m_windowSizeDirty = false;
     m_lastExportSpecialOutputFlag = 0;
     m_readOnly = false;
-    m_toolBox = 0;
-    m_shapeSelector = 0;
+    m_dockWidgetMenu = 0;
   }
   ~KoMainWindowPrivate()
   {
@@ -190,10 +190,8 @@ public:
   QByteArray m_lastExportFormat;
   int m_lastExportSpecialOutputFlag;
 
-    QDockWidget *m_toolBox;
-    QDockWidget *m_shapeSelector;
-
     QMap<QString, QDockWidget*> m_dockWidgetMap;
+    KActionMenu* m_dockWidgetMenu;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance )
@@ -303,6 +301,10 @@ KoMainWindow::KoMainWindow( KInstance *instance )
     d->m_splitViewActionList.append(d->m_orientation);
     d->m_splitViewActionList.append(new KSeparatorAction(actionCollection()));
 
+    d->m_dockWidgetMenu = new KActionMenu( i18n( "Palettes" ), actionCollection(),
+                                           "settings_palette_menu" );
+    d->m_dockWidgetMenu->setVisible( false );
+
     // Load list of recent files
     KConfig * config = instance ? instance->config() : KGlobal::config();
     m_recent->loadEntries( config );
@@ -387,6 +389,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     // Remove the dock widgets created by the old doc's views
     qDeleteAll( d->m_dockWidgetMap.values() );
     d->m_dockWidgetMap.clear();
+    d->m_dockWidgetMenu->setVisible( false );
   }
 
   d->m_rootDoc = doc;
@@ -398,21 +401,6 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     KoView *view = doc->createView(d->m_splitter);
     d->m_rootViews.append(view);
     view->setPartManager( d->m_manager );
-    if(! d->m_toolBox) { // no toolbox yet, create one
-        d->m_toolBox = view->createToolBox();
-        if(d->m_toolBox) // if the app wants one, then add it.
-            addDockWidget(Qt::LeftDockWidgetArea, d->m_toolBox);
-    } else
-        d->m_toolBox->setVisible(true);
-
-    if( !d->m_shapeSelector ) { // no shape selector yet, create one
-        d->m_shapeSelector = view->createShapeSelector();
-        if(d->m_shapeSelector) // if the app wants one, add it
-            addDockWidget( Qt::LeftDockWidgetArea, d->m_shapeSelector );
-    } else {
-        d->m_shapeSelector->setVisible(true);
-    }
-
     view->show();
     // The addShell has been done already if using openURL
     if ( !d->m_rootDoc->shells().contains( this ) )
@@ -1118,9 +1106,6 @@ void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFl
     if ( !newdoc )
         return;
 
-    if(d->m_toolBox)
-        d->m_toolBox->setVisible(false);
-
     //FIXME: This needs to be handled differently
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -1747,9 +1732,14 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 
     if( !d->m_dockWidgetMap.contains( factory->dockId() ) ) {
         dockWidget = factory->createDockWidget();
-        dockWidget->setParent(this);
+        dockWidget->setParent( this );
         addDockWidget( factory->defaultDockWidgetArea(), dockWidget );
         d->m_dockWidgetMap.insert( factory->dockId(), dockWidget );
+
+        if( dockWidget->features() & QDockWidget::DockWidgetClosable ) {
+            d->m_dockWidgetMenu->setVisible( true );
+            d->m_dockWidgetMenu->addAction( dockWidget->toggleViewAction() );
+        }
     } else {
         dockWidget = d->m_dockWidgetMap[ factory->dockId() ];
     }

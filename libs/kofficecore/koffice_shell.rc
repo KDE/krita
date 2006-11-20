@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KOffice" version="17">
+<kpartgui name="KOffice" version="18">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -30,6 +30,7 @@
   <DefineGroup name="settings_top"/>
   <Merge/>
 <!--  <ActionList name="toolbarlist"/> -->
+  <Action name="settings_palette_menu"/>
   <Separator/>
   <DefineGroup name="settings_show"/>
   <Separator/>

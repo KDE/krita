@@ -20,12 +20,16 @@
 #ifndef KODOCKFACTORY_H
 #define KODOCKFACTORY_H
 
+#include <QString>
+
+#include <koffice_export.h>
+
 class QDockWidget;
 
 /**
  * Base class for factories used to create new dock widgets.
  */
-class KoDockFactory
+class KOFFICECORE_EXPORT KoDockFactory
 {
     public:
         KoDockFactory() {}

@@ -140,7 +140,4 @@ private:
     void showEvent(QShowEvent *event);
 };
 
-/// \internal
-
-
 #endif // _KO_TOOLBOX_H_

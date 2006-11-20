@@ -51,7 +51,9 @@ set(kofficeui_LIB_SRCS
    tkaction.cpp
    tkcoloractions.cpp 
    tkcombobox.cpp 
-   tktoolbarbutton.cpp 
+   tktoolbarbutton.cpp
+   KoToolBoxFactory.cpp
+   KoShapeSelectorFactory.cpp
 )
 
 kde4_automoc(${kofficeui_LIB_SRCS})
@@ -110,6 +112,8 @@ install(
     tkcoloractions.h
     tkcombobox.h
     tktoolbarbutton.h
+    KoToolBoxFactory.h
+    KoShapeSelectorFactory.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
 )

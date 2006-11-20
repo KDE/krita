@@ -89,7 +89,7 @@ public:
         BottomInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
         BottomBorderSpacing,    ///< In case of style being 'double' the space between the inner and outer border lines
         BottomBorderStyle,      ///< The border style. (see BorderStyle)
-        BottomBorderColor,      ///< The border Color
+        BottomBorderColor       ///< The border Color
 
 // do 15.5.24
 // continue at 15.5.28

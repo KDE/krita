@@ -47,6 +47,8 @@ public:
     };
 
     KoCharacterStyle(QObject *parent = 0);
+    /// clone constructor
+    KoCharacterStyle(const KoCharacterStyle &other);
     ~KoCharacterStyle();
 /*
     void setFont (const QFont &font) { setProperty(QTextFormat::FOO, font); }

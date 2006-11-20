@@ -106,7 +106,7 @@ public:
         BorderInset,    ///< The border makes the entire box look as though it were embedded in the canvas.
         BorderOutset,   ///< The opposite of 'inset': the border makes the entire box look as though it were coming out of the canvas.
 
-        // kword lagacy
+        // kword legacy
         BorderDashDotPattern,
         BorderDashDotDotPattern
     };

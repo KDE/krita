@@ -22,16 +22,29 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
+#include <kdebug.h>
 
 KoCharacterStyle::KoCharacterStyle(QObject *parent)
     : QObject(parent)
 {
     m_stylesPrivate = new StylePrivate();
+#ifndef NDEBUG
+    if(dynamic_cast<KoCharacterStyle*> (parent)) {
+        kWarning() << "KoCharacterStyle: passing a char style as parent; did you mean to use the copy constructor?" << endl;
+    }
+#endif
     setFontPointSize(12.0);
     setFontWeight(QFont::Normal);
     setVerticalAlignment(QTextCharFormat::AlignNormal);
     setTextOutline(QPen(Qt::NoPen));
     setForeground(Qt::black);
+}
+
+KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style)
+    : QObject(0)
+{
+    m_stylesPrivate = new StylePrivate();
+    m_stylesPrivate->copyMissing(style.m_stylesPrivate);
 }
 
 KoCharacterStyle::~KoCharacterStyle() {

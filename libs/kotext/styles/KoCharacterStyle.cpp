@@ -129,6 +129,18 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         StyleId,
         QTextFormat::FontPointSize,
         QTextCharFormat::ForegroundBrush,
+        QTextFormat::BackgroundBrush,
+        QTextFormat::FontFamily,
+        QTextFormat::FontWeight,
+        QTextFormat::FontItalic,
+        QTextFormat::FontOverline,
+        QTextFormat::FontStrikeOut,
+        QTextFormat::FontFixedPitch,
+        QTextFormat::TextUnderlineStyle,
+        QTextFormat::TextVerticalAlignment,
+        QTextFormat::TextOutline,
+        QTextFormat::BackgroundBrush,
+        QTextFormat::ForegroundBrush,
         -1
     };
 

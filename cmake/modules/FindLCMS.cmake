@@ -8,10 +8,12 @@
 
 # use pkg-config to get the directories and then use these values
 # in the FIND_PATH() and FIND_LIBRARY() calls
+if(NOT WIN32)
 INCLUDE(UsePkgConfig)
 PKGCONFIG(lcms _LcmsIncDir _LcmsLinkDir _LcmsLinkFlags _LcmsCflags)
 SET(LCMS_DEFINITIONS ${_LcmsCflags})
-    
+endif(NOT WIN32)
+
 find_path(LCMS_INCLUDE_DIR lcms.h
    ${_LcmsIncDir}
    ${CMAKE_INSTALL_PREFIX}/include

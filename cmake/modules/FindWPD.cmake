@@ -10,7 +10,6 @@
 
 # use pkg-config to get the directories and then use these values
 # in the FIND_PATH() and FIND_LIBRARY() calls
-INCLUDE(UsePkgConfig)
 
 if (WPD_INCLUDE_DIR AND WPD_LIBRARIES)
 
@@ -18,10 +17,12 @@ if (WPD_INCLUDE_DIR AND WPD_LIBRARIES)
    set(WPD_FOUND TRUE)
 
 else (WPD_INCLUDE_DIR AND WPD_LIBRARIES)
-
+if(NOT WIN32)
+  INCLUDE(UsePkgConfig)
   PKGCONFIG(libwpd-0.8 _WPDIncDir _WPDLinkDir _WPDLinkFlags _WPDCflags)
 
   set(WPD_DEFINITIONS ${_WPDCflags} CACHE INTERNAL "The definitions for libwpd")
+endif(NOT WIN32)
 
   FIND_PATH(WPD_INCLUDE_DIR libwpd/libwpd.h
     ${_WPDIncDir}

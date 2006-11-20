@@ -16,11 +16,13 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 
+if(NOT WIN32)
 INCLUDE(UsePkgConfig)
   
 PKGCONFIG(poppler-qt4 _PopplerQt4IncDir _PopplerQt4LinkDir _PopplerQt4LinkFlags _PopplerQt4Cflags)
   
 set(POPPLER_QT4_DEFINITIONS ${_PopplerQt4Cflags})
+endif(NOT WIN32)
 
 FIND_PATH(POPPLER_QT4_INCLUDE_DIR poppler-qt4.h
   ${_PopplerQt4IncDir}/poppler

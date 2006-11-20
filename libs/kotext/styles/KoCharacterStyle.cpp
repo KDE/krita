@@ -36,7 +36,6 @@ KoCharacterStyle::KoCharacterStyle(QObject *parent)
     setFontPointSize(12.0);
     setFontWeight(QFont::Normal);
     setVerticalAlignment(QTextCharFormat::AlignNormal);
-    setTextOutline(QPen(Qt::NoPen));
     setForeground(Qt::black);
 }
 

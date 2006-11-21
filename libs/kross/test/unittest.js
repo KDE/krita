@@ -24,6 +24,25 @@ function UnitTest()
 			this.failed(actual, expected);
 	}
 
+	this.assertArray = function(actual, expected) {
+		if(actual.length != expected.length) {
+			this.failed(actual, expected);
+		}
+		else {
+			var found = 0;
+			for(i=0;i<actual.length;i++) {
+				if(actual[i] != expected[i]) {
+					found = 1;
+					break;
+				}
+			}
+			if(found == 0)
+				this.passed(actual, expected);
+			else
+				this.failed(actual, expected);
+		}
+	}
+
 	this.printResult = function() {
 		println("Tests passed: " + numpassed);
 		println("Tests failed: " + numfailed);
@@ -32,7 +51,7 @@ function UnitTest()
 
 tester = new UnitTest();
 
-// We have 2 instances of TestObject which is inherits QObject.
+// We have 2 instances of TestObject which inherit QObject.
 var testobj1 = TestObject1
 var testobj2 = TestObject2
 
@@ -83,13 +102,13 @@ tester.assert(testobj1.func_qstring_qstring(" "), " ");
 tester.assert(testobj1.func_qstring_qstring(" Another \n\r Test!   $%&\" "), " Another \n\r Test!   $%&\" ");
 
 // stringlist
-//TODO Cast failure QStringList value Type 6
-//var a = new Array("string1","string");
-//tester.assert(testobj1.func_qstringlist_qstringlist(a), a);
+//TODO test failed
+var a = new Array("string1","string2");
+tester.assertArray(testobj1.func_qstringlist_qstringlist(a), a);
+tester.assertArray(testobj1.func_qstringlist_qstringlist(["abc","def"]), ["abc","def"]);
 
 // variantlist
-//TODO Cast failure QVariantList value Type 6
-//var a = new Array("string1","string");
+var a = new Array("string1","string2",17,-95);
 //tester.assert(testobj1.func_qvariantlist_qvariantlist(a), a);
 
 // print the test-results

@@ -41,6 +41,7 @@
 #include <KoZoomHandler.h>
 #include <KoViewConverter.h>
 #include <KoView.h>
+#include <KoToolDocker.h>
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
@@ -238,6 +239,14 @@ void KisView2::slotInitializeCanvas()
     m_d->selectionManager->updateGUI();
     //m_d->layerManager->updateGUI(true);
     m_d->zoomManager->updateGUI();
+
+
+    KoToolDockerFactory toolDockerFactory(m_d->canvas);
+    KoToolDocker * d =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
+    if(d)
+        m_d->canvasController->setToolOptionDocker( d );
+    else
+        kDebug() << "Could not create tool docker: " << d << endl;
 
     KoSelection *select = m_d->shapeManager->selection();
     select->select( m_d->doc->imageShape() );

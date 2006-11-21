@@ -116,7 +116,9 @@ void KisToolPaint::mouseReleaseEvent( KoPointerEvent *e )
 
 void KisToolPaint::createOptionWidget()
 {
-    KoTool::createOptionWidget();
+    kDebug() << "############################# KisToolPaint::createOptionWidget\n";
+
+    m_optionWidget = new QWidget();
 
     m_lbOpacity = new QLabel(i18n("Opacity: "), m_optionWidget);
     m_slOpacity = new KisIntSpinbox( m_optionWidget, "int_m_optionwidget");
@@ -158,6 +160,7 @@ void KisToolPaint::createOptionWidget()
 
 void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 {
+    kDebug() << "################################ addOptionWidgetLayout\n";
     Q_ASSERT(m_optionWidget != 0);
     Q_ASSERT(m_optionWidgetLayout != 0);
     int rowCount = m_optionWidgetLayout->rowCount();
@@ -166,6 +169,7 @@ void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 
 void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 {
+    kDebug() << "###############################3 addOptionWidgetOption\n";
     Q_ASSERT(m_optionWidget != 0);
     Q_ASSERT(m_optionWidgetLayout != 0);
     if (label) {

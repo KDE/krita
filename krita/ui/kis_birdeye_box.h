@@ -72,8 +72,8 @@ class KisBirdEyeBoxFactory : public KoDockFactory
 {
 public:
     KisBirdEyeBoxFactory(KisView2 * view)
+        : m_view( view )
         {
-            m_view = view;
         }
 
     virtual QString dockId() const

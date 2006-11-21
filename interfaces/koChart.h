@@ -38,7 +38,7 @@ namespace KoChart
     typedef QVariant         Value;
     //typedef KDChartTableData Data;
 
-    class KOCHARTINTERFACE_EXPORT WizardExtension : public QObject
+    class KOCHART_EXPORT WizardExtension : public QObject
     {
         Q_OBJECT
     public:
@@ -56,7 +56,7 @@ namespace KoChart
         WizardExtensionPrivate *d;
     };
 
-    class KOCHARTINTERFACE_EXPORT Part : public KoDocument
+    class KOCHART_EXPORT Part : public KoDocument
     {
         Q_OBJECT
     public:

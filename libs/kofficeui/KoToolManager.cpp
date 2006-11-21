@@ -28,8 +28,15 @@
 #include <QPaintEvent>
 #include <QTabletEvent>
 #include <QKeyEvent>
+#include <QDockWidget>
+
+#include <kactioncollection.h>
+#include <kdebug.h>
+#include <kstaticdeleter.h>
 
 #include "KoToolRegistry.h"
+#include "KoToolDocker.h"
+
 #include <KoTool.h>
 #include <KoToolBox.h>
 #include <KoCreateShapesToolFactory.h>
@@ -41,9 +48,6 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
 #include <KoInputDevice.h>
-#include <kactioncollection.h>
-#include <kdebug.h>
-#include <kstaticdeleter.h>
 
 #include <QStringList>
 #include <QAbstractButton>
@@ -114,6 +118,7 @@ KoToolManager::KoToolManager()
     , m_activeTool(0)
 {
     m_dummyTool = new DummyTool();
+    m_dummyWidget = new QLabel(i18n("No options for current tool"));
     connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*,QWidget*)),
             this, SLOT(movedFocus(QWidget*,QWidget*)));
 }
@@ -342,6 +347,15 @@ void KoToolManager::switchTool(KoTool *tool) {
         controller->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     }
     m_activeTool->activate();
+
+    if (m_activeCanvas->toolOptionDocker()) {
+        if (m_activeTool->optionWidget()) {
+            m_activeCanvas->toolOptionDocker()->setOptionWidget( m_activeTool->optionWidget() );
+        }
+        else {
+            m_activeCanvas->toolOptionDocker()->setOptionWidget( m_dummyWidget );
+        }
+    }
     emit changedTool(m_uniqueToolIds.value(m_activeTool));
 }
 
@@ -362,8 +376,9 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
     m_allTools.remove(controller);
     m_allTools.insert(controller, toolsMap);
 
-    if (m_activeTool == 0)
+    if (m_activeTool == 0) {
         toolActivated(m_defaultTool);
+    }
     else {
         // XXX: Obsolete?
         // controller->canvas()->setTool(m_dummyTool);

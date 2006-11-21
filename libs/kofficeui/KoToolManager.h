@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QCursor>
 #include <QStack>
+#include <QLabel>
 
 #include <KoToolProxy.h>
 #include <KoInputDevice.h>
@@ -234,6 +235,8 @@ private:
     QStack<QString> m_stack; // stack of temporary tools
 
     QList<KoShape*> m_lastSelectedShapes;
+
+    QLabel * m_dummyWidget;
 };
 
 #endif

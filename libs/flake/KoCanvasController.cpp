@@ -30,9 +30,10 @@
 #include <QEvent>
 
 KoCanvasController::KoCanvasController(QWidget *parent)
-: QScrollArea(parent)
-, m_canvas(0)
-, m_canvasWidget(0)
+    : QScrollArea(parent)
+    , m_canvas(0)
+    , m_canvasWidget(0)
+    , m_toolOptionDocker(0)
 {
     m_viewport = new Viewport();
     setWidget(m_viewport);

@@ -21,12 +21,12 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasResourceProvider.h"
 
-KoCanvasBase::KoCanvasBase() 
-{ 
-    m_resourceProvider = new KoCanvasResourceProvider(0); 
+KoCanvasBase::KoCanvasBase()
+{
+    m_resourceProvider = new KoCanvasResourceProvider(0);
 }
 
 KoCanvasBase::~KoCanvasBase()
-{ 
-    delete m_resourceProvider; 
+{
+    delete m_resourceProvider;
 }

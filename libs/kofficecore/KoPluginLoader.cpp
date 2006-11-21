@@ -58,13 +58,11 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType,
                                  QString::fromLatin1("(Type == 'Service') and (%1)").arg(versionString));
 
-    kDebug(30008) << ">>>>>>>>>>>>>>>>>>>>>>>> KoPluginLoader searching for plugins, " << serviceType << " " << offers.count() << " found\n";
 
     foreach(KService::Ptr service, offers) {
         int errCode = 0;
         QObject * plugin = KService::createInstance<QObject>(service, this, QStringList(), &errCode );
         if ( plugin ) {
-            kDebug(30008) <<">>>>>>>>>>>>>>>>>>>>>>>>>>> found plugin '"<< service->name() << "'\n";
             delete plugin;
         }
         else {

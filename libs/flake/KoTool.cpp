@@ -87,7 +87,6 @@ void KoTool::useCursor(QCursor cursor, bool force) {
 }
 
 QWidget * KoTool::optionWidget() {
-    // Create the optionwidget if it doesn't exist yet
     if (m_optionWidget == 0) {
         createOptionWidget();
     }

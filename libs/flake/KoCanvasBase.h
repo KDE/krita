@@ -135,6 +135,7 @@ public:
         return m_resourceProvider;
     }
 
+
 #if 0
 /*  The next list of methods are naming taken from Krita, which means they have already been
     toughened by time.  So, if you ever need a method in this interface; please uncomment the
@@ -259,28 +260,6 @@ q
     virtual QRectF windowToView(const QRectF& rc)  0;
     virtual void windowToView(qint32 *x, qint32 *y)  0;
 
-    /**
-     * Set the cursor shown when the pointer is over the canvas widget to
-     * the specified cursor.
-     *
-     * @param cursor the new cursor
-     * @return the old cursor
-     */
-    virtual QCursor setCanvasCursor(const QCursor & cursor)  0;
-
-    /**
-     * Set the active input device to the specified input device, This
-     * could be a mouse, a stylus, an eraser or any other pointing input
-     * device.
-     *
-     * @param inputDevice the new input device
-     */
-    virtual void setInputDevice(KoInputDevice inputDevice)  0;
-
-    /**
-     * @return the current input device, such as a mouse or a stylus
-     */
-    virtual KoInputDevice currentInputDevice() const  0;
 #endif
 
 private:

@@ -17,19 +17,13 @@
  */
 #include "kis_nameserver.h"
 
-KisNameServer::KisNameServer(const QString& prefix, qint32 seed)
+KisNameServer::KisNameServer(qint32 seed)
 {
-    m_prefix = prefix;
     m_generator = seed;
 }
 
 KisNameServer::~KisNameServer()
 {
-}
-
-QString KisNameServer::name()
-{
-    return m_prefix.arg(m_generator++);
 }
 
 qint32 KisNameServer::currentSeed() const

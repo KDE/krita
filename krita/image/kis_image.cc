@@ -569,7 +569,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisShared(rhs)
 
         m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied
 
-        m_d->nserver = new KisNameServer( i18n("Layer ") + rhs.m_d->nserver->currentSeed() + 1);
+        m_d->nserver = new KisNameServer(rhs.m_d->nserver->currentSeed() + 1);
         Q_CHECK_PTR(m_d->nserver);
 
     }
@@ -625,7 +625,7 @@ QString KisImage::nextLayerName() const
         return i18n("background");
     }
 
-    return m_d->nserver->name();
+    return i18n("Layer %1", m_d->nserver->number());
 }
 
 void KisImage::rollBackLayerName()
@@ -651,7 +651,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
 
     m_d->adapter = adapter;
 
-    m_d->nserver = new KisNameServer(i18n("Layer %1"), 1);
+    m_d->nserver = new KisNameServer(1);
     m_d->name = name;
 
     m_d->colorSpace = colorSpace;

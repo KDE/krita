@@ -264,7 +264,7 @@ bool KisDoc2::init()
     connect(m_d->cmdHistory, SIGNAL(commandExecuted(KCommand *)), this, SLOT(slotCommandExecuted(KCommand *)));
     setUndo(true);
 
-    m_d->nserver = new KisNameServer(i18n("Image %1"), 1);
+    m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
 
     if (!KisMetaRegistry::instance()->csRegistry()->exists(KoID("RGBA",""))) {

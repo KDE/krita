@@ -24,10 +24,9 @@
 
 class KRITAIMAGE_EXPORT KisNameServer {
 public:
-    KisNameServer(const QString& prefix, qint32 seed = 1);
+    KisNameServer(qint32 seed = 1);
     ~KisNameServer();
 
-    QString name();
     qint32 number();
     qint32 currentSeed() const;
     void rollback();

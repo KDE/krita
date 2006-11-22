@@ -27,19 +27,20 @@ function UnitTest()
 	this.assertArray = function(actual, expected) {
 		if(actual.length != expected.length) {
 			this.failed(actual, expected);
+			println("Array-Length does not match");
 		}
 		else {
-			var found = 0;
+			var failed = 0;
 			for(i=0;i<actual.length;i++) {
 				if(actual[i] != expected[i]) {
-					found = 1;
+					failed = 1;
+					this.failed(actual, expected);
+					println("Array-Item actual[i]=" + actual[i] + " expected[i]=" + expected[i]);
 					break;
 				}
 			}
-			if(found == 0)
+			if(failed == 0)
 				this.passed(actual, expected);
-			else
-				this.failed(actual, expected);
 		}
 	}
 
@@ -92,7 +93,7 @@ tester.assert(testobj1.func_double_double(-548993.271993), -548993.271993);
 //tester.assert(testobj1.func_qulonglong_qulonglong(378972), 378972);
 
 // bytearray
-//TODO func_qbytearray_qbytearray-method returns always an empty bytearray
+//TODO handle in kjsembed/qobject_binding.h QByteArray for KJS::StringType
 //tester.assert(testobj1.func_qbytearray_qbytearray("  Some String as ByteArray  "), "  Some String as ByteArray  ");
 //tester.assert(testobj1.func_qbytearray_qbytearray(" \0\n\r\t\s\0 test "), " \0\n\r\t\s\0 test ");
 
@@ -102,14 +103,14 @@ tester.assert(testobj1.func_qstring_qstring(" "), " ");
 tester.assert(testobj1.func_qstring_qstring(" Another \n\r Test!   $%&\" "), " Another \n\r Test!   $%&\" ");
 
 // stringlist
-//TODO test failed
-var a = new Array("string1","string2");
-tester.assertArray(testobj1.func_qstringlist_qstringlist(a), a);
+tester.assertArray(testobj1.func_qstringlist_qstringlist(new Array()), new Array());
+tester.assertArray(testobj1.func_qstringlist_qstringlist(new Array("s1","s2")), new Array("s1","s2"));
+tester.assertArray(testobj1.func_qstringlist_qstringlist([]), []);
 tester.assertArray(testobj1.func_qstringlist_qstringlist(["abc","def"]), ["abc","def"]);
 
 // variantlist
-var a = new Array("string1","string2",17,-95);
-//tester.assert(testobj1.func_qvariantlist_qvariantlist(a), a);
+//TODO why does this test fail?
+tester.assertArray(testobj1.func_qvariantlist_qvariantlist(new Array("s1","s2",17,-95)), new Array("s1","s2",17,-95));
 
 // print the test-results
 tester.printResult();

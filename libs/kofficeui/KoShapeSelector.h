@@ -68,8 +68,8 @@ private:
 
     class DummyShapeController : public KoShapeControllerBase {
     public:    
-        void addShape( KoShape* shape ) {}
-        void removeShape( KoShape* shape ) {}
+        void addShape( KoShape* ) {}
+        void removeShape( KoShape* ) {}
     };
 
     /// \internal

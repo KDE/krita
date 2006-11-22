@@ -53,3 +53,16 @@ install(TARGETS koproperty  DESTINATION ${LIB_INSTALL_DIR})
 ########### install files ###############
 
 kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons  )
+install( FILES
+customproperty.h
+editor.h
+editoritem.h
+factory.h
+koproperty_global.h
+property.h
+set.h
+utils.h
+widget.h
+widgetproxy.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty)
+

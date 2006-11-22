@@ -21,7 +21,8 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasResourceProvider.h"
 
-KoCanvasBase::KoCanvasBase()
+KoCanvasBase::KoCanvasBase( KoShapeControllerBase * shapeControllerBase )
+: m_shapeController( this, shapeControllerBase )
 {
     m_resourceProvider = new KoCanvasResourceProvider(0);
 }

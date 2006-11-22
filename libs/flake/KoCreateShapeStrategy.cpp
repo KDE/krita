@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 #include "KoCanvasBase.h"
 #include "KoShapeConfigWidgetBase.h"
 #include "KoShapeConfigFactory.h"
+#include "KoShapeFactory.h"
 
 #include <KoProperties.h>
 
@@ -34,7 +36,6 @@
 
 KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoShapeRubberSelectStrategy(tool, canvas, clicked)
-, m_tool(tool)
 {
 }
 
@@ -43,9 +44,10 @@ KCommand* KoCreateShapeStrategy::createCommand() {
     KoShapeFactory *factory = KoShapeRegistry::instance()->get(parent->shapeId());
     if(! factory) {
         kWarning(30001) << "Application requested a shape that is not registered '" <<
-            static_cast<KoCreateShapesTool*>(m_parent)->shapeId() << "'" << endl;
+            parent->shapeId() << "'" << endl;
         return 0;
     }
+
     const KoProperties *props = parent->shapeProperties();
     KoShape *shape;
     if(props)
@@ -60,60 +62,15 @@ KCommand* KoCreateShapeStrategy::createCommand() {
     if(newSize.width() > 1.0 && newSize.height() > 1.0) 
         shape->resize(newSize);
 
-    Q_ASSERT(m_canvas->shapeManager());
-    int z=0;
-    foreach(KoShape *sh, m_canvas->shapeManager()->shapesAt(shape->boundingRect()))
-        z = qMax(z, sh->zIndex());
-    shape->setZIndex(z+1);
+    KCommand * cmd = parent->m_canvas->shapeController().addShape( shape );
+    if ( cmd )
+    {
+        KoSelection *selection = parent->m_canvas->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select(shape);
 
-    // show config dialog.
-    KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
-    dialog->setCaption(i18n("%1 Options", factory->name()));
-
-    int pageCount = 0;
-    QList<KoShapeConfigFactory*> panels = factory->panelFactories();
-    qSort(panels.begin(), panels.end(), KoShapeConfigFactory::compare);
-    QList<KoShapeConfigWidgetBase*> widgets;
-    foreach (KoShapeConfigFactory *panelFactory, panels) {
-        if(! panelFactory->showForShapeId(parent->shapeId()))
-            continue;
-        KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
-        if(widget == 0)
-            continue;
-        widgets.append(widget);
-        widget->setUnit(m_canvas->unit());
-        dialog->addPage(widget, panelFactory->name());
-        pageCount ++;
+        cmd->execute();
     }
-    foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
-        panel->open(shape);
-        widgets.append(panel);
-        panel->setUnit(m_canvas->unit());
-        dialog->addPage(panel, panel->objectName());
-        pageCount ++;
-    }
-
-    if(pageCount > 0) {
-        if(pageCount > 1)
-            dialog->setFaceType(KPageDialog::Tabbed);
-        if(dialog->exec() != KPageDialog::Accepted) {
-            delete dialog;
-            return 0;
-        }
-        foreach(KoShapeConfigWidgetBase *widget, widgets) {
-            widget->save();
-            // TODO action;
-        }
-    }
-    delete dialog;
-
-    KoSelection *selection = m_canvas->shapeManager()->selection();
-    selection->deselectAll();
-    selection->select(shape);
-
-    Q_ASSERT(m_tool->controller() /*controller was set on parent tool*/);
-    KoShapeCreateCommand *cmd = new KoShapeCreateCommand(m_tool->controller(), shape);
-    cmd->execute();
     return cmd;
 }
 

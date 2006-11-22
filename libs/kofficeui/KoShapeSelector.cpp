@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -53,7 +54,7 @@ public:
         resize(m_icon.size());
     }
 
-    virtual void visit(KoShapeController *tool) = 0;
+    virtual void visit(KoCreateShapesTool *tool) = 0;
     virtual QString toolTip() = 0;
 
     void paint(QPainter &painter, const KoViewConverter &converter) {
@@ -74,7 +75,7 @@ public:
         m_shapeTemplate = shapeTemplate;
     }
 
-    void visit(KoShapeController *tool) {
+    void visit(KoCreateShapesTool *tool) {
         tool->setShapeId(m_shapeTemplate.id);
         tool->setShapeProperties(m_shapeTemplate.properties);
     }
@@ -96,7 +97,7 @@ public:
         m_shapeFactory = shapeFactory;
     }
 
-    void visit(KoShapeController *tool) {
+    void visit(KoCreateShapesTool *tool) {
         tool->setShapeId(m_shapeFactory->shapeId());
         tool->setShapeProperties(0);
     }
@@ -173,8 +174,8 @@ void KoShapeSelector::itemSelected() {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
     if(canvasController) {
-        KoShapeController* controller = KoToolManager::instance()->shapeController(canvasController->canvas());
-        shape->visit(controller);
+        KoCreateShapesTool * tool = KoToolManager::instance()->shapeCreatorTool( canvasController->canvas() );
+        shape->visit( tool );
         KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);
     }
 }
@@ -246,7 +247,9 @@ double KoShapeSelector::DummyViewConverter::viewToDocumentY (double viewY) const
 
 // ********* Canvas **********
 KoShapeSelector::Canvas::Canvas(KoShapeSelector *parent)
-: QWidget(parent), m_parent(parent)
+: QWidget(parent)
+, KoCanvasBase( &m_shapeController )
+, m_parent(parent)
 {
     m_toolProxy = KoToolManager::instance()->toolProxy();
     m_tool = new MoveTool(this);

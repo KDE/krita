@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +23,7 @@
 
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
+#include <KoShapeControllerBase.h>
 #include <koffice_export.h>
 #include <KoDockFactory.h>
 
@@ -64,6 +66,12 @@ private:
         double viewToDocumentY (double viewY) const;
     };
 
+    class DummyShapeController : public KoShapeControllerBase {
+    public:    
+        void addShape( KoShape* shape ) {}
+        void removeShape( KoShape* shape ) {}
+    };
+
     /// \internal
     class Canvas : public QWidget, public KoCanvasBase {
         public:
@@ -88,6 +96,7 @@ private:
             bool event(QEvent *e);
 
         private:
+            DummyShapeController m_shapeController;
             DummyViewConverter m_converter;
             KoShapeSelector *m_parent;
             KoToolProxy * m_toolProxy;

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,34 +23,63 @@
 #define KOCREATESHAPESTOOL_H
 
 #include "KoInteractionTool.h"
-#include "KoShapeController.h"
-#include "KoShapeFactory.h"
 
 #include <koffice_export.h>
 
 #include <QString>
 
 class KoCanvasBase;
-class KoShapeControllerBase;
+class KoProperties;
 
 #define KoCreateShapesTool_ID "CreateShapesTool"
 
 /**
  * A tool to create shapes with.
  */
-class FLAKE_EXPORT KoCreateShapesTool : public KoShapeController, public KoInteractionTool
+class FLAKE_EXPORT KoCreateShapesTool : public KoInteractionTool
 {
 public:
     /**
      * Create a new tool; typically not called by applications, only by the KoToolManager
      * @param canvas the canvas this tool works for.
      */
-    KoCreateShapesTool( KoCanvasBase *canvas);
+    KoCreateShapesTool( KoCanvasBase *canvas );
     /// destructor
-    ~KoCreateShapesTool() {};
+    virtual ~KoCreateShapesTool() {}
     void mouseReleaseEvent( KoPointerEvent *event );
 
     void paint( QPainter &painter, KoViewConverter &converter );
+
+    /**
+     * Each shape-type has an Id; as found in KoShapeFactory::id().id(), to choose which
+     * shape this controller should actually create; set the id before the user starts to
+     * create the new shape.
+     * @param id the SHAPEID of the to be generated shape
+     */
+    void setShapeId( const QString &id ) { m_shapeId = id; }
+    /**
+     * return the shape Id that is to be created.
+     * @return the shape Id that is to be created.
+     */
+    const QString &shapeId() const { return m_shapeId; }
+
+    /**
+     * Set the shape properties that the create controller will use for the next shape it will
+     * create.
+     * @param properties the properties or 0 if the default shape should be created.
+     */
+    void setShapeProperties( KoProperties *properties ) { m_newShapeProperties = properties; }
+    /**
+     * return the properties to be used for creating the next shape
+     * @return the properties to be used for creating the next shape
+     */
+    KoProperties const * shapeProperties() { return m_newShapeProperties; }
+
+private:    
+    friend class KoCreateShapeStrategy;
+
+    QString m_shapeId;
+    KoProperties *m_newShapeProperties;
 };
 
 #endif

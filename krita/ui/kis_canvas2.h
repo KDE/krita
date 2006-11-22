@@ -56,7 +56,7 @@ public:
      * @param canvasType determines which kind of canvas widget the
      *                   canvas initially creates.
      */
-    KisCanvas2(KoViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view);
+    KisCanvas2(KoViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view, KoShapeControllerBase * sc);
 
     virtual ~KisCanvas2();
 

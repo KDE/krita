@@ -75,7 +75,6 @@ public:
         {
             viewConverter = new KoZoomHandler( );
 
-            canvas = new KisCanvas2( viewConverter, QPAINTER, view );
             shapeManager = canvas->shapeManager();
             // The canvas controller handles the scrollbars
             canvasController = new KoCanvasController( view );
@@ -135,6 +134,7 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
 
     m_d->doc = doc;
     m_d->resourceProvider = new KisResourceProvider( this );
+    m_d->canvas = new KisCanvas2( m_d->viewConverter, QPAINTER, this, static_cast<KoShapeControllerBase*>( doc->imageShape() ) );
 
     // Add the image and select it immediately (later, we'll select
     // the first layer)
@@ -277,8 +277,7 @@ void KisView2::createGUI()
     layout->addWidget(m_d->verticalRuler, 1, 0);
     layout->addWidget(m_d->canvasController, 1, 1);
 
-    KoToolManager::instance()->addControllers(m_d->canvasController,
-                                              static_cast<KoShapeControllerBase*>( m_d->doc->imageShape()) );
+    KoToolManager::instance()->addControllers(m_d->canvasController);
 
     connect(m_d->canvasController, SIGNAL(canvasOffsetXChanged(int)),
             m_d->horizontalRuler, SLOT(setOffset(int)));

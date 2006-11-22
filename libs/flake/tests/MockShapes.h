@@ -27,7 +27,9 @@ class KoToolProxy;
 
 class MockCanvas : public KoCanvasBase {
 public:
-    MockCanvas() {}
+    MockCanvas()
+    : KoCanvasBase( 0 ) 
+    {}
     ~MockCanvas() {}
 
     void gridSize(double *, double *) const {}

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *  Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,9 +35,8 @@ class ToolHelper;
 class KoCanvasController;
 class KoCanvasBase;
 class KoTool;
-class KoShapeControllerBase;
+class KoCreateShapesTool;
 class KoToolBox;
-class KoShapeController;
 class KActionCollection;
 class KoShape;
 
@@ -60,7 +60,7 @@ class KoShape;
     MyGuiWidget::MyGuiWidget() {
         m_canvasController = new KoCanvasController(this);
         m_canvasController->setCanvas(m_canvas);
-        KoToolManager::instance()->addControllers(m_canvasController, myShapeController));
+        KoToolManager::instance()->addControllers(m_canvasController));
     }
     MyGuiWidget::~MyGuiWidget() {
         KoToolManager::instance()->removeCanvasController(m_canvasController);
@@ -138,18 +138,15 @@ public:
     void registerTools(KActionCollection *ac);
 
     /**
-     * Register a new pair of view controllers
+     * Register a new canvas controller
      * @param controller the view controller that this toolmanager will manage the tools for
-     * @param sc the shape controller instance that is associated with the controller and which
-     *      will be used for things like registring new shapes if a tool creates one.
      */
-    void addControllers(KoCanvasController *controller, KoShapeControllerBase *sc);
+    void addControllers(KoCanvasController *controller);
 
     /**
      * Remove a set of controllers
      * When the controller is no longer used it should be removed so all tools can be
-     * deleted and stop eating memory.  The accompanying KoShapeControllerBase will
-     * no longer be referenced afterwards.
+     * deleted and stop eating memory.
      * @param controller the controller that is removed
      */
     void removeCanvasController(KoCanvasController *controller);
@@ -157,8 +154,6 @@ public:
     /// @return the active canvas controller
     KoCanvasController *activeCanvasController() const;
 
-    /// @deprecated. Method is renamed to shapeController()
-    KoShapeController *shapeCreatorTool(KoCanvasBase *canvas) const;
     /**
      * Return the tool that is able to create shapes for this param canvas.
      * This is typically used by the KoShapeSelector to set which shape to create next.
@@ -166,7 +161,7 @@ public:
      *    who's tool you want.
      * @see addControllers()
      */
-    KoShapeController *shapeController(KoCanvasBase *canvas) const;
+    KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 
     /// @return the currently active pointing device
     KoInputDevice currentInputDevice() const;
@@ -223,7 +218,6 @@ private:
     static KoToolManager* s_instance;
 
     QList<ToolHelper*> m_tools;
-    QMap<KoCanvasController*, KoShapeControllerBase*> m_shapeControllers;
     QList<KoCanvasController*> m_canvases;
     KoCanvasController *m_activeCanvas;
     KoTool *m_activeTool, *m_dummyTool;

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,89 +24,55 @@
 
 #include <koffice_export.h>
 
-#include <kcommand.h>
-
-#include <QString>
 
 class KoCanvasBase;
 class KoShape;
 class KoShapeControllerBase;
-class KoProperties;
+class KCommand;
 
 /**
  * Class used by tools to maintain the list of shapes.
  * All applications have some sort of list of all shapes that belong to the document.
  * The applications implement the KoShapeControllerBase interface (all pure virtuals)
- * to add and remove shapes from the document.  To ensure that an application can expect
+ * to add and remove shapes from the document. To ensure that an application can expect
  * a certain protocol to be adhered to when adding/removing shapes, all tools use the API
- * from this class for maintaining the list of shapes in the document.  So no tool gets
- * to acess the application directly.
+ * from this class for maintaining the list of shapes in the document. So no tool gets
+ * to access the application directly.
  */
-class FLAKE_EXPORT KoShapeController {
+class FLAKE_EXPORT KoShapeController 
+{
 public:
     /**
      * Create a new Controller; typically not called by applications, only by the KoToolManager
      * @param canvas the canvas this controller works for.
      */
-    KoShapeController(KoCanvasBase *canvas);
+    KoShapeController( KoCanvasBase *canvas, KoShapeControllerBase *shapeController );
     /// destructor
     ~KoShapeController() {};
 
     /**
-     * Set the shape controller that this controller adds its created shapes to.
-     * This controller will create a shape after user input and that shape has to be
-     * registered to the hosting application.  We add/remove the shape via the
-     * KoShapeControllerBase interface.<br>
-     * Note that this controller will create a command that can be used for undo/redo.
-     * The undo will actually call the remove.
-     * @param sc the controller that will be used to add/remove the created shape.
+     * @brief Add a shape to the document.
+     *
+     * @param shape to add to the document
+     * 
+     * @return command which will insert the shape into the document or 0 if the 
+     *         insertion was canceled. The command is not yet executed.
      */
-    void setShapeController(KoShapeControllerBase *sc) { m_shapeController = sc; }
+    KCommand* addShape( KoShape *shape );
 
     /**
-     * Each shape-type has an Id; as found in KoShapeFactory::id().id(), to choose which
-     * shape this controller should actually create; set the id before the user starts to
-     * create the new shape.
-     * @param id the SHAPEID of the to be generated shape
+     * @brief Remove a shape from the document.
+     *
+     * @param shape to remove from thr document
+     * 
+     * @return command which will remove the shape from the document.
+     *         The command is not yet executed.
      */
-    void setShapeId(const QString &id) { m_shapeId = id; }
-    /**
-     * return the shape Id that is to be created.
-     * @return the shape Id that is to be created.
-     */
-    const QString &shapeId() const { return m_shapeId; }
-
-    /**
-     * Set the shape properties that the create controller will use for the next shape it will
-     * create.
-     * @param properties the properties or 0 if the default shape should be created.
-     */
-    void setShapeProperties(KoProperties *properties) { m_newShapeProperties = properties; }
-    /**
-     * return the properties to be used for creating the next shape
-     * @return the properties to be used for creating the next shape
-     */
-    KoProperties const * shapeProperties() { return m_newShapeProperties; }
-
-    /// Suggested API for deleting a shape
-    KCommand* deleteShape( KoShape *shape);
-
-    /// Suggested API for creating a new shape, and registring it with the hosting application.
-    KCommand* createShape( KoShape *shape );
-
-protected:
-    friend class KoCreateShapeStrategy;
-    /**
-     * Returns the shape Controller that is registered to hold the shapes this class creates.
-     * @return the shape controller.
-     */
-    KoShapeControllerBase* controller() const { return m_shapeController; }
+    KCommand* removeShape( KoShape *shape );
 
 private:
-    KoShapeControllerBase *m_shapeController;
-    QString m_shapeId;
-    KoProperties *m_newShapeProperties;
     KoCanvasBase *m_canvas;
+    KoShapeControllerBase *m_shapeController;
 };
 
 #endif

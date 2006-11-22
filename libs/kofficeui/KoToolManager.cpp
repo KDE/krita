@@ -2,6 +2,7 @@
  *
  * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,7 +44,6 @@
 #include <KoCreateShapesTool.h>
 #include <KoInteractionToolFactory.h>
 #include <KoPointerEvent.h>
-#include <KoShapeControllerBase.h>
 #include <KoCanvasController.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
@@ -246,12 +246,11 @@ void KoToolManager::registerTools(KActionCollection *ac) {
     // TODO
 }
 
-void KoToolManager::addControllers(KoCanvasController *controller, KoShapeControllerBase *sc) {
+void KoToolManager::addControllers(KoCanvasController *controller ) {
     if (m_canvases.contains(controller))
         return;
     setup();
     m_canvases.append(controller);
-    m_shapeControllers.insert(controller, sc);
     if (m_activeCanvas == 0)
         m_activeCanvas = controller;
     if (controller->canvas())
@@ -262,7 +261,6 @@ void KoToolManager::addControllers(KoCanvasController *controller, KoShapeContro
 
 void KoToolManager::removeCanvasController(KoCanvasController *controller) {
     m_canvases.removeAll(controller);
-    m_shapeControllers.remove(controller);
     QMap<QString, KoTool*> toolsMap = m_allTools.value(controller);
     foreach(KoTool *tool, toolsMap.values()) {
         m_uniqueToolIds.remove(tool);
@@ -369,7 +367,6 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
     }
     KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsMap.value(KoCreateShapesTool_ID));
     Q_ASSERT(createTool);
-    createTool->setShapeController(m_shapeControllers[controller]);
     QString id = KoShapeRegistry::instance()->keys()[0];
     createTool->setShapeId(id);
 
@@ -456,21 +453,18 @@ void KoToolManager::switchBackRequested() {
     switchTool(m_stack.pop(), false);
 }
 
-KoShapeController *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const {
-    return shapeController(canvas);
-}
-
-KoShapeController *KoToolManager::shapeController(KoCanvasBase *canvas) const {
+KoCreateShapesTool * KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const
+{
     foreach(KoCanvasController *controller, m_canvases) {
         if (controller->canvas() == canvas) {
             QMap<QString, KoTool*> tools = m_allTools.value(controller);
-            KoShapeController *sc =
-                dynamic_cast<KoShapeController*>(tools.value(KoCreateShapesTool_ID));
-            Q_ASSERT(sc /* ID changed? */);
-            return sc;
+
+            KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(tools.value(KoCreateShapesTool_ID));
+            Q_ASSERT(createTool /* ID changed? */);
+            return createTool;
         }
     }
-    kWarning(30004) << "KoToolManager: can't find the canvas, did you register it?" << endl;
+    Q_ASSERT( 0 ); // this should not happen
     return 0;
 }
 

@@ -31,6 +31,8 @@
 #include <QRect>
 #include <QWidget>
 
+#include "KoShapeController.h"
+
 
 class KoCanvasResourceProvider;
 class KoSelection;
@@ -48,7 +50,7 @@ class KoCanvasBase {
 
 public:
 
-    KoCanvasBase();
+    KoCanvasBase( KoShapeControllerBase * shapeControllerBase );
     virtual ~KoCanvasBase();
 
 public:
@@ -136,6 +138,7 @@ public:
     }
 
 
+    KoShapeController & shapeController() { return m_shapeController; }
 #if 0
 /*  The next list of methods are naming taken from Krita, which means they have already been
     toughened by time.  So, if you ever need a method in this interface; please uncomment the
@@ -263,7 +266,10 @@ q
 #endif
 
 private:
+    // we need a KoShapeControllerBase so that it can work
+    KoCanvasBase();
 
+    KoShapeController m_shapeController;
     KoCanvasResourceProvider * m_resourceProvider;
 };
 

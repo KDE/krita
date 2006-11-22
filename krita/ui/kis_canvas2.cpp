@@ -59,8 +59,8 @@ public:
     KoShapeManager * shapeManager;
 };
 
-KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view)
-    : KoCanvasBase()
+KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view, KoShapeControllerBase * sc)
+    : KoCanvasBase(sc)
 {
     m_d = new KisCanvas2Private(this, viewConverter, view);
 

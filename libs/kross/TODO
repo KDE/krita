@@ -36,7 +36,14 @@ Python:
 * uncomment dynamic PyQt-support + regressiontest just every case
 
 KjsEmbed:
-* work has started but still misses a lot of functionality to have it as
-  first class citizen like Python or Ruby within Kross.
+* fix longlong segfault
+* fix ulonglong segfault
+* fix QByteArray
+* implement QVariantMap
+* test/extend QVariant
+* test/extend propertymembers
+* test/extend propertymethods
+* test/extend enumerators
+* test/extend signals and slots
 * extend KjsEmbed to be able to deal with untrusted scripts coming from
   untrusted sources like e.g. via internet distributed OpenDocument files.

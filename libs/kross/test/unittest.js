@@ -109,8 +109,17 @@ tester.assertArray(testobj1.func_qstringlist_qstringlist([]), []);
 tester.assertArray(testobj1.func_qstringlist_qstringlist(["abc","def"]), ["abc","def"]);
 
 // variantlist
-//TODO why does this test fail?
+tester.assertArray(testobj1.func_qvariantlist_qvariantlist(new Array()), new Array());
 tester.assertArray(testobj1.func_qvariantlist_qvariantlist(new Array("s1","s2",17,-95)), new Array("s1","s2",17,-95));
+tester.assertArray(testobj1.func_qvariantlist_qvariantlist(["abc","def",426,-842,96.23,-275.637]), ["abc","def",426,-842,96.23,-275.637]);
+
+//TODO test following cases
+//variantmap
+//variant
+//propertymembers
+//propertymethods
+//enumerators
+//signals and slots
 
 // print the test-results
 tester.printResult();

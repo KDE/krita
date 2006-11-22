@@ -103,7 +103,7 @@ public:
      * Profiles will not work with any color space, you can query which profiles
      * that are registered with this registry can be used in combination with the
      * argument factory.
-     * @param colorProfileId the colorspace-id with which all the returned profiles will work.
+     * @param colorSpaceId the colorspace-id with which all the returned profiles will work.
      * @return a list of profiles for the factory
      */
     QList<KoColorProfile *>  profilesFor(const QString &colorSpaceId);
@@ -128,7 +128,6 @@ public:
 
     /**
      * Return a colorspace that works with the parameter profile.
-     * @param csID the ID of the colorspace that you want to have returned
      * @param profileName the name of the KoColorProfile to be combined with the colorspace
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */

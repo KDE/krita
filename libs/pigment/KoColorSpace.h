@@ -238,23 +238,23 @@ public:
      * and fills a byte array with the corresponding color in the
      * the colorspace managed by this strategy.
      *
-     * @param c the QColor that will be used to fill dst
+     * @param color the QColor that will be used to fill dst
      * @param dst a pointer to a pixel
      * @param profile the optional profile that describes the color values of QColor
      */
-    virtual void fromQColor(const QColor& c, quint8 *dst, KoColorProfile * profile = 0) const = 0;
+    virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile = 0) const = 0;
 
     /**
      * The fromQColor methods take a given color defined as an RGB QColor
      * and fills a byte array with the corresponding color in the
      * the colorspace managed by this strategy.
      *
-     * @param c the QColor that will be used to fill dst
+     * @param color the QColor that will be used to fill dst
      * @param opacity the opacity of the color
      * @param dst a pointer to a pixel
      * @param profile the optional profile that describes the color values of QColor
      */
-    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0) const = 0;
+    virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0) const = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long

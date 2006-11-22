@@ -25,11 +25,10 @@
 #include <kstdaction.h>
 #include <kxmlguifactory.h>
 #include <klocale.h>
-//#include <kparts/plugin.h>
-//#include <kservice.h>
-//#include <kservicetypetrader.h>
-//#include <kparts/componentfactory.h>
+#include <kfiledialog.h>
+#include <kurl.h>
 
+#include <KoFilterManager.h>
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
@@ -63,22 +62,31 @@
 #include "kis_layerbox.h"
 #include "kis_layer_manager.h"
 #include "kis_zoom_manager.h"
+#include "kis_import_catcher.h"
 
 class KisView2::KisView2Private {
 
 public:
 
-    KisView2Private(KisView2 * view)
-        : filterManager( 0 )
+    KisView2Private()
+        : canvas( 0 )
+        , doc( 0 )
+        , viewConverter( 0 )
+        , shapeManager( 0 )
+        , canvasController( 0 )
+        , resourceProvider( 0 )
+        , filterManager( 0 )
         , horizontalRuler( 0 )
         , verticalRuler( 0 )
+        , statusBar( 0 )
+        , selectionManager( 0 )
+        , controlFrame( 0 )
+        , birdEyeBox( 0 )
+        , layerBox( 0 )
+        , layerManager( 0 )
+        , zoomManager( 0 )
         {
             viewConverter = new KoZoomHandler( );
-
-            shapeManager = canvas->shapeManager();
-            // The canvas controller handles the scrollbars
-            canvasController = new KoCanvasController( view );
-            canvasController->setCanvas( canvas );
 
         }
 
@@ -130,15 +138,15 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
                              SLOT( configureShortcuts() ),
                              actionCollection() );
 
-    m_d = new KisView2Private(this);
+    m_d = new KisView2Private();
 
     m_d->doc = doc;
-    m_d->resourceProvider = new KisResourceProvider( this );
     m_d->canvas = new KisCanvas2( m_d->viewConverter, QPAINTER, this, static_cast<KoShapeControllerBase*>( doc->imageShape() ) );
-
-    // Add the image and select it immediately (later, we'll select
-    // the first layer)
+    m_d->shapeManager = m_d->canvas->shapeManager();
+    m_d->canvasController = new KoCanvasController( this );
+    m_d->canvasController->setCanvas( m_d->canvas );
     m_d->shapeManager->add( doc->imageShape() );
+    m_d->resourceProvider = new KisResourceProvider( this );
 
     createActions();
     createManagers();
@@ -147,8 +155,7 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
 
     // Wait for the async image to have loaded
     if ( m_d->doc->isLoading() ) {
-        connect( m_d->doc, SIGNAL( sigLoadingFinished() ),
-                 this, SLOT( slotInitializeCanvas() ) );
+        connect( m_d->doc, SIGNAL( sigLoadingFinished() ), this, SLOT( slotInitializeCanvas() ) );
     }
     else {
         slotInitializeCanvas();
@@ -235,11 +242,9 @@ void KisView2::slotInitializeCanvas()
 {
 
     m_d->canvas->setCanvasSize( image()->width(), image()->height() );
-    m_d->filterManager->updateGUI();
-    m_d->selectionManager->updateGUI();
-    //m_d->layerManager->updateGUI(true);
-    m_d->zoomManager->updateGUI();
 
+    m_d->layerManager->layersUpdated();
+    updateGUI();
 
     KoToolDockerFactory toolDockerFactory(m_d->canvas);
     KoToolDocker * d =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
@@ -250,6 +255,9 @@ void KisView2::slotInitializeCanvas()
 
     KoSelection *select = m_d->shapeManager->selection();
     select->select( m_d->doc->imageShape() );
+
+    connectCurrentImage();
+
 }
 
 
@@ -291,7 +299,7 @@ void KisView2::createGUI()
     KisLayerBoxFactory layerboxFactory( this );
     m_d->layerBox = qobject_cast<KisLayerBox*>( createDockWidget( &layerboxFactory ) );
 
-    m_d->statusBar = new KisStatusBar( KoView::statusBar() );
+    m_d->statusBar = new KisStatusBar( KoView::statusBar(), this );
     m_d->controlFrame = new KisControlFrame( mainWindow(), this );
 
     show();
@@ -301,6 +309,9 @@ void KisView2::createGUI()
 
 void KisView2::createActions()
 {
+    KAction *action = new KAction(i18n("I&nsert Image as Layer..."), actionCollection(), "insert_image_as_layer");
+    connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
+
 }
 
 
@@ -323,6 +334,135 @@ void KisView2::createManagers()
     m_d->zoomManager->setup( actionCollection() );
 
 
+}
+
+void KisView2::updateGUI()
+{
+
+    m_d->layerManager->updateGUI();
+    m_d->selectionManager->updateGUI();
+    m_d->filterManager->updateGUI();
+    m_d->zoomManager->updateGUI();
+    //m_toolManager->updateGUI(); // XXX Port this or not to the generic tool manager? BSAR
+    //m_gridManager->updateGUI();
+    //m_perspectiveGridManager->updateGUI();
+
+}
+
+
+void KisView2::connectCurrentImage()
+{
+    KisImageSP img = image();
+    if (img) {
+        connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_d->selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
+        //connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), this, SLOT(updateCanvas()));
+        connect(img.data(), SIGNAL(sigColorSpaceChanged(KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+        connect(img.data(), SIGNAL(sigProfileChanged(KoColorProfile * )), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+
+        connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
+        //connect(img.data(), SIGNAL(sigMaskInfoChanged()), SLOT(maskUpdated()));
+        connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
+        connect(img.data(), SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
+        connect(img.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
+        connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
+        connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), m_d->canvas, SLOT(updateCanvas()));
+        connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
+
+#if 0 // XXX: What about parts
+        KisConnectPartLayerVisitor v(img, this, true);
+        img->rootLayer()->accept(v);
+        connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)),
+                SLOT(handlePartLayerAdded(KisLayerSP)));
+#endif
+        //  maskUpdated();
+#if 0
+#ifdef HAVE_OPENGL
+        if (!m_OpenGLImageContext.isNull()) {
+            connect(m_OpenGLImageContext.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(slotOpenGLImageUpdated(QRect)));
+            connect(m_OpenGLImageContext.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
+        } else
+#endif
+#endif
+        {
+            connect(img.data(), SIGNAL(sigImageUpdated(QRect)), m_d->canvas, SLOT(updateCanvas(QRect)));
+            connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->canvas, SLOT(updateCanvas( )));
+        }
+
+        connect( m_d->doc, SIGNAL( sigCommandExecuted() ), img.data(), SLOT( slotCommandExecuted() ) );
+    }
+
+    m_d->layerBox->setImage(img);
+    m_d->birdEyeBox->setImage(img);
+
+}
+
+void KisView2::disconnectCurrentImage()
+{
+    KisImageSP img = image();
+
+    if (img) {
+
+        img->disconnect(this);
+        img->disconnect( m_d->layerManager );
+        img->disconnect( m_d->canvas );
+        img->disconnect( m_d->selectionManager );
+        img->disconnect( m_d->statusBar );
+
+        disconnect( m_d->doc, SIGNAL( sigCommandExecuted() ), img.data(), SLOT( slotCommandExecuted() ) );
+
+        m_d->layerBox->setImage(KisImageSP(0));
+        m_d->birdEyeBox->setImage(KisImageSP(0));
+
+#if 0 // XXX: What about parts?
+        KisConnectPartLayerVisitor v(img, this, false);
+        img->rootLayer()->accept(v);
+
+#endif
+    }
+#if 0
+#ifdef HAVE_OPENGL
+    if (!m_OpenGLImageContext.isNull()) {
+        m_OpenGLImageContext->disconnect(this);
+    }
+#endif
+#endif
+}
+
+void KisView2::slotInsertImageAsLayer()
+{
+    if (importImage() > 0)
+        m_d->doc->setModified(true);
+
+}
+
+qint32 KisView2::importImage(const KUrl& urlArg)
+{
+    KisImageSP currentImage = image();
+
+    if (!currentImage) {
+        return 0;
+    }
+
+    KUrl::List urls;
+    Q_INT32 rc = 0;
+
+    if (urlArg.isEmpty()) {
+        QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import).join(" ");
+        urls = KFileDialog::getOpenUrls(KUrl(QString::null), mimelist, 0, i18n("Import Image"));
+    } else {
+        urls.push_back(urlArg);
+    }
+
+    if (urls.empty())
+        return 0;
+
+    for (KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it) {
+        new KisImportCatcher( *it, currentImage );
+    }
+
+    canvas()->update();
+
+    return rc;
 }
 
 #include "kis_view2.moc"

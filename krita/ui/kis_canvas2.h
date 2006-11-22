@@ -20,7 +20,9 @@
 #ifndef KIS_CANVAS_H
 #define KIS_CANVAS_H
 
+#include <QObject>
 #include <QWidget>
+
 #include <KoCanvasBase.h>
 
 #include <kis_types.h>
@@ -43,8 +45,11 @@ class KoViewConverter;
  * the widget it contains, which may be either a QPainter based
  * canvas, or an OpenGL based canvas: that are the real widgets.
  */
-class KisCanvas2 : public KoCanvasBase
+class KisCanvas2 : public QObject, public KoCanvasBase
 {
+
+    Q_OBJECT
+
 public:
 
     /**
@@ -88,6 +93,13 @@ public: // KisCanvas2 methods
 
     KisImageSP image();
 
+public slots:
+
+    /// Update the entire canvas area
+    void updateCanvas();
+
+    /// Update the given rect (in document coordinates)
+    void updateCanvas( const QRect rc );
 
 private:
 

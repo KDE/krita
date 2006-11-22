@@ -91,16 +91,41 @@ public:  // Krita specific interfaces
     /// The undo adapter is used to add commands to the undo stack
     KisUndoAdapter * undoAdapter();
 
+    /// Go to all managers and enable or disable all actions and other
+    /// gui elements
+    void updateGUI();
+
 private slots:
 
     void slotInitializeCanvas();
 
+    void slotInsertImageAsLayer();
+
 
 private:
+
+    /// Connects the signals from the current image to the various
+    /// slots of the various managers
+    void connectCurrentImage();
+
+    /// Disconnect the current image (for instance, before connecting
+    /// another image) from the slots in the various managers
+    void disconnectCurrentImage();
 
     void createGUI();
     void createActions();
     void createManagers();
+
+    /**
+     * Import an image as a layer. If there is more than
+     * one layer in the image, import all of them as separate
+     * layers.
+     *
+     * @param url the url to the image file
+     * @return the number of layers added
+     */
+    qint32 importImage(const KUrl& url = KUrl());
+
 
 private:
     class KisView2Private;

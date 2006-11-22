@@ -76,7 +76,6 @@ set(kritaui_LIB_SRCS
     kis_tool.cc
     kis_tool_freehand.cc
     kis_tool_paint.cc
-    kis_tool_registry.cc	
     kis_tool_shape.cc
     kis_view2.cpp
     kis_view_converter.cpp
@@ -169,7 +168,6 @@ install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})
 #    kis_tool_dummy.h
 #    kis_tool_manager.h
 #    kis_tool_types.h
-#    kis_tool_registry.h
 #    kis_view2.h
 #    kobirdeyepanel.h
 #    kis_filters_listview.h

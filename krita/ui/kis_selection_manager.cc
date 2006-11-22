@@ -349,13 +349,11 @@ void KisSelectionManager::updateStatusBar()
         if (dev) {
             if (dev->hasSelection()) {
                 QRect r = dev->selection()->selectedExactRect();
-                m_parent->statusBar()->setSelection( i18n("Selection Active: x = %1 y = %2 width = %3 height = %4",r.x(),r.y(), r.width(), r.height()));
+                m_parent->statusBar()->setSelection( img );
                 return;
             }
         }
     }
-
-    m_parent->statusBar()->setSelection(i18n("No Selection"));
 }
 
 

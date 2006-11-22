@@ -34,9 +34,6 @@ KisToolRegistry::KisToolRegistry()
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Tool"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Krita-Version] == 3)"));
-    kDebug() << "\n\n\n#########################\n"
-             << "######### " << offers.count() << "\n\n\n\n";
-
 
     KService::List::ConstIterator iter;
 

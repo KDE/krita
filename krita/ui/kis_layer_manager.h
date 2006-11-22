@@ -55,16 +55,15 @@ public:
     void setup(KActionCollection * collection);
     void addAction(KAction * action);
 
+    void updateGUI();
+
 signals:
 
     /// XXX: Move this to kisview or to kisresourceprovider? (BSAR)
     void currentColorSpaceChanged(KoColorSpace * cs);
-
 public slots:
 
-    // Calls the updateGUI methods of the other managers: the layer
-    // manager is leading.
-    void updateGUI(bool enable);
+    void imgResizeToActiveLayer();
 
     void layerCompositeOp(const KoCompositeOp* compositeOp);
     void layerOpacity(int opacity, bool dontundo);
@@ -135,6 +134,8 @@ private:
     KAction *m_layerSaveAs;
     KAction *m_layerTop;
     bool m_actLayerVis;
+    KAction *m_imgResizeToLayer;
+
 };
 
 #endif

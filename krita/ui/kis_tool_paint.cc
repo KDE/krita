@@ -116,7 +116,6 @@ void KisToolPaint::mouseReleaseEvent( KoPointerEvent *e )
 
 void KisToolPaint::createOptionWidget()
 {
-    kDebug() << "############################# KisToolPaint::createOptionWidget\n";
 
     m_optionWidget = new QWidget();
 
@@ -160,7 +159,6 @@ void KisToolPaint::createOptionWidget()
 
 void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 {
-    kDebug() << "################################ addOptionWidgetLayout\n";
     Q_ASSERT(m_optionWidget != 0);
     Q_ASSERT(m_optionWidgetLayout != 0);
     int rowCount = m_optionWidgetLayout->rowCount();
@@ -169,7 +167,6 @@ void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 
 void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 {
-    kDebug() << "###############################3 addOptionWidgetOption\n";
     Q_ASSERT(m_optionWidget != 0);
     Q_ASSERT(m_optionWidgetLayout != 0);
     if (label) {

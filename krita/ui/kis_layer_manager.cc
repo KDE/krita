@@ -55,6 +55,7 @@
 
 #include "kis_config.h"
 #include "kis_cursor.h"
+#include "kis_zoom_manager.h"
 #include "kis_doc2.h"
 #include "kis_view2.h"
 #include "kis_part_layer.h"
@@ -66,6 +67,7 @@
 #include "kis_filter_manager.h"
 #include "kis_resource_provider.h"
 #include "kis_statusbar.h"
+#include "kis_label_progress.h"
 
 #include "kis_layer_manager.h"
 
@@ -87,6 +89,7 @@ KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     , m_layerSaveAs( 0 )
     , m_layerTop( 0 )
     , m_actLayerVis( false )
+    , m_imgResizeToLayer( 0 )
 {
 }
 
@@ -144,19 +147,17 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_layerProperties = new KAction(i18n("Properties..."), actionCollection, "layer_properties");
     connect(m_layerProperties, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
-    KAction *action = new KAction(i18n("I&nsert Image as Layer..."), actionCollection, "insert_image_as_layer");
-    connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
-
     m_layerSaveAs = new KAction(KIcon("filesave"), i18n("Save Layer as Image..."), actionCollection, "save_layer_as_image");
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 
-    action = new KAction(KIcon("view_left_right"), i18n ("Flip on &X Axis"), actionCollection, "mirrorLayerX");
+    KAction * action = new KAction(KIcon("view_left_right"), i18n ("Flip on &X Axis"), actionCollection, "mirrorLayerX");
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerX()));
 
     action = new KAction(KIcon("view_top_bottom"), i18n("Flip on &Y Axis"), actionCollection, "mirrorLayerY");
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerY()));
 
-
+    m_imgResizeToLayer = new KAction(i18n("Resize Image to Size of Current Layer"), actionCollection, "resizeimgtolayer");
+    connect(m_imgResizeToLayer, SIGNAL(triggered()), this, SLOT(imgResizeToActiveLayer()));
 }
 
 void KisLayerManager::addAction(KAction * action)
@@ -164,8 +165,9 @@ void KisLayerManager::addAction(KAction * action)
     m_pluginActions.append(action);
 }
 
-void KisLayerManager::updateGUI(bool enable)
+void KisLayerManager::updateGUI()
 {
+
     KisImageSP img = m_view->image();
 
     KisLayerSP layer;
@@ -189,7 +191,7 @@ void KisLayerManager::updateGUI(bool enable)
     }
 #endif
 
-    enable = enable && img && layer && layer->visible() && !layer->locked();
+    bool enable = img && layer && layer->visible() && !layer->locked();
 
     m_layerDup->setEnabled(enable);
     m_layerRm->setEnabled(enable);
@@ -206,12 +208,6 @@ void KisLayerManager::updateGUI(bool enable)
     m_imgMergeLayer->setEnabled(nlayers > 1 && layer && layer->nextSibling());
 
 
-    m_view->selectionManager()->updateGUI();
-    m_view->filterManager()->updateGUI();
-    //m_toolManager->updateGUI(); // XXX Port this or not to the generic tool manager? BSAR
-    //m_gridManager->updateGUI();
-    //m_perspectiveGridManager->updateGUI();
-
 #if 0 //Port if we want to keep embedded parts
     KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(layer.data());
     if (partLayer) {
@@ -221,9 +217,35 @@ void KisLayerManager::updateGUI(bool enable)
     if (img && img->activeDevice())
         emit currentColorSpaceChanged(img->activeDevice()->colorSpace());
 
-    // XXX: Implement this in kisview? (BSAR)
-    //imgUpdateGUI();
+    m_imgResizeToLayer->setEnabled(img && img->activeLayer());
 
+    m_view->statusBar()->setProfile(img);
+
+}
+
+void KisLayerManager::imgResizeToActiveLayer()
+{
+    KisImageSP img = m_view->image();
+    KisLayerSP layer;
+    KisUndoAdapter * undoAdapter = m_view->undoAdapter();
+
+    if (img && (layer = img->activeLayer())) {
+
+        if (undoAdapter && undoAdapter->undo()) {
+            undoAdapter->beginMacro(i18n("Resize Image to Size of Current Layer"));
+        }
+
+        img->lock();
+
+        QRect r = layer->exactBounds();
+        img->resize(r.width(), r.height(), r.x(), r.y(), true);
+
+        img->unlock();
+
+        if (undoAdapter && undoAdapter->undo()) {
+            undoAdapter->endMacro();
+        }
+    }
 }
 
 void KisLayerManager::layerCompositeOp(const KoCompositeOp* compositeOp)
@@ -655,7 +677,7 @@ void KisLayerManager::layerRemove()
                 layer->parent()->setDirty(layer->extent());
 
             m_view->canvas()->update();
-            updateGUI(!img->activeLayer().isNull());
+            m_view->updateGUI();
         }
     }
 }
@@ -899,6 +921,8 @@ void KisLayerManager::mergeLayer()
     if (!layer) return;
 
     img->mergeLayer(layer);
+    m_view->updateGUI();
+
 }
 
 void KisLayerManager::layersUpdated()
@@ -907,9 +931,9 @@ void KisLayerManager::layersUpdated()
     if (!img) return;
 
     KisLayerSP layer = img->activeLayer();
+    if (!layer) return;
 
-    updateGUI(img && layer);
-
+    m_view->updateGUI();
     m_view->resourceProvider()->slotLayerActivated( layer );
 
 }

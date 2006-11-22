@@ -45,7 +45,6 @@ public:
         , canvasWidget( 0 )
         , shapeManager( new KoShapeManager(parent) )
         {
-            kDebug() << ">>>>>>>>>>>>> " << shapeManager << endl;
         }
 
     ~KisCanvas2Private()
@@ -118,7 +117,7 @@ KoShapeManager* KisCanvas2::shapeManager() const
 
 void KisCanvas2::updateCanvas(const QRectF& rc)
 {
-    kDebug() << "KisCanvas2::updateCanvas: " << rc << endl;
+    // XXX: Convert from document coordinated to widget coordinates
     m_d->canvasWidget->widget()->update( rc.toRect() );
 }
 
@@ -153,3 +152,15 @@ KisImageSP KisCanvas2::image()
     return m_d->view->image();
 
 }
+
+void KisCanvas2::updateCanvas()
+{
+    m_d->canvasWidget->widget()->update();
+}
+
+void KisCanvas2::updateCanvas( const QRect rc )
+{
+    updateCanvas( QRectF( rc ) );
+}
+
+#include "kis_canvas2.moc"

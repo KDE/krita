@@ -19,30 +19,36 @@
 #ifndef KIS_STATUSBAR_H
 #define KIS_STATUSBAR_H
 
-#include <QLabel>
-#include <QLineEdit>
+#include <QObject>
 
-#include <kstatusbar.h>
-#include <ksqueezedtextlabel.h>
+#include <kis_types.h>
 
-#include "kis_label_progress.h"
+class KStatusBar;
+class KStatusBarLabel;
+class KSqueezedTextLabel;
 
+class KoColorProfile;
+
+class KisLabelProgress;
+class KisView2;
+
+/// XXX: Conform to Karbon in our statusbar
 class KisStatusBar : public QObject
 {
     Q_OBJECT
 
 public:
 
-    KisStatusBar(KStatusBar * statusBar );
+    KisStatusBar(KStatusBar * statusBar, KisView2 * view );
     ~KisStatusBar();
 
-public:
+public slots:
 
     void setZoom( int percentage );
     void setPosition( int x, int y );
     void setSize( int w, int h );
-    void setSelection( const QString & t );
-    void setProfile( const QString & t );
+    void setSelection( KisImageSP img );
+    void setProfile( KisImageSP img );
     void setHelp( const QString &t );
 
     KisLabelProgress * progress()
@@ -50,13 +56,19 @@ public:
             return m_progress;
         }
 
+
+
+    void updateStatusBarProfileLabel();
+
 private:
+
+    KisView2 * m_view;
 
     KStatusBar * m_statusbar;
 
-    QLineEdit *m_statusBarZoomLabel;
-    QLabel *m_statusBarPositionLabel;
-    QLabel *m_sizeLabel;
+    KStatusBarLabel *m_statusBarZoomLabel; // Make interactive line edit
+    KStatusBarLabel *m_statusBarPositionLabel;
+    KStatusBarLabel *m_sizeLabel;
 
     KSqueezedTextLabel *m_statusBarSelectionLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;

@@ -337,6 +337,11 @@ KisFilterManager * KisView2::filterManager()
     return m_d->filterManager;
 }
 
+KisImageManager * KisView2::imageManager()
+{
+    return m_d->imageManager;
+}
+
 KisUndoAdapter * KisView2::undoAdapter()
 {
     return m_d->doc->undoAdapter();

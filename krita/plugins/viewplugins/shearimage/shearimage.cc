@@ -34,14 +34,13 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_doc.h>
-#include <kis_config.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view2.h>
-#include <kis_selection.h>
+#include <kis_layer_manager.h>
+#include <kis_image_manager.h>
 
 #include "shearimage.h"
 #include "dlg_shearimage.h"
@@ -50,15 +49,15 @@ typedef KGenericFactory<ShearImage> ShearImageFactory;
 K_EXPORT_COMPONENT_FACTORY( kritashearimage, ShearImageFactory( "krita" ) )
 
 // XXX: this plugin could also provide layer scaling/resizing
-ShearImage::ShearImage(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+    ShearImage::ShearImage(QObject *parent, const QStringList &)
+        : KParts::Plugin(parent)
 {
     if ( parent->inherits("KisView2") )
     {
         setInstance(ShearImageFactory::instance());
-        
-setXMLFile(KStandardDirs::locate("data","kritaplugins/shearimage.rc"), 
-true);
+
+        setXMLFile(KStandardDirs::locate("data","kritaplugins/shearimage.rc"),
+                   true);
 
         KAction *action = new KAction(i18n("&Shear Image..."), actionCollection(), "shearimage");
         connect(action,  SIGNAL(triggered()), this, SLOT(slotShearImage()));
@@ -86,12 +85,12 @@ void ShearImage::slotShearImage()
 
     dlgShearImage->setCaption(i18n("Shear Image"));
 
-        if (dlgShearImage->exec() == QDialog::Accepted) {
+    if (dlgShearImage->exec() == QDialog::Accepted) {
         qint32 angleX = dlgShearImage->angleX();
-                qint32 angleY = dlgShearImage->angleY();
-                m_view->shearCurrentImage(angleX, angleY);
+        qint32 angleY = dlgShearImage->angleY();
+        m_view->imageManager()->shearCurrentImage(angleX, angleY);
     }
-        delete dlgShearImage;
+    delete dlgShearImage;
 }
 
 void ShearImage::slotShearLayer()
@@ -106,9 +105,9 @@ void ShearImage::slotShearLayer()
     dlgShearImage->setCaption(i18n("Shear Layer"));
 
     if (dlgShearImage->exec() == QDialog::Accepted) {
-                qint32 angleX = dlgShearImage->angleX();
-                qint32 angleY = dlgShearImage->angleY();
-                m_view->shearLayer(angleX, angleY);
+        qint32 angleX = dlgShearImage->angleX();
+        qint32 angleY = dlgShearImage->angleY();
+        m_view->layerManager()->shearLayer(angleX, angleY);
 
     }
     delete dlgShearImage;

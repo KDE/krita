@@ -45,7 +45,7 @@ class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
-
+class KisImageManager;
 
 class KisView2 : public KoView {
 
@@ -98,6 +98,10 @@ public:  // Krita specific interfaces
 
     /// The filtermanager handles everything action-related to filters
     KisFilterManager * filterManager();
+
+    /// The image manager handles everything action-related to the
+    /// current image
+    KisImageManager * imageManager();
 
     /// The undo adapter is used to add commands to the undo stack
     KisUndoAdapter * undoAdapter();

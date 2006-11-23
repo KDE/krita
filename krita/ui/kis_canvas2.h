@@ -89,6 +89,8 @@ public: // KoCanvasBase implementation
 
     KoColorProfile * monitorProfile();
 
+    void resetMonitorProfile();
+
 public: // KisCanvas2 methods
 
     void setCanvasSize(int w, int h);
@@ -105,7 +107,6 @@ public slots:
 
 private:
 
-    void resetMonitorProfile();
 
     KisCanvas2(const KisCanvas2&);
 

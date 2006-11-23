@@ -31,6 +31,7 @@
 #include <kaction.h>
 #include <k3urldrag.h>
 #include <kmenu.h>
+#include <kstdaction.h>
 #include <ktogglefullscreenaction.h>
 
 #include <KoMainWindow.h>
@@ -50,6 +51,7 @@
 #include <kis_undo_adapter.h>
 #include <kis_layer.h>
 
+#include "kis_config.h"
 #include "kis_statusbar.h"
 #include "kis_canvas2.h"
 #include "kis_doc2.h"
@@ -70,6 +72,7 @@
 #include "kis_grid_manager.h"
 #include "kis_perspective_grid_manager.h"
 #include "kis_mask_manager.h"
+#include "kis_dlg_preferences.h"
 
 class KisView2::KisView2Private {
 
@@ -406,6 +409,10 @@ void KisView2::createActions()
 {
     m_d->fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
     connect( m_d->fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
+
+    KStdAction::preferences(this, SLOT(slotPreferences()), actionCollection(), "preferences");
+
+
 }
 
 
@@ -547,6 +554,54 @@ void KisView2::slotUpdateFullScreen(bool toggle)
         }
 
         KoView::shell()->setWindowState(newState);
+    }
+}
+
+void KisView2::slotPreferences()
+{
+#if 0
+#ifdef HAVE_OPENGL
+    bool canvasWasOpenGL = m_canvas->isOpenGLCanvas();
+#endif
+#endif
+    if (PreferencesDialog::editPreferences())
+    {
+        KisConfig cfg;
+        m_d->canvas->resetMonitorProfile();
+#if 0
+#ifdef HAVE_OPENGL
+        if (cfg.useOpenGL() != canvasWasOpenGL) {
+
+            disconnectCurrentImg();
+
+            //XXX: Need to notify other views that this global setting has changed.
+            if (cfg.useOpenGL()) {
+                m_OpenGLImageContext = KisOpenGLImageContext::getImageContext(m_image, monitorProfile());
+                m_canvas->createOpenGLCanvas(m_OpenGLImageContext->sharedContextWidget());
+            } else
+            {
+                m_OpenGLImageContext = 0;
+                m_canvas->createQPaintDeviceCanvas();
+            }
+
+            connectCurrentImg();
+
+            resizeEvent(0);
+        }
+
+        if (cfg.useOpenGL()) {
+            m_OpenGLImageContext->setMonitorProfile(monitorProfile());
+        }
+#endif
+#endif
+        m_d->canvas->canvasWidget()->update();
+
+#if 0 // XXX: How to do this with KoToolManager?
+        if (m_toolManager->currentTool()) {
+            setCanvasCursor(m_toolManager->currentTool()->cursor());
+        }
+#endif
+
     }
 }
 

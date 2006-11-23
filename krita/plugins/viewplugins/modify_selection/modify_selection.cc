@@ -78,9 +78,9 @@ true);
         connect(b, SIGNAL(triggered()), this, SLOT(slotShrinkSelection()));
         connect(c, SIGNAL(triggered()), this, SLOT(slotBorderSelection()));
 
-        m_view ->canvasSubject()-> selectionManager()->addSelectionAction(a);
-        m_view ->canvasSubject()-> selectionManager()->addSelectionAction(b);
-        m_view ->canvasSubject()-> selectionManager()->addSelectionAction(c);
+        m_view->selectionManager()->addSelectionAction(a);
+        m_view->selectionManager()->addSelectionAction(b);
+        m_view->selectionManager()->addSelectionAction(c);
     }
 }
 
@@ -106,7 +106,7 @@ void ModifySelection::slotGrowSelection()
         qint32 xradius = dlgGrowSelection->xradius();
         qint32 yradius = dlgGrowSelection->yradius();
 
-        m_view ->canvasSubject()-> selectionManager()->grow(xradius, yradius);
+        m_view->selectionManager()->grow(xradius, yradius);
     }
 
     delete dlgGrowSelection;
@@ -130,7 +130,7 @@ void ModifySelection::slotShrinkSelection()
         qint32 yradius = dlgShrinkSelection->yradius();
         bool shrinkFromImageBorder = dlgShrinkSelection->shrinkFromImageBorder();
 
-        m_view ->canvasSubject()-> selectionManager()->shrink(xradius, yradius, shrinkFromImageBorder);
+        m_view->selectionManager()->shrink(xradius, yradius, shrinkFromImageBorder);
     }
 
     delete dlgShrinkSelection;
@@ -153,7 +153,7 @@ void ModifySelection::slotBorderSelection()
         qint32 xradius = dlgBorderSelection->xradius();
         qint32 yradius = dlgBorderSelection->yradius();
 
-        m_view ->canvasSubject()-> selectionManager()->border(xradius, yradius);
+        m_view->selectionManager()->border(xradius, yradius);
     }
 
     delete dlgBorderSelection;

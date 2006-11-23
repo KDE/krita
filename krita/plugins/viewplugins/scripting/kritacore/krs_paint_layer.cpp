@@ -23,7 +23,7 @@
 #include <klocale.h>
 
 #include <KoColorSpaceRegistry.h>
-#include <kis_doc.h>
+#include <kis_doc2.h>
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
 #include <kis_iterators_pixel.h>
@@ -37,7 +37,7 @@
 
 using namespace Kross::KritaCore;
 
-PaintLayer::PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc* doc)
+PaintLayer::PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc2* doc)
     : QObject(image)
     , m_layer(layer)
     , m_doc(doc)

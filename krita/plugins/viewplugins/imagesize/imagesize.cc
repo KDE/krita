@@ -35,7 +35,6 @@
 #include <kgenericfactory.h>
 #include <kstdaction.h>
 
-#include <kis_doc.h>
 #include <kis_config.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -60,8 +59,8 @@ ImageSize::ImageSize(QObject *parent, const QStringList &)
     if ( parent->inherits("KisView2") )
     {
         setInstance(ImageSizeFactory::instance());
-        
-setXMLFile(KStandardDirs::locate("data","kritaplugins/imagesize.rc"), 
+
+setXMLFile(KStandardDirs::locate("data","kritaplugins/imagesize.rc"),
 true);
 
         KAction *action = new KAction(i18n("Change &Image Size..."), actionCollection(), "imagesize");

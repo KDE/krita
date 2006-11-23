@@ -34,7 +34,6 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include "kis_doc.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
@@ -54,8 +53,8 @@ ColorRange::ColorRange(QObject *parent, const QStringList &)
 {
     if (parent->inherits("KisView2")) {
         setInstance(ColorRangeFactory::instance());
-        
-setXMLFile(KStandardDirs::locate("data","kritaplugins/colorrange.rc"), 
+
+setXMLFile(KStandardDirs::locate("data","kritaplugins/colorrange.rc"),
 true);
         m_view = dynamic_cast<KisView2*>(parent);
         KAction *action = new KAction(i18n("&Color Range..."), actionCollection(), "colorrange");

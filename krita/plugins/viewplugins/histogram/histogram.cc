@@ -34,7 +34,6 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
@@ -57,8 +56,8 @@ Histogram::Histogram(QObject *parent, const QStringList &)
     if ( parent->inherits("KisView2") ) {
 
         setInstance(HistogramFactory::instance());
-        
-setXMLFile(KStandardDirs::locate("data","kritaplugins/histogram.rc"), 
+
+setXMLFile(KStandardDirs::locate("data","kritaplugins/histogram.rc"),
 true);
 
         m_action = new KAction(i18n("&Histogram..."), actionCollection(), "histogram");

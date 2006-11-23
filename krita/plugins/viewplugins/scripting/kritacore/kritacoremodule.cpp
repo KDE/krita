@@ -35,13 +35,12 @@
 
 // krita
 #include <kis_view2.h>
-#include <kis_doc.h>
+#include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_autobrush_resource.h>
 #include <kis_resourceserver.h>
 #include <kis_brush.h>
 #include <kis_pattern.h>
-//#include <kis_doc.h>
 #include <kis_filter.h>
 #include <kis_filter_registry.h>
 //#include <kis_image.h>
@@ -115,7 +114,7 @@ QObject* KritaCoreModule::progress()
 
 QObject* KritaCoreModule::image()
 {
-    ::KisDoc* document = d->view->canvasSubject()->document();
+    ::KisDoc2* document = d->view->canvasSubject()->document();
     return document ? new Image(this, document->currentImage(), document) : 0;
 }
 

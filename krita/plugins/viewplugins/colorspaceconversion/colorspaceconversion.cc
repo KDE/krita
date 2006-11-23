@@ -36,7 +36,6 @@
 
 #include "kis_types.h"
 #include "kis_annotation.h"
-#include "kis_doc2.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_image.h"

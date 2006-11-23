@@ -30,7 +30,6 @@
 #include "KoColorSpaceRegistry.h"
 #include "kis_progress_display_interface.h"
 #include "kis_dlg_filtersgallery.h"
-#include "kis_doc.h"
 #include "kis_filter.h"
 #include "kis_filters_listview.h"
 #include "kis_meta_registry.h"

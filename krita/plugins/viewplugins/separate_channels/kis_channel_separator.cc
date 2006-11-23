@@ -38,7 +38,7 @@
 
 #include <KoFilterManager.h>
 
-#include <kis_doc.h>
+#include <kis_doc2.h>
 #include <kis_image.h>
 #include "kis_meta_registry.h"
 #include <kis_iterators_pixel.h>
@@ -272,7 +272,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer( image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
                 QRect r = l->exactBounds();
 
-                KisDoc d;
+                KisDoc2 d;
                 d.prepareForImport();
 
                 KisImageSP dst = KisImageSP(new KisImage(d.undoAdapter(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));

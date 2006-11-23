@@ -34,7 +34,6 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kicon.h>
-#include <kis_doc.h>
 #include <kis_config.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -42,6 +41,8 @@
 #include <kis_types.h>
 #include <kis_view2.h>
 #include <kis_selection.h>
+#include <kis_image_manager.h>
+#include <kis_layer_manager.h>
 
 #include "rotateimage.h"
 #include "dlg_rotateimage.h"
@@ -55,8 +56,8 @@ RotateImage::RotateImage(QObject *parent, const QStringList &)
 {
     if ( parent->inherits("KisView2") ) {
         setInstance(RotateImageFactory::instance());
-        
-setXMLFile(KStandardDirs::locate("data","kritaplugins/rotateimage.rc"), 
+
+setXMLFile(KStandardDirs::locate("data","kritaplugins/rotateimage.rc"),
 true);
         m_view = (KisView2*) parent;
 
@@ -104,25 +105,25 @@ void RotateImage::slotRotateImage()
 
         if (dlgRotateImage->exec() == QDialog::Accepted) {
         qint32 angle = dlgRotateImage->angle();
-        m_view->rotateCurrentImage(angle);
+        m_view->imageManager()->rotateCurrentImage(angle);
     }
     delete dlgRotateImage;
 }
 
 void RotateImage::slotRotateImage90()
 {
-    m_view->rotateCurrentImage( 90 );
+    m_view->imageManager()->rotateCurrentImage( 90 );
 }
 
 void RotateImage::slotRotateImage180()
 {
-    m_view->rotateCurrentImage( 180 );
+    m_view->imageManager()->rotateCurrentImage( 180 );
 }
 
 
 void RotateImage::slotRotateImage270()
 {
-    m_view->rotateCurrentImage( 270 );
+    m_view->imageManager()->rotateCurrentImage( 270 );
 }
 
 void RotateImage::slotRotateLayer()
@@ -138,7 +139,7 @@ void RotateImage::slotRotateLayer()
 
     if (dlgRotateImage->exec() == QDialog::Accepted) {
                 qint32 angle = dlgRotateImage->angle();
-        m_view->rotateLayer(angle);
+        m_view->layerManager()->rotateLayer(angle);
 
     }
     delete dlgRotateImage;

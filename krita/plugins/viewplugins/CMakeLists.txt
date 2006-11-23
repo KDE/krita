@@ -8,7 +8,7 @@ add_subdirectory( colorspaceconversion )
 #add_subdirectory( histogram_docker )
 #add_subdirectory( imagesize )
 #add_subdirectory( modify_selection )
-#add_subdirectory( rotateimage )
+add_subdirectory( rotateimage )
 #add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 

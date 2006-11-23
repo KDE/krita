@@ -35,7 +35,6 @@
 #include <kgenericfactory.h>
 #include <kstdaction.h>
 
-#include "kis_doc.h"
 #include "kis_config.h"
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -60,8 +59,8 @@ ModifySelection::ModifySelection(QObject *parent, const QStringList &)
     if ( parent->inherits("KisView2") )
     {
         setInstance(ModifySelectionFactory::instance());
-        
-setXMLFile(KStandardDirs::locate("data","kritaplugins/modify_selection.rc"), 
+
+setXMLFile(KStandardDirs::locate("data","kritaplugins/modify_selection.rc"),
 true);
 
         m_view = (KisView2*) parent;

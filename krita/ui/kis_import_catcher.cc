@@ -36,7 +36,7 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisImageSP image)
         slotLoadingFinished();
     }
     else {
-        connect(m_doc, SIGNAL(loadingFinished()), this, SLOT(slotLoadingFinished()));
+        connect(m_doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     }
 }
 

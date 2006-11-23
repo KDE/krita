@@ -20,6 +20,11 @@
 #include <kcmdlineargs.h>
 #include <KoApplication.h>
 #include <krita_export.h>
+#include <execinfo.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <kdebug.h>
+#include <QString>
 
 #include "ui/kis_aboutdata.h"
 
@@ -28,8 +33,49 @@ static const KCmdLineOptions options[] = {
     KCmdLineLastOption
 };
 
+static QString qBacktrace( int levels = -1 )
+{
+    QString s;
+    void* trace[256];
+    int n = backtrace(trace, 256);
+    char** strings = backtrace_symbols (trace, n);
+
+    if ( levels != -1 )
+        n = qMin( n, levels );
+    s = "[\n";
+
+    for (int i = 0; i < n; ++i)
+        s += QString::number(i) +
+             QString::fromLatin1(": ") +
+             QString::fromLatin1(strings[i]) + QString::fromLatin1("\n");
+    s += "]\n";
+    free (strings);
+    return s;
+}
+
+void myMessageOutput(QtMsgType type, const char *msg)
+{
+    switch (type) {
+    case QtDebugMsg:
+        fprintf(stderr, "Debug: %s\n", msg);
+        break;
+    case QtWarningMsg:
+        fprintf(stderr, "Warning: %s\n", msg);
+        break;
+    case QtCriticalMsg:
+        fprintf(stderr, "Critical: %s\n", msg);
+        break;
+    case QtFatalMsg:
+        kDebug() << "Fatal: " <<  msg << endl;
+        kDebug() << qBacktrace();
+        abort();
+    }
+}
+
 extern "C" KRITA_EXPORT int kdemain(int argc, char **argv)
 {
+    qInstallMsgHandler(myMessageOutput);
+
     KCmdLineArgs::init(argc, argv, newKritaAboutData());
     KCmdLineArgs::addCmdLineOptions(options);
 

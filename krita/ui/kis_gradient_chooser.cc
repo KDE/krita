@@ -42,7 +42,7 @@ KisCustomGradientDialog::KisCustomGradientDialog(KisView2 * view, QWidget * pare
     setModal(false);
     m_page = new KisAutogradient(this, "autogradient", i18n("Custom Gradient"));
     setMainWidget(m_page);
-    connect(m_page, SIGNAL(activatedResource(KisResource *)), view->resourceProvider(), SLOT(gradientActivated(KisResource*)));
+    connect(m_page, SIGNAL(activatedResource(KisResource *)), view->resourceProvider(), SLOT(slotGradientActivated(KisResource*)));
 }
 
 KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const char *name) : super(parent, name)

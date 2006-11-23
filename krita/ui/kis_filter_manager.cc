@@ -252,7 +252,6 @@ void KisFilterManager::updateGUI()
 
     KAction * a;
     int i = 0;
-    kDebug() << "XXXXXXXXXXXXXXXXXXXXXX\n";
     for (a = m_d->filterActions.first(); a; a = m_d->filterActions.next(), i++) {
         // XXX: This should always be true: investigate later! BSAR
         if (i < m_d->filterList.count()) {
@@ -265,7 +264,6 @@ void KisFilterManager::updateGUI()
             }
         }
     }
-    kDebug() << "XXXXXXXXXXXXXXXXXXXXXX\n";
 
 }
 

@@ -109,6 +109,7 @@ KisImageSP KisTool::image() const
     if ( !imageShape ) return 0;
 
     KisImageSP img = imageShape->image();
+    kDebug() << "Current image: " << img << endl;
     return img;
 
 }

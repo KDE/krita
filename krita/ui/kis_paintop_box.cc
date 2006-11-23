@@ -46,7 +46,7 @@
 #include <kis_paintop.h>
 #include <kis_layer.h>
 #include <kis_factory2.h>
-
+#include <kis_layer_manager.h>
 
 KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * name)
     : super (parent),
@@ -80,11 +80,9 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
         addItem(*it);
     }
 
-#if 0 // XXX: Fix this when we have the layerbox and everything else
-      // that can change the current colorspace back (BSAR)
-    connect(view, SIGNAL(currentColorSpaceChanged(KoColorSpace*)),
+    connect(view->layerManager(), SIGNAL(currentColorSpaceChanged(KoColorSpace*)),
             this, SLOT(colorSpaceChanged(KoColorSpace*)));
-#endif
+
     connect(KoToolManager::instance(),
             SIGNAL(inputDeviceChanged(const KoInputDevice&)),
             this,

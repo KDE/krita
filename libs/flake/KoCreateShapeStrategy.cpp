@@ -62,7 +62,7 @@ KCommand* KoCreateShapeStrategy::createCommand() {
     if(newSize.width() > 1.0 && newSize.height() > 1.0) 
         shape->resize(newSize);
 
-    KCommand * cmd = parent->m_canvas->shapeController().addShape( shape );
+    KCommand * cmd = parent->m_canvas->shapeController()->addShape( shape );
     if ( cmd )
     {
         KoSelection *selection = parent->m_canvas->shapeManager()->selection();

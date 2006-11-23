@@ -22,12 +22,13 @@
 #include "KoCanvasResourceProvider.h"
 
 KoCanvasBase::KoCanvasBase( KoShapeControllerBase * shapeControllerBase )
-: m_shapeController( this, shapeControllerBase )
 {
     m_resourceProvider = new KoCanvasResourceProvider(0);
+    m_shapeController = new KoShapeController( this, shapeControllerBase );
 }
 
 KoCanvasBase::~KoCanvasBase()
 {
     delete m_resourceProvider;
+    delete m_shapeController;
 }

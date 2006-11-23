@@ -132,13 +132,18 @@ public:
      * canvas. The resource provider contains per-canvas settings such
      * as current foreground and background color.
      */
-    KoCanvasResourceProvider * resourceProvider()
+    KoCanvasResourceProvider * resourceProvider() const
     {
         return m_resourceProvider;
     }
 
+    /**
+     * Return the shape controller for this canvas.
+     * A shape controller is used to create or delete shapes and show the relevant dialogs to the user.
+     */
+    KoShapeController * shapeController() const { return m_shapeController; }
 
-    KoShapeController & shapeController() { return m_shapeController; }
+
 #if 0
 /*  The next list of methods are naming taken from Krita, which means they have already been
     toughened by time.  So, if you ever need a method in this interface; please uncomment the
@@ -269,7 +274,7 @@ private:
     // we need a KoShapeControllerBase so that it can work
     KoCanvasBase();
 
-    KoShapeController m_shapeController;
+    KoShapeController *m_shapeController;
     KoCanvasResourceProvider * m_resourceProvider;
 };
 

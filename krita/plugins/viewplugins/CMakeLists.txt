@@ -1,6 +1,6 @@
 
 #add_subdirectory( performancetest )
-#add_subdirectory( colorrange )
+add_subdirectory( colorrange )
 add_subdirectory( colorspaceconversion )
 #add_subdirectory( dropshadow )
 #add_subdirectory( filtersgallery )

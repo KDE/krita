@@ -59,7 +59,7 @@ true);
         m_view = dynamic_cast<KisView2*>(parent);
         KAction *action = new KAction(i18n("&Color Range..."), actionCollection(), "colorrange");
         connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
-        m_view->canvasSubject()->selectionManager()->addSelectionAction(action);
+        m_view->selectionManager()->addSelectionAction(action);
     }
 }
 

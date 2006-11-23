@@ -77,13 +77,13 @@ true);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateLayer()));
 
         action = new KAction(i18n("Rotate 1&80"), actionCollection(), "rotateLayer180");
-        connect(action, SIGNAL(triggered()), m_view, SLOT(rotateLayer180()));
+        connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayer180()));
 
         action = new KAction(KIcon("rotate_ccw"), i18n("Rotate CCW"), actionCollection(), "rotateLayerCCW90");
-        connect(action, SIGNAL(triggered()), m_view, SLOT(rotateLayerLeft90()));
+        connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerLeft90()));
 
         action = new KAction(KIcon("rotate_cw"), i18n("Rotate CW"), actionCollection(), "rotateLayerCW90");
-        connect(action, SIGNAL(triggered()), m_view, SLOT(rotateLayerRight90()));
+        connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerRight90()));
     }
 }
 

@@ -92,7 +92,6 @@ private:
     KisSelectionSP m_selection;
     KisPaintDeviceSP m_dev;
     KisView2 * m_view;
-    KisCanvasSubject * m_subject;
     enumSelectionMode m_mode;
     QCursor m_oldCursor;
     KisSelectedTransaction *m_transaction;

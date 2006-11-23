@@ -19,12 +19,12 @@
 #ifndef GRAY_PLUGIN_H_
 #define GRAY_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
 
 /**
  * A plugin wrapper around the GRAY color space strategy.
  */
-class GrayPlugin : public KParts::Plugin
+class GrayPlugin : public QObject
 {
     Q_OBJECT
 public:

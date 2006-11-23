@@ -28,11 +28,11 @@
 #include <knuminput.h>
 #include <kdebug.h>
 
-#include "kis_meta_registry.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "KoID.h"
+
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 
@@ -53,7 +53,7 @@ DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    m_page->cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
+    m_page->cmbColorSpaces->setIDList(KoColorSpaceRegistry::instance()->listKeys());
 
     fillCmbDestProfile(m_page->cmbColorSpaces->currentItem());
 
@@ -88,7 +88,7 @@ void DlgColorSpaceConversion::fillCmbDestProfile(const KoID & s)
 {
     m_page->cmbDestProfile->clear();
 
-    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor(s);
+    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(s);
 
     foreach (KoColorProfile *profile, profileList) {
         m_page->cmbDestProfile->addSqueezedItem(profile->productName());

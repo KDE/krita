@@ -24,15 +24,21 @@
 #include <QDragEnterEvent>
 #include <QApplication>
 
-#include <kurl.h>
-#include <kstdaction.h>
-#include <kxmlguifactory.h>
-#include <klocale.h>
-#include <kaction.h>
 #include <k3urldrag.h>
+#include <kaction.h>
+#include <klocale.h>
 #include <kmenu.h>
+#include <kparts/componentfactory.h>
+#include <kparts/event.h>
+#include <kparts/plugin.h>
+#include <kservice.h>
+#include <kservicetypetrader.h>
+#include <kstdaction.h>
 #include <kstdaction.h>
 #include <ktogglefullscreenaction.h>
+#include <kurl.h>
+#include <kxmlguifactory.h>
+#include <kxmlguifactory.h>
 
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
@@ -174,6 +180,7 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     createManagers();
     createGUI();
 
+    loadPlugins();
 
     // Wait for the async image to have loaded
     if ( m_d->doc->isLoading() ) {
@@ -606,5 +613,31 @@ void KisView2::slotPreferences()
 }
 
 
+void KisView2::loadPlugins()
+{
+    // Load all plugins
+    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
+                                                              QString::fromLatin1("(Type == 'Service') and "
+                                                                                  "([X-Krita-Version] == 3)"));
+    KService::List::ConstIterator iter;
+    for(iter = offers.begin(); iter != offers.end(); ++iter)
+    {
+        KService::Ptr service = *iter;
+        int errCode = 0;
+        KParts::Plugin* plugin =
+            KService::createInstance<KParts::Plugin> ( service, this, QStringList(), &errCode);
+        if ( plugin ) {
+            kDebug(41006) << "found plugin " << service->property("Name").toString() << "\n";
+            insertChildClient(plugin);
+        }
+        else {
+            kDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
+            if( errCode == KLibLoader::ErrNoLibrary)
+            {
+                kWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
+            }
+        }
+    }
+}
 
 #include "kis_view2.moc"

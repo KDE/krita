@@ -126,6 +126,7 @@ private:
     void createActions();
     void createManagers();
 
+    void loadPlugins();
 
 
 private:

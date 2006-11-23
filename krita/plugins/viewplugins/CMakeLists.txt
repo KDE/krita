@@ -1,8 +1,8 @@
 
 #add_subdirectory( performancetest )
 #add_subdirectory( colorrange )
-#add_subdirectory( colorspaceconversion )
-add_subdirectory( dropshadow )
+add_subdirectory( colorspaceconversion )
+#add_subdirectory( dropshadow )
 #add_subdirectory( filtersgallery )
 #add_subdirectory( histogram )
 #add_subdirectory( histogram_docker )

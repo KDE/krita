@@ -54,7 +54,7 @@ class KisDlgFiltersGallery : public KDialog
         ~KisDlgFiltersGallery();
     public:
         inline KisFilter* currentFilter() { return m_currentFilter; }
-        inline  QWidget* currentConfigWidget() { return m_currentConfigWidget; }
+        inline  * currentConfigWidget() { return m_currentConfigWidget; }
     private slots:
         void slotConfigChanged();
         void refreshPreview();

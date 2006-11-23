@@ -28,6 +28,8 @@
 #include <kstandarddirs.h>
 
 #include "KoColorSpaceRegistry.h"
+
+#include "kis_undo_adapter.h"
 #include "kis_progress_display_interface.h"
 #include "kis_dlg_filtersgallery.h"
 #include "kis_filter.h"
@@ -36,6 +38,7 @@
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 #include "kis_view2.h"
+#include "kis_statusbar.h"
 #include "kis_transaction.h"
 
 namespace Krita {
@@ -102,11 +105,11 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
                 QRect r3 = dev->selection()->selectedExactRect();
                 rect = rect.intersect(r3);
             }
-            KisFilterConfiguration* config = filter->configuration( dlg.currentConfigWidget());
+            KisFilterConfiguration* config = dlg.currentConfigWidget()->configuration();
 
             filter->enableProgress();
-            m_view->canvasSubject()->progressDisplay()->setSubject(filter, true, true);
-            filter->setProgressDisplay(m_view->canvasSubject()->progressDisplay());
+            m_view->statusBar()->progress()->setSubject(filter, true, true);
+            filter->setProgressDisplay(m_view->statusBar()->progress());
 
             KisTransaction * cmd = new KisTransaction(filter->id().name(), dev);
 

@@ -19,6 +19,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_layerbox.h"
+
 #include <QtDebug>
 #include <QToolButton>
 #include <QLayout>
@@ -49,23 +51,24 @@
 #include <kicon.h>
 #include <KoDocumentSectionView.h>
 #include <KoPartSelectAction.h>
+#include "KoColorSpace.h"
+
+#include <kis_types.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <kis_layer.h>
+#include <kis_group_layer.h>
 
 #include "kis_cmb_composite.h"
 #include "kis_int_spinbox.h"
 #include "kis_view2.h"
-#include "KoColorSpace.h"
-#include "kis_paint_device.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_image.h"
 #include "kis_layer_manager.h"
-
-#include "kis_layerbox.h"
 
 KisLayerBox::KisLayerBox(KisView2 *view, const char *name)
     : QDockWidget( i18n("Layers" ) )
     , Ui::WdgLayerBox()
     , m_view( view )
+    , m_image( 0 )
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
@@ -166,13 +169,11 @@ KisLayerBox::~KisLayerBox()
 
 void KisLayerBox::setImage(KisImageSP img)
 {
-    if (m_view->image() == img)
+    if (m_image == img)
         return;
 
-    if (m_view->image())
-        m_view->image()->disconnect(this);
-
-    m_view->image() = img;
+    if (m_image)
+        m_image->disconnect(this);
 
     if (img)
     {
@@ -186,7 +187,10 @@ void KisLayerBox::setImage(KisImageSP img)
         connect(img.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                 this, SLOT(updateUI()));
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(updateUI()));
+
         listLayers->setModel(m_view->image()->rootLayer().data());
+
+        m_image = img;
     }
     else
     {

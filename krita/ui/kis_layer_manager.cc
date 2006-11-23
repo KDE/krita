@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_layer_manager.h"
+
 #include <QRect>
 #include <QApplication>
 #include <QCursor>
@@ -68,8 +70,6 @@
 #include "kis_resource_provider.h"
 #include "kis_statusbar.h"
 #include "kis_label_progress.h"
-
-#include "kis_layer_manager.h"
 
 KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     : m_view( view )

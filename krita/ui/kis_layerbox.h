@@ -108,6 +108,7 @@ private:
     KMenu *m_newLayerMenu;
     KoPartSelectAction *m_partLayerAction;
     KisView2 * m_view;
+    KisImageSP m_image;
 };
 
 class KisLayerBoxFactory : public KoDockFactory

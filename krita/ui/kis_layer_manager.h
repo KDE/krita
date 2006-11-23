@@ -61,6 +61,7 @@ signals:
 
     /// XXX: Move this to kisview or to kisresourceprovider? (BSAR)
     void currentColorSpaceChanged(KoColorSpace * cs);
+
 public slots:
 
     void imgResizeToActiveLayer();
@@ -135,7 +136,6 @@ private:
     KAction *m_layerTop;
     bool m_actLayerVis;
     KAction *m_imgResizeToLayer;
-
 };
 
 #endif

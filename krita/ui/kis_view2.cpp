@@ -31,6 +31,7 @@
 #include <kaction.h>
 #include <k3urldrag.h>
 #include <kmenu.h>
+#include <ktogglefullscreenaction.h>
 
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
@@ -127,7 +128,7 @@ public:
     KoRuler * horizontalRuler;
     KoRuler * verticalRuler;
     KisStatusBar * statusBar;
-
+    KAction * fullScreen;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisBirdEyeBox * birdEyeBox;
@@ -403,7 +404,8 @@ void KisView2::createGUI()
 
 void KisView2::createActions()
 {
-
+    m_d->fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
+    connect( m_d->fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 }
 
 
@@ -531,5 +533,23 @@ void KisView2::disconnectCurrentImage()
 #endif
 #endif
 }
+
+void KisView2::slotUpdateFullScreen(bool toggle)
+{
+    if (KoView::shell()) {
+
+        Qt::WindowStates newState = KoView::shell()->windowState();
+
+        if (toggle) {
+            newState |= Qt::WindowFullScreen;
+        } else {
+            newState &= ~Qt::WindowFullScreen;
+        }
+
+        KoView::shell()->setWindowState(newState);
+    }
+}
+
+
 
 #include "kis_view2.moc"

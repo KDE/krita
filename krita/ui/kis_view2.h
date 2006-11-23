@@ -109,8 +109,8 @@ public:  // Krita specific interfaces
 private slots:
 
     void slotLoadingFinished();
-
-
+    void slotUpdateFullScreen(bool);
+    void slotPreferences();
 
 private:
 

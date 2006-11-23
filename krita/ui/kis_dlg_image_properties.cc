@@ -66,7 +66,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
     m_page->intWidth->setValue(image->width());
     m_page->intHeight->setValue(image->height());
-
+    m_page->txtDescription->setText(image->description());
     m_page->doubleResolution->setValue(image->xRes()); // XXX: separate values for x & y?
 
     //m_page->cmbColorSpaces->hide();

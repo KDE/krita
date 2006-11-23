@@ -31,6 +31,8 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_layer.h"
+#include <kis_statusbar.h>
+
 
 #include "kis_dropshadow_plugin.h"
 #include "kis_dropshadow.h"
@@ -44,8 +46,8 @@ KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QStringList &)
     if ( parent->inherits("KisView2") ) {
 
         setInstance(KGenericFactory<KisDropshadowPlugin>::instance());
-        
-setXMLFile(KStandardDirs::locate("data","kritaplugins/dropshadow.rc"), 
+
+setXMLFile(KStandardDirs::locate("data","kritaplugins/dropshadow.rc"),
 true);
 
         m_view = (KisView2*) parent;
@@ -76,7 +78,7 @@ void KisDropshadowPlugin::slotDropshadow()
     if (dlgDropshadow->exec() == QDialog::Accepted) {
 
         KisDropshadow dropshadow(m_view);
-        dropshadow.dropshadow(m_view->canvasSubject()->progressDisplay(),
+        dropshadow.dropshadow(m_view->statusBar()->progress(),
                            dlgDropshadow->getXOffset(),
                            dlgDropshadow->getYOffset(),
                            dlgDropshadow->getBlurRadius(),

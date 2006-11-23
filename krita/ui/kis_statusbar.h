@@ -22,6 +22,7 @@
 #include <QObject>
 
 #include <kis_types.h>
+#include "kis_label_progress.h"
 
 class KStatusBar;
 class KStatusBarLabel;
@@ -51,7 +52,7 @@ public slots:
     void setProfile( KisImageSP img );
     void setHelp( const QString &t );
 
-    KisLabelProgress * progress()
+    KisProgressDisplayInterface * progress()
         {
             return m_progress;
         }

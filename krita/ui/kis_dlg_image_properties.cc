@@ -23,6 +23,7 @@
 #include <QSpinBox>
 #include <QSlider>
 #include <QCheckBox>
+#include <QTextEdit>
 
 #include <klocale.h>
 #include <kcolorcombo.h>
@@ -64,6 +65,8 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     m_page->intHeight->setValue(image->height());
 
     m_page->doubleResolution->setValue(image->xRes()); // XXX: separate values for x & y?
+
+    m_page->txtDescription->setText( m_image->description() );
 
     //m_page->cmbColorSpaces->hide();
     //m_page->lblColorSpaces->setText(image->colorSpace()->id().name());

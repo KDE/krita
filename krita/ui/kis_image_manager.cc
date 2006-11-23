@@ -39,6 +39,7 @@
 #include "kis_import_catcher.h"
 #include "kis_view2.h"
 #include "kis_label_progress.h"
+#include "kis_dlg_image_properties.h"
 
 KisImageManager::KisImageManager( KisView2 * view)
     : m_view( view )
@@ -49,6 +50,9 @@ void KisImageManager::setup( KActionCollection * actionCollection )
 {
     KAction *action = new KAction(i18n("I&nsert Image as Layer..."), actionCollection, "insert_image_as_layer");
     connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
+
+    action = new KAction(i18n("Image Properties..."), actionCollection, "img_properties");
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }
 
 
@@ -127,5 +131,32 @@ void KisImageManager::shearCurrentImage(double angleX, double angleY)
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
 }
+
+
+void KisImageManager::slotImageProperties()
+{
+    KisImageSP img = m_view->image();
+
+    if (!img) return;
+
+    KisDlgImageProperties dlg(img, m_view);
+
+    if (dlg.exec() == QDialog::Accepted) {
+        if (dlg.imageWidth() != img->width() ||
+            dlg.imageHeight() != img->height()) {
+
+            resizeCurrentImage(dlg.imageWidth(),
+                               dlg.imageHeight());
+        }
+        qint32 opacity = dlg.opacity();
+        opacity = opacity * 255 / 100;
+        img->setName(dlg.imageName());
+        img->setColorSpace(dlg.colorSpace());
+        img->setResolution(dlg.resolution(), dlg.resolution());
+        img->setDescription(dlg.description());
+        img->setProfile(dlg.profile());
+    }
+}
+
 
 #include "kis_image_manager.moc"

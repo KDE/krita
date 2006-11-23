@@ -235,7 +235,7 @@ public:
      * towards the tablet's physical right. The angle is in the range -60 
      * to +60 degrees. The default value is 0.
      */
-    int yTilt () const 
+    int yTilt () const
         {
             if (m_tabletEvent)
                 return m_tabletEvent->yTilt();
@@ -256,7 +256,12 @@ public:
                 return 0;
         }
 
-    int delta() const 
+    /**
+     * Returns the distance that the wheel is rotated, in eights of a degree, or 0 otherwise.
+     * @return the distance of rotation.
+     * @see orientation()
+     */
+    int delta() const
         {
             if (m_wheelEvent)
                 return m_wheelEvent->delta();
@@ -264,6 +269,9 @@ public:
                 return 0;
         }
 
+    /**
+     * Returns the orientation of the delta.
+     */
     Qt::Orientation orientation() const
         {
             if (m_wheelEvent)

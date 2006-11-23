@@ -105,6 +105,7 @@ public:
      */
     bool isCanvasCentered() const;
 
+    /// Reimplemented from QObject
     virtual bool eventFilter(QObject* watched, QEvent* event);
 
     /**

@@ -346,6 +346,7 @@ private:
     KoShapeMoveCommand *m_command;
 };
 
+/// The undo / redo command to lock a set of shapes position and size
 class KoShapeLockCommand : public KCommand
 {
 public:

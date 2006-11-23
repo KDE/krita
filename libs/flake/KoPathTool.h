@@ -33,6 +33,7 @@ class KoInteractionStrategy;
 class KoPathPointMoveStrategy;
 class KoPathPointRubberSelectStrategy;
 
+/// The tool for editing a KoPathShape or a KoParameterShape
 class KoPathTool : public KoTool {
 public:
     KoPathTool(KoCanvasBase *canvas);

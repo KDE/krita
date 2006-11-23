@@ -194,7 +194,7 @@ bool ScriptManagerView::uninstallPackage(Action* action)
     QFileInfo fi(file);
 
     if(file.isNull() || ! fi.exists()) {
-        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\" since the script is not installed.").arg(action->objectName()));
+        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\" since the script is not installed.",action->objectName()));
         return false;
     }
 
@@ -202,7 +202,7 @@ bool ScriptManagerView::uninstallPackage(Action* action)
     krossdebug( QString("Uninstall script-package with destination directory: %1").arg(scriptpackagepath) );
 
     if(! KIO::NetAccess::del(scriptpackagepath, 0) ) {
-        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\". You may not have sufficient permissions to delete the folder \"%1\".").arg(action->objectName()).arg(scriptpackagepath));
+        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\". You may not have sufficient permissions to delete the folder \"%1\".",action->objectName()).arg(scriptpackagepath));
         return false;
     }
 

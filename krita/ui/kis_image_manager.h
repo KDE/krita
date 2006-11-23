@@ -16,51 +16,52 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_MASK_MANAGER
-#define KIS_MASK_MANAGER
+#ifndef KIS_IMAGE_MANAGER
+#define KIS_IMAGE_MANAGER
 
 #include <QObject>
 
+#include <kurl.h>
+
 class KisView2;
 class KActionCollection;
-class KAction;
-class KToggleAction;
+class KisFilterStrategy;
 
-class KisMaskManager : public QObject {
+class KisImageManager : public QObject {
 
     Q_OBJECT
 
 public:
 
 
-    KisMaskManager(KisView2 * view );
-    ~KisMaskManager() {}
+    KisImageManager(KisView2 * view );
+    ~KisImageManager() {}
 
     void setup(KActionCollection * actionCollection);
     void updateGUI();
 
 public slots:
 
-    void slotCreateMask();
-    void slotMaskFromSelection();
-    void slotMaskToSelection();
-    void slotApplyMask();
-    void slotRemoveMask();
-    void slotEditMask();
-    void slotShowMask();
-    void maskUpdated();
+    void slotInsertImageAsLayer();
+
+    /**
+     * Import an image as a layer. If there is more than
+     * one layer in the image, import all of them as separate
+     * layers.
+     *
+     * @param url the url to the image file
+     * @return the number of layers added
+     */
+    qint32 importImage(const KUrl& url = KUrl());
+
+    void resizeCurrentImage(qint32 w, qint32 h, bool cropLayers);
+    void scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy);
+    void rotateCurrentImage(double angle);
+    void shearCurrentImage(double angleX, double angleY);
+
 
 private:
     KisView2 * m_view;
-
-    KAction *m_createMask;
-    KAction *m_maskFromSelection;
-    KAction *m_maskToSelection;
-    KAction *m_applyMask;
-    KAction *m_removeMask;
-    KToggleAction *m_editMask;
-    KToggleAction *m_showMask;
-
 };
 
-#endif // KIS_MASK_MANAGER
+#endif // KIS_IMAGE_MANAGER

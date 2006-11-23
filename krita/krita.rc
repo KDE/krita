@@ -139,9 +139,6 @@
 	<Action name="misc_filters"/>
 </Menu>
 
-<Menu name="Tools"><text>&amp;Tools</text>
-</Menu>
-
 
 <Menu name="settings"><text>Settings</text>
   <Separator group="settings_show"/>
@@ -149,17 +146,6 @@
 </Menu>
 
 </MenuBar>
-
-<ToolBar name="navigation" position="top"><Text>Navigation</Text>
-  <Action name="refresh_canvas"/>
-  <Action name="zoom"/>
-  <Action name="zoom_in"/>
-  <Action name="zoom_out"/>
-</ToolBar>
-
-<ToolBar name="ToolBox" position="left">
-    <Text>Krita</Text>
-</ToolBar>
 
 <ToolBar name="BrushesAndStuff" position="top">
      <Text>Brushes and Stuff</Text>

@@ -244,6 +244,8 @@ KisPaintDeviceSP KisPaintLayer::createMask() {
     // Grey8 nicely fits our needs of being intuitively comparable to other apps'
     // mask layer interfaces. It does have an alpha component though, which is a bit
     // less appropriate in this context.
+    // Bart: why not use ALPHA -- that is a single channel 8-bit
+    // colorspace, which is best suited for this purpose (BSAR).
     m_mask = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()
             ->colorSpace(KoID("GRAYA"), 0));
 

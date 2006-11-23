@@ -21,14 +21,18 @@
 #include <QGridLayout>
 #include <QRect>
 #include <QWidget>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QApplication>
 
+#include <kurl.h>
 #include <kstdaction.h>
 #include <kxmlguifactory.h>
 #include <klocale.h>
-#include <kfiledialog.h>
-#include <kurl.h>
+#include <kaction.h>
+#include <k3urldrag.h>
+#include <kmenu.h>
 
-#include <KoFilterManager.h>
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
@@ -57,12 +61,15 @@
 #include "kis_resource_provider.h"
 #include "kis_resource_provider.h"
 #include "kis_selection_manager.h"
+#include "kis_image_manager.h"
 #include "kis_controlframe.h"
 #include "kis_birdeye_box.h"
 #include "kis_layerbox.h"
 #include "kis_layer_manager.h"
 #include "kis_zoom_manager.h"
-#include "kis_import_catcher.h"
+#include "kis_grid_manager.h"
+#include "kis_perspective_grid_manager.h"
+#include "kis_mask_manager.h"
 
 class KisView2::KisView2Private {
 
@@ -85,6 +92,8 @@ public:
         , layerBox( 0 )
         , layerManager( 0 )
         , zoomManager( 0 )
+        , imageManager( 0 )
+        , maskManager( 0 )
         {
             viewConverter = new KoZoomHandler( );
 
@@ -99,6 +108,8 @@ public:
             delete selectionManager;
             delete layerManager;
             delete zoomManager;
+            delete imageManager;
+            delete maskManager;
         }
 
 public:
@@ -120,6 +131,8 @@ public:
     KisLayerBox * layerBox;
     KisLayerManager * layerManager;
     KisZoomManager * zoomManager;
+    KisImageManager * imageManager;
+    KisMaskManager * maskManager;
 };
 
 
@@ -155,10 +168,10 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
 
     // Wait for the async image to have loaded
     if ( m_d->doc->isLoading() ) {
-        connect( m_d->doc, SIGNAL( sigLoadingFinished() ), this, SLOT( slotInitializeCanvas() ) );
+        connect( m_d->doc, SIGNAL( sigLoadingFinished() ), this, SLOT( slotLoadingFinished() ) );
     }
     else {
-        slotInitializeCanvas();
+        slotLoadingFinished();
     }
 
 }
@@ -168,6 +181,75 @@ KisView2::~KisView2()
 {
     delete m_d;
 }
+
+
+void KisView2::dragEnterEvent(QDragEnterEvent *event)
+{
+    // Only accept drag if we're not busy, particularly as we may
+    // be showing a progress bar and calling qApp->processEvents().
+    if (K3URLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+void KisView2::dropEvent(QDropEvent *event)
+{
+    KUrl::List urls;
+
+    if (K3URLDrag::decode(event, urls))
+    {
+        if (urls.count() > 0) {
+
+            KMenu popup(this);
+            popup.setObjectName("drop_popup");
+
+            KAction insertAsNewLayer(i18n("Insert as New Layer"), 0, "insert_as_new_layer");
+            KAction insertAsNewLayers(i18n("Insert as New Layers"), 0, "insert_as_new_layers");
+
+            KAction openInNewDocument(i18n("Open in New Document"), 0, "open_in_new_document");
+            KAction openInNewDocuments(i18n("Open in New Documents"), 0, "open_in_new_documents");
+
+            KAction cancel(i18n("Cancel"), 0, "cancel");
+
+            if (urls.count() == 1) {
+                if (!image().isNull()) {
+                    popup.addAction(&insertAsNewLayer);
+                }
+                popup.addAction(&openInNewDocument);
+            }
+            else {
+                if (!image().isNull()) {
+                    popup.addAction(&insertAsNewLayers);
+                }
+                popup.addAction(&openInNewDocuments);
+            }
+
+            (void)popup.addSeparator();
+            popup.addAction(&cancel);
+
+            QAction *action = popup.exec(QCursor::pos());
+
+            if (action != 0 && action != &cancel) {
+                for (KUrl::List::ConstIterator it = urls.begin (); it != urls.end (); ++it) {
+                    KUrl url = *it;
+
+                    if (action == &insertAsNewLayer || action == &insertAsNewLayers) {
+                        m_d->imageManager->importImage(url);
+                    } else {
+                        Q_ASSERT(action == &openInNewDocument || action == &openInNewDocuments);
+
+                        if (shell() != 0) {
+                            shell()->openDocument(url);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 void KisView2::slotChildActivated(bool a) {
 
@@ -184,6 +266,12 @@ void KisView2::slotChildActivated(bool a) {
     }
 
     KoView::slotChildActivated(a);
+}
+
+
+void KisView2::canvasAddChild(KoViewChild *child) {
+    KoView::canvasAddChild(child);
+    connect(this, SIGNAL(viewTransformationsChanged()), child, SLOT(reposition()));
 }
 
 
@@ -238,8 +326,9 @@ KisUndoAdapter * KisView2::undoAdapter()
     return m_d->doc->undoAdapter();
 }
 
-void KisView2::slotInitializeCanvas()
+void KisView2::slotLoadingFinished()
 {
+    disconnect(m_d->doc, SIGNAL(loadingFinished()), this, SLOT(slotLoadingFinished()));
 
     m_d->canvas->setCanvasSize( image()->width(), image()->height() );
 
@@ -309,8 +398,6 @@ void KisView2::createGUI()
 
 void KisView2::createActions()
 {
-    KAction *action = new KAction(i18n("I&nsert Image as Layer..."), actionCollection(), "insert_image_as_layer");
-    connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
 
 }
 
@@ -333,6 +420,11 @@ void KisView2::createManagers()
     m_d->zoomManager = new KisZoomManager( this, m_d->viewConverter );
     m_d->zoomManager->setup( actionCollection() );
 
+    m_d->imageManager = new KisImageManager( this );
+    m_d->imageManager->setup( actionCollection() );
+
+    m_d->maskManager = new KisMaskManager( this );
+    m_d->maskManager->setup( actionCollection() );
 
 }
 
@@ -343,7 +435,8 @@ void KisView2::updateGUI()
     m_d->selectionManager->updateGUI();
     m_d->filterManager->updateGUI();
     m_d->zoomManager->updateGUI();
-    //m_toolManager->updateGUI(); // XXX Port this or not to the generic tool manager? BSAR
+    m_d->imageManager->updateGUI();
+    m_d->maskManager->updateGUI();
     //m_gridManager->updateGUI();
     //m_perspectiveGridManager->updateGUI();
 
@@ -360,7 +453,7 @@ void KisView2::connectCurrentImage()
         connect(img.data(), SIGNAL(sigProfileChanged(KoColorProfile * )), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
 
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
-        //connect(img.data(), SIGNAL(sigMaskInfoChanged()), SLOT(maskUpdated()));
+        connect(img.data(), SIGNAL(sigMaskInfoChanged()), m_d->maskManager, SLOT(maskUpdated()));
         connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
         connect(img.data(), SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
         connect(img.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
@@ -374,7 +467,7 @@ void KisView2::connectCurrentImage()
         connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)),
                 SLOT(handlePartLayerAdded(KisLayerSP)));
 #endif
-        //  maskUpdated();
+        m_d->maskManager->maskUpdated();
 #if 0
 #ifdef HAVE_OPENGL
         if (!m_OpenGLImageContext.isNull()) {
@@ -426,43 +519,6 @@ void KisView2::disconnectCurrentImage()
     }
 #endif
 #endif
-}
-
-void KisView2::slotInsertImageAsLayer()
-{
-    if (importImage() > 0)
-        m_d->doc->setModified(true);
-
-}
-
-qint32 KisView2::importImage(const KUrl& urlArg)
-{
-    KisImageSP currentImage = image();
-
-    if (!currentImage) {
-        return 0;
-    }
-
-    KUrl::List urls;
-    Q_INT32 rc = 0;
-
-    if (urlArg.isEmpty()) {
-        QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import).join(" ");
-        urls = KFileDialog::getOpenUrls(KUrl(QString::null), mimelist, 0, i18n("Import Image"));
-    } else {
-        urls.push_back(urlArg);
-    }
-
-    if (urls.empty())
-        return 0;
-
-    for (KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it) {
-        new KisImportCatcher( *it, currentImage );
-    }
-
-    canvas()->update();
-
-    return rc;
 }
 
 #include "kis_view2.moc"

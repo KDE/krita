@@ -27,6 +27,10 @@
 #include "kis_undo_adapter.h"
 #include "kis_transaction.h"
 #include "kis_rotate_visitor.h"
+#include "kis_paint_layer.h"
+#include "kis_group_layer.h"
+#include "kis_adjustment_layer.h"
+#include "kis_part_layer.h"
 
 class KisShearVisitor : public KisLayerVisitor {
 public:

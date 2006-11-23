@@ -82,6 +82,8 @@ set(kritaui_LIB_SRCS
     kis_zoom_manager.cc
     kobirdeyepanel.cpp
     squeezedcombobox.cpp
+    kis_image_manager.cc
+    kis_mask_manager.cc
 )
 
 

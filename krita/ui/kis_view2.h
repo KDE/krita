@@ -27,19 +27,25 @@
 
 #include <kis_types.h>
 
-class KisCanvas2;
-class KisQPainterCanvas;
-class KisOpenGLCanvas2;
-class KisImage;
+class QDragEnterEvent;
+class QDropEvent;
+
 class KoCanvasController;
+class KoViewChield;
+
+class KisCanvas2;
 class KisDoc2;
-class KisResourceProvider;
-class KisStatusBar;
-class KisSelectionManager;
+class KisFilterManager;
+class KisImage;
 class KisLayerManager;
+class KisOpenGLCanvas2;
+class KisQPainterCanvas;
+class KisResourceProvider;
+class KisSelectionManager;
+class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
-class KisFilterManager;
+
 
 class KisView2 : public KoView {
 
@@ -52,9 +58,14 @@ public:
 
 public:
 
+    // QWidget overrides
+    virtual void dragEnterEvent ( QDragEnterEvent * event );
+    virtual void dropEvent ( QDropEvent * event );
+
     // KoView implementation
     virtual void updateReadWrite( bool readwrite ) { Q_UNUSED(readwrite); }
     void slotChildActivated(bool a);
+    void canvasAddChild( KoViewChild * child );
 
 public:  // Krita specific interfaces
 
@@ -97,9 +108,8 @@ public:  // Krita specific interfaces
 
 private slots:
 
-    void slotInitializeCanvas();
+    void slotLoadingFinished();
 
-    void slotInsertImageAsLayer();
 
 
 private:
@@ -116,15 +126,6 @@ private:
     void createActions();
     void createManagers();
 
-    /**
-     * Import an image as a layer. If there is more than
-     * one layer in the image, import all of them as separate
-     * layers.
-     *
-     * @param url the url to the image file
-     * @return the number of layers added
-     */
-    qint32 importImage(const KUrl& url = KUrl());
 
 
 private:

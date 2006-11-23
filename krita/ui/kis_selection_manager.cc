@@ -27,7 +27,6 @@
 
 #include <kdebug.h>
 #include <kaction.h>
-
 #include <ktoggleaction.h>
 #include <klocale.h>
 #include <kstdaction.h>

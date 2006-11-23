@@ -93,6 +93,8 @@ public:
         , zoomManager( 0 )
         , imageManager( 0 )
         , maskManager( 0 )
+        , gridManager( 0 )
+        , perspectiveGridManager( 0 )
         {
             viewConverter = new KoZoomHandler( );
 
@@ -109,6 +111,8 @@ public:
             delete zoomManager;
             delete imageManager;
             delete maskManager;
+            delete gridManager;
+            delete perspectiveGridManager;
         }
 
 public:
@@ -132,6 +136,8 @@ public:
     KisZoomManager * zoomManager;
     KisImageManager * imageManager;
     KisMaskManager * maskManager;
+    KisGridManager * gridManager;
+    KisPerspectiveGridManager * perspectiveGridManager;
 };
 
 
@@ -425,6 +431,12 @@ void KisView2::createManagers()
     m_d->maskManager = new KisMaskManager( this );
     m_d->maskManager->setup( actionCollection() );
 
+    m_d->gridManager = new KisGridManager( this );
+    m_d->gridManager->setup( actionCollection() );
+
+    m_d->perspectiveGridManager = new KisPerspectiveGridManager( this );
+    m_d->perspectiveGridManager->setup( actionCollection() );
+
 }
 
 void KisView2::updateGUI()
@@ -436,8 +448,8 @@ void KisView2::updateGUI()
     m_d->zoomManager->updateGUI();
     m_d->imageManager->updateGUI();
     m_d->maskManager->updateGUI();
-    //m_gridManager->updateGUI();
-    //m_perspectiveGridManager->updateGUI();
+    m_d->gridManager->updateGUI();
+    m_d->perspectiveGridManager->updateGUI();
 
 }
 

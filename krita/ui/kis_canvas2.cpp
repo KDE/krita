@@ -25,6 +25,8 @@
 #include <KoUnit.h>
 #include <KoViewConverter.h>
 #include <KoShapeManager.h>
+#include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <kis_image.h>
 
@@ -35,6 +37,7 @@
 #include "kis_opengl_canvas2.h"
 #include "kis_dummy_shape.h"
 
+
 class KisCanvas2::KisCanvas2Private {
 
 public:
@@ -44,18 +47,21 @@ public:
         , view( view )
         , canvasWidget( 0 )
         , shapeManager( new KoShapeManager(parent) )
+        , monitorProfile( 0 )
         {
         }
 
     ~KisCanvas2Private()
         {
             delete shapeManager;
+            delete monitorProfile;
         }
 
     KoViewConverter * viewConverter;
     KisView2 * view;
     KisAbstractCanvasWidget * canvasWidget;
     KoShapeManager * shapeManager;
+    KoColorProfile * monitorProfile;
 };
 
 KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view, KoShapeControllerBase * sc)
@@ -162,5 +168,27 @@ void KisCanvas2::updateCanvas( const QRect rc )
 {
     updateCanvas( QRectF( rc ) );
 }
+
+KoColorProfile *  KisCanvas2::monitorProfile()
+{
+    if (m_d->monitorProfile == 0) {
+        resetMonitorProfile();
+    }
+    return m_d->monitorProfile;
+}
+
+
+void KisCanvas2::resetMonitorProfile()
+{
+    m_d->monitorProfile = KoColorProfile::getScreenProfile();
+
+    if (m_d->monitorProfile == 0) {
+        KisConfig cfg;
+        QString monitorProfileName = cfg.monitorProfile();
+        m_d->monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+    }
+
+}
+
 
 #include "kis_canvas2.moc"

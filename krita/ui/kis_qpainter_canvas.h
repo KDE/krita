@@ -26,7 +26,6 @@ class QBrush;
 class QImage;
 class QPaintEvent;
 class KisCanvas2;
-class KoColorProfile;
 class KoViewConverter;
 class KoToolProxy;
 
@@ -86,7 +85,6 @@ private:
     KoToolProxy * m_toolProxy;
     KisCanvas2 * m_canvas;
     KoViewConverter * m_viewConverter;
-    KoColorProfile *  m_monitorProfile;
     QImage * m_checkTexture;
     QBrush * m_checkBrush;
 };

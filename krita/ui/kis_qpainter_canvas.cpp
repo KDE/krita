@@ -49,7 +49,6 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     : QWidget( parent )
     , m_canvas( canvas )
     , m_viewConverter( canvas->viewConverter() )
-    , m_monitorProfile( 0 )
     , m_checkTexture( 0 )
     , m_checkBrush( 0 )
 
@@ -71,15 +70,6 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     }
 
     m_checkBrush = new QBrush( *m_checkTexture );
-
-    m_monitorProfile = KoColorProfile::getScreenProfile();
-
-    if (m_monitorProfile == 0) {
-        KisConfig cfg;
-        QString monitorProfileName = cfg.monitorProfile();
-        m_monitorProfile = KisMetaRegistry::instance()->csRegistry()->profileByName(monitorProfileName);
-    }
-
 }
 
 
@@ -118,7 +108,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
                                  (*it).y(),
                                  (*it).x(), (*it).y(),
                                  (*it).width(), (*it).height(), gc,
-                                 m_monitorProfile,
+                                 m_canvas->monitorProfile(),
                                  0);
             ++it;
         }

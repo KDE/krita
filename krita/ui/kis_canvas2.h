@@ -26,9 +26,10 @@
 
 #include <kis_types.h>
 
-class KisView2;
 class KoToolProxy;
+class KoColorProfile;
 
+class KisView2;
 class KisDummyShape;
 
 enum KisCanvasType {
@@ -86,6 +87,8 @@ public: // KoCanvasBase implementation
 
     virtual KoToolProxy* toolProxy();
 
+    KoColorProfile * monitorProfile();
+
 public: // KisCanvas2 methods
 
     void setCanvasSize(int w, int h);
@@ -101,6 +104,8 @@ public slots:
     void updateCanvas( const QRect rc );
 
 private:
+
+    void resetMonitorProfile();
 
     KisCanvas2(const KisCanvas2&);
 

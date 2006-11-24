@@ -36,8 +36,8 @@
 KisGrayColorSpace ::KisGrayColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
             KoLcmsColorSpace<GrayU8Traits>("GRAYA", i18n("Grayscale 8-bit integer/channel)"), parent, TYPE_GRAYA_8, icSigGrayData, p)
 {
-    m_channels.push_back(new KoChannelInfo(i18n("Gray"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
-    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
+    m_channels.push_back(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 1, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
 
     init();
 

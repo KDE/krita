@@ -1,62 +1,54 @@
 /*
- * cmyk_plugin.cc -- Part of Krita
- *
- * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+* cmyk_u8_plugin.cc -- Part of Krita
+*
+* Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+* Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+*
+*  This program is free software; you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation; either version 2 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program; if not, write to the Free Software
+*  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*/
 
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kinstance.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kgenericfactory.h>
-
 #include <KoColorSpaceRegistry.h>
-#include <kis_basic_histogram_producers.h>
-
+#include <KoBasicHistogramProducers.h>
 #include "cmyk_plugin.h"
-
 #include "kis_cmyk_colorspace.h"
 
-typedef KGenericFactory<CMYKPlugin> CMYKPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritacmykplugin, CMYKPluginFactory( "krita" ) )
+typedef KGenericFactory<CMYKU8Plugin> CMYKU8PluginFactory;
+K_EXPORT_COMPONENT_FACTORY( kritacmykplugin, CMYKU8PluginFactory( "krita" ) )
 
 
-CMYKPlugin::CMYKPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+CMYKU8Plugin::CMYKU8Plugin(QObject *parent, const QStringList &)
+    : QObject(parent)
 {
-    setInstance(CMYKPluginFactory::instance());
-    if ( parent->inherits("KoColorSpaceRegistry") )
-    {
-        KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>( parent );
+    
+    KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
 
-        KoColorSpace * colorSpaceCMYK = new KisCmykColorSpace(f, 0);
-        KoColorSpaceFactory * csf = new KisCmykColorSpaceFactory();
-        Q_CHECK_PTR(colorSpaceCMYK);
-        f->add(csf);
-
-        KisHistogramProducerFactoryRegistry::instance()->add(
-                new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
-                (KoID("CMYKHISTO", i18n("CMYK Histogram")), colorSpaceCMYK) );
-    }
+    KoColorSpaceFactory * csf = new KisCmykU8ColorSpaceFactory();
+    f->add(csf);
+    
+    KoColorSpace * colorSpaceCMYKU8 = new KisCmykU8ColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile()));
+    Q_CHECK_PTR(colorSpaceCMYKU8);
+    
+    KoHistogramProducerFactoryRegistry::instance()->add(
+            new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
+            (KoID("CMYK8HISTO", i18n("CMYK8 Histogram")), colorSpaceCMYKU8) );
 
 }
 
-CMYKPlugin::~CMYKPlugin()
+CMYKU8Plugin::~CMYKU8Plugin()
 {
 }
 

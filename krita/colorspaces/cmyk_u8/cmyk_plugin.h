@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2005 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,22 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CMYK_PLUGIN_H_
-#define CMYK_PLUGIN_H_
+#ifndef CMYK_U8_PLUGIN_H_
+#define CMYK_U8_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
 
 /**
- * A plugin wrapper around the CMYK color space strategy.
+ * A plugin wrapper around the CMYK U8 color space strategy.
  */
-class CMYKPlugin : public KParts::Plugin
+class CMYKU8Plugin : public QObject
 {
     Q_OBJECT
 public:
-    CMYKPlugin(QObject *parent, const QStringList &);
-    virtual ~CMYKPlugin();
-
+    CMYKU8Plugin(QObject *parent, const QStringList &);
+    virtual ~CMYKU8Plugin();
 
 };
 
-#endif // CMYK_PLUGIN_H_
+
+#endif // CMYK_U8_PLUGIN_H_

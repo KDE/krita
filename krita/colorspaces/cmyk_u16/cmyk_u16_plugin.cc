@@ -22,7 +22,7 @@
 #include <kinstance.h>
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
-#include <kis_basic_histogram_producers.h>
+#include <KoBasicHistogramProducers.h>
 #include "cmyk_u16_plugin.h"
 #include "kis_cmyk_u16_colorspace.h"
 
@@ -31,22 +31,20 @@ K_EXPORT_COMPONENT_FACTORY( krita_cmyk_u16_plugin, CMYKU16PluginFactory( "krita"
 
 
 CMYKU16Plugin::CMYKU16Plugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+    : QObject(parent)
 {
-    setInstance(CMYKU16PluginFactory::instance());
+    
+    KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
 
-    if ( parent->inherits("KoColorSpaceRegistry") )
-    {
-        KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>( parent );
-
-        KoColorSpace * colorSpaceCMYKU16 = new KisCmykU16ColorSpace(f, 0);
-        KoColorSpaceFactory * csf = new KisCmykU16ColorSpaceFactory();
-        Q_CHECK_PTR(colorSpaceCMYKU16);
-        f->add(csf);
-        KisHistogramProducerFactoryRegistry::instance()->add(
-                new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KoID("CMYK16HISTO", i18n("CMYK16 Histogram")), colorSpaceCMYKU16) );
-    }
+    KoColorSpaceFactory * csf = new KisCmykU16ColorSpaceFactory();
+    f->add(csf);
+    
+    KoColorSpace * colorSpaceCMYKU16 = new KisCmykU16ColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile()));
+    Q_CHECK_PTR(colorSpaceCMYKU16);
+    
+    KoHistogramProducerFactoryRegistry::instance()->add(
+            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+            (KoID("CMYK16HISTO", i18n("CMYK16 Histogram")), colorSpaceCMYKU16) );
 
 }
 

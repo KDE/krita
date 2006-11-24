@@ -19,12 +19,12 @@
 #ifndef CMYK_U16_PLUGIN_H_
 #define CMYK_U16_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
 
 /**
  * A plugin wrapper around the CMYK U16 color space strategy.
  */
-class CMYKU16Plugin : public KParts::Plugin
+class CMYKU16Plugin : public QObject
 {
     Q_OBJECT
 public:

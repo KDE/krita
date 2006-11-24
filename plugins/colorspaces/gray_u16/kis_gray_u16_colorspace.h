@@ -21,8 +21,6 @@
 
 #include <klocale.h>
 
-#include <krita_export.h>
-
 #include "KoLcmsColorSpace.h"
 
 struct GrayU16Traits {

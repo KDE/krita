@@ -27,12 +27,14 @@
 #include "KoShapeBorderModel.h"
 #include "KoShapeManager.h"
 #include "KoShapeUserData.h"
+#include "KoShapeApplicationData.h"
 #include "KoViewConverter.h"
 
 #include <QPainter>
-#include <QtDebug>
 #include <QVariant>
 #include <QPainterPath>
+
+#include <kdebug.h>
 
 KoShape::KoShape()
 : m_backgroundBrush(Qt::NoBrush)
@@ -51,13 +53,16 @@ KoShape::KoShape()
 , m_keepAspect( false )
 , m_selectable( true )
 , m_userData(0)
+, m_appData(0)
 {
     recalcMatrix();
 }
 
 KoShape::~KoShape()
 {
+kDebug() << "KoShape::~KoShape\n";
     delete m_userData;
+    delete m_appData;
 }
 
 void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected) {
@@ -341,6 +346,16 @@ void KoShape::setUserData(KoShapeUserData *userData) {
 
 KoShapeUserData *KoShape::userData() const {
     return m_userData;
+}
+
+void KoShape::setApplicationData(KoShapeApplicationData *appData) {
+    if(m_appData)
+        delete m_appData;
+    m_appData = appData;
+}
+
+KoShapeApplicationData *KoShape::applicationData() const {
+    return m_appData;
 }
 
 bool KoShape::hasTransparency() {

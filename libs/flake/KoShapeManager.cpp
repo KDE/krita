@@ -78,6 +78,8 @@ void KoShapeManager::setShapes( const QList<KoShape *> &shapes )
 
 void KoShapeManager::add( KoShape *shape )
 {
+    if(m_shapes.contains(shape))
+        return;
     shape->addShapeManager( this );
     m_shapes.append(shape);
     if( ! dynamic_cast<KoShapeGroup*>( shape ))

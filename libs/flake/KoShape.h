@@ -41,6 +41,7 @@ class KoShapeBorderModel;
 class KoShapeManager;
 class KoShapeUserData;
 class KoViewConverter;
+class KoShapeApplicationData;
 
 /**
  *
@@ -457,6 +458,18 @@ public:
     KoShapeUserData *userData() const;
 
     /**
+     * Set a data object on the shape to be used by an application.
+     * This is specifically useful when an application wants to have data that is per shape
+     * and should be deleted when the shape is destructed.
+     * @param applicationData the new application data, or 0 to delete the current one.
+     */
+    void setApplicationData(KoShapeApplicationData *applicationData);
+    /**
+     * Return the current applicationData.
+     */
+    KoShapeApplicationData *applicationData() const;
+
+    /**
      * Return the Id of this shape, indentifying the type of shape by the id of the factory.
      * @see KoShapeFactory::shapeId()
      * @return the id of the shape-type
@@ -549,6 +562,7 @@ private:
     void addShapeManager( KoShapeManager * manager ) { m_shapeManagers.insert( manager ); }
     void removeShapeManager( KoShapeManager * manager ) { m_shapeManagers.remove( manager ); }
     KoShapeUserData *m_userData;
+    KoShapeApplicationData *m_appData;
 };
 
 #endif

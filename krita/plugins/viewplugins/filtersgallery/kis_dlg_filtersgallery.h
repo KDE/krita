@@ -25,11 +25,15 @@
 
 #include "ui_kis_wdg_filtersgallery.h"
 
+#include <kis_filter_config_widget.h>
+
 class Q3IconViewItem;
 class QLabel;
 
 class KisView2;
 class KisFilter;
+
+
 
 class KisWdgFiltersGallery : public QWidget, public Ui::KisWdgFiltersGallery
 {
@@ -54,7 +58,7 @@ class KisDlgFiltersGallery : public KDialog
         ~KisDlgFiltersGallery();
     public:
         inline KisFilter* currentFilter() { return m_currentFilter; }
-        inline  * currentConfigWidget() { return m_currentConfigWidget; }
+        inline KisFilterConfigWidget * currentConfigWidget() { return m_currentConfigWidget; }
     private slots:
         void slotConfigChanged();
         void refreshPreview();
@@ -62,7 +66,7 @@ class KisDlgFiltersGallery : public KDialog
     private:
         KisWdgFiltersGallery* m_widget;
         KisView2* m_view;
-        QWidget* m_currentConfigWidget;
+        KisFilterConfigWidget * m_currentConfigWidget;
         KisFilter* m_currentFilter;
         QLabel* m_labelNoCW;
 };

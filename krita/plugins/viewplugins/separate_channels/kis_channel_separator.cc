@@ -291,7 +291,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
             undo->endMacro();
         }
 
-        m_view->canvasSubject()->document()->setModified(true);
+        image->setModified();
     }
 }
 

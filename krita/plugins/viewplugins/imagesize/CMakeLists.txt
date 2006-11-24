@@ -22,3 +22,7 @@ target_link_libraries(kritaimagesize kritaui)
 
 install(TARGETS kritaimagesize  DESTINATION ${PLUGIN_INSTALL_DIR})
 
+########### install files ###############
+
+install( FILES  imagesize.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritaimagesize.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

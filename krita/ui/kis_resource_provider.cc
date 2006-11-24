@@ -24,11 +24,13 @@
 #include <KoCanvasBase.h>
 #include <KoID.h>
 
-#include "kis_brush.h"
-#include "kis_pattern.h"
-#include "kis_gradient.h"
-#include "kis_view2.h"
+#include <kis_brush.h>
+#include <kis_pattern.h>
+#include <kis_gradient.h>
 #include <kis_layer.h>
+
+#include "kis_view2.h"
+#include "kis_canvas2.h"
 
 KisResourceProvider::KisResourceProvider(KisView2 * view )
     : m_view( view )

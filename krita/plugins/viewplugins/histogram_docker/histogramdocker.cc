@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QMenu>
+#include <QDockWidget>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -26,19 +28,61 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
+#include "KoDockFactory.h"
 #include "KoBasicHistogramProducers.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoID.h"
 
-#include "kis_meta_registry.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_view2.h"
-
+#include <kis_histogram_view.h>
 
 #include "histogramdocker.h"
 #include "kis_imagerasteredcache.h"
 #include "kis_accumulating_producer.h"
+
+
+namespace {
+
+    class KisHistogramDock : public QDockWidget {
+
+        public KisHistogramDock( KisView2 *view ) {
+
+
+        }
+    };
+
+    class KisHistogramDockFactory : public KoDockFactory {
+public:
+    KisHistogramDockFactory(KisView2 * view)
+        : m_view( view )
+        {
+        }
+
+    virtual QString dockId() const
+        {
+            return QString( "KisHistogramDock" );
+        }
+
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+        {
+            return Qt::RightDockWidgetArea;
+        }
+
+    virtual QDockWidget* createDockWidget()
+        {
+            KisHistogramDock * dockWidget = new KisHistogramDock(m_view);
+            dockWidget->setObjectName(dockId());
+
+            return dockWidget;
+        }
+
+private:
+    KisView2 * m_view;
+
+    };
+}
 
 typedef KGenericFactory<KritaHistogramDocker> KritaHistogramDockerFactory;
 K_EXPORT_COMPONENT_FACTORY( kritahistogramdocker, KritaHistogramDockerFactory( "krita" ) )
@@ -51,8 +95,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
 
         setInstance(KritaHistogramDockerFactory::instance());
 
-setXMLFile(KStandardDirs::locate("data","kritaplugins/kritahistogramdocker.rc"),
-true);
+        setXMLFile(KStandardDirs::locate("data","kritaplugins/kritahistogramdocker.rc"), true);
 
         KisImageSP img = m_view->image();
         if (!img) {
@@ -134,7 +177,7 @@ void KritaHistogramDocker::producerChanged(QAction *action)
 
     // use dummy layer as a source; we are not going to actually use or need it
     // All of these are SP, no need to delete them afterwards
-    m_histogram = new KisHistogram( KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->alpha8(), "dummy histogram")),
+    m_histogram = new KisHistogram( KisPaintDeviceSP(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "dummy histogram")),
                                     KoHistogramProducerSP(m_producer), LOGARITHMIC);
 
     if (m_hview) {

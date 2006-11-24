@@ -18,12 +18,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
+#include "kis_dlg_filtersgallery.h"
+
 #include <QLayout>
 #include <QLabel>
 #include <QDateTime>
 
 #include <kis_filter.h>
-#include <kis_filter_config_widget.h>
 #include <kis_filters_listview.h>
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
@@ -31,8 +33,9 @@
 #include <kis_transaction.h>
 #include <kis_types.h>
 #include <kis_view2.h>
+#include <kis_canvas2.h>
 
-#include "kis_dlg_filtersgallery.h"
+#include <kis_filter_config_widget.h>
 
 namespace Krita {
 namespace Plugins {
@@ -49,7 +52,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView2* view, QWidget* parent,const
    // Initialize main widget
     m_widget = new KisWdgFiltersGallery(this);
     m_widget->filtersList->setLayer(view->image()->activeLayer());
-    m_widget->filtersList->setProfile(view->canvasSubject()->monitorProfile());
+    m_widget->filtersList->setProfile(view->canvasBase()->monitorProfile());
 
     setMainWidget(m_widget);
     // Initialize filters list
@@ -125,7 +128,7 @@ void KisDlgFiltersGallery::refreshPreview( )
     KisPaintDeviceSP layer =  m_widget->previewWidget->getDevice();
 
     KisTransaction cmd("Temporary transaction", layer);
-    KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
+    KisFilterConfiguration* config = m_currentConfigWidget->configuration();
 
     QRect rect = layer->exactBounds();
     m_currentFilter->process(layer, rect, config);

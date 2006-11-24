@@ -31,6 +31,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
+#include <kis_statusbar.h>
 
 #include "kis_separate_channels_plugin.h"
 #include "kis_channel_separator.h"
@@ -43,9 +44,8 @@ KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QStr
 {
     if ( parent->inherits("KisView2") ) {
         setInstance(KGenericFactory<KisSeparateChannelsPlugin>::instance());
-        
-setXMLFile(KStandardDirs::locate("data","kritaplugins/imageseparate.rc"), 
-true);
+
+        setXMLFile(KStandardDirs::locate("data","kritaplugins/imageseparate.rc"), true);
         m_view = (KisView2*) parent;
         KAction *action = new KAction(i18n("Separate Image..."), actionCollection(), "separate");
         connect(action, SIGNAL(triggered(bool) ), SLOT(slotSeparate()));
@@ -81,7 +81,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     if (dlgSeparate->exec() == QDialog::Accepted) {
 
         KisChannelSeparator separator(m_view);
-        separator.separate(m_view->canvasSubject()->progressDisplay(),
+        separator.separate(m_view->statusBar()->progress(),
                            dlgSeparate->getAlphaOptions(),
                            dlgSeparate->getSource(),
                            dlgSeparate->getOutput(),

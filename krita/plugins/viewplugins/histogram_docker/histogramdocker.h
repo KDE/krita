@@ -24,7 +24,6 @@
 #include <QObject>
 
 #include <kparts/plugin.h>
-#include <kis_histogram_view.h>
 #include <kis_histogram.h>
 
 #include "kis_cachedhistogram.h"

@@ -38,7 +38,6 @@ class KisDoc2;
 class KisFilterManager;
 class KisImage;
 class KisLayerManager;
-class KisOpenGLCanvas2;
 class KisQPainterCanvas;
 class KisResourceProvider;
 class KisSelectionManager;
@@ -77,7 +76,7 @@ public:  // Krita specific interfaces
     KisResourceProvider * resourceProvider();
 
     /// Return the canvasbase class
-    KoCanvasBase * canvasBase() const;
+    KisCanvas2 * canvasBase() const;
 
     /// Return the actual widget that is displaying the current image
     QWidget* canvas() const;

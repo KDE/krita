@@ -44,6 +44,8 @@
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
 #include <kis_transaction.h>
+#include <kis_image_manager.h>
+#include <kis_layer_manager.h>
 
 #include "imagesize.h"
 #include "dlg_imagesize.h"
@@ -60,8 +62,7 @@ ImageSize::ImageSize(QObject *parent, const QStringList &)
     {
         setInstance(ImageSizeFactory::instance());
 
-setXMLFile(KStandardDirs::locate("data","kritaplugins/imagesize.rc"),
-true);
+        setXMLFile(KStandardDirs::locate("data","kritaplugins/imagesize.rc"), true);
 
         KAction *action = new KAction(i18n("Change &Image Size..."), actionCollection(), "imagesize");
         action->setShortcut(Qt::SHIFT+Qt::Key_S);
@@ -76,7 +77,7 @@ true);
         Q_CHECK_PTR(action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
-        m_view ->canvasSubject()-> selectionManager()->addSelectionAction(action);
+        m_view ->selectionManager()->addSelectionAction(action);
     }
 }
 
@@ -106,12 +107,12 @@ void ImageSize::slotImageSize()
         qint32 h = dlgImageSize->height();
 
         if (dlgImageSize->scale()) {
-            m_view->scaleCurrentImage((double)w / ((double)(image->width())),
+            m_view->imageManager()->scaleCurrentImage((double)w / ((double)(image->width())),
                             (double)h / ((double)(image->height())),
                             dlgImageSize->filterType());
         }
         else {
-            m_view->resizeCurrentImage(w, h, dlgImageSize->cropLayers());
+            m_view->imageManager()->resizeCurrentImage(w, h, dlgImageSize->cropLayers());
         }
     }
 
@@ -138,9 +139,9 @@ void ImageSize::slotLayerSize()
         qint32 w = dlgLayerSize->width();
         qint32 h = dlgLayerSize->height();
 
-        m_view->scaleLayer((double)w / ((double)(image->width())),
-                    (double)h / ((double)(image->height())),
-                    dlgLayerSize->filterType());
+        m_view->layerManager()->scaleLayer((double)w / ((double)(image->width())),
+                                           (double)h / ((double)(image->height())),
+                                           dlgLayerSize->filterType());
     }
     delete dlgLayerSize;
 }
@@ -177,7 +178,7 @@ void ImageSize::slotSelectionScale()
         qint32 w = dlgImageSize->width();
         qint32 h = dlgImageSize->height();
 
-        m_view->scaleLayer((double)w / ((double)(image->width())),
+        m_view->layerManager()->scaleLayer((double)w / ((double)(image->width())),
                      (double)h / ((double)(image->height())),
                      dlgImageSize->filterType());
 

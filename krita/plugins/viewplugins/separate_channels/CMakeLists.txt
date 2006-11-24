@@ -1,8 +1,3 @@
-
-
-
-
-
 ########### next target ###############
 
 set(kritaseparatechannels_PART_SRCS kis_channel_separator.cc dlg_separate.cc kis_separate_channels_plugin.cc )

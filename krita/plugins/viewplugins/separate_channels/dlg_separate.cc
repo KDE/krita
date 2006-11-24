@@ -43,7 +43,7 @@ DlgSeparate::DlgSeparate( const QString & imageCS,
     setButtons(  Ok | Cancel );
     setDefaultButton( Ok );
 
-    m_page = new WdgSeparations(this, "separate_image");
+    m_page = new WdgSeparations(this);
     Q_CHECK_PTR(m_page);
     setMainWidget(m_page);
     resize(m_page->sizeHint());

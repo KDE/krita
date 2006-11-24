@@ -102,11 +102,11 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
     updateTree();
     QPen pen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.
     painter.setPen(pen);
-    QList<KoShape*> sorterdShapes( m_tree.intersects( converter.viewToDocument( painter.clipRegion().boundingRect() ) ) );
-    qSort(sorterdShapes.begin(), sorterdShapes.end(), KoShape::compareShapeZIndex);
+    QList<KoShape*> sortedShapes( m_tree.intersects( converter.viewToDocument( painter.clipRegion().boundingRect() ) ) );
+    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     const QRegion clipRegion = painter.clipRegion();
 
-    foreach ( KoShape * shape, sorterdShapes ) {
+    foreach ( KoShape * shape, sortedShapes ) {
         if(! shape->isVisible() || ( shape->parent() && ! shape->parent()->isVisible() ) )
             continue;
         if(shape->parent() != 0 && shape->parent()->childClipped(shape))
@@ -157,11 +157,11 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
 KoShape * KoShapeManager::shapeAt( const QPointF &position, KoFlake::ShapeSelection selection, bool omitHiddenShapes )
 {
     updateTree();
-    QList<KoShape*> sorterdShapes( m_tree.contains( position ) );
-    qSort(sorterdShapes.begin(), sorterdShapes.end(), KoShape::compareShapeZIndex);
+    QList<KoShape*> sortedShapes( m_tree.contains( position ) );
+    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     KoShape *firstUnselectedShape = 0;
-    for(int count = sorterdShapes.count()-1; count >= 0; count--) {
-        KoShape *shape = sorterdShapes.at(count);
+    for(int count = sortedShapes.count()-1; count >= 0; count--) {
+        KoShape *shape = sortedShapes.at(count);
         if ( omitHiddenShapes && ! shape->isVisible() )
             continue;
         if ( ! shape->hitTest( position ) )
@@ -187,7 +187,7 @@ KoShape * KoShapeManager::shapeAt( const QPointF &position, KoFlake::ShapeSelect
                 if( ! firstUnselectedShape )
                     firstUnselectedShape = shape;
                 // check if the shape above is selected
-                if( count + 1 < sorterdShapes.count() && m_selection->isSelected( sorterdShapes.at(count + 1) ) )
+                if( count + 1 < sortedShapes.count() && m_selection->isSelected( sortedShapes.at(count + 1) ) )
                     return shape;
                 break;
         }

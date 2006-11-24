@@ -32,9 +32,9 @@ KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
 
 KoShape * KoPathShapeFactory::createDefaultShape() {
     KoPathShape* path = new KoPathShape();
-    path->moveTo( QPointF( 0, 10 ) );
-    path->curveTo( QPointF( 0, 20 ), QPointF( 5, 20 ), QPointF( 5, 10 ) );
-    path->curveTo( QPointF( 5, 0 ), QPointF( 10, 0 ), QPointF( 10, 10 ) );
+    path->moveTo( QPointF( 0, 50 ) );
+    path->curveTo( QPointF( 0, 120 ), QPointF( 50, 120 ), QPointF( 50, 50 ) );
+    path->curveTo( QPointF( 50, -20 ), QPointF( 100, -20 ), QPointF( 100, 50 ) );
     path->normalize();
     path->setBorder( new KoLineBorder( 1.0 ) );
     path->setShapeId(shapeId());

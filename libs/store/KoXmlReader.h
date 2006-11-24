@@ -64,7 +64,7 @@ class KoXmlNodeData;
  *
  * @author Ariya Hidayat <ariya@kde.org>
  */
-class KOSTORE_EXPORT KoXmlNode
+class KSTORE_EXPORT KoXmlNode
 {
 public:
 
@@ -146,7 +146,7 @@ protected:
  * @author Ariya Hidayat <ariya@kde.org>
  */
 
-class KOSTORE_EXPORT KoXmlElement: public KoXmlNode
+class KSTORE_EXPORT KoXmlElement: public KoXmlNode
 {
 public:
   KoXmlElement();
@@ -176,7 +176,7 @@ private:
  * KoXmlText represents a text in a DOM tree.
  * @author Ariya Hidayat <ariya@kde.org>
  */
-class KOSTORE_EXPORT KoXmlText: public KoXmlNode
+class KSTORE_EXPORT KoXmlText: public KoXmlNode
 {
 public:
   KoXmlText();
@@ -199,7 +199,7 @@ private:
  * KoXmlCDATASection represents a CDATA section in a DOM tree.
  * @author Ariya Hidayat <ariya@kde.org>
  */
-class KOSTORE_EXPORT KoXmlCDATASection: public KoXmlText
+class KSTORE_EXPORT KoXmlCDATASection: public KoXmlText
 {
 public:
   KoXmlCDATASection();
@@ -227,7 +227,7 @@ private:
  * @author Ariya Hidayat <ariya@kde.org>
  */
 
-class KOSTORE_EXPORT KoXmlDocument: public KoXmlNode
+class KSTORE_EXPORT KoXmlDocument: public KoXmlNode
 {
 public:
   KoXmlDocument();
@@ -264,7 +264,7 @@ private:
 
 #endif // KOXML_USE_QDOM
 
-class KOSTORE_EXPORT KoXmlInputSource: public QXmlInputSource
+class KSTORE_EXPORT KoXmlInputSource: public QXmlInputSource
 {
 public:
   KoXmlInputSource(QIODevice *dev);
@@ -325,33 +325,33 @@ namespace KoXml {
      *
      * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
      */
-    KOSTORE_EXPORT KoXmlElement namedItemNS( const KoXmlNode& node, 
+    KSTORE_EXPORT KoXmlElement namedItemNS( const KoXmlNode& node, 
         const char* nsURI, const char* localName );
 
     /**
      * Explicitly load child nodes of specified node, up to given depth.
      * This function has no effect if QDom is used.
      */
-    KOSTORE_EXPORT void load( KoXmlNode& node, int depth = 1 );
+    KSTORE_EXPORT void load( KoXmlNode& node, int depth = 1 );
 
     /**
      * Unload child nodes of specified node.
      * This function has no effect if QDom is used.
      */
-    KOSTORE_EXPORT void unload( KoXmlNode& node );
+    KSTORE_EXPORT void unload( KoXmlNode& node );
     
     /**
      * Get the number of child nodes of specified node.
      */
-    KOSTORE_EXPORT int childNodesCount( const KoXmlNode& node );
+    KSTORE_EXPORT int childNodesCount( const KoXmlNode& node );
     
     /**
      * Convert KoXml classes to the corresponding QDom classes, which has 
      * 'ownerDoc' as the owner document (QDomDocument instance).     
      */
-   	KOSTORE_EXPORT QDomNode asQDomNode( QDomDocument ownerDoc, const KoXmlNode& node );
-   	KOSTORE_EXPORT QDomElement asQDomElement( QDomDocument ownerDoc, const KoXmlElement& element );
-   	KOSTORE_EXPORT QDomDocument asQDomDocument( QDomDocument ownerDoc, const KoXmlDocument& document );
+   	KSTORE_EXPORT QDomNode asQDomNode( QDomDocument ownerDoc, const KoXmlNode& node );
+   	KSTORE_EXPORT QDomElement asQDomElement( QDomDocument ownerDoc, const KoXmlElement& element );
+   	KSTORE_EXPORT QDomDocument asQDomDocument( QDomDocument ownerDoc, const KoXmlDocument& document );
 
     /*
      * Load an XML document from specified device to a document. You can of 
@@ -362,11 +362,11 @@ namespace KoXml {
      * 
      * Note: it is assumed that the XML uses UTF-8 encoding.	      
      */     
-    KOSTORE_EXPORT bool setDocument( KoXmlDocument& doc, QIODevice* device,
+    KSTORE_EXPORT bool setDocument( KoXmlDocument& doc, QIODevice* device,
       bool namespaceProcessing, QString* errorMsg = 0, 
 	  int* errorLine = 0, int* errorColumn = 0 );
 
-    KOSTORE_EXPORT bool setDocument( KoXmlDocument& doc, QIODevice* device,
+    KSTORE_EXPORT bool setDocument( KoXmlDocument& doc, QIODevice* device,
       QXmlSimpleReader* reader, QString* errorMsg = 0, 
 	  int* errorLine = 0, int* errorColumn = 0 );
 }

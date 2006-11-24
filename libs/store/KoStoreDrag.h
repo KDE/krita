@@ -35,7 +35,7 @@
  * then KoStore::createStore( theBuffer, .... ), save the
  * data into the store and delete it. Finally, call setEncodedData().
  */
-class KOSTORE_EXPORT KoStoreDrag : public Q3StoredDrag
+class KSTORE_EXPORT KoStoreDrag : public Q3StoredDrag
 {
 public:
     /** Constructor.

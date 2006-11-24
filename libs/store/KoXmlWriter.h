@@ -33,7 +33,7 @@
  * document in memory (like QDom does), and avoids using QTextStream at all
  * (which in Qt3 has major performance issues when converting to utf8).
  */
-class KOSTORE_EXPORT KoXmlWriter
+class KSTORE_EXPORT KoXmlWriter
 {
 public:
     /**

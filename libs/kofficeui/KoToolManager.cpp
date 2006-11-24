@@ -222,6 +222,8 @@ KoToolBox *KoToolManager::toolBox(const QString &applicationName) {
     setup();
     KoToolBox *toolBox = new KoToolBox();
     foreach(ToolHelper *tool, m_tools) {
+        if(tool->id() == KoCreateShapesTool_ID)
+            continue; // don't show this one.
         QAbstractButton *but = tool->createButton();
         toolBox->addButton(but, tool->toolType(), tool->priority(), tool->uniqueId());
         if (tool->toolType() == KoToolFactory::dynamicToolType())

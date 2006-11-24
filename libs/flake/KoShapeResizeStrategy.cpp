@@ -23,8 +23,6 @@
 #include "KoCanvasBase.h"
 #include "KoCommand.h"
 
-#include <kdebug.h>
-
 KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
         const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool, canvas)
@@ -38,6 +36,8 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
         m_startSizes << shape->size();
         m_startShearXs << shape->shearX();
         m_startShearYs << shape->shearY();
+        m_startScaleXs << shape->scaleX();
+        m_startScaleYs << shape->scaleY();
     }
     m_start = clicked;
 
@@ -133,15 +133,12 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     QMatrix matrix;
 
     if(scaleFromCenter)
-    {
         move = QPointF(startWidth / 2.0, startHeight / 2.0);
-    }
     else
-    {
         move = QPointF(m_left?startWidth:0, m_top?startHeight:0);
-    }
+
     matrix.translate(move.x(), move.y()); // translate to 
-    matrix.scale(qMax(0.0, zoomX), qMax(0.0, zoomY));
+    matrix.scale(zoomX, zoomY);
     matrix.translate(-move.x(), -move.y()); // and back
 
     matrix = m_unwindMatrix * matrix * m_windMatrix;
@@ -153,11 +150,23 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         // construct the matrix tranformation we apply to the shape
         QMatrix m = (QMatrix().rotate(shape->rotation())) * matrix  * (QMatrix().rotate(-shape->rotation()));
         QSizeF size(m.m11() * m_startSizes[i].width(), m.m22() * m_startSizes[i].height());
-        size.setWidth(qMax(4.0, size.width()));
-        size.setHeight(qMax(4.0, size.height()));
+        bool mirrorX = size.width() < 0;
+        bool mirrorY = size.height() < 0;
+        size.setWidth(qMax(4.0, qAbs(size.width())));
+        size.setHeight(qMax(4.0, qAbs(size.height())));
 
         shape->repaint();
         // the position has to be set after the size as we set the center of the shape
+
+        // possibly mirror the shape
+        double x = m_startScaleXs[i];
+        double y = m_startScaleYs[i];
+        if(mirrorX)
+            x = x * -1;
+        if(mirrorY)
+            y = y * -1;
+        shape->scale(x, y);
+
         shape->resize( size );
         shape->shear(m_startShearXs[i] + m.m12() / m.m22(), m_startShearYs[i] + m.m21() / m.m11());
         shape->setAbsolutePosition( pos + m_initialPosition );

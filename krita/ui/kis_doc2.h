@@ -46,7 +46,9 @@ class KisChildDoc;
 class KoColorSpace;
 class KoColor;
 class KisDummyShape;
-
+/**
+ * The class that represents a Krita document containing content and settings.
+ */
 class KRITAUI_EXPORT KisDoc2 : public KoDocument, private KisUndoAdapter {
 
     typedef KoDocument super;

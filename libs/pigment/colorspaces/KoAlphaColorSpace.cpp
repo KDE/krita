@@ -266,12 +266,10 @@ namespace {
 
 }
 
-KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceRegistry * parent,
-                                       KoColorProfile *p) :
-        KoLcmsColorSpace<AlphaU8Traits>("ALPHA", i18n("Alpha mask"),  parent, TYPE_GRAY_8, icSigGrayData, p)
+KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceRegistry * parent) :
+        KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"),  parent)
 {
     m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
-    init();
     m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver( this ) );
     m_compositeOps.insert( COMPOSITE_CLEAR,  new CompositeClear( this ) );
     m_compositeOps.insert( COMPOSITE_ERASE, new CompositeErase( this ) );
@@ -329,7 +327,7 @@ void KoAlphaColorSpace::mixColors(const quint8 **colors, const quint8 *weights, 
 }
 
 bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
-                     quint8 *dst, KoColorSpace * dstColorSpace,
+                     quint8 *dst, const KoColorSpace * dstColorSpace,
                      quint32 numPixels,
                      qint32 /*renderingIntent*/) const
 {

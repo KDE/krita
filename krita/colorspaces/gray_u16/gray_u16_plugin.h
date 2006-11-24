@@ -19,12 +19,12 @@
 #ifndef GRAY_U16_PLUGIN_H_
 #define GRAY_U16_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
 
 /**
  * A plugin wrapper around the GRAY U16 color space strategy.
  */
-class GRAYU16Plugin : public KParts::Plugin
+class GRAYU16Plugin : public QObject
 {
     Q_OBJECT
 public:

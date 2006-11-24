@@ -105,9 +105,16 @@ void KoColorSpaceRegistry::init()
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
                 (KoID("LABAHISTO", i18n("L*a*b* Histogram")), new KoLabColorSpace(this, 0);) );
 */
+    // Create the default profile for grayscale, probably not the best place to but that, but still better than in a grayscale plugin
+    // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
+    LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2); 
+    cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
+    cmsFreeGamma(Gamma);
+    KoColorProfile *defProfile = new KoColorProfile(hProfile);
+    addProfile(defProfile);
 
     // Create the built-in colorspaces
-    m_alphaCs = new KoAlphaColorSpace(this, 0);
+    m_alphaCs = new KoAlphaColorSpace(this);
 
     // Load all colorspace modules
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/ColorSpace"),

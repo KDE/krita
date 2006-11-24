@@ -88,8 +88,8 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
     // Default pixel buffer for QColor conversion
             m_qcolordata = new quint8[3];
             Q_CHECK_PTR(m_qcolordata);
-
-            if (m_profile == 0) { return; }
+            Q_ASSERT(m_profile );
+//             if (m_profile == 0) { return; }
 
     // For conversions from default rgb
             m_lastFromRGB = cmsCreate_sRGBProfile();

@@ -22,7 +22,7 @@
 #include <kinstance.h>
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
-#include <kis_basic_histogram_producers.h>
+#include <KoBasicHistogramProducers.h>
 
 #include "gray_u16_plugin.h"
 #include "kis_gray_u16_colorspace.h"
@@ -32,23 +32,18 @@ K_EXPORT_COMPONENT_FACTORY( krita_gray_u16_plugin, GRAYU16PluginFactory( "krita"
 
 
 GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+    : QObject(parent)
 {
-    setInstance(GRAYU16PluginFactory::instance());
-
-    if ( parent->inherits("KoColorSpaceRegistry") )
-    {
-        KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>( parent );
-
-        KoColorSpace * colorSpaceGRAYU16 = new KisGrayU16ColorSpace(f, 0);
-        KoColorSpaceFactory * csf = new KisGrayU16ColorSpaceFactory();
-        Q_CHECK_PTR(colorSpaceGRAYU16);
-        f->add(csf);
-
-        KisHistogramProducerFactoryRegistry::instance()->add(
-                new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), colorSpaceGRAYU16) );
-    }
+    KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
+    
+    KoColorSpaceFactory * csf = new KisGrayU16ColorSpaceFactory();
+    KoColorSpace * colorSpaceGRAYU16 = new KisGrayU16ColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile()));
+    Q_CHECK_PTR(colorSpaceGRAYU16);
+    f->add(csf);
+    
+    KoHistogramProducerFactoryRegistry::instance()->add(
+            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+            (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), colorSpaceGRAYU16) );
 
 }
 

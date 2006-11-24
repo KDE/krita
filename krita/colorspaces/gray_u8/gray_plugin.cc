@@ -43,18 +43,10 @@ GrayPlugin::GrayPlugin(QObject *parent, const QStringList &)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     
-        // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
-    LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2); 
-    cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
-    cmsFreeGamma(Gamma);
-    KoColorProfile *defProfile = new KoColorProfile(hProfile);
-    f->addProfile(defProfile);
-
-
     KoColorSpaceFactory * csFactory = new KisGrayColorSpaceFactory();
     f->add(csFactory);
 
-    KoColorSpace * colorSpaceGrayA = new KisGrayColorSpace(f, 0);
+    KoColorSpace * colorSpaceGrayA = new KisGrayColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csFactory->defaultProfile()));
     KoHistogramProducerFactoryRegistry::instance()->add(
     new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
                 (KoID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), colorSpaceGrayA) );

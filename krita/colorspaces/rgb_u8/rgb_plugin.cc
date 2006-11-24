@@ -50,7 +50,8 @@ RGBPlugin::RGBPlugin(QObject *parent, const QStringList &)
     KoColorSpaceFactory * csFactory = new KisRgbColorSpaceFactory();
     f->add(csFactory);
 
-    KoColorSpace * colorSpaceRGBA = new KisRgbColorSpace(f, 0);
+    KoColorSpace * colorSpaceRGBA = new KisRgbColorSpace(f,
+            KoColorSpaceRegistry::instance()->profileByName(csFactory->defaultProfile()) );
     KoHistogramProducerFactoryRegistry::instance()->add(
     new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
                 (KoID("RGB8HISTO", i18n("RGB8 Histogram")), colorSpaceRGBA) );

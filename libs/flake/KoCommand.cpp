@@ -289,15 +289,28 @@ KoShapeCreateCommand::~KoShapeCreateCommand() {
 void KoShapeCreateCommand::execute () {
     Q_ASSERT(m_shape);
     Q_ASSERT(m_controller);
-    m_controller->addShape( m_shape );
+    recurse(m_shape, Add);
     m_deleteShape = false;
 }
 
 void KoShapeCreateCommand::unexecute () {
     Q_ASSERT(m_shape);
     Q_ASSERT(m_controller);
-    m_controller->removeShape( m_shape );
+    recurse(m_shape, Remove);
     m_deleteShape = true;
+}
+
+void KoShapeCreateCommand::recurse(KoShape *shape, const AddRemove ar) {
+    if(ar == Remove)
+        m_controller->removeShape( m_shape );
+    else
+        m_controller->addShape( m_shape );
+
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer*> (shape);
+    if(container) {
+        foreach(KoShape *child, container->iterator())
+            recurse(child, ar);
+    }
 }
 
 QString KoShapeCreateCommand::name () const {

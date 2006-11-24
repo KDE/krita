@@ -224,6 +224,9 @@ public:
     /// return the name of this command
     virtual QString name () const;
 private:
+    enum AddRemove { Add, Remove };
+    void recurse(KoShape *shape, const AddRemove ar);
+
     KoShapeControllerBase *m_controller;
     KoShape *m_shape;
     bool m_deleteShape;

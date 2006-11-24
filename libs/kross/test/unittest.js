@@ -111,10 +111,23 @@ tester.assertArray(testobj1.func_qstringlist_qstringlist(["abc","def"]), ["abc",
 // variantlist
 tester.assertArray(testobj1.func_qvariantlist_qvariantlist(new Array()), new Array());
 tester.assertArray(testobj1.func_qvariantlist_qvariantlist(new Array("s1","s2",17,-95)), new Array("s1","s2",17,-95));
+tester.assertArray(testobj1.func_qvariantlist_qvariantlist([]), []);
 tester.assertArray(testobj1.func_qvariantlist_qvariantlist(["abc","def",426,-842,96.23,-275.637]), ["abc","def",426,-842,96.23,-275.637]);
 
-//TODO test following cases
 //variantmap
+//TODO
+//var v = new Array;
+//v["key1"] = "value1";
+//v["key2"] = "value2";
+//aa = testobj1.func_qvariantmap_qvariantmap( v )
+//for(i in v) { println("1 =======> i=" + i + " aa[i]=" + aa[i]); }
+//for(i in aa) { println("2 =======> i=" + i + " aa[i]=" + aa[i]); }
+//aa = testobj1.func_qvariantmap_qvariantmap( ["key1":"value1","key2":"value"] )
+//aa = testobj1.func_qvariantmap_qvariantmap( ["key1"="value1","key2"="value"] )
+//aa = testobj1.func_qvariantmap_qvariantmap( ["key1"=>"value1","key2"=>"value"] )
+//for(i in aa) { println("2 =======> i=" + i + " aa[i]=" + aa[i]); }
+
+//TODO test following cases
 //variant
 //propertymembers
 //propertymethods

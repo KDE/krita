@@ -34,8 +34,6 @@
 #include <QVariant>
 #include <QPainterPath>
 
-#include <kdebug.h>
-
 KoShape::KoShape()
 : m_backgroundBrush(Qt::NoBrush)
 , m_border(0)
@@ -60,7 +58,6 @@ KoShape::KoShape()
 
 KoShape::~KoShape()
 {
-kDebug() << "KoShape::~KoShape\n";
     delete m_userData;
     delete m_appData;
 }

@@ -4,7 +4,7 @@
 # the current image.
 #
 # Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
-# Published under the GNU GPL >=v2
+# Published under the GNU GPL =v2
 
 # import the Krita-module.
 require "Krita"
@@ -14,11 +14,6 @@ image = Krita.image()
 
 # we like to manipulate the active painting layer.
 layer = image.activePaintLayer()
-
-# currently the invert.rb does not work with all supported colorspaces.
-if(layer.colorSpaceId() != "RGBA" and layer.colorSpaceId() != "RGBU8")
-    raise("This script works only for 8bit RGBA or RGBU layers")
-end
 
 # get the height and the width the layer has.
 width = layer.width()

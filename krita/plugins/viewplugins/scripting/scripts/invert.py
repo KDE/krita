@@ -5,7 +5,7 @@ The python invert script inverts all pixels at the activate layer in
 the current image.
 
 Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
-Published under the GNU GPL >=v2
+Published under the GNU GPL =v2
 """
 
 class Inverter:
@@ -23,10 +23,6 @@ class Inverter:
 
         # we like to manipulate the active painting layer.
         layer = image.activePaintLayer()
-
-        # currently the invert.py does not work with all supported colorspaces.
-        if(not layer.colorSpaceId() in ["RGBA","RGBU8"]):
-            raise("This script works only for 8bit RGBA or RGBU layers")
 
         # get the height and the width the layer has.
         width = layer.width()

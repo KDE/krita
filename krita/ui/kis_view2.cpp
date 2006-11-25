@@ -190,6 +190,7 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
         slotLoadingFinished();
     }
 
+    setAcceptDrops(true);
 }
 
 

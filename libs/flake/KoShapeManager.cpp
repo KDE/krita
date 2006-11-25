@@ -69,8 +69,8 @@ void KoShapeManager::setShapes( const QList<KoShape *> &shapes )
         m_tree.remove( shape );
         shape->removeShapeManager( this );
     }
-    m_shapes = shapes;
-    foreach(KoShape *shape, m_shapes)
+    m_shapes.clear();
+    foreach(KoShape *shape, shapes)
     {
         add( shape );
     }

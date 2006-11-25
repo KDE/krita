@@ -63,12 +63,19 @@ public:
     /**
      * @brief Remove a shape from the document.
      *
-     * @param shape to remove from thr document
+     * @param shape to remove from the document
      * 
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
      */
     KCommand* removeShape( KoShape *shape );
+
+    /**
+     * @brief Set the KoShapeControllerBase used to add/remove shapes
+     *
+     * @param shapeControllerBase the new shapeControllerBase
+     */
+    void setShapeControllerBase(KoShapeControllerBase* shapeControllerBase) { m_shapeController = shapeControllerBase; }
 
 private:
     KoCanvasBase *m_canvas;

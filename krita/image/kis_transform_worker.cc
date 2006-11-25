@@ -526,7 +526,12 @@ bool KisTransformWorker::run()
         return false;
     }
 
-    transformPass <KisVLineIteratorPixel>(tmpdev2.data(), tmpdev3.data(), yscale, yshear, ytranslate, m_filter);
+    if(xshear==0.0)
+        // Not going to do third step so let m_dev be destination
+        transformPass <KisVLineIteratorPixel>(tmpdev2.data(), m_dev.data(), yscale, yshear, ytranslate, m_filter);
+    else
+        transformPass <KisVLineIteratorPixel>(tmpdev2.data(), tmpdev3.data(), yscale, yshear, ytranslate, m_filter);
+
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
 
@@ -535,7 +540,8 @@ bool KisTransformWorker::run()
         return false;
     }
 
-    transformPass <KisHLineIteratorPixel>(tmpdev3.data(), m_dev.data(), 1.0, xshear, xtranslate, m_filter);
+    if(xshear!=0.0)
+        transformPass <KisHLineIteratorPixel>(tmpdev3.data(), m_dev.data(), 1.0, xshear, xtranslate, m_filter);
     if (m_dev->parentLayer()) {
         m_dev->parentLayer()->setDirty();
     }

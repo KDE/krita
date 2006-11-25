@@ -31,6 +31,13 @@ KoColor::KoColor()
     memset(m_data, 0, m_colorSpace->pixelSize());
     m_colorSpace->setAlpha(m_data, OPACITY_OPAQUE, 1);
 }
+KoColor::KoColor(KoColorSpace * colorSpace)
+{
+    m_colorSpace = colorSpace;
+    m_data = new quint8[m_colorSpace->pixelSize()];
+    memset(m_data, 0, m_colorSpace->pixelSize());
+}
+
 
 KoColor::~KoColor()
 {
@@ -139,19 +146,14 @@ void KoColor::setColor(quint8 * data, KoColorSpace * colorSpace)
 void KoColor::toQColor(QColor *c) const
 {
     if (m_colorSpace && m_data) {
-        // XXX (bsar): There must be a better way, but I'm getting hopelessly confused about constness by now
-        KoColorSpace * cs(const_cast<KoColorSpace*>(m_colorSpace));
-
-        cs->toQColor(m_data, c);
+        m_colorSpace->toQColor(m_data, c);
     }
 }
 
 void KoColor::toQColor(QColor *c, quint8 *opacity) const
 {
     if (m_colorSpace && m_data) {
-        // XXX (bsar): There must be a better way, but I'm getting hopelessly confused about constness by now
-        KoColorSpace * cs(const_cast<KoColorSpace*>(m_colorSpace));
-        cs->toQColor(m_data, c, opacity);
+        m_colorSpace->toQColor(m_data, c, opacity);
     }
 }
 
@@ -160,6 +162,22 @@ QColor KoColor::toQColor() const
     QColor c;
     toQColor(&c);
     return c;
+}
+
+void KoColor::fromQColor(const QColor& c) const
+{
+    if (m_colorSpace && m_data) {
+        m_colorSpace->fromQColor(c, m_data);
+    }
+
+}
+
+void KoColor::fromQColor(const QColor& c, quint8 opacity) const
+{
+    if (m_colorSpace && m_data) {
+        m_colorSpace->fromQColor(c, opacity, m_data);
+    }
+
 }
 
 void KoColor::dump() const
@@ -189,4 +207,14 @@ void KoColor::dump() const
         }
     }
 
+}
+
+void KoColor::fromKoColor(const KoColor& src)
+{
+    if(src.colorSpace()->id() == colorSpace()->id())
+    {
+        memcpy(m_data, src.m_data, colorSpace()->pixelSize());
+    } else {
+        src.colorSpace()->convertPixelsTo(src.m_data, m_data, colorSpace(), 1);
+    }
 }

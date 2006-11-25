@@ -211,6 +211,9 @@ MetaType* RubyMetaTypeFactory::create(const char* typeName, VALUE value)
     #ifdef KROSS_RUBY_VARIANT_DEBUG
         krossdebug( QString("RubyMetaTypeFactory::create typeName=%1 metatype.id=%2 variant.id=%3").arg(typeName).arg(QMetaType::type(typeName)).arg(typeId) );
     #endif
+    return RubyMetaTypeFactory::create(typeId, value);
+}
+MetaType* RubyMetaTypeFactory::create(int typeId, VALUE value) {
 
     switch(typeId) {
         case QVariant::Int:
@@ -267,7 +270,7 @@ MetaType* RubyMetaTypeFactory::create(const char* typeName, VALUE value)
             //if(typeId == QVariant::Invalid) return new RubyVariantImpl<void>();
             //return new RubyVariantImpl<QVariant>(v);
 
-            krosswarning( QString("RubyMetaTypeFactory::create Not possible to convert the VALUE to QVariant with '%1' and metaid '%2'").arg(typeName).arg(typeId) );
+            krosswarning( QString("RubyMetaTypeFactory::create Not possible to convert the VALUE to QVariant with '%1' and metaid '%2'").arg(QVariant::typeToName((QVariant::Type)typeId)).arg(typeId) );
             return 0;
         } break;
     }

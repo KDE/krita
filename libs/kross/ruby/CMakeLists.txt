@@ -10,7 +10,9 @@ set(krossruby_PART_SRCS
    rubyinterpreter.cpp 
    rubyextension.cpp 
    rubyscript.cpp 
-   rubymodule.cpp )
+   rubymodule.cpp
+   rubycallcache.cpp
+   )
 
 kde4_automoc(${krossruby_PART_SRCS})
 

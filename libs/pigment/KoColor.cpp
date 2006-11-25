@@ -211,10 +211,5 @@ void KoColor::dump() const
 
 void KoColor::fromKoColor(const KoColor& src)
 {
-    if(src.colorSpace()->id() == colorSpace()->id())
-    {
-        memcpy(m_data, src.m_data, colorSpace()->pixelSize());
-    } else {
-        src.colorSpace()->convertPixelsTo(src.m_data, m_data, colorSpace(), 1);
-    }
+    src.colorSpace()->convertPixelsTo(src.m_data, m_data, colorSpace(), 1);
 }

@@ -114,8 +114,8 @@ QObject* KritaCoreModule::progress()
 
 QObject* KritaCoreModule::image()
 {
-    ::KisDoc2* document = d->view->canvasSubject()->document();
-    return document ? new Image(this, document->currentImage(), document) : 0;
+    ::KisDoc2* document = d->view->document();
+    return document ? new Image(this, d->view->image(), document) : 0;
 }
 
 QObject* KritaCoreModule::createRGBColor(int r, int g, int b)

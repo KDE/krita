@@ -23,7 +23,7 @@
 
 #include <kis_types.h>
 
-class KisDoc;
+class KisDoc2;
 
 namespace Kross { namespace KritaCore {
 
@@ -36,7 +36,7 @@ class Image : public QObject
 {
        Q_OBJECT
     public:
-        Image(KritaCoreModule* module, KisImageSP image, KisDoc* doc = 0);
+        Image(KritaCoreModule* module, KisImageSP image, KisDoc2* doc = 0);
         ~Image();
 
     public slots:
@@ -135,7 +135,7 @@ class Image : public QObject
 
     private:
         KisImageSP m_image;
-        KisDoc* m_doc;
+        KisDoc2* m_doc;
 };
 
 }}

@@ -33,7 +33,7 @@
 
 using namespace Kross::KritaCore;
 
-Image::Image(KritaCoreModule* module, KisImageSP image, KisDoc* doc)
+Image::Image(KritaCoreModule* module, KisImageSP image, KisDoc2* doc)
     : QObject(module)
     , m_image(image)
     , m_doc(doc)

@@ -24,7 +24,7 @@
 #include <kis_types.h>
 #include <kis_paint_layer.h>
 
-class KisDoc;
+class KisDoc2;
 class KisTransaction;
 
 namespace Kross { namespace KritaCore {
@@ -39,7 +39,7 @@ class PaintLayer : public QObject
 {
         Q_OBJECT
     public:
-        explicit PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc* doc = 0);
+        explicit PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc2* doc = 0);
         virtual ~PaintLayer();
 
     public slots:
@@ -201,10 +201,10 @@ class PaintLayer : public QObject
 
     public:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
-        inline KisDoc* doc() { return m_doc; }
+        inline KisDoc2* doc() { return m_doc; }
     private:
         KisPaintLayerSP m_layer;
-        KisDoc* m_doc;
+        KisDoc2* m_doc;
         KisTransaction* m_cmd;
 };
 

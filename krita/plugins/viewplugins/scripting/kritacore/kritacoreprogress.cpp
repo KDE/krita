@@ -17,6 +17,8 @@
  */
 
 #include "kritacoreprogress.h"
+        
+#include <kdebug.h>
 
 #include <kis_progress_display_interface.h>
 #include <kis_view2.h>
@@ -39,7 +41,8 @@ KritaCoreProgress::~KritaCoreProgress()
 void KritaCoreProgress::activateAsSubject()
 {
     // set this class as the KisProgressSubject in view.
-    m_view->canvasSubject()->progressDisplay()->setSubject( this, true, false /* TODO: how to cancel a script ? */ );
+    //TODO: restore progress in scripting
+//     m_view->canvasSubject()->progressDisplay()->setSubject( this, true, false /* TODO: how to cancel a script ? */ );
     m_progressTotalSteps = 100; // let's us 100 as default (=100%)
 }
 

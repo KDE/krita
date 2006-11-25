@@ -28,6 +28,7 @@
 #include <QPoint>
 #include <QPointer>
 
+#include <kactioncollection.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kgenericfactory.h>
@@ -43,6 +44,7 @@
 #include <kis_view2.h>
 #include <kis_image.h>
 #include <kis_layer.h>
+#include <kis_doc2.h>
 
 #define KROSS_MAIN_EXPORT KDE_EXPORT
 
@@ -130,8 +132,8 @@ void ScriptingPart::started(Kross::Action* action)
 void ScriptingPart::finished(Kross::Action*)
 {
     kDebug() << "ScriptingPart::executionFinished" << endl;
-    d->view->canvasSubject()->document()->setModified(true);
-    d->view->canvasSubject()->document()->currentImage()->activeLayer()->setDirty();
+    d->view->document()->setModified(true);
+    d->view->image()->activeLayer()->setDirty();
     static_cast< Kross::KritaCore::KritaCoreProgress* >( d->module->progress() )->progressDone();
     QApplication::restoreOverrideCursor();
     //d->module->deleteLater();

@@ -38,33 +38,33 @@ Filter::~Filter()
 
 const QString Filter::name()
 {
-    return m_filter->configuration()->name();
+    return m_filter->id().name();
 }
 
 const QVariant Filter::property(const QString& name)
 {
     QVariant value;
-    return m_filter->configuration()->getProperty(name, value) ? value : QVariant();
+//     return m_filter->configuration()->getProperty(name, value) ? value : QVariant();
 }
 
 void Filter::setProperty(const QString& name, const QVariant& value)
 {
-    m_filter->configuration()->setProperty(name, value);
+//     m_filter->configuration()->setProperty(name, value);
 }
 
 QVariantMap Filter::properties()
 {
-    return m_filter->configuration()->getProperties();
+//     return m_filter->configuration()->getProperties();
 }
 
 void Filter::fromXML(const QString& xml)
 {
-    m_filter->configuration()->fromXML( xml );
+//     m_filter->configuration()->fromXML( xml );
 }
 
 const QString Filter::toXML()
 {
-    return m_filter->configuration()->toString();
+//     return m_filter->configuration()->toString();
 }
 
 bool Filter::process(QObject* layer)
@@ -79,7 +79,7 @@ bool Filter::process(QObject* layer)
     QRect r1 = paintlayer->paintLayer()->paintDevice()->extent();
     QRect r2 = paintlayer->paintLayer()->image()->bounds();
     QRect rect = r1.intersect(r2);
-    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, m_filter->configuration());
+    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, 0/*m_filter->configuration()*/);
     return true;
 }
 
@@ -92,7 +92,7 @@ bool Filter::process(QObject* layer, int x, int y, int width, int height)
         return false;
     }
     QRect rect(x, y, width, height);
-    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, m_filter->configuration());
+    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, 0/*m_filter->configuration()*/);
     return true;
 }
 

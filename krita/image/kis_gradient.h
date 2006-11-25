@@ -54,7 +54,7 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
         KisGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const KoColor& startColor, const KoColor& endColor);
 
         // startOffset <= t <= endOffset
-        KoColor colorAt(double t) const;
+        void colorAt(KoColor&, double t) const;
 
         const KoColor& startColor() const;
         const KoColor& endColor() const;
@@ -86,7 +86,7 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
             ColorInterpolationStrategy() {}
             virtual ~ColorInterpolationStrategy() {}
 
-            virtual KoColor colorAt(double t, KoColor start, KoColor end) const = 0;
+            virtual void colorAt(KoColor& dst, double t, KoColor start, KoColor end) const = 0;
             virtual int type() const = 0;
         };
 
@@ -94,7 +94,7 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
         public:
             static RGBColorInterpolationStrategy *instance();
 
-            virtual KoColor colorAt(double t, KoColor start, KoColor end) const;
+            virtual void colorAt(KoColor& dst, double t, KoColor start, KoColor end) const;
             virtual int type() const { return COLOR_INTERP_RGB; }
 
         private:
@@ -102,13 +102,14 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
 
             static RGBColorInterpolationStrategy *m_instance;
             KoColorSpace * m_colorSpace;
+            KoColor buffer;
         };
 
         class HSVCWColorInterpolationStrategy : public ColorInterpolationStrategy {
         public:
             static HSVCWColorInterpolationStrategy *instance();
 
-            virtual KoColor colorAt(double t, KoColor start, KoColor end) const;
+            virtual void colorAt(KoColor& dst, double t, KoColor start, KoColor end) const;
             virtual int type() const { return COLOR_INTERP_HSV_CW; }
         private:
             HSVCWColorInterpolationStrategy();
@@ -121,7 +122,7 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
         public:
             static HSVCCWColorInterpolationStrategy *instance();
 
-            virtual KoColor colorAt(double t, KoColor start, KoColor end) const;
+            virtual void colorAt(KoColor& dst, double t, KoColor start, KoColor end) const;
             virtual int type() const { return COLOR_INTERP_HSV_CCW; }
         private:
             HSVCCWColorInterpolationStrategy();
@@ -232,7 +233,7 @@ public:
     virtual QImage img();
     virtual QImage generatePreview(int width, int height) const;
 
-    KoColor colorAt(double t) const;
+    void colorAt(KoColor& dst, double t) const;
     KoColorSpace * colorSpace() const { return m_colorSpace; }
 
     KisGradientSegment *segmentAt(double t) const;

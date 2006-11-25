@@ -128,15 +128,17 @@ void KisAutogradientResource::splitSegment( KisGradientSegment* segment )
     QList<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
     if ( it != m_segments.end() )
     {
+        KoColor midleoffsetColor;
+        segment->colorAt( midleoffsetColor, segment->middleOffset() );
         KisGradientSegment* newSegment = new KisGradientSegment(
                 segment->interpolation(), segment->colorInterpolation(),
                 segment ->startOffset(),
                 ( segment->middleOffset() - segment->startOffset() ) / 2 + segment->startOffset(),
                 segment->middleOffset(),
                 segment->startColor(),
-                segment->colorAt( segment->middleOffset() ) );
+                midleoffsetColor );
         m_segments.insert( it, newSegment );
-        segment->setStartColor( segment->colorAt( segment->middleOffset() ) );
+        segment->setStartColor( midleoffsetColor );
         segment->setStartOffset( segment->middleOffset() );
         segment->setMiddleOffset( ( segment->endOffset() - segment->startOffset() ) / 2 + segment->startOffset() );
     }

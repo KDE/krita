@@ -561,6 +561,7 @@ bool KisGradientPainter::paintGradient(const KoPoint& gradientVectorStart,
 
     KisPaintDeviceSP dev = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->rgb8(), "temporary device for gradient"));
 
+    KoColor color ;
     for (int y = starty; y <= endy; y++) {
 
         KisHLineIteratorPixel hit = dev->createHLineIterator(startx, y, width);
@@ -573,8 +574,8 @@ bool KisGradientPainter::paintGradient(const KoPoint& gradientVectorStart,
                 t = 1 - t;
             }
 
-            KoColor color = m_gradient->colorAt(t);
-            memcpy(hit.rawData(), color.data(), color.colorSpace()->pixelSize());
+            m_gradient->colorAt(color, t);
+            memcpy(hit.rawData(), color.data(), color.colorSpace()->pixelSize()); // TODO: might be possible to use directly the paintdevice in the KoColor and avoid that memcpy
 
             ++hit;
         }

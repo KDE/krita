@@ -89,8 +89,10 @@ KisPalette::KisPalette(const KisGradient * gradient, qint32 nColors, const QStri
     dx = 1.0 / (nColors - 1);
 
     KisPaletteEntry e;
+    KoColor c;
     for (i = 0, cur_x = 0; i < nColors; i++, cur_x += dx) {
-        e.color = gradient->colorAt(cur_x).toQColor();
+        gradient->colorAt(c,cur_x);
+        e.color = c.toQColor();
         e.name = "Untitled";
         add(e);
     }

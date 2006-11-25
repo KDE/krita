@@ -259,7 +259,7 @@ void KoTextObject::redo()
 KoTextObject::UndoRedoInfo::UndoRedoInfo( KoTextObject *to )
     : type( Invalid ), textobj(to), cursor( 0 )
 {
-    text = QString::null;
+    text.clear();
     id = -1;
     index = -1;
     placeHolderCmd = 0L;
@@ -319,7 +319,7 @@ void KoTextObject::UndoRedoInfo::clear()
     type = Invalid;
     // Before Qt-3.2.0, this called KoTextString::clear(), which called resize(0) on the array, which _detached_. Tricky.
     // Since Qt-3.2.0, resize(0) doesn't detach anymore -> KoTextDocDeleteCommand calls copy() itself.
-    text = QString::null;
+    text.clear();
     id = -1;
     index = -1;
     oldParagLayouts.clear();
@@ -438,7 +438,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
             newPlaceHolderCommand( i18n("Delete Text") );
             undoRedoInfo.id = parag->paragId();
             undoRedoInfo.index = cursor->index();
-            undoRedoInfo.text = QString::null;
+            undoRedoInfo.text.clear();
             undoRedoInfo.oldParagLayouts << parag->paragLayout();
         }
         if ( !cursor->atParagEnd() )
@@ -478,7 +478,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                 newPlaceHolderCommand( i18n("Delete Text") );
                 undoRedoInfo.id = parag->paragId();
                 undoRedoInfo.index = cursor->index();
-                undoRedoInfo.text = QString::null;
+                undoRedoInfo.text.clear();
                 undoRedoInfo.oldParagLayouts << parag->paragLayout();
             }
             undoRedoInfo.text.insert( 0, cursor->parag()->at( cursor->index()-1 ) );
@@ -504,7 +504,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
             newPlaceHolderCommand( i18n("Insert Text") );
             undoRedoInfo.id = cursor->parag()->paragId();
             undoRedoInfo.index = cursor->index();
-            undoRedoInfo.text = QString::null;
+            undoRedoInfo.text.clear();
         }
         undoRedoInfo.text += "\n";
         if ( cursor->parag() )
@@ -562,7 +562,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                 newPlaceHolderCommand( i18n("Delete Text") );
                 undoRedoInfo.id = cursor->parag()->paragId();
                 undoRedoInfo.index = cursor->index();
-                undoRedoInfo.text = QString::null;
+                undoRedoInfo.text.clear();
                 undoRedoInfo.oldParagLayouts << parag->paragLayout();
             }
             if ( cursor->atParagEnd() ) {
@@ -641,7 +641,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
             newPlaceHolderCommand( commandName );
         undoRedoInfo.id = cursor->parag()->paragId();
         undoRedoInfo.index = cursor->index();
-        undoRedoInfo.text = QString::null;
+        undoRedoInfo.text.clear();
     }
     int oldLen = undoRedoInfo.text.length();
     KoTextCursor oldCursor = *cursor;
@@ -1534,7 +1534,7 @@ void KoTextObject::removeSelectedText( KoTextCursor * cursor, KoTextDocument::Se
         checkUndoRedoInfo( cursor, UndoRedoInfo::RemoveSelected );
         if ( !undoRedoInfo.valid() ) {
             textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
-            undoRedoInfo.text = QString::null;
+            undoRedoInfo.text.clear();
             newPlaceHolderCommand( cmdName.isNull() ? i18n("Remove Selected Text") : cmdName );
         }
     }

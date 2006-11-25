@@ -357,7 +357,7 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
 // private
 void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, QGridLayout * layout)
 {
-    QString dir = QString::null;
+    QString dir;
     QPoint point( 0, 0 );
 
     d->m_filedialog=new MyFileDialog(dir,

@@ -677,7 +677,7 @@ void KoTextFormat::save( KoGenStyle& gs, KoSavingContext& context, KoTextFormat 
 void KoTextFormat::update()
 {
     //kDebug(32500) << this << " KoTextFormat::update " << fn.family() << " " << pointSize() << endl;
-    m_key = QString::null; // invalidate key, recalc at the next key() call
+    m_key.clear(); // invalidate key, recalc at the next key() call
     assert( d );
     d->clearCache(); // i.e. recalc at the next screenFont[Metrics]() call
 }

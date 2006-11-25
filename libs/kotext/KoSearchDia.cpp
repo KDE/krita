@@ -57,7 +57,7 @@ KoSearchContext::KoSearchContext()
     m_underline = KoTextFormat::U_NONE;
     m_strikeOut = KoTextFormat::S_NONE;
     m_attribute = KoTextFormat::ATT_NONE;
-    m_language = QString::null;
+    m_language.clear();
 }
 
 KoSearchContext::~KoSearchContext()

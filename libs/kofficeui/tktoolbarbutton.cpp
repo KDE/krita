@@ -51,14 +51,14 @@ m_isPopup      = false;
     m_autoRaised   = true;
     ignoreNextMousePress = false;
 
-    m_text         = QString::null;
-    m_iconName     = QString::null;
+    m_text        .clear();
+    m_iconName    .clear();
     m_arrowPressed = false;
     m_delayTimer   = 0L;
     m_popup        = 0L;
 
-    m_disabledIconName = QString::null;
-    m_defaultIconName  = QString::null;
+    m_disabledIconName.clear();
+    m_defaultIconName .clear();
 
     m_instance = KGlobal::instance();
   }

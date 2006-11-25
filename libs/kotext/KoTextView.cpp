@@ -1087,7 +1087,7 @@ KoLinkVariable * KoTextView::linkVariable()
 QList<KAction *> KoTextView::dataToolActionList(KInstance * instance, KActionCollection* parent, const QString& word, bool & _singleWord )
 {
     m_singleWord = false;
-    m_wordUnderCursor = QString::null;
+    m_wordUnderCursor.clear();
     QString text;
     if ( textObject()->hasSelection() )
     {
@@ -1101,7 +1101,7 @@ QList<KAction *> KoTextView::dataToolActionList(KInstance * instance, KActionCol
             m_singleWord = false;
             //laurent : don't try to search thesaurus when we have a customItemChar.
             if( text.contains( KoTextObject::customItemChar() ) )
-                text = QString::null;
+                text.clear();
         }
     }
     else // No selection -> use word under cursor

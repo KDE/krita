@@ -87,8 +87,8 @@ namespace Kross {
              * Clear the error.
              */
             void clearError() {
-                m_error = QString::null;
-                m_trace = QString::null;
+                m_error.clear();
+                m_trace.clear();
                 m_lineno = -1;
             }
 

@@ -43,7 +43,7 @@ KoParagCounter::KoParagCounter()
     m_displayLevels = 1;
     m_restartCounter = false;
     m_customBulletChar = QChar( '-' );
-    m_customBulletFont = QString::null;
+    m_customBulletFont.clear();
     m_align = Qt::AlignLeft;
     invalidate();
 }
@@ -88,7 +88,7 @@ unsigned int KoParagCounter::depth() const
 void KoParagCounter::invalidate()
 {
     m_cache.number = -1;
-    m_cache.text = QString::null;
+    m_cache.text.clear();
     m_cache.width = -1;
     m_cache.parent = INVALID_PARAG;
     m_cache.counterFormat = 0;
@@ -125,10 +125,10 @@ void KoParagCounter::load( QDomElement & element )
     m_customBulletChar = QChar( element.attribute("bullet").toInt() );
     m_prefix = element.attribute("lefttext");
     if ( m_prefix.toLower() == "(null)" ) // very old kword thing
-        m_prefix = QString::null;
+        m_prefix.clear();
     m_suffix = element.attribute("righttext");
     if ( m_suffix.toLower() == "(null)" )
-        m_suffix = QString::null;
+        m_suffix.clear();
     QString s = element.attribute("start");
     if ( s.isEmpty() )
         m_startNumber = 1;

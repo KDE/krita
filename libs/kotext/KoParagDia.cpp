@@ -447,7 +447,7 @@ QString KoSpinBox::mapValueToText( int value )
     if(value==0 && m_Etype==NUM)
         return QString("0");
     else if(value==0 && m_Etype!=NUM)
-        return QString::null;
+        return QString();
     switch(m_Etype)
     {
         case NUM:
@@ -462,10 +462,10 @@ QString KoSpinBox::mapValueToText( int value )
             return KoParagCounter::makeRomanNumber( value ).toUpper();
         case NONE:
         default:
-            return QString::null;
+            return QString();
     }
     //never here
-    return QString::null;
+    return QString();
 }
 
 int KoSpinBox::mapTextToValue( bool * ok )

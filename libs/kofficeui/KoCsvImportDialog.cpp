@@ -173,7 +173,7 @@ QString KoCsvImportDialog::text(int row, int col)
 {
     // Check for overflow.
     if ( row >= rows() || col >= cols())
-	return QString::null;
+	return QString();
 
     return m_dialog->m_sheet->text( row - m_startRow, col - m_startCol );
 }

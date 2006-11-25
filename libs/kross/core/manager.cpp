@@ -200,7 +200,7 @@ const QString Manager::interpreternameForFile(const QString& file)
         if( file.contains(rx) )
             return (*it)->interpreterName();
     }
-    return QString::null;
+    return QString();
 }
 
 Interpreter* Manager::interpreter(const QString& interpretername) const

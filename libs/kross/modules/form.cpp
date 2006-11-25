@@ -336,7 +336,7 @@ QString FormDialog::result()
     int i = metaObject()->indexOfEnumerator("ButtonCode");
     if( i < 0 ) {
         kWarning() << "Kross::FormDialog::setButtons No such enumerator \"ButtonCode\"" << endl;
-        return QString::null;
+        return QString();
     }
     QMetaEnum e = metaObject()->enumerator(i);
     return e.valueToKey(d->buttoncode);

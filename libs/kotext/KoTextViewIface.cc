@@ -533,7 +533,7 @@ QString KoTextViewIface::linkVariableUrl( ) const
 {
     KoLinkVariable *var=m_textView->linkVariable();
     if ( !var)
-        return QString::null;
+        return QString();
     else
     {
         return var->url();
@@ -544,7 +544,7 @@ QString KoTextViewIface::linkVariableName( ) const
 {
     KoLinkVariable *var=m_textView->linkVariable();
     if ( !var)
-        return QString::null;
+        return QString();
     else
     {
         return var->value();
@@ -590,7 +590,7 @@ QString KoTextViewIface::noteVariableText() const
     if( var )
         return var->note();
     else
-        return QString::null;
+        return QString();
 }
 
 bool KoTextViewIface::setNoteVariableText(const QString & note) const

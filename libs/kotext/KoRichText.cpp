@@ -1353,11 +1353,11 @@ QString KoTextString::toReverseString() const
 QString KoTextString::stringToSpellCheck()
 {
     if ( !bNeedsSpellCheck )
-        return QString::null;
+        return QString();
 
     bNeedsSpellCheck = false;
     if ( length() <= 1 )
-        return QString::null;
+        return QString();
 
     QString str = toString();
     str.truncate( str.length() - 1 ); // remove trailing space

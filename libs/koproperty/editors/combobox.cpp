@@ -186,7 +186,7 @@ ComboBox::keyForValue(const QVariant &value)
 	Property::ListData *list = property()->listData();
 
 	if (!list)
-		return QString::null;
+		return QString();
 	int idx = listData->keys.findIndex( value );
 
 
@@ -195,7 +195,7 @@ ComboBox::keyForValue(const QVariant &value)
 		if(it.data() == value)
 			return it.key();
 	}
-	return QString::null;
+	return QString();
 }*/
 
 

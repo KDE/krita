@@ -558,7 +558,7 @@ QString KoComplexText::shapedString(const QString& uc, int from, int len, QPaint
     if( len < 0 )
 	len = uc.length() - from;
     if( len == 0 ) {
-	return QString::null;
+	return QString();
     }
 
     // we have to ignore NSMs at the beginning and add at the end.
@@ -575,7 +575,7 @@ QString KoComplexText::shapedString(const QString& uc, int from, int len, QPaint
 	len--;
 	from++;
     }
-    if ( len == 0 ) return QString::null;
+    if ( len == 0 ) return QString();
 
     if( !shapeBuffer || len > shapeBufSize ) {
       if( shapeBuffer ) free( (void *) shapeBuffer );

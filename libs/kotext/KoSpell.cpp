@@ -138,7 +138,7 @@ QString KoSpell::getMoreText()
     }
 
     if ( d->itr && d->itr->atEnd() )
-        return QString::null;
+        return QString();
 
     if ( !d->dialog && !d->itr ) {
         QString str = d->parag ? d->parag->string()->stringToSpellCheck() : QString::null;
@@ -161,7 +161,7 @@ QString KoSpell::getMoreText()
         ++(*d->itr);
         if ( d->itr->atEnd() ) {
             d->needsIncrement = false;
-            return QString::null;
+            return QString();
         }
         d->parag = d->itr->currentParag();
         d->lastTxtDocument = d->parag->textDocument();

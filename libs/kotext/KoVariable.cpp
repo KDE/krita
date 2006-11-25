@@ -351,7 +351,7 @@ QString KoVariableTimeFormat::convert( const QVariant & time ) const
     {
         kDebug(32500)<<" Error in KoVariableTimeFormat::convert. Value is a "
                       << time.typeName() << "(" << time.type() << ")" << endl;
-        return QString::null;
+        return QString();
     }
 
     if( m_strFormat.toLower() == "locale" || m_strFormat.isEmpty() )
@@ -403,7 +403,7 @@ QString KoVariableStringFormat::convert( const QVariant & string ) const
     if ( string.type() != QVariant::String )
     {
         kDebug(32500)<<" Error in KoVariableStringFormat::convert. Value is a " << string.typeName() << endl;
-        return QString::null;
+        return QString();
     }
 
     return string.toString();
@@ -427,7 +427,7 @@ QString KoVariableNumberFormat::convert( const QVariant &value ) const
     if ( value.type() != QVariant::Int )
     {
         kDebug(32500)<<" Error in KoVariableNumberFormat::convert. Value is a " << value.typeName() << endl;
-        return QString::null;
+        return QString();
     }
 
     return QString::number( value.toInt() );

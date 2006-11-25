@@ -154,7 +154,7 @@ public:
     /**
      * @return the properties of this format, e.g. DD/MM/YYYY for a date format.
      */
-    virtual QString formatProperties() const { return QString::null; }
+    virtual QString formatProperties() const { return QString(); }
     /**
      * @return the list of available properties strings (e.g. hh:mm:ss)
      */

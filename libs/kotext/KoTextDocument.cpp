@@ -591,7 +591,7 @@ QString KoTextDocument::selectedText( int id, bool withCustom ) const
     // ######## TODO: look at textFormat() and return rich text or plain text (like the text() method!)
     QMap<int, KoTextDocumentSelection>::ConstIterator it = selections.find( id );
     if ( it == selections.end() )
-	return QString::null;
+	return QString();
 
     KoTextDocumentSelection sel = *it;
 

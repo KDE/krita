@@ -103,14 +103,14 @@ QString
 SizePolicyEdit::findDescription(const QVariant &value) const
 {
 	if(!m_spValues)
-		return QString::null;
+		return QString();
 
 	QMap<QString, QVariant>::ConstIterator endIt = m_spValues->constEnd();
 	for (QMap<QString, QVariant>::ConstIterator it = m_spValues->constBegin(); it != endIt; ++ it) {
 		if (it.value() == value)
 			return it.key();
 	}
-	return QString::null;;
+	return QString();;
 }
 
 void

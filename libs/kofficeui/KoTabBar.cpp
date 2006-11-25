@@ -744,7 +744,7 @@ void KoTabBar::renameTab( const QString& old_name, const QString& new_name )
 QString KoTabBar::activeTab() const
 {
     if( d->activeTab == 0 )
-        return QString::null;
+        return QString();
     else
         return d->tabs[ d->activeTab ];
 }

@@ -685,7 +685,7 @@ QString KoTextView::wordUnderCursor( const KoTextCursor& cursor )
     textDocument()->removeSelection( KoTextDocument::Temp );
     if( !hasCustomItems )
         return text;
-    return QString::null;
+    return QString();
 }
 
 bool KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bool canStartDrag, bool insertDirectCursor )

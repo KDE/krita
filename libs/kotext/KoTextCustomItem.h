@@ -64,7 +64,7 @@ public:
     virtual int widthHint() const { return 0; }
     virtual int ascent() const { return height; }
 
-    virtual QString richText() const { return QString::null; }
+    virtual QString richText() const { return QString(); }
 
     int width;
     int height;

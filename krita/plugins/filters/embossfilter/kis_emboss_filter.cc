@@ -57,6 +57,7 @@ KisFilterConfiguration* KisEmbossFilter::designerConfiguration(const KisPaintDev
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(m_id.id(), 0);
     config->setProperty("depth",30);
+    return config;
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

@@ -110,6 +110,7 @@ KisFilterConfiguration* KisMultiDoubleFilterWidget::configuration() const
     for (int i = 0; i < nbValues(); ++i) {
         config->setProperty(m_doubleWidgets[i]->objectName(), m_doubleWidgets[i]->value());
     }
+    return config;
 }
 
 #include "kis_multi_double_filter_widget.moc"

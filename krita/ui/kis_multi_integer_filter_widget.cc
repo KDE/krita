@@ -110,6 +110,7 @@ KisFilterConfiguration* KisMultiIntegerFilterWidget::configuration() const
     for (int i = 0; i < nbValues(); ++i) {
         config->setProperty(m_integerWidgets[i]->objectName(), m_integerWidgets[i]->value());
     }
+    return config;
 }
 
 #include "kis_multi_integer_filter_widget.moc"

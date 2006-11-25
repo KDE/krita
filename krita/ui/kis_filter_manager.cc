@@ -285,7 +285,12 @@ bool KisFilterManager::apply()
     QApplication::setOverrideCursor( Qt::WaitCursor );
 
     //Apply the filter
-    m_d->lastFilterConfig = m_d->lastWidget->configuration();
+    if(m_d->lastWidget)
+    {
+        m_d->lastFilterConfig = m_d->lastWidget->configuration();
+    } else {
+        m_d->lastFilterConfig = 0;
+    }
 
     QRect r1 = dev->extent();
     QRect r2 = img->bounds();
@@ -413,7 +418,7 @@ void KisFilterManager::slotApplyFilter(int i)
     }
 
     // apply will crash if lastWidget == 0
-    if (!m_d->lastWidget || !apply()) {
+    if (!apply()) {
         delete m_d->lastDialog;
         m_d->lastFilterConfig = oldConfig;
         m_d->lastDialog = oldDialog;

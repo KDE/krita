@@ -645,4 +645,8 @@ void KisView2::loadPlugins()
     }
 }
 
+KisDoc2 * KisView2::document() const
+{
+    return m_d->doc;
+}
 #include "kis_view2.moc"

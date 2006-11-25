@@ -118,6 +118,8 @@ public:  // Krita specific interfaces
     /// gui elements
     void updateGUI();
 
+    KisDoc2* document() const;
+
 private slots:
 
     void slotLoadingFinished();

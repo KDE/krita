@@ -26,6 +26,8 @@
 
 #include <KoViewConverter.h>
 #include "kis_view2.h"
+#include "kis_canvas2.h"
+#include "kis_image.h"
 
 KisZoomManager::KisZoomManager( KisView2 * view, KoViewConverter * viewConverter )
     : m_view( view )
@@ -58,13 +60,17 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
     m_actualPixels = new KAction(i18n("Actual Pixels"), actionCollection, "actual_pixels");
     m_actualPixels->setShortcut(Qt::CTRL+Qt::Key_0);
     connect(m_actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
-
+*/
     m_actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection, "actual_size");
-    m_actualSize->setEnabled(false);
+/*
     m_fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection, "fit_to_canvas");
 */
 }
 
+void KisZoomManager::slotActualSize()
+{
+    slotZoomChanged(KoZoomMode::ZOOM_CONSTANT, 100);
+}
 
 void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
 {
@@ -80,6 +86,48 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
     kDebug() << "zoom changed to: " << zoom <<  endl;
 
     zoomHandler->setZoomMode(mode);
+    KisImageSP img = m_view->image();
+    m_view->canvasBase()->setCanvasSize(
+                    int(zoomHandler->documentToViewX(img->xRes() * img->width())),
+                    int(zoomHandler->documentToViewY(img->yRes() * img->height())));
+    m_view->canvas()->update();
+}
+
+void KisZoomManager::slotZoomIn()
+{
+    KoZoomHandler *zoomHandler = (KoZoomHandler*)m_viewConverter;
+
+    double zoomF = 4;
+    m_view->setZoom(zoomF);
+    zoomHandler->setZoom(zoomF);
+
+    int zoom = int(zoomF * 100);
+    kDebug() << "zoom in. now at: " << zoom <<  endl;
+
+    zoomHandler->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+    KisImageSP img = m_view->image();
+    m_view->canvasBase()->setCanvasSize(
+                    int(zoomHandler->documentToViewX(img->xRes() * img->width())),
+                    int(zoomHandler->documentToViewY(img->yRes() * img->height())));
+    m_view->canvas()->update();
+}
+
+void KisZoomManager::slotZoomOut()
+{
+    KoZoomHandler *zoomHandler = (KoZoomHandler*)m_viewConverter;
+
+    double zoomF = 1;
+    m_view->setZoom(zoomF);
+    zoomHandler->setZoom(zoomF);
+
+    int zoom = int(zoomF * 100);
+    kDebug() << "zoom out. now at: " << zoom <<  endl;
+
+    zoomHandler->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+    KisImageSP img = m_view->image();
+    m_view->canvasBase()->setCanvasSize(
+                    int(zoomHandler->documentToViewX(img->xRes() * img->width())),
+                    int(zoomHandler->documentToViewY(img->yRes() * img->height())));
     m_view->canvas()->update();
 }
 

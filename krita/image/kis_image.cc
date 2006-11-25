@@ -1413,18 +1413,13 @@ QImage KisImage::convertToQImage(qint32 x,
     return QImage();
 }
 
-QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, KoColorProfile *profile, float exposure)
+QImage KisImage::convertToQImage(const QRect& r, const double xScale, const double yScale, KoColorProfile *profile, float exposure)
 {
-    if (r.isEmpty() || scaledImageSize.isEmpty()) {
+    if (r.isEmpty()) {
         return QImage();
     }
 
-    qint32 imageWidth = width();
-    qint32 imageHeight = height();
     quint32 pixelSize = colorSpace()->pixelSize();
-
-    double xScale = static_cast<double>(imageWidth) / scaledImageSize.width();
-    double yScale = static_cast<double>(imageHeight) / scaledImageSize.height();
 
     QRect srcRect;
 
@@ -1446,7 +1441,7 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
 
         qint32 dstY = r.y() + y;
         qint32 dstX = r.x();
-        qint32 srcY = (dstY * imageHeight) / scaledImageSize.height();
+        qint32 srcY = int(dstY * yScale);
 
         mergedImage->readBytes(imageRow, imageRowX, srcY, srcRect.width(), 1);
 
@@ -1455,7 +1450,7 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
 
         while (columnsRemaining > 0) {
 
-            qint32 srcX = (dstX * imageWidth) / scaledImageSize.width();
+            qint32 srcX = int(dstX * xScale);
 
             memcpy(dstPixel, imageRow + ((srcX - imageRowX) * pixelSize), pixelSize);
 

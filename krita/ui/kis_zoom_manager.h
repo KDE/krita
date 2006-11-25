@@ -51,8 +51,9 @@ public:
 private slots:
 
     void slotZoomChanged(KoZoomMode::Mode mode, int zoom);
-    void slotZoomIn() {};
-    void slotZoomOut() {};
+    void slotActualSize();
+    void slotZoomIn();
+    void slotZoomOut();
 
 private:
 

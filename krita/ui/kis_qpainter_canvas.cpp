@@ -79,6 +79,8 @@ KisQPainterCanvas::~KisQPainterCanvas()
     delete m_checkBrush;
 }
 
+#define EPSILON 1e-6
+
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
     KisImageSP img = m_canvas->image();
@@ -88,28 +90,56 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     QRegion paintRegion = ev->region();
     QPainter gc( this );
 
-    QRect imageRect(0,0,img->width(), img->height());
-
-    // Then draw the checks in the rects that are inside the the image
+    // Then draw the checks in the rects that are inside the image
     // and which we need to repaint. We must paint all checks because we
     // don't know where our image is transparent. In the same loop, ask
     // the image to paint itself. (And later, the selections and so on.)
-    if (paintRegion.intersects(imageRect)) {
-        QVector<QRect> checkRects = paintRegion.intersected(QRegion(imageRect)).rects();
+    QVector<QRect> checkRects = paintRegion.rects();
 
-        QVector<QRect>::iterator it = checkRects.begin();
-        QVector<QRect>::iterator end = checkRects.end();
+    QVector<QRect>::iterator it = checkRects.begin();
+    QVector<QRect>::iterator end = checkRects.end();
 
+    while (it != end) {
+        // Checks
+        gc.fillRect((*it), *m_checkBrush );
+        ++it;
+    }
+
+    double zx,zy;
+    m_viewConverter->zoom(&zx, &zy);
+
+    if(zx < 1.0 +EPSILON && zy < 1.0 +EPSILON) {
+        // We are scaling pixels down (birds eye) so adjust for display profile AFTER scaling the pixels
+        it = checkRects.begin();
         while (it != end) {
-            // Checks
-            gc.fillRect((*it), *m_checkBrush );
             // Image
-            img->renderToPainter((*it).x(),
-                                 (*it).y(),
-                                 (*it).x(), (*it).y(),
-                                 (*it).width(), (*it).height(), gc,
-                                 m_canvas->monitorProfile(),
-                                 0);
+            QRectF imagerect = m_viewConverter->viewToDocument(*it);
+            imagerect.adjust(-5,-5,5,5);
+
+            QImage image = img->convertToQImage(imagerect.toRect(), 1/zx, 1/zy, 
+                        m_canvas->monitorProfile());
+
+            gc.drawImage(imagerect.topLeft(), image, image.rect());
+            ++it;
+        }
+    }
+    else
+    {
+        // We are scaling pixels up (magnified look) so adjust for display profile before scaling the pixels
+        gc.setWorldMatrixEnabled(true);
+        gc.scale(zx, zy);
+
+        it = checkRects.begin();
+        while (it != end) {
+            // Image
+            QRectF imagerect = m_viewConverter->viewToDocument(*it);
+            imagerect.adjust(-5,-5,5,5);
+            img->renderToPainter(imagerect.x(),
+                                imagerect.y(),
+                                imagerect.x(), imagerect.y(),
+                                imagerect.width(), imagerect.height(), gc,
+                                m_canvas->monitorProfile(),
+                                0);
             ++it;
         }
     }

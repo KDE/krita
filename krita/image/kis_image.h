@@ -98,8 +98,8 @@ public:
       * zoom < 100% to avoid color-adjusting pixels that will be 
       * filtered away anyway.
       */
-     virtual QImage convertToQImage(const QRect& r, 
-                                    const QSize& fullImageSize, 
+     virtual QImage convertToQImage(const QRect& r,
+                                    const double xScale, const double yScale,
                                     KoColorProfile *profile, 
                                     float exposure = 0.0f);
 

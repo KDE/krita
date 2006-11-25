@@ -4,7 +4,8 @@ For anyone that wants to hack on flake here is a list of things that need to be 
   scaled etc) instead of the rubberband.  The rubberband is still used if no painterPath is set.
 * Fix scale strategy so it will not create zero sized objects.  Negative size is allowed, though.
 * Add shadow to a KoShape
-  - distance & angle properties in KoShape
+  - shadow properties as described by the odf spec are (offsetx, offsety, color, opacity)
+    -> maybe have a KoShapeShadow class to hold these
   - painting done in the shape itself. The angle is set in the document space, not in the shape-coordianate system
   - on insert into the rTree (KoShapeManager) extend the boudingrect with shadow (note that KoShapeManager is
     a friend of KoShape).

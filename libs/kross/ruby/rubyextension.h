@@ -66,7 +66,7 @@ namespace Kross {
             /**
             * Handle the function call.
             */
-            VALUE callMetaMethod(const QByteArray& funcname, int argc, VALUE *argv);
+            VALUE callMetaMethod(const QByteArray& funcname, int argc, VALUE *argv, VALUE self);
 
             /**
             * This function will catch functions that are undefined, extracts
@@ -83,7 +83,7 @@ namespace Kross {
             * @param argc the number of argument
             * @param argv the lists of arguments (the first argument is the Ruby ID of the function)
             */
-            static VALUE call_method_missing(RubyExtension* extension, int argc, VALUE *argv);
+            static VALUE call_method_missing(RubyExtension* extension, int argc, VALUE *argv, VALUE self);
 
 #if 0
             /**

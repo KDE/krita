@@ -93,5 +93,5 @@ VALUE RubyModule::method_missing(int argc, VALUE *argv, VALUE self)
     RubyExtension* extension;
     Data_Get_Struct(extensionvalue, RubyExtension /*RubyModule*/, extension);
     Q_ASSERT(extension);
-    return RubyExtension::call_method_missing(extension, argc, argv);
+    return RubyExtension::call_method_missing(extension, argc, argv, self);
 }

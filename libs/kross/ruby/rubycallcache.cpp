@@ -37,11 +37,12 @@ namespace Kross {
         int returnTypeId;
         int returnMetaTypeId;
         QVarLengthArray<int> varianttypes;
+        static VALUE s_rccObject;
     };
+    VALUE RubyCallCachePrivate::s_rccObject = 0;
     RubyCallCache::RubyCallCache(QObject* object, int methodindex, bool hasreturnvalue, int returnTypeId, int returnMetaTypeId, QVarLengthArray<int> variantargs) :
-            d(new RubyCallCachePrivate(object, methodindex, hasreturnvalue, returnTypeId, returnMetaTypeId, variantargs))
+            d(new RubyCallCachePrivate(object, methodindex, hasreturnvalue, returnTypeId, returnMetaTypeId, variantargs)), m_self(0)
     {
-        
     }
     RubyCallCache::~RubyCallCache()
     {
@@ -123,5 +124,36 @@ namespace Kross {
         }
         return result;
     }
-
+    void RubyCallCache::delete_object(void* object)
+    {
+        #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            krossdebug("RubyCallCache::delete_object");
+        #endif
+        RubyCallCache* extension = static_cast< RubyCallCache* >(object);
+        delete extension;
+        extension = 0;
+    }
+    VALUE RubyCallCache::method_cacheexec(int argc, VALUE *argv, VALUE self)
+    {
+        #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            krossdebug("RubyCallCache::method_cacheexec");
+        #endif
+        RubyCallCache* callcache;
+        Data_Get_Struct(self, RubyCallCache, callcache);
+        QVariant result = callcache->execfunction(argc, argv);
+        return result.isNull() ? 0 : RubyType<QVariant>::toVALUE(result);
+    }
+    VALUE RubyCallCache::toValue()
+    {
+        if(m_self == 0)
+        {
+            if(RubyCallCachePrivate::s_rccObject  == 0)
+            {
+                RubyCallCachePrivate::s_rccObject = rb_define_class("KrossCallCache", rb_cObject);
+                rb_define_method(RubyCallCachePrivate::s_rccObject, "cacheexec",  (VALUE (*)(...))RubyCallCache::method_cacheexec, -1);
+            }
+            m_self = Data_Wrap_Struct(RubyCallCachePrivate::s_rccObject, 0, RubyCallCache::delete_object, this);
+        }
+        return m_self;
+    }
 }

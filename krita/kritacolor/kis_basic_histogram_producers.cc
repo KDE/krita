@@ -96,7 +96,6 @@ void KisBasicU8HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * sel
 {
     if (!pixels) return;
     if (!cs) return;
-    if (!selectionMask) return;
     if (nPixels == 0) return;
 
     Q_INT32 pSize = cs->pixelSize();

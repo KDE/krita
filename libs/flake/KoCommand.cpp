@@ -637,3 +637,33 @@ QString KoShapeLockCommand::name () const
 {
     return i18n("Lock shapes");
 }
+
+KoShapeBorderCommand::KoShapeBorderCommand( const KoSelectionSet &shapes, KoShapeBorderModel *border )
+: m_newBorder( border )
+{
+    m_shapes = shapes.toList();
+}
+
+KoShapeBorderCommand::~KoShapeBorderCommand() {
+}
+
+void KoShapeBorderCommand::execute () {
+    foreach( KoShape *shape, m_shapes ) {
+        m_oldBorders.append( shape->border() );
+        shape->setBorder( m_newBorder );
+        shape->repaint();
+    }
+}
+
+void KoShapeBorderCommand::unexecute () {
+    QList<KoShapeBorderModel*>::iterator borderIt = m_oldBorders.begin();
+    foreach( KoShape *shape, m_shapes ) {
+        shape->setBorder( *borderIt );
+        shape->repaint();
+        borderIt++;
+    }
+}
+
+QString KoShapeBorderCommand::name () const {
+    return i18n( "Set border" );
+}

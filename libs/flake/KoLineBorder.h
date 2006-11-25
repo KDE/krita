@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 class KoShape;
 class QPainter;
 class QColor;
+class QPen;
 class KoViewConverter;
 
 /**
@@ -39,19 +41,36 @@ public:
     KoLineBorder();
     /**
      * Constructor for a lineBorder
-     * @param lineSize the width, in pt
+     * @param lineWidth the width, in pt
      * @param color the color we draw the outline in.
      */
-    KoLineBorder(double lineSize, QColor color = Qt::black);
+    KoLineBorder(double lineWidth, QColor color = Qt::black);
     virtual ~KoLineBorder() {};
+
+    /// Sets the lines cap style
+    void setCapStyle( Qt::PenCapStyle style );
+    /// Returns the lines cap style
+    Qt::PenCapStyle capStyle() const;
+    /// Sets the lines join style
+    void setJoinStyle( Qt::PenJoinStyle style );
+    /// Returns the lines join style
+    Qt::PenJoinStyle joinStyle() const;
+    /// Sets the line width
+    void setLineWidth( double lineWidth );
+    /// Returns the line width
+    double lineWidth() const;
+    /// Sets the miter limit
+    void setMiterLimit( double miterLimit );
+    /// Returns the miter limit
+    double miterLimit() const;
 
     virtual KoInsets* borderInsets(const KoShape *shape, KoInsets &insets);
     virtual bool hasTransparency();
     virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
 
 private:
-    double m_lineSize;
     QColor m_color;
+    QPen m_pen;
 };
 
 #endif

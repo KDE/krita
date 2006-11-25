@@ -24,6 +24,7 @@
 #include "KoShapeRubberSelectStrategy.h"
 
 #include <QPointF>
+#include <QPainterPath>
 
 class KoCanvasBase;
 class KoCreateShapesTool;
@@ -44,6 +45,12 @@ public:
 
     void finishInteraction( Qt::KeyboardModifiers modifiers );
     KCommand* createCommand();
+    void paint( QPainter &painter, KoViewConverter &converter);
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+
+private:
+    QPainterPath m_outline;
+    QRectF m_outlineBoundingRect;
 };
 
 #endif /* KOSHAPEROTATESTRATEGY_H */

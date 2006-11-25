@@ -37,6 +37,21 @@
 KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoShapeRubberSelectStrategy(tool, canvas, clicked)
 {
+    KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(m_parent);
+    KoShapeFactory *factory = KoShapeRegistry::instance()->get(parent->shapeId());
+    if( factory)
+    {
+        const KoProperties *props = parent->shapeProperties();
+        KoShape *shape;
+        if(props)
+            shape = factory->createShape(props);
+        else
+            shape = factory->createDefaultShape();
+
+        m_outline = shape->outline();
+        m_outlineBoundingRect = m_outline.boundingRect();
+        delete shape;
+    }
 }
 
 KCommand* KoCreateShapeStrategy::createCommand() {
@@ -77,4 +92,42 @@ KCommand* KoCreateShapeStrategy::createCommand() {
 void KoCreateShapeStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) {
     Q_UNUSED( modifiers );
     m_canvas->updateCanvas(selectRect());
+}
+
+void KoCreateShapeStrategy::paint( QPainter &painter, KoViewConverter &converter)
+{
+    if( m_outline.isEmpty() )
+        KoShapeRubberSelectStrategy::paint( painter, converter );
+    else
+    {
+        painter.save();
+        painter.setRenderHint( QPainter::Antialiasing, false );
+
+        QColor selectColor( Qt::blue ); // TODO make configurable
+        selectColor.setAlphaF( 0.5 );
+        QBrush sb( selectColor, Qt::SolidPattern );
+        painter.setPen( QPen( sb, 0 ) );
+        painter.setBrush( sb );
+        QRectF paintRect = converter.documentToView(selectRect());
+
+        double xscale = paintRect.width() / m_outlineBoundingRect.width();
+        double yscale = paintRect.height() / m_outlineBoundingRect.height();
+        QMatrix matrix;
+        matrix.translate( -m_outlineBoundingRect.left(), -m_outlineBoundingRect.top() );
+        matrix.scale( xscale, yscale );
+        painter.translate( paintRect.left(), paintRect.top() );
+
+        if(painter.hasClipping())
+            paintRect = paintRect.intersect(painter.clipRegion().boundingRect());
+
+        painter.setWorldMatrix( matrix, true );
+        painter.drawPath( m_outline );
+        painter.restore();
+    }
+}
+
+void KoCreateShapeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
+    KoShapeRubberSelectStrategy::handleMouseMove( point, modifiers );
+    if( ! m_outline.isEmpty() )
+        m_canvas->updateCanvas( selectRect() );
 }

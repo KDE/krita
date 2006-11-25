@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
+#ifndef KROSS_RUBYCALLCACHE_H
+#define KROSS_RUBYCALLCACHE_H
+
 #include <ruby.h>
 
 #include <QVarLengthArray>
@@ -38,3 +41,5 @@ namespace Kross {
             VALUE m_self;
     };
 }
+
+#endif

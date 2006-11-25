@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "rubyextension.h"
-        
+
 #include "rubycallcache.h"
 #include "rubyvariant.h"
 #include "../core/metatype.h"

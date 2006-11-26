@@ -270,7 +270,7 @@ bool KisWetStickyColorSpace::hasAlpha() const
     return true;
 }
 
-qint32 KisWetStickyColorSpace::nChannels() const
+qint32 KisWetStickyColorSpace::channelCount() const
 {
     return 14;
 }
@@ -495,7 +495,7 @@ KoCompositeOpList KisWetStickyColorSpace::userVisiblecompositeOps() const
 
 QString KisWetStickyColorSpace::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < nChannels());
+    Q_ASSERT(channelIndex < channelCount());
     const CELL *pixel = reinterpret_cast<const CELL *>(U8_pixel);
 
     switch (channelIndex) {
@@ -549,7 +549,7 @@ QString KisWetStickyColorSpace::channelValueText(const quint8 *U8_pixel, quint32
 
 QString KisWetStickyColorSpace::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < nChannels());
+    Q_ASSERT(channelIndex < channelCount());
     const CELL *pixel = reinterpret_cast<const CELL *>(U8_pixel);
 
     //XXX: Are these right?

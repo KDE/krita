@@ -75,7 +75,7 @@ void KisRgbF16HalfColorSpaceTester::testBasics()
     KisAbstractColorSpace * csSP = cs;
 
     CHECK(cs->hasAlpha(), true);
-    CHECK(cs->nChannels(), NUM_CHANNELS);
+    CHECK(cs->channelCount(), NUM_CHANNELS);
     CHECK(cs->nColorChannels(), NUM_COLOUR_CHANNELS);
     CHECK(cs->pixelSize(), NUM_CHANNELS * CHANNEL_SIZE);
 

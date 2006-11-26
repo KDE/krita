@@ -64,7 +64,7 @@ Q3ValueVector<KoChannelInfo *> KisXyzColorSpace::channels() const
     return m_channels;
 }
 
-quint32 KisXyzColorSpace::nChannels() const
+quint32 KisXyzColorSpace::channelCount() const
 {
     return xyz::MAX_CHANNEL_XYZA;
 }

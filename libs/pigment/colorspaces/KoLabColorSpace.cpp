@@ -49,7 +49,7 @@ bool KoLabColorSpace::willDegrade(ColorSpaceIndependence independence) const
 QString KoLabColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
     const LabU16Traits::channels_type *pix = reinterpret_cast<const  LabU16Traits::channels_type *>(pixel);
-    Q_ASSERT(channelIndex < nChannels());
+    Q_ASSERT(channelIndex < channelCount());
 
     // These convert from lcms encoded format to standard ranges.
 

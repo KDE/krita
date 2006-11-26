@@ -169,7 +169,7 @@ Q3ValueVector<KoChannelInfo *> KisLmsF32ColorSpace::channels() const
     return m_channels;
 }
 
-quint32 KisLmsF32ColorSpace::nChannels() const
+quint32 KisLmsF32ColorSpace::channelCount() const
 {
     return MAX_CHANNEL_LMSA;
 }

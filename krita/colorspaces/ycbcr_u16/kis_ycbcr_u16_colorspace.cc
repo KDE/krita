@@ -164,7 +164,7 @@ QValueVector<KoChannelInfo *> KisYCbCrU16ColorSpace::channels() const {
     return m_channels;
 }
 
-Q_UINT32 KisYCbCrU16ColorSpace::nChannels() const {
+Q_UINT32 KisYCbCrU16ColorSpace::channelCount() const {
     return MAX_CHANNEL_YCbCrA;
 }
 

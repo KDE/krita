@@ -43,7 +43,7 @@ void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                               quint8 opacity) const
 {
     if (m_defaultChannelFlags.isNull() || m_defaultChannelFlags.isEmpty()) {
-        m_defaultChannelFlags.fill( true, m_colorSpace->nChannels() );
+        m_defaultChannelFlags.fill( true, m_colorSpace->channelCount() );
     }
 
     composite( dstRowStart, dstRowStride,

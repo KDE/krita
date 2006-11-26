@@ -354,7 +354,7 @@ bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
 
 QString KoAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < nChannels());
+    Q_ASSERT(channelIndex < channelCount());
     quint32 channelPosition = m_channels[channelIndex]->pos();
 
     return QString().setNum(pixel[channelPosition]);
@@ -362,7 +362,7 @@ QString KoAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channel
 
 QString KoAlphaColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < nChannels());
+    Q_ASSERT(channelIndex < channelCount());
     quint32 channelPosition = m_channels[channelIndex]->pos();
 
     return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);

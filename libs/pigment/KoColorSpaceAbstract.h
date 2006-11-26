@@ -95,7 +95,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
         };
         
         virtual quint32 nColorChannels() const { return _CSTraits::channels_nb - 1; }
-        virtual quint32 nChannels() const { return _CSTraits::channels_nb; };
+        virtual quint32 channelCount() const { return _CSTraits::channels_nb; };
         virtual quint32 pixelSize() const { return _CSTraits::channels_nb * sizeof(typename _CSTraits::channels_type); }
 
         virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const

@@ -280,7 +280,7 @@ Q3ValueVector<KoChannelInfo *> KisWetColorSpace::channels() const
     return m_channels;
 }
 
-quint32 KisWetColorSpace::nChannels() const
+quint32 KisWetColorSpace::channelCount() const
 {
     return 16;
 }
@@ -500,7 +500,7 @@ KoCompositeOpList KisWetColorSpace::userVisiblecompositeOps() const
 
 QString KisWetColorSpace::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < nChannels());
+    Q_ASSERT(channelIndex < channelCount());
     const quint16 *pixel = reinterpret_cast<const quint16 *>(U8_pixel);
     quint32 channelPosition = m_channels[channelIndex]->pos();
 
@@ -509,7 +509,7 @@ QString KisWetColorSpace::channelValueText(const quint8 *U8_pixel, quint32 chann
 
 QString KisWetColorSpace::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < nChannels());
+    Q_ASSERT(channelIndex < channelCount());
     const quint16 *pixel = reinterpret_cast<const quint16 *>(U8_pixel);
     quint32 channelPosition = m_channels[channelIndex]->pos();
 

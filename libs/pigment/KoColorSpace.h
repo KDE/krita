@@ -116,7 +116,7 @@ public:
     /**
      * The total number of channels for a single pixel in this color model
      */
-    virtual quint32 nChannels() const = 0;
+    virtual quint32 channelCount() const = 0;
 
     /**
      * The total number of color channels (excludes alpha and substance) for a single

@@ -95,7 +95,7 @@ void KoF32ColorSpaceTrait::applyInverseAlphaU8Mask(quint8 * U8_pixels, quint8 * 
 
 QString KoF32ColorSpaceTrait::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < (quint32)nChannels());
+    Q_ASSERT(channelIndex < (quint32)channelCount());
     const float *pixel = reinterpret_cast<const float *>(U8_pixel);
     quint32 channelPosition = channels()[channelIndex]->pos() / sizeof(float);
 
@@ -104,7 +104,7 @@ QString KoF32ColorSpaceTrait::channelValueText(const quint8 *U8_pixel, quint32 c
 
 QString KoF32ColorSpaceTrait::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < (quint32)nChannels());
+    Q_ASSERT(channelIndex < (quint32)channelCount());
     const float *pixel = reinterpret_cast<const float *>(U8_pixel);
     quint32 channelPosition = channels()[channelIndex]->pos() / sizeof(float);
 

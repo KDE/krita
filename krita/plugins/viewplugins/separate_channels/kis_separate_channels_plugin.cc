@@ -74,7 +74,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     dlgSeparate->setCaption(i18n("Separate Image"));
 
     // If we're 8-bits, disable the downscale option
-    if (dev->pixelSize() == dev->nChannels()) {
+    if (dev->pixelSize() == dev->channelCount()) {
 	dlgSeparate->enableDownscale(false);
     }
 

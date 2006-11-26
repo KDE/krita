@@ -92,7 +92,7 @@ void KoBasicHistogramProducer::makeExternalToInternal() {
 // ------------ U8 ---------------------
 
 KoBasicU8HistogramProducer::KoBasicU8HistogramProducer(const KoID& id, KoColorSpace *cs)
-    : KoBasicHistogramProducer(id, cs->nChannels(), 256, cs)
+    : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs)
 {
 }
 
@@ -140,7 +140,7 @@ void KoBasicU8HistogramProducer::addRegionToBin(const quint8 * pixels, const qui
 // ------------ U16 ---------------------
 
 KoBasicU16HistogramProducer::KoBasicU16HistogramProducer(const KoID& id, KoColorSpace *cs)
-    : KoBasicHistogramProducer(id, cs->nChannels(), 256, cs)
+    : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs)
 {
 }
 
@@ -209,7 +209,7 @@ void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
 
 // ------------ Float32 ---------------------
 KoBasicF32HistogramProducer::KoBasicF32HistogramProducer(const KoID& id, KoColorSpace *cs)
-    : KoBasicHistogramProducer(id, cs->nChannels(), 256, cs)
+    : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs)
 {
 }
 
@@ -282,7 +282,7 @@ void KoBasicF32HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
 // ------------ Float16 Half ---------------------
 KoBasicF16HalfHistogramProducer::KoBasicF16HalfHistogramProducer(const KoID& id,
                                                                    KoColorSpace *cs)
-    : KoBasicHistogramProducer(id, cs->nChannels(), 256, cs) {
+    : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs) {
 }
 
 QString KoBasicF16HalfHistogramProducer::positionToString(double pos) const {

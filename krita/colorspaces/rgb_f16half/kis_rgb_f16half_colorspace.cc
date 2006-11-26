@@ -231,7 +231,7 @@ Q3ValueVector<KoChannelInfo *> KisRgbF16HalfColorSpace::channels() const
     return m_channels;
 }
 
-quint32 KisRgbF16HalfColorSpace::nChannels() const
+quint32 KisRgbF16HalfColorSpace::channelCount() const
 {
     return MAX_CHANNEL_RGBA;
 }

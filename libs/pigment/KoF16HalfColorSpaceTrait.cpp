@@ -95,7 +95,7 @@ void KoF16HalfColorSpaceTrait::applyInverseAlphaU8Mask(quint8 * U8_pixels, quint
 
 QString KoF16HalfColorSpaceTrait::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < (quint32)nChannels());
+    Q_ASSERT(channelIndex < (quint32)channelCount());
     const half *pixel = reinterpret_cast<const half *>(U8_pixel);
     quint32 channelPosition = channels()[channelIndex] -> pos() / sizeof(half);
 
@@ -104,7 +104,7 @@ QString KoF16HalfColorSpaceTrait::channelValueText(const quint8 *U8_pixel, quint
 
 QString KoF16HalfColorSpaceTrait::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < (quint32)nChannels());
+    Q_ASSERT(channelIndex < (quint32)channelCount());
     const half *pixel = reinterpret_cast<const half *>(U8_pixel);
     quint32 channelPosition = channels()[channelIndex] -> pos() / sizeof(half);
 

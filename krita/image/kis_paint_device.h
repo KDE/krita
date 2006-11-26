@@ -376,7 +376,7 @@ public:
     /**
      * Return the number of channels a pixel takes
      */
-    virtual qint32 nChannels() const;
+    virtual qint32 channelCount() const;
 
     /**
      * Return the image that contains this paint device, or 0 if it is not
@@ -597,7 +597,7 @@ inline qint32 KisPaintDevice::pixelSize() const
     return m_pixelSize;
 }
 
-inline qint32 KisPaintDevice::nChannels() const
+inline qint32 KisPaintDevice::channelCount() const
 {
     Q_ASSERT(m_nChannels > 0);
     return m_nChannels;

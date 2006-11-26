@@ -51,7 +51,7 @@ class KisYCbCrU16ColorSpace : public KoU16ColorSpaceTrait
         virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
         virtual QValueVector<KoChannelInfo *> channels() const;
-        virtual Q_UINT32 nChannels() const;
+        virtual Q_UINT32 channelCount() const;
         virtual Q_UINT32 nColorChannels() const;
         virtual Q_UINT32 pixelSize() const;
 

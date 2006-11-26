@@ -82,7 +82,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
     KoColorSpace * dstCs = 0;
 
-    quint32 numberOfChannels = src->nChannels();
+    quint32 numberOfChannels = src->channelCount();
     KoColorSpace * srcCs  = src->colorSpace();
     Q3ValueVector<KoChannelInfo *> channels = srcCs->channels();
 

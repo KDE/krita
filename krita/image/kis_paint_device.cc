@@ -213,7 +213,7 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name) :
     m_y = 0;
 
     m_pixelSize = colorSpace->pixelSize();
-    m_nChannels = colorSpace->nChannels();
+    m_nChannels = colorSpace->channelCount();
 
     quint8* defPixel = new quint8 [ m_pixelSize ];
     colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
@@ -258,7 +258,7 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KoColorSpace * colorSpace, cons
     }
 
     m_pixelSize = m_colorSpace->pixelSize();
-    m_nChannels = m_colorSpace->nChannels();
+    m_nChannels = m_colorSpace->channelCount();
 
     quint8* defPixel = new quint8[ m_pixelSize ];
     colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
@@ -676,7 +676,7 @@ void KisPaintDevice::setData(KisDataManagerSP data, KoColorSpace * colorSpace)
     m_datamanager = data;
     m_colorSpace = colorSpace;
     m_pixelSize = m_colorSpace->pixelSize();
-    m_nChannels = m_colorSpace->nChannels();
+    m_nChannels = m_colorSpace->channelCount();
 
     if (m_parentLayer) {
         m_parentLayer->setDirty(extent());

@@ -352,8 +352,8 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
     image.setAttribute("colorspacename", img->colorSpace()->id());
     image.setAttribute("description", img->description());
     // XXX: Save profile as blob inside the image, instead of the product name.
-    if (img->getProfile() && img->getProfile()-> valid())
-        image.setAttribute("profile", img->getProfile()->productName());
+    if (img->profile() && img->profile()-> valid())
+        image.setAttribute("profile", img->profile()->productName());
     image.setAttribute("x-res", img->xRes());
     image.setAttribute("y-res", img->yRes());
 
@@ -715,8 +715,8 @@ bool KisDoc::completeSaving(KoStore *store)
             store->close();
         }
     }
-    if (m_currentImage->getProfile()) {
-        KoColorProfile *profile = m_currentImage->getProfile();
+    if (m_currentImage->profile()) {
+        KoColorProfile *profile = m_currentImage->profile();
         KisAnnotationSP annotation;
         if (profile)
         {
@@ -884,7 +884,7 @@ bool KisDoc::newImage(const QString& name, qint32 width, qint32 height, KoColorS
     connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
     img->setResolution(imgResolution, imgResolution);
     img->setDescription(imgDescription);
-    img->setProfile(cs->getProfile());
+    img->setProfile(cs->profile());
 
     layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, cs);
     Q_CHECK_PTR(layer);

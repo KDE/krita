@@ -109,8 +109,8 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
         store->close();
     }
 
-    if (selection->colorSpace()->getProfile()) {
-        KoColorProfile *profile = selection->colorSpace()->getProfile();
+    if (selection->colorSpace()->profile()) {
+        KoColorProfile *profile = selection->colorSpace()->profile();
         KisAnnotationSP annotation;
         if (profile)
         {

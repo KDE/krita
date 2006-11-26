@@ -82,7 +82,7 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), "adjust", i18n("&Auto Contr
 
 bool KisAutoContrast::workWith(KoColorSpace* cs)
 {
-    return (cs->getProfile() != 0);
+    return (cs->profile() != 0);
 }
 
 void KisAutoContrast::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* )
@@ -242,7 +242,7 @@ KisDesaturateFilter::~KisDesaturateFilter()
 
 bool KisDesaturateFilter::workWith(KoColorSpace* cs)
 {
-    return (cs->getProfile() != 0);
+    return (cs->profile() != 0);
 }
 
 void KisDesaturateFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)

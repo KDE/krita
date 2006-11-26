@@ -65,7 +65,7 @@ void KisYCbCrU16ColorSpace::getPixel(const Q_UINT8 *src, Q_UINT16 *Y, Q_UINT16 *
 
 void KisYCbCrU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KoColorProfile * profile )
 {
-    if(getProfile())
+    if(profile())
     {
         KisYCbCrU16ColorSpace::fromQColor(c, dstU8, profile);
     } else {
@@ -78,7 +78,7 @@ void KisYCbCrU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KoColorP
 
 void KisYCbCrU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KoColorProfile * profile )
 {
-    if(getProfile())
+    if(profile())
     {
         KisYCbCrU16ColorSpace::fromQColor(c, opacity, dstU8, profile);
     } else {
@@ -92,7 +92,7 @@ void KisYCbCrU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8
 
 void KisYCbCrU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KoColorProfile * profile)
 {
-    if(getProfile())
+    if(profile())
     {
         KisYCbCrU16ColorSpace::toQColor(srcU8, c, profile);
         
@@ -104,7 +104,7 @@ void KisYCbCrU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KoColorPro
 
 void KisYCbCrU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KoColorProfile * profile)
 {
-    if(getProfile())
+    if(profile())
     {
         KisYCbCrU16ColorSpace::toQColor(srcU8, c, opacity, profile);
     } else {
@@ -116,7 +116,7 @@ void KisYCbCrU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *o
 
 Q_UINT8 KisYCbCrU16ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
 {
-    if(getProfile())
+    if(profile())
         return KisYCbCrU16ColorSpace::difference(src1U8, src2U8);
     const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
     const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
@@ -179,7 +179,7 @@ Q_UINT32 KisYCbCrU16ColorSpace::pixelSize() const {
 
 QImage KisYCbCrU16ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height, KoColorProfile *  dstProfile, Q_INT32 renderingIntent, float exposure )
 {
-    if(getProfile())
+    if(profile())
         return KisYCbCrU16ColorSpace::convertToQImage( data, width, height, dstProfile, renderingIntent, exposure);
     
     QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);

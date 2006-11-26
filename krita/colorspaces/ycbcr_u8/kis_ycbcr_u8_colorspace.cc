@@ -65,7 +65,7 @@ void KisYCbCrU8ColorSpace::getPixel(const Q_UINT8 *src, Q_UINT8 *Y, Q_UINT8 *Cb,
 
 void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KoColorProfile * profile )
 {
-    if(getProfile())
+    if(profile())
     {
         KoU8ColorSpaceTrait::fromQColor(c, dstU8, profile);
     } else {
@@ -78,7 +78,7 @@ void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KoColorPr
 
 void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KoColorProfile * profile )
 {
-    if(getProfile())
+    if(profile())
     {
         KoU8ColorSpaceTrait::fromQColor(c, opacity, dstU8, profile);
     } else {
@@ -92,7 +92,7 @@ void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 
 
 void KisYCbCrU8ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KoColorProfile * profile)
 {
-    if(getProfile())
+    if(profile())
     {
         KoU8ColorSpaceTrait::toQColor(srcU8, c, profile);
         
@@ -104,7 +104,7 @@ void KisYCbCrU8ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KoColorProf
 
 void KisYCbCrU8ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KoColorProfile * profile)
 {
-    if(getProfile())
+    if(profile())
     {
         KoU8ColorSpaceTrait::toQColor(srcU8, c, opacity, profile);
     } else {
@@ -116,7 +116,7 @@ void KisYCbCrU8ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *op
 
 Q_UINT8 KisYCbCrU8ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
 {
-    if(getProfile())
+    if(profile())
         return KoU8ColorSpaceTrait::difference(src1U8, src2U8);
     const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
     const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
@@ -179,7 +179,7 @@ Q_UINT32 KisYCbCrU8ColorSpace::pixelSize() const {
 
 QImage KisYCbCrU8ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height, KoColorProfile *  dstProfile, Q_INT32 renderingIntent, float exposure )
 {
-    if(getProfile())
+    if(profile())
         return KoU8ColorSpaceTrait::convertToQImage( data, width, height, dstProfile, renderingIntent, exposure);
     
     QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);

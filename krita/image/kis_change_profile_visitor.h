@@ -85,7 +85,7 @@ bool KisChangeProfileVisitor::visit(KisPaintLayer *layer)
 
     if (cs == m_oldColorSpace) {
     
-        layer->paintDevice()->setProfile(m_dstColorSpace->getProfile());
+        layer->paintDevice()->setProfile(m_dstColorSpace->profile());
 
         layer->setDirty();
     }

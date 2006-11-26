@@ -165,7 +165,7 @@ public:
       * should be set to whatever makes sense for 'empty' channels of this color space,
       * with the intent being that the pixel should look like it only has the given channel.
       */
-    virtual void getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const = 0;
+    virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const = 0;
 
     //========== Identification ===============================================//
 
@@ -228,7 +228,7 @@ public:
     /**
      * Return the profile of this color space. This may be 0
      */
-    virtual KoColorProfile * getProfile() const = 0;
+    virtual KoColorProfile * profile() const = 0;
 
 //================= Conversion functions ==================================//
 

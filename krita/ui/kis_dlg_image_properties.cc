@@ -80,8 +80,8 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
     fillCmbProfiles(image->colorSpace()->id());
 
-    if (image->getProfile()) {
-        m_page->cmbProfile->setCurrent(image->getProfile()->productName());
+    if (image->profile()) {
+        m_page->cmbProfile->setCurrent(image->profile()->productName());
     }
     else {
         m_page->cmbProfile->setCurrentIndex(0);

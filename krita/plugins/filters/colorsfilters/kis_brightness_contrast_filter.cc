@@ -168,7 +168,7 @@ std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesCo
 
 bool KisBrightnessContrastFilter::workWith(KoColorSpace* cs)
 {
-    return (cs->getProfile() != 0);
+    return (cs->profile() != 0);
 }
 
 

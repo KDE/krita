@@ -184,7 +184,7 @@ namespace {
                 m_adapter->setUndo(false);
 
                 m_img->setColorSpace(m_afterColorSpace);
-                m_img->setProfile(m_afterColorSpace->getProfile());
+                m_img->setProfile(m_afterColorSpace->profile());
 
                 m_adapter->setUndo(true);
             }
@@ -194,7 +194,7 @@ namespace {
                 m_adapter->setUndo(false);
 
                 m_img->setColorSpace(m_beforeColorSpace);
-                m_img->setProfile(m_beforeColorSpace->getProfile());
+                m_img->setProfile(m_beforeColorSpace->profile());
 
                 m_adapter->setUndo(true);
             }
@@ -937,9 +937,9 @@ void KisImage::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
     }
 }
 
-KoColorProfile *  KisImage::getProfile() const
+KoColorProfile *  KisImage::profile() const
 {
-    return colorSpace()->getProfile();
+    return colorSpace()->profile();
 }
 
 void KisImage::setProfile(const KoColorProfile * profile)
@@ -1619,7 +1619,7 @@ void KisImage::removeAnnotation(const QString& type)
 
 vKisAnnotationSP_it KisImage::beginAnnotations()
 {
-    KoColorProfile * profile = colorSpace()->getProfile();
+    KoColorProfile * profile = colorSpace()->profile();
     KisAnnotationSP annotation;
 
     if (profile)

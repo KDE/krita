@@ -65,8 +65,8 @@ public:
             m_store->close();
         }
 
-        if (layer->paintDevice()->colorSpace()->getProfile()) {
-            KoColorProfile *profile = layer->paintDevice()->colorSpace()->getProfile();
+        if (layer->paintDevice()->colorSpace()->profile()) {
+            KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
             KisAnnotationSP annotation;
             if (profile)
             {

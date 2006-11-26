@@ -67,7 +67,7 @@ public:
 
     KoColorSpace * colorSpace() const { return m_colorSpace; }
 
-    KoColorProfile *  profile() const { return m_colorSpace->getProfile(); }
+    KoColorProfile *  profile() const { return m_colorSpace->profile(); }
 
     /// Convert this KoColor to the specified colorspace. If the specified colorspace is the
     /// same as the original colorspace, do nothing. Returns the converted KoColor.

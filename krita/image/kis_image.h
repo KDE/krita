@@ -187,7 +187,7 @@ public:
     void convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent = INTENT_PERCEPTUAL);
 
     // Get the profile associated with this image
-    KoColorProfile *  getProfile() const;
+    KoColorProfile *  profile() const;
 
     /**
      * Set the profile of the image to the new profile and do the same for

@@ -71,7 +71,7 @@ public:
     virtual icColorSpaceSignature colorSpaceSignature() const { return icSigGrayData; }
 
     virtual bool hasHighDynamicRange() const { return false; }
-    virtual KoColorProfile* getProfile() const { return 0; }
+    virtual KoColorProfile* profile() const { return 0; }
     virtual QImage convertToQImage(const quint8*, qint32, qint32, KoColorProfile*, qint32, float) const
     {
         return QImage();

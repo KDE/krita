@@ -523,11 +523,11 @@ void KisView::updateStatusBarProfileLabel()
     KisImageSP img = currentImg();
     if (!img) return;
 
-    if (img->getProfile() == 0) {
+    if (img->profile() == 0) {
         m_statusBarProfileLabel->setText(i18n("No profile"));
     }
     else {
-        m_statusBarProfileLabel->setText(img->colorSpace()->name() + "  " + img->getProfile()->productName());
+        m_statusBarProfileLabel->setText(img->colorSpace()->name() + "  " + img->profile()->productName());
     }
 }
 
@@ -2721,8 +2721,8 @@ void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
     if (img) {
         KisConfig cfg;
         QString profilename;
-        if(img->colorSpace()->getProfile())
-            profilename = img->colorSpace()->getProfile()->productName();
+        if(img->colorSpace()->profile())
+            profilename = img->colorSpace()->profile()->productName();
         NewLayerDialog dlg(img->colorSpace()->id(), profilename, img->nextLayerName(), this);
 
         if (dlg.exec() == QDialog::Accepted) {
@@ -2772,8 +2772,8 @@ void KisView::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
     KisImageSP img = currentImg();
     if (img) {
         QString profilename;
-        if(img->colorSpace()->getProfile())
-            profilename = img->colorSpace()->getProfile()->productName();
+        if(img->colorSpace()->profile())
+            profilename = img->colorSpace()->profile()->productName();
         KisConfig cfg;
         NewLayerDialog dlg(img->colorSpace()->id(), profilename, img->nextLayerName(), this);
         dlg.setColorSpaceEnabled(false);

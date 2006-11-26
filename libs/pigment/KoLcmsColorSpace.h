@@ -125,7 +125,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         virtual icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }
         
         virtual bool hasHighDynamicRange() const { return false; }
-        virtual KoColorProfile * getProfile() const { return m_profile; };
+        virtual KoColorProfile * profile() const { return m_profile; };
         
         virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile=0) const
         {
@@ -237,7 +237,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                 qint32 renderingIntent) const
         {
             if (dstColorSpace->colorSpaceType() == colorSpaceType()
-                && dstColorSpace->getProfile() == getProfile())
+                && dstColorSpace->profile() == profile())
             {
                 if (src!= dst)
                     memcpy (dst, src, numPixels * this->pixelSize());
@@ -252,17 +252,17 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
             if (m_lastUsedTransform != 0 && m_lastUsedDstColorSpace != 0) {
                 if (dstColorSpace->colorSpaceType() == m_lastUsedDstColorSpace->colorSpaceType() &&
-                    dstColorSpace->getProfile() == m_lastUsedDstColorSpace->getProfile()) {
+                    dstColorSpace->profile() == m_lastUsedDstColorSpace->profile()) {
                     tf = m_lastUsedTransform;
                     }
             }
 
-            if (!tf && m_profile && dstColorSpace->getProfile()) {
+            if (!tf && m_profile && dstColorSpace->profile()) {
 
                 if (!m_transforms.contains(dstColorSpace)) {
                     tf = this->createTransform(dstColorSpace,
                             m_profile,
-                            dstColorSpace->getProfile(),
+                            dstColorSpace->profile(),
                             renderingIntent);
                     if (tf) {
             // XXX: Should we clear the transform cache if it gets too big?

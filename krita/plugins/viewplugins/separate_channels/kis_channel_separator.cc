@@ -148,7 +148,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 if (srcIt.isSelected())
                 {
                     if (toColor) {
-                        dstCs->getSingleChannelPixel(dstIt.rawData(), srcIt.rawData(), channelIndex);
+                        dstCs->singleChannelPixel(dstIt.rawData(), srcIt.rawData(), channelIndex);
 
                         if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
                             //dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);

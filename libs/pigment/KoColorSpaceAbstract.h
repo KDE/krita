@@ -121,7 +121,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
             typename _CSTraits::channels_type c = nativeArray(srcPixel)[channelIndex];
             return KoColorSpaceMaths<typename _CSTraits::channels_type,quint16>::scaleToA(c);
         }
-        virtual void getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const
+        virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const
         {
             const typename _CSTraits::channels_type* src = nativeArray(srcPixel);
             typename _CSTraits::channels_type* dst = nativeArray(dstPixel);

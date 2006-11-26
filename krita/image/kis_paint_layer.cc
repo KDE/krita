@@ -142,7 +142,7 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qin
     for (qint32 y2 = y; y2 < h + y; ++y2) {
         KisHLineConstIteratorPixel it = m_paintdev->createHLineIterator(x, y2, w);
         while ( ! it.isDone()) {
-            quint8 s = cs->getAlpha(it.rawData());
+            quint8 s = cs->alpha(it.rawData());
             if(s==0)
             {
                 quint8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;

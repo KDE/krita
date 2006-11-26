@@ -227,7 +227,7 @@ void KisWetStickyColorSpace::mixColors(const quint8 **colors, const quint8 *weig
 {
 }
 
-quint8 KisWetStickyColorSpace::getAlpha(const quint8 *pixel) const
+quint8 KisWetStickyColorSpace::alpha(const quint8 *pixel) const
 {
     return ((CELL_PTR)pixel)->alpha;
 }

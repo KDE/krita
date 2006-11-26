@@ -100,7 +100,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
             if (srcIt.isSelected())
             {
                 //set the shadow color
-                quint8 alpha = dev->colorSpace()->getAlpha(srcIt.rawData());
+                quint8 alpha = dev->colorSpace()->alpha(srcIt.rawData());
                 rgb8cs->fromQColor(color, alpha, dstIt.rawData());
             }
             ++srcIt;

@@ -106,7 +106,7 @@ void KoBasicU8HistogramProducer::addRegionToBin(const quint8 * pixels, const qui
 
     if ( selectionMask ) {
         while (nPixels > 0) {
-            if ( ! (m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT) ) {
+            if ( ! (m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT) ) {
 
                 for (int i = 0; i < m_channels; i++) {
                     m_bins.at(i).at(pixels[i])++;
@@ -122,7 +122,7 @@ void KoBasicU8HistogramProducer::addRegionToBin(const quint8 * pixels, const qui
     }
     else {
         while (nPixels > 0) {
-            if ( ! (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT) ) {
+            if ( ! (m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT) ) {
 
                 for (int i = 0; i < m_channels; i++) {
                     m_bins.at(i).at(pixels[i])++;
@@ -167,7 +167,7 @@ void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
     if ( selectionMask ) {
         const quint16* pixel = reinterpret_cast<const quint16*>(pixels);
         while (nPixels > 0) {
-            if ( ! ((m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
+            if ( ! ((m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT)) ) {
                 for (int i = 0; i < m_channels; i++) {
                     quint16 value = pixel[i];
                     if (value > to)
@@ -188,7 +188,7 @@ void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
         while (nPixels > 0) {
             const quint16* pixel = reinterpret_cast<const quint16*>(pixels);
 
-            if ( ! (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) {
+            if ( ! (m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT)) {
                 for (int i = 0; i < m_channels; i++) {
                     quint16 value = pixel[i];
                     if (value > to)
@@ -235,7 +235,7 @@ void KoBasicF32HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
         while (nPixels > 0) {
 
             const float* pixel = reinterpret_cast<const float*>(pixels);
-            if ( !((m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
+            if ( !((m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT)) ) {
                 for (int i = 0; i < m_channels; i++) {
                     float value = pixel[i];
                     if (value > to)
@@ -258,7 +258,7 @@ void KoBasicF32HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
         while (nPixels > 0) {
 
             const float* pixel = reinterpret_cast<const float*>(pixels);
-            if ( !(m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) {
+            if ( !(m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT)) {
                 for (int i = 0; i < m_channels; i++) {
                     float value = pixel[i];
                     if (value > to)
@@ -305,7 +305,7 @@ void KoBasicF16HalfHistogramProducer::addRegionToBin(const quint8 * pixels, cons
     if ( selectionMask ) {
         while (nPixels > 0) {
             const half* pixel = reinterpret_cast<const half*>(pixels);
-            if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
+            if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT)) ) {
                 for (int i = 0; i < m_channels; i++) {
                     float value = pixel[i];
                     if (value > to)
@@ -325,7 +325,7 @@ void KoBasicF16HalfHistogramProducer::addRegionToBin(const quint8 * pixels, cons
     else {
         while (nPixels > 0) {
             const half* pixel = reinterpret_cast<const half*>(pixels);
-            if ( !(m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) {
+            if ( !(m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT)) {
                 for (int i = 0; i < m_channels; i++) {
                     float value = pixel[i];
                     if (value > to)
@@ -379,7 +379,7 @@ void KoGenericRGBHistogramProducer::addRegionToBin(const quint8 * pixels, const 
     qint32 pSize = cs->pixelSize();
     if (selectionMask) {
         while (nPixels > 0) {
-            if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
+            if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT)) ) {
                 cs->toQColor(pixels, &c);
                 m_bins.at(0).at(c.red())++;
                 m_bins.at(1).at(c.green())++;
@@ -396,7 +396,7 @@ void KoGenericRGBHistogramProducer::addRegionToBin(const quint8 * pixels, const 
     else {
         while (nPixels > 0) {
 
-            if ( !(m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) {
+            if ( !(m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT)) {
                 cs->toQColor(pixels, &c);
                 m_bins.at(0).at(c.red())++;
                 m_bins.at(1).at(c.green())++;
@@ -457,7 +457,7 @@ void KoGenericLabHistogramProducer::addRegionToBin(const quint8 * pixels, const 
 
     if (selectionMask) {
         while (nPixels > 0) {
-            if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
+            if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT)) ) {
 /*
   cs->toQColor(pixels, &c);
   m_bins.at(0).at(c.red())++;
@@ -471,7 +471,7 @@ void KoGenericLabHistogramProducer::addRegionToBin(const quint8 * pixels, const 
     }
     else {
         while (nPixels > 0) {
-            if ( !(m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT))  {
+            if ( !(m_skipTransparent && cs->alpha(pixels) == OPACITY_TRANSPARENT))  {
 
   cs->convertPixelsTo(pixels, dst, m_colorSpace, 1);
   m_bins.at(0).at(m_colorSpace->scaleToU8(dst, 0))++;

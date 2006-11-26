@@ -51,7 +51,7 @@ public:
     virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile = 0) const;
     virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0) const;
 
-    virtual void getAlpha(const quint8 *pixel, quint8 *alpha) const;
+    virtual void alpha(const quint8 *pixel, quint8 *alpha) const;
 
     virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0) const;
     virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0) const;

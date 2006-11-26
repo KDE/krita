@@ -135,7 +135,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
                 }
             }
         }
-        virtual quint8 getAlpha(const quint8 * U8_pixel) const
+        virtual quint8 alpha(const quint8 * U8_pixel) const
         {
             if (_CSTraits::alpha_pos < 0) return OPACITY_OPAQUE;
             typename _CSTraits::channels_type c = nativeArray(U8_pixel)[_CSTraits::alpha_pos];
@@ -197,7 +197,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
             while(nColors--)
             {
                 const typename _CSTraits::channels_type* color = nativeArray(*colors);
-                quint8 alphaTimesWeight =  KoColorSpaceMaths<quint8>::multiply(getAlpha(*colors), *weights);
+                quint8 alphaTimesWeight =  KoColorSpaceMaths<quint8>::multiply(alpha(*colors), *weights);
                 for(uint i = 0; i < _CSTraits::channels_nb; i++)
                 {
                     totals[i] += color[i] * alphaTimesWeight;
@@ -235,7 +235,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
             for (;nPixels--; colors++, kernelValues++)
             {
                 const typename _CSTraits::channels_type* color = nativeArray(*colors);
-                quint8 alphaTimesWeight =  KoColorSpaceMaths<quint8>::multiply(getAlpha(*colors), *kernelValues);
+                quint8 alphaTimesWeight =  KoColorSpaceMaths<quint8>::multiply(alpha(*colors), *kernelValues);
                 for(uint i = 0; i < _CSTraits::channels_nb; i++)
                 {
                     totals[i] += color[i] * alphaTimesWeight;

@@ -291,7 +291,7 @@ void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 opacity, quint8 *
     dst[PIXEL_MASK] = opacity;
 }
 
-void KoAlphaColorSpace::getAlpha(const quint8 *pixel, quint8 *alpha) const
+void KoAlphaColorSpace::alpha(const quint8 *pixel, quint8 *alpha) const
 {
     *alpha = *pixel;
 }

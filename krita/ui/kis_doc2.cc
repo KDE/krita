@@ -921,7 +921,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
 
     KisConfig cfg;
 
-    quint8 opacity = OPACITY_OPAQUE;//bgColor.getAlpha();
+    quint8 opacity = OPACITY_OPAQUE;//bgColor.alpha();
     KisImageSP img;
     KisPaintLayer *layer;
 

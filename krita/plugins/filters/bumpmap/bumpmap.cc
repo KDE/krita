@@ -98,7 +98,7 @@ namespace {
         KisHLineConstIteratorPixel origIt = orig->createHLineConstIterator(x, y, w);
         for (int i = 0; i < w; ++i) {
             row[0] = csOrig->intensity8(origIt.rawData());
-            row[0] = lut[waterlevel + ((row[0] -  waterlevel) * csOrig->getAlpha(origIt.rawData())) / 255];
+            row[0] = lut[waterlevel + ((row[0] -  waterlevel) * csOrig->alpha(origIt.rawData())) / 255];
 
             ++row;
             ++origIt;

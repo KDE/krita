@@ -182,7 +182,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile =0) const
         {
             this->toQColor(src, c, profile);
-            *opacity = this->getAlpha(src);
+            *opacity = this->alpha(src);
         }
         virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                 KoColorProfile *dstProfile,
@@ -285,7 +285,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
         // Lcms does nothing to the destination alpha channel so we must convert that manually.
                 while (numPixels > 0) {
-                    quint8 alpha = this->getAlpha(src);
+                    quint8 alpha = this->alpha(src);
                     dstColorSpace->setAlpha(dst, alpha, 1);
 
                     src += srcPixelSize;
@@ -438,8 +438,8 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                 quint8 lab1[8], lab2[8];
                 cmsCIELab labF1, labF2;
 
-                if (this->getAlpha(src1) == OPACITY_TRANSPARENT || this->getAlpha(src2) == OPACITY_TRANSPARENT)
-                    return (this->getAlpha(src1) == this->getAlpha(src2) ? 0 : 255);
+                if (this->alpha(src1) == OPACITY_TRANSPARENT || this->alpha(src2) == OPACITY_TRANSPARENT)
+                    return (this->alpha(src1) == this->alpha(src2) ? 0 : 255);
 
                 cmsDoTransform( m_defaultToLab, const_cast<quint8*>( src1 ), lab1, 1);
                 cmsDoTransform( m_defaultToLab, const_cast<quint8*>( src2 ), lab2, 1);
@@ -484,7 +484,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
         // Copy alpha
                 for ( int i = 0; i < nPixels; ++i ) {
-                    quint8 alpha = this->getAlpha( src );
+                    quint8 alpha = this->alpha( src );
                     this->setAlpha( dst, alpha, 1 );
                 }
                 delete [] labcache;

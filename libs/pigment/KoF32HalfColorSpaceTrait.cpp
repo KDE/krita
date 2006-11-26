@@ -20,7 +20,7 @@
 
 #include "KoF32HalfColorSpaceTrait.h"
 
-quint8 KoF32ColorSpaceTrait::getAlpha(const quint8 * U8_pixel) const
+quint8 KoF32ColorSpaceTrait::alpha(const quint8 * U8_pixel) const
 {
     if (m_alphaPos < 0) return OPACITY_OPAQUE;
 

@@ -65,7 +65,7 @@ public:
 	//m_alphaSize = sizeof(float);
     };
 
-    virtual quint8 getAlpha(const quint8 * pixel) const;
+    virtual quint8 alpha(const quint8 * pixel) const;
     virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
     virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels);
 

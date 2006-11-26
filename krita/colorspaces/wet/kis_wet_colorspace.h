@@ -115,7 +115,7 @@ public:
     virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0);
     virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0);
 
-    virtual quint8 getAlpha(const quint8 * pixel) const;
+    virtual quint8 alpha(const quint8 * pixel) const;
     virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
     virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels);
 

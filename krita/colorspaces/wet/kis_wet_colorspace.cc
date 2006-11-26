@@ -207,7 +207,7 @@ void KisWetColorSpace::fromQColor(const QColor& c, quint8  /*opacity*/, quint8 *
     fromQColor(c, dst);
 }
 
-quint8 KisWetColorSpace::getAlpha(const quint8 */*pixel*/) const
+quint8 KisWetColorSpace::alpha(const quint8 */*pixel*/) const
 {
     return OPACITY_OPAQUE;
 }

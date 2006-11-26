@@ -326,7 +326,7 @@ void KoUniColorChooser::slotHSVChanged()
 {
     quint8 data[4];
     HSVtoRGB(m_HIn->value(), m_SIn->value(), m_VIn->value(), data+2, data+1, data);
-    data[3] = m_currentColor.colorSpace()->getAlpha(m_currentColor.data());
+    data[3] = m_currentColor.colorSpace()->alpha(m_currentColor.data());
     m_currentColor.setColor(data, rgbColorSpace());
     updateValues();
     updateSelectorsCurrent();
@@ -339,7 +339,7 @@ void KoUniColorChooser::slotRGBChanged()
     data[2] = m_RIn->value();
     data[1] = m_GIn->value();
     data[0] = m_BIn->value();
-    data[3] = m_currentColor.colorSpace()->getAlpha(m_currentColor.data());
+    data[3] = m_currentColor.colorSpace()->alpha(m_currentColor.data());
     m_currentColor.setColor(data, rgbColorSpace());
     updateValues();
     updateSelectorsCurrent();
@@ -349,7 +349,7 @@ void KoUniColorChooser::slotRGBChanged()
 void KoUniColorChooser::slotSliderChanged(int v)
 {
     quint8 data[4];
-    data[3] = m_currentColor.colorSpace()->getAlpha(m_currentColor.data());
+    data[3] = m_currentColor.colorSpace()->alpha(m_currentColor.data());
     switch(m_activeChannel)
     {
         case CHANNEL_H:
@@ -400,7 +400,7 @@ void KoUniColorChooser::slotSliderChanged(int v)
 void KoUniColorChooser::slotXYChanged(int u, int v)
 {
     quint8 data[4];
-    data[3] = m_currentColor.colorSpace()->getAlpha(m_currentColor.data());
+    data[3] = m_currentColor.colorSpace()->alpha(m_currentColor.data());
     switch(m_activeChannel)
     {
         case CHANNEL_H:

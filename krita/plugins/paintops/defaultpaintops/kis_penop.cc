@@ -104,7 +104,7 @@ void KisPenOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     KisRectIteratorPixel pixelIt = dab->createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height());
 
     while (!pixelIt.isDone()) {
-        quint8 alpha = cs->getAlpha(pixelIt.rawData());
+        quint8 alpha = cs->alpha(pixelIt.rawData());
 
         if (alpha < (4 * OPACITY_OPAQUE) / 10) {
             cs->setAlpha(pixelIt.rawData(), OPACITY_TRANSPARENT, 1);

@@ -152,7 +152,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
                         if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
                             //dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
-                            dstCs->setAlpha(dstIt.rawData(), srcCs->getAlpha(srcIt.rawData()), 1);
+                            dstCs->setAlpha(dstIt.rawData(), srcCs->alpha(srcIt.rawData()), 1);
                         }
                         else {
                             dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
@@ -169,7 +169,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                             dstIt.rawData()[0] = srcIt.rawData()[channelPos];
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
-                                dstCs->setAlpha(dstIt.rawData(), srcCs->getAlpha(srcIt.rawData()), 1);
+                                dstCs->setAlpha(dstIt.rawData(), srcCs->alpha(srcIt.rawData()), 1);
                             }
                             else {
                                 dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
@@ -182,7 +182,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                             dstIt.rawData()[1] = srcIt.rawData()[channelPos + 1];
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
-                                dstCs->setAlpha(dstIt.rawData(), srcCs->getAlpha(srcIt.rawData()), 1);
+                                dstCs->setAlpha(dstIt.rawData(), srcCs->alpha(srcIt.rawData()), 1);
                             }
                             else {
                                 dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);

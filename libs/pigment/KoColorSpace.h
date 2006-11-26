@@ -363,7 +363,7 @@ public:
     /**
     * Get the alpha value of the given pixel, downscaled to an 8-bit value.
     */
-    virtual quint8 getAlpha(const quint8 * pixel) const = 0;
+    virtual quint8 alpha(const quint8 * pixel) const = 0;
 
     /**
      * Set the alpha channel of the given run of pixels to the given value.

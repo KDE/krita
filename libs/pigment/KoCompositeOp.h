@@ -122,6 +122,4 @@ protected:
     bool m_userVisible;
 };
 
-typedef QList<KoCompositeOp*> KoCompositeOpList;
-
 #endif // KOCOMPOSITEOP_H

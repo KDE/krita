@@ -203,7 +203,7 @@ public:
     /**
      * Returns the list of user-visible composite ops supported by this colorspace.
      */
-    virtual KoCompositeOpList userVisiblecompositeOps() const;
+    virtual QList<KoCompositeOp*> userVisiblecompositeOps() const;
 
     /**
      * Retrieve a single composite op from the ones this colorspace offers.

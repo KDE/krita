@@ -41,7 +41,7 @@ quint8 *KoColorSpace::allocPixelBuffer(quint32 numPixels) const
     return new quint8[pixelSize()*numPixels];
 }
 
-KoCompositeOpList KoColorSpace::userVisiblecompositeOps() const
+QList<KoCompositeOp*> KoColorSpace::userVisiblecompositeOps() const
 {
     return m_compositeOps.values();
 }

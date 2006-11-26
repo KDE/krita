@@ -38,7 +38,7 @@ KisCmbComposite::~KisCmbComposite()
 {
 }
 
-void KisCmbComposite::setCompositeOpList(const KoCompositeOpList & list)
+void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
 {
     super::clear();
     m_list = list;

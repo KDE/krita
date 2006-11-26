@@ -69,7 +69,7 @@ quint32 KisXyzColorSpace::channelCount() const
     return xyz::MAX_CHANNEL_XYZA;
 }
 
-quint32 KisXyzColorSpace::nColorChannels() const
+quint32 KisXyzColorSpace::colorChannelCount() const
 {
     return xyz::MAX_CHANNEL_XYZ;
 }

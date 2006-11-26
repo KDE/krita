@@ -174,7 +174,7 @@ quint32 KisLmsF32ColorSpace::channelCount() const
     return MAX_CHANNEL_LMSA;
 }
 
-quint32 KisLmsF32ColorSpace::nColorChannels() const
+quint32 KisLmsF32ColorSpace::colorChannelCount() const
 {
     return MAX_CHANNEL_LMS;
 }

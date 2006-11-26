@@ -52,7 +52,7 @@ class KisYCbCrU16ColorSpace : public KoU16ColorSpaceTrait
 
         virtual QValueVector<KoChannelInfo *> channels() const;
         virtual Q_UINT32 channelCount() const;
-        virtual Q_UINT32 nColorChannels() const;
+        virtual Q_UINT32 colorChannelCount() const;
         virtual Q_UINT32 pixelSize() const;
 
         virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,

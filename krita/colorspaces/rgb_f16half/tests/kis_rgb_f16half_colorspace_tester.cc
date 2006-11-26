@@ -76,7 +76,7 @@ void KisRgbF16HalfColorSpaceTester::testBasics()
 
     CHECK(cs->hasAlpha(), true);
     CHECK(cs->channelCount(), NUM_CHANNELS);
-    CHECK(cs->nColorChannels(), NUM_COLOUR_CHANNELS);
+    CHECK(cs->colorChannelCount(), NUM_COLOUR_CHANNELS);
     CHECK(cs->pixelSize(), NUM_CHANNELS * CHANNEL_SIZE);
 
     Q3ValueVector<KoChannelInfo *> channels = cs->channels();

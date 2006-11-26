@@ -181,7 +181,7 @@ KisFilterConfiguration* KisPerChannelFilter::configuration(QWidget *nwidget)
 std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfiguration(KisPaintDeviceSP dev)
 {
     std::list<KisFilterConfiguration*> list;
-    list.insert(list.begin(), new KisPerChannelFilterConfiguration(dev->colorSpace()->nColorChannels()));
+    list.insert(list.begin(), new KisPerChannelFilterConfiguration(dev->colorSpace()->colorChannelCount()));
     return list;
 }
 
@@ -195,7 +195,7 @@ void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
 
     KisPerChannelFilterConfiguration* configBC =
             static_cast<KisPerChannelFilterConfiguration*>(config);
-    if (configBC->nTransfers != src->colorSpace()->nColorChannels()) {
+    if (configBC->nTransfers != src->colorSpace()->colorChannelCount()) {
         // We got an illegal number of colorchannels.KisFilter
         return;
     }
@@ -320,7 +320,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_dev = dev;
     m_curves.clear();
     m_activeCh = 0;
-    for(unsigned int ch = 0; ch < m_dev->colorSpace()->nColorChannels(); ch++)
+    for(unsigned int ch = 0; ch < m_dev->colorSpace()->colorChannelCount(); ch++)
     {
         m_curves.append(KisCurve());
         m_curves[ch].append(QPair<double,double>(0, 0));
@@ -333,7 +333,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     // Fill in the channel chooser
     Q3ValueVector<KoChannelInfo *> channels = dev->colorSpace()->channels();
-    for(unsigned int val=0; val < dev->colorSpace()->nColorChannels(); val++)
+    for(unsigned int val=0; val < dev->colorSpace()->colorChannelCount(); val++)
         m_page->cmbChannel->addItem(channels.at(val)->name());
     connect( m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
@@ -370,7 +370,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
 KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
 {
-    int nCh = m_dev->colorSpace()->nColorChannels();
+    int nCh = m_dev->colorSpace()->colorChannelCount();
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
 
     m_curves[m_activeCh] = m_page->kCurve->getCurve();

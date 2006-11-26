@@ -82,7 +82,7 @@ public:
 
             KisRectIteratorPixel dstIt = m_dst->createRectIterator(m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height(), true );
             KisRectIteratorPixel srcIt = m_src->createRectIterator(m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height(), false);
-            qint32 depth = m_src -> colorSpace() -> nColorChannels();
+            qint32 depth = m_src -> colorSpace() -> colorChannelCount();
 
             kDebug() << "Thread " << m_name << " starts loop \n";
 

@@ -85,7 +85,7 @@ void KisFilterMax::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
     setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
-    Q_INT32 nC = cs->nColorChannels();
+    Q_INT32 nC = cs->colorChannelCount();
     
     funcMaxMin F;
     KoChannelInfo::enumChannelValueType cT = cs->channels()[0]->channelValueType();
@@ -131,7 +131,7 @@ void KisFilterMin::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
     setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
-    Q_INT32 nC = cs->nColorChannels();
+    Q_INT32 nC = cs->colorChannelCount();
     
     funcMaxMin F;
     KoChannelInfo::enumChannelValueType cT = cs->channels()[0]->channelValueType();

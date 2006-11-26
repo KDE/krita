@@ -168,7 +168,7 @@ Q_UINT32 KisYCbCrU8ColorSpace::channelCount() const {
     return MAX_CHANNEL_YCbCrA;
 }
 
-Q_UINT32 KisYCbCrU8ColorSpace::nColorChannels() const {
+Q_UINT32 KisYCbCrU8ColorSpace::colorChannelCount() const {
     return MAX_CHANNEL_YCbCr;
 }
 

@@ -97,7 +97,7 @@ public:
     virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual bool hasAlpha() const;
     virtual qint32 channelCount() const;
-    virtual qint32 nColorChannels() const;
+    virtual qint32 colorChannelCount() const;
     virtual qint32 nSubstanceChannels() const;
     virtual qint32 pixelSize() const;
 

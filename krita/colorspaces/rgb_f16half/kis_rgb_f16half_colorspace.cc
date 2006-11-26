@@ -236,7 +236,7 @@ quint32 KisRgbF16HalfColorSpace::channelCount() const
     return MAX_CHANNEL_RGBA;
 }
 
-quint32 KisRgbF16HalfColorSpace::nColorChannels() const
+quint32 KisRgbF16HalfColorSpace::colorChannelCount() const
 {
     return MAX_CHANNEL_RGB;
 }

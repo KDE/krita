@@ -122,7 +122,7 @@ public:
      * The total number of color channels (excludes alpha and substance) for a single
      * pixel in this color model.
      */
-    virtual quint32 nColorChannels() const = 0;
+    virtual quint32 colorChannelCount() const = 0;
 
     /**
      * The total number of substance channels for a single pixel
@@ -412,7 +412,7 @@ public:
 
     /**
      * Create an adjustment object for adjusting individual channels
-     * transferValues is an array of nColorChannels number of 256 bins array with values from 0 to 0xFFFF
+     * transferValues is an array of colorChannelCount number of 256 bins array with values from 0 to 0xFFFF
      */
     virtual KoColorAdjustment *createPerChannelAdjustment(quint16 **transferValues) const = 0;
 

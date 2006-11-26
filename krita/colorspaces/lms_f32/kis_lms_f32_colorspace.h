@@ -61,7 +61,7 @@ public:
 
     virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual quint32 channelCount() const;
-    virtual quint32 nColorChannels() const;
+    virtual quint32 colorChannelCount() const;
     virtual quint32 pixelSize() const;
 
     virtual bool hasHighDynamicRange() const { return false; }

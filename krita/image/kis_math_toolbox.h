@@ -107,7 +107,7 @@ inline KisMathToolbox::KisWavelet* KisMathToolbox::initWavelet(KisPaintDeviceSP 
     int size;
     int maxrectsize = (rect.height() < rect.width()) ? rect.width() : rect.height();
     for(size = 2; size < maxrectsize; size *= 2) ;
-    qint32 depth = src->colorSpace()->nColorChannels();
+    qint32 depth = src->colorSpace()->colorChannelCount();
     return new KisWavelet(size, depth);
 }
 

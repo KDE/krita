@@ -59,7 +59,7 @@ public:
     virtual quint8 difference(const quint8 *src1, const quint8 *src2) const;
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
-    virtual quint32 nColorChannels() const { return 0; };
+    virtual quint32 colorChannelCount() const { return 0; };
 
     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;

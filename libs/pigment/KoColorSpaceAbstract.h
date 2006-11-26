@@ -94,7 +94,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
             this->m_compositeOps.insert( COMPOSITE_COPY, new CompositeCopy( this ) );
         };
         
-        virtual quint32 nColorChannels() const { return _CSTraits::channels_nb - 1; }
+        virtual quint32 colorChannelCount() const { return _CSTraits::channels_nb - 1; }
         virtual quint32 channelCount() const { return _CSTraits::channels_nb; };
         virtual quint32 pixelSize() const { return _CSTraits::channels_nb * sizeof(typename _CSTraits::channels_type); }
 

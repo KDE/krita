@@ -64,7 +64,7 @@ void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint&
     
     threshold = config->getDouble("threshold", BEST_WAVELET_THRESHOLD_VALUE);
 
-    qint32 depth = src->colorSpace()->nColorChannels();
+    qint32 depth = src->colorSpace()->colorChannelCount();
 
     int size;
     int maxrectsize = qMax( areaSize.width(), areaSize.height());

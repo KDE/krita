@@ -130,7 +130,7 @@ public:
     virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual quint32 channelCount() const;
     virtual quint32 colorChannelCount() const;
-    virtual quint32 nSubstanceChannels() const;
+    virtual quint32 substanceChannelCount() const;
     virtual quint32 pixelSize() const;
 
     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;

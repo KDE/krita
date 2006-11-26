@@ -128,7 +128,7 @@ public:
      * The total number of substance channels for a single pixel
      * in this color model
      */
-    virtual quint32 nSubstanceChannels() const { return 0; };
+    virtual quint32 substanceChannelCount() const { return 0; };
 
     /**
      * The size in bytes of a single pixel in this color model

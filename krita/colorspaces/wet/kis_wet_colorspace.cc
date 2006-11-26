@@ -290,7 +290,7 @@ quint32 KisWetColorSpace::colorChannelCount() const
     return 12;
 }
 
-quint32 KisWetColorSpace::nSubstanceChannels() const
+quint32 KisWetColorSpace::substanceChannelCount() const
 {
     return 4;
 }

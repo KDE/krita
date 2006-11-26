@@ -280,7 +280,7 @@ qint32 KisWetStickyColorSpace::colorChannelCount() const
     return 3;
 }
 
-qint32 KisWetStickyColorSpace::nSubstanceChannels() const
+qint32 KisWetStickyColorSpace::substanceChannelCount() const
 {
     return 4;
 

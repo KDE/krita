@@ -98,7 +98,7 @@ public:
     virtual bool hasAlpha() const;
     virtual qint32 channelCount() const;
     virtual qint32 colorChannelCount() const;
-    virtual qint32 nSubstanceChannels() const;
+    virtual qint32 substanceChannelCount() const;
     virtual qint32 pixelSize() const;
 
     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;

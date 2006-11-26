@@ -266,7 +266,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
             return static_cast<quint8>((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
         }
 
-        virtual KoID mathToolboxID() const
+        virtual KoID mathToolboxId() const
         {
             return KoID("Basic");
         }

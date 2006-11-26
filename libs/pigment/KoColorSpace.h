@@ -460,7 +460,7 @@ public:
     /**
      * Create a mathematical toolbox compatible with this colorspace
      */
-    virtual KoID mathToolboxID() const =0;
+    virtual KoID mathToolboxId() const =0;
 
     /**
      * Compose two arrays of pixels together. If source and target

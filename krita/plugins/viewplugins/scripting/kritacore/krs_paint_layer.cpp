@@ -161,7 +161,7 @@ void PaintLayer::endPainting()
 
 QObject* PaintLayer::fastWaveletTransformation()
 {
-    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( paintLayer()->paintDevice()->colorSpace()->mathToolboxID() );
+    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( paintLayer()->paintDevice()->colorSpace()->mathToolboxId() );
     QRect rect = paintLayer()->exactBounds();
     KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(paintLayer()->paintDevice(), rect);
     return new Wavelet(wav);
@@ -174,7 +174,7 @@ bool PaintLayer::fastWaveletUntransformation(QObject* wavelet)
         kWarning() << "The passed argument is not a valid Wavelet-object." << endl;
         return false;
     }
-    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( paintLayer()->paintDevice()->colorSpace()->mathToolboxID() );
+    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( paintLayer()->paintDevice()->colorSpace()->mathToolboxId() );
     QRect rect = paintLayer()->exactBounds();
     mathToolbox->fastWaveletUntransformation( paintLayer()->paintDevice(), rect, wav->wavelet() );
     return true;

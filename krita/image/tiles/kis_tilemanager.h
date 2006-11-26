@@ -21,7 +21,7 @@
 #include <sys/types.h>
 
 #include <qglobal.h>
-#include <QMap>
+#include <QHash>
 #include <q3valuelist.h>
 #include <QMutex>
 
@@ -88,7 +88,7 @@ private:
         Q3ValueList<TileInfo*>::iterator node;
         bool inMem; bool onFile; bool mmapped; bool validNode; };
     typedef struct { KTemporaryFile* file; off_t filePos; int size; } FreeInfo;
-    typedef QMap<const KisTile*, TileInfo*> TileMap;
+    typedef QHash<const KisTile*, TileInfo*> TileMap;
     typedef Q3ValueList<TileInfo*> TileList;
     typedef Q3ValueList<FreeInfo*> FreeList;
     typedef Q3ValueVector<FreeList> FreeListList;

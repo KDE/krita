@@ -310,6 +310,11 @@ void Action::finalize()
     d->script = 0;
 }
 
+bool Action::isFinalized() const
+{
+    return d->script == 0;
+}
+
 void Action::slotTriggered()
 {
     //krossdebug( QString("Action::slotTriggered()") );

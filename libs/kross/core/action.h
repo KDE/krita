@@ -156,6 +156,12 @@ namespace Kross {
              */
             void finalize();
 
+            /**
+             * \return true if the action is finalized what means the
+             * action is currently not running.
+             */
+            bool isFinalized() const;
+
         public slots:
 
             /**

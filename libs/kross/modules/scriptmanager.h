@@ -39,53 +39,30 @@ namespace Kross {
     class ScriptManagerModule;
 
     /**
-    * The listview that displays the items provided by the \a ScriptManagerModel
-    * model and offers a collection of actions to run, stop, install, uninstall
-    * and to get new scripts.
+    * The ScriptManagerCollection class shows a QListView where the content of a
+    * \a ActionCollection is displayed and some buttons to run, stop, install,
+    * uninstall and to get new scripts.
     */
-    class KROSS_EXPORT ScriptManagerView : public QTreeView
+    class KROSS_EXPORT ScriptManagerCollection : public QWidget
     {
             Q_OBJECT
         public:
-            ScriptManagerView(ScriptManagerModule* module, QWidget* parent);
-            virtual ~ScriptManagerView();
-
-            /**
-            * \return true if the user changed some data else if the data
-            * was not changed at all return false.
-            */
+            ScriptManagerCollection(ScriptManagerModule* module, QWidget* parent);
+            virtual ~ScriptManagerCollection();
+            ScriptManagerModule* module() const;
             bool isModified() const;
-
-            /**
-            * Install the scriptpackage \p file . The scriptpackage should be a
-            * tar.gz or tar.bzip archivefile.
-            *
-            * \param scriptpackagefile The local tar.gz or tar.bzip archivfile
-            * which contains the files that should be installed.
-            * \return true if installing was successfully else false.
-            */
-            bool installPackage(const QString& scriptpackagefile);
-
-            /**
-            * Uninstalls the scriptpackage \p action and removes all to the package
-            * belonging files.
-            *
-            * \param action The \a Action that should be removed.
-            * \return true if the uninstall was successfully else false.
-            */
-            bool uninstallPackage(Action* action);
 
         public slots:
             void slotRun();
             void slotStop();
             bool slotInstall();
-            void slotUninstall();
-            void slotNewScripts();
+            //void slotUninstall();
+            //void slotNewScripts();
 
         private slots:
             void slotSelectionChanged();
             void slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
-            void slotNewScriptsInstallFinished();
+            //void slotNewScriptsInstallFinished();
 
         private:
             class Private;
@@ -105,6 +82,26 @@ namespace Kross {
 
         public slots:
 
+            /**
+            * Install the scriptpackage \p file . The scriptpackage should be a
+            * tar.gz or tar.bzip archivefile.
+            *
+            * \param scriptpackagefile The local tar.gz or tar.bzip archivfile
+            * which contains the files that should be installed.
+            * \return true if installing was successfully else false.
+            */
+            bool installPackage(const QString& scriptpackagefile);
+
+#if 0
+            /**
+            * Uninstalls the scriptpackage \p action and removes all to the package
+            * belonging files.
+            *
+            * \param action The \a Action that should be removed.
+            * \return true if the uninstall was successfully else false.
+            */
+            bool uninstallPackage(Action* action);
+#endif
             /**
             * Display the "Script Manager" KDialog.
             */

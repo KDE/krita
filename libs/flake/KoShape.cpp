@@ -244,9 +244,9 @@ void KoShape::repaint() const {
 void KoShape::repaint(const QRectF &shape) const {
     if ( !m_shapeManagers.empty() && isVisible() )
     {
+        QRectF rect(m_matrix.mapRect(shape));
         foreach( KoShapeManager * manager, m_shapeManagers )
         {
-            QRectF rect(m_matrix.mapRect(shape));
             manager->repaint(rect);
         }
     }

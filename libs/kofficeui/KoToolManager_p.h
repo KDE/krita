@@ -23,6 +23,8 @@
 #include <QObject>
 #include <QString>
 
+#include <kshortcut.h>
+
 class KoToolFactory;
 class KoToolBox;
 class KoShapeManager;
@@ -50,6 +52,8 @@ public:
     int priority() const;
     KoTool *createTool(KoCanvasBase *canvas) const;
     int uniqueId() const { return m_uniqueId; }
+    /// wrapper around KoToolFactory::shortcut()
+    const KShortcut& shortcut() const;
 
 signals:
     /// emitted when one of the generated buttons was pressed.

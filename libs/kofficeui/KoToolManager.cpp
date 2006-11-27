@@ -19,25 +19,13 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+// local lib
 #include "KoToolManager.h"
 #include "KoToolManager_p.h"
-
-#include <QWidget>
-#include <QEvent>
-#include <QWheelEvent>
-#include <QMouseEvent>
-#include <QPaintEvent>
-#include <QTabletEvent>
-#include <QKeyEvent>
-#include <QDockWidget>
-
-#include <kactioncollection.h>
-#include <kdebug.h>
-#include <kstaticdeleter.h>
-
 #include "KoToolRegistry.h"
 #include "KoToolDocker.h"
 
+// koffice
 #include <KoTool.h>
 #include <KoToolBox.h>
 #include <KoCreateShapesToolFactory.h>
@@ -49,9 +37,23 @@
 #include <KoShapeManager.h>
 #include <KoInputDevice.h>
 
+// Qt + kde
+#include <QWidget>
+#include <QEvent>
+#include <QWheelEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
+#include <QTabletEvent>
+#include <QKeyEvent>
+#include <QDockWidget>
 #include <QStringList>
 #include <QAbstractButton>
 #include <QApplication>
+#include <kactioncollection.h>
+#include <kdebug.h>
+#include <kstaticdeleter.h>
+#include <kaction.h>
+
 
 namespace {
 
@@ -245,7 +247,23 @@ KoToolBox *KoToolManager::toolBox(const QString &applicationName) {
 void KoToolManager::registerTools(KActionCollection *ac) {
     Q_UNUSED(ac);
     setup();
-    // TODO
+
+    class ToolSwitchAction : public KAction {
+      public:
+        ToolSwitchAction(KActionCollection *parent, const QString &name, const QString &toolId) : KAction(parent, name) {
+            m_toolId = toolId;
+        }
+      private:
+        void slotTriggered() {
+            KoToolManager::instance()->switchToolRequested(m_toolId);
+        }
+        QString m_toolId;
+    };
+
+    foreach(ToolHelper *th, m_tools) {
+        ToolSwitchAction *tsa = new ToolSwitchAction(ac, "tools"+ th->name(), th->id());
+        //tsa->setShortcut(th->shortcut()); // this crashes currently, lets try tomorrow with the kdelibs updates
+    }
 }
 
 void KoToolManager::addControllers(KoCanvasController *controller ) {

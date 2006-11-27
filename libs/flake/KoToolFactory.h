@@ -26,8 +26,8 @@
 #include <koffice_export.h>
 
 #include <klocale.h>
+#include <kshortcut.h>
 #include <QObject>
-#include <QKeySequence>
 
 /**
  * A factory for KoTool objects.
@@ -120,7 +120,7 @@ public:
      *
      * @return the shortcut 
      */
-    QKeySequence shortcut() const;
+    KShortcut shortcut() const;
 
     /**
      * Returns the main toolType
@@ -180,7 +180,7 @@ protected:
     /**
      * Set the default shortcut for activation of this tool.
      */
-    void setShortcut(const QKeySequence & shortcut);
+    void setShortcut(const KShortcut & shortcut);
 
 private:
     QString m_toolType;
@@ -189,7 +189,7 @@ private:
     QString m_icon;
     const QString m_name, m_id;
     int m_priority;
-    QKeySequence m_shortcut;
+    KShortcut m_shortcut;
 };
 
 #endif

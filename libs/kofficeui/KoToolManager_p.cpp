@@ -69,6 +69,10 @@ int ToolHelper::priority() const {
     return m_toolFactory->priority();
 }
 
+const KShortcut& ToolHelper::shortcut() const {
+    return m_toolFactory->shortcut();
+}
+
 
 //   ************ Connector **********
 Connector::Connector(KoShapeManager *parent)

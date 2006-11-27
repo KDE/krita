@@ -122,6 +122,8 @@ KisFilterConfiguration* KisFilterBumpmap::designerConfiguration(const KisPaintDe
     config->setProperty("invert", false);
     config->setProperty("tiled", true);
     config->setProperty("type",krita::LINEAR);
+
+    return config;
 }
 
 

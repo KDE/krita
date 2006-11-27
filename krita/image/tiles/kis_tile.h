@@ -40,7 +40,6 @@ public:
     void release();
     void allocate();
 
-    quint8 *data(qint32 xoff, qint32 yoff) const;
     quint8 *data() const { return m_data; }
 
     void setData(const quint8 *pixel);
@@ -67,11 +66,12 @@ public:
     friend class KisTiledDataManager;
     friend class KisMemento;
     friend class KisTileManager;
+
 private:
     KisTile& operator=(const KisTile&);
 
 private:
-    quint8 *m_data;
+    quint8 * m_data;
     mutable qint32 m_nReadlock;
     qint32 m_row;
     qint32 m_col;

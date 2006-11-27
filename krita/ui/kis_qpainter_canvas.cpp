@@ -191,6 +191,7 @@ void KisQPainterCanvas::keyReleaseEvent (QKeyEvent *e) {
 
 void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
 {
+    kDebug() << "tablet event: " << e->pressure() << endl;
     m_toolProxy->tabletEvent( e, m_viewConverter->viewToDocument(  e->pos() ) );
 }
 

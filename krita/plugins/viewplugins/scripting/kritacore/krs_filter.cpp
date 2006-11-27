@@ -45,6 +45,7 @@ const QVariant Filter::property(const QString& name)
 {
     QVariant value;
 //     return m_filter->configuration()->getProperty(name, value) ? value : QVariant();
+    return value;     
 }
 
 void Filter::setProperty(const QString& name, const QVariant& value)
@@ -65,6 +66,7 @@ void Filter::fromXML(const QString& xml)
 const QString Filter::toXML()
 {
 //     return m_filter->configuration()->toString();
+     return QString::null;
 }
 
 bool Filter::process(QObject* layer)

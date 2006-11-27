@@ -90,7 +90,6 @@ KisTile::~KisTile()
     KisTileManager::instance()->deregisterTile(this); // goes before the deleting of m_data!
 
     if (m_data) {
-//        delete[] m_data;
         KisTileManager::instance()->dontNeedTileData(m_data, m_pixelSize);
         m_data = 0;
     }
@@ -109,17 +108,6 @@ void KisTile::allocate()
 void KisTile::setNext(KisTile *n)
 {
     m_nextTile = n;
-}
-
-quint8 *KisTile::data(qint32 x, qint32 y ) const
-{
-    addReader();
-    removeReader();
-
-    Q_ASSERT(m_data != 0);
-    if (m_data == 0) return 0;
-
-    return m_data + m_pixelSize * ( y * WIDTH + x );
 }
 
 void KisTile::setData(const quint8 *pixel)

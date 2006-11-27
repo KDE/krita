@@ -208,7 +208,7 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name) :
         return;
     }
     m_longRunningFilterTimer = 0;
-    
+
     m_x = 0;
     m_y = 0;
 
@@ -270,7 +270,7 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KoColorSpace * colorSpace, cons
 
 }
 
- 
+
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KisShared(rhs)
 {
     if (this != &rhs) {
@@ -507,7 +507,7 @@ void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
 
 void KisPaintDevice::crop(QRect r)
 {
-    r.translate(-m_x, -m_y); 
+    r.translate(-m_x, -m_y);
     m_datamanager->setExtent(r);
 }
 
@@ -1025,7 +1025,7 @@ void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
 
     QRect r = selection->selectedExactRect();
     painter.bitBlt(r.x(), r.y(), COMPOSITE_ERASE, KisPaintDeviceSP(selection.data()), r.x(), r.y(), r.width(), r.height());
-    
+
     selection->invert();
     painter.end();
 }
@@ -1164,16 +1164,6 @@ qint32 KisPaintDevice::numContiguousRows(qint32 y, qint32 minX, qint32 maxX) con
 qint32 KisPaintDevice::rowStride(qint32 x, qint32 y) const
 {
     return m_datamanager->rowStride(x - m_x, y - m_y);
-}
-
-const quint8* KisPaintDevice::pixel(qint32 x, qint32 y)
-{
-    return m_datamanager->pixel(x - m_x, y - m_y);
-}
-
-quint8* KisPaintDevice::writablePixel(qint32 x, qint32 y)
-{
-    return m_datamanager->writablePixel(x - m_x, y - m_y);
 }
 
 void KisPaintDevice::setX(qint32 x)

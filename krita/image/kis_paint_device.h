@@ -33,7 +33,7 @@
 #include "KoColor.h"
 #include <krita_export.h>
 #include <kis_shared.h>
-        
+
 class QImage;
 class QSize;
 class QPoint;
@@ -225,16 +225,6 @@ public:
      * pointer to pixel (x, y) to access (x, y + 1).
      */
     qint32 rowStride(qint32 x, qint32 y) const;
-
-    /**
-     * Get a read-only pointer to pixel (x, y).
-     */
-    KDE_DEPRECATED const quint8* pixel(qint32 x, qint32 y);
-
-    /**
-     * Get a read-write pointer to pixel (x, y).
-     */
-    KDE_DEPRECATED quint8* writablePixel(qint32 x, qint32 y);
 
     /**
      *   Converts the paint device to a different colorspace
@@ -449,12 +439,12 @@ public:
      * @return an iterator which points to the first pixel of a horizontal line
      */
     KisHLineIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w);
-    
+
     /**
      * This function return an iterator which points to the first pixel of a vertical line
      */
     KisVLineIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h);
-    
+
     /**
      * This function return an iterator which points to the first pixel of a vertical line
      */
@@ -467,7 +457,7 @@ public:
      * you can
      */
     KisRandomAccessorPixel createRandomAccessor(Q_INT32 x, Q_INT32 y);
-    
+
     /**
      * This function creates a random accessor which allow to randomly access any pixels on
      * the paint device.

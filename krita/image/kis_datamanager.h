@@ -150,17 +150,6 @@ public:
            qint32 w, qint32 h) { ACTUAL_DATAMGR::paste(data, sx, sy, dx, dy, w, h); }
 
 public:
-    /**
-     * Get a read-only pointer to the specified pixel.
-     */
-    inline KDE_DEPRECATED const quint8* pixel(qint32 x, qint32 y)
-          { return ACTUAL_DATAMGR::pixel(x, y); }
-
-    /**
-     * Get a read-write pointer to the specified pixel.
-     */
-    inline KDE_DEPRECATED quint8* writablePixel(qint32 x, qint32 y)
-          { return ACTUAL_DATAMGR::writablePixel(x, y); }
 
     /**
      * Write the specified data to x, y. There is no checking on pixelSize!

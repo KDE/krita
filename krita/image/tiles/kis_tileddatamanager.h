@@ -126,16 +126,6 @@ protected:
 
 
     /**
-     * Get a read-only pointer to pixel (x, y).
-     */
-    const quint8* pixel(qint32 x, qint32 y);
-
-    /**
-     * Get a read-write pointer to pixel (x, y).
-     */
-    quint8* writablePixel(qint32 x, qint32 y);
-
-    /**
      * write the specified data to x, y. There is no checking on pixelSize!
      */
     void setPixel(qint32 x, qint32 y, const quint8 * data);

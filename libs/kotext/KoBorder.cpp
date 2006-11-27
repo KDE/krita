@@ -27,6 +27,7 @@
 #include "KoTextParag.h"
 #include "KoUnit.h"
 #include <float.h>
+#include <KoXmlReader.h>
 
 static const struct BorderStyle {
     Qt::PenStyle penStyle;
@@ -88,7 +89,7 @@ QPen KoBorder::borderPen( const KoBorder & _brd, int width, QColor defaultColor 
 }
 
 // KOffice-1.3 file format (deprecated)
-KoBorder KoBorder::loadBorder( const QDomElement & elem )
+KoBorder KoBorder::loadBorder( const KoXmlElement & elem )
 {
     KoBorder bd;
     if ( elem.hasAttribute("red") )

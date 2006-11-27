@@ -24,6 +24,7 @@
 #include "KoChangeCaseDia.h"
 #include "KoStyleCollection.h"
 #include "KoTextDocument.h"
+#include <KoXmlReader.h>
 #include <koffice_export.h>
 //Added by qt3to4:
 #include <QByteArray>
@@ -448,13 +449,13 @@ public:
     QString textChangedCase(const QString& _text, KoChangeCaseDia::TypeOfCase _type);
     KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,KoTextCursor *cursor, KoTextParag *parag);
 
-    void loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context, KoStyleCollection * styleColl );
+    void loadOasisContent( const KoXmlElement &bodyElem, KoOasisContext& context, KoStyleCollection * styleColl );
     void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
 
     // Similar to KoTextDocument::loadOasisText but there's no newline inserted before the first paragraph
     // or after the last one - so it's possible to paste just a few chars.
     // It also handles m_lastFormatted
-    KoTextCursor pasteOasisText( const QDomElement &bodyElem, KoOasisContext& context,
+    KoTextCursor pasteOasisText( const KoXmlElement &bodyElem, KoOasisContext& context,
                                  KoTextCursor& cursor, KoStyleCollection * styleColl );
 
 #ifndef NDEBUG

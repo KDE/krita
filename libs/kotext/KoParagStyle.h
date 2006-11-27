@@ -22,6 +22,7 @@
 #include "KoTextFormat.h"
 #include "KoParagLayout.h"
 #include "KoUserStyle.h"
+#include <KoXmlReader.h>
 class KoGenStyles;
 class QDomElement;
 
@@ -76,10 +77,10 @@ public:
     void saveStyle( QDomElement & parentElem );
     /// Loads the name, layout and the outline bool. Not the "following style" nor the format.
     /// (1.3 format)
-    void loadStyle( QDomElement & parentElem, int docVersion = 2 );
+    void loadStyle( KoXmlElement & parentElem, int docVersion = 2 );
 
     /// Load the style from OASIS
-    void loadStyle( QDomElement & styleElem, KoOasisContext& context );
+    void loadStyle( KoXmlElement & styleElem, KoOasisContext& context );
     /// Save the style to OASIS
     /// Don't use, use the method in KoStyleCollection instead
     QString saveStyle( KoGenStyles& genStyles, int styleType, const QString& parentStyleName, KoSavingContext& context ) const;

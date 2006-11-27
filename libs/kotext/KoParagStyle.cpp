@@ -21,6 +21,7 @@
 #include "KoParagCounter.h"
 
 #include <KoGenStyles.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 
@@ -100,7 +101,7 @@ void KoParagStyle::saveStyle( QDomElement & parentElem )
     parentElem.setAttribute( "outline", m_bOutline ? "true" : "false" );
 }
 
-void KoParagStyle::loadStyle( QDomElement & parentElem, int docVersion )
+void KoParagStyle::loadStyle( KoXmlElement & parentElem, int docVersion )
 {
     KoParagLayout layout;
     KoParagLayout::loadParagLayout( layout, parentElem, docVersion );
@@ -110,7 +111,7 @@ void KoParagStyle::loadStyle( QDomElement & parentElem, int docVersion )
     m_paragLayout = layout;
 
     // Load name
-    QDomElement nameElem = parentElem.namedItem("NAME").toElement();
+    KoXmlElement nameElem = parentElem.namedItem("NAME").toElement();
     if ( !nameElem.isNull() ) {
         m_name = nameElem.attribute("value");
         m_displayName = i18nc( "Style name", m_name.toUtf8() );
@@ -122,7 +123,7 @@ void KoParagStyle::loadStyle( QDomElement & parentElem, int docVersion )
     m_bOutline = parentElem.attribute( "outline" ) == "true";
 }
 
-void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
+void KoParagStyle::loadStyle( KoXmlElement & styleElem, KoOasisContext& context )
 {
     // Load name
     m_name = styleElem.attributeNS( KoXmlNS::style, "name", QString::null );
@@ -168,7 +169,7 @@ void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
             listOK = context.pushListLevelStyle( listStyleName, level );
     }
     if ( listOK ) {
-        const QDomElement listStyle = context.listStyleStack().currentListStyle();
+        const KoXmlElement listStyle = context.listStyleStack().currentListStyle();
         // The tag is either text:list-level-style-number or text:list-level-style-bullet
         const bool ordered = listStyle.localName() == "list-level-style-number";
         Q_ASSERT( !layout.counter );

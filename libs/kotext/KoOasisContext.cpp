@@ -33,20 +33,20 @@ KoOasisContext::KoOasisContext( KoDocument* doc, KoVariableCollection& varColl,
 {
 }
 
-static QDomElement findListLevelStyle( const QDomElement& fullListStyle, int level )
+static KoXmlElement findListLevelStyle( const KoXmlElement& fullListStyle, int level )
 {
-    for ( QDomNode n = fullListStyle.firstChild(); !n.isNull(); n = n.nextSibling() )
+    for ( KoXmlNode n = fullListStyle.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-       const QDomElement listLevelItem = n.toElement();
+       const KoXmlElement listLevelItem = n.toElement();
        if ( listLevelItem.attributeNS( KoXmlNS::text, "level", QString::null ).toInt() == level )
            return listLevelItem;
     }
-    return QDomElement();
+    return KoXmlElement();
 }
 
 bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, int level )
 {
-    QDomElement* fullListStyle = oasisStyles().listStyles()[listStyleName];
+    KoXmlElement* fullListStyle = oasisStyles().listStyles()[listStyleName];
     if ( !fullListStyle ) {
         kWarning(32500) << "List style " << listStyleName << " not found!" << endl;
         return false;
@@ -57,16 +57,16 @@ bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, int level
 
 bool KoOasisContext::pushOutlineListLevelStyle( int level )
 {
-    QDomElement outlineStyle = KoDom::namedItemNS( oasisStyles().officeStyle(), KoXmlNS::text, "outline-style" );
+    KoXmlElement outlineStyle = KoDom::namedItemNS( oasisStyles().officeStyle(), KoXmlNS::text, "outline-style" );
     return pushListLevelStyle( "<outline-style>", outlineStyle, level );
 }
 
 bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, // for debug only
-                                         const QDomElement& fullListStyle, int level )
+                                         const KoXmlElement& fullListStyle, int level )
 {
     // Find applicable list-level-style for level
     int i = level;
-    QDomElement listLevelStyle;
+    KoXmlElement listLevelStyle;
     while ( i > 0 && listLevelStyle.isNull() ) {
         listLevelStyle = findListLevelStyle( fullListStyle, i );
         --i;

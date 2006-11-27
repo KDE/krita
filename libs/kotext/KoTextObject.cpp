@@ -2114,7 +2114,7 @@ bool KoTextObject::rtl() const
     return textdoc->firstParag()->string()->isRightToLeft();
 }
 
-void KoTextObject::loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context, KoStyleCollection * styleColl )
+void KoTextObject::loadOasisContent( const KoXmlElement &bodyElem, KoOasisContext& context, KoStyleCollection * styleColl )
 {
     textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
     setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
@@ -2133,7 +2133,7 @@ void KoTextObject::loadOasisContent( const QDomElement &bodyElem, KoOasisContext
     setLastFormattedParag( textDocument()->firstParag() );
 }
 
-KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisContext& context,
+KoTextCursor KoTextObject::pasteOasisText( const KoXmlElement &bodyElem, KoOasisContext& context,
                                            KoTextCursor& cursor, KoStyleCollection * styleColl )
 {
     KoTextCursor resultCursor( cursor );
@@ -2152,16 +2152,16 @@ KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisC
     } else {
         // Pasting inside a non-empty paragraph -> insert/append text to it.
         // This loop looks for the *FIRST* paragraph only.
-        for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
+        for ( KoXmlNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
         {
-            QDomElement tag = text.toElement();
+            KoXmlElement tag = text.toElement();
             if ( tag.isNull() ) continue;
             // The first tag could be a text:p, text:h, text:numbered-paragraph, but also
             // a frame (anchored to page), a TOC, etc. For those, don't try to concat-with-existing-paragraph.
             // For text:numbered-paragraph, find the text:p or text:h inside it.
-            QDomElement tagToLoad = tag;
+            KoXmlElement tagToLoad = tag;
             if ( tag.localName() == "numbered-paragraph" ) {
-                QDomElement npchild;
+                KoXmlElement npchild;
                 forEachElement( npchild, tag )
                 {
                     if ( npchild.localName() == "p" || npchild.localName() == "h" ) {
@@ -2187,7 +2187,9 @@ KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisC
                 removeNewline = true;
 
                 // Done with first parag, remove it and exit loop
+#ifdef KOXML_USE_QDOM
                 const_cast<QDomElement &>( bodyElem ).removeChild( tag ); // somewhat hackish
+#endif
             }
             break;
         }

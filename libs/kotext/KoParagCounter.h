@@ -29,6 +29,8 @@ class KoOasisContext;
 #ifndef koparagcounter_h
 #define koparagcounter_h
 
+#include <KoXmlReader.h>
+
 /**
  * This is the structure associated with a paragraph (KoTextParag),
  * to define the bullet or numbering of the paragraph.
@@ -68,7 +70,7 @@ public:
     int bulletX();
 
     /// KOffice-1.3 loading code
-    void load( QDomElement & element );
+    void load( KoXmlElement & element );
     /// KOffice-1.3 saving code
     void save( QDomElement & element );
     /** Load from OASIS XML
@@ -82,9 +84,9 @@ public:
      */
     void loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level, bool loadingStyle = false );
     /// Part of loadOasis that is shared with KWVariableSettings::loadOasis for footnotes/endnotes
-    void loadOasisListStyle( const QDomElement& listStyle,
-                             const QDomElement& listStyleProperties,
-                             const QDomElement& listStyleTextProperties,
+    void loadOasisListStyle( const KoXmlElement& listStyle,
+                             const KoXmlElement& listStyleProperties,
+                             const KoXmlElement& listStyleTextProperties,
                              int restartNumbering,
                              bool orderedList, bool heading, int level, bool loadingStyle );
     /// Save as OASIS XML

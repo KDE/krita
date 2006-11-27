@@ -25,6 +25,7 @@
 #include "KoStyleCollection.h"
 #include "KoVariable.h"
 #include <KoOasisContext.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoDom.h>
@@ -2686,14 +2687,14 @@ QString KoTextParag::toString( int from, int length ) const
     return str;
 }
 
-void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos )
+void KoTextParag::loadOasisSpan( const KoXmlElement& parent, KoOasisContext& context, uint& pos )
 {
     // Parse every child node of the parent
     // Can't use forEachElement here since we also care about text nodes
-    QDomNode node;
+    KoXmlNode node;
     for ( node = parent.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
-        QDomElement ts = node.toElement();
+        KoXmlElement ts = node.toElement();
         QString textData;
         const QString localName( ts.localName() );
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
@@ -2735,6 +2736,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             // This is the number in front of a numbered paragraph,
             // written out to help export filters. We can ignore it.
         }
+#ifdef KOXML_USE_QDOM
         else if ( node.isProcessingInstruction() )
         {
             QDomProcessingInstruction pi = node.toProcessingInstruction();
@@ -2743,6 +2745,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
                 context.setCursorPosition( this, pos );
             }
         }
+#endif
         else
         {
             bool handled = false;
@@ -2822,7 +2825,7 @@ KoParagLayout KoTextParag::loadParagLayout( KoOasisContext& context, KoStyleColl
     return layout;
 }
 
-void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context, KoStyleCollection *styleCollection, uint& pos )
+void KoTextParag::loadOasis( const KoXmlElement& parent, KoOasisContext& context, KoStyleCollection *styleCollection, uint& pos )
 {
     // First load layout from style
     KoParagLayout paragLayout = loadParagLayout( context, styleCollection, true );
@@ -3046,7 +3049,7 @@ void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering,
     m_layout.counter = new KoParagCounter;
     m_layout.counter->loadOasis( context, restartNumbering, orderedList, heading, level );
     // We emulate space-before with a left paragraph indent (#109223)
-    const QDomElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
+    const KoXmlElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
     if ( listStyleProperties.hasAttributeNS( KoXmlNS::text, "space-before" ) )
     {
         double spaceBefore = KoUnit::parseValue( listStyleProperties.attributeNS( KoXmlNS::text, "space-before", QString::null ) );

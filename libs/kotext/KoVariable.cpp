@@ -193,9 +193,9 @@ void KoVariableSettings::save( QDomElement &parentElem )
         elem.setAttribute("modificationDate", d->m_modificationDate.toString(Qt::ISODate));
 }
 
-void KoVariableSettings::load( QDomElement &elem )
+void KoVariableSettings::load( KoXmlElement &elem )
 {
-    QDomElement e = elem.namedItem( "VARIABLESETTINGS" ).toElement();
+    KoXmlElement e = elem.namedItem( "VARIABLESETTINGS" ).toElement();
     if (!e.isNull())
     {
         if(e.hasAttribute("startingPageNumber"))
@@ -749,7 +749,7 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
 }
 
 
-KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context )
+KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const KoXmlElement& tag, KoOasisContext& context )
 {
     const QString localName( tag.localName() );
     const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
@@ -840,7 +840,7 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
     return loadOasisFieldCreateVariable( textdoc, tag, context, key, type );
 }
 
-KoVariable* KoVariableCollection::loadOasisFieldCreateVariable( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context, const QString &key, int type )
+KoVariable* KoVariableCollection::loadOasisFieldCreateVariable( KoTextDocument* textdoc, const KoXmlElement& tag, KoOasisContext& context, const QString &key, int type )
 {
     KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_formatCollection->format( key.toLatin1() );
     // If varFormat is 0 (no key specified), the default format will be used.
@@ -1020,12 +1020,12 @@ void KoVariable::save( QDomElement &parentElem )
     saveVariable( variableElem );
 }
 
-void KoVariable::load( QDomElement & )
+void KoVariable::load( KoXmlElement & )
 {
 }
 
 
-void KoVariable::loadOasis( const QDomElement &/*elem*/, KoOasisContext& /*context*/ )
+void KoVariable::loadOasis( const KoXmlElement &/*elem*/, KoOasisContext& /*context*/ )
 {
     // nothing to do here, reimplemented in subclasses (make it pure virtual?)
 }
@@ -1254,11 +1254,11 @@ void KoDateVariable::saveVariable( QDomElement& varElem )
     }
 }
 
-void KoDateVariable::load( QDomElement& elem )
+void KoDateVariable::load( KoXmlElement& elem )
 {
     KoVariable::load( elem );
 
-    QDomElement e = elem.namedItem( "DATE" ).toElement();
+    KoXmlElement e = elem.namedItem( "DATE" ).toElement();
     if (!e.isNull())
     {
         const bool fix = e.attribute("fix").toInt() == 1;
@@ -1336,7 +1336,7 @@ void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
     writer.endElement();
 }
 
-void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+void KoDateVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*context*/ )
 {
     const QString localName( elem.localName() );
     if ( localName == "date" ) // current (or fixed) date
@@ -1517,11 +1517,11 @@ void KoTimeVariable::saveVariable( QDomElement& parentElem )
     elem.setAttribute( "correct", m_correctTime );
 }
 
-void KoTimeVariable::load( QDomElement& elem )
+void KoTimeVariable::load( KoXmlElement& elem )
 {
     KoVariable::load( elem );
 
-    QDomElement e = elem.namedItem( "TIME" ).toElement();
+    KoXmlElement e = elem.namedItem( "TIME" ).toElement();
     if (!e.isNull())
     {
         int h = e.attribute("hour").toInt();
@@ -1545,7 +1545,7 @@ void KoTimeVariable::load( QDomElement& elem )
     }
 }
 
-void KoTimeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+void KoTimeVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*context*/ )
 {
     const QString localName( elem.localName() );
     Q_ASSERT( localName == "time" ); // caller checked for it
@@ -1714,10 +1714,10 @@ void KoCustomVariable::saveVariable( QDomElement& parentElem )
     elem.setAttribute( "value", value() );
 }
 
-void KoCustomVariable::load( QDomElement& elem )
+void KoCustomVariable::load( KoXmlElement& elem )
 {
     KoVariable::load( elem );
-    QDomElement e = elem.namedItem( "CUSTOM" ).toElement();
+    KoXmlElement e = elem.namedItem( "CUSTOM" ).toElement();
     if (!e.isNull())
     {
         m_varValue = QVariant (e.attribute( "name" ));
@@ -1725,7 +1725,7 @@ void KoCustomVariable::load( QDomElement& elem )
     }
 }
 
-void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+void KoCustomVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*context*/ )
 {
     const QString localName( elem.localName() );
     // We treat all those the same. For OO/OpenDocument the difference is that
@@ -1784,7 +1784,7 @@ QString KoMailMergeVariable::fieldCode()
     return i18n("Mail Merge");
 }
 
-void KoMailMergeVariable::loadOasis( const QDomElement &/*elem*/, KoOasisContext& /*context*/ )
+void KoMailMergeVariable::loadOasis( const KoXmlElement &/*elem*/, KoOasisContext& /*context*/ )
 {
     // TODO
 }
@@ -1803,10 +1803,10 @@ void KoMailMergeVariable::saveVariable( QDomElement& parentElem )
     elem.setAttribute( "name", m_varValue.toString() );
 }
 
-void KoMailMergeVariable::load( QDomElement& elem )
+void KoMailMergeVariable::load( KoXmlElement& elem )
 {
     KoVariable::load( elem );
-    QDomElement e = elem.namedItem( "MAILMERGE" ).toElement();
+    KoXmlElement e = elem.namedItem( "MAILMERGE" ).toElement();
     if (!e.isNull())
         m_varValue = QVariant( e.attribute( "name" ) );
 }
@@ -1867,10 +1867,10 @@ void KoPageVariable::saveVariable( QDomElement& parentElem )
         pgNumElem.setAttribute( "value", m_varValue.toString() );
 }
 
-void KoPageVariable::load( QDomElement& elem )
+void KoPageVariable::load( KoXmlElement& elem )
 {
     KoVariable::load( elem );
-    QDomElement pgNumElem = elem.namedItem( "PGNUM" ).toElement();
+    KoXmlElement pgNumElem = elem.namedItem( "PGNUM" ).toElement();
     if (!pgNumElem.isNull())
     {
         m_subtype = pgNumElem.attribute("subtype").toInt();
@@ -1924,7 +1924,7 @@ void KoPageVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*
     }
 }
 
-void KoPageVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+void KoPageVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*context*/ )
 {
     const QString localName( elem.localName() );
     if ( localName == "page-number" )
@@ -2074,10 +2074,10 @@ void KoFieldVariable::saveVariable( QDomElement& parentElem )
     elem.setAttribute( "value", m_varValue.toString() );
 }
 
-void KoFieldVariable::load( QDomElement& elem )
+void KoFieldVariable::load( KoXmlElement& elem )
 {
     KoVariable::load( elem );
-    QDomElement e = elem.namedItem( "FIELD" ).toElement();
+    KoXmlElement e = elem.namedItem( "FIELD" ).toElement();
     if (!e.isNull())
     {
         m_subtype = e.attribute( "subtype" ).toInt();
@@ -2088,7 +2088,7 @@ void KoFieldVariable::load( QDomElement& elem )
         kWarning() << "FIELD element not found !" << endl;
 }
 
-void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+void KoFieldVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*context*/ )
 {
     const QString localName( elem.localName() );
     if ( localName == "file-name" ) {
@@ -2445,7 +2445,7 @@ QString KoLinkVariable::fieldCode()
     return i18n("Link");
 }
 
-void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+void KoLinkVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*context*/ )
 {
     if ( elem.localName() == "a" && elem.namespaceURI() == KoXmlNS::text ) {
         m_url = elem.attributeNS( KoXmlNS::xlink, "href", QString::null);
@@ -2481,10 +2481,10 @@ void KoLinkVariable::saveVariable( QDomElement& parentElem )
     linkElem.setAttribute( "hrefName", m_url );
 }
 
-void KoLinkVariable::load( QDomElement& elem )
+void KoLinkVariable::load( KoXmlElement& elem )
 {
     KoVariable::load( elem );
-    QDomElement linkElem = elem.namedItem( "LINK" ).toElement();
+    KoXmlElement linkElem = elem.namedItem( "LINK" ).toElement();
     if (!linkElem.isNull())
     {
         m_varValue = QVariant(linkElem.attribute("linkName"));
@@ -2538,20 +2538,20 @@ QString KoNoteVariable::createdNote() const
     return KGlobal::locale()->formatDate( m_createdNoteDate, false );
 }
 
-void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+void KoNoteVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*context*/ )
 {
     const QString localName = elem.localName();
     QString note;
     if ( localName == "annotation" && elem.namespaceURI() == KoXmlNS::office )
     {
-        QDomElement date = KoDom::namedItemNS( elem, KoXmlNS::dc, "date" );
+        KoXmlElement date = KoDom::namedItemNS( elem, KoXmlNS::dc, "date" );
         m_createdNoteDate = QDate::fromString( date.text(), Qt::ISODate );
-        QDomNode text = KoDom::namedItemNS( elem, KoXmlNS::text, "p" );
+        KoXmlNode text = KoDom::namedItemNS( elem, KoXmlNS::text, "p" );
         for ( ; !text.isNull(); text = text.nextSibling() )
         {
             if ( text.isElement() )
             {
-                QDomElement t = text.toElement();
+                KoXmlElement t = text.toElement();
                 note += t.text() + '\n';
             }
         }
@@ -2582,10 +2582,10 @@ void KoNoteVariable::saveVariable( QDomElement& parentElem )
     linkElem.setAttribute( "note", m_varValue.toString() );
 }
 
-void KoNoteVariable::load( QDomElement& elem )
+void KoNoteVariable::load( KoXmlElement& elem )
 {
     KoVariable::load( elem );
-    QDomElement linkElem = elem.namedItem( "NOTE" ).toElement();
+    KoXmlElement linkElem = elem.namedItem( "NOTE" ).toElement();
     if (!linkElem.isNull())
     {
         m_varValue = QVariant(linkElem.attribute("note"));
@@ -2715,11 +2715,11 @@ void KoStatisticVariable::saveVariable( QDomElement& varElem )
 }
 
 
-void KoStatisticVariable::load( QDomElement &elem )
+void KoStatisticVariable::load( KoXmlElement &elem )
 {
     KoVariable::load( elem );
 
-    QDomElement e = elem.namedItem( "STATISTIC" ).toElement();
+    KoXmlElement e = elem.namedItem( "STATISTIC" ).toElement();
     if ( !e.isNull() ) {
 	// FIXME: Error handling.
 	m_subtype  = e.attribute( "type" ).toInt();
@@ -2728,7 +2728,7 @@ void KoStatisticVariable::load( QDomElement &elem )
 }
 
 
-void KoStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+void KoStatisticVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*context*/ )
 {
     const QString localName( elem.localName() );
     if ( localName == "object-count" )

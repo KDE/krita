@@ -1,5 +1,6 @@
 #include "KoListStyleStack.h"
 #include <KoDom.h>
+#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
 KoListStyleStack::KoListStyleStack()
@@ -16,7 +17,7 @@ void KoListStyleStack::pop()
     m_stack.pop();
 }
 
-void KoListStyleStack::push( const QDomElement& style )
+void KoListStyleStack::push( const KoXmlElement& style )
 {
     m_stack.push( style );
 }
@@ -27,20 +28,20 @@ void KoListStyleStack::setInitialLevel( int initialLevel )
     m_initialLevel = initialLevel;
 }
 
-QDomElement KoListStyleStack::currentListStyle() const
+KoXmlElement KoListStyleStack::currentListStyle() const
 {
     Q_ASSERT( !m_stack.isEmpty() );
     return m_stack.top();
 }
 
-QDomElement KoListStyleStack::currentListStyleProperties() const
+KoXmlElement KoListStyleStack::currentListStyleProperties() const
 {
-    QDomElement style = currentListStyle();
+    KoXmlElement style = currentListStyle();
     return KoDom::namedItemNS( style, KoXmlNS::style, "list-level-properties" );
 }
 
-QDomElement KoListStyleStack::currentListStyleTextProperties() const
+KoXmlElement KoListStyleStack::currentListStyleTextProperties() const
 {
-    QDomElement style = currentListStyle();
+    KoXmlElement style = currentListStyle();
     return KoDom::namedItemNS( style, KoXmlNS::style, "text-properties" );
 }

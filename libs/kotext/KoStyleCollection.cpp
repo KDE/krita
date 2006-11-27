@@ -43,12 +43,12 @@ KoStyleCollection::~KoStyleCollection()
 int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
 {
     QStringList followingStyles;
-    Q3ValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
+    Q3ValueVector<KoXmlElement> userStyles = context.oasisStyles().userStyles();
     bool defaultStyleDeleted = false;
     int stylesLoaded = 0;
     const unsigned int nStyles = userStyles.count();
     for (unsigned int item = 0; item < nStyles; item++) {
-        QDomElement styleElem = userStyles[item];
+        KoXmlElement styleElem = userStyles[item];
 	Q_ASSERT( !styleElem.isNull() );
 
         if ( styleElem.attributeNS( KoXmlNS::style, "family", QString::null ) != "paragraph" )

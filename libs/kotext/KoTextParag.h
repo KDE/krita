@@ -40,6 +40,7 @@ class KoTextCustomItem;
 class KoOasisContext;
 class KoSavingContext;
 class KoStyleCollection;
+#include <KoXmlReader.h>
 
 struct KoTextParagSelection
 {
@@ -323,14 +324,14 @@ public:
     void fixParagWidth( bool viewFormattingChars );
 
     /// Load from XML
-    virtual void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection, uint& pos );
+    virtual void loadOasis( const KoXmlElement& e, KoOasisContext& context, KoStyleCollection *styleCollection, uint& pos );
     /// Save to XML
     /// By default the whole paragraph is saved. from/to allow to save only a portion of it.
     /// The 'from' and 'to' characters are both included.
     virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context,
                             int from, int to, bool saveAnchorsFramesets = false ) const;
 
-    void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos );
+    void loadOasisSpan( const KoXmlElement& parent, KoOasisContext& context, uint& pos );
 
     void applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level );
 

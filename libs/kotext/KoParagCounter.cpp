@@ -23,6 +23,7 @@
 #include "KoTextFormat.h"
 #include "KoTextDocument.h"
 #include "KoOasisContext.h"
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
@@ -114,7 +115,7 @@ bool KoParagCounter::isBullet() const
     return isBullet( m_style );
 }
 
-void KoParagCounter::load( QDomElement & element )
+void KoParagCounter::load( KoXmlElement & element )
 {
     m_numbering = static_cast<Numbering>( element.attribute("numberingtype", "2").toInt() );
     m_style = static_cast<Style>( element.attribute("type").toInt() );
@@ -181,16 +182,16 @@ static QChar exportCounterType( KoParagCounter::Style style )
 void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering,
                                 bool orderedList, bool heading, int level, bool loadingStyle )
 {
-    const QDomElement listStyle = context.listStyleStack().currentListStyle();
-    const QDomElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
-    const QDomElement listStyleTextProperties = context.listStyleStack().currentListStyleTextProperties();
+    const KoXmlElement listStyle = context.listStyleStack().currentListStyle();
+    const KoXmlElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
+    const KoXmlElement listStyleTextProperties = context.listStyleStack().currentListStyleTextProperties();
     loadOasisListStyle( listStyle, listStyleProperties, listStyleTextProperties,
                         restartNumbering, orderedList, heading, level, loadingStyle );
 }
 
-void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
-                                         const QDomElement& listStyleProperties,
-                                         const QDomElement& listStyleTextProperties,
+void KoParagCounter::loadOasisListStyle( const KoXmlElement& listStyle,
+                                         const KoXmlElement& listStyleProperties,
+                                         const KoXmlElement& listStyleTextProperties,
                                          int restartNumbering,
                                          bool orderedList, bool heading, int level,
                                          bool loadingStyle )

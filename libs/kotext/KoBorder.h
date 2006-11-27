@@ -23,6 +23,7 @@
 #include <QColor>
 #include <QPen>
 #include <koffice_export.h>
+#include <KoXmlReader.h>
 class QDomElement;
 class KoZoomHandler;
 class QPainter;
@@ -54,7 +55,7 @@ public:
     bool operator!=( const KoBorder _brd ) const;
 
     // Load from XML
-    static KoBorder loadBorder( const QDomElement & elem );
+    static KoBorder loadBorder( const KoXmlElement & elem );
     void loadFoBorder( const QString& border );
     // Save to XML
     void save( QDomElement & elem ) const;

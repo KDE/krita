@@ -22,6 +22,7 @@
 #include "KoParagCounter.h"
 #include "KoStyleCollection.h"
 #include "KoOasisContext.h"
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
@@ -145,7 +146,7 @@ KoParagLayout::~KoParagLayout()
     delete counter;
 }
 
-void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& parentElem, int docVersion )
+void KoParagLayout::loadParagLayout( KoParagLayout& layout, const KoXmlElement& parentElem, int docVersion )
 {
     // layout is an input and output parameter
     // It can have been initialized already, e.g. by copying from a style
@@ -156,7 +157,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
     // there is no way to differentiate between "I want no tabs in the parag"
     // and "use default from style".
     KoTabulatorList tabList;
-    QDomElement element = parentElem.firstChild().toElement();
+    KoXmlElement element = parentElem.firstChild().toElement();
     for ( ; !element.isNull() ; element = element.nextSibling().toElement() )
     {
         if ( element.tagName() == "TABULATOR" )
@@ -533,9 +534,9 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     // Tabulators
     KoTabulatorList tabList;
     if ( context.styleStack().hasChildNodeNS( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
-        QDomElement tabStops = context.styleStack().childNodeNS( KoXmlNS::style, "tab-stops" );
+        KoXmlElement tabStops = context.styleStack().childNodeNS( KoXmlNS::style, "tab-stops" );
         //kDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
-        QDomElement tabStop;
+        KoXmlElement tabStop;
         forEachElement( tabStop, tabStops )
         {
             Q_ASSERT( tabStop.localName() == "tab-stop" );

@@ -83,7 +83,7 @@ public:
 
 private:
     /// @return true on success (a list style was found and pushed)
-    bool pushListLevelStyle( const QString& listStyleName, const QDomElement& fullListStyle, int level );
+    bool pushListLevelStyle( const QString& listStyleName, const KoXmlElement& fullListStyle, int level );
 
 private:
     KoListStyleStack m_listStyleStack;

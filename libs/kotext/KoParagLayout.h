@@ -21,6 +21,7 @@
 #define koparaglayout_h
 
 #include <KoTabulator.h>
+#include <KoXmlReader.h>
 #include <qdom.h>
 //Added by qt3to4:
 #include <QByteArray>
@@ -142,7 +143,7 @@ public:
     /** Load this parag layout from XML.
      * This format is used by KWord for paragraphs, and by KPresenter+KWord for styles.
      */
-    static void loadParagLayout( KoParagLayout& layout, const QDomElement& parentElem, int docVersion = 2 );
+    static void loadParagLayout( KoParagLayout& layout, const KoXmlElement& parentElem, int docVersion = 2 );
 
     /// Load this parag layout from Oasis XML
     static void loadOasisParagLayout( KoParagLayout& layout, KoOasisContext& context );
@@ -159,12 +160,12 @@ public:
     static QByteArray saveOasisAlignment( Qt::AlignmentFlag alignment );
 
 private:
-    static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue) {
+    static int getAttribute(const KoXmlElement &element, const char *attributeName, int defaultValue) {
         QString value = element.attribute( attributeName );
         return value.isNull() ? defaultValue : value.toInt();
     }
 
-    static double getAttribute(const QDomElement &element, const char *attributeName, double defaultValue) {
+    static double getAttribute(const KoXmlElement &element, const char *attributeName, double defaultValue) {
         QString value = element.attribute( attributeName );
         return value.isNull() ? defaultValue : value.toDouble();
     }

@@ -23,6 +23,7 @@
 
 #include "KoRichText.h"
 #include <koffice_export.h>
+#include <KoXmlReader.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3MemArray>
@@ -207,10 +208,10 @@ public:
     int length() const;
     void clear( bool createEmptyParag = false );
 
-    KoTextParag* loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph );
+    KoTextParag* loadList( const KoXmlElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph );
 
     // For normal loading nextParagraph and pos are 0.
-    KoTextParag* loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph );
+    KoTextParag* loadOasisText( const KoXmlElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph );
 
     QString copySelection( KoXmlWriter& writer, KoSavingContext& context, int selectionId );
 
@@ -348,7 +349,7 @@ protected:
      * for special tags no handled by kotext (images, textboxes, tables, etc.)
      * @return true if @p tag was handled.
      */
-    virtual bool loadOasisBodyTag( const QDomElement& /*tag*/, KoOasisContext& /*context*/,
+    virtual bool loadOasisBodyTag( const KoXmlElement& /*tag*/, KoOasisContext& /*context*/,
                                    KoTextParag* & /*lastParagraph*/, KoStyleCollection* /*styleColl*/,
                                    KoTextParag* /*nextParagraph*/ ) {
         return false;
@@ -361,7 +362,7 @@ protected:
      * KoTextDocument.
      * @return true (and optionally @p textData and @p customItem) if @p tag was handled.
      */
-    virtual bool loadSpanTag( const QDomElement& /*tag*/, KoOasisContext& /*context*/,
+    virtual bool loadSpanTag( const KoXmlElement& /*tag*/, KoOasisContext& /*context*/,
                               KoTextParag* /*parag*/, uint /*pos*/,
                               QString& /*textData*/, KoTextCustomItem* & /*customItem*/ ) {
         return false;

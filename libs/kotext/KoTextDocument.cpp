@@ -26,6 +26,7 @@
 #include "KoTextCommand.h"
 #include "KoOasisContext.h"
 #include "KoVariable.h"
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
@@ -1416,10 +1417,10 @@ KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
     return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
-KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection* styleColl, KoTextParag* nextParagraph )
+KoTextParag* KoTextDocument::loadOasisText( const KoXmlElement& bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection* styleColl, KoTextParag* nextParagraph )
 {
     // was OoWriterImport::parseBodyOrSimilar
-    QDomElement tag;
+    KoXmlElement tag;
     forEachElement( tag, bodyElem )
     {
         context.styleStack().save();
@@ -1486,7 +1487,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         }
         else if ( isTextNS && localName == "user-field-decls" )
         {
-            QDomElement fd;
+            KoXmlElement fd;
             forEachElement( fd, tag )
             {
                 if ( fd.namespaceURI() == KoXmlNS::text && fd.localName() == "user-field-decl" )
@@ -1515,7 +1516,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
     return lastParagraph;
 }
 
-KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph )
+KoTextParag* KoTextDocument::loadList( const KoXmlElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph )
 {
     //kDebug(32500) << "loadList: " << list.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
 
@@ -1531,7 +1532,7 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
     if ( listOK )
         listOK = context.pushListLevelStyle( context.currentListStyleName(), level );
 
-    const QDomElement listStyle = context.listStyleStack().currentListStyle();
+    const KoXmlElement listStyle = context.listStyleStack().currentListStyle();
     // The tag is either list-level-style-number or list-level-style-bullet
     const bool orderedList = listStyle.localName() == "list-level-style-number";
 
@@ -1553,9 +1554,9 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
     else
     {
         // Iterate over list items
-        for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
+        for ( KoXmlNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
         {
-            QDomElement listItem = n.toElement();
+            KoXmlElement listItem = n.toElement();
             int restartNumbering = -1;
             if ( listItem.hasAttributeNS( KoXmlNS::text, "start-value" ) )
                 restartNumbering = listItem.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();

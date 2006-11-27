@@ -1,4 +1,6 @@
-OPTION(KOFFICE_ENABLE_SCRIPTING   "build scripting library (Kross)" ON)
+# scripting is disabled for now.
+#OPTION(KOFFICE_ENABLE_SCRIPTING   "build scripting library (Kross)" ON)
+OPTION(KOFFICE_ENABLE_SCRIPTING   "build scripting library (Kross)" OFF)
 
 add_subdirectory( store )
 add_subdirectory( kwmf )

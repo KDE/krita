@@ -61,8 +61,8 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     m_page->m_createButton->hide();
     KisConfig cfg;
 
-    m_page->intWidth->setValue(image->width());
-    m_page->intHeight->setValue(image->height());
+    m_page->doubleWidth->setValue(image->width());
+    m_page->doubleHeight->setValue(image->height());
 
     m_page->doubleResolution->setValue(image->xRes()); // XXX: separate values for x & y?
 
@@ -108,12 +108,12 @@ KisDlgImageProperties::~KisDlgImageProperties()
 
 int KisDlgImageProperties::imageWidth()
 {
-    return m_page->intWidth->value();
+    return m_page->doubleWidth->value();
 }
 
 int KisDlgImageProperties::imageHeight()
 {
-    return m_page->intHeight->value();
+    return m_page->doubleHeight->value();
 }
 
 int KisDlgImageProperties::opacity()

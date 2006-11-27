@@ -30,6 +30,7 @@
 #include "KoColorSpace.h"
 #include "KoID.h"
 #include "KoColor.h"
+#include <KoUnit.h>
 
 #include "kis_doc2.h"
 #include "kis_meta_registry.h"
@@ -44,9 +45,14 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
 
     txtName->setText(imageName);
 
-    intWidth->setValue(defWidth);
-    intHeight->setValue(defHeight);
+    doubleWidth->setValue(defWidth);
+    doubleHeight->setValue(defHeight);
     doubleResolution->setValue(resolution);
+
+    cmbWidthUnit->addItem( i18n("Pixels") );
+    cmbWidthUnit->addItems( KoUnit::listOfUnitName() );
+    cmbHeightUnit->addItem( i18n("Pixels") );
+    cmbHeightUnit->addItems( KoUnit::listOfUnitName() );
 
     cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
     cmbColorSpaces->setCurrent(defColorSpaceName);
@@ -65,7 +71,27 @@ void KisCustomImageWidget::buttonClicked() {
 
     QColor qc(cmbColor->color());
 
-    m_doc->newImage(txtName->text(), (qint32)intWidth->value(), (qint32)intHeight->value(), cs, KoColor(qc, cs), txtDescription->toPlainText(), doubleResolution->value());
+    qint32 width, height;
+    double resolution;
+    resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
+
+    switch(cmbWidthUnit->currentIndex())
+    {
+        case 0:
+            width = int(doubleWidth->value());
+            break;
+        case 1:
+            width = int(doubleWidth->value());
+            break;
+        case 2:
+            width = int(doubleWidth->value());
+            break;
+        case 3:
+            width = int(doubleWidth->value());
+            break;
+    }
+     
+    m_doc->newImage(txtName->text(), width, height, cs, KoColor(qc, cs), txtDescription->toPlainText(), resolution);
 
     KisImageSP img = m_doc->currentImage();
     if (img) {

@@ -90,7 +90,7 @@ void KisToolDummy::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KAction(KIcon("tool_dummy"), i18n("&Dummy"), collection, objectName());
-        m_action->setShortcut(Qt::SHIFT+Qt::Key_H);
+        m_action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_H));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;

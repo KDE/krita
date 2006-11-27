@@ -71,7 +71,7 @@ public:
             setToolTip( i18n( "Paint a selection with a brush" ) );
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_brush_selection" );
-            setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B);
+            setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
             setPriority( 0 );
         }
 

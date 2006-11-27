@@ -49,7 +49,7 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
 {
 
     // view actions
-    m_zoomAction = new KoZoomAction(0, i18n("Zoom"), KIcon("14_zoom"), 0, actionCollection, "zoom" );
+    m_zoomAction = new KoZoomAction(0, i18n("Zoom"), KIcon("14_zoom"), KShortcut(), actionCollection, "zoom" );
     connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
           this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
 
@@ -58,7 +58,7 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
 
 /*
     m_actualPixels = new KAction(i18n("Actual Pixels"), actionCollection, "actual_pixels");
-    m_actualPixels->setShortcut(Qt::CTRL+Qt::Key_0);
+    m_actualPixels->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_0));
     connect(m_actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
 */
     m_actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection, "actual_size");

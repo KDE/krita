@@ -82,7 +82,7 @@ public:
             setToolTip( i18n( "Select an elliptical area" ) );
             setToolType( TOOL_TYPE_SELECTED);
             setIcon( "tool_elliptical_selection" );
-            setShortcut( Qt::Key_J );
+            setShortcut( QKeySequence(Qt::Key_J) );
             setPriority( 0 );
         }
 

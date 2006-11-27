@@ -137,7 +137,7 @@ void KisToolSelectBrush::setup(KActionCollection *collection)
                                collection,
                                objectName());
         Q_CHECK_PTR(m_action);
-        m_action->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B);
+        m_action->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Paint a selection"));
         m_action->setActionGroup(actionGroup());

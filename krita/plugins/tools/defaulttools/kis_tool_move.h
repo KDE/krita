@@ -62,7 +62,7 @@ public:
             setToolType(TOOL_TYPE_TRANSFORM);
             setPriority(0);
             setIcon("tool_move");
-            setShortcut( Qt::SHIFT + Qt::Key_V );
+            setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
         }
 
     virtual ~KisToolMoveFactory(){}

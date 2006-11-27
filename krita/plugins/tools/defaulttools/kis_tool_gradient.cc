@@ -298,7 +298,7 @@ void KisToolGradient::setup(KActionCollection *collection)
                                i18n("&Gradient"),
                                collection,
                                objectName());
-        m_action->setShortcut(Qt::Key_G);
+        m_action->setShortcut(QKeySequence(Qt::Key_G));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw a gradient"));
         m_action->setActionGroup(actionGroup());

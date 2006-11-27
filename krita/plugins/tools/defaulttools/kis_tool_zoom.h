@@ -85,7 +85,7 @@ public:
             setToolType( TOOL_TYPE_VIEW );
             setIcon( "viewmag" );
             setPriority( 0 );
-            setShortcut( Qt:Key_Z );
+            setShortcut( QKeySequence( Qt:Key_Z ) );
         }
 
     virtual ~KisToolZoomFactory(){}

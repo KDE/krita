@@ -175,7 +175,7 @@ void KisToolZoom::setup(KActionCollection *collection)
                                i18n("&Zoom"),
                                collection,
                                objectName());
-        m_action->setShortcut(Qt::Key_Z);
+        m_action->setShortcut(QKeySequence(Qt::Key_Z));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Zoom"));
         m_action->setActionGroup(actionGroup());

@@ -213,7 +213,7 @@ void KisToolColorPicker::setup(KActionCollection *collection)
                                i18n("&Color Picker"),
                                collection,
                                objectName());
-        m_action->setShortcut(Qt::Key_P);
+        m_action->setShortcut(QKeySequence(Qt::Key_P));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Color picker"));
         m_action->setActionGroup(actionGroup());

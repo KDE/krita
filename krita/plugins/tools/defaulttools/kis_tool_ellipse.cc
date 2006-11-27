@@ -162,13 +162,11 @@ void KisToolEllipse::setup(KActionCollection *collection)
     m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(Qt::Key_F7);
         m_action = new KAction(KIcon("tool_ellipse"),
                                i18n("&Ellipse"),
                                collection,
                                objectName());
-        m_action->setShortcut(shortcut);
+        m_action->setShortcut(KShortcut(Qt::Key_Plus, Qt::Key_F7));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw an ellipse"));
         m_action->setActionGroup(actionGroup());

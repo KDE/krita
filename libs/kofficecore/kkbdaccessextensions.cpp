@@ -564,24 +564,30 @@ void KKbdAccessExtensions::resizePanelFromKey(int key, int state)
 void KKbdAccessExtensions::displayAccessKeys()
 {
     // Build a list of valid access keys that don't collide with shortcuts.
-    QString availableAccessKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+ /*   QString availableAccessKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
     QList<KXMLGUIClient*> allClients = d->mainWindow->factory()->clients();
     foreach ( KXMLGUIClient* client, allClients )
     {
         QList<KAction*> actions = client->actionCollection()->actions();
         for (int j = 0; j < (int)actions.count(); j++) {
-            KAction* action = actions[j];
-            KShortcut sc = action->shortcut();
+            KShortcut sc = actions[j]->shortcut();
             for (int i = 0; i < (int)sc.count(); i++) {
                 QKeySequence seq = sc.seq(i);
-                if (seq.count() == 1) {
-                    QString s = seq.toString();
+                if (seq.count() == 1) {*/
+#warning this is NOT going to work. Have a look at some string toString() gives you.
+//e.g."Ctrl+X" -> great, let's see... this string isn't in availableAccessKeys.
+//I might be wrong and you only want no-modifier shortcuts. Whatever...
+//Please port to the new KShortcut; I (ahartmetz) wanted to do it but I couldn't figure
+//out what should happen here. Suggestion: use QKeySequence::operator[] and bitwise operators
+//to do what you want to do instead of using strings.
+                    /*QString s = seq.toString();
                     if (availableAccessKeys.contains(s))
                         availableAccessKeys.remove(s);
                 }
             }
         }
     }
+
     // Find all visible, focusable widgets and create a QLabel for each.  Don't exceed
     // available list of access keys.
     QWidgetList allWidgets = kapp->allWidgets();
@@ -631,7 +637,7 @@ void KKbdAccessExtensions::displayAccessKeys()
             lab->adjustSize();
             lab->show();
         }
-    }
+    }*/
 }
 
 // Handling of the HTML accesskey attribute.

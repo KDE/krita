@@ -85,7 +85,7 @@ public:
             setToolType(TOOL_TYPE_SELECTED);
             setPriority(0);
             setIcon("colorpicker");
-            setShortcut( Qt::Key_P );
+            setShortcut( QKeySequence( Qt::Key_P ) );
         }
 
     virtual ~KisToolColorPickerFactory(){}

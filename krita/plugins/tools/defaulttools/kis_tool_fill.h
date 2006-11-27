@@ -92,7 +92,7 @@ public:
             setToolTip( i18n( "Fill a contiguous area of color with a color, or fill a selection." ) );
             setToolType( TOOL_TYPE_FILL );
             setIcon( "color_fill" );
-            setShortcut( Qt::Key_F );
+            setShortcut( QKeySequence( Qt::Key_F ) );
             setPriority( 0 );
         }
 

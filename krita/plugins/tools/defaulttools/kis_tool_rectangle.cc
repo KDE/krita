@@ -169,7 +169,7 @@ void KisToolRectangle::setup(KActionCollection *collection)
                                i18n("&Rectangle"),
                                collection,
                                objectName());
-        m_action->setShortcut(Qt::Key_F6);
+        m_action->setShortcut(QKeySequence(Qt::Key_F6));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw a rectangle"));
         m_action->setActionGroup(actionGroup());

@@ -274,7 +274,7 @@ KoMainWindow::KoMainWindow( KInstance *instance )
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     KAction* closeAllViews = new KAction( KIcon("fileclose"), i18n("&Close All Views"),
                                           actionCollection(), "view_closeallviews" );
-    closeAllViews->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_W);
+    closeAllViews->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
     connect( closeAllViews, SIGNAL(triggered(bool)), this, SLOT(slotCloseAllViews()) );
     d->m_veryHackyActionList.append(closeAllViews);
 

@@ -94,7 +94,7 @@ void KisToolDuplicate::setup(KActionCollection *collection)
                                i18n("&Duplicate Brush"),
                                collection,
                                objectName());
-        m_action->setShortcut(Qt::Key_C);
+        m_action->setShortcut(QKeySequence(Qt::Key_C));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Duplicate parts of the image. Shift-click to select the point to duplicate from to begin."));
         m_action->setActionGroup(actionGroup());

@@ -84,7 +84,7 @@ void KisToolPan::setup(KActionCollection *collection)
                                i18n("&Pan"),
                                collection,
                                objectName());
-        m_action->setShortcut(Qt::SHIFT+Qt::Key_H);
+        m_action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_H));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Pan"));
         m_action->setActionGroup(actionGroup());

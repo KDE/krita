@@ -283,7 +283,7 @@ void KisToolSelectRectangular::setup(KActionCollection *collection)
                                collection,
                                objectName());
         Q_CHECK_PTR(m_action);
-        m_action->setShortcut(Qt::Key_R);
+        m_action->setShortcut(QKeySequence(Qt::Key_R));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setActionGroup(actionGroup());
         m_action->setToolTip(i18n("Select a rectangular area"));

@@ -255,7 +255,7 @@ void MainWindow::about()
 void MainWindow::createActions()
 {
     m_quitAct = new QAction(tr("&Quit"), this);
-    m_quitAct->setShortcut(tr("Ctrl+Q"));
+    m_quitAct->setShortcut(QKeySequence(tr("Ctrl+Q")));
     m_quitAct->setStatusTip(tr("Quit the application"));
     connect(m_quitAct, SIGNAL(triggered()), this, SLOT(close()));
 
@@ -280,17 +280,17 @@ void MainWindow::createActions()
     connect(m_removeAct, SIGNAL(triggered()), m_canvas, SLOT( selectRemoveTool() ) );
 
     m_replayAct = new QAction(tr("&Replay"), this);
-    m_replayAct->setShortcut(tr("Ctrl+R"));
+    m_replayAct->setShortcut(QKeySequence(tr("Ctrl+R")));
     m_replayAct->setStatusTip(tr("Replay"));
     connect(m_replayAct, SIGNAL(triggered()), m_canvas, SLOT( replay() ) );
 
     m_debugAct = new QAction(tr("&Debug"), this);
-    m_debugAct->setShortcut(tr("Ctrl+D"));
+    m_debugAct->setShortcut(QKeySequence(tr("Ctrl+D")));
     m_debugAct->setStatusTip(tr("Debug"));
     connect(m_debugAct, SIGNAL(triggered()), m_canvas, SLOT( debug() ) );
 
     m_paintTreeAct = new QAction(tr("&Paint Tree"), this);
-    m_paintTreeAct->setShortcut(tr("Ctrl+P"));
+    m_paintTreeAct->setShortcut(QKeySequence(tr("Ctrl+P")));
     m_paintTreeAct->setStatusTip(tr("Paint Tree"));
     m_paintTreeAct->setCheckable( true );
     connect(m_paintTreeAct, SIGNAL(toggled( bool )), m_canvas, SLOT( paintTree( bool ) ) );

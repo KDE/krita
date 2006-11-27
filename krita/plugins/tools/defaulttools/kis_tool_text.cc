@@ -162,7 +162,7 @@ void KisToolText::setup(KActionCollection *collection)
                                i18n("T&ext"),
                                collection,
                                objectName());
-        m_action->setShortcut(Qt::SHIFT+Qt::Key_T);
+        m_action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_T));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setActionGroup(actionGroup());
         m_action->setToolTip(i18n("Text"));

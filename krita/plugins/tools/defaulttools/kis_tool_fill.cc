@@ -218,7 +218,7 @@ void KisToolFill::setup(KActionCollection *collection)
                                i18n("&Fill"),
                                collection,
                                objectName());
-        m_action->setShortcut(Qt::Key_F);
+        m_action->setShortcut(QKeySequence(Qt::Key_F));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Contiguous fill"));
         m_action->setActionGroup(actionGroup());

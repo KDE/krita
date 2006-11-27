@@ -144,43 +144,43 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_reselect = new KAction(i18n("&Reselect"),
                              collection,
                              "reselect");
-    m_reselect->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_D);
+    m_reselect->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 
     m_invert = new KAction(i18n("&Invert"),
                            collection,
                            "invert");
-    m_invert->setShortcut(Qt::CTRL+Qt::Key_I);
+    m_invert->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));
     connect(m_invert, SIGNAL(triggered()), this, SLOT(invert()));
 
     m_toNewLayer = new KAction(i18n("Copy Selection to New Layer"),
                                collection,
                                "copy_selection_to_new_layer");
-    m_toNewLayer->setShortcut(Qt::CTRL+Qt::Key_J);
+    m_toNewLayer->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_J));
     connect(m_toNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer = new KAction(i18n("Cut Selection to New Layer"),
                                   collection,
                                   "cut_selection_to_new_layer");
-    m_cutToNewLayer->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_J);
+    m_cutToNewLayer->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_J));
     connect(m_cutToNewLayer, SIGNAL(triggered()), this, SLOT(cutToNewLayer()));
 
     m_feather = new KAction(i18n("Feather"),
                             collection,
                             "feather");
-    m_feather->setShortcut(Qt::CTRL+Qt::ALT+Qt::Key_D);
+    m_feather->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_D));
     connect(m_feather, SIGNAL(triggered()), this, SLOT(feather()));
 
     m_fillForegroundColor = new KAction(i18n("Fill with Foreground Color"),
                                         collection,
                                         "fill_selection_foreground_color");
-    m_fillForegroundColor->setShortcut(Qt::ALT+Qt::Key_Backspace);
+    m_fillForegroundColor->setShortcut(QKeySequence(Qt::ALT+Qt::Key_Backspace));
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
     m_fillBackgroundColor = new KAction(i18n("Fill with Background Color"),
                                         collection,
                                         "fill_selection_background_color");
-    m_fillBackgroundColor->setShortcut(Qt::Key_Backspace);
+    m_fillBackgroundColor->setShortcut(QKeySequence(Qt::Key_Backspace));
     connect(m_fillBackgroundColor, SIGNAL(triggered()), this, SLOT(fillBackgroundColor()));
 
     m_fillPattern = new KAction(i18n("Fill with Pattern"),
@@ -191,7 +191,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_toggleDisplaySelection = new KToggleAction(i18n("Display Selection"),
                                                  collection,
                                                  "toggle_display_selection");
-    m_toggleDisplaySelection->setShortcut(Qt::CTRL+Qt::Key_H);
+    m_toggleDisplaySelection->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
     connect(m_toggleDisplaySelection, SIGNAL(triggered()), this, SLOT(toggleDisplaySelection()));
 
     m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));

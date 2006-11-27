@@ -179,14 +179,12 @@ void KisToolStar::setup(KActionCollection *collection)
     m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(Qt::Key_F9);
         m_action = new KAction(KIcon("tool_star"),
                                i18n("&Star"),
                                collection,
                                objectName());
         Q_CHECK_PTR(m_action);
-        m_action->setShortcut(shortcut);
+        m_action->setShortcut(KShortcut(Qt::Key_Plus, Qt::Key_F9));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw a star"));
         m_action->setActionGroup(actionGroup());

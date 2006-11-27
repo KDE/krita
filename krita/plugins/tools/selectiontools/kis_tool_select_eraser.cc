@@ -128,7 +128,7 @@ void KisToolSelectEraser::setup(KActionCollection *collection)
                                collection,
                                objectName());
         Q_CHECK_PTR(m_action);
-        m_action->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
+        m_action->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Erase parts of a selection"));
         m_action->setActionGroup(actionGroup());

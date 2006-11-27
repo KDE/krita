@@ -76,7 +76,7 @@ public:
             //setToolType( TOOL_TYPE_SHAPE );
             setToolType( dynamicToolType() );
             setIcon( "tool_freehand" );
-            setShortcut( Qt::Key_B );
+            setShortcut( QKeySequence( Qt::Key_B ) );
             setPriority( 0 );
             setActivationShapeID( KisDummyShape_SHAPEID );
         }

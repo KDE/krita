@@ -98,7 +98,7 @@ void KisToolMove::setup(KActionCollection *collection)
                                i18n("&Move"),
                                collection,
                                objectName());
-        m_action->setShortcut(Qt::SHIFT+Qt::Key_V);
+        m_action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_V));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Move"));
         m_action->setActionGroup(actionGroup());

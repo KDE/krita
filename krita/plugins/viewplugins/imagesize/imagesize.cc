@@ -65,7 +65,7 @@ ImageSize::ImageSize(QObject *parent, const QStringList &)
         setXMLFile(KStandardDirs::locate("data","kritaplugins/imagesize.rc"), true);
 
         KAction *action = new KAction(i18n("Change &Image Size..."), actionCollection(), "imagesize");
-        action->setShortcut(Qt::SHIFT+Qt::Key_S);
+        action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_S));
         connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
         action = new KAction(i18n("Change &Layer Size..."), actionCollection(), "layersize");

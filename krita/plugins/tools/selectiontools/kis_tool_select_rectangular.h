@@ -80,7 +80,7 @@ public:
             setToolTip( i18n( "Select a rectangular area" ) );
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_rect_selection" );
-            setShortcut( Qt::Key_R );
+            setShortcut( QKeySequence( Qt::Key_R ) );
             setPriority( 0 );
         }
 

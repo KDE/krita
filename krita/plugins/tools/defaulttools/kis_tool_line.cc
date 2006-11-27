@@ -229,7 +229,7 @@ void KisToolLine::setup(KActionCollection *collection)
                                i18n("&Line"),
                                collection,
                                objectName());
-        m_action->setShortcut(Qt::Key_L);
+        m_action->setShortcut(QKeySequence(Qt::Key_L));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw a line"));
         m_action->setActionGroup(actionGroup());

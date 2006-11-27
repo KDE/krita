@@ -231,14 +231,12 @@ void KisToolPolyline::setup(KActionCollection *collection)
     m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(Qt::Key_F9);
         m_action = new KAction(KIcon("polyline"),
                                i18n("&Polyline"),
                                collection,
                                objectName());
         Q_CHECK_PTR(m_action);
-        m_action->setShortcut(shortcut);
+        m_action->setShortcut(KShortcut(Qt::Key_Plus, Qt::Key_F9));
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw a polyline. Shift-mouseclick ends the polyline."));
         m_action->setActionGroup(actionGroup());

@@ -100,15 +100,15 @@ KisLayerManager::~KisLayerManager()
 void KisLayerManager::setup(KActionCollection * actionCollection)
 {
     m_imgFlatten = new KAction(i18n("&Flatten image"), actionCollection, "flatten_image");
-    m_imgFlatten->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
+    m_imgFlatten->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
     connect(m_imgFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
 
     m_imgMergeLayer = new KAction(i18n("&Merge with Layer Below"), actionCollection, "merge_layer");
-    m_imgMergeLayer->setShortcut(Qt::CTRL+Qt::Key_E);
+    m_imgMergeLayer->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
     connect(m_imgMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
     m_layerAdd = new KAction(i18n("&Add..."), actionCollection, "insert_layer");
-    m_layerAdd->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_N);
+    m_layerAdd->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     connect(m_layerAdd, SIGNAL(triggered()), this, SLOT(layerAdd()));
 
     m_actionPartLayer = new KoPartSelectAction( i18n( "&Object Layer" ), "frame_query",
@@ -124,24 +124,24 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_layerDup = new KAction(i18n("Duplicate"), actionCollection, "duplicate_layer");
     connect(m_layerDup, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 
-    m_layerHide = new KToggleAction(i18n("&Hide"), 0, this, SLOT(layerToggleVisible()), actionCollection, "hide_layer");
+    m_layerHide = new KToggleAction(i18n("&Hide"), KShortcut(), this, SLOT(layerToggleVisible()), actionCollection, "hide_layer");
     m_layerHide->setCheckedState(KGuiItem(i18n("&Show")));
     m_layerHide->setChecked(false);
 
     m_layerRaise = new KAction(KIcon("raise"), i18n("Raise"), actionCollection, "raiselayer");
-    m_layerRaise->setShortcut(Qt::CTRL+Qt::Key_BracketRight);
+    m_layerRaise->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_BracketRight));
     connect(m_layerRaise, SIGNAL(triggered()), this, SLOT(layerRaise()));
 
     m_layerLower = new KAction(KIcon("lower"), i18n("Lower"), actionCollection, "lowerlayer");
-    m_layerLower->setShortcut(Qt::CTRL+Qt::Key_BracketLeft);
+    m_layerLower->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_BracketLeft));
     connect(m_layerLower, SIGNAL(triggered()), this, SLOT(layerLower()));
 
     m_layerTop = new KAction(KIcon("bring_forward"), i18n ("To Top"), actionCollection, "toplayer");
-    m_layerTop->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketRight);
+    m_layerTop->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketRight));
     connect(m_layerTop, SIGNAL(triggered()), this, SLOT(layerFront()));
 
     m_layerBottom = new KAction(KIcon("send_backward"), i18n("To Bottom"), actionCollection, "bottomlayer");
-    m_layerBottom->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketLeft);
+    m_layerBottom->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketLeft));
     connect(m_layerBottom, SIGNAL(triggered()), this, SLOT(layerBack()));
 
     m_layerProperties = new KAction(i18n("Properties..."), actionCollection, "layer_properties");

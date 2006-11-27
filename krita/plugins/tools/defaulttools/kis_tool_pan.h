@@ -66,7 +66,7 @@ public:
             setToolType( TOOL_TYPE_VIEW );
             setIcon( "tool_pan" );
             setPriority( 0 );
-            setShortcut( Qt::SHIFT + Qt::Key_H );
+            setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_H ) );
         }
 
     virtual ~KisToolPanFactory(){}

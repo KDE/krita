@@ -104,7 +104,7 @@ void KisEmbossFilter::KisEmbossFilter::process(const KisPaintDeviceSP src, const
 // FIXME: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
 
                 QColor color1;
-                quint8 opacity;
+                quint8 opacity = 0;
                 src->colorSpace()->toQColor(it.oldRawData(), &color1);
 
                 QColor color2;

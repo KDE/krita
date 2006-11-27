@@ -42,7 +42,7 @@ namespace KoChart
     {
         Q_OBJECT
     public:
-        WizardExtension( Part *part );
+        explicit WizardExtension( Part *part );
         virtual ~WizardExtension();
 
         Part *part() const { return m_part; }

@@ -31,9 +31,6 @@ class KoCanvasBase;
 class KoPointerEvent;
 class KoViewConverter;
 
-class KActionCollection;
-class KRadioAction;
-
 class QKeyEvent;
 class QWidget;
 class QPainter;

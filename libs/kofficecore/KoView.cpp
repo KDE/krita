@@ -158,6 +158,7 @@ KoView::KoView( KoDocument *document, QWidget *parent )
 
 
   actionCollection()->setAssociatedWidget(this);
+  actionCollection()->setDefaultShortcutContext(Qt::ApplicationShortcut);
   setupGlobalActions();
   /**** not needed anymore, according to David (Werner)
   KActionCollection *coll = actionCollection();

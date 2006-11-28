@@ -46,7 +46,7 @@ class KoViewConverter;
  * should implement. Flake tools know about the canvas, so they can
  * do things like scroll, redraw, set a cursor etc.
  */
-class KoCanvasBase {
+class FLAKE_EXPORT KoCanvasBase {
 
 public:
 

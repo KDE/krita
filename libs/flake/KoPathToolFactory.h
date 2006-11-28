@@ -24,7 +24,7 @@
 
 #include <QStringList>
 
-class KoPathToolFactory : public KoToolFactory {
+class FLAKE_EXPORT KoPathToolFactory : public KoToolFactory {
     Q_OBJECT
 public:
     KoPathToolFactory(QObject *parent, const QStringList&);

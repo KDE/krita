@@ -18,9 +18,9 @@
 
 #include "scriptingmonitor.h"
 
-#include <core/manager.h>
-#include <core/action.h>
-#include <core/guiclient.h>
+#include <kross/core/manager.h>
+#include <kross/core/action.h>
+#include <kross/core/guiclient.h>
 
 
 ScriptingMonitor::ScriptingMonitor()

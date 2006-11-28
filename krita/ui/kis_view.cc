@@ -1849,7 +1849,7 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
     }
 
     if (t) undoAdapter()->addCommand(t);
-
+    currentImg()->rootLayer()->setDirty(false);
     m_doc->setModified(true);
     layersUpdated();
     updateCanvas();

@@ -44,7 +44,7 @@ public:
      * inside an image file.
      * @param rawData profile data
      */
-    KoColorProfile(QByteArray rawData);
+    KoColorProfile(const QByteArray& rawData);
     /**
      * Initialize a profile from the disk. You need to call the function \ref load to actually
      * load the profile data in memory.

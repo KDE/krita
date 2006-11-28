@@ -43,13 +43,13 @@
 #endif
 
 
-KoColorProfile::KoColorProfile(QByteArray rawData)
+KoColorProfile::KoColorProfile(const QByteArray& rawData)
     : m_rawData(rawData),
       m_filename( QString() ),
       m_valid( false ),
       m_suitableForOutput(false)
 {
-    m_profile = cmsOpenProfileFromMem(rawData.data(), (DWORD)rawData.size());
+    m_profile = cmsOpenProfileFromMem((void*)rawData.constData(), (DWORD)rawData.size());
     init();
 }
 
@@ -73,7 +73,7 @@ KoColorProfile::KoColorProfile(const cmsHPROFILE profile)
     if(m_rawData.size() >= (int)bytesNeeded)
     {
         _cmsSaveProfileToMem(m_profile, m_rawData.data(), &bytesNeeded); // fill buffer
-        cmsHPROFILE newprofile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD) bytesNeeded);
+        cmsHPROFILE newprofile = cmsOpenProfileFromMem((void*)m_rawData.constData(), (DWORD) bytesNeeded);
         cmsCloseProfile(m_profile);
         m_profile = newprofile;
     }
@@ -94,7 +94,7 @@ bool KoColorProfile::load()
     QFile file(m_filename);
     file.open(QIODevice::ReadOnly);
     m_rawData = file.readAll();
-    m_profile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD)m_rawData.size());
+    m_profile = cmsOpenProfileFromMem((void*)m_rawData.constData(), (DWORD)m_rawData.size());
     file.close();
 
     if (m_profile == 0) {
@@ -148,7 +148,7 @@ cmsHPROFILE KoColorProfile::profile()
 	    QFile file(m_filename);
 	    file.open(QIODevice::ReadOnly);
 	    m_rawData = file.readAll();
-	    m_profile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD)m_rawData.size());
+	    m_profile = cmsOpenProfileFromMem((void*)m_rawData.constData(), (DWORD)m_rawData.size());
         file.close();
 	}
 #endif

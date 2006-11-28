@@ -18,35 +18,22 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KO_TOOL_DOCKER_H
-#define KO_TOOL_DOCKER_H
 
-#include <QDockWidget>
+#include "KoToolDockerFactory.h"
 
-#include <koffice_export.h>
-
-class QStackedWidget;
-
-/**
-   The tool docker shows the tool option widget associtated with the
-   current tool and the current canvas.
- */
-class KOFFICEUI_EXPORT KoToolDocker : public QDockWidget
+QString KoToolDockerFactory::dockId() const
 {
-public:
+    return QString("KoToolOptionsDocker");
+}
 
-    KoToolDocker();
+Qt::DockWidgetArea KoToolDockerFactory::defaultDockWidgetArea() const
+{
+    return Qt::RightDockWidgetArea;
+}
 
-    virtual ~KoToolDocker() {}
-
-    /**
-     * Update the option widget to the argument one, removing the currently set widget.
-     */
-    void setOptionWidget(QWidget * widget);
-
-private:
-
-    QStackedWidget * m_stack;
-};
-
-#endif
+QDockWidget* KoToolDockerFactory::createDockWidget()
+{
+    KoToolDocker * dockWidget = new KoToolDocker();
+    dockWidget->setObjectName( dockId() );
+    return dockWidget;
+}

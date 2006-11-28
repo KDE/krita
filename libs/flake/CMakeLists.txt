@@ -31,6 +31,8 @@ set(flake_SRCS
     KoPathShapeFactory.cpp
     KoShapeFactory.cpp
     KoShapeUserData.cpp
+    KoCreatePathTool.cpp
+    KoCreatePathToolFactory.cpp
     KoPathToolFactory.cpp
     KoPathTool.cpp
     KoPathCommand.cpp

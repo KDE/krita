@@ -28,6 +28,7 @@
 // koffice
 #include <KoTool.h>
 #include <KoToolBox.h>
+#include <KoCreatePathToolFactory.h>
 #include <KoCreateShapesToolFactory.h>
 #include <KoCreateShapesTool.h>
 #include <KoInteractionToolFactory.h>
@@ -203,6 +204,7 @@ void KoToolManager::setup() {
     // add defaults. XXX: Make these settable? We have not yet solved
     // the problem of application-specific versus generic flake tools,
     // have we?
+    m_tools.append( new ToolHelper(new KoCreatePathToolFactory(this, QStringList())) );
     m_tools.append( new ToolHelper(new KoCreateShapesToolFactory(this, QStringList())) );
     m_defaultTool = new ToolHelper(new KoInteractionToolFactory(this, QStringList()));
     m_tools.append(m_defaultTool);

@@ -26,6 +26,7 @@
 #include <QMap>
 #include <QPointF>
 #include "KoPathShape.h"
+#include <koffice_export.h>
 
 class KoParameterShape;
 
@@ -275,7 +276,7 @@ private:
 class KoShapeControllerBase;
 
 /// The undo / redo command for combining two or more paths into one
-class KoPathCombineCommand : public KCommand
+class FLAKE_EXPORT KoPathCombineCommand : public KCommand
 {
 public:
     /**
@@ -336,7 +337,7 @@ private:
 };
 
 /// The undo / redo command for separating subpaths into different paths
-class KoPathSeparateCommand : public KCommand
+class FLAKE_EXPORT KoPathSeparateCommand : public KCommand
 {
 public:
     /**

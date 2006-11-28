@@ -22,7 +22,7 @@
 #include "ui_KoShapeGeometry.h"
 
 #include <KoShapeConfigWidgetBase.h>
-
+#include <koffice_export.h>
 #include <QWidget>
 #include <QList>
 
@@ -31,7 +31,7 @@ class KoShape;
 /**
  * A widget that shows the basic geometry items of a shape.
  */
-class KoShapeGeometry : public KoShapeConfigWidgetBase {
+class KOFFICEUI_EXPORT KoShapeGeometry : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
     KoShapeGeometry();

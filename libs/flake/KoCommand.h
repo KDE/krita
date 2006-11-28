@@ -283,7 +283,7 @@ private:
 };
 
 /// The undo / redo command for aligning shapes
-class KoShapeAlignCommand : public KCommand {
+class FLAKE_EXPORT KoShapeAlignCommand : public KCommand {
 public:
     /// The different alignment options for this command
     enum Align

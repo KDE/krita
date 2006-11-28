@@ -25,6 +25,7 @@
 
 #include <kdebug.h>
 #include <QKeyEvent>
+#include <QAction>
 #include <QTextBlock>
 #include <QTextLayout>
 #include <QAbstractTextDocumentLayout>
@@ -34,9 +35,29 @@ KoTextTool::KoTextTool(KoCanvasBase *canvas)
 , m_textShape(0)
 , m_textShapeData(0)
 {
+    class OptionWidget : public QWidget {
+      public:
+        OptionWidget() {
+        }
+    };
+    m_optionWidget = new OptionWidget();
+
+    QAction *bold = new QAction(m_optionWidget);
+    bold->setText("Bold");
+    bold->setShortcut(QKeySequence ("Ctrl+B"));
+
+    m_optionWidget->addAction(bold);
+
+    connect(bold, SIGNAL(triggered()), this, SLOT( textBold()) );
 }
 
 KoTextTool::~KoTextTool() {
+}
+
+void KoTextTool::textBold() {
+    QTextCharFormat cf = m_caret.charFormat();
+    cf.setFontWeight( (cf.fontWeight() <= QFont::Normal) ? QFont::Bold : QFont::Normal );
+    m_caret.mergeCharFormat(cf);
 }
 
 void KoTextTool::paint( QPainter &painter, KoViewConverter &converter) {
@@ -220,8 +241,10 @@ void KoTextTool::keyPressEvent(QKeyEvent *event) {
             moveOperation = QTextCursor::StartOfLine;
             break;
         default:
-            if(event->text().length() == 0)
+            if((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {
+                event->ignore();
                 return;
+            }
             useCursor(Qt::BlankCursor);
             m_caret.insertText(event->text());
     }
@@ -231,11 +254,10 @@ void KoTextTool::keyPressEvent(QKeyEvent *event) {
             (event->modifiers() & Qt::ShiftModifier)?QTextCursor::KeepAnchor:QTextCursor::MoveAnchor);
         repaint();
     }
-    event->accept();
 }
 
 void KoTextTool::keyReleaseEvent(QKeyEvent *event) {
-    event->accept();
+    event->ignore();
 }
 
 void KoTextTool::activate (bool temporary) {
@@ -283,3 +305,5 @@ void KoTextTool::repaint() {
         m_canvas->updateCanvas(repaintRect);
     }
 }
+
+#include "KoTextTool.moc"

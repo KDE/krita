@@ -27,12 +27,10 @@
 #include <QTextCursor>
 
 class KoTextTool : public KoTool {
+    Q_OBJECT
 public:
     KoTextTool(KoCanvasBase *canvas);
     ~KoTextTool();
-
-    // font settings etc
-    //QWidget * optionWidget(QWidget * parent);
 
     void paint( QPainter &painter, KoViewConverter &converter );
 
@@ -45,6 +43,12 @@ public:
 
     void activate (bool temporary=false);
     void deactivate();
+
+private slots:
+    void textBold();
+    //void textItalic();
+    //void textUnderline();
+    //void textStrikeOut();
 
 private:
     void repaint();

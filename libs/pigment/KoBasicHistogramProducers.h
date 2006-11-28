@@ -31,7 +31,7 @@
 
 class KoLabColorSpace;
 
-class /*PIGMENT_EXPORT*/ KoBasicHistogramProducer : public KoHistogramProducer {
+class PIGMENT_EXPORT KoBasicHistogramProducer : public KoHistogramProducer {
 public:
     KoBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, KoColorSpace *colorSpace);
     virtual ~KoBasicHistogramProducer() {}
@@ -83,7 +83,7 @@ protected:
     Q3ValueVector<qint32> m_external;
 };
 
-class /*PIGMENT_EXPORT*/ KoBasicU8HistogramProducer : public KoBasicHistogramProducer {
+class PIGMENT_EXPORT KoBasicU8HistogramProducer : public KoBasicHistogramProducer {
 public:
     KoBasicU8HistogramProducer(const KoID& id, KoColorSpace *colorSpace);
     virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
@@ -91,7 +91,7 @@ public:
     virtual double maximalZoom() const { return 1.0; }
 };
 
-class /*PIGMENT_EXPORT*/ KoBasicU16HistogramProducer : public KoBasicHistogramProducer {
+class PIGMENT_EXPORT KoBasicU16HistogramProducer : public KoBasicHistogramProducer {
 public:
     KoBasicU16HistogramProducer(const KoID& id, KoColorSpace *colorSpace);
     virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
@@ -108,7 +108,7 @@ public:
 };
 
 #ifdef HAVE_OPENEXR
-class /*PIGMENT_EXPORT*/ KoBasicF16HalfHistogramProducer : public KoBasicHistogramProducer {
+class PIGMENT_EXPORT KoBasicF16HalfHistogramProducer : public KoBasicHistogramProducer {
 public:
     KoBasicF16HalfHistogramProducer(const KoID& id, KoColorSpace *colorSpace);
     virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);

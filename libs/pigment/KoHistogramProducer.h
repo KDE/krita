@@ -48,7 +48,7 @@ class KoChannelInfo;
  * in which they are found in the channels() method. This is potentially different from
  * the order in which they are internally ordered!
  **/
-class /*PIGMEMT_EXPORT*/ KoHistogramProducer : public KShared {
+class PIGMENT_EXPORT KoHistogramProducer : public KShared {
 public:
     KoHistogramProducer() : m_skipTransparent(true), m_skipUnselected(true) {}
     virtual ~KoHistogramProducer() {}
@@ -96,7 +96,7 @@ protected:
 
 typedef KSharedPtr<KoHistogramProducer> KoHistogramProducerSP;
 
-class /*PIGMEMT_EXPORT*/ KoHistogramProducerFactory {
+class PIGMENT_EXPORT KoHistogramProducerFactory {
 public:
     KoHistogramProducerFactory(const KoID& id) : m_id(id) {}
     virtual ~KoHistogramProducerFactory() {}
@@ -111,7 +111,7 @@ protected:
     KoID m_id;
 };
 
-class /*PIGMEMT_EXPORT*/ KoHistogramProducerFactoryRegistry
+class PIGMENT_EXPORT KoHistogramProducerFactoryRegistry
     : public KoGenericRegistry<KoHistogramProducerFactory*> {
 public:
     virtual ~KoHistogramProducerFactoryRegistry();

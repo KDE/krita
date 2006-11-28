@@ -24,7 +24,7 @@
 #include <QVariant>
 
 #include <KoID.h>
-
+#include <koffice_export.h>
 class KoColor;
 
 namespace KoCanvasResource {
@@ -62,7 +62,7 @@ namespace KoCanvasResource {
  * color and more. All tools belonging to the current canvas are
  * notified when a Resource changes (is set).
  */
-class KoCanvasResourceProvider : public QObject {
+class FLAKE_EXPORT KoCanvasResourceProvider : public QObject {
 
     Q_OBJECT
 

@@ -21,11 +21,11 @@
 
 #include <QAtomic>
 #include <kis_shared_ptr.h>
-
+#include <koffice_export.h>
 
 class KisSharedData;
 
-class KisShared {
+class KRITAIMAGE_EXPORT KisShared {
     friend class KisSharedData;
     protected:
         KisShared();

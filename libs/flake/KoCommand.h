@@ -314,7 +314,7 @@ private:
 };
 
 /// The undo / redo command for distributing shapes
-class KoShapeDistributeCommand : public KCommand
+class FLAKE_EXPORT KoShapeDistributeCommand : public KCommand
 {
 public:
     /// The different options to ditribute with this command
@@ -350,7 +350,7 @@ private:
 };
 
 /// The undo / redo command to lock a set of shapes position and size
-class KoShapeLockCommand : public KCommand
+class FLAKE_EXPORT KoShapeLockCommand : public KCommand
 {
 public:
     /**

@@ -633,8 +633,10 @@ QString KoStore::toExternalNaming( const QString & _internalNaming ) const
   return expandEncodedPath( intern );
 }
 
-QString KoStore::expandEncodedPath( QString intern ) const
+QString KoStore::expandEncodedPath( const QString& _intern ) const
 {
+  QString intern = _intern;
+
   if ( m_namingVersion == NAMING_VERSION_RAW )
     return intern;
 
@@ -667,8 +669,10 @@ QString KoStore::expandEncodedPath( QString intern ) const
   return result;
 }
 
-QString KoStore::expandEncodedDirectory( QString intern ) const
+QString KoStore::expandEncodedDirectory( const QString& _intern ) const
 {
+  QString intern = _intern;
+
   if ( m_namingVersion == NAMING_VERSION_RAW )
     return intern;
 

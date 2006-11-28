@@ -336,13 +336,13 @@ private:
   /**
    *  Expands a full path name for a stream (directories+filename)
    */
-  QString expandEncodedPath( QString intern ) const;
+  QString expandEncodedPath( const QString& intern ) const;
 
   /**
    * Expands only directory names(!)
    * Needed for the path handling code, as we only operate on internal names
    */
-  QString expandEncodedDirectory( QString intern ) const;
+  QString expandEncodedDirectory( const QString& intern ) const;
 
   mutable enum
   {

@@ -155,13 +155,15 @@ bool KoPictureShared::loadTmp(QIODevice* io)
     return identifyAndLoad( array );
 }
 
-bool KoPictureShared::identifyAndLoad( QByteArray array )
+bool KoPictureShared::identifyAndLoad( const QByteArray& _array )
 {
-    if ( array.size() < 5 )
+    if ( _array.size() < 5 )
     {
         kError(30003) << "Picture is less than 5 bytes long!" << endl;
         return false;
     }
+
+    QByteArray array = _array;
 
     QString strExtension;
     bool flag=false;

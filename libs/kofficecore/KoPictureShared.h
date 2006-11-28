@@ -191,7 +191,7 @@ protected:
     bool loadTmp(QIODevice* io);
 
     /// Find type of image, create base accordingly, and load data
-    bool identifyAndLoad( QByteArray data );
+    bool identifyAndLoad( const QByteArray& data );
 
     /**
      * @internal

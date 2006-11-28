@@ -21,7 +21,7 @@
 
 #include <QAtomic>
 #include <kis_shared_ptr.h>
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KisSharedData;
 

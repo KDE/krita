@@ -25,6 +25,7 @@
 
 #include <QSlider>
 #include <QPoint>
+#include <QRect>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -39,6 +40,7 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_global.h>
+#include <kis_statusbar.h>
 #include <kis_types.h>
 #include <kis_view2.h>
 #include <kis_selection.h>
@@ -46,6 +48,7 @@
 #include <kis_transaction.h>
 #include <kis_image_manager.h>
 #include <kis_layer_manager.h>
+#include <kis_transform_visitor.h>
 
 #include "imagesize.h"
 #include "dlg_imagesize.h"
@@ -64,18 +67,18 @@ ImageSize::ImageSize(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/imagesize.rc"), true);
 
-        KAction *action = new KAction(i18n("Change &Image Size..."), actionCollection(), "imagesize");
+        KAction *action = new KAction(i18n("Scale or Resize &Image..."), actionCollection(), "imagesize");
         action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_S));
         connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
-        action = new KAction(i18n("Change &Layer Size..."), actionCollection(), "layersize");
+        action = new KAction(i18n("Scale &Layer..."), actionCollection(), "layersize");
         connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
         m_view = (KisView2*) parent;
         // Selection manager takes ownership?
-        action = new KAction(i18n("&Layer Size..."), actionCollection(), "selectionScale");
+        action = new KAction(i18n("&Scale Selection..."), actionCollection(), "selectionscale");
         Q_CHECK_PTR(action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
+        connect(action, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
 
         m_view ->selectionManager()->addSelectionAction(action);
     }
@@ -132,15 +135,18 @@ void ImageSize::slotLayerSize()
 
     KisConfig cfg;
 
-    dlgLayerSize->setWidth(image->width());
-    dlgLayerSize->setHeight(image->height());
+    KisPaintDeviceSP dev = image->activeDevice();
+    QRect rc = dev->exactBounds();
+
+    dlgLayerSize->setWidth(rc.width());
+    dlgLayerSize->setHeight(rc.height());
 
     if (dlgLayerSize->exec() == QDialog::Accepted) {
         qint32 w = dlgLayerSize->width();
         qint32 h = dlgLayerSize->height();
 
-        m_view->layerManager()->scaleLayer((double)w / ((double)(image->width())),
-                                           (double)h / ((double)(image->height())),
+        m_view->layerManager()->scaleLayer((double)w / ((double)(rc.width())),
+                                           (double)h / ((double)(rc.height())),
                                            dlgLayerSize->filterType());
     }
     delete dlgLayerSize;
@@ -148,9 +154,6 @@ void ImageSize::slotLayerSize()
 
 void ImageSize::slotSelectionScale()
 {
-    // XXX: figure out a way to add selection actions to the selection
-    // manager to enable/disable
-
     KisImageSP image = m_view->image();
 
     if (!image) return;
@@ -162,28 +165,30 @@ void ImageSize::slotSelectionScale()
     if (!layer->hasSelection()) return;
 
 
-    DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "SelectionScale");
-    Q_CHECK_PTR(dlgImageSize);
+    DlgLayerSize * dlgSize = new DlgLayerSize(m_view, "SelectionScale");
+    Q_CHECK_PTR(dlgSize);
 
-    dlgImageSize->setCaption(i18n("Scale Selection"));
+    dlgSize->setCaption(i18n("Scale Selection"));
 
     KisConfig cfg;
 
-    dlgImageSize->setWidth(image->width());
-    dlgImageSize->setHeight(image->height());
+    QRect rc = layer->selection()->selectedRect();
 
-    dlgImageSize->hideScaleBox();
+    dlgSize->setWidth(rc.width());
+    dlgSize->setHeight(rc.height());
 
-    if (dlgImageSize->exec() == QDialog::Accepted) {
-        qint32 w = dlgImageSize->width();
-        qint32 h = dlgImageSize->height();
-
-        m_view->layerManager()->scaleLayer((double)w / ((double)(image->width())),
-                     (double)h / ((double)(image->height())),
-                     dlgImageSize->filterType());
-
+    if (dlgSize->exec() == QDialog::Accepted) {
+        qint32 w = dlgSize->width();
+        qint32 h = dlgSize->height();
+        KisTransformWorker worker(layer->selection().data(), 
+                (double)w / ((double)(rc.width())),
+                (double)h / ((double)(rc.height())),
+                0, 0, 0.0, 0, 0, m_view->statusBar()->progress(), 
+                dlgSize->filterType()
+                );
+        worker.run();
     }
-    delete dlgImageSize;
+    delete dlgSize;
 }
 
 

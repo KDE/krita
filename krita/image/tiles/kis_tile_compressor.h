@@ -4,7 +4,7 @@
 #include <QQueue>
 #include <QByteArray>
 #include <QThread>
-
+class KisTile;
 class KisTileCompressor : QThread
 {
 
@@ -25,7 +25,7 @@ private:
 
 private:
 
-    QQueue m_tileQueue;
+    QQueue<KisTile*> m_tileQueue;
 };
 
 

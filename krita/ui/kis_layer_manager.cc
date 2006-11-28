@@ -828,7 +828,7 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     worker.run();
 
     if (t) m_view->undoAdapter()->addCommand(t);
-
+    m_view->image()->rootLayer()->setDirty(false);
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();

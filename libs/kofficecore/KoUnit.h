@@ -165,8 +165,11 @@ public:
     static QStringList listOfUnitName();
 
     /// parse common %KOffice and OO values, like "10cm", "5mm" to pt
-    static double parseValue( QString value, double defaultVal = 0.0 );
+    static double parseValue( QString& value, double defaultVal = 0.0 );
     // Note: the above method doesn't take a const ref, since it modifies the arg.
+
+    // same version, but not modifying the argument 
+    static double parseValue( const QString& value, double defaultVal = 0.0 );
 
     /// Save a unit in OASIS format
     static void saveOasis(KoXmlWriter* settingsWriter, Unit _unit);

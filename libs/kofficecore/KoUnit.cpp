@@ -144,13 +144,19 @@ double KoUnit::fromUserValue( const QString& value, Unit unit, bool* ok )
     return fromUserValue( KGlobal::locale()->readNumber( value, ok ), unit );
 }
 
-double KoUnit::parseValue( QString value, double defaultVal )
+double KoUnit::parseValue( const QString& _value, double defaultVal )
 {
-    value.simplified();
-    value.remove( ' ' );
+    QString value = _value;
+    return parseValue( value, defaultVal );
+}
 
+double KoUnit::parseValue( QString& value, double defaultVal )
+{
     if( value.isEmpty() )
         return defaultVal;
+
+    value.simplified();
+    value.remove( ' ' );
 
     int index = value.indexOf( QRegExp( "[a-z]+$" ) );
     if ( index == -1 )

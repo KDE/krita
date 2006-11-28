@@ -21,10 +21,10 @@
 #define KROSS_PYTHONINTERPRETER_H
 
 #include "pythonconfig.h"
-#include "../core/krossconfig.h"
-#include "../core/interpreter.h"
-#include "../core/action.h"
-#include "../core/manager.h"
+#include <kross/core/krossconfig.h>
+#include <kross/core/interpreter.h>
+#include <kross/core/action.h>
+#include <kross/core/manager.h>
 
 #include <QString>
 

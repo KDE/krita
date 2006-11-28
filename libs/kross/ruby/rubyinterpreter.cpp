@@ -25,7 +25,7 @@
 
 //#include "../core/exception.h"
 //#include "../core/module.h"
-#include "../core/manager.h"
+#include <kross/core/manager.h>
 
 #include "rubyconfig.h"
 #include "rubyextension.h"

@@ -13,6 +13,6 @@ add_subdirectory( kopainter )
 add_subdirectory( flake )
 add_subdirectory( pigment )
 if(KOFFICE_ENABLE_SCRIPTING)
-	#add_subdirectory(kross)
+add_subdirectory(kross)
 endif(KOFFICE_ENABLE_SCRIPTING)
 

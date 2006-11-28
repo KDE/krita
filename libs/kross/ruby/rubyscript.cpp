@@ -26,7 +26,7 @@
 #include <rubysig.h>
 #include <node.h>
 
-#include "../core/action.h"
+#include <kross/core/action.h>
 
 #include "rubyconfig.h"
 #include "rubyextension.h"

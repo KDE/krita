@@ -26,7 +26,7 @@
 //#include <typeinfo>
 
 #include "rubyconfig.h"
-#include "../core/metatype.h"
+#include <kross/core/metatype.h>
 
 #include <QString>
 #include <QStringList>

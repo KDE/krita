@@ -26,7 +26,7 @@
 #include <QString>
 #include <QObject>
 
-#include "../core/krossconfig.h"
+#include <kross/core/krossconfig.h>
 //#include "../core/object.h"
 //#include "../core/module.h"
 

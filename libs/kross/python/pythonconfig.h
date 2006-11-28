@@ -20,7 +20,7 @@
 #ifndef KROSS_PYTHON_CONFIG_H
 #define KROSS_PYTHON_CONFIG_H
 
-#include "../core/krossconfig.h"
+#include <kross/core/krossconfig.h>
 
 // Prevent warnings
 #if defined(_XOPEN_SOURCE)

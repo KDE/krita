@@ -20,7 +20,7 @@
 #ifndef KROSS_RUBY_CONFIG_H
 #define KROSS_RUBY_CONFIG_H
 
-#include "../core/krossconfig.h"
+#include <kross/core/krossconfig.h>
 
 namespace Kross {
 

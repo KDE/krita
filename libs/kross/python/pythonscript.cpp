@@ -22,7 +22,7 @@
 #include "pythoninterpreter.h"
 #include "pythonextension.h"
 #include "pythonvariant.h"
-#include "../core/action.h"
+#include <kross/core/action.h>
 
 using namespace Kross;
 

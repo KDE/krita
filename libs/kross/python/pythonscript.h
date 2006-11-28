@@ -21,7 +21,7 @@
 #define KROSS_PYTHONSCRIPT_H
 
 #include "pythonconfig.h"
-#include "../core/script.h"
+#include <kross/core/script.h>
 
 namespace Kross {
 

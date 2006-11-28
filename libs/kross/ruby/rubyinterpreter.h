@@ -23,8 +23,8 @@
 
 #include <ruby.h>
 
-#include "../core/krossconfig.h"
-#include "../core/interpreter.h"
+#include <kross/core/krossconfig.h>
+#include <kross/core/interpreter.h>
 
 namespace Kross {
 

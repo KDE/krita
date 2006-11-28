@@ -21,8 +21,8 @@
 #ifndef KROSS_RUBYRUBYSCRIPT_H
 #define KROSS_RUBYRUBYSCRIPT_H
 
-#include "../core/krossconfig.h"
-#include "../core/script.h"
+#include <kross/core/krossconfig.h>
+#include <kross/core/script.h>
 
 namespace Kross {
 

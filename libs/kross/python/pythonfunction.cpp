@@ -22,7 +22,7 @@
 
 #include "pythonfunction.h"
 #include "pythonvariant.h"
-#include "../core/metatype.h"
+#include <kross/core/metatype.h>
 
 #include <QByteArray>
 #include <QPointer>

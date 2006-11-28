@@ -22,7 +22,7 @@
 
 #include "rubycallcache.h"
 #include "rubyvariant.h"
-#include "../core/metatype.h"
+#include <kross/core/metatype.h>
 
 //#include <st.h>
 

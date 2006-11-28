@@ -51,7 +51,7 @@
 #include <KoZoomHandler.h>
 #include <KoViewConverter.h>
 #include <KoView.h>
-#include <KoToolDocker.h>
+#include <KoToolDockerFactory.h>
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
@@ -357,7 +357,7 @@ void KisView2::slotLoadingFinished()
     m_d->layerManager->layersUpdated();
     updateGUI();
 
-    KoToolDockerFactory toolDockerFactory(m_d->canvas);
+    KoToolDockerFactory toolDockerFactory;
     KoToolDocker * d =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
     if(d)
         m_d->canvasController->setToolOptionDocker( d );

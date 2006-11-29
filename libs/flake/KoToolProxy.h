@@ -24,13 +24,12 @@
 
 #include <QPainter>
 
-#include <KoViewConverter.h>
-
 class QPaintEvent;
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
 class QTabletEvent;
+class KoToolSelection;
 
 /**
  * Simple proxy interface that provides a point d'appui for canvas
@@ -62,6 +61,7 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *event) = 0;
     virtual void wheelEvent ( QWheelEvent * event, const QPointF &pnt  ) = 0;
 
+    virtual KoToolSelection* selection() = 0;
 };
 
 

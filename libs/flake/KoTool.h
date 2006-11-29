@@ -30,6 +30,7 @@
 class KoCanvasBase;
 class KoPointerEvent;
 class KoViewConverter;
+class KoToolSelection;
 
 class QKeyEvent;
 class QWidget;
@@ -127,6 +128,8 @@ public:
      * Quick help is a short help text about the way the tool functions.
      */
     virtual QString quickHelp() const { return ""; }
+
+    virtual KoToolSelection* selection() { return 0; }
 
 public: // Events
 

@@ -40,30 +40,6 @@ KoTextTool::KoTextTool(KoCanvasBase *canvas)
 KoTextTool::~KoTextTool() {
 }
 
-void KoTextTool::textBold() {
-    QTextCharFormat cf = m_caret.charFormat();
-    cf.setFontWeight( (cf.fontWeight() <= QFont::Normal) ? QFont::Bold : QFont::Normal );
-    m_caret.mergeCharFormat(cf);
-}
-
-void KoTextTool::textItalic() {
-    QTextCharFormat cf = m_caret.charFormat();
-    cf.setFontItalic(! cf.fontItalic());
-    m_caret.mergeCharFormat(cf);
-}
-
-void KoTextTool::textUnderline() {
-    QTextCharFormat cf = m_caret.charFormat();
-    cf.setFontUnderline(! cf.fontUnderline());
-    m_caret.mergeCharFormat(cf);
-}
-
-void KoTextTool::textStrikeOut() {
-    QTextCharFormat cf = m_caret.charFormat();
-    cf.setFontStrikeOut(! cf.fontStrikeOut());
-    m_caret.mergeCharFormat(cf);
-}
-
 void KoTextTool::paint( QPainter &painter, KoViewConverter &converter) {
     if(painter.hasClipping()) {
         QRect shape = converter.documentToView(m_textShape->boundingRect()).toRect();
@@ -124,6 +100,14 @@ void KoTextTool::mousePressEvent( KoPointerEvent *event ) {
     repaint();
     m_caret.setPosition(position);
     repaint();
+
+    updateSelectionHandler();
+}
+
+void KoTextTool::updateSelectionHandler() {
+    m_selectionHandler.setShape(m_textShape);
+    m_selectionHandler.setShapeData(m_textShapeData);
+    m_selectionHandler.setCaret(&m_caret);
 }
 
 int KoTextTool::pointToPosition(const QPointF & point) const {
@@ -150,6 +134,8 @@ void KoTextTool::mouseMoveEvent( KoPointerEvent *event ) {
         m_caret.setPosition(position, QTextCursor::KeepAnchor);
         repaint();
     }
+
+    updateSelectionHandler();
 }
 
 void KoTextTool::mouseReleaseEvent( KoPointerEvent *event ) {
@@ -218,6 +204,8 @@ void KoTextTool::keyPressEvent(QKeyEvent *event) {
             (event->modifiers() & Qt::ShiftModifier)?QTextCursor::KeepAnchor:QTextCursor::MoveAnchor);
         repaint();
     }
+
+    updateSelectionHandler();
 }
 
 void KoTextTool::keyReleaseEvent(QKeyEvent *event) {
@@ -246,6 +234,8 @@ void KoTextTool::activate (bool temporary) {
     m_caret = QTextCursor(m_textShapeData->document());
     useCursor(Qt::IBeamCursor, true);
     m_textShape->repaint();
+
+    updateSelectionHandler();
 }
 
 void KoTextTool::deactivate() {
@@ -253,6 +243,8 @@ void KoTextTool::deactivate() {
     if(m_textShapeData)
         m_textShapeData->document()->setUndoRedoEnabled(false); // erase undo history.
     m_textShapeData = 0;
+
+    updateSelectionHandler();
 }
 
 void KoTextTool::repaint() {
@@ -273,34 +265,8 @@ void KoTextTool::repaint() {
     }
 }
 
-void KoTextTool::createOptionWidget() {
-    class OptionWidget : public QWidget {
-      public:
-        OptionWidget() {
-        }
-    };
-    QWidget *widget = new OptionWidget();
-
-    QAction *bold = new QAction(widget);
-    bold->setText("Bold");
-    bold->setShortcut(QKeySequence ("Ctrl+B"));
-
-    QAction *italic = new QAction(widget);
-    italic->setText("Italic");
-    italic->setShortcut(QKeySequence ("Ctrl+I"));
-
-    QAction *underline = new QAction(widget);
-    underline->setText("Underline");
-    underline->setShortcut(QKeySequence ("Ctrl+U"));
-
-    widget->addAction(bold);
-    widget->addAction(italic);
-    widget->addAction(underline);
-
-    connect(bold, SIGNAL(triggered()), this, SLOT( textBold()) );
-    connect(italic, SIGNAL(triggered()), this, SLOT( textItalic()) );
-    connect(underline, SIGNAL(triggered()), this, SLOT( textUnderline()) );
-    m_optionWidget = widget;
+KoToolSelection* KoTextTool::selection() {
+    return &m_selectionHandler;
 }
 
 #include "KoTextTool.moc"

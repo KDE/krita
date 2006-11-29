@@ -17,50 +17,39 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOTEXTTOOL_H
-#define KOTEXTTOOL_H
+#ifndef KOTEXTSELECTIONHANDLER_H
+#define KOTEXTSELECTIONHANDLER_H
 
-#include "KoTextShape.h"
-#include "KoTextSelectionHandler.h"
+#include <KoToolSelection.h>
 
-#include <KoTool.h>
+#include <koffice_export.h>
 
-#include <QTextCursor>
-
+class KoTextShape;
+class KoTextShapeData;
+class QTextCursor;
 
 /**
- * This is the tool for the text-shape (which is a flake-based plugin).
+ * The public class that is able to manipulate selected text.
  */
-class KoTextTool : public KoTool {
-    Q_OBJECT
+class KOTEXT_EXPORT KoTextSelectionHandler : public KoToolSelection {
 public:
-    KoTextTool(KoCanvasBase *canvas);
-    ~KoTextTool();
+    KoTextSelectionHandler() {}
 
-    void paint( QPainter &painter, KoViewConverter &converter );
+    void bold(bool bold);
+    void italic(bool italic);
+    void underline(bool underline);
+    void strikeOut(bool strikeout);
 
-    void mousePressEvent( KoPointerEvent *event ) ;
-    void mouseDoubleClickEvent( KoPointerEvent *event );
-    void mouseMoveEvent( KoPointerEvent *event );
-    void mouseReleaseEvent( KoPointerEvent *event );
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
-
-    void activate (bool temporary=false);
-    void deactivate();
-
-    KoToolSelection* selection();
-
-private:
-    void repaint();
-    int pointToPosition(const QPointF & point) const;
-    void updateSelectionHandler();
+protected:
+    friend class KoTextTool;
+    void setShape(KoTextShape *shape) { m_textShape = shape; }
+    void setShapeData(KoTextShapeData *data) { m_textShapeData = data; }
+    void setCaret(QTextCursor *caret) { m_caret = caret; }
 
 private:
     KoTextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
-    QTextCursor m_caret;
-    KoTextSelectionHandler m_selectionHandler;
+    QTextCursor *m_caret;
 };
 
 #endif

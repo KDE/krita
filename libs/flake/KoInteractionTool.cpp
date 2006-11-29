@@ -103,17 +103,17 @@ bool KoInteractionTool::wantsAutoScroll()
 void KoInteractionTool::updateCursor() {
     QCursor cursor = Qt::ArrowCursor;
 
-    if(selection()->count() > 0) { // has a selection
+    if(koSelection()->count() > 0) { // has a selection
         bool editable=false;
-        foreach(KoShape *shape, selection()->selectedShapes(KoFlake::StrippedSelection)) {
+        foreach(KoShape *shape, koSelection()->selectedShapes(KoFlake::StrippedSelection)) {
             if(!shape->isLocked())
                 editable = true;
         }
 
-        if(selection()->count()>1)
-            m_angle = selection()->rotation();
+        if(koSelection()->count()>1)
+            m_angle = koSelection()->rotation();
         else
-            m_angle = selection()->firstSelectedShape()->rotation();
+            m_angle = koSelection()->firstSelectedShape()->rotation();
 
         int rotOctant = 8 + int(8.5 + m_angle / 45);
 
@@ -188,10 +188,10 @@ void KoInteractionTool::updateCursor() {
 void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
     if ( m_currentStrategy )
         m_currentStrategy->paint( painter, converter);
-    else if(selection()->count() > 0) {
+    else if(koSelection()->count() > 0) {
         SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle,
                  true, true);
-        decorator.setSelection(selection());
+        decorator.setSelection(koSelection());
         decorator.paint(painter, converter);
     }
 }
@@ -209,7 +209,7 @@ void KoInteractionTool::mouseMoveEvent( KoPointerEvent *event ) {
         m_currentStrategy->handleMouseMove( m_lastPoint, event->modifiers() );
     }
     else {
-        if(selection()->count() > 0) {
+        if(koSelection()->count() > 0) {
             QRectF bound = handlesSize();
             if(bound.contains(event->point)) {
                 bool inside;
@@ -232,7 +232,7 @@ void KoInteractionTool::mouseMoveEvent( KoPointerEvent *event ) {
 }
 
 QRectF KoInteractionTool::handlesSize() {
-    QRectF bound = selection()->boundingRect();
+    QRectF bound = koSelection()->boundingRect();
     // expansion Border
     QPointF border = m_canvas->viewConverter()->viewToDocument(QPointF(HANDLE_DISTANCE, HANDLE_DISTANCE));
     bound.adjust(-border.x(), -border.y(), border.x(), border.y());
@@ -282,7 +282,7 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
             QList<QPointF> prevPos;
             QList<QPointF> newPos;
             QList<KoShape*> shapes;
-            foreach(KoShape* shape, selection()->selectedShapes(KoFlake::StrippedSelection)) {
+            foreach(KoShape* shape, koSelection()->selectedShapes(KoFlake::StrippedSelection)) {
                 if(shape->isLocked())
                     continue;
                 shapes.append(shape);
@@ -326,11 +326,11 @@ void KoInteractionTool::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void KoInteractionTool::repaintDecorations() {
-    if ( selection()->count() > 0 )
+    if ( koSelection()->count() > 0 )
         m_canvas->updateCanvas(handlesSize());
 }
 
-KoSelection *KoInteractionTool::selection() {
+KoSelection *KoInteractionTool::koSelection() {
     return m_canvas->shapeManager()->selection();
 }
 
@@ -348,7 +348,7 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
         KoFlake::NoHandle
     };
 
-    if( selection()->count() == 0 )
+    if( koSelection()->count() == 0 )
         return KoFlake::NoHandle;
 
     recalcSelectionBox();
@@ -379,20 +379,20 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
 }
 
 void KoInteractionTool::recalcSelectionBox() {
-    if(selection()->count()==0)
+    if(koSelection()->count()==0)
         return;
 
-    if(selection()->count()>1)
+    if(koSelection()->count()>1)
     {
-        QMatrix matrix = selection()->transformationMatrix(0);
-        m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selection()->size())));
-        m_angle = selection()->rotation();
+        QMatrix matrix = koSelection()->transformationMatrix(0);
+        m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->size())));
+        m_angle = koSelection()->rotation();
     }
     else
     {
-        QMatrix matrix = selection()->firstSelectedShape()->transformationMatrix(0);
-        m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selection()->firstSelectedShape()->size())));
-        m_angle = selection()->firstSelectedShape()->rotation();
+        QMatrix matrix = koSelection()->firstSelectedShape()->transformationMatrix(0);
+        m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->firstSelectedShape()->size())));
+        m_angle = koSelection()->firstSelectedShape()->rotation();
     }
     QPolygonF outline = m_selectionOutline; //shorter name in the following :)
     m_selectionBox[KoFlake::TopMiddleHandle] = (outline.value(0)+outline.value(1))/2;

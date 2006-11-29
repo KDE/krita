@@ -104,7 +104,7 @@ private:
     QRectF handlesSize();
 
     // convenience method;
-    KoSelection * selection();
+    KoSelection * koSelection();
     KoFlake::SelectionHandle m_lastHandle;
     bool m_mouseWasInsideHandles;
     QPointF m_selectionBox[8];

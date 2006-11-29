@@ -46,6 +46,7 @@
 #include <QPaintEvent>
 #include <QTabletEvent>
 #include <QKeyEvent>
+#include <QGridLayout>
 #include <QDockWidget>
 #include <QStringList>
 #include <QAbstractButton>
@@ -54,6 +55,12 @@
 #include <kdebug.h>
 #include <kstaticdeleter.h>
 #include <kaction.h>
+
+/*
+ TODO
+    * We now have one m_activeTool, we should allow a different active tool per canvas.
+    * We now have one set of all tools per canvas, but this should be per canvas, per input device.
+*/
 
 
 namespace {
@@ -121,7 +128,6 @@ KoToolManager::KoToolManager()
     , m_activeTool(0)
 {
     m_dummyTool = new DummyTool();
-    m_dummyWidget = new QLabel(i18n("No options for current tool"));
     connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*,QWidget*)),
             this, SLOT(movedFocus(QWidget*,QWidget*)));
 }
@@ -196,6 +202,11 @@ void KoToolManager::wheelEvent ( QWheelEvent * event, const QPointF &pnt )
     if (m_activeTool) m_activeTool->wheelEvent( &ev );
 }
 
+KoToolSelection* KoToolManager::selection() {
+    if (m_activeTool)
+        return m_activeTool->selection();
+    return 0;
+}
 
 void KoToolManager::setup() {
     if (m_tools.size() > 0)
@@ -265,6 +276,7 @@ void KoToolManager::registerTools(KActionCollection *ac) {
     foreach(ToolHelper *th, m_tools) {
         ToolSwitchAction *tsa = new ToolSwitchAction(ac, "tools"+ th->name(), th->id());
         //tsa->setShortcut(th->shortcut()); // this crashes currently, lets try tomorrow with the kdelibs updates
+        tsa->setText(i18n("Activate %1", th->name()));
     }
 }
 
@@ -332,8 +344,6 @@ void KoToolManager::switchTool(const QString &id, bool temporary) {
 }
 
 void KoToolManager::switchTool(KoTool *tool) {
-
-    if (!tool) kDebug() << kBacktrace();
     Q_ASSERT(tool);
     if (m_activeCanvas == 0) {
         return;
@@ -361,8 +371,6 @@ void KoToolManager::switchTool(KoTool *tool) {
     foreach(KoCanvasController *controller, m_canvases) {
         if (!controller->canvas())
             continue;
-        // XXX: Obsolete with toolproxy? (Did I write this XXX? BSAR)
-        // controller->canvas()->setTool(controller==m_activeCanvas ? m_activeTool : m_dummyTool);
         // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
         controller->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     }
@@ -373,7 +381,11 @@ void KoToolManager::switchTool(KoTool *tool) {
             m_activeCanvas->toolOptionDocker()->setOptionWidget( m_activeTool->optionWidget() );
         }
         else {
-            m_activeCanvas->toolOptionDocker()->setOptionWidget( m_dummyWidget );
+            QWidget *widget = new QWidget();
+            QGridLayout *lay = new QGridLayout(widget);
+            QLabel *label = new QLabel(i18n("No options for current tool"), widget);
+            lay->addWidget(label, 0, 0, Qt::AlignTop | Qt::AlignHCenter);
+            m_activeCanvas->toolOptionDocker()->setOptionWidget( widget );
         }
     }
     emit changedTool(m_uniqueToolIds.value(m_activeTool));

@@ -39,6 +39,7 @@ class KoCreateShapesTool;
 class KoToolBox;
 class KActionCollection;
 class KoShape;
+class KoToolSelection;
 
 
 /**
@@ -104,12 +105,12 @@ public:
     ~KoToolManager();
 
 
-public: // KoToolProxy implementation
+public:
 
     KoToolProxy * toolProxy() { return this; }
 
 private:
-
+    // KoToolProxy implementation
     void paint( QPainter &painter, KoViewConverter &converter );
     void repaintDecorations();
     void tabletEvent( QTabletEvent *event, const QPointF &pnt );
@@ -120,6 +121,8 @@ private:
     void keyPressEvent(QKeyEvent *event );
     void keyReleaseEvent(QKeyEvent *event);
     void wheelEvent ( QWheelEvent * event, const QPointF &pnt );
+    KoToolSelection* selection();
+
 
 public:
     /**
@@ -135,6 +138,13 @@ public:
      */
     KoToolBox *toolBox(const QString &applicationName = QString());
 
+    /**
+     * Register actions for switching to tools at the actionCollection parameter.
+     * The actions will have the text / shortcut as stated by the toolFactory.
+     * If the application calls this in their KoView extending class they will have all the benefits
+     * from allowing this in the menus and to allow the use to configure the shortcuts used.
+     * @param ac the actionCollection that will be the parent of the actions.
+     */
     void registerTools(KActionCollection *ac);
 
     /**
@@ -229,8 +239,6 @@ private:
     QStack<QString> m_stack; // stack of temporary tools
 
     QList<KoShape*> m_lastSelectedShapes;
-
-    QLabel * m_dummyWidget;
 };
 
 #endif

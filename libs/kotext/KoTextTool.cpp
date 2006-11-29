@@ -35,20 +35,6 @@ KoTextTool::KoTextTool(KoCanvasBase *canvas)
 , m_textShape(0)
 , m_textShapeData(0)
 {
-    class OptionWidget : public QWidget {
-      public:
-        OptionWidget() {
-        }
-    };
-    m_optionWidget = new OptionWidget();
-
-    QAction *bold = new QAction(m_optionWidget);
-    bold->setText("Bold");
-    bold->setShortcut(QKeySequence ("Ctrl+B"));
-
-    m_optionWidget->addAction(bold);
-
-    connect(bold, SIGNAL(triggered()), this, SLOT( textBold()) );
 }
 
 KoTextTool::~KoTextTool() {
@@ -304,6 +290,24 @@ void KoTextTool::repaint() {
         repaintRect.moveTopLeft(repaintRect.topLeft() + m_textShape->position());
         m_canvas->updateCanvas(repaintRect);
     }
+}
+
+void KoTextTool::createOptionWidget() {
+    class OptionWidget : public QWidget {
+      public:
+        OptionWidget() {
+        }
+    };
+    QWidget *widget = new OptionWidget();
+
+    QAction *bold = new QAction(widget);
+    bold->setText("Bold");
+    bold->setShortcut(QKeySequence ("Ctrl+B"));
+
+    widget->addAction(bold);
+
+    connect(bold, SIGNAL(triggered()), this, SLOT( textBold()) );
+    m_optionWidget = widget;
 }
 
 #include "KoTextTool.moc"

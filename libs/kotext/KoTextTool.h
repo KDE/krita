@@ -44,6 +44,9 @@ public:
     void activate (bool temporary=false);
     void deactivate();
 
+protected:
+    void createOptionWidget();
+
 private slots:
     void textBold();
     //void textItalic();

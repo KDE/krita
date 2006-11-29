@@ -124,7 +124,7 @@ class KOFFICEUI_EXPORT KoInsertLinkDia : public KPageDialog
 {
     Q_OBJECT
 public:
-    KoInsertLinkDia( QWidget *parent, const char *name = 0,bool displayBookmarkLink=true );
+    explicit KoInsertLinkDia( QWidget *parent, const char *name = 0,bool displayBookmarkLink=true );
     static bool createLinkDia(QString & linkName, QString & hrefName, const QStringList& bkmlist, bool displayBookmarkLink = true,
                               QWidget* parent = 0, const char* name = 0);
 

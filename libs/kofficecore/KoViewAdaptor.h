@@ -41,7 +41,7 @@ class KOFFICECORE_EXPORT KoViewAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.view")
 public:
-    KoViewAdaptor( KoView *view );
+    explicit KoViewAdaptor( KoView *view );
     //KoViewAdaptor( const char *name, KoView *view );
     // TODO same args order as KoDocumentIface
 

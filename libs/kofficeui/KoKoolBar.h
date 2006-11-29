@@ -103,7 +103,7 @@ class KoKoolBarBox : public Q3Frame
 {
   Q_OBJECT
 public:
-  KoKoolBarBox( KoKoolBar *_bar );
+  explicit KoKoolBarBox( KoKoolBar *_bar );
 
   void setActiveGroup( KoKoolBarGroup *_grp );
   int maxHeight() const;

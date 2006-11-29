@@ -34,7 +34,7 @@ class KOFFICEUI_EXPORT KoPen : public QPen
   public:
     KoPen();
     KoPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style);
-    KoPen(const QColor& _color);
+    explicit KoPen(const QColor& _color);
     ~KoPen();
 
     /**

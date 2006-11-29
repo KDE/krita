@@ -34,7 +34,7 @@ class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
     Q_OBJECT
 
     public:
-        KoDocumentSectionDelegate( KoDocumentSectionView *view, QObject *parent = 0 );
+        explicit KoDocumentSectionDelegate( KoDocumentSectionView *view, QObject *parent = 0 );
         virtual ~KoDocumentSectionDelegate();
 
         virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;

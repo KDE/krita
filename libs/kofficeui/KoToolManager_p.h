@@ -38,7 +38,7 @@ class QAbstractButton;
 class ToolHelper : public QObject {
     Q_OBJECT
 public:
-    ToolHelper(KoToolFactory *tool);
+    explicit ToolHelper(KoToolFactory *tool);
     QAbstractButton *createButton();
     /// wrapper around KoToolFactory::id();
     const QString &id() const;

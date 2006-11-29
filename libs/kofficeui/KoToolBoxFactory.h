@@ -29,7 +29,7 @@
 class KOFFICEUI_EXPORT KoToolBoxFactory : public KoDockFactory
 {
     public:
-        KoToolBoxFactory(const QString& appName);
+        explicit KoToolBoxFactory(const QString& appName);
 
         virtual QString dockId() const;
         virtual Qt::DockWidgetArea defaultDockWidgetArea() const;

@@ -33,7 +33,7 @@
 class KoCsvImportWidget : public QWidget, public Ui::KoCsvImportWidget
 {
   public:
-    KoCsvImportWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
+    explicit KoCsvImportWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
 };
 
 class KOFFICEUI_EXPORT KoCsvImportDialog : public KDialog

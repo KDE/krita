@@ -49,9 +49,9 @@ protected:
 
 private slots:
     void textBold();
-    //void textItalic();
-    //void textUnderline();
-    //void textStrikeOut();
+    void textItalic();
+    void textUnderline();
+    void textStrikeOut();
 
 private:
     void repaint();

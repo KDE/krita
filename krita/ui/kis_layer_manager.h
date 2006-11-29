@@ -22,6 +22,7 @@
 #include <QList>
 
 #include "kis_types.h"
+#include <krita_export.h>
 
 class QRect;
 
@@ -43,7 +44,7 @@ class KisFilterConfiguration;
    KisLayerManager takes care of the gui around working with layers:
    adding, removing, editing.
 */
-class KisLayerManager : public QObject {
+class KRITAUI_EXPORT KisLayerManager : public QObject {
 
     Q_OBJECT
 

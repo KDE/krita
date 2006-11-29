@@ -22,10 +22,11 @@
 
 #include <math.h>
 #include <QPointF>
+#include <krita_export.h>
 
 class QRect;
 
-class KisPerspectiveMath {
+class KRITAIMAGE_EXPORT KisPerspectiveMath {
     private:
         KisPerspectiveMath() { }
     public:

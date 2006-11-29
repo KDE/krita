@@ -141,7 +141,7 @@ protected:
  * Registry, because it isCompatibleWith all colorspaces, and should only be used in extreme
  * cases (like no other producer being available
  **/
-class /*PIGMENT_EXPORT*/ KoGenericRGBHistogramProducer : public KoBasicHistogramProducer {
+class PIGMENT_EXPORT KoGenericRGBHistogramProducer : public KoBasicHistogramProducer {
 public:
     KoGenericRGBHistogramProducer();
     virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
@@ -153,7 +153,7 @@ protected:
 };
 
 /** KoGenericRGBHistogramProducer his special Factory that isCompatibleWith everything. */
-class  /*PIGMENT_EXPORT*/ KoGenericRGBHistogramProducerFactory : public KoHistogramProducerFactory {
+class  PIGMENT_EXPORT KoGenericRGBHistogramProducerFactory : public KoHistogramProducerFactory {
 public:
     KoGenericRGBHistogramProducerFactory()
         : KoHistogramProducerFactory(KoID("GENRGBHISTO", i18n("Generic RGB Histogram"))) {}
@@ -169,7 +169,7 @@ public:
  * to L*a*b*, and then does its counting.
  * It isCompatibleWith all colorspaces
  **/
-class  /*PIGMENT_EXPORT*/ KoGenericLabHistogramProducer : public KoBasicHistogramProducer {
+class  PIGMENT_EXPORT KoGenericLabHistogramProducer : public KoBasicHistogramProducer {
     public:
         KoGenericLabHistogramProducer();
         virtual ~KoGenericLabHistogramProducer();

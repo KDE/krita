@@ -21,12 +21,13 @@
 #include <QObject>
 
 #include <kurl.h>
+#include <krita_export.h>
 
 class KisView2;
 class KActionCollection;
 class KisFilterStrategy;
 
-class KisImageManager : public QObject {
+class KRITAUI_EXPORT KisImageManager : public QObject {
 
     Q_OBJECT
 

@@ -21,7 +21,7 @@
 #define KIS_RANDOM_ACCESSOR_H
 
 #include <kis_shared_ptr.h>
-
+#include <krita_export.h>
 #include <kis_global.h>
 
 class KisTiledRandomAccessor;
@@ -33,7 +33,7 @@ class KisTiledDataManager;
  * Gives a random access to the pixel of an image. Use the moveTo function, to select the pixel. And then rawData to
  * access the value of a pixel.
  */
- class KisRandomConstAccessor{
+ class KRITAIMAGE_EXPORT KisRandomConstAccessor{
         friend class KisRandomAccessor;
         KisRandomConstAccessor(KisTiledDataManager *ktm, Q_INT32 x, Q_INT32 y, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
     public:

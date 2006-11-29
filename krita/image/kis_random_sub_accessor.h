@@ -23,8 +23,9 @@
 #include "KoPoint.h"
 #include "kis_random_accessor.h"
 #include "kis_types.h"
+#include <krita_export.h>
 
-class KisRandomSubAccessorPixel{
+class  KRITAIMAGE_EXPORT KisRandomSubAccessorPixel{
     public:
         KisRandomSubAccessorPixel(const KisPaintDeviceSP device);
         ~KisRandomSubAccessorPixel();

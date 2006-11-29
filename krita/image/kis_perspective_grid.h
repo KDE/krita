@@ -27,6 +27,7 @@
 #include <kis_perspective_math.h>
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
+#include <koffice_export.h>
 
 class KisPerspectiveGridNode : public QPointF, public KisShared {
     public:
@@ -84,7 +85,7 @@ class KisSubPerspectiveGrid {
         static int s_lastIndex;
 };
 
-class KisPerspectiveGrid {
+class KRITAIMAGE_EXPORT KisPerspectiveGrid {
     public:
         KisPerspectiveGrid();
         ~KisPerspectiveGrid();

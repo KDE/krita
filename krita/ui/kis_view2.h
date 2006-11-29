@@ -24,7 +24,7 @@
 #include <KoView.h>
 #include <KoToolBox.h>
 #include <KoToolManager.h>
-
+#include <krita_export.h>
 #include <kis_types.h>
 
 class QDragEnterEvent;
@@ -51,7 +51,7 @@ class KisImageManager;
  * Following the broad model-view-controller idea this class shows you one view on the document.
  * There can be multiple views of the same document each in with independent settings for viewMode and zoom etc. 
  */
-class KisView2 : public KoView {
+class KRITAUI_EXPORT KisView2 : public KoView {
 
 Q_OBJECT
 

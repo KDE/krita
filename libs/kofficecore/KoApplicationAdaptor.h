@@ -23,6 +23,7 @@
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
+#include <koffice_export.h>
 class QByteArray;
 template<class T> class QList;
 template<class Key, class Value> class QMap;
@@ -33,7 +34,7 @@ class QStringList;
 /**
  * D-BUS interface for any KOffice application (entry point)
  */
-class KoApplicationAdaptor : public QDBusAbstractAdaptor
+class KOFFICECORE_EXPORT KoApplicationAdaptor : public QDBusAbstractAdaptor
 {
   Q_OBJECT
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.application")

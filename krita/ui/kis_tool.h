@@ -25,7 +25,7 @@
 #include <KoTool.h>
 #include <KoID.h>
 #include <KoCanvasResourceProvider.h>
-
+#include <krita_export.h>
 #include <kis_types.h>
 
 class KoCanvasBase;
@@ -43,7 +43,7 @@ static const QString TOOL_TYPE_VIEW = "Krita/View"; // Tools that affect the can
 static const QString TOOL_TYPE_SELECTED = "Krita/Select"; // Tools that select pixels
 
 
-class  KisTool
+class  KRITAUI_EXPORT KisTool
     : public KoTool
 {
     Q_OBJECT

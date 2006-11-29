@@ -23,7 +23,7 @@
 #include <QWidget>
 
 #include <KoCanvasBase.h>
-
+#include <krita_export.h>
 #include <kis_types.h>
 
 class KoToolProxy;
@@ -45,7 +45,7 @@ class KoViewConverter;
  * the widget it contains, which may be either a QPainter based
  * canvas, or an OpenGL based canvas: that are the real widgets.
  */
-class KisCanvas2 : public QObject, public KoCanvasBase
+class KRITAUI_EXPORT KisCanvas2 : public QObject, public KoCanvasBase
 {
 
     Q_OBJECT

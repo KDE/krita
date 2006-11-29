@@ -40,7 +40,7 @@ public:
      * Create a KoXmlWriter instance to write out an XML document into
      * the given QIODevice.
      */
-    KoXmlWriter( QIODevice* dev, int indentLevel = 0 );
+    explicit KoXmlWriter( QIODevice* dev, int indentLevel = 0 );
 
     /// Destructor
     ~KoXmlWriter();

@@ -43,7 +43,7 @@ public:
      * @param dragSource must be 0 when copying to the clipboard.
      * @param name object name for this drag.
      */
-    KoStoreDrag( const char* nativeMimeType, QWidget *dragSource = 0L, const char *name = 0L );
+    explicit KoStoreDrag( const char* nativeMimeType, QWidget *dragSource = 0L, const char *name = 0L );
 
     static bool canDecode( const char* nativeMimeType, QMimeSource* e );
 

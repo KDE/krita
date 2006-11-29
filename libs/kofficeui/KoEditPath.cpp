@@ -104,7 +104,7 @@ KoChangePathDia::KoChangePathDia( const QString & _path, QWidget *parent, const 
 
 QString KoChangePathDia::newPath() const
 {
-    return m_defaultPath->isChecked() ? QString::null : m_urlReq->lineEdit()->text();
+    return m_defaultPath->isChecked() ? QString() : m_urlReq->lineEdit()->text();
 }
 
 void KoChangePathDia::slotChangeDefaultValue( bool _b)

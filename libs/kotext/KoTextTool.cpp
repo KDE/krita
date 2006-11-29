@@ -91,46 +91,6 @@ void KoTextTool::paint( QPainter &painter, KoViewConverter &converter) {
     if(! block.layout())
         return;
 
-#if 0
-Hmm, not useful right now due to the implementation of QAbstractTextDocumentLayout
-    if(m_caret.selectionStart() != m_caret.selectionEnd()) { // paint selection
-        //kDebug(32500) << "Selection: " << m_caret.selectionStart() << "-" << m_caret.selectionEnd() << "\n";
-        bool first = true;
-        QList<QTextLine> lines;
-        QTextBlock block = document->findBlock(m_caret.selectionStart());
-        do { // for all textBlocks
-            QTextLayout *layout = block.layout();
-            if(!block.isValid() || block.position() > m_caret.selectionEnd())
-                break;
-            if(layout == 0)
-                continue;
-            layout->setCacheEnabled(true);
-kDebug() << " block '" << block.text() << "'" << endl;
-            for(int i=0; i < layout->lineCount(); i++) {
-                QTextLine line = layout->lineAt(i);
-kDebug() << " line: " << line.textStart() << "-" << (line.textStart() + line.textLength()) << endl;
-                if(first && line.textStart() + line.textLength() < m_caret.selectionStart())
-                    continue;
-                lines.append(line);
-kDebug() << "    appending" << endl;
-                if(line.textStart() + line.textLength() > m_caret.selectionEnd())
-                    break;
-            }
-            first = false;
-            block = block.next();
-        } while(block.position() + block.length() < m_caret.selectionEnd());
-
-        kDebug(32500) << "found " << lines.count() << " lines that contain the selection" << endl;
-        foreach(QTextLine line, lines) {
-            if(! line.isValid())
-                continue;
-            if(painter.clipRegion().intersect(QRegion(line.rect().toRect())).isEmpty())
-                continue;
-            painter.fillRect(line.rect(), QBrush(Qt::yellow));
-        }
-    }
-#endif
-
     // paint caret.
     QPen pen(Qt::black);
     if(! m_textShape->hasTransparency()) {
@@ -300,12 +260,15 @@ void KoTextTool::repaint() {
     if(block.isValid()) {
         QTextLine tl = block.layout()->lineForTextPosition(m_caret.position() - block.position());
         QRectF repaintRect;
-        if(tl.isValid())
+        if(tl.isValid()) {
             repaintRect = tl.rect();
+            repaintRect.setX(tl.cursorToX(m_caret.position() - block.position()));
+            repaintRect.setWidth(2);
+        }
         else // layouting info was removed already :(
             repaintRect = block.layout()->boundingRect();
         repaintRect.moveTop(repaintRect.y() - m_textShapeData->documentOffset());
-        repaintRect.moveTopLeft(repaintRect.topLeft() + m_textShape->position());
+        repaintRect = m_textShape->transformationMatrix(0).mapRect(repaintRect);
         m_canvas->updateCanvas(repaintRect);
     }
 }

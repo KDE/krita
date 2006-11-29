@@ -773,7 +773,7 @@ void KoGuides::add( Qt::Orientation o, QPoint &pos )
 void KoGuides::select( KoGuideLine *guideLine )
 {
     guideLine->selected = true;
-    if ( m_guideLines[GL].remove( guideLine ) == 1 )
+    if ( m_guideLines[GL].removeAll( guideLine ) == 1 )
     {
         m_guideLines[GL_SELECTED].append( guideLine );
     }
@@ -783,7 +783,7 @@ void KoGuides::select( KoGuideLine *guideLine )
 void KoGuides::unselect( KoGuideLine *guideLine )
 {
     guideLine->selected = false;
-    if ( m_guideLines[GL_SELECTED].remove( guideLine ) == 1 )
+    if ( m_guideLines[GL_SELECTED].removeAll( guideLine ) == 1 )
     {
         m_guideLines[GL].append( guideLine );
     }

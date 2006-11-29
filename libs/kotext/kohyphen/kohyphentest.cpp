@@ -10,7 +10,7 @@
 #include "kohyphen.h"
 #include <kdebug.h>
 
-static bool check(const QString& a, const QString& b)
+static bool check(QString a, QString b)
 {
   if (a.isEmpty())
      a.clear();

@@ -22,7 +22,7 @@
 #include <QMap>
 #include <QPointer>
 #include <QTextList>
-
+#include <koffice_export.h>
 class StylePrivate;
 
 
@@ -33,7 +33,7 @@ class StylePrivate;
  * typically just one pargraph-style since that style can be reused on various
  * paragraphs.
  */
-class KoListStyle {
+class  KOTEXT_EXPORT KoListStyle {
 public:
     /// This list is used to specify what kind of list-style to use
     enum Style {

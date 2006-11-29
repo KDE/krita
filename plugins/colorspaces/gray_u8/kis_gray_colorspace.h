@@ -20,7 +20,7 @@
 #include <QColor>
 
 #include <klocale.h>
-
+#include <koffice_export.h>
 #include "KoLcmsColorSpace.h"
 
 struct GrayU8Traits {
@@ -29,7 +29,7 @@ struct GrayU8Traits {
     static const qint32 alpha_pos = 1;
 };
 
-class KisGrayColorSpace : public KoLcmsColorSpace<GrayU8Traits>
+class KRITAGRAYSCALE_EXPORT KisGrayColorSpace : public KoLcmsColorSpace<GrayU8Traits>
 {
     public:
         KisGrayColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);

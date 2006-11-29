@@ -19,7 +19,7 @@
 #define KIS_STRATEGY_COLORSPACE_RGB_H_
 
 #include "klocale.h"
-
+#include <koffice_export.h>
 #include "KoLcmsColorSpace.h"
 
 struct RgbU8Traits {
@@ -35,7 +35,7 @@ const quint8 PIXEL_ALPHA = RgbU8Traits::alpha_pos;
 const qint32 MAX_CHANNEL_RGB = 3;
 const qint32 MAX_CHANNEL_RGBA = 4;
 
-class KisRgbColorSpace : public KoLcmsColorSpace<RgbU8Traits>
+class KRITARGB_EXPORT KisRgbColorSpace : public KoLcmsColorSpace<RgbU8Traits>
 {
     public:
         KisRgbColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);

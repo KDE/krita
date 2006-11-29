@@ -21,6 +21,7 @@
 #define KIS_STRATEGY_COLORSPACE_CMYK_U16_H_
 
 #include <KoLcmsColorSpace.h>
+#include <koffice_export.h>
 
 struct CmykU16Traits {
     typedef quint16 channels_type;
@@ -28,7 +29,7 @@ struct CmykU16Traits {
     static const qint32 alpha_pos = 4;
 };
 
-class KisCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
+class KRITA_CMYK_U16_EXPORT KisCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
 {
     public:
         KisCmykU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);

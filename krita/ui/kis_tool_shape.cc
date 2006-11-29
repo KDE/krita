@@ -38,22 +38,23 @@ KisToolShape::~KisToolShape()
 {
 }
 
-void KisToolShape::createOptionWidget()
+QWidget * KisToolShape::createOptionWidget()
 {
-    KisToolPaint::createOptionWidget();
+    QWidget * optionWidget = KisToolPaint::createOptionWidget();
 
     m_shapeOptionsWidget = new WdgGeometryOptions(0);
     Q_CHECK_PTR(m_shapeOptionsWidget);
 
-    m_optionLayout = new QGridLayout(m_optionWidget);
+    m_optionLayout = new QGridLayout(optionWidget);
 
-    m_shapeOptionsWidget->cmbFill->setParent(m_optionWidget);
+    m_shapeOptionsWidget->cmbFill->setParent(optionWidget);
     m_shapeOptionsWidget->cmbFill->move(QPoint(0, 0));
     m_shapeOptionsWidget->cmbFill->show();
-    m_shapeOptionsWidget->textLabel3->setParent(m_optionWidget);
+    m_shapeOptionsWidget->textLabel3->setParent(optionWidget);
     m_shapeOptionsWidget->textLabel3->move(QPoint(0, 0));
     m_shapeOptionsWidget->textLabel3->show();
     addOptionWidgetOption(m_shapeOptionsWidget->cmbFill, m_shapeOptionsWidget->textLabel3);
+    return optionWidget;
 }
 
 KisPainter::FillStyle KisToolShape::fillStyle(void)

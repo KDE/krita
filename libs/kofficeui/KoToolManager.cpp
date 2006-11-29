@@ -377,16 +377,20 @@ void KoToolManager::switchTool(KoTool *tool) {
     m_activeTool->activate();
 
     if (m_activeCanvas->toolOptionDocker()) {
-        if (m_activeTool->optionWidget()) {
+// XXX: Commented out until the tool knows what for tool it is.
+//        if (m_activeTool->optionWidget()) {
             m_activeCanvas->toolOptionDocker()->setOptionWidget( m_activeTool->optionWidget() );
-        }
-        else {
-            QWidget *widget = new QWidget();
-            QGridLayout *lay = new QGridLayout(widget);
-            QLabel *label = new QLabel(i18n("No options for current tool"), widget);
-            lay->addWidget(label, 0, 0, Qt::AlignTop | Qt::AlignHCenter);
-            m_activeCanvas->toolOptionDocker()->setOptionWidget( widget );
-        }
+//         }
+//         else {
+//             QString name;
+//             foreach( ToolHelper * tool, m_tools ) {
+//                 if ( tool->toolId() == m_activeTool->toolId() ) {
+//                     name = tool->name();
+//                     break;
+//                 }
+//             }
+//             m_activeCanvas->toolOptionDocker()->setDummyText(i18n( "Active tool: %1" ).arg( name ) );
+//         }
     }
     emit changedTool(m_uniqueToolIds.value(m_activeTool));
 }
@@ -508,8 +512,6 @@ KoInputDevice KoToolManager::currentInputDevice() const
 }
 
 void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
-
-
 
     QList<QString> types;
     foreach(KoShape *shape, shapes) {

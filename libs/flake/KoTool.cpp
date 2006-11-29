@@ -45,7 +45,7 @@ KoTool::KoTool(KoCanvasBase *canvas )
     }
 }
 
-KoTool::~KoTool() 
+KoTool::~KoTool()
 {
     if (m_optionWidget && !m_optionWidget->parentWidget())
         delete m_optionWidget;
@@ -94,9 +94,15 @@ void KoTool::useCursor(QCursor cursor, bool force) {
 
 QWidget * KoTool::optionWidget() {
     if (m_optionWidget == 0) {
-        createOptionWidget();
+        m_optionWidget = createOptionWidget();
     }
     return m_optionWidget;
+}
+
+
+QWidget * KoTool::createOptionWidget()
+{
+    return 0;
 }
 
 #include "KoTool.moc"

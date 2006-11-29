@@ -133,15 +133,17 @@ void KisToolBrush::slotSetPaintingMode( int mode )
 }
 
 
-void KisToolBrush::createOptionWidget()
+QWidget * KisToolBrush::createOptionWidget()
 {
-    KisToolFreehand::createOptionWidget();
-    m_chkDirect = new QCheckBox(i18n("Paint incrementally"), m_optionWidget);
+
+    QWidget * optionWidget = KisToolFreehand::createOptionWidget();
+
+    m_chkDirect = new QCheckBox(i18n("Paint incrementally"), optionWidget);
     m_chkDirect->setObjectName("chkDirect");
     m_chkDirect->setChecked(true);
     connect(m_chkDirect, SIGNAL(stateChanged(int)), this, SLOT(slotSetPaintingMode(int)));
 
-    m_optionLayout = new QGridLayout(m_optionWidget);
+    m_optionLayout = new QGridLayout(optionWidget);
     Q_CHECK_PTR(m_optionLayout);
 
     m_optionLayout->setMargin(0);
@@ -150,6 +152,7 @@ void KisToolBrush::createOptionWidget()
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
     m_optionLayout->addWidget(m_chkDirect, 0, 0);
 
+    return optionWidget;
 }
 
 #include "kis_tool_brush.moc"

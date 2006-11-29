@@ -234,21 +234,18 @@ protected:
      * Reimplement this if your tool actually has an option widget.
      * Sets the option widget to 0 by default.
      */
-    virtual void createOptionWidget()
-        {
-            m_optionWidget = 0;
-        }
+    virtual QWidget *  createOptionWidget();
 
 protected:
 
     KoCanvasBase *m_canvas; ///< the canvas interface this tool will work for.
-    QWidget * m_optionWidget; ///< the optionwidget this tool will show in the option widget palette
 
 private:
     KoTool();
     KoTool(const KoTool&);
     KoTool& operator=(const KoTool&);
 
+    QWidget * m_optionWidget; ///< the optionwidget this tool will show in the option widget palette
     QCursor m_previousCursor;
 };
 

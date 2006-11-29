@@ -38,7 +38,7 @@ class KoToolSelection;
  * paint their decorations because tools can be stacked.
  *
  * The implementator of KoToolProxy should be solely responsible
- * for know which tool is currently in the user's hands.
+ * for knowing which tool is currently in the user's hands.
  */
 class KoToolProxy {
 
@@ -61,6 +61,11 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *event) = 0;
     virtual void wheelEvent ( QWheelEvent * event, const QPointF &pnt  ) = 0;
 
+    /**
+     * Call this to get data _from_ the tool, instead of events _to_ the tool,
+     * namely what the tool thinks is the current selection on the data contained
+     * inside the tool.
+     */
     virtual KoToolSelection* selection() = 0;
 };
 

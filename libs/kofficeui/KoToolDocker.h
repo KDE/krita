@@ -26,6 +26,7 @@
 #include <koffice_export.h>
 
 class QStackedWidget;
+class QWidget;
 
 /**
    The tool docker shows the tool option widget associtated with the
@@ -47,6 +48,7 @@ public:
 private:
 
     QStackedWidget * m_stack;
+    QWidget * m_label;
 };
 
 #endif

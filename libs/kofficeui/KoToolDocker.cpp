@@ -20,6 +20,9 @@
  */
 #include "KoToolDocker.h"
 #include <QStackedWidget>
+#include <QGridLayout>
+#include <QLabel>
+#include <QWidget>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -30,6 +33,14 @@ KoToolDocker::KoToolDocker()
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_stack = new QStackedWidget(this);
     setWidget(m_stack);
+
+    m_label = new QWidget();
+    QGridLayout *lay = new QGridLayout(m_label);
+    QLabel *label = new QLabel(i18n("No options for current tool"), m_label);
+    lay->addWidget(label, 0, 0, Qt::AlignTop | Qt::AlignHCenter);
+
+    m_stack->addWidget( m_label );
+    m_stack->setCurrentWidget( m_label );
 }
 
 KoToolDocker::~KoToolDocker()
@@ -42,12 +53,20 @@ KoToolDocker::~KoToolDocker()
         m_stack->removeWidget(w);
         w->setParent(0);
     }
+    delete m_label;
 }
 
 void KoToolDocker::setOptionWidget(QWidget * widget)
 {
-    if (widget && m_stack->indexOf(widget) == -1) {
-        m_stack->addWidget(widget);
+    kDebug() << "Setting to " << widget << endl;
+    if (widget ) {
+        if ( m_stack->indexOf(widget) == -1) {
+                m_stack->addWidget(widget);
+        }
+        m_stack->setCurrentWidget(widget);
     }
-    m_stack->setCurrentWidget(widget);
+    else {
+        kDebug() << "index of label " << m_stack->indexOf(m_label) << endl;
+        m_stack->setCurrentWidget( m_label );
+    }
 }

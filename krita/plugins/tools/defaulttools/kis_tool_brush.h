@@ -41,7 +41,7 @@ public:
     KisToolBrush(KoCanvasBase * canvas);
     virtual ~KisToolBrush();
 
-    void createOptionWidget();
+    QWidget * createOptionWidget();
 
     virtual void mouseMoveEvent(KoPointerEvent *e);
 

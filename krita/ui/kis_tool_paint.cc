@@ -61,7 +61,6 @@
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     : KisTool(canvas, cursor)
 {
-    m_optionWidget = 0;
     m_optionWidgetLayout = 0;
 
     m_lbOpacity = 0;
@@ -114,22 +113,22 @@ void KisToolPaint::mouseReleaseEvent( KoPointerEvent *e )
 
 }
 
-void KisToolPaint::createOptionWidget()
+QWidget * KisToolPaint::createOptionWidget()
 {
 
-    m_optionWidget = new QWidget();
+    QWidget * optionWidget = new QWidget();
 
-    m_lbOpacity = new QLabel(i18n("Opacity: "), m_optionWidget);
-    m_slOpacity = new KisIntSpinbox( m_optionWidget, "int_m_optionwidget");
+    m_lbOpacity = new QLabel(i18n("Opacity: "), optionWidget);
+    m_slOpacity = new KisIntSpinbox( optionWidget, "int_m_optionwidget");
     m_slOpacity->setRange(0, 100);
     m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE * 100);
     connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
 
-    m_lbComposite = new QLabel(i18n("Mode: "), m_optionWidget);
-    m_cmbComposite = new KisCmbComposite(m_optionWidget);
+    m_lbComposite = new QLabel(i18n("Mode: "), optionWidget);
+    m_cmbComposite = new KisCmbComposite(optionWidget);
     connect(m_cmbComposite, SIGNAL(activated(const KoCompositeOp*)), this, SLOT(slotSetCompositeMode(const KoCompositeOp*)));
 
-    QVBoxLayout* verticalLayout = new QVBoxLayout(m_optionWidget);
+    QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setMargin(0);
     verticalLayout->setSpacing(3);
 
@@ -146,20 +145,21 @@ void KisToolPaint::createOptionWidget()
     verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     if (!quickHelp().isEmpty()) {
-        QPushButton* push = new QPushButton(SmallIconSet( "help" ), "", m_optionWidget);
+        QPushButton* push = new QPushButton(SmallIconSet( "help" ), "", optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
 
-        QHBoxLayout* hLayout = new QHBoxLayout(m_optionWidget);
+        QHBoxLayout* hLayout = new QHBoxLayout(optionWidget);
         hLayout->addWidget(push);
         hLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         verticalLayout->addLayout(hLayout);
     }
+
+    return optionWidget;
 }
 
 
 void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 {
-    Q_ASSERT(m_optionWidget != 0);
     Q_ASSERT(m_optionWidgetLayout != 0);
     int rowCount = m_optionWidgetLayout->rowCount();
     m_optionWidgetLayout->addLayout(layout, rowCount, 0, 1, 1);
@@ -167,7 +167,6 @@ void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 
 void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 {
-    Q_ASSERT(m_optionWidget != 0);
     Q_ASSERT(m_optionWidgetLayout != 0);
     if (label) {
         m_optionWidgetLayout->addWidget(label, m_optionWidgetLayout->rowCount(), 0);
@@ -191,7 +190,7 @@ void KisToolPaint::slotSetCompositeMode(const KoCompositeOp* compositeOp)
 void KisToolPaint::updateCompositeOpComboBox()
 {
     KisImageSP img = image();
-    if (m_optionWidget && img) {
+    if (optionWidget() && img) {
         KisPaintDeviceSP device = img->activeDevice();
 
         if (device) {

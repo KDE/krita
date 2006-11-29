@@ -136,7 +136,7 @@ public:
      * in various tools. If false, it won't show up in the toolchest.
      * The KoColorSpace argument can be used when certain paintops only support a specific cs
      */
-    virtual bool userVisible(KoColorSpace * cs = 0) { return cs->id() != KoID("WET", ""); }
+    virtual bool userVisible(KoColorSpace * cs = 0) { return KoID(cs->id()) != KoID("WET", ""); }
 
     /**
      * Create and return an (abstracted) widget with options for this paintop when used with the

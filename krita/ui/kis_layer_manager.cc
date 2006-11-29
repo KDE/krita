@@ -464,7 +464,7 @@ void KisLayerManager::addLayer(KisGroupLayerSP parent, KisLayerSP above)
         QString profilename;
         if(img->colorSpace()->profile())
             profilename = img->colorSpace()->profile()->productName();
-        NewLayerDialog dlg(img->colorSpace()->id(), profilename, img->nextLayerName(), m_view);
+        NewLayerDialog dlg(KoID(img->colorSpace()->id()), profilename, img->nextLayerName(), m_view);
 
         if (dlg.exec() == QDialog::Accepted) {
             KoColorSpace* cs = KisMetaRegistry::instance()-> csRegistry() ->
@@ -492,7 +492,7 @@ void KisLayerManager::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
         if(img->colorSpace()->profile())
             profilename = img->colorSpace()->profile()->productName();
         KisConfig cfg;
-        NewLayerDialog dlg(img->colorSpace()->id(), profilename, img->nextLayerName(), m_view);
+        NewLayerDialog dlg(KoID(img->colorSpace()->id()), profilename, img->nextLayerName(), m_view);
         dlg.setColorSpaceEnabled(false);
 
         if (dlg.exec() == QDialog::Accepted) {

@@ -78,7 +78,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     m_page->cmbColorSpaces->setIDList(colorSpaces);
     m_page->cmbColorSpaces->setCurrent(image->colorSpace()->id());
 
-    fillCmbProfiles(image->colorSpace()->id());
+    fillCmbProfiles(KoID(image->colorSpace()->id()));
 
     if (image->profile()) {
         m_page->cmbProfile->setCurrent(image->profile()->productName());

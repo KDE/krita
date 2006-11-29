@@ -146,14 +146,10 @@ double KoUnit::fromUserValue( const QString& value, Unit unit, bool* ok )
 
 double KoUnit::parseValue( const QString& _value, double defaultVal )
 {
-    QString value = _value;
-    return parseValue( value, defaultVal );
-}
-
-double KoUnit::parseValue( QString& value, double defaultVal )
-{
-    if( value.isEmpty() )
+    if( _value.isEmpty() )
         return defaultVal;
+
+    QString value(_value);
 
     value.simplified();
     value.remove( ' ' );

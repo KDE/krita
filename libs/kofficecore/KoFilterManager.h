@@ -55,7 +55,7 @@ public:
     /**
      * Create a filter manager for a document
      */
-    KoFilterManager( KoDocument* document );
+    explicit KoFilterManager( KoDocument* document );
     /**
      * Create a filter manager for a filter which wants to embed something.
      * The url it passes is the file to convert, obviously. You cannot use
@@ -70,7 +70,7 @@ public:
      * @param parentChain The parent filter chain of this filter manager. Used
      *        to allow embedding for filters. Most likely you do not have to care.
      */
-    KoFilterManager( const QString& url, const QByteArray& mimetypeHint = "",
+    explicit KoFilterManager( const QString& url, const QByteArray& mimetypeHint = "",
                      KoFilterChain* const parentChain = 0 );
 
     virtual ~KoFilterManager();

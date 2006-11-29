@@ -38,7 +38,7 @@ class KoApplicationAdaptor : public QDBusAbstractAdaptor
   Q_OBJECT
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.application")
 public:
-   KoApplicationAdaptor(QObject *parent);
+   explicit KoApplicationAdaptor(QObject *parent);
    virtual ~KoApplicationAdaptor();
 
 public Q_SLOTS: // METHODS

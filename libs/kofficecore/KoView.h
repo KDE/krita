@@ -76,7 +76,7 @@ public:
    *                 must not be zero.
    * @param parent   parent widget for this view.
    */
-  KoView( KoDocument *document, QWidget *parent = 0 );
+  explicit KoView( KoDocument *document, QWidget *parent = 0 );
   /**
    * Destroys the view and unregisters at the document.
    */

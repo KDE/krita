@@ -36,7 +36,7 @@ class KoFrame : public QWidget
 public:
   enum State { Inactive, Selected, Active };
 
-  KoFrame( QWidget *parent, const char *name = 0 );
+  explicit KoFrame( QWidget *parent, const char *name = 0 );
   virtual ~KoFrame();
 
   virtual void setView( KoView *view );

@@ -54,7 +54,7 @@ class KOFFICECORE_EXPORT KoOasisStore
 {
 public:
     /// @param store recontents the property of the caller
-    KoOasisStore( KoStore* store );
+    explicit KoOasisStore( KoStore* store );
 
     ~KoOasisStore();
 

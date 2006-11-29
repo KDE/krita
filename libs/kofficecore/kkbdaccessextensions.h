@@ -119,7 +119,7 @@ class KOFFICECORE_EXPORT KKbdAccessExtensions : public QObject
         *   @param parent       KMainWindow of the application.  Required.
         *   @param name         (optional) Name of this object.
         */
-        KKbdAccessExtensions(KMainWindow* parent, const char* name = 0);
+        explicit KKbdAccessExtensions(KMainWindow* parent, const char* name = 0);
 
         /** Destructor. */
         virtual ~KKbdAccessExtensions();

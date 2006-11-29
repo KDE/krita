@@ -47,7 +47,7 @@ class KOFFICECORE_EXPORT KoEventHandler : public QObject
 {
     Q_OBJECT
 public:
-    KoEventHandler( QObject* target );
+    explicit KoEventHandler( QObject* target );
     ~KoEventHandler();
 
     QObject* target();

@@ -36,7 +36,7 @@ class KOFFICECORE_EXPORT KoViewIface : public DCOPObject
 {
     K_DCOP
 public:
-    KoViewIface( KoView *view );
+    explicit KoViewIface( KoView *view );
     KoViewIface( const char *name, KoView *view );
     // TODO same args order as KoDocumentIface
 

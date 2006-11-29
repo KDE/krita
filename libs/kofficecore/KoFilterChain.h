@@ -369,7 +369,7 @@ namespace KOffice
     {
 
     public:
-        Graph( const QByteArray& from );
+        explicit Graph( const QByteArray& from );
         ~Graph() {}
 
         bool isValid() const { return m_graphValid; }

@@ -33,7 +33,7 @@ class KoID {
 public:
     KoID() : m_id(), m_name() {}
 
-    KoID(const QString & id, const QString & name = QString())
+    explicit KoID(const QString & id, const QString & name = QString())
         : m_id(id),
           m_name(name) {};
 

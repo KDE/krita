@@ -93,7 +93,7 @@ public:
      * Constructs a key from a filename 
      * @note The modification date is set to 1970-01-01
      */
-    KoPictureKey( const QString &fn );
+    explicit KoPictureKey( const QString &fn );
 
     /**
      * Copy constructor

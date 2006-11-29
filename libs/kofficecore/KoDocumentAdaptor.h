@@ -44,7 +44,7 @@ class KOFFICECORE_EXPORT KoDocumentAdaptor : public QDBusAbstractAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.document")
 public:
 
-    KoDocumentAdaptor( KoDocument * doc);
+    explicit KoDocumentAdaptor( KoDocument * doc);
     ~KoDocumentAdaptor();
 
 public Q_SLOTS: // METHODS

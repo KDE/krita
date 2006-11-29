@@ -53,7 +53,7 @@ public:
    * When using this constructor you must call @ref #setDocument before
    * you can call any other function of this class.
    */
-  KoDocumentChild( KoDocument* parent );
+  explicit KoDocumentChild( KoDocument* parent );
 
   virtual ~KoDocumentChild();
 

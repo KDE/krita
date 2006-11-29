@@ -44,7 +44,7 @@ class KOFFICECORE_EXPORT KoDocumentIface : public DCOPObject
     K_DCOP
 public:
 
-    KoDocumentIface( KoDocument * doc, const char * name = 0 );
+    explicit KoDocumentIface( KoDocument * doc, const char * name = 0 );
     ~KoDocumentIface();
 
     /**

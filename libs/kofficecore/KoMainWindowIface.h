@@ -33,7 +33,7 @@ class KoMainWindowIface : public DCOPObject
 {
     K_DCOP
 public:
-    KoMainWindowIface( KoMainWindow *mainwindow );
+    explicit KoMainWindowIface( KoMainWindow *mainwindow );
     virtual ~KoMainWindowIface();
 
 k_dcop:

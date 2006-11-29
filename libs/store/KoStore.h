@@ -24,7 +24,7 @@
 #include <QString>
 #include <QStringList>
 #include <QIODevice>
-#include <q3valuestack.h>
+#include <QStack>
 #include <QByteArray>
 #include <koffice_export.h>
 
@@ -385,7 +385,7 @@ protected:
 
 private:
   /// Used to push/pop directories to make it easy to save/restore the state
-  Q3ValueStack<QString> m_directoryStack;
+  QStack<QString> m_directoryStack;
 
 private:
   KoStore( const KoStore& store );  ///< don't copy

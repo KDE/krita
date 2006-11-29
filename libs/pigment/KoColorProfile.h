@@ -44,17 +44,17 @@ public:
      * inside an image file.
      * @param rawData profile data
      */
-    KoColorProfile(const QByteArray& rawData);
+    explicit KoColorProfile(const QByteArray& rawData);
     /**
      * Initialize a profile from the disk. You need to call the function \ref load to actually
      * load the profile data in memory.
      * @param file filename of the profile
      */
-    KoColorProfile(const QString& file);
+    explicit KoColorProfile(const QString& file);
     /**
      * Initialize the profile from the LCMS color profile
      */
-    KoColorProfile(const cmsHPROFILE profile);
+    explicit KoColorProfile(const cmsHPROFILE profile);
 
     virtual ~KoColorProfile();
 

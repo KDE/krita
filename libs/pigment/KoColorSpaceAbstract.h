@@ -32,7 +32,7 @@ namespace {
 
         public:
 
-            CompositeCopy(KoColorSpace * cs)
+            explicit CompositeCopy(KoColorSpace * cs)
             : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Copy" ) )
             {
             }

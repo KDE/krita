@@ -38,7 +38,7 @@ struct AlphaU8Traits {
  */
 class PIGMENT_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits> {
 public:
-    KoAlphaColorSpace(KoColorSpaceRegistry * parent);
+    explicit KoAlphaColorSpace(KoColorSpaceRegistry * parent);
     virtual ~KoAlphaColorSpace();
 
 public:

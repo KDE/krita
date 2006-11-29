@@ -58,7 +58,7 @@ class PIGMENT_EXPORT KoF32ColorSpaceTrait : public virtual KoColorSpace {
 
 public:
 
-    KoF32ColorSpaceTrait(qint32 alphaPos)
+    explicit KoF32ColorSpaceTrait(qint32 alphaPos)
 	: KoColorSpace()
     {
         m_alphaPos = alphaPos;

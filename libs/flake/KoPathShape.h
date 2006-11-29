@@ -48,7 +48,7 @@ typedef QMap<KoPathShape *, QSet<KoPathPointIndex> > KoPathShapePointIndexMap;
  * bezier ending at the point. controlPoint2 is used to describe the 
  * first point of a cubic bezier curve starting at the point.
  */
-class KoPathPoint
+class FLAKE_EXPORT KoPathPoint
 {
 public:
     enum KoPointProperty

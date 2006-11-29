@@ -21,8 +21,9 @@
 #define KOPARAMETERSHAPE_H
 
 #include "KoPathShape.h"
+#include <koffice_export.h>
 
-class KoParameterShape : public KoPathShape
+class FLAKE_EXPORT KoParameterShape : public KoPathShape
 {
 public:
     KoParameterShape();

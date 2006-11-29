@@ -50,7 +50,7 @@ class FLAKE_EXPORT KoCanvasBase {
 
 public:
 
-    KoCanvasBase( KoShapeControllerBase * shapeControllerBase );
+    explicit KoCanvasBase( KoShapeControllerBase * shapeControllerBase );
     virtual ~KoCanvasBase();
 
 public:

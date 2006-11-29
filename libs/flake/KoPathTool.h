@@ -36,7 +36,7 @@ class KoPathPointRubberSelectStrategy;
 /// The tool for editing a KoPathShape or a KoParameterShape
 class KoPathTool : public KoTool {
 public:
-    KoPathTool(KoCanvasBase *canvas);
+    explicit KoPathTool(KoCanvasBase *canvas);
     ~KoPathTool();
 
     void paint( QPainter &painter, KoViewConverter &converter );
@@ -126,7 +126,7 @@ private:
     class KoPathPointSelection
     {
     public:    
-        KoPathPointSelection( KoPathTool * tool )
+        explicit KoPathPointSelection( KoPathTool * tool )
         : m_tool( tool )
         {}
         ~KoPathPointSelection() {}

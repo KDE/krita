@@ -31,7 +31,7 @@ class KoPathPoint;
 class KoCreatePathTool : public KoTool 
 {
 public:
-    KoCreatePathTool( KoCanvasBase * canvas );
+    explicit KoCreatePathTool( KoCanvasBase * canvas );
     virtual ~KoCreatePathTool();
 
     void paint( QPainter &painter, KoViewConverter &converter );

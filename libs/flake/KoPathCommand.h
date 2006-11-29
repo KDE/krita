@@ -34,7 +34,7 @@ class KoParameterShape;
 class KoPathBaseCommand : public KCommand {
 public:
     /// initialize the base command with the shape
-    KoPathBaseCommand( KoPathShape *shape );
+    explicit KoPathBaseCommand( KoPathShape *shape );
 protected:
     /**
      * Call this to repaint the shape after altering.
@@ -121,7 +121,7 @@ public:
      * @brief Command to remove a points from path shapes
      * @param pointMap map of the path points to remove
      */
-    KoPointRemoveCommand( const KoPathShapePointMap &pointMap );
+    explicit KoPointRemoveCommand( const KoPathShapePointMap &pointMap );
     /// execute the command
     void execute();
     /// revert the actions done in execute

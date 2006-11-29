@@ -43,7 +43,7 @@ public:
      * Create a new tool; typically not called by applications, only by the KoToolManager
      * @param canvas the canvas this tool works for.
      */
-    KoCreateShapesTool( KoCanvasBase *canvas );
+    explicit KoCreateShapesTool( KoCanvasBase *canvas );
     /// destructor
     virtual ~KoCreateShapesTool() {}
     void mouseReleaseEvent( KoPointerEvent *event );

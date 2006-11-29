@@ -44,7 +44,7 @@ public:
      * @param lineWidth the width, in pt
      * @param color the color we draw the outline in.
      */
-    KoLineBorder(double lineWidth, QColor color = Qt::black);
+    explicit KoLineBorder(double lineWidth, QColor color = Qt::black);
     virtual ~KoLineBorder() {};
 
     /// Sets the lines cap style

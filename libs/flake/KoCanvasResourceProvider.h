@@ -68,7 +68,7 @@ class FLAKE_EXPORT KoCanvasResourceProvider : public QObject {
 
 public:
 
-    KoCanvasResourceProvider(QObject * parent);
+    explicit KoCanvasResourceProvider(QObject * parent);
     ~KoCanvasResourceProvider() {}
 
     void setResource( KoCanvasResource::EnumCanvasResource key, const QVariant & value );

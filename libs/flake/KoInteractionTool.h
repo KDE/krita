@@ -53,7 +53,7 @@ public:
      * and handled by interaction strategies of type KoInteractionStrategy.
      * @param canvas the canvas this tool will be working for.
      */
-    KoInteractionTool( KoCanvasBase *canvas );
+    explicit KoInteractionTool( KoCanvasBase *canvas );
     virtual ~KoInteractionTool();
 
 public:

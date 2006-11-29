@@ -53,7 +53,7 @@ public:
      * Constructor.
      * @param parent the parent this widget will belong to
      */
-    KoCanvasController(QWidget *parent);
+    explicit KoCanvasController(QWidget *parent);
     virtual ~KoCanvasController() {}
 
     /**

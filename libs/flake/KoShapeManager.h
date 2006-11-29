@@ -52,7 +52,7 @@ public:
     /**
      * Empty constructor.
      */
-    KoShapeManager(KoCanvasBase *canvas);
+    explicit KoShapeManager(KoCanvasBase *canvas);
     /**
      * Constructor that takes a list of shapes, convenience version.
      * @param shapes the shapes to start out with, see also setShapes()

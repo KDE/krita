@@ -22,6 +22,7 @@
 #include <QStackedWidget>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 KoToolDocker::KoToolDocker()
     : QDockWidget(i18n("Tool Options"))
@@ -29,6 +30,18 @@ KoToolDocker::KoToolDocker()
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_stack = new QStackedWidget(this);
     setWidget(m_stack);
+}
+
+KoToolDocker::~KoToolDocker()
+{
+    // Remove the tool option widgets from our layout: we don't own them,
+    // we are not going to delete them.
+    while (m_stack->count() > 0) {
+        QWidget * w = m_stack->widget(0);
+        kDebug() << "Stack count: " << m_stack->count() << ", widget: " << w << endl;
+        m_stack->removeWidget(w);
+        w->setParent(0);
+    }
 }
 
 void KoToolDocker::setOptionWidget(QWidget * widget)

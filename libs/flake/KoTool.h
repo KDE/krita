@@ -54,7 +54,7 @@ public:
      * @param canvas the canvas interface this tool will work for.
      */
     explicit KoTool(KoCanvasBase *canvas );
-    virtual ~KoTool() {}
+    virtual ~KoTool();
 
 public:
 

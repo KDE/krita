@@ -45,6 +45,12 @@ KoTool::KoTool(KoCanvasBase *canvas )
     }
 }
 
+KoTool::~KoTool() 
+{
+    if (m_optionWidget && !m_optionWidget->parentWidget())
+        delete m_optionWidget;
+}
+
 void KoTool::activate(bool temporary) {
     Q_UNUSED(temporary);
 }

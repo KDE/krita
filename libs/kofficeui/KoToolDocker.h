@@ -37,7 +37,7 @@ public:
 
     KoToolDocker();
 
-    virtual ~KoToolDocker() {}
+    virtual ~KoToolDocker();
 
     /**
      * Update the option widget to the argument one, removing the currently set widget.

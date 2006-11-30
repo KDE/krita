@@ -51,3 +51,46 @@ void KoTextSelectionHandler::strikeOut(bool strikeout) {
     m_caret->mergeCharFormat(cf);
 }
 
+void KoTextSelectionHandler::insertFrameBreak() {
+    // TODO
+}
+
+void KoTextSelectionHandler::setFontSize(int size) {
+    // TODO
+}
+
+void KoTextSelectionHandler::increaseFontSize() {
+    // TODO
+}
+
+void KoTextSelectionHandler::decreaseFontSize() {
+    // TODO
+}
+
+void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
+    // TODO
+    // left,right,center,justified
+}
+
+void KoTextSelectionHandler::setVerticalTextAlignment(Qt::Alignment align) {
+    // TODO
+    // superscript, subscript, normal
+}
+
+void KoTextSelectionHandler::setTextColor(const QColor &color) {
+    // TODO
+}
+
+void KoTextSelectionHandler::setTextBackgroundColor(const QColor &color) {
+    // TODO
+}
+
+QString KoTextSelectionHandler::selectedText() const {
+    // TODO
+    return "";
+}
+
+void KoTextSelectionHandler::insert(const QString &text) {
+    // TODO
+}
+

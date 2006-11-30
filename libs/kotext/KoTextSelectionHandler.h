@@ -24,6 +24,8 @@
 
 #include <koffice_export.h>
 
+#include <QColor>
+
 class KoTextShape;
 class KoTextShapeData;
 class QTextCursor;
@@ -35,10 +37,56 @@ class KOTEXT_EXPORT KoTextSelectionHandler : public KoToolSelection {
 public:
     KoTextSelectionHandler() {}
 
+    /**
+     * Make the currently selected text bold
+     * @param bold if true, make text have weight bold, if false make normal.
+     */
     void bold(bool bold);
+
+    /**
+     * Make the currently selected text italic
+     * @param italic if true, make italic, if false make slant normal.
+     */
     void italic(bool italic);
+
+    /**
+     * Make the currently selected text underlined.
+     * @param underline if true make the text have a continues underline.
+     */
     void underline(bool underline);
+
+    /**
+     * Make the currently selected text have a line through it.
+     * @param strikeout if true, make the text have a strike out through it.
+     */
     void strikeOut(bool strikeout);
+
+    /**
+     * Insert a frame break at the cursor position, moving the rest of the text to the next frame.
+     */
+    void insertFrameBreak();
+
+    /**
+     * Alter the selection to have param font size.
+     * @param size the new font size in points.
+     */
+    void setFontSize(int size);
+
+    /**
+     * Alter the selections font size to be slightly bigger.
+     */
+    void increaseFontSize();
+
+    /**
+     * Alter the selections font size to be slightly smaller.
+     */
+    void decreaseFontSize();
+    void setHorizontalTextAlignment(Qt::Alignment align);
+    void setVerticalTextAlignment(Qt::Alignment align);
+    void setTextColor(const QColor &color);
+    void setTextBackgroundColor(const QColor &color);
+    void insert(const QString &text);
+    QString selectedText() const;
 
 protected:
     friend class KoTextTool;

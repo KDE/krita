@@ -402,6 +402,7 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
         KoTool *tl = tool->createTool(controller->canvas());
         m_uniqueToolIds.insert(tl, tool->uniqueId());
         toolsMap.insert(tool->id(), tl);
+        tl->setObjectName(tool->id());
     }
     KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsMap.value(KoCreateShapesTool_ID));
     Q_ASSERT(createTool);

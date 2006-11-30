@@ -60,6 +60,18 @@ void KoCreatePathTool::paint( QPainter &painter, KoViewConverter &converter )
             m_shape->border()->paintBorder( m_shape, painter, converter );
             painter.restore();
         }
+
+        if ( m_activePoint->activeControlPoint1() || m_activePoint->activeControlPoint2() )
+        {
+            painter.setBrush( Qt::white ); //TODO make configurable
+            painter.setPen( Qt::blue );
+            KoShape::applyConversion( painter, converter );
+            //TODO use the same handle size as configured in the PathTool
+            m_activePoint->paint( painter, QSize( 4, 4 ), 
+                                  KoPathPoint::ControlPoint1 | KoPathPoint::ControlPoint2, 
+                                  !m_activePoint->activeControlPoint1() );
+        }
+
         painter.restore();
     }
 }
@@ -118,14 +130,17 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
     {
         //qDebug() << "KoCreatePathTool::mouseMoveEvent" << m_shape << "point = " << event->point;
         m_canvas->updateCanvas( m_shape->boundingRect() );
+        m_canvas->updateCanvas( m_activePoint->boundingRect( false ).adjusted( -2, -2, 2, 2 ) );
         if ( event->buttons() & Qt::LeftButton )
         {
             m_activePoint->setControlPoint2( event->point );
             if ( m_activePoint->properties() & KoPathPoint::CanHaveControlPoint1 )
             {
                 m_activePoint->setControlPoint1( m_activePoint->point() + ( m_activePoint->point() - event->point ) );
+                qDebug() << "mouseMoveEvent" << "setControlPoint1" << m_activePoint->controlPoint1();
             }
             m_canvas->updateCanvas( m_shape->boundingRect() );
+            m_canvas->updateCanvas( m_activePoint->boundingRect( false ).adjusted( -2, -2, 2, 2 ) );
         }
         else
         {
@@ -140,6 +155,7 @@ void KoCreatePathTool::mouseReleaseEvent( KoPointerEvent *event )
     //qDebug() << "KoCreatePathTool::mouseReleaseEvent" << m_shape << "point = " << event->point;
     if ( m_shape )
     {
+        m_canvas->updateCanvas( m_activePoint->boundingRect( false ).adjusted( -2, -2, 2, 2 ) );
         m_activePoint = m_shape->lineTo( event->point );
     }
 }

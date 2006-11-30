@@ -22,8 +22,7 @@
 #include <QString>
 #include <QVariant>
 #include <QObject>
-
-#define KROSS_MAIN_EXPORT KDE_EXPORT
+#include <krita_export.h>
 
 class KisView2;
 
@@ -34,7 +33,7 @@ namespace Kross { namespace KritaCore {
      * functionality from within the supported Kross scripting
      * backends like for example Python or Ruby.
      */
-    class KritaCoreModule : public QObject
+    class KROSSKRITACORE_EXPORT KritaCoreModule : public QObject
     {
             Q_OBJECT
         public:

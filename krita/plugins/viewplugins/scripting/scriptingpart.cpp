@@ -46,8 +46,6 @@
 #include <kis_layer.h>
 #include <kis_doc2.h>
 
-#define KROSS_MAIN_EXPORT KDE_EXPORT
-
 #include <kross/core/manager.h>
 #include <kross/core/model.h>
 #include <kross/core/guiclient.h>

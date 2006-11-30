@@ -41,7 +41,7 @@ class FactoryManagerPrivate;
 class KOPROPERTY_EXPORT CustomPropertyFactory : public QObject
 {
 	public:
-		CustomPropertyFactory(QObject *parent);
+		explicit CustomPropertyFactory(QObject *parent);
 		virtual ~CustomPropertyFactory();
 
 		/*! \return a new instance of custom property for \a parent.

@@ -57,7 +57,7 @@ class EditorItem : public K3ListViewItem
 			Q3ListViewItem *after=0);
 
 		//! Two helper contructors for subclass
-		EditorItem(K3ListView *parent);
+		explicit EditorItem(K3ListView *parent);
 		EditorItem(EditorItem *parent, const QString &text);
 		EditorItem(EditorItem *parent, EditorItem *after, const QString &text);
 
@@ -116,7 +116,7 @@ class EditorGroupItem : public EditorItem
 class EditorDummyItem : public EditorItem
 {
 	public:
-		EditorDummyItem(K3ListView *parent);
+		explicit EditorDummyItem(K3ListView *parent);
 		virtual ~EditorDummyItem();
 
 	protected:

@@ -40,7 +40,7 @@ class Property;
 class KOPROPERTY_EXPORT CustomProperty
 {
 	public:
-		CustomProperty(Property *parent);
+		explicit CustomProperty(Property *parent);
 		virtual ~CustomProperty();
 
 		/*! This function is called by \ref Property::setValue() when
@@ -74,7 +74,7 @@ class KOPROPERTY_EXPORT CustomProperty
 class KOPROPERTY_EXPORT SizeCustomProperty : public CustomProperty
 {
 	public:
-		SizeCustomProperty(Property *parent);
+		explicit SizeCustomProperty(Property *parent);
 		~SizeCustomProperty();
 
 		void setValue(const QVariant &value, bool rememberOldValue);
@@ -86,7 +86,7 @@ class KOPROPERTY_EXPORT SizeCustomProperty : public CustomProperty
 class KOPROPERTY_EXPORT PointCustomProperty : public CustomProperty
 {
 	public:
-		PointCustomProperty(Property *parent);
+		explicit PointCustomProperty(Property *parent);
 		~PointCustomProperty();
 
 		void setValue(const QVariant &value, bool rememberOldValue);
@@ -98,7 +98,7 @@ class KOPROPERTY_EXPORT PointCustomProperty : public CustomProperty
 class KOPROPERTY_EXPORT RectCustomProperty : public CustomProperty
 {
 	public:
-		RectCustomProperty(Property *parent);
+		explicit RectCustomProperty(Property *parent);
 		~RectCustomProperty();
 
 		void setValue(const QVariant &value, bool rememberOldValue);
@@ -110,7 +110,7 @@ class KOPROPERTY_EXPORT RectCustomProperty : public CustomProperty
 class KOPROPERTY_EXPORT SizePolicyCustomProperty : public CustomProperty
 {
 	public:
-		SizePolicyCustomProperty(Property *parent);
+		explicit SizePolicyCustomProperty(Property *parent);
 		~SizePolicyCustomProperty();
 
 		void setValue(const QVariant &value, bool rememberOldValue);

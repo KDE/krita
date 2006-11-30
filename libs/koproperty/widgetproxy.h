@@ -39,7 +39,7 @@ class KOPROPERTY_EXPORT WidgetProxy : public QWidget
 	Q_OBJECT
 
 	public:
-		WidgetProxy(QWidget *parent, const char *name=0);
+		explicit WidgetProxy(QWidget *parent, const char *name=0);
 		WidgetProxy();
         virtual ~WidgetProxy();
 

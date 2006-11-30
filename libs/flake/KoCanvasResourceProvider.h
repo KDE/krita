@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2006 Boudewijn Rempt
- *
+   Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
+ 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either

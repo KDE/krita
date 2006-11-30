@@ -19,9 +19,11 @@
 
 #include "KoTextSelectionHandler.h"
 
+#include <kdebug.h>
 #include <QTextCharFormat>
 #include <QFont>
 #include <QTextCursor>
+#include <QTextBlock>
 
 void KoTextSelectionHandler::bold(bool bold) {
     Q_ASSERT(m_caret);
@@ -52,7 +54,21 @@ void KoTextSelectionHandler::strikeOut(bool strikeout) {
 }
 
 void KoTextSelectionHandler::insertFrameBreak() {
-    // TODO
+    QTextBlock block = m_caret->block();
+/*
+    if(m_caret->position() == block.position() && block.length() > 0) { // start of parag
+        QTextBlockFormat bf = m_caret->blockFormat();
+        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysAfter);
+        m_caret->setBlockFormat(bf);
+    } else { */
+        QTextBlockFormat bf = m_caret->blockFormat();
+//       if(m_caret->position() != block.position() + block.length() -1 ||
+//               bf.pageBreakPolicy() != QTextFormat::PageBreak_Auto) // end of parag or already a pagebreak
+            m_caret->insertText("\n");
+        bf = m_caret->blockFormat();
+        bf.setPageBreakPolicy(QTextFormat::QTextFormat::PageBreak_AlwaysBefore);
+        m_caret->setBlockFormat(bf);
+    //}
 }
 
 void KoTextSelectionHandler::setFontSize(int size) {
@@ -91,6 +107,6 @@ QString KoTextSelectionHandler::selectedText() const {
 }
 
 void KoTextSelectionHandler::insert(const QString &text) {
-    // TODO
+    m_caret->insertText(text);
 }
 

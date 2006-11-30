@@ -67,10 +67,12 @@ public:
 
     /// the type for identifying part of a KoPathPoint
     enum KoPointType {
-        Node,          ///< the node point
-        ControlPoint1, ///< the first control point
-        ControlPoint2  ///< the second control point
+        Node = 1,          ///< the node point
+        ControlPoint1 = 2, ///< the first control point
+        ControlPoint2 = 4,  ///< the second control point
+        All = 7     
     };
+    Q_DECLARE_FLAGS( KoPointTypes, KoPointType )
 
     /**
      * @brief Constructor
@@ -206,8 +208,12 @@ public:
      * Paints the path point with the actual brush and pen
      * @param painter used for painting the shape point
      * @param size the drawing size of the shape point
+     * @param types the points which should be painted
+     * @param active If true only the given active points are painted
+     *               If false all given points are used.
      */
-    void paint(QPainter &painter, const QSizeF &size, bool selected );
+    //void paint(QPainter &painter, const QSizeF &size, bool selected );
+    void paint(QPainter &painter, const QSizeF &size, KoPointTypes types, bool active = true );
 
     /**
      * @brief Sets the parent path shape.
@@ -226,9 +232,12 @@ public:
      * 
      * This takes into account if there are controlpoints 
      *
+     * @param active If true only the active points are used in caluclation
+     *               of the bounding rectangle. If false all points are used.
+     *
      * @return bounding rect in document coordinates
      */
-    QRectF boundingRect() const;
+    QRectF boundingRect( bool active = true ) const;
 
     /**
      * @brief Reverses the path point.
@@ -633,5 +642,6 @@ protected:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( KoPathPoint::KoPointProperties )
+Q_DECLARE_OPERATORS_FOR_FLAGS( KoPathPoint::KoPointTypes )
 
 #endif /* KOPATHSHAPE_H */

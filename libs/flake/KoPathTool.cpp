@@ -481,7 +481,7 @@ void KoPathTool::ActivePointHandle::paint( QPainter &painter, KoViewConverter &c
     KoShape::applyConversion( painter, converter );
 
     QRectF handle = converter.viewToDocument( m_tool->handleRect( QPoint(0,0) ) );
-    m_activePoint->paint( painter, handle.size(), m_tool->m_pointSelection.contains( m_activePoint ) );
+    m_activePoint->paint( painter, handle.size(), m_tool->m_pointSelection.contains( m_activePoint ) ? KoPathPoint::All : KoPathPoint::Node );
     painter.restore();
 }
 
@@ -584,7 +584,7 @@ void KoPathTool::KoPathPointSelection::paint( QPainter &painter, KoViewConverter
         QRectF handle = converter.viewToDocument( m_tool->handleRect( QPoint(0,0) ) );
 
         foreach( KoPathPoint *p, it.value() )
-            p->paint( painter, handle.size(), true );
+            p->paint( painter, handle.size(), KoPathPoint::All );
 
         painter.restore();
     }

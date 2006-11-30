@@ -189,37 +189,37 @@ void KoPathPoint::map( const QMatrix &matrix, bool mapGroup )
     m_shape->update(); 
 }
 
-void KoPathPoint::paint(QPainter &painter, const QSizeF &size, bool selected)
+void KoPathPoint::paint( QPainter &painter, const QSizeF &size, KoPointTypes types, bool active )
 {
-    QRectF handle( QPointF(-0.5*size.width(),0-0.5*size.height()), size );
+    QRectF handle( QPointF( -0.5 * size.width(), -0.5 * size.height() ), size );
 
-    if( selected )
+    if ( types & ControlPoint1 && ( !active || activeControlPoint1() ) )
     {
-        if( activeControlPoint1() )
-        {
-            painter.drawLine( point(), controlPoint1() );
-            painter.drawEllipse( handle.translated( controlPoint1() ) );
-        }
-        if( activeControlPoint2() )
-        {
-            painter.drawLine( point(), controlPoint2() );
-            painter.drawEllipse( handle.translated( controlPoint2() ) );
-        }
+        painter.drawLine( point(), controlPoint1() );
+        painter.drawEllipse( handle.translated( controlPoint1() ) );
+    }
+    if ( types & ControlPoint2 && ( !active || activeControlPoint2() ) )
+    {
+        painter.drawLine( point(), controlPoint2() );
+        painter.drawEllipse( handle.translated( controlPoint2() ) );
     }
 
-    if( properties() & IsSmooth )
-        painter.drawRect( handle.translated( point() ) );
-    else if( properties() & IsSymmetric )
+    if ( types & Node )
     {
-        QWMatrix matrix;
-        matrix.rotate( 45.0 );
-        QPolygonF poly( handle );
-        poly = matrix.map( poly );
-        poly.translate( point() );
-        painter.drawPolygon( poly );
+        if ( properties() & IsSmooth )
+            painter.drawRect( handle.translated( point() ) );
+        else if( properties() & IsSymmetric )
+        {
+            QWMatrix matrix;
+            matrix.rotate( 45.0 );
+            QPolygonF poly( handle );
+            poly = matrix.map( poly );
+            poly.translate( point() );
+            painter.drawPolygon( poly );
+        }
+        else
+            painter.drawEllipse( handle.translated( point() ) );
     }
-    else
-        painter.drawEllipse( handle.translated( point() ) );
 }
 
 void KoPathPoint::setParent( KoPathShape* parent )
@@ -229,16 +229,16 @@ void KoPathPoint::setParent( KoPathShape* parent )
     m_shape = parent;
 }
 
-QRectF KoPathPoint::boundingRect() const
+QRectF KoPathPoint::boundingRect( bool active ) const
 {
     QRectF rect( m_point, QSize( 1, 1 ) );
-    if ( activeControlPoint1() )
+    if ( !active || activeControlPoint1() )
     {
         QRectF r1( m_point, QSize( 1, 1 ) );
         r1.setBottomRight( m_controlPoint1 );
         rect = rect.unite( r1 );
     }
-    if ( activeControlPoint2() )
+    if ( !active || activeControlPoint2() )
     {
         QRectF r2( m_point, QSize( 1, 1 ) );
         r2.setBottomRight( m_controlPoint2 );
@@ -428,7 +428,7 @@ void KoPathShape::paintPoints( QPainter &painter, const KoViewConverter &convert
         for ( ; it != ( *pathIt )->end(); ++it )
         {
             KoPathPoint *point = ( *it );
-            point->paint( painter, handle.size(), false );
+            point->paint( painter, handle.size(), KoPathPoint::Node );
         }
     }
 }

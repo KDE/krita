@@ -45,8 +45,14 @@ public slots:
     void activate( bool temporary = false );
 
 protected:
+    /// add path shape to document
+    void addPathShape();
+    QRectF handleRect( const QPointF &p );
+    void repaintAdjusted( const QRectF &rect );
+
     KoPathShape *m_shape;
     KoPathPoint *m_activePoint;
     KoPathPoint *m_firstPoint;
+    int m_handleRadius;
 };
 

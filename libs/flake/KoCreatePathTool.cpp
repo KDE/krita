@@ -61,11 +61,14 @@ void KoCreatePathTool::paint( QPainter &painter, KoViewConverter &converter )
             painter.restore();
         }
 
+        KoShape::applyConversion( painter, converter );
+        painter.setBrush( Qt::white ); //TODO make configurable
+        painter.setPen( Qt::blue );
+
+        m_firstPoint->paint( painter, QSize( 4, 4 ), KoPathPoint::Node );
+
         if ( m_activePoint->activeControlPoint1() || m_activePoint->activeControlPoint2() )
         {
-            painter.setBrush( Qt::white ); //TODO make configurable
-            painter.setPen( Qt::blue );
-            KoShape::applyConversion( painter, converter );
             //TODO use the same handle size as configured in the PathTool
             m_activePoint->paint( painter, QSize( 4, 4 ), 
                                   KoPathPoint::ControlPoint1 | KoPathPoint::ControlPoint2, 
@@ -90,6 +93,7 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         // TODO take properties form the resource provider
         m_shape->setBorder( new KoLineBorder( 1, Qt::black ) );
         m_activePoint = m_shape->moveTo( event->point );
+        m_firstPoint = m_activePoint;
     }
     m_canvas->updateCanvas( m_shape->boundingRect() );
 }
@@ -99,7 +103,8 @@ void KoCreatePathTool::mouseDoubleClickEvent( KoPointerEvent *event )
     //qDebug() << "KoCreatePathTool::mouseDoubleClickEvent" << m_shape << "point = " << event->point;
     if ( m_shape )
     {
-        m_activePoint->setPoint( event->point );
+        // the first click of the double click created a new point which has the be removed again
+        m_shape->removePoint( m_activePoint );
 
         m_shape->normalize();
 
@@ -137,7 +142,6 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
             if ( m_activePoint->properties() & KoPathPoint::CanHaveControlPoint1 )
             {
                 m_activePoint->setControlPoint1( m_activePoint->point() + ( m_activePoint->point() - event->point ) );
-                qDebug() << "mouseMoveEvent" << "setControlPoint1" << m_activePoint->controlPoint1();
             }
             m_canvas->updateCanvas( m_shape->boundingRect() );
             m_canvas->updateCanvas( m_activePoint->boundingRect( false ).adjusted( -2, -2, 2, 2 ) );

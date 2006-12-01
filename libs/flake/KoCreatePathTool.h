@@ -47,5 +47,6 @@ public slots:
 protected:
     KoPathShape *m_shape;
     KoPathPoint *m_activePoint;
+    KoPathPoint *m_firstPoint;
 };
 

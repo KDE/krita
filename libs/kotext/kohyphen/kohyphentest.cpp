@@ -10,12 +10,8 @@
 #include "kohyphen.h"
 #include <kdebug.h>
 
-static bool check(QString a, QString b)
+static bool check(const QString& a, const QString& b)
 {
-  if (a.isEmpty())
-     a.clear();
-  if (b.isEmpty())
-     b.clear();
   if (a == b) {
     kDebug() << "checking '" << a << "' against expected value '" << b << "'... " << "ok" << endl;
   }

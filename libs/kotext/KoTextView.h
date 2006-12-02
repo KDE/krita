@@ -63,7 +63,7 @@ public:
      * Constructor. A KoTextView is associated to a KoTextObject.
      * Don't forget to call updateUI(true,true) in your derived constructor
      */
-    KoTextView( KoTextObject *textobj );
+    explicit KoTextView( KoTextObject *textobj );
     virtual ~KoTextView();
 
     void setBackSpeller( KoBgSpellCheck* backSpeller );

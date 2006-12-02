@@ -27,7 +27,7 @@
 class KoTextToolFactory : public KoToolFactory {
     Q_OBJECT
 public:
-    KoTextToolFactory(QObject *parent);
+    explicit KoTextToolFactory(QObject *parent);
     ~KoTextToolFactory();
 
     KoTool * createTool(KoCanvasBase *canvas);

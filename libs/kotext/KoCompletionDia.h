@@ -26,7 +26,7 @@
 class KoCompletionBase : public QWidget, public Ui::KoCompletionBase
 {
 public:
-  KoCompletionBase( QWidget *parent ) : QWidget( parent ) {
+  explicit KoCompletionBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

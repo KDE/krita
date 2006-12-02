@@ -49,7 +49,7 @@ class KoVariableNameDia : public KDialog
 
 public:
     // For KWMailMergeVariableInsertDia
-    KoVariableNameDia( QWidget *parent );
+    explicit KoVariableNameDia( QWidget *parent );
     // For kwview
     KoVariableNameDia( QWidget *parent, const Q3PtrList<KoVariable> &vars );
     QString getName() const;
@@ -71,7 +71,7 @@ protected:
 class KoCustomVariablesListItem : public Q3ListViewItem
 {
 public:
-    KoCustomVariablesListItem( Q3ListView *parent );
+    explicit KoCustomVariablesListItem( Q3ListView *parent );
 
     void setVariable( KoCustomVariable *v );
     KoCustomVariable *getVariable() const;
@@ -98,7 +98,7 @@ class KoCustomVariablesList : public K3ListView
     Q_OBJECT
 
 public:
-    KoCustomVariablesList( QWidget *parent );
+    explicit KoCustomVariablesList( QWidget *parent );
 
     void setValues();
     void updateItems();
@@ -144,7 +144,7 @@ public:
     /**
      * Add new variable
      */
-    KoCustomVarDialog( QWidget *parent );
+    explicit KoCustomVarDialog( QWidget *parent );
     /**
      * Edit existing variable @p var
      */

@@ -30,7 +30,7 @@ class KOTEXT_EXPORT KoBorderPreview : public QFrame/*QGroupBox*/
     Q_OBJECT
 
 public:
-    KoBorderPreview( QWidget* );
+    explicit KoBorderPreview( QWidget* );
     ~KoBorderPreview() {}
 
     KoBorder leftBorder()const { return m_leftBorder; }

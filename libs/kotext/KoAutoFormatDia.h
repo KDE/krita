@@ -40,7 +40,7 @@ class KoAutoFormatLineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
-    KoAutoFormatLineEdit ( QWidget * parent, const char * name=0 );
+    explicit KoAutoFormatLineEdit ( QWidget * parent, const char * name=0 );
 
 protected:
     virtual void keyPressEvent ( QKeyEvent * );

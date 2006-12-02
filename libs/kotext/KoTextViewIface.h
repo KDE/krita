@@ -33,7 +33,7 @@ class KOTEXT_EXPORT KoTextViewIface /*:  public DCOPObject*/
 {
 //     K_DCOP
 public:
-    KoTextViewIface( KoTextView *_textview );
+    explicit KoTextViewIface( KoTextView *_textview );
 
 // k_dcop:
     void insertSoftHyphen();

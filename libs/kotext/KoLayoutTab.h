@@ -26,7 +26,7 @@
 class KoLayoutTabBase : public QWidget, public Ui::KoLayoutTabBase
 {
 public:
-  KoLayoutTabBase( QWidget *parent ) : QWidget( parent ) {
+  explicit KoLayoutTabBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

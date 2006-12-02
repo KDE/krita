@@ -27,7 +27,7 @@
 class KoDecorationTabBase : public QWidget, public Ui::KoDecorationTabBase
 {
 public:
-  KoDecorationTabBase( QWidget *parent ) : QWidget( parent ) {
+  explicit KoDecorationTabBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };
@@ -38,7 +38,7 @@ class KoDecorationTab : public KoDecorationTabBase
     Q_OBJECT
 
 public:
-    KoDecorationTab( QWidget* parent=0);
+    explicit KoDecorationTab( QWidget* parent=0);
     ~KoDecorationTab();
 
     QColor getTextColor() const;

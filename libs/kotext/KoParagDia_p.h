@@ -95,7 +95,7 @@ class KPagePreview2 : public Q3GroupBox
     Q_OBJECT
 
 public:
-    KPagePreview2( QWidget* );
+    explicit KPagePreview2( QWidget* );
     ~KPagePreview2() {}
 
     void setAlign( int _align )

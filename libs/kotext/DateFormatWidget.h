@@ -9,7 +9,7 @@ class DateFormatWidget : public QWidget
     Q_OBJECT
 
 public:
-    DateFormatWidget( QWidget* parent );
+    explicit DateFormatWidget( QWidget* parent );
     ~DateFormatWidget();
     QString resultString();
     int correctValue();

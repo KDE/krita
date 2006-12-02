@@ -34,7 +34,7 @@
 class KoTextTool : public KoTool {
     Q_OBJECT
 public:
-    KoTextTool(KoCanvasBase *canvas);
+    explicit KoTextTool(KoCanvasBase *canvas);
     ~KoTextTool();
 
     void paint( QPainter &painter, KoViewConverter &converter );

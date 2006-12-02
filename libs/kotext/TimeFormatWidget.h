@@ -10,7 +10,7 @@ class TimeFormatWidget : public QWidget
     Q_OBJECT
 
 public:
-    TimeFormatWidget( QWidget* parent );
+    explicit TimeFormatWidget( QWidget* parent );
     ~TimeFormatWidget();
     QString resultString() const;
     int correctValue() const;

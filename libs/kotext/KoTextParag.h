@@ -60,7 +60,7 @@ class KOTEXT_EXPORT KoTextParag
     friend class KoTextCursor;
 
 public:
-    KoTextParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = true );
+    explicit KoTextParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = true );
     virtual ~KoTextParag();
 
     KoTextString *string() const;

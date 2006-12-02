@@ -33,7 +33,7 @@
 class KOTEXT_EXPORT KoUserStyle
 {
 public:
-    KoUserStyle( const QString & name );
+    explicit KoUserStyle( const QString & name );
 
     /// The internal name (used for loading/saving, but not shown to the user)
     /// Should be unique in a given style collection.

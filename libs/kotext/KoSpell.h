@@ -49,7 +49,7 @@ class KOTEXT_EXPORT KoSpell : public KSpell2::BackgroundChecker
     Q_OBJECT
 
 public:
-    KoSpell( const KSpell2::Loader::Ptr& loader, QObject *parent =0,
+    explicit KoSpell( const KSpell2::Loader::Ptr& loader, QObject *parent =0,
              const char *name =0 );
     /**
      * The destructor instructs ISpell/ASpell to write out the personal

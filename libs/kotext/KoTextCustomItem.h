@@ -34,7 +34,7 @@
 class KOTEXT_EXPORT KoTextCustomItem
 {
 public:
-    KoTextCustomItem( KoTextDocument *p );
+    explicit KoTextCustomItem( KoTextDocument *p );
     virtual ~KoTextCustomItem();
     virtual void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected ) /* = 0*/;
 

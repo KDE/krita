@@ -27,7 +27,7 @@
 class KoLanguageTabBase : public QWidget, public Ui::KoLanguageTabBase
 {
 public:
-  KoLanguageTabBase( QWidget *parent ) : QWidget( parent ) {
+  explicit KoLanguageTabBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

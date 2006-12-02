@@ -144,7 +144,7 @@ class KOTEXT_EXPORT KoStyleParagTab : public KoStyleManagerTab
 {
     Q_OBJECT
 public:
-    KoStyleParagTab( QWidget * parent );
+    explicit KoStyleParagTab( QWidget * parent );
 
     // not a constructor parameter since 'this' is the parent of the widget
     void setWidget( KoParagLayoutWidget * widget );

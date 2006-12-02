@@ -37,7 +37,7 @@ public:
      * @param prefix used by generateUniqueName to prefix new style names
      * (to avoid clashes between different kinds of styles)
      */
-    KoUserStyleCollection( const QString& prefix );
+    explicit KoUserStyleCollection( const QString& prefix );
 
     /**
      * Destructor

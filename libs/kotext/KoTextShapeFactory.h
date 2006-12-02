@@ -33,7 +33,7 @@ class KoTextShapeFactory : public KoShapeFactory {
 
 public:
     /// constructor
-    KoTextShapeFactory(QObject *parent);
+    explicit KoTextShapeFactory(QObject *parent);
     ~KoTextShapeFactory() {}
 
     KoShape *createDefaultShape();

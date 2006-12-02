@@ -69,7 +69,7 @@ class KoUnitDoubleSpinBox;
 class KoParagDecorationTab : public QWidget, public Ui::KoParagDecorationTab
 {
 public:
-  KoParagDecorationTab( QWidget *parent ) : QWidget( parent ) {
+  explicit KoParagDecorationTab( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };
@@ -195,7 +195,7 @@ class KOTEXT_EXPORT KoParagDecorationWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoParagDecorationWidget( QWidget * parent );
+    explicit KoParagDecorationWidget( QWidget * parent );
     virtual ~KoParagDecorationWidget() {}
 
     virtual void display( const KoParagLayout & lay );

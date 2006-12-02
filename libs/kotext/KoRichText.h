@@ -236,7 +236,7 @@ inline QChar::Direction KoTextString::direction() const
 class KOTEXT_EXPORT KoTextCursor
 {
 public:
-    KoTextCursor( KoTextDocument *d );
+    explicit KoTextCursor( KoTextDocument *d );
     KoTextCursor();
     KoTextCursor( const KoTextCursor &c );
     KoTextCursor &operator=( const KoTextCursor &c );

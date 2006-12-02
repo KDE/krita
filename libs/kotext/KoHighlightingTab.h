@@ -28,7 +28,7 @@
 class KoHighlightingTabBase: public QWidget, public Ui::KoHighlightingTabBase
 {
 public:
-  KoHighlightingTabBase( QWidget *parent ) : QWidget( parent ) {
+  explicit KoHighlightingTabBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

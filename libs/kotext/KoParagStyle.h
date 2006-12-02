@@ -34,7 +34,7 @@ class KOTEXT_EXPORT KoCharStyle : public KoUserStyle
 {
 public:
     /** Create a blank style (with default attributes) */
-    KoCharStyle( const QString & name );
+    explicit KoCharStyle( const QString & name );
 
     /** Copy another style */
     KoCharStyle( const KoCharStyle & rhs ) : KoUserStyle( QString::null ) { *this = rhs; }

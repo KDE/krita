@@ -33,7 +33,7 @@ class KOTEXT_EXPORT KoBgSpellCheck : public QObject
 {
     Q_OBJECT
 public:
-    KoBgSpellCheck( const KSpell2::Loader::Ptr& loader, QObject *parent =0,
+    explicit KoBgSpellCheck( const KSpell2::Loader::Ptr& loader, QObject *parent =0,
                     const char *name =0 );
     virtual ~KoBgSpellCheck();
 

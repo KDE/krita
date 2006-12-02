@@ -30,7 +30,7 @@
 
 #include "ui_wdgcolortoalphabase.h"
 
-KisWdgColorToAlpha::KisWdgColorToAlpha( KisFilter* nfilter, QWidget * parent, const char * name) : KisFilterConfigWidget ( parent, name )
+KisWdgColorToAlpha::KisWdgColorToAlpha( KisFilter* nfilter, QWidget * parent) : KisFilterConfigWidget ( parent )
 {
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
@@ -50,5 +50,14 @@ void KisWdgColorToAlpha::setConfiguration(KisFilterConfiguration* config)
         m_widget->intThreshold->setValue( value.toInt() );
     }
 }
+
+KisFilterConfiguration* KisWdgColorToAlpha::configuration() const
+{
+    KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
+    config->setProperty("targetcolor", widget()->colorTarget->color() );
+    config->setProperty("threshold", widget()->intThreshold->value());
+    return config;
+}
+
 
 #include "kis_wdg_color_to_alpha.moc"

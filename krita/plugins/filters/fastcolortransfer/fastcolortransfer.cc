@@ -66,17 +66,13 @@ KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), "colo
 
 KisFilterConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP )
 {
-    return new KisWdgFastColorTransfer(this, parent, "configuration of color to alpha");
+    return new KisWdgFastColorTransfer(this, parent);
 }
 
-KisFilterConfiguration* KisFilterFastColorTransfer::configuration(QWidget* w)
+KisFilterConfiguration* KisFilterFastColorTransfer::designerConfiguration(KisPaintDeviceSP)
 {
-    KisWdgFastColorTransfer * wCTA = dynamic_cast<KisWdgFastColorTransfer*>(w);
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    if(wCTA)
-    {
-        config->setProperty("filename", wCTA->widget()->fileNameURLRequester->url() );
-    }
+    config->setProperty("filename", "" ); // TODO: put an exemple image in share/krita, like a sunset that what's give the best results
     return config;
 }
 

@@ -35,9 +35,9 @@ class KisBlurFilter : public KisFilter
         virtual bool supportsIncrementalPainting() { return false; }
         virtual bool supportsAdjustmentLayers() { return false; }
         virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
+        virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP);
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-        virtual KisFilterConfiguration* configuration(QWidget*);
 };
 
 #endif

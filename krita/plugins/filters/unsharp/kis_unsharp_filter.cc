@@ -37,21 +37,16 @@ KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), "enhance", i18n("&Unsharp
 
 KisFilterConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP )
 {
-    return new KisWdgUnsharp(this, parent, "configuration of color to alpha");
+    return new KisWdgUnsharp(this, parent);
 }
 
-KisFilterConfiguration* KisUnsharpFilter::configuration(QWidget* w)
+KisFilterConfiguration* KisUnsharpFilter::designerConfiguration(KisPaintDeviceSP)
 {
-    KisWdgUnsharp * wCTA = dynamic_cast<KisWdgUnsharp*>(w);
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    if(wCTA)
-    {
-        config->setProperty("halfSize", wCTA->widget()->intHalfSize->value() );
-        config->setProperty("amount", wCTA->widget()->doubleAmount->value() );
-        config->setProperty("threshold", wCTA->widget()->intThreshold->value() );
-    }
+    config->setProperty("halfSize", 5 );
+    config->setProperty("amount", 0.5 );
+    config->setProperty("threshold", 10 );
     return config;
-    return 0;
 }
 
 void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& areaSize, KisFilterConfiguration* config)

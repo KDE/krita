@@ -37,18 +37,14 @@ KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), "colors", i18n(
 
 KisFilterConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP )
 {
-    return new KisWdgColorToAlpha(this, parent, "configuration of color to alpha");
+    return new KisWdgColorToAlpha(this, parent);
 }
 
-KisFilterConfiguration* KisFilterColorToAlpha::configuration(QWidget* w)
+KisFilterConfiguration* KisFilterColorToAlpha::designerConfiguration(KisPaintDeviceSP )
 {
-    KisWdgColorToAlpha * wCTA = dynamic_cast<KisWdgColorToAlpha*>(w);
     KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
-    if(wCTA)
-    {
-        config->setProperty("targetcolor", wCTA->widget()->colorTarget->color() );
-        config->setProperty("threshold", wCTA->widget()->intThreshold->value());
-    }
+    config->setProperty("targetcolor", QColor(255,255,255) );
+    config->setProperty("threshold", 0);
     return config;
 }
 

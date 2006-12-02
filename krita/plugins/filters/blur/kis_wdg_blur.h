@@ -30,9 +30,10 @@ class KisWdgBlur : public KisFilterConfigWidget
 {
     Q_OBJECT
     public:
-        KisWdgBlur( KisFilter* nfilter, QWidget * parent, const char * name);
-        inline Ui_WdgBlur* widget() { return m_widget; }
+        KisWdgBlur( KisFilter* nfilter, QWidget * parent);
+        inline const Ui_WdgBlur* widget() const { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
+        virtual KisFilterConfiguration* configuration() const;
     private slots:
         void linkSpacingToggled(bool);
         void spinBoxHalfWidthChanged(int );

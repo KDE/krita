@@ -26,7 +26,7 @@
 
 #include "ui_wdgfastcolortransfer.h"
 
-KisWdgFastColorTransfer::KisWdgFastColorTransfer(KisFilter* nfilter, QWidget * parent, const char * name) : KisFilterConfigWidget ( parent, name )
+KisWdgFastColorTransfer::KisWdgFastColorTransfer(KisFilter* nfilter, QWidget * parent) : KisFilterConfigWidget ( parent )
 {
     m_widget = new Ui_WdgFastColorTransfer();
     m_widget->setupUi(this);
@@ -46,4 +46,11 @@ void KisWdgFastColorTransfer::setConfiguration(KisFilterConfiguration* config)
         widget()->fileNameURLRequester->setUrl( value.toString() );
     }
 
+}
+
+KisFilterConfiguration* KisWdgFastColorTransfer::configuration() const
+{
+    KisFilterConfiguration* config = new KisFilterConfiguration("colortransfer", 1);
+    config->setProperty("filename", this->widget()->fileNameURLRequester->url() );
+    return config;
 }

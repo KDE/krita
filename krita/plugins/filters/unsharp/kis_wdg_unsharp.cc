@@ -30,7 +30,7 @@
 
 #include "ui_wdgunsharp.h"
 
-KisWdgUnsharp::KisWdgUnsharp( KisFilter* , QWidget * parent, const char * name) : KisFilterConfigWidget ( parent, name )
+KisWdgUnsharp::KisWdgUnsharp( KisFilter* , QWidget * parent) : KisFilterConfigWidget ( parent )
 {
     m_widget = new Ui_WdgUnsharp();
     m_widget->setupUi(this);
@@ -47,5 +47,15 @@ void KisWdgUnsharp::setConfiguration(KisFilterConfiguration* config)
     widget()->doubleAmount->setValue( (config->getProperty("amount", value)) ? value.toDouble() : 0.1 );
     widget()->intThreshold->setValue( (config->getProperty("threshold", value)) ? value.toUInt() : 20 );
 }
+
+KisFilterConfiguration* KisWdgUnsharp::configuration() const
+{
+    KisFilterConfiguration* config = new KisFilterConfiguration("unsharp", 1);
+    config->setProperty("halfSize", widget()->intHalfSize->value() );
+    config->setProperty("amount", widget()->doubleAmount->value() );
+    config->setProperty("threshold", widget()->intThreshold->value() );
+    return config;
+}
+
 
 #include "kis_wdg_unsharp.moc"

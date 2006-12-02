@@ -56,21 +56,17 @@ KisBlurFilter::KisBlurFilter() : KisFilter(id(), "blur", i18n("&Blur..."))
 
 KisFilterConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP )
 {
-    return new KisWdgBlur(this, parent, "configuration of color to alpha");
+    return new KisWdgBlur(this, parent);
 }
 
-KisFilterConfiguration* KisBlurFilter::configuration(QWidget* w)
+KisFilterConfiguration* KisBlurFilter::designerConfiguration(const KisPaintDeviceSP)
 {
-    KisWdgBlur * wCTA = dynamic_cast<KisWdgBlur*>(w);
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    if(wCTA)
-    {
-        config->setProperty("halfWidth", wCTA->widget()->intHalfWidth->value() );
-        config->setProperty("halfHeight", wCTA->widget()->intHalfWidth->value() );
-        config->setProperty("rotate", wCTA->widget()->intAngle->value() );
-        config->setProperty("strength", wCTA->widget()->intStrength->value() );
-        config->setProperty("shape", wCTA->widget()->cbShape->currentItem());
-    }
+    config->setProperty("halfWidth", 5 );
+    config->setProperty("halfHeight", 5 );
+    config->setProperty("rotate", 0 );
+    config->setProperty("strength", 0 );
+    config->setProperty("shape", 0);
     return config;
 }
 

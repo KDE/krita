@@ -102,27 +102,23 @@ KisFilterWave::KisFilterWave() : KisFilter(id(), "other", i18n("&Wave..."))
 {
 }
 
-KisFilterConfiguration* KisFilterWave::configuration(QWidget* w)
+KisFilterConfiguration* KisFilterWave::designerConfiguration(const KisPaintDeviceSP)
 {
-    KisWdgWave* wN = dynamic_cast<KisWdgWave*>(w);
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    if(wN)
-    {
-        config->setProperty("horizontalwavelength", wN->widget()->intHWavelength->value() );
-        config->setProperty("horizontalshift", wN->widget()->intHShift->value() );
-        config->setProperty("horizontalamplitude", wN->widget()->intHAmplitude->value() );
-        config->setProperty("horizontalshape", wN->widget()->cbHShape->currentItem() );
-        config->setProperty("verticalwavelength", wN->widget()->intVWavelength->value() );
-        config->setProperty("verticalshift", wN->widget()->intVShift->value() );
-        config->setProperty("verticalamplitude", wN->widget()->intVAmplitude->value() );
-        config->setProperty("verticalshape", wN->widget()->cbVShape->currentItem() );
-    }
+    KisFilterConfiguration* config = new KisFilterConfiguration("wave", 1);
+    config->setProperty("horizontalwavelength", 50 );
+    config->setProperty("horizontalshift", 50 );
+    config->setProperty("horizontalamplitude", 4 );
+    config->setProperty("horizontalshape", 0 );
+    config->setProperty("verticalwavelength", 50 );
+    config->setProperty("verticalshift", 50 );
+    config->setProperty("verticalamplitude", 4 );
+    config->setProperty("verticalshape", 0 );
     return config;
 }
 
 KisFilterConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
-    return new KisWdgWave((KisFilter*)this, (QWidget*)parent, i18n("Configuration of wave filter").ascii());
+    return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }
 
 void KisFilterWave::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)

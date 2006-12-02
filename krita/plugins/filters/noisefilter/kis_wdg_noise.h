@@ -30,11 +30,12 @@ class KisWdgNoise : public KisFilterConfigWidget
 {
     Q_OBJECT
     public:
-        KisWdgNoise(KisFilter* nfilter, QWidget* parent = 0, const char* name = 0);
+        KisWdgNoise(KisFilter* nfilter, QWidget* parent = 0);
         ~KisWdgNoise();
     public:
-        inline Ui_WdgNoiseOptions* widget() { return m_widget; }
+        inline const Ui_WdgNoiseOptions* widget() const { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
+        virtual KisFilterConfiguration* configuration() const;
     private:
         Ui_WdgNoiseOptions* m_widget;
 };

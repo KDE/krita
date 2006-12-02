@@ -67,21 +67,17 @@ KisFilterNoise::KisFilterNoise() : KisFilter(id(), "other", i18n("&Random Noise.
 {
 }
 
-KisFilterConfiguration* KisFilterNoise::configuration(QWidget* w)
+KisFilterConfiguration* KisFilterNoise::designerConfiguration(const KisPaintDeviceSP)
 {
-    KisWdgNoise* wN = dynamic_cast<KisWdgNoise*>(w);
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    if(wN)
-    {
-        config->setProperty("level", wN->widget()->intLevel->value() );
-        config->setProperty("opacity", wN->widget()->intOpacity->value() );
-    }
+    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    config->setProperty("level", 50 );
+    config->setProperty("opacity", 100 );
     return config;
 }
 
 KisFilterConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-    return new KisWdgNoise((KisFilter*)this, (QWidget*)parent, i18n("Configuration of noise filter").ascii());
+    return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);
 }
 
 void KisFilterNoise::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)

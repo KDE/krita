@@ -30,11 +30,12 @@ class KisWdgLensCorrection : public KisFilterConfigWidget
 {
     Q_OBJECT
     public:
-        KisWdgLensCorrection(KisFilter* nfilter, QWidget* parent = 0, const char* name = 0);
+        KisWdgLensCorrection(KisFilter* nfilter, QWidget* parent = 0);
         ~KisWdgLensCorrection();
     public:
-        inline Ui_WdgLensCorrectionOptions* widget() { return m_widget; }
+        inline const Ui_WdgLensCorrectionOptions* widget() const { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
+        virtual KisFilterConfiguration* configuration() const;
     private:
         Ui_WdgLensCorrectionOptions* m_widget;
 };

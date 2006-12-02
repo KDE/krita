@@ -30,11 +30,12 @@ class KisWdgRandomPick : public KisFilterConfigWidget
 {
     Q_OBJECT
     public:
-        KisWdgRandomPick(KisFilter* nfilter, QWidget* parent = 0, const char* name = 0);
+        KisWdgRandomPick(KisFilter* nfilter, QWidget* parent = 0);
         ~KisWdgRandomPick();
     public:
-        inline Ui_WdgRandomPickOptions* widget() { return m_widget; }
+        inline const Ui_WdgRandomPickOptions* widget() const { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
+        virtual KisFilterConfiguration* configuration() const;
     private:
         Ui_WdgRandomPickOptions* m_widget;
 };

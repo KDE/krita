@@ -26,8 +26,8 @@
 
 #include "ui_wdglenscorrectionoptions.h"
 
-KisWdgLensCorrection::KisWdgLensCorrection(KisFilter* /*nfilter*/, QWidget* parent, const char* name)
-    : KisFilterConfigWidget(parent,name)
+KisWdgLensCorrection::KisWdgLensCorrection(KisFilter* /*nfilter*/, QWidget* parent)
+    : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgLensCorrectionOptions();
     m_widget->setupUi(this);
@@ -68,6 +68,17 @@ void KisWdgLensCorrection::setConfiguration(KisFilterConfiguration* config)
     }
 }
 
+KisFilterConfiguration* KisWdgLensCorrection::configuration() const
+{
+    QVariant value;
+    KisFilterConfiguration* config = new KisFilterConfiguration("lenscorrection", 1);
+    config->setProperty("xcenter", widget()->intXCenter->value() );
+    config->setProperty("ycenter", widget()->intYCenter->value() );
+    config->setProperty("correctionnearcenter", widget()->dblCorrectionNearCenter->value() );
+    config->setProperty("correctionnearedges", widget()->dblCorrectionNearEdges->value() );
+    config->setProperty("brightness", widget()->dblBrightness->value() );
+    return config;
+}
 
 #include "kis_wdg_lens_correction.moc"
 

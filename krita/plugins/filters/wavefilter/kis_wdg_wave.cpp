@@ -25,8 +25,8 @@
 
 #include "ui_wdgwaveoptions.h"
 
-KisWdgWave::KisWdgWave(KisFilter* /*nfilter*/, QWidget* parent, const char* name)
-    : KisFilterConfigWidget(parent,name)
+KisWdgWave::KisWdgWave(KisFilter* /*nfilter*/, QWidget* parent)
+    : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgWaveOptions();
     m_widget->setupUi(this);
@@ -82,6 +82,19 @@ void KisWdgWave::setConfiguration(KisFilterConfiguration* config)
     }
 }
 
+KisFilterConfiguration* KisWdgWave::configuration() const
+{
+    KisFilterConfiguration* config = new KisFilterConfiguration("wave", 1);
+    config->setProperty("horizontalwavelength", this->widget()->intHWavelength->value() );
+    config->setProperty("horizontalshift", this->widget()->intHShift->value() );
+    config->setProperty("horizontalamplitude", this->widget()->intHAmplitude->value() );
+    config->setProperty("horizontalshape", this->widget()->cbHShape->currentItem() );
+    config->setProperty("verticalwavelength", this->widget()->intVWavelength->value() );
+    config->setProperty("verticalshift", this->widget()->intVShift->value() );
+    config->setProperty("verticalamplitude", this->widget()->intVAmplitude->value() );
+    config->setProperty("verticalshape", this->widget()->cbVShape->currentItem() );
+    return config;
+}
 
 #include "kis_wdg_wave.moc"
 

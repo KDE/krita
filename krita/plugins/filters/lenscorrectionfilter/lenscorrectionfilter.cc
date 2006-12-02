@@ -71,25 +71,21 @@ KisFilterLensCorrection::KisFilterLensCorrection() : KisFilter(id(), "other", i1
 {
 }
 
-KisFilterConfiguration* KisFilterLensCorrection::configuration(QWidget* w)
+KisFilterConfiguration* KisFilterLensCorrection::designerConfiguration(const KisPaintDeviceSP)
 {
     QVariant value;
-    KisWdgLensCorrection* wN = dynamic_cast<KisWdgLensCorrection*>(w);
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    if(wN)
-    {
-        config->setProperty("xcenter", wN->widget()->intXCenter->value() );
-        config->setProperty("ycenter", wN->widget()->intYCenter->value() );
-        config->setProperty("correctionnearcenter", wN->widget()->dblCorrectionNearCenter->value() );
-        config->setProperty("correctionnearedges", wN->widget()->dblCorrectionNearEdges->value() );
-        config->setProperty("brightness", wN->widget()->dblBrightness->value() );
-    }
+    KisFilterConfiguration* config = new KisFilterConfiguration("lenscorrection", 1);
+    config->setProperty("xcenter", 50 );
+    config->setProperty("ycenter", 50 );
+    config->setProperty("correctionnearcenter", 0. );
+    config->setProperty("correctionnearedges", 0. );
+    config->setProperty("brightness", 0. );
     return config;
 }
 
 KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
-    return new KisWdgLensCorrection((KisFilter*)this, (QWidget*)parent, i18n("Configuration of lens correction filter").ascii());
+    return new KisWdgLensCorrection((KisFilter*)this, (QWidget*)parent);
 }
 
 void KisFilterLensCorrection::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft,  const QSize& size, KisFilterConfiguration* config)

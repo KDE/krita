@@ -26,8 +26,8 @@
 
 #include "ui_wdgnoiseoptions.h"
 
-KisWdgNoise::KisWdgNoise(KisFilter* /*nfilter*/, QWidget* parent, const char* name)
-    : KisFilterConfigWidget(parent, name)
+KisWdgNoise::KisWdgNoise(KisFilter* /*nfilter*/, QWidget* parent)
+    : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgNoiseOptions();
     m_widget->setupUi(this);
@@ -53,6 +53,13 @@ void KisWdgNoise::setConfiguration(KisFilterConfiguration* config)
     }
 }
 
+KisFilterConfiguration* KisWdgNoise::configuration() const
+{
+    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    config->setProperty("level", this->widget()->intLevel->value() );
+    config->setProperty("opacity", this->widget()->intOpacity->value() );
+    return config;
+}
 
 #include "kis_wdg_noise.moc"
 

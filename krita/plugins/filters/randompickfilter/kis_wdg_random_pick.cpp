@@ -26,8 +26,8 @@
 
 #include "ui_wdgrandompickoptions.h"
 
-KisWdgRandomPick::KisWdgRandomPick(KisFilter* /*nfilter*/, QWidget* parent, const char* name)
-    : KisFilterConfigWidget(parent,name)
+KisWdgRandomPick::KisWdgRandomPick(KisFilter* /*nfilter*/, QWidget* parent)
+    : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgRandomPickOptions();
     m_widget->setupUi(this);
@@ -58,6 +58,15 @@ void KisWdgRandomPick::setConfiguration(KisFilterConfiguration* config)
     }
 }
 
+
+KisFilterConfiguration* KisWdgRandomPick::configuration() const
+{
+    KisFilterConfiguration* config = new KisFilterConfiguration("randompick", 1);
+    config->setProperty("level", this->widget()->intLevel->value() );
+    config->setProperty("windowsize", this->widget()->intWindowSize->value() );
+    config->setProperty("opacity", this->widget()->intOpacity->value() );
+    return config;
+}
 
 #include "kis_wdg_random_pick.moc"
 

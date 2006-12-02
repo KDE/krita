@@ -68,22 +68,18 @@ KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), "other", i18n("&Ran
 {
 }
 
-KisFilterConfiguration* KisFilterRandomPick::configuration(QWidget* w)
-{
-    KisWdgRandomPick* wN = dynamic_cast<KisWdgRandomPick*>(w);
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    if(wN)
-    {
-        config->setProperty("level", wN->widget()->intLevel->value() );
-        config->setProperty("windowsize", wN->widget()->intWindowSize->value() );
-        config->setProperty("opacity", wN->widget()->intOpacity->value() );
-    }
-    return config;
-}
-
 KisFilterConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-    return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent, i18n("Configuration of random pick filter").ascii());
+    return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);
+}
+
+KisFilterConfiguration* KisFilterRandomPick::designerConfiguration(const KisPaintDeviceSP)
+{
+    KisFilterConfiguration* config = new KisFilterConfiguration("randompick", 1);
+    config->setProperty("level", 50 );
+    config->setProperty("windowsize", 2.5 );
+    config->setProperty("opacity", 100 );
+    return config;
 }
 
 void KisFilterRandomPick::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)

@@ -17,6 +17,10 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef KoEncryptedStore_h
+#define KoEncryptedStore_h
+
+
 #include "KoStoreBase.h"
 #include <QHash>
 #include <QtCrypto>
@@ -157,3 +161,5 @@ protected:
     QString m_filename;
     QByteArray m_manifestBuffer;
 };
+
+#endif

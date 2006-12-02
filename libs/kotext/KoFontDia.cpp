@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,43 +22,41 @@
 
 
 
-
-#include "KoRichText.h"
-
-#include <kcolordialog.h>
+//
+//   #include "KoRichText.h"
+//
+//   #include <kcolordialog.h>
 #include <klocale.h>
-#include <kdebug.h>
-
-#include <q3groupbox.h>
-#include <QPushButton>
-#include <QTabWidget>
-#include <QLabel>
-#include <QComboBox>
-#include <QRadioButton>
-#include <QCheckBox>
-#include <knuminput.h>
-#include <KoGlobal.h>
-#include <QGroupBox>
-
-
-#include <QButtonGroup>
-#include <kcolorbutton.h>
-#include <kiconloader.h>
+//   #include <kdebug.h>
+//
+//   #include <q3groupbox.h>
+//   #include <QPushButton>
+//   #include <QTabWidget>
+//   #include <QLabel>
+//   #include <QComboBox>
+//   #include <QRadioButton>
+//   #include <QCheckBox>
+//   #include <knuminput.h>
+//   #include <KoGlobal.h>
+//   #include <QGroupBox>
+//
+//
+//   #include <QButtonGroup>
+//   #include <kcolorbutton.h>
+//   #include <kiconloader.h>
 #include <kvbox.h>
+#include <kfontdialog.h>
 
-KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
-    KSpell2::Loader::Ptr loader, QWidget* parent, const char* name )
-    : KDialog( parent ),
-    m_initialFormat(initialFormat),
-    m_changedFlags(KoTextFormat::NoFlags)
+#include <QWidget>
+
+KoFontDia::KoFontDia( const QTextCharFormat &format, KSpell2::Loader::Ptr loader, QWidget* parent)
+    : KDialog(parent),
+    m_format(format)
 {
     setCaption(i18n("Select Font") );
     setModal( true );
-    setObjectName( name );
-    setButtons( Ok|Cancel|User1|Apply );
+    setButtons( Ok|Cancel|Default|Apply );
     setDefaultButton( Ok );
-
-    setButtonText( KDialog::User1, i18n("&Reset") );
 
     KVBox *mainWidget = new KVBox( this );
     KHBox *mainHBox = new KHBox( mainWidget );
@@ -68,10 +67,13 @@ KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
     fontTab = new KoFontTab( KFontChooser::SmoothScalableFonts, this );
     fontTabWidget->addTab( fontTab, i18n( "Font" ) );
 
-    connect( fontTab, SIGNAL( familyChanged() ), this, SLOT( slotFontFamilyChanged() ) );
+    connect( fontTab, SIGNAL( fontChanged(const QFont&) ), this, SLOT( fontChanged(const QFont&) ) );
+
+/*  connect( fontTab, SIGNAL( familyChanged() ), this, SLOT( slotFontFamilyChanged() ) );
     connect( fontTab, SIGNAL( boldChanged() ), this, SLOT( slotFontBoldChanged() ) );
     connect( fontTab, SIGNAL( italicChanged() ), this, SLOT( slotFontItalicChanged() ) );
     connect( fontTab, SIGNAL( sizeChanged() ), this, SLOT( slotFontSizeChanged() ) );
+*/
 
     //Highlighting tab
     highlightingTab = new KoHighlightingTab( this );
@@ -85,7 +87,7 @@ KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
     connect( highlightingTab, SIGNAL( wordByWordChanged( bool ) ), this, SLOT( slotWordByWordChanged( bool ) ) );
     connect( highlightingTab, SIGNAL( capitalisationChanged( int ) ), this, SLOT( slotCapitalisationChanged( int ) ) );
 
-    //Decoratio tab
+    //Decoration tab
     decorationTab = new KoDecorationTab( this );
     fontTabWidget->addTab( decorationTab, i18n( "Decoration" ) );
 
@@ -112,20 +114,18 @@ KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
     //relatedPropertiesListView = new K3ListView( mainHBox );
 
     //Preview
-    fontDiaPreview = new KoFontDiaPreview( mainWidget );
+    //fontDiaPreview = new KoFontDiaPreview( mainWidget );
 
     setMainWidget( mainWidget );
 
-    init();
-}
-
-void KoFontDia::init()
-{
-    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()) );
-
+    connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+    connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotReset() ) );
     slotReset();
 }
 
+/*
+#if 0
 KoTextFormat KoFontDia::newFormat() const
 {
     return KoTextFormat( fontTab->getSelection(),
@@ -148,21 +148,25 @@ KoTextFormat KoFontDia::newFormat() const
                          decorationTab->getShadowColor()
 			);
 }
+#endif
+ */
 
 void KoFontDia::slotApply()
 {
-    emit applyFont();
+    m_format.setFont(fontTab->font());
+    // TODO
 }
 
 void KoFontDia::slotOk()
 {
     slotApply();
-    slotButtonClicked( Ok );
+    QDialog::accept();
 }
 
 void KoFontDia::slotReset()
 {
-    fontTab->setSelection( m_initialFormat.font() );
+    fontTab->setFont( m_format.font());
+/*
     highlightingTab->setUnderline( m_initialFormat.underlineType() );
     highlightingTab->setUnderlineStyle( m_initialFormat.underlineStyle() );
     highlightingTab->setUnderlineColor( m_initialFormat.textUnderlineColor() );
@@ -176,8 +180,10 @@ void KoFontDia::slotReset()
     layoutTab->setSubSuperScript( m_initialFormat.vAlign(), m_initialFormat.offsetFromBaseLine(), m_initialFormat.relativeTextSize() );
     layoutTab->setAutoHyphenation( m_initialFormat.hyphenation() );
     languageTab->setLanguage( m_initialFormat.language() );
+*/
 }
 
+/*
 void KoFontDia::slotFontFamilyChanged()
 {
     m_changedFlags |= KoTextFormat::Family;
@@ -201,110 +207,115 @@ void KoFontDia::slotFontSizeChanged()
     m_changedFlags |= KoTextFormat::Size;
     fontDiaPreview->setFont( fontTab->getSelection() );
 }
+*/
 
 void KoFontDia::slotFontColorChanged( const QColor& color )
 {
-    m_changedFlags |= KoTextFormat::Color;
-    fontDiaPreview->setFontColor( color );
+    //m_changedFlags |= KoTextFormat::Color;
+    //fontDiaPreview->setFontColor( color );
 }
 
 void KoFontDia::slotBackgroundColorChanged( const QColor& color )
 {
-    m_changedFlags |= KoTextFormat::TextBackgroundColor;
-    fontDiaPreview->setBackgroundColor( color );
+    //m_changedFlags |= KoTextFormat::TextBackgroundColor;
+    //fontDiaPreview->setBackgroundColor( color );
 }
 
 void KoFontDia::slotCapitalisationChanged( int item )
 {
-    m_changedFlags |= KoTextFormat::Attribute;
-    fontDiaPreview->setCapitalisation( item );
+    //m_changedFlags |= KoTextFormat::Attribute;
+    //fontDiaPreview->setCapitalisation( item );
 }
 
 void KoFontDia::slotUnderlineChanged( int item )
 {
-    m_changedFlags |= KoTextFormat::ExtendUnderLine;
-    if ( !item ) fontDiaPreview->setUnderlining( item, 0, Qt::black, false );
-    else fontDiaPreview->setUnderlining( item, highlightingTab->getUnderlineStyle(), highlightingTab->getUnderlineColor(), highlightingTab->getWordByWord() );
+    //m_changedFlags |= KoTextFormat::ExtendUnderLine;
+    //if ( !item ) fontDiaPreview->setUnderlining( item, 0, Qt::black, false );
+    //else fontDiaPreview->setUnderlining( item, highlightingTab->getUnderlineStyle(), highlightingTab->getUnderlineColor(), highlightingTab->getWordByWord() );
 }
 
 void KoFontDia::slotUnderlineStyleChanged( int item )
 {
-    m_changedFlags |= KoTextFormat::ExtendUnderLine;
-    if ( !highlightingTab->getUnderline() ) fontDiaPreview->setUnderlining( 0, 0, Qt::black, false );
-    else fontDiaPreview->setUnderlining( highlightingTab->getUnderline(), item, highlightingTab->getUnderlineColor(), highlightingTab->getWordByWord() );
+    //m_changedFlags |= KoTextFormat::ExtendUnderLine;
+    //if ( !highlightingTab->getUnderline() ) fontDiaPreview->setUnderlining( 0, 0, Qt::black, false );
+    //else fontDiaPreview->setUnderlining( highlightingTab->getUnderline(), item, highlightingTab->getUnderlineColor(), highlightingTab->getWordByWord() );
 }
 
 void KoFontDia::slotUnderlineColorChanged( const QColor &color )
 {
-    m_changedFlags |= KoTextFormat::ExtendUnderLine;
-    if ( !highlightingTab->getUnderline() ) fontDiaPreview->setUnderlining( 0, 0, Qt::black, false );
-    else fontDiaPreview->setUnderlining( highlightingTab->getUnderline(), highlightingTab->getUnderlineStyle(), color, highlightingTab->getWordByWord() );
+    //m_changedFlags |= KoTextFormat::ExtendUnderLine;
+    //if ( !highlightingTab->getUnderline() ) fontDiaPreview->setUnderlining( 0, 0, Qt::black, false );
+    //else fontDiaPreview->setUnderlining( highlightingTab->getUnderline(), highlightingTab->getUnderlineStyle(), color, highlightingTab->getWordByWord() );
 }
 
 void KoFontDia::slotWordByWordChanged( bool state )
 {
-    m_changedFlags |= KoTextFormat::WordByWord;
-    fontDiaPreview->setWordByWord( state );
+    //m_changedFlags |= KoTextFormat::WordByWord;
+    //fontDiaPreview->setWordByWord( state );
 }
 
 void KoFontDia::slotStrikethroughChanged( int item )
 {
-    m_changedFlags |= KoTextFormat::StrikeOut;
-    if ( !item ) fontDiaPreview->setStrikethrough( item, 0, false );
-    else fontDiaPreview->setStrikethrough( item, highlightingTab->getStrikethroughStyle(), highlightingTab->getWordByWord() );
+    //m_changedFlags |= KoTextFormat::StrikeOut;
+    //if ( !item ) fontDiaPreview->setStrikethrough( item, 0, false );
+    //else fontDiaPreview->setStrikethrough( item, highlightingTab->getStrikethroughStyle(), highlightingTab->getWordByWord() );
 }
 
 void KoFontDia::slotStrikethroughStyleChanged( int item )
 {
-    m_changedFlags |= KoTextFormat::StrikeOut;
-    if ( !highlightingTab->getStrikethrough() ) fontDiaPreview->setStrikethrough( 0, 0, false );
-    else fontDiaPreview->setStrikethrough( highlightingTab->getStrikethrough(), item, highlightingTab->getWordByWord() );
+    //m_changedFlags |= KoTextFormat::StrikeOut;
+    //if ( !highlightingTab->getStrikethrough() ) fontDiaPreview->setStrikethrough( 0, 0, false );
+    //else fontDiaPreview->setStrikethrough( highlightingTab->getStrikethrough(), item, highlightingTab->getWordByWord() );
 }
 
 void KoFontDia::slotShadowDistanceChanged( double )
 {
-    m_changedFlags |= KoTextFormat::ShadowText;
-    fontDiaPreview->setShadow( decorationTab->getShadowDistanceX(), decorationTab->getShadowDistanceY(), decorationTab->getShadowColor() );
+    //m_changedFlags |= KoTextFormat::ShadowText;
+    //fontDiaPreview->setShadow( decorationTab->getShadowDistanceX(), decorationTab->getShadowDistanceY(), decorationTab->getShadowColor() );
 }
 
 void KoFontDia::slotShadowDirectionChanged( int )
 {
-    m_changedFlags |= KoTextFormat::ShadowText;
-    fontDiaPreview->setShadow( decorationTab->getShadowDistanceX(), decorationTab->getShadowDistanceY(), decorationTab->getShadowColor() );
+    //m_changedFlags |= KoTextFormat::ShadowText;
+    //fontDiaPreview->setShadow( decorationTab->getShadowDistanceX(), decorationTab->getShadowDistanceY(), decorationTab->getShadowColor() );
 }
 
 void KoFontDia::slotShadowColorChanged( const QColor & )
 {
-    m_changedFlags |= KoTextFormat::ShadowText;
-    fontDiaPreview->setShadow( decorationTab->getShadowDistanceX(), decorationTab->getShadowDistanceY(), decorationTab->getShadowColor() );
+    //m_changedFlags |= KoTextFormat::ShadowText;
+    //fontDiaPreview->setShadow( decorationTab->getShadowDistanceX(), decorationTab->getShadowDistanceY(), decorationTab->getShadowColor() );
 }
 
 void KoFontDia::slotSubSuperChanged()
 {
-    m_changedFlags |= KoTextFormat::VAlign;
-    fontDiaPreview->setSubSuperscript( layoutTab->getSubSuperScript(), layoutTab->getOffsetFromBaseline(), layoutTab->getRelativeTextSize() );
+    //m_changedFlags |= KoTextFormat::VAlign;
+    //fontDiaPreview->setSubSuperscript( layoutTab->getSubSuperScript(), layoutTab->getOffsetFromBaseline(), layoutTab->getRelativeTextSize() );
 }
 
 void KoFontDia::slotOffsetChanged( int offset )
 {
-    m_changedFlags |= KoTextFormat::OffsetFromBaseLine;
-    fontDiaPreview->setSubSuperscript( layoutTab->getSubSuperScript(), offset, layoutTab->getRelativeTextSize() );
+    //m_changedFlags |= KoTextFormat::OffsetFromBaseLine;
+    //fontDiaPreview->setSubSuperscript( layoutTab->getSubSuperScript(), offset, layoutTab->getRelativeTextSize() );
 }
 
 void KoFontDia::slotRelativeSizeChanged( double relativeSize )
 {
-    m_changedFlags |= KoTextFormat::VAlign;
-    fontDiaPreview->setSubSuperscript( layoutTab->getSubSuperScript(), layoutTab->getOffsetFromBaseline(), relativeSize );
+    //m_changedFlags |= KoTextFormat::VAlign;
+    //fontDiaPreview->setSubSuperscript( layoutTab->getSubSuperScript(), layoutTab->getOffsetFromBaseline(), relativeSize );
 }
 
 void KoFontDia::slotHyphenationChanged( bool )
 {
-    m_changedFlags |= KoTextFormat::Hyphenation;
+    //m_changedFlags |= KoTextFormat::Hyphenation;
 }
 
 void KoFontDia::slotLanguageChanged()
 {
-    m_changedFlags |= KoTextFormat::Language;
+    //m_changedFlags |= KoTextFormat::Language;
+}
+
+void KoFontDia::fontChanged( const QFont &font) {
+    // TODO
 }
 
 #include "KoFontDia.moc"

@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kfontdialog.h>
 
 #include <QTabWidget>
 #include <QPushButton>
@@ -720,7 +721,7 @@ KoStyleFontTab::~KoStyleFontTab()
 
 void KoStyleFontTab::update()
 {
-	m_fontTab->setSelection( m_style->format().font() );
+	m_fontTab->setFont( m_style->format().font() );
 	m_highlightingTab->setUnderline( m_style->format().underlineType() );
 	m_highlightingTab->setUnderlineStyle( m_style->format().underlineStyle() );
 	m_highlightingTab->setUnderlineColor( m_style->format().textUnderlineColor() );
@@ -765,7 +766,7 @@ void KoStyleFontTab::update()
 
 void KoStyleFontTab::save()
 {
-	m_style->format() = KoTextFormat( m_fontTab->getSelection(),
+	m_style->format() = KoTextFormat( m_fontTab->font(),
                          m_layoutTab->getSubSuperScript(),
                          m_decorationTab->getTextColor(),
                          m_decorationTab->getBackgroundColor(),

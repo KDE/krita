@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,49 +21,52 @@
 #ifndef __kofontdia_h__
 #define __kofontdia_h__
 
-#include <kfontdialog.h>
-#include <kdialog.h>
-#include <QTabWidget>
-#include <KoTextFormat.h>
-#include <QCheckBox>
-#include <koffice_export.h>
-
+// local lib
 #include "KoFontTab.h"
 #include "KoHighlightingTab.h"
 #include "KoDecorationTab.h"
 #include "KoLayoutTab.h"
 #include "KoLanguageTab.h"
 
-#include "KoFontDiaPreview.h"
+// koffice
+//#include <koffice_export.h>
 
+// kde + Qt
+#include <QTabWidget>
+#include <kdialog.h>
 #include <sonnet/loader.h>
 
-class QComboBox;
+#include <QTextCharFormat>
+
+//   #include <kfontdialog.h>
+//   #include <QCheckBox>
+//
+//
+//   #include "KoFontDiaPreview.h"
+//
+
+//class QComboBox;
 
 
-class KOTEXT_EXPORT KoFontDia : public KDialog
+class KoFontDia : public KDialog
 {
     Q_OBJECT
 public:
 
     /// If your application supports spell-checking, pass here the KSpell2 Loader
     /// so that the font dialog can show which languages are supported for spellchecking.
-    KoFontDia( const KoTextFormat& initialFormat,
-               KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr(),
-               QWidget* parent = 0, const char* name = 0 );
+    KoFontDia( const QTextCharFormat &format, KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr(), QWidget* parent = 0);
 
-    int changedFlags() const { return m_changedFlags; }
-
-    KoTextFormat newFormat() const;
+    QTextCharFormat format() { return m_format; }
 
 protected slots:
     void slotReset();
-    virtual void slotApply();
-    virtual void slotOk();
-    void slotFontFamilyChanged();
-    void slotFontBoldChanged();
-    void slotFontItalicChanged();
-    void slotFontSizeChanged();
+    void slotApply();
+    void slotOk();
+    //void slotFontFamilyChanged();
+    //void slotFontBoldChanged();
+    //void slotFontItalicChanged();
+    //void slotFontSizeChanged();
     void slotFontColorChanged( const QColor& color );
     void slotBackgroundColorChanged( const QColor& color );
     void slotCapitalisationChanged( int item );
@@ -81,22 +85,16 @@ protected slots:
     void slotHyphenationChanged( bool state );
     void slotLanguageChanged();
 
-signals:
-    void applyFont();
+    void fontChanged(const QFont &font);
 
 private:
-    void init();
-
-    KoTextFormat m_initialFormat;
+    QTextCharFormat m_format;
     KoFontTab *fontTab;
     KoHighlightingTab *highlightingTab;
     KoDecorationTab *decorationTab;
     KoLayoutTab *layoutTab;
     KoLanguageTab *languageTab;
-    KoFontDiaPreview *fontDiaPreview;
-
-    int m_changedFlags;
-
+    //KoFontDiaPreview *fontDiaPreview;
 };
 
 #endif

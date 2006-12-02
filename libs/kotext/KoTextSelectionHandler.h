@@ -87,6 +87,7 @@ public:
     void setTextBackgroundColor(const QColor &color);
     void insert(const QString &text);
     QString selectedText() const;
+    void selectFont(QWidget *parent = 0);
 
 protected:
     friend class KoTextTool;

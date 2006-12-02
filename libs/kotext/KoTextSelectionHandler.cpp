@@ -18,6 +18,7 @@
  */
 
 #include "KoTextSelectionHandler.h"
+#include "KoFontDia.h"
 
 #include <kdebug.h>
 #include <QTextCharFormat>
@@ -110,3 +111,11 @@ void KoTextSelectionHandler::insert(const QString &text) {
     m_caret->insertText(text);
 }
 
+void KoTextSelectionHandler::selectFont(QWidget *parent) {
+    KoFontDia *fontDlg = new KoFontDia( m_caret->charFormat()); // , 0, parent);
+    fontDlg->exec();
+QTextCharFormat cf = fontDlg->format();
+kDebug() << "font now: " << cf.font().family() << " " << cf.font().pointSize() << endl;
+    m_caret->mergeCharFormat(fontDlg->format());
+    delete fontDlg;
+}

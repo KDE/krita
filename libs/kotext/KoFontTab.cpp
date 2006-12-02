@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,32 +20,30 @@
 
 #include "KoFontTab.h"
 
-KoFontTab::KoFontTab( uint fontListCriteria, QWidget* parent, const char* name, Qt::WFlags fl ) 
-        : KoFontTabBase( parent/*, name, fl*/ ) //FIXME apply fl argument
+KoFontTab::KoFontTab( uint fontListCriteria, QWidget* parent)
+        : QWidget( parent)
 {
+    widget.setupUi(this);
+
     QStringList list;
     KFontChooser_local::getFontList(list, fontListCriteria);
 
-    characterFont->setSampleBoxVisible( false );
-    characterFont->setFamilyList( list );
-    comparisonFont = characterFont->font();
-    connect( characterFont, SIGNAL( fontSelected( const QFont & ) ), this, SLOT( slotFontChanged( const QFont & ) ) );
+    widget.characterFont->setSampleBoxVisible( false );
+    widget.characterFont->setFamilyList( list );
+    //comparisonFont = widget.characterFont->font();
+    connect( widget.characterFont, SIGNAL( fontSelected( const QFont & ) ), this, SIGNAL( fontChanged( const QFont & ) ) );
 }
 
-KoFontTab::~KoFontTab()
+QFont KoFontTab::font()
 {
+    return widget.characterFont->font();
 }
 
-QFont KoFontTab::getSelection()
+void KoFontTab::setFont( const QFont &font )
 {
-    return characterFont->font();
+    widget.characterFont->setFont( font );
 }
-
-void KoFontTab::setSelection( const QFont &font )
-{
-    characterFont->setFont( font );
-}
-
+/*
 void KoFontTab::slotFontChanged( const QFont &font )
 {
     if ( comparisonFont.family() != font.family() ) emit familyChanged();
@@ -53,5 +52,6 @@ void KoFontTab::slotFontChanged( const QFont &font )
     if ( comparisonFont.pointSize() != font.pointSize() ) emit sizeChanged();
     comparisonFont = font;
 }
+*/
 
 #include "KoFontTab.moc"

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,41 +22,36 @@
 #define __kofonttab_h__
 
 #include "ui_kofonttabbase.h"
+
 #include <QFont>
+#include <QWidget>
 
-class KoFontTabBase : public QWidget, public Ui::KoFontTabBase
-{
-public:
- KoFontTabBase( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
-
-
-class KoFontTab : public KoFontTabBase
+class KoFontTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    KoFontTab( uint fontListCriteria=0, QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
-    ~KoFontTab();
+    KoFontTab( uint fontListCriteria=0, QWidget* parent=0);
+    ~KoFontTab() {}
 
-    QFont getSelection();
+    QFont font();
 
 public slots:
-    void setSelection( const QFont &font );
-
+    void setFont( const QFont &font );
+/*
 signals:
     void familyChanged();
     void boldChanged();
     void italicChanged();
     void sizeChanged();
+*/
+
+signals:
+    void fontChanged( const QFont &font );
 
 private:
-    QFont comparisonFont;
-
-private slots:
-    void slotFontChanged( const QFont &font );
+    //QFont comparisonFont;
+    Ui::KoFontTabBase widget;
 };
 
 #endif

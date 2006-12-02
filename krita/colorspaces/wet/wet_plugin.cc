@@ -92,7 +92,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
         KisPaintOpRegistry::instance()->add(new KisWetOpFactory);
 
         // Dry filter
-        // KisFilterRegistry::instance()->add( new WetPhysicsFilter() );
+        KisFilterRegistry::instance()->add( new WetPhysicsFilter() );
 
         // Texture Action:
         f->addPaintDeviceAction(colorSpaceWet, new WetPaintDevAction);

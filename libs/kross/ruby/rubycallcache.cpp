@@ -49,9 +49,8 @@ namespace Kross {
         delete d;
     }
     
-    QVariant RubyCallCache::execfunction( int argc, VALUE *argv )
+    VALUE RubyCallCache::execfunction( int argc, VALUE *argv )
     {
-        QVariant result;
         int typelistcount = d->varianttypes.count();
         QVarLengthArray<MetaType*> variantargs( typelistcount );
         QVarLengthArray<void*> voidstarargs( typelistcount );
@@ -91,7 +90,7 @@ namespace Kross {
                 krosswarning( QString("RubyExtension::callMetaMethod Aborting cause RubyMetaTypeFactory::create returned NULL.") );
                 for(int i = 0; i < idx; ++i) // Clear already allocated instances.
                     delete variantargs[i];
-                return QVariant(false); // abort execution.
+                return Qfalse; // abort execution.
             }
             variantargs[idx] = metatype;
             voidstarargs[idx] = metatype->toVoidStar();
@@ -107,22 +106,23 @@ namespace Kross {
         #endif
 
                 // eval the return-value
+        for(int idx = 1; idx < typelistcount; ++idx)
+        {
+            delete variantargs[idx];
+        }
         if(d->hasreturnvalue) {
             int tp = d->returnTypeId;
             if(tp == QVariant::UserType /*|| tp == QVariant::Invalid*/) {
                 tp = d->returnMetaTypeId;
                 //QObject* obj = (*reinterpret_cast< QObject*(*)>( variantargs[0]->toVoidStar() ));
             }
-            result = QVariant(tp, variantargs[0]->toVoidStar());
+            QVariant result (tp, variantargs[0]->toVoidStar());
             #ifdef KROSS_RUBY_EXTENSION_DEBUG
                 krossdebug( QString("Returnvalue id=%1 metamethod.typename=%2 variant.toString=%3 variant.typeName=%4").arg(tp).arg(metamethod.typeName()).arg(result.toString()).arg(result.typeName()) );
             #endif
+            return result.isNull() ? 0 : RubyType<QVariant>::toVALUE(result);
         }
-        for(int idx = 1; idx < typelistcount; ++idx)
-        {
-            delete variantargs[idx];
-        }
-        return result;
+        return 0;
     }
     void RubyCallCache::delete_object(void* object)
     {
@@ -140,8 +140,7 @@ namespace Kross {
         #endif
         RubyCallCache* callcache;
         Data_Get_Struct(self, RubyCallCache, callcache);
-        QVariant result = callcache->execfunction(argc, argv);
-        return result.isNull() ? 0 : RubyType<QVariant>::toVALUE(result);
+        return callcache->execfunction(argc, argv);
     }
     VALUE RubyCallCache::toValue()
     {

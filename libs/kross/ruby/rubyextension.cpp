@@ -155,7 +155,6 @@ VALUE RubyExtension::callMetaMethod(const QByteArray& funcname, int argc, VALUE 
         return Qfalse;
     }
 
-    QVariant result;
     QObject* object = d->m_object;
     QMetaMethod metamethod = object->metaObject()->method( methodindex );
     if(metamethod.parameterTypes().size() != argumentcount) {
@@ -230,9 +229,7 @@ VALUE RubyExtension::callMetaMethod(const QByteArray& funcname, int argc, VALUE 
     rb_iv_set(self, varcallcache , callobj->toValue() );
     rb_define_variable("$krossinternallastclass", &self);
     rb_eval_string("def $krossinternallastclass." + funcname + "(*args)\n "+ varcallcache +".cacheexec(args) \nend");
-    result = callobj->execfunction(argc, argv);
-
-    return result.isNull() ? 0 : RubyType<QVariant>::toVALUE(result);
+    return callobj->execfunction(argc, argv);
 }
 
 VALUE RubyExtension::call_method_missing(RubyExtension* extension, int argc, VALUE *argv, VALUE self)

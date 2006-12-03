@@ -17,6 +17,9 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KOCREATEPATHTOOL_H
+#define KOCREATEPATHTOOL_H
+
 
 #include <KoTool.h>
 
@@ -55,4 +58,5 @@ protected:
     KoPathPoint *m_firstPoint;
     int m_handleRadius;
 };
+#endif
 

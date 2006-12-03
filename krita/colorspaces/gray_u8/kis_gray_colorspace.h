@@ -15,44 +15,44 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_STRATEGY_COLORSPACE_GRAYSCALE_U16_H_
-#define KIS_STRATEGY_COLORSPACE_GRAYSCALE_U16_H_
+#ifndef KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
+#define KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
 #include <QColor>
 
 #include <klocale.h>
 #include <koffice_export.h>
 #include "KoLcmsColorSpace.h"
 
-struct GrayAU16Traits {
-    typedef quint16 channels_type;
-    static const quint32 channels_nb = 2;
-    static const qint32 alpha_pos = 1;
+struct GrayU8Traits {
+    typedef quint8 channels_type;
+    static const quint32 channels_nb = 1;
+    static const qint32 alpha_pos = -1;
 };
 
-class KRITA_GRAY_U16_EXPORT KisGrayAU16ColorSpace : public KoLcmsColorSpace<GrayAU16Traits>
+class KRITAGRAYSCALE_EXPORT KisGrayColorSpace : public KoLcmsColorSpace<GrayU8Traits>
 {
     public:
-        KisGrayAU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+        KisGrayColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
 };
 
-class KisGrayAU16ColorSpaceFactory : public KoColorSpaceFactory
+class KisGrayColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KoID id() const { return KoID("GRAYA16", i18n("Grayscale (16-bit integer/channel)")); };
+    virtual KoID id() const { return KoID("GRAY", i18n("Grayscale (8-bit integer/channel)")); };
 
     /**
      * lcms colorspace type definition.
      */
-    virtual quint32 colorSpaceType() { return TYPE_GRAYA_16; };
+    virtual quint32 colorSpaceType() { return TYPE_GRAY_8; };
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigGrayData; };
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisGrayAU16ColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisGrayColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "gray built-in - (lcms internal)"; };
 };

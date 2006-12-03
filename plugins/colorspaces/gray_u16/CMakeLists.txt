@@ -34,5 +34,5 @@ install(TARGETS koffice_graya_u16_plugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita_graya_u16_plugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  koffice_graya_u16_plugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

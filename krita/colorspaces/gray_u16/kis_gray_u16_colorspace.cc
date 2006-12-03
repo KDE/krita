@@ -27,20 +27,19 @@
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "kis_gray_colorspace.h"
+#include "kis_gray_u16_colorspace.h"
 
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 
 
-KisGrayAU8ColorSpace ::KisGrayAU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-            KoLcmsColorSpace<GrayAU8Traits>("GRAYA", i18n("Grayscale 8-bit integer/channel)"), parent, TYPE_GRAYA_8, icSigGrayData, p)
+KisGrayU16ColorSpace ::KisGrayU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
+            KoLcmsColorSpace<GrayU16Traits>("GRAYU16", i18n("Grayscale 16-bit integer/channel)"), parent, TYPE_GRAY_16, icSigGrayData, p)
 {
-    m_channels.push_back(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
-    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 1, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
+    m_channels.push_back(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
 
     init();
 
-    m_compositeOps.insert( COMPOSITE_OVER, new KoCompositeOpOver<GrayAU8Traits>( this ) );
-    m_compositeOps.insert( COMPOSITE_ERASE, new KoCompositeOpErase<GrayAU8Traits>( this ) );
+    m_compositeOps.insert( COMPOSITE_OVER, new KoCompositeOpOver<GrayU16Traits>( this ) );
+    m_compositeOps.insert( COMPOSITE_ERASE, new KoCompositeOpErase<GrayU16Traits>( this ) );
 }

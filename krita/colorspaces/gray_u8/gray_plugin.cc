@@ -35,7 +35,7 @@
 #include "kis_gray_colorspace.h"
 
 typedef KGenericFactory<GrayPlugin> GrayPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kofficegrayau8plugin, GrayPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kritagrayplugin, GrayPluginFactory( "krita" ) )
 
 
 GrayPlugin::GrayPlugin(QObject *parent, const QStringList &)
@@ -43,10 +43,10 @@ GrayPlugin::GrayPlugin(QObject *parent, const QStringList &)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     
-    KoColorSpaceFactory * csFactory = new KisGrayAU8ColorSpaceFactory();
+    KoColorSpaceFactory * csFactory = new KisGrayColorSpaceFactory();
     f->add(csFactory);
 
-    KoColorSpace * colorSpaceGrayA = new KisGrayAU8ColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csFactory->defaultProfile()));
+    KoColorSpace * colorSpaceGrayA = new KisGrayColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csFactory->defaultProfile()));
     KoHistogramProducerFactoryRegistry::instance()->add(
     new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
                 (KoID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), colorSpaceGrayA) );

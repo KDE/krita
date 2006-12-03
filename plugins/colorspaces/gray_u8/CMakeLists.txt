@@ -37,5 +37,5 @@ install(TARGETS kofficegrayau8plugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES kritagrayaplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES kofficegrayaplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 

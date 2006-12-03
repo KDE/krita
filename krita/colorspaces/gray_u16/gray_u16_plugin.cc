@@ -1,9 +1,10 @@
 /*
-* gray_plugin.cc -- Part of Krita
+* gray_u16_plugin.cc -- Part of Krita
 *
 * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+* Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
 *
-*  This program is free software; you can redistribute it and/or modify
+*  This program is free software; you can grayistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.
@@ -17,43 +18,37 @@
 *  along with this program; if not, write to the Free Software
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-#include <stdlib.h>
-#include <vector>
 
-#include <QPoint>
-
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kinstance.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoBasicHistogramProducers.h>
 
-#include "gray_plugin.h"
-#include "kis_gray_colorspace.h"
+#include "gray_u16_plugin.h"
+#include "kis_gray_u16_colorspace.h"
 
-typedef KGenericFactory<GrayPlugin> GrayPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kofficegrayau8plugin, GrayPluginFactory( "krita" ) )
+typedef KGenericFactory<GRAYU16Plugin> GRAYU16PluginFactory;
+K_EXPORT_COMPONENT_FACTORY( krita_gray_u16_plugin, GRAYU16PluginFactory( "krita" ) )
 
 
-GrayPlugin::GrayPlugin(QObject *parent, const QStringList &)
+GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     
-    KoColorSpaceFactory * csFactory = new KisGrayAU8ColorSpaceFactory();
-    f->add(csFactory);
-
-    KoColorSpace * colorSpaceGrayA = new KisGrayAU8ColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csFactory->defaultProfile()));
+    KoColorSpaceFactory * csf = new KisGrayU16ColorSpaceFactory();
+    KoColorSpace * colorSpaceGRAYU16 = new KisGrayU16ColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile()));
+    Q_CHECK_PTR(colorSpaceGRAYU16);
+    f->add(csf);
+    
     KoHistogramProducerFactoryRegistry::instance()->add(
-    new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-                (KoID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), colorSpaceGrayA) );
+            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+            (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), colorSpaceGRAYU16) );
+
 }
 
-GrayPlugin::~GrayPlugin()
+GRAYU16Plugin::~GRAYU16Plugin()
 {
 }
 
-#include "gray_plugin.moc"
+#include "gray_u16_plugin.moc"

@@ -23,36 +23,36 @@
 #include <koffice_export.h>
 #include "KoLcmsColorSpace.h"
 
-struct GrayAU16Traits {
+struct GrayU16Traits {
     typedef quint16 channels_type;
-    static const quint32 channels_nb = 2;
-    static const qint32 alpha_pos = 1;
+    static const quint32 channels_nb = 1;
+    static const qint32 alpha_pos = -1;
 };
 
-class KRITA_GRAY_U16_EXPORT KisGrayAU16ColorSpace : public KoLcmsColorSpace<GrayAU16Traits>
+class KRITA_GRAY_U16_EXPORT KisGrayU16ColorSpace : public KoLcmsColorSpace<GrayU16Traits>
 {
     public:
-        KisGrayAU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+        KisGrayU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
 };
 
-class KisGrayAU16ColorSpaceFactory : public KoColorSpaceFactory
+class KisGrayU16ColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KoID id() const { return KoID("GRAYA16", i18n("Grayscale (16-bit integer/channel)")); };
+    virtual KoID id() const { return KoID("GRAY16", i18n("Grayscale (16-bit integer/channel)")); };
 
     /**
      * lcms colorspace type definition.
      */
-    virtual quint32 colorSpaceType() { return TYPE_GRAYA_16; };
+    virtual quint32 colorSpaceType() { return TYPE_GRAY_16; };
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigGrayData; };
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisGrayAU16ColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisGrayU16ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "gray built-in - (lcms internal)"; };
 };

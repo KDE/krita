@@ -28,7 +28,7 @@
 #include "kis_gray_u16_colorspace.h"
 
 typedef KGenericFactory<GRAYU16Plugin> GRAYU16PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita_gray_u16_plugin, GRAYU16PluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( koffice_graya_u16_plugin, GRAYU16PluginFactory( "krita" ) )
 
 
 GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const QStringList &)
@@ -36,8 +36,8 @@ GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const QStringList &)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     
-    KoColorSpaceFactory * csf = new KisGrayU16ColorSpaceFactory();
-    KoColorSpace * colorSpaceGRAYU16 = new KisGrayU16ColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile()));
+    KoColorSpaceFactory * csf = new KisGrayAU16ColorSpaceFactory();
+    KoColorSpace * colorSpaceGRAYU16 = new KisGrayAU16ColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile()));
     Q_CHECK_PTR(colorSpaceGRAYU16);
     f->add(csf);
     

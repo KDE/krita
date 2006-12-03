@@ -10,3 +10,6 @@ if(OPENEXR_FOUND)
     #	add_subdirectory( rgb_f16half )
 endif(OPENEXR_FOUND)
 
+add_subdirectory( gray_u8 )
+add_subdirectory( gray_u16 )
+

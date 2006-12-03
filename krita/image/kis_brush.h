@@ -31,7 +31,7 @@
 #include "kis_resource.h"
 #include "kis_types.h"
 #include "KoPoint.h"
-#include "kis_alpha_mask.h"
+#include "kis_qimage_mask.h"
 #include "krita_export.h"
 #include "kis_boundary.h"
 #include "kis_paintop.h"
@@ -83,7 +83,7 @@ public:
        @return a mask computed from the grey-level values of the
        pixels in the brush.
     */
-    virtual KisAlphaMaskSP mask(const KisPaintInformation& info,
+    virtual KisQImagemaskSP mask(const KisPaintInformation& info,
                                 double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
     virtual KisPaintDeviceSP image(KoColorSpace * colorSpace, const KisPaintInformation& info,
@@ -133,16 +133,16 @@ private:
     class ScaledBrush {
     public:
         ScaledBrush();
-        ScaledBrush(KisAlphaMaskSP scaledMask, const QImage& scaledImage, double scale, double xScale, double yScale);
+        ScaledBrush(KisQImagemaskSP scaledMask, const QImage& scaledImage, double scale, double xScale, double yScale);
 
         double scale() const { return m_scale; }
         double xScale() const { return m_xScale; }
         double yScale() const { return m_yScale; }
-        KisAlphaMaskSP mask() const { return m_mask; }
+        KisQImagemaskSP mask() const { return m_mask; }
         QImage image() const { return m_image; }
 
     private:
-        KisAlphaMaskSP m_mask;
+        KisQImagemaskSP m_mask;
         QImage m_image;
         double m_scale;
         double m_xScale;
@@ -154,13 +154,13 @@ private:
     bool initFromPaintDev(KisPaintDevice* image, int x, int y, int w, int h);
     void createScaledBrushes() const;
 
-    KisAlphaMaskSP scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const;
+    KisQImagemaskSP scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const;
     QImage scaleImage(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const;
 
     static QImage scaleImage(const QImage& srcImage, int width, int height);
     static QImage interpolate(const QImage& image1, const QImage& image2, double t);
 
-    static KisAlphaMaskSP scaleSinglePixelMask(double scale, quint8 maskValue, double subPixelX, double subPixelY);
+    static KisQImagemaskSP scaleSinglePixelMask(double scale, quint8 maskValue, double subPixelX, double subPixelY);
     static QImage scaleSinglePixelImage(double scale, QRgb pixel, double subPixelX, double subPixelY);
 
     // Find the scaled brush(es) nearest to the given scale.

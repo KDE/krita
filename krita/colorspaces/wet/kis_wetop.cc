@@ -120,7 +120,7 @@ void KisWetOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
         dab = brush->image(KisMetaRegistry::instance()->csRegistry()->alpha8(), inf);
     }
     else {
-        KisAlphaMaskSP mask = brush->mask(inf);
+        KisQImagemaskSP mask = brush->mask(inf);
         dab = computeDab(mask, KisMetaRegistry::instance()->csRegistry()->alpha8());
     }
 

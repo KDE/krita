@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -8,140 +8,52 @@
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A ShapeICULAR PURPOSE.  See the
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_SHAPE_LAYER_
-#define _KIS_SHAPE_LAYER_
 
-#include <QRect>
+#ifndef KIS_SHAPE_LAYER_H_
+#define KIS_SHAPE_LAYER_H_
 
-#include <KoDocument.h>
-#include <KoDocumentChild.h>
+#include <KoShapeContainer.h>
 
-#include "kis_paint_layer.h"
-#include "kis_types.h"
-#include "kis_doc2.h"
-#include "kis_Shape_layer_iface.h"
-#include "kis_view2.h"
-#include "kis_layer_visitor.h"
+#include <kis_external_layer_iface.h>
 
-class KoFrame;
-class KoDocument;
+class QRect;
+class QPainter;
+class QIcon;
+class QRect;
+class QDomDocument;
+class QDomElement;
 
+class KoViewConverter;
 
 /**
- * The child document is responsible for saving and loading the embedded layers.
- */
-class KisChildDoc : public KoDocumentChild
+   A KisShapeLayer contains any number of non-krita flakes, such as
+   path shapes, text shapes and anything else people come up with.
+*/
+class KisShapeLayer : public KoShapeContainer, public KisExternalLayer
 {
+    // KoShape overrides
 
-public:
-    KisChildDoc ( KisDoc2 * kisDoc, const QRect& rect, KoDocument * childDoc );
-    KisChildDoc ( KisDoc2 * kisDdoc );
+    bool isSelectable() const { return false; }
 
-    virtual ~KisChildDoc();
+    // KoShapeContainer implemenation
 
-    KisDoc2 * parent() const { return m_doc; }
+    void paintComponent(QPainter &painter, const KoViewConverter &converter);
 
-    void setShapeLayer (KisShapeLayerSP layer) { m_ShapeLayer = layer; }
+    // KisExternalLayer implementation
 
-    KisShapeLayerSP ShapeLayer() const { return m_ShapeLayer; }
-protected:
+    QIcon icon() const;
 
-    KisDoc2 * m_doc;
-    KisShapeLayerSP m_ShapeLayer;
+    KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r);
+
+    bool saveToXML(QDomDocument doc, QDomElement elem);
+
 };
 
-
-/**
- * A ShapeLayer is a layer that contains a KOffice Shape like a KWord document
- * or a KSpread spreadsheet. Or whatever. A Karbon drawing.
- *
- * The Shape is rendered into an RBGA8 paint device so we can composite it with
- * the other layers.
- *
- * When it is activated (see activate()), it draws a rectangle around itself on the kisdoc,
- * whereas when it is deactivated (deactivate()), it removes that rectangle and commits
- * the child to the paint device.
- *
- * Embedded Shapes should get loaded and saved to the Native Krita Fileformat natively.
- */
-class KisShapeLayerImpl : public KisShapeLayer {
-    Q_OBJECT
-    typedef KisShapeLayer super;
-public:
-    KisShapeLayerImpl(KisImageSP img, KisChildDoc * doc);
-    virtual ~KisShapeLayerImpl();
-
-    virtual KisLayerSP clone() const;
-
-    /// Called when the layer is made active
-    virtual void activate() {}
-
-    /// Called when another layer is made inactive
-    virtual void deactivate() {}
-
-    /// Returns the childDoc so that we can access the doc from other places, if need be (KisDoc)
-    virtual KisChildDoc* childDoc() const { return m_doc; }
-
-    void setDocType(const QString& type) { m_docType = type; }
-    QString docType() const { return m_docType; }
-
-    virtual void setX(qint32 x);
-    virtual void setY(qint32 y);
-    virtual qint32 x() const { return m_doc->geometry() . x(); }
-    virtual qint32 y() const { return m_doc->geometry() . y(); } //m_paintLayer->y(); }
-    virtual QRect extent() const { return m_doc->geometry(); }
-    virtual QRect exactBounds() const { return m_doc->geometry(); }
-
-    virtual QImage createThumbnail(qint32 w, qint32 h);
-
-    virtual bool accept(KisLayerVisitor& visitor) {
-        return visitor.visit(this);
-    }
-
-    virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r);
-
-    virtual void paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
-
-    virtual bool saveToXML(QDomDocument doc, QDomElement elem);
-private slots:
-    /// Repaints our device with the data from the embedded Shape
-    //void repaint();
-    /// When we activate the embedding, we clear ourselves
-    void childActivated(KoDocumentChild* child);
-    void childDeactivated(bool activated);
-
-
-private:
-    // KisPaintLayerSP m_paintLayer;
-    KisPaintDeviceSP m_cache;
-    KoFrame * m_frame; // The widget that holds the editable view of the embedded Shape
-    KisChildDoc * m_doc; // The sub-document
-    QString m_docType;
-    bool m_activated;
-};
-
-/**
- * Visitor that connects all Shapelayers in an image to a KisView's signals
- */
-class KisConnectShapeLayerVisitor : public KisLayerVisitor {
-    KisImageSP m_img;
-    KisView* m_view;
-    bool m_connect; // connects, or disconnects signals
-public:
-    KisConnectShapeLayerVisitor(KisImageSP img, KisView* view, bool mode);
-    virtual ~KisConnectShapeLayerVisitor() {}
-
-    virtual bool visit(KisPaintLayer *layer);
-    virtual bool visit(KisGroupLayer *layer);
-    virtual bool visit(KisShapeLayer *layer);
-    virtual bool visit(KisAdjustmentLayer *layer);
-};
-
-#endif // _KIS_SHAPE_LAYER_
+#endif

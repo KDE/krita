@@ -125,7 +125,7 @@ void KisDuplicateOp::paintAt(const KoPoint &pos, const KisPaintInformation& info
         dab->convertTo(KisMetaRegistry::instance()->csRegistry()->alpha8());
     }
     else {
-        KisAlphaMaskSP mask = brush->mask(info, xFraction, yFraction);
+        KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
         dab = computeDab(mask, KisMetaRegistry::instance()->csRegistry()->alpha8());
     }
 

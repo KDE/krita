@@ -1,4 +1,25 @@
+/*
+ *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 #include "kis_tile_compressor.h"
+#include "kis_tile.h"
+#include "kis_tilemanager.h"
+
+#include "kdebug.h"
 
 #define HASH_LOG  12
 #define HASH_SIZE (1<< HASH_LOG)
@@ -12,7 +33,7 @@
 
 // Lossless compression using LZF algorithm, this is faster on modern CPU than
 // the original implementation in http://liblzf.plan9.de/
-int lzff_compress(const void* input, int length, void* output, int maxout)
+int lzff_compress(const void* input, int length, void* output, int /*maxout*/)
 {
     const quint8* ip = (const quint8*) input;
     const quint8* ip_limit = ip + length - MAX_COPY -4;
@@ -239,7 +260,57 @@ int lzff_decompress(const void* input, int length, void* output, int maxout)
 }
 
 
-QByteArray KoLZF::compress(const QByteArray& input)
+KisTileCompressor::KisTileCompressor()
+    : QThread(0)
+    , m_stopped( false )
+{
+}
+
+KisTileCompressor::~KisTileCompressor()
+{
+}
+
+void KisTileCompressor::enqueue( KisTile * tile )
+{
+    kDebug() << "Enqueueing tile " << tile << " for compression\n";
+    tile->m_tileState = QUEUED;
+    m_tileQueue.enqueue( tile );
+}
+
+void KisTileCompressor::dequeue( KisTile * tile )
+{
+    m_queueLock.lock();
+    kDebug() << "Dequeueing tile " << tile << " for compression\n";
+    if ( int i =  m_tileQueue.indexOf( tile ) > -1)
+        m_tileQueue.removeAt(i);
+    m_queueLock.unlock();
+}
+
+void KisTileCompressor::run()
+{
+    while ( !m_stopped ) {
+        KisTile * tile = 0;
+        if ( m_queueLock.tryLock() && !m_tileQueue.isEmpty() ) {
+            tile = m_tileQueue.dequeue();
+            // XXX: hard lock this tile!
+            m_queueLock.unlock();
+        }
+        if ( tile && tile->m_tileState == QUEUED ) {
+            kDebug() << "Going to compress tile " << tile << ", state: " << tile->m_tileState << endl;
+            tile->m_tileState = COMPRESSED;
+            KisTileManager::instance()->maySwapTile(tile);
+        }
+        sleep( 1 ); // Sleep a second
+    }
+}
+
+void KisTileCompressor::decompress( KisTile * tile )
+{
+    kDebug() << "Decompressing tile " << tile << endl;
+    tile->m_tileState = UNCOMPRESSED;
+}
+
+QByteArray KisTileCompressor::compress(const QByteArray& input)
 {
     const void* const in_data = (const void*) input.constData();
     unsigned int in_len = (unsigned int)input.size();
@@ -280,7 +351,7 @@ QByteArray KoLZF::compress(const QByteArray& input)
 }
 
 // will not squeeze output
-void KoLZF::decompress(const QByteArray& input, QByteArray& output)
+void KisTileCompressor::decompress(const QByteArray& input, QByteArray& output)
 {
     // read out first how big is the uncompressed size
     unsigned int unpack_size = 0;

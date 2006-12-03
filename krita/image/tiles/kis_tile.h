@@ -24,6 +24,14 @@
 class KisTiledDataManager;
 class KisTiledIterator;
 
+enum TileState {
+    UNCOMPRESSED = 0,
+    QUEUED,
+    COMPRESSED
+};
+
+
+
 /**
  * Provides abstraction to a tile.  A tile contains
  * a part of a PaintDevice, but only the individual pixels
@@ -66,12 +74,15 @@ public:
     friend class KisTiledDataManager;
     friend class KisMemento;
     friend class KisTileManager;
+    friend class KisTileCompressor;
 
 private:
     KisTile& operator=(const KisTile&);
 
 private:
     quint8 * m_data;
+    QByteArray m_compressedData;
+    TileState m_tileState;
     mutable qint32 m_nReadlock;
     qint32 m_row;
     qint32 m_col;

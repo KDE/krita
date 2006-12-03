@@ -229,8 +229,8 @@ public:
     KisUndoAdapter *undoAdapter() const;
 
     /// paints a mask where the selection on this layer resides
-    virtual void paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
-    virtual void paintSelection(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
+    virtual void paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
+    virtual void paint(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
     /// paints where no data is on this layer. Useful when it is a transparent layer stacked on top of another one
     virtual void paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);

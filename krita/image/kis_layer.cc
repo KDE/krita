@@ -637,11 +637,11 @@ void KisLayer::paintMaskInactiveLayers(QImage &, qint32, qint32, qint32, qint32)
 {
 }
 
-void KisLayer::paintSelection(QImage &, qint32, qint32, qint32, qint32)
+void KisLayer::paint(QImage &, qint32, qint32, qint32, qint32)
 {
 }
 
-void KisLayer::paintSelection(QImage &, const QRect&, const QSize&, const QSize&)
+void KisLayer::paint(QImage &, const QRect&, const QSize&, const QSize&)
 {
 }
 

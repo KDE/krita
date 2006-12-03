@@ -46,7 +46,7 @@
 #include "kis_paint_device.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_brush.h"
-#include "kis_alpha_mask.h"
+#include "kis_qimage_mask.h"
 #include "kis_layer.h"
 #include "kis_meta_registry.h"
 #include "KoColorSpaceRegistry.h"
@@ -316,9 +316,9 @@ QImage KisImagePipeBrush::img()
     }
 }
 
-KisAlphaMaskSP KisImagePipeBrush::mask(const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisQImagemaskSP KisImagePipeBrush::mask(const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
-    if (m_brushes.isEmpty()) return KisAlphaMaskSP(0);
+    if (m_brushes.isEmpty()) return KisQImagemaskSP(0);
     selectNextBrush(info);
     return m_brushes.at(m_currentBrush)->mask(info, subPixelX, subPixelY);
 }

@@ -35,6 +35,7 @@ KisTile::KisTile(qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixe
     m_col = col;
     m_row = row;
     m_nReadlock = 0;
+    m_tileState = UNCOMPRESSED;
 
     allocate();
 

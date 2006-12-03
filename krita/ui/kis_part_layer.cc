@@ -142,7 +142,7 @@ void KisPartLayerImpl::setY(qint32 y) {
     m_doc->setGeometry(rect);
 }
 
-void KisPartLayerImpl::paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h) {
+void KisPartLayerImpl::paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h) {
     uchar *j = img.bits();
     QRect rect = m_doc->geometry();
 

@@ -123,7 +123,7 @@ public:
     /**
        @return the next mask in the pipe.
     */
-    virtual KisAlphaMaskSP mask(const KisPaintInformation& info,
+    virtual KisQImagemaskSP mask(const KisPaintInformation& info,
                                 double subPixelX = 0, double subPixelY = 0) const;
     virtual KisPaintDeviceSP image(KoColorSpace * colorSpace, const KisPaintInformation& info,
                              double subPixelX = 0, double subPixelY = 0) const;

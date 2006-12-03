@@ -1,20 +1,21 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
- *  this program is free software; you can redistribute it and/or modify
- *  it under the terms of the gnu general public license as published by
- *  the free software foundation; either version 2 of the license, or
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
- *  this program is distributed in the hope that it will be useful,
- *  but without any warranty; without even the implied warranty of
- *  merchantability or fitness for a particular purpose.  see the
- *  gnu general public license for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- *  you should have received a copy of the gnu general public license
- *  along with this program; if not, write to the free software
- *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 
 #include <QImage>
 #include <QVector>
@@ -36,22 +37,24 @@
 #include "kis_selection.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
-    : super(dev->parentLayer(), KisMetaRegistry::instance()->csRegistry()->alpha8(), QString("selection for ") + dev->objectName())
-    , m_parentPaintDevice(dev), m_dirty(false)
+    : super(dev,
+            QString("selection for ") + dev->objectName())
+    , m_parentPaintDevice(dev)
+    , m_dirty(false)
 {
     Q_ASSERT(dev);
 }
 
 KisSelection::KisSelection()
-    : super(KisMetaRegistry::instance()->csRegistry()->alpha8(), "anonymous selection")
+    : super("anonymous selection")
     , m_parentPaintDevice(0), m_dirty(false)
 {
 }
 
 KisSelection::KisSelection(const KisSelection& rhs)
-    : super(rhs), m_dirty(false)
+    : super(rhs)
+    , m_dirty(false)
 {
-    m_parentPaintDevice = rhs.m_parentPaintDevice;
 }
 
 KisSelection::~KisSelection()
@@ -226,7 +229,7 @@ void KisSelection::paintUniformSelectionRegion(QImage img, const QRect& imageRec
     }
 }
 
-void KisSelection::paintSelection(QImage img, qint32 imageRectX, qint32 imageRectY, qint32 imageRectWidth, qint32 imageRectHeight)
+void KisSelection::paint(QImage img, qint32 imageRectX, qint32 imageRectY, qint32 imageRectWidth, qint32 imageRectHeight)
 {
     Q_ASSERT(img.size() == QSize(imageRectWidth, imageRectHeight));
 
@@ -262,65 +265,65 @@ void KisSelection::paintSelection(QImage img, qint32 imageRectX, qint32 imageRec
         imageRectHeight = nonuniformRect.height();
 
         const qint32 NUM_SELECTION_ROWS = 3;
-    
+
         quint8 *selectionRow[NUM_SELECTION_ROWS];
-    
+
         qint32 aboveRowIndex = 0;
         qint32 centerRowIndex = 1;
         qint32 belowRowIndex = 2;
-    
+
         selectionRow[aboveRowIndex] = new quint8[imageRectWidth + 2];
         selectionRow[centerRowIndex] = new quint8[imageRectWidth + 2];
         selectionRow[belowRowIndex] = new quint8[imageRectWidth + 2];
-    
+
         readBytes(selectionRow[centerRowIndex], imageRectX - 1, imageRectY - 1, imageRectWidth + 2, 1);
         readBytes(selectionRow[belowRowIndex], imageRectX - 1, imageRectY, imageRectWidth + 2, 1);
-    
+
         for (qint32 y = 0; y < imageRectHeight; ++y) {
-    
+
             qint32 oldAboveRowIndex = aboveRowIndex;
             aboveRowIndex = centerRowIndex;
             centerRowIndex = belowRowIndex;
             belowRowIndex = oldAboveRowIndex;
-    
+
             readBytes(selectionRow[belowRowIndex], imageRectX - 1, imageRectY + y + 1, imageRectWidth + 2, 1);
-    
+
             const quint8 *aboveRow = selectionRow[aboveRowIndex] + 1;
             const quint8 *centerRow = selectionRow[centerRowIndex] + 1;
             const quint8 *belowRow = selectionRow[belowRowIndex] + 1;
-    
+
             QRgb *imagePixel = reinterpret_cast<QRgb *>(img.scanLine(imageRectOffsetY + y));
             imagePixel += imageRectOffsetX;
-    
+
             for (qint32 x = 0; x < imageRectWidth; ++x) {
-    
+
                 quint8 center = *centerRow;
-    
+
                 if (center != MAX_SELECTED) {
-    
+
                     // this is where we come if the pixels should be blue or bluish
-    
+
                     QRgb srcPixel = *imagePixel;
                     quint8 srcGrey = (qRed(srcPixel) + qGreen(srcPixel) + qBlue(srcPixel)) / 9;
                     quint8 srcAlpha = qAlpha(srcPixel);
-    
+
                     // Color influence is proportional to alphaPixel.
                     srcGrey = UINT8_MULT(srcGrey, srcAlpha);
-    
+
                     QRgb dstPixel;
-    
+
                     if (center == MIN_SELECTED) {
                         //this is where we come if the pixels should be blue (or red outline)
-    
+
                         quint8 left = *(centerRow - 1);
                         quint8 right = *(centerRow + 1);
                         quint8 above = *aboveRow;
                         quint8 below = *belowRow;
-    
+
                         // Stop unselected transparent areas from appearing the same
                         // as selected transparent areas.
                         quint8 dstAlpha = qMax(srcAlpha, quint8(192));
-    
+
                         // now for a simple outline based on 4-connectivity
                         if (left != MIN_SELECTED || right != MIN_SELECTED || above != MIN_SELECTED || below != MIN_SELECTED) {
                             dstPixel = qRgba(255, 0, 0, dstAlpha);
@@ -330,27 +333,27 @@ void KisSelection::paintSelection(QImage img, qint32 imageRectX, qint32 imageRec
                     } else {
                         dstPixel = qRgba(UINT8_BLEND(qRed(srcPixel), srcGrey + 128, center),
                                          UINT8_BLEND(qGreen(srcPixel), srcGrey + 128, center),
-                                         UINT8_BLEND(qBlue(srcPixel), srcGrey + 165, center), 
+                                         UINT8_BLEND(qBlue(srcPixel), srcGrey + 165, center),
                                          srcAlpha);
                     }
-    
+
                     *imagePixel = dstPixel;
                 }
-    
+
                 aboveRow++;
                 centerRow++;
                 belowRow++;
                 imagePixel++;
             }
         }
-    
+
         delete [] selectionRow[aboveRowIndex];
         delete [] selectionRow[centerRowIndex];
         delete [] selectionRow[belowRowIndex];
     }
 }
 
-void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize)
+void KisSelection::paint(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize)
 {
     if (img.isNull() || scaledImageRect.isEmpty() || scaledImageSize.isEmpty() || imageSize.isEmpty()) {
         return;
@@ -532,7 +535,7 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
                     } else {
                         dstPixel = qRgba(UINT8_BLEND(qRed(srcPixel), srcGrey + 128, center),
                                          UINT8_BLEND(qGreen(srcPixel), srcGrey + 128, center),
-                                         UINT8_BLEND(qBlue(srcPixel), srcGrey + 165, center), 
+                                         UINT8_BLEND(qBlue(srcPixel), srcGrey + 165, center),
                                          srcAlpha);
                     }
 

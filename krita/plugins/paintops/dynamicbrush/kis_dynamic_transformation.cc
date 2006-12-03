@@ -17,7 +17,7 @@
 
 #include "kis_dynamic_transformation.h"
 
-#include "kis_alpha_mask.h"
+#include "kis_qimage_mask.h"
 #include "kis_autobrush_resource.h"
 
 quint8 KisDabAlphaMaskSource::alphaAt(int x, int y)

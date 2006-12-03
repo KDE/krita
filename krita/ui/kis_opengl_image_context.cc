@@ -189,7 +189,7 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 
                 if (m_displaySelection) {
                     if (!m_image->activeLayer().isNull()) {
-                        m_image->activeLayer()->paintSelection(tileUpdateImage,
+                        m_image->activeLayer()->paint(tileUpdateImage,
                                                                    tileUpdateRect.x(), tileUpdateRect.y(),
                                                                    tileUpdateRect.width(), tileUpdateRect.height());
                     }

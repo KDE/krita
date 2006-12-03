@@ -94,7 +94,7 @@ void KisEraseOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     splitCoordinate(pt.x(), &destX, &xFraction);
     splitCoordinate(pt.y(), &destY, &yFraction);
 
-    KisAlphaMaskSP mask = brush->mask(info, xFraction, yFraction);
+    KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
 
     KisPaintDeviceSP dab = KisPaintDeviceSP(new KisPaintDevice(device->colorSpace(), "erase op dab"));
     Q_CHECK_PTR(dab);

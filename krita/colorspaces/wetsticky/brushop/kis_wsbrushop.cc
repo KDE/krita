@@ -91,7 +91,7 @@ void KisWSBrushOp::paintAt(const KoPoint &pos,
         dab = brush -> image(device -> colorSpace(), pressure, xFraction, yFraction);
     }
     else {
-        KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
+        KisQImagemaskSP mask = brush -> mask(pressure, xFraction, yFraction);
         dab = computeDab(mask);
     }
     m_painter -> setPressure(pressure);

@@ -25,9 +25,9 @@
 #include <KoColorSpace.h>
 
 #include "kis_global.h"
-#include "kis_alpha_mask.h"
+#include "kis_qimage_mask.h"
 
-KisAlphaMask::KisAlphaMask(const QImage& img, bool hasColor)
+KisQImagemask::KisQImagemask(const QImage& img, bool hasColor)
 {
     m_width = img.width();
     m_height = img.height();
@@ -40,7 +40,7 @@ KisAlphaMask::KisAlphaMask(const QImage& img, bool hasColor)
     }
 }
 
-KisAlphaMask::KisAlphaMask(const QImage& img)
+KisQImagemask::KisQImagemask(const QImage& img)
 {
     m_width = img.width();
     m_height = img.height();
@@ -53,7 +53,7 @@ KisAlphaMask::KisAlphaMask(const QImage& img)
     }
 }
 
-KisAlphaMask::KisAlphaMask(qint32 width, qint32 height)
+KisQImagemask::KisQImagemask(qint32 width, qint32 height)
 {
     m_width = width;
     m_height = height;
@@ -62,28 +62,28 @@ KisAlphaMask::KisAlphaMask(qint32 width, qint32 height)
     m_data.insert(0, width * height, OPACITY_TRANSPARENT);
 }
 
-KisAlphaMask::~KisAlphaMask()
+KisQImagemask::~KisQImagemask()
 {
 }
 
-qint32 KisAlphaMask::width() const
+qint32 KisQImagemask::width() const
 {
     return m_width;
 }
 
-qint32 KisAlphaMask::height() const
+qint32 KisQImagemask::height() const
 {
     return m_height;
 }
 
-void KisAlphaMask::setAlphaAt(qint32 x, qint32 y, quint8 alpha)
+void KisQImagemask::setAlphaAt(qint32 x, qint32 y, quint8 alpha)
 {
     if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
         m_data[(y * m_width) + x] = alpha;
     }
 }
 
-void KisAlphaMask::copyAlpha(const QImage& img)
+void KisQImagemask::copyAlpha(const QImage& img)
 {
     for (int y = 0; y < img.height(); y++) {
         for (int x = 0; x < img.width(); x++) {
@@ -95,7 +95,7 @@ void KisAlphaMask::copyAlpha(const QImage& img)
     }
 }
 
-void KisAlphaMask::computeAlpha(const QImage& img)
+void KisQImagemask::computeAlpha(const QImage& img)
 {
     // The brushes are mostly grayscale on a white background,
     // although some do have a colors. The alpha channel is seldom
@@ -112,14 +112,14 @@ void KisAlphaMask::computeAlpha(const QImage& img)
     }
 }
 
-KisAlphaMaskSP KisAlphaMask::interpolate(KisAlphaMaskSP mask1, KisAlphaMaskSP mask2, double t)
+KisQImagemaskSP KisQImagemask::interpolate(KisQImagemaskSP mask1, KisQImagemaskSP mask2, double t)
 {
     Q_ASSERT((mask1->width() == mask2->width()) && (mask1->height() == mask2->height()));
     Q_ASSERT(t > -DBL_EPSILON && t < 1 + DBL_EPSILON);
 
     int width = mask1->width();
     int height = mask1->height();
-    KisAlphaMaskSP outputMask = KisAlphaMaskSP(new KisAlphaMask(width, height));
+    KisQImagemaskSP outputMask = KisQImagemaskSP(new KisQImagemask(width, height));
     Q_CHECK_PTR(outputMask);
 
     for (int x = 0; x < width; x++) {

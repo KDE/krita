@@ -1,19 +1,19 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
- *  this program is free software; you can redistribute it and/or modify
- *  it under the terms of the gnu general public license as published by
- *  the free software foundation; either version 2 of the license, or
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
- *  this program is distributed in the hope that it will be useful,
- *  but without any warranty; without even the implied warranty of
- *  merchantability or fitness for a particular purpose.  see the
- *  gnu general public license for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- *  you should have received a copy of the gnu general public license
- *  along with this program; if not, write to the free software
- *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #ifndef KIS_SELECTION_H_
 #define KIS_SELECTION_H_
@@ -22,6 +22,7 @@
 
 #include "kis_types.h"
 #include "kis_paint_device.h"
+#include "kis_mask.h"
 
 #include <krita_export.h>
 
@@ -40,9 +41,9 @@ enum enumSelectionMode {
  *       often you want to combine several actions in to perfom one operation and you
  *       do not want recomposition to happen all the time.
  */
-class KRITAIMAGE_EXPORT KisSelection : public KisPaintDevice {
+class KRITAIMAGE_EXPORT KisSelection : public KisMask {
 
-    typedef KisPaintDevice super;
+    typedef KisMask super;
 
 public:
     /**
@@ -100,8 +101,8 @@ public:
      */
     QRect selectedExactRect() const;
 
-    void paintSelection(QImage img, qint32 x, qint32 y, qint32 w, qint32 h);
-    void paintSelection(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
+    void paint(QImage img, qint32 x, qint32 y, qint32 w, qint32 h);
+    void paint(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
     // if the parent layer is interested in keeping up to date with the dirtyness
     // of this layer, set to true

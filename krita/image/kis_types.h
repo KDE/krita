@@ -83,8 +83,8 @@ typedef QVector<QPoint> vKisSegments;
 //class KisGuide;
 //typedef KisSharedPtr<KisGuide> KisGuideSP;
 
-class KisAlphaMask;
-typedef KisSharedPtr<KisAlphaMask> KisAlphaMaskSP;
+class KisQImagemask;
+typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 
 class KisFilter;
 typedef KisSharedPtr<KisFilter> KisFilterSP;

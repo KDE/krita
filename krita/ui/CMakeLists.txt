@@ -84,6 +84,10 @@ set(kritaui_LIB_SRCS
     squeezedcombobox.cpp
     kis_image_manager.cc
     kis_mask_manager.cc
+    kis_shape_layer.cc
+    kis_layer_shape.cc
+    kis_mask_shape.cc
+    kis_layer_container.cc
 )
 
 

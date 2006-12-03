@@ -50,7 +50,7 @@ struct KisDabSource {
     enum DabType {
         DabAlphaMask, DabAuto
     };
-    KisAlphaMaskSP alphaMask;
+    KisQImagemaskSP alphaMask;
     KisAutoDab autoDab;
     DabType type;
     virtual quint8 alphaAt(int x, int y) = 0;

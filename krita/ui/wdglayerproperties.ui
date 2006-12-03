@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>WdgLayerProperties</class>
  <widget class="QWidget" name="WdgLayerProperties" >
   <property name="geometry" >
@@ -9,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>362</width>
-    <height>224</height>
+    <height>395</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -29,19 +26,53 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
-    <widget class="SqueezedComboBox" name="cmbProfile" />
+   <item row="0" column="1" >
+    <widget class="QLineEdit" name="editName" />
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="textLabel2" >
+     <property name="text" >
+      <string>Colorspace:</string>
+     </property>
+    </widget>
    </item>
    <item rowspan="2" row="1" column="1" >
-    <widget class="KisCmbIDList" name="cmbColorSpaces" />
+    <widget class="KisCmbIDList" native="1" name="cmbColorSpaces" />
+   </item>
+   <item rowspan="2" row="2" column="0" >
+    <widget class="QLabel" name="textLabel1_2" >
+     <property name="text" >
+      <string>Profile:</string>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="3" column="1" >
+    <widget class="SqueezedComboBox" native="1" name="cmbProfile" />
+   </item>
+   <item rowspan="2" row="4" column="0" >
+    <widget class="QLabel" name="textLabel3" >
+     <property name="text" >
+      <string>&amp;Opacity:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>intOpacity</cstring>
+     </property>
+    </widget>
    </item>
    <item row="5" column="1" >
-    <widget class="KisCmbComposite" name="cmbComposite" />
-   </item>
-   <item row="4" column="1" >
-    <widget class="KisIntSpinbox" name="intOpacity" />
+    <widget class="KisIntSpinbox" native="1" name="intOpacity" />
    </item>
    <item row="6" column="0" >
+    <widget class="QLabel" name="textLabel4" >
+     <property name="text" >
+      <string>Composite mode:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" >
+    <widget class="KisCmbComposite" native="1" name="cmbComposite" />
+   </item>
+   <item row="7" column="0" >
     <widget class="QLabel" name="lblChannelsst" >
      <property name="text" >
       <string>Visible channels:</string>
@@ -54,75 +85,117 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1" >
+   <item row="7" column="1" >
     <widget class="QListWidget" name="listChannels" />
    </item>
-   <item row="0" column="1" >
-    <widget class="QLineEdit" name="editName" />
-   </item>
-   <item row="5" column="0" >
-    <widget class="QLabel" name="textLabel4" >
-     <property name="text" >
-      <string>Composite mode:</string>
+   <item row="8" column="0" colspan="2" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Painterly overlays</string>
      </property>
-    </widget>
-   </item>
-   <item row="4" column="0" >
-    <widget class="QLabel" name="textLabel3" >
-     <property name="text" >
-      <string>&amp;Opacity:</string>
-     </property>
-     <property name="buddy" >
-      <cstring>intOpacity</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="textLabel2" >
-     <property name="text" >
-      <string>Colorspace:</string>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="2" row="2" column="0" >
-    <widget class="QLabel" name="textLabel1_2" >
-     <property name="text" >
-      <string>Profile:</string>
-     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="chkWetness" >
+        <property name="toolTip" >
+         <string>Keeps track of how much liquid there's on the paper.</string>
+        </property>
+        <property name="text" >
+         <string>Wetness</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QCheckBox" name="chkHeight" >
+        <property name="toolTip" >
+         <string>Representes the texture of your canvas</string>
+        </property>
+        <property name="text" >
+         <string>Height</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QCheckBox" name="chkGravity" >
+        <property name="toolTip" >
+         <string>Direction and strength of the gravity -- determines which way your wet paint flows</string>
+        </property>
+        <property name="text" >
+         <string>Gravity</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QCheckBox" name="chkMixability" >
+        <property name="toolTip" >
+         <string>How well the colors mix with other colors</string>
+        </property>
+        <property name="text" >
+         <string>Mixability</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QCheckBox" name="chkAdsorbency" >
+        <property name="toolTip" >
+         <string>Determines how fast your wet paint is adsorbed into the paper</string>
+        </property>
+        <property name="text" >
+         <string>Adsorbency</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QCheckBox" name="chkViscosity" >
+        <property name="toolTip" >
+         <string>How sticky your paint is.</string>
+        </property>
+        <property name="text" >
+         <string>Viscosity</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QCheckBox" name="chkVolume" >
+        <property name="toolTip" >
+         <string>Keeps track of the build-up of material</string>
+        </property>
+        <property name="text" >
+         <string>Paint volume</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>KisIntSpinbox</class>
    <extends>QWidget</extends>
    <header>kis_int_spinbox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>SqueezedComboBox</class>
    <extends>QWidget</extends>
    <header>squeezedcombobox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>KisCmbIDList</class>
    <extends>QWidget</extends>
    <header>kis_cmb_idlist.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>KisCmbComposite</class>
    <extends>QWidget</extends>
    <header>kis_cmb_composite.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <resources/>

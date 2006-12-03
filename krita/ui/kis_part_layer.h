@@ -104,7 +104,7 @@ public:
 
     virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r);
 
-    virtual void paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
+    virtual void paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
 
     virtual bool saveToXML(QDomDocument doc, QDomElement elem);
 private slots:

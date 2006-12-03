@@ -30,7 +30,7 @@
 #include "kis_resource.h"
 #include "kis_global.h"
 #include "kis_gradient.h"
-#include "kis_alpha_mask.h"
+#include "kis_qimage_mask.h"
 
 class QPoint;
 class QPixmap;

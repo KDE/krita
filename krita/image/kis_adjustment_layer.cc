@@ -190,16 +190,16 @@ bool KisAdjustmentLayer::accept(KisLayerVisitor & v)
     return v.visit( this );
 }
 
-void KisAdjustmentLayer::paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h)
+void KisAdjustmentLayer::paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h)
 {
     if (showSelection() && selection())
-        selection()->paintSelection(img, x, y, w, h);
+        selection()->paint(img, x, y, w, h);
 }
 
-void KisAdjustmentLayer::paintSelection(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize)
+void KisAdjustmentLayer::paint(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize)
 {
     if (showSelection() && selection())
-        selection()->paintSelection(img, scaledImageRect, scaledImageSize, imageSize);
+        selection()->paint(img, scaledImageRect, scaledImageSize, imageSize);
 }
 
 QImage KisAdjustmentLayer::createThumbnail(qint32 w, qint32 h)

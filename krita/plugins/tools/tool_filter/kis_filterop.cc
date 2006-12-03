@@ -84,7 +84,7 @@ void KisFilterOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 
     // Filters always work with a mask, never with an image; that
     // wouldn't be useful at all.
-    KisAlphaMaskSP mask = brush->mask(info, xFraction, yFraction);
+    KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
 
     m_painter->setPressure(info.pressure);
 

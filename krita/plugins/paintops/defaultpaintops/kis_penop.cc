@@ -80,7 +80,7 @@ void KisPenOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     }
     else {
         // Compute mask without sub-pixel positioning
-        KisAlphaMaskSP mask = brush->mask(info);
+        KisQImagemaskSP mask = brush->mask(info);
         dab = computeDab(mask);
     }
 

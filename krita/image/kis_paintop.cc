@@ -25,7 +25,7 @@
 #include "kis_layer.h"
 #include "kis_types.h"
 #include "kis_paintop.h"
-#include "kis_alpha_mask.h"
+#include "kis_qimage_mask.h"
 #include "KoPoint.h"
 #include "KoColorSpace.h"
 #include "kis_global.h"
@@ -42,11 +42,11 @@ KisPaintOp::~KisPaintOp()
 {
 }
 
-KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask) {
+KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask) {
     return computeDab(mask, m_painter->device()->colorSpace());
 }
 
-KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KoColorSpace *cs)
+KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, KoColorSpace *cs)
 {
     // XXX: According to the SeaShore source, the Gimp uses a
     // temporary layer the size of the layer that is being painted

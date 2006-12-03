@@ -115,7 +115,7 @@ void KisAirbrushOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
         dab = brush->image(device->colorSpace(), info, xFraction, yFraction);
     }
     else {
-        KisAlphaMaskSP mask = brush->mask(info, xFraction, yFraction);
+        KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
         dab = computeDab(mask);
     }
 

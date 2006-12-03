@@ -23,6 +23,7 @@
 #include <qglobal.h>
 #include <QHash>
 #include <q3valuelist.h>
+#include <q3valuevector.h>
 #include <QMutex>
 
 #include <ktemporaryfile.h>

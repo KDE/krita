@@ -40,7 +40,7 @@
 #include <krita_export.h>
 
 class KoPoint;
-class KisAlphaMask;
+class KisQImagemask;
 class KisPainter;
 class KoColorSpace;
 class KoInputDevice;
@@ -86,8 +86,8 @@ public:
 
 protected:
 
-    virtual KisPaintDeviceSP computeDab(KisAlphaMaskSP mask);
-    virtual KisPaintDeviceSP computeDab(KisAlphaMaskSP mask, KoColorSpace *cs);
+    virtual KisPaintDeviceSP computeDab(KisQImagemaskSP mask);
+    virtual KisPaintDeviceSP computeDab(KisQImagemaskSP mask, KoColorSpace *cs);
 
 
     /**

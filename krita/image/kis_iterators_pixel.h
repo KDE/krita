@@ -103,10 +103,13 @@ class KisRectIteratorPixelBase : public T, public KisIteratorPixelTrait<T, TSele
 
         /// Advances a number of pixels until it reaches the end of the line
         KisRectIteratorPixelBase<T, TSelect> & operator+=(int n) { T::operator+=(n); KisIteratorPixelTrait<T, TSelect>::advance(n); return *this; };
+
         /// @return the x coordinate in the image referential
         qint32 x() const { return T::x() + m_offsetx; }
+
         /// @return the y coordinate in the image referential
         qint32 y() const { return T::y() + m_offsety; }
+
         /// @return the minimum of the regular underlying iterator's and the selection iterator's nConseqHPixels
         qint32 nConseqPixels() const {
             if (this->m_selectionIterator) {

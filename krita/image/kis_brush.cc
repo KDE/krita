@@ -42,7 +42,7 @@
 #include "kis_paint_device.h"
 #include "kis_global.h"
 #include "kis_brush.h"
-#include "kis_alpha_mask.h"
+#include "kis_qimage_mask.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_image.h"
@@ -384,7 +384,7 @@ QImage KisBrush::img()
     return image;
 }
 
-KisAlphaMaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisQImagemaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_scaledBrushes.isEmpty()) {
         createScaledBrushes();
@@ -398,17 +398,17 @@ KisAlphaMaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX,
     findScaledBrushes(scale, &aboveBrush,  &belowBrush);
     Q_ASSERT(aboveBrush != 0);
 
-    KisAlphaMaskSP outputMask = KisAlphaMaskSP(0);
+    KisQImagemaskSP outputMask = KisQImagemaskSP(0);
 
     if (belowBrush != 0) {
         // We're in between two masks. Interpolate between them.
 
-        KisAlphaMaskSP scaledAboveMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
-        KisAlphaMaskSP scaledBelowMask = scaleMask(belowBrush, scale, subPixelX, subPixelY);
+        KisQImagemaskSP scaledAboveMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
+        KisQImagemaskSP scaledBelowMask = scaleMask(belowBrush, scale, subPixelX, subPixelY);
 
         double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
 
-        outputMask = KisAlphaMask::interpolate(scaledBelowMask, scaledAboveMask, t);
+        outputMask = KisQImagemask::interpolate(scaledBelowMask, scaledAboveMask, t);
     } else {
         if (fabs(scale - aboveBrush->scale()) < DBL_EPSILON) {
             // Exact match.
@@ -571,7 +571,7 @@ void KisBrush::createScaledBrushes() const
             scaledImage = scaleImage(scaledImage, width, height);
         }
 
-        KisAlphaMaskSP scaledMask = KisAlphaMaskSP(new KisAlphaMask(scaledImage, hasColor()));
+        KisQImagemaskSP scaledMask = KisQImagemaskSP(new KisQImagemask(scaledImage, hasColor()));
         Q_CHECK_PTR(scaledMask);
 
         double xScale = static_cast<double>(width) / m_img.width();
@@ -629,16 +629,16 @@ qint32 KisBrush::maskHeight(const KisPaintInformation& info) const
     return static_cast<qint32>(ceil(height() * scaleForPressure(info.pressure)) + 1);
 }
 
-KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const
+KisQImagemaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const
 {
     // Add one pixel for sub-pixel shifting
     int dstWidth = static_cast<int>(ceil(scale * width())) + 1;
     int dstHeight = static_cast<int>(ceil(scale * height())) + 1;
 
-    KisAlphaMaskSP dstMask = KisAlphaMaskSP(new KisAlphaMask(dstWidth, dstHeight));
+    KisQImagemaskSP dstMask = KisQImagemaskSP(new KisQImagemask(dstWidth, dstHeight));
     Q_CHECK_PTR(dstMask);
 
-    KisAlphaMaskSP srcMask = srcBrush->mask();
+    KisQImagemaskSP srcMask = srcBrush->mask();
 
     // Compute scales to map the scaled brush onto the required scale.
     double xScale = srcBrush->xScale() / scale;
@@ -978,13 +978,13 @@ void KisBrush::findScaledBrushes(double scale, const ScaledBrush **aboveBrush, c
     }
 }
 
-KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, quint8 maskValue, double subPixelX, double subPixelY)
+KisQImagemaskSP KisBrush::scaleSinglePixelMask(double scale, quint8 maskValue, double subPixelX, double subPixelY)
 {
     int srcWidth = 1;
     int srcHeight = 1;
     int dstWidth = 2;
     int dstHeight = 2;
-    KisAlphaMaskSP outputMask = KisAlphaMaskSP(new KisAlphaMask(dstWidth, dstHeight));
+    KisQImagemaskSP outputMask = KisQImagemaskSP(new KisQImagemask(dstWidth, dstHeight));
     Q_CHECK_PTR(outputMask);
 
     double a = subPixelX;
@@ -1179,7 +1179,7 @@ KisBrush::ScaledBrush::ScaledBrush()
     m_yScale = 1;
 }
 
-KisBrush::ScaledBrush::ScaledBrush(KisAlphaMaskSP scaledMask, const QImage& scaledImage, double scale, double xScale, double yScale)
+KisBrush::ScaledBrush::ScaledBrush(KisQImagemaskSP scaledMask, const QImage& scaledImage, double scale, double xScale, double yScale)
 {
     m_mask = scaledMask;
     m_image = scaledImage;
@@ -1267,7 +1267,7 @@ void KisBrush::generateBoundary() {
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
         dev = image(KisMetaRegistry::instance()->csRegistry() ->colorSpace("RGBA",0), KisPaintInformation());
     } else {
-        KisAlphaMaskSP amask = mask(KisPaintInformation());
+        KisQImagemaskSP amask = mask(KisPaintInformation());
         KoColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->colorSpace("RGBA",0);
         dev = new KisPaintDevice(cs, "tmp for generateBoundary");
         for (int y = 0; y < h; y++) {

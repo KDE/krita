@@ -1,6 +1,5 @@
 
 
-add_subdirectory( templates )
 
 if(KUNITTEST_FOUND)
     add_subdirectory(tests)

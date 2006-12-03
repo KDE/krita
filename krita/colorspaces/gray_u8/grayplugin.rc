@@ -1,7 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritagrayplugin" version="1">
-<Menu name="Image"><text>&amp;Image</text>
-    <Menu name="Mode"><text>&amp;Mode</text>
-            <Action name="convert to Gray(A)"/>
-    </Menu>
-</Menu></kpartgui>

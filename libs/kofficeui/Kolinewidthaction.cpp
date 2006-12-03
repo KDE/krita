@@ -46,7 +46,7 @@ class KoLineWidthAction::KoLineWidthActionPrivate
     KoLineWidthActionPrivate()
     {
       m_currentWidth = 1.0;
-      m_unit = KoUnit::U_PT;
+      m_unit = KoUnit::Point;
     }
 
     ~KoLineWidthActionPrivate()
@@ -54,7 +54,7 @@ class KoLineWidthAction::KoLineWidthActionPrivate
     }
 
     double m_currentWidth;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
 };
 
 KoLineWidthAction::KoLineWidthAction(const QString &text, const QString& icon,
@@ -148,7 +148,7 @@ void KoLineWidthAction::setCurrentWidth(double width)
   setCurrentSelection(11);
 }
 
-void KoLineWidthAction::setUnit(KoUnit::Unit unit)
+void KoLineWidthAction::setUnit(KoUnit unit)
 {
   d->m_unit = unit;
 }
@@ -174,7 +174,7 @@ KoLineWidthChooser::KoLineWidthChooser(QWidget* parent, const char* name)
   setMainWidget(mainWidget);
   Q3GridLayout* gl = new Q3GridLayout(mainWidget, 1, 2, KDialog::marginHint(), KDialog::spacingHint());
   QLabel* textLbl = new QLabel(i18n("Line width:"), mainWidget);
-  d->m_lineWidthUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, KoUnit::U_PT, 2);
+  d->m_lineWidthUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, KoUnit::Point, 2);
   gl->addWidget(textLbl, 0, 0);
   gl->addWidget(d->m_lineWidthUSBox, 0, 1);
 }
@@ -189,7 +189,7 @@ double KoLineWidthChooser::width() const
   return d->m_lineWidthUSBox->value();
 }
 
-void KoLineWidthChooser::setUnit(KoUnit::Unit unit)
+void KoLineWidthChooser::setUnit(KoUnit unit)
 {
   d->m_lineWidthUSBox->setUnit(unit);
 }

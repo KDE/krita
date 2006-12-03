@@ -743,7 +743,7 @@ void KoStylePreview::drawContents( QPainter *painter )
     painter->restore();
 }
 
-KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWidth, QWidget * parent )
+KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit unit, double _frameWidth, QWidget * parent )
         : KoParagLayoutWidget( KoParagDia::PD_SPACING, parent ), m_unit( unit )
 {
     QString unitName = KoUnit::unitName( m_unit );
@@ -1602,7 +1602,7 @@ void KoParagCounterWidget::save( KoParagLayout & lay ) {
         lay.counter = new KoParagCounter( m_counter );
 }
 
-KoTabulatorsLineEdit::KoTabulatorsLineEdit( QWidget *parent, double lower, double toUpper, double step, double value /*= 0.0*/, KoUnit::Unit unit /*= KoUnit::U_PT*/, unsigned int precision /*= 2*/ )
+KoTabulatorsLineEdit::KoTabulatorsLineEdit( QWidget *parent, double lower, double toUpper, double step, double value /*= 0.0*/, KoUnit unit /*= KoUnit::Point*/, unsigned int precision /*= 2*/ )
     : KoUnitDoubleSpinBox ( parent, lower, toUpper, step, value, unit, precision )
 {
     setRange( 0, 9999, 1, false);
@@ -1619,7 +1619,7 @@ void KoTabulatorsLineEdit::keyPressEvent ( QKeyEvent *ke )
     KoUnitDoubleSpinBox::keyPressEvent (ke);
 }
 
-KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double frameWidth, QWidget * parent )
+KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit unit, double frameWidth, QWidget * parent )
     : KoParagLayoutWidget( KoParagDia::PD_TABS, parent ), m_unit(unit) {
     QString length;
     if(frameWidth==-1) {
@@ -1833,8 +1833,6 @@ void KoParagTabulatorsWidget::newClicked() {
     } else {
         double pos = m_tabList[selected].ptPos;
         double add=1.0;
-        if(m_unit==KoUnit::U_INCH) // inches are 25 times as big as mm, take it easy with adding..
-            add=0.1;
 
         pos=pos + KoUnit::fromUserValue( add, m_unit );
         if(pos<m_toplimit)
@@ -2033,7 +2031,7 @@ QString KoParagTabulatorsWidget::tabName() {
 /* Class: KoParagDia                                              */
 /******************************************************************/
 KoParagDia::KoParagDia( QWidget* parent,
-                        int flags, KoUnit::Unit unit, double _frameWidth, bool breakLine, bool disableAll )
+                        int flags, KoUnit unit, double _frameWidth, bool breakLine, bool disableAll )
     : KPageDialog( parent )
 {
     setFaceType( Tabbed );

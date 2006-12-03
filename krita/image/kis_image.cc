@@ -519,7 +519,7 @@ public:
     double xres;
     double yres;
 
-    KoUnit::Unit unit;
+    KoUnit unit;
 
     KoColorSpace * colorSpace;
 
@@ -661,7 +661,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
 
     m_d->xres = 1.0;
     m_d->yres = 1.0;
-    m_d->unit = KoUnit::U_PT;
+    m_d->unit = KoUnit::Point;
     m_d->dirty = false;
     m_d->width = width;
     m_d->height = height;

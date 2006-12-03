@@ -21,6 +21,7 @@
 
 #include "kis_global.h"
 #include "kis_dlg_image_properties.h"
+#include "KoUnit.h"
 
 class KisDoc2;
 class KoID;
@@ -43,6 +44,10 @@ public:
 private slots:
     void buttonClicked();
     void fillCmbProfiles(const KoID & s);
+    void widthUnitChanged(int index);
+    void widthChanged(double value);
+    void heightUnitChanged(int index);
+    void heightChanged(double value);
 
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
@@ -52,6 +57,8 @@ private:
     quint8 backgroundOpacity() const;
 
     KisDoc2 *m_doc;
+    double m_width, m_height;
+    KoUnit m_widthUnit, m_heightUnit;
 };
 
 #endif

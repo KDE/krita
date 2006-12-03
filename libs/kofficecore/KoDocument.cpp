@@ -132,9 +132,9 @@ public:
         m_confirmNonNativeSave[0] = true;
         m_confirmNonNativeSave[1] = true;
         if ( KGlobal::locale()->measureSystem() == KLocale::Imperial ) {
-            m_unit = KoUnit::U_INCH;
+            m_unit = KoUnit::Inch;
         } else {
-            m_unit = KoUnit::U_CM;
+            m_unit = KoUnit::Centimeter;
         }
     }
 
@@ -147,7 +147,7 @@ public:
 //     KoDocumentIface * m_dcopObject;
     KoDocumentInfo *m_docInfo;
 
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
 
     KoFilterManager * filterManager; // The filter-manager to use when loading/saving [for the options]
 
@@ -2661,12 +2661,12 @@ KoPageLayout KoDocument::pageLayout(int /*pageNumber*/) const
     return m_pageLayout;
 }
 
-KoUnit::Unit KoDocument::unit() const
+KoUnit KoDocument::unit() const
 {
     return d->m_unit;
 }
 
-void KoDocument::setUnit( KoUnit::Unit unit )
+void KoDocument::setUnit( KoUnit unit )
 {
     if ( d->m_unit != unit )
     {

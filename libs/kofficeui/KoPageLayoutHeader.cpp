@@ -23,7 +23,7 @@
 #include <QCheckBox>
 #include <QHBoxLayout>
 
-KoPageLayoutHeader::KoPageLayoutHeader(QWidget *parent, KoUnit::Unit unit, const KoKWHeaderFooter &kwhf)
+KoPageLayoutHeader::KoPageLayoutHeader(QWidget *parent, KoUnit unit, const KoKWHeaderFooter &kwhf)
     : QWidget(parent)
 {
     m_headerFooters = kwhf;

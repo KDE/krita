@@ -92,7 +92,7 @@ KAction *KoShapeGeometry::createAction() {
     return 0; // TODO
 }
 
-void KoShapeGeometry::setUnit(KoUnit::Unit unit) {
+void KoShapeGeometry::setUnit(KoUnit unit) {
     widget.left->setUnit(unit);
     widget.top->setUnit(unit);
     widget.width->setUnit(unit);

@@ -26,7 +26,7 @@
 #include <QLayout>
 #include <QHBoxLayout>
 
-KoPageLayoutColumns::KoPageLayoutColumns(QWidget *parent, const KoColumns& columns, KoUnit::Unit unit, const KoPageLayout& layout)
+KoPageLayoutColumns::KoPageLayoutColumns(QWidget *parent, const KoColumns& columns, KoUnit unit, const KoPageLayout& layout)
     : QWidget(parent) {
     setupUi(this);
     m_columns = columns;

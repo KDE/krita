@@ -879,13 +879,13 @@ public:
      * Returns the unit used to display all measures/distances.
      * @since 1.5
      */
-    KoUnit::Unit unit() const;
+    KoUnit unit() const;
 
     /**
      * Sets the unit used to display all measures/distances.
      * @since 1.5
      */
-    void setUnit( KoUnit::Unit u );
+    void setUnit( KoUnit u );
 
     /**
      * Returns the name of the unit used to display all measures/distances.
@@ -941,7 +941,7 @@ signals:
      * It is common to connect views to it, in order to change the displayed units
      * (e.g. in the rulers)
      */
-    void unitChanged(KoUnit::Unit);
+    void unitChanged(KoUnit);
 
     /**
      * This signal is emitted when a direct or indirect child document changes

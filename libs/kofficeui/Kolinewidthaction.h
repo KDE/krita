@@ -65,7 +65,7 @@ class KOFFICEUI_EXPORT KoLineWidthAction : public KoSelectAction
     /** Set which unit to use in the custom width dialog.
      * @param unit The unit to use.
      */
-    void setUnit(KoUnit::Unit unit);
+    void setUnit(KoUnit unit);
 
   protected slots:
     /** Reimplemented from KoSelectAction.
@@ -98,7 +98,7 @@ class KoLineWidthChooser : public KDialogBase
     /** Set unit to use when showing the width.
      * @param unit Unit to use.
      */
-    void setUnit(KoUnit::Unit unit);
+    void setUnit(KoUnit unit);
     /** Set line width.
      * @param width Line width in points.
      */

@@ -118,7 +118,7 @@ public:
      * by the flake framework.
      * @see KoDocument::unit()
      */
-    virtual KoUnit::Unit unit() = 0;
+    virtual KoUnit unit() = 0;
 
     /**
      * Return the position of the document origin inside the canvas widget.

@@ -45,7 +45,7 @@ class KOFFICEUI_EXPORT KoRuler : public QWidget
         ~KoRuler();
 
         /// The ruler's unit
-        KoUnit::Unit unit() const;
+        KoUnit unit() const;
 
         /// The length of the ruler in points (pt)
         double rulerLength() const;
@@ -58,7 +58,7 @@ class KOFFICEUI_EXPORT KoRuler : public QWidget
 
     public Q_SLOTS:
         /// Set the unit of the ruler
-        void setUnit(KoUnit::Unit unit);
+        void setUnit(KoUnit unit);
 
         /** Set the offset. Use this function to sync the ruler with
           * the canvas' position on screen

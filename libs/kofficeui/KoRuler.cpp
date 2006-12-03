@@ -32,7 +32,7 @@
 
 class KoRulerPrivate {
     public:
-        KoUnit::Unit m_unit;
+        KoUnit m_unit;
         Qt::Orientation m_orientation;
         KoViewConverter* m_viewConverter;
 
@@ -54,7 +54,7 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, KoViewConverter* 
     d->m_orientation = orientation;
     d->m_viewConverter = viewConverter;
 
-    setUnit(KoUnit::U_PT);
+    setUnit(KoUnit(KoUnit::Point));
     setRulerLength(0);
     setOffset(0);
     setActiveRange(0, 0);
@@ -68,12 +68,12 @@ KoRuler::~KoRuler()
     d = 0;
 }
 
-KoUnit::Unit KoRuler::unit() const
+KoUnit KoRuler::unit() const
 {
     return d->m_unit;
 }
 
-void KoRuler::setUnit(KoUnit::Unit unit)
+void KoRuler::setUnit(KoUnit unit)
 {
     d->m_unit = unit;
 }
@@ -360,19 +360,19 @@ double KoRuler::numberStepForUnit() const
 {
     double numberStep;
 
-    switch(d->m_unit) {
-        case KoUnit::U_DD:
-        case KoUnit::U_INCH:
-        case KoUnit::U_CM:
-        case KoUnit::U_DM:
+    switch(d->m_unit.indexInList()) {
+        case KoUnit::Didot:
+        case KoUnit::Inch:
+        case KoUnit::Centimeter:
+        case KoUnit::Decimeter:
             numberStep = 1.0;
             break;
-        case KoUnit::U_MM:
-        case KoUnit::U_PI:
-        case KoUnit::U_CC:
+        case KoUnit::Millimeter:
+        case KoUnit::Pica:
+        case KoUnit::Cicero:
             numberStep = 10.0;
             break;
-        case KoUnit::U_PT:
+        case KoUnit::Point:
         default:
             numberStep = 100.0;
     }

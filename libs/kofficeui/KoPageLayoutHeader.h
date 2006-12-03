@@ -42,7 +42,7 @@ public:
      * @param unit the unit-type (mm/cm/inch) that the dialog should show
      * @param kwhf the data that this widget will be filled with initially
      */
-    KoPageLayoutHeader(QWidget *parent, KoUnit::Unit unit, const KoKWHeaderFooter &kwhf);
+    KoPageLayoutHeader(QWidget *parent, KoUnit unit, const KoKWHeaderFooter &kwhf);
     /**
      * @return the altered data as it is currently set by the user.
      */

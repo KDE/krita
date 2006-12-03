@@ -46,7 +46,7 @@ public:
     KAction *createAction();
 
     /// reimplemented from KoShapeConfigWidgetBase
-    void setUnit(KoUnit::Unit unit);
+    void setUnit(KoUnit unit);
 
 private slots:
     void updateShape();

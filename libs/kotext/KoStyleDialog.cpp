@@ -66,7 +66,7 @@ public:
     QCheckBox* cbIncludeInTOC;
 };
 
-KoStyleDialog::KoStyleDialog( QWidget *_parent, KoUnit::Unit unit,
+KoStyleDialog::KoStyleDialog( QWidget *_parent, KoUnit unit,
                                 const KoStyleCollection& styles, const QString & activeStyleName,
                                 int flags )
     : KDialog( _parent )

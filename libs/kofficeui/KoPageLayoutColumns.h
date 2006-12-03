@@ -44,7 +44,7 @@ public:
      * @param unit the unit-type (mm/cm/inch) that the dialog should show
      * @param layout the page layout that the preview should be initialzed with.
      */
-    KoPageLayoutColumns(QWidget *parent, const KoColumns& columns, KoUnit::Unit unit, const KoPageLayout& layout);
+    KoPageLayoutColumns(QWidget *parent, const KoColumns& columns, KoUnit unit, const KoPageLayout& layout);
 
     /**
      * Update the page preview widget with the param layout.

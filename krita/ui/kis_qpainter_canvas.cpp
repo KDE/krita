@@ -105,18 +105,23 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
         ++it;
     }
 
-    double zx,zy;
-    m_viewConverter->zoom(&zx, &zy);
+    double sx,sy;
+    m_viewConverter->zoom(&sx, &sy);
+    double pppx,pppy;
+    pppx = img->xRes();
+    pppy = img->yRes();
 
-    if(zx < 1.0 +EPSILON && zy < 1.0 +EPSILON) {
+    if(sx < 1.0 +EPSILON && sy < 1.0 +EPSILON) {
         // We are scaling pixels down (birds eye) so adjust for display profile AFTER scaling the pixels
         it = checkRects.begin();
         while (it != end) {
             // Image
             QRectF imagerect = m_viewConverter->viewToDocument(*it);
             imagerect.adjust(-5,-5,5,5);
+           imagerect.setCoords(imagerect.left()*pppx,imagerect.top()*pppy,
+                            imagerect.right()*pppx,imagerect.bottom()*pppy);
 
-            QImage image = img->convertToQImage(imagerect.toRect(), 1/zx, 1/zy, 
+            QImage image = img->convertToQImage(imagerect.toRect(), pppx/sx, pppy/sy, 
                         m_canvas->monitorProfile());
 
             gc.drawImage(imagerect.topLeft(), image, image.rect());
@@ -127,14 +132,16 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     {
         // We are scaling pixels up (magnified look) so adjust for display profile before scaling the pixels
         gc.setWorldMatrixEnabled(true);
-        gc.scale(zx, zy);
+        gc.scale(sx/pppx, sy/pppy);
 
         it = checkRects.begin();
         while (it != end) {
-            // Image
-            QRectF imagerect = m_viewConverter->viewToDocument(*it);
-            imagerect.adjust(-5,-5,5,5);
-            img->renderToPainter(imagerect.x(),
+           // Image
+           QRectF imagerect = m_viewConverter->viewToDocument(*it);
+           imagerect.adjust(-5,-5,5,5);
+           imagerect.setCoords(imagerect.left()*pppx,imagerect.top()*pppy,
+                            imagerect.right()*pppx,imagerect.bottom()*pppy);
+           img->renderToPainter(imagerect.x(),
                                 imagerect.y(),
                                 imagerect.x(), imagerect.y(),
                                 imagerect.width(), imagerect.height(), gc,

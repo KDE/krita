@@ -88,8 +88,8 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
     zoomHandler->setZoomMode(mode);
     KisImageSP img = m_view->image();
     m_view->canvasBase()->setCanvasSize(
-                    int(zoomHandler->documentToViewX(img->xRes() * img->width())),
-                    int(zoomHandler->documentToViewY(img->yRes() * img->height())));
+                    int(zoomHandler->documentToViewX(img->width() / img->xRes())),
+                    int(zoomHandler->documentToViewY(img->height() / img->yRes())));
     m_view->canvas()->update();
 }
 
@@ -107,8 +107,8 @@ void KisZoomManager::slotZoomIn()
     zoomHandler->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
     KisImageSP img = m_view->image();
     m_view->canvasBase()->setCanvasSize(
-                    int(zoomHandler->documentToViewX(img->xRes() * img->width())),
-                    int(zoomHandler->documentToViewY(img->yRes() * img->height())));
+                    int(zoomHandler->documentToViewX(img->width() / img->xRes())),
+                    int(zoomHandler->documentToViewY(img->height() / img->yRes())));
     m_view->canvas()->update();
 }
 
@@ -126,8 +126,8 @@ void KisZoomManager::slotZoomOut()
     zoomHandler->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
     KisImageSP img = m_view->image();
     m_view->canvasBase()->setCanvasSize(
-                    int(zoomHandler->documentToViewX(img->xRes() * img->width())),
-                    int(zoomHandler->documentToViewY(img->yRes() * img->height())));
+                    int(zoomHandler->documentToViewX(img->width() / img->xRes())),
+                    int(zoomHandler->documentToViewY(img->height() / img->yRes())));
     m_view->canvas()->update();
 }
 

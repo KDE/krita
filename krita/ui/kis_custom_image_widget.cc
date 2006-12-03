@@ -20,6 +20,7 @@
 
 #include <QPushButton>
 #include <QSlider>
+#include <QComboBox>
 
 #include <kcolorcombo.h>
 #include <kdebug.h>
@@ -45,18 +46,34 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
 
     txtName->setText(imageName);
 
+    m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
     doubleWidth->setValue(defWidth);
-    doubleHeight->setValue(defHeight);
-    doubleResolution->setValue(resolution);
+    doubleWidth->setDecimals(0);
+    m_width = KoUnit::fromUserValue(defWidth, m_widthUnit);
+    cmbWidthUnit->addItems( KoUnit::listOfUnitName(false) );
+    cmbWidthUnit->setCurrentIndex(KoUnit::Pixel);
 
-    cmbWidthUnit->addItem( i18n("Pixels") );
-    cmbWidthUnit->addItems( KoUnit::listOfUnitName() );
-    cmbHeightUnit->addItem( i18n("Pixels") );
-    cmbHeightUnit->addItems( KoUnit::listOfUnitName() );
+    m_heightUnit = KoUnit(KoUnit::Pixel, resolution);
+    doubleHeight->setValue(defHeight);
+    doubleHeight->setDecimals(0);
+    m_height = KoUnit::fromUserValue(defHeight, m_heightUnit);
+    cmbHeightUnit->addItems( KoUnit::listOfUnitName(false) );
+    cmbHeightUnit->setCurrentIndex(KoUnit::Pixel);
+
+    doubleResolution->setValue(72.0 * resolution);
+    doubleResolution->setDecimals(0);
 
     cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
     cmbColorSpaces->setCurrent(defColorSpaceName);
 
+    connect(cmbWidthUnit, SIGNAL(activated(int)),
+        this, SLOT(widthUnitChanged(int)));
+    connect(doubleWidth, SIGNAL(valueChanged(double)),
+        this, SLOT(widthChanged(double)));
+    connect(cmbHeightUnit, SIGNAL(activated(int)),
+        this, SLOT(heightUnitChanged(int)));
+    connect(doubleHeight, SIGNAL(valueChanged(double)),
+        this, SLOT(heightChanged(double)));
     connect(cmbColorSpaces, SIGNAL(activated(const KoID &)),
         this, SLOT(fillCmbProfiles(const KoID &)));
     connect (m_createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
@@ -66,6 +83,48 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
 
 }
 
+void KisCustomImageWidget::widthUnitChanged(int index) {
+    doubleWidth->blockSignals(true);
+
+    if(index == KoUnit::Pixel) {
+        doubleWidth->setDecimals(0);
+        m_widthUnit = KoUnit(KoUnit::Pixel, doubleResolution->value() / 72.0);
+    }
+    else {
+        doubleWidth->setDecimals(2);
+        m_widthUnit = KoUnit((KoUnit::Unit)cmbWidthUnit->currentIndex());
+    }
+
+    doubleWidth->setValue(KoUnit::ptToUnit(m_width, m_widthUnit));
+
+    doubleWidth->blockSignals(false);
+}
+
+void KisCustomImageWidget::widthChanged(double value) {
+    m_width = KoUnit::fromUserValue(value, m_widthUnit);
+}
+
+void KisCustomImageWidget::heightUnitChanged(int index) {
+    doubleHeight->blockSignals(true);
+
+    if(index == KoUnit::Pixel) {
+        doubleHeight->setDecimals(0);
+        m_heightUnit = KoUnit(KoUnit::Pixel, doubleResolution->value()/72.0);
+    }
+    else {
+        doubleHeight->setDecimals(2);
+        m_heightUnit = KoUnit((KoUnit::Unit)cmbHeightUnit->currentIndex());
+    }
+
+    doubleHeight->setValue(KoUnit::ptToUnit(m_height, m_heightUnit));
+
+    doubleHeight->blockSignals(false);
+}
+
+void KisCustomImageWidget::heightChanged(double value) {
+    m_height = KoUnit::fromUserValue(value, m_heightUnit);
+}
+
 void KisCustomImageWidget::buttonClicked() {
     KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(cmbColorSpaces->currentItem(), cmbProfile->currentText());
 
@@ -73,24 +132,11 @@ void KisCustomImageWidget::buttonClicked() {
 
     qint32 width, height;
     double resolution;
-    resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
+    resolution =  doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
-    switch(cmbWidthUnit->currentIndex())
-    {
-        case 0:
-            width = int(doubleWidth->value());
-            break;
-        case 1:
-            width = int(doubleWidth->value());
-            break;
-        case 2:
-            width = int(doubleWidth->value());
-            break;
-        case 3:
-            width = int(doubleWidth->value());
-            break;
-    }
-     
+    width = 0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution));
+    height = 0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution));
+
     m_doc->newImage(txtName->text(), width, height, cs, KoColor(qc, cs), txtDescription->toPlainText(), resolution);
 
     KisImageSP img = m_doc->currentImage();

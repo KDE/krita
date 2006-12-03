@@ -77,7 +77,7 @@
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1025" isRoot="false" isAbstract="false" name="const KisProfileSP&amp;" elementReference="438" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1028" isRoot="false" isAbstract="false" name="KoCommandHistory*" elementReference="957" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1034" isRoot="false" isAbstract="false" name="const KUrl&amp;" elementReference="1032" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1040" isRoot="false" isAbstract="false" name="const KoUnit::Unit&amp;" elementReference="1038" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1040" isRoot="false" isAbstract="false" name="const KoUnit&amp;" elementReference="1038" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1052" isRoot="false" isAbstract="false" name="const vKisLayerSP&amp;" elementReference="395" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1056" isRoot="false" isAbstract="false" name="const KisLayerSP" elementReference="394" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1062" isRoot="false" isAbstract="false" name="const KisLayerSP&amp;" elementReference="394" />
@@ -28291,7 +28291,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="1040" parent_class="1040" fileExt=".java" fileName="const KoUnit::Unit&amp;" >
+    <classifiercodedocument writeOutCode="true" package="" id="1040" parent_class="1040" fileExt=".java" fileName="const KoUnit&amp;" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -28305,7 +28305,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="1040" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Const KoUnit::Unit&amp;&amp;#010;" />
+        <javacodedocumentation tag="" text="Class Const KoUnit&amp;&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -28324,7 +28324,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Const KoUnit::Unit&amp; ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Const KoUnit&amp; ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>

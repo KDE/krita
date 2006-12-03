@@ -84,7 +84,7 @@ private:
             KoToolProxy *toolProxy () { return m_toolProxy; }
             KoViewConverter * viewConverter() { return &m_converter; }
             QWidget *canvasWidget () { return m_parent; }
-            KoUnit::Unit unit() { return KoUnit::U_MM; }
+            KoUnit unit() { return KoUnit(KoUnit::Millimeter); }
 
         protected: // event handlers
             void mouseMoveEvent(QMouseEvent *e);

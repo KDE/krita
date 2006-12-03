@@ -59,7 +59,7 @@
         <item>
          <widget class="QLabel" name="lblWidth" >
           <property name="text" >
-           <string>&amp;Width:</string>
+           <string>Width:</string>
           </property>
           <property name="alignment" >
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -69,7 +69,7 @@
         <item>
          <widget class="QLabel" name="lblHeight" >
           <property name="text" >
-           <string>Hei&amp;ght:</string>
+           <string>Height:</string>
           </property>
           <property name="alignment" >
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -90,10 +90,33 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="QDoubleSpinBox" name="doubleWidth" />
+         <widget class="QDoubleSpinBox" name="doubleWidth" >
+          <property name="minimumSize" >
+           <size>
+            <width>80</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="decimals" >
+           <number>2</number>
+          </property>
+          <property name="maximum" >
+           <double>100000000.000000000000000</double>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="doubleHeight" />
+         <widget class="QDoubleSpinBox" name="doubleHeight" >
+          <property name="minimumSize" >
+           <size>
+            <width>80</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximum" >
+           <double>100000000.000000000000000</double>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -118,13 +141,23 @@
         <property name="text" >
          <string>&amp;Resolution:</string>
         </property>
-        <property name="buddy" >
-         <cstring>doubleResolution</cstring>
-        </property>
        </widget>
       </item>
       <item>
-       <widget class="KDoubleSpinBox" name="doubleResolution" />
+       <widget class="QDoubleSpinBox" name="doubleResolution" >
+        <property name="minimumSize" >
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="decimals" >
+         <number>0</number>
+        </property>
+        <property name="maximum" >
+         <double>99999.000000000000000</double>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer>
@@ -335,20 +368,14 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
-   <class>SqueezedComboBox</class>
-   <extends>QComboBox</extends>
-   <header>squeezedcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KDoubleSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisCmbIDList</class>
    <extends>QWidget</extends>
    <header>kis_cmb_idlist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SqueezedComboBox</class>
+   <extends>QComboBox</extends>
+   <header>squeezedcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KColorCombo</class>
@@ -359,7 +386,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>txtName</tabstop>
-  <tabstop>doubleResolution</tabstop>
   <tabstop>cmbColorSpaces</tabstop>
   <tabstop>cmbProfile</tabstop>
   <tabstop>cmbColor</tabstop>

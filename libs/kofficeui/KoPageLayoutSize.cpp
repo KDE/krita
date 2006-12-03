@@ -37,7 +37,7 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 
-KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,const KoColumns& columns,  bool unitChooser, bool enableBorders)
+KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, KoUnit unit,const KoColumns& columns,  bool unitChooser, bool enableBorders)
     : QWidget(parent), m_blockSignals(false)
 {
     m_layout = layout;
@@ -61,7 +61,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
         cpgUnit->setEditable( false );
         lpgUnit->setBuddy( cpgUnit );
         cpgUnit->addItems( KoUnit::listOfUnitName() );
-        cpgUnit->setCurrentIndex( unit );
+        cpgUnit->setCurrentIndex( unit.indexInList() );
         unitLayout->addWidget( cpgUnit, 0, Qt::AlignLeft | Qt::AlignVCenter );
         connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( setUnitInt( int ) ) );
     }
@@ -224,7 +224,7 @@ void KoPageLayoutSize::setValues() {
     updatePreview();
 }
 
-void KoPageLayoutSize::setUnit( KoUnit::Unit unit ) {
+void KoPageLayoutSize::setUnit( KoUnit unit ) {
     m_unit = unit;
     m_blockSignals = true; // due to non-atomic changes the propertyChange emits should be blocked
 
@@ -258,7 +258,7 @@ void KoPageLayoutSize::setUnit( KoUnit::Unit unit ) {
 }
 
 void KoPageLayoutSize::setUnitInt( int unit ) {
-    setUnit((KoUnit::Unit)unit);
+    setUnit(KoUnit((KoUnit::Unit)unit));
 }
 
 void KoPageLayoutSize::formatChanged( int format ) {

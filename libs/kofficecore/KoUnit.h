@@ -61,19 +61,26 @@ class KOFFICECORE_EXPORT KoUnit
 public:
     /** Length units supported by KOffice. */
     enum Unit {
-        U_MM = 0,
-        U_PT = 1,
-        U_INCH = 2,
-        U_CM = 3,
-        U_DM = 4,
-        U_PI = 5, // pica
-        U_DD = 6, // didot
-        U_CC = 7, // cicero
-// XXX update U_LASTUNIT and rulers to allow for the new U_PIXEL!
-	U_PIXEL = 8,
-        U_LASTUNIT = U_CC// update when adding a new unit
+        Millimeter = 0,
+        Point = 1,
+        Inch = 2,
+        Centimeter = 3,
+        Decimeter = 4,
+        Pica = 5, // pica
+        Didot = 6, // didot
+        Cicero = 7, // cicero
+        Pixel = 8, // pixel (not really used yet
+// XXX update LastUnit and rulers to allow for the new Pixel!
+        LastUnit = Pixel// update when adding a new unit
         // when adding a new unit, make sure to implement support for it in koRuler too
     };
+
+    /** Construction requires initialization. The factor is for variable factor units like pixel */
+    explicit KoUnit(Unit unit=Point, double factor=1.0) { m_unit = unit; m_pixelConversion=factor;}
+
+    KoUnit& operator=(const Unit unit) {m_unit=unit; m_pixelConversion=1.0; return *this;}
+
+    bool operator!=(const KoUnit &ku) {return m_unit!=ku.m_unit;}
 
     /// Prepare ptValue to be displayed in pt
     static double toPoint( double ptValue ) {
@@ -126,7 +133,7 @@ public:
      * \return the value @p ptValue converted to @p unit and rounded, ready to be displayed
      * Old name: ptToUnit
      */
-    static double toUserValue( double ptValue, Unit unit );
+    static double toUserValue( double ptValue, KoUnit unit );
 
     /**
      * Convert the value @p ptValue to a given unit @p unit
@@ -134,17 +141,22 @@ public:
      * \return the converted value
      * Old name: ptToUnitUnrounded
      */
-    static double ptToUnit( const double ptValue, const Unit unit );
+    static double ptToUnit( const double ptValue, const KoUnit unit );
 
     /// This method is the one to use to display a value in a dialog
     /// @return the value @p ptValue converted to @p unit and rounded, ready to be displayed
     /// Old name: userValue
-    static QString toUserStringValue( double ptValue, Unit unit );
+    static QString toUserStringValue( double ptValue, KoUnit unit );
 
     /// This method is the one to use to read a value from a dialog
     /// @return the value in @p unit, converted to points for internal use
     /// Old name: ptFromUnit
-    static double fromUserValue( double value, Unit unit );
+    static double fromUserValue( double value, KoUnit unit );
+
+    /// This method is the one to use to read a value from a dialog
+    /// @return the value in @p unit, converted to points for internal use
+    /// Old name: ptFromUnit
+    static double fromUserValue( double value, Unit unit ) {return fromUserValue( value, KoUnit(unit));}
 
     /// This method is the one to use to read a value from a dialog
     /// @param value value entered by the user
@@ -152,24 +164,31 @@ public:
     /// @param ok if set, the pointed bool is set to true if the value could be
     /// converted to a double, and to false otherwise.
     /// @return the value in @p unit, converted to points for internal use
-    static double fromUserValue( const QString& value, Unit unit, bool* ok = 0 );
+    static double fromUserValue( const QString& value, KoUnit unit, bool* ok = 0 );
 
-    /// Convert a unit name into a Unit enum
+    /// Convert a unit name into a KoUnit
     /// @param _unitName name to convert
     /// @param ok if set, it will be true if the unit was known, false if unknown
-    static Unit unit( const QString &_unitName, bool* ok = 0 );
+    static KoUnit unit( const QString &_unitName, bool* ok = 0 );
     /// Get the name of a unit
-    static QString unitName( Unit _unit );
+    static QString unitName( KoUnit _unit );
     /// Get the full (translated) description of a unit
-    static QString unitDescription( Unit _unit );
-    static QStringList listOfUnitName();
+    static QString unitDescription( KoUnit _unit );
+    static QStringList listOfUnitName(bool hidePixel=true);
+
+    /// Get the index of this unit in the list of names
+    /// @param hidePixel count as if the Pixel unit hadn't been shown in the list
+    uint indexInList(bool hidePixel=true);
 
     /// parse common %KOffice and OO values, like "10cm", "5mm" to pt
     static double parseValue( const QString& value, double defaultVal = 0.0 );
 
     /// Save a unit in OASIS format
-    static void saveOasis(KoXmlWriter* settingsWriter, Unit _unit);
+    static void saveOasis(KoXmlWriter* settingsWriter, KoUnit _unit);
 
+    private:
+        Unit m_unit;
+        double m_pixelConversion;
 };
 
 

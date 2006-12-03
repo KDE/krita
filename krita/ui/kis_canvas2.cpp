@@ -139,9 +139,9 @@ QWidget* KisCanvas2::canvasWidget()
 }
 
 
-KoUnit::Unit KisCanvas2::unit()
+KoUnit KisCanvas2::unit()
 {
-    return KoUnit::U_PIXEL;
+    return KoUnit(KoUnit::Pixel);
 }
 
 KoToolProxy * KisCanvas2::toolProxy() {

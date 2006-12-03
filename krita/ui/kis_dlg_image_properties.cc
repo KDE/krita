@@ -64,7 +64,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     m_page->doubleWidth->setValue(image->width());
     m_page->doubleHeight->setValue(image->height());
 
-    m_page->doubleResolution->setValue(image->xRes()); // XXX: separate values for x & y?
+    m_page->doubleResolution->setValue(image->xRes()*72); // XXX: separate values for x & y?
 
     m_page->txtDescription->setText( m_image->description() );
 
@@ -128,7 +128,7 @@ QString KisDlgImageProperties::imageName()
 
 double KisDlgImageProperties::resolution()
 {
-    return m_page->doubleResolution->value();
+    return m_page->doubleResolution->value() / 72;
 }
 
 QString KisDlgImageProperties::description()

@@ -144,6 +144,10 @@ void KoZoomAction::regenerateItems(const QString& zoomString)
   {
     values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
   }
+  if(m_zoomModes & KoZoomMode::ZOOM_PIXELS)
+  {
+    values << KoZoomMode::toString(KoZoomMode::ZOOM_PIXELS);
+  }
 
   foreach(int value, zoomLevels) {
     values << i18n("%1%", value);

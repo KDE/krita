@@ -83,7 +83,7 @@ public: // KoCanvasBase implementation
 
     virtual QWidget* canvasWidget();
 
-    virtual KoUnit::Unit unit();
+    virtual KoUnit unit();
 
     virtual KoToolProxy* toolProxy();
 

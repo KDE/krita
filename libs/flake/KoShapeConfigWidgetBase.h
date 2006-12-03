@@ -73,7 +73,7 @@ public:
      * Called by the tool that created the shape using KoCavasBase::unit()
      * @param unit the new unit to show data in.
      */
-    virtual void setUnit(KoUnit::Unit unit) { Q_UNUSED(unit); }
+    virtual void setUnit(KoUnit unit) { Q_UNUSED(unit); }
 };
 
 

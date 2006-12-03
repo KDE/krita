@@ -60,7 +60,7 @@ class KOTEXT_EXPORT KoStyleDialog : public KDialog
 
 public:
     enum { ShowIncludeInToc = 1 }; // bitfield for flags
-    KoStyleDialog( QWidget *_parent, KoUnit::Unit unit,
+    KoStyleDialog( QWidget *_parent, KoUnit unit,
                     const KoStyleCollection& styleCollection,
                     const QString & activeStyleName,
                     int flags = 0 );

@@ -119,7 +119,7 @@ class KOTEXT_EXPORT KoIndentSpacingWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWidth, QWidget * parent );
+    KoIndentSpacingWidget( KoUnit unit, double _frameWidth, QWidget * parent );
     virtual ~KoIndentSpacingWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -152,7 +152,7 @@ private:
     KoUnitDoubleSpinBox *eLeft, *eRight, *eFirstLine;
     QComboBox *cSpacing;
     KPagePreview *prev1;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
 };
 
 /**
@@ -397,7 +397,7 @@ class KoTabulatorsLineEdit : public KoUnitDoubleSpinBox
     Q_OBJECT
 public:
     KoTabulatorsLineEdit( QWidget *parent, double lower, double upper, double step, double value = 0.0,
-                         KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2 );
+                         KoUnit unit = KoUnit(KoUnit::Point), unsigned int precision = 2 );
 
 protected:
     virtual void keyPressEvent ( QKeyEvent * );
@@ -412,7 +412,7 @@ class KOTEXT_EXPORT KoParagTabulatorsWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoParagTabulatorsWidget( KoUnit::Unit unit, double _frameWidth, QWidget * parent );
+    KoParagTabulatorsWidget( KoUnit unit, double _frameWidth, QWidget * parent );
     virtual ~KoParagTabulatorsWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -458,7 +458,7 @@ private:
     QPushButton* bDeleteAll;
 
     KoTabulatorList m_tabList;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
     double m_toplimit;
     bool noSignals;
 };
@@ -508,7 +508,7 @@ public:
     /**
      * breakLine : kpresenter didn't used this attibute, kword use it.
      */
-    KoParagDia( QWidget*, int flags, KoUnit::Unit unit, double _frameWidth=-1,bool breakLine=true, bool disableAll = false);
+    KoParagDia( QWidget*, int flags, KoUnit unit, double _frameWidth=-1,bool breakLine=true, bool disableAll = false);
     ~KoParagDia();
 
     /** Flags passed to constructor */

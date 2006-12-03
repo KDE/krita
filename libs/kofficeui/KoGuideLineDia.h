@@ -49,7 +49,7 @@ public:
      * @param name The name is send to the QObject constructor
      */
     KoGuideLineDia( QWidget *parent, double pos, double minPos, double maxPos,
-                    KoUnit::Unit unit, const char *name = 0L );
+                    KoUnit unit, const char *name = 0L );
 
     /**
      * @brief Constructor
@@ -65,7 +65,7 @@ public:
      * @param name the name is send to the QObject constructor
      */
     KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
-                    KoUnit::Unit unit, const char *name = 0L );
+                    KoUnit unit, const char *name = 0L );
     /**
      * @brief the position
      *

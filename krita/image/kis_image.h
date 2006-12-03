@@ -239,7 +239,7 @@ public:
     double yRes();
 
     /**
-     * Set the resolution in pixels per inch.
+     * Set the resolution in pixels per pt.
      */
     void setResolution(double xres, double yres);
 

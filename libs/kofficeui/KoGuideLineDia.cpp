@@ -34,7 +34,7 @@
 
 
 KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, double maxPos,
-                                KoUnit::Unit unit, const char *name )
+                                KoUnit unit, const char *name )
 : KDialog( parent )
 , m_hButton( 0 )
 , m_vButton( 0 )
@@ -53,7 +53,7 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, doub
 
 
 KoGuideLineDia::KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
-                                KoUnit::Unit unit, const char *name )
+                                KoUnit unit, const char *name )
 : KDialog( parent )
 , m_rect( rect )
 , m_pos( pos )

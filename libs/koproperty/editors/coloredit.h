@@ -34,7 +34,7 @@ class KOPROPERTY_EXPORT ColorButton : public Widget
 	Q_OBJECT
 
 	public:
-		ColorButton(Property *property, QWidget *parent=0);
+		explicit ColorButton(Property *property, QWidget *parent=0);
 		virtual ~ColorButton();
 
 		virtual QVariant value() const;

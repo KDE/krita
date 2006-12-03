@@ -37,7 +37,7 @@ class KOPROPERTY_EXPORT BoolEdit : public Widget
 	Q_OBJECT
 
 	public:
-		BoolEdit(Property *property, QWidget *parent=0);
+		explicit BoolEdit(Property *property, QWidget *parent=0);
 		virtual ~BoolEdit();
 
 		virtual QVariant value() const;

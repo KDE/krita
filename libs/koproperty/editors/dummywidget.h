@@ -32,7 +32,7 @@ class KOPROPERTY_EXPORT DummyWidget: public Widget
 	Q_OBJECT
 
 	public:
-		DummyWidget(Property *property, QWidget *parent=0);
+		explicit DummyWidget(Property *property, QWidget *parent=0);
 		virtual ~DummyWidget();
 
 		virtual QVariant value() const;

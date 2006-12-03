@@ -32,7 +32,7 @@ class KOPROPERTY_EXPORT URLEdit : public Widget
 	Q_OBJECT
 
 	public:
-		URLEdit(Property *property, QWidget *parent=0);
+		explicit URLEdit(Property *property, QWidget *parent=0);
 		virtual ~URLEdit();
 
 		virtual QVariant value() const;

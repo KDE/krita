@@ -32,7 +32,7 @@ class KOPROPERTY_EXPORT ComboBox : public Widget
 	Q_OBJECT
 
 	public:
-		ComboBox(Property *property, QWidget *parent=0);
+		explicit ComboBox(Property *property, QWidget *parent=0);
 		virtual ~ComboBox();
 
 		virtual QVariant value() const;

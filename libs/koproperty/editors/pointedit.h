@@ -34,7 +34,7 @@ class KOPROPERTY_EXPORT PointEdit : public Widget
 	Q_OBJECT
 
 	public:
-		PointEdit(Property *property, QWidget *parent=0);
+		explicit PointEdit(Property *property, QWidget *parent=0);
 		virtual ~PointEdit();
 
 		virtual QVariant value() const;

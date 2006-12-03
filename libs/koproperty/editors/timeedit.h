@@ -32,7 +32,7 @@ class KOPROPERTY_EXPORT TimeEdit : public Widget
 	Q_OBJECT
 
 	public:
-		TimeEdit(Property *property, QWidget *parent=0);
+		explicit TimeEdit(Property *property, QWidget *parent=0);
 		virtual ~TimeEdit();
 
 		virtual QVariant value() const;

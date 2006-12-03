@@ -24,10 +24,11 @@ kritadefaultpaintops_la_SOURCES = \
 	kis_duplicateop.cc \
 	kis_eraseop.cc \
 	kis_penop.cc \
-	kis_dlgbrushcurvecontrol.ui
+	kis_dlgbrushcurvecontrol.ui \
+	kis_smudgeop.cc
 
 noinst_HEADERS = defaultpaintops_plugin.h 	kis_airbrushop.h 	kis_brushop.h \
-		kis_duplicateop.h 	kis_eraseop.h 	kis_penop.h
+		kis_duplicateop.h 	kis_eraseop.h 	kis_penop.h kis_smudgeop.h
 
 kde_module_LTLIBRARIES = kritadefaultpaintops.la
 

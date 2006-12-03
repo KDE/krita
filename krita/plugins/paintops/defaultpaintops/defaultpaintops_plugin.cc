@@ -31,6 +31,7 @@
 #include "kis_brushop.h"
 #include "kis_duplicateop.h"
 #include "kis_eraseop.h"
+#include "kis_smudgeop.h"
 #include "kis_penop.h"
 #include "kis_global.h"
 #include "kis_paintop_registry.h"
@@ -57,6 +58,7 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const char *name, 
         r->add ( new KisDuplicateOpFactory );
         r->add ( new KisEraseOpFactory );
         r->add ( new KisPenOpFactory );
+        r->add ( new KisSmudgeOpFactory );
     }
 
 }

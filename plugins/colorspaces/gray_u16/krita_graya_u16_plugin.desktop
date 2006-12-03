@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Grayscale Color Model (16-bit integer)
+Name=Grayscale Color Model with Alpha Channel (16-bit integer)
 Name[fr]=Modèle de couleurs en nivaux de gris (entiers 16 bits)
 Name[x-test]=xxGrayscale Color Model (16-bit integer)xx
 Comment=Color model for 16-bit integer per channel Grayscale images
@@ -9,4 +9,4 @@ Comment[x-test]=xxColor model for 16-bit integer per channel Grayscale imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-Pigment-Version=1
-X-KDE-Library=krita_gray_u16_plugin
+X-KDE-Library=koffice_graya_u16_plugin

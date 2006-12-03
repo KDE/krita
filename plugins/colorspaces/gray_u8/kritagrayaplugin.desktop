@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Grayscale Color Model
+Name=Grayscale Color Model with Alpha
 Name[fr]=Modèle de couleurs en niveaux de gris
 Name[x-test]=xxGrayscale Color Modelxx
 Comment=Color model for 8-bit grayscale images
@@ -8,5 +8,5 @@ Comment[fr]=Modèle de couleurs pour des images en niveaux de gris 8 bits
 Comment[x-test]=xxColor model for 8-bit grayscale imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service
-X-KDE-Library=kritagrayplugin
+X-KDE-Library=kofficegrayau8plugin
 X-Pigment-Version=1

@@ -88,6 +88,19 @@ class KOFFICEUI_EXPORT KoRuler : public QWidget
           */
         void updateMouseCoordinate(int coordinate);
 
+        /**
+         * Set whether the ruler should show the selection borders
+         * @param show show selection borders if true, default is false.
+         */
+        void setShowSelectionBorders(bool show);
+
+        /**
+         * Update the selection borders
+         * @param first the first selection border in points
+         * @param second the other selection border in points
+         */
+        void updateSelectionBorders(double first, double second);
+
     protected:
         virtual void paintEvent(QPaintEvent* event);
 

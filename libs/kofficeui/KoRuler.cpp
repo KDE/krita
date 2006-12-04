@@ -43,6 +43,10 @@ class KoRulerPrivate {
 
         int m_mouseCoordinate;
         int m_showMousePosition;
+
+        bool m_showSelectionBorders;
+        double m_firstSelectionBorder;
+        double m_secondSelectionBorder;
 };
 
 
@@ -59,6 +63,7 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, KoViewConverter* 
     setOffset(0);
     setActiveRange(0, 0);
     setShowMousePosition(false);
+    setShowSelectionBorders(false);
     updateMouseCoordinate(-1);
 }
 
@@ -244,6 +249,19 @@ void KoRuler::paintEvent(QPaintEvent* event)
             painter.drawLine(QPointF(mouseCoord, rectangle.y() + 1),
                               QPointF(mouseCoord, rectangle.bottom() - 1));
         }
+
+        if(d->m_showSelectionBorders) {
+            // Draw first selection border
+            if(d->m_firstSelectionBorder > 0) {
+                double border = d->m_viewConverter->documentToViewX(d->m_firstSelectionBorder);
+                painter.drawLine(QPointF(border, rectangle.y() + 1), QPointF(border, rectangle.bottom() - 1));
+            }
+            // Draw second selection border
+            if(d->m_secondSelectionBorder > 0) {
+                double border = d->m_viewConverter->documentToViewX(d->m_secondSelectionBorder);
+                painter.drawLine(QPointF(border, rectangle.y() + 1), QPointF(border, rectangle.bottom() - 1));
+            }
+        }
     } else {
         int textOffset = 0;
 
@@ -316,6 +334,19 @@ void KoRuler::paintEvent(QPaintEvent* event)
             painter.drawLine(QPointF(rectangle.x() + 1, mouseCoord),
                               QPointF(rectangle.right() - 1, mouseCoord));
         }
+
+        if(d->m_showSelectionBorders) {
+            // Draw first selection border
+            if(d->m_firstSelectionBorder > 0) {
+                double border = d->m_viewConverter->documentToViewY(d->m_firstSelectionBorder);
+                painter.drawLine(QPointF(rectangle.x() + 1, border), QPointF(rectangle.right() - 1, border));
+            }
+            // Draw second selection border
+            if(d->m_secondSelectionBorder > 0) {
+                double border = d->m_viewConverter->documentToViewY(d->m_secondSelectionBorder);
+                painter.drawLine(QPointF(rectangle.x() + 1, border), QPointF(rectangle.right() - 1, border));
+            }
+        }
     }
 }
 
@@ -378,6 +409,18 @@ double KoRuler::numberStepForUnit() const
     }
 
     return numberStep;
+}
+
+void KoRuler::setShowSelectionBorders(bool show)
+{
+    d->m_showSelectionBorders = show;
+}
+
+void KoRuler::updateSelectionBorders(double first, double second)
+{
+    d->m_firstSelectionBorder = first;
+    d->m_secondSelectionBorder = second;
+    update();
 }
 
 #include "KoRuler.moc"

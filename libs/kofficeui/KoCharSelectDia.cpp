@@ -62,7 +62,7 @@ KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QStri
 
     setButtonText( User1, i18n("&Insert") );
     setButtonToolTip( User1, i18n("Insert the selected character in the text") );
-
+    connect(this,SIGNAL(user1Clicked()),this,SLOT(slotUser1()));
 }
 
 void KoCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /*_enableFont*/)

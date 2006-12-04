@@ -84,7 +84,6 @@ set(kritaimage_LIB_SRCS
    kis_filter_mask.cc
    kis_gravity_mask.cc
    kis_height_mask.cc
-   kis_qimage_mask.cc
    kis_viscosity_mask.cc
    kis_wetness_mask.cc
    kis_channel_mask.cc

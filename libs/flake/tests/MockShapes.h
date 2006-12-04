@@ -40,5 +40,5 @@ public:
     KoToolProxy * toolProxy() { return 0; }
     KoViewConverter *viewConverter() { return 0; }
     QWidget* canvasWidget() { return 0; }
-    KoUnit unit() { return KoUnit::Millimeter; }
+    KoUnit unit() { return KoUnit(KoUnit::Millimeter); }
 };

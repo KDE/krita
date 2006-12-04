@@ -50,11 +50,14 @@ public:
     KisSmudgeOpSettings(QWidget *parent, bool isTablet);
 
     int rate() const;
+    bool varyRate() const;
     bool varySize() const;
     bool varyOpacity() const;
 
+    bool customRate() const { return m_customRate; }
     bool customSize() const { return m_customSize; }
     bool customOpacity() const { return m_customOpacity; }
+    const double* rateCurve() const { return m_rateCurve; }
     const double* sizeCurve() const { return m_sizeCurve; }
     const double* opacityCurve() const { return m_opacityCurve; }
 
@@ -67,12 +70,15 @@ private:
     QLabel* m_rateLabel;
     QSlider* m_rateSlider;
     QLabel * m_pressureVariation;
+    QCheckBox * m_rate;
     QCheckBox * m_size;
     QCheckBox * m_opacity;
     WdgBrushCurveControl* m_curveControl;
 
     bool m_customSize;
+    bool m_customRate;
     bool m_customOpacity;
+    double m_rateCurve[256];
     double m_sizeCurve[256];
     double m_opacityCurve[256];
 };
@@ -97,10 +103,13 @@ private:
     }
     bool m_firstRun;
     int m_rate;
+    bool m_pressureRate;
     bool m_pressureSize;
     bool m_pressureOpacity;
+    bool m_customRate;
     bool m_customSize;
     bool m_customOpacity;
+    double m_rateCurve[256];
     double m_sizeCurve[256];
     double m_opacityCurve[256];
 };

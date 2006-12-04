@@ -70,8 +70,12 @@ KisSmudgeOpSettings::KisSmudgeOpSettings(QWidget *parent, bool isTablet)
         m_size =  new QCheckBox(i18n("Size"), m_optionsWidget);
         m_size->setChecked(true);
         m_opacity = new QCheckBox(i18n("Opacity"), m_optionsWidget);
+        m_rate =  new QCheckBox(i18n("Rate"), m_optionsWidget);
         m_curveControl = new WdgBrushCurveControl(m_optionsWidget);
-        m_curveControl->tabWidget->removePage(m_curveControl->tabWidget->page(2));
+        // We abuse the darken curve here for rate
+        m_curveControl->tabWidget->setTabLabel(m_curveControl->tabWidget->page(2), i18n("Rate"));
+        m_curveControl->tabWidget->setTabToolTip(m_curveControl->tabWidget->page(2),
+                i18n("Modifies the rate. Bottom is 0% of the rate top is 100% of the original rate."));
         QToolButton* moreButton = new QToolButton(Qt::UpArrow, m_optionsWidget);
         moreButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         moreButton->setMinimumSize(QSize(24,24)); // Bah, I had hoped the above line would make this unneeded
@@ -79,10 +83,12 @@ KisSmudgeOpSettings::KisSmudgeOpSettings(QWidget *parent, bool isTablet)
     } else {
         m_pressureVariation = 0;
         m_size = 0;
+        m_rate = 0;
         m_opacity = 0;
         m_curveControl = 0;
     }
 
+    m_customRate = false;
     m_customSize = false;
     m_customOpacity = false;
     // the curves will get filled in when the slot gets accepted
@@ -90,9 +96,13 @@ KisSmudgeOpSettings::KisSmudgeOpSettings(QWidget *parent, bool isTablet)
 
 void KisSmudgeOpSettings::slotCustomCurves() {
     if (m_curveControl->exec() == QDialog::Accepted) {
+        m_customRate = m_curveControl->darkenCheckbox->isChecked();
         m_customSize = m_curveControl->sizeCheckbox->isChecked();
         m_customOpacity = m_curveControl->opacityCheckbox->isChecked();
 
+        if (m_customRate) {
+            transferCurve(m_curveControl->darkenCurve, m_rateCurve);
+        }
         if (m_customSize) {
             transferCurve(m_curveControl->sizeCurve, m_sizeCurve);
         }
@@ -120,6 +130,11 @@ int KisSmudgeOpSettings::rate() const
     return m_rateSlider->value();
 }
 
+bool KisSmudgeOpSettings::varyRate() const
+{
+    return m_rate ? m_rate->isChecked() : false;
+}
+
 bool KisSmudgeOpSettings::varySize() const
 {
     return m_size ? m_size->isChecked() : true;
@@ -145,7 +160,9 @@ KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painte
         , m_firstRun(true)
         , m_rate(50)
     , m_pressureSize(true)
+    , m_pressureRate(false)
     , m_pressureOpacity(false)
+    , m_customRate(false)
     , m_customSize(false)
     , m_customOpacity(false)
     , m_target(0)
@@ -153,8 +170,10 @@ KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painte
 {
     if (settings != 0) {
         m_rate = settings->rate();
+        m_pressureRate = settings->varyRate();
         m_pressureSize = settings->varySize();
         m_pressureOpacity = settings->varyOpacity();
+        m_customRate = settings->customRate();
         m_customSize = settings->customSize();
         m_customOpacity = settings->customOpacity();
         if (m_customSize) {
@@ -162,6 +181,9 @@ KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painte
         }
         if (m_customOpacity) {
             memcpy(m_opacityCurve, settings->opacityCurve(), 256 * sizeof(double));
+        }
+        if (m_customRate) {
+            memcpy(m_rateCurve, settings->rateCurve(), 256 * sizeof(double));
         }
     }
     KisPaintDeviceSP device = m_painter->device();
@@ -259,6 +281,14 @@ void KisSmudgeOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if(!m_firstRun)
     {
         opacity = rate();
+        if (m_pressureRate) {
+            if (m_customRate) {
+                opacity = CLAMP((Q_UINT8)(double(opacity) * scaleToCurve(info.pressure, m_rateCurve)), OPACITY_TRANSPARENT, OPACITY_OPAQUE);
+            } else {
+                opacity = CLAMP((Q_UINT8)(double(opacity) * info.pressure), OPACITY_TRANSPARENT, OPACITY_OPAQUE);
+            }
+        }
+        opacity = OPACITY_OPAQUE - opacity;
     } else {
         m_firstRun = false;
     }

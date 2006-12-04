@@ -22,6 +22,7 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "KoColorSpace.h"
+
 /**
  * This layer is of a type that can be painted on.
  */
@@ -145,10 +146,13 @@ private:
     void genericMaskCreationHelper();
 
     KisPaintDeviceSP m_paintdev;
+
     // Layer mask related:
     // XXX It would be nice to merge the next 2 devices...
     KisPaintDeviceSP m_mask; // The mask that we can edit and display easily
     KisSelectionSP m_maskAsSelection; // The mask as selection, to apply and render easily
+
+
     bool m_renderMask;
     bool m_editMask;
 };

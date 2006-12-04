@@ -30,11 +30,10 @@
    core.
  */
 class KisExternalLayer : public KisLayer {
-    typedef KisLayer super;
 
 public:
-    KisExternalLayer(KisImageWSP img, const QString &name, quint8 opacity)
-        : super(img, name, opacity) {}
+    KisExternalLayer(KisImageSP img, const QString &name, quint8 opacity)
+        : KisLayer(img, name, opacity) {}
     virtual QIcon icon() const { return KIcon("gear"); }
     virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r) = 0;
     virtual bool saveToXML(QDomDocument doc, QDomElement elem) = 0;

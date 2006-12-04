@@ -29,42 +29,26 @@
 #include <ksharedptr.h>
 #include <klocale.h>
 
+#include "KoID.h"
+#include "KoColorSpace.h"
+
 #include "kis_shared.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "KoID.h"
 #include "kis_vec.h"
-#include "KoColorSpace.h"
-
+#include "kis_paint_information.h"
 
 #include <krita_export.h>
 
-class KoPoint;
-class KisQImagemask;
-class KisPainter;
-class KoColorSpace;
-class KoInputDevice;
 class QWidget;
 
-/**
- * This class keeps information that can be used in the painting process, for example by
- * brushes.
- **/
-class KRITAIMAGE_EXPORT KisPaintInformation {
-public:
-    KisPaintInformation(double pressure = PRESSURE_DEFAULT,
-                        double xTilt = 0.0, double yTilt = 0.0,
-                        KisVector2D movement = KisVector2D())
-        : pressure(pressure), xTilt(xTilt), yTilt(yTilt), movement(movement) {}
-    /// The pressure of the value (from 0.0 to 1.0)
-    double pressure;
-    /// The tilt of the pen on the horizontal axis (from 0.0 to 1.0)
-    double xTilt;
-    /// The tilt of the pen on the vertical axis (from 0.0 to 1.0)
-    double yTilt;
-    /// The movement of the pen is equal to current position minus the last position of the call to paintAt
-    KisVector2D movement;
-};
+class KoPoint;
+class KoColorSpace;
+class KoInputDevice;
+
+class KisQImagemask;
+class KisPainter;
+
 
 class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
 {

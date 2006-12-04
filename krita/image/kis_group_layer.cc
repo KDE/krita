@@ -86,7 +86,7 @@ void KisGroupLayer::resetProjection(KisPaintDeviceSP to)
     if (to)
         m_projection = new KisPaintDevice(*to); /// XXX ### look into Copy on Write here (CoW)
     else
-        m_projection = new KisPaintDevice(this, image()->colorSpace(), name().latin1());
+        m_projection = new KisPaintDevice(this, image()->colorSpace(), name().toLatin1());
 }
 
 bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) {

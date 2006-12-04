@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_imagepipe_brush.h"
+
 #include <config.h>
 
 #ifdef HAVE_SYS_TYPES_H
@@ -42,15 +44,14 @@
 #include <kapplication.h>
 #include <krandom.h>
 
+#include "KoColorSpaceRegistry.h"
+
 #include "kis_global.h"
 #include "kis_paint_device.h"
-#include "kis_imagepipe_brush.h"
 #include "kis_brush.h"
 #include "kis_qimage_mask.h"
 #include "kis_layer.h"
-#include "kis_meta_registry.h"
-#include "KoColorSpaceRegistry.h"
-
+#include "kis_boundary.h"
 
 KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
 {
@@ -241,7 +242,7 @@ bool KisImagePipeBrush::init()
 
         numOfBrushes++;
     }
-    
+
     if (!m_brushes.isEmpty()) {
         setValid(true);
         if (m_brushes.at( 0 )->brushType() == MASK) {
@@ -439,7 +440,7 @@ KisImagePipeBrush* KisImagePipeBrush::clone() const {
 
     for (int i = 0; i < m_brushes.count(); i++) {
         KisPaintDevice* pd = new KisPaintDevice(
-                KisMetaRegistry::instance()->csRegistry()->colorSpace("RGBA", 0), "clone pd" );
+            KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), "clone pd" );
         pd->convertFromQImage(m_brushes.at(i)->img(), "");
         devices[0].append(pd);
     }

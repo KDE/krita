@@ -790,16 +790,17 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
         h = qint32(double(srch) / srcw * w);
     else if (srch > srcw)
         w = qint32(double(srcw) / srch * h);
-
+#warning FIXME: use KisRandomAccessor instead !
+#if 0
     for (qint32 y=0; y < h; ++y) {
         qint32 iY = (y * srch ) / h;
         for (qint32 x=0; x < w; ++x) {
             qint32 iX = (x * srcw ) / w;
-        // TODO: FIXME: use KisRandomAccessor instead !
-//             thumbnail->setPixel(x, y, colorAt(iX, iY));
+
+             thumbnail->setPixel(x, y, colorAt(iX, iY));
         }
     }
-
+#endif
     return thumbnail;
 
 }

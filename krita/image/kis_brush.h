@@ -20,27 +20,26 @@
 #ifndef KIS_BRUSH_
 #define KIS_BRUSH_
 
-#include <QString>
-#include <QSize>
 #include <QImage>
 #include <QVector>
-#include <QPixmap>
 
-#include <kio/job.h>
+#include "KoPoint.h"
+
+#include "kis_types.h"
 
 #include "kis_resource.h"
-#include "kis_types.h"
-#include "KoPoint.h"
+#include "kis_paint_information.h"
 #include "kis_qimage_mask.h"
-#include "krita_export.h"
-#include "kis_boundary.h"
-#include "kis_paintop.h"
 
+#include "krita_export.h"
+
+class QString;
 class QPoint;
-class QPixmap;
-class KisBoundary;
-class KoColorSpace;
 class QIODevice;
+
+class KoColorSpace;
+
+class KisBoundary;
 
 enum enumBrushType {
     INVALID,
@@ -84,7 +83,7 @@ public:
        pixels in the brush.
     */
     virtual KisQImagemaskSP mask(const KisPaintInformation& info,
-                                double subPixelX = 0, double subPixelY = 0) const;
+                                 double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
     virtual KisPaintDeviceSP image(KoColorSpace * colorSpace, const KisPaintInformation& info,
                              double subPixelX = 0, double subPixelY = 0) const;

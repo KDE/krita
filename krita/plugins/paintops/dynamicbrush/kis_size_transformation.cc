@@ -3,7 +3,8 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License.
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,7 +18,9 @@
 
 #include "kis_size_transformation.h"
 
+#include "kis_dynamic_brush.h"
 #include "kis_transform_parameter.h"
+        
 
 KisSizeTransformation::KisSizeTransformation(KisTransformParameter* hTransfoParameter, KisTransformParameter* vTransfoParameter)
     : m_horizTransfoParameter(hTransfoParameter), m_vertiTransfoParameter(vTransfoParameter)
@@ -29,25 +32,13 @@ KisSizeTransformation::~KisSizeTransformation()
         delete m_vertiTransfoParameter;
     delete m_horizTransfoParameter;
 }
-void KisSizeTransformation::transformDab(KisDabSource& dabsrc, const KisPaintInformation& info)
-{
-    // TODO: implement it, but I wonder if it makes sense to support it for the dab ?
-    switch(dabsrc.type)
-    {
-        case KisDabSource::DabAuto:
-            dabsrc.autoDab.width *= 2 * m_horizTransfoParameter->parameter(info);
-            dabsrc.autoDab.hfade *= 2 * m_horizTransfoParameter->parameter(info);
-            dabsrc.autoDab.height *= 2 * m_vertiTransfoParameter->parameter(info);
-            dabsrc.autoDab.vfade *= 2 * m_vertiTransfoParameter->parameter(info);
-            return;
-        case KisDabSource::DabAlphaMask:
-            // TODO: implement it
-        return;
-    }
 
+void KisSizeTransformation::transformBrush(KisDynamicBrush* dabsrc, const KisPaintInformation& info)
+{
+    dabsrc->resize(m_horizTransfoParameter->parameter(info), m_vertiTransfoParameter->parameter(info));
 }
 
-void KisSizeTransformation::transformColoring(KisColoringSource& coloringsrc, const KisPaintInformation& info)
+void KisSizeTransformation::transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info)
 {
     Q_UNUSED(coloringsrc);
     Q_UNUSED(info);

@@ -3,7 +3,8 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License.
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -41,6 +42,8 @@
 #include <kis_types.h>
 
 #include "kis_darken_transformation.h"
+#include "kis_dynamic_brush.h"
+#include "kis_dynamic_coloring.h"
 #include "kis_size_transformation.h"
 #include "kis_transform_parameter.h"
 
@@ -106,7 +109,7 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     KoColor origColor = m_painter->paintColor();
 
     // First apply the transfo to the dab source
-    KisDabSource* dabsrc = new KisDabAutoSource;
+    KisDabBrush* dabsrc = new KisAutoMaskBrush;
     dabsrc->autoDab.shape = KisAutoDab::ShapeCircle;
     dabsrc->autoDab.width = 10;
     dabsrc->autoDab.height = 10;
@@ -115,14 +118,14 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     KisDynamicTransformation* transfo = m_firstTransfo;
     while(transfo)
     {
-        m_firstTransfo->transformDab(*dabsrc, adjustedInfo);
+        m_firstTransfo->transformBrush(dabsrc, adjustedInfo);
         transfo = transfo->nextTransformation();
     }
 
     // Then to the coloring source
-    KisColoringSource coloringsrc;
-    coloringsrc.type = KisColoringSource::ColoringPlainColor;
-    coloringsrc.color = KoColor(QColor(255,200,100), 255, coloringsrc.color.colorSpace() );
+    KisDynamicColoring* coloringsrc = new KisPlainColoring;
+    coloringsrc->type = KisDynamicColoring::ColoringPlainColor;
+    coloringsrc->color = KoColor(QColor(255,200,100), 255, coloringsrc->color.colorSpace() );
     transfo = m_firstTransfo;
     while(transfo)
     {
@@ -133,7 +136,7 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     // Transform into the paintdevice to apply
     switch(dabsrc->type)
     {
-        case KisDabSource::DabAuto:
+        case KisDabBrush::DabAuto:
         {
             switch(dabsrc->autoDab.shape)
             {
@@ -146,19 +149,19 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
             }
         }
             break;
-        case KisDabSource::DabAlphaMask:
+        case KisDabBrush::DabAlphaMask:
             break;
     }
 
     // Apply the coloring
-    switch(coloringsrc.type)
+    switch(coloringsrc->type)
     {
-        case KisColoringSource::ColoringPlainColor:
+        case KisDynamicColoring::ColoringPlainColor:
         {
             KoColorSpace * colorSpace = dab->colorSpace();
 
             // Convert the kiscolor to the right colorspace.
-            KoColor kc = coloringsrc.color;
+            KoColor kc = coloringsrc->color;
             kc.convertTo(colorSpace);
             qint32 pixelSize = colorSpace->pixelSize();
 
@@ -179,7 +182,7 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 
         }
             break;
-        case KisColoringSource::ColoringPaintDevice:
+        case KisDynamicColoring::ColoringPaintDevice:
             // TODO: implement it
             break;
     }

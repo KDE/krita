@@ -16,23 +16,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_Size_TRANSFORMATION_
-#define _KIS_Size_TRANSFORMATION_
+#include "kis_dynamic_brush.h"
 
-#include "kis_dynamic_transformation.h"
+#include "kis_qimage_mask.h"
+#include "kis_autobrush_resource.h"
 
-class KisTransformParameter;
+quint8 KisAlphaMaskBrush::alphaAt(int x, int y)
+{
+    return alphaMask->alphaAt(x,y);
+}
 
-class KisSizeTransformation : public KisDynamicTransformation {
-    public:
-        KisSizeTransformation(KisTransformParameter* hTransfoParameter, KisTransformParameter* vTransfoParameter);
-        virtual ~KisSizeTransformation();
-    public:
-        virtual void transformBrush(KisDynamicBrush* dabsrc, const KisPaintInformation& info);
-        virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
-    private:
-        KisTransformParameter* m_horizTransfoParameter;
-        KisTransformParameter* m_vertiTransfoParameter;
-};
+quint8 KisAutoMaskBrush::alphaAt(int x, int y)
+{
+    return 255 - m_shape->valueAt(x,y);
+}
 
-#endif
+KisAutoMaskBrush::~KisAutoMaskBrush() { if(m_shape) delete m_shape; }
+
+KisDabBrush::~KisDabBrush() { }
+KisDabBrush::KisDabBrush() { }
+
+
+void KisAlphaMaskBrush::resize(double xs, double ys)
+{
+    Q_UNUSED(xs);
+    Q_UNUSED(ys);
+    // TODO: implement it
+}
+
+void KisAutoMaskBrush::resize(double xs, double ys)
+{
+    autoDab.width *= 2 * xs;
+    autoDab.hfade *= 2 * xs;
+    autoDab.height *= 2 * ys;
+    autoDab.vfade *= 2 * ys;
+}
+

@@ -16,23 +16,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_Size_TRANSFORMATION_
-#define _KIS_Size_TRANSFORMATION_
+#ifndef _KIS_DYNAMIC_COLORING_H_
+#define _KIS_DYNAMIC_COLORING_H_
 
-#include "kis_dynamic_transformation.h"
+#include <KoColor.h>
 
-class KisTransformParameter;
+#include <kis_types.h>
 
-class KisSizeTransformation : public KisDynamicTransformation {
+class KisDynamicColoring {
     public:
-        KisSizeTransformation(KisTransformParameter* hTransfoParameter, KisTransformParameter* vTransfoParameter);
-        virtual ~KisSizeTransformation();
+        enum ColoringType {
+            ColoringPlainColor, ColoringPaintDevice
+        };
+        virtual ~KisDynamicColoring();
     public:
-        virtual void transformBrush(KisDynamicBrush* dabsrc, const KisPaintInformation& info);
-        virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
-    private:
-        KisTransformParameter* m_horizTransfoParameter;
-        KisTransformParameter* m_vertiTransfoParameter;
+        virtual void resize(double xs, double ys) = 0;
+        virtual void darken(double v) = 0;
+    public:
+        KoColor color;
+        KisPaintDeviceSP paintDevice;
+        ColoringType type;
+};
+
+class KisPlainColoring : public KisDynamicColoring {
+    public:
+        virtual ~KisPlainColoring();
+        virtual void darken(double v);
+        virtual void resize(double , double ) {
+            // Do nothing as plain color doesn't have size
+        };
 };
 
 #endif

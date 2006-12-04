@@ -3,7 +3,8 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License.
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,20 +18,3 @@
 
 #include "kis_dynamic_transformation.h"
 
-#include "kis_qimage_mask.h"
-#include "kis_autobrush_resource.h"
-
-quint8 KisDabAlphaMaskSource::alphaAt(int x, int y)
-{
-    return alphaMask->alphaAt(x,y);
-}
-
-quint8 KisDabAutoSource::alphaAt(int x, int y)
-{
-    return 255 - m_shape->valueAt(x,y);
-}
-
-KisDabAutoSource::~KisDabAutoSource() { if(m_shape) delete m_shape; }
-
-KisDabSource::~KisDabSource() { }
-KisDabSource::KisDabSource() { }

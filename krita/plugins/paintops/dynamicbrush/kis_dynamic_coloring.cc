@@ -16,23 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_Size_TRANSFORMATION_
-#define _KIS_Size_TRANSFORMATION_
+#include "kis_dynamic_coloring.h"
 
-#include "kis_dynamic_transformation.h"
+#include <kis_paint_device.h>
 
-class KisTransformParameter;
+KisDynamicColoring::~KisDynamicColoring() { }
+KisPlainColoring::~KisPlainColoring() { }
 
-class KisSizeTransformation : public KisDynamicTransformation {
-    public:
-        KisSizeTransformation(KisTransformParameter* hTransfoParameter, KisTransformParameter* vTransfoParameter);
-        virtual ~KisSizeTransformation();
-    public:
-        virtual void transformBrush(KisDynamicBrush* dabsrc, const KisPaintInformation& info);
-        virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
-    private:
-        KisTransformParameter* m_horizTransfoParameter;
-        KisTransformParameter* m_vertiTransfoParameter;
-};
-
-#endif
+        
+void KisPlainColoring::darken(double v)
+{
+    color.colorSpace()->darken( color.data(),  color.data(), (qint32)(255  - 75 * v), false, 0.0, 1);
+}

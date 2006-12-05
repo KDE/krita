@@ -101,7 +101,6 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     if (!m_painter->device()) return;
     KisPaintDeviceSP device = m_painter->device();
-
     if (!m_painter->device()) return;
 
     KisBrush *brush = m_painter->brush();
@@ -145,21 +144,21 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // the paint
     // double wetness = paint.w; // XXX: Was unused
     // strength is a double in the 0 - 2 range, but upscaled to Q_UINT16:
-    kdDebug() << "Original strength as in paint.h: " << paint.h << endl;
-    
+    //kdDebug() << "Original strength as in paint.h: " << paint.h << endl;
+
     double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
 
-    kdDebug() << "Before strength: " << strength << endl;
-    
+    //kdDebug() << "Before strength: " << strength << endl;
+
     if (m_strength)
         strength = strength * (strength + info.pressure) * 0.5;
     else
         strength = strength * (strength + PRESSURE_DEFAULT) * 0.5;
 
     double pressure = 0.75 + 0.25 * info.pressure;
-    
-    kdDebug() << "info.pressure " << info.pressure << ", local pressure: " << pressure << ", strength: " << strength << endl;
-    
+
+    //kdDebug() << "info.pressure " << info.pressure << ", local pressure: " << pressure << ", strength: " << strength << endl;
+
     WetPack currentPack;
     WetPix currentPix;
     double eff_height;

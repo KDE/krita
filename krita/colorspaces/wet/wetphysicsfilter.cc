@@ -32,9 +32,6 @@
 
 
 WetPhysicsFilter::WetPhysicsFilter()
-#if 0
-    : KisFilter(id(), "artistic", i18n("Dry the Paint (25 times)"))
-#endif
     : KisFilter(id(), "artistic", i18n("Dry the Paint"))
 {
     m_adsorbCount = 0;
@@ -42,8 +39,9 @@ WetPhysicsFilter::WetPhysicsFilter()
 
 void WetPhysicsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
-    // XXX: It would be nice be able to interleave this, instead of having the same loop over
-    //      our pixels three times.
+    kdDebug() << "Physics processing " << src->name() << m_adsorbCount << endl;
+    // XXX: It would be nice be able to interleave this, instead of
+    // having the same loop over  our pixels three times.
     flow(src, dst, rect);
     if (m_adsorbCount++ == 2) {
 //         XXX I think we could combine dry and adsorb, yes
@@ -51,7 +49,6 @@ void WetPhysicsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
         dry(src, dst, rect);
         m_adsorbCount = 0;
     }
-    
     setProgressDone(); // Must be called even if you don't really support progression
 }
 
@@ -61,6 +58,8 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP /*dst*/, cons
     /* XXX: Is this like a convolution operation? BSAR */
     int width = r.width();
     int height = r.height();
+
+    kdDebug() << "Flowing: " << r << endl;
 
     /* width of a line in a layer in pixel units, not in bytes -- used to move to the next
        line in the fluid masks below */
@@ -232,6 +231,7 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP /*dst*/, cons
 
 void WetPhysicsFilter::dry(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r)
 {
+    kdDebug () << "Drying " << r << endl;
     for (Q_INT32 y = 0; y < r.height(); y++) {
         KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.y() + y, r.width(), false);
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(r.x(), r.y() + y, r.width(), true);
@@ -260,6 +260,7 @@ void WetPhysicsFilter::dry(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRe
 
 void WetPhysicsFilter::adsorb(KisPaintDeviceSP src, KisPaintDeviceSP /*dst*/, const QRect & r)
 {
+    kdDebug() << "Adsorbing " << r << endl;
     for (Q_INT32 y = 0; y < r.height(); y++) {
         KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.y() + y, r.width(), true);
 

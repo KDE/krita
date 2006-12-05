@@ -40,6 +40,7 @@
 #include "kis_iteratorpixeltrait.h"
 #include "kis_random_accessor.h"
 #include "kis_random_sub_accessor.h"
+#include "kis_transaction.h"
 #include "kis_profile.h"
 #include "kis_color.h"
 #include "kis_integer_maths.h"
@@ -200,7 +201,7 @@ namespace {
 }
 
 KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
-        QObject(0, name), KShared(), m_exifInfo(0)
+        QObject(0, name), KShared(), m_exifInfo(0),  m_lock( false )
 {
     if (colorSpace == 0) {
         kdWarning(41001) << "Cannot create paint device without colorstrategy!\n";
@@ -232,16 +233,10 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
     m_selectionDeselected = false;
     m_selection = 0;
 
-    m_longRunningFilters = colorSpace->createBackgroundFilters();
-    if (!m_longRunningFilters.isEmpty()) {
-        m_longRunningFilterTimer = new QTimer(this);
-        connect(m_longRunningFilterTimer, SIGNAL(timeout()), this, SLOT(runBackgroundFilters()));
-        m_longRunningFilterTimer->start(800);
-    }
 }
 
 KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, const char * name) :
-        QObject(0, name), KShared(), m_exifInfo(0)
+        QObject(0, name), KShared(), m_exifInfo(0), m_lock( false )
 {
 
     m_longRunningFilterTimer = 0;
@@ -276,12 +271,14 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, con
     Q_CHECK_PTR(m_datamanager);
     m_extentIsValid = true;
 
+    if ( QString ( name ) == QString( "Layer 1" ) ) {
+        m_longRunningFilters = m_colorSpace->createBackgroundFilters();
 
-    m_longRunningFilters = m_colorSpace->createBackgroundFilters();
-    if (!m_longRunningFilters.isEmpty()) {
-        m_longRunningFilterTimer = new QTimer(this);
-        connect(m_longRunningFilterTimer, SIGNAL(timeout()), this, SLOT(runBackgroundFilters()));
-        m_longRunningFilterTimer->start(800);
+        if (!m_longRunningFilters.isEmpty()) {
+            m_longRunningFilterTimer = new QTimer(this);
+            connect(m_longRunningFilterTimer, SIGNAL(timeout()), this, SLOT(runBackgroundFilters()));
+            m_longRunningFilterTimer->start(2000);
+        }
     }
 }
 
@@ -600,14 +597,7 @@ QRect KisPaintDevice::exactBoundsImprovedOldMethod() const
 
 QRect KisPaintDevice::exactBounds() const
 {
-    // XXX: Look, this code should never have gone into a release,
-    // right?
-    //QRect r1 = exactBoundsOldMethod();
     QRect r2 = exactBoundsImprovedOldMethod();
-    //if(r1 != r2)
-    //{
-    //    kdDebug() << "EXACTBOUNDSERROR : " << r1 << " " << r2 << endl;
-    //}
     return r2;
 }
 
@@ -1269,6 +1259,10 @@ KisExifInfo* KisPaintDevice::exifInfo()
 
 void KisPaintDevice::runBackgroundFilters()
 {
+    if ( m_lock ) return;
+
+    KisTransaction * cmd = new KisTransaction("Running autofilters", this);
+
     QRect rc = extent();
     if (!m_longRunningFilters.isEmpty()) {
         QValueList<KisFilter*>::iterator it;
@@ -1277,6 +1271,8 @@ void KisPaintDevice::runBackgroundFilters()
             (*it)->process(this, this, 0, rc);
         }
     }
+    undoAdapter()->addCommand(cmd);
+
     if (m_parentLayer) m_parentLayer->setDirty(rc);
 }
 

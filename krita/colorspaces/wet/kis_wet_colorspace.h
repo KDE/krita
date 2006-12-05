@@ -144,7 +144,7 @@ public:
                        Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
-    //virtual QValueList<KisFilter*> createBackgroundFilters();
+    virtual QValueList<KisFilter*> createBackgroundFilters();
     
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 

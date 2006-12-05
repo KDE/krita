@@ -62,7 +62,6 @@ public:
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 
-
 protected:
 
     virtual void bitBlt(Q_UINT8 *dst,

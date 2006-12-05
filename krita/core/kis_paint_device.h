@@ -101,6 +101,7 @@ public:
     virtual ~KisPaintDevice();
     virtual DCOPObject *dcopObject();
 
+    void lock(bool lock) { m_lock = lock; }
 
 public:
 
@@ -557,6 +558,8 @@ private:
 
     QValueList<KisFilter*> m_longRunningFilters;
     QTimer * m_longRunningFilterTimer;
+
+    bool m_lock;
 };
 
 inline Q_INT32 KisPaintDevice::pixelSize() const

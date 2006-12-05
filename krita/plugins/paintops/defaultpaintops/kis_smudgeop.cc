@@ -157,8 +157,8 @@ KisPaintOpSettings* KisSmudgeOpFactory::settings(QWidget * parent, const KisInpu
 
 KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painter)
     : super(painter)
-        , m_firstRun(true)
-        , m_rate(50)
+    , m_firstRun(true)
+    , m_rate(50)
     , m_pressureSize(true)
     , m_pressureRate(false)
     , m_pressureOpacity(false)
@@ -187,8 +187,8 @@ KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painte
         }
     }
     KisPaintDeviceSP device = m_painter->device();
-        m_srcdev = new KisPaintDevice(device->colorSpace(), "duplicate source dev");
-        m_target = new KisPaintDevice(device->colorSpace(), "duplicate target dev");
+    m_srcdev = new KisPaintDevice(device->colorSpace(), "duplicate source dev");
+    m_target = new KisPaintDevice(device->colorSpace(), "duplicate target dev");
 }
 
 KisSmudgeOp::~KisSmudgeOp()
@@ -295,10 +295,9 @@ void KisSmudgeOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     copyPainter.bitBlt(0, 0, COMPOSITE_OVER, device, opacity, pt.x(), pt.y(), sw, sh);
     copyPainter.end();
     
-        m_target = new KisPaintDevice(device->colorSpace(), "duplicate target dev");
+    m_target = new KisPaintDevice(device->colorSpace(), "duplicate target dev");
     
     copyPainter.begin(m_target);
-    
 
     copyPainter.bltMask(0, 0, COMPOSITE_OVER, m_srcdev, dab,
                              OPACITY_OPAQUE, 0, 0, sw, sh);

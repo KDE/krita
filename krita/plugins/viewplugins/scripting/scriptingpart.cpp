@@ -92,7 +92,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     KAction* manageraction = new KAction(i18n("Script Manager..."), actionCollection(), "configurescripts");
     connect(manageraction, SIGNAL(triggered(bool)), d->guiclient, SLOT(showManager()));
 
-    KAction* scriptmenuaction = d->guiclient->action("scripts");
+    QAction* scriptmenuaction = d->guiclient->action("scripts");
     actionCollection()->insert(scriptmenuaction);
 
     d->view->createDock(i18n("Scripts"), new ScriptingDocker(d->view, d->guiclient));

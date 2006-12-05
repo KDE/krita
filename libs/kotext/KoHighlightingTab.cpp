@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,134 +19,83 @@
 */
 
 #include "KoHighlightingTab.h"
-#include "KoTextFormat.h"
+#include "KoText.h"
 
-#include <QStringList>
-#include <q3buttongroup.h>
-#include <QRadioButton>
-#include <QCheckBox>
+KoHighlightingTab::KoHighlightingTab( QWidget* parent)
+    : QWidget ( parent)
+{
+    widget.setupUi(this);
 
-#include <kcombobox.h>
-#include <kcolorbutton.h>
+    widget.underlineStyle->addItems( KoText::underlineTypeList() );
+    widget.underlineLineStyle->addItems( KoText::underlineStyleList() );
+
+    connect( widget.underlineStyle, SIGNAL( activated( int ) ), this, SLOT( underlineChanged( int ) ) );
+}
+
+void KoHighlightingTab::underlineChanged(int item) {
+    widget.underlineLineStyle->setEnabled(item != 0);
+    widget.underlineColor->setEnabled(item != 0);
+}
+
+void KoHighlightingTab::open(const QTextCharFormat &format) {
+    widget.underlineStyle->setCurrentIndex(1);
+    switch(format.underlineStyle()) {
+        case QTextCharFormat::SingleUnderline:
+            widget.underlineLineStyle->setCurrentIndex(0);
+            break;
+        case QTextCharFormat::DashUnderline:
+            widget.underlineLineStyle->setCurrentIndex(1);
+            break;
+        case QTextCharFormat::DotLine:
+            widget.underlineLineStyle->setCurrentIndex(2);
+            break;
+        case QTextCharFormat::DashDotLine:
+            widget.underlineLineStyle->setCurrentIndex(3);
+            break;
+        case QTextCharFormat::DashDotDotLine:
+            widget.underlineLineStyle->setCurrentIndex(4);
+            break;
+        case QTextCharFormat::WaveUnderline:
+            widget.underlineLineStyle->setCurrentIndex(5);
+            break;
+        default:
+            widget.underlineStyle->setCurrentIndex(0);
+            break;
+    }
+    underlineChanged(widget.underlineStyle->currentIndex());
+    widget.underlineColor->setColor(format.underlineColor());
+
+    widget.strikethrough->setChecked(format.fontStrikeOut());
+}
+
+void KoHighlightingTab::save(QTextCharFormat &format) const {
+    switch(widget.underlineStyle->currentIndex()) {
+        case 0: format.setUnderlineStyle(QTextCharFormat::NoUnderline); break;
+        case 1:
+            QTextCharFormat::UnderlineStyle style;
+            switch(widget.underlineLineStyle->currentIndex()) {
+                case 0: style = QTextCharFormat::SingleUnderline; break;
+                case 1: style = QTextCharFormat::DashUnderline; break;
+                case 2: style = QTextCharFormat::DotLine; break;
+                case 3: style = QTextCharFormat::DashDotLine; break;
+                case 4: style = QTextCharFormat::DashDotDotLine; break;
+                case 5: style = QTextCharFormat::WaveUnderline; break;
+                default:
+                    kWarning() << "Unknown items in the underlineLineStyle combobox!\n";
+            }
+            format.setUnderlineStyle(style);
+            format.setUnderlineColor(widget.underlineColor->color());
+            break;
+        case 2: // unsupported by Qt right now :(  TODO
+            format.setUnderlineStyle(QTextCharFormat::SingleUnderline);
+            format.setUnderlineColor(widget.underlineColor->color());
+            break;
+        default:
+            kWarning() << "Unknown items in the underlineStyle combobox!\n";
+    }
+
+    format.setFontStrikeOut(widget.strikethrough->isChecked());
+}
 
 #include "KoHighlightingTab.moc"
-
-
-KoHighlightingTab::KoHighlightingTab( QWidget* parent, const char* name, Qt::WFlags fl ) 
-        : KoHighlightingTabBase( parent/*, name, fl*/ )
-{
-    underlineStyleKComboBox->addItems( KoTextFormat::underlineTypeList() );
-    underlineLineStyleKComboBox->addItems( KoTextFormat::underlineStyleList() );
-    strikethroughStyleKComboBox->addItems( KoTextFormat::strikeOutTypeList() );
-    strikethroughLineStyleKComboBox->addItems( KoTextFormat::strikeOutStyleList() );
-
-    capitalisationButtonGroup->setColumnLayout( 3, Qt::Horizontal );
-    QStringList attributes = KoTextFormat::fontAttributeList();
-    for ( QStringList::Iterator it = attributes.begin(); it != attributes.end(); ++it ) {
-        capitalisationButtonGroup->insert( new QRadioButton( *it, capitalisationButtonGroup ) );
-    }
-    capitalisationButtonGroup->setButton( 0 );
-
-    connect( underlineStyleKComboBox, SIGNAL( activated( int ) ), this, SLOT( slotUnderlineChanged( int ) ) );
-    connect( underlineLineStyleKComboBox, SIGNAL( activated( int ) ), this, SIGNAL( underlineStyleChanged( int ) ) );
-    connect( underlineKColorButton, SIGNAL( changed( const QColor & ) ), this, SIGNAL( underlineColorChanged( const QColor & ) ) );
-    connect( strikethroughStyleKComboBox, SIGNAL( activated( int ) ), this, SLOT( slotStrikethroughChanged( int ) ) );
-    connect( strikethroughLineStyleKComboBox, SIGNAL( activated( int ) ), this, SIGNAL( strikethroughStyleChanged( int ) ) );
-    connect( underlineWordByWordCheckBox, SIGNAL( toggled( bool ) ), this, SIGNAL( wordByWordChanged( bool ) ) );
-    connect( capitalisationButtonGroup, SIGNAL( clicked( int ) ), this, SIGNAL( capitalisationChanged( int ) ) );
-}
-
-KoHighlightingTab::~KoHighlightingTab()
-{
-}
-
-KoTextFormat::UnderlineType KoHighlightingTab::getUnderline() const
-{
-    return static_cast<KoTextFormat::UnderlineType>( underlineStyleKComboBox->currentIndex() );
-}
-
-KoTextFormat::UnderlineStyle KoHighlightingTab::getUnderlineStyle() const
-{
-    return static_cast<KoTextFormat::UnderlineStyle>( underlineLineStyleKComboBox->currentIndex() );
-}
-
-QColor KoHighlightingTab::getUnderlineColor() const
-{
-    return underlineKColorButton->color();
-}
-
-KoTextFormat::StrikeOutType KoHighlightingTab::getStrikethrough() const
-{
-    return static_cast<KoTextFormat::StrikeOutType>( strikethroughStyleKComboBox->currentIndex() );
-}
-
-KoTextFormat::StrikeOutStyle KoHighlightingTab::getStrikethroughStyle() const
-{
-    return static_cast<KoTextFormat::StrikeOutStyle>( strikethroughLineStyleKComboBox->currentIndex() );
-}
-
-bool KoHighlightingTab::getWordByWord() const
-{
-    return underlineWordByWordCheckBox->isOn();
-}
-
-KoTextFormat::AttributeStyle KoHighlightingTab::getCapitalisation() const
-{
-    return static_cast<KoTextFormat::AttributeStyle>( capitalisationButtonGroup->selectedId() );
-}
-
-void KoHighlightingTab::setUnderline( KoTextFormat::UnderlineType item )
-{
-    underlineStyleKComboBox->setCurrentIndex( static_cast<int>( item ) );
-    slotUnderlineChanged( static_cast<int>( item ) );
-}
-
-void KoHighlightingTab::setUnderlineStyle( KoTextFormat::UnderlineStyle item )
-{
-    underlineLineStyleKComboBox->setCurrentIndex( static_cast<int>( item ) );
-    emit underlineStyleChanged( static_cast<int>( item ) );
-}
-
-void KoHighlightingTab::setUnderlineColor( const QColor &color )
-{
-    underlineKColorButton->setColor( color );
-}
-
-void KoHighlightingTab::setStrikethrough( int item )
-{
-    strikethroughStyleKComboBox->setCurrentIndex( static_cast<int>( item ) );
-    slotStrikethroughChanged( static_cast<int>( item ) );
-}
-
-void KoHighlightingTab::setStrikethroughStyle( int item )
-{
-    strikethroughLineStyleKComboBox->setCurrentIndex( static_cast<int>( item ) );
-    emit strikethroughStyleChanged( static_cast<int>( item ) );
-}
-
-void KoHighlightingTab::setWordByWord( bool state )
-{
-    underlineWordByWordCheckBox->setChecked( state );
-}
-
-void KoHighlightingTab::setCapitalisation( int item )
-{
-    capitalisationButtonGroup->setButton( static_cast<int>( item ) );
-    emit capitalisationChanged( static_cast<int>( item ) );
-}
-
-void KoHighlightingTab::slotUnderlineChanged( int item )
-{
-    underlineLineStyleKComboBox->setEnabled( item > 0 );
-    underlineKColorButton->setEnabled( item > 0 );
-    underlineWordByWordCheckBox->setEnabled( ( item > 0 ) || ( strikethroughStyleKComboBox->currentIndex() > 0 ) );
-    emit underlineChanged( item );
-}
-
-void KoHighlightingTab::slotStrikethroughChanged( int item )
-{
-    strikethroughLineStyleKComboBox->setEnabled( item > 0 );
-    underlineWordByWordCheckBox->setEnabled( ( item > 0 ) || ( underlineStyleKComboBox->currentIndex() > 0 ) );
-    emit strikethroughChanged(  item );
-}
 

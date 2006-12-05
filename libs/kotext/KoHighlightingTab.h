@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,56 +21,26 @@
 #ifndef __kohighlightingtab_h__
 #define __kohighlightingtab_h__
 
-#include "ui_kohighlightingtabbase.h"
-#include <KoTextFormat.h>
+#include "ui_KoHighlightingTab.h"
 
-#include <QColor>
+#include <QTextCharFormat>
 
-class KoHighlightingTabBase: public QWidget, public Ui::KoHighlightingTabBase
-{
-public:
-  explicit KoHighlightingTabBase( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
-
-
-class KoHighlightingTab : public KoHighlightingTabBase
+class KoHighlightingTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    KoHighlightingTab( QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
-    ~KoHighlightingTab();
+    KoHighlightingTab(QWidget* parent=0);
+    ~KoHighlightingTab() {}
 
-    KoTextFormat::UnderlineType getUnderline() const;
-    KoTextFormat::UnderlineStyle getUnderlineStyle() const;
-    QColor getUnderlineColor() const;
-    KoTextFormat::StrikeOutType getStrikethrough() const;
-    KoTextFormat::StrikeOutStyle getStrikethroughStyle() const;
-    bool getWordByWord() const;
-    KoTextFormat::AttributeStyle getCapitalisation() const;
+    void open(const QTextCharFormat &format);
+    void save(QTextCharFormat &format) const;
 
-    void setUnderline( KoTextFormat::UnderlineType item );
-    void setUnderlineStyle( KoTextFormat::UnderlineStyle item );
-    void setUnderlineColor( const QColor &color );
-    void setStrikethrough( int item );
-    void setStrikethroughStyle( int item );
-    void setWordByWord( bool state );
-    void setCapitalisation( int item );
-
-signals:
+private slots:
     void underlineChanged( int item );
-    void underlineStyleChanged( int item );
-    void underlineColorChanged( const QColor & );
-    void strikethroughChanged( int item );
-    void strikethroughStyleChanged( int item );
-    void wordByWordChanged( bool state );
-    void capitalisationChanged( int item );
 
-protected slots:
-    void slotUnderlineChanged( int item );
-    void slotStrikethroughChanged( int item );
+private:
+    Ui::KoHighlightingTab widget;
 };
 
 #endif

@@ -76,16 +76,8 @@ KoFontDia::KoFontDia( const QTextCharFormat &format, KSpell2::Loader::Ptr loader
 */
 
     //Highlighting tab
-    highlightingTab = new KoHighlightingTab( this );
-    fontTabWidget->addTab( highlightingTab, i18n( "Highlighting" ) );
-
-    connect( highlightingTab, SIGNAL( underlineChanged( int ) ), this, SLOT( slotUnderlineChanged( int ) ) );
-    connect( highlightingTab, SIGNAL( underlineStyleChanged( int ) ), this, SLOT( slotUnderlineStyleChanged( int ) ) );
-    connect( highlightingTab, SIGNAL( underlineColorChanged( const QColor & ) ), this, SLOT( slotUnderlineColorChanged( const QColor & ) ) );
-    connect( highlightingTab, SIGNAL( strikethroughChanged( int ) ), this, SLOT( slotStrikethroughChanged( int ) ) );
-    connect( highlightingTab, SIGNAL( strikethroughStyleChanged( int ) ), this, SLOT( slotStrikethroughStyleChanged( int ) ) );
-    connect( highlightingTab, SIGNAL( wordByWordChanged( bool ) ), this, SLOT( slotWordByWordChanged( bool ) ) );
-    connect( highlightingTab, SIGNAL( capitalisationChanged( int ) ), this, SLOT( slotCapitalisationChanged( int ) ) );
+    m_highlightingTab = new KoHighlightingTab( this );
+    fontTabWidget->addTab( m_highlightingTab, i18n( "Highlighting" ) );
 
     //Decoration tab
     decorationTab = new KoDecorationTab( this );
@@ -154,6 +146,7 @@ KoTextFormat KoFontDia::newFormat() const
 void KoFontDia::slotApply()
 {
     m_format.setFont(fontTab->font());
+    m_highlightingTab->save( m_format );
     // TODO
 }
 
@@ -166,14 +159,8 @@ void KoFontDia::slotOk()
 void KoFontDia::slotReset()
 {
     fontTab->setFont( m_format.font());
+    m_highlightingTab->open( m_format );
 /*
-    highlightingTab->setUnderline( m_initialFormat.underlineType() );
-    highlightingTab->setUnderlineStyle( m_initialFormat.underlineStyle() );
-    highlightingTab->setUnderlineColor( m_initialFormat.textUnderlineColor() );
-    highlightingTab->setStrikethrough( m_initialFormat.strikeOutType() );
-    highlightingTab->setStrikethroughStyle( m_initialFormat.strikeOutStyle() );
-    highlightingTab->setWordByWord( m_initialFormat.wordByWord() );
-    highlightingTab->setCapitalisation( m_initialFormat.attributeFont() );
     decorationTab->setTextColor( m_initialFormat.color() );
     decorationTab->setBackgroundColor( m_initialFormat.textBackgroundColor() );
     decorationTab->setShadow( m_initialFormat.shadowDistanceX(), m_initialFormat.shadowDistanceY(), m_initialFormat.shadowColor() );
@@ -225,33 +212,6 @@ void KoFontDia::slotCapitalisationChanged( int item )
 {
     //m_changedFlags |= KoTextFormat::Attribute;
     //fontDiaPreview->setCapitalisation( item );
-}
-
-void KoFontDia::slotUnderlineChanged( int item )
-{
-    //m_changedFlags |= KoTextFormat::ExtendUnderLine;
-    //if ( !item ) fontDiaPreview->setUnderlining( item, 0, Qt::black, false );
-    //else fontDiaPreview->setUnderlining( item, highlightingTab->getUnderlineStyle(), highlightingTab->getUnderlineColor(), highlightingTab->getWordByWord() );
-}
-
-void KoFontDia::slotUnderlineStyleChanged( int item )
-{
-    //m_changedFlags |= KoTextFormat::ExtendUnderLine;
-    //if ( !highlightingTab->getUnderline() ) fontDiaPreview->setUnderlining( 0, 0, Qt::black, false );
-    //else fontDiaPreview->setUnderlining( highlightingTab->getUnderline(), item, highlightingTab->getUnderlineColor(), highlightingTab->getWordByWord() );
-}
-
-void KoFontDia::slotUnderlineColorChanged( const QColor &color )
-{
-    //m_changedFlags |= KoTextFormat::ExtendUnderLine;
-    //if ( !highlightingTab->getUnderline() ) fontDiaPreview->setUnderlining( 0, 0, Qt::black, false );
-    //else fontDiaPreview->setUnderlining( highlightingTab->getUnderline(), highlightingTab->getUnderlineStyle(), color, highlightingTab->getWordByWord() );
-}
-
-void KoFontDia::slotWordByWordChanged( bool state )
-{
-    //m_changedFlags |= KoTextFormat::WordByWord;
-    //fontDiaPreview->setWordByWord( state );
 }
 
 void KoFontDia::slotStrikethroughChanged( int item )

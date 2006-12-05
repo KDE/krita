@@ -39,7 +39,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
    KoVariable.cpp 
    KoCustomVariablesDia.cpp 
    KoChangeCaseDia.cpp 
-   KoStyleDialog.cpp 
+   #KoStyleDialog.cpp 
    KoSearchDia.cpp 
    TimeFormatWidget.cpp 
    DateFormatWidget.cpp 
@@ -67,6 +67,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
    KoTextBookmark.cpp
    KoBorderPreview.cpp
    KoTextShapeData.cpp
+    KoText.cpp
     KoTextBlockData.cpp
     KoTextSelectionHandler.cpp
     styles/Styles_p.cpp
@@ -86,7 +87,7 @@ kde4_add_ui_files(kotext_LIB_SRCS
    KoParagDecorationTab.ui
    KoCompletionBase.ui
    kofonttabbase.ui
-   kohighlightingtabbase.ui
+   KoHighlightingTab.ui
    kolayouttabbase.ui
 )
 

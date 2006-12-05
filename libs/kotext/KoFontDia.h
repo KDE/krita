@@ -70,12 +70,12 @@ protected slots:
     void slotFontColorChanged( const QColor& color );
     void slotBackgroundColorChanged( const QColor& color );
     void slotCapitalisationChanged( int item );
-    void slotUnderlineChanged( int item );
-    void slotUnderlineStyleChanged( int item );
-    void slotUnderlineColorChanged( const QColor &color );
+    //void slotUnderlineChanged( int item );
+    //void slotUnderlineStyleChanged( int item );
+    //void slotUnderlineColorChanged( const QColor &color );
     void slotStrikethroughChanged( int item );
     void slotStrikethroughStyleChanged( int item );
-    void slotWordByWordChanged( bool state );
+    //void slotWordByWordChanged( bool state );
     void slotShadowDistanceChanged( double distance );
     void slotShadowDirectionChanged( int direction );
     void slotShadowColorChanged( const QColor &color );
@@ -90,7 +90,7 @@ protected slots:
 private:
     QTextCharFormat m_format;
     KoFontTab *fontTab;
-    KoHighlightingTab *highlightingTab;
+    KoHighlightingTab *m_highlightingTab;
     KoDecorationTab *decorationTab;
     KoLayoutTab *layoutTab;
     KoLanguageTab *languageTab;

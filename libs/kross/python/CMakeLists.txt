@@ -2,6 +2,8 @@ include_directories(
 	${PYTHON_INCLUDE_PATH}
 )
 
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
+
 add_subdirectory( cxx )
 ##add_subdirectory( scripts )
 
@@ -26,7 +28,6 @@ set(krosspython_PART_SRCS ${libkrosspythoncxx_SRCS}
 kde4_automoc(${krosspython_PART_SRCS})
 
 kde4_add_plugin(krosspython ${krosspython_PART_SRCS})
-
 
 # -ldl seems to be needed.
 # see http://lists.kde.org/?l=koffice-devel&m=116333261328694&w=2

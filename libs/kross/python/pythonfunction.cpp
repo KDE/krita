@@ -22,6 +22,7 @@
 
 #include "pythonfunction.h"
 #include "pythonvariant.h"
+#include "pythoninterpreter.h"
 #include <kross/core/metatype.h>
 
 #include <QByteArray>
@@ -137,8 +138,18 @@ int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
                     ++idx;
                 }
 
-                // call the python function
-                Py::Object result = d->callable.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
+                Py::Object result;
+                try {
+                    // call the python function
+                    result = d->callable.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
+                }
+                catch(Py::Exception& e) {
+                    QStringList trace;
+                    int lineno;
+                    PythonInterpreter::extractException(trace, lineno);
+                    krosswarning( QString("PythonFunction::qt_metacall exception on line %1:\n%2 \n%3").arg(lineno).arg(Py::value(e).as_string().c_str()).arg(trace.join("\n")) );
+                    return -1;
+                }
 
                 // finally set the returnvalue
                 QObject* sender = QObject::sender();

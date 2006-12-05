@@ -420,7 +420,7 @@ KisLayerSP KisSelectionManager::paste()
     KisPaintDeviceSP clip = m_clipboard->clip();
 
     if (clip) {
-        KisPaintLayer *layer = new KisPaintLayer(img, img->nextLayerName() + "(pasted)", OPACITY_OPAQUE);
+        KisPaintLayer *layer = new KisPaintLayer(img, img->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE);
         Q_CHECK_PTR(layer);
 
         QRect r = clip->exactBounds();

@@ -9,15 +9,10 @@ INCLUDES =  -I$(srcdir)/../../../sdk \
 	$(KOFFICE_INCLUDES) \
 	$(all_includes)
 
-kritaselectiontools_la_SOURCES = \
-	selection_tools.cc \
-	kis_tool_select_rectangular.cc \
-	kis_tool_select_brush.cc \
-	kis_tool_select_eraser.cc \
-    kis_tool_select_polygonal.cc \
-    kis_tool_select_elliptical.cc \
-    kis_tool_select_contiguous.cc \
-    kis_tool_select_outline.cc
+kritaselectiontools_la_SOURCES = kis_tool_move_selection.cc \
+	kis_tool_select_brush.cc kis_tool_select_contiguous.cc kis_tool_select_elliptical.cc \
+	kis_tool_select_eraser.cc kis_tool_select_outline.cc kis_tool_select_polygonal.cc \
+	kis_tool_select_rectangular.cc selection_tools.cc
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = kritaselectiontools.la

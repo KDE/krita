@@ -573,10 +573,10 @@ void KoDocument::slotAutoSave()
     }
 }
 
-KAction *KoDocument::action( const QDomElement &element ) const
+QAction *KoDocument::action( const QDomElement &element ) const
 {
     // First look in the document itself
-    KAction* act = KParts::ReadWritePart::action( element );
+    QAction* act = KParts::ReadWritePart::action( element );
     if ( act )
         return act;
 

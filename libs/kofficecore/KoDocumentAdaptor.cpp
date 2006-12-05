@@ -96,9 +96,9 @@ QStringList KoDocumentAdaptor::actions()
 // 
 //     return res;
     QStringList tmp_actions;
-    QList<KAction *> lst = m_pDoc->actionCollection()->actions();
-    foreach( KAction* it, lst ) {
-        if (it->isPlugged())
+    QList<QAction*> lst = m_pDoc->actionCollection()->actions();
+    foreach( QAction* it, lst ) {
+        if (it->isEnabled())
             tmp_actions.append( it->objectName() );
     }
     return tmp_actions;

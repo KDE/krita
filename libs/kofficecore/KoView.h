@@ -112,7 +112,7 @@ public:
    * @see KXMLGUIClient::actionCollection
    * @see KoDocument::action
    */
-  virtual KAction *action( const QDomElement &element ) const;
+  virtual QAction *action( const QDomElement &element ) const;
 
   /**
    *  Retrieves the document that is hit. This can be an embedded document.

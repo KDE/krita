@@ -138,7 +138,7 @@ public:
      * @see KXMLGUIClient::actionCollection
      * @see KoView::action
      */
-    virtual KAction *action( const QDomElement &element ) const;
+    virtual QAction *action( const QDomElement &element ) const;
 
     /**
      * Returns the DOM document which describes the GUI of the

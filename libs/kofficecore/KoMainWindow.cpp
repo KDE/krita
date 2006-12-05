@@ -153,16 +153,16 @@ public:
   QLabel * statusBarLabel;
   QProgressBar *m_progress;
 
-  QList<KAction *> m_splitViewActionList;
+  QList<QAction *> m_splitViewActionList;
   // This additional list is needed, because we don't plug
   // the first list, when an embedded view gets activated (Werner)
-  QList<KAction *> m_veryHackyActionList;
+  QList<QAction *> m_veryHackyActionList;
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
   KAction *m_removeView;
 //   KoMainWindowIface *m_dcopObject;
 
-  QList<KAction *> m_toolbarList;
+  QList<QAction *> m_toolbarList;
 
   bool bMainWindowGUIBuilt;
   bool m_splitted;
@@ -1367,7 +1367,7 @@ void KoMainWindow::showToolbar( const char * tbName, bool shown )
         tb->hide();
 
     // Update the action appropriately
-    foreach( KAction* action, d->m_toolbarList )
+    foreach( QAction* action, d->m_toolbarList )
         if ( action->objectName() != tbName )
         {
             //kDebug(30003) << "KoMainWindow::showToolbar setChecked " << shown << endl;

@@ -1084,7 +1084,7 @@ KoLinkVariable * KoTextView::linkVariable()
     return dynamic_cast<KoLinkVariable *>(variable());
 }
 
-QList<KAction *> KoTextView::dataToolActionList(KInstance * instance, KActionCollection* parent, const QString& word, bool & _singleWord )
+QList<QAction *> KoTextView::dataToolActionList(KInstance * instance, KActionCollection* parent, const QString& word, bool & _singleWord )
 {
     m_singleWord = false;
     m_wordUnderCursor.clear();
@@ -1115,7 +1115,7 @@ QList<KAction *> KoTextView::dataToolActionList(KInstance * instance, KActionCol
     }
 
     if ( text.isEmpty() || textObject()->protectContent()) // Nothing to apply a tool to
-        return QList<KAction *>();
+        return QList<QAction *>();
 
     // Any tool that works on plain text is relevant
     Q3ValueList<KDataToolInfo> tools;

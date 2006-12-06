@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -255,9 +256,10 @@ public:
     /// return the name of this command
     virtual QString name () const;
 private:
-    KoShapeControllerBase *m_controller;
-    QList<KoShape*> m_shapes;
-    bool m_deleteShapes;
+    KoShapeControllerBase *m_controller; ///< the shape controller to use for removing/readding
+    QList<KoShape*> m_shapes; ///< the list of shapes to delete
+    QList<KoShapeContainer*> m_oldParents; ///< the old parents of the shapes
+    bool m_deleteShapes;  ///< shows if shapes should be deleted when deleting the command
 };
 
 /// The undo / redo command for setting the shape background

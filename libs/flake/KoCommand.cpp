@@ -322,6 +322,7 @@ KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, K
 , m_deleteShapes( false )
 {
     m_shapes.append( shape );
+    m_oldParents.append( shape->parent() );
 }
 
 KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, const KoSelectionSet &shapes )
@@ -329,6 +330,9 @@ KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, c
 , m_deleteShapes( false )
 {
     m_shapes = shapes.toList();
+    foreach( KoShape *shape, m_shapes ) {
+        m_oldParents.append( shape->parent() );
+    }
 }
 
 KoShapeDeleteCommand::~KoShapeDeleteCommand() {
@@ -344,8 +348,10 @@ void KoShapeDeleteCommand::execute () {
     if( ! m_controller )
         return;
 
-    foreach (KoShape *shape, m_shapes ) {
-        m_controller->removeShape( shape );
+    for(int i=0; i < m_shapes.count(); i++) {
+        if( m_oldParents.at( i ) )
+            m_oldParents.at( i )->removeChild( m_shapes[i] );
+        m_controller->removeShape( m_shapes[i] );
     }
     m_deleteShapes = true;
 }
@@ -354,8 +360,10 @@ void KoShapeDeleteCommand::unexecute () {
     if( ! m_controller )
         return;
 
-    foreach (KoShape *shape, m_shapes ) {
-        m_controller->addShape( shape );
+    for(int i=0; i < m_shapes.count(); i++) {
+        if( m_oldParents.at( i ) )
+            m_oldParents.at( i )->addChild( m_shapes[i] );
+        m_controller->addShape( m_shapes[i] );
     }
     m_deleteShapes = false;
 }

@@ -480,7 +480,7 @@ KoGradient* KoGradientManager::parseSvgGradient(const QDomElement& element)
 			{
 				// try style attr
 				QString style = colorstop.attribute( "style" ).simplified();
-				QStringList substyles = style.split( ';' );
+				QStringList substyles = style.split( ';', QString::SkipEmptyParts );
 				foreach(QString s, substyles)
 				{
 					QStringList substyle = s.split( ':' );

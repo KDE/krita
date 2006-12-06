@@ -228,6 +228,10 @@ namespace Kross {
             return s.isNull() ? rb_str_new2("") : rb_str_new2(s.toLatin1().data());
         }
         inline static QString toVariant(VALUE value) {
+            if( TYPE(value) != T_STRING ) {
+                rb_raise(rb_eTypeError, "QString must be a string");
+                return QString();
+            }
             return STR2CSTR(value);
         }
     };

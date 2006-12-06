@@ -37,6 +37,65 @@
 #include "kis_selection_manager.h"
 #include "kis_undo_adapter.h"
 
+class KisSelectionOffsetCommand : public KNamedCommand {
+    typedef KNamedCommand super;
+
+public:
+    KisSelectionOffsetCommand(KisSelectionSP layer, const QPoint& oldpos, const QPoint& newpos);
+    virtual ~KisSelectionOffsetCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    void moveTo(const QPoint& pos);
+
+private:
+    KisSelectionSP m_layer;
+    QPoint m_oldPos;
+    QPoint m_newPos;
+};
+
+    KisSelectionOffsetCommand::KisSelectionOffsetCommand(KisSelectionSP layer, const QPoint& oldpos, const QPoint& newpos) :
+        super(i18n("Move Layer"))
+    {
+        m_layer = layer;
+        m_oldPos = oldpos;
+        m_newPos = newpos;
+
+    }
+
+    KisSelectionOffsetCommand::~KisSelectionOffsetCommand()
+    {
+    }
+
+    void KisSelectionOffsetCommand::execute()
+    {
+        moveTo(m_newPos);
+    }
+
+    void KisSelectionOffsetCommand::unexecute()
+    {
+        moveTo(m_oldPos);
+    }
+
+    void KisSelectionOffsetCommand::moveTo(const QPoint& pos)
+    {
+        if (m_layer->undoAdapter()) {
+            m_layer->undoAdapter()->setUndo(false);
+        }
+
+        m_layer->setX(pos.x());
+        m_layer->setY(pos.y());
+
+        m_layer->parentPaintDevice()->setDirty();
+
+        if (m_layer->undoAdapter()) {
+            m_layer->undoAdapter()->setUndo(true);
+        }
+    }
+
+        
 KisToolMoveSelection::KisToolMoveSelection()
     : super(i18n("Move Selection Tool"))
 {
@@ -53,6 +112,7 @@ void KisToolMoveSelection::update(KisCanvasSubject *subject)
 {
     m_subject = subject;
     super::update(subject);
+    m_dragging = false;
 }
 
 void KisToolMoveSelection::buttonPress(KisButtonPressEvent *e)
@@ -61,21 +121,22 @@ void KisToolMoveSelection::buttonPress(KisButtonPressEvent *e)
     if (m_subject && e->button() == QMouseEvent::LeftButton) {
         QPoint pos = e->pos().floorQPoint();
         KisImageSP img = m_subject->currentImg();
-        KisPaintLayerSP dev;
+        KisPaintLayerSP lay;
 
-        if (!img || !(dev = dynamic_cast<KisPaintLayer*>( img->activeLayer().data() )))
+        if (!img || !(lay = dynamic_cast<KisPaintLayer*>( img->activeLayer().data() )))
             return;
 
         m_dragStart = pos;
         
-        if ( !dev->visible() || !dev->paintDevice()->hasSelection())
+        if ( !lay->visible() || !lay->paintDevice()->hasSelection())
             return;
+        KisSelectionSP sel = lay->paintDevice()->selection();
 
         m_dragging = true;
         m_dragStart.setX(pos.x());
         m_dragStart.setY(pos.y());
-        m_layerStart.setX(dev->x());
-        m_layerStart.setY(dev->y());
+        m_layerStart.setX(sel->getX());
+        m_layerStart.setY(sel->getY());
         m_layerPosition = m_layerStart;
 
     }
@@ -95,20 +156,20 @@ void KisToolMoveSelection::move(KisMoveEvent *e)
         KisImageSP img = m_subject->currentImg();
         KisPaintLayerSP lay = dynamic_cast<KisPaintLayer*>(m_subject->currentImg()->activeLayer().data());
         if(!lay) return;
-        KisSelectionSP dev = lay->paintDevice()->selection();
+        KisSelectionSP sel = lay->paintDevice()->selection();
             
         QRect rc;
 
         pos -= m_dragStart; // convert to delta
-        rc = dev->selectedRect();
-        dev->setX(dev->getX() + pos.x());
-        dev->setY(dev->getY() + pos.y());
-        rc = rc.unite(dev->selectedRect());
+        rc = sel->selectedRect();
+        sel->setX(sel->getX() + pos.x());
+        sel->setY(sel->getY() + pos.y());
+        rc = rc.unite(sel->selectedRect());
 
-        m_layerPosition = QPoint(dev->getX(), dev->getY());
+        m_layerPosition = QPoint(sel->getX(), sel->getY());
         m_dragStart = e->pos().floorQPoint();
 
-        lay->setDirty(rc);
+        lay->paintDevice()->setDirty(rc);
     }
 
 }
@@ -116,19 +177,18 @@ void KisToolMoveSelection::move(KisMoveEvent *e)
 void KisToolMoveSelection::buttonRelease(KisButtonReleaseEvent *e)
 {
     if (m_subject && e->button() == QMouseEvent::LeftButton && m_dragging) {
+        m_dragging = false;
         KisImageSP img = m_subject->currentImg();
         if(!img) return;
         KisPaintLayerSP lay = dynamic_cast<KisPaintLayer*>(img->activeLayer().data());
 
         if (lay->paintDevice()->hasSelection()) {
           KisSelectionSP dev = lay->paintDevice()->selection();
-//             drag(pos);
             m_dragging = false;
 
             if (img->undo()) {
-                KCommand *cmd = dev->moveCommand(m_layerPosition.x(), m_layerPosition.y());
+                KCommand *cmd = new KisSelectionOffsetCommand( dev, m_layerStart, m_layerPosition);
                 Q_CHECK_PTR(cmd);
-                
                 KisUndoAdapter *adapter = img->undoAdapter();
                 if (adapter) {
                     adapter->addCommand(cmd);

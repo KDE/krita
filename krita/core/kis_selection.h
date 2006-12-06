@@ -115,6 +115,7 @@ public:
 
     virtual void setDirty(const QRect & rc);
     virtual void setDirty();
+    inline KisPaintDeviceSP parentPaintDevice() { return m_parentPaintDevice; }
 private:
     void paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion);
 

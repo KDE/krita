@@ -346,8 +346,7 @@ KoShapeUserData *KoShape::userData() const {
 }
 
 void KoShape::setApplicationData(KoShapeApplicationData *appData) {
-    if(m_appData)
-        delete m_appData;
+    delete m_appData;
     m_appData = appData;
 }
 

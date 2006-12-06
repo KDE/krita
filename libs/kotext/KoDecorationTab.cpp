@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,133 +19,51 @@
 */
 
 #include "KoDecorationTab.h"
-#include <KoGlobal.h>
-
-#include <kcolorbutton.h>
-#include <kpushbutton.h>
-#include <knuminput.h>
-#include <klocale.h>
-
-#include <q3buttongroup.h>
-
-#include "KoDecorationTab.moc"
 
 KoDecorationTab::KoDecorationTab( QWidget* parent )
-    : KoDecorationTabBase( parent )
+    : QWidget( parent )
 {
-    shadowDistanceKDoubleNumInput->setRange(0, 9, 0.5, false);
+    widget.setupUi(this);
 
-    connect( textKColorButton, SIGNAL( changed( const QColor& ) ), this, SIGNAL( fontColorChanged( const QColor& ) ) );
-    connect( backgroundKColorButton, SIGNAL( changed( const QColor& ) ), this, SIGNAL( backgroundColorChanged( const QColor& ) ) );
-    connect( shadowKColorButton, SIGNAL( changed( const QColor& ) ), this, SIGNAL( shadowColorChanged( const QColor& ) ) );
-    connect( shadowDistanceKDoubleNumInput, SIGNAL( valueChanged( double ) ), this, SIGNAL( shadowDistanceChanged( double ) ) );
-    connect( shadowDirectionButtonGroup, SIGNAL( clicked( int ) ), this, SIGNAL( shadowDirectionChanged( int ) ) );
+    connect(widget.textColor, SIGNAL(changed(const QColor&)), this, SLOT(textColorChanged()));
+    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT( backgroundColorChanged()));
+
+    connect(widget.resetTextColor, SIGNAL(clicked()), this, SLOT(clearTextColor()));
+    connect(widget.resetBackground, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
+
+    widget.shadowGroupBox->setVisible(false);
 }
 
-KoDecorationTab::~KoDecorationTab()
-{
+void KoDecorationTab::open(const QTextCharFormat &format) {
+    m_textColorChanged = false;
+    m_backgroundColorChanged = false;
+    m_textColorReset = ! format.hasProperty(QTextFormat::ForegroundBrush);
+    if(!m_textColorReset)
+        widget.textColor->setColor(format.foreground().color());
+    m_backgroundColorReset = ! format.hasProperty(QTextFormat::BackgroundBrush);
+    if(!m_backgroundColorReset)
+        widget.backgroundColor->setColor(format.background().color());
 }
 
-QColor KoDecorationTab::getTextColor() const
-{
-    return textKColorButton->color();
+void KoDecorationTab::save(QTextCharFormat &format) const {
+    if(m_backgroundColorReset)
+        format.clearBackground();
+    else if(m_backgroundColorChanged)
+        format.setBackground(QBrush(widget.backgroundColor->color()));
+    if(m_textColorReset)
+        format.clearForeground();
+    else if(m_textColorChanged)
+        format.setForeground(QBrush(widget.textColor->color()));
 }
 
-QColor KoDecorationTab::getBackgroundColor() const
-{
-    return backgroundKColorButton->color();
+void KoDecorationTab::clearTextColor() {
+    widget.textColor->setColor(widget.textColor->defaultColor());
+    m_textColorReset = true;
 }
 
-double KoDecorationTab::getShadowDistanceX() const
-{
-    short int sd = shadowDirectionButtonGroup->selectedId();
-    double dist = shadowDistanceKDoubleNumInput->value();
-    return shadowDistanceX( sd, dist );
+void KoDecorationTab::clearBackgroundColor() {
+    widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
+    m_backgroundColorReset = true;
 }
 
-double KoDecorationTab::getShadowDistanceY() const
-{
-    short int sd = shadowDirectionButtonGroup->selectedId();
-    double dist = shadowDistanceKDoubleNumInput->value();
-    return shadowDistanceY( sd, dist );
-}
-
-QColor KoDecorationTab::getShadowColor() const
-{
-    return shadowKColorButton->color();
-}
-
-void KoDecorationTab::setTextColor( const QColor &color )
-{
-    textKColorButton->setColor( color );
-}
-
-void KoDecorationTab::setBackgroundColor( const QColor &color )
-{
-	backgroundKColorButton->setColor( color );
-}
-
-void KoDecorationTab::setShadow( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor )
-{
-    short int sd = SD_RIGHT_UP;
-    double dist = 0.0;
-
-    if ( shadowDistanceX > 0 ) // right
-        if ( shadowDistanceY == 0 )
-            sd = SD_RIGHT;
-        else
-            sd = shadowDistanceY > 0 ? SD_RIGHT_BOTTOM : SD_RIGHT_UP;
-    else if ( shadowDistanceX == 0 ) // top/bottom
-        sd = shadowDistanceY > 0 ? SD_BOTTOM : SD_UP;
-    else // left
-        if ( shadowDistanceY == 0 )
-            sd = SD_LEFT;
-        else
-            sd = shadowDistanceY > 0 ? SD_LEFT_BOTTOM : SD_LEFT_UP;
-
-    shadowDirectionButtonGroup->setButton( sd );
-
-    dist = qMax( QABS(shadowDistanceX), QABS(shadowDistanceY) );
-    shadowDistanceKDoubleNumInput->setValue( dist );
-
-    shadowKColorButton->setColor( shadowColor.isValid() ? shadowColor: Qt::gray  );
-
-}
-
-double KoDecorationTab::shadowDistanceX( short int sd, double dist ) const
-{
-    switch ( sd )
-    {
-    case SD_LEFT_BOTTOM:
-    case SD_LEFT:
-    case SD_LEFT_UP:
-        return - dist;
-    case SD_UP:
-    case SD_BOTTOM:
-        return 0;
-    case SD_RIGHT_UP:
-    case SD_RIGHT:
-    case SD_RIGHT_BOTTOM:
-        return dist;
-    }
-    return 0;
-}
-
-double KoDecorationTab::shadowDistanceY( short int sd, double dist ) const
-{
-    switch ( sd )
-    {
-    case SD_LEFT_UP:
-    case SD_UP:
-    case SD_RIGHT_UP:
-        return - dist;
-    case SD_LEFT:
-    case SD_RIGHT:
-        return 0;
-    case SD_LEFT_BOTTOM:
-    case SD_BOTTOM:
-    case SD_RIGHT_BOTTOM:
-        return dist;
-    }
-    return 0;
-}
+#include "KoDecorationTab.moc"

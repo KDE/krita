@@ -30,7 +30,7 @@ class KoHighlightingTab : public QWidget
     Q_OBJECT
 
 public:
-    KoHighlightingTab(QWidget* parent=0);
+    explicit KoHighlightingTab(QWidget* parent=0);
     ~KoHighlightingTab() {}
 
     void open(const QTextCharFormat &format);

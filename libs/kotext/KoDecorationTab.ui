@@ -1,0 +1,326 @@
+<ui version="4.0" >
+ <class>KoDecorationTab</class>
+ <widget class="QWidget" name="KoDecorationTab" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>437</width>
+    <height>271</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Colors</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item rowspan="2" row="0" column="3" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>41</width>
+          <height>78</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QToolButton" name="resetBackground" >
+        <property name="text" >
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="KColorButton" native="1" name="backgroundColor" />
+      </item>
+      <item row="0" column="1" >
+       <widget class="KColorButton" native="1" name="textColor" />
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="textColorLabel" >
+        <property name="text" >
+         <string>Text color:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+        <property name="buddy" >
+         <cstring>textColor</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QToolButton" name="resetTextColor" >
+        <property name="text" >
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="backgroundColorLabel" >
+        <property name="text" >
+         <string>Background color:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+        <property name="buddy" >
+         <cstring>backgroundColor</cstring>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="shadowGroupBox" >
+     <property name="title" >
+      <string>Text Shadow</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item rowspan="3" row="0" column="3" >
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>0</number>
+        </property>
+        <item row="2" column="1" >
+         <widget class="QToolButton" name="toolButton" >
+          <property name="text" >
+           <string>...</string>
+          </property>
+          <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2" >
+         <widget class="QToolButton" name="toolButton_5" >
+          <property name="text" >
+           <string>...</string>
+          </property>
+          <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QToolButton" name="toolButton_7" >
+          <property name="text" >
+           <string>...</string>
+          </property>
+          <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" >
+         <widget class="QToolButton" name="toolButton_4" >
+          <property name="text" >
+           <string>...</string>
+          </property>
+          <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" >
+         <widget class="QToolButton" name="toolButton_8" >
+          <property name="text" >
+           <string>...</string>
+          </property>
+          <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2" >
+         <widget class="QToolButton" name="toolButton_3" >
+          <property name="text" >
+           <string>...</string>
+          </property>
+          <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2" >
+         <widget class="QToolButton" name="toolButton_6" >
+          <property name="text" >
+           <string>...</string>
+          </property>
+          <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <widget class="QToolButton" name="toolButton_2" >
+          <property name="text" >
+           <string>...</string>
+          </property>
+          <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>20</width>
+          <height>10</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>31</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="shadowColorLabel" >
+        <property name="text" >
+         <string>Color:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+        <property name="buddy" >
+         <cstring>shadowGroupBox</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="shadowDistanceLabel" >
+        <property name="text" >
+         <string>Distance:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+        <property name="buddy" >
+         <cstring>shadowDistance</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QDoubleSpinBox" name="shadowDistance" >
+        <property name="decimals" >
+         <number>1</number>
+        </property>
+        <property name="maximum" >
+         <double>9.000000000000000</double>
+        </property>
+        <property name="singleStep" >
+         <double>0.500000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="KColorButton" native="1" name="shadow" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QWidget</extends>
+   <header>kcolorbutton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local" >knuminput.h</include>
+  <include location="local" >kcolorbutton.h</include>
+  <include location="local" >kpushbutton.h</include>
+ </includes>
+ <resources>
+  <include location="foobar.qrc" />
+ </resources>
+ <connections/>
+</ui>

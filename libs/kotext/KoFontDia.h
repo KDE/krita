@@ -63,38 +63,19 @@ protected slots:
     void slotReset();
     void slotApply();
     void slotOk();
-    //void slotFontFamilyChanged();
-    //void slotFontBoldChanged();
-    //void slotFontItalicChanged();
-    //void slotFontSizeChanged();
-    void slotFontColorChanged( const QColor& color );
-    void slotBackgroundColorChanged( const QColor& color );
-    void slotCapitalisationChanged( int item );
-    //void slotUnderlineChanged( int item );
-    //void slotUnderlineStyleChanged( int item );
-    //void slotUnderlineColorChanged( const QColor &color );
-    void slotStrikethroughChanged( int item );
-    void slotStrikethroughStyleChanged( int item );
-    //void slotWordByWordChanged( bool state );
-    void slotShadowDistanceChanged( double distance );
-    void slotShadowDirectionChanged( int direction );
-    void slotShadowColorChanged( const QColor &color );
     void slotSubSuperChanged();
     void slotOffsetChanged( int offset );
     void slotRelativeSizeChanged( double relativeSize );
     void slotHyphenationChanged( bool state );
     void slotLanguageChanged();
 
-    void fontChanged(const QFont &font);
-
 private:
     QTextCharFormat m_format;
     KoFontTab *fontTab;
     KoHighlightingTab *m_highlightingTab;
-    KoDecorationTab *decorationTab;
+    KoDecorationTab *m_decorationTab;
     KoLayoutTab *layoutTab;
     KoLanguageTab *languageTab;
-    //KoFontDiaPreview *fontDiaPreview;
 };
 
 #endif

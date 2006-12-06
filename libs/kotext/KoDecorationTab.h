@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,60 +21,32 @@
 #ifndef __kohigdecorationtab_h__
 #define __kohigdecorationtab_h__
 
-#include <ui_kodecorationtabbase.h>
+#include "ui_KoDecorationTab.h"
 
-#include <QColor>
+#include <QTextCharFormat>
 
-class KoDecorationTabBase : public QWidget, public Ui::KoDecorationTabBase
-{
-public:
-  explicit KoDecorationTabBase( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
-
-
-class KoDecorationTab : public KoDecorationTabBase
+class KoDecorationTab : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit KoDecorationTab( QWidget* parent=0);
-    ~KoDecorationTab();
+    ~KoDecorationTab() {}
 
-    QColor getTextColor() const;
-    QColor getBackgroundColor() const;
-    double getShadowDistanceX() const;
-    double getShadowDistanceY() const;
-    QColor getShadowColor() const;
+    void open(const QTextCharFormat &format);
+    void save(QTextCharFormat &format) const;
 
-    void setTextColor( const QColor &color );
-    void setBackgroundColor( const QColor &color );
-    void setShadow( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor );
+private slots:
+    void clearTextColor();
+    void clearBackgroundColor();
+    void textColorChanged() { m_textColorReset = false; m_textColorChanged = true; }
+    void backgroundColorChanged() { m_backgroundColorReset = false; m_backgroundColorChanged = true; }
 
-signals:
-    void fontColorChanged( const QColor& );
-    void backgroundColorChanged( const QColor&  );
-    void shadowColorChanged( const QColor&  );
-    void shadowDistanceChanged( double );
-    void shadowDirectionChanged( int  );
-    void shadowChanged();
+private:
+    Ui::KoDecorationTab widget;
 
-protected:
-    enum {
-        SD_LEFT_UP = 1,
-        SD_UP = 2,
-        SD_RIGHT_UP = 3,
-        SD_RIGHT = 4,
-        SD_RIGHT_BOTTOM = 5,
-        SD_BOTTOM = 6,
-        SD_LEFT_BOTTOM = 7,
-        SD_LEFT = 8
-    } ShadowDirection;
-
-    double shadowDistanceX( short int sd, double dist ) const;
-    double shadowDistanceY( short int sd, double dist ) const;
-
+    bool m_textColorChanged, m_textColorReset;
+    bool m_backgroundColorChanged, m_backgroundColorReset;
 };
 
 #endif

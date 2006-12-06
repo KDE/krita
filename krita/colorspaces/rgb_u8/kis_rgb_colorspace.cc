@@ -1492,6 +1492,10 @@ KisCompositeOpList KisRgbColorSpace::userVisiblecompositeOps() const
     list.append(KisCompositeOp(COMPOSITE_SATURATION));
     list.append(KisCompositeOp(COMPOSITE_VALUE));
     list.append(KisCompositeOp(COMPOSITE_COLOR));
+    list.append(KisCompositeOp(COMPOSITE_PLUS));
+    list.append(KisCompositeOp(COMPOSITE_MINUS));
+    list.append(KisCompositeOp(COMPOSITE_SUBTRACT));
+    list.append(KisCompositeOp(COMPOSITE_ADD));
 
     return list;
 }

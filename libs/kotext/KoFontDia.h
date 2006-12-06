@@ -63,18 +63,13 @@ protected slots:
     void slotReset();
     void slotApply();
     void slotOk();
-    void slotSubSuperChanged();
-    void slotOffsetChanged( int offset );
-    void slotRelativeSizeChanged( double relativeSize );
-    void slotHyphenationChanged( bool state );
-    void slotLanguageChanged();
 
 private:
     QTextCharFormat m_format;
     KoFontTab *fontTab;
     KoHighlightingTab *m_highlightingTab;
     KoDecorationTab *m_decorationTab;
-    KoLayoutTab *layoutTab;
+    KoLayoutTab *m_layoutTab;
     KoLanguageTab *languageTab;
 };
 

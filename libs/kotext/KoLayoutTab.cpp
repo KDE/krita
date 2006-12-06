@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,130 +19,71 @@
 */
 
 #include "KoLayoutTab.h"
-#include "KoTextFormat.h"
+#include "styles/KoCharacterStyle.h"
 
-#include <knuminput.h>
+#include <QButtonGroup>
 
-#include <q3buttongroup.h>
-#include <QCheckBox>
-#include <QSpinBox>
+enum Position {
+    Normal,
+    Superscript,
+    Subscript,
+    Custom
+};
+
+KoLayoutTab::KoLayoutTab( bool withSubSuperScript, QWidget* parent)
+        : QWidget( parent)
+{
+    widget.setupUi(this);
+
+    if ( !withSubSuperScript ) widget.positionGroup->setVisible(false);
+
+    // sigh, we could do this in designer in Qt3 :(
+    m_buttonGroup = new QButtonGroup(this);
+    m_buttonGroup->addButton(widget.normal, Normal);
+    m_buttonGroup->addButton(widget.subscript, Subscript);
+    m_buttonGroup->addButton(widget.superscript, Superscript);
+    m_buttonGroup->addButton(widget.custom, Custom);
+
+    widget.custom->setVisible(false);
+    widget.offset->setVisible(false);
+    widget.offsetLabel->setVisible(false);
+}
+
+void KoLayoutTab::open(const QTextCharFormat &format) {
+    switch(format.verticalAlignment()) {
+        case QTextCharFormat::AlignSuperScript:
+            m_buttonGroup->button(Superscript)->setChecked(true);
+            break;
+        case QTextCharFormat::AlignSubScript:
+            m_buttonGroup->button(Subscript)->setChecked(true);
+            break;
+        default:
+            // TODO check if its custom instead.
+            m_buttonGroup->button(Normal)->setChecked(true);
+    }
+
+    widget.hyphenate->setChecked(format.boolProperty(KoCharacterStyle::HasHyphenation));
+}
+
+void KoLayoutTab::save(QTextCharFormat &format) const {
+    QTextCharFormat::VerticalAlignment va;
+
+    switch(m_buttonGroup->checkedId()) {
+        case Subscript:
+            va = QTextCharFormat::AlignSubScript;
+            break;
+        case Superscript:
+            va = QTextCharFormat::AlignSuperScript;
+            break;
+        case Custom:
+            // fallthrough..
+        default:
+            va = QTextCharFormat::AlignNormal;
+            // TODO also handle custom
+    }
+    format.setVerticalAlignment(va);
+
+    format.setProperty(KoCharacterStyle::HasHyphenation, widget.hyphenate->isChecked());
+}
 
 #include "KoLayoutTab.moc"
-
-KoLayoutTab::KoLayoutTab( bool withSubSuperScript, QWidget* parent, const char* name, Qt::WFlags fl ) 
-        : KoLayoutTabBase( parent/*, name, fl*/ )
-{
-    if ( !withSubSuperScript ) positionButtonGroup->hide();
-
-    connect( positionButtonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotSubSuperScriptChanged( int ) ) );
-    connect( offsetSpinBox, SIGNAL( valueChanged( int ) ), this, SIGNAL( offsetChanged( int ) ) );
-    connect( relativeSizeKDoubleSpinBox, SIGNAL( valueChanged( double ) ), this, SLOT( slotRelativeSizeChanged( double ) ) );
-    connect( hyphenateCheckBox, SIGNAL( toggled( bool ) ), this, SIGNAL( hyphenationChanged( bool ) ) );
-}
-
-KoLayoutTab::~KoLayoutTab()
-{
-}
-
-KoTextFormat::VerticalAlignment KoLayoutTab::getSubSuperScript() const
-{
-    switch ( positionButtonGroup->selectedId() )
-    {
-    case 0:
-        return KoTextFormat::AlignNormal;
-    case 1:
-        return KoTextFormat::AlignSubScript;
-    case 2:
-        return KoTextFormat::AlignSuperScript;
-    case 3:
-        return KoTextFormat::AlignCustom;
-    default:
-        return KoTextFormat::AlignNormal;
-    }
-}
-
-int KoLayoutTab::getOffsetFromBaseline() const
-{
-    switch ( positionButtonGroup->selectedId() )
-    {
-    case 0:
-        return 0;
-    case 1:
-        return 0;	// subscript has a default
-    case 2:
-        return 0;	// superscript has got a default
-    case 3:
-        return offsetSpinBox->value();
-    default:
-        return 0;
-    }
-}
-
-double KoLayoutTab::getRelativeTextSize() const
-{
-    switch ( positionButtonGroup->selectedId() )
-    {
-    case 0:
-        return 1.0;
-    case 1:
-        return relativeSizeKDoubleSpinBox->value() / 100;
-    case 2:
-        return relativeSizeKDoubleSpinBox->value() / 100;
-    case 3:
-        return relativeSizeKDoubleSpinBox->value() / 100;
-    default:
-        return 1.0;
-    }
-}
-
-bool KoLayoutTab::getAutoHyphenation() const
-{
-    return hyphenateCheckBox->isOn();
-}
-
-void KoLayoutTab::setSubSuperScript( KoTextFormat::VerticalAlignment subSuperScript, int offset, double relativeSize )
-{
-    switch ( static_cast< int >( subSuperScript ) )
-    {
-    case 0:
-        positionButtonGroup->setButton( 0 );
-        break;
-    case 1:
-        positionButtonGroup->setButton( 1 );
-        relativeSizeKDoubleSpinBox->setValue( relativeSize * 100 );
-        break;
-    case 2:
-        positionButtonGroup->setButton( 2 );
-        relativeSizeKDoubleSpinBox->setValue( relativeSize * 100 );
-        break;
-    case 3:
-        positionButtonGroup->setButton( 3 );
-        offsetSpinBox->setValue( offset );
-        relativeSizeKDoubleSpinBox->setValue( relativeSize * 100 );
-        break;
-    default:
-        positionButtonGroup->setButton( 0 );
-        break;
-    }
-    slotSubSuperScriptChanged( static_cast< int >( subSuperScript ) );
-}
-
-void KoLayoutTab::setAutoHyphenation( bool state )
-{
-    hyphenateCheckBox->setChecked( state );
-}
-
-void KoLayoutTab::slotSubSuperScriptChanged( int item )
-{
-    if ( item == 1 || item == 2 ) offsetSpinBox->setValue( 0 );
-    emit subSuperScriptChanged();
-    if ( item ) {
-        emit relativeSizeChanged( relativeSizeKDoubleSpinBox->value() / 100 );
-        emit offsetChanged( offsetSpinBox->value() );
-    }
-}
-
-void KoLayoutTab::slotRelativeSizeChanged( double relativeSize )
-{
-    emit relativeSizeChanged( relativeSize / 100 );
-}

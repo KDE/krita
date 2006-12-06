@@ -80,15 +80,15 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
 
 kde4_automoc(${kotext_LIB_SRCS})
 
-kde4_add_ui_files(kotext_LIB_SRCS 
+kde4_add_ui_files(kotext_LIB_SRCS
    timedateformatwidget.ui
    kolanguagetabbase.ui
     KoDecorationTab.ui
-   KoParagDecorationTab.ui
-   KoCompletionBase.ui
+    KoParagDecorationTab.ui
+    KoLayoutTab.ui
+    KoHighlightingTab.ui
+    KoCompletionBase.ui
    kofonttabbase.ui
-   KoHighlightingTab.ui
-   kolayouttabbase.ui
 )
 
 # kde4_add_dcop_skels(kotext_LIB_SRCS KoTextViewIface.h )

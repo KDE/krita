@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,43 +21,26 @@
 #ifndef __kolayouttab_h__
 #define __kolayouttab_h__
 
-#include "ui_kolayouttabbase.h"
-#include <KoTextFormat.h>
+#include "ui_KoLayoutTab.h"
 
-class KoLayoutTabBase : public QWidget, public Ui::KoLayoutTabBase
-{
-public:
-  explicit KoLayoutTabBase( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
+#include <QTextCharFormat>
 
+class QButtonGroup;
 
-class KoLayoutTab : public KoLayoutTabBase
+class KoLayoutTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    KoLayoutTab( bool withSubSuperScript, QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
-    ~KoLayoutTab();
+    KoLayoutTab( bool withSubSuperScript, QWidget* parent=0);
+    ~KoLayoutTab() {}
 
-    KoTextFormat::VerticalAlignment getSubSuperScript() const;
-    int getOffsetFromBaseline() const;
-    double getRelativeTextSize() const;
-    bool getAutoHyphenation() const;
+    void open(const QTextCharFormat &format);
+    void save(QTextCharFormat &format) const;
 
-    void setSubSuperScript( KoTextFormat::VerticalAlignment subSuperScript, int offset, double relativeSize );
-    void setAutoHyphenation( bool state );
-
-signals:
-    void subSuperScriptChanged();
-    void offsetChanged( int offset );
-    void relativeSizeChanged( double relativeSize );
-    void hyphenationChanged( bool state );
-
-protected slots:
-    void slotSubSuperScriptChanged( int item );
-    void slotRelativeSizeChanged( double relativeSize );
+private:
+    Ui::KoLayoutTabBase widget;
+    QButtonGroup *m_buttonGroup;
 };
 
 #endif

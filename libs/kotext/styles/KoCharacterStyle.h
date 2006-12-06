@@ -43,7 +43,8 @@ class KOTEXT_EXPORT KoCharacterStyle : public QObject {
     Q_OBJECT
 public:
     enum Property {
-        StyleId = QTextFormat::UserProperty+1
+        StyleId = QTextFormat::UserProperty+1,
+        HasHyphenation
     };
 
     KoCharacterStyle(QObject *parent = 0);

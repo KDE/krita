@@ -82,12 +82,8 @@ KoFontDia::KoFontDia( const QTextCharFormat &format, KSpell2::Loader::Ptr loader
     fontTabWidget->addTab( m_decorationTab, i18n( "Decoration" ) );
 
     //Layout tab
-    layoutTab = new KoLayoutTab( true, this );
-    fontTabWidget->addTab( layoutTab, i18n( "Layout" ) );
-    connect( layoutTab, SIGNAL( subSuperScriptChanged() ), this, SLOT( slotSubSuperChanged() ) );;
-    connect( layoutTab, SIGNAL( offsetChanged( int ) ), this, SLOT( slotOffsetChanged( int ) ) );
-    connect( layoutTab, SIGNAL( relativeSizeChanged( double ) ), this, SLOT( slotRelativeSizeChanged( double ) ) );
-    connect( layoutTab, SIGNAL( hyphenationChanged( bool ) ), this, SLOT( slotHyphenationChanged( bool ) ) );
+    m_layoutTab = new KoLayoutTab( true, this );
+    fontTabWidget->addTab( m_layoutTab, i18n( "Layout" ) );
 
     //Language tab
     languageTab = new KoLanguageTab( loader, this );
@@ -113,6 +109,7 @@ void KoFontDia::slotApply()
     m_format.setFont(fontTab->font());
     m_highlightingTab->save( m_format );
     m_decorationTab->save( m_format );
+    m_layoutTab->save( m_format );
 }
 
 void KoFontDia::slotOk()
@@ -126,39 +123,7 @@ void KoFontDia::slotReset()
     fontTab->setFont( m_format.font());
     m_highlightingTab->open( m_format );
     m_decorationTab->open( m_format );
-/*
-    layoutTab->setSubSuperScript( m_initialFormat.vAlign(), m_initialFormat.offsetFromBaseLine(), m_initialFormat.relativeTextSize() );
-    layoutTab->setAutoHyphenation( m_initialFormat.hyphenation() );
-    languageTab->setLanguage( m_initialFormat.language() );
-*/
-}
-
-void KoFontDia::slotSubSuperChanged()
-{
-    //m_changedFlags |= KoTextFormat::VAlign;
-    //fontDiaPreview->setSubSuperscript( layoutTab->getSubSuperScript(), layoutTab->getOffsetFromBaseline(), layoutTab->getRelativeTextSize() );
-}
-
-void KoFontDia::slotOffsetChanged( int offset )
-{
-    //m_changedFlags |= KoTextFormat::OffsetFromBaseLine;
-    //fontDiaPreview->setSubSuperscript( layoutTab->getSubSuperScript(), offset, layoutTab->getRelativeTextSize() );
-}
-
-void KoFontDia::slotRelativeSizeChanged( double relativeSize )
-{
-    //m_changedFlags |= KoTextFormat::VAlign;
-    //fontDiaPreview->setSubSuperscript( layoutTab->getSubSuperScript(), layoutTab->getOffsetFromBaseline(), relativeSize );
-}
-
-void KoFontDia::slotHyphenationChanged( bool )
-{
-    //m_changedFlags |= KoTextFormat::Hyphenation;
-}
-
-void KoFontDia::slotLanguageChanged()
-{
-    //m_changedFlags |= KoTextFormat::Language;
+    m_layoutTab->open( m_format );
 }
 
 #include "KoFontDia.moc"

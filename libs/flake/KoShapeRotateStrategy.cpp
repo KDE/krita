@@ -25,8 +25,8 @@
 #include "KoCommand.h"
 
 #include <QPointF>
-
 #include <math.h>
+#include <klocale.h>
 
 KoShapeRotateStrategy::KoShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoInteractionStrategy(tool, canvas)

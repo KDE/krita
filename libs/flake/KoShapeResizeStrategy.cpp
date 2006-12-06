@@ -23,6 +23,8 @@
 #include "KoCanvasBase.h"
 #include "KoCommand.h"
 
+#include <klocale.h>
+
 KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
         const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool, canvas)

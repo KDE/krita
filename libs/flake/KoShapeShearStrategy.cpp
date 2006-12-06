@@ -29,6 +29,7 @@
 
 #include <math.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool, canvas)

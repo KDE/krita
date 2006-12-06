@@ -176,7 +176,7 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
 }
 
 KCommand* KoShapeResizeStrategy::createCommand() {
-    KMacroCommand *cmd = new KMacroCommand("Resize");
+    KMacroCommand *cmd = new KMacroCommand(i18n("Resize"));
     QList<QPointF> newPositions;
     QList<QSizeF> newSizes;
     foreach(KoShape *shape, m_selectedShapes) {

@@ -136,7 +136,7 @@ void KoShapeShearStrategy::paint( QPainter &painter, KoViewConverter &converter)
 }
 
 KCommand* KoShapeShearStrategy::createCommand() {
-    KMacroCommand *cmd = new KMacroCommand("Shear");
+    KMacroCommand *cmd = new KMacroCommand(i18n("Shear"));
     QList<QPointF> newPositions;
     QList<double> newShearX;
     QList<double> newShearY;

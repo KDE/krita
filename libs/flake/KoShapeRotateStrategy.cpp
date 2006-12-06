@@ -85,7 +85,7 @@ void KoShapeRotateStrategy::paint( QPainter &painter, KoViewConverter &converter
 }
 
 KCommand* KoShapeRotateStrategy::createCommand() {
-    KMacroCommand *cmd = new KMacroCommand("Rotate");
+    KMacroCommand *cmd = new KMacroCommand(i18n("Rotate"));
     QList<QPointF> newPositions;
     QList<double> newAngles;
     foreach(KoShape *shape, m_selectedShapes) {

@@ -64,23 +64,28 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
         kWarning() << "No filter specified!\n";
     }
 
-    KisPaintDeviceSP dev = KisPaintDeviceSP(0);
+    KisPaintDeviceSP dev = 0;
 
-    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(next.data());
-    if (pl) {
-        dev = pl->paintDevice();
-    }
-    else {
-        KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(next.data());
-        if (gl) {
-            dev = gl->projection(gl->extent());
+    if(next)
+    {
+        KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(next.data());
+        if (pl) {
+            dev = pl->paintDevice();
         }
         else {
-            KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(next.data());
-            if (al) {
-                dev = al->cachedPaintDevice();
+            KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(next.data());
+            if (gl) {
+                dev = gl->projection(gl->extent());
+            }
+            else {
+                KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(next.data());
+                if (al) {
+                    dev = al->cachedPaintDevice();
+                }
             }
         }
+    }  else {
+        dev = new KisPaintDevice(m_layer->image()->colorSpace());
     }
 
     setCaption(caption);

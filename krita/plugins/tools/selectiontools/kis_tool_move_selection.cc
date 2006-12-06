@@ -137,6 +137,7 @@ void KisToolMoveSelection::buttonRelease(KisButtonReleaseEvent *e)
                 }
             }
             img->setModified();
+            lay->setDirty();
         }
     }
 }

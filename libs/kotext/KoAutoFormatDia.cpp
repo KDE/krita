@@ -642,7 +642,7 @@ void KoAutoFormatDia::initTab3()
             KoExceptionLanguageName::Iterator it = exceptionLanguageName.begin();
             for ( ; it != exceptionLanguageName.end() ; ++it )
             {
-                if ( it.data() == initialLanguage)
+                if ( it.value() == initialLanguage )
                 {
                     autoFormatLanguage->setCurrentText(it.key());
                     break;
@@ -694,7 +694,7 @@ void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
         m_docAutoFormat->configAutoFormatLanguage( QString::null);
     else
     {
-        m_docAutoFormat->configAutoFormatLanguage( exceptionLanguageName.find(text).data());
+        m_docAutoFormat->configAutoFormatLanguage( exceptionLanguageName.find(text).value());
     }
     if ( !noSignal )
     {
@@ -1035,7 +1035,7 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configIncludeTwoUpperUpperLetterException( twoUpperLetter->autoInclude());
     m_docAutoFormat->configIncludeAbbreviation( abbreviation->autoInclude());
 
-    QString lang = exceptionLanguageName.find(autoFormatLanguage->currentText()).data();
+    QString lang = exceptionLanguageName.find(autoFormatLanguage->currentText()).value();
     if ( lang == i18n("Default") )
         m_docAutoFormat->configAutoFormatLanguage(QString::null);
     else

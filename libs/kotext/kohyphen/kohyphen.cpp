@@ -78,7 +78,7 @@ KoHyphenator::KoHyphenator()
                     kDebug() << "KoHyphenator: found lang=" << lang << " encoding=" << encoding << endl;
 #endif
                     encodings.insert( lang,
-                                      EncodingStruct( encoding.latin1() ) );
+                                      EncodingStruct( encoding.toLatin1() ) );
                 }
             }
         }
@@ -173,7 +173,7 @@ HyphenDict *KoHyphenator::dict(const QString &_lang) const
     //only load dictionary when encoding info is present
     if (encodings.find(lang) == encodings.end())
     {
-        int underscore = lang.find('_');
+        int underscore = lang.indexOf('_');
         if ( underscore > -1 ) {
             lang.truncate( underscore );
             if (encodings.find(lang) == encodings.end())
@@ -213,7 +213,7 @@ QTextCodec* KoHyphenator::codecForLang(const QString& lang) const
     EncodingMap::Iterator it = encodings.find(lang);
     if (it == encodings.end())
     {
-        int underscore = lang.find('_');
+        int underscore = lang.indexOf('_');
         if ( underscore > -1 ) {
             QString _lang( lang );
             _lang.truncate( underscore );

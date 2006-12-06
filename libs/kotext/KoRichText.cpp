@@ -382,7 +382,7 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, Q3MemArray<KoT
 	s = s.replace( QRegExp( "\\r" ), "" );
 #endif
     if ( checkNewLine )
-	justInsert = s.find( '\n' ) == -1;
+	justInsert = s.indexOf( '\n' ) == -1;
     if ( justInsert ) {
 	string->insert( idx, s );
 	if ( formatting ) {
@@ -395,7 +395,7 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, Q3MemArray<KoT
 	}
 	idx += s.length();
     } else {
-	QStringList lst = QStringList::split( '\n', s, true );
+	QStringList lst = s.split( '\n' );
 	QStringList::Iterator it = lst.begin();
 	//int y = string->rect().y() + string->rect().height();
 	int lastIndex = 0;
@@ -1634,7 +1634,7 @@ void KoTextParag::insertLineStart( int index, KoTextParagLineStart *ls )
     } else {
         kWarning(32500) << "insertLineStart: there's already a line for char index=" << index << endl;
 	delete *it;
-	lineStarts.remove( it );
+	lineStarts.erase( it );
 	lineStarts.insert( index, ls );
     }
 #else // non-debug code, take the fast route
@@ -1653,7 +1653,7 @@ int KoTextFormatterBase::formatVertically( KoTextDocument* doc, KoTextParag* par
     QMap<int, KoTextParagLineStart*>::Iterator it = lineStarts.begin();
     int h = doc->addMargins() ? parag->topMargin() : 0;
     for ( ; it != lineStarts.end() ; ++it  ) {
-	KoTextParagLineStart * ls = it.data();
+	KoTextParagLineStart * ls = it.value();
 	ls->y = h;
 	KoTextStringChar *c = &parag->string()->at(it.key());
 	if ( c && c->customItem() && c->customItem()->ownLine() ) {

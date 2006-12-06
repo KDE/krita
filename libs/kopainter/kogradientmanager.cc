@@ -38,7 +38,7 @@ KoGradientManager::~KoGradientManager()
 KoGradient* KoGradientManager::loadGradient(const QString& filename)
 {
 	QString strExt;
-	const int result=filename.findRev('.');
+	const int result=filename.lastIndexOf('.');
 	if (result>=0)
 	{
 		strExt=filename.mid(result).toLower();
@@ -480,10 +480,10 @@ KoGradient* KoGradientManager::parseSvgGradient(const QDomElement& element)
 			{
 				// try style attr
 				QString style = colorstop.attribute( "style" ).simplified();
-				QStringList substyles = QStringList::split( ';', style );
-			    for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
+				QStringList substyles = style.split( ';' );
+				foreach(QString s, substyles)
 				{
-					QStringList substyle = QStringList::split( ':', (*it) );
+					QStringList substyle = s.split( ':' );
 					QString command	= substyle[0].trimmed();
 					QString params	= substyle[1].trimmed();
 					if( command == "stop-color" )
@@ -516,7 +516,7 @@ void KoGradientManager::parseSvgColor(QColor &color, const QString &s)
 	if( s.startsWith( "rgb(" ) )
 	{
 		QString parse = s.trimmed();
-		QStringList colors = QStringList::split( ',', parse );
+		QStringList colors = parse.split( ',' );
 		QString r = colors[0].right( ( colors[0].length() - 4 ) );
 		QString g = colors[1];
 		QString b = colors[2].left( ( colors[2].length() - 1 ) );

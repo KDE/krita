@@ -197,7 +197,7 @@ void KoTextDocument::setPlainText( const QString &text )
     //oText = text;
 
     int lastNl = 0;
-    int nl = text.find( '\n' );
+    int nl = text.indexOf( '\n' );
     if ( nl == -1 ) {
 	lParag = createParag( this, lParag, 0 );
 	if ( !fParag )
@@ -222,7 +222,7 @@ void KoTextDocument::setPlainText( const QString &text )
 	    if ( nl == 0xffffff )
 		break;
 	    lastNl = nl + 1;
-	    nl = text.find( '\n', nl + 1 );
+	    nl = text.indexOf( '\n', nl + 1 );
 	    if ( nl == -1 )
 		nl = 0xffffff;
 	}

@@ -493,7 +493,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
                 layout.lineSpacingType = KoParagLayout::LS_ONEANDHALF;
             else if( value=="200%")
                 layout.lineSpacingType = KoParagLayout::LS_DOUBLE;
-            else if ( value.find('%') > -1 )
+            else if ( value.indexOf('%') > -1 )
             {
                 value = value.remove( '%' );
                 double percent = value.toDouble();

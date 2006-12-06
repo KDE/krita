@@ -1578,8 +1578,8 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
             // we flush on small caps changes
             if ( !flush && chr->format()->attributeFont() == KoTextFormat::ATT_SMALL_CAPS )
             {
-                bool isLowercase = chr->c.upper() != chr->c;
-                bool nextLowercase = nextchr->c.upper() != nextchr->c;
+                bool isLowercase = chr->c.toUpper() != chr->c;
+                bool nextLowercase = nextchr->c.toUpper() != nextchr->c;
                 flush = isLowercase != nextLowercase;
             }
 	    // we flush on start of run
@@ -1832,7 +1832,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
     // 2) Sort out the font
     QFont font( format->screenFont( zh ) );
-    if ( format->attributeFont() == KoTextFormat::ATT_SMALL_CAPS && s[start].upper() != s[start] )
+    if ( format->attributeFont() == KoTextFormat::ATT_SMALL_CAPS && s[start].toUpper() != s[start] )
         font = format->smallCapsFont( zh, true );
 
 #if 0
@@ -2377,7 +2377,7 @@ void KoTextParag::printRTDebug( int info )
         static const char * const tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
         KoTabulatorList tabList = m_layout.tabList();
         if ( tabList.isEmpty() ) {
-            if ( str->toString().find( '\t' ) != -1 )
+            if ( str->toString().indexOf( '\t' ) != -1 )
                 kDebug(32500) << "Tab width: " << textDocument()->tabStopWidth() << endl;
         } else {
             KoTabulatorList::Iterator it = tabList.begin();

@@ -123,7 +123,7 @@ int main( int argc, char** argv ) {
     for ( uint i = 0 ; i < 1000 ; ++i )
         longPath += QString::fromLatin1( "M10 10L20 20 " );
     expected = "<r a=\"";
-    expected += longPath.utf8() + "\"/>\n";
+    expected += longPath.toUtf8() + "\"/>\n";
     TEST_BEGIN( 0, 0 );
     writer.addAttribute( "a", longPath );
     TEST_END( "escaping long qstring", expected.data() );

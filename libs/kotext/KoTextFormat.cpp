@@ -647,7 +647,7 @@ void KoTextFormat::save( KoGenStyle& gs, KoSavingContext& context, KoTextFormat 
     {
         QString lang = m_language;
         QString country;
-        const int pos = lang.find( '_' );
+        const int pos = lang.indexOf( '_' );
         if ( pos != -1 ) {
             country = lang.mid( pos + 1 );
             lang = lang.left( pos );
@@ -1422,7 +1422,7 @@ void KoTextFormat::parseShadowFromCss( const QString& _css )
         d->m_shadowColor = QColor();
     } else
     {
-        QStringList tokens = QStringList::split(' ', css);
+        QStringList tokens = css.split(' ', QString::SkipEmptyParts);
         if ( tokens.isEmpty() ) {
             kWarning(32500) << "Parse error in text-shadow: " << css << endl;
             return;

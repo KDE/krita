@@ -17,15 +17,15 @@
  */
 
 #include "krs_filter.h"
-#include "kritacoremodule.h"
+#include "krs_module.h"
 #include "krs_paint_layer.h"
 
 #include <kis_filter.h>
 #include <kis_paint_layer.h>
 
-using namespace Kross::KritaCore;
+using namespace Scripting;
 
-Filter::Filter(KritaCoreModule* module, KisFilter* filter)
+Filter::Filter(Module* module, KisFilter* filter)
     : QObject(module)
     , m_filter(filter)
 {

@@ -27,7 +27,7 @@
 class KisDoc2;
 class KisTransaction;
 
-namespace Kross { namespace KritaCore {
+namespace Scripting {
 
 class Image;
 
@@ -208,6 +208,6 @@ class PaintLayer : public QObject
         KisTransaction* m_cmd;
 };
 
-}}
+}
 
 #endif

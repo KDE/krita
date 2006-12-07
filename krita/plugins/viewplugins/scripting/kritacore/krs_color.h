@@ -23,7 +23,7 @@
 
 #include <QObject>
 
-namespace Kross { namespace KritaCore {
+namespace Scripting {
 
 /**
  * The color class represents a single color.
@@ -40,6 +40,6 @@ class Color : public QObject
         QColor m_color;
 };
 
-}}
+}
 
 #endif

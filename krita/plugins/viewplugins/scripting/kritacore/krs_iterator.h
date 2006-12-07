@@ -32,7 +32,7 @@
 
 //#include "../scriptingmonitor.h"
 
-namespace Kross { namespace KritaCore {
+namespace Scripting {
 
 /**
  * This object allow to change the value of pixel one by one.
@@ -267,6 +267,6 @@ class Iterator : public IteratorBase
         KisPaintLayerSP m_layer;
 };
 
-}}
+}
 
 #endif

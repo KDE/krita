@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
-namespace Kross { namespace KritaCore {
+namespace Scripting {
 
 class PaintLayer;
 
@@ -214,14 +214,14 @@ class Painter : public QObject
         /**
          * This functions set the paint color (also called foreground color).
          * It takes one argument :
-         *  - a \a Color object e.g. create with \a KritaCoreModule::createRGBColor .
+         *  - a \a Color object e.g. create with \a Module::createRGBColor .
          */
         void setPaintColor(QObject* color);
 
         /**
          * This functions set the background color.
          * It takes one argument :
-         *  - a \a Color object e.g. create with \a KritaCoreModule::createRGBColor .
+         *  - a \a Color object e.g. create with \a Module::createRGBColor .
          */
         void setBackgroundColor(QObject* color);
 
@@ -281,6 +281,6 @@ class Painter : public QObject
         int m_threshold;
 };
 
-}}
+}
 
 #endif

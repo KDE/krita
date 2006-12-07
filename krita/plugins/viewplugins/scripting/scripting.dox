@@ -15,7 +15,7 @@
  *
  * @section Objects
  *
- * The \a Kross::KritaCore::KritaCoreModule is the Krita scripting module
+ * The \a Scripting::Module is the Krita scripting module
  * which provides access to the scripting functionality.
  *
  * @section Examples

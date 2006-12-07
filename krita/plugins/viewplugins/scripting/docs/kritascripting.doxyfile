@@ -82,7 +82,7 @@ WARN_LOGFILE           =
 
 INPUT                  = ../
 IMAGE_PATH             =
-FILE_PATTERNS          = *.h *.cpp scripting.dox
+FILE_PATTERNS          = krs_*.h krs_*.cpp scripting.dox
 RECURSIVE              = YES
 
 EXCLUDE                =

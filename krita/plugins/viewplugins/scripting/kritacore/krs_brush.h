@@ -23,9 +23,9 @@
 
 class KisBrush;
 
-namespace Kross { namespace KritaCore {
+namespace Scripting {
 
-class KritaCoreModule;
+class Module;
 
 /**
  * A brush object.
@@ -36,7 +36,7 @@ class Brush : public QObject
         /**
          * @param sharedBrush tell if the brush should be deleted or not when this object is deleted
          */
-        Brush(KritaCoreModule* module, KisBrush*, bool sharedBrush );
+        Brush(Module* module, KisBrush*, bool sharedBrush );
         ~Brush();
 
     public:
@@ -47,6 +47,6 @@ class Brush : public QObject
         bool m_sharedBrush;
 };
 
-}}
+}
 
 #endif

@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kritacoremodule.h"
-#include "kritacoreprogress.h"
+#include "krs_module.h"
+#include "krs_progress.h"
 #include "krs_brush.h"
 #include "krs_color.h"
 #include "krs_filter.h"
@@ -55,28 +55,29 @@ extern "C"
      */
     Kross::Api::Object* init_module(Kross::Api::Manager* manager)
     {
-        return new Kross::KritaCore::KritaCoreModule(manager);
+        return new Scripting::Module(manager);
     }
 }
 #endif
 
-using namespace Kross::KritaCore;
+using namespace Scripting;
 
-namespace Kross { namespace KritaCore {
+namespace Scripting {
 
-	class KritaCoreModule::Private
+	/// \internal d-pointer class.
+	class Module::Private
 	{
 		public:
 			KisView2* view;
-			KritaCoreProgress* progress;
+			Progress* progress;
 
 			Private(KisView2* v) : view(v), progress(0) {}
 			~Private() { delete progress; }
 	};
 
-}}
+}
 
-KritaCoreModule::KritaCoreModule(KisView2* view)
+Module::Module(KisView2* view)
 	: QObject()
 	, d(new Private(view))
 {
@@ -88,47 +89,47 @@ KritaCoreModule::KritaCoreModule(KisView2* view)
 #endif
 }
 
-KritaCoreModule::~KritaCoreModule()
+Module::~Module()
 {
 	delete d;
 }
 
-QObject* KritaCoreModule::application()
+QObject* Module::application()
 {
 	return KApplication::kApplication()->findChild< KoApplicationAdaptor* >();
 }
 
 #if 0
-QObject* KritaCoreModule::document()
+QObject* Module::document()
 {
 	return d->view->document() ? d->view->document()->findChild< KoDocumentAdaptor* >() : 0;
 }
 #endif
 
-QObject* KritaCoreModule::progress()
+QObject* Module::progress()
 {
     if(! d->progress)
-        d->progress = new KritaCoreProgress(d->view);
+        d->progress = new Progress(d->view);
     return d->progress;
 }
 
-QObject* KritaCoreModule::image()
+QObject* Module::image()
 {
     ::KisDoc2* document = d->view->document();
     return document ? new Image(this, d->view->image(), document) : 0;
 }
 
-QObject* KritaCoreModule::createRGBColor(int r, int g, int b)
+QObject* Module::createRGBColor(int r, int g, int b)
 {
     return new Color(r, g, b, QColor::Rgb);
 }
 
-QObject* KritaCoreModule::createHSVColor(int hue, int saturation, int value)
+QObject* Module::createHSVColor(int hue, int saturation, int value)
 {
     return new Color(hue, saturation, value, QColor::Hsv);
 }
 
-QObject* KritaCoreModule::pattern(const QString& patternname)
+QObject* Module::pattern(const QString& patternname)
 {
     KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("PatternServer");
     foreach(KisResource* res, rServer->resources())
@@ -138,7 +139,7 @@ QObject* KritaCoreModule::pattern(const QString& patternname)
     return 0;
 }
 
-QObject* KritaCoreModule::brush(const QString& brushname)
+QObject* Module::brush(const QString& brushname)
 {
     KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("BrushServer");
     foreach(KisResource* res, rServer->resources())
@@ -148,7 +149,7 @@ QObject* KritaCoreModule::brush(const QString& brushname)
     return 0;
 }
 
-QObject* KritaCoreModule::createCircleBrush(uint w, uint h, uint hf, uint vf)
+QObject* Module::createCircleBrush(uint w, uint h, uint hf, uint vf)
 {
     KisAutobrushShape* kas = new KisAutobrushCircleShape(qMax(1u,w), qMax(1u,h), hf, vf);
     QImage* brsh = new QImage();
@@ -158,7 +159,7 @@ QObject* KritaCoreModule::createCircleBrush(uint w, uint h, uint hf, uint vf)
     return new Brush(this, thing, false);
 }
 
-QObject* KritaCoreModule::createRectBrush(uint w, uint h, uint hf, uint vf)
+QObject* Module::createRectBrush(uint w, uint h, uint hf, uint vf)
 {
     KisAutobrushShape* kas = new KisAutobrushRectShape(qMax(1u,w), qMax(1u,h), hf, vf);
     QImage* brsh = new QImage();
@@ -168,7 +169,7 @@ QObject* KritaCoreModule::createRectBrush(uint w, uint h, uint hf, uint vf)
     return new Brush(this, thing, false);
 }
 
-QObject* KritaCoreModule::loadPattern(const QString& filename)
+QObject* Module::loadPattern(const QString& filename)
 {
     KisPattern* pattern = new KisPattern(filename);
     if(pattern->load())
@@ -178,7 +179,7 @@ QObject* KritaCoreModule::loadPattern(const QString& filename)
     return 0;
 }
 
-QObject* KritaCoreModule::loadBrush(const QString& filename)
+QObject* Module::loadBrush(const QString& filename)
 {
     KisBrush* brush = new KisBrush(filename);
     if(brush->load())
@@ -188,7 +189,7 @@ QObject* KritaCoreModule::loadBrush(const QString& filename)
     return 0;
 }
 
-QObject* KritaCoreModule::filter(const QString& filtername)
+QObject* Module::filter(const QString& filtername)
 {
     KisFilter* filter = KisFilterRegistry::instance()->get(filtername).data();
     if(filter)
@@ -199,7 +200,7 @@ QObject* KritaCoreModule::filter(const QString& filtername)
     }
 }
 
-QObject* KritaCoreModule::createImage(int width, int height, const QString& colorspace, const QString& name)
+QObject* Module::createImage(int width, int height, const QString& colorspace, const QString& name)
 {
     if( width < 0 || height < 0)
     {
@@ -215,4 +216,4 @@ QObject* KritaCoreModule::createImage(int width, int height, const QString& colo
     return new Image(this, KisImageSP(new KisImage(0, width, height, cs, name)));
 }
 
-#include "kritacoremodule.moc"
+#include "krs_module.moc"

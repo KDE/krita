@@ -21,7 +21,7 @@
 
 #include <kis_paint_layer.h>
 
-using namespace Kross::KritaCore;
+using namespace Scripting;
 
 Histogram::Histogram(PaintLayer* layer, KoHistogramProducerSP producer, const enumHistogramType type)
     : QObject(layer)

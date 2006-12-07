@@ -24,7 +24,7 @@
 
 #include <kis_math_toolbox.h>
 
-using namespace Kross::KritaCore;
+using namespace Scripting;
 
 Wavelet::Wavelet(KisMathToolbox::KisWavelet* kwl)
     : QObject(), m_wavelet(kwl)

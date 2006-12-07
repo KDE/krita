@@ -16,29 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kritacoreprogress.h"
-        
+#include "krs_progress.h"
+
 #include <kdebug.h>
 
 #include <kis_progress_display_interface.h>
 #include <kis_view2.h>
 
-using namespace Kross::KritaCore;
+using namespace Scripting;
 
-KritaCoreProgress::KritaCoreProgress(KisView2* view)
+Progress::Progress(KisView2* view)
     : KisProgressSubject()
     , m_view(view)
     , m_progressTotalSteps(0)
 {
-    //kDebug() << "KritaCoreProgress::KritaCoreProgress" << endl;
+    //kDebug() << "Progress::Progress" << endl;
 }
 
-KritaCoreProgress::~KritaCoreProgress()
+Progress::~Progress()
 {
-    //kDebug() << "KritaCoreProgress::~KritaCoreProgress" << endl;
+    //kDebug() << "Progress::~Progress" << endl;
 }
 
-void KritaCoreProgress::activateAsSubject()
+void Progress::activateAsSubject()
 {
     // set this class as the KisProgressSubject in view.
     //TODO: restore progress in scripting
@@ -46,7 +46,7 @@ void KritaCoreProgress::activateAsSubject()
     m_progressTotalSteps = 100; // let's us 100 as default (=100%)
 }
 
-void KritaCoreProgress::setProgressTotalSteps(uint totalSteps)
+void Progress::setProgressTotalSteps(uint totalSteps)
 {
     if(m_progressTotalSteps < 1)
         activateAsSubject();
@@ -57,7 +57,7 @@ void KritaCoreProgress::setProgressTotalSteps(uint totalSteps)
     emit notifyProgress(0);
 }
 
-void KritaCoreProgress::setProgress(uint progress)
+void Progress::setProgress(uint progress)
 {
     if(m_progressTotalSteps < 1)
         return;
@@ -72,12 +72,12 @@ void KritaCoreProgress::setProgress(uint progress)
     }
 }
 
-void KritaCoreProgress::incProgress()
+void Progress::incProgress()
 {
     setProgress( ++m_progressSteps );
 }
 
-void KritaCoreProgress::setProgressStage(const QString& stage, uint progress)
+void Progress::setProgressStage(const QString& stage, uint progress)
 {
     if(m_progressTotalSteps < 1)
         return;
@@ -87,11 +87,11 @@ void KritaCoreProgress::setProgressStage(const QString& stage, uint progress)
     emit notifyProgressStage( stage, progressPerCent);
 }
 
-void KritaCoreProgress::progressDone()
+void Progress::progressDone()
 {
-    kDebug() << "KritaCoreProgress::progressDone" << endl;
+    kDebug() << "Progress::progressDone" << endl;
     m_progressTotalSteps = 0;
     emit notifyProgressDone();
 }
 
-#include "kritacoreprogress.moc"
+#include "krs_progress.moc"

@@ -24,18 +24,18 @@
 
 class KisView2;
 
-namespace Kross { namespace KritaCore {
+namespace Scripting {
 
 /**
- * The KritaCoreProgress object enables displaying of a progressbar
+ * The Progress object enables displaying of a progressbar
  * in Krita to visualize the progress your script makes.
  */
-class KRITASCRIPTING_EXPORT KritaCoreProgress : public KisProgressSubject
+class KRITASCRIPTING_EXPORT Progress : public KisProgressSubject
 {
         Q_OBJECT
     public:
-        KritaCoreProgress(KisView2* view);
-        virtual ~KritaCoreProgress();
+        Progress(KisView2* view);
+        virtual ~Progress();
 
     public:
         void activateAsSubject();
@@ -88,6 +88,6 @@ class KRITASCRIPTING_EXPORT KritaCoreProgress : public KisProgressSubject
         //QString m_packagePath;
 };
 
-}}
+}
 
 #endif

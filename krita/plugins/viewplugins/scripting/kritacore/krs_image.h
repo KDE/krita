@@ -25,9 +25,9 @@
 
 class KisDoc2;
 
-namespace Kross { namespace KritaCore {
+namespace Scripting {
 
-class KritaCoreModule;
+class Module;
 
 /**
  * An image object.
@@ -36,7 +36,7 @@ class Image : public QObject
 {
        Q_OBJECT
     public:
-        Image(KritaCoreModule* module, KisImageSP image, KisDoc2* doc = 0);
+        Image(Module* module, KisImageSP image, KisDoc2* doc = 0);
         ~Image();
 
     public slots:
@@ -138,6 +138,6 @@ class Image : public QObject
         KisDoc2* m_doc;
 };
 
-}}
+}
 
 #endif

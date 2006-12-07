@@ -25,9 +25,7 @@
 
 #include <kis_math_toolbox.h>
 
-namespace Kross {
-
-namespace KritaCore {
+namespace Scripting {
 
 /**
  * Fast Wavelet object.
@@ -95,8 +93,6 @@ class Wavelet : public QObject
         KisMathToolbox::KisWavelet* m_wavelet;
         uint m_numCoeff;
 };
-
-}
 
 }
 

@@ -24,7 +24,7 @@
 #include <kis_types.h>
 #include <kis_histogram.h>
 
-namespace Kross { namespace KritaCore {
+namespace Scripting {
 
 class PaintLayer;
 
@@ -120,6 +120,6 @@ class Histogram : public QObject
         KisHistogram* m_histogram;
 };
 
-}}
+}
 
 #endif

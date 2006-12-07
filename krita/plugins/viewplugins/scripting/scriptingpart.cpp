@@ -50,8 +50,8 @@
 #include <kross/core/model.h>
 #include <kross/core/guiclient.h>
 
-#include "kritacore/kritacoremodule.h"
-#include "kritacore/kritacoreprogress.h"
+#include "kritacore/krs_module.h"
+#include "kritacore/krs_progress.h"
 
 typedef KGenericFactory<ScriptingPart> KritaScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
@@ -61,7 +61,7 @@ class ScriptingPart::Private
     public:
         KisView2* view;
         Kross::GUIClient* guiclient;
-        QPointer< Kross::KritaCore::KritaCoreModule > module;
+        QPointer< Scripting::Module > module;
 
         Private() : view(0), guiclient(0), module(0) {}
         virtual ~Private() {
@@ -120,7 +120,7 @@ void ScriptingPart::started(Kross::Action* action)
 
     if(d->module)
         delete d->module;
-    d->module = new Kross::KritaCore::KritaCoreModule(d->view);
+    d->module = new Scripting::Module(d->view);
     Kross::Manager::self().addObject(d->module, "Krita");
 
     //kDebug(41011) << act->getPackagePath() << endl;
@@ -132,7 +132,7 @@ void ScriptingPart::finished(Kross::Action*)
     kDebug() << "ScriptingPart::executionFinished" << endl;
     d->view->document()->setModified(true);
     d->view->image()->activeLayer()->setDirty();
-    static_cast< Kross::KritaCore::KritaCoreProgress* >( d->module->progress() )->progressDone();
+    static_cast< Scripting::Progress* >( d->module->progress() )->progressDone();
     QApplication::restoreOverrideCursor();
     //d->module->deleteLater();
 }

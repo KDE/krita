@@ -17,13 +17,13 @@
  */
 
 #include "krs_brush.h"
-#include "kritacoremodule.h"
+#include "krs_module.h"
 
 #include <kis_brush.h>
 
-using namespace Kross::KritaCore;
+using namespace Scripting;
 
-Brush::Brush(KritaCoreModule* module, KisBrush* brush, bool sharedBrush)
+Brush::Brush(Module* module, KisBrush* brush, bool sharedBrush)
     : QObject(module)
     , m_brush(brush)
     , m_sharedBrush(sharedBrush)

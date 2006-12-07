@@ -26,7 +26,7 @@
 #include <kis_paint_layer.h>
 #include <kis_paintop_registry.h>
 
-using namespace Kross::KritaCore;
+using namespace Scripting;
 
 Painter::Painter(PaintLayer* layer)
     : QObject(layer)

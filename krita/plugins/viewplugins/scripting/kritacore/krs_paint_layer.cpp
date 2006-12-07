@@ -35,7 +35,7 @@
 #include "krs_painter.h"
 #include "krs_wavelet.h"
 
-using namespace Kross::KritaCore;
+using namespace Scripting;
 
 PaintLayer::PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc2* doc)
     : QObject(image)

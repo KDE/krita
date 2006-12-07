@@ -26,19 +26,19 @@
 
 class KisView2;
 
-namespace Kross { namespace KritaCore {
+namespace Scripting {
 
     /**
-     * The main KritaCoreModule class enables access to the Krita
+     * The main Module class enables access to the Krita
      * functionality from within the supported Kross scripting
      * backends like for example Python or Ruby.
      */
-    class KROSSKRITACORE_EXPORT KritaCoreModule : public QObject
+    class KROSSKRITACORE_EXPORT Module : public QObject
     {
             Q_OBJECT
         public:
-            KritaCoreModule(KisView2* view);
-            virtual ~KritaCoreModule();
+            Module(KisView2* view);
+            virtual ~Module();
 
         public slots:
 
@@ -56,7 +56,7 @@ namespace Kross { namespace KritaCore {
 #endif
 
             /**
-            * Returns the \a KritaCoreProgress object which could be
+            * Returns the \a Progress object which could be
             * used to display a progressbar in Krita to visualize the
             * progress your script makes.
             *
@@ -232,10 +232,12 @@ namespace Kross { namespace KritaCore {
 #endif
 
         private:
+            /// \internal d-pointer class.
             class Private;
+            /// \internal d-pointer instance.
             Private* const d;
     };
 
-}}
+}
 
 #endif

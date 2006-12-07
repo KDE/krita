@@ -18,7 +18,7 @@
 
 #include "krs_image.h"
 #include "krs_paint_layer.h"
-#include "kritacoremodule.h"
+#include "krs_module.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -31,9 +31,9 @@
 #include <kis_paint_layer.h>
 #include <kis_meta_registry.h>
 
-using namespace Kross::KritaCore;
+using namespace Scripting;
 
-Image::Image(KritaCoreModule* module, KisImageSP image, KisDoc2* doc)
+Image::Image(Module* module, KisImageSP image, KisDoc2* doc)
     : QObject(module)
     , m_image(image)
     , m_doc(doc)

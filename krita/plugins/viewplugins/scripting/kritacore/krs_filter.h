@@ -24,9 +24,9 @@
 
 class KisFilter;
 
-namespace Kross { namespace KritaCore {
+namespace Scripting {
 
-class KritaCoreModule;
+class Module;
 
 /**
  * This class enables access to the filters Krita provides.
@@ -63,7 +63,7 @@ class Filter : public QObject
 {
         Q_OBJECT
     public:
-        Filter(KritaCoreModule* module, KisFilter*);
+        Filter(Module* module, KisFilter*);
         ~Filter();
 
     public slots:
@@ -159,6 +159,6 @@ class Filter : public QObject
         KisFilter* m_filter;
 };
 
-}}
+}
 
 #endif

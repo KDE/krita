@@ -61,6 +61,24 @@ public slots:
     virtual void deactivate();
     virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
 
+public:
+
+    void mousePressEvent( KoPointerEvent *event );
+    void mouseDoubleClickEvent( KoPointerEvent *event );
+    void mouseMoveEvent( KoPointerEvent *event );
+    void mouseReleaseEvent( KoPointerEvent *event );
+    void wheelEvent( KoPointerEvent * event );
+
+    /// The Px events have the event already translated to image
+    /// pixels from the KOffice native points
+
+    virtual void mousePressEventPx( KoPointerEvent * ) {};
+    virtual void mouseDoubleClickEventPx( KoPointerEvent * ) {};
+    virtual void mouseMoveEventPx( KoPointerEvent * ) {};
+    virtual void mouseReleaseEventPx( KoPointerEvent * ) {};
+    virtual void wheelEventPx( KoPointerEvent * ) {};
+
+
 protected:
 
     /// @return the image wrapped in the dummy shape in the shape

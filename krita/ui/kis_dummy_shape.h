@@ -25,7 +25,7 @@
 #include <kis_types.h>
 #include <kis_image.h>
 
-#define KisDummyShape_SHAPEID "KisDummyShapeID"
+const QString KisDummyShape_SHAPEID = "KisDummyShapeID";
 
 class KisShapeUserData : public KoShapeUserData {
 

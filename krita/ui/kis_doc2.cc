@@ -3,6 +3,7 @@
  *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
  *  Copyright (c) 2001 Toshitaka Fujioka  <fujioka@kde.org>
  *  Copyright (c) 2002, 2003 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004-2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +31,7 @@
 #include <QStringList>
 #include <QWidget>
 #include <q3paintdevicemetrics.h>
+#include <QList>
 
 // KDE
 #include <kapplication.h>
@@ -45,14 +47,19 @@
 
 // KOffice
 #include <KoApplication.h>
+#include <KoCanvasBase.h>
+#include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoColorProfile.h>
 #include <KoFilterManager.h>
 #include <KoID.h>
 #include <KoMainWindow.h>
 #include <KoOasisStore.h>
 #include <KoQueryTrader.h>
+#include <KoShape.h>
+#include <KoShape.h>
+#include <KoShapeContainer.h>
+#include <KoShapeManager.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
@@ -86,7 +93,11 @@
 #include "kis_oasis_load_visitor.h"
 #include "kis_oasis_save_data_visitor.h"
 #include "kis_oasis_save_visitor.h"
-#include "kis_dummy_shape.h"
+#include "kis_canvas2.h"
+#include "kis_layer_container.h"
+#include "kis_layer_shape.h"
+#include "kis_shape_layer.h"
+#include "kis_mask_shape.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -102,6 +113,8 @@ static const char *CURRENT_DTD_VERSION = "1.3";
  */
 #define NATIVE_MIMETYPE "application/x-kra"
 
+typedef QList<KisLayerShape*> KisLayerList;
+
 namespace {
 
     class KisCommandImageMv : public KisCommand {
@@ -109,9 +122,9 @@ namespace {
 
     public:
         KisCommandImageMv(KisDoc2 *doc,
-                  KisUndoAdapter *adapter,
-                  const QString& name,
-                  const QString& oldName) : super(i18n("Rename Image"), adapter)
+                          KisUndoAdapter *adapter,
+                          const QString& name,
+                          const QString& oldName) : super(i18n("Rename Image"), adapter)
             {
                 m_doc = doc;
                 m_name = name;
@@ -149,24 +162,22 @@ class KisDoc2::KisDocPrivate
 
 public:
 
-    KisDocPrivate(
-        ) : undo( false )
-          , cmdHistory( 0 )
-          , nserver( 0 )
-          , currentMacro( 0 )
-          , macroNestDepth( 0 )
-          , conversionDepth( 0 )
-          , ioProgressTotalSteps( 0 )
-          , ioProgressBase( 0 )
-          , m_imageShape( new KisDummyShape() )
-        {
-        }
+    KisDocPrivate()
+        : undo( false )
+        , cmdHistory( 0 )
+        , nserver( 0 )
+        , currentMacro( 0 )
+        , macroNestDepth( 0 )
+        , conversionDepth( 0 )
+        , ioProgressTotalSteps( 0 )
+        , ioProgressBase( 0 )
+{
+}
 
     ~KisDocPrivate()
         {
             delete cmdHistory;
             delete nserver;
-            delete m_imageShape;
             undoListeners.setAutoDelete( false );
         }
 
@@ -179,12 +190,18 @@ public:
     qint32 conversionDepth;
     int ioProgressTotalSteps;
     int ioProgressBase;
+    KisLayerList layerShapes;
+    KoShape * m_activeLayer;
+
     QMap<KisLayer *, QString> layerFilenames; // temp storage during load
 
     void setImage( KisImageSP currentImage )
         {
             m_currentImage = currentImage;
-            m_imageShape->setImage( currentImage );
+            KisLayerShape * rootLayerShape = new KisLayerShape( 0, currentImage->rootLayer() );
+            layerShapes.append( rootLayerShape );
+            m_activeLayer = rootLayerShape;
+
         }
 
     KisImageSP currentImage()
@@ -192,14 +209,9 @@ public:
             return m_currentImage ;
         }
 
-    KisDummyShape * imageShape()
-        {
-            return m_imageShape;
-        }
 private:
 
     KisImageSP m_currentImage;
-    KisDummyShape * m_imageShape; // the master shape containing the image
 
 
 };
@@ -1179,10 +1191,6 @@ KisImageSP KisDoc2::currentImage()
     return m_d->currentImage();
 }
 
-KisDummyShape * KisDoc2::imageShape()
-{
-    return m_d->imageShape();
-}
 
 void KisDoc2::setCurrentImage(KisImageSP image)
 {
@@ -1198,6 +1206,41 @@ void KisDoc2::initEmpty()
     KoColorSpace * rgb = KisMetaRegistry::instance()->csRegistry()->rgb8();
     newImage("", cfg.defImgWidth(), cfg.defImgHeight(), rgb);
 }
+
+void KisDoc2::addShape( KoShape* shape )
+{
+    if ( shape->shapeId() == KIS_LAYER_SHAPE_ID ) {
+    }
+    else if ( shape->shapeId() == KIS_SHAPE_LAYER_ID ) {
+    }
+    else if ( shape->shapeId() == KIS_LAYER_CONTAINER_ID ) {
+    }
+    else if ( shape->shapeId() == KIS_MASK_SHAPE_ID ) {
+    }
+    else {
+        // An ordinary shape, if the active layer is a KisShapeLayer,
+        // add it there, otherwise, create a new KisShapeLayer on top
+        // of the active layer.
+    }
+
+    foreach( KoView *view, views() ) {
+        KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
+        canvas->shapeManager()->add(shape);
+        canvas->canvasWidget()->update();
+    }
+    setModified( true );
+}
+
+void KisDoc2::removeShape( KoShape* shape )
+{
+    foreach( KoView *view, views() ) {
+        KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
+        canvas->shapeManager()->remove(shape);
+        canvas->canvasWidget()->update();
+    }
+    setModified( true );
+}
+
 
 #include "kis_doc2.moc"
 

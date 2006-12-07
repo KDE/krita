@@ -23,33 +23,33 @@
 #include <kdebug.h>
 
 #include <KoDocument.h>
+#include <KoShapeControllerBase.h>
 
 #include "kis_types.h"
 #include "kis_undo_adapter.h"
 
 #include <krita_export.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 class QImage;
 class QString;
 
 class KCommand;
-
 class KCommandHistory;
 class KMacroCommand;
 
 class KoColorProfile;
+class KoColorSpace;
+class KoColor;
+
 class KisView2;
 class KisNameServer;
 class KisChildDoc;
-class KoColorSpace;
-class KoColor;
-class KisDummyShape;
+
 /**
  * The class that represents a Krita document containing content and settings.
  */
-class KRITAUI_EXPORT KisDoc2 : public KoDocument, private KisUndoAdapter {
+class KRITAUI_EXPORT KisDoc2 : public KoDocument, public KoShapeControllerBase, private KisUndoAdapter
+{
 
     typedef KoDocument super;
     Q_OBJECT
@@ -83,7 +83,6 @@ public:
     virtual QDomDocument saveXML();
 
 public slots:
-
 
     /**
      * Initialize an empty document using default values
@@ -140,7 +139,6 @@ public:
     void prepareForImport();
 
     KisImageSP currentImage();
-    KisDummyShape * imageShape();
 
     /**
      * Set the current image to the specified image and turn undo on.
@@ -178,6 +176,13 @@ protected slots:
 private slots:
     void slotUpdate(KisImageSP img, quint32 x, quint32 y, quint32 w, quint32 h);
     void slotIOProgress(qint8 percentage);
+
+public:
+
+    // Implement KoShapeController
+
+    virtual void addShape( KoShape* shape );
+    virtual void removeShape( KoShape* shape );
 
 private:
 

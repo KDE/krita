@@ -170,6 +170,16 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="1" >
+       <widget class="QCheckBox" name="chkPermaDry" >
+        <property name="toolTip" >
+         <string>A second layer for completely dry and unerasable paint</string>
+        </property>
+        <property name="text" >
+         <string>Permapaint</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

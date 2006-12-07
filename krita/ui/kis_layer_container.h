@@ -19,24 +19,43 @@
 #ifndef KIS_LAYER_COLLECTION_H_
 #define KIS_LAYER_COLLECTION_H_
 
+#include <QString>
 
-#include <KoShapeContainer.h
+#include <KoShapeContainer.h>
+#include <kis_types.h>
 
 class QPainter;
 class KoViewConverter;
 
+
+const QString KIS_LAYER_CONTAINER_ID = "KisLayerContainerID";
 /**
    The layer container is the flake shape that corresponds to
    KisGroupLayer. It contains any number of layers, including other
    group layers.
+
+   XXX: Do we need to distinguish between LayerContainers and Layers?
+   Can a LayerContainer, i.e. a KisGroupLayer have masks and
+   selections, and if so, what does it mean? (BSAR)
  */
 class KisLayerContainer : public KoShapeContainer
 {
 
 public:
 
+    KisLayerContainer( KoShapeContainer * parent, KisGroupLayerSP groupLayer );
+
+    virtual ~KisLayerContainer();
+
+public:
+
     // KoShapeContainer implementation
-    void paintComponent(QPainter &painter, const KoViewConverter &converter)
+    void paintComponent(QPainter &painter, const KoViewConverter &converter);
+
+private:
+
+    class Private;
+    Private * m_d;
 };
 
 #endif

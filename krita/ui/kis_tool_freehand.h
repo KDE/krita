@@ -44,9 +44,9 @@ public:
     KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
     virtual ~KisToolFreehand();
 
-    virtual void mousePressEvent( KoPointerEvent *e );
-    virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void mouseReleaseEvent(KoPointerEvent *e);
+    virtual void mousePressEventPx( KoPointerEvent *e );
+    virtual void mouseMoveEventPx(KoPointerEvent *e);
+    virtual void mouseReleaseEventPx(KoPointerEvent *e);
 
 protected:
 

@@ -22,12 +22,35 @@
 #include <QDomElement>
 #include <QDomDocument>
 #include <QIcon>
+#include <QString>
 
 #include <kicon.h>
 
+#include <KoShapeContainer.h>
 #include <KoViewConverter.h>
 
-#include <kis_paint_device.h>
+#include <kis_types.h>
+#include <kis_image.h>
+
+class KisShapeLayer::Private
+{
+public:
+
+};
+
+KisShapeLayer::KisShapeLayer( KoShapeContainer * parent, KisImageSP img, const QString &name, quint8 opacity )
+    : KisExternalLayer( img, name, opacity )
+{
+    KoShapeContainer::setParent( parent );
+    setShapeId( KIS_SHAPE_LAYER_ID );
+
+    m_d = new Private();
+}
+
+KisShapeLayer::~KisShapeLayer()
+{
+    delete m_d;
+}
 
 void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {

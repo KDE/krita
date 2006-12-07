@@ -21,6 +21,10 @@
 
 #include <KoShapeContainer.h>
 
+#include <kis_types.h>
+
+#define KIS_LAYER_SHAPE_ID "KisLayerShape"
+
 /**
    A KisLayerShape is a flake wrapper around adjustment layers or paint
    layers. A layershape can only have a KisMaskShape as its descendant.
@@ -28,11 +32,21 @@
 class KisLayerShape : public KoShapeContainer
 {
 
+public:
+
+    KisLayerShape( KoShapeContainer * parent, KisLayerSP layer );
+    virtual ~KisLayerShape();
+
     // Shape overrides
     void paint(QPainter &painter, const KoViewConverter &converter);
 
     // KoShapeContainer implementation
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
+
+private:
+
+    class Private;
+    Private * m_d;
 };
 
 #endif

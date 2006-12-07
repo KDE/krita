@@ -43,7 +43,7 @@ public:
 
     QWidget * createOptionWidget();
 
-    virtual void mouseMoveEvent(KoPointerEvent *e);
+    virtual void mouseMoveEventPx(KoPointerEvent *e);
 
 protected:
 

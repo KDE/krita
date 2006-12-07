@@ -21,6 +21,7 @@
 
 #include <KoShapeContainer.h>
 
+#include <kis_types.h>
 #include <kis_external_layer_iface.h>
 
 class QRect;
@@ -29,8 +30,12 @@ class QIcon;
 class QRect;
 class QDomDocument;
 class QDomElement;
+class QString;
 
 class KoViewConverter;
+
+
+const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 
 /**
    A KisShapeLayer contains any number of non-krita flakes, such as
@@ -38,6 +43,13 @@ class KoViewConverter;
 */
 class KisShapeLayer : public KoShapeContainer, public KisExternalLayer
 {
+
+public:
+
+    KisShapeLayer( KoShapeContainer * parent, KisImageSP img, const QString &name, quint8 opacity );
+    virtual ~KisShapeLayer();
+
+public:
     // KoShape overrides
 
     bool isSelectable() const { return false; }
@@ -53,6 +65,11 @@ class KisShapeLayer : public KoShapeContainer, public KisExternalLayer
     KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r);
 
     bool saveToXML(QDomDocument doc, QDomElement elem);
+
+private:
+
+    class Private;
+    Private * m_d;
 
 };
 

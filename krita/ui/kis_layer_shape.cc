@@ -19,6 +19,33 @@
 #include "kis_layer_shape.h"
 
 
+
+#include <kis_types.h>
+#include <kis_layer.h>
+
+#include <kis_paint_device.h>
+
+class KisLayerShape::Private {
+public:
+    KisLayerSP layer;
+};
+
+KisLayerShape::KisLayerShape( KoShapeContainer * parent, KisLayerSP layer)
+    : KoShapeContainer()
+{
+    m_d = new Private();
+    m_d->layer = layer;
+
+    setShapeId( KIS_LAYER_SHAPE_ID );
+    setParent( parent );
+}
+
+KisLayerShape::~KisLayerShape()
+{
+    delete m_d;
+}
+
+
 void KisLayerShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
 }

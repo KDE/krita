@@ -122,4 +122,36 @@ void KisTool::notifyModified() const
     }
 }
 
+
+void KisTool::mousePressEvent( KoPointerEvent *event )
+{
+    // XXX: translate points to pixels!
+    mousePressEventPx( event );
+}
+
+void KisTool::mouseDoubleClickEvent( KoPointerEvent *event )
+{
+    // XXX: translate points to pixels!
+    mouseDoubleClickEventPx( event );
+}
+
+void KisTool::mouseMoveEvent( KoPointerEvent *event )
+{
+    // XXX: translate points to pixels!
+    mouseMoveEventPx( event );
+}
+
+void KisTool::mouseReleaseEvent( KoPointerEvent *event )
+{
+    // XXX: translate points to pixels!
+    mouseReleaseEventPx( event );
+}
+
+void KisTool::wheelEvent( KoPointerEvent * event )
+{
+    // XXX: translate points to pixels!
+    wheelEventPx( event );
+}
+
+
 #include "kis_tool.moc"

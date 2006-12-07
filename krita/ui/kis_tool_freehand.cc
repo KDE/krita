@@ -66,7 +66,7 @@ KisToolFreehand::~KisToolFreehand()
 }
 
 
-void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
+void KisToolFreehand::mousePressEventPx(KoPointerEvent *e)
 {
     if (!m_currentImage) return;
 
@@ -109,7 +109,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     }
 }
 
-void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
+void KisToolFreehand::mouseMoveEventPx(KoPointerEvent *e)
 {
     if (m_mode == PAINT) {
 
@@ -139,7 +139,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     }
 }
 
-void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
+void KisToolFreehand::mouseReleaseEventPx(KoPointerEvent* e)
 {
     if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();

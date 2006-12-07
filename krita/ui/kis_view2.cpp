@@ -88,7 +88,6 @@ public:
         : canvas( 0 )
         , doc( 0 )
         , viewConverter( 0 )
-        , shapeManager( 0 )
         , canvasController( 0 )
         , resourceProvider( 0 )
         , filterManager( 0 )
@@ -130,7 +129,6 @@ public:
     KisCanvas2 *canvas;
     KisDoc2 *doc;
     KoViewConverter *viewConverter;
-    KoShapeManager * shapeManager;
     KoCanvasController * canvasController;
     KisResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
@@ -169,11 +167,9 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     m_d = new KisView2Private();
 
     m_d->doc = doc;
-    m_d->canvas = new KisCanvas2( m_d->viewConverter, QPAINTER, this, static_cast<KoShapeControllerBase*>( doc->imageShape() ) );
-    m_d->shapeManager = m_d->canvas->shapeManager();
+    m_d->canvas = new KisCanvas2( m_d->viewConverter, QPAINTER, this, static_cast<KoShapeControllerBase*>( doc ) );
     m_d->canvasController = new KoCanvasController( this );
     m_d->canvasController->setCanvas( m_d->canvas );
-    m_d->shapeManager->add( doc->imageShape() );
     m_d->resourceProvider = new KisResourceProvider( this );
 
     createActions();
@@ -363,9 +359,6 @@ void KisView2::slotLoadingFinished()
         m_d->canvasController->setToolOptionDocker( d );
     else
         kDebug() << "Could not create tool docker: " << d << endl;
-
-    KoSelection *select = m_d->shapeManager->selection();
-    select->select( m_d->doc->imageShape() );
 
     connectCurrentImage();
 

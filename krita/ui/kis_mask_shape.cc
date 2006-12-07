@@ -16,3 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_mask_shape.h"
+
+#include <kis_types.h>
+#include <kis_mask.h>
+
+class KisMaskShape::Private {
+
+public:
+
+    KisMaskSP mask;
+};
+
+KisMaskShape::KisMaskShape(KoShapeContainer * parent, KisMaskSP mask )
+{
+    m_d = new Private();
+    m_d->mask = mask;
+
+    setParent( parent );
+    setShapeId( KIS_MASK_SHAPE_ID );
+}
+
+KisMaskShape::~KisMaskShape()
+{
+    delete m_d;
+}

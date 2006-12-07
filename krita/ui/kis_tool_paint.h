@@ -85,7 +85,7 @@ public:
 
     virtual void paint(QPainter& gc, KoViewConverter &converter);
 
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEventPx( KoPointerEvent *event );
 
 protected:
 

@@ -107,7 +107,7 @@ void KisToolBrush::endPaint()
 }
 
 
-void KisToolBrush::mouseMoveEvent(KoPointerEvent *e) {
+void KisToolBrush::mouseMoveEventPx(KoPointerEvent *e) {
     KisToolFreehand::mouseMoveEvent(e);
     KisConfig cfg;
     if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE)

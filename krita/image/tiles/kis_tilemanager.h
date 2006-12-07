@@ -42,6 +42,10 @@ class KisTiledDataManager;
  *    to swap new tiles.
  *  * tries to preallocate and recycle some tiles to make future allocations faster
  *    (not done yet)
+ *
+ *    XXX: Use QReadWriteLock, QReadLocker and QWriteLocker to make sure everyone can 
+ *    read any tile, as long as nobody is writing to it. (bsar)
+ *    See: http://doc.trolltech.com/qq/qq14-threading.html
  */
 class KRITAIMAGE_EXPORT KisTileManager  {
 public:

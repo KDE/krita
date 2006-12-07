@@ -21,6 +21,15 @@
 
 #include <KoShape.h>
 
+#include <kis_types.h>
+
+class QPainter;
+
+class KoViewConverter;
+class KoShapeContainer;
+
+#define KIS_MASK_SHAPE_ID "KisMaskShapeID"
+
 /**
    A KisMaskShape is a flake shape wrapper around a KisMask. A KisMask
    is a single-channel (for now) 8-bit (for now) mask that belongs to
@@ -34,11 +43,22 @@
 
 class KisMaskShape : public KoShape
 {
+public:
+
+    KisMaskShape( KoShapeContainer * parent, KisMaskSP mask );
+    ~KisMaskShape();
 
     void paint(QPainter &painter, const KoViewConverter &converter)
         {
+            Q_UNUSED( painter );
+            Q_UNUSED( converter );
             // Do nothing! Masks don't paint on QPainters
         }
+
+private:
+
+    class Private;
+    Private * m_d;
 };
 
 #endif //KIS_MASK_SHAPE_H_

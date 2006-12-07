@@ -30,7 +30,33 @@
 #include <kis_debug_areas.h>
 #include "wetphysicsfilter.h"
 
-
+/*
+ * [11:14] <boud> CyrilleB: I think I know why watercolor drying creates that funny pattern (you can see it if you have a very wet canvas with lots of paint and leave it drying for a while): our dry filter must have an off-by-one error to the right and bottom, which is also why the buggy drying didn't remove all of previously applied paint but left a fringe.
+ * [11:14] <pippin> does the drying behave kind of like an error diffusion?
+ * [11:14] <pippin> (it sounds like error diffusion artifacts,.)
+ * [11:15] <boud> pippin: not sure what error diffusion is...
+ * [11:15] <pippin> used for digital halftoning
+ * [11:15] <pippin> take a greyscale image,.. you want to end up with binary (could be less, but let's use 1bit result)
+ * [11:15] <CyrilleB> boud: the funny pattern is also in wetdreams when you disable wetness visualisation
+ * [11:15] <boud> CyrilleB: I don't mean the checkerboard pattern
+ * [11:16] <pippin> then for each pixel you calculate the difference between the current value and the desired value (0 or 255)
+ * [11:16] <CyrilleB> boud: which one then ?
+ * [11:16] <pippin> the error is distributed to the neighbour pixels (to the right, down and down to the left in pixels which have not yet been processed
+ * [11:16] <pippin> )
+ * [11:16] <boud> CyrilleB: it's only apparent when you let something dry for some time, it looks like meandering snakes (like the old game "snake")
+ * [11:16] <CyrilleB> pippin: somehow yes
+ * [11:16] <boud> pippin: that is possible
+ * [11:17] <pippin> boud: this leads to "bleeding" of data to the right and down,..
+ * [11:17] <boud> pippin: but on the other hand, when the filter worked on the old tiles (empty ones)  it also left a fringe of color.
+ * [11:17] <pippin> having the "error" spread in different directions on each iteration might fix something like this,.
+ * [11:18] <boud> Which leads me to think it's an off-by one.
+ * [11:25] <boud> No, it isn't off by one. Then pippin must be right.
+ * [11:26] <pippin> if I am, this is a fun debug session, not even having the code or the visual results available,. just hanging around on irc :)
+ * [11:27] <boud> Well, I don't have time to investigate right now, but it sounds very plausible.
+ * [11:27] <CyrilleB> pippin: :)
+ * [11:28] <boud> of course, the code _is_ available :-)
+ * [11:28] <pippin> if there is some form of diffusion matrix that is directional around the current pixel,. having that mask rotate depending on the modulus of the current iteration # should cancel such an effect out
+ */
 WetPhysicsFilter::WetPhysicsFilter()
     : KisFilter(id(), "artistic", i18n("Dry the Paint"))
 {

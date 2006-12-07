@@ -1,6 +1,7 @@
 For anyone that wants to hack on flake here is a list of things that need to be done;
 
-* Fix scale strategy so it will not create zero sized objects.  Negative size is allowed, though.
+* For shapes that are scaled to a negative size (using setScale) the interaction tool doesn't work
+  properly anymore. Moving the mouse left makes the action go right. And visa versa.
 * Add shadow to a KoShape
   - shadow properties as described by the odf spec are (offsetx, offsety, color, opacity)
     -> maybe have a KoShapeShadow class to hold these

@@ -31,8 +31,6 @@
 #include <QRect>
 #include <QWidget>
 
-#include "KoShapeController.h"
-
 
 class KoCanvasResourceProvider;
 class KoSelection;
@@ -40,6 +38,8 @@ class KCommand;
 class KoShapeManager;
 class KoToolProxy;
 class KoViewConverter;
+class KoShapeController;
+class KoShapeControllerBase;
 
 /**
  * KoCanvasBase is the interface actual application canvas classes

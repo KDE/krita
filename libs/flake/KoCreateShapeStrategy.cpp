@@ -25,6 +25,7 @@
 #include "KoCommand.h"
 #include "KoCanvasBase.h"
 #include "KoShapeFactory.h"
+#include "KoShapeController.h"
 
 #include <kdebug.h>
 

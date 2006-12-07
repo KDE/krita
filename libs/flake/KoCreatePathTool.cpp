@@ -18,17 +18,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KoCreatePathTool.h>
+#include "KoCreatePathTool.h"
 
 #include "KoPathShape.h"
 #include "KoPointerEvent.h"
 #include "KoLineBorder.h"
-#include "KoShapeBorderModel.h"
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
-#include "KoCommand.h"
+#include "KoSelection.h"
+#include "KoShapeController.h"
 
-#include <QDebug>
 #include <QPainter>
 
 

@@ -20,6 +20,7 @@
 
 #include "KoCanvasBase.h"
 #include "KoCanvasResourceProvider.h"
+#include "KoShapeController.h"
 
 KoCanvasBase::KoCanvasBase( KoShapeControllerBase * shapeControllerBase )
 {

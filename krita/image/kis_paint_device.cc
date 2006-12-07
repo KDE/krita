@@ -745,7 +745,14 @@ QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, qint32 x1, 
     if (h < 0)
         return QImage();
 
-    quint8 * data = new quint8 [w * h * m_pixelSize];
+    quint8 * data;
+    try {
+        data = new quint8 [w * h * m_pixelSize];
+    } catch(std::bad_alloc)
+    {
+        //delete[] data; // data is not allocated, so don't free it
+        return QImage();
+    }
     Q_CHECK_PTR(data);
 
     // XXX: Is this really faster than converting line by line and building the QImage directly?

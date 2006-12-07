@@ -93,6 +93,7 @@ set(kritaimage_LIB_SRCS
 #   kis_progress_updater_p.cpp
 )
 
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 kde4_automoc(${kritaimage_LIB_SRCS})
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})

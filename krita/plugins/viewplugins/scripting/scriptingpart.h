@@ -25,8 +25,6 @@
 
 class KisView2;
 class KisScript;
-class ScriptingProgress;
-class ScriptingModule;
 
 namespace Kross {
     class GUIClient;

@@ -20,19 +20,13 @@
 
 #include "KoCreateShapeStrategy.h"
 #include "KoCreateShapesTool.h"
-#include "KoShapeControllerBase.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
 #include "KoCommand.h"
 #include "KoCanvasBase.h"
-#include "KoShapeConfigWidgetBase.h"
-#include "KoShapeConfigFactory.h"
 #include "KoShapeFactory.h"
 
-#include <KoProperties.h>
-
-#include <kpagedialog.h>
-#include <klocale.h>
+#include <kdebug.h>
 
 KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoShapeRubberSelectStrategy(tool, canvas, clicked)

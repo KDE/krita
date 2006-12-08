@@ -229,31 +229,43 @@ bool KisPalette::init()
             m_columns = columns.toInt();
             index = 3;
         }
-
-        // Loop over the rest of the lines
-        for (qint32 i = index; i < lines.size(); i++) {
+        for (Q_UINT32 i = index; i < lines.size(); i++) {
             if (lines[i].startsWith("#")) {
-                m_comment += lines[i].mid(1).trimmed() + ' ';
+                m_comment += lines[i].mid(1).stripWhiteSpace() + " ";
             }
-            else {
-                if (lines[i].contains("\t") > 0) {
-                    QStringList a = lines[i].split("\t", QString::SkipEmptyParts);
-                    e.name = a[1];
+            else if (!lines[i].isEmpty())
+            {
+                QStringList a = QStringList::split(" ", lines[i].replace(QChar('\t'), " "));
 
-                    QStringList c = a[0].split(" ", QString::SkipEmptyParts);
-                    channel = c[0].trimmed();
-                    r = channel.toInt();
-                    channel = c[1].trimmed();
-                    g = channel.toInt();
-                    channel = c[2].trimmed();
-                    b = channel.toInt();
-                    color = QColor(r, g, b);
-                    e.color = color;
-
-                    add(e);
+                if (a.count() < 3)
+                {
+                    break;
                 }
+
+                r = a[0].toInt();
+                a.pop_front();
+                g = a[0].toInt();
+                a.pop_front();
+                b = a[0].toInt();
+                a.pop_front();
+
+                if (r < 0 || r > 255 ||
+                    g < 0 || g > 255 ||
+                    b < 0 || b > 255)
+                {
+                    break;
+                }
+
+                color = QColor(r, g, b);
+                e.color = color;
+
+                QString name = a.join(" ");
+                e.name = name.isEmpty() ? i18n("Untitled") : name;
+
+                add(e);
             }
         }
+
 
         setValid(true);
         return true;

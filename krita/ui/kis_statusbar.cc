@@ -42,16 +42,11 @@ KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view )
     , m_statusbar( sb )
 {
     // XXX: Use the KStatusbar fixed size labels!
-    m_statusBarZoomLabel = new KStatusBarLabel(QString::null, 0, sb);
-    m_statusBarZoomLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
-    m_statusBarZoomLabel->setMinimumWidth( 50 );
-    //addStatusBarItem(m_statusBarZoomLabel,1);
-
     m_statusBarSelectionLabel = new KSqueezedTextLabel(sb);
-    //addStatusBarItem(m_statusBarSelectionLabel,2);
+    sb->addWidget(m_statusBarSelectionLabel,2);
 
     m_statusBarProfileLabel = new KSqueezedTextLabel(sb);
-    //addStatusBarItem(m_statusBarProfileLabel,3);
+    sb->addWidget(m_statusBarProfileLabel,3);
 
     //int height = m_statusBarProfileLabel->height();
 
@@ -59,7 +54,7 @@ KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view )
     m_progress->setMaximumWidth(225);
     m_progress->setMinimumWidth(225);
     m_progress->setMaximumHeight(sb->fontMetrics().height() );
-    //addStatusBarItem(m_progress, 2, true);
+    sb->addPermanentWidget(m_progress, 2);
 
     m_progress->hide();
 
@@ -74,12 +69,13 @@ KisStatusBar::~KisStatusBar()
 
 void KisStatusBar::setZoom( int zoom )
 {
+/*
     if (zoom < 1 - EPSILON) {
         m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'g', 4));
     } else {
         m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'f', 0));
     }
-}
+*/}
 
 void KisStatusBar::setPosition( int x, int y )
 {

@@ -25,12 +25,17 @@
 #include <kselectaction.h>
 #include <KoZoomMode.h>
 
+class QLineEdit;
+class QSlider;
+class QRadioButton;
+
 /**
  * Class KoZoomAction implements an action to provide zoom values.
  * In a toolbar, KoZoomAction will show a dropdown list, also with 
  * the possibility for the user to enter arbritrary zoom value
  * (must be an integer). The values shown on the list are alwalys
  * sorted.
+ * In a statusbar it provides a scale plus an editable value plus some buttons for special zoommodes
  */
 class KOFFICEUI_EXPORT KoZoomAction : public KSelectAction
 {
@@ -51,6 +56,11 @@ public:
    */
   KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, const QString& pix,
     const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const char* name = 0 );
+
+    /**
+     * Reimplemented from @see QActionWidgetFactory.
+     */
+    virtual QWidget* createWidget(QWidget* parent);
 
 public Q_SLOTS:
 
@@ -74,6 +84,8 @@ public Q_SLOTS:
 protected Q_SLOTS:
 
   void triggered( const QString& text );
+  void sliderValueChanged(int value);
+  void numberValueChanged();
 
 Q_SIGNALS:
 
@@ -87,13 +99,18 @@ Q_SIGNALS:
 
 protected:
 
-  void init();
+  void init(KActionCollection* parent);
 
   /// Regenerates the action's items
   void regenerateItems( const QString& zoomString );
 
   KoZoomMode::Modes m_zoomModes;
-
+    QLineEdit *m_number;
+    QSlider *m_slider;
+    QRadioButton *m_actualButton;
+    QRadioButton *m_fitWidthButton;
+    QRadioButton *m_fitPageButton;
+    int m_sliderLookup[33];
 };
 
 #endif // kozoomaction_h

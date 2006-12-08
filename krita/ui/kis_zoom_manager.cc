@@ -17,9 +17,12 @@
  */
 #include "kis_zoom_manager.h"
 
+#include <QToolBar>
+
 #include <kactioncollection.h>
 #include <kstdaction.h>
 #include <kicon.h>
+#include <kstatusbar.h>
 
 #include <KoView.h>
 #include <KoZoomAction.h>
@@ -28,6 +31,7 @@
 #include "kis_view2.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
+#include "kis_statusbar.h"
 
 KisZoomManager::KisZoomManager( KisView2 * view, KoViewConverter * viewConverter )
     : m_view( view )
@@ -49,22 +53,14 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
 {
 
     // view actions
-    m_zoomAction = new KoZoomAction(0, i18n("Zoom"), KIcon("14_zoom"), KShortcut(), actionCollection, "zoom" );
+    m_zoomAction = new KoZoomAction(KoZoomMode::ZOOM_PIXELS |
+                     KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), KIcon("14_zoom"), KShortcut(), actionCollection, "zoom" );
     connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
           this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
 
-    m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection, "zoom_in");
-    m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection, "zoom_out");
-
-/*
-    m_actualPixels = new KAction(i18n("Actual Pixels"), actionCollection, "actual_pixels");
-    m_actualPixels->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_0));
-    connect(m_actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
-*/
-    m_actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection, "actual_size");
-/*
-    m_fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection, "fit_to_canvas");
-*/
+    QToolBar *tbar = new QToolBar(m_view->KoView::statusBar());
+    m_view->KoView::statusBar()->addWidget(tbar);
+    tbar->addAction(m_zoomAction);
 }
 
 void KisZoomManager::slotActualSize()

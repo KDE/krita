@@ -25,6 +25,7 @@ const char* KoZoomMode::modes[] =
     I18N_NOOP("%1%"),
     I18N_NOOP("Fit Page Width"),
     I18N_NOOP("Fit Page"),
+    0,
     I18N_NOOP("Actual Pixels")
 };
 

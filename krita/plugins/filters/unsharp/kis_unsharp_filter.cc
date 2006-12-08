@@ -94,7 +94,6 @@ void KisUnsharpFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     
     QImage mask;
     kas->createBrush(&mask);
-    mask.save("testmask.png", "PNG");
     
     KisKernelSP kernel = kernelFromQImage(mask); // TODO: for 1.6 reuse the krita's core function for creating kernel : KisKernel::fromQImage
     

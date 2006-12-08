@@ -232,40 +232,42 @@ bool KisPalette::init()
             index = 3;
         }
 
-        // Loop over the rest of the lines
         for (Q_UINT32 i = index; i < lines.size(); i++) {
             if (lines[i].startsWith("#")) {
                 m_comment += lines[i].mid(1).stripWhiteSpace() + " ";
             }
-            else {
-                if (lines[i].contains("\t") > 0 || lines[i].contains("     ") > 0) {
+            else if (!lines[i].isEmpty())
+            {
+                QStringList a = QStringList::split(" ", lines[i].replace(QChar('\t'), " "));
 
-                    QStringList a;
-                   
-                    if (lines[i].contains("\t") > 0)
-                        a = QStringList::split("\t", lines[i]);
-                    else if (lines[i].contains("     ") > 0)
-                        a = QStringList::split("     ", lines[i]);
-                    e.name = a[1];
-
-                    QStringList c = QStringList::split(" ", a[0]);
-                    channel = c[0].stripWhiteSpace();
-                    r = channel.toInt();
-                    channel = c[1].stripWhiteSpace();
-                    g = channel.toInt();
-                    channel = c[2].stripWhiteSpace();
-                    b = channel.toInt();
-                    color = QColor(r, g, b);
-                    e.color = color;
-
-                    add(e);
+                if (a.count() < 3)
+                {
+                    break;
                 }
-                else {
-                    kdWarning() << filename() << ": could not parse palette line " << lines[i] << endl;
+
+                r = a[0].toInt();
+                a.pop_front();
+                g = a[0].toInt();
+                a.pop_front();
+                b = a[0].toInt();
+                a.pop_front();
+
+                if (r < 0 || r > 255 ||
+                    g < 0 || g > 255 ||
+                    b < 0 || b > 255)
+                {
+                    break;
                 }
+
+                color = QColor(r, g, b);
+                e.color = color;
+
+                QString name = a.join(" ");
+                e.name = name.isEmpty() ? i18n("Untitled") : name;
+
+                add(e);
             }
         }
-
         setValid(true);
         return true;
     }

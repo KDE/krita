@@ -119,10 +119,17 @@ Py::Object PythonType<QVariant>::toPyObject(const QVariant& v)
 
 QVariant PythonType<QVariant>::toVariant(const Py::Object& obj)
 {
-    if(obj == Py::None())
+    if(obj == Py::None()) {
+        #ifdef KROSS_PYTHON_VARIANT_DEBUG
+            krossdebug( QString("PythonType<QVariant>::toVariant Py::None") );
+        #endif
         return QVariant();
+    }
 
     PyTypeObject *type = (PyTypeObject*) obj.type().ptr();
+    #ifdef KROSS_PYTHON_VARIANT_DEBUG
+        krossdebug( QString("PythonType<QVariant>::toVariant type=%1").arg(type->tp_name) );
+    #endif
 
     if(type == &PyInt_Type)
         return PythonType<int>::toVariant(obj);
@@ -132,10 +139,8 @@ QVariant PythonType<QVariant>::toVariant(const Py::Object& obj)
         return PythonType<double>::toVariant(obj);
     if(type == &PyBool_Type)
         return PythonType<bool>::toVariant(obj);
-
     if(PyType_IsSubtype(type,&PyString_Type))
         return PythonType<QString>::toVariant(obj);
-
     if(type == &PyTuple_Type)
         return PythonType<QVariantList,Py::Tuple>::toVariant(Py::Tuple(obj));
     if(type == &PyList_Type)
@@ -143,30 +148,35 @@ QVariant PythonType<QVariant>::toVariant(const Py::Object& obj)
     if(type == &PyDict_Type)
         return PythonType<QVariantMap,Py::Dict>::toVariant(Py::Dict(obj.ptr()));
 
-    if(obj.isInstance()) {
-        #ifdef KROSS_PYTHON_VARIANT_DEBUG
-            krossdebug( QString("PythonType<QVariant>::toVariant IsInstance=TRUE") );
-        #endif
-        //return new PythonType(object);
-    }
-
-    Py::ExtensionObject<PythonExtension> extobj(obj);
-    PythonExtension* extension = extobj.extensionObject();
-    if(! extension) {
-        #ifdef KROSS_PYTHON_VARIANT_DEBUG
-            krosswarning( QString("PythonType<QVariant>::toVariant Failed to determinate PythonExtension for object=%1").arg(obj.as_string().c_str()) );
-        #endif
-        throw Py::RuntimeError( QString("Failed to determinate PythonExtension object.").toLatin1().constData() );
-    }
-
-    const QVariant variant = qVariantFromValue( extension->object() );
     #ifdef KROSS_PYTHON_VARIANT_DEBUG
-        if(extension->object())
-            krossdebug( QString("PythonType<QVariant>::toVariant KrossObject.objectName=%1 KrossObject.className=%2 QVariant.toString=%3 QVariant.typeName=%4").arg(extension->object()->objectName()).arg(extension->object()->metaObject()->className()).arg(variant.toString()).arg(variant.typeName()) );
-        else
-            krossdebug( QString("PythonType<QVariant>::toVariant The PythonExtension object does not have a valid QObject") );
+        if(obj.isInstance()) {
+            krossdebug( QString("PythonType<QVariant>::toVariant IsInstance=TRUE") );
+            //return new PythonType(object);
+        }
     #endif
-    return variant;
+
+    if(PythonExtension::check(obj.ptr())) {
+        Py::ExtensionObject<PythonExtension> extobj(obj);
+        PythonExtension* extension = extobj.extensionObject();
+        if(! extension) {
+            #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                krosswarning( QString("PythonType<QVariant>::toVariant Failed to determinate PythonExtension for object=%1").arg(obj.as_string().c_str()) );
+            #endif
+            throw Py::RuntimeError( QString("Failed to determinate PythonExtension object.").toLatin1().constData() );
+        }
+
+        const QVariant variant = qVariantFromValue( extension->object() );
+        #ifdef KROSS_PYTHON_VARIANT_DEBUG
+            if(extension->object())
+                krossdebug( QString("PythonType<QVariant>::toVariant KrossObject.objectName=%1 KrossObject.className=%2 QVariant.toString=%3 QVariant.typeName=%4").arg(extension->object()->objectName()).arg(extension->object()->metaObject()->className()).arg(variant.toString()).arg(variant.typeName()) );
+            else
+                krossdebug( QString("PythonType<QVariant>::toVariant The PythonExtension object does not have a valid QObject") );
+        #endif
+        return variant;
+    }
+
+    throw Py::RuntimeError( QString("Invalid object of type '%1'.").arg(type->tp_name).toLatin1().constData() );
+    return QVariant();
 }
 
 MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& object)

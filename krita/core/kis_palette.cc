@@ -238,8 +238,14 @@ bool KisPalette::init()
                 m_comment += lines[i].mid(1).stripWhiteSpace() + " ";
             }
             else {
-                if (lines[i].contains("\t") > 0) {
-                    QStringList a = QStringList::split("\t", lines[i]);
+                if (lines[i].contains("\t") > 0 || lines[i].contains("     ") > 0) {
+
+                    QStringList a;
+                   
+                    if (lines[i].contains("\t") > 0)
+                        a = QStringList::split("\t", lines[i]);
+                    else if (lines[i].contains("     ") > 0)
+                        a = QStringList::split("     ", lines[i]);
                     e.name = a[1];
 
                     QStringList c = QStringList::split(" ", a[0]);
@@ -253,6 +259,9 @@ bool KisPalette::init()
                     e.color = color;
 
                     add(e);
+                }
+                else {
+                    kdWarning() << filename() << ": could not parse palette line " << lines[i] << endl;
                 }
             }
         }

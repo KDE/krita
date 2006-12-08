@@ -1271,7 +1271,7 @@ void KisPaintDevice::runBackgroundFilters()
             (*it)->process(this, this, 0, rc);
         }
     }
-    undoAdapter()->addCommand(cmd);
+    if (cmd && undoAdapter()) undoAdapter()->addCommand(cmd);
 
     if (m_parentLayer) m_parentLayer->setDirty(rc);
 }

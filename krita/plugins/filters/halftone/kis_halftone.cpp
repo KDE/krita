@@ -75,7 +75,7 @@ KisFilterConfigWidget * KisHalftoneReduction::createConfigurationWidget(QWidget*
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 0, 100, BEST_WAVELET_FREQUENCY_VALUE, i18n("Frequency"), "frequency" ) );
-    param.push_back( KisIntegerWidgetParam( 0, 100, 2, i18n("Half-size"), "size" ) );
+    param.push_back( KisIntegerWidgetParam( 0, 100, 2, i18n("Half-size"), "halfsize" ) );
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
@@ -94,14 +94,14 @@ void KisHalftoneReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, K
 {
 
     float frequency = 1.0;
-    int halfSize;
+    int halfSize = 2;
     
     if(config !=0)
     {
         KisHalftoneReductionConfiguration* configWNRC = (KisHalftoneReductionConfiguration*)config;
         frequency = configWNRC->getDouble("frequency");
         halfSize = configWNRC->getInt("halfsize");
-        kdDebug() << "frequency: " << frequency << endl;
+        kdDebug(41005) << "frequency: " << frequency << endl;
     }
 
 
@@ -118,12 +118,14 @@ void KisHalftoneReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, K
 
     kdDebug(41005) << size << " " << maxrectsize << " " << rect.x() << " " << rect.y() << endl;
 
-    KisAutobrushShape* kas = new KisAutobrushCircleShape(size, size , halfSize, halfSize);
+    kdDebug(41005) << halfSize << endl;
+    KisAutobrushShape* kas = new KisAutobrushCircleShape(2*halfSize+1, 2*halfSize+1 , halfSize, halfSize);
     
     QImage mask;
     kas->createBrush(&mask);
     
     KisKernelSP kernel = KisKernel::fromQImage(mask); // TODO: for 1.6 reuse the krita's core function for creating kernel : KisKernel::fromQImage
+    mask.save("testmask.png", "PNG");
     
     KisPaintDeviceSP interm = new KisPaintDevice(*src);
     KisColorSpace * cs = src->colorSpace();
@@ -132,7 +134,7 @@ void KisHalftoneReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, K
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
     
-    KisPaintDeviceSP interm2 = new KisPaintDevice(*interm);
+//     KisPaintDeviceSP interm2 = new KisPaintDevice(*interm);
     
     
     kdDebug(41005) << "Transforming..." << endl;
@@ -149,7 +151,7 @@ void KisHalftoneReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, K
     }
     try {
         wav = mathToolbox->fastWaveletTransformation(src, rect, buff);
-        blurwav = mathToolbox->fastWaveletTransformation(interm2, rect, buff);
+        blurwav = mathToolbox->fastWaveletTransformation(interm, rect, buff);
     } catch(std::bad_alloc)
     {
         if(wav) delete wav;
@@ -160,12 +162,19 @@ void KisHalftoneReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, K
 //     float* fin = wav->coeffs + wav->depth*wav->size*wav->size;
 //     setProgressStage( i18n("frequencying") ,progress());
 //     float* it2 = wav->coeffs + wav->depth;
-//     for(float* it = wav->coeffs + wav->depth; it < fin; it++ ,it2++)
-//     {
-//       if(*it2 == *it)
-//         kdDebug() << "cry" << endl;
-//       *it2 = 0.;
-//     }
+    int sizecopy = (int)pow(2, frequency);
+    if(sizecopy > wav->size) sizecopy = wav->size;
+    for(int i = 0; i < sizecopy; i++)
+    {
+      float *itNotblured = wav->coeffs + wav->depth * wav->size * i;
+      float *itBlured = blurwav->coeffs + blurwav->depth * blurwav->size * i;
+      for(int j = 0; j< sizecopy; j++)
+      {
+        memcpy(itBlured, itNotblured, sizeof(float) * blurwav->depth);
+        itBlured += blurwav->depth;
+        itNotblured +=  wav->depth;
+      }
+    }
 
     kdDebug(41005) << "Untransforming..." << endl;
 
@@ -173,6 +182,7 @@ void KisHalftoneReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, K
     mathToolbox->fastWaveletUntransformation( dst, rect, blurwav, buff);
 
     delete wav;
+    delete blurwav;
     delete buff;
     disconnect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
 

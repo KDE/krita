@@ -29,6 +29,7 @@
 
 class QDragEnterEvent;
 class QDropEvent;
+class QPoint;
 
 class KoCanvasController;
 class KoViewChield;
@@ -47,9 +48,9 @@ class KisZoomManager;
 class KisImageManager;
 /**
  * Krita view class
- * 
+ *
  * Following the broad model-view-controller idea this class shows you one view on the document.
- * There can be multiple views of the same document each in with independent settings for viewMode and zoom etc. 
+ * There can be multiple views of the same document each in with independent settings for viewMode and zoom etc.
  */
 class KRITAUI_EXPORT KisView2 : public KoView {
 
@@ -58,8 +59,8 @@ Q_OBJECT
 public:
     /**
      * Construct a new view on the krita document.
-     * @param document   the document we show. 
-     * @param parent   a parent widget we show ourselves in. 
+     * @param document   the document we show.
+     * @param parent   a parent widget we show ourselves in.
      */
     KisView2(KisDoc2 * doc, QWidget * parent);
     virtual ~KisView2();
@@ -125,6 +126,8 @@ private slots:
     void slotLoadingFinished();
     void slotUpdateFullScreen(bool);
     void slotPreferences();
+
+    void slotPositionChanged(const QPoint & pos);
 
 private:
 

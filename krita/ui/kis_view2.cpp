@@ -169,6 +169,11 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     m_d->doc = doc;
     m_d->canvas = new KisCanvas2( m_d->viewConverter, QPAINTER, this, static_cast<KoShapeControllerBase*>( doc ) );
     m_d->canvasController = new KoCanvasController( this );
+
+    // XXX: For casper, to play with
+    connect( m_d->canvasController, SIGNAL( canvasMousePositionChanged(const QPoint & ) ), this, SLOT( slotPositionChanged( const QPoint & ) ) );
+
+
     m_d->canvasController->setCanvas( m_d->canvas );
     m_d->resourceProvider = new KisResourceProvider( this );
 
@@ -611,6 +616,10 @@ void KisView2::slotPreferences()
     }
 }
 
+void KisView2::slotPositionChanged(const QPoint & pos)
+{
+    kDebug() << "Position changed: " << pos << endl;
+}
 
 void KisView2::loadPlugins()
 {
@@ -643,4 +652,5 @@ KisDoc2 * KisView2::document() const
 {
     return m_d->doc;
 }
+
 #include "kis_view2.moc"

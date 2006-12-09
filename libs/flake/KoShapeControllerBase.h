@@ -22,7 +22,7 @@
 #ifndef KOSHAPECONTROLLERBASE_H
 #define KOSHAPECONTROLLERBASE_H
 
-#include "KoShape.h"
+class KoShape;
 
 /**
  * The shape controller is an abstract interface that the applications class

@@ -92,6 +92,7 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
     m_horizontalRuler->setVisible(show);
     m_verticalRuler = new KoRuler(m_view, Qt::Vertical, (KoZoomHandler*)m_viewConverter);
     m_verticalRuler->setShowMousePosition(true);
+    m_verticalRuler->setUnit(KoUnit(KoUnit::Point));
     m_verticalRuler->setVisible(show);
     m_showRulersAction->setChecked(show);
 
@@ -121,7 +122,6 @@ void KisZoomManager::slotActualSize()
 
 void KisZoomManager::toggleShowRulers(bool show)
 {
-    m_horizontalRuler->setRulerLength(100);
     m_horizontalRuler->setVisible(show);
     m_verticalRuler->setVisible(show);
 }
@@ -132,7 +132,6 @@ void KisZoomManager::updateGUI()
 
     m_horizontalRuler->setRulerLength(img->width() / img->xRes());
     m_verticalRuler->setRulerLength(img->height() / img->yRes());
-
 }
 
 void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)

@@ -267,7 +267,6 @@ void KoRuler::paintEvent(QPaintEvent* event)
 
         if(d->m_offset > 0) {
             painter.translate(0, d->m_offset);
-            textOffset = d->m_offset;
         }
 
         int len = qRound(rectangle.height()) + start;
@@ -286,7 +285,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
                     painter.drawLine(QPointF(0, pos), QPointF(width() * 0.5, pos));
                 }
 
-                int textY = pos + textLength + 2 + textOffset;
+                int textY = pos + textLength + 2;
 
                 if(textY < len) {
                     painter.save();

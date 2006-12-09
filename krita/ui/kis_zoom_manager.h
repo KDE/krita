@@ -30,6 +30,9 @@
 class KoViewConverter;
 class KisView2;
 class KAction;
+class KoRuler;
+class KoCanvasController;
+class QPoint;
 
 /**
    The zoom manager handles all user actions related to zooming
@@ -42,23 +45,27 @@ class KisZoomManager : public QObject {
 
 public:
 
-    KisZoomManager(KisView2 * view, KoViewConverter * viewConverter );
+    KisZoomManager(KisView2 * view, KoViewConverter * viewConverter, KoCanvasController *);
     ~KisZoomManager();
 
     void setup(KActionCollection * actionCollection);
-    void updateGUI() {}
+    void updateGUI();
 
 private slots:
 
     void slotZoomChanged(KoZoomMode::Mode mode, int zoom);
     void slotActualSize();
-    void slotZoomIn();
-    void slotZoomOut();
+    void toggleShowRulers(bool show);
+    void mousePositionChanged(const QPoint &pos);
 
 private:
 
     KisView2 * m_view;
     KoViewConverter * m_viewConverter;
+    KoCanvasController *m_canvasController;
+    KoRuler * m_horizontalRuler;
+    KoRuler * m_verticalRuler;
+    QAction *m_showRulersAction;
     KAction * m_zoomAction;
     KAction * m_zoomIn;
     KAction * m_zoomOut;

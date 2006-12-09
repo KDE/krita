@@ -81,6 +81,20 @@ public Q_SLOTS:
    */
   void setZoomModes( KoZoomMode::Modes zoomModes );
 
+  /**
+   * Change the zoom to a closer look than current
+   * Zoom mode will be CONSTANT afterwards
+   * emits zoomChanged
+   */
+  void zoomIn( );
+
+  /**
+   * Change the zoom to a wider look than current
+   * Zoom mode will be CONSTANT afterwards
+   * emits zoomChanged
+   */
+  void zoomOut( );
+
 protected Q_SLOTS:
 
   void triggered( const QString& text );

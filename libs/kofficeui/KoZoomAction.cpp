@@ -29,6 +29,7 @@
 #include <QSlider>
 #include <QLineEdit>
 #include <QRadioButton>
+#include <QLabel>
 #include <QGridLayout>
 #include <QMenu>
 
@@ -97,7 +98,9 @@ void KoZoomAction::triggered( const QString& text )
 void KoZoomAction::init(KActionCollection* parent)
 {
     QAction *m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), parent, "zoom_in");
+    connect(m_zoomIn, SIGNAL(triggered()), this, SLOT(zoomIn()));
     QAction *m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), parent, "zoom_out");
+    connect(m_zoomOut, SIGNAL(triggered()), this, SLOT(zoomOut()));
 
 /*
     m_actualPixels = new KAction(i18n("Actual Pixels"), actionCollection, "actual_pixels");
@@ -203,10 +206,41 @@ void KoZoomAction::numberValueChanged()
         i++;
 
     m_slider->blockSignals(true);
-    m_slider->setValue(i);
+    m_slider->setValue(i); // causes sliderValueChanged to be called which does the rest
     m_slider->blockSignals(false);
 
     emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
+}
+
+void KoZoomAction::zoomIn()
+{
+    int zoom = m_number->text().toInt();
+kDebug() << m_slider->value() <<endl;
+
+    int i=0;
+    while(i <= 32 && m_sliderLookup[i] < zoom)
+        i++;
+kDebug() << i << " and " << m_sliderLookup[i] << " and " << zoom <<endl;
+    if(m_sliderLookup[i] == zoom && i<32)
+        i++;
+    // else i is the next zoom level already
+kDebug() << i << " and " << m_sliderLookup[i] << " and " << zoom <<endl;
+
+   m_slider->setValue(i); // causes sliderValueChanged to be called which does the rest
+}
+
+void KoZoomAction::zoomOut()
+{
+    int zoom = m_number->text().toInt();
+
+    int i=0;
+    while(i <= 32 && m_sliderLookup[i] < zoom)
+        i++;
+
+    if(i>0)
+        i--;
+
+   m_slider->setValue(i); // causes sliderValueChanged to be called which does the rest
 }
 
 QWidget * KoZoomAction::createWidget( QWidget * _parent )
@@ -232,6 +266,9 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     m_number->setValidator(validator);
     m_number->setMaxLength(5);
     m_number->setMaximumWidth(40);
+    m_number->setAlignment(Qt::AlignRight);
+
+    QLabel *pctLabel = new QLabel("% ");
 
     QGridLayout *layout = new QGridLayout();
     int radios=0;
@@ -255,8 +292,10 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     }
 
     layout->addWidget(m_number, 0, radios);
-    layout->addWidget(m_slider, 0, radios+1);
+    layout->addWidget(pctLabel, 0, radios+1);
+    layout->addWidget(m_slider, 0, radios+2);
     layout->setMargin(0);
+    layout->setSpacing(0);
 
     group->setLayout(layout);
 

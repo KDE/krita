@@ -44,7 +44,6 @@
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
-#include <KoRuler.h>
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeSelectorFactory.h>
@@ -91,8 +90,6 @@ public:
         , canvasController( 0 )
         , resourceProvider( 0 )
         , filterManager( 0 )
-        , horizontalRuler( 0 )
-        , verticalRuler( 0 )
         , statusBar( 0 )
         , selectionManager( 0 )
         , controlFrame( 0 )
@@ -132,8 +129,6 @@ public:
     KoCanvasController * canvasController;
     KisResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
-    KoRuler * horizontalRuler;
-    KoRuler * verticalRuler;
     KisStatusBar * statusBar;
     KAction * fullScreen;
     KisSelectionManager *selectionManager;
@@ -169,10 +164,6 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     m_d->doc = doc;
     m_d->canvas = new KisCanvas2( m_d->viewConverter, QPAINTER, this, static_cast<KoShapeControllerBase*>( doc ) );
     m_d->canvasController = new KoCanvasController( this );
-
-    // XXX: For casper, to play with
-    connect( m_d->canvasController, SIGNAL( canvasMousePositionChanged(const QPoint & ) ), this, SLOT( slotPositionChanged( const QPoint & ) ) );
-
 
     m_d->canvasController->setCanvas( m_d->canvas );
     m_d->resourceProvider = new KisResourceProvider( this );
@@ -379,28 +370,7 @@ void KisView2::createGUI()
     KoShapeSelectorFactory shapeSelectorFactory;
     createDockWidget( &shapeSelectorFactory );
 
-    // Put the canvascontroller in a layout so it resizes with us
-    QGridLayout * layout = new QGridLayout( this );
-    layout->setSpacing(0);
-    layout->setMargin(0);
-    setLayout(layout);
-
-    m_d->horizontalRuler = new KoRuler(this, Qt::Horizontal, (KoZoomHandler*)m_d->viewConverter);
-    m_d->horizontalRuler->setShowMousePosition(true);
-    m_d->verticalRuler = new KoRuler(this, Qt::Vertical, (KoZoomHandler*)m_d->viewConverter);
-    m_d->verticalRuler->setShowMousePosition(true);
-
-    layout->addWidget(m_d->horizontalRuler, 0, 1);
-    layout->addWidget(m_d->verticalRuler, 1, 0);
-    layout->addWidget(m_d->canvasController, 1, 1);
-
     KoToolManager::instance()->addControllers(m_d->canvasController);
-
-    connect(m_d->canvasController, SIGNAL(canvasOffsetXChanged(int)),
-            m_d->horizontalRuler, SLOT(setOffset(int)));
-
-    connect(m_d->canvasController, SIGNAL(canvasOffsetYChanged(int)),
-            m_d->verticalRuler, SLOT(setOffset(int)));
 
     KisBirdEyeBoxFactory birdeyeFactory(this);
     m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>( createDockWidget( &birdeyeFactory ) );
@@ -412,7 +382,6 @@ void KisView2::createGUI()
     m_d->controlFrame = new KisControlFrame( mainWindow(), this );
 
     show();
-
 }
 
 
@@ -442,7 +411,7 @@ void KisView2::createManagers()
     m_d->layerManager = new KisLayerManager( this, m_d->doc );
     m_d->layerManager->setup( actionCollection() );
 
-    m_d->zoomManager = new KisZoomManager( this, m_d->viewConverter );
+    m_d->zoomManager = new KisZoomManager( this, m_d->viewConverter, m_d->canvasController);
     m_d->zoomManager->setup( actionCollection() );
 
     m_d->imageManager = new KisImageManager( this );
@@ -614,11 +583,6 @@ void KisView2::slotPreferences()
 #endif
 
     }
-}
-
-void KisView2::slotPositionChanged(const QPoint & pos)
-{
-    kDebug() << "Position changed: " << pos << endl;
 }
 
 void KisView2::loadPlugins()

@@ -25,6 +25,7 @@
 
 #include <kdebug.h>
 
+#include <QMouseEvent>
 #include <QGridLayout>
 #include <QScrollBar>
 #include <QEvent>
@@ -41,6 +42,9 @@ KoCanvasController::KoCanvasController(QWidget *parent)
     setAutoFillBackground(false);
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetX()));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetY()));
+
+    setMouseTracking( true );
+
 }
 
 void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
@@ -52,6 +56,8 @@ void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
     m_viewport->setCanvas(canvas->canvasWidget());
     m_canvas = canvas;
     m_canvas->canvasWidget()->installEventFilter(this);
+    m_canvas->canvasWidget()->setMouseTracking( true );
+
     emit canvasSet(this);
 }
 
@@ -133,6 +139,11 @@ bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
         if((event->type() == QEvent::Resize) || event->type() == QEvent::Move) {
             updateCanvasOffsetX();
             updateCanvasOffsetY();
+        }
+        else if ( event->type() == QEvent::MouseMove ) {
+            QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent*>( event );
+            if ( mouseEvent )
+                emit canvasMousePositionChanged( mouseEvent->pos() );
         }
     }
 

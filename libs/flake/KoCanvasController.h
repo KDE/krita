@@ -159,16 +159,22 @@ signals:
     void canvasSet(KoCanvasController* cv);
 
     /**
-     * Emited when canvasOffsetX() changes
+     * Emitted when canvasOffsetX() changes
      * @param offset the new canvas offset
      */
     void canvasOffsetXChanged(int offset);
 
     /**
-     * Emited when canvasOffsetY() changes
+     * Emitted when canvasOffsetY() changes
      * @param offset the new canvas offset
      */
     void canvasOffsetYChanged(int offset);
+
+    /**
+     * Emitted when the cursor is moved over the canvas widget
+     * @param pos the position in widget pixels.
+     */
+    void canvasMousePositionChanged(const QPoint & pos );
 
 protected slots:
 

@@ -246,6 +246,9 @@ void DlgColorRange::updatePreview()
 
 void DlgColorRange::okClicked()
 {
+    m_dev->setDirty();
+    m_dev->emitSelectionChanged();
+
     if (m_dev->image()->undo()) m_subject->undoAdapter()->addCommand(m_transaction);
     accept();
 }

@@ -32,6 +32,7 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QMenu>
+#include <QStatusBar>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -246,7 +247,7 @@ void KoZoomAction::zoomOut()
 QWidget * KoZoomAction::createWidget( QWidget * _parent )
 {
     QToolBar *parent = qobject_cast<QToolBar *>(_parent);
-    if (!parent)
+    if (!parent || !qobject_cast<QStatusBar*>(parent->parent()))
         return KSelectAction::createWidget(_parent);
 
     QWidget * group = new QWidget(_parent);

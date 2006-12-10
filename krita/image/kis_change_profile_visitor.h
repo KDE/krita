@@ -25,6 +25,7 @@
 #include "kis_paint_device.h"
 #include "kis_adjustment_layer.h"
 #include "kis_group_layer.h"
+#include "kis_external_layer_iface.h"
 
 /**
  * The Change Profile visitor walks over all layers and if the current
@@ -39,17 +40,22 @@ public:
     virtual ~KisChangeProfileVisitor();
 
 public:
-    virtual bool visit(KisPaintLayer *layer);
-    virtual bool visit(KisGroupLayer *layer);
-    virtual bool visit(KisPartLayer *layer);
-    virtual bool visit(KisAdjustmentLayer* layer);
-    
+    bool visit( KisExternalLayer * layer )
+        {
+            return layer->changeProfileVisitorCallback( m_oldColorSpace, m_dstColorSpace );
+        }
+
+    bool visit(KisPaintLayer *layer);
+    bool visit(KisGroupLayer *layer);
+    bool visit(KisPartLayer *layer);
+    bool visit(KisAdjustmentLayer* layer);
+
 private:
     KoColorSpace *m_oldColorSpace;
     KoColorSpace *m_dstColorSpace;
 };
 
-KisChangeProfileVisitor::KisChangeProfileVisitor(KoColorSpace * oldColorSpace, 
+KisChangeProfileVisitor::KisChangeProfileVisitor(KoColorSpace * oldColorSpace,
                                                  KoColorSpace *dstColorSpace) :
     KisLayerVisitor(),
     m_oldColorSpace(oldColorSpace),
@@ -65,7 +71,7 @@ bool KisChangeProfileVisitor::visit(KisGroupLayer * layer)
 {
     // Clear the projection, we will have to re-render everything.
     layer->resetProjection();
-    
+
     KisLayerSP child = layer->firstChild();
     while (child) {
         child->accept(*this);
@@ -84,7 +90,7 @@ bool KisChangeProfileVisitor::visit(KisPaintLayer *layer)
     KoColorSpace * cs = layer->paintDevice()->colorSpace();
 
     if (cs == m_oldColorSpace) {
-    
+
         layer->paintDevice()->setProfile(m_dstColorSpace->profile());
 
         layer->setDirty();

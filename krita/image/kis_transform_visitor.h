@@ -30,7 +30,8 @@
 #include "kis_adjustment_layer.h"
 #include "kis_transaction.h"
 #include "kis_transform_worker.h"
-#include <kis_selected_transaction.h>
+#include "kis_selected_transaction.h"
+#include "kis_external_layer_iface.h"
 
 class KisProgressDisplayInterface;
 class KisFilterStrategy;
@@ -41,7 +42,7 @@ public:
 
     KisTransformVisitor(KisImageSP img, double  xscale, double  yscale,
         double  /*xshear*/, double  /*yshear*/, double angle,
-        qint32  tx, qint32  ty, KisProgressDisplayInterface *progress, KisFilterStrategy *filter) 
+        qint32  tx, qint32  ty, KisProgressDisplayInterface *progress, KisFilterStrategy *filter)
         : KisLayerVisitor()
         , m_sx(xscale)
         , m_sy(yscale)
@@ -58,11 +59,16 @@ public:
     {
     }
 
+    bool visit( KisExternalLayer * layer )
+        {
+            return layer->transformVisitorCallback( m_sx, m_sy, m_tx, m_ty, m_filter, m_angle, m_progress );
+        }
+
     /**
      * Crops the specified layer and adds the undo information to the undo adapter of the
      * layer's image.
      */
-    bool visit(KisPaintLayer *layer) 
+    bool visit(KisPaintLayer *layer)
     {
         KisPaintDeviceSP dev = layer->paintDevice();
 
@@ -105,7 +111,7 @@ public:
         layer->resetCache();
         return true;
     }
-    
+
 
 private:
     double m_sx, m_sy;

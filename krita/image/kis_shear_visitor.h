@@ -30,6 +30,7 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
+#include "kis_external_layer_iface.h"
 
 class KisShearVisitor : public KisLayerVisitor {
 public:
@@ -39,7 +40,13 @@ public:
     void setStrategy(KisFilterStrategy* strategy) { m_strategy = strategy; }
     void setUndoAdapter(KisUndoAdapter* undo) { m_undo = undo; }
 public:
-    virtual bool visit(KisPaintLayer* layer) {
+
+    bool visit( KisExternalLayer * layer )
+        {
+            return layer->shearVisitorCallback( m_xshear, m_yshear, m_progress, m_strategy, m_undo );
+        }
+
+    bool visit(KisPaintLayer* layer) {
         KisPaintDeviceSP dev = layer->paintDevice();
         if(!dev)
             return true;
@@ -74,7 +81,7 @@ public:
         return true;
     }
 
-    virtual bool visit(KisGroupLayer* layer) {
+    bool visit(KisGroupLayer* layer) {
         KisLayerSP child = layer->firstChild();
 
         while(child)
@@ -85,8 +92,8 @@ public:
         return true;
     }
 
-    virtual bool visit(KisPartLayer*) { return true; }
-    virtual bool visit(KisAdjustmentLayer *) { return true; }
+    bool visit(KisPartLayer*) { return true; }
+    bool visit(KisAdjustmentLayer *) { return true; }
 private:
     double m_xshear;
     double m_yshear;

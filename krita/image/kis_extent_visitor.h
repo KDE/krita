@@ -23,6 +23,8 @@
 
 #include "kis_layer_visitor.h"
 
+#include "kis_external_layer_iface.h"
+
 class KisPaintLayer;
 class KisGroupLayer;
 class KisPartLayer;
@@ -37,10 +39,10 @@ public:
 
     /**
      * @param rc: the extent of the image
-     * @param exact: if exact is true, we use the very slow exactBounds 
+     * @param exact: if exact is true, we use the very slow exactBounds
      *               function.
      */
-    KisExtentVisitor(QRect rc, bool exact) 
+    KisExtentVisitor(QRect rc, bool exact)
         : m_imageRect(rc)
         , m_region(rc)
         , m_exact(exact)
@@ -52,7 +54,12 @@ public:
 
 public:
 
-    virtual bool visit(KisPaintLayer *layer)
+    bool visit( KisExternalLayer * layer )
+        {
+            return layer->extentVisitorCallback( m_imageRect, m_region, m_exact );
+        }
+
+    bool visit(KisPaintLayer *layer)
     {
         if (m_exact) {
             m_region = m_region.united(layer->exactBounds());
@@ -63,7 +70,7 @@ public:
         return true;
     }
 
-    virtual bool visit(KisGroupLayer *layer)
+    bool visit(KisGroupLayer *layer)
     {
         KisLayerSP child = layer->firstChild();
         while (child) {
@@ -74,7 +81,7 @@ public:
         return true;
     }
 
-    virtual bool visit(KisPartLayer *layer) 
+    bool visit(KisPartLayer *layer)
     {
         if (m_exact) {
             m_region = m_region.united(layer->exactBounds());
@@ -85,7 +92,7 @@ public:
         return true;
     }
 
-    virtual bool visit(KisAdjustmentLayer *layer) 
+    bool visit(KisAdjustmentLayer *layer)
     {
         if (m_exact) {
             m_region = m_region.united(layer->exactBounds());

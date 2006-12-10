@@ -25,6 +25,7 @@
 #include "kis_paint_device.h"
 #include "kis_adjustment_layer.h"
 #include "kis_group_layer.h"
+#include "kis_external_layer_iface.h"
 
 class KoColorSpaceConvertVisitor :public KisLayerVisitor {
 public:
@@ -32,11 +33,17 @@ public:
     virtual ~KoColorSpaceConvertVisitor();
 
 public:
-    virtual bool visit(KisPaintLayer *layer);
-    virtual bool visit(KisGroupLayer *layer);
-    virtual bool visit(KisPartLayer *layer);
-    virtual bool visit(KisAdjustmentLayer* layer);
-    
+
+    bool visit( KisExternalLayer * layer )
+        {
+            return layer->colorspaceConvertVisitorCallback( m_dstColorSpace, m_renderingIntent );
+        }
+
+    bool visit(KisPaintLayer *layer);
+    bool visit(KisGroupLayer *layer);
+    bool visit(KisPartLayer *layer);
+    bool visit(KisAdjustmentLayer* layer);
+
 private:
     KoColorSpace *m_dstColorSpace;
     qint32 m_renderingIntent;
@@ -53,12 +60,14 @@ KoColorSpaceConvertVisitor::~KoColorSpaceConvertVisitor()
 {
 }
 
+
+
 bool KoColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
 {
     // Clear the projection, we will have to re-render everything.
     // The image is already set to the new colorspace, so this'll work.
     layer->resetProjection();
-    
+
     KisLayerSP child = layer->firstChild();
     while (child) {
         child->accept(*this);
@@ -88,7 +97,7 @@ bool KoColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
         // Per-channel filters need to be reset because of different number
         // of channels. This makes undo very tricky, but so be it.
         // XXX: Make this more generic for after 1.6, when we'll have many
-        // channel-specific filters. 
+        // channel-specific filters.
         KisFilterSP f = KisFilterRegistry::instance()->get("perchannel");
         layer->setFilter(f->defaultConfiguration(0));
     }

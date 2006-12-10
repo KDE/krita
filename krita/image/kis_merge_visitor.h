@@ -30,6 +30,7 @@
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
+#include "kis_external_layer_iface.h"
 #include "kis_paint_layer.h"
 #include "kis_part_layer_iface.h"
 #include "kis_filter.h"
@@ -55,13 +56,19 @@ public:
     }
 
 public:
-    virtual bool visit(KisPaintLayer *layer)
+
+    bool visit( KisExternalLayer * layer )
+        {
+            return layer->mergeVisitorCallback( m_projection, m_rc );
+        }
+
+    bool visit(KisPaintLayer *layer)
     {
-        
+
         if (m_projection.isNull()) {
             return false;
         }
-        
+
         kDebug(41010) << "Visiting on paint layer " << layer->name() << ", visible: " << layer->visible()
                 << ", temporary: " << layer->temporary() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
@@ -167,19 +174,19 @@ public:
         return true;
     }
 
-    virtual bool visit(KisGroupLayer *layer)
+    bool visit(KisGroupLayer *layer)
     {
-        
+
         if (m_projection.isNull()) {
             return false;
         }
-        
+
         kDebug(41010) << "Visiting on group layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
-                
+
         if (!layer->visible())
             return true;
-        
+
         qint32 sx, sy, dx, dy, w, h;
 
         // This automatically makes sure the projection is up-to-date for the specified rect.
@@ -204,7 +211,7 @@ public:
 
         kDebug(41010) << "Visiting on part layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
-        
+
         if (m_projection.isNull()) {
             return false;
         }
@@ -233,7 +240,7 @@ public:
         return true;
     }
 
-    virtual bool visit(KisAdjustmentLayer* layer)
+    bool visit(KisAdjustmentLayer* layer)
     {
         kDebug(41010) << "Visiting on adjustment layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
@@ -314,7 +321,7 @@ public:
 
         delete cmd;
 
-        // Copy the filtered bits onto the projection 
+        // Copy the filtered bits onto the projection
         KisPainter gc(m_projection);
         if (selection)
             gc.bltSelection(m_rc.left(), m_rc.top(),

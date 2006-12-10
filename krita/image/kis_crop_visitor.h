@@ -29,7 +29,8 @@
 #include "kis_paint_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_transaction.h"
-#include <kis_selected_transaction.h>
+#include "kis_selected_transaction.h"
+#include "kis_external_layer_iface.h"
 
 class KisProgressDisplayInterface;
 class KisFilterStrategy;
@@ -38,7 +39,7 @@ class KisCropVisitor : public KisLayerVisitor {
 
 public:
 
-    KisCropVisitor( const QRect & rc, bool movelayers = true) 
+    KisCropVisitor( const QRect & rc, bool movelayers = true)
         : KisLayerVisitor()
         , m_rect(rc), m_movelayers(movelayers)
     {
@@ -48,11 +49,16 @@ public:
     {
     }
 
+    bool visit( KisExternalLayer * layer )
+        {
+            return layer->cropVisitorCallback( m_rect, m_movelayers );
+        }
+
     /**
      * Crops the specified layer and adds the undo information to the undo adapter of the
      * layer's image.
      */
-    bool visit(KisPaintLayer *layer) 
+    bool visit(KisPaintLayer *layer)
     {
         KisPaintDeviceSP dev = layer->paintDevice();
         KisSelectedTransaction * t = 0;
@@ -64,7 +70,7 @@ public:
         if (layer->undoAdapter() && layer->undoAdapter()->undo()) {
             layer->undoAdapter()->addCommand(t);
         }
-        
+
         if(m_movelayers) {
             if(layer->undoAdapter() && layer->undoAdapter()->undo()) {
                 KNamedCommand * cmd = dev->moveCommand(layer->x() - m_rect.x(), layer->y() - m_rect.y());
@@ -98,7 +104,7 @@ public:
         layer->resetCache();
         return true;
     }
-    
+
 
 private:
     QRect m_rect;

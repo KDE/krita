@@ -27,25 +27,25 @@ class KisPaintDevice;
 class KisProgressDisplayInterface;
 
 class KRITAIMAGE_EXPORT KisRotateVisitor : public KisProgressSubject {
-        typedef KisProgressSubject super;
+    typedef KisProgressSubject super;
 
-        /* Structs for the image rescaling routine */
+    /* Structs for the image rescaling routine */
 
 public:
-        KisRotateVisitor();
-        ~KisRotateVisitor();
+    KisRotateVisitor();
+    ~KisRotateVisitor();
 
-        void visitKisPaintDevice(KisPaintDevice* dev);
+    void visitKisPaintDevice(KisPaintDevice* dev);
 
-        void rotate(double angle, bool rotateAboutImageCenter, KisProgressDisplayInterface *progress);
-        void shear(double angleX, double angleY, KisProgressDisplayInterface *progress);
+    void rotate(double angle, bool rotateAboutImageCenter, KisProgressDisplayInterface *progress);
+    void shear(double angleX, double angleY, KisProgressDisplayInterface *progress);
 
 private:
-        KisPaintDeviceSP m_dev;
+    KisPaintDeviceSP m_dev;
 
     // Implement KisProgressSubject
     bool m_cancelRequested;
-        virtual void cancel() { m_cancelRequested = true; }
+    virtual void cancel() { m_cancelRequested = true; }
 
     void initProgress(qint32 totalSteps);
     void incrementProgress();
@@ -76,6 +76,6 @@ inline KisRotateVisitor::~KisRotateVisitor()
 
 inline void KisRotateVisitor::visitKisPaintDevice(KisPaintDevice* dev)
 {
-        m_dev = dev;
+    m_dev = dev;
 }
 #endif // KIS_ROTATE_VISITOR_H_

@@ -41,6 +41,12 @@ class KOFFICEUI_EXPORT KoRuler : public QWidget
 {
     Q_OBJECT
     public:
+        /**
+         * Creates a ruler with the orientation @p orientation
+         * @param parent parent widget
+         * @param orientation the orientation of the ruler
+         * @param viewConverter the view converter used to convert from point to pixel
+         */
         KoRuler(QWidget* parent, Qt::Orientation orientation, KoViewConverter* viewConverter);
         ~KoRuler();
 

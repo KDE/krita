@@ -56,6 +56,7 @@ void Filter::setProperty(const QString& name, const QVariant& value)
 QVariantMap Filter::properties()
 {
 //     return m_filter->configuration()->getProperties();
+     return QVariantMap();
 }
 
 void Filter::fromXML(const QString& xml)

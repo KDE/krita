@@ -84,9 +84,6 @@
                     <property name="minValue">
                         <number>0</number>
                     </property>
-                    <property name="maxValue">
-                        <number>10000</number>
-                    </property>
                 </widget>
                 <widget class="KIntNumInput" row="1" column="1">
                     <property name="name">
@@ -97,9 +94,6 @@
                     </property>
                     <property name="minValue">
                         <number>0</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>10000</number>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="2">
@@ -396,7 +390,7 @@
         <header location="local">squeezedcombobox.h</header>
         <sizehint>
             <width>-1</width>
-            <height>i24</height>
+            <height>32</height>
         </sizehint>
         <container>0</container>
         <sizepolicy>
@@ -428,4 +422,14 @@
     <tabstop>txtDescription</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kis_cmb_idlist.h</includehint>
+    <includehint>squeezedcombobox.h</includehint>
+    <includehint>kcolorcombo.h</includehint>
+</includehints>
 </UI>

@@ -24,9 +24,7 @@ set(pigment_SRCS
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU16ColorSpace.cpp
 )
 
-if(KUNITTEST_FOUND)
-    add_subdirectory(tests)
-endif(KUNITTEST_FOUND)
+add_subdirectory(tests)
 
 kde4_automoc(${pigment_SRCS})
 

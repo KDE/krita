@@ -45,6 +45,7 @@ KCommand* KoShapeController::addShape( KoShape *shape )
     Q_ASSERT(m_canvas->shapeManager());
 
     KoShapeFactory *factory = KoShapeRegistry::instance()->get( shape->shapeId() );
+    Q_ASSERT(factory);
     int z=0;
     foreach(KoShape *sh, m_canvas->shapeManager()->shapesAt(shape->boundingRect()))
         z = qMax(z, sh->zIndex());

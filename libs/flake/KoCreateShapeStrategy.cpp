@@ -64,6 +64,7 @@ KCommand* KoCreateShapeStrategy::createCommand() {
         shape = factory->createShape(props);
     else
         shape = factory->createDefaultShape();
+    shape->setShapeId(factory->shapeId());
     QRectF rect = selectRect();
     shape->setPosition(rect.topLeft());
     QSizeF newSize = rect.size();

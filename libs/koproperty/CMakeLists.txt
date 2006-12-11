@@ -44,7 +44,7 @@ kde4_automoc(${koproperty_LIB_SRCS})
 
 kde4_add_library(koproperty SHARED ${koproperty_LIB_SRCS})
 
-target_link_libraries(koproperty ${KDE4_KIO_LIBS} )
+target_link_libraries(koproperty ${KDE4_KIO_LIBS} kde3support)
 
 set_target_properties(koproperty PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS koproperty  DESTINATION ${LIB_INSTALL_DIR})

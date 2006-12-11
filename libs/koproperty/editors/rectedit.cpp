@@ -25,7 +25,7 @@
 #include <QPainter>
 #include <QToolTip>
 
-#include <kactivelabel.h>
+#include <k3activelabel.h>
 #include <klocale.h>
 
 //	"[ %1, %2, %3, %4 ]"
@@ -37,7 +37,7 @@ RectEdit::RectEdit(Property *property, QWidget *parent)
  : Widget(property, parent)
 {
 	setHasBorders(false);
-	m_edit = new KActiveLabel(this);
+	m_edit = new K3ActiveLabel(this);
 	m_edit->setFocusPolicy(Qt::NoFocus);
 	QPalette pal = m_edit->palette();
 	pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));

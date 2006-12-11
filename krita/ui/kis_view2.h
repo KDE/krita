@@ -33,6 +33,7 @@ class QPoint;
 
 class KoCanvasController;
 class KoViewChield;
+class KoViewConverter;
 
 class KisCanvas2;
 class KisDoc2;
@@ -46,6 +47,8 @@ class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
 class KisImageManager;
+
+
 /**
  * Krita view class
  *
@@ -62,7 +65,7 @@ public:
      * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
      */
-    KisView2(KisDoc2 * doc, QWidget * parent);
+    KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * parent);
     virtual ~KisView2();
 
 public:

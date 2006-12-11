@@ -20,6 +20,8 @@
 #define KIS_LAYER_SHAPE_H_
 
 #include <KoShapeContainer.h>
+#include <KoShape.h>
+#include <KoViewConverter.h>
 
 #include <kis_types.h>
 
@@ -37,11 +39,15 @@ public:
     KisLayerShape( KoShapeContainer * parent, KisLayerSP layer );
     virtual ~KisLayerShape();
 
+    KisLayerSP layer();
+
     // Shape overrides
     void paint(QPainter &painter, const KoViewConverter &converter);
 
     // KoShapeContainer implementation
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
+
+    void addChild( KoShape * shape );
 
 private:
 

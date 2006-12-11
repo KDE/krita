@@ -51,7 +51,7 @@ public:
 
     bool visit( KisExternalLayer * layer )
         {
-            return layer->cropVisitorCallback( m_rect, m_movelayers );
+            return true;
         }
 
     /**

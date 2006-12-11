@@ -37,10 +37,15 @@ class KisOasisLoadDataVisitor : public KisLayerVisitor {
         virtual ~KisOasisLoadDataVisitor() {}
     
     public:
-        virtual bool visit(KisPaintLayer *layer);
-        virtual bool visit(KisGroupLayer *layer);
-        virtual bool visit(KisPartLayer *layer);
-        virtual bool visit(KisAdjustmentLayer *layer);
+        bool visit(KisPaintLayer *layer);
+        bool visit(KisGroupLayer *layer);
+        bool visit(KisPartLayer *layer);
+        bool visit(KisAdjustmentLayer *layer);
+
+        bool visit( KisExternalLayer * layer )
+            {
+                return true;
+            }
     private:
         KoOasisStore* m_oasisStore;
         QMap<KisLayer *, QString> m_layerFilenames;

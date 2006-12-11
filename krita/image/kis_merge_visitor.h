@@ -59,7 +59,7 @@ public:
 
     bool visit( KisExternalLayer * layer )
         {
-            return layer->mergeVisitorCallback( m_projection, m_rc );
+            return true;
         }
 
     bool visit(KisPaintLayer *layer)

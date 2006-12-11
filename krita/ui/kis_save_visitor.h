@@ -46,7 +46,12 @@ public:
         m_uri = uri;
     }
 
-    virtual bool visit(KisPaintLayer *layer)
+    bool visit( KisExternalLayer * layer )
+        {
+            return true;
+        }
+
+    bool visit(KisPaintLayer *layer)
     {
         //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
@@ -112,7 +117,7 @@ public:
         return true;
     }
 
-    virtual bool visit(KisGroupLayer *layer)
+    bool visit(KisGroupLayer *layer)
     {
         KisSaveVisitor visitor(m_img, m_store, m_count);
 
@@ -129,12 +134,12 @@ public:
         return true;
     }
 
-    virtual bool visit(KisPartLayer *)
+    bool visit(KisPartLayer *)
     {
         return true;
     }
 
-    virtual bool visit(KisAdjustmentLayer* layer)
+    bool visit(KisAdjustmentLayer* layer)
     {
 
         if (layer->selection()) {

@@ -46,7 +46,8 @@ KoToolDocker::KoToolDocker()
 KoToolDocker::~KoToolDocker()
 {
     // Remove the tool option widgets from our layout: we don't own them,
-    // we are not going to delete them.
+    // we are not going to delete them. 
+    // XXX: The Right (tm) solution here is to use QPointer (bsar, see http://doc.trolltech.com/qq/qq14-guardedpointers.html)
     while (m_stack->count() > 0) {
         QWidget * w = m_stack->widget(0);
         kDebug() << "Stack count: " << m_stack->count() << ", widget: " << w << endl;

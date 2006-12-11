@@ -31,20 +31,24 @@
 
 #include <kis_types.h>
 #include <kis_image.h>
+#include <kis_paint_device.h>
 
 class KisShapeLayer::Private
 {
 public:
-
+    KoViewConverter * converter;
+    KisPaintDeviceSP paintDevice;
 };
 
-KisShapeLayer::KisShapeLayer( KoShapeContainer * parent, KisImageSP img, const QString &name, quint8 opacity )
+KisShapeLayer::KisShapeLayer( KoShapeContainer * parent, KoViewConverter * converter, KisImageSP img, const QString &name, quint8 opacity )
     : KisExternalLayer( img, name, opacity )
 {
     KoShapeContainer::setParent( parent );
     setShapeId( KIS_SHAPE_LAYER_ID );
 
     m_d = new Private();
+    m_d->paintDevice = new KisPaintDevice( this, img->colorSpace(), name );
+    m_d->converter = converter;
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -68,11 +72,57 @@ KisPaintDeviceSP KisShapeLayer::prepareProjection(KisPaintDeviceSP projection, c
     // If the contained shape is a path shape, use the decorator class
     // Thrain is going to write to render directly onto the
     // KisPaintDevice
+    QImage img;
+    QPainter p( &img );
+    KoShapeContainer::paint( p, *m_d->converter );
 
-    return 0;
+    m_d->paintDevice->clear();
+    m_d->paintDevice->convertFromQImage( img, "", r.left(), r.top() );
+
+    return m_d->paintDevice;;
 }
 
 bool KisShapeLayer::saveToXML(QDomDocument doc, QDomElement elem)
 {
     return false;
 }
+
+KisLayerSP KisShapeLayer::clone() const
+{
+    return 0;
+}
+
+qint32 KisShapeLayer::x() const
+{
+    return 0;
+}
+
+void KisShapeLayer::setX(qint32)
+{
+}
+
+qint32 KisShapeLayer::y() const
+{
+    return 0;
+}
+
+void KisShapeLayer::setY(qint32)
+{
+}
+
+QRect KisShapeLayer::extent() const
+{
+    return QRect();
+}
+
+QRect KisShapeLayer::exactBounds() const
+{
+    return QRect();
+}
+
+bool KisShapeLayer::accept(KisLayerVisitor& visitor)
+{
+    visitor.visit(this);
+}
+
+

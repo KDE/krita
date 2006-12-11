@@ -43,7 +43,7 @@ public:
 
     bool visit( KisExternalLayer * layer )
         {
-            return layer->shearVisitorCallback( m_xshear, m_yshear, m_progress, m_strategy, m_undo );
+            return true;
         }
 
     bool visit(KisPaintLayer* layer) {

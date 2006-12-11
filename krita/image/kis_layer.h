@@ -281,11 +281,9 @@ private:
 
 // For classes that support indirect painting
 class KRITAIMAGE_EXPORT KisLayerSupportsIndirectPainting {
-    // To simulate the indirect painting
-    KisPaintDeviceSP m_temporaryTarget;
-    const KoCompositeOp* m_compositeOp;
-    Q_UINT8 m_compositeOpacity;
+
 public:
+
     KisLayerSupportsIndirectPainting() : m_compositeOp(0) { }
     virtual ~KisLayerSupportsIndirectPainting() {}
 
@@ -300,6 +298,16 @@ public:
     // Or I could make KisLayer a virtual base of KisLayerSupportsIndirectPainting and so, but
     // I'm sure virtual diamond inheritance isn't as appreciated as this
     virtual KisLayer* layer() = 0;
+
+private:
+
+    // To simulate the indirect painting
+    KisPaintDeviceSP m_temporaryTarget;
+    const KoCompositeOp* m_compositeOp;
+    Q_UINT8 m_compositeOpacity;
+
+
+
 };
 
 Q_DECLARE_METATYPE( KisLayerSP )

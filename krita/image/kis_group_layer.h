@@ -119,8 +119,10 @@ public:
 
     /// Returns if the layer will induce the projection hack (if the only layer in this group)
     virtual bool paintLayerInducesProjectionOptimization(KisPaintLayerSP l);
+
 signals:
 
+    /// Emitted whenever the specified rectangle needs to be recomposited.
     void sigDirty(QRect rc);
 
 protected:

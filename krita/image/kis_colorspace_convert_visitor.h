@@ -36,7 +36,7 @@ public:
 
     bool visit( KisExternalLayer * layer )
         {
-            return layer->colorspaceConvertVisitorCallback( m_dstColorSpace, m_renderingIntent );
+            return true;
         }
 
     bool visit(KisPaintLayer *layer);

@@ -42,7 +42,12 @@ public:
     }
 
 public:
-    virtual bool visit(KisPaintLayer *layer)
+    bool visit( KisExternalLayer * layer )
+        {
+            return true;
+        }
+
+    bool visit(KisPaintLayer *layer)
     {
         QDomElement layerElement = m_doc.createElement("layer");
 
@@ -69,7 +74,7 @@ public:
         return true;
     }
 
-    virtual bool visit(KisGroupLayer *layer)
+    bool visit(KisGroupLayer *layer)
     {
         QDomElement layerElement;
 
@@ -107,13 +112,13 @@ public:
         return true;
     }
 
-    virtual bool visit(KisPartLayer* layer)
+    bool visit(KisPartLayer* layer)
     {
         bool ok = layer->saveToXML(m_doc, m_elem);
         return ok;
     }
 
-    virtual bool visit(KisAdjustmentLayer* layer)
+    bool visit(KisAdjustmentLayer* layer)
     {
         QDomElement layerElement = m_doc.createElement("layer");
 

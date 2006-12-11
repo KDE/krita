@@ -68,6 +68,9 @@ typedef vKisLayerSP::const_iterator vKisLayerSP_cit;
 class KisPartLayer;
 typedef KisSharedPtr<KisPartLayer> KisPartLayerSP;
 
+class KisShapeLayer;
+typedef KisSharedPtr<KisShapeLayer> KisShapeLayerSP;
+
 class KisPaintLayer;
 typedef KisSharedPtr<KisPaintLayer> KisPaintLayerSP;
 

@@ -61,7 +61,7 @@ public:
 
     bool visit( KisExternalLayer * layer )
         {
-            return layer->transformVisitorCallback( m_sx, m_sy, m_tx, m_ty, m_filter, m_angle, m_progress );
+            return true;
         }
 
     /**

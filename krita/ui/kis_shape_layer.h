@@ -46,7 +46,7 @@ class KisShapeLayer : public KoShapeContainer, public KisExternalLayer
 
 public:
 
-    KisShapeLayer( KoShapeContainer * parent, KisImageSP img, const QString &name, quint8 opacity );
+    KisShapeLayer( KoShapeContainer * parent, KoViewConverter * converter, KisImageSP img, const QString &name, quint8 opacity );
     virtual ~KisShapeLayer();
 
 public:
@@ -65,6 +65,17 @@ public:
     KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r);
 
     bool saveToXML(QDomDocument doc, QDomElement elem);
+
+    // KisLayer implementation
+   KisLayerSP clone() const;
+   qint32 x() const;
+   void setX(qint32);
+   qint32 y() const;
+   void setY(qint32);
+   QRect extent() const;
+   QRect exactBounds() const;
+   bool accept(KisLayerVisitor&);
+
 
 private:
 

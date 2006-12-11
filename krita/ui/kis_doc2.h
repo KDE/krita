@@ -174,8 +174,19 @@ protected slots:
     virtual void openTemplate(const KUrl& url);
 
 private slots:
+
     void slotUpdate(KisImageSP img, quint32 x, quint32 y, quint32 w, quint32 h);
     void slotIOProgress(qint8 percentage);
+
+    // These slots keep track of changes in the layer stack and make
+    // sure that the shape stack doesn't get out of sync
+
+    void slotLayerAdded( KisLayerSP layer );
+    void slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis );
+    void slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis );
+    void slotLayersChanged( KisGroupLayerSP rootLayer );
+
+    // XXX: The same is necessary for selections, masks etc.
 
 public:
 
@@ -190,18 +201,11 @@ private:
     KisImageSP loadImage(const QDomElement& elem);
     void loadLayers(const QDomElement& element, KisImageSP img, KisGroupLayerSP parent);
     KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
-    KisLayerSP loadPaintLayer(const QDomElement& elem, KisImageSP img,
-                const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                const QString & compositeOp);
-    KisGroupLayerSP loadGroupLayer(const QDomElement& elem, KisImageSP img,
-                const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                const QString &compositeOp);
-    KisAdjustmentLayerSP loadAdjustmentLayer(const QDomElement& elem, KisImageSP img,
-                                             const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                                             const QString & compositeOp);
-    KisPartLayerSP loadPartLayer(const QDomElement& elem, KisImageSP img,
-                                  const QString & name, qint32 x, qint32 y, qint32 opacity,
-                                  bool visible, bool locked, const QString &compositeOp);
+    KisLayerSP loadPaintLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString & compositeOp);
+    KisGroupLayerSP loadGroupLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+    KisAdjustmentLayerSP loadAdjustmentLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString & compositeOp);
+    KisPartLayerSP loadPartLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+    KisShapeLayerSP loadShapeLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
     bool init();
 
     void setIOSteps(qint32 nsteps);

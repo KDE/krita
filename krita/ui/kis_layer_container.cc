@@ -48,6 +48,11 @@ KisLayerContainer::~KisLayerContainer()
     delete m_d;
 }
 
+KisGroupLayerSP KisLayerContainer::groupLayer()
+{
+    return m_d->groupLayer;
+}
+
 void KisLayerContainer::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED( painter );

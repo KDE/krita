@@ -25,6 +25,8 @@
 
 #include <kis_paint_device.h>
 
+#include "kis_mask_shape.h"
+
 class KisLayerShape::Private {
 public:
     KisLayerSP layer;
@@ -45,6 +47,10 @@ KisLayerShape::~KisLayerShape()
     delete m_d;
 }
 
+KisLayerSP KisLayerShape::layer()
+{
+    return m_d->layer;
+}
 
 void KisLayerShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
@@ -53,4 +59,12 @@ void KisLayerShape::paint(QPainter &painter, const KoViewConverter &converter)
 
 void KisLayerShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
+}
+
+void KisLayerShape::addChild( KoShape * shape )
+{
+    if ( shape->shapeId() != KIS_MASK_SHAPE_ID ) {
+        kdDebug() << "Can only add mask shapes as children to layer shapes!\n";
+        return;
+    }
 }

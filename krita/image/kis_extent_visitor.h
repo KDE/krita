@@ -56,7 +56,7 @@ public:
 
     bool visit( KisExternalLayer * layer )
         {
-            return layer->extentVisitorCallback( m_imageRect, m_region, m_exact );
+            return true;
         }
 
     bool visit(KisPaintLayer *layer)

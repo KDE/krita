@@ -102,14 +102,11 @@ public:
         , gridManager( 0 )
         , perspectiveGridManager( 0 )
         {
-            viewConverter = new KoZoomHandler( );
-
         }
 
     ~KisView2Private()
         {
             KoToolManager::instance()->removeCanvasController( canvasController );
-            delete viewConverter;
             delete canvas;
             delete filterManager;
             delete selectionManager;
@@ -125,7 +122,7 @@ public:
 
     KisCanvas2 *canvas;
     KisDoc2 *doc;
-    KoViewConverter *viewConverter;
+    KoViewConverter * viewConverter;
     KoCanvasController * canvasController;
     KisResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
@@ -144,7 +141,7 @@ public:
 };
 
 
-KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
+KisView2::KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * parent)
     : KoView(doc, parent)
 {
 
@@ -162,6 +159,7 @@ KisView2::KisView2(KisDoc2 * doc,  QWidget * parent)
     m_d = new KisView2Private();
 
     m_d->doc = doc;
+    m_d->viewConverter = viewConverter;
     m_d->canvas = new KisCanvas2( m_d->viewConverter, QPAINTER, this, static_cast<KoShapeControllerBase*>( doc ) );
     m_d->canvasController = new KoCanvasController( this );
 
@@ -339,6 +337,7 @@ KisUndoAdapter * KisView2::undoAdapter()
 {
     return m_d->doc->undoAdapter();
 }
+
 
 void KisView2::slotLoadingFinished()
 {

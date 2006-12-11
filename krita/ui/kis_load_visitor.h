@@ -51,7 +51,12 @@ public:
         m_uri = uri;
     }
 
-    virtual bool visit(KisPaintLayer *layer)
+    bool visit( KisExternalLayer * layer )
+        {
+            return true;
+        }
+
+    bool visit(KisPaintLayer *layer)
     {        //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
         QString location = m_external ? QString::null : m_uri;
@@ -113,7 +118,7 @@ public:
 
     }
 
-    virtual bool visit(KisGroupLayer *layer)
+    bool visit(KisGroupLayer *layer)
     {
         KisLoadVisitor visitor(m_img, m_store, m_layerFilenames);
 
@@ -132,12 +137,12 @@ public:
         return true;
     }
 
-    virtual bool visit(KisPartLayer *)
+    bool visit(KisPartLayer *)
     {
         return true;
     }
     
-    virtual bool visit(KisAdjustmentLayer* layer)
+    bool visit(KisAdjustmentLayer* layer)
     {
         //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 

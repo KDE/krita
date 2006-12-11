@@ -49,6 +49,8 @@ public:
 
 public:
 
+    KisGroupLayerSP groupLayer();
+
     // KoShapeContainer implementation
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
 

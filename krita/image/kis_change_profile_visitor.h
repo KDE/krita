@@ -42,7 +42,7 @@ public:
 public:
     bool visit( KisExternalLayer * layer )
         {
-            return layer->changeProfileVisitorCallback( m_oldColorSpace, m_dstColorSpace );
+            return true;
         }
 
     bool visit(KisPaintLayer *layer);

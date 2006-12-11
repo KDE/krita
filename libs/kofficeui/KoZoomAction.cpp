@@ -98,9 +98,9 @@ void KoZoomAction::triggered( const QString& text )
 
 void KoZoomAction::init(KActionCollection* parent)
 {
-    QAction *m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), parent, "zoom_in");
+    QAction *m_zoomIn = KStdAction::zoomIn(this, SLOT(zoomIn()), parent, "zoom_in");
     connect(m_zoomIn, SIGNAL(triggered()), this, SLOT(zoomIn()));
-    QAction *m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), parent, "zoom_out");
+    QAction *m_zoomOut = KStdAction::zoomOut(this, SLOT(zoomOut()), parent, "zoom_out");
     connect(m_zoomOut, SIGNAL(triggered()), this, SLOT(zoomOut()));
 
 /*

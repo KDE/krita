@@ -126,6 +126,12 @@ public:
     QPoint zoomPointOld( const KoPoint & p ) const {
         return QPoint( zoomItXOld( p.x() ), zoomItYOld( p.y() ) );
     }
+    QRect zoomRectOld( const QRectF & r ) const {
+        QRect _r;
+        _r.setCoords( zoomItXOld( r.left() ),  zoomItYOld( r.top() ),
+                      zoomItXOld( r.right() ), zoomItYOld( r.bottom() ) );
+        return _r;
+    }
     QRect zoomRectOld( const KoRect & r ) const {
         QRect _r;
         _r.setCoords( zoomItXOld( r.left() ),  zoomItYOld( r.top() ),
@@ -145,7 +151,9 @@ public:
     QSize zoomSizeOld( const KoSize & s ) const {
         return QSize( zoomItXOld( s.width() ), zoomItYOld( s.height() ) );
     }
-
+    QSize zoomSizeOld( const QSizeF & s ) const {
+        return QSize( zoomItXOld( s.width() ), zoomItYOld( s.height() ) );
+    }
     // Input: pixels. Output: pt.
     double unzoomItXOld( int x ) const {
         return static_cast<double>( x ) / m_zoomedResolutionX;
@@ -164,6 +172,12 @@ public:
     }
     KoRect unzoomRectOld (const QRect & r ) const {
         KoRect _r;
+        _r.setCoords( unzoomItXOld( r.left() ),  unzoomItYOld( r.top() ),
+                      unzoomItXOld( r.right() ), unzoomItYOld( r.bottom() ) );
+        return _r;
+    }
+    QRectF unzoomRectOldF (const QRect & r ) const {
+        QRectF _r;
         _r.setCoords( unzoomItXOld( r.left() ),  unzoomItYOld( r.top() ),
                       unzoomItXOld( r.right() ), unzoomItYOld( r.bottom() ) );
         return _r;

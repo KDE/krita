@@ -2798,7 +2798,7 @@ bool KoDocument::showEmbedInitDialog(QWidget* parent)
     dlg.setMainWidget(pane);
     KConfig cfg("EmbedInitDialog");
     /*dlg.setInitialSize(*/dlg.restoreDialogSize( &cfg /*)*/);
-    connect(this, SIGNAL(closeEmbedInitDialog()), &dlg, SLOT(slotOk()));
+    connect(this, SIGNAL(closeEmbedInitDialog()), &dlg, SLOT(accept()));
 
     bool ok = dlg.exec() == QDialog::Accepted;
 

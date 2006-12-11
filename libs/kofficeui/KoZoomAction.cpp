@@ -98,8 +98,8 @@ void KoZoomAction::triggered( const QString& text )
 
 void KoZoomAction::init(KActionCollection* parent)
 {
-    QAction *m_zoomIn = KStdAction::zoomIn(this, SLOT(zoomIn()), parent, "zoom_in");
-    QAction *m_zoomOut = KStdAction::zoomOut(this, SLOT(zoomOut()), parent, "zoom_out");
+    KStdAction::zoomIn(this, SLOT(zoomIn()), parent, "zoom_in");
+    KStdAction::zoomOut(this, SLOT(zoomOut()), parent, "zoom_out");
 
 /*
     m_actualPixels = new KAction(i18n("Actual Pixels"), actionCollection, "actual_pixels");

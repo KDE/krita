@@ -34,8 +34,8 @@ KoTextShapeFactory::KoTextShapeFactory(QObject *parent)
     setToolTip(i18n("A Shape That Shows Text"));
 
     KoShapeTemplate t;
-    t.name = "Simple text";
-    t.toolTip = "Text Shape With Some Text";
+    t.name = i18n("Simple text");
+    t.toolTip = i18n("Text Shape With Some Text");
     KoProperties *props = new KoProperties();
     t.properties = props;
     props->setProperty("text", "<b>Koffie</b>, koffie... Querelanten\ndrinken geen KOffice maar groene thee.");

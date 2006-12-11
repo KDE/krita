@@ -170,6 +170,9 @@ public:
     KoPoint unzoomPointOld( const QPoint & p ) const {
         return KoPoint( unzoomItXOld( p.x() ), unzoomItYOld( p.y() ) );
     }
+    QPointF unzoomPointOldF( const QPoint & p ) const {
+        return QPointF( unzoomItXOld( p.x() ), unzoomItYOld( p.y() ) );
+    }
     KoRect unzoomRectOld (const QRect & r ) const {
         KoRect _r;
         _r.setCoords( unzoomItXOld( r.left() ),  unzoomItYOld( r.top() ),

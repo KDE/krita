@@ -9,5 +9,22 @@ For anyone that wants to hack on flake here is a list of things that need to be 
   - on insert into the rTree (KoShapeManager) extend the boudingrect with shadow (note that KoShapeManager is
     a friend of KoShape).
 
+
+* Add a way to make sure a shape will never be printed partially due to it still doing work
+  for example by a kexi shape downloading data before it will show that.
+  Proposed Method in KoShape:
+    /**
+     * A shape can be in a state that its doing loading or text layout or similar in which case
+     * it can be shown on screen just fine (probably partially) but it should really not be printed
+     * until its fully done.
+     * Flake will call this method from a non-main thread and only start printing it when the
+     * method returned.
+     * Warning!  This method can be blocking for a long time, never call it on the gui-thread!
+     * @param pi the progress indicator class that can be used to set status information and / or
+     *        progress on which will be displayed while waiting.
+     */
+    virtual void waitUntilReady(KoProgressIndicator *pi) const {}
+
+
 Other:
 Use xcursorgen to create real xcursors ? (boemann)

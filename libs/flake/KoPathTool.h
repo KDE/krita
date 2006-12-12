@@ -27,6 +27,7 @@
 #include <QMap>
 #include <QSet>
 
+class QButtonGroup;
 class KoCanvasBase;
 class KoParameterShape;
 class KoInteractionStrategy;
@@ -35,6 +36,7 @@ class KoPathPointRubberSelectStrategy;
 
 /// The tool for editing a KoPathShape or a KoParameterShape
 class KoPathTool : public KoTool {
+    Q_OBJECT
 public:
     explicit KoPathTool(KoCanvasBase *canvas);
     ~KoPathTool();
@@ -50,6 +52,9 @@ public:
 
     void activate (bool temporary=false);
     void deactivate();
+
+protected:
+    virtual QWidget * createOptionWidget();
 
 private:
     /**
@@ -69,7 +74,18 @@ private:
     QPointF m_lastPoint;
     /// snaps given point to grid point
     QPointF snapToGrid( const QPointF &p, Qt::KeyboardModifiers modifiers );
+
+private slots:
+    void slotPointTypeChanged( int type );
+
 private:
+
+    /// the different path point types
+    enum PointType {
+        Corner,
+        Smooth,
+        Symmetric
+    };
 
     class ActiveHandle
     {
@@ -215,6 +231,8 @@ private:
     friend class KoPathPointRubberSelectStrategy;
 
     KoInteractionStrategy *m_currentStrategy; ///< the rubber selection strategy
+
+    QButtonGroup *m_pointTypeGroup;
 };
 
 #endif

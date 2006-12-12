@@ -33,7 +33,11 @@
 #include "KoPathPointRubberSelectStrategy.h"
 #include <kdebug.h>
 #include <klocale.h>
+#include <kiconloader.h>
 #include <QKeyEvent>
+#include <QGridLayout>
+#include <QButtonGroup>
+#include <QToolButton>
 
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
 : KoTool(canvas)
@@ -45,6 +49,78 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 }
 
 KoPathTool::~KoPathTool() {
+}
+
+QWidget * KoPathTool::createOptionWidget() {
+    QWidget *optionWidget = new QWidget();
+    QGridLayout *layout = new QGridLayout( optionWidget );
+    m_pointTypeGroup = new QButtonGroup( optionWidget );
+    m_pointTypeGroup->setExclusive( true );
+
+    QToolButton *button = 0;
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pathpoint-corner") );
+    button->setToolTip( i18n( "Corner point" ) );
+    m_pointTypeGroup->addButton( button, Corner );
+    layout->addWidget( button, 0, 0 );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pathpoint-smooth") );
+    button->setToolTip( i18n( "Smooth point" ) );
+    m_pointTypeGroup->addButton( button, Smooth );
+    layout->addWidget( button, 0, 1 );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pathpoint-symmetric") );
+    button->setToolTip( i18n( "Symmetric point" ) );
+    m_pointTypeGroup->addButton( button, Symmetric );
+    layout->addWidget( button, 0, 2 );
+
+    connect( m_pointTypeGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotPointTypeChanged( int ) ) );
+
+    return optionWidget;
+}
+
+void KoPathTool::slotPointTypeChanged( int type ) {
+    QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
+    if( ! selectedPoints.size() )
+        return;
+
+    QList<KoPathPoint*> points;
+    QList<KoPathPoint::KoPointProperties> properties;
+
+    foreach( KoPathPoint *point, selectedPoints )
+    {
+        KoPathPoint::KoPointProperties props = point->properties();
+        if( (props & KoPathPoint::HasControlPoint1) == 0 || (props & KoPathPoint::HasControlPoint2) == 0 )
+            continue;
+
+        points.append( point );
+        if( type == Symmetric )
+        {
+            props &= ~KoPathPoint::IsSmooth;
+            props |= KoPathPoint::IsSymmetric;
+        }
+        else if( type == Smooth )
+        {
+            props &= ~KoPathPoint::IsSymmetric;
+            props |= KoPathPoint::IsSmooth;
+        }
+        else
+        {
+            props &= ~KoPathPoint::IsSymmetric;
+            props &= ~KoPathPoint::IsSmooth;
+        }
+
+        properties.append( props );
+
+    }
+    if( points.count() == 0 )
+        return;
+
+    KoPointPropertyCommand *cmd = new KoPointPropertyCommand( points, properties );
+    m_canvas->addCommand( cmd, true );
 }
 
 void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
@@ -255,7 +331,7 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                     m_handleRadius++;
                 m_pointSelection.repaint();
                 break;
-            case Qt::Key_Delete:
+            case Qt::Key_Backspace:
                 // TODO finish current action or should this not possible during actions???
                 if ( m_pointSelection.size() > 0 )
                 {
@@ -542,7 +618,7 @@ void KoPathTool::ActivePointHandle::mousePressEvent( KoPointerEvent *event )
         else
             props |= KoPathPoint::IsSmooth;
 
-        KoPointPropertyCommand *cmd = new KoPointPropertyCommand( m_activePoint->parent(), m_activePoint, props );
+        KoPointPropertyCommand *cmd = new KoPointPropertyCommand( m_activePoint, props );
         m_tool->m_canvas->addCommand( cmd, true );
     }
 }
@@ -651,3 +727,5 @@ void KoPathTool::KoPathPointSelection::repaint()
         m_tool->repaint( p->boundingRect() );
     }
 }
+
+#include "KoPathTool.moc"

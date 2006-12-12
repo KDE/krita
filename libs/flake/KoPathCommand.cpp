@@ -25,25 +25,24 @@
 #include <kdebug.h>
 #include <math.h>
 
-KoPathBaseCommand::KoPathBaseCommand( KoPathShape *shape )
-: m_shape( shape )
+KoPathBaseCommand::KoPathBaseCommand()
 {
 }
 
-void KoPathBaseCommand::repaint( const QRectF &oldControlPointRect )
+KoPathBaseCommand::KoPathBaseCommand( KoPathShape *shape )
 {
-    QRectF repaintRect( oldControlPointRect );
-    repaintRect.adjust( -5.0, -5.0, 5.0, 5.0 );
-    m_shape->repaint( oldControlPointRect );
+    m_shapes.insert( shape );
+}
 
-    // the bounding rect has changed -> normalize
-    m_shape->normalize();
-
-    // adjust the old control rect as the repainting is relative to the new shape position
-    repaintRect = m_shape->outline().controlPointRect();
-    // TODO use the proper adjustment if the actual point size could be retrieved
-    repaintRect.adjust( -5.0, -5.0, 5.0, 5.0 );
-    m_shape->repaint( repaintRect );
+void KoPathBaseCommand::repaint( bool normalizeShapes )
+{
+    foreach( KoPathShape *shape, m_shapes )
+    {
+        if( normalizeShapes )
+            shape->normalize();
+        // TODO use the proper adjustment if the actual point size could be retrieved
+        shape->repaint( shape->outline().controlPointRect().adjusted( -5.0, -5.0, 5.0, 5.0 ) );
+    }
 }
 
 KoPointMoveCommand::KoPointMoveCommand( const KoPathShapePointMap &pointMap, const QPointF &offset )
@@ -54,7 +53,6 @@ KoPointMoveCommand::KoPointMoveCommand( const KoPathShapePointMap &pointMap, con
 
 void KoPointMoveCommand::execute()
 {
-
     KoPathShapePointMap::iterator it( m_pointMap.begin() );
     for ( ; it != m_pointMap.end(); ++it )
     {
@@ -155,74 +153,108 @@ QString KoControlPointMoveCommand::name() const
     return i18n( "Move control point" );
 }
 
-KoPointPropertyCommand::KoPointPropertyCommand( KoPathShape *shape, KoPathPoint *point, KoPathPoint::KoPointProperties property )
-: KoPathBaseCommand( shape )
-, m_point( point )
-, m_newProperties( property )
+KoPointPropertyCommand::KoPointPropertyCommand( KoPathPoint *point, KoPathPoint::KoPointProperties property )
 {
-    m_oldProperties = point->properties();
-    m_controlPoint1 = point->controlPoint1();
-    m_controlPoint2 = point->controlPoint2();
+    m_shapes.insert( point->parent() );
+    PointPropertyChangeset changeset;
+    changeset.point = point;
+    changeset.newProperty = property;
+    changeset.oldProperty = point->properties();
+    changeset.firstControlPoint = point->controlPoint1();
+    changeset.secondControlPoint = point->controlPoint2();
+    m_changesets.append( changeset );
+}
+
+KoPointPropertyCommand::KoPointPropertyCommand( const QList<KoPathPoint*> &points, const QList<KoPathPoint::KoPointProperties> &properties )
+{
+    Q_ASSERT(points.size() == properties.size());
+    uint pointCount = points.size();
+    for( uint i = 0; i < pointCount; ++i )
+    {
+        PointPropertyChangeset changeset;
+        changeset.point = points[i];
+        changeset.newProperty = properties[i];
+        changeset.oldProperty = changeset.point->properties();
+        changeset.firstControlPoint = changeset.point->controlPoint1();
+        changeset.secondControlPoint = changeset.point->controlPoint2();
+        m_changesets.append( changeset );
+        m_shapes.insert( changeset.point->parent() );
+    }
 }
 
 void KoPointPropertyCommand::execute()
 {
-    QRectF oldControlRect = m_shape->outline().controlPointRect();
+    repaint( false );
 
-    if( m_newProperties & KoPathPoint::IsSymmetric )
+    uint pointCount = m_changesets.count();
+    for( uint i = 0; i < pointCount; ++ i)
     {
-        m_newProperties &= ~KoPathPoint::IsSmooth;
-        m_point->setProperties( m_newProperties );
+        PointPropertyChangeset &changeset = m_changesets[i];
+        KoPathPoint::KoPointProperties newProperties = changeset.newProperty;
+        KoPathPoint *point = changeset.point;
 
-        // First calculate the direction vector of both control points starting from the point and their
-        // distance to the point. Then calculate the average distance and move points so that
-        // they have the same (average) distance from the point but keeping their direction.
-        QPointF directionC1 = m_point->controlPoint1() - m_point->point();
-        qreal dirLengthC1 = sqrt( directionC1.x()*directionC1.x() + directionC1.y()*directionC1.y() );
-        QPointF directionC2 = m_point->controlPoint2() - m_point->point();
-        qreal dirLengthC2 = sqrt( directionC2.x()*directionC2.x() + directionC2.y()*directionC2.y() );
-        qreal averageLength = 0.5 * (dirLengthC1 + dirLengthC2);
-        m_point->setControlPoint1( m_point->point() + averageLength / dirLengthC1 * directionC1 );
-        m_point->setControlPoint2( m_point->point() + averageLength / dirLengthC2 * directionC2 );
-        repaint( oldControlRect );
-    }
-    else if( m_newProperties & KoPathPoint::IsSmooth )
-    {
-        m_newProperties &= ~KoPathPoint::IsSymmetric;
-        m_point->setProperties( m_newProperties );
+        if( newProperties & KoPathPoint::IsSymmetric )
+        {
+            newProperties &= ~KoPathPoint::IsSmooth;
+            point->setProperties( newProperties );
 
-        // First calculate the direction vector of both control points starting from the point and their
-        // distance to the point. Then calculate the normalized direction vector. Then for each control
-        // point calculate the bisecting line between its nromalized direction vector and the negated
-        // normalied direction vector of the other points. Then use the result as the new direction
-        // vector for the control point and their old distance to the point.
-        QPointF directionC1 = m_point->controlPoint1() - m_point->point();
-        qreal dirLengthC1 = sqrt( directionC1.x()*directionC1.x() + directionC1.y()*directionC1.y() );
-        directionC1 /= dirLengthC1;
-        QPointF directionC2 = m_point->controlPoint2() - m_point->point();
-        qreal dirLengthC2 = sqrt( directionC2.x()*directionC2.x() + directionC2.y()*directionC2.y() );
-        directionC2 /= dirLengthC2;
-        m_point->setControlPoint1( m_point->point() + 0.5 * dirLengthC1 * (directionC1 - directionC2) );
-        m_point->setControlPoint2( m_point->point() + 0.5 * dirLengthC2 * (directionC2 - directionC1) );
-        repaint( oldControlRect );
+            // calculate vector from node point to first control point and normalize it
+            QPointF directionC1 = point->controlPoint1() - point->point();
+            qreal dirLengthC1 = sqrt( directionC1.x()*directionC1.x() + directionC1.y()*directionC1.y() );
+            directionC1 /= dirLengthC1;
+            // calculate vector from node point to second control point and normalize it
+            QPointF directionC2 = point->controlPoint2() - point->point();
+            qreal dirLengthC2 = sqrt( directionC2.x()*directionC2.x() + directionC2.y()*directionC2.y() );
+            directionC2 /= dirLengthC2;
+            // calculate the average distance of the control points to the node point
+            qreal averageLength = 0.5 * (dirLengthC1 + dirLengthC2);
+            // compute position of the control points so that they lie on a line going through the node point
+            // the new distance of the control points is the average distance to the node point
+            point->setControlPoint1( point->point() + 0.5 * averageLength * (directionC1 - directionC2) );
+            point->setControlPoint2( point->point() + 0.5 * averageLength * (directionC2 - directionC1) );
+        }
+        else if( newProperties & KoPathPoint::IsSmooth )
+        {
+            newProperties &= ~KoPathPoint::IsSymmetric;
+            point->setProperties( newProperties );
+
+            // calculate vector from node point to first control point and normalize it
+            QPointF directionC1 = point->controlPoint1() - point->point();
+            qreal dirLengthC1 = sqrt( directionC1.x()*directionC1.x() + directionC1.y()*directionC1.y() );
+            directionC1 /= dirLengthC1;
+            // calculate vector from node point to second control point and normalize it
+            QPointF directionC2 = point->controlPoint2() - point->point();
+            qreal dirLengthC2 = sqrt( directionC2.x()*directionC2.x() + directionC2.y()*directionC2.y() );
+            directionC2 /= dirLengthC2;
+            // compute position of the control points so that they lie on a line going through the node point
+            // the new distance of the control points is the average distance to the node point
+            point->setControlPoint1( point->point() + 0.5 * dirLengthC1 * (directionC1 - directionC2) );
+            point->setControlPoint2( point->point() + 0.5 * dirLengthC2 * (directionC2 - directionC1) );
+        }
+        else
+        {
+            newProperties &= ~KoPathPoint::IsSymmetric;
+            newProperties &= ~KoPathPoint::IsSmooth;
+            point->setProperties( newProperties );
+        }
     }
-    else
-    {
-        m_newProperties &= ~KoPathPoint::IsSymmetric;
-        m_newProperties &= ~KoPathPoint::IsSmooth;
-        m_point->setProperties( m_newProperties );
-    }
+    repaint( true );
 }
 
 void KoPointPropertyCommand::unexecute()
 {
-    QRectF oldControlRect = m_shape->outline().controlPointRect();
+    repaint( false );
 
-    m_point->setProperties( m_oldProperties );
-    m_point->setControlPoint1( m_controlPoint1 );
-    m_point->setControlPoint2( m_controlPoint2 );
+    uint pointCount = m_changesets.count();
+    for( uint i = 0; i < pointCount; ++ i)
+    {
+        KoPathPoint *point = m_changesets[i].point;
+        point->setProperties( m_changesets[i].oldProperty );
+        point->setControlPoint1( m_changesets[i].firstControlPoint );
+        point->setControlPoint2( m_changesets[i].secondControlPoint );
+    }
 
-    repaint( oldControlRect );
+    repaint( true );
 }
 
 QString KoPointPropertyCommand::name() const
@@ -357,9 +389,11 @@ KoSegmentSplitCommand::~KoSegmentSplitCommand()
 
 void KoSegmentSplitCommand::execute()
 {
-    QRectF oldControlRect = m_shape->outline().controlPointRect();
+    repaint( false );
 
     m_deletePoint = false;
+
+    KoPathShape *shape = *m_shapes.begin();
 
     for( int i = 0; i < m_segments.size(); ++i )
     {
@@ -367,33 +401,35 @@ void KoSegmentSplitCommand::execute()
         KoPathPoint *splitPoint = m_splitPoints[i];
         if( ! splitPoint )
         {
-            m_splitPoints[i] = m_shape->splitAt( segment, m_splitPos[i] );
+            m_splitPoints[i] = shape->splitAt( segment, m_splitPos[i] );
             m_newNeighbors[i] = qMakePair( *segment.first, *segment.second );
         }
         else
         {
-            m_shape->insertPoint( splitPoint, m_splitPointPos[i].first, m_splitPointPos[i].second );
+            shape->insertPoint( splitPoint, m_splitPointPos[i].first, m_splitPointPos[i].second );
             *segment.first = m_newNeighbors[i].first;
             *segment.second = m_newNeighbors[i].second;
         }
     }
-    repaint( oldControlRect );
+    repaint( true );
 }
 
 void KoSegmentSplitCommand::unexecute()
 {
-    QRectF oldControlRect = m_shape->outline().controlPointRect();
+    repaint( false );
 
     m_deletePoint = true;
+
+    KoPathShape *shape = *m_shapes.begin();
 
     for( int i = m_segments.size()-1; i >= 0; --i )
     {
         KoPathSegment &segment = m_segments[i];
-        m_splitPointPos[i] = m_shape->removePoint( m_splitPoints[i] );
+        m_splitPointPos[i] = shape->removePoint( m_splitPoints[i] );
         *segment.first = m_oldNeighbors[i].first;
         *segment.second = m_oldNeighbors[i].second;
     }
-    repaint( oldControlRect );
+    repaint( true );
 }
 
 QString KoSegmentSplitCommand::name() const
@@ -411,16 +447,18 @@ KoPointJoinCommand::KoPointJoinCommand( KoPathShape *shape, KoPathPoint *point1,
 
 void KoPointJoinCommand::execute()
 {
-    m_joined = m_shape->joinBetween( m_point1, m_point2 );
-    m_shape->repaint();
+    KoPathShape *shape = *m_shapes.begin();
+    m_joined = shape->joinBetween( m_point1, m_point2 );
+    shape->repaint();
 }
 
 void KoPointJoinCommand::unexecute()
 {
+    KoPathShape *shape = *m_shapes.begin();
     if( m_joined )
     {
-        m_shape->breakAt( KoPathSegment( m_point1, m_point2 ) );
-        m_shape->repaint();
+        shape->breakAt( KoPathSegment( m_point1, m_point2 ) );
+        shape->repaint();
     }
 }
 
@@ -441,7 +479,7 @@ KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *b
 {
     if( breakPoint )
         m_pointData1 = *breakPoint;
-    KoPathPoint *nextPoint = m_shape->nextPoint( m_breakPoint );
+    KoPathPoint *nextPoint = shape->nextPoint( m_breakPoint );
     if( nextPoint )
         m_pointData2 = *nextPoint;
 }
@@ -468,20 +506,22 @@ KoSubpathBreakCommand::~KoSubpathBreakCommand()
 
 void KoSubpathBreakCommand::execute()
 {
+    KoPathShape *shape = *m_shapes.begin();
+
     if( m_breakSegment )
     {
         if( m_segment.first && m_segment.second )
         {
-            m_broken = m_shape->breakAt( m_segment );
-            m_shape->repaint();
+            m_broken = shape->breakAt( m_segment );
+            shape->repaint();
         }
     }
     else
     {
         if( m_breakPoint )
         {
-            m_broken = m_shape->breakAt( m_breakPoint, m_newPoint );
-            m_shape->repaint();
+            m_broken = shape->breakAt( m_breakPoint, m_newPoint );
+            shape->repaint();
         }
     }
 }
@@ -491,25 +531,27 @@ void KoSubpathBreakCommand::unexecute()
     if( ! m_broken )
         return;
 
+    KoPathShape *shape = *m_shapes.begin();
+
     if( m_breakSegment )
     {
-        m_shape->joinBetween( m_segment.first, m_segment.second );
+        shape->joinBetween( m_segment.first, m_segment.second );
         *m_segment.first = m_pointData1;
         *m_segment.second = m_pointData2;
     }
     else
     {
-        KoPathPoint *nextPoint = m_shape->nextPoint( m_newPoint );
-        m_shape->removePoint( m_newPoint );
+        KoPathPoint *nextPoint = shape->nextPoint( m_newPoint );
+        shape->removePoint( m_newPoint );
         delete m_newPoint;
         m_newPoint = 0;
-        if( m_shape->joinBetween( m_breakPoint, nextPoint ) )
+        if( shape->joinBetween( m_breakPoint, nextPoint ) )
         {
             *m_breakPoint = m_pointData1;
             *nextPoint = m_pointData2;
         }
     }
-    m_shape->repaint();
+    shape->repaint();
 }
 
 QString KoSubpathBreakCommand::name() const
@@ -538,7 +580,7 @@ KoSegmentTypeCommand::KoSegmentTypeCommand( KoPathShape *shape, const QList<KoPa
 
 void KoSegmentTypeCommand::execute()
 {
-    QRectF oldControlRect = m_shape->outline().controlPointRect();
+    repaint( false );
 
     m_oldPointData.clear();
     foreach( KoPathSegment s, m_segments )
@@ -566,19 +608,19 @@ void KoSegmentTypeCommand::execute()
         }
     }
 
-    QPointF offset = m_shape->normalize();
+    QPointF offset = (*m_shapes.begin())->normalize();
     QMatrix matrix;
     matrix.translate( -offset.x(), -offset.y() );
     QMap<KoPathPoint*, KoPathPoint>::iterator it = m_oldPointData.begin();
     for(; it != m_oldPointData.end(); ++it )
         it.value().map( matrix );
 
-    repaint( oldControlRect.translated( -offset ) );
+    repaint( false );
 }
 
 void KoSegmentTypeCommand::unexecute()
 {
-    QRectF oldControlRect = m_shape->outline().controlPointRect();
+    repaint( false );
 
     KoPathPoint defaultPoint( 0, QPointF(0,0) );
     foreach( KoPathSegment s, m_segments )
@@ -587,7 +629,7 @@ void KoSegmentTypeCommand::unexecute()
         *s.second = m_oldPointData.value( s.second, defaultPoint );
     }
 
-    repaint( oldControlRect );
+    repaint( true );
 }
 
 QString KoSegmentTypeCommand::name() const

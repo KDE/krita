@@ -33,15 +33,17 @@ class KoParameterShape;
 /// the base command for commands altering a path shape
 class KoPathBaseCommand : public KCommand {
 public:
-    /// initialize the base command with the shape
+    KoPathBaseCommand();
+    /// initialize the base command with a single shape
     explicit KoPathBaseCommand( KoPathShape *shape );
 protected:
     /**
-     * Call this to repaint the shape after altering.
-     * @param oldControlPointRect the control point rect of the shape before altering
+     * Shedules repainting of all shapes control point rects.
+     * @param normalizeShape controls if paths are normalized before painting
      */
-    void repaint( const QRectF &oldControlPointRect );
-    KoPathShape *m_shape; ///< the shape the command operates on
+    void repaint( bool normalizeShapes );
+
+    QSet<KoPathShape*> m_shapes; ///< the shapes the command operates on
 };
 
 /// The undo / redo command for path point moving.
@@ -94,12 +96,17 @@ private:
 class KoPointPropertyCommand : public KoPathBaseCommand {
 public:
     /**
-     * Command to change the type of the point
-     * @param shape the path shape containing the point
-     * @param point the path point to move
-     * @param property ??
+     * Command to change the properties of a single point
+     * @param point the path point to change properties for
+     * @param property the new point properties to set
      */
-    KoPointPropertyCommand( KoPathShape *shape, KoPathPoint *point, KoPathPoint::KoPointProperties property );
+    KoPointPropertyCommand( KoPathPoint *point, KoPathPoint::KoPointProperties property );
+    /**
+     * Command to change the properties of multiple points
+     * @param points the path point whose properties to change
+     * @param properties the new properties to set
+     */
+    KoPointPropertyCommand( const QList<KoPathPoint*> &points, const QList<KoPathPoint::KoPointProperties> &properties );
     /// execute the command
     void execute();
     /// revert the actions done in execute
@@ -107,11 +114,15 @@ public:
     /// return the name of this command
     QString name() const;
 private:
-    KoPathPoint* m_point;
-    KoPathPoint::KoPointProperties m_newProperties;
-    KoPathPoint::KoPointProperties m_oldProperties;
-    QPointF m_controlPoint1;
-    QPointF m_controlPoint2;
+    typedef struct PointPropertyChangeset
+    {
+        KoPathPoint *point;
+        KoPathPoint::KoPointProperties oldProperty;
+        KoPathPoint::KoPointProperties newProperty;
+        QPointF firstControlPoint;
+        QPointF secondControlPoint;
+    };
+    QList<PointPropertyChangeset> m_changesets;
 };
 
 /// The undo / redo command for removing path points.

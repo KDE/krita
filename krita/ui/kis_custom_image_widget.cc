@@ -134,8 +134,9 @@ void KisCustomImageWidget::buttonClicked() {
     double resolution;
     resolution =  doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
-    width = 0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution));
-    height = 0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution));
+    // XXX: Added explicit casts to get rid of warning
+    width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
+    height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
 
     m_doc->newImage(txtName->text(), width, height, cs, KoColor(qc, cs), txtDescription->toPlainText(), resolution);
 

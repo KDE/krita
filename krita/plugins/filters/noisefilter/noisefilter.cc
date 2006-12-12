@@ -77,6 +77,7 @@ KisFilterConfiguration* KisFilterNoise::designerConfiguration(const KisPaintDevi
 
 KisFilterConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
+    Q_UNUSED(dev);
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);
 }
 
@@ -88,7 +89,6 @@ void KisFilterNoise::process(const KisPaintDeviceSP src, const QPoint& srcTopLef
     setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
-    Q_INT32 psize = cs->pixelSize();
     
     QVariant value;
     int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;

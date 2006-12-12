@@ -123,10 +123,10 @@ void KisFilter::setAutoUpdate(bool set) {
 
 QRect KisFilter::enlargeRect(QRect rect, KisFilterConfiguration* c) const {
     int margin = overlapMarginNeeded(c);
-    rect.rLeft() -= margin;
-    rect.rTop() -= margin;
-    rect.rRight() += margin;
-    rect.rBottom() += margin;
+    rect.setLeft(rect.left() - margin);
+    rect.setTop(rect.top() - margin);
+    rect.setRight(rect.right() + margin);
+    rect.setBottom(rect.bottom() + margin);
     return rect;
 }
 

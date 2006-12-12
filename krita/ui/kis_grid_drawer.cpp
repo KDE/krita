@@ -50,8 +50,11 @@ Qt::PenStyle GridDrawer::gs2style(quint32 s)
     }
 }
 
-void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& /*wr*/, const KisSubPerspectiveGrid* grid)
+void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisSubPerspectiveGrid* grid)
 {
+    Q_UNUSED(image);
+    Q_UNUSED(wr);
+
     KisConfig cfg;
     QPen mainPen = QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
     QPen subdivisionPen =  QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
@@ -74,7 +77,7 @@ void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& /*wr*/, cons
     QPointF horizVanishingPoint = KisPerspectiveMath::computeIntersection(d12,d34);
     QPointF vertVanishingPoint = KisPerspectiveMath::computeIntersection(d23,d41);
     
-    for(uint i = 1; i < grid->subdivisions(); i ++)
+    for(int i = 1; i < grid->subdivisions(); i ++)
     {
         QPointF pol1 = *grid->topRight() + i * v12;
         KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation( &pol1, &vertVanishingPoint );

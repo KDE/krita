@@ -124,7 +124,9 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_layerDup = new KAction(i18n("Duplicate"), actionCollection, "duplicate_layer");
     connect(m_layerDup, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 
-    m_layerHide = new KToggleAction(i18n("&Hide"), KShortcut(), this, SLOT(layerToggleVisible()), actionCollection, "hide_layer");
+    m_layerHide = new KToggleAction(i18n("&Hide"), actionCollection, "hide_layer");
+    connect(m_layerHide, SIGNAL(triggered()), this,  SLOT(layerToggleVisible()));
+
     m_layerHide->setCheckedState(KGuiItem(i18n("&Show")));
     m_layerHide->setChecked(false);
 
@@ -511,6 +513,11 @@ void KisLayerManager::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
 void KisLayerManager::insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
                                  KisGroupLayerSP parent, KisLayerSP above)
 {
+#warning "Port or remove the part layers!"
+    Q_UNUSED(viewRect);
+    Q_UNUSED(entry);
+    Q_UNUSED(parent);
+    Q_UNUSED(above);    
 #if 0 // XXX: What shall we do with parts?
     KisImageSP img = m_view->image();
     if (!img) return;
@@ -547,6 +554,9 @@ void KisLayerManager::addPartLayer()
 void KisLayerManager::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry)
 {
 #warning "Port addPartLayer or remove it!"
+    Q_UNUSED(parent);
+    Q_UNUSED(above);
+    Q_UNUSED(entry);    
 #if 0 // XXX: commented out because the canvas works differently and
 
     delete m_partHandler; // Only one at a time

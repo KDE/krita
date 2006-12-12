@@ -69,6 +69,7 @@ KisStatusBar::~KisStatusBar()
 
 void KisStatusBar::setZoom( int zoom )
 {
+    Q_UNUSED(zoom);
 /*
     if (zoom < 1 - EPSILON) {
         m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'g', 4));
@@ -79,10 +80,14 @@ void KisStatusBar::setZoom( int zoom )
 
 void KisStatusBar::setPosition( int x, int y )
 {
+    Q_UNUSED(x);
+    Q_UNUSED(y);
 }
 
 void KisStatusBar::setSize( int w, int h )
 {
+    Q_UNUSED(w);
+    Q_UNUSED(h);
 }
 
 void KisStatusBar::setSelection( KisImageSP img )
@@ -125,6 +130,7 @@ void KisStatusBar::setProfile( KisImageSP img )
 
 void KisStatusBar::setHelp( const QString &t )
 {
+    Q_UNUSED(t);
 }
 
 void KisStatusBar::updateStatusBarProfileLabel()

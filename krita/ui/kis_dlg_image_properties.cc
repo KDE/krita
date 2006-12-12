@@ -108,12 +108,14 @@ KisDlgImageProperties::~KisDlgImageProperties()
 
 int KisDlgImageProperties::imageWidth()
 {
-    return m_page->doubleWidth->value();
+    // XXX: adding explict cast
+    return static_cast<int>(m_page->doubleWidth->value());
 }
 
 int KisDlgImageProperties::imageHeight()
 {
-    return m_page->doubleHeight->value();
+    // XXX: adding explicit cast
+    return static_cast<int>(m_page->doubleHeight->value());
 }
 
 int KisDlgImageProperties::opacity()

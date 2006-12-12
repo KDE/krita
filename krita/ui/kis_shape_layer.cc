@@ -58,6 +58,8 @@ KisShapeLayer::~KisShapeLayer()
 
 void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 QIcon KisShapeLayer::icon() const
@@ -67,6 +69,7 @@ QIcon KisShapeLayer::icon() const
 
 KisPaintDeviceSP KisShapeLayer::prepareProjection(KisPaintDeviceSP projection, const QRect& r)
 {
+    Q_UNUSED(projection);
     // For all the contained shapes, render onto a QImage, and
     // composite with the cachec KisPaintDevice
     // If the contained shape is a path shape, use the decorator class
@@ -84,6 +87,8 @@ KisPaintDeviceSP KisShapeLayer::prepareProjection(KisPaintDeviceSP projection, c
 
 bool KisShapeLayer::saveToXML(QDomDocument doc, QDomElement elem)
 {
+    Q_UNUSED(doc);
+    Q_UNUSED(elem);
     return false;
 }
 
@@ -122,7 +127,7 @@ QRect KisShapeLayer::exactBounds() const
 
 bool KisShapeLayer::accept(KisLayerVisitor& visitor)
 {
-    visitor.visit(this);
+    return visitor.visit(this);
 }
 
 

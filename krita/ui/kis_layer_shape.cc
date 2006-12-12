@@ -54,17 +54,21 @@ KisLayerSP KisLayerShape::layer()
 
 void KisLayerShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 
 void KisLayerShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 void KisLayerShape::addChild( KoShape * shape )
 {
     if ( shape->shapeId() != KIS_MASK_SHAPE_ID ) {
-        kdDebug() << "Can only add mask shapes as children to layer shapes!\n";
+        kDebug() << "Can only add mask shapes as children to layer shapes!\n";
         return;
     }
 }

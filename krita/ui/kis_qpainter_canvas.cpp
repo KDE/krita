@@ -141,10 +141,14 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
            imagerect.adjust(-5,-5,5,5);
            imagerect.setCoords(imagerect.left()*pppx,imagerect.top()*pppy,
                             imagerect.right()*pppx,imagerect.bottom()*pppy);
-           img->renderToPainter(imagerect.x(),
-                                imagerect.y(),
-                                imagerect.x(), imagerect.y(),
-                                imagerect.width(), imagerect.height(), gc,
+           // XXX: Added explict cast
+           img->renderToPainter(static_cast<qint32>(imagerect.x()),
+                                static_cast<qint32>(imagerect.y()),
+                                static_cast<qint32>(imagerect.x()), 
+                                static_cast<qint32>(imagerect.y()),
+                                static_cast<qint32>(imagerect.width()),
+                                static_cast<qint32>(imagerect.height()),
+                                gc,
                                 m_canvas->monitorProfile(),
                                 0);
             ++it;

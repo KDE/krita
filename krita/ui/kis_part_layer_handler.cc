@@ -47,7 +47,7 @@ void KisPartLayerHandler::gotMoveEvent(KoPointerEvent* event) {
         return;
     }
 
-#warning Port this!
+#warning "Port or remove the part layers!"
 # if 0    
     QPainter painter( m_view->canvasController()->kiscanvas()->canvasWidget() );
     painter.setRasterOp( NotROP );
@@ -66,7 +66,9 @@ void KisPartLayerHandler::gotMoveEvent(KoPointerEvent* event) {
 #endif    
 }
 
-void KisPartLayerHandler::gotButtonPressEvent(KoPointerEvent* event) {
+void KisPartLayerHandler::gotButtonPressEvent(KoPointerEvent* event) 
+{
+    Q_UNUSED(event);
 #if 0
     m_start = event->pos().roundQPoint();
     m_end = m_start;
@@ -74,7 +76,9 @@ void KisPartLayerHandler::gotButtonPressEvent(KoPointerEvent* event) {
 #endif    
 }
 
-void KisPartLayerHandler::gotButtonReleaseEvent(KoPointerEvent* event) {
+void KisPartLayerHandler::gotButtonReleaseEvent(KoPointerEvent* event)
+{
+    Q_UNUSED(event);
     if (!m_started) {
         done();
         return;

@@ -51,7 +51,7 @@ public:
         m_uri = uri;
     }
 
-    bool visit( KisExternalLayer * layer )
+    bool visit( KisExternalLayer * )
         {
             return true;
         }

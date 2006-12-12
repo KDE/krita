@@ -41,7 +41,7 @@ public:
     void setUndoAdapter(KisUndoAdapter* undo) { m_undo = undo; }
 public:
 
-    bool visit( KisExternalLayer * layer )
+    bool visit( KisExternalLayer * )
         {
             return true;
         }

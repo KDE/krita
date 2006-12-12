@@ -57,7 +57,7 @@ public:
 
 public:
 
-    bool visit( KisExternalLayer * layer )
+    bool visit( KisExternalLayer * )
         {
             return true;
         }

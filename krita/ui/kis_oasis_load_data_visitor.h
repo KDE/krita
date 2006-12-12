@@ -42,7 +42,7 @@ class KisOasisLoadDataVisitor : public KisLayerVisitor {
         bool visit(KisPartLayer *layer);
         bool visit(KisAdjustmentLayer *layer);
 
-        bool visit( KisExternalLayer * layer )
+        bool visit( KisExternalLayer * )
             {
                 return true;
             }

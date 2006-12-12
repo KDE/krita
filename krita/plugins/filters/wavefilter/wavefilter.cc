@@ -51,14 +51,19 @@ K_EXPORT_COMPONENT_FACTORY( kritawavefilter, KritaWaveFilterFactory( "krita" ) )
 
 class KisWaveCurve {
     public:
+        virtual ~KisWaveCurve() {}
         virtual double valueAt(int x, int y) =0;
 };
 
 class KisSinusoidalWaveCurve : public KisWaveCurve {
     public:
+
         KisSinusoidalWaveCurve(int amplitude, int wavelenght, int shift) : m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift)
         {
         }
+
+        virtual ~KisSinusoidalWaveCurve() {}
+
         virtual double valueAt(int x, int y)
         {
             return y + m_amplitude * cos( (double) ( m_shift + x) / m_wavelength );
@@ -69,9 +74,13 @@ class KisSinusoidalWaveCurve : public KisWaveCurve {
 
 class KisTriangleWaveCurve : public KisWaveCurve {
     public:
+
         KisTriangleWaveCurve(int amplitude, int wavelenght, int shift) :  m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift)
         {
         }
+
+        virtual ~KisTriangleWaveCurve() {}
+
         virtual double valueAt(int x, int y)
         {
             return y +  m_amplitude * pow( -1, (m_shift + x) / m_wavelength )  * (0.5 - (double)( (m_shift + x) % m_wavelength ) / m_wavelength );

@@ -229,13 +229,13 @@ bool KisPalette::init()
             m_columns = columns.toInt();
             index = 3;
         }
-        for (Q_UINT32 i = index; i < lines.size(); i++) {
+        for (Q_INT32 i = index; i < lines.size(); i++) {
             if (lines[i].startsWith("#")) {
-                m_comment += lines[i].mid(1).stripWhiteSpace() + " ";
+                m_comment += lines[i].mid(1).trimmed() + " ";
             }
             else if (!lines[i].isEmpty())
             {
-                QStringList a = QStringList::split(" ", lines[i].replace(QChar('\t'), " "));
+                QStringList a = lines[i].replace(QChar('\t'), " ").split(" ");
 
                 if (a.count() < 3)
                 {

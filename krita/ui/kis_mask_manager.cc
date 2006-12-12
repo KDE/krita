@@ -42,23 +42,26 @@ KisMaskManager::KisMaskManager( KisView2 * view)
 
 void KisMaskManager::setup( KActionCollection * actionCollection )
 {
-    m_createMask = new KAction(i18n("Create Mask"), KShortcut(), this,
-                               SLOT(slotCreateMask()), actionCollection, "create_mask");
-    m_maskFromSelection = new KAction(i18n("Mask From Selection"), KShortcut(), this,
-                                      SLOT(slotMaskFromSelection()), actionCollection,
-                                      "mask_fromsel");
-    m_maskToSelection = new KAction(i18n("Mask To Selection"), KShortcut(), this,
-                                    SLOT(slotMaskToSelection()), actionCollection, "mask_tosel");
-    m_applyMask = new KAction(i18n("Apply Mask"), KShortcut(), this, SLOT(slotApplyMask()),
-                              actionCollection, "apply_mask");
-    m_removeMask = new KAction(i18n("Remove Mask"), KShortcut(), this,
-                               SLOT(slotRemoveMask()), actionCollection, "remove_mask");
-    m_editMask = new KToggleAction(i18n( "Edit Mask" ), KShortcut(), this,
-                                   SLOT(slotEditMask()), actionCollection, "edit_mask");
-    m_showMask = new KToggleAction(i18n( "Show Mask" ), KShortcut(), this,
-                                   SLOT(slotShowMask()), actionCollection, "show_mask");
+    m_createMask = new KAction(i18n("Create Mask"), actionCollection, "create_mask");
+    connect(m_createMask, SIGNAL(triggered()), this, SLOT(slotCreateMask()));
 
+    m_maskFromSelection = new KAction(i18n("Mask From Selection"), actionCollection, "mask_fromsel");
+    connect(m_maskFromSelection, SIGNAL(triggered()), this, SLOT(slotMaskFromSelection()));
 
+    m_maskToSelection = new KAction(i18n("Mask To Selection"), actionCollection, "mask_tosel");
+    connect(m_maskToSelection, SIGNAL(triggered()), this, SLOT(slotMaskToSelection()));
+
+    m_applyMask = new KAction(i18n("Apply Mask"), actionCollection, "apply_mask");
+    connect(m_applyMask, SIGNAL(triggered()), this, SLOT(slotApplyMask()));
+
+    m_removeMask = new KAction(i18n("Remove Mask"), actionCollection, "remove_mask");
+    connect(m_removeMask, SIGNAL(triggered()), this, SLOT(slotRemoveMask()));
+
+    m_editMask = new KToggleAction(i18n( "Edit Mask" ),  actionCollection, "edit_mask");
+    connect(m_editMask, SIGNAL(triggered()), this, SLOT(slotEditMask()));
+
+    m_showMask = new KToggleAction(i18n( "Show Mask" ),  actionCollection, "show_mask");
+    connect(m_showMask, SIGNAL(triggere4d()), this, SLOT(slotShowMask()));
 }
 
 void KisMaskManager::updateGUI()

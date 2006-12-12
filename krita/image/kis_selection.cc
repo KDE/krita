@@ -88,11 +88,11 @@ QImage KisSelection::maskImage() const
 
         bounds = m_parentPaintDevice->exactBounds();
         bounds = bounds.intersect( m_parentPaintDevice->image()->bounds() );
-        img = QImage(bounds.width(), bounds.height(), 32);
+        img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
     }
     else {
         bounds = QRect( 0, 0, image()->width(), image()->height());
-        img = QImage(bounds.width(), bounds.height(), 32);
+        img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
     }
 
     KisHLineConstIteratorPixel it = createHLineConstIterator(bounds.x(), bounds.y(), bounds.width());

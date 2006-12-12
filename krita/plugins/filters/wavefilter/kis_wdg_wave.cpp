@@ -88,11 +88,11 @@ KisFilterConfiguration* KisWdgWave::configuration() const
     config->setProperty("horizontalwavelength", this->widget()->intHWavelength->value() );
     config->setProperty("horizontalshift", this->widget()->intHShift->value() );
     config->setProperty("horizontalamplitude", this->widget()->intHAmplitude->value() );
-    config->setProperty("horizontalshape", this->widget()->cbHShape->currentItem() );
+    config->setProperty("horizontalshape", this->widget()->cbHShape->currentIndex() );
     config->setProperty("verticalwavelength", this->widget()->intVWavelength->value() );
     config->setProperty("verticalshift", this->widget()->intVShift->value() );
     config->setProperty("verticalamplitude", this->widget()->intVAmplitude->value() );
-    config->setProperty("verticalshape", this->widget()->cbVShape->currentItem() );
+    config->setProperty("verticalshape", this->widget()->cbVShape->currentIndex() );
     return config;
 }
 

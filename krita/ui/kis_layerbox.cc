@@ -41,7 +41,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kmenu.h>
-#include <k3popupmenu.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
@@ -70,6 +69,7 @@ KisLayerBox::KisLayerBox(KisView2 *view, const char *name)
     , m_view( view )
     , m_image( 0 )
 {
+    setObjectName(name);
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     QWidget* mainWidget = new QWidget(this);

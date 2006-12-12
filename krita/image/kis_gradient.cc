@@ -495,8 +495,8 @@ void KisGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, 
             h -= 360;
         }
     }
-
-    quint8 opacity = startOpacity + t * (endOpacity - startOpacity);
+    // XXX: added an explicit cast. Is this correct?
+    quint8 opacity = static_cast<quint8>(startOpacity + t * (endOpacity - startOpacity));
 
     QColor result;
     result.setHsv( h, s, v);
@@ -543,8 +543,8 @@ void KisGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst,
             h -= 360;
         }
     }
-
-    quint8 opacity = startOpacity + t * (endOpacity - startOpacity);
+    // XXX: Added an explicit static cast
+    quint8 opacity = static_cast<quint8>(startOpacity + t * (endOpacity - startOpacity));
 
     QColor result;
     result.setHsv( h, s, v);

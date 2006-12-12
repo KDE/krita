@@ -742,7 +742,16 @@ KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const QDomElement& element, Ki
 KisPartLayerSP KisDoc2::loadPartLayer(const QDomElement& element, KisImageSP img,
                                       const QString & name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
                                       bool visible, bool locked,
-                                      const QString & compositeOp) {
+                                      const QString & compositeOp) 
+{
+#warning "Kill or port the partlayer stuff"
+    Q_UNUSED(element);
+    Q_UNUSED(img);
+    Q_UNUSED(name);
+    Q_UNUSED(opacity);
+    Q_UNUSED(visible);
+    Q_UNUSED(locked);
+    Q_UNUSED(compositeOp);
 #if 0
     KisChildDoc* child = new KisChildDoc(this);
     QString filename(element.attribute("filename"));
@@ -773,6 +782,17 @@ KisPartLayerSP KisDoc2::loadPartLayer(const QDomElement& element, KisImageSP img
 
 KisShapeLayerSP KisDoc2::loadShapeLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp)
 {
+#warning "Implement loading of shape layers!"
+    Q_UNUSED(elem);
+    Q_UNUSED(img);
+    Q_UNUSED(name);
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(opacity);
+    Q_UNUSED(visible);
+    Q_UNUSED(locked);
+    Q_UNUSED(compositeOp);
+
     return KisShapeLayerSP();
 }
 
@@ -1024,6 +1044,7 @@ KoView* KisDoc2::createViewInstance(QWidget* parent)
 
 void KisDoc2::paintContent(QPainter& painter, const QRect& rc, bool transparent, double zoomX, double zoomY)
 {
+    Q_UNUSED(transparent);
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
     KoColorProfile *  profile = KisMetaRegistry::instance()->csRegistry()->profileByName(monitorProfileName);
@@ -1208,6 +1229,8 @@ void KisDoc2::slotIOProgress(qint8 percentage)
 
 KisChildDoc * KisDoc2::createChildDoc( const QRect & rect, KoDocument* childDoc )
 {
+    Q_UNUSED(rect);
+    Q_UNUSED(childDoc);
 #if 0
     KisChildDoc * ch = new KisChildDoc( this, rect, childDoc );
     insertChild( ch );

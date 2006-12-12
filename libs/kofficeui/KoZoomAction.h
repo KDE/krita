@@ -20,12 +20,12 @@
 #ifndef kozoomaction_h
 #define kozoomaction_h
 
+#include <QLineEdit>
 #include <kaction.h>
 #include <koffice_export.h>
 #include <kselectaction.h>
 #include <KoZoomMode.h>
 
-class QLineEdit;
 class QSlider;
 class QRadioButton;
 
@@ -118,13 +118,28 @@ protected:
   /// Regenerates the action's items
   void regenerateItems( const QString& zoomString );
 
-  KoZoomMode::Modes m_zoomModes;
-    QLineEdit *m_number;
+    class ExtLineEdit;
+
+    KoZoomMode::Modes m_zoomModes;
+    ExtLineEdit *m_number;
     QSlider *m_slider;
     QRadioButton *m_actualButton;
     QRadioButton *m_fitWidthButton;
     QRadioButton *m_fitPageButton;
     int m_sliderLookup[33];
+};
+
+class KoZoomAction::ExtLineEdit : public QLineEdit
+{
+Q_OBJECT
+
+public:
+    ExtLineEdit ( const QString & contents, QWidget * parent = 0 );
+
+Q_SIGNALS:
+    void lostFocus();
+protected:
+    void focusOutEvent ( QFocusEvent * event );
 };
 
 #endif // kozoomaction_h

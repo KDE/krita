@@ -251,7 +251,6 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     QWidget * group = new QWidget(_parent);
 
     m_slider = new QSlider(Qt::Horizontal);
-    m_slider->setFocusPolicy(Qt::NoFocus);
     m_slider->setMinimum(0);
     m_slider->setMaximum(32);
     m_slider->setValue(16);
@@ -261,13 +260,21 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     m_slider->setMaximumWidth(80);
 
     QValidator *validator = new QIntValidator(1, 1600, this);
-    m_number = new QLineEdit("100", group);
+    m_number = new ExtLineEdit("100", group);
     m_number->setValidator(validator);
     m_number->setMaxLength(5);
     m_number->setMaximumWidth(40);
+    m_number->setMaximumHeight(22);
     m_number->setAlignment(Qt::AlignRight);
+    m_number->hide();
 
     QLabel *pctLabel = new QLabel("% ");
+    QLabel *numLabel = new QLabel("100");
+    numLabel->setMaximumWidth(40);
+    numLabel->setMinimumWidth(40);
+    numLabel->setIndent(5);
+    numLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    numLabel->setContextMenuPolicy(Qt::CustomContextMenu);
 
     QGridLayout *layout = new QGridLayout();
     int radios=0;
@@ -276,21 +283,25 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
         m_actualButton= new QRadioButton("AP",group);
         layout->addWidget(m_actualButton, 0, radios);
         radios++;
+    m_actualButton->setMaximumHeight(22);
     }
     if(m_zoomModes & KoZoomMode::ZOOM_WIDTH)
     {
         m_fitWidthButton = new QRadioButton("FW",group);
         layout->addWidget(m_fitWidthButton, 0, radios);
         radios++;
+    m_fitWidthButton->setMaximumHeight(22);
     }
     if(m_zoomModes & KoZoomMode::ZOOM_PAGE)
     {
         m_fitPageButton = new QRadioButton("FP",group);
         layout->addWidget(m_fitPageButton, 0, radios);
         radios++;
+    m_fitPageButton->setMaximumHeight(22);
     }
 
     layout->addWidget(m_number, 0, radios);
+    layout->addWidget(numLabel, 0, radios);
     layout->addWidget(pctLabel, 0, radios+1);
     layout->addWidget(m_slider, 0, radios+2);
     layout->setMargin(0);
@@ -300,8 +311,28 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
 
     connect(m_slider, SIGNAL(valueChanged(int)), this, SLOT(sliderValueChanged(int)));
     connect(m_number, SIGNAL(returnPressed()), this, SLOT(numberValueChanged()));
+    connect(m_number, SIGNAL(returnPressed()), numLabel, SLOT(show()));
+    connect(m_number, SIGNAL(returnPressed()), m_number, SLOT(hide()));
+    connect(m_number, SIGNAL(lostFocus()), numLabel, SLOT(show()));
+    connect(m_number, SIGNAL(lostFocus()), m_number, SLOT(hide()));
+    connect(m_number, SIGNAL(textChanged(const QString & )), numLabel, SLOT(setText(const QString & )));
+    connect(numLabel, SIGNAL(customContextMenuRequested(const QPoint &)), m_number, SLOT(show()));
+    connect(numLabel, SIGNAL(customContextMenuRequested(const QPoint &)), m_number, SLOT(selectAll()));
+    connect(numLabel, SIGNAL(customContextMenuRequested(const QPoint &)), m_number, SLOT(setFocus()));
+    connect(numLabel, SIGNAL(customContextMenuRequested(const QPoint &)), numLabel, SLOT(hide()));
     return group;
 
+}
+
+KoZoomAction::ExtLineEdit::ExtLineEdit ( const QString & contents, QWidget * parent) :
+   QLineEdit(contents, parent)
+{
+}
+
+void KoZoomAction::ExtLineEdit::focusOutEvent ( QFocusEvent * event )
+{
+    QLineEdit::focusOutEvent(event);
+    emit lostFocus();
 }
 
 #include "KoZoomAction.moc"

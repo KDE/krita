@@ -25,11 +25,10 @@
 #include <QLayout>
 #include <QPainter>
 #include <QToolTip>
+#include <QTextEdit>
 
-#include <k3activelabel.h>
 #include <klocale.h>
 
-//"[ %1, %2 ]"
 #define POINTEDIT_MASK "%1,%2"
 
 using namespace KoProperty;
@@ -38,13 +37,12 @@ PointEdit::PointEdit(Property *property, QWidget *parent)
  : Widget(property, parent)
 {
 	setHasBorders(false);
-	m_edit = new K3ActiveLabel(this);
-	m_edit->setFocusPolicy(Qt::NoFocus);
+	m_edit = new QLabel(this);
+	m_edit->setTextInteractionFlags(Qt::TextSelectableByMouse);
 //	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
 	QPalette pal = m_edit->palette();
 	pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
 	m_edit->setPalette(pal);
-	m_edit->setLineWrapMode( QTextEdit::NoWrap );
 //	m_edit->setBackgroundMode(Qt::PaletteBase);
 //	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
@@ -65,8 +63,7 @@ void
 PointEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_value = value;
-	m_edit->selectAll();
-	m_edit->setPlainText(QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
+	m_edit->setText(QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
 	this->setToolTip( QString("%1, %2").arg(value.toPoint().x()).arg(value.toPoint().y()));
 
 	if (emitChange)

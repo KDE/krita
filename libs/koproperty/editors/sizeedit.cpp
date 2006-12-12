@@ -26,10 +26,8 @@
 #include <QPainter>
 #include <QToolTip>
 
-#include <k3activelabel.h>
 #include <klocale.h>
 
-//"[ %1, %2 ]"
 #define SIZEEDIT_MASK "%1x%2"
 
 using namespace KoProperty;
@@ -38,8 +36,8 @@ SizeEdit::SizeEdit(Property *property, QWidget *parent)
  : Widget(property, parent)
 {
 	setHasBorders(false);
-	m_edit = new K3ActiveLabel(this);
-	m_edit->setFocusPolicy(Qt::NoFocus);
+	m_edit = new QLabel(this);
+	m_edit->setTextInteractionFlags(Qt::TextSelectableByMouse);
 //	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
 	QPalette pal = m_edit->palette();
 	pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
@@ -64,8 +62,7 @@ void
 SizeEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_value = value;
-	m_edit->selectAll();
-	m_edit->setPlainText(QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
+	m_edit->setText(QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
 	this->setToolTip( QString("%1 x %2").arg(value.toSize().width()).arg(value.toSize().height()));
 
 	if (emitChange)

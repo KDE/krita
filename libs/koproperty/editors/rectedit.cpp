@@ -24,11 +24,10 @@
 #include <QLayout>
 #include <QPainter>
 #include <QToolTip>
+#include <QLabel>
 
-#include <k3activelabel.h>
 #include <klocale.h>
 
-//	"[ %1, %2, %3, %4 ]"
 #define RECTEDIT_MASK "%1,%2 %3x%4"
 
 using namespace KoProperty;
@@ -37,12 +36,11 @@ RectEdit::RectEdit(Property *property, QWidget *parent)
  : Widget(property, parent)
 {
 	setHasBorders(false);
-	m_edit = new K3ActiveLabel(this);
-	m_edit->setFocusPolicy(Qt::NoFocus);
+	m_edit = new QLabel(this);
+	m_edit->setTextInteractionFlags(Qt::TextSelectableByMouse);
 	QPalette pal = m_edit->palette();
 	pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
 	m_edit->setPalette(pal);
-	m_edit->setLineWrapMode( QTextEdit::NoWrap );
 	m_edit->setMinimumHeight(5);
 	setEditor(m_edit);
 //	setFocusWidget(m_edit);
@@ -61,8 +59,7 @@ void
 RectEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_value = value;
-	m_edit->selectAll();
-	m_edit->setPlainText(QString(RECTEDIT_MASK).arg(value.toRect().x()).
+	m_edit->setText(QString(RECTEDIT_MASK).arg(value.toRect().x()).
 		arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
 	this->setToolTip( i18n("Position: %1, %2\nSize: %3 x %4", value.toRect().x()).
 		arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));

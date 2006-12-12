@@ -25,7 +25,7 @@
 
 #include <QVariant>
 
-class K3ActiveLabel;
+class QLabel;
 
 namespace KoProperty {
 
@@ -46,7 +46,7 @@ class KOPROPERTY_EXPORT PointEdit : public Widget
 		virtual void setReadOnlyInternal(bool readOnly);
 
 	private:
-		K3ActiveLabel *m_edit;
+		QLabel *m_edit;
 		QVariant m_value;
 };
 

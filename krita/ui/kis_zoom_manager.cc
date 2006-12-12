@@ -25,6 +25,7 @@
 #include <ktoggleaction.h>
 #include <kicon.h>
 #include <kstatusbar.h>
+#include <kdebug.h>
 
 #include <KoView.h>
 #include <KoZoomAction.h>

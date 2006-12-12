@@ -39,8 +39,9 @@
 //Added by qt3to4:
 #include <Q3MemArray>
 #include <Q3PtrList>
-#include "KoRect.h"
 //#define DEBUG_PAINT
+
+#define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
 
 KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, bool updateIds )
     : p( pr ), n( nx ), doc( d ),

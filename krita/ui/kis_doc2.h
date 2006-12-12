@@ -51,7 +51,6 @@ class KisChildDoc;
 class KRITAUI_EXPORT KisDoc2 : public KoDocument, public KoShapeControllerBase, private KisUndoAdapter
 {
 
-    typedef KoDocument super;
     Q_OBJECT
 
 public:

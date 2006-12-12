@@ -30,10 +30,10 @@ class KisLayerContainer::Private
 {
 
 public:
-    KisGroupLayerSP groupLayer;
+    KisLayerSP groupLayer;
 };
 
-KisLayerContainer::KisLayerContainer( KoShapeContainer *parent, KisGroupLayerSP groupLayer )
+KisLayerContainer::KisLayerContainer( KoShapeContainer *parent, KisLayerSP groupLayer )
     : KoShapeContainer()
 {
     m_d = new Private();
@@ -48,7 +48,7 @@ KisLayerContainer::~KisLayerContainer()
     delete m_d;
 }
 
-KisGroupLayerSP KisLayerContainer::groupLayer()
+KisLayerSP KisLayerContainer::groupLayer()
 {
     return m_d->groupLayer;
 }

@@ -80,6 +80,7 @@
 #include "kis_command.h"
 #include "kis_meta_registry.h"
 #include "kis_nameserver.h"
+#include "kis_external_layer_iface.h"
 
 // Local
 #include "kis_factory2.h"
@@ -115,18 +116,18 @@ static const char *CURRENT_DTD_VERSION = "1.3";
  */
 #define NATIVE_MIMETYPE "application/x-kra"
 
-typedef QList<KisLayerShape*> KisLayerList;
+typedef QMap<KisLayerSP, KoShape*> KisLayerMap;
 
 namespace {
 
     class KisCommandImageMv : public KisCommand {
-        typedef KisCommand super;
+
 
     public:
         KisCommandImageMv(KisDoc2 *doc,
                           KisUndoAdapter *adapter,
                           const QString& name,
-                          const QString& oldName) : super(i18n("Rename Image"), adapter)
+                          const QString& oldName) : KisCommand(i18n("Rename Image"), adapter)
             {
                 m_doc = doc;
                 m_name = name;
@@ -195,18 +196,31 @@ public:
     qint32 conversionDepth;
     int ioProgressTotalSteps;
     int ioProgressBase;
-    KisLayerList layerShapes;
+    KisLayerMap layerShapes; // maps from krita/image layers to shapes
     KoShape * activeLayer;
     KoViewConverter * viewConverter;
-
     QMap<KisLayer *, QString> layerFilenames; // temp storage during
                                               // load
+
     void setImage( KisDoc2 * doc, KisImageSP currentImage )
         {
+            // First clear the current set of shapes away
+            foreach( KoShape* shape, layerShapes ) {
+                doc->removeShape( shape );
+                delete shape; // XXX: What happes with stuff on the
+                              // clipboard? And how about undo information?
+
+            }
+            layerShapes.clear();
+
             m_currentImage = currentImage;
+
             KisLayerShape * rootLayerShape = new KisLayerShape( 0, currentImage->rootLayer() );
-            layerShapes.append( rootLayerShape );
+
+            layerShapes[currentImage->rootLayer()] = rootLayerShape;
             activeLayer = rootLayerShape;
+
+            kDebug() << ">>>>>>>>>>>>>>>>>>>>> creating root layer shape " << rootLayerShape << endl;
 
             QObject::connect( currentImage, SIGNAL(sigLayerAdded( KisLayerSP )), doc, SLOT(slotLayerAdded( KisLayerSP )) );
             QObject::connect( currentImage, SIGNAL(sigLayerRemoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )), doc, SLOT(slotLayerRemoved( KisLayerSP, KisGroupLayerSP, KisLayerSP) ));
@@ -228,7 +242,7 @@ private:
 
 
 KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-    : super(parentWidget, parent, singleViewMode)
+    : KoDocument(parentWidget, parent, singleViewMode)
     , m_d( new KisDocPrivate() )
 {
 
@@ -241,6 +255,13 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
 
 KisDoc2::~KisDoc2()
 {
+    foreach( KoShape* shape, m_d->layerShapes ) {
+        removeShape( shape );
+        delete shape; // XXX: What happes with stuff on the
+                      // clipboard? And how about undo information?
+    }
+    m_d->layerShapes.clear();
+
     delete m_d;
 }
 
@@ -885,7 +906,7 @@ QWidget* KisDoc2::createCustomDocumentWidget(QWidget *parent)
 
 
 KoDocument* KisDoc2::hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix) {
-    KoDocument* doc = super::hitTest(pos, view, matrix);
+    KoDocument* doc = KoDocument::hitTest(pos, view, matrix);
     if (doc && doc != this) {
         // We hit a child document. We will only acknowledge we hit it, if the hit child
         // is the currently active parts layer.
@@ -1226,75 +1247,62 @@ void KisDoc2::initEmpty()
 
 void KisDoc2::addShape( KoShape* shape )
 {
-    kDebug() << "Add shape: " << shape->shapeId() << endl;
+    kDebug() << "KisDoc2::addShape: " << shape->shapeId() << endl;
 
-    if ( shape->shapeId() == KIS_LAYER_SHAPE_ID ) {
-    }
-    else if ( shape->shapeId() == KIS_SHAPE_LAYER_ID ) {
-    }
-    else if ( shape->shapeId() == KIS_LAYER_CONTAINER_ID ) {
-    }
-    else if ( shape->shapeId() == KIS_MASK_SHAPE_ID ) {
-    }
-    else {
+    if (   shape->shapeId() != KIS_LAYER_SHAPE_ID
+        && shape->shapeId() != KIS_SHAPE_LAYER_ID
+        && shape->shapeId() != KIS_LAYER_CONTAINER_ID
+        && shape->shapeId() != KIS_MASK_SHAPE_ID )
+    {
         // An ordinary shape, if the active layer is a KisShapeLayer,
         // add it there, otherwise, create a new KisShapeLayer on top
         // of the active layer.
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( m_d->activeLayer );
         if ( !shapeLayer ) {
 
+            kDebug() << "creating a new shape layer for shape " << shape << endl;
             KoShape * currentLayer = m_d->activeLayer;
-
+            kDebug() << "Active layer: " << m_d->activeLayer << ", as shape: " << currentLayer << endl;
             KisLayerContainer * container = 0;
             while ( container == 0 ) {
                 kDebug() << currentLayer->shapeId() << endl;
                 container = dynamic_cast<KisLayerContainer *>( currentLayer );
-                currentLayer = currentLayer->parent();
+                if ( currentLayer->parent() )
+                    currentLayer = currentLayer->parent();
+                else
+                    break;
             }
-            shapeLayer = new KisShapeLayer(container, m_d->viewConverter, currentImage(), "Flake shapes", OPACITY_OPAQUE);
+            shapeLayer = new KisShapeLayer(container, m_d->viewConverter, currentImage(), i18n( "Flake shapes %1" ).arg( m_d->nserver->number() ), OPACITY_OPAQUE);
 
-            // XXX: Add the shape layer to the parent group
-
-            // XXX: How to make sure it appears in the layerbox? Or
-            // does that happen automatically?
-
-            // Make the new layer active
-            m_d->activeLayer = shapeLayer;
+            // Add the shape layer to the image. The image then emits
+            // a signal that is caught by us (the document) and the
+            // layerbox and makes sure the new layer is in the
+            // layer-shape map and in the layerbox
+            // XXX: This casting around of layers is a blight and
+            // a blot on the landscape. Especially when I have to
+            // wriggle the pointer out of the shared pointer.
+            m_d->currentImage()->addLayer( shapeLayer,
+                                           qobject_cast<KisGroupLayer*>( container->groupLayer().data() ) );
 
         }
         shapeLayer->addChild( shape );
     }
 
-    foreach( KoView *view, views() ) {
-        KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
-        canvas->shapeManager()->add(shape);
-        canvas->canvasWidget()->update();
-    }
     setModified( true );
 }
 
 void KisDoc2::removeShape( KoShape* shape )
 {
-    kDebug() << "Remove shape: " << shape->shapeId() << endl;
+    kDebug() << "KisDoc2::removeShape: " << shape->shapeId() << endl;
 
-    if ( shape->shapeId() == KIS_LAYER_SHAPE_ID ) {
-    }
-    else if ( shape->shapeId() == KIS_SHAPE_LAYER_ID ) {
-    }
-    else if ( shape->shapeId() == KIS_LAYER_CONTAINER_ID ) {
-    }
-    else if ( shape->shapeId() == KIS_MASK_SHAPE_ID ) {
-    }
-    else {
-        KoShapeContainer * container = shape->parent();
-        if ( container ) {
-            container->removeChild( shape );
+    KoShapeContainer * container = shape->parent();
+    if ( container ) {
+        container->removeChild( shape );
 
-            // If there are no longer children, remove the container
-            // layer, too.
-            if ( container->childCount() == 0 ) {
-                removeShape( container );
-            }
+        // If there are no longer children, remove the container
+        // layer, too.
+        if ( container->childCount() == 0 ) {
+            removeShape( container );
         }
     }
 
@@ -1304,30 +1312,72 @@ void KisDoc2::removeShape( KoShape* shape )
         canvas->canvasWidget()->update();
     }
 
-    // XXX: delete the child? What happens with cut, undo? I think
-    // shapes should be wrapped in shared pointers!
-
     setModified( true );
 }
 
 
 void KisDoc2::slotLayerAdded( KisLayerSP layer )
 {
+    kDebug() << "KisDoc2::slotLayerAdded " << layer->name() << endl;
+
     // Check whether the layer is already in the map
-    // If not, create a shape around the layer
+    if ( m_d->layerShapes.contains( layer ) ) {
+        kDebug() << "The document already contains layer " << layer->name() << endl;
+        return;
+    }
+
+    // Get the parent -- there is always one
+    KoShapeContainer * parent = 0;
+    if ( m_d->activeLayer->shapeId() == KIS_LAYER_CONTAINER_ID ) {
+        parent = dynamic_cast<KoShapeContainer*>( m_d->activeLayer );
+        Q_ASSERT( parent );
+    }
+    else {
+        parent = m_d->activeLayer->parent();
+    }
+
+    KoShape * shape = 0;
+
+    // Create a shape around the layer
+    if ( layer->inherits( "KisGroupLayer" ) ) {
+        shape = new KisLayerContainer(parent, layer);
+    }
+    else if ( layer->inherits( "KisPaintLayer" )  || layer->inherits( "KisAdjustmentLayer" ) ) {
+        shape = new KisLayerShape( parent, layer );
+    }
+    else if ( layer->inherits( "KisShapeLayer" ) ) {
+        shape = dynamic_cast<KisShapeLayer*>( layer.data() );
+        Q_ASSERT( shape );
+    }
+    // XXX: We don't do part layers anymore
+
     // Put the layer in the right place in the hierarchy
+    shape->setParent( parent );
+
+    m_d->layerShapes[layer] = shape;
+
+    foreach( KoView *view, views() ) {
+        KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
+        canvas->shapeManager()->add(shape);
+        canvas->canvasWidget()->update();
+    }
+
+    m_d->activeLayer = shape;
 }
 
 void KisDoc2::slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis )
 {
+    kDebug() << "KisDoc2::slotLayerRemoved " << layer->name() << ", wasParent: " << wasParent->name() << ", wasAboveThis: " << wasAboveThis->name() << endl;
 }
 
 void KisDoc2::slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis )
 {
+    kDebug() << "KisDoc2::slotLayerMmoved " << layer->name() << ", previousParent: " << previousParent->name() << ", wasAboveThis: " << wasAboveThis->name() << endl;
 }
 
 void KisDoc2::slotLayersChanged( KisGroupLayerSP rootLayer )
 {
+    kDebug() << "KisDoc2::slotLayersChanged " << rootLayer->name() << endl;
 }
 
 #include "kis_doc2.moc"

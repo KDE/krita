@@ -279,7 +279,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 d.setCurrentImage( dst );
                 dst->addLayer(l->clone(), dst->rootLayer(), KisLayerSP(0));
 
-                d.setOutputMimeType(mimefilter.latin1());
+                d.setOutputMimeType(mimefilter.toLatin1());
                 d.exp0rt(url);
 
             }

@@ -43,13 +43,13 @@ class KisLayerContainer : public KoShapeContainer
 
 public:
 
-    KisLayerContainer( KoShapeContainer * parent, KisGroupLayerSP groupLayer );
+    KisLayerContainer( KoShapeContainer * parent, KisLayerSP groupLayer );
 
     virtual ~KisLayerContainer();
 
 public:
 
-    KisGroupLayerSP groupLayer();
+    KisLayerSP groupLayer();
 
     // KoShapeContainer implementation
     void paintComponent(QPainter &painter, const KoViewConverter &converter);

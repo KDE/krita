@@ -24,8 +24,6 @@
 
 #include <kdialog.h>
 #include <KoUnit.h>
-#include "KoRect.h"
-#include "KoPoint.h"
 
 #include <koffice_export.h>
 class KoUnitDoubleSpinBox;
@@ -64,7 +62,7 @@ public:
      * @param unit the unit used in the document
      * @param name the name is send to the QObject constructor
      */
-    KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
+    KoGuideLineDia( QWidget *parent, QPointF &pos, QRectF &rect,
                     KoUnit unit, const char *name = 0L );
     /**
      * @brief the position
@@ -85,8 +83,8 @@ protected slots:
     void slotPositionChanged();
 
 protected:
-    KoRect m_rect;
-    KoPoint m_pos;
+    QRectF m_rect;
+    QPointF m_pos;
     bool m_positionChanged;
     QRadioButton * m_hButton;
     QRadioButton * m_vButton;

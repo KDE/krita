@@ -52,7 +52,7 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, doub
 }
 
 
-KoGuideLineDia::KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
+KoGuideLineDia::KoGuideLineDia( QWidget *parent, QPointF &pos, QRectF &rect,
                                 KoUnit unit, const char *name )
 : KDialog( parent )
 , m_rect( rect )

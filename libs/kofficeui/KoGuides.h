@@ -32,8 +32,6 @@
 #include <koffice_export.h>
 
 class QPaintDevice;
-class KoPoint;
-class KoRect;
 class KoView;
 class KoZoomHandler;
 
@@ -161,7 +159,7 @@ public:
      * @param snapStatus if horiz,vert or both directions are snapped (both in and out param). 
      * @param diff distance away from guide. Only valid if status is snapping (both in and out param)
      */
-    void snapToGuideLines( KoRect &rect, int snap, SnapStatus &snapStatus, KoPoint &diff );
+    void snapToGuideLines( QRectF &rect, int snap, SnapStatus &snapStatus, QPointF &diff );
 
     /**
      * @brief Snap rect to guidelines
@@ -173,7 +171,7 @@ public:
      * @param snapStatus if horiz,vert or both directions are snapped (both in and out param)
      * @param diff distance away from guide. Only valid if status is snapping (both in and out param)
      */
-    void snapToGuideLines( KoPoint &pos, int snap, SnapStatus &snapStatus, KoPoint &diff );
+    void snapToGuideLines( QPointF &pos, int snap, SnapStatus &snapStatus, QPointF &diff );
 
     /**
      * @brief repaint guides if any changed snapping status
@@ -182,7 +180,7 @@ public:
      *
      * @param snappedRect the rect after it has been snapped
      */
-    void repaintSnapping( const KoRect &snappedRect );
+    void repaintSnapping( const QRectF &snappedRect );
 
     /**
      * @brief repaint guides if any changed snapping status
@@ -191,7 +189,7 @@ public:
      *
      * @param snappedPoint the point after it has been snapped
      */
-    void repaintSnapping( const KoPoint &snappedPoint, SnapStatus snapStatus );
+    void repaintSnapping( const QPointF &snappedPoint, SnapStatus snapStatus );
 
     /**
      * @brief repaint guides so none is snapped
@@ -208,7 +206,7 @@ public:
      * @param diff distance in which too look for the closesed guide. The parameter is updated
      * with the closesed distance to a guide if one is found (both in and out param)
      */
-    void diffNextGuide( KoRect &rect, KoPoint &diff );
+    void diffNextGuide( QRectF &rect, QPointF &diff );
 
 public slots:
     /**
@@ -354,7 +352,7 @@ private:
      * @return the fould guide
      * @return 0 if none is found
      */
-    KoGuideLine * find( KoPoint &p, double diff );
+    KoGuideLine * find( QPointF &p, double diff );
 
     /**
      * @brief Move selected guides.
@@ -373,7 +371,7 @@ private:
      *
      * @return pos in document
      */
-    KoPoint mapFromScreen( const QPoint & pos );
+    QPointF mapFromScreen( const QPoint & pos );
 
     /**
      * @brief Map pos to screen
@@ -382,7 +380,7 @@ private:
      *
      * @return pos on screen
      */
-    QPoint mapToScreen( const KoPoint & pos );
+    QPoint mapToScreen( const QPointF & pos );
 
     /**
      * @brief Check if the both values are nearly the same.

@@ -34,8 +34,6 @@
 #include <kmenu.h>
 
 #include <KoDocument.h>
-#include <KoPoint.h>
-#include <KoRect.h>
 #include <KoView.h>
 #include <KoZoomHandler.h>
 
@@ -137,7 +135,7 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
     bool changed = false;
     m_mouseSelected = false;
     
-    KoPoint p( mapFromScreen( e->pos() ) );
+    QPointF p( mapFromScreen( e->pos() ) );
     KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItYOld( 2 ) );
     if ( guideLine )
     {
@@ -219,7 +217,7 @@ bool KoGuides::mouseMoveEvent( QMouseEvent *e )
     }
     else if ( e->modifiers() == Qt::NoModifier )
     {
-        KoPoint p( mapFromScreen( e->pos() ) );
+        QPointF p( mapFromScreen( e->pos() ) );
         KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItYOld( 2 ) );
         if ( guideLine )
         {
@@ -236,7 +234,7 @@ bool KoGuides::mouseReleaseEvent( QMouseEvent *e )
     bool eventProcessed = false;
     if ( m_mouseSelected )
     {
-        KoPoint p( mapFromScreen( e->pos() ) );
+        QPointF p( mapFromScreen( e->pos() ) );
         if ( m_guideLines[GL_SELECTED].count() == 1 )
         {
             int x1, y1, x2, y2;
@@ -369,7 +367,7 @@ void KoGuides::getGuideLines( QList<double> &horizontalPos, QList<double> &verti
 }
 
 
-void KoGuides::snapToGuideLines( KoRect &rect, int snap, SnapStatus &snapStatus, KoPoint &diff )
+void KoGuides::snapToGuideLines( QRectF &rect, int snap, SnapStatus &snapStatus, QPointF &diff )
 {
     if( !(snapStatus & SNAP_VERT))
         diff.setX(10000);
@@ -433,7 +431,7 @@ void KoGuides::snapToGuideLines( KoRect &rect, int snap, SnapStatus &snapStatus,
         diff.setY( 0 );
 }
 
-void KoGuides::snapToGuideLines( KoPoint &pos, int snap, SnapStatus &snapStatus, KoPoint &diff )
+void KoGuides::snapToGuideLines( QPointF &pos, int snap, SnapStatus &snapStatus, QPointF &diff )
 {
     if( !(snapStatus & SNAP_VERT))
         diff.setX(10000);
@@ -480,7 +478,7 @@ void KoGuides::snapToGuideLines( KoPoint &pos, int snap, SnapStatus &snapStatus,
 }
 
 
-void KoGuides::repaintSnapping( const KoRect &snappedRect )
+void KoGuides::repaintSnapping( const QRectF &snappedRect )
 {
     bool needRepaint = false;
     for ( int i = 0; i < GL_END; ++i )
@@ -534,7 +532,7 @@ void KoGuides::repaintSnapping( const KoRect &snappedRect )
 }
 
 
-void KoGuides::repaintSnapping( const KoPoint &snappedPoint, SnapStatus snapStatus )
+void KoGuides::repaintSnapping( const QPointF &snappedPoint, SnapStatus snapStatus )
 {
     bool needRepaint = false;
     for ( int i = 0; i < GL_END; ++i )
@@ -615,7 +613,7 @@ void KoGuides::repaintAfterSnapping()
 }
 
 
-void KoGuides::diffNextGuide( KoRect &rect, KoPoint &diff )
+void KoGuides::diffNextGuide( QRectF &rect, QPointF &diff )
 {
     for ( int i = 0; i < GL_END; ++i )
     {
@@ -725,7 +723,7 @@ void KoGuides::addGuide( const QPoint &pos, bool /* horizontal */, int rulerWidt
 
 void KoGuides::slotChangePosition()
 {
-    KoPoint p( mapFromScreen( m_lastPoint ) );
+    QPointF p( mapFromScreen( m_lastPoint ) );
     KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItYOld( 2 ) );
 
     const KoPageLayout& pl = m_view->koDocument()->pageLayout();
@@ -764,7 +762,7 @@ void KoGuides::paint()
 
 void KoGuides::add( Qt::Orientation o, QPoint &pos )
 {
-    KoPoint p( mapFromScreen( pos ) );
+    QPointF p( mapFromScreen( pos ) );
     KoGuideLine *guideLine = new KoGuideLine( o, o == Qt::Vertical ? p.x(): p.y() );
     m_guideLines[GL].append( guideLine );
 }
@@ -823,7 +821,7 @@ bool KoGuides::hasSelected()
 }
 
 
-KoGuides::KoGuideLine * KoGuides::find( KoPoint &p, double diff )
+KoGuides::KoGuideLine * KoGuides::find( QPointF &p, double diff )
 {
     QList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
     for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
@@ -856,7 +854,7 @@ KoGuides::KoGuideLine * KoGuides::find( KoPoint &p, double diff )
 
 void KoGuides::moveSelectedBy( QPoint &p )
 {
-    KoPoint point( m_zoomHandler->unzoomPointOld( p ) );
+    QPointF point( m_zoomHandler->unzoomPointOldF( p ) );
     if ( m_guideLines[GL_SELECTED].count() > 1 )
     {
         const KoPageLayout& pl = m_view->koDocument()->pageLayout();
@@ -909,17 +907,17 @@ void KoGuides::moveSelectedBy( QPoint &p )
 }
 
 
-KoPoint KoGuides::mapFromScreen( const QPoint & pos )
+QPointF KoGuides::mapFromScreen( const QPoint & pos )
 {
     int x = pos.x() + m_view->canvasXOffset();
     int y = pos.y() + m_view->canvasYOffset();
     double xf = m_zoomHandler->unzoomItXOld( x );
     double yf = m_zoomHandler->unzoomItYOld( y );
-    return KoPoint( xf, yf );
+    return QPointF( xf, yf );
 }
 
 
-QPoint KoGuides::mapToScreen( const KoPoint & pos )
+QPoint KoGuides::mapToScreen( const QPointF & pos )
 {
     int x = m_zoomHandler->zoomItXOld( pos.x() ) - m_view->canvasXOffset();
     int y = m_zoomHandler->zoomItYOld( pos.y() ) - m_view->canvasYOffset();

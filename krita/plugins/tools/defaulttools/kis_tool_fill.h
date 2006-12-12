@@ -26,7 +26,7 @@
 #include <QLabel>
 
 #include "kis_tool_paint.h"
-#include "KoPoint.h"
+
 
 class KisPainter;
 class QWidget;
@@ -62,7 +62,7 @@ public slots:
     virtual void slotSetFillSelection(bool);
 
 private:
-    KoPoint m_startPos;
+    QPointF m_startPos;
     int m_threshold;
     qint32 m_depth;
     KisLayerSP m_lay;

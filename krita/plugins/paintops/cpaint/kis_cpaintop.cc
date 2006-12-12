@@ -31,7 +31,7 @@
 #include <kis_iterator.h>
 #include <kis_iterators_pixel.h>
 #include <kis_selection.h>
-#include <KoPoint.h>
+
 #include <kis_int_spinbox.h>
 
 #include "kis_cpaintop.h"
@@ -139,7 +139,7 @@ KisCPaintOp::~KisCPaintOp()
 
 
 
-void KisCPaintOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
+void KisCPaintOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 {
     if (!m_painter->device()) return;
 

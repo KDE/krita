@@ -53,7 +53,7 @@ void KisBoundary::generateBoundary(int w, int h) {
             darkBot = cs->alpha(botIt.rawData());
             if (darkTop != darkBot) {
                 // detected a change
-                m_horSegments.back().append(qMakePair(KoPoint(botIt.x(), botIt.y()), 1));
+                m_horSegments.back().append(qMakePair(QPointF(botIt.x(), botIt.y()), 1));
             }
             ++topIt;
             ++botIt;
@@ -74,7 +74,7 @@ void KisBoundary::generateBoundary(int w, int h) {
             darkRight = cs->alpha(rightIt.rawData());
             if (darkLeft != darkRight) {
                 // detected a change
-                m_vertSegments.back().append(qMakePair(KoPoint(rightIt.x(), rightIt.y()), 1));
+                m_vertSegments.back().append(qMakePair(QPointF(rightIt.x(), rightIt.y()), 1));
             }
             ++leftIt;
             ++rightIt;

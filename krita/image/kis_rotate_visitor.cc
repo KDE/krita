@@ -32,13 +32,13 @@
 
 void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCenter, KisProgressDisplayInterface *progress)
 {
-    KoPoint centerOfRotation;
+    QPointF centerOfRotation;
 
     if (rotateAboutImageCenter) {
-        centerOfRotation = KoPoint(m_dev->image()->width() / 2.0,  m_dev->image()->height() / 2.0);
+        centerOfRotation = QPointF(m_dev->image()->width() / 2.0,  m_dev->image()->height() / 2.0);
     } else {
         QRect r = m_dev->exactBounds();
-        centerOfRotation = KoPoint(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
+        centerOfRotation = QPointF(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
     }
 
     m_progress = progress;
@@ -192,7 +192,7 @@ KisPaintDeviceSP KisRotateVisitor::rotate180(KisPaintDeviceSP src)
     return dst;
 }
 
-KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, KoPoint centerOfRotation)
+KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, QPointF centerOfRotation)
 {
     const double pi = 3.1415926535897932385;
 
@@ -261,7 +261,7 @@ KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, Ko
     double sinAngle = sin(angle * pi / 180);
     double cosAngle = cos(angle * pi / 180);
 
-    KoPoint rotatedCenterOfRotation(
+    QPointF rotatedCenterOfRotation(
                                 centerOfRotation.x() * cosAngle - centerOfRotation.y() * sinAngle,
                                 centerOfRotation.x() * sinAngle + centerOfRotation.y() * cosAngle);
 

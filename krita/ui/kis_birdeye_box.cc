@@ -53,16 +53,16 @@ namespace {
 
     public:
 
-        virtual KoRect visibleArea()
+        virtual QRectF visibleArea()
             {
-                if (!m_canvasSubject->currentImg()) return KoRect(0,0,0,0);
+                if (!m_canvasSubject->currentImg()) return QRectF(0,0,0,0);
 
                 KisCanvasController * c = m_canvasSubject->canvasController();
 
                 if (c && c->kiscanvas())
                     return c->viewToWindow(KisRect(0, 0, c->kiscanvas()->width(), c->kiscanvas()->height()));
                 else
-                    return KoRect(0,0,0,0);
+                    return QRectF(0,0,0,0);
             }
 
        virtual double zoomFactor()

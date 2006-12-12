@@ -150,7 +150,7 @@ void KisToolDuplicate::move(KoPointerEvent *e)
             }
         
         // First look for the grid corresponding to the start point
-            KisSubPerspectiveGrid* subGridStart = *m_currentImage->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(KoPoint(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
+            KisSubPerspectiveGrid* subGridStart = *m_currentImage->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(QPointF(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
             QRect r = QRect(0,0, m_currentImage->width(), m_currentImage->height());
         
             if(subGridStart)
@@ -179,13 +179,13 @@ void KisToolDuplicate::move(KoPointerEvent *e)
                 }
             }
         // Compute the translation in the perspective transformation space:
-            KoPoint translat;
+            QPointF translat;
             {
-                KoPoint positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF());
-                KoPoint currentPositionT = KisPerspectiveMath::matProd(endM, e->pos().toPointF() );
-                KoPoint duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF() - m_offset.toPointF());
-                KoPoint duplicateRealPosition = KisPerspectiveMath::matProd(startM, duplicateStartPoisitionT.toPointF() + (currentPositionT.toPointF() - positionStartPaintingT.toPointF()) );
-                KoPoint p = e->pos() - duplicateRealPosition;
+                QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF());
+                QPointF currentPositionT = KisPerspectiveMath::matProd(endM, e->pos().toPointF() );
+                QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF() - m_offset.toPointF());
+                QPointF duplicateRealPosition = KisPerspectiveMath::matProd(startM, duplicateStartPoisitionT.toPointF() + (currentPositionT.toPointF() - positionStartPaintingT.toPointF()) );
+                QPointF p = e->pos() - duplicateRealPosition;
                 srcPos = p.floorQPoint();
             }
 
@@ -211,7 +211,7 @@ void KisToolDuplicate::move(KoPointerEvent *e)
     super::move(e);
 }
 
-void KisToolDuplicate::paintAt(const KoPoint &pos,
+void KisToolDuplicate::paintAt(const QPointF &pos,
                    const double pressure,
                    const double xtilt,
                    const double ytilt)

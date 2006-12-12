@@ -26,7 +26,7 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_qimage_mask.h"
-#include "KoPoint.h"
+
 #include "KoColorSpace.h"
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"

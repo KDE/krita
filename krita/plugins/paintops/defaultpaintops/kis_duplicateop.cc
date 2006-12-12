@@ -86,7 +86,7 @@ double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-void KisDuplicateOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
+void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
 
@@ -102,8 +102,8 @@ void KisDuplicateOp::paintAt(const KoPoint &pos, const KisPaintInformation& info
     if (! brush->canPaintFor(info) )
         return;
 
-    KoPoint hotSpot = brush->hotSpot(info);
-    KoPoint pt = pos - hotSpot;
+    QPointF hotSpot = brush->hotSpot(info);
+    QPointF pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
@@ -131,7 +131,7 @@ void KisDuplicateOp::paintAt(const KoPoint &pos, const KisPaintInformation& info
 
     m_painter->setPressure(info.pressure);
 
-    KoPoint srcPointF = pt - m_painter->duplicateOffset();
+    QPointF srcPointF = pt - m_painter->duplicateOffset();
     QPoint srcPoint = QPoint(x - static_cast<Q_INT32>(m_painter->duplicateOffset().x()),
                              y - static_cast<Q_INT32>(m_painter->duplicateOffset().y()));
 
@@ -208,8 +208,8 @@ void KisDuplicateOp::paintAt(const KoPoint &pos, const KisPaintInformation& info
 //         kDebug()<< " oouuuuh" << srcPointF << KisPerspectiveMath::matProd(startM,  KisPerspectiveMath::matProd(endM, srcPointF ) ) << KisPerspectiveMath::matProd(endM,  KisPerspectiveMath::matProd(startM, srcPointF ) );
         
         // Compute the translation in the perspective transformation space:
-        QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_painter->duplicateStart().toPointF() );
-        QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_painter->duplicateStart().toPointF() - m_painter->duplicateOffset().toPointF() );
+        QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_painter->duplicateStart()) );
+        QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, QPointF(m_painter->duplicateStart()) - QPointF(m_painter->duplicateOffset()) );
         QPointF translat = duplicateStartPoisitionT - positionStartPaintingT;
         KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh); 
         KisRandomSubAccessorPixel srcAcc = device->createRandomSubAccessor();

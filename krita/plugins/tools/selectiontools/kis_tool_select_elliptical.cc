@@ -56,9 +56,9 @@ KisToolSelectElliptical::KisToolSelectElliptical()
 
     m_subject = 0;
     m_selecting = false;
-    m_centerPos = KoPoint(0, 0);
-    m_startPos = KoPoint(0, 0);
-    m_endPos = KoPoint(0, 0);
+    m_centerPos = QPointF(0, 0);
+    m_startPos = QPointF(0, 0);
+    m_endPos = QPointF(0, 0);
     m_optWidget = 0;
     m_selectAction = SELECTION_ADD;
 }
@@ -102,8 +102,8 @@ void KisToolSelectElliptical::clearSelection()
 //                         controller->canvas()->update();
 //         }
 
-        m_startPos = KoPoint(0, 0);
-        m_endPos = KoPoint(0, 0);
+        m_startPos = QPointF(0, 0);
+        m_endPos = QPointF(0, 0);
         m_selecting = false;
     }
 }
@@ -128,18 +128,18 @@ void KisToolSelectElliptical::move(KoPointerEvent *e)
         paintOutline();
         // move (alt) or resize ellipse
         if (e->modifiers() & Qt::AltModifier) {
-            KoPoint trans = e->pos() - m_endPos;
+            QPointF trans = e->pos() - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
         } else {
-            KoPoint diag = e->pos() - (e->modifiers() & Qt::ControlModifier
+            QPointF diag = e->pos() - (e->modifiers() & Qt::ControlModifier
                     ? m_centerPos : m_startPos);
             // circle?
             if (e->modifiers() & Qt::ShiftModifier) {
                 double size = qMax(fabs(diag.x()), fabs(diag.y()));
                 double w = diag.x() < 0 ? -size : size;
                 double h = diag.y() < 0 ? -size : size;
-                diag = KoPoint(w, h);
+                diag = QPointF(w, h);
             }
 
             // resize around center point?
@@ -151,7 +151,7 @@ void KisToolSelectElliptical::move(KoPointerEvent *e)
             }
         }
         paintOutline();
-        m_centerPos = KoPoint((m_startPos.x() + m_endPos.x()) / 2,
+        m_centerPos = QPointF((m_startPos.x() + m_endPos.x()) / 2,
                 (m_startPos.y() + m_endPos.y()) / 2);
     }
 }

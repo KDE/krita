@@ -22,7 +22,7 @@
 #include <QPair>
 #include <krita_export.h>
 
-#include "KoPoint.h"
+
 
 class KisPaintDevice;
 
@@ -40,7 +40,7 @@ public:
     void generateBoundary(int w, int h);
 
 private:
-    typedef QPair<KoPoint, int> PointPair; // int->length
+    typedef QPair<QPointF, int> PointPair; // int->length
     bool isDark(quint8 val);
     KisPaintDevice* m_device;
     int m_fuzzyness;

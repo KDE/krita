@@ -52,7 +52,7 @@ KisAirbrushOp::~KisAirbrushOp()
 {
 }
 
-void KisAirbrushOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
+void KisAirbrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 {
 // See: http://www.sysf.physto.se/~klere/airbrush/ for information
 // about _real_ airbrushes.
@@ -100,8 +100,8 @@ void KisAirbrushOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
         return;
     KisPaintDeviceSP dab = m_painter->dab();
 
-    KoPoint hotSpot = brush->hotSpot(info);
-    KoPoint pt = pos - hotSpot;
+    QPointF hotSpot = brush->hotSpot(info);
+    QPointF pt = pos - hotSpot;
 
     qint32 x;
     double xFraction;

@@ -19,13 +19,13 @@
 #ifndef KIS_TOOL_PAN_H_
 #define KIS_TOOL_PAN_H_
 
-#include "KoPoint.h"
+
 #include "kis_tool_non_paint.h"
 #include "KoToolFactory.h"
 #include <koffice_export.h>
 
 class KisCanvasSubject;
-class KoPoint;
+class QPointF;
 
 class KRITATOOL_EXPORT KisToolPan : public KisToolNonPaint
 {
@@ -48,7 +48,7 @@ public:
 
 private:
     
-    KoPoint m_dragPos;
+    QPointF m_dragPos;
     qint32 m_origScrollX;
     qint32 m_origScrollY;
     bool m_dragging;

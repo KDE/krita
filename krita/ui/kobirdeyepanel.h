@@ -28,8 +28,6 @@
 #include <QEvent>
 #include <QPaintEvent>
 
-#include <KoPoint.h>
-#include <KoRect.h>
 
 #include "ui_wdgbirdeye.h"
 
@@ -57,7 +55,7 @@ public:
     /**
      * Returns the area of the document that is visible, in pixels
      */
-    virtual KoRect visibleArea() = 0;
+    virtual QRectF visibleArea() = 0;
     
     /**
      * Returns the total area of the document in pixels. Use KoPageLayout and KoZoomhandler
@@ -240,12 +238,12 @@ protected:
     /**
      * Returns the rectangle in the thumbnail covered by the given document rectangle.
      */
-    QRect documentToThumbnail(const KoRect& docRect);
+    QRect documentToThumbnail(const QRectF& docRect);
 
     /**
      * Returns the rectangle in the document covered by the given thumbnail rectangle.
      */
-    KoRect thumbnailToDocument(const QRect& thumbnailRect);
+    QRectF thumbnailToDocument(const QRect& thumbnailRect);
 
     /**
      * Converts a point in the view to a point in the thumbnail.

@@ -67,7 +67,7 @@ KisDynamicOp::~KisDynamicOp()
     delete m_firstTransfo;
 }
 
-void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
+void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 {
     KisPaintInformation adjustedInfo(info);
 
@@ -90,7 +90,7 @@ void KisDynamicOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 
     KisPaintDeviceSP device = m_painter->device();
 
-    KoPoint pt = pos;
+    QPointF pt = pos;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines

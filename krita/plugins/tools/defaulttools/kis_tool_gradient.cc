@@ -55,8 +55,8 @@ KisToolGradient::KisToolGradient()
     setObjectName("tool_gradient");
     setCursor(KisCursor::load("tool_gradient_cursor.png", 6, 6));
 
-    m_startPos = KoPoint(0, 0);
-    m_endPos = KoPoint(0, 0);
+    m_startPos = QPointF(0, 0);
+    m_endPos = QPointF(0, 0);
 
     m_reverse = false;
     m_shape = KisGradientPainter::GradientShapeLinear;
@@ -174,10 +174,10 @@ void KisToolGradient::buttonRelease(KoPointerEvent *e)
     }
 }
 
-KoPoint KisToolGradient::straightLine(KoPoint point)
+QPointF KisToolGradient::straightLine(QPointF point)
 {
-    KoPoint comparison = point - m_startPos;
-    KoPoint result;
+    QPointF comparison = point - m_startPos;
+    QPointF result;
 
     if ( fabs(comparison.x()) > fabs(comparison.y())) {
         result.setX(point.x());
@@ -206,8 +206,8 @@ void KisToolGradient::paintLine(QPainter& gc)
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
 
-        KoPoint start = controller->windowToView(m_startPos);
-        KoPoint end = controller->windowToView(m_endPos);
+        QPointF start = controller->windowToView(m_startPos);
+        QPointF end = controller->windowToView(m_endPos);
 
         //RasterOp op = gc.rasterOp();
         QPen old = gc.pen();

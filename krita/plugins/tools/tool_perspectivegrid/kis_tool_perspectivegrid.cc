@@ -157,7 +157,7 @@ void KisToolPerspectiveGrid::buttonPress(KoPointerEvent *event)
                 m_selectedNode1 = grid->bottomRight();
                 break;
             }
-            else if( !grid->leftGrid() && mouseNear( mousep, controller->windowToView( KoPoint( ((*grid->topLeft() + *grid->bottomLeft() )*0.5) ) ).roundQPoint() ) )
+            else if( !grid->leftGrid() && mouseNear( mousep, controller->windowToView( QPointF( ((*grid->topLeft() + *grid->bottomLeft() )*0.5) ) ).roundQPoint() ) )
             {
                 kDebug() << " PRESS LEFT HANDLE " << endl;
                 m_mode = MODE_DRAGING_TRANSLATING_TWONODES;

@@ -38,7 +38,7 @@
 
 #include <QColor>
 
-#include "KoPoint.h"
+
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"

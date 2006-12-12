@@ -154,7 +154,7 @@ void KoBirdEyePanel::setZoom(int zoom)
 
 void KoBirdEyePanel::zoomValueChanged(int zoom)
 {
-    KoPoint center;
+    QPointF center;
     center = m_canvas->visibleArea().center();
     m_zoomListener->zoomTo(center.x(), center.y(), zoom / 100.0);
     setZoom(zoom);
@@ -242,7 +242,7 @@ void KoBirdEyePanel::slotUpdate(const QRect & r)
 
     if (!updateRect.isEmpty() && !m_documentSize.isEmpty()) {
 
-        QRect thumbnailRect = documentToThumbnail(KoRect::fromQRect(updateRect));
+        QRect thumbnailRect = documentToThumbnail(QRectF(updateRect));
 
         if (!thumbnailRect.isEmpty()) {
 
@@ -264,7 +264,7 @@ void KoBirdEyePanel::slotUpdate(const QRect & r)
     m_page->view->update();
 }
 
-QRect KoBirdEyePanel::documentToThumbnail(const KoRect& docRect)
+QRect KoBirdEyePanel::documentToThumbnail(const QRectF& docRect)
 {
     if (docRect.isEmpty() || m_documentSize.isEmpty() || m_thumbnail.isNull()) {
         return QRect();
@@ -281,10 +281,10 @@ QRect KoBirdEyePanel::documentToThumbnail(const KoRect& docRect)
     return thumbnailRect;
 }
 
-KoRect KoBirdEyePanel::thumbnailToDocument(const QRect& thumbnailRect)
+QRectF KoBirdEyePanel::thumbnailToDocument(const QRect& thumbnailRect)
 {
     if (thumbnailRect.isEmpty() || m_documentSize.isEmpty() || m_thumbnail.isNull()) {
-        return KoRect();
+        return QRectF();
     }
 
     double docLeft = (static_cast<double>(thumbnailRect.left()) * m_documentSize.width()) / m_thumbnail.width();
@@ -292,8 +292,8 @@ KoRect KoBirdEyePanel::thumbnailToDocument(const QRect& thumbnailRect)
     double docTop = (static_cast<double>(thumbnailRect.top()) * m_documentSize.height()) / m_thumbnail.height();
     double docBottom = (static_cast<double>(thumbnailRect.bottom() + 1) * m_documentSize.height()) / m_thumbnail.height();
 
-    KoRect docRect(docLeft, docTop, docRight - docLeft + 1, docBottom - docTop + 1);
-    docRect &= KoRect(0, 0, m_documentSize.width(), m_documentSize.height());
+    QRectF docRect(docLeft, docTop, docRight - docLeft + 1, docBottom - docTop + 1);
+    docRect &= QRectF(0, 0, m_documentSize.width(), m_documentSize.height());
 
     return docRect;
 }
@@ -550,7 +550,7 @@ void KoBirdEyePanel::makeThumbnailRectVisible(const QRect& r)
         zoomFactor = m_zoomListener->getMaxZoom();
     }
 
-    KoRect docRect = thumbnailToDocument(thumbnailRect);
+    QRectF docRect = thumbnailToDocument(thumbnailRect);
     m_zoomListener->zoomTo(docRect.center().x(), docRect.center().y(), zoomFactor);
 }
 

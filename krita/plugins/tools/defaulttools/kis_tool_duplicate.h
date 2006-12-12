@@ -44,7 +44,7 @@ public:
     virtual void buttonPress(KoPointerEvent *e);
     virtual void move(KoPointerEvent *e);
 
-    virtual void paintAt(const KoPoint &pos,
+    virtual void paintAt(const QPointF &pos,
                  const double pressure,
                  const double xTilt,
                  const double yTilt);
@@ -59,10 +59,10 @@ protected:
     virtual void initPaint(KoPointerEvent *e);
 
     // Tool starting duplicate
-    KoPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
+    QPointF m_offset; // This member give the offset from the click position to the point where we take the duplication
     bool m_isOffsetNotUptodate; // Tells if the offset is updated
-    KoPoint m_position; // Give the position of the last alt-click
-    KoPoint m_positionStartPainting;
+    QPointF m_position; // Give the position of the last alt-click
+    QPointF m_positionStartPainting;
     QCheckBox* m_healing;
     QSpinBox* m_healingRadius;
     QCheckBox* m_perspectiveCorrection;

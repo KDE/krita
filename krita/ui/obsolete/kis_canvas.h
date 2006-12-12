@@ -41,7 +41,7 @@
 
 #include "kis_canvas_widget.h"
 #include "kis_global.h"
-#include "KoPoint.h"
+
 #include "kis_vec.h"
 #include "KoInputDevice.h"
 

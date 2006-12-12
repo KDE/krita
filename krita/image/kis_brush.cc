@@ -495,7 +495,7 @@ KisPaintDeviceSP KisBrush::image(KoColorSpace * /*colorSpace*/, const KisPaintIn
     return KisPaintDeviceSP(layer);
 }
 
-void KisBrush::setHotSpot(KoPoint pt)
+void KisBrush::setHotSpot(QPointF pt)
 {
     double x = pt.x();
     double y = pt.y();
@@ -510,10 +510,10 @@ void KisBrush::setHotSpot(KoPoint pt)
     else if (y >= height())
         y = height() - 1;
 
-    m_hotSpot = KoPoint(x, y);
+    m_hotSpot = QPointF(x, y);
 }
 
-KoPoint KisBrush::hotSpot(const KisPaintInformation& info) const
+QPointF KisBrush::hotSpot(const KisPaintInformation& info) const
 {
     double scale = scaleForPressure(info.pressure);
     double w = width() * scale;
@@ -531,7 +531,7 @@ KoPoint KisBrush::hotSpot(const KisPaintInformation& info) const
     // XXX: This should take m_hotSpot into account, though it
     // isn't specified by gimp brushes so it would default to the center
     // anyway.
-    KoPoint p(w / 2, h / 2);
+    QPointF p(w / 2, h / 2);
     return p;
 }
 

@@ -109,7 +109,7 @@ protected:
     /*
      * Called by selectCurve(), this convert m_curve to a vector of QPointF in order to be used by paintPolygon()
      */
-    virtual Q3ValueVector<KoPoint> convertCurve();
+    virtual Q3ValueVector<QPointF> convertCurve();
 
     /*
      * Called by paintCurve(), it behaves essentially like drawPoint(), but this uses a KisPainter

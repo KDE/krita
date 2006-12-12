@@ -19,21 +19,20 @@
 #define KIS_RECT_H_
 
 #include <QRect>
-#include <KoRect.h>
-#include "KoPoint.h"
+
 
 /**
  * A double-based rect class that can return a QRect that encloses the KisRect.
  */
-class KisRect : public KoRect
+class KisRect : public QRectF
 {
-    typedef KoRect super;
+    typedef QRectF super;
 public:
     KisRect() {}
     KisRect(double x, double y, double w, double h) : super(x, y, w, h) {}
-    KisRect(const KoPoint& topLeft, const KoPoint& bottomRight) : super(topLeft, bottomRight) {}
+    //KisRect(const QPointF& topLeft, const QPointF& bottomRight) : super(topLeft, bottomRight) {}
     KisRect(const QRect& qr) : super(qr.x(), qr.y(), qr.width(), qr.height()) {}
-    KisRect(const KoRect& r) : super(r) {}
+    KisRect(const QRectF& r) : super(r) {}
 
     /**
      * Return the QRect that encloses this KisRect.

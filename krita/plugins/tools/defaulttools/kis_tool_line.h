@@ -62,13 +62,13 @@ class KisToolLine : public KisToolPaint {
     void paintLine();
     void paintLine(QPainter& gc, const QRect& rc);
 
-    KoPoint straightLine(KoPoint point);
+    QPointF straightLine(QPointF point);
 
 
     bool m_dragging;
 
-    KoPoint m_startPos;
-    KoPoint m_endPos;
+    QPointF m_startPos;
+    QPointF m_endPos;
 
     
     KisImageSP m_currentImage;

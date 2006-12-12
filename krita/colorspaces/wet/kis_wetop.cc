@@ -94,7 +94,7 @@ KisWetOp::~KisWetOp()
 {
 }
 
-void KisWetOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
+void KisWetOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
 
@@ -164,7 +164,7 @@ void KisWetOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
 
     int maskW = brush->maskWidth(inf);
     int maskH = brush->maskHeight(inf);
-    KoPoint dest = (pos - (brush->hotSpot(inf)));
+    QPointF dest = (pos - (brush->hotSpot(inf)));
     int xStart = (int)dest.x();
     int yStart = (int)dest.y();
 

@@ -108,7 +108,7 @@ class KisLayerBox;
 class KoPointerEvent;
 class KisPaletteWidget;
 class KisPattern;
-class KoPoint;
+class QPointF;
 class KisRect;
 class KisResource;
 class KisResourceMediator;
@@ -340,14 +340,14 @@ private:
 
     virtual QPoint viewToWindow(const QPoint& pt);
     virtual QPoint viewToWindow(const QPoint& pt) const;
-    virtual KoPoint viewToWindow(const KoPoint& pt);
+    virtual QPointF viewToWindow(const QPointF& pt);
     virtual QRect viewToWindow(const QRect& rc);
     virtual KisRect viewToWindow(const KisRect& rc);
     virtual void viewToWindow(qint32 *x, qint32 *y);
 
     virtual QPoint windowToView(const QPoint& pt);
     virtual QPoint windowToView(const QPoint& pt) const;
-    virtual KoPoint windowToView(const KoPoint& pt);
+    virtual QPointF windowToView(const QPointF& pt);
     virtual QRect windowToView(const QRect& rc);
     virtual KisRect windowToView(const KisRect& rc);
     virtual void windowToView(qint32 *x, qint32 *y);

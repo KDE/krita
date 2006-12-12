@@ -25,7 +25,7 @@
 
 #include "kis_paintop.h"
 
-class KoPoint;
+class QPointF;
 class KisPainter;
 
 class KisDuplicateOpFactory  : public KisPaintOpFactory  {
@@ -51,7 +51,7 @@ class KisDuplicateOp : public KisPaintOp {
         virtual ~KisDuplicateOp();
 
 
-        void paintAt(const KoPoint &pos, const KisPaintInformation& info);
+        void paintAt(const QPointF &pos, const KisPaintInformation& info);
     private:
         double minimizeEnergy(const double* m, double* sol, int w, int h);
     private:

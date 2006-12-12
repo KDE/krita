@@ -23,7 +23,7 @@
 #include "KoToolFactory.h"
 #include <krita_export.h>
 
-#include "KoPoint.h"
+
 //Added by qt3to4:
 #include <QLabel>
 
@@ -60,7 +60,7 @@ public:
 private:
     QLabel * m_optionWidget;
     KisCanvasSubject *m_subject;
-    KoPoint m_dragPos;
+    QPointF m_dragPos;
     qint32 m_origScrollX;
     qint32 m_origScrollY;
     bool m_dragging;

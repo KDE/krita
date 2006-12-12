@@ -71,18 +71,18 @@ void KisToolRectangle::move(KoPointerEvent *event)
         draw(m_dragStart, m_dragEnd);
         // move (alt) or resize rectangle
         if (event->modifiers() & Qt::AltModifier) {
-            KoPoint trans = event->pos() - m_dragEnd;
+            QPointF trans = event->pos() - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
         } else {
-            KoPoint diag = event->pos() - (event->modifiers() & Qt::ControlModifier
+            QPointF diag = event->pos() - (event->modifiers() & Qt::ControlModifier
                     ? m_dragCenter : m_dragStart);
             // square?
             if (event->modifiers() & Qt::ShiftModifier) {
                 double size = qMax(fabs(diag.x()), fabs(diag.y()));
                 double w = diag.x() < 0 ? -size : size;
                 double h = diag.y() < 0 ? -size : size;
-                diag = KoPoint(w, h);
+                diag = QPointF(w, h);
             }
 
             // resize around center point?
@@ -95,7 +95,7 @@ void KisToolRectangle::move(KoPointerEvent *event)
         }
         // draw new lines on canvas
         draw(m_dragStart, m_dragEnd);
-        m_dragCenter = KoPoint((m_dragStart.x() + m_dragEnd.x()) / 2,
+        m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
                 (m_dragStart.y() + m_dragEnd.y()) / 2);
     }
 }
@@ -146,7 +146,7 @@ void KisToolRectangle::buttonRelease(KoPointerEvent *event)
     }
 }
 
-void KisToolRectangle::draw(const KoPoint& start, const KoPoint& end )
+void KisToolRectangle::draw(const QPointF& start, const QPointF& end )
 {
     if (!m_subject)
         return;

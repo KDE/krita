@@ -157,7 +157,7 @@ void Painter::setStrokeStyle(uint style)
 
 void Painter::setDuplicateOffset(double x1, double y1)
 {
-    m_painter->setDuplicateOffset(KoPoint(x1,y1));
+    m_painter->setDuplicateOffset(QPointF(x1,y1));
 }
 
 void Painter::paintPolyline(QVariantList pointsX, QVariantList pointsY)
@@ -171,17 +171,17 @@ void Painter::paintPolyline(QVariantList pointsX, QVariantList pointsY)
 
 void Painter::paintLine(double x1, double y1, double p1, double x2, double y2, double p2)
 {
-    m_painter->paintLine(KoPoint( x1, y1), p1, 0.0, 0.0, KoPoint( x2, y2 ), p2, 0.0, 0.0 );
+    m_painter->paintLine(QPointF( x1, y1), p1, 0.0, 0.0, QPointF( x2, y2 ), p2, 0.0, 0.0 );
 }
 
 void Painter::paintBezierCurve(double x1, double y1, double p1, double cx1, double cy1, double cx2, double cy2, double x2, double y2, double p2)
 {
-    m_painter->paintBezierCurve( KoPoint(x1,y1), p1, 0.0, 0.0, KoPoint(cx1,cy1), KoPoint(cx2,cy2), KoPoint(x2,y2), p2, 0.0, 0.0);
+    m_painter->paintBezierCurve( QPointF(x1,y1), p1, 0.0, 0.0, QPointF(cx1,cy1), QPointF(cx2,cy2), QPointF(x2,y2), p2, 0.0, 0.0);
 }
 
 void Painter::paintEllipse(double x1, double y1, double x2, double y2, double pressure)
 {
-    m_painter->paintEllipse( KoPoint(x1,y1), KoPoint(x2,y2), pressure, 0.0, 0.0 );
+    m_painter->paintEllipse( QPointF(x1,y1), QPointF(x2,y2), pressure, 0.0, 0.0 );
 }
 
 void Painter::paintPolygon(QVariantList pointsX, QVariantList pointsY)
@@ -195,12 +195,12 @@ void Painter::paintPolygon(QVariantList pointsX, QVariantList pointsY)
 
 void Painter::paintRect(double x, double y, double width, double height, double pressure)
 {
-    m_painter->paintRect( KoPoint(x, y), KoPoint(width, height), pressure, 0, 0);
+    m_painter->paintRect( QPointF(x, y), QPointF(width, height), pressure, 0, 0);
 }
 
 void Painter::paintAt(double x, double y, double pressure)
 {
-    m_painter->paintAt( KoPoint( x, y ), pressure, 0.0, 0.0);
+    m_painter->paintAt( QPointF( x, y ), pressure, 0.0, 0.0);
 }
 
 void Painter::setPaintColor(QObject* color)

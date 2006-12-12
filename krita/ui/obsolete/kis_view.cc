@@ -1440,7 +1440,7 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
 
         if (img) {
             if (m_hScroll->isVisible()) {
-                KoPoint c = viewToWindow(KoPoint(m_canvas->width() / 2.0, m_canvas->height() / 2.0));
+                QPointF c = viewToWindow(QPointF(m_canvas->width() / 2.0, m_canvas->height() / 2.0));
                 x = c.x();
             }
             else {
@@ -1448,7 +1448,7 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
             }
 
             if (m_vScroll->isVisible()) {
-                KoPoint c = viewToWindow(KoPoint(m_canvas->width() / 2.0, m_canvas->height() / 2.0));
+                QPointF c = viewToWindow(QPointF(m_canvas->width() / 2.0, m_canvas->height() / 2.0));
                 y = c.y();
             }
             else {
@@ -2318,7 +2318,7 @@ void KisView::canvasGotButtonPressEvent(KoPointerEvent *e)
         if (m_popup) m_popup->popup(e->globalPos().roundQPoint());
     }
     else if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
-        KoPoint p = viewToWindow(e->pos());
+        QPointF p = viewToWindow(e->pos());
         // somewhat of a hack: we should actually test if we intersect with the scrollers,
         // but the globalPos seems to be off by a few pixels
         if (m_vScroll->isSliderDown() || m_hScroll->isSliderDown())
@@ -2357,7 +2357,7 @@ void KisView::canvasGotMoveEvent(KoPointerEvent *e)
     m_hRuler->updatePointer(e->pos().floorX() - m_canvasXOffset, e->pos().floorY() - m_canvasYOffset);
     m_vRuler->updatePointer(e->pos().floorX() - m_canvasXOffset, e->pos().floorY() - m_canvasYOffset);
 
-    KoPoint wp = viewToWindow(e->pos());
+    QPointF wp = viewToWindow(e->pos());
 
 #if 0
     if (img && m_currentGuide) {
@@ -2445,7 +2445,7 @@ void KisView::canvasGotButtonReleaseEvent(KoPointerEvent *e)
 //        m_currentGuide = 0;
 //    } else
     if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
-        KoPoint p = viewToWindow(e->pos());
+        QPointF p = viewToWindow(e->pos());
         KoPointerEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
 
         disableAutoScroll();
@@ -2475,7 +2475,7 @@ void KisView::canvasGotDoubleClickEvent(KoPointerEvent *e)
     }
 
     if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
-        KoPoint p = viewToWindow(e->pos());
+        QPointF p = viewToWindow(e->pos());
         KoPointerEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
 
         if (m_toolManager->currentTool()) {
@@ -3306,9 +3306,9 @@ QPoint KisView::viewToWindow(const QPoint& pt) const
     return converted;
 }
 
-KoPoint KisView::viewToWindow(const KoPoint& pt)
+QPointF KisView::viewToWindow(const QPointF& pt)
 {
-    KoPoint converted;
+    QPointF converted;
 
     converted.setX((pt.x() + horzValue()) / zoom());
     converted.setY((pt.y() + vertValue()) / zoom());
@@ -3330,7 +3330,7 @@ QRect KisView::viewToWindow(const QRect& rc)
 KisRect KisView::viewToWindow(const KisRect& rc)
 {
     KisRect r;
-    KoPoint p = viewToWindow(KoPoint(rc.x(), rc.y()));
+    QPointF p = viewToWindow(QPointF(rc.x(), rc.y()));
     r.setX(p.x());
     r.setY(p.y());
     r.setWidth(rc.width() / zoom());
@@ -3366,9 +3366,9 @@ QPoint KisView::windowToView(const QPoint& pt) const
     return p;
 }
 
-KoPoint KisView::windowToView(const KoPoint& pt)
+QPointF KisView::windowToView(const QPointF& pt)
 {
-    KoPoint p;
+    QPointF p;
     p.setX(pt.x() * zoom() - horzValue());
     p.setY(pt.y() * zoom() - vertValue());
 
@@ -3389,7 +3389,7 @@ QRect KisView::windowToView(const QRect& rc)
 KisRect KisView::windowToView(const KisRect& rc)
 {
     KisRect r;
-    KoPoint p = windowToView(KoPoint(rc.x(), rc.y()));
+    QPointF p = windowToView(QPointF(rc.x(), rc.y()));
     r.setX(p.x());
     r.setY(p.y());
     r.setWidth(rc.width() * zoom());

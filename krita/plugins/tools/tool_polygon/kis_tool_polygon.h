@@ -59,13 +59,13 @@ protected:
     void finish();
     virtual void keyPress(QKeyEvent *e);
 protected:
-    KoPoint m_dragStart;
-    KoPoint m_dragEnd;
+    QPointF m_dragStart;
+    QPointF m_dragEnd;
 
     bool m_dragging;
     KisImageSP m_currentImage;
 private:
-    typedef Q3ValueVector<KoPoint> KoPointVector;
+    typedef Q3ValueVector<QPointF> KoPointVector;
     KoPointVector m_points;
 };
 

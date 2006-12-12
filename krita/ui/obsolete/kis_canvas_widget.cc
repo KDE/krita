@@ -836,7 +836,7 @@ double KisCanvasWidget::X11TabletDevice::translateAxisValue(int value, const XAx
     return translatedValue;
 }
 
-KisCanvasWidget::X11TabletDevice::State::State(const KoPoint& pos, double pressure, const KisVector2D& tilt, double wheel,
+KisCanvasWidget::X11TabletDevice::State::State(const QPointF& pos, double pressure, const KisVector2D& tilt, double wheel,
                                                quint32 toolID, quint32 serialNumber)
     : m_pos(pos),
       m_pressure(pressure),
@@ -849,10 +849,10 @@ KisCanvasWidget::X11TabletDevice::State::State(const KoPoint& pos, double pressu
 
 KisCanvasWidget::X11TabletDevice::State KisCanvasWidget::X11TabletDevice::translateAxisData(const int *axisData) const
 {
-    KoPoint pos(0, 0);
+    QPointF pos(0, 0);
 
     if (m_xAxis != NoAxis && m_yAxis != NoAxis) {
-        pos = KoPoint(translateAxisValue(axisData[m_xAxis], m_axisInfo[m_xAxis]),
+        pos = QPointF(translateAxisValue(axisData[m_xAxis], m_axisInfo[m_xAxis]),
                        translateAxisValue(axisData[m_yAxis], m_axisInfo[m_yAxis]));
     }
 
@@ -1055,9 +1055,9 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
 
                 // Map normalised position coordinates to screen coordinates
                 QDesktopWidget *desktop = QApplication::desktop();
-                KoPoint globalPos(deviceState.pos().x() * desktop->width(), deviceState.pos().y() * desktop->height());
+                QPointF globalPos(deviceState.pos().x() * desktop->width(), deviceState.pos().y() * desktop->height());
                 // Convert screen coordinates to widget coordinates
-                KoPoint pos = globalPos - KoPoint( widgetOriginPos );
+                QPointF pos = globalPos - QPointF( widgetOriginPos );
 
                 // Map tilt to -60 - +60 degrees
                 KisVector2D tilt(deviceState.tilt().x() * 60, deviceState.tilt().y() * 60);

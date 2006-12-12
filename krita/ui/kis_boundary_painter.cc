@@ -44,8 +44,8 @@ void KisBoundaryPainter::paint(const KisBoundary& boundary, QPainter& painter)
         KisBoundary::PointPairList::const_iterator lineIt = (*it).constBegin();
         KisBoundary::PointPairList::const_iterator lineEnd = (*it).constEnd();
         while (lineIt != lineEnd) {
-            int x1 = (*lineIt).first.floorX();
-            int y = (*lineIt).first.floorY();
+            int x1 = static_cast<int>((*lineIt).first.x());
+            int y = static_cast<int>((*lineIt).first.y());
             int x2 = x1 + (*lineIt).second;
 
             painter.drawLine(x1, y, x2, y);
@@ -64,8 +64,8 @@ void KisBoundaryPainter::paint(const KisBoundary& boundary, QPainter& painter)
         KisBoundary::PointPairList::const_iterator lineIt = (*it).constBegin();
         KisBoundary::PointPairList::const_iterator lineEnd = (*it).constEnd();
         while (lineIt != lineEnd) {
-            int x = (*lineIt).first.floorX();
-            int y1 = (*lineIt).first.floorY();
+            int x = static_cast<int>((*lineIt).first.x());
+            int y1 = static_cast<int>((*lineIt).first.y());
             int y2 = y1 + (*lineIt).second;
 
             painter.drawLine(x, y1, x, y2);

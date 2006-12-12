@@ -26,7 +26,7 @@
 #include <KoToolFactory.h>
 
 class QWidget;
-class KoPoint;
+class QPointF;
 class KisSelectedTransaction;
 class KisSelectionOptions;
 

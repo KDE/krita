@@ -53,7 +53,7 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_cubism_filter.h"
 #include "kis_polygon.h"
-#include "KoPoint.h"
+
 
 #define RANDOMNESS       5
 #define SUPERSAMPLE      4

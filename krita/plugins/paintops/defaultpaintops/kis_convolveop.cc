@@ -51,7 +51,7 @@ KisConvolveOp::~KisConvolveOp()
 {
 }
 
-void KisConvolveOp::paintAt(const KoPoint &/*pos*/, const KisPaintInformation& /*info*/)
+void KisConvolveOp::paintAt(const QPointF &/*pos*/, const KisPaintInformation& /*info*/)
 {
     // XXX: use convolve painter here.
     

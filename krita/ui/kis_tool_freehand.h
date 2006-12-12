@@ -23,7 +23,7 @@
 
 #include "kis_types.h"
 #include "kis_tool_paint.h"
-#include "KoPoint.h"
+
 #include "krita_export.h"
 
 class KoPointerEvent;
@@ -51,17 +51,17 @@ public:
 protected:
 
     /// Paint a single brush footprint on the current layer
-    virtual void paintAt(const KoPoint &pos,
+    virtual void paintAt(const QPointF &pos,
                  const double pressure,
                  const double xTilt,
                  const double yTilt);
 
     /// Paint a line between the specified positions on the current layer
-    virtual void paintLine(const KoPoint & pos1,
+    virtual void paintLine(const QPointF & pos1,
                    const double pressure1,
                    const double xtilt1,
                    const double ytilt1,
-                   const KoPoint & pos2,
+                   const QPointF & pos2,
                    const double pressure2,
                    const double xtilt2,
                    const double ytilt2);
@@ -69,11 +69,11 @@ protected:
     virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
 
-    void paintOutline(const KoPoint& point);
+    void paintOutline(const QPointF& point);
 
 protected:
 
-    KoPoint m_prevPos;
+    QPointF m_prevPos;
     double m_prevPressure;
     double m_prevXTilt;
     double m_prevYTilt;

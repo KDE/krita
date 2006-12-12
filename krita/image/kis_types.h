@@ -128,4 +128,6 @@ typedef KisRandomAccessorPixelBase<KisRandomConstAccessor, const quint8*> KisRan
 class KisRandomAccessor;
 typedef KisRandomAccessorPixelBase<KisRandomAccessor, quint8*> KisRandomAccessorPixel;
 
+typedef QVector<QPointF> vQPointF;
+
 #endif // KISTYPES_H_

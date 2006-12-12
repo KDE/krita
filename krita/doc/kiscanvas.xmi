@@ -93,8 +93,8 @@
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23287" isRoot="false" isAbstract="false" name="const KoShape*" elementReference="23031" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23298" isRoot="false" isAbstract="false" name="KoRTree&lt; KoShape * >" elementReference="23297" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23301" isRoot="false" isAbstract="false" name="QSet&lt; KoShape * >" elementReference="23300" />
-    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23366" isRoot="false" isAbstract="false" name="const KoPoint&amp;" elementReference="23365" />
-    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23370" isRoot="false" isAbstract="false" name="const KoRect&amp;" elementReference="23369" />
+    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23366" isRoot="false" isAbstract="false" name="const QPointF&amp;" elementReference="23365" />
+    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23370" isRoot="false" isAbstract="false" name="const QRectF&amp;" elementReference="23369" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23374" isRoot="false" isAbstract="false" name="const KoSize&amp;" elementReference="23373" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15481" isRoot="false" isAbstract="false" name="KoSelection" />
     <UML:Class comment="The shape manager hold a list of all shape which are in scope.
@@ -1798,8 +1798,8 @@ Convert a coordinate in pt to pixels.
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="23351" xmi.id="23352" isRoot="false" isAbstract="false" name="Mode" />
      </UML:Namespace.ownedElement>
     </UML:Class>
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23365" isRoot="false" isAbstract="false" name="KoPoint" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23369" isRoot="false" isAbstract="false" name="KoRect" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23365" isRoot="false" isAbstract="false" name="QPointF" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23369" isRoot="false" isAbstract="false" name="QRectF" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23373" isRoot="false" isAbstract="false" name="KoSize" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23376" isRoot="false" isAbstract="false" name="QSize" />
     <UML:Class comment="KisZoomHandler handles the zoom conversions for Krita. Krita is unique among KOffice applications that its internal coordinates are not in postscript points, but in pixels. 

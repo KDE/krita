@@ -53,7 +53,7 @@ KisEraseOp::~KisEraseOp()
 {
 }
 
-void KisEraseOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
+void KisEraseOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 {
 // Erasing is traditionally in paint applications one of two things:
 // either it is painting in the 'background' color, or it is replacing
@@ -83,8 +83,8 @@ void KisEraseOp::paintAt(const KoPoint &pos, const KisPaintInformation& info)
     KisBrush *brush = m_painter->brush();
     if (! brush->canPaintFor(info) )
         return;
-    KoPoint hotSpot = brush->hotSpot(info);
-    KoPoint pt = pos - hotSpot;
+    QPointF hotSpot = brush->hotSpot(info);
+    QPointF pt = pos - hotSpot;
 
     qint32 destX;
     double xFraction;

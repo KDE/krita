@@ -26,7 +26,7 @@
 #include <kis_dummy_shape.h>
 
 class QTimer;
-class KoPoint;
+class QPointF;
 class QPainter;
 class QRect;
 class QCheckBox;

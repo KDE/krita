@@ -26,7 +26,7 @@
 
 #include "wdgcpaintoptions.h"
 
-class KoPoint;
+class QPointF;
 class KisPainter;
 class Brush;
 class Stroke;
@@ -81,7 +81,7 @@ public:
     KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, KisPainter * painter);
     virtual ~KisCPaintOp();
 
-    void paintAt(const KoPoint &pos, const KisPaintInformation& info);
+    void paintAt(const QPointF &pos, const KisPaintInformation& info);
 
 private:
 

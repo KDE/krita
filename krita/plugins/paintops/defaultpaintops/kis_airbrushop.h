@@ -25,7 +25,7 @@
 
 #include "kis_paintop.h"
 
-class KoPoint;
+class QPointF;
 class KisPainter;
 
 class KisAirbrushOpFactory : public KisPaintOpFactory {
@@ -53,7 +53,7 @@ public:
     // We want to spray even when the pointer doesn't move.
     virtual bool incremental() { return true; }
 
-    void paintAt(const KoPoint &pos, const KisPaintInformation& info);
+    void paintAt(const QPointF &pos, const KisPaintInformation& info);
 
 };
 

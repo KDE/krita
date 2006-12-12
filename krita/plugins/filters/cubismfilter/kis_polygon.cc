@@ -24,13 +24,13 @@
 #include <math.h>
 #include <q3valuevector.h>
 
-#include <KoPoint.h>
+
 
 #include "kis_polygon.h"
 
 void KisPolygon::addPoint(double x, double y)
 {
-        KoPoint point(x, y);
+        QPointF point(x, y);
         append(point);
 }
 

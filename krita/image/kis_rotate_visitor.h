@@ -18,7 +18,7 @@
 #ifndef KIS_ROTATE_VISITOR_H_
 #define KIS_ROTATE_VISITOR_H_
 
-#include <KoPoint.h>
+
 #include "kis_types.h"
 #include "kis_progress_subject.h"
 
@@ -59,7 +59,7 @@ private:
     KisPaintDeviceSP rotateRight90(KisPaintDeviceSP src);
     KisPaintDeviceSP rotateLeft90(KisPaintDeviceSP src);
     KisPaintDeviceSP rotate180(KisPaintDeviceSP src);
-    KisPaintDeviceSP rotate(KisPaintDeviceSP src, double angle, KoPoint centerOfRotation);
+    KisPaintDeviceSP rotate(KisPaintDeviceSP src, double angle, QPointF centerOfRotation);
 
     KisPaintDeviceSP xShear(KisPaintDeviceSP src, double shearX);
     KisPaintDeviceSP yShear(KisPaintDeviceSP src, double shearY);

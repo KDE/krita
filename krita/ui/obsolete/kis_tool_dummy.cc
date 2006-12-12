@@ -71,8 +71,8 @@ void KisToolDummy::move(KoPointerEvent *e)
     if (m_subject && m_dragging) {
         KisCanvasController *controller = m_subject->canvasController();
 
-        KoPoint currPos = controller->windowToView(e->pos());
-        KoPoint delta = currPos - m_dragPos;
+        QPointF currPos = controller->windowToView(e->pos());
+        QPointF delta = currPos - m_dragPos;
         controller->scrollTo(m_origScrollX - delta.floorX(), m_origScrollY - delta.floorY());
     }
 }

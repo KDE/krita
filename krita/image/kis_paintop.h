@@ -42,7 +42,7 @@
 
 class QWidget;
 
-class KoPoint;
+class QPointF;
 class KoColorSpace;
 class KoInputDevice;
 
@@ -58,7 +58,7 @@ public:
     KisPaintOp(KisPainter * painter);
     virtual ~KisPaintOp();
 
-    virtual void paintAt(const KoPoint &pos, const KisPaintInformation& info) = 0;
+    virtual void paintAt(const QPointF &pos, const KisPaintInformation& info) = 0;
     void setSource(KisPaintDeviceSP p);
 
     /**

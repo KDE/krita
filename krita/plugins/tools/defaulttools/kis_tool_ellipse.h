@@ -46,12 +46,12 @@ public:
     virtual void buttonRelease(KoPointerEvent *event);
 
 protected:
-    virtual void draw(const KoPoint& start, const KoPoint& stop);
+    virtual void draw(const QPointF& start, const QPointF& stop);
 
 protected:
-    KoPoint m_dragCenter;
-    KoPoint m_dragStart;
-    KoPoint m_dragEnd;
+    QPointF m_dragCenter;
+    QPointF m_dragStart;
+    QPointF m_dragEnd;
 
     bool m_dragging;
     KisImageSP m_currentImage;

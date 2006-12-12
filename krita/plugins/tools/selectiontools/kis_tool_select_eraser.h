@@ -24,7 +24,7 @@
 #include <KoToolFactory.h>
 #include <kis_tool_freehand.h>
 
-class KoPoint;
+class QPointF;
 class KisSelectionOptions;
 
 

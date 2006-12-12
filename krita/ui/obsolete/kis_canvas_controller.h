@@ -27,7 +27,7 @@
 class QWidget;
 class KisTool;
 class KisRect;
-class KoPoint;
+class QPointF;
 class KisCanvas;
 class KoInputDevice;
 
@@ -153,7 +153,7 @@ public:
      * is the window on the image.
      */
     virtual QPoint viewToWindow(const QPoint& pt) = 0;
-    virtual KoPoint viewToWindow(const KoPoint& pt) = 0;
+    virtual QPointF viewToWindow(const QPointF& pt) = 0;
     virtual QRect viewToWindow(const QRect& rc) = 0;
     virtual KisRect viewToWindow(const KisRect& rc) = 0;
     virtual void viewToWindow(qint32 *x, qint32 *y) = 0;
@@ -162,7 +162,7 @@ public:
      * Conversion functions from image coordinates to view coordinates
      */
     virtual QPoint windowToView(const QPoint& pt) = 0;
-    virtual KoPoint windowToView(const KoPoint& pt) = 0;
+    virtual QPointF windowToView(const QPointF& pt) = 0;
     virtual QRect windowToView(const QRect& rc) = 0;
     virtual KisRect windowToView(const KisRect& rc) = 0;
     virtual void windowToView(qint32 *x, qint32 *y) = 0;

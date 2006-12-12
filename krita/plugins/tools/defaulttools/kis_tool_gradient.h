@@ -73,12 +73,12 @@ private:
     void paintLine();
     void paintLine(QPainter& gc);
 
-    KoPoint straightLine(KoPoint point);
+    QPointF straightLine(QPointF point);
 
     bool m_dragging;
 
-    KoPoint m_startPos;
-    KoPoint m_endPos;
+    QPointF m_startPos;
+    QPointF m_endPos;
 
     
 

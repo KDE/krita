@@ -22,7 +22,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "KoPoint.h"
+
 #include "kis_painter.h"
 #include <krita_export.h>
 
@@ -64,8 +64,8 @@ public:
      * XXX: What does the returned bool mean?
      * XXX: Make cs-independent
      */
-    bool paintGradient(const KoPoint& gradientVectorStart,
-               const KoPoint& gradientVectorEnd,
+    bool paintGradient(const QPointF& gradientVectorStart,
+               const QPointF& gradientVectorEnd,
                enumGradientShape shape,
                enumGradientRepeat repeat,
                double antiAliasThreshold,

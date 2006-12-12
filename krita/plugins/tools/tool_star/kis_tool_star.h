@@ -60,20 +60,20 @@ public:
     virtual void buttonRelease(KoPointerEvent *event);
 
 protected:
-    virtual void draw(const KoPoint& start, const KoPoint& stop);
+    virtual void draw(const QPointF& start, const QPointF& stop);
     //virtual void draw(KisPainter *gc, const QRect& rc);
 
 protected:
     int m_lineThickness;
 
-    KoPoint m_dragStart;
-    KoPoint m_dragEnd;
+    QPointF m_dragStart;
+    QPointF m_dragEnd;
     QRect m_final_lines;
 
     bool m_dragging;
     KisImageSP m_currentImage;
 private:
-    vKoPoint starCoordinates(int N, double mx, double my, double x, double y);
+    vQPointF starCoordinates(int N, double mx, double my, double x, double y);
     qint32 m_innerOuterRatio;
     qint32 m_vertices;
     WdgToolStar* m_optWidget;

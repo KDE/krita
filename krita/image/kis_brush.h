@@ -23,7 +23,7 @@
 #include <QImage>
 #include <QVector>
 
-#include "KoPoint.h"
+
 
 #include "kis_types.h"
 
@@ -88,8 +88,8 @@ public:
     virtual KisPaintDeviceSP image(KoColorSpace * colorSpace, const KisPaintInformation& info,
                              double subPixelX = 0, double subPixelY = 0) const;
 
-    void setHotSpot(KoPoint);
-    KoPoint hotSpot(const KisPaintInformation& info = KisPaintInformation()) const;
+    void setHotSpot(QPointF);
+    QPointF hotSpot(const KisPaintInformation& info = KisPaintInformation()) const;
 
     void setSpacing(double s) { m_spacing = s; }
     double spacing() const { return m_spacing; }
@@ -170,7 +170,7 @@ private:
 
     QByteArray m_data;
     bool m_ownData;
-    KoPoint m_hotSpot;
+    QPointF m_hotSpot;
     double m_spacing;
     bool m_useColorAsMask;
     bool m_hasColor;

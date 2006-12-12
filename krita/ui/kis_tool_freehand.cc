@@ -273,7 +273,7 @@ void KisToolFreehand::endPaint()
     }
 }
 
-void KisToolFreehand::paintAt(const KoPoint &pos,
+void KisToolFreehand::paintAt(const QPointF &pos,
                const double pressure,
                const double xTilt,
                const double yTilt)
@@ -281,11 +281,11 @@ void KisToolFreehand::paintAt(const KoPoint &pos,
     m_painter->paintAt(pos, pressure, xTilt, yTilt);
 }
 
-void KisToolFreehand::paintLine(const KoPoint & pos1,
+void KisToolFreehand::paintLine(const QPointF & pos1,
                  const double pressure1,
                  const double xtilt1,
                  const double ytilt1,
-                 const KoPoint & pos2,
+                 const QPointF & pos2,
                  const double pressure2,
                  const double xtilt2,
                  const double ytilt2)
@@ -294,7 +294,7 @@ void KisToolFreehand::paintLine(const KoPoint & pos1,
 }
 
 
-void KisToolFreehand::paintOutline(const KoPoint& point) {
+void KisToolFreehand::paintOutline(const QPointF& point) {
     Q_UNUSED( point );
 #if 0
     // XXX TOOL_PORT
@@ -325,7 +325,7 @@ void KisToolFreehand::paintOutline(const KoPoint& point) {
         QPainter gc( canvas->canvasWidget() );
         QPen pen(Qt::SolidLine);
 
-        KoPoint hotSpot = brush->hotSpot();
+        QPointF hotSpot = brush->hotSpot();
 
         //gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
@@ -334,7 +334,7 @@ void KisToolFreehand::paintOutline(const KoPoint& point) {
         gc.translate((- controller->horzValue()) / m_subject->zoomFactor(),
                         (- controller->vertValue()) / m_subject->zoomFactor());
 
-        KoPoint topLeft = point - hotSpot;
+        QPointF topLeft = point - hotSpot;
 
         if (m_subject->currentPaintop().id() == "pen") {
             // Pen paints on whole pixels only.

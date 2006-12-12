@@ -40,7 +40,7 @@
 #include <QMouseEvent>
 
 #include "kis_global.h"
-#include "KoPoint.h"
+
 #include "kis_vec.h"
 #include "kis_canvas.h"
 #include "KoInputDevice.h"
@@ -211,11 +211,11 @@ public:
         {
         public:
             State() {}
-            State(const KoPoint& pos, double pressure, const KisVector2D& tilt, double wheel,
+            State(const QPointF& pos, double pressure, const KisVector2D& tilt, double wheel,
                   quint32 toolID, quint32 serialNumber);
 
             // Position, pressure and wheel are normalised to 0 - 1
-            KoPoint pos() const { return m_pos; }
+            QPointF pos() const { return m_pos; }
             double pressure() const { return m_pressure; }
             // Tilt is normalised to -1->+1
             KisVector2D tilt() const { return m_tilt; }
@@ -225,7 +225,7 @@ public:
             quint32 serialNumber() const { return m_serialNumber; }
 
         private:
-            KoPoint m_pos;
+            QPointF m_pos;
             double m_pressure;
             KisVector2D m_tilt;
             double m_wheel;

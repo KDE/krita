@@ -90,7 +90,7 @@ void KisToolStar::move(KoPointerEvent *event)
         draw(m_dragStart, m_dragEnd);
         // move (alt) or resize star
         if (event->modifiers() & Qt::AltModifier) {
-            KoPoint trans = event->pos() - m_dragEnd;
+            QPointF trans = event->pos() - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
         } else {
@@ -134,7 +134,7 @@ void KisToolStar::buttonRelease(KoPointerEvent *event)
         KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintOp(), m_subject->currentPaintOpSettings(), &painter);
         painter.setPaintOp(op); // Painter takes ownership
 
-        vKoPoint coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
+        vQPointF coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
         painter.paintPolygon(coord);
 
@@ -147,7 +147,7 @@ void KisToolStar::buttonRelease(KoPointerEvent *event)
     }
 }
 
-void KisToolStar::draw(const KoPoint& start, const KoPoint& end )
+void KisToolStar::draw(const QPointF& start, const QPointF& end )
 {
     if (!m_subject || !m_currentImage)
         return;
@@ -157,14 +157,14 @@ void KisToolStar::draw(const KoPoint& start, const KoPoint& end )
     QPainter p (canvas->canvasWidget());
     QPen pen(Qt::SolidLine);
 
-    KoPoint startPos;
-    KoPoint endPos;
+    QPointF startPos;
+    QPointF endPos;
     startPos = controller->windowToView(start);
     endPos = controller->windowToView(end);
 
     //p.setRasterOp(Qt::NotROP);
 
-    vKoPoint points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
+    vQPointF points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
 
     for (int i = 0; i < points.count() - 1; i++) {
         p.drawLine(points[i].floorQPoint(), points[i + 1].floorQPoint());
@@ -192,13 +192,13 @@ void KisToolStar::setup(KActionCollection *collection)
     }
 }
 
-vKoPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
+vQPointF KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
 {
     double R=0, r=0;
     qint32 n=0;
     double angle;
 
-    vKoPoint starCoordinatesArray(2*N);
+    vQPointF starCoordinatesArray(2*N);
 
     // the radius of the outer edges
     R=sqrt((x-mx)*(x-mx)+(y-my)*(y-my));
@@ -211,12 +211,12 @@ vKoPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, dou
 
     //set outer edges
     for(n=0;n<N;n++){
-        starCoordinatesArray[2*n] = KoPoint(mx+R*cos(n * 2.0 * M_PI / N + angle),my+R*sin(n *2.0 * M_PI / N+angle));
+        starCoordinatesArray[2*n] = QPointF(mx+R*cos(n * 2.0 * M_PI / N + angle),my+R*sin(n *2.0 * M_PI / N+angle));
     }
 
     //set inner edges
     for(n=0;n<N;n++){
-        starCoordinatesArray[2*n+1] = KoPoint(mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle));
+        starCoordinatesArray[2*n+1] = QPointF(mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle));
     }
 
     return starCoordinatesArray;

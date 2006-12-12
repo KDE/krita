@@ -25,7 +25,7 @@
 
 #include "kis_paintop.h"
 
-class KoPoint;
+class QPointF;
 class KisPainter;
 
 
@@ -49,7 +49,7 @@ public:
     KisConvolveOp(KisPainter * painter);
     virtual ~KisConvolveOp();
 
-    void paintAt(const KoPoint &pos, const KisPaintInformation& info);
+    void paintAt(const QPointF &pos, const KisPaintInformation& info);
 
 };
 

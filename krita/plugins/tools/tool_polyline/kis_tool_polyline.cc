@@ -109,7 +109,7 @@ void KisToolPolyline::finish()
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintOp(), m_subject->currentPaintOpSettings(), &painter);
     painter.setPaintOp(op); // Painter takes ownership
 
-    KoPoint start,end;
+    QPointF start,end;
     KoPointVector::iterator it;
     for( it = m_points.begin(); it != m_points.end(); ++it )
     {
@@ -198,7 +198,7 @@ void KisToolPolyline::draw(QPainter& gc)
     //gc.setRasterOp(Qt::XorROP);
 
     KisCanvasController *controller = m_subject->canvasController();
-    KoPoint start, end;
+    QPointF start, end;
     QPoint startPos;
     QPoint endPos;
 

@@ -22,7 +22,7 @@
 #ifndef KIS_TOOL_SELECT_RECTANGULAR_H_
 #define KIS_TOOL_SELECT_RECTANGULAR_H_
 
-#include "KoPoint.h"
+
 #include "kis_tool_non_paint.h"
 #include "kis_selection.h"
 #include "KoToolFactory.h"
@@ -62,9 +62,9 @@ private:
 
 private:
     
-    KoPoint m_centerPos;
-    KoPoint m_startPos;
-    KoPoint m_endPos;
+    QPointF m_centerPos;
+    QPointF m_startPos;
+    QPointF m_endPos;
     bool m_selecting;
     KisSelectionOptions * m_optWidget;
     enumSelectionMode m_selectAction;

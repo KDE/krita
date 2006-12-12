@@ -23,14 +23,14 @@
 
 #include "KoToolFactory.h"
 #include "kis_tool_curve.h"
-#include "KoPoint.h"
+
 
 class CurvePoint;
-class KoPoint;
+class QPointF;
 class KisCanvas;
 class KisCurve;
 class KisPainter;
-class KoPoint;
+class QPointF;
 class WdgToolExample;
 
 class KisToolExample : public KisToolCurve {

@@ -53,8 +53,8 @@ KisToolLine::KisToolLine()
 
     m_painter = 0;
     m_currentImage = 0;
-    m_startPos = KoPoint(0, 0);
-    m_endPos = KoPoint(0, 0);
+    m_startPos = QPointF(0, 0);
+    m_endPos = QPointF(0, 0);
 }
 
 KisToolLine::~KisToolLine()
@@ -95,7 +95,7 @@ void KisToolLine::move(KoPointerEvent *e)
         //KisCanvasController *controller = m_subject->canvasController();
 
         if (e->modifiers() & Qt::AltModifier) {
-            KoPoint trans = e->pos() - m_endPos;
+            QPointF trans = e->pos() - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
         } else if (e->modifiers() & Qt::ShiftModifier)
@@ -163,10 +163,10 @@ void KisToolLine::buttonRelease(KoPointerEvent *e)
 
 }
 
-KoPoint KisToolLine::straightLine(KoPoint point)
+QPointF KisToolLine::straightLine(QPointF point)
 {
-    KoPoint comparison = point - m_startPos;
-    KoPoint result;
+    QPointF comparison = point - m_startPos;
+    QPointF result;
 
     if ( fabs(comparison.x()) > fabs(comparison.y())) {
         result.setX(point.x());
@@ -198,8 +198,8 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         //RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
-        KoPoint start;
-        KoPoint end;
+        QPointF start;
+        QPointF end;
 
 //        Q_ASSERT(controller);
         start = controller->windowToView(m_startPos);

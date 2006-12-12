@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include <KoPoint.h>
+
 #include <kis_types.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
@@ -252,14 +252,14 @@ class Painter : public QObject
         inline KisPaintLayerSP paintLayer() { return m_layer; }
 
     private:
-        inline vKoPoint createPointsVector( Q3ValueList<QVariant> xs, Q3ValueList<QVariant> ys)
+        inline vQPointF createPointsVector( Q3ValueList<QVariant> xs, Q3ValueList<QVariant> ys)
         {
-            vKoPoint a;
+            vQPointF a;
             Q3ValueList<QVariant>::iterator itx = xs.begin();
             Q3ValueList<QVariant>::iterator ity = ys.begin();
             for(; itx != xs.end(); ++itx, ++ity)
             {
-                a.push_back(KoPoint( (*itx).toDouble(), (*ity).toDouble()));
+                a.push_back(QPointF( (*itx).toDouble(), (*ity).toDouble()));
             }
             return a;
         }

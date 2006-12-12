@@ -17,7 +17,7 @@
  */
 
 #include <kis_paint_device.h>
-#include <KoPoint.h>
+
 #include <kis_vec.h>
 
 #include "stroke.h"
@@ -83,8 +83,8 @@ void drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2,
 
     if (!dev) return;
 
-    KoPoint pos1 = KoPoint( x1, y1 );
-    KoPoint pos2 = KoPoint( x2, y2 );
+    QPointF pos1 = QPointF( x1, y1 );
+    QPointF pos2 = QPointF( x2, y2 );
 
     KisVector2D end(pos2);
     KisVector2D start(pos1);
@@ -111,7 +111,7 @@ void drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2,
 
         step += dragVec;
 
-        KoPoint p(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale));
+        QPointF p(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale));
         kDebug() << "paint at: " << p.roundX() << ", " << p.roundY() << endl;
         dev->setPixel(p.roundX(), p.roundY(), Qt::blue, OPACITY_OPAQUE);
         dist -= 1;

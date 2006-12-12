@@ -187,7 +187,7 @@ void KisToolCurve::move(KoPointerEvent *event)
 
 double pointToSegmentDistance(const QPointF& pp, const QPointF& pl0, const QPointF& pl1)
 {
-    KoPoint l0 = pl0, l1 = pl1, p = pp;
+    QPointF l0 = pl0, l1 = pl1, p = pp;
     double lineLength = sqrt((l1.x() - l0.x()) * (l1.x() - l0.x()) + (l1.y() - l0.y()) * (l1.y() - l0.y()));
     double distance = 0;
     KisVector2D v0(l0), v1(l1), v(p), seg(v0-v1), dist0(v0-p), dist1(v1-p);
@@ -470,9 +470,9 @@ KisCurve::iterator KisToolCurve::paintPoint (KisPainter& painter, KisCurve::iter
     return point;
 }
 
-Q3ValueVector<KoPoint> KisToolCurve::convertCurve()
+Q3ValueVector<QPointF> KisToolCurve::convertCurve()
 {
-    Q3ValueVector<KoPoint> points;
+    Q3ValueVector<QPointF> points;
 
     for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); i++)
         if ((*i).hint() != NOHINTS)

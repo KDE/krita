@@ -199,7 +199,7 @@ void KisToolSelectOutline::draw(QPainter& gc)
         //gc.setRasterOp(Qt::XorROP);
 
         KisCanvasController *controller = m_subject->canvasController();
-        KoPoint start, end;
+        QPointF start, end;
         QPoint startPos;
         QPoint endPos;
 
@@ -221,7 +221,7 @@ void KisToolSelectOutline::deactivate()
         gc.setPen(pen);
         //gc.setRasterOp(Qt::XorROP);
 
-        KoPoint start, end;
+        QPointF start, end;
         QPoint startPos;
         QPoint endPos;
 

@@ -21,8 +21,6 @@
 #define kotextzoomhandler_h
 
 #include <KoZoomHandler.h>
-#include <KoPoint.h>
-#include <KoRect.h>
 /**
  * This class extends KoZoomHandler to add support for WYSIWYG text layouting.
  */
@@ -69,15 +67,15 @@ public:
     { return qRound( pt * m_resolutionX ); }
     int ptToPixelY( double pt ) const
     { return qRound( pt * m_resolutionY ); }
-    QPoint ptToPixel( const KoPoint & p ) const {
+    QPoint ptToPixel( const QPointF & p ) const {
         return QPoint( ptToPixelX( p.x() ), ptToPixelY( p.y() ) );
     }
     double pixelXToPt( int x ) const
     { return static_cast<double>(x) / m_resolutionX; }
     double pixelYToPt( int y ) const
     { return static_cast<double>(y) / m_resolutionY; }
-    KoPoint pixelToPt( const QPoint& p ) const {
-        return KoPoint( pixelXToPt( p.x() ), pixelYToPt( p.y() ) );
+    QPointF pixelToPt( const QPoint& p ) const {
+        return QPointF( pixelXToPt( p.x() ), pixelYToPt( p.y() ) );
     }
 
     /** The "document pt" -> "Layout Unit pixels" conversions, for convenience */
@@ -85,7 +83,7 @@ public:
     { return ptToPixelX( ptToLayoutUnitPt( x_pt ) ); }
     int ptToLayoutUnitPixY( double y_pt ) const
     { return ptToPixelY( ptToLayoutUnitPt( y_pt ) ); }
-    QPoint ptToLayoutUnitPix( const KoPoint & p ) const {
+    QPoint ptToLayoutUnitPix( const QPointF & p ) const {
         return QPoint( ptToLayoutUnitPixX( p.x() ), ptToLayoutUnitPixY( p.y() ) );
     }
 
@@ -116,17 +114,17 @@ public:
     static int ptToLayoutUnitPt( int ptSize )
     { return ptSize * m_layoutUnitFactor; }
 
-    static KoPoint ptToLayoutUnitPt( const KoPoint &p )
-    { return KoPoint( ptToLayoutUnitPt( p.x() ),
+    static QPointF ptToLayoutUnitPt( const QPointF &p )
+    { return QPointF( ptToLayoutUnitPt( p.x() ),
                       ptToLayoutUnitPt( p.y() ) ); }
-    static KoRect ptToLayoutUnitPt( const KoRect &r )
-    { return KoRect( ptToLayoutUnitPt( r.topLeft() ),
-                     ptToLayoutUnitPt( r.bottomRight() ) ); }
+    static QRectF ptToLayoutUnitPt( const QRectF &r )
+    { return QRectF( ptToLayoutUnitPt( r.topLeft() ).x(),ptToLayoutUnitPt( r.topLeft() ).y(), 
+                     ptToLayoutUnitPt( r.bottomRight() ).x(), ptToLayoutUnitPt( r.bottomRight() ).y() ); }
 
     static double layoutUnitPtToPt( double lupt )
     { return lupt / static_cast<double>( m_layoutUnitFactor ); }
-    static KoPoint layoutUnitPtToPt( const KoPoint& p )
-    { return KoPoint( layoutUnitPtToPt( p.x() ),
+    static QPointF layoutUnitPtToPt( const QPointF& p )
+    { return QPointF( layoutUnitPtToPt( p.x() ),
                       layoutUnitPtToPt( p.y() ) ); }
 
 protected:

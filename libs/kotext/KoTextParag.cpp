@@ -39,7 +39,7 @@
 //Added by qt3to4:
 #include <Q3MemArray>
 #include <Q3PtrList>
-
+#include "KoRect.h"
 //#define DEBUG_PAINT
 
 KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, bool updateIds )

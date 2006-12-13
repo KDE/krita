@@ -17,17 +17,28 @@
  */
 
 #include "KoTextBlockData.h"
+#include "KoTextBlockBorderData.h"
 
 KoTextBlockData::KoTextBlockData()
-    : m_counterPos(0.0, 0.0)
+    : m_counterPos(0.0, 0.0),
+    m_border(0)
 {
     m_counterWidth = -1.0;
 }
 
 KoTextBlockData::~KoTextBlockData() {
+    if(m_border && m_border->removeUser() == 0)
+        delete m_border;
 }
 
 bool KoTextBlockData::hasCounterData() const {
     return m_counterWidth >= 0 && !m_counterText.isNull();
 }
 
+void KoTextBlockData::setBorder(KoTextBlockBorderData *border) {
+    if(m_border && m_border->removeUser() == 0)
+        delete m_border;
+    m_border = border;
+    if(m_border)
+        m_border->addUser();
+}

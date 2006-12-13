@@ -23,6 +23,8 @@
 
 #include <koffice_export.h>
 
+class KoTextBlockBorderData;
+
 /**
  * This class is used to store properties for KoText layouting inside Qt QTextBlock
  * instances.
@@ -55,11 +57,15 @@ public:
     void setCounterPosition(QPointF position) { m_counterPos = position; }
     QPointF counterPosition() const { return m_counterPos; }
 
+    void setBorder(KoTextBlockBorderData *border);
+    KoTextBlockBorderData *border() const { return m_border; }
+
 private:
     double m_counterWidth;
     QString m_counterText;
     QString m_partialCounterText;
     QPointF m_counterPos;
+    KoTextBlockBorderData *m_border;
 };
 
 #endif

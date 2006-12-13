@@ -29,10 +29,10 @@ kde4_automoc(${krosspython_PART_SRCS})
 
 kde4_add_plugin(krosspython ${krosspython_PART_SRCS})
 
-# -ldl seems to be needed.
+# -ldl seems to be needed (on Linux at least).
 # see http://lists.kde.org/?l=koffice-devel&m=116333261328694&w=2
 # and http://websvn.kde.org/branches/work/kwin_composite/CMakeLists.txt?rev=603677&r1=603384&r2=603677
-target_link_libraries(krosspython ${KDE4_KROSSCORE_LIBS} ${PYTHON_LIBRARIES} -ldl)
+target_link_libraries(krosspython ${KDE4_KROSSCORE_LIBS} ${PYTHON_LIBRARIES} ${CMAKE_DL_LIBS})
 
 install(TARGETS krosspython  DESTINATION ${PLUGIN_INSTALL_DIR})
 

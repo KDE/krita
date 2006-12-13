@@ -109,7 +109,7 @@ ALPHABETICAL_INDEX     = NO
 COLS_IN_ALPHA_INDEX    = 4
 IGNORE_PREFIX          =
 
-GENERATE_HTML          = YES
+GENERATE_HTML          = NO
 HTML_OUTPUT            = html
 HTML_FILE_EXTENSION    = .html
 HTML_HEADER            =

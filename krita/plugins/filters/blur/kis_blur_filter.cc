@@ -114,16 +114,19 @@ void KisBlurFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
     QImage mask;
     kas->createBrush(&mask);
     
-    mask.convertDepth(1); 
+    mask.convertToFormat(QImage::Format_Mono); 
     
     if( rotate != 0)
     {
         QWMatrix m;
         m.rotate( rotate );
-        mask = mask.xForm( m );
+        mask = mask.transformed( m );
         if( (mask.height() & 1) || mask.width() & 1)
         {
-            mask.smoothScale( mask.width() + !(mask.width() & 1), mask.height() + !(mask.height() & 1) );
+            mask.scaled( mask.width() + !(mask.width() & 1), 
+                         mask.height() + !(mask.height() & 1), 
+                         Qt::KeepAspectRatio,
+                         Qt::SmoothTransformation );
         }
     }
     

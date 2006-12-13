@@ -89,18 +89,19 @@ void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), areaSize.width());
 
     int cdepth = cs -> pixelSize();
-    Q_UINT8 *colors[2];
-    colors[0] = new Q_UINT8[cdepth];
-    colors[1] = new Q_UINT8[cdepth];
+    quint8 *colors[2];
+    colors[0] = new quint8[cdepth];
+    colors[1] = new quint8[cdepth];
     
     int pixelsProcessed = 0;
-    Q_INT32 weights[2];
+    qint32 weights[2];
 /*    weights[0] = 128;
-    Q_INT32 factor = (Q_UINT32) 128 / amount;
+    qint32 factor = (quint32) 128 / amount;
     weights[1] = (factor - 128);*/
-    Q_INT32 factor = 128;
-    weights[0] = factor * ( 1. + amount);
-    weights[1] = -factor * amount;
+    qint32 factor = 128;
+    // XXX: Added static cast to avoid warning
+    weights[0] = static_cast<qint32>(factor * ( 1. + amount));
+    weights[1] = static_cast<qint32>(-factor * amount);
     kDebug() << (int) weights[0] << " " << (int)weights[1] << " " << factor << endl;
     for( int j = 0; j < areaSize.height(); j++)
     {
@@ -108,7 +109,7 @@ void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopL
         {
             if(srcIt.isSelected())
             {
-                Q_UINT8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
+                quint8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
                 if( diff > threshold)
                 {
                     memcpy(colors[0],srcIt.rawData(), cdepth);

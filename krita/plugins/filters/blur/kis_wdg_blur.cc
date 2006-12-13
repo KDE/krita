@@ -20,8 +20,9 @@
 
 #include "kis_wdg_blur.h"
 
-#include <qlayout.h>
-#include <qtoolbutton.h>
+#include <QLayout>
+#include <QToolButton>
+#include <QIcon>
 
 #include <kcombobox.h>
 #include <knuminput.h>
@@ -34,6 +35,8 @@
 
 KisWdgBlur::KisWdgBlur( KisFilter* nfilter, QWidget * parent) : KisFilterConfigWidget ( parent )
 {
+    Q_UNUSED(nfilter);
+
     m_widget = new Ui_WdgBlur();
     m_widget->setupUi(this);
     linkSpacingToggled(true);
@@ -54,7 +57,7 @@ KisFilterConfiguration* KisWdgBlur::configuration() const
     config->setProperty("halfHeight", widget()->intHalfWidth->value() );
     config->setProperty("rotate", widget()->intAngle->value() );
     config->setProperty("strength", widget()->intStrength->value() );
-    config->setProperty("shape", widget()->cbShape->currentItem());
+    config->setProperty("shape", widget()->cbShape->currentIndex());
     return config;
 }
 
@@ -88,10 +91,10 @@ void KisWdgBlur::linkSpacingToggled(bool b)
     m_halfSizeLink = b;
     KoImageResource kir;
     if (b) {
-        widget()->bnLinkSize->setPixmap(kir.chain());
+        widget()->bnLinkSize->setIcon(QIcon(kir.chain()));
     }
     else {
-        widget()->bnLinkSize->setPixmap(kir.chainBroken());
+        widget()->bnLinkSize->setIcon(QIcon(kir.chainBroken()));
     }
 }
 

@@ -98,7 +98,7 @@ void KisFilterNoise::process(const KisPaintDeviceSP src, const QPoint& srcTopLef
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
     
     Q_UINT8* interm = new Q_UINT8[ cs->pixelSize() ];
-    Q_UINT32 threshold = (RAND_MAX / 100) * (100 - level);
+    Q_INT32 threshold = (RAND_MAX / 100) * (100 - level);
     
     Q_UINT8 weights[2];
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
@@ -108,7 +108,10 @@ void KisFilterNoise::process(const KisPaintDeviceSP src, const QPoint& srcTopLef
     {
         if(rand() > threshold)
         {
-            QColor c = qRgb((double)rand()/RAND_MAX * 255,(double)rand()/RAND_MAX * 255,(double)rand()/RAND_MAX * 255);
+            // XXX: Added static_cast to get rid of warnings
+            QColor c = qRgb(static_cast<int>((double)rand()/RAND_MAX * 255),
+                            static_cast<int>((double)rand()/RAND_MAX * 255),
+                            static_cast<int>((double)rand()/RAND_MAX * 255));
             cs->fromQColor( c, interm, 0 );
             pixels[1] = srcIt.oldRawData();
             cs->mixColors( pixels, weights, 2, dstIt.rawData() );
@@ -121,3 +124,4 @@ void KisFilterNoise::process(const KisPaintDeviceSP src, const QPoint& srcTopLef
     delete [] interm;
     setProgressDone(); // Must be called even if you don't really support progression
 }
+

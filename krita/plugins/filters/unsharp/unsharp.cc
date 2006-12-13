@@ -32,13 +32,6 @@ UnsharpPlugin::UnsharpPlugin(QObject *parent, const QStringList &)
 {
     setInstance(UnsharpPluginFactory::instance());
 
-
-    kDebug(41006) << "Extensions Image enhancement Filters plugin. Class: "
-          << className()
-          << ", Parent: "
-          << parent -> className()
-          << "\n";
-
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
         manager->add(KisFilterSP(new KisUnsharpFilter()));

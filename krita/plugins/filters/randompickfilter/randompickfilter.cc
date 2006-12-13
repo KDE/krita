@@ -70,6 +70,7 @@ KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), "other", i18n("&Ran
 
 KisFilterConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
+    Q_UNUSED(dev);
     return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);
 }
 
@@ -90,18 +91,16 @@ void KisFilterRandomPick::process(const KisPaintDeviceSP src, const QPoint& srcT
     setProgressTotalSteps(size.height() * size.width());
 
     KoColorSpace * cs = src->colorSpace();
-    Q_INT32 psize = cs->pixelSize();
     
     QVariant value;
     int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
-    double windowsize = (config && config->getProperty("windowsize", value)) ? value.toInt() / 2. : 2.5;
     int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
     
     KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
     KisRandomConstAccessorPixel srcRA = src->createRandomConstAccessor(0, 0);
     
-    Q_UINT32 threshold = (RAND_MAX / 100) * (100 - level);
+    Q_INT32 threshold = (RAND_MAX / 100) * (100 - level);
     
     Q_UINT8 weights[2];
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
@@ -110,8 +109,8 @@ void KisFilterRandomPick::process(const KisPaintDeviceSP src, const QPoint& srcT
     {
         if(rand() > threshold)
         {
-            int x = srcIt.x() + 2.5 * rand() / RAND_MAX;
-            int y = srcIt.y() +  2.5 * rand() / RAND_MAX;
+            int x = static_cast<int>(srcIt.x() + 2.5 * rand() / RAND_MAX);
+            int y = static_cast<int>(srcIt.y() +  2.5 * rand() / RAND_MAX);
             srcRA.moveTo( x, y);
             pixels[0] = srcRA.oldRawData();
             pixels[1] = srcIt.oldRawData();

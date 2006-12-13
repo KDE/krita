@@ -43,12 +43,6 @@ FastColorTransferPlugin::FastColorTransferPlugin(QObject *parent, const QStringL
 {
     setInstance(KritaFastColorTransferFactory::instance());
 
-    kDebug(41006) << "Color Transfer Filter plugin. Class: "
-          << className()
-          << ", Parent: "
-          << parent -> className()
-          << "\n";
-
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
         manager->add(KisFilterSP(new KisFilterFastColorTransfer()));

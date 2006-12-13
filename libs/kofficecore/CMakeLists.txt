@@ -55,7 +55,6 @@ set(kofficecore_LIB_SRCS
    KoTemplates.cpp
    KoDetailsPane.cpp
    KoOasisLoadingContext.cpp
-   KoRect.cpp
    KoDocumentInfoPropsPage.cpp
    KoTemplatesPane.cpp
    KoRecentDocumentsPane.cpp
@@ -148,7 +147,6 @@ install( FILES
     kkbdaccessextensions.h 
     KoOpenPane.h 
     KoOasisLoadingContext.h 
-    KoPoint.h 
     KoRTree.h
     KoGenStyle.h
     threadAction/KoJobsListPolicy.h

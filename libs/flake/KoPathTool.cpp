@@ -77,8 +77,42 @@ QWidget * KoPathTool::createOptionWidget() {
     m_pointTypeGroup->addButton( button, Symmetric );
     layout->addWidget( button, 0, 2 );
 
-    connect( m_pointTypeGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotPointTypeChanged( int ) ) );
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pathpoint-insert") );
+    button->setToolTip( i18n( "Insert point" ) );
+    layout->addWidget( button, 0, 4 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( insertPoints() ) );
 
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pathpoint-remove") );
+    button->setToolTip( i18n( "Remove point" ) );
+    layout->addWidget( button, 0, 5 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( removePoints() ) );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pathsegment-line") );
+    button->setToolTip( i18n( "Segment to line" ) );
+    layout->addWidget( button, 0, 7 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( segmentToLine() ) );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pathsegment-curve") );
+    button->setToolTip( i18n( "Segment to curve" ) );
+    layout->addWidget( button, 0, 8 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( segmentToCurve() ) );
+
+    layout->setColumnStretch( 0, 0 );
+    layout->setColumnStretch( 1, 0 );
+    layout->setColumnStretch( 2, 0 );
+    layout->setColumnMinimumWidth( 3, 10 );
+    layout->setColumnStretch( 4, 0 );
+    layout->setColumnStretch( 5, 0 );
+    layout->setColumnMinimumWidth( 6, 10 );
+    layout->setColumnStretch( 7, 0 );
+    layout->setColumnStretch( 8, 0 );
+    layout->setColumnStretch( 9, 1 );
+
+    connect( m_pointTypeGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotPointTypeChanged( int ) ) );
     return optionWidget;
 }
 
@@ -121,6 +155,82 @@ void KoPathTool::slotPointTypeChanged( int type ) {
 
     KoPointPropertyCommand *cmd = new KoPointPropertyCommand( points, properties );
     m_canvas->addCommand( cmd, true );
+}
+
+void KoPathTool::insertPoints() {
+    if ( m_pointSelection.objectCount() == 1 )
+    {
+        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
+        KoPathShape * pathShape = selectedPoints[0]->parent();
+        QList<KoPathSegment> segments;
+        foreach( KoPathPoint* p, selectedPoints )
+        {
+            KoPathPoint *n = pathShape->nextPoint( p );
+            if( m_pointSelection.contains( n ) )
+                segments << qMakePair( p, n );
+        }
+        if( segments.size() )
+        {
+            KoSegmentSplitCommand *cmd = new KoSegmentSplitCommand( pathShape, segments, 0.5 );
+            m_canvas->addCommand( cmd, true );
+        }
+    }
+}
+
+void KoPathTool::removePoints() {
+    // TODO finish current action or should this not possible during actions???
+    if ( m_pointSelection.size() > 0 )
+    {
+        KoPointRemoveCommand *cmd = new KoPointRemoveCommand( m_pointSelection.selectedPointMap() );
+        ActivePointHandle *pointHandle = dynamic_cast<ActivePointHandle*>( m_activeHandle );
+        if ( pointHandle && m_pointSelection.contains( pointHandle->m_activePoint ) )
+        {
+            delete m_activeHandle;
+            m_activeHandle = 0;
+        }
+        m_pointSelection.clear();
+        m_canvas->addCommand( cmd, true );
+    }
+}
+
+void KoPathTool::segmentToLine() {
+    if ( m_pointSelection.objectCount() == 1 )
+    {
+        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
+        KoPathShape * pathShape = selectedPoints[0]->parent();
+        QList<KoPathSegment> segments;
+        foreach( KoPathPoint* p, selectedPoints )
+        {
+            KoPathPoint *n = pathShape->nextPoint( p );
+            if( m_pointSelection.contains( n ) )
+                segments << qMakePair( p, n );
+        }
+        if( segments.size() )
+        {
+            KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( pathShape, segments, true );
+            m_canvas->addCommand( cmd, true );
+        }
+    }
+}
+
+void KoPathTool::segmentToCurve() {
+    if ( m_pointSelection.objectCount() == 1 )
+    {
+        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
+        KoPathShape * pathShape = selectedPoints[0]->parent();
+        QList<KoPathSegment> segments;
+        foreach( KoPathPoint* p, selectedPoints )
+        {
+            KoPathPoint *n = pathShape->nextPoint( p );
+            if( m_pointSelection.contains( n ) )
+                segments << qMakePair( p, n );
+        }
+        if( segments.size() )
+        {
+            KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( pathShape, segments, false );
+            m_canvas->addCommand( cmd, true );
+        }
+    }
 }
 
 void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
@@ -332,36 +442,10 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 m_pointSelection.repaint();
                 break;
             case Qt::Key_Backspace:
-                // TODO finish current action or should this not possible during actions???
-                if ( m_pointSelection.size() > 0 )
-                {
-                    KoPointRemoveCommand *cmd = new KoPointRemoveCommand( m_pointSelection.selectedPointMap() );
-                    ActivePointHandle *pointHandle = dynamic_cast<ActivePointHandle*>( m_activeHandle );
-                    if ( pointHandle && m_pointSelection.contains( pointHandle->m_activePoint ) )
-                    {
-                        delete m_activeHandle;
-                        m_activeHandle = 0;
-                    }
-                    m_pointSelection.clear();
-                    m_canvas->addCommand( cmd, true );
-                }
+                removePoints();
                 break;
             case Qt::Key_Insert:
-                if ( pathShape )
-                {
-                    QList<KoPathSegment> segments;
-                    foreach( KoPathPoint* p, selectedPoints )
-                    {
-                        KoPathPoint *n = pathShape->nextPoint( p );
-                        if( m_pointSelection.contains( n ) )
-                            segments << qMakePair( p, n );
-                    }
-                    if( segments.size() )
-                    {
-                        KoSegmentSplitCommand *cmd = new KoSegmentSplitCommand( pathShape, segments, 0.5 );
-                        m_canvas->addCommand( cmd, true );
-                    }
-                }
+                insertPoints();
                 break;
             case Qt::Key_D:
                 if ( pathShape )
@@ -394,38 +478,10 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 }
                 break;
             case Qt::Key_F:
-                if ( pathShape )
-                {
-                    QList<KoPathSegment> segments;
-                    foreach( KoPathPoint* p, selectedPoints )
-                    {
-                        KoPathPoint *n = pathShape->nextPoint( p );
-                        if( m_pointSelection.contains( n ) )
-                            segments << qMakePair( p, n );
-                    }
-                    if( segments.size() )
-                    {
-                        KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( pathShape, segments, true );
-                        m_canvas->addCommand( cmd, true );
-                    }
-                }
+                segmentToLine();
                 break;
             case Qt::Key_C:
-                if ( pathShape )
-                {
-                    QList<KoPathSegment> segments;
-                    foreach( KoPathPoint* p, selectedPoints )
-                    {
-                        KoPathPoint *n = pathShape->nextPoint( p );
-                        if( m_pointSelection.contains( n ) )
-                            segments << qMakePair( p, n );
-                    }
-                    if( segments.size() )
-                    {
-                        KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( pathShape, segments, false );
-                        m_canvas->addCommand( cmd, true );
-                    }
-                }
+                segmentToCurve();
                 break;
             case Qt::Key_P:
                 {

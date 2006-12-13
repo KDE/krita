@@ -77,7 +77,10 @@ private:
 
 private slots:
     void slotPointTypeChanged( int type );
-
+    void insertPoints();
+    void removePoints();
+    void segmentToLine();
+    void segmentToCurve();
 private:
 
     /// the different path point types

@@ -64,14 +64,13 @@ class KisToolLine : public KisToolPaint {
 
     QPointF straightLine(QPointF point);
 
+ private:
 
     bool m_dragging;
 
     QPointF m_startPos;
     QPointF m_endPos;
 
-
-    KisImageSP m_currentImage;
     KisPainter *m_painter;
 };
 

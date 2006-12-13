@@ -60,7 +60,6 @@
 #include "kis_statusbar.h"
 #include "kis_canvas2.h"
 #include "kis_doc2.h"
-#include "kis_dummy_shape.h"
 #include "kis_factory2.h"
 #include "kis_filter_manager.h"
 #include "kis_opengl_canvas2.h"
@@ -78,6 +77,7 @@
 #include "kis_perspective_grid_manager.h"
 #include "kis_mask_manager.h"
 #include "kis_dlg_preferences.h"
+#include "kis_group_layer.h"
 
 class KisView2::KisView2Private {
 
@@ -356,7 +356,12 @@ void KisView2::slotLoadingFinished()
         kDebug() << "Could not create tool docker: " << d << endl;
 
     connectCurrentImage();
-
+    KisImageSP img = image();
+    KisGroupLayerSP rootLayer = img ->rootLayer();
+    KisLayerSP activeLayer = rootLayer->firstChild();
+    kDebug() << "image finished loading, active layer: " << activeLayer << ", root layer: " << rootLayer << endl;
+    if ( activeLayer )
+        img->activate( activeLayer );
 }
 
 

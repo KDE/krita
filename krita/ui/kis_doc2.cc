@@ -65,6 +65,7 @@
 #include <KoXmlWriter.h>
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
+#include <KoSelection.h>
 
 // Krita Image
 #include "kis_annotation.h"
@@ -97,10 +98,11 @@
 #include "kis_oasis_save_data_visitor.h"
 #include "kis_oasis_save_visitor.h"
 #include "kis_canvas2.h"
-#include "kis_layer_container.h"
+#include "kis_layer_container_shape.h"
 #include "kis_layer_shape.h"
 #include "kis_shape_layer.h"
 #include "kis_mask_shape.h"
+//#include "kis_layermap_visitor.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -197,7 +199,7 @@ public:
     int ioProgressTotalSteps;
     int ioProgressBase;
     KisLayerMap layerShapes; // maps from krita/image layers to shapes
-    KoShape * activeLayer;
+    KoShape * activeLayerShape;
     KoViewConverter * viewConverter;
     QMap<KisLayer *, QString> layerFilenames; // temp storage during
                                               // load
@@ -217,11 +219,10 @@ public:
 
             KisLayerShape * rootLayerShape = new KisLayerShape( 0, currentImage->rootLayer() );
 
-            layerShapes[currentImage->rootLayer()] = rootLayerShape;
-            activeLayer = rootLayerShape;
 
-            kDebug() << ">>>>>>>>>>>>>>>>>>>>> creating root layer shape " << rootLayerShape << endl;
+            activeLayerShape = rootLayerShape;
 
+            QObject::connect( currentImage, SIGNAL(sigLayerActivated( KisLayerSP ) ), doc, SLOT( slotLayerActivated( KisLayerSP ) ) );
             QObject::connect( currentImage, SIGNAL(sigLayerAdded( KisLayerSP )), doc, SLOT(slotLayerAdded( KisLayerSP )) );
             QObject::connect( currentImage, SIGNAL(sigLayerRemoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )), doc, SLOT(slotLayerRemoved( KisLayerSP, KisGroupLayerSP, KisLayerSP) ));
             QObject::connect( currentImage, SIGNAL(sigLayerMoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )), doc, SLOT(slotLayerMoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )) );
@@ -248,7 +249,6 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
 
     setInstance( KisFactory2::instance(), false );
     setTemplateType( "krita_template" );
-
     init();
 
 }
@@ -742,7 +742,7 @@ KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const QDomElement& element, Ki
 KisPartLayerSP KisDoc2::loadPartLayer(const QDomElement& element, KisImageSP img,
                                       const QString & name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
                                       bool visible, bool locked,
-                                      const QString & compositeOp) 
+                                      const QString & compositeOp)
 {
 #warning "Kill or port the partlayer stuff"
     Q_UNUSED(element);
@@ -1280,16 +1280,16 @@ void KisDoc2::addShape( KoShape* shape )
         // An ordinary shape, if the active layer is a KisShapeLayer,
         // add it there, otherwise, create a new KisShapeLayer on top
         // of the active layer.
-        KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( m_d->activeLayer );
+        KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( m_d->activeLayerShape );
         if ( !shapeLayer ) {
 
             kDebug() << "creating a new shape layer for shape " << shape << endl;
-            KoShape * currentLayer = m_d->activeLayer;
-            kDebug() << "Active layer: " << m_d->activeLayer << ", as shape: " << currentLayer << endl;
-            KisLayerContainer * container = 0;
+            KoShape * currentLayer = m_d->activeLayerShape;
+            kDebug() << "Active layer: " << m_d->activeLayerShape << ", as shape: " << currentLayer << endl;
+            KisLayerContainerShape * container = 0;
             while ( container == 0 ) {
                 kDebug() << currentLayer->shapeId() << endl;
-                container = dynamic_cast<KisLayerContainer *>( currentLayer );
+                container = dynamic_cast<KisLayerContainerShape *>( currentLayer );
                 if ( currentLayer->parent() )
                     currentLayer = currentLayer->parent();
                 else
@@ -1351,19 +1351,19 @@ void KisDoc2::slotLayerAdded( KisLayerSP layer )
 
     // Get the parent -- there is always one
     KoShapeContainer * parent = 0;
-    if ( m_d->activeLayer->shapeId() == KIS_LAYER_CONTAINER_ID ) {
-        parent = dynamic_cast<KoShapeContainer*>( m_d->activeLayer );
+    if ( m_d->activeLayerShape->shapeId() == KIS_LAYER_CONTAINER_ID ) {
+        parent = dynamic_cast<KoShapeContainer*>( m_d->activeLayerShape );
         Q_ASSERT( parent );
     }
     else {
-        parent = m_d->activeLayer->parent();
+        parent = m_d->activeLayerShape->parent();
     }
 
     KoShape * shape = 0;
 
     // Create a shape around the layer
     if ( layer->inherits( "KisGroupLayer" ) ) {
-        shape = new KisLayerContainer(parent, layer);
+        shape = new KisLayerContainerShape(parent, layer);
     }
     else if ( layer->inherits( "KisPaintLayer" )  || layer->inherits( "KisAdjustmentLayer" ) ) {
         shape = new KisLayerShape( parent, layer );
@@ -1385,7 +1385,7 @@ void KisDoc2::slotLayerAdded( KisLayerSP layer )
         canvas->canvasWidget()->update();
     }
 
-    m_d->activeLayer = shape;
+    m_d->activeLayerShape = shape;
 }
 
 void KisDoc2::slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis )
@@ -1401,6 +1401,30 @@ void KisDoc2::slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent,
 void KisDoc2::slotLayersChanged( KisGroupLayerSP rootLayer )
 {
     kDebug() << "KisDoc2::slotLayersChanged " << rootLayer->name() << endl;
+}
+
+void KisDoc2::slotLayerActivated( KisLayerSP layer )
+{
+    kDebug() << "Activating layer " << layer->name() << endl;
+
+    if (!m_d->layerShapes.contains( layer ) ) {
+        kDebug() << "A layer activated that is _not_ in the layer-shapes map!\n";
+        return;
+    }
+
+    m_d->activeLayerShape = m_d->layerShapes[layer];
+
+    if ( m_d->activeLayerShape->shapeId() == KIS_SHAPE_LAYER_ID ) {
+        // Automatically select all shapes in this newly selected shape layer?
+    }
+
+    foreach( KoView *view, views() ) {
+        KisCanvas2 * canvas = static_cast<KisView2*>( view )->canvasBase();
+        KoSelection * selection = canvas->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select( m_d->activeLayerShape );
+    }
+
 }
 
 #include "kis_doc2.moc"

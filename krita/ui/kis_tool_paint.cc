@@ -55,7 +55,6 @@
 #include "kis_cursor.h"
 #include "kis_cmb_composite.h"
 #include "kis_int_spinbox.h"
-#include "kis_dummy_shape.h"
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)

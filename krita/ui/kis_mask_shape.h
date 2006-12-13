@@ -54,6 +54,8 @@ public:
             Q_UNUSED( converter );
             // Do nothing! Masks don't paint on QPainters
         }
+    bool isSelectable() const { return false; }
+
 
 private:
 

@@ -28,7 +28,7 @@ class QPainter;
 class KoViewConverter;
 
 
-const QString KIS_LAYER_CONTAINER_ID = "KisLayerContainerID";
+const QString KIS_LAYER_CONTAINER_ID = "KisLayerContainerShapeID";
 /**
    The layer container is the flake shape that corresponds to
    KisGroupLayer. It contains any number of layers, including other
@@ -38,14 +38,14 @@ const QString KIS_LAYER_CONTAINER_ID = "KisLayerContainerID";
    Can a LayerContainer, i.e. a KisGroupLayer have masks and
    selections, and if so, what does it mean? (BSAR)
  */
-class KisLayerContainer : public KoShapeContainer
+class KisLayerContainerShape : public KoShapeContainer
 {
 
 public:
 
-    KisLayerContainer( KoShapeContainer * parent, KisLayerSP groupLayer );
+    KisLayerContainerShape( KoShapeContainer * parent, KisLayerSP groupLayer );
 
-    virtual ~KisLayerContainer();
+    virtual ~KisLayerContainerShape();
 
 public:
 
@@ -53,6 +53,9 @@ public:
 
     // KoShapeContainer implementation
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
+
+    // KoShape overrides
+    bool isSelectable() const { return false; }
 
 private:
 

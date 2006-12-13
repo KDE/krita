@@ -35,7 +35,6 @@
 #include "kis_abstract_canvas_widget.h"
 #include "kis_qpainter_canvas.h"
 #include "kis_opengl_canvas2.h"
-#include "kis_dummy_shape.h"
 
 
 class KisCanvas2::KisCanvas2Private {
@@ -188,6 +187,11 @@ void KisCanvas2::resetMonitorProfile()
         m_d->monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
     }
 
+}
+
+KisImageSP KisCanvas2::currentImage()
+{
+    return m_d->view->image();
 }
 
 

@@ -30,7 +30,6 @@ class KoToolProxy;
 class KoColorProfile;
 
 class KisView2;
-class KisDummyShape;
 
 enum KisCanvasType {
     QPAINTER,
@@ -90,6 +89,9 @@ public: // KoCanvasBase implementation
     KoColorProfile * monitorProfile();
 
     void resetMonitorProfile();
+
+    // Temporary!
+    KisImageSP currentImage();
 
 public: // KisCanvas2 methods
 

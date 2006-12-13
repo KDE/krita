@@ -29,8 +29,7 @@
 #include <kis_pattern.h>
 #include <kis_gradient.h>
 
-#include "kis_dummy_shape.h"
-
+#include "kis_canvas2.h"
 #include "kis_tool.h"
 
 KisTool::KisTool( KoCanvasBase * canvas, const QCursor & cursor )
@@ -100,15 +99,15 @@ void KisTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const Q
 
 KisImageSP KisTool::image() const
 {
-    KoShapeManager * shapeManager = m_canvas->shapeManager();
-    if ( !shapeManager ) return 0;
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
+    if ( !kisCanvas ) {
+        kDebug() << "The current canvas is not a kis canvas!\n";
+        return 0;
+    }
 
-    KisDummyShape * imageShape = dynamic_cast<KisDummyShape *>( shapeManager->shapeAt(QPointF( 0, 0 )) );
-    kDebug() << "Current shape: " << imageShape << endl;
 
-    if ( !imageShape ) return 0;
+    KisImageSP img = kisCanvas->currentImage();
 
-    KisImageSP img = imageShape->image();
     kDebug() << "Current image: " << img << endl;
     return img;
 

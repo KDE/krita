@@ -84,8 +84,9 @@ public:
         : KoToolFactory(parent, "KisToolLine", i18n( "Line" ))
         {
             setToolTip(i18n("Draw a line with the current brush"));
-            //setToolType(TOOL_TYPE_SHAPE);
-            setToolType( dynamicToolType() );
+            // Temporarily
+            setToolType(TOOL_TYPE_SHAPE);
+            //setToolType( dynamicToolType() );
             setPriority(0);
             setIcon("tool_line");
             setActivationShapeID( KIS_LAYER_SHAPE_ID );

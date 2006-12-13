@@ -43,6 +43,7 @@ public:
 
     // Shape overrides
     void paint(QPainter &painter, const KoViewConverter &converter);
+    bool isSelectable() const { return false; }
 
     // KoShapeContainer implementation
     void paintComponent(QPainter &painter, const KoViewConverter &converter);

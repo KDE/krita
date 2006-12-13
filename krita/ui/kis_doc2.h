@@ -184,7 +184,7 @@ private slots:
     void slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis );
     void slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis );
     void slotLayersChanged( KisGroupLayerSP rootLayer );
-
+    void slotLayerActivated( KisLayerSP layer );
     // XXX: The same is necessary for selections, masks etc.
 
 public:

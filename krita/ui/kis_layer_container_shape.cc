@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kis_layer_container.h"
+#include "kis_layer_container_shape.h"
 
 #include <QPainter>
 
@@ -26,14 +26,14 @@
 #include <kis_group_layer.h>
 
 
-class KisLayerContainer::Private
+class KisLayerContainerShape::Private
 {
 
 public:
     KisLayerSP groupLayer;
 };
 
-KisLayerContainer::KisLayerContainer( KoShapeContainer *parent, KisLayerSP groupLayer )
+KisLayerContainerShape::KisLayerContainerShape( KoShapeContainer *parent, KisLayerSP groupLayer )
     : KoShapeContainer()
 {
     m_d = new Private();
@@ -43,17 +43,17 @@ KisLayerContainer::KisLayerContainer( KoShapeContainer *parent, KisLayerSP group
     setShapeId( KIS_LAYER_CONTAINER_ID );
 }
 
-KisLayerContainer::~KisLayerContainer()
+KisLayerContainerShape::~KisLayerContainerShape()
 {
     delete m_d;
 }
 
-KisLayerSP KisLayerContainer::groupLayer()
+KisLayerSP KisLayerContainerShape::groupLayer()
 {
     return m_d->groupLayer;
 }
 
-void KisLayerContainer::paintComponent(QPainter &painter, const KoViewConverter &converter)
+void KisLayerContainerShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED( painter );
     Q_UNUSED( converter );

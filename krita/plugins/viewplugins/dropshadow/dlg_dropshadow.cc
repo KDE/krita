@@ -49,14 +49,14 @@ DlgDropshadow::DlgDropshadow( const QString & /*imageCS*/,
     resize(m_page->sizeHint());
 
     KConfig * cfg = KGlobal::config();
-    m_page->xOffsetSpinBox->setValue( cfg->readNumEntry("dropshadow_x", 8) );
-    m_page->yOffsetSpinBox->setValue( cfg->readNumEntry("dropshadow_y", 8) );
-    m_page->blurRadiusSpinBox->setValue( cfg->readNumEntry("dropshadow_blurRadius", 5) );
+    m_page->xOffsetSpinBox->setValue( cfg->readEntry<int>("dropshadow_x", 8) );
+    m_page->yOffsetSpinBox->setValue( cfg->readEntry<int>("dropshadow_y", 8) );
+    m_page->blurRadiusSpinBox->setValue( cfg->readEntry<int>("dropshadow_blurRadius", 5) );
     QColor black(0,0,0);
-    m_page->shadowColorButton->setColor( cfg->readColorEntry("dropshadow_color", &black) );
-    m_page->opacitySlider->setValue( cfg->readNumEntry("dropshadow_opacity", 80 ) );
-    m_page->opacitySpinBox->setValue( cfg->readNumEntry("dropshadow_opacity", 80 ) );
-    m_page->allowResizingCheckBox->setChecked( cfg->readBoolEntry("dropshadow_resizing", true ) );
+    m_page->shadowColorButton->setColor( cfg->readEntry<QColor>("dropshadow_color", Qt::black) );
+    m_page->opacitySlider->setValue( cfg->readEntry<int>("dropshadow_opacity", 80 ) );
+    m_page->opacitySpinBox->setValue( cfg->readEntry<int>("dropshadow_opacity", 80 ) );
+    m_page->allowResizingCheckBox->setChecked( cfg->readEntry<bool>("dropshadow_resizing", true ) );
     
     connect(this, SIGNAL(okClicked()),
         this, SLOT(okClicked()));

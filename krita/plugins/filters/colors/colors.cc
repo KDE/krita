@@ -33,13 +33,6 @@ KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QStringList 
 {
     setInstance(KritaExtensionsColorsFactory::instance());
 
-
-    kDebug(41006) << "Extensions Colors Filter plugin. Class: "
-          << className()
-          << ", Parent: "
-          << parent -> className()
-          << "\n";
-
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
         manager->add(KisFilterSP(new KisFilterMax()));

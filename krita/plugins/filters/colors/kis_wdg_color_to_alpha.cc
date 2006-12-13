@@ -32,6 +32,8 @@
 
 KisWdgColorToAlpha::KisWdgColorToAlpha( KisFilter* nfilter, QWidget * parent) : KisFilterConfigWidget ( parent )
 {
+    Q_UNUSED(nfilter);
+
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
     connect( m_widget->colorTarget, SIGNAL( changed(const QColor&)), SIGNAL(sigPleaseUpdatePreview()));

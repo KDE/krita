@@ -39,6 +39,7 @@ DlgSeparate::DlgSeparate( const QString & imageCS,
       m_imageCS(imageCS),
       m_layerCS(layerCS)
 {
+    setObjectName(name);
     setCaption( i18n("Separate Image") );
     setButtons(  Ok | Cancel );
     setDefaultButton( Ok );

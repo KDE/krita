@@ -42,7 +42,7 @@ KisAutobrushCircleShape::KisAutobrushCircleShape(qint32 w, qint32 h, double fh, 
         m_yfadecoef ( (m_fv == 0) ? 1 : ( 1.0 / m_fv))
 {
 }
-qint8 KisAutobrushCircleShape::valueAt(qint32 x, qint32 y)
+quint8 KisAutobrushCircleShape::valueAt(qint32 x, qint32 y)
 {
     double xr = (x - m_xcenter) + 0.5;
     double yr = (y - m_ycenter) + 0.5;
@@ -87,7 +87,7 @@ KisAutobrushRectShape::KisAutobrushRectShape(qint32 w, qint32 h, double fh, doub
         m_c( fv/fh)
 {
 }
-qint8 KisAutobrushRectShape::valueAt(qint32 x, qint32 y)
+quint8 KisAutobrushRectShape::valueAt(qint32 x, qint32 y)
 {
     double xr = QABS(x - m_xcenter);
     double yr = QABS(y - m_ycenter);

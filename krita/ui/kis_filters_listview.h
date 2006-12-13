@@ -117,7 +117,7 @@ public:
     void init();
 
 public:
-    void setLayer(KisLayerSP layer) KDE_DEPRECATED;
+    void setLayer(KisLayerSP layer);
     void setProfile(KoColorProfile * profile) { m_profile = profile; };
 
     inline void setPaintDevice(KisPaintDeviceSP pd) {

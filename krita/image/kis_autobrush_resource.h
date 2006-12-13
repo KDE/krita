@@ -40,7 +40,7 @@ class KRITAIMAGE_EXPORT KisAutobrushShape {
         /**
          * @return the alpha value at the position (x,y)
          */
-        virtual qint8 valueAt(qint32 x, qint32 y) =0;
+        virtual quint8 valueAt(qint32 x, qint32 y) =0;
     protected:
         qint32 m_w, m_h;
         double m_fh, m_fv;
@@ -53,7 +53,7 @@ class KRITAIMAGE_EXPORT KisAutobrushCircleShape : public KisAutobrushShape {
     public:
 		virtual ~KisAutobrushCircleShape(){}
         KisAutobrushCircleShape(qint32 w, qint32 h, double fh, double fv);
-        virtual qint8 valueAt(qint32 x, qint32 y);
+        virtual quint8 valueAt(qint32 x, qint32 y);
     private:
         double norme(double a, double b)
         {
@@ -72,7 +72,7 @@ class KRITAIMAGE_EXPORT KisAutobrushRectShape : public KisAutobrushShape {
     public:
 		virtual ~KisAutobrushRectShape() {}
         KisAutobrushRectShape(qint32 w, qint32 h, double fh, double fv);
-        virtual qint8 valueAt(qint32 x, qint32 y);
+        virtual quint8 valueAt(qint32 x, qint32 y);
     private:
         double m_xcenter, m_ycenter, m_c;
 };

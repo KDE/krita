@@ -84,18 +84,6 @@ add_test(kofficecore-kopointtest kopointtest)
 
 ########### next target ###############
 
-set(korecttest_SRCS korecttest.cpp )
-
-kde4_automoc(${korecttest_SRCS})
-
-kde4_add_executable(korecttest RUN_UNINSTALLED ${korecttest_SRCS})
-
-target_link_libraries(korecttest kofficecore ${QT_QTTEST_LIBRARY} )
-
-add_test(kofficecore-korecttest korecttest)
-
-########### next target ###############
-
 set(rtreetestapp_SRCS rtreetestapp.cpp Tool.cpp )
 
 kde4_automoc(${rtreetestapp_SRCS})

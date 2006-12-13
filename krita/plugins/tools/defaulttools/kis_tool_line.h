@@ -28,6 +28,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "KoToolFactory.h"
+#include "kis_layer_shape.h"
 
 class KisBrush;
 class KisPainter;
@@ -69,7 +70,7 @@ class KisToolLine : public KisToolPaint {
     QPointF m_startPos;
     QPointF m_endPos;
 
-    
+
     KisImageSP m_currentImage;
     KisPainter *m_painter;
 };
@@ -83,9 +84,11 @@ public:
         : KoToolFactory(parent, "KisToolLine", i18n( "Line" ))
         {
             setToolTip(i18n("Draw a line with the current brush"));
-            setToolType(TOOL_TYPE_SHAPE);
+            //setToolType(TOOL_TYPE_SHAPE);
+            setToolType( dynamicToolType() );
             setPriority(0);
             setIcon("tool_line");
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolLineFactory(){}

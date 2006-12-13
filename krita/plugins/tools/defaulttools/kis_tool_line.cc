@@ -34,22 +34,19 @@
 #include "kis_painter.h"
 #include "kis_tool_line.h"
 #include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
-#include "kis_canvas_subject.h"
 #include "kis_undo_adapter.h"
-#include "kis_canvas.h"
 #include "QPainter"
 #include "kis_cursor.h"
 #include "kis_layer.h"
+#include "KoCanvasBase.h"
 
-KisToolLine::KisToolLine()
-    : super(i18n("Line")),
+KisToolLine::KisToolLine(KoCanvasBase * canvas)
+    : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
       m_dragging( false )
 {
     setObjectName("tool_line");
-    setCursor(KisCursor::load("tool_line_cursor.png", 6, 6));
+
 
     m_painter = 0;
     m_currentImage = 0;
@@ -75,13 +72,12 @@ void KisToolLine::paint(QPainter& gc, const QRect& rc)
 
 void KisToolLine::buttonPress(KoPointerEvent *e)
 {
-    if (!m_subject || !m_currentImage) return;
+    if (!m_canvas || !m_currentImage) return;
 
-    if (!m_subject->currentBrush()) return;
+    if (!m_currentBrush) return;
 
     if (e->button() == Qt::LeftButton) {
         m_dragging = true;
-        //KisCanvasController *controller = m_subject->canvasController();
         m_startPos = e->pos(); //controller->windowToView(e->pos());
         m_endPos = e->pos(); //controller->windowToView(e->pos());
     }
@@ -92,7 +88,6 @@ void KisToolLine::move(KoPointerEvent *e)
     if (m_dragging) {
         if (m_startPos != m_endPos)
             paintLine();
-        //KisCanvasController *controller = m_subject->canvasController();
 
         if (e->modifiers() & Qt::AltModifier) {
             QPointF trans = e->pos() - m_endPos;
@@ -110,12 +105,12 @@ void KisToolLine::buttonRelease(KoPointerEvent *e)
 {
     if (m_dragging && e->button() == Qt::LeftButton) {
         m_dragging = false;
-        if(m_subject) {
-            KisCanvasController *controller = m_subject->canvasController();
-            
+
+        if(m_canvas) {
 
             if (m_startPos == m_endPos) {
-                controller->updateCanvas();
+                /* FIXME Which rectangle to repaint */
+                //m_canvas->updateCanvas();
                 m_dragging = false;
                 return;
             }
@@ -127,27 +122,27 @@ void KisToolLine::buttonRelease(KoPointerEvent *e)
             KisPaintDeviceSP device;
             if (m_currentImage &&
                 (device = m_currentImage->activeDevice()) &&
-                m_subject->currentBrush()) {
+                m_currentBrush) {
                 delete m_painter;
                 m_painter = new KisPainter( device );
                 Q_CHECK_PTR(m_painter);
 
                 if (m_currentImage->undo()) m_painter->beginTransaction(i18n("Line"));
 
-                m_painter->setPaintColor(m_subject->fgColor());
-                m_painter->setBrush(m_subject->currentBrush());
+                m_painter->setPaintColor(m_currentFgColor);
+                m_painter->setBrush(m_currentBrush);
                 m_painter->setOpacity(m_opacity);
                 m_painter->setCompositeOp(m_compositeOp);
-                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintOp(), m_subject->currentPaintOpSettings(), m_painter);
+                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, m_painter);
                 m_painter->setPaintOp(op); // Painter takes ownership
                 m_painter->paintLine(m_startPos, PRESSURE_DEFAULT, 0, 0, m_endPos, PRESSURE_DEFAULT, 0, 0);
                 device->setDirty( m_painter->dirtyRect() );
                 notifyModified();
 
-                /* remove remains of the line drawn while moving */
-                if (controller->kiscanvas()) {
-                    m_canvas->updateCanvas();
-                }
+		/* FIXME Which rectangle to repaint */
+                //if (m_canvas) {
+                //    m_canvas->updateCanvas();
+                //}
 
                 if (m_currentImage->undo() && m_painter) {
                     m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
@@ -156,12 +151,13 @@ void KisToolLine::buttonRelease(KoPointerEvent *e)
                 m_painter = 0;
             } else {
                 // m_painter can be 0 here...!!!
-                controller->updateCanvas(m_painter->dirtyRect()); // Removes the last remaining line.
+                m_canvas->updateCanvas(m_painter->dirtyRect()); // Removes the last remaining line.
             }
         }
     }
 
 }
+
 
 QPointF KisToolLine::straightLine(QPointF point)
 {
@@ -181,10 +177,8 @@ QPointF KisToolLine::straightLine(QPointF point)
 
 void KisToolLine::paintLine()
 {
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        KisCanvas *canvas = controller->kiscanvas();
-        QPainter gc(canvas->canvasWidget());
+    if (m_canvas) {
+        QPainter gc(m_canvas->canvasWidget());
         QRect rc;
 
         paintLine(gc, rc);
@@ -193,8 +187,8 @@ void KisToolLine::paintLine()
 
 void KisToolLine::paintLine(QPainter& gc, const QRect&)
 {
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
+    if (m_canvas) {
+        //KisCanvasController *controller = m_subject->canvasController();
         //RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
@@ -202,8 +196,10 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         QPointF end;
 
 //        Q_ASSERT(controller);
-        start = controller->windowToView(m_startPos);
-        end = controller->windowToView(m_endPos);
+        //start = m_canvas->windowToView(m_startPos);
+        //end = m_canvas->windowToView(m_endPos);
+	start = m_startPos;
+	end = m_endPos;
 //          start.setX(start.x() - controller->horzValue());
 //          start.setY(start.y() - controller->vertValue());
 //          end.setX(end.x() - controller->horzValue());
@@ -214,28 +210,15 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
 //         end *= m_subject->zoomFactor();
         //gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
-        gc.drawLine(start.floorQPoint(), end.floorQPoint());
-        //gc.setRasterOp(op);
+        //gc.drawLine(start.toPoint(), end.toPoint());
+	start = QPoint(static_cast<int>(start.x()), static_cast<int>(start.y()));
+	end = QPoint(static_cast<int>(end.x()), static_cast<int>(end.y()));
+	gc.drawLine(start, end);
+	//gc.setRasterOp(op);
         gc.setPen(old);
     }
 }
 
-void KisToolLine::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_line"),
-                               i18n("&Line"),
-                               collection,
-                               objectName());
-        m_action->setShortcut(QKeySequence(Qt::Key_L));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Draw a line"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
-}
 
 QString KisToolLine::quickHelp() const {
     return i18n("Alt+Drag will move the origin of the currently displayed line around, Shift+Drag will force you to draw straight lines");

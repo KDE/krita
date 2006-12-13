@@ -35,6 +35,7 @@ class KisPainter;
 class QPoint;
 class QWidget;
 
+class KoCanvasBase;
 
 class KisToolLine : public KisToolPaint {
 
@@ -42,11 +43,9 @@ class KisToolLine : public KisToolPaint {
     typedef KisToolPaint super;
 
  public:
-    KisToolLine();
+    KisToolLine(KoCanvasBase * canvas);
     virtual ~KisToolLine();
 
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual quint32 priority() { return 1; }
 
     virtual void buttonPress(KoPointerEvent *event);

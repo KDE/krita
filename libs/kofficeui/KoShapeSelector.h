@@ -39,6 +39,10 @@ class KoShapeManager;
 class QKeyEvent;
 class QPainter;
 
+/**
+ * The shape selector shows a widget that holds templates and clipboard data
+ * for the user to easilly move that between apps and maintain functionality.
+ */
 class KOFFICEUI_EXPORT KoShapeSelector : public QDockWidget {
     Q_OBJECT
 public:
@@ -67,7 +71,7 @@ private:
     };
 
     class DummyShapeController : public KoShapeControllerBase {
-    public:    
+    public:
         void addShape( KoShape* ) {}
         void removeShape( KoShape* ) {}
     };

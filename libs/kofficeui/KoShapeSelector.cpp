@@ -40,6 +40,7 @@
 #include <QPointF>
 #include <QToolTip>
 #include <QTimer>
+#include <QPainterPath>
 
 #include <kdebug.h>
 #include <kicon.h>
@@ -120,14 +121,44 @@ public:
         KoShape *clickedShape = m_canvas->shapeManager()->shapeAt(event->point);
         repaintDecorations();
         m_canvas->shapeManager()->selection()->deselectAll();
-        if(clickedShape) {
+        if(clickedShape)
             m_canvas->shapeManager()->selection()->select(clickedShape);
-        }
         m_currentStrategy = new KoShapeMoveStrategy(this, m_canvas, event->point);
+        m_startedDrag = false;
     }
     void mouseMoveEvent (KoPointerEvent *event) {
-        KoInteractionTool::mouseMoveEvent(event);
+        QPointF point = event->point;
+        // This hits a bug in QDockWidget where the size() is taller than the max visible y(), hence the 26
+        if(point.x() < 0 || point.x() > m_canvas->canvasWidget()->width() ||
+                point.y() < 0 || point.y() > m_canvas->canvasWidget()->height() - 26) {
+            if(! m_startedDrag) {
+                // TODO start dragStrategy
+                KCommand *cmd = m_currentStrategy->createCommand();
+                cmd->unexecute();
+                delete cmd;
+                m_startedDrag = true;
+            }
+        }
+        else {
+            KoInteractionTool::mouseMoveEvent(event);
+            m_startedDrag = false;
+        }
     }
+
+    void paint(QPainter &painter, KoViewConverter &converter) {
+        Q_UNUSED(converter);
+        QPen pen(Qt::red);
+        pen.setWidth(1);
+        foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes()) {
+            painter.save();
+            painter.translate(shape->position().x(), shape->position().y());
+            painter.strokePath(shape->outline(), pen);
+            painter.restore();
+        }
+    }
+
+private:
+    bool m_startedDrag;
 };
 
 
@@ -304,7 +335,10 @@ void KoShapeSelector::Canvas::paintEvent(QPaintEvent * e) {
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setClipRect(e->rect());
 
+    painter.save();
     m_parent->m_shapeManager->paint( painter, *(viewConverter()), false );
+    painter.restore();
+    m_tool->paint( painter, *(viewConverter()));
     painter.end();
 }
 

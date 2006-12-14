@@ -21,6 +21,7 @@
 #define KOGRIDDATA_H
 
 #include <koffice_export.h>
+#include <QColor>
 
 class KOFFICECORE_EXPORT KoGridData
 {
@@ -53,10 +54,30 @@ public:
      * @see setGrid()
      */
     void setSnapToGrid(bool on);
+ 
+    /**
+     * return color of grid.
+     * @return color of grid.
+     * @see setGridColor()
+     */
+    QColor gridColor() const;
    
+    /**
+     * Set the color of grid.
+     * @param color the color of grid.
+     * @see gridColor()
+     */
+     void setGridColor( const QColor & color );
+
+#if 0 //TODO look at if we save or not into odf file    
+     void saveOasisSettings( KoXmlWriter &settingsWriter );
+     void loadOasisSettings(const QDomDocument&settingsDoc);
+#endif     
+
 private:
     bool m_snapToGrid;
     double m_gridX, m_gridY;   
+    QColor m_gridColor;
 };
 
 

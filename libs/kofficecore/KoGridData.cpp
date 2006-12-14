@@ -23,7 +23,8 @@
 KoGridData::KoGridData()
  :m_snapToGrid(false),
   m_gridX(MM_TO_POINT(5.0)),
-  m_gridY(MM_TO_POINT(5.0))
+  m_gridY(MM_TO_POINT(5.0)),
+  m_gridColor(Qt::black)
 {
 }
 
@@ -51,5 +52,15 @@ bool KoGridData::snapToGrid() const
 void KoGridData::setSnapToGrid(bool on) 
 { 
    m_snapToGrid = on; 
+}
+
+QColor KoGridData::gridColor() const
+{
+  return m_gridColor;
+}
+
+void KoGridData::setGridColor( const QColor & color)
+{
+  m_gridColor=color;
 }
 

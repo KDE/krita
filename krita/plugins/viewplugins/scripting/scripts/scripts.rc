@@ -29,6 +29,13 @@
 		file="extensions/invert.py" />
 
 	<script
+		name="jsinvert"
+		text="Invert with JavaScript"
+		comment="Invert the pixel of an image with JavaScript"
+		interpreter="javascript"
+		file="extensions/invert.js" />
+
+	<script
 		name="rbrandompaint"
 		text="Random painting"
 		comment="Demonstrate how to use the Painter scripting API and paint random shape on screen"

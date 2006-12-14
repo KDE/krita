@@ -2,7 +2,7 @@ install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/krita/scripts)
 
 install(FILES
     pilexport.py pilimport.py pilimport.ui
-    invert.py invert.rb
+    invert.py invert.rb invert.js
     randompaint.rb
     filterstest.rb
     changecs.rb

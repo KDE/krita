@@ -32,6 +32,7 @@
 #include <KoCreateShapesTool.h>
 #include <KoShapeController.h>
 #include <KoCanvasController.h>
+#include <KoProperties.h>
 
 #include <QKeyEvent>
 #include <QPainter>
@@ -63,6 +64,8 @@ public:
         painter.drawPixmap(QRect( QPoint(0,0), m_icon.size()), m_icon);
     }
 
+    QPixmap pixmap() const { return m_icon; }
+
 private:
     QPixmap m_icon;
 };
@@ -84,6 +87,8 @@ public:
     QString toolTip() {
         return m_shapeTemplate.toolTip;
     }
+
+    const KoShapeTemplate &shapeTemplate() const { return m_shapeTemplate; }
 
 private:
     KoShapeTemplate m_shapeTemplate;
@@ -107,58 +112,10 @@ public:
         return m_shapeFactory->toolTip();
     }
 
+    const QString &groupId() const { return m_shapeFactory->shapeId(); }
+
 private:
     KoShapeFactory *m_shapeFactory;
-};
-
-
-// ******* MoveTool *********
-/// \internal
-class MoveTool : public KoInteractionTool {
-public:
-    MoveTool(KoCanvasBase *canvas) : KoInteractionTool(canvas) {};
-    void mousePressEvent( KoPointerEvent *event ) {
-        KoShape *clickedShape = m_canvas->shapeManager()->shapeAt(event->point);
-        repaintDecorations();
-        m_canvas->shapeManager()->selection()->deselectAll();
-        if(clickedShape)
-            m_canvas->shapeManager()->selection()->select(clickedShape);
-        m_currentStrategy = new KoShapeMoveStrategy(this, m_canvas, event->point);
-        m_startedDrag = false;
-    }
-    void mouseMoveEvent (KoPointerEvent *event) {
-        QPointF point = event->point;
-        // This hits a bug in QDockWidget where the size() is taller than the max visible y(), hence the 26
-        if(point.x() < 0 || point.x() > m_canvas->canvasWidget()->width() ||
-                point.y() < 0 || point.y() > m_canvas->canvasWidget()->height() - 26) {
-            if(! m_startedDrag) {
-                // TODO start dragStrategy
-                KCommand *cmd = m_currentStrategy->createCommand();
-                cmd->unexecute();
-                delete cmd;
-                m_startedDrag = true;
-            }
-        }
-        else {
-            KoInteractionTool::mouseMoveEvent(event);
-            m_startedDrag = false;
-        }
-    }
-
-    void paint(QPainter &painter, KoViewConverter &converter) {
-        Q_UNUSED(converter);
-        QPen pen(Qt::red);
-        pen.setWidth(1);
-        foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes()) {
-            painter.save();
-            painter.translate(shape->position().x(), shape->position().y());
-            painter.strokePath(shape->outline(), pen);
-            painter.restore();
-        }
-    }
-
-private:
-    bool m_startedDrag;
 };
 
 
@@ -282,11 +239,9 @@ KoShapeSelector::Canvas::Canvas(KoShapeSelector *parent)
 , KoCanvasBase( &m_shapeController )
 , m_parent(parent)
 {
-    m_toolProxy = KoToolManager::instance()->toolProxy();
-    m_tool = new MoveTool(this);
-
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Base);
+    setAcceptDrops(true);
 }
 
 void KoShapeSelector::Canvas::gridSize (double *horizontal, double *vertical) const {
@@ -307,27 +262,101 @@ void  KoShapeSelector::Canvas::addCommand (KCommand *command, bool execute) {
 }
 
 // event handlers
-void KoShapeSelector::Canvas::mouseMoveEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
-    m_tool->mouseMoveEvent( &ev );
+void KoShapeSelector::Canvas::mousePressEvent(QMouseEvent *event) {
+    KoShape *clickedShape = shapeManager()->shapeAt(event->pos());
+    foreach(KoShape *shape, shapeManager()->selection()->selectedShapes())
+        shape->repaint();
+    shapeManager()->selection()->deselectAll();
+    if(clickedShape == 0)
+        return;
+    shapeManager()->selection()->select(clickedShape);
+    clickedShape->repaint();
 }
 
-void KoShapeSelector::Canvas::mousePressEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
-    m_tool->mousePressEvent( &ev );
+void KoShapeSelector::Canvas::mouseMoveEvent(QMouseEvent *event) {
+    KoShape *clickedShape = shapeManager()->selection()->firstSelectedShape();
+    if(clickedShape == 0)
+        return;
+    QPointF distance = clickedShape->position() - event->pos();
+    if(qAbs(distance.x()) < 5 && qAbs(distance.y()) < 5)
+        return;
+
+    // start drag
+    QString mimeType;
+    QByteArray itemData;
+    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+kDebug() << "pos: " << QPointF(event->pos() - clickedShape->position()) << endl;
+    TemplateShape *templateShape = dynamic_cast<TemplateShape*> (clickedShape);
+    if(templateShape) {
+        dataStream << templateShape->shapeTemplate().id;
+        KoProperties *props = templateShape->shapeTemplate().properties;
+        if(props)
+            dataStream << props->store(); // is a QString
+        else
+            dataStream << QString();
+        mimeType = SHAPETEMPLATE_MIMETYPE;
+    }
+    else {
+        GroupShape *group = dynamic_cast<GroupShape*> (clickedShape);
+        if(group) {
+            dataStream << group->groupId();
+            mimeType = SHAPEID_MIMETYPE;
+        }
+        else {
+            kWarning() << "Unimplemented drag for this type!\n";
+            return;
+        }
+    }
+    dataStream << QPointF(event->pos() - clickedShape->position());
+
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData(mimeType, itemData);
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(mimeData);
+    drag->setPixmap(static_cast<IconShape*>(clickedShape)->pixmap());
+    drag->setHotSpot(event->pos() - clickedShape->position().toPoint());
+
+    drag->start(Qt::CopyAction | Qt::MoveAction);
 }
 
-void KoShapeSelector::Canvas::mouseReleaseEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
-    m_tool->mouseReleaseEvent( &ev );
+void  KoShapeSelector::Canvas::dragEnterEvent(QDragEnterEvent *event) {
+    if (event->source() == this && (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
+                event->mimeData()->hasFormat(SHAPEID_MIMETYPE))) {
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
 }
 
-void KoShapeSelector::Canvas::keyReleaseEvent (QKeyEvent *e) {
-    m_tool->keyReleaseEvent(e);
-}
+void  KoShapeSelector::Canvas::dropEvent(QDropEvent *event) {
+    QByteArray itemData;
+    bool isTemplate = true;
+    if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE))
+        itemData = event->mimeData()->data(SHAPETEMPLATE_MIMETYPE);
+    else {
+        isTemplate = false;
+        itemData = event->mimeData()->data(SHAPEID_MIMETYPE);
+    }
+    QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+    QString dummy;
+    dataStream >> dummy;
+    if(isTemplate) {
+        // a template additionally has a properties object. Lets get rid of that.
+        QString properties;
+        dataStream >> properties;
+    }
 
-void KoShapeSelector::Canvas::keyPressEvent( QKeyEvent *e ) {
-    m_tool->keyPressEvent(e);
+    // and finally, there is a point.
+    QPointF offset;
+    dataStream >> offset;
+
+    event->setDropAction(Qt::MoveAction);
+    event->accept();
+    foreach(KoShape *shape, shapeManager()->selection()->selectedShapes()) {
+        shape->repaint();
+        shape->setPosition(event->pos() - offset);
+        shape->repaint();
+    }
 }
 
 void KoShapeSelector::Canvas::paintEvent(QPaintEvent * e) {
@@ -335,10 +364,15 @@ void KoShapeSelector::Canvas::paintEvent(QPaintEvent * e) {
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setClipRect(e->rect());
 
-    painter.save();
+    QPen pen(Qt::blue); // TODO use the kde-wide 'selected' color.
+    pen.setWidth(1);
+    foreach(KoShape *shape, shapeManager()->selection()->selectedShapes()) {
+        painter.save();
+        painter.translate(shape->position().x(), shape->position().y());
+        painter.strokePath(shape->outline(), pen);
+        painter.restore();
+    }
     m_parent->m_shapeManager->paint( painter, *(viewConverter()), false );
-    painter.restore();
-    m_tool->paint( painter, *(viewConverter()));
     painter.end();
 }
 

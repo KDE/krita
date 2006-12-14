@@ -39,6 +39,9 @@ class KoShapeManager;
 class QKeyEvent;
 class QPainter;
 
+#define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
+#define SHAPEID_MIMETYPE "application/x-flake-shapeId"
+
 /**
  * The shape selector shows a widget that holds templates and clipboard data
  * for the user to easilly move that between apps and maintain functionality.
@@ -85,7 +88,7 @@ private:
             void addCommand (KCommand *command, bool execute=true);
             KoShapeManager * shapeManager () const { return m_parent->m_shapeManager; }
             void updateCanvas (const QRectF &rc);
-            KoToolProxy *toolProxy () { return m_toolProxy; }
+            KoToolProxy *toolProxy () { return 0; }
             KoViewConverter * viewConverter() { return &m_converter; }
             QWidget *canvasWidget () { return m_parent; }
             KoUnit unit() { return KoUnit(KoUnit::Millimeter); }
@@ -93,18 +96,15 @@ private:
         protected: // event handlers
             void mouseMoveEvent(QMouseEvent *e);
             void mousePressEvent(QMouseEvent *e);
-            void mouseReleaseEvent(QMouseEvent *e);
-            void keyReleaseEvent (QKeyEvent *e);
-            void keyPressEvent( QKeyEvent *e );
             void paintEvent(QPaintEvent * e);
+            void dragEnterEvent(QDragEnterEvent *e);
+            void dropEvent(QDropEvent *e);
             bool event(QEvent *e);
 
         private:
             DummyShapeController m_shapeController;
             DummyViewConverter m_converter;
             KoShapeSelector *m_parent;
-            KoToolProxy * m_toolProxy;
-            KoTool * m_tool;
     };
 
     friend class Canvas;

@@ -116,11 +116,11 @@ public:
 
     /**
      * Return the default keyboard shortcut for activation of this tool (if
-     * the shape this tool belongs to is active). 
+     * the shape this tool belongs to is active).
      *
-     * @return the shortcut 
+     * @return the shortcut
      */
-    KShortcut shortcut() const;
+    const KShortcut& shortcut() const;
 
     /**
      * Returns the main toolType

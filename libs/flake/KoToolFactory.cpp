@@ -55,7 +55,7 @@ const QString &KoToolFactory::activationShapeId() const {
     return m_activationId;
 }
 
-KShortcut KoToolFactory::shortcut() const {
+const KShortcut& KoToolFactory::shortcut() const {
     return m_shortcut;
 }
 

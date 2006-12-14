@@ -69,6 +69,20 @@ public:
      */
      void setGridColor( const QColor & color );
 
+    /**
+     * return if grid is visible.
+     * @return if grid is visible.
+     * @see setShowGrid()
+     */
+     bool showGrid() const;
+
+    /**
+     * Set the show grid status.
+     * @param showGrid set if grid will be visible.
+     * @see showGrid()
+     */
+     void setShowGrid ( bool showGrid );
+
 #if 0 //TODO look at if we save or not into odf file    
      void saveOasisSettings( KoXmlWriter &settingsWriter );
      void loadOasisSettings(const QDomDocument&settingsDoc);
@@ -76,6 +90,7 @@ public:
 
 private:
     bool m_snapToGrid;
+    bool m_showGrid;
     double m_gridX, m_gridY;   
     QColor m_gridColor;
 };

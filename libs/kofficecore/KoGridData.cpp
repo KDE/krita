@@ -22,6 +22,7 @@
 
 KoGridData::KoGridData()
  :m_snapToGrid(false),
+  m_showGrid(true),
   m_gridX(MM_TO_POINT(5.0)),
   m_gridY(MM_TO_POINT(5.0)),
   m_gridColor(Qt::black)
@@ -63,4 +64,15 @@ void KoGridData::setGridColor( const QColor & color)
 {
   m_gridColor=color;
 }
+
+bool KoGridData::showGrid() const 
+{ 
+  return m_showGrid; 
+}
+
+void KoGridData::setShowGrid ( bool showGrid ) 
+{ 
+  m_showGrid = showGrid; 
+}
+
 

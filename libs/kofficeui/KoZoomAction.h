@@ -123,9 +123,6 @@ protected:
     KoZoomMode::Modes m_zoomModes;
     ExtLineEdit *m_number;
     QSlider *m_slider;
-    QRadioButton *m_actualButton;
-    QRadioButton *m_fitWidthButton;
-    QRadioButton *m_fitPageButton;
     int m_sliderLookup[33];
 };
 

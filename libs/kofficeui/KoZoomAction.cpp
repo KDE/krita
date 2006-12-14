@@ -28,7 +28,7 @@
 #include <QToolBar>
 #include <QSlider>
 #include <QLineEdit>
-#include <QRadioButton>
+#include <QToolButton>
 #include <QLabel>
 #include <QGridLayout>
 #include <QMenu>
@@ -278,25 +278,32 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
 
     QGridLayout *layout = new QGridLayout();
     int radios=0;
+    QToolButton *actualButton, *fitWidthButton, *fitPageButton;
     if(m_zoomModes & KoZoomMode::ZOOM_PIXELS)
     {
-        m_actualButton= new QRadioButton(group);
-        m_actualButton->setIcon(KIcon("zoom-pixels.png").pixmap(22));
-        layout->addWidget(m_actualButton, 0, radios);
+        QToolButton * actualButton= new QToolButton(group);
+        layout->addWidget(actualButton, 0, radios);
+        actualButton->setIcon(KIcon("zoom-pixels").pixmap(22));
+        actualButton->setCheckable(true);
+        actualButton->setAutoRaise(true);
         radios++;
     }
     if(m_zoomModes & KoZoomMode::ZOOM_WIDTH)
     {
-        m_fitWidthButton = new QRadioButton(group);
-        layout->addWidget(m_fitWidthButton, 0, radios);
-        m_fitWidthButton->setIcon(KIcon("zoom-width.png").pixmap(22));
+        fitWidthButton = new QToolButton(group);
+        layout->addWidget(fitWidthButton, 0, radios);
+        fitWidthButton->setIcon(KIcon("zoom-width").pixmap(22));
+        fitWidthButton->setCheckable(true);
+        fitWidthButton->setAutoRaise(true);
         radios++;
     }
     if(m_zoomModes & KoZoomMode::ZOOM_PAGE)
     {
-        m_fitPageButton = new QRadioButton(group);
-        layout->addWidget(m_fitPageButton, 0, radios);
-        m_fitPageButton->setIcon(KIcon("zoom-page.png").pixmap(22));
+        fitPageButton = new QToolButton(group);
+        layout->addWidget(fitPageButton, 0, radios);
+        fitPageButton->setIcon(KIcon("zoom-page").pixmap(22));
+        fitPageButton->setCheckable(true);
+        fitPageButton->setAutoRaise(true);
         radios++;
     }
 

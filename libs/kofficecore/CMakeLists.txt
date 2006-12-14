@@ -63,6 +63,7 @@ set(kofficecore_LIB_SRCS
     threadAction/KoExecutePolicy.cpp
     threadAction/KoJobsListPolicy.cpp
     KoViewChild.cpp
+    KoGridData.cpp
 )
 
 kde4_automoc(${kofficecore_LIB_SRCS})

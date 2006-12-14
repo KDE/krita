@@ -129,6 +129,11 @@ public:
      */
     virtual QString quickHelp() const { return ""; }
 
+    /**
+     * Returns the internal selection option of this tool.
+     * Each tool can have a selection which is private to that tool and the specified shape that it comes with.
+     * The default returns 0.
+     */
     virtual KoToolSelection* selection() { return 0; }
 
 public: // Events

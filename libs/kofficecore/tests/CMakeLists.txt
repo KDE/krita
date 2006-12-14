@@ -72,18 +72,6 @@ add_test(kofficecore-kooasisstoretest kooasisstoretest)
 
 ########### next target ###############
 
-set(kopointtest_SRCS kopointtest.cpp )
-
-kde4_automoc(${kopointtest_SRCS})
-
-kde4_add_executable(kopointtest RUN_UNINSTALLED ${kopointtest_SRCS})
-
-target_link_libraries(kopointtest  ${KDE4_KDECORE_LIBS} kofficecore )
-
-add_test(kofficecore-kopointtest kopointtest)
-
-########### next target ###############
-
 set(rtreetestapp_SRCS rtreetestapp.cpp Tool.cpp )
 
 kde4_automoc(${rtreetestapp_SRCS})

@@ -41,6 +41,7 @@ set(flake_SRCS
     KoPathControlPointMoveStrategy.cpp
     KoParameterShape.cpp
     KoParameterChangeStrategy.cpp
+    KoPointerEvent.cpp
     KoShapeController.cpp
     KoToolSelection.cpp
 )

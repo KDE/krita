@@ -27,7 +27,7 @@ progress.setProgressTotalSteps(width * height);
 layer.beginPainting("invert");
 
 // create an iterator to walk over all pixels the layer has.
-it = layer.createRectIterator(0, 0, width, height);
+var it = layer.createRectIterator(0, 0, width, height);
 
 // iterate over all pixels and invert each pixel.
 while( ! it.isDone() ) {

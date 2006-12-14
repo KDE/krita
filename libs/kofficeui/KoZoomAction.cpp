@@ -280,24 +280,24 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     int radios=0;
     if(m_zoomModes & KoZoomMode::ZOOM_PIXELS)
     {
-        m_actualButton= new QRadioButton("AP",group);
+        m_actualButton= new QRadioButton(group);
+        m_actualButton->setIcon(KIcon("zoom-pixels.png").pixmap(22));
         layout->addWidget(m_actualButton, 0, radios);
         radios++;
-    m_actualButton->setMaximumHeight(22);
     }
     if(m_zoomModes & KoZoomMode::ZOOM_WIDTH)
     {
-        m_fitWidthButton = new QRadioButton("FW",group);
+        m_fitWidthButton = new QRadioButton(group);
         layout->addWidget(m_fitWidthButton, 0, radios);
+        m_fitWidthButton->setIcon(KIcon("zoom-width.png").pixmap(22));
         radios++;
-    m_fitWidthButton->setMaximumHeight(22);
     }
     if(m_zoomModes & KoZoomMode::ZOOM_PAGE)
     {
-        m_fitPageButton = new QRadioButton("FP",group);
+        m_fitPageButton = new QRadioButton(group);
         layout->addWidget(m_fitPageButton, 0, radios);
+        m_fitPageButton->setIcon(KIcon("zoom-page.png").pixmap(22));
         radios++;
-    m_fitPageButton->setMaximumHeight(22);
     }
 
     layout->addWidget(m_number, 0, radios);

@@ -95,7 +95,7 @@ void KisToolPaint::paint(QPainter&, KoViewConverter &)
 {
 }
 
-void KisToolPaint::mouseReleaseEventPx( KoPointerEvent *e )
+void KisToolPaint::mouseReleaseEvent( KoPointerEvent *e )
 {
     if(e->button() == Qt::MidButton)
     {

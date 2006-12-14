@@ -22,6 +22,7 @@
 #include <KoTool.h>
 #include <KoColor.h>
 #include <KoID.h>
+#include <KoPointerEvent.h>
 
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -97,6 +98,18 @@ void KisTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const Q
     };
 }
 
+QPointF KisTool::convertToPixelCoord( KoPointerEvent *e )
+{
+    return QPointF(e->point.x() * image()->xRes(), e->point.y() * image()->yRes());
+}
+
+QRectF KisTool::convertToPt( const QRectF &rect )
+{
+    QRectF r;
+    r.setCoords(rect.left() / image()->xRes(), rect.top() / image()->yRes(), rect.right() / image()->xRes(), rect.bottom() / image()->yRes());
+    return r;
+}
+
 KisImageSP KisTool::image() const
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
@@ -120,37 +133,5 @@ void KisTool::notifyModified() const
         img->setModified();
     }
 }
-
-
-void KisTool::mousePressEvent( KoPointerEvent *event )
-{
-    // XXX: translate points to pixels!
-    mousePressEventPx( event );
-}
-
-void KisTool::mouseDoubleClickEvent( KoPointerEvent *event )
-{
-    // XXX: translate points to pixels!
-    mouseDoubleClickEventPx( event );
-}
-
-void KisTool::mouseMoveEvent( KoPointerEvent *event )
-{
-    // XXX: translate points to pixels!
-    mouseMoveEventPx( event );
-}
-
-void KisTool::mouseReleaseEvent( KoPointerEvent *event )
-{
-    // XXX: translate points to pixels!
-    mouseReleaseEventPx( event );
-}
-
-void KisTool::wheelEvent( KoPointerEvent * event )
-{
-    // XXX: translate points to pixels!
-    wheelEventPx( event );
-}
-
 
 #include "kis_tool.moc"

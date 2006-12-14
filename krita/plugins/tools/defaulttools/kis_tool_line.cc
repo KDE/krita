@@ -70,54 +70,68 @@ void KisToolLine::paint(QPainter& gc, const QRect& rc)
         paintLine(gc, rc);
 }
 
-void KisToolLine::buttonPress(KoPointerEvent *e)
+void KisToolLine::paint(QPainter& gc, KoViewConverter &converter)
+{
+    if (m_dragging)
+        paintLine(gc, QRect());
+}
+
+void KisToolLine::mousePressEvent(KoPointerEvent *e)
 {
     if (!m_canvas || !m_currentImage) return;
 
     if (!m_currentBrush) return;
 
+    QPointF pos = convertToPixelCoord(e);
+
     if (e->button() == Qt::LeftButton) {
         m_dragging = true;
-        m_startPos = e->pos(); //controller->windowToView(e->pos());
-        m_endPos = e->pos(); //controller->windowToView(e->pos());
+        m_startPos = pos;
+        m_endPos = pos;
     }
 }
 
-void KisToolLine::move(KoPointerEvent *e)
+void KisToolLine::mouseMoveEvent(KoPointerEvent *e)
 {
+    QPointF pos = convertToPixelCoord(e);
+
     if (m_dragging) {
-        if (m_startPos != m_endPos)
-            paintLine();
+        QPointF pos = convertToPixelCoord(e);
 
         if (e->modifiers() & Qt::AltModifier) {
-            QPointF trans = e->pos() - m_endPos;
+            QPointF trans = pos - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
         } else if (e->modifiers() & Qt::ShiftModifier)
-            m_endPos = straightLine(e->pos());
+            m_endPos = straightLine(pos);
         else
-            m_endPos = e->pos();//controller->windowToView(e->pos());
-        paintLine();
+            m_endPos = pos;
+
+        QRectF bound;
+        bound.setTopLeft(m_startPos);
+        bound.setBottomRight(m_endPos);
+        /* FIXME Which rectangle to repaint */
+        m_canvas->updateCanvas(convertToPt(bound.normalized()));
     }
 }
 
-void KisToolLine::buttonRelease(KoPointerEvent *e)
+void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 {
+    QPointF pos = convertToPixelCoord(e);
+
     if (m_dragging && e->button() == Qt::LeftButton) {
         m_dragging = false;
 
         if(m_canvas) {
 
             if (m_startPos == m_endPos) {
-                /* FIXME Which rectangle to repaint */
-                //m_canvas->updateCanvas();
                 m_dragging = false;
                 return;
             }
 
             if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
-                m_endPos = straightLine(e->pos());
-            } else m_endPos = e->pos();
+                m_endPos = straightLine(pos);
+            } else m_endPos = pos;
 
             KisPaintDeviceSP device;
             if (m_currentImage &&
@@ -140,9 +154,9 @@ void KisToolLine::buttonRelease(KoPointerEvent *e)
                 notifyModified();
 
 		/* FIXME Which rectangle to repaint */
-                //if (m_canvas) {
-                //    m_canvas->updateCanvas();
-                //}
+                if (m_canvas) {
+                    m_canvas->updateCanvas(convertToPt(m_painter->dirtyRect()));
+                }
 
                 if (m_currentImage->undo() && m_painter) {
                     m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
@@ -196,25 +210,13 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         QPointF end;
 
 //        Q_ASSERT(controller);
-        //start = m_canvas->windowToView(m_startPos);
-        //end = m_canvas->windowToView(m_endPos);
 	start = m_startPos;
 	end = m_endPos;
-//          start.setX(start.x() - controller->horzValue());
-//          start.setY(start.y() - controller->vertValue());
-//          end.setX(end.x() - controller->horzValue());
-//          end.setY(end.y() - controller->vertValue());
-//          end.setX((end.x() - start.x()));
-//          end.setY((end.y() - start.y()));
-//         start *= m_subject->zoomFactor();
-//         end *= m_subject->zoomFactor();
-        //gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
         //gc.drawLine(start.toPoint(), end.toPoint());
 	start = QPoint(static_cast<int>(start.x()), static_cast<int>(start.y()));
 	end = QPoint(static_cast<int>(end.x()), static_cast<int>(end.y()));
 	gc.drawLine(start, end);
-	//gc.setRasterOp(op);
         gc.setPen(old);
     }
 }

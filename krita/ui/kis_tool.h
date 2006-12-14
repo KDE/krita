@@ -63,21 +63,17 @@ public slots:
 
 public:
 
-    void mousePressEvent( KoPointerEvent *event );
-    void mouseDoubleClickEvent( KoPointerEvent *event );
-    void mouseMoveEvent( KoPointerEvent *event );
-    void mouseReleaseEvent( KoPointerEvent *event );
-    void wheelEvent( KoPointerEvent * event );
+    virtual void mousePressEvent( KoPointerEvent * ) {};
+    virtual void mouseDoubleClickEvent( KoPointerEvent * ) {};
+    virtual void mouseMoveEvent( KoPointerEvent * ) {};
+    virtual void mouseReleaseEvent( KoPointerEvent * ) {};
+    virtual void wheelEvent( KoPointerEvent * ) {};
 
-    /// The Px events have the event already translated to image
+    /// @returnThe Px events have the event already translated to image
     /// pixels from the KOffice native points
+    QPointF convertToPixelCoord( KoPointerEvent *e );
 
-    virtual void mousePressEventPx( KoPointerEvent * ) {};
-    virtual void mouseDoubleClickEventPx( KoPointerEvent * ) {};
-    virtual void mouseMoveEventPx( KoPointerEvent * ) {};
-    virtual void mouseReleaseEventPx( KoPointerEvent * ) {};
-    virtual void wheelEventPx( KoPointerEvent * ) {};
-
+    QRectF convertToPt( const QRectF &rect );
 
 protected:
 

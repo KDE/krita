@@ -122,8 +122,10 @@ KoShapeManager* KisCanvas2::shapeManager() const
 
 void KisCanvas2::updateCanvas(const QRectF& rc)
 {
-    // XXX: Convert from document coordinated to widget coordinates
-    m_d->canvasWidget->widget()->update( rc.toRect() );
+    // First convert from document coordinated to widget coordinates
+    QRectF viewRect  = m_d->viewConverter->documentToView(rc);
+    viewRect.adjust(-1,-1,1,1); // to avoid rounding errors
+    m_d->canvasWidget->widget()->update( viewRect.toRect() );
 }
 
 

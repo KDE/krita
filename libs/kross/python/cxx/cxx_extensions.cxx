@@ -1317,7 +1317,7 @@ ExtensionExceptionType::ExtensionExceptionType()
 void ExtensionExceptionType::init( ExtensionModuleBase &module, const std::string& name )
 	{
 	std::string module_name( module.fullName() );
-	module_name += ".";
+	module_name += '.';
 	module_name += name;
 
 	set( PyErr_NewException( const_cast<char *>( module_name.c_str() ), NULL, NULL ), true );
@@ -1326,7 +1326,7 @@ void ExtensionExceptionType::init( ExtensionModuleBase &module, const std::strin
 void ExtensionExceptionType::init( ExtensionModuleBase &module, const std::string& name, ExtensionExceptionType &parent)
  	{
  	std::string module_name( module.fullName() );
- 	module_name += ".";
+ 	module_name += '.';
  	module_name += name;
 
 	set( PyErr_NewException( const_cast<char *>( module_name.c_str() ), parent.ptr(), NULL ), true );

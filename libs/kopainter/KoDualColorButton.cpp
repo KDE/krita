@@ -154,6 +154,7 @@ void KoDualColorButton::dragEnterEvent( QDragEnterEvent *event )
 
 void KoDualColorButton::dropEvent( QDropEvent *event )
 {
+    Q_UNUSED(event);
 /*  QColor color = KColorMimeData::fromMimeData( event->mimeData() );
 
   if ( color.isValid() ) {

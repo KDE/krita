@@ -658,6 +658,8 @@ bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & f
 QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
                                            const QString & _prefix, const QString & _suffix )
 {
+    Q_UNUSED(_prefix);
+    Q_UNUSED(_suffix);
     kDebug(30003)<<"QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_TIME );
@@ -808,6 +810,8 @@ void KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & 
 QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
                                            const QString & _prefix, const QString & _suffix )
 {
+    Q_UNUSED(_prefix);
+    Q_UNUSED(_suffix);
     kDebug(30003)<<"QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 

@@ -263,7 +263,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
             }
         }
     } else {
-        int textOffset = 0;
+        //int textOffset = 0;
 
         if(d->m_offset > 0) {
             painter.translate(0, d->m_offset);

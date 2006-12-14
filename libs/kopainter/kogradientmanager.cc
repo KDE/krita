@@ -97,7 +97,7 @@ KoGradient* KoGradientManager::loadKritaGradient(QFile* file)
 	file->close();
 
 	QTextStream fileContent(m_data, QIODevice::ReadOnly);
-	fileContent.setEncoding(QTextStream::UnicodeUTF8);
+	fileContent.setAutoDetectUnicode(true);
 
 	QString header = fileContent.readLine();
 
@@ -253,7 +253,7 @@ KoGradient* KoGradientManager::parseKarbonGradient(const QDomElement& element)
 
 	// load stops
 	QDomNodeList list = element.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
+	for( int i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{

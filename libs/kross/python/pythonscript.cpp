@@ -265,7 +265,7 @@ QVariant PythonScript::callFunction(const QString& name, const QVariantList& arg
     #ifdef KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
         QString s;
         foreach(QVariant v, args)
-            s += v.toString() + ",";
+            s += v.toString() + ',';
         krossdebug( QString("PythonScript::callFunction() name=%1 args=[%2]").arg(name).arg(s) );
     #endif
 

@@ -38,6 +38,9 @@ KoSelection::~KoSelection()
 
 void KoSelection::paint( QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
+
 /*    if ( count() == 0 )
         return;
     painter.setRenderHint( QPainter::Antialiasing, false );

@@ -112,6 +112,7 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
 
 void KoCreatePathTool::mouseDoubleClickEvent( KoPointerEvent *event )
 {
+    Q_UNUSED(event);
     //qDebug() << "KoCreatePathTool::mouseDoubleClickEvent" << m_shape << "point = " << event->point;
     if ( m_shape )
     {

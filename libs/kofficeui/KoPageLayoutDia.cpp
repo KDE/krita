@@ -135,6 +135,7 @@ void KoPagePreview::paintEvent( QPaintEvent * event )
 
 void KoPagePreview::resizeEvent ( QResizeEvent * event )
 {
+    Q_UNUSED(event);
     updateZoomedSize();
 }
 

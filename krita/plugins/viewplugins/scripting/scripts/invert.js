@@ -1,3 +1,13 @@
+/*
+KDE JavaScript invert script.
+
+The JavaScript invert script inverts all pixels at the activate layer in
+the current image.
+
+Copyright (c) 2006 Cyrille Berger <mail@dipe.org>
+Published under the GNU GPL v2 or higher
+*/
+
 // fetch the image.
 var image = Krita.image();
 

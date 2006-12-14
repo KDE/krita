@@ -47,8 +47,9 @@ public:
      * @param tool the parent tool which controls this strategy
      * @param canvas The canvas that owns the tool for this strategy.
      * @param clicked the initial point that the user depressed (in pt).
+     * @param useSnapToGrid use the snap-to-grid settings while doing the rubberstamp.
      */
-    KoShapeRubberSelectStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked );
+    KoShapeRubberSelectStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, bool useSnapToGrid = false );
     virtual ~KoShapeRubberSelectStrategy();
 
     void paint( QPainter &painter, KoViewConverter &converter);
@@ -67,6 +68,7 @@ protected:
 private:
     QRectF m_selectRect;
     QPointF m_lastPos;
+    bool m_useSnapToGrid;
 };
 
 #endif /* KODEFRUBBERSELECT_H */

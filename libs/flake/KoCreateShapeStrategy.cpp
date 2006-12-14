@@ -30,7 +30,7 @@
 #include <kdebug.h>
 
 KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
-: KoShapeRubberSelectStrategy(tool, canvas, clicked)
+: KoShapeRubberSelectStrategy(tool, canvas, clicked, true)
 {
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(m_parent);
     KoShapeFactory *factory = KoShapeRegistry::instance()->get(parent->shapeId());

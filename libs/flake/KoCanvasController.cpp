@@ -22,9 +22,14 @@
 #include "KoCanvasController.h"
 #include "KoShape.h"
 #include "KoViewConverter.h"
+#include "KoShapeFactory.h" // for the SHAPE mimetypes
+#include "KoShapeRegistry.h"
+#include "KoShapeController.h"
+
+#include <KoProperties.h>
 
 #include <kdebug.h>
-
+#include <kcommand.h>
 #include <QMouseEvent>
 #include <QGridLayout>
 #include <QScrollBar>
@@ -36,7 +41,7 @@ KoCanvasController::KoCanvasController(QWidget *parent)
     , m_canvasWidget(0)
     , m_toolOptionDocker(0)
 {
-    m_viewport = new Viewport();
+    m_viewport = new Viewport(this);
     setWidget(m_viewport);
     setWidgetResizable(true);
     setAutoFillBackground(false);
@@ -150,39 +155,9 @@ bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
     return false;
 }
 
-
-// ********** Viewport **********
-KoCanvasController::Viewport::Viewport()
-: QWidget()
-{
-    setBackgroundRole(QPalette::Dark);
-    setAutoFillBackground(false);
-    m_layout = new QGridLayout(this);
-    m_layout->setSpacing(0);
-    m_layout->setMargin(0);
-    centerCanvas(true);
-}
-
-void KoCanvasController::Viewport::setCanvas(QWidget *canvas) {
-    m_layout->addWidget(canvas, 1, 1, Qt::AlignHCenter | Qt::AlignVCenter);
-}
-
-void KoCanvasController::Viewport::removeCanvas(QWidget *canvas) {
-    m_layout->removeWidget(canvas);
-}
-
-void KoCanvasController::Viewport::centerCanvas(bool centered) {
-    m_layout->setColumnStretch(0,centered?1:0);
-    m_layout->setColumnStretch(1,1);
-    m_layout->setColumnStretch(2,centered?1:2);
-    m_layout->setRowStretch(0,centered?1:0);
-    m_layout->setRowStretch(1,1);
-    m_layout->setRowStretch(2,centered?1:2);
-}
-
 void KoCanvasController::ensureVisible( KoShape *shape ) {
-    if( shape )
-        ensureVisible( shape->boundingRect() );
+    Q_ASSERT(shape);
+    ensureVisible( shape->boundingRect() );
 }
 
 void KoCanvasController::ensureVisible( const QRectF &rect ) {
@@ -213,6 +188,98 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
         vBar->setValue( centerDiff.y() );
     }
 }
+
+
+// ********** Viewport **********
+KoCanvasController::Viewport::Viewport(KoCanvasController* parent)
+: QWidget(parent)
+{
+    setBackgroundRole(QPalette::Dark);
+    setAutoFillBackground(false);
+    m_layout = new QGridLayout(this);
+    m_layout->setSpacing(0);
+    m_layout->setMargin(0);
+    centerCanvas(true);
+    setAcceptDrops(true);
+    m_parent = parent;
+}
+
+void KoCanvasController::Viewport::setCanvas(QWidget *canvas) {
+    m_layout->addWidget(canvas, 1, 1, Qt::AlignHCenter | Qt::AlignVCenter);
+}
+
+void KoCanvasController::Viewport::removeCanvas(QWidget *canvas) {
+    m_layout->removeWidget(canvas);
+}
+
+void KoCanvasController::Viewport::centerCanvas(bool centered) {
+    m_layout->setColumnStretch(0,centered?1:0);
+    m_layout->setColumnStretch(1,1);
+    m_layout->setColumnStretch(2,centered?1:2);
+    m_layout->setRowStretch(0,centered?1:0);
+    m_layout->setRowStretch(1,1);
+    m_layout->setRowStretch(2,centered?1:2);
+}
+
+void KoCanvasController::Viewport::dragEnterEvent(QDragEnterEvent *event) {
+    if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
+            event->mimeData()->hasFormat(SHAPEID_MIMETYPE)) {
+        event->setDropAction(Qt::CopyAction);
+        event->accept();
+    }
+}
+
+void KoCanvasController::Viewport::dropEvent(QDropEvent *event) {
+    QByteArray itemData;
+    bool isTemplate = true;
+    if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE))
+        itemData = event->mimeData()->data(SHAPETEMPLATE_MIMETYPE);
+    else {
+        isTemplate = false;
+        itemData = event->mimeData()->data(SHAPEID_MIMETYPE);
+    }
+    QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+    QString id;
+    dataStream >> id;
+    QString properties;
+    if(isTemplate)
+        dataStream >> properties;
+
+    // and finally, there is a point.
+    QPointF offset;
+    dataStream >> offset;
+
+    // The rest of this method is mostly a copy paste from the KoCreateShapeStrategy
+    // So, lets remove this again when Zagge adds his new class that does this kind of thing. (KoLoadSave)
+    KoShapeFactory *factory = KoShapeRegistry::instance()->get(id);
+    if(! factory) {
+        kWarning(30001) << "Application requested a shape that is not registered '" <<
+            id << "', Ignoring" << endl;
+        event->ignore();
+        return;
+    }
+    event->setDropAction(Qt::CopyAction);
+    event->accept();
+
+    KoShape *shape;
+    if(isTemplate) {
+        KoProperties props;
+        props.load(properties);
+        shape = factory->createShape(&props);
+    }
+    else
+        shape = factory->createDefaultShape();
+    shape->setShapeId(factory->shapeId());
+    QPoint correctedPos(event->pos().x() - m_parent->canvasOffsetX(),
+            event->pos().y() - m_parent->canvasOffsetY());
+    shape->setAbsolutePosition( m_parent->canvas()->viewConverter()->viewToDocument(correctedPos));
+    KCommand * cmd = m_parent->canvas()->shapeController()->addShape( shape );
+    if(cmd) {
+        cmd->execute();
+        m_parent->canvas()->addCommand(cmd);
+    }
+}
+
 
 #include "KoCanvasController.moc"
 

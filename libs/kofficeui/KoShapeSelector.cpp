@@ -150,15 +150,13 @@ void KoShapeSelector::loadShapeTypes() {
         if(!oneAdded)
             add(new GroupShape(factory));
     }
-
-    connect(m_shapeManager->selection(), SIGNAL(selectionChanged()), this, SLOT(itemSelected()));
 }
 
 void KoShapeSelector::itemSelected() {
-    QList<KoShape*> allSelected = m_shapeManager->selection()->selectedShapes().toList();
-    if(allSelected.isEmpty())
+    KoShape *koShape = m_shapeManager->selection()->firstSelectedShape();
+    if(koShape == 0)
         return;
-    IconShape *shape= static_cast<IconShape*> (allSelected.first());
+    IconShape *shape= static_cast<IconShape*> (koShape);
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
     if(canvasController) {
@@ -238,6 +236,7 @@ KoShapeSelector::Canvas::Canvas(KoShapeSelector *parent)
 : QWidget(parent)
 , KoCanvasBase( &m_shapeController )
 , m_parent(parent)
+, m_emitItemSelected(false)
 {
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Base);
@@ -267,8 +266,10 @@ void KoShapeSelector::Canvas::mousePressEvent(QMouseEvent *event) {
     foreach(KoShape *shape, shapeManager()->selection()->selectedShapes())
         shape->repaint();
     shapeManager()->selection()->deselectAll();
+    m_emitItemSelected = false;
     if(clickedShape == 0)
         return;
+    m_emitItemSelected = true;
     shapeManager()->selection()->select(clickedShape);
     clickedShape->repaint();
 }
@@ -285,7 +286,6 @@ void KoShapeSelector::Canvas::mouseMoveEvent(QMouseEvent *event) {
     QString mimeType;
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-kDebug() << "pos: " << QPointF(event->pos() - clickedShape->position()) << endl;
     TemplateShape *templateShape = dynamic_cast<TemplateShape*> (clickedShape);
     if(templateShape) {
         dataStream << templateShape->shapeTemplate().id;
@@ -317,7 +317,8 @@ kDebug() << "pos: " << QPointF(event->pos() - clickedShape->position()) << endl;
     drag->setPixmap(static_cast<IconShape*>(clickedShape)->pixmap());
     drag->setHotSpot(event->pos() - clickedShape->position().toPoint());
 
-    drag->start(Qt::CopyAction | Qt::MoveAction);
+    if(drag->start(Qt::CopyAction | Qt::MoveAction) != Qt::MoveAction)
+        m_emitItemSelected = false;
 }
 
 void  KoShapeSelector::Canvas::dragEnterEvent(QDragEnterEvent *event) {
@@ -326,6 +327,12 @@ void  KoShapeSelector::Canvas::dragEnterEvent(QDragEnterEvent *event) {
         event->setDropAction(Qt::MoveAction);
         event->accept();
     }
+}
+
+void KoShapeSelector::Canvas::mouseReleaseEvent(QMouseEvent *event) {
+    Q_UNUSED(event);
+    if(m_emitItemSelected)
+        m_parent->itemSelected();
 }
 
 void  KoShapeSelector::Canvas::dropEvent(QDropEvent *event) {

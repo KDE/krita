@@ -34,6 +34,8 @@ class KoProperties;
 class KoShapeConfigFactory;
 class KoShapeConfigWidgetBase;
 
+#define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
+#define SHAPEID_MIMETYPE "application/x-flake-shapeId"
 
 /**
  * Contains a KoProperties object that describes the settings of a

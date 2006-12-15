@@ -39,9 +39,6 @@ class KoShapeManager;
 class QKeyEvent;
 class QPainter;
 
-#define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
-#define SHAPEID_MIMETYPE "application/x-flake-shapeId"
-
 /**
  * The shape selector shows a widget that holds templates and clipboard data
  * for the user to easilly move that between apps and maintain functionality.
@@ -53,10 +50,10 @@ public:
     ~KoShapeSelector();
 
 private slots:
-    void itemSelected();
     void loadShapeTypes();
 
 private:
+    void itemSelected();
     void add(KoShape *item);
 
 private:
@@ -96,6 +93,7 @@ private:
         protected: // event handlers
             void mouseMoveEvent(QMouseEvent *e);
             void mousePressEvent(QMouseEvent *e);
+            void mouseReleaseEvent(QMouseEvent *e);
             void paintEvent(QPaintEvent * e);
             void dragEnterEvent(QDragEnterEvent *e);
             void dropEvent(QDropEvent *e);
@@ -105,6 +103,7 @@ private:
             DummyShapeController m_shapeController;
             DummyViewConverter m_converter;
             KoShapeSelector *m_parent;
+            bool m_emitItemSelected;
     };
 
     friend class Canvas;

@@ -187,13 +187,17 @@ protected slots:
 private:
     class Viewport : public QWidget {
       public:
-        Viewport();
+        Viewport(KoCanvasController *parent);
         ~Viewport() {};
         void setCanvas(QWidget *canvas);
         void removeCanvas(QWidget *canvas);
         void centerCanvas(bool centered);
+        void dragEnterEvent(QDragEnterEvent *event);
+        void dropEvent(QDropEvent *event);
+
       private:
         QGridLayout *m_layout;
+        KoCanvasController *m_parent;
     };
 
 private:

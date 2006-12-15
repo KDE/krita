@@ -1,1 +1,0 @@
-AC_CHECK_DECLS([round], [], [], [#include <math.h>])

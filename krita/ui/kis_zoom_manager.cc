@@ -71,8 +71,7 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
           this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
 
     QToolBar *tbar = new QToolBar(m_view->KoView::statusBar());
-    m_view->KoView::statusBar()->addWidget(tbar);
-    tbar->addAction(m_zoomAction);
+    m_view->viewBar()->addAction(m_zoomAction);
 
     m_showRulersAction = new KToggleAction( i18n("Show Rulers"), actionCollection, "view_ruler" );
     m_showRulersAction->setWhatsThis( i18n("The rulers show the horizontal and vertical positions of the mouse on the image "

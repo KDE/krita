@@ -55,6 +55,7 @@ namespace KParts
 // Qt classes
 class QDockWidget;
 class QCustomEvent;
+class QToolBar;
 
 /**
  * This class is used to display a @ref KoDocument.
@@ -391,6 +392,11 @@ public:
     * the @ref #endOperation slot
     */
   bool isInOperation() const;
+
+  /**
+   * @return the view bar. The bar is created only if this function is called.
+   */
+  QToolBar* viewBar();
 
 public slots:
     /**

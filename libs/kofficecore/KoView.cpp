@@ -44,6 +44,7 @@
 #include <QMouseEvent>
 #include <QCustomEvent>
 #include <kicon.h>
+#include <QToolBar>
 
 //static
 QString KoView::newObjectName()
@@ -66,6 +67,7 @@ public:
 //     m_dcopObject = 0;
     m_registered=false;
     m_documentDeleted=false;
+    m_viewBar = 0L;
   }
   ~KoViewPrivate()
   {
@@ -126,6 +128,7 @@ public:
   };
   Q3ValueList<StatusBarItem> m_statusBarItems; // Our statusbar items
   bool m_inOperation; //in the middle of an operation (no screen refreshing)?
+  QToolBar* m_viewBar;
 };
 
 KoView::KoView( KoDocument *document, QWidget *parent )
@@ -777,6 +780,16 @@ QRect KoView::reverseViewTransformations( const QRect& r ) const
 {
   return QRect( reverseViewTransformations( r.topLeft() ),
                 reverseViewTransformations( r.bottomRight() ) );
+}
+
+QToolBar* KoView::viewBar()
+{
+    if(!d->m_viewBar) {
+        d->m_viewBar = new QToolBar(statusBar());
+        statusBar()->addWidget(d->m_viewBar);
+    }
+
+    return d->m_viewBar;
 }
 
 #include "KoView.moc"

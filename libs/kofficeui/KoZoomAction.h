@@ -27,7 +27,7 @@
 #include <KoZoomMode.h>
 
 class QSlider;
-class QRadioButton;
+class QButtonGroup;
 
 /**
  * Class KoZoomAction implements an action to provide zoom values.
@@ -101,6 +101,7 @@ protected Q_SLOTS:
   void sliderValueChanged(int value);
   void numberValueChanged();
   void zoomModeButtonClicked(int id);
+  void updateWidgets(KoZoomMode::Mode mode, int zoom);
 
 Q_SIGNALS:
 
@@ -125,6 +126,7 @@ protected:
     ExtLineEdit *m_number;
     QSlider *m_slider;
     int m_sliderLookup[33];
+    QButtonGroup* m_zoomButtonGroup;
 };
 
 class KoZoomAction::ExtLineEdit : public QLineEdit

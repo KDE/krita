@@ -25,6 +25,7 @@
 #include "KoShapeFactory.h" // for the SHAPE mimetypes
 #include "KoShapeRegistry.h"
 #include "KoShapeController.h"
+#include "KoShapeManager.h"
 
 #include <KoProperties.h>
 
@@ -32,8 +33,10 @@
 #include <kcommand.h>
 #include <QMouseEvent>
 #include <QGridLayout>
+#include <QPainter>
 #include <QScrollBar>
 #include <QEvent>
+#include <limits.h>
 
 KoCanvasController::KoCanvasController(QWidget *parent)
     : QScrollArea(parent)
@@ -193,6 +196,7 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
 // ********** Viewport **********
 KoCanvasController::Viewport::Viewport(KoCanvasController* parent)
 : QWidget(parent)
+, m_draggedShape(0)
 {
     setBackgroundRole(QPalette::Dark);
     setAutoFillBackground(false);
@@ -224,59 +228,106 @@ void KoCanvasController::Viewport::centerCanvas(bool centered) {
 void KoCanvasController::Viewport::dragEnterEvent(QDragEnterEvent *event) {
     if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
             event->mimeData()->hasFormat(SHAPEID_MIMETYPE)) {
+
+        QByteArray itemData;
+        bool isTemplate = true;
+        if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE))
+            itemData = event->mimeData()->data(SHAPETEMPLATE_MIMETYPE);
+        else {
+            isTemplate = false;
+            itemData = event->mimeData()->data(SHAPEID_MIMETYPE);
+        }
+        QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+        QString id;
+        dataStream >> id;
+        QString properties;
+        if(isTemplate)
+            dataStream >> properties;
+
+        // and finally, there is a point.
+        QPointF offset;
+        dataStream >> offset;
+
+        // The rest of this method is mostly a copy paste from the KoCreateShapeStrategy
+        // So, lets remove this again when Zagge adds his new class that does this kind of thing. (KoLoadSave)
+        KoShapeFactory *factory = KoShapeRegistry::instance()->get(id);
+        if(! factory) {
+            kWarning(30001) << "Application requested a shape that is not registered '" <<
+                id << "', Ignoring" << endl;
+            event->ignore();
+            return;
+        }
         event->setDropAction(Qt::CopyAction);
         event->accept();
+
+        if(isTemplate) {
+            KoProperties props;
+            props.load(properties);
+            m_draggedShape = factory->createShape(&props);
+        }
+        else
+            m_draggedShape = factory->createDefaultShape();
+        if( m_draggedShape->shapeId().isEmpty() )
+            m_draggedShape->setShapeId(factory->shapeId());
+        m_draggedShape->setZIndex(INT_MAX);
+
+        m_parent->canvas()->shapeManager()->add(m_draggedShape);
     }
 }
 
 void KoCanvasController::Viewport::dropEvent(QDropEvent *event) {
-    QByteArray itemData;
-    bool isTemplate = true;
-    if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE))
-        itemData = event->mimeData()->data(SHAPETEMPLATE_MIMETYPE);
-    else {
-        isTemplate = false;
-        itemData = event->mimeData()->data(SHAPEID_MIMETYPE);
-    }
-    QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-    QString id;
-    dataStream >> id;
-    QString properties;
-    if(isTemplate)
-        dataStream >> properties;
-
-    // and finally, there is a point.
-    QPointF offset;
-    dataStream >> offset;
-
-    // The rest of this method is mostly a copy paste from the KoCreateShapeStrategy
-    // So, lets remove this again when Zagge adds his new class that does this kind of thing. (KoLoadSave)
-    KoShapeFactory *factory = KoShapeRegistry::instance()->get(id);
-    if(! factory) {
-        kWarning(30001) << "Application requested a shape that is not registered '" <<
-            id << "', Ignoring" << endl;
-        event->ignore();
-        return;
-    }
-    event->setDropAction(Qt::CopyAction);
-    event->accept();
-
-    KoShape *shape;
-    if(isTemplate) {
-        KoProperties props;
-        props.load(properties);
-        shape = factory->createShape(&props);
-    }
-    else
-        shape = factory->createDefaultShape();
-    shape->setShapeId(factory->shapeId());
-    QPoint correctedPos(event->pos().x() - m_parent->canvasOffsetX(),
-            event->pos().y() - m_parent->canvasOffsetY());
-    shape->setAbsolutePosition( m_parent->canvas()->viewConverter()->viewToDocument(correctedPos));
-    KCommand * cmd = m_parent->canvas()->shapeController()->addShape( shape );
+    m_draggedShape->setAbsolutePosition( corrrectPosition(event->pos()) );
+    m_parent->canvas()->shapeManager()->remove(m_draggedShape); // remove it to not interfere with z-index calc.
+    KCommand * cmd = m_parent->canvas()->shapeController()->addShape( m_draggedShape );
     if(cmd) {
         cmd->execute();
         m_parent->canvas()->addCommand(cmd);
+    }
+    m_draggedShape = 0;
+}
+
+QPointF KoCanvasController::Viewport::corrrectPosition(const QPoint &point) const {
+    QPoint correctedPos(point.x() - m_parent->canvasOffsetX(), point.y() - m_parent->canvasOffsetY());
+    return m_parent->canvas()->viewConverter()->viewToDocument(correctedPos);
+}
+
+void KoCanvasController::Viewport::dragMoveEvent (QDragMoveEvent *event) {
+    if(m_draggedShape == 0)
+        return;
+    m_draggedShape->repaint();
+    repaint(m_draggedShape);
+    m_draggedShape->setAbsolutePosition( corrrectPosition(event->pos()) );
+    m_draggedShape->repaint();
+    repaint(m_draggedShape);
+}
+
+void KoCanvasController::Viewport::repaint(KoShape *shape) {
+    QRect rect = m_parent->canvas()->viewConverter()->documentToView(shape->boundingRect()).toRect();
+    rect.moveLeft(rect.left() + m_parent->canvasOffsetX());
+    rect.moveTop(rect.top() + m_parent->canvasOffsetY());
+    rect.adjust(-2, -2, 2, 2); // update for antialias
+    update(rect);
+}
+
+void KoCanvasController::Viewport::dragLeaveEvent(QDragLeaveEvent *) {
+    if(m_draggedShape) {
+        m_parent->canvas()->shapeManager()->remove(m_draggedShape);
+        delete m_draggedShape;
+        m_draggedShape = 0;
+    }
+}
+
+void KoCanvasController::Viewport::paintEvent(QPaintEvent *event) {
+    if(m_draggedShape) {
+        KoViewConverter *vc = m_parent->canvas()->viewConverter();
+
+        QPainter painter( this );
+        painter.setClipRect(event->rect());
+        painter.translate(m_parent->canvasOffsetX(), m_parent->canvasOffsetY());
+        QPointF offset = vc->documentToView(m_draggedShape->position());
+        painter.translate(offset.x(), offset.y());
+        m_draggedShape->paint(painter, *vc);
+        painter.end();
     }
 }
 

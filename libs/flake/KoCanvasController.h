@@ -194,10 +194,18 @@ private:
         void centerCanvas(bool centered);
         void dragEnterEvent(QDragEnterEvent *event);
         void dropEvent(QDropEvent *event);
+        void dragMoveEvent (QDragMoveEvent *event);
+        void dragLeaveEvent(QDragLeaveEvent *event);
+        void paintEvent(QPaintEvent *event);
+
+      private:
+        QPointF corrrectPosition(const QPoint &point) const;
+        void repaint(KoShape *shape);
 
       private:
         QGridLayout *m_layout;
         KoCanvasController *m_parent;
+        KoShape *m_draggedShape;
     };
 
 private:

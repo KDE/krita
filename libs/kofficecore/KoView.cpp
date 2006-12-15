@@ -786,7 +786,7 @@ QToolBar* KoView::viewBar()
 {
     if(!d->m_viewBar) {
         d->m_viewBar = new QToolBar(statusBar());
-        statusBar()->addWidget(d->m_viewBar);
+        addStatusBarItem(d->m_viewBar, 0 , true);
     }
 
     return d->m_viewBar;

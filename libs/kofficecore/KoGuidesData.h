@@ -23,11 +23,18 @@
 #include <koffice_export.h>
 #include <QList>
 #include <qnamespace.h>
-class KOFFICECORE_EXPORT KoGuideData
+class KOFFICECORE_EXPORT KoGuidesData
 {
 public:
-    KoGuideData();
+    KoGuidesData();
 
+    /**
+     * @brief Set the positions of the horizontal and vertical guide lines
+     *
+     * @param horizontalLines a list of positions of the horizontal guide lines
+     * @param verticalLines a list of positions of the vertical guide lines
+     */
+    void guideLines( const QList<double> &horizontalLines, const QList<double> &verticalLines);
     /**
      * @brief Set the positions of the horizontal guide lines
      *

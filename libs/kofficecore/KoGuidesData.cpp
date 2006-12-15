@@ -17,25 +17,30 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoGuideData.h"
+#include "KoGuidesData.h"
 
-KoGuideData::KoGuideData()
+KoGuidesData::KoGuidesData()
  :m_bShowGuideLines(true)
 {
 }
 
-void KoGuideData::horizontalGuideLines( const QList<double> &lines )
+void KoGuidesData::horizontalGuideLines( const QList<double> &lines )
 {
     m_hGuideLines = lines;
 }
 
-void KoGuideData::verticalGuideLines( const QList<double> &lines )
+void KoGuidesData::verticalGuideLines( const QList<double> &lines )
 {
     m_vGuideLines = lines;
 }
 
+void KoGuidesData::guideLines( const QList<double> &horizontalLines, const QList<double> &verticalLines)
+{
+    m_hGuideLines = horizontalLines;
+    m_vGuideLines = verticalLines;
+}
 
-void KoGuideData::addGuideLine( Qt::Orientation o, double pos )
+void KoGuidesData::addGuideLine( Qt::Orientation o, double pos )
 {
     if ( o == Qt::Horizontal )
     {
@@ -47,12 +52,12 @@ void KoGuideData::addGuideLine( Qt::Orientation o, double pos )
     }
 }
 
-bool KoGuideData::showGuideLines() const 
+bool KoGuidesData::showGuideLines() const 
 { 
   return m_bShowGuideLines; 
 }
 
-void KoGuideData::setShowGuideLines( bool show )
+void KoGuidesData::setShowGuideLines( bool show )
 {
   m_bShowGuideLines=show;
 }

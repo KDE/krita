@@ -42,6 +42,7 @@ class KoTextDocument;
 
 #include <KoXmlReader.h>
 #include <KoGridData.h>
+#include <KoGuidesData.h>
 
 class QDomElement;
 class QDomDocument;
@@ -929,6 +930,8 @@ public:
 
     KoGridData &gridData() {return m_gridData;}
 
+    KoGuidesData &guidesData() {return m_guidesData;}
+
 public slots:
     /**
      * Initialize an empty document using default values
@@ -1175,6 +1178,7 @@ private:
     KService::Ptr m_nativeService;
     bool m_bEmpty;
     KoGridData m_gridData;
+    KoGuidesData m_guidesData;
     static Q3PtrList<KoDocument> *s_documentList;
     static const int s_defaultAutoSave;
 };

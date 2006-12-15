@@ -33,6 +33,7 @@
 #include <QGridLayout>
 #include <QMenu>
 #include <QStatusBar>
+#include <QButtonGroup>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -249,6 +250,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
         return KSelectAction::createWidget(_parent);
 
     QWidget * group = new QWidget(_parent);
+    group->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
     m_slider = new QSlider(Qt::Horizontal);
     m_slider->setMinimum(0);
@@ -278,10 +280,13 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
 
     QGridLayout *layout = new QGridLayout();
     int radios=0;
-    QToolButton *actualButton, *fitWidthButton, *fitPageButton;
+    QButtonGroup* buttonGroup = new QButtonGroup(group);
+    buttonGroup->setExclusive(true);
+
     if(m_zoomModes & KoZoomMode::ZOOM_PIXELS)
     {
         QToolButton * actualButton= new QToolButton(group);
+        buttonGroup->addButton(actualButton, KoZoomMode::ZOOM_PIXELS);
         layout->addWidget(actualButton, 0, radios);
         actualButton->setIcon(KIcon("zoom-pixels").pixmap(22));
         actualButton->setCheckable(true);
@@ -290,7 +295,8 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     }
     if(m_zoomModes & KoZoomMode::ZOOM_WIDTH)
     {
-        fitWidthButton = new QToolButton(group);
+        QToolButton * fitWidthButton = new QToolButton(group);
+        buttonGroup->addButton(fitWidthButton, KoZoomMode::ZOOM_WIDTH);
         layout->addWidget(fitWidthButton, 0, radios);
         fitWidthButton->setIcon(KIcon("zoom-width").pixmap(22));
         fitWidthButton->setCheckable(true);
@@ -299,7 +305,8 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     }
     if(m_zoomModes & KoZoomMode::ZOOM_PAGE)
     {
-        fitPageButton = new QToolButton(group);
+        QToolButton * fitPageButton = new QToolButton(group);
+        buttonGroup->addButton(fitPageButton, KoZoomMode::ZOOM_PAGE);
         layout->addWidget(fitPageButton, 0, radios);
         fitPageButton->setIcon(KIcon("zoom-page").pixmap(22));
         fitPageButton->setCheckable(true);
@@ -327,8 +334,14 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     connect(numLabel, SIGNAL(customContextMenuRequested(const QPoint &)), m_number, SLOT(selectAll()));
     connect(numLabel, SIGNAL(customContextMenuRequested(const QPoint &)), m_number, SLOT(setFocus()));
     connect(numLabel, SIGNAL(customContextMenuRequested(const QPoint &)), numLabel, SLOT(hide()));
+    connect(buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(zoomModeButtonClicked(int)));
     return group;
 
+}
+
+void KoZoomAction::zoomModeButtonClicked(int id)
+{
+    triggered(KoZoomMode::toString(static_cast<KoZoomMode::Mode>(id)));
 }
 
 KoZoomAction::ExtLineEdit::ExtLineEdit ( const QString & contents, QWidget * parent) :

@@ -100,6 +100,7 @@ protected Q_SLOTS:
   void triggered( const QString& text );
   void sliderValueChanged(int value);
   void numberValueChanged();
+  void zoomModeButtonClicked(int id);
 
 Q_SIGNALS:
 

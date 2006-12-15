@@ -54,7 +54,7 @@ public:
 
     bool isSelectable() const { return false; }
 
-    // KoShapeContainer implemenation
+    // KoShapeContainer implementation
 
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
 

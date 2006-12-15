@@ -49,10 +49,10 @@ bool KisOasisLoadDataVisitor::visit(KisPaintLayer *layer)
         img.save("testouille.png", "PNG", 0);
         io.close();
         m_oasisStore->store()->close();
-        kDebug(41008) << "Loading was successfull" << endl;
+        kDebug(41008) << "Loading was successful" << endl;
         return true;
     }
-    kDebug(41008) << "Loading was unsuccessfull" << endl;
+    kDebug(41008) << "Loading was unsuccessful" << endl;
     return false;
 }
 

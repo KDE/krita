@@ -288,6 +288,7 @@ void KoCanvasController::Viewport::dropEvent(QDropEvent *event) {
 
 QPointF KoCanvasController::Viewport::corrrectPosition(const QPoint &point) const {
     QPoint correctedPos(point.x() - m_parent->canvasOffsetX(), point.y() - m_parent->canvasOffsetY());
+    correctedPos -= m_parent->canvas()->documentOrigin();
     return m_parent->canvas()->viewConverter()->viewToDocument(correctedPos);
 }
 

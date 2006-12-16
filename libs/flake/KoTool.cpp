@@ -34,14 +34,15 @@ KoTool::KoTool(KoCanvasBase *canvas )
     , m_optionWidget( 0 )
     , m_previousCursor(Qt::ArrowCursor)
 {
-    Q_ASSERT(m_canvas);
-    KoCanvasResourceProvider * crp = m_canvas->resourceProvider();
-    Q_ASSERT_X(crp, "KoTool::KoTool", "No KoCanvasResourceProvider");
-    connect( m_canvas->resourceProvider(),
-         SIGNAL( sigResourceChanged(KoCanvasResource::EnumCanvasResource, const QVariant & ) ),
-         this,
-         SLOT( resourceChanged( KoCanvasResource::EnumCanvasResource, const QVariant &  ) ) );
-
+    if(m_canvas) { // in the case of KoToolManagers dummytool it can be zero :(
+        KoCanvasResourceProvider * crp = m_canvas->resourceProvider();
+        Q_ASSERT_X(crp, "KoTool::KoTool", "No KoCanvasResourceProvider");
+        if (crp)
+            connect( m_canvas->resourceProvider(),
+                 SIGNAL( sigResourceChanged(KoCanvasResource::EnumCanvasResource, const QVariant & ) ),
+                 this,
+                 SLOT( resourceChanged( KoCanvasResource::EnumCanvasResource, const QVariant &  ) ) );
+    }
 }
 
 KoTool::~KoTool()

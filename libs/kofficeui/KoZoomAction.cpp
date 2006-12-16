@@ -291,6 +291,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
         actualButton->setIcon(KIcon("zoom-pixels").pixmap(22));
         actualButton->setCheckable(true);
         actualButton->setAutoRaise(true);
+        actualButton->setToolTip(i18n("Show actual pixels"));
         radios++;
     }
     if(m_zoomModes & KoZoomMode::ZOOM_WIDTH)
@@ -301,6 +302,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
         fitWidthButton->setIcon(KIcon("zoom-width").pixmap(22));
         fitWidthButton->setCheckable(true);
         fitWidthButton->setAutoRaise(true);
+        fitWidthButton->setToolTip(i18n("Fit to width"));
         radios++;
     }
     if(m_zoomModes & KoZoomMode::ZOOM_PAGE)
@@ -311,6 +313,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
         fitPageButton->setIcon(KIcon("zoom-page").pixmap(22));
         fitPageButton->setCheckable(true);
         fitPageButton->setAutoRaise(true);
+        fitPageButton->setToolTip(i18n("Fit to page/canvas"));
         radios++;
     }
 

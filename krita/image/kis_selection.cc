@@ -53,7 +53,7 @@ KisSelection::KisSelection()
 
 KisSelection::KisSelection(const KisSelection& rhs)
     : super(rhs)
-    , m_dirty(false)
+    , m_parentPaintDevice(rhs.m_parentPaintDevice), m_dirty(false)
 {
 }
 

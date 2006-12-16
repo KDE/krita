@@ -79,6 +79,7 @@ class KOFFICEUI_EXPORT KoRuler : public QWidget
         void setRulerLength(double length);
 
         /** Set the active range, ie the part of the ruler that is most likely used.
+          * set to 0, 0 when there is no longer any active range
           * @param start the start of the range in pt
           * @param end the end of the range in pt
           */
@@ -90,7 +91,7 @@ class KOFFICEUI_EXPORT KoRuler : public QWidget
           */
         void setShowMousePosition(bool show);
 
-        /** Update the current position of the mouse pointer.
+        /** Update the current position of the mouse pointer, repainting if changed.
           * The ruler offset will be applied before painting.
           * @param coordinate Either the x or y coordinate of the mouse depending
           *                   of the orientation of the ruler.

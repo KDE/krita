@@ -377,6 +377,8 @@ void KoRuler::setActiveRange(double start, double end)
 
 void KoRuler::updateMouseCoordinate(int coordinate)
 {
+    if(d->m_mouseCoordinate == coordinate)
+        return;
     d->m_mouseCoordinate = coordinate;
     update();
 }

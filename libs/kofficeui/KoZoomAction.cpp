@@ -125,7 +125,7 @@ void KoZoomAction::init(KActionCollection* parent)
     regenerateItems(0);
 
     setCurrentAction( i18n( "%1%",  100 ) );
-    m_actualZoom = 100;
+    m_effectiveZoom = 100;
 
     connect( this, SIGNAL( triggered( const QString& ) ), SLOT( triggered( const QString& ) ) );
 }
@@ -192,8 +192,6 @@ void KoZoomAction::regenerateItems(const QString& zoomString)
 
 void KoZoomAction::sliderValueChanged(int value)
 {
-    m_number->setText(QString().setNum(m_sliderLookup[value]));
-
     setZoom(m_sliderLookup[value]);
 
     emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, m_sliderLookup[value] );
@@ -206,28 +204,18 @@ void KoZoomAction::numberValueChanged()
     setZoom(m_number->text());
     int zoom = m_number->text().toInt();
 
-    int i=0;
-    while(i <= 32 && m_sliderLookup[i] < zoom)
-        i++;
-
-    m_slider->blockSignals(true);
-    m_slider->setValue(i); // causes sliderValueChanged to be called which does the rest
-    m_slider->blockSignals(false);
-
     emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
 }
 
 void KoZoomAction::zoomIn()
 {
     int i=0;
-    while(i <= 32 && m_sliderLookup[i] < m_actualZoom)
+    while(i <= 32 && m_sliderLookup[i] < m_effectiveZoom)
         i++;
-kDebug() << i << " and " << m_sliderLookup[i] << " and " << m_actualZoom <<endl;
 
-    if(m_sliderLookup[i] == m_actualZoom && i < 32)
+    if(m_sliderLookup[i] == m_effectiveZoom && i < 32)
         i++;
     // else i is the next zoom level already
-kDebug() << i << " and " << m_sliderLookup[i] << " and " << m_actualZoom <<endl;
 
     int zoom = m_sliderLookup[i];
     setZoom(zoom);
@@ -237,7 +225,7 @@ kDebug() << i << " and " << m_sliderLookup[i] << " and " << m_actualZoom <<endl;
 void KoZoomAction::zoomOut()
 {
     int i=0;
-    while(i <= 32 && m_sliderLookup[i] < m_actualZoom)
+    while(i <= 32 && m_sliderLookup[i] < m_effectiveZoom)
         i++;
 
     if(i>0)
@@ -368,13 +356,13 @@ void KoZoomAction::updateWidgets(KoZoomMode::Mode mode, int zoom)
             m_zoomButtonGroup->setExclusive(true);
         }
 
-        setActualZoom(zoom);
+        setEffectiveZoom(zoom);
     }
 }
 
-void KoZoomAction::setActualZoom(int zoom)
+void KoZoomAction::setEffectiveZoom(int zoom)
 {
-    m_actualZoom = zoom;
+    m_effectiveZoom = zoom;
 
     if(m_number) {
         m_number->setText(QString::number(zoom));

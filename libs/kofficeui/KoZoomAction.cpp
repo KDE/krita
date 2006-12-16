@@ -99,6 +99,10 @@ void KoZoomAction::triggered( const QString& text )
 
 void KoZoomAction::init(KActionCollection* parent)
 {
+    m_slider = 0;
+    m_number = 0;
+    m_zoomButtonGroup = 0;
+
     KStdAction::zoomIn(this, SLOT(zoomIn()), parent, "zoom_in");
     KStdAction::zoomOut(this, SLOT(zoomOut()), parent, "zoom_out");
 
@@ -121,6 +125,7 @@ void KoZoomAction::init(KActionCollection* parent)
     regenerateItems(0);
 
     setCurrentAction( i18n( "%1%",  100 ) );
+    m_actualZoom = 100;
 
     connect( this, SIGNAL( triggered( const QString& ) ), SLOT( triggered( const QString& ) ) );
 }
@@ -214,33 +219,33 @@ void KoZoomAction::numberValueChanged()
 
 void KoZoomAction::zoomIn()
 {
-    int zoom = m_number->text().toInt();
-kDebug() << m_slider->value() <<endl;
-
     int i=0;
-    while(i <= 32 && m_sliderLookup[i] < zoom)
+    while(i <= 32 && m_sliderLookup[i] < m_actualZoom)
         i++;
-kDebug() << i << " and " << m_sliderLookup[i] << " and " << zoom <<endl;
-    if(m_sliderLookup[i] == zoom && i<32)
+kDebug() << i << " and " << m_sliderLookup[i] << " and " << m_actualZoom <<endl;
+
+    if(m_sliderLookup[i] == m_actualZoom && i < 32)
         i++;
     // else i is the next zoom level already
-kDebug() << i << " and " << m_sliderLookup[i] << " and " << zoom <<endl;
+kDebug() << i << " and " << m_sliderLookup[i] << " and " << m_actualZoom <<endl;
 
-   m_slider->setValue(i); // causes sliderValueChanged to be called which does the rest
+    int zoom = m_sliderLookup[i];
+    setZoom(zoom);
+    emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
 }
 
 void KoZoomAction::zoomOut()
 {
-    int zoom = m_number->text().toInt();
-
     int i=0;
-    while(i <= 32 && m_sliderLookup[i] < zoom)
+    while(i <= 32 && m_sliderLookup[i] < m_actualZoom)
         i++;
 
     if(i>0)
         i--;
 
-   m_slider->setValue(i); // causes sliderValueChanged to be called which does the rest
+    int zoom = m_sliderLookup[i];
+    setZoom(zoom);
+    emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
 }
 
 QWidget * KoZoomAction::createWidget( QWidget * _parent )
@@ -362,17 +367,28 @@ void KoZoomAction::updateWidgets(KoZoomMode::Mode mode, int zoom)
             button->setChecked(false);
             m_zoomButtonGroup->setExclusive(true);
         }
+
+        setActualZoom(zoom);
+    }
+}
+
+void KoZoomAction::setActualZoom(int zoom)
+{
+    m_actualZoom = zoom;
+
+    if(m_number) {
+        m_number->setText(QString::number(zoom));
     }
 
-    m_number->setText(QString::number(zoom));
+    if(m_slider) {
+        int i = 0;
+        while(i <= 32 && m_sliderLookup[i] < zoom)
+            i++;
 
-    int i = 0;
-    while(i <= 32 && m_sliderLookup[i] < zoom)
-        i++;
-
-    m_slider->blockSignals(true);
-    m_slider->setValue(i); // causes sliderValueChanged to be called which does the rest
-    m_slider->blockSignals(false);
+        m_slider->blockSignals(true);
+        m_slider->setValue(i); // causes sliderValueChanged to be called which does the rest
+        m_slider->blockSignals(false);
+    }
 }
 
 

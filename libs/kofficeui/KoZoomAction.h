@@ -95,6 +95,12 @@ public Q_SLOTS:
    */
   void zoomOut( );
 
+  /**
+   * Set the actual zoom value used in the app. This is needed when using @ref zoomIn() , @ref zoomOut() and/or when
+   * plugged into the viewbar.
+   */
+  void setActualZoom(int zoom);
+
 protected Q_SLOTS:
 
   void triggered( const QString& text );
@@ -127,6 +133,8 @@ protected:
     QSlider *m_slider;
     int m_sliderLookup[33];
     QButtonGroup* m_zoomButtonGroup;
+
+    int m_actualZoom;
 };
 
 class KoZoomAction::ExtLineEdit : public QLineEdit

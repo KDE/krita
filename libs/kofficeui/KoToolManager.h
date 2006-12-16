@@ -40,6 +40,7 @@ class KoToolBox;
 class KActionCollection;
 class KoShape;
 class KoToolSelection;
+class KoToolDocker;
 
 
 /**
@@ -175,6 +176,12 @@ public:
 
     /// @return the currently active pointing device
     KoInputDevice currentInputDevice() const;
+
+    /**
+     * Unset the toolOptionDocker @p docker in all canvasControllers using it.
+     * This is called from the KoToolDocker destructor to avoid dangling pointers.
+     */
+    void unsetToolOptionDocker(KoToolDocker* docker);
 
 public slots:
     /**

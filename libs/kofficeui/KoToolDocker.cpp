@@ -27,6 +27,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <KoToolManager.h>
+
 KoToolDocker::KoToolDocker()
     : QDockWidget(i18n("Tool Options"))
 {
@@ -55,6 +57,9 @@ KoToolDocker::~KoToolDocker()
         w->setParent(0);
     }
     delete m_label;
+
+    // Hack to avoid crashes due to dangling pointers
+    KoToolManager::instance()->unsetToolOptionDocker(this);
 }
 
 void KoToolDocker::setOptionWidget(QWidget * widget)

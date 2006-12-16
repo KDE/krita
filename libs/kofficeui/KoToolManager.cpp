@@ -540,6 +540,15 @@ KoCanvasController *KoToolManager::activeCanvasController() const {
     return m_activeCanvas;
 }
 
+void KoToolManager::unsetToolOptionDocker(KoToolDocker* docker)
+{
+    foreach(KoCanvasController *controller, m_canvases) {
+        if(controller->toolOptionDocker() == docker) {
+            controller->setToolOptionDocker(0);
+        }
+    }
+}
+
 //static
 KoToolManager* KoToolManager::s_instance = 0;
 static KStaticDeleter<KoToolManager> staticToolManagerDeleter;

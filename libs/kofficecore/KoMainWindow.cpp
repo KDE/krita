@@ -192,6 +192,7 @@ public:
 
     QMap<QString, QDockWidget*> m_dockWidgetMap;
     KActionMenu* m_dockWidgetMenu;
+    QMap<QDockWidget*, bool> m_dockWidgetVisibilityMap;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance )
@@ -386,9 +387,14 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( oldRootDoc ) {
     oldRootDoc->removeShell( this );
 
-    // Remove the dock widgets created by the old doc's views
-    qDeleteAll( d->m_dockWidgetMap.values() );
-    d->m_dockWidgetMap.clear();
+    // Hide all dockwidgets and remember their old state
+    d->m_dockWidgetVisibilityMap.clear();
+
+    foreach( QDockWidget* dockWidget, d->m_dockWidgetMap.values() ) {
+        d->m_dockWidgetVisibilityMap.insert( dockWidget, dockWidget->isVisible() );
+        dockWidget->setVisible( false );
+    }
+
     d->m_dockWidgetMenu->setVisible( false );
   }
 
@@ -407,6 +413,12 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
         d->m_rootDoc->addShell( this );
     d->m_removeView->setEnabled(false);
     d->m_orientation->setEnabled(false);
+
+    foreach( QDockWidget* dockWidget, d->m_dockWidgetMap.values() ) {
+        dockWidget->setVisible( d->m_dockWidgetVisibilityMap[dockWidget] );
+    }
+
+    d->m_dockWidgetMenu->setVisible( true );
   }
 
   bool enable = d->m_rootDoc != 0 ? true : false;

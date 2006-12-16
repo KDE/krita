@@ -24,12 +24,16 @@
 #ifndef KIS_TOOL_GRADIENT_H_
 #define KIS_TOOL_GRADIENT_H_
 
-#include "kis_tool_paint.h"
+#include <kshortcut.h>
 
+#include "KoToolFactory.h"
+
+#include "kis_tool_paint.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_gradient_painter.h"
-#include "KoToolFactory.h"
+
+#include <kis_layer_shape.h>
 
 class KIntNumInput;
 class KDoubleNumInput;
@@ -48,18 +52,17 @@ class KisToolGradient : public KisToolPaint {
     typedef KisToolPaint super;
 
 public:
-    KisToolGradient();
+    KisToolGradient(KoCanvasBase * canvas);
     virtual ~KisToolGradient();
 
-    virtual void setup(KActionCollection *collection);
-        virtual enumToolType toolType() { return TOOL_FILL; }
+ //   virtual void setup(KActionCollection *collection);
+ //       virtual enumToolType toolType() { return TOOL_FILL; }
 
-    virtual void buttonPress(KoPointerEvent *event);
-    virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KoPointerEvent *event);
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void paint( QPainter &painter, KoViewConverter &converter );
 
     QWidget* createOptionWidget();
 
@@ -70,7 +73,6 @@ public slots:
     void slotSetAntiAliasThreshold(double);
 
 private:
-    void paintLine();
     void paintLine(QPainter& gc);
 
     QPointF straightLine(QPointF point);
@@ -79,8 +81,6 @@ private:
 
     QPointF m_startPos;
     QPointF m_endPos;
-
-    
 
     KisGradientPainter::enumGradientShape m_shape;
     KisGradientPainter::enumGradientRepeat m_repeat;
@@ -106,8 +106,9 @@ public:
             setToolTip( i18n( "Draw a gradient." ) );
             setToolType( TOOL_TYPE_FILL );
             setIcon( "tool_gradient" );
-            setShortcut( QKeySequence( Qt::Key_G ) );
+            setShortcut( KShortcut( Qt::Key_G ) );
             setPriority( 0 );
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolGradientFactory(){}

@@ -34,26 +34,24 @@
 #include <knuminput.h>
 
 #include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "kis_canvas_subject.h"
+#include "KoCanvasBase.h"
+#include "KoViewConverter.h"
+
 #include "kis_cmb_composite.h"
 #include "kis_cursor.h"
 #include "kis_double_widget.h"
 #include "kis_gradient_painter.h"
-#include "KoPointerEvent.h"
 #include "kis_painter.h"
 #include "kis_progress_display_interface.h"
 #include "kis_tool_gradient.h"
 #include "kis_undo_adapter.h"
-#include "kis_canvas.h"
-#include "QPainter"
+#include "kis_resource_provider.h"
 
-KisToolGradient::KisToolGradient()
-    : super(i18n("Gradient")),
+KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
+    : super(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6)), // TODO, i18n("Gradient")),
       m_dragging( false )
 {
     setObjectName("tool_gradient");
-    setCursor(KisCursor::load("tool_gradient_cursor.png", 6, 6));
 
     m_startPos = QPointF(0, 0);
     m_endPos = QPointF(0, 0);
@@ -68,69 +66,72 @@ KisToolGradient::~KisToolGradient()
 {
 }
 
-void KisToolGradient::paint(QPainter& gc)
+void KisToolGradient::paint( QPainter &painter, KoViewConverter &converter )
 {
-    if (m_dragging)
-        paintLine(gc);
+    if (m_dragging && m_startPos != m_endPos)
+        paintLine(painter);
 }
 
-void KisToolGradient::paint(QPainter& gc, const QRect&)
+void KisToolGradient::mousePressEvent(KoPointerEvent *e)
 {
-    if (m_dragging)
-        paintLine(gc);
-}
-
-void KisToolGradient::buttonPress(KoPointerEvent *e)
-{
-    if (!m_subject || !m_currentImage) {
+    if (!m_currentImage) {
         return;
     }
 
+    QPointF pos = convertToPixelCoord(e);
+
     if (e->button() == Qt::LeftButton) {
         m_dragging = true;
-        m_startPos = e->pos();
-        m_endPos = e->pos();
+        m_startPos = pos;
+        m_endPos = pos;
     }
 }
 
-void KisToolGradient::move(KoPointerEvent *e)
+void KisToolGradient::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_dragging) {
-        if (m_startPos != m_endPos) {
-            paintLine();
-        }
+        QPointF pos = convertToPixelCoord(e);
+
+        QRectF oldBound;
+        oldBound.setTopLeft(m_startPos);
+        oldBound.setBottomRight(m_endPos);
+
+        QRectF newBound;
+        oldBound.setTopLeft(m_startPos);
+        oldBound.setBottomRight(pos);
+
+        QRectF bound = oldBound.united(newBound);
 
         if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
-            m_endPos = straightLine(e->pos());
+            m_endPos = straightLine(pos);
         }
         else {
-            m_endPos = e->pos();
+            m_endPos = pos;
         }
-
-        paintLine();
+        m_canvas->updateCanvas(convertToPt(bound.normalized()));
     }
 }
 
-void KisToolGradient::buttonRelease(KoPointerEvent *e)
+void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 {
-    if (m_dragging && e->button() == Qt::LeftButton) {
 
-        KisCanvasController *controller = m_subject->canvasController();
-        
+    if (m_dragging && e->button() == Qt::LeftButton) {
 
         m_dragging = false;
 
         if (m_startPos == m_endPos) {
-            controller->updateCanvas();
+           // controller->updateCanvas();
             m_dragging = false;
             return;
         }
 
+        QPointF pos = convertToPixelCoord(e);
+
         if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
-            m_endPos = straightLine(e->pos());
+            m_endPos = straightLine(pos);
         }
         else {
-            m_endPos = e->pos();
+            m_endPos = pos;
         }
 
         KisPaintDeviceSP device;
@@ -141,16 +142,17 @@ void KisToolGradient::buttonRelease(KoPointerEvent *e)
 
             if (m_currentImage->undo())  painter.beginTransaction(i18n("Gradient"));
 
-            painter.setPaintColor(m_subject->fgColor());
-            painter.setGradient(*(m_subject->currentGradient()));
+            painter.setPaintColor(m_currentFgColor);
+            painter.setGradient(m_currentGradient);
             painter.setOpacity(m_opacity);
             painter.setCompositeOp(m_compositeOp);
 
-            KisProgressDisplayInterface *progress = m_subject->progressDisplay();
+
+            /* KisProgressDisplayInterface *progress = m_subject->progressDisplay();
 
             if (progress) {
                 progress->setSubject(&painter, true, true);
-            }
+            }*/
 
             bool painted = painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, m_currentImage->width(), m_currentImage->height());
 
@@ -165,11 +167,7 @@ void KisToolGradient::buttonRelease(KoPointerEvent *e)
                 }
             }
 
-            /* remove remains of the line drawn while moving */
-            if (controller->kiscanvas()) {
-                m_canvas->updateCanvas();
-            }
-
+            m_canvas->updateCanvas(painter.dirtyRect());
         }
     }
 }
@@ -190,40 +188,27 @@ QPointF KisToolGradient::straightLine(QPointF point)
     return result;
 }
 
-void KisToolGradient::paintLine()
-{
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        KisCanvas *canvas = controller->kiscanvas();
-        QPainter gc(canvas->canvasWidget());
-
-        paintLine(gc);
-    }
-}
-
 void KisToolGradient::paintLine(QPainter& gc)
 {
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-
-        QPointF start = controller->windowToView(m_startPos);
-        QPointF end = controller->windowToView(m_endPos);
-
-        //RasterOp op = gc.rasterOp();
+    if (m_canvas) {
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
+        QPointF start;
+        QPointF end;
 
-        //gc.setRasterOp(Qt::NotROP);
+        start = m_startPos;
+        end = m_endPos;
         gc.setPen(pen);
-        gc.drawLine(start.floorQPoint(), end.floorQPoint());
-        //gc.setRasterOp(op);
+        start = QPoint(static_cast<int>(start.x()), static_cast<int>(start.y()));
+        end = QPoint(static_cast<int>(end.x()), static_cast<int>(end.y()));
+        gc.drawLine(start, end);
         gc.setPen(old);
     }
 }
 
 QWidget* KisToolGradient::createOptionWidget()
 {
-    QWidget *widget = super::createOptionWidget(parent);
+    QWidget *widget = super::createOptionWidget();
     Q_CHECK_PTR(widget);
 
     m_lbShape = new QLabel(i18n("Shape:"), widget);
@@ -287,23 +272,6 @@ void KisToolGradient::slotSetReverse(bool state)
 void KisToolGradient::slotSetAntiAliasThreshold(double value)
 {
     m_antiAliasThreshold = value;
-}
-
-void KisToolGradient::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_gradient"),
-                               i18n("&Gradient"),
-                               collection,
-                               objectName());
-        m_action->setShortcut(QKeySequence(Qt::Key_G));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Draw a gradient"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
 }
 
 #include "kis_tool_gradient.moc"

@@ -11,7 +11,7 @@ set(kritadefaulttools_PART_SRCS
     #kis_tool_ellipse.cc
     #kis_tool_pan.cc
     #kis_tool_text.cc
-    #kis_tool_gradient.cc
+    kis_tool_gradient.cc
     )
 
 kde4_automoc(${kritadefaulttools_PART_SRCS})

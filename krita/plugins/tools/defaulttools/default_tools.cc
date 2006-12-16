@@ -29,7 +29,7 @@
 //#include "kis_tool_fill.h"
 #include "kis_tool_brush.h"
 #include "kis_tool_freehand.h"
-//#include "kis_tool_gradient.h"
+#include "kis_tool_gradient.h"
 //#include "kis_tool_rectangle.h"
 //#include "kis_tool_colorpicker.h"
 #include "kis_tool_line.h"
@@ -51,7 +51,7 @@ DefaultTools::DefaultTools(QObject *parent, const QStringList &)
     KoToolRegistry * r = KoToolRegistry::instance();
 
     //r->add(KoToolFactorySP(new KisToolFillFactory()));
-    //r->add(KoToolFactorySP(new KisToolGradientFactory()));
+    r->add(new KisToolGradientFactory(r, QStringList()));
     r->add(new KisToolBrushFactory(r, QStringList()));
     //r->add(KoToolFactorySP(new KisToolColorPickerFactory()));
     r->add(new KisToolLineFactory(r, QStringList()));

@@ -54,7 +54,6 @@ KisGradientSegment::SphereDecreasingInterpolationStrategy *KisGradientSegment::S
 
 KisGradient::KisGradient(const QString& file) : super(file), m_colorSpace( KisMetaRegistry::instance()->csRegistry()->rgb8() )
 {
-    ;
 }
 
 KisGradient::~KisGradient()

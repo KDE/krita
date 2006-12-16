@@ -243,7 +243,7 @@ protected:
 
 protected:
 
-    KoCanvasBase *m_canvas; ///< the canvas interface this tool will work for.
+    KoCanvasBase * const m_canvas; ///< the canvas interface this tool will work for.
 
 private:
     KoTool();

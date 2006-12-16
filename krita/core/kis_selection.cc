@@ -52,9 +52,9 @@ KisSelection::KisSelection()
 }
 
 KisSelection::KisSelection(const KisSelection& rhs)
-    : super(rhs), m_dirty(rhs.m_dirty)
+    : super(rhs), m_parentPaintDevice(rhs.m_parentPaintDevice), m_doCacheExactRect(rhs.m_doCacheExactRect),
+    m_cachedExactRect(rhs.m_cachedExactRect), m_dirty(rhs.m_dirty)
 {
-    m_parentPaintDevice = rhs.m_parentPaintDevice;
 }
 
 KisSelection::~KisSelection()

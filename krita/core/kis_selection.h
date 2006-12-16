@@ -136,7 +136,7 @@ private:
 
     QRect exactBounds() const
         {
-            return KisPaintDevice::extent();
+            return KisPaintDevice::exactBounds();
         }
 
     QRect exactBoundsOldMethod() const 

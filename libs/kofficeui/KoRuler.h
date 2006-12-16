@@ -37,6 +37,9 @@ class KoViewConverter;
 
 class KoRulerPrivate;
 
+/**
+ * Decorator widget to draw a single ruler around a canvas.
+ */
 class KOFFICEUI_EXPORT KoRuler : public QWidget
 {
     Q_OBJECT

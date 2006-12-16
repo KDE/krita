@@ -79,6 +79,7 @@ KisToolPaint::~KisToolPaint()
 void KisToolPaint::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & v )
 {
     KisTool::resourceChanged( key, v );
+    kDebug()<<"cbr here"<< int(key) << endl;
 
     switch ( key ) {
     case ( KoCanvasResource::CurrentKritaLayer ):
@@ -125,6 +126,7 @@ QWidget * KisToolPaint::createOptionWidget()
 
     m_lbComposite = new QLabel(i18n("Mode: "), optionWidget);
     m_cmbComposite = new KisCmbComposite(optionWidget);
+    updateCompositeOpComboBox();
     connect(m_cmbComposite, SIGNAL(activated(const KoCompositeOp*)), this, SLOT(slotSetCompositeMode(const KoCompositeOp*)));
 
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
@@ -153,7 +155,7 @@ QWidget * KisToolPaint::createOptionWidget()
         verticalLayout->addLayout(hLayout);
     }
 
-    return optionWidget;
+return optionWidget;
 }
 
 
@@ -189,7 +191,7 @@ void KisToolPaint::slotSetCompositeMode(const KoCompositeOp* compositeOp)
 void KisToolPaint::updateCompositeOpComboBox()
 {
     KisImageSP img = image();
-    if (optionWidget() && img) {
+    if (m_cmbComposite && img) {
         KisPaintDeviceSP device = img->activeDevice();
 
         if (device) {

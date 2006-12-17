@@ -26,6 +26,7 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeController.h"
 #include "KoShapeManager.h"
+#include "KoSelection.h"
 
 #include <KoProperties.h>
 
@@ -44,6 +45,7 @@ KoCanvasController::KoCanvasController(QWidget *parent)
     , m_canvasWidget(0)
     , m_toolOptionDocker(0)
 {
+    setFrameShape(NoFrame);
     m_viewport = new Viewport(this);
     setWidget(m_viewport);
     setWidgetResizable(true);
@@ -280,9 +282,13 @@ void KoCanvasController::Viewport::dropEvent(QDropEvent *event) {
     m_parent->canvas()->shapeManager()->remove(m_draggedShape); // remove it to not interfere with z-index calc.
     KCommand * cmd = m_parent->canvas()->shapeController()->addShape( m_draggedShape );
     if(cmd) {
-        cmd->execute();
         m_parent->canvas()->addCommand(cmd);
+        KoSelection *selection = m_parent->canvas()->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select(m_draggedShape);
     }
+    else
+        delete m_draggedShape;
     m_draggedShape = 0;
 }
 

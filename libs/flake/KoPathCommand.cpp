@@ -469,35 +469,36 @@ QString KoPointJoinCommand::name() const
 
 KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *breakPoint )
 : KoPathBaseCommand( shape )
-, m_breakPoint( breakPoint )
-, m_segment( 0, 0 )
-, m_breakSegment( false )
 , m_broken( false )
+, m_breakSegment( 0, 0 )
+, m_breakPoint( breakPoint )
 , m_newPoint( 0 )
-, m_pointData1( 0, QPointF(0,0) )
-, m_pointData2( 0, QPointF(0,0) )
 {
-    if( breakPoint )
-        m_pointData1 = *breakPoint;
-    KoPathPoint *nextPoint = shape->nextPoint( m_breakPoint );
-    if( nextPoint )
-        m_pointData2 = *nextPoint;
+    Q_ASSERT( breakPoint );
+
+    KoSubpath *subpath = shape->subpathOfPoint( breakPoint );
+    // copy the whole subpath as it can be reordered during breaking
+    foreach( KoPathPoint* point, *subpath )
+    {
+        KoPathPoint data = *point;
+        m_pointData.append( PointData( point, data ) );
+    }
 }
 
 KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, const KoPathSegment &segment )
 : KoPathBaseCommand( shape )
-, m_breakPoint( 0 )
-, m_segment( segment )
-, m_breakSegment( true )
 , m_broken( false )
+, m_breakSegment( segment )
+, m_breakPoint( 0 )
 , m_newPoint( 0 )
-, m_pointData1( 0, QPointF(0,0) )
-, m_pointData2( 0, QPointF(0,0) )
 {
-    if( m_segment.first )
-        m_pointData1 = *m_segment.first;
-    if( m_segment.second )
-        m_pointData2 = *m_segment.second;
+    KoSubpath *subpath = shape->subpathOfPoint( segment.first );
+    // copy the whole subpath as it can be reordered during breaking
+    foreach( KoPathPoint* point, *subpath )
+    {
+        KoPathPoint data = *point;
+        m_pointData.append( PointData( point, data ) );
+    }
 }
 
 KoSubpathBreakCommand::~KoSubpathBreakCommand()
@@ -508,22 +509,14 @@ void KoSubpathBreakCommand::execute()
 {
     KoPathShape *shape = *m_shapes.begin();
 
-    if( m_breakSegment )
-    {
-        if( m_segment.first && m_segment.second )
-        {
-            m_broken = shape->breakAt( m_segment );
-            shape->repaint();
-        }
-    }
-    else
-    {
-        if( m_breakPoint )
-        {
-            m_broken = shape->breakAt( m_breakPoint, m_newPoint );
-            shape->repaint();
-        }
-    }
+    repaint(false);
+
+    if( m_breakPoint )
+        m_broken = shape->breakAt( m_breakPoint, m_newPoint );
+    else if( m_breakSegment.first && m_breakSegment.second )
+        m_broken = shape->breakAt( m_breakSegment );
+
+    repaint(false);
 }
 
 void KoSubpathBreakCommand::unexecute()
@@ -533,25 +526,32 @@ void KoSubpathBreakCommand::unexecute()
 
     KoPathShape *shape = *m_shapes.begin();
 
-    if( m_breakSegment )
+    repaint(false);
+
+    KoSubpath *subpath = 0;
+    if( m_breakPoint )
     {
-        shape->joinBetween( m_segment.first, m_segment.second );
-        *m_segment.first = m_pointData1;
-        *m_segment.second = m_pointData2;
+        subpath = shape->subpathOfPoint( m_breakPoint );
+        shape->joinBetween( m_breakPoint, m_newPoint );
     }
     else
     {
-        KoPathPoint *nextPoint = shape->nextPoint( m_newPoint );
-        shape->removePoint( m_newPoint );
-        delete m_newPoint;
-        m_newPoint = 0;
-        if( shape->joinBetween( m_breakPoint, nextPoint ) )
-        {
-            *m_breakPoint = m_pointData1;
-            *nextPoint = m_pointData2;
-        }
+        shape->joinBetween( m_breakSegment.first, m_breakSegment.second );
+        subpath = shape->subpathOfPoint( m_breakSegment.first );
     }
-    shape->repaint();
+
+    subpath->clear();
+
+    delete m_newPoint;
+    m_newPoint = 0;
+
+    foreach( PointData data, m_pointData )
+    {
+        *data.first = data.second;
+        subpath->append( data.first );
+    }
+
+    repaint(false);
 }
 
 QString KoSubpathBreakCommand::name() const
@@ -737,7 +737,12 @@ QString KoParameterChangeCommand::name() const
 }
 
 KoParameterToPathCommand::KoParameterToPathCommand( KoParameterShape *shape )
-: m_shape( shape )    
+{
+    m_shapes.append( shape );
+}
+
+KoParameterToPathCommand::KoParameterToPathCommand( const QList<KoParameterShape*> &shapes )
+: m_shapes( shapes )
 {
 }
 
@@ -747,17 +752,27 @@ KoParameterToPathCommand::~KoParameterToPathCommand()
 
 void KoParameterToPathCommand::execute()
 {
-    m_shape->setModified( true );
+    foreach( KoParameterShape *shape, m_shapes )
+    {
+        shape->setModified( true );
+        // TODO use global handle sizes here when we have them
+        shape->repaint( shape->outline().controlPointRect().adjusted( -5.0, -5.0, 5.0, 5.0 ) );
+    }
 }
 
 void KoParameterToPathCommand::unexecute()
 {
-    m_shape->setModified( false );
+    foreach( KoParameterShape *shape, m_shapes )
+    {
+        shape->setModified( false );
+        // TODO use global handle sizes here when we have them
+        shape->repaint( shape->outline().controlPointRect().adjusted( -5.0, -5.0, 5.0, 5.0 ) );
+    }
 }
 
 QString KoParameterToPathCommand::name() const
 {
-    return i18n( "Modify path" );
+    return i18n( "Convert to Path" );
 }
 
 KoPathSeparateCommand::KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths )

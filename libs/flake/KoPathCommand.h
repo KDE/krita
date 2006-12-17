@@ -245,13 +245,12 @@ public:
     /// return the name of this command
     QString name() const;
 private:
-    KoPathPoint* m_breakPoint;
-    KoPathSegment m_segment;
-    bool m_breakSegment;
     bool m_broken;
+    KoPathSegment m_breakSegment;
+    KoPathPoint* m_breakPoint;
     KoPathPoint* m_newPoint;
-    KoPathPoint m_pointData1; ///< data of the first point to restore
-    KoPathPoint m_pointData2; ///< data of the second point to restore 
+    typedef QPair<KoPathPoint*, KoPathPoint> PointData;
+    QList<PointData> m_pointData;
 };
 
 /// The undo / redo command for changing a segments type (curve/line)
@@ -335,6 +334,7 @@ class KoParameterToPathCommand : public KCommand
 {
 public:
     KoParameterToPathCommand( KoParameterShape *shape );
+    KoParameterToPathCommand( const QList<KoParameterShape*> &shapes );
     virtual ~KoParameterToPathCommand();
 
     /// execute the command
@@ -344,7 +344,7 @@ public:
     /// return the name of this command
     QString name() const;
 private:
-    KoParameterShape *m_shape;
+    QList<KoParameterShape*> m_shapes;
 };
 
 /// The undo / redo command for separating subpaths into different paths

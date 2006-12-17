@@ -81,6 +81,10 @@ private slots:
     void removePoints();
     void segmentToLine();
     void segmentToCurve();
+    void convertToPath();
+    void joinPoints();
+    void breakAtPoint();
+    void breakAtSegment();
 private:
 
     /// the different path point types

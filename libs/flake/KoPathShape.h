@@ -74,6 +74,14 @@ public:
     };
     Q_DECLARE_FLAGS( KoPointTypes, KoPointType )
 
+    /// Default constructor
+    KoPathPoint()
+    : m_shape( 0 )
+    , m_point( 0.0, 0.0 )
+    , m_properties( Normal )
+    , m_pointGroup( 0 )
+    {}
+
     /**
      * @brief Constructor
      *
@@ -488,7 +496,7 @@ public:
      * The subpath is broken by deleting the given segment. If the
      * segment points are the start and end point of a single closed
      * subpath, the subpath is simply unclosed. If the segment points
-     * are in the middle of the subpath, two new subpath are mode out
+     * are in the middle of the subpath, two new subpaths are made out
      * of the subpath to break. So both segment points become
      * starting/ending nodes of the new subpaths.
      *
@@ -563,6 +571,13 @@ public:
     KoPathPoint* nextPoint( KoPathPoint* point );
 
     /**
+     * @brief Returns the subpath of the given path point.
+     * @param point the point to return subpath for
+     * @return the subpath of the point if it is part of this shape, else null
+     */
+    KoSubpath* subpathOfPoint( KoPathPoint * point );
+
+    /**
      * @brief print debug information about a the points of the path
      */
     void debugPath();
@@ -612,6 +627,8 @@ private:
     void closeSubpath( KoSubpath *subpath );
     /// close-merges specified subpath
     void closeMergeSubpath( KoSubpath *subpath );
+    /// opens specified subpath
+    void openSubpath( KoSubpath *subpath );
     /// return subpath and position of specified point
     KoPointPosition findPoint( KoPathPoint* point );
     /// reverses specified subpath (last point becomes first point)

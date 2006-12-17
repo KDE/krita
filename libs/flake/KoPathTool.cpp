@@ -78,39 +78,67 @@ QWidget * KoPathTool::createOptionWidget() {
     layout->addWidget( button, 0, 2 );
 
     button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("pathpoint-insert") );
-    button->setToolTip( i18n( "Insert point" ) );
-    layout->addWidget( button, 0, 4 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( insertPoints() ) );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("pathpoint-remove") );
-    button->setToolTip( i18n( "Remove point" ) );
-    layout->addWidget( button, 0, 5 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( removePoints() ) );
-
-    button = new QToolButton( optionWidget );
     button->setIcon( SmallIcon("pathsegment-line") );
     button->setToolTip( i18n( "Segment to line" ) );
-    layout->addWidget( button, 0, 7 );
+    layout->addWidget( button, 0, 4 );
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( segmentToLine() ) );
 
     button = new QToolButton( optionWidget );
     button->setIcon( SmallIcon("pathsegment-curve") );
     button->setToolTip( i18n( "Segment to curve" ) );
-    layout->addWidget( button, 0, 8 );
+    layout->addWidget( button, 0, 5 );
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( segmentToCurve() ) );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("convert-to-path") );
+    button->setToolTip( i18n( "Convert to path" ) );
+    layout->addWidget( button, 0, 6 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( convertToPath() ) );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pathpoint-insert") );
+    button->setToolTip( i18n( "Insert point" ) );
+    layout->addWidget( button, 1, 0 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( insertPoints() ) );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pathpoint-remove") );
+    button->setToolTip( i18n( "Remove point" ) );
+    layout->addWidget( button, 1, 1 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( removePoints() ) );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("path-break-point", 22) );
+    button->setToolTip( i18n( "Break at point" ) );
+    layout->addWidget( button, 1, 3 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( breakAtPoint() ) );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("path-break-segment") );
+    button->setToolTip( i18n( "Break at segment" ) );
+    layout->addWidget( button, 1, 4 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( breakAtSegment() ) );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pathpoint-join") );
+    button->setToolTip( i18n( "Join with segment" ) );
+    layout->addWidget( button, 1, 5 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( joinPoints() ) );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pathpoint-merge") );
+    button->setToolTip( i18n( "Merge points" ) );
+    layout->addWidget( button, 1, 6 );
+    //connect( button, SIGNAL( clicked( bool ) ), this, SLOT( removePoints() ) );
 
     layout->setColumnStretch( 0, 0 );
     layout->setColumnStretch( 1, 0 );
     layout->setColumnStretch( 2, 0 );
-    layout->setColumnMinimumWidth( 3, 10 );
+    //layout->setColumnMinimumWidth( 3, 10 );
     layout->setColumnStretch( 4, 0 );
     layout->setColumnStretch( 5, 0 );
-    layout->setColumnMinimumWidth( 6, 10 );
-    layout->setColumnStretch( 7, 0 );
-    layout->setColumnStretch( 8, 0 );
-    layout->setColumnStretch( 9, 1 );
+    layout->setColumnStretch( 6, 0 );
+    layout->setColumnStretch( 7, 1 );
 
     connect( m_pointTypeGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotPointTypeChanged( int ) ) );
     return optionWidget;
@@ -228,6 +256,58 @@ void KoPathTool::segmentToCurve() {
         if( segments.size() )
         {
             KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( pathShape, segments, false );
+            m_canvas->addCommand( cmd, true );
+        }
+    }
+}
+
+void KoPathTool::convertToPath()
+{
+    QList<KoParameterShape*> shapesToConvert;
+    foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection ) )
+    {
+        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
+        if ( parameterShape && parameterShape->isParametricShape() )
+            shapesToConvert.append( parameterShape );
+    }
+    if( shapesToConvert.count() )
+        m_canvas->addCommand( new KoParameterToPathCommand( shapesToConvert ), true );
+}
+
+void KoPathTool::joinPoints()
+{
+    if ( m_pointSelection.objectCount() == 1 )
+    {
+        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
+        KoPathShape * pathShape = selectedPoints[0]->parent();
+        if( selectedPoints.size() == 2 )
+        {
+            KoPointJoinCommand *cmd = new KoPointJoinCommand( pathShape, selectedPoints[0], selectedPoints[1] );
+            m_canvas->addCommand( cmd, true );
+        }
+    }
+}
+
+void KoPathTool::breakAtPoint()
+{
+    if ( m_pointSelection.objectCount() == 1 )
+    {
+        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
+        KoPathShape * pathShape = selectedPoints[0]->parent();
+        KoSubpathBreakCommand *cmd = new KoSubpathBreakCommand( pathShape, selectedPoints.first() );
+        m_canvas->addCommand( cmd, true );
+    }
+}
+
+void KoPathTool::breakAtSegment()
+{
+    if ( m_pointSelection.objectCount() == 1 )
+    {
+        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
+        KoPathShape * pathShape = selectedPoints[0]->parent();
+        if( selectedPoints.size() >= 2 )
+        {
+            KoSubpathBreakCommand *cmd = new KoSubpathBreakCommand( pathShape, KoPathSegment( selectedPoints[0], selectedPoints[1] ) );
             m_canvas->addCommand( cmd, true );
         }
     }
@@ -457,25 +537,13 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 }
                 break;
             case Qt::Key_B:
-                if ( pathShape )
-                {
-                    KoSubpathBreakCommand *cmd = 0;
-                    if( selectedPoints.size() == 1 )
-                        cmd = new KoSubpathBreakCommand( pathShape, selectedPoints.first() );
-                    else if( selectedPoints.size() >= 2 )
-                        cmd = new KoSubpathBreakCommand( pathShape, KoPathSegment( selectedPoints[0], selectedPoints[1] ) );
-                    m_canvas->addCommand( cmd, true );
-                }
+                if( m_pointSelection.selectedPoints().size() == 1 )
+                    breakAtPoint();
+                else if( m_pointSelection.selectedPoints().size() >= 2 )
+                    breakAtSegment();
                 break;
             case Qt::Key_J:
-                if ( pathShape )
-                {
-                    if( selectedPoints.size() == 2 )
-                    {
-                        KoPointJoinCommand *cmd = new KoPointJoinCommand( pathShape, selectedPoints[0], selectedPoints[1] );
-                        m_canvas->addCommand( cmd, true );
-                    }
-                }
+                joinPoints();
                 break;
             case Qt::Key_F:
                 segmentToLine();
@@ -484,28 +552,7 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 segmentToCurve();
                 break;
             case Qt::Key_P:
-                {
-                    KMacroCommand *cmd = 0;
-                    foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection ) ) 
-                    {
-                        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
-                        qDebug() << "Key_P" << parameterShape;
-
-                        if ( parameterShape && parameterShape->isParametricShape() )
-                        {
-                            if ( !cmd )
-                            {
-                                cmd = new KMacroCommand( i18n( "Convert to Path" ) );
-                            }
-                            cmd->addCommand( new KoParameterToPathCommand( parameterShape ) );
-                            repaint( parameterShape->boundingRect() );
-                        }
-                    }
-                    if ( cmd )
-                    {
-                        m_canvas->addCommand( cmd, true );
-                    }
-                }
+                convertToPath();
                 break;
         }
     }

@@ -312,6 +312,7 @@ void KoCanvasController::Viewport::repaint(KoShape *shape) {
 
 void KoCanvasController::Viewport::dragLeaveEvent(QDragLeaveEvent *) {
     if(m_draggedShape) {
+        repaint(m_draggedShape);
         m_parent->canvas()->shapeManager()->remove(m_draggedShape);
         delete m_draggedShape;
         m_draggedShape = 0;
@@ -333,12 +334,12 @@ void KoCanvasController::Viewport::paintEvent(QPaintEvent *event) {
     if(m_draggedShape) {
         KoViewConverter *vc = m_parent->canvas()->viewConverter();
 
+        painter.save();
         painter.translate(m_parent->canvasOffsetX(), m_parent->canvasOffsetY());
         QPointF offset = vc->documentToView(m_draggedShape->position());
+        painter.setOpacity(0.6);
         painter.translate(offset.x(), offset.y());
-        painter.save();
         painter.setRenderHint(QPainter::Antialiasing);
-        painter.setClipRect(event->rect());
         m_draggedShape->paint(painter, *vc);
         painter.restore();
     }

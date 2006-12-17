@@ -190,8 +190,8 @@ VALUE RubyExtension::callMetaMethod(const QByteArray& funcname, int argc, VALUE 
     QVarLengthArray<int> varianttypes( typelistcount + 1 );
     
     // set the return type
-    int returnTypeId;
-    int returnMetaTypeId;
+    int returnTypeId = QVariant::Invalid;
+    int returnMetaTypeId = QMetaType::Void;
     if(hasreturnvalue) {
         returnTypeId = QVariant::nameToType( metamethod.typeName() );
         if(returnTypeId != QVariant::Invalid) {

@@ -319,21 +319,32 @@ void KoCanvasController::Viewport::dragLeaveEvent(QDragLeaveEvent *) {
 }
 
 void KoCanvasController::Viewport::paintEvent(QPaintEvent *event) {
+    QPainter painter( this );
+    painter.setClipRect(event->rect());
+    if(false && m_parent->canvas() && m_parent->canvas()->canvasWidget()) {
+        QWidget *canvas = m_parent->canvas()->canvasWidget();
+        painter.setPen(Qt::black);
+        QRect rect(canvas->x(), canvas->y(), canvas->width(), canvas->height());
+        rect.adjust(-1, -1, 0, 0);
+        painter.drawRect(rect);
+        painter.drawLine(rect.right()+2, rect.top()+2, rect.right()+2, rect.bottom()+2);
+        painter.drawLine(rect.left()+2, rect.bottom()+2, rect.right()+2, rect.bottom()+2);
+    }
     if(m_draggedShape) {
         KoViewConverter *vc = m_parent->canvas()->viewConverter();
 
-        QPainter painter( this );
-        painter.setClipRect(event->rect());
         painter.translate(m_parent->canvasOffsetX(), m_parent->canvasOffsetY());
         QPointF offset = vc->documentToView(m_draggedShape->position());
         painter.translate(offset.x(), offset.y());
+        painter.save();
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setClipRect(event->rect());
         m_draggedShape->paint(painter, *vc);
-        painter.end();
+        painter.restore();
     }
+
+    painter.end();
 }
 
 
 #include "KoCanvasController.moc"
-
-// TODO add a paintEvent here and optionally paint a nice shadow to the
-// bottom/right of the canvas.

@@ -22,12 +22,12 @@
 #include "KoCreateShapesTool.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
-#include "KoCommand.h"
 #include "KoCanvasBase.h"
 #include "KoShapeFactory.h"
 #include "KoShapeController.h"
 
 #include <kdebug.h>
+#include <kcommand.h>
 
 KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoShapeRubberSelectStrategy(tool, canvas, clicked, true)

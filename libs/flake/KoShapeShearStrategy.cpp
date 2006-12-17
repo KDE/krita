@@ -23,7 +23,8 @@
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include "KoShapeManager.h"
-#include "KoCommand.h"
+#include "commands/KoShapeShearCommand.h"
+#include "commands/KoShapeMoveCommand.h"
 
 #include <QPointF>
 

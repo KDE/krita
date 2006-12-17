@@ -5,7 +5,6 @@ add_subdirectory(tests)
 set(flake_SRCS
     KoCanvasBase.cpp
     KoCanvasResourceProvider.cpp
-    KoCommand.cpp
     KoInteractionStrategy.cpp
     KoInteractionTool.cpp
     KoLineBorder.cpp
@@ -44,6 +43,19 @@ set(flake_SRCS
     KoPointerEvent.cpp
     KoShapeController.cpp
     KoToolSelection.cpp
+    commands/KoGroupShapesCommand.cpp
+    commands/KoShapeAlignCommand.cpp
+    commands/KoShapeBackgroundCommand.cpp
+    commands/KoShapeBorderCommand.cpp
+    commands/KoShapeCreateCommand.cpp
+    commands/KoShapeDeleteCommand.cpp
+    commands/KoShapeDistributeCommand.cpp
+    commands/KoShapeLockCommand.cpp
+    commands/KoShapeMoveCommand.cpp
+    commands/KoShapeRotateCommand.cpp
+    commands/KoShapeShearCommand.cpp
+    commands/KoShapeSizeCommand.cpp
+    commands/KoUngroupShapesCommand.cpp
 )
 
 kde4_automoc(${flake_SRCS})

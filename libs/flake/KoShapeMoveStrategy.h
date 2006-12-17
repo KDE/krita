@@ -23,7 +23,6 @@
 #define KODEFMOVE_H
 
 #include "KoInteractionStrategy.h"
-#include "KoCommand.h"
 
 #include <QPointF>
 

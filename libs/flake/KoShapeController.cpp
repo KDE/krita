@@ -23,13 +23,13 @@
 #include "KoShapeControllerBase.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
-#include "KoCommand.h"
+#include "commands/KoShapeCreateCommand.h"
+#include "commands/KoShapeDeleteCommand.h"
 #include "KoCanvasBase.h"
 #include "KoShapeConfigWidgetBase.h"
 #include "KoShapeConfigFactory.h"
 #include "KoShapeFactory.h"
-
-#include "KoCommand.h"
+#include "KoShape.h"
 
 #include <kpagedialog.h>
 #include <klocale.h>

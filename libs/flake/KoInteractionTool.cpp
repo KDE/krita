@@ -32,7 +32,7 @@
 #include "KoShapeManager.h"
 #include "KoInteractionStrategy.h"
 #include "KoCanvasBase.h"
-#include "KoCommand.h"
+#include "commands/KoShapeMoveCommand.h"
 
 #include <kcommand.h>
 #include <kcursor.h>

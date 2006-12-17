@@ -44,6 +44,7 @@
 #include <QPainterPath>
 
 #include <kdebug.h>
+#include <kcommand.h>
 #include <kicon.h>
 #include <klocale.h>
 

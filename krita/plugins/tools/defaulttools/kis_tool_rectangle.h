@@ -29,10 +29,15 @@
 #include "kis_tool_shape.h"
 #include "kis_types.h"
 #include "KoToolFactory.h"
+#include "kis_layer_shape.h"
 
 
 class QPainter;
 class KisPainter;
+
+class QPoint;
+
+class KoCanvasBase;
 
 class KisToolRectangle : public KisToolShape {
 
@@ -40,19 +45,27 @@ class KisToolRectangle : public KisToolShape {
     Q_OBJECT
 
 public:
-    KisToolRectangle();
+    KisToolRectangle(KoCanvasBase * canvas);
     virtual ~KisToolRectangle();
 
-
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
+    //virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual quint32 priority() { return 2; }
-    virtual void buttonPress(KoPointerEvent *event);
-    virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KoPointerEvent *event);
 
-protected:
-    virtual void draw(const QPointF&, const QPointF&);
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    
+    virtual void paint();
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void paint(QPainter& gc, KoViewConverter &converter);
+
+    // protected:
+    //virtual void draw(const QPointF&, const QPointF&);
+
+ private:
+    void paintRectangle();
+    void paintRectangle(QPainter& gc, const QRect& rc);
 
 protected:
     int m_lineThickness;
@@ -63,7 +76,10 @@ protected:
     QRect m_final_lines;
 
     bool m_dragging;
-    KisImageSP m_currentImage;
+    
+    KisPainter *m_painter;
+
+    //KisImageSP m_currentImage;
 };
 
 class KisToolRectangleFactory : public KoToolFactory {
@@ -73,9 +89,11 @@ public:
         : KoToolFactory(parent, "KisToolRectangle", i18n( "Rectangle" ))
         {
             setToolTip( i18n( "Draw a rectangle" ) );
+            // Temporarily
             setToolType( TOOL_TYPE_SHAPE );
+            //setToolType( dynamicToolType() );
             setIcon( "tool_rectange" );
-            setShortcut( Qt::Key_F6 );
+            //setShortcut( Qt::Key_F6 );
             setPriority( 0 );
         }
 

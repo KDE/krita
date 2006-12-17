@@ -30,7 +30,7 @@
 #include "kis_tool_brush.h"
 #include "kis_tool_freehand.h"
 #include "kis_tool_gradient.h"
-//#include "kis_tool_rectangle.h"
+#include "kis_tool_rectangle.h"
 //#include "kis_tool_colorpicker.h"
 #include "kis_tool_line.h"
 //#include "kis_tool_text.h"
@@ -60,7 +60,7 @@ DefaultTools::DefaultTools(QObject *parent, const QStringList &)
     //r->add(KoToolFactorySP(new KisToolMoveFactory()));
     //r->add(KoToolFactorySP(new KisToolZoomFactory()));
     //r->add(KoToolFactorySP(new KisToolEllipseFactory()));
-    //r->add(KoToolFactorySP(new KisToolRectangleFactory()));
+    r->add(new KisToolRectangleFactory(r, QStringList()));
     //r->add(KoToolFactorySP(new KisToolPanFactory()));
 }
 

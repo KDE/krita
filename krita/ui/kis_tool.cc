@@ -106,7 +106,9 @@ QPointF KisTool::convertToPixelCoord( KoPointerEvent *e )
 QRectF KisTool::convertToPt( const QRectF &rect )
 {
     QRectF r;
-    r.setCoords(rect.left() / image()->xRes(), rect.top() / image()->yRes(), rect.right() / image()->xRes(), rect.bottom() / image()->yRes());
+    //We add 1 in the following to the extreme coords because a pixel always has size
+    r.setCoords(int(rect.left()) / image()->xRes(), int(rect.top()) / image()->yRes(),
+             int(1 + rect.right()) / image()->xRes(), int(1 + rect.bottom()) / image()->yRes());
     return r;
 }
 

@@ -93,9 +93,13 @@ void KisToolLine::mousePressEvent(KoPointerEvent *e)
 
 void KisToolLine::mouseMoveEvent(KoPointerEvent *e)
 {
-    QPointF pos = convertToPixelCoord(e);
-
     if (m_dragging) {
+        // First ensure the old temp line is deleted
+        QRectF bound;
+        bound.setTopLeft(m_startPos);
+        bound.setBottomRight(m_endPos);
+        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+
         QPointF pos = convertToPixelCoord(e);
 
         if (e->modifiers() & Qt::AltModifier) {
@@ -107,10 +111,8 @@ void KisToolLine::mouseMoveEvent(KoPointerEvent *e)
         else
             m_endPos = pos;
 
-        QRectF bound;
         bound.setTopLeft(m_startPos);
         bound.setBottomRight(m_endPos);
-        /* FIXME Which rectangle to repaint */
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
     }
 }
@@ -150,13 +152,11 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, m_painter);
                 m_painter->setPaintOp(op); // Painter takes ownership
                 m_painter->paintLine(m_startPos, PRESSURE_DEFAULT, 0, 0, m_endPos, PRESSURE_DEFAULT, 0, 0);
-                device->setDirty( m_painter->dirtyRect() );
+                QRect dRect = m_painter->dirtyRect();
+                device->setDirty( dRect );
                 notifyModified();
 
-		/* FIXME Which rectangle to repaint */
-                if (m_canvas) {
-                    m_canvas->updateCanvas(convertToPt(m_painter->dirtyRect()));
-                }
+                m_canvas->updateCanvas(convertToPt(dRect));
 
                 if (m_currentImage->undo() && m_painter) {
                     m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
@@ -164,8 +164,13 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 delete m_painter;
                 m_painter = 0;
             } else {
+                // Remove the last remaining line.
                 // m_painter can be 0 here...!!!
-                m_canvas->updateCanvas(m_painter->dirtyRect()); // Removes the last remaining line.
+kDebug() <<"do we ever go here" << endl;
+                QRectF bound;
+                bound.setTopLeft(m_startPos);
+                bound.setBottomRight(m_endPos);
+                m_canvas->updateCanvas(convertToPt(bound.normalized()));
             }
         }
     }

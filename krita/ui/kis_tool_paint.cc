@@ -79,7 +79,6 @@ KisToolPaint::~KisToolPaint()
 void KisToolPaint::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & v )
 {
     KisTool::resourceChanged( key, v );
-    kDebug()<<"cbr here"<< int(key) << endl;
 
     switch ( key ) {
     case ( KoCanvasResource::CurrentKritaLayer ):

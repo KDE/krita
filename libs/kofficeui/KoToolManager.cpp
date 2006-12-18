@@ -227,10 +227,6 @@ void KoToolManager::setup() {
         connect(t, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
         m_tools.append(t);
     }
-
-    // connect to all tools so we can hear their button-clicks
-    foreach(ToolHelper *tool, m_tools)
-        connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
 }
 
 KoToolBox *KoToolManager::toolBox(const QString &applicationName) {

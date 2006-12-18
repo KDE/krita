@@ -133,7 +133,6 @@ add_subdirectory(autocorrect)
 add_subdirectory(doc)
 add_subdirectory( cmake )
 message( STATUS "Re-add kexi when we will port them")
-message( STATUS "Re-add kpresenter when it starts to use flake")
 
 
 ADD_CUSTOM_TARGET(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

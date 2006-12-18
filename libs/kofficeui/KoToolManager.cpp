@@ -224,9 +224,12 @@ void KoToolManager::setup() {
     KoToolRegistry *registry = KoToolRegistry::instance();
     foreach(QString id, registry->keys()) {
         ToolHelper *t = new ToolHelper(registry->get(id));
-        connect(t, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
         m_tools.append(t);
     }
+
+    // connect to all tools so we can hear their button-clicks
+    foreach(ToolHelper *tool, m_tools)
+        connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
 }
 
 KoToolBox *KoToolManager::toolBox(const QString &applicationName) {

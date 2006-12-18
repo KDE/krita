@@ -12,6 +12,6 @@ add_subdirectory( rotateimage )
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 
-if(KOFFICE_ENABLE_SCRIPTING)
+#if(KOFFICE_ENABLE_SCRIPTING)
        add_subdirectory(scripting)
-endif(KOFFICE_ENABLE_SCRIPTING)	
+#endif(KOFFICE_ENABLE_SCRIPTING)	

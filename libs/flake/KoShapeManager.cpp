@@ -141,7 +141,7 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
         painter.restore();  // for the matrix
     }
 
-#if 0
+#ifdef KOFFICE_RTREE_DEBUG
     // paint tree
     double zx = 0;
     double zy = 0;

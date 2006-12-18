@@ -188,17 +188,10 @@ void KoPathTool::slotPointTypeChanged( int type ) {
 void KoPathTool::insertPoints() {
     if ( m_pointSelection.objectCount() == 1 )
     {
-        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
-        KoPathShape * pathShape = selectedPoints[0]->parent();
-        QList<KoPathSegment> segments;
-        foreach( KoPathPoint* p, selectedPoints )
-        {
-            KoPathPoint *n = pathShape->nextPoint( p );
-            if( m_pointSelection.contains( n ) )
-                segments << qMakePair( p, n );
-        }
+        QList<KoPathSegment> segments = m_pointSelection.selectedSegments();
         if( segments.size() )
         {
+            KoPathShape * pathShape = segments.at( 0 ).first->parent();
             KoSegmentSplitCommand *cmd = new KoSegmentSplitCommand( pathShape, segments, 0.5 );
             m_canvas->addCommand( cmd, true );
         }
@@ -224,17 +217,10 @@ void KoPathTool::removePoints() {
 void KoPathTool::segmentToLine() {
     if ( m_pointSelection.objectCount() == 1 )
     {
-        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
-        KoPathShape * pathShape = selectedPoints[0]->parent();
-        QList<KoPathSegment> segments;
-        foreach( KoPathPoint* p, selectedPoints )
-        {
-            KoPathPoint *n = pathShape->nextPoint( p );
-            if( m_pointSelection.contains( n ) )
-                segments << qMakePair( p, n );
-        }
+        QList<KoPathSegment> segments = m_pointSelection.selectedSegments();
         if( segments.size() )
         {
+            KoPathShape * pathShape = segments.at( 0 ).first->parent();
             KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( pathShape, segments, true );
             m_canvas->addCommand( cmd, true );
         }
@@ -244,17 +230,10 @@ void KoPathTool::segmentToLine() {
 void KoPathTool::segmentToCurve() {
     if ( m_pointSelection.objectCount() == 1 )
     {
-        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
-        KoPathShape * pathShape = selectedPoints[0]->parent();
-        QList<KoPathSegment> segments;
-        foreach( KoPathPoint* p, selectedPoints )
-        {
-            KoPathPoint *n = pathShape->nextPoint( p );
-            if( m_pointSelection.contains( n ) )
-                segments << qMakePair( p, n );
-        }
+        QList<KoPathSegment> segments = m_pointSelection.selectedSegments();
         if( segments.size() )
         {
+            KoPathShape * pathShape = segments.at( 0 ).first->parent();
             KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( pathShape, segments, false );
             m_canvas->addCommand( cmd, true );
         }
@@ -829,6 +808,23 @@ void KoPathTool::KoPathPointSelection::repaint()
     {
         m_tool->repaint( p->boundingRect() );
     }
+}
+
+QList<KoPathSegment> KoPathTool::KoPathPointSelection::selectedSegments() const
+{
+    QList<KoPathSegment> segments;
+    foreach( KoPathPoint* p, m_selectedPoints )
+    {
+        KoSubpath *subpath = p->parent()->subpathOfPoint( p );
+        int index = subpath->indexOf( p );
+        if( index < subpath->size()-1 )
+        {
+            KoPathPoint *n = subpath->at( index+1 );
+            if( n && m_selectedPoints.contains( n ) )
+                segments << qMakePair( p, n );
+        }
+    }
+    return segments;
 }
 
 #include "KoPathTool.moc"

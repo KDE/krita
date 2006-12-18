@@ -818,23 +818,6 @@ void KoPathShape::insertPoint( KoPathPoint* point, KoSubpath* subpath, int posit
     subpath->insert( position, point );
 }
 
-KoPathPoint* KoPathShape::nextPoint( KoPathPoint* point )
-{
-    KoSubpathList::iterator pathIt( m_subpaths.begin() );
-    for ( ; pathIt != m_subpaths.end(); ++pathIt )
-    {
-        int index = ( *pathIt )->indexOf( point );
-        if( index != -1 )
-        {
-            if( index >= ( *pathIt )->size()-1 )
-                return 0;
-            else
-                return ( *pathIt )->value( index+1 );
-        }
-    }
-    return 0;
-}
-
 KoSubpath* KoPathShape::subpathOfPoint( KoPathPoint * point )
 {
     KoSubpathList::iterator pathIt( m_subpaths.begin() );
@@ -848,23 +831,6 @@ KoSubpath* KoPathShape::subpathOfPoint( KoPathPoint * point )
 }
 
 #if 0
-
-KoPathPoint* KoPathShape::prevPoint( KoPathPoint* point )
-{
-    KoSubpathList::iterator pathIt( m_subpaths.begin() );
-    for ( ; pathIt != m_subpaths.end(); ++pathIt )
-    {
-        int index = ( *pathIt )->indexOf( point );
-        if( index != -1 )
-        {
-            if( index == 0 )
-                return 0;
-            else
-                return ( *pathIt )->value( index-1 );
-        }
-    }
-    return 0;
-}
 
 bool KoPathShape::insertPointAfter( KoPathPoint *point, KoPathPoint *prevPoint )
 {

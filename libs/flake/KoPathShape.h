@@ -549,27 +549,7 @@ public:
      */
     bool insertPointBefore( KoPathPoint *point, KoPathPoint *nextPoint );
 
-    /**
-     * @brief Returns the previous point of a given path point.
-     *
-     * Only a previous point of the same subpath is returned.
-     *
-     * @param point the point to return the previous point for
-     * @return the previous point, or null if no previous point exists
-     */
-    KoPathPoint* prevPoint( KoPathPoint* point );
 #endif
-
-    /**
-     * @brief Returns the next point of a given path point.
-     *
-     * Only a next point of the same subpath is returned.
-     *
-     * @param point the point to return the next point for
-     * @return the next point, or null if no next point exists
-     */
-    KoPathPoint* nextPoint( KoPathPoint* point );
-
     /**
      * @brief Returns the subpath of the given path point.
      * @param point the point to return subpath for

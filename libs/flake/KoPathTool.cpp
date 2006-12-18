@@ -476,7 +476,8 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 m_currentStrategy = 0;
                 break;
             default:
-                break;
+                event->ignore();
+                return;
         }
     }
     else
@@ -506,6 +507,7 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
             case Qt::Key_Insert:
                 insertPoints();
                 break;
+#ifndef NDEBUG
             case Qt::Key_D:
                 if ( pathShape )
                 {
@@ -515,6 +517,7 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                     }
                 }
                 break;
+#endif
             case Qt::Key_B:
                 if( m_pointSelection.selectedPoints().size() == 1 )
                     breakAtPoint();
@@ -533,6 +536,9 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
             case Qt::Key_P:
                 convertToPath();
                 break;
+            default:
+                event->ignore();
+                return;
         }
     }
     event->accept();

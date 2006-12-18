@@ -56,6 +56,7 @@ set(kofficeui_LIB_SRCS
    KoShapeSelectorFactory.cpp
     KoToolDocker.cpp
     KoToolDockerFactory.cpp
+    ToolProxy_p.cpp
 )
 
 kde4_automoc(${kofficeui_LIB_SRCS})

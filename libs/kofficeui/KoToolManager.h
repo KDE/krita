@@ -22,13 +22,12 @@
 #define KO_TOOL_MANAGER
 
 #include <koffice_export.h>
-#include <QMap>
 #include <QObject>
 #include <QCursor>
 #include <QStack>
 #include <QLabel>
+#include <QHash>
 
-#include <KoToolProxy.h>
 #include <KoInputDevice.h>
 
 class ToolHelper;
@@ -41,6 +40,8 @@ class KActionCollection;
 class KoShape;
 class KoToolSelection;
 class KoToolDocker;
+class ToolProxy;
+class KoToolProxy;
 
 
 /**
@@ -97,7 +98,7 @@ class KoToolDocker;
    the tool stuff.)
 
  */
-class KOFFICEUI_EXPORT KoToolManager : public QObject, public KoToolProxy {
+class KOFFICEUI_EXPORT KoToolManager : public QObject {
     Q_OBJECT
 
 public:
@@ -105,27 +106,8 @@ public:
     static KoToolManager* instance();
     ~KoToolManager();
 
+    KoToolProxy *createToolProxy(KoCanvasBase *parentCanvas);
 
-public:
-
-    KoToolProxy * toolProxy() { return this; }
-
-private:
-    // KoToolProxy implementation
-    void paint( QPainter &painter, KoViewConverter &converter );
-    void repaintDecorations();
-    void tabletEvent( QTabletEvent *event, const QPointF &pnt );
-    void mousePressEvent( QMouseEvent *event, const QPointF &pnt );
-    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &pnt );
-    void mouseMoveEvent( QMouseEvent *event, const QPointF &pnt );
-    void mouseReleaseEvent( QMouseEvent *event, const QPointF &pnt );
-    void keyPressEvent(QKeyEvent *event );
-    void keyReleaseEvent(QKeyEvent *event);
-    void wheelEvent ( QWheelEvent * event, const QPointF &pnt );
-    KoToolSelection* selection();
-
-
-public:
     /**
      * Create a new ToolBox with title.
      * This creates a new toolbox that is initialized with all tools registered for you
@@ -231,12 +213,13 @@ private:
     QList<ToolHelper*> m_tools;
     QList<KoCanvasController*> m_canvases;
     KoCanvasController *m_activeCanvas;
-    KoTool *m_activeTool, *m_dummyTool;
+    KoTool *m_activeTool;
     ToolHelper *m_defaultTool; // the pointer thingy
     QString m_activeToolId;
 
-    QMap<KoTool*, int> m_uniqueToolIds; // for the changedTool signal
-    QMap<KoCanvasController*, QMap<QString, KoTool*> > m_allTools;
+    QHash<KoTool*, int> m_uniqueToolIds; // for the changedTool signal
+    QHash<KoCanvasController*, QHash<QString, KoTool*> > m_allTools;
+    QHash<KoCanvasBase*, ToolProxy*> m_proxies;
     QStack<QString> m_stack; // stack of temporary tools
 
     QList<KoShape*> m_lastSelectedShapes;

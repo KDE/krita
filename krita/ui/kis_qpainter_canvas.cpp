@@ -53,7 +53,7 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     , m_checkBrush( 0 )
 
 {
-    m_toolProxy = KoToolManager::instance()->toolProxy();
+    m_toolProxy = KoToolManager::instance()->createToolProxy(m_canvas);
 
     setAttribute(Qt::WA_NoSystemBackground);
     setAutoFillBackground(false);

@@ -39,7 +39,9 @@ KoToolBox::~KoToolBox() {
 }
 
 void KoToolBox::addButton(QAbstractButton *button, const QString &section, int priority, int buttonGroupId) {
-    QMap<int, QAbstractButton*> buttons = m_buttons[section];
+    kDebug() << "Adding button: " << section << ", prio " << priority << ", group: " << buttonGroupId << endl;
+
+    QMultiMap<int, QAbstractButton*> buttons = m_buttons[section];
     buttons.insert(priority, button);
     m_buttons.insert(section, buttons);
     if(buttonGroupId < 0)
@@ -71,7 +73,7 @@ void KoToolBox::setup() {
             m_layout->addWidget(ta);
             m_layout->setAlignment(ta, Qt::AlignLeft | Qt::AlignTop);
         }
-        QMap<int, QAbstractButton*> buttons = m_buttons[section];
+        QMultiMap<int, QAbstractButton*> buttons = m_buttons[section];
         foreach(QAbstractButton *button, buttons.values()) {
             ta->add(button);
         }

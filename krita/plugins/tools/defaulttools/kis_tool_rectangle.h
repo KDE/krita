@@ -92,7 +92,7 @@ public:
             // Temporarily
             setToolType( TOOL_TYPE_SHAPE );
             //setToolType( dynamicToolType() );
-            setIcon( "tool_rectange" );
+            setIcon( "tool_rectangle" );
             //setShortcut( Qt::Key_F6 );
             setPriority( 0 );
         }

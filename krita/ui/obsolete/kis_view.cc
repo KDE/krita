@@ -64,7 +64,7 @@
 #include <kprinter.h>
 #include <kpushbutton.h>
 #include <kstatusbar.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kinputdialog.h>
 #include <k3urldrag.h>
 #include <kmenu.h>
@@ -298,7 +298,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent)
     else
         setXMLFile("krita.rc");
 
-    KStdAction::keyBindings( mainWindow()->guiFactory(), SLOT( configureShortcuts() ), actionCollection() );
+    KStandardAction::keyBindings( mainWindow()->guiFactory(), SLOT( configureShortcuts() ), actionCollection() );
 
     createLayerBox();
 
@@ -591,7 +591,7 @@ void KisView::setupActions()
     m_gridManager->setup(actionCollection());
     m_perspectiveGridManager->setup(actionCollection());
 
-    m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
+    m_fullScreen = KStandardAction::fullScreen( NULL, NULL, actionCollection(), this );
     connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 
     m_imgProperties = new KAction(i18n("Image Properties..."), actionCollection(), "img_properties");
@@ -602,15 +602,15 @@ void KisView::setupActions()
     connect(m_imgResizeToLayer, SIGNAL(triggered()), this, SLOT(imgResizeToActiveLayer()));
 
     // view actions
-    m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
-    m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
+    m_zoomIn = KStandardAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
+    m_zoomOut = KStandardAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
     m_actualPixels = new KAction(i18n("Actual Pixels"), actionCollection(), "actual_pixels");
     m_actualPixels->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_0));
     connect(m_actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
 
-    m_actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection(), "actual_size");
+    m_actualSize = KStandardAction::actualSize(this, SLOT(slotActualSize()), actionCollection(), "actual_size");
     m_actualSize->setEnabled(false);
-    m_fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection(), "fit_to_canvas");
+    m_fitToCanvas = KStandardAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection(), "fit_to_canvas");
 
     // layer actions
     m_layerAdd = new KAction(i18n("&Add..."), actionCollection(), "insert_layer");
@@ -691,7 +691,7 @@ void KisView::setupActions()
     connect(m_imgMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
     // setting actions
-    KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
+    KStandardAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
     m_RulerAction = new KToggleAction(i18n( "Show Rulers" ), actionCollection(), "view_ruler");
     m_RulerAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));

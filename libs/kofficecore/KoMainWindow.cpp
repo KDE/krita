@@ -34,7 +34,7 @@
 
 #include <kprinter.h>
 #include <kdeversion.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -217,17 +217,17 @@ KoMainWindow::KoMainWindow( KInstance *instance )
     setXMLFile( findMostRecentXMLFile( allFiles, doc ) );
     setLocalXMLFile( KStandardDirs::locateLocal( "data", "koffice/koffice_shell.rc" ) );
 
-    KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new" );
-    KStdAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
-    m_recent = KStdAction::openRecent( this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection() );
-    d->m_paSave = KStdAction::save( this, SLOT( slotFileSave() ), actionCollection(), "file_save" );
-    d->m_paSaveAs = KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
-    d->m_paPrint = KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
-    d->m_paPrintPreview = KStdAction::printPreview( this, SLOT( slotFilePrintPreview() ), actionCollection(), "file_print_preview" );
-    d->m_sendfile = KStdAction::mail( this, SLOT( slotEmailFile() ), actionCollection(), "file_send_file");
+    KStandardAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new" );
+    KStandardAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
+    m_recent = KStandardAction::openRecent( this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection() );
+    d->m_paSave = KStandardAction::save( this, SLOT( slotFileSave() ), actionCollection(), "file_save" );
+    d->m_paSaveAs = KStandardAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
+    d->m_paPrint = KStandardAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
+    d->m_paPrintPreview = KStandardAction::printPreview( this, SLOT( slotFilePrintPreview() ), actionCollection(), "file_print_preview" );
+    d->m_sendfile = KStandardAction::mail( this, SLOT( slotEmailFile() ), actionCollection(), "file_send_file");
 
-    d->m_paCloseFile = KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
-    KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
+    d->m_paCloseFile = KStandardAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
+    KStandardAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
 
     d->m_reloadfile = new KAction( i18n( "Reload"),
                                    actionCollection(), "file_reload_file");
@@ -251,8 +251,8 @@ KoMainWindow::KoMainWindow( KInstance *instance )
                                   actionCollection(), "file_documentinfo" );
     connect( d->m_paDocInfo, SIGNAL( triggered(bool) ), this, SLOT( slotDocumentInfo() ) );
 
-    KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
-    KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
+    KStandardAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
+    KStandardAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
 
     d->m_paDocInfo->setEnabled( false );
     d->m_paSaveAs->setEnabled( false );

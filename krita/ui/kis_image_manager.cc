@@ -19,11 +19,11 @@
 
 #include <QString>
 
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kurl.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <ktoggleaction.h>
 
 #include <KoFilterManager.h>

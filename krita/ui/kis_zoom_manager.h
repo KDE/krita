@@ -20,7 +20,7 @@
 
 #include <QObject>
 
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <klocale.h>
 
 #include <KoZoomMode.h>

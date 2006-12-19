@@ -27,7 +27,7 @@
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
 #include <klocale.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kcommand.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>

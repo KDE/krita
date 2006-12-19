@@ -18,7 +18,7 @@
 #include "kis_mask_manager.h"
 
 #include <klocale.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <kcommand.h>

@@ -33,8 +33,8 @@
 #include <kparts/plugin.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <kstdaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
+#include <kstandardaction.h>
 #include <ktogglefullscreenaction.h>
 #include <kurl.h>
 #include <kxmlguifactory.h>
@@ -152,7 +152,7 @@ KisView2::KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * par
     else
         setXMLFile("krita.rc");
 
-    KStdAction::keyBindings( mainWindow()->guiFactory(),
+    KStandardAction::keyBindings( mainWindow()->guiFactory(),
                              SLOT( configureShortcuts() ),
                              actionCollection() );
 
@@ -391,10 +391,10 @@ void KisView2::createGUI()
 
 void KisView2::createActions()
 {
-    m_d->fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
+    m_d->fullScreen = KStandardAction::fullScreen( NULL, NULL, actionCollection(), this );
     connect( m_d->fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 
-    KStdAction::preferences(this, SLOT(slotPreferences()), actionCollection(), "preferences");
+    KStandardAction::preferences(this, SLOT(slotPreferences()), actionCollection(), "preferences");
 
 
 }

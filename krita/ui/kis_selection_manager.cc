@@ -29,7 +29,7 @@
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <klocale.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 
 #include "KoChannelInfo.h"
 #include "KoIntegerMaths.h"
@@ -105,17 +105,17 @@ void KisSelectionManager::setup(KActionCollection * collection)
 {
     // XXX: setup shortcuts!
 
-    m_cut = KStdAction::cut(this,
+    m_cut = KStandardAction::cut(this,
                             SLOT(cut()),
                             collection,
                             "cut");
 
-    m_copy = KStdAction::copy(this,
+    m_copy = KStandardAction::copy(this,
                               SLOT(copy()),
                               collection,
                               "copy");
 
-    m_paste = KStdAction::paste(this,
+    m_paste = KStandardAction::paste(this,
                                 SLOT(paste()),
                                 collection,
                                 "paste");
@@ -125,18 +125,18 @@ void KisSelectionManager::setup(KActionCollection * collection)
                              "paste_new");
     connect(m_pasteNew, SIGNAL(triggered()), this, SLOT(pasteNew()));
 
-    m_selectAll = KStdAction::selectAll(this,
+    m_selectAll = KStandardAction::selectAll(this,
                                         SLOT(selectAll()),
                                         collection,
                                         "select_all");
 
-    m_deselect = KStdAction::deselect(this,
+    m_deselect = KStandardAction::deselect(this,
                                       SLOT(deselect()),
                                       collection,
                                       "deselect");
 
 
-    m_clear = KStdAction::clear(this,
+    m_clear = KStandardAction::clear(this,
                                 SLOT(clear()),
                                 collection,
                                 "clear");

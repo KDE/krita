@@ -38,7 +38,7 @@
 #include <klocale.h>
 #include <kicon.h>
 #include <knuminput.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kdebug.h>
 
 #include <KoZoomMode.h>
@@ -103,17 +103,17 @@ void KoZoomAction::init(KActionCollection* parent)
     m_number = 0;
     m_zoomButtonGroup = 0;
 
-    KStdAction::zoomIn(this, SLOT(zoomIn()), parent, "zoom_in");
-    KStdAction::zoomOut(this, SLOT(zoomOut()), parent, "zoom_out");
+    KStandardAction::zoomIn(this, SLOT(zoomIn()), parent, "zoom_in");
+    KStandardAction::zoomOut(this, SLOT(zoomOut()), parent, "zoom_out");
 
 /*
     m_actualPixels = new KAction(i18n("Actual Pixels"), actionCollection, "actual_pixels");
     m_actualPixels->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_0));
     connect(m_actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
 
-    m_actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection, "actual_size");
+    m_actualSize = KStandardAction::actualSize(this, SLOT(slotActualSize()), actionCollection, "actual_size");
 
-    m_fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection, "fit_to_canvas");
+    m_fitToCanvas = KStandardAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection, "fit_to_canvas");
 */
 
     setEditable( true );

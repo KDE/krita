@@ -33,7 +33,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 
 #include "kis_config.h"
 #include "kis_image.h"

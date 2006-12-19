@@ -21,7 +21,7 @@
 #include <QGridLayout>
 
 #include <kactioncollection.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <kicon.h>
 #include <kstatusbar.h>

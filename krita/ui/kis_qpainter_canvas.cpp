@@ -211,6 +211,4 @@ void KisQPainterCanvas::wheelEvent( QWheelEvent *e )
     m_toolProxy->wheelEvent( e, m_viewConverter->viewToDocument( e->pos()  ) );
 }
 
-
-
 #include "kis_qpainter_canvas.moc"

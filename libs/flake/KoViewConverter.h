@@ -88,9 +88,9 @@ public:
     virtual double viewToDocumentY( double viewY ) const = 0;
 
     /**
-     * set the zoom levels of the individual x and y axis to the pointer paramets.
-     * @param zoomX a pointer to a double which will be modified to set the horizontal zoom.
-     * @param zoomY a pointer to a double which will be modified to set the vertical zoom.
+     * Retrieve the zoom levels of the individual x and y axes.
+     * @param zoomX a pointer to a double which will be modified to the horizontal zoom.
+     * @param zoomY a pointer to a double which will be modified to the vertical zoom.
      */
     virtual void zoom(double *zoomX, double *zoomY) const = 0;
 };

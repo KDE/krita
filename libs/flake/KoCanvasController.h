@@ -176,6 +176,12 @@ signals:
      */
     void canvasMousePositionChanged(const QPoint & pos );
 
+    /**
+     * Emitted when the entire controller size changes
+     * @param size the size in widget pixels.
+     */
+    void sizeChanged(const QSize & size );
+
 protected slots:
 
     /// Called by the horizontal scrollbar when it's value changes
@@ -183,6 +189,9 @@ protected slots:
 
     /// Called by the vertical scrollbar when it's value changes
     void updateCanvasOffsetY();
+
+protected:
+    void resizeEvent(QResizeEvent * resizeEvent);
 
 private:
     class Viewport : public QWidget {

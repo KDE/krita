@@ -27,9 +27,10 @@
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
 
-class KoViewConverter;
+class KoZoomHandler;
 class KisView2;
 class KAction;
+class KoZoomAction;
 class KoRuler;
 class KoCanvasController;
 class QPoint;
@@ -45,7 +46,7 @@ class KisZoomManager : public QObject {
 
 public:
 
-    KisZoomManager(KisView2 * view, KoViewConverter * viewConverter, KoCanvasController *);
+    KisZoomManager(KisView2 * view, KoZoomHandler*, KoCanvasController *);
     ~KisZoomManager();
 
     void setup(KActionCollection * actionCollection);
@@ -57,22 +58,22 @@ private slots:
     void slotActualSize();
     void toggleShowRulers(bool show);
     void mousePositionChanged(const QPoint &pos);
+    void availableSizeChanged(const QSize &size);
 
 private:
 
     KisView2 * m_view;
-    KoViewConverter * m_viewConverter;
+    KoZoomHandler * m_zoomHandler;
     KoCanvasController *m_canvasController;
     KoRuler * m_horizontalRuler;
     KoRuler * m_verticalRuler;
     QAction *m_showRulersAction;
-    KAction * m_zoomAction;
+    KoZoomAction * m_zoomAction;
     KAction * m_zoomIn;
     KAction * m_zoomOut;
     KAction * m_actualPixels;
     KAction * m_actualSize;
     KAction * m_fitToCanvas;
-
 };
 
 #endif

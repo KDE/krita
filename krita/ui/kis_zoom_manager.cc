@@ -32,6 +32,7 @@
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
 #include <KoCanvasController.h>
+#include <KoGlobal.h>
 
 #include "kis_view2.h"
 #include "kis_canvas2.h"
@@ -39,10 +40,10 @@
 #include "kis_statusbar.h"
 #include "kis_config.h"
 
-KisZoomManager::KisZoomManager( KisView2 * view, KoViewConverter * viewConverter,
+KisZoomManager::KisZoomManager( KisView2 * view, KoZoomHandler * zoomHandler,
             KoCanvasController * canvasController)
     : m_view( view )
-    , m_viewConverter( viewConverter )
+    , m_zoomHandler( zoomHandler )
     , m_canvasController( canvasController )
     , m_horizontalRuler( 0 )
     , m_verticalRuler( 0 )
@@ -70,7 +71,6 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
     connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
           this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
 
-    QToolBar *tbar = new QToolBar(m_view->KoView::statusBar());
     m_view->viewBar()->addAction(m_zoomAction);
 
     m_showRulersAction = new KToggleAction( i18n("Show Rulers"), actionCollection, "view_ruler" );
@@ -86,11 +86,11 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
 
     bool show = cfg.showRulers();
 
-    m_horizontalRuler = new KoRuler(m_view, Qt::Horizontal, (KoZoomHandler*)m_viewConverter);
+    m_horizontalRuler = new KoRuler(m_view, Qt::Horizontal, m_zoomHandler);
     m_horizontalRuler->setShowMousePosition(true);
     m_horizontalRuler->setUnit(KoUnit(KoUnit::Point));
     m_horizontalRuler->setVisible(show);
-    m_verticalRuler = new KoRuler(m_view, Qt::Vertical, (KoZoomHandler*)m_viewConverter);
+    m_verticalRuler = new KoRuler(m_view, Qt::Vertical, m_zoomHandler);
     m_verticalRuler->setShowMousePosition(true);
     m_verticalRuler->setUnit(KoUnit(KoUnit::Point));
     m_verticalRuler->setVisible(show);
@@ -107,12 +107,22 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
             m_verticalRuler, SLOT(setOffset(int)));
 
     connect( m_canvasController, SIGNAL( canvasMousePositionChanged(const QPoint & ) ), this, SLOT( mousePositionChanged( const QPoint & ) ) );
+
+    connect(m_canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( availableSizeChanged( const QSize & ) ) );
 }
 
 void KisZoomManager::mousePositionChanged(const QPoint &pos)
 {
     m_horizontalRuler->updateMouseCoordinate(pos.x());
     m_verticalRuler->updateMouseCoordinate(pos.y());
+}
+
+void KisZoomManager::availableSizeChanged(const QSize &)
+{
+    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
+        slotZoomChanged(KoZoomMode::ZOOM_WIDTH, 0);
+    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
+        slotZoomChanged(KoZoomMode::ZOOM_PAGE, 0);
 }
 
 void KisZoomManager::slotActualSize()
@@ -136,23 +146,69 @@ void KisZoomManager::updateGUI()
 
 void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
 {
-    KoZoomHandler *zoomHandler = (KoZoomHandler*)m_viewConverter;
+    m_zoomHandler->setZoomMode(mode);
 
-    if(mode == KoZoomMode::ZOOM_CONSTANT)
-    {
-        double zoomF = zoom / 100.0;
-        if(zoomF == 0.0) return;
-        m_view->setZoom(zoomF);
-        zoomHandler->setZoom(zoomF);
-    }
-    kDebug() << "zoom changed to: " << zoom <<  endl;
-
-    zoomHandler->setZoomMode(mode);
     KisImageSP img = m_view->image();
-    m_view->canvasBase()->setCanvasSize(
-                    int(zoomHandler->documentToViewX(img->width() / img->xRes())),
-                    int(zoomHandler->documentToViewY(img->height() / img->yRes())));
-    m_view->canvas()->update();
+
+    if(mode == KoZoomMode::ZOOM_PIXELS)
+    {
+        m_zoomHandler->setZoomedResolution(img->xRes(), img->yRes());
+        m_view->canvasBase()->setCanvasSize(int(img->width()), int(img->height()));
+        m_view->canvas()->update();
+
+        // Now try to calculate a zoomvalue for display purposes, eventhough it can never be correct
+        double zoomF = 72.0 * img->xRes() / KoGlobal::dpiX();
+        m_zoomAction->setEffectiveZoom(int(100*zoomF+0.5));
+    }
+    else 
+    {
+        double zoomF;
+        if(mode == KoZoomMode::ZOOM_CONSTANT)
+        {
+            zoomF = zoom / 100.0;
+            if(zoomF == 0.0) return;
+        }
+        else if(mode == KoZoomMode::ZOOM_WIDTH)
+        {
+            zoomF = m_canvasController->visibleWidth() / (m_zoomHandler->resolutionX() * (img->width() / img->xRes()));
+
+            int newheight = zoomF * (m_zoomHandler->resolutionY() * (img->height() / img->yRes()));
+
+            // Now we need to handle the appearing and disappereing of the vertical scrollbar.
+            // We could have a horizontal which is about to disappear, but it still has
+            // influence on what we see as visibleHeight
+            // Four possible combinations of verticalscrollbar and vertical visibleheight exists
+            // Two of them are stable - the other two are as follows:
+            //if(newheight >  m_canvasController->visibleHeight() && !m_gui->verticalScrollBarVisible())
+                // A vertical scrollbar will appear if we go ahead. This is what we want
+                // Which means we will be too big which means we''ll end up somewhere else in next recalc
+            //if(newheight <=  m_canvasController->visibleHeight() && m_gui->verticalScrollBarVisible()) {
+                // The vertical scrollbar will disappear if we go ahead
+                //if(!m_gui->horizontalScrollBarVisible())
+                    // We are zooming in and will hit it this time. yay
+                //else
+                    //we are zoming out which means the both scrollbars are disappearing
+                    // but we will be too small triggering another round
+           // }
+
+            m_zoomAction->setEffectiveZoom(int(100*zoomF+0.5));
+        }
+        else if(mode == KoZoomMode::ZOOM_PAGE)
+        {
+            zoomF = m_canvasController->visibleWidth() / (m_zoomHandler->resolutionX() * (img->width() / img->xRes()));
+            zoomF = qMin(zoomF, m_canvasController->visibleHeight() / (m_zoomHandler->resolutionY() * (img->height() / img->yRes())));
+
+            m_zoomAction->setEffectiveZoom(int(100*zoomF+0.5));
+        }
+
+        m_view->setZoom(zoomF);
+        m_zoomHandler->setZoom(zoomF);
+
+        m_view->canvasBase()->setCanvasSize(
+                        int(m_zoomHandler->documentToViewX(img->width() / img->xRes())),
+                        int(m_zoomHandler->documentToViewY(img->height() / img->yRes())));
+        m_view->canvas()->update();
+    }
 }
 
 #include "kis_zoom_manager.moc"

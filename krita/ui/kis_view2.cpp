@@ -343,7 +343,11 @@ void KisView2::slotLoadingFinished()
 {
     disconnect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
 
-    m_d->canvas->setCanvasSize( image()->width(), image()->height() );
+    KisImageSP img = image();
+
+    m_d->canvas->setCanvasSize(
+                    int(m_d->viewConverter->documentToViewX(img->width() / img->xRes())),
+                    int(m_d->viewConverter->documentToViewY(img->height() / img->yRes())));
 
     m_d->layerManager->layersUpdated();
     updateGUI();
@@ -356,7 +360,6 @@ void KisView2::slotLoadingFinished()
         kDebug() << "Could not create tool docker: " << d << endl;
 
     connectCurrentImage();
-    KisImageSP img = image();
     KisGroupLayerSP rootLayer = img ->rootLayer();
     KisLayerSP activeLayer = rootLayer->firstChild();
     kDebug() << "image finished loading, active layer: " << activeLayer << ", root layer: " << rootLayer << endl;
@@ -415,7 +418,9 @@ void KisView2::createManagers()
     m_d->layerManager = new KisLayerManager( this, m_d->doc );
     m_d->layerManager->setup( actionCollection() );
 
-    m_d->zoomManager = new KisZoomManager( this, m_d->viewConverter, m_d->canvasController);
+    // the following cast is not really safe, but better here than in the zoomManager
+    // best place would be outside kisview too
+    m_d->zoomManager = new KisZoomManager( this,(KoZoomHandler *) m_d->viewConverter, m_d->canvasController);
     m_d->zoomManager->setup( actionCollection() );
 
     m_d->imageManager = new KisImageManager( this );

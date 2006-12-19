@@ -144,6 +144,11 @@ void KoCanvasController::updateCanvasOffsetY() {
     emit canvasOffsetYChanged(canvasOffsetY());
 }
 
+void KoCanvasController::resizeEvent(QResizeEvent * resizeEvent) {
+    QScrollArea::resizeEvent(resizeEvent);
+    emit sizeChanged(resizeEvent->size());
+}
+
 bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
     if(m_canvas && m_canvas->canvasWidget() && (watched == m_canvas->canvasWidget())) {
         if((event->type() == QEvent::Resize) || event->type() == QEvent::Move) {
@@ -352,6 +357,5 @@ void KoCanvasController::Viewport::paintEvent(QPaintEvent *event) {
 
     painter.end();
 }
-
 
 #include "KoCanvasController.moc"

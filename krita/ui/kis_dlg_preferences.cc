@@ -63,7 +63,7 @@
 #include "KoColorProfile.h"
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
-#include "kis_canvas.h"
+#include "kis_canvas2.h"
 #endif
 
 // for the performance update

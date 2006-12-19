@@ -517,7 +517,7 @@ void KisLayerManager::insertPart(const QRect& viewRect, const KoDocumentEntry& e
     Q_UNUSED(viewRect);
     Q_UNUSED(entry);
     Q_UNUSED(parent);
-    Q_UNUSED(above);    
+    Q_UNUSED(above);
 #if 0 // XXX: What shall we do with parts?
     KisImageSP img = m_view->image();
     if (!img) return;
@@ -556,7 +556,7 @@ void KisLayerManager::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, con
 #warning "Port addPartLayer or remove it!"
     Q_UNUSED(parent);
     Q_UNUSED(above);
-    Q_UNUSED(entry);    
+    Q_UNUSED(entry);
 #if 0 // XXX: commented out because the canvas works differently and
 
     delete m_partHandler; // Only one at a time
@@ -937,6 +937,8 @@ void KisLayerManager::mergeLayer()
 
 void KisLayerManager::layersUpdated()
 {
+    kDebug() << "layersUpdated called\n";
+
     KisImageSP img = m_view->image();
     if (!img) return;
 

@@ -17,8 +17,8 @@
  */
 #include "kis_part_layer_handler.h"
 
-//#include "kis_canvas.h"
-//#include <fixx11h.h> // kis_canvas.h does X11 stuff
+//#include "kis_canvas2.h"
+//#include <fixx11h.h> // kis_canvas2.h does X11 stuff
 
 #include <QPainter>
 #include <QCursor>

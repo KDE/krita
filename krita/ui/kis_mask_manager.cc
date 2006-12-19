@@ -61,7 +61,7 @@ void KisMaskManager::setup( KActionCollection * actionCollection )
     connect(m_editMask, SIGNAL(triggered()), this, SLOT(slotEditMask()));
 
     m_showMask = new KToggleAction(i18n( "Show Mask" ),  actionCollection, "show_mask");
-    connect(m_showMask, SIGNAL(triggere4d()), this, SLOT(slotShowMask()));
+    connect(m_showMask, SIGNAL(triggered()), this, SLOT(slotShowMask()));
 }
 
 void KisMaskManager::updateGUI()

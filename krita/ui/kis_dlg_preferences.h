@@ -26,7 +26,7 @@
 #include <kpagedialog.h>
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
-#include "kis_canvas.h"
+#include "kis_canvas2.h"
 #endif
 
 #include "ui_wdggeneralsettings.h"

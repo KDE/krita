@@ -18,11 +18,12 @@
 #ifndef KIS_LAYERMAP_VISITOR_H_
 #define KIS_LAYERMAP_VISITOR_H_
 
+#include <KoShape.h>
+#include <KoShapeContainer.h>
+
 #include "kis_global.h"
 #include "kis_types.h"
-
 #include "kis_layer_visitor.h"
-
 #include "kis_external_layer_iface.h"
 
 #include <kis_layer_shape.h>
@@ -38,23 +39,24 @@ class KisAdjustmentLayer;
  * Creates the right layershape for all layers and puts them in the
  * right order
  */
-class KisLayermapVisitor : public KisLayerVisitor {
+class KisLayerMapVisitor : public KisLayerVisitor {
 public:
 
     /**
      * @param layerMap: the map that maps layers to layer shapes
      */
-    KisLayermapVisitor(QMap<KisLayerSP, KoShape*> & layerMap)
+    KisLayerMapVisitor(QMap<KisLayerSP, KoShape*> & layerMap)
         : m_layerMap( layerMap )
         {
         };
-    virtual ~KisLayermapVisitor() {};
+    virtual ~KisLayerMapVisitor() {};
 
 public:
 
     bool visit( KisExternalLayer * layer)
         {
-            KisShapelayer * layerShape = dynamic_cast<KisShapelayer*>( layer );
+            kDebug() << "adding external layer: " << layer->name() << endl;
+            KisShapeLayer * layerShape = dynamic_cast<KisShapeLayer*>( layer );
             if ( !layerShape ) {
                 kDebug() << "this external layer is not a shape layer!\n";
                 return false;
@@ -65,27 +67,66 @@ public:
 
     bool visit(KisPaintLayer *layer)
         {
+            kDebug() << "adding paint layer: " << layer->name() << endl;
+
+            KoShapeContainer * parent = 0;
+            if ( m_layerMap.contains( layer->parent() ) ) {
+                parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parent()] );
+            }
+
+            KisLayerShape * layerShape = new KisLayerShape( parent, layer );
+            m_layerMap[layer] = layerShape;
+
             return true;
         }
 
     bool visit(KisGroupLayer *layer)
         {
+            kDebug() << "adding group layer: " << layer->name() << endl;
+
+            KoShapeContainer * parent = 0;
+            if ( m_layerMap.contains( layer->parent() ) ) {
+                parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parent()] );
+            }
+
+            KisLayerContainerShape * layerContainer = new KisLayerContainerShape(parent, layer);
+            m_layerMap[layer] = layerContainer;
+
+            KisLayerSP child = layer->firstChild();
+            while (child) {
+                child->accept(*this);
+                child = child->nextSibling();
+            }
+
             return true;
         }
 
     bool visit(KisPartLayer *layer)
         {
+            kDebug() << "adding part layer: " << layer->name() << endl;
+
+            #warning "Kill or fix part layers"
             return true;
         }
 
     bool visit(KisAdjustmentLayer *layer)
         {
+            kDebug() << "adding adjustment layer: " << layer->name() << endl;
+
+            KoShapeContainer * parent = 0;
+            if ( m_layerMap.contains( layer->parent() ) ) {
+                parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parent()] );
+            }
+
+            KisLayerShape * layerShape = new KisLayerShape( parent, layer );
+            m_layerMap[layer] = layerShape;
+
             return true;
         }
 
 private:
 
-    QMap<KisLayerSP, KisShape*> m_layerMap;
+    QMap<KisLayerSP, KoShape*> m_layerMap;
 };
 
 

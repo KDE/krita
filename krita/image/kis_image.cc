@@ -1087,10 +1087,20 @@ KisPaintDeviceSP KisImage::projection()
 
 KisLayerSP KisImage::activate(KisLayerSP layer)
 {
+
+    kDebug() << "Activate called on image " << this << endl;
+    kDebug() << "Layer " << ( layer ? layer->name() : "zero" )  << " activated. Active layer was: " << ( m_d->activeLayer ? m_d->activeLayer->name() : "empty" ) << endl;
+
     if (layer != m_d->activeLayer) {
-        if (m_d->activeLayer) m_d->activeLayer->deactivate();
+
+        if (m_d->activeLayer)
+            m_d->activeLayer->deactivate();
+
         m_d->activeLayer = layer;
-        if (m_d->activeLayer) m_d->activeLayer->activate();
+
+        if (m_d->activeLayer)
+            m_d->activeLayer->activate();
+        kDebug() << "Going to emit signal: " << m_d->activeLayer->name() << " activated\n";
         emit sigLayerActivated(m_d->activeLayer);
         emit sigMaskInfoChanged();
     }

@@ -44,7 +44,7 @@
 #include "kis_undo_adapter.h"
 
 #include "kis_boundary_painter.h"
-#include "kis_canvas.h"
+#include "kis_canvas2.h"
 #include "kis_cursor.h"
 #include "kis_tool_freehand.h"
 

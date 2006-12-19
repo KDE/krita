@@ -60,18 +60,18 @@ class KisPerspectiveGrid;
 class KRITAIMAGE_EXPORT KisImage : public QObject, public KisShared {
 
     Q_OBJECT
-        
+
 public:
     KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, KoColorSpace * colorSpace, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
-    
+
 public:
-    
+
 
     /**
-     * Paint the specified rect onto the painter, adjusting the colors 
-     * using the given profile. The exposure setting is used if the image 
+     * Paint the specified rect onto the painter, adjusting the colors
+     * using the given profile. The exposure setting is used if the image
      * has a high dynamic range.
      */
     virtual void renderToPainter(qint32 srcX,
@@ -95,12 +95,12 @@ public:
 
      /**
       * Render the projection scaled onto a QImage. Use this when
-      * zoom < 100% to avoid color-adjusting pixels that will be 
+      * zoom < 100% to avoid color-adjusting pixels that will be
       * filtered away anyway.
       */
      virtual QImage convertToQImage(const QRect& r,
                                     const double xScale, const double yScale,
-                                    KoColorProfile *profile, 
+                                    KoColorProfile *profile,
                                     float exposure = 0.0f);
 
     /**
@@ -139,12 +139,12 @@ public:
      * Set the automatic layer name counter one back.
      */
     void rollBackLayerName();
-    
+
     /**
      * @return the perspective grid associated to this image
      */
     KisPerspectiveGrid* perspectiveGrid();
-    
+
     /**
      * Resize the image to the specified width and height. The resize
      * method handles the creating on an undo step itself.
@@ -281,7 +281,7 @@ public:
 
     // This was only used from the performance tests?
     KisLayerSP newLayer(const QString& name, quint8 opacity, const QString & compositeOp, KoColorSpace * colorstrategy);
-    
+
     /// Get the active painting device. Returns 0 if the active layer does not have a paint device.
     KisPaintDeviceSP activeDevice();
 

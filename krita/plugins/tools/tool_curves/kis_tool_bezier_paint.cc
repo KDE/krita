@@ -37,7 +37,7 @@
 #include "kis_cmb_composite.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
-//#include "kis_doc.h"
+//#include "kis_doc2.h"
 #include "kis_global.h"
 #include "kis_image.h"
 #include "kis_int_spinbox.h"

@@ -38,7 +38,7 @@
 #include <kis_canvas_subject.h>
 #include <kis_cmb_idlist.h>
 #include <kis_cursor.h>
-//#include <kis_doc.h>
+//#include <kis_doc2.h>
 #include <kis_filter.h>
 #include <kis_filterop.h>
 #include <KoID.h>

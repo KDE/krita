@@ -38,7 +38,7 @@
 #include <KoQueryTrader.h>
 
 #include "kis_adjustment_layer.h"
-#include "kis_canvas.h"
+#include "kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_convolution_painter.h"
 #include "kis_debug_areas.h"

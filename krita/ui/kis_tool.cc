@@ -120,7 +120,6 @@ KisImageSP KisTool::image() const
         return 0;
     }
 
-
     KisImageSP img = kisCanvas->currentImage();
 
     kDebug() << "Current image: " << img << endl;

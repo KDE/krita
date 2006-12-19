@@ -561,7 +561,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     KisPaintDeviceSP dev = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->rgb8(), "temporary device for gradient"));
 
-    KoColor color ;
+    KoColor color(dev->colorSpace()) ;
     for (int y = starty; y <= endy; y++) {
 
         KisHLineIteratorPixel hit = dev->createHLineIterator(startx, y, width);

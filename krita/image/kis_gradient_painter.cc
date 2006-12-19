@@ -562,9 +562,9 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     KisPaintDeviceSP dev = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->rgb8(), "temporary device for gradient"));
 
     KoColor color(dev->colorSpace()) ;
+    KisHLineIteratorPixel hit = dev->createHLineIterator(startx, starty, width);
     for (int y = starty; y <= endy; y++) {
 
-        KisHLineIteratorPixel hit = dev->createHLineIterator(startx, y, width);
         for (int x = startx; x <= endx; x++) {
 
             double t = shapeStrategy->valueAt( x, y);
@@ -579,6 +579,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
             ++hit;
         }
+        hit.nextRow();
 
         linesProcessed++;
 

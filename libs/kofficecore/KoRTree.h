@@ -32,6 +32,8 @@
 #include <QPainter>
 #include <qvarlengtharray.h>
 
+// #define KOFFICE_RTREE_DEBUG
+
 /**
  * @brief The KoRTree class is a template class that provides a R-tree.
  *

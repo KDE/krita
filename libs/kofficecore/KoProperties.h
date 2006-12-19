@@ -26,10 +26,8 @@
 
 
 /**
- * A KoProperties is the serializable representation of
- * the filter parameters. Filters can subclass this class to implement
- * direct accessors to properties, but properties not in the map will
- * not be serialized.
+ * A KoProperties is the (de-)serializable representation of
+ * a key-value map. The serialisation format is XML.
  */
 class KOFFICECORE_EXPORT KoProperties {
 

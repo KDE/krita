@@ -402,6 +402,11 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 
   if ( doc )
   {
+    foreach( QDockWidget* dockWidget, d->m_dockWidgetMap.values() ) {
+        dockWidget->setVisible( d->m_dockWidgetVisibilityMap[dockWidget] );
+    }
+
+    d->m_dockWidgetMenu->setVisible( true );
     doc->setSelectable( false );
     //d->m_manager->addPart( doc, false ); // done by KoView::setPartManager
     KoView *view = doc->createView(d->m_splitter);
@@ -413,12 +418,6 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
         d->m_rootDoc->addShell( this );
     d->m_removeView->setEnabled(false);
     d->m_orientation->setEnabled(false);
-
-    foreach( QDockWidget* dockWidget, d->m_dockWidgetMap.values() ) {
-        dockWidget->setVisible( d->m_dockWidgetVisibilityMap[dockWidget] );
-    }
-
-    d->m_dockWidgetMenu->setVisible( true );
   }
 
   bool enable = d->m_rootDoc != 0 ? true : false;

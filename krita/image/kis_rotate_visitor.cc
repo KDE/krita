@@ -145,9 +145,10 @@ KisPaintDeviceSP KisRotateVisitor::rotateLeft90(KisPaintDeviceSP src)
     QRect r = src->exactBounds();
     qint32 x = 0;
 
+    KisHLineConstIteratorPixel hit = src->createHLineIterator(r.x(), r.top(), r.width());
+
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
         // Read the horizontal line from back to front, write onto the vertical column
-        KisHLineConstIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width());
         KisVLineIterator vit = dst->createVLineIterator(y, -r.x() - r.width(), r.width());
 
         hit += r.width() - 1;
@@ -158,6 +159,7 @@ KisPaintDeviceSP KisRotateVisitor::rotateLeft90(KisPaintDeviceSP src)
             --hit;
             ++vit;
         }
+        hit.nextRow();
         ++x;
         incrementProgress();
     }
@@ -174,8 +176,9 @@ KisPaintDeviceSP KisRotateVisitor::rotate180(KisPaintDeviceSP src)
     qint32 pixelSize = src->pixelSize();
     QRect r = src->exactBounds();
 
+    KisHLineConstIteratorPixel srcIt = src->createHLineIterator(r.x(), r.top(), r.width());
+
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-        KisHLineConstIteratorPixel srcIt = src->createHLineIterator(r.x(), y, r.width());
         KisHLineIterator dstIt = dst->createHLineIterator( -r.x() - r.width(), -y, r.width());
 
         srcIt += r.width() - 1;
@@ -186,6 +189,7 @@ KisPaintDeviceSP KisRotateVisitor::rotate180(KisPaintDeviceSP src)
             --srcIt;
             ++dstIt;
         }
+        srcIt.nextRow();
         incrementProgress();
     }
 

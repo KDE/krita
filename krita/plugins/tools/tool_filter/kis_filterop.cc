@@ -107,9 +107,11 @@ void KisFilterOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     filter->enableProgress();
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
+
+    KisHLineIterator hiter = tmpDev->createHLineIterator(0, 0, maskWidth);
+
     for (int y = 0; y < maskHeight; y++)
     {
-        KisHLineIterator hiter = tmpDev->createHLineIterator(0, y, maskWidth);
         int x=0;
         while(! hiter.isDone())
         {
@@ -118,6 +120,8 @@ void KisFilterOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
             ++hiter;
         }
+        hiter.nextRow();
+
     }
 
     // Blit the paint device onto the layer

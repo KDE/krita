@@ -50,22 +50,26 @@ void KisTexturePainter::createTexture(qint32 x, qint32 y, qint32 w, qint32 h)
 
     int ibh = (int) floor(256 * m_blurh + 0.5);
 
+    KisHLineIterator i = m_device->createHLineIterator(x, y, w, true);
+
     // initialize with random data
-    for (int y2 = 0; y2 < h; y2++) {
-        KisHLineIterator i = m_device->createHLineIterator(x, y + y2, w, true);
+    for (int row = 0; row < h; row++) {
+
         while (!i.isDone()) {
             WetPack* pack = reinterpret_cast<WetPack*>(i.rawData());
             WetPix* w = &(pack->adsorb);
             w->h = (quint16)floor(128 + hscale * rand());
             ++i;
         }
+        i.nextRow();
     }
 
     int lh;
 
     // Blur horizontally
-    for (int y2 = 0; y2 < h; y2++) {
-        KisHLineIterator i = m_device->createHLineIterator(x, y + y2, w, true);
+    KisHLineIterator i = m_device->createHLineIterator(x, y, w, true);
+    for (int row = 0; row < h; row++) {
+
 
         WetPack* pack = reinterpret_cast<WetPack*>(i.rawData());
         WetPix* w = &(pack->adsorb);
@@ -83,6 +87,7 @@ void KisTexturePainter::createTexture(qint32 x, qint32 y, qint32 w, qint32 h)
             w->h = lh;
             ++i;
         }
+        i.nextRow();
     }
 
     // Vertical blurring was commented out in wetdreams, the effect seems to be achievable

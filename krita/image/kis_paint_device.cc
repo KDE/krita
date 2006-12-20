@@ -432,8 +432,8 @@ QRect KisPaintDevice::exactBounds() const
 
     bool found = false;
 
+    KisHLineConstIterator it = this->createHLineConstIterator(x, y, w);
     for (qint32 y2 = y; y2 < y + h ; ++y2) {
-        KisHLineConstIterator it = this->createHLineConstIterator(x, y2, w);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), defaultPixel, m_pixelSize) != 0) {
                 boundY = y2;
@@ -442,6 +442,7 @@ QRect KisPaintDevice::exactBounds() const
             }
             ++it;
         }
+        it.nextRow();
         if (found) break;
     }
 
@@ -461,16 +462,17 @@ QRect KisPaintDevice::exactBounds() const
     }
     found = false;
 
+    KisVLineConstIterator vit = createVLineConstIterator(x, y, h);
     for (qint32 x2 = x; x2 < x + w ; ++x2) {
-        KisVLineConstIterator it = createVLineConstIterator(x2, y, h);
-        while (!it.isDone() && found == false) {
+        while (!vit.isDone() && found == false) {
             if (memcmp(it.rawData(), defaultPixel, m_pixelSize) != 0) {
                 boundX = x2;
                 found = true;
                 break;
             }
-            ++it;
+            ++vit;
         }
+        vit.nextCol();
         if (found) break;
     }
 
@@ -531,9 +533,10 @@ void KisPaintDevice::mirrorX()
         r = exactBounds();
     }
 
+    KisHLineConstIteratorPixel srcIt = createHLineConstIterator(r.x(), r.top(), r.width());
+    KisHLineIteratorPixel dstIt = createHLineIterator(r.x(), r.top(), r.width());
+
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-        KisHLineConstIteratorPixel srcIt = createHLineConstIterator(r.x(), y, r.width());
-        KisHLineIteratorPixel dstIt = createHLineIterator(r.x(), y, r.width());
 
         dstIt += r.width() - 1;
 
@@ -545,6 +548,8 @@ void KisPaintDevice::mirrorX()
             --dstIt;
 
         }
+        srcIt.nextRow();
+        dstIt.nextRow();
     }
     if (m_parentLayer) {
         m_parentLayer->setDirty(r);
@@ -1047,10 +1052,10 @@ void KisPaintDevice::clearSelection()
 
     if (r.isValid()) {
 
-        for (qint32 y = 0; y < r.height(); y++) {
+        KisHLineIterator devIt = createHLineIterator(r.x(), r.y(), r.width());
+        KisHLineConstIterator selectionIt = m_selection->createHLineIterator(r.x(), r.y(), r.width());
 
-            KisHLineIterator devIt = createHLineIterator(r.x(), r.y() + y, r.width());
-            KisHLineConstIterator selectionIt = m_selection->createHLineIterator(r.x(), r.y() + y, r.width());
+        for (qint32 y = 0; y < r.height(); y++) {
 
             while (!devIt.isDone()) {
                 // XXX: Optimize by using stretches
@@ -1060,6 +1065,8 @@ void KisPaintDevice::clearSelection()
                 ++devIt;
                 ++selectionIt;
             }
+            devIt.nextRow();
+            selectionIt.nextRow();
         }
 
         if (m_parentLayer) {
@@ -1073,10 +1080,10 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
     QRect r = mask->extent();
     crop(r);
 
-    for (qint32 y = r.top(); y <= r.bottom(); ++y) {
+    KisHLineIterator pixelIt = createHLineIterator(r.x(), r.top(), r.width());
+    KisHLineConstIterator maskIt = mask->createHLineIterator(r.x(), r.top(), r.width());
 
-        KisHLineIterator pixelIt = createHLineIterator(r.x(), y, r.width());
-        KisHLineConstIterator maskIt = mask->createHLineIterator(r.x(), y, r.width());
+    for (qint32 y = r.top(); y <= r.bottom(); ++y) {
 
         while (!pixelIt.isDone()) {
             // XXX: Optimize by using stretches
@@ -1086,6 +1093,8 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
             ++pixelIt;
             ++maskIt;
         }
+        pixelIt.nextRow();
+        maskIt.nextRow();
     }
 }
 

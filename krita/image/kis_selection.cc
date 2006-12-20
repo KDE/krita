@@ -97,14 +97,16 @@ QImage KisSelection::maskImage() const
 
     KisHLineConstIteratorPixel it = createHLineConstIterator(bounds.x(), bounds.y(), bounds.width());
     for (int y2 = bounds.y(); y2 < bounds.height() - bounds.y(); ++y2) {
-            int x2 = 0;
-            while (!it.isDone()) {
-                    quint8 s = MAX_SELECTED - *(it.rawData());
-                    qint32 c = qRgb(s, s, s);
-                    img.setPixel(x2, y2, c);
-                    ++x2;
-                    ++it;
-            }
+        int x2 = 0;
+        while (!it.isDone()) {
+            quint8 s = MAX_SELECTED - *(it.rawData());
+            qint32 c = qRgb(s, s, s);
+            img.setPixel(x2, y2, c);
+            ++x2;
+            ++it;
+        }
+        it.nextRow(); // XXX: Why wasn't this line here? Used to be
+                      // present in 1.6.
     }
     return img;
 }
@@ -556,7 +558,7 @@ void KisSelection::setDirty(const QRect& rc)
         super::setDirty(rc);
 }
 
-            void KisSelection::setDirty()
+void KisSelection::setDirty()
 {
     if (m_dirty)
         super::setDirty();

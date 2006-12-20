@@ -148,12 +148,14 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
     // row == the y position of the pixel we want to change in the paint device
     int row = y;
 
+    KisHLineIteratorPixel hit = m_device->createHLineIterator(x, y, w);
+
     for (; row < y + h; ++row) {
 
         // col = the x position of the pixel we want to change
         int col = x;
 
-        KisHLineIteratorPixel hit = m_device->createHLineIterator(x, row, w);
+
         bool needFull = true;
         while (!hit.isDone()) {
 
@@ -201,6 +203,8 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
             ++col;
             ++hit;
         }
+
+        hit.nextRow();
 
         int progressPercent = 100 - ((((y + h) - row) * 100) / h);
 
@@ -254,15 +258,15 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
 
     // row == the y position of the pixel we want to change in the paint device
     int row = y;
-
+    KisHLineIteratorPixel hit = m_device->createHLineIterator(x, y, w);
     for (; row < y + h; ++row) {
 
         // col = the x position of the pixel we want to change
         int col = x;
 
-        KisHLineIteratorPixel hit = m_device->createHLineIterator(x, row, w);
+
         bool needFull = true;
-        
+
         qint32 itStart = row - khalfHeight;
         qint32 itH = kh;
         if(itStart < 0)
@@ -396,6 +400,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
             ++col;
             ++hit;
         }
+        hit.nextRow();
 
         int progressPercent = 100 - ((((y + h) - row) * 100) / h);
 

@@ -168,9 +168,10 @@ void KisWetOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     int xStart = (int)dest.x();
     int yStart = (int)dest.y();
 
+    KisHLineIteratorPixel it = device->createHLineIterator(xStart, yStart, maskW, true);
+    KisHLineIteratorPixel dabIt = dab->createHLineIterator(0, 0, maskW, false);
+
     for (int y = 0; y < maskH; y++) {
-        KisHLineIteratorPixel dabIt = dab->createHLineIterator(0, y, maskW, false);
-        KisHLineIteratorPixel it = device->createHLineIterator(xStart, yStart+y, maskW, true);
 
         while (!dabIt.isDone()) {
             // This only does something with .paint, and not with adsorb.
@@ -222,6 +223,8 @@ void KisWetOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
             ++dabIt;
             ++it;
         }
+        dabIt.nextRow();
+        it.nextRow();
     }
 
     m_painter->addDirtyRect(QRect(xStart, yStart, maskW, maskH));

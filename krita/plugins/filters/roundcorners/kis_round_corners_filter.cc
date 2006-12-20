@@ -66,13 +66,15 @@ void KisRoundCornersFilter::process(const KisPaintDeviceSP src, const QPoint& sr
 
     qint32 width = size.width();
     qint32 height = size.height();
+
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(srcTopLeft.x(), srcTopLeft.y(), width );
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(dstTopLeft.x(), dstTopLeft.y(), width);
+
     for (qint32 y = 0; y < size.height(); y++)
     {
         qint32 x = dstTopLeft.x();
         qint32 x0 = dstTopLeft.x();
         qint32 y0 = dstTopLeft.x();
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(srcTopLeft.x(), srcTopLeft.y(), width );
-        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(dstTopLeft.x(), dstTopLeft.y(), width);
         while( ! srcIt.isDone() )
         {
             if(srcIt.isSelected())
@@ -133,6 +135,8 @@ void KisRoundCornersFilter::process(const KisPaintDeviceSP src, const QPoint& sr
             ++dstIt;
             ++x;
         }
+        srcIt.nextRow();
+        dstIt.nextRow();
         setProgress(y);
     }
     setProgressDone();

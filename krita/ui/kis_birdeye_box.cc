@@ -142,9 +142,9 @@ namespace {
                     qint32 imageHeight = m_image->height();
                     quint32 pixelSize = m_image->colorSpace()->pixelSize();
 
+                    KisHLineIteratorPixel it = thumbnailRect.createHLineIterator(0, 0, r.width());
                     for (qint32 y = 0; y < r.height(); ++y) {
 
-                        KisHLineIteratorPixel it = thumbnailRect.createHLineIterator(0, y, r.width());
                         qint32 thumbnailY = r.y() + y;
                         qint32 thumbnailX = r.x();
                         qint32 imageY = (thumbnailY * imageHeight) / thumbnailSize.height();
@@ -162,6 +162,7 @@ namespace {
                             ++it;
                             ++thumbnailX;
                         }
+                        it.nextRow();
                     }
 
                     return thumbnailRect.convertToQImage(m_canvasSubject->monitorProfile(), 0, 0, r.width(), r.height(),

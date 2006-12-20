@@ -467,8 +467,9 @@ KisPaintDeviceSP KisBrush::image(KoColorSpace * /*colorSpace*/, const KisPaintIn
 
     Q_CHECK_PTR(layer);
 
+    KisHLineIterator iter = layer->createHLineIterator( 0, 0, outputWidth);
+
     for (int y = 0; y < outputHeight; y++) {
-        KisHLineIterator iter = layer->createHLineIterator( 0, y, outputWidth);
         for (int x = 0; x < outputWidth; x++) {
 	    quint8 * p = iter.rawData();
 
@@ -490,6 +491,7 @@ KisPaintDeviceSP KisBrush::image(KoColorSpace * /*colorSpace*/, const KisPaintIn
 
             ++iter;
         }
+        iter.nextRow();
     }
 
     return KisPaintDeviceSP(layer);
@@ -1271,14 +1273,17 @@ void KisBrush::generateBoundary() {
         KisQImagemaskSP amask = mask(KisPaintInformation());
         KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA",0);
         dev = new KisPaintDevice(cs, "tmp for generateBoundary");
+
+        KisHLineIteratorPixel it = dev->createHLineIterator(0, 0, w);
+
         for (int y = 0; y < h; y++) {
-            KisHLineIteratorPixel it = dev->createHLineIterator(0, y, w);
             int x = 0;
 
             while(!it.isDone()) {
                 cs->setAlpha(it.rawData(), amask->alphaAt(x++, y), 1);
                 ++it;
             }
+            it.nextRow();
         }
     }
 

@@ -414,13 +414,15 @@ void KisCurveMagnetic::toGrayScale (const QRect& rect, KisPaintDeviceSP src, Gra
     QColor c;
     KoColorSpace *cs = src->colorSpace();
 
+    KisHLineIteratorPixel srcIt = src->createHLineIterator(grectx, grecty, grectw);
+
     for (int row = 0; row < grecth; row++) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(grectx, grecty+row, grectw);
         for (int col = 0; col < grectw; col++) {
             cs->toQColor(srcIt.rawData(),&c);
             dst[col][row] = qGray(c.rgb());
             ++srcIt;
         }
+        srcIt.nextRow();
     }
 }
 

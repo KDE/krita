@@ -95,10 +95,11 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
 
     QRect bounds(srcTopLeft.x(), srcTopLeft.y(), w, h);
 
+    KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), w);
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), w);
+
     for (qint32 yOffset = 0; yOffset < h; yOffset++) {
 
-        KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y() + yOffset, w);
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y() + yOffset, w);
 
         while (!it.isDone() && !cancelRequested()) {
 
@@ -111,7 +112,8 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
             ++it;
             ++dstIt;
         }
-
+        it.nextRow();
+        dstIt.nextRow();
         setProgress(yOffset);
     }
 

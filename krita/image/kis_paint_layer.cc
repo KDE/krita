@@ -138,9 +138,9 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qin
     uchar *j = img.bits();
 
     KoColorSpace *cs = m_paintdev->colorSpace();
-
+    KisHLineConstIteratorPixel it = m_paintdev->createHLineIterator(x, y, w);
     for (qint32 y2 = y; y2 < h + y; ++y2) {
-        KisHLineConstIteratorPixel it = m_paintdev->createHLineIterator(x, y2, w);
+
         while ( ! it.isDone()) {
             quint8 s = cs->alpha(it.rawData());
             if(s==0)
@@ -154,6 +154,7 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qin
             j+=4;
             ++it;
         }
+        it.nextRow();
     }
 }
 
@@ -282,9 +283,11 @@ void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
 
         int w = r.width();
         int h = r.height();
+
+        KisHLineConstIteratorPixel srcIt = from->createHLineIterator(r.x(), r.y(), w);
+        KisHLineIteratorPixel dstIt = m_mask->createHLineIterator(r.x(), r.y(), w);
+
         for (int y = r.y(); y < h; y++) {
-            KisHLineConstIteratorPixel srcIt = from->createHLineIterator(r.x(), y, w);
-            KisHLineIteratorPixel dstIt = m_mask->createHLineIterator(r.x(), y, w);
 
             while(!dstIt.isDone()) {
                 // XXX same remark as in convertMaskToSelection
@@ -292,6 +295,8 @@ void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
                 ++srcIt;
                 ++dstIt;
             }
+            srcIt.nextRow();
+            dstIt.nextRow();
         }
     }
 

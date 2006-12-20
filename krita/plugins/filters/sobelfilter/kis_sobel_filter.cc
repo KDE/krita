@@ -101,10 +101,10 @@ void KisSobelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLef
 
     //pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
 /*    sobel(rect, src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
-}
+      }
 
-void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
-{*/
+      void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
+      {*/
 //     QRect rect(); //src->exactBounds();
 //     quint32 x = rect.x();
 //     quint32 y = rect.y();
@@ -137,55 +137,58 @@ void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDevic
     quint8* tmp;
     qint32 gradient, horGradient, verGradient;
     // loop through the rows, applying the sobel convolution
+
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), width);
+
     for (quint32 row = 0; row < height; row++)
+    {
+
+        // prepare the next row
+        prepareRow (src, nr, srcTopLeft.x(), srcTopLeft.y() + row + 1, width, height);
+        d = dest;
+
+        for (quint32 col = 0; col < width * pixelSize; col++)
         {
+            int positive = col + pixelSize;
+            int negative = col - pixelSize;
+            horGradient = (doHorizontal ?
+                           ((pr[negative] +  2 * pr[col] + pr[positive]) -
+                            (nr[negative] + 2 * nr[col] + nr[positive]))
+                           : 0);
 
-            // prepare the next row
-            prepareRow (src, nr, srcTopLeft.x(), srcTopLeft.y() + row + 1, width, height);
-            d = dest;
+            verGradient = (doVertical ?
+                           ((pr[negative] + 2 * cr[negative] + nr[negative]) -
+                            (pr[positive] + 2 * cr[positive] + nr[positive]))
+                           : 0);
+            gradient = (qint32)((doVertical && doHorizontal) ?
+                                (ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0
+                                : (keepSign ? (127 + (ROUND ((horGradient + verGradient) / 8.0)))
+                                   : (ROUND (QABS (horGradient + verGradient) / 4.0))));
 
-            for (quint32 col = 0; col < width * pixelSize; col++)
-                {
-                    int positive = col + pixelSize;
-                    int negative = col - pixelSize;
-                    horGradient = (doHorizontal ?
-                                   ((pr[negative] +  2 * pr[col] + pr[positive]) -
-                                    (nr[negative] + 2 * nr[col] + nr[positive]))
-                                   : 0);
-
-                    verGradient = (doVertical ?
-                                   ((pr[negative] + 2 * cr[negative] + nr[negative]) -
-                                    (pr[positive] + 2 * cr[positive] + nr[positive]))
-                                   : 0);
-                    gradient = (qint32)((doVertical && doHorizontal) ?
-                        (ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0
-                        : (keepSign ? (127 + (ROUND ((horGradient + verGradient) / 8.0)))
-                        : (ROUND (QABS (horGradient + verGradient) / 4.0))));
-
-                    *d++ = gradient;
-                    if (gradient > 10) counter ++;
-                }
-
-            //  shuffle the row pointers
-            tmp = pr;
-            pr = cr;
-            cr = nr;
-            nr = tmp;
-
-            //store the dest
-            dst->writeBytes(dest, dstTopLeft.x(), row, width, 1);
-
-            if ( makeOpaque )
-                {
-                    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y() + row, width);
-                    while( ! dstIt.isDone() )
-                        {
-                            dst->colorSpace()->setAlpha(dstIt.rawData(), 255,1);
-                            ++dstIt;
-                        }
-                }
-            setProgress(row);
+            *d++ = gradient;
+            if (gradient > 10) counter ++;
         }
+
+        //  shuffle the row pointers
+        tmp = pr;
+        pr = cr;
+        cr = nr;
+        nr = tmp;
+
+        //store the dest
+        dst->writeBytes(dest, dstTopLeft.x(), row, width, 1);
+
+        if ( makeOpaque )
+        {
+            while( ! dstIt.isDone() )
+            {
+                dst->colorSpace()->setAlpha(dstIt.rawData(), 255,1);
+                ++dstIt;
+            }
+            dstIt.nextRow();
+        }
+        setProgress(row);
+    }
     setProgressDone();
 
     delete[] prevRow;
@@ -209,9 +212,9 @@ KisFilterConfiguration* KisSobelFilter::configuration(QWidget* nwidget)
 {
     KisMultiBoolFilterWidget* widget = (KisMultiBoolFilterWidget*) nwidget;
     if( widget == 0 )
-        {
-            return new KisSobelFilterConfiguration( true, true, true, true);
-        } else {
+    {
+        return new KisSobelFilterConfiguration( true, true, true, true);
+    } else {
         return new KisSobelFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ), widget->valueAt( 2 ), widget->valueAt( 3 ) );
     }
 }

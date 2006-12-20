@@ -91,10 +91,11 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
 
     QRect rect = dev->exactBounds();
 
+    KisHLineConstIteratorPixel srcIt = dev->createHLineConstIterator(rect.x(), rect.y(), rect.width());
+    KisHLineIteratorPixel dstIt = shadowDev->createHLineIterator(rect.x(), rect.y(), rect.width());
+
     for (qint32 row = 0; row < rect.height(); ++row)
     {
-        KisHLineConstIteratorPixel srcIt = dev->createHLineConstIterator(rect.x(), rect.y() + row, rect.width());
-        KisHLineIteratorPixel dstIt = shadowDev->createHLineIterator(rect.x(), rect.y() + row, rect.width());
         while( ! srcIt.isDone() )
         {
             if (srcIt.isSelected())
@@ -106,6 +107,8 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
             ++srcIt;
             ++dstIt;
         }
+        srcIt.nextRow();
+        dstIt.nextRow();
         emit notifyProgress((row * 100) / rect.height() );
     }
 

@@ -420,9 +420,10 @@ void KisSelectionManager::copy()
 
     // Apply selection mask.
 
+    KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, 0, r.width());
+    KisHLineConstIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y(), r.width());
+
     for (qint32 y = 0; y < r.height(); y++) {
-        KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, y, r.width());
-        KisHLineConstIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y() + y, r.width());
 
         while (!layerIt.isDone()) {
 
@@ -432,6 +433,8 @@ void KisSelectionManager::copy()
             ++layerIt;
             ++selectionIt;
         }
+        layerIt.nextRow();
+        selectionIt.nextRow();
     }
 
     m_clipboard->setClip(clip);

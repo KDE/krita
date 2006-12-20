@@ -41,8 +41,10 @@ void KisBoundary::generateBoundary(int w, int h) {
 
     // Horizontal
     for (int currentY = - 1; currentY < h; currentY++) {
+
         KisHLineConstIteratorPixel topIt = m_device->createHLineIterator(0, currentY, w);
         KisHLineConstIteratorPixel botIt = m_device->createHLineIterator(0, currentY + 1, w);
+
         bool darkTop;
         bool darkBot;
 

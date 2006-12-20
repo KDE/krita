@@ -289,9 +289,11 @@ void DlgColorRange::slotSelectClicked()
     m_dev->exactBounds(x, y, w, h);
     KoColorSpace * cs = m_dev->colorSpace();
     quint8 opacity;
-    for (int y2 = y; y2 < h - y; ++y2) {
-        KisHLineConstIterator hiter = m_dev->createHLineConstIterator(x, y2, w);
-        KisHLineIterator selIter = m_selection ->createHLineIterator(x, y2, w);
+
+    KisHLineConstIterator hiter = m_dev->createHLineConstIterator(x, y, w);
+    KisHLineIterator selIter = m_selection ->createHLineIterator(x, y, w);
+
+    for (int row = y; row < h - y; ++row) {
         while (!hiter.isDone()) {
             QColor c;
 
@@ -335,6 +337,8 @@ void DlgColorRange::slotSelectClicked()
             ++hiter;
             ++selIter;
         }
+        hiter.nextRow();
+        selIter.nextRow();
     }
     updatePreview();
     QApplication::restoreOverrideCursor();

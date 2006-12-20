@@ -138,10 +138,11 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
         layers.push_back(dev);
 
+        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(rect.x(), rect.y(), rect.width());
+        KisHLineIteratorPixel dstIt = dev->createHLineIterator(rect.x(), rect.y(), rect.width());
+
         for (qint32 row = 0; row < rect.height(); ++row) {
 
-            KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(rect.x(), rect.y() + row, rect.width());
-            KisHLineIteratorPixel dstIt = dev->createHLineIterator(rect.x(), rect.y() + row, rect.width());
 
             while( ! srcIt.isDone() )
             {
@@ -208,6 +209,8 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 ++dstIt;
                 ++srcIt;
             }
+            dstIt.nextRow();
+            srcIt.nextRow();
         }
         ++i;
 

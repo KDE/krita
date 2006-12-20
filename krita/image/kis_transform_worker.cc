@@ -104,9 +104,10 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
     }
     qint32 x = 0;
 
+    KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), r.top(), r.width());
+
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
         // Read the horizontal line from back to front, write onto the vertical column
-        KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width());
         KisVLineIterator vit = dst->createVLineIterator(y, -r.x() - r.width(), r.width());
         KisVLineIterator dstSelIt = dstSelection->createVLineIterator(y, -r.x() - r.width(), r.width());
 
@@ -123,6 +124,7 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
             ++vit;
             ++dstSelIt;
         }
+        hit.nextRow();
         ++x;
     }
 }
@@ -146,8 +148,9 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
         dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
     }
 
+    KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.top(), r.width());
+
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), y, r.width());
         KisHLineIterator dstIt = dst->createHLineIterator(-r.x() - r.width(), -y, r.width());
         KisHLineIterator dstSelIt = dstSelection->createHLineIterator(-r.x() - r.width(), -y, r.width());
 
@@ -164,6 +167,7 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
             ++dstIt;
             ++dstSelIt;
         }
+        srcIt.nextRow();
     }
 }
 

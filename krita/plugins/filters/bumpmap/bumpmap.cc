@@ -65,13 +65,13 @@
 
 #include "bumpmap.h"
 
-#define MOD(x, y) \
-  ((x) < 0 ? ((y) - 1 - ((y) - 1 - (x)) % (y)) : (x) % (y))
+#define MOD(x, y)                                               \
+    ((x) < 0 ? ((y) - 1 - ((y) - 1 - (x)) % (y)) : (x) % (y))
 
 typedef KGenericFactory<KritaBumpmap> KritaBumpmapFactory;
 K_EXPORT_COMPONENT_FACTORY( kritabumpmap, KritaBumpmapFactory( "krita" ) )
 
-KritaBumpmap::KritaBumpmap(QObject *parent, const QStringList &)
+    KritaBumpmap::KritaBumpmap(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setInstance(KritaBumpmapFactory::instance());
@@ -185,12 +185,12 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
         case SINUSOIDAL:
             n = i / 255.0;
             lut[i] = (int) (255.0 *
-                    (sin((-M_PI / 2.0) + M_PI * n) + 1.0) /
-                    2.0 + 0.5);
+                            (sin((-M_PI / 2.0) + M_PI * n) + 1.0) /
+                            2.0 + 0.5);
             break;
 
         case LINEAR:
-            default:
+        default:
             lut[i] = i;
         }
 
@@ -234,10 +234,10 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
             bmRect = QRect(srcTopLeft, size) ;
             bumpmap = src;
         }
-     }
-     else {
-         bmRect = QRect(srcTopLeft, size);
-         bumpmap = src;
+    }
+    else {
+        bmRect = QRect(srcTopLeft, size);
+        bumpmap = src;
     }
 
 
@@ -260,9 +260,9 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
         yofs3 = MOD (yofs2 + 1,  bm_h);
     }
     else {
-          yofs2 = CLAMP (config->getInt("yofs", 0) + dstTopLeft.y(), 0, bm_h - 1);
-          yofs1 = yofs2;
-          yofs3 = CLAMP (yofs2 + 1, 0, bm_h - 1);
+        yofs2 = CLAMP (config->getInt("yofs", 0) + dstTopLeft.y(), 0, bm_h - 1);
+        yofs1 = yofs2;
+        yofs3 = CLAMP (yofs2 + 1, 0, bm_h - 1);
 
     }
 
@@ -283,15 +283,18 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
 
     bool row_in_bumpmap;
 
+
     qint32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
+
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), sel_w);
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), sel_w);
+
     for (int y = 0; y < sel_h; y++) {
 
         row_in_bumpmap = (y >= - config->getInt("yofs",0) && y < - config->getInt("yofs",0) + bm_h);
 
         // Bumpmap
 
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y() + y, sel_w);
-        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y() + y, sel_w);
 
         qint32 tmp = config->getInt("xofs",0) + dstTopLeft.x();
         xofs2 = MOD (tmp, bm_w);
@@ -314,9 +317,9 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
                     }
 
                     nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
-                        bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
+                          bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
                     ny = (bm_row3[xofs1] + bm_row3[xofs2] + bm_row3[xofs3] -
-                        bm_row1[xofs1] - bm_row1[xofs2] - bm_row1[xofs3]);
+                          bm_row1[xofs1] - bm_row1[xofs2] - bm_row1[xofs3]);
 
 
                 }
@@ -345,13 +348,14 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
                 // Paint
                 srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->getBool("compensate", true), compensation, 1);
             }
-              if (++xofs2 == bm_w)
+            if (++xofs2 == bm_w)
                 xofs2 = 0;
             ++srcIt;
             ++dstIt;
             ++x;
         }
-
+        srcIt.nextRow();
+        dstIt.nextRow();
 
         // Next line
         if (config->getBool("tiled", true) || row_in_bumpmap) {
@@ -413,7 +417,7 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, const KisPain
 void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * cfg)
 {
     if (!cfg) return;
-    
+
     m_page->txtSourceLayer->setText( cfg->getString("bumpmap", "") );
     m_page->dblAzimuth->setValue(cfg->getDouble("azimuth", 135.0) );
     m_page->dblElevation->setValue(cfg->getDouble("elevation", 45.0));

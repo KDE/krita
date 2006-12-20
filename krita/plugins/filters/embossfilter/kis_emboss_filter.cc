@@ -93,23 +93,26 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
     setProgressTotalSteps(Height);
     setProgressStage(i18n("Applying emboss filter..."),0);
 
-        for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
-        {
-        KisHLineIteratorPixel it = src->createHLineIterator(rect.x(), rect.y() + y, rect.width(), false);
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y() + y, rect.width(), true);
+    KisHLineIteratorPixel it = src->createHLineIterator(rect.x(), rect.y(), rect.width(), false);
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width(), true);
+    QColor color1;
+    QColor color2;
+    Q_UINT8 opacity;
+    Q_UINT8 opacity2;
+
+    for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
+    {
 
         for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it, ++dstIt)
         {
             if (it.isSelected()) {
 
-// XXX: COLORSPACE_INDEPENDENCE
+// XXX: COLORSPACE_INDEPENDENCE 
+                opacity = 0;
+                opacity2 = 0;
 
-                QColor color1;
-                Q_UINT8 opacity;
                 src->colorSpace()->toQColor(it.rawData(), &color1, &opacity);
 
-                QColor color2;
-                Q_UINT8 opacity2;
                 src->pixel(rect.x() + x + Lim_Max(x, 1, Width), rect.y() + y + Lim_Max(y, 1, Height), &color2, &opacity2);
 
                 R = abs((int)((color1.red() - color2.red()) * Depth + (Q_UINT8_MAX / 2)));
@@ -122,8 +125,10 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
             }
         }
 
+        it.nextRow();
+        dstIt.nextRow();
         setProgress(y);
-        }
+    }
 
     setProgressDone();
 }

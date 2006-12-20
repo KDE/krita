@@ -77,7 +77,7 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
             case KoChannelInfo::UINT16:
                 f[k] = toDouble<quint16>;
                 break;
-#ifdef HAVE_OPENEXR		
+#ifdef HAVE_OPENEXR
             case KoChannelInfo::FLOAT16:
                 f[k] = toDouble<half>;
                 break;
@@ -96,10 +96,11 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
                 return;
         }
     }
-    
+
+    KisHLineConstIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y(), rect.width());
+
     for(int i = rect.y(); i < rect.height(); i++)
     {
-        KisHLineConstIteratorPixel srcIt = src->createHLineIterator(rect.x(), i, rect.width());
         float *dstIt = fr->coeffs + (i-rect.y()) * fr->size * fr->depth;
         while( ! srcIt.isDone() )
         {
@@ -111,6 +112,7 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
             }
             ++srcIt;
         }
+        srcIt.nextRow();
     }
 }
 
@@ -133,7 +135,7 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
             case KoChannelInfo::FLOAT16:
                 f[k] = fromDouble<half>;
                 break;
-#endif		
+#endif
             case KoChannelInfo::FLOAT32:
                 f[k] = fromDouble<float>;
                 break;
@@ -148,9 +150,10 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
                 return;
         }
     }
+
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width());
     for(int i = rect.y(); i < rect.height(); i++)
     {
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), i, rect.width());
         float *srcIt = fr->coeffs + (i-rect.y()) * fr->size * fr->depth;
         while( ! dstIt.isDone() )
         {
@@ -162,6 +165,7 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
             }
             ++dstIt;
         }
+        dstIt.nextRow();
     }
 }
 

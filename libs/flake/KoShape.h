@@ -22,6 +22,8 @@
 #ifndef KOSHAPE_H
 #define KOSHAPE_H
 
+#include "KoInsets.h"
+
 #include <QMatrix>
 #include <QVector>
 #include <QSet>
@@ -395,6 +397,12 @@ public:
      * @param border the new border, or 0 if there should be no border.
      */
     void setBorder(KoShapeBorderModel *border) { m_border = border; }
+
+    /**
+     * Return the insets of the border.
+     * Convenience method for KoShapeBorderModel::borderInsets()
+     */
+    KoInsets borderInsets() const;
 
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will

@@ -360,6 +360,13 @@ bool KoShape::hasTransparency() {
     return !m_backgroundBrush.isOpaque();
 }
 
+KoInsets KoShape::borderInsets() const {
+    KoInsets answer;
+    if(m_border)
+        m_border->borderInsets(this, answer);
+    return answer;
+}
+
 // static
 void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converter) {
     double zoomX, zoomY;

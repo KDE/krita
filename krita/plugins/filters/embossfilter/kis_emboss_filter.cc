@@ -91,11 +91,15 @@ void KisEmbossFilter::KisEmbossFilter::process(const KisPaintDeviceSP src, const
     setProgressTotalSteps(Height);
     setProgressStage(i18n("Applying emboss filter..."),0);
 
-        for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
-        {
+    KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
+    QColor color1;
+    QColor color2;
+    quint8 opacity = 0;
+
+    for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
+    {
         KisRandomConstAccessorPixel acc = src->createRandomConstAccessor(srcTopLeft.x(), srcTopLeft.y());
-        KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y() + y, size.width());
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y() + y, size.width());
 
         for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it, ++dstIt)
         {
@@ -103,13 +107,11 @@ void KisEmbossFilter::KisEmbossFilter::process(const KisPaintDeviceSP src, const
 
 // FIXME: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
 
-                QColor color1;
-                quint8 opacity = 0;
-                src->colorSpace()->toQColor(it.oldRawData(), &color1);
+                opacity = 0;
 
-                QColor color2;
+                src->colorSpace()->toQColor(it.oldRawData(), &color1);
                 acc.moveTo(srcTopLeft.x() + x + Lim_Max(x, 1, Width), srcTopLeft.y() + y + Lim_Max(y, 1, Height) );
-                
+
                 src->colorSpace()->toQColor(acc.oldRawData(), &color2);
 
                 R = abs((int)((color1.red() - color2.red()) * Depth + (quint8_MAX / 2)));
@@ -121,9 +123,10 @@ void KisEmbossFilter::KisEmbossFilter::process(const KisPaintDeviceSP src, const
                 dst->colorSpace()->fromQColor(QColor(Gray, Gray, Gray), opacity, dstIt.rawData());
             }
         }
-
+        it.nextRow();
+        dstIt.nextRow();
         setProgress(y);
-        }
+    }
 
     setProgressDone();
 }

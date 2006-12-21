@@ -22,29 +22,34 @@
 #define KIS_TOOL_MOVE_H_
 
 #include "kis_strategy_move.h"
-#include "kis_tool_non_paint.h"
+//#include "kis_tool_non_paint.h"
 #include "KoToolFactory.h"
+#include "kis_tool.h"
+
+
+class KoCanvasBase;
 
 // XXX: Moving is not nearly smooth enough!
-class KisToolMove : public KisToolNonPaint {
+class KisToolMove : public KisTool {
 
-    typedef KisToolNonPaint super;
+    typedef KisTool super;
     Q_OBJECT
 
 public:
-    KisToolMove();
+    KisToolMove(KoCanvasBase * canvas);
     virtual ~KisToolMove();
 
 
 public:
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_TRANSFORM; }
+    //virtual enumToolType toolType() { return TOOL_TRANSFORM; }
     virtual quint32 priority() { return 2; }
 
-    virtual void buttonPress(KoPointerEvent *e);
-    virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KoPointerEvent *e);
-
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    
+    virtual void paint(QPainter& gc, KoViewConverter &converter);
+    
 private:
     
     KisStrategyMove m_strategy;
@@ -62,7 +67,7 @@ public:
             setToolType(TOOL_TYPE_TRANSFORM);
             setPriority(0);
             setIcon("tool_move");
-            setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
+            //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
         }
 
     virtual ~KisToolMoveFactory(){}

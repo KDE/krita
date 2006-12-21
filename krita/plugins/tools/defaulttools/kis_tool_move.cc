@@ -28,50 +28,53 @@
 #include <kactioncollection.h>
 #include <klocale.h>
 
-#include "kis_canvas_subject.h"
 #include "kis_cursor.h"
+//#include "kis_tool.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_tool_move.h"
 #include "kis_tool_move.moc"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
+#include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
 #include "kis_layer.h"
 
-KisToolMove::KisToolMove()
-    : super(i18n("Move Tool"))
+KisToolMove::KisToolMove(KoCanvasBase * canvas)
+    :  KisTool(canvas, KisCursor::load("tool_line_cursor.png", 6, 6))
 {
     setObjectName("tool_move");
-    m_subject = 0;
-    setCursor(KisCursor::moveCursor());
+
 }
 
 KisToolMove::~KisToolMove()
 {
 }
 
-void KisToolMove::buttonPress(KoPointerEvent *e)
+void KisToolMove::paint(QPainter& gc, KoViewConverter &converter)
 {
-    if (m_subject && e->button() == Qt::LeftButton) {
-        QPoint pos = e->pos().floorQPoint();
-        
+}
+
+void KisToolMove::mousePressEvent(KoPointerEvent *e)
+{
+    if (m_canvas && e->button() == Qt::LeftButton) {
+        QPointF pos = convertToPixelCoord(e);
+
         KisLayerSP dev;
 
         if (!m_currentImage || !(dev = m_currentImage->activeLayer()))
             return;
 
-        m_dragStart = pos;
-        m_strategy.startDrag(pos);
+        m_dragStart = QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y()));
+        m_strategy.startDrag(m_dragStart);
     }
 }
 
-void KisToolMove::move(KoPointerEvent *e)
+void KisToolMove::mouseMoveEvent(KoPointerEvent *e)
 {
-    if (m_subject) {
-        QPoint pos = e->pos().floorQPoint();
+    if (m_canvas) {
+	QPointF posf = convertToPixelCoord(e);
+        QPoint pos = QPoint(static_cast<int>(posf.x()), static_cast<int>(posf.y()));
         if((e->modifiers() & Qt::AltModifier) || (e->modifiers() & Qt::ControlModifier)) {
             if(fabs(pos.x() - m_dragStart.x()) > fabs(pos.y() - m_dragStart.y()))
                 pos.setY(m_dragStart.y());
@@ -82,27 +85,28 @@ void KisToolMove::move(KoPointerEvent *e)
     }
 }
 
-void KisToolMove::buttonRelease(KoPointerEvent *e)
+void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
 {
-    if (m_subject && e->button() == Qt::LeftButton) {
-        m_strategy.endDrag(e->pos().floorQPoint());
+    if (m_canvas && e->button() == Qt::LeftButton) {
+	QPointF pos = convertToPixelCoord(e);
+	m_strategy.endDrag(QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y())));
     }
 }
 
-void KisToolMove::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
+// void KisToolMove::setup(KActionCollection *collection)
+// {
+//     m_action = collection->action(objectName());
 
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("move"),
-                               i18n("&Move"),
-                               collection,
-                               objectName());
-        m_action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_V));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Move"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
-}
+//     if (m_action == 0) {
+//         m_action = new KAction(KIcon("move"),
+//                                i18n("&Move"),
+//                                collection,
+//                                objectName());
+//         m_action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_V));
+//         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
+//         m_action->setToolTip(i18n("Move"));
+//         m_action->setActionGroup(actionGroup());
+//         m_ownAction = true;
+//     }
+// }
 

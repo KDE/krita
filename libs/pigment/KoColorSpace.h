@@ -31,6 +31,7 @@
 #include <q3valuevector.h>
 #include <q3valuelist.h>
 
+#include <KoColorTransformation.h>
 #include <KoCompositeOp.h>
 #include <KoChannelInfo.h>
 #include <KoID.h>
@@ -43,7 +44,7 @@ class KisFilter;
 
 const quint8 OPACITY_TRANSPARENT = 0;
 const quint8 OPACITY_OPAQUE = UCHAR_MAX;
-
+/*
 class KoColorAdjustment
 {
 public:
@@ -51,7 +52,7 @@ public:
     KoColorAdjustment() {};
     virtual ~KoColorAdjustment() {};
 };
-
+*/
 
 enum ColorSpaceIndependence {
     FULLY_INDEPENDENT,
@@ -403,23 +404,23 @@ public:
      * Create an adjustment object for adjusting the brightness and contrast
      * transferValues is a 256 bins array with values from 0 to 0xFFFF
      */
-    virtual KoColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues) const = 0;
+    virtual KoColorTransformation *createBrightnessContrastAdjustment(quint16 *transferValues) const = 0;
 
     /**
      * Create an adjustment object for desaturating
      */
-    virtual KoColorAdjustment *createDesaturateAdjustment() const = 0;
+    virtual KoColorTransformation *createDesaturateAdjustment() const = 0;
 
     /**
      * Create an adjustment object for adjusting individual channels
      * transferValues is an array of colorChannelCount number of 256 bins array with values from 0 to 0xFFFF
      */
-    virtual KoColorAdjustment *createPerChannelAdjustment(quint16 **transferValues) const = 0;
+    virtual KoColorTransformation *createPerChannelAdjustment(quint16 **transferValues) const = 0;
 
     /**
      * Apply the adjustment created with onr of the other functions
      */
-    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *, qint32 nPixels) const = 0;
+//     virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *, qint32 nPixels) const = 0;
 
     /**
      * Invert color channels of the given pixels

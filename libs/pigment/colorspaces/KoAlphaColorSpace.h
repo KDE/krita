@@ -118,22 +118,22 @@ public:
             rgb+=4;
         }
     }
-    virtual KoColorAdjustment* createBrightnessContrastAdjustment(quint16*) const
+    virtual KoColorTransformation* createBrightnessContrastAdjustment(quint16*) const
     {
         kDebug() << "Undefined operation in the alpha colorspace" << endl;
         return 0;
     }
-    virtual KoColorAdjustment* createDesaturateAdjustment() const
+    virtual KoColorTransformation* createDesaturateAdjustment() const
     {
         kDebug() << "Undefined operation in the alpha colorspace" << endl;
         return 0;
     }
-    virtual KoColorAdjustment* createPerChannelAdjustment(quint16**) const
+    virtual KoColorTransformation* createPerChannelAdjustment(quint16**) const
     {
         kDebug() << "Undefined operation in the alpha colorspace" << endl;
         return 0;
     }
-    virtual void applyAdjustment(const quint8*, quint8*, KoColorAdjustment*, qint32) const
+    virtual void applyAdjustment(const quint8*, quint8*, KoColorTransformation*, qint32) const
     {
         kDebug() << "Undefined operation in the alpha colorspace" << endl;
     }

@@ -29,21 +29,21 @@
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceRegistry.h>
 
-struct KoColorAdjustmentImpl : public KoColorAdjustment
+struct KoLcmsColorTransformation : public KoColorTransformation
 {
-    KoColorAdjustmentImpl() : KoColorAdjustment()
+    KoLcmsColorTransformation() : KoColorTransformation()
     {
         csProfile = 0;
-        transform = 0;
+        cmstransform = 0;
         profiles[0] = 0;
         profiles[1] = 0;
         profiles[2] = 0;
     };
 
-    ~KoColorAdjustmentImpl() {
+    ~KoLcmsColorTransformation() {
 
-        if (transform)
-            cmsDeleteTransform(transform);
+        if (cmstransform)
+            cmsDeleteTransform(cmstransform);
         if (profiles[0] && profiles[0] != csProfile)
             cmsCloseProfile(profiles[0]);
         if(profiles[1] && profiles[1] != csProfile)
@@ -52,9 +52,14 @@ struct KoColorAdjustmentImpl : public KoColorAdjustment
             cmsCloseProfile(profiles[2]);
     }
 
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+    {
+        cmsDoTransform(cmstransform, const_cast<quint8 *>(src), dst, nPixels);
+    }
+
     cmsHPROFILE csProfile;
     cmsHPROFILE profiles[3];
-    cmsHTRANSFORM transform;
+    cmsHTRANSFORM cmstransform;
 };
 
 /**
@@ -300,7 +305,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent);
         }
 
-        virtual KoColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues) const
+        virtual KoColorTransformation *createBrightnessContrastAdjustment(quint16 *transferValues) const
         {
             if (!m_profile) return 0;
 
@@ -312,23 +317,23 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             for(int i =0; i < 256; i++)
                 transferFunctions[0]->GammaTable[i] = transferValues[i];
 
-            KoColorAdjustmentImpl *adj = new KoColorAdjustmentImpl;
+            KoLcmsColorTransformation *adj = new KoLcmsColorTransformation;
             adj->profiles[1] = cmsCreateLinearizationDeviceLink(icSigLabData, transferFunctions);
             cmsSetDeviceClass(adj->profiles[1], icSigAbstractClass);
 
             adj->profiles[0] = m_profile->profile();
             adj->profiles[2] = m_profile->profile();
-            adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
+            adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
             adj->csProfile = m_profile->profile();
             return adj;
         }
 
 
-        virtual KoColorAdjustment *createDesaturateAdjustment() const
+        virtual KoColorTransformation *createDesaturateAdjustment() const
         {
             if (!m_profile) return 0;
 
-            KoColorAdjustmentImpl *adj = new KoColorAdjustmentImpl;
+            KoLcmsColorTransformation *adj = new KoLcmsColorTransformation;
 
             adj->profiles[0] = m_profile->profile();
             adj->profiles[2] = m_profile->profile();
@@ -377,12 +382,12 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             // LUT is already on virtual profile
             cmsFreeLUT(Lut);
 
-            adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
+            adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
 
             return adj;
         }
 
-        virtual KoColorAdjustment *createPerChannelAdjustment(quint16 **transferValues) const
+        virtual KoColorTransformation *createPerChannelAdjustment(quint16 **transferValues) const
         {
             if (!m_profile) return 0;
 
@@ -395,26 +400,17 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                 }
             }
 
-            KoColorAdjustmentImpl *adj = new KoColorAdjustmentImpl;
+            KoLcmsColorTransformation *adj = new KoLcmsColorTransformation;
             adj->profiles[0] = cmsCreateLinearizationDeviceLink(colorSpaceSignature(), transferFunctions);
             adj->profiles[1] = NULL;
             adj->profiles[2] = NULL;
             adj->csProfile = m_profile->profile();
-            adj->transform  = cmsCreateTransform(adj->profiles[0], m_cmType, NULL, m_cmType, INTENT_PERCEPTUAL, 0);
+            adj->cmstransform  = cmsCreateTransform(adj->profiles[0], m_cmType, NULL, m_cmType, INTENT_PERCEPTUAL, 0);
 
             delete [] transferFunctions;
 
             return adj;
         }
-
-
-        virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *adjustment, qint32 nPixels) const
-        {
-            KoColorAdjustmentImpl * adj = dynamic_cast<KoColorAdjustmentImpl*>(adjustment);
-            if (adj)
-                cmsDoTransform(adj->transform, const_cast<quint8 *>(src), dst, nPixels);
-        }
-
 
         virtual void invertColor(quint8 * src, qint32 nPixels) const
         {

@@ -360,11 +360,9 @@ void KisView2::slotLoadingFinished()
         kDebug() << "Could not create tool docker: " << d << endl;
 
     connectCurrentImage();
-    KisGroupLayerSP rootLayer = img ->rootLayer();
-    KisLayerSP activeLayer = rootLayer->firstChild();
-    kDebug() << "image finished loading, active layer: " << activeLayer << ", root layer: " << rootLayer << endl;
-    if ( activeLayer )
-        img->activate( activeLayer );
+
+    kDebug() << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
+
 }
 
 

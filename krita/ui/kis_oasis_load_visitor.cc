@@ -34,6 +34,8 @@
 void KisOasisLoadVisitor::loadImage(const QDomElement& elem)
 {
     m_image = new KisImage(m_doc->undoAdapter(), 100, 100, KisMetaRegistry::instance()->csRegistry()->colorSpace("RGBA",""), "OpenRaster Image (name)"); // TODO: take into account width and height parameters, and metadata, when width = height = 0 use the new function from boud to get the size of the image after the layers have been loaded
+
+    m_image->blockSignals( true );  // Don't send out signals while we're building the image
     for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "image:layer") { // it's the root layer !
             QDomElement subelem = node.toElement();
@@ -41,7 +43,7 @@ void KisOasisLoadVisitor::loadImage(const QDomElement& elem)
             return;
         }
     }
-
+    m_image->blockSignals( false );
     m_image = KisImageSP(0);
 }
 

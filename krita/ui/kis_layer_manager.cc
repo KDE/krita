@@ -708,7 +708,7 @@ void KisLayerManager::layerDuplicate()
     dup->setName(i18n("Duplicate of '%1'",active->name()));
     img->addLayer(dup, active->parent(), active);
     if (dup) {
-        img->activate( dup );
+        img->activateLayer( dup );
         m_view->canvas()->update();
     } else {
         KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));

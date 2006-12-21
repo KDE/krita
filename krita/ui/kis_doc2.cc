@@ -205,7 +205,7 @@ public:
 
     void setImage( KisDoc2 * doc, KisImageSP currentImage )
         {
-            kDebug() << "Setting image " << currentImage->name() << endl;
+            kDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\nSetting image " << currentImage->name() << ", rootlayer: " << currentImage->rootLayer() << endl;
 
             if ( m_currentImage ) {
                 m_currentImage->disconnect( m_currentImage, 0, doc, 0 );
@@ -225,8 +225,7 @@ public:
 
             KisLayerMapVisitor v( layerShapes );
             currentImage->rootLayer()->accept( v );
-
-            activeLayerShape = layerShapes[currentImage->rootLayer()->firstChild()];
+            layerShapes = v.layerMap();
 
             foreach( KoView *view, doc->views() ) {
                 KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
@@ -235,6 +234,7 @@ public:
                 }
                 canvas->canvasWidget()->update();
             }
+
             kDebug() << "Connecting image " << m_currentImage << " to doc "  << doc << endl;
             doc->connect( m_currentImage.data(), SIGNAL(sigLayerActivated(KisLayerSP) ), doc, SLOT( slotLayerActivated( KisLayerSP ) ) );
             doc->connect( m_currentImage.data(), SIGNAL(sigLayerAdded( KisLayerSP )), doc, SLOT(slotLayerAdded( KisLayerSP )) );
@@ -242,6 +242,13 @@ public:
             doc->connect( m_currentImage.data(), SIGNAL(sigLayerMoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )), doc, SLOT(slotLayerMoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )) );
             doc->connect( m_currentImage.data(), SIGNAL(sigLayersChanged( KisGroupLayerSP )), doc, SLOT(slotLayersChanged( KisGroupLayerSP )) );
 
+
+            if ( !layerShapes.contains( m_currentImage->activeLayer() ) ) {
+                kDebug() << "Active layer " << m_currentImage->activeLayer() << " not in layer shapes! " << layerShapes.count() << endl;
+            }
+            else {
+                activeLayerShape = layerShapes[m_currentImage->activeLayer()];
+            }
         }
 
     KisImageSP currentImage()
@@ -363,7 +370,8 @@ bool KisDoc2::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocu
             KoOasisStore* oasisStore =  new KoOasisStore( store );
             KisOasisLoadDataVisitor oldv(oasisStore, olv.layerFilenames());
             m_d->currentImage()->rootLayer()->accept(oldv);
-            m_d->setImage( this, olv.image() );
+
+            setCurrentImage( olv.image() );
 
             return true;
         }
@@ -436,8 +444,8 @@ bool KisDoc2::loadXML(QIODevice *, const QDomDocument& doc)
             }
         }
     }
-    m_d->setImage( this, img );
-    connect( img.data(), SIGNAL(sigLayerActivated(KisLayerSP) ), SLOT( slotLayerActivated(KisLayerSP) ) );
+    setCurrentImage( img );
+
     emit sigLoadingFinished();
     return true;
 }
@@ -541,17 +549,16 @@ KisImageSP KisDoc2::loadImage(const QDomElement& element)
         }
 
         img = new KisImage(this, width, height, cs, name);
-        img->blockSignals(true); // Don't send out signals while we're building the image
         Q_CHECK_PTR(img);
         connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
         img->setDescription(description);
         img->setResolution(xres, yres);
 
+        img->blockSignals(true); // Don't send out signals while we're building the image
         loadLayers(element, img, img->rootLayer());
+        img->blockSignals(false);
 
     }
-
-    img->notifyImageLoaded();
 
     return img;
 }
@@ -992,9 +999,9 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     painter.end();
 
     img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
-    img->activate(KisLayerSP(layer));
+    img->activateLayer(KisLayerSP(layer));
 
-    m_d->setImage(this, img );
+    setCurrentImage(img );
 
     setUndo(true);
 
@@ -1038,9 +1045,9 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
 
     img->setBackgroundColor(bgColor);
     img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
-    img->activate(KisLayerSP(layer));
+    img->activateLayer(KisLayerSP(layer));
 
-    m_d->setImage( this, img );
+    setCurrentImage( img );
 
     cfg.defImgWidth(width);
     cfg.defImgHeight(height);
@@ -1272,12 +1279,11 @@ KisImageSP KisDoc2::currentImage()
 
 void KisDoc2::setCurrentImage(KisImageSP image)
 {
-    kDebug() << "set current image: " << image->name() << endl;
+    kDebug() << "KisDoc2::setCurrentImage: " << image->name() << ", active layer: " << m_d->activeLayerShape << endl;
     m_d->setImage( this, image );
     setUndo(true);
-    image->notifyImageLoaded();
     emit sigLoadingFinished();
-    image->blockSignals(false);
+    image->activateLayer( image->rootLayer()->firstChild() );
 }
 
 void KisDoc2::initEmpty()
@@ -1289,7 +1295,7 @@ void KisDoc2::initEmpty()
 
 void KisDoc2::addShape( KoShape* shape )
 {
-    kDebug() << "KisDoc2::addShape: " << shape->shapeId() << endl;
+    kDebug() << "KisDoc2::addShape: " << shape->shapeId()  << ", active layer: " << m_d->activeLayerShape << endl;
 
     if (   shape->shapeId() != KIS_LAYER_SHAPE_ID
         && shape->shapeId() != KIS_SHAPE_LAYER_ID
@@ -1337,7 +1343,7 @@ void KisDoc2::removeShape( KoShape* shape )
 {
     if ( !shape ) return;
 
-    kDebug() << "KisDoc2::removeShape: " << shape->shapeId() << endl;
+    kDebug() << "KisDoc2::removeShape: " << shape->shapeId()  << ", active layer: " << m_d->activeLayerShape << endl;
 
     KoShapeContainer * container = shape->parent();
     if ( container ) {
@@ -1364,7 +1370,7 @@ void KisDoc2::slotLayerAdded( KisLayerSP layer )
 {
     kDebug() << "KisDoc2::slotLayerAdded "
              << ( layer ? layer->name() : "empty layer" ) << ", active layer type: "
-             << ( m_d->activeLayerShape ? m_d->activeLayerShape->shapeId() : " no active layer ") << endl;
+             << m_d->activeLayerShape  << endl;
 
     // Check whether the layer is already in the map
     if ( m_d->layerShapes.contains( layer ) ) {
@@ -1413,22 +1419,22 @@ void KisDoc2::slotLayerAdded( KisLayerSP layer )
 
 void KisDoc2::slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis )
 {
-    kDebug() << "KisDoc2::slotLayerRemoved " << layer->name() << ", wasParent: " << wasParent->name() << ", wasAboveThis: " << wasAboveThis->name() << endl;
+    kDebug() << "KisDoc2::slotLayerRemoved " << layer->name() << ", wasParent: " << wasParent->name() << ", wasAboveThis: " << wasAboveThis->name() << ", active layer: " << m_d->activeLayerShape  << endl;
 }
 
 void KisDoc2::slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis )
 {
-    kDebug() << "KisDoc2::slotLayerMmoved " << layer->name() << ", previousParent: " << previousParent->name() << ", wasAboveThis: " << wasAboveThis->name() << endl;
+    kDebug() << "KisDoc2::slotLayerMmoved " << layer->name() << ", previousParent: " << previousParent->name() << ", wasAboveThis: " << wasAboveThis->name()  << ", active layer: " << m_d->activeLayerShape << endl;
 }
 
 void KisDoc2::slotLayersChanged( KisGroupLayerSP rootLayer )
 {
-    kDebug() << "KisDoc2::slotLayersChanged " << rootLayer->name() << endl;
+    kDebug() << "KisDoc2::slotLayersChanged " << rootLayer->name()  << ", active layer: " << m_d->activeLayerShape << endl;
 }
 
 void KisDoc2::slotLayerActivated( KisLayerSP layer )
 {
-    kDebug() << "KisDoc2::slotLayerActivated. Activating layer " << layer->name() << endl;
+    kDebug() << "KisDoc2::slotLayerActivated. Activating layer " << layer->name() << ", active layer: " << m_d->activeLayerShape  << endl;
 
     if (!m_d->layerShapes.contains( layer ) ) {
         kDebug() << "A layer activated that is _not_ in the layer-shapes map!\n";
@@ -1437,7 +1443,7 @@ void KisDoc2::slotLayerActivated( KisLayerSP layer )
 
     m_d->activeLayerShape = m_d->layerShapes[layer];
 
-    kDebug() << "Active layer shape has id: " << m_d->activeLayerShape->shapeId();
+    kDebug() << "Active layer shape has id: " << m_d->activeLayerShape->shapeId() << endl;
 
     if ( m_d->activeLayerShape->shapeId() == KIS_SHAPE_LAYER_ID ) {
         // Automatically select all shapes in this newly selected shape layer?

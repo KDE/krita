@@ -344,7 +344,7 @@ bool KisLayer::isActive() const
 void KisLayer::setActive()
 {
     if (image())
-        image()->activate(KisLayerSP(this));
+        image()->activateLayer(KisLayerSP(this));
 }
 
 void KisLayer::setClean(const QRect & rect)

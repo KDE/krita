@@ -51,11 +51,15 @@ public:
         };
     virtual ~KisLayerMapVisitor() {};
 
+    QMap<KisLayerSP, KoShape*> & layerMap() {
+        return m_layerMap;
+    }
+
 public:
 
     bool visit( KisExternalLayer * layer)
         {
-            kDebug() << "adding external layer: " << layer->name() << endl;
+            kDebug() << "KisLayerMap visitor adding external layer: " << layer->name() << endl;
             KisShapeLayer * layerShape = dynamic_cast<KisShapeLayer*>( layer );
             if ( !layerShape ) {
                 kDebug() << "this external layer is not a shape layer!\n";
@@ -67,7 +71,7 @@ public:
 
     bool visit(KisPaintLayer *layer)
         {
-            kDebug() << "adding paint layer: " << layer->name() << endl;
+            kDebug() << "KisLayerMap visitor adding paint layer: " << layer->name() << endl;
 
             KoShapeContainer * parent = 0;
             if ( m_layerMap.contains( layer->parent() ) ) {
@@ -82,7 +86,7 @@ public:
 
     bool visit(KisGroupLayer *layer)
         {
-            kDebug() << "adding group layer: " << layer->name() << endl;
+            kDebug() << "KisLayerMap visitor adding group layer: " << layer->name() << endl;
 
             KoShapeContainer * parent = 0;
             if ( m_layerMap.contains( layer->parent() ) ) {
@@ -103,7 +107,7 @@ public:
 
     bool visit(KisPartLayer *layer)
         {
-            kDebug() << "adding part layer: " << layer->name() << endl;
+            kDebug() << "KisLayerMap visitor adding part layer: " << layer->name() << endl;
 
             #warning "Kill or fix part layers"
             return true;
@@ -111,7 +115,7 @@ public:
 
     bool visit(KisAdjustmentLayer *layer)
         {
-            kDebug() << "adding adjustment layer: " << layer->name() << endl;
+            kDebug() << "KisLayerMap visitor adding adjustment layer: " << layer->name() << endl;
 
             KoShapeContainer * parent = 0;
             if ( m_layerMap.contains( layer->parent() ) ) {

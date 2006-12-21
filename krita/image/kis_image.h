@@ -294,7 +294,7 @@ public:
     /// of this image.
     KisPaintDeviceSP projection();
 
-    KisLayerSP activate(KisLayerSP layer);
+    KisLayerSP activateLayer(KisLayerSP layer);
     KisLayerSP findLayer(const QString& name) const;
     KisLayerSP findLayer(int id) const;
 
@@ -366,8 +366,6 @@ public:
     void notifyLayersChanged();
 
     void notifyPropertyChanged(KisLayerSP layer);
-
-    void notifyImageLoaded();
 
     void notifyLayerUpdated(KisLayerSP layer, QRect rc);
 

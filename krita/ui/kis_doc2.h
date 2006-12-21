@@ -46,7 +46,13 @@ class KisNameServer;
 class KisChildDoc;
 
 /**
- * The class that represents a Krita document containing content and settings.
+ * The class that represents a Krita document containing content and
+   settings.
+
+   KisDoc2 also keeps track of the correspondence between the layer
+   structure of the KisImage and the shape tree that is used by the
+   tools.
+
  */
 class KRITAUI_EXPORT KisDoc2 : public KoDocument, public KoShapeControllerBase, private KisUndoAdapter
 {
@@ -174,6 +180,7 @@ protected slots:
 
 private slots:
 
+
     void slotUpdate(KisImageSP img, quint32 x, quint32 y, quint32 w, quint32 h);
     void slotIOProgress(qint8 percentage);
 
@@ -185,6 +192,7 @@ private slots:
     void slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis );
     void slotLayersChanged( KisGroupLayerSP rootLayer );
     void slotLayerActivated( KisLayerSP layer );
+
     // XXX: The same is necessary for selections, masks etc.
 
 public:

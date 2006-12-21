@@ -1046,7 +1046,7 @@ KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const QString
     else {
         addLayer(layerSP, m_d->rootLayer, KisLayerSP(0));
     }
-    activate(layerSP);
+    activateLayer(layerSP);
 
     return layerSP;
 }
@@ -1085,13 +1085,13 @@ KisPaintDeviceSP KisImage::projection()
     return m_d->rootLayer->projection(QRect(0, 0, m_d->width, m_d->height));
 }
 
-KisLayerSP KisImage::activate(KisLayerSP layer)
+KisLayerSP KisImage::activateLayer(KisLayerSP layer)
 {
 
     kDebug() << "Activate called on image " << this << endl;
     kDebug() << "Layer " << ( layer ? layer->name() : "zero" )  << " activated. Active layer was: " << ( m_d->activeLayer ? m_d->activeLayer->name() : "empty" ) << endl;
 
-    if (layer != m_d->activeLayer) {
+//    if (layer != m_d->activeLayer) {
 
         if (m_d->activeLayer)
             m_d->activeLayer->deactivate();
@@ -1103,7 +1103,7 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
         kDebug() << "Going to emit signal: " << m_d->activeLayer->name() << " activated\n";
         emit sigLayerActivated(m_d->activeLayer);
         emit sigMaskInfoChanged();
-    }
+//    }
 
     return layer;
 }
@@ -1150,7 +1150,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
 
         if (!layer->temporary()) {
             emit sigLayerAdded(layer);
-            activate(layer);
+            activateLayer(layer);
         }
 
 
@@ -1211,15 +1211,15 @@ bool KisImage::removeLayer(KisLayerSP layer)
                 emit sigLayerRemoved(layer, parent, wasAbove);
                 if (wasActive) {
                     if (wasBelow)
-                        activate(wasBelow);
+                        activateLayer(wasBelow);
                     else if (wasAbove)
-                        activate(wasAbove);
+                        activateLayer(wasAbove);
                     else if (parent != rootLayer())
-                        activate(KisLayerSP(parent.data()));
+                        activateLayer(KisLayerSP(parent.data()));
                     else
-                        activate(rootLayer()->firstChild());
+                        activateLayer(rootLayer()->firstChild());
                 } else {
-                    activate(actLayer);
+                    activateLayer(actLayer);
                 }
             }
         }
@@ -1334,7 +1334,7 @@ void KisImage::flatten()
     lock();
 
     addLayer(KisLayerSP(dst), m_d->rootLayer, KisLayerSP(0));
-    activate(KisLayerSP(dst));
+    activateLayer(KisLayerSP(dst));
 
     unlock();
 
@@ -1514,10 +1514,6 @@ void KisImage::notifyPropertyChanged(KisLayerSP layer)
     emit sigLayerPropertiesChanged(layer);
 }
 
-void KisImage::notifyImageLoaded()
-{
-}
-
 QRect KisImage::bounds() const
 {
     return QRect(0, 0, width(), height());
@@ -1586,7 +1582,7 @@ void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
     if (!locked()) {
         connect(m_d->rootLayer.data(), SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
     }
-    activate(m_d->rootLayer->firstChild());
+    activateLayer(m_d->rootLayer->firstChild());
 }
 
 void KisImage::addAnnotation(KisAnnotationSP annotation)

@@ -57,7 +57,7 @@ public:
     // Caching of adjustment
     bool dirty;
     KoColorSpace* oldCs;
-    KoColorAdjustment* adjustment;
+    KoColorTransformation* adjustment;
 };
 
 
@@ -71,8 +71,7 @@ public:
     KisPerChannelFilter() : KisFilter( id(), "adjust", i18n("&Color Adjustment curves...")) {}
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*);
-    virtual KisFilterConfiguration* configuration() { return new KisPerChannelFilterConfiguration(0); }
+//     virtual KisFilterConfiguration* configuration() { return new KisPerChannelFilterConfiguration(0); }
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     static inline KoID id() { return KoID("perchannel", i18n("Color Adjustment")); }
     virtual bool supportsPainting() { return true; }
@@ -90,11 +89,11 @@ class KisPerChannelConfigWidget : public KisFilterConfigWidget {
     Q_OBJECT
 
 public:
-    KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name = 0, Qt::WFlags f = 0 );
+    KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0 );
     virtual ~KisPerChannelConfigWidget() {}
 
-    KisPerChannelFilterConfiguration * config();
-    void setConfiguration(KisFilterConfiguration * config);
+    virtual void setConfiguration(KisFilterConfiguration * config);
+    virtual KisFilterConfiguration * configuration() const;
 
 private slots:
     virtual void setActiveChannel(int ch);
@@ -103,7 +102,7 @@ private:
     WdgPerChannel * m_page;
     KisPaintDeviceSP m_dev;
     KisHistogram *m_histogram;
-    QList<KisCurve> m_curves;
+    mutable QList<KisCurve> m_curves;
     int m_activeCh;
 };
 

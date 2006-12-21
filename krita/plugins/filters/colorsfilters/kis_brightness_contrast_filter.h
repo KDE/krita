@@ -28,7 +28,7 @@
 #include "ui_wdg_brightness_contrast.h"
 
 class QWidget;
-class KoColorAdjustment;
+class KoColorTransformation;
 
 class WdgBrightnessContrast : public QWidget, public Ui::WdgBrightnessContrast
 {
@@ -50,7 +50,7 @@ public:
 public:
     quint16 transfer[256];
     QList<QPair<double,double> >  curve;
-    KoColorAdjustment * m_adjustment;
+    KoColorTransformation * m_adjustment;
 };
 
 /**
@@ -66,7 +66,6 @@ public:
 public:
 
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration * configuration(QWidget *);
     virtual KisFilterConfiguration * configuration() { return new KisBrightnessContrastFilterConfiguration(); }
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     static inline KoID id() { return KoID("brightnesscontrast", i18n("Brightness / Contrast")); }
@@ -83,11 +82,11 @@ public:
 class KisBrightnessContrastConfigWidget : public KisFilterConfigWidget {
 
 public:
-    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name = 0, Qt::WFlags f = 0 );
+    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0 );
     virtual ~KisBrightnessContrastConfigWidget() {}
 
-    KisBrightnessContrastFilterConfiguration * config();
-    void setConfiguration( KisFilterConfiguration * config );
+    virtual KisBrightnessContrastFilterConfiguration * configuration() const;
+    virtual void setConfiguration( KisFilterConfiguration * config );
     WdgBrightnessContrast * m_page;
 };
 

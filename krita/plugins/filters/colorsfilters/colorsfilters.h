@@ -24,7 +24,7 @@
 #include "kis_perchannel_filter.h"
 
 class KoColorSpace;
-class KoColorAdjustment;
+class KoColorTransformation;
 
 class ColorsFilters : public KParts::Plugin
 {
@@ -66,7 +66,7 @@ class KisDesaturateFilter : public KisFilter {
     private:
 
         KoColorSpace * m_lastCS;
-        KoColorAdjustment * m_adj;
+        KoColorTransformation * m_adj;
 };
 
 #endif

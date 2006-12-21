@@ -146,18 +146,6 @@ KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(Q
     return new KisBrightnessContrastConfigWidget(parent, dev);
 }
 
-KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwidget)
-{
-    KisBrightnessContrastConfigWidget* widget = (KisBrightnessContrastConfigWidget*)nwidget;
-
-    if ( widget == 0 )
-    {
-        return new KisBrightnessContrastFilterConfiguration();
-    } else {
-        return widget->config();
-    }
-}
-
 std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceSP /*dev*/)
 {
     //XXX should really come up with a list of configurations
@@ -227,7 +215,7 @@ void KisBrightnessContrastFilter::process(const KisPaintDeviceSP src, const QPoi
                     ++npix;
                 }
                 // adjust
-                src->colorSpace()->applyAdjustment(firstPixel, firstPixel, configBC->m_adjustment, npix);
+                configBC->m_adjustment->transform(firstPixel, firstPixel, npix);
                 pixelsProcessed += npix;
                 ++iter;
                 break;
@@ -235,7 +223,7 @@ void KisBrightnessContrastFilter::process(const KisPaintDeviceSP src, const QPoi
 
             default:
                 // adjust, but since it's partially selected we also only partially adjust
-                src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), configBC->m_adjustment, 1);
+                configBC->m_adjustment->transform(iter.oldRawData(), iter.rawData(), 1);
                 const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
                 quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
                 src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
@@ -249,8 +237,8 @@ void KisBrightnessContrastFilter::process(const KisPaintDeviceSP src, const QPoi
     setProgressDone();
 }
 
-KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name, Qt::WFlags f)
-    : KisFilterConfigWidget(parent, name, f)
+KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
+    : KisFilterConfigWidget(parent, f)
 {
     int i;
     int height;
@@ -318,7 +306,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
 
 }
 
-KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::config()
+KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::configuration() const
 {
     KisBrightnessContrastFilterConfiguration * cfg = new KisBrightnessContrastFilterConfiguration();
 

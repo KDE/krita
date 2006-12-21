@@ -166,18 +166,6 @@ KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *
     return new KisPerChannelConfigWidget(parent, dev);
 }
 
-KisFilterConfiguration* KisPerChannelFilter::configuration(QWidget *nwidget)
-{
-    KisPerChannelConfigWidget* widget = (KisPerChannelConfigWidget*)nwidget;
-
-    if ( widget == 0 )
-    {
-        return 0;
-    } else {
-        return widget->config();
-    }
-}
-
 std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfiguration(KisPaintDeviceSP dev)
 {
     std::list<KisFilterConfiguration*> list;
@@ -209,7 +197,7 @@ void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
         configBC->dirty = false;
     }
 
-    KoColorAdjustment *adj = configBC->adjustment;
+    KoColorTransformation *adj = configBC->adjustment;
 
 
     if (src!=dst) {
@@ -254,14 +242,14 @@ void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
                     ++npix;
                 }
                 // adjust
-                src->colorSpace()->applyAdjustment(firstPixel, firstPixel, adj, npix);
+                adj->transform(firstPixel, firstPixel, npix);
                 pixelsProcessed += npix;
                 break;
             }
 
             default:
                 // adjust, but since it's partially selected we also only partially adjust
-                src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), adj, 1);
+                adj->transform(iter.oldRawData(), iter.rawData(), 1);
                 const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
                 quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
                 src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
@@ -308,8 +296,8 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
     m_page->kCurve->setPixmap(pix);
 }
 
-KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name, Qt::WFlags f)
-    : KisFilterConfigWidget(parent, name, f)
+KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
+    : KisFilterConfigWidget(parent, f)
 {
     int i;
     int height;
@@ -368,7 +356,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     setActiveChannel(0);
 }
 
-KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
+KisFilterConfiguration * KisPerChannelConfigWidget::configuration() const
 {
     int nCh = m_dev->colorSpace()->colorChannelCount();
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);

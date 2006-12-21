@@ -163,7 +163,7 @@ void KisAutoContrast::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
     }
 
     // apply
-    KoColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(cfg->transfer);
+    KoColorTransformation *adj = src->colorSpace()->createBrightnessContrastAdjustment(cfg->transfer);
 
     KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
 
@@ -198,7 +198,7 @@ void KisAutoContrast::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
                     ++npix;
                 }
                 // adjust
-                src->colorSpace()->applyAdjustment(firstPixel, firstPixel, adj, npix);
+                adj->transform(firstPixel, firstPixel, npix);
                 pixelsProcessed += npix;
                 ++iter;
                 break;
@@ -206,7 +206,7 @@ void KisAutoContrast::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
 
             default:
                 // adjust, but since it's partially selected we also only partially adjust
-                src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), adj, 1);
+                adj->transform(iter.oldRawData(), iter.rawData(), 1);
                 const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
                 quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
                 src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
@@ -292,7 +292,7 @@ void KisDesaturateFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
                     ++npix;
                 }
                 // adjust
-                src->colorSpace()->applyAdjustment(firstPixel, firstPixel, m_adj, npix);
+                m_adj->transform(firstPixel, firstPixel, npix);
                 pixelsProcessed += npix;
                 ++iter;
                 break;
@@ -300,7 +300,7 @@ void KisDesaturateFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
 
             default:
                 // adjust, but since it's partially selected we also only partially adjust
-                src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), m_adj, 1);
+                m_adj->transform(iter.oldRawData(), iter.rawData(), 1);
                 const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
                 quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
                 src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());

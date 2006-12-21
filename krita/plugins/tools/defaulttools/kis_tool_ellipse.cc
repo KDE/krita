@@ -89,9 +89,13 @@ void KisToolEllipse::mousePressEvent(KoPointerEvent *event)
 
 void KisToolEllipse::mouseMoveEvent(KoPointerEvent *event)
 {
-    QRectF bound;
-
     if (m_dragging) {
+        QRectF bound;
+
+        bound.setTopLeft(m_dragStart);
+        bound.setBottomRight(m_dragEnd);
+        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+
 	QPointF pos = convertToPixelCoord(event);
         // erase old lines on canvas
         //draw(m_dragStart, m_dragEnd);

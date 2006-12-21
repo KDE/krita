@@ -92,15 +92,10 @@ void KisToolGradient::mouseMoveEvent(KoPointerEvent *e)
     if (m_dragging) {
         QPointF pos = convertToPixelCoord(e);
 
-        QRectF oldBound;
-        oldBound.setTopLeft(m_startPos);
-        oldBound.setBottomRight(m_endPos);
-
-        QRectF newBound;
-        oldBound.setTopLeft(m_startPos);
-        oldBound.setBottomRight(pos);
-
-        QRectF bound = oldBound.united(newBound);
+        QRectF bound;
+        bound.setTopLeft(m_startPos);
+        bound.setBottomRight(m_endPos);
+        m_canvas->updateCanvas(convertToPt(bound.normalized()));
 
         if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
             m_endPos = straightLine(pos);
@@ -108,6 +103,9 @@ void KisToolGradient::mouseMoveEvent(KoPointerEvent *e)
         else {
             m_endPos = pos;
         }
+
+        bound.setTopLeft(m_startPos);
+        bound.setBottomRight(m_endPos);
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
     }
 }

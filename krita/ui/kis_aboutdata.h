@@ -61,6 +61,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
     aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
     aboutData->addAuthor("Sander Koning", 0, "sanderkoning@kde.nl");
+    aboutData->addAuthor("Andreas Lundin", 0, "adde@update.uu.se");
     return aboutData;
 }
 

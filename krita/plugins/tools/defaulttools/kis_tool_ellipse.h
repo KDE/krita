@@ -24,10 +24,15 @@
 #define __KIS_TOOL_ELLIPSE_H__
 
 #include "kis_tool_shape.h"
+#include "kis_types.h"
+#include "KoToolFactory.h"
+#include "kis_layer_shape.h"
 
-class KisCanvas;
+
+class QPainter;
 class KisPainter;
-class KisRect;
+
+class KoCanvasBase;
 
 class KisToolEllipse : public KisToolShape {
 
@@ -35,18 +40,28 @@ class KisToolEllipse : public KisToolShape {
     Q_OBJECT
 
 public:
-    KisToolEllipse();
+    KisToolEllipse(KoCanvasBase * canvas);
     virtual ~KisToolEllipse();
 
-    virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 3; }
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual void buttonPress(KoPointerEvent *event);
-    virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KoPointerEvent *event);
+    //virtual enumToolType toolType() { return TOOL_SHAPE; }
 
-protected:
-    virtual void draw(const QPointF& start, const QPointF& stop);
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+
+
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void paint(QPainter& gc, KoViewConverter &converter);
+
+    //protected:
+    //virtual void draw(const QPointF& start, const QPointF& stop);
+
+private:
+    void paintEllipse();
+    void paintEllipse(QPainter& gc, const QRect& rc);
+
 
 protected:
     QPointF m_dragCenter;
@@ -54,7 +69,7 @@ protected:
     QPointF m_dragEnd;
 
     bool m_dragging;
-    KisImageSP m_currentImage;
+    KisPainter *m_painter;
 };
 
 

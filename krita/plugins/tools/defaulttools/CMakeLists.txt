@@ -1,14 +1,14 @@
 set(kritadefaulttools_PART_SRCS
     default_tools.cc
     #kis_tool_colorpicker.cc
-    #kis_tool_move.cc
+    kis_tool_move.cc
     #kis_tool_zoom.cc
     kis_tool_brush.cc
     kis_tool_line.cc
     #kis_tool_duplicate.cc
     #kis_tool_fill.cc
     kis_tool_rectangle.cc
-    #kis_tool_ellipse.cc
+    kis_tool_ellipse.cc
     #kis_tool_pan.cc
     #kis_tool_text.cc
     kis_tool_gradient.cc

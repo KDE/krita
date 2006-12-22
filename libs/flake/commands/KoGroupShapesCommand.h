@@ -23,14 +23,14 @@
 #include <koffice_export.h>
 
 #include <QList>
-#include <kcommand.h>
+#include <QUndoCommand>
 
 class KoShape;
 class KoShapeGroup;
 class KoShapeContainer;
 
 /// The undo / redo command for grouping shapes
-class FLAKE_EXPORT KoGroupShapesCommand : public KCommand {
+class FLAKE_EXPORT KoGroupShapesCommand : public QUndoCommand {
 public:
     /**
      * Command to group a set of shapes into a predefined container.
@@ -38,25 +38,25 @@ public:
      * @param shapes a list of all the shapes that should be grouped.
      * @param clipped a list of the same length as the shapes list with one bool for each shape.
      *      See KoShapeContainer::childClipped()
+     * @param parent the parent command used for macro commands
      */
-    KoGroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes, QList<bool> clipped);
+    KoGroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes, QList<bool> clipped,
+                          QUndoCommand *parent = 0);
     /**
      * Command to group a set of shapes into a predefined container.
      * Convenience constructor since KoShapeGroup does not allow clipping.
      * @param container the group to group the shapes under.
      * @param shapes a list of all the shapes that should be grouped.
      */
-    KoGroupShapesCommand(KoShapeGroup *container, QList<KoShape *> shapes);
+    KoGroupShapesCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent = 0);
     virtual ~KoGroupShapesCommand() { };
-    /// execute the command
-    virtual void execute ();
-    /// revert the actions done in execute
-    virtual void unexecute ();
-    /// return the name of this command
-    virtual QString name () const;
+    /// redo the command
+    virtual void redo ();
+    /// revert the actions done in redo
+    virtual void undo ();
 
 protected:
-    KoGroupShapesCommand(); ///< protected constructor for child classes
+    KoGroupShapesCommand(QUndoCommand* parent = 0); ///< protected constructor for child classes
     QList<KoShape*> m_shapes; ///<list of shapes to be grouped
     QList<bool> m_clipped; ///< list of booleas to specify the shape of the same index to eb clipped
     KoShapeContainer *m_container; ///< the container where the grouping should be for.

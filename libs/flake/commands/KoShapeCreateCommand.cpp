@@ -25,11 +25,13 @@
 
 #include <klocale.h>
 
-KoShapeCreateCommand::KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape )
-: m_controller( controller )
+KoShapeCreateCommand::KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_controller( controller )
 , m_shape( shape )
 , m_deleteShape( true )
 {
+    setText( i18n( "Create shape" ) );
 }
 
 KoShapeCreateCommand::~KoShapeCreateCommand() {
@@ -37,14 +39,14 @@ KoShapeCreateCommand::~KoShapeCreateCommand() {
         delete m_shape;
 }
 
-void KoShapeCreateCommand::execute () {
+void KoShapeCreateCommand::redo () {
     Q_ASSERT(m_shape);
     Q_ASSERT(m_controller);
     recurse(m_shape, Add);
     m_deleteShape = false;
 }
 
-void KoShapeCreateCommand::unexecute () {
+void KoShapeCreateCommand::undo () {
     Q_ASSERT(m_shape);
     Q_ASSERT(m_controller);
     recurse(m_shape, Remove);
@@ -62,8 +64,4 @@ void KoShapeCreateCommand::recurse(KoShape *shape, const AddRemove ar) {
         foreach(KoShape *child, container->iterator())
             recurse(child, ar);
     }
-}
-
-QString KoShapeCreateCommand::name () const {
-    return i18n( "Create shape" );
 }

@@ -21,7 +21,7 @@
 #ifndef KOPATHCOMMAND_H
 #define KOPATHCOMMAND_H
 
-#include <kcommand.h>
+#include <QUndoCommand>
 #include <QList>
 #include <QMap>
 #include <QPointF>
@@ -31,11 +31,16 @@
 class KoParameterShape;
 
 /// the base command for commands altering a path shape
-class KoPathBaseCommand : public KCommand {
+class KoPathBaseCommand : public QUndoCommand {
 public:
-    KoPathBaseCommand();
-    /// initialize the base command with a single shape
-    explicit KoPathBaseCommand( KoPathShape *shape );
+    /**
+     * @param parent the parent command used for macro commands
+     */
+    KoPathBaseCommand( QUndoCommand *parent = 0 );
+    /** initialize the base command with a single shape
+     * @param parent the parent command used for macro commands
+     */
+    explicit KoPathBaseCommand( KoPathShape *shape, QUndoCommand *parent = 0 );
 protected:
     /**
      * Shedules repainting of all shapes control point rects.
@@ -47,29 +52,28 @@ protected:
 };
 
 /// The undo / redo command for path point moving.
-class KoPointMoveCommand : public KCommand 
+class KoPointMoveCommand : public QUndoCommand 
 {
 public:
     /**
      * Command to move path point.
      * @param pointMap map of the path point to move
      * @param offset the offset by which the point is moved in document coordinates
+     * @param parent the parent command used for macro commands
      */
-    KoPointMoveCommand( const KoPathShapePointMap &pointMap, const QPointF &offset );
+    KoPointMoveCommand( const KoPathShapePointMap &pointMap, const QPointF &offset, QUndoCommand *parent = 0 );
 
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
-    /// return the name of this command
-    QString name() const;
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 private:
     KoPathShapePointMap m_pointMap;
     QPointF m_offset;
 };
 
 /// The undo / redo command for path point moving.
-class KoControlPointMoveCommand : public KCommand
+class KoControlPointMoveCommand : public QUndoCommand
 {
 public:
     /**
@@ -77,14 +81,14 @@ public:
      * @param point the path point to control point belongs to
      * @param offset the offset by which the point is moved in document coordinates
      * @param pointType the type of the point to move
+     * @param parent the parent command used for macro commands
      */
-    KoControlPointMoveCommand( KoPathPoint *point, const QPointF &offset, KoPathPoint::KoPointType pointType );
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
-    /// return the name of this command
-    QString name() const;
+    KoControlPointMoveCommand( KoPathPoint *point, const QPointF &offset, KoPathPoint::KoPointType pointType,
+                               QUndoCommand *parent = 0 );
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 private:
     KoPathPoint * m_point;
     // the offset in shape coordinates
@@ -99,20 +103,21 @@ public:
      * Command to change the properties of a single point
      * @param point the path point to change properties for
      * @param property the new point properties to set
+     * @param parent the parent command used for macro commands
      */
-    KoPointPropertyCommand( KoPathPoint *point, KoPathPoint::KoPointProperties property );
+    KoPointPropertyCommand( KoPathPoint *point, KoPathPoint::KoPointProperties property, QUndoCommand *parent = 0 );
     /**
      * Command to change the properties of multiple points
      * @param points the path point whose properties to change
      * @param properties the new properties to set
+     * @param parent the parent command used for macro commands
      */
-    KoPointPropertyCommand( const QList<KoPathPoint*> &points, const QList<KoPathPoint::KoPointProperties> &properties );
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
-    /// return the name of this command
-    QString name() const;
+    KoPointPropertyCommand( const QList<KoPathPoint*> &points, const QList<KoPathPoint::KoPointProperties> &properties,
+                            QUndoCommand *parent = 0 );
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 private:
     typedef struct PointPropertyChangeset
     {
@@ -126,19 +131,18 @@ private:
 };
 
 /// The undo / redo command for removing path points.
-class KoPointRemoveCommand : public KCommand {
+class KoPointRemoveCommand : public QUndoCommand {
 public:
     /**
      * @brief Command to remove a points from path shapes
      * @param pointMap map of the path points to remove
+     * @param parent the parent command used for macro commands
      */
-    explicit KoPointRemoveCommand( const KoPathShapePointMap &pointMap );
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
-    /// return the name of this command
-    QString name() const;
+    explicit KoPointRemoveCommand( const KoPathShapePointMap &pointMap, QUndoCommand *parent = 0 );
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 private:
     struct KoPointRemoveData
     {
@@ -164,29 +168,33 @@ public:
      * @param shape the path shape containing the points
      * @param segment the segment to split
      * @param splitPosition the position to split at [0..1]
+     * @param parent the parent command used for macro commands
      */
-    KoSegmentSplitCommand( KoPathShape *shape, const KoPathSegment &segment, double splitPosition );
+    KoSegmentSplitCommand( KoPathShape *shape, const KoPathSegment &segment, double splitPosition,
+                           QUndoCommand *parent = 0 );
     /**
      * Command to split multiple path segments at different positions
      * @param shape the path shape containing the points
      * @param segments the segments to split
      * @param splitPositions the positions to split at [0..1]
+     * @param parent the parent command used for macro commands
      */
-    KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, const QList<double> &splitPositions );
+    KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, const QList<double> &splitPositions,
+                           QUndoCommand *parent = 0 );
     /**
      * Command to split multiple path segments at the same position
      * @param shape the path shape containing the points
      * @param segments the segments to split
      * @param splitPosition the position to split at [0..1]
+     * @param parent the parent command used for macro commands
      */
-    KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, double splitPosition );
+    KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, double splitPosition,
+                           QUndoCommand *parent = 0 );
     virtual ~KoSegmentSplitCommand();
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
-    /// return the name of this command
-    QString name() const;
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 private:
     QList<KoPathSegment> m_segments;
     typedef QPair<KoPathPoint,KoPathPoint> KoSegmentData;
@@ -207,12 +215,13 @@ public:
      * @param shape the path shape whose points to join
      * @param point1 the first point of the subpath to join
      * @param point2 the second point of the subpath to join
+     * @param parent the parent command used for macro commands
      */
-    KoPointJoinCommand( KoPathShape *shape, KoPathPoint *point1, KoPathPoint *point2 );
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
+    KoPointJoinCommand( KoPathShape *shape, KoPathPoint *point1, KoPathPoint *point2, QUndoCommand *parent = 0 );
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
     /// return the name of this command
     QString name() const;
 private:
@@ -229,21 +238,21 @@ public:
      * Command to break a subpath at a single point.
      * @param shape the path shape whose subpath to close
      * @param breakPoint the point to break at
+     * @param parent the parent command used for macro commands
      */
-    KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *breakPoint );
+    KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *breakPoint, QUndoCommand *parent = 0 );
     /**
      * Command to break a subpath at a path segment
      * @param shape the path shape whose subpath to close
      * @param segment the segment
+     * @param parent the parent command used for macro commands
      */
-    KoSubpathBreakCommand( KoPathShape *shape, const KoPathSegment &segment );
+    KoSubpathBreakCommand( KoPathShape *shape, const KoPathSegment &segment, QUndoCommand *parent = 0 );
     virtual ~KoSubpathBreakCommand();
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
-    /// return the name of this command
-    QString name() const;
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 private:
     bool m_broken;
     KoPathSegment m_breakSegment;
@@ -262,21 +271,22 @@ public:
      * @param shape the path shape whose subpath to close
      * @param segment the segment to change the type of
      * @param changeToLine if true, changes segment to line, else changes segment to curve
+     * @param parent the parent command used for macro commands
      */
-    KoSegmentTypeCommand( KoPathShape *shape, const KoPathSegment &segment, bool changeToLine );
+    KoSegmentTypeCommand( KoPathShape *shape, const KoPathSegment &segment, bool changeToLine, QUndoCommand *parent = 0 );
     /**
      * Command for changing a segments type (curve/line)
      * @param shape the path shape whose subpath to close
      * @param segments the segments to change the type of
      * @param changeToLine if true, changes segments to lines, else changes segments to curves
+     * @param parent the parent command used for macro commands
      */
-    KoSegmentTypeCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, bool changeToLine );
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
-    /// return the name of this command
-    QString name() const;
+    KoSegmentTypeCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, bool changeToLine,
+                          QUndoCommand *parent = 0 );
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 private:
     QList<KoPathSegment> m_segments;
     QMap<KoPathPoint*,KoPathPoint> m_oldPointData;
@@ -286,22 +296,21 @@ private:
 class KoShapeControllerBase;
 
 /// The undo / redo command for combining two or more paths into one
-class FLAKE_EXPORT KoPathCombineCommand : public KCommand
+class FLAKE_EXPORT KoPathCombineCommand : public QUndoCommand
 {
 public:
     /**
      * Command for combining a list of paths into one single path.
      * @param controller the controller to used for removing/inserting.
      * @param paths the list of paths to combine
+     * @param parent the parent command used for macro commands
      */
-    KoPathCombineCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths );
+    KoPathCombineCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, QUndoCommand *parent = 0 );
     virtual ~KoPathCombineCommand();
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
-    /// return the name of this command
-    QString name() const;
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 private:
     KoShapeControllerBase *m_controller;
     QList<KoPathShape*> m_paths;
@@ -310,18 +319,17 @@ private:
 };
 
 /// The undo / redo command for changing a parameter
-class KoParameterChangeCommand : public KCommand
+class KoParameterChangeCommand : public QUndoCommand
 {
 public:
-    KoParameterChangeCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint );
+    KoParameterChangeCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint,
+                              QUndoCommand *parent = 0 );
     virtual ~KoParameterChangeCommand();
 
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
-    /// return the name of this command
-    QString name() const;
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 private:
     KoParameterShape *m_shape;
     int m_handleId;
@@ -330,40 +338,38 @@ private:
 };
 
 /// The undo / redo command for changing a KoParameterShape into a KoPathShape
-class KoParameterToPathCommand : public KCommand
+class KoParameterToPathCommand : public QUndoCommand
 {
 public:
-    KoParameterToPathCommand( KoParameterShape *shape );
-    KoParameterToPathCommand( const QList<KoParameterShape*> &shapes );
+    KoParameterToPathCommand( KoParameterShape *shape, QUndoCommand *parent = 0 );
+    KoParameterToPathCommand( const QList<KoParameterShape*> &shapes, QUndoCommand *parent = 0 );
     virtual ~KoParameterToPathCommand();
 
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
-    /// return the name of this command
-    QString name() const;
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 private:
     QList<KoParameterShape*> m_shapes;
 };
 
 /// The undo / redo command for separating subpaths into different paths
-class FLAKE_EXPORT KoPathSeparateCommand : public KCommand
+class FLAKE_EXPORT KoPathSeparateCommand : public QUndoCommand
 {
 public:
     /**
      * Command for separating subpaths of a list of paths into different paths.
      * @param controller the controller to used for removing/inserting.
      * @param paths the list of paths to separate
+     * @param parent the parent command used for macro commands
      */
-    KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths );
+    KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths,
+                           QUndoCommand *parent = 0 );
     virtual ~KoPathSeparateCommand();
-    /// execute the command
-    void execute();
-    /// revert the actions done in execute
-    void unexecute();
-    /// return the name of this command
-    QString name() const;
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 private:
     KoShapeControllerBase *m_controller;
     QList<KoPathShape*> m_paths;

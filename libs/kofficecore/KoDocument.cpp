@@ -53,6 +53,9 @@
 #include <kprinter.h>
 #include <ksavefile.h>
 #include <kxmlguifactory.h>
+#include <KActionCollection>
+#include <kstandardaction.h>
+#include <KIconLoader>
 
 #include <QBuffer>
 #include <QCursor>
@@ -74,6 +77,8 @@
 #include <QDateTime>
 #include <config.h>
 #include <assert.h>
+#include <QUndoStack>
+#include <QUndoCommand>
 
 
 // Define the protocol used here for embedded documents' URL
@@ -127,7 +132,8 @@ public:
         m_current( false ),
         m_storeInternal( false ),
         m_bLoading( false ),
-        m_startUpWidget( 0 )
+        m_startUpWidget( 0 ),
+        m_undoStack( 0 )
     {
         m_confirmNonNativeSave[0] = true;
         m_confirmNonNativeSave[1] = true;
@@ -178,6 +184,8 @@ public:
     KoOpenPane* m_startUpWidget;
     QString m_templateType;
     QList<KoVersionInfo> m_versionInfo;
+
+    QUndoStack* m_undoStack;
 };
 
 // Used in singleViewMode
@@ -283,6 +291,17 @@ KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleView
     m_pageLayout.ptBottom = 0;
     m_pageLayout.ptLeft = 0;
     m_pageLayout.ptRight = 0;
+
+    d->m_undoStack = new QUndoStack( this );
+    QAction* action = d->m_undoStack->createUndoAction( actionCollection() );
+    action->setObjectName( KStandardAction::stdName( KStandardAction::Undo ) );
+    action->setIcon( SmallIconSet( "undo" ) );
+    actionCollection()->insert( action );
+    action = d->m_undoStack->createRedoAction( actionCollection() );
+    action->setObjectName( KStandardAction::stdName( KStandardAction::Redo ) );
+    action->setIcon( SmallIconSet( "redo" ) );
+    actionCollection()->insert( action );
+    connect( d->m_undoStack, SIGNAL( cleanChanged( bool ) ), this, SLOT( setModified( bool ) ) );
 
     // A way to 'fix' the job's window, since we have no widget known to KParts
     if ( !singleViewMode )
@@ -2457,6 +2476,7 @@ void KoDocument::addShell( KoMainWindow *shell )
     {
         //kDebug(30003) << "addShell: shell " << (void*)shell << " added to doc " << this << endl;
         d->m_shells.append( shell );
+        connect( shell, SIGNAL( documentSaved() ), d->m_undoStack, SLOT( setClean() ) );
     }
 }
 
@@ -2810,6 +2830,11 @@ bool KoDocument::showEmbedInitDialog(QWidget* parent)
 QList<KoVersionInfo> & KoDocument::versionList()
 {
   return d->m_versionInfo;
+}
+
+void KoDocument::addCommand(QUndoCommand* command)
+{
+    d->m_undoStack->push( command );
 }
 
 #include "KoDocument_p.moc"

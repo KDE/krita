@@ -27,6 +27,7 @@
 #include <KoShapeManager.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoDocument.h>
 
 #include <kis_image.h>
 
@@ -108,10 +109,9 @@ bool KisCanvas2::snapToGrid() const
     return true;
 }
 
-void KisCanvas2::addCommand(KCommand *command, bool execute)
+void KisCanvas2::addCommand(QUndoCommand *command)
 {
-    Q_UNUSED( command );
-    Q_UNUSED( execute );
+    m_d->view->koDocument()->addCommand( command );
 }
 
 KoShapeManager* KisCanvas2::shapeManager() const

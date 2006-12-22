@@ -40,7 +40,7 @@ KoShapeController::KoShapeController( KoCanvasBase *canvas, KoShapeControllerBas
 {
 }
 
-KCommand* KoShapeController::addShape( KoShape *shape )
+QUndoCommand* KoShapeController::addShape( KoShape *shape )
 {
     Q_ASSERT(m_canvas->shapeManager());
 
@@ -96,7 +96,7 @@ KCommand* KoShapeController::addShape( KoShape *shape )
     return cmd;
 }
 
-KCommand* KoShapeController::removeShape( KoShape *shape )
+QUndoCommand* KoShapeController::removeShape( KoShape *shape )
 {
     KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( m_shapeController, shape );
     return cmd;    

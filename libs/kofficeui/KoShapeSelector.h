@@ -32,7 +32,7 @@
 class KoTool;
 class KoShape;
 class KoViewConverter;
-class KCommand;
+class QUndoCommand;
 class KoCanvasController;
 class KoShapeManager;
 class QKeyEvent;
@@ -81,7 +81,7 @@ private:
             Canvas(KoShapeSelector *parent);
             void gridSize (double *horizontal, double *vertical) const;
             bool snapToGrid() const { return false; }
-            void addCommand (KCommand *command, bool execute=true);
+            void addCommand (QUndoCommand *command);
             KoShapeManager * shapeManager () const { return m_parent->m_shapeManager; }
             void updateCanvas (const QRectF &rc);
             KoToolProxy *toolProxy () { return 0; }

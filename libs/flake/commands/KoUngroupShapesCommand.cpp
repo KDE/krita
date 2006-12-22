@@ -23,8 +23,8 @@
 
 #include <klocale.h>
 
-KoUngroupShapesCommand::KoUngroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes)
-: KoGroupShapesCommand()
+KoUngroupShapesCommand::KoUngroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes, QUndoCommand *parent)
+: KoGroupShapesCommand(parent)
 {
     m_shapes = shapes;
     m_container = container;
@@ -32,16 +32,14 @@ KoUngroupShapesCommand::KoUngroupShapesCommand(KoShapeContainer *container, QLis
         m_clipped.append( m_container->childClipped(shape) );
         m_oldParents.append( m_container->parent() );
     }
+
+    setText(i18n( "Ungroup shapes" ));
 }
 
-void KoUngroupShapesCommand::execute () {
-    KoGroupShapesCommand::unexecute();
+void KoUngroupShapesCommand::redo () {
+    KoGroupShapesCommand::undo();
 }
 
-void KoUngroupShapesCommand::unexecute () {
-    KoGroupShapesCommand::execute();
-}
-
-QString KoUngroupShapesCommand::name () const {
-    return i18n( "Ungroup shapes" );
+void KoUngroupShapesCommand::undo () {
+    KoGroupShapesCommand::redo();
 }

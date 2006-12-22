@@ -26,7 +26,9 @@
 #include <klocale.h>
 // #include <kdebug.h>
 
-KoShapeAlignCommand::KoShapeAlignCommand( const KoSelectionSet &shapes, Align align, QRectF boundingRect )
+KoShapeAlignCommand::KoShapeAlignCommand( const KoSelectionSet &shapes, Align align, QRectF boundingRect,
+                                          QUndoCommand *parent )
+: QUndoCommand( parent )
 {
     QList<QPointF> previousPositions;
     QList<QPointF> newPositions;
@@ -69,6 +71,8 @@ KoShapeAlignCommand::KoShapeAlignCommand( const KoSelectionSet &shapes, Align al
 //        (position + delta).x() << ", " << (position+delta).y() << endl;
     }
     m_command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
+
+    setText( i18n( "Align shapes" ) );
 }
 
 KoShapeAlignCommand::~KoShapeAlignCommand()
@@ -76,16 +80,12 @@ KoShapeAlignCommand::~KoShapeAlignCommand()
     delete m_command;
 }
 
-void KoShapeAlignCommand::execute()
+void KoShapeAlignCommand::redo()
 {
-    m_command->execute();
+    m_command->redo();
 }
 
-void KoShapeAlignCommand::unexecute()
+void KoShapeAlignCommand::undo()
 {
-    m_command->unexecute();
-}
-
-QString KoShapeAlignCommand::name () const {
-    return i18n( "Align shapes" );
+    m_command->undo();
 }

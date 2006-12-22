@@ -24,22 +24,29 @@
 
 #include <klocale.h>
 
-KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, KoShape *shape )
-: m_controller( controller )
+KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_controller( controller )
 , m_deleteShapes( false )
 {
     m_shapes.append( shape );
     m_oldParents.append( shape->parent() );
+
+    setText( i18n( "Delete shapes" ) );
 }
 
-KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, const KoSelectionSet &shapes )
-: m_controller( controller )
+KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, const KoSelectionSet &shapes,
+                                            QUndoCommand *parent)
+: QUndoCommand( parent )
+, m_controller( controller )
 , m_deleteShapes( false )
 {
     m_shapes = shapes.toList();
     foreach( KoShape *shape, m_shapes ) {
         m_oldParents.append( shape->parent() );
     }
+
+    setText( i18n( "Delete shapes" ) );
 }
 
 KoShapeDeleteCommand::~KoShapeDeleteCommand() {
@@ -51,7 +58,7 @@ KoShapeDeleteCommand::~KoShapeDeleteCommand() {
     }
 }
 
-void KoShapeDeleteCommand::execute () {
+void KoShapeDeleteCommand::redo () {
     if( ! m_controller )
         return;
 
@@ -63,7 +70,7 @@ void KoShapeDeleteCommand::execute () {
     m_deleteShapes = true;
 }
 
-void KoShapeDeleteCommand::unexecute () {
+void KoShapeDeleteCommand::undo () {
     if( ! m_controller )
         return;
 
@@ -73,8 +80,4 @@ void KoShapeDeleteCommand::unexecute () {
         m_controller->addShape( m_shapes[i] );
     }
     m_deleteShapes = false;
-}
-
-QString KoShapeDeleteCommand::name () const {
-    return i18n( "Delete shapes" );
 }

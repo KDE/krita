@@ -32,14 +32,14 @@
 #include "KoCanvasBase.h"
 #include "KoTool.h"
 
-#include <kcommand.h>
+#include <QUndoCommand>
 
 #include <QMouseEvent>
 
 void KoInteractionStrategy::cancelInteraction() {
-    KCommand *cmd = createCommand();
+    QUndoCommand *cmd = createCommand();
     if(cmd) {
-        cmd->unexecute();
+        cmd->undo();
         delete cmd;
     }
 }

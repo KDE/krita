@@ -22,25 +22,31 @@
 
 #include <klocale.h>
 
-KoShapeRotateCommand::KoShapeRotateCommand(const KoSelectionSet &shapes, QList<double> &previousAngles, QList<double> &newAngles)
-: m_previousAngles(previousAngles)
+KoShapeRotateCommand::KoShapeRotateCommand(const KoSelectionSet &shapes, QList<double> &previousAngles, QList<double> &newAngles, QUndoCommand *parent)
+: QUndoCommand(parent)
+, m_previousAngles(previousAngles)
 , m_newAngles(newAngles)
 {
     m_shapes = shapes.toList();
     Q_ASSERT(m_shapes.count() == m_previousAngles.count());
     Q_ASSERT(m_shapes.count() == m_newAngles.count());
+
+    setText( i18n( "Rotate shapes" ) );
 }
 
-KoShapeRotateCommand::KoShapeRotateCommand(const QList<KoShape*> &shapes, QList<double> &previousAngles, QList<double> &newAngles)
-: m_previousAngles(previousAngles)
+KoShapeRotateCommand::KoShapeRotateCommand(const QList<KoShape*> &shapes, QList<double> &previousAngles, QList<double> &newAngles, QUndoCommand *parent)
+: QUndoCommand(parent)
+, m_previousAngles(previousAngles)
 , m_newAngles(newAngles)
 {
     m_shapes = shapes;
     Q_ASSERT(m_shapes.count() == m_previousAngles.count());
     Q_ASSERT(m_shapes.count() == m_newAngles.count());
+
+    setText( i18n( "Rotate shapes" ) );
 }
 
-void KoShapeRotateCommand::execute() {
+void KoShapeRotateCommand::redo() {
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->repaint();
         m_shapes.at(i)->rotate( m_newAngles.at(i) );
@@ -48,14 +54,10 @@ void KoShapeRotateCommand::execute() {
     }
 }
 
-void KoShapeRotateCommand::unexecute() {
+void KoShapeRotateCommand::undo() {
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->repaint();
         m_shapes.at(i)->rotate( m_previousAngles.at(i) );
         m_shapes.at(i)->repaint();
     }
-}
-
-QString KoShapeRotateCommand::name () const {
-    return i18n( "Rotate shapes" );
 }

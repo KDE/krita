@@ -25,13 +25,13 @@
 #include <koffice_export.h>
 
 #include <QRectF>
-#include <kcommand.h>
+#include <QUndoCommand>
 
 class QString;
 class KoShapeMoveCommand;
 
 /// The undo / redo command for aligning shapes
-class FLAKE_EXPORT KoShapeAlignCommand : public KCommand {
+class FLAKE_EXPORT KoShapeAlignCommand : public QUndoCommand {
 public:
     /// The different alignment options for this command
     enum Align
@@ -48,15 +48,14 @@ public:
      * @param shapes a set of all the shapes that should be aligned
      * @param align the aligment type
      * @param boundingRect the rect the shape will be aligned in
+     * @param parent the parent command used for macro commands
      */
-    KoShapeAlignCommand( const KoSelectionSet &shapes, Align align, QRectF boundingRect );
+    KoShapeAlignCommand( const KoSelectionSet &shapes, Align align, QRectF boundingRect, QUndoCommand *parent = 0 );
     virtual ~KoShapeAlignCommand();
-    /// execute the command
-    virtual void execute();
-    /// revert the actions done in execute
-    virtual void unexecute();
-    /// return the name of this command
-    virtual QString name () const;
+    /// redo the command
+    virtual void redo();
+    /// revert the actions done in redo
+    virtual void undo();
 private:
     KoShapeMoveCommand *m_command;
 };

@@ -25,7 +25,7 @@
 
 #include <koffice_export.h>
 
-#include <kcommand.h>
+#include <QUndoCommand>
 
 /// The undo / redo command for ungrouping shapes
 class FLAKE_EXPORT KoUngroupShapesCommand : public KoGroupShapesCommand {
@@ -34,14 +34,13 @@ public:
      * Command to ungroup a set of shapes from one parent container.
      * @param container the group to ungroup the shapes from.
      * @param shapes a list of all the shapes that should be ungrouped.
+     * @param parent the parent command used for macro commands
      */
-    KoUngroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes);
-    /// execute the command
-    void execute ();
-    /// revert the actions done in execute
-    void unexecute ();
-    /// return the name of this command
-    QString name () const;
+    KoUngroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes, QUndoCommand *parent = 0);
+    /// redo the command
+    void redo ();
+    /// revert the actions done in redo
+    void undo ();
 };
 
 #endif

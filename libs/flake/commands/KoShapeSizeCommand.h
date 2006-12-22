@@ -25,34 +25,36 @@
 
 #include <koffice_export.h>
 
-#include <kcommand.h>
+#include <QUndoCommand>
 #include <QList>
 
 class KoShape;
 
 /// The undo / redo command for shape sizing.
-class FLAKE_EXPORT KoShapeSizeCommand : public KCommand {
+class FLAKE_EXPORT KoShapeSizeCommand : public QUndoCommand {
 public:
     /**
      * The undo / redo command for shape sizing.
      * @param shapes all the shapes that will be rezised at the same time
      * @param previousSizes the old sizes; in a list with a member for each shape
      * @param newSizes the new sizes; in a list with a member for each shape
+     * @param parent the parent command used for macro commands
      */
-    KoShapeSizeCommand(const KoSelectionSet &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes);
+    KoShapeSizeCommand(const KoSelectionSet &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes,
+                        QUndoCommand *parent = 0);
     /**
      * The undo / redo command for shape sizing.
      * @param shapes all the shapes that will be rezised at the same time
      * @param previousSizes the old sizes; in a list with a member for each shape
      * @param newSizes the new sizes; in a list with a member for each shape
+     * @param parent the parent command used for macro commands
      */
-    KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes);
-    /// execute the command
-    void execute ();
-    /// revert the actions done in execute
-    void unexecute ();
-    /// return the name of this command
-    QString name () const;
+    KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes,
+                        QUndoCommand *parent = 0);
+    /// redo the command
+    void redo ();
+    /// revert the actions done in redo
+    void undo ();
 private:
     QList<KoShape*> m_shapes;
     QList<QSizeF> m_previousSizes, m_newSizes;

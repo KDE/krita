@@ -42,9 +42,9 @@
 #include <QToolTip>
 #include <QTimer>
 #include <QPainterPath>
+#include <QUndoCommand>
 
 #include <kdebug.h>
-#include <kcommand.h>
 #include <kicon.h>
 #include <klocale.h>
 
@@ -255,9 +255,8 @@ void KoShapeSelector::Canvas::updateCanvas (const QRectF &rc) {
     update(rect);
 }
 
-void  KoShapeSelector::Canvas::addCommand (KCommand *command, bool execute) {
-    if(execute)
-        command->execute();
+void  KoShapeSelector::Canvas::addCommand (QUndoCommand *command) {
+    command->redo();
     delete command;
 }
 

@@ -20,10 +20,13 @@
 
 #include "KoShapeDistributeCommand.h"
 
+#include <QMap>
+
 #include <klocale.h>
 
-KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute,  QRectF boundingRect )
-: m_distribute( distribute )
+KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute,  QRectF boundingRect, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_distribute( distribute )
 {
     QMap<double,KoShape*> sortedPos;
     QRectF bRect;
@@ -107,6 +110,8 @@ KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes
         pos += step;
     }
     m_command = new KoShapeMoveCommand(sortedPos.values(), previousPositions, newPositions);
+
+    setText( i18n( "Distribute shapes" ) );
 }
 
 KoShapeDistributeCommand::~KoShapeDistributeCommand()
@@ -114,18 +119,14 @@ KoShapeDistributeCommand::~KoShapeDistributeCommand()
     delete m_command;
 }
 
-void KoShapeDistributeCommand::execute()
+void KoShapeDistributeCommand::redo()
 {
-    m_command->execute();
+    m_command->redo();
 }
 
-void KoShapeDistributeCommand::unexecute()
+void KoShapeDistributeCommand::undo()
 {
-    m_command->unexecute();
-}
-
-QString KoShapeDistributeCommand::name () const {
-    return i18n( "Distribute shapes" );
+    m_command->undo();
 }
 
 double KoShapeDistributeCommand::getAvailableSpace( KoShape *first, KoShape *last, double extent, QRectF boundingRect  )

@@ -24,13 +24,13 @@
 #include "KoSelection.h"
 #include <koffice_export.h>
 
-#include <kcommand.h>
+#include <QUndoCommand>
 #include <QList>
 
 class KoShape;
 
 /// The undo / redo command for shape shearing.
-class FLAKE_EXPORT KoShapeShearCommand : public KCommand {
+class FLAKE_EXPORT KoShapeShearCommand : public QUndoCommand {
 public:
     /**
      * Comand to rotate a selection of shapes.  Note that it just alters the rotated
@@ -42,14 +42,13 @@ public:
      *        old shearY values
      * @param newShearXs a list with the same amount of items as shapes with the new values.
      * @param newShearYs a list with the same amount of items as shapes with the new values.
+     * @param parent the parent command used for macro commands
      */
-    KoShapeShearCommand(const KoSelectionSet &shapes, QList<double> &previousShearXs, QList<double> &previousShearYs, QList<double> &newShearXs, QList<double> &newShearYs);
-    /// execute the command
-    void execute ();
-    /// revert the actions done in execute
-    void unexecute ();
-    /// return the name of this command
-    QString name () const;
+    KoShapeShearCommand(const KoSelectionSet &shapes, QList<double> &previousShearXs, QList<double> &previousShearYs, QList<double> &newShearXs, QList<double> &newShearYs, QUndoCommand *parent = 0);
+    /// redo the command
+    void redo ();
+    /// revert the actions done in redo
+    void undo ();
 private:
     QList<KoShape*> m_shapes;
     QList<double> m_previousShearXs, m_previousShearYs, m_newShearXs, m_newShearYs;

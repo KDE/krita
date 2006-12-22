@@ -85,15 +85,15 @@ void KoShapeRotateStrategy::paint( QPainter &painter, KoViewConverter &converter
     decorator.paint(painter, converter);
 }
 
-KCommand* KoShapeRotateStrategy::createCommand() {
-    KMacroCommand *cmd = new KMacroCommand(i18n("Rotate"));
+QUndoCommand* KoShapeRotateStrategy::createCommand() {
+    QUndoCommand *cmd = new QUndoCommand(i18n("Rotate"));
     QList<QPointF> newPositions;
     QList<double> newAngles;
     foreach(KoShape *shape, m_selectedShapes) {
         newPositions << shape->position();
         newAngles << shape->rotation();
     }
-    cmd->addCommand(new KoShapeMoveCommand(m_selectedShapes, m_startPositions, newPositions));
-    cmd->addCommand(new KoShapeRotateCommand(m_selectedShapes, m_initialAngles, newAngles));
+    new KoShapeMoveCommand(m_selectedShapes, m_startPositions, newPositions, cmd);
+    new KoShapeRotateCommand(m_selectedShapes, m_initialAngles, newAngles, cmd);
     return cmd;
 }

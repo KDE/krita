@@ -23,16 +23,20 @@
 #include <klocale.h>
 
 
-KoShapeBorderCommand::KoShapeBorderCommand( const KoSelectionSet &shapes, KoShapeBorderModel *border )
-: m_newBorder( border )
+KoShapeBorderCommand::KoShapeBorderCommand( const KoSelectionSet &shapes, KoShapeBorderModel *border,
+                                            QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_newBorder( border )
 {
     m_shapes = shapes.toList();
+
+    setText( i18n( "Set border" ) );
 }
 
 KoShapeBorderCommand::~KoShapeBorderCommand() {
 }
 
-void KoShapeBorderCommand::execute () {
+void KoShapeBorderCommand::redo () {
     foreach( KoShape *shape, m_shapes ) {
         m_oldBorders.append( shape->border() );
         shape->setBorder( m_newBorder );
@@ -40,15 +44,11 @@ void KoShapeBorderCommand::execute () {
     }
 }
 
-void KoShapeBorderCommand::unexecute () {
+void KoShapeBorderCommand::undo () {
     QList<KoShapeBorderModel*>::iterator borderIt = m_oldBorders.begin();
     foreach( KoShape *shape, m_shapes ) {
         shape->setBorder( *borderIt );
         shape->repaint();
         borderIt++;
     }
-}
-
-QString KoShapeBorderCommand::name () const {
-    return i18n( "Set border" );
 }

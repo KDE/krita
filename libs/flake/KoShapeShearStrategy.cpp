@@ -137,8 +137,8 @@ void KoShapeShearStrategy::paint( QPainter &painter, KoViewConverter &converter)
     decorator.paint(painter, converter);
 }
 
-KCommand* KoShapeShearStrategy::createCommand() {
-    KMacroCommand *cmd = new KMacroCommand(i18n("Shear"));
+QUndoCommand* KoShapeShearStrategy::createCommand() {
+    QUndoCommand *cmd = new QUndoCommand(i18n("Shear"));
     QList<QPointF> newPositions;
     QList<double> newShearX;
     QList<double> newShearY;
@@ -147,7 +147,7 @@ KCommand* KoShapeShearStrategy::createCommand() {
         newShearX << shape->shearX();
         newShearY << shape->shearY();
     }
-    cmd->addCommand(new KoShapeMoveCommand(m_selectedShapes, m_startPositions, newPositions));
-    cmd->addCommand(new KoShapeShearCommand(m_selectedShapes, m_startShearXs, m_startShearYs, newShearX, newShearY));
+    new KoShapeMoveCommand(m_selectedShapes, m_startPositions, newPositions, cmd);
+    new KoShapeShearCommand(m_selectedShapes, m_startShearXs, m_startShearYs, newShearX, newShearY, cmd);
     return cmd;
 }

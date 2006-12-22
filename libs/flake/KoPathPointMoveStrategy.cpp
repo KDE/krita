@@ -46,7 +46,7 @@ void KoPathPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt:
     m_move += move;
 
     KoPointMoveCommand cmd( m_tool->m_pointSelection.selectedPointMap(), move );
-    cmd.execute();
+    cmd.redo();
 }
 
 void KoPathPointMoveStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) 
@@ -54,9 +54,9 @@ void KoPathPointMoveStrategy::finishInteraction( Qt::KeyboardModifiers modifiers
     Q_UNUSED( modifiers );
 }
 
-KCommand* KoPathPointMoveStrategy::createCommand()
+QUndoCommand* KoPathPointMoveStrategy::createCommand()
 {
-    KCommand *cmd = 0;
+    QUndoCommand *cmd = 0;
     if( !m_move.isNull() )
     {
         cmd = new KoPointMoveCommand( m_tool->m_pointSelection.selectedPointMap(), m_move );

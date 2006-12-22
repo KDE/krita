@@ -38,7 +38,7 @@ public:
     virtual ~KoPathControlPointMoveStrategy();
     virtual void handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers );
     virtual void finishInteraction( Qt::KeyboardModifiers modifiers ); 
-    virtual KCommand* createCommand();
+    virtual QUndoCommand* createCommand();
 
 private:    
     /// the last mouse position

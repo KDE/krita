@@ -34,7 +34,7 @@
 
 class KoCanvasResourceProvider;
 class KoSelection;
-class KCommand;
+class QUndoCommand;
 class KoShapeManager;
 class KoToolProxy;
 class KoViewConverter;
@@ -71,7 +71,7 @@ public:
 
     /**
      * Adds a command to the history. Call this for each @p command you create.
-     * Unless you set @p execute to false, this will also execute the command.
+     * This will also execute the command.
      * This means, most of the application's code will look like
      *    MyCommand * cmd = new MyCommand( parameters );
      *    canvas.addCommand( cmd );
@@ -79,9 +79,8 @@ public:
      * Note that the command history takes ownership of the command, it will delete
      * it when the undo limit is reached, or when deleting the command history itself.
      * @param command the command to add
-     * @param execute if true, the commands execute method will be called
      */
-    virtual void addCommand(KCommand *command, bool execute = true) = 0;
+    virtual void addCommand(QUndoCommand *command) = 0;
 
     /**
      * return the current shapeManager

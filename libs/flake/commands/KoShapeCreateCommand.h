@@ -21,27 +21,26 @@
 #define KOSHAPECREATECOMMAND_H
 
 #include <koffice_export.h>
-#include <kcommand.h>
+#include <QUndoCommand>
 
 class KoShape;
 class KoShapeControllerBase;
 
 /// The undo / redo command for creating shapes
-class FLAKE_EXPORT KoShapeCreateCommand : public KCommand {
+class FLAKE_EXPORT KoShapeCreateCommand : public QUndoCommand {
 public:
     /**
      * Command used on creation of new shapes
      * @param controller the controller used to add/remove the shape from
      * @param shape the shape thats just been created.
+     * @param parent the parent command used for macro commands
      */
-    KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape );
+    KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent = 0 );
     virtual ~KoShapeCreateCommand();
-    /// execute the command
-    void execute ();
-    /// revert the actions done in execute
-    void unexecute ();
-    /// return the name of this command
-    virtual QString name () const;
+    /// redo the command
+    void redo ();
+    /// revert the actions done in redo
+    void undo ();
 private:
     enum AddRemove { Add, Remove };
     void recurse(KoShape *shape, const AddRemove ar);

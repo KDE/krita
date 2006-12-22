@@ -28,7 +28,7 @@
 
 class QPainter;
 class KoPointerEvent;
-class KCommand;
+class QUndoCommand;
 class KoCanvasBase;
 class KoInteractionTool;
 class KoTool;
@@ -68,7 +68,7 @@ public:
      * a command.  Implementations should return 0 otherwise.
      * @return a command, or 0.
      */
-    virtual KCommand* createCommand() = 0;
+    virtual QUndoCommand* createCommand() = 0;
     /**
      * This method will undo frames based interactions by calling createCommand()
      * and unexecuting that.

@@ -27,7 +27,7 @@
 #include "KoShapeController.h"
 
 #include <kdebug.h>
-#include <kcommand.h>
+#include <QUndoCommand>
 
 KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoShapeRubberSelectStrategy(tool, canvas, clicked, true)
@@ -49,7 +49,7 @@ KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvas
     }
 }
 
-KCommand* KoCreateShapeStrategy::createCommand() {
+QUndoCommand* KoCreateShapeStrategy::createCommand() {
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(m_parent);
     KoShapeFactory *factory = KoShapeRegistry::instance()->get(parent->shapeId());
     if(! factory) {
@@ -74,14 +74,12 @@ KCommand* KoCreateShapeStrategy::createCommand() {
     if(newSize.width() > 1.0 && newSize.height() > 1.0) 
         shape->resize(newSize);
 
-    KCommand * cmd = parent->m_canvas->shapeController()->addShape( shape );
+    QUndoCommand * cmd = parent->m_canvas->shapeController()->addShape( shape );
     if ( cmd )
     {
         KoSelection *selection = parent->m_canvas->shapeManager()->selection();
         selection->deselectAll();
         selection->select(shape);
-
-        cmd->execute();
     }
     return cmd;
 }

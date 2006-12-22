@@ -24,13 +24,13 @@
 #include "KoSelection.h"
 #include <koffice_export.h>
 
-#include <kcommand.h>
+#include <QUndoCommand>
 #include <QList>
 
 class KoShape;
 
 /// The undo / redo command for shape rotating.
-class FLAKE_EXPORT KoShapeRotateCommand : public KCommand {
+class FLAKE_EXPORT KoShapeRotateCommand : public QUndoCommand {
 public:
     /**
      * Comand to rotate a selection of shapes.  Note that it just alters the rotated
@@ -39,8 +39,10 @@ public:
      * @param previousAngles a list with the same amount of items as shapes with the
      *        old rotation angles
      * @param newAngles a list with the same amount of items as shapes with the new angles.
+     * @param parent the parent command used for macro commands
      */
-    KoShapeRotateCommand(const KoSelectionSet &shapes, QList<double> &previousAngles, QList<double> &newAngles);
+    KoShapeRotateCommand(const KoSelectionSet &shapes, QList<double> &previousAngles, QList<double> &newAngles,
+                          QUndoCommand *parent = 0);
     /**
      * Comand to rotate a selection of shapes.  Note that it just alters the rotated
      * property of those shapes, and nothing more.
@@ -48,14 +50,14 @@ public:
      * @param previousAngles a list with the same amount of items as shapes with the
      *        old rotation angles
      * @param newAngles a list with the same amount of items as shapes with the new angles.
+     * @param parent the parent command used for macro commands
      */
-    KoShapeRotateCommand(const QList<KoShape*> &shapes, QList<double> &previousAngles, QList<double> &newAngles);
-    /// execute the command
-    void execute ();
-    /// revert the actions done in execute
-    void unexecute ();
-    /// return the name of this command
-    QString name () const;
+    KoShapeRotateCommand(const QList<KoShape*> &shapes, QList<double> &previousAngles, QList<double> &newAngles,
+                          QUndoCommand *parent = 0);
+    /// redo the command
+    void redo ();
+    /// revert the actions done in redo
+    void undo ();
 private:
     QList<KoShape*> m_shapes;
     QList<double> m_previousAngles, m_newAngles;

@@ -72,7 +72,7 @@ public: // KoCanvasBase implementation
 
     virtual bool snapToGrid() const;
 
-    virtual void addCommand(KCommand *command, bool execute = true);
+    virtual void addCommand(QUndoCommand *command);
 
     virtual KoShapeManager *shapeManager() const;
 

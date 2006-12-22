@@ -25,16 +25,19 @@
 #include <kdebug.h>
 #include <limits.h>
 
-KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes)
-: m_shapes(shapes)
+KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, QUndoCommand *parent)
+: QUndoCommand(parent)
+, m_shapes(shapes)
 , m_newIndexes(newIndexes)
 {
     Q_ASSERT(m_shapes.count() == m_newIndexes.count());
     foreach(KoShape *shape, shapes)
         m_previousIndexes.append(shape->zIndex());
+
+    setText(i18n( "Reorder shapes" ));
 }
 
-void KoShapeReorderCommand::execute() {
+void KoShapeReorderCommand::redo() {
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->repaint();
         m_shapes.at(i)->setZIndex( m_newIndexes.at(i) );
@@ -42,7 +45,7 @@ void KoShapeReorderCommand::execute() {
     }
 }
 
-void KoShapeReorderCommand::unexecute() {
+void KoShapeReorderCommand::undo() {
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->repaint();
         m_shapes.at(i)->setZIndex( m_previousIndexes.at(i) );
@@ -50,12 +53,8 @@ void KoShapeReorderCommand::unexecute() {
     }
 }
 
-QString KoShapeReorderCommand::name () const {
-    return i18n( "Reorder shapes" );
-}
-
 // static
-KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const KoSelectionSet &shapes, KoShapeManager *manager, MoveShapeType move) {
+KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const KoSelectionSet &shapes, KoShapeManager *manager, MoveShapeType move, QUndoCommand *parent) {
     QList<int> newIndexes;
     QList<KoShape*> changedShapes;
     foreach(KoShape *shape, shapes) {
@@ -110,5 +109,5 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const KoSelectionSet
         }
     }
     Q_ASSERT(changedShapes.count() == newIndexes.count());
-    return new KoShapeReorderCommand(changedShapes, newIndexes);
+    return new KoShapeReorderCommand(changedShapes, newIndexes, parent);
 }

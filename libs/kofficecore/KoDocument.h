@@ -47,6 +47,7 @@ class KoTextDocument;
 class QDomElement;
 class QDomDocument;
 class QXmlSimpleReader;
+class QUndoCommand;
 
 class KoStore;
 class KoMainWindow;
@@ -473,12 +474,6 @@ public:
      * @since 1.5
      */
     virtual void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
-
-    /**
-     *  Sets the modified flag on the document. This means that it has
-     *  to be saved or not before deleting it.
-     */
-    virtual void setModified( bool _mod );
 
     /**
      *  Tells the document that its title has been modified, either because
@@ -938,6 +933,18 @@ public slots:
      * @since 1.5
      */
     virtual void initEmpty();
+
+    /**
+     * Adds a command to the undo stack and executes it by calling the redo() function.
+     * @param command command to add to the undo stack
+     */
+    virtual void addCommand(QUndoCommand* command);
+
+    /**
+     *  Sets the modified flag on the document. This means that it has
+     *  to be saved or not before deleting it.
+     */
+    virtual void setModified( bool _mod );
 
 signals:
 

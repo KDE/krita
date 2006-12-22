@@ -25,11 +25,13 @@
 #include <kdebug.h>
 #include <math.h>
 
-KoPathBaseCommand::KoPathBaseCommand()
+KoPathBaseCommand::KoPathBaseCommand( QUndoCommand *parent )
+: QUndoCommand( parent )
 {
 }
 
-KoPathBaseCommand::KoPathBaseCommand( KoPathShape *shape )
+KoPathBaseCommand::KoPathBaseCommand( KoPathShape *shape, QUndoCommand *parent )
+: QUndoCommand( parent )
 {
     m_shapes.insert( shape );
 }
@@ -45,13 +47,15 @@ void KoPathBaseCommand::repaint( bool normalizeShapes )
     }
 }
 
-KoPointMoveCommand::KoPointMoveCommand( const KoPathShapePointMap &pointMap, const QPointF &offset )
-: m_pointMap( pointMap )
+KoPointMoveCommand::KoPointMoveCommand( const KoPathShapePointMap &pointMap, const QPointF &offset, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_pointMap( pointMap )
 , m_offset( offset )
 {
+    setText( i18n( "Move points" ) );
 }
 
-void KoPointMoveCommand::execute()
+void KoPointMoveCommand::redo()
 {
     KoPathShapePointMap::iterator it( m_pointMap.begin() );
     for ( ; it != m_pointMap.end(); ++it )
@@ -72,26 +76,23 @@ void KoPointMoveCommand::execute()
     }
 }
 
-void KoPointMoveCommand::unexecute()
+void KoPointMoveCommand::undo()
 {
     m_offset *= -1.0;
-    execute();
+    redo();
     m_offset *= -1.0;
 }
 
-QString KoPointMoveCommand::name() const
-{
-    return i18n( "Move points" );
-}
-
-KoControlPointMoveCommand::KoControlPointMoveCommand( KoPathPoint *point, const QPointF &offset, KoPathPoint::KoPointType pointType )
-: m_point( point )
+KoControlPointMoveCommand::KoControlPointMoveCommand( KoPathPoint *point, const QPointF &offset, KoPathPoint::KoPointType pointType, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_point( point )
 , m_offset( point->parent()->documentToShape( offset ) - point->parent()->documentToShape( QPointF( 0, 0 ) ) )
 , m_pointType( pointType )
 {
+    setText( i18n( "Move control point" ) );
 }
 
-void KoControlPointMoveCommand::execute()
+void KoControlPointMoveCommand::redo()
 {
     KoPathShape * pathShape = m_point->parent();
     pathShape->repaint();
@@ -141,19 +142,15 @@ void KoControlPointMoveCommand::execute()
     pathShape->repaint();
 }
 
-void KoControlPointMoveCommand::unexecute()
+void KoControlPointMoveCommand::undo()
 {
     m_offset *= -1.0;
-    execute();
+    redo();
     m_offset *= -1.0;
 }
 
-QString KoControlPointMoveCommand::name() const
-{
-    return i18n( "Move control point" );
-}
-
-KoPointPropertyCommand::KoPointPropertyCommand( KoPathPoint *point, KoPathPoint::KoPointProperties property )
+KoPointPropertyCommand::KoPointPropertyCommand( KoPathPoint *point, KoPathPoint::KoPointProperties property, QUndoCommand *parent )
+: KoPathBaseCommand( parent )
 {
     m_shapes.insert( point->parent() );
     PointPropertyChangeset changeset;
@@ -163,9 +160,12 @@ KoPointPropertyCommand::KoPointPropertyCommand( KoPathPoint *point, KoPathPoint:
     changeset.firstControlPoint = point->controlPoint1();
     changeset.secondControlPoint = point->controlPoint2();
     m_changesets.append( changeset );
+
+    setText( i18n( "Set point properties" ) );
 }
 
-KoPointPropertyCommand::KoPointPropertyCommand( const QList<KoPathPoint*> &points, const QList<KoPathPoint::KoPointProperties> &properties )
+KoPointPropertyCommand::KoPointPropertyCommand( const QList<KoPathPoint*> &points, const QList<KoPathPoint::KoPointProperties> &properties, QUndoCommand *parent )
+: KoPathBaseCommand( parent )
 {
     Q_ASSERT(points.size() == properties.size());
     uint pointCount = points.size();
@@ -180,9 +180,11 @@ KoPointPropertyCommand::KoPointPropertyCommand( const QList<KoPathPoint*> &point
         m_changesets.append( changeset );
         m_shapes.insert( changeset.point->parent() );
     }
+
+    setText( i18n( "Set point properties" ) );
 }
 
-void KoPointPropertyCommand::execute()
+void KoPointPropertyCommand::redo()
 {
     repaint( false );
 
@@ -241,7 +243,7 @@ void KoPointPropertyCommand::execute()
     repaint( true );
 }
 
-void KoPointPropertyCommand::unexecute()
+void KoPointPropertyCommand::undo()
 {
     repaint( false );
 
@@ -257,17 +259,14 @@ void KoPointPropertyCommand::unexecute()
     repaint( true );
 }
 
-QString KoPointPropertyCommand::name() const
+KoPointRemoveCommand::KoPointRemoveCommand( const KoPathShapePointMap &pointMap, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_pointMap( pointMap )
 {
-    return i18n( "Set point properties" );
+    setText( i18n( "Remove point" ) );
 }
 
-KoPointRemoveCommand::KoPointRemoveCommand( const KoPathShapePointMap &pointMap )
-: m_pointMap( pointMap )
-{
-}
-
-void KoPointRemoveCommand::execute()
+void KoPointRemoveCommand::redo()
 {
     KoPathShapePointMap::iterator it( m_pointMap.begin() );
     m_data.clear();
@@ -295,7 +294,7 @@ void KoPointRemoveCommand::execute()
     }
 }
 
-void KoPointRemoveCommand::unexecute()
+void KoPointRemoveCommand::undo()
 {
     // insert the points in inverse order
     KoPathShape * pathShape = 0;
@@ -317,13 +316,8 @@ void KoPointRemoveCommand::unexecute()
     }
 }
 
-QString KoPointRemoveCommand::name() const
-{
-    return i18n( "Remove point" );
-}
-
-KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const KoPathSegment &segment, double splitPosition )
-: KoPathBaseCommand( shape )
+KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const KoPathSegment &segment, double splitPosition, QUndoCommand *parent )
+: KoPathBaseCommand( shape, parent )
 , m_deletePoint( false )
 {
     if( segment.first && segment.second )
@@ -335,10 +329,12 @@ KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const KoPathSe
         m_splitPointPos << qMakePair( (KoSubpath*)0, 0 );
         m_splitPos << splitPosition;
     }
+
+    setText( i18n( "Split segment" ) );
 }
 
-KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, const QList<double> &splitPositions )
-: KoPathBaseCommand( shape )
+KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, const QList<double> &splitPositions, QUndoCommand *parent )
+: KoPathBaseCommand( shape, parent )
 , m_deletePoint( false )
 {
     Q_ASSERT(segments.size() == splitPositions.size());
@@ -356,10 +352,12 @@ KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<Ko
             m_splitPos << splitPositions[i];
         }
     }
+
+    setText( i18n( "Split segment" ) );
 }
 
-KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, double splitPosition )
-: KoPathBaseCommand( shape )
+KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, double splitPosition, QUndoCommand *parent )
+: KoPathBaseCommand( shape, parent )
 , m_deletePoint( false )
 {
     // check all the segments
@@ -376,6 +374,8 @@ KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<Ko
             m_splitPos << splitPosition;
         }
     }
+
+    setText( i18n( "Split segment" ) );
 }
 
 KoSegmentSplitCommand::~KoSegmentSplitCommand()
@@ -387,7 +387,7 @@ KoSegmentSplitCommand::~KoSegmentSplitCommand()
     }
 }
 
-void KoSegmentSplitCommand::execute()
+void KoSegmentSplitCommand::redo()
 {
     repaint( false );
 
@@ -414,7 +414,7 @@ void KoSegmentSplitCommand::execute()
     repaint( true );
 }
 
-void KoSegmentSplitCommand::unexecute()
+void KoSegmentSplitCommand::undo()
 {
     repaint( false );
 
@@ -432,27 +432,23 @@ void KoSegmentSplitCommand::unexecute()
     repaint( true );
 }
 
-QString KoSegmentSplitCommand::name() const
-{
-    return i18n( "Split segment" );
-}
-
-KoPointJoinCommand::KoPointJoinCommand( KoPathShape *shape, KoPathPoint *point1, KoPathPoint *point2 )
-: KoPathBaseCommand( shape )
+KoPointJoinCommand::KoPointJoinCommand( KoPathShape *shape, KoPathPoint *point1, KoPathPoint *point2, QUndoCommand *parent )
+: KoPathBaseCommand( shape, parent )
 , m_point1( point1 )
 , m_point2( point2 )
 , m_joined( false )
 {
+    setText( i18n( "Join points" ) );
 }
 
-void KoPointJoinCommand::execute()
+void KoPointJoinCommand::redo()
 {
     KoPathShape *shape = *m_shapes.begin();
     m_joined = shape->joinBetween( m_point1, m_point2 );
     shape->repaint();
 }
 
-void KoPointJoinCommand::unexecute()
+void KoPointJoinCommand::undo()
 {
     KoPathShape *shape = *m_shapes.begin();
     if( m_joined )
@@ -462,13 +458,8 @@ void KoPointJoinCommand::unexecute()
     }
 }
 
-QString KoPointJoinCommand::name() const
-{
-    return i18n( "Join points" );
-}
-
-KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *breakPoint )
-: KoPathBaseCommand( shape )
+KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *breakPoint, QUndoCommand *parent )
+: KoPathBaseCommand( shape, parent )
 , m_broken( false )
 , m_breakSegment( 0, 0 )
 , m_breakPoint( breakPoint )
@@ -483,10 +474,12 @@ KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *b
         KoPathPoint data = *point;
         m_pointData.append( PointData( point, data ) );
     }
+
+    setText( i18n( "Break subpath" ) );
 }
 
-KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, const KoPathSegment &segment )
-: KoPathBaseCommand( shape )
+KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, const KoPathSegment &segment, QUndoCommand *parent )
+: KoPathBaseCommand( shape, parent )
 , m_broken( false )
 , m_breakSegment( segment )
 , m_breakPoint( 0 )
@@ -499,13 +492,15 @@ KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, const KoPathSe
         KoPathPoint data = *point;
         m_pointData.append( PointData( point, data ) );
     }
+
+    setText( i18n( "Break subpath" ) );
 }
 
 KoSubpathBreakCommand::~KoSubpathBreakCommand()
 {
 }
 
-void KoSubpathBreakCommand::execute()
+void KoSubpathBreakCommand::redo()
 {
     KoPathShape *shape = *m_shapes.begin();
 
@@ -519,7 +514,7 @@ void KoSubpathBreakCommand::execute()
     repaint(false);
 }
 
-void KoSubpathBreakCommand::unexecute()
+void KoSubpathBreakCommand::undo()
 {
     if( ! m_broken )
         return;
@@ -554,21 +549,18 @@ void KoSubpathBreakCommand::unexecute()
     repaint(false);
 }
 
-QString KoSubpathBreakCommand::name() const
-{
-    return i18n( "Break subpath" );
-}
-
-KoSegmentTypeCommand::KoSegmentTypeCommand( KoPathShape *shape, const KoPathSegment &segment, bool changeToLine )
-: KoPathBaseCommand( shape )
+KoSegmentTypeCommand::KoSegmentTypeCommand( KoPathShape *shape, const KoPathSegment &segment, bool changeToLine, QUndoCommand *parent )
+: KoPathBaseCommand( shape, parent )
 , m_changeToLine( changeToLine )
 {
     if( segment.first && segment.second )
         m_segments.append( segment );
+
+    setText( i18n( "Change segment type" ) );
 }
 
-KoSegmentTypeCommand::KoSegmentTypeCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, bool changeToLine )
-: KoPathBaseCommand( shape )
+KoSegmentTypeCommand::KoSegmentTypeCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, bool changeToLine, QUndoCommand *parent )
+: KoPathBaseCommand( shape, parent )
 , m_changeToLine( changeToLine )
 {
     foreach( KoPathSegment segment, segments )
@@ -576,9 +568,11 @@ KoSegmentTypeCommand::KoSegmentTypeCommand( KoPathShape *shape, const QList<KoPa
         if( segment.first && segment.second )
             m_segments.append( segment );
     }
+
+    setText( i18n( "Change segment type" ) );
 }
 
-void KoSegmentTypeCommand::execute()
+void KoSegmentTypeCommand::redo()
 {
     repaint( false );
 
@@ -618,7 +612,7 @@ void KoSegmentTypeCommand::execute()
     repaint( false );
 }
 
-void KoSegmentTypeCommand::unexecute()
+void KoSegmentTypeCommand::undo()
 {
     repaint( false );
 
@@ -632,17 +626,14 @@ void KoSegmentTypeCommand::unexecute()
     repaint( true );
 }
 
-QString KoSegmentTypeCommand::name() const
-{
-    return i18n( "Change segment type" );
-}
-
-KoPathCombineCommand::KoPathCombineCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths )
-: m_controller( controller )
+KoPathCombineCommand::KoPathCombineCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_controller( controller )
 , m_paths( paths )
 , m_combinedPath( 0 )
 , m_isCombined( false )
 {
+    setText( i18n( "Combine paths" ) );
 }
 
 KoPathCombineCommand::~KoPathCombineCommand()
@@ -656,7 +647,7 @@ KoPathCombineCommand::~KoPathCombineCommand()
         delete m_combinedPath;
 }
 
-void KoPathCombineCommand::execute()
+void KoPathCombineCommand::redo()
 {
     if( ! m_paths.size() )
         return;
@@ -682,7 +673,7 @@ void KoPathCombineCommand::execute()
     }
 }
 
-void KoPathCombineCommand::unexecute()
+void KoPathCombineCommand::undo()
 {
     if( ! m_paths.size() )
         return;
@@ -697,60 +688,56 @@ void KoPathCombineCommand::unexecute()
     }
 }
 
-QString KoPathCombineCommand::name() const
-{
-    return i18n( "Combine paths" );
-}
-
-KoParameterChangeCommand::KoParameterChangeCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint )
-: m_shape( shape )
+KoParameterChangeCommand::KoParameterChangeCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_shape( shape )
 , m_handleId( handleId )    
 , m_startPoint( startPoint )    
 , m_endPoint( endPoint )    
 {
+    setText( i18n( "Change parameter" ) );
 }
 
 KoParameterChangeCommand::~KoParameterChangeCommand()
 {
 }
 
-/// execute the command
-void KoParameterChangeCommand::execute()
+/// redo the command
+void KoParameterChangeCommand::redo()
 {
     m_shape->repaint();
     m_shape->moveHandle( m_handleId, m_endPoint );
     m_shape->repaint();
 }
 
-/// revert the actions done in execute
-void KoParameterChangeCommand::unexecute()
+/// revert the actions done in redo
+void KoParameterChangeCommand::undo()
 {
     m_shape->repaint();
     m_shape->moveHandle( m_handleId, m_startPoint );
     m_shape->repaint();
 }
 
-/// return the name of this command
-QString KoParameterChangeCommand::name() const
-{
-    return i18n( "Change parameter" );
-}
-
-KoParameterToPathCommand::KoParameterToPathCommand( KoParameterShape *shape )
+KoParameterToPathCommand::KoParameterToPathCommand( KoParameterShape *shape, QUndoCommand *parent )
+: QUndoCommand( parent )
 {
     m_shapes.append( shape );
+
+    setText( i18n( "Convert to Path" ) );
 }
 
-KoParameterToPathCommand::KoParameterToPathCommand( const QList<KoParameterShape*> &shapes )
-: m_shapes( shapes )
+KoParameterToPathCommand::KoParameterToPathCommand( const QList<KoParameterShape*> &shapes, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_shapes( shapes )
 {
+    setText( i18n( "Convert to Path" ) );
 }
 
 KoParameterToPathCommand::~KoParameterToPathCommand()
 {
 }
 
-void KoParameterToPathCommand::execute()
+void KoParameterToPathCommand::redo()
 {
     foreach( KoParameterShape *shape, m_shapes )
     {
@@ -760,7 +747,7 @@ void KoParameterToPathCommand::execute()
     }
 }
 
-void KoParameterToPathCommand::unexecute()
+void KoParameterToPathCommand::undo()
 {
     foreach( KoParameterShape *shape, m_shapes )
     {
@@ -770,16 +757,13 @@ void KoParameterToPathCommand::unexecute()
     }
 }
 
-QString KoParameterToPathCommand::name() const
-{
-    return i18n( "Convert to Path" );
-}
-
-KoPathSeparateCommand::KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths )
-: m_controller( controller )
+KoPathSeparateCommand::KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_controller( controller )
 , m_paths( paths )
 , m_isSeparated( false )
 {
+    setText( i18n( "Separate paths" ) );
 }
 
 KoPathSeparateCommand::~KoPathSeparateCommand()
@@ -796,7 +780,7 @@ KoPathSeparateCommand::~KoPathSeparateCommand()
     }
 }
 
-void KoPathSeparateCommand::execute()
+void KoPathSeparateCommand::redo()
 {
     if( ! m_separatedPaths.size() )
     {
@@ -821,7 +805,7 @@ void KoPathSeparateCommand::execute()
         p->repaint();
 }
 
-void KoPathSeparateCommand::unexecute()
+void KoPathSeparateCommand::undo()
 {
     if( m_controller )
     {
@@ -835,9 +819,4 @@ void KoPathSeparateCommand::unexecute()
 
     foreach( KoPathShape* p, m_paths )
         p->repaint();
-}
-
-QString KoPathSeparateCommand::name() const
-{
-    return i18n( "Separate paths" );
 }

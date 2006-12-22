@@ -25,14 +25,14 @@
 
 #include <koffice_export.h>
 
-#include <kcommand.h>
+#include <QUndoCommand>
 #include <QList>
 #include <QPointF>
 
 class KoShape;
 
 /// The undo / redo command for shape moving.
-class FLAKE_EXPORT KoShapeMoveCommand : public KCommand {
+class FLAKE_EXPORT KoShapeMoveCommand : public QUndoCommand {
 public:
     /**
      * Constructor.
@@ -41,8 +41,10 @@ public:
      *  this list naturally must have the same amount of items as the shapes set.
      * @param newPositions the new positions for the shapes.
      *  this list naturally must have the same amount of items as the shapes set.
+     * @param parent the parent command used for macro commands
      */
-    KoShapeMoveCommand(const KoSelectionSet &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions);
+    KoShapeMoveCommand(const KoSelectionSet &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions,
+                        QUndoCommand *parent = 0);
     /**
      * Constructor.
      * @param shapes the set of objects that are moved.
@@ -50,14 +52,14 @@ public:
      *  this list naturally must have the same amount of items as the shapes set.
      * @param newPositions the new positions for the shapes.
      *  this list naturally must have the same amount of items as the shapes set.
+     * @param parent the parent command used for macro commands
      */
-    KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions);
-    /// execute the command
-    void execute ();
-    /// revert the actions done in execute
-    void unexecute ();
-    /// return the name of this command
-    QString name () const;
+    KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions,
+                        QUndoCommand *parent = 0);
+    /// redo the command
+    void redo ();
+    /// revert the actions done in redo
+    void undo ();
 
     /// update newPositions list with new postions.
     void setNewPositions(QList<QPointF> newPositions) { m_newPositions = newPositions; }

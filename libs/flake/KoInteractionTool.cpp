@@ -34,7 +34,7 @@
 #include "KoCanvasBase.h"
 #include "commands/KoShapeMoveCommand.h"
 
-#include <kcommand.h>
+#include <QUndoCommand>
 #include <kcursor.h>
 #include <kstandarddirs.h>
 #include <kstaticdeleter.h>
@@ -244,9 +244,9 @@ void KoInteractionTool::mouseReleaseEvent( KoPointerEvent *event ) {
     if ( m_currentStrategy )
     {
         m_currentStrategy->finishInteraction( event->modifiers() );
-        KCommand *command = m_currentStrategy->createCommand();
+        QUndoCommand *command = m_currentStrategy->createCommand();
         if(command)
-            m_canvas->addCommand(command, false);
+            m_canvas->addCommand(command);
         delete m_currentStrategy;
         m_currentStrategy = 0;
         repaintDecorations();
@@ -296,13 +296,13 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
                 // use a timeout to make sure we don't reuse a command possibly deleted by the commandHistory
                 if(m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000)
                     m_moveCommand = 0;
-                if(m_moveCommand) // alter previous instead of creating new one.
+                if(m_moveCommand) { // alter previous instead of creating new one.
                     m_moveCommand->setNewPositions(newPos);
-                else {
+                    m_moveCommand->redo();
+                } else {
                     m_moveCommand = new KoShapeMoveCommand(shapes, prevPos, newPos);
-                    m_canvas->addCommand(m_moveCommand, false);
+                    m_canvas->addCommand(m_moveCommand);
                 }
-                m_moveCommand->execute();
                 m_lastUsedMoveCommand = QTime::currentTime();
             }
         }

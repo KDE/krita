@@ -78,7 +78,7 @@ void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     m_canvas->shapeManager()->selection()->setPosition(m_initialSelectionPosition + m_diff);
 }
 
-KCommand* KoShapeMoveStrategy::createCommand() {
+QUndoCommand* KoShapeMoveStrategy::createCommand() {
     if(m_diff.x() == 0 && m_diff.y() == 0)
         return 0;
     return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);

@@ -26,18 +26,23 @@
 #include <klocale.h>
 //#include <kdebug.h>
 
-KoGroupShapesCommand::KoGroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes, QList<bool> clipped)
-: m_shapes(shapes)
+KoGroupShapesCommand::KoGroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes, QList<bool> clipped,
+                                            QUndoCommand *parent)
+: QUndoCommand( parent )
+, m_shapes(shapes)
 , m_clipped(clipped)
 , m_container(container)
 {
     Q_ASSERT(m_clipped.count() == m_shapes.count());
     foreach( KoShape* shape, m_shapes )
         m_oldParents.append( shape->parent() );
+
+    setText( i18n( "Group shapes" ) );
 }
 
-KoGroupShapesCommand::KoGroupShapesCommand(KoShapeGroup *container, QList<KoShape *> shapes)
-: m_shapes(shapes)
+KoGroupShapesCommand::KoGroupShapesCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent)
+: QUndoCommand(parent)
+, m_shapes(shapes)
 , m_container(container)
 {
     foreach( KoShape* shape, m_shapes )
@@ -45,12 +50,16 @@ KoGroupShapesCommand::KoGroupShapesCommand(KoShapeGroup *container, QList<KoShap
         m_clipped.append(false);
         m_oldParents.append( shape->parent() );
     }
+
+    setText( i18n( "Group shapes" ) );
 }
 
-KoGroupShapesCommand::KoGroupShapesCommand() {
+KoGroupShapesCommand::KoGroupShapesCommand(QUndoCommand *parent)
+: QUndoCommand(parent)
+{
 }
 
-void KoGroupShapesCommand::execute () {
+void KoGroupShapesCommand::redo () {
     QList <QPointF> positions;
     bool boundingRectInitialized=true;
     QRectF bound;
@@ -77,7 +86,7 @@ void KoGroupShapesCommand::execute () {
 //kDebug() << "after group: " << m_container->position().x() << ", " << m_container->position().y() << endl;
 }
 
-void KoGroupShapesCommand::unexecute () {
+void KoGroupShapesCommand::undo () {
     QList <QPointF> positions;
     foreach(KoShape *shape, m_shapes)
         positions.append(shape->absolutePosition());
@@ -88,8 +97,4 @@ void KoGroupShapesCommand::unexecute () {
         if( m_oldParents.at( i ) )
             m_oldParents.at( i )->addChild( m_shapes[i] );
     }
-}
-
-QString KoGroupShapesCommand::name () const {
-    return i18n( "Group shapes" );
 }

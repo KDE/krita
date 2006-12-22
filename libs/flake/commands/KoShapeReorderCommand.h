@@ -24,22 +24,23 @@
 
 #include <koffice_export.h>
 
-#include <kcommand.h>
+#include <QUndoCommand>
 #include <QList>
 
 class KoShape;
 class KoShapeManager;
 
 /// This command allows you to change the zIndex of a number of shapes.
-class FLAKE_EXPORT KoShapeReorderCommand : public KCommand {
+class FLAKE_EXPORT KoShapeReorderCommand : public QUndoCommand {
 public:
     /**
      * Constructor.
      * @param shapes the set of objects that are moved.
      * @param newIndexes the new indexes for the shapes.
      *  this list naturally must have the same amount of items as the shapes set.
+     * @param parent the parent command used for macro commands
      */
-    KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes);
+    KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, QUndoCommand *parent = 0);
 
     enum MoveShapeType  {
         RaiseShape,
@@ -47,14 +48,13 @@ public:
         BringToFront,
         SendToBack
     };
-    static KoShapeReorderCommand *createCommand(const KoSelectionSet &shapes, KoShapeManager *manager, MoveShapeType move);
+    static KoShapeReorderCommand *createCommand(const KoSelectionSet &shapes, KoShapeManager *manager, MoveShapeType move,
+                                                 QUndoCommand *parent = 0);
 
-    /// execute the command
-    void execute ();
-    /// revert the actions done in execute
-    void unexecute ();
-    /// return the name of this command
-    QString name () const;
+    /// redo the command
+    void redo ();
+    /// revert the actions done in redo
+    void undo ();
 
 private:
     QList<KoShape*> m_shapes;

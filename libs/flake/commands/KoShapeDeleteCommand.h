@@ -24,34 +24,34 @@
 #include "KoSelection.h"
 
 #include <koffice_export.h>
-#include <kcommand.h>
+#include <QUndoCommand>
 
 class KoShape;
 class KoShapeContainer;
 class KoShapeControllerBase;
 
 /// The undo / redo command for deleting shapes
-class FLAKE_EXPORT KoShapeDeleteCommand : public KCommand {
+class FLAKE_EXPORT KoShapeDeleteCommand : public QUndoCommand {
 public:
     /**
      * Command to delete a single shape by means of a shape controller.
      * @param controller the controller to used for deleting.
      * @param shape a single shape that should be deleted.
+     * @param parent the parent command used for macro commands
      */
-    KoShapeDeleteCommand( KoShapeControllerBase *controller, KoShape *shape );
+    KoShapeDeleteCommand( KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent = 0 );
     /**
      * Command to delete a set of shapes by means of a shape controller.
      * @param controller the controller to used for deleting.
      * @param shapes a set of all the shapes that should be deleted.
+     * @param parent the parent command used for macro commands
      */
-    KoShapeDeleteCommand( KoShapeControllerBase *controller, const KoSelectionSet &shapes );
+    KoShapeDeleteCommand( KoShapeControllerBase *controller, const KoSelectionSet &shapes, QUndoCommand *parent = 0 );
     virtual ~KoShapeDeleteCommand();
-    /// execute the command
-    void execute ();
-    /// revert the actions done in execute
-    void unexecute ();
-    /// return the name of this command
-    virtual QString name () const;
+    /// redo the command
+    void redo ();
+    /// revert the actions done in redo
+    void undo ();
 private:
     KoShapeControllerBase *m_controller; ///< the shape controller to use for removing/readding
     QList<KoShape*> m_shapes; ///< the list of shapes to delete

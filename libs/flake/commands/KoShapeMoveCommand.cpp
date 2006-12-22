@@ -22,25 +22,31 @@
 
 #include <klocale.h>
 
-KoShapeMoveCommand::KoShapeMoveCommand(const KoSelectionSet &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions)
-: m_previousPositions(previousPositions)
+KoShapeMoveCommand::KoShapeMoveCommand(const KoSelectionSet &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions, QUndoCommand *parent)
+: QUndoCommand( parent )
+, m_previousPositions(previousPositions)
 , m_newPositions(newPositions)
 {
     m_shapes = shapes.toList();
     Q_ASSERT(m_shapes.count() == m_previousPositions.count());
     Q_ASSERT(m_shapes.count() == m_newPositions.count());
+
+    setText( i18n( "Move shapes" ) );
 }
 
-KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions)
-: m_shapes(shapes)
+KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions, QUndoCommand *parent)
+: QUndoCommand( parent )
+, m_shapes(shapes)
 , m_previousPositions(previousPositions)
 , m_newPositions(newPositions)
 {
     Q_ASSERT(m_shapes.count() == m_previousPositions.count());
     Q_ASSERT(m_shapes.count() == m_newPositions.count());
+
+    setText( i18n( "Move shapes" ) );
 }
 
-void KoShapeMoveCommand::execute() {
+void KoShapeMoveCommand::redo() {
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->repaint();
         m_shapes.at(i)->setPosition( m_newPositions.at(i) );
@@ -48,14 +54,10 @@ void KoShapeMoveCommand::execute() {
     }
 }
 
-void KoShapeMoveCommand::unexecute() {
+void KoShapeMoveCommand::undo() {
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->repaint();
         m_shapes.at(i)->setPosition( m_previousPositions.at(i) );
         m_shapes.at(i)->repaint();
     }
-}
-
-QString KoShapeMoveCommand::name () const {
-    return i18n( "Move shapes" );
 }

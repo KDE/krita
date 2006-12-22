@@ -28,7 +28,7 @@
 class KoCanvasBase;
 class KoShape;
 class KoShapeControllerBase;
-class KCommand;
+class QUndoCommand;
 
 /**
  * Class used by tools to maintain the list of shapes.
@@ -58,7 +58,7 @@ public:
      * @return command which will insert the shape into the document or 0 if the 
      *         insertion was canceled. The command is not yet executed.
      */
-    KCommand* addShape( KoShape *shape );
+    QUndoCommand* addShape( KoShape *shape );
 
     /**
      * @brief Remove a shape from the document.
@@ -68,7 +68,7 @@ public:
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
      */
-    KCommand* removeShape( KoShape *shape );
+    QUndoCommand* removeShape( KoShape *shape );
 
     /**
      * @brief Set the KoShapeControllerBase used to add/remove shapes

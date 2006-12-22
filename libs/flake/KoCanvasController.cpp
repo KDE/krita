@@ -31,7 +31,7 @@
 #include <KoProperties.h>
 
 #include <kdebug.h>
-#include <kcommand.h>
+#include <QUndoCommand>
 #include <QMouseEvent>
 #include <QGridLayout>
 #include <QPainter>
@@ -285,7 +285,7 @@ void KoCanvasController::Viewport::dragEnterEvent(QDragEnterEvent *event) {
 void KoCanvasController::Viewport::dropEvent(QDropEvent *event) {
     m_draggedShape->setAbsolutePosition( corrrectPosition(event->pos()) );
     m_parent->canvas()->shapeManager()->remove(m_draggedShape); // remove it to not interfere with z-index calc.
-    KCommand * cmd = m_parent->canvas()->shapeController()->addShape( m_draggedShape );
+    QUndoCommand * cmd = m_parent->canvas()->shapeController()->addShape( m_draggedShape );
     if(cmd) {
         m_parent->canvas()->addCommand(cmd);
         KoSelection *selection = m_parent->canvas()->shapeManager()->selection();

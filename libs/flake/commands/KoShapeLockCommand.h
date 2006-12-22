@@ -24,13 +24,13 @@
 #include "KoSelection.h"
 
 #include <koffice_export.h>
-#include <kcommand.h>
+#include <QUndoCommand>
 #include <QList>
 
 class KoShape;
 
 /// The undo / redo command to lock a set of shapes position and size
-class FLAKE_EXPORT KoShapeLockCommand : public KCommand
+class FLAKE_EXPORT KoShapeLockCommand : public QUndoCommand
 {
 public:
     /**
@@ -38,23 +38,25 @@ public:
      * @param shapes a set of shapes that should change lock state
      * @param oldLock list of old lock states the same length as @p shapes
      * @param newLock list of new lock states the same length as @p shapes
+     * @param parent the parent command used for macro commands
      */
-    KoShapeLockCommand(const KoSelectionSet &shapes, const QList<bool> &oldLock, const QList<bool> &newLock);
+    KoShapeLockCommand(const KoSelectionSet &shapes, const QList<bool> &oldLock, const QList<bool> &newLock,
+                        QUndoCommand *parent = 0);
     /**
      * Command to lock a set of shapes position and size
      * @param shapes a set of shapes that should change lock state
      * @param oldLock list of old lock states the same length as @p shapes
      * @param newLock list of new lock states the same length as @p shapes
+     * @param parent the parent command used for macro commands
      */
-    KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock);
+    KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock,
+                        QUndoCommand *parent = 0);
     ~KoShapeLockCommand();
 
-    /// execute the command
-    virtual void execute();
-    /// revert the actions done in execute
-    virtual void unexecute();
-    /// return the name of this command
-    virtual QString name () const;
+    /// redo the command
+    virtual void redo();
+    /// revert the actions done in redo
+    virtual void undo();
 
 private:
     QList<KoShape*> m_shapes;    /// the shapes to set background for

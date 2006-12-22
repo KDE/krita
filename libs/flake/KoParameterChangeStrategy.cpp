@@ -38,7 +38,7 @@ void KoParameterChangeStrategy::handleMouseMove( const QPointF &mouseLocation, Q
     m_parameterShape->moveHandle( m_handleId, m_parameterShape->documentToShape( mouseLocation ), modifiers );
 }
 
-KCommand* KoParameterChangeStrategy::createCommand()
+QUndoCommand* KoParameterChangeStrategy::createCommand()
 {
     KoParameterChangeCommand *cmd = 0;
     // check if handle position changed

@@ -32,7 +32,7 @@ public:
 
     virtual void handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers );
     virtual void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED( modifiers ); }
-    virtual KCommand* createCommand();
+    virtual QUndoCommand* createCommand();
 
 private:    
     KoParameterShape * m_parameterShape;

@@ -24,24 +24,23 @@
 #include "KoSelection.h"
 
 #include <koffice_export.h>
-#include <kcommand.h>
+#include <QUndoCommand>
 
 /// The undo / redo command for setting the shape border
-class FLAKE_EXPORT KoShapeBorderCommand : public KCommand {
+class FLAKE_EXPORT KoShapeBorderCommand : public QUndoCommand {
 public:
     /**
      * Command to set a new shape background.
      * @param shapes a set of all the shapes that should get the new background.
      * @param border the new border
+     * @param parent the parent command used for macro commands
      */
-    KoShapeBorderCommand( const KoSelectionSet &shapes, KoShapeBorderModel *border );
+    KoShapeBorderCommand( const KoSelectionSet &shapes, KoShapeBorderModel *border, QUndoCommand *parent = 0 );
     virtual ~KoShapeBorderCommand();
-    /// execute the command
-    void execute ();
-    /// revert the actions done in execute
-    void unexecute ();
-    /// return the name of this command
-    virtual QString name () const;
+    /// redo the command
+    void redo ();
+    /// revert the actions done in redo
+    void undo ();
 private:
     QList<KoShape*> m_shapes;                ///< the shapes to set border for
     QList<KoShapeBorderModel*> m_oldBorders; ///< the old borders, one for each shape

@@ -182,7 +182,7 @@ void KoPathTool::slotPointTypeChanged( int type ) {
         return;
 
     KoPointPropertyCommand *cmd = new KoPointPropertyCommand( points, properties );
-    m_canvas->addCommand( cmd, true );
+    m_canvas->addCommand( cmd );
 }
 
 void KoPathTool::insertPoints() {
@@ -193,7 +193,7 @@ void KoPathTool::insertPoints() {
         {
             KoPathShape * pathShape = segments.at( 0 ).first->parent();
             KoSegmentSplitCommand *cmd = new KoSegmentSplitCommand( pathShape, segments, 0.5 );
-            m_canvas->addCommand( cmd, true );
+            m_canvas->addCommand( cmd );
         }
     }
 }
@@ -210,7 +210,7 @@ void KoPathTool::removePoints() {
             m_activeHandle = 0;
         }
         m_pointSelection.clear();
-        m_canvas->addCommand( cmd, true );
+        m_canvas->addCommand( cmd );
     }
 }
 
@@ -222,7 +222,7 @@ void KoPathTool::segmentToLine() {
         {
             KoPathShape * pathShape = segments.at( 0 ).first->parent();
             KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( pathShape, segments, true );
-            m_canvas->addCommand( cmd, true );
+            m_canvas->addCommand( cmd );
         }
     }
 }
@@ -235,7 +235,7 @@ void KoPathTool::segmentToCurve() {
         {
             KoPathShape * pathShape = segments.at( 0 ).first->parent();
             KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( pathShape, segments, false );
-            m_canvas->addCommand( cmd, true );
+            m_canvas->addCommand( cmd );
         }
     }
 }
@@ -250,7 +250,7 @@ void KoPathTool::convertToPath()
             shapesToConvert.append( parameterShape );
     }
     if( shapesToConvert.count() )
-        m_canvas->addCommand( new KoParameterToPathCommand( shapesToConvert ), true );
+        m_canvas->addCommand( new KoParameterToPathCommand( shapesToConvert ) );
 }
 
 void KoPathTool::joinPoints()
@@ -262,7 +262,7 @@ void KoPathTool::joinPoints()
         if( selectedPoints.size() == 2 )
         {
             KoPointJoinCommand *cmd = new KoPointJoinCommand( pathShape, selectedPoints[0], selectedPoints[1] );
-            m_canvas->addCommand( cmd, true );
+            m_canvas->addCommand( cmd );
         }
     }
 }
@@ -274,7 +274,7 @@ void KoPathTool::breakAtPoint()
         QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
         KoPathShape * pathShape = selectedPoints[0]->parent();
         KoSubpathBreakCommand *cmd = new KoSubpathBreakCommand( pathShape, selectedPoints.first() );
-        m_canvas->addCommand( cmd, true );
+        m_canvas->addCommand( cmd );
     }
 }
 
@@ -287,7 +287,7 @@ void KoPathTool::breakAtSegment()
         if( selectedPoints.size() >= 2 )
         {
             KoSubpathBreakCommand *cmd = new KoSubpathBreakCommand( pathShape, KoPathSegment( selectedPoints[0], selectedPoints[1] ) );
-            m_canvas->addCommand( cmd, true );
+            m_canvas->addCommand( cmd );
         }
     }
 }
@@ -451,9 +451,9 @@ void KoPathTool::mouseReleaseEvent( KoPointerEvent *event ) {
     if ( m_currentStrategy )
     {
         m_currentStrategy->finishInteraction( event->modifiers() );
-        KCommand *command = m_currentStrategy->createCommand();
+        QUndoCommand *command = m_currentStrategy->createCommand();
         if ( command )
-            m_canvas->addCommand( command, false );
+            m_canvas->addCommand( command );
         delete m_currentStrategy;
         m_currentStrategy = 0;
     }
@@ -707,7 +707,7 @@ void KoPathTool::ActivePointHandle::mousePressEvent( KoPointerEvent *event )
             props |= KoPathPoint::IsSmooth;
 
         KoPointPropertyCommand *cmd = new KoPointPropertyCommand( m_activePoint, props );
-        m_tool->m_canvas->addCommand( cmd, true );
+        m_tool->m_canvas->addCommand( cmd );
     }
 }
 

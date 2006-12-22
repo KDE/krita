@@ -26,10 +26,10 @@
 #include "KoSelection.h"
 
 #include <koffice_export.h>
-#include <kcommand.h>
+#include <QUndoCommand>
 
 /// The undo / redo command for distributing shapes
-class FLAKE_EXPORT KoShapeDistributeCommand : public KCommand
+class FLAKE_EXPORT KoShapeDistributeCommand : public QUndoCommand
 {
 public:
     /// The different options to ditribute with this command
@@ -49,15 +49,15 @@ public:
      * @param shapes a set of all the shapes that should be distributed
      * @param distribute the distribution type
      * @param boundingRect the rect the shapes will be distributed in
+     * @param parent the parent command used for macro commands
      */
-    KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute, QRectF boundingRect );
+    KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute, QRectF boundingRect,
+                              QUndoCommand *parent = 0 );
     virtual ~KoShapeDistributeCommand();
-    /// execute the command
-    virtual void execute();
-    /// revert the actions done in execute
-    virtual void unexecute();
-    /// return the name of this command
-    virtual QString name () const;
+    /// redo the command
+    virtual void redo();
+    /// revert the actions done in redo
+    virtual void undo();
 private:
     double getAvailableSpace( KoShape *first, KoShape *last, double extent, QRectF boundingRect );
     Distribute m_distribute;

@@ -172,14 +172,14 @@ void KoCreatePathTool::addPathShape()
     KoPathShape *pathShape = m_shape;
     m_shape = 0;
 
-    KCommand * cmd = m_canvas->shapeController()->addShape( pathShape );
+    QUndoCommand * cmd = m_canvas->shapeController()->addShape( pathShape );
     if ( cmd )
     {
         KoSelection *selection = m_canvas->shapeManager()->selection();
         selection->deselectAll();
         selection->select(pathShape);
 
-        m_canvas->addCommand( cmd, true );
+        m_canvas->addCommand( cmd );
     }
     else
     {

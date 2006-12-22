@@ -40,28 +40,28 @@
 #include "kis_cmb_composite.h"
 #include "kis_tool_fill.h"
 #include "KoColorSpace.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
+#include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include "kis_pattern.h"
 #include "kis_fill_painter.h"
 #include "kis_progress_display_interface.h"
 #include "kis_undo_adapter.h"
-#include "kis_canvas_subject.h"
+//#include "kis_canvas_subject.h"
 #include "kis_selection.h"
 
-KisToolFill::KisToolFill()
-    : super(i18n("Fill"))
+KisToolFill::KisToolFill(KoCanvasBase * canvas)
+    : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
 {
     setObjectName("tool_fill");
-    m_subject = 0;
+    m_fillPainter = 0;
+    m_painter = 0;
     m_oldColor = 0;
     m_threshold = 15;
+    m_currentImage = 0;
     m_usePattern = false;
     m_unmerged = false;
     m_fillOnlySelection = false;
 
-    setCursor(KisCursor::load("tool_fill_cursor.png", 6, 6));
 }
 
 KisToolFill::~KisToolFill()
@@ -70,6 +70,7 @@ KisToolFill::~KisToolFill()
 
 bool KisToolFill::flood(int startX, int startY)
 {
+    
     KisPaintDeviceSP device = m_currentImage->activeDevice();
     if (!device) return false;
 
@@ -77,76 +78,106 @@ bool KisToolFill::flood(int startX, int startY)
 #warning Port the fixes for filling the selection from 1.6!
         QRect rc = device->selection()->selectedRect();
         KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device->colorSpace(),  "filled"));
-        KisFillPainter painter(filled);
+	delete m_fillPainter;
+	m_fillPainter = new KisFillPainter (filled);
+	Q_CHECK_PTR(m_fillPainter);
+
+        //KisFillPainter painter(filled);
         // XXX: The fillRect methods should either set the dirty rect or return it,
         // so we don't have to blit over all of the image, but only the part that's
         // really filled.
         if (m_usePattern)
-            painter.fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
-                             m_subject->currentPattern());
+            m_fillPainter->fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
+                             m_currentPattern);
         else
-            painter.fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
-                             m_subject->fgColor(), m_opacity);
-        painter.end();
-        KisPainter painter2(device);
-        if (m_currentImage->undo()) painter2.beginTransaction(i18n("Fill"));
-        painter2.bltSelection(0, 0, m_compositeOp, filled, m_opacity,
-                              0, 0, m_currentImage->width(), m_currentImage->height());
+            m_fillPainter->fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
+                             m_currentFgColor, m_opacity);
+        //m_painter.end();
+	delete m_fillPainter;
+	m_fillPainter = 0;
 
-        device->setDirty(filled->extent());
+        //KisPainter painter2(device);
+	m_painter = new KisPainter (device);
+	Q_CHECK_PTR(m_painter);
+
+        if (m_currentImage->undo()) m_painter->beginTransaction(i18n("Fill"));
+        m_painter->bltSelection(0, 0, m_compositeOp, filled, m_opacity,
+				0, 0, m_currentImage->width(), m_currentImage->height());
+
+	QRect dRect = filled->extent();
+        device->setDirty(dRect);
         notifyModified();
+	m_canvas->updateCanvas(convertToPt(dRect.normalized()));
 
         if (m_currentImage->undo()) {
-            m_currentImage->undoAdapter()->addCommand(painter2.endTransaction());
+            m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
         }
         return true;
     }
 
-    KisFillPainter painter(device);
-    if (m_currentImage->undo()) painter.beginTransaction(i18n("Flood Fill"));
-    painter.setPaintColor(m_subject->fgColor());
-    painter.setOpacity(m_opacity);
-    painter.setFillThreshold(m_threshold);
-    painter.setCompositeOp(m_compositeOp);
-    painter.setPattern(m_subject->currentPattern());
-    painter.setSampleMerged(!m_unmerged);
-    painter.setCareForSelection(true);
+    //KisFillPainter painter(device);
+    delete m_fillPainter;
+    m_fillPainter = new KisFillPainter (device);
+    Q_CHECK_PTR(m_fillPainter);
 
-    KisProgressDisplayInterface *progress = m_subject->progressDisplay();
-    if (progress) {
-        progress->setSubject(&painter, true, true);
-    }
+    if (m_currentImage->undo()) m_fillPainter->beginTransaction(i18n("Flood Fill"));
+    m_fillPainter->setPaintColor(m_currentFgColor);
+    m_fillPainter->setOpacity(m_opacity);
+    m_fillPainter->setFillThreshold(m_threshold);
+    m_fillPainter->setCompositeOp(m_compositeOp);
+    m_fillPainter->setPattern(m_currentPattern);
+    m_fillPainter->setSampleMerged(!m_unmerged);
+    m_fillPainter->setCareForSelection(true);
+
+    // Enable this code again when I know how progress works
+   //  KisProgressDisplayInterface *progress = ??
+//     if (progress) {
+// 	progress->setSubject(m_fillPainter, true, true);
+//     }
 
     if (m_usePattern)
-        painter.fillPattern(startX, startY);
+        m_fillPainter->fillPattern(startX, startY);
     else
-        painter.fillColor(startX, startY);
+        m_fillPainter->fillColor(startX, startY);
 
-    device->setDirty(painter.dirtyRect());
+    QRect dRect = m_fillPainter->dirtyRect();
+    device->setDirty(dRect);
     notifyModified();
+    kDebug() << "Are we here?" << endl;
+    m_canvas->updateCanvas(convertToPt(dRect));
+
 
     if (m_currentImage->undo()) {
-        m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
+        m_currentImage->undoAdapter()->addCommand(m_fillPainter->endTransaction());
     }
+
+    delete m_fillPainter;
+    m_fillPainter = 0;
 
     return true;
 }
 
-void KisToolFill::buttonPress(KoPointerEvent *e)
+void KisToolFill::mousePressEvent(KoPointerEvent *e)
 {
-    m_startPos = e->pos();
+    QPointF pos = convertToPixelCoord(e);
+    m_startPos = pos;
+    kDebug() <<"do we ever go here press event" << endl;
 }
 
-void KisToolFill::buttonRelease(KoPointerEvent *e)
+void KisToolFill::mouseReleaseEvent(KoPointerEvent *e)
 {
-    if (!m_subject) return;
+
+    if (!m_canvas) return;
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
     if (e->button() != Qt::LeftButton) return;
     int x, y;
-    x = m_startPos.floorX();
-    y = m_startPos.floorY();
+    //x = m_startPos.floorX();
+    //y = m_startPos.floorY();
+    x = static_cast<int>(m_startPos.x());
+    y = static_cast<int>(m_startPos.y());
+
     if (!m_currentImage->bounds().contains(x, y)) {
-        return;
+	return;
     }
     flood(x, y);
     notifyModified();
@@ -154,7 +185,8 @@ void KisToolFill::buttonRelease(KoPointerEvent *e)
 
 QWidget* KisToolFill::createOptionWidget()
 {
-    QWidget *widget = super::createOptionWidget(parent);
+    //QWidget *widget = super::createOptionWidget(parent);
+    QWidget *widget = KisToolPaint::createOptionWidget();
 
     m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
     m_slThreshold = new KIntNumInput( widget);
@@ -209,21 +241,21 @@ void KisToolFill::slotSetFillSelection(bool state)
     m_checkSampleMerged->setEnabled(!state);
 }
 
-void KisToolFill::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
+// void KisToolFill::setup(KActionCollection *collection)
+// {
+//     m_action = collection->action(objectName());
 
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("color_fill"),
-                               i18n("&Fill"),
-                               collection,
-                               objectName());
-        m_action->setShortcut(QKeySequence(Qt::Key_F));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Contiguous fill"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
-}
+//     if (m_action == 0) {
+//         m_action = new KAction(KIcon("color_fill"),
+//                                i18n("&Fill"),
+//                                collection,
+//                                objectName());
+//         m_action->setShortcut(QKeySequence(Qt::Key_F));
+//         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
+//         m_action->setToolTip(i18n("Contiguous fill"));
+//         m_action->setActionGroup(actionGroup());
+//         m_ownAction = true;
+//     }
+// }
 
 #include "kis_tool_fill.moc"

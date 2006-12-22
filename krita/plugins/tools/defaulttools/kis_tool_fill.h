@@ -25,15 +25,19 @@
 //Added by qt3to4:
 #include <QLabel>
 
-#include "kis_tool_paint.h"
 
+#include "kis_tool_paint.h"
+#include <kis_layer_shape.h>
 
 class KisPainter;
+class KisFillPainter;
 class QWidget;
 class QLabel;
 class QCheckBox;
 class KIntNumInput;
-class KActionCollection;
+//class KActionCollection;
+
+class KoCanvasBase;
 
 class KisToolFill : public KisToolPaint {
 
@@ -42,18 +46,18 @@ class KisToolFill : public KisToolPaint {
 
 public:
 
-    KisToolFill();
+    KisToolFill(KoCanvasBase * canvas);
     virtual ~KisToolFill();
 
-    virtual void setup(KActionCollection *collection);
-        virtual enumToolType toolType() { return TOOL_FILL; }
+    //    virtual void setup(KActionCollection *collection);
+    //     virtual enumToolType toolType() { return TOOL_FILL; }
 
-    virtual void buttonPress(KoPointerEvent*);
-    virtual void buttonRelease(KoPointerEvent*);
-
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    
     bool flood(int startX, int startY);
 
-    virtual QWidget* createOptionWidget();
+    virtual QWidget * createOptionWidget();
 
 public slots:
     virtual void slotSetThreshold(int);
@@ -68,8 +72,9 @@ private:
     KisLayerSP m_lay;
     quint8* m_oldColor, *m_color;
     KisPainter *m_painter;
-    
-    KisImageSP m_currentImage;
+    KisFillPainter *m_fillPainter;
+
+    //KisImageSP m_currentImage;
     bool *m_map, m_unmerged, m_usePattern, m_fillOnlySelection;
     KisSelectionSP m_selection;
 
@@ -92,9 +97,9 @@ public:
             setToolTip( i18n( "Fill a contiguous area of color with a color, or fill a selection." ) );
             setToolType( TOOL_TYPE_FILL );
             setIcon( "color_fill" );
-            setShortcut( QKeySequence( Qt::Key_F ) );
+            //setShortcut( QKeySequence( Qt::Key_F ) );
             setPriority( 0 );
-        }
+	}
 
     virtual ~KisToolFillFactory(){}
 

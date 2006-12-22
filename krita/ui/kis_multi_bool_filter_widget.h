@@ -42,14 +42,16 @@ class KRITAUI_EXPORT KisMultiBoolFilterWidget : public KisFilterConfigWidget
 {
     Q_OBJECT
 public:
-    KisMultiBoolFilterWidget(QWidget * parent,  const QString & caption, vKisBoolWidgetParam iwparam);
+    KisMultiBoolFilterWidget(QString filterid, QWidget * parent,  const QString & caption, vKisBoolWidgetParam iwparam);
     virtual void setConfiguration(KisFilterConfiguration * cfg);
+    virtual KisFilterConfiguration* configuration() const;
 public:
-    inline qint32 nbValues() { return m_nbboolWidgets; };
-    inline qint32 valueAt( qint32 i ) { return m_boolWidgets[i]->isChecked(); };
+    inline qint32 nbValues() const { return m_nbboolWidgets; };
+    inline bool valueAt( qint32 i ) const { return m_boolWidgets[i]->isChecked(); };
 private:
     QCheckBox** m_boolWidgets;
     qint32 m_nbboolWidgets;
+    QString m_filterid;
 };
 
 #endif

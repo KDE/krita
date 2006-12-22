@@ -50,24 +50,24 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-void KisSobelFilterConfiguration::fromXML(const QString & s)
-{
-    KisFilterConfiguration::fromXML(s);
-    m_doHorizontally = getBool( "doHorizontally" );
-    m_doVertically = getBool( "doVertically" );
-    m_keepSign = getBool( "makeOpaque" );
-}
-
-QString KisSobelFilterConfiguration::toString()
-{
-    m_properties.clear();
-    setProperty("doHorizontally", m_doHorizontally);
-    setProperty("doVertically", m_doVertically);
-    setProperty("keepSign", m_keepSign);
-    setProperty("makeOpaque", m_makeOpaque);
-
-    return KisFilterConfiguration::toString();
-}
+// void KisSobelFilterConfiguration::fromXML(const QString & s)
+// {
+//     KisFilterConfiguration::fromXML(s);
+//     m_doHorizontally = getBool( "doHorizontally" );
+//     m_doVertically = getBool( "doVertically" );
+//     m_keepSign = getBool( "makeOpaque" );
+// }
+// 
+// QString KisSobelFilterConfiguration::toString()
+// {
+//     m_properties.clear();
+//     setProperty("doHorizontally", m_doHorizontally);
+//     setProperty("doVertically", m_doVertically);
+//     setProperty("keepSign", m_keepSign);
+//     setProperty("makeOpaque", m_makeOpaque);
+// 
+//     return KisFilterConfiguration::toString();
+// }
 
 KisSobelFilter::KisSobelFilter() : KisFilter(id(), "edge", i18n("&Sobel..."))
 {
@@ -94,20 +94,11 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, 
 void KisSobelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
 {
     //read the filter configuration values from the KisFilterConfiguration object
-    bool doHorizontal = ((KisSobelFilterConfiguration*)configuration)->doHorizontally();
-    bool doVertical = ((KisSobelFilterConfiguration*)configuration)->doVertically();
-    bool keepSign = ((KisSobelFilterConfiguration*)configuration)->keepSign();
-    bool makeOpaque = ((KisSobelFilterConfiguration*)configuration)->makeOpaque();
+    bool doHorizontal = configuration->getBool("doHorizontally", true);
+    bool doVertical = configuration->getBool("doVertically", true);
+    bool keepSign = configuration->getBool("keepSign", true);
+    bool makeOpaque = configuration->getBool("makeOpaque", true);
 
-    //pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
-/*    sobel(rect, src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
-      }
-
-      void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
-      {*/
-//     QRect rect(); //src->exactBounds();
-//     quint32 x = rect.x();
-//     quint32 y = rect.y();
     quint32 width = size.width();
     quint32 height = size.height();
     quint32 pixelSize = src->pixelSize();
@@ -205,16 +196,5 @@ KisFilterConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* paren
     param.push_back( KisBoolWidgetParam( true, i18n("Sobel vertically"), "doVertically" ) );
     param.push_back( KisBoolWidgetParam( true, i18n("Keep sign of result"), "keepSign" ) );
     param.push_back( KisBoolWidgetParam( true, i18n("Make image opaque"), "makeOpaque" ) );
-    return new KisMultiBoolFilterWidget(parent, id().id().toAscii(), id().id(), param );
-}
-
-KisFilterConfiguration* KisSobelFilter::configuration(QWidget* nwidget)
-{
-    KisMultiBoolFilterWidget* widget = (KisMultiBoolFilterWidget*) nwidget;
-    if( widget == 0 )
-    {
-        return new KisSobelFilterConfiguration( true, true, true, true);
-    } else {
-        return new KisSobelFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ), widget->valueAt( 2 ), widget->valueAt( 3 ) );
-    }
+    return new KisMultiBoolFilterWidget(id().id(), parent, id().id(), param );
 }

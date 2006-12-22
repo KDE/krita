@@ -27,6 +27,8 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceR
     : m_id(id)
     , m_name( name )
     , m_parent( parent )
+    , m_mixColorsOp( 0 )
+    , m_convolutionOp( 0 )
 {
     //m_dcop = 0;
 }

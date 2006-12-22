@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,15 +45,6 @@ class KisFilter;
 
 const quint8 OPACITY_TRANSPARENT = 0;
 const quint8 OPACITY_OPAQUE = UCHAR_MAX;
-/*
-class KoColorAdjustment
-{
-public:
-
-    KoColorAdjustment() {};
-    virtual ~KoColorAdjustment() {};
-};
-*/
 
 enum ColorSpaceIndependence {
     FULLY_INDEPENDENT,
@@ -60,7 +52,19 @@ enum ColorSpaceIndependence {
     TO_RGBA8,
     TO_RGBA16
 };
-// TODO: constify all function of KisColorSpace
+
+class KoMixColorsOp {
+  public:
+    virtual ~KoMixColorsOp() { }
+    virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const = 0;
+};
+
+class KoConvolutionOp {
+  public:
+    virtual ~KoConvolutionOp() { }
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const = 0;
+};
+
 /**
  * A KoColorSpace is the definition of a certain color space.
  * 
@@ -437,13 +441,29 @@ public:
     /**
      * Mix the colors given their weights and return in dst
      * The sum of weights is assumed 255 */
-    virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const = 0;
+    inline void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const KDE_DEPRECATED
+    {
+      Q_ASSERT(m_mixColorsOp);
+      m_mixColorsOp->mixColors(colors, weights, nColors, dst);
+    }
+
+    inline KoMixColorsOp* mixColorsOp() const {
+      return m_mixColorsOp;
+    }
 
     /**
      * Convolve the given array of pointers to pixels and return the result
      * in dst. The kernel values are clamped between -128 and 128
      */
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const = 0;
+    inline void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const
+    {
+      Q_ASSERT(m_convolutionOp);
+      m_convolutionOp->convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nPixels);
+    }
+
+    inline KoConvolutionOp* convolutionOp() const {
+      return m_convolutionOp;
+    }
 
     /**
      * Darken all color channels with the given amount. If compensate is true,
@@ -561,7 +581,8 @@ protected:
     Q3ValueVector<KoChannelInfo *> m_channels;
     QHash<QString, KoCompositeOp *> m_compositeOps;
     mutable Q3MemArray<quint8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
-
+    KoMixColorsOp* m_mixColorsOp;
+    KoConvolutionOp* m_convolutionOp;
 };
 
 class KoColorSpaceFactory {

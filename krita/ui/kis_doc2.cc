@@ -1388,16 +1388,18 @@ void KisDoc2::slotLayerAdded( KisLayerSP layer )
         parent = m_d->activeLayerShape->parent();
     }
 
+    kDebug() << "We found the parent: " << parent << endl;
+
     KoShape * shape = 0;
 
     // Create a shape around the layer
-    if ( layer->inherits( "KisGroupLayer" ) ) {
+    if ( dynamic_cast<KisGroupLayer*>( layer.data() ) ) {
         shape = new KisLayerContainerShape(parent, layer);
     }
-    else if ( layer->inherits( "KisPaintLayer" )  || layer->inherits( "KisAdjustmentLayer" ) ) {
+    else if ( dynamic_cast<KisGroupLayer*>( layer.data() )  || dynamic_cast<KisAdjustmentLayer*>( layer.data() ) ) {
         shape = new KisLayerShape( parent, layer );
     }
-    else if ( layer->inherits( "KisShapeLayer" ) ) {
+    else if ( dynamic_cast<KisShapeLayer*>( layer.data() ) ) {
         shape = dynamic_cast<KisShapeLayer*>( layer.data() );
         Q_ASSERT( shape );
     }

@@ -34,7 +34,7 @@ public:
 
     void gridSize(double *, double *) const {}
     bool snapToGrid() const  { return false; }
-    void addCommand(KCommand *, bool = true) { }
+    void addCommand(QUndoCommand*) { }
     KoShapeManager *shapeManager() const  { return 0; }
     void updateCanvas(const QRectF& )  {};
     KoToolProxy * toolProxy() { return 0; }

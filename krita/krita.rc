@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="14">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="15">
 
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
@@ -109,7 +109,7 @@
 </Menu>
 
 
-<Menu name="Select"><text>&amp;Select</text>
+<Menu name="Select"><text>Sele&amp;ct</text>
     <Action name="select_all"/>
     <Action name="deselect"/>
     <Action name="reselect"/>

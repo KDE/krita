@@ -11,7 +11,7 @@ kde4_add_executable(storage_test RUN_UNINSTALLED ${storage_test_SRCS})
 
 target_link_libraries(storage_test  ${KDE4_KDECORE_LIBS} kstore )
 
-add_test(kostore-storage_test storage_test)
+add_test(libs-store-storage_test storage_test)
 
 ########### next target ###############
 
@@ -23,7 +23,7 @@ kde4_add_executable(xmlwritertest RUN_UNINSTALLED ${xmlwritertest_SRCS})
 
 target_link_libraries(xmlwritertest  ${KDE4_KDECORE_LIBS} kstore )
 
-add_test(kostore-xmlwritertest xmlwritertest)
+add_test(libs-store-xmlwritertest xmlwritertest)
 
 ########### next target ###############
 
@@ -35,7 +35,7 @@ kde4_add_executable(koxmlreadertest RUN_UNINSTALLED ${koxmlreader_SRCS})
 
 target_link_libraries(koxmlreadertest kofficecore ${QT_QTTEST_LIBRARY} )
 
-add_test(kofficecore-koxmlreadertest koxmlreadertest)
+add_test(libs-store-koxmlreadertest koxmlreadertest)
 
 ########### next target ###############
 
@@ -55,9 +55,9 @@ kde4_automoc(${kodomtest_SRCS})
 
 kde4_add_executable(kodomtest RUN_UNINSTALLED ${kodomtest_SRCS})
 
-target_link_libraries(kodomtest ${KDE4_KDECORE_LIBS} kstore )
+target_link_libraries(kodomtest ${KDE4_KDECORE_LIBS} kstore ${QT_QTTEST_LIBRARY} )
 
-add_test(kostore-kodomtest kodomtest)
+add_test(libs-store-kodomtest kodomtest)
 
 ########### end ###############
 

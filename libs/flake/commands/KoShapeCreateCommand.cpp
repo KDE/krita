@@ -22,21 +22,28 @@
 #include "KoShape.h"
 #include "KoShapeContainer.h"
 #include "KoShapeControllerBase.h"
+#include "KoShapeAddRemoveData.h"
 
 #include <klocale.h>
 
-KoShapeCreateCommand::KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent )
+KoShapeCreateCommand::KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape, 
+                                            KoShapeAddRemoveData *addRemoveData, QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_controller( controller )
 , m_shape( shape )
 , m_deleteShape( true )
+, m_addRemoveData( 0 )                       
 {
+    if ( addRemoveData )
+        m_addRemoveData = addRemoveData->clone();
+
     setText( i18n( "Create shape" ) );
 }
 
 KoShapeCreateCommand::~KoShapeCreateCommand() {
     if( m_shape && m_deleteShape )
         delete m_shape;
+    delete m_addRemoveData;
 }
 
 void KoShapeCreateCommand::redo () {
@@ -55,9 +62,9 @@ void KoShapeCreateCommand::undo () {
 
 void KoShapeCreateCommand::recurse(KoShape *shape, const AddRemove ar) {
     if(ar == Remove)
-        m_controller->removeShape( m_shape );
+        m_controller->removeShape( m_shape, m_addRemoveData );
     else
-        m_controller->addShape( m_shape );
+        m_controller->addShape( m_shape, m_addRemoveData );
 
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*> (shape);
     if(container) {

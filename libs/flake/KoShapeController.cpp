@@ -92,12 +92,12 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape )
     }
     delete dialog;
     
-    KoShapeCreateCommand *cmd = new KoShapeCreateCommand( m_shapeController, shape );
+    KoShapeCreateCommand *cmd = new KoShapeCreateCommand( m_shapeController, shape, m_canvas->addRemoveData() );
     return cmd;
 }
 
 QUndoCommand* KoShapeController::removeShape( KoShape *shape )
 {
-    KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( m_shapeController, shape );
+    KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( m_shapeController, shape, m_canvas->addRemoveData() );
     return cmd;    
 }

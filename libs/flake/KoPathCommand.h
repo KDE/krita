@@ -29,6 +29,7 @@
 #include <koffice_export.h>
 
 class KoParameterShape;
+class KoShapeAddRemoveData;
 
 /// the base command for commands altering a path shape
 class KoPathBaseCommand : public QUndoCommand {
@@ -303,9 +304,11 @@ public:
      * Command for combining a list of paths into one single path.
      * @param controller the controller to used for removing/inserting.
      * @param paths the list of paths to combine
+     * @param addRemoveData additional data for shape creation
      * @param parent the parent command used for macro commands
      */
-    KoPathCombineCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, QUndoCommand *parent = 0 );
+    KoPathCombineCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, 
+                          KoShapeAddRemoveData *addRemoveData = 0, QUndoCommand *parent = 0 );
     virtual ~KoPathCombineCommand();
     /// redo the command
     void redo();
@@ -316,6 +319,7 @@ private:
     QList<KoPathShape*> m_paths;
     KoPathShape *m_combinedPath;
     bool m_isCombined;
+    KoShapeAddRemoveData *m_addRemoveData;
 };
 
 /// The undo / redo command for changing a parameter
@@ -361,10 +365,11 @@ public:
      * Command for separating subpaths of a list of paths into different paths.
      * @param controller the controller to used for removing/inserting.
      * @param paths the list of paths to separate
+     * @param addRemoveData additional data for shape creation
      * @param parent the parent command used for macro commands
      */
-    KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths,
-                           QUndoCommand *parent = 0 );
+    KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, 
+                           KoShapeAddRemoveData *addRemoveData = 0, QUndoCommand *parent = 0 );
     virtual ~KoPathSeparateCommand();
     /// redo the command
     void redo();
@@ -375,6 +380,7 @@ private:
     QList<KoPathShape*> m_paths;
     QList<KoPathShape*> m_separatedPaths;
     bool m_isSeparated;
+    KoShapeAddRemoveData *m_addRemoveData;
 };
 
 #endif

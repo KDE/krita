@@ -25,6 +25,7 @@
 
 class KoShape;
 class KoShapeControllerBase;
+class KoShapeAddRemoveData;
 
 /// The undo / redo command for creating shapes
 class FLAKE_EXPORT KoShapeCreateCommand : public QUndoCommand {
@@ -33,9 +34,11 @@ public:
      * Command used on creation of new shapes
      * @param controller the controller used to add/remove the shape from
      * @param shape the shape thats just been created.
+     * @param addRemoveData additional data for shape creation
      * @param parent the parent command used for macro commands
      */
-    KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent = 0 );
+    KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape, 
+                          KoShapeAddRemoveData *addRemoveData, QUndoCommand *parent = 0 );
     virtual ~KoShapeCreateCommand();
     /// redo the command
     void redo ();
@@ -48,6 +51,7 @@ private:
     KoShapeControllerBase *m_controller;
     KoShape *m_shape;
     bool m_deleteShape;
+    KoShapeAddRemoveData * m_addRemoveData;
 };
 
 #endif

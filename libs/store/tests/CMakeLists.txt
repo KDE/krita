@@ -55,7 +55,7 @@ kde4_automoc(${kodomtest_SRCS})
 
 kde4_add_executable(kodomtest RUN_UNINSTALLED ${kodomtest_SRCS})
 
-target_link_libraries(kodomtest ${KDE4_KDECORE_LIBS} kstore ${QT_QTTEST_LIBRARY} )
+target_link_libraries(kodomtest ${KDE4_KDECORE_LIBS} kstore kofficecore ${QT_QTTEST_LIBRARY} )
 
 add_test(libs-store-kodomtest kodomtest)
 

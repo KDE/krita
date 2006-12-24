@@ -516,12 +516,14 @@ KisImageSP KisDoc2::loadImage(const QDomElement& element)
         description = element.attribute("description");
 
         if ((attr = element.attribute("x-res")).isNull())
-            xres = 100.0;
-        xres = attr.toDouble();
+            xres = 100.0 / 72.0;
+        else
+            xres = attr.toDouble() / 72.0;
 
         if ((attr = element.attribute("y-res")).isNull())
-            yres = 100.0;
-        yres = attr.toDouble();
+            yres = 100.0 / 72.0;
+        else
+            yres = attr.toDouble() / 72.0;
 
         if ((colorspacename = element.attribute("colorspacename")).isNull())
         {

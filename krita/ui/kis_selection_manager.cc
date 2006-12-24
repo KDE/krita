@@ -20,6 +20,7 @@
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qcolor.h>
+#include <qcursor.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -30,6 +31,7 @@
 #include <KoMainWindow.h>
 #include <KoQueryTrader.h>
 
+#include "kis_cursor.h"
 #include "kis_part_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_clipboard.h"
@@ -420,6 +422,7 @@ KisLayerSP KisSelectionManager::paste()
     KisPaintDeviceSP clip = m_clipboard->clip();
 
     if (clip) {
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
         KisPaintLayer *layer = new KisPaintLayer(img, img->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE);
         Q_CHECK_PTR(layer);
 
@@ -447,6 +450,7 @@ KisLayerSP KisSelectionManager::paste()
             if (dlg->exec() == QDialog::Accepted)
                 layer->convertTo(img->colorSpace());
 */
+        QApplication::restoreOverrideCursor();
         if(img->addLayer(layer, img->activeLayer()->parent(), img->activeLayer()))
         {
           return layer;

@@ -21,6 +21,7 @@
 #include "kis_canvas_painter.h"
 #include "kis_qpaintdevice_canvas.h"
 #include "kis_qpaintdevice_canvas_painter.h"
+#include <kdebug.h>
 
 KisQPaintDeviceCanvasWidget::KisQPaintDeviceCanvasWidget(QWidget *parent, const char *name)
     : QWidget(parent, name)

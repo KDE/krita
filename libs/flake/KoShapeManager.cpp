@@ -63,6 +63,8 @@ KoShapeManager::~KoShapeManager()
 
 void KoShapeManager::setShapes( const QList<KoShape *> &shapes )
 {
+    //clear selection
+    m_selection->deselectAll();
     foreach(KoShape *shape, m_shapes)
     {
         m_aggregate4update.remove( shape );
@@ -92,6 +94,7 @@ void KoShapeManager::add( KoShape *shape )
 
 void KoShapeManager::remove( KoShape *shape )
 {
+    shape->repaint();
     shape->removeShapeManager( this );
     m_selection->deselect( shape );
     m_aggregate4update.remove( shape );
@@ -102,8 +105,8 @@ void KoShapeManager::remove( KoShape *shape )
 void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter, bool forPrint)
 {
     updateTree();
-    QPen pen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.
-    painter.setPen(pen);
+    painter.setPen( Qt::NoPen );// painters by default have a black stroke, lets turn that off.
+    painter.setBrush( Qt::NoBrush );
     QList<KoShape*> sortedShapes( m_tree.intersects( converter.viewToDocument( painter.clipRegion().boundingRect() ) ) );
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     const QRegion clipRegion = painter.clipRegion();

@@ -59,7 +59,7 @@ public:
 
     bool visit( KisExternalLayer * layer )
         {
-            kDebug(41010) << "Visiting on external layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+            kDebug() << "Visiting on external layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                           << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
 
             if (m_projection.isNull()) {
@@ -74,7 +74,7 @@ public:
 
             qint32 sx, sy, dx, dy, w, h;
 
-            QRect rc = dev->extent() & m_rc;
+            QRect rc = m_rc; //dev->extent() & m_rc;
 
             sx= rc.left();
             sy = rc.top();

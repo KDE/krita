@@ -1321,7 +1321,11 @@ void KisDoc2::addShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
                 else
                     break;
             }
-            shapeLayer = new KisShapeLayer(container, m_d->viewConverter, currentImage(), i18n( "Flake shapes %1" ).arg( m_d->nserver->number() ), OPACITY_OPAQUE);
+            shapeLayer = new KisShapeLayer(container,
+                                           m_d->viewConverter,
+                                           currentImage(),
+                                           i18n( "Flake shapes %1", m_d->nserver->number() ),
+                                           OPACITY_OPAQUE);
 
             // Add the shape layer to the image. The image then emits
             // a signal that is caught by us (the document) and the
@@ -1394,7 +1398,9 @@ void KisDoc2::slotLayerAdded( KisLayerSP layer )
 
     KoShape * shape = 0;
 
-    // Create a shape around the layer
+    // Create a shape around the layer (Bjarne frowns upon promiscuous
+    // dynamic casts, though, and I dare say he's right. I still like
+    // it better than adding layerId's everywhere.
     if ( dynamic_cast<KisGroupLayer*>( layer.data() ) ) {
         shape = new KisLayerContainerShape(parent, layer);
     }

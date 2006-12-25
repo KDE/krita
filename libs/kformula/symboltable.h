@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>              
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,40 +27,17 @@
 #include <QString>
 #include <QStringList>
 #include <QVector>
+
 #include "kformuladefs.h"
-#include "contextstyle.h"
+
 class KConfig;
 
 namespace KFormula
 {
 
+class ContextStyle;
+struct UnicodeNameTable;
 	
-/**
- * What we know about a unicode char. The char value itself
- * is a key inside the symbol table. Here we have
- * the char class and which font to use.
- */
-class CharTableEntry {
-public:
-
-    /**
-     * Defaults for all arguments are provided so it can be used in a QMap.
-     */
-    CharTableEntry( CharClass cl=ORDINARY, char font=0, QChar ch=0 )
-        : m_charClass( static_cast<char>( cl ) ), m_font( font ), m_character( ch ) {}
-
-    char font() const { return m_font; }
-    QChar character() const { return m_character; }
-    CharClass charClass() const { return static_cast<CharClass>( m_charClass ); }
-
-private:
-
-    char m_charClass;
-    char m_font;
-    QChar m_character;
-};
-
-
 /**
  * We expect to always have the symbol font.
  */
@@ -105,7 +83,7 @@ class KOFORMULA_EXPORT SymbolTable
     /**
      * Reads the unicode / font tables.
      */
-    void init( ContextStyle* context );
+    void init( const QFont& font );
 
     bool contains( const QString & name ) const;
 
@@ -116,15 +94,9 @@ class KOFORMULA_EXPORT SymbolTable
     QChar unicode( const QString & name ) const;
     QString name( QChar symbol ) const;
 
-    const CharTableEntry& entry( QChar symbol, CharStyle style=normalChar ) const;
-    QFont font( QChar symbol, CharStyle style=normalChar ) const;
-    QChar character( QChar symbol, CharStyle style=normalChar ) const;
-    CharClass charClass( QChar symbol, CharStyle style=normalChar ) const;
+    QFont font( QChar symbol, const QFont& f ) const;
 
-    /**
-     * @returns the unicode value of the symbol font char.
-     */
-    QChar unicodeFromSymbolFont( QChar pos ) const;
+    CharClass charClass( QChar symbol ) const;
 
     /**
      * @returns a string with all greek letters.
@@ -132,33 +104,21 @@ class KOFORMULA_EXPORT SymbolTable
     QString greekLetters() const;
 
     /**
+     * @returns the unicode value of the symbol font char.
+     */
+    QChar unicodeFromSymbolFont( QChar pos ) const;
+
+    /**
      * @returns all known names as strings.
      */
     QStringList allNames() const;
 
-    typedef QMap<QChar, CharTableEntry> UnicodeTable;
     typedef QMap<QChar, QString> NameTable;
     typedef QMap<QString, QChar> EntryTable;
-    typedef QVector<QFont> FontTable;
-
-    bool inTable( QChar ch, CharStyle style=anyChar ) const;
-
-    void initFont( const InternFontTable* table,
-                   const char* fontname,
-                   const NameTable& tempNames );
 
 private:
 
-    UnicodeTable& unicodeTable( CharStyle style );
-    const UnicodeTable& unicodeTable( CharStyle style ) const;
-
-    /**
-     * The chars from unicode.
-     */
-    UnicodeTable normalChars;
-    UnicodeTable boldChars;
-    UnicodeTable italicChars;
-    UnicodeTable boldItalicChars;
+    QString get_name( UnicodeNameTable entry ) const;
 
     /**
      * unicode -> name mapping.
@@ -171,18 +131,16 @@ private:
     EntryTable entries;
 
     /**
-     * Symbol fonts in use.
-     * There must not be more than 256 fonts.
-     */
-    FontTable fontTable;
-
-    /**
      * Basic symbol font support.
      */
     SymbolFontHelper symbolFontHelper;
 
-    // An empty entry that's used if nothing was found.
-    CharTableEntry dummyEntry;
+    /**
+     * Backup font for mathematical operators. We ensure that every symbol in
+     * this table is present in this font. If user selected font doesn't have
+     * the needed glyph this font will be used instead.
+     */
+    QFont backupFont;
 };
 
 }

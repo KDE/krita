@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -21,6 +21,7 @@
 #include <QFile>
 #include <QRegExp>
 #include <QTextStream>
+#include <QFontMetrics>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -28,13 +29,17 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
+#include <koffice_export.h>
+
 #include "symboltable.h"
 #include "contextstyle.h"
+#include "unicodetable.cc"
 
 
 KFORMULA_NAMESPACE_BEGIN
 
-/* -- moved to "symbolfontstyle.cc" to have access to the symbolMap.
+#include "symbolfontmapping.cc"
+
 SymbolFontHelper::SymbolFontHelper()
     : greek("abgdezhqiklmnxpvrstufjcywGDQLXPSUFYVW")
 {
@@ -42,7 +47,6 @@ SymbolFontHelper::SymbolFontHelper()
         compatibility[ symbolMap[ i ].pos ] = symbolMap[ i ].unicode;
     }
 }
-*/
 
 QChar SymbolFontHelper::unicodeFromSymbolFont( QChar pos ) const
 {		
@@ -58,34 +62,20 @@ SymbolTable::SymbolTable()
 }
 
 
-void SymbolTable::init( ContextStyle* /*context*/ )
+void SymbolTable::init( const QFont& font )
 {
-    normalChars.clear();
-    boldChars.clear();
-    italicChars.clear();
-    boldItalicChars.clear();
-    entries.clear();
-    fontTable.clear();
-}
-
-
-void SymbolTable::initFont( const InternFontTable* table,
-                            const char* fontname,
-                            const NameTable& tempNames )
-{
-    uint fontnr = fontTable.size();
-    fontTable.push_back( QFont( fontname ) );
-    for ( uint i = 0; table[ i ].unicode != 0; ++i ) {
-        QChar uc = table[ i ].unicode;
-        unicodeTable( table[ i ].style )[ uc ] =
-            CharTableEntry( table[ i ].cl,
-                            static_cast<char>( fontnr ),
-                            table[ i ].pos );
-
-        if ( tempNames.contains( uc ) ) {
-            entries[ tempNames[uc] ] = uc;
-            names[uc] = tempNames[uc];
-        }
+    backupFont = font;
+    for ( int i=0; operatorTable[i].unicode != 0; ++i ) {
+        names[QChar( operatorTable[i].unicode )] = get_name( operatorTable[i] );
+        entries[get_name( operatorTable[i] )] = QChar( operatorTable[i].unicode );
+    }
+    for ( int i=0; arrowTable[i].unicode != 0; ++i ) {
+        names[QChar( arrowTable[i].unicode )] = get_name( arrowTable[i] );
+        entries[get_name( arrowTable[i] )] = QChar( arrowTable[i].unicode );
+    }
+    for ( int i=0; greekTable[i].unicode != 0; ++i ) {
+        names[QChar( greekTable[i].unicode )] = get_name( greekTable[i] );
+        entries[get_name( greekTable[i] )] = QChar( greekTable[i].unicode );
     }
 }
 
@@ -107,52 +97,21 @@ QString SymbolTable::name( QChar symbol ) const
 }
 
 
-const CharTableEntry& SymbolTable::entry( QChar symbol, CharStyle style ) const
+QFont SymbolTable::font( QChar symbol, const QFont& f ) const
 {
-    const UnicodeTable& table = unicodeTable( style );
-    if ( table.contains( symbol ) ) {
-        return table[symbol];
+    QFontMetrics fm( f );
+    if ( fm.inFont( symbol ) ) {
+        return f;
     }
-    if ( ( style != normalChar ) && ( style != anyChar ) ) {
-        if ( normalChars.contains( symbol ) ) {
-            return normalChars[symbol];
-        }
-    }
-    if ( style != boldChar ) {
-        if ( boldChars.contains( symbol ) ) {
-            return boldChars[symbol];
-        }
-    }
-    if ( style != italicChar ) {
-        if ( italicChars.contains( symbol ) ) {
-            return italicChars[symbol];
-        }
-    }
-    if ( style != boldItalicChar ) {
-        if ( boldItalicChars.contains( symbol ) ) {
-            return boldItalicChars[symbol];
-        }
-    }
-    return dummyEntry;
+    return QFont("Arev Sans");
 }
 
 
-QFont SymbolTable::font( QChar symbol, CharStyle style ) const
+CharClass SymbolTable::charClass( QChar symbol ) const
 {
-    char f = entry( symbol, style ).font();
-    return fontTable[f];
-}
-
-
-QChar SymbolTable::character( QChar symbol, CharStyle style ) const
-{
-    return entry( symbol, style ).character();
-}
-
-
-CharClass SymbolTable::charClass( QChar symbol, CharStyle style ) const
-{
-    return entry( symbol, style ).charClass();
+    return ORDINARY;
+    // FIXME
+    // return entry( symbol, style ).charClass();
 }
 
 
@@ -172,50 +131,25 @@ QStringList SymbolTable::allNames() const
 {
     QStringList list;
 
-    for ( EntryTable::const_iterator iter = entries.begin();
-          iter != entries.end();
-          ++iter ) {
-        if ( QChar( character( iter.value() ) ) != QChar::Null ) {
-            list.append( iter.key() );
-        }
+    for ( int i=0; operatorTable[i].unicode != 0; ++i ) {
+        list.append( get_name( operatorTable[i] ));
     }
-    list.sort();
+    for ( int i=0; arrowTable[i].unicode != 0; ++i ) {
+        list.append( get_name( arrowTable[i] ));
+    }
+    for ( int i=0; greekTable[i].unicode != 0; ++i ) {
+        list.append( get_name( greekTable[i] ) );
+    }
     return list;
 }
 
 
-bool SymbolTable::inTable( QChar ch, CharStyle style ) const
+QString SymbolTable::get_name( struct UnicodeNameTable entry ) const
 {
-    if ( style == anyChar ) {
-        return normalChars.contains( ch ) ||
-            boldChars.contains( ch ) ||
-            italicChars.contains( ch ) ||
-            boldItalicChars.contains( ch );
+    if ( !*entry.name ) {
+        return "U" + QString( "%1" ).arg( entry.unicode, 4, 16 ).upper();
     }
-    return unicodeTable( style ).contains( ch );
-}
-
-
-SymbolTable::UnicodeTable& SymbolTable::unicodeTable( CharStyle style )
-{
-    switch ( style ) {
-    case boldChar: return boldChars;
-    case italicChar: return italicChars;
-    case boldItalicChar: return boldItalicChars;
-    default: break;
-    }
-    return normalChars;
-}
-
-const SymbolTable::UnicodeTable& SymbolTable::unicodeTable( CharStyle style ) const
-{
-    switch ( style ) {
-    case boldChar: return boldChars;
-    case italicChar: return italicChars;
-    case boldItalicChar: return boldItalicChars;
-    default: break;
-    }
-    return normalChars;
+    return entry.name;
 }
 
 

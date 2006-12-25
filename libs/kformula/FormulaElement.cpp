@@ -136,7 +136,7 @@ void FormulaElement::insertFormula( FormulaCursor* cursor )
 //    m_document->insertFormula( cursor );
 }
 
-void FormulaElement::calcSizes( const ContextStyle& style,
+void FormulaElement::calcSizes( const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle,
                                 ContextStyle::IndexStyle istyle,
                                 StyleAttributes& style )
@@ -186,6 +186,7 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
     else {
         context.setSizeFactor( 1 );
     }
+    StyleAttributes style;
     draw( painter, r, context, context.getBaseTextStyle(),
           ContextStyle::normal, style, LuPixelPoint() );
 }

@@ -565,9 +565,6 @@ protected:
         break;
       }
       
-//   qDebug("fetch item %d", index);
-//    qDebug("  -> from start index %d (%d of %d)", startIndex[loc], loc, startIndex.count());  
-      
     bufferStartIndex = startIndex[loc];  
 #ifdef KOXMLVECTOR_USE_LZF
     KoLZF::decompress(blocks[loc],bufferData);
@@ -579,8 +576,6 @@ protected:
     QDataStream in(&buffer);
     bufferItems.clear();
     in >> bufferItems;
-    
-//    qDebug("  done fetching %d items at %d", bufferItems.count(), bufferStartIndex);
   }
   
   // store data in the buffer to main blocks
@@ -639,19 +634,6 @@ public:
   const T &operator[](int i) const
   {
     ((KoXmlVector*)this)->fetchItem((unsigned)i);
-#if 0
-    int index = i - bufferStartIndex;
-    if(i == 256)
-    {
-    qDebug("  index is %d of %d", index, bufferItems.count());
-    qDebug("  bufferStartIndex is %d", bufferStartIndex);
-       qDebug("  at %d", i);
-    }   
-       
-    if(index >= bufferItems.count())
-     qDebug("BANG %d %d", i, bufferItems.count());
-#endif       
-    
     return bufferItems[i - bufferStartIndex];
   }
 
@@ -660,11 +642,6 @@ public:
   void squeeze()
   {
     storeBuffer();
-    
-#if 0
-    for(int c = 0; c < startIndex.count(); c++)
-      qDebug("%d %d", c, startIndex[c]);
-#endif
   }
   
 };

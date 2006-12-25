@@ -22,6 +22,7 @@
 #include <QPen>
 #include <QFontDatabase>
 #include <QChar>
+#include <QApplication>
 
 #include <kstaticdeleter.h>
 #include <klocale.h>
@@ -118,21 +119,21 @@ void FontStyle::installFonts()
         for (QStringList::iterator it = missing.begin(); it != missing.end(); ++it)
         {
             if ( *it == "arev sans" ) {
-                if (!KIO::NetAccess::exists("fonts:/Personal/Arev.ttf", true, NULL))
-                    urlList.append(locate("data", "kformula/fonts/Arev.ttf"));
-                if (!KIO::NetAccess::exists("fonts:/Personal/ArevIt.ttf", true, NULL))
-                    urlList.append(locate("data", "kformula/fonts/ArevIt.ttf"));
-                if (!KIO::NetAccess::exists("fonts:/Personal/ArevBd.ttf", true, NULL))
-                    urlList.append(locate("data", "kformula/fonts/ArevBd.ttf"));
-                if (!KIO::NetAccess::exists("fonts:/Personal/ArevBI.ttf", true, NULL))
-                    urlList.append(locate("data", "kformula/fonts/ArevBI.ttf"));
+                if ( ! KIO::NetAccess::exists( KUrl( "fonts:/Personal/Arev.ttf" ), true, NULL) )
+                    urlList.append( KStandardDirs::locate( "data", "kformula/fonts/Arev.ttf" ) );
+                if ( ! KIO::NetAccess::exists( KUrl( "fonts:/Personal/ArevIt.ttf" ), true, NULL ) )
+                    urlList.append( KStandardDirs::locate( "data", "kformula/fonts/ArevIt.ttf" ) );
+                if ( ! KIO::NetAccess::exists( KUrl( "fonts:/Personal/ArevBd.ttf" ), true, NULL ) )
+                    urlList.append( KStandardDirs::locate( "data", "kformula/fonts/ArevBd.ttf" ) );
+                if ( ! KIO::NetAccess::exists( KUrl( "fonts:/Personal/ArevBI.ttf" ), true, NULL) )
+                    urlList.append( KStandardDirs::locate( "data", "kformula/fonts/ArevBI.ttf" ) );
             }
             else {
-                if (!KIO::NetAccess::exists("fonts:/Personal/" + *it + ".ttf", true, NULL))
-                    urlList.append(locate("data", "kformula/fonts/" + *it + ".ttf"));
+                if ( ! KIO::NetAccess::exists( KUrl( "fonts:/Personal/" + *it + ".ttf" ), true, NULL ) )
+                    urlList.append( KStandardDirs::locate( "data", "kformula/fonts/" + *it + ".ttf" ) );
             }
         }
-        KIO::copy(urlList, "fonts:/Personal/", false);
+        KIO::copy( urlList, KUrl( "fonts:/Personal/" ), false );
         KMessageBox::information(qApp->mainWidget(), 
                                  i18n("Some fonts have been installed to assure that symbols in formulas are properly visualized. You must restart the application in order so that changes take effect"));
     }
@@ -146,45 +147,45 @@ Artwork* FontStyle::createArtwork( SymbolType type ) const
 
 // We claim that all chars come from the same font.
 // It's up to the font tables to ensure this.
-const QChar leftRoundBracket[] = {
+const uchar leftRoundBracket[] = {
     0x30, // uppercorner
     0x40, // lowercorner
     0x42  // line
 };
-const QChar leftSquareBracket[] = {
+const uchar leftSquareBracket[] = {
     0x32, // uppercorner
     0x34, // lowercorner
     0x36  // line
 };
-const QChar leftCurlyBracket[] = {
+const uchar leftCurlyBracket[] = {
     0x38, // uppercorner
     0x3A, // lowercorner
     0x3E, // line
     0x3C  // middle
 };
 
-const QChar leftLineBracket[] = {
+const uchar leftLineBracket[] = {
     0x36, // line
     0x36, // line
     0x36  // line
 };
-const QChar rightLineBracket[] = {
+const uchar rightLineBracket[] = {
     0x37, // line
     0x37, // line
     0x37  // line
 };
 
-const QChar rightRoundBracket[] = {
+const uchar rightRoundBracket[] = {
     0x31, // uppercorner
     0x41, // lowercorner
     0x43  // line
 };
-const QChar rightSquareBracket[] = {
+const uchar rightSquareBracket[] = {
     0x33, // uppercorner
     0x35, // lowercorner
     0x37  // line
 };
-const QChar rightCurlyBracket[] = {
+const uchar rightCurlyBracket[] = {
     0x39, // uppercorner
     0x3B, // lowercorner
     0x3E, // line
@@ -721,18 +722,18 @@ void Artwork::calcCharSize( const ContextStyle& style, QFont f,
 
 void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style,
                              QFont f,
-                             luPixel x, luPixel y, luPt height, uchar c )
+                             luPixel x, luPixel y, luPt height, QChar c )
 {
     f.setPointSizeF( style.layoutUnitToFontSize( height, false ) );
 
     painter.setFont( f );
     painter.drawText( style.layoutUnitToPixelX( x ),
                       style.layoutUnitToPixelY( y+getBaseline() ), 
-                      QString( QChar( c ) ) );
+                      QString( c ) );
 }
 
 
-void Artwork::calcRoundBracket( const ContextStyle& style, const QChar chars[],
+void Artwork::calcRoundBracket( const ContextStyle& style, const uchar chars[],
                                 luPt height, luPt charHeight )
 {
     uchar uppercorner = chars[0];
@@ -754,7 +755,7 @@ void Artwork::calcRoundBracket( const ContextStyle& style, const QChar chars[],
     setHeight( qMax( edgeHeight, height ) );
 }
 
-void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const QChar chars[],
+void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const uchar chars[],
                                    luPixel x, luPixel y, luPt charHeight )
 {
     uchar uppercorner = chars[0];
@@ -802,7 +803,7 @@ void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const
                 QString( QChar( line ) ) );
 }
 
-void Artwork::calcCurlyBracket( const ContextStyle& style, const QChar chars[],
+void Artwork::calcCurlyBracket( const ContextStyle& style, const uchar chars[],
                                 luPt height, luPt charHeight )
 {
     uchar uppercorner = chars[0];
@@ -828,7 +829,7 @@ void Artwork::calcCurlyBracket( const ContextStyle& style, const QChar chars[],
     setHeight( qMax( edgeHeight, height ) );
 }
 
-void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const QChar chars[],
+void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const uchar chars[],
                                    luPixel x, luPixel y, luPt charHeight )
 {
     //QFont f = style.getSymbolFont();

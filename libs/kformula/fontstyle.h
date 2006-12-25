@@ -88,16 +88,16 @@ const QChar applyFunctionChar = 0x2061;
 const QChar invisibleTimes = 0x2062;
 const QChar invisibleComma = 0x2063;
 
-extern const QChar leftRoundBracket[];
-extern const QChar leftSquareBracket[];
-extern const QChar leftCurlyBracket[];
+extern const uchar leftRoundBracket[];
+extern const uchar leftSquareBracket[];
+extern const uchar leftCurlyBracket[];
 
-extern const QChar leftLineBracket[];
-extern const QChar rightLineBracket[];
+extern const uchar leftLineBracket[];
+extern const uchar rightLineBracket[];
 
-extern const QChar rightRoundBracket[];
-extern const QChar rightSquareBracket[];
-extern const QChar rightCurlyBracket[];
+extern const uchar rightRoundBracket[];
+extern const uchar rightSquareBracket[];
+extern const uchar rightCurlyBracket[];
 
 /*
  * A piece of art that may be used by any element.
@@ -155,16 +155,16 @@ protected:
     void drawCharacter( QPainter& painter, const ContextStyle& style,
                         luPixel x, luPixel y, luPt height, QChar ch );
 
-    void calcCharSize( const ContextStyle& style, QFont f, QChar c );
+    void calcCharSize( const ContextStyle& style, QFont f, luPt height, QChar c );
     void drawCharacter( QPainter& painter, const ContextStyle& style,
                         QFont f,
-                        luPixel x, luPixel y, luPt height, uchar c );
+                        luPixel x, luPixel y, luPt height, QChar c );
 
-    void calcRoundBracket( const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );
-    void calcCurlyBracket( const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );
+    void calcRoundBracket( const ContextStyle& style, const uchar chars[], luPt height, luPt charHeight );
+    void calcCurlyBracket( const ContextStyle& style, const uchar chars[], luPt height, luPt charHeight );
 
-    void drawBigRoundBracket( QPainter& p, const ContextStyle& style, const QChar chars[], luPixel x, luPixel y, luPt charHeight );
-    void drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const QChar chars[], luPixel x, luPixel y, luPt charHeight );
+    void drawBigRoundBracket( QPainter& p, const ContextStyle& style, const uchar chars[], luPixel x, luPixel y, luPt charHeight );
+    void drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const uchar chars[], luPixel x, luPixel y, luPt charHeight );
 
 private:
 

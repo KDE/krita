@@ -328,8 +328,10 @@ public:
     luPixel getBaseline() const { return m_baseLine; }
     void setBaseline( luPixel line ) { m_baseLine = line; }
 
-    luPixel axis( const ContextStyle& style, ContextStyle::TextStyle tstyle ) const {
-        return getBaseline() - style.axisHeight( tstyle ); }
+    luPixel axis( const ContextStyle& style, 
+                  ContextStyle::TextStyle tstyle,
+                  double factor ) const {
+        return getBaseline() - style.axisHeight( tstyle, factor ); }
 
     /**
      * @return a QDomElement that contain as DomChildren the

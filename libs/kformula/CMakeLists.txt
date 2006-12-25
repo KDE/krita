@@ -9,38 +9,47 @@ include_directories( ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES})
 ########### next target ###############
 
 set(kformulalib_LIB_SRCS 
-   FormulaShape.cpp
-   FormulaTool.cpp
+#   FormulaShape.cpp
+#   FormulaTool.cpp
    FormulaCursor.cpp 
-   FormulaContainer.cpp
+#   FormulaContainer.cpp
    BasicElement.cpp 
-   SequenceElement.cpp
-   FormulaElement.cpp 
-   MultiscriptElement.cpp
-   UnderOverElement.cpp
-   TextElement.cpp 
-   BracketElement.cpp 
-   MatrixElement.cpp
-   MatrixRowElement.cpp
-   MatrixEntryElement.cpp
-   FractionElement.cpp
-   RootElement.cpp
-   SpaceElement.cpp 
+#   SequenceElement.cpp
+#   FormulaElement.cpp 
+#   MultiscriptElement.cpp
+#   UnderOverElement.cpp
+#   TextElement.cpp 
+#   BracketElement.cpp 
+#   MatrixElement.cpp
+#   MatrixRowElement.cpp
+#   MatrixEntryElement.cpp
+#   FractionElement.cpp
+#   RootElement.cpp
+#   SpaceElement.cpp
+#   EncloseElement.cpp
 #   ActionElement.cpp
 #   PaddedElement.cpp
 #   GlyphElement.cpp
 #   ErrorElement.cpp
-   ElementFactory.cpp 
+#   TokenStyleElement.cpp
+#   StyleElement.cpp
+#   TokenElement.cpp
+#   NumberElement.cpp
+#   IdentifierElement.cpp
+#   OperatorElement.cpp
+#   OperatorDictionary.cpp
+#   ElementFactory.cpp 
 #   kformulacommand.cc 
-   MatrixDialog.cc 
-   contextstyle.cc 
-   symboltable.cc 
-   kformulaconfigpage.cc 
-   symbolaction.cc 
-   cmstyle.cc 
-   fontstyle.cc 
-   symbolfontstyle.cc 
-   esstixfontstyle.cc )
+#   MatrixDialog.cc 
+#   contextstyle.cc 
+#   symboltable.cc 
+#   kformulaconfigpage.cc 
+#   symbolaction.cc 
+#   cmstyle.cc 
+#   fontstyle.cc 
+#   symbolfontstyle.cc 
+#   esstixfontstyle.cc 
+)
 
 kde4_automoc(${kformulalib_LIB_SRCS})
 

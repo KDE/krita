@@ -152,8 +152,7 @@ QString BasicElement::inheritAttribute( const QString& attribute ) const
 {
     if( !m_attributes.contains( attribute ) )
         return QString();
-    else
-        m_attributes.value( attribute );
+    return m_attributes.value( attribute );
 }
 
 void BasicElement::moveLeft( FormulaCursor* cursor, BasicElement* )

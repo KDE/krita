@@ -26,7 +26,7 @@
 #include <QFont>
 #include <QString>
 #include <QStringList>
-#include <QValueStack>
+#include <QStack>
 #include <kconfig.h>
 #include <KoZoomHandler.h>
 
@@ -464,53 +464,53 @@ class StyleAttributes {
 
  private:
     // Size of the font in points (mathsize / fontsize)
-    QValueStack<double> m_size;
+    QStack<double> m_size;
 
     // Whether a custom mathvariant attribute is in use
-    QValueStack<bool> m_customMathVariant;
+    QStack<bool> m_customMathVariant;
 
     // Font style (mathvariant, fontweight, fontstyle)
-    QValueStack<CharStyle> m_charStyle;
+    QStack<CharStyle> m_charStyle;
 
     // Font family (mathvariant)
-    QValueStack<CharFamily> m_charFamily;
+    QStack<CharFamily> m_charFamily;
 
     // Foreground color (mathcolor, color)
-    QValueStack<QColor> m_color;
+    QStack<QColor> m_color;
 
     // Background color (mathbackground)
-    QValueStack<QColor> m_background;
+    QStack<QColor> m_background;
 
     // Font family (fontfamily)
-    QValueStack<QFont> m_font;
+    QStack<QFont> m_font;
 
     // Whether a custom fontfamily attribute is in use (instead of CharFamily)
-    QValueStack<bool> m_customFontFamily;
+    QStack<bool> m_customFontFamily;
 
     // Font Weight (fontweight)
-    QValueStack<bool> m_fontWeight;
+    QStack<bool> m_fontWeight;
 
     // Whether a custom fontweight attribute is in use
-    QValueStack<bool> m_customFontWeight;
+    QStack<bool> m_customFontWeight;
 
     // Font Style (fontstyle)
-    QValueStack<bool> m_fontStyle;
+    QStack<bool> m_fontStyle;
 
     // Whether a custom fontstyle attribute is in use
-    QValueStack<bool> m_customFontStyle;
+    QStack<bool> m_customFontStyle;
 
-    QValueStack<int> m_scriptLevel;
-    QValueStack<double> m_scriptSizeMultiplier;
-    QValueStack<double> m_scriptMinSize;
-    QValueStack<double> m_veryVeryThinMathSpace;
-    QValueStack<double> m_veryThinMathSpace;
-    QValueStack<double> m_thinMathSpace;
-    QValueStack<double> m_mediumMathSpace;
-    QValueStack<double> m_thickMathSpace;
-    QValueStack<double> m_veryThickMathSpace;
-    QValueStack<double> m_veryVeryThickMathSpace;
-    QValueStack<bool> m_displayStyle;
-    QValueStack<bool> m_customDisplayStyle;
+    QStack<int> m_scriptLevel;
+    QStack<double> m_scriptSizeMultiplier;
+    QStack<double> m_scriptMinSize;
+    QStack<double> m_veryVeryThinMathSpace;
+    QStack<double> m_veryThinMathSpace;
+    QStack<double> m_thinMathSpace;
+    QStack<double> m_mediumMathSpace;
+    QStack<double> m_thickMathSpace;
+    QStack<double> m_veryThickMathSpace;
+    QStack<double> m_veryVeryThickMathSpace;
+    QStack<bool> m_displayStyle;
+    QStack<bool> m_customDisplayStyle;
 };
 
 

@@ -114,6 +114,9 @@ public:
   
   // equivalen to node.childNodes().count() if node is a QDomNode instance
   int childNodesCount() const;
+  
+  // workaround to get and iterate over all attributes
+  QStringList attributeNames() const;
 
   KoXmlNode namedItem( const QString& name ) const;
   KoXmlNode namedItemNS( const QString& nsURI, const QString& name ) const;
@@ -344,6 +347,11 @@ namespace KoXml {
      * Get the number of child nodes of specified node.
      */
     KSTORE_EXPORT int childNodesCount( const KoXmlNode& node );
+    
+    /**
+     * Return the name of all attributes of specified node.
+     */
+    KSTORE_EXPORT QStringList attributeNames( const KoXmlNode& node );
     
     /**
      * Convert KoXml classes to the corresponding QDom classes, which has 

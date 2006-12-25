@@ -445,6 +445,18 @@ void testAttributes()
   CHECK( imgElement.attribute("border").isEmpty(), true );
   CHECK( imgElement.attribute("border","0").toInt(), 0 );
   CHECK( imgElement.attribute("border","-1").toInt(), -1 );
+  
+  QStringList list = KoXml::attributeNames(imgElement);
+  CHECK( list.count(), 3 );
+  CHECK( list.contains("src"), true );
+  CHECK( list.contains("width"), true );
+  CHECK( list.contains("height"), true );
+  CHECK( list.contains("border"), false );
+  foreach(QString a, list)
+  {
+    CHECK( imgElement.hasAttribute(a), true );
+    CHECK( imgElement.attribute(a).isEmpty(), false );
+  }  
 }
 
 void testText()

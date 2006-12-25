@@ -1315,6 +1315,7 @@ public:
   inline QString attributeNS( const QString& nsURI, const QString& name, const QString& def ) const;
   inline bool hasAttributeNS( const QString& nsURI, const QString& name ) const;
   inline void clearAttributes();
+  inline QStringList attributeNames() const;
 
   // for text and CDATA
   QString data() const;
@@ -1528,6 +1529,15 @@ void KoXmlNodeData::clearAttributes()
 {
   attr.clear();
   attrNS.clear();
+}
+
+// FIXME how about namespaced attributes ?
+QStringList KoXmlNodeData::attributeNames() const
+{
+  QStringList result;
+  result = attr.keys();
+  
+  return result;
 }
 
 QString KoXmlNodeData::data() const
@@ -2236,6 +2246,14 @@ int KoXmlNode::childNodesCount() const
   return count;
 }
 
+QStringList KoXmlNode::attributeNames() const
+{
+  if( !d->loaded)  
+    d->loadChildren();
+    
+  return d->attributeNames();
+}
+
 KoXmlNode KoXmlNode::firstChild() const
 {
   if( !d->loaded)  
@@ -2824,6 +2842,23 @@ int KoXml::childNodesCount( const KoXmlNode& node )
   // compatibility function, because no need to implement
   // a class like QDomNodeList
   return node.childNodesCount();
+#endif  
+}
+
+QStringList KoXml::attributeNames( const KoXmlNode& node )
+{
+#ifdef KOXML_USE_QDOM
+  QStringList result;
+
+  QDomNamedNodeMap attrMap = node.attributes();
+  for(int i = 0; i < attrMap.count(); i++)
+    result += attrMap.item(i).toAttr().name();
+    
+  return result;
+#else
+  // compatibility function, because no need to implement
+  // a class like QDomNamedNodeMap
+  return node.attributeNames();
 #endif  
 }
 

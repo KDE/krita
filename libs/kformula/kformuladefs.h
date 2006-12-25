@@ -48,7 +48,7 @@ typedef QRectF PtRect;
 typedef double pixel;
 typedef QPointF PixelPoint;
 typedef QRectF PixelRect;
-typedef QSizeF PixelSize;
+// typedef QSizeF PixelSize;
 
 /**
  * Layout Unit. That's the values we store to get

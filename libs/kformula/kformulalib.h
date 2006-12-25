@@ -15,5 +15,12 @@
  * cursor for the formula. Through the FormulaCursor all editing is done and apart
  * from loading the formula tree's structure is never changed in a different way.
  *
- * 
+ * The complex system of attributes which can be hold by the single elements is
+ * completely implemented in the AttributeManager class. The attributes are
+ * generically loaded and stored inside the elements and obtain and parse their
+ * values the elements use AttributeManager which also deals with heritage and
+ * default values.
+ *
+ * The MathML specification lists default values for operator's layouting. 
+ *  --- rest to come when it is implemented ---
  */

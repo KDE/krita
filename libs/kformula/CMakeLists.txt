@@ -12,10 +12,10 @@ set(kformulalib_LIB_SRCS
 #   FormulaShape.cpp
 #   FormulaTool.cpp
    FormulaCursor.cpp 
-#   FormulaContainer.cpp
+   FormulaContainer.cpp
    BasicElement.cpp 
 #   SequenceElement.cpp
-#   FormulaElement.cpp 
+   FormulaElement.cpp 
 #   MultiscriptElement.cpp
 #   UnderOverElement.cpp
 #   TextElement.cpp 
@@ -41,12 +41,12 @@ set(kformulalib_LIB_SRCS
 #   ElementFactory.cpp 
 #   kformulacommand.cc 
 #   MatrixDialog.cc 
-#   contextstyle.cc 
-#   symboltable.cc 
+   contextstyle.cc 
+   symboltable.cc 
 #   kformulaconfigpage.cc 
 #   symbolaction.cc 
 #   cmstyle.cc 
-#   fontstyle.cc 
+   fontstyle.cc 
 #   symbolfontstyle.cc 
 #   esstixfontstyle.cc 
 )

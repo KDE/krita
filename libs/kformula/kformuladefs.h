@@ -168,6 +168,48 @@ enum Direction { beforeCursor, afterCursor };
 enum SpaceWidth { THIN, MEDIUM, THICK, QUAD, NEGTHIN };
 
 /**
+ * The types of MathML horizontal or vertical sizes we know
+ */
+enum SizeType { 
+    NoSize, 
+    AutoSize, 
+    FitSize,
+    InfinitySize,
+    RelativeSize, 
+    AbsoluteSize, 
+    PixelSize,
+    NegativeVeryVeryThinMathSpace,
+    NegativeVeryThinMathSpace,
+    NegativeThinMathSpace,
+    NegativeMediumMathSpace,
+    NegativeThickMathSpace,
+    NegativeVeryThickMathSpace,
+    NegativeVeryVeryThickMathSpace,
+    VeryVeryThinMathSpace,
+    VeryThinMathSpace,
+    ThinMathSpace,
+    MediumMathSpace,
+    ThickMathSpace,
+    VeryThickMathSpace,
+    VeryVeryThickMathSpace
+};
+
+/**
+ * The types of horizontal align
+ */
+enum HorizontalAlign { 
+    NoHorizontalAlign, 
+    LeftHorizontalAlign, 
+    CenterHorizontalAlign, 
+    RightHorizontalAlign 
+};
+
+/**
+ * Type of forms in operators
+ */
+enum FormType { NoForm, PrefixForm, InfixForm, PostfixForm };
+
+/**
  * each index has its own number.
  */
 enum IndexPosition {

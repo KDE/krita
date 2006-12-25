@@ -201,6 +201,9 @@ void BasicElement::moveEnd( FormulaCursor* cursor )
 void BasicElement::readMathML( const QDomElement& element )
 {
     readMathMLAttributes( element );
+
+    QDomNode node = element.firstChild();
+    readMathMLContent( node );
 }
 
 void BasicElement::readMathMLAttributes( const QDomElement& element )
@@ -214,11 +217,18 @@ void BasicElement::readMathMLAttributes( const QDomElement& element )
     }
 }
 
-void BasicElement::writeMathML( KoXmlWriter* , bool )
+int BasicElement::readMathMLContent( QDomNode &node )
 {
+    return 1;
 }
 
-void BasicElement::writeMathMLAttributes( KoXmlWriter* writer )
+void BasicElement::writeMathML( KoXmlWriter* writer, bool oasisFormat ) const
+{
+    writeMathMLAttributes( writer );
+    writeMathMLContent( writer, oasisFormat );
+}
+
+void BasicElement::writeMathMLAttributes( KoXmlWriter* writer ) const
 {
     foreach( QString value, m_attributes )
         writer->addAttribute( m_attributes.key( value ).toLatin1(), value );

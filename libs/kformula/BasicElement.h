@@ -206,7 +206,7 @@ public:
     virtual void readMathML( const QDomElement& element );
 
     /// Save the element to MathML 
-    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
+    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const ;
 
 
 
@@ -352,10 +352,12 @@ protected:
     /// Read all attributes loaded and add them to the m_attributes map 
     void readMathMLAttributes( const QDomElement& element );
 
+    virtual int readMathMLContent( QDomNode& node );
+
     /// Write all attributes of m_attributes to @p writer
-    void writeMathMLAttributes( KoXmlWriter* writer );
+    void writeMathMLAttributes( KoXmlWriter* writer ) const ;
 
-
+    virtual void writeMathMLContent( KoXmlWriter* , bool ) const {};
 
     /**
      * Returns the tag name of this element type.

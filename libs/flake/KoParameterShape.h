@@ -36,7 +36,7 @@ public:
      * After that updatePath and a repaint is called.
      *
      * @param handleId of the handle
-     * @param point to move the handle to
+     * @param point to move the handle to in document coordinates
      * @param modifiers used during move to point
      */
     virtual void moveHandle( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
@@ -103,7 +103,7 @@ protected:
      * This method is called from moveHandle.
      *
      * @param handleId of the handle
-     * @param point to move the handle to
+     * @param point to move the handle to in shape coordinates
      * @param modifiers used during move to point
      */
     virtual void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier ) = 0;

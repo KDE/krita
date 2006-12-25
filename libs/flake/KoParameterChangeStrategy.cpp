@@ -25,7 +25,7 @@ KoParameterChangeStrategy::KoParameterChangeStrategy( KoTool *tool, KoCanvasBase
 : KoInteractionStrategy( tool, canvas )
 , m_parameterShape( parameterShape )
 , m_handleId( handleId )    
-, m_startPoint( m_parameterShape->handlePosition( handleId ) )    
+, m_startPoint( m_parameterShape->shapeToDocument( m_parameterShape->handlePosition( handleId ) ) )
 {
 }
 
@@ -35,7 +35,7 @@ KoParameterChangeStrategy::~KoParameterChangeStrategy()
 
 void KoParameterChangeStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers )
 {
-    m_parameterShape->moveHandle( m_handleId, m_parameterShape->documentToShape( mouseLocation ), modifiers );
+    m_parameterShape->moveHandle( m_handleId, mouseLocation, modifiers );
 }
 
 QUndoCommand* KoParameterChangeStrategy::createCommand()
@@ -44,7 +44,7 @@ QUndoCommand* KoParameterChangeStrategy::createCommand()
     // check if handle position changed
     if ( m_startPoint != m_parameterShape->handlePosition( m_handleId ) )
     {
-        cmd = new KoParameterChangeCommand( m_parameterShape, m_handleId, m_startPoint, m_parameterShape->handlePosition( m_handleId ) );
+        cmd = new KoParameterChangeCommand( m_parameterShape, m_handleId, m_startPoint, m_parameterShape->shapeToDocument( m_parameterShape->handlePosition( m_handleId ) ) );
     }
     return cmd;
 }

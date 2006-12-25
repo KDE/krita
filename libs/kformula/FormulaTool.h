@@ -54,7 +54,12 @@ public:
     void keyReleaseEvent( QKeyEvent *event );
 
     /// Insert a new element at the current cursor position with type ElementType
-    //void insert( ElementType element );
+    void insertAtCursor( BasicElement* element );
+
+    void insertAtCursor( QList<BasicElement*> elements );
+
+    // perhaps later for copy&paste:
+    // insertAtCursor( QDomElement element );
 
     void remove( bool backSpace );
 

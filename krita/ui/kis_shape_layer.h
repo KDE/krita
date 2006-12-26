@@ -19,7 +19,7 @@
 #ifndef KIS_SHAPE_LAYER_H_
 #define KIS_SHAPE_LAYER_H_
 
-#include <KoShapeContainer.h>
+#include <KoLayerShape.h>
 
 #include <kis_types.h>
 #include <kis_external_layer_iface.h>
@@ -41,7 +41,7 @@ const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
    A KisShapeLayer contains any number of non-krita flakes, such as
    path shapes, text shapes and anything else people come up with.
 */
-class KisShapeLayer : public KoShapeContainer, public KisExternalLayer
+class KisShapeLayer : public KisExternalLayer, public KoLayerShape
 {
 
 public:
@@ -51,30 +51,28 @@ public:
 
 public:
     // KoShape overrides
-
     bool isSelectable() const { return false; }
 
     // KoShapeContainer implementation
-
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
 
+    // KoShapeContainer overrides
+    void addChild(KoShape *object);
+
     // KisExternalLayer implementation
-
     QIcon icon() const;
-
     KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r);
-
     bool saveToXML(QDomDocument doc, QDomElement elem);
 
     // KisLayer implementation
-   KisLayerSP clone() const;
-   qint32 x() const;
-   void setX(qint32);
-   qint32 y() const;
-   void setY(qint32);
-   QRect extent() const;
-   QRect exactBounds() const;
-   bool accept(KisLayerVisitor&);
+    KisLayerSP clone() const;
+    qint32 x() const;
+    void setX(qint32);
+    qint32 y() const;
+    void setY(qint32);
+    QRect extent() const;
+    QRect exactBounds() const;
+    bool accept(KisLayerVisitor&);
 
 
 private:

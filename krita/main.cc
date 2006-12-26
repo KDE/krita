@@ -32,28 +32,8 @@ static const KCmdLineOptions options[] = {
     KCmdLineLastOption
 };
 
-void myMessageOutput(QtMsgType type, const char *msg)
-{
-    switch (type) {
-    case QtDebugMsg:
-        fprintf(stderr, "Debug: %s\n", msg);
-        break;
-    case QtWarningMsg:
-        fprintf(stderr, "Warning: %s\n", msg);
-        break;
-    case QtCriticalMsg:
-        fprintf(stderr, "Critical: %s\n", msg);
-        break;
-    case QtFatalMsg:
-        kDebug() << "Fatal: " <<  msg << endl;
-        kDebug() << kBacktrace();
-        abort();
-    }
-}
-
 extern "C" KRITA_EXPORT int kdemain(int argc, char **argv)
 {
-    qInstallMsgHandler(myMessageOutput);
 
     KCmdLineArgs::init(argc, argv, newKritaAboutData());
     KCmdLineArgs::addCmdLineOptions(options);

@@ -1088,7 +1088,7 @@ KisPaintDeviceSP KisImage::projection()
 KisLayerSP KisImage::activateLayer(KisLayerSP layer)
 {
 
-    kDebug() << "Activate called on image " << this << endl;
+    kDebug() << "activateLayer called on image " << this << endl;
     kDebug() << "Layer " << ( layer ? layer->name() : "zero" )  << " activated. Active layer was: " << ( m_d->activeLayer ? m_d->activeLayer->name() : "empty" ) << endl;
 
 //    if (layer != m_d->activeLayer) {
@@ -1098,10 +1098,13 @@ KisLayerSP KisImage::activateLayer(KisLayerSP layer)
 
         m_d->activeLayer = layer;
 
-        if (m_d->activeLayer)
+        if (m_d->activeLayer) {
             m_d->activeLayer->activate();
-        kDebug() << "Going to emit signal: " << m_d->activeLayer->name() << " activated\n";
-        emit sigLayerActivated(m_d->activeLayer);
+
+            kDebug() << "Going to emit signal: " << m_d->activeLayer->name() << " activated\n";
+            emit sigLayerActivated(m_d->activeLayer);
+        }
+
         emit sigMaskInfoChanged();
 //    }
 
@@ -1121,11 +1124,17 @@ KisLayerSP KisImage::findLayer(int id) const
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
 {
-    return addLayer(layer, parent, parent->firstChild());
+    kDebug() << "KisImage::addLayer. layer: " << layer << ", parent: " << parent << endl;
+    if ( parent )
+        return addLayer(layer, parent, parent->firstChild());
+    else
+        return addLayer( layer, rootLayer(), rootLayer()->firstChild() );
 }
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
 {
+    kDebug() << "KisImage::addLayer. layer: " << layer << ", parent: " << parent << ", aboveThis: " << aboveThis << endl;
+
     if (!parent)
         return false;
 
@@ -1149,6 +1158,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
         if (layer->extent().isValid()) layer->setDirty();
 
         if (!layer->temporary()) {
+            kDebug() << "Going to emit sigLayerAdded\n";
             emit sigLayerAdded(layer);
             activateLayer(layer);
         }
@@ -1201,7 +1211,9 @@ bool KisImage::removeLayer(KisLayerSP layer)
         const bool wasActive = layer == activeLayer();
         // sigLayerRemoved can set it to 0, we don't want that in the else of wasActive!
         KisLayerSP actLayer = activeLayer();
+
         const bool success = parent->removeLayer(layer);
+
         if (success) {
             layer->setImage(0);
             if (!layer->temporary() && undo()) {

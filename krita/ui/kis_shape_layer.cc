@@ -58,8 +58,17 @@ KisShapeLayer::~KisShapeLayer()
 
 void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
-    Q_UNUSED(painter);
     Q_UNUSED(converter);
+    kDebug() << "KisShapeLayer::paintComponent " << boundingRect() << endl;
+    painter.fillRect( boundingRect(), QColor(200, 100, 100, 100) );
+    kDebug() << "KisShapeLayer::paintComponent done" << endl;
+}
+
+void KisShapeLayer::addChild(KoShape *object)
+{
+    kDebug() << "KisShapeLayer::addChild " << object->shapeId() << ", " << object->boundingRect() << endl;
+    KoLayerShape::addChild( object );
+    setDirty( object->boundingRect().toRect(), true ); // XXX: convert to pixels
 }
 
 QIcon KisShapeLayer::icon() const
@@ -70,16 +79,23 @@ QIcon KisShapeLayer::icon() const
 KisPaintDeviceSP KisShapeLayer::prepareProjection(KisPaintDeviceSP projection, const QRect& r)
 {
     Q_UNUSED(projection);
+    kDebug() << "KisShapeLayer::prepareProjection " << r << endl;
+
     // For all the contained shapes, render onto a QImage, and
-    // composite with the cachec KisPaintDevice
+    // composite with the cached KisPaintDevice
     // If the contained shape is a path shape, use the decorator class
     // Thrain is going to write to render directly onto the
     // KisPaintDevice
-    QImage img;
-    QPainter p( &img );
-    KoShapeContainer::paint( p, *m_d->converter );
 
-    m_d->paintDevice->clear();
+    // Cache the QImage!
+    QImage img(r.width(), r.height(), QImage::Format_ARGB32 );
+    kDebug() << "1\n";
+    QPainter p( &img );
+    kDebug() << "2\n";
+
+    KoLayerShape::paint( p, *m_d->converter );
+    kDebug() << "3\n";
+
     m_d->paintDevice->convertFromQImage( img, "", r.left(), r.top() );
 
     return m_d->paintDevice;;
@@ -117,12 +133,14 @@ void KisShapeLayer::setY(qint32)
 
 QRect KisShapeLayer::extent() const
 {
-    return QRect();
+    // XXX: Use view converter to go from points to pixels
+    return boundingRect().toRect();
 }
 
 QRect KisShapeLayer::exactBounds() const
 {
-    return QRect();
+    // XXX: Use view converter to go from points to pixels
+    return boundingRect().toRect();
 }
 
 bool KisShapeLayer::accept(KisLayerVisitor& visitor)

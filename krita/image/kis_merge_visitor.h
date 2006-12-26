@@ -74,7 +74,7 @@ public:
 
             qint32 sx, sy, dx, dy, w, h;
 
-            QRect rc = m_rc; //dev->extent() & m_rc;
+            QRect rc = dev->extent() & m_rc;
 
             sx= rc.left();
             sy = rc.top();

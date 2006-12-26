@@ -56,6 +56,7 @@
 #include <KActionCollection>
 #include <kstandardaction.h>
 #include <KIconLoader>
+#include <kundostack.h>
 
 #include <QBuffer>
 #include <QCursor>
@@ -185,7 +186,7 @@ public:
     QString m_templateType;
     QList<KoVersionInfo> m_versionInfo;
 
-    QUndoStack* m_undoStack;
+    KUndoStack* m_undoStack;
 };
 
 // Used in singleViewMode
@@ -292,15 +293,9 @@ KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleView
     m_pageLayout.ptLeft = 0;
     m_pageLayout.ptRight = 0;
 
-    d->m_undoStack = new QUndoStack( this );
-    QAction* action = d->m_undoStack->createUndoAction( actionCollection() );
-    action->setObjectName( KStandardAction::stdName( KStandardAction::Undo ) );
-    action->setIcon( SmallIconSet( "undo" ) );
-    actionCollection()->insert( action );
-    action = d->m_undoStack->createRedoAction( actionCollection() );
-    action->setObjectName( KStandardAction::stdName( KStandardAction::Redo ) );
-    action->setIcon( SmallIconSet( "redo" ) );
-    actionCollection()->insert( action );
+    d->m_undoStack = new KUndoStack( this );
+    d->m_undoStack->createUndoAction( actionCollection() );
+    d->m_undoStack->createRedoAction( actionCollection() );
     connect( d->m_undoStack, SIGNAL( cleanChanged( bool ) ), this, SLOT( setModified( bool ) ) );
 
     // A way to 'fix' the job's window, since we have no widget known to KParts

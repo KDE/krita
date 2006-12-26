@@ -79,6 +79,15 @@ protected slots:
     void slotLineBreak();
     void formatFont();
 
+    /// Called when the canvas controller is resized
+    virtual void canvasControllerResized();
+
+    /// Called when the mouse position changes on the canvas
+    virtual void updateMousePosition(const QPoint& position);
+
+    /// Called when the selection changed
+    virtual void selectionChanged();
+
 protected:
     KoPADocument *m_doc;
     KoPACanvas *m_canvas;
@@ -86,9 +95,6 @@ protected:
 
 private:    
     void recalculateZoom();
-
-    /// Reimplemented to recalc the zoom when in fit to page or width mode
-    virtual void resizeEvent(QResizeEvent* event);
 
     KoCanvasController * m_canvasController;
     KoZoomHandler m_zoomHandler;

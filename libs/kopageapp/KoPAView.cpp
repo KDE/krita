@@ -34,7 +34,9 @@
 #include <KoShapeManager.h>
 #include <KoZoomAction.h>
 #include <KoTextSelectionHandler.h>
-
+#include <KoSelection.h>
+#include <KoToolDockerFactory.h>
+#include <KoToolDocker.h>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
@@ -47,9 +49,11 @@
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
 , m_doc( document )
-, m_activeData( 0, 0 )                   
+, m_activeData( 0, 0 )
 {
     initGUI();
+    initActions();
+
     if ( m_doc->pageCount() > 0 )
         setActivePage( m_doc->pageByIndex( 0 ) );
 }
@@ -101,11 +105,22 @@ void KoPAView::initGUI()
             m_horizontalRuler, SLOT(setOffset(int)));
     connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
             m_verticalRuler, SLOT(setOffset(int)));
+    connect(m_canvasController, SIGNAL(sizeChanged(const QSize&)),
+             this, SLOT(canvasControllerResized()));
+    connect(m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint&)),
+             this, SLOT(updateMousePosition(const QPoint&)));
 
     KoToolBoxFactory toolBoxFactory( "Tools" );
     createDockWidget( &toolBoxFactory );
     KoShapeSelectorFactory shapeSelectorFactory;
     createDockWidget( &shapeSelectorFactory );
+    KoToolDockerFactory toolDockerFactory;
+    KoToolDocker* toolDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
+    m_canvasController->setToolOptionDocker(toolDocker);
+
+
+    connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+
     show();
 }
 
@@ -254,11 +269,9 @@ void KoPAView::setActivePage( KoPAPage* page )
 
 }
 
-void KoPAView::resizeEvent(QResizeEvent* event)
+void KoPAView::canvasControllerResized()
 {
-    KoView::resizeEvent(event);
-
-    if ( m_zoomHandler.zoomMode() != KoZoomMode::ZOOM_CONSTANT ) 
+    if ( m_zoomHandler.zoomMode() != KoZoomMode::ZOOM_CONSTANT )
     {
         recalculateZoom();
     }
@@ -326,6 +339,32 @@ void KoPAView::formatFont() {
         handler->selectFont(this);
 }
 
+void KoPAView::updateMousePosition(const QPoint& position)
+{
+    m_horizontalRuler->updateMouseCoordinate(position.x());
+    m_verticalRuler->updateMouseCoordinate(position.y());
 
+    // Update the selection borders in the rulers while moving with the mouse
+    if(m_canvas->shapeManager()->selection() && (m_canvas->shapeManager()->selection()->count() > 0)) {
+        QRectF boundingRect = m_canvas->shapeManager()->selection()->boundingRect();
+        m_horizontalRuler->updateSelectionBorders(boundingRect.x(), boundingRect.right());
+        m_verticalRuler->updateSelectionBorders(boundingRect.y(), boundingRect.bottom());
+    }
+}
+
+void KoPAView::selectionChanged()
+{
+    // Show the borders of the selection in the rulers
+    if(m_canvas->shapeManager()->selection() && (m_canvas->shapeManager()->selection()->count() > 0)) {
+        QRectF boundingRect = m_canvas->shapeManager()->selection()->boundingRect();
+        m_horizontalRuler->setShowSelectionBorders(true);
+        m_verticalRuler->setShowSelectionBorders(true);
+        m_horizontalRuler->updateSelectionBorders(boundingRect.x(), boundingRect.right());
+        m_verticalRuler->updateSelectionBorders(boundingRect.y(), boundingRect.bottom());
+    } else {
+        m_horizontalRuler->setShowSelectionBorders(false);
+        m_verticalRuler->setShowSelectionBorders(false);
+    }
+}
 
 #include "KoPAView.moc"

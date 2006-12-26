@@ -804,7 +804,7 @@ QImage KisBrush::scaleImage(const ScaledBrush *srcBrush, double scale, double su
                 alpha = 255;
             }
 
-            dstImage.setPixel(dstX, dstY, qRgba(Qt::red, Qt::green, Qt::blue, alpha));
+            dstImage.setPixel(dstX, dstY, qRgba(red, green, blue, alpha));
         }
     }
 

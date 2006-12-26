@@ -103,7 +103,11 @@ public:
     /// return the position in widget coordinates
     const QPoint & pos () const;
 
-    /// return the pressure (or a default value)
+    /**
+     * return the pressure (or a default value). The range is 0.0 - 1.0
+     * and the default pressure (this is the pressure that will be given
+     * when you use something like the mouse) is 0.5
+     */
     qreal pressure () const;
 
     /// return the rotation (or a default value)

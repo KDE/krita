@@ -97,7 +97,7 @@ qreal KoPointerEvent::pressure () const
     if (m_tabletEvent)
         return m_tabletEvent->pressure();
     else
-        return 1.0;
+        return 0.5;
 }
 
 qreal KoPointerEvent::rotation () const

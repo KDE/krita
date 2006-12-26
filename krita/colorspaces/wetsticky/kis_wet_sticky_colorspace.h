@@ -44,9 +44,9 @@ namespace WetAndSticky {
      * Defines the contents and attributes of a cell on the canvas.
      */
     typedef struct cell {
-        quint8 Qt::blue;
-        quint8 Qt::green;
-        quint8 Qt::red;
+        quint8 blue;
+        quint8 green;
+        quint8 red;
         quint8 alpha;
 
         float   hue;

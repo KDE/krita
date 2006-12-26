@@ -1106,7 +1106,7 @@ QImage KisBrush::scaleSinglePixelImage(double scale, QRgb pixel, double subPixel
                 alpha = 255;
             }
 
-            outputImage.setPixel(x, y, qRgba(Qt::red, Qt::green, Qt::blue, alpha));
+            outputImage.setPixel(x, y, qRgba(red, green, blue, alpha));
         }
     }
 
@@ -1166,7 +1166,7 @@ QImage KisBrush::interpolate(const QImage& image1, const QImage& image2, double 
                 alpha = 255;
             }
 
-            outputImage.setPixel(x, y, qRgba(Qt::red, Qt::green, Qt::blue, alpha));
+            outputImage.setPixel(x, y, qRgba(red, green, blue, alpha));
         }
     }
 

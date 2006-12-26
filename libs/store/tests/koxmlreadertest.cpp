@@ -717,6 +717,82 @@ void testDocument()
   CHECK( doc.parentNode().isNull(), true );
 }
 
+void testDocumentType()
+{
+  QString errorMsg;
+  int errorLine = 0;
+  int errorColumn = 0;
+
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
+  xmlstream << "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">";
+  xmlstream << "<body>";
+  xmlstream << "  <img/>\n";
+  xmlstream << "  <p/>\n";
+  xmlstream << "  <blockquote/>\n";
+  xmlstream << "</body>";
+  xmldevice.close();
+
+  // empty document
+  KoXmlDocument doc;
+  CHECK( doc.nodeName(), QString() );
+  CHECK( doc.isNull(), true );
+  CHECK( doc.isElement(), false );
+  CHECK( doc.isDocument(), false );
+  CHECK( doc.parentNode().isNull(), true );
+  CHECK( doc.firstChild().isNull(), true );
+  CHECK( doc.lastChild().isNull(), true );
+  CHECK( doc.previousSibling().isNull(), true );
+  CHECK( doc.nextSibling().isNull(), true );
+  
+  // has empty doctype
+  KoXmlDocumentType doctype = doc.doctype();
+  CHECK( doctype.nodeName(), QString() );
+  CHECK( doctype.isNull(), true );
+  CHECK( doctype.isElement(), false );
+  CHECK( doctype.isDocument(), false );
+  CHECK( doctype.isDocumentType(), false );
+  CHECK( doctype.parentNode().isNull(), true );
+  CHECK( doctype.firstChild().isNull(), true );
+  CHECK( doctype.lastChild().isNull(), true );
+  CHECK( doctype.previousSibling().isNull(), true );
+  CHECK( doctype.nextSibling().isNull(), true );
+
+  // now give something as the content
+  CHECK( doc.setContent(&xmldevice,&errorMsg,&errorLine,&errorColumn ), true );
+  CHECK( errorMsg.isEmpty(), true );
+  CHECK( errorLine, 0 );
+  CHECK( errorColumn, 0 );
+
+  // this document has something already
+  CHECK( doc.nodeName(), QString("#document") );
+  CHECK( doc.isNull(), false );
+  CHECK( doc.isElement(), false );
+  CHECK( doc.isDocument(), true );
+  CHECK( doc.parentNode().isNull(), true );
+  CHECK( doc.firstChild().isNull(), false );
+  CHECK( doc.lastChild().isNull(), false );
+  CHECK( doc.previousSibling().isNull(), true );
+  CHECK( doc.nextSibling().isNull(), true );
+  
+  // the doctype becomes a valid one
+  doctype = doc.doctype();
+  CHECK( doctype.nodeName(), QString("html") );
+  CHECK( doctype.name(), QString("html") );
+  CHECK( doctype.isNull(), false );
+  CHECK( doctype.isElement(), false );
+  CHECK( doctype.isDocument(), false );
+  CHECK( doctype.isDocumentType(), true );
+  CHECK( doctype.parentNode().isNull(), false );
+  CHECK( doctype.parentNode()==doc, true );
+  CHECK( doctype.firstChild().isNull(), true );
+  CHECK( doctype.lastChild().isNull(), true );
+  CHECK( doctype.previousSibling().isNull(), true );
+  CHECK( doctype.nextSibling().isNull(), true );
+}
+
+
 void testNamespace()
 {
   QString errorMsg;
@@ -2535,6 +2611,7 @@ int main( int argc, char** argv )
     testText();
     testCDATA();
     testDocument();
+    testDocumentType();
     testNamespace();
     
     testParseQString();

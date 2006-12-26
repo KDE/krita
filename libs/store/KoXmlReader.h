@@ -37,6 +37,7 @@ typedef QDomNode KoXmlNode;
 typedef QDomElement KoXmlElement;
 typedef QDomText KoXmlText;
 typedef QDomCDATASection KoXmlCDATASection;
+typedef QDomDocumentType KoXmlDocumentType;
 typedef QDomDocument KoXmlDocument;
 
 #else
@@ -48,6 +49,7 @@ class QXmlInputSource;
 class KoXmlElement;
 class KoXmlText;
 class KoXmlCDATASection;
+class KoXmlDocumentType;
 class KoXmlDocument;
 class KoXmlNodeData;
 
@@ -75,7 +77,8 @@ public:
     TextNode,
     CDATASectionNode,
     ProcessingInstructionNode,
-    DocumentNode 
+    DocumentNode,
+    DocumentTypeNode
   };
 
   KoXmlNode();
@@ -91,6 +94,7 @@ public:
   virtual bool isText() const;
   virtual bool isCDATASection() const;
   virtual bool isDocument() const;
+  virtual bool isDocumentType() const;
 
   virtual void clear();
   KoXmlElement toElement() const;
@@ -219,6 +223,31 @@ private:
 };
 
 /**
+ * KoXmlDocumentType represents the DTD of the document. At the moment,
+ * it can used only to get the document type, i.e. no support for 
+ * entities etc.
+ *
+ * @author Ariya Hidayat <ariya@kde.org>
+ */
+
+class KSTORE_EXPORT KoXmlDocumentType: public KoXmlNode
+{
+public:
+  KoXmlDocumentType();
+  KoXmlDocumentType( const KoXmlDocumentType& );
+  KoXmlDocumentType& operator=( const KoXmlDocumentType& );
+  virtual ~KoXmlDocumentType();
+  
+  QString name() const;
+
+private:
+  friend class KoXmlNode;
+  friend class KoXmlDocument;
+  KoXmlDocumentType( KoXmlNodeData* );
+};
+
+
+/**
  * KoXmlDocument represents an XML document, structured in a DOM tree.
  *
  * KoXmlDocument is designed to be memory efficient. Unlike QDomDocument from 
@@ -241,6 +270,8 @@ public:
   virtual ~KoXmlDocument();
 
   KoXmlElement documentElement() const;
+  
+  KoXmlDocumentType doctype() const;
 
   virtual QString nodeName() const;
   virtual void clear();
@@ -262,6 +293,7 @@ public:
 
 private:
   friend class KoXmlNode;
+  KoXmlDocumentType dt;
   KoXmlDocument( KoXmlNodeData* );
 };
 

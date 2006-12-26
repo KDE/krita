@@ -677,6 +677,7 @@ public:
 #endif
   
   QStringList stringList;
+  QString docType;
 
 private:
   QHash<QString, unsigned> stringHash;
@@ -780,6 +781,7 @@ public:
     valueHash.clear();
     valueList.clear();
     groups.clear();
+    docType = QString();
     
     // reserve index #0
     cacheString(QString());
@@ -818,6 +820,11 @@ public:
   void closeElement()
   {
     currentDepth--;
+  }
+  
+  void addDTD( const QString& dt )
+  {
+    docType = dt;
   }
     
   void addAttribute( const QString& name, const QString& nsURI, const QString& value )
@@ -1090,11 +1097,11 @@ bool KoXmlHandler::endDocument()
 bool KoXmlHandler::startDTD( const QString& name, const QString& publicId, 
 const QString& systemId )
 {
-  Q_UNUSED( name );
   Q_UNUSED( publicId );
   Q_UNUSED( systemId );
+  
+  document->addDTD( name );
 
-  // we skip DTD
   return true;
 }
 
@@ -1430,6 +1437,7 @@ QString KoXmlNodeData::nodeName() const
     case KoXmlNode::TextNode: return QLatin1String("#text");
     case KoXmlNode::CDATASectionNode: return QLatin1String("#cdata-section");
     case KoXmlNode::DocumentNode: return QLatin1String("#document");
+    case KoXmlNode::DocumentTypeNode: return tagName;
     default: break;
   }
 
@@ -2154,6 +2162,11 @@ bool KoXmlNode::isDocument() const
   return d->nodeType == DocumentNode;
 }
 
+bool KoXmlNode::isDocumentType() const
+{
+  return d->nodeType == DocumentTypeNode;
+}
+
 void KoXmlNode::clear()
 {
   d->unref();
@@ -2531,6 +2544,44 @@ KoXmlCDATASection& KoXmlCDATASection::operator=( const KoXmlCDATASection& cdata 
 
 // ==================================================================
 //
+//         KoXmlDocumentType
+//
+// ==================================================================
+
+KoXmlDocumentType::KoXmlDocumentType(): KoXmlNode( new KoXmlNodeData )
+{
+  // because referenced also once in KoXmlNode constructor
+  d->unref();
+}
+
+KoXmlDocumentType::~KoXmlDocumentType()
+{
+  d->unref();
+  d = 0;
+}
+
+KoXmlDocumentType::KoXmlDocumentType( const KoXmlDocumentType& dt ): 
+KoXmlNode( dt.d )
+{
+}
+
+QString KoXmlDocumentType::name() const
+{
+  return nodeName();
+}
+
+KoXmlDocumentType::KoXmlDocumentType( KoXmlNodeData* dt ): KoXmlNode( dt )
+{
+}
+
+KoXmlDocumentType& KoXmlDocumentType::operator=( const KoXmlDocumentType& dt )
+{
+  KoXmlNode::operator=( dt );
+  return *this;
+}
+
+// ==================================================================
+//
 //         KoXmlDocument 
 //
 // ==================================================================
@@ -2592,6 +2643,11 @@ KoXmlElement KoXmlDocument::documentElement() const
   return KoXmlElement();
 }
 
+KoXmlDocumentType KoXmlDocument::doctype() const
+{
+  return dt;
+}
+
 QString KoXmlDocument::nodeName() const
 {
   if( d->emptyDocument )
@@ -2615,8 +2671,17 @@ bool KoXmlDocument::setContent( QXmlInputSource *source, QXmlReader *reader,
     d = new KoXmlNodeData;
     d->nodeType = KoXmlNode::DocumentNode;
   }
+  
+  dt = KoXmlDocumentType();
+  bool result = d->setContent( source, reader, errorMsg, errorLine, errorColumn );
+  if(result && !isNull())
+  {
+    dt.d->nodeType = KoXmlNode::DocumentTypeNode;
+    dt.d->tagName = d->packedDoc->docType;
+    dt.d->parent = d;
+  }  
 
-  return d->setContent( source, reader, errorMsg, errorLine, errorColumn );
+  return result;
 }
 
 // no namespace processing
@@ -2645,7 +2710,16 @@ QString* errorMsg, int* errorLine, int* errorColumn )
   //reader.setUndefEntityInAttrHack(true);
 
   QXmlInputSource source( device );
-  return d->setContent( &source, &reader, errorMsg, errorLine, errorColumn );
+  
+  dt = KoXmlDocumentType();
+  bool result = d->setContent( &source, &reader, errorMsg, errorLine, errorColumn );
+  {
+    dt.d->nodeType = KoXmlNode::DocumentTypeNode;
+    dt.d->tagName = d->packedDoc->docType;
+    dt.d->parent = d;
+  }  
+
+  return result;
 }
 
 bool KoXmlDocument::setContent( const QByteArray& text, bool namespaceProcessing,
@@ -2668,7 +2742,17 @@ QString *errorMsg, int *errorLine, int *errorColumn)
 
   QXmlInputSource source;
   source.setData(text);
-  return d->setContent( &source, namespaceProcessing, errorMsg, errorLine, errorColumn );
+  
+  dt = KoXmlDocumentType();
+  bool result = d->setContent( &source, namespaceProcessing, errorMsg, errorLine, errorColumn );
+  if(result && !isNull())
+  {
+    dt.d->nodeType = KoXmlNode::DocumentTypeNode;
+    dt.d->tagName = d->packedDoc->docType;
+    dt.d->parent = d;
+  }  
+
+  return result;
 }
 
 bool KoXmlDocument::setContent(const QString& text,  

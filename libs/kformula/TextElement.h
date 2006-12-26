@@ -39,7 +39,7 @@ namespace KFormula {
 class TextElement : public BasicElement {
 public:
     /// The standard constructor
-    TextElement( BasicElement* parent = 0 );
+    TextElement(QChar ch = ' ', bool beSymbol = false, BasicElement* parent = 0);
 
     /**
      * Obtain a list of all child elements of this element
@@ -111,6 +111,8 @@ public:
 
 protected:
     //Save/load support
+
+    virtual void writeMathMLContent( KoXmlWriter* , bool ) const ;
 
     /**
      * @returns the tag name of this element type.

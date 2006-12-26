@@ -21,11 +21,13 @@
 
 #include "TextElement.h"
 
+#include <math.h>
 
 #include <QFontMetrics>
 #include <QPainter>
 
 #include <kdebug.h>
+#include <KoXmlWriter.h>
 
 #include "BasicElement.h"
 #include "contextstyle.h"
@@ -50,9 +52,9 @@ const QList<BasicElement*> TextElement::childElements()
     return QList<BasicElement*>();
 }
 
-void TextElement::writeMathMLContent( KoXmlWriter* writer, bool oasisFormat )
+void TextElement::writeMathMLContent( KoXmlWriter* writer, bool /* oasisFormat */ ) const
 {
-    parent.appendChild( writer.createTextNode( getCharacter() ) );
+    writer->addTextNode( getCharacter() );
 }
 
 
@@ -228,7 +230,6 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                               context.layoutUnitToPixelX( getWidth() ),
                               context.layoutUnitToPixelY( getHeight() ) );
         }
-    }
 }
 
 
@@ -240,13 +241,13 @@ void TextElement::dispatchFontCommand( FontCommand* cmd )
 void TextElement::setCharStyle( CharStyle cs )
 {
     charStyle( cs );
-    formula()->changed();
+//    formula()->changed();
 }
 
 void TextElement::setCharFamily( CharFamily cf )
 {
     charFamily( cf );
-    formula()->changed();
+//    formula()->changed();
 }
 
 QChar TextElement::getRealCharacter(const ContextStyle& context)
@@ -281,9 +282,11 @@ QFont TextElement::getFont( const ContextStyle& context, const StyleAttributes& 
     if ( style.customFont() ) {
         font = style.font();
     }
+    /*
     else if (getElementType() != 0) {
         font = getElementType()->getFont(context);
     }
+    */
     else {
         font = context.getDefaultFont();
     }
@@ -325,11 +328,9 @@ void TextElement::setUpPainter(const ContextStyle& context, QPainter& painter)
 
 const SymbolTable& TextElement::getSymbolTable() const
 {
-    return formula()->getSymbolTable();
-    /*
+//    return formula()->getSymbolTable();
     static SymbolTable s;
     return s;
-    */
 }
 
 

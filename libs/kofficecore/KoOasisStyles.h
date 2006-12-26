@@ -19,12 +19,10 @@
 #ifndef KOOASISSTYLES_H
 #define KOOASISSTYLES_H
 
-#include <qdom.h>
-#include <q3dict.h>
-#include <q3valuevector.h>
-#include <QMap>
-#include <koffice_export.h>
+#include <QHash>
+#include <QtXml>
 
+#include <koffice_export.h>
 #include <KoXmlReader.h>
 
 class KoGenStyles;
@@ -45,7 +43,7 @@ public:
     /// Look into @p doc for styles and remember them
     /// @param doc document to look into
     /// @param stylesDotXml true when loading styles.xml, false otherwise
-    void createStyleMap( const KoXmlDocument& doc, bool stylesDotXml );
+    void createStyleMap( const KoXmlDocument& doc );
 
     /**
      * Look up a style by name.
@@ -59,38 +57,41 @@ public:
     const KoXmlElement* findStyle( const QString& name ) const;
 
     /**
-     * Look up a style:style by name.
+     * Looks up a style:style by name.
+     * Searches in the list of custom styles first and then in the list of automatic styles.
      * @param name the style name
      * @param family the style family (for a style:style, use 0 otherwise)
      * @return the dom element representing the style, or QString::null if it wasn't found.
      */
     const KoXmlElement* findStyle( const QString& name, const QString& family ) const;
 
-    /// Similar to findStyle but for auto-styles in styles.xml only.
-    const KoXmlElement* findStyleAutoStyle( const QString& name, const QString& family ) const;
+    /// Similar to findStyle but for custom styles only.
+    const KoXmlElement* findStyleCustomStyle( const QString& name, const QString& family ) const;
 
-    /// @return the style:styles that are "user styles", i.e. those from office:styles
-    /// findStyle() is used for lookup. userStyles() is used to load all user styles upfront.
-    Q3ValueVector<KoXmlElement> userStyles() const;
+    /// Similar to findStyle but for auto-styles only.
+    const KoXmlElement* findStyleAutoStyle( const QString& name, const QString& family ) const;
 
     /// @return the default style for a given family ("graphic","paragraph","table" etc.)
     /// Returns 0 if no default style for this family is available
     const KoXmlElement* defaultStyle( const QString& family ) const;
 
     /// @return the office:style element
-    const KoXmlElement& officeStyle() const { return m_officeStyle; }
+    const KoXmlElement& officeStyle() const;
 
     /// @return all list styles ("text:list-style" elements), hashed by name
-    const Q3Dict<KoXmlElement>& listStyles() const { return m_listStyles; }
+    const QHash<QString, KoXmlElement*>& listStyles() const;
 
     /// @return master pages ("style:master-page" elements), hashed by name
-    const Q3Dict<KoXmlElement>& masterPages() const { return m_masterPages; }
+    const QHash<QString, KoXmlElement*>& masterPages() const;
 
     /// @return draw styles, hashed by name
-    const Q3Dict<KoXmlElement>& drawStyles() const { return m_drawStyles; }
+    const QHash<QString, KoXmlElement*>& drawStyles() const;
 
-    /// @return all styles ("style:style" elements) for a given family, hashed by name
-    const Q3Dict<KoXmlElement>& styles(const QString& family) const;
+    /// @return all custom styles ("style:style" elements) for a given family, hashed by name
+    const QHash<QString, KoXmlElement*>& customStyles(const QString& family) const;
+
+    /// @return all auto-styles ("style:style" elements) for a given family, hashed by name
+    const QHash<QString, KoXmlElement*>& autoStyles(const QString& family) const;
 
     /// Prefix and suffix are always included into formatStr. Having them as separate fields simply
     /// allows to extract them from formatStr, to display them in separate widgets.
@@ -105,10 +106,10 @@ public:
         QString currencySymbol;
     };
 
-    typedef QMap<QString, NumericStyleFormat> DataFormatsMap;
+    typedef QHash<QString, NumericStyleFormat> DataFormatsMap;
     /// Value (date/time/number...) formats found while parsing styles. Used e.g. for fields.
     /// Key: format name. Value:
-    const DataFormatsMap& dataFormats() const { return m_dataFormats; }
+    const DataFormatsMap& dataFormats() const;
 
     static QString saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
                                        const QString &_prefix = QString::null , const QString &_suffix= QString::null );
@@ -150,16 +151,6 @@ private:
     KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden
 
 private:
-    Q3Dict<KoXmlElement>   m_styles; // page-layout, font-decl etc.
-    Q3Dict<KoXmlElement>   m_defaultStyle;
-    KoXmlElement m_officeStyle;
-
-    Q3Dict<KoXmlElement>  m_masterPages;
-    Q3Dict<KoXmlElement>   m_listStyles;
-
-    Q3Dict<KoXmlElement>   m_drawStyles;
-    DataFormatsMap m_dataFormats;
-
     class Private;
     Private * const d;
 };

@@ -43,16 +43,14 @@ KoStyleCollection::~KoStyleCollection()
 int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
 {
     QStringList followingStyles;
-    Q3ValueVector<KoXmlElement> userStyles = context.oasisStyles().userStyles();
+    QList<KoXmlElement*> userStyles = context.oasisStyles().customStyles( "paragraph" ).values();
     bool defaultStyleDeleted = false;
     int stylesLoaded = 0;
     const unsigned int nStyles = userStyles.count();
     for (unsigned int item = 0; item < nStyles; item++) {
-        KoXmlElement styleElem = userStyles[item];
-	Q_ASSERT( !styleElem.isNull() );
-
-        if ( styleElem.attributeNS( KoXmlNS::style, "family", QString::null ) != "paragraph" )
-            continue;
+        KoXmlElement* styleElem = userStyles[item];
+        if ( !styleElem ) continue;
+	Q_ASSERT( !styleElem->isNull() );
 
         if( !defaultStyleDeleted ) { // we are going to import at least one style.
             KoParagStyle *s = defaultStyle();
@@ -64,7 +62,7 @@ int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
 
         KoParagStyle *sty = new KoParagStyle( QString::null );
         // Load the style
-        sty->loadStyle( styleElem, context );
+        sty->loadStyle( *styleElem, context );
         // Style created, now let's try to add it
         const int oldStyleCount = count();
         sty = addStyle( sty );
@@ -75,7 +73,7 @@ int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
 
         if ( count() > oldStyleCount )
         {
-            const QString following = styleElem.attributeNS( KoXmlNS::style, "next-style-name", QString::null );
+            const QString following = styleElem->attributeNS( KoXmlNS::style, "next-style-name", QString::null );
             followingStyles.append( following );
             ++stylesLoaded;
         }

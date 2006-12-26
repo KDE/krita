@@ -16,42 +16,60 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoOasisStyles.h"
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
-#include <kdebug.h>
-#include "KoDom.h"
-#include "KoXmlNS.h"
-#include "KoGenStyles.h"
+#include <QBrush>
 #include <QBuffer>
+
+#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <QBrush>
+
 #include <KoStyleStack.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
+
+#include "KoDom.h"
+#include "KoGenStyles.h"
+#include "KoXmlNS.h"
+
+#include "KoOasisStyles.h"
 
 class KoOasisStyles::Private
 {
 public:
-    // The key of the map is the family
-    QMap<QString, Q3Dict<KoXmlElement> > m_styles;
-    QMap<QString, Q3Dict<KoXmlElement> > m_stylesAutoStyles;
+    QHash<QString /*family*/, QHash<QString /*name*/, KoXmlElement*> > customStyles;
+    QHash<QString /*family*/, QHash<QString /*name*/, KoXmlElement*> > autoStyles;
+    QHash<QString /*family*/, KoXmlElement*> defaultStyles;
+
+    QHash<QString /*name*/, KoXmlElement*> styles; // page-layout, font-decl etc.
+    QHash<QString /*name*/, KoXmlElement*> masterPages;
+    QHash<QString /*name*/, KoXmlElement*> listStyles;
+    QHash<QString /*name*/, KoXmlElement*> drawStyles;
+
+    KoXmlElement           officeStyle;
+
+    DataFormatsMap         dataFormats;
 };
 
 KoOasisStyles::KoOasisStyles()
     : d( new Private )
 {
-    m_defaultStyle.setAutoDelete( true );
-    m_masterPages.setAutoDelete( true );
-    m_listStyles.setAutoDelete( true );
-    m_drawStyles.setAutoDelete( true );
 }
 
 KoOasisStyles::~KoOasisStyles()
 {
+    foreach ( const QString& family, d->customStyles.keys() )
+        qDeleteAll( d->customStyles[family] );
+    foreach ( const QString& family, d->autoStyles.keys() )
+        qDeleteAll( d->autoStyles[family] );
+    qDeleteAll( d->defaultStyles );
+    qDeleteAll( d->styles );
+    qDeleteAll( d->masterPages );
+    qDeleteAll( d->listStyles );
+    qDeleteAll( d->drawStyles );
     delete d;
 }
 
-void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml )
+void KoOasisStyles::createStyleMap( const KoXmlDocument& doc )
 {
    const KoXmlElement docElement  = doc.documentElement();
     // We used to have the office:version check here, but better let the apps do that
@@ -63,11 +81,11 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
     }// else
     //   kDebug(30003) << "No items found" << endl;
 
-    //kDebug(30003) << "Starting reading in office:automatic-styles. stylesDotXml=" << stylesDotXml << endl;
+    //kDebug(30003) << "Starting reading in office:automatic-styles." << endl;
 
     KoXmlElement autoStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "automatic-styles" );
     if ( !autoStyles.isNull() ) {
-        insertStyles( autoStyles, stylesDotXml );
+        insertStyles( autoStyles, true );
     }// else
     //    kDebug(30003) << "No items found" << endl;
 
@@ -75,7 +93,6 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
     //kDebug(30003) << "Reading in master styles" << endl;
 
     KoXmlNode masterStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "master-styles" );
-
     if ( !masterStyles.isNull() ) {
         KoXmlElement master;
         forEachElement( master, masterStyles )
@@ -84,7 +101,7 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
                  master.namespaceURI() == KoXmlNS::style ) {
                 const QString name = master.attributeNS( KoXmlNS::style, "name", QString::null );
                 kDebug(30003) << "Master style: '" << name << "' loaded " << endl;
-                m_masterPages.insert( name, new KoXmlElement( master ) );
+                d->masterPages.insert( name, new KoXmlElement( master ) );
             } else
                 // OASIS docu mentions style:handout-master and draw:layer-set here
                 kWarning(30003) << "Unknown tag " << master.tagName() << " in office:master-styles" << endl;
@@ -95,39 +112,31 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
     kDebug(30003) << "Starting reading in office:styles" << endl;
 
     const KoXmlElement officeStyle = KoDom::namedItemNS( docElement, KoXmlNS::office, "styles" );
-
     if ( !officeStyle.isNull() ) {
-        m_officeStyle = officeStyle;
-        insertOfficeStyles( m_officeStyle );
-
+        d->officeStyle = officeStyle;
+        insertOfficeStyles( officeStyle );
     }
 
     //kDebug(30003) << "Styles read in." << endl;
 }
 
-Q3ValueVector<KoXmlElement> KoOasisStyles::userStyles() const
-{
-    Q3ValueVector<KoXmlElement> vec;
-    // Collect user styles
-    unsigned int i = 0;
-    KoXmlElement e;
-    forEachElement( e, m_officeStyle )
-    {
-        if ( e.localName() == "style" &&
-             e.namespaceURI() == KoXmlNS::style )
-        {
-            vec.resize( i+1 );
-            vec[i++] = e;
-        }
-    }
-    return vec;
-}
-
-const Q3Dict<KoXmlElement>& KoOasisStyles::styles(const QString& family) const
+const QHash<QString, KoXmlElement*>& KoOasisStyles::customStyles(const QString& family) const
 {
     // hmm this can create an empty item in the map, but otherwise we couldn't
     // return a const reference.
-    return d->m_styles[family];
+    return d->customStyles[family];
+}
+
+const QHash<QString, KoXmlElement*>& KoOasisStyles::autoStyles(const QString& family) const
+{
+    // hmm this can create an empty item in the map, but otherwise we couldn't
+    // return a const reference.
+    return d->autoStyles[family];
+}
+
+const KoOasisStyles::DataFormatsMap& KoOasisStyles::dataFormats() const
+{
+    return d->dataFormats;
 }
 
 void KoOasisStyles::insertOfficeStyles( const KoXmlElement& styles )
@@ -152,7 +161,7 @@ void KoOasisStyles::insertOfficeStyles( const KoXmlElement& styles )
             const QString name = e.attributeNS( KoXmlNS::draw, "name", QString::null );
             Q_ASSERT( !name.isEmpty() );
             KoXmlElement* ep = new KoXmlElement( e );
-            m_drawStyles.insert( name, ep );
+            d->drawStyles.insert( name, ep );
         }
         else
             insertStyle( e, false );
@@ -178,18 +187,21 @@ void KoOasisStyles::insertStyle( const KoXmlElement& e, bool styleAutoStyles )
         const QString family = e.attributeNS( KoXmlNS::style, "family", QString::null );
 
         if ( styleAutoStyles ) {
-            Q3Dict<KoXmlElement>& dict = d->m_stylesAutoStyles[ family ];
-            dict.setAutoDelete( true );
-            if ( dict.find( name ) != 0 )
+            QHash<QString, KoXmlElement*>& dict = d->autoStyles[ family ];
+            if ( dict.contains( name ) )
+            {
                 kDebug(30003) << "Auto-style: '" << name << "' already exists" << endl;
+                delete dict.take( name );
+            }
             dict.insert( name, new KoXmlElement( e ) );
             //kDebug(30003) << "Style: '" << name << "' loaded as a style auto style" << endl;
         } else {
-            Q3Dict<KoXmlElement>& dict = d->m_styles[ family ];
-            dict.setAutoDelete( true );
-
-            if ( dict.find( name ) != 0 )
+            QHash<QString, KoXmlElement*>& dict = d->customStyles[ family ];
+            if ( dict.contains( name ) )
+            {
                 kDebug(30003) << "Style: '" << name << "' already exists" << endl;
+                delete dict.take( name );
+            }
             dict.insert( name, new KoXmlElement( e ) );
             //kDebug(30003) << "Style: '" << name << "' loaded " << endl;
         }
@@ -198,15 +210,18 @@ void KoOasisStyles::insertStyle( const KoXmlElement& e, bool styleAutoStyles )
              || localName == "font-decl"
              || localName == "presentation-page-layout" ) )
     {
-        if ( m_styles.find( name ) != 0 )
+        if ( d->styles.contains( name ) )
+        {
             kDebug(30003) << "Style: '" << name << "' already exists" << endl;
-        m_styles.insert( name, new KoXmlElement( e ) );
+            delete d->styles.take( name );
+        }
+        d->styles.insert( name, new KoXmlElement( e ) );
     } else if ( localName == "default-style" && ns == KoXmlNS::style ) {
         const QString family = e.attributeNS( KoXmlNS::style, "family", QString::null );
         if ( !family.isEmpty() )
-            m_defaultStyle.insert( family, new KoXmlElement( e ) );
+            d->defaultStyles.insert( family, new KoXmlElement( e ) );
     } else if ( localName == "list-style" && ns == KoXmlNS::text ) {
-        m_listStyles.insert( name, new KoXmlElement( e ) );
+        d->listStyles.insert( name, new KoXmlElement( e ) );
         //kDebug(30003) << "List style: '" << name << "' loaded " << endl;
     } else if ( ns == KoXmlNS::number && (
                    localName == "number-style"
@@ -475,7 +490,7 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
     dataStyle.suffix=suffix;
     dataStyle.precision = precision;
     kDebug(30003)<<" finish insert format :"<<format<<" prefix :"<<prefix<<" suffix :"<<suffix<<endl;
-    m_dataFormats.insert( styleName, dataStyle );
+    d->dataFormats.insert( styleName, dataStyle );
 }
 
 #define addTextNumber( text, elementWriter ) { \
@@ -1575,17 +1590,45 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
 
 const KoXmlElement* KoOasisStyles::defaultStyle( const QString& family ) const
 {
-    return m_defaultStyle[family];
+    return d->defaultStyles[family];
+}
+
+const KoXmlElement& KoOasisStyles::officeStyle() const
+{
+    return d->officeStyle;
+}
+
+const QHash<QString, KoXmlElement*>& KoOasisStyles::listStyles() const
+{
+    return d->listStyles;
+}
+
+const QHash<QString, KoXmlElement*>& KoOasisStyles::masterPages() const
+{
+    return d->masterPages;
+}
+
+const QHash<QString, KoXmlElement*>& KoOasisStyles::drawStyles() const
+{
+    return d->drawStyles;
 }
 
 const KoXmlElement* KoOasisStyles::findStyle( const QString& name ) const
 {
-    return m_styles[ name ];
+    return d->styles[ name ];
 }
 
 const KoXmlElement* KoOasisStyles::findStyle( const QString& styleName, const QString& family ) const
 {
-    const KoXmlElement* style = d->m_styles[ family ][ styleName ];
+    const KoXmlElement* style = findStyleCustomStyle( styleName, family );
+    if ( !style )
+        style = findStyleAutoStyle( styleName, family );
+    return style;
+}
+
+const KoXmlElement* KoOasisStyles::findStyleCustomStyle( const QString& styleName, const QString& family ) const
+{
+    const KoXmlElement* style = d->customStyles.value( family ).value( styleName );
     if ( style && !family.isEmpty() ) {
         const QString styleFamily = style->attributeNS( KoXmlNS::style, "family", QString::null );
         if ( styleFamily != family ) {
@@ -1598,7 +1641,7 @@ const KoXmlElement* KoOasisStyles::findStyle( const QString& styleName, const QS
 
 const KoXmlElement* KoOasisStyles::findStyleAutoStyle( const QString& styleName, const QString& family ) const
 {
-    const KoXmlElement* style = d->m_stylesAutoStyles[ family ][ styleName ];
+    const KoXmlElement* style = d->autoStyles.value( family ).value( styleName );
     if ( style ) {
         const QString styleFamily = style->attributeNS( KoXmlNS::style, "family", QString::null );
         if ( styleFamily != family ) {

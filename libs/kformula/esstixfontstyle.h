@@ -64,7 +64,7 @@ private:
 
 class EsstixArtwork : public Artwork {
 public:
-    EsstixArtwork( SymbolType t );
+    explicit EsstixArtwork( SymbolType t );
 
     virtual void calcSizes( const ContextStyle& style,
                             ContextStyle::TextStyle tstyle,

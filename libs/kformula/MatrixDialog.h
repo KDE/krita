@@ -40,7 +40,7 @@ public:
     int w;
     int h;
 
-    MatrixDialog( QWidget *parent, int width = 3, int height = 3 );
+    explicit MatrixDialog( QWidget *parent, int width = 3, int height = 3 );
     ~MatrixDialog() {}
 
 protected slots:

@@ -45,7 +45,7 @@ public:
 
     // Construction.
 
-    KWmf(
+    explicit KWmf(
         unsigned dpi);
     virtual ~KWmf();
 

@@ -30,7 +30,7 @@ class KOPAINTER_EXPORT KoColorPatch : public QFrame
 {
   Q_OBJECT
 public:
-  KoColorPatch( QWidget *parent );
+  explicit KoColorPatch( QWidget *parent );
   virtual ~KoColorPatch();
 
   void setColor( const KoColor c );

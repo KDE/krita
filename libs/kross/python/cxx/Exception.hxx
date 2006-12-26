@@ -30,7 +30,7 @@ namespace Py
 		explicit Exception ()
 			{}
 		
-		Exception (const std::string& reason)
+		explicit Exception (const std::string& reason)
 			{
 			PyErr_SetString (Py::_Exc_RuntimeError(), reason.c_str());
 			}
@@ -94,7 +94,7 @@ namespace Py
 	class IndexError: public LookupError
 		{
 	public:
-		IndexError (const std::string& reason)
+		explicit IndexError (const std::string& reason)
 			: LookupError()
 			{
 			PyErr_SetString (Py::_Exc_IndexError(), reason.c_str());
@@ -114,7 +114,7 @@ namespace Py
 	class NameError: public StandardError
 		{
 	public:
-		NameError (const std::string& reason)
+		explicit NameError (const std::string& reason)
 			: StandardError()
 			{
 			PyErr_SetString (Py::_Exc_NameError(), reason.c_str());
@@ -134,7 +134,7 @@ namespace Py
 	class SystemError: public StandardError
 		{
 	public:
-		SystemError (const std::string& reason)
+		explicit SystemError (const std::string& reason)
 			: StandardError()
 			{
 			PyErr_SetString (Py::_Exc_SystemError(),reason.c_str());
@@ -155,7 +155,7 @@ namespace Py
 	class ValueError: public StandardError
 		{
 	public:
-		ValueError (const std::string& reason)
+		explicit ValueError (const std::string& reason)
 			: StandardError()
 			{
 			PyErr_SetString (Py::_Exc_ValueError(), reason.c_str());
@@ -175,7 +175,7 @@ namespace Py
 	class ZeroDivisionError: public ArithmeticError
 		{
 	public:
-		ZeroDivisionError (const std::string& reason)
+		explicit ZeroDivisionError (const std::string& reason)
 			: ArithmeticError() 
 			{
 			PyErr_SetString (Py::_Exc_ZeroDivisionError(), reason.c_str());
@@ -195,7 +195,7 @@ namespace Py
 	class MemoryError: public StandardError
 		{
 	public:
-		MemoryError (const std::string& reason)
+		explicit MemoryError (const std::string& reason)
 			: StandardError()
 			{
 			PyErr_SetString (Py::_Exc_MemoryError(), reason.c_str());

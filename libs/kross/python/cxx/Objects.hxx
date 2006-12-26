@@ -685,7 +685,7 @@ namespace Py
 			}
 
 		// try to make from any object
-		Float (const Object& ob)
+		explicit Float (const Object& ob)
 			: Object(PyNumber_Float(*ob), true)
 			{
 			validate();
@@ -1485,7 +1485,7 @@ namespace Py
 			validate();
 			}
 
-		Char (const Object& ob): Object(ob)
+		explicit Char (const Object& ob): Object(ob)
 			{
 			validate();
 			}
@@ -1496,13 +1496,13 @@ namespace Py
 			validate();
 			}
 
-		Char (char v)
+		explicit Char (char v)
 			: Object(PyString_FromStringAndSize (&v, 1), true)
 			{
 			validate();
 			}
 
-		Char (Py_UNICODE v)
+		explicit Char (Py_UNICODE v)
 			: Object(PyUnicode_FromUnicode (&v, 1), true)
 			{
 			validate();
@@ -1744,7 +1744,7 @@ namespace Py
 			validate();
 			}
 
-		Tuple (const Object& ob): Sequence(ob)
+		explicit Tuple (const Object& ob): Sequence(ob)
 			{
 			validate();
 			}
@@ -2322,7 +2322,7 @@ namespace Py
 				, pos()
 				{}
 
-			iterator (MapBase<T>* m, bool end = false )
+			explicit iterator (MapBase<T>* m, bool end = false )
 				: map( m )
 				, keys( m->keys() )
 				, pos( end ? keys.end() : keys.begin() )

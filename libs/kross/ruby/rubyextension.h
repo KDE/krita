@@ -49,7 +49,7 @@ namespace Kross {
             *
             * @param object The QObject instance this extension provides access to.
             */
-            RubyExtension(QObject* object);
+            explicit RubyExtension(QObject* object);
 
             /**
             * Destructor.

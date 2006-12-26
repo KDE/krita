@@ -125,7 +125,7 @@ namespace Py
 	class ExtensionModuleBase
 		{
 	public:
-		ExtensionModuleBase( const char *name );
+		explicit ExtensionModuleBase( const char *name );
 		virtual ~ExtensionModuleBase();
 		
 		Module module(void) const;		// only valid after initialize() has been called
@@ -164,7 +164,7 @@ namespace Py
 	class ExtensionModule : public ExtensionModuleBase
 		{
 	public:
-		ExtensionModule( const char *name )
+		explicit ExtensionModule( const char *name )
 			: ExtensionModuleBase( name )
 			{}
 		virtual ~ExtensionModule()

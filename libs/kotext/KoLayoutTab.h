@@ -32,7 +32,7 @@ class KoLayoutTab : public QWidget
     Q_OBJECT
 
 public:
-    KoLayoutTab( bool withSubSuperScript, QWidget* parent=0);
+    explicit KoLayoutTab( bool withSubSuperScript, QWidget* parent=0);
     ~KoLayoutTab() {}
 
     void open(const QTextCharFormat &format);

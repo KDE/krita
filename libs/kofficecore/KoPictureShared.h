@@ -47,7 +47,7 @@ public:
     /**
      * Default constructor.
      */
-    KoPictureShared(void);
+    KoPictureShared();
 
     /**
      * Destructor.

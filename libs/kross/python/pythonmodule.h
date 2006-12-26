@@ -49,7 +49,7 @@ namespace Kross {
              * \param interpreter The \a PythonInterpreter instance
              *        used to create this PythonModule.
              */
-            PythonModule(PythonInterpreter* interpreter);
+            explicit PythonModule(PythonInterpreter* interpreter);
 
             /**
              * Destructor.

@@ -54,7 +54,7 @@ namespace Kross {
              *        which describes the \a PythonInterpreter for
              *        applications using Kross.
              */
-            PythonInterpreter(Kross::InterpreterInfo* info);
+            explicit PythonInterpreter(Kross::InterpreterInfo* info);
 
             /**
              * Destructor.

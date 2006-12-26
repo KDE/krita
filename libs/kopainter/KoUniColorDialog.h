@@ -39,7 +39,7 @@ class KOPAINTER_EXPORT KoUniColorDialog
     typedef KPageDialog super;
 
 public:
-    KoUniColorDialog(KoColor &initialColor, QWidget *parent = 0L);
+    explicit KoUniColorDialog(KoColor &initialColor, QWidget *parent = 0L);
     virtual ~KoUniColorDialog() {}
 
     /**

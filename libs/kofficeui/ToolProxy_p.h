@@ -26,7 +26,7 @@ class KoTool;
 
 class ToolProxy : public KoToolProxy {
 public:
-    ToolProxy(KoCanvasBase *canvas);
+    explicit ToolProxy(KoCanvasBase *canvas);
     ~ToolProxy() {};
 
     void setActiveTool(KoTool *tool) { m_activeTool = tool; }

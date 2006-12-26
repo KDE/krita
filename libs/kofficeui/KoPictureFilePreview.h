@@ -35,7 +35,7 @@ class KOFFICEUI_EXPORT KoPictureFilePreview : public KPreviewWidgetBase
     Q_OBJECT
 
 public:
-    KoPictureFilePreview( QWidget *parent );
+    explicit KoPictureFilePreview( QWidget *parent );
 
     /**
      * @return a list of patterns of all supported clipart formats.

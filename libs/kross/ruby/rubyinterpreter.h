@@ -44,7 +44,7 @@ namespace Kross {
             * @param info The \a Kross::InterpreterInfo instance
             *        that describes this \a RubyInterpreter .
             */
-            RubyInterpreter(Kross::InterpreterInfo* info);
+            explicit RubyInterpreter(Kross::InterpreterInfo* info);
 
             /**
             * Destructor.

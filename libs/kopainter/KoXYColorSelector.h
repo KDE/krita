@@ -32,7 +32,7 @@ class KOPAINTER_EXPORT KoXYColorSelector : public KXYSelector
   Q_OBJECT
 
 public:
-    KoXYColorSelector( KoColorSpace* colorSpace,  QWidget *parent=0 );
+    explicit KoXYColorSelector( KoColorSpace* colorSpace,  QWidget *parent=0 );
 
     void setColors( const KoColor& topLeftColor, const KoColor& topRightColor,  const KoColor& bottomLeftColor, const KoColor& bottomRightColor);
 

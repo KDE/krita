@@ -31,7 +31,7 @@
 
 class KoHyphenatorException{
 public:
-        KoHyphenatorException(const QString& MessageText): messageText(MessageText) {}
+        explicit KoHyphenatorException(const QString& MessageText): messageText(MessageText) {}
         QString message() const { return messageText; }
 private:
         QString messageText;

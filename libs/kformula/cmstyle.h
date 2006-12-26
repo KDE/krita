@@ -66,7 +66,7 @@ private:
 
 class CMArtwork : public Artwork {
 public:
-    CMArtwork( SymbolType t );
+    explicit CMArtwork( SymbolType t );
 
     virtual void calcSizes( const ContextStyle& style,
                             ContextStyle::TextStyle tstyle,

@@ -65,7 +65,7 @@ public:
      *
      * @param name a description to be used as menu entry.
      */
-    PlainCommand(const QString& name);
+    explicit PlainCommand(const QString& name);
     virtual ~PlainCommand();
 
     /**

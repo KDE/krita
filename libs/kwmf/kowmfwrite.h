@@ -50,7 +50,7 @@ class KoWmfWritePrivate;
 class KOWMF_EXPORT KoWmfWrite
 {
 public:
-    KoWmfWrite( const QString& fileName );
+    explicit KoWmfWrite( const QString& fileName );
     virtual ~KoWmfWrite();
 
 

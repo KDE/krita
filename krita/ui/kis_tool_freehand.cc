@@ -66,7 +66,7 @@ KisToolFreehand::~KisToolFreehand()
 }
 
 
-void KisToolFreehand::mousePressEventPx(KoPointerEvent *e)
+void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
     if (!m_currentImage) return;
 
@@ -82,9 +82,10 @@ void KisToolFreehand::mousePressEventPx(KoPointerEvent *e)
         // if (!m_currentImage->bounds().contains(e->pos().floorQPoint())) return;
 
         initPaint(e);
-        paintAt(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
 
-        m_prevPos = e->pos();
+        m_prevPos = convertToPixelCoord(e);
+        paintAt(m_prevPos, e->pressure(), e->xTilt(), e->yTilt());
+
         m_prevPressure = e->pressure();
         m_prevXTilt = e->xTilt();
         m_prevYTilt = e->yTilt();
@@ -102,20 +103,20 @@ void KisToolFreehand::mousePressEventPx(KoPointerEvent *e)
             else {
                 m_target->setDirty( r );
             }
-            m_canvas->updateCanvas( r ); // XXX are we working in the
-                            // right coordinates?
+            m_canvas->updateCanvas( convertToPt(r) );
 
         }
     }
 }
 
-void KisToolFreehand::mouseMoveEventPx(KoPointerEvent *e)
+void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_mode == PAINT) {
+        QPointF pos = convertToPixelCoord(e);
 
         paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e->pos(), e->pressure(), e->xTilt(), e->yTilt());
 
-        m_prevPos = e->pos();
+        m_prevPos = pos;
         m_prevPressure = e->pressure();
         m_prevXTilt = e->xTilt();
         m_prevYTilt = e->yTilt();
@@ -133,13 +134,13 @@ void KisToolFreehand::mouseMoveEventPx(KoPointerEvent *e)
                 r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
                 m_target->setDirty(r);
             }
-            m_canvas->updateCanvas( r );
+            m_canvas->updateCanvas( convertToPt(r) );
 
         }
     }
 }
 
-void KisToolFreehand::mouseReleaseEventPx(KoPointerEvent* e)
+void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
     if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();
@@ -175,7 +176,6 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             KisLayerSupportsIndirectPainting* layer;
             if ((layer = dynamic_cast<KisLayerSupportsIndirectPainting*>(
                     m_currentImage->activeLayer().data()))) {
-
                 // Hack for the painting of single-layered layers using indirect painting,
                 // because the group layer would not have a correctly synched cache (
                 // because of an optimization that would happen, having this layer as

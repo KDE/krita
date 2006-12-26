@@ -38,9 +38,8 @@
 
 namespace KFormula {
 
-TextElement::TextElement( BasicElement* parent ) : BasicElement(parent),
-						   character(' '),
-						   symbol(false)
+TextElement::TextElement( QChar ch, bool beSymbol, BasicElement* parent ) 
+    : BasicElement( parent ), character( ch ), symbol( beSymbol )
 {
     charStyle( anyChar );
     charFamily( anyFamily );
@@ -51,12 +50,9 @@ const QList<BasicElement*> TextElement::childElements()
     return QList<BasicElement*>();
 }
 
-void TextElement::readMathML( const QDomElement& element )
+void TextElement::writeMathMLContent( KoXmlWriter* writer, bool oasisFormat )
 {
-}
-
-void TextElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
-{
+    parent.appendChild( writer.createTextNode( getCharacter() ) );
 }
 
 
@@ -110,37 +106,50 @@ bool TextElement::isInvisible() const
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle /*istyle*/)
+void TextElement::calcSizes( const ContextStyle& context, 
+                             ContextStyle::TextStyle tstyle, 
+                             ContextStyle::IndexStyle /*istyle*/,
+                             StyleAttributes& style )
 {
-    luPt mySize = context.getAdjustedSize( tstyle );
-    //kDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
+    double factor = style.sizeFactor();
+    luPt mySize = context.getAdjustedSize( tstyle, factor );
 
-    QFont font = getFont( context );
-    font.setPointSizeF( context.layoutUnitPtToPt( mySize ) );
+    setCharStyle( style.charStyle() );
+    setCharFamily( style.charFamily() );
+
+    QFont font = getFont( context, style );
+    double fontsize = context.layoutUnitPtToPt( mySize );
+    double scriptsize = pow( style.scriptSizeMultiplier(), style.scriptLevel() );
+    double size = fontsize * scriptsize;
+    font.setPointSizeF( size < style.scriptMinSize() ? style.scriptMinSize() : size );
 
     QFontMetrics fm( font );
-    QChar ch = getRealCharacter(context);
-    if ( ch != QChar::Null ) {
-        QRect bound = fm.boundingRect( ch );
-        setWidth( context.ptToLayoutUnitPt( fm.width( ch ) ) );
-        setHeight( context.ptToLayoutUnitPt( bound.height() ) );
-        setBaseline( context.ptToLayoutUnitPt( -bound.top() ) );
-
-        // There are some glyphs in TeX that have
-        // baseline==0. (\int, \sum, \prod)
-        if ( getBaseline() == 0 ) {
-            //setBaseline( getHeight()/2 + context.axisHeight( tstyle ) );
-            setBaseline( -1 );
-        }
-    }
-    else {
-        setWidth( qRound( context.getEmptyRectWidth() * 2./3. ) );
-        setHeight( qRound( context.getEmptyRectHeight() * 2./3. ) );
+    if ( character == applyFunctionChar || character == invisibleTimes || character == invisibleComma ) {
+        setWidth( 0 );
+        setHeight( 0 );
         setBaseline( getHeight() );
     }
+    else {
+        QChar ch = getRealCharacter( context );
+        if ( ch == QChar::null ) {
+            setWidth( qRound( context.getEmptyRectWidth( factor ) * 2./3. ) );
+            setHeight( qRound( context.getEmptyRectHeight( factor ) * 2./3. ) );
+            setBaseline( getHeight() );
+        }
+        else {
+            QRect bound = fm.boundingRect( ch );
+            setWidth( context.ptToLayoutUnitPt( fm.width( ch ) ) );
+            setHeight( context.ptToLayoutUnitPt( bound.height() ) );
+            setBaseline( context.ptToLayoutUnitPt( -bound.top() ) );
 
-    //kDebug( DEBUGID ) << "height: " << getHeight() << endl;
-    //kDebug( DEBUGID ) << "width: " << getWidth() << endl;
+            // There are some glyphs in TeX that have
+            // baseline==0. (\int, \sum, \prod)
+            if ( getBaseline() == 0 ) {
+                //setBaseline( getHeight()/2 + context.axisHeight( tstyle ) );
+                setBaseline( -1 );
+            }
+        }
+    }
 }
 
 /**
@@ -152,29 +161,51 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                         const ContextStyle& context,
                         ContextStyle::TextStyle tstyle,
                         ContextStyle::IndexStyle /*istyle*/,
+                        StyleAttributes& style,
                         const LuPixelPoint& parentOrigin )
 {
+    if ( character == applyFunctionChar || character == invisibleTimes || character == invisibleComma ) {
+        return;
+    }
+
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
     //    return;
 
-    setUpPainter( context, painter );
+    // Let container set the color, instead of elementType
+    //setUpPainter( context, painter );
+    painter.setPen( style.color() );
 
-    luPt mySize = context.getAdjustedSize( tstyle );
-    QFont font = getFont( context );
-    font.setPointSizeF( context.layoutUnitToFontSize( mySize, false ) );
+    setCharStyle( style.charStyle() );
+    setCharFamily( style.charFamily() );
+
+    double factor = style.sizeFactor();
+    luPt mySize = context.getAdjustedSize( tstyle, factor );
+    QFont font = getFont( context, style );
+    double fontsize = context.layoutUnitPtToPt( mySize );
+    double scriptsize = pow( style.scriptSizeMultiplier(), style.scriptLevel() );
+    double size = fontsize * scriptsize;
+    font.setPointSizeFloat( size < style.scriptMinSize() ? style.scriptMinSize() : size );
     painter.setFont( font );
 
     // Each starting element draws the whole token
 /*    ElementType* token = getElementType();
     if ( ( token != 0 ) && !symbol ) {
         QString text = token->text( static_cast<SequenceElement*>( getParent() ) );
+//         kdDebug() << "draw text: " << text[0].unicode()
+//                   << " " << painter.font().family().latin1()
+//                   << endl;
+        painter.fillRect( context.layoutUnitToPixelX( parentOrigin.x() ),
+                          context.layoutUnitToPixelY( parentOrigin.y() ),
+                          context.layoutUnitToPixelX( getParent()->getWidth() ),
+                          context.layoutUnitToPixelY( getParent()->getHeight() ),
+                          style.background() );
         painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                           context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
                           text );
     }
     else {
-        //kDebug() << "draw char" << endl;
+*/
         QChar ch = getRealCharacter(context);
         if ( ch != QChar::Null ) {
             luPixel bl = getBaseline();
@@ -183,7 +214,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                 // meant to be. You shouldn't calculate a lot in
                 // draw. But I don't see how else to deal with
                 // baseline==0 glyphs without yet another flag.
-                bl = -( getHeight()/2 + context.axisHeight( tstyle ) );
+                bl = -( getHeight()/2 + context.axisHeight( tstyle, factor ) );
             }
             painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                               context.layoutUnitToPixelY( myPos.y()+bl ),
@@ -191,14 +222,13 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
         }
         else {
             painter.setPen( QPen( context.getErrorColor(),
-                                  context.layoutUnitToPixelX( context.getLineWidth() ) ) );
+                                  context.layoutUnitToPixelX( context.getLineWidth( factor ) ) ) );
             painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
                               context.layoutUnitToPixelY( myPos.y() ),
                               context.layoutUnitToPixelX( getWidth() ),
                               context.layoutUnitToPixelY( getHeight() ) );
         }
     }
-*/
 }
 
 
@@ -210,17 +240,19 @@ void TextElement::dispatchFontCommand( FontCommand* cmd )
 void TextElement::setCharStyle( CharStyle cs )
 {
     charStyle( cs );
-    //formula()->changed();
+    formula()->changed();
 }
 
 void TextElement::setCharFamily( CharFamily cf )
 {
     charFamily( cf );
-    //formula()->changed();
+    formula()->changed();
 }
 
 QChar TextElement::getRealCharacter(const ContextStyle& context)
 {
+    return character;
+/*
     if ( !isSymbol() ) {
         const FontStyle& fontStyle = context.fontStyle();
         const AlphaTable* alphaTable = fontStyle.alphaTable();
@@ -238,53 +270,46 @@ QChar TextElement::getRealCharacter(const ContextStyle& context)
     else {
         return getSymbolTable().character(character, charStyle());
     }
+*/
 }
 
 
-QFont TextElement::getFont(const ContextStyle& context)
+QFont TextElement::getFont( const ContextStyle& context, const StyleAttributes& style )
 {
-    if ( !isSymbol() ) {
-        const FontStyle& fontStyle = context.fontStyle();
-        const AlphaTable* alphaTable = fontStyle.alphaTable();
-        if ( alphaTable != 0 ) {
-#warning "kde4: port it"
-            //AlphaTableEntry ate = alphaTable->entry( character,
-            //                                         charFamily(),
-            //                                         charStyle() );
-            //if ( ate.valid() ) {
-            //    return ate.font;
-            //}
-        }
-        QFont font;
-/*        if (getElementType() != 0) {
-            font = getElementType()->getFont(context);
-        }
-        else {
-            font = context.getDefaultFont();
-        }*/
-        switch ( charStyle() ) {
-        case anyChar:
-            break;
-        case normalChar:
-            font.setItalic( false );
-            font.setBold( false );
-            break;
-        case boldChar:
-            font.setItalic( false );
-            font.setBold( true );
-            break;
-        case italicChar:
-            font.setItalic( true );
-            font.setBold( false );
-            break;
-        case boldItalicChar:
-            font.setItalic( true );
-            font.setBold( true );
-            break;
-        }
-        return font;
+    const FontStyle& fontStyle = context.fontStyle();
+    QFont font;
+    if ( style.customFont() ) {
+        font = style.font();
     }
-    return context.symbolTable().font( character, charStyle() );
+    else if (getElementType() != 0) {
+        font = getElementType()->getFont(context);
+    }
+    else {
+        font = context.getDefaultFont();
+    }
+    switch ( charStyle() ) {
+    case anyChar:
+        font.setItalic( false );
+        font.setBold( false );
+        break;
+    case normalChar:
+        font.setItalic( false );
+        font.setBold( false );
+        break;
+    case boldChar:
+        font.setItalic( false );
+        font.setBold( true );
+        break;
+    case italicChar:
+        font.setItalic( true );
+        font.setBold( false );
+        break;
+    case boldItalicChar:
+        font.setItalic( true );
+        font.setBold( true );
+        break;
+    }
+    return fontStyle.symbolTable()->font( character, font );
 }
 
 
@@ -300,8 +325,11 @@ void TextElement::setUpPainter(const ContextStyle& context, QPainter& painter)
 
 const SymbolTable& TextElement::getSymbolTable() const
 {
+    return formula()->getSymbolTable();
+    /*
     static SymbolTable s;
     return s;
+    */
 }
 
 

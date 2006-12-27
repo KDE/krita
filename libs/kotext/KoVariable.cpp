@@ -60,8 +60,22 @@ void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument 
     Q_UNUSED(document);
     Q_UNUSED(object);
     Q_UNUSED(posInDocument);
-    painter.setFont(QFont(format.font(), pd));
-    // TODO figure out why the above doesn't actually use the paintDevice
-    // TODO set all the font properties from the format (color etc)
-    painter.drawText(QPointF(rect.x(), object.ascent()), m_value);
+
+    QFont font(format.font(), pd);
+    QTextLayout layout(m_value, font, pd);
+    layout.setCacheEnabled(true);
+    QList<QTextLayout::FormatRange> layouts;
+    QTextLayout::FormatRange range;
+    range.start=0;
+    range.length=m_value.length();
+    range.format = format;
+    layouts.append(range);
+    layout.setAdditionalFormats(layouts);
+
+    QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
+    layout.setTextOption(option);
+    layout.beginLayout();
+    layout.createLine();
+    layout.endLayout();
+    layout.draw(&painter, rect.topLeft());
 }

@@ -2,6 +2,7 @@
 
    Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,6 +33,7 @@
 #include <koffice_export.h>
 
 class KoShapeGroup;
+class KoLayerShape;
 
 typedef QSet<KoShape*> KoSelectionSet;
 
@@ -92,6 +94,19 @@ public:
 
     virtual QRectF boundingRect() const;
 
+    /**
+     * Sets the currently active layer.
+     * @param layer the new active layer
+     */
+    void setActiveLayer( KoLayerShape* layer );
+
+    /**
+     * Returns a currently active layer.
+     *
+     * @return the currently active layer, or zero if there is none
+     */
+    KoLayerShape* activeLayer() const;
+
 protected:
     virtual void updateTree() {}
 
@@ -108,6 +123,8 @@ private:
 
     KoSelectionSet m_selectedObjects;
     bool m_eventTriggered;
+
+    KoLayerShape *m_activeLayer;
 };
 
 #endif

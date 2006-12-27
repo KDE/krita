@@ -2,6 +2,7 @@
 
    Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,8 +29,8 @@
 #include <QTimer>
 
 KoSelection::KoSelection()
+    : m_eventTriggered( false ), m_activeLayer( 0 )
 {
-    m_eventTriggered = false;
 }
 
 KoSelection::~KoSelection()
@@ -240,6 +241,14 @@ KoShape *KoSelection::firstSelectedShape(KoFlake::SelectionType strip) const {
     if(set.isEmpty())
         return 0;
     return *(set.begin());
+}
+
+void KoSelection::setActiveLayer( KoLayerShape* layer ) {
+    m_activeLayer = layer;
+}
+
+KoLayerShape* KoSelection::activeLayer() const {
+    return m_activeLayer;
 }
 
 #include "KoSelection.moc"

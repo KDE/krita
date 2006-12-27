@@ -51,4 +51,13 @@ include_directories( ${KOTEXT_INCLUDES} )
 #
 #   ########### end ###############
 
+########### next target ###############
+
+set(TestDocumentLayout_test_SRCS TestDocumentLayout.cpp)
+kde4_automoc(${TestDocumentLayout_test_SRCS})
+kde4_add_executable(TestDocumentLayout RUN_UNINSTALLED ${TestDocumentLayout_test_SRCS})
+target_link_libraries(TestDocumentLayout kotext ${QT_QTTEST_LIBRARY})
+add_test(kword/frame/TestDocumentLayout ${EXECUTABLE_OUTPUT_PATH}/TestDocumentLayout)
+
+
 endif(KDE4_BUILD_TESTS)

@@ -19,6 +19,7 @@
  */
 
 #include "KoTextShape.h"
+#include "KoTextDocumentLayout.h"
 
 #include <QTextLayout>
 #include <QFont>
@@ -31,9 +32,12 @@
 
 KoTextShape::KoTextShape()
 {
+    setShapeId(KoTextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
-    setShapeId(KoTextShape_SHAPEID);
+    KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document());
+    lay->addShape(this);
+    m_textShapeData->document()->setDocumentLayout(lay);
 }
 
 KoTextShape::~KoTextShape() {

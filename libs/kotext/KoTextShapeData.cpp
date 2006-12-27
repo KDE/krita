@@ -29,6 +29,7 @@ KoTextShapeData::KoTextShapeData()
 {
     m_document = new QTextDocument();
     m_document->setUseDesignMetrics(true);
+    m_document->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false));
 }
 
 KoTextShapeData::~KoTextShapeData() {

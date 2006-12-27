@@ -40,7 +40,6 @@ KoTextShapeFactory::KoTextShapeFactory(QObject *parent)
     t.properties = props;
     props->setProperty("text", "<b>Koffie</b>, koffie... Querelanten\ndrinken geen KOffice maar groene thee.");
     addTemplate(t);
-
 }
 
 KoShape *KoTextShapeFactory::createDefaultShape() {
@@ -50,11 +49,8 @@ KoShape *KoTextShapeFactory::createDefaultShape() {
 
 KoShape *KoTextShapeFactory::createShape(const KoProperties * params) const {
     KoTextShape *shape = new KoTextShape();
-    QTextDocument *doc = new QTextDocument();
-    doc->setDefaultFont(QFont("Sans", 10, QFont::Normal, false));
-    doc->setHtml( params->getProperty("text").toString() );
     KoTextShapeData *data = static_cast<KoTextShapeData*> (shape->userData());
-    data->setDocument(doc);
+    data->document()->setHtml( params->getProperty("text").toString() );
     return shape;
 }
 

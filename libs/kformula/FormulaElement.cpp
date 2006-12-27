@@ -51,7 +51,7 @@ const QList<BasicElement*> FormulaElement::childElements()
     return m_childElements;
 }
 
-void FormulaElement::readMathML( const QDomElement& element )
+void FormulaElement::readMathML( const KoXmlElement& element )
 {
     readMathMLAttributes( element );
 }

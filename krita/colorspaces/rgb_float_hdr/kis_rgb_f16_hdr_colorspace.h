@@ -27,6 +27,9 @@ struct RgbF16Traits {
     typedef half channels_type;
     static const quint32 channels_nb = 4;
     static const qint32 alpha_pos = 3;
+    static const qint32 red = 2;
+    static const qint32 green = 1;
+    static const qint32 blue = 0;
 };
 
 class KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>

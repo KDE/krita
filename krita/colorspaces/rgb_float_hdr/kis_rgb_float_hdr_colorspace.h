@@ -23,6 +23,9 @@
 #include <KoIncompleteColorSpace.h>
 #include <KoFallBack.h>
 
+#define UINT8_TO_FLOAT(v) (KoColorSpaceMaths<quint8, typename _CSTraits::channels_type >::scaleToA(v))
+#define FLOAT_TO_UINT8(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint8>::scaleToA(v))
+
 template <class _CSTraits>
 class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB16Fallback>
 {
@@ -32,13 +35,53 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB1
         {
         
         }
+        
+        virtual void fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * /*profile*/) const
+        {
+            typename _CSTraits::channels_type* dst = this->nativeArray(dstU8);
+            dst[ _CSTraits::red ] = UINT8_TO_FLOAT(c.red());
+            dst[ _CSTraits::green ] = UINT8_TO_FLOAT(c.green());
+            dst[ _CSTraits::blue ] = UINT8_TO_FLOAT(c.blue());
+        }
+        
+        virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KoColorProfile * /*profile*/) const
+        {
+            typename _CSTraits::channels_type* dst = this->nativeArray(dstU8);
+            dst[ _CSTraits::red ] = UINT8_TO_FLOAT(c.red());
+            dst[ _CSTraits::green ] = UINT8_TO_FLOAT(c.green());
+            dst[ _CSTraits::blue ] = UINT8_TO_FLOAT(c.blue());
+            dst[ _CSTraits::alpha_pos ] = UINT8_TO_FLOAT(opacity);
+        }
+        
+        virtual void toQColor(const quint8 *srcU8, QColor *c, KoColorProfile * /*profile*/) const
+        {
+            const typename _CSTraits::channels_type* src = this->nativeArray(srcU8);
+            c->setRgb(FLOAT_TO_UINT8(src[_CSTraits::red]), FLOAT_TO_UINT8(src[_CSTraits::green]), FLOAT_TO_UINT8(src[_CSTraits::blue]));
+        }
+        
+        virtual void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/) const
+        {
+            const typename _CSTraits::channels_type* src = this->nativeArray(srcU8);
+            c->setRgb(FLOAT_TO_UINT8(src[_CSTraits::red]), FLOAT_TO_UINT8(src[_CSTraits::green]), FLOAT_TO_UINT8(src[_CSTraits::blue]));
+            *opacity = FLOAT_TO_UINT8(src[_CSTraits::alpha_pos]);
+        }
+        
+        quint8 difference(const quint8 *src1U8, const quint8 *src2U8)
+        {
+            const typename _CSTraits::channels_type* src1 = this->nativeArray(src1U8);
+            const typename _CSTraits::channels_type* src2 = this->nativeArray(src2U8);
+            return FLOAT_TO_UINT8(qMax(QABS(src2[_CSTraits::red] - src1[_CSTraits::red]),
+                        qMax(QABS(src2[_CSTraits::green] - src1[_CSTraits::green]),
+                            QABS(src2[_CSTraits::blue] - src1[_CSTraits::blue]))));
+        }
 
+        
         virtual QImage convertToQImage(const quint8 *dataU8, qint32 width, qint32 height,
                                                     KoColorProfile *  /*dstProfile*/,
                                                     qint32 /*renderingIntent*/, float exposure) const
         {
             const typename _CSTraits::channels_type *data = reinterpret_cast<const typename _CSTraits::channels_type *>(dataU8);
-        
+            
             QImage img = QImage(width, height, QImage::Format_ARGB32);
         
             qint32 i = 0;

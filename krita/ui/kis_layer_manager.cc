@@ -909,7 +909,7 @@ void KisLayerManager::flattenImage()
                                                    i18n("The image contains hidden layers that will be lost."),
                                                    i18n("Flatten Image"),
                                                    KGuiItem(i18n("&Flatten Image")),
-                                                   KStdGuiItem::cancel());
+                                                   KStandardGuiItem::cancel());
 
             if (answer != KMessageBox::Yes) {
                 doIt = false;

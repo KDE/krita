@@ -736,7 +736,7 @@ bool KoMainWindow::exportConfirmation( const QByteArray &outputFormat )
                         "<p>Do you still want to save in this format?</qt>",
                   QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
                   i18n( "Confirm Save" ),
-                  KStdGuiItem::save (),
+                  KStandardGuiItem::save (),
                   "NonNativeSaveConfirmation"
                   );
     }
@@ -1080,8 +1080,8 @@ bool KoMainWindow::queryClose()
         int res = KMessageBox::warningYesNoCancel( this,
                         i18n( "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name ),
                         QString::null,
-                        KStdGuiItem::save(),
-                        KStdGuiItem::discard());
+                        KStandardGuiItem::save(),
+                        KStandardGuiItem::discard());
 
         switch(res) {
             case KMessageBox::Yes : {

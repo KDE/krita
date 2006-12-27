@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include <kcharselect.h>
 #include <kdebug.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 
 /******************************************************************/
 /* class KoCharSelectDia                                           */
@@ -43,7 +43,7 @@ KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QChar
 
     initDialog(_chr,_font,_enableFont);
 
-    KGuiItem okItem = KStdGuiItem::ok(); // start from std item to keep the OK icon...
+    KGuiItem okItem = KStandardGuiItem::ok(); // start from std item to keep the OK icon...
     okItem.setText( i18n("&Insert") );
     okItem.setWhatsThis( i18n("Insert the selected character in the text") );
     setButtonGuiItem( KDialog::Ok, okItem );

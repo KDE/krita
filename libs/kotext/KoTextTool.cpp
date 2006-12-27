@@ -147,7 +147,7 @@ void KoTextTool::keyPressEvent(QKeyEvent *event) {
     switch(event->key()) { // map input to moveOperation
 /* TODO
  * Look at KoTextView::handleKeyPressEvent
- * Use    if ( KShortcut(  e->key() ) == KStdAccel::deleteWordBack() )  and friends
+ * Use    if ( KShortcut(  e->key() ) == KStandardShortcut::deleteWordBack() )  and friends
  */
         case Qt::Key_Backspace:
             useCursor(Qt::BlankCursor);

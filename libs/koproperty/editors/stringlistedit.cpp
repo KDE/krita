@@ -31,7 +31,7 @@
 
 #include <keditlistbox.h>
 #include <kdialog.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <klocale.h>
 #include <kdebug.h>
 

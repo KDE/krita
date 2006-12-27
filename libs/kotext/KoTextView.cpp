@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kstdaccel.h>
+#include <kstandardshortcut.h>
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kdatatool.h>
@@ -180,14 +180,14 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
     }*/
 
     bool clearUndoRedoInfo = true;
-    if ( KShortcut(  e->key() ) == KStdAccel::deleteWordBack() )
+    if ( KShortcut(  e->key() ) == KStandardShortcut::deleteWordBack() )
     {
         if ( m_cursor->parag()->string()->isRightToLeft() )
             deleteWordRight();
         else
             deleteWordLeft();
         clearUndoRedoInfo = true;
-    } else if ( KShortcut( e->key() ) == KStdAccel::deleteWordForward() )
+    } else if ( KShortcut( e->key() ) == KStandardShortcut::deleteWordForward() )
     {
         if ( m_cursor->parag()->string()->isRightToLeft() )
             deleteWordLeft();

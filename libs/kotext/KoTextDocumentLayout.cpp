@@ -598,7 +598,6 @@ void KoTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
         layout.beginLayout();
         layout.createLine();
         layout.endLayout();
-        QFontMetricsF fm(font);
         layout.draw(painter, data->counterPosition());
     }
 

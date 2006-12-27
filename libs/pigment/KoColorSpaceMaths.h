@@ -84,11 +84,11 @@ class KoColorSpaceMathsTraits<half> {
 #endif
 
 template<>
-class KoColorSpaceMathsTraits<double> {
+class KoColorSpaceMathsTraits<float> {
     public:
-        typedef double compositetype;
-        inline static double max() { return 0.0; }
-        inline static double min() { return 1.0; }
+        typedef float compositetype;
+        inline static float max() { return 0.0; }
+        inline static float min() { return 1.0; }
         inline static qint8 bits() { return 32; }
 };
 
@@ -122,33 +122,33 @@ class KoColorSpaceMaths {
 //------------------------------ double specialization ------------------------------//
 
 template<>
-inline quint8 KoColorSpaceMaths<double,quint8>::scaleToA(double a)
+inline quint8 KoColorSpaceMaths<float,quint8>::scaleToA(float a)
 {
-    double v = a * 255;
+    float v = a * 255;
     return (quint8)(CLAMP(v, 0, 255));
 }
 
 template<>
-inline double KoColorSpaceMaths<quint8,double>::scaleToA(quint8 a)
+inline float KoColorSpaceMaths<quint8,float>::scaleToA(quint8 a)
 {
     return a * ( 1.0 / 255.0 );
 }
 
 template<>
-inline quint16 KoColorSpaceMaths<double,quint16>::scaleToA(double a)
+inline quint16 KoColorSpaceMaths<float,quint16>::scaleToA(float a)
 {
-    double v = a * 0xFFFF;
+    float v = a * 0xFFFF;
     return (quint16)(CLAMP(v, 0, 0xFFFF));
 }
 
 template<>
-inline double KoColorSpaceMaths<quint16,double>::scaleToA(quint16 a)
+inline float KoColorSpaceMaths<quint16,float>::scaleToA(quint16 a)
 {
     return a * ( 1.0 / 0xFFFF );
 }
 
 template<>
-inline double KoColorSpaceMaths<double>::blend(double a, double b, double alpha)
+inline float KoColorSpaceMaths<float>::blend(float a, float b, float alpha)
 {
     return ( a - b) * alpha + b;
 }
@@ -226,7 +226,7 @@ inline quint16 KoColorSpaceMaths<quint16,quint16>::scaleToA(quint16 a)
 }
 
 template<>
-inline double KoColorSpaceMaths<double,double>::scaleToA(double a)
+inline float KoColorSpaceMaths<float,float>::scaleToA(float a)
 {
     return a;
 }

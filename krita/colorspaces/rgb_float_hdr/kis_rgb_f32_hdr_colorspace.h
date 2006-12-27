@@ -22,7 +22,7 @@
 #include "kis_rgb_float_hdr_colorspace.h"
 
 struct RgbF32Traits {
-    typedef double channels_type;
+    typedef float channels_type;
     static const quint32 channels_nb = 4;
     static const qint32 alpha_pos = 3;
 };

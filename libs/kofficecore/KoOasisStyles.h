@@ -43,7 +43,7 @@ public:
     /// Look into @p doc for styles and remember them
     /// @param doc document to look into
     /// @param stylesDotXml true when loading styles.xml, false otherwise
-    void createStyleMap( const KoXmlDocument& doc );
+    void createStyleMap( const KoXmlDocument& doc, bool stylesDotXml );
 
     /**
      * Look up a style by name.
@@ -58,7 +58,7 @@ public:
 
     /**
      * Looks up a style:style by name.
-     * Searches in the list of custom styles first and then in the list of automatic styles.
+     * Searches in the list of custom styles first and then in the lists of automatic styles.
      * @param name the style name
      * @param family the style family (for a style:style, use 0 otherwise)
      * @return the dom element representing the style, or QString::null if it wasn't found.
@@ -68,8 +68,19 @@ public:
     /// Similar to findStyle but for custom styles only.
     const KoXmlElement* findStyleCustomStyle( const QString& name, const QString& family ) const;
 
-    /// Similar to findStyle but for auto-styles only.
+    /**
+     * Similar to findStyle but for auto-styles only.
+     * \note Searches in styles.xml only!
+     * \see findStyle()
+     */
     const KoXmlElement* findStyleAutoStyle( const QString& name, const QString& family ) const;
+
+    /**
+     * Similar to findStyle but for auto-styles only.
+     * \note Searches in content.xml only!
+     * \see findStyle()
+     */
+    const KoXmlElement* findContentAutoStyle( const QString& name, const QString& family ) const;
 
     /// @return the default style for a given family ("graphic","paragraph","table" etc.)
     /// Returns 0 if no default style for this family is available
@@ -88,10 +99,14 @@ public:
     const QHash<QString, KoXmlElement*>& drawStyles() const;
 
     /// @return all custom styles ("style:style" elements) for a given family, hashed by name
-    const QHash<QString, KoXmlElement*>& customStyles(const QString& family) const;
+    QHash<QString, KoXmlElement*> customStyles(const QString& family) const;
 
-    /// @return all auto-styles ("style:style" elements) for a given family, hashed by name
-    const QHash<QString, KoXmlElement*>& autoStyles(const QString& family) const;
+    /**
+     * Returns all auto-styles defined in styles.xml, if \p stylesDotXml is \c true ,
+     * or all in content.xml, if \p stylesDotXml is \c false .
+     * \return all auto-styles ("style:style" elements) for a given family, hashed by name
+     */
+    QHash<QString, KoXmlElement*> autoStyles(const QString& family, bool stylesDotXml = false ) const;
 
     /// Prefix and suffix are always included into formatStr. Having them as separate fields simply
     /// allows to extract them from formatStr, to display them in separate widgets.
@@ -134,12 +149,18 @@ public:
     static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOasisStyles & oasisStyles );
 
 private:
+    enum TypeAndLocation
+    {
+        CustomInStyles,     ///< custom style located in styles.xml
+        AutomaticInContent, ///< auto-style located in content.xml
+        AutomaticInStyles   ///< auto-style located in styles.xml
+    };
     /// Add styles to styles map
-    void insertStyles( const KoXmlElement& styles, bool styleAutoStyles = false );
+    void insertStyles( const KoXmlElement& styles, TypeAndLocation typeAndLocation = CustomInStyles );
 
 private:
     void insertOfficeStyles( const KoXmlElement& styles );
-    void insertStyle( const KoXmlElement& style, bool styleAutoStyles );
+    void insertStyle( const KoXmlElement& style, TypeAndLocation typeAndLocation );
     void importDataStyle( const KoXmlElement& parent );
     static bool saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text, bool &antislash );
     static void parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text );

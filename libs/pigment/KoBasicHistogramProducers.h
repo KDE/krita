@@ -100,7 +100,7 @@ public:
     virtual double maximalZoom() const;
 };
 
-class /*PIGMENT_EXPORT*/ KoBasicF32HistogramProducer : public KoBasicHistogramProducer {
+class PIGMENT_EXPORT KoBasicF32HistogramProducer : public KoBasicHistogramProducer {
 public:
     KoBasicF32HistogramProducer(const KoID& id, KoColorSpace *colorSpace);
     virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);

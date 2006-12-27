@@ -34,7 +34,10 @@
 #include <KoBasicHistogramProducers.h>
 
 #include "kis_rgb_f32_hdr_colorspace.h"
+
+#ifdef HAVE_OPENEXR
 #include "kis_rgb_f16_hdr_colorspace.h"
+#endif
 
 typedef KGenericFactory<RGBFloatHDRPlugin> RGBFloatHDRPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritargbfloathdrplugin, RGBFloatHDRPluginFactory( "krita" ) )

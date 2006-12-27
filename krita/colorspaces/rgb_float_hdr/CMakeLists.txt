@@ -19,7 +19,9 @@ target_link_libraries(kritargbf16hdr  ${KDE4_KDECORE_LIBS} pigment )
 
 set_target_properties(kritargbf16hdr PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kritargbf16hdr  DESTINATION ${LIB_INSTALL_DIR})
-
+set(RGBF16_LIB kritargbf16hdr )
+else(OPENEXR_FOUND)
+set(RGBF16_LIB )
 endif(OPENEXR_FOUND)
 
 ########### next target ###############
@@ -45,7 +47,7 @@ kde4_add_plugin(kritargbfloathdrplugin ${kritargbfloathdrplugin_PART_SRCS})
 
 
 
-target_link_libraries(kritargbfloathdrplugin  ${KDE4_KDECORE_LIBS} kritargbf16hdr kritargbf32hdr  pigment)
+target_link_libraries(kritargbfloathdrplugin  ${KDE4_KDECORE_LIBS} ${RGBF16_LIB} kritargbf32hdr  pigment)
 
 install(TARGETS kritargbfloathdrplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

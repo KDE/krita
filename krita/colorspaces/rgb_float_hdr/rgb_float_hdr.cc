@@ -44,6 +44,7 @@ RGBFloatHDRPlugin::RGBFloatHDRPlugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
+#ifdef HAVE_OPENEXR
     // Register F16 HDR colorspace
     {
         KoColorSpace * colorSpaceRGBF16Half  = new KisRgbF16HDRColorSpace(f, 0);
@@ -54,6 +55,7 @@ RGBFloatHDRPlugin::RGBFloatHDRPlugin(QObject *parent, const QStringList &)
                     new KoBasicHistogramProducerFactory<KoBasicF16HalfHistogramProducer>
                     (KoID("RGBF16HALFHISTO", i18n("Float16 Half Histogram")), colorSpaceRGBF16Half) );
     }
+#endif
     // Register F32 HDR colorspace
     {
         KoColorSpace * colorSpaceRGBF32  = new KisRgbF32HDRColorSpace(f, 0);

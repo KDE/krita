@@ -15,52 +15,50 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_STRATEGY_COLORSPACE_RGB_16F_HDR_H_
-#define KIS_STRATEGY_COLORSPACE_RGB_16F_HDR_H_
+#ifndef KIS_STRATEGY_COLORSPACE_RGB_32F_HDR_H_
+#define KIS_STRATEGY_COLORSPACE_RGB_32F_HDR_H_
 
 #include "klocale.h"
 #include "kis_rgb_float_hdr_colorspace.h"
 
-#include <half.h>
-
-struct RgbF16Traits {
-    typedef half channels_type;
+struct RgbF32Traits {
+    typedef double channels_type;
     static const quint32 channels_nb = 4;
     static const qint32 alpha_pos = 3;
 };
 
-class KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
+class KisRgbF32HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF32Traits>
 {
     public:
-        KisRgbF16HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+        KisRgbF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const {
-          if (independence == TO_RGBA8 /*|| independence == TO_LAB16*/)
+          if (independence == TO_RGBA8 || independence == TO_LAB16)
             return true;
           else
             return false;
         }
 };
 
-// FIXME: lcms doesn't support 16-bit float
-#define RGBAF16HALF_LCMS_TYPE TYPE_BGRA_16
+// FIXME: lcms doesn't support 32-bit float
+#define RGBAF32FLOAT_LCMS_TYPE TYPE_BGRA_16
 
-class KisRgbF16HDRColorSpaceFactory : public KoColorSpaceFactory
+class KisRgbF32HDRColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KoID id() const { return KoID("RGBAF16HALF", i18n("RGB (16-bit float/channel) for High Dynamic Range imaging")); };
+    virtual KoID id() const { return KoID("RGBAF32", i18n("RGB (32-bit float/channel) for High Dynamic Range imaging")); };
 
     /**
      * lcms colorspace type definition.
      */
-   virtual quint32 colorSpaceType() { return RGBAF16HALF_LCMS_TYPE; };
+   virtual quint32 colorSpaceType() { return RGBAF32FLOAT_LCMS_TYPE; };
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisRgbF16HDRColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisRgbF32HDRColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };

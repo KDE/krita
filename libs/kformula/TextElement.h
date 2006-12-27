@@ -47,8 +47,6 @@ public:
      */
     const QList<BasicElement*> childElements();
 
-    void readMathML( const QDomElement& element );
-    
     void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
     

@@ -60,6 +60,10 @@ public:
 
     void setZoom(int zoom);
 
+public slots:
+    /// Shows/hides the rulers
+    void setShowRulers(bool show);
+
 protected:    
     void initGUI();
     void initActions();
@@ -108,6 +112,7 @@ private:
 
     KoRuler *m_horizontalRuler;
     KoRuler *m_verticalRuler;
+    KToggleAction* m_viewRulers;
 
     KoZoomAction *m_viewZoomAction;
 

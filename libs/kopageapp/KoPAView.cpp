@@ -167,11 +167,15 @@ void KoPAView::initActions()
     m_actionViewShowGrid = new KToggleAction( i18n( "Show &Grid" ), KShortcut(),
                                             this, SLOT( viewGrid() ),
                                             actionCollection(), "view_grid" );
-    m_actionViewShowGrid->setCheckedState(KGuiItem(i18n("Hide &Grid")));
 
     m_actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), KShortcut(),
                                              this, SLOT(viewSnapToGrid() ),
                                              actionCollection(), "view_snaptogrid" );
+
+    m_viewRulers = new KToggleAction(i18n("Show Rulers"), actionCollection(), "view_rulers");
+    m_viewRulers->setToolTip(i18n("Show/hide the view's rulers"));
+    connect(m_viewRulers, SIGNAL(triggered(bool)), this, SLOT(setShowRulers(bool)));
+    setShowRulers(true);
 
     m_viewZoomAction = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
                                         i18n("Zoom"), KIcon("viewmag"), KShortcut(),
@@ -365,6 +369,14 @@ void KoPAView::selectionChanged()
         m_horizontalRuler->setShowSelectionBorders(false);
         m_verticalRuler->setShowSelectionBorders(false);
     }
+}
+
+void KoPAView::setShowRulers(bool show)
+{
+    m_horizontalRuler->setVisible(show);
+    m_verticalRuler->setVisible(show);
+
+    m_viewRulers->setChecked(show);
 }
 
 #include "KoPAView.moc"

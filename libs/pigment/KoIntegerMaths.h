@@ -34,8 +34,8 @@
 
 // #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-template<typename _T_, typename _T2_>
-inline _T_ CLAMP(_T_ x, _T2_ l, _T2_ u)
+template<typename _T_, typename _T2_, typename _T3_>
+inline _T_ CLAMP(_T_ x, _T2_ l, _T3_ u)
 {
     if( x < l)
         return _T_(l);

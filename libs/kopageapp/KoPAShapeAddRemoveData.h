@@ -4,12 +4,12 @@
 #include <KoShapeAddRemoveData.h>
 
 class KoPAPage;
-class KoLayerShape;
+class KoShapeLayer;
 
 class KoPAShapeAddRemoveData : public KoShapeAddRemoveData
 {
 public:    
-    KoPAShapeAddRemoveData( KoPAPage * activePage, KoLayerShape * activeLayer );
+    KoPAShapeAddRemoveData( KoPAPage * activePage, KoShapeLayer * activeLayer );
     virtual ~KoPAShapeAddRemoveData() {}
 
     virtual KoShapeAddRemoveData * clone() const;
@@ -17,12 +17,12 @@ public:
     void setPage( KoPAPage * activePage ) { m_activePage = activePage; } 
     KoPAPage * page() const { return m_activePage; }
 
-    void setLayer( KoLayerShape * activeLayer ) { m_activeLayer = activeLayer; }
-    KoLayerShape * layer() const { return m_activeLayer; }
+    void setLayer( KoShapeLayer * activeLayer ) { m_activeLayer = activeLayer; }
+    KoShapeLayer * layer() const { return m_activeLayer; }
 
 private:    
     KoPAPage * m_activePage;
-    KoLayerShape * m_activeLayer;
+    KoShapeLayer * m_activeLayer;
 };
 
 #endif /* KOPASHAPEADDREMOVEDATA_H */

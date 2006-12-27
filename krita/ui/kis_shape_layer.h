@@ -19,7 +19,7 @@
 #ifndef KIS_SHAPE_LAYER_H_
 #define KIS_SHAPE_LAYER_H_
 
-#include <KoLayerShape.h>
+#include <KoShapeLayer.h>
 
 #include <kis_types.h>
 #include <kis_external_layer_iface.h>
@@ -41,7 +41,7 @@ const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
    A KisShapeLayer contains any number of non-krita flakes, such as
    path shapes, text shapes and anything else people come up with.
 */
-class KisShapeLayer : public KisExternalLayer, public KoLayerShape
+class KisShapeLayer : public KisExternalLayer, public KoShapeLayer
 {
 
 public:

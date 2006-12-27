@@ -33,7 +33,7 @@
 #include <koffice_export.h>
 
 class KoShapeGroup;
-class KoLayerShape;
+class KoShapeLayer;
 
 typedef QSet<KoShape*> KoSelectionSet;
 
@@ -98,14 +98,14 @@ public:
      * Sets the currently active layer.
      * @param layer the new active layer
      */
-    void setActiveLayer( KoLayerShape* layer );
+    void setActiveLayer( KoShapeLayer* layer );
 
     /**
      * Returns a currently active layer.
      *
      * @return the currently active layer, or zero if there is none
      */
-    KoLayerShape* activeLayer() const;
+    KoShapeLayer* activeLayer() const;
 
 protected:
     virtual void updateTree() {}
@@ -124,7 +124,7 @@ private:
     KoSelectionSet m_selectedObjects;
     bool m_eventTriggered;
 
-    KoLayerShape *m_activeLayer;
+    KoShapeLayer *m_activeLayer;
 };
 
 #endif

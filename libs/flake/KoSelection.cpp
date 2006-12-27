@@ -243,11 +243,11 @@ KoShape *KoSelection::firstSelectedShape(KoFlake::SelectionType strip) const {
     return *(set.begin());
 }
 
-void KoSelection::setActiveLayer( KoLayerShape* layer ) {
+void KoSelection::setActiveLayer( KoShapeLayer* layer ) {
     m_activeLayer = layer;
 }
 
-KoLayerShape* KoSelection::activeLayer() const {
+KoShapeLayer* KoSelection::activeLayer() const {
     return m_activeLayer;
 }
 

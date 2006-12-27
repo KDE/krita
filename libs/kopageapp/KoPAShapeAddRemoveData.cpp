@@ -1,6 +1,6 @@
 #include "KoPAShapeAddRemoveData.h"
 
-KoPAShapeAddRemoveData::KoPAShapeAddRemoveData( KoPAPage * activePage, KoLayerShape * activeLayer )
+KoPAShapeAddRemoveData::KoPAShapeAddRemoveData( KoPAPage * activePage, KoShapeLayer * activeLayer )
 : m_activePage( activePage )    
 , m_activeLayer( activeLayer )
 {

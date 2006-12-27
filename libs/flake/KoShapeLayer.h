@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KOLAYERSHAPE_H__
-#define __KOLAYERSHAPE_H__
+#ifndef __KOSHAPELAYER_H__
+#define __KOSHAPELAYER_H__
 
 #include <KoShapeContainer.h>
 #include <koffice_export.h>
@@ -31,11 +31,11 @@
  * in a document.
  * A layer is always invisible and unselectable.
  */
-class FLAKE_EXPORT KoLayerShape : public KoShapeContainer
+class FLAKE_EXPORT KoShapeLayer : public KoShapeContainer
 {
 public:
     /// The default constructor
-    KoLayerShape();
+    KoShapeLayer();
     /// empty implementation, as the layer itself is not visible
     virtual void paintComponent(QPainter &, const KoViewConverter &) {};
     bool hitTest( const QPointF &position ) const;
@@ -58,5 +58,5 @@ private:
     };
 };
 
-#endif // __KOLAYERSHAPE_H__
+#endif // __KOSHAPELAYER_H__
 

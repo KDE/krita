@@ -43,7 +43,7 @@ set(flake_SRCS
     KoPointerEvent.cpp
     KoShapeController.cpp
     KoToolSelection.cpp
-    KoLayerShape.cpp
+    KoShapeLayer.cpp
     commands/KoGroupShapesCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp

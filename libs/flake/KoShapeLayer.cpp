@@ -17,20 +17,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoLayerShape.h"
+#include "KoShapeLayer.h"
 
-KoLayerShape::KoLayerShape()
+KoShapeLayer::KoShapeLayer()
 : KoShapeContainer(new LayerMembers())
 {
 }
 
-bool KoLayerShape::hitTest( const QPointF &position ) const
+bool KoShapeLayer::hitTest( const QPointF &position ) const
 {
     Q_UNUSED(position);
     return false;
 }
 
-QRectF KoLayerShape::boundingRect() const
+QRectF KoShapeLayer::boundingRect() const
 {
 	QRectF bb;
 
@@ -46,48 +46,48 @@ QRectF KoLayerShape::boundingRect() const
 }
 
 //  ############# LayerMembers #############
-KoLayerShape::LayerMembers::LayerMembers()
+KoShapeLayer::LayerMembers::LayerMembers()
 {
 }
 
-KoLayerShape::LayerMembers::~LayerMembers()
+KoShapeLayer::LayerMembers::~LayerMembers()
 {
 }
 
-void KoLayerShape::LayerMembers::add(KoShape *child)
+void KoShapeLayer::LayerMembers::add(KoShape *child)
 {
     if(m_layerMembers.contains(child))
         return;
     m_layerMembers.append(child);
 }
 
-void KoLayerShape::LayerMembers::remove(KoShape *child)
+void KoShapeLayer::LayerMembers::remove(KoShape *child)
 {
     m_layerMembers.removeAll(child);
 }
 
-int KoLayerShape::LayerMembers::count() const
+int KoShapeLayer::LayerMembers::count() const
 {
     return m_layerMembers.count();
 }
 
-QList<KoShape*> KoLayerShape::LayerMembers::iterator() const
+QList<KoShape*> KoShapeLayer::LayerMembers::iterator() const
 {
     return QList<KoShape*>(m_layerMembers);
 }
 
-void KoLayerShape::LayerMembers::containerChanged(KoShapeContainer *container)
+void KoShapeLayer::LayerMembers::containerChanged(KoShapeContainer *container)
 {
     Q_UNUSED(container);
 }
 
-void KoLayerShape::LayerMembers::setClipping(const KoShape *child, bool clipping)
+void KoShapeLayer::LayerMembers::setClipping(const KoShape *child, bool clipping)
 {
     Q_UNUSED(child);
     Q_UNUSED(clipping);
 }
 
-bool KoLayerShape::LayerMembers::childClipped(const KoShape *child) const
+bool KoShapeLayer::LayerMembers::childClipped(const KoShape *child) const
 {
     Q_UNUSED(child);
     return false;

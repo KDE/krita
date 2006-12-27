@@ -2,16 +2,16 @@
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
@@ -182,11 +182,16 @@ namespace {
 template<class _CSTraits>
 class KoColorSpaceAbstract : public KoColorSpace {
     public:
-        KoColorSpaceAbstract(const QString &id, const QString &name, KoColorSpaceRegistry * parent) : KoColorSpace(id, name, parent) {
+        KoColorSpaceAbstract(const QString &id, const QString &name, KoColorSpaceRegistry * parent, DWORD cmType,
+                         icColorSpaceSignature colorSpaceSignature) : KoColorSpace(id, name, parent), m_cmType(cmType), m_colorSpaceSignature(colorSpaceSignature) {
             this->m_compositeOps.insert( COMPOSITE_COPY, new CompositeCopy( this ) );
             m_mixColorsOp = new KoMixColorsOpImpl< _CSTraits>(this);
             m_convolutionOp = new KoConvolutionOpImpl< _CSTraits>(this);
         };
+        
+        virtual void setColorSpaceType(quint32 type) { m_cmType = type; }
+        virtual quint32 colorSpaceType() const { return m_cmType; }
+        virtual icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }
         
         virtual quint32 colorChannelCount() const { return _CSTraits::channels_nb - 1; }
         virtual quint32 channelCount() const { return _CSTraits::channels_nb; };
@@ -297,6 +302,10 @@ class KoColorSpaceAbstract : public KoColorSpace {
     protected:
         inline const typename _CSTraits::channels_type* nativeArray(const quint8 * a) const { return reinterpret_cast<const typename _CSTraits::channels_type*>(a); }
         inline typename _CSTraits::channels_type* nativeArray(quint8 * a) const { return reinterpret_cast<typename _CSTraits::channels_type*>(a); }
+    private:
+        DWORD m_cmType;                           // The colorspace type as defined by littlecms
+        icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files
+
 };
 
 

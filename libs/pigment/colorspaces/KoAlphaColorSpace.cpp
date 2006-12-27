@@ -10,7 +10,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the Lesser GNU General Public License
  *  along with this program; if not, write to the Free Software
@@ -268,7 +268,7 @@ namespace {
 }
 
 KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceRegistry * parent) :
-        KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"),  parent)
+        KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"),  parent, TYPE_GRAY_8, icSigGrayData )
 {
     m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
     m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver( this ) );

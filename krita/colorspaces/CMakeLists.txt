@@ -6,10 +6,7 @@ MESSAGE(STATUS "Remember to port ycbcr_u16 and ycbcr_u8 and all the rest when Cy
 #add_subdirectory(ycbcr_u16)
 #add_subdirectory(ycbcr_u8)
 
-if(OPENEXR_FOUND)
-    #	add_subdirectory( rgb_f16half )
-endif(OPENEXR_FOUND)
-
+add_subdirectory( rgb_float_hdr )
 add_subdirectory( gray_u8 )
 add_subdirectory( gray_u16 )
 

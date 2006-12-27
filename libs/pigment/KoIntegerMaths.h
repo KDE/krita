@@ -32,8 +32,17 @@
 #define INT16_MAX 32767
 #define INT16_MIN -32768
 
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
+// #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
+template<typename _T_, typename _T2_>
+inline _T_ CLAMP(_T_ x, _T2_ l, _T2_ u)
+{
+    if( x < l)
+        return _T_(l);
+    else if( x > u)
+        return _T_(u);
+    return x;
+}
 
 /// take a and scale it up by 256*b/255
 inline uint UINT8_SCALEBY(uint a, uint b)

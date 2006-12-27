@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=RGB (float 16-bit and 32-bit HDR) Color Model
+Comment=Color model for 16-bit and 32-bit per channel in floating point for High-Dynamic Range RGB images
+ServiceTypes=KOffice/ColorSpace
+Type=Service
+X-KDE-Library=kritargbfloathdrplugin
+X-Pigment-Version=1

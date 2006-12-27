@@ -11,9 +11,9 @@
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
@@ -71,7 +71,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
     protected:
         KoLcmsColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, DWORD cmType,
                          icColorSpaceSignature colorSpaceSignature,
-                         KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name, parent), m_profile( p ), m_cmType( cmType ), m_colorSpaceSignature( colorSpaceSignature )
+                         KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name, parent, cmType, colorSpaceSignature), m_profile( p )
 
         {
             m_qcolordata = 0;
@@ -100,34 +100,30 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             m_lastFromRGB = cmsCreate_sRGBProfile();
 
             m_defaultFromRGB = cmsCreateTransform(m_lastFromRGB, TYPE_BGR_8,
-                    m_profile->profile(), m_cmType,
+                    m_profile->profile(), this->colorSpaceType(),
                     INTENT_PERCEPTUAL, 0);
 
-            m_defaultToRGB =  cmsCreateTransform(m_profile->profile(), m_cmType,
+            m_defaultToRGB =  cmsCreateTransform(m_profile->profile(), this->colorSpaceType(),
                     m_lastFromRGB, TYPE_BGR_8,
                     INTENT_PERCEPTUAL, 0);
 
             m_defaultFromRGB16 = cmsCreateTransform(m_lastFromRGB, TYPE_BGR_16,
-                    m_profile->profile(), m_cmType,
+                    m_profile->profile(), this->colorSpaceType(),
                     INTENT_PERCEPTUAL, 0);
 
-            m_defaultToRGB16 =  cmsCreateTransform(m_profile->profile(), m_cmType,
+            m_defaultToRGB16 =  cmsCreateTransform(m_profile->profile(), this->colorSpaceType(),
                     m_lastFromRGB, TYPE_BGR_16,
                     INTENT_PERCEPTUAL, 0);
 
             cmsHPROFILE hLab  = cmsCreateLabProfile(NULL);
 
-            m_defaultFromLab = cmsCreateTransform(hLab, TYPE_Lab_16, m_profile->profile(), m_cmType,
+            m_defaultFromLab = cmsCreateTransform(hLab, TYPE_Lab_16, m_profile->profile(), this->colorSpaceType(),
                     INTENT_PERCEPTUAL, 0);
 
-            m_defaultToLab = cmsCreateTransform(m_profile->profile(), m_cmType, hLab, TYPE_Lab_16,
+            m_defaultToLab = cmsCreateTransform(m_profile->profile(), this->colorSpaceType(), hLab, TYPE_Lab_16,
                     INTENT_PERCEPTUAL, 0);
         }
     public:
-        void setColorSpaceType(quint32 type) { m_cmType = type; }
-        quint32 colorSpaceType() const { return m_cmType; }
-
-        virtual icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }
         
         virtual bool hasHighDynamicRange() const { return false; }
         virtual KoColorProfile * profile() const { return m_profile; };
@@ -148,7 +144,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             else {
                 if (m_lastFromRGB == 0 || (m_lastFromRGB != 0 && m_lastRGBProfile != profile->profile())) {
                     m_lastFromRGB = cmsCreateTransform(profile->profile(), TYPE_BGR_8,
-                            m_profile->profile(), m_cmType,
+                            m_profile->profile(), this->colorSpaceType(),
                             INTENT_PERCEPTUAL, 0);
                     m_lastRGBProfile = profile->profile();
 
@@ -174,7 +170,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             }
             else {
                 if (m_lastToRGB == 0 || (m_lastToRGB != 0 && m_lastRGBProfile != profile->profile())) {
-                    m_lastToRGB = cmsCreateTransform(m_profile->profile(), m_cmType,
+                    m_lastToRGB = cmsCreateTransform(m_profile->profile(), this->colorSpaceType(),
                             profile->profile(), TYPE_BGR_8,
                             INTENT_PERCEPTUAL, 0);
                     m_lastRGBProfile = profile->profile();
@@ -241,7 +237,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                 quint32 numPixels,
                 qint32 renderingIntent) const
         {
-            if (dstColorSpace->colorSpaceType() == colorSpaceType()
+            if (dstColorSpace->colorSpaceType() == this->colorSpaceType()
                 && dstColorSpace->profile() == profile())
             {
                 if (src!= dst)
@@ -323,7 +319,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
             adj->profiles[0] = m_profile->profile();
             adj->profiles[2] = m_profile->profile();
-            adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
+            adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(), INTENT_PERCEPTUAL, 0);
             adj->csProfile = m_profile->profile();
             return adj;
         }
@@ -382,7 +378,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             // LUT is already on virtual profile
             cmsFreeLUT(Lut);
 
-            adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
+            adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(), INTENT_PERCEPTUAL, 0);
 
             return adj;
         }
@@ -401,11 +397,11 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             }
 
             KoLcmsColorTransformation *adj = new KoLcmsColorTransformation;
-            adj->profiles[0] = cmsCreateLinearizationDeviceLink(colorSpaceSignature(), transferFunctions);
+            adj->profiles[0] = cmsCreateLinearizationDeviceLink(this->colorSpaceSignature(), transferFunctions);
             adj->profiles[1] = NULL;
             adj->profiles[2] = NULL;
             adj->csProfile = m_profile->profile();
-            adj->cmstransform  = cmsCreateTransform(adj->profiles[0], m_cmType, NULL, m_cmType, INTENT_PERCEPTUAL, 0);
+            adj->cmstransform  = cmsCreateTransform(adj->profiles[0], this->colorSpaceType(), NULL, this->colorSpaceType(), INTENT_PERCEPTUAL, 0);
 
             delete [] transferFunctions;
 
@@ -558,7 +554,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
             if (dstColorSpace && dstProfile && srcProfile ) {
                 cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->profile(),
-                        colorSpaceType(),
+                        this->colorSpaceType(),
                         dstProfile->profile(),
                         dstColorSpace->colorSpaceType(),
                         renderingIntent,
@@ -586,9 +582,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         mutable const KoColorSpace *m_lastUsedDstColorSpace;
         mutable cmsHTRANSFORM m_lastUsedTransform;
         
-        DWORD m_cmType;                           // The colorspace type as defined by littlecms
-        icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files
-
     // cmsHTRANSFORM is a void *, so this should work.
         typedef QMap<const KoColorSpace *, cmsHTRANSFORM>  TransformMap;
         mutable TransformMap m_transforms; // Cache for existing transforms

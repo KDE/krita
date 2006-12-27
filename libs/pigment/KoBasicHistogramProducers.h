@@ -9,7 +9,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -25,6 +25,7 @@
 #include <klocale.h>
 
 #include "config.h"
+
 #include "KoColorSpace.h"
 #include "KoID.h"
 #include <koffice_export.h>
@@ -106,6 +107,7 @@ public:
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
+
 
 #ifdef HAVE_OPENEXR
 class PIGMENT_EXPORT KoBasicF16HalfHistogramProducer : public KoBasicHistogramProducer {

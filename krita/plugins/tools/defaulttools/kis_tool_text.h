@@ -22,6 +22,7 @@
 #include "kis_tool_paint.h"
 
 #include "KoToolFactory.h"
+#include <kis_layer_shape.h>
 
 class QFont;
 class QLabel;
@@ -46,7 +47,7 @@ public slots:
     virtual void setFont();
 
 private:
-    
+
     QFont m_font;
     QLabel *m_lbFont;
     KSqueezedTextLabel *m_lbFontName;
@@ -58,10 +59,12 @@ class KisToolTextFactory : public KoToolFactory {
 
 public:
     KisToolTextFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolText", i18n( "Text" ))
+        : KoToolFactory(parent, "KritaFill/KisToolText", i18n( "Text" ))
         {
             setToolTip(i18n("Place a single line of uneditable text on the canvas"));
-            setToolType(TOOL_TYPE_FILL);
+            //setToolType(TOOL_TYPE_FILL);
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setToolType( dynamicToolType() );
             setPriority(0);
             setIcon("tool_text");
         }

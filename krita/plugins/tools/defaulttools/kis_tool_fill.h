@@ -54,7 +54,7 @@ public:
 
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
-    
+
     bool flood(int startX, int startY);
 
     virtual QWidget * createOptionWidget();
@@ -92,10 +92,12 @@ class KisToolFillFactory : public KoToolFactory {
 
 public:
     KisToolFillFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisTooLFill", i18n( "Contiguous Fill" ))
+        : KoToolFactory(parent, "KritaFill/KisTooLFill", i18n( "Contiguous Fill" ))
         {
             setToolTip( i18n( "Fill a contiguous area of color with a color, or fill a selection." ) );
-            setToolType( TOOL_TYPE_FILL );
+            //setToolType( TOOL_TYPE_FILL );
+            setToolType( dynamicToolType() );
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
             setIcon( "color_fill" );
             //setShortcut( QKeySequence( Qt::Key_F ) );
             setPriority( 0 );

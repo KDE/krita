@@ -1429,17 +1429,22 @@ void KisDoc2::slotLayerAdded( KisLayerSP layer )
     // Create a shape around the layer (Bjarne frowns upon promiscuous
     // dynamic casts, though, and I dare say he's right. I still like
     // it better than adding layerId's everywhere.
+    kDebug() << "Is grouplayer?: " << dynamic_cast<KisGroupLayer*>( layer.data() ) << endl;
+    kDebug() << "Is adjustmentlayer?: " << dynamic_cast<KisAdjustmentLayer*>( layer.data() ) << endl;
+    kDebug() << "Is paintlayer?: " << dynamic_cast<KisPaintLayer*>( layer.data() ) << endl;
+    kDebug() << "Is shapelayer?: " << dynamic_cast<KisShapeLayer*>( layer.data() ) << endl;
+
     if ( dynamic_cast<KisGroupLayer*>( layer.data() ) ) {
         shape = new KisLayerContainerShape(parent, layer);
     }
-    else if ( dynamic_cast<KisGroupLayer*>( layer.data() )  || dynamic_cast<KisAdjustmentLayer*>( layer.data() ) ) {
+    else if ( dynamic_cast<KisPaintLayer*>( layer.data() )  || dynamic_cast<KisAdjustmentLayer*>( layer.data() ) ) {
         shape = new KisLayerShape( parent, layer );
     }
     else if ( dynamic_cast<KisShapeLayer*>( layer.data() ) ) {
         shape = dynamic_cast<KisShapeLayer*>( layer.data() );
-        Q_ASSERT( shape );
     }
     // XXX: We don't do part layers anymore
+    Q_ASSERT( shape );
 
     // Put the layer in the right place in the hierarchy
     shape->setParent( parent );

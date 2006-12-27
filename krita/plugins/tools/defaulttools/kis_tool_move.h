@@ -25,7 +25,7 @@
 //#include "kis_tool_non_paint.h"
 #include "KoToolFactory.h"
 #include "kis_tool.h"
-
+#include <kis_layer_shape.h>
 
 class KoCanvasBase;
 
@@ -47,11 +47,11 @@ public:
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
-    
+
     virtual void paint(QPainter& gc, KoViewConverter &converter);
-    
+
 private:
-    
+
     KisStrategyMove m_strategy;
     QPoint m_dragStart;
 };
@@ -61,10 +61,12 @@ class KisToolMoveFactory : public KoToolFactory {
 
 public:
     KisToolMoveFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolMove", i18n( "Move" ))
+        : KoToolFactory(parent, "KritaTransform/KisToolMove", i18n( "Move" ))
         {
             setToolTip(i18n("Move a layer"));
-            setToolType(TOOL_TYPE_TRANSFORM);
+            //setToolType(TOOL_TYPE_TRANSFORM);
+            setToolType( dynamicToolType() );
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
             setPriority(0);
             setIcon("tool_move");
             //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );

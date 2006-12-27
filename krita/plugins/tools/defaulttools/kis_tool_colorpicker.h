@@ -25,7 +25,7 @@
 #include "kis_tool_non_paint.h"
 #include "KoToolFactory.h"
 #include "ui_wdgcolorpicker.h"
-
+#include <kis_layer_shape.h>
 class KisResource;
 class KisPalette;
 
@@ -71,7 +71,7 @@ private:
     KoColor m_pickedColor;
 
     ColorPickerOptionsWidget *m_optionsWidget;
-    
+
     QList<KisPalette*> m_palettes;
 };
 
@@ -79,10 +79,12 @@ class KisToolColorPickerFactory : public KoToolFactory {
 
 public:
     KisToolColorPickerFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolColorPicker", i18n( "Color Picker" ))
+        : KoToolFactory(parent, "KritaSelected/KisToolColorPicker", i18n( "Color Picker" ))
         {
             setToolTip(i18n("Select a color from the image or current layer"));
-            setToolType(TOOL_TYPE_SELECTED);
+            //setToolType(TOOL_TYPE_SELECTED);
+            setToolType( dynamicToolType() );
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
             setPriority(0);
             setIcon("colorpicker");
             setShortcut( QKeySequence( Qt::Key_P ) );

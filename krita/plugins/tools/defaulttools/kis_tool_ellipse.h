@@ -79,10 +79,12 @@ class KisToolEllipseFactory : public KoToolFactory {
 
 public:
     KisToolEllipseFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolEllipse", i18n( "Ellipse" ))
+        : KoToolFactory(parent, "KritaShape/KisToolEllipse", i18n( "Ellipse" ))
         {
             setToolTip( i18n( "Draw an ellipse" ) );
-            setToolType( TOOL_TYPE_SHAPE );
+            //setToolType( TOOL_TYPE_SHAPE );
+            setToolType( dynamicToolType() );
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_ellipse" );
             setPriority( 0 );
         }

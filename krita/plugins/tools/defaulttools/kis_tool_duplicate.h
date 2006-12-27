@@ -23,7 +23,7 @@
 
 #include "kis_tool_freehand.h"
 #include "KoToolFactory.h"
-
+#include <kis_layer_shape.h>
 class KoPointerEvent;
 class KoPointerEvent;
 
@@ -74,10 +74,12 @@ class KisToolDuplicateFactory : public KoToolFactory {
 public:
 
     KisToolDuplicateFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolDuplicate", i18n( "Duplicate Brush" ))
+        : KoToolFactory(parent, "KritaFreehand/KisToolDuplicate", i18n( "Duplicate Brush" ))
         {
             setToolTip( i18n( "Duplicate parts of the image. Shift-click to select the point to duplicate from to begin." ) );
-            setToolType( TOOL_TYPE_FREEHAND );
+            //setToolType( TOOL_TYPE_FREEHAND );
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setToolType( dynamicToolType() );
             setIcon( "tool_duplicate" );
             setPriority( 0 );
         }

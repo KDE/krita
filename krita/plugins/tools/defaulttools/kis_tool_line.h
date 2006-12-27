@@ -81,12 +81,13 @@ class KisToolLineFactory : public KoToolFactory {
 public:
 
     KisToolLineFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolLine", i18n( "Line" ))
+        : KoToolFactory(parent, "KritaShape/KisToolLine", i18n( "Line" ))
         {
             setToolTip(i18n("Draw a line with the current brush"));
             // Temporarily
-            setToolType(TOOL_TYPE_SHAPE);
-            //setToolType( dynamicToolType() );
+            //setToolType(TOOL_TYPE_SHAPE);
+            setToolType( dynamicToolType() );
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
             setPriority(0);
             setIcon("tool_line");
             setActivationShapeID( KIS_LAYER_SHAPE_ID );

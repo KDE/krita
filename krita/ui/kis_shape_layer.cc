@@ -37,7 +37,10 @@ class KisShapeLayer::Private
 {
 public:
     KoViewConverter * converter;
+    QImage cachedImage;
     KisPaintDeviceSP paintDevice;
+    qint32 x;
+    qint32 y;
 };
 
 KisShapeLayer::KisShapeLayer( KoShapeContainer * parent, KoViewConverter * converter, KisImageSP img, const QString &name, quint8 opacity )
@@ -49,6 +52,8 @@ KisShapeLayer::KisShapeLayer( KoShapeContainer * parent, KoViewConverter * conve
     m_d = new Private();
     m_d->paintDevice = new KisPaintDevice( this, img->colorSpace(), name );
     m_d->converter = converter;
+    m_d->x = 0;
+    m_d->y = 0;
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -103,6 +108,7 @@ KisPaintDeviceSP KisShapeLayer::prepareProjection(KisPaintDeviceSP projection, c
 
 bool KisShapeLayer::saveToXML(QDomDocument doc, QDomElement elem)
 {
+    #warning "Implement KisShapeLayer::saveToXML"
     Q_UNUSED(doc);
     Q_UNUSED(elem);
     return false;
@@ -110,37 +116,44 @@ bool KisShapeLayer::saveToXML(QDomDocument doc, QDomElement elem)
 
 KisLayerSP KisShapeLayer::clone() const
 {
+    #warning "Implement KisShapeLayer::clone()"
     return 0;
 }
 
 qint32 KisShapeLayer::x() const
 {
-    return 0;
+    return m_d->x;
 }
 
-void KisShapeLayer::setX(qint32)
+void KisShapeLayer::setX(qint32 x)
 {
+    if ( x == m_d->x ) return;
+    m_d->x = x;
+    setDirty( true );
 }
 
 qint32 KisShapeLayer::y() const
 {
-    return 0;
+    return m_d->y;
 }
 
-void KisShapeLayer::setY(qint32)
+void KisShapeLayer::setY(qint32 y)
 {
+    if ( y == m_d->y ) return;
+    m_d->y = y;
+    setDirty( true );
 }
 
 QRect KisShapeLayer::extent() const
 {
-    // XXX: Use view converter to go from points to pixels
-    return boundingRect().toRect();
+    QRect rc = boundingRect().toRect();
+    return QRect( rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes() );
 }
 
 QRect KisShapeLayer::exactBounds() const
 {
-    // XXX: Use view converter to go from points to pixels
-    return boundingRect().toRect();
+    QRect rc = boundingRect().toRect();
+    return QRect( rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes() );
 }
 
 bool KisShapeLayer::accept(KisLayerVisitor& visitor)

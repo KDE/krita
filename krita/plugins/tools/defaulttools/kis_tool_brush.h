@@ -70,12 +70,12 @@ class KisToolBrushFactory : public KoToolFactory {
 
 public:
     KisToolBrushFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolBrush", i18n( "Paint" ))
+        : KoToolFactory(parent, "KritaShape/KisToolBrush", i18n( "Paint" ))
         {
             setToolTip( i18n( "Paint freely" ) );
             // Temporarily
-            setToolType( TOOL_TYPE_SHAPE );
-            //setToolType( dynamicToolType() );
+            //setToolType( TOOL_TYPE_SHAPE );
+            setToolType( dynamicToolType() );
             setIcon( "tool_freehand" );
             setShortcut( KShortcut( Qt::Key_B ) );
             setPriority( 0 );

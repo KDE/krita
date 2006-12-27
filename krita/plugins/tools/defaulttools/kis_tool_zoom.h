@@ -23,9 +23,10 @@
 
 #include <QTimer>
 
-#include "kis_tool_non_paint.h"
+#include <kis_tool_non_paint.h>
 
-#include "KoToolFactory.h"
+#include <KoToolFactory.h>
+#include <kis_layer_shape.h>
 
 class KisCanvasSubject;
 
@@ -65,7 +66,7 @@ private slots:
     void slotTimer();
 
 private:
-    
+
     QPoint m_startPos;
     QPoint m_endPos;
     bool m_dragging;
@@ -79,10 +80,13 @@ class KisToolZoomFactory : public KoToolFactory {
 
 public:
     KisToolZoomFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent,  "KisToolZoom", i18n( "Zoom tool") )
+        : KoToolFactory(parent,  "KritaView/KisToolZoom", i18n( "Zoom tool") )
         {
             setToolTip( i18n( "Zoom" ) );
-            setToolType( TOOL_TYPE_VIEW );
+            //setToolType( TOOL_TYPE_VIEW );
+            setToolType( dynamicToolType() );
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+
             setIcon( "viewmag" );
             setPriority( 0 );
             setShortcut( QKeySequence( Qt:Key_Z ) );

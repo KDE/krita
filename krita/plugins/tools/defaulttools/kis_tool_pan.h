@@ -23,7 +23,7 @@
 #include "kis_tool_non_paint.h"
 #include "KoToolFactory.h"
 #include <koffice_export.h>
-
+#include <kis_layer_shape.h>
 class KisCanvasSubject;
 class QPointF;
 
@@ -47,7 +47,7 @@ public:
     virtual bool wantsAutoScroll() const { return false; }
 
 private:
-    
+
     QPointF m_dragPos;
     qint32 m_origScrollX;
     qint32 m_origScrollY;
@@ -60,10 +60,12 @@ class KisToolPanFactory : public KoToolFactory {
 
 public:
     KisToolPanFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolPan", i18n( "Pan" ))
+        : KoToolFactory(parent, "KritaView/KisToolPan", i18n( "Pan" ))
         {
             setToolTip( i18n( "Pan the current view" ) );
-            setToolType( TOOL_TYPE_VIEW );
+            //setToolType( TOOL_TYPE_VIEW );
+            setToolType( dynamicToolType() );
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_pan" );
             setPriority( 0 );
             setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_H ) );

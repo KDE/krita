@@ -54,7 +54,7 @@ public:
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
-    
+
     virtual void paint();
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);
@@ -76,7 +76,7 @@ protected:
     QRect m_final_lines;
 
     bool m_dragging;
-    
+
     KisPainter *m_painter;
 
     //KisImageSP m_currentImage;
@@ -86,12 +86,13 @@ class KisToolRectangleFactory : public KoToolFactory {
 
 public:
     KisToolRectangleFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolRectangle", i18n( "Rectangle" ))
+        : KoToolFactory(parent, "KritaShape/KisToolRectangle", i18n( "Rectangle" ))
         {
             setToolTip( i18n( "Draw a rectangle" ) );
             // Temporarily
-            setToolType( TOOL_TYPE_SHAPE );
-            //setToolType( dynamicToolType() );
+            //setToolType( TOOL_TYPE_SHAPE );
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setToolType( dynamicToolType() );
             setIcon( "tool_rectangle" );
             //setShortcut( Qt::Key_F6 );
             setPriority( 0 );

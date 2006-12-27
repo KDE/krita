@@ -101,10 +101,11 @@ class KisToolGradientFactory : public KoToolFactory {
 
 public:
     KisToolGradientFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolGradient", i18n( "Gradient" ))
+        : KoToolFactory(parent, "KritaFill/KisToolGradient", i18n( "Gradient" ))
         {
             setToolTip( i18n( "Draw a gradient." ) );
-            setToolType( TOOL_TYPE_FILL );
+            //setToolType( TOOL_TYPE_FILL );
+            setToolType( dynamicToolType() );
             setIcon( "tool_gradient" );
             setShortcut( KShortcut( Qt::Key_G ) );
             setPriority( 0 );

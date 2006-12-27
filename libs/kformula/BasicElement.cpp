@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 
 #include "BasicElement.h"
 #include "FormulaCursor.h"
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
 #include <kdebug.h>
@@ -197,26 +199,22 @@ void BasicElement::moveEnd( FormulaCursor* cursor )
     parentElement()->moveEnd( cursor );
 }
 
-void BasicElement::readMathML( const QDomElement& element )
+void BasicElement::readMathML( const KoXmlElement& element )
 {
     readMathMLAttributes( element );
-
-    QDomNode node = element.firstChild();
+    KoXmlNode node = element.firstChild();
     readMathMLContent( node );
 }
 
-void BasicElement::readMathMLAttributes( const QDomElement& element )
+void BasicElement::readMathMLAttributes( const KoXmlElement& element )
 {
-    QDomAttr attribute;
-    int attributeCount = element.attributes().count();
-    for( int i = 0; i < attributeCount; i++ )
-    {
-	 attribute = element.attributes().item( i ).toAttr();
-         m_attributes.insert( attribute.name(), attribute.value() );
+    QStringList attributeList = KoXml::attributeNames( element );
+    foreach( QString attributeName, attributeList ) {
+        m_attributes.insert( attributeName, element.attribute( attributeName ) );
     }
 }
 
-int BasicElement::readMathMLContent( QDomNode &node )
+int BasicElement::readMathMLContent( KoXmlNode &node )
 {
     return 1;
 }

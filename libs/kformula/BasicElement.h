@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +31,8 @@
 #include <QList>
 #include <QDomElement>
 #include <QDomDocument>
+
+#include <KoXmlReader.h>
 
 #include "contextstyle.h"
 #include "kformuladefs.h"
@@ -203,7 +206,7 @@ public:
     QString inheritAttribute( const QString& attribute ) const;
     
     /// Read the element from MathML
-    virtual void readMathML( const QDomElement& element );
+    virtual void readMathML( const KoXmlElement& element );
 
     /// Save the element to MathML 
     virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const ;
@@ -350,9 +353,9 @@ public:
 
 protected:
     /// Read all attributes loaded and add them to the m_attributes map 
-    void readMathMLAttributes( const QDomElement& element );
+    void readMathMLAttributes( const KoXmlElement& element );
 
-    virtual int readMathMLContent( QDomNode& node );
+    virtual int readMathMLContent( KoXmlNode& node );
 
     /// Write all attributes of m_attributes to @p writer
     void writeMathMLAttributes( KoXmlWriter* writer ) const ;

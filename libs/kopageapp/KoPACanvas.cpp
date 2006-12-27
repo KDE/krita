@@ -47,6 +47,8 @@ KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
 
 KoPACanvas::~KoPACanvas()
 {
+    delete m_toolProxy;
+    delete m_shapeManager;
 }
 
 void KoPACanvas::updateSize()

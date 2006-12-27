@@ -22,6 +22,7 @@
 #include "kis_rgb_float_hdr_colorspace.h"
 
 #include <half.h>
+#include <koffice_export.h>
 
 struct RgbF16Traits {
     typedef half channels_type;
@@ -32,7 +33,7 @@ struct RgbF16Traits {
     static const qint32 blue = 0;
 };
 
-class KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
+class KRITAGRAYSCALE_EXPORT KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
 {
     public:
         KisRgbF16HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
@@ -47,7 +48,7 @@ class KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
 // FIXME: lcms doesn't support 16-bit float
 #define RGBAF16HALF_LCMS_TYPE TYPE_BGRA_16
 
-class KisRgbF16HDRColorSpaceFactory : public KoColorSpaceFactory
+class KRITAGRAYSCALE_EXPORT KisRgbF16HDRColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**

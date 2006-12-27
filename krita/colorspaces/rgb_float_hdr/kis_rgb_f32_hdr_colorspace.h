@@ -20,6 +20,7 @@
 
 #include "klocale.h"
 #include "kis_rgb_float_hdr_colorspace.h"
+#include <koffice_export.h>
 
 struct RgbF32Traits {
     typedef float channels_type;
@@ -30,7 +31,7 @@ struct RgbF32Traits {
     static const qint32 blue = 0;
 };
 
-class KisRgbF32HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF32Traits>
+class KRITAGRAYSCALE_EXPORT KisRgbF32HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF32Traits>
 {
     public:
         KisRgbF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
@@ -45,7 +46,7 @@ class KisRgbF32HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF32Traits>
 // FIXME: lcms doesn't support 32-bit float
 #define RGBAF32FLOAT_LCMS_TYPE TYPE_BGRA_16
 
-class KisRgbF32HDRColorSpaceFactory : public KoColorSpaceFactory
+class KRITAGRAYSCALE_EXPORT KisRgbF32HDRColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**

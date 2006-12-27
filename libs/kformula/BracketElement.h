@@ -63,7 +63,10 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& style,  ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
+    virtual void calcSizes( const ContextStyle& context,
+                            ContextStyle::TextStyle tstyle,
+                            ContextStyle::IndexStyle istyle,
+                            StyleAttributes& style );
 
     /**
      * Draws the whole element including its children.
@@ -74,15 +77,17 @@ public:
                        const ContextStyle& style,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
-
-    void readMathML( const QDomElement& element );
-    
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
 protected:
     
     //Save/load support
+    virtual void readMathMLContent( const KoXmlElement& element );
+    
+    virtual void writeMathMLContent( KoXmlWriter* writer, bool oasisFormat = false );
+
+    virtual QString getElementName() const { return "mfenced"; }
 
     /**
      * Returns the tag name of this element type.
@@ -105,6 +110,19 @@ private:
      QString latexString(char);
 
     /**
+     * Set left and right types in operator fences
+     * @param open if true set SymbolType for open (left) bracket, 
+     * otherwise set for close (right) bracket.
+     */
+    bool operatorType( QDomNode& node, bool open );
+
+    /**
+     * Search through the nodes to find the close operator to match current
+     * open bracket.
+     */
+    int searchOperator( const QDomNode& node );
+
+    /**
      * The brackets we are showing.
      */
     Artwork* left;
@@ -112,6 +130,11 @@ private:
 
     SymbolType leftType;
     SymbolType rightType;
+
+    QString m_separators;
+    bool m_operator;
+    bool m_customLeft;
+    bool m_customRight;
 };
 
 } // namespace KFormula

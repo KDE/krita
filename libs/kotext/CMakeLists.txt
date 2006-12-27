@@ -36,7 +36,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     #KoAutoFormat.cpp 
     #KoAutoFormatDia.cpp 
     #KoParagDia.cpp 
-    #KoVariable.cpp 
+    KoVariable.cpp 
     #KoCustomVariablesDia.cpp 
     #KoChangeCaseDia.cpp 
     #KoStyleDialog.cpp 

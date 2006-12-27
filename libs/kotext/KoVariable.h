@@ -16,28 +16,32 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOINLINEOBJECTBASE_H
-#define KOINLINEOBJECTBASE_H
+
+// KOffice libs
+#include <KoInlineObjectBase.h>
+#include <koffice_export.h>
+
+// Qt + kde
 #include <QHash>
 #include <QTextDocument>
-#include <QTextCharFormat>
 #include <QTextInlineObject>
 
-class KoInlineObjectBase {
+class KOTEXT_EXPORT KoVariable : public KoInlineObjectBase {
 public:
-    KoInlineObjectBase() : m_id(-1) {}
-    virtual ~KoInlineObjectBase() {}
+    KoVariable(const QString &value = QString() );
+    ~KoVariable() {}
 
-    virtual void updatePosition(const QTextDocument &document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format) = 0;
-    virtual void resize(const QTextDocument &document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) = 0;
-    virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument &document,
-            const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) = 0;
+    void setValue(const QString &value);
 
-    int id() const { return m_id; }
-    void setId(int id) { m_id = id; }
 private:
-    int m_id;
+    void updatePosition(const QTextDocument &document, QTextInlineObject object,
+            int posInDocument, const QTextCharFormat &format);
+    void resize(const QTextDocument &document, QTextInlineObject object,
+            int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument &document,
+            const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
+
+private:
+    QString m_value;
+    bool m_modified;
 };
-#endif

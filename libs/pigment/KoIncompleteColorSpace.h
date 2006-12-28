@@ -32,6 +32,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         KoIncompleteColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, quint32 type,
                          icColorSpaceSignature colorSpaceSignature) : KoColorSpaceAbstract<_CSTraits>(id, name, parent, type, colorSpaceSignature), m_fallBackColorSpace(_fallback_::createColorSpace())
         {
+            m_qcolordata = new quint16[4];
         }
         virtual ~KoIncompleteColorSpace()
         {
@@ -44,18 +45,36 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         
         virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile=0) const
         {
+            Q_UNUSED(profile);
+            m_qcolordata[3] = 0xFFFF;
+            m_qcolordata[2] = KoColorSpaceMaths<quint8,quint16>::scaleToA( color.red() );
+            m_qcolordata[1] = KoColorSpaceMaths<quint8,quint16>::scaleToA( color.green() );
+            m_qcolordata[0] = KoColorSpaceMaths<quint8,quint16>::scaleToA( color.blue() );
+            this->fromRgbA16((const quint8*)m_qcolordata, dst, 1);
         }
 
         virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, KoColorProfile * profile=0) const
         {
+            Q_UNUSED(profile);
+            this->fromQColor(color, dst, profile);
+            this->setAlpha(dst, opacity, 1);
         }
 
         virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile =0) const
         {
+            Q_UNUSED(profile);
+            this->toRgbA16(src, (quint8*)m_qcolordata, 1);
+            c->setRgb(
+                KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[2]),
+                KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[1]),
+                KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[0]) );
         }
 
         virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile =0) const
         {
+            Q_UNUSED(profile);
+            this->toQColor( src, c, profile);
+            *opacity = this->alpha(src);
         }
         virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                 KoColorProfile *dstProfile,
@@ -114,8 +133,9 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         }
 
     private:
-      KoColorSpace* m_fallBackColorSpace;
-      quint32 m_cmType;
+        mutable quint16 * m_qcolordata; // A small buffer for conversion from and to qcolor.
+        KoColorSpace* m_fallBackColorSpace;
+        quint32 m_cmType;
 };
 
 #endif

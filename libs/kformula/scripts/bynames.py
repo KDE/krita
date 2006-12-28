@@ -78,7 +78,7 @@ KFORMULA_NAMESPACE_END
 
 def write_cc( fr, fw ):
 	print >> fw, '''
-#include "entities.h"
+#include "Entities.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -140,11 +140,11 @@ def parse( fr, fw ):
 	fd_list.close()
 	
 if __name__ == '__main__':
-	fh = open( '../entities.h', 'w' )
+	fh = open( '../Entities.h', 'w' )
 	write_header( fh )
 	write_h( fh )
 	fh.close()
-	fcc = open( '../entities.cc', 'w' )
+	fcc = open( '../Entities.cpp', 'w' )
 	write_header( fcc )
 	fr = open( sys.argv[1] )
 	write_cc( fr , fcc )

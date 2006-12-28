@@ -123,7 +123,7 @@ KFORMULA_NAMESPACE_END
 
 def write_cc( fr, fw ):
 	print >> fw, '''
-#include "operatordictionary.h"
+#include "OperatorDictionary.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -243,11 +243,11 @@ def parse( fr, fw, entities ):
 		print >> fw, ',\n'
 
 if __name__ == '__main__':
-	fh = open( '../operatordictionary.h', 'w' )
+	fh = open( '../OperatorDictionary.h', 'w' )
 	write_header( fh )
 	write_h( fh )
 	fh.close()
-	fcc = codecs.open( '../operatordictionary.cc', 'w', 'utf-8' )
+	fcc = codecs.open( '../OperatorDictionary.cpp', 'w', 'utf-8' )
 	write_header( fcc )
 	fr = open( sys.argv[1] )
 	write_cc( fr , fcc )

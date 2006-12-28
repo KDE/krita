@@ -37,7 +37,8 @@ set(kformulalib_LIB_SRCS
 #   NumberElement.cpp
 #   IdentifierElement.cpp
 #   OperatorElement.cpp
-#   OperatorDictionary.cpp
+   OperatorDictionary.cpp
+   Entities.cpp
 #   ElementFactory.cpp 
 #   kformulacommand.cc 
 #   MatrixDialog.cc 

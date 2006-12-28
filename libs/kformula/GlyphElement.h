@@ -51,11 +51,11 @@ public:
                        const LuPixelPoint& parentOrigin );
 
 protected:
-    virtual bool readAttributesFromMathMLDom( const QDomElement &element );
+//    virtual bool readAttributesFromMathMLDom( const QDomElement &element );
 
 private:
     virtual QString getElementName() const { return "mglyph"; }
-    virtual void writeMathMLAttributes( QDomElement& element ) const ;
+//    virtual void writeMathMLAttributes( QDomElement& element ) const ;
 
     QChar m_char;         // Char to be shown
     QString m_fontFamily; // Font family to use

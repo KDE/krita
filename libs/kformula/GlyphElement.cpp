@@ -28,6 +28,7 @@ namespace KFormula {
 GlyphElement::GlyphElement( BasicElement* parent ) : TextElement( ' ', false, parent ) {
 }
 
+/*
 bool GlyphElement::readAttributesFromMathMLDom( const QDomElement& element )
 {
     if ( !BasicElement::readAttributesFromMathMLDom( element ) ) {
@@ -65,6 +66,7 @@ bool GlyphElement::readAttributesFromMathMLDom( const QDomElement& element )
 
     return true;
 }
+*/
 
 
 /**
@@ -148,12 +150,14 @@ void GlyphElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                       context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
                       text );
 }
-    
+
+/*    
 void GlyphElement::writeMathMLAttributes( QDomElement& element ) const
 {
     element.setAttribute( "fontfamily", m_fontFamily );
     element.setAttribute( "index", m_char.unicode() );
     element.setAttribute( "alt", m_alt );
 }
+*/
 
 } // namespace KFormula

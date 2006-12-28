@@ -31,8 +31,9 @@ KoShapeCreateCommand::KoShapeCreateCommand( KoShapeControllerBase *controller, K
 : QUndoCommand( parent )
 , m_controller( controller )
 , m_shape( shape )
+, m_shapeParent( shape->parent() )
 , m_deleteShape( true )
-, m_addRemoveData( 0 )                       
+, m_addRemoveData( 0 )
 {
     if ( addRemoveData )
         m_addRemoveData = addRemoveData->clone();
@@ -49,6 +50,8 @@ KoShapeCreateCommand::~KoShapeCreateCommand() {
 void KoShapeCreateCommand::redo () {
     Q_ASSERT(m_shape);
     Q_ASSERT(m_controller);
+    if( m_shapeParent )
+        m_shapeParent->addChild( m_shape );
     recurse(m_shape, Add);
     m_deleteShape = false;
 }
@@ -56,6 +59,8 @@ void KoShapeCreateCommand::redo () {
 void KoShapeCreateCommand::undo () {
     Q_ASSERT(m_shape);
     Q_ASSERT(m_controller);
+    if( m_shapeParent )
+        m_shapeParent->removeChild( m_shape );
     recurse(m_shape, Remove);
     m_deleteShape = true;
 }

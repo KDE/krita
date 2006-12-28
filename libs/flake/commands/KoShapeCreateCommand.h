@@ -24,6 +24,7 @@
 #include <QUndoCommand>
 
 class KoShape;
+class KoShapeContainer;
 class KoShapeControllerBase;
 class KoShapeAddRemoveData;
 
@@ -50,6 +51,7 @@ private:
 
     KoShapeControllerBase *m_controller;
     KoShape *m_shape;
+    KoShapeContainer *m_shapeParent;
     bool m_deleteShape;
     KoShapeAddRemoveData * m_addRemoveData;
 };

@@ -23,6 +23,7 @@
 #include "KoShapeControllerBase.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
+#include "KoShapeLayer.h"
 #include "commands/KoShapeCreateCommand.h"
 #include "commands/KoShapeDeleteCommand.h"
 #include "KoCanvasBase.h"
@@ -91,6 +92,11 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape )
         }
     }
     delete dialog;
+    // set the active layer as parent if there is not yet a parent.
+    if ( !shape->parent() )
+    {
+        shape->setParent( m_canvas->shapeManager()->selection()->activeLayer() );
+    }
     
     KoShapeCreateCommand *cmd = new KoShapeCreateCommand( m_shapeController, shape, m_canvas->addRemoveData() );
     return cmd;

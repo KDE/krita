@@ -36,7 +36,7 @@ KoCreatePathTool::KoCreatePathTool( KoCanvasBase * canvas )
 , m_shape( 0 )
 , m_activePoint( 0 )    
 , m_firstPoint( 0 )
-, m_handleRadius( 2 )    
+, m_handleRadius( 3 )    
 {
 }
 
@@ -66,12 +66,13 @@ void KoCreatePathTool::paint( QPainter &painter, KoViewConverter &converter )
         painter.setBrush( Qt::white ); //TODO make configurable
         painter.setPen( Qt::blue );
 
-        m_firstPoint->paint( painter, handleRect( QPointF( 0, 0 ) ).size(), KoPathPoint::Node );
+        QRectF handle = converter.viewToDocument( handleRect( QPoint(0,0) ) );
+        m_firstPoint->paint( painter, handle.size(), KoPathPoint::Node );
 
         if ( m_activePoint->activeControlPoint1() || m_activePoint->activeControlPoint2() )
         {
             //TODO use the same handle size as configured in the PathTool
-            m_activePoint->paint( painter, handleRect( QPointF( 0, 0 ) ).size(), 
+            m_activePoint->paint( painter, handle.size(), 
                                   KoPathPoint::ControlPoint1 | KoPathPoint::ControlPoint2, 
                                   !m_activePoint->activeControlPoint1() );
         }

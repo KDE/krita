@@ -54,14 +54,16 @@ public:
     const QString &value() const { return m_value; }
 
 private:
-    void updatePosition(const QTextDocument &document, QTextInlineObject object,
+    void updatePosition(const QTextDocument *document, QTextInlineObject object,
             int posInDocument, const QTextCharFormat &format);
-    void resize(const QTextDocument &document, QTextInlineObject object,
+    void resize(const QTextDocument *document, QTextInlineObject object,
             int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
-    void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument &document,
+    void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
             const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
     QString m_value;
     bool m_modified;
+    const QTextDocument *m_document;
+    int m_lastPositionInDocument;
 };

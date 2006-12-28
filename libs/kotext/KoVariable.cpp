@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoVariable.h"
+#include "KoTextDocumentLayout.h"
 
 #include <QTextCursor>
 #include <QPainter>
@@ -25,6 +26,8 @@
 #include <QTextInlineObject>
 
 KoVariable::KoVariable() : m_modified(true) {
+    m_document = 0;
+    m_lastPositionInDocument = -1;
 }
 
 void KoVariable::setValue(const QString &value) {
@@ -32,17 +35,22 @@ void KoVariable::setValue(const QString &value) {
         return;
     m_value = value;
     m_modified = true;
+    if(m_document) {
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_document->documentLayout());
+        if(lay)
+            lay->documentChanged(m_lastPositionInDocument, 0, 0);
+    }
 }
 
-void KoVariable::updatePosition(const QTextDocument &document, QTextInlineObject object, int posInDocument, const QTextCharFormat & format ) {
-    Q_UNUSED(document);
-    Q_UNUSED(posInDocument);
+void KoVariable::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat & format ) {
+    m_document = document;
+    m_lastPositionInDocument = posInDocument;
     Q_UNUSED(object);
     Q_UNUSED(format);
     // Variables are always 'in place' so the position is 100% defined by the text layout.
 }
 
-void KoVariable::resize(const QTextDocument &document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) {
+void KoVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
     if(m_modified == false)
@@ -55,7 +63,7 @@ void KoVariable::resize(const QTextDocument &document, QTextInlineObject object,
     m_modified = true;
 }
 
-void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument &document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) {
+void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) {
     Q_UNUSED(document);
     Q_UNUSED(object);
     Q_UNUSED(posInDocument);

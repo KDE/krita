@@ -47,7 +47,7 @@ public:
      * @param posInDocument the character position in the document (param document) this inline object is at.
      * @param format the character format for the inline object.
      */
-    virtual void updatePosition(const QTextDocument &document, QTextInlineObject object,
+    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
             int posInDocument, const QTextCharFormat &format) = 0;
 
     /**
@@ -63,7 +63,7 @@ public:
      * @param pd the postscript-paintdevice that all text is rendered on. Use this for QFont and related
      *  classes so the inline object can be reused on any paintdevice.
      */
-    virtual void resize(const QTextDocument &document, QTextInlineObject object,
+    virtual void resize(const QTextDocument *document, QTextInlineObject object,
             int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) = 0;
 
     /**
@@ -79,7 +79,7 @@ public:
      * @param rect the rectangle inside which the variable can paint itself.  Painting outside the rect
      *    will give varous problems with regards to repainting issues.
      */
-    virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument &document,
+    virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
             const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) = 0;
 
     /// return the inline-object Id that is assigned for this object.

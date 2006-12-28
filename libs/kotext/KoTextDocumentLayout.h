@@ -132,6 +132,9 @@ public:
 
     };
 
+    /// reimplemented from QAbstractTextDocumentLayout
+    void documentChanged(int position, int charsRemoved, int charsAdded);
+
 protected:
     LayoutState *m_state;
 
@@ -139,9 +142,6 @@ private slots:
     void relayout();
 
 private:
-    /// reimplemented
-    void documentChanged(int position, int charsRemoved, int charsAdded);
-
     /// reimplemented
     void drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format);
     /// reimplemented

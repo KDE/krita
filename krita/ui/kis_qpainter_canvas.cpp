@@ -29,18 +29,20 @@
 #include <kdebug.h>
 
 #include <KoColorProfile.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 
-#include <KoToolProxy.h>
 #include <KoToolManager.h>
+#include <KoToolProxy.h>
 
-#include <kis_meta_registry.h>
 #include <kis_image.h>
 #include <kis_layer.h>
+#include <kis_meta_registry.h>
 
 #include "kis_config.h"
 #include "kis_canvas2.h"
+#include "kis_resource_provider.h"
+#include "kis_view2.h"
 
 #define PATTERN_WIDTH 256
 #define PATTERN_HEIGHT 256
@@ -122,7 +124,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
                             imagerect.right()*pppx,imagerect.bottom()*pppy);
 
             QImage image = img->convertToQImage(imagerect.toRect(), pppx/sx, pppy/sy, 
-                        m_canvas->monitorProfile());
+                        m_canvas->monitorProfile(), m_canvas->view()->resourceProvider()->HDRExposure());
 
             gc.drawImage(imagerect.topLeft(), image, image.rect());
             ++it;
@@ -150,7 +152,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
                                 static_cast<qint32>(imagerect.height()),
                                 gc,
                                 m_canvas->monitorProfile(),
-                                0);
+                                m_canvas->view()->resourceProvider()->HDRExposure());
             ++it;
         }
     }

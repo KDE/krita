@@ -97,6 +97,11 @@ KisCanvas2::~KisCanvas2()
     delete m_d;
 }
 
+KisView2* KisCanvas2::view()
+{
+    return m_d->view;
+}
+
 void KisCanvas2::gridSize(double *horizontal, double *vertical) const
 {
     Q_UNUSED( horizontal );

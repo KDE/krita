@@ -98,7 +98,7 @@ public: // KisCanvas2 methods
     void setCanvasSize(int w, int h);
 
     KisImageSP image();
-
+    KisView2* view();
 public slots:
 
     /// Update the entire canvas area

@@ -132,11 +132,12 @@ public:
 
     };
 
-    /// reimplemented from QAbstractTextDocumentLayout
-    void documentChanged(int position, int charsRemoved, int charsAdded);
-
 protected:
     LayoutState *m_state;
+
+    friend class KoVariable;
+    /// reimplemented from QAbstractTextDocumentLayout
+    void documentChanged(int position, int charsRemoved, int charsAdded);
 
 private slots:
     void relayout();

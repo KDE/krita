@@ -26,7 +26,7 @@ KoInlineTextObjectManager::KoInlineTextObjectManager()
 {
 }
 
-KoInlineObjectBase *KoInlineTextObjectManager::inlineTextObject(const QTextFormat &format) const {
+KoInlineObjectBase *KoInlineTextObjectManager::inlineTextObject(const QTextCharFormat &format) const {
     int id = format.intProperty(InlineInstanceId);
     if(id <= 0)
         return 0;

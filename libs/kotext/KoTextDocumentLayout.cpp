@@ -684,27 +684,30 @@ void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rec
     Q_ASSERT(format.isCharFormat());
     if(m_inlineTextObjectManager == 0)
         return;
-    KoInlineObjectBase *obj = m_inlineTextObjectManager->inlineTextObject(format);
+    QTextCharFormat cf = format.toCharFormat();
+    KoInlineObjectBase *obj = m_inlineTextObjectManager->inlineTextObject(cf);
     if(obj)
-        obj->paint(*painter, paintDevice(), *document(), rect, object, position, format.toCharFormat());
+        obj->paint(*painter, paintDevice(), *document(), rect, object, position, cf);
 }
 
 void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format) {
     Q_ASSERT(format.isCharFormat());
     if(m_inlineTextObjectManager == 0)
         return;
-    KoInlineObjectBase *obj = m_inlineTextObjectManager->inlineTextObject(format);
+    QTextCharFormat cf = format.toCharFormat();
+    KoInlineObjectBase *obj = m_inlineTextObjectManager->inlineTextObject(cf);
     if(obj)
-        obj->updatePosition(*document(), item, position, format.toCharFormat());
+        obj->updatePosition(*document(), item, position, cf);
 }
 
 void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format) {
     Q_ASSERT(format.isCharFormat());
     if(m_inlineTextObjectManager == 0)
         return;
-    KoInlineObjectBase *obj = m_inlineTextObjectManager->inlineTextObject(format);
+    QTextCharFormat cf = format.toCharFormat();
+    KoInlineObjectBase *obj = m_inlineTextObjectManager->inlineTextObject(cf);
     if(obj)
-        obj->resize(*document(), item, position, format.toCharFormat(), paintDevice());
+        obj->resize(*document(), item, position, cf, paintDevice());
 }
 
 void KoTextDocumentLayout::scheduleLayout() {

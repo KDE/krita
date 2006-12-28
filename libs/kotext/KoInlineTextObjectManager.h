@@ -20,28 +20,51 @@
 #define KOINLINEOBJECTMANAGER_H
 
 // KOffice libs
-#include <KoInlineObjectBase.h>
+#include "KoInlineObjectBase.h"
 #include <koffice_export.h>
 
 // Qt + kde
 #include <QHash>
-#include <QTextDocument>
-#include <QTextFormat>
-#include <QTextInlineObject>
+#include <QTextCharFormat>
 
+/**
+ * A container to register all the inlineTextObjects with.
+ * Inserting an inline-object in a QTextDocument should be done via this manager which will
+ * insert a placeholder in the text and if you add the KoInlineTextObjectManager to the
+ * KoTextDocumentLayout for that specific textDocument, your inline text object will get painted
+ * properly.
+ */
 class KOTEXT_EXPORT KoInlineTextObjectManager {
 // TODO, when to delete the inlineObject s
 public:
+     /// Constructor
     KoInlineTextObjectManager();
 
-    KoInlineObjectBase *inlineTextObject(const QTextFormat &format) const;
+    /**
+     * Retrieve a formerly added inline object based on the format.
+     * @param format the textCharFormat 
+     */
+    KoInlineObjectBase *inlineTextObject(const QTextCharFormat &format) const;
+    /**
+     * Retrieve a formerly added inline object based on the cursor position.
+     * @param cursor the cursor which position is used. The anchor is ignored.
+     */
     KoInlineObjectBase *inlineTextObject(const QTextCursor &cursor) const;
 
+    /**
+     * Insert a new inline object into the manager as well as the document.
+     * This method will cause a placeholder to be inserted into the text at cursor position,
+     *  possibly replacing a selection.  The object will then be used as an inline
+     * character and painted at the specified location in the text.
+     * @param cursor the cursor which indicated the document and the position in that document
+     *      where the inline object will be inserted.
+     * @param object the inline object to insert.
+     */
     void insertInlineObject(QTextCursor &cursor, KoInlineObjectBase *object);
 
 private:
     enum Properties {
-        InlineInstanceId = QTextFormat::UserProperty+7001
+        InlineInstanceId = 577297549
     };
 
     QHash<int, KoInlineObjectBase*> m_objects;

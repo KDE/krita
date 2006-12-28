@@ -21,6 +21,8 @@
 #include <QTextCursor>
 #include <QPainter>
 #include <QFontMetricsF>
+#include <QTextDocument>
+#include <QTextInlineObject>
 
 KoVariable::KoVariable(const QString &value )
     : m_value(value),
@@ -61,6 +63,7 @@ void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument 
     Q_UNUSED(object);
     Q_UNUSED(posInDocument);
 
+    // TODO set all the font properties from the format (color etc)
     QFont font(format.font(), pd);
     QTextLayout layout(m_value, font, pd);
     layout.setCacheEnabled(true);
@@ -73,6 +76,7 @@ void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument 
     layout.setAdditionalFormats(layouts);
 
     QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
+    option.setTextDirection(object.textDirection());
     layout.setTextOption(option);
     layout.beginLayout();
     layout.createLine();

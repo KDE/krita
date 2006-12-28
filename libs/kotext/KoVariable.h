@@ -18,20 +18,40 @@
  */
 
 // KOffice libs
-#include <KoInlineObjectBase.h>
+#include "KoInlineObjectBase.h"
 #include <koffice_export.h>
 
 // Qt + kde
 #include <QHash>
-#include <QTextDocument>
-#include <QTextInlineObject>
+#include <QString>
 
+class QTextInlineObject;
+class QTextDocument;
+
+/**
+ * Base class for in-text variables.
+ * A variable is a field inserted into the text and the content is set to a specific value that
+ * is used as text.  This class is pretty boring in that it has just a setValue() to alter the
+ * text shown; we depend on plugin writers to create more exciting ways to update variables.
+ */
 class KOTEXT_EXPORT KoVariable : public KoInlineObjectBase {
 public:
+    /**
+     * Constructor.
+     * @param value the initial value this variable shows.
+     */
     KoVariable(const QString &value = QString() );
-    ~KoVariable() {}
+    virtual ~KoVariable() {}
 
+    /**
+     * The new value this variable will show.
+     * Will be used at the next repaint.
+     * @param value the new value this variable shows.
+     */
     void setValue(const QString &value);
+
+    /// @return the current value of this variable.
+    const QString &value() const { return m_value; }
 
 private:
     void updatePosition(const QTextDocument &document, QTextInlineObject object,

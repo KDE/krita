@@ -24,10 +24,7 @@
 #include <QTextDocument>
 #include <QTextInlineObject>
 
-KoVariable::KoVariable(const QString &value )
-    : m_value(value),
-    m_modified(true)
-{
+KoVariable::KoVariable() : m_modified(true) {
 }
 
 void KoVariable::setValue(const QString &value) {

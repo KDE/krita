@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=Text Variables
+ServiceTypes=KOffice/Text-Variables
+Type=Service
+X-KoText-Version=1
+X-KDE-Library=textvariables

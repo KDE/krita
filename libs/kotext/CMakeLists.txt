@@ -5,6 +5,7 @@ include_directories( ${KOFFICEUI_INCLUDES} )
 add_subdirectory( kohyphen ) 
 add_subdirectory( tests ) 
 add_subdirectory( styles/tests )
+add_subdirectory( variables )
 
 
 # Need by kohyphen
@@ -73,6 +74,8 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoTextBlockBorderData.cpp
     KoTextDocumentLayout.cpp
     KoInlineTextObjectManager.cpp
+    KoVariableFactory.cpp
+    KoVariableRegistry.cpp
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
     styles/KoParagraphStyle.cpp
@@ -127,4 +130,4 @@ install(TARGETS kotext2  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES textshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-
+install( FILES textvariable.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})

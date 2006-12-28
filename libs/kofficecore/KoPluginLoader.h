@@ -27,12 +27,38 @@
 
 /**
  * The pluginloader singleton is responsible for loading the plugins
- * that it's asked to load. It keeps track of which servicetypes it 
- * has seen and doesn't reload them. The plugins need to inherit KoPlugin,
- * which is just a QObject with a default constructor. Inside the default
- * constructor you can create whatever object you want and add it to 
+ * that it's asked to load. It keeps track of which servicetypes it
+ * has seen and doesn't reload them. The plugins need to inherit
+ * a QObject with a default constructor. Inside the default
+ * constructor you can create whatever object you want and add it to
  * whatever registry you prefer. After having been constructed, your plugin
- * will be deleted, so do all you need in the constructor.
+ * will be deleted, so do all you need in the constructor.  Things like
+ * adding a factory to a registry make sense there.
+ * Example header file;
+@code
+#include <QObject>
+
+class MyPlugin : public QObject {
+    Q_OBJECT
+public:
+    MyPlugin(QObject *parent, const QStringList & );
+    ~MyPlugin() {}
+};
+@endcode
+ * Example cpp file;
+@code
+#include "MyPlugin.h"
+#include <kgenericfactory.h>
+
+K_EXPORT_COMPONENT_FACTORY(mylibrary,
+                           KGenericFactory<MyPlugin>( "DaPlugin" ) )
+
+MyPlugin::MyPlugin( QObject *parent, const QStringList& ) : QObject(parent) {
+    // do stuff like creating a factory and adding it to the
+    // registry instance.
+}
+#include "MyPlugin.moc"
+@endcode
  *
  * TODO: make plugins manageable.
  */

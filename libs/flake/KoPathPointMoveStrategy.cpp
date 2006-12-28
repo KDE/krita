@@ -59,7 +59,9 @@ QUndoCommand* KoPathPointMoveStrategy::createCommand()
     QUndoCommand *cmd = 0;
     if( !m_move.isNull() )
     {
+        // as the point is allready at the new position we need to undo the command
         cmd = new KoPointMoveCommand( m_tool->m_pointSelection.selectedPointMap(), m_move );
+        cmd->undo();
     }
     return cmd;
 }

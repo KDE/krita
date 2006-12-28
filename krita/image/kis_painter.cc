@@ -148,6 +148,97 @@ QRect KisPainter::dirtyRect() {
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         const KoCompositeOp* op,
+                        const QImage * src,
+                        quint8 opacity,
+                        qint32 sx, qint32 sy,
+                        qint32 sw, qint32 sh)
+{
+    #warning "Don't assume the same resulution for a QImage and a KisPaintDevice -- see QImage::dotsPerMeterX|Y"
+
+    if ( src == 0 ) return;
+    if ( src->isNull() ) return;
+    if ( src->format() != QImage::Format_RGB32 && src->format() != QImage::Format_ARGB32 ) return;
+    if ( src->depth() != 32 ) return;
+
+    QRect srcRect = QRect( sx, sy, sw, sh );
+    KoColorSpace * srcCs = KoColorSpaceRegistry::instance()->rgb8();
+
+    // Make sure we don't try to blit outside the source image
+    if ( src->rect().isValid() && op != srcCs->compositeOp( COMPOSITE_COPY ) ) {
+        srcRect &= src->rect();
+    }
+
+    dx += srcRect.x() - sx;
+    dy += srcRect.y() - sy;
+
+    sx = srcRect.x();
+    sy = srcRect.y();
+    sw = srcRect.width();
+    sh = srcRect.height();
+
+    addDirtyRect( srcRect );
+
+    qint32 dstY = dy;
+    qint32 srcY = sy;
+    qint32 rowsRemaining = sh;
+
+    // A Qimage is always one big chunk of memory
+    qint32 numContiguousSrcRows = srcRect.height();
+    qint32 numContiguousSrcColumns = srcRect.width();
+    const quint8 * srcData = src->bits();
+
+    while (rowsRemaining > 0) {
+
+        qint32 dstX = dx;
+        qint32 srcX = sx;
+        qint32 columnsRemaining = sw;
+        qint32 numContiguousDstRows = m_device->numContiguousRows(dstY, dstX, dstX + sw - 1);
+
+        qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
+        rows = qMin(rows, rowsRemaining);
+
+        while (columnsRemaining > 0) {
+
+            qint32 numContiguousDstColumns = m_device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
+
+            qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
+            columns = qMin(columns, columnsRemaining);
+
+            qint32 srcRowStride = srcRect.width() * 4; // 4 bytes to
+                                                       // one  qimage pixels
+
+            qint32 dstRowStride = m_device->rowStride(dstX, dstY);
+            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns);
+            quint8 *dstData = dstIt.rawData();
+
+            m_colorSpace->bitBlt(dstData,
+                          dstRowStride,
+                          srcCs,
+                          srcData,
+                          srcRowStride,
+                          0,
+                          0,
+                          opacity,
+                          rows,
+                          columns,
+                          op);
+
+            srcData += ( columns * 4 ); // 4 bytes to one QImage pixel
+            srcX += columns;
+            dstX += columns;
+            columnsRemaining -= columns;
+        }
+
+        srcY += rows;
+        dstY += rows;
+        rowsRemaining -= rows;
+    }
+
+}
+
+
+void KisPainter::bitBlt(qint32 dx, qint32 dy,
+                        const KoCompositeOp* op,
                         const KisPaintDeviceSP srcdev,
                         quint8 opacity,
                         qint32 sx, qint32 sy,
@@ -175,7 +266,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     sw = srcRect.width();
     sh = srcRect.height();
 
-    addDirtyRect(QRect(dx, dy, sw, sh));
+    addDirtyRect( srcRect );
 
     KoColorSpace * srcCs = srcdev->colorSpace();
 
@@ -355,7 +446,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
         return;
     }
     bltMask(dx, dy, op, srcdev, seldev, opacity, sx, sy, sw, sh);
-    
+
 }
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,

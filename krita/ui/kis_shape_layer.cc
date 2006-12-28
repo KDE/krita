@@ -37,8 +37,6 @@ class KisShapeLayer::Private
 {
 public:
     KoViewConverter * converter;
-    QImage cachedImage;
-    KisPaintDeviceSP paintDevice;
     qint32 x;
     qint32 y;
 };
@@ -50,7 +48,6 @@ KisShapeLayer::KisShapeLayer( KoShapeContainer * parent, KoViewConverter * conve
     setShapeId( KIS_SHAPE_LAYER_ID );
 
     m_d = new Private();
-    m_d->paintDevice = new KisPaintDevice( this, img->colorSpace(), name );
     m_d->converter = converter;
     m_d->x = 0;
     m_d->y = 0;
@@ -83,27 +80,11 @@ QIcon KisShapeLayer::icon() const
 
 KisPaintDeviceSP KisShapeLayer::prepareProjection(KisPaintDeviceSP projection, const QRect& r)
 {
-    Q_UNUSED(projection);
     kDebug() << "KisShapeLayer::prepareProjection " << r << endl;
-
-    // For all the contained shapes, render onto a QImage, and
-    // composite with the cached KisPaintDevice
-    // If the contained shape is a path shape, use the decorator class
-    // Thrain is going to write to render directly onto the
-    // KisPaintDevice
-
-    // Cache the QImage!
-    QImage img(r.width(), r.height(), QImage::Format_ARGB32 );
-    kDebug() << "1\n";
-    QPainter p( &img );
-    kDebug() << "2\n";
-
+    QPainter p( projection.data() );
     KoShapeLayer::paint( p, *m_d->converter );
-    kDebug() << "3\n";
 
-    m_d->paintDevice->convertFromQImage( img, "", r.left(), r.top() );
-
-    return m_d->paintDevice;;
+    return projection;
 }
 
 bool KisShapeLayer::saveToXML(QDomDocument doc, QDomElement elem)
@@ -147,18 +128,16 @@ void KisShapeLayer::setY(qint32 y)
 QRect KisShapeLayer::extent() const
 {
     QRect rc = boundingRect().toRect();
-    return QRect( rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes() );
+    return QRectF( rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes() ).toRect();
 }
 
 QRect KisShapeLayer::exactBounds() const
 {
     QRect rc = boundingRect().toRect();
-    return QRect( rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes() );
+    return QRectF( rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes() ).toRect();
 }
 
 bool KisShapeLayer::accept(KisLayerVisitor& visitor)
 {
     return visitor.visit(this);
 }
-
-

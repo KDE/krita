@@ -1,19 +1,20 @@
 /*
- *  copyright (c) 2002 patrick julien <freak@codepimps.org>
+ *  Copyright (c) 2002 patrick julien <freak@codepimps.org>
+ *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
- *  this program is free software; you can redistribute it and/or modify
- *  it under the terms of the gnu general public license as published by
- *  the free software foundation; either version 2 of the license, or
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
- *  this program is distributed in the hope that it will be useful,
- *  but without any warranty; without even the implied warranty of
- *  merchantability or fitness for a particular purpose.  see the
- *  gnu general public license for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- *  you should have received a copy of the gnu general public license
- *  along with this program; if not, write to the free software
- *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #ifndef KIS_PAINT_DEVICE_IMPL_H_
 #define KIS_PAINT_DEVICE_IMPL_H_
@@ -24,6 +25,8 @@
 #include <QRect>
 #include <QList>
 #include <QString>
+#include <QPaintDevice>
+#include <QPaintEngine>
 
 #include "kis_types.h"
 #include "kdebug.h"
@@ -39,7 +42,7 @@ class QSize;
 class QPoint;
 class QMatrix;
 class QTimer;
-
+class QPaintEngine;
 class KNamedCommand;
 
 class KoStore;
@@ -66,6 +69,7 @@ typedef KisSharedPtr<KisMemento> KisMementoSP;
 class KRITAIMAGE_EXPORT KisPaintDevice
     : public QObject
     , public KisShared
+    , public QPaintDevice
 {
 
         Q_OBJECT
@@ -93,6 +97,12 @@ public:
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
 
+public:
+
+    /**
+     * Returns an instance of KisPaintEngine for QPainters to work with.
+     */
+    QPaintEngine * paintEngine () const;
 
 public:
     /**
@@ -579,6 +589,8 @@ private:
 
     QList<KisFilter*> m_longRunningFilters;
     QTimer * m_longRunningFilterTimer;
+
+    QPaintEngine * m_paintEngine;
 };
 
 inline qint32 KisPaintDevice::pixelSize() const

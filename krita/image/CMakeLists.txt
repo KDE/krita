@@ -28,6 +28,7 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/)
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
    kis_adjustment_layer.cc
+   kis_paint_engine.cc
    kis_progress_subject.cc
    kis_qimage_mask.cc
    kis_autobrush_resource.cc

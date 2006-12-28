@@ -22,6 +22,7 @@
 
 #include <kis_types.h>
 #include <kis_layer.h>
+#include <kis_image.h>
 
 #include <kis_paint_device.h>
 
@@ -63,6 +64,25 @@ void KisLayerShape::paintComponent(QPainter &painter, const KoViewConverter &con
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
+}
+
+QSizeF KisLayerShape::size() const
+{
+    QRect br = m_d->layer->extent();
+    KisImageSP image = m_d->layer->image();
+    kDebug() << "KisLayerShape::size exactbounds: " << br << ", x res: " << image->xRes() << ", y res: " << image->yRes() << endl;
+
+    return QSizeF( br.width() / image->xRes(), br.height() / image->yRes() );
+}
+
+QRectF KisLayerShape::boundingRect() const
+{
+    QRect br = m_d->layer->extent();
+    kDebug() << "KisLayerShape::size exactbounds: " << br << ", x res: " << m_d->layer->image()->xRes() << ", y res: " << m_d->layer->image()->yRes() << endl;
+
+    return QRectF(int(br.left()) / m_d->layer->image()->xRes(), int(br.top()) / m_d->layer->image()->yRes(),
+                  int(1 + br.right()) / m_d->layer->image()->xRes(), int(1 + br.bottom()) / m_d->layer->image()->yRes());
+
 }
 
 void KisLayerShape::addChild( KoShape * shape )

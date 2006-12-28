@@ -43,7 +43,6 @@ const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 */
 class KisShapeLayer : public KisExternalLayer, public KoShapeLayer
 {
-
 public:
 
     KisShapeLayer( KoShapeContainer * parent, KoViewConverter * converter, KisImageSP img, const QString &name, quint8 opacity );

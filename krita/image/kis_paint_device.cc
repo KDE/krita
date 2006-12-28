@@ -36,6 +36,7 @@
 #include <KoStore.h>
 
 #include "kis_global.h"
+#include "kis_paint_engine.h"
 #include "kis_types.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
@@ -231,6 +232,8 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name) :
     m_hasSelection = false;
     m_selectionDeselected = false;
     m_selection = 0;
+    m_paintEngine = new KisPaintEngine();
+
 
 }
 
@@ -267,11 +270,12 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KoColorSpace * colorSpace, cons
     delete [] defPixel;
     Q_CHECK_PTR(m_datamanager);
     m_extentIsValid = true;
+    m_paintEngine = new KisPaintEngine();
 
 }
 
 
-KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KisShared(rhs)
+KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KisShared(rhs), QPaintDevice()
 {
     if (this != &rhs) {
         m_longRunningFilterTimer = 0;
@@ -298,6 +302,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KisShared
         else {
             m_exifInfo = 0;
         }
+        m_paintEngine = rhs.m_paintEngine;
     }
 }
 
@@ -311,9 +316,14 @@ KisPaintDevice::~KisPaintDevice()
         delete f;
     }
     m_longRunningFilters.clear();
+    delete m_paintEngine;
     //delete m_exifInfo;
 }
 
+QPaintEngine * KisPaintDevice::paintEngine () const
+{
+    return m_paintEngine;
+}
 
 void KisPaintDevice::startBackgroundFilters()
 {
@@ -714,7 +724,7 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
 #endif
         quint8 * dstData = new quint8[img.width() * img.height() * pixelSize()];
         KisMetaRegistry::instance()->csRegistry()
-                ->colorSpace("RGBA",srcProfileName)->
+                ->colorSpace("RGBA", srcProfileName)->
                         convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
 //    }

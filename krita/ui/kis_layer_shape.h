@@ -44,6 +44,8 @@ public:
     // Shape overrides
     void paint(QPainter &painter, const KoViewConverter &converter);
     bool isSelectable() const { return false; }
+    QSizeF size() const;
+    QRectF boundingRect() const;
 
     // KoShapeContainer implementation
     void paintComponent(QPainter &painter, const KoViewConverter &converter);

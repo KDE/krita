@@ -174,7 +174,7 @@ bool KoTextDocumentLayout::LayoutState::addLine(const QTextLine &line) {
     if(d->data->documentOffset() + shape->size().height() < d->y + height + d->shapeBorder.bottom) {
 //kDebug() << "   NEXT shape" << endl;
         // line does not fit.
-        d->data->setEndPosition(d->block.position() + line.textStart()-1);
+        d->data->setEndPosition(qMax(0, d->block.position() + line.textStart()-1));
         nextShape();
         if(d->data)
             d->data->setPosition(d->block.position() + line.textStart());
@@ -370,6 +370,11 @@ void KoTextDocumentLayout::LayoutState::resetPrivate() {
             if(d->block.layout() && d->block.layout()->lineCount() > 0) {
                 // block has been layouted. So use its offset.
                 d->y = d->block.layout()->lineAt(0).position().y();
+                if(d->y > data->documentOffset() + shape->size().height()) {
+                    // hang on; this line is explicitly placed outside the shape. Shape is empty!
+                    d->y = data->documentOffset();
+                    break;
+                }
                 if(d->y < data->documentOffset()) {
                     Q_ASSERT(shapeNumber > 0);
                     // since we only recalc whole parags; we need to go back a little.
@@ -480,16 +485,6 @@ double KoTextDocumentLayout::LayoutState::topMargin() {
     return 0.0;
 }
 
-void KoTextDocumentLayout::addShape(KoShape *shape) {
-    m_shapes.append(shape);
-
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
-    if(data) {
-        data->faul();
-        m_state->reset();
-    }
-}
-
 // ------------------- KoTextDocumentLayout --------------------
 KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc)
     : QAbstractTextDocumentLayout(doc),
@@ -507,6 +502,16 @@ KoTextDocumentLayout::~KoTextDocumentLayout() {
     delete m_state;
 }
 
+
+void KoTextDocumentLayout::addShape(KoShape *shape) {
+    m_shapes.append(shape);
+
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
+    if(data) {
+        data->faul();
+        m_state->reset();
+    }
+}
 
 void KoTextDocumentLayout::setStyleManager(KoStyleManager *sm) {
     m_styleManager = sm;

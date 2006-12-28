@@ -29,6 +29,7 @@
 #include <QPainterPath>
 
 #include "kis_paint_device.h"
+#include "kis_painter.h"
 
 class KisPaintEngine::KisPaintEnginePrivate {
 public:
@@ -138,13 +139,29 @@ void KisPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF
 
 void KisPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
 {
+    QPaintEngine::drawTextItem( p, textItem );
 }
 
 void KisPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s)
 {
+    // XXX: Reimplement this, the default will convert the pixmap time
+    // and again to a QImage
+    QPaintEngine::drawTiledPixmap( r, pixmap, s );
 }
 
 void KisPaintEngine::drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
                                Qt::ImageConversionFlags flags)
 {
+    Q_UNUSED( flags );
+    // XXX: How about sub-pixel bitBlting?
+    QRect srcRect = sr.toRect();
+    QRect dstRect = r.toRect();
+
+    KisPainter p( m_d->dev );
+    // XXX: Get the right porter-duff composite op from the state, for
+    // now use OVER.
+
+    p.bitBlt(dstRect.x(), dstRect.y(), m_d->dev->colorSpace()->compositeOp( COMPOSITE_OVER ),
+             &pm, static_cast<quint8>( m_d->state.opacity() * 255 ),
+             srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
 }

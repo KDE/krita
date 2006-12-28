@@ -211,6 +211,10 @@ public:
     /// Save the element to MathML 
     virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const ;
 
+    /**
+     * @returns MathML element tag name
+     */
+    virtual QString getElementName() const { return ""; };
 
 
 

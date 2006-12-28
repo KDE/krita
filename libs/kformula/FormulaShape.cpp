@@ -64,7 +64,7 @@ BasicElement* FormulaShape::formulaElement() const
     return m_formulaElement;
 }
 
-void FormulaShape::loadMathML( const QDomDocument &doc, bool )
+void FormulaShape::loadMathML( const KoXmlDocument &doc, bool )
 {
     delete m_formulaElement;                                // delete the old formula
     m_formulaElement = new FormulaElement();                // create a new root element

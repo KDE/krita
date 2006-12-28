@@ -21,7 +21,7 @@
 #define FORMULASHAPE_H
 
 #include <KoShape.h>
-#include <QDomDocument>
+#include <KoXmlReader.h>
 class KoXmlWriter;
 
 #define FormulaShape_SHAPEID "FormulaShapeID"
@@ -70,7 +70,7 @@ public:
      * @param doc The DomDocument to load from
      * @param oasisFormat If true the formula is read from OASIS conform MathML
      */
-    void loadMathML( const QDomDocument &doc, bool oasisFormat = false );
+    void loadMathML( const KoXmlDocument &doc, bool oasisFormat = false );
     
     /**
      * Save the formula as MathML

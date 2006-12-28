@@ -25,6 +25,7 @@
 #include "styles/KoStyleManager.h"
 #include "KoTextBlockData.h"
 #include "KoTextBlockBorderData.h"
+#include "KoInlineTextObjectManager.h"
 
 #include <KoInsets.h>
 #include <KoShape.h>

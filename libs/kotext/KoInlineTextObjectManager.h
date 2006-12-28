@@ -34,11 +34,12 @@
  * KoTextDocumentLayout for that specific textDocument, your inline text object will get painted
  * properly.
  */
-class KOTEXT_EXPORT KoInlineTextObjectManager {
+class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject {
+    Q_OBJECT
 // TODO, when to delete the inlineObject s
 public:
      /// Constructor
-    KoInlineTextObjectManager();
+    KoInlineTextObjectManager(QObject *parent = 0);
 
     /**
      * Retrieve a formerly added inline object based on the format.

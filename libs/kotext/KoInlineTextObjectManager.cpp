@@ -21,8 +21,9 @@
 #include <QTextCursor>
 #include <QPainter>
 
-KoInlineTextObjectManager::KoInlineTextObjectManager()
-    : m_lastObjectId(0)
+KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
+    : QObject(parent),
+    m_lastObjectId(0)
 {
 }
 
@@ -45,3 +46,5 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     object->setId(m_lastObjectId);
     m_objects.insert(m_lastObjectId, object);
 }
+
+#include "KoInlineTextObjectManager.moc"

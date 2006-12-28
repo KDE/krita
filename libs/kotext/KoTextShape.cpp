@@ -19,7 +19,9 @@
  */
 
 #include "KoTextShape.h"
-#include "KoTextDocumentLayout.h"
+
+#include <KoTextDocumentLayout.h>
+#include <KoInlineTextObjectManager.h>
 
 #include <QTextLayout>
 #include <QFont>
@@ -38,6 +40,8 @@ KoTextShape::KoTextShape()
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document());
     lay->addShape(this);
     m_textShapeData->document()->setDocumentLayout(lay);
+
+    lay->setInlineObjectTextManager(new KoInlineTextObjectManager(lay));
 }
 
 KoTextShape::~KoTextShape() {

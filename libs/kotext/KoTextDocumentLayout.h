@@ -20,8 +20,6 @@
 #ifndef KOTEXTDOCUMENTLAYOUT_H
 #define KOTEXTDOCUMENTLAYOUT_H
 
-#include "KoInlineTextObjectManager.h"
-
 #include <koffice_export.h>
 
 #include <QAbstractTextDocumentLayout>
@@ -35,6 +33,7 @@ class KoShape;
 class KoStyleManager;
 class QTextLayout;
 class QTextList;
+class KoInlineTextObjectManager;
 
 /**
  * KWords text layouter that allows text to flow in multiple frames and around

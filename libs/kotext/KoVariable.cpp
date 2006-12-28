@@ -18,6 +18,9 @@
  */
 #include "KoVariable.h"
 #include "KoTextDocumentLayout.h"
+#include "KoTextShapeData.h"
+
+#include <KoShape.h>
 
 #include <QTextCursor>
 #include <QPainter>
@@ -48,6 +51,21 @@ void KoVariable::updatePosition(const QTextDocument *document, QTextInlineObject
     Q_UNUSED(object);
     Q_UNUSED(format);
     // Variables are always 'in place' so the position is 100% defined by the text layout.
+
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_document->documentLayout());
+    if(lay == 0)
+        return;
+    KoShape *textShape = 0;
+    foreach(KoShape *shape, lay->shapes()) {
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
+        if(data == 0)
+            continue;
+        if(data->position() <= posInDocument && (data->endPosition() == -1 || data->endPosition() > posInDocument)) {
+            textShape = shape;
+            break;
+        }
+    }
+    variableMoved(textShape, m_document, posInDocument);
 }
 
 void KoVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) {
@@ -57,7 +75,7 @@ void KoVariable::resize(const QTextDocument *document, QTextInlineObject object,
         return;
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
-    object.setWidth( fm.width(m_value ) );
+    object.setWidth( fm.width(m_value) );
     object.setAscent(fm.ascent());
     object.setDescent(fm.descent());
     m_modified = true;
@@ -87,4 +105,10 @@ void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument 
     layout.createLine();
     layout.endLayout();
     layout.draw(&painter, rect.topLeft());
+}
+
+void KoVariable::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument) {
+    Q_UNUSED(shape);
+    Q_UNUSED(document);
+    Q_UNUSED(posInDocument);
 }

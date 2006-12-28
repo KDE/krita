@@ -27,6 +27,7 @@
 
 class QTextInlineObject;
 class QTextDocument;
+class KoShape;
 
 /**
  * Base class for in-text variables.
@@ -52,6 +53,14 @@ public:
 
     /// @return the current value of this variable.
     const QString &value() const { return m_value; }
+
+protected:
+    /**
+     * This hook is called whenever the variable gets a new position.
+     * If this is a type of variable that needs to change its value based on that
+     * you should implement this method and act on it.
+     */
+    virtual void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
 
 private:
     void updatePosition(const QTextDocument *document, QTextInlineObject object,

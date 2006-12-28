@@ -109,6 +109,18 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB1
             */
             return img;
         }
+        
+        virtual void invertColor(quint8 * srcU8, qint32 nPixels) const
+        {
+            typename _CSTraits::channels_type *src = reinterpret_cast<typename _CSTraits::channels_type *>(srcU8);
+            while(nPixels--)
+            {
+                src[0] = KoColorSpaceMathsTraits<quint16>::max() - src[0];
+                src[1] = KoColorSpaceMathsTraits<quint16>::max() - src[1];
+                src[2] = KoColorSpaceMathsTraits<quint16>::max() - src[2];
+                src += this->pixelSize();
+            }
+        }
     private:
         quint8 convertToDisplay(double value, double exposureFactor, double gamma) const
         {

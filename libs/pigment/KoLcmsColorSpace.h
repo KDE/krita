@@ -408,21 +408,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             return adj;
         }
 
-        virtual void invertColor(quint8 * src, qint32 nPixels) const
-        {
-            quint16 rgba[4];
-            quint32 psize = this->pixelSize();
-            while(nPixels--)
-            {
-                toRgbA16(src, reinterpret_cast<quint8 *>(rgba), 1);
-                rgba[0] = KoColorSpaceMathsTraits<quint16>::max() - rgba[0];
-                rgba[1] = KoColorSpaceMathsTraits<quint16>::max() - rgba[1];
-                rgba[2] = KoColorSpaceMathsTraits<quint16>::max() - rgba[2];
-                fromRgbA16(reinterpret_cast<quint8 *>(rgba), src, 1);
-                src += psize;
-            }
-        }
-
         virtual quint8 difference(const quint8* src1, const quint8* src2) const
         {
             if (m_defaultToLab) {

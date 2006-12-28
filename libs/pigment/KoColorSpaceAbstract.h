@@ -294,6 +294,21 @@ class KoColorSpaceAbstract : public KoColorSpace {
             return static_cast<quint8>((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
         }
 
+        virtual void invertColor(quint8 * src, qint32 nPixels) const
+        {
+            quint16 rgba[4];
+            quint32 psize = this->pixelSize();
+            while(nPixels--)
+            {
+                toRgbA16(src, reinterpret_cast<quint8 *>(rgba), 1);
+                rgba[0] = KoColorSpaceMathsTraits<quint16>::max() - rgba[0];
+                rgba[1] = KoColorSpaceMathsTraits<quint16>::max() - rgba[1];
+                rgba[2] = KoColorSpaceMathsTraits<quint16>::max() - rgba[2];
+                fromRgbA16(reinterpret_cast<quint8 *>(rgba), src, 1);
+                src += psize;
+            }
+        }
+
         virtual KoID mathToolboxId() const
         {
             return KoID("Basic");

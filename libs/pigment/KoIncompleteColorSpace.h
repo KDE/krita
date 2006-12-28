@@ -120,10 +120,6 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
           return _fallback_::createTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createPerChannelAdjustment( transferValues ));
         }
 
-        virtual void invertColor(quint8 * src, qint32 nPixels) const
-        {
-        }
-
         virtual quint8 difference(const quint8* src1, const quint8* src2) const
         {
         }

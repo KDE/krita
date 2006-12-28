@@ -62,6 +62,7 @@ QUndoCommand* KoPathControlPointMoveStrategy::createCommand()
     if( !m_move.isNull() )
     {
         cmd = new KoControlPointMoveCommand( m_point, m_move, m_pointType );
+        cmd->undo();
     }
     return cmd;
 }

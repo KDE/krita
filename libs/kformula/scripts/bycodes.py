@@ -20,7 +20,7 @@
 """
 import sys
 import string
-import qt
+from PyQt4 import QtCore, QtGui
 
 def decode( fd, font, line ):
 	begin = string.find( line, '"' )
@@ -39,10 +39,10 @@ def decode( fd, font, line ):
 				char_list.append( string.atoi( second, 16 ) )
 	else:
 		char_list.append( string.atoi ( unicode, 16 ) )
-	fm = qt.QFontMetrics( qt.QFont( font ) )
+	fm = QtGui.QFontMetrics( QtGui.QFont( font ) )
 	in_font = True
 	for c in char_list:
-		if not fm.inFont( qt.QChar( c ) ):
+		if not fm.inFont( QtCore.QChar( c ) ):
 			in_font = False
 	fd.write( unicode + ' ' + str( in_font ) + '\n')
 
@@ -56,7 +56,7 @@ def parse( file, font ):
 		line = fd.readline()
 		
 if __name__ == '__main__':
-	a = qt.QApplication( sys.argv )
+	a = QtGui.QApplication( sys.argv )
 	if len( sys.argv ) == 2:
 		sys.argv.append( 'Arev Sans' )
 	parse ( sys.argv[1], sys.argv[2] )

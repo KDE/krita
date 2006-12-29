@@ -33,7 +33,7 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes( const ContextStyle& style,
+    virtual void calcSizes( const ContextStyle& context,
 						    ContextStyle::TextStyle tstyle,
 						    ContextStyle::IndexStyle istyle,
 							StyleAttributes& style );

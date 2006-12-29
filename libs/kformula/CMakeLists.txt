@@ -29,7 +29,7 @@ set(kformulalib_LIB_SRCS
 #   EncloseElement.cpp
 #   ActionElement.cpp
 #   PaddedElement.cpp
-#   GlyphElement.cpp
+   GlyphElement.cpp
 #   ErrorElement.cpp
    TokenStyleElement.cpp
    StyleElement.cpp

@@ -23,7 +23,7 @@
 
 #include "ActionElement.h"
 #include "BracketElement.h"
-#include "EncloseElement.h"
+//#include "EncloseElement.h"
 #include "ErrorElement.h"
 #include "FractionElement.h"
 #include "GlyphElement.h"

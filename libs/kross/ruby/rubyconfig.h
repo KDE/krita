@@ -22,15 +22,26 @@
 
 #include <kross/core/krossconfig.h>
 
-namespace Kross {
+// define the KROSSRUBY_EXPORT macro
+#ifdef Q_WS_WIN
+# ifndef KROSSRUBY_EXPORT
+#  ifdef MAKE_KROSSRUBY_LIB
+#   define KROSSRUBY_EXPORT KDE_EXPORT
+#  elif KDE_MAKE_LIB
+#   define KROSSRUBY_EXPORT KDE_IMPORT
+#  else
+#   define KROSSRUBY_EXPORT
+#  endif
+# endif
+#else
+# define KROSSRUBY_EXPORT KDE_EXPORT
+#endif
 
-    //#define KROSS_RUBY_SCRIPT_DEBUG
-    //#define KROSS_RUBY_INTERPRETER_DEBUG
-    //#define KROSS_RUBY_EXTENSION_DEBUG
-    //#define KROSS_RUBY_MODULE_DEBUG
-    //#define KROSS_RUBY_VARIANT_DEBUG
-
-}
+//#define KROSS_RUBY_SCRIPT_DEBUG
+//#define KROSS_RUBY_INTERPRETER_DEBUG
+//#define KROSS_RUBY_EXTENSION_DEBUG
+//#define KROSS_RUBY_MODULE_DEBUG
+//#define KROSS_RUBY_VARIANT_DEBUG
 
 #endif
 

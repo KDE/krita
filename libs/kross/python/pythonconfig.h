@@ -43,40 +43,52 @@
 #include "cxx/Extensions.hxx"
 #include "cxx/Exception.hxx"
 
-namespace Kross {
+// define the KROSSPYTHON_EXPORT macro
+#ifdef Q_WS_WIN
+# ifndef KROSSPYTHON_EXPORT
+#  ifdef MAKE_KROSSPYTHON_LIB
+#   define KROSSPYTHON_EXPORT KDE_EXPORT
+#  elif KDE_MAKE_LIB
+#   define KROSSPYTHON_EXPORT KDE_IMPORT
+#  else
+#   define KROSSPYTHON_EXPORT
+#  endif
+# endif
+#else
+# define KROSSPYTHON_EXPORT KDE_EXPORT
+#endif
 
-    // The version of this python plugin. This will be exported
-    // to the scripting code. That way we're able to write
-    // scripting code for different incompatible Kross python
-    // bindings by checking the version. You should increment
-    // this number only if you really know what you're doing.
-    #define KROSS_PYTHON_VERSION 1
 
-    // Enable debugging for Kross::PythonInterpreter
-    //#define KROSS_PYTHON_INTERPRETER_DEBUG
+// The version of this python plugin. This will be exported
+// to the scripting code. That way we're able to write
+// scripting code for different incompatible Kross python
+// bindings by checking the version. You should increment
+// this number only if you really know what you're doing.
+#define KROSS_PYTHON_VERSION 1
 
-    // Enable debugging for Kross::PythonScript
-    //#define KROSS_PYTHON_SCRIPT_CTOR_DEBUG
-    //#define KROSS_PYTHON_SCRIPT_DTOR_DEBUG
-    //#define KROSS_PYTHON_SCRIPT_INIT_DEBUG
-    //#define KROSS_PYTHON_SCRIPT_FINALIZE_DEBUG
-    //#define KROSS_PYTHON_SCRIPT_EXEC_DEBUG
-    //#define KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
-    //#define KROSS_PYTHON_SCRIPT_CLASSINSTANCE_DEBUG
+// Enable debugging for Kross::PythonInterpreter
+//#define KROSS_PYTHON_INTERPRETER_DEBUG
 
-    // Enable debugging for Kross::PythonModule
-    //#define KROSS_PYTHON_MODULE_DEBUG
+// Enable debugging for Kross::PythonScript
+//#define KROSS_PYTHON_SCRIPT_CTOR_DEBUG
+//#define KROSS_PYTHON_SCRIPT_DTOR_DEBUG
+//#define KROSS_PYTHON_SCRIPT_INIT_DEBUG
+//#define KROSS_PYTHON_SCRIPT_FINALIZE_DEBUG
+//#define KROSS_PYTHON_SCRIPT_EXEC_DEBUG
+//#define KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
+//#define KROSS_PYTHON_SCRIPT_CLASSINSTANCE_DEBUG
 
-    // Enable debugging for Kross::PythonExtension
-    //#define KROSS_PYTHON_EXTENSION_CTORDTOR_DEBUG
-    //#define KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
-    //#define KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
-    //#define KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
-    //#define KROSS_PYTHON_EXTENSION_CALL_DEBUG
+// Enable debugging for Kross::PythonModule
+//#define KROSS_PYTHON_MODULE_DEBUG
 
-    // Enable debugging for Kross::PythonType and Kross::PythonMetaTypeFactory
-    //#define KROSS_PYTHON_VARIANT_DEBUG
+// Enable debugging for Kross::PythonExtension
+//#define KROSS_PYTHON_EXTENSION_CTORDTOR_DEBUG
+//#define KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
+//#define KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
+//#define KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
+//#define KROSS_PYTHON_EXTENSION_CALL_DEBUG
 
-}
+// Enable debugging for Kross::PythonType and Kross::PythonMetaTypeFactory
+//#define KROSS_PYTHON_VARIANT_DEBUG
 
 #endif

@@ -42,7 +42,7 @@ extern "C"
      * function will be used to return an instance of the
      * \a PythonInterpreter implementation.
      */
-    void* krossinterpreter(Kross::InterpreterInfo* info)
+    KROSSPYTHON_EXPORT void* krossinterpreter(Kross::InterpreterInfo* info)
     {
         return new Kross::PythonInterpreter(info);
     }

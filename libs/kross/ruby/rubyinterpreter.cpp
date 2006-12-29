@@ -42,7 +42,7 @@ extern "C"
      * function will be used to return an instance of the
      * \a RubyInterpreter implementation.
      */
-    void* krossinterpreter(Kross::InterpreterInfo* info)
+    KROSSRUBY_EXPORT void* krossinterpreter(Kross::InterpreterInfo* info)
     {
 #ifdef KROSS_RUBY_INTERPRETER_DEBUG
         Kross::krossdebug("krossinterpreter(info)");

@@ -521,7 +521,6 @@ private:
     
     KisDoc *m_doc;
     KisCanvas *m_canvas;
-    QPopupMenu * m_popup;
     KisPartLayerHandler* m_partHandler;
 
     KisGridManager * m_gridManager;

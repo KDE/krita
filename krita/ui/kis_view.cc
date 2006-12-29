@@ -175,7 +175,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_oldTool( 0 )
     , m_doc( doc )
     , m_canvas( 0 )
-    , m_popup( 0 )
     , m_partHandler( 0 )
     , m_gridManager( 0 )
     , m_perspectiveGridManager( 0 )
@@ -2307,12 +2306,14 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 //        }
 //    }
     if (e->button() == Qt::RightButton) {
-
-        if (m_popup == 0 && factory()) {
+        QPopupMenu * m_popup = 0;
+        if (factory()) {
             Q_ASSERT(factory());
             m_popup = (QPopupMenu *)factory()->container("image_popup", this);
         }
-        if (m_popup) m_popup->popup(e->globalPos().roundQPoint());
+        if (m_popup) {
+            m_popup->popup(e->globalPos().roundQPoint());
+        }
     }
     else if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
         KisPoint p = viewToWindow(e->pos());

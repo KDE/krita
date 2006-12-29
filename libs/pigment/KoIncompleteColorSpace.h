@@ -87,7 +87,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             Q_UNUSED(renderingIntent);
             QImage img = QImage(width, height, QImage::Format_ARGB32);
 
-            Q_INT32 i = 0;
+            quint32 i = 0;
             uchar *j = img.bits();
 
             while ( i < width * height * this->channelCount()) {
@@ -148,8 +148,20 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             return new KoFallBackDarkenTransformation( this, shade, compensate, compensation );
         }
 
-        virtual quint8 difference(const quint8* src1, const quint8* src2) const
+        virtual quint8 difference(const quint8* src1U8, const quint8* src2U8) const
         {
+            const typename _CSTraits::channels_type* src1 = this->nativeArray(src1U8);
+            const typename _CSTraits::channels_type* src2 = this->nativeArray(src2U8);
+            typename _CSTraits::channels_type count = 0;
+            for(uint i = 0; i < this->colorChannelCount(); i++)
+            {
+                typename _CSTraits::channels_type d = QABS(src2[i] - src1[i]);
+                if( d > count)
+                {
+                    count = d;
+                }
+            }
+            return KoColorSpaceMaths<typename _CSTraits::channels_type,quint8>::scaleToA(count );
         }
 
     private:

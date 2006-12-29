@@ -132,7 +132,7 @@ namespace {
             {
                 // Create and initialize to 0 the array of totals
                 typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype totals[_CSTraits::channels_nb];
-                typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype totalAlpha = 0;
+                qint32 totalAlpha = 0;
                 memset(totals, 0, sizeof(typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype) * _CSTraits::channels_nb);
                 for (;nPixels--; colors++, kernelValues++)
                 {
@@ -155,7 +155,7 @@ namespace {
     
                 }
                 if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
-                    m_colorSpace->setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, SCHAR_MAX ),1);
+                    m_colorSpace->setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, 0xFF ),1);
                 }
             }
         private:

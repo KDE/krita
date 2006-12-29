@@ -35,7 +35,7 @@
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 
-KisRgbF32HDRColorSpace::KisRgbF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p)
+KisRgbF32HDRColorSpace::KisRgbF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile */*p*/)
 : KisRgbFloatHDRColorSpace<RgbF32Traits>("RGBAF32", i18n("RGB (32-bit float/channel) for High Dynamic Range imaging"), parent, RGBAF32FLOAT_LCMS_TYPE)
 {
     m_channels.push_back(new KoChannelInfo(i18n("Red"), 2 * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(255,0,0)));

@@ -23,7 +23,6 @@
 KisDynamicColoring::~KisDynamicColoring() { }
 KisPlainColoring::~KisPlainColoring() { }
 
-        
 void KisPlainColoring::darken(double v)
 {
     KoColorTransformation* transfo = color.colorSpace()->createDarkenAdjustement((qint32)(255  - 75 * v), false, 0.0);

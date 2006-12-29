@@ -70,53 +70,23 @@ struct KoLcmsDarkenTransformation : public KoColorTransformation
     }
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
     {
-//         if (m_defaultToLab) {
-            quint16 * labcache = new quint16[nPixels * 4];
-            cmsDoTransform( m_defaultToLab, const_cast<quint8*>( src ), reinterpret_cast<quint8*>( labcache ), nPixels );
-            for ( int i = 0; i < nPixels * 4; ++i ) {
-                if ( m_compensate ) {
-                    labcache[i] = static_cast<quint16>( ( labcache[i] * m_shade ) / ( m_compensation * 255 ) );
-                }
-                else {
-                    labcache[i] = static_cast<quint16>( labcache[i] * m_shade  / 255 );
-                }
+        quint16 * labcache = new quint16[nPixels * 4];
+        cmsDoTransform( m_defaultToLab, const_cast<quint8*>( src ), reinterpret_cast<quint8*>( labcache ), nPixels );
+        for ( int i = 0; i < nPixels * 4; ++i ) {
+            if ( m_compensate ) {
+                labcache[i] = static_cast<quint16>( ( labcache[i] * m_shade ) / ( m_compensation * 255 ) );
             }
-            cmsDoTransform( m_defaultFromLab, reinterpret_cast<quint8*>( labcache ), dst, nPixels );
-
-    // Copy alpha
-            for ( int i = 0; i < nPixels; ++i ) {
-                quint8 alpha = m_colorSpace->alpha( src );
-                m_colorSpace->setAlpha( dst, alpha, 1 );
-            }
-            delete [] labcache;
-        #if 0
-        }
-        else {
-
-            QColor c;
-            qint32 psize = this->pixelSize();
-
-            for (int i = 0; i < nPixels; ++i) { // TODO use to/fromLab16 instead !
-
-                const_cast<KoLcmsColorSpace<_CSTraits>* >(this)->toQColor(src + (i * psize), &c);
-                qint32 r, g, b;
-
-                if (compensate) {
-                    r = static_cast<qint32>( qMin(255, static_cast<qint32>((c.red() * shade) / (compensation * 255))));
-                    g = static_cast<qint32>( qMin(255, static_cast<qint32>((c.green() * shade) / (compensation * 255))));
-                    b = static_cast<qint32>( qMin(255, static_cast<qint32>((c.blue() * shade) / (compensation * 255))));
-                }
-                else {
-                    r = static_cast<qint32>( qMin(255, (c.red() * shade / 255)));
-                    g = static_cast<qint32>( qMin(255, (c.green() * shade / 255)));
-                    b = static_cast<qint32>( qMin(255, (c.blue() * shade / 255)));
-                }
-                c.setRgb(r, g, b);
-
-                const_cast<KoLcmsColorSpace<_CSTraits>* >(this)->fromQColor( c, dst  + (i * psize));
+            else {
+                labcache[i] = static_cast<quint16>( labcache[i] * m_shade  / 255 );
             }
         }
-        #endif
+        cmsDoTransform( m_defaultFromLab, reinterpret_cast<quint8*>( labcache ), dst, nPixels );
+        // Copy alpha
+        for ( int i = 0; i < nPixels; ++i ) {
+            quint8 alpha = m_colorSpace->alpha( src );
+            m_colorSpace->setAlpha( dst, alpha, 1 );
+        }
+        delete [] labcache;
     }
     const KoColorSpace* m_colorSpace;
     cmsHTRANSFORM m_defaultToLab;

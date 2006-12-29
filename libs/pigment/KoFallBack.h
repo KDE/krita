@@ -23,6 +23,40 @@
 #include <KoColorTransformation.h>
 #include <KoColorSpace.h>
 
+struct KoFallBackDarkenTransformation : public KoColorTransformation
+{
+    KoFallBackDarkenTransformation(const KoColorSpace* cs, qint32 shade, bool compensate, double compensation) : m_colorSpace(cs), m_shade(shade), m_compensate(compensate), m_compensation(compensation)
+    {
+        
+    }
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+    {
+            quint16 * labcache = new quint16[nPixels * 4];
+            
+            m_colorSpace->toLabA16( src, (quint8*)labcache, nPixels );
+            for ( int i = 0; i < nPixels * 4; ++i ) {
+                if ( m_compensate ) {
+                    labcache[i] = static_cast<quint16>( ( labcache[i] * m_shade ) / ( m_compensation * 255 ) );
+                }
+                else {
+                    labcache[i] = static_cast<quint16>( labcache[i] * m_shade  / 255 );
+                }
+            }
+            m_colorSpace->fromLabA16( (quint8*)labcache, dst, nPixels );
+            // Copy alpha
+            for ( int i = 0; i < nPixels; ++i ) {
+                quint8 alpha = m_colorSpace->alpha( src );
+                m_colorSpace->setAlpha( dst, alpha, 1 );
+            }
+            delete [] labcache;
+    }
+    const KoColorSpace* m_colorSpace;
+    qint32 m_shade;
+    bool m_compensate;
+    double m_compensation;
+};
+
+
 class KoRGB16FallbackColorTransformation : public KoColorTransformation {
   public:
     KoRGB16FallbackColorTransformation(const KoColorSpace* cs, const KoColorSpace* fallBackCS, KoColorTransformation* transfo)

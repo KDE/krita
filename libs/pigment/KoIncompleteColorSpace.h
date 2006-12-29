@@ -20,6 +20,7 @@
 #ifndef _KO_INCOMPLETE_COLOR_SPACE_H_
 #define _KO_INCOMPLETE_COLOR_SPACE_H_
 
+#include <KoFallBack.h>
 #include <KoColorSpaceAbstract.h>
 
 /**
@@ -144,6 +145,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
         virtual KoColorTransformation *createDarkenAdjustement(qint32 shade, bool compensate, double compensation) const
         {
+            return new KoFallBackDarkenTransformation( this, shade, compensate, compensation );
         }
 
         virtual quint8 difference(const quint8* src1, const quint8* src2) const

@@ -23,7 +23,6 @@
 #include "KoShapeController.h"
 
 KoCanvasBase::KoCanvasBase( KoShapeControllerBase * shapeControllerBase )
-: m_addRemoveData( 0 )
 {
     m_resourceProvider = new KoCanvasResourceProvider(0);
     m_shapeController = new KoShapeController( this, shapeControllerBase );

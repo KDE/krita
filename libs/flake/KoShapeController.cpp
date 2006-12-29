@@ -97,13 +97,13 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape )
     {
         shape->setParent( m_canvas->shapeManager()->selection()->activeLayer() );
     }
-    
-    KoShapeCreateCommand *cmd = new KoShapeCreateCommand( m_shapeController, shape, m_canvas->addRemoveData() );
+
+    KoShapeCreateCommand *cmd = new KoShapeCreateCommand( m_shapeController, shape );
     return cmd;
 }
 
 QUndoCommand* KoShapeController::removeShape( KoShape *shape )
 {
-    KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( m_shapeController, shape, m_canvas->addRemoveData() );
-    return cmd;    
+    KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( m_shapeController, shape );
+    return cmd;
 }

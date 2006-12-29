@@ -22,7 +22,7 @@
 #include "KoPAMasterPage.h"
 
 KoPAPage::KoPAPage( KoPAMasterPage * masterPage )
-: m_masterPage( masterPage )    
+: KoPAPageBase(), m_masterPage( masterPage )
 {
 }
 

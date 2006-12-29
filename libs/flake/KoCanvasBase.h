@@ -40,7 +40,6 @@ class KoToolProxy;
 class KoViewConverter;
 class KoShapeController;
 class KoShapeControllerBase;
-class KoShapeAddRemoveData;
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
@@ -142,18 +141,6 @@ public:
      * A shape controller is used to create or delete shapes and show the relevant dialogs to the user.
      */
     KoShapeController * shapeController() const { return m_shapeController; }
-
-    /**
-     * @brief Get data passed along during add/remove of a shape
-     * This will return 0 if it has not set.
-     */
-    KoShapeAddRemoveData * addRemoveData() const { return m_addRemoveData; }
-
-    /**
-     * @brief Set data used for passing along during add/remove of a shape
-     * @param addRemoveData data used for inserting a shape
-     */
-    void setAddRemoveData( KoShapeAddRemoveData * addRemoveData ) { m_addRemoveData = addRemoveData; }
 
 
 #if 0
@@ -288,7 +275,6 @@ private:
 
     KoShapeController *m_shapeController;
     KoCanvasResourceProvider * m_resourceProvider;
-    KoShapeAddRemoveData *m_addRemoveData;
 };
 
 

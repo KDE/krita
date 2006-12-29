@@ -90,6 +90,17 @@ void KoShapeManager::add( KoShape *shape )
         m_tree.insert( br, shape );
     }
     shape->repaint();
+
+    // add the children of a KoShapeContainer
+    KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(shape);
+
+    if(container)
+    {
+        foreach(KoShape* containerShape, container->iterator())
+        {
+            add(containerShape);
+        }
+    }
 }
 
 void KoShapeManager::remove( KoShape *shape )
@@ -100,6 +111,17 @@ void KoShapeManager::remove( KoShape *shape )
     m_aggregate4update.remove( shape );
     m_tree.remove( shape );
     m_shapes.removeAll(shape);
+
+    // remove the children of a KoShapeContainer
+    KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(shape);
+
+    if(container)
+    {
+        foreach(KoShape* containerShape, container->iterator())
+        {
+            remove(containerShape);
+        }
+    }
 }
 
 void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter, bool forPrint)

@@ -20,6 +20,7 @@
 #include "KoPAMasterPage.h"
 
 KoPAMasterPage::KoPAMasterPage()
+: KoPAPageBase()
 {
     m_pageLayout = KoPageLayout::standardLayout();
 }

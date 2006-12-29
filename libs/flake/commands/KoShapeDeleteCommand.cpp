@@ -21,40 +21,30 @@
 #include "KoShapeDeleteCommand.h"
 #include "KoShapeContainer.h"
 #include "KoShapeControllerBase.h"
-#include "KoShapeAddRemoveData.h"
 
 #include <klocale.h>
 
-KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, KoShape *shape, 
-                                            KoShapeAddRemoveData *addRemoveData, QUndoCommand *parent )
+KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_controller( controller )
 , m_deleteShapes( false )
-, m_addRemoveData( 0 ) 
 {
     m_shapes.append( shape );
     m_oldParents.append( shape->parent() );
-
-    if ( addRemoveData )
-        m_addRemoveData = addRemoveData->clone();
 
     setText( i18n( "Delete shapes" ) );
 }
 
 KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, const KoSelectionSet &shapes,
-                                            KoShapeAddRemoveData *addRemoveData, QUndoCommand *parent)
+                                            QUndoCommand *parent)
 : QUndoCommand( parent )
 , m_controller( controller )
 , m_deleteShapes( false )
-, m_addRemoveData( 0 ) 
 {
     m_shapes = shapes.toList();
     foreach( KoShape *shape, m_shapes ) {
         m_oldParents.append( shape->parent() );
     }
-
-    if ( addRemoveData )
-        m_addRemoveData = addRemoveData->clone();
 
     setText( i18n( "Delete shapes" ) );
 }
@@ -66,7 +56,6 @@ KoShapeDeleteCommand::~KoShapeDeleteCommand() {
     foreach (KoShape *shape, m_shapes ) {
         delete shape;
     }
-    delete m_addRemoveData;
 }
 
 void KoShapeDeleteCommand::redo () {
@@ -76,7 +65,7 @@ void KoShapeDeleteCommand::redo () {
     for(int i=0; i < m_shapes.count(); i++) {
         if( m_oldParents.at( i ) )
             m_oldParents.at( i )->removeChild( m_shapes[i] );
-        m_controller->removeShape( m_shapes[i], m_addRemoveData );
+        m_controller->removeShape( m_shapes[i] );
     }
     m_deleteShapes = true;
 }
@@ -88,7 +77,7 @@ void KoShapeDeleteCommand::undo () {
     for(int i=0; i < m_shapes.count(); i++) {
         if( m_oldParents.at( i ) )
             m_oldParents.at( i )->addChild( m_shapes[i] );
-        m_controller->addShape( m_shapes[i], m_addRemoveData );
+        m_controller->addShape( m_shapes[i] );
     }
     m_deleteShapes = false;
 }

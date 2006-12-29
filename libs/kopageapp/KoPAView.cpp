@@ -37,6 +37,7 @@
 #include <KoSelection.h>
 #include <KoToolDockerFactory.h>
 #include <KoToolDocker.h>
+#include <KoShapeLayer.h>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
@@ -49,7 +50,7 @@
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
 , m_doc( document )
-, m_activeData( 0, 0 )
+, m_activePage( 0 )
 {
     initGUI();
     initActions();
@@ -66,7 +67,7 @@ KoPAView::~KoPAView()
 
 KoPAPage* KoPAView::activePage() const
 {
-    return m_activeData.page();
+    return m_activePage;
 }
 
 void KoPAView::updateReadWrite( bool readwrite )
@@ -81,7 +82,6 @@ void KoPAView::initGUI()
     setLayout( gridLayout );
 
     m_canvas = new KoPACanvas( this, m_doc );
-    m_canvas->setAddRemoveData( &m_activeData );
     m_canvasController = new KoCanvasController( this );
     m_canvasController->setCanvas( m_canvas );
     KoToolManager::instance()->addControllers( m_canvasController );
@@ -198,7 +198,7 @@ void KoPAView::viewGrid()
 void KoPAView::viewZoom(KoZoomMode::Mode mode, int zoom)
 {
     // No point trying to zoom something that isn't there...
-    if ( m_activeData.page() == 0) 
+    if ( m_activePage == 0)
         return;
 
     int newZoom = zoom;
@@ -207,7 +207,7 @@ void KoPAView::viewZoom(KoZoomMode::Mode mode, int zoom)
     if ( mode == KoZoomMode::ZOOM_WIDTH) 
     {
         zoomString = KoZoomMode::toString( mode );
-        KoPageLayout layout = m_activeData.page()->pageLayout();
+        KoPageLayout layout = m_activePage->pageLayout();
         newZoom = qRound(static_cast<double>( m_canvasController->visibleWidth() * 100 ) /
             ( m_zoomHandler.resolutionX() * layout.ptWidth ) ) - 1;
 
@@ -220,7 +220,7 @@ void KoPAView::viewZoom(KoZoomMode::Mode mode, int zoom)
     else if ( mode == KoZoomMode::ZOOM_PAGE ) 
     {
         zoomString = KoZoomMode::toString( mode );
-        KoPageLayout layout = m_activeData.page()->pageLayout();
+        KoPageLayout layout = m_activePage->pageLayout();
         double height = m_zoomHandler.resolutionY() * layout.ptHeight;
         double width = m_zoomHandler.resolutionX() * layout.ptWidth;
         newZoom = qMin(qRound(static_cast<double>( m_canvasController->visibleHeight() * 100) / height ),
@@ -260,9 +260,15 @@ void KoPAView::setActivePage( KoPAPage* page )
 {
     if ( !page )
         return;
-    m_activeData.setPage( page );
 
-    shapeManager()->setShapes( page->shapes() );
+    m_activePage = page;
+    QList<KoShape*> shapes = page->iterator();
+    shapeManager()->setShapes( shapes );
+    //Make the top most layer active
+    if(!shapes.isEmpty()) {
+        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>(shapes.last());
+        shapeManager()->selection()->setActiveLayer(layer);
+    }
 
     m_canvas->updateSize();
     KoPageLayout layout = page->pageLayout();

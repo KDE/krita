@@ -26,8 +26,6 @@
 #include <KoZoomHandler.h>
 #include <KoRuler.h>
 
-#include "KoPAShapeAddRemoveData.h"
-
 class KoCanvasController;
 class KoPACanvas;
 class KoPADocument;
@@ -95,7 +93,7 @@ protected slots:
 protected:
     KoPADocument *m_doc;
     KoPACanvas *m_canvas;
-    KoPAShapeAddRemoveData m_activeData;
+    KoPAPage *m_activePage;
 
 private:    
     void recalculateZoom();

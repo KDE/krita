@@ -22,26 +22,26 @@
 #include <kcommand.h>
 
 #include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoShapeLayer.h>
 
 #include "KoPACanvas.h"
 #include "KoPAView.h"
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"
-#include "KoPAShapeAddRemoveData.h"
 
 KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoDocument( parentWidget, parent, singleViewMode )
 {
     KoPAMasterPage * masterPage = new KoPAMasterPage();
     m_masterPages.append( masterPage );
-    m_pages.append( new KoPAPage( masterPage ) );
+    addPage( new KoPAPage( masterPage ), 0 /*add first*/ );
 }
 
 KoPADocument::~KoPADocument()
 {
     qDeleteAll( m_pages );
     qDeleteAll( m_masterPages );
-    m_pages.clear();
 }
 
 void KoPADocument::paintContent( QPainter &painter, const QRect &rect, bool transparent,
@@ -72,39 +72,63 @@ KoPAPage* KoPADocument::pageByIndex(int index)
     return m_pages.at(index);
 }
 
-void KoPADocument::addShape( KoShape * shape, KoShapeAddRemoveData * addRemoveData )
+void KoPADocument::addShape( KoShape * shape )
 {
-    KoPAShapeAddRemoveData * arData = dynamic_cast<KoPAShapeAddRemoveData*>( addRemoveData );
-    if ( arData )
+    if(!shape)
+        return;
+
+    foreach( KoView *view, views() )
     {
-        arData->page()->addShape( shape );
-        foreach( KoView *view, views() ) 
+        KoPAView * kogaView = static_cast<KoPAView*>( view );
+        KoSelection* selection = kogaView->shapeManager()->selection();
+
+        if ( selection && selection->activeLayer() && shape->parent() &&
+            ( selection->activeLayer()->parent() == shape->parent()->parent() ) )
         {
-            KoPAView * kogaView = static_cast<KoPAView*>( view );
-            if ( kogaView->activePage() && kogaView->activePage() == arData->page() )
-            {
-                KoPACanvas *canvas = kogaView->kogaCanvas();
-                canvas->shapeManager()->add( shape );
-                //TODO repainting kprView->canvasWidget()->update();
-            }
+            KoPACanvas *canvas = kogaView->kogaCanvas();
+            canvas->shapeManager()->add( shape );
+            //TODO Missing? canvas->update()
         }
     }
 }
 
 
-void KoPADocument::removeShape( KoShape *shape, KoShapeAddRemoveData * addRemoveData )
+void KoPADocument::removeShape( KoShape *shape )
 {
-    pageByIndex( 0 )->removeShape( shape );
+    if(!shape)
+        return;
+
     foreach( KoView *view, views() ) 
     {
         KoPAView * kogaView = static_cast<KoPAView*>( view );
-        if ( kogaView->activePage() /*TODO*/ )
+
+        KoSelection* selection = kogaView->shapeManager()->selection();
+
+        if ( selection && selection->activeLayer() && shape->parent() &&
+            ( selection->activeLayer()->parent() == shape->parent()->parent() ) )
         {
             KoPACanvas *canvas = kogaView->kogaCanvas();
             canvas->shapeManager()->remove( shape );
-            //TODO repainting kView->canvasWidget()->update();
+            //TODO Missing? canvas->update()
         }
     }
+}
+
+void KoPADocument::addPage(KoPAPage* page, KoPAPage* before)
+{
+    if(!page)
+        return;
+
+    int index = 0;
+
+    if(before != 0)
+        index = m_pages.indexOf(before);
+
+    // Append the page if before wasn't found in m_pages
+    if(index == -1)
+        index = m_pages.count();
+
+    m_pages.insert(index, page);
 }
 
 #include "KoPADocument.moc"

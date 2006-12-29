@@ -41,8 +41,6 @@ class KoColorProfile;
 class KoColorSpace;
 class KoColor;
 
-class KoShapeAddRemoveData;
-
 class KisView2;
 class KisNameServer;
 class KisChildDoc;
@@ -201,8 +199,8 @@ public:
 
     // Implement KoShapeController
 
-    virtual void addShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData );
-    virtual void removeShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData );
+    virtual void addShape( KoShape* shape );
+    virtual void removeShape( KoShape* shape );
 
 private:
 

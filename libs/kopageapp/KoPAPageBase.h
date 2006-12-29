@@ -24,34 +24,19 @@
 #include <QList>
 #include <QString>
 
+#include <KoShapeContainer.h>
+
 class KoPageLayout;
 
 class KoShape;
 
-class KoPAPageBase
+class KoPAPageBase : public KoShapeContainer
 {
-public:    
+public:
     explicit KoPAPageBase();
     virtual ~KoPAPageBase();
 
-    /**
-     * @brief Add a shape to the page
-     *
-     * @param shape to add
-     */
-    void addShape( KoShape * shape );
-
-    /**
-     * @brief Remove a shape from the page
-     *
-     * @param shape to remove
-     */
-    void removeShape( KoShape *shape );
-
     virtual KoPageLayout & pageLayout() = 0;
-
-    /// @return all shapes.
-    QList<KoShape*> shapes() const;
 
     /**
      * Return page title
@@ -65,8 +50,9 @@ public:
      */
     void setPageTitle( const QString &);
 
+    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+
 protected:
-    QList<KoShape *> m_shapes;
     QString m_pageTitle;
 };
 

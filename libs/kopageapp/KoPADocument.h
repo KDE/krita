@@ -25,8 +25,6 @@
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
 
-class KoShapeAddRemoveData;
-
 class KoPAPage;
 class KoPAMasterPage;
 
@@ -48,8 +46,15 @@ public:
 
     KoPAPage* pageByIndex(int index);
 
-    void addShape( KoShape *shape, KoShapeAddRemoveData * addRemoveData );
-    void removeShape( KoShape* shape, KoShapeAddRemoveData * addRemoveData );
+    /**
+     * Add @p page to the document after page @p before
+     * @param page page to add to document
+     * @param before the page which the added page should come after. Set before to 0 to add at the begining
+     */
+    void addPage(KoPAPage* page, KoPAPage* before);
+
+    void addShape( KoShape *shape );
+    void removeShape( KoShape* shape );
 
 protected:
     virtual KoView *createViewInstance(  QWidget *parent ) = 0;

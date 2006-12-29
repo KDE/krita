@@ -19,27 +19,21 @@
 
 #include "KoPAPageBase.h"
 
+#include <QPainter>
+
+#include <KoShapeLayer.h>
+#include <KoViewConverter.h>
+
 KoPAPageBase::KoPAPageBase()
+: KoShapeContainer()
 {
+    // Add a default layer
+    KoShapeLayer* layer = new KoShapeLayer;
+    addChild(layer);
 }
 
 KoPAPageBase::~KoPAPageBase()
 {
-}
-
-QList<KoShape*> KoPAPageBase::shapes() const
-{
-    return m_shapes;
-}
-
-void KoPAPageBase::addShape( KoShape* shape )
-{
-    m_shapes.append( shape );
-}
-
-void KoPAPageBase::removeShape( KoShape* shape )
-{
-    m_shapes.removeAll( shape );
 }
 
 QString KoPAPageBase::pageTitle() const
@@ -50,4 +44,10 @@ QString KoPAPageBase::pageTitle() const
 void KoPAPageBase::setPageTitle( const QString &_title )
 {
     m_pageTitle = _title;
+}
+
+void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& converter)
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }

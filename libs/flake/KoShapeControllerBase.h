@@ -23,7 +23,6 @@
 #define KOSHAPECONTROLLERBASE_H
 
 class KoShape;
-class KoShapeAddRemoveData;
 
 /**
  * The shape controller is an abstract interface that the applications class
@@ -42,7 +41,7 @@ public:
      * @param shape the new shape
      * @param addRemoveData additional data which can be used for adding the new shape
      */
-    virtual void addShape( KoShape* shape, KoShapeAddRemoveData* addRemoveData ) = 0;
+    virtual void addShape( KoShape* shape ) = 0;
 
     /**
      * Remove a shape from the shape controllers control, allowing it to be deleted shortly after
@@ -50,7 +49,7 @@ public:
      * @param shape the shape to remove
      * @param addRemoveData additional data which can be used for removing the new shape
      */
-    virtual void removeShape( KoShape* shape, KoShapeAddRemoveData* addRemoveData ) = 0;
+    virtual void removeShape( KoShape* shape ) = 0;
 };
 
 #endif

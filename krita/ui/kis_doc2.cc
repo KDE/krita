@@ -231,7 +231,7 @@ public:
                 m_currentImage->disconnect( m_currentImage, 0, doc, 0 );
                 // First clear the current set of shapes away
                 foreach( KoShape* shape, layerShapes ) {
-                    doc->removeShape( shape, 0 );
+                    doc->removeShape( shape );
                     delete shape; // XXX: What happes with stuff on the
                     // clipboard? And how about undo information?
 
@@ -292,7 +292,7 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
 KisDoc2::~KisDoc2()
 {
     foreach( KoShape* shape, m_d->layerShapes ) {
-        removeShape( shape, 0 );
+        removeShape( shape );
         delete shape; // XXX: What happes with stuff on the
                       // clipboard? And how about undo information?
     }
@@ -1310,9 +1310,8 @@ void KisDoc2::initEmpty()
     newImage("", cfg.defImgWidth(), cfg.defImgHeight(), rgb);
 }
 
-void KisDoc2::addShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
+void KisDoc2::addShape( KoShape* shape )
 {
-    Q_UNUSED( addRemoveData );
     kDebug() << ">>>>> KisDoc2::addShape: " << shape->shapeId()  << ", active layer: " << m_d->activeLayerShape() << endl;
     if ( m_d->activeLayerShape() ) kDebug() << "active layer shape id: " << m_d->activeLayerShape()->shapeId() << endl;
 
@@ -1372,9 +1371,8 @@ void KisDoc2::addShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
     setModified( true );
 }
 
-void KisDoc2::removeShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
+void KisDoc2::removeShape( KoShape* shape )
 {
-    Q_UNUSED( addRemoveData );
     if ( !shape ) return;
 
     kDebug() << ">>>>> KisDoc2::removeShape: " << shape->shapeId()  << ", active layer: " << m_d->activeLayerShape() << endl;
@@ -1386,7 +1384,7 @@ void KisDoc2::removeShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
         // If there are no longer children, remove the container
         // layer, too.
         if ( container->childCount() == 0 ) {
-            removeShape( container, 0 );
+            removeShape( container );
         }
     }
 

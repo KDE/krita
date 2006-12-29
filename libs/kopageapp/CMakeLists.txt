@@ -8,7 +8,6 @@ set( kopageapp_LIB_SRCS
      KoPAPageBase.cpp
      KoPAMasterPage.cpp
      KoPAPage.cpp
-     KoPAShapeAddRemoveData.cpp
    )
 
 kde4_automoc(${kopageapp_LIB_SRCS})

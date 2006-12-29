@@ -21,6 +21,7 @@
 #include "KoPathCommand.h"
 #include "KoParameterShape.h"
 #include "KoShapeControllerBase.h"
+#include "KoShapeContainer.h"
 #include <klocale.h>
 #include <kdebug.h>
 #include <math.h>
@@ -627,13 +628,12 @@ void KoSegmentTypeCommand::undo()
 }
 
 KoPathCombineCommand::KoPathCombineCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths,
-                                            KoShapeAddRemoveData * addRemoveData, QUndoCommand *parent )
+                                            QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_controller( controller )
 , m_paths( paths )
 , m_combinedPath( 0 )
 , m_isCombined( false )
-, m_addRemoveData( addRemoveData )                    
 {
     setText( i18n( "Combine paths" ) );
 }
@@ -657,6 +657,9 @@ void KoPathCombineCommand::redo()
     if( ! m_combinedPath )
     {
         m_combinedPath = new KoPathShape();
+        KoShapeContainer * parent = m_paths.first()->parent();
+        if(parent)
+            parent->addChild(m_combinedPath);
         m_combinedPath->setBorder( m_paths.first()->border() );
         m_combinedPath->setShapeId( m_paths.first()->shapeId() );
         // combine the paths
@@ -669,9 +672,9 @@ void KoPathCombineCommand::redo()
     if( m_controller )
     {
         foreach( KoPathShape* p, m_paths )
-            m_controller->removeShape( p, m_addRemoveData );
+            m_controller->removeShape( p );
 
-        m_controller->addShape( m_combinedPath, m_addRemoveData );
+        m_controller->addShape( m_combinedPath );
     }
 }
 
@@ -684,9 +687,11 @@ void KoPathCombineCommand::undo()
 
     if( m_controller )
     {
-        m_controller->removeShape( m_combinedPath, m_addRemoveData );
+        m_controller->removeShape( m_combinedPath );
         foreach( KoPathShape* p, m_paths )
-            m_controller->addShape( p, m_addRemoveData );
+        {
+            m_controller->addShape( p );
+        }
     }
 }
 
@@ -760,12 +765,11 @@ void KoParameterToPathCommand::undo()
 }
 
 KoPathSeparateCommand::KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths,
-                                              KoShapeAddRemoveData *addRemoveData, QUndoCommand *parent )
+                                              QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_controller( controller )
 , m_paths( paths )
 , m_isSeparated( false )
-, m_addRemoveData( addRemoveData )                    
 {
     setText( i18n( "Separate paths" ) );
 }
@@ -786,7 +790,7 @@ KoPathSeparateCommand::~KoPathSeparateCommand()
 
 void KoPathSeparateCommand::redo()
 {
-    if( ! m_separatedPaths.size() )
+    if( m_separatedPaths.isEmpty() )
     {
         foreach( KoPathShape* p, m_paths )
         {
@@ -801,9 +805,9 @@ void KoPathSeparateCommand::redo()
     if( m_controller )
     {
         foreach( KoPathShape* p, m_paths )
-            m_controller->removeShape( p, m_addRemoveData );
+            m_controller->removeShape( p );
         foreach( KoPathShape *p, m_separatedPaths )
-            m_controller->addShape( p, m_addRemoveData );
+            m_controller->addShape( p );
     }
     foreach( KoPathShape* p, m_paths )
         p->repaint();
@@ -814,9 +818,9 @@ void KoPathSeparateCommand::undo()
     if( m_controller )
     {
         foreach( KoPathShape *p, m_separatedPaths )
-            m_controller->removeShape( p, m_addRemoveData );
+            m_controller->removeShape( p );
         foreach( KoPathShape* p, m_paths )
-            m_controller->addShape( p, m_addRemoveData );
+            m_controller->addShape( p );
     }
 
     m_isSeparated = false;

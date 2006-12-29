@@ -22,6 +22,7 @@
 KoShapeLayer::KoShapeLayer()
 : KoShapeContainer(new LayerMembers())
 {
+    setSelectable(false);
 }
 
 bool KoShapeLayer::hitTest( const QPointF &position ) const
@@ -32,18 +33,30 @@ bool KoShapeLayer::hitTest( const QPointF &position ) const
 
 QRectF KoShapeLayer::boundingRect() const
 {
-	QRectF bb;
+    QRectF bb(0.0, 0.0, 1.0, 1.0);
+    QRectF shapeRect;
 
-	foreach( KoShape* shape, iterator() )
-	{
-		if( bb.isEmpty() )
-			bb = shape->boundingRect();
-		else
-			bb = bb.unite( shape->boundingRect() );
-	}
+    foreach( KoShape* shape, iterator() )
+    {
+        shapeRect.setTopLeft(shape->position());
+        shapeRect.setSize(shape->size());
 
-	return bb;
+        bb = bb.unite( shapeRect );
+    }
+
+    return bb;
 }
+
+QSizeF KoShapeLayer::size() const
+{
+    return boundingRect().size();
+}
+
+QPointF KoShapeLayer::position() const
+{
+    return QPointF(0.0, 0.0);
+}
+
 
 //  ############# LayerMembers #############
 KoShapeLayer::LayerMembers::LayerMembers()

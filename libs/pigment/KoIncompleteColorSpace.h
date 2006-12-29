@@ -119,14 +119,6 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             _fallback_::toRgbA16(this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
         }
 
-        virtual bool convertPixelsTo(const quint8 * src,
-                quint8 * dst,
-                const KoColorSpace * dstColorSpace,
-                quint32 numPixels,
-                qint32 renderingIntent) const
-        {
-        }
-
         virtual KoColorTransformation *createBrightnessContrastAdjustment(quint16 *transferValues) const
         {
           return _fallback_::createTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createBrightnessContrastAdjustment( transferValues ));

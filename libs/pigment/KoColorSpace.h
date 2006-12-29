@@ -355,7 +355,7 @@ public:
     virtual bool convertPixelsTo(const quint8 * src,
                                  quint8 * dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 qint32 renderingIntent = INTENT_PERCEPTUAL) const = 0;
+                                 qint32 renderingIntent = INTENT_PERCEPTUAL) const;
 
 //============================== Manipulation functions ==========================//
 

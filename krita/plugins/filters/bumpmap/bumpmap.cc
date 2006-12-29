@@ -288,6 +288,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
 
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), sel_w);
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), sel_w);
+    KoColorTransformation* darkenTransfo = srcCs->createDarkenAdjustement(shade, config->getBool("compensate", true), compensation);
 
     for (int y = 0; y < sel_h; y++) {
 
@@ -346,7 +347,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
                 }
 
                 // Paint
-                srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->getBool("compensate", true), compensation, 1);
+                darkenTransfo->transform(srcIt.rawData(), dstIt.rawData(), 1);
             }
             if (++xofs2 == bm_w)
                 xofs2 = 0;
@@ -379,6 +380,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
 
         incProgress();
     }
+    delete darkenTransfo;
 
     delete [] bm_row1;
     delete [] bm_row2;

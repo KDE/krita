@@ -142,11 +142,11 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
           return _fallback_::createTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createPerChannelAdjustment( transferValues ));
         }
 
-        virtual quint8 difference(const quint8* src1, const quint8* src2) const
+        virtual KoColorTransformation *createDarkenAdjustement(qint32 shade, bool compensate, double compensation) const
         {
         }
 
-        void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const
+        virtual quint8 difference(const quint8* src1, const quint8* src2) const
         {
         }
 

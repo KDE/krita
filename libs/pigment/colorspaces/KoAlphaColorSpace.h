@@ -133,15 +133,12 @@ public:
         kDebug() << "Undefined operation in the alpha colorspace" << endl;
         return 0;
     }
-    virtual void applyAdjustment(const quint8*, quint8*, KoColorTransformation*, qint32) const
+    virtual KoColorTransformation *createDarkenAdjustement(qint32 , bool , double ) const
     {
         kDebug() << "Undefined operation in the alpha colorspace" << endl;
+        return 0;
     }
     virtual void invertColor(quint8*, qint32) const
-    {
-        kDebug() << "Undefined operation in the alpha colorspace" << endl;
-    }
-    virtual void darken(const quint8*, quint8*, qint32, bool, double, qint32) const
     {
         kDebug() << "Undefined operation in the alpha colorspace" << endl;
     }

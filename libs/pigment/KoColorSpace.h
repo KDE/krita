@@ -425,6 +425,14 @@ public:
     virtual KoColorTransformation *createPerChannelAdjustment(quint16 **transferValues) const = 0;
 
     /**
+     * Darken all color channels with the given amount. If compensate is true,
+     * the compensation factor will be used to limit the darkening.
+     *
+     */
+    virtual KoColorTransformation *createDarkenAdjustement(qint32 shade, bool compensate, double compensation) const = 0;
+
+
+    /**
      * Invert color channels of the given pixels
      */
     virtual void invertColor(quint8 * src, qint32 nPixels) const = 0;
@@ -462,14 +470,6 @@ public:
     inline KoConvolutionOp* convolutionOp() const {
       return m_convolutionOp;
     }
-
-    /**
-     * Darken all color channels with the given amount. If compensate is true,
-     * the compensation factor will be used to limit the darkening.
-     *
-     * (See the bumpmap filter)
-     */
-    virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const = 0;
 
     /**
      * Calculate the intensity of the given pixel, scaled down to the range 0-255. XXX: Maybe this should be more flexible

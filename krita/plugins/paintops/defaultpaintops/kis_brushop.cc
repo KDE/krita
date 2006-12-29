@@ -238,10 +238,10 @@ void KisBrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
         else
             darkenAmount = (Q_INT32)(255  - 75 * scaleToCurve(info.pressure, m_darkenCurve));
 
-
-        darkened.colorSpace()->darken(origColor.data(), darkened.data(),
-            darkenAmount, false, 0.0, 1);
+        KoColorTransformation* transfo = darkened.colorSpace()->createDarkenAdjustement(darkenAmount, false, 0.0);
+        transfo->transform(origColor.data(), darkened.data(), 1);
         m_painter->setPaintColor(darkened);
+        delete transfo;
     }
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {

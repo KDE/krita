@@ -401,7 +401,26 @@ protected:
      */
     bool buildChild( SequenceElement* child, QDomNode node, const QString & name );
 
+    /**
+     * Utility function that sets the size type and returns the size value from
+     * a MathML attribute string with unit as defined in Section 2.4.4.2
+     *
+     * @returns the size value
+     *
+     * @param str the attribute string.
+     * @param st size type container. It will be properly assigned to its size
+     * type or NoSize if str is invalid
+     */
+    double getSize( const QString& str, SizeType* st );
+
+    SizeType getSpace( const QString& str );
+
 private:
+    /**
+     * Used internally by getSize()
+     */
+    double str2size( const QString& str, SizeType* st, uint index, SizeType type );
+
     /// The element's parent element - might not be null except of FormulaElement
     BasicElement* m_parentElement;
 

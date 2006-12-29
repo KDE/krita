@@ -57,13 +57,14 @@ bool KoTextBlockBorderData::equals(const KoTextBlockBorderData &border) {
     return true;
 }
 
-void KoTextBlockBorderData::applyInsets(KoInsets &insets, double paragStart) const {
+void KoTextBlockBorderData::applyInsets(KoInsets &insets, double paragStart, bool startUnderBorder) const {
     insets.left += inset(Left);
     insets.right += inset(Right);
 
     // only apply top when the parag is the top parag in the border-set
-    if(qAbs(m_bounds.top() - paragStart) < 1E-10)
-        insets.top += inset(Top);
+    double insetTop = startUnderBorder ? inset(Top): 0;
+    if(qAbs(m_bounds.top() + insetTop - paragStart) < 1E-10)
+        insets.top += startUnderBorder ? insetTop : inset(Top);
 }
 
 void KoTextBlockBorderData::setParagraphBottom(double bottom) {

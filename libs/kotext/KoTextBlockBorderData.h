@@ -33,6 +33,7 @@
  * cause on text-layout is stored in here.
  * An instance of this class is owned by the KoTextBlockData and this class is being refcounted
  * to allow multiple paragraphs to share one border.
+ * 
  */
 class KOTEXT_EXPORT KoTextBlockBorderData {
 public:
@@ -88,9 +89,11 @@ public:
      * @param insets the object to alter
      * @param paragraphStart the y-offset in the document of the paragraph for which the insets apply.
      *     This parameter is used to find out if this is the top paragraph and thus the top insets should apply.
+     * @param startUnderBorder if true the paragraphStart is calculated from the top of the text, and thus under
+            the border.  If false; its above the border.
      * @see inset()
      */
-    void applyInsets(KoInsets &insets, double paragraphStart) const;
+    void applyInsets(KoInsets &insets, double paragraphStart, bool startUnderBorder) const;
 
     /**
      * Alter the bounding rect of the borders to move the bottom to the parameter position.

@@ -59,5 +59,13 @@ kde4_add_executable(TestDocumentLayout RUN_UNINSTALLED ${TestDocumentLayout_test
 target_link_libraries(TestDocumentLayout kotext ${QT_QTTEST_LIBRARY})
 add_test(TestDocumentLayout ${EXECUTABLE_OUTPUT_PATH}/TestDocumentLayout)
 
+########### next target ###############
+
+set(TestDocumentLayout_test_SRCS TestBorder.cpp)
+kde4_automoc(${TestDocumentLayout_test_SRCS})
+kde4_add_executable(TestBorder RUN_UNINSTALLED ${TestDocumentLayout_test_SRCS})
+target_link_libraries(TestBorder kotext ${QT_QTTEST_LIBRARY})
+add_test(TestBorder ${EXECUTABLE_OUTPUT_PATH}/TestBorder)
+
 
 endif(KDE4_BUILD_TESTS)

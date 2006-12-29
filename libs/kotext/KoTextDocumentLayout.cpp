@@ -456,7 +456,7 @@ void KoTextDocumentLayout::LayoutState::updateBorders() {
             if(prevBorder && !d->newShape)
                 d->y += prevBorder->inset(KoTextBlockBorderData::Bottom);
         }
-        d->blockData->border()->applyInsets(d->borderInsets, d->y + d->borderInsets.top);
+        d->blockData->border()->applyInsets(d->borderInsets, d->y + d->borderInsets.top, false);
     }
     else { // this parag has no border.
         if(prevBorder && !d->newShape)
@@ -552,6 +552,15 @@ painter->setPen(Qt::black); // TODO use theme color, or a kword wide hardcoded d
             QTextLine first = layout->lineAt(0);
             QTextLine last = layout->lineAt(layout->lineCount()-1);
             QRectF parag(qMin(first.x(), last.x()), first.y(), qMax(first.width(), last.width()), last.y() + last.height());
+            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
+            if(blockData) {
+                KoTextBlockBorderData *border = blockData->border();
+                if(border) {
+                    KoInsets insets;
+                    border->applyInsets(insets, parag.top(), true);
+                    parag.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+                }
+            }
             if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(parag.toRect())).isEmpty()) {
                 started=true;
                 decorateParagraph(painter, block);

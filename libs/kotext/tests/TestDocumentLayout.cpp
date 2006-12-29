@@ -1,9 +1,5 @@
 #include "TestDocumentLayout.h"
 
-//   #include <KWTextFrame.h>
-//   #include <KWTextFrameSet.h>
-//   #include <KWTextDocumentLayout.h>
-
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoListStyle.h"
 #include "styles/KoStyleManager.h"

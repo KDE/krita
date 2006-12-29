@@ -99,6 +99,8 @@ void KoColorSpaceRegistry::init()
     KoColorProfile *labProfile = new KoColorProfile(cmsCreateLabProfile(NULL));
     addProfile(labProfile);
     add(new KoLabColorSpaceFactory());
+    KoColorProfile *rgbProfile = new KoColorProfile(cmsCreate_sRGBProfile());
+    addProfile(rgbProfile);
     add(new KoRgbU16ColorSpaceFactory());
 /* XXX where to put this
     KisHistogramProducerFactoryRegistry::instance()->add(

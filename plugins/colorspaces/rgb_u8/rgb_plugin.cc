@@ -43,10 +43,6 @@ RGBPlugin::RGBPlugin(QObject *parent, const QStringList &)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
 
-    KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());
-    f->addProfile(defProfile);
-
-
     KoColorSpaceFactory * csFactory = new KisRgbColorSpaceFactory();
     f->add(csFactory);
 

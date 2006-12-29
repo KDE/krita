@@ -104,6 +104,14 @@ public:
      */
     QPaintEngine * paintEngine () const;
 
+protected:
+
+    /**
+     * Returns the metric information for the given paint device
+     * metric.
+     */
+    int metric( PaintDeviceMetric metric ) const;
+
 public:
     /**
      * Start the long-running background filters. This is typically done from

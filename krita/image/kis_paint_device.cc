@@ -325,6 +325,58 @@ QPaintEngine * KisPaintDevice::paintEngine () const
     return m_paintEngine;
 }
 
+int KisPaintDevice::metric( PaintDeviceMetric metric ) const
+{
+    QRect rc = exactBounds();
+    int depth = colorSpace()->pixelSize() - 1;
+
+    switch (metric) {
+    case PdmWidth:
+        return rc.width();
+        break;
+
+    case PdmHeight:
+        return rc.height();
+        break;
+
+    case PdmWidthMM:
+        return 0;
+        break;
+
+    case PdmHeightMM:
+        return 0;
+        break;
+
+    case PdmNumColors:
+        return depth * depth;
+        break;
+
+    case PdmDepth:
+        return colorSpace()->pixelSize() * 8; // in bits
+        break;
+
+    case PdmDpiX:
+        return 0;
+        break;
+
+    case PdmDpiY:
+        return 0;
+        break;
+
+    case PdmPhysicalDpiX:
+        return 0;
+        break;
+
+    case PdmPhysicalDpiY:
+        return 0;
+        break;
+    default:
+        qWarning("QImage::metric(): Unhandled metric type %d", metric);
+        break;
+    }
+    return 0;
+}
+
 void KisPaintDevice::startBackgroundFilters()
 {
     m_longRunningFilters = m_colorSpace->createBackgroundFilters();

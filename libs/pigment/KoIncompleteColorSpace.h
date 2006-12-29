@@ -33,6 +33,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                          icColorSpaceSignature colorSpaceSignature) : KoColorSpaceAbstract<_CSTraits>(id, name, parent, type, colorSpaceSignature), m_fallBackColorSpace(_fallback_::createColorSpace())
         {
             m_qcolordata = new quint16[4];
+            m_convertionCache.resize( m_fallBackColorSpace->pixelSize() );
         }
         virtual ~KoIncompleteColorSpace()
         {
@@ -77,23 +78,44 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             *opacity = this->alpha(src);
         }
         virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                KoColorProfile *dstProfile,
-                qint32 renderingIntent, float exposure) const
+                KoColorProfile *dstProfile, qint32 renderingIntent, float exposure) const
 
         {
+            Q_UNUSED(exposure);
+            Q_UNUSED(dstProfile);
+            Q_UNUSED(renderingIntent);
+            QImage img = QImage(width, height, QImage::Format_ARGB32);
+
+            Q_INT32 i = 0;
+            uchar *j = img.bits();
+
+            while ( i < width * height * this->channelCount()) {
+                this->toRgbA16( ( data + i), (quint8*)m_qcolordata, 1);
+                *( j + 3)  = this->alpha(data + i);
+                *( j + 2 ) = KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[2]);
+                *( j + 1 ) = KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[1]);
+                *( j + 0 ) = KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[0]);
+                i += this->channelCount();
+                j += 4;
+            }
+            return img;
         }
         virtual void toLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
         {
+            _fallback_::toLabA16( this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
         }
 
         virtual void fromLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
         {
+            _fallback_::fromLabA16(this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
         }
         virtual void fromRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
         {
+            _fallback_::fromRgbA16(this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
         }
         virtual void toRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
         {
+            _fallback_::toRgbA16(this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
         }
 
         virtual bool convertPixelsTo(const quint8 * src,
@@ -132,6 +154,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         mutable quint16 * m_qcolordata; // A small buffer for conversion from and to qcolor.
         KoColorSpace* m_fallBackColorSpace;
         quint32 m_cmType;
+        mutable QByteArray m_convertionCache;
 };
 
 #endif

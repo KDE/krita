@@ -407,24 +407,22 @@ public:
     /**
      * Create an adjustment object for adjusting the brightness and contrast
      * transferValues is a 256 bins array with values from 0 to 0xFFFF
+     * This function is thread-safe, but you need to create one KoColorTransformation per thread.
      */
     virtual KoColorTransformation *createBrightnessContrastAdjustment(quint16 *transferValues) const = 0;
 
     /**
      * Create an adjustment object for desaturating
+     * This function is thread-safe, but you need to create one KoColorTransformation per thread.
      */
     virtual KoColorTransformation *createDesaturateAdjustment() const = 0;
 
     /**
      * Create an adjustment object for adjusting individual channels
      * transferValues is an array of colorChannelCount number of 256 bins array with values from 0 to 0xFFFF
+     * This function is thread-safe, but you need to create one KoColorTransformation per thread.
      */
     virtual KoColorTransformation *createPerChannelAdjustment(quint16 **transferValues) const = 0;
-
-    /**
-     * Apply the adjustment created with onr of the other functions
-     */
-//     virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *, qint32 nPixels) const = 0;
 
     /**
      * Invert color channels of the given pixels

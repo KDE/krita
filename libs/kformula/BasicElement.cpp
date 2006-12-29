@@ -246,15 +246,19 @@ void BasicElement::writeMathMLAttributes( KoXmlWriter* writer ) const
 
 
 
-void BasicElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
+void BasicElement::calcSizes( const ContextStyle& context, 
+                              ContextStyle::TextStyle tstyle,
+                              ContextStyle::IndexStyle istyle,
+                              StyleAttributes& style )
 {
 }
 
 void BasicElement::draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                             ContextStyle::TextStyle tstyle,
-                             ContextStyle::IndexStyle istyle,
-                            const LuPixelPoint& parentOrigin )
+                         const ContextStyle& context,
+                         ContextStyle::TextStyle tstyle,
+                         ContextStyle::IndexStyle istyle,
+                         StyleAttributes& style,
+                         const LuPixelPoint& parentOrigin )
 
 {}
 

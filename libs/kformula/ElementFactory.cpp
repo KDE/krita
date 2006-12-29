@@ -58,34 +58,34 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     // mtr and mtd are currently managed inside MatrixElement
 
     // Token Elements ( Section 3.1.6.1 )
-    if      ( tagName == "mi" )            return new IdentifierElement( parent );
+    if      ( tagName == "mi" )            ;//return new IdentifierElement( parent );
 //    else if ( tagName == "mo" )            return createOperatorElement( parent, element );
-    else if ( tagName == "mn" )            return new NumberElement( parent );
-    else if ( tagName == "mtext" )         return new TokenElement( parent );
-    else if ( tagName == "ms" )            return new StringElement( parent );
-    else if ( tagName == "mspace" )        return new SpaceElement( parent );
-    else if ( tagName == "mglyph" )        return new GlyphElement( parent );
+    //else if ( tagName == "mn" )            return new NumberElement( parent );
+    //else if ( tagName == "mtext" )         return new TokenElement( parent );
+    //else if ( tagName == "ms" )            return new StringElement( parent );
+    //else if ( tagName == "mspace" )        return new SpaceElement( parent );
+    //else if ( tagName == "mglyph" )        return new GlyphElement( parent );
 
     // General Layout Schemata ( Section 3.1.6.2 )
     else if ( tagName == "mrow" )          return new SequenceElement( parent );
-    else if ( tagName == "mfrac" )         return new FractionElement( parent );
-    else if ( tagName == "msqrt"
-              || tagName == "mroot" )      return new RootElement( parent );
-	else if ( tagName == "mstyle" )        return new StyleElement( parent );
-    else if ( tagName == "merror" )        return new ErrorElement( parent );
-    else if ( tagName == "mpadded" )       return new PaddedElement( parent );
-    else if ( tagName == "mphantom" )      return new PhantomElement( parent );
-    else if ( tagName == "mfenced" )       return new BracketElement( parent );
-    else if ( tagName == "menclose" )      return new EncloseElement( parent );
+    //else if ( tagName == "mfrac" )         return new FractionElement( parent );
+    //else if ( tagName == "msqrt"
+    //          || tagName == "mroot" )      return new RootElement( parent );
+	//else if ( tagName == "mstyle" )        return new StyleElement( parent );
+    //else if ( tagName == "merror" )        return new ErrorElement( parent );
+    //else if ( tagName == "mpadded" )       return new PaddedElement( parent );
+    //else if ( tagName == "mphantom" )      return new PhantomElement( parent );
+    //else if ( tagName == "mfenced" )       return new BracketElement( parent );
+    //else if ( tagName == "menclose" )      return new EncloseElement( parent );
 
     // Script and Limit Schemata ( Section 3.1.6.3 )
-    else if ( tagName == "msub"
-              || tagName == "msup"
-              || tagName == "msubsup" )    return new MultiscriptElement( parent );
-    else if ( tagName == "munder"
-              || tagName == "mover"
-              || tagName == "munderover" ) return new UnderOverElement( parent );
-    else if ( tagName == "mmultiscripts" ) return new MultiscriptElement( parent );
+    //else if ( tagName == "msub"
+    //        || tagName == "msup"
+    //        || tagName == "msubsup" )    return new MultiscriptElement( parent );
+    //else if ( tagName == "munder"
+    //        || tagName == "mover"
+    //        || tagName == "munderover" ) return new UnderOverElement( parent );
+    //else if ( tagName == "mmultiscripts" ) return new MultiscriptElement( parent );
 
     return 0;
 }
@@ -134,12 +134,12 @@ SpaceElement* ElementFactory::createSpaceElement( SpaceWidth width )
 
 FractionElement* ElementFactory::createFractionElement()
 {
-    return new FractionElement;
+    //return new FractionElement;
 }
 
 RootElement* ElementFactory::createRootElement()
 {
-    return new RootElement;
+    //return new RootElement;
 }
 
 /*
@@ -178,32 +178,32 @@ BasicElement* ElementFactory::createOperatorElement( const QDomElement& element 
              || name == "RightCeiling"
              || name == "RightDoubleBracket"
              || name == "RightFloor" ) {
-            return new BracketElement();
+            //return new BracketElement();
         }
-        return new OperatorElement();
+        //return new OperatorElement();
     }
     if ( n.isText() ) {
         QString text = n.toText().data();
         if ( text.length() == 1 && QString("()[]{}").contains(text[0]) ) {
-            return new BracketElement();
+            //return new BracketElement();
         }
     }
-    return new OperatorElement();
+    //return new OperatorElement();
 }
 
 IdentifierElement* ElementFactory::createIdentifierElement()
 {
-    return new IdentifierElement();
+    //return new IdentifierElement();
 }
 
 OperatorElement* ElementFactory::createOperatorElement()
 {
-    return new OperatorElement();
+    //return new OperatorElement();
 }
 
 NumberElement* ElementFactory::createNumberElement()
 {
-    return new NumberElement();
+    //return new NumberElement();
 }
 
 } // namespace KFormula

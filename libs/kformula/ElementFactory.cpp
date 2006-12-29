@@ -58,104 +58,108 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     // mtr and mtd are currently managed inside MatrixElement
 
     // Token Elements ( Section 3.1.6.1 )
-    if      ( type == "mi" )            return new IdentifierElement( parent );
-    else if ( type == "mo" )            return createOperatorElement( parent, element );
-    else if ( type == "mn" )            return new NumberElement( parent );
-    else if ( type == "mtext" )         return new TokenElement( parent );
-    else if ( type == "ms" )            return new StringElement( parent );
-    else if ( type == "mspace" )        return new SpaceElement( parent );
-    else if ( type == "mglyph" )        return new GlyphElement( parent );
+    if      ( tagName == "mi" )            return new IdentifierElement( parent );
+//    else if ( tagName == "mo" )            return createOperatorElement( parent, element );
+    else if ( tagName == "mn" )            return new NumberElement( parent );
+    else if ( tagName == "mtext" )         return new TokenElement( parent );
+    else if ( tagName == "ms" )            return new StringElement( parent );
+    else if ( tagName == "mspace" )        return new SpaceElement( parent );
+    else if ( tagName == "mglyph" )        return new GlyphElement( parent );
 
     // General Layout Schemata ( Section 3.1.6.2 )
-    else if ( type == "mrow" )          return new SequenceElement( parent );
-    else if ( type == "mfrac" )         return new FractionElement( parent );
-    else if ( type == "msqrt"
-              || type == "mroot" )      return new RootElement( parent );
-	else if ( type == "mstyle" )        return new StyleElement( parent );
-    else if ( type == "merror" )        return new ErrorElement( parent );
-    else if ( type == "mpadded" )       return new PaddedElement( parent );
-    else if ( type == "mphantom" )      return new PhantomElement( parent );
-    else if ( type == "mfenced" )       return new BracketElement( parent );
-    else if ( type == "menclose" )      return new EncloseElement( parent );
+    else if ( tagName == "mrow" )          return new SequenceElement( parent );
+    else if ( tagName == "mfrac" )         return new FractionElement( parent );
+    else if ( tagName == "msqrt"
+              || tagName == "mroot" )      return new RootElement( parent );
+	else if ( tagName == "mstyle" )        return new StyleElement( parent );
+    else if ( tagName == "merror" )        return new ErrorElement( parent );
+    else if ( tagName == "mpadded" )       return new PaddedElement( parent );
+    else if ( tagName == "mphantom" )      return new PhantomElement( parent );
+    else if ( tagName == "mfenced" )       return new BracketElement( parent );
+    else if ( tagName == "menclose" )      return new EncloseElement( parent );
 
     // Script and Limit Schemata ( Section 3.1.6.3 )
-    else if ( type == "msub"
-              || type == "msup"
-              || type == "msubsup" )    return new MultiscriptElement( parent );
-    else if ( type == "munder"
-              || type == "mover"
-              || type == "munderover" ) return new UnderOverElement( parent );
-    else if ( type == "mmultiscripts" ) return new MultiscriptElement( parent );
+    else if ( tagName == "msub"
+              || tagName == "msup"
+              || tagName == "msubsup" )    return new MultiscriptElement( parent );
+    else if ( tagName == "munder"
+              || tagName == "mover"
+              || tagName == "munderover" ) return new UnderOverElement( parent );
+    else if ( tagName == "mmultiscripts" ) return new MultiscriptElement( parent );
 
     return 0;
 }
 
-TextElement* OasisCreationStrategy::createTextElement( const QChar& ch, bool symbol )
+TextElement* ElementFactory::createTextElement( const QChar& ch, bool symbol )
 {
     return new TextElement( ch, symbol );
 }
 
-EmptyElement* OasisCreationStrategy::createEmptyElement()
+/*
+EmptyElement* ElementFactory::createEmptyElement()
 {
     return new EmptyElement;
 }
 
-NameSequence* OasisCreationStrategy::createNameSequence()
+NameSequence* ElementFactory::createNameSequence()
 {
     return new NameSequence;
 }
 
-BracketElement* OasisCreationStrategy::createBracketElement( SymbolType lhs, SymbolType rhs )
+BracketElement* ElementFactory::createBracketElement( SymbolType lhs, SymbolType rhs )
 {
     return new BracketElement( lhs, rhs );
 }
 
-OverlineElement* OasisCreationStrategy::createOverlineElement()
+OverlineElement* ElementFactory::createOverlineElement()
 {
     return new OverlineElement;
 }
 
-UnderlineElement* OasisCreationStrategy::createUnderlineElement()
+UnderlineElement* ElementFactory::createUnderlineElement()
 {
     return new UnderlineElement;
 }
 
-MultilineElement* OasisCreationStrategy::createMultilineElement()
+MultilineElement* ElementFactory::createMultilineElement()
 {
     return new MultilineElement;
 }
 
-SpaceElement* OasisCreationStrategy::createSpaceElement( SpaceWidth width )
+SpaceElement* ElementFactory::createSpaceElement( SpaceWidth width )
 {
     return new SpaceElement( width );
 }
+*/
 
-FractionElement* OasisCreationStrategy::createFractionElement()
+FractionElement* ElementFactory::createFractionElement()
 {
     return new FractionElement;
 }
 
-RootElement* OasisCreationStrategy::createRootElement()
+RootElement* ElementFactory::createRootElement()
 {
     return new RootElement;
 }
 
-SymbolElement* OasisCreationStrategy::createSymbolElement( SymbolType type )
+/*
+SymbolElement* ElementFactory::createSymbolElement( SymbolType type )
 {
     return new SymbolElement( type );
 }
 
-MatrixElement* OasisCreationStrategy::createMatrixElement( uint rows, uint columns )
+MatrixElement* ElementFactory::createMatrixElement( uint rows, uint columns )
 {
     return new MatrixElement( rows, columns );
 }
 
-IndexElement* OasisCreationStrategy::createIndexElement()
+IndexElement* ElementFactory::createIndexElement()
 {
     return new IndexElement;
 }
+*/
 
-BasicElement* OasisCreationStrategy::createOperatorElement( const QDomElement& element )
+BasicElement* ElementFactory::createOperatorElement( const QDomElement& element )
 {
     QDomNode n = element.firstChild();
     if ( n.isNull() )
@@ -187,17 +191,17 @@ BasicElement* OasisCreationStrategy::createOperatorElement( const QDomElement& e
     return new OperatorElement();
 }
 
-IdentifierElement* OasisCreationStrategy::createIdentifierElement()
+IdentifierElement* ElementFactory::createIdentifierElement()
 {
     return new IdentifierElement();
 }
 
-OperatorElement* OasisCreationStrategy::createOperatorElement()
+OperatorElement* ElementFactory::createOperatorElement()
 {
     return new OperatorElement();
 }
 
-NumberElement* OasisCreationStrategy::createNumberElement()
+NumberElement* ElementFactory::createNumberElement()
 {
     return new NumberElement();
 }

@@ -24,6 +24,8 @@
 
 #include <QString>
 
+#include <KoXmlReader.h>
+
 #include "kformuladefs.h"
 
 namespace KFormula {
@@ -69,7 +71,7 @@ public:
     static OperatorElement* createOperatorElement();
     static NumberElement* createNumberElement();
 
-    BasicElement* createOperatorElement( const QDomElement& element );
+    BasicElement* createOperatorElement( const KoXmlElement& element );
 };
 
 } // namespace KFormula

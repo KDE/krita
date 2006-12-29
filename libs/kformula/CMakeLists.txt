@@ -14,7 +14,7 @@ set(kformulalib_LIB_SRCS
    FormulaCursor.cpp 
    FormulaContainer.cpp
    BasicElement.cpp 
-#   SequenceElement.cpp
+   SequenceElement.cpp
    FormulaElement.cpp 
 #   MultiscriptElement.cpp
 #   UnderOverElement.cpp
@@ -39,7 +39,7 @@ set(kformulalib_LIB_SRCS
 #   OperatorElement.cpp
    OperatorDictionary.cpp
    Entities.cpp
-#   ElementFactory.cpp 
+   ElementFactory.cpp 
 #   kformulacommand.cc 
 #   MatrixDialog.cc 
    contextstyle.cc 

@@ -20,7 +20,7 @@
 #ifndef STRINGELEMENT_H
 #define STRINGELEMENT_H
 
-#include "tokenelement.h"
+#include "TokenElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -28,7 +28,7 @@ class StringElement : public TokenElement {
     typedef TokenElement inherited;
 public:
     StringElement( BasicElement* parent = 0 );
-	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
+	virtual int buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNode n);
 
 protected:
     virtual bool readAttributesFromMathMLDom(const QDomElement& element);

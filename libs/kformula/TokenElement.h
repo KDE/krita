@@ -20,9 +20,9 @@
 #ifndef TOKENELEMENT_H
 #define TOKENELEMENT_H
 
-#include "formulacursor.h"
-#include "tokenstyleelement.h"
-#include "sequenceelement.h"
+#include "FormulaCursor.h"
+#include "TokenStyleElement.h"
+#include "SequenceElement.h"
 #include "contextstyle.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -32,7 +32,7 @@ class TokenElement : public TokenStyleElement {
 public:
     TokenElement( BasicElement* parent = 0 );
 
-	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
+	virtual int buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNode n);
 
     virtual QString getElementName() const { return "mtext"; }
 protected:

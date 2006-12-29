@@ -20,7 +20,7 @@
 #ifndef PHANTOMELEMENT_H
 #define PHANTOMELEMENT_H
 
-#include "sequenceelement.h"
+#include "SequenceElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 

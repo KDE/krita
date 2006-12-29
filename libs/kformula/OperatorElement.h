@@ -20,7 +20,7 @@
 #ifndef OPERATORELEMENT_H
 #define OPERATORELEMENT_H
 
-#include "tokenelement.h"
+#include "TokenElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 

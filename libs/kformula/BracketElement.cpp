@@ -37,9 +37,9 @@ namespace KFormula {
 
 BracketElement::BracketElement( BasicElement* parent ) : BasicElement( parent ),
                                                          left( 0 ),
-							 right( 0 ),
-							 leftType( EmptyBracket ),
-							 rightType( EmptyBracket )
+                                                         right( 0 ),
+                                                         leftType( EmptyBracket ),
+                                                         rightType( EmptyBracket )
 {
 }
 

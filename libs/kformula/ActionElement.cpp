@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "creationstrategy.h"
+#include "ElementFactory.h"
 #include "ActionElement.h"
 
 namespace KFormula {
@@ -27,12 +27,8 @@ ActionElement::ActionElement( BasicElement* parent ) : SequenceElement( parent )
 {
 }
 
-bool ActionElement::readAttributesFromMathMLDom(const QDomElement& element)
+void ActionElement::readMathMLAttributes(const QDomElement& element)
 {
-    if ( ! BasicElement::readAttributesFromMathMLDom( element ) ) {
-        return false;
-    }
-
     m_actionType = element.attribute( "actiontype" );
     QString selectionStr = element.attribute( "selection" );
     if ( ! selectionStr.isNull() ) {
@@ -40,8 +36,6 @@ bool ActionElement::readAttributesFromMathMLDom(const QDomElement& element)
         m_selection = selectionStr.toUInt( &ok ); 
         if ( ! ok ) m_selection = 0;
     }
-
-    return true;
 }
 
 int ActionElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) 

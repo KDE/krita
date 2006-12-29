@@ -32,10 +32,10 @@ namespace KFormula {
 class ActionElement : public SequenceElement {
 public:
     ActionElement( BasicElement* parent = 0 );
-    virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
+    virtual int buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNode n);
 
 private:
-    virtual bool readAttributesFromMathMLDom(const QDomElement& element);
+    virtual void readMathMLAttributes(const QDomElement& element);
     virtual QString getElementName() const { return "maction"; }
     virtual void writeMathMLAttributes( QDomElement& element ) const ;
 

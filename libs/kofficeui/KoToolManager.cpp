@@ -195,7 +195,7 @@ void KoToolManager::toolActivated(ToolHelper *tool) {
 
 void KoToolManager::switchTool(const QString &id, bool temporary) {
 
-    if (!m_activeCanvas) kDebug() << kBacktrace();
+    if (!m_activeCanvas) kDebug(30004) << kBacktrace();
     Q_ASSERT(m_activeCanvas);
     if (m_activeTool && temporary)
         m_stack.push(m_activeToolId);

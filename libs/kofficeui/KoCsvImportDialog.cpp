@@ -582,7 +582,7 @@ void KoCsvImportDialog::delimiterClicked(int id)
     else if (id == group->id(m_dialog->m_radioSemicolon))
         m_delimiter = ";";
 
-    kDebug() << "Delimiter \"" << m_delimiter << "\" selected." << endl;
+    kDebug(30501) << "Delimiter \"" << m_delimiter << "\" selected." << endl;
     fillTable();
 }
 
@@ -640,7 +640,7 @@ void KoCsvImportDialog::ignoreDuplicatesChanged(int)
 QTextCodec* KoCsvImportDialog::getCodec(void) const
 {
     const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-    kDebug(30502) << "Encoding: " << strCodec << endl;
+    kDebug(30501) << "Encoding: " << strCodec << endl;
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );

@@ -199,7 +199,7 @@ void KoZoomAction::sliderValueChanged(int value)
 
 void KoZoomAction::numberValueChanged()
 {
-    kDebug() << "number widget has changed to " << m_number->text() << endl;
+    kDebug(30004) << "number widget has changed to " << m_number->text() << endl;
 
     setZoom(m_number->text());
     int zoom = m_number->text().toInt();

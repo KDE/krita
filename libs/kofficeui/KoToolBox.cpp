@@ -39,7 +39,7 @@ KoToolBox::~KoToolBox() {
 }
 
 void KoToolBox::addButton(QAbstractButton *button, const QString &section, int priority, int buttonGroupId) {
-    kDebug() << "Adding button: " << section << ", prio " << priority << ", group: " << buttonGroupId << endl;
+    //kDebug(30004) << "Adding button: " << section << ", prio " << priority << ", group: " << buttonGroupId << endl;
 
     QMultiMap<int, QAbstractButton*> buttons = m_buttons[section];
     buttons.insert(priority, button);

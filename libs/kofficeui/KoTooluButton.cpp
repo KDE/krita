@@ -690,7 +690,7 @@ QSize KoToolButton::minimumSize() const
 
 void KoToolButton::colorSelected( const QColor& color )
 {
-    kDebug() << "selected::: " << color.name() << endl;
+    kDebug(30004) << "selected::: " << color.name() << endl;
 }
 
 void KoToolButton::drawButton(QPainter *_painter)

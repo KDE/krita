@@ -24,15 +24,22 @@
 
 class KoPAMasterPage;
 
+/// Class representing a page
 class KoPAPage : public KoPAPageBase
 {
-public:    
+public:
+    /** Constructor
+     * @param masterPage masterpage used for this page
+     */
     explicit KoPAPage( KoPAMasterPage * masterPage );
     ~KoPAPage();
 
+    /// @return the layout set by the masterpage
     KoPageLayout & pageLayout();
 
+    /// Set the masterpage for this page to @p masterPage
     void setMasterPage( KoPAMasterPage * masterPage );
+    /// @return the masterpage of this page
     KoPAMasterPage * masterPage() { return m_masterPage; }
 
 protected:

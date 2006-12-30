@@ -30,12 +30,14 @@ class KoPageLayout;
 
 class KoShape;
 
+/// Base class used for KoPAMasterPage and KoPAPage
 class KoPAPageBase : public KoShapeContainer
 {
 public:
     explicit KoPAPageBase();
     virtual ~KoPAPageBase();
 
+    /// @return the layout of the page
     virtual KoPageLayout & pageLayout() = 0;
 
     /**

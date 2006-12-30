@@ -26,13 +26,14 @@
 class KoPAView;
 class KoPADocument;
 
+/// Widget that shows a KoPAPage
 class KoPACanvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
 public:
     explicit KoPACanvas( KoPAView * view, KoPADocument * doc );
     ~KoPACanvas();
-    
+
     void gridSize( double *horizontal, double *vertical ) const;
     bool snapToGrid() const;
     void addCommand( QUndoCommand *command );
@@ -48,7 +49,7 @@ public slots:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
     void updateSize();
 
-protected:    
+protected:
     void paintEvent( QPaintEvent* event );
     void tabletEvent( QTabletEvent *event );
     void mousePressEvent( QMouseEvent *event );

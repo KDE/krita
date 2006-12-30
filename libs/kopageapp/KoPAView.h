@@ -34,10 +34,16 @@ class KoPAPage;
 class KoShapeManager;
 class KoZoomAction;
 
+/// Creates a view with a KoPACanvas and rulers
 class KOPAGEAPP_EXPORT KoPAView : public KoView
 {
     Q_OBJECT
 public:
+    /**
+     * Constructor
+     * @param document the document of this view
+     * @param parent the parent widget
+     */
     explicit KoPAView( KoPADocument * document, QWidget * parent = 0 );
     virtual ~KoPAView();
 
@@ -49,11 +55,14 @@ public:
 
     KoPACanvas * kogaCanvas() { return m_canvas; }
     KoPACanvas * kogaCanvas() const { return m_canvas; }
-    
+
+    /// @return Page that is shown in the canvas
     KoPAPage* activePage() const;
 
+    /// Set page shown in the canvas to @p page
     void setActivePage( KoPAPage* page );
-    
+
+    /// @return the shape manager used for this view
     KoShapeManager* shapeManager() const;
 
     void setZoom(int zoom);
@@ -62,8 +71,10 @@ public slots:
     /// Shows/hides the rulers
     void setShowRulers(bool show);
 
-protected:    
+protected:
+    /// creates the widgets (called from the constructor)
     void initGUI();
+    /// creates the actions (called from the constructor)
     void initActions();
 
 protected slots:
@@ -95,7 +106,7 @@ protected:
     KoPACanvas *m_canvas;
     KoPAPage *m_activePage;
 
-private:    
+private:
     void recalculateZoom();
 
     KoCanvasController * m_canvasController;

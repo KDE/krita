@@ -22,7 +22,6 @@
 #include <kcommand.h>
 
 #include <KoShapeManager.h>
-#include <KoSelection.h>
 #include <KoShapeLayer.h>
 
 #include "KoPACanvas.h"
@@ -90,17 +89,20 @@ void KoPADocument::addShape( KoShape * shape )
     if(!shape)
         return;
 
+    KoShape * parent = shape;
+    KoPAPageBase * page = 0;
+    while ( !page && ( parent = parent->parent() ) )
+    {
+        page = dynamic_cast<KoPAPageBase*>( parent );
+    }
+
     foreach( KoView *view, views() )
     {
         KoPAView * kogaView = static_cast<KoPAView*>( view );
-        KoSelection* selection = kogaView->shapeManager()->selection();
-
-        if ( selection && selection->activeLayer() && shape->parent() &&
-            ( selection->activeLayer()->parent() == shape->parent()->parent() ) )
+        if ( page == kogaView->activePage() )
         {
             KoPACanvas *canvas = kogaView->kogaCanvas();
             canvas->shapeManager()->add( shape );
-            //TODO Missing? canvas->update()
         }
     }
 }
@@ -111,18 +113,21 @@ void KoPADocument::removeShape( KoShape *shape )
     if(!shape)
         return;
 
+    KoShape * parent = shape;
+    KoPAPageBase * page = 0;
+    while ( !page && ( parent = parent->parent() ) )
+    {
+        page = dynamic_cast<KoPAPageBase*>( parent );
+    }
+
     foreach( KoView *view, views() ) 
     {
         KoPAView * kogaView = static_cast<KoPAView*>( view );
 
-        KoSelection* selection = kogaView->shapeManager()->selection();
-
-        if ( selection && selection->activeLayer() && shape->parent() &&
-            ( selection->activeLayer()->parent() == shape->parent()->parent() ) )
+        if ( page == kogaView->activePage() )    
         {
             KoPACanvas *canvas = kogaView->kogaCanvas();
             canvas->shapeManager()->remove( shape );
-            //TODO Missing? canvas->update()
         }
     }
 }

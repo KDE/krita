@@ -21,11 +21,14 @@
 #ifndef KIS_TOOL_MOVE_H_
 #define KIS_TOOL_MOVE_H_
 
+#include <qtimer.h>
+
 #include "kis_strategy_move.h"
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
 
-// XXX: Moving is not nearly smooth enough!
+class QTimer;
+
 class KisToolMove : public KisToolNonPaint {
 
     typedef KisToolNonPaint super;
@@ -46,11 +49,21 @@ public:
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void keyPress(QKeyEvent *e);
+    virtual void keyRelease(QKeyEvent *e);
+
+private slots:
+
+    void slotMove();
 
 private:
+
     KisCanvasSubject *m_subject;
     KisStrategyMove m_strategy;
     QPoint m_dragStart;
+    QTimer * m_repeatTimer;
+    QKeyEvent * m_keyEvent;
+    int m_steps;
 };
 
 

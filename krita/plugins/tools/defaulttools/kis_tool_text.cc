@@ -83,7 +83,6 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 
     if (m_subject && e->button() == QMouseEvent::LeftButton) {
         if(!m_wasPressed) return;
-        m_windowIsBeingShown = true;
         m_wasPressed = false;
         KisImageSP img = m_subject->currentImg();
 
@@ -91,8 +90,10 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         bool ok;
         QString text = KInputDialog::getText(i18n("Font Tool"), i18n("Enter text:"),
              QString::null, &ok);
-        if (!ok)
+        if (!ok) {
+            m_windowIsBeingShown = false;
             return;
+        }
 
         KisUndoAdapter *undoAdapter = img->undoAdapter();
         if (undoAdapter) {

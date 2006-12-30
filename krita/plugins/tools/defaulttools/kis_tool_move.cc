@@ -39,10 +39,14 @@
 
 KisToolMove::KisToolMove()
     : super(i18n("Move Tool"))
+    , m_subject( 0 )
+    , m_keyEvent( 0 )
 {
     setName("tool_move");
-    m_subject = 0;
+
     setCursor(KisCursor::moveCursor());
+    m_repeatTimer = new QTimer(this);
+    connect( m_repeatTimer, SIGNAL( timeout() ), this, SLOT( slotMove() ) );
 }
 
 KisToolMove::~KisToolMove()
@@ -66,14 +70,13 @@ void KisToolMove::buttonPress(KisButtonPressEvent *e)
         if (!img || !(dev = img->activeLayer()))
             return;
 
-        m_dragStart = pos;
         m_strategy.startDrag(pos);
     }
 }
 
 void KisToolMove::move(KisMoveEvent *e)
 {
-    if (m_subject) {
+    if (m_subject  && e->state() == QMouseEvent::LeftButton) {
         QPoint pos = e->pos().floorQPoint();
         if((e->state() & Qt::AltButton) || (e->state() & Qt::ControlButton)) {
             if(fabs(pos.x() - m_dragStart.x()) > fabs(pos.y() - m_dragStart.y()))
@@ -110,3 +113,69 @@ void KisToolMove::setup(KActionCollection *collection)
     }
 }
 
+
+void KisToolMove::keyPress( QKeyEvent *e )
+{
+    m_keyEvent = e;
+
+   if (m_subject) {
+
+        KisImageSP img = m_subject->currentImg();
+        KisLayerSP dev;
+
+        if (!img || !(dev = img->activeLayer()))
+            return;
+
+        m_dragStart = QPoint( 0, 0 );
+        m_strategy.startDrag( m_dragStart );
+        m_steps = 1;
+        m_repeatTimer->start(200);
+
+    }
+}
+
+void KisToolMove::keyRelease(QKeyEvent *)
+{
+    m_repeatTimer->stop();
+
+    if ( m_subject && m_keyEvent) {
+
+        if ( m_keyEvent->key() == Qt::Key_Left ) {
+            m_strategy.endDrag(QPoint( -m_steps, 0 ));
+        }
+        else if ( m_keyEvent->key() == Qt::Key_Right ) {
+            m_strategy.endDrag(QPoint(m_steps, 0) );
+        }
+        else if ( m_keyEvent->key() == Qt::Key_Up ) {
+            m_strategy.endDrag(QPoint(0, -m_steps) );
+        }
+        else if ( m_keyEvent->key() == Qt::Key_Down ) {
+            m_strategy.endDrag(QPoint(0, m_steps) );
+        }
+    }
+    m_steps = 0;
+    m_keyEvent = 0;
+
+}
+
+void KisToolMove::slotMove()
+{
+    if (m_subject  && m_keyEvent) {
+
+        if ( m_keyEvent->key() == Qt::Key_Left ) {
+            m_strategy.drag(QPoint(-m_steps, 0) );
+        }
+        else if ( m_keyEvent->key() == Qt::Key_Right ) {
+            m_strategy.drag(QPoint(m_steps, 0) );
+        }
+        else if ( m_keyEvent->key() == Qt::Key_Up ) {
+            m_strategy.drag(QPoint(0, -m_steps) );
+        }
+        else if ( m_keyEvent->key() == Qt::Key_Down ) {
+            m_strategy.drag(QPoint(0, m_steps) );
+        }
+
+        ++m_steps;
+    }
+
+}

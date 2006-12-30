@@ -529,8 +529,9 @@ void KisSelectionManager::deselect()
     Q_CHECK_PTR(t);
 
     // Make adjustment layers behave almost the same (except no reselect)
-    if (dynamic_cast<KisAdjustmentLayer*>(img->activeLayer().data())) {
-        dev->clear();
+    KisAdjustmentLayer* adj = dynamic_cast<KisAdjustmentLayer*>(img->activeLayer().data());
+    if (adj) {
+        adj->clearSelection();
     } else {
         dev->deselect();
     }

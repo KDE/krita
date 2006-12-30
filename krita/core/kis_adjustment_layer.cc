@@ -118,6 +118,17 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
         m_selection->setSelection(m_selection);
 }
 
+void KisAdjustmentLayer::clearSelection()
+{
+    KisFillPainter gc(m_selection.data());
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+
+    QRect bounds = extent();
+    bounds |= image()->bounds();
+    gc.fillRect(bounds, KisColor(Qt::white, cs), MAX_SELECTED);
+    gc.end();
+}
+
 
 Q_INT32 KisAdjustmentLayer::x() const
 {

@@ -61,6 +61,9 @@ public:
     /// Set the selction of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
 
+    /// Clears the selection (doesn't call any of the update or dirty methods)
+    void clearSelection();
+
     virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     virtual void paintSelection(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 public:

@@ -17,28 +17,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoVariableRegistry.h"
+#include "KoInlineObjectFactory.h"
 
-#include <KoPluginLoader.h>
-
-#include <kdebug.h>
-#include <kstaticdeleter.h>
-
-void KoVariableRegistry::init() {
-kDebug() << "KoVariableRegistry::init!\n";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Text-Variables"),
-                                      QString::fromLatin1("[X-KoText-Version] == 1"));
+KoInlineObjectFactory::KoInlineObjectFactory(QObject *parent, const QString &id, const QString &name)
+    : QObject(parent),
+    m_id(id),
+    m_name(name)
+{
 }
 
-KoVariableRegistry *KoVariableRegistry::m_instance = 0;
-static KStaticDeleter<KoVariableRegistry> staticShapeRegistryDeleter;
-
-KoVariableRegistry* KoVariableRegistry::instance() {
-    if(KoVariableRegistry::m_instance == 0) {
-        staticShapeRegistryDeleter.setObject(m_instance, new KoVariableRegistry());
-        KoVariableRegistry::m_instance->init();
-    }
-    return KoVariableRegistry::m_instance;
+const KoID KoInlineObjectFactory::id() const {
+    return KoID(m_id, m_name);
 }
 
-#include "KoVariableRegistry.moc"
+const QString& KoInlineObjectFactory::name() const {
+    return m_name;
+}
+
+const QString &KoInlineObjectFactory::objectId() const {
+    return m_id;
+}
+
+#include "KoInlineObjectFactory.moc"

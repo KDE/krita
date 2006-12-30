@@ -20,16 +20,18 @@
 #ifndef KO_DATE_VARIABLE_FACTORY
 #define KO_DATE_VARIABLE_FACTORY
 
-#include <KoVariableFactory.h>
+#include <KoInlineObjectFactory.h>
 
 class KoVariable;
 
-class KoDateVariableFactory : public KoVariableFactory {
+class KoDateVariableFactory : public KoInlineObjectFactory {
 public:
     KoDateVariableFactory(QObject *parent);
     ~KoDateVariableFactory() {}
 
-    KoVariable *createVariable();
+    KoInlineObjectBase *createInlineObject();
+
+    ObjectType type() const { return TextVariable; }
 };
 
 #endif

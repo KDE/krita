@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Inline Text Object Plugin
+Type=ServiceType
+X-KDE-ServiceType=KOffice/Text-InlineObject
+Comment=Definition of a text object
+[PropertyDef::X-KoText-Version]
+Type=int

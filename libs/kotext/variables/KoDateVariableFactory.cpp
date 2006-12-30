@@ -23,10 +23,10 @@
 #include <klocale.h>
 
 KoDateVariableFactory::KoDateVariableFactory(QObject *parent)
-    : KoVariableFactory(parent, "date", i18n("date"))
+    : KoInlineObjectFactory(parent, "date", i18n("date"))
 {
 }
 
-KoVariable *KoDateVariableFactory::createVariable() {
+KoInlineObjectBase *KoDateVariableFactory::createInlineObject() {
     return new KoDateVariable();
 }

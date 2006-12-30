@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=Text Variables
-ServiceTypes=KOffice/Text-Variables
+ServiceTypes=KOffice/Text-InlineObject
 Type=Service
 X-KoText-Version=1
 X-KDE-Library=textvariables

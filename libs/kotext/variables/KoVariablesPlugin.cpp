@@ -16,7 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <KoVariableRegistry.h>
+#include <KoInlineObjectRegistry.h>
 
 #include "KoVariablesPlugin.h"
 #include "KoDateVariableFactory.h"
@@ -28,7 +28,7 @@ K_EXPORT_COMPONENT_FACTORY(textvariables,
 KoVariablesPlugin::KoVariablesPlugin( QObject *parent, const QStringList& )
     : QObject(parent)
 {
-    KoVariableRegistry::instance()->add( new KoDateVariableFactory( parent));
+    KoInlineObjectRegistry::instance()->add( new KoDateVariableFactory( parent));
 }
 
 #include "KoVariablesPlugin.moc"

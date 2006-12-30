@@ -17,41 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOTEXTVARIABLEREGISTRY_H
-#define KOTEXTVARIABLEREGISTRY_H
+#include "KoInlineObjectRegistry.h"
 
-#include <QObject>
+#include <KoPluginLoader.h>
 
-#include <KoGenericRegistry.h>
+#include <kdebug.h>
+#include <kstaticdeleter.h>
 
-#include <koffice_export.h>
+void KoInlineObjectRegistry::init() {
+kDebug() << "XXXXXXXXXXXXXXX init!\n";
+    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Text-InlineObject"),
+                                      QString::fromLatin1("[X-KoText-Version] == 1"));
+}
 
-class KoShape;
-class KoVariableFactory;
+KoInlineObjectRegistry *KoInlineObjectRegistry::m_instance = 0;
+static KStaticDeleter<KoInlineObjectRegistry> staticShapeRegistryDeleter;
 
-/**
- * This singleton class keeps a register of all available flake shapes,
- * or rather, of the factories that applications can use to create flake
- * shape objects.
- */
-class FLAKE_EXPORT KoVariableRegistry : public QObject,  public KoGenericRegistry<KoVariableFactory*>
-{
-    Q_OBJECT
-public:
-    ~KoVariableRegistry() {}
+KoInlineObjectRegistry* KoInlineObjectRegistry::instance() {
+    if(KoInlineObjectRegistry::m_instance == 0) {
+        staticShapeRegistryDeleter.setObject(m_instance, new KoInlineObjectRegistry());
+        KoInlineObjectRegistry::m_instance->init();
+    }
+    return KoInlineObjectRegistry::m_instance;
+}
 
-    /**
-     * Return an instance of the KoVariableRegistry
-     * Creates an instance if that has never happened before and returns the singleton instance.
-     */
-    static KoVariableRegistry * instance();
-
-private:
-    KoVariableRegistry() {}
-    void init();
-
-private:
-    static KoVariableRegistry *m_instance;
-};
-
-#endif
+#include "KoInlineObjectRegistry.moc"

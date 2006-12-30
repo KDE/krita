@@ -17,15 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// KOffice libs
 #include <KoVariable.h>
 
-// Qt + kde
-//#include <QHash>
 #include <QString>
-
-//class QTextInlineObject;
-//class QTextDocument;
 
 /**
  * Base class for in-text variables.

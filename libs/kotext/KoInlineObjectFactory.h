@@ -17,26 +17,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KO_VARIABLE_FACTORY
-#define KO_VARIABLE_FACTORY
+#ifndef KOINLINEOBJECTFACTORY_H
+#define KOINLINEOBJECTFACTORY_H
 
 #include <QString>
-//   #include <QWidget>
-//   #include <QList>
 
 #include <KoID.h>
 
 #include <koffice_export.h>
 
-class KoVariable;
-//   class KoShape;
-//   class KoProperties;
-//   class KoShapeConfigFactory;
-//   class KoShapeConfigWidgetBase;
+class KoInlineObjectBase;
 
-class KOTEXT_EXPORT KoVariableFactory : public QObject {
+class KOTEXT_EXPORT KoInlineObjectFactory : public QObject {
     Q_OBJECT
 public:
+    enum ObjectType {
+        TextVariable,   ///< The factory creates KoVariable inherting objects.
+        // etc
+        Other = 0x100,  ///< The factory creates objects that should not be shown in any menu
+        PopupItem,      ///< The factory creates objects that should be show in the PopupMenu
+    };
 
     /**
      * Create the new factory
@@ -44,10 +44,10 @@ public:
      * @param id a string that will be used internally for referencing the variable-type.
      * @param name the user visible name of the tool this factory creates.
      */
-    KoVariableFactory(QObject *parent, const QString &id, const QString &name);
-    virtual ~KoVariableFactory() {}
+    KoInlineObjectFactory(QObject *parent, const QString &id, const QString &name);
+    virtual ~KoInlineObjectFactory() {}
 
-    virtual KoVariable *createVariable() = 0;
+    virtual KoInlineObjectBase *createInlineObject() = 0;
 
     /**
      * return the user visible (and translated) name to be seen by the user.
@@ -59,15 +59,33 @@ public:
      * return the id for the variable this factory creates.
      * @return the id for the variable this factory creates.
      */
-    const QString &variableId() const;
+    const QString &objectId() const;
 
     /**
      * Create a KoID for the variable this factory creates.
      */
     const KoID id() const;
 
+    /**
+     * return the basename of the icon for this inlineObject when its shown in menus
+     * @return the basename of the icon for this inlineObject when its shown in menus
+     */
+    const QString & icon() const;
+
+    virtual ObjectType type() const { return Other; }
+
+protected:
+    /**
+     * Set an icon to be used in menus
+     * @param iconName the basename (without extension) of the icon
+     * @see KIconLoader
+     */
+    void setIcon(const QString & iconName);
+
+
 private:
     const QString m_id, m_name;
+    QString m_iconName;
 };
 
 #endif

@@ -19,8 +19,9 @@
 #ifndef KOINLINEOBJECTMANAGER_H
 #define KOINLINEOBJECTMANAGER_H
 
-// KOffice libs
 #include "KoInlineObjectBase.h"
+#include "KoInlineObjectFactory.h"
+
 #include <koffice_export.h>
 
 // Qt + kde
@@ -62,6 +63,11 @@ public:
      * @param object the inline object to insert.
      */
     void insertInlineObject(QTextCursor &cursor, KoInlineObjectBase *object);
+
+    /**
+     * overloaded method, provided for your convenience.
+     */
+    void insertInlineObject(QTextCursor &cursor, KoInlineObjectFactory *factory);
 
 private:
     enum Properties {

@@ -1,8 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Text Variable plugin
-Type=ServiceType
-X-KDE-ServiceType=KOffice/Text-Variables
-Comment=Definition of a text variable plugin
-[PropertyDef::X-KoText-Version]
-Type=int

@@ -17,25 +17,41 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoVariableFactory.h"
+#ifndef KOINLINEOBJECTREGISTRY_H
+#define KOINLINEOBJECTREGISTRY_H
 
-KoVariableFactory::KoVariableFactory(QObject *parent, const QString &id, const QString &name)
-    : QObject(parent),
-    m_id(id),
-    m_name(name)
+#include <QObject>
+
+#include <KoGenericRegistry.h>
+
+#include <koffice_export.h>
+
+class KoShape;
+class KoInlineObjectFactory;
+
+/**
+ * This singleton class keeps a register of all available flake shapes,
+ * or rather, of the factories that applications can use to create flake
+ * shape objects.
+ */
+class FLAKE_EXPORT KoInlineObjectRegistry : public QObject,  public KoGenericRegistry<KoInlineObjectFactory*>
 {
-}
+    Q_OBJECT
+public:
+    ~KoInlineObjectRegistry() {}
 
-const KoID KoVariableFactory::id() const {
-    return KoID(m_id, m_name);
-}
+    /**
+     * Return an instance of the KoInlineObjectRegistry
+     * Creates an instance if that has never happened before and returns the singleton instance.
+     */
+    static KoInlineObjectRegistry * instance();
 
-const QString& KoVariableFactory::name() const {
-    return m_name;
-}
+private:
+    KoInlineObjectRegistry() {}
+    void init();
 
-const QString &KoVariableFactory::variableId() const {
-    return m_id;
-}
+private:
+    static KoInlineObjectRegistry *m_instance;
+};
 
-#include "KoVariableFactory.moc"
+#endif

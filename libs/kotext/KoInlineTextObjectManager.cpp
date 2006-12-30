@@ -47,4 +47,12 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     m_objects.insert(m_lastObjectId, object);
 }
 
+/**
+ * overloaded method, provided for your convenience.
+ */
+void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInlineObjectFactory *factory) {
+    Q_ASSERT(factory);
+    insertInlineObject(cursor, factory->createInlineObject());
+}
+
 #include "KoInlineTextObjectManager.moc"

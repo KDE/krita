@@ -75,20 +75,18 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
     setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
-    qint32 psize = cs->pixelSize();
 
+    KoColorTransformation* inverter = cs->createInvertTransformation();
     while( ! srcIt.isDone() )
     {
         if(srcIt.isSelected())
         {
-            if (src!=dst)
-                memcpy(dstIt.rawData(), srcIt.oldRawData(), psize);
-
-            cs->invertColor( dstIt.rawData(), 1);
+            inverter->transform( srcIt.oldRawData(), dstIt.rawData(), 1);
         }
         setProgress(++pixelsProcessed);
         ++srcIt;
         ++dstIt;
     }
+    delete inverter;
     setProgressDone(); // Must be called even if you don't really support progression
 }

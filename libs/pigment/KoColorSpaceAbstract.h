@@ -163,6 +163,30 @@ namespace {
             inline typename _CSTraits::channels_type* nativeArray(quint8 * a) const { return reinterpret_cast<typename _CSTraits::channels_type*>(a); }
             KoColorSpace* m_colorSpace;
     };
+
+    class KoInvertColorTransformation : public KoColorTransformation {
+        public:
+            KoInvertColorTransformation(const KoColorSpace* cs) : m_colorSpace(cs)
+            {
+            }
+            virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+            {
+                quint16 rgba[4];
+                quint32 psize = m_colorSpace->pixelSize();
+                while(nPixels--)
+                {
+                    m_colorSpace->toRgbA16(src, reinterpret_cast<quint8 *>(rgba), 1);
+                    rgba[0] = KoColorSpaceMathsTraits<quint16>::max() - rgba[0];
+                    rgba[1] = KoColorSpaceMathsTraits<quint16>::max() - rgba[1];
+                    rgba[2] = KoColorSpaceMathsTraits<quint16>::max() - rgba[2];
+                    m_colorSpace->fromRgbA16(reinterpret_cast<quint8 *>(rgba), dst, 1);
+                    src += psize;
+                }
+            }
+        private:
+            const KoColorSpace* m_colorSpace;
+    };
+
 }
 
 /**
@@ -294,19 +318,9 @@ class KoColorSpaceAbstract : public KoColorSpace {
             return static_cast<quint8>((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
         }
 
-        virtual void invertColor(quint8 * src, qint32 nPixels) const
+        virtual KoInvertColorTransformation* createInvertTransformation() const
         {
-            quint16 rgba[4];
-            quint32 psize = this->pixelSize();
-            while(nPixels--)
-            {
-                toRgbA16(src, reinterpret_cast<quint8 *>(rgba), 1);
-                rgba[0] = KoColorSpaceMathsTraits<quint16>::max() - rgba[0];
-                rgba[1] = KoColorSpaceMathsTraits<quint16>::max() - rgba[1];
-                rgba[2] = KoColorSpaceMathsTraits<quint16>::max() - rgba[2];
-                fromRgbA16(reinterpret_cast<quint8 *>(rgba), src, 1);
-                src += psize;
-            }
+            return new KoInvertColorTransformation(this);
         }
 
         virtual KoID mathToolboxId() const

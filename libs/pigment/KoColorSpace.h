@@ -434,8 +434,9 @@ public:
 
     /**
      * Invert color channels of the given pixels
+     * This function is thread-safe, but you need to create one KoColorTransformation per thread.
      */
-    virtual void invertColor(quint8 * src, qint32 nPixels) const = 0;
+    virtual KoColorTransformation *createInvertTransformation() const = 0;
 
     // XXX: What with alpha channels? YYY: Add an overloaded function that takes alpha into account?
     /**

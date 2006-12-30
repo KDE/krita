@@ -33,26 +33,17 @@ bool KoShapeLayer::hitTest( const QPointF &position ) const
 
 QRectF KoShapeLayer::boundingRect() const
 {
-    // The layer always has position 0,0
-    QRectF bb(0.0, 0.0, 1.0, 1.0);
-    QRectF shapeRect;
+    QRectF bb;
 
     foreach( KoShape* shape, iterator() )
     {
-        bb = bb.unite( shape->boundingRect() );
+        if(bb.isEmpty())
+             bb = shape->boundingRect();
+        else
+            bb = bb.unite( shape->boundingRect() );
     }
 
     return bb;
-}
-
-QSizeF KoShapeLayer::size() const
-{
-    return boundingRect().size();
-}
-
-QPointF KoShapeLayer::position() const
-{
-    return QPointF(0.0, 0.0);
 }
 
 

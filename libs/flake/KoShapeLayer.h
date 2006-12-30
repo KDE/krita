@@ -40,8 +40,6 @@ public:
     virtual void paintComponent(QPainter &, const KoViewConverter &) {};
     bool hitTest( const QPointF &position ) const;
     virtual QRectF boundingRect() const;
-    virtual QSizeF size() const;
-    virtual QPointF position() const;
 private:
     class LayerMembers: public KoShapeContainerModel {
         public:

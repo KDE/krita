@@ -24,9 +24,17 @@
 
 class KoParameterShape;
 
+/// Strategy for changing control points of parametric shapes
 class KoParameterChangeStrategy : public KoInteractionStrategy
 {
-public:    
+public:
+    /**
+     * Constructs a strategy for changing control points of parametric shapes.
+     * @param tool the tool the strategy belongs to
+     * @param canvas canvas the canvas to paint on
+     * @param parameterShape the parametric shapes the strategy is working on
+     * @param handleId the id of the handle to modify
+     */
     KoParameterChangeStrategy( KoTool *tool, KoCanvasBase *canvas, KoParameterShape * parameterShape, int handleId );
     virtual ~KoParameterChangeStrategy();
 
@@ -34,10 +42,10 @@ public:
     virtual void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED( modifiers ); }
     virtual QUndoCommand* createCommand();
 
-private:    
-    KoParameterShape * m_parameterShape;
-    int m_handleId;
-    QPointF m_startPoint;
+private:
+    KoParameterShape * m_parameterShape; ///< the parametric shape we are working on
+    int m_handleId;                      ///< the id of the control point
+    QPointF m_startPoint;                ///< the starting position of the control point
 };
 
 #endif /* KOPATHPARAMETERCHANGESTRATEGY_H */

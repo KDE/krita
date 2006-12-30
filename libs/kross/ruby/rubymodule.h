@@ -44,8 +44,7 @@ namespace Kross {
             /**
             * Constructor.
             *
-            * @param mod The \a Kross::Module this RubyExtension
-            *        wraps.
+            * @param object The QObject instance this extension provides access to.
             * @param modname The name the module will be published as.
             */
             RubyModule(QObject* object, const QString & modname);

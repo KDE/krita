@@ -51,7 +51,7 @@ private:
     void init();
 
 private:
-    static KoInlineObjectRegistry *m_instance;
+    static KoInlineObjectRegistry *s_instance;
 };
 
 #endif

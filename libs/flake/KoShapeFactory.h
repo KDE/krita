@@ -165,8 +165,8 @@ public:
      */
     const QString & toolTip() const;
     /**
-     * return the basename of i the icon for this tool for a selector of shapes
-     * @return the basename of the icon for this selector of shapes
+     * return the basename of the icon for a selector of shapes
+     * @return the basename of the icon for a selector of shapes
      */
     const QString & icon() const;
     /**

@@ -39,7 +39,6 @@ class KOTEXT_EXPORT KoVariable : public KoInlineObjectBase {
 public:
     /**
      * Constructor.
-     * @param value the initial value this variable shows.
      */
     KoVariable();
     virtual ~KoVariable() {}

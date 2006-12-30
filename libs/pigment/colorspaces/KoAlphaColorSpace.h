@@ -66,31 +66,39 @@ public:
 
     virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
 
-    
+
     virtual quint32 colorSpaceType() const { return 0; }
     virtual icColorSpaceSignature colorSpaceSignature() const { return icSigGrayData; }
 
     virtual bool hasHighDynamicRange() const { return false; }
     virtual KoColorProfile* profile() const { return 0; }
-    virtual QImage convertToQImage(const quint8*, qint32, qint32, KoColorProfile*, qint32, float) const
+    virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
+                                   KoColorProfile *  dstProfile, qint32 renderingIntent = INTENT_PERCEPTUAL,
+                                   float exposure = 0.0f) const
     {
+        Q_UNUSED(data);
+        Q_UNUSED(width);
+        Q_UNUSED(height);
+        Q_UNUSED(dstProfile);
+        Q_UNUSED(renderingIntent);
+        Q_UNUSED(exposure);
         return QImage();
     }
-    
-    virtual void toLabA16(const quint8* src, quint8* dst, quint32 np) const
+
+    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
     {
         quint16* lab = reinterpret_cast<quint16*>(dst);
-        while(np--)
+        while(nPixels--)
         {
             lab[3] = src[0];
             src++;
             lab+=4;
         }
     }
-    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 np) const
+    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
     {
         const quint16* lab = reinterpret_cast<const quint16*>(src);
-        while(np--)
+        while(nPixels--)
         {
             dst[0] = lab[3];
             dst++;
@@ -98,28 +106,29 @@ public:
         }
     }
     
-    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 np) const
+    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const
     {
         quint16* rgb = reinterpret_cast<quint16*>(dst);
-        while(np--)
+        while(nPixels--)
         {
             rgb[3] = src[0];
             src++;
             rgb+=4;
         }
     }
-    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 np) const
+    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const
     {
         const quint16* rgb = reinterpret_cast<const quint16*>(src);
-        while(np--)
+        while(nPixels--)
         {
             dst[0] = rgb[3];
             dst++;
             rgb+=4;
         }
     }
-    virtual KoColorTransformation* createBrightnessContrastAdjustment(quint16*) const
+    virtual KoColorTransformation* createBrightnessContrastAdjustment(quint16* transferValues) const
     {
+        Q_UNUSED(transferValues);
         kDebug() << "Undefined operation in the alpha colorspace" << endl;
         return 0;
     }

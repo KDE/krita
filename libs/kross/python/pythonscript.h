@@ -47,7 +47,7 @@ namespace Kross {
              *
              * \param interpreter The \a Kross::Python::PythonInterpreter used
              *       to create this PythonScript instance.
-             * \param Action The with this PythonScript associated
+             * \param action The with this PythonScript associated
              *       \a Kross::Action instance that spends us
              *       e.g. the python scripting code.
              */
@@ -60,9 +60,6 @@ namespace Kross {
 
             /**
              * Execute the script.
-             *
-             * \param args The optional arguments passed to the script
-             * on excution.
              */
             virtual void execute();
 

@@ -31,7 +31,6 @@ class KoDateVariable : public KoVariable {
 public:
     /**
      * Constructor.
-     * @param value the initial value this variable shows.
      */
     KoDateVariable();
 };

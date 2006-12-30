@@ -44,7 +44,7 @@ public:
 protected:
     /**
      * Shedules repainting of all shapes control point rects.
-     * @param normalizeShape controls if paths are normalized before painting
+     * @param normalizeShapes controls if paths are normalized before painting
      */
     void repaint( bool normalizeShapes );
 

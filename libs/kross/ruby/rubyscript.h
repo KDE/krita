@@ -55,9 +55,6 @@ namespace Kross {
 
             /**
             * Execute the script.
-            *
-            * \param args The optional arguments passed to the script
-            * on excution.
             */
             virtual void execute();
 

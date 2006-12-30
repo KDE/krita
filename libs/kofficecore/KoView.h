@@ -379,7 +379,7 @@ public:
 
     /**
      * Creates a dockwidget if needed from @p factory if the mainwindow is a KoMainWindow by calling
-     * @link KoMainWindow::createDockWidget
+     * KoMainWindow::createDockWidget()
      *
      * @param factory the factory used to the create the dockwidget
      * @return the created dockwidget or NULL if the mainwindow isn't a KoMainWindow

@@ -39,16 +39,17 @@ class QUndoCommand;
  * from this class for maintaining the list of shapes in the document. So no tool gets
  * to access the application directly.
  */
-class FLAKE_EXPORT KoShapeController 
+class FLAKE_EXPORT KoShapeController
 {
 public:
     /**
      * Create a new Controller; typically not called by applications, only by the KoToolManager
      * @param canvas the canvas this controller works for.
+     * @param shapeController the application provided shapeControllerBase that we can call.
      */
     KoShapeController( KoCanvasBase *canvas, KoShapeControllerBase *shapeController );
     /// destructor
-    ~KoShapeController() {};
+    ~KoShapeController() {}
 
     /**
      * @brief Add a shape to the document.

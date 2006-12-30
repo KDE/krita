@@ -39,8 +39,8 @@ class KoViewConverter;
  */
 class FLAKE_EXPORT KoShapeBorderModel {
 public:
-    KoShapeBorderModel() {};
-    virtual ~KoShapeBorderModel() {};
+    KoShapeBorderModel() {}
+    virtual ~KoShapeBorderModel() {}
 
     /**
      * Return a new borderInsets object filled with the size around the shape that this
@@ -54,7 +54,7 @@ public:
         return insets;
     };
     /**
-     * Return a borderInsets object filled with the size around the shape that this border takes.
+     * Return a borderInsets object filled with the size inside the shape that this border takes.
      * @param shape the shape the insets will be calculated for
      * @param insets the insets object that will be filled and returned.
      */

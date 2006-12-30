@@ -50,6 +50,11 @@ class FLAKE_EXPORT KoCanvasBase {
 
 public:
 
+    /**
+     * The constructor.
+     * @param shapeControllerBase the implementation of the shapeController that the
+     *   application provides to allow shapes to be added in multiple views.
+     */
     explicit KoCanvasBase( KoShapeControllerBase * shapeControllerBase );
     virtual ~KoCanvasBase();
 

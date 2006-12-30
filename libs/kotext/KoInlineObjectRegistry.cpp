@@ -30,15 +30,15 @@ kDebug() << "XXXXXXXXXXXXXXX init!\n";
                                       QString::fromLatin1("[X-KoText-Version] == 1"));
 }
 
-KoInlineObjectRegistry *KoInlineObjectRegistry::m_instance = 0;
+KoInlineObjectRegistry *KoInlineObjectRegistry::s_instance = 0;
 static KStaticDeleter<KoInlineObjectRegistry> staticShapeRegistryDeleter;
 
 KoInlineObjectRegistry* KoInlineObjectRegistry::instance() {
-    if(KoInlineObjectRegistry::m_instance == 0) {
-        staticShapeRegistryDeleter.setObject(m_instance, new KoInlineObjectRegistry());
-        KoInlineObjectRegistry::m_instance->init();
+    if(KoInlineObjectRegistry::s_instance == 0) {
+        staticShapeRegistryDeleter.setObject(s_instance, new KoInlineObjectRegistry());
+        KoInlineObjectRegistry::s_instance->init();
     }
-    return KoInlineObjectRegistry::m_instance;
+    return KoInlineObjectRegistry::s_instance;
 }
 
 #include "KoInlineObjectRegistry.moc"

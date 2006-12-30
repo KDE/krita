@@ -39,7 +39,6 @@ public:
      * The controller should add the shape to the ShapeManager instance(s) manually
      * if the shape is one that should be currently shown on screen.
      * @param shape the new shape
-     * @param addRemoveData additional data which can be used for adding the new shape
      */
     virtual void addShape( KoShape* shape ) = 0;
 
@@ -47,7 +46,6 @@ public:
      * Remove a shape from the shape controllers control, allowing it to be deleted shortly after
      * The controller should remove the shape from all the ShapeManager instance(s) manually
      * @param shape the shape to remove
-     * @param addRemoveData additional data which can be used for removing the new shape
      */
     virtual void removeShape( KoShape* shape ) = 0;
 };

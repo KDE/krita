@@ -28,9 +28,17 @@
 
 class KoInlineObjectBase;
 
+/**
+ * A factory for inline text objects. There should be one for each plugin type to
+ * allow the creation of the inlineObject from that plugin.
+ * The factory additionally has information to allow showing a menu entry for user
+ * access to the object-type.
+ * @see KoInlineObjectRegistry
+ */
 class KOTEXT_EXPORT KoInlineObjectFactory : public QObject {
     Q_OBJECT
 public:
+    /// The type of inlineObject this factory creates.
     enum ObjectType {
         TextVariable,   ///< The factory creates KoVariable inherting objects.
         // etc
@@ -47,6 +55,9 @@ public:
     KoInlineObjectFactory(QObject *parent, const QString &id, const QString &name);
     virtual ~KoInlineObjectFactory() {}
 
+    /**
+     * Create a new instance of an inline object.
+     */
     virtual KoInlineObjectBase *createInlineObject() = 0;
 
     /**
@@ -72,6 +83,11 @@ public:
      */
     const QString & icon() const;
 
+    /**
+     * Returns the type of object this factory creates.
+     * The main purpose is to group plugins per type in, for example, a menu.
+     * The default returns Other which means it will not be shown in any menu.
+     */
     virtual ObjectType type() const { return Other; }
 
 protected:
@@ -81,7 +97,6 @@ protected:
      * @see KIconLoader
      */
     void setIcon(const QString & iconName);
-
 
 private:
     const QString m_id, m_name;

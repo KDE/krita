@@ -17,11 +17,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef FORMULASHAPE_H
-#define FORMULASHAPE_H
+#ifndef KOFORMULASHAPE_H
+#define KOFORMULASHAPE_H
 
 #include <KoShape.h>
-#include <KoXmlReader.h>
+#include <QDomDocument>
 class KoXmlWriter;
 
 #define FormulaShape_SHAPEID "FormulaShapeID"
@@ -29,19 +29,20 @@ class KoXmlWriter;
 namespace KFormula {
 
 class BasicElement;
+class FormulaRenderer;
 
 /**
  * @short The flake shape for a formula
  * @author Martin Pfeiffer <hubipete@gmx.net>
  * @since 2.0
  */
-class KOFORMULA_EXPORT FormulaShape : public KoShape {
+class KOFORMULA_EXPORT KoFormulaShape : public KoShape {
 public:
     /// The basic constructor
-    FormulaShape();
+    KoFormulaShape();
 
     /// The basic destructor
-    ~FormulaShape();
+    ~KoFormulaShape();
 
     /// inherited from KoShape
     void paint( QPainter &painter, KoViewConverter &converter );
@@ -70,7 +71,7 @@ public:
      * @param doc The DomDocument to load from
      * @param oasisFormat If true the formula is read from OASIS conform MathML
      */
-    void loadMathML( const KoXmlDocument &doc, bool oasisFormat = false );
+    void loadMathML( const QDomDocument &doc, bool oasisFormat = false );
     
     /**
      * Save the formula as MathML
@@ -80,10 +81,13 @@ public:
     void saveMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
 private:
-    /// The element at the highest level in the formula tree
+    /// The element at the highest level in the formula tree, contains all other elements
     BasicElement* m_formulaElement;
+
+    /// The renderer that takes care of painting the shape's formula
+    FormulaRenderer* m_formulaRenderer; 
 };
 
 } // namespace KFormula
 
-#endif // FORMULASHAPE_H
+#endif // KOFORMULASHAPE_H

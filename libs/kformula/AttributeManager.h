@@ -21,6 +21,8 @@
 #define ATTRIBUTEMANAGER_H
 
 #include <QList>
+#include <KoViewConverter.h>
+class QPaintDevice;
 
 namespace KFormula {
 
@@ -29,6 +31,7 @@ class BasicElement;
 enum MathVariant {
     Normal,
     Bold,
+    Italic,
     BoldItalic,
     DoubleStruck,
     BoldFraktur,
@@ -42,20 +45,43 @@ enum MathVariant {
     Monospace    
 };
 
+enum NamedSpaces { 
+    NegativeVeryVeryThinMathSpace,
+    NegativeVeryThinMathSpace,
+    NegativeThinMathSpace,
+    NegativeMediumMathSpace,
+    NegativeThickMathSpace,
+    NegativeVeryThickMathSpace,
+    NegativeVeryVeryThickMathSpace,
+    VeryVeryThinMathSpace,
+    VeryThinMathSpace,
+    ThinMathSpace,
+    MediumMathSpace,
+    ThickMathSpace,
+    VeryThickMathSpace,
+    VeryVeryThickMathSpace
+};
+
 enum Align {
     Left,
     Center,
     Right
 };
 
+enum Form {
+    Prefix,
+    Infix,
+    Postfix
+};
+
 /**
- * @short A manager the elements can retrieve their attribute information from
+ * @short manages all the attributes, used by the elements to obtain attribute values
  *
  * The AttributeManager is the central point dealing with the MathML attributes and
- * their values. As the normal elements only have a general hash list of the elements
- * they hold, there is the need for a class that manages conversion and heritage of
- * the attributes during the painting phase. These are the two main tasks of 
- * AttributeManager.
+ * their values. It is in fact something like a StyleManager. As the normal elements
+ * only have a general hash list of the elements they hold, there is the need for a
+ * class that manages conversion and heritage of the attributes during the painting
+ * phase. These are the two main tasks of AttributeManager.
  * The AttributeManager is always called when an element needs a value to work with.
  * The AttributeManager looks for that value in its stack according to the heritage
  * and if it does not find an appropriated value it returns a default.
@@ -71,26 +97,55 @@ enum Align {
 class AttributeManager {
 public:
     /// The constructor
-    AttributeManager();
+    AttributeManager( const KoViewConverter& converter );
 
-    QVariant valueOfAttribute( const QString& attribute );
+    /**
+     * Obtain a value for attribute
+     * @param attribute A string with the attribute to look up
+     * @return QVariant with the value
+     */
+    QVariant valueOf( const QString& attribute );
 
     /**
      * Inherit the attributes of an element
-     * @param e The BasicElement to herit from
-     * @param increaseScriptLevel Indicates whether the scriptLevel should be changed
+     * @param element The BasicElement to herit from
      */
-    void inheritAttributes( BasicElement* e, bool increaseScriptLevel );
-    void disinheritAttributes( bool decreaseScriptLevel );
+    void inheritAttributes( BasicElement* element );
+
+    /// Disenherit the attributes currently on top of the stack
+    void disinheritAttributes();
+
+    /// Obtain the @r current scriptlevel
+    int scripLevel() const;
+ 
+    /// Obtain the @r current displystyle
+    bool displayStyle() const;
 
 protected:
     QVariant defaultValueOf( const QString& attribute );
     bool alteringScriptLevel( const BasicElement* e ) const;
     QVariant parseValue( const QString& value ) const;
 
+    /**
+     * Fill the heritage stack with all the attributes valid for element
+     * @param element The BasicElement to build up the heritage stack for
+     */
+    void buildHeritageOf( BasicElement* element );
+
+    double calculateEmExUnits( double value, bool isEm );
+
 private:
-    int m_scriptLevel;
-    QList<BasicElement*> m_heritageList;
+    /// The stack of attribute heritage, the topmost element is the currently active
+    QStack<BasicElement*> m_heritageStack;
+
+    /// The stack for the current scriptlevel
+    QStack<int> m_scriptLevelStack;
+
+    /// The current font
+//    QFont m_currentFont;  will come perhaps later
+
+    /// The KoViewConverter used to determine the point values of pixels
+    KoViewConverter m_converter;
 };
 
 } // namespace KFormula

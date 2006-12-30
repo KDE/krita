@@ -1,3 +1,32 @@
 /**
- * \mainpage KFormula
+ * \mainpage KoFormulaShape
+ *
+ * KoFormulaShape is a flake shape ( derived from KoShape ) that implements the
+ * functionality to edit and show a mathematical formula. Its structure is highly
+ * related to the MathML markup language which is the ODF standard format for
+ * formula markup. At the moment the KoFormulaShape implements only parts of the
+ * MathML presentation markup, content markup is not supported.
+ *
+ * Every formula is stored as a tree of element objects that more or less are
+ * equivalent to the XML structure of the MathML they were loaded from.
+ * The element objects are classes that derive all from the BasicElement class.
+ * They all implement a special interface which is used to alter and navigate
+ * through them.
+ *
+ * The element tree's highest element is an object of the class FormulaElement.
+ * This object is a private member of the FormulaShape class which implements the
+ * public interface of a flake shape.
+ * The according flake tool is implemented in FormulaTool and contains an instance
+ * of FormulaCursor which is a class that emulates the behaviour of a normal text
+ * cursor for the formula. Through the FormulaCursor all editing is done and apart
+ * from loading the formula tree's structure is never changed in a different way.
+ *
+ * The complex system of attributes which can be hold by the single elements is
+ * completely implemented in the AttributeManager class. The attributes are
+ * generically loaded and stored inside the elements and obtain and parse their
+ * values the elements use AttributeManager which also deals with heritage and
+ * default values.
+ *
+ * The MathML specification lists default values for operator's layouting. 
+ *  --- rest to come when it is implemented ---
  */

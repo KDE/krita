@@ -19,59 +19,69 @@
 
 #include "FormulaShape.h"
 #include "FormulaElement.h"
+#include "FormulaRenderer.h"
 #include <KoXmlWriter.h>
 
 namespace KFormula {
 	
-FormulaShape::FormulaShape()
+KoFormulaShape::KoFormulaShape()
 {
     m_formulaElement = new FormulaElement();
+    m_formulaRenderer = new FormulaRenderer(); //TODO add the right arguments
 }
 
-FormulaShape::~FormulaShape()
+KoFormulaShape::~KoFormulaShape()
 {
     delete m_formulaElement;
+    delete m_formulaRenderer;
 }
 
-void FormulaShape::paint( QPainter &painter, KoViewConverter &converter ) 
+void KoFormulaShape::paint( QPainter &painter, KoViewConverter &converter ) 
 {
     applyConversion( painter, converter );   // apply zooming and coordinate translation
-    m_formulaElement->paint( painter );      // paint the formula
+    m_formulaRenderer->paintElement( painter, m_formulaElement );  // paint the formula
 }
 
-BasicElement* FormulaShape::elementAt( const QPointF& p )
+void KoFormulaShape::paintDecorations( QPainter &painter,
+                                       const KoViewConverter &converter, bool selected )
+{
+    // TODO how to highlight things?? do we need it btw?
+}
+
+
+BasicElement* KoFormulaShape::elementAt( const QPointF& p )
 {
     return m_formulaElement->childElementAt( p );
 }
 
-QSizeF FormulaShape::size() const
+QSizeF KoFormulaShape::size() const
 {
     return m_formulaElement->boundingRect().size();
 }
 
-void FormulaShape::resize( const QSizeF& )
+void KoFormulaShape::resize( const QSizeF& )
 {
     // do nothing as FormulaShape is fixed size
 }
 
-QRectF FormulaShape::boundingRect() const
+QRectF KoFormulaShape::boundingRect() const
 {
     return m_invMatrix.inverted().mapRect( m_formulaElement->boundingRect() );
 }
 
-BasicElement* FormulaShape::formulaElement() const
+BasicElement* KoFormulaShape::formulaElement() const
 {
     return m_formulaElement;
 }
 
-void FormulaShape::loadMathML( const KoXmlDocument &doc, bool )
+void KoFormulaShape::loadMathML( const QDomDocument &doc, bool )
 {
     delete m_formulaElement;                                // delete the old formula
     m_formulaElement = new FormulaElement();                // create a new root element
     m_formulaElement->readMathML( doc.documentElement() );  // and load the new formula
 }
 
-void FormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
+void KoFormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
 {
     if( m_formulaElement->childElements().isEmpty() )  // if the formula is empty
 	return;                                        // do not save it

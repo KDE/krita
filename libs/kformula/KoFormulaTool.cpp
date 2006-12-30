@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
  */
 
-#include "FormulaTool.h"
-#include "FormulaShape.h"
+#include "KoFormulaTool.h"
+#include "KoFormulaShape.h"
 #include "FormulaCursor.h"
 #include "BasicElement.h"
 #include <KoCanvasBase.h>
@@ -28,19 +28,19 @@
 
 namespace KFormula {
 
-FormulaTool::FormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
-						   m_formulaShape( 0 ),
-						   m_formulaCursor( 0 )
+KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
+                                                       m_formulaShape( 0 ),
+						       m_formulaCursor( 0 )
 {
 }
 
-FormulaTool::~FormulaTool()
+KoFormulaTool::~KoFormulaTool()
 {
     if( m_formulaCursor )
         delete m_formulaCursor;
 }
 
-void FormulaTool::activate( bool temporary )
+void KoFormulaTool::activate( bool temporary )
 {
     Q_UNUSED(temporary);
     KoSelection* selection = m_canvas->shapeManager()->selection();
@@ -59,20 +59,20 @@ void FormulaTool::activate( bool temporary )
     m_formulaCursor = new FormulaCursor( m_formulaShape->formulaElement() );
 }
 
-void FormulaTool::deactivate()
+void KoFormulaTool::deactivate()
 {
     m_formulaShape = 0;
     delete m_formulaCursor;
     m_formulaCursor = 0;
 }
 
-void FormulaTool::paint( QPainter &painter, KoViewConverter &converter)
+void KoFormulaTool::paint( QPainter &painter, KoViewConverter &converter)
 {
     // TODO do view conversions with converter
     m_formulaCursor->paint( painter );
 }
 
-void FormulaTool::mousePressEvent( KoPointerEvent *event )
+void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
 {
 // TODO implement the action and the elementAt method in FormulaShape
 //   m_formulaCursor->setCursorTo( m_formulaShape->elementAt( ) );
@@ -97,12 +97,12 @@ void FormulaTool::mousePressEvent( KoPointerEvent *event )
 */
 }
 
-void FormulaTool::mouseDoubleClickEvent( KoPointerEvent *event )
+void KoFormulaTool::mouseDoubleClickEvent( KoPointerEvent *event )
 {
     // TODO select whole element 
 }
 
-void FormulaTool::mouseMoveEvent( KoPointerEvent *event )
+void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )
 {
     // TODO find the old implementation and use it
     //
@@ -159,12 +159,12 @@ void FormulaTool::mouseMoveEvent( KoPointerEvent *event )
     }*/
 }
 
-void FormulaTool::mouseReleaseEvent( KoPointerEvent *event )
+void KoFormulaTool::mouseReleaseEvent( KoPointerEvent *event )
 {
     // TODO what should happen here ?
 }
 
-void FormulaTool::keyPressEvent( QKeyEvent *event )
+void KoFormulaTool::keyPressEvent( QKeyEvent *event )
 {
     m_formulaCursor->setWordMovement( event->modifiers() & Qt::ControlModifier );
     m_formulaCursor->setSelecting( event->modifiers() & Qt::ShiftModifier );
@@ -204,12 +204,12 @@ void FormulaTool::keyPressEvent( QKeyEvent *event )
     event->accept();
 }
 
-void FormulaTool::keyReleaseEvent( QKeyEvent *event )
+void KoFormulaTool::keyReleaseEvent( QKeyEvent *event )
 {
     event->accept();
 }
 
-void FormulaTool::remove( bool backSpace )
+void KoFormulaTool::remove( bool backSpace )
 {
     if( m_formulaCursor->hasSelection() )  // remove the selection
     {

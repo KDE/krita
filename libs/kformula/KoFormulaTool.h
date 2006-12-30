@@ -17,15 +17,15 @@
    Boston, MA 02110-1301, USA.
  */
 
-#ifndef FORMULATOOL_H
-#define FORMULATOOL_H
+#ifndef KOFORMULATOOL_H
+#define KOFORMULATOOL_H
 
 #include <KoTool.h>
 #include <QStack>
 
 namespace KFormula {
 
-class FormulaShape;
+class KoFormulaShape;
 class BasicElement;
 class FormulaCursor;
 
@@ -34,10 +34,10 @@ class FormulaCursor;
  * @author Martin Pfeiffer <hubipete@gmx.net>
  * @since 2.0
  */
-class FormulaTool : public KoTool {
+class KoFormulaTool : public KoTool {
 public:
-    explicit FormulaTool( KoCanvasBase *canvas );
-    ~FormulaTool();
+    explicit KoFormulaTool( KoCanvasBase *canvas );
+    ~KoFormulaTool();
 
     virtual void paint( QPainter &painter, KoViewConverter &converter );
 
@@ -72,7 +72,7 @@ public slots:
  
 private:
     /// The FormulaShape the tool is manipulating
-    FormulaShape* m_formulaShape;
+    KoFormulaShape* m_formulaShape;
 
     /// The FormulaCursor the tool uses to move around in the formula
     FormulaCursor* m_formulaCursor;

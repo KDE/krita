@@ -52,9 +52,9 @@ void KoShapeCreateCommand::redo () {
 void KoShapeCreateCommand::undo () {
     Q_ASSERT(m_shape);
     Q_ASSERT(m_controller);
+    recurse(m_shape, Remove);
     if( m_shapeParent )
         m_shapeParent->removeChild( m_shape );
-    recurse(m_shape, Remove);
     m_deleteShape = true;
 }
 

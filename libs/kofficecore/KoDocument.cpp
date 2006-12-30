@@ -296,7 +296,7 @@ KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleView
     d->m_undoStack = new KUndoStack( this );
     d->m_undoStack->createUndoAction( actionCollection() );
     d->m_undoStack->createRedoAction( actionCollection() );
-    connect( d->m_undoStack, SIGNAL( cleanChanged( bool ) ), this, SLOT( setModified( bool ) ) );
+    connect( d->m_undoStack, SIGNAL( cleanChanged( bool ) ), this, SLOT( setDocumentClean( bool ) ) );
 
     // A way to 'fix' the job's window, since we have no widget known to KParts
     if ( !singleViewMode )
@@ -2830,6 +2830,11 @@ QList<KoVersionInfo> & KoDocument::versionList()
 void KoDocument::addCommand(QUndoCommand* command)
 {
     d->m_undoStack->push( command );
+}
+
+void KoDocument::setDocumentClean(bool clean)
+{
+    setModified(!clean);
 }
 
 #include "KoDocument_p.moc"

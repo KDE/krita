@@ -23,6 +23,23 @@
 #include "KoPathShape.h"
 #include <koffice_export.h>
 
+/**
+ * KoParameterShape is the base class for all parametric shapes
+ * in flake.
+ * Parametric shapes are those whose appearance can be completely
+ * defined by a few numerical parameters. Rectangle, ellipse and star
+ * are examples of parametric shapes.
+ * In flake, these shape parameters can be manipulated visually by means
+ * of control points. These control points can be moved with the mouse
+ * on the canvas which changes the shapes parameter values and hence the
+ * shapes apperance in realtime.
+ * KoParameterShape is derived from the KoPathShape class that means
+ * by changing the shape parameters, the underlying path is manipulated.
+ * A parametric shape can be converted into a path shape by simply calling
+ * the setModified method. This makes the path tool know that it can handle
+ * the shape like a path shape, so that modifying the single path points
+ * is possible.
+ */
 class FLAKE_EXPORT KoParameterShape : public KoPathShape
 {
 public:
@@ -59,16 +76,16 @@ public:
     /**
      * @brief Paint the handles
      *
-     * @param painter
-     * @param converter
+     * @param painter the painter to paint the handles on
+     * @param converter the view converter for applying the actual zoom
      */
     virtual void paintHandles( QPainter & painter, const KoViewConverter & converter );
 
     /**
      * @brief Paint the given handles
      *
-     * @param painter
-     * @param converter
+     * @param painter the painter to paint the handles on
+     * @param converter the view converter for applying the actual zoom
      * @param handleId of the handle which should be repainted
      */
     virtual void paintHandle( QPainter & painter, const KoViewConverter & converter, int handleId );

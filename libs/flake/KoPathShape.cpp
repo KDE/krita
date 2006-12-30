@@ -263,9 +263,7 @@ void KoPathPoint::reverse()
     newProps |= m_properties & IsSymmetric;
     newProps |= m_properties & StartSubpath;
     newProps |= m_properties & CloseSubpath;
-    qDebug() << "oldProps = " << m_properties;
     m_properties = newProps;
-    qDebug() << "newProps = " << m_properties;
 }
 
 void KoPathPoint::removeFromGroup()
@@ -761,6 +759,281 @@ QList<KoPathPoint*> KoPathShape::pointsAt( const QRectF &r )
     }
     return result;
 }
+
+
+KoPathPointIndex KoPathShape::pathPointIndex( KoPathPoint *point )
+{
+    for ( int subpathIndex = 0; subpathIndex < m_subpaths.size(); ++subpathIndex )
+    {
+        KoSubpath * subpath = m_subpaths.at( subpathIndex );
+        for ( int pointPos = 0; pointPos < subpath->size(); ++pointPos )
+        {
+            if ( subpath->at( pointPos ) == point )
+            {
+                return KoPathPointIndex( subpathIndex, pointPos );
+            }
+        }
+    }
+    return KoPathPointIndex( -1, -1 );
+}
+
+bool KoPathShape::insertPoint( KoPathPoint* point, const KoPathPointIndex &pointIndex )
+{
+    KoSubpath * subpath = subPath( pointIndex.first );
+
+    if ( subpath == 0 || pointIndex.second < 0 || pointIndex.second > subpath->size() )
+        return false;
+
+    KoPathPoint::KoPointProperties properties( point->properties() | KoPathPoint::CanHaveControlPoint1 | KoPathPoint::CanHaveControlPoint2 );
+    properties = properties & ~KoPathPoint::StartSubpath;
+    properties = properties & ~KoPathPoint::CloseSubpath;
+    if ( pointIndex.second == 0 )
+    {
+        properties = properties | KoPathPoint::StartSubpath;
+        if ( !( subpath->last()->properties() & KoPathPoint::CloseSubpath ) )
+        {
+            // there is no control point 1 when subpath is not closed
+            properties = properties & ~KoPathPoint::CanHaveControlPoint1;
+        }
+        subpath->first()->setProperties( subpath->first()->properties() & ~KoPathPoint::StartSubpath | KoPathPoint::CanHaveControlPoint1 );
+    }
+    else if ( pointIndex.second == subpath->size() )
+    {
+        if ( subpath->last()->properties() & KoPathPoint::CloseSubpath )
+        {
+            // keep the path closed
+            properties = properties | KoPathPoint::CloseSubpath;
+        }
+        else
+        {
+            // there is no control point 2 when subpath is not closed
+            properties = properties & ~KoPathPoint::CanHaveControlPoint2;
+            properties = properties & ~KoPathPoint::CloseSubpath;
+        }
+        subpath->last()->setProperties( subpath->last()->properties() & ~KoPathPoint::CloseSubpath | KoPathPoint::CanHaveControlPoint2 );
+    }
+    else
+    {
+        properties = properties & ~KoPathPoint::StartSubpath;
+        properties = properties & ~KoPathPoint::CloseSubpath;
+    }
+    point->setProperties( properties );
+    subpath->insert( pointIndex.second , point );
+    return true;
+}
+
+KoPathPoint * KoPathShape::removePoint( const KoPathPointIndex &pointIndex )
+{
+    KoSubpath * subpath = subPath( pointIndex.first );
+
+    if ( subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size() )
+        return 0;
+
+    KoPathPoint * point = subpath->takeAt( pointIndex.second );
+
+    if ( pointIndex.second == 0 )
+    {
+        // first point removed, set new StartSubpath
+        if ( subpath->last()->properties() & KoPathPoint::CloseSubpath )
+        {
+            subpath->first()->setProperties( subpath->first()->properties() | KoPathPoint::StartSubpath );
+        }
+        else
+        {
+            subpath->first()->setProperties( ( subpath->first()->properties() & ~KoPathPoint::CanHaveControlPoint1 ) | KoPathPoint::StartSubpath );
+        }
+    }
+    else if ( pointIndex.second == subpath->size() ) // use size as point is allreay removed
+    {
+        // last point removed, change last point to be the end
+        if ( point->properties() & KoPathPoint::CloseSubpath )
+        {
+            subpath->last()->setProperties( subpath->last()->properties() | KoPathPoint::CloseSubpath );
+        }
+        else
+        {
+            subpath->last()->setProperties( subpath->last()->properties() & ~KoPathPoint::CanHaveControlPoint2 );
+        }
+    }
+
+    return point;
+}
+
+bool KoPathShape::breakAfter( const KoPathPointIndex &pointIndex )
+{
+    KoSubpath * subpath = subPath( pointIndex.first );
+
+    if ( subpath == 0 || pointIndex.second < 0 || pointIndex.second > subpath->size() - 2 
+         || subpath->last()->properties() & KoPathPoint::CloseSubpath )
+        return false;
+
+    KoSubpath * newSubpath = new KoSubpath;
+
+    int size = subpath->size();
+    for ( int i = pointIndex.second + 1; i < size; ++i )
+    {
+        newSubpath->append( subpath->takeAt( pointIndex.second + 1 ) );
+    }
+    // now make the first point of the new subpath a starting node
+    newSubpath->first()->setProperty( KoPathPoint::StartSubpath );
+    newSubpath->first()->unsetProperty( KoPathPoint::CanHaveControlPoint1 );
+    // the last point of the old subpath is now an ending node 
+    subpath->last()->unsetProperty( KoPathPoint::CanHaveControlPoint2 );
+
+    // insert the new subpath after the broken one
+    m_subpaths.insert( pointIndex.first + 1, newSubpath );
+
+    return true;
+}
+
+bool KoPathShape::join( int subpathIndex )
+{
+    KoSubpath * subpath = subPath( subpathIndex );
+    KoSubpath * nextSubpath = subPath( subpathIndex + 1 );
+
+    if ( subpath == 0 || nextSubpath == 0 || subpath->last()->properties() & KoPathPoint::CloseSubpath 
+         || nextSubpath->last()->properties() & KoPathPoint::CloseSubpath )
+        return false;
+
+    nextSubpath->first()->unsetProperty( KoPathPoint::StartSubpath );
+    
+    // append the second subpath to the first
+    foreach( KoPathPoint * p, *nextSubpath )
+        subpath->append( p );
+
+    // remove the nextSubpath from path
+    m_subpaths.removeAt( subpathIndex + 1 );
+
+    // delete it as it is no longer possible to use it
+    delete nextSubpath;
+
+    return true;
+}
+
+bool KoPathShape::moveSubpath( int oldSubpathIndex, int newSubpathIndex )
+{
+    KoSubpath * subpath = subPath( oldSubpathIndex );
+
+    if ( subpath == 0 || newSubpathIndex >= m_subpaths.size() )
+        return false;
+
+    m_subpaths.removeAt( oldSubpathIndex );
+    m_subpaths.insert( newSubpathIndex, subpath );
+
+    return true;
+}
+
+KoPathPointIndex KoPathShape::openSubpath( const KoPathPointIndex &pointIndex )
+{
+    KoSubpath * subpath = subPath( pointIndex.first );
+
+    if ( subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size() 
+         || !( subpath->last()->properties() & KoPathPoint::CloseSubpath ) )
+        return KoPathPointIndex( -1, -1 );
+
+    KoPathPoint * oldStartPoint = subpath->first();
+    // the old starting node no longer starts the subpath
+    oldStartPoint->unsetProperty( KoPathPoint::StartSubpath );
+    oldStartPoint->setProperty( KoPathPoint::CanHaveControlPoint1 );
+    // the old end node no longer closes the subpath
+    subpath->last()->unsetProperty( KoPathPoint::CloseSubpath );
+
+    // reorder the subpath
+    for ( int i = 0; i < pointIndex.second; ++i )
+    {
+        subpath->append( subpath->takeFirst() );
+    }
+    // make the first point a start node
+    subpath->first()->setProperty( KoPathPoint::StartSubpath );
+    subpath->first()->unsetProperty( KoPathPoint::CanHaveControlPoint1 );
+    // make the last point a end node 
+    subpath->last()->unsetProperty( KoPathPoint::CanHaveControlPoint2 );
+
+    return pathPointIndex( oldStartPoint );
+}
+
+KoPathPointIndex KoPathShape::closeSubpath( const KoPathPointIndex &pointIndex )
+{
+    KoSubpath * subpath = subPath( pointIndex.first );
+
+    if ( subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size() 
+         || subpath->last()->properties() & KoPathPoint::CloseSubpath )
+        return KoPathPointIndex( -1, -1 );
+
+    KoPathPoint * oldStartPoint = subpath->first();
+    // the old starting node no longer starts the subpath
+    oldStartPoint->unsetProperty( KoPathPoint::StartSubpath );
+    oldStartPoint->setProperty( KoPathPoint::CanHaveControlPoint1 );
+    // the old end node no longer closes the subpath
+    subpath->last()->setProperty( KoPathPoint::CanHaveControlPoint2 );
+    
+    // reorder the subpath
+    for ( int i = 0; i < pointIndex.second; ++i )
+    {
+        subpath->append( subpath->takeFirst() );
+    }
+    subpath->first()->setProperty( KoPathPoint::StartSubpath );
+    closeSubpath( subpath );
+    return pathPointIndex( oldStartPoint );
+}
+
+bool KoPathShape::reverseSubpath( int subpathIndex )
+{
+    KoSubpath * subpath = subPath( subpathIndex );
+
+    if ( subpath == 0 )
+        return false;
+
+    int size = subpath->size();
+    for( int i = 0; i < size; ++i )
+    {
+        KoPathPoint *p = subpath->takeAt( i );
+        p->reverse();
+        subpath->prepend( p );
+    }
+
+    // adjust the position dependent properties
+    KoPathPoint *first = subpath->first();
+    KoPathPoint *last = subpath->last();
+
+    KoPathPoint::KoPointProperties firstProps = first->properties();
+    KoPathPoint::KoPointProperties lastProps = last->properties();
+
+    firstProps |= KoPathPoint::StartSubpath;
+    lastProps &= ~KoPathPoint::StartSubpath;
+    if( firstProps & KoPathPoint::CloseSubpath )
+    {
+        firstProps &= ~KoPathPoint::CloseSubpath;
+        lastProps |= KoPathPoint::CloseSubpath;
+    }
+    first->setProperties( firstProps );
+    last->setProperties( lastProps );
+
+    return true;
+}
+
+KoSubpath * KoPathShape::removeSubpath( int subpathIndex )
+{
+    KoSubpath * subpath = subPath( subpathIndex );
+
+    if ( subpath != 0 )
+        m_subpaths.removeAt( subpathIndex );
+
+    return subpath;
+}
+
+bool KoPathShape::addSubpath( KoSubpath * subpath, int subpathIndex )
+{
+    if ( subpathIndex < 0 || subpathIndex > m_subpaths.size() )
+        return false;
+    
+    m_subpaths.insert( subpathIndex, subpath );
+
+    return true;
+}
+
+
+
 
 KoPointPosition KoPathShape::removePoint( KoPathPoint *point )
 {
@@ -1318,4 +1591,12 @@ void KoPathShape::reverseSubpath( KoSubpath &subpath )
     }
     first->setProperties( firstProps );
     last->setProperties( lastProps );
+}
+
+KoSubpath * KoPathShape::subPath( int subpathIndex )
+{
+    if ( subpathIndex < 0 || subpathIndex >= m_subpaths.size() )
+        return 0;
+
+    return m_subpaths.at( subpathIndex );
 }

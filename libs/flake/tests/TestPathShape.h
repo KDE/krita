@@ -29,6 +29,19 @@ private slots:
     void close();
     void moveTo();
     void normalize();
+
+    void pathPointIndex();
+    void insertPoint();
+    void removePoint();
+    void splitAfter();
+    void join();
+    void moveSubpath();
+    void openSubpath();
+    void closeSubpath();
+    void openCloseSubpath();
+    void reverseSubpath();
+    void removeSubpath();
+    void addSubpath();
 };
 
 #endif // TESTPATHSHAPE_H

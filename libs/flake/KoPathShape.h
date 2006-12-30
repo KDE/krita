@@ -453,6 +453,127 @@ public:
     QList<KoPathPoint*> pointsAt( const QRectF &r );
 
     /**
+     * @brief Get the path point index of a point
+     *
+     * @param point for which you want to get the info
+     * @return path point index of the point if it exists
+     *         otherwise KoPathPointIndex( -1, -1 )
+     */
+    KoPathPointIndex pathPointIndex( KoPathPoint *point );
+
+    /**
+     * @brief Inserts a new point into the given subpath at the specified position
+     *
+     * This method keeps the subpath closed if it is closed, and open when it was 
+     * open. So it can change the properties of the point inserted.
+     * You might need to update the point before/after to get the wanted result
+     * e.g. when you insert the point into a curve.
+     *
+     * @param point to insert
+     * @param pointIndex where the point should be inserted
+     *
+     * @return true on success, 
+     *         false when pointIndex is out of bounds
+     */
+    bool insertPoint( KoPathPoint* point, const KoPathPointIndex &pointIndex );
+
+    /**
+     * @brief Removes point from the path.
+     *
+     * @param pointIndex of the point which should be removed
+     *
+     * @return The removed point on success,
+     *         otherwise 0
+     */
+    KoPathPoint * removePoint( const KoPathPointIndex &pointIndex );
+
+    /**
+     * @brief Breaks the path after the point index
+     *
+     * The new subpath will behind the one that was broken. The segment between the
+     * given point and the one behind will be removed. If you want to split at one 
+     * point insert first a copy of the point behind it.
+     * This does not work when the subpath is closed. Use openSubpath for this.
+     * It does not break at the last position of a subpath or if there is only one 
+     * point in the subpath.
+     *
+     * @param pointIndex after which the path should be broken
+     *
+     * @return true if the subpath was broken, otherwise false
+     */
+    bool breakAfter( const KoPathPointIndex &pointIndex );
+
+    /**
+     * @brief Joins the given subpath with the following one
+     *
+     * Joins the given subpath with the following one by inserting a segment between 
+     * the two subpathes.
+     * This does nothing if the given ot the following subpath is closed or on the 
+     * last subpath of the path.
+     * 
+     * @param subpathIndex of the subpath which will be joined with its following one
+     *
+     * @return true if the subpath was joined, otherwise false
+     */
+    bool join( int subpathIndex );
+
+    /**
+     * @brief Move the position of a subpath within a path
+     *
+     * @param oldSubpathIndex old index of the subpath
+     * @param newSubpathIndex new index of the subpath
+     *
+     * @return true if the subpath was moved, otherwise false e.g. if an index is out of bounds
+     */
+    bool moveSubpath( int oldSubpathIndex, int newSubpathIndex );
+
+    /**
+     * @brief Open a closed subpath
+     *
+     * The subpath is opened by removing the segment before the given point, makeing
+     * the given point the new start point of the subpath.
+     *
+     * @param pointIndex to where to open the closed subpath
+     * @return the new position of the old first point in the subpath
+     *         otherwise KoPathPointIndex( -1, -1 )
+     */
+    KoPathPointIndex openSubpath( const KoPathPointIndex &pointIndex );
+
+    /**
+     * @brief Close a open subpath
+     *
+     * The subpath is closed be inserting as segment before the given point, makeing
+     * the given point the new start point of the subpath.
+     *
+     * @return the new position of the old first point in the subpath
+     *         otherwise KoPathPointIndex( -1, -1 )
+     */
+    KoPathPointIndex closeSubpath( const KoPathPointIndex &pointIndex );
+
+    /**
+     * @brief Reverse subpath 
+     *
+     * The last point becomes the first point and the first one becomes the last one.
+     *
+     * @param pointIndex of the subpath to reverse
+     */
+    bool reverseSubpath( int subpathIndex );
+
+    /**
+     * @brief Remove subpath from path
+     *
+     * @return The removed subpath on succes, 0 otherwise.
+     */
+    KoSubpath * removeSubpath( int subpathIndex );
+
+    /**
+     * @brief Add a Subpath at the given index to the path
+     *
+     * @return true on success, false otherwise e.g. subpathIndex out of bounds
+     */
+    bool addSubpath( KoSubpath * subpath, int subpathIndex );
+
+    /**
      * @brief Inserts a new point into the given subpath at the specified position
      * @param point the point to insert
      * @param subpath the subpath to insert the point into
@@ -613,6 +734,13 @@ private:
     KoPointPosition findPoint( KoPathPoint* point );
     /// reverses specified subpath (last point becomes first point)
     void reverseSubpath( KoSubpath &subpath );
+
+    /**
+     * @brief Get subpath at subpathIndex
+     *
+     * @return subPath on success, or 0 when subpathIndex is out of bounds
+     */
+    KoSubpath * subPath( int subpathIndex );
 #ifndef NDEBUG
     void paintDebug( QPainter &painter );
 #endif

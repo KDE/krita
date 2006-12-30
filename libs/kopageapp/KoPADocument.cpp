@@ -47,10 +47,17 @@ KoPADocument::~KoPADocument()
 void KoPADocument::paintContent( QPainter &painter, const QRect &rect, bool transparent,
                                 double zoomX, double zoomY )
 {
+    Q_UNUSED( painter );
+    Q_UNUSED( rect );
+    Q_UNUSED( transparent );
+    Q_UNUSED( zoomX );
+    Q_UNUSED( zoomY );
 }
 
 bool KoPADocument::loadXML( QIODevice *, const KoXmlDocument & doc )
 {
+    Q_UNUSED( doc );
+
     //Perhaps not necessary if we use filter import/export for old file format
     //only needed as it is in the base class will be removed.
     return true;
@@ -59,11 +66,16 @@ bool KoPADocument::loadXML( QIODevice *, const KoXmlDocument & doc )
 bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
                              const KoXmlDocument & settings, KoStore* store )
 {
+    Q_UNUSED( doc );
+    Q_UNUSED( oasisStyles );
+    Q_UNUSED( settings );
+    Q_UNUSED( store  );
     return true;
 }
 
 bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
+    Q_UNUSED( manifestWriter );
     return true;
 }
 

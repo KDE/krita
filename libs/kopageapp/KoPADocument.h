@@ -50,7 +50,7 @@ public:
     /**
      * Add @p page to the document after page @p before
      * @param page page to add to document
-     * @param before the page which the added page should come after. Set before to 0 to add at the begining
+     * @param before the page which the added page should come after. Set before to 0 to add at the beginning
      */
     void addPage(KoPAPage* page, KoPAPage* before);
 

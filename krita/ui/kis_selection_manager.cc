@@ -508,8 +508,15 @@ void KisSelectionManager::selectAll()
     if (img->undo()) t = new KisSelectedTransaction(i18n("Select All"), dev);
     Q_CHECK_PTR(t);
 
-    dev->selection()->clear();
-    dev->selection()->invert();
+    // Make adjustment layers behave better
+    KisAdjustmentLayer* adj = dynamic_cast<KisAdjustmentLayer*>(img->activeLayer().data());
+    if (adj) {
+        adj->clearSelection();
+        adj->selection()->invert();
+    } else {
+        dev->selection()->clear();
+        dev->selection()->invert();
+    }
     dev->setDirty();
     dev->emitSelectionChanged();
 

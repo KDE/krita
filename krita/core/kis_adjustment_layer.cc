@@ -125,7 +125,7 @@ void KisAdjustmentLayer::clearSelection()
 
     QRect bounds = extent();
     bounds |= image()->bounds();
-    gc.fillRect(bounds, KisColor(Qt::white, cs), MAX_SELECTED);
+    gc.fillRect(bounds, KisColor(Qt::white, cs), MIN_SELECTED);
     gc.end();
 }
 

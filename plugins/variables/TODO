@@ -1,0 +1,47 @@
+These are the variables that the previous version of KOffice supplied.
+We have to redesign this with ODf and the new plugin structure in mind; but having a list
+here is certainly useful.
+
+Don't just start implementing these as listed here!
+
+KoDateVariable
+    has a format string and/or one of:
+    fixed, current, date last printed, date file creation, date file modified
+
+KoTimeVariable
+    has a format string and/or one of:
+    fixed, current
+
+KoCustomVariable
+    Basically a text-based one.  Which is mostly what KoVariable already provides
+
+KoFieldVariable
+Of types:
+    none, filename, directoryname, authorname, email,
+    companyname, pathfilename, filenamewithoutextension,
+    telephone_work, fax, country, title, abstract, postal_code,
+    city, street, authortitle, initial, telephone_home,
+    subject, keywords, authorposition
+
+KoPageVariable
+    number of pages and current page number
+    need integration with the application somehow...
+
+KoLinkVariable
+    An external link. Like a http url or mail/news or file or even a bookmark.
+
+KoNoteVariable
+    A custom item that display a small yellow rect. Right-clicking on it shows the comment.
+
+KoStatisticVariable
+    number of word
+    number of sentence
+    number of lines
+    number of charactere
+    number of non_whitespace_charactere
+    number of syllable
+    number of frame
+    number of embedded
+    number of picture
+    number of table
+

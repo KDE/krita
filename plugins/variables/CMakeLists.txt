@@ -1,4 +1,4 @@
-include_directories( ${KOTEXT_INCLUDES} )
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} )
 
 set(textvariables_PART_SRCS
     KoVariablesPlugin.cpp

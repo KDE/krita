@@ -5,7 +5,6 @@ include_directories( ${KOFFICEUI_INCLUDES} )
 add_subdirectory( kohyphen ) 
 add_subdirectory( tests ) 
 add_subdirectory( styles/tests )
-add_subdirectory( variables )
 
 
 # Need by kohyphen

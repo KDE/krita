@@ -26,7 +26,7 @@ class KoVariable;
 
 class KoDateVariableFactory : public KoInlineObjectFactory {
 public:
-    KoDateVariableFactory(QObject *parent);
+    explicit KoDateVariableFactory(QObject *parent);
     ~KoDateVariableFactory() {}
 
     KoInlineObjectBase *createInlineObject();

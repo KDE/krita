@@ -94,10 +94,10 @@ class KoRGB16Fallback {
   public:
     static inline void toLabA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
     {
-        int lenght = nPixels * fallBackCS->pixelSize();
-        if(lenght > buf.size())
+        int length = nPixels * fallBackCS->pixelSize();
+        if(length > buf.size())
         {
-            buf.resize(lenght);
+            buf.resize(length);
         }
         cs->toRgbA16( src, (quint8*)buf.data(), nPixels);
         fallBackCS->toLabA16( (quint8*)buf.data(), dst, nPixels);
@@ -105,10 +105,10 @@ class KoRGB16Fallback {
 
     static inline void fromLabA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
     {
-        int lenght = nPixels * fallBackCS->pixelSize();
-        if(lenght > buf.size())
+        int length = nPixels * fallBackCS->pixelSize();
+        if(length > buf.size())
         {
-            buf.resize(lenght);
+            buf.resize(length);
         }
         fallBackCS->toLabA16(src, (quint8*)buf.data(), nPixels);
         cs->toRgbA16( (quint8*)buf.data(), dst, nPixels);

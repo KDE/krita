@@ -75,6 +75,7 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
 
 bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
+    Q_UNUSED( store );
     Q_UNUSED( manifestWriter );
     return true;
 }

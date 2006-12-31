@@ -194,7 +194,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 /*    ElementType* token = getElementType();
     if ( ( token != 0 ) && !symbol ) {
         QString text = token->text( static_cast<SequenceElement*>( getParent() ) );
-//         kdDebug() << "draw text: " << text[0].unicode()
+//         kDebug() << "draw text: " << text[0].unicode()
 //                   << " " << painter.font().family().latin1()
 //                   << endl;
         painter.fillRect( context.layoutUnitToPixelX( parentOrigin.x() ),

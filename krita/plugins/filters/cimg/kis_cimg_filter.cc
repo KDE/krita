@@ -194,7 +194,7 @@ void KisCImgFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
             ++it;
         }
     } else {
-        kdDebug() << "The RGB16 colorspace is not available, will work in 8bit." << endl;
+        kDebug() << "The RGB16 colorspace is not available, will work in 8bit." << endl;
         KisRectConstIteratorPixel it = src->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
         while (!it.isDone()) {
     

@@ -64,7 +64,7 @@ int TokenElement::buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNod
             const entityMap* end = entities + entityMap::size();
             const entityMap* pos = std::lower_bound( begin, end, entity.ascii() );
             if ( pos == end || QString( pos->name ) != entity ) {
-                kdWarning() << "Invalid entity refererence: " << entity << endl;
+                kWarning() << "Invalid entity refererence: " << entity << endl;
             }
             else {
                 TextElement* child = new TextElement( QChar( pos->unicode ) );
@@ -79,7 +79,7 @@ int TokenElement::buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNod
             // Only mglyph element is allowed
             QDomElement e = n.toElement();
             if ( e.tagName().lower() != "mglyph" ) {
-                kdWarning( DEBUGID ) << "Invalid element inside Token Element\n";
+                kWarning( DEBUGID ) << "Invalid element inside Token Element\n";
                 return -1;
             }
             GlyphElement* child = new GlyphElement();
@@ -94,12 +94,12 @@ int TokenElement::buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNod
             list.append( child );
         }
         else {
-            kdWarning() << "Invalid content in TokenElement\n";
+            kWarning() << "Invalid content in TokenElement\n";
         }
         n = n.nextSibling();
     }
 //	parse();
-	kdWarning() << "Num of children " << list.count() << endl;
+	kWarning() << "Num of children " << list.count() << endl;
     return 1;
 }
 

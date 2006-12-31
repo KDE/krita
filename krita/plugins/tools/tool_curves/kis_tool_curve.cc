@@ -413,7 +413,7 @@ void KisToolCurve::commitCurve()
     else if (toolType() == TOOL_SELECT)
         selectCurve();
     else
-        kdDebug(0) << "NO SUPPORT FOR THIS TYPE OF TOOL" << endl;
+        kDebug(0) << "NO SUPPORT FOR THIS TYPE OF TOOL" << endl;
 
     m_curve->clear();
     m_curve->endActionOptions();
@@ -542,7 +542,7 @@ QWidget* KisToolCurve::createOptionWidget()
     else if (toolType() == TOOL_SELECT)
         return createSelectionOptionWidget(parent);
     else
-        kdDebug(0) << "NO SUPPORT FOR THIS TOOL TYPE" << endl;
+        kDebug(0) << "NO SUPPORT FOR THIS TOOL TYPE" << endl;
     return 0;
 }
 

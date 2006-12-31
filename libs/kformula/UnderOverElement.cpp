@@ -67,7 +67,7 @@ bool UnderOverElement::readAttributesFromMathMLDom( const QDomElement& element )
                 m_accentUnder = false;
             }
             else {
-                kdWarning( DEBUGID ) << "Invalid value for attribute `accentunder': " 
+                kWarning( DEBUGID ) << "Invalid value for attribute `accentunder': " 
                                      << accentunderStr << endl;
             }
         }
@@ -84,7 +84,7 @@ bool UnderOverElement::readAttributesFromMathMLDom( const QDomElement& element )
                 m_accent = false;
             }
             else {
-                kdWarning( DEBUGID ) << "Invalid value for attribute `accent': " 
+                kWarning( DEBUGID ) << "Invalid value for attribute `accent': " 
                                      << accentStr << endl;
             }
         }

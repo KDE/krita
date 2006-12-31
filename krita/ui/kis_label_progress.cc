@@ -32,6 +32,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kicon.h>
 
 #include "kis_progress_subject.h"
 #include "kis_label_progress.h"
@@ -60,7 +61,7 @@ KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name) : super(pa
     box->setMargin(0);
     box->setAlignment(Qt::AlignTop);
 
-    QIcon cancelIconSet = SmallIconSet("stop");
+    QIcon cancelIconSet = KIcon("stop");
 
     m_cancelButton = new EscapeButton(this, "cancel_button");
     m_cancelButton->setIcon(cancelIconSet);

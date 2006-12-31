@@ -280,7 +280,7 @@ void TokenStyleElement::writeMathMLAttributes( QDomElement& element ) const
                 element.setAttribute( "mathvariant", "bold-italic" );
             }
             else { // anyChar or unknown, it's always an error
-                kdWarning( DEBUGID ) << "Mathvariant: unknown style for normal family\n";
+                kWarning( DEBUGID ) << "Mathvariant: unknown style for normal family\n";
             }
         }
         else if ( charFamily() == doubleStruckFamily ) {
@@ -288,7 +288,7 @@ void TokenStyleElement::writeMathMLAttributes( QDomElement& element ) const
                 element.setAttribute( "mathvariant", "double-struck" );
             }
             else { // Shouldn't happen, it's a bug
-                kdWarning( DEBUGID ) << "Mathvariant: unknown style for double-struck family\n";
+                kWarning( DEBUGID ) << "Mathvariant: unknown style for double-struck family\n";
             }
         }
         else if ( charFamily() == frakturFamily ) {
@@ -299,7 +299,7 @@ void TokenStyleElement::writeMathMLAttributes( QDomElement& element ) const
                 element.setAttribute( "mathvariant", "bold-fraktur" );
             }
             else {
-                kdWarning( DEBUGID ) << "Mathvariant: unknown style for fraktur family\n";
+                kWarning( DEBUGID ) << "Mathvariant: unknown style for fraktur family\n";
             }
         }
         else if ( charFamily() == scriptFamily ) {
@@ -310,7 +310,7 @@ void TokenStyleElement::writeMathMLAttributes( QDomElement& element ) const
                 element.setAttribute( "mathvariant", "bold-script" );
             }
             else { // Shouldn't happen, it's a bug
-                kdWarning( DEBUGID ) << "Mathvariant: unknown style for script family\n";
+                kWarning( DEBUGID ) << "Mathvariant: unknown style for script family\n";
             }
         }
         else if ( charFamily() == sansSerifFamily ) {
@@ -327,7 +327,7 @@ void TokenStyleElement::writeMathMLAttributes( QDomElement& element ) const
                 element.setAttribute( "mathvariant", "sans-serif-bold-italic" );
             }
             else {
-                kdWarning( DEBUGID ) << "Mathvariant: unknown style for sans serif family\n";
+                kWarning( DEBUGID ) << "Mathvariant: unknown style for sans serif family\n";
             }
         }
         else if ( charFamily() == monospaceFamily ) {
@@ -335,11 +335,11 @@ void TokenStyleElement::writeMathMLAttributes( QDomElement& element ) const
                 element.setAttribute( "mathvariant", "monospace" );
             }
             else {
-                kdWarning( DEBUGID ) << "Mathvariant: unknown style for monospace family\n";
+                kWarning( DEBUGID ) << "Mathvariant: unknown style for monospace family\n";
             }
         }
         else {
-            kdWarning( DEBUGID ) << "Mathvariant: unknown family\n";
+            kWarning( DEBUGID ) << "Mathvariant: unknown family\n";
         }
     }
 
@@ -407,7 +407,7 @@ void TokenStyleElement::writeMathMLAttributes( QDomElement& element ) const
 
 void TokenStyleElement::setAbsoluteSize( double s, bool fontsize )
 { 
-        kdDebug( DEBUGID) << "Setting absolute size: " << s << endl;
+        kDebug( DEBUGID) << "Setting absolute size: " << s << endl;
         if ( fontsize ) {
             m_fontSizeType = AbsoluteSize;
             m_fontSize = s;
@@ -420,7 +420,7 @@ void TokenStyleElement::setAbsoluteSize( double s, bool fontsize )
 
 void TokenStyleElement::setRelativeSize( double f, bool fontsize )
 { 
-        kdDebug( DEBUGID) << "Setting relative size: " << f << endl;
+        kDebug( DEBUGID) << "Setting relative size: " << f << endl;
         if ( fontsize ) {
             m_fontSizeType = RelativeSize;
             m_fontSize = f;
@@ -433,7 +433,7 @@ void TokenStyleElement::setRelativeSize( double f, bool fontsize )
 
 void TokenStyleElement::setPixelSize( double px, bool fontsize )
 {
-        kdDebug( DEBUGID) << "Setting pixel size: " << px << endl;
+        kDebug( DEBUGID) << "Setting pixel size: " << px << endl;
         if ( fontsize ) {
             m_fontSizeType = PixelSize;
             m_fontSize = px;
@@ -575,7 +575,7 @@ double TokenStyleElement::sizeFactor( const ContextStyle& context, double factor
     default:
         break;
     }
-    kdWarning( DEBUGID ) << k_funcinfo << " Unknown SizeType\n";
+    kWarning( DEBUGID ) << k_funcinfo << " Unknown SizeType\n";
     return factor;
 }
 
@@ -618,7 +618,7 @@ QString TokenStyleElement::getHtmlColor( const QString& colorStr ){
         return "#008080";
     if ( colorname == "aqua" )
         return "#00FFFF";
-    kdWarning( DEBUGID ) << "Invalid HTML color: " << colorname << endl;
+    kWarning( DEBUGID ) << "Invalid HTML color: " << colorname << endl;
     return "#FFFFFF"; // ### Arbitrary selection of default color
 }
 

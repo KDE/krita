@@ -54,7 +54,7 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
         bool ok;
         m_scriptLevel = scriptlevelStr.toInt( &ok );
         if ( ! ok ) {
-            kdWarning( DEBUGID ) << "Invalid scriptlevel attribute value: " 
+            kWarning( DEBUGID ) << "Invalid scriptlevel attribute value: " 
                                  << scriptlevelStr << endl;
         }
         else {
@@ -76,7 +76,7 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
         bool ok;
         m_scriptSizeMultiplier = scriptsizemultiplierStr.toDouble( &ok );
         if ( ! ok ) {
-            kdWarning( DEBUGID ) << "Invalid scriptsizemultiplier attribute value: " 
+            kWarning( DEBUGID ) << "Invalid scriptsizemultiplier attribute value: " 
                                  << scriptsizemultiplierStr << endl;
         }
         else {

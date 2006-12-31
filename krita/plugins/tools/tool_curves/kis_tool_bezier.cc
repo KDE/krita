@@ -210,7 +210,7 @@ KisCurve::iterator KisCurveBezier::pushPivot (const QPointF& point)
 /*
     it = pushPoint(point,true,false,BEZIERENDHINT);
     if (count() > 1) {
-	kdDebug(0) << "QUI" << endl;
+	kDebug(0) << "QUI" << endl;
         addPoint(it,point,true,false,BEZIERPREVCONTROLHINT);
     }
     

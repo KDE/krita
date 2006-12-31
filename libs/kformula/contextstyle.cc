@@ -98,7 +98,7 @@ void ContextStyle::readConfig( KConfig* config, bool init )
     m_baseSize = baseSize.toInt();
 
     if ( ! FontStyle::missingFonts( init ).isEmpty() ) {
-        kdWarning( DEBUGID) << "Not all basic fonts found\n";
+        kWarning( DEBUGID) << "Not all basic fonts found\n";
     }
     mathFont.fromString("Arev Sans");
     bracketFont.fromString("cmex10");
@@ -413,7 +413,7 @@ double ContextStyle::layoutUnitToFontSize( double luSize, bool /*forPrint*/ ) co
 double StyleAttributes::sizeFactor() const
 {
     if ( m_size.empty() ) {
-//        kdWarning( DEBUGID ) << "SizeFactor stack is empty.\n";
+//        kWarning( DEBUGID ) << "SizeFactor stack is empty.\n";
         return 1.0;
     }
     return m_size.top();
@@ -430,7 +430,7 @@ bool StyleAttributes::customMathVariant() const
 CharStyle StyleAttributes::charStyle() const
 {
     if ( m_charStyle.empty() ) {
-//        kdWarning( DEBUGID ) << "CharStyle stack is empty.\n";
+//        kWarning( DEBUGID ) << "CharStyle stack is empty.\n";
         return anyChar;
     }
     return m_charStyle.top();
@@ -439,7 +439,7 @@ CharStyle StyleAttributes::charStyle() const
 CharFamily StyleAttributes::charFamily() const
 {
     if ( m_charFamily.empty() ) {
-//        kdWarning( DEBUGID ) << "CharFamily stack is empty.\n";
+//        kWarning( DEBUGID ) << "CharFamily stack is empty.\n";
         return anyFamily;
     }
     return m_charFamily.top();
@@ -448,7 +448,7 @@ CharFamily StyleAttributes::charFamily() const
 QColor StyleAttributes::color() const
 {
     if ( m_color.empty() ) {
-//        kdWarning( DEBUGID ) << "Color stack is empty.\n";
+//        kWarning( DEBUGID ) << "Color stack is empty.\n";
         return QColor( Qt::black );
         //return getDefaultColor();
     }
@@ -458,7 +458,7 @@ QColor StyleAttributes::color() const
 QColor StyleAttributes::background() const
 {
     if ( m_background.empty() ) {
-//        kdWarning( DEBUGID ) << "Background stack is empty.\n";
+//        kWarning( DEBUGID ) << "Background stack is empty.\n";
         return QColor( Qt::color0 );
     }
     return m_background.top();

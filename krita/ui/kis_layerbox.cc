@@ -120,9 +120,9 @@ KisLayerBox::KisLayerBox(KisView2 *view, const char *name)
     bnAdd->setMenu(m_newLayerMenu);
     bnAdd->setPopupMode(QToolButton::InstantPopup);
 
-    m_newLayerMenu->addAction(SmallIconSet("filenew"), i18n("&New Layer..."), this, SLOT(slotNewLayer()));
-    m_newLayerMenu->addAction(SmallIconSet("folder"), i18n("New &Group Layer..."), this, SLOT(slotNewGroupLayer()));
-    m_newLayerMenu->addAction(SmallIconSet("tool_filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
+    m_newLayerMenu->addAction(KIcon("filenew"), i18n("&New Layer..."), this, SLOT(slotNewLayer()));
+    m_newLayerMenu->addAction(KIcon("folder"), i18n("New &Group Layer..."), this, SLOT(slotNewGroupLayer()));
+    m_newLayerMenu->addAction(KIcon("tool_filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
 
     m_partLayerAction = new KoPartSelectAction( i18n("New &Object Layer"), "gear" /*, this - KDE4*/);
     m_newLayerMenu->addAction(m_partLayerAction);

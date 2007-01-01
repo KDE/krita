@@ -51,7 +51,6 @@ set(kformulalib_LIB_SRCS
 #   cmstyle.cc 
    fontstyle.cc 
 #   symbolfontstyle.cc 
-#   esstixfontstyle.cc 
 )
 
 kde4_automoc(${kformulalib_LIB_SRCS})

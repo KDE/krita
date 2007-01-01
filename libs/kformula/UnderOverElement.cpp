@@ -49,6 +49,7 @@ const QList<BasicElement*> UnderOverElement::childElements()
  */
 bool UnderOverElement::readAttributesFromMathMLDom( const QDomElement& element )
 {
+    /*
     if ( !BasicElement::readAttributesFromMathMLDom( element ) ) {
         return false;
     }
@@ -89,6 +90,7 @@ bool UnderOverElement::readAttributesFromMathMLDom( const QDomElement& element )
             }
         }
     }
+    */
     return true;
 }
 
@@ -130,8 +132,9 @@ void UnderOverElement::readMathML( const QDomElement& element )
 /*
  * TODO: Upgrade to new API
  */
-void UnderOverElement::writeMathMLAttributes( QDomElement& element ) const
+void UnderOverElement::writeMathMLAttributes( KoXmlWriter* writer ) const
 {
+/*    
     QString tag = getElementName();
     if ( tag == "munder" || tag == "munderover" ) {
         if ( m_customAccentUnder ) {
@@ -143,6 +146,7 @@ void UnderOverElement::writeMathMLAttributes( QDomElement& element ) const
             element.setAttribute( "accent", m_accent ? "true" : "false" );
         }
     }
+*/
 }
 
 

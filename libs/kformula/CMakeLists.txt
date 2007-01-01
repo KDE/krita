@@ -19,7 +19,7 @@ set(kformulalib_LIB_SRCS
    SequenceElement.cpp
    FormulaElement.cpp 
    MultiscriptElement.cpp
-#   UnderOverElement.cpp
+   UnderOverElement.cpp
    TextElement.cpp 
    BracketElement.cpp 
 #   MatrixElement.cpp

@@ -68,11 +68,13 @@ public:
                        const LuPixelPoint& parentOrigin );
     
 private:
-    virtual QString getElementName() const ;
-    virtual void writeMathMLAttributes( QDomElement& element ) const ;
+//    virtual QString getElementName() const ;
+    virtual void writeMathMLAttributes( KoXmlWriter* writer ) const ;
+/*
     virtual void writeMathMLContent( QDomDocument& doc, 
                                      QDomElement& element,
                                      bool oasisFormat ) const ;
+*/
 
     virtual bool readAttributesFromMathMLDom( const QDomElement& element );
     /**
@@ -81,7 +83,7 @@ private:
      * (e. g. for fence operators).
      * Returns the number of nodes processed or -1 if it failed.
      */
-    virtual int readContentFromMathMLDom( QDomNode& node );
+//    virtual int readContentFromMathMLDom( QDomNode& node );
 
     BasicElement* m_baseElement;
 

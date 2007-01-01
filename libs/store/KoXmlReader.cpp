@@ -111,7 +111,7 @@ typedef QPair<QString,QString> KoXmlStringPair;
 
 // this simplistic hash is rather fast-and-furious. it works because
 // likely there is very few namespaced attributes per element
-inline uint qHash( const KoXmlStringPair &p )
+static inline uint qHash( const KoXmlStringPair &p )
 {
   return qHash(p.first[0].unicode()) ^ 0x1477;
   
@@ -150,7 +150,7 @@ public:
 };
 
 #ifdef KOXML_COMPRESS
-QDataStream& operator<<( QDataStream& s, const KoXmlPackedItem& item )
+static QDataStream& operator<<( QDataStream& s, const KoXmlPackedItem& item )
 {
   quint8 flag = item.attr ? 1 : 0;
   
@@ -164,7 +164,7 @@ QDataStream& operator<<( QDataStream& s, const KoXmlPackedItem& item )
   return s;
 }
 
-QDataStream& operator>>( QDataStream& s, KoXmlPackedItem& item )
+static QDataStream& operator>>( QDataStream& s, KoXmlPackedItem& item )
 {
   quint8 flag;
   quint8 type;
@@ -223,7 +223,7 @@ QDataStream& operator>>( QDataStream& s, KoXmlPackedItem& item )
 
 // Lossless compression using LZF algorithm, this is faster on modern CPU than
 // the original implementation in http://liblzf.plan9.de/
-int lzff_compress(const void* input, int length, void* output, int maxout)
+static int lzff_compress(const void* input, int length, void* output, int maxout)
 {
   const quint8* ip = (const quint8*) input;
   const quint8* ip_limit = ip + length - MAX_COPY -4;
@@ -377,7 +377,7 @@ int lzff_compress(const void* input, int length, void* output, int maxout)
    return op - (quint8*)output;
 }
 
-int lzff_decompress(const void* input, int length, void* output, int maxout)
+static int lzff_decompress(const void* input, int length, void* output, int maxout)
 {
   const quint8* ip = (const quint8*) input;
   const quint8* ip_limit  = ip + length - 1;
@@ -1005,7 +1005,6 @@ class KoXmlHandler : public QXmlDefaultHandler
 {
 public:
   KoXmlHandler( KoXmlPackedDocument* doc );
-  ~KoXmlHandler();
 
   // content handler
   bool startDocument();
@@ -1047,32 +1046,18 @@ public:
   int errorColumn;
 
 private:
+  KoXmlPackedDocument* document;
   bool processNamespace;
   QString entityName;
   bool cdata;
-
-  KoXmlPackedDocument* document;
 };
 
 
-KoXmlHandler::KoXmlHandler( KoXmlPackedDocument* doc ): 
-QXmlDefaultHandler()
-{
-  document = doc;
-  processNamespace = doc->processNamespace;
-
-  cdata = false;
-  entityName = QString();
-
-  errorMsg = QString();
-  errorLine = 0;
-  errorColumn = 0;
-}
-
-KoXmlHandler::~KoXmlHandler()
+KoXmlHandler::KoXmlHandler( KoXmlPackedDocument* doc ) : QXmlDefaultHandler(), 
+  errorLine(0), errorColumn(0), document(doc), 
+  processNamespace(doc->processNamespace), cdata(false) 
 {
 }
-
 
 bool KoXmlHandler::startDocument()
 {
@@ -1258,16 +1243,16 @@ public:
   KoXmlNodeData();
   ~KoXmlNodeData();
 
-#ifdef KOXML_COMPACT
-  unsigned nodeDepth;
-#endif
-
   // generic properties
   KoXmlNode::NodeType nodeType;
   QString tagName;
   QString namespaceURI;
   QString prefix;
   QString localName;
+
+#ifdef KOXML_COMPACT
+  unsigned nodeDepth;
+#endif
 
   // reference counting
   unsigned long count;
@@ -1337,30 +1322,13 @@ private:
 
 KoXmlNodeData KoXmlNodeData::null;
 
-KoXmlNodeData::KoXmlNodeData()
-{
+KoXmlNodeData::KoXmlNodeData() : nodeType( KoXmlNode::NullNode ),
 #ifdef KOXML_COMPACT
-  nodeDepth = 0;
+  nodeDepth(0),
 #endif
-  nodeType = KoXmlNode::NullNode;
-
-  tagName = QString();
-  prefix = QString();
-  localName = QString();
-  namespaceURI = QString();
-  textData = QString();
-
-  count = 1;
-  parent = 0;
-  prev = next = 0;
-  first = last = 0;
-
-  packedDoc = 0;
-  nodeIndex = 0;
-  
-  emptyDocument = true;
-  
-  loaded = false;
+  count(1), emptyDocument(true), parent(0), prev(0), next(0), first(0), last(0),
+  packedDoc(0), nodeIndex(0), loaded(false)
+{
 }
 
 KoXmlNodeData::~KoXmlNodeData()
@@ -1427,21 +1395,27 @@ QString KoXmlNodeData::text()
 
 QString KoXmlNodeData::nodeName() const
 {
-  QString n;
-
   switch( nodeType )
   {
     case KoXmlNode::ElementNode: 
-      n = tagName;
-      if (!prefix.isEmpty()) n.prepend(':').prepend(prefix); break;
-    case KoXmlNode::TextNode: return QLatin1String("#text");
+      {
+        QString n( tagName );  
+        if( !prefix.isEmpty() )
+          n.prepend(':').prepend(prefix);
+        return n;  
+      }
+      break;
+      
+    case KoXmlNode::TextNode:         return QLatin1String("#text");
     case KoXmlNode::CDATASectionNode: return QLatin1String("#cdata-section");
-    case KoXmlNode::DocumentNode: return QLatin1String("#document");
+    case KoXmlNode::DocumentNode:     return QLatin1String("#document");
     case KoXmlNode::DocumentTypeNode: return tagName;
-    default: break;
+    
+    default: return QString(); break;
   }
 
-  return n;
+  // should not happen
+  return QString();
 }
 
 void KoXmlNodeData::appendChild( KoXmlNodeData* node )

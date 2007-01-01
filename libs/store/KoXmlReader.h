@@ -302,7 +302,7 @@ private:
 class KSTORE_EXPORT KoXmlInputSource: public QXmlInputSource
 {
 public:
-  KoXmlInputSource(QIODevice *dev);
+  explicit KoXmlInputSource(QIODevice *dev);
   ~KoXmlInputSource();
 
   virtual void setData(const QString& dat);

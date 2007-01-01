@@ -772,7 +772,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
         }
 
         if ( colorSpace()->id() == KisID("RGBA") || colorSpace()->id() == KisID("CMYK") || colorSpace()->id() == KisID("GRAYA")) {
-          KisScaleVisitor v (this, sx, sy, progress, filterStrategy);
+            KisScaleVisitor v (this, sx, sy, progress, filterStrategy);
             m_rootLayer->accept( v );
         }
         else {
@@ -1010,7 +1010,6 @@ KisPaintDeviceSP KisImage::activeDevice()
     else if (KisLayerSP layer = m_activeLayer) {
         // A weird layer -- let's not return it, but a sibling
         KisLayerSP sibling = layer->nextSibling();
-        kdDebug() << "sibling: " << sibling->name() << endl;
         while (sibling) {
             if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(sibling.data())) {
                 return layer->paintDevice();

@@ -40,6 +40,34 @@ typedef QPair<int,int> KoPathPointIndex;
 typedef QMap<KoPathShape *, QSet<KoPathPointIndex> > KoPathShapePointIndexMap;
 
 /**
+ * @brief Describe a KoPathPoint by a KoPathShape and its indices
+ */
+class KoPathPointData
+{
+public:
+    /// contructor
+    KoPathPointData( KoPathShape * pathShape, const KoPathPointIndex & pathPointIndex )
+    : m_pathShape( pathShape )
+    , m_pointIndex( pathPointIndex )
+    {}
+
+    /// operator used for sorting
+    bool operator<( const KoPathPointData & other ) const 
+    { 
+        return m_pathShape < other.m_pathShape ||
+               ( m_pathShape == other.m_pathShape && 
+                 ( m_pointIndex.first < other.m_pointIndex.first ||
+                   ( m_pointIndex.first == other.m_pointIndex.first &&
+                     m_pointIndex.second < other.m_pointIndex.second ) ) );
+
+    }
+    /// path shape the path point belongs too
+    KoPathShape *m_pathShape;
+    /// position of the point in the path shape
+    KoPathPointIndex m_pointIndex;
+};
+
+/**
  * @brief A KoPathPoint represents a point in a path.
  *
  * A KoPathPoint stores a point in a path. Additional to this point 
@@ -459,7 +487,16 @@ public:
      * @return path point index of the point if it exists
      *         otherwise KoPathPointIndex( -1, -1 )
      */
-    KoPathPointIndex pathPointIndex( KoPathPoint *point );
+    KoPathPointIndex pathPointIndex( const KoPathPoint *point ) const;
+
+    /**
+     * @brief Get the point defined by a path point index
+     *
+     * @param pathPointIndex of the point to get
+     *
+     * @return KoPathPoint on success, 0 otherwise e.g. out of bounds
+     */
+    KoPathPoint * pointByIndex( const KoPathPointIndex &pointIndex ) const;
 
     /**
      * @brief Inserts a new point into the given subpath at the specified position
@@ -740,7 +777,7 @@ private:
      *
      * @return subPath on success, or 0 when subpathIndex is out of bounds
      */
-    KoSubpath * subPath( int subpathIndex );
+    KoSubpath * subPath( int subpathIndex ) const;
 #ifndef NDEBUG
     void paintDebug( QPainter &painter );
 #endif

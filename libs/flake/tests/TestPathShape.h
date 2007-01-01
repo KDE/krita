@@ -31,6 +31,7 @@ private slots:
     void normalize();
 
     void pathPointIndex();
+    void pointByIndex();
     void insertPoint();
     void removePoint();
     void splitAfter();
@@ -42,6 +43,8 @@ private slots:
     void reverseSubpath();
     void removeSubpath();
     void addSubpath();
+
+    void koPathPointDataLess();
 };
 
 #endif // TESTPATHSHAPE_H

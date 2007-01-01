@@ -85,6 +85,22 @@ void TestPathShape::pathPointIndex()
     QVERIFY( p5Index == path.pathPointIndex( point5 ) );
 }
 
+void TestPathShape::pointByIndex()
+{
+    KoPathShape path;
+    KoPathPoint * point1 = path.moveTo( QPointF( 10, 10 ) );
+    KoPathPoint * point2 = path.lineTo( QPointF( 20, 20 ) );
+    KoPathPoint * point3 = path.moveTo( QPointF( 30, 30 ) );
+    KoPathPoint * point4 = path.lineTo( QPointF( 40, 40 ) );
+    KoPathPoint * point5 = 0;
+
+    QVERIFY( point1 == path.pointByIndex( path.pathPointIndex( point1 ) ) );
+    QVERIFY( point2 == path.pointByIndex( path.pathPointIndex( point2 ) ) );
+    QVERIFY( point3 == path.pointByIndex( path.pathPointIndex( point3 ) ) );
+    QVERIFY( point4 == path.pointByIndex( path.pathPointIndex( point4 ) ) );
+    QVERIFY( point5 == path.pointByIndex( path.pathPointIndex( point5 ) ) );
+}
+
 void TestPathShape::insertPoint()
 {
     KoPathShape path;
@@ -546,6 +562,40 @@ void TestPathShape::addSubpath()
     QVERIFY( ppath == path.outline() );
 }
 
+void TestPathShape::koPathPointDataLess()
+{
+    QList<KoPathPointData> v;
+    v.push_back( KoPathPointData( (KoPathShape*)1, KoPathPointIndex( 1, 1 ) ) );
+    v.push_back( KoPathPointData( (KoPathShape*)1, KoPathPointIndex( 1, 2 ) ) );
+    v.push_back( KoPathPointData( (KoPathShape*)1, KoPathPointIndex( 1, 3 ) ) );
+    v.push_back( KoPathPointData( (KoPathShape*)1, KoPathPointIndex( 1, 6 ) ) );
+    v.push_back( KoPathPointData( (KoPathShape*)2, KoPathPointIndex( 2, 1 ) ) );
+    v.push_back( KoPathPointData( (KoPathShape*)2, KoPathPointIndex( 2, 3 ) ) );
+    v.push_back( KoPathPointData( (KoPathShape*)2, KoPathPointIndex( 3, 3 ) ) );
+    v.push_back( KoPathPointData( (KoPathShape*)3, KoPathPointIndex( 1, 1 ) ) );
+    v.push_back( KoPathPointData( (KoPathShape*)3, KoPathPointIndex( 1, 2 ) ) );
+
+    QList<KoPathPointData> l;
+    l.push_back( v[8] );
+    l.push_back( v[0] );
+    l.push_back( v[1] );
+    l.push_back( v[7] );
+    l.push_back( v[6] );
+    l.push_back( v[2] );
+    l.push_back( v[5] );
+    l.push_back( v[3] );
+    l.push_back( v[4] );
+
+    qSort( l.begin(), l.end() );
+    for ( int i = 0; i < v.size(); ++i )
+    {
+        KoPathPointData ld = l.at( i );
+        KoPathPointData vd = v[i];
+        QVERIFY( ld.m_pathShape == vd.m_pathShape );
+        QVERIFY( ld.m_pointIndex.first == vd.m_pointIndex.first );
+        QVERIFY( ld.m_pointIndex.second == vd.m_pointIndex.second );
+    }
+}
 
 QTEST_MAIN(TestPathShape)
 #include "TestPathShape.moc"

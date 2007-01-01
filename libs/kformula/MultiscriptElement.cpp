@@ -49,27 +49,22 @@ void MultiscriptElement::readMathML( const QDomElement& element )
 {
 }
 
-void MultiscriptElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
+void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer, bool oasisFormat )
 {
-    writer->startElement( oasisFormat ? "math:mmultiscripts" : "mmultiscripts" );
-    writeMathMLAttributes( writer );
-   
     m_baseElement->writeMathML( writer, oasisFormat );
-    // saving of mmultiscript is a bit more complicated, still to be done
-    
-    writer->endElement();
 }
 
 void MultiscriptElement::calcSizes( const ContextStyle& context, ContextStyle::TextStyle tstyle,
-                                          ContextStyle::IndexStyle istyle )
+                                    ContextStyle::IndexStyle istyle, StyleAttributes& style )
 {
 }
 
 void MultiscriptElement::draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       const LuPixelPoint& parentOrigin )
+                               const ContextStyle& context,
+                               ContextStyle::TextStyle tstyle,
+                               ContextStyle::IndexStyle istyle,
+                               StyleAttributes& style,
+                               const LuPixelPoint& parentOrigin )
 {}
 
 

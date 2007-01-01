@@ -56,22 +56,17 @@ public:
 
     void readMathML( const QDomElement& element );
     
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
     
 private:
-    virtual QString getElementName() const ;
-    virtual void writeMathMLAttributes( QDomElement& element ) const ;
-    virtual void writeMathMLContent( QDomDocument& doc, 
-                                     QDomElement& element,
-                                     bool oasisFormat ) const ;
-    virtual bool readAttributesFromMathMLDom( const QDomElement& element );
+    virtual QString getElementName() const { return "mmultiscript"; }
+    virtual void writeMathMLContent( KoXmlWriter* writer, bool oasisFormat = false );
     /**
      * Reads our content from the MathML node. Sets the node to the next node
      * that needs to be read. It is sometimes needed to read more than one node
      * (e. g. for fence operators).
      * Returns the number of nodes processed or -1 if it failed.
      */
-    virtual int readContentFromMathMLDom( QDomNode& node );
+//    virtual int readContentFromMathMLDom( QDomNode& node );
 
     BasicElement* m_baseElement;
     BasicElement* m_preSubscript;

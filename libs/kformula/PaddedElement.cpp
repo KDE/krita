@@ -17,7 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "elementtype.h"
 #include "PaddedElement.h"
 
 namespace KFormula {
@@ -43,6 +42,7 @@ void PaddedElement::calcSizes( const ContextStyle& context,
                                ContextStyle::IndexStyle istyle,
                                StyleAttributes& style )
 {
+    /*
     double factor = style.sizeFactor();
 
     luPixel width = 0;
@@ -54,10 +54,7 @@ void PaddedElement::calcSizes( const ContextStyle& context,
         // First, get content height and width
         for ( iterator it = begin(); it != end(); ++it ) {
             if ( it == begin() ) {
-                spaceBefore =
-                    context.ptToPixelX( it->getElementType()->getSpaceBefore( context,
-                                                                              tstyle,
-                                                                              factor ) );
+                spaceBefore = context.ptToPixelX( getSpaceBefore( context, tstyle, factor ) );
             }
             it->calcSizes( context, tstyle, istyle, style );
             width += it->getWidth() + spaceBefore;
@@ -92,6 +89,10 @@ void PaddedElement::calcSizes( const ContextStyle& context,
         width = left;
         // Let's do all normal elements that have a base line.
         for ( iterator it = begin(); it != end(); ++it ) {
+            luPixel spaceBefore = 0;
+            if ( it == begin() ) {
+                spaceBefore = context.ptToPixelX( getSpaceBefore( context, tstyle, factor ) );
+            }
             it->calcSizes( context, tstyle, istyle, style );
             it->setX( width + spaceBefore );
             width += it->getWidth() + spaceBefore;
@@ -107,10 +108,12 @@ void PaddedElement::calcSizes( const ContextStyle& context,
         setHeight( up + down );
         setBaseline( up );
     }
+    */
 }
 
 bool PaddedElement::readAttributesFromMathMLDom(const QDomElement& element)
 {
+    /*
     if ( ! BasicElement::readAttributesFromMathMLDom( element ) ) {
         return false;
     }
@@ -131,7 +134,7 @@ bool PaddedElement::readAttributesFromMathMLDom(const QDomElement& element)
     if ( ! depthStr.isNull() ) {
         m_depth = readSizeAttribute( depthStr, &m_depthType, &m_depthRelative );
     }
-
+    */
     return true;
 }
 

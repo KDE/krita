@@ -19,7 +19,7 @@
 
 #include <qpainter.h>
 
-#include "errorelement.h"
+#include "ErrorElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 

@@ -32,7 +32,7 @@ set(kformulalib_LIB_SRCS
 #   ActionElement.cpp
 #   PaddedElement.cpp
    GlyphElement.cpp
-#   ErrorElement.cpp
+   ErrorElement.cpp
    TokenStyleElement.cpp
    StyleElement.cpp
    TokenElement.cpp

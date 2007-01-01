@@ -193,17 +193,17 @@ void KoPathPoint::paint( QPainter &painter, const QSizeF &size, KoPointTypes typ
 {
     QRectF handle( QPointF( -0.5 * size.width(), -0.5 * size.height() ), size );
 
-    if ( types & ControlPoint1 && ( !active || activeControlPoint1() ) )
-    {
-        painter.drawLine( point(), controlPoint1() );
-        painter.drawEllipse( handle.translated( controlPoint1() ) );
-    }
-    if ( types & ControlPoint2 && ( !active || activeControlPoint2() ) )
-    {
-        painter.drawLine( point(), controlPoint2() );
-        painter.drawEllipse( handle.translated( controlPoint2() ) );
-    }
+    bool drawControlPoint1 = types & ControlPoint1 && ( !active || activeControlPoint1() );
+    bool drawControlPoint2 = types & ControlPoint2 && ( !active || activeControlPoint2() );
 
+    // draw lines at the bottom
+    if ( drawControlPoint2 )
+        painter.drawLine( point(), controlPoint2() );
+
+    if ( drawControlPoint1 )
+        painter.drawLine( point(), controlPoint1() );
+
+    // the point is lowest 
     if ( types & Node )
     {
         if ( properties() & IsSmooth )
@@ -220,6 +220,14 @@ void KoPathPoint::paint( QPainter &painter, const QSizeF &size, KoPointTypes typ
         else
             painter.drawEllipse( handle.translated( point() ) );
     }
+
+    // then comes control point 2
+    if ( drawControlPoint2 )
+        painter.drawEllipse( handle.translated( controlPoint2() ) );
+
+    // then comes control point 1
+    if ( drawControlPoint1 )
+        painter.drawEllipse( handle.translated( controlPoint1() ) );
 }
 
 void KoPathPoint::setParent( KoPathShape* parent )

@@ -19,11 +19,10 @@
 
 #include <qpainter.h>
 
-#include "elementtype.h"
-#include "sequenceelement.h"
-#include "textelement.h"
+#include "SequenceElement.h"
+#include "TextElement.h"
 #include "fontstyle.h"
-#include "operatorelement.h"
+#include "OperatorElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -49,6 +48,7 @@ void OperatorElement::setForm( FormType type )
     m_form = type;
 }
 
+/*
 bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
 {
     if ( ! BasicElement::readAttributesFromMathMLDom( element ) ) {
@@ -209,6 +209,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
     }
     return true;
 }
+*/
 
 void OperatorElement::writeMathMLAttributes( QDomElement& element ) const
 {

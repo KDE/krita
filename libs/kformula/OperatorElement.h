@@ -31,7 +31,7 @@ public:
     void setForm( FormType type );
 
 private:
-    virtual bool readAttributesFromMathMLDom( const QDomElement &element );
+//    virtual bool readAttributesFromMathMLDom( const QDomElement &element );
     virtual QString getElementName() const { return "mo"; }
     void writeMathMLAttributes( QDomElement& element ) const ;
     void writeSizeAttribute( QDomElement& element, const QString &attr, SizeType type, double length ) const ;

@@ -215,7 +215,7 @@ void KoTextTool::keyReleaseEvent(QKeyEvent *event) {
 void KoTextTool::activate (bool temporary) {
     Q_UNUSED(temporary);
     KoSelection *selection = m_canvas->shapeManager()->selection();
-    foreach(KoShape *shape, selection->selectedShapes().toList()) {
+    foreach(KoShape *shape, selection->selectedShapes()) {
         m_textShape = dynamic_cast<KoTextShape*> (shape);
         if(m_textShape)
             break;
@@ -224,7 +224,7 @@ void KoTextTool::activate (bool temporary) {
         emit sigDone();
         return;
     }
-    foreach(KoShape *shape, selection->selectedShapes().toList()) {
+    foreach(KoShape *shape, selection->selectedShapes()) {
         // deselect others.
         if(m_textShape == shape) continue;
         selection->deselect(shape);

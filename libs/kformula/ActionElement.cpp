@@ -38,8 +38,9 @@ void ActionElement::readMathMLAttributes(const QDomElement& element)
     }
 }
 
-int ActionElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) 
+int ActionElement::buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNode n) 
 {
+/*
     if ( ! n.isElement() )
         return -1;
     QDomElement e = n.toElement();
@@ -55,6 +56,7 @@ int ActionElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDom
     list.append( child );
     parse();
     return 1;
+*/
 }
 
 void ActionElement::writeMathMLAttributes( QDomElement& element ) const

@@ -103,7 +103,7 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
     {
         m_shape = new KoPathShape();
         m_shape->setShapeId( KoPathShapeId );
-        // TODO take properties form the resource provider
+        // TODO take properties from the resource provider
         m_shape->setBorder( new KoLineBorder( 1, Qt::black ) );
         m_activePoint = m_shape->moveTo( event->point );
         m_firstPoint = m_activePoint;

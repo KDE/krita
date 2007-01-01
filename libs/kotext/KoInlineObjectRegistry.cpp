@@ -21,11 +21,10 @@
 
 #include <KoPluginLoader.h>
 
-#include <kdebug.h>
+//#include <kdebug.h>
 #include <kstaticdeleter.h>
 
 void KoInlineObjectRegistry::init() {
-kDebug() << "XXXXXXXXXXXXXXX init!\n";
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Text-InlineObject"),
                                       QString::fromLatin1("[X-KoText-Version] == 1"));
 }

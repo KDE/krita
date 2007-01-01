@@ -155,10 +155,10 @@ void SymbolAction::setSymbols( const QStringList &names, const QList<QFont>& fon
 
 void SymbolAction::updateItems( int id )
 {
-    QWidget *w = container( id );
-    if ( w->inherits( "KToolBar" ) ) {
 #warning "kde4: port it"			
 #if 0			
+    QWidget *w = container( id );
+    if ( w->inherits( "KToolBar" ) ) {
         QWidget *r = static_cast<KToolBar*>( w )->getWidget( itemId( id ) );
         if ( r->inherits( "Q3ComboBox" ) ) {
             Q3ComboBox *cb = static_cast<Q3ComboBox*>( r );
@@ -170,8 +170,8 @@ void SymbolAction::updateItems( int id )
             }
             cb->setMinimumWidth( cb->sizeHint().width() );
         }
-#endif		
     }
+#endif		
 }
 
 KFORMULA_NAMESPACE_END

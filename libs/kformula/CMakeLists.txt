@@ -47,7 +47,7 @@ set(kformulalib_LIB_SRCS
    contextstyle.cc 
    symboltable.cc 
 #   kformulaconfigpage.cc 
-#   symbolaction.cc 
+   symbolaction.cc 
    fontstyle.cc 
 )
 

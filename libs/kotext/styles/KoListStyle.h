@@ -79,7 +79,10 @@ public:
         ExplicitListValue ///< TextBlock level int with the value that that parag will have
     };
 
-    /// constructor
+    /**
+     * Constructor
+     * Create a new list style which uses bulletted listitems.
+     */
     KoListStyle();
     /// copy constructor
     KoListStyle(const KoListStyle &orig);

@@ -36,27 +36,17 @@ KisMetaRegistry::KisMetaRegistry()
     KGlobal::instance()->dirs()->addResourceType("kis_profiles",
                                                      KStandardDirs::kde_default("data") + "krita/profiles/");
                           
+    // Add those things here as well, since we are not yet using KisDoc's KisFactory instance (which inits these as well)
+    KGlobal::instance()->dirs()->addResourceType("kis_profiles", KStandardDirs::kde_default("data") + "krita/profiles/");
+    KGlobal::instance()->dirs()->addResourceDir("kis_profiles", "/usr/share/color/icc");
+    KGlobal::instance()->dirs()->addResourceDir("kis_profiles", QDir::homeDirPath() + QString("/.icc/"));
+    KGlobal::instance()->dirs()->addResourceDir("kis_profiles", QDir::homeDirPath() + QString("/.color/icc/"));
+
     QStringList profileFilenames;
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icm");
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICM");
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICC");
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icc");
-
-    QDir d("/usr/share/color/icc/", "*.icc;*.ICC;*.icm;*.ICM");
-
-    QStringList filenames = d.entryList();
-
-    for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
-        profileFilenames += d.absFilePath(*it);
-    }
-
-    d.setPath(QDir::homeDirPath() + "/.color/icc/");
-    filenames = d.entryList();
-
-    for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
-        profileFilenames += d.absFilePath(*it);
-    }
-
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icm", true /* recursive */);
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICM", true);
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICC", true);
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icc", true);
     // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.
     cmsErrorAction(LCMS_ERROR_SHOW);
 

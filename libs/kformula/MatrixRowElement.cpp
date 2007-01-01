@@ -130,12 +130,13 @@ void MatrixRowElement::calcSizes( const ContextStyle& context,
                                   ContextStyle::IndexStyle istyle,
                                   StyleAttributes& style )
 {
-    luPt mySize = context.getAdjustedSize( tstyle );
+    double factor = style.sizeFactor();
+    luPt mySize = context.getAdjustedSize( tstyle, factor );
     QFont font = context.getDefaultFont();
     font.setPointSizeF( context.layoutUnitPtToPt( mySize ) );
     QFontMetrics fm( font );
     luPixel leading = context.ptToLayoutUnitPt( fm.leading() );
-    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle ) );
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
 
     int count = m_matrixEntryElements.count();
     luPixel height = -leading;
@@ -181,7 +182,7 @@ void MatrixRowElement::calcSizes( const ContextStyle& context,
     }
     else {
         // There's always a first line. No formulas without lines.
-        setBaseline( height/2 + context.axisHeight( tstyle ) );
+        setBaseline( height/2 + context.axisHeight( tstyle, factor ) );
     }
 }
 

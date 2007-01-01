@@ -22,9 +22,9 @@ set(kformulalib_LIB_SRCS
    UnderOverElement.cpp
    TextElement.cpp 
    BracketElement.cpp 
-#   MatrixElement.cpp
-#   MatrixRowElement.cpp
-#   MatrixEntryElement.cpp
+   MatrixElement.cpp
+   MatrixRowElement.cpp
+   MatrixEntryElement.cpp
    FractionElement.cpp
    RootElement.cpp
 #   SpaceElement.cpp
@@ -43,7 +43,7 @@ set(kformulalib_LIB_SRCS
    Entities.cpp
    ElementFactory.cpp 
 #   kformulacommand.cc 
-#   MatrixDialog.cc 
+   MatrixDialog.cc 
    contextstyle.cc 
    symboltable.cc 
    kformulaconfigpage.cc 

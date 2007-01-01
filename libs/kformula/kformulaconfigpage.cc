@@ -51,9 +51,6 @@
 #include "contextstyle.h"
 #include "kformulaconfigpage.h"
 #include "symboltable.h"
-#include "esstixfontstyle.h"
-#include "cmstyle.h"
-#include "symbolfontstyle.h"
 
 
 KFORMULA_NAMESPACE_BEGIN
@@ -171,26 +168,6 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
     syntaxHighlightingClicked();
 
-    styleBox = new Q3ButtonGroup( i18n( "Font Style" ), box );
-    styleBox->setColumnLayout( 0, Qt::Horizontal );
-
-    grid = new Q3GridLayout( styleBox->layout(), 3, 1 );
-    grid->setSpacing( KDialog::spacingHint() );
-
-//    esstixStyle = new QRadioButton( i18n( "Esstix font style" ), styleBox );
-//    esstixStyle->setChecked( contextStyle.getFontStyle() == "esstix" );
-
-//    cmStyle = new QRadioButton( i18n( "Computer modern (TeX) style" ), styleBox );
-//    cmStyle->setChecked( contextStyle.getFontStyle() == "tex" );
-
-    symbolStyle = new QRadioButton( i18n( "Symbol font style" ), styleBox );
-    symbolStyle->setChecked( !esstixStyle->isChecked() && !cmStyle->isChecked() );
-
-    grid->addWidget( symbolStyle, 0, 0 );
-    grid->addWidget( esstixStyle, 1, 0 );
-    grid->addWidget( cmStyle, 2, 0 );
-
-    connect( styleBox, SIGNAL( clicked( int ) ), this, SLOT( slotChanged() ) );
     connect( syntaxHighlighting, SIGNAL( clicked() ), this, SLOT( slotChanged() ) );
     connect( sizeSpin, SIGNAL( valueChanged( int ) ), this, SLOT( slotChanged() ) );
 
@@ -223,52 +200,6 @@ void ConfigurePage::apply()
 {
     if ( !m_changed )
         return;
-    QString fontStyle;
-    if ( esstixStyle->isChecked() ) {
-        fontStyle = "esstix";
-
-        QStringList missing = EsstixFontStyle::missingFonts();
-
-        if ( missing.count() > 0 ) {
-            QString text = i18n( "The fonts '%1' are missing."
-                                 " Do you want to change the font style anyway?"
-                           ,missing.join( "', '" ) );
-            if ( KMessageBox::warningContinueCancel( m_view, text ) ==
-                 KMessageBox::Cancel ) {
-                return;
-            }
-        }
-    }
-    else if ( cmStyle->isChecked() ) {
-        fontStyle = "tex";
-
-        QStringList missing = CMStyle::missingFonts();
-
-        if ( missing.count() > 0 && !CMStyle::m_installed) {
-            QString text = i18n( "The fonts '%1' are missing."
-                                 " Do you want to change the font style anyway?"
-                           , missing.join( "', '" ) );
-            if ( KMessageBox::warningContinueCancel( m_view, text ) ==
-                 KMessageBox::Cancel ) {
-                return;
-            }
-        }
-    }
-    else { // symbolStyle->isChecked ()
-        fontStyle = "symbol";
-
-        QStringList missing = SymbolFontStyle::missingFonts();
-
-        if ( missing.count() > 0 ) {
-            QString text = i18n( "The font 'symbol' is missing."
-                                 " Do you want to change the font style anyway?" );
-            if ( KMessageBox::warningContinueCancel( m_view, text ) ==
-                 KMessageBox::Cancel ) {
-                return;
-            }
-
-        }
-    }
 
 /*    ContextStyle& contextStyle = m_document->getContextStyle( true );
 
@@ -277,8 +208,6 @@ void ConfigurePage::apply()
     contextStyle.setNumberFont( numberFont );
     contextStyle.setOperatorFont( operatorFont );
     contextStyle.setBaseSize( sizeSpin->value() );
-
-    contextStyle.setFontStyle( fontStyle );
 
     contextStyle.setSyntaxHighlighting( syntaxHighlighting->isChecked() );*/
 //     contextStyle.setDefaultColor( defaultColorBtn->color() );
@@ -293,8 +222,6 @@ void ConfigurePage::apply()
     m_config->writeEntry( "numberFont", numberFont.toString() );
     m_config->writeEntry( "operatorFont", operatorFont.toString() );
     m_config->writeEntry( "baseSize", QString::number( sizeSpin->value() ) );
-
-    m_config->writeEntry( "fontStyle", fontStyle );
 
 //     m_config->setGroup( "kformula Color" );
 //     m_config->writeEntry( "syntaxHighlighting", syntaxHighlighting->isChecked() );
@@ -322,14 +249,6 @@ void ConfigurePage::slotDefault()
     updateFontLabel( nameFont, nameFontName );
     updateFontLabel( numberFont, numberFontName );
     updateFontLabel( operatorFont, operatorFontName );
-
-    symbolStyle->setChecked( true );
-    if (CMStyle::missingFonts().isEmpty())
-        cmStyle->setChecked( true );
-    else if (EsstixFontStyle::missingFonts().isEmpty())
-        esstixStyle->setChecked( true );
-    else
-        symbolStyle->setChecked( true );
 
     syntaxHighlighting->setChecked( true );
     syntaxHighlightingClicked();

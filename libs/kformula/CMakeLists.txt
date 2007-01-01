@@ -46,7 +46,7 @@ set(kformulalib_LIB_SRCS
 #   MatrixDialog.cc 
    contextstyle.cc 
    symboltable.cc 
-#   kformulaconfigpage.cc 
+   kformulaconfigpage.cc 
    symbolaction.cc 
    fontstyle.cc 
 )

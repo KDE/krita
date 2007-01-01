@@ -25,6 +25,9 @@
 #include <KoPluginLoader.h>
 
 KoToolRegistry::KoToolRegistry() {
+}
+
+void KoToolRegistry::init() {
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Flake"),
                                       QString::fromLatin1("[X-Flake-Version] == 1"));
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Tool"),
@@ -44,8 +47,10 @@ static KStaticDeleter<KoToolRegistry> staticToolRegistryDeleter;
 
 KoToolRegistry* KoToolRegistry::instance()
 {
-    if(KoToolRegistry::s_instance == 0)
+    if(KoToolRegistry::s_instance == 0) {
         staticToolRegistryDeleter.setObject(s_instance, new KoToolRegistry());
+        KoToolRegistry::s_instance->init();
+    }
     return KoToolRegistry::s_instance;
 }
 

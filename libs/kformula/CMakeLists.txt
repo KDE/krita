@@ -37,7 +37,7 @@ set(kformulalib_LIB_SRCS
    StyleElement.cpp
    TokenElement.cpp
    NumberElement.cpp
-#   IdentifierElement.cpp
+   IdentifierElement.cpp
 #   OperatorElement.cpp
    OperatorDictionary.cpp
    Entities.cpp

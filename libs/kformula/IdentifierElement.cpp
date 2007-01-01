@@ -20,15 +20,14 @@
 #include <klocale.h>
 
 #include "kformuladefs.h"
-#include "textelement.h"
-#include "identifierelement.h"
-#include "operatorelement.h"
-#include "numberelement.h"
+#include "TextElement.h"
+#include "IdentifierElement.h"
+#include "OperatorElement.h"
+#include "NumberElement.h"
 #include "kformulacommand.h"
-#include "kformulacontainer.h"
-#include "kformuladocument.h"
-#include "formulaelement.h"
-#include "creationstrategy.h"
+#include "FormulaContainer.h"
+#include "FormulaElement.h"
+#include "ElementFactory.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -40,6 +39,7 @@ IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( par
  * the command asks for a different content, a new element has to be created in
  * parent sequence.
  */
+/*
 KCommand* IdentifierElement::buildCommand( Container* container, Request* request )
 {
     FormulaCursor* cursor = container->activeCursor();
@@ -138,6 +138,7 @@ KCommand* IdentifierElement::buildCommand( Container* container, Request* reques
     }
     return 0;
 }
+*/
 
 void IdentifierElement::setStyleVariant( StyleAttributes& style )
 {
@@ -181,9 +182,11 @@ void IdentifierElement::setStyleVariant( StyleAttributes& style )
         if ( customFontStyle() ) {
             fontstyle = fontStyle();
         }
+        /* FIXME: SequenceElement should have a method of this kind when ported
         else if ( countChildren() == 1 ) {
             fontstyle = true;
         }
+        */
         else {
             fontstyle = false;
         }

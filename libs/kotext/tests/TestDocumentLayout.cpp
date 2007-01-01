@@ -4,6 +4,7 @@
 #include "styles/KoListStyle.h"
 #include "styles/KoStyleManager.h"
 #include "KoTextBlockData.h"
+#include "KoTextBlockBorderData.h"
 
 #include <QtGui>
 
@@ -962,6 +963,62 @@ void TestDocumentLayout::testParagraphBorders() {
     //qDebug() << blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - ( 9.0 + 14.4 + 10 + (5.0 + 2.0 + 3.0) * 2)) < ROUNDING);
 }
+
+void TestDocumentLayout::testBorderData() {
+    initForNewTest("Emtpy\nParagraph with Borders\nAnother parag\n");
+
+    KoParagraphStyle style;
+    style.setTopMargin(10);
+    KoListStyle listStyle;
+    listStyle.setStyle(KoListStyle::DecimalItem);
+    style.setListStyle(listStyle);
+    style.setLeftBorderWidth(3);
+
+    QTextBlock block = doc->begin().next();
+    style.applyStyle(block);
+    block = block.next();
+    style.applyStyle(block);
+
+    layout->layout();
+
+    block = doc->begin().next();
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    KoTextBlockBorderData *border = data->border();
+    QVERIFY(border);
+    // 1st parag is 12 * 120% = 14.4 tall.
+    // 2nd parag starts with 10 pt offset = 24.4
+    // Hight of border is 2 parags, each 14.4 for text. Plus 10 pt above the 3th parag. = 38.8pt
+
+    // The rules here are
+    //  * two paragraphs share a border
+    //  * The top indent (of all parags) does not have a border
+    //  * The left border is left of the counter
+    QCOMPARE(border->rect(), QRectF(0, 24.4, 200, 38.8));
+
+    style.setBottomMargin(5);
+    // manually reapply and relayout to force immediate reaction.
+    block = doc->begin().next();
+    style.applyStyle(block);
+    block = block.next();
+    style.applyStyle(block);
+    layout->layout();
+
+    block = doc->begin().next();
+    border = data->border();
+    QVERIFY(border);
+    // The tested here is
+    //  * the bottom border of the last parag is directly under the text. (so similar to rule 2)
+    // This means that the height is the prev 38.8 + the bottom of the top parag: 5pt = 43.8pt
+    QCOMPARE(border->rect(), QRectF(0, 24.4, 200, 43.8));
+
+    QCOMPARE(data->counterPosition(), QPointF(3, 24.4));
+
+    block = block.next();
+    data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QCOMPARE(data->counterPosition(), QPointF(3, 53.8));
+}
+
 
 QTEST_MAIN(TestDocumentLayout)
 #include "TestDocumentLayout.moc"

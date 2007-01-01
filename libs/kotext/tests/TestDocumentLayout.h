@@ -57,6 +57,7 @@ private slots:
     //etc
     void testParagOffset();
     void testParagraphBorders();
+    void testBorderData();
 
 private:
     void initForNewTest(const QString &initText = QString());

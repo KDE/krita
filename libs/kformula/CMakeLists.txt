@@ -25,8 +25,8 @@ set(kformulalib_LIB_SRCS
 #   MatrixElement.cpp
 #   MatrixRowElement.cpp
 #   MatrixEntryElement.cpp
-#   FractionElement.cpp
-#   RootElement.cpp
+   FractionElement.cpp
+   RootElement.cpp
 #   SpaceElement.cpp
 #   EncloseElement.cpp
 #   ActionElement.cpp

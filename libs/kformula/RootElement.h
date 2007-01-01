@@ -163,19 +163,22 @@ protected:
      * Reads our attributes from the MathML element.
      * Also checks whether it's a msqrt or mroot.
      */
-    virtual void readMathMLAttributes( const QDomElement& element );
+//    virtual void readMathMLAttributes( const QDomElement& element );
 
     /**
      * Reads our content from the MathML node. Sets the node to the next node
      * that needs to be read.
      */
-    virtual int readMathMLContent( QDomNode& node );
+//    virtual int readMathML( KoXmlNode& node );
 
 private:
     virtual QString getElementName() const { return hasIndex() ? "mroot" : "msqrt"; }
+    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = true );
+    /*
     virtual void writeMathMLContent( QDomDocument& doc, 
                                      QDomElement& element,
                                      bool oasisFormat ) const ;
+    */
 
     /// The element that is the radicand of the root
     BasicElement* m_radicand;

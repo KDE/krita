@@ -52,9 +52,11 @@ const QList<BasicElement*> RootElement::childElements()
     return tmp << m_radicand;
 }
 
-void RootElement::readMathML( const QDomElement& element )
+/*
+void RootElement::readMathMLContent( const KoXmlNode& node )
 {
 }
+*/
 
 void RootElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
@@ -75,23 +77,28 @@ void RootElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
+void RootElement::calcSizes( const ContextStyle& context,
+                             ContextStyle::TextStyle tstyle, 
+                             ContextStyle::IndexStyle istyle,
+                             StyleAttributes& style )
 {
-    m_radicand->calcSizes(style, tstyle,
-		       style.convertIndexStyleLower(istyle));
+    m_radicand->calcSizes( context, tstyle,
+                           context.convertIndexStyleLower(istyle), style );
 
     luPixel indexWidth = 0;
     luPixel indexHeight = 0;
     if ( m_exponent) {
-	m_exponent->calcSizes(style,
-			 style.convertTextStyleIndex(tstyle),
-			 style.convertIndexStyleUpper(istyle));
+        m_exponent->calcSizes( context,
+                               context.convertTextStyleIndex(tstyle),
+                               context.convertIndexStyleUpper(istyle),
+                               style );
         indexWidth = m_exponent->getWidth();
         indexHeight = m_exponent->getHeight();
     }
 
-    luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    double factor = style.sizeFactor();
+    luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle, factor ) );
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     luPixel unit = (m_radicand->getHeight() + distY)/ 3;
 
     if (m_exponent) {
@@ -131,51 +138,53 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
  * We can use our parentPosition to get our own origin then.
  */
 void RootElement::draw( QPainter& painter, const LuPixelRect& r,
-                        const ContextStyle& style,
+                        const ContextStyle& context,
                         ContextStyle::TextStyle tstyle,
                         ContextStyle::IndexStyle istyle,
+                        StyleAttributes& style,
                         const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
     //    return;
 
-    m_radicand->draw(painter, r, style, tstyle,
-		  style.convertIndexStyleLower(istyle), myPos);
+    m_radicand->draw( painter, r, context, tstyle,
+                      context.convertIndexStyleLower( istyle ), style, myPos);
     if ( m_exponent ) {
-        m_exponent->draw(painter, r, style,
-		    style.convertTextStyleIndex(tstyle),
-		    style.convertIndexStyleUpper(istyle), myPos);
+        m_exponent->draw( painter, r, context,
+                          context.convertTextStyleIndex(tstyle),
+                          context.convertIndexStyleUpper(istyle), style, myPos);
     }
 
     luPixel x = myPos.x() + rootOffset.x();
     luPixel y = myPos.y() + rootOffset.y();
     //int distX = style.getDistanceX(tstyle);
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    double factor = style.sizeFactor();
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     luPixel unit = (m_radicand->getHeight() + distY)/ 3;
 
-    painter.setPen( QPen( style.getDefaultColor(),
-                          style.layoutUnitToPixelX( 2*style.getLineWidth() ) ) );
-    painter.drawLine( style.layoutUnitToPixelX( x+unit/3 ),
-                      style.layoutUnitToPixelY( y+unit+distY/3 ),
-                      style.layoutUnitToPixelX( x+unit/2+unit/3 ),
-                      style.layoutUnitToPixelY( myPos.y()+getHeight() ) );
+    painter.setPen( QPen( style.color(),
+                          context.layoutUnitToPixelX( 2*context.getLineWidth( factor ) ) ) );
+    painter.drawLine( context.layoutUnitToPixelX( x+unit/3 ),
+                      context.layoutUnitToPixelY( y+unit+distY/3 ),
+                      context.layoutUnitToPixelX( x+unit/2+unit/3 ),
+                      context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
 
-    painter.setPen( QPen( style.getDefaultColor(),
-                          style.layoutUnitToPixelY( style.getLineWidth() ) ) );
+    painter.setPen( QPen( style.color(),
+                          context.layoutUnitToPixelY( context.getLineWidth( factor ) ) ) );
 
-    painter.drawLine( style.layoutUnitToPixelX( x+unit+unit/3 ),
-                      style.layoutUnitToPixelY( y+distY/3 ),
-                      style.layoutUnitToPixelX( x+unit/2+unit/3 ),
-                      style.layoutUnitToPixelY( myPos.y()+getHeight() ) );
-    painter.drawLine( style.layoutUnitToPixelX( x+unit+unit/3 ),
-                      style.layoutUnitToPixelY( y+distY/3 ),
-                      style.layoutUnitToPixelX( x+unit+unit/3+m_radicand->getWidth() ),
-                      style.layoutUnitToPixelY( y+distY/3 ) );
-    painter.drawLine( style.layoutUnitToPixelX( x+unit/3 ),
-                      style.layoutUnitToPixelY( y+unit+distY/2 ),
-                      style.layoutUnitToPixelX( x ),
-                      style.layoutUnitToPixelY( y+unit+unit/2 ) );
+    painter.drawLine( context.layoutUnitToPixelX( x+unit+unit/3 ),
+                      context.layoutUnitToPixelY( y+distY/3 ),
+                      context.layoutUnitToPixelX( x+unit/2+unit/3 ),
+                      context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
+    painter.drawLine( context.layoutUnitToPixelX( x+unit+unit/3 ),
+                      context.layoutUnitToPixelY( y+distY/3 ),
+                      context.layoutUnitToPixelX( x+unit+unit/3+m_radicand->getWidth() ),
+                      context.layoutUnitToPixelY( y+distY/3 ) );
+    painter.drawLine( context.layoutUnitToPixelX( x+unit/3 ),
+                      context.layoutUnitToPixelY( y+unit+distY/2 ),
+                      context.layoutUnitToPixelX( x ),
+                      context.layoutUnitToPixelY( y+unit+unit/2 ) );
 }
 
 /**
@@ -443,5 +452,74 @@ bool RootElement::readContentFromDom(QDomNode& node)
 */
     return true;
 }
+
+/**
+ * Reads our attributes from the MathML element.
+ * Also checks whether it's a msqrt or mroot.
+ * Returns false if it failed.
+ */
+/*
+bool RootElement::readAttributesFromMathMLDom(const QDomElement& element)
+{
+    if ( element.tagName().lower() == "mroot" )
+        square = false;
+    else
+        square = true;
+    return true;
+}
+*/
+
+/**
+ * Reads our content from the MathML node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+/*
+int RootElement::readContentFromMathMLDom(QDomNode& node)
+{
+    if ( BasicElement::readContentFromMathMLDom( node ) == -1 ) {
+        return -1;
+    }
+
+    if ( square ) {
+        // Any number of arguments are allowed
+        if ( content->readContentFromMathMLDom( node ) == -1 ) {
+            kdWarning( DEBUGID ) << "Empty content in RootElement." << endl;
+            return -1;
+        }
+    }
+    else {
+        // Exactly two arguments are required
+        int contentNumber = content->buildMathMLChild( node );
+        if ( contentNumber == -1 ) {
+            kdWarning( DEBUGID ) << "Empty content in RootElement." << endl;
+            return -1;
+        }
+        for (int i = 0; i < contentNumber; i++ ) {
+            if ( node.isNull() ) {
+                return -1;
+            }
+            node = node.nextSibling();
+        }
+
+        index = new SequenceElement( this );
+        if ( index->buildMathMLChild( node ) == -1 ) {
+            kdWarning( DEBUGID ) << "Empty index in RootElement." << endl;
+            return -1;
+        }
+    }
+
+    return 1;
+}
+
+void RootElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const
+{
+    content->writeMathML( doc, element, oasisFormat );
+    if( hasIndex() )
+    {
+        index->writeMathML( doc, element, oasisFormat );
+    }
+}
+*/
 
 } // namespace KFormula

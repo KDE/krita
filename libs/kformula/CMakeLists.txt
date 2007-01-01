@@ -48,7 +48,6 @@ set(kformulalib_LIB_SRCS
    symboltable.cc 
 #   kformulaconfigpage.cc 
 #   symbolaction.cc 
-#   cmstyle.cc 
    fontstyle.cc 
 #   symbolfontstyle.cc 
 )

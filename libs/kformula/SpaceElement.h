@@ -114,7 +114,7 @@ protected:
 private:
 
     virtual QString getElementName() const { return "mspace"; }
-    virtual void writeMathMLAttributes( QDomElement& element ) const ;
+    virtual void writeMathMLAttributes( KoXmlWriter* writer ) const ;
 
     /**
      * Whether this space behaves like a tab.

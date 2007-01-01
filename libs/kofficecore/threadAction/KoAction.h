@@ -107,7 +107,7 @@ signals:
     void triggered(const QVariant &params);
 
     /**
-     * The signal emitted directly after the triggered() signal, but this signal
+     * The signal emitted directly after the triggered() signal completed, but this signal
      * is guaranteed to be in the Gui thread and can be used to update the user
      * interface after an action has been completed.
      * @param params a variant that equals the variant given in the execute() signal

@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KOFFICECORE_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/kchart/kdchart1 ${KOFFICECORE_INCLUDES} )
 
 
 ########### next target ###############

@@ -22,7 +22,6 @@
 
 #include "pythonconfig.h"
 #include <kross/core/metatype.h>
-//#include "../core/object.h"
 
 #include <QString>
 #include <QStringList>
@@ -323,6 +322,74 @@ namespace Kross {
         }
     };
 
+    /// \internal
+    template<>
+    struct PythonType<QColor>
+    {
+        static Py::Object toPyObject(const QColor& color);
+        static QColor toVariant(const Py::Object& obj);
+    };
+
+//aaaaaaaaaaaaaaaaaaaaaaaaaaa;
+//QVariant::Size
+//QVariant::SizeF
+//QVariant::Point
+//QVariant::PointArray
+//QVariant::PointF
+//QVariant::Rect
+//QVariant::RectF
+//QVariant::Url
+#if 0
+    /// \internal
+    template<>
+    struct PythonType<QFont>
+    {
+        inline static Py::Object toPyObject(const QFont& font) {
+            //TODO
+            return Py::asObject(new PythonExtension(new Font(font)));
+        }
+        inline static QFont toVariant(const Py::Object& obj) {
+            //TODO
+aaaaaaaaaaaa;
+        }
+    };
+
+    /// \internal
+    template<>
+    struct PythonType<QDateTime>
+    {
+        inline static Py::Object toPyObject(const QDateTime& font) {
+            //TODO
+        }
+        inline static QDateTime toVariant(const Py::Object& obj) {
+            //TODO
+        }
+    };
+
+    /// \internal
+    template<>
+    struct PythonType<QTime>
+    {
+        inline static Py::Object toPyObject(const QTime& font) {
+            //TODO
+        }
+        inline static QTime toVariant(const Py::Object& obj) {
+            //TODO
+        }
+    };
+
+    /// \internal
+    template<>
+    struct PythonType<QDate>
+    {
+        inline static Py::Object toPyObject(const QDate& font) {
+            //TODO
+        }
+        inline static QDate toVariant(const Py::Object& obj) {
+            //TODO
+        }
+    };
+
     /*
     /// \internal
     template<>
@@ -368,7 +435,7 @@ namespace Kross {
         }
     };
     */
-
+#endif
     /*
     /// \internal
     template<>

@@ -31,22 +31,9 @@
   #define PYPATHDELIMITER ":"
 #endif
 
-extern "C"
-{
-    /**
-     * Exported and loadable function as entry point to use
-     * the \a PythonInterpreter.
-     * The krosspython library the \a PythonInterpreter is part
-     * will be loaded dynamically at runtime from e.g.
-     * \a Kross::Manager::getInterpreter and this exported
-     * function will be used to return an instance of the
-     * \a PythonInterpreter implementation.
-     */
-    KROSSPYTHON_EXPORT void* krossinterpreter(Kross::InterpreterInfo* info)
-    {
-        return new Kross::PythonInterpreter(info);
-    }
-}
+// The in krossconfig.h defined KROSS_EXPORT_INTERPRETER macro defines an
+// exported C function used as factory for Kross::PythonInterpreter instances.
+KROSS_EXPORT_INTERPRETER( Kross::PythonInterpreter )
 
 using namespace Kross;
 

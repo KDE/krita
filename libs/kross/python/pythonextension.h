@@ -48,8 +48,11 @@ namespace Kross {
              * Constructor.
              *
              * \param object The QObject this extension instance wraps.
+             * \param owner Defines if this PythonExtension the owner
+             * of the QObject \p object . If that's the case the QObject
+             * will be destroyed if this PythonExtension is destroyed.
              */
-            explicit PythonExtension(QObject* object);
+            explicit PythonExtension(QObject* object, bool owner = false);
 
             /**
              * Destructor.

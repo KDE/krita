@@ -32,24 +32,9 @@
 #include "rubymodule.h"
 #include "rubyscript.h"
 
-extern "C"
-{
-    /**
-     * Exported and loadable function as entry point to use
-     * the \a RubyInterpreter.
-     * The krossruby library will be loaded dynamically at runtime from e.g.
-     * \a Kross::Manager::getInterpreter and this exported
-     * function will be used to return an instance of the
-     * \a RubyInterpreter implementation.
-     */
-    KROSSRUBY_EXPORT void* krossinterpreter(Kross::InterpreterInfo* info)
-    {
-#ifdef KROSS_RUBY_INTERPRETER_DEBUG
-        Kross::krossdebug("krossinterpreter(info)");
-#endif
-        return new Kross::RubyInterpreter(info);
-    }
-}
+// The in krossconfig.h defined KROSS_EXPORT_INTERPRETER macro defines an
+// exported C function used as factory for Kross::RubyInterpreter instances.
+KROSS_EXPORT_INTERPRETER( Kross::RubyInterpreter )
 
 using namespace Kross;
 

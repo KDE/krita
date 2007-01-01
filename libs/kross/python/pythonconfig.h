@@ -43,28 +43,12 @@
 #include "cxx/Extensions.hxx"
 #include "cxx/Exception.hxx"
 
-// define the KROSSPYTHON_EXPORT macro
-#ifdef Q_WS_WIN
-# ifndef KROSSPYTHON_EXPORT
-#  ifdef MAKE_KROSSPYTHON_LIB
-#   define KROSSPYTHON_EXPORT KDE_EXPORT
-#  elif KDE_MAKE_LIB
-#   define KROSSPYTHON_EXPORT KDE_IMPORT
-#  else
-#   define KROSSPYTHON_EXPORT
-#  endif
-# endif
-#else
-# define KROSSPYTHON_EXPORT KDE_EXPORT
-#endif
-
-
 // The version of this python plugin. This will be exported
 // to the scripting code. That way we're able to write
 // scripting code for different incompatible Kross python
 // bindings by checking the version. You should increment
 // this number only if you really know what you're doing.
-#define KROSS_PYTHON_VERSION 1
+//#define KROSS_PYTHON_VERSION 1
 
 // Enable debugging for Kross::PythonInterpreter
 //#define KROSS_PYTHON_INTERPRETER_DEBUG

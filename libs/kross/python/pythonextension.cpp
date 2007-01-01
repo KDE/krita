@@ -37,6 +37,8 @@ namespace Kross {
         public:
             /// The QObject this PythonExtension wraps.
             QPointer<QObject> object;
+            /// Defines if this PythonExtension the owner of the QObject.
+            bool owner;
 
             #ifdef KROSS_PYTHON_EXTENSION_CTORDTOR_DEBUG
                 /// \internal string for debugging.
@@ -65,11 +67,12 @@ namespace Kross {
 
 }
 
-PythonExtension::PythonExtension(QObject* object)
+PythonExtension::PythonExtension(QObject* object, bool owner)
     : Py::PythonExtension<PythonExtension>()
     , d( new Private() )
 {
     d->object = object;
+    d->owner = owner;
 
     #ifdef KROSS_PYTHON_EXTENSION_CTORDTOR_DEBUG
         d->debuginfo = object ? QString("%1 (%2)").arg(object->objectName()).arg(object->metaObject()->className()) : "NULL";
@@ -153,6 +156,8 @@ PythonExtension::~PythonExtension()
     #ifdef KROSS_PYTHON_EXTENSION_CTORDTOR_DEBUG
         krossdebug( QString("PythonExtension::Destructor object=%1").arg(d->debuginfo) );
     #endif
+    if( d->owner )
+        delete d->object;
     qDeleteAll(d->functions);
     delete d->proxymethod;
     delete d;

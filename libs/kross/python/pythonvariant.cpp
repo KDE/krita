@@ -20,6 +20,8 @@
 #include "pythonvariant.h"
 #include "pythonextension.h"
 
+#include <kross/core/variant.h>
+
 #include <QWidget>
 
 using namespace Kross;
@@ -53,6 +55,17 @@ Py::Object PythonType<QVariant>::toPyObject(const QVariant& v)
             return PythonType<qlonglong>::toPyObject(v.toLongLong());
         case QVariant::ULongLong:
             return PythonType<qlonglong>::toPyObject(v.toULongLong());
+
+        case QVariant::Color:
+            return PythonType<QColor>::toPyObject( v.value<QColor>() );
+
+/*TODO
+        case QVariant::Brush:
+        case QVariant::Font:
+        case QVariant::Date:
+        case QVariant::Time:
+        case QVariant::DateTime:
+*/
 
         case QVariant::Invalid: {
             #ifdef KROSS_PYTHON_VARIANT_DEBUG
@@ -179,6 +192,63 @@ QVariant PythonType<QVariant>::toVariant(const Py::Object& obj)
     return QVariant();
 }
 
+Py::Object PythonType<QColor>::toPyObject(const QColor& color)
+{
+    #ifdef KROSS_PYTHON_VARIANT_DEBUG
+        krossdebug( QString("PythonType<QColor>::toPyObject color.name=%1").arg(color.name()) );
+    #endif
+krossdebug( QString("....1") );
+    Color* c = new Color(0 /*no parent*/, color);
+krossdebug( QString("....2") );
+    Py::Object o = Py::asObject( new PythonExtension(c, false /*owner*/) );
+krossdebug( QString("....3") );
+    return o;
+
+
+}
+
+QColor PythonType<QColor>::toVariant(const Py::Object& obj)
+{
+krossdebug( QString("...........9999999999999999999999999") );
+    if( PythonExtension::check(obj.ptr()) ) {
+        Py::ExtensionObject<PythonExtension> extobj(obj);
+        Q_ASSERT( extobj.extensionObject() );
+        Color* color = dynamic_cast< Color* >( extobj.extensionObject()->object() );
+        #ifdef KROSS_PYTHON_VARIANT_DEBUG
+            krossdebug( QString("PythonType<QColor>::toVariant Color.name=%1").arg(color ? color->name() : "NULL") );
+        #endif
+        if( color ) return color->color();
+    }
+    PyTypeObject *type = (PyTypeObject*) obj.type().ptr();
+    if( PyType_IsSubtype(type,&PyString_Type) ) {
+        QString cname = PythonType<QString>::toVariant(obj);
+        QColor c(cname);
+        #ifdef KROSS_PYTHON_VARIANT_DEBUG
+            krossdebug( QString("PythonType<QColor>::toVariant string=%1 color.name=%2").arg(cname).arg(c.name()) );
+        #endif
+        return c;
+    }
+    if( type == &PyTuple_Type || type == &PyList_Type ) {
+        Py::Tuple t(obj);
+        if( t.size() >= 3 ) {
+            bool f = ( ((PyTypeObject*)(t[0].type().ptr())) == &PyFloat_Type );
+            int r = f ? int(PythonType<double>::toVariant(t[0]) * 255.0) : PythonType<int>::toVariant(t[0]);
+            int g = f ? int(PythonType<double>::toVariant(t[1]) * 255.0) : PythonType<int>::toVariant(t[1]);
+            int b = f ? int(PythonType<double>::toVariant(t[2]) * 255.0) : PythonType<int>::toVariant(t[2]);
+            int a = (t.size() >= 4) ? ( f ? int(PythonType<double>::toVariant(t[3]) * 255.0) : PythonType<int>::toVariant(t[3]) ) : 255;
+            QColor c(r,g,b,a);
+            #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                krossdebug( QString("PythonType<QColor>::toVariant Tuple QColor.name=%1").arg(c.name()) );
+            #endif
+            return c;
+        }
+    }
+    #ifdef KROSS_PYTHON_VARIANT_DEBUG
+        krossdebug( QString("PythonType<QColor>::toVariant empty QColor()") );
+    #endif
+    return QColor();
+}
+
 MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& object)
 {
     int typeId = QVariant::nameToType(typeName);
@@ -214,6 +284,22 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
         case QVariant::ULongLong:
             return new PythonMetaTypeVariant<qulonglong>(object);
 
+        case QVariant::Color:
+            //QColor c = PythonType<QColor>::toVariant(object);
+//return new PythonMetaTypeVariant<QColor>(c);
+            //return new MetaTypeVoidStar(typeId, &c);
+            return new PythonMetaTypeVariant<QColor>(object);
+
+/*TODO
+        case QVariant::Brush:
+            return new PythonMetaTypeVariant<QBrush>(object);
+        case QVariant::Font:
+            return new PythonMetaTypeVariant<QFont>(object);
+        case QVariant::Date:
+        case QVariant::Time:
+        case QVariant::DateTime:
+            return new PythonMetaTypeVariant<QDateTime>(object);
+*/
         case QVariant::Invalid: // fall through
         case QVariant::UserType: // fall through
         default: {

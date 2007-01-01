@@ -1,0 +1,10 @@
+This directory includes the fonts packaged with KFormula.
+
+From BaKoMa fonts cmex.ttf is included. Its license is included in
+LICENSE.BAKOMA. It's site at CTAN is:
+http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/
+
+Arev fonts are also included. These fonts are derived from Bitstream Vera
+fonts and so both Bitstream Vera's license (included in LICENSE.BITSTREAM) and
+Arev license (included in LICENSE.AREV) apply. Arev fonts' homepage is:
+http://tavmjong.free.fr/FONTS/

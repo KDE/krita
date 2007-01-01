@@ -21,8 +21,6 @@
 #ifndef KOSHAPELOCKCOMMAND_H
 #define KOSHAPELOCKCOMMAND_H
 
-#include "KoSelection.h"
-
 #include <koffice_export.h>
 #include <QUndoCommand>
 #include <QList>
@@ -33,15 +31,6 @@ class KoShape;
 class FLAKE_EXPORT KoShapeLockCommand : public QUndoCommand
 {
 public:
-    /**
-     * Command to lock a set of shapes position and size
-     * @param shapes a set of shapes that should change lock state
-     * @param oldLock list of old lock states the same length as @p shapes
-     * @param newLock list of new lock states the same length as @p shapes
-     * @param parent the parent command used for macro commands
-     */
-    KoShapeLockCommand(const KoSelectionSet &shapes, const QList<bool> &oldLock, const QList<bool> &newLock,
-                        QUndoCommand *parent = 0);
     /**
      * Command to lock a set of shapes position and size
      * @param shapes a set of shapes that should change lock state

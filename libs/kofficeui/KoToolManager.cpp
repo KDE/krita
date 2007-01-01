@@ -320,7 +320,7 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
     m_activeCanvas = newCanvas;
 
     switchTool(m_activeToolId, false);
-    selectionChanged(m_activeCanvas->canvas()->shapeManager()->selection()->selectedShapes().toList());
+    selectionChanged(m_activeCanvas->canvas()->shapeManager()->selection()->selectedShapes());
 }
 
 void KoToolManager::detachCanvas(KoCanvasController *controller) {

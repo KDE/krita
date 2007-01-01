@@ -41,17 +41,6 @@ public:
      * @param newAngles a list with the same amount of items as shapes with the new angles.
      * @param parent the parent command used for macro commands
      */
-    KoShapeRotateCommand(const KoSelectionSet &shapes, QList<double> &previousAngles, QList<double> &newAngles,
-                          QUndoCommand *parent = 0);
-    /**
-     * Comand to rotate a selection of shapes.  Note that it just alters the rotated
-     * property of those shapes, and nothing more.
-     * @param shapes all the shapes that should be rotated
-     * @param previousAngles a list with the same amount of items as shapes with the
-     *        old rotation angles
-     * @param newAngles a list with the same amount of items as shapes with the new angles.
-     * @param parent the parent command used for macro commands
-     */
     KoShapeRotateCommand(const QList<KoShape*> &shapes, QList<double> &previousAngles, QList<double> &newAngles,
                           QUndoCommand *parent = 0);
     /// redo the command

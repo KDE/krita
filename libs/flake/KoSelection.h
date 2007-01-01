@@ -35,8 +35,6 @@
 class KoShapeGroup;
 class KoShapeLayer;
 
-typedef QSet<KoShape*> KoSelectionSet;
-
 /**
  * A selection is a shape that contains a number of references
  * to shapes. That means that a selection can be manipulated in
@@ -75,7 +73,7 @@ public:
      * @param strip if StrippedSelection, the returned list will not include any children
      *    of a container shape if the container-parent is itself also in the set.
      */
-    virtual const KoSelectionSet selectedShapes(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
+    virtual const QList<KoShape*> selectedShapes(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
 
     /**
      * Return the first selected shape, or 0 if there is nothing selected.
@@ -121,7 +119,7 @@ private:
     void requestSelectionChangedEvent();
     void selectGroupChilds( KoShapeGroup *group );
 
-    KoSelectionSet m_selectedObjects;
+    QList<KoShape*> m_selectedShapes;
     bool m_eventTriggered;
 
     KoShapeLayer *m_activeLayer;

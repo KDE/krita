@@ -21,10 +21,9 @@
 #ifndef KOSHAPEDELETECOMMAND_H
 #define KOSHAPEDELETECOMMAND_H
 
-#include "KoSelection.h"
-
 #include <koffice_export.h>
 #include <QUndoCommand>
+#include <QList>
 
 class KoShape;
 class KoShapeContainer;
@@ -46,7 +45,7 @@ public:
      * @param shapes a set of all the shapes that should be deleted.
      * @param parent the parent command used for macro commands
      */
-    KoShapeDeleteCommand( KoShapeControllerBase *controller, const KoSelectionSet &shapes, QUndoCommand *parent = 0 );
+    KoShapeDeleteCommand( KoShapeControllerBase *controller, const QList<KoShape*> &shapes, QUndoCommand *parent = 0 );
     virtual ~KoShapeDeleteCommand();
     /// redo the command
     void redo ();

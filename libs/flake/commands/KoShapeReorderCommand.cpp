@@ -54,7 +54,7 @@ void KoShapeReorderCommand::undo() {
 }
 
 // static
-KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const KoSelectionSet &shapes, KoShapeManager *manager, MoveShapeType move, QUndoCommand *parent) {
+KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager, MoveShapeType move, QUndoCommand *parent) {
     QList<int> newIndexes;
     QList<KoShape*> changedShapes;
     foreach(KoShape *shape, shapes) {

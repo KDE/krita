@@ -83,7 +83,7 @@ Connector::Connector(KoShapeManager *parent)
 }
 
 void Connector::selectionChanged() {
-    emit selectionChanged(m_shapeManager->selection()->selectedShapes().toList());
+    emit selectionChanged(m_shapeManager->selection()->selectedShapes());
 }
 
 #include "KoToolManager_p.moc"

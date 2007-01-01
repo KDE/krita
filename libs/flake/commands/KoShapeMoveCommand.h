@@ -43,17 +43,6 @@ public:
      *  this list naturally must have the same amount of items as the shapes set.
      * @param parent the parent command used for macro commands
      */
-    KoShapeMoveCommand(const KoSelectionSet &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions,
-                        QUndoCommand *parent = 0);
-    /**
-     * Constructor.
-     * @param shapes the set of objects that are moved.
-     * @param previousPositions the known set of previous positions for each of the objects.
-     *  this list naturally must have the same amount of items as the shapes set.
-     * @param newPositions the new positions for the shapes.
-     *  this list naturally must have the same amount of items as the shapes set.
-     * @param parent the parent command used for macro commands
-     */
     KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions,
                         QUndoCommand *parent = 0);
     /// redo the command

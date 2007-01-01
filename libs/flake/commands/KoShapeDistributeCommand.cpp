@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 
-KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute,  QRectF boundingRect, QUndoCommand *parent )
+KoShapeDistributeCommand::KoShapeDistributeCommand( const QList<KoShape*> &shapes, Distribute distribute,  QRectF boundingRect, QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_distribute( distribute )
 {

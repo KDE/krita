@@ -48,8 +48,8 @@ public:
         BringToFront,
         SendToBack
     };
-    static KoShapeReorderCommand *createCommand(const KoSelectionSet &shapes, KoShapeManager *manager, MoveShapeType move,
-                                                 QUndoCommand *parent = 0);
+    static KoShapeReorderCommand *createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager,
+            MoveShapeType move, QUndoCommand *parent = 0);
 
     /// redo the command
     void redo ();

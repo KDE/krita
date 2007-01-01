@@ -21,10 +21,13 @@
 #ifndef KOSHAPEBORDERCOMMAND_H
 #define KOSHAPEBORDERCOMMAND_H
 
-#include "KoSelection.h"
-
 #include <koffice_export.h>
+
 #include <QUndoCommand>
+#include <QList>
+
+class KoShape;
+class KoShapeBorderModel;
 
 /// The undo / redo command for setting the shape border
 class FLAKE_EXPORT KoShapeBorderCommand : public QUndoCommand {
@@ -35,7 +38,7 @@ public:
      * @param border the new border
      * @param parent the parent command used for macro commands
      */
-    KoShapeBorderCommand( const KoSelectionSet &shapes, KoShapeBorderModel *border, QUndoCommand *parent = 0 );
+    KoShapeBorderCommand( const QList<KoShape*> &shapes, KoShapeBorderModel *border, QUndoCommand *parent = 0 );
     virtual ~KoShapeBorderCommand();
     /// redo the command
     void redo ();

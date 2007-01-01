@@ -24,6 +24,7 @@
 
 #include <koffice_export.h>
 
+#include <QList>
 
 class KoCanvasBase;
 class KoShape;
@@ -70,6 +71,16 @@ public:
      *         The command is not yet executed.
      */
     QUndoCommand* removeShape( KoShape *shape );
+
+    /**
+     * Remove a shape from the document.
+     *
+     * @param shapes the set of shapes to remove from the document
+     * 
+     * @return command which will remove the shape from the document.
+     *         The command is not yet executed.
+     */
+    QUndoCommand* removeShapes( const QList<KoShape*> &shapes );
 
     /**
      * @brief Set the KoShapeControllerBase used to add/remove shapes

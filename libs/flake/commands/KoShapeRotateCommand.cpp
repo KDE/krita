@@ -22,18 +22,6 @@
 
 #include <klocale.h>
 
-KoShapeRotateCommand::KoShapeRotateCommand(const KoSelectionSet &shapes, QList<double> &previousAngles, QList<double> &newAngles, QUndoCommand *parent)
-: QUndoCommand(parent)
-, m_previousAngles(previousAngles)
-, m_newAngles(newAngles)
-{
-    m_shapes = shapes.toList();
-    Q_ASSERT(m_shapes.count() == m_previousAngles.count());
-    Q_ASSERT(m_shapes.count() == m_newAngles.count());
-
-    setText( i18n( "Rotate shapes" ) );
-}
-
 KoShapeRotateCommand::KoShapeRotateCommand(const QList<KoShape*> &shapes, QList<double> &previousAngles, QList<double> &newAngles, QUndoCommand *parent)
 : QUndoCommand(parent)
 , m_previousAngles(previousAngles)

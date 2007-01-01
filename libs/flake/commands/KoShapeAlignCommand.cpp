@@ -26,7 +26,7 @@
 #include <klocale.h>
 // #include <kdebug.h>
 
-KoShapeAlignCommand::KoShapeAlignCommand( const KoSelectionSet &shapes, Align align, QRectF boundingRect,
+KoShapeAlignCommand::KoShapeAlignCommand( const QList<KoShape*> &shapes, Align align, QRectF boundingRect,
                                           QUndoCommand *parent )
 : QUndoCommand( parent )
 {

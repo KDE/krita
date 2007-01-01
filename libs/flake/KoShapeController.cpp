@@ -24,6 +24,7 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
 #include "KoShapeLayer.h"
+#include "KoSelection.h"
 #include "commands/KoShapeCreateCommand.h"
 #include "commands/KoShapeDeleteCommand.h"
 #include "KoCanvasBase.h"
@@ -106,4 +107,8 @@ QUndoCommand* KoShapeController::removeShape( KoShape *shape )
 {
     KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( m_shapeController, shape );
     return cmd;
+}
+
+QUndoCommand* KoShapeController::removeShapes( const QList<KoShape*> &shapes) {
+    return new KoShapeDeleteCommand( m_shapeController, shapes );
 }

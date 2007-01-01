@@ -21,11 +21,13 @@
 #ifndef KOSHAPEBACKGROUNDCOMMAND_H
 #define KOSHAPEBACKGROUNDCOMMAND_H
 
-#include "KoSelection.h"
-
 #include <koffice_export.h>
-#include <QUndoCommand>
 
+#include <QUndoCommand>
+#include <QList>
+#include <QBrush>
+
+class KoShape;
 
 /// The undo / redo command for setting the shape background
 class FLAKE_EXPORT KoShapeBackgroundCommand : public QUndoCommand {
@@ -36,7 +38,7 @@ public:
      * @param brush the new background brush
      * @param parent the parent command used for macro commands
      */
-    KoShapeBackgroundCommand( const KoSelectionSet &shapes, const QBrush &brush, QUndoCommand *parent = 0 );
+    KoShapeBackgroundCommand( const QList<KoShape*> &shapes, const QBrush &brush, QUndoCommand *parent = 0 );
     virtual ~KoShapeBackgroundCommand();
     /// redo the command
     void redo ();

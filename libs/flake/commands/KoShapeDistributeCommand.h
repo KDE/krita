@@ -23,10 +23,11 @@
 
 
 #include "commands/KoShapeMoveCommand.h"
-#include "KoSelection.h"
 
 #include <koffice_export.h>
+
 #include <QUndoCommand>
+#include <QList>
 
 /// The undo / redo command for distributing shapes
 class FLAKE_EXPORT KoShapeDistributeCommand : public QUndoCommand
@@ -51,7 +52,7 @@ public:
      * @param boundingRect the rect the shapes will be distributed in
      * @param parent the parent command used for macro commands
      */
-    KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute, QRectF boundingRect,
+    KoShapeDistributeCommand( const QList<KoShape*> &shapes, Distribute distribute, QRectF boundingRect,
                               QUndoCommand *parent = 0 );
     virtual ~KoShapeDistributeCommand();
     /// redo the command

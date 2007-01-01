@@ -21,7 +21,6 @@
 #ifndef KOSHAPESHEARCOMMAND_H
 #define KOSHAPESHEARCOMMAND_H
 
-#include "KoSelection.h"
 #include <koffice_export.h>
 
 #include <QUndoCommand>
@@ -44,7 +43,7 @@ public:
      * @param newShearYs a list with the same amount of items as shapes with the new values.
      * @param parent the parent command used for macro commands
      */
-    KoShapeShearCommand(const KoSelectionSet &shapes, QList<double> &previousShearXs, QList<double> &previousShearYs, QList<double> &newShearXs, QList<double> &newShearYs, QUndoCommand *parent = 0);
+    KoShapeShearCommand(const QList<KoShape*> &shapes, QList<double> &previousShearXs, QList<double> &previousShearYs, QList<double> &newShearXs, QList<double> &newShearYs, QUndoCommand *parent = 0);
     /// redo the command
     void redo ();
     /// revert the actions done in redo

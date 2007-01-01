@@ -293,7 +293,7 @@ void KoPathTool::breakAtSegment()
 }
 
 void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
-    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
 
     painter.save();
     painter.setRenderHint( QPainter::Antialiasing, true );
@@ -393,7 +393,7 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
         return;
     }
     
-    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
     foreach( KoShape *shape, selectedShapes ) 
     {
         KoPathShape *pathShape = dynamic_cast<KoPathShape*>( shape );
@@ -598,7 +598,7 @@ void KoPathTool::selectPoints( const QRectF &rect, bool clearSelection )
         m_pointSelection.clear();
     }
 
-    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
     foreach( KoShape *shape, selectedShapes ) 
     {
         KoPathShape *pathShape = dynamic_cast<KoPathShape*>( shape );

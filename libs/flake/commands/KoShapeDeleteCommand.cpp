@@ -32,16 +32,16 @@ KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, K
     m_shapes.append( shape );
     m_oldParents.append( shape->parent() );
 
-    setText( i18n( "Delete shapes" ) );
+    setText( i18n( "Delete shape" ) );
 }
 
-KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, const KoSelectionSet &shapes,
+KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, const QList<KoShape*> &shapes,
                                             QUndoCommand *parent)
 : QUndoCommand( parent )
 , m_controller( controller )
+, m_shapes(shapes)
 , m_deleteShapes( false )
 {
-    m_shapes = shapes.toList();
     foreach( KoShape *shape, m_shapes ) {
         m_oldParents.append( shape->parent() );
     }

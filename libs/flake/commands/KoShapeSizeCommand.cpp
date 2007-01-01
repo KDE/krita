@@ -22,19 +22,6 @@
 
 #include <klocale.h>
 
-KoShapeSizeCommand::KoShapeSizeCommand(const KoSelectionSet &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes,
-                                        QUndoCommand *parent)
-: QUndoCommand(parent)
-, m_previousSizes(previousSizes)
-, m_newSizes(newSizes)
-{
-    m_shapes = shapes.toList();
-    Q_ASSERT(m_shapes.count() == m_previousSizes.count());
-    Q_ASSERT(m_shapes.count() == m_newSizes.count());
-
-    setText(i18n( "Resize shapes" ));
-}
-
 KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes, QUndoCommand *parent)
 : QUndoCommand(parent)
 , m_previousSizes(previousSizes)

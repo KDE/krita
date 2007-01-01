@@ -19,21 +19,9 @@
  */
 
 #include "KoShapeLockCommand.h"
+#include "KoShape.h"
 
 #include <klocale.h>
-
-KoShapeLockCommand::KoShapeLockCommand(const KoSelectionSet &shapes, const QList<bool> &oldLock, const QList<bool> &newLock, QUndoCommand *parent)
-: QUndoCommand( parent )
-{
-    m_shapes = shapes.toList();
-    m_oldLock = oldLock;
-    m_newLock = newLock;
-
-    Q_ASSERT(m_shapes.count() == m_oldLock.count());
-    Q_ASSERT(m_shapes.count() == m_newLock.count());
-
-    setText( i18n("Lock shapes") );
-}
 
 KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock, QUndoCommand *parent)
 : QUndoCommand( parent )

@@ -40,15 +40,6 @@ public:
      * @param newSizes the new sizes; in a list with a member for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeSizeCommand(const KoSelectionSet &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes,
-                        QUndoCommand *parent = 0);
-    /**
-     * The undo / redo command for shape sizing.
-     * @param shapes all the shapes that will be rezised at the same time
-     * @param previousSizes the old sizes; in a list with a member for each shape
-     * @param newSizes the new sizes; in a list with a member for each shape
-     * @param parent the parent command used for macro commands
-     */
     KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes,
                         QUndoCommand *parent = 0);
     /// redo the command

@@ -19,17 +19,18 @@
  */
 
 #include "KoShapeShearCommand.h"
+#include "KoShape.h"
 
 #include <klocale.h>
 
-KoShapeShearCommand::KoShapeShearCommand(const KoSelectionSet &shapes, QList<double> &previousShearXs, QList<double> &previousShearYs, QList<double> &newShearXs, QList<double> &newShearYs, QUndoCommand *parent)
+KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, QList<double> &previousShearXs, QList<double> &previousShearYs, QList<double> &newShearXs, QList<double> &newShearYs, QUndoCommand *parent)
 : QUndoCommand(parent)
+, m_shapes(shapes)
 , m_previousShearXs(previousShearXs)
 , m_previousShearYs(previousShearYs)
 , m_newShearXs(newShearXs)
 , m_newShearYs(newShearYs)
 {
-    m_shapes = shapes.toList();
     Q_ASSERT(m_shapes.count() == m_previousShearXs.count());
     Q_ASSERT(m_shapes.count() == m_previousShearYs.count());
     Q_ASSERT(m_shapes.count() == m_newShearXs.count());

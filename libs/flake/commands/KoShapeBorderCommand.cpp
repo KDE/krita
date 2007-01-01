@@ -19,16 +19,18 @@
  */
 
 #include "KoShapeBorderCommand.h"
+#include "KoShape.h"
+#include "KoShapeBorderModel.h"
 
 #include <klocale.h>
 
 
-KoShapeBorderCommand::KoShapeBorderCommand( const KoSelectionSet &shapes, KoShapeBorderModel *border,
+KoShapeBorderCommand::KoShapeBorderCommand( const QList<KoShape*> &shapes, KoShapeBorderModel *border,
                                             QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_newBorder( border )
 {
-    m_shapes = shapes.toList();
+    m_shapes = shapes;
 
     setText( i18n( "Set border" ) );
 }

@@ -18,15 +18,16 @@
  */
 
 #include "KoShapeBackgroundCommand.h"
+#include "KoShape.h"
 
 #include <klocale.h>
 
-KoShapeBackgroundCommand::KoShapeBackgroundCommand( const KoSelectionSet &shapes, const QBrush &brush,
+KoShapeBackgroundCommand::KoShapeBackgroundCommand( const QList<KoShape*> &shapes, const QBrush &brush,
                                                     QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_newBrush( brush )
 {
-    m_shapes = shapes.toList();
+    m_shapes = shapes;
 
     setText( i18n( "Set background" ) );
 }

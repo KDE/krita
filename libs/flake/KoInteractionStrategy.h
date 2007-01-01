@@ -96,7 +96,7 @@ protected:
 
 protected: // members
     KoTool *m_parent; ///< the KoTool instance that controls this strategy.
-    KoSelectionSet m_selectedShapes; ///< the objects this strategy will act on.
+    QList<KoShape*> m_selectedShapes; ///< the objects this strategy will act on.
     KoCanvasBase *m_canvas; ///< the canvas which contains getters for document-data
 };
 

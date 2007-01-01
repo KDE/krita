@@ -112,7 +112,7 @@ BasicElement* SequenceElement::childAt( int i )
     return m_sequenceElements[ i ];
 }
 
-void SequenceElement::readMathML( const QDomElement& element )
+void SequenceElement::readMathML( const KoXmlElement& element )
 {
     readMathMLAttributes( element );
    

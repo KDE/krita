@@ -86,7 +86,7 @@ public:
      */
     virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
 
-    virtual void readMathML( const QDomElement& element );
+    virtual void readMathML( const KoXmlElement& element );
     
     virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
    

@@ -185,14 +185,14 @@ void KoPathTool::slotPointTypeChanged( int type ) {
     m_canvas->addCommand( cmd );
 }
 
-void KoPathTool::insertPoints() {
-    if ( m_pointSelection.objectCount() == 1 )
+void KoPathTool::insertPoints() 
+{
+    if ( m_pointSelection.size() > 1 )
     {
-        QList<KoPathSegment> segments = m_pointSelection.selectedSegments();
-        if( segments.size() )
+        QList<KoPathPointData> segments( m_pointSelection.selectedSegmentsData() );
+        if ( segments.size() > 0 )
         {
-            KoPathShape * pathShape = segments.at( 0 ).first->parent();
-            KoSegmentSplitCommand *cmd = new KoSegmentSplitCommand( pathShape, segments, 0.5 );
+            KoSplitSegmentCommand *cmd = new KoSplitSegmentCommand( segments, 0.5 );
             m_canvas->addCommand( cmd );
         }
     }
@@ -269,24 +269,22 @@ void KoPathTool::joinPoints()
 
 void KoPathTool::breakAtPoint()
 {
-    if ( m_pointSelection.objectCount() == 1 )
+    if ( m_pointSelection.size() > 0 )
     {
-        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
-        KoPathShape * pathShape = selectedPoints[0]->parent();
-        KoSubpathBreakCommand *cmd = new KoSubpathBreakCommand( pathShape, selectedPoints.first() );
+        KoBreakAtPointCommand *cmd = new KoBreakAtPointCommand( m_pointSelection.selectedPointsData() );
         m_canvas->addCommand( cmd );
     }
 }
 
 void KoPathTool::breakAtSegment()
 {
-    if ( m_pointSelection.objectCount() == 1 )
+    // only try to break a segment when 2 points of the same object are selected
+    if ( m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2 )
     {
-        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
-        KoPathShape * pathShape = selectedPoints[0]->parent();
-        if( selectedPoints.size() >= 2 )
+        QList<KoPathPointData> segments( m_pointSelection.selectedSegmentsData() );
+        if ( segments.size() == 1 )
         {
-            KoSubpathBreakCommand *cmd = new KoSubpathBreakCommand( pathShape, KoPathSegment( selectedPoints[0], selectedPoints[1] ) );
+            KoBreakSegmentCommand *cmd = new KoBreakSegmentCommand( segments.at( 0 ) );
             m_canvas->addCommand( cmd );
         }
     }
@@ -814,6 +812,41 @@ void KoPathTool::KoPathPointSelection::repaint()
     {
         m_tool->repaint( p->boundingRect() );
     }
+}
+
+QList<KoPathPointData> KoPathTool::KoPathPointSelection::selectedPointsData() const
+{
+    QList<KoPathPointData> pointData;
+    foreach( KoPathPoint* p, m_selectedPoints )
+    {
+        KoPathShape * pathShape = p->parent();
+        pointData.append( KoPathPointData( pathShape, pathShape->pathPointIndex( p ) ) );
+    }
+    return pointData;
+}
+
+QList<KoPathPointData> KoPathTool::KoPathPointSelection::selectedSegmentsData() const
+{
+    QList<KoPathPointData> pointData;
+
+    QList<KoPathPointData> pd( selectedPointsData() );
+    qSort( pd );
+
+    KoPathPointData last( 0, KoPathPointIndex( -1, -1 ) );
+
+    QList<KoPathPointData>::const_iterator it( pd.begin() );
+    for ( ; it != pd.end(); ++it )
+    {
+        if ( last.m_pathShape == it->m_pathShape 
+             && last.m_pointIndex.first == it->m_pointIndex.first 
+             && last.m_pointIndex.second + 1 == it->m_pointIndex.second  )
+        {
+            pointData.append( last );
+        }
+        last = *it;
+    }
+
+    return pointData;
 }
 
 QList<KoPathSegment> KoPathTool::KoPathPointSelection::selectedSegments() const

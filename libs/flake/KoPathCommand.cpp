@@ -317,120 +317,139 @@ void KoPointRemoveCommand::undo()
     }
 }
 
-KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const KoPathSegment &segment, double splitPosition, QUndoCommand *parent )
-: KoPathBaseCommand( shape, parent )
-, m_deletePoint( false )
+KoSplitSegmentCommand::KoSplitSegmentCommand( const QList<KoPathPointData> & pointDataList, double splitPosition, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_deletePoints( true )
 {
-    if( segment.first && segment.second )
-    {
-        m_segments << segment;
-        m_oldNeighbors << qMakePair( *segment.first, *segment.second );
-        m_newNeighbors << qMakePair( *segment.first, *segment.second );
-        m_splitPoints << 0;
-        m_splitPointPos << qMakePair( (KoSubpath*)0, 0 );
-        m_splitPos << splitPosition;
-    }
+    //TODO this does not yet weork for the last segment in a closed subpath
+    if ( splitPosition < 0 )
+        splitPosition = 0;
+    if ( splitPosition > 1 )
+        splitPosition = 1;
 
-    setText( i18n( "Split segment" ) );
-}
-
-KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, const QList<double> &splitPositions, QUndoCommand *parent )
-: KoPathBaseCommand( shape, parent )
-, m_deletePoint( false )
-{
-    Q_ASSERT(segments.size() == splitPositions.size());
-    // check all the segments
-    for( int i = 0; i < segments.size(); ++i )
+    QList<KoPathPointData>::const_iterator it( pointDataList.begin() );
+    for ( ; it != pointDataList.end(); ++it )
     {
-        const KoPathSegment &segment = segments[i];
-        if( segment.first && segment.second )
+        KoPathShape * pathShape = it->m_pathShape;
+        KoPathPointIndex pi( it->m_pointIndex );
+
+        KoPathPoint * before = pathShape->pointByIndex( pi );
+        ++pi.second;
+        KoPathPoint * after = pathShape->pointByIndex( pi );
+
+        // should not happen but to be sure
+        if ( !before || !after )
+            continue;
+
+        m_pointDataList.append( *it );
+        if ( before->activeControlPoint2() || after->activeControlPoint1() )
         {
-            m_segments << segment;
-            m_oldNeighbors << qMakePair( *segment.first, *segment.second );
-            m_newNeighbors << qMakePair( *segment.first, *segment.second );
-            m_splitPoints << 0;
-            m_splitPointPos << qMakePair( (KoSubpath*)0, 0 );
-            m_splitPos << splitPositions[i];
-        }
-    }
+            QPointF q[4] =
+            { 
+               before->point(), 
+               before->activeControlPoint2() ? before->controlPoint2() : before->point(), 
+               after->activeControlPoint1() ? after->controlPoint1() : after->point(), 
+               after->point()
+            };
 
-    setText( i18n( "Split segment" ) );
-}
+            QPointF p[3];
+            // the De Casteljau algorithm.
+            for( unsigned short j = 1; j <= 3; ++j )
+            {
+                for( unsigned short i = 0; i <= 3 - j; ++i )
+                {
+                    q[i] = ( 1.0 - splitPosition ) * q[i] + splitPosition * q[i + 1];
+                }
+                // modify the new segment.
+                p[j - 1] = q[0];
+            }
+            KoPathPoint * splitPoint = new KoPathPoint( pathShape, p[2], KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2 );
+            splitPoint->setControlPoint1( p[1] );
+            splitPoint->setControlPoint2( q[1] );
 
-KoSegmentSplitCommand::KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, double splitPosition, QUndoCommand *parent )
-: KoPathBaseCommand( shape, parent )
-, m_deletePoint( false )
-{
-    // check all the segments
-    for( int i = 0; i < segments.size(); ++i )
-    {
-        const KoPathSegment &segment = segments[i];
-        if( segment.first && segment.second )
-        {
-            m_segments << segment;
-            m_oldNeighbors << qMakePair( *segment.first, *segment.second );
-            m_newNeighbors << qMakePair( *segment.first, *segment.second );
-            m_splitPoints << 0;
-            m_splitPointPos << qMakePair( (KoSubpath*)0, 0 );
-            m_splitPos << splitPosition;
-        }
-    }
-
-    setText( i18n( "Split segment" ) );
-}
-
-KoSegmentSplitCommand::~KoSegmentSplitCommand()
-{
-    if( m_deletePoint )
-    {
-        foreach( KoPathPoint* p, m_splitPoints )
-            delete p;
-    }
-}
-
-void KoSegmentSplitCommand::redo()
-{
-    repaint( false );
-
-    m_deletePoint = false;
-
-    KoPathShape *shape = *m_shapes.begin();
-
-    for( int i = 0; i < m_segments.size(); ++i )
-    {
-        KoPathSegment &segment = m_segments[i];
-        KoPathPoint *splitPoint = m_splitPoints[i];
-        if( ! splitPoint )
-        {
-            m_splitPoints[i] = shape->splitAt( segment, m_splitPos[i] );
-            m_newNeighbors[i] = qMakePair( *segment.first, *segment.second );
+            m_points.append( splitPoint );
+            m_controlPoints.append( QPair<QPointF, QPointF>( p[0], q[2] ) );
         }
         else
         {
-            shape->insertPoint( splitPoint, m_splitPointPos[i].first, m_splitPointPos[i].second );
-            *segment.first = m_newNeighbors[i].first;
-            *segment.second = m_newNeighbors[i].second;
+            QPointF splitPointPos = before->point() + splitPosition * ( after->point() - before->point());
+            m_points.append( new KoPathPoint( pathShape, splitPointPos, KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2 ) );
+            m_controlPoints.append( QPair<QPointF, QPointF>( before->controlPoint2(), after->controlPoint1() ) );
         }
     }
-    repaint( true );
 }
 
-void KoSegmentSplitCommand::undo()
+KoSplitSegmentCommand::~KoSplitSegmentCommand()
 {
-    repaint( false );
-
-    m_deletePoint = true;
-
-    KoPathShape *shape = *m_shapes.begin();
-
-    for( int i = m_segments.size()-1; i >= 0; --i )
+    if ( m_deletePoints )
     {
-        KoPathSegment &segment = m_segments[i];
-        m_splitPointPos[i] = shape->removePoint( m_splitPoints[i] );
-        *segment.first = m_oldNeighbors[i].first;
-        *segment.second = m_oldNeighbors[i].second;
+        qDeleteAll( m_points );
     }
-    repaint( true );
+}
+
+void KoSplitSegmentCommand::redo()
+{
+    for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
+    {
+        const KoPathPointData &pdBefore = m_pointDataList.at( i );
+        KoPathShape * pathShape = pdBefore.m_pathShape;
+        KoPathPointIndex piAfter = pdBefore.m_pointIndex;
+        ++piAfter.second;
+
+        KoPathPoint * before = pathShape->pointByIndex( pdBefore.m_pointIndex );
+        KoPathPoint * after = pathShape->pointByIndex( piAfter );
+
+        if ( before->activeControlPoint2() )
+        {
+            QPointF controlPoint2 = before->controlPoint2();
+            qSwap( controlPoint2, m_controlPoints[i].first );
+            before->setControlPoint2( controlPoint2 );
+        }
+
+        if ( after->activeControlPoint1() )
+        {
+            QPointF controlPoint1 = after->controlPoint1();
+            qSwap( controlPoint1, m_controlPoints[i].second );
+            after->setControlPoint1( controlPoint1 );
+        }
+
+        pathShape->insertPoint( m_points.at( i ), piAfter );
+        pathShape->repaint();
+    }
+    m_deletePoints = false;
+}
+
+void KoSplitSegmentCommand::undo()
+{
+    for ( int i = 0; i < m_pointDataList.size(); ++i )
+    {
+        const KoPathPointData &pdBefore = m_pointDataList.at( i );
+        KoPathShape * pathShape = pdBefore.m_pathShape;
+        KoPathPointIndex piAfter = pdBefore.m_pointIndex;
+        ++piAfter.second;
+
+        KoPathPoint * before = pathShape->pointByIndex( pdBefore.m_pointIndex );
+
+        m_points[i] = pathShape->removePoint( piAfter );
+
+        KoPathPoint * after = pathShape->pointByIndex( piAfter );
+
+        if ( before->activeControlPoint2() )
+        {
+            QPointF controlPoint2 = before->controlPoint2();
+            qSwap( controlPoint2, m_controlPoints[i].first );
+            before->setControlPoint2( controlPoint2 );
+        }
+
+        if ( after->activeControlPoint1() )
+        {
+            QPointF controlPoint1 = after->controlPoint1();
+            qSwap( controlPoint1, m_controlPoints[i].second );
+            after->setControlPoint1( controlPoint1 );
+        }
+        pathShape->repaint();
+    }
+    m_deletePoints = true;
 }
 
 KoPointJoinCommand::KoPointJoinCommand( KoPathShape *shape, KoPathPoint *point1, KoPathPoint *point2, QUndoCommand *parent )
@@ -459,96 +478,128 @@ void KoPointJoinCommand::undo()
     }
 }
 
-KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *breakPoint, QUndoCommand *parent )
-: KoPathBaseCommand( shape, parent )
-, m_broken( false )
-, m_breakSegment( 0, 0 )
-, m_breakPoint( breakPoint )
-, m_newPoint( 0 )
+KoBreakSegmentCommand::KoBreakSegmentCommand( const KoPathPointData & pointData, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_pointData( pointData )    
+, m_broken( false )                                        
 {
-    Q_ASSERT( breakPoint );
-
-    KoSubpath *subpath = shape->subpathOfPoint( breakPoint );
-    // copy the whole subpath as it can be reordered during breaking
-    foreach( KoPathPoint* point, *subpath )
-    {
-        KoPathPoint data = *point;
-        m_pointData.append( PointData( point, data ) );
-    }
-
     setText( i18n( "Break subpath" ) );
 }
 
-KoSubpathBreakCommand::KoSubpathBreakCommand( KoPathShape *shape, const KoPathSegment &segment, QUndoCommand *parent )
-: KoPathBaseCommand( shape, parent )
-, m_broken( false )
-, m_breakSegment( segment )
-, m_breakPoint( 0 )
-, m_newPoint( 0 )
-{
-    KoSubpath *subpath = shape->subpathOfPoint( segment.first );
-    // copy the whole subpath as it can be reordered during breaking
-    foreach( KoPathPoint* point, *subpath )
-    {
-        KoPathPoint data = *point;
-        m_pointData.append( PointData( point, data ) );
-    }
-
-    setText( i18n( "Break subpath" ) );
-}
-
-KoSubpathBreakCommand::~KoSubpathBreakCommand()
+KoBreakSegmentCommand::~KoBreakSegmentCommand()
 {
 }
 
-void KoSubpathBreakCommand::redo()
+void KoBreakSegmentCommand::redo()
 {
-    KoPathShape *shape = *m_shapes.begin();
-
-    repaint(false);
-
-    if( m_breakPoint )
-        m_broken = shape->breakAt( m_breakPoint, m_newPoint );
-    else if( m_breakSegment.first && m_breakSegment.second )
-        m_broken = shape->breakAt( m_breakSegment );
-
-    repaint(false);
+    // a repaint before is needed as the shape can shrink during the break
+    m_pointData.m_pathShape->repaint();
+    m_broken = m_pointData.m_pathShape->breakAfter( m_pointData.m_pointIndex );
+    if ( m_broken )
+    {
+        m_pointData.m_pathShape->normalize();
+        m_pointData.m_pathShape->repaint();
+    }
 }
 
-void KoSubpathBreakCommand::undo()
+void KoBreakSegmentCommand::undo()
 {
-    if( ! m_broken )
-        return;
-
-    KoPathShape *shape = *m_shapes.begin();
-
-    repaint(false);
-
-    KoSubpath *subpath = 0;
-    if( m_breakPoint )
+    if ( m_broken )
     {
-        subpath = shape->subpathOfPoint( m_breakPoint );
-        shape->joinBetween( m_breakPoint, m_newPoint );
+        m_pointData.m_pathShape->join( m_pointData.m_pointIndex.first );
+        m_pointData.m_pathShape->normalize();
+        m_pointData.m_pathShape->repaint();
     }
-    else
-    {
-        shape->joinBetween( m_breakSegment.first, m_breakSegment.second );
-        subpath = shape->subpathOfPoint( m_breakSegment.first );
-    }
-
-    subpath->clear();
-
-    delete m_newPoint;
-    m_newPoint = 0;
-
-    foreach( PointData data, m_pointData )
-    {
-        *data.first = data.second;
-        subpath->append( data.first );
-    }
-
-    repaint(false);
 }
+
+
+KoBreakAtPointCommand::KoBreakAtPointCommand( const QList<KoPathPointData> & pointDataList, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_pointDataList( pointDataList )
+, m_deletePoints( true )                                      
+{
+    qSort( m_pointDataList );
+    setText( i18n( "Break subpath at points" ) );
+
+    QList<KoPathPointData>::const_iterator it( m_pointDataList.begin() );
+    for ( ; it != m_pointDataList.end(); ++it )
+    {
+        m_points.push_back( new KoPathPoint( *( it->m_pathShape->pointByIndex( it->m_pointIndex ) ) ) );
+    }
+}
+
+KoBreakAtPointCommand::~KoBreakAtPointCommand()
+{
+    if ( m_deletePoints )
+    {
+        qDeleteAll( m_points );
+    }
+}
+
+void KoBreakAtPointCommand::redo()
+{
+    KoPathShape * lastPathShape = 0;
+
+    for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
+    {
+        const KoPathPointData & pd = m_pointDataList.at( i );
+        KoPathShape * pathShape = pd.m_pathShape; 
+        KoPathPointIndex pointIndex = pd.m_pointIndex;
+        ++pointIndex.second;
+        pathShape->insertPoint( m_points[i], pointIndex );
+        pathShape->breakAfter( pd.m_pointIndex );
+
+        if ( lastPathShape != pathShape )
+        {
+            if ( lastPathShape )
+            {
+                lastPathShape->normalize();
+                lastPathShape->repaint();
+            }
+            lastPathShape = pathShape;
+        }
+    }
+    if ( lastPathShape )
+    {
+        lastPathShape->normalize();
+        lastPathShape->repaint();
+    }
+
+    m_deletePoints = false;
+}
+
+void KoBreakAtPointCommand::undo()
+{
+    KoPathShape * lastPathShape = 0;
+
+    for ( int i = 0; i < m_pointDataList.size(); ++i )
+    {
+        const KoPathPointData & pd = m_pointDataList.at( i );
+        KoPathShape * pathShape = pd.m_pathShape; 
+        KoPathPointIndex pointIndex = pd.m_pointIndex;
+        ++pointIndex.second;
+        pathShape->join( pd.m_pointIndex.first );
+        m_points[i] = pathShape->removePoint( pointIndex );
+
+        if ( lastPathShape != pathShape )
+        {
+            if ( lastPathShape )
+            {
+                lastPathShape->normalize();
+                lastPathShape->repaint();
+            }
+            lastPathShape = pathShape;
+        }
+    }
+    if ( lastPathShape )
+    {
+        lastPathShape->normalize();
+        lastPathShape->repaint();
+    }
+
+    m_deletePoints = true;
+}
+
 
 KoSegmentTypeCommand::KoSegmentTypeCommand( KoPathShape *shape, const KoPathSegment &segment, bool changeToLine, QUndoCommand *parent )
 : KoPathBaseCommand( shape, parent )

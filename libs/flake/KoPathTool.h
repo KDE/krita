@@ -206,6 +206,20 @@ private:
         const QSet<KoPathPoint *> & selectedPoints() const { return m_selectedPoints; }
 
         /**
+         * @brief Get the point data of all selected points
+         *
+         * This is subject to change
+         */
+        QList<KoPathPointData> selectedPointsData() const;
+
+        /**
+         * @brief Get the point data of all selected segments
+         *
+         * This is subject to change
+         */
+        QList<KoPathPointData> selectedSegmentsData() const;
+
+        /**
          * @brief Get the selected point map
          *
          * @return KoSelectedPointMap containing all objects and selected points 
@@ -242,6 +256,9 @@ private:
     friend class KoPathPointMoveStrategy;
     friend class KoPathControlPointMoveStrategy;
     friend class KoPathPointRubberSelectStrategy;
+
+    // make a frind so that it can test private member/methods
+    friend class TestPathTool;
 
     KoInteractionStrategy *m_currentStrategy; ///< the rubber selection strategy
 

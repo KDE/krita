@@ -160,50 +160,33 @@ private:
 };
 
 /// The undo / redo command for splitting a path segment
-class KoSegmentSplitCommand : public KoPathBaseCommand
+class KoSplitSegmentCommand : public QUndoCommand
 {
-public:
+public:    
     /**
-     * Command to split a single path segment at the given position
-     * @param shape the path shape containing the points
-     * @param segment the segment to split
+     * Command to split a path segment
+     *
+     * This splits the segments at the given split position by inserting new points.
+     * The De Casteljau algorithm is used for calculating the position of the new 
+     * points.
+     *
+     * @param pointDataList describing the segments to split
      * @param splitPosition the position to split at [0..1]
      * @param parent the parent command used for macro commands
      */
-    KoSegmentSplitCommand( KoPathShape *shape, const KoPathSegment &segment, double splitPosition,
-                           QUndoCommand *parent = 0 );
-    /**
-     * Command to split multiple path segments at different positions
-     * @param shape the path shape containing the points
-     * @param segments the segments to split
-     * @param splitPositions the positions to split at [0..1]
-     * @param parent the parent command used for macro commands
-     */
-    KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, const QList<double> &splitPositions,
-                           QUndoCommand *parent = 0 );
-    /**
-     * Command to split multiple path segments at the same position
-     * @param shape the path shape containing the points
-     * @param segments the segments to split
-     * @param splitPosition the position to split at [0..1]
-     * @param parent the parent command used for macro commands
-     */
-    KoSegmentSplitCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, double splitPosition,
-                           QUndoCommand *parent = 0 );
-    virtual ~KoSegmentSplitCommand();
+    KoSplitSegmentCommand( const QList<KoPathPointData> & pointDataList, double splitPosition, QUndoCommand *parent = 0 );
+    virtual ~KoSplitSegmentCommand();
+
     /// redo the command
     void redo();
     /// revert the actions done in redo
     void undo();
+
 private:
-    QList<KoPathSegment> m_segments;
-    typedef QPair<KoPathPoint,KoPathPoint> KoSegmentData;
-    QList<KoSegmentData> m_oldNeighbors;
-    QList<KoSegmentData> m_newNeighbors;
-    QList<double> m_splitPos;
-    QList<KoPathPoint*> m_splitPoints;
-    bool m_deletePoint;
-    QList< QPair<KoSubpath*,int> > m_splitPointPos;
+    QList<KoPathPointData> m_pointDataList;
+    QList<KoPathPoint*> m_points;
+    QList<QPair<QPointF, QPointF> > m_controlPoints;
+    bool m_deletePoints;
 };
 
 /// The undo / redo command for joining two start/end path points
@@ -230,36 +213,54 @@ private:
     bool m_joined;
 };
 
-/// The undo / redo command for breaking a subpath
-class KoSubpathBreakCommand : public KoPathBaseCommand
+/// The undo / redo command for breaking a subpath by removing the segment
+class KoBreakSegmentCommand : public QUndoCommand 
 {
 public:
     /**
-     * Command to break a subpath at a single point.
-     * @param shape the path shape whose subpath to close
-     * @param breakPoint the point to break at
+     * Command to break a subpath by removing the segement
+     *
+     * The segment following the given point will be removed.
+     *
+     * @param pointData describing the point 
      * @param parent the parent command used for macro commands
      */
-    KoSubpathBreakCommand( KoPathShape *shape, KoPathPoint *breakPoint, QUndoCommand *parent = 0 );
-    /**
-     * Command to break a subpath at a path segment
-     * @param shape the path shape whose subpath to close
-     * @param segment the segment
-     * @param parent the parent command used for macro commands
-     */
-    KoSubpathBreakCommand( KoPathShape *shape, const KoPathSegment &segment, QUndoCommand *parent = 0 );
-    virtual ~KoSubpathBreakCommand();
+    KoBreakSegmentCommand( const KoPathPointData & pointData, QUndoCommand *parent = 0 );
+    ~KoBreakSegmentCommand();
+    
     /// redo the command
     void redo();
     /// revert the actions done in redo
     void undo();
 private:
+    KoPathPointData m_pointData;
     bool m_broken;
-    KoPathSegment m_breakSegment;
-    KoPathPoint* m_breakPoint;
-    KoPathPoint* m_newPoint;
-    typedef QPair<KoPathPoint*, KoPathPoint> PointData;
-    QList<PointData> m_pointData;
+};
+
+/// Command to break a subpath at points.
+class KoBreakAtPointCommand : public QUndoCommand
+{
+public:
+    /**
+     * Command to break a subpath at points.
+     *
+     * The pathes are broken at the given points. New points will be inserted after
+     * the given points and then the pathes will be split after the given points.
+     *
+     * @param pointDataList List of point datas where the path should be split.
+     * @param parent the parent command used for macro commands
+     */
+    KoBreakAtPointCommand( const QList<KoPathPointData> & pointDataList, QUndoCommand *parent = 0 );
+    ~KoBreakAtPointCommand();
+    
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
+private:    
+    QList<KoPathPointData> m_pointDataList;
+    QList<KoPathPoint*> m_points;
+    bool m_deletePoints;
 };
 
 /// The undo / redo command for changing a segments type (curve/line)

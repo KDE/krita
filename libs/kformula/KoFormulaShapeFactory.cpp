@@ -41,14 +41,14 @@ KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
 KoFormulaShapeFactory::~KoFormulaShapeFactory()
 {}
 
-KoShape* KoStarShapeFactory::createDefaultShape()
+KoShape* KoFormulaShapeFactory::createDefaultShape()
 {
     KoFormulaShape* formula = new KoFormulaShape();
     formula->setShapeId( KoFormulaShapeId );
     return formula;
 }
 
-KoShape* KoStarShapeFactory::createShape( const KoProperties * params ) const
+KoShape* KoFormulaShapeFactory::createShape( const KoProperties * params ) const
 {
     KoFormulaShape* formula = new KoFormulaShape();
     if( !formula )

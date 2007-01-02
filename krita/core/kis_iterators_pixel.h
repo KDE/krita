@@ -50,6 +50,10 @@ public:
         }
 
     inline KisHLineIteratorPixel & operator ++() { KisHLineIterator::operator++(); advance(1); return *this;}
+    inline void nextRow() {
+      KisHLineIterator::nextRow();
+      if (m_selectionIterator) m_selectionIterator->nextRow();
+    }
 
     /// Advances a number of pixels until it reaches the end of the line
     KisHLineIteratorPixel & operator+=(int n) { KisHLineIterator::operator+=(n); advance(n); return *this; };
@@ -91,6 +95,10 @@ public:
           return *this; }
 
     inline KisVLineIteratorPixel & operator ++() { KisVLineIterator::operator++(); advance(1); return *this;}
+    inline void nextRow() {
+      KisVLineIterator::nextCol();
+      if (m_selectionIterator) m_selectionIterator->nextCol();
+    }
 
     Q_INT32 x() const { return KisVLineIterator::x() + m_offsetx; }
     

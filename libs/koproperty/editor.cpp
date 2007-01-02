@@ -43,6 +43,7 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -77,7 +78,7 @@ class EditorPrivate
 			itemToSelectLater = 0;
 			if (!kofficeAppDirAdded) {
 				kofficeAppDirAdded = true;
-				KGlobal::iconLoader()->addAppDir("koffice");
+				kapp->iconLoader()->addAppDir("koffice");
 			}
 			previouslyCollapsedGroupItem = 0;
 			childFormPreviouslyCollapsedGroupItem = 0;

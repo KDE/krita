@@ -22,12 +22,13 @@
 #ifndef FORMULACOMMAND_H
 #define FORMULACOMMAND_H
 
-#include <kcommand.h>
+#include <QUndoCommand>
 #include <QList>
 #include <QHash>
 
 namespace KFormula {
 class BasicElement;
+class FormulaCursor;
 
 /**
  * @short The command for addition of elements
@@ -39,7 +40,7 @@ class BasicElement;
  * 
  * @since 2.0
  */
-class FormulaCommandAdd : public KCommand {
+class FormulaCommandAdd : public QUndoCommand {
 public:
     /**
      * The constructor
@@ -49,13 +50,10 @@ public:
     FormulaCommandAdd( FormulaCursor* cursor, QList<BasicElement*> added );
 
     /// Execute the command
-    void execute();
+    void redo();
 
-    /// Revert the actions done in execute()
-    void unexecute();
-
-    /// @return The name of this command 
-    QString name() const;
+    /// Revert the actions done in redo()
+    void undo();
 
 private:
     /// The BasicElement that owns the newly added elements
@@ -79,7 +77,7 @@ private:
  * 
  * @since 2.0
  */
-class FormulaCommandRemove : public KCommand {
+class FormulaCommandRemove : public QUndoCommand {
 public:
     /**
      * The constructor
@@ -89,13 +87,10 @@ public:
     FormulaCommandRemove( FormulaCursor* cursor, QList<BasicElement*> elements );
 
     /// Execute the command
-    void execute();
+    void redo();
 
-    /// Revert the actions done in execute()
-    void unexecute();
-
-    /// @return The name of this command 
-    QString name() const;
+    /// Revert the actions done in redo()
+    void undo();
 
 private:
     /// The BasicElement that owned the removed elements
@@ -119,7 +114,7 @@ private:
  *
  * @since 2.0
  */
-class FormulaCommandReplace : public KCommand {
+class FormulaCommandReplace : public QUndoCommand {
 public:
     /**
      * The constructor
@@ -131,13 +126,10 @@ public:
                                                   QList<BasicElement*> replacing );
 
     /// Execute the command
-    void execute();
+    void redo();
 
-    /// Revert the actions done in execute()
-    void unexecute();
-
-    /// @return The name of this command 
-    QString name() const;
+    /// Revert the actions done in redo()
+    void undo();
 
 private:
     /// The BasicElement that owned the replaced elements
@@ -163,7 +155,7 @@ private:
  * 
  * @since 2.0
  */
-class FormulaCommandAttribute : public KCommand {
+class FormulaCommandAttribute : public QUndoCommand {
 public:
     /**
      * The constructor
@@ -173,13 +165,10 @@ public:
     FormulaCommandAttribute( FormulaCursor* cursor, QHash<QString,QString> attributes );
 
     /// Execute the command
-    void execute();
+    void redo();
 
-    /// Revert the actions done in execute()
-    void unexecute();
-
-    /// @return The name of this command 
-    QString name() const;
+    /// Revert the actions done in redo()
+    void undo();
     
 private:
     /// The BasicElement whose attributes have been changed

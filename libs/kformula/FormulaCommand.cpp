@@ -26,14 +26,15 @@
 namespace KFormula {
 
 FormulaCommandAdd::FormulaCommandAdd( FormulaCursor* cursor, QList<BasicElement*> added )
-                 : KCommand()
+                 : QUndoCommand()
 {
     m_ownerElement = cursor()->ownerElement();
     m_positionInElement = cursor()->position();
     m_addedElements = added;
+    setText( i18n( "Add Elements" ) );
 }
 
-void FormulaCommandAdd::execute()
+void FormulaCommandAdd::redo()
 {
     FormulaCursor* cursor = new FormulaCursor( m_ownerElement );
     cursor->setPosition( m_positionInElement );
@@ -44,35 +45,31 @@ void FormulaCommandAdd::execute()
     delete cursor;
 }
 
-void FormulaCommandAdd::unexecute()
+void FormulaCommandAdd::undo()
 {
     foreach( BasicElement* tmp, m_addedElements )
         m_ownerElement->removeElement( tmp );
-}
-
-QString FormulaCommandAdd::name() const
-{
-    return i18n( "Add Elements" );
 }
 
 
 
 FormulaCommandRemove::FormulaCommandRemove( FormulaCursor* cursor,
                                             QList<BasicElement*> removed )
-                    : KCommand()
+                    : QUndoCommand()
 {
     m_ownerElement = cursor()->ownerElement();
     m_positionInElement = cursor()->position();
     m_removedElements = removed;
+    setText( i18n( "Remove Elements" ) );
 }
 
-void FormulaCommandRemove::execute()
+void FormulaCommandRemove::redo()
 {
     foreach( BasicElement* tmp, m_removedElements )
         m_ownerElement->removeElement( tmp );
 }
 
-void FormulaCommandRemove::unexecute()
+void FormulaCommandRemove::undo()
 {
     FormulaCursor* cursor = new FormulaCursor( m_ownerElement );
     cursor->setPosition( m_positionInElement );
@@ -81,26 +78,22 @@ void FormulaCommandRemove::unexecute()
         m_ownerElement->insertChild( cursor, tmp );
 	
     delete cursor;
-}
-
-QString FormulaCommandRemove::name() const
-{
-    return i18n( "Remove Elements" );
 }
 
 
 
 FormulaCommandReplace::FormulaCommandReplace( FormulaCursor* cursor,
                        QList<BasicElement*> replaced,QList<BasicElement*> replacing )
-                     : KCommand()
+                     : QUndoCommand()
 {
     m_ownerElement = cursor()->ownerElement();
     m_positionInElement = cursor()->position();
     m_replacedElements = replaced;
     m_replacingElements = replacing;
+    setText( i18n( "Replace Element" ) );
 }
 
-void FormulaCommandReplace::execute()
+void FormulaCommandReplace::redo()
 {
     foreach( BasicElement* tmp, m_replacedElements )
         m_ownerElement->removeElement( tmp );
@@ -114,7 +107,7 @@ void FormulaCommandReplace::execute()
     delete cursor;
 }
 
-void FormulaCommandReplace::unexecute()
+void FormulaCommandReplace::undo()
 {
     foreach( BasicElement* tmp, m_replacingElements )
         m_ownerElement->removeElement( tmp );
@@ -126,18 +119,13 @@ void FormulaCommandReplace::unexecute()
         m_ownerElement->insertChild( cursor, tmp );
 	
     delete cursor;
-}
-
-QString FormulaCommandReplace::name() const
-{
-    return i18n( "Replace Element" );
 }
 
 
 
 FormulaCommandAttribute::FormulaCommandAttribute( FormulaCursor* cursor,
                                                   QHash<QString,QString> attributes )
-                       : KCommand()
+                       : QUndoCommand()
 {
     m_ownerElement = cursor->ownerElement();
     m_attributes = attributes;
@@ -149,21 +137,18 @@ FormulaCommandAttribute::FormulaCommandAttribute( FormulaCursor* cursor,
 	if( !m_attributes.contains( i.key() ) )
             m_attributes.insert( i.key(), i.value() );
     }
+
+    setText( i18n( "Attribute Changed" ) );
 }
 
-void FormulaCommandAttribute::execute()
+void FormulaCommandAttribute::redo()
 {
     m_ownerElement->setAttributes( m_attributes );
 }
 
-void FormulaCommandAttribute::unexecute()
+void FormulaCommandAttribute::undo()
 {
     m_ownerElement->setAttributes( m_oldAttributes );
-}
-
-QString FormulaCommandAttribute::name() const
-{
-    return i18n( "Attribute Changed" );
 }
 
 } //namespace KFormula

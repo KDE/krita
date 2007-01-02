@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 #  This file is part of the KDE project
 #
 #  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
@@ -20,7 +21,7 @@ def listavailabletemplates()
   templatesdir = Dir.new( File.dirname( __FILE__  ) + "/templates/")
   templates = []
   templatesdir.each() { |x|
-    if( x != "." and x != "..")
+    if( x[0,1] != "." )
       templates << x
     end
   }
@@ -70,7 +71,7 @@ Dir.mkdir(namelc)
 templatedir = Dir.new( File.dirname( __FILE__  ) + "/templates/" + type)
 
 templatedir.each() { |x|
-   if( x != "." and x != "..")
+   if( x[0,1] != "." )
       dstname = x.clone
       begin
         dstname[type] = namelc

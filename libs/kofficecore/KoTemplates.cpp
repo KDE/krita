@@ -24,6 +24,7 @@
 #include <QPixmap>
 #include <QPrinter>
 
+#include <kapplication.h>
 #include <kdesktopfile.h>
 #include <ksimpleconfig.h>
 #include <kdebug.h>
@@ -67,7 +68,7 @@ const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
         m_pixmap = QPixmap::fromImage(img);
         return m_pixmap;
     } else { // relative path
-        m_pixmap = instance->iconLoader()->loadIcon( m_picture, K3Icon::Desktop, 128 );
+        m_pixmap = kapp->iconLoader()->loadIcon( m_picture, K3Icon::Desktop, 128 );
         return m_pixmap;
     }
 }

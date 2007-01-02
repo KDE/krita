@@ -31,6 +31,7 @@
 #include <QPixmap>
 #include <QSize>
 
+#include <kapplication.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kinstance.h>
@@ -273,8 +274,8 @@ void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
 
 Q3ListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight)
 {
-  return addPane(title, SmallIcon(icon, K3Icon::SizeLarge, K3Icon::DefaultState, d->m_instance),
-                 widget, sortWeight);
+  return addPane(title, KIcon(icon, kapp->iconLoader()).pixmap(K3Icon::SizeLarge,K3Icon::SizeLarge), 
+    widget, sortWeight);
 }
 
 Q3ListViewItem* KoOpenPane::addPane(const QString& title, const QPixmap& icon, QWidget* widget, int sortWeight)

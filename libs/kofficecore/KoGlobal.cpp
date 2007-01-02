@@ -28,6 +28,7 @@
 #endif
 
 #include <KoGlobal.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
@@ -60,7 +61,7 @@ KoGlobal::KoGlobal()
     KGlobal::dirs()->addPrefix(PREFIX);
 
     // Tell the iconloader about share/apps/koffice/icons
-    KGlobal::iconLoader()->addAppDir("koffice");
+    kapp->iconLoader()->addAppDir("koffice");
 
     // Another way to get the DPI of the display would be QPaintDeviceMetrics,
     // but we have no widget here (and moving this to KoView wouldn't allow

@@ -198,7 +198,7 @@ public:
     {
         KGlobal::locale()->insertCatalog("koffice");
         // Tell the iconloader about share/apps/koffice/icons
-        KGlobal::iconLoader()->addAppDir("koffice");
+        kapp->iconLoader()->addAppDir("koffice");
         m_view = 0L;
         // Avoid warning from KParts - we'll have the KoView as focus proxy anyway
         setFocusPolicy( Qt::ClickFocus );

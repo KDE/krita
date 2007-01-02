@@ -26,8 +26,7 @@
 #include <QString>
 
 class KArchiveEntry;
-
-class KOFFICECORE_EXPORT KoDocumentInfoPropsPage : public KPropsDlgPlugin
+class KOFFICECORE_EXPORT KoDocumentInfoPropsPage : public KPropertiesDialogPlugin
 {
   Q_OBJECT
 

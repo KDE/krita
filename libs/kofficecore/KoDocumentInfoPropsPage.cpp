@@ -50,7 +50,7 @@ public:
 
 KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
         const QStringList & )
-: KPropsDlgPlugin( props )
+: KPropertiesDialogPlugin( props )
 {
     d = new KoDocumentInfoPropsPagePrivate;
     d->m_info = new KoDocumentInfo( this );

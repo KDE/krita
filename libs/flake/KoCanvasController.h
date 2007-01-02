@@ -208,7 +208,7 @@ private:
         void paintEvent(QPaintEvent *event);
 
       private:
-        QPointF corrrectPosition(const QPoint &point) const;
+        QPointF correctPosition(const QPoint &point) const;
         void repaint(KoShape *shape);
 
       private:

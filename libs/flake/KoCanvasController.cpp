@@ -283,7 +283,7 @@ void KoCanvasController::Viewport::dragEnterEvent(QDragEnterEvent *event) {
 }
 
 void KoCanvasController::Viewport::dropEvent(QDropEvent *event) {
-    m_draggedShape->setAbsolutePosition( corrrectPosition(event->pos()) );
+    m_draggedShape->setAbsolutePosition( correctPosition(event->pos()) );
     m_parent->canvas()->shapeManager()->remove(m_draggedShape); // remove it to not interfere with z-index calc.
     QUndoCommand * cmd = m_parent->canvas()->shapeController()->addShape( m_draggedShape );
     if(cmd) {
@@ -297,7 +297,7 @@ void KoCanvasController::Viewport::dropEvent(QDropEvent *event) {
     m_draggedShape = 0;
 }
 
-QPointF KoCanvasController::Viewport::corrrectPosition(const QPoint &point) const {
+QPointF KoCanvasController::Viewport::correctPosition(const QPoint &point) const {
     QPoint correctedPos(point.x() - m_parent->canvasOffsetX(), point.y() - m_parent->canvasOffsetY());
     correctedPos -= m_parent->canvas()->documentOrigin();
     return m_parent->canvas()->viewConverter()->viewToDocument(correctedPos);
@@ -308,7 +308,7 @@ void KoCanvasController::Viewport::dragMoveEvent (QDragMoveEvent *event) {
         return;
     m_draggedShape->repaint();
     repaint(m_draggedShape);
-    m_draggedShape->setAbsolutePosition( corrrectPosition(event->pos()) );
+    m_draggedShape->setAbsolutePosition( correctPosition(event->pos()) );
     m_draggedShape->repaint();
     repaint(m_draggedShape);
 }

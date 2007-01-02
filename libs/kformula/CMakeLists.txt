@@ -1,5 +1,3 @@
-
-
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 
 

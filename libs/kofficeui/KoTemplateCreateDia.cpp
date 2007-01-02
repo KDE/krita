@@ -37,6 +37,7 @@
 #include <QFrame>
 #include <QByteArray>
 
+#include <kapplication.h>
 #include <ktemporaryfile.h>
 #include <klineedit.h>
 #include <k3listview.h>
@@ -394,7 +395,7 @@ void KoTemplateCreateDia::slotSelect() {
         return;
     }
     // ### TODO: do a better remote loading without having to have d->m_tempFile
-    QString path = KGlobal::iconLoader()->iconPath(name, K3Icon::Desktop);
+    QString path = kapp->iconLoader()->iconPath(name, K3Icon::Desktop);
     d->m_customFile = path;
     d->m_customPixmap=QPixmap();
     updatePixmap();

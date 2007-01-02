@@ -194,23 +194,23 @@ void TKToolBarButton::setIcon( const QString& icon )
   d->m_iconName = icon;
   int iconSize = 16;
 
-  setPixmap( BarIcon(icon, iconSize, K3Icon::ActiveState, d->m_instance), false );
-  setDisabledPixmap( BarIcon(icon, iconSize, K3Icon::DisabledState, d->m_instance) );
-  setDefaultPixmap( BarIcon(icon, iconSize, K3Icon::DefaultState, d->m_instance) );
+  setPixmap( KIcon(icon, kapp->iconLoader()).pixmap(iconSize, KIcon::Active) );
+  setDisabledPixmap( KIcon(icon, kapp->iconLoader()).pixmap(iconSize, KIcon::Disabled) );
+  setDefaultPixmap( KIcon(icon, kapp->iconLoader()).pixmap(iconSize, KIcon::Normal) );
 }
 
 void TKToolBarButton::setDisabledIcon( const QString &icon )
 {
   d->m_disabledIconName = icon;
   int iconSize = 16;
-  setDisabledPixmap( BarIcon(icon, iconSize, K3Icon::DisabledState, d->m_instance) );
+  setDisabledPixmap( KIcon(icon, kapp->iconLoader()).pixmap(iconSize, KIcon::Disabled) );
 }
 
 void TKToolBarButton::setDefaultIcon( const QString &icon )
 {
   d->m_defaultIconName = icon;
   int iconSize = 16;
-  setDefaultPixmap( BarIcon(icon, iconSize, K3Icon::DefaultState, d->m_instance) );
+  setDefaultPixmap( KIcon(icon, kapp->iconLoader()).pixmap(iconSize, KIcon::Normal) );
 }
 
 QPixmap TKToolBarButton::getActivePixmap() const

@@ -24,6 +24,7 @@
 #ifndef koTemplateChooseDia_h
 #define koTemplateChooseDia_h
 
+#include <kinstance.h>
 #include <kpagedialog.h>
 #include <kicondialog.h>
 #include <k3iconview.h>

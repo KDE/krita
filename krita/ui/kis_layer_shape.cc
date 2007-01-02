@@ -41,6 +41,7 @@ KisLayerShape::KisLayerShape( KoShapeContainer * parent, KisLayerSP layer)
 
     setShapeId( KIS_LAYER_SHAPE_ID );
     setParent( parent );
+    parent->addChild(this);
 }
 
 KisLayerShape::~KisLayerShape()
@@ -91,4 +92,5 @@ void KisLayerShape::addChild( KoShape * shape )
         kDebug() << "Can only add mask shapes as children to layer shapes!\n";
         return;
     }
+    KoShapeContainer::addChild(shape);
 }

@@ -32,7 +32,12 @@ KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
 }
 
 KoShapeContainer::~KoShapeContainer() {
-    delete m_children;
+    if(m_children)
+    {
+        foreach (KoShape *shape, m_children->iterator())
+            shape->setParent(0);
+        delete m_children;
+    }
 }
 
 void KoShapeContainer::addChild(KoShape *shape) {

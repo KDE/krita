@@ -291,8 +291,9 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
 
 KisDoc2::~KisDoc2()
 {
+    kDebug() << "There are " << m_d->layerShapes.size() << " shapes" << endl;
     foreach( KoShape* shape, m_d->layerShapes ) {
-        removeShape( shape );
+        removeShape( shape);
         delete shape; // XXX: What happes with stuff on the
                       // clipboard? And how about undo information?
     }
@@ -1378,6 +1379,7 @@ void KisDoc2::removeShape( KoShape* shape )
     kDebug() << ">>>>> KisDoc2::removeShape: " << shape->shapeId()  << ", active layer: " << m_d->activeLayerShape() << endl;
 
     KoShapeContainer * container = shape->parent();
+    kDebug() << "parent is " << container << endl;
     if ( container ) {
         container->removeChild( shape );
 
@@ -1446,6 +1448,7 @@ void KisDoc2::slotLayerAdded( KisLayerSP layer )
 
     // Put the layer in the right place in the hierarchy
     shape->setParent( parent );
+    parent->addChild(shape);
 
     m_d->layerShapes[layer] = shape;
 

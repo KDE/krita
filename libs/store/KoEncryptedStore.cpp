@@ -540,7 +540,7 @@ bool KoEncryptedStore::openRead( const QString& name ) {
         while( true ) {
             QByteArray pass;
             QSecureArray password;
-            int keepPass = 0;
+            bool keepPass = false;
             // I already have a password! Let's try it. If it's not good, we can dump it, anyway.
             if( !m_password.isEmpty( ) ) {
                 password = m_password;
@@ -549,10 +549,12 @@ bool KoEncryptedStore::openRead( const QString& name ) {
             else {
                 QByteArray pass;
                 if( !m_filename.isNull( ) )
-                    keepPass = 1;
-                if( KPasswordDialog::getPassword( m_window, pass, i18n( "Please enter the password to open this file." ), &keepPass ) == KPasswordDialog::Rejected ) {
+                    keepPass = true;
+                QString passwordString = KPasswordDialog::getPassword( i18n( "Please enter the password to open this file." ),
+                    QString(), &keepPass, m_window );
+                if( passwordString.isNull() )
                     return false;
-                }
+                pass = passwordString.toUtf8();    
                 password = QSecureArray( pass );
                 if( password.isEmpty( ) ) {
                     continue;

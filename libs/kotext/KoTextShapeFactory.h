@@ -20,15 +20,11 @@
 #ifndef TEXTSHAPEFACTORY_H
 #define TEXTSHAPEFACTORY_H
 
-//#include <QWidget>
 #include <KoShapeFactory.h>
-
-//#include <koffice_export.h>
 
 class KoShape;
 
 class KoTextShapeFactory : public KoShapeFactory {
-
     Q_OBJECT
 
 public:
@@ -39,7 +35,7 @@ public:
     KoShape *createDefaultShape();
     KoShape *createShape(const KoProperties * params) const;
 
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    //QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 
 #endif

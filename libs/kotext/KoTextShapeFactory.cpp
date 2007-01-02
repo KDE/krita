@@ -54,10 +54,12 @@ KoShape *KoTextShapeFactory::createShape(const KoProperties * params) const {
     return shape;
 }
 
+#if 0
 QList<KoShapeConfigWidgetBase*> KoTextShapeFactory::createShapeOptionPanels() {
     QList<KoShapeConfigWidgetBase*> answer;
     answer.append(new KoShapeGeometry());
     return answer;
 }
+#endif
 
 #include "KoTextShapeFactory.moc"

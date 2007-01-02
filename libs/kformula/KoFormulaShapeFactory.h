@@ -32,9 +32,10 @@ class KoFormulaShapeFactory : public KoShapeFactory
 public:
     /// constructor
     explicit KoFormulaShapeFactory( QObject *parent );
-    ~KoFormulaShapeFactory() {}
+    ~KoFormulaShapeFactory();
+
     KoShape* createDefaultShape();
-    KoShape* createShape(const KoProperties * params) const;
+    KoShape* createShape( const KoProperties * params ) const;
 };
 
 #endif // KOFORMULASHAPEFACTORY_H

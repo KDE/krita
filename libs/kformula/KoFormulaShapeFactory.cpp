@@ -20,7 +20,6 @@
 #include "KoFormulaShape.h"
 
 #include <KoShapeFactory.h>
-
 #include <klocale.h>
 
 KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
@@ -38,6 +37,9 @@ KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
     t.properties = props;
     addTemplate( t );
 }
+
+KoFormulaShapeFactory::~KoFormulaShapeFactory()
+{}
 
 KoShape* KoStarShapeFactory::createDefaultShape()
 {

@@ -8,9 +8,12 @@ include_directories( ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES})
 
 ########### next target ###############
 
-set(kformulalib_LIB_SRCS 
+set(kformulalib_LIB_SRCS
+#   KoFormulaShapePlugin.cpp
 #   KoFormulaShape.cpp
+#   KoFormulaShapeFactory.cpp
 #   KoFormulaTool.cpp
+#   KoFormulaToolFactory.cpp
 #   AttributeManager.cpp
 #   FormulaRenderer.cpp
    FormulaCursor.cpp 

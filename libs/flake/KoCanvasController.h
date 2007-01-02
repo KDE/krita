@@ -219,7 +219,6 @@ private:
 
 private:
     KoCanvasBase *m_canvas;
-    QWidget *m_canvasWidget;
     Viewport *m_viewport;
     bool m_centerCanvas;
     KoToolDocker * m_toolOptionDocker;

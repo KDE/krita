@@ -42,7 +42,6 @@
 KoCanvasController::KoCanvasController(QWidget *parent)
     : QScrollArea(parent)
     , m_canvas(0)
-    , m_canvasWidget(0)
     , m_toolOptionDocker(0)
 {
     setFrameShape(NoFrame);
@@ -76,11 +75,15 @@ KoCanvasBase* KoCanvasController::canvas() const {
 }
 
 int KoCanvasController::visibleHeight() const {
+    if(m_canvas == 0)
+        return 0;
+    QWidget *canvasWidget = canvas()->canvasWidget();
+
     int height1;
-    if(m_canvasWidget == 0)
+    if(canvasWidget == 0)
         height1 = m_viewport->height();
     else
-        height1 = qMin(m_viewport->height(), m_canvasWidget->height());
+        height1 = qMin(m_viewport->height(), canvasWidget->height());
     int height2 = height();
     if(horizontalScrollBar() && horizontalScrollBar()->isVisible())
         height2 -= horizontalScrollBar()->height();
@@ -88,11 +91,15 @@ int KoCanvasController::visibleHeight() const {
 }
 
 int KoCanvasController::visibleWidth() const {
+    if(m_canvas == 0)
+        return 0;
+    QWidget *canvasWidget = canvas()->canvasWidget();
+
     int width1;
-    if(m_canvasWidget == 0)
+    if(canvasWidget == 0)
         width1 = m_viewport->width();
     else
-        width1 = qMin(m_viewport->width(), m_canvasWidget->width());
+        width1 = qMin(m_viewport->width(), canvasWidget->width());
     int width2 = width();
     if(verticalScrollBar() && verticalScrollBar()->isVisible())
         width2 -= verticalScrollBar()->width();
@@ -233,6 +240,10 @@ void KoCanvasController::Viewport::centerCanvas(bool centered) {
 }
 
 void KoCanvasController::Viewport::dragEnterEvent(QDragEnterEvent *event) {
+    // if not a canvas set then ignore this, makes it possible to assume
+    // we have a canvas in all the support methods.
+    if(! (m_parent->canvas() && m_parent->canvas()->canvasWidget()))
+        return;
     if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
             event->mimeData()->hasFormat(SHAPEID_MIMETYPE)) {
 
@@ -298,7 +309,9 @@ void KoCanvasController::Viewport::dropEvent(QDropEvent *event) {
 }
 
 QPointF KoCanvasController::Viewport::correctPosition(const QPoint &point) const {
-    QPoint correctedPos(point.x() - m_parent->canvasOffsetX(), point.y() - m_parent->canvasOffsetY());
+    QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
+    Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
+    QPoint correctedPos(point.x() - canvasWidget->x(), point.y() - canvasWidget->y());
     correctedPos -= m_parent->canvas()->documentOrigin();
     return m_parent->canvas()->viewConverter()->viewToDocument(correctedPos);
 }
@@ -315,8 +328,10 @@ void KoCanvasController::Viewport::dragMoveEvent (QDragMoveEvent *event) {
 
 void KoCanvasController::Viewport::repaint(KoShape *shape) {
     QRect rect = m_parent->canvas()->viewConverter()->documentToView(shape->boundingRect()).toRect();
-    rect.moveLeft(rect.left() + m_parent->canvasOffsetX());
-    rect.moveTop(rect.top() + m_parent->canvasOffsetY());
+    QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
+    Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
+    rect.moveLeft(rect.left() + canvasWidget->x());
+    rect.moveTop(rect.top() + canvasWidget->y());
     rect.adjust(-2, -2, 2, 2); // update for antialias
     update(rect);
 }
@@ -346,7 +361,9 @@ void KoCanvasController::Viewport::paintEvent(QPaintEvent *event) {
         KoViewConverter *vc = m_parent->canvas()->viewConverter();
 
         painter.save();
-        painter.translate(m_parent->canvasOffsetX(), m_parent->canvasOffsetY());
+        QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
+        Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
+        painter.translate(canvasWidget->x(), canvasWidget->y());
         QPointF offset = vc->documentToView(m_draggedShape->position());
         painter.setOpacity(0.6);
         painter.translate(offset.x(), offset.y());

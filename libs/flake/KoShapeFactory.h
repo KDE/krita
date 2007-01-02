@@ -66,20 +66,21 @@ struct FLAKE_EXPORT KoShapeTemplate {
  * ship a factory. That factory will extend this class and set variable data like
  * a toolTip and icon in the constructor of that extending class.
  *
- * An example usage would be:<pre>
+ * An example usage would be:
+@code
 class MyShapeFactory : public KoShapeFactory {
 public:
-    MyShapeFactory(QObject *parent, const QStringList&)
+    MyShapeFactory(QObject *parent)
         : KoShapeFactory(parent, "MyShape", i18n("My Shape")) {
         setToolTip(i18n("A nice shape"));
     }
     ~MyShapeFactory() {}
     // more methods here
 };
-K_EXPORT_COMPONENT_FACTORY(myLibrary,
-     KGenericFactory<MyShapeFactory>( "MyShape" ) )
-</pre>
+@endcode
 
+ * After you created the factory you should create a plugin that can announce the factory to the
+ * KoShapeRegistry.  See the KoPluginLoader as well.
  */
 class FLAKE_EXPORT KoShapeFactory : public QObject {
     Q_OBJECT

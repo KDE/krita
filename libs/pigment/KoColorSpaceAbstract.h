@@ -329,8 +329,20 @@ class KoColorSpaceAbstract : public KoColorSpace {
         }
 
     protected:
-        inline const typename _CSTraits::channels_type* nativeArray(const quint8 * a) const { return reinterpret_cast<const typename _CSTraits::channels_type*>(a); }
-        inline typename _CSTraits::channels_type* nativeArray(quint8 * a) const { return reinterpret_cast<typename _CSTraits::channels_type*>(a); }
+        /**
+         * Convenient function for transforming a quint8* array in a pointer of the native channels type
+         */
+        inline const typename _CSTraits::channels_type* nativeArray(const quint8 * a) const
+        {
+          return reinterpret_cast<const typename _CSTraits::channels_type*>(a);
+        }
+        /**
+         * Convenient function for transforming a quint8* array in a pointer of the native channels type
+         */
+        inline typename _CSTraits::channels_type* nativeArray(quint8 * a) const
+        {
+          return reinterpret_cast<typename _CSTraits::channels_type*>(a);
+        }
     private:
         DWORD m_cmType;                           // The colorspace type as defined by littlecms
         icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files

@@ -26,6 +26,9 @@
 /**
  * Inherits this colorspace if you can't provide all the functions defined in KoColorSpace
  * and that you colorspace is unsupported by LCMS.
+ *
+ * If you choose _fallback_ == KoRGB16Fallback, you need to reimplement toRgbA16/fromRgbA16.
+ * If you choose _fallback_ == KoLAB16Fallback, you need to reimplement toLabA16/fromLabA16
  */
 template<class _CSTraits, class _fallback_>
 class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {

@@ -23,6 +23,9 @@
 #include <KoColorTransformation.h>
 #include <KoColorSpace.h>
 
+/**
+ * This class use a convertion to LabA16 to darken pixels. Do not use directly. Use KoColorSpace::createDarkenAdjustement
+ */
 struct KoFallBackDarkenTransformation : public KoColorTransformation
 {
     KoFallBackDarkenTransformation(const KoColorSpace* cs, qint32 shade, bool compensate, double compensation) : m_colorSpace(cs), m_shade(shade), m_compensate(compensate), m_compensation(compensation)
@@ -56,7 +59,10 @@ struct KoFallBackDarkenTransformation : public KoColorTransformation
     double m_compensation;
 };
 
-
+/**
+ * This class implement a color transformation that first convert to RGB16 before feeding an other
+ * KoColorTransformation from the RGB16 colorspace.
+ */
 class KoRGB16FallbackColorTransformation : public KoColorTransformation {
   public:
     KoRGB16FallbackColorTransformation(const KoColorSpace* cs, const KoColorSpace* fallBackCS, KoColorTransformation* transfo)
@@ -89,9 +95,14 @@ class KoRGB16FallbackColorTransformation : public KoColorTransformation {
     KoColorTransformation* m_colorTransformation;
 };
 
-
+/**
+ * Use this class as a parameter of the template KoIncompleteColorSpace, if you want to use RGB16 as a fallback
+ */
 class KoRGB16Fallback {
   public:
+    /**
+     * Use internally by KoIncompleteColorSpace to convert to LabA16
+     */
     static inline void toLabA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
     {
         int length = nPixels * fallBackCS->pixelSize();
@@ -102,7 +113,9 @@ class KoRGB16Fallback {
         cs->toRgbA16( src, (quint8*)buf.data(), nPixels);
         fallBackCS->toLabA16( (quint8*)buf.data(), dst, nPixels);
     }
-
+    /**
+     * Use internally by KoIncompleteColorSpace to convert from LabA16
+     */
     static inline void fromLabA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
     {
         int length = nPixels * fallBackCS->pixelSize();
@@ -113,6 +126,9 @@ class KoRGB16Fallback {
         fallBackCS->toLabA16(src, (quint8*)buf.data(), nPixels);
         cs->toRgbA16( (quint8*)buf.data(), dst, nPixels);
     }
+    /**
+     * Should not be called or that mean the fallback doesn't work
+     */
     static inline void fromRgbA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
     {
         Q_UNUSED(cs);
@@ -123,6 +139,9 @@ class KoRGB16Fallback {
         Q_UNUSED(nPixels);
         kError() << "THIS FUNCTION SHOULDN'T BE EXECUTED YOU NEED TO REIMPLEMENT fromRgbA16 IN YOUR COLORSPACE"  << endl;
     }
+    /**
+     * Should not be called or that mean the fallback doesn't work
+     */
     static inline  void toRgbA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
     {
         Q_UNUSED(cs);
@@ -133,10 +152,16 @@ class KoRGB16Fallback {
         Q_UNUSED(nPixels);
         kError() << "THIS FUNCTION SHOULDN'T BE CALLED YOU NEED TO REIMPLEMENT toRgbA16 IN YOUR COLORSPACE"  << endl;
     }
+    /**
+     * Use internally by KoIncompleteColorSpace to create the fallback colorspace
+     */
     static inline KoColorSpace* createColorSpace()
     {
       return KoColorSpaceRegistry::instance()->rgb16();
     }
+    /**
+     * Use internally by KoIncompleteColorSpace to create a transformation
+     */
     static inline KoColorTransformation* createTransformation(const KoColorSpace* cs, const KoColorSpace* fallBackCS, KoColorTransformation* c)
     {
       return new KoRGB16FallbackColorTransformation(cs, fallBackCS, c);

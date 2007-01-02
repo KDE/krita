@@ -53,16 +53,44 @@ enum ColorSpaceIndependence {
     TO_RGBA16
 };
 
+/**
+ * Base class of the mix color operation. It's defined by sum(colors[i] * weights[i]) / 255.
+ * You access the KoConvolutionOp of a colorspace by calling KoColorSpace::mixColorsOp.
+ */
 class KoMixColorsOp {
   public:
     virtual ~KoMixColorsOp() { }
+    /**
+     * Mix the colors.
+     * @param colors a pointer toward the source pixels
+     * @param weights the coeffient of the source pixels
+     * @param nColors the number of pixels in the colors array
+     * @param dst the destination pixel
+     */
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const = 0;
 };
 
+/**
+ * Base class of a convolution operation. A convolution operation is defined
+ * by sum(colors[i] * kernelValues[i]) / factor + offset). The most well known
+ * convolution is the gaussian blur.
+ * You access the KoConvolutionOp of a colorspace by calling KoColorSpace::convolutionOp.
+ */
 class KoConvolutionOp {
   public:
     virtual ~KoConvolutionOp() { }
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const = 0;
+    /**
+     * Convolve the colors.
+     * @param colors a pointer toward the source pixels
+     * @param kernelValues the coeffient of the source pixels
+     * @param channelFlags determines which channels are affected
+     * @param dst the destination pixel
+     * @param factor usually the factor is equal to the sum of kernelValues
+     * @param offset the offset which is added to the result, usefull when the sum of kernelValues is equal to 0
+     * This function is thread-safe.
+     * @param nColors the number of pixels in the colors array
+     */
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const = 0;
 };
 
 /**
@@ -454,6 +482,9 @@ public:
       m_mixColorsOp->mixColors(colors, weights, nColors, dst);
     }
 
+    /**
+     * @return the mix color operation of this colorspace (do not delete it locally, it's deleted by the colorspace).
+     */
     inline KoMixColorsOp* mixColorsOp() const {
       return m_mixColorsOp;
     }
@@ -467,7 +498,9 @@ public:
       Q_ASSERT(m_convolutionOp);
       m_convolutionOp->convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nPixels);
     }
-
+    /**
+     * @return the convolution operation of this colorspace (do not delete it locally, it's deleted by the colorspace).
+     */
     inline KoConvolutionOp* convolutionOp() const {
       return m_convolutionOp;
     }

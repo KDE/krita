@@ -588,7 +588,7 @@ public:
     /**
      * @brief Close a open subpath
      *
-     * The subpath is closed be inserting as segment before the given point, makeing
+     * The subpath is closed be inserting a segment between the start and end point, makeing
      * the given point the new start point of the subpath.
      *
      * @return the new position of the old first point in the subpath

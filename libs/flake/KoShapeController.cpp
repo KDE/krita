@@ -49,7 +49,7 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape )
     KoShapeFactory *factory = KoShapeRegistry::instance()->get( shape->shapeId() );
     Q_ASSERT(factory);
     int z=0;
-    foreach(KoShape *sh, m_canvas->shapeManager()->shapesAt(shape->boundingRect()))
+    foreach(KoShape *sh, m_canvas->shapeManager()->shapes())
         z = qMax(z, sh->zIndex());
     shape->setZIndex(z+1);
 

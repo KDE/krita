@@ -26,7 +26,7 @@
 
 #include "FormulaCursor.h"
 #include "FormulaElement.h"
-#include "kformulacommand.h"
+//#include "kformulacommand.h"
 #include "RootElement.h"
 #include "SequenceElement.h"
 

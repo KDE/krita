@@ -33,7 +33,7 @@
 #include "contextstyle.h"
 #include "fontstyle.h"
 #include "FormulaElement.h"
-#include "kformulacommand.h"
+//#include "kformulacommand.h"
 #include "SequenceElement.h"
 #include "symboltable.h"
 
@@ -235,7 +235,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 
 void TextElement::dispatchFontCommand( FontCommand* cmd )
 {
-    cmd->addTextElement( this );
+    //cmd->addTextElement( this );
 }
 
 void TextElement::setCharStyle( CharStyle cs )

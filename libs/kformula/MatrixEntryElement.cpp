@@ -22,7 +22,7 @@
 #include <KoXmlWriter.h>
 
 #include "FormulaContainer.h"
-#include "kformulacommand.h"
+//#include "kformulacommand.h"
 #include "FormulaCursor.h"
 #include "SpaceElement.h"
 #include <klocale.h>

@@ -39,7 +39,7 @@
 #include "FormulaCursor.h"
 #include "FormulaElement.h"
 #include "FractionElement.h"
-#include "kformulacommand.h"
+//#include "kformulacommand.h"
 #include "kformulacompatibility.h"
 #include "FormulaContainer.h"
 #include "MatrixElement.h"

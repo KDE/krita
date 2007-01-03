@@ -24,12 +24,12 @@
 #include "IdentifierElement.h"
 #include "OperatorElement.h"
 #include "NumberElement.h"
-#include "kformulacommand.h"
+//#include "kformulacommand.h"
 #include "FormulaContainer.h"
 #include "FormulaElement.h"
 #include "ElementFactory.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent ) {}
 
@@ -206,4 +206,4 @@ void IdentifierElement::setStyleVariant( StyleAttributes& style )
     }
 }
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula

@@ -24,17 +24,29 @@
 
 class KoShape;
 
-/// Factory for the formula shape 
-class KoFormulaShapeFactory : public KoShapeFactory
-{
+/**
+ * @short Factory for the formula shape
+ *
+ * This class provides a generic way to obtain instances of the KoFormulaShape class.
+ * It follows the factory pattern and implements the two virtual methods 
+ * createDefaultShape() and createShape() of KoShapeFactory.
+ *
+ * @since 2.0
+ */
+class KoFormulaShapeFactory : public KoShapeFactory {
     Q_OBJECT
 
 public:
     /// constructor
     explicit KoFormulaShapeFactory( QObject *parent );
+
+    /// destructor
     ~KoFormulaShapeFactory();
 
+    /// reimplemented
     KoShape* createDefaultShape();
+
+    /// reimplemented
     KoShape* createShape( const KoProperties * params ) const;
 };
 

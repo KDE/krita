@@ -24,12 +24,12 @@
 #include "TextElement.h"
 #include "IdentifierElement.h"
 #include "OperatorElement.h"
-#include "kformulacommand.h"
+//#include "kformulacommand.h"
 #include "FormulaContainer.h"
 #include "FormulaElement.h"
 #include "ElementFactory.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent ) {}
 
@@ -151,5 +151,4 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
 }
 */
 
-
-KFORMULA_NAMESPACE_END
+} // namespace KFormula

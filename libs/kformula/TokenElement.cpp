@@ -30,7 +30,7 @@
 #include "GlyphElement.h"
 #include "TokenElement.h"
 #include "IdentifierElement.h"
-#include "kformulacommand.h"
+//#include "kformulacommand.h"
 #include "FormulaContainer.h"
 //#include "kformuladocument.h"
 #include "FormulaElement.h"

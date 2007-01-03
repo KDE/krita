@@ -321,7 +321,6 @@ KoSplitSegmentCommand::KoSplitSegmentCommand( const QList<KoPathPointData> & poi
 : QUndoCommand( parent )
 , m_deletePoints( true )
 {
-    //TODO this does not yet weork for the last segment in a closed subpath
     if ( splitPosition < 0 )
         splitPosition = 0;
     if ( splitPosition > 1 )
@@ -331,10 +330,18 @@ KoSplitSegmentCommand::KoSplitSegmentCommand( const QList<KoPathPointData> & poi
     for ( ; it != pointDataList.end(); ++it )
     {
         KoPathShape * pathShape = it->m_pathShape;
-        KoPathPointIndex pi( it->m_pointIndex );
 
+        KoPathPointIndex pi( it->m_pointIndex );
         KoPathPoint * before = pathShape->pointByIndex( pi );
-        ++pi.second;
+
+        if ( before->properties() & KoPathPoint::CloseSubpath )
+        {
+            pi.second = 0;
+        }
+        else
+        {
+            ++pi.second;
+        }
         KoPathPoint * after = pathShape->pointByIndex( pi );
 
         // should not happen but to be sure
@@ -394,10 +401,19 @@ void KoSplitSegmentCommand::redo()
         const KoPathPointData &pdBefore = m_pointDataList.at( i );
         KoPathShape * pathShape = pdBefore.m_pathShape;
         KoPathPointIndex piAfter = pdBefore.m_pointIndex;
-        ++piAfter.second;
 
         KoPathPoint * before = pathShape->pointByIndex( pdBefore.m_pointIndex );
+
+        if ( before->properties() & KoPathPoint::CloseSubpath )
+        {
+            piAfter.second = 0;
+        }
+        else
+        {
+            ++piAfter.second;
+        }
         KoPathPoint * after = pathShape->pointByIndex( piAfter );
+        piAfter.second = pdBefore.m_pointIndex.second + 1;
 
         if ( before->activeControlPoint2() )
         {
@@ -431,6 +447,11 @@ void KoSplitSegmentCommand::undo()
         KoPathPoint * before = pathShape->pointByIndex( pdBefore.m_pointIndex );
 
         m_points[i] = pathShape->removePoint( piAfter );
+
+        if ( m_points[i]->properties() & KoPathPoint::CloseSubpath )
+        {
+            piAfter.second = 0;
+        }
 
         KoPathPoint * after = pathShape->pointByIndex( piAfter );
 

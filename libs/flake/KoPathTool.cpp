@@ -833,16 +833,27 @@ QList<KoPathPointData> KoPathTool::KoPathPointSelection::selectedSegmentsData() 
     qSort( pd );
 
     KoPathPointData last( 0, KoPathPointIndex( -1, -1 ) );
+    KoPathPointData lastSubpathStart( 0, KoPathPointIndex( -1, -1 ) );
 
     QList<KoPathPointData>::const_iterator it( pd.begin() );
     for ( ; it != pd.end(); ++it )
     {
+        if ( it->m_pointIndex.second == 0 )
+            lastSubpathStart = *it;
+
         if ( last.m_pathShape == it->m_pathShape 
              && last.m_pointIndex.first == it->m_pointIndex.first 
              && last.m_pointIndex.second + 1 == it->m_pointIndex.second  )
         {
             pointData.append( last );
         }
+
+        if ( lastSubpathStart.m_pathShape == it->m_pathShape 
+             && it->m_pathShape->pointByIndex( it->m_pointIndex )->properties() & KoPathPoint::CloseSubpath )
+        {
+            pointData.append( *it );
+        }
+
         last = *it;
     }
 

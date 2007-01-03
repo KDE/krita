@@ -31,12 +31,12 @@ void TestPosition::initTestCase() {
 }
 
 void TestPosition::cleanupTestCase() {
+    delete container;
+    delete container2;
     delete shape1;
     delete shape2;
     delete childShape1;
     delete childShape2;
-    delete container;
-    delete container2;
 }
 
 void TestPosition::testBasePosition() {

@@ -89,6 +89,7 @@ class KRITAIMAGE_EXPORT ExifValue {
         {
             if(m_type == EXIF_TYPE_UNDEFINED)
             {
+                ((UByteArray*)m_value)->resize(size);
                 qCopy(data, data + size, ((UByteArray*)m_value)->begin());
                 m_components = size;
             }

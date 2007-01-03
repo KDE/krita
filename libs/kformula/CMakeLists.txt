@@ -1,7 +1,7 @@
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 
 
-include_directories(${QT_INCLUDES} ${FLAKE_INCLUDES} ${KOFFICECORE_INCLUDES})
+include_directories(${QT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
 set( formulashape_PART_SRCS
 #   KoFormulaShapePlugin.cpp

@@ -25,6 +25,9 @@
 #include <qdom.h> 
 #include <QMap>
 
+/**
+ * This class contains all the value extracted from EXIF Metainformation.
+ */
 class KisExifInfo
 {
     public:
@@ -33,7 +36,12 @@ class KisExifInfo
 
         virtual bool load(const QDomElement& elmt);
         virtual QDomElement save(QDomDocument& doc);
-
+        /**
+         * Get a value.
+         * @param name the name of the value
+         * @param value an ExifValue where the value will be stored
+         * @return true if a value with the given name was found or false otherwise
+         */
         bool getValue(QString name, ExifValue& value)
         {
             if ( m_values.find( name ) == m_values.end() ) {
@@ -44,6 +52,11 @@ class KisExifInfo
                 return true;
             }
         }
+        /**
+         * Set a value.
+         * @param name the name of the value.
+         * @param value the value
+         */
         void setValue(QString name, ExifValue value)
         {
             m_values[name] = value;

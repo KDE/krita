@@ -27,16 +27,26 @@
 #include <krita_export.h>
 typedef QVector<quint8> UByteArray;
 
+/**
+ * This structure represents an unsigned rational for used
+ * in exif meta information.
+ */
 struct KisExifRational {
     quint32 numerator;
     quint32 denominator;
 };
-
+/**
+ * This structure represents a signed rational for used
+ * in exif meta information.
+ */
 struct KisExifSRational {
     qint32 numerator;
     qint32 denominator;
 };
 
+/**
+ * This class holds a value extracted from an exif info.
+ */
 class KRITAIMAGE_EXPORT ExifValue {
     typedef union {
         quint8 m_byte;
@@ -51,6 +61,7 @@ class KRITAIMAGE_EXPORT ExifValue {
         double m_double;
     } ExifNumber;
     public:
+        /// Type in the Exif specification
         enum ExifType {
             EXIF_TYPE_BYTE       =  1,
             EXIF_TYPE_ASCII      =  2,
@@ -66,14 +77,31 @@ class KRITAIMAGE_EXPORT ExifValue {
             EXIF_TYPE_DOUBLE     = 12,
             EXIF_TYPE_UNKNOW     = 13
         };
+        /// Byte order of the data
         enum ByteOrder {
             BYTE_ORDER_MOTOROLA,
             BYTE_ORDER_INTEL
         };
+        /// Initialize an empty exif value
         ExifValue() : m_ifd(-1), m_type(EXIF_TYPE_UNKNOW), m_components(0), m_value(0) { }
+        /**
+         * @param type the type of the data
+         * @param data a pointer to the array representing the data,
+         *             it will be up to the constructor to decode it
+         * @param size the size of the data
+         * @param idf the bank in the exif where this data is stored
+         * @param components the number of components
+         * @param order the endianness of the data
+         */
         ExifValue(ExifType type, unsigned char *data, unsigned int size, int ifd, uint components, ExifValue::ByteOrder order);
        	virtual ~ExifValue() {} 
+       	/**
+       	 * load data as saved in a .kra file
+       	 */
         virtual bool load(const QDomElement& elmt);
+        /**
+         * save data as saved in a .kra file
+         */
         virtual QDomElement save(QDomDocument& doc);
 
         /**

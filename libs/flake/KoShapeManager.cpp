@@ -269,6 +269,8 @@ void KoShapeManager::updateTree()
         DetectCollision() {}
         void detect(KoRTree<KoShape *> &m_tree, KoShape *s) {
             foreach(KoShape *shape, m_tree.intersects( s->boundingRect() )) {
+                if(shape == s)
+                    continue;
                 if(s->zIndex() <= shape->zIndex())
                     // Moving a shape will only make it collide with shapes below it.
                     continue;

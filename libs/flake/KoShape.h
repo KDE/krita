@@ -523,7 +523,7 @@ protected:
     /**
      * Update the position of the shape in the tree of the KoShapeManager.
      */
-    void updateTree();
+    void notifyChanged();
 
     /// Used by shapeChanged() to select which change was made
     enum ChangeType {
@@ -532,7 +532,8 @@ protected:
         ScaleChanged,   ///< used after a scale()
         ShearChanged,   ///< used after a shear()
         SizeChanged,    ///< used after a resize()
-        ParentChanged   ///< used after a setParent()
+        ParentChanged,   ///< used after a setParent()
+        CollisionDetected ///< used when another shape moved in our boundingrect
     };
 
     /**
@@ -541,6 +542,9 @@ protected:
      * @param type an indicator which type was changed.
      */
     virtual void shapeChanged(ChangeType type) { Q_UNUSED(type); }
+
+    void setCollisionDetection(bool detect) { m_detectCollision = detect; }
+    bool collisionDetection() { return m_detectCollision; }
 
 private:
     double m_scaleX;
@@ -560,7 +564,7 @@ private:
     int m_zIndex;
     KoShapeContainer *m_parent;
 
-    bool m_visible, m_locked, m_keepAspect, m_selectable;
+    bool m_visible, m_locked, m_keepAspect, m_selectable, m_detectCollision;
 
 
     QSet<KoShapeManager *> m_shapeManagers;

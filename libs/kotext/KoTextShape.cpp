@@ -42,6 +42,7 @@ KoTextShape::KoTextShape()
     m_textShapeData->document()->setDocumentLayout(lay);
 
     lay->setInlineObjectTextManager(new KoInlineTextObjectManager(lay));
+    setCollisionDetection(true);
 }
 
 KoTextShape::~KoTextShape() {
@@ -67,7 +68,7 @@ QPointF KoTextShape::convertScreenPos(const QPointF &point) {
 }
 
 void KoTextShape::shapeChanged(ChangeType type) {
-    if(type == PositionChanged || type == SizeChanged) {
+    if(type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->faul();
         m_textShapeData->fireResizeEvent();
     }

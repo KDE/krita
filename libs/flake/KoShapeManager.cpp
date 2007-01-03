@@ -231,8 +231,8 @@ KoShape * KoShapeManager::shapeAt( const QPointF &position, KoFlake::ShapeSelect
 QList<KoShape *> KoShapeManager::shapesAt( const QRectF &rect, bool omitHiddenShapes )
 {
     updateTree();
-    //TODO check if object is really in the rect and not 
-    // only the bounding rect of the object.
+    //TODO check if object (outline) is really in the rect and we are not just
+    // adding objects by their bounding rect
     if( omitHiddenShapes ) {
         QList<KoShape*> intersectedShapes( m_tree.intersects( rect ) );
         for(int count = intersectedShapes.count()-1; count >= 0; count--) {
@@ -256,20 +256,52 @@ void KoShapeManager::repaint( QRectF &rect, const KoShape *shape, bool selection
     }
 }
 
-void KoShapeManager::updateTree( KoShape * shape )
+void KoShapeManager::notifyShapeChanged( KoShape * shape )
 {
     m_aggregate4update.insert( shape );
 }
 
 void KoShapeManager::updateTree()
 {
+    // for detecting collisions between shapes.
+    class DetectCollision {
+      public:
+        DetectCollision() {}
+        void detect(KoRTree<KoShape *> &m_tree, KoShape *s) {
+            foreach(KoShape *shape, m_tree.intersects( s->boundingRect() )) {
+                if(s->zIndex() <= shape->zIndex())
+                    // Moving a shape will only make it collide with shapes below it.
+                    continue;
+                if(shape->collisionDetection() && !shapesWithCollisionDetection.contains(shape))
+                    shapesWithCollisionDetection.append(shape);
+            }
+        }
+
+        void fireSignals() {
+            foreach(KoShape *shape, shapesWithCollisionDetection)
+                shape->shapeChanged(KoShape::CollisionDetected);
+        }
+
+      private:
+        QList<KoShape*> shapesWithCollisionDetection;
+    };
+    DetectCollision detector;
+    foreach ( KoShape *shape, m_aggregate4update )
+        detector.detect(m_tree, shape);
+
     foreach ( KoShape * shape, m_aggregate4update )
     {
         m_tree.remove( shape );
         QRectF br( shape->boundingRect() );
         m_tree.insert( br, shape );
     }
+
+    // do it again to see which shapes we intersect with _after_ moving.
+    foreach ( KoShape *shape, m_aggregate4update )
+        detector.detect(m_tree, shape);
     m_aggregate4update.clear();
+
+    detector.fireSignals();
 }
 
 #include "KoShapeManager.moc"

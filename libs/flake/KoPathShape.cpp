@@ -688,7 +688,7 @@ void KoPathShape::closeMerge()
 
 void KoPathShape::update()
 {
-    updateTree();
+    notifyChanged();
 }
 
 QPointF KoPathShape::normalize()

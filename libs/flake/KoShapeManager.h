@@ -128,13 +128,13 @@ public:
     /**
      * Update the tree for finding the shapes.
      * This will remove the shape from the tree and will reinsert it again.
-     * The update to the tree will be posponed until it is needed so that successive calles
+     * The update to the tree will be posponed until it is needed so that successive calls
      * will be merged into one.
      * @param shape the shape to updated its position in the tree.
      */
-    void updateTree( KoShape * shape );
+    void notifyShapeChanged( KoShape * shape );
 
-protected:
+private:
     /**
      * Update the tree when there are shapes in m_aggregate4update. This is done so not all
      * updates to the tree are done when they are asked for but when they are needed.

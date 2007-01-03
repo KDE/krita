@@ -115,8 +115,9 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 }
 
 void KoShapeContainer::shapeChanged(ChangeType type) {
-    Q_UNUSED(type);
     if(m_children == 0)
+        return;
+    if(! (type == RotationChanged || type == ScaleChanged || type == ShearChanged || type == SizeChanged))
         return;
     m_children->containerChanged(this);
     foreach (KoShape *shape, m_children->iterator())

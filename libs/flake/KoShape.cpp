@@ -50,6 +50,7 @@ KoShape::KoShape()
 , m_locked( false )
 , m_keepAspect( false )
 , m_selectable( true )
+, m_detectCollision( false )
 , m_userData(0)
 , m_appData(0)
 {
@@ -165,7 +166,7 @@ void KoShape::recalcMatrix()
 {
     m_matrix = transformationMatrix(0);
     m_invMatrix = m_matrix.inverted();
-    updateTree();
+    notifyChanged();
 }
 
 QMatrix KoShape::transformationMatrix(const KoViewConverter *converter) const {
@@ -327,11 +328,11 @@ void KoShape::moveBy(double distanceX, double distanceY) {
     setAbsolutePosition(QPointF(p.x() + distanceX, p.y() + distanceY));
 }
 
-void KoShape::updateTree()
+void KoShape::notifyChanged()
 {
     foreach( KoShapeManager * manager, m_shapeManagers )
     {
-        manager->updateTree( this );
+        manager->notifyShapeChanged( this );
     }
 }
 

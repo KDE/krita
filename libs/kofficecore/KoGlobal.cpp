@@ -37,7 +37,6 @@
 #include <kstandarddirs.h>
 #include <kstaticdeleter.h>
 #include <kimageio.h>
-#include <kiconloader.h>
 #include <kstandarddirs.h>
 
 
@@ -59,9 +58,6 @@ KoGlobal::KoGlobal()
 
     // Tell KStandardDirs about the koffice prefix
     KGlobal::dirs()->addPrefix(PREFIX);
-
-    // Tell the iconloader about share/apps/koffice/icons
-    kapp->iconLoader()->addAppDir("koffice");
 
     // Another way to get the DPI of the display would be QPaintDeviceMetrics,
     // but we have no widget here (and moving this to KoView wouldn't allow

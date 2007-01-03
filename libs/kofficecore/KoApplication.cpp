@@ -34,6 +34,7 @@
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 #include <stdlib.h>
 
 void qt_generate_epsf( bool b );
@@ -61,6 +62,9 @@ KoApplication::KoApplication()
         : KApplication( initHack() )
 {
     d = new KoApplicationPrivate;
+
+    // Tell the iconloader about share/apps/koffice/icons
+    kapp->iconLoader()->addAppDir("koffice");
 
     // Initialize all KOffice directories etc.
     KoGlobal::initialize();

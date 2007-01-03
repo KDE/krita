@@ -71,7 +71,7 @@ QSizeF KisLayerShape::size() const
 {
     QRect br = m_d->layer->extent();
     KisImageSP image = m_d->layer->image();
-    kDebug() << "KisLayerShape::size exactbounds: " << br << ", x res: " << image->xRes() << ", y res: " << image->yRes() << endl;
+    kDebug(41007) << "KisLayerShape::size exactbounds: " << br << ", x res: " << image->xRes() << ", y res: " << image->yRes() << endl;
 
     return QSizeF( br.width() / image->xRes(), br.height() / image->yRes() );
 }
@@ -79,7 +79,7 @@ QSizeF KisLayerShape::size() const
 QRectF KisLayerShape::boundingRect() const
 {
     QRect br = m_d->layer->extent();
-    kDebug() << "KisLayerShape::size exactbounds: " << br << ", x res: " << m_d->layer->image()->xRes() << ", y res: " << m_d->layer->image()->yRes() << endl;
+    kDebug(41007) << "KisLayerShape::size exactbounds: " << br << ", x res: " << m_d->layer->image()->xRes() << ", y res: " << m_d->layer->image()->yRes() << endl;
 
     return QRectF(int(br.left()) / m_d->layer->image()->xRes(), int(br.top()) / m_d->layer->image()->yRes(),
                   int(1 + br.right()) / m_d->layer->image()->xRes(), int(1 + br.bottom()) / m_d->layer->image()->yRes());
@@ -89,7 +89,7 @@ QRectF KisLayerShape::boundingRect() const
 void KisLayerShape::addChild( KoShape * shape )
 {
     if ( shape->shapeId() != KIS_MASK_SHAPE_ID ) {
-        kDebug() << "Can only add mask shapes as children to layer shapes!\n";
+        kDebug(41007) << "Can only add mask shapes as children to layer shapes!\n";
         return;
     }
     KoShapeContainer::addChild(shape);

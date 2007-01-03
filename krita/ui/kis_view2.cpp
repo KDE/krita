@@ -357,11 +357,11 @@ void KisView2::slotLoadingFinished()
     if(d)
         m_d->canvasController->setToolOptionDocker( d );
     else
-        kDebug() << "Could not create tool docker: " << d << endl;
+        kDebug(41007) << "Could not create tool docker: " << d << endl;
 
     connectCurrentImage();
 
-    kDebug() << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
+    kDebug(41007) << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
 
 }
 
@@ -454,7 +454,7 @@ void KisView2::connectCurrentImage()
 {
     KisImageSP img = image();
     if (img) {
-        kDebug() << "Going to connect current image\n";
+        kDebug(41007) << "Going to connect current image\n";
 
         connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_d->selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
         //connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), this, SLOT(updateCanvas()));

@@ -59,10 +59,10 @@ public:
 
     bool visit( KisExternalLayer * layer)
         {
-            kDebug() << "KisLayerMap visitor adding external layer: " << layer->name() << endl;
+            kDebug(41007) << "KisLayerMap visitor adding external layer: " << layer->name() << endl;
             KisShapeLayer * layerShape = dynamic_cast<KisShapeLayer*>( layer );
             if ( !layerShape ) {
-                kDebug() << "this external layer is not a shape layer!\n";
+                kDebug(41007) << "this external layer is not a shape layer!\n";
                 return false;
             }
             m_layerMap[layer] = layerShape;
@@ -71,7 +71,7 @@ public:
 
     bool visit(KisPaintLayer *layer)
         {
-            kDebug() << "KisLayerMap visitor adding paint layer: " << layer->name() << endl;
+            kDebug(41007) << "KisLayerMap visitor adding paint layer: " << layer->name() << endl;
 
             KoShapeContainer * parent = 0;
             if ( m_layerMap.contains( layer->parent() ) ) {
@@ -86,7 +86,7 @@ public:
 
     bool visit(KisGroupLayer *layer)
         {
-            kDebug() << "KisLayerMap visitor adding group layer: " << layer->name() << endl;
+            kDebug(41007) << "KisLayerMap visitor adding group layer: " << layer->name() << endl;
 
             KoShapeContainer * parent = 0;
             if ( m_layerMap.contains( layer->parent() ) ) {
@@ -107,7 +107,7 @@ public:
 
     bool visit(KisPartLayer *layer)
         {
-            kDebug() << "KisLayerMap visitor adding part layer: " << layer->name() << endl;
+            kDebug(41007) << "KisLayerMap visitor adding part layer: " << layer->name() << endl;
 
             #warning "Kill or fix part layers"
             return true;
@@ -115,7 +115,7 @@ public:
 
     bool visit(KisAdjustmentLayer *layer)
         {
-            kDebug() << "KisLayerMap visitor adding adjustment layer: " << layer->name() << endl;
+            kDebug(41007) << "KisLayerMap visitor adding adjustment layer: " << layer->name() << endl;
 
             KoShapeContainer * parent = 0;
             if ( m_layerMap.contains( layer->parent() ) ) {

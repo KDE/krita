@@ -49,9 +49,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 {
     Q_ASSERT(m_canvas); // not optional.
     connect( m_selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()) );
-    m_selection->addShapeManager( this );
 }
-
 
 KoShapeManager::~KoShapeManager()
 {

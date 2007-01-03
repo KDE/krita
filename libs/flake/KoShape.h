@@ -523,7 +523,7 @@ protected:
     /**
      * Update the position of the shape in the tree of the KoShapeManager.
      */
-    virtual void updateTree();
+    void updateTree();
 
     /// Used by shapeChanged() to select which change was made
     enum ChangeType {

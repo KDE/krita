@@ -105,9 +105,6 @@ public:
      */
     KoShapeLayer* activeLayer() const;
 
-protected:
-    virtual void updateTree() {}
-
 signals:
     /// emitted when the selection is changed
     void selectionChanged();

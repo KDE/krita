@@ -233,10 +233,10 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 }
 
 
-void TextElement::dispatchFontCommand( FontCommand* cmd )
+/*void TextElement::dispatchFontCommand( FontCommand* cmd )
 {
     //cmd->addTextElement( this );
-}
+}*/
 
 void TextElement::setCharStyle( CharStyle cs )
 {

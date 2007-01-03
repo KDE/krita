@@ -92,7 +92,7 @@ public:
     /**
      * Dispatch this FontCommand to all our TextElement children.
      */
-    virtual void dispatchFontCommand( FontCommand* cmd );
+//    virtual void dispatchFontCommand( FontCommand* cmd );
 
     CharStyle getCharStyle() const { return charStyle(); }
     void setCharStyle( CharStyle cs );

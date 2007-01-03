@@ -41,7 +41,6 @@ class KoXmlWriter;
 
 namespace KFormula {
 
-class FontCommand;
 class FormulaCursor;
 class FormulaElement;
 class SequenceElement;
@@ -263,11 +262,6 @@ public:
                        const LuPixelPoint& parentOrigin );
 
 
-    /**
-     * Dispatch this FontCommand to all our TextElement children.
-     */
-    virtual void dispatchFontCommand( FontCommand* /*cmd*/ ) {}
-    
     /**
      * Sets the cursor inside this element to its start position.
      * For most elements that is the main child.

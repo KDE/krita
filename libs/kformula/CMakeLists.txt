@@ -12,7 +12,7 @@ set( formulashape_PART_SRCS
 #   AttributeManager.cpp
 #   FormulaRenderer.cpp
    FormulaCursor.cpp 
-   FormulaContainer.cpp
+#   FormulaContainer.cpp
    BasicElement.cpp 
    SequenceElement.cpp
    FormulaElement.cpp 

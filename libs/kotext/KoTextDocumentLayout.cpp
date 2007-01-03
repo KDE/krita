@@ -170,7 +170,7 @@ bool KoTextDocumentLayout::LayoutState::addLine(const QTextLine &line) {
     if(d->data->documentOffset() + shape->size().height() < d->y + height + d->shapeBorder.bottom) {
 //kDebug() << "   NEXT shape" << endl;
         // line does not fit.
-        d->data->setEndPosition(qMax(0, d->block.position() + line.textStart()-1));
+        d->data->setEndPosition(d->block.position() + line.textStart()-1);
         nextShape();
         if(d->data)
             d->data->setPosition(d->block.position() + line.textStart());
@@ -301,7 +301,7 @@ void KoTextDocumentLayout::LayoutState::nextShape() {
     d->newShape = true;
 
     if(d->data) {
-// TODO add weduwen wezen algo waardoor ik eventueel een parag opnieuw moet kunnen layouten.
+// TODO add weduwen wezen algoritm here. May require me to relayout a parag..
         Q_ASSERT(d->data->endPosition() >= d->data->position());
         d->y = d->data->documentOffset() + shape->size().height() + 10.0;
         d->data->wipe();
@@ -375,21 +375,28 @@ void KoTextDocumentLayout::LayoutState::resetPrivate() {
             d->y = data->documentOffset();
             d->format = d->block.blockFormat();
 
+            if(shapeNumber == 0) {
+                // no matter what the previous data says, just start from zero.
+                d->y = 0;
+                data->setDocumentOffset(0);
+                Q_ASSERT(lastPos == -1);
+                break;
+            }
             if(d->block.layout() && d->block.layout()->lineCount() > 0) {
                 // block has been layouted. So use its offset.
                 d->y = d->block.layout()->lineAt(0).position().y();
-                if(d->y > data->documentOffset() + shape->size().height()) {
-                    // hang on; this line is explicitly placed outside the shape. Shape is empty!
-                    d->y = data->documentOffset();
-                    break;
-                }
-                if(d->y < data->documentOffset()) {
+                if(d->y < data->documentOffset() - 0.126) { // 0.126 to account of rounding in Qt-scribe
                     Q_ASSERT(shapeNumber > 0);
                     // since we only recalc whole parags; we need to go back a little.
                     shapeNumber--;
                     shape = shapes[shapeNumber];
                     data = dynamic_cast<KoTextShapeData*> (shape->userData());
                     d->newShape = false;
+                }
+                if(d->y > data->documentOffset() + shape->size().height()) {
+                    // hang on; this line is explicitly placed outside the shape. Shape is empty!
+                    d->y = data->documentOffset();
+                    break;
                 }
                 // in case this parag has a border we have to subtract that as well
                 d->blockData = dynamic_cast<KoTextBlockData*> (d->block.userData());

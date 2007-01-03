@@ -26,6 +26,9 @@ private slots:
     /// Test the hittest of KoTextDocumentLayout
     void testHitTest();
 
+    /// make sure empty paragraphs are initialized properly
+    void testEmptyParag();
+
     /// Test breaking lines based on the width of the shape.
     void testLineBreaking();
     /// Test breaking lines for frames with different widths.

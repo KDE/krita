@@ -1019,6 +1019,22 @@ void TestDocumentLayout::testBorderData() {
     QCOMPARE(data->counterPosition(), QPointF(3, 53.8));
 }
 
+void TestDocumentLayout::testEmptyParag() {
+    initForNewTest("Foo\n\nBar\n");
+    layout->layout();
+    QTextBlock block = doc->begin();
+    QTextLayout *lay = block.layout();
+    QVERIFY(lay);
+    QCOMPARE(lay->lineCount(), 1);
+    const double y = lay->lineAt(0).position().y();
+
+    block = block.next();
+    lay = block.layout();
+    QVERIFY(lay);
+    QCOMPARE(lay->lineCount(), 1);
+    QVERIFY(lay->lineAt(0).position().y() > y);
+    QVERIFY(qAbs(lay->lineAt(0).position().y() - 14.4) < ROUNDING);
+}
 
 QTEST_MAIN(TestDocumentLayout)
 #include "TestDocumentLayout.moc"

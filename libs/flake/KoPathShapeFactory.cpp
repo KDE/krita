@@ -30,7 +30,7 @@ KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
     setIcon("pathshape");
 }
 
-KoShape * KoPathShapeFactory::createDefaultShape() {
+KoShape * KoPathShapeFactory::createDefaultShape() const {
     KoPathShape* path = new KoPathShape();
     path->moveTo( QPointF( 0, 50 ) );
     path->curveTo( QPointF( 0, 120 ), QPointF( 50, 120 ), QPointF( 50, 50 ) );

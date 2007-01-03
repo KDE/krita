@@ -32,7 +32,7 @@ public:
     explicit KoTextShapeFactory(QObject *parent);
     ~KoTextShapeFactory() {}
 
-    KoShape *createDefaultShape();
+    KoShape *createDefaultShape() const;
     KoShape *createShape(const KoProperties * params) const;
 
     //QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();

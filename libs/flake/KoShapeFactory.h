@@ -104,7 +104,7 @@ public:
      * The default shape position is not relevant, it will be moved by the caller.
      * @return a new shape
      */
-    virtual KoShape * createDefaultShape() = 0;
+    virtual KoShape * createDefaultShape() const = 0;
     /**
      * This method should be implemented by factories to create a shape based on a set of
      * properties that are specifically made for this shape-type.

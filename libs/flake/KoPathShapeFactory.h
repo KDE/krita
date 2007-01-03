@@ -31,7 +31,7 @@ public:
     /// constructor
     KoPathShapeFactory(QObject *parent, const QStringList&);
     ~KoPathShapeFactory() {}
-    KoShape * createDefaultShape();
+    KoShape * createDefaultShape() const;
     KoShape * createShape(const KoProperties * params) const;
 };
 

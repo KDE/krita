@@ -166,7 +166,7 @@ class KRITAIMAGE_EXPORT ExifValue {
         {
             ((ExifNumber*)m_value)[i].m_byte = v;
         }
-        inline quint8 asShort(uint i)
+        inline quint16 asShort(uint i)
         {
             if(m_type == EXIF_TYPE_SHORT)
                 return asExifNumber(i).m_short;

@@ -499,6 +499,15 @@ public:
     KoPathPoint * pointByIndex( const KoPathPointIndex &pointIndex ) const;
 
     /**
+     * @brief Check if subpath is closed
+     *
+     * @param subpathIndex of the subpath to check
+     *
+     * @return true when the subpath is closed, false otherwise
+     */
+    bool isClosedSubpath( int subpathIndex );
+
+    /**
      * @brief Inserts a new point into the given subpath at the specified position
      *
      * This method keeps the subpath closed if it is closed, and open when it was 

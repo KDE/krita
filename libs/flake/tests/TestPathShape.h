@@ -32,6 +32,7 @@ private slots:
 
     void pathPointIndex();
     void pointByIndex();
+    void isClosedSubpath();
     void insertPoint();
     void removePoint();
     void splitAfter();

@@ -791,6 +791,16 @@ KoPathPoint * KoPathShape::pointByIndex( const KoPathPointIndex &pointIndex ) co
     return subpath->at( pointIndex.second );
 }
 
+bool KoPathShape::isClosedSubpath( int subpathIndex )
+{
+    KoSubpath * subpath = subPath( subpathIndex );
+
+    if ( subpath == 0 )
+        return false;
+
+    return subpath->last()->properties() & KoPathPoint::CloseSubpath;
+}
+
 bool KoPathShape::insertPoint( KoPathPoint* point, const KoPathPointIndex &pointIndex )
 {
     KoSubpath * subpath = subPath( pointIndex.first );

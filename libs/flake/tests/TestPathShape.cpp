@@ -101,6 +101,32 @@ void TestPathShape::pointByIndex()
     QVERIFY( point5 == path.pointByIndex( path.pathPointIndex( point5 ) ) );
 }
 
+void TestPathShape::isClosedSubpath()
+{
+    KoPathShape path;
+    path.moveTo( QPointF( 20, 20 ) );
+    path.lineTo( QPointF( 15, 25 ) );
+    path.lineTo( QPointF( 10, 20 ) );
+    path.close();
+    path.moveTo( QPointF( 20, 30 ) ); 
+    path.lineTo( QPointF( 20, 30 ) );
+    path.moveTo( QPointF( 30, 30 ) ); 
+    path.lineTo( QPointF( 40, 30 ) );
+    path.lineTo( QPointF( 40, 40 ) );
+    path.curveTo( QPointF( 40, 45 ), QPointF( 30, 45 ), QPointF( 30, 40 ) );
+    path.close();
+    path.moveTo( QPointF( 50, 50 ) ); 
+    path.lineTo( QPointF( 60, 50 ) );
+    path.lineTo( QPointF( 60, 60 ) );
+    path.curveTo( QPointF( 60, 65 ), QPointF( 50, 65 ), QPointF( 50, 60 ) );
+    path.close();
+
+    QVERIFY( path.isClosedSubpath( 0 ) == true );
+    QVERIFY( path.isClosedSubpath( 1 ) == false );
+    QVERIFY( path.isClosedSubpath( 2 ) == true );
+    QVERIFY( path.isClosedSubpath( 3 ) == true );
+}
+
 void TestPathShape::insertPoint()
 {
     KoPathShape path;

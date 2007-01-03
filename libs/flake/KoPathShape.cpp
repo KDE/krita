@@ -80,10 +80,6 @@ void KoPathPoint::setProperties( KoPointProperties properties )
         properties &= ~IsSmooth;
         properties &= ~IsSymmetric;
     }
-    if( properties & KoPathPoint::StartSubpath )
-    {
-        properties &= ~CloseSubpath;
-    }
     m_properties = properties;
     m_shape->update();
 }

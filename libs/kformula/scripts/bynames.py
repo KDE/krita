@@ -56,9 +56,7 @@ def write_h( f ):
 #ifndef ENTITIES_H
 #define ENTITIES_H
 
-#include "kformuladefs.h"
-
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 	
 struct entityMap {
     static int size();
@@ -71,7 +69,7 @@ struct entityMap {
 	
 extern const entityMap entities[];
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 #endif // ENTITIES_H
 '''
@@ -80,7 +78,7 @@ def write_cc( fr, fw ):
 	print >> fw, '''
 #include "Entities.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 const entityMap entities[] = {'''
 
@@ -95,7 +93,7 @@ int entityMap::size()
     return sizeof( entities ) / sizeof( entityMap );
 }
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 	'''
 	
 def name_cmp( a, b ):

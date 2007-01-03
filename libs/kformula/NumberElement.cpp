@@ -24,8 +24,6 @@
 #include "TextElement.h"
 #include "IdentifierElement.h"
 #include "OperatorElement.h"
-//#include "kformulacommand.h"
-#include "FormulaContainer.h"
 #include "FormulaElement.h"
 #include "ElementFactory.h"
 

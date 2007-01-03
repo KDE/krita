@@ -24,15 +24,11 @@
 #include <klocale.h>
 
 #include "Entities.h"
-//#include "elementtype.h"
 #include "SequenceElement.h"
 #include "TextElement.h"
 #include "GlyphElement.h"
 #include "TokenElement.h"
 #include "IdentifierElement.h"
-//#include "kformulacommand.h"
-#include "FormulaContainer.h"
-//#include "kformuladocument.h"
 #include "FormulaElement.h"
 #include "ElementFactory.h"
 

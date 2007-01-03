@@ -28,7 +28,6 @@
 #include <KoXmlWriter.h>
 
 #include "contextstyle.h"
-#include "FormulaContainer.h"
 #include "FormulaCursor.h"
 #include "FormulaElement.h"
 

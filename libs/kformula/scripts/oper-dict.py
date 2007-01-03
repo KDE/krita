@@ -75,9 +75,7 @@ def write_h( f ):
 #ifndef OPERATORDICTIONARY_H
 #define OPERATORDICTIONARY_H
 
-#include "kformuladefs.h"
-
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 	
 struct DictionaryKey
 {
@@ -116,7 +114,7 @@ struct OperatorDictionary {
 	
 extern const OperatorDictionary operators[];
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 #endif // OPERATORDICTIONARY_H
 '''
@@ -125,7 +123,7 @@ def write_cc( fr, fw ):
 	print >> fw, '''
 #include "OperatorDictionary.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 const OperatorDictionary operators[] = {'''
 
@@ -141,7 +139,7 @@ int OperatorDictionary::size()
     return sizeof( operators ) / sizeof( OperatorDictionary );
 }
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 	'''
 
 def get_entities():

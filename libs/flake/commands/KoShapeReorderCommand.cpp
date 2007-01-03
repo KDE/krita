@@ -65,17 +65,13 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
         qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
         if(move == BringToFront) {
             KoShape *top = *(--sortedShapes.end());
-            if(shape != top) {
-                changedShapes.append(shape);
-                newIndexes.append(top->zIndex()+1);
-            }
+            changedShapes.append(shape);
+            newIndexes.append(top->zIndex()+1);
         }
         else if(move == SendToBack) {
             KoShape *bottom = (*sortedShapes.begin());
-            if(shape != bottom) {
-                changedShapes.append(shape);
-                newIndexes.append(bottom->zIndex()-1);
-            }
+            changedShapes.append(shape);
+            newIndexes.append(bottom->zIndex()-1);
         }
         else {
             QList<KoShape*>::Iterator iter = sortedShapes.begin();

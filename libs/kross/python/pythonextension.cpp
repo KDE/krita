@@ -27,8 +27,6 @@
 #include <QSignalSpy>
 #include <QVarLengthArray>
 
-using namespace Kross;
-
 namespace Kross {
 
     /// \internal d-pointer class.
@@ -66,6 +64,8 @@ namespace Kross {
     };
 
 }
+
+using namespace Kross;
 
 PythonExtension::PythonExtension(QObject* object, bool owner)
     : Py::PythonExtension<PythonExtension>()
@@ -205,7 +205,7 @@ Py::Object PythonExtension::getattr(const char* n)
         #endif
 
         if(! property.isReadable()) {
-            Py::AttributeError( QString("Attribute \"%1\" is not readable.").arg(n).toLatin1().constData() );
+            Py::AttributeError( ::QString("Attribute \"%1\" is not readable.").arg(n).toLatin1().constData() );
             return Py::None();
         }
 
@@ -237,13 +237,13 @@ int PythonExtension::setattr(const char* n, const Py::Object& value)
         #endif
 
         if(! property.isWritable()) {
-            Py::AttributeError( QString("Attribute \"%1\" is not writable.").arg(n).toLatin1().constData() );
+            Py::AttributeError( ::QString("Attribute \"%1\" is not writable.").arg(n).toLatin1().constData() );
             return -1; // indicate error
         }
 
         QVariant v = PythonType<QVariant>::toVariant(value);
         if(! property.write(d->object, v)) {
-            Py::AttributeError( QString("Setting attribute \"%1\" failed.").arg(n).toLatin1().constData() );
+            Py::AttributeError( ::QString("Setting attribute \"%1\" failed.").arg(n).toLatin1().constData() );
             return -1; // indicate error
         }
         #ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
@@ -362,18 +362,18 @@ Py::Object PythonExtension::doConnect(const Py::Tuple& args)
         Py::ExtensionObject<PythonExtension> extobj(args[0]);
         PythonExtension* extension = extobj.extensionObject();
         if(! extension) {
-            Py::TypeError( QString("First argument needs to be a signalname or a sender-object.").toLatin1().constData() );
+            Py::TypeError( ::QString("First argument needs to be a signalname or a sender-object.").toLatin1().constData() );
             return PythonType<bool>::toPyObject(false);
         }
         sender = extension->object();
         if( ! args[1].isString() ) {
-            Py::TypeError( QString("Second argument needs to be a signalname.").toLatin1().constData() );
+            Py::TypeError( ::QString("Second argument needs to be a signalname.").toLatin1().constData() );
             return PythonType<bool>::toPyObject(false);
         }
         sendersignal = PythonType<QByteArray>::toVariant( args[1] );
         idx = 2;
         if( args.size() <= idx ) {
-            Py::TypeError( QString("Expected at least %1 arguments.").arg(idx+1).toLatin1().constData() );
+            Py::TypeError( ::QString("Expected at least %1 arguments.").arg(idx+1).toLatin1().constData() );
             return PythonType<bool>::toPyObject(false);
         }
     }
@@ -396,17 +396,17 @@ Py::Object PythonExtension::doConnect(const Py::Tuple& args)
             Py::ExtensionObject<PythonExtension> extobj(args[idx]);
             PythonExtension* extension = extobj.extensionObject();
             if(! extension) {
-                Py::TypeError( QString("Receiver argument needs to be a slotname or a receiver-object.").toLatin1().constData() );
+                Py::TypeError( ::QString("Receiver argument needs to be a slotname or a receiver-object.").toLatin1().constData() );
                 return PythonType<bool>::toPyObject(false);
             }
             receiver = extension->object();
             idx++;
             if( args.size() < idx ) {
-                Py::TypeError( QString("Expected at least %1 arguments.").arg(idx+1).toLatin1().constData() );
+                Py::TypeError( ::QString("Expected at least %1 arguments.").arg(idx+1).toLatin1().constData() );
                 return PythonType<bool>::toPyObject(false);
             }
             if( ! args[idx].isString() ) {
-                Py::TypeError( QString("Expected receiver slotname as argument %1.").arg(idx+1).toLatin1().constData() );
+                Py::TypeError( ::QString("Expected receiver slotname as argument %1.").arg(idx+1).toLatin1().constData() );
                 return PythonType<bool>::toPyObject(false);
             }
             receiverslot = PythonType<QByteArray>::toVariant( args[idx] );

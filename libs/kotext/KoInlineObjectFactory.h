@@ -43,7 +43,7 @@ public:
         TextVariable,   ///< The factory creates KoVariable inherting objects.
         // etc
         Other = 0x100,  ///< The factory creates objects that should not be shown in any menu
-        PopupItem,      ///< The factory creates objects that should be show in the PopupMenu
+        PopupItem       ///< The factory creates objects that should be show in the PopupMenu
     };
 
     /**

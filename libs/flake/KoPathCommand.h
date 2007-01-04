@@ -234,6 +234,7 @@ public:
     void undo();
 private:
     KoPathPointData m_pointData;
+    KoPathPointIndex m_startIndex;
     bool m_broken;
 };
 

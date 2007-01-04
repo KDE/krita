@@ -502,8 +502,22 @@ void KoPointJoinCommand::undo()
 KoBreakSegmentCommand::KoBreakSegmentCommand( const KoPathPointData & pointData, QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_pointData( pointData )    
+, m_startIndex( -1, -1 )
 , m_broken( false )                                        
 {
+    if ( m_pointData.m_pathShape->isClosedSubpath( m_pointData.m_pointIndex.first ) )
+    {
+        m_startIndex = m_pointData.m_pointIndex;
+        KoPathPoint * before = m_pointData.m_pathShape->pointByIndex( m_startIndex );
+        if ( before->properties() & KoPathPoint::CloseSubpath )
+        {
+            m_startIndex.second = 0;
+        }
+        else
+        {
+            ++m_startIndex.second;
+        }
+    }
     setText( i18n( "Break subpath" ) );
 }
 
@@ -515,17 +529,32 @@ void KoBreakSegmentCommand::redo()
 {
     // a repaint before is needed as the shape can shrink during the break
     m_pointData.m_pathShape->repaint();
-    m_broken = m_pointData.m_pathShape->breakAfter( m_pointData.m_pointIndex );
-    if ( m_broken )
+    if ( m_startIndex.first != -1 )
     {
+        m_startIndex = m_pointData.m_pathShape->openSubpath( m_startIndex );
         m_pointData.m_pathShape->normalize();
         m_pointData.m_pathShape->repaint();
+    }
+    else
+    {
+        m_broken = m_pointData.m_pathShape->breakAfter( m_pointData.m_pointIndex );
+        if ( m_broken )
+        {
+            m_pointData.m_pathShape->normalize();
+            m_pointData.m_pathShape->repaint();
+        }
     }
 }
 
 void KoBreakSegmentCommand::undo()
 {
-    if ( m_broken )
+    if ( m_startIndex.first != -1 )
+    {
+        m_startIndex = m_pointData.m_pathShape->closeSubpath( m_startIndex );
+        m_pointData.m_pathShape->normalize();
+        m_pointData.m_pathShape->repaint();
+    }
+    else if ( m_broken )
     {
         m_pointData.m_pathShape->join( m_pointData.m_pointIndex.first );
         m_pointData.m_pathShape->normalize();

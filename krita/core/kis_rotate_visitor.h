@@ -44,7 +44,7 @@ private:
 
     // Implement KisProgressSubject
     bool m_cancelRequested;
-        virtual void cancel() { m_cancelRequested = true; }
+    virtual void cancel() { m_cancelRequested = true; }
 
     void initProgress(Q_INT32 totalSteps);
     void incrementProgress();

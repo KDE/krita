@@ -40,7 +40,6 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kmimetype.h>
-#include <knotifyclient.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 

@@ -352,6 +352,11 @@ void TestPathShape::openSubpath()
     path.lineTo( QPointF( 60, 60 ) );
     KoPathPoint *point3 = path.curveTo( QPointF( 60, 65 ), QPointF( 50, 65 ), QPointF( 50, 60 ) );
     path.close();
+    KoPathPoint *point4 = path.moveTo( QPointF( 100, 100 ) );
+    point4->setControlPoint2( QPointF( 120, 120 ) );
+    path.lineTo( QPointF( 140, 140 ) );
+    KoPathPoint *point5 = path.lineTo( QPointF( 140, 100 ) );
+    path.close();
 
     // open at middle point in subpath
     QVERIFY( path.openSubpath( path.pathPointIndex( point1 ) ) == KoPathPointIndex( 0, 2 ) );
@@ -361,8 +366,10 @@ void TestPathShape::openSubpath()
     QVERIFY( path.openSubpath( path.pathPointIndex( point3 ) ) == KoPathPointIndex( 2, 1 ) );
     // try to open open subpath
     QVERIFY( path.openSubpath( path.pathPointIndex( point3 ) ) == KoPathPointIndex( -1, -1 ) );
+    // open if the first path is a curve
+    QVERIFY( path.openSubpath( path.pathPointIndex( point5 ) ) == KoPathPointIndex( 3, 1 ) );
     // try to open none existing subpath
-    QVERIFY( path.openSubpath( KoPathPointIndex( 3, 1 ) ) == KoPathPointIndex( -1, -1 ) );
+    QVERIFY( path.openSubpath( KoPathPointIndex( 4, 1 ) ) == KoPathPointIndex( -1, -1 ) );
 
     QPainterPath ppath( QPointF( 15, 25 ) );
     ppath.lineTo( 10, 20 );
@@ -375,6 +382,9 @@ void TestPathShape::openSubpath()
     ppath.lineTo( 50, 50 );
     ppath.lineTo( 60, 50 );
     ppath.lineTo( 60, 60 );
+    ppath.moveTo( 140, 100 );
+    ppath.lineTo( 100, 100 );
+    ppath.cubicTo( 120, 120, 140, 140, 140, 140 );
 
     QVERIFY( ppath == path.outline() );
 }

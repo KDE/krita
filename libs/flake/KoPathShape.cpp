@@ -967,7 +967,7 @@ KoPathPointIndex KoPathShape::openSubpath( const KoPathPointIndex &pointIndex )
         subpath->append( subpath->takeFirst() );
     }
     // make the first point a start node
-    subpath->first()->setProperties( oldStartPoint->properties() & ~KoPathPoint::CanHaveControlPoint1 | KoPathPoint::StartSubpath );
+    subpath->first()->setProperties( subpath->first()->properties() & ~KoPathPoint::CanHaveControlPoint1 | KoPathPoint::StartSubpath );
     // make the last point a end node 
     subpath->last()->setProperties( subpath->last()->properties() & ~KoPathPoint::CanHaveControlPoint2 );
 

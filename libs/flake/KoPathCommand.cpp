@@ -326,6 +326,8 @@ KoSplitSegmentCommand::KoSplitSegmentCommand( const QList<KoPathPointData> & poi
     if ( splitPosition > 1 )
         splitPosition = 1;
 
+    //TODO the list needs to be sorted
+
     QList<KoPathPointData>::const_iterator it( pointDataList.begin() );
     for ( ; it != pointDataList.end(); ++it )
     {
@@ -563,18 +565,49 @@ void KoBreakSegmentCommand::undo()
 }
 
 
+/*
+ * The algorithm to break a multiple open or closed subpaths is:
+ * Subpath is closed
+ * - open behind the last point in the subpath 
+ * - go on like as described in Not closed 
+ * Not closed 
+ * - break from the back of the subpath
+ */
 KoBreakAtPointCommand::KoBreakAtPointCommand( const QList<KoPathPointData> & pointDataList, QUndoCommand *parent )
 : QUndoCommand( parent )
-, m_pointDataList( pointDataList )
 , m_deletePoints( true )                                      
 {
-    qSort( m_pointDataList );
+    QList<KoPathPointData> sortedPointDataList( pointDataList );
+    qSort( sortedPointDataList );
     setText( i18n( "Break subpath at points" ) );
 
-    QList<KoPathPointData>::const_iterator it( m_pointDataList.begin() );
-    for ( ; it != m_pointDataList.end(); ++it )
+    QList<KoPathPointData>::const_iterator it( sortedPointDataList.begin() );
+    for ( ; it != sortedPointDataList.end(); ++it )
     {
-        m_points.push_back( new KoPathPoint( *( it->m_pathShape->pointByIndex( it->m_pointIndex ) ) ) );
+        KoPathPoint *point = it->m_pathShape->pointByIndex(  it->m_pointIndex );
+        if ( point )
+        {
+            m_pointDataList.append( *it );
+            m_points.push_back( new KoPathPoint( *point ) );
+            m_closedIndex.push_back( KoPathPointIndex( -1, 0 ) );
+        }
+    }
+
+    KoPathPointData last( 0, KoPathPointIndex( -1, -1 ) );
+    for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
+    {
+        const KoPathPointData &current = m_pointDataList.at( i );
+
+        if ( last.m_pathShape != current.m_pathShape || last.m_pointIndex.first != current.m_pointIndex.first )
+        {
+            last = current;
+            if ( current.m_pathShape->isClosedSubpath( current.m_pointIndex.first ) )
+            {
+                // the break will happen before the inserted point so we have to increment by 1
+                m_closedIndex[i] = current.m_pointIndex;
+                ++m_closedIndex[i].second;
+            }
+        }
     }
 }
 
@@ -588,31 +621,51 @@ KoBreakAtPointCommand::~KoBreakAtPointCommand()
 
 void KoBreakAtPointCommand::redo()
 {
-    KoPathShape * lastPathShape = 0;
+    KoPathPointData last( 0, KoPathPointIndex( -1, -1 ) );
 
+    // offset, needed when path was opened 
+    int offset = 0;
     for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
     {
         const KoPathPointData & pd = m_pointDataList.at( i );
         KoPathShape * pathShape = pd.m_pathShape; 
-        KoPathPointIndex pointIndex = pd.m_pointIndex;
-        ++pointIndex.second;
-        pathShape->insertPoint( m_points[i], pointIndex );
-        pathShape->breakAfter( pd.m_pointIndex );
 
-        if ( lastPathShape != pathShape )
+        KoPathPointIndex pointIndex = pd.m_pointIndex;
+        if ( last.m_pathShape != pathShape || last.m_pointIndex.first != pointIndex.first )
         {
-            if ( lastPathShape )
+            offset = 0;
+        }
+
+        pointIndex.second = pointIndex.second + offset + 1;
+        pathShape->insertPoint( m_points[i], pointIndex );
+
+        if ( m_closedIndex.at( i ).first != -1 )
+        {
+            m_closedIndex[i] = pathShape->openSubpath( m_closedIndex.at( i ) );
+            offset = m_closedIndex.at( i ).second;
+        }
+        else
+        {
+            KoPathPointIndex breakIndex = pd.m_pointIndex;
+            breakIndex.second += offset;
+            pathShape->breakAfter( breakIndex );
+            m_closedIndex[i].second = offset;
+        }
+
+        if ( last.m_pathShape != pathShape )
+        {
+            if ( last.m_pathShape )
             {
-                lastPathShape->normalize();
-                lastPathShape->repaint();
+                last.m_pathShape->normalize();
+                last.m_pathShape->repaint();
             }
-            lastPathShape = pathShape;
+            last = pd;
         }
     }
-    if ( lastPathShape )
+    if ( last.m_pathShape )
     {
-        lastPathShape->normalize();
-        lastPathShape->repaint();
+        last.m_pathShape->normalize();
+        last.m_pathShape->repaint();
     }
 
     m_deletePoints = false;
@@ -628,7 +681,15 @@ void KoBreakAtPointCommand::undo()
         KoPathShape * pathShape = pd.m_pathShape; 
         KoPathPointIndex pointIndex = pd.m_pointIndex;
         ++pointIndex.second;
-        pathShape->join( pd.m_pointIndex.first );
+        if ( m_closedIndex.at( i ).first != -1 )
+        {
+            m_closedIndex[i] = pathShape->closeSubpath( m_closedIndex.at( i ) );
+        }
+        else
+        {
+            pointIndex.second = pointIndex.second + m_closedIndex.at( i ).second;
+            pathShape->join( pd.m_pointIndex.first );
+        }
         m_points[i] = pathShape->removePoint( pointIndex );
 
         if ( lastPathShape != pathShape )

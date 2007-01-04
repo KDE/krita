@@ -195,7 +195,7 @@ DlgColorRange::DlgColorRange( KisView * view, KisPaintDeviceSP dev, QWidget *  p
         m_dev->selection()->clear();
     m_selection = m_dev->selection();
 
-        updatePreview();
+    updatePreview();
 
     m_invert = false;
     m_mode = SELECTION_ADD;

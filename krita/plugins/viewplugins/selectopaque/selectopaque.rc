@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaselectopaque" version="1">
+<MenuBar>
+    <Menu name="Select"><text>Select</text>
+	<Separator/>
+	<Action name="selectopaque"/>
+	<Separator/>
+    </Menu>
+</MenuBar>
+</kpartgui>

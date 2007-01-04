@@ -18,6 +18,7 @@ SUBDIRS = \
     shearimage \
     $(SCRIPTINGDIR)
 
+#selectopaque
 # variations
 # history_docker
 # performancetest

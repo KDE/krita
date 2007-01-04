@@ -770,16 +770,16 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
             m_adapter->beginMacro(i18n("Scale Image"));
             m_adapter->addCommand(new LockImageCommand(this, true));
         }
-
+#if 0
         if ( colorSpace()->id() == KisID("RGBA") || colorSpace()->id() == KisID("CMYK") || colorSpace()->id() == KisID("GRAYA")) {
             KisScaleVisitor v (this, sx, sy, progress, filterStrategy);
             m_rootLayer->accept( v );
         }
         else {
-
+#endif
             KisTransformVisitor visitor (this, sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy);
             m_rootLayer->accept(visitor);
-        }
+//        }
 
         if (undo()) {
             m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
@@ -1431,6 +1431,7 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
 
 QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, KisProfile *profile, PaintFlags paintFlags, float exposure)
 {
+
     if (r.isEmpty() || scaledImageSize.isEmpty()) {
         return QImage();
     }
@@ -1450,8 +1451,8 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
     srcRect.setBottom(static_cast<int>(ceil((r.bottom() + 1) * yScale)) - 1);
 
     KisPaintDeviceSP mergedImage = m_rootLayer->projection(srcRect);
-    //QTime t;
-    //t.start();
+    QTime t;
+    t.start();
 
     Q_UINT8 *scaledImageData = new Q_UINT8[r.width() * r.height() * pixelSize];
 
@@ -1480,6 +1481,7 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
             --columnsRemaining;
         }
     }
+    kdDebug() << "Time elapsed scaling image: " << t.elapsed() << endl;
 
     delete [] imageRow;
 

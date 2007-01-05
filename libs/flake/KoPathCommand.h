@@ -29,6 +29,7 @@
 #include <koffice_export.h>
 
 class KoParameterShape;
+class KoShapeController;
 
 /// the base command for commands altering a path shape
 class KoPathBaseCommand : public QUndoCommand {
@@ -131,32 +132,30 @@ private:
 };
 
 /// The undo / redo command for removing path points.
-class KoPointRemoveCommand : public QUndoCommand {
+class KoPointRemoveCommand : public QUndoCommand 
+{
 public:
+    static QUndoCommand * createCommand( const QList<KoPathPointData> & pointDataList, KoShapeController * shapeController, 
+                                         QUndoCommand *parent = 0 );
+
     /**
      * @brief Command to remove a points from path shapes
-     * @param pointMap map of the path points to remove
+     *
+     * @param pointDataList List of point datas to remove.
      * @param parent the parent command used for macro commands
      */
-    explicit KoPointRemoveCommand( const KoPathShapePointMap &pointMap, QUndoCommand *parent = 0 );
+    explicit KoPointRemoveCommand( const QList<KoPathPointData> & pointDataList, QUndoCommand *parent = 0 );
+    ~KoPointRemoveCommand();
+
     /// redo the command
     void redo();
     /// revert the actions done in redo
     void undo();
+
 private:
-    struct KoPointRemoveData
-    {
-        KoPointRemoveData( KoPathPoint * point, KoSubpath * subpath, int position )
-        : m_point( point )
-        , m_subpath( subpath )
-        , m_position( position )
-        {}
-        KoPathPoint * m_point;
-        KoSubpath * m_subpath;///< the position in the path 
-        int m_position;
-    };
-    KoPathShapePointMap m_pointMap;
-    QList<KoPointRemoveData> m_data;
+    QList<KoPathPointData> m_pointDataList;
+    QList<KoPathPoint*> m_points;
+    bool m_deletePoints;
 };
 
 /// The undo / redo command for splitting a path segment

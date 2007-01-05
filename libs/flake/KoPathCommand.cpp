@@ -260,61 +260,102 @@ void KoPointPropertyCommand::undo()
     repaint( true );
 }
 
-KoPointRemoveCommand::KoPointRemoveCommand( const KoPathShapePointMap &pointMap, QUndoCommand *parent )
-: QUndoCommand( parent )
-, m_pointMap( pointMap )
+QUndoCommand * KoPointRemoveCommand::createCommand( const QList<KoPathPointData> & pointDataList, KoShapeController * shapeController, 
+                                                       QUndoCommand *parent )
 {
-    setText( i18n( "Remove point" ) );
+    return 0;
+}
+
+KoPointRemoveCommand::KoPointRemoveCommand( const QList<KoPathPointData> & pointDataList, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_deletePoints( false )
+{
+    QList<KoPathPointData>::const_iterator it( pointDataList.begin() );
+    for ( ; it != pointDataList.end(); ++it )
+    {
+        KoPathPoint *point = it->m_pathShape->pointByIndex( it->m_pointIndex );
+        if ( point )
+        {
+            m_pointDataList.append( *it );
+            m_points.append( 0 );
+        }
+    }
+    qSort( m_pointDataList );
+}
+
+KoPointRemoveCommand::~KoPointRemoveCommand()
+{
+    if ( m_deletePoints )
+    {
+        qDeleteAll( m_points );
+    }
 }
 
 void KoPointRemoveCommand::redo()
 {
-    KoPathShapePointMap::iterator it( m_pointMap.begin() );
-    m_data.clear();
-    for ( ; it != m_pointMap.end(); ++it )
+    KoPathShape * lastPathShape = 0;
+    int updateBefore = m_pointDataList.size();
+    for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
     {
-        it.key()->repaint();
+        const KoPathPointData &pd = m_pointDataList.at( i );
+        pd.m_pathShape->repaint();
+        m_points[i] = pd.m_pathShape->removePoint( pd.m_pointIndex );
 
-        foreach( KoPathPoint *p, it.value() )
+        if ( lastPathShape != pd.m_pathShape )
         {
-            QPair<KoSubpath*, int> pointdata = it.key()->removePoint( p );
-            m_data.push_back( KoPointRemoveData( p, pointdata.first, pointdata.second ) );
-        }
+            if ( lastPathShape )
+            {
+                QPointF offset = lastPathShape->normalize();
 
-        QPointF offset = it.key()->normalize();
+                QMatrix matrix;
+                matrix.translate( -offset.x(), -offset.y() );
+                for ( int j = i + 1; j < updateBefore; ++j )
+                {
+                    m_points.at( j )->map( matrix );
+                }
+                lastPathShape->repaint();
+                updateBefore = i + 1;
+            }
+            lastPathShape = pd.m_pathShape;
+        }
+    }
+
+    if ( lastPathShape )
+    {
+        QPointF offset = lastPathShape->normalize();
 
         QMatrix matrix;
         matrix.translate( -offset.x(), -offset.y() );
-        foreach( KoPathPoint *p, it.value() )
+        for ( int j = 0; j < updateBefore; ++j )
         {
-            p->map( matrix );
+            m_points.at( j )->map( matrix );
         }
-        // repaint new bounding rect
-        // TODO is this really needed
-        it.key()->repaint();
+        lastPathShape->repaint();
     }
+
+    m_deletePoints = true;
 }
 
 void KoPointRemoveCommand::undo()
 {
-    // insert the points in inverse order
-    KoPathShape * pathShape = 0;
-    for( int i = m_data.size()-1; i >= 0; --i )
+    KoPathShape * lastPathShape = 0;
+    for ( int i = 0; i < m_pointDataList.size(); ++i )
     {
-        KoPointRemoveData &data = m_data[i];
-        if ( pathShape && pathShape != data.m_point->parent() )
+        const KoPathPointData &pd = m_pointDataList.at( i );
+        if ( lastPathShape && lastPathShape != pd.m_pathShape )
         {
-            pathShape->normalize();
-            pathShape->repaint();
+            lastPathShape->normalize();
+            lastPathShape->repaint();
         }
-        pathShape = data.m_point->parent();
-        pathShape->insertPoint( data.m_point, data.m_subpath, data.m_position );
+        pd.m_pathShape->insertPoint( m_points[i], pd.m_pointIndex );
+        lastPathShape = pd.m_pathShape;
     }
-    if ( pathShape )
+    if ( lastPathShape )
     {
-        pathShape->normalize();
-        pathShape->repaint();
+        lastPathShape->normalize();
+        lastPathShape->repaint();
     }
+    m_deletePoints = false;
 }
 
 KoSplitSegmentCommand::KoSplitSegmentCommand( const QList<KoPathPointData> & pointDataList, double splitPosition, QUndoCommand *parent )
@@ -656,7 +697,6 @@ void KoBreakAtPointCommand::redo()
         {
             if ( last.m_pathShape )
             {
-                last.m_pathShape->normalize();
                 last.m_pathShape->repaint();
             }
             last = pd;
@@ -664,7 +704,6 @@ void KoBreakAtPointCommand::redo()
     }
     if ( last.m_pathShape )
     {
-        last.m_pathShape->normalize();
         last.m_pathShape->repaint();
     }
 
@@ -696,7 +735,6 @@ void KoBreakAtPointCommand::undo()
         {
             if ( lastPathShape )
             {
-                lastPathShape->normalize();
                 lastPathShape->repaint();
             }
             lastPathShape = pathShape;
@@ -704,7 +742,6 @@ void KoBreakAtPointCommand::undo()
     }
     if ( lastPathShape )
     {
-        lastPathShape->normalize();
         lastPathShape->repaint();
     }
 

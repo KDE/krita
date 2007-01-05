@@ -202,7 +202,7 @@ void KoPathTool::removePoints() {
     // TODO finish current action or should this not possible during actions???
     if ( m_pointSelection.size() > 0 )
     {
-        KoPointRemoveCommand *cmd = new KoPointRemoveCommand( m_pointSelection.selectedPointMap() );
+        KoPointRemoveCommand * cmd = new KoPointRemoveCommand( m_pointSelection.selectedPointsData() );
         ActivePointHandle *pointHandle = dynamic_cast<ActivePointHandle*>( m_activeHandle );
         if ( pointHandle && m_pointSelection.contains( pointHandle->m_activePoint ) )
         {

@@ -43,7 +43,7 @@ class KOTEXT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayout {
     Q_OBJECT
 public:
     /// constructor
-    KoTextDocumentLayout(QTextDocument *document);
+    explicit KoTextDocumentLayout(QTextDocument *document);
     virtual ~KoTextDocumentLayout();
 
     /**
@@ -166,7 +166,7 @@ private:
 
 class ListItemsPrivate;
 /// \internal helper class for calculating text-lists prefixes and indents
-class ListItemsHelper {
+class KOTEXT_EXPORT ListItemsHelper {
 public:
     ListItemsHelper(QTextList *textList, const QFont &font);
     ~ListItemsHelper();

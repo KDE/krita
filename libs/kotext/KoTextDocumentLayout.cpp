@@ -234,7 +234,7 @@ bool KoTextDocumentLayout::LayoutState::nextParag() {
     d->format = d->block.blockFormat();
     d->blockData = dynamic_cast<KoTextBlockData*> (d->block.userData());
 
-    // initalize list item stuff for this parag.
+    // initialize list item stuff for this parag.
     QTextList *textList = d->block.textList();
     if(textList) {
         QTextListFormat format = textList->format();

@@ -101,6 +101,60 @@ void TestPathShape::pointByIndex()
     QVERIFY( point5 == path.pointByIndex( path.pathPointIndex( point5 ) ) );
 }
 
+void TestPathShape::pointCount()
+{
+    KoPathShape path;
+    path.moveTo( QPointF( 20, 20 ) );
+    path.lineTo( QPointF( 15, 25 ) );
+    path.lineTo( QPointF( 10, 20 ) );
+    path.close();
+
+    QVERIFY( path.pointCount() == 3 );
+
+    path.moveTo( QPointF( 20, 30 ) ); 
+    path.lineTo( QPointF( 20, 30 ) );
+    path.moveTo( QPointF( 30, 30 ) ); 
+    path.lineTo( QPointF( 40, 30 ) );
+    path.lineTo( QPointF( 40, 40 ) );
+    path.curveTo( QPointF( 40, 45 ), QPointF( 30, 45 ), QPointF( 30, 40 ) );
+
+    QVERIFY( path.pointCount() == 9 );
+
+    path.moveTo( QPointF( 50, 50 ) ); 
+    path.lineTo( QPointF( 60, 50 ) );
+    path.lineTo( QPointF( 60, 60 ) );
+    path.curveTo( QPointF( 60, 65 ), QPointF( 50, 65 ), QPointF( 50, 60 ) );
+    path.close();
+
+    QVERIFY( path.pointCount() == 13 );
+}
+
+void TestPathShape::pointCountSubpath()
+{
+    KoPathShape path;
+    path.moveTo( QPointF( 20, 20 ) );
+    path.lineTo( QPointF( 15, 25 ) );
+    path.lineTo( QPointF( 10, 20 ) );
+    path.close();
+    path.moveTo( QPointF( 20, 30 ) ); 
+    path.lineTo( QPointF( 20, 30 ) );
+    path.moveTo( QPointF( 30, 30 ) ); 
+    path.lineTo( QPointF( 40, 30 ) );
+    path.lineTo( QPointF( 40, 40 ) );
+    path.curveTo( QPointF( 40, 45 ), QPointF( 30, 45 ), QPointF( 30, 40 ) );
+    path.moveTo( QPointF( 50, 50 ) ); 
+    path.lineTo( QPointF( 60, 50 ) );
+    path.lineTo( QPointF( 60, 60 ) );
+    path.curveTo( QPointF( 60, 65 ), QPointF( 50, 65 ), QPointF( 50, 60 ) );
+    path.close();
+
+    QVERIFY( path.pointCountSubpath( 0 ) == 3 );
+    QVERIFY( path.pointCountSubpath( 1 ) == 2 );
+    QVERIFY( path.pointCountSubpath( 2 ) == 4 );
+    QVERIFY( path.pointCountSubpath( 3 ) == 4 );
+    QVERIFY( path.pointCountSubpath( 4 ) == -1 );
+}
+
 void TestPathShape::isClosedSubpath()
 {
     KoPathShape path;

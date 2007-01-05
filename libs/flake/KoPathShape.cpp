@@ -791,6 +791,28 @@ KoPathPoint * KoPathShape::pointByIndex( const KoPathPointIndex &pointIndex ) co
     return subpath->at( pointIndex.second );
 }
 
+int KoPathShape::pointCount() const
+{
+    int i = 0;
+    KoSubpathList::const_iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
+    {
+        i += (*pathIt)->size();
+    }
+
+    return i;
+}
+
+int KoPathShape::pointCountSubpath( int subpathIndex ) const
+{
+    KoSubpath * subpath = subPath( subpathIndex );
+
+    if ( subpath == 0 )
+        return -1;
+
+    return subpath->size();
+}
+
 bool KoPathShape::isClosedSubpath( int subpathIndex )
 {
     KoSubpath * subpath = subPath( subpathIndex );

@@ -499,6 +499,20 @@ public:
     KoPathPoint * pointByIndex( const KoPathPointIndex &pointIndex ) const;
 
     /**
+     * @brief Get the number of points in the path
+     *
+     * @return The number of points in the path
+     */
+    int pointCount() const;
+
+    /**
+     * @brief Get the number of points in a subpath
+     *
+     * @return The number of points in the subpath or -1 if subpath out of bounds
+     */
+    int pointCountSubpath( int subpathIndex ) const;
+
+    /**
      * @brief Check if subpath is closed
      *
      * @param subpathIndex of the subpath to check

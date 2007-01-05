@@ -32,8 +32,8 @@
  */
 class KoViewConverter {
 public:
-    KoViewConverter() {};
-    virtual ~KoViewConverter() {};
+    KoViewConverter() {}
+    virtual ~KoViewConverter() {}
 
     /**
      * Convert a coordinate in pt to pixels.

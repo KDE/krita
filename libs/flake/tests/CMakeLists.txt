@@ -41,15 +41,23 @@ add_test(flake-TestPathShape ${EXECUTABLE_OUTPUT_PATH}/TestPathShape)
 
 ########### next target ###############
 
-set(TestSelection_test_SRCS TestShapeAt.cpp )
+set(TestShapeAt_test_SRCS TestShapeAt.cpp )
 
-kde4_automoc(${TestSelection_test_SRCS})
+kde4_automoc(${TestShapeAt_test_SRCS})
 
-kde4_add_executable(TestShapeAt RUN_UNINSTALLED ${TestSelection_test_SRCS})
+kde4_add_executable(TestShapeAt RUN_UNINSTALLED ${TestShapeAt_test_SRCS})
 
 target_link_libraries(TestShapeAt  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
 add_test(flake-TestShapeAt ${EXECUTABLE_OUTPUT_PATH}/TestShapeAt)
+
+########### next target ###############
+
+set(TestShapePaint_test_SRCS TestShapePainting.cpp )
+kde4_automoc(${TestShapePaint_test_SRCS})
+kde4_add_executable(TestShapePainting RUN_UNINSTALLED ${TestShapePaint_test_SRCS})
+target_link_libraries(TestShapePainting  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+add_test(TestShapePainting ${EXECUTABLE_OUTPUT_PATH}/TestShapePainting)
 
 ########### next target ###############
 

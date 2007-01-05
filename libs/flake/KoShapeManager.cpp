@@ -127,7 +127,11 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
     updateTree();
     painter.setPen( Qt::NoPen );// painters by default have a black stroke, lets turn that off.
     painter.setBrush( Qt::NoBrush );
-    QList<KoShape*> sortedShapes( m_tree.intersects( converter.viewToDocument( painter.clipRegion().boundingRect() ) ) );
+    QList<KoShape*> sortedShapes;
+    if(painter.hasClipping())
+        sortedShapes = m_tree.intersects( converter.viewToDocument( painter.clipRegion().boundingRect() ) );
+    else
+        sortedShapes = shapes();
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     const QRegion clipRegion = painter.clipRegion();
 

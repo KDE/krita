@@ -137,7 +137,8 @@ class KoRGB16Fallback {
         Q_UNUSED(dst);
         Q_UNUSED(buf);
         Q_UNUSED(nPixels);
-        kError() << "THIS FUNCTION SHOULDN'T BE EXECUTED YOU NEED TO REIMPLEMENT fromRgbA16 IN YOUR COLORSPACE"  << endl;
+        kFatal() << "THIS FUNCTION SHOULDN'T BE EXECUTED YOU NEED TO REIMPLEMENT fromRgbA16 IN YOUR COLORSPACE"  << endl;
+        Q_ASSERT(false);
     }
     /**
      * Should not be called or that mean the fallback doesn't work
@@ -150,7 +151,7 @@ class KoRGB16Fallback {
         Q_UNUSED(dst);
         Q_UNUSED(buf);
         Q_UNUSED(nPixels);
-        kError() << "THIS FUNCTION SHOULDN'T BE CALLED YOU NEED TO REIMPLEMENT toRgbA16 IN YOUR COLORSPACE"  << endl;
+        kFatal() << "THIS FUNCTION SHOULDN'T BE CALLED YOU NEED TO REIMPLEMENT toRgbA16 IN YOUR COLORSPACE"  << endl;
     }
     /**
      * Use internally by KoIncompleteColorSpace to create the fallback colorspace

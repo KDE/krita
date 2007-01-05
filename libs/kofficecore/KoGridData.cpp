@@ -25,7 +25,7 @@ KoGridData::KoGridData()
   m_showGrid(true),
   m_gridX(MM_TO_POINT(5.0)),
   m_gridY(MM_TO_POINT(5.0)),
-  m_gridColor(Qt::black)
+  m_gridColor(Qt::lightGray)
 {
 }
 

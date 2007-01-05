@@ -86,7 +86,7 @@ class KoConvolutionOp {
      * @param channelFlags determines which channels are affected
      * @param dst the destination pixel
      * @param factor usually the factor is equal to the sum of kernelValues
-     * @param offset the offset which is added to the result, usefull when the sum of kernelValues is equal to 0
+     * @param offset the offset which is added to the result, useful when the sum of kernelValues is equal to 0
      * This function is thread-safe.
      * @param nColors the number of pixels in the colors array
      */

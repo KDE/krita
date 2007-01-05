@@ -15,6 +15,8 @@ class MockTextShape;
 class QTextDocument;
 class QTextLayout;
 
+#define ROUNDING 0.126
+
 class TestDocumentLayout : public QObject {
     Q_OBJECT
 public:
@@ -55,6 +57,14 @@ private slots:
     void testNumberedList();
     void testInterruptedLists(); // consecutiveNumbering
     void testNestedLists();
+    void testAutoRestartList();
+    void testListParagraphIndent();
+    void testRomanNumbering();
+    void testUpperAlphaNumbering();
+    void testRestartNumbering();
+
+
+
 // relativeBulletSize
 
     //etc

@@ -6,8 +6,8 @@
 #include "MockShapes.h"
 
 void TestShapePainting::testPaintShape() {
-    MockContainer container;
     MockShape shape;
+    MockContainer container;
 
     container.addChild(&shape);
     QCOMPARE(shape.parent(), &container);
@@ -47,6 +47,37 @@ void TestShapePainting::testPaintShape() {
     // paint the child shape for us.
     QCOMPARE(shape.paintedCount, 1);
     QCOMPARE(container.paintedCount, 1);
+}
+
+void TestShapePainting::testPaintHiddenShape() {
+    MockShape shape;
+    MockContainer fourth;
+    MockContainer thirth;
+    MockContainer second;
+    MockContainer top;
+
+    top.addChild(&second);
+    second.addChild(&thirth);
+    thirth.addChild(&fourth);
+    fourth.addChild(&shape);
+
+    second.setVisible(false);
+
+    MockCanvas canvas;
+    KoShapeManager manager(&canvas);
+    manager.add(&top);
+    QCOMPARE(manager.shapes().count(), 5);
+
+    QImage image(100, 100,  QImage::Format_Mono);
+    QPainter painter(&image);
+    MockViewConverter vc;
+    manager.paint(painter, vc, false);
+
+    QCOMPARE(top.paintedCount, 1);
+    QCOMPARE(second.paintedCount, 0);
+    QCOMPARE(thirth.paintedCount, 0);
+    QCOMPARE(fourth.paintedCount, 0);
+    QCOMPARE(shape.paintedCount, 0);
 }
 
 QTEST_MAIN(TestShapePainting)

@@ -8,6 +8,7 @@ class TestShapePainting : public QObject {
 private slots:
 
     void testPaintShape();
+    void testPaintHiddenShape();
 };
 
 #endif

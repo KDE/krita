@@ -100,8 +100,6 @@ KisFilterManager::KisFilterManager(KisView2 * view, KisDoc2 * doc)
     connect( m_d->timer, SIGNAL( timeout() ), this, SLOT(slotDelayedRefreshPreview()) );
 
     connect(m_d->filterMapper, SIGNAL(mapped(int)), this, SLOT(slotApplyFilter(int)));
-
-    setup( view->actionCollection() );
 }
 
 KisFilterManager::~KisFilterManager()

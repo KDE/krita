@@ -28,6 +28,7 @@ KoListStyle::KoListStyle() {
     m_stylesPrivate = new StylePrivate();
     setStyle(DiscItem);
     setStartValue(1);
+    setLevel(1);
 }
 
 KoListStyle::KoListStyle(const KoListStyle &orig) {

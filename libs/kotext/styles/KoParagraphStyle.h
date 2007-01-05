@@ -59,6 +59,8 @@ public:
         FollowDocBaseline,  ///< If true the baselines will be aligned with the doc-wide grid
         BreakBefore,    ///< If true, insert a frame break before this paragraph
         BreakAfter,     ///< If true, insert a frame break after this paragraph
+
+        // border stuff
         HasLeftBorder,  ///< If true, paint a border on the left
         HasTopBorder,   ///< If true, paint a border on the top
         HasRightBorder, ///< If true, paint a border on the right
@@ -89,7 +91,9 @@ public:
         BottomInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
         BottomBorderSpacing,    ///< In case of style being 'double' the space between the inner and outer border lines
         BottomBorderStyle,      ///< The border style. (see BorderStyle)
-        BottomBorderColor       ///< The border Color
+        BottomBorderColor,      ///< The border Color
+
+        RestartListNumbering    ///> A boolean to indicate that this paragraph will start the numbering at the start.
 
 // do 15.5.24
 // continue at 15.5.28

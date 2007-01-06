@@ -55,7 +55,7 @@ public:
     const QString &partialCounterText() const { return m_partialCounterText; }
 
     void setCounterPosition(QPointF position) { m_counterPos = position; }
-    QPointF counterPosition() const { return m_counterPos; }
+    const QPointF &counterPosition() const { return m_counterPos; }
 
     void setBorder(KoTextBlockBorderData *border);
     KoTextBlockBorderData *border() const { return m_border; }

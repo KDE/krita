@@ -580,7 +580,9 @@ painter->setPen(Qt::black); // TODO use theme color, or a kword wide hardcoded d
             }
             if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(parag.toRect())).isEmpty()) {
                 started=true;
+                painter->save();
                 decorateParagraph(painter, block);
+                painter->restore();
                 layout->draw(painter, QPointF(0,0));
             }
             else if(started) // when out of the cliprect, then we are done drawing.
@@ -597,10 +599,11 @@ void KoTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
 
     QTextList *list = block.textList();
     if(list && data->hasCounterData()) {
+        QTextListFormat listFormat = list->format();
         QTextCharFormat cf;
         bool filled=false;
         if(m_styleManager) {
-            const int id = list->format().intProperty(KoListStyle::CharacterStyleId);
+            const int id = listFormat.intProperty(KoListStyle::CharacterStyleId);
             KoCharacterStyle *cs = m_styleManager->characterStyle(id);
             if(cs) {
                 cs->applyStyle(cf);
@@ -613,24 +616,66 @@ void KoTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
             // charformat does not work, apparantly
             cf = cursor.charFormat();
         }
-        QFont font(cf.font(), paintDevice());
-        QTextLayout layout(data->counterText(), font, paintDevice());
-        layout.setCacheEnabled(true);
-        QList<QTextLayout::FormatRange> layouts;
-        QTextLayout::FormatRange format;
-        format.start=0;
-        format.length=data->counterText().length();
-        format.format = cf;
-        layouts.append(format);
-        layout.setAdditionalFormats(layouts);
+        if(! data->counterText().isEmpty()) {
+            QFont font(cf.font(), paintDevice());
+            QTextLayout layout(data->counterText(), font, paintDevice());
+            layout.setCacheEnabled(true);
+            QList<QTextLayout::FormatRange> layouts;
+            QTextLayout::FormatRange format;
+            format.start=0;
+            format.length=data->counterText().length();
+            format.format = cf;
+            layouts.append(format);
+            layout.setAdditionalFormats(layouts);
 
-        QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
-        option.setTextDirection(block.blockFormat().layoutDirection());
-        layout.setTextOption(option);
-        layout.beginLayout();
-        layout.createLine();
-        layout.endLayout();
-        layout.draw(painter, data->counterPosition());
+            QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
+            option.setTextDirection(block.blockFormat().layoutDirection());
+            layout.setTextOption(option);
+            layout.beginLayout();
+            layout.createLine();
+            layout.endLayout();
+            layout.draw(painter, data->counterPosition());
+        }
+
+        KoListStyle::Style listStyle = static_cast<KoListStyle::Style> ( listFormat.style() );
+        if(listStyle == KoListStyle::SquareItem || listStyle == KoListStyle::DiscItem ||
+                listStyle == KoListStyle::CircleItem || listStyle == KoListStyle::BoxItem) {
+            QFontMetricsF fm(cf.font(), paintDevice());
+#if 0
+// helper lines to show the anatomy of this font.
+painter->setPen(Qt::green);
+painter->drawLine(QLineF(-1, data->counterPosition().y(), 200, data->counterPosition().y()));
+painter->setPen(Qt::yellow);
+painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.ascent() - fm.xHeight(), 200, data->counterPosition().y() + fm.ascent() - fm.xHeight()));
+painter->setPen(Qt::blue);
+painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.ascent(), 200, data->counterPosition().y() + fm.ascent()));
+painter->setPen(Qt::gray);
+painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, data->counterPosition().y() + fm.height()));
+#endif
+
+            double width = fm.xHeight();
+            double y = data->counterPosition().y() + fm.ascent() - fm.xHeight(); // at top of text.
+            int percent = listFormat.intProperty(KoListStyle::BulletSize);
+            if(percent > 0)
+                width *= percent / 100.0;
+            y -= width / 10.; // move it up just slightly
+            double x = qMax(1., fm.width(listFormat.stringProperty( KoListStyle::ListItemPrefix )));
+            switch( listStyle ) {
+                case KoListStyle::SquareItem:
+                    painter->fillRect(QRectF(x, y, width, width), QBrush(Qt::black));
+                    break;
+                case KoListStyle::DiscItem:
+                    painter->setBrush(QBrush(Qt::black));
+                    // fall through!
+                case KoListStyle::CircleItem:
+                    painter->drawEllipse(QRectF(x, y, width, width));
+                    break;
+                case KoListStyle::BoxItem:
+                    painter->drawRect(QRectF(x, y, width, width));
+                    break;
+                default:; // others we ignore.
+            }
+        }
     }
 
     KoTextBlockBorderData *border = dynamic_cast<KoTextBlockBorderData*> (data->border());
@@ -937,6 +982,7 @@ Q_ASSERT(otherData);
             case KoListStyle::DiscItem:
             case KoListStyle::CircleItem:
             case KoListStyle::BoxItem: {
+                item = ' ';
                 width = d->displayFont.pointSizeF();
                 int percent = format.intProperty(KoListStyle::BulletSize);
                 if(percent > 0)

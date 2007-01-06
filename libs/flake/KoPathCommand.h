@@ -135,11 +135,24 @@ private:
 class KoPointRemoveCommand : public QUndoCommand 
 {
 public:
+    /**
+     * @brief Create command for removing points from path shapes
+     *
+     * This will create the command for removing points from path shapes. If all
+     * points from a path shape are deleted it will delete the path shape. If all 
+     * points from a subpath are deleted it will delete the subpath.
+     *
+     * @param pointDataList List of point datas to remove
+     * @param shapeController shape controller in charge
+     * @param parent the parent command used for macro commands
+     */
     static QUndoCommand * createCommand( const QList<KoPathPointData> & pointDataList, KoShapeController * shapeController, 
                                          QUndoCommand *parent = 0 );
 
     /**
      * @brief Command to remove a points from path shapes
+     *
+     * Don't use this directly use createCommand instead.
      *
      * @param pointDataList List of point datas to remove.
      * @param parent the parent command used for macro commands
@@ -156,6 +169,24 @@ private:
     QList<KoPathPointData> m_pointDataList;
     QList<KoPathPoint*> m_points;
     bool m_deletePoints;
+};
+
+/// The undo / redo command for removing a subpath
+class KoRemoveSubpathCommand : public QUndoCommand
+{
+public:
+    KoRemoveSubpathCommand( KoPathShape *pathShape, int subpathIndex, QUndoCommand *parent = 0 );
+    ~KoRemoveSubpathCommand();
+
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
+
+private:
+    KoPathShape * m_pathShape;
+    int m_subpathIndex;
+    KoSubpath * m_subpath;
 };
 
 /// The undo / redo command for splitting a path segment

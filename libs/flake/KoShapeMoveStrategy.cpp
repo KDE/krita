@@ -87,5 +87,6 @@ QUndoCommand* KoShapeMoveStrategy::createCommand() {
 void KoShapeMoveStrategy::paint( QPainter &painter, KoViewConverter &converter) {
     SelectionDecorator decorator (KoFlake::NoHandle, false, false);
     decorator.setSelection(m_canvas->shapeManager()->selection());
+    decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     decorator.paint(painter, converter);
 }

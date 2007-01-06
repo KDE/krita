@@ -147,11 +147,16 @@ public:
      */
     void setSelection(KoSelection *selection);
 
+    /**
+     * set the radius of the selection handles
+     * @param radius the new handle radius
+     */
+    void setHandleRadius( int radius );
 private:
     bool m_rotationHandles, m_shearHandles;
     KoFlake::SelectionHandle m_arrows;
     KoSelection *m_selection;
-
+    int m_handleRadius;
     static QImage *s_rotateCursor;
 };
 

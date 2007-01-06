@@ -192,6 +192,7 @@ void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
         SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle,
                  true, true);
         decorator.setSelection(koSelection());
+        decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
         decorator.paint(painter, converter);
     }
 }
@@ -422,6 +423,7 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 : m_rotationHandles(rotationHandles)
 , m_shearHandles(shearHandles)
 , m_arrows(arrows)
+, m_handleRadius( 3 )
 {
     if(SelectionDecorator::s_rotateCursor == 0) {
         staticRotateCursorDeleter.setObject(s_rotateCursor, new QImage());
@@ -431,6 +433,10 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 
 void SelectionDecorator::setSelection(KoSelection *selection) {
     m_selection = selection;
+}
+
+void SelectionDecorator::setHandleRadius( int radius ) {
+    m_handleRadius = radius;
 }
 
 void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
@@ -479,23 +485,24 @@ void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
     painter.setBrush(Qt::yellow);
 
     // the 8 move rects
+    QRectF rect( QPointF(0,0), QSizeF(2*m_handleRadius,2*m_handleRadius) );
     pen.setWidthF(0);
     painter.setPen(pen);
-    QRectF rect(outline.value(0)- QPointF(3,3), QSizeF(6, 6));
+    rect.moveCenter(outline.value(0));
     painter.drawRect(rect);
-    rect.moveTo(outline.value(1)- QPointF(3,3));
+    rect.moveCenter(outline.value(1));
     painter.drawRect(rect);
-    rect.moveTo(outline.value(2)- QPointF(3,3));
+    rect.moveCenter(outline.value(2));
     painter.drawRect(rect);
-    rect.moveTo(outline.value(3)- QPointF(3,3));
+    rect.moveCenter(outline.value(3));
     painter.drawRect(rect);
-    rect.moveTo((outline.value(0)+outline.value(1))/2 - QPointF(3,3));
+    rect.moveCenter((outline.value(0)+outline.value(1))/2);
     painter.drawRect(rect);
-    rect.moveTo((outline.value(1)+outline.value(2))/2 - QPointF(3,3));
+    rect.moveCenter((outline.value(1)+outline.value(2))/2);
     painter.drawRect(rect);
-    rect.moveTo((outline.value(2)+outline.value(3))/2 - QPointF(3,3));
+    rect.moveCenter((outline.value(2)+outline.value(3))/2);
     painter.drawRect(rect);
-    rect.moveTo((outline.value(3)+outline.value(0))/2 - QPointF(3,3));
+    rect.moveCenter((outline.value(3)+outline.value(0))/2);
     painter.drawRect(rect);
 
 #if 0

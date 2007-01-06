@@ -45,6 +45,7 @@ void KoShapeCreateCommand::redo () {
     Q_ASSERT(m_controller);
     if( m_shapeParent )
         m_shapeParent->addChild( m_shape );
+    // the parent has to be there when it is added to the KoShapeControllerBase
     recurse(m_shape, Add);
     m_deleteShape = false;
 }
@@ -52,6 +53,7 @@ void KoShapeCreateCommand::redo () {
 void KoShapeCreateCommand::undo () {
     Q_ASSERT(m_shape);
     Q_ASSERT(m_controller);
+    // the parent has to be there when it is removed from the KoShapeControllerBase
     recurse(m_shape, Remove);
     if( m_shapeParent )
         m_shapeParent->removeChild( m_shape );

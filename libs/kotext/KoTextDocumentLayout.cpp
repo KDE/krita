@@ -287,7 +287,8 @@ bool KoTextDocumentLayout::LayoutState::nextParag() {
     if(textList) {
         // if list set list-indent. Do this after borders init to we can account for them.
         // Also after we account for indents etc so the y() pos is correct.
-        d->blockData->setCounterPosition(QPointF(d->borderInsets.left, y()));
+        d->blockData->setCounterPosition(QPointF(d->borderInsets.left +
+                    d->format.textIndent() + d->format.leftMargin() , y()));
     }
 
     return true;

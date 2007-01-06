@@ -60,7 +60,7 @@ public:
      * @return command which will insert the shape into the document or 0 if the 
      *         insertion was canceled. The command is not yet executed.
      */
-    QUndoCommand* addShape( KoShape *shape );
+    QUndoCommand* addShape( KoShape *shape, QUndoCommand *parent = 0 );
 
     /**
      * @brief Remove a shape from the document.
@@ -70,7 +70,7 @@ public:
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
      */
-    QUndoCommand* removeShape( KoShape *shape );
+    QUndoCommand* removeShape( KoShape *shape, QUndoCommand *parent = 0 );
 
     /**
      * Remove a shape from the document.
@@ -80,7 +80,7 @@ public:
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
      */
-    QUndoCommand* removeShapes( const QList<KoShape*> &shapes );
+    QUndoCommand* removeShapes( const QList<KoShape*> &shapes, QUndoCommand *parent = 0 );
 
     /**
      * @brief Set the KoShapeControllerBase used to add/remove shapes

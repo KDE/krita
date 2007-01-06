@@ -42,7 +42,7 @@ KoShapeController::KoShapeController( KoCanvasBase *canvas, KoShapeControllerBas
 {
 }
 
-QUndoCommand* KoShapeController::addShape( KoShape *shape )
+QUndoCommand* KoShapeController::addShape( KoShape *shape, QUndoCommand *parent )
 {
     Q_ASSERT(m_canvas->shapeManager());
 
@@ -99,16 +99,15 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape )
         shape->setParent( m_canvas->shapeManager()->selection()->activeLayer() );
     }
 
-    KoShapeCreateCommand *cmd = new KoShapeCreateCommand( m_shapeController, shape );
-    return cmd;
+    return new KoShapeCreateCommand( m_shapeController, shape, parent );
 }
 
-QUndoCommand* KoShapeController::removeShape( KoShape *shape )
+QUndoCommand* KoShapeController::removeShape( KoShape *shape, QUndoCommand *parent  )
 {
-    KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( m_shapeController, shape );
-    return cmd;
+    return new KoShapeDeleteCommand( m_shapeController, shape, parent );
 }
 
-QUndoCommand* KoShapeController::removeShapes( const QList<KoShape*> &shapes) {
-    return new KoShapeDeleteCommand( m_shapeController, shapes );
+QUndoCommand* KoShapeController::removeShapes( const QList<KoShape*> &shapes, QUndoCommand *parent )
+{
+    return new KoShapeDeleteCommand( m_shapeController, shapes, parent );
 }

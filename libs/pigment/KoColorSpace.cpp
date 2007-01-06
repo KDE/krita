@@ -72,8 +72,7 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
 {
     Q_UNUSED(renderingIntent);
     // 4 channels: labA, 2 bytes per lab channel
-    quint8 *pixels = new quint8[2*4*numPixels];
-
+    quint8 *pixels = new quint8[sizeof(quint16)*4*numPixels];
     toLabA16(src, pixels,numPixels);
     dstColorSpace->fromLabA16(pixels, dst,numPixels);
 

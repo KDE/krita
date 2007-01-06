@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,8 @@
 
 #define UINT8_TO_FLOAT(v) (KoColorSpaceMaths<quint8, typename _CSTraits::channels_type >::scaleToA(v))
 #define FLOAT_TO_UINT8(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint8>::scaleToA(v))
+#define UINT16_TO_FLOAT(v) (KoColorSpaceMaths<quint16, typename _CSTraits::channels_type >::scaleToA(v))
+#define FLOAT_TO_UINT16(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint16>::scaleToA(v))
 
 template <class _CSTraits>
 class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB16Fallback>
@@ -119,6 +121,24 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB1
                 src[1] = KoColorSpaceMathsTraits<quint16>::max() - src[1];
                 src[2] = KoColorSpaceMathsTraits<quint16>::max() - src[2];
                 src += this->pixelSize();
+            }
+        }
+        virtual void fromRgbA16(const quint8 * srcU8, quint8 * dstU8, const quint32 nPixels) const
+        {
+            typename _CSTraits::channels_type* dst = this->nativeArray(dstU8);
+            const quint16* src = reinterpret_cast<const quint16*>(srcU8);
+            for(quint32 i = 0; i< 4*nPixels;i++)
+            {
+                dst[i] = UINT16_TO_FLOAT(src[i]);
+            }
+        }
+        virtual void toRgbA16(const quint8 * srcU8, quint8 * dstU8, const quint32 nPixels) const
+        {
+            const typename _CSTraits::channels_type* src = this->nativeArray(srcU8);
+            quint16* dst = reinterpret_cast<quint16*>(dstU8);
+            for(quint32 i = 0; i< 4*nPixels;i++)
+            {
+                dst[i] = FLOAT_TO_UINT16(src[i]);
             }
         }
     private:

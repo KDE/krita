@@ -138,7 +138,6 @@ class KoRGB16Fallback {
         Q_UNUSED(buf);
         Q_UNUSED(nPixels);
         kFatal() << "THIS FUNCTION SHOULDN'T BE EXECUTED YOU NEED TO REIMPLEMENT fromRgbA16 IN YOUR COLORSPACE"  << endl;
-        Q_ASSERT(false);
     }
     /**
      * Should not be called or that mean the fallback doesn't work

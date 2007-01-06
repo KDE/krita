@@ -1,6 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SelectOpauqe
+Name[it]=Seleziona opachi
+Name[pt]=Selecção Opaca
+Name[pt_BR]=Selecção Opaca
+Name[sv]=Markera ogenomskinliga
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaselectopaque

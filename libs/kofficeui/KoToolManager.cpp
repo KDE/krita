@@ -179,16 +179,7 @@ void KoToolManager::toolActivated(ToolHelper *tool) {
     KoTool *t = toolsHash.value(tool->id());
 
     m_activeToolId = tool->id();
-
-    // cache all the selected shapes relevant to the activated tool
-    if ( m_activeToolId != KoInteractionTool_ID ) {
-        m_lastSelectedShapes.clear();
-        KoSelection *selection = m_activeCanvas->canvas()->shapeManager()->selection();
-        foreach( KoShape *shape, selection->selectedShapes() ) {
-            if ( tool->activationShapeId().isNull() || tool->activationShapeId() == shape->shapeId() )
-                m_lastSelectedShapes.append( shape );
-        }
-    }
+    m_activationShapeId = tool->activationShapeId();
 
     switchTool(t);
 }
@@ -387,17 +378,12 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
         }
     }
 
-    // check if all previous selected shapes are still selected
+    // check if there is still a shape selected the active tool can work on
     // if not change the current tool to the default tool
-    if ( m_activeToolId != KoInteractionTool_ID ) {
-        foreach( KoShape* shape, m_lastSelectedShapes ) {
-            if ( ! shapes.contains( shape ) ) {
-                switchTool(KoInteractionTool_ID, false);
-                break;
-            }
-        }
+    if ( ! m_activationShapeId.isNull() && ! types.contains( m_activationShapeId ) )
+    {
+        switchTool(KoInteractionTool_ID, false);
     }
-    m_lastSelectedShapes = shapes;
 
     emit toolCodesSelected(types);
 }

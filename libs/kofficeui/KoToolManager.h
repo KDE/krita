@@ -216,13 +216,12 @@ private:
     KoTool *m_activeTool;
     ToolHelper *m_defaultTool; // the pointer thingy
     QString m_activeToolId;
+    QString m_activationShapeId;
 
     QHash<KoTool*, int> m_uniqueToolIds; // for the changedTool signal
     QHash<KoCanvasController*, QHash<QString, KoTool*> > m_allTools;
     QHash<KoCanvasBase*, ToolProxy*> m_proxies;
     QStack<QString> m_stack; // stack of temporary tools
-
-    QList<KoShape*> m_lastSelectedShapes;
 };
 
 #endif

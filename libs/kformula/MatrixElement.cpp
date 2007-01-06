@@ -157,6 +157,7 @@ int MatrixElement::indexOfRow( BasicElement* row ) const
     for( int i = 0; i < m_matrixRowElements.count(); i++ )
         if( m_matrixRowElements[ i ] == row )
             return i;
+    return 0;
 }
 /*
 int MatrixElement::rows() const

@@ -135,11 +135,13 @@ SpaceElement* ElementFactory::createSpaceElement( SpaceWidth width )
 FractionElement* ElementFactory::createFractionElement()
 {
     //return new FractionElement;
+    return 0;
 }
 
 RootElement* ElementFactory::createRootElement()
 {
     //return new RootElement;
+    return 0;
 }
 
 /*
@@ -189,21 +191,25 @@ BasicElement* ElementFactory::createOperatorElement( const QDomElement& element 
         }
     }
     //return new OperatorElement();
+    return 0;
 }
 
 IdentifierElement* ElementFactory::createIdentifierElement()
 {
     //return new IdentifierElement();
+    return 0;
 }
 
 OperatorElement* ElementFactory::createOperatorElement()
 {
     //return new OperatorElement();
+    return 0;
 }
 
 NumberElement* ElementFactory::createNumberElement()
 {
     //return new NumberElement();
+    return 0;
 }
 
 } // namespace KFormula

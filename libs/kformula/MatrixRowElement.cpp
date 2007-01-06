@@ -46,6 +46,7 @@ int MatrixRowElement::positionOfEntry( BasicElement* entry ) const
     for( int i = 0; i < m_matrixEntryElements.count(); i++ )
          if( m_matrixEntryElements[ i ] == entry )
              return i;
+    return 0;
 }
 
 MatrixEntryElement* MatrixRowElement::entryAt( int pos )

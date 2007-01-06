@@ -57,6 +57,7 @@ int ActionElement::buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNo
     parse();
     return 1;
 */
+    return 0;
 }
 
 void ActionElement::writeMathMLAttributes( QDomElement& element ) const

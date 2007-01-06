@@ -34,6 +34,7 @@ namespace KoCanvasResource {
         BackgroundColor,    ///< The active background color selected for this canvas.
         CompositeOperation,
         CompositeOpacity,
+        HandleRadius,       ///< The handle radius used for drawing handles of any kind
         KarbonStart = 1000,      ///< Base number for karbon specific values.
         KexiStart = 2000,        ///< Base number for kexi specific values.
         KivioStart = 3000,       ///< Base number for kivio specific values.
@@ -89,6 +90,11 @@ public:
 
     void setKoID( KoCanvasResource::EnumCanvasResource key, const KoID & id );
     KoID koID(KoCanvasResource::EnumCanvasResource key);
+
+    /// Sets the actual handle radius
+    void setHandleRadius( int handleSize );
+    /// Returns the actual handle radius
+    int handleRadius();
 
 signals:
 

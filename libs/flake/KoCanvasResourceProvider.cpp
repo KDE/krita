@@ -25,6 +25,8 @@
 KoCanvasResourceProvider::KoCanvasResourceProvider(QObject * parent)
     : QObject( parent )
 {
+    // initialize handle radius to a sane value
+    setHandleRadius( 3 );
 }
 
 void KoCanvasResourceProvider::setResource( KoCanvasResource::EnumCanvasResource key, const QVariant & value )
@@ -100,5 +102,17 @@ KoID KoCanvasResourceProvider::koID(KoCanvasResource::EnumCanvasResource key)
     return resource( key ).value<KoID>();
 }
 
+void KoCanvasResourceProvider::setHandleRadius( int handleRadius )
+{
+    // do not allow arbitrary small handles
+    if( handleRadius < 3 )
+        handleRadius = 3;
+    setResource( KoCanvasResource::HandleRadius, QVariant( handleRadius) );
+}
+
+int KoCanvasResourceProvider::handleRadius()
+{
+    return resource( KoCanvasResource::HandleRadius ).toInt();
+}
 
 #include "KoCanvasResourceProvider.moc"

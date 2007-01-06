@@ -710,8 +710,8 @@ bool KoEncryptedStore::closeWrite() {
         QSecureArray passwordHash = QCA::Hash( "sha1" ).hash( m_password );
         QCA::Random random;
         KoEncryptedStore_EncryptionData encData;
-        encData.initVector = random.randomArray( 8, QCA::Random::LongTermKey );
-        encData.salt = random.randomArray( 16, QCA::Random::LongTermKey );
+        encData.initVector = random.randomArray( 8 );
+        encData.salt = random.randomArray( 16 );
         encData.iterationCount = 1024;
         QCA::SymmetricKey key = QCA::PBKDF2( "sha1" ).makeKey( passwordHash, QCA::InitializationVector( encData.salt ), 16, encData.iterationCount );
         QCA::Cipher encrypter( "blowfish", QCA::Cipher::CFB, QCA::Cipher::DefaultPadding, QCA::Encode, key, QCA::InitializationVector( encData.initVector ) );

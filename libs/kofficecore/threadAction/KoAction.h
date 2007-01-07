@@ -41,11 +41,11 @@ class KoJobsListPolicy;
     myAction->connect(myAction, SIGNAL(triggered(const QVariant&)),
         target, SLOT(slot()), Qt::DirectConnection);
 
-    myAction.execute();
+    myAction->execute();
  * @endcode
  * In this example the method 'slot' will be called each time
- * the 'execute()' method is called on the action. It will be called in a differen
- * thread from the main thread and you get the guarentee that it will
+ * the 'execute()' method is called on the action. It will be called in a different
+ * thread from the main thread and you get the guarantee that it will
  * never be called before a previous call has ended.
  * The execute() method can be called from any thread to simply move control to
  * an anonymous thread.

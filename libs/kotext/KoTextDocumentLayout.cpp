@@ -999,19 +999,19 @@ Q_ASSERT(otherData);
             }
             case KoListStyle::AlphaLowerItem:
                 item = d->intToAlpha(index, ListItemsPrivate::Lowercase);
-                width = d->fm.width(item);
+                width = qMax(width, d->fm.width(item + ' '));
                 break;
             case KoListStyle::UpperAlphaItem:
                 item = d->intToAlpha(index, ListItemsPrivate::Uppercase);
-                width = d->fm.width(item);
+                width = qMax(width, d->fm.width(item + ' '));
                 break;
             case KoListStyle::RomanLowerItem:
                 item = d->intToRoman(index);
-                width = d->fm.width(item);
+                width = qMax(width, d->fm.width(item + ' '));
                 break;
             case KoListStyle::UpperRomanItem:
                 item = d->intToRoman(index).toUpper();
-                width = d->fm.width(item);
+                width = qMax(width, d->fm.width(item + ' '));
                 break;
             case KoListStyle::SquareItem:
             case KoListStyle::DiscItem:

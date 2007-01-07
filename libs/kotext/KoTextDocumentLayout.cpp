@@ -855,6 +855,8 @@ void KoTextDocumentLayout::layout() {
 // ------------------- ListItemsHelper ------------
 class ListItemsPrivate {
 public:
+    enum Capitalisation { Lowercase, Uppercase };
+
     ListItemsPrivate(QTextList *tl, const QFont &font)
         : textList( tl ),
           fm( font, textList->document()->documentLayout()->paintDevice() ),
@@ -864,7 +866,32 @@ public:
     QFontMetricsF fm;
     QFont displayFont;
 
+    static QString intToRoman( int n ) {
+        static const QByteArray RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
+        static const QByteArray RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
+        static const QByteArray RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
+        static const QByteArray RNThousands[] = {"", "m", "mm", "mmm"};
 
+        if ( n <= 0 ) {
+            kWarning(32500) << "intToRoman called with negative number: n=" << n << endl;
+            return QString::number( n );
+        }
+        return QString::fromLatin1( RNThousands[ ( n / 1000 ) ] + RNHundreds[ ( n / 100 ) % 10 ] +
+                                    RNTens[ ( n / 10 ) % 10 ] + RNUnits[ ( n ) % 10 ] );
+    }
+
+    static QString intToAlpha( int n, Capitalisation caps ) {
+        const char offset = caps == Uppercase?'A':'a';
+        QString answer;
+        char bottomDigit;
+        while ( n > 26 ) {
+            bottomDigit = (n-1) % 26;
+            n = (n-1) / 26;
+            answer.prepend( QChar( offset + bottomDigit  ) );
+        }
+        answer.prepend( QChar( offset + n -1 ) );
+        return answer;
+    }
 };
 
 ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font) {
@@ -971,16 +998,20 @@ Q_ASSERT(otherData);
                 break;
             }
             case KoListStyle::AlphaLowerItem:
-                // TODO;
+                item = d->intToAlpha(index, ListItemsPrivate::Lowercase);
+                width = d->fm.width(item);
                 break;
             case KoListStyle::UpperAlphaItem:
-                // TODO;
+                item = d->intToAlpha(index, ListItemsPrivate::Uppercase);
+                width = d->fm.width(item);
                 break;
             case KoListStyle::RomanLowerItem:
-                // TODO;
+                item = d->intToRoman(index);
+                width = d->fm.width(item);
                 break;
             case KoListStyle::UpperRomanItem:
-                // TODO;
+                item = d->intToRoman(index).toUpper();
+                width = d->fm.width(item);
                 break;
             case KoListStyle::SquareItem:
             case KoListStyle::DiscItem:

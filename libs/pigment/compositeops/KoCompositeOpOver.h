@@ -27,7 +27,7 @@
 #define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::min()
 
 /**
- * A template version of the pver composite operation to use in colorspaces.
+ * A template version of the over composite operation to use in colorspaces.
  */
 template<class _CSTraits>
 class KoCompositeOpOver : public KoCompositeOp {

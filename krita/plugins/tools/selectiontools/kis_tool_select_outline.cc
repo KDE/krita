@@ -148,7 +148,7 @@ void KisToolSelectOutline::buttonRelease(KoPointerEvent *event)
 
 
             if(hasSelection) {
-                QRect dirty(painter.dirtyRect());
+                QRect dirty(painter.dirtyRegion());
                 dev->setDirty(dirty);
                 dev->emitSelectionChanged(dirty);
             } else {

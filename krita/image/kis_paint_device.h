@@ -404,13 +404,31 @@ public:
      */
     void setParentLayer(KisLayer *parentLayer);
 
+
     /**
-     * Add the specified rect top the parent layer (if present)
+       Add the specified rect to the parent layer's set of dirty rects
+       (if there is a parent layer)
+
+       XXX: Refactor this so whenever we need to set a layer dirty, we
+       do it on the layer instead of in this roundabout way. (BSAR)
      */
     virtual void setDirty(const QRect & rc);
 
     /**
-     * Set the parent layer completely dirty, if this paint device has one.
+       Add the specified region to the parent layer's dirty region
+       (if there is a parent layer)
+
+       XXX: Refactor this so whenever we need to set a layer dirty, we
+       do it on the layer instead of in this roundabout way. (BSAR)
+    */
+    virtual void setDirty( const QRegion & region );
+
+    /**
+       Set the parent layer completely dirty, if this paint device has
+       as parent layer.
+
+       XXX: Refactor this so whenever we need to set a layer dirty, we
+       do it on the layer instead of in this roundabout way. (BSAR)
      */
     virtual void setDirty();
 

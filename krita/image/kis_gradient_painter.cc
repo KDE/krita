@@ -559,7 +559,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         totalPixels *= 2;
     }*/
 
-    KisPaintDeviceSP dev = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->rgb8(), "temporary device for gradient"));
+    KisPaintDeviceSP dev = KisPaintDeviceSP(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary device for gradient"));
 
     KoColor color(dev->colorSpace()) ;
     KisHLineIteratorPixel hit = dev->createHLineIterator(startx, starty, width);
@@ -710,7 +710,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     }*/
 
     if (!m_cancelRequested) {
-        kDebug() << "Have we got a selection? " << m_device->hasSelection() << endl;
+        kDebug(41001) << "Have we got a selection? " << m_device->hasSelection() << endl;
         bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);
     }
     delete shapeStrategy;

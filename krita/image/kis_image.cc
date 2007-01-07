@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,6 +68,7 @@
 #include "kis_shear_visitor.h"
 #include "kis_perspective_grid.h"
 #include "kis_extent_visitor.h"
+#include "kis_projection.h"
 
 namespace {
 
@@ -524,11 +526,13 @@ public:
     KoColorSpace * colorSpace;
 
     bool dirty;
-    QRect dirtyRect;
+    QRect dirtyRegion;
 
     KisGroupLayerSP rootLayer; // The layers are contained in here
     KisLayerSP activeLayer;
     QList<KisLayer*> dirtyLayers; // for thumbnails
+
+    KisProjection * projection;
 
     KisNameServer *nserver;
     KisUndoAdapter *adapter;
@@ -564,10 +568,12 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisShared(rhs)
         m_d->dirty = rhs.m_d->dirty;
         m_d->adapter = rhs.m_d->adapter;
 
+
         m_d->rootLayer = static_cast<KisGroupLayer*>(rhs.m_d->rootLayer->clone().data());
-        connect(m_d->rootLayer.data(), SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
 
         m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied
+
+        m_d->projection = new KisProjection( this, m_d->rootLayer );
 
         m_d->nserver = new KisNameServer(rhs.m_d->nserver->currentSeed() + 1);
         Q_CHECK_PTR(m_d->nserver);
@@ -638,7 +644,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
     Q_ASSERT(colorSpace);
 
     if (colorSpace == 0) {
-        colorSpace = KisMetaRegistry::instance()->csRegistry()->rgb8();
+        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
         kWarning(41010) << "No colorspace specified: using RGBA\n";
     }
 
@@ -656,8 +662,8 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
 
     m_d->colorSpace = colorSpace;
 
-    m_d->rootLayer = new KisGroupLayer(this,"root", OPACITY_OPAQUE);
-    connect(m_d->rootLayer.data(), SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+    m_d->rootLayer = new KisGroupLayer(this, "root", OPACITY_OPAQUE);
+    m_d->projection = new KisProjection( this, m_d->rootLayer );
 
     m_d->xres = 1.0;
     m_d->yres = 1.0;
@@ -665,6 +671,10 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
     m_d->dirty = false;
     m_d->width = width;
     m_d->height = height;
+
+    blockSignals( this );
+    lock();
+
 }
 
 bool KisImage::locked() const
@@ -675,7 +685,8 @@ bool KisImage::locked() const
 void KisImage::lock()
 {
     if (!locked()) {
-        if (m_d->rootLayer) disconnect(m_d->rootLayer.data(), SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+        if (m_d->projection)
+            m_d->projection->lock();
         m_d->sizeChangedWhileLocked = false;
         m_d->selectionChangedWhileLocked = false;
     }
@@ -691,33 +702,24 @@ void KisImage::unlock()
 
         if (m_d->lockCount == 0) {
             if (m_d->sizeChangedWhileLocked) {
-                // A size change implies a full image update so only send this.
                 emit sigSizeChanged(m_d->width, m_d->height);
-            } else {
-                if (m_d->rootLayer->dirty()) emit sigImageUpdated( m_d->rootLayer->dirtyRect() );
             }
 
             if (m_d->selectionChangedWhileLocked) {
                 emit sigActiveSelectionChanged(KisImageSP(this));
             }
 
-            if (m_d->rootLayer) connect(m_d->rootLayer.data(), SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+            if (m_d->projection)
+                m_d->projection->unlock();
+
         }
     }
 }
 
-void KisImage::emitSizeChanged()
+void KisImage::notifyLayerUpdated(KisLayerSP layer)
 {
-    if (!locked()) {
-        emit sigSizeChanged(m_d->width, m_d->height);
-    } else {
-        m_d->sizeChangedWhileLocked = true;
-    }
-}
-
-void KisImage::notifyLayerUpdated(KisLayerSP layer, QRect rc)
-{
-    emit sigLayerUpdated(layer, rc);
+    // Add the layer to the list of layers that need to be
+    // rescanned for the thumbnails in the layerbox
     KisLayer *l = layer.data();
     while( l )
     {
@@ -725,6 +727,12 @@ void KisImage::notifyLayerUpdated(KisLayerSP layer, QRect rc)
             m_d->dirtyLayers.append( l );
         l = l->parent().data();
     }
+}
+
+
+void KisImage::resize(const QRect& rc, bool cropLayers)
+{
+    resize(rc.width(), rc.height(), rc.x(), rc.y(), cropLayers);
 }
 
 void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
@@ -762,9 +770,14 @@ void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
     }
 }
 
-void KisImage::resize(const QRect& rc, bool cropLayers)
+
+void KisImage::emitSizeChanged()
 {
-    resize(rc.width(), rc.height(), rc.x(), rc.y(), cropLayers);
+    if (!locked()) {
+        emit sigSizeChanged(m_d->width, m_d->height);
+    } else {
+        m_d->sizeChangedWhileLocked = true;
+    }
 }
 
 
@@ -946,7 +959,7 @@ void KisImage::setProfile(const KoColorProfile * profile)
 {
     if (profile == 0) return;
 
-    KoColorSpace * dstCs= KisMetaRegistry::instance()->csRegistry()->colorSpace( colorSpace()->id(),
+    KoColorSpace * dstCs= KoColorSpaceRegistry::instance()->colorSpace( colorSpace()->id(),
                                                                                          profile);
     if (dstCs) {
 
@@ -998,7 +1011,7 @@ QRegion KisImage::extent() const
 
 QRegion KisImage::dirtyRegion() const
 {
-    return QRegion(m_d->dirtyRect);
+    return QRegion(m_d->dirtyRegion);
 }
 
 KisPaintDeviceSP KisImage::activeDevice()
@@ -1082,14 +1095,14 @@ KisLayerSP KisImage::activeLayer() const
 
 KisPaintDeviceSP KisImage::projection()
 {
-    return m_d->rootLayer->projection(QRect(0, 0, m_d->width, m_d->height));
+    return m_d->rootLayer->projection();
 }
 
 KisLayerSP KisImage::activateLayer(KisLayerSP layer)
 {
 
-    kDebug() << "activateLayer called on image " << this << endl;
-    kDebug() << "Layer " << ( layer ? layer->name() : "zero" )  << " activated. Active layer was: " << ( m_d->activeLayer ? m_d->activeLayer->name() : "empty" ) << endl;
+    kDebug(41001) << "activateLayer called on image " << this << endl;
+    kDebug(41001) << "Layer " << ( layer ? layer->name() : "zero" )  << " activated. Active layer was: " << ( m_d->activeLayer ? m_d->activeLayer->name() : "empty" ) << endl;
 
 //    if (layer != m_d->activeLayer) {
 
@@ -1101,7 +1114,7 @@ KisLayerSP KisImage::activateLayer(KisLayerSP layer)
         if (m_d->activeLayer) {
             m_d->activeLayer->activate();
 
-            kDebug() << "Going to emit signal: " << m_d->activeLayer->name() << " activated\n";
+            kDebug(41001) << "Going to emit signal: " << m_d->activeLayer->name() << " activated\n";
             emit sigLayerActivated(m_d->activeLayer);
         }
 
@@ -1124,7 +1137,7 @@ KisLayerSP KisImage::findLayer(int id) const
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
 {
-    kDebug() << "KisImage::addLayer. layer: " << layer << ", parent: " << parent << endl;
+    kDebug(41001) << "KisImage::addLayer. layer: " << layer << ", parent: " << parent << endl;
     if ( parent )
         return addLayer(layer, parent, parent->firstChild());
     else
@@ -1133,7 +1146,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
 {
-    kDebug() << "KisImage::addLayer. layer: " << layer << ", parent: " << parent << ", aboveThis: " << aboveThis << endl;
+    kDebug(41001) << "KisImage::addLayer. layer: " << layer << ", parent: " << parent << ", aboveThis: " << aboveThis << endl;
 
     if (!parent)
         return false;
@@ -1145,8 +1158,8 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
         if (!player.isNull()) {
 
             // XXX: This should also be done whenever a layer grows!
-            QList<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
-                csRegistry()->paintDeviceActionsFor(player->paintDevice()->colorSpace());
+            QList<KisPaintDeviceAction *> actions =
+                KoColorSpaceRegistry::instance()->paintDeviceActionsFor(player->paintDevice()->colorSpace());
             for (int i = 0; i < actions.count(); i++) {
                 actions.at(i)->act(player.data()->paintDevice(), width(), height());
             }
@@ -1158,7 +1171,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
         if (layer->extent().isValid()) layer->setDirty();
 
         if (!layer->temporary()) {
-            kDebug() << "Going to emit sigLayerAdded\n";
+            kDebug(41001) << "Going to emit sigLayerAdded\n";
             emit sigLayerAdded(layer);
             activateLayer(layer);
         }
@@ -1179,7 +1192,7 @@ bool KisImage::removeLayer(KisLayerSP layer)
 
     if (KisGroupLayerSP parent = layer->parent()) {
         // Adjustment layers should mark the layers underneath them, whose rendering
-        // they have cached, diryt on removal. Otherwise, the group won't be re-rendered.
+        // they have cached, dirty on removal. Otherwise, the group won't be re-rendered.
         KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(layer.data());
         if (al) {
             QRect r = al->extent();
@@ -1187,7 +1200,6 @@ bool KisImage::removeLayer(KisLayerSP layer)
             KisLayerSP l = layer->nextSibling();
             while (l) {
                 KisAdjustmentLayer * al2 = dynamic_cast<KisAdjustmentLayer*>(l.data());
-                l->setDirty(r, false);
                 if (al2 != 0) break;
                 l = l->nextSibling();
             }
@@ -1202,7 +1214,6 @@ bool KisImage::removeLayer(KisLayerSP layer)
         KisLayerSP l = layer->prevSibling();
         QRect r = layer->extent();
         while (l) {
-            l->setDirty(r, false);
             l = l->prevSibling();
         }
 
@@ -1324,7 +1335,6 @@ qint32 KisImage::nHiddenLayers() const
 void KisImage::flatten()
 {
     KisGroupLayerSP oldRootLayer = m_d->rootLayer;
-    disconnect(oldRootLayer.data(), SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
 
     KisPaintLayer *dst = new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE, colorSpace());
     Q_CHECK_PTR(dst);
@@ -1335,7 +1345,7 @@ void KisImage::flatten()
     gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, mergedImage(), OPACITY_OPAQUE, rc.left(), rc.top(), rc.width(), rc.height());
 
     m_d->rootLayer = new KisGroupLayer(this, "", OPACITY_OPAQUE);
-    connect(m_d->rootLayer.data(), SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+    m_d->projection->setRootLayer( m_d->rootLayer);
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Flatten Image"));
@@ -1397,7 +1407,6 @@ void KisImage::renderToPainter(qint32 srcX,
                                float exposure)
 {
     QImage img = convertToQImage(srcX, srcY, width, height, monitorProfile, exposure);
-
     painter.drawImage(dstX, dstY, img, 0, 0, width, height);
 }
 
@@ -1408,7 +1417,7 @@ QImage KisImage::convertToQImage(qint32 x,
                                  KoColorProfile * profile,
                                  float exposure)
 {
-    KisPaintDeviceSP dev = m_d->rootLayer->projection(QRect(x, y, w, h));
+    KisPaintDeviceSP dev = m_d->rootLayer->projection();
     QImage img = dev->convertToQImage(profile, x, y, w, h, exposure);
 
     if (!img.isNull()) {
@@ -1435,8 +1444,10 @@ QImage KisImage::convertToQImage(qint32 x,
     return QImage();
 }
 
+#if 0
 QImage KisImage::convertToQImage(const QRect& r, const double xScale, const double yScale, KoColorProfile *profile, float exposure)
 {
+    kDebug(41001) << "convertToQImage r: " << r << ", xScale: " << xScale << ", yScale: " << yScale << endl;
     if (r.isEmpty()) {
         return QImage();
     }
@@ -1450,14 +1461,17 @@ QImage KisImage::convertToQImage(const QRect& r, const double xScale, const doub
     srcRect.setTop(static_cast<int>(r.top() * yScale));
     srcRect.setBottom(static_cast<int>(ceil((r.bottom() + 1) * yScale)) - 1);
 
-    KisPaintDeviceSP mergedImage = m_d->rootLayer->projection(srcRect);
-    //QTime t;
-    //t.start();
+    KisPaintDeviceSP mergedImage = m_d->rootLayer->projection();
+    QTime t;
+    t.start();
 
     quint8 *scaledImageData = new quint8[r.width() * r.height() * pixelSize];
 
     quint8 *imageRow = new quint8[srcRect.width() * pixelSize];
     const qint32 imageRowX = srcRect.x();
+
+    qDebug( "Created temporary memory areas: %d",  t.elapsed() );
+    t.restart();
 
     for (qint32 y = 0; y < r.height(); ++y) {
 
@@ -1482,6 +1496,8 @@ QImage KisImage::convertToQImage(const QRect& r, const double xScale, const doub
         }
     }
 
+    qDebug( "Created scaled image data : %d",  t.elapsed() );
+    t.restart();
     delete [] imageRow;
 
     QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), profile, INTENT_PERCEPTUAL, exposure);
@@ -1502,18 +1518,20 @@ QImage KisImage::convertToQImage(const QRect& r, const double xScale, const doub
       data += 4;
     }
 #endif
+    qDebug( "Converted to QImage: %d",  t.elapsed() );
 
     return image;
 }
+#endif
 
 KisPaintDeviceSP KisImage::mergedImage()
 {
-    return m_d->rootLayer->projection(QRect(0, 0, m_d->width, m_d->height));
+    return m_d->rootLayer->projection();
 }
 
 KoColor KisImage::mergedPixel(qint32 x, qint32 y)
 {
-    return m_d->rootLayer->projection(QRect(x, y, 1, 1))->colorAt(x, y);
+    return m_d->rootLayer->projection()->colorAt(x, y);
 }
 
 void KisImage::notifyLayersChanged()
@@ -1587,13 +1605,8 @@ void KisImage::setColorSpace(KoColorSpace * colorSpace)
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
-    disconnect(m_d->rootLayer.data(), SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
-
     m_d->rootLayer = rootLayer;
-
-    if (!locked()) {
-        connect(m_d->rootLayer.data(), SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
-    }
+    m_d->projection->setRootLayer( rootLayer );
     activateLayer(m_d->rootLayer->firstChild());
 }
 
@@ -1664,6 +1677,12 @@ vKisAnnotationSP_it KisImage::endAnnotations()
 KisPerspectiveGrid* KisImage::perspectiveGrid()
 {
     return m_d->perspectiveGrid;
+}
+
+void KisImage::slotProjectionUpdated( const QRect & rc )
+{
+    kDebug(41010) << "KisImage::slotProjectionUpdated " << rc << endl;
+    emit sigImageUpdated( rc );
 }
 
 #include "kis_image.moc"

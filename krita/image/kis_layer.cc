@@ -295,7 +295,6 @@ KisLayer::KisLayer(const KisLayer& rhs) :
         m_locked = rhs.m_locked;
         m_visible = rhs.m_visible;
         m_temporary = rhs.m_temporary;
-        m_dirtyRect = rhs.m_dirtyRect;
         m_name = rhs.m_name;
         m_image = rhs.m_image;
         m_parent = 0;
@@ -347,62 +346,38 @@ void KisLayer::setActive()
         image()->activateLayer(KisLayerSP(this));
 }
 
-void KisLayer::setClean(const QRect & rect)
+
+
+void KisLayer::setDirty()
 {
-    if (m_dirtyRect.isValid() && rect.isValid()) {
-
-        // XXX: We should only set the parts clean that were actually cleaned. However, extent and exactBounds conspire
-        // to make that very hard atm.
-        //if (rect.contains(m_dirtyRect)) m_dirtyRect = QRect();
-        m_dirtyRect = QRect();
-    }
-
-}
-
-bool KisLayer::dirty()
-{
-    return m_dirtyRect.isValid();
-}
-
-
-bool KisLayer::dirty(const QRect & rc)
-{
-    if (!m_dirtyRect.isValid() || !rc.isValid()) return false;
-
-    return rc.intersects(m_dirtyRect);
-}
-
-QRect KisLayer::dirtyRect() const
-{
-    return m_dirtyRect;
-}
-
-void KisLayer::setDirty(bool propagate)
-{
+    kDebug(41001) << "KisLayer::setDirty " << name() << endl;
     QRect rc = extent();
 
-    if (rc.isValid()) m_dirtyRect = rc;
-
     // If we're dirty, our parent is dirty, if we've got a parent
-    if (propagate && m_parent && rc.isValid()) m_parent->setDirty(m_dirtyRect);
+    if (m_parent && rc.isValid()) m_parent->setDirty(rc);
 
     if (m_image && rc.isValid()) {
-        m_image->notifyLayerUpdated(KisLayerSP(this), rc);
+        m_image->notifyLayerUpdated(KisLayerSP(this));
     }
 }
 
-void KisLayer::setDirty(const QRect & rc, bool propagate)
+void KisLayer::setDirty(const QRect & rc)
 {
+    kDebug(41001) << "KisLayer::setDirty " << name() << ", " << rc << endl;
+    setDirty( QRegion( rc ) );
+}
+
+void KisLayer::setDirty( const QRegion & region)
+{
+    kDebug(41001) << "KisLayer::setDirty " << name() << ", " << region << endl;
     // If we're dirty, our parent is dirty, if we've got a parent
+    if ( region.isEmpty() ) return;
 
-    if (rc.isValid())
-        m_dirtyRect |= rc;
+    if (m_parent)
+        m_parent->setDirty(region);
 
-    if (propagate && m_parent && m_dirtyRect.isValid())
-        m_parent->setDirty(m_dirtyRect);
-
-    if (m_image && rc.isValid()) {
-        m_image->notifyLayerUpdated(KisLayerSP(this), rc);
+    if (m_image) {
+        m_image->notifyLayerUpdated(KisLayerSP(this));
     }
 }
 
@@ -667,7 +642,10 @@ void KisLayer::notifyPropertyChanged(KisLayer *layer)
     QModelIndex index = indexFromLayer(layer);
     emit dataChanged(index, index);
     if (parent())
-        parent()->notifyPropertyChanged(layer);
+        parent()->notifyPropertyChanged(layer); // To make sure the
+                                                // group layers
+                                                // thumbnails are
+                                                // updated, too.
 }
 
 QModelIndex KisLayer::indexFromLayer(KisLayer *layer) const

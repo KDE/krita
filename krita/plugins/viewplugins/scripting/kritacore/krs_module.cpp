@@ -207,7 +207,7 @@ QObject* Module::createImage(int width, int height, const QString& colorspace, c
         kWarning() << i18n("Invalid image size") << endl;
         return 0;
     }
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(colorspace, 0);
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspace, 0);
     if(!cs)
     {
         kWarning() << i18n("Colorspace %1 is not available, please check your installation.", colorspace ) << endl;

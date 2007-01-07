@@ -59,8 +59,8 @@ public:
 
     bool visit( KisExternalLayer * layer )
         {
-            kDebug() << "Visiting on external layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
-                          << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
+            kDebug(41010) << "Visiting on external layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+                          << layer->extent() << ", paint rect: " << m_rc << endl;
 
             if (m_projection.isNull()) {
                 return false;
@@ -86,7 +86,6 @@ public:
             KisPainter gc(m_projection);
             gc.bitBlt(dx, dy, layer->compositeOp() , dev, layer->opacity(), sx, sy, w, h);
 
-            layer->setClean(rc);
             return true;
         }
 
@@ -99,7 +98,7 @@ public:
 
             kDebug(41010) << "Visiting on paint layer " << layer->name() << ", visible: " << layer->visible()
                           << ", temporary: " << layer->temporary() << ", extent: "
-                          << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
+                          << layer->extent() << ", paint rect: " << m_rc << endl;
             if (!layer->visible())
                 return true;
 
@@ -136,8 +135,8 @@ public:
                     // This is like the gimp does it, I guess that's ok?
 
                     // Note that here we'll use m_rc, because even if the extent of the device is
-                    // empty, we want a full mask to be drawn! (we don't change rc, since
-                    // it'd mess with setClean). This is because KisPainter::bitBlt &'s with
+                    // empty, we want a full mask to be drawn!
+                    // This is because KisPainter::bitBlt &'s with
                     // the source device's extent. This is ok in normal circumstances, but
                     // we changed the default tile. Fixing this properly would mean fixing it there.
                     sx = m_rc.left();
@@ -198,7 +197,6 @@ public:
                 }
             }
 
-            layer->setClean( rc );
             return true;
         }
 
@@ -210,15 +208,16 @@ public:
             }
 
             kDebug(41010) << "Visiting on group layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
-                          << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
+                          << layer->extent() << ", paint rect: " << m_rc << endl;
 
             if (!layer->visible())
                 return true;
 
             qint32 sx, sy, dx, dy, w, h;
 
-            // This automatically makes sure the projection is up-to-date for the specified rect.
-            KisPaintDeviceSP dev = layer->projection(m_rc);
+            layer->updateProjection( m_rc );
+            KisPaintDeviceSP dev = layer->projection();
+
             QRect rc = dev->extent() & m_rc;
 
             sx = rc.left();
@@ -238,7 +237,7 @@ public:
         {
 
             kDebug(41010) << "Visiting on part layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
-                          << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
+                          << layer->extent() << ", paint rect: " << m_rc << endl;
 
             if (m_projection.isNull()) {
                 return false;
@@ -264,14 +263,13 @@ public:
             KisPainter gc(m_projection);
             gc.bitBlt(dx, dy, layer->compositeOp() , dev, layer->opacity(), sx, sy, w, h);
 
-            layer->setClean(rc);
             return true;
         }
 
     bool visit(KisAdjustmentLayer* layer)
         {
             kDebug(41010) << "Visiting on adjustment layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
-                          << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
+                          << layer->extent() << ", paint rect: " << m_rc << endl;
 
             if (m_projection.isNull()) {
                 return true;
@@ -320,7 +318,6 @@ public:
                 // Don't forget that we need to take into account the extended sourcing area as well
                 //selectedRect = f->enlargeRect(selectedRect, cfg);
 
-                //kDebug() << k_funcinfo << selectedRect << endl;
                 tmp->setX(selection->getX());
                 tmp->setY(selection->getY());
 
@@ -366,8 +363,6 @@ public:
             gc.bitBlt(m_rc.left(), m_rc.top(),
                       COMPOSITE_COPY, m_projection, OPACITY_OPAQUE,
                       m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
-
-            layer->setClean(m_rc);
 
             return true;
         }

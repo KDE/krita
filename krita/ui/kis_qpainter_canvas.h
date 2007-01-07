@@ -77,16 +77,11 @@ public: // KisAbstractCanvasWidget
 
     QWidget * widget() { return this; }
 
-    KoToolProxy * toolProxy() {
-        return m_toolProxy;
-    }
-
+    KoToolProxy * toolProxy();
 private:
-    KoToolProxy * m_toolProxy;
-    KisCanvas2 * m_canvas;
-    KoViewConverter * m_viewConverter;
-    QImage * m_checkTexture;
-    QBrush * m_checkBrush;
+
+    class Private;
+    Private * m_d;
 };
 
 #endif

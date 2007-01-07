@@ -43,7 +43,7 @@ KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
       m_dragging (false)
 {
     setObjectName("tool_ellipse");
-    
+
     m_painter = 0;
     m_currentImage = 0;
     m_dragStart = QPointF(0, 0);
@@ -174,15 +174,16 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
         m_painter->setPaintOp(op); // Painter takes ownership
 
         m_painter->paintEllipse(m_dragStart, m_dragEnd-m_dragStart, PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());
-	QRect bound = m_painter->dirtyRect();
+	QRegion bound = m_painter->dirtyRegion();
 	device->setDirty( bound );
         notifyModified();
-
+// Should no longer be necessary
+#if 0
 	if (m_canvas) {
 	    m_canvas->updateCanvas(convertToPt(bound.normalized()));
 	    //m_canvas->updateCanvas(convertToPt(bound.normalized()));
 	}
-
+#endif
 	if (m_currentImage->undo()) {
             m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
         }
@@ -216,7 +217,7 @@ void KisToolEllipse::paintEllipse(QPainter& gc, const QRect&)
         QPoint end;
 
         gc.setPen(pen);
-        
+
 	start = QPoint(static_cast<int>(m_dragStart.x()), static_cast<int>(m_dragStart.y()));
 	end = QPoint(static_cast<int>(m_dragEnd.x()), static_cast<int>(m_dragEnd.y()));
 	gc.drawEllipse(QRect(start, end));

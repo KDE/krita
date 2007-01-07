@@ -154,7 +154,7 @@ QGLWidget *KisOpenGLImageContext::sharedContextWidget() const
 
 void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 {
-    //kDebug() << "updateImageTextureTiles " << rect << endl;
+    //kDebug(41007) << "updateImageTextureTiles " << rect << endl;
 
     QRect updateRect = rect & m_image->bounds();
 
@@ -220,7 +220,7 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 
 KoColorSpace* KisOpenGLImageContext::textureColorSpaceForImageColorSpace(KoColorSpace */*imageColorSpace*/)
 {
-    return KisMetaRegistry::instance()->csRegistry()->colorSpace("RGBA", 0);
+    return KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
 }
 
 void KisOpenGLImageContext::setMonitorProfile(KoColorProfile *monitorProfile)

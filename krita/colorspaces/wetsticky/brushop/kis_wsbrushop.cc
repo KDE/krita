@@ -65,10 +65,10 @@ void KisWSBrushOp::paintAt(const QPointF &pos,
     if (!m_painter -> device()) return;
 
     KisBrush *brush = m_painter -> brush();
-    
+
     Q_ASSERT(brush);
     if (!brush) return;
-    
+
     KisPaintDeviceSP device = m_painter -> device();
 
     QPointF hotSpot = brush -> hotSpot(pressure);
@@ -100,11 +100,11 @@ void KisWSBrushOp::paintAt(const QPointF &pos,
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     KisImage * image = device -> image();
-    
+
     if (image != 0) {
         dstRect &= image -> bounds();
     }
-    
+
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
     qint32 sx = dstRect.x() - x;
@@ -113,5 +113,4 @@ void KisWSBrushOp::paintAt(const QPointF &pos,
     qint32 sh = dstRect.height();
 
     m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), sx, sy, sw, sh);
-    m_painter -> addDirtyRect(dstRect);
 }

@@ -64,7 +64,7 @@ NewLayerDialog::NewLayerDialog(const KoID colorSpaceID,
     m_page->intOpacity->setValue(100);
 
     // ColorSpace
-    m_page->cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
+    m_page->cmbColorSpaces->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbColorSpaces->setCurrent(colorSpaceID.id());
     connect(m_page->cmbColorSpaces, SIGNAL(activated(const KoID &)),
         this, SLOT(fillCmbProfiles(const KoID &)));
@@ -95,14 +95,14 @@ void NewLayerDialog::fillCmbProfiles(const KoID & s)
 {
     m_page->cmbProfile->clear();
 
-    if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
+    if (!KoColorSpaceRegistry::instance()->exists(s)) {
         return;
     }
 
-    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->get(s);
     if (csf == 0) return;
 
-    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
         m_page->cmbProfile->addSqueezedItem(profile->productName());
@@ -114,11 +114,11 @@ void NewLayerDialog::fillCmbComposite(const KoID & s)
 {
     m_page->cmbComposite->clear();
 
-    if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
+    if (!KoColorSpaceRegistry::instance()->exists(s)) {
         return;
     }
 
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(s,"");
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(s,"");
     if (cs) {
         m_page->cmbComposite->setCompositeOpList(cs->userVisiblecompositeOps());
     }

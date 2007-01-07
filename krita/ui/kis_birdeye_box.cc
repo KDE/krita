@@ -270,17 +270,17 @@ void KisBirdEyeBox::slotDocCommandExecuted()
 {
 #if 0 // XXX: Redo when zooming is implemented again (BSAR)
     if (m_image) {
-        if (!m_dirtyRect.isEmpty()) {
-            m_birdEyePanel->slotUpdate(m_dirtyRect);
+        if (!m_dirtyRegion.isEmpty()) {
+            m_birdEyePanel->slotUpdate(m_dirtyRegion);
         }
-        m_dirtyRect = QRect();
+        m_dirtyRegion = QRect();
     }
 #endif
 }
 
 void KisBirdEyeBox::slotImageUpdated(QRect r)
 {
-    m_dirtyRect |= r;
+    m_dirtyRegion |= r;
 }
 
 void KisBirdEyeBox::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)

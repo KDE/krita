@@ -77,7 +77,7 @@ void KisOpenGLCanvas2::initializeGL()
 
 void KisOpenGLCanvas2::resizeGL(int w, int h)
 {
-    kDebug() << "Resize gl to " << w << ", " << h << endl;
+    kDebug(41007) << "Resize gl to " << w << ", " << h << endl;
     glViewport(0, 0, (GLint)w, (GLint)h);
 }
 

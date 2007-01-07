@@ -266,6 +266,8 @@ void KisBrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
+    kDebug() << "KisBrushOp::paintAt : " << dstRect << endl;
+
     qint32 sx = dstRect.x() - x;
     qint32 sy = dstRect.y() - y;
     qint32 sw = dstRect.width();
@@ -278,7 +280,6 @@ void KisBrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     else {
         m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab, m_painter->opacity(), sx, sy, sw, sh);
     }
-    m_painter->addDirtyRect(dstRect);
 
     m_painter->setOpacity(origOpacity);
     m_painter->setPaintColor(origColor);

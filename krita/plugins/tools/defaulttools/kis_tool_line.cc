@@ -152,12 +152,13 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, m_painter);
                 m_painter->setPaintOp(op); // Painter takes ownership
                 m_painter->paintLine(m_startPos, PRESSURE_DEFAULT, 0, 0, m_endPos, PRESSURE_DEFAULT, 0, 0);
-                QRect dRect = m_painter->dirtyRect();
-                device->setDirty( dRect );
+                QRegion dirtyRegion = m_painter->dirtyRegion();
+                device->setDirty( dirtyRegion );
                 notifyModified();
-
-                m_canvas->updateCanvas(convertToPt(dRect));
-
+// Should not be necessary anymore because of KisProjection
+#if 0
+                m_canvas->updateCanvas(convertToPt(dirtyRegion));
+#endif
                 if (m_currentImage->undo() && m_painter) {
                     m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
                 }

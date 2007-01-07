@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QWidget>
+#include <QPixmap>
 
 #include <KoCanvasBase.h>
 #include <krita_export.h>
@@ -68,29 +69,34 @@ public:
 
 public: // KoCanvasBase implementation
 
-    virtual void gridSize(double *horizontal, double *vertical) const;
+    void gridSize(double *horizontal, double *vertical) const;
 
-    virtual bool snapToGrid() const;
+    bool snapToGrid() const;
 
-    virtual void addCommand(QUndoCommand *command);
+    void addCommand(QUndoCommand *command);
 
-    virtual KoShapeManager *shapeManager() const;
+    KoShapeManager *shapeManager() const;
 
-    virtual void updateCanvas(const QRectF& rc);
+    void updateCanvas(const QRectF& rc);
 
-    virtual KoViewConverter *viewConverter();
+    void updateCanvas( const QRegion & region );
 
-    virtual QWidget* canvasWidget();
+    KoViewConverter *viewConverter();
 
-    virtual KoUnit unit();
+    QWidget* canvasWidget();
 
-    virtual KoToolProxy* toolProxy();
+    QImage canvasCache();
+
+    KoUnit unit();
+
+    KoToolProxy* toolProxy();
 
     KoColorProfile * monitorProfile();
 
     void resetMonitorProfile();
 
     // Temporary!
+#warning: "Make the tools get the current paint device from the shape selection instead of directly from the canvas!"
     KisImageSP currentImage();
 
 public: // KisCanvas2 methods
@@ -104,8 +110,11 @@ public slots:
     /// Update the entire canvas area
     void updateCanvas();
 
-    /// Update the given rect (in document coordinates)
-    void updateCanvas( const QRect rc );
+    /// The image projection has changed, now update the canvas
+    /// representation of it.
+    void updateCanvasProjection( const QRect & rc );
+
+    void setImageSize(qint32 w, qint32 h);
 
 private:
 

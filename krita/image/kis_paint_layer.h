@@ -61,8 +61,6 @@ public:
 
     virtual bool accept(KisLayerVisitor &v)
         {
-//            kDebug(41001) << "\tPAINT\t" << name()
-//                    << " dirty: " << dirty() << "\n";
             return v.visit(this);
         }
 
@@ -126,9 +124,9 @@ public:
     void setEditMask(bool b);
 
     /// Overridden to call the private convertMaskToSelection
-    virtual void setDirty(bool propagate = true);
-    /// Same as above
-    virtual void setDirty(const QRect & rect, bool propagate = true);
+    virtual void setDirty();
+    virtual void setDirty(const QRect & rect);
+    virtual void setDirty(const QRegion & region);
 
     // KisLayerSupportsIndirectPainting
     virtual KisLayer* layer() { return this; }

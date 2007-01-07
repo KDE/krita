@@ -223,7 +223,6 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     else {
         m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab, m_painter->opacity(), sx, sy, sw, sh);
     }
-    m_painter->addDirtyRect(dstRect);
 
     m_painter->setOpacity(origOpacity);
     m_painter->setPaintColor(origColor);

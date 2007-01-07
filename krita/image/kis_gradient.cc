@@ -52,7 +52,7 @@ KisGradientSegment::SineInterpolationStrategy *KisGradientSegment::SineInterpola
 KisGradientSegment::SphereIncreasingInterpolationStrategy *KisGradientSegment::SphereIncreasingInterpolationStrategy::m_instance = 0;
 KisGradientSegment::SphereDecreasingInterpolationStrategy *KisGradientSegment::SphereDecreasingInterpolationStrategy::m_instance = 0;
 
-KisGradient::KisGradient(const QString& file) : super(file), m_colorSpace( KisMetaRegistry::instance()->csRegistry()->rgb8() )
+KisGradient::KisGradient(const QString& file) : super(file), m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() )
 {
 }
 
@@ -423,7 +423,7 @@ bool KisGradientSegment::isValid() const
 }
 
 KisGradientSegment::RGBColorInterpolationStrategy::RGBColorInterpolationStrategy()
-    : m_colorSpace( KisMetaRegistry::instance()->csRegistry()->rgb8() ), buffer(m_colorSpace)
+    : m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() ), buffer(m_colorSpace)
 {
 }
 
@@ -456,7 +456,7 @@ void KisGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, do
 }
 
 KisGradientSegment::HSVCWColorInterpolationStrategy::HSVCWColorInterpolationStrategy()
-    : m_colorSpace( KisMetaRegistry::instance()->csRegistry()->rgb8() )
+    : m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() )
 {
 }
 
@@ -503,7 +503,7 @@ void KisGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, 
 }
 
 KisGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStrategy() :
-        m_colorSpace( KisMetaRegistry::instance()->csRegistry()->rgb8() )
+        m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() )
 {
 }
 

@@ -74,7 +74,7 @@ QString PaintLayer::colorSpaceId()
 
 bool PaintLayer::convertToColorspace(const QString& colorspacename)
 {
-    KoColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->colorSpace(colorspacename, 0);
+    KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
     if(!dstCS)
     {
         kWarning() << QString("Colorspace %1 is not available, please check your installation.").arg(colorspacename) << endl;

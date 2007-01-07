@@ -36,19 +36,19 @@
 #include "kis_airbrushop.h"
 
 KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
-{ 
-    KisPaintOp * op = new KisAirbrushOp(painter); 
+{
+    KisPaintOp * op = new KisAirbrushOp(painter);
     Q_CHECK_PTR(op);
-    return op; 
+    return op;
 }
 
 
 KisAirbrushOp::KisAirbrushOp(KisPainter * painter)
-    : super(painter) 
+    : super(painter)
 {
 }
 
-KisAirbrushOp::~KisAirbrushOp() 
+KisAirbrushOp::~KisAirbrushOp()
 {
 }
 
@@ -146,5 +146,4 @@ void KisAirbrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
         m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab, m_painter->opacity(), sx, sy, sw, sh);
     }
 
-    m_painter->addDirtyRect(dstRect);
 }

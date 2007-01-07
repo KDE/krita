@@ -60,17 +60,15 @@ KisShapeLayer::~KisShapeLayer()
 
 void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
-    Q_UNUSED(converter);
-    kDebug() << "KisShapeLayer::paintComponent " << boundingRect() << endl;
-    painter.fillRect( boundingRect(), QColor(200, 100, 100, 100) );
-    kDebug() << "KisShapeLayer::paintComponent done" << endl;
+    Q_UNUSED( converter );
+    Q_UNUSED( painter );
 }
 
 void KisShapeLayer::addChild(KoShape *object)
 {
-    kDebug() << "KisShapeLayer::addChild " << object->shapeId() << ", " << object->boundingRect() << endl;
+    kDebug(41007) << "KisShapeLayer::addChild " << object->shapeId() << ", " << object->boundingRect() << endl;
     KoShapeLayer::addChild( object );
-    setDirty( object->boundingRect().toRect(), true ); // XXX: convert to pixels
+    setDirty( object->boundingRect().toRect() ); // XXX: convert to pixels
 }
 
 QIcon KisShapeLayer::icon() const
@@ -80,7 +78,7 @@ QIcon KisShapeLayer::icon() const
 
 KisPaintDeviceSP KisShapeLayer::prepareProjection(KisPaintDeviceSP projection, const QRect& r)
 {
-    kDebug() << "KisShapeLayer::prepareProjection " << r << endl;
+    kDebug(41007) << "KisShapeLayer::prepareProjection " << r << endl;
     QPainter p( projection.data() );
     KoShapeLayer::paint( p, *m_d->converter );
 
@@ -110,7 +108,7 @@ void KisShapeLayer::setX(qint32 x)
 {
     if ( x == m_d->x ) return;
     m_d->x = x;
-    setDirty( true );
+    setDirty();
 }
 
 qint32 KisShapeLayer::y() const
@@ -122,7 +120,7 @@ void KisShapeLayer::setY(qint32 y)
 {
     if ( y == m_d->y ) return;
     m_d->y = y;
-    setDirty( true );
+    setDirty();
 }
 
 QRect KisShapeLayer::extent() const

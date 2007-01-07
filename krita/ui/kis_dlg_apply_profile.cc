@@ -80,7 +80,7 @@ KoColorProfile *  KisDlgApplyProfile::profile() const
 
     profileName = m_page->cmbProfile->currentText();
 
-    return KisMetaRegistry::instance()->csRegistry()->profileByName(profileName);
+    return KoColorSpaceRegistry::instance()->profileByName(profileName);
 }
 
 int KisDlgApplyProfile::renderIntent() const
@@ -94,14 +94,14 @@ void KisDlgApplyProfile::fillCmbProfiles(const KoID & s)
 {
     m_page->cmbProfile->clear();
 
-    if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
+    if (!KoColorSpaceRegistry::instance()->exists(s)) {
         return;
     }
 
-    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->get(s);
     if (csf == 0) return;
 
-    QList<KoColorProfile *> profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
             m_page->cmbProfile->addSqueezedItem(profile->productName());

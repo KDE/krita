@@ -113,7 +113,7 @@ QImage KisSelection::maskImage() const
 void KisSelection::select(QRect r)
 {
     KisFillPainter painter(KisPaintDeviceSP(this));
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     painter.fillRect(r, KoColor(Qt::white, cs), MAX_SELECTED);
     qint32 x, y, w, h;
     extent(x, y, w, h);
@@ -122,7 +122,7 @@ void KisSelection::select(QRect r)
 void KisSelection::clear(QRect r)
 {
     KisFillPainter painter(KisPaintDeviceSP(this));
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     painter.fillRect(r, KoColor(Qt::white, cs), MIN_SELECTED);
 }
 

@@ -20,6 +20,7 @@
 #define KIS_LAYER_H_
 
 #include <QRect>
+#include <QRegion>
 #include <QMetaType>
 
 #include "krita_export.h"
@@ -67,36 +68,24 @@ public:
     virtual void setProperties( const PropertyList &properties  );
 
     /**
-     * Set the specified rect to clean
-     */
-    virtual void setClean(const QRect & rect);
-
-    /**
-     * If the layer has been changed and not been composited yet, this returns true
-     */
-    virtual bool dirty();
-
-    /**
-     * Return true if the given rect intersects the dirty rect(s) of this layer
-     */
-    virtual bool dirty(const QRect & rc);
-
-
-    virtual QRect dirtyRect() const;
-
-
-    /**
      * Set the entire layer extent dirty; this percolates up to parent layers all the
      * way to the root layer.
      */
-    virtual void setDirty(bool propagate = true);
+    virtual void setDirty();
 
     /**
      * Add the given rect to the set of dirty rects for this layer;
      * this percolates up to parent layers all the way to the root
      * layer.
      */
-    virtual void setDirty(const QRect & rect, bool propagate = true);
+    virtual void setDirty(const QRect & rect);
+
+    /**
+      Add the given region to the set of dirty rects for this layer;
+      this percolates up to parent layers all the way to the root
+      layer, if propagate is true;
+    */
+    virtual void setDirty( const QRegion & region);
 
     /// Return a copy of this layer
     virtual KisLayerSP clone() const = 0;
@@ -269,13 +258,12 @@ private:
     bool m_visible;
     bool m_temporary;
 
-    // XXX: keep a list of dirty rects instead of always aggegrating them
-    QRect m_dirtyRect;
     QString m_name;
     KisGroupLayerSP m_parent;
     KisImageWSP m_image;
 
-    // Operation used to composite this layer with the layers _under_ this layer
+    // Operation used to composite this layer with the projection of
+    // the layers _under_ this layer
     const KoCompositeOp * m_compositeOp;
 };
 

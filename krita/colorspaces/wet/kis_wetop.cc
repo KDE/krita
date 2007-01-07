@@ -117,11 +117,11 @@ void KisWetOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     KisPaintDeviceSP dab = KisPaintDeviceSP(0);
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(KisMetaRegistry::instance()->csRegistry()->alpha8(), inf);
+        dab = brush->image(KoColorSpaceRegistry::instance()->alpha8(), inf);
     }
     else {
         KisQImagemaskSP mask = brush->mask(inf);
-        dab = computeDab(mask, KisMetaRegistry::instance()->csRegistry()->alpha8());
+        dab = computeDab(mask, KoColorSpaceRegistry::instance()->alpha8());
     }
 
     KoColorSpace * cs = device->colorSpace();
@@ -227,7 +227,6 @@ void KisWetOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
         it.nextRow();
     }
 
-    m_painter->addDirtyRect(QRect(xStart, yStart, maskW, maskH));
 }
 
 #include "kis_wetop.moc"

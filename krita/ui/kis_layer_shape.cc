@@ -71,7 +71,7 @@ QSizeF KisLayerShape::size() const
 {
     QRect br = m_d->layer->extent();
     KisImageSP image = m_d->layer->image();
-    kDebug(41007) << "KisLayerShape::size exactbounds: " << br << ", x res: " << image->xRes() << ", y res: " << image->yRes() << endl;
+    kDebug(41007) << "KisLayerShape::size extent: " << br << ", x res: " << image->xRes() << ", y res: " << image->yRes() << endl;
 
     return QSizeF( br.width() / image->xRes(), br.height() / image->yRes() );
 }
@@ -79,8 +79,7 @@ QSizeF KisLayerShape::size() const
 QRectF KisLayerShape::boundingRect() const
 {
     QRect br = m_d->layer->extent();
-    kDebug(41007) << "KisLayerShape::size exactbounds: " << br << ", x res: " << m_d->layer->image()->xRes() << ", y res: " << m_d->layer->image()->yRes() << endl;
-
+    kDebug(41007) << "KisLayerShape::boundingRect extent: " << br << ", x res: " << m_d->layer->image()->xRes() << ", y res: " << m_d->layer->image()->yRes() << endl;
     return QRectF(int(br.left()) / m_d->layer->image()->xRes(), int(br.top()) / m_d->layer->image()->yRes(),
                   int(1 + br.right()) / m_d->layer->image()->xRes(), int(1 + br.bottom()) / m_d->layer->image()->yRes());
 

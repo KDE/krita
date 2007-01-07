@@ -139,11 +139,22 @@ KCommand *KisPainter::endTransaction()
         return command;
 }
 
+QRegion KisPainter::dirtyRegion()
+{
+    kDebug(41010) << "KisPainter::dirtyRegion, dirty region is: " << m_dirtyRegion << ", " << m_device->name() << endl;
+    QRegion r = m_dirtyRegion;
 
-QRect KisPainter::dirtyRect() {
-    QRect r = m_dirtyRect;
-    m_dirtyRect = QRect();
+    m_dirtyRegion = QRegion();
+
     return r;
+}
+
+
+QRegion KisPainter::addDirtyRect(QRect r)
+{
+    m_dirtyRegion += QRegion( r );
+    kDebug(41010) << "KisPainter::addDirtyRect << " << r << ", dirty region has become: " << m_dirtyRegion.boundingRect()  << ", " << m_device->name() << endl;
+    return m_dirtyRegion;
 }
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
@@ -153,6 +164,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         qint32 sx, qint32 sy,
                         qint32 sw, qint32 sh)
 {
+    kDebug(41010) << "KisPainter::bitBlt with QImage" << endl;
     #warning "Don't assume the same resulution for a QImage and a KisPaintDevice -- see QImage::dotsPerMeterX|Y"
 
     if ( src == 0 ) return;
@@ -178,60 +190,32 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
     addDirtyRect( srcRect );
 
-    qint32 dstY = dy;
-    qint32 srcY = sy;
-    qint32 rowsRemaining = sh;
-
-    // A Qimage is always one big chunk of memory
-    qint32 numContiguousSrcRows = srcRect.height();
-    qint32 numContiguousSrcColumns = srcRect.width();
     const quint8 * srcData = src->bits();
 
-    while (rowsRemaining > 0) {
+    for ( qint32 row = 0; row < sh; ++row ) {
 
-        qint32 dstX = dx;
-        qint32 srcX = sx;
-        qint32 columnsRemaining = sw;
-        qint32 numContiguousDstRows = m_device->numContiguousRows(dstY, dstX, dstX + sw - 1);
+        KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dx, dy + row, sw);
+        qint32 pixels = dstIt.nConseqHPixels();
+        while ( !dstIt.isDone() ) {
+            m_colorSpace->bitBlt(dstIt.rawData(),
+                                 0,
+                                 srcCs,
+                                 srcData,
+                                 0,
+                                 0,
+                                 0,
+                                 opacity,
+                                 1,
+                                 pixels,
+                                 op);
 
-        qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
-        rows = qMin(rows, rowsRemaining);
+            srcData += ( pixels * 4 ); // 4 bytes to one QImage pixel
 
-        while (columnsRemaining > 0) {
+            dstIt += pixels;
 
-            qint32 numContiguousDstColumns = m_device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
-
-            qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
-            columns = qMin(columns, columnsRemaining);
-
-            qint32 srcRowStride = srcRect.width() * 4; // 4 bytes to
-                                                       // one  qimage pixels
-
-            qint32 dstRowStride = m_device->rowStride(dstX, dstY);
-            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns);
-            quint8 *dstData = dstIt.rawData();
-
-            m_colorSpace->bitBlt(dstData,
-                          dstRowStride,
-                          srcCs,
-                          srcData,
-                          srcRowStride,
-                          0,
-                          0,
-                          opacity,
-                          rows,
-                          columns,
-                          op);
-
-            srcData += ( columns * 4 ); // 4 bytes to one QImage pixel
-            srcX += columns;
-            dstX += columns;
-            columnsRemaining -= columns;
         }
+        dstIt.nextRow();
 
-        srcY += rows;
-        dstY += rows;
-        rowsRemaining -= rows;
     }
 
 }
@@ -244,6 +228,8 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         qint32 sx, qint32 sy,
                         qint32 sw, qint32 sh)
 {
+    kDebug(41010) << "KisPainter::bitBlt. dx:" << dx << ", dy: " << dy << ", sx: " << sx << ", sy: " << sy << ", sw: " << sw << ", sh: " << sh  << ", " << m_device->name() << endl;
+
     if (srcdev.isNull()) {
         return;
     }
@@ -332,6 +318,8 @@ void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
                  Q_INT32 sx, Q_INT32 sy,
                  Q_INT32 sw, Q_INT32 sh)
 {
+    kDebug(41010) << "KisPainter::bltMaskdx:" << dx << ", dy: " << dy << ", sx: " << sx << ", sy: " << sy << ", sw: " << sw << ", sh: " << sh  << ", " << m_device->name() << endl;
+
     if (srcdev.isNull()) return;
 
     if (selMask.isNull()) return;
@@ -435,14 +423,6 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
     if (!seldev) return;
         // Better use a probablistic method than a too slow one
     if (seldev->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
-/*
-        kDebug() << "Blitting outside selection rect\n";
-
-        kDebug() << "srcdev: " << srcdev << " (" << srcdev->name() << ")"
-        << ", seldev: " << seldev << " (" << seldev->name() << ")"
-        << ". dx, dy " << dx << "," << dy
-        << ". sx, sy : sw, sy " << sx << "," << sy << " : " << sw << "," << sh << endl;
-*/
         return;
     }
     bltMask(dx, dy, op, srcdev, seldev, opacity, sx, sy, sw, sh);
@@ -974,7 +954,6 @@ void KisPainter::fillPolygon(const vQPointF& points, FillStyle fillStyle)
 
     // The strokes for the outline may have already added updated the dirtyrect, but it can't hurt,
     // and if we're painting without outlines, then there will be no dirty rect. Let's do it ourselves...
-    // addDirtyRect( r ); // XXX the bltSelection will add to the dirtyrect
 
     bltSelection(r.x(), r.y(), m_compositeOp, polygon, opacity(), r.x(), r.y(), r.width(), r.height());
 }

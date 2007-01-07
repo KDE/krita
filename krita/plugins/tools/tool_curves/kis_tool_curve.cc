@@ -440,7 +440,7 @@ void KisToolCurve::paintCurve()
         it = paintPoint(painter,it);
 // Finish
 
-    device->setDirty( painter.dirtyRect() );
+    device->setDirty( painter.dirtyRegion() );
     notifyModified();
 
     if (m_currentImage->undo()) {
@@ -519,7 +519,7 @@ void KisToolCurve::selectCurve()
 
 
     if(hasSelection) {
-        QRect dirty(painter.dirtyRect());
+        QRect dirty(painter.dirtyRegion());
         dev->setDirty(dirty);
         dev->emitSelectionChanged(dirty);
     } else {

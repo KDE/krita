@@ -156,7 +156,7 @@ void KisToolSelectPolygonal::finish()
         painter.paintPolygon(m_points);
 
         if(hasSelection) {
-            QRect rect(painter.dirtyRect());
+            QRect rect(painter.dirtyRegion());
             dev->setDirty(rect);
             dev->emitSelectionChanged(rect);
         } else {

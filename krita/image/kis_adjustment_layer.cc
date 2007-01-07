@@ -113,7 +113,7 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 {
     m_selection = new KisSelection();
     KisFillPainter gc(KisPaintDeviceSP(m_selection.data()));
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     if (selection) {
         gc.bitBlt(0, 0, cs->compositeOp(COMPOSITE_COPY), KisPaintDeviceSP(selection.data()),
@@ -168,7 +168,7 @@ void KisAdjustmentLayer::setY(qint32 y)
 QRect KisAdjustmentLayer::extent() const
 {
     if (m_selection)
-        return m_selection->extent();
+        return m_selection->selectedRect();
     else if (image())
         return image()->bounds();
     else
@@ -178,7 +178,7 @@ QRect KisAdjustmentLayer::extent() const
 QRect KisAdjustmentLayer::exactBounds() const
 {
     if (m_selection)
-        return m_selection->exactBounds();
+        return m_selection->selectedExactRect();
     else if (image())
         return image()->bounds();
     else

@@ -241,13 +241,13 @@ KisPaintDeviceSP KisPaintLayer::createMask() {
     if (hasMask())
         return m_mask;
 
-    kDebug() << k_funcinfo << endl;
+    kDebug(41001) << k_funcinfo << endl;
     // Grey8 nicely fits our needs of being intuitively comparable to other apps'
     // mask layer interfaces. It does have an alpha component though, which is a bit
     // less appropriate in this context.
     // Bart: why not use ALPHA -- that is a single channel 8-bit
     // colorspace, which is best suited for this purpose (BSAR).
-    m_mask = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()
+    m_mask = new KisPaintDevice(KoColorSpaceRegistry::instance()
             ->colorSpace(KoID("GRAYA"), 0));
 
     genericMaskCreationHelper();
@@ -260,15 +260,15 @@ void KisPaintLayer::createMaskFromPaintDevice(KisPaintDeviceSP from) {
     if (hasMask())
         return; // Or overwrite? XXX
 
-    kDebug() << k_funcinfo << endl;
+    kDebug(41001) << k_funcinfo << endl;
     m_mask = from; // KisPaintDevice(*from); XXX
 
     genericMaskCreationHelper();
 }
 
 void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
-    kDebug() << k_funcinfo << endl;
-    m_mask = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()
+    kDebug(41001) << k_funcinfo << endl;
+    m_mask = new KisPaintDevice(KoColorSpaceRegistry::instance()
             ->colorSpace(KoID("GRAYA"), 0));
     m_mask->setParentLayer(this);
 
@@ -309,13 +309,13 @@ void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
 
 KisPaintDeviceSP KisPaintLayer::getMask() {
     createMask();
-    kDebug() << k_funcinfo << endl;
+    kDebug(41001) << k_funcinfo << endl;
     return m_mask;
 }
 
 KisSelectionSP KisPaintLayer::getMaskAsSelection() {
     createMask();
-    kDebug() << k_funcinfo << endl;
+    kDebug(41001) << k_funcinfo << endl;
     return m_maskAsSelection;
 }
 
@@ -362,17 +362,35 @@ void KisPaintLayer::genericMaskCreationHelper() {
     emit sigMaskInfoChanged();
 }
 
-void KisPaintLayer::setDirty(bool propagate) {
+void KisPaintLayer::setDirty() {
+    kDebug(41001) << "KisPaintLayer::setDirty " << name() << endl;
+    QRect rc = extent();
     if (hasMask())
-        convertMaskToSelection(extent());
-    super::setDirty(propagate);
+        convertMaskToSelection(rc);
+    super::setDirty(rc);
 }
 
-void KisPaintLayer::setDirty(const QRect & rect, bool propagate) {
+void KisPaintLayer::setDirty(const QRect & rect) {
+    kDebug(41001) << "KisPaintLayer::setDirty " << name() << "," << rect << endl;
     if (hasMask())
         convertMaskToSelection(rect);
-    super::setDirty(rect, propagate);
+    super::setDirty(rect);
 }
+
+void KisPaintLayer::setDirty(const QRegion & region) {
+    kDebug(41001) << "KisPaintLayer::setDirty " << name() << "," << region << endl;
+    if (hasMask()) {
+        QVector<QRect> regionRects = region.rects();
+        QVector<QRect>::iterator it = regionRects.begin();
+        QVector<QRect>::iterator end = regionRects.end();
+        while ( it != end ) {
+            convertMaskToSelection(*it);
+            ++it;
+        }
+    }
+    super::setDirty(region);
+}
+
 
 // Undoable versions code
 namespace {
@@ -384,7 +402,7 @@ namespace {
         KisCreateMaskCommand(const QString& name, KisPaintLayer* layer)
             : super(name), m_layer(layer) {}
         virtual void execute() {
-            kDebug() << k_funcinfo << endl;
+            kDebug(41001) << k_funcinfo << endl;
             if (!m_mask)
                 m_mask = m_layer->createMask();
             else
@@ -470,7 +488,7 @@ namespace {
             m_mask = m_layer->getMask();
             }
             virtual void execute() {
-                kDebug() << k_funcinfo << endl;
+                kDebug(41001) << k_funcinfo << endl;
                 m_layer->removeMask();
             }
             virtual void unexecute() {

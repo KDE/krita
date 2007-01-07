@@ -124,7 +124,7 @@ void KisToolPolyline::finish()
     }
     m_points.clear();
 
-    device->setDirty( painter.dirtyRect() );
+    device->setDirty( painter.dirtyRegion() );
     notifyModified();
 
     if (m_currentImage->undo()) {

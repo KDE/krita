@@ -118,7 +118,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
         m_dragging = false;
 
         if (m_startPos == m_endPos) {
-           // controller->updateCanvas();
+            // controller->updateCanvas();
             m_dragging = false;
             return;
         }
@@ -156,7 +156,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
             if (painted) {
                 // does whole thing at moment
-                device->setDirty(painter.dirtyRect());
+                device->setDirty(painter.dirtyRegion());
 
                 notifyModified();
 
@@ -164,8 +164,14 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
                     m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
                 }
             }
-
-            m_canvas->updateCanvas(painter.dirtyRect());
+// XXX: This should not be necessary; after composition is
+// done, the KisProjection instance should notify the GUI
+// that everything is ready for a paintevent.
+#if 0
+            // XXX 2: shouldn't this be
+            // convertToPt(painter.dirtyRegion()) anyway?
+            m_canvas->updateCanvas( painter.dirtyRegion() );
+#endif
         }
     }
 }

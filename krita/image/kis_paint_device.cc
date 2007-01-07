@@ -340,11 +340,11 @@ int KisPaintDevice::metric( PaintDeviceMetric metric ) const
         break;
 
     case PdmWidthMM:
-        return 0;
+        return qRound( rc.width() * ( 72 / 25.4 ) );
         break;
 
     case PdmHeightMM:
-        return 0;
+        return qRound( rc.height() * ( 72 / 25.4 ) );
         break;
 
     case PdmNumColors:
@@ -352,23 +352,23 @@ int KisPaintDevice::metric( PaintDeviceMetric metric ) const
         break;
 
     case PdmDepth:
-        return colorSpace()->pixelSize() * 8; // in bits
+        return qRound( colorSpace()->pixelSize() * 8 ); // in bits
         break;
 
     case PdmDpiX:
-        return 0;
+        return 72;
         break;
 
     case PdmDpiY:
-        return 0;
+        return 72;
         break;
 
     case PdmPhysicalDpiX:
-        return 0;
+        return 72;
         break;
 
     case PdmPhysicalDpiY:
-        return 0;
+        return 72;
         break;
     default:
         qWarning("QImage::metric(): Unhandled metric type %d", metric);
@@ -399,11 +399,19 @@ void KisPaintDevice::setParentLayer(KisLayer *parentLayer)
 
 void KisPaintDevice::setDirty(const QRect & rc)
 {
+    kDebug(41001) << "KisPaintDevice " << name() << " setDirty " << m_parentLayer << ", " << rc << endl;
     if (m_parentLayer) m_parentLayer->setDirty(rc);
+}
+
+void KisPaintDevice::setDirty( const QRegion & region )
+{
+    kDebug(41001) << "KisPaintDevice " << name() << " setDirty " << m_parentLayer << ", " << region << endl;
+    if ( m_parentLayer ) m_parentLayer->setDirty( region );
 }
 
 void KisPaintDevice::setDirty()
 {
+        kDebug(41001) << "KisPaintDevice " << name() << " setDirty " << m_parentLayer << endl;
     if (m_parentLayer) m_parentLayer->setDirty();
 }
 
@@ -419,12 +427,12 @@ KisImageSP KisPaintDevice::image() const
 
 void KisPaintDevice::move(qint32 x, qint32 y)
 {
-    QRect dirtyRect = extent();
+    QRect dirtyRegion = extent();
 
     m_x = x;
     m_y = y;
 
-    dirtyRect |= extent();
+    dirtyRegion |= extent();
 
     if(m_selection)
     {
@@ -432,7 +440,7 @@ void KisPaintDevice::move(qint32 x, qint32 y)
         m_selection->setY(y);
     }
 
-    setDirty(dirtyRect);
+    setDirty(dirtyRegion);
 
     emit positionChanged(KisPaintDeviceSP(this));
 }
@@ -589,7 +597,7 @@ void KisPaintDevice::mirrorX()
 {
     QRect r;
     if (hasSelection()) {
-        r = selection()->exactBounds();
+        r = selection()->selectedExactRect();
     }
     else {
         r = exactBounds();
@@ -623,7 +631,7 @@ void KisPaintDevice::mirrorY()
     /* Read a line from bottom to top and and from top to bottom and write their values to each other */
     QRect r;
     if (hasSelection()) {
-        r = selection()->exactBounds();
+        r = selection()->selectedExactRect();
     }
     else {
         r = exactBounds();
@@ -731,7 +739,7 @@ void KisPaintDevice::setProfile(KoColorProfile * profile)
     if (profile == 0) return;
 
     KoColorSpace * dstSpace =
-            KisMetaRegistry::instance()->csRegistry()->colorSpace( colorSpace()->id(),
+            KoColorSpaceRegistry::instance()->colorSpace( colorSpace()->id(),
                                                                       profile);
     if (dstSpace)
         m_colorSpace = dstSpace;
@@ -760,25 +768,37 @@ KisUndoAdapter *KisPaintDevice::undoAdapter() const
 }
 
 void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcProfileName,
-                                           qint32 offsetX, qint32 offsetY)
+                                       qint32 offsetX, qint32 offsetY)
 {
+    Q_UNUSED( srcProfileName );
+
     QImage img = image;
 
     if (img.format() != QImage::Format_ARGB32) {
         img = img.convertToFormat(QImage::Format_ARGB32);
     }
+#warning "KisPaintDevice::convertFromQImage. re-enable use of srcProfileName"
 #if 0
+
     // XXX: Apply import profile
-    if (colorSpace() == KisMetaRegistry::instance()->csRegistry() ->colorSpace("RGBA",0)) {
+    if (colorSpace() == KoColorSpaceRegistry::instance() ->colorSpace("RGBA",0)) {
         writeBytes(img.bits(), 0, 0, img.width(), img.height());
     }
     else {
 #endif
+#if 0
         quint8 * dstData = new quint8[img.width() * img.height() * pixelSize()];
-        KisMetaRegistry::instance()->csRegistry()
+        KoColorSpaceRegistry::instance()
                 ->colorSpace("RGBA", srcProfileName)->
                         convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
+#endif
+        KisPainter p( this );
+        p.bitBlt(offsetX, offsetY, colorSpace()->compositeOp( COMPOSITE_OVER ),
+                 &image, OPACITY_OPAQUE,
+                 0, 0, image.width(), image.height());
+        p.end();
+
 //    }
 }
 
@@ -1139,7 +1159,7 @@ void KisPaintDevice::clearSelection()
 
 void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
 {
-    QRect r = mask->extent();
+    QRect r = mask->selectedExactRect();
     crop(r);
 
     KisHLineIterator pixelIt = createHLineIterator(r.x(), r.top(), r.width());

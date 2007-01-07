@@ -140,12 +140,12 @@ QString KisDlgImageProperties::description()
 
 KoColorSpace * KisDlgImageProperties::colorSpace()
 {
-    return KisMetaRegistry::instance()->csRegistry()->colorSpace(m_page->cmbColorSpaces->currentItem(), m_page->cmbProfile->currentText());
+    return KoColorSpaceRegistry::instance()->colorSpace(m_page->cmbColorSpaces->currentItem(), m_page->cmbProfile->currentText());
 }
 
 KoColorProfile * KisDlgImageProperties::profile()
 {
-    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image->colorSpace()->id() );
+    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( m_image->colorSpace()->id() );
     qint32 index = m_page->cmbProfile->currentIndex();
 
     if (index < profileList.count()) {
@@ -158,10 +158,10 @@ KoColorProfile * KisDlgImageProperties::profile()
 // XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class
 void KisDlgImageProperties::fillCmbProfiles(const KoID & s)
 {
-    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->get(s);
     m_page->cmbProfile->clear();
     if (csf) {
-        QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+        QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
         foreach (KoColorProfile *profile, profileList) {
             m_page->cmbProfile->addSqueezedItem(profile->productName());

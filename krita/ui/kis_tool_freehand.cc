@@ -90,21 +90,31 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         m_prevXTilt = e->xTilt();
         m_prevYTilt = e->yTilt();
 
-        QRect r = m_painter->dirtyRect();
-        if ( r.isValid() ) {
-            m_dirtyRect = r;
+        QRegion region = m_painter->dirtyRegion();
 
-            r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
+
+        if ( !region.isEmpty() ) {
+
+            m_dirtyRegion = region;
+
+#if 0
             if (!m_paintOnSelection) {
                 if (!m_paintIncremental) {
-                    m_currentImage->activeLayer()->setDirty(r);
+                    m_currentImage->activeLayer()->setDirty(region);
                 }
             }
             else {
-                m_target->setDirty( r );
+                m_target->setDirty( region );
             }
-            m_canvas->updateCanvas( convertToPt(r) );
+#endif
+            m_currentImage->activeLayer()->setDirty(region);
+// We shouldn't need to update the canvas manually
+#if 0
+            QRect r = region.boundingRect();
+            r = QRect(r.left()-1, r.top()-1, r.width()+2,/r.height()+2); //needed to update selectionvisualization
 
+            m_canvas->updateCanvas( convertToPt(r) );
+#endif
         }
     }
 }
@@ -121,21 +131,28 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         m_prevXTilt = e->xTilt();
         m_prevYTilt = e->yTilt();
 
-        QRect r = m_painter->dirtyRect();
+        QRegion region = m_painter->dirtyRegion();
 
-        if (r.isValid()) {
-            m_dirtyRect |= r;
+        if (!region.isEmpty()) {
+            m_dirtyRegion += region;
 
             if (!m_paintOnSelection) {
-                m_currentImage->activeLayer()->setDirty(r);
+                m_currentImage->activeLayer()->setDirty(region);
             }
             else {
                 // Just update the canvas
-                r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
-                m_target->setDirty(r);
+                // XXX: How to do this hack with regions?
+                // r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
+                m_target->setDirty(region);
             }
-            m_canvas->updateCanvas( convertToPt(r) );
 
+// XXX: This should not be necessary anymore when I've done with KisProjection
+#if 0
+
+            QRect r = region.boundingRect();
+            r = QRect(r.left()-1, r.top()-1, r.width()+2,/r.height()+2); //needed to update selectionvisualization
+            m_canvas->updateCanvas( convertToPt(r) );
+#endif
         }
     }
 }
@@ -223,7 +240,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
     }
 
-/*    kDebug() << "target: " << m_target << "( " << m_target->name() << " )"
+/*    kDebug(41007) << "target: " << m_target << "( " << m_target->name() << " )"
             << " source: " << m_source << "( " << m_source->name() << " )"
             << ", incremental " << m_paintIncremental
             << ", paint on selection: " << m_paintOnSelection
@@ -246,17 +263,26 @@ void KisToolFreehand::endPaint()
                     m_painter->endTransaction();
                 KisPainter painter( m_source );
                 painter.setCompositeOp(m_compositeOp);
+
                 if (m_currentImage->undo())
                     painter.beginTransaction(m_transactionText);
-                painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(), m_compositeOp, m_target,
-                               m_opacity,
-                               m_dirtyRect.x(), m_dirtyRect.y(),
-                               m_dirtyRect.width(), m_dirtyRect.height());
 
+                QVector<QRect> dirtyRects = m_dirtyRegion.rects();
+                QVector<QRect>::iterator it = dirtyRects.begin();
+                QVector<QRect>::iterator end = dirtyRects.end();
+
+                while (it != end) {
+
+                    painter.bitBlt(it->x(), it->y(), m_compositeOp, m_target,
+                                   m_opacity,
+                                   it->x(), it->y(),
+                                   it->width(), it->height());
+                    ++it;
+                }
                 KisLayerSupportsIndirectPainting* layer =
                     dynamic_cast<KisLayerSupportsIndirectPainting*>(m_source->parentLayer());
                 layer->setTemporaryTarget(0);
-                m_source->parentLayer()->setDirty(m_dirtyRect);
+                m_source->parentLayer()->setDirty(m_dirtyRegion);
 
                 if (m_currentImage->undo()) {
                     m_currentImage->undoAdapter()->addCommand(painter.endTransaction());

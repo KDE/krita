@@ -20,14 +20,8 @@
 
 #include <krita_export.h>
 
-class KoColorSpaceRegistry;
 class KisMathToolboxFactoryRegistry;
 
-/**
- * A single singleton that provides access to several registries.
- *
- * XXX: Maybe this should go into the SDK
- */
 class KRITAIMAGE_EXPORT KisMetaRegistry {
 
 public:
@@ -35,8 +29,8 @@ public:
     virtual ~KisMetaRegistry();
     static KisMetaRegistry* instance();
 
-    KoColorSpaceRegistry * csRegistry() { return m_csRegistry; };
     KisMathToolboxFactoryRegistry* mtRegistry() { return m_mtRegistry; };
+
 private:
 
     KisMetaRegistry();
@@ -45,7 +39,6 @@ private:
 
     static KisMetaRegistry * m_singleton;
 
-    KoColorSpaceRegistry * m_csRegistry;
     KisMathToolboxFactoryRegistry* m_mtRegistry;
 };
 #endif

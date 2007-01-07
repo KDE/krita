@@ -97,7 +97,7 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
 
         if (canCancel) {
             if (modal) {
-                kDebug() << "grabbing 1\n";
+                kDebug(41007) << "grabbing 1\n";
                 m_cancelButton->grabMouse();
                 m_cancelButton->grabKeyboard();
             }
@@ -107,7 +107,7 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
 
             if (modal) {
                 // Only visible widgets can grab.
-                kDebug() << "grabbing 2\n";
+                kDebug(41007) << "grabbing 2\n";
                 grabMouse();
                 grabKeyboard();
             }

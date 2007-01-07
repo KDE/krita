@@ -69,7 +69,7 @@ void KisToolBrush::timeoutPaint()
 {
     if (m_currentImage && m_painter) {
         m_painter->paintAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
-        m_currentImage->activeLayer()->setDirty(m_painter->dirtyRect());
+        m_currentImage->activeLayer()->setDirty(m_painter->dirtyRegion());
     }
 }
 

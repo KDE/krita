@@ -220,7 +220,7 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 
 void KisLayerBox::updateUI()
 {
-    kDebug()  << "###### KisLayerBox::updateUI " << m_view->image()->activeLayer() << endl;
+    kDebug(41007)  << "###### KisLayerBox::updateUI " << m_view->image()->activeLayer() << endl;
 
     bnDelete->setEnabled(m_view->image()->activeLayer());
     bnRaise->setEnabled(m_view->image()->activeLayer() && (m_view->image()->activeLayer()->prevSibling() || m_view->image()->activeLayer()->parent()));

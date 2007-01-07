@@ -223,7 +223,7 @@ void KisFilterManager::setup(KActionCollection * ac)
 
 void KisFilterManager::updateGUI()
 {
-    kDebug() << "Filter actions: " << m_d->filterActions.isEmpty() << endl;
+    kDebug(41007) << "Filter actions: " << m_d->filterActions.isEmpty() << endl;
 
     if ( m_d->filterActions.isEmpty() ) return;
 

@@ -110,7 +110,7 @@ private slots:
 
 protected:
 
-    QRect m_dirtyRect;
+    QRegion m_dirtyRegion;
     quint8 m_opacity;
     const KoCompositeOp * m_compositeOp;
     bool m_paintOutline;

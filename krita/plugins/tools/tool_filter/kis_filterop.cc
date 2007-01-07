@@ -149,7 +149,6 @@ void KisFilterOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
         m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev, m_painter->opacity(), sx, sy, sw, sh);
     }
 
-    m_painter->addDirtyRect(dstRect);
 }
 
 void KisFilterOp::setFilterConfiguration(KisFilterConfiguration* filterConfiguration)

@@ -78,7 +78,7 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 //     m_dockabilityGroup.addButton(radioDisallowDocking, DOCK_DISABLED);
 //     m_dockabilityGroup.addButton(radioSmartDocking, DOCK_SMART);
 // 
-//     kDebug() << "Dock is " << cfg.dockability() << endl;
+//     kDebug(41007) << "Dock is " << cfg.dockability() << endl;
 
 
 //     QAbstractButton *button = m_dockabilityGroup.button(cfg.dockability());
@@ -137,10 +137,10 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 
     KisConfig cfg;
 
-    m_page->cmbWorkingColorSpace->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
+    m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
 
-    m_page->cmbPrintingColorSpace->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
+    m_page->cmbPrintingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbPrintingColorSpace->setCurrent(cfg.printerColorSpace());
 
     refillMonitorProfiles(KoID("RGBA", ""));
@@ -190,14 +190,14 @@ void ColorSettingsTab::setDefault()
 
 void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
 {
-    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->get(s);
 
     m_page->cmbMonitorProfile->clear();
 
     if ( !csf )
     return;
 
-    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
         if (profile->deviceClass() == icSigDisplayClass)
@@ -209,14 +209,14 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
 
 void ColorSettingsTab::refillPrintProfiles(const KoID & s)
 {
-    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->get(s);
 
     m_page->cmbPrintProfile->clear();
 
     if ( !csf )
         return;
 
-    QList<KoColorProfile *> profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
         if (profile->deviceClass() == icSigOutputClass)

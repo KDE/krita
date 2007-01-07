@@ -64,7 +64,7 @@ private:
     bool m_draggingExposureSlider;
     KoZoomAdapter * m_zoomAdapter;
     KisImageSP m_image;
-    QRect m_dirtyRect;
+    QRect m_dirtyRegion;
 };
 
 

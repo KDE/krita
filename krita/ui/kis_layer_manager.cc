@@ -469,8 +469,7 @@ void KisLayerManager::addLayer(KisGroupLayerSP parent, KisLayerSP above)
         NewLayerDialog dlg(KoID(img->colorSpace()->id()), profilename, img->nextLayerName(), m_view);
 
         if (dlg.exec() == QDialog::Accepted) {
-            KoColorSpace* cs = KisMetaRegistry::instance()-> csRegistry() ->
-                    colorSpace(dlg.colorSpaceID(),dlg.profileName());
+            KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(dlg.colorSpaceID(),dlg.profileName());
             KisLayerSP layer = KisLayerSP(new KisPaintLayer(img.data(), dlg.layerName(), dlg.opacity(), cs));
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
@@ -629,7 +628,7 @@ void KisLayerManager::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP abov
     else {
         KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(l.data());
         if (gl) {
-            dev = gl->projection(img->bounds());
+            dev = gl->projection();
         }
         else {
             KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(l.data());
@@ -838,7 +837,6 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     worker.run();
 
     if (t) m_view->undoAdapter()->addCommand(t);
-    m_view->image()->rootLayer()->setDirty(false);
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();
@@ -937,7 +935,7 @@ void KisLayerManager::mergeLayer()
 
 void KisLayerManager::layersUpdated()
 {
-    kDebug() << "layersUpdated called\n";
+    kDebug(41007) << "layersUpdated called\n";
 
     KisImageSP img = m_view->image();
     if (!img) return;

@@ -112,17 +112,17 @@ QRectF KisTool::convertToPt( const QRectF &rect )
     return r;
 }
 
+
 KisImageSP KisTool::image() const
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
     if ( !kisCanvas ) {
-        kDebug() << "The current canvas is not a kis canvas!\n";
+        kDebug(41007) << "The current canvas is not a kis canvas!\n";
         return 0;
     }
 
     KisImageSP img = kisCanvas->currentImage();
 
-    kDebug() << "Current image: " << img << endl;
     return img;
 
 }

@@ -69,16 +69,26 @@ QIcon KisGroupLayer::icon() const
 }
 
 
-void KisGroupLayer::setDirty(bool propagate)
+void KisGroupLayer::setDirty()
 {
-    KisLayer::setDirty(propagate);
-    if (propagate) emit (sigDirty(m_dirtyRect));
+    kDebug(41001) << "KisGroupLayer::setDirty " << name() << endl;
+    QRect rc = extent();
+    KisLayer::setDirty(rc);
+    emit sigDirtyRegionAdded( extent() );
 }
 
-void KisGroupLayer::setDirty(const QRect & rc, bool propagate)
+void KisGroupLayer::setDirty(const QRect & rc)
 {
-    KisLayer::setDirty(rc, propagate);
-    if (propagate) emit sigDirty(rc);
+    kDebug(41001) << "KisGroupLayer::setDirty " << name() << ", " << rc << endl;
+    KisLayer::setDirty(rc);
+    emit sigDirtyRectAdded( rc );
+}
+
+void KisGroupLayer::setDirty( const QRegion & region)
+{
+    kDebug(41001) << "KisGroupLayer::setDirty " << name() << ", " << region << endl;
+    KisLayer::setDirty( region );
+    emit sigDirtyRegionAdded( region );
 }
 
 void KisGroupLayer::resetProjection(KisPaintDeviceSP to)
@@ -94,37 +104,18 @@ bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) {
              && l->opacity() == OPACITY_OPAQUE && !l->temporaryTarget() && !l->hasMask();
 }
 
-KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
+KisPaintDeviceSP KisGroupLayer::projection()
 {
+    kDebug(41001) << "KisGroupLayer::projection\n";
+
     // We don't have a parent, and we've got only one child: abuse the child's
     // paint device as the projection if the child is visible
     if (parent().isNull() && childCount() == 1) {
         KisPaintLayerSP l = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(firstChild().data()));
         if (paintLayerInducesProjectionOptimization(l)) {
-            l->setClean(rect);
-            setClean(rect);
             return l->paintDevice();
         }
     }
-    // No need for updates, we're clean
-    if (!dirty()) {
-        return m_projection;
-    }
-    // No need for updates -- the desired area wasn't dirty
-    if (!rect.intersects(m_dirtyRect)) {
-        return m_projection;
-    }
-
-
-    // Okay, we need to update the intersection between
-    // what's dirty and what's asked us to be updated.
-    // XXX Nooo, that doesn't work, since the call to setClean following this, is actually:
-    // m_dirtyRect = QRect(); So the non-intersecting part gets brilliantly lost otherwise.
-    const QRect rc = m_dirtyRect;//rect.intersect(m_dirtyRect);
-
-    updateProjection(rc);
-    setClean(rect);
-
     return m_projection;
 }
 
@@ -313,7 +304,8 @@ QImage KisGroupLayer::createThumbnail(qint32 w, qint32 h)
 
 void KisGroupLayer::updateProjection(const QRect & rc)
 {
-    if (!m_dirtyRect.isValid()) return;
+    kDebug(41001) << "KisGroupLayer::updateProjection " << rc << endl;
+    if ( !rc.isValid() ) return ;
 
     // Get the first layer in this group to start compositing with
     KisLayerSP child = lastChild();
@@ -322,6 +314,10 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     if (!child) m_projection->clear();
 
     KisLayerSP startWith = KisLayerSP(0);
+
+#warning "KisGroupLayer::updateProjection. Reenable adjustmentlayer optimization!"
+#if 0
+
     KisAdjustmentLayerSP adjLayer = KisAdjustmentLayerSP(0);
     KisLayerSP tmpPaintLayer = KisLayerSP(0);
 
@@ -379,6 +375,9 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     if (adjLayer.isNull()) {
         startWith = lastChild();
     }
+#endif
+
+    startWith = lastChild();
 
     if (startWith.isNull()) {
         return;
@@ -388,6 +387,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     // Fill the projection either with the cached data, or erase it.
     KisFillPainter gc(m_projection);
+#if 0
     if (!adjLayer.isNull()) {
         gc.bitBlt(rc.left(), rc.top(),
                   COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
@@ -395,9 +395,10 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         first = false;
     }
     else {
+#endif
         gc.eraseRect(rc);
         first = true;
-    }
+//    }
     gc.end();
 
     KisMergeVisitor visitor(m_projection, rc);
@@ -412,15 +413,18 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             // or an empty image. This means the layer's composite op is ignored,
             // which is consistent with Photoshop and gimp.
             const KoCompositeOp * cop = child->compositeOp();
+
             const bool block = child->signalsBlocked();
             child->blockSignals(true);
-            // Composite op copy doesn't take a mask/selection into account, so we need
+
+            // Composite Op copy doesn't take a mask/selection into account, so we need
             // to make a difference between a paintlayer with a mask, and one without
             KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(child.data());
             if (l && l->hasMask())
                 child->m_compositeOp = cop->colorSpace()->compositeOp( COMPOSITE_OVER );
             else
                 child->m_compositeOp = cop->colorSpace()->compositeOp( COMPOSITE_COPY );
+
             child->blockSignals(block);
             child->accept(visitor);
             child->blockSignals(true);

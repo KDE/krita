@@ -105,7 +105,7 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
     }
     
     // Convert ref and src to LAB
-    KoColorSpace* labCS = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("LABA"),"");
+    KoColorSpace* labCS = KoColorSpaceRegistry::instance()->colorSpace(KoID("LABA"),"");
     if(!labCS)
     {
         kDebug() << "The LAB colorspace is not available." << endl;

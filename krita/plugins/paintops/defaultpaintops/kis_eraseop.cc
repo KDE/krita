@@ -135,6 +135,5 @@ void KisEraseOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
         m_painter->bitBlt(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab, m_painter->opacity(), sx, sy, sw, sh);
     }
 
-    m_painter->addDirtyRect(dstRect);
 }
 

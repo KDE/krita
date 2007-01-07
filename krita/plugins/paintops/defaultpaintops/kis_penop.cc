@@ -41,19 +41,19 @@
 
 
 KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
-{ 
-    KisPaintOp * op = new KisPenOp(painter); 
+{
+    KisPaintOp * op = new KisPenOp(painter);
     Q_CHECK_PTR(op);
-    return op; 
+    return op;
 }
 
 
 KisPenOp::KisPenOp(KisPainter * painter)
-    : super(painter) 
+    : super(painter)
 {
 }
 
-KisPenOp::~KisPenOp() 
+KisPenOp::~KisPenOp()
 {
 }
 
@@ -74,7 +74,7 @@ void KisPenOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     qint32 y = qRound(pt.y());
 
     KisPaintDeviceSP dab = KisPaintDeviceSP(0);
-    if (brush->brushType() == IMAGE || 
+    if (brush->brushType() == IMAGE ||
         brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), info);
     }
@@ -128,5 +128,4 @@ void KisPenOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
         m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab, m_painter->opacity(), sx, sy, sw, sh);
     }
 
-    m_painter->addDirtyRect(dstRect);
 }

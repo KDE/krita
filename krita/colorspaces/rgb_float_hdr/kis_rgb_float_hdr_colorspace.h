@@ -18,6 +18,7 @@
  */
 #ifndef KIS_RGB_FLOAT_HDR_COLORSPACE_H_
 #define KIS_RGB_FLOAT_HDR_COLORSPACE_H_
+#include "config-krita.h"
 
 #include "klocale.h"
 #include <KoIncompleteColorSpace.h>

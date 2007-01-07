@@ -169,7 +169,6 @@ void KisSmearyOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
         m_painter->bitBlt(x - 32, y - 32, m_painter->compositeOp(), dab, m_painter->opacity(), x - 32, y -32, 64, 64);
     }
 
-    m_painter->addDirtyRect(QRect(x -32, y -32, 64, 64));
 }
 
 

@@ -318,19 +318,12 @@ public:
     /**
      * The methods below are 'higher' level than the above methods. They need brushes, colors
      * etc. set before they can be called. The methods do not directly tell the image to
-     * update, but you can call dirtyRect() to get the rect that needs to be notified by your
+     * update, but you can call dirtyRegion() to get the region that needs to be notified by your
      * painting code.
      *
-     * Call will RESET the dirtyRect!
+     * Call will RESET the dirtyRegion!
     */
-    QRect dirtyRect();
-
-    /**
-     * Add the r to the current dirty rect, and return the dirtyRect after adding r to it.
-     */
-    QRect addDirtyRect(QRect r) { m_dirtyRect |= r; return m_dirtyRect; }
-
-
+    QRegion dirtyRegion();
 
     /**
      * Paint a line that connects the dots in points
@@ -540,11 +533,16 @@ protected:
     /// Fill the polygon defined by points with the fillStyle
     void fillPolygon(const vQPointF& points, FillStyle fillStyle);
 
+    /**
+     * Add the r to the current dirty rect, and return the dirtyRegion after adding r to it.
+     */
+    QRegion addDirtyRect(QRect r);
+
 protected:
     KisPaintDeviceSP m_device;
     KisTransaction  *m_transaction;
 
-    QRect m_dirtyRect;
+    QRegion m_dirtyRegion;
 
     KoColor m_paintColor;
     KoColor m_backgroundColor;

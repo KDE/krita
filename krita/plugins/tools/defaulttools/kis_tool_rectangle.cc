@@ -173,12 +173,13 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
         m_painter->setPaintOp(op);
 
         m_painter->paintRect(m_dragStart, m_dragEnd-m_dragStart, PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());
-        QRect bound = m_painter->dirtyRect();
+        QRegion bound = m_painter->dirtyRegion();
         device->setDirty( bound );
         notifyModified();
-
+// Should not be necessary anymore
+#if 0
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
-
+#endif
         if (m_currentImage->undo()) {
             m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
         }
@@ -216,7 +217,7 @@ void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
         QPoint end;
 
         gc.setPen(pen);
-        
+
 	start = QPoint(static_cast<int>(m_dragStart.x()), static_cast<int>(m_dragStart.y()));
 	end = QPoint(static_cast<int>(m_dragEnd.x()), static_cast<int>(m_dragEnd.y()));
 	gc.drawRect(QRect(start, end));

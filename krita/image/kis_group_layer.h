@@ -47,20 +47,40 @@ public:
     virtual QIcon icon() const;
 
     virtual KisLayerSP clone() const;
+
+signals:
+
+    /**
+       Emitted whenever the specified region has been dirtied.
+    */
+    void sigDirtyRegionAdded( const QRegion & );
+
+    /**
+       Emitten whenver the specified rect has been dirtied.
+    */
+    void sigDirtyRectAdded( const QRect & );
+
 public:
 
     /**
      * Set the entire layer extent dirty; this percolates up to parent layers all the
      * way to the root layer.
      */
-    virtual void setDirty(bool propagate = true);
+    virtual void setDirty();
 
     /**
      * Add the given rect to the set of dirty rects for this layer;
      * this percolates up to parent layers all the way to the root
      * layer.
      */
-    virtual void setDirty(const QRect & rect, bool propagate = true);
+    virtual void setDirty(const QRect & rect);
+
+    /**
+     * Add the given region to the set of dirty rects for this layer;
+     * this percolates up to parent layers all the way to the root
+     * layer.
+     */
+    virtual void setDirty( const QRegion & region);
 
     virtual qint32 x() const;
     virtual void setX(qint32);
@@ -68,34 +88,94 @@ public:
     virtual qint32 y() const;
     virtual void setY(qint32);
 
-    // Sets this layer and all its descendants' owner image to the given image.
+    /**
+       Sets this layer and all its descendants' owner image to the
+       given image.
+    */
     virtual void setImage(KisImageWSP image);
 
+    /**
+       Return the united extents of all layers in this group layer;
+       this function is _recursive_.
+     */
     virtual QRect extent() const;
+
+    /**
+       Return the exact bounding rect of all layers in this group
+       layer; this function is _recursive_ and can therefore be really
+       slow.
+     */
     virtual QRect exactBounds() const;
 
+    /**
+       Accect the specified visitor.
+       @return true if the operation succeeded, false if it failed.
+    */
     virtual bool accept(KisLayerVisitor &v)
         {
-//            kDebug(41001) << "GROUP\t\t" << name()
-//                    << " dirty: " << dirty()
-//                    << ", " << m_layers.count() << " children "
-//                    << ", projection: " << m_projection
-//                    << "\n";
             return v.visit(this);
         };
 
-    virtual void resetProjection(KisPaintDeviceSP to = 0); /// will copy from to, if !0, CoW!!
-    virtual KisPaintDeviceSP projection(const QRect & rect);
+    /**
+       Clear the projection or create a projection from the specified
+       paint devide.
 
+       Warning: will copy from to, if !0,
+
+       Note for hackers: implement CoW!
+     */
+    virtual void resetProjection(KisPaintDeviceSP to = 0);
+
+    /**
+       Retrieve the projection for this group layer. Note that
+       The projection is _not_ guaranteed to be up to date with
+       the latest actions, and that you cannot discover whether it
+       is!
+
+       Note the second: this _may_ return the paint device of a paint
+       layer if that paint layer is the only child of this group layer.
+    */
+    virtual KisPaintDeviceSP projection();
+
+    /**
+       Update the given rect of the projection paint device.
+
+       Note for hackers: keep this method thread-safe!
+    */
+    void updateProjection(const QRect & rc);
+
+    /**
+       @return the number of layers contained in this group layer. The
+       count is _not_ recursive, i.e., a child grouplayer that
+       contains ten other layers counts for one.
+    */
     virtual uint childCount() const;
 
+    /**
+     @return the bottom-most layer of the layers contained in this
+     group. This is not recursive: if the bottom-most layer is a
+     grouplayer, the grouplayer is returned, not the first child of
+     that group layer.
+    */
     virtual KisLayerSP firstChild() const;
+
+    /**
+     @return the top-most layer of the layers contained in this
+     group. This is not recursive: if the top-most layer is a
+     grouplayer, the grouplayer is returned, not the last child
+     of that group layer.
+    */
     virtual KisLayerSP lastChild() const;
 
-    /// Returns the layer at the specified index.
+    /**
+       @returns the layer at the specified index.
+    */
     virtual KisLayerSP at(int index) const;
 
-    /// Returns the index of the layer if it's in this group, or -1 otherwise.
+    /**
+       @returns the index of the specified layer if it's in this
+       group, or -1 otherwise.
+    */
     virtual int index(KisLayerSP layer) const;
 
     /// Moves the specified layer to the specified index in the group, if it's already a member of this group.
@@ -120,11 +200,6 @@ public:
     /// Returns if the layer will induce the projection hack (if the only layer in this group)
     virtual bool paintLayerInducesProjectionOptimization(KisPaintLayerSP l);
 
-signals:
-
-    /// Emitted whenever the specified rectangle needs to be recomposited.
-    void sigDirty(QRect rc);
-
 protected:
 
     /// these cause QAbstractItemModel::rows{AboutToBe,}{Inserted,Removed} to be emitted and percolated up the tree
@@ -134,8 +209,6 @@ protected:
     void notifyRemoved(KisGroupLayer *parent, int index);
 
 private:
-
-    void updateProjection(const QRect & rc);
 
     inline int reverseIndex(int index) const { return childCount() - 1 - index; };
     vKisLayerSP m_layers; // Contains the list of all layers

@@ -29,6 +29,8 @@
 #include <QLayout>
 #include <QCheckBox>
 
+#include <QVector>
+#include <QRect>
 #include <QColor>
 
 #include "knuminput.h"
@@ -70,90 +72,95 @@ KisToolFill::~KisToolFill()
 
 bool KisToolFill::flood(int startX, int startY)
 {
-    
+
     KisPaintDeviceSP device = m_currentImage->activeDevice();
     if (!device) return false;
 
     if (m_fillOnlySelection) {
 #warning Port the fixes for filling the selection from 1.6!
+
         QRect rc = device->selection()->selectedRect();
-        KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device->colorSpace(),  "filled"));
+        KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device->colorSpace(),  "filled_only_selection"));
 	delete m_fillPainter;
 	m_fillPainter = new KisFillPainter (filled);
 	Q_CHECK_PTR(m_fillPainter);
 
         //KisFillPainter painter(filled);
-        // XXX: The fillRect methods should either set the dirty rect or return it,
-        // so we don't have to blit over all of the image, but only the part that's
         // really filled.
         if (m_usePattern)
             m_fillPainter->fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
-                             m_currentPattern);
+                                    m_currentPattern);
         else
             m_fillPainter->fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
-                             m_currentFgColor, m_opacity);
-        //m_painter.end();
-	delete m_fillPainter;
+                                    m_currentFgColor, m_opacity);
+
+        QRegion dirty = m_fillPainter->dirtyRegion();
+
+        delete m_fillPainter;
 	m_fillPainter = 0;
 
-        //KisPainter painter2(device);
 	m_painter = new KisPainter (device);
 	Q_CHECK_PTR(m_painter);
 
-        if (m_currentImage->undo()) m_painter->beginTransaction(i18n("Fill"));
-        m_painter->bltSelection(0, 0, m_compositeOp, filled, m_opacity,
-				0, 0, m_currentImage->width(), m_currentImage->height());
 
-	QRect dRect = filled->extent();
-        device->setDirty(dRect);
-        notifyModified();
-	m_canvas->updateCanvas(convertToPt(dRect.normalized()));
+        if (m_currentImage->undo()) m_painter->beginTransaction(i18n("Fill"));
+
+        QVector<QRect> rects = dirty.rects();
+
+        QVector<QRect>::iterator it = rects.begin();
+        QVector<QRect>::iterator end = rects.end();
+
+        while ( it != end )
+        {
+            QRect rc = *it;
+            m_painter->bltSelection(rc.x(), rc.y(), m_compositeOp, filled, m_opacity,
+                                    rc.x(), rc.y(), rc.width(), rc.height());
+            ++it;
+        }
+
+        device->setDirty(dirty);
 
         if (m_currentImage->undo()) {
             m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
         }
-        return true;
     }
+    else {
 
-    //KisFillPainter painter(device);
-    delete m_fillPainter;
-    m_fillPainter = new KisFillPainter (device);
-    Q_CHECK_PTR(m_fillPainter);
+        delete m_fillPainter;
+        m_fillPainter = new KisFillPainter (device);
+        Q_CHECK_PTR(m_fillPainter);
 
-    if (m_currentImage->undo()) m_fillPainter->beginTransaction(i18n("Flood Fill"));
-    m_fillPainter->setPaintColor(m_currentFgColor);
-    m_fillPainter->setOpacity(m_opacity);
-    m_fillPainter->setFillThreshold(m_threshold);
-    m_fillPainter->setCompositeOp(m_compositeOp);
-    m_fillPainter->setPattern(m_currentPattern);
-    m_fillPainter->setSampleMerged(!m_unmerged);
-    m_fillPainter->setCareForSelection(true);
+        if (m_currentImage->undo()) m_fillPainter->beginTransaction(i18n("Flood Fill"));
 
-    // Enable this code again when I know how progress works
-   //  KisProgressDisplayInterface *progress = ??
+        m_fillPainter->setPaintColor(m_currentFgColor);
+        m_fillPainter->setOpacity(m_opacity);
+        m_fillPainter->setFillThreshold(m_threshold);
+        m_fillPainter->setCompositeOp(m_compositeOp);
+        m_fillPainter->setPattern(m_currentPattern);
+        m_fillPainter->setSampleMerged(!m_unmerged);
+        m_fillPainter->setCareForSelection(true);
+
+        // Enable this code again when I know how progress works
+        //  KisProgressDisplayInterface *progress = ??
 //     if (progress) {
 // 	progress->setSubject(m_fillPainter, true, true);
 //     }
 
-    if (m_usePattern)
-        m_fillPainter->fillPattern(startX, startY);
-    else
-        m_fillPainter->fillColor(startX, startY);
+        if (m_usePattern)
+            m_fillPainter->fillPattern(startX, startY);
+        else
+            m_fillPainter->fillColor(startX, startY);
 
-    QRect dRect = m_fillPainter->dirtyRect();
-    device->setDirty(dRect);
-    notifyModified();
-    kDebug() << "Are we here?" << endl;
-    m_canvas->updateCanvas(convertToPt(dRect));
+        QRegion dirtyRegion = m_fillPainter->dirtyRegion();
+        device->setDirty(dirtyRegion);
 
+        if (m_currentImage->undo()) {
+            m_currentImage->undoAdapter()->addCommand(m_fillPainter->endTransaction());
+        }
 
-    if (m_currentImage->undo()) {
-        m_currentImage->undoAdapter()->addCommand(m_fillPainter->endTransaction());
+        delete m_fillPainter;
+        m_fillPainter = 0;
     }
-
-    delete m_fillPainter;
-    m_fillPainter = 0;
-
     return true;
 }
 
@@ -161,7 +168,6 @@ void KisToolFill::mousePressEvent(KoPointerEvent *e)
 {
     QPointF pos = convertToPixelCoord(e);
     m_startPos = pos;
-    kDebug() <<"do we ever go here press event" << endl;
 }
 
 void KisToolFill::mouseReleaseEvent(KoPointerEvent *e)
@@ -171,14 +177,14 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *e)
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
     if (e->button() != Qt::LeftButton) return;
     int x, y;
-    //x = m_startPos.floorX();
-    //y = m_startPos.floorY();
+
     x = static_cast<int>(m_startPos.x());
     y = static_cast<int>(m_startPos.y());
 
     if (!m_currentImage->bounds().contains(x, y)) {
 	return;
     }
+
     flood(x, y);
     notifyModified();
 }

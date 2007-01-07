@@ -138,7 +138,7 @@ void KisToolStar::buttonRelease(KoPointerEvent *event)
 
         painter.paintPolygon(coord);
 
-        device->setDirty( painter.dirtyRect() );
+        device->setDirty( painter.dirtyRegion() );
         notifyModified();
 
         if (m_currentImage->undo()) {

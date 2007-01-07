@@ -30,6 +30,17 @@
 
 class KisView2;
 
+/**
+  The KisImageRasteredCache keeps a big 'grid' associated with the
+  image, and with each block in the grid, it has an associated element
+  and then if a part of the image is changed, it queues those parts of
+  the grid to be updated as well and then it slowly updates the grid
+  items (and associated stuff when the image resizes and so) in this
+  case, the 'elements' are mini histograms and they need to get
+  updated so we put them on a queue, and if the user has done nothing
+  for long enough (hence the timer), we'll update the histograms that
+  became dirty
+*/
 class KisImageRasteredCache : public QObject {
 Q_OBJECT
 
@@ -48,7 +59,7 @@ signals:
     void cacheUpdated();
 
 private slots:
-    void imageUpdated(QRect rc);
+    void imageUpdated(QRegion rc);
     void imageSizeChanged(qint32 w, qint32 h);
     void timeOut();
 

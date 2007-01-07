@@ -122,11 +122,11 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
     if (brush->brushType() == IMAGE ||
         brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), info, xFraction, yFraction);
-        dab->convertTo(KisMetaRegistry::instance()->csRegistry()->alpha8());
+        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     }
     else {
         KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
-        dab = computeDab(mask, KisMetaRegistry::instance()->csRegistry()->alpha8());
+        dab = computeDab(mask, KoColorSpaceRegistry::instance()->alpha8());
     }
 
     m_painter->setPressure(info.pressure);
@@ -170,7 +170,7 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
         // First look for the grid corresponding to the start point
         KisSubPerspectiveGrid* subGridStart = *device->image()->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(QPointF(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
         QRect r = QRect(0,0, device->image()->width(), device->image()->height());
-        
+
 #if 1
         if(subGridStart)
         {
@@ -206,12 +206,12 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
         }
 #endif
 //         kDebug()<< " oouuuuh" << srcPointF << KisPerspectiveMath::matProd(startM,  KisPerspectiveMath::matProd(endM, srcPointF ) ) << KisPerspectiveMath::matProd(endM,  KisPerspectiveMath::matProd(startM, srcPointF ) );
-        
+
         // Compute the translation in the perspective transformation space:
         QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_painter->duplicateStart()) );
         QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, QPointF(m_painter->duplicateStart()) - QPointF(m_painter->duplicateOffset()) );
         QPointF translat = duplicateStartPoisitionT - positionStartPaintingT;
-        KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh); 
+        KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh);
         KisRandomSubAccessorPixel srcAcc = device->createRandomSubAccessor();
         //Action
         while(!dstIt.isDone())
@@ -225,15 +225,15 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
             ++dstIt;
         }
 
-        
+
     } else {
         // Or, copy the source data on the temporary device:
         copyPainter.bitBlt(0, 0, COMPOSITE_COPY, device, srcPoint.x(), srcPoint.y(), sw, sh);
         copyPainter.end();
     }
-    
+
     // heal ?
-    
+
     if(heal)
     {
         Q_UINT16 dataDevice[4];
@@ -274,7 +274,7 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
             } while( err < 0.00001 && iter < 100);
             delete [] solution;
         }
-        
+
         // Finaly multiply
         deviceIt = device->createHLineIterator(x, y, sw);
         srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
@@ -300,8 +300,8 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
         }
         delete [] matrix;
     }
-    
-    
+
+
     // Add the dab as selection to the srcdev
 //     KisPainter copySelection(srcdev->selection().data());
 //     copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);
@@ -329,7 +329,7 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
     Q_INT32 sy = dstRect.y() - y;
     sw = dstRect.width();
     sh = dstRect.height();
-    
+
     if (m_source->hasSelection()) {
         m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), m_target,
                                 m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
@@ -339,5 +339,4 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
     }
 
 
-    m_painter->addDirtyRect(dstRect);
 }

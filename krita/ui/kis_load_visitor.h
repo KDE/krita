@@ -84,12 +84,12 @@ public:
             data = m_store->read(m_store->size());
             m_store->close();
             // Create a colorspace with the embedded profile
-            KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(layer->paintDevice()->colorSpace()->id(),
+            KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(layer->paintDevice()->colorSpace()->id(),
                                                                                             new KoColorProfile(data));
             // replace the old colorspace
             layer->paintDevice()->setData(layer->paintDevice()->dataManager(), cs);
             QRect rc = layer->paintDevice()->extent();
-            kDebug() << "After loading " << layer->name() << " extent is: " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << endl;
+            kDebug(41007) << "After loading " << layer->name() << " extent is: " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << endl;
             layer->setDirty(rc);
             kDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
         }

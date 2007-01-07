@@ -345,9 +345,9 @@ void KisView2::slotLoadingFinished()
 
     KisImageSP img = image();
 
-    m_d->canvas->setCanvasSize(
-                    int(m_d->viewConverter->documentToViewX(img->width() / img->xRes())),
-                    int(m_d->viewConverter->documentToViewY(img->height() / img->yRes())));
+    m_d->canvas->setCanvasSize( int(m_d->viewConverter->documentToViewX(img->width() / img->xRes())),
+                                int(m_d->viewConverter->documentToViewY(img->height() / img->yRes())));
+    m_d->canvas->setImageSize( img->width(), img->height() );
 
     m_d->layerManager->layersUpdated();
     updateGUI();
@@ -360,6 +360,8 @@ void KisView2::slotLoadingFinished()
         kDebug(41007) << "Could not create tool docker: " << d << endl;
 
     connectCurrentImage();
+    img->blockSignals( false );
+    img->unlock();
 
     kDebug(41007) << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
 
@@ -480,14 +482,14 @@ void KisView2::connectCurrentImage()
 #if 0
 #ifdef HAVE_OPENGL
         if (!m_OpenGLImageContext.isNull()) {
-            connect(m_OpenGLImageContext.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(slotOpenGLImageUpdated(QRect)));
-            connect(m_OpenGLImageContext.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
+            connect(m_OpenGLImageContext.data(), SIGNAL(sigImageUpdated(QRegion)), SLOT(slotOpenGLImageUpdated(QRegion)));
+            connect(m_OpenGLImageContext.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize(qint32, qint32)));
         } else
 #endif
 #endif
         {
-            connect(img.data(), SIGNAL(sigImageUpdated(QRect)), m_d->canvas, SLOT(updateCanvas(QRect)));
-            connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->canvas, SLOT(updateCanvas( )));
+            connect(img.data(), SIGNAL(sigImageUpdated(const QRect &)), m_d->canvas, SLOT(updateCanvasProjection(const QRect &)));
+            connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->canvas, SLOT(setImageSize( qint32, qint32)) );
         }
 
         connect( m_d->doc, SIGNAL( sigCommandExecuted() ), img.data(), SLOT( slotCommandExecuted() ) );

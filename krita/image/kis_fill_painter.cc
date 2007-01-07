@@ -145,7 +145,7 @@ void KisFillPainter::fillColor(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "filled"));
+    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "filled_fillcolor"));
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
     painter.fillRect(0, 0, m_width, m_height, m_paintColor);
@@ -158,7 +158,7 @@ void KisFillPainter::fillPattern(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "filled"));
+    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "filled_fillpattern"));
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
     painter.fillRect(0, 0, m_width, m_height, m_pattern);
@@ -191,11 +191,11 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
         return;
     }
 
-    int x, y, w, h;
-    m_selection->extent(x, y, w, h);
+    QRect rc = m_selection->selectedExactRect();
 
-    bltSelection(x, y, m_compositeOp, filled, m_selection, m_opacity,
-                 x, y, w, h);
+    // Sets dirty!
+    bltSelection(rc.x(), rc.y(), m_compositeOp, filled, m_selection, m_opacity,
+                 rc.x(), rc.y(), rc.width(), rc.height());
 
     emit notifyProgressDone();
 
@@ -212,12 +212,15 @@ struct FillSegment {
 typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 
 KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
+
+// XXX: This always returns a rect with x = 0, it seems. That can't be
+// correct! (BSAR)
+
     if (m_width < 0 || m_height < 0) {
         if (m_device->hasSelection() && m_careForSelection) {
-            qint32 x,y,w,h;
-            m_device->selection()->extent(x,y,w,h);
-            m_width = w - (startX - x);
-            m_height = h - (startY - y);
+            QRect rc = m_device->selection()->selectedExactRect();
+            m_width = rc.width() - (startX - rc.x());
+            m_height = rc.height() - (startY - rc.y());
         } else if (m_device->image()) {
             m_width = m_device->image()->width();
             m_height = m_device->image()->height();
@@ -249,7 +252,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     KoColorSpace * devColorSpace = sourceDevice->colorSpace();
 
     quint8* source = new quint8[sourceDevice->pixelSize()];
-    KisHLineConstIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1);
+    KisHLineConstIteratorPixel pixelIt = sourceDevice->createHLineConstIterator(startX, startY, startX+1);
 
     memcpy(source, pixelIt.rawData(), sourceDevice->pixelSize());
 

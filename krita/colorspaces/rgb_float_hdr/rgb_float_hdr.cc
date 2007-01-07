@@ -19,6 +19,8 @@
  */
 #include "rgb_float_hdr.h"
 
+#include <config-krita.h>
+
 #include <stdlib.h>
 #include <vector>
 

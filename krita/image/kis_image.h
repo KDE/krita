@@ -68,21 +68,21 @@ public:
 
 public:
 
-
     /**
      * Paint the specified rect onto the painter, adjusting the colors
      * using the given profile. The exposure setting is used if the image
      * has a high dynamic range.
      */
     virtual void renderToPainter(qint32 srcX,
-                     qint32 srcY,
-                     qint32 dstX,
-                     qint32 dstY,
-                     qint32 width,
-                     qint32 height,
-                     QPainter &painter,
-                     KoColorProfile *profile,
-                     float exposure = 0.0f);
+                                 qint32 srcY,
+                                 qint32 dstX,
+                                 qint32 dstY,
+                                 qint32 width,
+                                 qint32 height,
+                                 QPainter &painter,
+                                 KoColorProfile *profile,
+                                 float exposure = 0.0f);
+
     /**
      * Render the projection onto a QImage.
      */
@@ -92,7 +92,7 @@ public:
                                     qint32 height,
                                     KoColorProfile * profile,
                                     float exposure = 0.0f);
-
+#if 0
      /**
       * Render the projection scaled onto a QImage. Use this when
       * zoom < 100% to avoid color-adjusting pixels that will be
@@ -102,7 +102,7 @@ public:
                                     const double xScale, const double yScale,
                                     KoColorProfile *profile,
                                     float exposure = 0.0f);
-
+#endif
     /**
      * Lock the image to make sure no recompositing-causing signals get emitted
      * while you're messing with the layers. Don't forget to unlock again.
@@ -367,7 +367,15 @@ public:
 
     void notifyPropertyChanged(KisLayerSP layer);
 
-    void notifyLayerUpdated(KisLayerSP layer, QRect rc);
+    /**
+       Called whenever a layer has changed. The layer is added to a
+       list of dirty layers and as soon as the document stores the
+       command that is now in progress, the image will be notified.
+       Then the image will notify the dirty layers, the dirty layers
+       will notify their parents & emit a signal that will be caught
+       by the layer box, which will request a new thumbnail.
+    */
+    void notifyLayerUpdated(KisLayerSP layer);
 
     void setColorSpace(KoColorSpace * colorSpace);
     void setRootLayer(KisGroupLayerSP rootLayer);
@@ -431,23 +439,16 @@ signals:
     void sigLayersChanged(KisGroupLayerSP rootLayer);
 
     /**
-     * Emitted whenever an action has caused the image to be recomposited. This happens
-     * after calls to recomposite().
-     *
-     * @param rc The rect that has been recomposited.
+       Emitted whenever an action has caused the image to be
+       recomposited.
+
+       @param rc The recty that has been recomposited.
      */
-    void sigImageUpdated(QRect rc);
+    void sigImageUpdated( const QRect & );
 
     /**
-     * Emitted whenever a layer is modified.
-     *
-     * @param layer The layer that has been modified.
-     * @param rc The rectangle that has been modified.
-     */
-    void sigLayerUpdated(KisLayerSP layer, QRect rc);
-
-    /**
-     * Emitted whenever the image has been modified, so that it doesn't match with the version saved on disk.
+       Emitted whenever the image has been modified, so that it
+       doesn't match with the version saved on disk.
      */
     void sigImageModified();
 
@@ -460,6 +461,13 @@ signals:
 public slots:
     void slotSelectionChanged();
     void slotSelectionChanged(const QRect& r);
+
+   void slotProjectionUpdated( const QRect & rc );
+    /**
+       Called whenever a KisCommand has been executed. This notifies
+       the layers, who then notify the layerbox that they are ready
+       for new thumbnails
+    */
     void slotCommandExecuted();
 
 
@@ -467,6 +475,7 @@ private:
     KisImage& operator=(const KisImage& rhs);
     void init(KisUndoAdapter * adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace, const QString& name);
     void emitSizeChanged();
+
 
 private:
     class KisImagePrivate;

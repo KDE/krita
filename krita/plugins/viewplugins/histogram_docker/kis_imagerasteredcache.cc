@@ -48,10 +48,12 @@ KisImageRasteredCache::KisImageRasteredCache(KisView2* view, Observer* o)
 
     imageSizeChanged(img->width(), img->height());
 
-    connect(img.data(), SIGNAL(sigImageUpdated(QRect)),
-            this, SLOT(imageUpdated(QRect)));
+    connect(img.data(), SIGNAL(sigImageUpdated(QRegion)),
+            this, SLOT(imageUpdated(QRegion)));
+
     connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)),
             this, SLOT(imageSizeChanged(qint32, qint32)));
+
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
 }
 
@@ -59,31 +61,40 @@ KisImageRasteredCache::~KisImageRasteredCache() {
     cleanUpElements();
 }
 
-void KisImageRasteredCache::imageUpdated(QRect rc) {
+void KisImageRasteredCache::imageUpdated(QRegion rc) {
 
-    if (rc.isValid()) {
-        QRect r(0, 0, m_width * m_rasterSize, m_height * m_rasterSize);
-        r &= rc;
+    if (!rc.isEmpty()) {
 
-        int x = static_cast<int>(r.x() / m_rasterSize);
-        int y = static_cast<int>(r.y() / m_rasterSize);
-        int x2 = static_cast<int>(ceil(float(r.x() + r.width()) / float(m_rasterSize)));
-        int y2 = static_cast<int>(ceil(float(r.y() + r.height()) / float(m_rasterSize)));
+        QVector<QRect>::iterator it = rc.begin();
+        QVector<QRect>::iterator end = rc.end();
 
-        if (!m_raster.empty()) {
-            for ( ; x < x2; x++) {
-                for (int i = y; i < y2; i++) {
-                    if (x < m_raster.size()) {
-                        if (i < m_raster.at(x).size()) {
-                            Element* e = m_raster.at(x).at(i);
-                            if (e && e->valid) {
-                                e->valid = false;
-                                m_queue.push_back(e);
+        while (it != end) {
+
+            QRect r(0, 0, m_width * m_rasterSize, m_height * m_rasterSize);
+            r &= *it;
+
+            int x = static_cast<int>(r.x() / m_rasterSize);
+            int y = static_cast<int>(r.y() / m_rasterSize);
+            int x2 = static_cast<int>(ceil(float(r.x() + r.width()) / float(m_rasterSize)));
+            int y2 = static_cast<int>(ceil(float(r.y() + r.height()) / float(m_rasterSize)));
+
+            if (!m_raster.empty()) {
+                for ( ; x < x2; x++) {
+                    for (int i = y; i < y2; i++) {
+                        if (x < m_raster.size()) {
+                            if (i < m_raster.at(x).size()) {
+                                Element* e = m_raster.at(x).at(i);
+                                if (e && e->valid) {
+                                    e->valid = false;
+                                    m_queue.push_back(e);
+                                }
                             }
                         }
                     }
                 }
             }
+
+            ++it;
         }
     }
 

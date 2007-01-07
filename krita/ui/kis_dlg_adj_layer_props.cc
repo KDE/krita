@@ -75,7 +75,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
         else {
             KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(next.data());
             if (gl) {
-                dev = gl->projection(gl->extent());
+                dev = gl->projection();
             }
             else {
                 KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(next.data());
@@ -166,7 +166,7 @@ void KisDlgAdjLayerProps::slotConfigChanged()
 void KisDlgAdjLayerProps::refreshPreview()
 {
     if (!m_preview) {
-        kDebug() << "no preview!\n";
+        kDebug(41007) << "no preview!\n";
         return;
     }
 

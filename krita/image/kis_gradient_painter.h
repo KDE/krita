@@ -29,7 +29,7 @@
 class KisGradient;
 
 
-// XXX: Need to set dirtyRect in KisPainter
+// XXX: Need to set dirtyRegion in KisPainter
 class KRITAIMAGE_EXPORT KisGradientPainter : public KisPainter
 {
 

@@ -346,7 +346,7 @@ bool KisDoc2::init()
     m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
 
-    if (!KisMetaRegistry::instance()->csRegistry()->exists(KoID("RGBA",""))) {
+    if (!KoColorSpaceRegistry::instance()->exists(KoID("RGBA",""))) {
         KMessageBox::sorry(0, i18n("No colorspace modules loaded: cannot run Krita"));
         return false;
     }
@@ -553,10 +553,10 @@ KisImageSP KisDoc2::loadImage(const QDomElement& element)
 
         if ((profileProductName = element.attribute("profile")).isNull()) {
             // no mention of profile so get default profile
-            cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(colorspacename,"");
+            cs = KoColorSpaceRegistry::instance()->colorSpace(colorspacename,"");
         }
         else {
-            cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(colorspacename, profileProductName);
+            cs = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, profileProductName);
         }
 
         if (cs == 0) {
@@ -570,9 +570,7 @@ KisImageSP KisDoc2::loadImage(const QDomElement& element)
         img->setDescription(description);
         img->setResolution(xres, yres);
 
-        img->blockSignals(true); // Don't send out signals while we're building the image
         loadLayers(element, img, img->rootLayer());
-        img->blockSignals(false);
 
     }
 
@@ -686,7 +684,7 @@ KisLayerSP KisDoc2::loadPaintLayer(const QDomElement& element, KisImageSP img,
         cs = img->colorSpace();
     else
         // use default profile - it will be replaced later in completLoading
-        cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(colorspacename,"");
+        cs = KoColorSpaceRegistry::instance()->colorSpace(colorspacename,"");
 
     const KoCompositeOp * op = cs->compositeOp(compositeOp);
 
@@ -1007,7 +1005,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     KisPaintLayer *layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE,colorstrategy);
     Q_CHECK_PTR(layer);
 
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFillPainter painter;
 
     painter.begin(layer->paintDevice());
@@ -1054,8 +1052,8 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
     painter.fillRect(0, 0, width, height, bgColor, opacity);
     painter.end();
 
-    QList<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
-                csRegistry()->paintDeviceActionsFor(cs);
+    QList<KisPaintDeviceAction *> actions =
+        KoColorSpaceRegistry::instance()->paintDeviceActionsFor(cs);
     for (int i = 0; i < actions.count(); i++)
         actions.at(i)->act(layer->paintDevice(), img->width(), img->height());
 
@@ -1087,7 +1085,7 @@ void KisDoc2::paintContent(QPainter& painter, const QRect& rc, bool transparent,
     Q_UNUSED(transparent);
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    KoColorProfile *  profile = KisMetaRegistry::instance()->csRegistry()->profileByName(monitorProfileName);
+    KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
     painter.scale(zoomX, zoomY);
     QRect rect = rc & m_d->currentImage()->bounds();
     m_d->currentImage()->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
@@ -1296,7 +1294,6 @@ KisImageSP KisDoc2::currentImage()
 void KisDoc2::setCurrentImage(KisImageSP image)
 {
     kDebug(41007) << "KisDoc2::setCurrentImage: " << image->name() << ", active layer: " << image->activeLayer() << endl;
-    image->blockSignals( false );
     m_d->setImage( this, image );
     setUndo(true);
 
@@ -1306,7 +1303,7 @@ void KisDoc2::setCurrentImage(KisImageSP image)
 void KisDoc2::initEmpty()
 {
     KisConfig cfg;
-    KoColorSpace * rgb = KisMetaRegistry::instance()->csRegistry()->rgb8();
+    KoColorSpace * rgb = KoColorSpaceRegistry::instance()->rgb8();
     newImage("", cfg.defImgWidth(), cfg.defImgHeight(), rgb);
 }
 

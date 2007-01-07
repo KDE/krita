@@ -63,7 +63,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(0);
 
-    cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
+    cmbColorSpaces->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     cmbColorSpaces->setCurrent(defColorSpaceName);
 
     connect(cmbWidthUnit, SIGNAL(activated(int)),
@@ -126,7 +126,7 @@ void KisCustomImageWidget::heightChanged(double value) {
 }
 
 void KisCustomImageWidget::buttonClicked() {
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(cmbColorSpaces->currentItem(), cmbProfile->currentText());
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(cmbColorSpaces->currentItem(), cmbProfile->currentText());
 
     QColor qc(cmbColor->color());
 
@@ -165,14 +165,14 @@ void KisCustomImageWidget::fillCmbProfiles(const KoID & s)
 {
     cmbProfile->clear();
 
-    if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
+    if (!KoColorSpaceRegistry::instance()->exists(s)) {
         return;
     }
 
-    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->get(s);
     if (csf == 0) return;
 
-    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
         cmbProfile->addSqueezedItem(profile->productName());

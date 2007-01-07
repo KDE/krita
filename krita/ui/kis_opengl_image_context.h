@@ -97,9 +97,9 @@ signals:
     /**
      * Emitted whenever an action has caused the image to be recomposited.
      *
-     * @param rc     The rect that has been recomposited.
+     * @param region  The region that has been recomposited.
      */
-    void sigImageUpdated(QRect rc);
+    void sigImageUpdated(QRregion region);
 
     /**
      * Emitted whenever the image size changes.

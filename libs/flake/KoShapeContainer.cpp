@@ -16,6 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include <kdebug.h>
 
 #include "KoShapeContainer.h"
 
@@ -80,11 +81,12 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     if(m_children == 0 || m_children->count() == 0)
         return;
 
-    QList<KoShape*> sorterdObjects = m_children->iterator();
-    qSort(sorterdObjects.begin(), sorterdObjects.end(), KoShape::compareShapeZIndex);
+    QList<KoShape*> sortedObjects = m_children->iterator();
+    qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
     painter.setMatrix( m_invMatrix * painter.matrix() );
     QMatrix myMatrix = transformationMatrix(&converter);
-    foreach (KoShape *shape, sorterdObjects) {
+    foreach (KoShape *shape, sortedObjects) {
+        kDebug() << "painting shape: " << shape->shapeId() << ", " << shape->boundingRect() << endl;
         if(! shape->isVisible())
             continue;
         // TODO this is not perfect yet..

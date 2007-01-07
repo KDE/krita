@@ -33,3 +33,9 @@ KoCanvasBase::~KoCanvasBase()
     delete m_resourceProvider;
     delete m_shapeController;
 }
+
+
+void KoCanvasBase::updateCanvas( const QRegion & region )
+{
+    updateCanvas( QRectF( region.boundingRect() ) );
+}

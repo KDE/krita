@@ -29,6 +29,7 @@
 #include <QPoint>
 #include <QRectF>
 #include <QRect>
+#include <QRegion>
 #include <QWidget>
 
 
@@ -98,6 +99,14 @@ public:
      * are document coordinates, not view coordinates.
      */
     virtual void updateCanvas(const QRectF& rc) = 0;
+
+    /**
+     * Tell the canvas to repaint the specified region. The
+     * are document coordinates, not view coordinates. The
+     * default implementation calls the slow QRegion::boundingRect()
+     * method.
+     */
+    virtual void updateCanvas(const QRegion & region);
 
     /**
      * Return the proxy to the active tool (determining which tool

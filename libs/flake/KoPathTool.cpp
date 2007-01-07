@@ -311,11 +311,11 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
             KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
             if ( parameterShape && parameterShape->isParametricShape() )
             {
-                parameterShape->paintHandles( painter, converter );
+                parameterShape->paintHandles( painter, converter, m_handleRadius );
             }
             else
             {
-                pathShape->paintPoints(  painter, converter );
+                pathShape->paintPoints(  painter, converter, m_handleRadius );
             }
 
             painter.restore();
@@ -490,15 +490,15 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
         switch(event->key()) 
         {
             case Qt::Key_I:
+            {
+                int handleRadius = m_canvas->resourceProvider()->handleRadius();
                 if(event->modifiers() & Qt::ControlModifier) 
-                {
-                    if( m_handleRadius > 3 )
-                        m_handleRadius--;
-                }
+                    handleRadius--;
                 else
-                    m_handleRadius++;
-                m_pointSelection.repaint();
+                    handleRadius++;
+                m_canvas->resourceProvider()->setHandleRadius( handleRadius );
                 break;
+            }
             case Qt::Key_Backspace:
                 removePoints();
                 break;
@@ -563,6 +563,10 @@ void KoPathTool::keyReleaseEvent(QKeyEvent *event) {
 void KoPathTool::activate (bool temporary) {
     Q_UNUSED(temporary);
     bool found = false;
+
+    // retrieve the actual global handle radius
+    m_handleRadius = m_canvas->resourceProvider()->handleRadius();
+
     foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes()) 
     {
         KoPathShape *pathShape;
@@ -587,6 +591,36 @@ void KoPathTool::deactivate() {
     m_activeHandle = 0;
     delete m_currentStrategy;
     m_currentStrategy = 0;
+}
+
+void KoPathTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
+{
+    switch( key )
+    {
+        case KoCanvasResource::HandleRadius:
+        {
+            QRectF repaintRect;
+            foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
+            {
+                KoPathShape *pathShape = dynamic_cast<KoPathShape*>( shape );
+                if( pathShape )
+                {
+                    if( repaintRect.isEmpty() )
+                        repaintRect = pathShape->shapeToDocument( pathShape->outline().controlPointRect() );
+                    else
+                        repaintRect |= pathShape->shapeToDocument( pathShape->outline().controlPointRect() );
+                }
+            }
+            repaint( repaintRect );
+            m_pointSelection.repaint();
+            m_handleRadius = res.toUInt();
+            m_pointSelection.repaint();
+            repaint( repaintRect );
+        }
+        break;
+        default:
+            return;
+    }
 }
 
 void KoPathTool::selectPoints( const QRectF &rect, bool clearSelection )
@@ -716,8 +750,7 @@ void KoPathTool::ActiveParameterHandle::paint( QPainter &painter, KoViewConverte
     painter.save();
     painter.setMatrix( m_parameterShape->transformationMatrix(&converter) * painter.matrix() );
 
-    QRectF handle = converter.viewToDocument( m_tool->handleRect( QPoint(0,0) ) );
-    m_parameterShape->paintHandle( painter, converter, m_handleId );
+    m_parameterShape->paintHandle( painter, converter, m_handleId, m_tool->m_handleRadius );
     painter.restore();
 }
 

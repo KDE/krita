@@ -416,13 +416,13 @@ QRectF KoPathShape::documentToShape( const QRectF &rect ) const
 }
 
 
-void KoPathShape::paintPoints( QPainter &painter, const KoViewConverter &converter )
+void KoPathShape::paintPoints( QPainter &painter, const KoViewConverter &converter, int handleRadius )
 {
     applyConversion( painter, converter );
 
     KoSubpathList::const_iterator pathIt( m_subpaths.begin() );
 
-    QRectF handle = converter.viewToDocument( handleRect( QPoint(0,0) ) );
+    QRectF handle = converter.viewToDocument( handleRect( QPoint(0,0), handleRadius ) );
 
     for ( ; pathIt != m_subpaths.end(); ++pathIt )
     {
@@ -435,10 +435,9 @@ void KoPathShape::paintPoints( QPainter &painter, const KoViewConverter &convert
     }
 }
 
-QRectF KoPathShape::handleRect( const QPointF &p ) const
+QRectF KoPathShape::handleRect( const QPointF &p, double radius ) const
 {
-    const qreal handleRadius = 3.0;
-    return QRectF( p.x()-handleRadius, p.y()-handleRadius, 2*handleRadius, 2*handleRadius );
+    return QRectF( p.x()-radius, p.y()-radius, 2*radius, 2*radius );
 }
 
 const QPainterPath KoPathShape::outline() const

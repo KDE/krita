@@ -78,8 +78,9 @@ public:
      *
      * @param painter the painter to paint the handles on
      * @param converter the view converter for applying the actual zoom
+     * @param handleRadius the radius of the handles used for painting
      */
-    virtual void paintHandles( QPainter & painter, const KoViewConverter & converter );
+    virtual void paintHandles( QPainter & painter, const KoViewConverter & converter, int handleRadius );
 
     /**
      * @brief Paint the given handles
@@ -87,8 +88,9 @@ public:
      * @param painter the painter to paint the handles on
      * @param converter the view converter for applying the actual zoom
      * @param handleId of the handle which should be repainted
+     * @param handleRadius the radius of the handle used for painting
      */
-    virtual void paintHandle( QPainter & painter, const KoViewConverter & converter, int handleId );
+    virtual void paintHandle( QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius );
 
     virtual void resize( const QSizeF &newSize );
 

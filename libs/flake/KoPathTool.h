@@ -85,6 +85,7 @@ private slots:
     void joinPoints();
     void breakAtPoint();
     void breakAtSegment();
+    void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
 private:
 
     /// the different path point types

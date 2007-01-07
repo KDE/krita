@@ -387,7 +387,7 @@ public:
     virtual ~KoPathShape();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    virtual void paintPoints( QPainter &painter, const KoViewConverter &converter );
+    virtual void paintPoints( QPainter &painter, const KoViewConverter &converter, int handleRadius );
     virtual const QPainterPath outline() const;
     virtual QRectF boundingRect() const;
     virtual QSizeF size() const;
@@ -806,7 +806,7 @@ private:
 #endif
 
 protected:    
-    QRectF handleRect( const QPointF &p ) const;
+    QRectF handleRect( const QPointF &p, double radius ) const;
     /**
      * @brief add a arc.
      *

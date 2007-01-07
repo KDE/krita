@@ -76,7 +76,8 @@ public:
         BulletSize,     ///< size in percent relative to the height of the text
         ListHeader,     ///< TextBlock level flag to mark a block to be a listHeader
         NoListItem,     ///< TextBlock level flag to mark a block to not have a listItem
-        ExplicitListValue ///< TextBlock level int with the value that that parag will have
+        ExplicitListValue, ///< TextBlock level int with the list-value that that parag will have
+        RestartListNumbering    ///> TextBlock level boolean to indicate that this paragraph will have numbering restart at the list-start.
     };
 
     /**

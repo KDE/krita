@@ -897,7 +897,10 @@ void ListItemsHelper::recalculate() {
             data = new KoTextBlockData();
             tb.setUserData(data);
         }
-        int paragIndex = tb.blockFormat().intProperty( KoListStyle::ExplicitListValue);
+        QTextBlockFormat blockFormat = tb.blockFormat();
+        if(blockFormat.boolProperty( KoListStyle::RestartListNumbering) )
+            index = format.intProperty(KoListStyle::StartValue);
+        const int paragIndex = blockFormat.intProperty( KoListStyle::ExplicitListValue);
         if(paragIndex > 0)
             index = paragIndex;
 

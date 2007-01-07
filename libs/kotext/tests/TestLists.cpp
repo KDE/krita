@@ -370,7 +370,7 @@ void TestDocumentLayout::testRestartNumbering() {
     cursor.setPosition(5);
     QCOMPARE(cursor.block().text(), QString("a"));
     QTextBlockFormat format = cursor.blockFormat();
-    format.setProperty(KoParagraphStyle::RestartListNumbering, true);
+    format.setProperty(KoListStyle::RestartListNumbering, true);
     cursor.setBlockFormat(format);
 
     layout->layout();

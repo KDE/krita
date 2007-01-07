@@ -46,7 +46,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, doub
     m_progress = progress;
     m_filter = filter;
 }
-/*
+
 void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     KisSelectionSP dstSelection;
@@ -65,11 +65,10 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
         dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
     }
 
-    for (Q_INT32 y = r.bottom(); y >= r.top(); --y) {
-        KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width(), true);
-        KisVLineIterator vit = dst->createVLineIterator(-y, r.x(), r.width(), true);
-        KisVLineIterator dstSelIt = dstSelection->createVLineIterator(-y, r.x(), r.width(), true);
-
+    KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), r.top(), r.width(), true);
+    KisHLineIterator vit = dst->createHLineIterator(r.x(), r.top(), r.width(), true);
+    KisHLineIterator dstSelIt = dstSelection->createHLineIterator(r.x(), r.top(), r.width(), true);
+    for (Q_INT32 i = 0; i < r.height(); ++i) {
             while (!hit.isDone()) {
             if (hit.isSelected())  {
                 memcpy(vit.rawData(), hit.rawData(), pixelSize);
@@ -82,9 +81,12 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
             ++vit;
             ++dstSelIt;
         }
+        hit.nextRow();
+        vit.nextRow();
+        dstSelIt.nextRow();
     }
 }
-*/
+
 void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     KisSelectionSP dstSelection;
@@ -543,16 +545,14 @@ bool KisTransformWorker::run()
     // Handle simple move case possibly with rotation of 90,180,270
     if(rotation == 0.0 && xscale == 1.0 && yscale == 1.0)
     {
-/*        if(rotQuadrant==0)
+        if(rotQuadrant==0)
         {
             // Though not nessesay in the general case because we make several passes
             // We need to move (not just copy) the data to a temp dev so we can move them back
-            KisPainter painter(tmpdev1);
-            QRect r = srcdev->extent();
-            painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, srcdev.data(), r.x(), r.y(), r.width(), r.height());
+            rotateNone(srcdev, tmpdev1);
             srcdev = tmpdev1;
         }
-*/        KisPainter painter(m_dev.data());
+        KisPainter painter(m_dev.data());
         QRect r = srcdev->extent();
         painter.bitBlt(r.x() + xtranslate, r.y() + ytranslate, COMPOSITE_OVER, srcdev.data(), r.x(), r.y(), r.width(), r.height());
 

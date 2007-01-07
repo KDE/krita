@@ -49,6 +49,7 @@ private:
     template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, double  shear, Q_INT32 dx,   KisFilterStrategy *filterStrategy);
     
 public:    
+    void rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst);
     void rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
     void rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
     void rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst);

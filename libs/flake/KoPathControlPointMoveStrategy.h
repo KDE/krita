@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,7 +34,8 @@ class KoPathTool;
 class KoPathControlPointMoveStrategy : public KoInteractionStrategy
 {
 public:    
-    KoPathControlPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, KoPathPoint *point, KoPathPoint::KoPointType type, const QPointF &pos );
+    KoPathControlPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, const KoPathPointData &point, 
+                                    KoPathPoint::KoPointType type, const QPointF &pos );
     virtual ~KoPathControlPointMoveStrategy();
     virtual void handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers );
     virtual void finishInteraction( Qt::KeyboardModifiers modifiers ); 
@@ -47,7 +48,7 @@ private:
     QPointF m_move;         
 
     KoPathTool *m_tool;
-    KoPathPoint *m_point;
+    KoPathPointData m_pointData;
     KoPathPoint::KoPointType m_pointType;
 };
 

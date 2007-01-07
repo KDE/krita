@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -683,7 +683,9 @@ void KoPathTool::ActivePointHandle::mousePressEvent( KoPointerEvent *event )
         }
         else
         {
-            m_tool->m_currentStrategy = new KoPathControlPointMoveStrategy( m_tool, m_tool->m_canvas, m_activePoint, m_activePointType, event->point );
+            KoPathShape * pathShape = m_activePoint->parent();
+            KoPathPointData pd( pathShape, pathShape->pathPointIndex( m_activePoint ) );
+            m_tool->m_currentStrategy = new KoPathControlPointMoveStrategy( m_tool, m_tool->m_canvas, pd, m_activePointType, event->point );
         }
             
     }

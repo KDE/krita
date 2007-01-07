@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,12 +23,13 @@
 #include "KoPathTool.h"
 #include "KoPathCommand.h"
 
-KoPathControlPointMoveStrategy::KoPathControlPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, KoPathPoint *point, KoPathPoint::KoPointType type, const QPointF &pos )
+KoPathControlPointMoveStrategy::KoPathControlPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, const KoPathPointData &pointData, 
+                                                                KoPathPoint::KoPointType type, const QPointF &pos )
 : KoInteractionStrategy( tool, canvas )
 , m_lastPosition( pos )
 , m_move( 0, 0 )
 , m_tool( tool )    
-, m_point( point )    
+, m_pointData( pointData )    
 , m_pointType( type )    
 {
 }
@@ -47,7 +48,7 @@ void KoPathControlPointMoveStrategy::handleMouseMove( const QPointF &mouseLocati
 
     m_move += move;
 
-    KoControlPointMoveCommand cmd( m_point, move, m_pointType );
+    KoControlPointMoveCommand cmd( m_pointData, move, m_pointType );
     cmd.redo();
 }
 
@@ -61,7 +62,7 @@ QUndoCommand* KoPathControlPointMoveStrategy::createCommand()
     QUndoCommand *cmd = 0;
     if( !m_move.isNull() )
     {
-        cmd = new KoControlPointMoveCommand( m_point, m_move, m_pointType );
+        cmd = new KoControlPointMoveCommand( m_pointData, m_move, m_pointType );
         cmd->undo();
     }
     return cmd;

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -85,63 +85,74 @@ void KoPointMoveCommand::undo()
     m_offset *= -1.0;
 }
 
-KoControlPointMoveCommand::KoControlPointMoveCommand( KoPathPoint *point, const QPointF &offset, KoPathPoint::KoPointType pointType, QUndoCommand *parent )
+KoControlPointMoveCommand::KoControlPointMoveCommand( const KoPathPointData &pointData, const QPointF &offset, 
+                                                      KoPathPoint::KoPointType pointType, QUndoCommand *parent )
 : QUndoCommand( parent )
-, m_point( point )
-, m_offset( point->parent()->documentToShape( offset ) - point->parent()->documentToShape( QPointF( 0, 0 ) ) )
+, m_pointData( pointData )
 , m_pointType( pointType )
 {
+    KoPathShape * pathShape = m_pointData.m_pathShape;
+    KoPathPoint * point = pathShape->pointByIndex( m_pointData.m_pointIndex );
+    if ( point )
+    {
+        m_offset = point->parent()->documentToShape( offset ) - point->parent()->documentToShape( QPointF( 0, 0 ) );
+    }
+
     setText( i18n( "Move control point" ) );
 }
 
 void KoControlPointMoveCommand::redo()
 {
-    KoPathShape * pathShape = m_point->parent();
-    pathShape->repaint();
-
-    if ( m_pointType == KoPathPoint::ControlPoint1 )
+    KoPathShape * pathShape = m_pointData.m_pathShape;
+    KoPathPoint * point = pathShape->pointByIndex( m_pointData.m_pointIndex );
+    if ( point )
     {
-        m_point->setControlPoint1( m_point->controlPoint1() + m_offset );
-        if( m_point->properties() & KoPathPoint::IsSymmetric )
-        {
-            // set the other control point so that it lies on the line between the moved
-            // control point and the point, with the same distance to the point as the moved point
-            m_point->setControlPoint2( 2.0 * m_point->point() - m_point->controlPoint1() );
-        }
-        else if( m_point->properties() & KoPathPoint::IsSmooth )
-        {
-            // move the other control point so that it lies on the line through point and control point
-            // keeping its distance to the point
-            QPointF direction = m_point->point() - m_point->controlPoint1();
-            direction /= sqrt( direction.x()*direction.x() + direction.y()*direction.y() );
-            QPointF distance = m_point->point() - m_point->controlPoint2();
-            qreal length = sqrt( distance.x()*distance.x() + distance.y()*distance.y() );
-            m_point->setControlPoint2( m_point->point() + length * direction );
-        }
-    }
-    else if( m_pointType == KoPathPoint::ControlPoint2 )
-    {
-        m_point->setControlPoint2( m_point->controlPoint2() + m_offset );
-        if( m_point->properties() & KoPathPoint::IsSymmetric )
-        {
-            // set the other control point so that it lies on the line between the moved
-            // control point and the point, with the same distance to the point as the moved point
-            m_point->setControlPoint1( 2.0 * m_point->point() - m_point->controlPoint2() );
-        }
-        else if( m_point->properties() & KoPathPoint::IsSmooth )
-        {
-            // move the other control point so that it lies on the line through point and control point
-            // keeping its distance to the point
-            QPointF direction = m_point->point() - m_point->controlPoint2();
-            direction /= sqrt( direction.x()*direction.x() + direction.y()*direction.y() );
-            QPointF distance = m_point->point() - m_point->controlPoint1();
-            qreal length = sqrt( distance.x()*distance.x() + distance.y()*distance.y() );
-            m_point->setControlPoint1( m_point->point() + length * direction );
-        }
-    }
+        pathShape->repaint();
 
-    pathShape->normalize();
-    pathShape->repaint();
+        if ( m_pointType == KoPathPoint::ControlPoint1 )
+        {
+            point->setControlPoint1( point->controlPoint1() + m_offset );
+            if( point->properties() & KoPathPoint::IsSymmetric )
+            {
+                // set the other control point so that it lies on the line between the moved
+                // control point and the point, with the same distance to the point as the moved point
+                point->setControlPoint2( 2.0 * point->point() - point->controlPoint1() );
+            }
+            else if( point->properties() & KoPathPoint::IsSmooth )
+            {
+                // move the other control point so that it lies on the line through point and control point
+                // keeping its distance to the point
+                QPointF direction = point->point() - point->controlPoint1();
+                direction /= sqrt( direction.x()*direction.x() + direction.y()*direction.y() );
+                QPointF distance = point->point() - point->controlPoint2();
+                qreal length = sqrt( distance.x()*distance.x() + distance.y()*distance.y() );
+                point->setControlPoint2( point->point() + length * direction );
+            }
+        }
+        else if( m_pointType == KoPathPoint::ControlPoint2 )
+        {
+            point->setControlPoint2( point->controlPoint2() + m_offset );
+            if( point->properties() & KoPathPoint::IsSymmetric )
+            {
+                // set the other control point so that it lies on the line between the moved
+                // control point and the point, with the same distance to the point as the moved point
+                point->setControlPoint1( 2.0 * point->point() - point->controlPoint2() );
+            }
+            else if( point->properties() & KoPathPoint::IsSmooth )
+            {
+                // move the other control point so that it lies on the line through point and control point
+                // keeping its distance to the point
+                QPointF direction = point->point() - point->controlPoint2();
+                direction /= sqrt( direction.x()*direction.x() + direction.y()*direction.y() );
+                QPointF distance = point->point() - point->controlPoint1();
+                qreal length = sqrt( distance.x()*distance.x() + distance.y()*distance.y() );
+                point->setControlPoint1( point->point() + length * direction );
+            }
+        }
+
+        pathShape->normalize();
+        pathShape->repaint();
+    }
 }
 
 void KoControlPointMoveCommand::undo()

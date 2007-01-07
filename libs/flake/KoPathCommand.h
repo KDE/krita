@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -84,14 +84,14 @@ public:
      * @param pointType the type of the point to move
      * @param parent the parent command used for macro commands
      */
-    KoControlPointMoveCommand( KoPathPoint *point, const QPointF &offset, KoPathPoint::KoPointType pointType,
+    KoControlPointMoveCommand( const KoPathPointData &pointData, const QPointF &offset, KoPathPoint::KoPointType pointType,
                                QUndoCommand *parent = 0 );
     /// redo the command
     void redo();
     /// revert the actions done in redo
     void undo();
 private:
-    KoPathPoint * m_point;
+    KoPathPointData m_pointData;
     // the offset in shape coordinates
     QPointF m_offset;
     KoPathPoint::KoPointType m_pointType;

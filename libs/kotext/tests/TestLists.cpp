@@ -352,7 +352,7 @@ void TestDocumentLayout::testUpperAlphaNumbering() {
 
 void TestDocumentLayout::testRestartNumbering() {
     // create 5 items; restart the 3th. Check numbering.
-    initForNewTest("a\nb\na\nb\nc\n");
+    initForNewTest("a\nb\na\nb\nc");
 
     KoParagraphStyle h1;
     styleManager->add(&h1);

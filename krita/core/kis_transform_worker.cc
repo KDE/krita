@@ -28,6 +28,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
 #include "kis_layer.h"
+#include "kis_painter.h"
 
 KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, double yscale,
                     double xshear, double yshear, double rotation,
@@ -45,7 +46,45 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, doub
     m_progress = progress;
     m_filter = filter;
 }
+/*
+void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+{
+    KisSelectionSP dstSelection;
+    Q_INT32 pixelSize = src->pixelSize();
+    QRect r;
+    KisColorSpace *cs = src->colorSpace();
 
+    if(src->hasSelection())
+    {
+        r = src->selection()->selectedExactRect();
+        dstSelection = dst->selection();
+    }
+    else
+    {
+        r = src->exactBounds();
+        dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
+    }
+
+    for (Q_INT32 y = r.bottom(); y >= r.top(); --y) {
+        KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width(), true);
+        KisVLineIterator vit = dst->createVLineIterator(-y, r.x(), r.width(), true);
+        KisVLineIterator dstSelIt = dstSelection->createVLineIterator(-y, r.x(), r.width(), true);
+
+            while (!hit.isDone()) {
+            if (hit.isSelected())  {
+                memcpy(vit.rawData(), hit.rawData(), pixelSize);
+
+                // XXX: Should set alpha = alpha*(1-selectedness)
+                cs->setAlpha(hit.rawData(), 0, 1);
+            }
+            *(dstSelIt.rawData()) = hit.selectedness();
+            ++hit;
+            ++vit;
+            ++dstSelIt;
+        }
+    }
+}
+*/
 void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     KisSelectionSP dstSelection;
@@ -501,6 +540,29 @@ bool KisTransformWorker::run()
             break;
     }
 
+    // Handle simple move case possibly with rotation of 90,180,270
+    if(rotation == 0.0 && xscale == 1.0 && yscale == 1.0)
+    {
+/*        if(rotQuadrant==0)
+        {
+            // Though not nessesay in the general case because we make several passes
+            // We need to move (not just copy) the data to a temp dev so we can move them back
+            KisPainter painter(tmpdev1);
+            QRect r = srcdev->extent();
+            painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, srcdev.data(), r.x(), r.y(), r.width(), r.height());
+            srcdev = tmpdev1;
+        }
+*/        KisPainter painter(m_dev.data());
+        QRect r = srcdev->extent();
+        painter.bitBlt(r.x() + xtranslate, r.y() + ytranslate, COMPOSITE_OVER, srcdev.data(), r.x(), r.y(), r.width(), r.height());
+
+        //progress info
+        emit notifyProgressDone();
+        m_dev->emitSelectionChanged();
+
+        return m_cancelRequested;
+    }
+
     yshear = sin(rotation);
     xshear = -tan(rotation/2);
     xtranslate -= int(xshear*ytranslate);
@@ -524,11 +586,8 @@ bool KisTransformWorker::run()
         return false;
     }
 
-    if(xshear==0.0)
-        // Not going to do the third transform when scaling
-        transformPass <KisVLineIteratorPixel>(tmpdev2.data(), m_dev.data(), yscale, yshear, ytranslate, m_filter);
-    else
-        transformPass <KisVLineIteratorPixel>(tmpdev2.data(), tmpdev3.data(), yscale, yshear, ytranslate, m_filter);
+    // Now do the second pass
+    transformPass <KisVLineIteratorPixel>(tmpdev2.data(), tmpdev3.data(), yscale, yshear, ytranslate, m_filter);
 
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
@@ -540,6 +599,14 @@ bool KisTransformWorker::run()
 
     if (xshear != 0.0)
         transformPass <KisHLineIteratorPixel>(tmpdev3, m_dev, 1.0, xshear, xtranslate, m_filter);
+    else
+    {
+        // No need to filter again when we are only scaling
+        KisPainter painter(m_dev.data());
+        QRect r = tmpdev3->extent();
+        painter.bitBlt(r.x() + xtranslate, r.y(), COMPOSITE_OVER, tmpdev3.data(), r.x(), r.y(), r.width(), r.height());
+    }
+
     if (m_dev->parentLayer()) {
         m_dev->parentLayer()->setDirty();
     }

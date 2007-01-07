@@ -391,9 +391,37 @@ void KoInteractionTool::recalcSelectionBox() {
     }
     else
     {
+        //TODO
+#if 1
+        // This code gives you the wrong m_selectionOutline when the shape is mirrored
+        // and you as result you will get show the wrong handles :-(
         QMatrix matrix = koSelection()->firstSelectedShape()->transformationMatrix(0);
         m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->firstSelectedShape()->size())));
         m_angle = koSelection()->firstSelectedShape()->rotation();
+#else
+        // This code fixes the above problem of showing the wrong handles. But as I'm not 
+        // sure it is the right solution it is commented out. This should be fixed together 
+        // with the mirroring of shapes.
+        KoShape * shape = koSelection()->firstSelectedShape();
+        QMatrix matrix = shape->transformationMatrix(0);
+    
+        m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), shape->size())));
+
+        QPointF center( m_selectionOutline.value( 0 ) );
+        for ( int i = 1; i < 4; ++i )
+        {
+            center += m_selectionOutline.value( i );
+        }
+        center = center / 4.0;
+
+        QMatrix t1( 1, 0, 0, 1, -center.x(), -center.y() );
+        QMatrix mi( shape->scaleX() >= 0 ? 1 : - 1, 0, 0, shape->scaleY() >= 0 ? 1 : -1, 0, 0 );
+        QMatrix t2( 1, 0, 0, 1, center.x(), center.y() );
+        QMatrix res = t1 * mi * t2;
+
+        m_selectionOutline = res.map( m_selectionOutline );
+        m_angle = shape->rotation();
+#endif        
     }
     QPolygonF outline = m_selectionOutline; //shorter name in the following :)
     m_selectionBox[KoFlake::TopMiddleHandle] = (outline.value(0)+outline.value(1))/2;

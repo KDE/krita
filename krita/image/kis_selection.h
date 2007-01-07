@@ -136,6 +136,11 @@ private:
             return KisPaintDevice::exactBounds();
         }
 
+    QRegion region() const
+        {
+            return KisPaintDevice::region();
+        }
+
 private:
     KisPaintDeviceWSP m_parentPaintDevice;
     bool m_dirty;

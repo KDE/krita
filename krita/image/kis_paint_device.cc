@@ -472,6 +472,11 @@ QRect KisPaintDevice::extent() const
     return QRect(x, y, w, h);
 }
 
+QRegion KisPaintDevice::region() const
+{
+    return m_datamanager->region();
+}
+
 bool KisPaintDevice::extentIsValid() const
 {
     return m_extentIsValid;

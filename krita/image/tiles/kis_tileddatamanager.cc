@@ -17,6 +17,7 @@
  */
 
 #include <q3valuevector.h>
+#include <QRegion>
 
 #include <kdebug.h>
 
@@ -234,6 +235,12 @@ QRect KisTiledDataManager::extent() const
     extent(x, y, w, h);
 
     return QRect(x, y, w, h);
+}
+
+QRegion KisTiledDataManager::region() const
+{
+    // XXX: Implement this correctly!
+    return QRegion( extent() );
 }
 
 void KisTiledDataManager::setExtent(qint32 x, qint32 y, qint32 w, qint32 h)

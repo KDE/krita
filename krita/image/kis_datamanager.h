@@ -20,6 +20,8 @@
 
 #include <qglobal.h>
 #include <QRect>
+#include <QRegion>
+
 
 class KoStore;
 
@@ -105,7 +107,13 @@ public:
     inline void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
                          { return ACTUAL_DATAMGR::extent(x, y, w, h); }
 
-     QRect extent() const { return ACTUAL_DATAMGR::extent(); }
+    QRect extent() const { return ACTUAL_DATAMGR::extent(); }
+
+    /**
+       Return the region that is built from all non-default pixels or
+       tiles.
+    */
+    QRegion region() const { return ACTUAL_DATAMGR::region(); }
 
 
 public:

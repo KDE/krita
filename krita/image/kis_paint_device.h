@@ -168,6 +168,16 @@ public:
     virtual QRect extent() const;
 
     /**
+     * Retrieve the region, that is the collection of non-overlapping
+     * rects, that contain actual pixels in the paint device. For
+     * instance, given a transparent paint device with two 10x10 black
+     * spots, at 50,50 and 2000, 1800, the result would be a region
+     * with two rects, 50,50 10x10 and 2000,1800 10x10 -- in the best case.
+     * The implementation may optimize by putting a margin aound it.
+     */
+    virtual QRegion region() const;
+
+    /**
      * XXX: This should be a temporay hack, awaiting a proper fix.
      *
      * Indicates whether the extent really represents the extent. For example,

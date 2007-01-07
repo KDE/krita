@@ -38,6 +38,7 @@ typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 class KisTiledIterator;
 class KisTiledRandomAccessor;
 class KoStore;
+class QRegion;
 
 class KisTileDataWrapper : public KisShared {
     KisTile* m_tile;
@@ -106,6 +107,8 @@ protected:
 
     void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
     QRect extent() const;
+    QRegion region() const;
+
 
     void setExtent(qint32 x, qint32 y, qint32 w, qint32 h);
 

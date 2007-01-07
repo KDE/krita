@@ -91,7 +91,11 @@ public:
         BottomInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
         BottomBorderSpacing,    ///< In case of style being 'double' the space between the inner and outer border lines
         BottomBorderStyle,      ///< The border style. (see BorderStyle)
-        BottomBorderColor      ///< The border Color
+        BottomBorderColor,      ///< The border Color
+
+        // lists
+        ExplicitListValue, ///< Int with the list-value that that parag will have. Ignored if this is not a list.
+        RestartListNumbering    ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
 
 // do 15.5.24
 // continue at 15.5.28
@@ -376,6 +380,11 @@ public:
 
     /// each style has a unique ID (non persistent) given out by the styleManager
     void setStyleId(int id) { setProperty(StyleId, id); if(m_next == 0) m_next=id; }
+
+    /// Set to true if this paragraph is marked to start the list numbering from the first entry.
+    void setRestartListNumbering(bool on) { setProperty(RestartListNumbering, on); }
+    /// return if this paragraph is marked to start the list numbering from the first entry.
+    bool restartListNumbering() { return propertyBoolean(RestartListNumbering); }
 
     /**
      * Apply this style to a blockFormat by copying all properties from this, and parent

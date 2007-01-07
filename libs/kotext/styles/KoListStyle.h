@@ -39,7 +39,7 @@ public:
     enum Style {
         /// Draw a square
         SquareItem = QTextListFormat::ListSquare,
-        /// Draw a disc (filled circle)
+        /// Draw a disc (filled circle)  (aka bullet)
         DiscItem = QTextListFormat::ListDisc,
         /// Draw a disc (non-filled disk)
         CircleItem = QTextListFormat::ListCircle,
@@ -74,10 +74,6 @@ public:
         CharacterStyleId,///< CharacterStyle used for markup of the counter
         BulletCharacter,///< an int with the unicode value of the character
         BulletSize,     ///< size in percent relative to the height of the text
-        ListHeader,     ///< TextBlock level flag to mark a block to be a listHeader
-        NoListItem,     ///< TextBlock level flag to mark a block to not have a listItem
-        ExplicitListValue, ///< TextBlock level int with the list-value that that parag will have
-        RestartListNumbering    ///> TextBlock level boolean to indicate that this paragraph will have numbering restart at the list-start.
     };
 
     /**

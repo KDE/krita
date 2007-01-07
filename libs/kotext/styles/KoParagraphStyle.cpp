@@ -184,6 +184,9 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
         TopBorderColor,
         RightBorderColor,
         BottomBorderColor,
+        ExplicitListValue,
+        RestartListNumbering,
+
         -1
     };
 

@@ -24,7 +24,7 @@ set(libkritatile_SRCS
 )
 
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
-                     ${KOFFICECORE_INCLUDES}/threadAction/
+                     ${CMAKE_SOURCE_DIR}/libs/kofficecore/threadAction/
 )
 
 set(kritaimage_LIB_SRCS

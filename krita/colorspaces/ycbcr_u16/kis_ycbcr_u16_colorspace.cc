@@ -20,6 +20,7 @@
 #include "kis_ycbcr_u16_colorspace.h"
 
 #include <qimage.h>
+#include <config-endian.h> // WORDS_BIGENDIAN
 
 #include <KoIntegerMaths.h>
 
@@ -192,7 +193,7 @@ QImage KisYCbCrU16ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width
         Q_UINT16 Y = *( data + i + PIXEL_Y );
         Q_UINT16 Cb = *( data + i + PIXEL_Cb );
         Q_UINT16 Cr = *( data + i + PIXEL_Cr );
-#ifdef __BIG_ENDIAN__
+#ifdef WORDS_BIGENDIAN
         *( j + 0)  = *( data + i + PIXEL_ALPHA ) >> 8;
         *( j + 1 ) = computeRed(Y,Cb,Cr) >> 8;
         *( j + 2 ) = computeGreen(Y,Cb,Cr) >> 8;

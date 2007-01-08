@@ -18,6 +18,8 @@
  */
 #include "kis_image.h"
 
+#include <config-endian.h> // WORDS_BIGENDIAN
+
 #include <stdlib.h>
 #include <math.h>
 
@@ -1421,7 +1423,7 @@ QImage KisImage::convertToQImage(qint32 x,
 
     if (!img.isNull()) {
 
-#ifdef __BIG_ENDIAN__
+#ifdef WORDS_BIGENDIAN
         uchar * data = img.bits();
         for (int i = 0; i < w * h; ++i) {
             uchar r, g, b, a;
@@ -1502,7 +1504,7 @@ QImage KisImage::convertToQImage(const QRect& r, const double xScale, const doub
     QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), profile, INTENT_PERCEPTUAL, exposure);
     delete [] scaledImageData;
 
-#ifdef __BIG_ENDIAN__
+#ifdef WORDS_BIGENDIAN
     uchar * data = image.bits();
     for (int i = 0; i < image.width() * image.height(); ++i) {
       uchar r, g, b, a;

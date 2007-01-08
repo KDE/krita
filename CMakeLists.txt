@@ -38,10 +38,14 @@ link_directories(${KDE4_LIB_DIR})
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 include (ConfigureChecks.cmake)
+include (TestBigEndian)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
+configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h )
 configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
+
+TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
+configure_file(config-endian.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-endian.h )
 
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(${QDBUS_INCLUDE_DIRS}  ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )

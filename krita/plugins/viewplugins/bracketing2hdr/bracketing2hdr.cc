@@ -38,7 +38,6 @@
 #include "kis_global.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
-#include "kis_meta_registry.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_types.h"
@@ -149,12 +148,25 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
     connect(m_wdgBracketing2HDR->pushButtonCreateHDRLayer, SIGNAL(released()), dialog, SLOT(accept ()));
     connect(m_wdgBracketing2HDR->pushButtonAddImages, SIGNAL(released()), this, SLOT(slotAddImages()));
     connect(m_wdgBracketing2HDR->pushButtonCalculateCameraResponse, SIGNAL(released()), this, SLOT(computeCameraResponse()));
+    addImage( "~/tmp/hdr/exposures/img01.jpg" );
+    addImage( "~/tmp/hdr/exposures/img02.jpg" );
+    addImage( "~/tmp/hdr/exposures/img03.jpg" );
+    addImage( "~/tmp/hdr/exposures/img04.jpg" );
+    addImage( "~/tmp/hdr/exposures/img05.jpg" );
+    addImage( "~/tmp/hdr/exposures/img06.jpg" );
+    addImage( "~/tmp/hdr/exposures/img07.jpg" );
+    addImage( "~/tmp/hdr/exposures/img08.jpg" );
+    addImage( "~/tmp/hdr/exposures/img09.jpg" );
+    addImage( "~/tmp/hdr/exposures/img10.jpg" );
+    addImage( "~/tmp/hdr/exposures/img11.jpg" );
+    addImage( "~/tmp/hdr/exposures/img12.jpg" );
+    addImage( "~/tmp/hdr/exposures/img13.jpg" );
     if(dialog->exec()==QDialog::Accepted)
     {
         kDebug() << "Start creating the HDR layer" << endl;
         computeCameraResponse();
         KisImageSP img = m_view->image();
-        KoColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->colorSpace("RGBAF32", 0);
+        KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBAF32", 0);
         if(!cs)
         {
             KMessageBox::error(m_view, i18n("No HDR colorspace found, please check your installation."), i18n("Layer Error"));
@@ -272,7 +284,7 @@ void Bracketing2HDRPlugin::computeCameraResponse()
     }
     // Now optimize the camera response
     // Create a temporary paint device and fill it with the current value
-    KoColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->colorSpace("RGBAF32", 0);
+    KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBAF32", 0);
     KisPaintDeviceSP device = new KisPaintDevice(cs, i18n("HDR Layer"));
     // Normalize the intensity responses
     normalize(m_intensityR);

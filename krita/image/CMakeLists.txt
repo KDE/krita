@@ -23,7 +23,9 @@ set(libkritatile_SRCS
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tile_compressor.cc
 )
 
-include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/)
+include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
+                     ${KOFFICECORE_INCLUDES}/threadAction/
+)
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
@@ -91,8 +93,8 @@ set(kritaimage_LIB_SRCS
    kis_channel_mask.cc
    kis_volume_mask.cc
    kis_mixability_mask.cc
-#   kis_progress_updater.cpp
-#   kis_progress_updater_p.cpp
+   #  kis_progress_updater.cpp
+   #  kis_progress_updater_p.cpp
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

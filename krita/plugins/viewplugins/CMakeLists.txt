@@ -11,6 +11,7 @@ add_subdirectory( modify_selection )
 add_subdirectory( rotateimage )
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
+add_subdirectory( bracketing2hdr )
 
 #if(KOFFICE_ENABLE_SCRIPTING)
 #       add_subdirectory(scripting)

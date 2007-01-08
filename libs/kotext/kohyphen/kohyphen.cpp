@@ -25,7 +25,7 @@
 #include <QString>
 
 #include <klocale.h>
-#include <kapplication.h>
+#include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kstaticdeleter.h>
 
@@ -49,7 +49,7 @@ KoHyphenator::KoHyphenator()
 {
 /*  Reading config for dictionary encodings from file...*/
 
-    QString path = kapp->dirs()->findResource("data", "koffice/hyphdicts/dicts.xml");
+    QString path = KGlobal::dirs()->findResource("data", "koffice/hyphdicts/dicts.xml");
 #ifdef DEBUG_HYPHENATOR
     kDebug() << path << endl;
 #endif
@@ -187,7 +187,7 @@ HyphenDict *KoHyphenator::dict(const QString &_lang) const
 #ifdef DEBUG_HYPHENATOR
         kDebug() << "Searching dictionary for '" << lang << "' language..." << endl;
 #endif
-        QString path = kapp->dirs()->findResource("data", "koffice/hyphdicts/hyph_" + lang + ".dic");
+        QString path = KGlobal::dirs()->findResource("data", "koffice/hyphdicts/hyph_" + lang + ".dic");
         if (!path.isNull())
         {
 #ifdef DEBUG_HYPHENATOR

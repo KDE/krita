@@ -33,7 +33,6 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kapplication.h>
 
 #include <QTimer>
 #include <QRegExp>

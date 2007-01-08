@@ -61,7 +61,7 @@ KoApplication::KoApplication()
     d = new KoApplicationPrivate;
 
     // Tell the iconloader about share/apps/koffice/icons
-    kapp->iconLoader()->addAppDir("koffice");
+    KIconLoader::global()->addAppDir("koffice");
 
     // Initialize all KOffice directories etc.
     KoGlobal::initialize();

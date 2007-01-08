@@ -28,7 +28,6 @@
 #endif
 
 #include <KoGlobal.h>
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>

@@ -21,7 +21,6 @@
 #include <QPainter>
 #include <Q3ComboBox>
 
-#include <kapplication.h>
 #include <kcombobox.h>
 #include <kglobalsettings.h>
 #include <ktoolbar.h>

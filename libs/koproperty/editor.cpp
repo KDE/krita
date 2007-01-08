@@ -43,12 +43,10 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdeversion.h>
-#include <kapplication.h>
 
 namespace KoProperty {
 
@@ -78,7 +76,7 @@ class EditorPrivate
 			itemToSelectLater = 0;
 			if (!kofficeAppDirAdded) {
 				kofficeAppDirAdded = true;
-				kapp->iconLoader()->addAppDir("koffice");
+				KIconLoader::global()->addAppDir("koffice");
 			}
 			previouslyCollapsedGroupItem = 0;
 			childFormPreviouslyCollapsedGroupItem = 0;
@@ -397,7 +395,7 @@ void
 Editor::changeSetLater()
 {
 	qApp->processEvents(QEventLoop::AllEvents);
-	if (kapp->hasPendingEvents()) {
+	if (qApp->hasPendingEvents()) {
 		d->changeSetLaterTimer.setSingleShot(true);
 		d->changeSetLaterTimer.start(10); //try again...
 		return;
@@ -599,7 +597,7 @@ Editor::slotClicked(Q3ListViewItem *it)
 	if (d->currentWidget) {
 		if (d->currentWidget->visibleFlag()) {
 			d->currentWidget->show();
-			if (hasParent( this, kapp->focusWidget() ))
+			if (hasParent( this, qApp->focusWidget() ))
 				d->currentWidget->setFocus();
 		}
 	}

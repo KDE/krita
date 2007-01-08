@@ -43,7 +43,6 @@
 #include <kfileiconview.h>
 #include <kfileitem.h>
 #include <kmessagebox.h>
-#include <kapplication.h>
 #include <kaboutdata.h>
 #include <kpagewidgetmodel.h>
 #include <kicon.h>
@@ -237,7 +236,7 @@ KoTemplateChooseDia::~KoTemplateChooseDia()
 static bool cancelQuits() {
     bool onlyDoc = !KoDocument::documentList() || KoDocument::documentList()->count() <= 1;
     bool onlyMainWindow = KMainWindow::memberList().count() <= 1;
-    return onlyDoc && onlyMainWindow && kapp->instanceName() != "koshell"; // hack for koshell
+    return onlyDoc && onlyMainWindow && KGlobal::instance()->instanceName() != "koshell"; // hack for koshell
 }
 
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance, QString &file,

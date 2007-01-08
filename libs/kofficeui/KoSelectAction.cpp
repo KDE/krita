@@ -27,7 +27,6 @@
 #include <Q3PopupMenu>
 
 #include <kmenu.h>
-#include <kapplication.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
 
@@ -91,7 +90,7 @@ void KoSelectAction::popup(const QPoint& global)
 int KoSelectAction::plug(QWidget* widget, int index)
 {
   // This function is copied from KActionMenu::plug
-  if (kapp && !KAuthorized::authorizeKAction(name()))
+  if (!KAuthorized::authorizeKAction(name()))
     return -1;
   kDebug(129) << "KAction::plug( " << widget << ", " << index << " )" << endl; // remove -- ellis
   if ( widget->inherits("QPopupMenu") )
@@ -102,7 +101,7 @@ int KoSelectAction::plug(QWidget* widget, int index)
     if ( hasIconSet() )
       id = menu->insertItem( iconSet(), text(), popupMenu(), -1, index );
     else
-      id = menu->insertItem( kapp->iconLoader()->loadIcon(icon(), K3Icon::Small),
+      id = menu->insertItem( KIconLoader::global()->loadIcon(icon(), K3Icon::Small),
         text(), popupMenu(), -1, index );
 
     if ( !isEnabled() )

@@ -39,7 +39,6 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kcursor.h>
-#include <kapplication.h>
 #include <QString>
 #include <ktoolinvocation.h>
 #include <ktoggleaction.h>

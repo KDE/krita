@@ -28,7 +28,6 @@
 #include <QPixmap>
 #include <QPaintEvent>
 
-#include <kapplication.h>
 
 TKComboBox::TKComboBox(QWidget* parent, const char* name)
 : Q3ComboBox(false,parent,name)

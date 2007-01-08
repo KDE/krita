@@ -23,7 +23,6 @@
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
 #include "KoView.h"
-#include <kapplication.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kdebug.h>

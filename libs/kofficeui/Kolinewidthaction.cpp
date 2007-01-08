@@ -30,7 +30,6 @@
 #include <Q3GridLayout>
 
 #include <kmenu.h>
-#include <kapplication.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
 

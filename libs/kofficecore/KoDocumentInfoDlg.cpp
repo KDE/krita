@@ -24,7 +24,6 @@
 #include "ui_koDocumentInfoAuthorWidget.h"
 #include "KoDocumentInfo.h"
 #include "KoDocument.h"
-#include <kapplication.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -144,11 +143,11 @@ void KoDocumentInfoDlg::initAboutTab()
 
 void KoDocumentInfoDlg::initAuthorTab()
 {
-    QPixmap p = kapp->iconLoader()->loadIcon( "personal", K3Icon::Desktop, 48 );
+    QPixmap p = KIconLoader::global()->loadIcon( "personal", K3Icon::Desktop, 48 );
     d->m_authorUi->lblAuthor->setPixmap( p );
-    p = kapp->iconLoader()->loadIcon( "kaddressbook", K3Icon::Small );
+    p = KIconLoader::global()->loadIcon( "kaddressbook", K3Icon::Small );
     d->m_authorUi->pbLoadKABC->setIcon( QIcon( p ) );
-    p= kapp->iconLoader()->loadIcon( "eraser", K3Icon::Small );
+    p= KIconLoader::global()->loadIcon( "eraser", K3Icon::Small );
     d->m_authorUi->pbDelete->setIcon( QIcon( p ) );
 
     d->m_authorUi->leFullName->setText( d->m_info->authorInfo( "creator" ) );

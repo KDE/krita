@@ -18,6 +18,7 @@
 */
 #include "KoDetailsPane.h"
 
+#include <QApplication>
 #include <QCheckBox>
 #include <QLabel>
 #include <QFile>
@@ -39,7 +40,6 @@
 #include <kio/previewjob.h>
 #include <kdebug.h>
 #include <ktextbrowser.h>
-#include <kapplication.h>
 #include <kglobalsettings.h>
 #include "KoTemplates.h"
 
@@ -137,7 +137,7 @@ void KoDetailsPane::openFile()
 
 void KoDetailsPane::changePalette()
 {
-  QPalette p = kapp ? kapp->palette() : palette();
+  QPalette p = qApp ? qApp->palette() : palette();
   p.setBrush(QColorGroup::Base, p.brush(QPalette::Normal, QColorGroup::Background));
   p.setColor(QColorGroup::Text, p.color(QPalette::Normal, QColorGroup::Foreground));
   m_detailsLabel->setPalette(p);

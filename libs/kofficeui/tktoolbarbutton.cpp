@@ -29,7 +29,6 @@
 #include <QEvent>
 
 #include <kdeversion.h>
-#include <kapplication.h>
 #include <kiconeffect.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
@@ -194,23 +193,23 @@ void TKToolBarButton::setIcon( const QString& icon )
   d->m_iconName = icon;
   int iconSize = 16;
 
-  setPixmap( KIcon(icon, kapp->iconLoader()).pixmap(iconSize, KIcon::Active) );
-  setDisabledPixmap( KIcon(icon, kapp->iconLoader()).pixmap(iconSize, KIcon::Disabled) );
-  setDefaultPixmap( KIcon(icon, kapp->iconLoader()).pixmap(iconSize, KIcon::Normal) );
+  setPixmap( KIcon(icon, KIconLoader::global()).pixmap(iconSize, KIcon::Active) );
+  setDisabledPixmap( KIcon(icon, KIconLoader::global()).pixmap(iconSize, KIcon::Disabled) );
+  setDefaultPixmap( KIcon(icon, KIconLoader::global()).pixmap(iconSize, KIcon::Normal) );
 }
 
 void TKToolBarButton::setDisabledIcon( const QString &icon )
 {
   d->m_disabledIconName = icon;
   int iconSize = 16;
-  setDisabledPixmap( KIcon(icon, kapp->iconLoader()).pixmap(iconSize, KIcon::Disabled) );
+  setDisabledPixmap( KIcon(icon, KIconLoader::global()).pixmap(iconSize, KIcon::Disabled) );
 }
 
 void TKToolBarButton::setDefaultIcon( const QString &icon )
 {
   d->m_defaultIconName = icon;
   int iconSize = 16;
-  setDefaultPixmap( KIcon(icon, kapp->iconLoader()).pixmap(iconSize, KIcon::Normal) );
+  setDefaultPixmap( KIcon(icon, KIconLoader::global()).pixmap(iconSize, KIcon::Normal) );
 }
 
 QPixmap TKToolBarButton::getActivePixmap() const

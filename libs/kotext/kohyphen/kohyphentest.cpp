@@ -4,8 +4,8 @@
 #include <stdlib.h>
 
 #include <QStringList>
+#include <QApplication>
 
-#include <kapplication.h>
 
 #include "kohyphen.h"
 #include <kdebug.h>

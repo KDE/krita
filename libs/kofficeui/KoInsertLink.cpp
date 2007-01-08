@@ -17,15 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kapplication.h>
 #include <klocale.h>
 
 #include <QVBoxLayout>
-#include <kdebug.h>
 #include <QLabel>
+#include <QApplication>
 #include <QComboBox>
 #include <QDesktopWidget>
 
+#include <kdebug.h>
 #include <klineedit.h>
 #include <kurlrequester.h>
 #include <kseparator.h>
@@ -455,7 +455,7 @@ fileLinkPage::fileLinkPage( QWidget *parent , char* /*name*/  )
   tmpQLabel->setText(i18n("Recent file:"));
 
   QComboBox * recentFile = new QComboBox( this );
-  recentFile->setMaximumWidth( kapp->desktop()->width()*3/4 );
+  recentFile->setMaximumWidth( QApplication::desktop()->width()*3/4 );
   lay2->addWidget(recentFile);
 
   QStringList fileList = KRecentDocument::recentDocuments();

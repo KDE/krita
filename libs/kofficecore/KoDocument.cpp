@@ -37,12 +37,12 @@
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 
-#include <kapplication.h>
 #include <kdialog.h>
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kfileitem.h>
 #include <kiconloader.h>
+#include <kinstance.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
@@ -76,9 +76,10 @@
 #include <QEvent>
 #include <QResizeEvent>
 #include <QDateTime>
-#include <assert.h>
 #include <QUndoStack>
 #include <QUndoCommand>
+#include <QApplication>
+#include <assert.h>
 
 
 // Define the protocol used here for embedded documents' URL
@@ -197,7 +198,7 @@ public:
     {
         KGlobal::locale()->insertCatalog("koffice");
         // Tell the iconloader about share/apps/koffice/icons
-        kapp->iconLoader()->addAppDir("koffice");
+        KIconLoader::global()->addAppDir("koffice");
         m_view = 0L;
         // Avoid warning from KParts - we'll have the KoView as focus proxy anyway
         setFocusPolicy( Qt::ClickFocus );
@@ -2376,7 +2377,7 @@ QByteArray KoDocument::nativeOasisMimeType() const
 //static
 KService::Ptr KoDocument::readNativeService( KInstance *instance )
 {
-    QString instname = instance ? instance->instanceName() : kapp->instanceName();
+    QString instname = instance ? instance->instanceName() : KGlobal::instance()->instanceName();
 
     // The new way is: we look for a foopart.desktop in the kde_services dir.
     QString servicepartname = instname + "part.desktop";
@@ -2411,7 +2412,7 @@ QByteArray KoDocument::readNativeFormatMimeType( KInstance *instance ) //static
         if ( !ptr )
             kError(30003) << "The serviceType KOfficePart is missing. Check that you have a kofficepart.desktop file in the share/servicetypes directory." << endl;
         else {
-            QString instname = instance ? instance->instanceName() : kapp->instanceName();
+            QString instname = instance ? instance->instanceName() : KGlobal::instance()->instanceName();
             if ( instname != "koshell" ) // hack for koshell
                 kWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!" << endl;
         }

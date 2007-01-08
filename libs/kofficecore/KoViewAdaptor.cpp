@@ -23,7 +23,6 @@
 
 #include "KoView.h"
 
-#include <kapplication.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 //Added by qt3to4:

@@ -33,12 +33,12 @@
 #include <QKeyEvent>
 #include <QFrame>
 #include <Q3ValueList>
+#include <QApplication>
 #include <QMouseEvent>
 
 // KDE includes
 #include <klocale.h>
 #include <kglobal.h>
-#include <kapplication.h>
 #include <kmainwindow.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -68,7 +68,7 @@ class KPanelKbdSizerIcon : public QCursor
         void show(const QPoint p) {
             if (!isActive) {
                 originalPos = QCursor::pos();
-                kapp->setOverrideCursor(*this);
+                qApp->setOverrideCursor(*this);
                 isActive = true;
             }
             if (p != pos())
@@ -78,7 +78,7 @@ class KPanelKbdSizerIcon : public QCursor
 
         void hide() {
             if (isActive) {
-                kapp->restoreOverrideCursor();
+                qApp->restoreOverrideCursor();
                 QCursor::setPos(originalPos);
             }
             isActive = false;
@@ -88,9 +88,9 @@ class KPanelKbdSizerIcon : public QCursor
         {
             if (shayp != shape()) {
                 // Must restore and override to get the icon to refresh.
-                if (isActive) kapp->restoreOverrideCursor();
+                if (isActive) qApp->restoreOverrideCursor();
                 QCursor::setShape(shayp);
-                if (isActive) kapp->setOverrideCursor(*this);
+                if (isActive) qApp->setOverrideCursor(*this);
             }
         }
 
@@ -186,12 +186,12 @@ KKbdAccessExtensions::KKbdAccessExtensions(KMainWindow* parent, const char* /*na
     d->revAction->setEnabled(false);
     d->accessKeysAction->setEnabled(false);
     d->icon = new KPanelKbdSizerIcon();
-    kapp->installEventFilter(this);
+    qApp->installEventFilter(this);
 }
 
 KKbdAccessExtensions::~KKbdAccessExtensions()
 {
-    kapp->removeEventFilter(this);
+    qApp->removeEventFilter(this);
     if (d->panel) exitSizing();
     delete d;
 }
@@ -285,7 +285,7 @@ bool KKbdAccessExtensions::eventFilter( QObject *o, QEvent *e )
 
 QWidgetList* KKbdAccessExtensions::getAllPanels()
 {
-    QWidgetList allWidgets = kapp->allWidgets();
+    QWidgetList allWidgets = qApp->allWidgets();
     QWidgetList* allPanels = new QWidgetList;
     foreach ( QWidget* widget, allWidgets ) {
         if (widget->isVisible()) {
@@ -590,7 +590,7 @@ void KKbdAccessExtensions::displayAccessKeys()
 
     // Find all visible, focusable widgets and create a QLabel for each.  Don't exceed
     // available list of access keys.
-    QWidgetList allWidgets = kapp->allWidgets();
+    QWidgetList allWidgets = qApp->allWidgets();
     int accessCount = 0;
     int maxAccessCount = availableAccessKeys.length();
     int overlap = 20;

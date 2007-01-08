@@ -34,7 +34,6 @@
 #include <kcursor.h>
 #include <assert.h>
 #include <kstatusbar.h>
-#include <kapplication.h>
 #include <QTimer>
 #include <QtGui/QDockWidget>
 //Added by qt3to4:
@@ -45,6 +44,7 @@
 #include <QCustomEvent>
 #include <kicon.h>
 #include <QToolBar>
+#include <QApplication>
 
 //static
 QString KoView::newObjectName()

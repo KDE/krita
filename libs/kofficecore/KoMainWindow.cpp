@@ -35,8 +35,8 @@
 #include <kprinter.h>
 #include <kdeversion.h>
 #include <kstandardaction.h>
-#include <kapplication.h>
 #include <kmessagebox.h>
+#include <kinstance.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
@@ -64,6 +64,7 @@
 #include <QEvent>
 #include <QLabel>
 #include <QResizeEvent>
+#include <QApplication>
 #include <QSplitter>
 #include <kxmlguifactory.h>
 #include <ktoolbar.h>
@@ -1493,7 +1494,7 @@ void KoMainWindow::slotProgress(int value) {
         d->m_firstTime=false;
     }
     d->m_progress->setValue(value);
-    kapp->processEvents();
+    qApp->processEvents();
 }
 
 

@@ -40,7 +40,6 @@
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 
-#include <kapplication.h>
 #include <kcharsets.h>
 #include <kconfig.h>
 #include <kdialog.h>

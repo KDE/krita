@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Bracketing2HDR
+Comment=Bracketing2HDR
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritabracketing2hdr
+X-Krita-Version=3

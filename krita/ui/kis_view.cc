@@ -123,6 +123,7 @@
 #include "kis_tool.h"
 #include "kis_tool_manager.h"
 #include "kis_transaction.h"
+#include "kis_selected_transaction.h"
 #include "kis_types.h"
 #include "kis_undo_adapter.h"
 #include "kis_view.h"
@@ -1861,9 +1862,9 @@ void KisView::rotateLayer(double angle)
     KisPaintDeviceSP dev = currentImg()->activeDevice();
     if (!dev) return;
 
-    KisTransaction * t = 0;
+    KisSelectedTransaction * t = 0;
     if (undoAdapter() && undoAdapter()->undo()) {
-        t = new KisTransaction(i18n("Rotate Layer"), dev);
+        t = new KisSelectedTransaction(i18n("Rotate Layer"), dev);
         Q_CHECK_PTR(t);
     }
 

@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <config-endian.h> // WORDS_BIGENDIAN
+
 #include <math.h>
 #include <assert.h>
 

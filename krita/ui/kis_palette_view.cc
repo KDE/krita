@@ -19,44 +19,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <QCheckBox>
-#include <QComboBox>
-#include <qdrawutil.h>
-#include <QEvent>
-#include <QFile>
-#include <QImage>
-#include <QLabel>
-#include <QLayout>
-#include <QLineEdit>
-#include <QValidator>
-#include <QPainter>
-#include <QPushButton>
-#include <QSpinBox>
-#include <QTimer>
-
-#include <kapplication.h>
-#include <kconfig.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
 #include <kiconloader.h>
-#include <klistbox.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kseparator.h>
-#include <kpalette.h>
-#include <kimageeffect.h>
 
-#include <kcolordialog.h>
-#include <k3colordrag.h>
-#include <config.h>
 #include <kdebug.h>
+#include <kcolordialog.h> // KColorCells
 
 #include <kis_meta_registry.h>
 #include <KoColor.h>
-#include <kis_factory2.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_palette_view.h"
 #include "kis_resource.h"

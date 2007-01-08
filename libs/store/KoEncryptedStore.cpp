@@ -547,15 +547,15 @@ bool KoEncryptedStore::openRead( const QString& name ) {
                 m_password = QSecureArray();
             }
             else {
-                QByteArray pass;
                 if( !m_filename.isNull( ) )
                     keepPass = true;
-                QString passwordString = KPasswordDialog::getPassword( i18n( "Please enter the password to open this file." ),
-                    QString(), &keepPass, m_window );
-                if( passwordString.isNull() )
+                KPasswordDialog dlg(m_window , KPasswordDialog::ShowKeepPassword );
+                dlg.setPrompt(i18n( "Please enter the password to open this file." ) );
+                dlg.setKeepPassword( keepPass ); 
+                if( ! dlg.exec() )
                     return false;
-                pass = passwordString.toUtf8();    
-                password = QSecureArray( pass );
+                password = QSecureArray( dlg.password().toUtf8() );
+                keepPass = dlg.keepPassword();
                 if( password.isEmpty( ) ) {
                     continue;
                 }

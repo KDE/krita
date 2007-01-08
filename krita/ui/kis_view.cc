@@ -1870,10 +1870,15 @@ void KisView::rotateLayer(double angle)
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KisID("Triangle"));
     angle *= M_PI/180;
-    Q_INT32 w = currentImg()->width();
-    Q_INT32 h = currentImg()->height();
-    Q_INT32 tx = Q_INT32((w*cos(angle) - h*sin(angle) - w) / 2 + 0.5);
-    Q_INT32 ty = Q_INT32((h*cos(angle) + w*sin(angle) - h) / 2 + 0.5);
+    QRect r;
+    if(dev->hasSelection())
+        r = dev->selection()->selectedExactRect();
+    else
+        r = dev->exactBounds();
+    double cx = r.x()+r.width()/2.0;
+    double cy = r.y()+r.height()/2.0;
+    Q_INT32 tx = Q_INT32(cx*cos(angle) - cy*sin(angle) - cx + 0.5);
+    Q_INT32 ty = Q_INT32(cy*cos(angle) + cx*sin(angle) - cy + 0.5);
 
     KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, angle, -tx, -ty, m_progress, filter);
     tw.run();

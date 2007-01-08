@@ -20,7 +20,6 @@
 #ifndef KOCOLORSPACE_H
 #define KOCOLORSPACE_H
 
-#include <config.h>
 #include <lcms.h>
 #include <limits.h>
 

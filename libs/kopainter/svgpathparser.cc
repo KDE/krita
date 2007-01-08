@@ -96,8 +96,9 @@ SVGPathParser::parseSVG( const QString &s, bool process )
 		d = d.replace( ',', ' ' );
 		d = d.simplified();
 
-		const char *ptr = d.latin1();
-		const char *end = d.latin1() + d.length() + 1;
+		const QByteArray buffer = d.toLatin1();
+		const char *ptr = buffer.constData();
+		const char *end = buffer.constData() + buffer.length() + 1;
 
 		double contrlx, contrly, curx, cury, subpathx, subpathy, tox, toy, x1, y1, x2, y2, xc, yc;
 		double px1, py1, px2, py2, px3, py3;

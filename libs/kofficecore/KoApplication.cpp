@@ -20,11 +20,8 @@
 #include "KoApplication.h"
 #include "KoApplicationAdaptor.h"
 #include <QtDBus/QtDBus>
-#include <config.h>
 #include <QFile>
 #include <QRegExp>
-// #include <dcopclient.h>
-// #include <KoApplicationIface.h>
 #include <KoQueryTrader.h>
 #include <KoDocument.h>
 #include <KoMainWindow.h>

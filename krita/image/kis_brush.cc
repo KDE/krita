@@ -20,17 +20,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <config.h>
-
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-
-#include <netinet/in.h>
-#include <limits.h>
-#include <stdlib.h>
-#include <cfloat>
-
 #include <QFile>
 #include <QImage>
 #include <QPoint>
@@ -48,6 +37,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_image.h"
 
+#include <netinet/in.h> // htonl
 
 namespace {
     struct GimpBrushV1Header {

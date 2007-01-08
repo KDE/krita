@@ -76,7 +76,6 @@
 #include <QEvent>
 #include <QResizeEvent>
 #include <QDateTime>
-#include <config.h>
 #include <assert.h>
 #include <QUndoStack>
 #include <QUndoCommand>

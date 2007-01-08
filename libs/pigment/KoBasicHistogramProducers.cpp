@@ -19,8 +19,7 @@
 #include <QString>
 #include <klocale.h>
 
-#include "config.h"
-// #include <config-krita.h>
+#include <config-openexr.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
 #endif

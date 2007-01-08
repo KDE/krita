@@ -23,8 +23,6 @@
 #ifndef KOCOLORPROFILE_H
 #define KOCOLORPROFILE_H
 
-#include <config.h>
-
 #include <lcms.h>
 
 #include <q3valuevector.h>

@@ -19,17 +19,8 @@
 
 #include "kis_imagepipe_brush.h"
 
-#include <config.h>
-
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-
 #include <math.h>
-
-#include <netinet/in.h>
 #include <limits.h>
-#include <stdlib.h>
 
 #include <QImage>
 #include <QPoint>

@@ -25,8 +25,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <config.h>
-
 #include <lcms.h>
 
 #include "KoAlphaColorSpace.h"

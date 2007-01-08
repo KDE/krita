@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "config.h"
+#include "config-prefix.h"
 
 #include <QPaintDevice>
 #include <QFont>
@@ -57,7 +57,7 @@ KoGlobal::KoGlobal()
     KGlobal::locale()->insertCatalog("koffice");
 
     // Tell KStandardDirs about the koffice prefix
-    KGlobal::dirs()->addPrefix(PREFIX);
+    KGlobal::dirs()->addPrefix(KOFFICEPREFIX);
 
     // Another way to get the DPI of the display would be QPaintDeviceMetrics,
     // but we have no widget here (and moving this to KoView wouldn't allow

@@ -69,7 +69,7 @@ class KoColorSpaceMathsTraits<quint32> {
         inline static qint8 bits() { return 32; }
 };
 
-// TODO: find someone who understand cmake and understand how to set HAVE_OPENEXR in pigment
+#include <config-openexr.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
 
@@ -155,7 +155,6 @@ inline float KoColorSpaceMaths<float>::blend(float a, float b, float alpha)
 
 //------------------------------ half specialization ------------------------------//
 
-// TODO: find someone who understand cmake and understand how to set HAVE_OPENEXR in pigment
 #ifdef HAVE_OPENEXR
 
 template<>

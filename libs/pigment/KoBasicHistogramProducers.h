@@ -24,7 +24,7 @@
 #include <q3valuevector.h>
 #include <klocale.h>
 
-#include "config.h"
+#include <config-openexr.h>
 
 #include "KoColorSpace.h"
 #include "KoID.h"

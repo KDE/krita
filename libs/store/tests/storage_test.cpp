@@ -215,13 +215,10 @@ int main( int argc, char **argv )
     //KApplication::disableAutoDcopRegistration();
     KApplication app(false);
 
-    // KZip (due to KSaveFile) doesn't support relative filenames
-    // So use $PWD as base for the paths explicitly.
-    const QString testDir = QDir::currentPath();
-    if ( test( "Tar", KoStore::Tar, testDir+"test.tgz" ) != 0 )
+    if ( test( "Tar", KoStore::Tar, "test.tgz" ) != 0 )
       return 1;
-    if ( test( "Directory", KoStore::Directory, testDir+"testdir/maindoc.xml" ) != 0 )
+    if ( test( "Directory", KoStore::Directory, "testdir/maindoc.xml" ) != 0 )
       return 1;
-    if ( test( "Zip", KoStore::Zip, testDir+"test.zip" ) != 0 )
+    if ( test( "Zip", KoStore::Zip, "test.zip" ) != 0 )
       return 1;
 }

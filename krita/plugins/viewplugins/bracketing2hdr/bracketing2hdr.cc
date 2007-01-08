@@ -46,6 +46,8 @@
 
 #include "ui_wdgbracketing2hdr.h"
 
+const double epsilon = 1e-3;
+
 typedef KGenericFactory<Bracketing2HDRPlugin> Bracketing2HDRPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritabracketing2hdr, Bracketing2HDRPluginFactory( "krita" ) )
 
@@ -171,69 +173,85 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
         above = parent->firstChild();
         img->addLayer(layer, parent, above);
         
-        KisPaintDeviceSP dstdev = layer->paintDevice();
-        int width = m_images[0].image->width();
-        int height = m_images[0].image->height();
-        for(int k = 0; k < m_images.size(); k++)
-        {
-            m_images[k].it = new KisHLineConstIteratorPixel( m_images[k].device->createHLineConstIterator(0, 0, width) );
-        }
-        KisHLineIteratorPixel dstIt = dstdev->createHLineIterator(0, 0, width);
-        QColor c;
-        struct { double rsum, rdiv, gsum, gdiv, bsum, bdiv;  } v;
-        for(int j = 0; j < height; j++)
-        {
-            while(!dstIt.isDone())
-            {
-                v.rsum = v.rdiv = v.gsum = v.gdiv = v.bsum = v.bdiv = 0.0;
-                for(int k = 0; k < m_images.size(); k++)
-                {
-                    double coef = m_images[k].apexBrightness;
-                    m_images[k].device->colorSpace()->toQColor(m_images[k].it->rawData(), &c);
-                    v.rsum += m_intensityR[ c.red() ] * m_weights[ c.red() ] * coef ;
-                    v.rdiv += m_weights[ c.red() ] * coef * coef ;
-                    v.gsum += m_intensityG[ c.green() ] * m_weights[ c.green() ] * coef ;
-                    v.gdiv += m_weights[ c.green() ] * coef * coef ;
-                    v.bsum += m_intensityB[ c.blue() ] * m_weights[ c.blue() ] * coef ;
-                    v.bdiv += m_weights[ c.blue() ] * coef * coef ;
-                    ++(*m_images[k].it);
-                }
-                float* pixelData = reinterpret_cast<float*>(dstIt.rawData());
-                if( v.rdiv != 0.0)
-                {
-                    pixelData[2] = v.rsum / v.rdiv;
-                } else {
-                    pixelData[2] = 0.0;
-                }
-                if( v.gdiv != 0.0)
-                {
-                    pixelData[1] = v.gsum / v.gdiv;
-                } else {
-                    pixelData[1] = 0.0;
-                }
-                if( v.bdiv != 0.0)
-                {
-                    pixelData[0] = v.bsum / v.bdiv;
-                } else {
-                    pixelData[0] = 0.0;
-                }
-                dstdev->colorSpace()->setAlpha(dstIt.rawData(), 255, 1);
-                ++dstIt;
-            }
-            dstIt.nextRow();
-            for(int k = 0; k < m_images.size(); k++)
-            {
-                m_images[k].it->nextRow();
-            }
-        }
-        
-        for(int k = 0; k < m_images.size(); k++)
-        {
-            delete m_images[k].it;
-        }
+        createHDRPaintDevice( layer->paintDevice() );
         m_view->canvas()->update();
     }
     delete dialog;
+}
+
+void Bracketing2HDRPlugin::createHDRPaintDevice( KisPaintDeviceSP device )
+{
+    int width = m_images[0].image->width();
+    int height = m_images[0].image->height();
+    // Create iterators
+    for(int k = 0; k < m_images.size(); k++)
+    {
+        m_images[k].it = new KisHLineConstIteratorPixel( m_images[k].device->createHLineConstIterator(0, 0, width) );
+    }
+    KisHLineIteratorPixel dstIt = device->createHLineIterator(0, 0, width);
+    QColor c;
+    struct { double rsum, rdiv, gsum, gdiv, bsum, bdiv;  } v;
+    // Loop over pixels
+    for(int j = 0; j < height; j++)
+    {
+        while(!dstIt.isDone())
+        {
+            // compute the sum and normalization coefficient for rgb values from the bracketing ldr images
+            v.rsum = v.rdiv = v.gsum = v.gdiv = v.bsum = v.bdiv = 0.0;
+            for(int k = 0; k < m_images.size(); k++)
+            {
+                double coef = m_images[k].apexBrightness;
+                m_images[k].device->colorSpace()->toQColor(m_images[k].it->rawData(), &c);
+                v.rsum += m_intensityR[ c.red() ] * m_weights[ c.red() ] * coef ;
+                v.rdiv += m_weights[ c.red() ] * coef * coef ;
+                v.gsum += m_intensityG[ c.green() ] * m_weights[ c.green() ] * coef ;
+                v.gdiv += m_weights[ c.green() ] * coef * coef ;
+                v.bsum += m_intensityB[ c.blue() ] * m_weights[ c.blue() ] * coef ;
+                v.bdiv += m_weights[ c.blue() ] * coef * coef ;
+                ++(*m_images[k].it);
+            }
+            float* pixelData = reinterpret_cast<float*>(dstIt.rawData());
+            if( v.rdiv != 0.0)
+            {
+                pixelData[2] = v.rsum / v.rdiv;
+            } else {
+                pixelData[2] = 0.0;
+            }
+            if( v.gdiv != 0.0)
+            {
+                pixelData[1] = v.gsum / v.gdiv;
+            } else {
+                pixelData[1] = 0.0;
+            }
+            if( v.bdiv != 0.0)
+            {
+                pixelData[0] = v.bsum / v.bdiv;
+            } else {
+                pixelData[0] = 0.0;
+            }
+            device->colorSpace()->setAlpha(dstIt.rawData(), 255, 1);
+            ++dstIt;
+        }
+        dstIt.nextRow();
+        for(int k = 0; k < m_images.size(); k++)
+        {
+            m_images[k].it->nextRow();
+        }
+    }
+    // Delete iterators
+    for(int k = 0; k < m_images.size(); k++)
+    {
+        delete m_images[k].it;
+    }
+}
+
+void Bracketing2HDRPlugin::normalize(QVector<double>& intensity)
+{
+    double norm = intensity[numberOfInputLevels()/2];
+    for(int i = 0; i < numberOfInputLevels(); i++)
+    {
+        intensity[i] /= norm;
+    }
 }
 
 void Bracketing2HDRPlugin::computeCameraResponse()
@@ -252,6 +270,115 @@ void Bracketing2HDRPlugin::computeCameraResponse()
             kError() << "NOT IMPLEMENTED YET !" << endl;
             Q_ASSERT(false);
     }
+    // Now optimize the camera response
+    // Create a temporary paint device and fill it with the current value
+    KoColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->colorSpace("RGBAF32", 0);
+    KisPaintDeviceSP device = new KisPaintDevice(cs, i18n("HDR Layer"));
+    // Normalize the intensity responses
+    normalize(m_intensityR);
+    normalize(m_intensityG);
+    normalize(m_intensityB);
+    // Initialize some variables used for computation
+    QVector<qint64> counts[3];
+    QVector<double> sums[3];
+    for(int k = 0; k < 3; k++)
+    {
+        counts[k].resize(numberOfInputLevels());
+        sums[k].resize(numberOfInputLevels());
+    }
+    QVector<double> iROld, iGOld, iBOld;
+    int width = m_images[0].image->width();
+    int height = m_images[0].image->height();
+    while(true)
+    {
+        kDebug() << "New loop" << endl;
+        // Compute answer
+        createHDRPaintDevice( device );
+        // Copy the old responses
+        iROld = m_intensityR;
+        iGOld = m_intensityG;
+        iBOld = m_intensityB;
+        // Compute new response curve
+        for(int k = 0; k < 3; k++)
+        {
+            counts[k].fill(0);
+            sums[k].fill(0.0);
+        }
+        // Create iterators
+        for(int k = 0; k < m_images.size(); k++)
+        {
+            m_images[k].it = new KisHLineConstIteratorPixel( m_images[k].device->createHLineConstIterator(0, 0, width) );
+        }
+        KisHLineIteratorPixel dstIt = device->createHLineIterator(0, 0, width);
+        QColor c;
+        // Loop over pixels
+        for(int j = 0; j < height; j++)
+        {
+            while(!dstIt.isDone())
+            {
+                float* pixelData = reinterpret_cast<float*>(dstIt.rawData());
+                // compute the sum and normalization coefficient for rgb values from the bracketing ldr images
+                for(int k = 0; k < m_images.size(); k++)
+                {
+                    double coef = m_images[k].apexBrightness;
+                    m_images[k].device->colorSpace()->toQColor(m_images[k].it->rawData(), &c);
+                    sums[2][c.red()] += pixelData[2] * coef ;
+                    counts[2][c.red()] ++;
+                    sums[1][c.green()] += pixelData[1] * coef ;
+                    counts[1][c.green()] ++;
+                    sums[0][c.blue()] += pixelData[0] * coef ;
+                    counts[0][c.blue()] ++;
+                    ++(*m_images[k].it);
+                }
+                device->colorSpace()->setAlpha(dstIt.rawData(), 255, 1);
+                ++dstIt;
+            }
+            dstIt.nextRow();
+            for(int k = 0; k < m_images.size(); k++)
+            {
+                m_images[k].it->nextRow();
+            }
+        }
+        // Delete iterators
+        for(int k = 0; k < m_images.size(); k++)
+        {
+            delete m_images[k].it;
+        }
+        // Update intensity responses
+        #define UPDATEINTENSITY(n,vec) \
+            for(int i = 0; i < numberOfInputLevels(); i++) \
+            { \
+                if(sums[n][i] != 0.0) \
+                    vec[i] = counts[n][i] / sums[n][i]; \
+                else \
+                    vec[i] = 0.0; \
+            } \
+            normalize(vec);
+        UPDATEINTENSITY(2, m_intensityR);
+        UPDATEINTENSITY(1, m_intensityG);
+        UPDATEINTENSITY(0, m_intensityB);
+        #undef UPDATEINTENSITY
+        // Compute the convergence
+        int count = 0;
+        double sumdiff = 0.0;
+        #define DIFF(vec1, vec2) \
+            if(vec1[i] != 0.0) \
+            { \
+                double diff = vec1[i] - vec2[i]; \
+                sumdiff += diff * diff; \
+                count++; \
+            }
+        for(int i = 0; i < numberOfInputLevels(); i++)
+        {
+            DIFF(m_intensityR, iROld);
+            DIFF(m_intensityG, iGOld);
+            DIFF(m_intensityB, iBOld);
+        }
+        #undef DIFF
+        kDebug() << "Optimization delta = " << (sumdiff/count) << endl;
+        if( sumdiff/count < epsilon)
+            return;
+    }
 }
 
 bool Bracketing2HDRPlugin::loadImagesInMemory()
@@ -261,23 +388,15 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
     {
         // read the info about the frame in the table
         QString fileName = m_wdgBracketing2HDR->tableWidgetImages->item(i,0)->text();
-    
-//     $Av = 2 * log($aperture) / log(2);
-//     $Tv = log($inv_exposure_time) / log(2);
-//     $Sv = log( $iso_speed / 3.125 ) / log(2);
-// 
-//     ## Brightness value
-//     $Bv = $Av+$Tv-$Sv;
 
         BracketingFrame f;
         f.exposure = m_wdgBracketing2HDR->tableWidgetImages->item(i,1)->text().toDouble();
         f.aperture = m_wdgBracketing2HDR->tableWidgetImages->item(i,2)->text().toDouble();
         f.sensitivity = m_wdgBracketing2HDR->tableWidgetImages->item(i,3)->text().toInt();
-        
+        // Compute the apex brightness, more info at http://en.wikipedia.org/wiki/APEX_system
         f.apexBrightness = 2.0 * log(f.aperture ) + log( 1.0 / f.exposure) - log( f.sensitivity / 3.125 );
         f.apexBrightness /= log(2.0);
-        kDebug() << f.apexBrightness << endl;
-        f.apexBrightness = 1.0 / ( powf(2.0, f.apexBrightness) * ( 1.0592f * 11.4f / 3.125f ) ); // TODO: the magic number is apparrently dependent of the camera, this value is taken from pfscalibrate, this need to be configurable
+        f.apexBrightness = 1.0 / ( powf(2.0, f.apexBrightness) * ( 1.0592f * 11.4f / 3.125f ) ); // TODO: the magic number is apparrently dependent of the camera, this value is taken from pfscalibrate, this need to be configurable (it is the reflected-light meter calibration constant)
         
         kDebug() << "Loading fileName " << fileName << " Exposure = " << f.exposure << " Adjusted exposure = " << f.apexBrightness << " Aperture " << f.aperture << " Sensitivity = " << f.sensitivity << endl;
         // import the image
@@ -318,7 +437,7 @@ void Bracketing2HDRPlugin::computePseudoGaussianWeights()
     {
         double v = (i - 127.5) * ( 1. / 127.5);
         m_weights[i] = exp( -8.0 * v * v );
-        if( m_weights[i] < 1e-3)
+        if( m_weights[i] < epsilon)
             m_weights[i] = 0.;
     }
 }

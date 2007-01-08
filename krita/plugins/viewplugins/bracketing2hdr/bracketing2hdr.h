@@ -37,7 +37,6 @@ class Bracketing2HDRPlugin : public KParts::Plugin
     Q_OBJECT
     public:
         enum ResponseType {
-            RESPONSE_AUTO,
             RESPONSE_LINEAR,
             RESPONSE_GAMMA,
             RESPONSE_LOG10
@@ -80,6 +79,10 @@ class Bracketing2HDRPlugin : public KParts::Plugin
         
         void computeCameraResponse();
     private:
+        /// Create the HDR paintdevice
+        void createHDRPaintDevice( KisPaintDeviceSP device );
+        /// Normalize the intensity vector such as intensity[numberOfInputLevels()/2] = 1.0
+        void normalize(QVector<double>& intensity);
         /// Initialize a linear response table
         void computeLinearResponse(QVector<double>& intensity);
         void computePseudoGaussianWeights();

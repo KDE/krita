@@ -21,12 +21,9 @@
 #define KIS_STRATEGY_COLORSPACE_CMYK_U8_H_
 
 #include <KoLcmsColorSpace.h>
+#include <KoColorSpaceTraits.h>
 
-struct CmykU8Traits {
-    typedef quint8 channels_type;
-    static const quint32 channels_nb = 5;
-    static const qint32 alpha_pos = 4;
-};
+typedef KoColorSpaceTrait<quint8, 5, 4> CmykU8Traits;
 
 class KisCmykU8ColorSpace : public KoLcmsColorSpace<CmykU8Traits>
 {

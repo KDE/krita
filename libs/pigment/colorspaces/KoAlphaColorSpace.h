@@ -24,13 +24,9 @@
 #include <koffice_export.h>
 
 #include "KoLcmsColorSpace.h"
+#include "KoColorSpaceTraits.h"
 
-
-struct AlphaU8Traits {
-    typedef quint8 channels_type;
-    static const quint32 channels_nb = 1;
-    static const qint32 alpha_pos = 0;
-};
+typedef KoColorSpaceTrait<quint8, 1, 0> AlphaU8Traits;
 
 /**
  * The alpha mask is a special color strategy that treats all pixels as

@@ -169,11 +169,11 @@ inline half KoColorSpaceMaths<quint8,half>::scaleToA(quint8 a)
 {
     return a * ( 1.0 / 255.0 );
 }
-
+#include <kdebug.h>
 template<>
 inline quint16 KoColorSpaceMaths<half,quint16>::scaleToA(half a)
 {
-    half v = a * 0xFFFF;
+    double v = a * 0xFFFF;
     return (quint16)(CLAMP(v, 0, 0xFFFF));
 }
 

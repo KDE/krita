@@ -145,8 +145,8 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
         virtual quint8 difference(const quint8* src1U8, const quint8* src2U8) const
         {
-            const typename _CSTraits::channels_type* src1 = this->nativeArray(src1U8);
-            const typename _CSTraits::channels_type* src2 = this->nativeArray(src2U8);
+            const typename _CSTraits::channels_type* src1 = _CSTraits::nativeArray(src1U8);
+            const typename _CSTraits::channels_type* src2 = _CSTraits::nativeArray(src2U8);
             typename _CSTraits::channels_type count = 0;
             for(uint i = 0; i < this->colorChannelCount(); i++)
             {

@@ -20,15 +20,10 @@
 #ifndef KORGBU16COLORSPACE_H_
 #define KORGBU16COLORSPACE_H_
 
-#include <KoLcmsColorSpace.h>
+#include "KoLcmsColorSpace.h"
+#include "KoColorSpaceTraits.h"
 
-struct RgbU16Traits {
-    typedef quint16 channels_type;
-    static const quint32 channels_nb = 4;
-    static const qint32 alpha_pos = 3;
-};
-
-class KoRgbU16ColorSpace : public KoLcmsColorSpace<RgbU16Traits>
+class KoRgbU16ColorSpace : public KoLcmsColorSpace<KoRgbU16Traits>
 {
     public:
         KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);

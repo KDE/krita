@@ -22,12 +22,9 @@
 #include <klocale.h>
 #include <koffice_export.h>
 #include "KoLcmsColorSpace.h"
+#include <KoColorSpaceTraits.h>
 
-struct GrayAU16Traits {
-    typedef quint16 channels_type;
-    static const quint32 channels_nb = 2;
-    static const qint32 alpha_pos = 1;
-};
+typedef KoColorSpaceTrait<quint16, 2, 1> GrayAU16Traits;
 
 class KRITA_GRAY_U16_EXPORT KisGrayAU16ColorSpace : public KoLcmsColorSpace<GrayAU16Traits>
 {

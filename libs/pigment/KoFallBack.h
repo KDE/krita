@@ -123,8 +123,8 @@ class KoRGB16Fallback {
         {
             buf.resize(length);
         }
-        fallBackCS->toLabA16(src, (quint8*)buf.data(), nPixels);
-        cs->toRgbA16( (quint8*)buf.data(), dst, nPixels);
+        fallBackCS->fromLabA16(src, (quint8*)buf.data(), nPixels);
+        cs->fromRgbA16( (quint8*)buf.data(), dst, nPixels);
     }
     /**
      * Should not be called or that mean the fallback doesn't work

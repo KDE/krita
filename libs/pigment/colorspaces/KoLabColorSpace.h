@@ -20,15 +20,10 @@
 #ifndef KoLabColorSpace_H_
 #define KoLabColorSpace_H_
 
-#include <KoLcmsColorSpace.h>
+#include "KoLcmsColorSpace.h"
+#include "KoColorSpaceTraits.h"
 
-struct LabU16Traits {
-    typedef quint16 channels_type;
-    static const quint32 channels_nb = 4;
-    static const qint32 alpha_pos = 3;
-};
-
-class KoLabColorSpace : public KoLcmsColorSpace<LabU16Traits>
+class KoLabColorSpace : public KoLcmsColorSpace<KoLabU16Traits>
 {
     public:
         KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);

@@ -22,12 +22,9 @@
 #include <klocale.h>
 #include <koffice_export.h>
 #include "KoLcmsColorSpace.h"
+#include <KoColorSpaceTraits.h>
 
-struct GrayU8Traits {
-    typedef quint8 channels_type;
-    static const quint32 channels_nb = 1;
-    static const qint32 alpha_pos = -1;
-};
+typedef KoColorSpaceTrait<quint8, 1, -1> GrayU8Traits;
 
 class KRITAGRAYSCALE_EXPORT KisGrayColorSpace : public KoLcmsColorSpace<GrayU8Traits>
 {

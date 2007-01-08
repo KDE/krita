@@ -21,12 +21,9 @@
 #include "klocale.h"
 #include <koffice_export.h>
 #include "KoLcmsColorSpace.h"
+#include <KoColorSpaceTraits.h>
 
-struct RgbU8Traits {
-    typedef quint8 channels_type;
-    static const quint32 channels_nb = 4;
-    static const qint32 alpha_pos = 3;
-};
+typedef KoRgbTraits<quint8>  RgbU8Traits;
 
 const quint8 PIXEL_BLUE = 0;
 const quint8 PIXEL_GREEN = 1;

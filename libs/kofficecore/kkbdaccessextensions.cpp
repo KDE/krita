@@ -139,11 +139,11 @@ class KKbdAccessExtensionsPrivate
         }
 
         // Action that starts panel sizing (defaults to F8), forward and reverse;
-        KAction* fwdAction;
-        KAction* revAction;
+        KAction * fwdAction;
+        KAction * revAction;
 
         // Action that starts access keys.
-        KAction* accessKeysAction;
+        KAction * accessKeysAction;
 
         // The splitter or dockwindow currently being sized.  If 0, sizing is not in progress.
         QWidget* panel;
@@ -172,14 +172,14 @@ KKbdAccessExtensions::KKbdAccessExtensions(KMainWindow* parent, const char* /*na
     // kDebug() << "KKbdAccessExtensions::KKbdAccessExtensions: running." << endl;
     d = new KKbdAccessExtensionsPrivate;
     d->mainWindow = parent;
-    d->fwdAction = new KAction(i18n("Resize Panel Forward"),
-                               parent->actionCollection(), "resize_panel_forward");
+    d->fwdAction  = new KAction(i18n("Resize Panel Forward"), this);
+    parent->actionCollection()->addAction("resize_panel_forward", d->fwdAction );
     d->fwdAction->setShortcut(KShortcut("F8"));
-    d->revAction = new KAction(i18n("Resize Panel Reverse"),
-                               parent->actionCollection(), "resize_panel_reverse");
+    d->revAction  = new KAction(i18n("Resize Panel Reverse"), this);
+    parent->actionCollection()->addAction("resize_panel_reverse", d->revAction );
     d->revAction->setShortcut(KShortcut("Shift+F8"));
-    d->accessKeysAction = new KAction(i18n("Access Keys"),
-                                      parent->actionCollection(), "access_keys");
+    d->accessKeysAction  = new KAction(i18n("Access Keys"), this);
+    parent->actionCollection()->addAction("access_keys", d->accessKeysAction );
     d->accessKeysAction->setShortcut(KShortcut("Alt+F8"));
     // "Disable" the shortcuts so we can see them in eventFilter.
     d->fwdAction->setEnabled(false);
@@ -568,7 +568,7 @@ void KKbdAccessExtensions::displayAccessKeys()
     QList<KXMLGUIClient*> allClients = d->mainWindow->factory()->clients();
     foreach ( KXMLGUIClient* client, allClients )
     {
-        QList<KAction*> actions = client->actionCollection()->actions();
+        QList<QAction *> actions = client->actionCollection()->actions();
         for (int j = 0; j < (int)actions.count(); j++) {
             KShortcut sc = actions[j]->shortcut();
             for (int i = 0; i < (int)sc.count(); i++) {

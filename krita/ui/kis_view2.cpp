@@ -52,6 +52,8 @@
 #include <KoView.h>
 #include <KoToolDockerFactory.h>
 
+#include <kactioncollection.h>
+
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
 #include <kis_layer.h>
@@ -127,7 +129,7 @@ public:
     KisResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
     KisStatusBar * statusBar;
-    KAction * fullScreen;
+    QAction * fullScreen;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisBirdEyeBox * birdEyeBox;
@@ -152,9 +154,7 @@ KisView2::KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * par
     else
         setXMLFile("krita.rc");
 
-    KStandardAction::keyBindings( mainWindow()->guiFactory(),
-                             SLOT( configureShortcuts() ),
-                             actionCollection() );
+    actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT( configureShortcuts() ));
 
     m_d = new KisView2Private();
 
@@ -212,40 +212,40 @@ void KisView2::dropEvent(QDropEvent *event)
             KMenu popup(this);
             popup.setObjectName("drop_popup");
 
-            KAction insertAsNewLayer(i18n("Insert as New Layer"), 0, "insert_as_new_layer");
-            KAction insertAsNewLayers(i18n("Insert as New Layers"), 0, "insert_as_new_layers");
+            QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);
+            QAction *insertAsNewLayers = new QAction(i18n("Insert as New Layers"), &popup);
 
-            KAction openInNewDocument(i18n("Open in New Document"), 0, "open_in_new_document");
-            KAction openInNewDocuments(i18n("Open in New Documents"), 0, "open_in_new_documents");
+            QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
+            QAction *openInNewDocuments = new QAction(i18n("Open in New Documents"), &popup);
 
-            KAction cancel(i18n("Cancel"), 0, "cancel");
+            QAction *cancel = new QAction(i18n("Cancel"), &popup);
 
             if (urls.count() == 1) {
                 if (!image().isNull()) {
-                    popup.addAction(&insertAsNewLayer);
+                    popup.addAction(insertAsNewLayer);
                 }
-                popup.addAction(&openInNewDocument);
+                popup.addAction(openInNewDocument);
             }
             else {
                 if (!image().isNull()) {
-                    popup.addAction(&insertAsNewLayers);
+                    popup.addAction(insertAsNewLayers);
                 }
-                popup.addAction(&openInNewDocuments);
+                popup.addAction(openInNewDocuments);
             }
 
-            (void)popup.addSeparator();
-            popup.addAction(&cancel);
+            popup.addSeparator();
+            popup.addAction(cancel);
 
             QAction *action = popup.exec(QCursor::pos());
 
-            if (action != 0 && action != &cancel) {
+            if (action != 0 && action != cancel) {
                 for (KUrl::List::ConstIterator it = urls.begin (); it != urls.end (); ++it) {
                     KUrl url = *it;
 
-                    if (action == &insertAsNewLayer || action == &insertAsNewLayers) {
+                    if (action == insertAsNewLayer || action == insertAsNewLayers) {
                         m_d->imageManager->importImage(url);
                     } else {
-                        Q_ASSERT(action == &openInNewDocument || action == &openInNewDocuments);
+                        Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
 
                         if (shell() != 0) {
                             shell()->openDocument(url);
@@ -394,12 +394,8 @@ void KisView2::createGUI()
 
 void KisView2::createActions()
 {
-    m_d->fullScreen = KStandardAction::fullScreen( NULL, NULL, actionCollection(), this );
-    connect( m_d->fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
-
-    KStandardAction::preferences(this, SLOT(slotPreferences()), actionCollection(), "preferences");
-
-
+    actionCollection()->addAction(KStandardAction::FullScreen, "full_screen", this, SLOT( slotUpdateFullScreen( bool )));
+    actionCollection()->addAction(KStandardAction::Preferences,  "preferences", this, SLOT(slotPreferences()));
 }
 
 

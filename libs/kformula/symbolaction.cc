@@ -23,6 +23,7 @@
 
 #include <kcombobox.h>
 #include <kglobalsettings.h>
+#include <kactioncollection.h>
 #include <ktoolbar.h>
 #include <kdebug.h>
 #include <kauthorized.h>
@@ -103,9 +104,11 @@ void SymbolComboItem::paint( QPainter *p )
  * The symbol action *
  */
 SymbolAction::SymbolAction( const QString &text, KActionCollection* parent, const char* name )
-    : KSelectAction( text, parent, name )
+    : KSelectAction( text, parent )
 {
     setEditable( false );
+    if(parent)
+        parent->addAction(name, this);
 }
 
 void SymbolAction::plug( QWidget* w, int /*index*/ )

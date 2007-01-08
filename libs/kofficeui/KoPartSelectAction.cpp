@@ -20,48 +20,50 @@
 #include "KoPartSelectDia.h"
 
 #include <kdebug.h>
-//Added by qt3to4:
+#include <kactioncollection.h>
 #include <Q3ValueList>
 #include <kicon.h>
 #warning "KDE4: TODO change argument as kactionmenu (when all will compile)"
 
 KoPartSelectAction::KoPartSelectAction( const QString& text, KActionCollection* parent, const char* name )
-    : KActionMenu( text, parent, name )
+    : KActionMenu( text, parent)
 {
-    init();
+    init(parent, name);
 }
 
 KoPartSelectAction::KoPartSelectAction( const QString& text, const QString& icon,
                                         KActionCollection* parent, const char* name )
-    : KActionMenu( KIcon(icon),text, parent, name )
+    : KActionMenu( KIcon(icon),text, parent)
 {
-    init();
+    init(parent, name);
 }
 
 KoPartSelectAction::KoPartSelectAction( const QString& text, const QString& icon,
                                         QObject* receiver, const char* slot,
                                         KActionCollection* parent, const char* name )
-    : KActionMenu( KIcon(icon),text, parent, name )
+    : KActionMenu( KIcon(icon),text, parent)
 {
     if (receiver)
         connect( this, SIGNAL( activated() ), receiver, slot );
-    init();
+    init(parent, name);
 }
 
-void KoPartSelectAction::init()
+void KoPartSelectAction::init(KActionCollection *ac, const char *name)
 {
+    Q_ASSERT(ac);
     // Query for documents
     m_lstEntries = KoDocumentEntry::query();
     Q3ValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
         if (!serv->genericName().isEmpty()) {
-            KAction *action = new KAction(KIcon(serv->icon()), serv->genericName().replace('&',"&&"), parentCollection(), serv->name().toLatin1());
+            KAction *action = new KAction(KIcon(serv->icon()), serv->genericName().replace('&',"&&"), ac);
+            ac->addAction(serv->name().toLatin1(), action);
             connect(action, SIGNAL(triggered()), this, SLOT(slotActionActivated()));
             addAction( action );
         }
     }
-
+    ac->addAction(name, this);
 }
 
 // Called when selecting a part

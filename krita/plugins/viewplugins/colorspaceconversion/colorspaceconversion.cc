@@ -33,6 +33,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kactioncollection.h>
 
 #include "kis_types.h"
 #include "kis_annotation.h"
@@ -67,9 +68,11 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QStringList &)
 setXMLFile(KStandardDirs::locate("data","kritaplugins/colorspaceconversion.rc"),
 true);
 
-        KAction *action = new KAction(i18n("&Convert Image Type..."), actionCollection(), "imgcolorspaceconversion");
+        KAction *action  = new KAction(i18n("&Convert Image Type..."), this);
+        actionCollection()->addAction("imgcolorspaceconversion", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotImgColorSpaceConversion()));
-        action = new KAction(i18n("&Convert Layer Type..."), actionCollection(), "layercolorspaceconversion");
+        action  = new KAction(i18n("&Convert Layer Type..."), this);
+        actionCollection()->addAction("layercolorspaceconversion", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotLayerColorSpaceConversion()));
     }
 }

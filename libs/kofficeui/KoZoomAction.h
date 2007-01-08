@@ -28,6 +28,7 @@
 
 class QSlider;
 class QButtonGroup;
+class KActionCollection;
 
 /**
  * Class KoZoomAction implements an action to provide zoom values.
@@ -48,14 +49,14 @@ public:
    * @param zoomModes which zoom modes that should be shown
    */
   KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, const QIcon& pix,
-    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const char* name = 0 );
+    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const QString &name = QString() );
 
   /**
    * Creates a new zoom action.
    * @param zoomModes which zoom modes that should be shown
    */
   KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, const QString& pix,
-    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const char* name = 0 );
+    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const QString &name = QString() );
 
     /**
      * Reimplemented from @see QActionWidgetFactory.
@@ -121,7 +122,7 @@ Q_SIGNALS:
 
 protected:
 
-  void init(KActionCollection* parent);
+  void init(KActionCollection* parent, const QString &name);
 
   /// Regenerates the action's items
   void regenerateItems( const QString& zoomString );

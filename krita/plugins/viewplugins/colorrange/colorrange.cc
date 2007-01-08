@@ -33,6 +33,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kactioncollection.h>
 
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -57,7 +58,8 @@ ColorRange::ColorRange(QObject *parent, const QStringList &)
 setXMLFile(KStandardDirs::locate("data","kritaplugins/colorrange.rc"),
 true);
         m_view = dynamic_cast<KisView2*>(parent);
-        KAction *action = new KAction(i18n("&Color Range..."), actionCollection(), "colorrange");
+    QAction *action  = new KAction(i18n("&Color Range..."), this);
+    actionCollection()->addAction("colorrange", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
         m_view->selectionManager()->addSelectionAction(action);
     }

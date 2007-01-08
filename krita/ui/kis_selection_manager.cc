@@ -30,6 +30,7 @@
 #include <ktoggleaction.h>
 #include <klocale.h>
 #include <kstandardaction.h>
+#include <kactioncollection.h>
 
 #include "KoChannelInfo.h"
 #include "KoIntegerMaths.h"
@@ -105,126 +106,90 @@ void KisSelectionManager::setup(KActionCollection * collection)
 {
     // XXX: setup shortcuts!
 
-    m_cut = KStandardAction::cut(this,
-                            SLOT(cut()),
-                            collection,
-                            "cut");
+    m_cut = collection->addAction(KStandardAction::Cut,  "cut", this, SLOT(cut()));
+    m_copy = collection->addAction(KStandardAction::Copy,  "copy", this, SLOT(copy()));
+    m_paste = collection->addAction(KStandardAction::Paste,  "paste", this, SLOT(paste()));
 
-    m_copy = KStandardAction::copy(this,
-                              SLOT(copy()),
-                              collection,
-                              "copy");
-
-    m_paste = KStandardAction::paste(this,
-                                SLOT(paste()),
-                                collection,
-                                "paste");
-
-    m_pasteNew = new KAction(i18n("Paste into &New Image"),
-                             collection,
-                             "paste_new");
+    m_pasteNew  = new KAction(i18n("Paste into &New Image"), this);
+    collection->addAction("paste_new", m_pasteNew );
     connect(m_pasteNew, SIGNAL(triggered()), this, SLOT(pasteNew()));
 
-    m_selectAll = KStandardAction::selectAll(this,
-                                        SLOT(selectAll()),
-                                        collection,
-                                        "select_all");
+    m_selectAll = collection->addAction(KStandardAction::SelectAll,  "select_all", this, SLOT(selectAll()));
 
-    m_deselect = KStandardAction::deselect(this,
-                                      SLOT(deselect()),
-                                      collection,
-                                      "deselect");
+    m_deselect = collection->addAction(KStandardAction::Deselect,  "deselect", this, SLOT(deselect()));
 
 
-    m_clear = KStandardAction::clear(this,
-                                SLOT(clear()),
-                                collection,
-                                "clear");
+    m_clear = collection->addAction(KStandardAction::Clear,  "clear", this, SLOT(clear()));
 
-    m_reselect = new KAction(i18n("&Reselect"),
-                             collection,
-                             "reselect");
+    m_reselect  = new KAction(i18n("&Reselect"), this);
+    collection->addAction("reselect", m_reselect );
     m_reselect->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 
-    m_invert = new KAction(i18n("&Invert"),
-                           collection,
-                           "invert");
+    m_invert  = new KAction(i18n("&Invert"), this);
+    collection->addAction("invert", m_invert );
     m_invert->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));
     connect(m_invert, SIGNAL(triggered()), this, SLOT(invert()));
 
-    m_toNewLayer = new KAction(i18n("Copy Selection to New Layer"),
-                               collection,
-                               "copy_selection_to_new_layer");
+    m_toNewLayer  = new KAction(i18n("Copy Selection to New Layer"), this);
+    collection->addAction("copy_selection_to_new_layer", m_toNewLayer );
     m_toNewLayer->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_J));
     connect(m_toNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
-    m_cutToNewLayer = new KAction(i18n("Cut Selection to New Layer"),
-                                  collection,
-                                  "cut_selection_to_new_layer");
+    m_cutToNewLayer  = new KAction(i18n("Cut Selection to New Layer"), this);
+    collection->addAction("cut_selection_to_new_layer", m_cutToNewLayer );
     m_cutToNewLayer->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_J));
     connect(m_cutToNewLayer, SIGNAL(triggered()), this, SLOT(cutToNewLayer()));
 
-    m_feather = new KAction(i18n("Feather"),
-                            collection,
-                            "feather");
+    m_feather  = new KAction(i18n("Feather"), this);
+    collection->addAction("feather", m_feather );
     m_feather->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_D));
     connect(m_feather, SIGNAL(triggered()), this, SLOT(feather()));
 
-    m_fillForegroundColor = new KAction(i18n("Fill with Foreground Color"),
-                                        collection,
-                                        "fill_selection_foreground_color");
+    m_fillForegroundColor  = new KAction(i18n("Fill with Foreground Color"), this);
+    collection->addAction("fill_selection_foreground_color", m_fillForegroundColor );
     m_fillForegroundColor->setShortcut(QKeySequence(Qt::ALT+Qt::Key_Backspace));
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
-    m_fillBackgroundColor = new KAction(i18n("Fill with Background Color"),
-                                        collection,
-                                        "fill_selection_background_color");
+    m_fillBackgroundColor  = new KAction(i18n("Fill with Background Color"), this);
+    collection->addAction("fill_selection_background_color", m_fillBackgroundColor );
     m_fillBackgroundColor->setShortcut(QKeySequence(Qt::Key_Backspace));
     connect(m_fillBackgroundColor, SIGNAL(triggered()), this, SLOT(fillBackgroundColor()));
 
-    m_fillPattern = new KAction(i18n("Fill with Pattern"),
-                                collection,
-                                "fill_selection_pattern");
+    m_fillPattern  = new KAction(i18n("Fill with Pattern"), this);
+    collection->addAction("fill_selection_pattern", m_fillPattern );
     connect(m_fillPattern, SIGNAL(triggered()), this, SLOT(fillPattern()));
 
-    m_toggleDisplaySelection = new KToggleAction(i18n("Display Selection"),
-                                                 collection,
-                                                 "toggle_display_selection");
+    m_toggleDisplaySelection  = new KToggleAction(i18n("Display Selection"), this);
+    collection->addAction("toggle_display_selection", m_toggleDisplaySelection );
     m_toggleDisplaySelection->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
     connect(m_toggleDisplaySelection, SIGNAL(triggered()), this, SLOT(toggleDisplaySelection()));
 
     m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));
     m_toggleDisplaySelection->setChecked(true);
 
-    m_border = new KAction(i18n("Border..."),
-                           collection,
-                           "border");
+    m_border  = new KAction(i18n("Border..."), this);
+    collection->addAction("border", m_border );
     connect(m_border, SIGNAL(triggered()), this, SLOT(border()));
 
-    m_expand = new KAction(i18n("Expand..."),
-                           collection,
-                           "expand");
+    m_expand  = new KAction(i18n("Expand..."), this);
+    collection->addAction("expand", m_expand );
     connect(m_expand, SIGNAL(triggered()), this, SLOT(expand()));
 
-    m_smooth = new KAction(i18n("Smooth..."),
-                           collection,
-                           "smooth");
+    m_smooth  = new KAction(i18n("Smooth..."), this);
+    collection->addAction("smooth", m_smooth );
     connect(m_smooth, SIGNAL(triggered()), this, SLOT(smooth()));
 
-    m_contract = new KAction(i18n("Contract..."),
-                             collection,
-                             "contract");
+    m_contract  = new KAction(i18n("Contract..."), this);
+    collection->addAction("contract", m_contract );
     connect(m_contract, SIGNAL(triggered()), this, SLOT(contract()));
 
-    m_similar = new KAction(i18n("Similar"),
-                            collection,
-                            "similar");
+    m_similar  = new KAction(i18n("Similar"), this);
+    collection->addAction("similar", m_similar );
     connect(m_similar, SIGNAL(triggered()), this, SLOT(similar()));
 
-    m_transform = new KAction(i18n("Transform..."),
-                              collection,
-                              "transform_selection");
+    m_transform  = new KAction(i18n("Transform..."), this);
+    collection->addAction("transform_selection", m_transform );
     connect(m_transform, SIGNAL(triggered()), this, SLOT(transform()));
 
 
@@ -252,7 +217,7 @@ void KisSelectionManager::clipboardDataChanged()
 }
 
 
-void KisSelectionManager::addSelectionAction(KAction * action)
+void KisSelectionManager::addSelectionAction(QAction * action)
 {
     m_pluginActions.append(action);
 }
@@ -317,7 +282,7 @@ void KisSelectionManager::updateGUI()
 
 
     if ( !m_pluginActions.isEmpty() ) {
-        QListIterator<KAction*> i( m_pluginActions );
+        QListIterator<QAction *> i( m_pluginActions );
 
         while( i.hasNext() ) {
             i.next()->setEnabled(!img.isNull());

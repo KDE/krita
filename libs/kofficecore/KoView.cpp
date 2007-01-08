@@ -165,9 +165,9 @@ KoView::KoView( KoDocument *document, QWidget *parent )
   setupGlobalActions();
   /**** not needed anymore, according to David (Werner)
   KActionCollection *coll = actionCollection();
-  QValueList<KAction*> docActions = document->actionCollection()->actions();
-  QValueList<KAction*>::ConstIterator it = docActions.begin();
-  QValueList<KAction*>::ConstIterator end = docActions.end();
+  QValueList<QAction *> docActions = document->actionCollection()->actions();
+  QValueList<QAction *>::ConstIterator it = docActions.begin();
+  QValueList<QAction *>::ConstIterator end = docActions.end();
   for (; it != end; ++it )
       coll->insert( *it );
   */
@@ -672,8 +672,8 @@ void KoView::slotAutoScroll(  )
 
 void KoView::setupGlobalActions()
 {
-  actionNewView = new KAction( KIcon("window_new"), i18n( "&New View" ),
-                               actionCollection(), "view_newview" );
+    actionNewView  = new KAction(KIcon("window_new"), i18n("&New View"), this);
+    actionCollection()->addAction("view_newview", actionNewView );
   connect( actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()) );
 }
 

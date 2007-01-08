@@ -34,6 +34,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kstandardaction.h>
+#include <kactioncollection.h>
 
 #include "kis_config.h"
 #include "kis_image.h"
@@ -66,9 +67,12 @@ true);
         m_view = (KisView2*) parent;
 
         // Selection manager takes ownership?
-        KAction* a = new KAction(i18n("Grow selection..."), actionCollection(), "growselection");
-        KAction* b = new KAction(i18n("Shrink selection..."), actionCollection(), "shrinkselection");
-        KAction* c = new KAction(i18n("Border selection..."), actionCollection(), "borderselection");
+        KAction* a  = new KAction(i18n("Grow selection..."), this);
+        actionCollection()->addAction("growselection", a );
+        KAction* b  = new KAction(i18n("Shrink selection..."), this);
+        actionCollection()->addAction("shrinkselection", b );
+        KAction* c  = new KAction(i18n("Border selection..."), this);
+        actionCollection()->addAction("borderselection", c );
 
         Q_CHECK_PTR(a);
         Q_CHECK_PTR(b);

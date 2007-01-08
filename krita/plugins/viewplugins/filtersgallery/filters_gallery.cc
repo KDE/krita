@@ -26,6 +26,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
+#include <kactioncollection.h>
 
 #include "KoColorSpaceRegistry.h"
 
@@ -60,7 +61,8 @@ true);
 
         m_view = (KisView2*) parent;
 
-        KAction *action = new KAction(i18n("&Filters Gallery"), actionCollection(), "krita_filters_gallery");
+        KAction *action  = new KAction(i18n("&Filters Gallery"), this);
+        actionCollection()->addAction("krita_filters_gallery", action );
         connect(action, SIGNAL(triggered()), this, SLOT(showFiltersGalleryDialog()));
 
         // Add a docker with the list of filters

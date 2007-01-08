@@ -54,7 +54,6 @@
 #include <kglobalsettings.h>
 #include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
-#include <kseparatoraction.h>
 #include <kfileitem.h>
 #include <kicon.h>
 #include <QObject>
@@ -76,6 +75,7 @@
 // qt includes
 #include <QDockWidget>
 #include <QMap>
+#include <kactioncollection.h>
 
 class KoPartManager : public KParts::PartManager
 {
@@ -160,7 +160,7 @@ public:
   QList<QAction *> m_veryHackyActionList;
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
-  KAction *m_removeView;
+  QAction *m_removeView;
 //   KoMainWindowIface *m_dcopObject;
 
   QList<QAction *> m_toolbarList;
@@ -172,17 +172,17 @@ public:
   bool m_windowSizeDirty;
   bool m_readOnly;
 
-  KAction *m_paDocInfo;
-  KAction *m_paSave;
-  KAction *m_paSaveAs;
-  KAction *m_paPrint;
-  KAction *m_paPrintPreview;
-  KAction *m_sendfile;
-  KAction *m_paCloseFile;
-  KAction *m_reloadfile;
-  KAction *m_versionsfile;
-  KAction *m_importFile;
-  KAction *m_exportFile;
+  QAction *m_paDocInfo;
+  QAction *m_paSave;
+  QAction *m_paSaveAs;
+  QAction *m_paPrint;
+  QAction *m_paPrintPreview;
+  QAction *m_sendfile;
+  QAction *m_paCloseFile;
+  QAction *m_reloadfile;
+  QAction *m_versionsfile;
+  QAction *m_importFile;
+  QAction *m_exportFile;
 
   bool m_isImporting;
   bool m_isExporting;
@@ -218,38 +218,38 @@ KoMainWindow::KoMainWindow( KInstance *instance )
     setXMLFile( findMostRecentXMLFile( allFiles, doc ) );
     setLocalXMLFile( KStandardDirs::locateLocal( "data", "koffice/koffice_shell.rc" ) );
 
-    KStandardAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new" );
-    KStandardAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
+    actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
+    actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
     m_recent = KStandardAction::openRecent( this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection() );
-    d->m_paSave = KStandardAction::save( this, SLOT( slotFileSave() ), actionCollection(), "file_save" );
-    d->m_paSaveAs = KStandardAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
-    d->m_paPrint = KStandardAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
-    d->m_paPrintPreview = KStandardAction::printPreview( this, SLOT( slotFilePrintPreview() ), actionCollection(), "file_print_preview" );
-    d->m_sendfile = KStandardAction::mail( this, SLOT( slotEmailFile() ), actionCollection(), "file_send_file");
+    d->m_paSave = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT( slotFileSave() ));
+    d->m_paSaveAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT( slotFileSaveAs() ));
+    d->m_paPrint = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT( slotFilePrint() ));
+    d->m_paPrintPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT( slotFilePrintPreview() ));
+    d->m_sendfile = actionCollection()->addAction(KStandardAction::Mail,  "file_send_file", this, SLOT( slotEmailFile() ));
 
-    d->m_paCloseFile = KStandardAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
-    KStandardAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
+    d->m_paCloseFile = actionCollection()->addAction(KStandardAction::Close,  "file_close", this, SLOT( slotFileClose() ));
+    actionCollection()->addAction(KStandardAction::Quit,  "file_quit", this, SLOT( slotFileQuit() ));
 
-    d->m_reloadfile = new KAction( i18n( "Reload"),
-                                   actionCollection(), "file_reload_file");
+    d->m_reloadfile  = new KAction(i18n("Reload"), this);
+    actionCollection()->addAction("file_reload_file", d->m_reloadfile );
     connect( d->m_reloadfile, SIGNAL( triggered(bool) ), this, SLOT( slotReloadFile() ) );
 
-    d->m_versionsfile = new KAction( i18n( "Versions..."),
-                                     actionCollection(), "file_versions_file");
+    d->m_versionsfile  = new KAction(i18n("Versions..."), this);
+    actionCollection()->addAction("file_versions_file", d->m_versionsfile );
     connect( d->m_versionsfile, SIGNAL( triggered(bool) ), this, SLOT( slotVersionsFile() ) );
 
-    d->m_importFile = new KAction( i18n( "I&mport..." ),
-                                   actionCollection(), "file_import_file");
+    d->m_importFile  = new KAction(i18n("I&mport..."), this);
+    actionCollection()->addAction("file_import_file", d->m_importFile );
     connect( d->m_importFile, SIGNAL( triggered(bool) ), this, SLOT( slotImportFile() ) );
 
-    d->m_exportFile = new KAction( i18n( "E&xport..." ),
-                                   actionCollection(), "file_export_file");
+    d->m_exportFile  = new KAction(i18n("E&xport..."), this);
+    actionCollection()->addAction("file_export_file", d->m_exportFile );
     connect( d->m_exportFile, SIGNAL( triggered(bool) ), this, SLOT( slotExportFile() ) );
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->m_paDocInfo = new KAction( KIcon("documentinfo"), i18n( "&Document Information" ),
-                                  actionCollection(), "file_documentinfo" );
+    d->m_paDocInfo  = new KAction(KIcon("documentinfo"), i18n("&Document Information"), this);
+    actionCollection()->addAction("file_documentinfo", d->m_paDocInfo );
     connect( d->m_paDocInfo, SIGNAL( triggered(bool) ), this, SLOT( slotDocumentInfo() ) );
 
     KStandardAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
@@ -274,26 +274,26 @@ KoMainWindow::KoMainWindow( KInstance *instance )
     new KKbdAccessExtensions(this, "mw-panelSizer");
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
-    KAction* closeAllViews = new KAction( KIcon("fileclose"), i18n("&Close All Views"),
-                                          actionCollection(), "view_closeallviews" );
+    QAction *closeAllViews  = new KAction(KIcon("fileclose"), i18n("&Close All Views"), this);
+    actionCollection()->addAction("view_closeallviews", closeAllViews );
     closeAllViews->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
     connect( closeAllViews, SIGNAL(triggered(bool)), this, SLOT(slotCloseAllViews()) );
     d->m_veryHackyActionList.append(closeAllViews);
 
     // set up the action list for the splitter stuff
-    KAction* splitView = new KAction( KIcon("view_split"), i18n("&Split View"),
-                                     actionCollection(), "view_split");
+    QAction * splitView  = new KAction(KIcon("view_split"), i18n("&Split View"), this);
+    actionCollection()->addAction("view_split", splitView );
     connect( splitView, SIGNAL(triggered(bool)), this, SLOT(slotSplitView()) );
     d->m_splitViewActionList.append(splitView);
 
-    d->m_removeView = new KAction( KIcon("view_remove"), i18n("&Remove View"),
-                                   actionCollection(), "view_rm_splitter");
+    d->m_removeView  = new KAction(KIcon("view_remove"), i18n("&Remove View"), this);
+    actionCollection()->addAction("view_rm_splitter", d->m_removeView );
     connect( d->m_removeView, SIGNAL(triggered(bool)), this, SLOT(slotRemoveView()) );
     d->m_splitViewActionList.append(d->m_removeView);
     d->m_removeView->setEnabled(false);
 
-    d->m_orientation = new KSelectAction( KIcon("view_orientation"), i18n("Splitter &Orientation"),
-                                          actionCollection(), "view_splitter_orientation");
+    d->m_orientation  = new KSelectAction(KIcon("view_orientation"), i18n("Splitter &Orientation"), this);
+    actionCollection()->addAction("view_splitter_orientation", d->m_orientation );
     connect( d->m_orientation, SIGNAL(triggered(bool)), this, SLOT(slotSetOrientation()) );
     QStringList items;
     items << i18n("&Vertical")
@@ -301,10 +301,12 @@ KoMainWindow::KoMainWindow( KInstance *instance )
     d->m_orientation->setItems(items);
     d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
     d->m_splitViewActionList.append(d->m_orientation);
-    d->m_splitViewActionList.append(new KSeparatorAction(actionCollection()));
+    QAction *sep = new QAction(this);
+    sep->setSeparator(true);
+    d->m_splitViewActionList.append(sep);
 
-    d->m_dockWidgetMenu = new KActionMenu( i18n( "Palettes" ), actionCollection(),
-                                           "settings_palette_menu" );
+    d->m_dockWidgetMenu  = new KActionMenu(i18n("Palettes"), this);
+    actionCollection()->addAction("settings_palette_menu", d->m_dockWidgetMenu );
     d->m_dockWidgetMenu->setVisible( false );
 
     // Load list of recent files
@@ -1565,10 +1567,10 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
       KToolBar * tb = ::qobject_cast<KToolBar *>(it);
       if ( tb )
       {
-          KToggleAction * act = new KToggleAction( i18n("Show %1 Toolbar", tb->windowTitle() ),
-                                                   actionCollection(), tb->objectName().toUtf8() );
-	  act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", tb->windowTitle() )));
-	  connect( act, SIGNAL( toggled( bool ) ), this, SLOT( slotToolbarToggled( bool ) ) );
+          KToggleAction * act = new KToggleAction( i18n("Show %1 Toolbar", tb->windowTitle() ), this);
+          actionCollection()->addAction( tb->objectName().toUtf8(), act );
+          act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", tb->windowTitle() )));
+          connect( act, SIGNAL( toggled( bool ) ), this, SLOT( slotToolbarToggled( bool ) ) );
           act->setChecked ( !tb->isHidden() );
           d->m_toolbarList.append( act );
       }

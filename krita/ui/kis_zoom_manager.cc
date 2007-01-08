@@ -73,7 +73,8 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
 
     m_view->viewBar()->addAction(m_zoomAction);
 
-    m_showRulersAction = new KToggleAction( i18n("Show Rulers"), actionCollection, "view_ruler" );
+    m_showRulersAction  = new KToggleAction(i18n("Show Rulers"), this);
+    actionCollection->addAction("view_ruler", m_showRulersAction );
     m_showRulersAction->setWhatsThis( i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
                                       "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers." ) );
     connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));

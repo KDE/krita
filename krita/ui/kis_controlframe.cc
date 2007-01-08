@@ -111,29 +111,34 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView2 * view, con
     m_brushWidget->setText( i18n("Brush Shapes") );
     m_brushWidget->setToolTip( i18n("Brush Shapes") );
     // XXX: An action without a slot -- that's silly, what kind of action could we use here?
-    KAction *action = new KAction( i18n("&Brush"), view->actionCollection(), "brushes");
+    KAction *action  = new KAction(i18n("&Brush"), this);
+    view->actionCollection()->addAction("brushes", action );
 
     action->setDefaultWidget( m_brushWidget );
 
     m_patternWidget = new KisIconWidget(view, "patterns");
     m_patternWidget->setText( i18n("Fill Patterns") );
     m_patternWidget->setToolTip( i18n("Fill Patterns") );
-    action = new KAction(i18n("&Patterns"), view->actionCollection(), "patterns");
+    action  = new KAction(i18n("&Patterns"), this);
+    view->actionCollection()->addAction("patterns", action );
     action->setDefaultWidget( m_patternWidget );
 
     m_gradientWidget = new KisIconWidget(view, "gradients");
     m_gradientWidget->setText( i18n("Gradients") );
     m_gradientWidget->setToolTip( i18n("Gradients") );
-    action = new KAction( i18n("&Gradients"), view->actionCollection(), "gradients");
+    action  = new KAction(i18n("&Gradients"), this);
+    view->actionCollection()->addAction("gradients", action );
     action->setDefaultWidget( m_gradientWidget );
 
     m_paintopBox = new KisPaintopBox( view, view, "paintopbox" );
-    action = new KAction(i18n("&Painter's Tools"), view->actionCollection(), "paintops");
+    action  = new KAction(i18n("&Painter's Tools"), this);
+    view->actionCollection()->addAction("paintops", action );
     action->setDefaultWidget( m_paintopBox );
 
 /**** Temporary hack to test the KoDualColorButton ***/
    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->fgColor(), view, view);
-    action = new KAction(i18n("&Painter's Tools"), view->actionCollection(), "dual");
+    action  = new KAction(i18n("&Painter's Tools"), this);
+    view->actionCollection()->addAction("dual", action );
     action->setDefaultWidget( dual );
     connect(dual, SIGNAL(foregroundColorChanged(const KoColor &)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor &)));
     connect(dual, SIGNAL(backgroundColorChanged(const KoColor &)), view->resourceProvider(), SLOT(slotSetBGColor(const KoColor &)));

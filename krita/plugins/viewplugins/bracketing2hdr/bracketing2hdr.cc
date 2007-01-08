@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kactioncollection.h>
 
 #include <KoColorSpaceRegistry.h>
 
@@ -63,7 +64,8 @@ Bracketing2HDRPlugin::Bracketing2HDRPlugin(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/bracketing2hdr.rc"), true);
 
-        KAction *action = new KAction(i18n("HDR Layer from bracketing"), actionCollection(), "Bracketing2HDR");
+    KAction *action  = new KAction(i18n("HDR Layer from bracketing"), this);
+    actionCollection()->addAction("Bracketing2HDR", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotNewHDRLayerFromBracketing()));
     }
 }

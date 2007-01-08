@@ -18,6 +18,7 @@
 */
 
 #include <klocale.h>
+#include <kactioncollection.h>
 #include <kiconloader.h>
 #include <kinstance.h>
 #include <kmessagebox.h>
@@ -38,7 +39,8 @@ Scan::Scan(QObject *parent, const QStringList &)
 {
     setInstance(ScanFactory::instance());
 
-    KAction *action = new KAction(KIcon("scanner"), i18n("&Scan Image..."), actionCollection(), "scan_image");
+    KAction *action  = new KAction(KIcon("scanner"), i18n("&Scan Image..."), this);
+    actionCollection()->addAction("scan_image", action );
     connect(action, SIGNAL(triggered(bool)), SLOT(slotScan()));
 }
 

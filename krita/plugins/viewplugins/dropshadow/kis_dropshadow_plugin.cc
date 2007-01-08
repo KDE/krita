@@ -25,6 +25,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kactioncollection.h>
 
 #include "kis_view2.h"
 #include "kis_types.h"
@@ -51,7 +52,8 @@ setXMLFile(KStandardDirs::locate("data","kritaplugins/dropshadow.rc"),
 true);
 
         m_view = (KisView2*) parent;
-        KAction *action = new KAction(i18n("Add Drop Shadow..."), actionCollection(), "dropshadow");
+        KAction *action  = new KAction(i18n("Add Drop Shadow..."), this);
+        actionCollection()->addAction("dropshadow", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotDropshadow()));
     }
 }

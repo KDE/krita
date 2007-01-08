@@ -33,6 +33,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kactioncollection.h>
 
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -59,10 +60,12 @@ K_EXPORT_COMPONENT_FACTORY( kritashearimage, ShearImageFactory( "krita" ) )
         setXMLFile(KStandardDirs::locate("data","kritaplugins/shearimage.rc"),
                    true);
 
-        KAction *action = new KAction(i18n("&Shear Image..."), actionCollection(), "shearimage");
+        KAction *action  = new KAction(i18n("&Shear Image..."), this);
+        actionCollection()->addAction("shearimage", action );
         connect(action,  SIGNAL(triggered()), this, SLOT(slotShearImage()));
 
-        action = new KAction(i18n("&Shear Layer..."), actionCollection(), "shearlayer");
+        action  = new KAction(i18n("&Shear Layer..."), this);
+        actionCollection()->addAction("shearlayer", action );
         connect(action,  SIGNAL(triggered()), this, SLOT(slotShearLayer()));
 
         m_view = (KisView2*) parent;

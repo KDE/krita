@@ -27,6 +27,7 @@
 class QRect;
 
 class KAction;
+class QAction;
 class KToggleAction;
 class KActionCollection;
 
@@ -54,7 +55,7 @@ public:
     ~KisLayerManager();
 
     void setup(KActionCollection * collection);
-    void addAction(KAction * action);
+    void addAction(QAction * action);
 
     void updateGUI();
 
@@ -119,24 +120,24 @@ private:
     KisView2 * m_view;
     KisDoc2 * m_doc;
 
-    QList<KAction*> m_pluginActions;
+    QList<QAction*> m_pluginActions;
 
-    KAction *m_imgFlatten;
-    KAction *m_imgMergeLayer;
+    QAction *m_imgFlatten;
+    QAction *m_imgMergeLayer;
     KoPartSelectAction * m_actionPartLayer;
-    KAction * m_actionAdjustmentLayer;
-    KAction *m_layerAdd;
-    KAction *m_layerBottom;
-    KAction *m_layerDup;
+    QAction * m_actionAdjustmentLayer;
+    QAction *m_layerAdd;
+    QAction *m_layerBottom;
+    QAction *m_layerDup;
     KToggleAction *m_layerHide;
-    KAction *m_layerLower;
-    KAction *m_layerProperties;
-    KAction *m_layerRaise;
-    KAction *m_layerRm;
-    KAction *m_layerSaveAs;
-    KAction *m_layerTop;
+    QAction *m_layerLower;
+    QAction *m_layerProperties;
+    QAction *m_layerRaise;
+    QAction *m_layerRm;
+    QAction *m_layerSaveAs;
+    QAction *m_layerTop;
     bool m_actLayerVis;
-    KAction *m_imgResizeToLayer;
+    QAction *m_imgResizeToLayer;
 };
 
 #endif

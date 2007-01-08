@@ -25,6 +25,8 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
+class KActionCollection;
+
 /**
  * An action for inserting an embedded object.
  * In a toolbar it presents itself as a button that opens the part-select dialog,
@@ -46,7 +48,7 @@ public:
     //virtual void plug(QWidget* widget, int index);
 
 protected:
-    void init();
+    void init(KActionCollection *ac, const char *name);
 
 protected slots:
     virtual void slotActivated();

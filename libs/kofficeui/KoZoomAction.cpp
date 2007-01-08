@@ -19,7 +19,7 @@
 */
 #include <math.h>
 
-#include <KoZoomAction.h>
+#include "KoZoomAction.h"
 
 #include <QString>
 #include <QStringList>
@@ -39,26 +39,27 @@
 #include <kicon.h>
 #include <knuminput.h>
 #include <kstandardaction.h>
+#include <kactioncollection.h>
 #include <kdebug.h>
 
 #include <KoZoomMode.h>
 
 KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, const QIcon& pix,
-  const KShortcut& cut, KActionCollection* parent, const char* name ):
-  KSelectAction( KIcon(pix), text, parent, name ), m_zoomModes( zoomModes )
+  const KShortcut& cut, KActionCollection* parent, const QString &name ):
+  KSelectAction( KIcon(pix), text, parent), m_zoomModes( zoomModes )
 {
     setShortcut(cut);
 
-    init(parent);
+    init(parent, name);
 }
 
 KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, const QString& pix,
-  const KShortcut& cut, KActionCollection* parent, const char* name ):
-  KSelectAction( KIcon(pix), text, parent, name ), m_zoomModes( zoomModes )
+  const KShortcut& cut, KActionCollection* parent, const QString &name ):
+  KSelectAction( KIcon(pix), text, parent), m_zoomModes( zoomModes )
 {
     setShortcut(cut);
 
-    init(parent);
+    init(parent, name);
 }
 
 void KoZoomAction::setZoom( const QString& text )
@@ -97,23 +98,24 @@ void KoZoomAction::triggered( const QString& text )
     emit zoomChanged( mode, zoom );
 }
 
-void KoZoomAction::init(KActionCollection* parent)
+void KoZoomAction::init(KActionCollection* parent, const QString &name)
 {
     m_slider = 0;
     m_number = 0;
     m_zoomButtonGroup = 0;
 
-    KStandardAction::zoomIn(this, SLOT(zoomIn()), parent, "zoom_in");
-    KStandardAction::zoomOut(this, SLOT(zoomOut()), parent, "zoom_out");
+    parent->addAction(KStandardAction::ZoomIn,  "zoom_in", this, SLOT(zoomIn()));
+    parent->addAction(KStandardAction::ZoomOut,  "zoom_out", this, SLOT(zoomOut()));
 
 /*
-    m_actualPixels = new KAction(i18n("Actual Pixels"), actionCollection, "actual_pixels");
+    m_actualPixels  = new KAction(i18n("Actual Pixels"), this);
+    actionCollection()->addAction("actual_pixels", m_actualPixels );
     m_actualPixels->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_0));
     connect(m_actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
 
-    m_actualSize = KStandardAction::actualSize(this, SLOT(slotActualSize()), actionCollection, "actual_size");
+    m_actualSize = actionCollection()->addAction(KStandardAction::ActualSize,  "actual_size", this, SLOT(slotActualSize()));
 
-    m_fitToCanvas = KStandardAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection, "fit_to_canvas");
+    m_fitToCanvas = actionCollection()->addAction(KStandardAction::FitToPage,  "fit_to_canvas", this, SLOT(slotFitToCanvas()));
 */
 
     setEditable( true );
@@ -128,6 +130,7 @@ void KoZoomAction::init(KActionCollection* parent)
     m_effectiveZoom = 100;
 
     connect( this, SIGNAL( triggered( const QString& ) ), SLOT( triggered( const QString& ) ) );
+    parent->addAction(name, parent);
 }
 
 void KoZoomAction::setZoomModes( KoZoomMode::Modes zoomModes )

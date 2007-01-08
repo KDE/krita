@@ -99,15 +99,18 @@ KisLayerManager::~KisLayerManager()
 
 void KisLayerManager::setup(KActionCollection * actionCollection)
 {
-    m_imgFlatten = new KAction(i18n("&Flatten image"), actionCollection, "flatten_image");
+    m_imgFlatten  = new KAction(i18n("&Flatten image"), this);
+    actionCollection->addAction("flatten_image", m_imgFlatten );
     m_imgFlatten->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
     connect(m_imgFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
 
-    m_imgMergeLayer = new KAction(i18n("&Merge with Layer Below"), actionCollection, "merge_layer");
+    m_imgMergeLayer  = new KAction(i18n("&Merge with Layer Below"), this);
+    actionCollection->addAction("merge_layer", m_imgMergeLayer );
     m_imgMergeLayer->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
     connect(m_imgMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
-    m_layerAdd = new KAction(i18n("&Add..."), actionCollection, "insert_layer");
+    m_layerAdd  = new KAction(i18n("&Add..."), this);
+    actionCollection->addAction("insert_layer", m_layerAdd );
     m_layerAdd->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     connect(m_layerAdd, SIGNAL(triggered()), this, SLOT(layerAdd()));
 
@@ -115,54 +118,67 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
                                                     this, SLOT( addPartLayer() ),
                                                     actionCollection, "insert_part_layer" );
 
-    m_actionAdjustmentLayer = new KAction(i18n( "&Adjustment Layer" ), actionCollection, "insert_adjustment_layer");
+    m_actionAdjustmentLayer  = new KAction(i18n("&Adjustment Layer"), this);
+    actionCollection->addAction("insert_adjustment_layer", m_actionAdjustmentLayer );
     connect(m_actionAdjustmentLayer, SIGNAL(triggered()), this, SLOT(addAdjustmentLayer()));
 
-    m_layerRm = new KAction(i18n("&Remove"), actionCollection, "remove_layer");
+    m_layerRm  = new KAction(i18n("&Remove"), this);
+    actionCollection->addAction("remove_layer", m_layerRm );
     connect(m_layerRm, SIGNAL(triggered()), this, SLOT(layerRemove()));
 
-    m_layerDup = new KAction(i18n("Duplicate"), actionCollection, "duplicate_layer");
+    m_layerDup  = new KAction(i18n("Duplicate"), this);
+    actionCollection->addAction("duplicate_layer", m_layerDup );
     connect(m_layerDup, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 
-    m_layerHide = new KToggleAction(i18n("&Hide"), actionCollection, "hide_layer");
+    m_layerHide  = new KToggleAction(i18n("&Hide"), this);
+    actionCollection->addAction("hide_layer", m_layerHide );
     connect(m_layerHide, SIGNAL(triggered()), this,  SLOT(layerToggleVisible()));
 
     m_layerHide->setCheckedState(KGuiItem(i18n("&Show")));
     m_layerHide->setChecked(false);
 
-    m_layerRaise = new KAction(KIcon("raise"), i18n("Raise"), actionCollection, "raiselayer");
+    m_layerRaise  = new KAction(KIcon("raise"), i18n("Raise"), this);
+    actionCollection->addAction("raiselayer", m_layerRaise );
     m_layerRaise->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_BracketRight));
     connect(m_layerRaise, SIGNAL(triggered()), this, SLOT(layerRaise()));
 
-    m_layerLower = new KAction(KIcon("lower"), i18n("Lower"), actionCollection, "lowerlayer");
+    m_layerLower  = new KAction(KIcon("lower"), i18n("Lower"), this);
+    actionCollection->addAction("lowerlayer", m_layerLower );
     m_layerLower->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_BracketLeft));
     connect(m_layerLower, SIGNAL(triggered()), this, SLOT(layerLower()));
 
-    m_layerTop = new KAction(KIcon("bring_forward"), i18n ("To Top"), actionCollection, "toplayer");
+    m_layerTop  = new KAction(KIcon("bring_forward"), i18n("To Top"), this);
+    actionCollection->addAction("toplayer", m_layerTop );
     m_layerTop->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketRight));
     connect(m_layerTop, SIGNAL(triggered()), this, SLOT(layerFront()));
 
-    m_layerBottom = new KAction(KIcon("send_backward"), i18n("To Bottom"), actionCollection, "bottomlayer");
+    m_layerBottom  = new KAction(KIcon("send_backward"), i18n("To Bottom"), this);
+    actionCollection->addAction("bottomlayer", m_layerBottom );
     m_layerBottom->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketLeft));
     connect(m_layerBottom, SIGNAL(triggered()), this, SLOT(layerBack()));
 
-    m_layerProperties = new KAction(i18n("Properties..."), actionCollection, "layer_properties");
+    m_layerProperties  = new KAction(i18n("Properties..."), this);
+    actionCollection->addAction("layer_properties", m_layerProperties );
     connect(m_layerProperties, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
-    m_layerSaveAs = new KAction(KIcon("filesave"), i18n("Save Layer as Image..."), actionCollection, "save_layer_as_image");
+    m_layerSaveAs  = new KAction(KIcon("filesave"), i18n("Save Layer as Image..."), this);
+    actionCollection->addAction("save_layer_as_image", m_layerSaveAs );
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 
-    KAction * action = new KAction(KIcon("view_left_right"), i18n ("Flip on &X Axis"), actionCollection, "mirrorLayerX");
+    KAction * action  = new KAction(KIcon("view_left_right"), i18n("Flip on &X Axis"), this);
+    actionCollection->addAction("mirrorLayerX", action );
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerX()));
 
-    action = new KAction(KIcon("view_top_bottom"), i18n("Flip on &Y Axis"), actionCollection, "mirrorLayerY");
+    action  = new KAction(KIcon("view_top_bottom"), i18n("Flip on &Y Axis"), this);
+    actionCollection->addAction("mirrorLayerY", action );
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerY()));
 
-    m_imgResizeToLayer = new KAction(i18n("Resize Image to Size of Current Layer"), actionCollection, "resizeimgtolayer");
+    m_imgResizeToLayer  = new KAction(i18n("Resize Image to Size of Current Layer"), this);
+    actionCollection->addAction("resizeimgtolayer", m_imgResizeToLayer );
     connect(m_imgResizeToLayer, SIGNAL(triggered()), this, SLOT(imgResizeToActiveLayer()));
 }
 
-void KisLayerManager::addAction(KAction * action)
+void KisLayerManager::addAction(QAction * action)
 {
     m_pluginActions.append(action);
 }

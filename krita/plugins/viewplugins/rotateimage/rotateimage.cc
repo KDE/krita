@@ -33,6 +33,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kactioncollection.h>
 #include <kicon.h>
 #include <kis_config.h>
 #include <kis_image.h>
@@ -61,28 +62,36 @@ setXMLFile(KStandardDirs::locate("data","kritaplugins/rotateimage.rc"),
 true);
         m_view = (KisView2*) parent;
 
-        KAction *action = new KAction(i18n("&Rotate Image..."), actionCollection(), "rotateimage");
+        KAction *action  = new KAction(i18n("&Rotate Image..."), this);
+        actionCollection()->addAction("rotateimage", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage()));
 
-        action = new KAction(KIcon("rotate_cw"), i18n("Rotate Image CW"), actionCollection(), "rotateImageCW90");
+        action  = new KAction(KIcon("rotate_cw"), i18n("Rotate Image CW"), this);
+        actionCollection()->addAction("rotateImageCW90", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage90()));
 
-        action = new KAction(i18n("Rotate Image 1&80"), actionCollection(), "rotateImage180");
+        action  = new KAction(i18n("Rotate Image 1&80"), this);
+        actionCollection()->addAction("rotateImage180", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage180()));
 
-        action = new KAction(KIcon("rotate_ccw"), i18n("Rotate Image CCW"), actionCollection(), "rotateImageCCW90");
+        action  = new KAction(KIcon("rotate_ccw"), i18n("Rotate Image CCW"), this);
+        actionCollection()->addAction("rotateImageCCW90", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage270()));
 
-        action = new KAction(i18n("&Rotate Layer..."), actionCollection(), "rotatelayer");
+        action  = new KAction(i18n("&Rotate Layer..."), this);
+        actionCollection()->addAction("rotatelayer", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateLayer()));
 
-        action = new KAction(i18n("Rotate 1&80"), actionCollection(), "rotateLayer180");
+        action  = new KAction(i18n("Rotate 1&80"), this);
+        actionCollection()->addAction("rotateLayer180", action );
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayer180()));
 
-        action = new KAction(KIcon("rotate_ccw"), i18n("Rotate CCW"), actionCollection(), "rotateLayerCCW90");
+        action  = new KAction(KIcon("rotate_ccw"), i18n("Rotate CCW"), this);
+        actionCollection()->addAction("rotateLayerCCW90", action );
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerLeft90()));
 
-        action = new KAction(KIcon("rotate_cw"), i18n("Rotate CW"), actionCollection(), "rotateLayerCW90");
+        action  = new KAction(KIcon("rotate_cw"), i18n("Rotate CW"), this);
+        actionCollection()->addAction("rotateLayerCW90", action );
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerRight90()));
     }
 }

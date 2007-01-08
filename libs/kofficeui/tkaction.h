@@ -24,6 +24,7 @@
 
 #include <kaction.h>
 #include <QStringList>
+#include <kactioncollection.h>
 #include <koffice_export.h>
 
 // TODO Remove as we can use the Qt enum for this

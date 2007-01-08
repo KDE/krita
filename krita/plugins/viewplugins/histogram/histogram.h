@@ -42,7 +42,7 @@ class Histogram : public KParts::Plugin
         KisImage* m_img;
         KisView2 * m_view;
         KisPainter * m_painter;
-        KAction* m_action;
+        QAction * m_action;
 
 };
 

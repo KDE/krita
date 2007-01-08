@@ -42,6 +42,7 @@
 #include <QString>
 #include <ktoolinvocation.h>
 #include <ktoggleaction.h>
+#include <kactioncollection.h>
 #include <QAbstractEventDispatcher>
 
 KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* /*name*/ )
@@ -514,15 +515,17 @@ void KoContextHelpPopup::keyReleaseEvent( QKeyEvent* e )
 } // KoContextHelpPopup::keyPressEvent
 
 KoContextHelpAction::KoContextHelpAction( KActionCollection* parent, QWidget* /*popupParent*/ )
-		: KToggleAction( KIcon(BarIcon("help")), i18n("Context Help"), parent, "help_context" )
+    : KToggleAction( KIcon(BarIcon("help")), i18n("Context Help"), parent)
 {
+    Q_ASSERT(parent);
     setShortcut(KShortcut("CTRL+Qt::SHIFT+F1"));
 
 	m_popup = new KoContextHelpPopup( 0L );
 	connect( m_popup, SIGNAL( wantsToBeClosed() ), this, SLOT( closePopup() ) );
 	connect( this, SIGNAL( toggled( bool ) ), m_popup, SLOT( setShown( bool ) ) );
 	connect( m_popup, SIGNAL( linkClicked( const QString& ) ), this, SIGNAL( linkClicked( const QString& ) ) );
-} // KoContextHelpAction::KoContextHelpAction
+    parent->addAction("help_context", this );
+}
 
 KoContextHelpAction::~KoContextHelpAction()
 {

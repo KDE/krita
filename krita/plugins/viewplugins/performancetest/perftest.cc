@@ -85,7 +85,8 @@ PerfTest::PerfTest(QObject *parent, const QStringList &)
 setXMLFile(KStandardDirs::locate("data","kritaplugins/perftest.rc"),
 true);
 
-        KAction *action = new KAction(i18n("&Performance Test..."), actionCollection(), "perf_test");
+    KAction *action  = new KAction(i18n("&Performance Test..."), this);
+    actionCollection()->addAction("perf_test", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotPerfTest()));
         m_view = (KisView2*) parent;
     }

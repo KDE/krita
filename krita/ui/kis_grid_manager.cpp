@@ -30,6 +30,7 @@
 
 #include <kaction.h>
 #include <ktoggleaction.h>
+#include <kactioncollection.h>
 #include <kdialog.h>
 #include <klocale.h>
 
@@ -52,29 +53,36 @@ KisGridManager::~KisGridManager()
 
 void KisGridManager::setup(KActionCollection * collection)
 {
-    m_toggleGrid = new KToggleAction(i18n("Show Grid"), collection, "view_toggle_grid");
+    m_toggleGrid  = new KToggleAction(i18n("Show Grid"), this);
+    collection->addAction("view_toggle_grid", m_toggleGrid );
     connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleGrid()));
 
     m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Grid")));
     m_toggleGrid->setChecked(false);
 
     // Fast grid config
-    m_gridFastConfig1x1 = new KAction(i18n("1x1"), collection, "view_fast_grid_1x1");
+    m_gridFastConfig1x1  = new KAction(i18n("1x1"), this);
+    collection->addAction("view_fast_grid_1x1", m_gridFastConfig1x1 );
     connect(m_gridFastConfig1x1, SIGNAL(triggered()), this, SLOT(fastConfig1x1()));
 
-    m_gridFastConfig2x2 = new KAction(i18n("2x2"), collection, "view_fast_grid_2x2");
+    m_gridFastConfig2x2  = new KAction(i18n("2x2"), this);
+    collection->addAction("view_fast_grid_2x2", m_gridFastConfig2x2 );
     connect(m_gridFastConfig2x2, SIGNAL(triggered()), this, SLOT(fastConfig2x2()));
 
-    m_gridFastConfig5x5 = new KAction(i18n("5x5"), collection, "view_fast_grid_5x5");
+    m_gridFastConfig5x5  = new KAction(i18n("5x5"), this);
+    collection->addAction("view_fast_grid_5x5", m_gridFastConfig5x5 );
     connect(m_gridFastConfig5x5, SIGNAL(triggered()), this, SLOT(fastConfig5x5()));
 
-    m_gridFastConfig10x10 = new KAction(i18n("10x10"), collection, "view_fast_grid_10x10");
+    m_gridFastConfig10x10  = new KAction(i18n("10x10"), this);
+    collection->addAction("view_fast_grid_10x10", m_gridFastConfig10x10 );
     connect(m_gridFastConfig10x10, SIGNAL(triggered()), this, SLOT(fastConfig10x10()));
 
-    m_gridFastConfig20x20 = new KAction(i18n("20x20"), collection, "view_fast_grid_20x20");
+    m_gridFastConfig20x20  = new KAction(i18n("20x20"), this);
+    collection->addAction("view_fast_grid_20x20", m_gridFastConfig20x20 );
     connect(m_gridFastConfig20x20, SIGNAL(triggered()), this, SLOT(fastConfig20x20()));
 
-    m_gridFastConfig40x40 = new KAction(i18n("40x40"), collection, "view_fast_grid_40x40");
+    m_gridFastConfig40x40  = new KAction(i18n("40x40"), this);
+    collection->addAction("view_fast_grid_40x40", m_gridFastConfig40x40 );
     connect(m_gridFastConfig40x40, SIGNAL(triggered()), this, SLOT(fastConfig40x40()));
 }
 

@@ -127,7 +127,7 @@ void KoToolManager::registerTools(KActionCollection *ac) {
 
     class ToolSwitchAction : public KAction {
       public:
-        ToolSwitchAction(KActionCollection *parent, const QString &name, const QString &toolId) : KAction(parent, name) {
+        ToolSwitchAction(KActionCollection *parent, const QString &toolId) : KAction(parent) {
             m_toolId = toolId;
         }
       private:
@@ -138,7 +138,8 @@ void KoToolManager::registerTools(KActionCollection *ac) {
     };
 
     foreach(ToolHelper *th, m_tools) {
-        ToolSwitchAction *tsa = new ToolSwitchAction(ac, "tools"+ th->name(), th->id());
+        ToolSwitchAction *tsa = new ToolSwitchAction(ac, th->id());
+        ac->addAction("tools"+ th->name(), tsa);
         //tsa->setShortcut(th->shortcut()); // this crashes currently, lets try tomorrow with the kdelibs updates
         tsa->setText(i18n("Activate %1", th->name()));
     }

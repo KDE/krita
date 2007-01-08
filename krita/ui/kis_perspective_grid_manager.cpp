@@ -24,6 +24,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktoggleaction.h>
+#include <kactioncollection.h>
 
 #include "kis_image.h"
 #include "kis_grid_drawer.h"
@@ -58,12 +59,14 @@ void KisPerspectiveGridManager::setup(KActionCollection * collection)
 {
 
 
-    m_toggleGrid = new KToggleAction(i18n("Show Perspective Grid"), collection, "view_toggle_perspective_grid");
+    m_toggleGrid  = new KToggleAction(i18n("Show Perspective Grid"), this);
+    collection->addAction("view_toggle_perspective_grid", m_toggleGrid );
     connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleGrid()));
 
     m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Perspective Grid")));
     m_toggleGrid->setChecked(false);
-    m_gridClear = new KAction(i18n("Clear Perspective Grid"), collection, "view_clear_perspective_grid");
+    m_gridClear  = new KAction(i18n("Clear Perspective Grid"), this);
+    collection->addAction("view_clear_perspective_grid", m_gridClear );
     connect(m_gridClear, SIGNAL(triggered()), this, SLOT(clearPerspectiveGrid()));
 }
 

@@ -25,6 +25,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kactioncollection.h>
 
 #include <kis_view2.h>
 #include <kis_types.h>
@@ -47,7 +48,8 @@ KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QStr
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/imageseparate.rc"), true);
         m_view = (KisView2*) parent;
-        KAction *action = new KAction(i18n("Separate Image..."), actionCollection(), "separate");
+        KAction *action  = new KAction(i18n("Separate Image..."), this);
+        actionCollection()->addAction("separate", action );
         connect(action, SIGNAL(triggered(bool) ), SLOT(slotSeparate()));
     }
 }

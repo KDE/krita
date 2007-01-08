@@ -27,7 +27,7 @@
 #include <kmessagebox.h>
 #include <kguiitem.h>
 #include <kactionmenu.h>
-#include <kactionmenu.h>
+#include <kactioncollection.h>
 
 #include "KoID.h"
 
@@ -55,7 +55,7 @@ public:
     KisView2 * view;
     KisDoc2 * doc;
 
-    KAction * reapplyAction;
+    QAction * reapplyAction;
 
     Q3PtrList<KAction> filterActions;
 
@@ -126,63 +126,75 @@ void KisFilterManager::setup(KActionCollection * ac)
 
         QString s = f->menuCategory();
         if (s == "adjust" && !m_d->filterActionMenus.find("adjust")) {
-            am = new KActionMenu(i18n("Adjust"), ac, "adjust_filters");
+            am  = new KActionMenu(i18n("Adjust"), this);
+            ac->addAction("adjust_filters", am );
             m_d->filterActionMenus.insert("adjust", am);
         }
 
         else if (s == "artistic" && !m_d->filterActionMenus.find("artistic")) {
-            am = new KActionMenu(i18n("Artistic"), ac, "artistic_filters");
+            am  = new KActionMenu(i18n("Artistic"), this);
+            ac->addAction("artistic_filters", am );
             m_d->filterActionMenus.insert("artistic", am);
         }
 
         else if (s == "blur" && !m_d->filterActionMenus.find("blur")) {
-            am = new KActionMenu(i18n("Blur"), ac, "blur_filters");
+            am  = new KActionMenu(i18n("Blur"), this);
+            ac->addAction("blur_filters", am );
             m_d->filterActionMenus.insert("blur", am);
         }
 
         else if (s == "colors" && !m_d->filterActionMenus.find("colors")) {
-            am = new KActionMenu(i18n("Colors"), ac, "color_filters");
+            am  = new KActionMenu(i18n("Colors"), this);
+            ac->addAction("color_filters", am );
             m_d->filterActionMenus.insert("colors", am);
         }
 
         else if (s == "decor" && !m_d->filterActionMenus.find("decor")) {
-            am = new KActionMenu(i18n("Decor"), ac, "decor_filters");
+            am  = new KActionMenu(i18n("Decor"), this);
+            ac->addAction("decor_filters", am );
             m_d->filterActionMenus.insert("decor", am);
         }
 
         else if (s == "edge" && !m_d->filterActionMenus.find("edge")) {
-            am = new KActionMenu(i18n("Edge Detection"), ac, "edge_filters");
+            am  = new KActionMenu(i18n("Edge Detection"), this);
+            ac->addAction("edge_filters", am );
             m_d->filterActionMenus.insert("edge", am);
         }
 
         else if (s == "emboss" && !m_d->filterActionMenus.find("emboss")) {
-            am = new KActionMenu(i18n("Emboss"), ac, "emboss_filters");
+            am  = new KActionMenu(i18n("Emboss"), this);
+            ac->addAction("emboss_filters", am );
             m_d->filterActionMenus.insert("emboss", am);
         }
 
         else if (s == "enhance" && !m_d->filterActionMenus.find("enhance")) {
-            am = new KActionMenu(i18n("Enhance"), ac, "enhance_filters");
+            am  = new KActionMenu(i18n("Enhance"), this);
+            ac->addAction("enhance_filters", am );
             m_d->filterActionMenus.insert("enhance", am);
         }
 
         else if (s == "map" && !m_d->filterActionMenus.find("map")) {
-            am = new KActionMenu(i18n("Map"), ac, "map_filters");
+            am  = new KActionMenu(i18n("Map"), this);
+            ac->addAction("map_filters", am );
             m_d->filterActionMenus.insert("map", am);
         }
 
         else if (s == "nonphotorealistic" && !m_d->filterActionMenus.find("nonphotorealistic")) {
-            am = new KActionMenu(i18n("Non-photorealistic"), ac, "nonphotorealistic_filters");
+            am  = new KActionMenu(i18n("Non-photorealistic"), this);
+            ac->addAction("nonphotorealistic_filters", am );
             m_d->filterActionMenus.insert("nonphotorealistic", am);
         }
 
         else if (s == "other" && !m_d->filterActionMenus.find("other")) {
-            other = new KActionMenu(i18n("Other"), ac, "misc_filters");
+            other  = new KActionMenu(i18n("Other"), this);
+            ac->addAction("misc_filters", other );
             m_d->filterActionMenus.insert("other", am);
         }
 
     }
 
-    m_d->reapplyAction = new KAction(i18n("Apply Filter Again"), ac, "filter_apply_again");
+    m_d->reapplyAction  = new KAction(i18n("Apply Filter Again"), this);
+    ac->addAction("filter_apply_again", m_d->reapplyAction );
     m_d->reapplyAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
     connect(m_d->reapplyAction, SIGNAL(triggered()), this , SLOT(slotApply()));
 
@@ -196,7 +208,8 @@ void KisFilterManager::setup(KActionCollection * ac)
         if (!f) break;
 
         // Create action
-        KAction * a = new KAction(f->menuEntry(), ac, QString("krita_filter_%1").arg((*it).id()).toAscii());
+        KAction * a = new KAction(f->menuEntry(), this);
+        ac->addAction(QString("krita_filter_%1").arg((*it).id()).toAscii(), a);
         connect(a, SIGNAL(triggered()), m_d->filterMapper, SLOT(map()));
 
 
@@ -207,7 +220,8 @@ void KisFilterManager::setup(KActionCollection * ac)
         }
         else {
             if (!other) {
-                other = new KActionMenu(i18n("Other"), ac, "misc_filters");
+                other  = new KActionMenu(i18n("Other"), this);
+                ac->addAction("misc_filters", other );
                 m_d->filterActionMenus.insert("other", am);
             }
             other->addAction(a);
@@ -248,7 +262,7 @@ void KisFilterManager::updateGUI()
     else
         m_d->reapplyAction->setText(i18n("Apply Filter Again"));
 
-    KAction * a;
+    QAction * a;
     int i = 0;
     for (a = m_d->filterActions.first(); a; a = m_d->filterActions.next(), i++) {
         // XXX: This should always be true: investigate later! BSAR

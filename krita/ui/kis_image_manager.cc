@@ -25,6 +25,7 @@
 #include <kurl.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
+#include <kactioncollection.h>
 
 #include <KoFilterManager.h>
 
@@ -48,10 +49,12 @@ KisImageManager::KisImageManager( KisView2 * view)
 
 void KisImageManager::setup( KActionCollection * actionCollection )
 {
-    KAction *action = new KAction(i18n("I&nsert Image as Layer..."), actionCollection, "insert_image_as_layer");
+    KAction *action  = new KAction(i18n("I&nsert Image as Layer..."), this);
+    actionCollection->addAction("insert_image_as_layer", action );
     connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
 
-    action = new KAction(i18n("Image Properties..."), actionCollection, "img_properties");
+    action  = new KAction(i18n("Image Properties..."), this);
+    actionCollection->addAction("img_properties", action );
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }
 

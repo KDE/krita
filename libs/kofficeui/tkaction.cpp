@@ -47,10 +47,11 @@
 #endif
 
 TKAction::TKAction(KActionCollection* parent, const char* name)
-: KAction( "", parent, name )
+: KAction( "", parent )
 {
   m_imode = TK::IconOnly;
-  
+    if(parent)
+        parent->addAction(name, this);
 }
 
 TKAction::~TKAction()

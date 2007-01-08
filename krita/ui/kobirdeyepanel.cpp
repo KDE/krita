@@ -79,10 +79,10 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
     m_page->view->setAutoFillBackground(false);
     m_page->view->setAttribute(Qt::WA_OpaquePaintEvent);
 
-    m_zoomIn = new KAction(KIcon("birdeye_zoom_plus"), i18n("Zoom In"), 0, "zoomIn");
+    m_zoomIn  = new KAction(KIcon("birdeye_zoom_plus"), i18n("Zoom In"), this);
     connect(m_zoomIn, SIGNAL(triggered()), this, SLOT(zoomPlus()));
 
-    m_zoomOut = new KAction(KIcon("birdeye_zoom_minus"), i18n("Zoom Out"), 0, "zoomOut");
+    m_zoomOut  = new KAction(KIcon("birdeye_zoom_minus"), i18n("Zoom Out"), this);
     connect(m_zoomOut, SIGNAL(triggered()), this, SLOT(zoomMinus()));
 
     l->addWidget(m_page);

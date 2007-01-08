@@ -36,6 +36,8 @@
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <koffice_export.h>
+
+class KActionCollection;
 class QPixmap;
 class QLabel;
 class Q3SimpleRichText;
@@ -220,6 +222,7 @@ class KoContextHelpPopup : public QWidget
  */
 class KOFFICEUI_EXPORT KoContextHelpAction : public KToggleAction
 {
+    // TODO port this action to have a normal KAction constructor, without a KActionCollection
 	Q_OBJECT
 
 	public:

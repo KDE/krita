@@ -46,6 +46,7 @@
 #include <klocale.h>
 #include <kicon.h>
 #include <ktoggleaction.h>
+#include <kactioncollection.h>
 
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
@@ -126,53 +127,63 @@ void KoPAView::initGUI()
 
 void KoPAView::initActions()
 {
-    m_actionFormatBold = new KToggleAction(KIcon("text_bold"), i18n( "Bold" ), actionCollection(), "format_bold");
+    // note that the following actions do not belong in here. Only KWord should have them, the text-tool will
+    // provide for the rest... (TZ)
+    m_actionFormatBold  = new KToggleAction(KIcon("text_bold"), i18n("Bold"), this);
+    actionCollection()->addAction("format_bold", m_actionFormatBold );
     m_actionFormatBold->setShortcut(KShortcut(Qt::CTRL + Qt::Key_B));
     connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textBold(bool)) );
 
-    m_actionFormatItalic = new KToggleAction(KIcon("text_italic"), i18n( "Italic" ), actionCollection(), "format_italic" );
+    m_actionFormatItalic  = new KToggleAction(KIcon("text_italic"), i18n("Italic"), this);
+    actionCollection()->addAction("format_italic", m_actionFormatItalic );
     m_actionFormatItalic->setShortcut(KShortcut( Qt::CTRL + Qt::Key_I));
     connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textItalic(bool)) );
 
-    m_actionFormatUnderline = new KToggleAction(KIcon("text_under"), i18n( "Underline" ), actionCollection(), "format_underline" );
+    m_actionFormatUnderline  = new KToggleAction(KIcon("text_under"), i18n("Underline"), this);
+    actionCollection()->addAction("format_underline", m_actionFormatUnderline );
     m_actionFormatUnderline->setShortcut(KShortcut( Qt::CTRL + Qt::Key_U));
     connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), this, SLOT(textUnderline(bool)) );
 
-    m_actionFormatStrikeOut = new KToggleAction(KIcon("text_strike"), i18n( "Strike Out" ), actionCollection(), "format_strike" );
+    m_actionFormatStrikeOut  = new KToggleAction(KIcon("text_strike"), i18n("Strike Out"), this);
+    actionCollection()->addAction("format_strike", m_actionFormatStrikeOut );
     connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), this, SLOT(textStrikeOut(bool)) );
 
     // ------------------- Actions with a key binding and no GUI item
-    KAction *action = new KAction( i18n( "Insert Non-Breaking Space" ), actionCollection(), "nonbreaking_space" );
+    KAction *action  = new KAction(i18n("Insert Non-Breaking Space"), this);
+    actionCollection()->addAction("nonbreaking_space", action );
     action->setShortcut( KShortcut( Qt::CTRL+Qt::Key_Space));
     connect(action, SIGNAL(triggered()), this, SLOT( slotNonbreakingSpace() ));
 
-    action = new KAction( i18n( "Insert Non-Breaking Hyphen" ), actionCollection(), "nonbreaking_hyphen" );
+    action  = new KAction(i18n("Insert Non-Breaking Hyphen"), this);
+    actionCollection()->addAction("nonbreaking_hyphen", action );
     action->setShortcut( KShortcut( Qt::CTRL+Qt::SHIFT+Qt::Key_Minus));
     connect(action, SIGNAL(triggered()), this, SLOT( slotNonbreakingHyphen() ));
 
-    action = new KAction( i18n( "Insert Soft Hyphen" ), actionCollection(), "soft_hyphen" );
+    action  = new KAction(i18n("Insert Soft Hyphen"), this);
+    actionCollection()->addAction("soft_hyphen", action );
     action->setShortcut( KShortcut( Qt::CTRL+Qt::Key_Minus));
     connect(action, SIGNAL(triggered()), this, SLOT( slotSoftHyphen() ));
 
-    action = new KAction( i18n( "Line Break" ), actionCollection(), "line_break" );
+    action  = new KAction(i18n("Line Break"), this);
+    actionCollection()->addAction("line_break", action );
     action->setShortcut( KShortcut( Qt::SHIFT+Qt::Key_Return));
     connect(action, SIGNAL(triggered()), this, SLOT( slotLineBreak() ));
 
 
-    m_actionFormatFont = new KAction( i18n( "Font..." ), actionCollection(), "format_font" );
+    m_actionFormatFont  = new KAction(i18n("Font..."), this);
+    actionCollection()->addAction("format_font", m_actionFormatFont );
     m_actionFormatFont->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
     m_actionFormatFont->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
     connect(m_actionFormatFont, SIGNAL(triggered()), this, SLOT( formatFont() ));
 
-    m_actionViewShowGrid = new KToggleAction( i18n( "Show &Grid" ), KShortcut(),
-                                            this, SLOT( viewGrid() ),
-                                            actionCollection(), "view_grid" );
+    m_actionViewShowGrid  = new KToggleAction(i18n("Show &Grid"), this);
+    actionCollection()->addAction("view_grid", m_actionViewShowGrid );
 
-    m_actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), KShortcut(),
-                                             this, SLOT(viewSnapToGrid() ),
-                                             actionCollection(), "view_snaptogrid" );
+    m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
+    actionCollection()->addAction("view_snaptogrid", m_actionViewSnapToGrid);
 
-    m_viewRulers = new KToggleAction(i18n("Show Rulers"), actionCollection(), "view_rulers");
+    m_viewRulers  = new KToggleAction(i18n("Show Rulers"), this);
+    actionCollection()->addAction("view_rulers", m_viewRulers );
     m_viewRulers->setToolTip(i18n("Show/hide the view's rulers"));
     connect(m_viewRulers, SIGNAL(triggered(bool)), this, SLOT(setShowRulers(bool)));
     setShowRulers(true);

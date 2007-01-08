@@ -33,6 +33,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kactioncollection.h>
 
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -60,7 +61,8 @@ Histogram::Histogram(QObject *parent, const QStringList &)
 setXMLFile(KStandardDirs::locate("data","kritaplugins/histogram.rc"),
 true);
 
-        m_action = new KAction(i18n("&Histogram..."), actionCollection(), "histogram");
+        m_action  = new KAction(i18n("&Histogram..."), this);
+        actionCollection()->addAction("histogram", m_action );
         connect(m_action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
 
         m_view = (KisView2*) parent;

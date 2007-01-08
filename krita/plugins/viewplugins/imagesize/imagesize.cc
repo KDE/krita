@@ -35,6 +35,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kstandardaction.h>
+#include <kactioncollection.h>
 
 #include <kis_config.h>
 #include <kis_image.h>
@@ -67,16 +68,19 @@ ImageSize::ImageSize(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/imagesize.rc"), true);
 
-        KAction *action = new KAction(i18n("Scale or Resize &Image..."), actionCollection(), "imagesize");
+    KAction *action  = new KAction(i18n("Scale or Resize &Image..."), this);
+    actionCollection()->addAction("imagesize", action );
         action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_S));
         connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
-        action = new KAction(i18n("Scale &Layer..."), actionCollection(), "layersize");
+    action  = new KAction(i18n("Scale &Layer..."), this);
+    actionCollection()->addAction("layersize", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
         m_view = (KisView2*) parent;
         // Selection manager takes ownership?
-        action = new KAction(i18n("&Scale Selection..."), actionCollection(), "selectionscale");
+    action  = new KAction(i18n("&Scale Selection..."), this);
+    actionCollection()->addAction("selectionscale", action );
         Q_CHECK_PTR(action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
 

@@ -625,9 +625,11 @@ bool KisTransformWorker::run()
             rotateNone(srcdev, tmpdev1);
             srcdev = tmpdev1;
         }
-        KisPainter painter(m_dev.data());
-        QRect r = srcdev->extent();
-        painter.bitBlt(r.x() + xtranslate, r.y() + ytranslate, COMPOSITE_OVER, srcdev.data(), r.x(), r.y(), r.width(), r.height());
+        if(m_dev->hasSelection())
+            m_dev->selection()->clear();
+
+        srcdev->move(srcdev->getX() + xtranslate, srcdev->getY() + ytranslate);
+        rotateNone(srcdev, m_dev);
 
         //progress info
         emit notifyProgressDone();
@@ -666,9 +668,8 @@ bool KisTransformWorker::run()
     else
     {
         // No need to filter again when we are only scaling
-        KisPainter painter(m_dev.data());
-        QRect r = tmpdev3->extent();
-        painter.bitBlt(r.x() + xtranslate, r.y(), COMPOSITE_OVER, tmpdev3.data(), r.x(), r.y(), r.width(), r.height());
+        tmpdev3->move(tmpdev3->getX() + xtranslate, tmpdev3->getY());
+        rotateNone(tmpdev3, m_dev);
     }
 
     if (m_dev->parentLayer()) {

@@ -42,30 +42,30 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB1
         virtual void fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * /*profile*/) const
         {
             typename _CSTraits::channels_type* dst = _CSTraits::nativeArray(dstU8);
-            dst[ _CSTraits::red ] = UINT8_TO_FLOAT(c.red());
-            dst[ _CSTraits::green ] = UINT8_TO_FLOAT(c.green());
-            dst[ _CSTraits::blue ] = UINT8_TO_FLOAT(c.blue());
+            dst[ _CSTraits::red_pos ] = UINT8_TO_FLOAT(c.red());
+            dst[ _CSTraits::green_pos ] = UINT8_TO_FLOAT(c.green());
+            dst[ _CSTraits::blue_pos ] = UINT8_TO_FLOAT(c.blue());
         }
         
         virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KoColorProfile * /*profile*/) const
         {
             typename _CSTraits::channels_type* dst = _CSTraits::nativeArray(dstU8);
-            dst[ _CSTraits::red ] = UINT8_TO_FLOAT(c.red());
-            dst[ _CSTraits::green ] = UINT8_TO_FLOAT(c.green());
-            dst[ _CSTraits::blue ] = UINT8_TO_FLOAT(c.blue());
+            dst[ _CSTraits::red_pos ] = UINT8_TO_FLOAT(c.red());
+            dst[ _CSTraits::green_pos ] = UINT8_TO_FLOAT(c.green());
+            dst[ _CSTraits::blue_pos ] = UINT8_TO_FLOAT(c.blue());
             dst[ _CSTraits::alpha_pos ] = UINT8_TO_FLOAT(opacity);
         }
         
         virtual void toQColor(const quint8 *srcU8, QColor *c, KoColorProfile * /*profile*/) const
         {
             const typename _CSTraits::channels_type* src = _CSTraits::nativeArray(srcU8);
-            c->setRgb(FLOAT_TO_UINT8(src[_CSTraits::red]), FLOAT_TO_UINT8(src[_CSTraits::green]), FLOAT_TO_UINT8(src[_CSTraits::blue]));
+            c->setRgb(FLOAT_TO_UINT8(src[_CSTraits::red_pos]), FLOAT_TO_UINT8(src[_CSTraits::green_pos]), FLOAT_TO_UINT8(src[_CSTraits::blue_pos]));
         }
         
         virtual void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/) const
         {
             const typename _CSTraits::channels_type* src = _CSTraits::nativeArray(srcU8);
-            c->setRgb(FLOAT_TO_UINT8(src[_CSTraits::red]), FLOAT_TO_UINT8(src[_CSTraits::green]), FLOAT_TO_UINT8(src[_CSTraits::blue]));
+            c->setRgb(FLOAT_TO_UINT8(src[_CSTraits::red_pos]), FLOAT_TO_UINT8(src[_CSTraits::green_pos]), FLOAT_TO_UINT8(src[_CSTraits::blue_pos]));
             *opacity = FLOAT_TO_UINT8(src[_CSTraits::alpha_pos]);
         }
         
@@ -73,9 +73,9 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB1
         {
             const typename _CSTraits::channels_type* src1 = _CSTraits::nativeArray(src1U8);
             const typename _CSTraits::channels_type* src2 = _CSTraits::nativeArray(src2U8);
-            return FLOAT_TO_UINT8(qMax(QABS(src2[_CSTraits::red] - src1[_CSTraits::red]),
-                        qMax(QABS(src2[_CSTraits::green] - src1[_CSTraits::green]),
-                            QABS(src2[_CSTraits::blue] - src1[_CSTraits::blue]))));
+            return FLOAT_TO_UINT8(qMax(QABS(src2[_CSTraits::red_pos] - src1[_CSTraits::red_pos]),
+                        qMax(QABS(src2[_CSTraits::green_pos] - src1[_CSTraits::green_pos]),
+                            QABS(src2[_CSTraits::blue_pos] - src1[_CSTraits::blue_pos]))));
         }
 
         
@@ -96,9 +96,9 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB1
         
             while ( i < width * height * 4) {
                 *( j + 3)  = KoColorSpaceMaths<float, quint8>::scaleToA(*( data + i + 3 ));
-                *( j + 2 ) = convertToDisplay(*( data + i + 2 ), exposureFactor, gamma); //red
-                *( j + 1 ) = convertToDisplay(*( data + i + 1 ), exposureFactor, gamma); //green
-                *( j + 0 ) = convertToDisplay(*( data + i + 0 ), exposureFactor, gamma); //blue
+                *( j + 2 ) = convertToDisplay(*( data + i + 2 ), exposureFactor, gamma); //red_pos
+                *( j + 1 ) = convertToDisplay(*( data + i + 1 ), exposureFactor, gamma); //green_pos
+                *( j + 0 ) = convertToDisplay(*( data + i + 0 ), exposureFactor, gamma); //blue_pos
                 i += 4;
                 j += 4;
             }

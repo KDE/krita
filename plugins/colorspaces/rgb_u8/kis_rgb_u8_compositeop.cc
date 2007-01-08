@@ -24,9 +24,9 @@
 #include "KoColorConversions.h"
 
 #define PixelIntensity(pixel) ((unsigned int) \
-   (((double)306.0 * (pixel[PIXEL_RED]) + \
-     (double)601.0 * (pixel[PIXEL_GREEN]) + \
-     (double)117.0 * (pixel[PIXEL_BLUE)) \
+   (((double)306.0 * (pixel[RgbU8Traits::red_pos]) + \
+     (double)601.0 * (pixel[RgbU8Traits::green_pos]) + \
+     (double)117.0 * (pixel[RgbU8Traits::blue_pos)) \
     / 1024.0))
 
 #define PixelIntensityToQuantum(pixel) ((quint8)PixelIntensity(pixel))
@@ -179,7 +179,7 @@ void KisRgbU8CompositeOp::compositeOver(quint8 *dstRowStart, qint32 dstRowStride
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
 
             // apply the alphamask
             if(mask != 0)
@@ -192,13 +192,13 @@ void KisRgbU8CompositeOp::compositeOver(quint8 *dstRowStart, qint32 dstRowStride
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 if (srcAlpha == OPACITY_OPAQUE) {
-                    memcpy(dst, src, MAX_CHANNEL_RGBA * sizeof(quint8));
+                    memcpy(dst, src, RgbU8Traits::channels_nb * sizeof(quint8));
                 } else {
-                    quint8 dstAlpha = dst[PIXEL_ALPHA];
+                    quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
                     quint8 srcBlend;
 
@@ -206,7 +206,7 @@ void KisRgbU8CompositeOp::compositeOver(quint8 *dstRowStart, qint32 dstRowStride
                         srcBlend = srcAlpha;
                     } else {
                         quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                        dst[PIXEL_ALPHA] = newAlpha;
+                        dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                         if (newAlpha != 0) {
                             srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -218,16 +218,16 @@ void KisRgbU8CompositeOp::compositeOver(quint8 *dstRowStart, qint32 dstRowStride
                     if (srcBlend == OPACITY_OPAQUE) {
                         memcpy(dst, src, MAX_CHANNEL_RGB * sizeof(quint8));
                     } else {
-                        dst[PIXEL_RED] = UINT8_BLEND(src[PIXEL_RED], dst[PIXEL_RED], srcBlend);
-                        dst[PIXEL_GREEN] = UINT8_BLEND(src[PIXEL_GREEN], dst[PIXEL_GREEN], srcBlend);
-                        dst[PIXEL_BLUE] = UINT8_BLEND(src[PIXEL_BLUE], dst[PIXEL_BLUE], srcBlend);
+                        dst[RgbU8Traits::red_pos] = UINT8_BLEND(src[RgbU8Traits::red_pos], dst[RgbU8Traits::red_pos], srcBlend);
+                        dst[RgbU8Traits::green_pos] = UINT8_BLEND(src[RgbU8Traits::green_pos], dst[RgbU8Traits::green_pos], srcBlend);
+                        dst[RgbU8Traits::blue_pos] = UINT8_BLEND(src[RgbU8Traits::blue_pos], dst[RgbU8Traits::blue_pos], srcBlend);
                     }
                 }
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -249,8 +249,8 @@ void KisRgbU8CompositeOp::compositeMultiply(quint8 *dstRowStart, qint32 dstRowSt
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -266,7 +266,7 @@ void KisRgbU8CompositeOp::compositeMultiply(quint8 *dstRowStart, qint32 dstRowSt
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -275,7 +275,7 @@ void KisRgbU8CompositeOp::compositeMultiply(quint8 *dstRowStart, qint32 dstRowSt
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -284,31 +284,31 @@ void KisRgbU8CompositeOp::compositeMultiply(quint8 *dstRowStart, qint32 dstRowSt
                     }
                 }
 
-                quint8 srcColor = src[PIXEL_RED];
-                quint8 dstColor = dst[PIXEL_RED];
+                quint8 srcColor = src[RgbU8Traits::red_pos];
+                quint8 dstColor = dst[RgbU8Traits::red_pos];
 
                 srcColor = UINT8_MULT(srcColor, dstColor);
 
-                dst[PIXEL_RED] = UINT8_BLEND(srcColor, dstColor, srcBlend);
+                dst[RgbU8Traits::red_pos] = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
-                srcColor = src[PIXEL_GREEN];
-                dstColor = dst[PIXEL_GREEN];
-
-                srcColor = UINT8_MULT(srcColor, dstColor);
-
-                dst[PIXEL_GREEN] = UINT8_BLEND(srcColor, dstColor, srcBlend);
-
-                srcColor = src[PIXEL_BLUE];
-                dstColor = dst[PIXEL_BLUE];
+                srcColor = src[RgbU8Traits::green_pos];
+                dstColor = dst[RgbU8Traits::green_pos];
 
                 srcColor = UINT8_MULT(srcColor, dstColor);
 
-                dst[PIXEL_BLUE] = UINT8_BLEND(srcColor, dstColor, srcBlend);
+                dst[RgbU8Traits::green_pos] = UINT8_BLEND(srcColor, dstColor, srcBlend);
+
+                srcColor = src[RgbU8Traits::blue_pos];
+                dstColor = dst[RgbU8Traits::blue_pos];
+
+                srcColor = UINT8_MULT(srcColor, dstColor);
+
+                dst[RgbU8Traits::blue_pos] = UINT8_BLEND(srcColor, dstColor, srcBlend);
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -330,8 +330,8 @@ void KisRgbU8CompositeOp::compositeDivide(quint8 *dstRowStart, qint32 dstRowStri
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -346,7 +346,7 @@ void KisRgbU8CompositeOp::compositeDivide(quint8 *dstRowStart, qint32 dstRowStri
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -355,7 +355,7 @@ void KisRgbU8CompositeOp::compositeDivide(quint8 *dstRowStart, qint32 dstRowStri
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -378,8 +378,8 @@ void KisRgbU8CompositeOp::compositeDivide(quint8 *dstRowStart, qint32 dstRowStri
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -401,8 +401,8 @@ void KisRgbU8CompositeOp::compositeScreen(quint8 *dstRowStart, qint32 dstRowStri
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -417,7 +417,7 @@ void KisRgbU8CompositeOp::compositeScreen(quint8 *dstRowStart, qint32 dstRowStri
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -426,7 +426,7 @@ void KisRgbU8CompositeOp::compositeScreen(quint8 *dstRowStart, qint32 dstRowStri
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -449,8 +449,8 @@ void KisRgbU8CompositeOp::compositeScreen(quint8 *dstRowStart, qint32 dstRowStri
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -472,8 +472,8 @@ void KisRgbU8CompositeOp::compositeOverlay(quint8 *dstRowStart, qint32 dstRowStr
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -489,7 +489,7 @@ void KisRgbU8CompositeOp::compositeOverlay(quint8 *dstRowStart, qint32 dstRowStr
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -498,7 +498,7 @@ void KisRgbU8CompositeOp::compositeOverlay(quint8 *dstRowStart, qint32 dstRowStr
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -521,8 +521,8 @@ void KisRgbU8CompositeOp::compositeOverlay(quint8 *dstRowStart, qint32 dstRowStr
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -544,8 +544,8 @@ void KisRgbU8CompositeOp::compositeDodge(quint8 *dstRowStart, qint32 dstRowStrid
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -561,7 +561,7 @@ void KisRgbU8CompositeOp::compositeDodge(quint8 *dstRowStart, qint32 dstRowStrid
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -570,7 +570,7 @@ void KisRgbU8CompositeOp::compositeDodge(quint8 *dstRowStart, qint32 dstRowStrid
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -593,8 +593,8 @@ void KisRgbU8CompositeOp::compositeDodge(quint8 *dstRowStart, qint32 dstRowStrid
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -616,8 +616,8 @@ void KisRgbU8CompositeOp::compositeBurn(quint8 *dstRowStart, qint32 dstRowStride
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -632,7 +632,7 @@ void KisRgbU8CompositeOp::compositeBurn(quint8 *dstRowStart, qint32 dstRowStride
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -641,7 +641,7 @@ void KisRgbU8CompositeOp::compositeBurn(quint8 *dstRowStart, qint32 dstRowStride
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -665,8 +665,8 @@ void KisRgbU8CompositeOp::compositeBurn(quint8 *dstRowStart, qint32 dstRowStride
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -688,8 +688,8 @@ void KisRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStri
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -704,7 +704,7 @@ void KisRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStri
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -713,7 +713,7 @@ void KisRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStri
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -736,8 +736,8 @@ void KisRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStri
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -759,8 +759,8 @@ void KisRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStr
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -775,7 +775,7 @@ void KisRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStr
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -784,7 +784,7 @@ void KisRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStr
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -807,8 +807,8 @@ void KisRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStr
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -830,8 +830,8 @@ void KisRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride,
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -846,7 +846,7 @@ void KisRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride,
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -855,7 +855,7 @@ void KisRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride,
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -864,9 +864,9 @@ void KisRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride,
                     }
                 }
 
-                int dstRed = dst[PIXEL_RED];
-                int dstGreen = dst[PIXEL_GREEN];
-                int dstBlue = dst[PIXEL_BLUE];
+                int dstRed = dst[RgbU8Traits::red_pos];
+                int dstGreen = dst[RgbU8Traits::green_pos];
+                int dstBlue = dst[RgbU8Traits::blue_pos];
 
                 int srcHue;
                 int srcSaturation;
@@ -875,7 +875,7 @@ void KisRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride,
                 int dstSaturation;
                 int dstValue;
 
-                rgb_to_hsv(src[PIXEL_RED], src[PIXEL_GREEN], src[PIXEL_BLUE], &srcHue, &srcSaturation, &srcValue);
+                rgb_to_hsv(src[RgbU8Traits::red_pos], src[RgbU8Traits::green_pos], src[RgbU8Traits::blue_pos], &srcHue, &srcSaturation, &srcValue);
                 rgb_to_hsv(dstRed, dstGreen, dstBlue, &dstHue, &dstSaturation, &dstValue);
 
                 int srcRed;
@@ -884,14 +884,14 @@ void KisRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride,
 
                 hsv_to_rgb(srcHue, dstSaturation, dstValue, &srcRed, &srcGreen, &srcBlue);
 
-                dst[PIXEL_RED] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-                dst[PIXEL_GREEN] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-                dst[PIXEL_BLUE] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
+                dst[RgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
+                dst[RgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
+                dst[RgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -913,8 +913,8 @@ void KisRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRow
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -929,7 +929,7 @@ void KisRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRow
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -938,7 +938,7 @@ void KisRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRow
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -947,9 +947,9 @@ void KisRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRow
                     }
                 }
 
-                int dstRed = dst[PIXEL_RED];
-                int dstGreen = dst[PIXEL_GREEN];
-                int dstBlue = dst[PIXEL_BLUE];
+                int dstRed = dst[RgbU8Traits::red_pos];
+                int dstGreen = dst[RgbU8Traits::green_pos];
+                int dstBlue = dst[RgbU8Traits::blue_pos];
 
                 int srcHue;
                 int srcSaturation;
@@ -958,7 +958,7 @@ void KisRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRow
                 int dstSaturation;
                 int dstValue;
 
-                rgb_to_hsv(src[PIXEL_RED], src[PIXEL_GREEN], src[PIXEL_BLUE], &srcHue, &srcSaturation, &srcValue);
+                rgb_to_hsv(src[RgbU8Traits::red_pos], src[RgbU8Traits::green_pos], src[RgbU8Traits::blue_pos], &srcHue, &srcSaturation, &srcValue);
                 rgb_to_hsv(dstRed, dstGreen, dstBlue, &dstHue, &dstSaturation, &dstValue);
 
                 int srcRed;
@@ -967,14 +967,14 @@ void KisRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRow
 
                 hsv_to_rgb(dstHue, srcSaturation, dstValue, &srcRed, &srcGreen, &srcBlue);
 
-                dst[PIXEL_RED] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-                dst[PIXEL_GREEN] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-                dst[PIXEL_BLUE] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
+                dst[RgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
+                dst[RgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
+                dst[RgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -996,8 +996,8 @@ void KisRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStrid
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -1012,7 +1012,7 @@ void KisRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStrid
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -1021,7 +1021,7 @@ void KisRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStrid
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -1030,9 +1030,9 @@ void KisRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStrid
                     }
                 }
 
-                int dstRed = dst[PIXEL_RED];
-                int dstGreen = dst[PIXEL_GREEN];
-                int dstBlue = dst[PIXEL_BLUE];
+                int dstRed = dst[RgbU8Traits::red_pos];
+                int dstGreen = dst[RgbU8Traits::green_pos];
+                int dstBlue = dst[RgbU8Traits::blue_pos];
 
                 int srcHue;
                 int srcSaturation;
@@ -1041,7 +1041,7 @@ void KisRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStrid
                 int dstSaturation;
                 int dstValue;
 
-                rgb_to_hsv(src[PIXEL_RED], src[PIXEL_GREEN], src[PIXEL_BLUE], &srcHue, &srcSaturation, &srcValue);
+                rgb_to_hsv(src[RgbU8Traits::red_pos], src[RgbU8Traits::green_pos], src[RgbU8Traits::blue_pos], &srcHue, &srcSaturation, &srcValue);
                 rgb_to_hsv(dstRed, dstGreen, dstBlue, &dstHue, &dstSaturation, &dstValue);
 
                 int srcRed;
@@ -1050,14 +1050,14 @@ void KisRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStrid
 
                 hsv_to_rgb(dstHue, dstSaturation, srcValue, &srcRed, &srcGreen, &srcBlue);
 
-                dst[PIXEL_RED] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-                dst[PIXEL_GREEN] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-                dst[PIXEL_BLUE] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
+                dst[RgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
+                dst[RgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
+                dst[RgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -1079,8 +1079,8 @@ void KisRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStrid
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[PIXEL_ALPHA];
-            quint8 dstAlpha = dst[PIXEL_ALPHA];
+            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -1095,7 +1095,7 @@ void KisRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStrid
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -1104,7 +1104,7 @@ void KisRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStrid
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[PIXEL_ALPHA] = newAlpha;
+                    dst[RgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -1113,9 +1113,9 @@ void KisRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStrid
                     }
                 }
 
-                int dstRed = dst[PIXEL_RED];
-                int dstGreen = dst[PIXEL_GREEN];
-                int dstBlue = dst[PIXEL_BLUE];
+                int dstRed = dst[RgbU8Traits::red_pos];
+                int dstGreen = dst[RgbU8Traits::green_pos];
+                int dstBlue = dst[RgbU8Traits::blue_pos];
 
                 int srcHue;
                 int srcSaturation;
@@ -1124,7 +1124,7 @@ void KisRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStrid
                 int dstSaturation;
                 int dstLightness;
 
-                rgb_to_hls(src[PIXEL_RED], src[PIXEL_GREEN], src[PIXEL_BLUE], &srcHue, &srcLightness, &srcSaturation);
+                rgb_to_hls(src[RgbU8Traits::red_pos], src[RgbU8Traits::green_pos], src[RgbU8Traits::blue_pos], &srcHue, &srcLightness, &srcSaturation);
                 rgb_to_hls(dstRed, dstGreen, dstBlue, &dstHue, &dstLightness, &dstSaturation);
 
                 quint8 srcRed;
@@ -1133,14 +1133,14 @@ void KisRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStrid
 
                 hls_to_rgb(srcHue, dstLightness, srcSaturation, &srcRed, &srcGreen, &srcBlue);
 
-                dst[PIXEL_RED] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-                dst[PIXEL_GREEN] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-                dst[PIXEL_BLUE] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
+                dst[RgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
+                dst[RgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
+                dst[RgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
             }
 
             columns--;
-            src += MAX_CHANNEL_RGBA;
-            dst += MAX_CHANNEL_RGBA;
+            src += RgbU8Traits::channels_nb;
+            dst += RgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -1170,9 +1170,9 @@ void KisRgbU8CompositeOp::compositeErase(quint8 *dst,
         quint8 *d = dst;
         const quint8 *mask = srcAlphaMask;
 
-        for (i = cols; i > 0; i--, s+=MAX_CHANNEL_RGBA, d+=MAX_CHANNEL_RGBA)
+        for (i = cols; i > 0; i--, s+=RgbU8Traits::channels_nb, d+=RgbU8Traits::channels_nb)
         {
-            srcAlpha = s[PIXEL_ALPHA];
+            srcAlpha = s[RgbU8Traits::alpha_pos];
             // apply the alphamask
             if(mask != 0)
             {
@@ -1180,7 +1180,7 @@ void KisRgbU8CompositeOp::compositeErase(quint8 *dst,
                     srcAlpha = UINT8_BLEND(srcAlpha, OPACITY_OPAQUE, *mask);
                 mask++;
             }
-            d[PIXEL_ALPHA] = UINT8_MULT(srcAlpha, d[PIXEL_ALPHA]);
+            d[RgbU8Traits::alpha_pos] = UINT8_MULT(srcAlpha, d[RgbU8Traits::alpha_pos]);
         }
 
         dst += dstRowSize;
@@ -1218,25 +1218,25 @@ void KisRgbU8CompositeOp::compositeIn(qint32 pixelSize,
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
 
-            if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+            if (s[RgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT)
             {
                 memcpy(d, s, pixelSize * sizeof(quint8));
                 continue;
             }
-            if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+            if (d[RgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT)
                 continue;
 
-            sAlpha = UINT8_MAX - s[PIXEL_ALPHA];
-            dAlpha = UINT8_MAX - d[PIXEL_ALPHA];
+            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
 
             alpha=(double) (((double) UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) / UINT8_MAX);
-            d[PIXEL_RED]=(quint8) (((double) UINT8_MAX - sAlpha) *
-                        (UINT8_MAX-dAlpha) * s[PIXEL_RED] / UINT8_MAX / alpha + 0.5);
-            d[PIXEL_GREEN]=(quint8) (((double) UINT8_MAX - sAlpha)*
-                          (UINT8_MAX-dAlpha) * s[PIXEL_GREEN] / UINT8_MAX / alpha + 0.5);
-            d[PIXEL_BLUE]=(quint8) (((double) UINT8_MAX - sAlpha)*
-                         (UINT8_MAX - dAlpha) * s[PIXEL_BLUE] / UINT8_MAX / alpha + 0.5);
-            d[PIXEL_ALPHA]=(quint8) ((d[PIXEL_ALPHA] * (UINT8_MAX - alpha) / UINT8_MAX) + 0.5);
+            d[RgbU8Traits::red_pos]=(quint8) (((double) UINT8_MAX - sAlpha) *
+                        (UINT8_MAX-dAlpha) * s[RgbU8Traits::red_pos] / UINT8_MAX / alpha + 0.5);
+            d[RgbU8Traits::green_pos]=(quint8) (((double) UINT8_MAX - sAlpha)*
+                          (UINT8_MAX-dAlpha) * s[RgbU8Traits::green_pos] / UINT8_MAX / alpha + 0.5);
+            d[RgbU8Traits::blue_pos]=(quint8) (((double) UINT8_MAX - sAlpha)*
+                         (UINT8_MAX - dAlpha) * s[RgbU8Traits::blue_pos] / UINT8_MAX / alpha + 0.5);
+            d[RgbU8Traits::alpha_pos]=(quint8) ((d[RgbU8Traits::alpha_pos] * (UINT8_MAX - alpha) / UINT8_MAX) + 0.5);
 
         }
         dst += dstRowSize;
@@ -1269,24 +1269,24 @@ void KisRgbU8CompositeOp::compositeOut(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+            if (s[RgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT)
             {
                 memcpy(d, s, pixelSize * sizeof(quint8));
                 break;
             }
-            if (d[PIXEL_ALPHA] == OPACITY_OPAQUE)
+            if (d[RgbU8Traits::alpha_pos] == OPACITY_OPAQUE)
             {
-                d[PIXEL_ALPHA]=OPACITY_TRANSPARENT;
+                d[RgbU8Traits::alpha_pos]=OPACITY_TRANSPARENT;
                 break;
             }
-            sAlpha = UINT8_MAX - s[PIXEL_ALPHA];
-            dAlpha = UINT8_MAX - d[PIXEL_ALPHA];
+            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
 
-            alpha=(double) (UINT8_MAX - sAlpha) * d[PIXEL_ALPHA]/UINT8_MAX;
-            d[PIXEL_RED] = (quint8) (((double) UINT8_MAX - sAlpha) * dAlpha * s[PIXEL_RED] / UINT8_MAX / alpha + 0.5);
-            d[PIXEL_GREEN] = (quint8) (((double) UINT8_MAX - sAlpha) * dAlpha * s[PIXEL_GREEN] / UINT8_MAX / alpha + 0.5);
-            d[PIXEL_BLUE] = (quint8) (((double) UINT8_MAX - sAlpha) * dAlpha * s[PIXEL_BLUE] / UINT8_MAX / alpha + 0.5);
-            d[PIXEL_ALPHA]=(quint8) ((d[PIXEL_ALPHA] * (UINT8_MAX - alpha) / UINT8_MAX) + 0.5);
+            alpha=(double) (UINT8_MAX - sAlpha) * d[RgbU8Traits::alpha_pos]/UINT8_MAX;
+            d[RgbU8Traits::red_pos] = (quint8) (((double) UINT8_MAX - sAlpha) * dAlpha * s[RgbU8Traits::red_pos] / UINT8_MAX / alpha + 0.5);
+            d[RgbU8Traits::green_pos] = (quint8) (((double) UINT8_MAX - sAlpha) * dAlpha * s[RgbU8Traits::green_pos] / UINT8_MAX / alpha + 0.5);
+            d[RgbU8Traits::blue_pos] = (quint8) (((double) UINT8_MAX - sAlpha) * dAlpha * s[RgbU8Traits::blue_pos] / UINT8_MAX / alpha + 0.5);
+            d[RgbU8Traits::alpha_pos]=(quint8) ((d[RgbU8Traits::alpha_pos] * (UINT8_MAX - alpha) / UINT8_MAX) + 0.5);
         }
         dst += dstRowSize;
         src += srcRowSize;
@@ -1319,25 +1319,25 @@ void KisRgbU8CompositeOp::compositeAtop(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[PIXEL_ALPHA];
-            dAlpha = UINT8_MAX - d[PIXEL_ALPHA];
+            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
 
             alpha = ((double)(UINT8_MAX - sAlpha) *
                    (UINT8_MAX - dAlpha) + (double) sAlpha *
                    (UINT8_MAX - dAlpha)) / UINT8_MAX;
 
-            red = ((double)(UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) *  s[PIXEL_RED] / UINT8_MAX +
-                 (double) sAlpha * (UINT8_MAX-dAlpha) * d[PIXEL_RED]/UINT8_MAX) / alpha;
-            d[PIXEL_RED] = (quint8) (red > UINT8_MAX ? UINT8_MAX : red + 0.5);
+            red = ((double)(UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) *  s[RgbU8Traits::red_pos] / UINT8_MAX +
+                 (double) sAlpha * (UINT8_MAX-dAlpha) * d[RgbU8Traits::red_pos]/UINT8_MAX) / alpha;
+            d[RgbU8Traits::red_pos] = (quint8) (red > UINT8_MAX ? UINT8_MAX : red + 0.5);
 
-            green = ((double) (UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) * s[PIXEL_GREEN] / UINT8_MAX +
-                 (double) sAlpha * (UINT8_MAX-dAlpha) * d[PIXEL_GREEN]/UINT8_MAX)/alpha;
-            d[PIXEL_GREEN] = (quint8) (green > UINT8_MAX ? UINT8_MAX : green + 0.5);
+            green = ((double) (UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) * s[RgbU8Traits::green_pos] / UINT8_MAX +
+                 (double) sAlpha * (UINT8_MAX-dAlpha) * d[RgbU8Traits::green_pos]/UINT8_MAX)/alpha;
+            d[RgbU8Traits::green_pos] = (quint8) (green > UINT8_MAX ? UINT8_MAX : green + 0.5);
 
-            blue = ((double) (UINT8_MAX - sAlpha) * (UINT8_MAX- dAlpha) * s[PIXEL_BLUE] / UINT8_MAX +
-                     (double) sAlpha * (UINT8_MAX - dAlpha) * d[PIXEL_BLUE]/UINT8_MAX) / alpha;
-            d[PIXEL_BLUE] = (quint8) (blue > UINT8_MAX ? UINT8_MAX : blue + 0.5);
-            d[PIXEL_ALPHA]=(quint8) (UINT8_MAX - (alpha > UINT8_MAX ? UINT8_MAX : alpha) + 0.5);
+            blue = ((double) (UINT8_MAX - sAlpha) * (UINT8_MAX- dAlpha) * s[RgbU8Traits::blue_pos] / UINT8_MAX +
+                     (double) sAlpha * (UINT8_MAX - dAlpha) * d[RgbU8Traits::blue_pos]/UINT8_MAX) / alpha;
+            d[RgbU8Traits::blue_pos] = (quint8) (blue > UINT8_MAX ? UINT8_MAX : blue + 0.5);
+            d[RgbU8Traits::alpha_pos]=(quint8) (UINT8_MAX - (alpha > UINT8_MAX ? UINT8_MAX : alpha) + 0.5);
         }
         dst += dstRowSize;
         src += srcRowSize;
@@ -1369,25 +1369,25 @@ void KisRgbU8CompositeOp::compositeXor(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[PIXEL_ALPHA];
-            dAlpha = UINT8_MAX - d[PIXEL_ALPHA];
+            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
 
             alpha =((double) (UINT8_MAX -sAlpha)*
                 dAlpha+(double) (UINT8_MAX -dAlpha)*
                 sAlpha)/UINT8_MAX ;
             red=((double) (UINT8_MAX -sAlpha)*dAlpha*
-                 s[PIXEL_RED]/UINT8_MAX +(double) (UINT8_MAX -dAlpha)*
-                 sAlpha*d[PIXEL_RED]/UINT8_MAX )/alpha ;
-            d[PIXEL_RED]=RoundSignedToQuantum(Qt::red);
+                 s[RgbU8Traits::red_pos]/UINT8_MAX +(double) (UINT8_MAX -dAlpha)*
+                 sAlpha*d[RgbU8Traits::red_pos]/UINT8_MAX )/alpha ;
+            d[RgbU8Traits::red_pos]=RoundSignedToQuantum(Qt::red);
             green=((double) (UINT8_MAX -sAlpha)*dAlpha*
-                   s[PIXEL_GREEN]/UINT8_MAX +(double) (UINT8_MAX -dAlpha)*
-                   sAlpha*d[PIXEL_GREEN]/UINT8_MAX )/alpha ;
-            d[PIXEL_GREEN]=RoundSignedToQuantum(Qt::green);
+                   s[RgbU8Traits::green_pos]/UINT8_MAX +(double) (UINT8_MAX -dAlpha)*
+                   sAlpha*d[RgbU8Traits::green_pos]/UINT8_MAX )/alpha ;
+            d[RgbU8Traits::green_pos]=RoundSignedToQuantum(Qt::green);
             blue=((double) (UINT8_MAX -sAlpha)*dAlpha*
-                  s[PIXEL_BLUE]/UINT8_MAX +(double) (UINT8_MAX -dAlpha)*
-                  sAlpha*d[PIXEL_BLUE]/UINT8_MAX )/alpha ;
-            d[PIXEL_BLUE]=RoundSignedToQuantum(Qt::blue);
-            d[PIXEL_ALPHA]=UINT8_MAX -RoundSignedToQuantum(alpha );
+                  s[RgbU8Traits::blue_pos]/UINT8_MAX +(double) (UINT8_MAX -dAlpha)*
+                  sAlpha*d[RgbU8Traits::blue_pos]/UINT8_MAX )/alpha ;
+            d[RgbU8Traits::blue_pos]=RoundSignedToQuantum(Qt::blue);
+            d[RgbU8Traits::alpha_pos]=UINT8_MAX -RoundSignedToQuantum(alpha );
         }
         dst += dstRowSize;
         src += srcRowSize;
@@ -1420,21 +1420,21 @@ void KisRgbU8CompositeOp::compositePlus(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[PIXEL_ALPHA];
-            dAlpha = UINT8_MAX - d[PIXEL_ALPHA];
+            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
 
-            red=((double) (UINT8_MAX -sAlpha)*s[PIXEL_RED]+(double)
-                 (UINT8_MAX -dAlpha)*d[PIXEL_RED])/UINT8_MAX ;
-            d[PIXEL_RED]=RoundSignedToQuantum(Qt::red);
-            green=((double) (UINT8_MAX -sAlpha)*s[PIXEL_GREEN]+(double)
-                   (UINT8_MAX -dAlpha)*d[PIXEL_GREEN])/UINT8_MAX ;
-            d[PIXEL_GREEN]=RoundSignedToQuantum(Qt::green);
-            blue=((double) (UINT8_MAX -sAlpha)*s[PIXEL_BLUE]+(double)
-                  (UINT8_MAX -dAlpha)*d[PIXEL_BLUE])/UINT8_MAX ;
-            d[PIXEL_BLUE]=RoundSignedToQuantum(Qt::blue);
+            red=((double) (UINT8_MAX -sAlpha)*s[RgbU8Traits::red_pos]+(double)
+                 (UINT8_MAX -dAlpha)*d[RgbU8Traits::red_pos])/UINT8_MAX ;
+            d[RgbU8Traits::red_pos]=RoundSignedToQuantum(Qt::red);
+            green=((double) (UINT8_MAX -sAlpha)*s[RgbU8Traits::green_pos]+(double)
+                   (UINT8_MAX -dAlpha)*d[RgbU8Traits::green_pos])/UINT8_MAX ;
+            d[RgbU8Traits::green_pos]=RoundSignedToQuantum(Qt::green);
+            blue=((double) (UINT8_MAX -sAlpha)*s[RgbU8Traits::blue_pos]+(double)
+                  (UINT8_MAX -dAlpha)*d[RgbU8Traits::blue_pos])/UINT8_MAX ;
+            d[RgbU8Traits::blue_pos]=RoundSignedToQuantum(Qt::blue);
             alpha =((double) (UINT8_MAX -sAlpha)+
                 (double) (UINT8_MAX -dAlpha))/UINT8_MAX ;
-            d[PIXEL_ALPHA]=UINT8_MAX -RoundSignedToQuantum(alpha );
+            d[RgbU8Traits::alpha_pos]=UINT8_MAX -RoundSignedToQuantum(alpha );
         }
         dst += dstRowSize;
         src += srcRowSize;
@@ -1467,21 +1467,21 @@ void KisRgbU8CompositeOp::compositeMinus(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[PIXEL_ALPHA];
-            dAlpha = UINT8_MAX - d[PIXEL_ALPHA];
+            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
 
-            red=((double) (UINT8_MAX -dAlpha)*d[PIXEL_RED]-
-                 (double) (UINT8_MAX -sAlpha)*s[PIXEL_RED])/UINT8_MAX ;
-            d[PIXEL_RED]=RoundSignedToQuantum(Qt::red);
-            green=((double) (UINT8_MAX -dAlpha)*d[PIXEL_GREEN]-
-                   (double) (UINT8_MAX -sAlpha)*s[PIXEL_GREEN])/UINT8_MAX ;
-            d[PIXEL_GREEN]=RoundSignedToQuantum(Qt::green);
-            blue=((double) (UINT8_MAX -dAlpha)*d[PIXEL_BLUE]-
-                  (double) (UINT8_MAX -sAlpha)*s[PIXEL_BLUE])/UINT8_MAX ;
-            d[PIXEL_BLUE]=RoundSignedToQuantum(Qt::blue);
+            red=((double) (UINT8_MAX -dAlpha)*d[RgbU8Traits::red_pos]-
+                 (double) (UINT8_MAX -sAlpha)*s[RgbU8Traits::red_pos])/UINT8_MAX ;
+            d[RgbU8Traits::red_pos]=RoundSignedToQuantum(Qt::red);
+            green=((double) (UINT8_MAX -dAlpha)*d[RgbU8Traits::green_pos]-
+                   (double) (UINT8_MAX -sAlpha)*s[RgbU8Traits::green_pos])/UINT8_MAX ;
+            d[RgbU8Traits::green_pos]=RoundSignedToQuantum(Qt::green);
+            blue=((double) (UINT8_MAX -dAlpha)*d[RgbU8Traits::blue_pos]-
+                  (double) (UINT8_MAX -sAlpha)*s[RgbU8Traits::blue_pos])/UINT8_MAX ;
+            d[RgbU8Traits::blue_pos]=RoundSignedToQuantum(Qt::blue);
             alpha =((double) (UINT8_MAX -dAlpha)-
                 (double) (UINT8_MAX -sAlpha))/UINT8_MAX ;
-            d[PIXEL_ALPHA]=UINT8_MAX -RoundSignedToQuantum(alpha );
+            d[RgbU8Traits::alpha_pos]=UINT8_MAX -RoundSignedToQuantum(alpha );
 
         }
         dst += dstRowSize;
@@ -1514,19 +1514,19 @@ void KisRgbU8CompositeOp::compositeAdd(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[PIXEL_ALPHA];
-            dAlpha = UINT8_MAX - d[PIXEL_ALPHA];
+            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
 
-            red=(double) s[PIXEL_RED]+d[PIXEL_RED];
-            d[PIXEL_RED]=(quint8)
+            red=(double) s[RgbU8Traits::red_pos]+d[RgbU8Traits::red_pos];
+            d[RgbU8Traits::red_pos]=(quint8)
                 (red > UINT8_MAX  ? red-=UINT8_MAX  : red+0.5);
-            green=(double) s[PIXEL_GREEN]+d[PIXEL_GREEN];
-            d[PIXEL_GREEN]=(quint8)
+            green=(double) s[RgbU8Traits::green_pos]+d[RgbU8Traits::green_pos];
+            d[RgbU8Traits::green_pos]=(quint8)
                 (green > UINT8_MAX  ? green-=UINT8_MAX  : green+0.5);
-            blue=(double) s[PIXEL_BLUE]+d[PIXEL_BLUE];
-            d[PIXEL_BLUE]=(quint8)
+            blue=(double) s[RgbU8Traits::blue_pos]+d[RgbU8Traits::blue_pos];
+            d[RgbU8Traits::blue_pos]=(quint8)
                 (blue > UINT8_MAX  ? blue-=UINT8_MAX  : blue+0.5);
-            d[PIXEL_ALPHA]=OPACITY_OPAQUE;
+            d[RgbU8Traits::alpha_pos]=OPACITY_OPAQUE;
         }
         dst += dstRowSize;
         src += srcRowSize;
@@ -1558,16 +1558,16 @@ void KisRgbU8CompositeOp::compositeSubtract(qint32 pixelSize,
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
 
-            red=(double) s[PIXEL_RED]-d[PIXEL_RED];
-            d[PIXEL_RED]=(quint8)
+            red=(double) s[RgbU8Traits::red_pos]-d[RgbU8Traits::red_pos];
+            d[RgbU8Traits::red_pos]=(quint8)
                 (red < 0 ? red+=UINT8_MAX  : red+0.5);
-            green=(double) s[PIXEL_GREEN]-d[PIXEL_GREEN];
-            d[PIXEL_GREEN]=(quint8)
+            green=(double) s[RgbU8Traits::green_pos]-d[RgbU8Traits::green_pos];
+            d[RgbU8Traits::green_pos]=(quint8)
                 (green < 0 ? green+=UINT8_MAX  : green+0.5);
-            blue=(double) s[PIXEL_BLUE]-d[PIXEL_BLUE];
-            d[PIXEL_BLUE]=(quint8)
+            blue=(double) s[RgbU8Traits::blue_pos]-d[RgbU8Traits::blue_pos];
+            d[RgbU8Traits::blue_pos]=(quint8)
                 (blue < 0 ? blue+=UINT8_MAX  : blue+0.5);
-            d[PIXEL_ALPHA]=OPACITY_OPAQUE;
+            d[RgbU8Traits::alpha_pos]=OPACITY_OPAQUE;
 
         }
         dst += dstRowSize;
@@ -1599,16 +1599,16 @@ void KisRgbU8CompositeOp::compositeDiff(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[PIXEL_ALPHA];
-            dAlpha = UINT8_MAX - d[PIXEL_ALPHA];
+            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
 
-            d[PIXEL_RED]=(quint8)
-                AbsoluteValue(s[PIXEL_RED]-(double) d[PIXEL_RED]);
-            d[PIXEL_GREEN]=(quint8)
-                AbsoluteValue(s[PIXEL_GREEN]-(double) d[PIXEL_GREEN]);
-            d[PIXEL_BLUE]=(quint8)
-                AbsoluteValue(s[PIXEL_BLUE]-(double) d[PIXEL_BLUE]);
-            d[PIXEL_ALPHA]=UINT8_MAX - (quint8)
+            d[RgbU8Traits::red_pos]=(quint8)
+                AbsoluteValue(s[RgbU8Traits::red_pos]-(double) d[RgbU8Traits::red_pos]);
+            d[RgbU8Traits::green_pos]=(quint8)
+                AbsoluteValue(s[RgbU8Traits::green_pos]-(double) d[RgbU8Traits::green_pos]);
+            d[RgbU8Traits::blue_pos]=(quint8)
+                AbsoluteValue(s[RgbU8Traits::blue_pos]-(double) d[RgbU8Traits::blue_pos]);
+            d[RgbU8Traits::alpha_pos]=UINT8_MAX - (quint8)
                 AbsoluteValue(sAlpha-(double) dAlpha);
 
         }
@@ -1642,22 +1642,22 @@ void KisRgbU8CompositeOp::compositeBumpmap(qint32 pixelSize,
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
             // Is this correct? It's not this way in GM.
-            if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+            if (s[RgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT)
                 continue;
 
             // And I'm not sure whether this is correct, either.
-            intensity = ((double)306.0 * s[PIXEL_RED] +
-                     (double)601.0 * s[PIXEL_GREEN] +
-                     (double)117.0 * s[PIXEL_BLUE]) / 1024.0;
+            intensity = ((double)306.0 * s[RgbU8Traits::red_pos] +
+                     (double)601.0 * s[RgbU8Traits::green_pos] +
+                     (double)117.0 * s[RgbU8Traits::blue_pos]) / 1024.0;
 
-            d[PIXEL_RED]=(quint8) (((double)
-                         intensity * d[PIXEL_RED])/UINT8_MAX +0.5);
-            d[PIXEL_GREEN]=(quint8) (((double)
-                           intensity * d[PIXEL_GREEN])/UINT8_MAX +0.5);
-            d[PIXEL_BLUE]=(quint8) (((double)
-                          intensity * d[PIXEL_BLUE])/UINT8_MAX +0.5);
-            d[PIXEL_ALPHA]= (quint8) (((double)
-                           intensity * d[PIXEL_ALPHA])/UINT8_MAX +0.5);
+            d[RgbU8Traits::red_pos]=(quint8) (((double)
+                         intensity * d[RgbU8Traits::red_pos])/UINT8_MAX +0.5);
+            d[RgbU8Traits::green_pos]=(quint8) (((double)
+                           intensity * d[RgbU8Traits::green_pos])/UINT8_MAX +0.5);
+            d[RgbU8Traits::blue_pos]=(quint8) (((double)
+                          intensity * d[RgbU8Traits::blue_pos])/UINT8_MAX +0.5);
+            d[RgbU8Traits::alpha_pos]= (quint8) (((double)
+                           intensity * d[RgbU8Traits::alpha_pos])/UINT8_MAX +0.5);
 
 
         }
@@ -1698,7 +1698,7 @@ void KisRgbU8CompositeOp::compositeCopyRed(qint32 pixelSize,
               qint32 cols,
               quint8 opacity) const
 {
-    compositeCopyChannel(PIXEL_RED, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
+    compositeCopyChannel(RgbU8Traits::red_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 }
 
 void KisRgbU8CompositeOp::compositeCopyGreen(qint32 pixelSize,
@@ -1710,7 +1710,7 @@ void KisRgbU8CompositeOp::compositeCopyGreen(qint32 pixelSize,
             qint32 cols,
             quint8 opacity) const
 {
-    compositeCopyChannel(PIXEL_GREEN, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
+    compositeCopyChannel(RgbU8Traits::green_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 }
 
 void KisRgbU8CompositeOp::compositeCopyBlue(qint32 pixelSize,
@@ -1722,7 +1722,7 @@ void KisRgbU8CompositeOp::compositeCopyBlue(qint32 pixelSize,
                qint32 cols,
                quint8 opacity) const
 {
-    compositeCopyChannel(PIXEL_BLUE, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
+    compositeCopyChannel(RgbU8Traits::blue_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 }
 
 
@@ -1737,7 +1737,7 @@ void KisRgbU8CompositeOp::compositeCopyOpacity(qint32 pixelSize,
 {
 
     // XXX: mess with intensity if there isn't an alpha channel, according to GM.
-    compositeCopyChannel(PIXEL_ALPHA, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
+    compositeCopyChannel(RgbU8Traits::alpha_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 
 }
 
@@ -1791,18 +1791,18 @@ void KisRgbU8CompositeOp::compositeDissolve(qint32 pixelSize,
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
             // XXX: correct?
-            if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT) continue;
+            if (s[RgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT) continue;
 
-            sAlpha = UINT8_MAX - s[PIXEL_ALPHA];
-            dAlpha = UINT8_MAX - d[PIXEL_ALPHA];
+            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
 
-            d[PIXEL_RED]=(quint8) (((double) sAlpha*s[PIXEL_RED]+
-                          (UINT8_MAX -sAlpha)*d[PIXEL_RED])/UINT8_MAX +0.5);
-            d[PIXEL_GREEN]= (quint8) (((double) sAlpha*s[PIXEL_GREEN]+
-                           (UINT8_MAX -sAlpha)*d[PIXEL_GREEN])/UINT8_MAX +0.5);
-            d[PIXEL_BLUE] = (quint8) (((double) sAlpha*s[PIXEL_BLUE]+
-                          (UINT8_MAX -sAlpha)*d[PIXEL_BLUE])/UINT8_MAX +0.5);
-            d[PIXEL_ALPHA] = OPACITY_OPAQUE;
+            d[RgbU8Traits::red_pos]=(quint8) (((double) sAlpha*s[RgbU8Traits::red_pos]+
+                          (UINT8_MAX -sAlpha)*d[RgbU8Traits::red_pos])/UINT8_MAX +0.5);
+            d[RgbU8Traits::green_pos]= (quint8) (((double) sAlpha*s[RgbU8Traits::green_pos]+
+                           (UINT8_MAX -sAlpha)*d[RgbU8Traits::green_pos])/UINT8_MAX +0.5);
+            d[RgbU8Traits::blue_pos] = (quint8) (((double) sAlpha*s[RgbU8Traits::blue_pos]+
+                          (UINT8_MAX -sAlpha)*d[RgbU8Traits::blue_pos])/UINT8_MAX +0.5);
+            d[RgbU8Traits::alpha_pos] = OPACITY_OPAQUE;
         }
         dst += dstRowSize;
         src += srcRowSize;

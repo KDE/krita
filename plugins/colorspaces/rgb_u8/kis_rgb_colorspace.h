@@ -25,12 +25,7 @@
 
 typedef KoRgbTraits<quint8>  RgbU8Traits;
 
-const quint8 PIXEL_BLUE = 0;
-const quint8 PIXEL_GREEN = 1;
-const quint8 PIXEL_RED = 2;
-const quint8 PIXEL_ALPHA = RgbU8Traits::alpha_pos;
 const qint32 MAX_CHANNEL_RGB = 3;
-const qint32 MAX_CHANNEL_RGBA = 4;
 
 class KRITARGB_EXPORT KisRgbColorSpace : public KoLcmsColorSpace<RgbU8Traits>
 {

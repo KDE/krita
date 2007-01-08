@@ -22,12 +22,10 @@
 */
 #include <cfloat>
 #include <cmath>
-#include <config.h>
 #include <lcms.h>
 #include <limits.h>
 
 #include <QImage>
-#include <QTextStream>
 #include <QFile>
 
 #include <kdebug.h>

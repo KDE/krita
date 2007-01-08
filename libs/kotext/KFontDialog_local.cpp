@@ -23,11 +23,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-
 #include <QComboBox>
 #include <QCheckBox>
 #include <QFile>
@@ -40,7 +35,6 @@
 #include <QFontDatabase>
 
 #include <QToolTip>
-//Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3ValueList>
 #include <Q3HBoxLayout>

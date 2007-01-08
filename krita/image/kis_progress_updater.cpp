@@ -18,8 +18,8 @@
 #include "kis_progress_updater.h"
 #include "kis_progress_updater_p.h"
 
-#include <KoAction.h>
-#include <KoExecutePolicy.h>
+#include <threadAction/KoAction.h>
+#include <threadAction/KoExecutePolicy.h>
 #include <threadweaver/ThreadWeaver.h>
 
 #include <QProgressBar>
@@ -143,4 +143,4 @@ bool KisUpdater::interrupted() const {
     return d->interrupted();
 }
 
-#include <kis_progress_updater.moc>
+#include "kis_progress_updater.moc"

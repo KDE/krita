@@ -21,7 +21,7 @@
 #include <QRect>
 #include <QVariant>
 
-#include <KoAction.h>
+#include <threadAction/KoAction.h>
 #include <KoExecutePolicy.h>
 #include <threadweaver/ThreadWeaver.h>
 

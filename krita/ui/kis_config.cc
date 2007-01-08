@@ -17,13 +17,11 @@
  */
 #include <limits.h>
 
-#include <QFont>
-
 #include <kglobalsettings.h>
-#include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
-#include <config.h>
+#include <kconfig.h>
+#include <QFont>
 
 #include <lcms.h>
 

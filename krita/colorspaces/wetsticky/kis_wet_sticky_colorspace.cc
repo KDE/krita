@@ -19,7 +19,6 @@
 #include <limits.h>
 #include <stdlib.h>
 
-#include <config.h>
 #include <lcms.h>
 
 #include <QImage>

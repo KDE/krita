@@ -20,7 +20,6 @@
  
 #include "kis_grid_drawer.h"
 
-#include <config.h>
 #include <config-krita.h>
 
 #ifdef HAVE_OPENGL

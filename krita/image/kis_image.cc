@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <config.h>
 #include <lcms.h>
 
 #include <QImage>

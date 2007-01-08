@@ -19,22 +19,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <config.h>
-
 #include <math.h>
 
-#include <iostream>
-
-using namespace std;
-
-#include <QRadioButton>
-#include <QCheckBox>
-#include <q3buttongroup.h>
-#include <QLabel>
-#include <QComboBox>
-
 #include <klocale.h>
-#include <knuminput.h>
 #include <kdebug.h>
 
 #include <kis_cmb_idlist.h>

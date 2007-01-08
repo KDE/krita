@@ -16,20 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <limits.h>
-#include <stdlib.h>
-
-#include <config.h>
-#include <lcms.h>
 
 #include <QImage>
-//Added by qt3to4:
 #include <Q3ValueList>
 
 #include <klocale.h>
 #include "KoLcmsColorSpaceTrait.h"
 #include "KoColorSpaceRegistry.h"
-#include "kis_image.h"
 #include "kis_wet_colorspace.h"
 #include "wetphysicsfilter.h"
 #include "KoIntegerMaths.h"

@@ -19,7 +19,6 @@
 #ifndef KISGLOBAL_H_
 #define KISGLOBAL_H_
 
-#include <config.h>
 #include <config-krita.h>
 #include <lcms.h>
 #include <limits.h>
@@ -27,8 +26,8 @@
 #include <QString>
 
 #include <kglobal.h>
-
-#define KRITA_VERSION VERSION
+#include <kofficeversion.h>
+#define KRITA_VERSION KOFFICE_VERSION
 
 const quint8 quint8_MAX = UCHAR_MAX;
 const quint16 quint16_MAX = 65535;

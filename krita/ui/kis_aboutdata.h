@@ -24,7 +24,6 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kofficeversion.h>
-#include <config.h>
 
 KAboutData * newKritaAboutData()
 {

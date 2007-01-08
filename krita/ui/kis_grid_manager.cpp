@@ -19,8 +19,7 @@
  */
 
 #include "kis_grid_manager.h"
- 
-#include <config.h>
+
 #include <config-krita.h>
 
 #ifdef HAVE_OPENGL

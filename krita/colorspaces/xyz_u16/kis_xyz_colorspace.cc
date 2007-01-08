@@ -17,13 +17,9 @@
  */
 
 
-#include <limits.h>
-#include <stdlib.h>
+#include <limits.h> // UINT16_MAX
 
-#include <config.h>
 #include <lcms.h>
-
-#include <QImage>
 
 #include <klocale.h>
 #include <kdebug.h>

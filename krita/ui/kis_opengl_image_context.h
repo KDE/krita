@@ -18,7 +18,6 @@
 #ifndef KIS_OPENGL_IMAGE_CONTEXT_H_
 #define KIS_OPENGL_IMAGE_CONTEXT_H_
 
-#include <config.h>
 #include <config-krita.h>
 
 #ifdef HAVE_OPENGL

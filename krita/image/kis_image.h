@@ -24,8 +24,6 @@
 #include <QRect>
 #include <QRegion>
 
-#include <config.h>
-
 #include <kis_shared.h>
 #include <kurl.h>
 

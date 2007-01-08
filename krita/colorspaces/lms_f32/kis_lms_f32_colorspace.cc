@@ -20,9 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <config.h>
 #include <limits.h>
-#include <stdlib.h>
 #include <lcms.h>
 
 #include <QImage>

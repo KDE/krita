@@ -24,8 +24,6 @@
 #include "krs_image.h"
 #include "krs_pattern.h"
 
-// kde
-#include <kapplication.h>
 #include <kdebug.h>
 
 // koffice
@@ -96,7 +94,7 @@ Module::~Module()
 
 QObject* Module::application()
 {
-	return KApplication::kApplication()->findChild< KoApplicationAdaptor* >();
+	return qApp->findChild< KoApplicationAdaptor* >();
 }
 
 #if 0

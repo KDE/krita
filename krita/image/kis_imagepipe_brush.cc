@@ -32,7 +32,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kapplication.h>
 #include <krandom.h>
 
 #include "KoColorSpaceRegistry.h"

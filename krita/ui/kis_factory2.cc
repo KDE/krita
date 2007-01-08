@@ -25,7 +25,6 @@
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kglobal.h>
-#include <kapplication.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
@@ -133,7 +132,7 @@ KInstance* KisFactory2::instance()
         s_instance->dirs()->addResourceDir("kis_palettes", QDir::homePath() + QString("/.create/swatches"));
 
         // Tell the iconloader about share/apps/koffice/icons
-        kapp->iconLoader()->addAppDir("koffice");
+        KIconLoader::global()->addAppDir("koffice");
 
 
 

@@ -20,7 +20,6 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
 
 #include "kis_image.h"
 #include "kis_paint_device.h"

@@ -16,6 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QApplication>
 #include <QLayout>
 #include <QToolTip>
 #include <QToolButton>
@@ -29,7 +30,6 @@
 #include <QTime>
 
 #include <kdebug.h>
-#include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kicon.h>
@@ -181,7 +181,7 @@ void KisLabelProgress::update(int percent)
 {
     if(m_time.elapsed() >= 100) {
         m_bar->setValue(percent);
-        KApplication::kApplication()->processEvents();
+        qApp->processEvents();
         // The following is safer, but makes cancel impossible:
         //QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput | QEventLoop::ExcludeSocketNotifiers);
         m_time.restart();
@@ -192,7 +192,7 @@ void KisLabelProgress::updateStage(const QString&, int percent)
 {
     if(m_time.elapsed() >= 100) {
         m_bar->setValue(percent);
-        KApplication::kApplication()->processEvents();
+        qApp->processEvents();
         // The following is safer, but makes cancel impossible:
         //QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput | QEventLoop::ExcludeSocketNotifiers);
         m_time.restart();

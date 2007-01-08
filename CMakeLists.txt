@@ -40,7 +40,6 @@ include (MacroAddFileDependencies)
 include (ConfigureChecks.cmake)
 include (TestBigEndian)
 
-configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h )
 configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
 

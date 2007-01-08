@@ -28,7 +28,6 @@
 #include <QPixmap>
 #include <QMouseEvent>
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kis_cursor.h>
 

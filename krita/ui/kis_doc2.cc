@@ -33,7 +33,6 @@
 #include <QList>
 
 // KDE
-#include <kapplication.h>
 #include <kcommand.h>
 #include <kdebug.h>
 #include <kimageio.h>
@@ -1253,12 +1252,10 @@ void KisDoc2::IODone()
 
 void KisDoc2::slotIOProgress(qint8 percentage)
 {
-    KApplication *app = KApplication::kApplication();
+    Q_ASSERT(qApp);
 
-    Q_ASSERT(app);
-
-    if (app->hasPendingEvents())
-        app->processEvents();
+    if (qApp->hasPendingEvents())
+        qApp->processEvents();
 
     int totalPercentage = ((m_d->ioProgressBase + percentage) * 100) / m_d->ioProgressTotalSteps;
 

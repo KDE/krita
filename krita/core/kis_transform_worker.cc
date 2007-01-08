@@ -84,6 +84,17 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
         hit.nextRow();
         vit.nextRow();
         dstSelIt.nextRow();
+
+        //progress info
+        m_progressStep += r.width();
+        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
+        {
+            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
+            emit notifyProgress(m_lastProgressReport);
+        }
+        if (m_cancelRequested) {
+            break;
+        }
     }
 }
 
@@ -121,6 +132,17 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
             ++hit;
             ++vit;
             ++dstSelIt;
+        }
+
+        //progress info
+        m_progressStep += r.width();
+        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
+        {
+            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
+            emit notifyProgress(m_lastProgressReport);
+        }
+        if (m_cancelRequested) {
+            break;
         }
     }
 }
@@ -165,6 +187,17 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
             ++dstSelIt;
         }
         ++x;
+
+        //progress info
+        m_progressStep += r.width();
+        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
+        {
+            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
+            emit notifyProgress(m_lastProgressReport);
+        }
+        if (m_cancelRequested) {
+            break;
+        }
     }
 }
 
@@ -204,6 +237,17 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
             --srcIt;
             ++dstIt;
             ++dstSelIt;
+        }
+
+        //progress info
+        m_progressStep += r.width();
+        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
+        {
+            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
+            emit notifyProgress(m_lastProgressReport);
+        }
+        if (m_cancelRequested) {
+            break;
         }
     }
 }
@@ -512,33 +556,62 @@ bool KisTransformWorker::run()
         rotation = fmod(rotation, 2*M_PI);
     int rotQuadrant = int(rotation /(M_PI/2) + 0.5) & 3;
 
+    // Figure out how we will do the initial right angle rotations
     double tmp;
     switch(rotQuadrant)
     {
+        default: // just to shut up the compiler
+        case 0:
+            m_progressTotalSteps = 0;
+            break;
+        case 1:
+            rotation -= M_PI/2;
+            tmp = xscale;
+            xscale=yscale;
+            yscale=tmp;
+            m_progressTotalSteps = r.width() * r.height();
+            break;
+        case 2:
+            rotation -= M_PI;
+            m_progressTotalSteps = r.width() * r.height();
+            break;
+        case 3:
+            rotation += M_PI/2 + 2*M_PI;
+            tmp = xscale;
+            xscale = yscale;
+            yscale = tmp;
+            m_progressTotalSteps = r.width() * r.height();
+            break;
+    }
+
+    // Calculate some auxillary values
+    yshear = sin(rotation);
+    xshear = -tan(rotation/2);
+    xtranslate -= int(xshear*ytranslate);
+
+    // Calculate progress steps
+    m_progressTotalSteps += int(yscale * r.width() * r.height());
+    m_progressTotalSteps += int(xscale * r.width() * (r.height() * yscale + r.width()*yshear));
+
+    m_lastProgressReport=0;
+
+    // Now that we have everything in place it's time to do the actual right angle rotations
+    switch(rotQuadrant)
+    {
+        default: // just to shut up the compiler
         case 0:
             break;
         case 1:
             rotateRight90(srcdev, tmpdev1);
             srcdev = tmpdev1;
-            rotation -= M_PI/2;
-            tmp = xscale;
-            xscale=yscale;
-            yscale=tmp;
             break;
         case 2:
             rotate180(srcdev, tmpdev1);
             srcdev = tmpdev1;
-            rotation -= M_PI;
             break;
         case 3:
             rotateLeft90(srcdev, tmpdev1);
             srcdev = tmpdev1;
-            rotation += M_PI/2 + 2*M_PI;
-            tmp = xscale;
-            xscale = yscale;
-            yscale = tmp;
-            break;
-        default:
             break;
     }
 
@@ -562,15 +635,6 @@ bool KisTransformWorker::run()
 
         return m_cancelRequested;
     }
-
-    yshear = sin(rotation);
-    xshear = -tan(rotation/2);
-    xtranslate -= int(xshear*ytranslate);
-
-    m_progressTotalSteps = int(yscale * r.width() * r.height());
-    m_progressTotalSteps += int(xscale * r.width() * (r.height() * yscale + r.width()*yshear));
-
-    m_lastProgressReport=0;
 
     if ( m_cancelRequested) {
         emit notifyProgressDone();

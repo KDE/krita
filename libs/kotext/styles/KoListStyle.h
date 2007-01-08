@@ -73,7 +73,7 @@ public:
         DisplayLevel,   ///< show this many levels. Is always lower than the (implied) level.
         CharacterStyleId,///< CharacterStyle used for markup of the counter
         BulletCharacter,///< an int with the unicode value of the character
-        BulletSize,     ///< size in percent relative to the height of the text
+        BulletSize     ///< size in percent relative to the height of the text
     };
 
     /**

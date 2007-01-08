@@ -26,6 +26,7 @@
 #include <QWidget>
 #include <QtCrypto>
 #include <kpassworddialog.h>
+#include <knewpassworddialog.h>
 #include "KoEncryptedStore.h"
 #include <kwallet.h>
 #include <klocale.h>
@@ -679,11 +680,11 @@ bool KoEncryptedStore::closeWrite() {
         findPasswordInKWallet( );
     }
     while( m_password.isEmpty( ) ) {
-        QByteArray pass;
-        if( KPasswordDialog::getNewPassword( m_window ? m_window : NULL, pass, i18n( "Please enter the password to encrypt the document with." ) ) == KPasswordDialog::Rejected ) {
+        KNewPasswordDialog dlg(m_window );
+        dlg.setPrompt(i18n( "Please enter the password to encrypt the document with." ) );
+        if( ! dlg.exec() )
             return false;
-        }
-        m_password = QSecureArray( pass );
+        m_password = QSecureArray( dlg.password().toUtf8() );
         passWasAsked = true;
     }
     // So, we have a password, then we can initialize the backend (if necessary)

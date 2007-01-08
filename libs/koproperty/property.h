@@ -66,7 +66,7 @@ Integers that represent the type of the property. Plugin defined properties
 should have a type number >= UserDefined .*/
 enum PropertyType {
 	//standard supported QVariant types
-	Auto = QVariant::Invalid - 1,
+	Auto = 0x00ffffff,
 	Invalid = QVariant::Invalid   /**<invalid property type*/,
 	Map = QVariant::Map           /**<QMap<QString, QVariant>*/,
 	List = QVariant::List         /**<QList<QVariant>*/,

@@ -177,7 +177,7 @@ enum SizeType {
     InfinitySize,
     RelativeSize, 
     AbsoluteSize, 
-    PixelSize,
+    PixelSize/*,
     NegativeVeryVeryThinMathSpace,
     NegativeVeryThinMathSpace,
     NegativeThinMathSpace,
@@ -191,7 +191,7 @@ enum SizeType {
     MediumMathSpace,
     ThickMathSpace,
     VeryThickMathSpace,
-    VeryVeryThickMathSpace
+    VeryVeryThickMathSpace*/
 };
 
 /**

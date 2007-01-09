@@ -22,6 +22,7 @@
 
 #include "BasicElement.h"
 #include "FormulaCursor.h"
+#include "AttributeManager.h"
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
@@ -31,8 +32,8 @@
 
 namespace KFormula {
 
-BasicElement::BasicElement( BasicElement* p ) : m_baseLine( 0.0 ),
-						m_parentElement( p )
+BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p ),
+                                                m_baseLine( 0.0 )
 {
 }
 
@@ -41,13 +42,16 @@ BasicElement::~BasicElement()
     // TODO delete m_attributes 
 }
 
-void BasicElement::paint( QPainter& painter ) const
+void BasicElement::paint( QPainter& painter, const AttributeManager* am )
 {
     // TODO paint a blue rectangle with boundingRect
     // painter.setBrush( Qt::NoBrush );
     // painter.setPen( QPen(  ) );
     // painter.drawRect( m_boundingRect );
 }
+
+void BasicElement::layout( const AttributeManager* am )
+{}
 
 void BasicElement::calculateSize()
 {
@@ -150,11 +154,21 @@ BasicElement* BasicElement::childElementAt( const QPointF& p )
     return this;    // if no child contains the point, it's the FormulaElement itsself
 }
 
-QString BasicElement::inheritAttribute( const QString& attribute ) const
+QString BasicElement::hasAttribute( const QString& attribute ) const
+{
+    return QString();
+}
+
+QString BasicElement::inheritsAttribute( const QString& attribute ) const
 {
     if( !m_attributes.contains( attribute ) )
         return QString();
     return m_attributes.value( attribute );
+}
+
+QVariant BasicElement::attributesDefaultValue( const QString& attribute ) const
+{
+    return QVariant();
 }
 
 void BasicElement::moveLeft( FormulaCursor* cursor, BasicElement* )
@@ -419,7 +433,7 @@ double BasicElement::getX() const
  * @param st size type container. It will be properly assigned to its size
  * type or NoSize if str is invalid
  */
-double BasicElement::getSize( const QString& str, SizeType* st )
+/*double BasicElement::getSize( const QString& str, SizeType* st )
 {
     int index = str.find( "%" );
     if ( index != -1 ) {
@@ -459,9 +473,9 @@ double BasicElement::getSize( const QString& str, SizeType* st )
     }
     // If there's no unit, assume 'pt'
     return str2size( str, st, str.length(),AbsoluteSize );
-}
+}*/
 
-SizeType BasicElement::getSpace( const QString& str )
+/*NamedSpaces BasicElement::getSpace( const QString& str )
 {
     if ( str == "negativeveryverythinmathspace" ) {
         return NegativeVeryVeryThinMathSpace;
@@ -508,11 +522,11 @@ SizeType BasicElement::getSpace( const QString& str )
     return NoSize;
 }
 
-
+*/
 /**
  * Used internally by getSize()
  */
-double BasicElement::str2size( const QString& str, SizeType *st, uint index, SizeType type )
+/*double BasicElement::str2size( const QString& str, SizeType *st, uint index, SizeType type )
 {
     QString num = str.left( index );
     bool ok;
@@ -527,6 +541,6 @@ double BasicElement::str2size( const QString& str, SizeType *st, uint index, Siz
         *st = NoSize;
     }
     return -1;
-}
+}*/
 
 } // namespace KFormula

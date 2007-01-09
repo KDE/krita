@@ -44,7 +44,7 @@ public:
     ~KoFormulaShapeFactory();
 
     /// reimplemented
-    KoShape* createDefaultShape();
+    KoShape* createDefaultShape() const;
 
     /// reimplemented
     KoShape* createShape( const KoProperties * params ) const;

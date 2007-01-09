@@ -20,6 +20,8 @@
 #ifndef FORMULARENDERER_H
 #define FORMULARENDERER_H
 
+#include <QPainter>
+
 namespace KFormula {
 
 class AttributeManager;
@@ -51,25 +53,28 @@ public:
     /// The constructor
     FormulaRenderer();
 
+    /// The destructor
+    ~FormulaRenderer();
+
     /**
      * Paint an element
      * @param p The QPainter that should be used to paint the element
      * @param element The element to be painted
      */
-    void paintElement( const QPainter& p, const BasicElement* element );
+    void paintElement( QPainter& p, BasicElement* element );
 
     /**
      * Layout an element
      * @param element The element to be layouted
      */
-    void layoutElement( const BasicElement* element );
+    void layoutElement( BasicElement* element );
 
     /**
      * Update an element after it has changed
      * @param p The QPainter that should be used to paint the element
      * @param element The element that has changed
      */
-    void update( const QPainter& p, const BasicElement* element );
+    void update( QPainter& p, BasicElement* element );
 
 private:
     /// The attribute manager used for renderering and layouting

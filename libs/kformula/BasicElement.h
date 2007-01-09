@@ -38,9 +38,10 @@
 #include "kformuladefs.h"
 
 class KoXmlWriter;
-
+#include "AttributeManager.h"
 namespace KFormula {
 
+class AttributeManager;
 class FormulaCursor;
 class FormulaElement;
 class SequenceElement;
@@ -53,7 +54,8 @@ enum ElementType {
     MatrixRow,
     MatrixEntry,
     UnderOver,
-    MultiScript
+    MultiScript,
+    Root
 };
 
 
@@ -120,7 +122,10 @@ public:
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      */
-    virtual void paint( QPainter& painter ) const;
+    virtual void paint( QPainter& painter, const AttributeManager* am );
+
+    /// the former calculateSize
+    virtual void layout( const AttributeManager* am );
 
     /// Calculate the element's sizes and the size of its children
     virtual void calculateSize();
@@ -201,8 +206,14 @@ public:
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
 
+    /// @return The value of the attribute if it is set for this element
+    QString hasAttribute( const QString& attribute ) const;
+
     /// @return The value of the attribute if it is inherited
-    QString inheritAttribute( const QString& attribute ) const;
+    virtual QString inheritsAttribute( const QString& attribute ) const;
+
+    /// @return The default value of the attribute for this element
+    virtual QVariant attributesDefaultValue( const QString& attribute ) const;
     
     /// Read the element from MathML
     virtual void readMathML( const KoXmlElement& element );
@@ -405,15 +416,15 @@ protected:
      * @param st size type container. It will be properly assigned to its size
      * type or NoSize if str is invalid
      */
-    double getSize( const QString& str, SizeType* st );
+//    double getSize( const QString& str, SizeType* st );
 
-    SizeType getSpace( const QString& str );
+    //NamedSpaces getSpace( const QString& str );
 
 private:
     /**
      * Used internally by getSize()
      */
-    double str2size( const QString& str, SizeType* st, uint index, SizeType type );
+    //double str2size( const QString& str, SizeType* st, uint index, SizeType type );
 
     /// The element's parent element - might not be null except of FormulaElement
     BasicElement* m_parentElement;

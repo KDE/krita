@@ -20,8 +20,10 @@
 #ifndef ATTRIBUTEMANAGER_H
 #define ATTRIBUTEMANAGER_H
 
-#include <QList>
-#include <KoViewConverter.h>
+#include <QStack>
+#include <QFont>
+#include <QVariant>
+class KoViewConverter;
 class QPaintDevice;
 
 namespace KFormula {
@@ -97,7 +99,10 @@ enum Form {
 class AttributeManager {
 public:
     /// The constructor
-    AttributeManager( const KoViewConverter& converter );
+    AttributeManager();
+
+    /// The destructor
+    ~AttributeManager();
 
     /**
      * Obtain a value for attribute
@@ -110,42 +115,70 @@ public:
      * Inherit the attributes of an element
      * @param element The BasicElement to herit from
      */
-    void inheritAttributes( BasicElement* element );
+    void inheritAttributes( const BasicElement* element );
 
     /// Disenherit the attributes currently on top of the stack
     void disinheritAttributes();
 
     /// Obtain the @r current scriptlevel
-    int scripLevel() const;
+    int scriptLevel() const;
  
     /// Obtain the @r current displystyle
     bool displayStyle() const;
 
+    /// Set the KoViewConverter to use
+    void setViewConverter( KoViewConverter* converter );
+
+    /// Set the QPaintDevice to use
+    void setPaintDevice( QPaintDevice* paintDevice );
+
 protected:
-    QVariant defaultValueOf( const QString& attribute );
-    bool alteringScriptLevel( const BasicElement* e ) const;
+    /**
+     * Alter the current scriptlevel on the stack's top
+     * @param element The BasicElement that effects the changes to the scriptLevel
+     */
+    void alterScriptLevel( const BasicElement* element );
     QVariant parseValue( const QString& value ) const;
 
     /**
      * Fill the heritage stack with all the attributes valid for element
      * @param element The BasicElement to build up the heritage stack for
      */
-    void buildHeritageOf( BasicElement* element );
+    void buildHeritageOf( const BasicElement* element );
 
-    double calculateEmExUnits( double value, bool isEm );
+    /**
+     * Calculates the pt values of a passes em or ex value
+     * @param value The em or ex value to be used for calculation
+     * @param isEm Indicates whether to calculate an ex or em value
+     * @return The calculated pt value
+     */
+    double calculateEmExUnits( double value, bool isEm ) const;
+
+    QVariant parseMetrics( const QString& value ) const;
+
+    int formValue( const QString& value ) const;
+
+    int mathVariantValue( const QString& value ) const;
+
+    int alignValue( const QString& value ) const;
+
+    double mathSpaceValue( const QString& value ) const;
 
 private:
     /// The stack of attribute heritage, the topmost element is the currently active
-    QStack<BasicElement*> m_heritageStack;
+    QStack<const BasicElement*> m_attributeStack;
 
     /// The stack for the current scriptlevel
     QStack<int> m_scriptLevelStack;
 
     /// The current font
-//    QFont m_currentFont;  will come perhaps later
+    QFont m_currentFont; 
 
     /// The KoViewConverter used to determine the point values of pixels
-    KoViewConverter m_converter;
+    KoViewConverter* m_viewConverter;
+
+    /// The QPaintDevice we are currently painting on - needed for em/ ex units
+    QPaintDevice* m_paintDevice;
 };
 
 } // namespace KFormula

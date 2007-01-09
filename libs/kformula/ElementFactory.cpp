@@ -67,7 +67,7 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     //else if ( tagName == "mglyph" )        return new GlyphElement( parent );
 
     // General Layout Schemata ( Section 3.1.6.2 )
-    else if ( tagName == "mrow" )          return new SequenceElement( parent );
+//    else if ( tagName == "mrow" )          return new SequenceElement( parent );
     //else if ( tagName == "mfrac" )         return new FractionElement( parent );
     //else if ( tagName == "msqrt"
     //          || tagName == "mroot" )      return new RootElement( parent );
@@ -92,7 +92,8 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
 
 TextElement* ElementFactory::createTextElement( const QChar& ch, bool symbol )
 {
-    return new TextElement( ch, symbol );
+    //return new TextElement( ch, symbol );
+    return 0;
 }
 
 /*

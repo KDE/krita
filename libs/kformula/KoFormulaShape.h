@@ -24,7 +24,7 @@
 #include <QDomDocument>
 class KoXmlWriter;
 
-#define FormulaShape_SHAPEID "FormulaShapeID"
+#define KoFormulaShapeId "FormulaShapeID"
 
 namespace KFormula {
 
@@ -45,7 +45,7 @@ public:
     ~KoFormulaShape();
 
     /// inherited from KoShape
-    void paint( QPainter &painter, KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter );
 
     /// inherited from KoShape
     void paintDecorations( QPainter &painter, const KoViewConverter &converter,

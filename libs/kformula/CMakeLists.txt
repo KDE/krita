@@ -4,48 +4,47 @@ add_subdirectory( fonts )
 include_directories(${QT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
 set( formulashape_PART_SRCS
-#   KoFormulaShapePlugin.cpp
-#   KoFormulaShape.cpp
-#   KoFormulaShapeFactory.cpp
-#   KoFormulaTool.cpp
-#   KoFormulaToolFactory.cpp
-#   AttributeManager.cpp
-#   FormulaRenderer.cpp
+   KoFormulaShapePlugin.cpp
+   KoFormulaShape.cpp
+   KoFormulaShapeFactory.cpp
+   KoFormulaTool.cpp
+   KoFormulaToolFactory.cpp
+   AttributeManager.cpp
+   FormulaRenderer.cpp
    FormulaCursor.cpp 
-#   FormulaContainer.cpp
    BasicElement.cpp 
-   SequenceElement.cpp
-   FormulaElement.cpp 
-   MultiscriptElement.cpp
-   UnderOverElement.cpp
-   TextElement.cpp 
-   BracketElement.cpp 
-   MatrixElement.cpp
-   MatrixRowElement.cpp
-   MatrixEntryElement.cpp
-   FractionElement.cpp
-   RootElement.cpp
-   SpaceElement.cpp
-   EncloseElement.cpp
-   ActionElement.cpp
-   PaddedElement.cpp
-   GlyphElement.cpp
-   ErrorElement.cpp
-   TokenStyleElement.cpp
-   StyleElement.cpp
-   TokenElement.cpp
-   NumberElement.cpp
-   IdentifierElement.cpp
-   OperatorElement.cpp
+#   SequenceElement.cpp
+#   FormulaElement.cpp 
+#   MultiscriptElement.cpp
+#   UnderOverElement.cpp
+#   TextElement.cpp 
+#   BracketElement.cpp 
+#   MatrixElement.cpp
+#   MatrixRowElement.cpp
+#   MatrixEntryElement.cpp
+#   FractionElement.cpp
+#   RootElement.cpp
+#   SpaceElement.cpp
+#   EncloseElement.cpp
+#   ActionElement.cpp
+#   PaddedElement.cpp
+#   GlyphElement.cpp
+#   ErrorElement.cpp
+#   TokenStyleElement.cpp
+#   StyleElement.cpp
+#   TokenElement.cpp
+#   NumberElement.cpp
+#   IdentifierElement.cpp
+#   OperatorElement.cpp
    OperatorDictionary.cpp
    Entities.cpp
    ElementFactory.cpp 
    MatrixDialog.cc 
-   contextstyle.cc 
+#   contextstyle.cc 
    symboltable.cc 
    kformulaconfigpage.cc 
    symbolaction.cc 
-   fontstyle.cc 
+#   fontstyle.cc 
 )
 
 kde4_automoc(${formulashape_PART_SRCS})

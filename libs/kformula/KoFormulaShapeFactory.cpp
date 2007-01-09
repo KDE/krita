@@ -28,29 +28,31 @@ KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
     setToolTip( i18n( "A formula" ) );
 //    setIcon( "formula" );    yet to come
 
-    KoShapeTemplate t;
+/*    KoShapeTemplate t;
     t.id = KoFormulaShapeId;
     t.name = i18n("Formula");
     t.toolTip = i18n("A formula");
-//    t.icon = ""; //TODO add it
+    t.icon = ""; //TODO add it
     props = new KoProperties();
     t.properties = props;
-    addTemplate( t );
+    addTemplate( t );*/
 }
 
 KoFormulaShapeFactory::~KoFormulaShapeFactory()
 {}
 
-KoShape* KoFormulaShapeFactory::createDefaultShape()
+KoShape* KoFormulaShapeFactory::createDefaultShape() const
 {
-    KoFormulaShape* formula = new KoFormulaShape();
+    KFormula::KoFormulaShape* formula = new KFormula::KoFormulaShape();
     formula->setShapeId( KoFormulaShapeId );
     return formula;
 }
 
-KoShape* KoFormulaShapeFactory::createShape( const KoProperties * params ) const
+KoShape* KoFormulaShapeFactory::createShape( const KoProperties* params ) const
 {
-    KoFormulaShape* formula = new KoFormulaShape();
+    Q_UNUSED( params );
+
+    KFormula::KoFormulaShape* formula = new KFormula::KoFormulaShape();
     if( !formula )
         return 0;
 

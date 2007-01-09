@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "FormulaShape.h"
+#include "KoFormulaShape.h"
 #include "FormulaElement.h"
 #include "FormulaRenderer.h"
 #include <KoXmlWriter.h>
@@ -26,7 +26,7 @@ namespace KFormula {
 	
 KoFormulaShape::KoFormulaShape()
 {
-    m_formulaElement = new FormulaElement();
+//    m_formulaElement = new FormulaElement();
     m_formulaRenderer = new FormulaRenderer(); //TODO add the right arguments
 }
 
@@ -36,7 +36,7 @@ KoFormulaShape::~KoFormulaShape()
     delete m_formulaRenderer;
 }
 
-void KoFormulaShape::paint( QPainter &painter, KoViewConverter &converter ) 
+void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter ) 
 {
     applyConversion( painter, converter );   // apply zooming and coordinate translation
     m_formulaRenderer->paintElement( painter, m_formulaElement );  // paint the formula
@@ -77,7 +77,7 @@ BasicElement* KoFormulaShape::formulaElement() const
 void KoFormulaShape::loadMathML( const QDomDocument &doc, bool )
 {
     delete m_formulaElement;                                // delete the old formula
-    m_formulaElement = new FormulaElement();                // create a new root element
+//    m_formulaElement = new FormulaElement();                // create a new root element
     m_formulaElement->readMathML( doc.documentElement() );  // and load the new formula
 }
 

@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "FormulaRenderer.h"
 #include "AttributeManager.h"
 #include "BasicElement.h"
 
@@ -25,6 +26,7 @@ namespace KFormula {
 FormulaRenderer::FormulaRenderer()
 {
     m_dirtyElement = 0;
+    m_attributeManager = new AttributeManager();
 }
 
 FormulaRenderer::~FormulaRenderer()
@@ -32,7 +34,7 @@ FormulaRenderer::~FormulaRenderer()
     delete m_attributeManager;
 }
 
-void FormulaRenderer::paintElement( const QPainter& p, const BasicElement* element )
+void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
 {
     m_attributeManager->inheritAttributes( element );
 
@@ -42,18 +44,18 @@ void FormulaRenderer::paintElement( const QPainter& p, const BasicElement* eleme
     element->paint( p, m_attributeManager );
     
     foreach( BasicElement* tmpElement, element->childElements() ) // do recursive repaint
-        paintElement( tmpElement );
+        paintElement( p, tmpElement );
     
     m_attributeManager->disinheritAttributes();
 }
 
-void FormulaRenderer::update( const QPainter& p, const BasicElement* element )
+void FormulaRenderer::update( QPainter& p, BasicElement* element )
 {
     layoutElement( element );              // relayout the changed element
     paintElement( p, m_dirtyElement );     // and then repaint as much as needed
 }
 
-void FormulaRenderer::layoutElement( const BasicElement* element )
+void FormulaRenderer::layoutElement( BasicElement* element )
 {
     m_attributeManager->inheritAttributes( element );   // rebuild the heritage tree
     QRectF tmpBoundingRect;
@@ -62,7 +64,7 @@ void FormulaRenderer::layoutElement( const BasicElement* element )
     while( parentLayoutAffected )
     {
         tmpBoundingRect = tmpElement->boundingRect();   // cache the former boundingRect
-        tmpElement->layout();                           // layout the element
+        tmpElement->layout( m_attributeManager );       // layout the element
 
         // check whether the new layout affects the parent element's layout
         if( tmpBoundingRect == tmpElement->boundingRect() )

@@ -20,20 +20,19 @@
 #include "AttributeManager.h"
 #include "BasicElement.h"
 #include <KoUnit.h>
+#include <QFontMetrics>
 
 namespace KFormula {
 
-AttributeManager::AttributeManager( const KoViewConverter& converter ),
-                  m_converter( converter ), m_paintDevice( pd )
+AttributeManager::AttributeManager()
 {
-    m_paintDevice = 0;
+    m_viewConverter = 0;
 }
 
 AttributeManager::~AttributeManager()
-{
-}
+{}
 
-void AttributeManager::inheritAttributes( BasicElement* element )
+void AttributeManager::inheritAttributes( const BasicElement* element )
 {
     // check for the parent element and rebuild attribute heritage if needed
     if( element->parentElement() != m_attributeStack.first() )
@@ -54,118 +53,83 @@ void AttributeManager::disinheritAttributes()
 QVariant AttributeManager::valueOf( const QString& attribute )
 {
     // check if the current element has a value assigned
-    if( m_attributeStack.first()->attributes().contain( attribute ) )
-        return parseValue( m_attributeStack.first()->attributes().value( attribute ) );
+    QString value;
+    value = m_attributeStack.first()->hasAttribute( attribute );
+    if( !value.isEmpty() )
+        return parseValue( value );
 
     // if not, check if any element in the stack might inherit a value
-    QString value;
-    foreach( BasicElement* tmp, m_attributeStack )
+    foreach( const BasicElement* tmp, m_attributeStack )
     {
-        value = tmp->inheritAttribute( attribute );
+        value = tmp->inheritsAttribute( attribute );
         if( !value.isEmpty() )
             return parseValue( value );
     }
     
     // if not, return the default value of the attribute 
-    if( value.isEmpty() )                     // there was no attribute found
-        return defaultValueOf( attribute );   // return default value
+    return m_attributeStack.first()->attributesDefaultValue( attribute );
 }
 
-void AttributeManager::buildHeritageOf( BasicElement* element )
+void AttributeManager::buildHeritageOf( const BasicElement* element )
 {
     m_attributeStack.clear();
-    BasicElement* tmpElement = element;
+    m_scriptLevelStack.clear();
+    m_scriptLevelStack.push( 0 );     // see 3.3.4.2 of the MathML spec
+
+    const BasicElement* tmpElement = element;
     while( tmpElement )
     {
-        m_attributeStack << tmpElement;
+        m_attributeStack.push( tmpElement );
+        alterScriptLevel( tmpElement );
         tmpElement = tmpElement->parentElement();
     }
-
-    determineScriptLevel();
 }
 
-void AttributeManager::determineScriptLevel()
-{
-    m_scriptLevel = 0;    // see 3.3.4.2 of the MathML spec 
-
-    // iterating the tree from behind
-    QListIterator it( m_attributeStack );
-    it.toBack();
-    while( it.hasPrevious() )
-        alterScriptLevel( it.previous() );
-}
-
-int AttributeManager::scriptLevel() const
-{
-    return m_scriptLevelStack.top();
-}
-
-void AttributeManager::alterScriptLevel( BasicElement* element ) const
+void AttributeManager::alterScriptLevel( const BasicElement* element )
 {
     // set the scriptlevel explicitly
-    if( element->attributes()->contain( "scriptlevel" ) )
+    QString value = element->hasAttribute( "scriptlevel" );
+    if( !value.isEmpty() )
     {
         // catch increments or decrements that may only affect scriptlevel
         if( value.startsWith( "+" ) )
         {
-            int tmp = m_scriptLevelStack.top() + QString::number( value.remove( 0, 1 ) );
+            int tmp = m_scriptLevelStack.top() + value.remove( 0, 1 ).toInt();
             m_scriptLevelStack.push( tmp );
         }
         else if( value.startsWith( "-" ) )
         {
-            int tmp = m_scriptLevelStack.top() - QString::number( value.remove( 0, 1 ) );
+            int tmp = m_scriptLevelStack.top() - value.remove( 0, 1 ).toInt();
             m_scriptLevelStack.push( tmp );
 	}
         else
-            m_scriptLevelStack.push( QString::number( value ) );
+            m_scriptLevelStack.push( value.toInt() );
     }
     else if( element->parentElement()->elementType() == MultiScript ||
              element->parentElement()->elementType() == UnderOver )
         m_scriptLevelStack.push( m_scriptLevelStack.top()++ );
-    else if( element->parentElement()->elementType() == Fraction
-             && valueOf( "displaystyle" ) )
+    else if( element->parentElement()->elementType() == Fraction && 
+             valueOf( "displaystyle" ).toBool() )
         m_scriptLevelStack.push( m_scriptLevelStack.top()++ );
     else if( element->parentElement()->elementType() == Root && 
-             element == element->parentElement()->childElements()->value( 1 ) )
+             element == element->parentElement()->childElements().value( 1 ) )
         m_scriptLevelStack.push( m_scriptLevelStack.top()+2 ); // only for roots index
-}
-
-QVariant AttributeManager::defaultValueOf( const QString& attribute )
-{
-    QVariant tmp = m_attributeStack.first()->defaultValueOf( attribute );
-    if( !tmp.isNull() )
-        return tmp;
-    
-    // there is a global default value for the attribute
-    // TODO implement all default values listed in the spec
-
-
-    return QVariant(); 
 }
 
 QVariant AttributeManager::parseValue( const QString& value ) const
 {
-    // catch values with metrics
-    if( value.endsWith( "em" ) )
-        return calculateEmExUnits( QString::number( value.chop( 2 ) ), true );
-    else if( value.endsWith( "ex" ) )
-        return calculateEmExUnits( QString::number( value.chop( 2 ) ), false );
-    else if( value.endsWith( "px" ) )
-        return m_converter.viewToDocumentX( QString::number( value.chop( 2 ) ) );
-    else if( value.endsWith( "in" ) || value.endsWith( "cm" ) || value.endsWith( "pc" )
-             value.endsWith( "mm" ) || value.endsWith( "pt" ) )
-        return KoUnit::parseValue( value );
-//    else if( value.endsWith( "%" ) )
-//        return defaultValueOf( attribute )*QString::number( value.chop( 1 ) );
+    // check if the value includes metric units
+    if( parseMetrics( value ).isValid() )
+        return parseMetrics( value );
 
     // look for attributes that are enums
-    if( alignValue( value ) =! -1 )
+    if( alignValue( value ) != -1 )
         return alignValue( value );
-    else if( mathVariantValue( value ) =! -1 )
+    else if( mathVariantValue( value ) != -1 )
         return mathVariantValue( value );
-    else if( mathSpaceValue( value ) =! -1.0)
-        return mathSpaceValue;
-    else if( formValue( value ) =! -1 )
+    else if( mathSpaceValue( value ) != -1.0)
+        return mathSpaceValue( value );
+    else if( formValue( value ) != -1 )
         return formValue( value );
 
     // look if the value is color
@@ -177,65 +141,65 @@ QVariant AttributeManager::parseValue( const QString& value ) const
     return QVariant( value );
 }
 
-int AttributeManager::alignValue( const QString& value )
+int AttributeManager::alignValue( const QString& value ) const
 {
     if( value == "right" )
-        return Align::Right;
+        return Right;
     else if( value == "left" )
-        return Align::Left;
+        return Left;
     else if( value == "center" )
-        return Align::Center;
+        return Center;
     else
         return -1;
 }
 
-int AttributeManager::formValue( const QString& value )
+int AttributeManager::formValue( const QString& value ) const
 {
     if( value == "prefix" )
-        return Form::Prefix;
+        return Prefix;
     else if( value == "infix" )
-        return Form::Infix;
+        return Infix;
     else if( value == "postfix" )
-        return Form::Postfix;
+        return Postfix;
     else
         return -1;
 }
 
-int AttributeManager::mathVariantValue( const QString& value )
+int AttributeManager::mathVariantValue( const QString& value ) const
 {
     if( value == "normal" )
-        return MathVariant::Normal;
+        return Normal;
     else if( value == "bold" )
-        return MathVariant::Bold;
+        return Bold;
     else if( value == "italic" )
-        return MathVariant::Italic;
+        return Italic;
     else if( value == "bold-italic" )
-        return MathVariant::BoldItalic;
+        return BoldItalic;
     else if( value == "double-struck" )
-        return MathVariant::DoubleStruck;
+        return DoubleStruck;
     else if( value == "bold-fraktur" )
-        return MathVariant::BoldFraktur;
+        return BoldFraktur;
     else if( value == "script" )
-        return MathVariant::Script;
+        return Script;
     else if( value == "bold-script" )
-        return MathVariant::BoldScript;
+        return BoldScript;
     else if( value == "fraktur" )
-        return MathVariant::Fraktur;
+        return Fraktur;
     else if( value == "sans-serif" )
-        return MathVariant::SansSerif;
+        return SansSerif;
     else if( value == "bold-sans-serif" )
-        return MathVariant::BoldSansSerif;
+        return BoldSansSerif;
     else if( value == "sans-serif-italic" )
-        return MathVariant::SansSerifItalic;
+        return SansSerifItalic;
     else if( value == "sans-serif-bold-italic" )
-        return MathVariant::SansSerifBoldItalic;
+        return SansSerifBoldItalic;
     else if( value == "monospace" )
-        return MathVariant::MonoSpace;
+        return Monospace;
     else
         return -1; 
 }
 
-double AttributeManager::mathSpaceValue( const QString& value )
+double AttributeManager::mathSpaceValue( const QString& value ) const
 {
     if( value == "negativeveryverythinmathspace" )
         return -1*calculateEmExUnits( 0.055556, true );
@@ -269,22 +233,58 @@ double AttributeManager::mathSpaceValue( const QString& value )
         return -1.0;
 }
 
-double AttributeManager::calculateEmExUnits( double value, bool isEm )
+QVariant AttributeManager::parseMetrics( const QString& value ) const
+{
+    QString tmpValue = value.trimmed();
+    QString unit = tmpValue.right( 2 );
+    tmpValue.chop( 2 );
+
+    if( unit == "em" )
+        return calculateEmExUnits( tmpValue.toDouble(), true );
+    else if( unit == "ex" )
+        return calculateEmExUnits( tmpValue.toDouble(), false );
+    else if( unit == "px" )
+        return m_viewConverter->viewToDocumentX( tmpValue.toInt() );
+    else if( unit == "in" || unit == "cm" || unit == "pc" || unit == "mm" ||
+             unit == "pt" )
+        return KoUnit::parseValue( value );
+//    else if( value.endsWith( "%" ) )
+//        return defaultValueOf( attribute )*value.trimmed().chop( 1 ).toInt();
+
+    return QVariant();
+}
+
+double AttributeManager::calculateEmExUnits( double value, bool isEm ) const
 {
     // ThomasZ said that with KoViewConverter it does not work but atm otherwise
     // it is to hard to realise
     // The constructor of QFontMetrics needs as second argument a postscript based
     // QPaintDevice so that width() and xHeight() return values that are also
     // postscript based.
-//    if( !m_paintDevice )
-//        return 0.0;
+    if( !m_paintDevice )
+        return 0.0;
 
-//    QFontMetrics fm( m_currentFont, m_paintDevice );
-    QFontMetrics fm( m_currentFont );
+    QFontMetrics fm( m_currentFont, m_paintDevice );
     if( isEm )
-        return m_converter.viewToDocumentX( value*fm.width( 'm' ) );
+        return value * fm.width( 'm' );
     else
-        return m_converter.viewToDocumentY( value*fm.xHeight() );
+        return value* fm.xHeight();
+}
+
+
+int AttributeManager::scriptLevel() const
+{
+    return m_scriptLevelStack.top();
+}
+
+void AttributeManager::setViewConverter( KoViewConverter* converter )
+{
+    m_viewConverter = converter;
+}
+
+void AttributeManager::setPaintDevice( QPaintDevice* paintDevice )
+{
+    m_paintDevice = paintDevice;
 }
 
 } // namespace KFormula

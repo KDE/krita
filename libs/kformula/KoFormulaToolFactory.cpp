@@ -24,13 +24,13 @@
 #include <klocale.h>
 
 KoFormulaToolFactory::KoFormulaToolFactory( QObject* parent )
-           : KoToolFactory( parent, "FormulaToolFactory_ID", i18n( "Formula tool" ) )
+           : KoToolFactory( parent, "KoFormulaToolFactoryId", i18n( "Formula tool" ) )
 {
     setToolTip( i18n( "Formula editing tool" ) );
     setToolType( dynamicToolType() );
     setIcon( "edittext" );
     setPriority( 1 );
-    setActivationShapeID( FormulaShape_SHAPEID );
+    setActivationShapeID( KoFormulaShapeId );
 }
 
 KoFormulaToolFactory::~KoFormulaToolFactory()
@@ -38,7 +38,7 @@ KoFormulaToolFactory::~KoFormulaToolFactory()
 
 KoTool* KoFormulaToolFactory::createTool( KoCanvasBase* canvas )
 {
-    return new KoFormulaTool( canvas );
+    return new KFormula::KoFormulaTool( canvas );
 }
 
 #include "KoFormulaToolFactory.moc"

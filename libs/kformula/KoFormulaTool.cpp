@@ -44,9 +44,9 @@ void KoFormulaTool::activate( bool temporary )
 {
     Q_UNUSED(temporary);
     KoSelection* selection = m_canvas->shapeManager()->selection();
-    foreach( KoShape* shape, selection->selectedShapes().toList())
+    foreach( KoShape* shape, selection->selectedShapes() )
     {
-        m_formulaShape = dynamic_cast<FormulaShape*>( shape );
+        m_formulaShape = dynamic_cast<KoFormulaShape*>( shape );
         if( m_formulaShape )
             break;
     }

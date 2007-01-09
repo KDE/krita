@@ -118,17 +118,14 @@ void KCurve::keyPressEvent(QKeyEvent *e)
         }
         repaint();
     }
-    else if(e->key() == Qt::Key_Escape)
+    else if(e->key() == Qt::Key_Escape && m_dragging)
     {
-        if(m_dragging)
-        {
-            m_points[m_grab_point_index].first = m_grabOriginalX;
-            m_points[m_grab_point_index].second = m_grabOriginalY;
-            setCursor( KCursor::arrowCursor() );
-            m_dragging = false;
-            repaint();
-            emit modified();
-        }
+        m_points[m_grab_point_index].first = m_grabOriginalX;
+        m_points[m_grab_point_index].second = m_grabOriginalY;
+        setCursor( KCursor::arrowCursor() );
+        m_dragging = false;
+        repaint();
+        emit modified();
     }
     else
         QWidget::keyPressEvent(e);
@@ -330,7 +327,10 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
         if (m_grab_point_index == 0)
         {
             leftX = 0.0;
-            rightX = m_points[m_grab_point_index + 1].first - 1E-4;
+            if(m_points.count()>1)
+                rightX = m_points[m_grab_point_index + 1].first - 1E-4;
+            else
+                rightX = 1.0;
         }
         else if (m_grab_point_index == m_points.count() - 1)
         {

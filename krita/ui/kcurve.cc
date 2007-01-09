@@ -330,12 +330,12 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
         if (m_grab_point_index == 0)
         {
             leftX = 0.0;
-            rightX = m_points[m_grab_point_index + 1].first + 1E-4;
+            rightX = m_points[m_grab_point_index + 1].first - 1E-4;
         }
         else if (m_grab_point_index == m_points.count() - 1)
         {
             leftX = m_points[m_grab_point_index - 1].first + 1E-4;
-            rightX = 0.0;
+            rightX = 1.0;
         }
         else
         {
@@ -343,7 +343,7 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
 
             // the 1E-4 addition so we can grab the dot later.
             leftX = m_points[m_grab_point_index - 1].first + 1E-4;
-            rightX = m_points[m_grab_point_index + 1].first + 1E-4;
+            rightX = m_points[m_grab_point_index + 1].first - 1E-4;
         }
 
         if (x <= leftX)

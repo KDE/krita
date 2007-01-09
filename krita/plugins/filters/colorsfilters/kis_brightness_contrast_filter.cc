@@ -54,6 +54,11 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
         transfer[i] = i * 257;
     }
     m_adjustment = 0;
+    QPair<double,double> p;
+    p.first = 0.0; p.second=0.0;
+    curve.append(p);
+    p.first = 1.0; p.second=1.0;
+    curve.append(p);
 }
 
 KisBrightnessContrastFilterConfiguration::~KisBrightnessContrastFilterConfiguration()

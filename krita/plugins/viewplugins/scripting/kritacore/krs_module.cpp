@@ -26,6 +26,8 @@
 
 #include <kdebug.h>
 
+#include <QApplication>
+
 // koffice
 #include <KoDocumentAdaptor.h>
 #include <KoApplicationAdaptor.h>

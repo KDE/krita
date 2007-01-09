@@ -95,7 +95,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     connect(manageraction, SIGNAL(triggered(bool)), d->guiclient, SLOT(showManager()));
 
     QAction* scriptmenuaction = d->guiclient->action("scripts");
-    actionCollection()->insert(scriptmenuaction);
+    actionCollection()->addAction("scripts", scriptmenuaction);
 
     d->view->createDock(i18n("Scripts"), new ScriptingDocker(d->view, d->guiclient));
 

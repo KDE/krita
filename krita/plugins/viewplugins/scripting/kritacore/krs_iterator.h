@@ -24,6 +24,8 @@
 #include <QListIterator>
 #include <klocale.h>
 
+#include <KoColorTransformation.h>
+
 #include "krs_paint_layer.h"
 
 #include <kis_paint_layer.h>
@@ -211,12 +213,16 @@ class Iterator : public IteratorBase
 
         void invertColor()
         {
-            m_layer->paintDevice()->colorSpace()->invertColor(m_it->rawData(), 1);
+            KoColorTransformation* invertTransfo = m_layer->paintDevice()->colorSpace()->createInvertTransformation();
+            invertTransfo->transform(m_it->oldRawData(), m_it->rawData(), 1);
+            delete invertTransfo; // FIXME don't create an invert transfo each time
         }
 
         void darken(int shade, bool compensate, double compensation)
         {
-            m_layer->paintDevice()->colorSpace()->darken(m_it->rawData(), m_it->rawData(), shade, compensate, compensation, 1);
+            KoColorTransformation* transfo = m_layer->paintDevice()->colorSpace()->createDarkenAdjustement(shade, compensate, compensation);
+            transfo->transform(m_it->rawData(), m_it->rawData(), 1);
+            delete transfo;
         }
 
     private:

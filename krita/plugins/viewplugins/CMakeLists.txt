@@ -14,5 +14,5 @@ add_subdirectory( shearimage )
 add_subdirectory( bracketing2hdr )
 
 #if(KOFFICE_ENABLE_SCRIPTING)
-#       add_subdirectory(scripting)
+       add_subdirectory(scripting)
 #endif(KOFFICE_ENABLE_SCRIPTING)	

@@ -49,14 +49,22 @@ public:
    * @param zoomModes which zoom modes that should be shown
    */
   KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, const QIcon& pix,
-    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const QString &name = QString() );
+    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const QString &name = QString() ) KDE_DEPRECATED;
 
   /**
    * Creates a new zoom action.
    * @param zoomModes which zoom modes that should be shown
    */
   KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, const QString& pix,
-    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const QString &name = QString() );
+    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const QString &name = QString() ) KDE_DEPRECATED;
+
+  /**
+   * Creates a new zoom action.
+   * @param zoomModes which zoom modes that should be shown
+   * @param text The text that will be displayed.
+   * @param parent The action's parent object.
+   */
+  KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent);
 
     /**
      * Reimplemented from @see QActionWidgetFactory.

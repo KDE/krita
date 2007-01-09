@@ -62,6 +62,13 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, co
     init(parent, name);
 }
 
+KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent)
+    : KSelectAction(text, parent),
+    m_zoomModes( zoomModes )
+{
+    init(0, QString()); // todo; inline the init when the other 2 constructors are gone.
+}
+
 void KoZoomAction::setZoom( const QString& text )
 {
     regenerateItems( text );
@@ -104,8 +111,11 @@ void KoZoomAction::init(KActionCollection* parent, const QString &name)
     m_number = 0;
     m_zoomButtonGroup = 0;
 
-    parent->addAction(KStandardAction::ZoomIn,  "zoom_in", this, SLOT(zoomIn()));
-    parent->addAction(KStandardAction::ZoomOut,  "zoom_out", this, SLOT(zoomOut()));
+    if(parent) {
+        parent->addAction(name, this);
+        parent->addAction(KStandardAction::ZoomIn,  "zoom_in", this, SLOT(zoomIn()));
+        parent->addAction(KStandardAction::ZoomOut,  "zoom_out", this, SLOT(zoomOut()));
+    }
 
 /*
     m_actualPixels  = new KAction(i18n("Actual Pixels"), this);
@@ -130,7 +140,6 @@ void KoZoomAction::init(KActionCollection* parent, const QString &name)
     m_effectiveZoom = 100;
 
     connect( this, SIGNAL( triggered( const QString& ) ), SLOT( triggered( const QString& ) ) );
-    parent->addAction(name, parent);
 }
 
 void KoZoomAction::setZoomModes( KoZoomMode::Modes zoomModes )

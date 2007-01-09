@@ -405,29 +405,16 @@ void KoInteractionTool::recalcSelectionBox() {
     m_selectionBox[KoFlake::LeftMiddleHandle] = (outline.value(3)+outline.value(0))/2;
     m_selectionBox[KoFlake::TopLeftHandle] = outline.value(0);
     if(koSelection()->count() == 1) {
-        class Swapper {
-          public:
-            Swapper(QPointF *box) {
-                m_box = box;
-            }
-            void swap(KoFlake::SelectionHandle from, KoFlake::SelectionHandle to) {
-                QPointF tmp = m_box[from];
-                m_box[from] = m_box[to];
-                m_box[to] = tmp;
-            }
-            QPointF *m_box;
-        };
-        Swapper swapper(m_selectionBox);
         KoShape *s = koSelection()->firstSelectedShape();
         if(s->scaleX() < 0) { // vertically mirrored: swap left / right
-            swapper.swap(KoFlake::TopLeftHandle , KoFlake::TopRightHandle);
-            swapper.swap(KoFlake::LeftMiddleHandle , KoFlake::RightMiddleHandle);
-            swapper.swap(KoFlake::BottomLeftHandle , KoFlake::BottomRightHandle);
+            qSwap(m_selectionBox[KoFlake::TopLeftHandle], m_selectionBox[KoFlake::TopRightHandle]);
+            qSwap(m_selectionBox[KoFlake::LeftMiddleHandle], m_selectionBox[KoFlake::RightMiddleHandle]);
+            qSwap(m_selectionBox[KoFlake::BottomLeftHandle], m_selectionBox[KoFlake::BottomRightHandle]);
         }
         if(s->scaleY() < 0) { // vertically mirrored: swap top / bottom
-            swapper.swap(KoFlake::TopLeftHandle , KoFlake::BottomLeftHandle);
-            swapper.swap(KoFlake::TopMiddleHandle , KoFlake::BottomMiddleHandle);
-            swapper.swap(KoFlake::TopRightHandle , KoFlake::BottomRightHandle);
+            qSwap(m_selectionBox[KoFlake::TopLeftHandle], m_selectionBox[KoFlake::BottomLeftHandle]);
+            qSwap(m_selectionBox[KoFlake::TopMiddleHandle], m_selectionBox[KoFlake::BottomMiddleHandle]);
+            qSwap(m_selectionBox[KoFlake::TopRightHandle], m_selectionBox[KoFlake::BottomRightHandle]);
         }
     }
 }

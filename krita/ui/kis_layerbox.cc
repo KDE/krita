@@ -123,11 +123,11 @@ KisLayerBox::KisLayerBox(KisView2 *view, const char *name)
     m_newLayerMenu->addAction(KIcon("filenew"), i18n("&New Layer..."), this, SLOT(slotNewLayer()));
     m_newLayerMenu->addAction(KIcon("folder"), i18n("New &Group Layer..."), this, SLOT(slotNewGroupLayer()));
     m_newLayerMenu->addAction(KIcon("tool_filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
-
-    m_partLayerAction = new KoPartSelectAction( i18n("New &Object Layer"), "gear" /*, this - KDE4*/);
+/*
+    m_partLayerAction = new KoPartSelectAction( i18n("New &Object Layer"), "gear");
     m_newLayerMenu->addAction(m_partLayerAction);
     connect(m_partLayerAction, SIGNAL(triggered()), this, SLOT(slotNewPartLayer()));
-
+*/
     connect(bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     connect(bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     connect(bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));

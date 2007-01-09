@@ -68,8 +68,11 @@ void ScriptingDocker::runScript()
 {
     QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
     if( index.isValid() ) {
-        Kross::Action* action = static_cast< Kross::Action* >( index.internalPointer() );
-        action->trigger(); // execute the script
+        Kross::Action* action = Kross::ActionCollectionModel::action(index);
+        if( action ) {
+            kDebug() << "ScriptingDocker::runScript execute action=" << action->objectName() << endl;
+            action->trigger();
+        }
     }
 }
 
@@ -77,8 +80,11 @@ void ScriptingDocker::stopScript()
 {
     QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
     if( index.isValid() ) {
-        Kross::Action* action = static_cast< Kross::Action* >( index.internalPointer() );
-        action->finalize();
+        Kross::Action* action = Kross::ActionCollectionModel::action(index);
+        if( action ) {
+            kDebug() << "ScriptingDocker::stopScript finalize action=" << action->objectName() << endl;
+            action->finalize();
+        }
     }
 }
 

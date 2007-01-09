@@ -27,7 +27,6 @@ class KisView2;
 class KisScript;
 
 namespace Kross {
-    class GUIClient;
     class Action;
 }
 

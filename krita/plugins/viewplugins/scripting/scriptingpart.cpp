@@ -18,7 +18,6 @@
  */
 
 #include "scriptingpart.h"
-#include "scriptingmonitor.h"
 #include "scriptingdocker.h"
 
 #include <stdlib.h>
@@ -85,7 +84,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu
     setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), true);
 
-    // Setup the actions Kross provides and KSpread likes to have.
+    // Setup the actions Kross provides and Krita likes to have.
     KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
     actionCollection()->addAction("executescriptfile", execaction );
     connect(execaction, SIGNAL(triggered(bool)), d->guiclient, SLOT(executeFile()));
@@ -101,9 +100,6 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
 
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
-
-    // do we still need the monitor?
-    ScriptingMonitor::instance()->monitor( d->guiclient );
 }
 
 ScriptingPart::~ScriptingPart()
@@ -119,14 +115,10 @@ void ScriptingPart::started(Kross::Action* action)
 {
     Q_UNUSED(action);
     kDebug() << "ScriptingPart::executionStarted" << endl;
-
     if(d->module)
         delete d->module;
     d->module = new Scripting::Module(d->view);
     Kross::Manager::self().addObject(d->module, "Krita");
-
-    //kDebug(41011) << act->getPackagePath() << endl;
-    //progress->setPackagePath( act->getPackagePath() );
 }
 
 void ScriptingPart::finished(Kross::Action*)

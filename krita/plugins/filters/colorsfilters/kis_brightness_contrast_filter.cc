@@ -156,6 +156,13 @@ std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesCo
     return list;
 }
 
+KisFilterConfiguration* KisBrightnessContrastFilter::designerConfiguration(const KisPaintDeviceSP)
+{
+    KisFilterConfiguration* config = new KisBrightnessContrastFilterConfiguration( );
+    return config;
+}
+
+
 bool KisBrightnessContrastFilter::workWith(KoColorSpace* cs)
 {
     return (cs->profile() != 0);

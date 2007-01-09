@@ -73,6 +73,7 @@ public:
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP);
 
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
     virtual bool workWith(KoColorSpace* cs);

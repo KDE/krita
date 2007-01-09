@@ -213,3 +213,8 @@ void KoColor::fromKoColor(const KoColor& src)
 {
     src.colorSpace()->convertPixelsTo(src.m_data, m_data, colorSpace(), 1);
 }
+
+KoColorProfile *  KoColor::profile() const
+{
+    return m_colorSpace->profile();
+}

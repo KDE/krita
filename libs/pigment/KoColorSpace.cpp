@@ -22,6 +22,7 @@
 #include <kdebug.h>
 
 #include "KoCompositeOp.h"
+#include "KoColorTransformation.h"
 
 KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent)
     : m_id(id)

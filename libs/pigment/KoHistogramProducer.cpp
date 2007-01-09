@@ -21,6 +21,8 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
+#include "KoColorSpace.h"
+
 KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::m_singleton = 0;
 
 KoHistogramProducerFactoryRegistry::KoHistogramProducerFactoryRegistry() {

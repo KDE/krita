@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoColorSpaceRegistry.h"
+
 #include <QStringList>
 #include <QDir>
 
@@ -34,7 +36,6 @@
 #include <KoPluginLoader.h>
 #include "KoColorSpace.h"
 #include "KoColorProfile.h"
-#include "KoColorSpaceRegistry.h"
 #include "colorspaces/KoAlphaColorSpace.h"
 #include "colorspaces/KoLabColorSpace.h"
 #include "colorspaces/KoRgbU16ColorSpace.h"

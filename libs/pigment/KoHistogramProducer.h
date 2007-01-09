@@ -20,16 +20,16 @@
 #define _KIS_HISTOGRAM_PRODUCER_
 
 #include <qglobal.h>
+#include <Q3ValueVector>
 #include <ksharedptr.h>
 
 #include <koffice_export.h>
-
-#include <KoColorSpace.h>
 
 #include "KoGenericRegistry.h"
 
 class QString;
 class KoChannelInfo;
+class KoColorSpace;
 
 /**
  * This class is an interface used in the generation of a histogram. It is a container of

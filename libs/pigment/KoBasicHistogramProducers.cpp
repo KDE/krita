@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "KoBasicHistogramProducers.h"
+
 #include <QString>
 #include <klocale.h>
 
@@ -25,7 +27,6 @@
 #endif
 
 // #include "Ko_global.h"
-#include "KoBasicHistogramProducers.h"
 #include "KoIntegerMaths.h"
 #include "KoChannelInfo.h"
 #include "KoColorSpace.h"

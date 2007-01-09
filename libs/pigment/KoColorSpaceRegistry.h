@@ -28,10 +28,12 @@
 #include <koffice_export.h>
 
 #include <KoGenericRegistry.h>
-#include "KoColorSpace.h"
 
 class QStringList;
 class KisPaintDeviceAction;
+class KoColorSpace;
+class KoColorSpaceFactory;
+class KoColorProfile;
 
 /**
  *

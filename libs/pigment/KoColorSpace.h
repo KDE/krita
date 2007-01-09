@@ -31,14 +31,14 @@
 #include <q3valuevector.h>
 #include <q3valuelist.h>
 
-#include <KoColorTransformation.h>
-#include <KoCompositeOp.h>
 #include <KoChannelInfo.h>
 #include <KoID.h>
+#include <koffice_export.h>
 
-
+class KoCompositeOp;
 class KoColorProfile;
 class KoColorSpaceRegistry;
+class KoColorTransformation;
 class KisMathToolbox;
 class KisFilter;
 

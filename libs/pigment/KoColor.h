@@ -24,9 +24,8 @@
 
 #include <koffice_export.h>
 
-#include "KoColorProfile.h"
-#include "KoColorSpace.h"
-
+class KoColorProfile;
+class KoColorSpace;
 
 /**
  * A KoColor describes a color in a certain colorspace.
@@ -67,7 +66,7 @@ public:
 
     KoColorSpace * colorSpace() const { return m_colorSpace; }
 
-    KoColorProfile *  profile() const { return m_colorSpace->profile(); }
+    KoColorProfile *  profile() const;
 
     /// Convert this KoColor to the specified colorspace. If the specified colorspace is the
     /// same as the original colorspace, do nothing. Returns the converted KoColor.

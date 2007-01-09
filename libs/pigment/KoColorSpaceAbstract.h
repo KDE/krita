@@ -25,6 +25,8 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
 #include <KoIntegerMaths.h>
+#include "KoCompositeOp.h"
+#include "KoColorTransformation.h"
 
 namespace {
 

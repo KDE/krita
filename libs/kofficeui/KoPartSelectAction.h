@@ -37,9 +37,9 @@ class KOFFICEUI_EXPORT KoPartSelectAction : public KActionMenu
     Q_OBJECT
 
 public:
-    explicit KoPartSelectAction( const QString& text, KActionCollection* parent = 0, const char* name = 0 );
+    explicit KoPartSelectAction( const QString& text, KActionCollection* parent, const char* name = 0 );
     KoPartSelectAction( const QString& text, const QString& icon,
-                        KActionCollection* parent = 0, const char* name = 0 );
+                        KActionCollection* parent, const char* name = 0 );
     KoPartSelectAction( const QString& text, const QString& icon,
                         QObject* receiver, const char* slot, KActionCollection* parent, const char* name = 0 );
 

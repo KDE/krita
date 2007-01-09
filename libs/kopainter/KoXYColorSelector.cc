@@ -21,6 +21,7 @@
 #include <QPainter>
 
 #include "KoXYColorSelector.h"
+#include "KoColorSpace.h"
 
 KoXYColorSelector::KoXYColorSelector( KoColorSpace* colorSpace, QWidget *parent )
     : KXYSelector( parent )

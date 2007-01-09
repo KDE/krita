@@ -30,6 +30,7 @@
 
 #include "kis_paint_device.h"
 #include "kis_painter.h"
+#include "KoCompositeOp.h"
 
 class KisPaintEngine::KisPaintEnginePrivate {
 public:

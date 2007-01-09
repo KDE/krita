@@ -21,6 +21,8 @@
 #include <QIcon>
 #include <QImage>
 
+#include <KoColorProfile.h>
+
 #include "kis_debug_areas.h"
 #include "kis_image.h"
 #include "kis_paint_layer.h"

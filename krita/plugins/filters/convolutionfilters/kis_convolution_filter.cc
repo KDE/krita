@@ -23,6 +23,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <KoCompositeOp.h>
+
 #include "kis_painter.h"
 #include "kis_convolution_painter.h"
 #include "kis_progress_display_interface.h"

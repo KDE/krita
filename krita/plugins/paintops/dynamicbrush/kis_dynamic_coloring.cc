@@ -20,6 +20,8 @@
 
 #include <kis_paint_device.h>
 
+#include "KoColorTransformation.h"
+
 KisDynamicColoring::~KisDynamicColoring() { }
 KisPlainColoring::~KisPlainColoring() { }
 

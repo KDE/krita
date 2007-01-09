@@ -32,6 +32,8 @@
 
 #include <kdebug.h>
 
+#include "KoColorTransformation.h"
+
 #include "kcurve.h"
 #include "kis_brush.h"
 #include "kis_global.h"

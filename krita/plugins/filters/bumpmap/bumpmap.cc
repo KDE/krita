@@ -49,6 +49,8 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
+#include <KoColorTransformation.h>
+
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>

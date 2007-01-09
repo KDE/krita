@@ -40,6 +40,7 @@
 #include <KoPointerEvent.h>
 #include <KoPartSelectAction.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorProfile.h>
 
 #include <kis_image.h>
 #include <kis_layer.h>

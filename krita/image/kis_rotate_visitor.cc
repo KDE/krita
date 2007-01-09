@@ -23,6 +23,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <KoCompositeOp.h>
+
 #include "kis_paint_device.h"
 #include "kis_rotate_visitor.h"
 #include "kis_progress_display_interface.h"

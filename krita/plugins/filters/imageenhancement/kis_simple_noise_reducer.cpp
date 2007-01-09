@@ -18,6 +18,7 @@
 #include "kis_simple_noise_reducer.h"
 
 #include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 
 #include <kis_iterators_pixel.h>
 #include <kis_autobrush_resource.h>

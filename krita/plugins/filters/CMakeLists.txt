@@ -22,4 +22,3 @@ add_subdirectory( blur )
 add_subdirectory( fastcolortransfer )
 add_subdirectory( colors )
 add_subdirectory( unsharp )
-

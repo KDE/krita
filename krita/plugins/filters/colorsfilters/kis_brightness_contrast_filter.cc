@@ -35,6 +35,8 @@
 
 #include "KoBasicHistogramProducers.h"
 #include "KoColorSpace.h"
+#include "KoColorTransformation.h"
+#include "KoCompositeOp.h"
 
 #include "kis_filter_config_widget.h"
 #include "kis_brightness_contrast_filter.h"

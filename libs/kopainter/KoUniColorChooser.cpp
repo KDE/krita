@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoUniColorChooser.h"
+
 #include <kselector.h>
 #include <QLayout>
 #include <QLabel>
@@ -34,8 +36,7 @@
 #include "KoXYColorSelector.h"
 #include "KoColorSlider.h"
 #include "KoColorPatch.h"
-
-#include "KoUniColorChooser.h"
+#include "KoColorSpace.h"
 
 KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : super(parent), m_showOpacitySlider(opacitySlider)
 {

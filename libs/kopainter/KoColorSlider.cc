@@ -21,6 +21,7 @@
 #include <QPainter>
 
 #include "KoColorSlider.h"
+#include "KoColorSpace.h"
 
 KoColorSlider::KoColorSlider(QWidget* parent)
   : KSelector(parent)

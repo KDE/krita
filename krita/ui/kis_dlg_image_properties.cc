@@ -29,6 +29,7 @@
 #include <kcolorcombo.h>
 
 #include <KoUnitWidgets.h>
+#include <KoColorSpace.h>
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoID.h"

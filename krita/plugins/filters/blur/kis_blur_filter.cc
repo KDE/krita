@@ -23,10 +23,11 @@
 #include <kcombobox.h>
 #include <knuminput.h>
 
+#include <KoCompositeOp.h>
+
 #include <kis_autobrush_resource.h>
 #include <kis_convolution_painter.h>
 #include <kis_iterators_pixel.h>
-
 
 #include "kis_wdg_blur.h"
 #include "ui_wdgblur.h"

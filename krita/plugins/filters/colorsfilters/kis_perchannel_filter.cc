@@ -27,6 +27,8 @@
 
 #include "KoBasicHistogramProducers.h"
 #include "KoColorSpace.h"
+#include "KoColorTransformation.h"
+#include "KoCompositeOp.h"
 #include "KoID.h"
 
 #include "kis_filter_configuration.h"

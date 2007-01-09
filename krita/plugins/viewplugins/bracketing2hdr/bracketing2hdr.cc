@@ -31,6 +31,7 @@
 #include <kactioncollection.h>
 
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceTraits.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -54,7 +55,7 @@ K_EXPORT_COMPONENT_FACTORY( kritabracketing2hdr, Bracketing2HDRPluginFactory( "k
 
 Bracketing2HDRPlugin::Bracketing2HDRPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent), m_wdgBracketing2HDR(0),
-    m_responseType(RESPONSE_LINEAR), m_bitDepth(8), m_numberOfInputLevels(2 << (m_bitDepth-1))
+    m_responseType(RESPONSE_LINEAR), m_bitDepth(16), m_numberOfInputLevels(2 << (m_bitDepth-1))
 {
     if ( parent->inherits("KisView2") )
     {
@@ -203,7 +204,8 @@ void Bracketing2HDRPlugin::createHDRPaintDevice( KisPaintDeviceSP device )
         m_images[k].it = new KisHLineConstIteratorPixel( m_images[k].device->createHLineConstIterator(0, 0, width) );
     }
     KisHLineIteratorPixel dstIt = device->createHLineIterator(0, 0, width);
-    QColor c;
+//     QColor c;
+    quint8* c = KoRgbU16Traits::allocate(1);
     struct { double rsum, rdiv, gsum, gdiv, bsum, bdiv;  } v;
     // Loop over pixels
     for(int j = 0; j < height; j++)
@@ -215,13 +217,13 @@ void Bracketing2HDRPlugin::createHDRPaintDevice( KisPaintDeviceSP device )
             for(int k = 0; k < m_images.size(); k++)
             {
                 double coef = m_images[k].apexBrightness;
-                m_images[k].device->colorSpace()->toQColor(m_images[k].it->rawData(), &c);
-                v.rsum += m_intensityR[ c.red() ] * m_weights[ c.red() ] * coef ;
-                v.rdiv += m_weights[ c.red() ] * coef * coef ;
-                v.gsum += m_intensityG[ c.green() ] * m_weights[ c.green() ] * coef ;
-                v.gdiv += m_weights[ c.green() ] * coef * coef ;
-                v.bsum += m_intensityB[ c.blue() ] * m_weights[ c.blue() ] * coef ;
-                v.bdiv += m_weights[ c.blue() ] * coef * coef ;
+                m_images[k].device->colorSpace()->toRgbA16(m_images[k].it->rawData(), c, 1);
+                v.rsum += m_intensityR[ KoRgbU16Traits::red(c) ] * m_weights[ KoRgbU16Traits::red(c) ] * coef ;
+                v.rdiv += m_weights[ KoRgbU16Traits::red(c) ] * coef * coef ;
+                v.gsum += m_intensityG[ KoRgbU16Traits::green(c) ] * m_weights[ KoRgbU16Traits::green(c) ] * coef ;
+                v.gdiv += m_weights[ KoRgbU16Traits::green(c) ] * coef * coef ;
+                v.bsum += m_intensityB[ KoRgbU16Traits::blue(c) ] * m_weights[ KoRgbU16Traits::blue(c) ] * coef ;
+                v.bdiv += m_weights[ KoRgbU16Traits::blue(c) ] * coef * coef ;
                 ++(*m_images[k].it);
             }
             float* pixelData = reinterpret_cast<float*>(dstIt.rawData());
@@ -284,6 +286,7 @@ void Bracketing2HDRPlugin::computeCameraResponse()
             kError() << "NOT IMPLEMENTED YET !" << endl;
             Q_ASSERT(false);
     }
+    return ;
     // Now optimize the camera response
     // Create a temporary paint device and fill it with the current value
     KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBAF32", 0);

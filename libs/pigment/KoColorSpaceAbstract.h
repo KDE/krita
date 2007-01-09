@@ -23,6 +23,7 @@
 #include <klocale.h>
 
 #include <KoColorSpace.h>
+#include "KoColorSpaceConstants.h"
 #include <KoColorSpaceMaths.h>
 #include <KoIntegerMaths.h>
 #include "KoCompositeOp.h"

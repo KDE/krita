@@ -20,6 +20,9 @@
 #ifndef _KO_COLORSPACE_TRAITS_H_
 #define _KO_COLORSPACE_TRAITS_H_
 
+#include "KoColorSpaceConstants.h"
+#include "KoColorSpaceMaths.h"
+
 /**
  * This class is the base class to define the main characteristics of a colorspace
  * which inherits KoColorSpaceAbstract.

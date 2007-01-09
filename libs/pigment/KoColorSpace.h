@@ -31,6 +31,7 @@
 #include <q3valuevector.h>
 #include <q3valuelist.h>
 
+#include "KoColorSpaceConstants.h"
 #include <KoChannelInfo.h>
 #include <KoID.h>
 #include <koffice_export.h>
@@ -41,9 +42,6 @@ class KoColorSpaceRegistry;
 class KoColorTransformation;
 class KisMathToolbox;
 class KisFilter;
-
-const quint8 OPACITY_TRANSPARENT = 0;
-const quint8 OPACITY_OPAQUE = UCHAR_MAX;
 
 enum ColorSpaceIndependence {
     FULLY_INDEPENDENT,

@@ -550,9 +550,9 @@ public:
     /**
      * @brief Breaks the path after the point index
      *
-     * The new subpath will behind the one that was broken. The segment between the
-     * given point and the one behind will be removed. If you want to split at one 
-     * point insert first a copy of the point behind it.
+     * The new subpath will be behind the one that was broken. The segment between 
+     * the given point and the one behind will be removed. If you want to split at 
+     * one point insert first a copy of the point behind it.
      * This does not work when the subpath is closed. Use openSubpath for this.
      * It does not break at the last position of a subpath or if there is only one 
      * point in the subpath.

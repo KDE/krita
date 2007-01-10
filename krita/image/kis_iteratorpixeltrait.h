@@ -123,6 +123,7 @@ public:
         const _iTp* selectionIterator() const { return m_selectionIterator; }
 protected:
     inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) ++(*m_selectionIterator);};
+    inline void retreat(){if (m_selectionIterator) --(*m_selectionIterator);};
 
     void setSelectionIterator(_iTp *si){m_selectionIterator = si;};
 

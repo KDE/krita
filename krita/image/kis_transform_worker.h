@@ -46,6 +46,7 @@ private:
     // XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
     template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, double  shear, qint32 dx,   KisFilterStrategy *filterStrategy);
 
+     void rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst);
     void rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
     void rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
     void rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst);

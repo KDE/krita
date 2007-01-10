@@ -49,7 +49,7 @@
 #include <kis_adjustment_layer.h>
 #include <kis_filter.h>
 #include <kis_selection.h>
-#include <kis_transaction.h>
+#include <kis_selected_transaction.h>
 #include <kis_filter_strategy.h>
 #include <kis_shear_visitor.h>
 #include <kis_transform_worker.h>
@@ -844,9 +844,9 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     KisPaintDeviceSP dev = m_view->image()->activeDevice();
     if (!dev) return;
 
-    KisTransaction * t = 0;
+    KisSelectedTransaction * t = 0;
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisTransaction(i18n("Scale Layer"), dev);
+        t = new KisSelectedTransaction(i18n("Scale Layer"), dev);
         Q_CHECK_PTR(t);
     }
 
@@ -866,19 +866,23 @@ void KisLayerManager::rotateLayer(double angle)
     KisPaintDeviceSP dev = m_view->image()->activeDevice();
     if (!dev) return;
 
-    KisTransaction * t = 0;
+    KisSelectedTransaction * t = 0;
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisTransaction(i18n("Rotate Layer"), dev);
+        t = new KisSelectedTransaction(i18n("Rotate Layer"), dev);
         Q_CHECK_PTR(t);
     }
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KoID("Triangle"));
     angle *= M_PI/180;
-    qint32 w = m_view->image()->width();
-    qint32 h = m_view->image()->height();
-    qint32 tx = qint32((w*cos(angle) - h*sin(angle) - w) / 2 + 0.5);
-    qint32 ty = qint32((h*cos(angle) + w*sin(angle) - h) / 2 + 0.5);
-
+    QRect r;
+    if(dev->hasSelection())
+        r = dev->selection()->selectedExactRect();
+    else
+        r = dev->exactBounds();
+    double cx = r.x()+r.width()/2.0;
+    double cy = r.y()+r.height()/2.0;
+    Q_INT32 tx = Q_INT32(cx*cos(angle) - cy*sin(angle) - cx + 0.5);
+    Q_INT32 ty = Q_INT32(cy*cos(angle) + cx*sin(angle) - cy + 0.5);
     KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, angle, -tx, -ty, m_view->statusBar()->progress(), filter);
     tw.run();
 

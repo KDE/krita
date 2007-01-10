@@ -28,6 +28,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
 #include "kis_layer.h"
+#include "kis_painter.h"
 
 KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, double yscale,
                     double xshear, double yshear, double rotation,
@@ -44,6 +45,57 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, doub
     m_ytranslate = ytranslate;
     m_progress = progress;
     m_filter = filter;
+}
+
+void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+{
+    KisSelectionSP dstSelection;
+    Q_INT32 pixelSize = src->pixelSize();
+    QRect r;
+    KoColorSpace *cs = src->colorSpace();
+
+    if(src->hasSelection())
+    {
+        r = src->selection()->selectedExactRect();
+        dstSelection = dst->selection();
+    }
+    else
+    {
+        r = src->exactBounds();
+        dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
+    }
+
+    KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), r.top(), r.width());
+    KisHLineIterator vit = dst->createHLineIterator(r.x(), r.top(), r.width());
+    KisHLineIterator dstSelIt = dstSelection->createHLineIterator(r.x(), r.top(), r.width());
+    for (Q_INT32 i = 0; i < r.height(); ++i) {
+            while (!hit.isDone()) {
+            if (hit.isSelected())  {
+                memcpy(vit.rawData(), hit.rawData(), pixelSize);
+
+                // XXX: Should set alpha = alpha*(1-selectedness)
+                cs->setAlpha(hit.rawData(), 0, 1);
+            }
+            *(dstSelIt.rawData()) = hit.selectedness();
+            ++hit;
+            ++vit;
+            ++dstSelIt;
+        }
+        hit.nextRow();
+        vit.nextRow();
+        dstSelIt.nextRow();
+
+        //progress info
+        m_progressStep += r.width();
+        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
+        {
+            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
+            emit notifyProgress(m_lastProgressReport);
+        }
+        if (m_cancelRequested) {
+            break;
+        }
+    }
 }
 
 void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
@@ -80,6 +132,17 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
             ++hit;
             ++vit;
             ++dstSelIt;
+        }
+
+        //progress info
+        m_progressStep += r.width();
+        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
+        {
+            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
+            emit notifyProgress(m_lastProgressReport);
+        }
+        if (m_cancelRequested) {
+            break;
         }
     }
 }
@@ -126,6 +189,17 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
         }
         hit.nextRow();
         ++x;
+
+        //progress info
+        m_progressStep += r.width();
+        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
+        {
+            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
+            emit notifyProgress(m_lastProgressReport);
+        }
+        if (m_cancelRequested) {
+            break;
+        }
     }
 }
 
@@ -168,6 +242,17 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
             ++dstSelIt;
         }
         srcIt.nextRow();
+
+        //progress info
+        m_progressStep += r.width();
+        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
+        {
+            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
+            emit notifyProgress(m_lastProgressReport);
+        }
+        if (m_cancelRequested) {
+            break;
+        }
     }
 }
 
@@ -477,44 +562,87 @@ bool KisTransformWorker::run()
         rotation = fmod(rotation, 2*M_PI);
     int rotQuadrant = int(rotation /(M_PI/2) + 0.5) & 3;
 
+    // Figure out how we will do the initial right angle rotations
     double tmp;
     switch(rotQuadrant)
     {
+        default: // just to shut up the compiler
+        case 0:
+            m_progressTotalSteps = 0;
+            break;
+        case 1:
+            rotation -= M_PI/2;
+            tmp = xscale;
+            xscale=yscale;
+            yscale=tmp;
+            m_progressTotalSteps = r.width() * r.height();
+            break;
+        case 2:
+            rotation -= M_PI;
+            m_progressTotalSteps = r.width() * r.height();
+            break;
+        case 3:
+            rotation += M_PI/2 + 2*M_PI;
+            tmp = xscale;
+            xscale = yscale;
+            yscale = tmp;
+            m_progressTotalSteps = r.width() * r.height();
+            break;
+    }
+
+    // Calculate some auxillary values
+    yshear = sin(rotation);
+    xshear = -tan(rotation/2);
+    xtranslate -= int(xshear*ytranslate);
+
+    // Calculate progress steps
+    m_progressTotalSteps += int(yscale * r.width() * r.height());
+    m_progressTotalSteps += int(xscale * r.width() * (r.height() * yscale + r.width()*yshear));
+
+    m_lastProgressReport=0;
+
+    // Now that we have everything in place it's time to do the actual right angle rotations
+    switch(rotQuadrant)
+    {
+        default: // just to shut up the compiler
         case 0:
             break;
         case 1:
             rotateRight90(srcdev, tmpdev1);
             srcdev = tmpdev1;
-            rotation -= M_PI/2;
-            tmp = xscale;
-            xscale=yscale;
-            yscale=tmp;
             break;
         case 2:
             rotate180(srcdev, tmpdev1);
             srcdev = tmpdev1;
-            rotation -= M_PI;
             break;
         case 3:
             rotateLeft90(srcdev, tmpdev1);
             srcdev = tmpdev1;
-            rotation += M_PI/2 + 2*M_PI;
-            tmp = xscale;
-            xscale = yscale;
-            yscale = tmp;
-            break;
-        default:
             break;
     }
 
-    yshear = sin(rotation);
-    xshear = -tan(rotation/2);
-    xtranslate -= int(xshear*ytranslate);
+    // Handle simple move case possibly with rotation of 90,180,270
+    if(rotation == 0.0 && xscale == 1.0 && yscale == 1.0)
+    {
+        if(rotQuadrant==0)
+        {
+            // Though not nessesay in the general case because we make several passes
+            // We need to move (not just copy) the data to a temp dev so we can move them back
+            rotateNone(srcdev, tmpdev1);
+            srcdev = tmpdev1;
+        }
+        if(m_dev->hasSelection())
+            m_dev->selection()->clear();
 
-    m_progressTotalSteps = int(yscale * r.width() * r.height());
-    m_progressTotalSteps += int(xscale * r.width() * (r.height() * yscale + r.width()*yshear));
+        srcdev->move(srcdev->getX() + xtranslate, srcdev->getY() + ytranslate);
+        rotateNone(srcdev, m_dev);
 
-    m_lastProgressReport=0;
+        //progress info
+        emit notifyProgressDone();
+        m_dev->emitSelectionChanged();
+
+        return m_cancelRequested;
+    }
 
     if ( m_cancelRequested) {
         emit notifyProgressDone();
@@ -530,11 +658,8 @@ bool KisTransformWorker::run()
         return false;
     }
 
-    if(xshear==0.0)
-        // Not going to do third step so let m_dev be destination
-        transformPass <KisVLineIteratorPixel>(tmpdev2.data(), m_dev.data(), yscale, yshear, ytranslate, m_filter);
-    else
-        transformPass <KisVLineIteratorPixel>(tmpdev2.data(), tmpdev3.data(), yscale, yshear, ytranslate, m_filter);
+     // Now do the second pass
+     transformPass <KisVLineIteratorPixel>(tmpdev2.data(), tmpdev3.data(), yscale, yshear, ytranslate, m_filter);
 
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
@@ -546,6 +671,13 @@ bool KisTransformWorker::run()
 
     if(xshear!=0.0)
         transformPass <KisHLineIteratorPixel>(tmpdev3.data(), m_dev.data(), 1.0, xshear, xtranslate, m_filter);
+     else
+     {
+         // No need to filter again when we are only scaling
+         tmpdev3->move(tmpdev3->getX() + xtranslate, tmpdev3->getY());
+         rotateNone(tmpdev3, m_dev);
+     }
+
     if (m_dev->parentLayer()) {
         m_dev->parentLayer()->setDirty();
     }

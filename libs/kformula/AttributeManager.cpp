@@ -257,7 +257,7 @@ QVariant AttributeManager::parseMetrics( const QString& value ) const
 double AttributeManager::calculateEmExUnits( double value, bool isEm ) const
 {
     // ThomasZ said that with KoViewConverter it does not work but atm otherwise
-    // it is to hard to realise
+    // it is to hard to realize
     // The constructor of QFontMetrics needs as second argument a postscript based
     // QPaintDevice so that width() and xHeight() return values that are also
     // postscript based.

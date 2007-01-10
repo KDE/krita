@@ -142,7 +142,7 @@ public:
      * points from a path shape are deleted it will delete the path shape. If all 
      * points from a subpath are deleted it will delete the subpath.
      *
-     * @param pointDataList List of point datas to remove
+     * @param pointDataList List of point data to remove
      * @param shapeController shape controller in charge
      * @param parent the parent command used for macro commands
      */
@@ -154,7 +154,7 @@ public:
      *
      * Don't use this directly use createCommand instead.
      *
-     * @param pointDataList List of point datas to remove.
+     * @param pointDataList List of point data to remove.
      * @param parent the parent command used for macro commands
      */
     explicit KoPointRemoveCommand( const QList<KoPathPointData> & pointDataList, QUndoCommand *parent = 0 );
@@ -291,7 +291,7 @@ public:
      * The pathes are broken at the given points. New points will be inserted after
      * the given points and then the pathes will be split after the given points.
      *
-     * @param pointDataList List of point datas where the path should be split.
+     * @param pointDataList List of point data where the path should be split.
      * @param parent the parent command used for macro commands
      */
     KoBreakAtPointCommand( const QList<KoPathPointData> & pointDataList, QUndoCommand *parent = 0 );

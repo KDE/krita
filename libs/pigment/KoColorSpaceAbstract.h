@@ -187,7 +187,7 @@ namespace {
 /**
  * This in an implementation of KoColorSpace which can be used as a base for colorspaces with as many
  * different channels of the same type.
- * the template parameters must be a class wich inherits KoColorSpaceTrait (or a class with the same signature).
+ * the template parameters must be a class which inherits KoColorSpaceTrait (or a class with the same signature).
  * Where SOMETYPE is the type of the channel for instance (quint8, quint32...), SOMENBOFCHANNELS is the number of channels
  * including the alpha channel, SOMEALPHAPOS is the position of the alpha channel in the pixel (can be equal to -1 if no
  * alpha channel).

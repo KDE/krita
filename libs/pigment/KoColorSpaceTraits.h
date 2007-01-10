@@ -83,7 +83,7 @@ struct KoColorSpaceTrait {
 };
 
 /** LAB traits, it provides some convenient functions to
- * access LAB channels throught an explicit API.
+ * access LAB channels through an explicit API.
  *
  * Use this class in conjonction with KoColorSpace::toLabA16 and
  * KoColorSpace::fromLabA16 data.
@@ -134,7 +134,7 @@ struct KoLabU16Traits : public KoColorSpaceTrait<quint16, 4,3> {
 };
 
 /** Base class for rgb traits, it provides some convenient functions to
- * access RGB channels throught an explicit API.
+ * access RGB channels through an explicit API.
  */
 template<typename _channels_type_>
 struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {

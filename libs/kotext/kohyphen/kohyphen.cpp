@@ -68,7 +68,7 @@ KoHyphenator::KoHyphenator()
         if (n.nodeName() == "dicts")
         {
             records = n.childNodes();
-            for (uint i = 0; i < records.count(); i++)
+            for (int i = 0; i < records.count(); i++)
             {
                 QDomNamedNodeMap attr = records.item(i).attributes();
                 if (attr.contains("lang") && attr.contains("encoding")) {
@@ -108,7 +108,7 @@ char *KoHyphenator::hyphens(const QString& str, const QString& lang) const
 #ifdef DEBUG_HYPHENATOR
         kDebug() << e.message().latin1() << endl;
 #endif
-        for (uint j = 0; j < str.length(); j++)
+        for (int j = 0; j < str.length(); j++)
             x[j] = '0';
         x[str.length()] = '\0';
     }

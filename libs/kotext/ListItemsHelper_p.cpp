@@ -68,8 +68,8 @@ ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font)
 
 void ListItemsHelper::recalculate() {
     //kDebug() << "ListItemsHelper::recalculate" << endl;
-    double width = 0.0;
-    QTextListFormat format = m_textList->format();
+    const QTextListFormat format = m_textList->format();
+    const KoListStyle::Style listStyle = static_cast<KoListStyle::Style> (m_textList->format().style());
 
     int index = format.intProperty(KoListStyle::StartValue);
     QString prefix = format.stringProperty( KoListStyle::ListItemPrefix );
@@ -79,7 +79,7 @@ void ListItemsHelper::recalculate() {
     if(dp > level || dp == 0)
         dp = level;
     const int displayLevel = dp;
-// TODO define item and width only once for the non changing list styles
+
     for(int i=0; i < m_textList->count(); i++) {
         QTextBlock tb = m_textList->item(i);
         //kDebug() << " * " << tb.text() << endl;
@@ -88,6 +88,12 @@ void ListItemsHelper::recalculate() {
             data = new KoTextBlockData();
             tb.setUserData(data);
         }
+    }
+
+    double width = 0.0;
+    for(int i=0; i < m_textList->count(); i++) {
+        QTextBlock tb = m_textList->item(i);
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
         QTextBlockFormat blockFormat = tb.blockFormat();
         if(blockFormat.boolProperty( KoParagraphStyle::RestartListNumbering) )
             index = format.intProperty(KoListStyle::StartValue);
@@ -95,13 +101,13 @@ void ListItemsHelper::recalculate() {
         if(paragIndex > 0)
             index = paragIndex;
 
-        QTextBlock b = tb.previous();
-        for(;b.isValid(); b = b.previous()) {
-            if(b.textList() == m_textList)
+        QTextBlock prevBlock = tb.previous();
+        for(;prevBlock.isValid(); prevBlock = prevBlock.previous()) {
+            if(prevBlock.textList() == m_textList)
                 break; // all fine
-            if(b.textList() == 0)
+            if(prevBlock.textList() == 0)
                 continue;
-            if(b.textList()->format().intProperty(KoListStyle::Level) < level) {
+            if(prevBlock.textList()->format().intProperty(KoListStyle::Level) < level) {
                 index = format.intProperty(KoListStyle::StartValue);
                 break;
             }
@@ -141,8 +147,6 @@ Q_ASSERT(otherData);
                 }
             }
         }
-        KoListStyle::Style listStyle = static_cast<KoListStyle::Style> (
-                m_textList->format().style() );
         if((listStyle == KoListStyle::DecimalItem || listStyle == KoListStyle::AlphaLowerItem ||
                     listStyle == KoListStyle::UpperAlphaItem ||
                     listStyle == KoListStyle::RomanLowerItem ||
@@ -196,6 +200,11 @@ Q_ASSERT(otherData);
         }
         data->setCounterText(prefix + item + suffix);
         index++;
+        // now, if this is a list style where each item has the same content, then we are done after 1 item
+        if(listStyle == KoListStyle::SquareItem || listStyle == KoListStyle::DiscItem ||
+                listStyle == KoListStyle::CircleItem || listStyle == KoListStyle::BoxItem ||
+                listStyle == KoListStyle::CustomCharItem || listStyle == KoListStyle::NoItem)
+            break;
     }
     double counterSpacing = 1;
     if(suffix.isEmpty())

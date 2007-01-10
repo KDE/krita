@@ -140,11 +140,11 @@ void TestDocumentLayout::testNumberedList() {
 
 void TestDocumentLayout::testInterruptedLists() {
     initForNewTest("ListItem1\nListItem2\nNormal Parag\nAnother parag\nListItem3\n");
+    // expect that normal paragraphs do not break a list (i.e not restart it)
 
     KoParagraphStyle style;
     KoListStyle listStyle;
     listStyle.setStyle(KoListStyle::DecimalItem);
-    listStyle.setConsecutiveNumbering(true);
     listStyle.setListItemSuffix(".");
     style.setListStyle(listStyle);
 
@@ -176,8 +176,11 @@ void TestDocumentLayout::testInterruptedLists() {
     block = block.next(); // list item 3
     data = dynamic_cast<KoTextBlockData*> (block.userData());
     QVERIFY(data);
+    //qDebug() << data->counterText();
     QVERIFY(data->counterText() == "3.");
 
+// I have doubts what consecutiveNumbering should do.  Disable the feature for now.
+#if 0
     // now the other way around
     block = doc->begin();
     listStyle.setConsecutiveNumbering(false);
@@ -200,8 +203,9 @@ void TestDocumentLayout::testInterruptedLists() {
     block = block.next(); // list item 3
     data = dynamic_cast<KoTextBlockData*> (block.userData());
     QVERIFY(data);
-    //qDebug() << data->counterText();
+    qDebug() << data->counterText();
     QVERIFY(data->counterText() == "1.");
+#endif
 }
 
 void TestDocumentLayout::testNestedLists() {
@@ -308,9 +312,9 @@ void TestDocumentLayout::testAutoRestartList() {
 
     layout->layout();
 
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (car.userData());
     QVERIFY(data);
-    qDebug() << data->counterText();
+    // qDebug() << data->counterText();
     QCOMPARE(data->counterText(), QString("2.1"));
 }
 

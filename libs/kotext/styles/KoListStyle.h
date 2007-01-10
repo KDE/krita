@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -84,6 +84,9 @@ public:
     /// copy constructor
     KoListStyle(const KoListStyle &orig);
 
+    // destuctor;
+    ~KoListStyle();
+
     /// set the style to be used for this list.
     void setStyle(Style style) { setProperty(QTextListFormat::ListStyle, (int) style); }
     /// return the used style
@@ -128,6 +131,10 @@ public:
      * to the target block format.
      */
     void applyStyle(const QTextBlock &block);
+
+    bool operator==(const KoListStyle &other) const;
+
+    QTextList *textList(const QTextDocument *doc);
 
 protected:
     friend class KoParagraphStyle;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -287,7 +287,7 @@ bool KoTextDocumentLayout::LayoutState::nextParag() {
     if(textList) {
         // if list set list-indent. Do this after borders init to we can account for them.
         // Also after we account for indents etc so the y() pos is correct.
-        d->blockData->setCounterPosition(QPointF(d->borderInsets.left +
+        d->blockData->setCounterPosition(QPointF(d->borderInsets.left + d->shapeBorder.left +
                     d->format.textIndent() + d->format.leftMargin() , y()));
     }
 
@@ -660,7 +660,7 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
             if(percent > 0)
                 width *= percent / 100.0;
             y -= width / 10.; // move it up just slightly
-            double x = qMax(1., fm.width(listFormat.stringProperty( KoListStyle::ListItemPrefix )));
+            double x = qMax(1., data->counterPosition().x() + fm.width(listFormat.stringProperty( KoListStyle::ListItemPrefix )));
             switch( listStyle ) {
                 case KoListStyle::SquareItem:
                     painter->fillRect(QRectF(x, y, width, width), QBrush(Qt::black));
@@ -908,17 +908,18 @@ void ListItemsHelper::recalculate() {
     double width = 0.0;
     QTextListFormat format = d->textList->format();
 
-    // when true don't let non-numbering parags restart numbering
-    bool consecutiveNumbering = format.boolProperty(KoListStyle::ConsecutiveNumbering);
     int index = format.intProperty(KoListStyle::StartValue);
     QString prefix = format.stringProperty( KoListStyle::ListItemPrefix );
     QString suffix = format.stringProperty( KoListStyle::ListItemSuffix );
     const int level = format.intProperty(KoListStyle::Level);
-    int displayLevel = format.intProperty(KoListStyle::DisplayLevel);
-    if(displayLevel > level || displayLevel == 0)
-        displayLevel = level;
+    int dp = format.intProperty(KoListStyle::DisplayLevel);
+    if(dp > level || dp == 0)
+        dp = level;
+    const int displayLevel = dp;
+// TODO define item and width only once for the non changing list styles
     for(int i=0; i < d->textList->count(); i++) {
         QTextBlock tb = d->textList->item(i);
+        //kDebug() << " * " << tb.text() << endl;
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
         if(!data) {
             data = new KoTextBlockData();
@@ -931,26 +932,23 @@ void ListItemsHelper::recalculate() {
         if(paragIndex > 0)
             index = paragIndex;
 
-        if(! consecutiveNumbering) { // check if before this parag there was a lower-level list
-// from ODF spec: text:consecutive-numbering
-// The text:consecutive-numbering attribute specifies whether or not the list style uses consecutive numbering for all list levels or whether each list level restarts the numbering.
-            QTextBlock b = tb.previous();
-            while(b.isValid()) {
-                if(b.textList() == d->textList)
-                    break; // all fine
-                if(b.textList() == 0 || b.textList()->format().intProperty(KoListStyle::Level)
-                        < level) {
-                    index = format.intProperty(KoListStyle::StartValue);
-                    break;
-                }
-                b = b.previous();
+        QTextBlock b = tb.previous();
+        for(;b.isValid(); b = b.previous()) {
+            if(b.textList() == d->textList)
+                break; // all fine
+            if(b.textList() == 0)
+                continue;
+            if(b.textList()->format().intProperty(KoListStyle::Level) < level) {
+                index = format.intProperty(KoListStyle::StartValue);
+                break;
             }
         }
 
         QString item("");
         if(displayLevel > 1) {
             int checkLevel = level;
-            for(QTextBlock b = tb.previous(); displayLevel > 1 && b.isValid(); b=b.previous()) {
+            int tmpDisplayLevel = displayLevel;
+            for(QTextBlock b = tb.previous(); tmpDisplayLevel > 1 && b.isValid(); b=b.previous()) {
                 if(b.textList() == 0)
                     continue;
                 QTextListFormat lf = b.textList()->format();
@@ -962,13 +960,13 @@ void ListItemsHelper::recalculate() {
                 } */
                 KoTextBlockData *otherData = dynamic_cast<KoTextBlockData*> (b.userData());
 Q_ASSERT(otherData);
-                if(displayLevel-1 < otherLevel) { // can't just copy it fully since we are
+                if(tmpDisplayLevel-1 < otherLevel) { // can't just copy it fully since we are
                                                   // displaying less then the full counter
                     item += otherData->partialCounterText();
-                    displayLevel--;
+                    tmpDisplayLevel--;
                     checkLevel--;
                     for(int i=otherLevel+1;i < level; i++) {
-                        displayLevel--;
+                        tmpDisplayLevel--;
                         item += ".0"; // add missing counters.
                     }
                 }
@@ -1025,7 +1023,8 @@ Q_ASSERT(otherData);
                 break;
             }
             case KoListStyle::CustomCharItem:
-                width =  19.0; //  TODO
+                item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
+                width = d->fm.width(item + ' ');
                 break;
             case KoListStyle::NoItem:
                 width =  10.0; // simple indenting

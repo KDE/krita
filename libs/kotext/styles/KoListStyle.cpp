@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +22,22 @@
 
 #include <QTextBlock>
 #include <QTextCursor>
+#include <kdebug.h>
+
+// all relevant properties.
+static const int properties[] = {
+    QTextListFormat::ListStyle,
+    KoListStyle::ListItemPrefix,
+    KoListStyle::ListItemSuffix,
+    KoListStyle::ConsecutiveNumbering,
+    KoListStyle::StartValue,
+    KoListStyle::Level,
+    KoListStyle::DisplayLevel,
+    KoListStyle::CharacterStyleId,
+    KoListStyle::BulletCharacter,
+    KoListStyle::BulletSize,
+    -1
+};
 
 KoListStyle::KoListStyle() {
     m_refCount = 0;
@@ -36,6 +52,11 @@ KoListStyle::KoListStyle(const KoListStyle &orig) {
     m_stylesPrivate = new StylePrivate();
     m_stylesPrivate->copyMissing(orig.m_stylesPrivate);
     m_name = orig.name();
+}
+
+KoListStyle::~KoListStyle() {
+    delete m_stylesPrivate;
+    m_stylesPrivate = 0;
 }
 
 void KoListStyle::setProperty(int key, const QVariant &value) {
@@ -78,21 +99,6 @@ void KoListStyle::applyStyle(const QTextBlock &block) {
     if(block.textList())
         format = block.textList()->format();
 
-    // copy all relevant properties.
-    static const int properties[] = {
-        QTextListFormat::ListStyle,
-        ListItemPrefix,
-        ListItemSuffix,
-        ConsecutiveNumbering,
-        StartValue,
-        Level,
-        DisplayLevel,
-        CharacterStyleId,
-        BulletCharacter,
-        BulletSize,
-        -1
-    };
-
     int i=0;
     while(properties[i] != -1) {
         QVariant const *variant = m_stylesPrivate->get(properties[i]);
@@ -120,6 +126,31 @@ void KoListStyle::apply(const KoListStyle &other) {
     m_name = other.name();
     m_stylesPrivate->clearAll();
     m_stylesPrivate->copyMissing(other.m_stylesPrivate);
+}
+
+bool KoListStyle::operator==(const KoListStyle &other) const {
+    kDebug() << "KoListStyle::operator==\n";
+
+    int i=0;
+    while(properties[i] != -1) {
+        QVariant const *variant = m_stylesPrivate->get(properties[i]);
+        if(variant) {
+            if(other.m_stylesPrivate->get(properties[i]) != 0)
+                return false;
+        }
+        else {
+            QVariant const *otherVariant = m_stylesPrivate->get(properties[i]);
+            if(*otherVariant != *variant)
+                return false;
+        }
+        i++;
+    }
+kDebug() << "  yap, equal\n";
+    return true;
+}
+
+QTextList *KoListStyle::textList(const QTextDocument *doc) {
+    return m_textLists[doc];
 }
 
 // TODO; what did I invent m_textLists for?  Can it be removed?

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -402,10 +402,30 @@ public:
     KoCharacterStyle *characterStyle() { return m_charStyle; }
     const KoCharacterStyle *characterStyle() const { return m_charStyle; }
 
+    /**
+     * Returns the list style for this paragraph style, or 0 if there is none.
+     * @see setListStyle()
+     * @see removeListStyle()
+     */
     KoListStyle *listStyle() { return m_listStyle; }
+    /**
+     * Returns the list style for this paragraph style, or 0 if there is none.
+     * @see setListStyle()
+     * @see removeListStyle()
+     */
     const KoListStyle *listStyle() const { return m_listStyle; }
 
+    /**
+     * Set a new liststyle on this paragraph style, making all paragraphs that use this style
+     *  automatically be part of the list.
+     * @see setListStyle()
+     * @see removeListStyle()
+     */
     void setListStyle(const KoListStyle &style);
+    /**
+     * Remove any set list style on this paragraphs style.
+     * Stops all paragraphs that follow this style from being a list item.
+     */
     void removeListStyle();
 
 private:

@@ -34,13 +34,17 @@ void TestDocumentLayout::testBasicList() {
     block = doc->begin().next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 2
-    QCOMPARE(blockLayout->lineAt(0).x(), 12.0);
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    double counterSpacing = data->counterSpacing();
+    QVERIFY(counterSpacing > 0.);
+    QCOMPARE(blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 3
-    QCOMPARE(blockLayout->lineAt(0).x(), 12.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
     QVERIFY(blockLayout->lineCount() > 1);
-    QCOMPARE(blockLayout->lineAt(1).x(), 12.0); // make sure not only the first line is indented
+    QCOMPARE(blockLayout->lineAt(1).x(), 12.0 + counterSpacing); // make sure not only the first line is indented
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 4

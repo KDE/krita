@@ -21,7 +21,6 @@
 #include <Job.h>
 
 #include <QSemaphore>
-#include <QVariant>
 
 class QEvent;
 
@@ -50,7 +49,7 @@ private:
     KoAction *m_action;
     Enable m_enable;
     bool m_started;
-    QVariant m_params;
+    QVariant *m_params;
     QSemaphore m_semaphore;
 };
 

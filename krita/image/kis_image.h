@@ -278,7 +278,7 @@ public:
     KoColor mergedPixel(qint32 x, qint32 y);
 
     // This was only used from the performance tests?
-    KisLayerSP newLayer(const QString& name, quint8 opacity, const QString & compositeOp, KoColorSpace * colorstrategy);
+    KisLayerSP newLayer(const QString& name, quint8 opacity, const QString & compositeOp, KoColorSpace * colorspace);
 
     /// Get the active painting device. Returns 0 if the active layer does not have a paint device.
     KisPaintDeviceSP activeDevice();

@@ -33,6 +33,7 @@ public:
 
     virtual KoToolProxy * toolProxy() = 0;
 
+    virtual void parentSizeChanged( const QSize & ) {}
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

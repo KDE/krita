@@ -47,7 +47,8 @@
 #include "kis_brushop.h"
 #include "ui_kis_dlgbrushcurvecontrol.h"
 
-KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter)
+KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings,
+                                         KisPainter * painter)
 {
     const KisBrushOpSettings *brushopSettings = dynamic_cast<const KisBrushOpSettings *>(settings);
     Q_ASSERT(settings == 0 || brushopSettings != 0);
@@ -285,6 +286,7 @@ void KisBrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     m_painter->setOpacity(origOpacity);
     m_painter->setPaintColor(origColor);
+
 }
 
 #include "kis_brushop.moc"

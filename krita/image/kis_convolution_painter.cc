@@ -136,7 +136,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
             h -= kh - 1;
     }
 
-    // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
+    // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorspace.
 
     int cacheSize = kw * kh;
     int cdepth = cs -> pixelSize();
@@ -248,7 +248,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
 
     KoColorSpace * cs = m_device->colorSpace();
 
-    // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
+    // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorspace.
 
     int cacheSize = kw * kh;
     int cdepth = cs -> pixelSize();

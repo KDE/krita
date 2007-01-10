@@ -62,7 +62,7 @@ public:
     // cirrent y position
     qint32 y() const { return m_y; };
 
-    /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+    /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
     quint8 *rawData() const;
 
     /// Returns a pointer to the pixel data as it was at the moment tof he last memento creation.

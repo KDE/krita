@@ -76,12 +76,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
     if (e->button() == Qt::LeftButton) {
 
-        // People complain that they can't start brush strokes outside of the image boundaries.
-        // This makes sense, especially when combined with BUG:132759, so commenting out the
-        // next line makes sense.
-        // if (!m_currentImage->bounds().contains(e->pos().floorQPoint())) return;
-
-        initPaint(e);
+       initPaint(e);
 
         m_prevPos = convertToPixelCoord(e);
         paintAt(m_prevPos, e->pressure(), e->xTilt(), e->yTilt());
@@ -90,31 +85,16 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         m_prevXTilt = e->xTilt();
         m_prevYTilt = e->yTilt();
 
-        QRegion region = m_painter->dirtyRegion();
+        QRegion r = m_painter->dirtyRegion();
+        kDebug() << "KisToolFreehand::mousePressEvent " << r.boundingRect() << endl;
 
-
-        if ( !region.isEmpty() ) {
-
-            m_dirtyRegion = region;
-
-#if 0
-            if (!m_paintOnSelection) {
-                if (!m_paintIncremental) {
-                    m_currentImage->activeLayer()->setDirty(region);
-                }
+        if (!m_paintOnSelection) {
+            if (!m_paintIncremental) {
+                m_currentImage->activeLayer()->setDirty(r);
             }
-            else {
-                m_target->setDirty( region );
-            }
-#endif
-            m_currentImage->activeLayer()->setDirty(region);
-// We shouldn't need to update the canvas manually
-#if 0
-            QRect r = region.boundingRect();
-            r = QRect(r.left()-1, r.top()-1, r.width()+2,/r.height()+2); //needed to update selectionvisualization
-
-            m_canvas->updateCanvas( convertToPt(r) );
-#endif
+        }
+        else {
+            m_target->setDirty( r);
         }
     }
 }
@@ -132,27 +112,16 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         m_prevYTilt = e->yTilt();
 
         QRegion region = m_painter->dirtyRegion();
+        kDebug() << "KisToolFreehand::mouseNoveEvent: " << region.boundingRect() << endl;
 
-        if (!region.isEmpty()) {
-            m_dirtyRegion += region;
-
-            if (!m_paintOnSelection) {
-                m_currentImage->activeLayer()->setDirty(region);
-            }
-            else {
-                // Just update the canvas
-                // XXX: How to do this hack with regions?
-                // r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
-                m_target->setDirty(region);
-            }
-
-// XXX: This should not be necessary anymore when I've done with KisProjection
-#if 0
-
-            QRect r = region.boundingRect();
-            r = QRect(r.left()-1, r.top()-1, r.width()+2,/r.height()+2); //needed to update selectionvisualization
-            m_canvas->updateCanvas( convertToPt(r) );
-#endif
+        if (!m_paintOnSelection) {
+            m_currentImage->activeLayer()->setDirty(region);
+        }
+        else {
+            // Just update the canvas
+            // XXX: How to do this hack with regions?
+            // r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
+            m_target->setDirty(region);
         }
     }
 }
@@ -267,7 +236,9 @@ void KisToolFreehand::endPaint()
                 if (m_currentImage->undo())
                     painter.beginTransaction(m_transactionText);
 
-                QVector<QRect> dirtyRects = m_dirtyRegion.rects();
+                QRegion r = painter.dirtyRegion();
+                kDebug() << "endPaint: " << r.boundingRect() << endl;
+                QVector<QRect> dirtyRects = r.rects();
                 QVector<QRect>::iterator it = dirtyRects.begin();
                 QVector<QRect>::iterator end = dirtyRects.end();
 
@@ -282,7 +253,7 @@ void KisToolFreehand::endPaint()
                 KisLayerSupportsIndirectPainting* layer =
                     dynamic_cast<KisLayerSupportsIndirectPainting*>(m_source->parentLayer());
                 layer->setTemporaryTarget(0);
-                m_source->parentLayer()->setDirty(m_dirtyRegion);
+                m_source->parentLayer()->setDirty(painter.dirtyRegion());
 
                 if (m_currentImage->undo()) {
                     m_currentImage->undoAdapter()->addCommand(painter.endTransaction());

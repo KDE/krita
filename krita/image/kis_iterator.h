@@ -55,7 +55,7 @@ public:
 
 
 public:
-    /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+    /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
     const quint8 * rawData() const;
 
     /// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
@@ -88,7 +88,7 @@ private:
 class KRITAIMAGE_EXPORT KisRectIterator : public KisRectConstIterator {
     public:
         inline KisRectIterator ( KisDataManager *dm, qint32  x, qint32  y, qint32  w, qint32  h) : KisRectConstIterator(dm, x, y, w, h, true) { }
-        /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+        /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
         quint8 * rawData() const;
         /// Advances a number of pixels until it reaches the end of the rect
         KisRectIterator & operator+=(int n) { KisRectConstIterator::operator+=(n); return *this; }
@@ -115,7 +115,7 @@ public:
     KisHLineConstIterator& operator=(const KisHLineConstIterator& rhs);
 
 public:
-    /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+    /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
     const quint8 *rawData() const;
 
     /// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
@@ -156,7 +156,7 @@ class KRITAIMAGE_EXPORT KisHLineIterator : public KisHLineConstIterator {
     public:
         inline KisHLineIterator ( KisDataManager *dm, qint32  x, qint32 y, qint32 w) : KisHLineConstIterator(dm, x, y, w, true) { }
     public:
-        /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+        /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
         quint8 *rawData() const;
         
         /// Advances one pixel until it reaches the end of the line
@@ -184,7 +184,7 @@ public:
     KisVLineConstIterator& operator=(const KisVLineConstIterator& rhs);
 
 public:
-    /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+    /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
     const quint8 *rawData() const;
 
     /// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
@@ -214,7 +214,7 @@ private:
 class KRITAIMAGE_EXPORT KisVLineIterator : public KisVLineConstIterator {
     public:
         inline KisVLineIterator ( KisDataManager *dm, qint32  x, qint32 y, qint32 h) : KisVLineConstIterator(dm, x, y, h, true) { }
-        /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+        /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
         quint8 *rawData() const;
         /// Advances one pixel until it reaches the end of the line
         KisVLineIterator & operator++() { KisVLineConstIterator::operator++(); return *this; }

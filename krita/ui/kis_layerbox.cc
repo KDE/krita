@@ -49,7 +49,6 @@
 #include <khbox.h>
 #include <kicon.h>
 #include <KoDocumentSectionView.h>
-#include <KoPartSelectAction.h>
 #include "KoColorSpace.h"
 
 #include <kis_types.h>
@@ -123,11 +122,7 @@ KisLayerBox::KisLayerBox(KisView2 *view, const char *name)
     m_newLayerMenu->addAction(KIcon("filenew"), i18n("&New Layer..."), this, SLOT(slotNewLayer()));
     m_newLayerMenu->addAction(KIcon("folder"), i18n("New &Group Layer..."), this, SLOT(slotNewGroupLayer()));
     m_newLayerMenu->addAction(KIcon("tool_filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
-/*
-    m_partLayerAction = new KoPartSelectAction( i18n("New &Object Layer"), "gear");
-    m_newLayerMenu->addAction(m_partLayerAction);
-    connect(m_partLayerAction, SIGNAL(triggered()), this, SLOT(slotNewPartLayer()));
-*/
+
     connect(bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     connect(bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     connect(bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
@@ -145,9 +140,6 @@ KisLayerBox::KisLayerBox(KisView2 *view, const char *name)
 
     connect(this, SIGNAL(sigRequestAdjustmentLayer(KisGroupLayerSP, KisLayerSP)),
             m_view->layerManager(), SLOT(addAdjustmentLayer(KisGroupLayerSP, KisLayerSP)));
-
-    connect(this, SIGNAL(sigRequestPartLayer(KisGroupLayerSP, KisLayerSP, const KoDocumentEntry&)),
-            m_view->layerManager(), SLOT(addPartLayer(KisGroupLayerSP, KisLayerSP, const KoDocumentEntry&)));
 
     connect(this, SIGNAL(sigRequestLayerProperties(KisLayerSP)),
             m_view->layerManager(), SLOT(showLayerProperties(KisLayerSP)));
@@ -274,18 +266,14 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         sub->addAction(KIcon("file"), i18n("&Layer..."), this, SLOT(slotNewLayer()));
         sub->addAction(KIcon("folder"), i18n("&Group Layer..."), this, SLOT(slotNewGroupLayer()));
         sub->addAction(KIcon("tool_filter"), i18n("&Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
-        sub->addAction(m_partLayerAction);
-        m_partLayerAction->setText(i18n("&Object Layer..."));
     }
     else
     {
         menu.addAction(KIcon("filenew"), i18n("&New Layer..."), this, SLOT(slotNewLayer()));
         menu.addAction(KIcon("folder"), i18n("New &Group Layer..."), this, SLOT(slotNewGroupLayer()));
         menu.addAction(KIcon("tool_filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
-        menu.addAction(m_partLayerAction);
     }
     menu.exec(pos);
-    m_partLayerAction->setText(i18n("New &Object Layer..."));
 }
 
 void KisLayerBox::slotMinimalView()
@@ -356,16 +344,6 @@ void KisLayerBox::slotNewAdjustmentLayer()
     getNewLayerLocation(parent, above);
 
     emit sigRequestAdjustmentLayer(parent, above);
-}
-
-void KisLayerBox::slotNewPartLayer()
-{
-    KisGroupLayerSP parent;
-    KisLayerSP above;
-
-    getNewLayerLocation(parent, above);
-
-    emit sigRequestPartLayer(parent, above, m_partLayerAction->documentEntry());
 }
 
 void KisLayerBox::slotRmClicked()

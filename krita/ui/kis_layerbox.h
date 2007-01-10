@@ -46,7 +46,6 @@ class KIconLoader;
 class KMenu;
 class KoDocumentEntry;
 class KoCompositeOp;
-class KoPartSelectAction;
 
 class KisLayerBox : public QDockWidget, public Ui::WdgLayerBox {
 
@@ -71,7 +70,6 @@ signals:
     void sigRequestLayer(KisGroupLayerSP parent, KisLayerSP above);
     void sigRequestGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
     void sigRequestAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above);
-    void sigRequestPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry);
     void sigRequestLayerProperties(KisLayerSP layer);
 
     void sigOpacityChanged(int opacity, bool withSlider);
@@ -96,7 +94,6 @@ private slots:
     void slotNewLayer();
     void slotNewGroupLayer();
     void slotNewAdjustmentLayer();
-    void slotNewPartLayer();
 
     void updateUI();
 
@@ -106,7 +103,6 @@ private:
 
     KMenu *m_viewModeMenu;
     KMenu *m_newLayerMenu;
-    KoPartSelectAction *m_partLayerAction;
     KisView2 * m_view;
     KisImageSP m_image;
 };

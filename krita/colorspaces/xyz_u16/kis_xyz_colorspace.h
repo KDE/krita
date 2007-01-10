@@ -63,7 +63,7 @@ public:
     virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
     virtual quint8 intensity8(const quint8 * src) const;
 
-    // Information about the colorstrategy
+    // Information about the colorspace
     virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual quint32 channelCount() const;
     virtual quint32 colorChannelCount() const;

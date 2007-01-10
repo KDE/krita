@@ -990,18 +990,18 @@ void KisDoc2::renameImage(const QString& oldName, const QString& newName)
 }
 
 
-KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * colorstrategy)
+KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * colorspace)
 {
     if (!init())
         return KisImageSP(0);
 
     setUndo(false);
 
-    KisImageSP img = KisImageSP(new KisImage(this, width, height, colorstrategy, name));
+    KisImageSP img = KisImageSP(new KisImage(this, width, height, colorspace, name));
     Q_CHECK_PTR(img);
     connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
 
-    KisPaintLayer *layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE,colorstrategy);
+    KisPaintLayer *layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE,colorspace);
     Q_CHECK_PTR(layer);
 
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();

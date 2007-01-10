@@ -162,7 +162,8 @@ KisView2::KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * par
     m_d->viewConverter = viewConverter;
     m_d->canvas = new KisCanvas2( m_d->viewConverter, QPAINTER, this, static_cast<KoShapeControllerBase*>( doc ) );
     m_d->canvasController = new KoCanvasController( this );
-
+    connect( m_d->canvasController, SIGNAL( sizeChanged(const QSize & ) ),
+             m_d->canvas, SLOT( controllerSizeChanged( const QSize & ) ) );
     m_d->canvasController->setCanvas( m_d->canvas );
     m_d->resourceProvider = new KisResourceProvider( this );
 

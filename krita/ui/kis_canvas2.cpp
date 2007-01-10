@@ -258,6 +258,12 @@ void KisCanvas2::setImageSize( qint32 w, qint32 h )
     m_d->canvasCache = QImage( w, h, QImage::Format_ARGB32 );
 }
 
+void KisCanvas2::controllerSizeChanged( const QSize & size )
+{
+    if ( m_d->canvasWidget )
+        m_d->canvasWidget->parentSizeChanged( size );
+}
+
 #if 0
 // Old paint code from kis_view.cc
 void KisView::zoomAroundPoint(double x, double y, double zf)

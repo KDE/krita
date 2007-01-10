@@ -205,7 +205,7 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name) :
 {
     setObjectName(name);
     if (colorSpace == 0) {
-        kWarning(41001) << "Cannot create paint device without colorstrategy!\n";
+        kWarning(41001) << "Cannot create paint device without colorspace!\n";
         return;
     }
     m_longRunningFilterTimer = 0;

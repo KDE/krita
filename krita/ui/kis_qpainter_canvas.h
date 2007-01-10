@@ -78,6 +78,11 @@ public: // KisAbstractCanvasWidget
     QWidget * widget() { return this; }
 
     KoToolProxy * toolProxy();
+
+public slots:
+
+    void parentSizeChanged( const QSize & size );
+
 private:
 
     class Private;

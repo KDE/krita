@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QPixmap>
+#include <QSize>
 
 #include <KoCanvasBase.h>
 #include <krita_export.h>
@@ -115,6 +116,8 @@ public slots:
     void updateCanvasProjection( const QRect & rc );
 
     void setImageSize(qint32 w, qint32 h);
+
+    void controllerSizeChanged( const QSize & size );
 
 private:
 

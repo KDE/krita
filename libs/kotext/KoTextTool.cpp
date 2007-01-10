@@ -139,7 +139,7 @@ void KoTextTool::mouseMoveEvent( KoPointerEvent *event ) {
 }
 
 void KoTextTool::mouseReleaseEvent( KoPointerEvent *event ) {
-    // TODO
+    event->ignore();
 }
 
 void KoTextTool::keyPressEvent(QKeyEvent *event) {

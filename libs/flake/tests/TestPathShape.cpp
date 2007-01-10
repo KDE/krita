@@ -75,7 +75,7 @@ void TestPathShape::pathPointIndex()
     KoPathPointIndex p3Index( 1, 0 );
     KoPathPoint * point4 = path.lineTo( QPointF( 40, 40 ) );
     KoPathPointIndex p4Index( 1, 1 );
-    KoPathPoint * point5;
+    KoPathPoint * point5 = 0;
     KoPathPointIndex p5Index( -1, -1 );
 
     QVERIFY( p1Index == path.pathPointIndex( point1 ) );

@@ -81,6 +81,7 @@ void KoHighlightingTab::save(QTextCharFormat &format) const {
                 case 4: style = QTextCharFormat::DashDotDotLine; break;
                 case 5: style = QTextCharFormat::WaveUnderline; break;
                 default:
+                    style = QTextCharFormat::SingleUnderline; break;
                     kWarning() << "Unknown items in the underlineLineStyle combobox!\n";
             }
             format.setUnderlineStyle(style);

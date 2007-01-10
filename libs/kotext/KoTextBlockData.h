@@ -40,6 +40,10 @@ public:
     double counterWidth() const { return m_counterWidth; }
     /// set the width of the counter in pt.
     void setCounterWidth(double width) { m_counterWidth = width; }
+    /// return the spacing (in pt) between the counter and the text
+    double counterSpacing() const { return m_counterSpacing; }
+    /// set the spacing (in pt) between the counter and the text
+    void setCounterSpacing(double spacing) { m_counterSpacing = spacing; }
     /// set the exact text that will be painted as the counter
     void setCounterText(const QString &text) { m_counterText = text; }
     /// return the exact text that will be painted as the counter
@@ -62,6 +66,7 @@ public:
 
 private:
     double m_counterWidth;
+    double m_counterSpacing;
     QString m_counterText;
     QString m_partialCounterText;
     QPointF m_counterPos;

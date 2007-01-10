@@ -36,6 +36,7 @@ static const int properties[] = {
     KoListStyle::CharacterStyleId,
     KoListStyle::BulletCharacter,
     KoListStyle::BulletSize,
+    KoListStyle::Alignment,
     -1
 };
 

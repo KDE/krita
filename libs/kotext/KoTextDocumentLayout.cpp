@@ -629,11 +629,15 @@ void KoTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
             layouts.append(format);
             layout.setAdditionalFormats(layouts);
 
-            QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
+            Qt::Alignment align = static_cast<Qt::Alignment> (listFormat.intProperty(KoListStyle::Alignment));
+            if(align == 0)
+                align = Qt::AlignLeft;
+            QTextOption option( align | Qt::AlignAbsolute);
             option.setTextDirection(block.blockFormat().layoutDirection());
             layout.setTextOption(option);
             layout.beginLayout();
-            layout.createLine();
+            QTextLine line = layout.createLine();
+            line.setLineWidth(data->counterWidth() - data->counterSpacing());
             layout.endLayout();
             layout.draw(painter, data->counterPosition());
         }
@@ -997,19 +1001,19 @@ Q_ASSERT(otherData);
             }
             case KoListStyle::AlphaLowerItem:
                 item = d->intToAlpha(index, ListItemsPrivate::Lowercase);
-                width = qMax(width, d->fm.width(item + ' '));
+                width = qMax(width, d->fm.width(item));
                 break;
             case KoListStyle::UpperAlphaItem:
                 item = d->intToAlpha(index, ListItemsPrivate::Uppercase);
-                width = qMax(width, d->fm.width(item + ' '));
+                width = qMax(width, d->fm.width(item));
                 break;
             case KoListStyle::RomanLowerItem:
                 item = d->intToRoman(index);
-                width = qMax(width, d->fm.width(item + ' '));
+                width = qMax(width, d->fm.width(item));
                 break;
             case KoListStyle::UpperRomanItem:
                 item = d->intToRoman(index).toUpper();
-                width = qMax(width, d->fm.width(item + ' '));
+                width = qMax(width, d->fm.width(item));
                 break;
             case KoListStyle::SquareItem:
             case KoListStyle::DiscItem:
@@ -1034,16 +1038,22 @@ Q_ASSERT(otherData);
         data->setCounterText(prefix + item + suffix);
         index++;
     }
-    width += d->fm.width(prefix + suffix); // same for all
+    double counterSpacing = 1;
+    if(suffix.isEmpty())
+        counterSpacing = d->fm.width(' ');
+    width += counterSpacing + d->fm.width(prefix + suffix); // same for all
     for(int i=0; i < d->textList->count(); i++) {
         QTextBlock tb = d->textList->item(i);
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
         data->setCounterWidth(width);
+        data->setCounterSpacing(counterSpacing);
         //kDebug() << data->counterText() << " " << tb.text() << endl;
         //kDebug() << "    setCounterWidth: " << width << endl;
     }
     //kDebug() << endl;
 }
+
+// TODO remove the public classes ListItemsHelper from the header file. Didn't need the unit tests afterall.
 
 // static
 bool ListItemsHelper::needsRecalc(QTextList *textList) {

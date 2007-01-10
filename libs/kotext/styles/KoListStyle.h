@@ -73,7 +73,8 @@ public:
         DisplayLevel,   ///< show this many levels. Is always lower than the (implied) level.
         CharacterStyleId,///< CharacterStyle used for markup of the counter
         BulletCharacter,///< an int with the unicode value of the character
-        BulletSize     ///< size in percent relative to the height of the text
+        BulletSize,     ///< size in percent relative to the height of the text
+        Alignment       ///< Alignment of the counter
     };
 
     /**
@@ -119,6 +120,8 @@ public:
     QChar bulletCharacter() const { return propertyInt (BulletCharacter); }
     void setRelativeBulletSize(int percent) { setProperty(BulletSize, percent  ); }
     int relativeBulletSize() const { return propertyInt (BulletSize); }
+    void setAlignment(Qt::Alignment align) { setProperty(Alignment, static_cast<int> (align) ); }
+    Qt::Alignment alignment() const { return static_cast<Qt::Alignment>(propertyInt(Alignment)); }
 
     /// return the name of the style.
     const QString& name() const { return m_name; }

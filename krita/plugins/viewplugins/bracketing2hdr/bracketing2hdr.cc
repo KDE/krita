@@ -151,19 +151,6 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
     connect(m_wdgBracketing2HDR->pushButtonCreateHDRLayer, SIGNAL(released()), dialog, SLOT(accept ()));
     connect(m_wdgBracketing2HDR->pushButtonAddImages, SIGNAL(released()), this, SLOT(slotAddImages()));
     connect(m_wdgBracketing2HDR->pushButtonCalculateCameraResponse, SIGNAL(released()), this, SLOT(computeCameraResponse()));
-    addImage( "~/tmp/hdr/exposures/img01.jpg" );
-    addImage( "~/tmp/hdr/exposures/img02.jpg" );
-    addImage( "~/tmp/hdr/exposures/img03.jpg" );
-    addImage( "~/tmp/hdr/exposures/img04.jpg" );
-    addImage( "~/tmp/hdr/exposures/img05.jpg" );
-    addImage( "~/tmp/hdr/exposures/img06.jpg" );
-    addImage( "~/tmp/hdr/exposures/img07.jpg" );
-    addImage( "~/tmp/hdr/exposures/img08.jpg" );
-    addImage( "~/tmp/hdr/exposures/img09.jpg" );
-    addImage( "~/tmp/hdr/exposures/img10.jpg" );
-    addImage( "~/tmp/hdr/exposures/img11.jpg" );
-    addImage( "~/tmp/hdr/exposures/img12.jpg" );
-    addImage( "~/tmp/hdr/exposures/img13.jpg" );
     if(dialog->exec()==QDialog::Accepted)
     {
         kDebug() << "Start creating the HDR layer" << endl;
@@ -263,7 +250,12 @@ void Bracketing2HDRPlugin::createHDRPaintDevice( KisPaintDeviceSP device )
 
 void Bracketing2HDRPlugin::normalize(QVector<double>& intensity)
 {
-    double norm = intensity[numberOfInputLevels()/2];
+    double norm = 0.0;
+    int pos = numberOfInputLevels()/2;
+    while((norm = intensity[pos]) == 0.0)
+    {
+        pos++;
+    }
     for(int i = 0; i < numberOfInputLevels(); i++)
     {
         intensity[i] /= norm;
@@ -286,7 +278,6 @@ void Bracketing2HDRPlugin::computeCameraResponse()
             kError() << "NOT IMPLEMENTED YET !" << endl;
             Q_ASSERT(false);
     }
-    return ;
     // Now optimize the camera response
     // Create a temporary paint device and fill it with the current value
     KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBAF32", 0);
@@ -327,7 +318,7 @@ void Bracketing2HDRPlugin::computeCameraResponse()
             m_images[k].it = new KisHLineConstIteratorPixel( m_images[k].device->createHLineConstIterator(0, 0, width) );
         }
         KisHLineIteratorPixel dstIt = device->createHLineIterator(0, 0, width);
-        QColor c;
+        quint8* c = KoRgbU16Traits::allocate(1);
         // Loop over pixels
         for(int j = 0; j < height; j++)
         {
@@ -338,16 +329,15 @@ void Bracketing2HDRPlugin::computeCameraResponse()
                 for(int k = 0; k < m_images.size(); k++)
                 {
                     double coef = m_images[k].apexBrightness;
-                    m_images[k].device->colorSpace()->toQColor(m_images[k].it->rawData(), &c);
-                    sums[2][c.red()] += pixelData[2] * coef ;
-                    counts[2][c.red()] ++;
-                    sums[1][c.green()] += pixelData[1] * coef ;
-                    counts[1][c.green()] ++;
-                    sums[0][c.blue()] += pixelData[0] * coef ;
-                    counts[0][c.blue()] ++;
+                    m_images[k].device->colorSpace()->toRgbA16(m_images[k].it->rawData(), c, 1);
+                    sums[2][ KoRgbU16Traits::red(c) ] += pixelData[2] * coef ;
+                    counts[2][ KoRgbU16Traits::red(c) ] ++;
+                    sums[1][ KoRgbU16Traits::green(c) ] += pixelData[1] * coef ;
+                    counts[1][ KoRgbU16Traits::green(c) ] ++;
+                    sums[0][ KoRgbU16Traits::blue(c) ] += pixelData[0] * coef ;
+                    counts[0][ KoRgbU16Traits::blue(c) ] ++;
                     ++(*m_images[k].it);
                 }
-                device->colorSpace()->setAlpha(dstIt.rawData(), 255, 1);
                 ++dstIt;
             }
             dstIt.nextRow();
@@ -392,7 +382,7 @@ void Bracketing2HDRPlugin::computeCameraResponse()
             DIFF(m_intensityB, iBOld);
         }
         #undef DIFF
-        kDebug() << "Optimization delta = " << (sumdiff/count) << endl;
+        kDebug() << "Optimization delta = " << (sumdiff/count) << " = " << sumdiff << " / " << count << endl;
         if( sumdiff/count < epsilon)
             return;
     }
@@ -449,10 +439,11 @@ void Bracketing2HDRPlugin::computeLinearResponse(QVector<double>& intensity)
 
 void Bracketing2HDRPlugin::computePseudoGaussianWeights()
 {
+    double pseudosigma = numberOfInputLevels() * 0.5;
     m_weights.resize(numberOfInputLevels());
     for(int i = 0; i < numberOfInputLevels(); i++)
     {
-        double v = (i - 127.5) * ( 1. / 127.5);
+        double v = (i - pseudosigma) / pseudosigma;
         m_weights[i] = exp( -8.0 * v * v );
         if( m_weights[i] < epsilon)
             m_weights[i] = 0.;

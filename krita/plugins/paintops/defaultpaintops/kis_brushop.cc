@@ -269,7 +269,7 @@ void KisBrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    kDebug() << "KisBrushOp::paintAt : " << dstRect << endl;
+    kDebug(41010) << "KisBrushOp::paintAt : " << dstRect << endl;
 
     qint32 sx = dstRect.x() - x;
     qint32 sy = dstRect.y() - y;

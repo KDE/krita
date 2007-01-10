@@ -21,6 +21,7 @@
 #include <QWidget>
 #include <QTime>
 #include <QPixmap>
+#include <QLabel>
 
 #include <kdebug.h>
 
@@ -30,7 +31,6 @@
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoDocument.h>
-
 
 #include <kis_image.h>
 
@@ -182,6 +182,12 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
                 , 0, 0, rc.width(), rc.height() );
     kDebug(41010) << "Converting image part took " << t.elapsed() << " ms\n";
     updateCanvas( QRectF( rc ) );
+/*
+    kDebug(41010 ) << ">>>>>>>>>>>>>>>>>> canvas cache size: " << m_d->canvasCache.size() << endl;
+    QLabel * l = new QLabel( 0 );
+    l->setPixmap( QPixmap::fromImage( m_d->canvasCache ) );
+    l->show();
+*/
 }
 
 

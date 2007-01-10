@@ -147,35 +147,12 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
                             imageRect.right() * pppx, imageRect.bottom() * pppy);
         QRect rc = imageRect.toRect();
 
-
-#if 1
-        // XXX: Do I need to do stuff with EPSILON here because I'm
-        // comparing doubles?
-        if ( sx / pppx != 1.0 && sy / pppy != 1.0 ) {
-
-            // XXX scale the canvaspixmap ourselves onto the top-left
-            // region of the canvascache, and draw that without scaling
-            // onto the widget painter.
-            gc.drawImage( rc.x(), rc.y(), *m_d->displayCache, 0, 0, rc.width(), rc.height() );
-        }
-        else {
-            // Draw the canvas pixmap unscaled at the right place
-            gc.drawImage( rc.x(), rc.y(), canvasPixmap, rc.x(), rc.y(), rc.width(), rc.height() );
-
-        }
-#else
         gc.setWorldMatrixEnabled( true );
         kDebug(41010) << "scale: " << sx / pppx << ", " << sy / pppy << endl;
         gc.scale( sx / pppx, sy / pppy );
 
-        QRectF imageRect = m_d->viewConverter->viewToDocument(*it);
-        imageRect.adjust(-1, -1, 1, 1);
-        imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
-                            imageRect.right() * pppx, imageRect.bottom() * pppy);
-        QRect rc = imageRect.toRect();
-
         gc.drawImage( rc.x(), rc.y(), canvasPixmap, rc.x(), rc.y(), rc.width(), rc.height() );
-#endif
+
         qDebug( "painting image: %d",  t.elapsed() );
         t.restart();
 
@@ -296,8 +273,8 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
 
 void KisQPainterCanvas::parentSizeChanged(const QSize & size )
 {
-    if ( size.width() > m_d->displayCache->size().width() ||
-         size.height() > m_d->displayCache->size().height() ) {
+    if (!m_d->displayCache || ( size.width() > m_d->displayCache->size().width() ||
+         size.height() > m_d->displayCache->size().height()) ) {
         kDebug() << "KisQPainterCanvas::parentSizeChanged " << size << endl;
         m_d->displayCache = new QImage(size, QImage::Format_RGB32);
     }

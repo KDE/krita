@@ -255,13 +255,20 @@ void KoPathTool::convertToPath()
 
 void KoPathTool::joinPoints()
 {
-    if ( m_pointSelection.objectCount() == 1 )
+    if ( m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2 )
     {
-        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
-        KoPathShape * pathShape = selectedPoints[0]->parent();
-        if( selectedPoints.size() == 2 )
+        QList<KoPathPointData> pd( m_pointSelection.selectedPointsData() );
+        const KoPathPointData & pd1 = pd.at( 0 );
+        const KoPathPointData & pd2 = pd.at( 1 );
+        KoPathShape * pathShape = pd1.m_pathShape;
+        if ( !pathShape->isClosedSubpath( pd1.m_pointIndex.first ) &&  
+            ( pd1.m_pointIndex.second == 0 || 
+              pd1.m_pointIndex.second == pathShape->pointCountSubpath( pd1.m_pointIndex.first ) - 1 ) &&
+             !pathShape->isClosedSubpath( pd2.m_pointIndex.first ) && 
+            ( pd2.m_pointIndex.second == 0 || 
+              pd2.m_pointIndex.second == pathShape->pointCountSubpath( pd2.m_pointIndex.first ) - 1 ) )
         {
-            KoPointJoinCommand *cmd = new KoPointJoinCommand( pathShape, selectedPoints[0], selectedPoints[1] );
+            KoSubpathJoinCommand *cmd = new KoSubpathJoinCommand( pd1, pd2 );
             m_canvas->addCommand( cmd );
         }
     }

@@ -219,28 +219,41 @@ private:
     bool m_deletePoints;
 };
 
-/// The undo / redo command for joining two start/end path points
-class KoPointJoinCommand : public KoPathBaseCommand
+/// The undo / redo command for joining two subpath end points
+class KoSubpathJoinCommand : public QUndoCommand
 {
 public:
     /**
-     * Command to join two start/end path points.
-     * @param shape the path shape whose points to join
-     * @param point1 the first point of the subpath to join
-     * @param point2 the second point of the subpath to join
+     * Command to join two subpath end points.
+     *
+     * The points have to be from the same path shape.
+     *
+     * @param pointData1 the data of the first point to join
+     * @param pointData2 the data of the second point to join
      * @param parent the parent command used for macro commands
      */
-    KoPointJoinCommand( KoPathShape *shape, KoPathPoint *point1, KoPathPoint *point2, QUndoCommand *parent = 0 );
+    KoSubpathJoinCommand( const KoPathPointData &pointData1, const KoPathPointData &pointData2, QUndoCommand *parent = 0 );
+    ~KoSubpathJoinCommand();
+    
     /// redo the command
     void redo();
     /// revert the actions done in redo
     void undo();
-    /// return the name of this command
-    QString name() const;
 private:
-    KoPathPoint* m_point1;
-    KoPathPoint* m_point2;
-    bool m_joined;
+    KoPathPointData m_pointData1;
+    KoPathPointData m_pointData2;
+    KoPathPointIndex m_splitIndex;
+    // the control points have to be stored in document positions
+    QPointF m_oldControlPoint1;
+    QPointF m_oldControlPoint2;
+    KoPathPoint::KoPointProperties m_oldProperties1;
+    KoPathPoint::KoPointProperties m_oldProperties2;
+    enum Reverse
+    {
+        ReverseFirst = 1,
+        ReverseSecond = 2
+    };
+    int m_reverse;
 };
 
 /// The undo / redo command for breaking a subpath by removing the segment

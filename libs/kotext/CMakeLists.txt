@@ -72,6 +72,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoTextSelectionHandler.cpp
     KoTextBlockBorderData.cpp
     KoTextDocumentLayout.cpp
+    ListItemsHelper_p.cpp
     KoInlineTextObjectManager.cpp
     KoInlineObjectFactory.cpp
     KoInlineObjectRegistry.cpp

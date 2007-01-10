@@ -164,17 +164,4 @@ private:
     bool m_scheduled;
 };
 
-class ListItemsPrivate;
-/// \internal helper class for calculating text-lists prefixes and indents
-class KOTEXT_EXPORT ListItemsHelper {
-public:
-    ListItemsHelper(QTextList *textList, const QFont &font);
-    ~ListItemsHelper();
-    void recalculate();
-    static bool needsRecalc(QTextList *textList);
-
-private:
-    ListItemsPrivate *d;
-};
-
 #endif

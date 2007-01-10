@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
- * Copyright (C) 2006 Thoresten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -85,8 +85,6 @@ int KoCanvasController::visibleHeight() const {
     else
         height1 = qMin(m_viewport->height(), canvasWidget->height());
     int height2 = height();
-    if(horizontalScrollBar() && horizontalScrollBar()->isVisible())
-        height2 -= horizontalScrollBar()->height();
     return qMin(height1, height2);
 }
 
@@ -101,8 +99,6 @@ int KoCanvasController::visibleWidth() const {
     else
         width1 = qMin(m_viewport->width(), canvasWidget->width());
     int width2 = width();
-    if(verticalScrollBar() && verticalScrollBar()->isVisible())
-        width2 -= verticalScrollBar()->width();
     return qMin(width1, width2);
 }
 

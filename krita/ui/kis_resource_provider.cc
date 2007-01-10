@@ -43,7 +43,7 @@ KisResourceProvider::KisResourceProvider(KisView2 * view )
     v.setValue( KoColor(Qt::white, view->image()->colorSpace()) );
     m_resourceProvider->setResource( KoCanvasResource::BackgroundColor, v );
 
-    m_resourceProvider->setKoID(KoCanvasResource::CurrentPaintop, KoID( "paintbrush" ) );
+    m_resourceProvider->setKoID(KoCanvasResource::CurrentPaintop, KoID( "paintbrush", "Paintbrush" ) );
     v = qVariantFromValue( ( void * ) 0 );
     m_resourceProvider->setResource( KoCanvasResource::CurrentPaintopSettings, v );
 
@@ -168,7 +168,7 @@ void KisResourceProvider::slotGradientActivated(KisResource *res)
 }
 
 void KisResourceProvider::slotPaintopActivated(const KoID & paintop,
-                                           const KisPaintOpSettings *paintopSettings)
+                                               const KisPaintOpSettings *paintopSettings)
 {
     if (paintop.id().isNull() || paintop.id().isEmpty()) {
         return;
@@ -215,7 +215,7 @@ void KisResourceProvider::slotLayerActivated( const KisLayerSP l )
 {
     QVariant v;
     v.setValue( l );
-    m_resourceProvider->setResource( KoCanvasResource::CurrentPaintop, v );
+    m_resourceProvider->setResource( KoCanvasResource::CurrentKritaLayer, v );
 
 }
 

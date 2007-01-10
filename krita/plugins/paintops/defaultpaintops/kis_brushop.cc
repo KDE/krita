@@ -178,6 +178,8 @@ KisBrushOp::~KisBrushOp()
 
 void KisBrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 {
+    qDebug() << "KisBrushOp::paintAt " << pos << endl;
+
     KisPaintInformation adjustedInfo(info);
     if (!m_pressureSize)
         adjustedInfo.pressure = PRESSURE_DEFAULT;
@@ -269,7 +271,7 @@ void KisBrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    kDebug(41010) << "KisBrushOp::paintAt : " << dstRect << endl;
+    qDebug()<< ">>>>>>>>>>>>>>>>>>>>>>>>>>>> KisBrushOp::paintAt : " << dstRect << endl;
 
     qint32 sx = dstRect.x() - x;
     qint32 sy = dstRect.y() - y;

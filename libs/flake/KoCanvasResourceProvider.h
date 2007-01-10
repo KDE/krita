@@ -1,6 +1,6 @@
 /*
    Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -59,7 +59,7 @@ namespace KoCanvasResource {
 
 /**
  * The KoCanvasResourceProvider contains a set of per-canvas
- * &reserties, like current foreground color, current background
+ * properties, like current foreground color, current background
  * color and more. All tools belonging to the current canvas are
  * notified when a Resource changes (is set).
  */

@@ -67,7 +67,7 @@ void KisTool::deactivate()
 
 void KisTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & v )
 {
-
+    kDebug() << "KisTool::resourceChanged " << key << ", " << v << endl;
     switch ( key ) {
     case ( KoCanvasResource::ForegroundColor ):
         m_currentFgColor = v.value<KoColor>();

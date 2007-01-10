@@ -84,6 +84,7 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
         kWarning() << "Didn't create a painter! Something is wrong!\n";
         return;
     }
+
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp,
                                                               m_currentPaintOpSettings,
                                                               m_painter);

@@ -39,7 +39,7 @@ ActionJob::ActionJob(KoAction *parent, Enable enable, QVariant *params)
 
 void ActionJob::run() {
     m_started = true;
-    m_action->doAction(m_params);
+    m_action->doAction(&m_params);
     switch(m_enable) {
         case EnableOn:
             m_action->setEnabled(true);
@@ -51,7 +51,7 @@ void ActionJob::run() {
             break;
     }
     if(QThread::currentThread() == QCoreApplication::instance()->thread())
-        m_action->doActionUi(m_params);
+        m_action->doActionUi(&m_params);
     else {
         // do it in the main thread.
         QCoreApplication::postEvent(this, new ActionJobEvent());
@@ -62,7 +62,7 @@ void ActionJob::run() {
 bool ActionJob::event(QEvent *e) {
     ActionJobEvent *event = dynamic_cast<ActionJobEvent*> (e);
     if(event) {
-        m_action->doActionUi(m_params);
+        m_action->doActionUi(&m_params);
         m_semaphore.release();
         return true;
     }

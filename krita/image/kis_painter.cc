@@ -188,7 +188,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     sw = srcRect.width();
     sh = srcRect.height();
 
-    addDirtyRect( srcRect );
+    addDirtyRect( QRect( dx, dy, sw, sh ));
 
     const quint8 * srcData = src->bits();
 
@@ -252,7 +252,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     sw = srcRect.width();
     sh = srcRect.height();
 
-    addDirtyRect( srcRect );
+    addDirtyRect( QRect( dx, dy, sw, sh ) );
 
     KoColorSpace * srcCs = srcdev->colorSpace();
 

@@ -23,7 +23,7 @@
 
 #include <QWidget>
 
-class QListView;
+class QTreeView;
 
 namespace Kross {
     class GUIClient;
@@ -44,7 +44,7 @@ class ScriptingDocker : public QWidget
     private:
         Kross::GUIClient* m_guiclient;
         Kross::ActionCollectionProxyModel* m_model;
-        QListView* m_view;
+        QTreeView* m_view;
 };
 
 #endif

@@ -22,10 +22,9 @@
 
 #include <QToolBar>
 #include <QBoxLayout>
-#include <QListView>
+#include <QTreeView>
 #include <QModelIndex>
-
-#include <QRect>
+#include <QHeaderView>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -44,10 +43,13 @@ ScriptingDocker::ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
     layout->setMargin(0);
     setLayout(layout);
 
-    m_view = new QListView(this);
+    m_view = new QTreeView(this);
+    m_view->setRootIsDecorated(false);
+    m_view->header()->hide();
     m_model = new Kross::ActionCollectionProxyModel(this);
     m_view->setModel(m_model);
     layout->addWidget(m_view, 1);
+    m_view->expandAll();
 
     QToolBar* tb = new QToolBar(this);
     layout->addWidget(tb);

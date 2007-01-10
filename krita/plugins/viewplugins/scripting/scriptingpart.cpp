@@ -61,12 +61,6 @@ class ScriptingPart::Private
         KisView2* view;
         Kross::GUIClient* guiclient;
         QPointer< Scripting::Module > module;
-
-        Private() : view(0), guiclient(0), module(0) {}
-        virtual ~Private() {
-            //Kross::Manager::self().removeObject(module);
-            delete module; module = 0;
-        }
 };
 
 ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
@@ -83,6 +77,8 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     //d->guiclient ->setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
     //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu
     setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), true);
+
+    d->module = new Scripting::Module(d->view);
 
     // Setup the actions Kross provides and Krita likes to have.
     KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
@@ -104,20 +100,13 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
 
 ScriptingPart::~ScriptingPart()
 {
-    if(d->module) {
-        kDebug() << "ScriptingPart::~ScriptingPart Execution is still running. Trying to free it." << endl;
-        d->module->deleteLater();
-    }
+    delete d->module;
     delete d;
 }
 
-void ScriptingPart::started(Kross::Action* action)
+void ScriptingPart::started(Kross::Action*)
 {
-    Q_UNUSED(action);
     kDebug() << "ScriptingPart::executionStarted" << endl;
-    if(d->module)
-        delete d->module;
-    d->module = new Scripting::Module(d->view);
     Kross::Manager::self().addObject(d->module, "Krita");
 }
 

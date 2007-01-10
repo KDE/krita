@@ -181,7 +181,14 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
                                           m_d->view->resourceProvider()->HDRExposure() )
                 , 0, 0, rc.width(), rc.height() );
     kDebug(41010) << "Converting image part took " << t.elapsed() << " ms\n";
-    updateCanvas( QRectF( rc ) );
+
+    double pppx,pppy;
+    pppx = image()->xRes();
+    pppy = image()->yRes();
+    QRectF docRect;
+    docRect.setCoords(rc.left() / pppx, rc.top() / pppy, rc.right() / pppx, rc.bottom() / pppy);
+    QRectF viewRect = m_d->viewConverter->documentToView(docRect);
+    updateCanvas( viewRect );
 /*
     kDebug(41010 ) << ">>>>>>>>>>>>>>>>>> canvas cache size: " << m_d->canvasCache.size() << endl;
     QLabel * l = new QLabel( 0 );

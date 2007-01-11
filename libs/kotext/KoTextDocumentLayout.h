@@ -107,7 +107,7 @@ public:
         /// return the y offset of the document at start of shape.
         double docOffsetInShape() const;
         /// when a line is added, update internal vars.  Return true if line does not fit in shape
-        bool addLine(const QTextLine &line);
+        bool addLine(QTextLine &line);
         /// prepare for next paragraph; return false if there is no next parag.
         bool nextParag();
         double documentOffsetInShape();

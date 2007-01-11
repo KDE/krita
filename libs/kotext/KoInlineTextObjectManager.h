@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -69,13 +69,24 @@ public:
      */
     void insertInlineObject(QTextCursor &cursor, KoInlineObjectFactory *factory);
 
+    void setProperty(KoInlineObjectBase::Property key, QVariant value);
+    QVariant property(KoInlineObjectBase::Property key) const;
+    int intProperty(KoInlineObjectBase::Property key) const;
+    bool boolProperty(KoInlineObjectBase::Property key) const;
+    QString stringProperty(KoInlineObjectBase::Property key) const;
+
+signals:
+    void propertyChanged(int, const QVariant &variant);
+
 private:
     enum Properties {
         InlineInstanceId = 577297549
     };
 
     QHash<int, KoInlineObjectBase*> m_objects;
+    QList<KoInlineObjectBase*> m_listeners; // holds objects also in m_objects, but which want propertyChanges
     int m_lastObjectId;
+    QHash<int, QVariant> m_properties;
 };
 
 #endif

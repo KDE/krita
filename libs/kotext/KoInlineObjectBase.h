@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,12 +19,16 @@
 #ifndef KOINLINEOBJECTBASE_H
 #define KOINLINEOBJECTBASE_H
 
+#include <Qt> // for Q_UNUSED
+#include <koffice_export.h>
+
 class QTextDocument;
 class QTextCharFormat;
 class QTextInlineObject;
 class QPaintDevice;
 class QPainter;
 class QRectF;
+class QVariant;
 
 /**
  * Base class for all inline-text-objects.
@@ -32,10 +36,25 @@ class QRectF;
  * position in the text, as one character.
  * @see KoInlineTextObjectManager
  */
-class KoInlineObjectBase {
+class KOTEXT_EXPORT KoInlineObjectBase {
 public:
+    // TODO move this back to the manager where it really belongs
+    enum Property {
+        VariousKofficeWidePropertiesHere,
+
+        KarbonStart = 1000,      ///< Base number for karbon specific values.
+        KexiStart = 2000,        ///< Base number for kexi specific values.
+        KivioStart = 3000,       ///< Base number for kivio specific values.
+        KPlatoStart = 4000,      ///< Base number for kplato specific values.
+        KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
+        KritaStart = 6000,       ///< Base number for krita specific values.
+        KWordStart = 7000,       ///< Base number for kword specific values.
+        User = 10000
+    };
+
     /// constructor
-    KoInlineObjectBase() : m_id(-1) {}
+    KoInlineObjectBase(bool propertyChangeListener = false)
+        : m_id(-1), m_propertyChangeListener(propertyChangeListener) {}
     virtual ~KoInlineObjectBase() {}
 
     /**
@@ -82,12 +101,17 @@ public:
     virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
             const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) = 0;
 
+    virtual void propertyChanged(Property key, const QVariant &value) { Q_UNUSED(key); Q_UNUSED(value); }
+
     /// return the inline-object Id that is assigned for this object.
     int id() const { return m_id; }
     /// Set the inline-object Id that is assigned for this object by the KoInlineTextObjectManager.
     void setId(int id) { m_id = id; }
 
+    bool propertyChangeListener() const { return m_propertyChangeListener; }
+
 private:
     int m_id;
+    const bool m_propertyChangeListener;
 };
 #endif

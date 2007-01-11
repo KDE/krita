@@ -145,7 +145,11 @@ double KoTextDocumentLayout::LayoutState::docOffsetInShape() const {
     return d->data->documentOffset();
 }
 
-bool KoTextDocumentLayout::LayoutState::addLine(const QTextLine &line) {
+bool KoTextDocumentLayout::LayoutState::addLine(QTextLine &line) {
+    // TODO
+    // if the line was right aligned (RtL) and we have a counter, we have
+    // to move the line so we can paint the counter at its proper place.
+
     double height = d->format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     bool useFixedLineHeight = height != 0.0;
     bool useFontProperties = d->format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
@@ -363,6 +367,7 @@ void KoTextDocumentLayout::LayoutState::resetPrivate() {
     layout = 0;
     d->newShape = true;
     d->blockData = 0;
+    d->newParag = true;
     d->block = d->parent->document()->begin();
 
     shapeNumber = 0;

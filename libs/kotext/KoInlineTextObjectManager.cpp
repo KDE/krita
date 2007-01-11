@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,6 +45,8 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     cursor.insertText(QString(0xFFFC), cf);
     object->setId(m_lastObjectId);
     m_objects.insert(m_lastObjectId, object);
+    if(object->propertyChangeListener())
+        m_listeners.append(object);
 }
 
 /**
@@ -53,6 +55,39 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
 void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInlineObjectFactory *factory) {
     Q_ASSERT(factory);
     insertInlineObject(cursor, factory->createInlineObject());
+}
+
+void KoInlineTextObjectManager::setProperty(KoInlineObjectBase::Property key, QVariant value) {
+    if(m_properties.contains(key)) {
+        if(value == m_properties.value(key))
+            return;
+        m_properties.remove(key);
+    }
+    m_properties.insert(key, value);
+    foreach(KoInlineObjectBase *obj, m_listeners)
+        obj->propertyChanged(key, value);
+}
+
+QVariant KoInlineTextObjectManager::property(KoInlineObjectBase::Property key) const {
+    return m_properties.value(key);
+}
+
+int KoInlineTextObjectManager::intProperty(KoInlineObjectBase::Property key) const {
+    if(!m_properties.contains(key))
+        return 0;
+    return m_properties.value(key).toInt();
+}
+
+bool KoInlineTextObjectManager::boolProperty(KoInlineObjectBase::Property key) const {
+    if(!m_properties.contains(key))
+        return false;
+    return m_properties.value(key).toBool();
+}
+
+QString KoInlineTextObjectManager::stringProperty(KoInlineObjectBase::Property key) const {
+    if(!m_properties.contains(key))
+        return QString();
+    return qvariant_cast<QString>(m_properties.value(key));
 }
 
 #include "KoInlineTextObjectManager.moc"

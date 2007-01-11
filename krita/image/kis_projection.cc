@@ -28,7 +28,7 @@
 #include "kis_image.h"
 #include "kis_group_layer.h"
 
-const int UPDATE_RECT_SIZE = 65000;
+const int UPDATE_RECT_SIZE = 512;
 
 class KisProjection::Private {
 public:
@@ -170,14 +170,17 @@ void KisProjection::scheduleRect( const QRect & rc )
         m_d->action->execute( &v );
     }
 
+    int x = rc.x();
+    int y = rc.y();
+
     int wleft = w;
     int col = 0;
     while ( wleft > 0 ) {
         int hleft = h;
         int row = 0;
         while ( hleft > 0 ) {
-            v = QRect( col, row, qMin( wleft, UPDATE_RECT_SIZE ), qMin( hleft, UPDATE_RECT_SIZE ) );
-            kDebug(41010) << "Scheduling subrect : " << v << ", wleft: " << wleft << ", hleft:" << hleft << endl;
+            v = QRect( col + x, row + y, qMin( wleft, UPDATE_RECT_SIZE ), qMin( hleft, UPDATE_RECT_SIZE ) );
+            kDebug() << "Scheduling subrect : " << v << ", wleft: " << wleft << ", hleft:" << hleft << endl;
             m_d->action->execute( &v );
             hleft -= UPDATE_RECT_SIZE;
             row += UPDATE_RECT_SIZE;

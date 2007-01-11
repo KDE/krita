@@ -139,18 +139,18 @@ KoShapeManager* KisCanvas2::shapeManager() const
 
 void KisCanvas2::updateCanvas(const QRectF& rc)
 {
-    kDebug(41010) << "KisCanvas2::updateCanvas(QRectF): " << rc << endl;
+    //kDebug(41010) << "KisCanvas2::updateCanvas(QRectF): " << rc << endl;
 
     // First convert from document coordinated to widget coordinates
     QRectF viewRect  = m_d->viewConverter->documentToView(rc);
-    kDebug() << "KiSCanvas2::updateCanvas viewrect becomes: " << viewRect << endl;
+    //kDebug() << "KiSCanvas2::updateCanvas viewrect becomes: " << viewRect << endl;
     m_d->canvasWidget->widget()->update( viewRect.toRect() );
 }
 
 
 void KisCanvas2::updateCanvas(const QRegion & rc)
 {
-    kDebug(41007) << "KisCanvas2::updateCanvas(QRegion): " << rc << endl;
+    //kDebug(41007) << "KisCanvas2::updateCanvas(QRegion): " << rc << endl;
 
     // Loop through all rects in the region and call update() on the
     // canvas widget for all these rects after conversion: Qt will
@@ -171,7 +171,7 @@ void KisCanvas2::updateCanvas(const QRegion & rc)
 
 void KisCanvas2::updateCanvasProjection( const QRect & rc )
 {
-    kDebug(41010) << "KisCanvas2::updateCanvasProjection(QRect) " << rc << " onto cache " << m_d->canvasCache.size() << endl;
+    kDebug() << "KisCanvas2::updateCanvasProjection(QRect) " << rc << " onto cache " << m_d->canvasCache.size() << endl;
     QTime t;
     t.start();
     QPainter p( &m_d->canvasCache );
@@ -186,7 +186,7 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
     pppx = image()->xRes();
     pppy = image()->yRes();
     QRectF docRect;
-    docRect.setCoords(rc.left() - 2 / pppx, rc.top() - 2 / pppy, rc.right() + 2 / pppx, rc.bottom() + 2 / pppy);
+    docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
     QRectF viewRect = m_d->viewConverter->documentToView(docRect);
     m_d->canvasWidget->widget()->update( viewRect.toRect() );
 

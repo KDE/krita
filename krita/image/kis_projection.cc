@@ -28,7 +28,7 @@
 #include "kis_image.h"
 #include "kis_group_layer.h"
 
-const int UPDATE_RECT_SIZE = 512;
+const int UPDATE_RECT_SIZE = 1024;
 
 class KisProjection::Private {
 public:
@@ -115,8 +115,13 @@ bool KisProjection::upToDate(const QRegion & region)
 
 void KisProjection::slotAddDirtyRegion( const QRegion & region )
 {
-    kDebug(41010) << "KisProjection::slotAddDirtyRegion " << region << endl;
+
+    //kDebug(41010) << "KisProjection::slotAddDirtyRegion " << region << ", bounding rect: " << region.boundingRect() << endl;
+#if 1
     m_d->dirtyRegion += region;
+    if ( !m_d->locked )
+        scheduleRect( region.boundingRect() );
+#else
     if ( !m_d->locked ) {
         QVector<QRect> regionRects = region.rects();
 
@@ -127,6 +132,8 @@ void KisProjection::slotAddDirtyRegion( const QRegion & region )
             ++it;
         }
     }
+#endif
+
 }
 
 void KisProjection::slotAddDirtyRect( const QRect & rect )
@@ -155,7 +162,7 @@ void KisProjection::slotUpdateUi( const QVariant & rect )
 
 void KisProjection::scheduleRect( const QRect & rc )
 {
-    kDebug() << "Scheduled big rect: " << rc << endl;
+    kDebug(41010) << "Scheduled big rect: " << rc << endl;
     int h = rc.height();
     int w = rc.width();
     QRect imageRect = m_d->image->bounds();
@@ -165,7 +172,7 @@ void KisProjection::scheduleRect( const QRect & rc )
     // Note: we're doing columns first, so when we have small strip left
     // at the bottom, we have as few and as long runs of pixels left
     // as possible.
-    if ( w <= UPDATE_RECT_SIZE || h <= UPDATE_RECT_SIZE ) {
+    if ( w <= UPDATE_RECT_SIZE && h <= UPDATE_RECT_SIZE ) {
         v = QRect( rc );
         m_d->action->execute( &v );
     }
@@ -180,7 +187,7 @@ void KisProjection::scheduleRect( const QRect & rc )
         int row = 0;
         while ( hleft > 0 ) {
             v = QRect( col + x, row + y, qMin( wleft, UPDATE_RECT_SIZE ), qMin( hleft, UPDATE_RECT_SIZE ) );
-            kDebug() << "Scheduling subrect : " << v << ", wleft: " << wleft << ", hleft:" << hleft << endl;
+            kDebug(41010) << "Scheduling subrect : " << v << ", wleft: " << wleft << ", hleft:" << hleft << endl;
             m_d->action->execute( &v );
             hleft -= UPDATE_RECT_SIZE;
             row += UPDATE_RECT_SIZE;

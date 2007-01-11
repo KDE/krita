@@ -121,7 +121,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     QVector<QRect> repaintRects = paintRegion.rects();
 
-    //kDebug(41010) << "painting on " << repaintRects.count() << " rects\n";
+    kDebug() << "painting on " << repaintRects.count() << " rects, bounding rect: " << ev->rect() << "\n";
 
     QVector<QRect>::iterator it = repaintRects.begin();
     QVector<QRect>::iterator end = repaintRects.end();

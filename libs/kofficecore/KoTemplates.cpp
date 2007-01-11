@@ -47,8 +47,6 @@ KoTemplate::KoTemplate(const QString &name, const QString &description, const QS
 }
 
 const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
-    Q_UNUSED(instance);
-
     if(m_cached)
         return m_pixmap;
     m_cached=true;
@@ -68,7 +66,8 @@ const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
         m_pixmap = QPixmap::fromImage(img);
         return m_pixmap;
     } else { // relative path
-        m_pixmap = KIconLoader::global()->loadIcon( m_picture, K3Icon::Desktop, 128 );
+        KIconLoader iconLoader(instance);
+        m_pixmap = iconLoader.loadIcon( m_picture, K3Icon::Desktop, 128 );
         return m_pixmap;
     }
 }

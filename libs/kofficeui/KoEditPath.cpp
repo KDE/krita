@@ -29,7 +29,7 @@
 #include <kurlrequester.h>
 #include <q3hbox.h>
 #include <klineedit.h>
-#include <q3vbox.h>
+#include <kvbox.h>
 #include <QCheckBox>
 #include <QLabel>
 

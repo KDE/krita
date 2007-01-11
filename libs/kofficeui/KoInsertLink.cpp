@@ -35,6 +35,7 @@
 #include <krecentdocument.h>
 #include <kpagewidgetmodel.h>
 #include <kicon.h>
+#include <kvbox.h>
 
 using namespace KOfficePrivate;
 

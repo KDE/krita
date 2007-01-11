@@ -26,7 +26,7 @@
 #include <KoShapeManager.h>
 #include <QKeyEvent>
 
-namespace KFormula {
+namespace FormulaShape {
 
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
                                                        m_formulaShape( 0 ),
@@ -68,12 +68,16 @@ void KoFormulaTool::deactivate()
 
 void KoFormulaTool::paint( QPainter &painter, KoViewConverter &converter)
 {
+    Q_UNUSED( converter )
     // TODO do view conversions with converter
-    m_formulaCursor->paint( painter );
+    if( m_formulaCursor )
+        m_formulaCursor->paint( painter );
 }
 
 void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
 {
+    Q_UNUSED( event )
+
 // TODO implement the action and the elementAt method in FormulaShape
 //   m_formulaCursor->setCursorTo( m_formulaShape->elementAt( ) );
 //
@@ -99,11 +103,15 @@ void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
 
 void KoFormulaTool::mouseDoubleClickEvent( KoPointerEvent *event )
 {
+    Q_UNUSED( event )
+
     // TODO select whole element 
 }
 
 void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )
 {
+    Q_UNUSED( event )
+
     // TODO find the old implementation and use it
     //
     // the old implementation
@@ -161,11 +169,16 @@ void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )
 
 void KoFormulaTool::mouseReleaseEvent( KoPointerEvent *event )
 {
+    Q_UNUSED( event )
+
     // TODO what should happen here ?
 }
 
 void KoFormulaTool::keyPressEvent( QKeyEvent *event )
 {
+    if( !m_formulaCursor )
+        return;
+
     m_formulaCursor->setWordMovement( event->modifiers() & Qt::ControlModifier );
     m_formulaCursor->setSelecting( event->modifiers() & Qt::ShiftModifier );
     	    
@@ -211,6 +224,8 @@ void KoFormulaTool::keyReleaseEvent( QKeyEvent *event )
 
 void KoFormulaTool::remove( bool backSpace )
 {
+    Q_UNUSED( backSpace )
+
     if( m_formulaCursor->hasSelection() )  // remove the selection
     {
 	 // TODO set the cursor according to backSpace
@@ -222,5 +237,5 @@ void KoFormulaTool::remove( bool backSpace )
     }
 }
 
-} // namespace KFormula
+} // namespace FormulaShape
 

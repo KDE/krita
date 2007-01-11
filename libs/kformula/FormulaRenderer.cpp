@@ -21,7 +21,7 @@
 #include "AttributeManager.h"
 #include "BasicElement.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
 FormulaRenderer::FormulaRenderer()
 {
@@ -38,13 +38,16 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
 {
     m_attributeManager->inheritAttributes( element );
 
-    // TODO add more general painting code like: background, scriptlevel and so on
-    // p.setBrush( QBrush( m_attributeManager->valueOf( "mathbackground" ) ) );
-    // p.setPen( m_attributeManager->valueOf( "mathcolor" ) );
+      // TODO add more general painting code like: background, scriptlevel and so on
+      // p.setBrush( QBrush( m_attributeManager->valueOf( "mathbackground" ) ) );
+      // p.setPen( m_attributeManager->valueOf( "mathcolor" ) );
     element->paint( p, m_attributeManager );
-    
-    foreach( BasicElement* tmpElement, element->childElements() ) // do recursive repaint
-        paintElement( p, tmpElement );
+
+    if( element->childElements().isEmpty() )
+        return;    
+    else
+        foreach( BasicElement* tmpElement, element->childElements() ) 
+            paintElement( p, tmpElement );
     
     m_attributeManager->disinheritAttributes();
 }
@@ -80,4 +83,4 @@ void FormulaRenderer::layoutElement( BasicElement* element )
     }
 }
 
-} // namespace KFormula
+} // namespace FormulaShape

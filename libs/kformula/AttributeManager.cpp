@@ -20,13 +20,16 @@
 #include "AttributeManager.h"
 #include "BasicElement.h"
 #include <KoUnit.h>
+#include <KoViewConverter.h>
 #include <QFontMetrics>
+#include <QColor>
 
-namespace KFormula {
+namespace FormulaShape {
 
 AttributeManager::AttributeManager()
 {
     m_viewConverter = 0;
+    m_scriptLevelStack.push( 0 ); // set startup scriptlevel to 0
 }
 
 AttributeManager::~AttributeManager()
@@ -34,9 +37,13 @@ AttributeManager::~AttributeManager()
 
 void AttributeManager::inheritAttributes( const BasicElement* element )
 {
+    if( element->elementType() == Formula )   // FormulaElement has no attributes
+        return;
+
     // check for the parent element and rebuild attribute heritage if needed
-    if( element->parentElement() != m_attributeStack.first() )
-        buildHeritageOf( element );
+    if( m_attributeStack.isEmpty() ||
+        element->parentElement() != m_attributeStack.first() )
+        buildHeritageOf( element ); 
     else
     { 
         m_attributeStack.push( element );       // add the element to the stack
@@ -114,6 +121,8 @@ void AttributeManager::alterScriptLevel( const BasicElement* element )
     else if( element->parentElement()->elementType() == Root && 
              element == element->parentElement()->childElements().value( 1 ) )
         m_scriptLevelStack.push( m_scriptLevelStack.top()+2 ); // only for roots index
+    else
+        m_scriptLevelStack.push( m_scriptLevelStack.top() );
 }
 
 QVariant AttributeManager::parseValue( const QString& value ) const
@@ -287,4 +296,4 @@ void AttributeManager::setPaintDevice( QPaintDevice* paintDevice )
     m_paintDevice = paintDevice;
 }
 
-} // namespace KFormula
+} // namespace FormulaShape

@@ -24,56 +24,17 @@
 
 #include <QString>
 
-#include <KoXmlReader.h>
+namespace FormulaShape {
 
-#include "kformuladefs.h"
-
-namespace KFormula {
-	
 class BasicElement;
-class BracketElement;
-class EmptyElement;
-class FractionElement;
-class IdentifierElement;
-class IndexElement;
-class MatrixElement;
-class MultilineElement;
-class NameSequence;
-class NumberElement;
-class OperatorElement;
-class OverlineElement;
-class RootElement;
-class SpaceElement;
-class SymbolElement;
-class TextElement;
-class UnderlineElement;
 
 class ElementFactory {
 public:
     ElementFactory();
 
     static BasicElement* createElement( const QString& tagName, BasicElement* parent );
-
-    static TextElement* createTextElement( const QChar& ch, bool symbol=false );
-    static EmptyElement* createEmptyElement();
-    static NameSequence* createNameSequence();
-    static BracketElement* createBracketElement( SymbolType lhs, SymbolType rhs );
-    static OverlineElement* createOverlineElement();
-    static UnderlineElement* createUnderlineElement();
-    static MultilineElement* createMultilineElement();
-    static SpaceElement* createSpaceElement( SpaceWidth width );
-    static FractionElement* createFractionElement();
-    static RootElement* createRootElement();
-    static SymbolElement* createSymbolElement( SymbolType type );
-    static MatrixElement* createMatrixElement( uint rows, uint columns );
-    static IndexElement* createIndexElement();
-    static IdentifierElement* createIdentifierElement();
-    static OperatorElement* createOperatorElement();
-    static NumberElement* createNumberElement();
-
-    BasicElement* createOperatorElement( const KoXmlElement& element );
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // ELEMENTFACTORY_H

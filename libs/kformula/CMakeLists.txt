@@ -14,7 +14,7 @@ set( formulashape_PART_SRCS
    FormulaCursor.cpp 
    BasicElement.cpp 
 #   SequenceElement.cpp
-#   FormulaElement.cpp 
+   FormulaElement.cpp 
 #   MultiscriptElement.cpp
 #   UnderOverElement.cpp
 #   TextElement.cpp 

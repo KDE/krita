@@ -26,7 +26,7 @@ class KoXmlWriter;
 
 #define KoFormulaShapeId "FormulaShapeID"
 
-namespace KFormula {
+namespace FormulaShape {
 
 class BasicElement;
 class FormulaRenderer;
@@ -88,6 +88,6 @@ private:
     FormulaRenderer* m_formulaRenderer; 
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // KOFORMULASHAPE_H

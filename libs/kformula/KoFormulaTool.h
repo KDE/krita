@@ -23,7 +23,7 @@
 #include <KoTool.h>
 #include <QStack>
 
-namespace KFormula {
+namespace FormulaShape {
 
 class KoFormulaShape;
 class BasicElement;
@@ -39,7 +39,7 @@ public:
     explicit KoFormulaTool( KoCanvasBase *canvas );
     ~KoFormulaTool();
 
-    virtual void paint( QPainter &painter, KoViewConverter &converter );
+    void paint( QPainter &painter, KoViewConverter &converter );
 
     void mousePressEvent( KoPointerEvent *event ) ;
     
@@ -78,6 +78,6 @@ private:
     FormulaCursor* m_formulaCursor;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif

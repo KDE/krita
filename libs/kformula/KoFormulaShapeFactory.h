@@ -47,7 +47,7 @@ public:
     KoShape* createDefaultShape() const;
 
     /// reimplemented
-    KoShape* createShape( const KoProperties * params ) const;
+    KoShape* createShape( const KoProperties* params ) const;
 };
 
 #endif // KOFORMULASHAPEFACTORY_H

@@ -26,7 +26,7 @@
 class KoViewConverter;
 class QPaintDevice;
 
-namespace KFormula {
+namespace FormulaShape {
 
 class BasicElement;
 	
@@ -181,6 +181,6 @@ private:
     QPaintDevice* m_paintDevice;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // ATTRIBUTEMANAGER_H

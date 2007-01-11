@@ -43,7 +43,7 @@ KoFormulaShapeFactory::~KoFormulaShapeFactory()
 
 KoShape* KoFormulaShapeFactory::createDefaultShape() const
 {
-    KFormula::KoFormulaShape* formula = new KFormula::KoFormulaShape();
+    FormulaShape::KoFormulaShape* formula = new FormulaShape::KoFormulaShape();
     formula->setShapeId( KoFormulaShapeId );
     return formula;
 }
@@ -52,7 +52,7 @@ KoShape* KoFormulaShapeFactory::createShape( const KoProperties* params ) const
 {
     Q_UNUSED( params );
 
-    KFormula::KoFormulaShape* formula = new KFormula::KoFormulaShape();
+    FormulaShape::KoFormulaShape* formula = new FormulaShape::KoFormulaShape();
     if( !formula )
         return 0;
 

@@ -20,10 +20,10 @@
 */
 
 #include "ElementFactory.h"
-
+/*
 #include "ActionElement.h"
 #include "BracketElement.h"
-//#include "EncloseElement.h"
+#include "EncloseElement.h"
 #include "ErrorElement.h"
 #include "FractionElement.h"
 #include "GlyphElement.h"
@@ -43,9 +43,8 @@
 #include "StyleElement.h"
 #include "TextElement.h"
 #include "UnderOverElement.h"
-
-
-namespace KFormula {
+*/
+namespace FormulaShape {
 
 BasicElement* ElementFactory::createElement( const QString& tagName,
                                              BasicElement* parent )
@@ -58,8 +57,8 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     // mtr and mtd are currently managed inside MatrixElement
 
     // Token Elements ( Section 3.1.6.1 )
-    if      ( tagName == "mi" )            ;//return new IdentifierElement( parent );
-//    else if ( tagName == "mo" )            return createOperatorElement( parent, element );
+/*    if      ( tagName == "mi" )              return new IdentifierElement( parent );
+    else if ( tagName == "mo" )            return createOperatorElement( parent, element );
     //else if ( tagName == "mn" )            return new NumberElement( parent );
     //else if ( tagName == "mtext" )         return new TokenElement( parent );
     //else if ( tagName == "ms" )            return new StringElement( parent );
@@ -86,82 +85,10 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     //        || tagName == "mover"
     //        || tagName == "munderover" ) return new UnderOverElement( parent );
     //else if ( tagName == "mmultiscripts" ) return new MultiscriptElement( parent );
-
-    return 0;
-}
-
-TextElement* ElementFactory::createTextElement( const QChar& ch, bool symbol )
-{
-    //return new TextElement( ch, symbol );
-    return 0;
-}
-
-/*
-EmptyElement* ElementFactory::createEmptyElement()
-{
-    return new EmptyElement;
-}
-
-NameSequence* ElementFactory::createNameSequence()
-{
-    return new NameSequence;
-}
-
-BracketElement* ElementFactory::createBracketElement( SymbolType lhs, SymbolType rhs )
-{
-    return new BracketElement( lhs, rhs );
-}
-
-OverlineElement* ElementFactory::createOverlineElement()
-{
-    return new OverlineElement;
-}
-
-UnderlineElement* ElementFactory::createUnderlineElement()
-{
-    return new UnderlineElement;
-}
-
-MultilineElement* ElementFactory::createMultilineElement()
-{
-    return new MultilineElement;
-}
-
-SpaceElement* ElementFactory::createSpaceElement( SpaceWidth width )
-{
-    return new SpaceElement( width );
-}
 */
-
-FractionElement* ElementFactory::createFractionElement()
-{
-    //return new FractionElement;
     return 0;
 }
-
-RootElement* ElementFactory::createRootElement()
-{
-    //return new RootElement;
-    return 0;
-}
-
 /*
-SymbolElement* ElementFactory::createSymbolElement( SymbolType type )
-{
-    return new SymbolElement( type );
-}
-
-MatrixElement* ElementFactory::createMatrixElement( uint rows, uint columns )
-{
-    return new MatrixElement( rows, columns );
-}
-
-IndexElement* ElementFactory::createIndexElement()
-{
-    return new IndexElement;
-}
-*/
-
 BasicElement* ElementFactory::createOperatorElement( const QDomElement& element )
 {
     QDomNode n = element.firstChild();
@@ -194,23 +121,5 @@ BasicElement* ElementFactory::createOperatorElement( const QDomElement& element 
     //return new OperatorElement();
     return 0;
 }
-
-IdentifierElement* ElementFactory::createIdentifierElement()
-{
-    //return new IdentifierElement();
-    return 0;
-}
-
-OperatorElement* ElementFactory::createOperatorElement()
-{
-    //return new OperatorElement();
-    return 0;
-}
-
-NumberElement* ElementFactory::createNumberElement()
-{
-    //return new NumberElement();
-    return 0;
-}
-
-} // namespace KFormula
+*/
+} // namespace FormulaShape

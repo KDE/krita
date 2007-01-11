@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                 2006-2007 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,15 +22,9 @@
 #ifndef FORMULAELEMENT_H
 #define FORMULAELEMENT_H
 
-#include "SequenceElement.h"
-#include <QKeyEvent>
+#include "BasicElement.h"
 
-namespace KFormula {
-
-class BasicElement;
-class ContextStyle;
-class SymbolTable;
-
+namespace FormulaShape {
 
 /**
  * @short The element of a formula at the highest position.
@@ -53,183 +48,61 @@ public:
      */
     const QList<BasicElement*> childElements();
 
-    void readMathML( const KoXmlElement& element );
+    /**
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     * @param am The AttributeManager used for painting
+     */
+    void paint( QPainter& painter, const AttributeManager* am );
+
+    /**
+     * Calculate size and position of the element
+     * @param am The AttributeManager used for calculating
+     */
+    void layout( const AttributeManager* am );
+
+    /**
+     * Move the FormulaCursor left
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveLeft( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor right 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveRight( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor up 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveUp( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor down 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveDown( FormulaCursor* cursor, BasicElement* from );
     
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
+    /// Read the element from MathML
+    void readMathML( const KoXmlElement& element );
 
+    /// Save the element to MathML 
+    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
 
-
-
-
-
-    void addChild( BasicElement* element );
-    void deleteChild( BasicElement* element );
-    // void insertChild( int position, BasicElement* element );
-
-    /**
-     * Ordinary formulas are not write protected.
-     */
-    virtual bool readOnly( const BasicElement* /*child*/ ) const { return false; }
-
-    /**
-     * @returns whether its prohibited to change the sequence with this cursor.
-     */
-    virtual bool readOnly( const FormulaCursor* ) const { return false; }
-
-    /**
-     * Provide fast access to the rootElement for each child.
-     */
-    virtual FormulaElement* formula() { return this; }
-
-    /**
-     * Provide fast access to the rootElement for each child.
-     */
-    virtual const FormulaElement* formula() const { return this; }
-
-    /**
-     * Gets called just before the child is removed from
-     * the element tree.
-     */
-    void elementRemoval(BasicElement* child);
-
-    /**
-     * Gets called whenever something changes and we need to
-     * recalc.
-     */
-    virtual void changed();
-
-    /**
-     * Gets called when a request has the side effect of moving the
-     * cursor. In the end any operation that moves the cursor should
-     * call this.
-     */
-    void cursorHasMoved( FormulaCursor* );
-
-    void moveOutLeft( FormulaCursor* );
-    void moveOutRight( FormulaCursor* );
-    void moveOutBelow( FormulaCursor* );
-    void moveOutAbove( FormulaCursor* );
-
-    /**
-     * Tell the user something has happened.
-     */
-//    void tell( const QString& msg );
-
-    /**
-     * Gets called when the formula wants to vanish. The one who
-     * holds it should create an appropriate command and execute it.
-     */
-    void removeFormula( FormulaCursor* );
-
-    void insertFormula( FormulaCursor* );
-
-    /**
-     * Calculates our width and height and
-     * our children's parentPosition.
-     */
-    virtual void calcSizes( const ContextStyle& context,
-                            ContextStyle::TextStyle tstyle,
-                            ContextStyle::IndexStyle istyle,
-                            StyleAttributes& style );
-
-    /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
-     */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
-
-    /**
-     * Calculates the formulas sizes and positions.
-     */
-    void calcSizes( ContextStyle& context );
-
-    /**
-     * Draws the whole thing.
-     */
-    void draw( QPainter& painter, const LuPixelRect& r, ContextStyle& context );
-
-    /**
-     * This is called by the container to get a command depending on
-     * the current cursor position (this is how the element gets chosen)
-     * and the request.
-     *
-     * @returns the command that performs the requested action with
-     * the containers active cursor.
-     */
-//    virtual KCommand* buildCommand( Container*, Request* );
-
-    /**
-     * @returns our documents symbol table
-     */
-    //const SymbolTable& getSymbolTable() const;
-
-    int getBaseSize() const { return baseSize; }
-    void setBaseSize( int size );
-
-    bool hasOwnBaseSize() const { return ownBaseSize; }
-
-//    virtual KCommand* input( Container* container, QKeyEvent* event );
-
- 
-    /**
-     * Appends our attributes to the dom element.
-     */
-    virtual void writeDom(QDomElement element);
-
-    /**
-     * For copy&paste we need to create an empty XML element.
-     */
-    QDomElement emptyFormulaElement( QDomDocument& doc );
-
-protected:
-    //Save/load support
-
-    /**
-     * Returns the tag name of this element type.
-     */
-    virtual QString getTagName() const { return "FORMULA"; }
-
-    /**
-     * Reads our attributes from the element.
-     * Returns false if it failed.
-     */
-    virtual bool readAttributesFromDom(QDomElement element);
-
-    /**
-     * Reads our content from the node. Sets the node to the next node
-     * that needs to be read.
-     * Returns false if it failed.
-     */
-    virtual bool readContentFromDom(QDomNode& node);
-
+    /// @return The element's ElementType
+    ElementType elementType() const;
 
 private:
     /// The child elements of the FormulaElement 
     QList<BasicElement*> m_childElements;
-
-    /**
-     * The introduction of 'NameSequence' changed the DOM.
-     * However, we need to read the old version.
-     */
-    void convertNames( QDomNode node );
-
-    /**
-     * The base font size.
-     */
-    int baseSize;
-
-    /**
-     * Whether we want to use the default base size.
-     */
-    bool ownBaseSize;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // FORMULAELEMENT_H

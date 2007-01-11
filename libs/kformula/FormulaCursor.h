@@ -27,7 +27,7 @@
 
 class QPainter;
 
-namespace KFormula {
+namespace FormulaShape {
 
 class BasicElement;
 
@@ -125,6 +125,6 @@ private:
     QStack<BasicElement*> m_selectedElements;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // FORMULACURSOR_H

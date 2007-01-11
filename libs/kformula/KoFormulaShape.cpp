@@ -22,12 +22,12 @@
 #include "FormulaRenderer.h"
 #include <KoXmlWriter.h>
 
-namespace KFormula {
+namespace FormulaShape {
 	
 KoFormulaShape::KoFormulaShape()
 {
-//    m_formulaElement = new FormulaElement();
-    m_formulaRenderer = new FormulaRenderer(); //TODO add the right arguments
+    m_formulaElement = new FormulaElement();
+    m_formulaRenderer = new FormulaRenderer();
 }
 
 KoFormulaShape::~KoFormulaShape()
@@ -45,6 +45,9 @@ void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter 
 void KoFormulaShape::paintDecorations( QPainter &painter,
                                        const KoViewConverter &converter, bool selected )
 {
+    Q_UNUSED( painter )
+    Q_UNUSED( converter )
+    Q_UNUSED( selected )
     // TODO how to highlight things?? do we need it btw?
 }
 
@@ -60,9 +63,7 @@ QSizeF KoFormulaShape::size() const
 }
 
 void KoFormulaShape::resize( const QSizeF& )
-{
-    // do nothing as FormulaShape is fixed size
-}
+{ /* do nothing as FormulaShape is fixed size */ }
 
 QRectF KoFormulaShape::boundingRect() const
 {
@@ -76,8 +77,10 @@ BasicElement* KoFormulaShape::formulaElement() const
 
 void KoFormulaShape::loadMathML( const QDomDocument &doc, bool )
 {
+    Q_UNUSED( doc )
+
     delete m_formulaElement;                                // delete the old formula
-//    m_formulaElement = new FormulaElement();                // create a new root element
+    m_formulaElement = new FormulaElement();                // create a new root element
     m_formulaElement->readMathML( doc.documentElement() );  // and load the new formula
 }
 
@@ -89,5 +92,5 @@ void KoFormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
     m_formulaElement->writeMathML( writer, oasisFormat );
 }
 
-} // namespace KFormula
+} // namespace FormulaShape
 

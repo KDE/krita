@@ -23,31 +23,23 @@
 #ifndef BASICELEMENT_H
 #define BASICELEMENT_H
 
-#include <QHash>
-#include <QString>
-#include <QVariant>
-
-
-#include <QList>
-#include <QDomElement>
-#include <QDomDocument>
-
 #include <KoXmlReader.h>
-
-#include "contextstyle.h"
-#include "kformuladefs.h"
-
+#include <QHash>
+#include <QList>
+#include <QString>
+#include <QRectF>
+#include <QVariant>
+class QPainter;
 class KoXmlWriter;
-#include "AttributeManager.h"
-namespace KFormula {
+
+namespace FormulaShape {
 
 class AttributeManager;
 class FormulaCursor;
-class FormulaElement;
-class SequenceElement;
 
 enum ElementType {
     Basic,
+    Formula,
     Sequence,
     Fraction,
     Matrix,
@@ -126,9 +118,6 @@ public:
 
     /// the former calculateSize
     virtual void layout( const AttributeManager* am );
-
-    /// Calculate the element's sizes and the size of its children
-    virtual void calculateSize();
     
     /**
      * Move the FormulaCursor left
@@ -171,7 +160,7 @@ public:
     virtual void moveEnd( FormulaCursor* cursor );
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    virtual ElementType elementType() const;
     
     /// @return The height of the element
     double height() const;
@@ -219,222 +208,28 @@ public:
     virtual void readMathML( const KoXmlElement& element );
 
     /// Save the element to MathML 
-    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const ;
+    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
 
-    /**
-     * @returns MathML element tag name
-     */
-    virtual QString getElementName() const { return ""; };
-
-
-
-
-    /**
-     * @returns whether the child should be read-only. The idea is
-     * that a read-only parent has read-only children.
-     */
-    virtual bool readOnly( const BasicElement* child ) const;
-
-    /**
-     * @returns the character that represents this element. Used for
-     * parsing a sequence.
-     * This is guaranteed to be QChar::null for all non-text elements.
-     */
-    virtual QChar getCharacter() const { return QChar::Null; }
-
-    /**
-     * @returns the type of this element. Used for
-     * parsing a sequence.
-     */
-    virtual TokenType getTokenType() const { return ELEMENT; }
-
-
-    /**
-     * Returns our position inside the widget.
-     */
-    LuPixelPoint widgetPos();
-
-    /// Calculates our width and height and our children's parentPosition
-    virtual void calcSizes( const ContextStyle& context,
-                            ContextStyle::TextStyle tstyle, 
-                            ContextStyle::IndexStyle istyle,
-                            StyleAttributes& style );
-
-    /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
-     */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
-
-
-    /**
-     * Sets the cursor inside this element to its start position.
-     * For most elements that is the main child.
-     */
-    virtual void goInside(FormulaCursor* cursor);
-
-    virtual SequenceElement* getMainChild() { return 0; }
-
-    /**
-     * Inserts all new children at the cursor position. Places the
-     * cursor according to the direction.
-     *
-     * The list will be emptied but stays the property of the caller.
-     */
-    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction) {}
-
-    /**
-     * Removes all selected children and returns them. Places the
-     * cursor to where the children have been.
-     */
-    virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction) {}
-
-    /**
-     * Moves the cursor to a normal place where new elements
-     * might be inserted.
-     */
-    virtual void normalize(FormulaCursor*, Direction);
-
-    /**
-     * Returns wether the element has no more useful
-     * children (except its main child) and should therefore
-     * be replaced by its main child's content.
-     */
-    virtual bool isSenseless() { return false; }
-
-    /**
-     * Returns the child at the cursor.
-     */
-    virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor) { return 0; }
-
-    /**
-     * Sets the cursor to select the child. The mark is placed before,
-     * the position behind it.
-     */
-    virtual void selectChild(FormulaCursor*, BasicElement*) {}
-
-    /**
-     * Moves the cursor away from the given child. The cursor is
-     * guaranteed to be inside this element.
-     */
-    virtual void childWillVanish(FormulaCursor*, BasicElement*) {}
-
-    /**
-     * Callback for the tabs among our children. Needed for alignment.
-     */
-    virtual void registerTab( BasicElement* /*tab*/ ) {}
-
-    // basic support
-
-    const BasicElement* getParent() const { return m_parentElement; }
-    BasicElement* getParent() { return m_parentElement; }
-    void setParent(BasicElement* p) { m_parentElement = p; }
-    double getX() const;
-    double getY() const;
-    void setX( double x );
-    void setY( double y );
-    double getWidth() const;
-    double getHeight() const;
-    luPixel getBaseline() const { return m_baseLine; }
-    void setBaseline( luPixel line ) { m_baseLine = line; }
-
-    luPixel axis( const ContextStyle& style, 
-                  ContextStyle::TextStyle tstyle,
-                  double factor ) const {
-        return getBaseline() - style.axisHeight( tstyle, factor ); }
-
-    /**
-     * @return a QDomElement that contain as DomChildren the
-     * children, and as attribute the attribute of this
-     * element.
-     */
-    QDomElement getElementDom( QDomDocument& doc);
-
-    /**
-     * Set this element attribute, build children and
-     * call their buildFromDom.
-     */
-    bool buildFromDom(QDomElement element);
-
-
+    /// @returns MathML element tag name
+    virtual QString getElementName() const { return "mrow"; }
 
 protected:
     /// Read all attributes loaded and add them to the m_attributes map 
     void readMathMLAttributes( const KoXmlElement& element );
 
-    virtual int readMathMLContent( KoXmlNode& node );
-
     /// Write all attributes of m_attributes to @p writer
-    void writeMathMLAttributes( KoXmlWriter* writer ) const ;
+    void writeMathMLAttributes( KoXmlWriter* writer ) const;
 
+    virtual int readMathMLContent( KoXmlNode& node );
     virtual void writeMathMLContent( KoXmlWriter* , bool ) const {};
 
-    /**
-     * Returns the tag name of this element type.
-     */
-    virtual QString getTagName() const { return "BASIC"; }
-
-    /**
-     * Appends our attributes to the dom element.
-     */
-    virtual void writeDom(QDomElement element);
-
-    /**
-     * Reads our attributes from the element.
-     * Returns false if it failed.
-     */
-    virtual bool readAttributesFromDom(QDomElement element);
-
-    /**
-     * Reads our content from the node. Sets the node to the next node
-     * that needs to be read.
-     * Returns false if it failed.
-     */
-    virtual bool readContentFromDom(QDomNode& node);
-
-    /**
-     * Returns if the SequenceElement could be constructed from the nodes first child.
-     * The node name must match the given name.
-     *
-     * This is a service for all subclasses that contain children.
-     */
-    bool buildChild( SequenceElement* child, QDomNode node, const QString & name );
-
-    /**
-     * Utility function that sets the size type and returns the size value from
-     * a MathML attribute string with unit as defined in Section 2.4.4.2
-     *
-     * @returns the size value
-     *
-     * @param str the attribute string.
-     * @param st size type container. It will be properly assigned to its size
-     * type or NoSize if str is invalid
-     */
-//    double getSize( const QString& str, SizeType* st );
-
-    //NamedSpaces getSpace( const QString& str );
-
 private:
-    /**
-     * Used internally by getSize()
-     */
-    //double str2size( const QString& str, SizeType* st, uint index, SizeType type );
-
     /// The element's parent element - might not be null except of FormulaElement
     BasicElement* m_parentElement;
 
     /// A hash map of all attributes where attribute name is assigned to a value
     QHash<QString,QString> m_attributes;
 
-    /// The element's type, for example a Sequence, a Fraction etc
-    ElementType m_elementType;
-    
     /// The boundingRect storing the element's width, height, x and y
     QRectF m_boundingRect;
    
@@ -442,6 +237,6 @@ private:
     double m_baseLine;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // BASICELEMENT_H

@@ -23,7 +23,7 @@
 #include "BasicElement.h"
 #include <QPainter>
 
-namespace KFormula {
+namespace FormulaShape {
 
 FormulaCursor::FormulaCursor( BasicElement* element )
               : m_wordMovement( false ),
@@ -137,4 +137,4 @@ bool FormulaCursor::isEnd() const
 	return ( m_positionInElement == 1 );
 }
 
-} // namespace KFormula
+} // namespace FormulaShape

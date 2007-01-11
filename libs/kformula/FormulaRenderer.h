@@ -22,7 +22,7 @@
 
 #include <QPainter>
 
-namespace KFormula {
+namespace FormulaShape {
 
 class AttributeManager;
 class BasicElement;
@@ -84,6 +84,6 @@ private:
     BasicElement* m_dirtyElement;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // FORMULARENDERER_H

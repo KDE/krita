@@ -1344,7 +1344,9 @@ void KoDateVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*cont
         // Standard form of the date is in text:date-value. Example: 2004-01-21T10:57:05
         const QString dateValue = elem.attributeNS( KoXmlNS::text, "date-value", QString::null);
         QDateTime dt;
+#ifdef __GNUC__
 #warning "kde4 port it"
+#endif
         //if ( !dateValue.isEmpty() ) // avoid QDate warning
             //dt = QDate::fromString(dateValue, Qt::ISODate);
 
@@ -1451,7 +1453,9 @@ QString KoDateVariable::formatStr(int & correct)
     {
         QString num;
         num.setNum(i);
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
         //configGroup.writeEntry("Last Used"+num, stringList[i]);
     }
     config->sync();
@@ -1668,7 +1672,9 @@ QString KoTimeVariable::formatStr(int & _correct)
     {
         QString num;
         num.setNum(i);
+#ifdef __GNUC__
 #warning "kde4 port it"
+#endif
         //configGroup.writeEntry("Last Used"+num, stringList[i]);
     }
     config->sync();

@@ -258,7 +258,9 @@ QChar TextElement::getRealCharacter(const ContextStyle& context)
         const FontStyle& fontStyle = context.fontStyle();
         const AlphaTable* alphaTable = fontStyle.alphaTable();
         if ( alphaTable != 0 ) {
+#ifdef __GNUC__
 #warning "port it"				
+#endif
             //AlphaTableEntry ate = alphaTable->entry( character,
             //                                         charFamily(),
              //                                        charStyle() );

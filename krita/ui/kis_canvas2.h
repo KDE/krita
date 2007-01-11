@@ -97,7 +97,9 @@ public: // KoCanvasBase implementation
     void resetMonitorProfile();
 
     // Temporary!
+#ifdef __GNUC__
 #warning: "Make the tools get the current paint device from the shape selection instead of directly from the canvas!"
+#endif
     KisImageSP currentImage();
 
 public: // KisCanvas2 methods

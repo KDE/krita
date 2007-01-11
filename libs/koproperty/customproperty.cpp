@@ -269,7 +269,9 @@ RectCustomProperty::value() const
 SizePolicyCustomProperty::SizePolicyCustomProperty(Property *property)
 : CustomProperty(property)
 {
+#ifdef __GNUC__
 #warning "kde4: port QVariant::SizePolicy"
+#endif
 #if 0
 	if(property && (property->type() == SizePolicy) ) {
 //		QMap<QString, QVariant> spValues;
@@ -338,7 +340,9 @@ SizePolicyCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 		return;
 
 	if(m_property->parent()) {
+#ifdef __GNUC__
 #warning "kde4: port it"			
+#endif
 #if 0			
 		QSizePolicy v = m_property->parent()->value().toSizePolicy();
 
@@ -355,7 +359,9 @@ SizePolicyCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 #endif		
 	}
 	else {
+#ifdef __GNUC__
 #warning "kde4: port QVariant::QSizePolicy"			
+#endif
 #if 0
 			QSizePolicy v = value.toSizePolicy();
 		m_property->child("hSizeType")->setValue(v.horData(), rememberOldValue, false);
@@ -371,7 +377,9 @@ SizePolicyCustomProperty::value() const
 {
 	if(!m_property || !m_property->parent())
 		return QVariant();
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 #if 0
 	if(m_property->type() == SizePolicy_HorData)
 		return m_property->parent()->value().toSizePolicy().horData();

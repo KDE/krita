@@ -311,8 +311,9 @@ int KoStyleDialog::styleIndex( int pos ) {
     }
     kWarning() << "KoStyleDialog::styleIndex no style found at pos " << pos << endl;
 
-#ifdef __GNUC_
+#ifdef __GNUC__#ifdef __GNUC__
 #warning implement undo/redo
+#endif
 #endif
 
     return 0;

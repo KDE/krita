@@ -117,7 +117,9 @@ void SymbolAction::plug( QWidget* w, int /*index*/ )
         return;
     if ( w->inherits( "KToolBar" ) )
     {
+#ifdef __GNUC__
 #warning "kde4: port it"			
+#endif
 #if 0
 			KToolBar* bar = static_cast<KToolBar*>( w );
         int id_ = KAction::getToolButtonID();
@@ -157,7 +159,9 @@ void SymbolAction::setSymbols( const QStringList &names, const QList<QFont>& fon
 
 void SymbolAction::updateItems( int id )
 {
+#ifdef __GNUC__
 #warning "kde4: port it"			
+#endif
 #if 0			
     QWidget *w = container( id );
     if ( w->inherits( "KToolBar" ) ) {

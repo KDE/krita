@@ -176,7 +176,9 @@ KoView::KoView( KoDocument *document, QWidget *parent )
   if ( sb ) // No statusbar in e.g. konqueror
   {
       //coll->setHighlightingEnabled( true );
+#ifdef __GNUC__
 #warning portKDE4
+#endif
 #if 0
       connect( coll, SIGNAL( actionStatusText( const QString & ) ),
                this, SLOT( slotActionStatusText( const QString & ) ) );

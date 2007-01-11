@@ -276,7 +276,9 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
     QString format;
     int precision = -1;
     int leadingZ  = 1;
+#ifdef __GNUC__
 #warning Nothing changes thousandsSep - dead constant
+#endif
     bool thousandsSep = false;
     //todo negred
     //bool negRed = false;

@@ -47,7 +47,9 @@ void KisPartLayerHandler::gotMoveEvent(KoPointerEvent* event) {
         return;
     }
 
+#ifdef __GNUC__
 #warning "Port or remove the part layers!"
+#endif
 # if 0    
     QPainter painter( m_view->canvasController()->kiscanvas()->canvasWidget() );
     painter.setRasterOp( NotROP );

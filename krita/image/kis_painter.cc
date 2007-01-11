@@ -165,7 +165,9 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         qint32 sw, qint32 sh)
 {
     kDebug(41010) << "KisPainter::bitBlt with QImage" << endl;
+#ifdef __GNUC__
     #warning "Don't assume the same resulution for a QImage and a KisPaintDevice -- see QImage::dotsPerMeterX|Y"
+#endif
 
     if ( src == 0 ) return;
     if ( src->isNull() ) return;

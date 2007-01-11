@@ -782,7 +782,9 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
     if (img.format() != QImage::Format_ARGB32) {
         img = img.convertToFormat(QImage::Format_ARGB32);
     }
+#ifdef __GNUC__
 #warning "KisPaintDevice::convertFromQImage. re-enable use of srcProfileName"
+#endif
 #if 0
 
     // XXX: Apply import profile
@@ -890,7 +892,9 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
         h = qint32(double(srch) / srcw * w);
     else if (srch > srcw)
         w = qint32(double(srcw) / srch * h);
+#ifdef __GNUC__
 #warning FIXME: use KisRandomAccessor instead !
+#endif
 #if 0
     for (qint32 y=0; y < h; ++y) {
         qint32 iY = (y * srch ) / h;

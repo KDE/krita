@@ -23,7 +23,9 @@
 #include <kactioncollection.h>
 #include <Q3ValueList>
 #include <kicon.h>
+#ifdef __GNUC__
 #warning "KDE4: TODO change argument as kactionmenu (when all will compile)"
+#endif
 
 KoPartSelectAction::KoPartSelectAction( const QString& text, KActionCollection* parent, const char* name )
     : KActionMenu( text, parent)

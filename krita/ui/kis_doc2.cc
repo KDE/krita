@@ -781,7 +781,9 @@ KisPartLayerSP KisDoc2::loadPartLayer(const QDomElement& element, KisImageSP img
                                       bool visible, bool locked,
                                       const QString & compositeOp)
 {
+#ifdef __GNUC__
 #warning "Kill or port the partlayer stuff"
+#endif
     Q_UNUSED(element);
     Q_UNUSED(img);
     Q_UNUSED(name);
@@ -819,7 +821,9 @@ KisPartLayerSP KisDoc2::loadPartLayer(const QDomElement& element, KisImageSP img
 
 KisShapeLayerSP KisDoc2::loadShapeLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp)
 {
+#ifdef __GNUC__
 #warning "Implement loading of shape layers!"
+#endif
     Q_UNUSED(elem);
     Q_UNUSED(img);
     Q_UNUSED(name);

@@ -109,7 +109,9 @@ public:
         {
             kDebug(41007) << "KisLayerMap visitor adding part layer: " << layer->name() << endl;
 
+#ifdef __GNUC__
             #warning "Kill or fix part layers"
+#endif
             return true;
         }
 

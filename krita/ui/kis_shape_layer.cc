@@ -87,7 +87,9 @@ KisPaintDeviceSP KisShapeLayer::prepareProjection(KisPaintDeviceSP projection, c
 
 bool KisShapeLayer::saveToXML(QDomDocument doc, QDomElement elem)
 {
+#ifdef __GNUC__
     #warning "Implement KisShapeLayer::saveToXML"
+#endif
     Q_UNUSED(doc);
     Q_UNUSED(elem);
     return false;
@@ -95,7 +97,9 @@ bool KisShapeLayer::saveToXML(QDomDocument doc, QDomElement elem)
 
 KisLayerSP KisShapeLayer::clone() const
 {
+#ifdef __GNUC__
     #warning "Implement KisShapeLayer::clone()"
+#endif
     return 0;
 }
 

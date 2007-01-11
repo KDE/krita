@@ -77,7 +77,9 @@ bool KisToolFill::flood(int startX, int startY)
     if (!device) return false;
 
     if (m_fillOnlySelection) {
+#ifdef __GNUC__
 #warning Port the fixes for filling the selection from 1.6!
+#endif
 
         QRect rc = device->selection()->selectedRect();
         KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device->colorSpace(),  "filled_only_selection"));

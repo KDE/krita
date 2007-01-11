@@ -533,7 +533,9 @@ void KoAutoFormatDia::setupTab3()
         }
     }
     autoFormatLanguage->addItems(lst);
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
     //connect(autoFormatLanguage->listBox(), SIGNAL(selected ( const QString & )), this, SLOT(changeAutoformatLanguage(const QString & )));
 
     grid->addMultiCellWidget( autoFormatLanguage, 0, 0, 4, 6 );

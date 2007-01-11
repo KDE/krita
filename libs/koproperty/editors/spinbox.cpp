@@ -46,7 +46,9 @@ IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntE
 	// An empty string matches all object names.
 	QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
 #ifndef Q_WS_WIN
+#ifdef __GNUC__
 #warning TODO: fix for Qt4
+#endif
 #endif
 	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : spinwidgets.first();
 	if (spin)
@@ -165,7 +167,9 @@ IntEdit::updateSpinWidgets()
 	// An empty string matches all object names.
 	QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
 #ifndef Q_WS_WIN
+#ifdef __GNUC__
 #warning TODO: fix for Qt4
+#endif
 #endif
 	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : spinwidgets.first();
 	if (spin) {
@@ -197,7 +201,9 @@ DoubleSpinBox::DoubleSpinBox (double lower, double upper, double step, double va
 	// An empty string matches all object names.
 	QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
 #ifndef Q_WS_WIN
+#ifdef __GNUC__
 #warning TODO: fix for Qt4
+#endif
 #endif
 	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : static_cast<QAbstractSpinBox*>(spinwidgets.first());
 	if (spin)
@@ -326,7 +332,9 @@ DoubleEdit::updateSpinWidgets()
 	// An empty string matches all object names.
 	QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
 #ifndef Q_WS_WIN
+#ifdef __GNUC__
 #warning TODO: fix for Qt4
+#endif
 #endif
 	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : static_cast<QAbstractSpinBox*>(spinwidgets.first());
 	if (spin) {

@@ -529,7 +529,9 @@ void KisLayerManager::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
 void KisLayerManager::insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
                                  KisGroupLayerSP parent, KisLayerSP above)
 {
+#ifdef __GNUC__
 #warning "Port or remove the part layers!"
+#endif
     Q_UNUSED(viewRect);
     Q_UNUSED(entry);
     Q_UNUSED(parent);
@@ -569,7 +571,9 @@ void KisLayerManager::addPartLayer()
 
 void KisLayerManager::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry)
 {
+#ifdef __GNUC__
 #warning "Port addPartLayer or remove it!"
+#endif
     Q_UNUSED(parent);
     Q_UNUSED(above);
     Q_UNUSED(entry);

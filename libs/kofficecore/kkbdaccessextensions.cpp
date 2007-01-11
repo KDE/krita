@@ -574,7 +574,9 @@ void KKbdAccessExtensions::displayAccessKeys()
             for (int i = 0; i < (int)sc.count(); i++) {
                 QKeySequence seq = sc.seq(i);
                 if (seq.count() == 1) {*/
+#ifdef __GNUC__
 #warning this is NOT going to work. Have a look at some string toString() gives you.
+#endif
 //e.g."Ctrl+X" -> great, let's see... this string isn't in availableAccessKeys.
 //I might be wrong and you only want no-modifier shortcuts. Whatever...
 //Please port to the new KShortcut; I (ahartmetz) wanted to do it but I couldn't figure

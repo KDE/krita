@@ -315,7 +315,9 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     KisLayerSP startWith = KisLayerSP(0);
 
+#ifdef __GNUC__
 #warning "KisGroupLayer::updateProjection. Reenable adjustmentlayer optimization!"
+#endif
 #if 0
 
     KisAdjustmentLayerSP adjLayer = KisAdjustmentLayerSP(0);

@@ -540,6 +540,8 @@ double KisPainter::paintLine(const QPointF & pos1,
         dist -= spacing;
     }
 
+    addDirtyRect( QRect( pos1.toPoint(), pos2.toPoint() ) );
+
     if (dist > 0)
         return dist;
     else

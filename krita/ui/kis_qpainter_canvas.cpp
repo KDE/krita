@@ -121,19 +121,19 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     QVector<QRect> repaintRects = paintRegion.rects();
 
-    kDebug(41010) << "painting on " << repaintRects.count() << " rects\n";
+    //kDebug(41010) << "painting on " << repaintRects.count() << " rects\n";
 
     QVector<QRect>::iterator it = repaintRects.begin();
     QVector<QRect>::iterator end = repaintRects.end();
 
     while (it != end) {
 
-        kDebug(41010) << "Starting with checkers on rect " << (*it) << endl;
+        //kDebug(41010) << "Starting with checkers on rect " << (*it) << endl;
         t.start();
         // Checks
         gc.fillRect((*it), *m_d->checkBrush );
 
-        qDebug( "Painting checks: %d", t.elapsed() );
+        //qDebug( "Painting checks: %d", t.elapsed() );
         t.restart();
 
         double sx, sy;
@@ -148,12 +148,12 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
         QRect rc = imageRect.toRect();
 
         gc.setWorldMatrixEnabled( true );
-        kDebug(41010) << "scale: " << sx / pppx << ", " << sy / pppy << endl;
+        //kDebug(41010) << "scale: " << sx / pppx << ", " << sy / pppy << endl;
         gc.scale( sx / pppx, sy / pppy );
 
         gc.drawImage( rc.x(), rc.y(), canvasPixmap, rc.x(), rc.y(), rc.width(), rc.height() );
 
-        qDebug( "painting image: %d",  t.elapsed() );
+        //qDebug( "painting image: %d",  t.elapsed() );
         t.restart();
 
 
@@ -163,7 +163,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
         if(sx < 1.0 +EPSILON && sy < 1.0 +EPSILON) {
             // We are scaling pixels down (birds eye) so adjust for
             // display profile AFTER scaling the pixels
-            kDebug(41010) << "Starting to paint scaled down\n";
+            //kDebug(41010) << "Starting to paint scaled down\n";
             // Image
             QRectF imageRect = m_d->viewConverter->viewToDocument(*it);
             imageRect.adjust(-5,-5,5,5);
@@ -175,11 +175,11 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
             gc.drawImage(imageRect.topLeft(), image, image.rect());
 
-            qDebug("Painting scaled down rects %d", t.elapsed() );
+            //qDebug("Painting scaled down rects %d", t.elapsed() );
             t.restart();
         }
         else {
-            kDebug(41010) << "Starting to paint magnified\n";
+            //kDebug(41010) << "Starting to paint magnified\n";
             // We are scaling pixels up (magnified look) so adjust for display profile before scaling the pixels
             gc.setWorldMatrixEnabled(true);
             gc.scale(sx/pppx, sy/pppy);
@@ -199,10 +199,17 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
                                  gc,
                                  m_d->canvas->monitorProfile(),
                                  m_d->canvas->view()->resourceProvider()->HDRExposure());
-            qDebug( "Done painting scaled up pixels %d", t.elapsed() );
+            //qDebug( "Done painting scaled up pixels %d", t.elapsed() );
             t.restart();
         }
 #endif
+
+/*
+        QColor color = QColor(random()%255, random()%255, random()%255, 125);
+        gc.fillRect(( *it ), QBrush(color));
+
+        gc.end();
+*/
         ++it;
     }
 
@@ -226,12 +233,11 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     // ask the guides, grids, etc to paint themselves
 
     // Give the tool a chance to paint its stuff
-    kDebug(41010) << "Tool starts painting\n";
+    //kDebug(41010) << "Tool starts painting\n";
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
 
-    qDebug( "Done painting tool stuff %d", t.elapsed() );
+    //qDebug( "Done painting tool stuff %d", t.elapsed() );
 
-    gc.end();
 }
 
 
@@ -274,7 +280,7 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
 void KisQPainterCanvas::parentSizeChanged(const QSize & size )
 {
     if (!m_d->displayCache || ( size.width() > m_d->displayCache->size().width() ||
-         size.height() > m_d->displayCache->size().height()) ) {
+                                size.height() > m_d->displayCache->size().height()) ) {
         kDebug() << "KisQPainterCanvas::parentSizeChanged " << size << endl;
         m_d->displayCache = new QImage(size, QImage::Format_RGB32);
     }

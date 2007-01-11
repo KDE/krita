@@ -186,9 +186,10 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
     pppx = image()->xRes();
     pppy = image()->yRes();
     QRectF docRect;
-    docRect.setCoords(rc.left() / pppx, rc.top() / pppy, rc.right() / pppx, rc.bottom() / pppy);
+    docRect.setCoords(rc.left() - 2 / pppx, rc.top() - 2 / pppy, rc.right() + 2 / pppx, rc.bottom() + 2 / pppy);
     QRectF viewRect = m_d->viewConverter->documentToView(docRect);
-    updateCanvas( viewRect );
+    m_d->canvasWidget->widget()->update( viewRect.toRect() );
+
 /*
     kDebug(41010 ) << ">>>>>>>>>>>>>>>>>> canvas cache size: " << m_d->canvasCache.size() << endl;
     QLabel * l = new QLabel( 0 );

@@ -17,7 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_image.h"
-
 #include <config-endian.h> // WORDS_BIGENDIAN
 
 #include <stdlib.h>

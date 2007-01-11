@@ -1,5 +1,6 @@
 include_directories(${CMAKE_SOURCE_DIR}/krita/ui/obsolete/)
 set(kritaui_LIB_SRCS
+    scale.cpp
     imageviewer.cc
     kcurve.cc
     kis_autobrush.cc

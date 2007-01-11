@@ -28,7 +28,7 @@
 #include "kis_image.h"
 #include "kis_group_layer.h"
 
-const int UPDATE_RECT_SIZE = 256;
+const int UPDATE_RECT_SIZE = 65000;
 
 class KisProjection::Private {
 public:
@@ -155,7 +155,7 @@ void KisProjection::slotUpdateUi( const QVariant & rect )
 
 void KisProjection::scheduleRect( const QRect & rc )
 {
-    kDebug(41010) << "Scheduled big rect: " << rc << endl;
+    kDebug() << "Scheduled big rect: " << rc << endl;
     int h = rc.height();
     int w = rc.width();
     QRect imageRect = m_d->image->bounds();

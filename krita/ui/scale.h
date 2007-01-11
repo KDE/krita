@@ -2,7 +2,7 @@
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
@@ -18,32 +18,20 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef IMAGEUTILS_H
-#define IMAGEUTILS_H
+#ifndef SCALE_H
+#define SCALE_H
 
 // Qt
-#include <qimage.h>
+class QImage;
+class QRect;
+class QSize;
 
-// Local
-#include "imageutils/orientation.h"
-
-namespace ImageUtils {
-	enum SmoothAlgorithm { SMOOTH_NONE, SMOOTH_FAST, SMOOTH_NORMAL, SMOOTH_BEST };
-
-	QImage scale(const QImage& image, int width, int height,
-		SmoothAlgorithm alg, QImage::ScaleMode mode = QImage::ScaleFree, double blur = 1.0);
-
-	int extraScalePixels( SmoothAlgorithm alg, double zoom, double blur = 1.0 );
-
-	QImage transform(const QImage& img, Orientation orientation);
-
-	QImage changeBrightness( const QImage& image, int brightness );
-
-	QImage changeContrast( const QImage& image, int contrast );
-
-	QImage changeGamma( const QImage& image, int gamma );
-
-	QWMatrix transformMatrix(Orientation orientation);
-}
+/**
+   Scale the specified rect from srcImage right into the 0,0
+   position of dstImage up or down to dstSize. There are two
+   variets: unsmooth and smooth, with unsmooth being the fastest,
+   apparently.
+*/
+void scale(const QImage& srcImage, const QRect & srcRect,  QImage & dstImage, QSize dstSize);
 
 #endif

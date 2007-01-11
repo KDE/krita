@@ -47,6 +47,7 @@ KoTemplate::KoTemplate(const QString &name, const QString &description, const QS
 }
 
 const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
+    Q_UNUSED(instance);
 
     if(m_cached)
         return m_pixmap;

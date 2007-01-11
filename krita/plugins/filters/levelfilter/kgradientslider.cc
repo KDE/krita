@@ -176,7 +176,7 @@ void KGradientSlider::mousePressEvent ( QMouseEvent * e )
                 double delta = (double) (m_whitecursor - m_blackcursor) / 2.0;
                 double mid   = (double)m_blackcursor + delta;
                 double tmp   = log10 (1.0 / m_gamma);
-                m_gammacursor = (unsigned int)round(mid + delta * tmp);
+                m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
             }
             break;
         case WhiteCursor:
@@ -188,7 +188,7 @@ void KGradientSlider::mousePressEvent ( QMouseEvent * e )
                 double delta = (double) (m_whitecursor - m_blackcursor) / 2.0;
                 double mid   = (double)m_blackcursor + delta;
                 double tmp   = log10 (1.0 / m_gamma);
-                m_gammacursor = (unsigned int)round(mid + delta * tmp);
+                m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
             }
             break;
         case GammaCursor:
@@ -254,7 +254,7 @@ void KGradientSlider::mouseMoveEvent ( QMouseEvent * e )
                         double delta = (double) (m_whitecursor - m_blackcursor) / 2.0;
                         double mid   = (double)m_blackcursor + delta;
                         double tmp   = log10 (1.0 / m_gamma);
-                        m_gammacursor = (unsigned int)round(mid + delta * tmp);
+                        m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
                     }
                 }
                 break;
@@ -266,7 +266,7 @@ void KGradientSlider::mouseMoveEvent ( QMouseEvent * e )
                         double delta = (double) (m_whitecursor - m_blackcursor) / 2.0;
                         double mid   = (double)m_blackcursor + delta;
                         double tmp   = log10 (1.0 / m_gamma);
-                        m_gammacursor = (unsigned int)round(mid + delta * tmp);
+                        m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
                     }
                 }
                 break;
@@ -309,7 +309,7 @@ void KGradientSlider::modifyBlack(int v) {
             double delta = (double) (m_whitecursor - m_blackcursor) / 2.0;
             double mid   = (double)m_blackcursor + delta;
             double tmp   = log10 (1.0 / m_gamma);
-            m_gammacursor = (unsigned int)round(mid + delta * tmp);
+            m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
         }
         repaint(false);
     }
@@ -321,7 +321,7 @@ void KGradientSlider::modifyWhite(int v) {
             double delta = (double) (m_whitecursor - m_blackcursor) / 2.0;
             double mid   = (double)m_blackcursor + delta;
             double tmp   = log10 (1.0 / m_gamma);
-            m_gammacursor = (unsigned int)round(mid + delta * tmp);
+            m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
         }
         repaint(false);
     }
@@ -331,7 +331,7 @@ void KGradientSlider::modifyGamma(double v) {
     double delta = (double) (m_whitecursor - m_blackcursor) / 2.0;
     double mid   = (double)m_blackcursor + delta;
     double tmp   = log10 (1.0 / m_gamma);
-    m_gammacursor = (unsigned int)round(mid + delta * tmp);
+    m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
     repaint(false);
 }
 

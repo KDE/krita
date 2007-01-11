@@ -32,6 +32,7 @@
 
 class KoRulerPrivate {
     public:
+    KoRulerPrivate() : m_mouseCoordinate(-1) {}
         KoUnit m_unit;
         Qt::Orientation m_orientation;
         KoViewConverter* m_viewConverter;

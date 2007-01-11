@@ -32,6 +32,7 @@
 #include "kkbdaccessextensions.h"
 #include "KoDockFactory.h"
 
+#include <kaboutdata.h>
 #include <kprinter.h>
 #include <kdeversion.h>
 #include <kstandardaction.h>
@@ -1252,6 +1253,11 @@ void KoMainWindow::print(bool quick) {
 
     if ( title.isEmpty() )
         title = fileName;
+    if ( title.isEmpty() ) {
+        // #139905
+        const QString programName = instance()->aboutData() ? instance()->aboutData()->programName() : instance()->instanceName();
+        title = i18n("%1 unsaved document (%2)").arg(programName).arg(KGlobal::locale()->formatDate(QDate::currentDate(), true/*short*/));
+    }
     printer.setDocName( title );
     printer.setDocFileName( fileName );
     printer.setDocDirectory( rootView()->koDocument()->url().directory() );

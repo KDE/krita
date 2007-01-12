@@ -27,7 +27,6 @@
 #include "KoTextBlockBorderData.h"
 #include "KoInlineTextObjectManager.h"
 #include "ListItemsHelper_p.h"
-#include "ListItemsHelper_p.h"
 
 #include <KoInsets.h>
 #include <KoShape.h>

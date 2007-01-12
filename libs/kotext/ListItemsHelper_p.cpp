@@ -57,6 +57,90 @@ static QString intToAlpha( int n, Capitalisation caps ) {
     return answer;
 }
 
+static QString intToScript(int n, KoListStyle::Style type) {
+    // note; the leading X is to make these 1 based.
+    // 10-base
+    static const QByteArray bengali[] = { "X", "૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯" };
+    static const QByteArray gujarati[] = { "X", "૦","૧","૨","૩","૪","૫","૬","૭","૮","૯" };
+    static const QByteArray gurumukhi[] = { "X", "੦","੧","੨","੩","੪","੫","੬","੭","੮","੯"};
+    static const QByteArray kannada[] = { "X", "೦","೧","೨","೩","೪","೫","೬","೭","೮","೯"};
+    static const QByteArray malayalam[] = { "X", "൦","൧","൨","൩","൪","൫","൬","൭","൮","൯"};
+    static const QByteArray oriya[] = { "X", "୦","୧","୨","୩","୪","୫","୬","୭","୮","୯"};
+    static const QByteArray tamil[] = { "X", "௦","௧","௨","௩","௪","௫","௬","௭","௮","௯"};
+    static const QByteArray telugu[] = { "X", "౦","౧","౨","౩","౪","౫","౬","౭","౮","౯"};
+    static const QByteArray tibetan[] = { "X", "༠","༡","༢","༣","༤","༥","༦","༧","༨","༩"};
+    static const QByteArray thai[] = { "X", "๐","๑","๒","๓","๔","๕","๖","๗","๘","๙" };
+    // 1 time Sequences
+    static const QByteArray Abjad[] = { "X", "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
+        "ن", "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ" };
+    static const QByteArray Abjad2[] = { "X", "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
+        "ﻥ", "ﺹ", "ﻉ", "ﻑ", "ﺽ", "ﻕ", "ﺭ", "ﺱ", "ﺕ", "ﺙ", "ﺥ", "ﺫ", "ﻅ", "ﻍ", "ﺵ" };
+
+/*
+// see this page for the 10, 100, 1000 etc http://en.wikipedia.org/wiki/Chinese_numerals
+static const char* chinese1[] = { '零','壹','貳','叄','肆','伍','陸','柒','捌','玖' };
+static const char* chinese2[] = { '〇','一','二','三','四','五','六','七','八','九' };
+
+TODO: http://en.wikipedia.org/wiki/Korean_numerals
+http://en.wikipedia.org/wiki/Japanese_numerals
+'http://en.wikipedia.org/wiki/Hebrew_numerals'
+'http://en.wikipedia.org/wiki/Armenian_numerals'
+'http://en.wikipedia.org/wiki/Greek_numerals'
+'http://en.wikipedia.org/wiki/Cyrillic_numerals'
+'http://en.wikipedia.org/wiki/Sanskrit_numerals'
+'http://en.wikipedia.org/wiki/Ge%27ez_alphabet#Numerals'
+'http://en.wikipedia.org/wiki/Abjad_numerals'
+*/
+
+    const QByteArray *numerals;
+    switch(type) {
+        case KoListStyle::Bengali:
+            numerals = gurumukhi;
+            break;
+        case KoListStyle::Gujarati:
+            numerals = gujarati;
+            break;
+        case KoListStyle::Gurumukhi:
+            numerals = gurumukhi;
+            break;
+        case KoListStyle::Kannada:
+            numerals = kannada;
+            break;
+        case KoListStyle::Malayalam:
+            numerals = malayalam;
+            break;
+        case KoListStyle::Oriya:
+            numerals = oriya;
+            break;
+        case KoListStyle::Tamil:
+            numerals = tamil;
+            break;
+        case KoListStyle::Telugu:
+            numerals = telugu;
+            break;
+        case KoListStyle::Tibetan:
+            numerals = tibetan;
+            break;
+        case KoListStyle::Thai:
+            numerals = thai;
+            break;
+        case KoListStyle::Abjad:
+            if( n > 22) return "*";
+            return QString::fromUtf8(Abjad[n].data());
+        case KoListStyle::AbjadMinor:
+            if( n > 22) return "*";
+            return QString::fromUtf8(Abjad2[n].data());
+        default:
+            return QString::number(n);
+    }
+    QString answer;
+    while(n > 0) {
+        answer.prepend( QString::fromUtf8(numerals[n].data()) );
+        n = n / 10;
+    }
+    return answer;
+}
+
 // ------------------- ListItemsHelper ------------
 /// \internal helper class for calculating text-lists prefixes and indents
 ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font)
@@ -149,34 +233,29 @@ Q_ASSERT(otherData);
                 !(item.isEmpty() || item.endsWith('.') || item.endsWith(' '))) {
             item += '.';
         }
+        bool calcWidth=true;
+        QString partialCounterText;
         switch( listStyle ) {
-            case KoListStyle::DecimalItem: {
-                QString i = QString::number(index);
-                data->setPartialCounterText(i);
-                item += i;
-                width = qMax(width, m_fm.width(item));
+            case KoListStyle::DecimalItem:
+                partialCounterText = QString::number(index);
                 break;
-            }
             case KoListStyle::AlphaLowerItem:
-                item = intToAlpha(index, Lowercase);
-                width = qMax(width, m_fm.width(item));
+                partialCounterText = intToAlpha(index, Lowercase);
                 break;
             case KoListStyle::UpperAlphaItem:
-                item = intToAlpha(index, Uppercase);
-                width = qMax(width, m_fm.width(item));
+                partialCounterText = intToAlpha(index, Uppercase);
                 break;
             case KoListStyle::RomanLowerItem:
-                item = intToRoman(index);
-                width = qMax(width, m_fm.width(item));
+                partialCounterText = intToRoman(index);
                 break;
             case KoListStyle::UpperRomanItem:
-                item = intToRoman(index).toUpper();
-                width = qMax(width, m_fm.width(item));
+                partialCounterText = intToRoman(index).toUpper();
                 break;
             case KoListStyle::SquareItem:
             case KoListStyle::DiscItem:
             case KoListStyle::CircleItem:
             case KoListStyle::BoxItem: {
+                calcWidth = false;
                 item = ' ';
                 width = m_displayFont.pointSizeF();
                 int percent = format.intProperty(KoListStyle::BulletSize);
@@ -184,15 +263,35 @@ Q_ASSERT(otherData);
                     width = width * (percent / 100.0);
                 break;
             }
-            case KoListStyle::CustomCharItem:
+            case KoListStyle::KoListStyle::CustomCharItem:
+                calcWidth = false;
                 item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
                 width = m_fm.width(item);
                 break;
-            case KoListStyle::NoItem:
+            case KoListStyle::KoListStyle::NoItem:
+                calcWidth = false;
                 width =  10.0; // simple indenting
+                break;
+            case KoListStyle::Bengali:
+            case KoListStyle::Gujarati:
+            case KoListStyle::Gurumukhi:
+            case KoListStyle::Kannada:
+            case KoListStyle::Malayalam:
+            case KoListStyle::Oriya:
+            case KoListStyle::Tamil:
+            case KoListStyle::Telugu:
+            case KoListStyle::Tibetan:
+            case KoListStyle::Thai:
+            case KoListStyle::Abjad:
+            case KoListStyle::AbjadMinor:
+                partialCounterText = intToScript(index, listStyle);
                 break;
             default:; // others we ignore.
         }
+        data->setPartialCounterText(partialCounterText);
+        item += partialCounterText;
+        if(calcWidth)
+            width = qMax(width, m_fm.width(item));
         data->setCounterText(prefix + item + suffix);
         index++;
     }

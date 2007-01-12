@@ -58,7 +58,19 @@ public:
         /// draw a box
         BoxItem,
         /// use an unicode char for the numbering
-        CustomCharItem
+        CustomCharItem,
+        Bengali,    ///< Bengali characters for normal 10-base counting
+        Gujarati,   ///< Gujarati characters for normal 10-base counting
+        Gurumukhi,  ///< Gurumukhi characters for normal 10-base counting
+        Kannada,    ///< Kannada characters for normal 10-base counting
+        Malayalam,  ///< Malayalam characters for normal 10-base counting
+        Oriya,      ///< Oriya characters for normal 10-base counting
+        Tamil,      ///< Tamil characters for normal 10-base counting
+        Telugu,     ///< Telugu characters for normal 10-base counting
+        Tibetan,    ///< Tibetan characters for normal 10-base counting
+        Thai,       ///< Thai characters for normal 10-base counting
+        Abjad,      ///< Abjad sequence.
+        AbjadMinor ///< A lesser known version of the Abjad sequence.
          // TODO look at css 3 for things like hebrew counters
          // TODO allow a bitmap 'bullet'
     };

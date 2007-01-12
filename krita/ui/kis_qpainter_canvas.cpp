@@ -126,8 +126,10 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     QVector<QRect>::iterator it = repaintRects.begin();
     QVector<QRect>::iterator end = repaintRects.end();
 
-    while (it != end) {
+    double sx, sy;
+    m_d->viewConverter->zoom(&sx, &sy);
 
+    while (it != end) {
         //kDebug(41010) << "Starting with checkers on rect " << (*it) << endl;
         t.start();
         // Checks
@@ -136,8 +138,6 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
         //qDebug( "Painting checks: %d", t.elapsed() );
         t.restart();
 
-        double sx, sy;
-        m_d->viewConverter->zoom(&sx, &sy);
         double pppx,pppy;
         pppx = img->xRes();
         pppy = img->yRes();
@@ -154,62 +154,10 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
         gc.drawImage( rc.x(), rc.y(), canvasPixmap, rc.x(), rc.y(), rc.width(), rc.height() );
 
         //qDebug( "painting image: %d",  t.elapsed() );
+        gc.resetMatrix( ); // important when the region has more than one rect or for subsequent drawing
+
         t.restart();
 
-
-
-#if 0 // Old code that uses KIsImage to scale down
-
-        if(sx < 1.0 +EPSILON && sy < 1.0 +EPSILON) {
-            // We are scaling pixels down (birds eye) so adjust for
-            // display profile AFTER scaling the pixels
-            //kDebug(41010) << "Starting to paint scaled down\n";
-            // Image
-            QRectF imageRect = m_d->viewConverter->viewToDocument(*it);
-            imageRect.adjust(-5,-5,5,5);
-            imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
-                                imageRect.right() * pppx, imageRect.bottom() * pppy);
-
-            QImage image = img->convertToQImage(imageRect.toRect(), sx / pppx, sy / pppy,
-                                                m_d->canvas->monitorProfile(), m_d->canvas->view()->resourceProvider()->HDRExposure());
-
-            gc.drawImage(imageRect.topLeft(), image, image.rect());
-
-            //qDebug("Painting scaled down rects %d", t.elapsed() );
-            t.restart();
-        }
-        else {
-            //kDebug(41010) << "Starting to paint magnified\n";
-            // We are scaling pixels up (magnified look) so adjust for display profile before scaling the pixels
-            gc.setWorldMatrixEnabled(true);
-            gc.scale(sx/pppx, sy/pppy);
-
-            // Image
-            QRectF imageRect = m_d->viewConverter->viewToDocument(*it);
-            imageRect.adjust(-5,-5,5,5);
-            imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
-                                imageRect.right() * pppx, imageRect.bottom() * pppy);
-            // XXX: Added explict cast
-            img->renderToPainter(static_cast<qint32>(imageRect.x()),
-                                 static_cast<qint32>(imageRect.y()),
-                                 static_cast<qint32>(imageRect.x()),
-                                 static_cast<qint32>(imageRect.y()),
-                                 static_cast<qint32>(imageRect.width()),
-                                 static_cast<qint32>(imageRect.height()),
-                                 gc,
-                                 m_d->canvas->monitorProfile(),
-                                 m_d->canvas->view()->resourceProvider()->HDRExposure());
-            //qDebug( "Done painting scaled up pixels %d", t.elapsed() );
-            t.restart();
-        }
-#endif
-
-/*
-        QColor color = QColor(random()%255, random()%255, random()%255, 125);
-        gc.fillRect(( *it ), QBrush(color));
-
-        gc.end();
-*/
         ++it;
     }
 
@@ -234,10 +182,10 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     // Give the tool a chance to paint its stuff
     //kDebug(41010) << "Tool starts painting\n";
+    gc.scale( sx, sy );
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
 
     //qDebug( "Done painting tool stuff %d", t.elapsed() );
-
 }
 
 

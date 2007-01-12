@@ -53,8 +53,6 @@ class KisToolLine : public KisToolPaint {
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
     virtual void paint(QPainter& gc, KoViewConverter &converter);
 
     virtual QString quickHelp() const;

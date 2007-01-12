@@ -54,21 +54,12 @@ KisToolRectangle::~KisToolRectangle()
 {
 }
 
-
-void KisToolRectangle::paint(QPainter& gc)
-{
-    if (m_dragging)
-        paintRectangle(gc, QRect());
-}
-
-void KisToolRectangle::paint(QPainter& gc, const QRect& rc)
-{
-    if (m_dragging)
-        paintRectangle(gc, rc);
-}
-
 void KisToolRectangle::paint(QPainter& gc, KoViewConverter &converter)
 {
+    double sx, sy;
+    converter.zoom(&sx, &sy);
+
+    gc.scale( sx, sy );
     if (m_dragging)
         paintRectangle(gc, QRect());
 }
@@ -185,16 +176,6 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
         }
 	delete m_painter;
 	m_painter = 0;
-    }
-}
-
-void KisToolRectangle::paint()
-{
-    if (m_canvas) {
-        QPainter gc(m_canvas->canvasWidget());
-        QRect rc;
-
-        paintRectangle(gc, rc);
     }
 }
 

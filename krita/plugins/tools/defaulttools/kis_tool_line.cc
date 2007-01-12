@@ -58,20 +58,12 @@ KisToolLine::~KisToolLine()
 {
 }
 
-void KisToolLine::paint(QPainter& gc)
-{
-    if (m_dragging)
-        paintLine(gc, QRect());
-}
-
-void KisToolLine::paint(QPainter& gc, const QRect& rc)
-{
-    if (m_dragging)
-        paintLine(gc, rc);
-}
-
 void KisToolLine::paint(QPainter& gc, KoViewConverter &converter)
 {
+    double sx, sy;
+    converter.zoom(&sx, &sy);
+
+    gc.scale( sx, sy );
     if (m_dragging)
         paintLine(gc, QRect());
 }

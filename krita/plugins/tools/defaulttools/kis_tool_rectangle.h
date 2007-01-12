@@ -55,9 +55,6 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    virtual void paint();
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
     virtual void paint(QPainter& gc, KoViewConverter &converter);
 
     // protected:

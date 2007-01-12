@@ -36,11 +36,32 @@ class QVariant;
  * position in the text, as one character.
  * @see KoInlineTextObjectManager
  */
-class KOTEXT_EXPORT KoInlineObjectBase {
+class KOTEXT_EXPORT KoInlineObject {
 public:
-    // TODO move this back to the manager where it really belongs
     enum Property {
-        VariousKofficeWidePropertiesHere,
+        DocumentURL,
+        PageCount,
+        StartPage,
+        AuthorName,
+        SenderEmail,
+        SenderCompany,
+        SenderPhoneWork,
+        SenderPhonePrivate,
+        SenderFax,
+        SenderCountry,
+        Title,
+        Keywords,
+        Subject,
+        Description,
+        SenderPostalCode,
+        SenderCity,
+        SenderStreet,
+        SenderTitle,
+        SenderFirstname,
+        SenderLastname,
+        SenderPosition,
+        AuthorInitials,
+
 
         KarbonStart = 1000,      ///< Base number for karbon specific values.
         KexiStart = 2000,        ///< Base number for kexi specific values.
@@ -53,9 +74,9 @@ public:
     };
 
     /// constructor
-    KoInlineObjectBase(bool propertyChangeListener = false)
+    KoInlineObject(bool propertyChangeListener = false)
         : m_id(-1), m_propertyChangeListener(propertyChangeListener) {}
-    virtual ~KoInlineObjectBase() {}
+    virtual ~KoInlineObject() {}
 
     /**
      * Update position of the inline object.

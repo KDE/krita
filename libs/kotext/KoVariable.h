@@ -18,7 +18,7 @@
  */
 
 // KOffice libs
-#include "KoInlineObjectBase.h"
+#include "KoInlineObject.h"
 #include <koffice_export.h>
 
 // Qt + kde
@@ -35,7 +35,7 @@ class KoShape;
  * is used as text.  This class is pretty boring in that it has just a setValue() to alter the
  * text shown; we depend on plugin writers to create more exciting ways to update variables.
  */
-class KOTEXT_EXPORT KoVariable : public KoInlineObjectBase {
+class KOTEXT_EXPORT KoVariable : public KoInlineObject {
 public:
     /**
      * Constructor.

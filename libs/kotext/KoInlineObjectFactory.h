@@ -26,7 +26,7 @@
 
 #include <koffice_export.h>
 
-class KoInlineObjectBase;
+class KoInlineObject;
 
 /**
  * A factory for inline text objects. There should be one for each plugin type to
@@ -58,7 +58,7 @@ public:
     /**
      * Create a new instance of an inline object.
      */
-    virtual KoInlineObjectBase *createInlineObject() = 0;
+    virtual KoInlineObject *createInlineObject() = 0;
 
     /**
      * return the user visible (and translated) name to be seen by the user.

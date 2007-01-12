@@ -27,18 +27,18 @@ KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
 {
 }
 
-KoInlineObjectBase *KoInlineTextObjectManager::inlineTextObject(const QTextCharFormat &format) const {
+KoInlineObject *KoInlineTextObjectManager::inlineTextObject(const QTextCharFormat &format) const {
     int id = format.intProperty(InlineInstanceId);
     if(id <= 0)
         return 0;
     return m_objects.value(id);
 }
 
-KoInlineObjectBase *KoInlineTextObjectManager::inlineTextObject(const QTextCursor &cursor) const {
+KoInlineObject *KoInlineTextObjectManager::inlineTextObject(const QTextCursor &cursor) const {
     return inlineTextObject(cursor.charFormat());
 }
 
-void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInlineObjectBase *object) {
+void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInlineObject *object) {
     QTextCharFormat cf;
     cf.setObjectType(1001);
     cf.setProperty(InlineInstanceId, ++m_lastObjectId);
@@ -57,34 +57,34 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     insertInlineObject(cursor, factory->createInlineObject());
 }
 
-void KoInlineTextObjectManager::setProperty(KoInlineObjectBase::Property key, QVariant value) {
+void KoInlineTextObjectManager::setProperty(KoInlineObject::Property key, QVariant value) {
     if(m_properties.contains(key)) {
         if(value == m_properties.value(key))
             return;
         m_properties.remove(key);
     }
     m_properties.insert(key, value);
-    foreach(KoInlineObjectBase *obj, m_listeners)
+    foreach(KoInlineObject *obj, m_listeners)
         obj->propertyChanged(key, value);
 }
 
-QVariant KoInlineTextObjectManager::property(KoInlineObjectBase::Property key) const {
+QVariant KoInlineTextObjectManager::property(KoInlineObject::Property key) const {
     return m_properties.value(key);
 }
 
-int KoInlineTextObjectManager::intProperty(KoInlineObjectBase::Property key) const {
+int KoInlineTextObjectManager::intProperty(KoInlineObject::Property key) const {
     if(!m_properties.contains(key))
         return 0;
     return m_properties.value(key).toInt();
 }
 
-bool KoInlineTextObjectManager::boolProperty(KoInlineObjectBase::Property key) const {
+bool KoInlineTextObjectManager::boolProperty(KoInlineObject::Property key) const {
     if(!m_properties.contains(key))
         return false;
     return m_properties.value(key).toBool();
 }
 
-QString KoInlineTextObjectManager::stringProperty(KoInlineObjectBase::Property key) const {
+QString KoInlineTextObjectManager::stringProperty(KoInlineObject::Property key) const {
     if(!m_properties.contains(key))
         return QString();
     return qvariant_cast<QString>(m_properties.value(key));

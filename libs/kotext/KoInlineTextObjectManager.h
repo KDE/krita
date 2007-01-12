@@ -19,7 +19,7 @@
 #ifndef KOINLINEOBJECTMANAGER_H
 #define KOINLINEOBJECTMANAGER_H
 
-#include "KoInlineObjectBase.h"
+#include "KoInlineObject.h"
 #include "KoInlineObjectFactory.h"
 
 #include <koffice_export.h>
@@ -46,12 +46,12 @@ public:
      * Retrieve a formerly added inline object based on the format.
      * @param format the textCharFormat 
      */
-    KoInlineObjectBase *inlineTextObject(const QTextCharFormat &format) const;
+    KoInlineObject *inlineTextObject(const QTextCharFormat &format) const;
     /**
      * Retrieve a formerly added inline object based on the cursor position.
      * @param cursor the cursor which position is used. The anchor is ignored.
      */
-    KoInlineObjectBase *inlineTextObject(const QTextCursor &cursor) const;
+    KoInlineObject *inlineTextObject(const QTextCursor &cursor) const;
 
     /**
      * Insert a new inline object into the manager as well as the document.
@@ -62,18 +62,18 @@ public:
      *      where the inline object will be inserted.
      * @param object the inline object to insert.
      */
-    void insertInlineObject(QTextCursor &cursor, KoInlineObjectBase *object);
+    void insertInlineObject(QTextCursor &cursor, KoInlineObject *object);
 
     /**
      * overloaded method, provided for your convenience.
      */
     void insertInlineObject(QTextCursor &cursor, KoInlineObjectFactory *factory);
 
-    void setProperty(KoInlineObjectBase::Property key, QVariant value);
-    QVariant property(KoInlineObjectBase::Property key) const;
-    int intProperty(KoInlineObjectBase::Property key) const;
-    bool boolProperty(KoInlineObjectBase::Property key) const;
-    QString stringProperty(KoInlineObjectBase::Property key) const;
+    void setProperty(KoInlineObject::Property key, QVariant value);
+    QVariant property(KoInlineObject::Property key) const;
+    int intProperty(KoInlineObject::Property key) const;
+    bool boolProperty(KoInlineObject::Property key) const;
+    QString stringProperty(KoInlineObject::Property key) const;
 
 signals:
     void propertyChanged(int, const QVariant &variant);
@@ -83,8 +83,8 @@ private:
         InlineInstanceId = 577297549
     };
 
-    QHash<int, KoInlineObjectBase*> m_objects;
-    QList<KoInlineObjectBase*> m_listeners; // holds objects also in m_objects, but which want propertyChanges
+    QHash<int, KoInlineObject*> m_objects;
+    QList<KoInlineObject*> m_listeners; // holds objects also in m_objects, but which want propertyChanges
     int m_lastObjectId;
     QHash<int, QVariant> m_properties;
 };

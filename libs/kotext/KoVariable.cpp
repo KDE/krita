@@ -29,7 +29,7 @@
 #include <QTextInlineObject>
 
 KoVariable::KoVariable(bool propertyChangeListener)
-    : KoInlineObjectBase(propertyChangeListener),
+    : KoInlineObject(propertyChangeListener),
     m_modified(true)
 {
     m_document = 0;

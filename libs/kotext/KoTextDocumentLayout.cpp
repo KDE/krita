@@ -131,7 +131,8 @@ double KoTextDocumentLayout::LayoutState::width() {
 }
 
 double KoTextDocumentLayout::LayoutState::x() {
-    double result = (d->newParag?d->format.textIndent():0.0) + d->format.leftMargin();
+    double result = d->newParag?d->format.textIndent():0.0;
+    result += d->isRtl ? d->format.rightMargin() : d->format.leftMargin();
     result += listIndent();
     result += d->borderInsets.left + d->shapeBorder.left;
     return result;
@@ -294,7 +295,7 @@ bool KoTextDocumentLayout::LayoutState::nextParag() {
         // Also after we account for indents etc so the y() pos is correct.
         if(d->isRtl)
             d->blockData->setCounterPosition(QPointF(shape->size().width() - d->borderInsets.right -
-                d->shapeBorder.right - d->format.rightMargin() - d->blockData->counterWidth() , y()));
+                d->shapeBorder.right - d->format.leftMargin() - d->blockData->counterWidth(), y()));
         else
             d->blockData->setCounterPosition(QPointF(d->borderInsets.left + d->shapeBorder.left +
                         d->format.textIndent() + d->format.leftMargin() , y()));

@@ -646,8 +646,12 @@ void KoTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
             Qt::Alignment align = static_cast<Qt::Alignment> (listFormat.intProperty(KoListStyle::Alignment));
             if(align == 0)
                 align = Qt::AlignLeft;
-            QTextOption option( align | Qt::AlignAbsolute);
+            else if(align != Qt::AlignAuto)
+                align |= Qt::AlignAbsolute;
+            QTextOption option( align );
             option.setTextDirection(block.layout()->textOption().textDirection());
+            if(option.textDirection() == Qt::RightToLeft || data->counterText().isRightToLeft())
+                option.setAlignment(Qt::AlignRight);
             layout.setTextOption(option);
             layout.beginLayout();
             QTextLine line = layout.createLine();

@@ -286,7 +286,8 @@ Q_ASSERT(otherData);
             case KoListStyle::AbjadMinor:
                 partialCounterText = intToScript(index, listStyle);
                 break;
-            default:; // others we ignore.
+            default:  // others we ignore.
+                calcWidth = false;
         }
         data->setPartialCounterText(partialCounterText);
         item += partialCounterText;
@@ -295,9 +296,7 @@ Q_ASSERT(otherData);
         data->setCounterText(prefix + item + suffix);
         index++;
     }
-    double counterSpacing = 1;
-    if(suffix.isEmpty())
-        counterSpacing = m_fm.width(' ');
+    double counterSpacing = m_fm.width(' ');
     width += counterSpacing + m_fm.width(prefix + suffix); // same for all
     for(int i=0; i < m_textList->count(); i++) {
         QTextBlock tb = m_textList->item(i);

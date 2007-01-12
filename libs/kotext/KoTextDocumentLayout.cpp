@@ -71,7 +71,7 @@ public:
 
 class LayoutStatePrivate {
 public:
-    LayoutStatePrivate() : blockData(0), data(0), reset(true)  { }
+    LayoutStatePrivate() : blockData(0), data(0), reset(true), isRtl(false)  { }
     KoStyleManager *styleManager;
 
     double y;
@@ -80,7 +80,7 @@ public:
     QTextBlockFormat format;
     QTextBlock::Iterator fragmentIterator;
     KoTextShapeData *data;
-    bool newShape, newParag, reset;
+    bool newShape, newParag, reset, isRtl;
     KoInsets borderInsets;
     KoInsets shapeBorder;
     KoTextDocumentLayout *parent;
@@ -124,8 +124,8 @@ double KoTextDocumentLayout::LayoutState::width() {
     double ptWidth = shape->size().width() - d->format.leftMargin() - d->format.rightMargin();
     if(d->newParag)
         ptWidth -= d->format.textIndent();
-    if(d->newParag)
-        ptWidth -= listIndent();
+    if(d->newParag && d->blockData)
+        ptWidth -= d->blockData->counterWidth() + d->blockData->counterSpacing();
     ptWidth -= d->borderInsets.left + d->borderInsets.right + d->shapeBorder.right;
     return ptWidth;
 }
@@ -146,10 +146,6 @@ double KoTextDocumentLayout::LayoutState::docOffsetInShape() const {
 }
 
 bool KoTextDocumentLayout::LayoutState::addLine(QTextLine &line) {
-    // TODO
-    // if the line was right aligned (RtL) and we have a counter, we have
-    // to move the line so we can paint the counter at its proper place.
-
     double height = d->format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     bool useFixedLineHeight = height != 0.0;
     bool useFontProperties = d->format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
@@ -239,6 +235,7 @@ bool KoTextDocumentLayout::LayoutState::nextParag() {
     }
     d->format = d->block.blockFormat();
     d->blockData = dynamic_cast<KoTextBlockData*> (d->block.userData());
+    d->isRtl = d->block.text().isRightToLeft();
 
     // initialize list item stuff for this parag.
     QTextList *textList = d->block.textList();
@@ -284,6 +281,8 @@ bool KoTextDocumentLayout::LayoutState::nextParag() {
     layout = d->block.layout();
     QTextOption options = layout->textOption();
     options.setAlignment(d->format.alignment());
+    if(d->isRtl)
+        options.setTextDirection(Qt::RightToLeft);
     layout->setTextOption(options);
 
     layout->beginLayout();
@@ -293,8 +292,12 @@ bool KoTextDocumentLayout::LayoutState::nextParag() {
     if(textList) {
         // if list set list-indent. Do this after borders init to we can account for them.
         // Also after we account for indents etc so the y() pos is correct.
-        d->blockData->setCounterPosition(QPointF(d->borderInsets.left + d->shapeBorder.left +
-                    d->format.textIndent() + d->format.leftMargin() , y()));
+        if(d->isRtl)
+            d->blockData->setCounterPosition(QPointF(shape->size().width() - d->borderInsets.right -
+                d->shapeBorder.right - d->format.rightMargin() - d->blockData->counterWidth() , y()));
+        else
+            d->blockData->setCounterPosition(QPointF(d->borderInsets.left + d->shapeBorder.left +
+                        d->format.textIndent() + d->format.leftMargin() , y()));
     }
 
     return true;
@@ -353,10 +356,10 @@ void KoTextDocumentLayout::LayoutState::cleanupShape(KoShape *daShape) {
 }
 
 double KoTextDocumentLayout::LayoutState::listIndent() {
-    QTextList *textList = d->block.textList();
-    if(! textList)
-        return 0.;
-    Q_ASSERT(d->blockData);
+    if(d->blockData == 0)
+        return 0;
+    if(d->isRtl)
+        return 0;
     return d->blockData->counterWidth();
 }
 
@@ -578,8 +581,12 @@ painter->setPen(Qt::black); // TODO use theme color, or a kword wide hardcoded d
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
             if(blockData) {
                 KoTextBlockBorderData *border = blockData->border();
-                if(blockData->hasCounterData())
-                    parag.setLeft(blockData->counterPosition().x());
+                if(blockData->hasCounterData()) {
+                    if(block.layout()->textOption().textDirection() == Qt::RightToLeft)
+                        parag.setRight(parag.right() + blockData->counterWidth() + blockData->counterSpacing());
+                    else
+                        parag.setLeft(blockData->counterPosition().x());
+                }
                 if(border) {
                     KoInsets insets;
                     border->applyInsets(insets, parag.top(), true);
@@ -640,7 +647,7 @@ void KoTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
             if(align == 0)
                 align = Qt::AlignLeft;
             QTextOption option( align | Qt::AlignAbsolute);
-            option.setTextDirection(block.blockFormat().layoutDirection());
+            option.setTextDirection(block.layout()->textOption().textDirection());
             layout.setTextOption(option);
             layout.beginLayout();
             QTextLine line = layout.createLine();

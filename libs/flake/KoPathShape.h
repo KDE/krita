@@ -394,6 +394,8 @@ public:
     virtual QPointF position() const;
     virtual void resize( const QSizeF &size );
 
+    /// Removes all subpaths and their points from the path
+    void clear();
     /**
      * @brief Start a new Subpath
      *

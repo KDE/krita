@@ -322,6 +322,17 @@ KoPathShape::KoPathShape()
 
 KoPathShape::~KoPathShape()
 {
+    clear();
+}
+
+void KoPathShape::clear()
+{
+    foreach( KoSubpath *subpath, m_subpaths )
+    {
+        foreach( KoPathPoint *point, *subpath )
+            delete point;
+        delete subpath;
+    }
 }
 
 void KoPathShape::paint( QPainter &painter, const KoViewConverter &converter )

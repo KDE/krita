@@ -92,6 +92,8 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             if (!m_paintIncremental) {
                 m_currentImage->activeLayer()->setDirty(r);
             }
+            else
+                m_target->setDirty( r);
         }
         else {
             m_target->setDirty( r);

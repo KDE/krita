@@ -286,7 +286,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     bool row_in_bumpmap;
 
 
-    qint32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
+    qint32 xofs1, xofs2, xofs3, shade = 0, ndotl, nx, ny;
 
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), sel_w);
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), sel_w);

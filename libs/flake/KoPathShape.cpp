@@ -333,6 +333,7 @@ void KoPathShape::clear()
             delete point;
         delete subpath;
     }
+    m_subpaths.clear();
 }
 
 void KoPathShape::paint( QPainter &painter, const KoViewConverter &converter )

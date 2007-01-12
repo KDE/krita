@@ -118,6 +118,8 @@ KoStyleDialog::KoStyleDialog( QWidget *_parent, KoUnit unit,
     noSignals=false;
     switchStyle();
     setInitialSize( QSize( 600, 570 ) );
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
 }
 
 KoStyleDialog::~KoStyleDialog()

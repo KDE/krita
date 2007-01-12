@@ -203,6 +203,8 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name,
     setupTab4();
     setInitialSize( QSize(500, 300) );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotResetConf()));
+    connect(this,SIGNAL(cancelClicked()),this,SLOT(slotCancel()));
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
     noSignal=false;
 }
 

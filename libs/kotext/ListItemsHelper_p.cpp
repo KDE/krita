@@ -59,7 +59,7 @@ static QString intToAlpha( int n, Capitalisation caps ) {
 
 static QString intToScript(int n, KoListStyle::Style type) {
     // 10-base
-    static const QByteArray bengali[] = { "૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯" };
+    static const QByteArray bengali[] = { "০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯" };
     static const QByteArray gujarati[] = { "૦","૧","૨","૩","૪","૫","૬","૭","૮","૯" };
     static const QByteArray gurumukhi[] = { "੦","੧","੨","੩","੪","੫","੬","੭","੮","੯"};
     static const QByteArray kannada[] = { "೦","೧","೨","೩","೪","೫","೬","೭","೮","೯"};
@@ -75,6 +75,8 @@ static QString intToScript(int n, KoListStyle::Style type) {
         "ن", "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ" };
     static const QByteArray Abjad2[] = { "X", "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
         "ﻥ", "ﺹ", "ﻉ", "ﻑ", "ﺽ", "ﻕ", "ﺭ", "ﺱ", "ﺕ", "ﺙ", "ﺥ", "ﺫ", "ﻅ", "ﻍ", "ﺵ" };
+    static const QByteArray ArabicAlphabet[] = { "X", "ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
+        "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي" };
 
 /*
 // see this page for the 10, 100, 1000 etc http://en.wikipedia.org/wiki/Chinese_numerals
@@ -95,7 +97,7 @@ http://en.wikipedia.org/wiki/Japanese_numerals
     const QByteArray *numerals;
     switch(type) {
         case KoListStyle::Bengali:
-            numerals = gurumukhi;
+            numerals = bengali;
             break;
         case KoListStyle::Gujarati:
             numerals = gujarati;
@@ -130,6 +132,9 @@ http://en.wikipedia.org/wiki/Japanese_numerals
         case KoListStyle::AbjadMinor:
             if( n > 22) return "*";
             return QString::fromUtf8(Abjad2[n].data());
+        case KoListStyle::ArabicAlphabet:
+            if( n > 28) return "*";
+            return QString::fromUtf8(ArabicAlphabet[n].data());
         default:
             return QString::number(n);
     }
@@ -283,6 +288,7 @@ Q_ASSERT(otherData);
             case KoListStyle::Tibetan:
             case KoListStyle::Thai:
             case KoListStyle::Abjad:
+            case KoListStyle::ArabicAlphabet:
             case KoListStyle::AbjadMinor:
                 partialCounterText = intToScript(index, listStyle);
                 break;

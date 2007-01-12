@@ -70,9 +70,13 @@ public:
         Tibetan,    ///< Tibetan characters for normal 10-base counting
         Thai,       ///< Thai characters for normal 10-base counting
         Abjad,      ///< Abjad sequence.
-        AbjadMinor ///< A lesser known version of the Abjad sequence.
+        AbjadMinor, ///< A lesser known version of the Abjad sequence.
+        ArabicAlphabet,
+
          // TODO look at css 3 for things like hebrew counters
          // TODO allow a bitmap 'bullet'
+
+        Foo
     };
 
     /// further properties

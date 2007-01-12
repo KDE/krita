@@ -58,19 +58,19 @@ static QString intToAlpha( int n, Capitalisation caps ) {
 }
 
 static QString intToScript(int n, KoListStyle::Style type) {
-    // note; the leading X is to make these 1 based.
     // 10-base
-    static const QByteArray bengali[] = { "X", "૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯" };
-    static const QByteArray gujarati[] = { "X", "૦","૧","૨","૩","૪","૫","૬","૭","૮","૯" };
-    static const QByteArray gurumukhi[] = { "X", "੦","੧","੨","੩","੪","੫","੬","੭","੮","੯"};
-    static const QByteArray kannada[] = { "X", "೦","೧","೨","೩","೪","೫","೬","೭","೮","೯"};
-    static const QByteArray malayalam[] = { "X", "൦","൧","൨","൩","൪","൫","൬","൭","൮","൯"};
-    static const QByteArray oriya[] = { "X", "୦","୧","୨","୩","୪","୫","୬","୭","୮","୯"};
-    static const QByteArray tamil[] = { "X", "௦","௧","௨","௩","௪","௫","௬","௭","௮","௯"};
-    static const QByteArray telugu[] = { "X", "౦","౧","౨","౩","౪","౫","౬","౭","౮","౯"};
-    static const QByteArray tibetan[] = { "X", "༠","༡","༢","༣","༤","༥","༦","༧","༨","༩"};
-    static const QByteArray thai[] = { "X", "๐","๑","๒","๓","๔","๕","๖","๗","๘","๙" };
+    static const QByteArray bengali[] = { "૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯" };
+    static const QByteArray gujarati[] = { "૦","૧","૨","૩","૪","૫","૬","૭","૮","૯" };
+    static const QByteArray gurumukhi[] = { "੦","੧","੨","੩","੪","੫","੬","੭","੮","੯"};
+    static const QByteArray kannada[] = { "೦","೧","೨","೩","೪","೫","೬","೭","೮","೯"};
+    static const QByteArray malayalam[] = { "൦","൧","൨","൩","൪","൫","൬","൭","൮","൯"};
+    static const QByteArray oriya[] = { "୦","୧","୨","୩","୪","୫","୬","୭","୮","୯"};
+    static const QByteArray tamil[] = { "௦","௧","௨","௩","௪","௫","௬","௭","௮","௯"};
+    static const QByteArray telugu[] = { "౦","౧","౨","౩","౪","౫","౬","౭","౮","౯"};
+    static const QByteArray tibetan[] = { "༠","༡","༢","༣","༤","༥","༦","༧","༨","༩"};
+    static const QByteArray thai[] = { "๐","๑","๒","๓","๔","๕","๖","๗","๘","๙" };
     // 1 time Sequences
+    // note; the leading X is to make these 1 based.
     static const QByteArray Abjad[] = { "X", "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
         "ن", "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ" };
     static const QByteArray Abjad2[] = { "X", "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
@@ -135,7 +135,7 @@ http://en.wikipedia.org/wiki/Japanese_numerals
     }
     QString answer;
     while(n > 0) {
-        answer.prepend( QString::fromUtf8(numerals[n].data()) );
+        answer.prepend( QString::fromUtf8(numerals[n %10].data()) );
         n = n / 10;
     }
     return answer;

@@ -182,7 +182,6 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     // Give the tool a chance to paint its stuff
     //kDebug(41010) << "Tool starts painting\n";
-    gc.scale( sx, sy );
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
 
     //qDebug( "Done painting tool stuff %d", t.elapsed() );

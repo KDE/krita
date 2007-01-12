@@ -104,7 +104,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     if (m_mode == PAINT) {
         QPointF pos = convertToPixelCoord(e);
 
-        paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e->pos(), e->pressure(), e->xTilt(), e->yTilt());
+        paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, pos, e->pressure(), e->xTilt(), e->yTilt());
 
         m_prevPos = pos;
         m_prevPressure = e->pressure();

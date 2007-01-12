@@ -20,6 +20,7 @@
 #include <KoVariable.h>
 
 #include <QString>
+#include <QVariant>
 
 /**
  * Base class for in-text variables.
@@ -33,4 +34,6 @@ public:
      * Constructor.
      */
     KoDateVariable();
+
+    void propertyChanged(Property key, const QVariant &value);
 };

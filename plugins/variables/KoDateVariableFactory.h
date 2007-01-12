@@ -29,7 +29,7 @@ public:
     explicit KoDateVariableFactory(QObject *parent);
     ~KoDateVariableFactory() {}
 
-    KoInlineObjectBase *createInlineObject();
+    KoInlineObject *createInlineObject();
 
     ObjectType type() const { return TextVariable; }
 };

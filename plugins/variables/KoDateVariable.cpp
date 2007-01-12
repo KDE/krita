@@ -19,6 +19,11 @@
 
 #include "KoDateVariable.h"
 
-KoDateVariable::KoDateVariable() {
-    setValue("Yesterday");
+KoDateVariable::KoDateVariable() : KoVariable(true) {
+    setValue("NoValue");
+}
+
+void KoDateVariable::propertyChanged(Property key, const QVariant &value) {
+    if(key == KoInlineObject::KWordStart)
+        setValue(QString::number(value.toInt()));
 }

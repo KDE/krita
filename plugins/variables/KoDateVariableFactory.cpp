@@ -27,6 +27,6 @@ KoDateVariableFactory::KoDateVariableFactory(QObject *parent)
 {
 }
 
-KoInlineObjectBase *KoDateVariableFactory::createInlineObject() {
+KoInlineObject *KoDateVariableFactory::createInlineObject() {
     return new KoDateVariable();
 }

@@ -200,6 +200,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInsta
     connect(d->m_groups,SIGNAL( selectionChanged()),this,SLOT(slotSelectionChanged()));
 
     d->m_remove->setEnabled(d->m_groups->currentItem());
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 KoTemplateCreateDia::~KoTemplateCreateDia() {

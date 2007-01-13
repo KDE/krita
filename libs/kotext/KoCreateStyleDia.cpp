@@ -44,6 +44,7 @@ KoCreateStyleDia::KoCreateStyleDia( const QStringList & _list, QWidget *parent, 
     connect( m_styleName, SIGNAL(textChanged ( const QString & )), this, SLOT(nameChanged( const QString &)));
     m_styleName->setFocus();
     enableButtonOk( false );
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 void KoCreateStyleDia::slotOk()

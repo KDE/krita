@@ -110,6 +110,7 @@ KoSearchDia::KoSearchDia( QWidget * parent,const char *name, KoSearchContext *fi
     m_findUI = new KoSearchContextUI( find, findExtension() );
     setHasSelection(hasSelection);
     setHasCursor(hasCursor);
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 void KoSearchDia::slotOk()
@@ -131,6 +132,7 @@ KoReplaceDia::KoReplaceDia( QWidget *parent, const char *name, KoSearchContext *
     // Look whether we have a selection, and/or a cursor
     setHasSelection(hasSelection);
     setHasCursor(hasCursor);
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 void KoReplaceDia::slotOk()

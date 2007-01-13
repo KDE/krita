@@ -2079,6 +2079,8 @@ KoParagDia::KoParagDia( QWidget* parent,
     }
 
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
     setInitialSize( QSize(630, 500) );
 }
 

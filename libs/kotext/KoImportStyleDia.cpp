@@ -49,6 +49,7 @@ KoImportStyleDia::KoImportStyleDia( KoStyleCollection* currentCollection, QWidge
     enableButtonOk( m_listStyleName->count() != 0 );
     setButtonText( KDialog::User1, i18n("Load...") );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotLoadFile()));
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
     setInitialSize( QSize( 300, 400 ) );
     setFocus();
 }

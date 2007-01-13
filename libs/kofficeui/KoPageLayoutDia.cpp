@@ -170,6 +170,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
 
     setFocusPolicy( Qt::StrongFocus );
     setFocus();
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 /*==================== constructor ===============================*/
@@ -204,6 +205,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
 
     setFocusPolicy( Qt::StrongFocus );
     setFocus();
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 /*===================== destructor ===============================*/

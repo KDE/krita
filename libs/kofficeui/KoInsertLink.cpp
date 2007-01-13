@@ -78,7 +78,7 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displa
   }
 
   connect( this, SIGNAL( aboutToShowPage(QWidget *) ), this, SLOT( tabChanged(QWidget *) ) );
-
+  connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
   slotTextChanged ( );
   resize(400,300);
 }

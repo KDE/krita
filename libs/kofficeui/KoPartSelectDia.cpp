@@ -47,7 +47,7 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
     listview->setShowSortIndicator( true );
     setMainWidget( listview );
     connect( listview, SIGNAL( doubleClicked( Q3ListViewItem * ) ),
-	     this, SLOT( slotOk() ) );
+	     this, SLOT( accept() ) );
     connect( listview, SIGNAL( selectionChanged( Q3ListViewItem * ) ),
 	     this, SLOT( selectionChanged( Q3ListViewItem * ) ) );
 

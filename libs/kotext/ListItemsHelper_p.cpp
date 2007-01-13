@@ -59,23 +59,68 @@ static QString intToAlpha( int n, Capitalisation caps ) {
 
 static QString intToScript(int n, KoListStyle::Style type) {
     // 10-base
-    static const QByteArray bengali[] = { "০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯" };
-    static const QByteArray gujarati[] = { "૦","૧","૨","૩","૪","૫","૬","૭","૮","૯" };
-    static const QByteArray gurumukhi[] = { "੦","੧","੨","੩","੪","੫","੬","੭","੮","੯"};
-    static const QByteArray kannada[] = { "೦","೧","೨","೩","೪","೫","೬","೭","೮","೯"};
-    static const QByteArray malayalam[] = { "൦","൧","൨","൩","൪","൫","൬","൭","൮","൯"};
-    static const QByteArray oriya[] = { "୦","୧","୨","୩","୪","୫","୬","୭","୮","୯"};
-    static const QByteArray tamil[] = { "௦","௧","௨","௩","௪","௫","௬","௭","௮","௯"};
-    static const QByteArray telugu[] = { "౦","౧","౨","౩","౪","౫","౬","౭","౮","౯"};
-    static const QByteArray tibetan[] = { "༠","༡","༢","༣","༤","༥","༦","༧","༨","༩"};
-    static const QByteArray thai[] = { "๐","๑","๒","๓","๔","๕","๖","๗","๘","๙" };
+    static const int bengali = 0x9e6;
+    static const int gujarati = 0xae6;
+    static const int gurumukhi = 0xa66;
+    static const int kannada = 0xce6;
+    static const int malayalam = 0xd66;
+    static const int oriya = 0xb66;
+    static const int tamil = 0x0be6;
+    static const int telugu = 0xc66;
+    static const int tibetan = 0xf20;
+    static const int thai = 0xe50;
+
+    int offset;
+    switch(type) {
+        case KoListStyle::Bengali:
+            offset = bengali;
+            break;
+        case KoListStyle::Gujarati:
+            offset = gujarati;
+            break;
+        case KoListStyle::Gurumukhi:
+            offset = gurumukhi;
+            break;
+        case KoListStyle::Kannada:
+            offset = kannada;
+            break;
+        case KoListStyle::Malayalam:
+            offset = malayalam;
+            break;
+        case KoListStyle::Oriya:
+            offset = oriya;
+            break;
+        case KoListStyle::Tamil:
+            offset = tamil;
+            break;
+        case KoListStyle::Telugu:
+            offset = telugu;
+            break;
+        case KoListStyle::Tibetan:
+            offset = tibetan;
+            break;
+        case KoListStyle::Thai:
+            offset = thai;
+            break;
+        default:
+            return QString::number(n);
+    }
+    QString answer;
+    while(n > 0) {
+        answer.prepend( QChar(offset + n % 10) );
+        n = n / 10;
+    }
+    return answer;
+}
+
+static QString intToScriptList(int n, KoListStyle::Style type) {
     // 1 time Sequences
     // note; the leading X is to make these 1 based.
-    static const QByteArray Abjad[] = { "X", "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
+    static const char* Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
         "ن", "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ" };
-    static const QByteArray Abjad2[] = { "X", "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
+    static const char* Abjad2[] = { "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
         "ﻥ", "ﺹ", "ﻉ", "ﻑ", "ﺽ", "ﻕ", "ﺭ", "ﺱ", "ﺕ", "ﺙ", "ﺥ", "ﺫ", "ﻅ", "ﻍ", "ﺵ" };
-    static const QByteArray ArabicAlphabet[] = { "X", "ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
+    static const char* ArabicAlphabet[] = {"ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
         "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي" };
 
 /*
@@ -94,56 +139,19 @@ http://en.wikipedia.org/wiki/Japanese_numerals
 'http://en.wikipedia.org/wiki/Abjad_numerals'
 */
 
-    const QByteArray *numerals;
     switch(type) {
-        case KoListStyle::Bengali:
-            numerals = bengali;
-            break;
-        case KoListStyle::Gujarati:
-            numerals = gujarati;
-            break;
-        case KoListStyle::Gurumukhi:
-            numerals = gurumukhi;
-            break;
-        case KoListStyle::Kannada:
-            numerals = kannada;
-            break;
-        case KoListStyle::Malayalam:
-            numerals = malayalam;
-            break;
-        case KoListStyle::Oriya:
-            numerals = oriya;
-            break;
-        case KoListStyle::Tamil:
-            numerals = tamil;
-            break;
-        case KoListStyle::Telugu:
-            numerals = telugu;
-            break;
-        case KoListStyle::Tibetan:
-            numerals = tibetan;
-            break;
-        case KoListStyle::Thai:
-            numerals = thai;
-            break;
         case KoListStyle::Abjad:
             if( n > 22) return "*";
-            return QString::fromUtf8(Abjad[n].data());
+            return QString::fromUtf8(Abjad[n-1]);
         case KoListStyle::AbjadMinor:
             if( n > 22) return "*";
-            return QString::fromUtf8(Abjad2[n].data());
+            return QString::fromUtf8(Abjad2[n-1]);
         case KoListStyle::ArabicAlphabet:
             if( n > 28) return "*";
-            return QString::fromUtf8(ArabicAlphabet[n].data());
+            return QString::fromUtf8(ArabicAlphabet[n-1]);
         default:
             return QString::number(n);
     }
-    QString answer;
-    while(n > 0) {
-        answer.prepend( QString::fromUtf8(numerals[n %10].data()) );
-        n = n / 10;
-    }
-    return answer;
 }
 
 // ------------------- ListItemsHelper ------------
@@ -287,10 +295,12 @@ Q_ASSERT(otherData);
             case KoListStyle::Telugu:
             case KoListStyle::Tibetan:
             case KoListStyle::Thai:
+                partialCounterText = intToScript(index, listStyle);
+                break;
             case KoListStyle::Abjad:
             case KoListStyle::ArabicAlphabet:
             case KoListStyle::AbjadMinor:
-                partialCounterText = intToScript(index, listStyle);
+                partialCounterText = intToScriptList(index, listStyle);
                 break;
             default:  // others we ignore.
                 calcWidth = false;

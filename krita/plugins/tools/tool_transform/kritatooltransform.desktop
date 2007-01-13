@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Transform Tool
 Name[fr]=Outil transformation
+Name[ja]=変換ツール
 Name[x-test]=xxTransform Toolxx
 ServiceTypes=Krita/Tool
 Type=Service

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Wet & Sticky Canvas Color Model
 Name[fr]=Modèle de couleurs gluantes et mouillées
+Name[ja]=Wet & Sticky キャンバスカラーモデル
 Name[x-test]=xxWet & Sticky Canvas Color Modelxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service

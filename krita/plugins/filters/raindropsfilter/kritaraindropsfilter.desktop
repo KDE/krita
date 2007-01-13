@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Raindrops Filter
 Name[fr]=Filtre gouttes de pluie
+Name[ja]=雨滴フィルタ
 Name[x-test]=xxRaindrops Filterxx
 Comment=Raindrops filter
 Comment[fr]=Filtre gouttes de pluie
+Comment[ja]=雨滴フィルタ
 Comment[x-test]=xxRaindrops filterxx
 ServiceTypes=Krita/Filter
 Type=Service

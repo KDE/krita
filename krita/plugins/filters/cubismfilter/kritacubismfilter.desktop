@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Cubism Filter
 Name[fr]=Filtre de cubisme
+Name[ja]=キュビズムフィルタ
 Name[x-test]=xxCubism Filterxx
 Comment=Cubism filter
 Comment[fr]=Filtre de cubisme
+Comment[ja]=キュビズムフィルタ
 Comment[x-test]=xxCubism filterxx
 ServiceTypes=Krita/Filter
 Type=Service

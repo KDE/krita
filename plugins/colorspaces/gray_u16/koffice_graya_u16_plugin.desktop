@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Grayscale Color Model with Alpha Channel (16-bit integer)
 Comment=Color model for 16-bit integer per channel Grayscale images
 Comment[fr]=Modèle de couleurs pour des images en nivaux de gris à 16 bits/plage
+Comment[ja]=16 ビット整数/チャンネル グレースケール画像のためのカラーモデル
 Comment[x-test]=xxColor model for 16-bit integer per channel Grayscale imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service

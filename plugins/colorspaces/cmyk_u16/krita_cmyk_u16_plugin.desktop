@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=CMYK Color Model (16-bit integer)
 Name[fr]=Modèle de couleurs CMYK (entiers 16 bits)
+Name[ja]=CMYK カラーモデル (16 ビット整数)
 Name[x-test]=xxCMYK Color Model (16-bit integer)xx
 Comment=Color model for 16-bit integer per channel CMYK images
 Comment[fr]=Modèle de couleurs pour des images CMYK à 16 bits/plage
+Comment[ja]=16 ビット整数/チャンネル CMYK 画像のためのカラーモデル
 Comment[x-test]=xxColor model for 16-bit integer per channel CMYK imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service

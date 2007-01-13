@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Separate Channels Plugin
 Name[fr]=Module de séparation des canaux
+Name[ja]=チャンネル分離プラグイン
 Name[x-test]=xxSeparate Channels Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

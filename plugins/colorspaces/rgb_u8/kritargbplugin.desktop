@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=RGB Color Model
 Name[fr]=Modèle de couleurs RVB
+Name[ja]=RGB カラーモデル
 Name[x-test]=xxRGB Color Modelxx
 Comment=Color model for 8-bit/channel RGB images
 Comment[fr]=Modèle de couleurs pour des images RVB en 8 bits/plage
+Comment[ja]=8 ビット/チャンネル RGB 画像のためのカラーモデル
 Comment[x-test]=xxColor model for 8-bit/channel RGB imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service

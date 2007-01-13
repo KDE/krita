@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Small Tiles Filter
 Name[fr]=Filtre mosaïque
+Name[ja]=小タイルフィルタ
 Name[x-test]=xxSmall Tiles Filterxx
 ServiceTypes=Krita/Filter
 Type=Service

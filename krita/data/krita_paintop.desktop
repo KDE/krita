@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=Krita/Paintop
 Comment=Paint operation plugin for Krita
 Comment[fr]=Module d'opération pour Krita
+Comment[ja]=Krita 描画操作プラグイン
 Comment[x-test]=xxPaint operation plugin for Kritaxx
 [PropertyDef::X-Krita-Version]
 Type=int

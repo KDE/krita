@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Star Tool
 Name[fr]=Outil étoile
+Name[ja]=星型ツール
 Name[x-test]=xxStar Toolxx
 ServiceTypes=Krita/Tool
 Type=Service

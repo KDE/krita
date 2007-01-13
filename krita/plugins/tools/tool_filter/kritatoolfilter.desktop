@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Filter Tool
 Name[fr]=Outil filtre
+Name[ja]=フィルタツール
 Name[x-test]=xxFilter Toolxx
 Comment=Filter tool and paint operation
 Comment[fr]=Outil de filtrage et opération de dessin
+Comment[ja]=フィルタツールと画像操作
 Comment[x-test]=xxFilter tool and paint operationxx
 ServiceTypes=Krita/Tool
 Type=Service

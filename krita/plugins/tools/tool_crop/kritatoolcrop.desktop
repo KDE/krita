@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Crop Tool
 Name[fr]=Outil découpage
+Name[ja]=切り取りツール
 Name[x-test]=xxCrop Toolxx
 ServiceTypes=Krita/Tool
 Type=Service

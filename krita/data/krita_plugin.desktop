@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=Krita/ViewPlugin
 Comment=GUI functionality for Krita
 Comment[fr]=Interface graphique pour Krita
+Comment[ja]=Krita の GUI 機能
 Comment[x-test]=xxGUI functionality for Kritaxx
 [PropertyDef::X-Krita-Version]
 Type=int

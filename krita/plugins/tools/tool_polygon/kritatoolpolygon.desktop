@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Polygon Tool
 Name[fr]=Outil polygone
+Name[ja]=多角形ツール
 Name[x-test]=xxPolygon Toolxx
 ServiceTypes=Krita/Tool
 Type=Service

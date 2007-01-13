@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Scripting plugin
 Name[fr]=Module de scriptage
+Name[ja]=スクリプトプラグイン
 Name[x-test]=xxScripting pluginxx
 Comment=Allow execution of scripts
 Comment[fr]=Permet d'exécuter des scripts
+Comment[ja]=スクリプトの実行を可能にします
 Comment[x-test]=xxAllow execution of scriptsxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

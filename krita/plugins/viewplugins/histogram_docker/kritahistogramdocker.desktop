@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Histogram Docker
 Name[fr]=Ancrage d'histogramme
+Name[ja]=ヒストグラムドッカー
 Name[x-test]=xxHistogram Dockerxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

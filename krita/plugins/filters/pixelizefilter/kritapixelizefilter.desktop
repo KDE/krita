@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Pixelize Filter
 Name[fr]=Filtre pixélisation
+Name[ja]=ピクセル化フィルタ
 Name[x-test]=xxPixelize Filterxx
 Comment=Pixelize filter
 Comment[fr]=Filtre pixélisation
+Comment[ja]=ピクセル化フィルタ
 Comment[x-test]=xxPixelize filterxx
 ServiceTypes=Krita/Filter
 Type=Service

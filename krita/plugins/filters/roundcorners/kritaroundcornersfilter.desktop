@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Sobel Filter
 Name[fr]=Filtre de Sobel
+Name[ja]=ソーベルフィルタ
 Name[x-test]=xxSobel Filterxx
 ServiceTypes=Krita/Filter
 Type=Service

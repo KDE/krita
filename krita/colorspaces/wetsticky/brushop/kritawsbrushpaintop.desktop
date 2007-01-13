@@ -5,6 +5,7 @@ Name[fr]=Pinceau paintop mouillé et gluant
 Name[x-test]=xxWet & Sticky Paintbrush Paintopxx
 Comment=Wet & Sticky paintbrush
 Comment[fr]=Pinceau mouillé et gluant
+Comment[ja]=Wet & Sticky ペイントブラシ
 Comment[x-test]=xxWet & Sticky paintbrushxx
 ServiceTypes=Krita/ColorSpace
 Type=Service

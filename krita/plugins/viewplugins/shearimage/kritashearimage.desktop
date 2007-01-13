@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Shear Image Plugin
 Name[fr]=Module de rognage d'images
+Name[ja]=画像剪断変形プラグイン
 Name[x-test]=xxShear Image Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

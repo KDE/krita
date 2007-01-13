@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Bumpmap Filter
 Name[fr]=Filtre bumpmap
+Name[ja]=Bumpmap フィルタ
 Name[x-test]=xxBumpmap Filterxx
 Comment=Bumpmap filter
 Comment[fr]=Filtre bumpmap
+Comment[ja]=Bumpmap フィルタ
 Comment[x-test]=xxBumpmap filterxx
 ServiceTypes=Krita/Filter
 Type=Service

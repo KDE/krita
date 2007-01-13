@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Convolution Filters
 Name[fr]=Filtres de convolution
+Name[ja]=コンヴォリューションフィルタ
 Name[x-test]=xxConvolution Filtersxx
 Comment=Convolution filters
 Comment[fr]=Filtres de déformations
+Comment[ja]=コンヴォリューションフィルタ
 Comment[x-test]=xxConvolution filtersxx
 ServiceTypes=Krita/Filter
 Type=Service

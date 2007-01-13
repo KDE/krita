@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Selection Tools
 Name[fr]=Outils de sélection
+Name[ja]=選択ツール
 Name[x-test]=xxSelection Toolsxx
 ServiceTypes=Krita/Tool
 Type=Service

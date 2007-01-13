@@ -5,9 +5,11 @@ URL=.source/white_2000x800.kra
 Icon=template_cmyk_empty
 Name=White 2000 x 800
 Name[fr]=Image blanche 2000 x 800
+Name[ja]=白 2000 x 800
 Name[x-test]=xxWhite 2000 x 800xx
 Comment=Creates a white CMYK image of 2000 x 800 pixels.
 Comment[fr]=Crée une image CMYK blanche de 2000 x 800 pixels.
+Comment[ja]=2000 x 800 ピクセルの CMYK 画像を作成
 Comment[x-test]=xxCreates a white CMYK image of 2000 x 800 pixels.xx
 X-Krita-Version=2
 

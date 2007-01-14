@@ -163,6 +163,23 @@ void KoCreatePathTool::activate( bool temporary )
 {
     Q_UNUSED( temporary );
     useCursor(Qt::ArrowCursor, true);
+
+    // retrieve the actual global handle radius
+    m_handleRadius = m_canvas->resourceProvider()->handleRadius();
+}
+
+void KoCreatePathTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
+{
+    switch( key )
+    {
+        case KoCanvasResource::HandleRadius:
+            {
+                m_handleRadius = res.toUInt();
+            }
+            break;
+        default:
+            return;
+    }
 }
 
 void KoCreatePathTool::addPathShape()

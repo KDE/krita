@@ -46,6 +46,7 @@ public:
 
 public slots:
     void activate( bool temporary = false );
+    void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
 
 protected:
     /// add path shape to document

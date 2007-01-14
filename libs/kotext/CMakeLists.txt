@@ -76,7 +76,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoInlineTextObjectManager.cpp
     KoInlineObjectFactory.cpp
     KoInlineObjectRegistry.cpp
-    InsertVariableAction_p.cpp
+#    InsertVariableAction_p.cpp
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
     styles/KoParagraphStyle.cpp

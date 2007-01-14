@@ -121,8 +121,6 @@ int KoTextTool::pointToPosition(const QPointF & point) const {
 }
 
 void KoTextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
-    Q_UNUSED( event );
-
     // TODO select whole word, or when clicking in between two words select 2 words.
 }
 

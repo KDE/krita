@@ -49,14 +49,16 @@ DlgDropshadow::DlgDropshadow( const QString & /*imageCS*/,
     resize(m_page->sizeHint());
 
     KConfig * cfg = KGlobal::config();
-    m_page->xOffsetSpinBox->setValue( cfg->readEntry<int>("dropshadow_x", 8) );
-    m_page->yOffsetSpinBox->setValue( cfg->readEntry<int>("dropshadow_y", 8) );
-    m_page->blurRadiusSpinBox->setValue( cfg->readEntry<int>("dropshadow_blurRadius", 5) );
+    cfg->setGroup("dropshadow");
+    m_page->xOffsetSpinBox->setValue( cfg->readEntry<int>("x", 8) );
+    m_page->yOffsetSpinBox->setValue( cfg->readEntry<int>("y", 8) );
+    m_page->blurRadiusSpinBox->setValue( cfg->readEntry<int>("blurRadius", 5) );
     QColor black(0,0,0);
-    m_page->shadowColorButton->setColor( cfg->readEntry<QColor>("dropshadow_color", Qt::black) );
-    m_page->opacitySlider->setValue( cfg->readEntry<int>("dropshadow_opacity", 80 ) );
-    m_page->opacitySpinBox->setValue( cfg->readEntry<int>("dropshadow_opacity", 80 ) );
-    m_page->allowResizingCheckBox->setChecked( cfg->readEntry<bool>("dropshadow_resizing", true ) );
+    m_page->shadowColorButton->setColor( cfg->readEntry<QColor>("color", Qt::black) );
+    m_page->opacitySlider->setValue( cfg->readEntry<int>("opacity", 80 ) );
+    m_page->opacitySpinBox->setValue( cfg->readEntry<int>("opacity", 80 ) );
+    m_page->allowResizingCheckBox->setChecked( cfg->readEntry<bool>("resizing", true ) );
+    cfg->setGroup("");
     
     connect(this, SIGNAL(okClicked()),
         this, SLOT(okClicked()));
@@ -104,13 +106,14 @@ bool DlgDropshadow::allowResizingChecked()
 void DlgDropshadow::okClicked()
 {
     KConfig * cfg = KGlobal::config();
-    cfg->writeEntry("dropshadow_x", m_page->xOffsetSpinBox->value());
-    cfg->writeEntry("dropshadow_y", m_page->yOffsetSpinBox->value());
-    cfg->writeEntry("dropshadow_blurRadius", m_page->blurRadiusSpinBox->value());
-    cfg->writeEntry("dropshadow_color", m_page->shadowColorButton->color());
-    cfg->writeEntry("dropshadow_opacity", m_page->opacitySpinBox->value());
-    cfg->writeEntry("dropshadow_resizing", m_page->allowResizingCheckBox->isChecked());
-    
+    cfg->setGroup("dropshadow");
+    cfg->writeEntry("x", m_page->xOffsetSpinBox->value());
+    cfg->writeEntry("y", m_page->yOffsetSpinBox->value());
+    cfg->writeEntry("blurRadius", m_page->blurRadiusSpinBox->value());
+    cfg->writeEntry("color", m_page->shadowColorButton->color());
+    cfg->writeEntry("opacity", m_page->opacitySpinBox->value());
+    cfg->writeEntry("resizing", m_page->allowResizingCheckBox->isChecked());
+    cfg->setGroup("");
     accept();
 }
 

@@ -88,13 +88,6 @@ private slots:
     void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
 private:
 
-    /// the different path point types
-    enum PointType {
-        Corner,
-        Smooth,
-        Symmetric
-    };
-
     class ActiveHandle
     {
     public:    

@@ -98,37 +98,46 @@ private:
 };
 
 /// The undo / redo command for changing the path point type.
-class KoPointPropertyCommand : public KoPathBaseCommand {
+class KoPointTypeCommand : public KoPathBaseCommand
+{
 public:
+    /// The type of the point
+    enum PointType
+    {
+        Corner,
+        Smooth,
+        Symmetric
+    };
     /**
-     * Command to change the properties of a single point
-     * @param point the path point to change properties for
-     * @param property the new point properties to set
+     * Command to change the type of the given points
+     * @param pointDataList List of point for changing the points
+     * @param pointType the new point type to set
      * @param parent the parent command used for macro commands
      */
-    KoPointPropertyCommand( KoPathPoint *point, KoPathPoint::KoPointProperties property, QUndoCommand *parent = 0 );
-    /**
-     * Command to change the properties of multiple points
-     * @param points the path point whose properties to change
-     * @param properties the new properties to set
-     * @param parent the parent command used for macro commands
-     */
-    KoPointPropertyCommand( const QList<KoPathPoint*> &points, const QList<KoPathPoint::KoPointProperties> &properties,
-                            QUndoCommand *parent = 0 );
+    KoPointTypeCommand( const QList<KoPathPointData> & pointDataList, PointType pointType, QUndoCommand *parent = 0 );
+    ~KoPointTypeCommand();
+
     /// redo the command
     void redo();
     /// revert the actions done in redo
     void undo();
-private:
-    typedef struct PointPropertyChangeset
+
+private:    
+    // used for storing the data for undo
+    struct PointData
     {
-        KoPathPoint *point;
-        KoPathPoint::KoPointProperties oldProperty;
-        KoPathPoint::KoPointProperties newProperty;
-        QPointF firstControlPoint;
-        QPointF secondControlPoint;
+        PointData( const KoPathPointData pointData )
+        : m_pointData( pointData )
+        {}
+        KoPathPointData m_pointData;
+        // old control points in document coordinates
+        QPointF m_oldControlPoint1;
+        QPointF m_oldControlPoint2;
+        KoPathPoint::KoPointProperties m_oldProperties;
     };
-    QList<PointPropertyChangeset> m_changesets;
+
+    PointType m_pointType;
+    QList<PointData> m_oldPointData;
 };
 
 /// The undo / redo command for removing path points.

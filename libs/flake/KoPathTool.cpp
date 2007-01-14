@@ -62,19 +62,19 @@ QWidget * KoPathTool::createOptionWidget() {
     button = new QToolButton( optionWidget );
     button->setIcon( SmallIcon("pathpoint-corner") );
     button->setToolTip( i18n( "Corner point" ) );
-    m_pointTypeGroup->addButton( button, Corner );
+    m_pointTypeGroup->addButton( button, KoPointTypeCommand::Corner );
     layout->addWidget( button, 0, 0 );
 
     button = new QToolButton( optionWidget );
     button->setIcon( SmallIcon("pathpoint-smooth") );
     button->setToolTip( i18n( "Smooth point" ) );
-    m_pointTypeGroup->addButton( button, Smooth );
+    m_pointTypeGroup->addButton( button, KoPointTypeCommand::Smooth );
     layout->addWidget( button, 0, 1 );
 
     button = new QToolButton( optionWidget );
     button->setIcon( SmallIcon("pathpoint-symmetric") );
     button->setToolTip( i18n( "Symmetric point" ) );
-    m_pointTypeGroup->addButton( button, Symmetric );
+    m_pointTypeGroup->addButton( button, KoPointTypeCommand::Symmetric );
     layout->addWidget( button, 0, 2 );
 
     button = new QToolButton( optionWidget );
@@ -144,45 +144,32 @@ QWidget * KoPathTool::createOptionWidget() {
     return optionWidget;
 }
 
-void KoPathTool::slotPointTypeChanged( int type ) {
-    QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
-    if( ! selectedPoints.size() )
-        return;
-
-    QList<KoPathPoint*> points;
-    QList<KoPathPoint::KoPointProperties> properties;
-
-    foreach( KoPathPoint *point, selectedPoints )
+void KoPathTool::slotPointTypeChanged( int type ) 
+{
+    if ( m_pointSelection.size() > 0 )
     {
-        KoPathPoint::KoPointProperties props = point->properties();
-        if( (props & KoPathPoint::HasControlPoint1) == 0 || (props & KoPathPoint::HasControlPoint2) == 0 )
-            continue;
+        QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
+        QList<KoPathPointData> pointToChange;
 
-        points.append( point );
-        if( type == Symmetric )
+        QList<KoPathPointData>::const_iterator it( selectedPoints.begin() );
+        for ( ; it != selectedPoints.end(); ++it )
         {
-            props &= ~KoPathPoint::IsSmooth;
-            props |= KoPathPoint::IsSymmetric;
-        }
-        else if( type == Smooth )
-        {
-            props &= ~KoPathPoint::IsSymmetric;
-            props |= KoPathPoint::IsSmooth;
-        }
-        else
-        {
-            props &= ~KoPathPoint::IsSymmetric;
-            props &= ~KoPathPoint::IsSmooth;
+            KoPathPoint *point = it->m_pathShape->pointByIndex( it->m_pointIndex );
+            if ( point )
+            {
+                if ( point->activeControlPoint1() && point->activeControlPoint2() )
+                {
+                    pointToChange.append( *it );
+                }
+            }
         }
 
-        properties.append( props );
-
+        if ( pointToChange.size() > 0 )
+        {
+            KoPointTypeCommand *cmd = new KoPointTypeCommand( pointToChange, (KoPointTypeCommand::PointType)type );
+            m_canvas->addCommand( cmd );
+        }
     }
-    if( points.count() == 0 )
-        return;
-
-    KoPointPropertyCommand *cmd = new KoPointPropertyCommand( points, properties );
-    m_canvas->addCommand( cmd );
 }
 
 void KoPathTool::insertPoints() 
@@ -736,18 +723,16 @@ void KoPathTool::ActivePointHandle::mousePressEvent( KoPointerEvent *event )
         if( (props & KoPathPoint::HasControlPoint1) == 0 || (props & KoPathPoint::HasControlPoint2) == 0 )
             return;
 
+        KoPointTypeCommand::PointType pointType = KoPointTypeCommand::Smooth;
         // cycle the smooth->symmetric->unsmooth state of the path point
         if( props & KoPathPoint::IsSmooth )
-        {
-            props &= ~KoPathPoint::IsSmooth;
-            props |= KoPathPoint::IsSymmetric;
-        }
+            pointType = KoPointTypeCommand::Symmetric;
         else if( props & KoPathPoint::IsSymmetric )
-            props &= ~KoPathPoint::IsSymmetric;
-        else
-            props |= KoPathPoint::IsSmooth;
+            pointType = KoPointTypeCommand::Corner;
 
-        KoPointPropertyCommand *cmd = new KoPointPropertyCommand( m_activePoint, props );
+        QList<KoPathPointData> pointData;
+        pointData.append( KoPathPointData( m_activePoint->parent(), m_activePoint->parent()->pathPointIndex( m_activePoint ) ) );
+        KoPointTypeCommand *cmd = new KoPointTypeCommand( pointData, pointType );
         m_tool->m_canvas->addCommand( cmd );
     }
 }

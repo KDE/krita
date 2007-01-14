@@ -54,6 +54,7 @@ public:
     void setStyleManager(KoStyleManager *sm);
 
     void setInlineObjectTextManager(KoInlineTextObjectManager *iom);
+    KoInlineTextObjectManager *inlineObjectTextManager();
 
     /// Returns the bounding rectangle of block.
     QRectF blockBoundingRect ( const QTextBlock & block ) const;

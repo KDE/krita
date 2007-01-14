@@ -28,6 +28,7 @@
 
 class KoTextShape;
 class KoTextShapeData;
+class KoVariable;
 class QTextCursor;
 
 /**
@@ -88,6 +89,8 @@ public:
     void insert(const QString &text);
     QString selectedText() const;
     void selectFont(QWidget *parent = 0);
+
+    void insertVariable(KoVariable *variable);
 
 protected:
     friend class KoTextTool;

@@ -548,6 +548,10 @@ void KoTextDocumentLayout::setInlineObjectTextManager(KoInlineTextObjectManager 
     m_inlineTextObjectManager = iom;
 }
 
+KoInlineTextObjectManager *KoTextDocumentLayout::inlineObjectTextManager() {
+    return m_inlineTextObjectManager;
+}
+
 QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const {
     // nobody calls this code and I have no way of implementing it anyway...
     Q_UNUSED(block);

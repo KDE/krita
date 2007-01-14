@@ -30,6 +30,8 @@ class QPainter;
 class QRectF;
 class QVariant;
 
+class KoInlineTextObjectManager;
+
 /**
  * Base class for all inline-text-objects.
  * In a KoTextShape you can insert objects that move with the text. They are essentially anchored to a specific
@@ -75,8 +77,12 @@ public:
 
     /// constructor
     KoInlineObject(bool propertyChangeListener = false)
-        : m_id(-1), m_propertyChangeListener(propertyChangeListener) {}
+        : m_manager(0), m_id(-1), m_propertyChangeListener(propertyChangeListener) {}
     virtual ~KoInlineObject() {}
+
+    void setManager(KoInlineTextObjectManager *manager) { m_manager = manager; }
+    virtual void initialize() {}
+
 
     /**
      * Update position of the inline object.
@@ -130,6 +136,9 @@ public:
     void setId(int id) { m_id = id; }
 
     bool propertyChangeListener() const { return m_propertyChangeListener; }
+
+protected:
+    KoInlineTextObjectManager *m_manager;
 
 private:
     int m_id;

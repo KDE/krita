@@ -19,6 +19,10 @@
 
 #include "KoTextSelectionHandler.h"
 #include "KoFontDia.h"
+#include "KoTextDocumentLayout.h"
+#include "KoTextShapeData.h"
+#include "KoInlineTextObjectManager.h"
+#include "KoVariable.h"
 
 #include <kdebug.h>
 #include <QTextCharFormat>
@@ -117,3 +121,11 @@ void KoTextSelectionHandler::selectFont(QWidget *parent) {
     m_caret->setCharFormat(fontDlg->format());
     delete fontDlg;
 }
+
+void KoTextSelectionHandler::insertVariable(KoVariable *variable) {
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+    Q_ASSERT(layout);
+    Q_ASSERT(layout->inlineObjectTextManager());
+    layout->inlineObjectTextManager()->insertInlineObject(*m_caret, variable);
+}
+

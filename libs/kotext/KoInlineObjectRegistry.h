@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,14 +20,15 @@
 #ifndef KOINLINEOBJECTREGISTRY_H
 #define KOINLINEOBJECTREGISTRY_H
 
-#include <QObject>
-
 #include <KoGenericRegistry.h>
-
 #include <koffice_export.h>
+#include <QObject>
+#include <QList>
 
 class KoShape;
+class KAction;
 class KoInlineObjectFactory;
+class KoCanvasBase;
 
 /**
  * This singleton class keeps a register of all available flake shapes,
@@ -45,6 +46,8 @@ public:
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
     static KoInlineObjectRegistry * instance();
+
+    QList<KAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
 private:
     KoInlineObjectRegistry() {}

@@ -81,7 +81,7 @@ public:
      * return the basename of the icon for this inlineObject when its shown in menus
      * @return the basename of the icon for this inlineObject when its shown in menus
      */
-    const QString & icon() const;
+    const QString & icon() const { return m_iconName; }
 
     /**
      * Returns the type of object this factory creates.
@@ -96,7 +96,7 @@ protected:
      * @param iconName the basename (without extension) of the icon
      * @see KIconLoader
      */
-    void setIcon(const QString & iconName);
+    void setIcon(const QString & iconName) { m_iconName = iconName; }
 
 private:
     const QString m_id, m_name;

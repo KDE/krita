@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,10 +18,13 @@
  */
 
 #include "KoInlineObjectRegistry.h"
+#include "KoInlineObjectFactory.h"
+#include "InsertVariableAction_p.h"
 
+#include <KoCanvasBase.h>
 #include <KoPluginLoader.h>
 
-//#include <kdebug.h>
+#include <kdebug.h>
 #include <kstaticdeleter.h>
 
 void KoInlineObjectRegistry::init() {
@@ -38,6 +41,16 @@ KoInlineObjectRegistry* KoInlineObjectRegistry::instance() {
         KoInlineObjectRegistry::s_instance->init();
     }
     return KoInlineObjectRegistry::s_instance;
+}
+
+QList<KAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const {
+    QList<KAction*> answer;
+    foreach(QString key, keys()) {
+        KoInlineObjectFactory *factory = get(key);
+        if(factory->type() == KoInlineObjectFactory::TextVariable)
+            answer.append(new InsertVariableAction(host, factory));
+    }
+    return answer;
 }
 
 #include "KoInlineObjectRegistry.moc"

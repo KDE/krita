@@ -45,6 +45,7 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     cursor.insertText(QString(0xFFFC), cf);
     object->setId(m_lastObjectId);
     m_objects.insert(m_lastObjectId, object);
+    object->setManager(this);
     if(object->propertyChangeListener())
         m_listeners.append(object);
 }

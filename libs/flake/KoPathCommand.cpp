@@ -874,7 +874,7 @@ KoBreakAtPointCommand::KoBreakAtPointCommand( const QList<KoPathPointData> & poi
     QList<KoPathPointData>::const_iterator it( sortedPointDataList.begin() );
     for ( ; it != sortedPointDataList.end(); ++it )
     {
-        KoPathPoint *point = it->m_pathShape->pointByIndex(  it->m_pointIndex );
+        KoPathPoint *point = it->m_pathShape->pointByIndex( it->m_pointIndex );
         if ( point )
         {
             m_pointDataList.append( *it );
@@ -997,82 +997,106 @@ void KoBreakAtPointCommand::undo()
     m_deletePoints = true;
 }
 
-
-KoSegmentTypeCommand::KoSegmentTypeCommand( KoPathShape *shape, const KoPathSegment &segment, bool changeToLine, QUndoCommand *parent )
-: KoPathBaseCommand( shape, parent )
-, m_changeToLine( changeToLine )
+KoSegmentTypeCommand::KoSegmentTypeCommand( const QList<KoPathPointData> & pointDataList, SegmentType segmentType, 
+                                            QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_segmentType( segmentType )    
 {
-    if( segment.first && segment.second )
-        m_segments.append( segment );
-
-    setText( i18n( "Change segment type" ) );
-}
-
-KoSegmentTypeCommand::KoSegmentTypeCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, bool changeToLine, QUndoCommand *parent )
-: KoPathBaseCommand( shape, parent )
-, m_changeToLine( changeToLine )
-{
-    foreach( KoPathSegment segment, segments )
+    QList<KoPathPointData>::const_iterator it( pointDataList.begin() ); 
+    for ( ; it != pointDataList.end(); ++it )
     {
-        if( segment.first && segment.second )
-            m_segments.append( segment );
+        KoPathSegment segment = it->m_pathShape->segmentByIndex( it->m_pointIndex );
+        if ( segment.first && segment.second )
+        {
+            if ( m_segmentType == Curve )
+            {
+                if ( segment.first->activeControlPoint2() || segment.second->activeControlPoint1() )
+                    continue;
+            }
+            else 
+            {
+                if ( ! segment.first->activeControlPoint2() && ! segment.second->activeControlPoint1() )
+                    continue;
+            }
+
+            m_pointDataList.append( *it );
+            SegmentTypeData segmentData;
+
+            KoPathShape * pathShape = segment.first->parent();
+
+            if ( m_segmentType == Curve )
+            {
+                segmentData.m_controlPoint2 = pathShape->shapeToDocument( segment.first->controlPoint2() );
+                segmentData.m_controlPoint1 = pathShape->shapeToDocument( segment.second->controlPoint1() );
+            }
+            segmentData.m_properties2 = segment.first->properties();
+            segmentData.m_properties1 = segment.second->properties();
+            m_segmentData.append( segmentData );
+        }
     }
 
-    setText( i18n( "Change segment type" ) );
+    if ( m_segmentType == Curve )
+    {
+        setText(  i18n(  "Change segments to curves" ) );
+    }
+    else
+    {
+        setText(  i18n(  "Change segments to lines" ) );
+    }
+}
+
+KoSegmentTypeCommand::~KoSegmentTypeCommand()
+{
 }
 
 void KoSegmentTypeCommand::redo()
 {
-    repaint( false );
-
-    m_oldPointData.clear();
-    foreach( KoPathSegment s, m_segments )
+    QList<KoPathPointData>::const_iterator it( m_pointDataList.begin() ); 
+    for ( ; it != m_pointDataList.end(); ++it )
     {
-        m_oldPointData.insert( s.first, *s.first );
-        m_oldPointData.insert( s.second, *s.second );
-    }
+        KoPathShape * pathShape = it->m_pathShape;
+        pathShape->repaint();
 
-    foreach( KoPathSegment s, m_segments )
-    {
-        if( m_changeToLine )
+        KoPathSegment segment = pathShape->segmentByIndex( it->m_pointIndex );
+
+        if ( m_segmentType == Curve )
         {
-            s.first->unsetProperty( KoPathPoint::HasControlPoint2 );
-            s.second->unsetProperty( KoPathPoint::HasControlPoint1 );
+            QPointF pointDiff = segment.second->point() - segment.first->point();
+            segment.first->setControlPoint2( segment.first->point() + pointDiff / 3.0 );
+            segment.second->setControlPoint1( segment.first->point() + pointDiff * 2.0 / 3.0 );
+            segment.first->setProperties( segment.first->properties() | KoPathPoint::HasControlPoint2 );
+            segment.second->setProperties( segment.second->properties() | KoPathPoint::HasControlPoint1 );
         }
         else
         {
-            // check if segment is already a curve
-            if( s.first->properties() & KoPathPoint::HasControlPoint2 || s.second->properties() & KoPathPoint::HasControlPoint1 )
-                continue;
-
-            QPointF pointDiff = s.second->point() - s.first->point();
-            s.first->setControlPoint2( s.first->point() + 0.3 * pointDiff );
-            s.second->setControlPoint1( s.first->point() + 0.7 * pointDiff );
+            segment.first->setProperties( segment.first->properties() & ~KoPathPoint::HasControlPoint2 );
+            segment.second->setProperties( segment.second->properties() & ~KoPathPoint::HasControlPoint1 );
         }
+
+        pathShape->normalize();
+        pathShape->repaint();
     }
-
-    QPointF offset = (*m_shapes.begin())->normalize();
-    QMatrix matrix;
-    matrix.translate( -offset.x(), -offset.y() );
-    QMap<KoPathPoint*, KoPathPoint>::iterator it = m_oldPointData.begin();
-    for(; it != m_oldPointData.end(); ++it )
-        it.value().map( matrix );
-
-    repaint( false );
 }
 
 void KoSegmentTypeCommand::undo()
 {
-    repaint( false );
-
-    KoPathPoint defaultPoint( 0, QPointF(0,0) );
-    foreach( KoPathSegment s, m_segments )
+    for ( int i = 0; i < m_pointDataList.size(); ++i )
     {
-        *s.first = m_oldPointData.value( s.first, defaultPoint );
-        *s.second = m_oldPointData.value( s.second, defaultPoint );
-    }
+        const KoPathPointData & pd = m_pointDataList.at( i );
+        pd.m_pathShape->repaint();
+        KoPathSegment segment = pd.m_pathShape->segmentByIndex( pd.m_pointIndex );
+        const SegmentTypeData segmentData( m_segmentData.at( i ) );
+        if ( m_segmentType == Curve )
+        {
+            segment.first->setControlPoint2( pd.m_pathShape->documentToShape( segmentData.m_controlPoint2 ) );
+            segment.second->setControlPoint1( pd.m_pathShape->documentToShape( segmentData.m_controlPoint1 ) );
+        }
+        segment.first->setProperties( segmentData.m_properties2 );
+        segment.second->setProperties( segmentData.m_properties1 );
 
-    repaint( true );
+        pd.m_pathShape->normalize();
+        pd.m_pathShape->repaint();
+    }
 }
 
 KoPathCombineCommand::KoPathCombineCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths,

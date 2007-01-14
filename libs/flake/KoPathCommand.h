@@ -310,35 +310,45 @@ private:
     bool m_deletePoints;
 };
 
-/// The undo / redo command for changing a segments type (curve/line)
-class KoSegmentTypeCommand : public KoPathBaseCommand
+/// The undo / redo command for changing segments to curves/lines
+class KoSegmentTypeCommand : public QUndoCommand
 {
 public:
+    /// Segment Types
+    enum SegmentType
+    {
+        Curve = 1,
+        Line = 2
+    };
+
     /**
-     * Command for changing a segments type (curve/line)
-     * @param shape the path shape whose subpath to close
-     * @param segment the segment to change the type of
-     * @param changeToLine if true, changes segment to line, else changes segment to curve
+     * Command for changing the segment type ( curve/line )
+     * @param pointDataList List of point data identifying the segements that should be changed.
+     * @param segmentType to which the segements should be changed to
      * @param parent the parent command used for macro commands
      */
-    KoSegmentTypeCommand( KoPathShape *shape, const KoPathSegment &segment, bool changeToLine, QUndoCommand *parent = 0 );
-    /**
-     * Command for changing a segments type (curve/line)
-     * @param shape the path shape whose subpath to close
-     * @param segments the segments to change the type of
-     * @param changeToLine if true, changes segments to lines, else changes segments to curves
-     * @param parent the parent command used for macro commands
-     */
-    KoSegmentTypeCommand( KoPathShape *shape, const QList<KoPathSegment> &segments, bool changeToLine,
-                          QUndoCommand *parent = 0 );
+    KoSegmentTypeCommand( const QList<KoPathPointData> & pointDataList, SegmentType segmentType, QUndoCommand *parent = 0 );
+    ~KoSegmentTypeCommand();
+
     /// redo the command
     void redo();
     /// revert the actions done in redo
     void undo();
+
 private:
-    QList<KoPathSegment> m_segments;
-    QMap<KoPathPoint*,KoPathPoint> m_oldPointData;
-    bool m_changeToLine;
+    // used for storing the data for undo
+    struct SegmentTypeData
+    {
+        // old control points in document coordinates
+        QPointF m_controlPoint1;
+        QPointF m_controlPoint2;
+        KoPathPoint::KoPointProperties m_properties1;
+        KoPathPoint::KoPointProperties m_properties2;
+    };
+
+    QList<KoPathPointData> m_pointDataList;
+    QList<SegmentTypeData> m_segmentData;
+    SegmentType m_segmentType;
 };
 
 class KoShapeControllerBase;

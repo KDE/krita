@@ -214,27 +214,27 @@ void KoPathTool::removePoints() {
     }
 }
 
-void KoPathTool::segmentToLine() {
-    if ( m_pointSelection.objectCount() == 1 )
+void KoPathTool::segmentToLine() 
+{
+    if ( m_pointSelection.size() > 1 )
     {
-        QList<KoPathSegment> segments = m_pointSelection.selectedSegments();
-        if( segments.size() )
+        QList<KoPathPointData> segments( m_pointSelection.selectedSegmentsData() );
+        if ( segments.size() > 0 )
         {
-            KoPathShape * pathShape = segments.at( 0 ).first->parent();
-            KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( pathShape, segments, true );
+            KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( segments, KoSegmentTypeCommand::Line );
             m_canvas->addCommand( cmd );
         }
     }
 }
 
-void KoPathTool::segmentToCurve() {
-    if ( m_pointSelection.objectCount() == 1 )
+void KoPathTool::segmentToCurve() 
+{
+    if ( m_pointSelection.size() > 1 )
     {
-        QList<KoPathSegment> segments = m_pointSelection.selectedSegments();
-        if( segments.size() )
+        QList<KoPathPointData> segments( m_pointSelection.selectedSegmentsData() );
+        if ( segments.size() > 0 )
         {
-            KoPathShape * pathShape = segments.at( 0 ).first->parent();
-            KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( pathShape, segments, false );
+            KoSegmentTypeCommand *cmd = new KoSegmentTypeCommand( segments, KoSegmentTypeCommand::Curve );
             m_canvas->addCommand( cmd );
         }
     }

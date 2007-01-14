@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,8 +19,14 @@
 
 #include <QString>
 
+#include <kconfig.h>
+
 #include "kis_types.h"
 #include "kis_filter_configuration.h"
+
+const KoID KisFilter::ConfigDefault = KoID("Default", i18n("Default"));
+const KoID KisFilter::ConfigDesigner = KoID("Designer", i18n("Designer"));
+const KoID KisFilter::ConfigLastUsed = KoID("Last Used", i18n("Last used"));
 
 KisFilter::KisFilter(const KoID& id, const QString & category, const QString & entry)
     : KisProgressSubject(0, id.id().toLatin1())
@@ -29,7 +35,6 @@ KisFilter::KisFilter(const KoID& id, const QString & category, const QString & e
     , m_category(category)
     , m_entry(entry)
 {
-    m_bookmarkedConfig.insert(i18n("default configuration"), designerConfiguration(0));
 }
 
 KisFilterConfiguration * KisFilter::designerConfiguration(const KisPaintDeviceSP)
@@ -44,8 +49,53 @@ KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, const Ki
 
 KisFilterConfiguration * KisFilter::defaultConfiguration(const KisPaintDeviceSP pd)
 {
- return designerConfiguration(pd); //TODO: implement the bookmarking mechanism
+  if(existInBookmark(KisFilter::ConfigDefault.id()))
+  {
+    return loadFromBookmark(KisFilter::ConfigDefault.id());
+  }
+  else if(existInBookmark(KisFilter::ConfigLastUsed.id()))
+  {
+    return loadFromBookmark(KisFilter::ConfigLastUsed.id());
+  }
+  else {
+    return designerConfiguration(pd);
+  }
 }
+
+QHash<QString, KisFilterConfiguration*> KisFilter::bookmarkedConfigurations( const KisPaintDeviceSP )
+{
+  QHash<QString, KisFilterConfiguration*> bookmarkedConfig;
+  bookmarkedConfig.insert(i18n("designer"), designerConfiguration(0));
+  return bookmarkedConfig;
+}
+
+
+void KisFilter::saveToBookmark(const QString& configname, KisFilterConfiguration* config)
+{
+    KConfig * cfg = KGlobal::config();
+    cfg->setGroup(configEntryGroup());
+    cfg->writeEntry(configname,config->toString());
+    cfg->setGroup("");
+}
+
+KisFilterConfiguration* KisFilter::loadFromBookmark(const QString& configname)
+{
+    if(not existInBookmark(configname)) return 0;
+    KConfig * cfg = KGlobal::config();
+    cfg->setGroup(configEntryGroup());
+    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    config->fromXML(cfg->readEntry<QString>(configname, ""));
+    cfg->setGroup("");
+    return config;
+}
+
+bool KisFilter::existInBookmark(const QString& configname)
+{
+    KConfig * cfg = KGlobal::config();
+    QMap< QString, QString > m = cfg->entryMap(configEntryGroup());
+    return (m.find(configname) != m.end());
+}
+
 
 void KisFilter::setProgressDisplay(KisProgressDisplayInterface * progressDisplay)
 {

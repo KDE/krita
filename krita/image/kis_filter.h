@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,6 +45,10 @@ class QWidget;
  */
 class KRITAIMAGE_EXPORT KisFilter : public KisProgressSubject, public KisShared {
     Q_OBJECT
+public:
+    static const KoID ConfigDefault;
+    static const KoID ConfigDesigner;
+    static const KoID ConfigLastUsed;
 public:
 
     /**
@@ -100,8 +104,26 @@ public:
      * Return a list of default configuration to demonstrates the use of the filter
      * @return a list with a null element if the filter do not use a configuration
      */
-    virtual QHash<QString, KisFilterConfiguration*> bookmarkedConfigurations( const KisPaintDeviceSP )
-    {  return m_bookmarkedConfig; }
+    QHash<QString, KisFilterConfiguration*> bookmarkedConfigurations( const KisPaintDeviceSP );
+
+    /**
+     * Save this filter configuration for a later use.
+     * @param configname the name of this configuration in the kritarc
+     * @param config the configuration object to save
+     */
+    void saveToBookmark(const QString& configname, KisFilterConfiguration* config);
+
+    /**
+     * Save this filter configuration for a later use.
+     * @param configname the name of this configuration in the kritarc
+     * @param config the configuration object to save
+     */
+    KisFilterConfiguration* loadFromBookmark(const QString& configname);
+
+    /**
+     * @return true if this configuration exist in the bookmarks
+     */
+    bool existInBookmark(const QString& configname);
 
     /**
      * Can this filter work incrementally when painting, or do we need to work
@@ -158,13 +180,13 @@ public:
 
     bool autoUpdate();
 
-    // Unique identification for this filter
+    /// @return Unique identification for this filter
     inline const KoID id() const { return m_id; };
-    // Which submenu in the filters menu does filter want to go?
-
+    
+    /// @return the submenu in the filters menu does filter want to go?
     inline QString menuCategory() const { return m_category; };
-    // The i18n'ed string this filter wants to show itself in the menu
-
+    
+    /// @return the i18n'ed string this filter wants to show itself in the menu
     inline QString menuEntry() const { return m_entry; };
 
     /**
@@ -175,12 +197,22 @@ public:
      */
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev);
 
+    /**
+     * call this to cancel the current filtering
+     */
     virtual void cancel() { m_cancelRequested = true; }
 
     virtual void setAutoUpdate(bool set);
     bool progressEnabled() const { return m_progressEnabled; }
+    /**
+     * @return true if cancel was requested and if progress is enabled
+     */
     inline bool cancelRequested() const { return m_progressEnabled && m_cancelRequested; }
+    
 protected:
+    /// @return the name of config group in KConfig
+    inline QString configEntryGroup() { return id().id() + "_filter_bookmarks"; }
+    /// @return the default configuration as defined by whoever wrote the plugin
     virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP); // FIXME: this name sucks so much
 protected slots:
 
@@ -205,7 +237,6 @@ protected:
     KisProgressDisplayInterface * m_progressDisplay;
     QString m_category; // The category in the filter menu this filter fits
     QString m_entry; // the i18n'ed accelerated menu text
-    QHash<QString, KisFilterConfiguration*> m_bookmarkedConfig;
 };
 
 

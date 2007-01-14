@@ -348,6 +348,7 @@ bool KisFilterManager::apply()
         if (img->undo() && cmd) img->undoAdapter()->addCommand(cmd);
         m_d->lastFilter->disableProgress();
         QApplication::restoreOverrideCursor();
+        m_d->lastFilter->saveToBookmark(KisFilter::ConfigLastUsed.id(), m_d->lastFilterConfig);
         return true;
     }
 }

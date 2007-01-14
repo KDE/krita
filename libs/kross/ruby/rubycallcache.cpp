@@ -51,6 +51,8 @@ namespace Kross {
     
     VALUE RubyCallCache::execfunction( int argc, VALUE *argv )
     {
+        Q_UNUSED( argc );
+
         int typelistcount = d->varianttypes.count();
         QVarLengthArray<MetaType*> variantargs( typelistcount );
         QVarLengthArray<void*> voidstarargs( typelistcount );

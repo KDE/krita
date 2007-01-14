@@ -49,6 +49,9 @@ namespace FormulaShape {
 BasicElement* ElementFactory::createElement( const QString& tagName,
                                              BasicElement* parent )
 {
+    Q_UNUSED( tagName );
+    Q_UNUSED( parent );
+
     // TODO
     // mlabeledtr
     // maligngroup

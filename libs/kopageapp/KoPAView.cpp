@@ -73,6 +73,7 @@ KoPAPage* KoPAView::activePage() const
 
 void KoPAView::updateReadWrite( bool readwrite )
 {
+    Q_UNUSED( readwrite );
 }
 
 void KoPAView::initGUI()

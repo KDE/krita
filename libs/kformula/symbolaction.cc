@@ -159,6 +159,8 @@ void SymbolAction::setSymbols( const QStringList &names, const QList<QFont>& fon
 
 void SymbolAction::updateItems( int id )
 {
+    Q_UNUSED( id );
+
 #ifdef __GNUC__
 #warning "kde4: port it"			
 #endif

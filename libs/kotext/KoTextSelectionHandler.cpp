@@ -77,6 +77,8 @@ void KoTextSelectionHandler::insertFrameBreak() {
 }
 
 void KoTextSelectionHandler::setFontSize(int size) {
+    Q_UNUSED( size );
+
     // TODO
 }
 
@@ -89,20 +91,28 @@ void KoTextSelectionHandler::decreaseFontSize() {
 }
 
 void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
+    Q_UNUSED( align );
+
     // TODO
     // left,right,center,justified
 }
 
 void KoTextSelectionHandler::setVerticalTextAlignment(Qt::Alignment align) {
+    Q_UNUSED( align );
+
     // TODO
     // superscript, subscript, normal
 }
 
 void KoTextSelectionHandler::setTextColor(const QColor &color) {
+    Q_UNUSED( color );
+
     // TODO
 }
 
 void KoTextSelectionHandler::setTextBackgroundColor(const QColor &color) {
+    Q_UNUSED( color );
+
     // TODO
 }
 
@@ -116,6 +126,8 @@ void KoTextSelectionHandler::insert(const QString &text) {
 }
 
 void KoTextSelectionHandler::selectFont(QWidget *parent) {
+    Q_UNUSED( parent );
+
     KoFontDia *fontDlg = new KoFontDia( m_caret->charFormat()); // , 0, parent);
     fontDlg->exec();
     m_caret->setCharFormat(fontDlg->format());

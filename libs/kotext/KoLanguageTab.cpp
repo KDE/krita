@@ -31,6 +31,9 @@
 KoLanguageTab::KoLanguageTab( KSpell2::Loader::Ptr loader, QWidget* parent, const char* name, Qt::WFlags fl ) 
         : KoLanguageTabBase( parent )
 {
+    Q_UNUSED( name );
+    Q_UNUSED( fl );
+
     //TODO use fl
     const QStringList langNames = KoGlobal::listOfLanguages();
     const QStringList langTags = KoGlobal::listTagOfLanguages();

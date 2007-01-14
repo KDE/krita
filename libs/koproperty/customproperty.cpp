@@ -336,6 +336,9 @@ SizePolicyCustomProperty::handleValue() const
 void
 SizePolicyCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 {
+        Q_UNUSED( value );
+        Q_UNUSED( rememberOldValue );
+
 	if(!m_property)
 		return;
 

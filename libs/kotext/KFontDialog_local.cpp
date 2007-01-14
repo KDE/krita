@@ -832,8 +832,22 @@ int KFontDialog_local::getFontAndText( QFont &theFont, QString &theString,
   return result;
 }
 
-void KFontChooser_local::virtual_hook( int, void* )
-{ /*BASE::virtual_hook( id, data );*/ }
+void KFontChooser_local::virtual_hook( int id, void *data )
+{ 
+#if 0
+  BASE::virtual_hook( id, data );
+#else
+  Q_UNUSED( id );
+  Q_UNUSED( data );
+#endif
+}
 
-void KFontDialog_local::virtual_hook( int id, void* data )
-{ /*KDialogBase::virtual_hook( id, data );*/ }
+void KFontDialog_local::virtual_hook( int id, void *data )
+{
+#if 0
+  KDialogBase::virtual_hook( id, data );
+#else
+  Q_UNUSED( id );
+  Q_UNUSED( data );
+#endif
+}

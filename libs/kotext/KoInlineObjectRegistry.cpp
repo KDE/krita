@@ -19,7 +19,7 @@
 
 #include "KoInlineObjectRegistry.h"
 #include "KoInlineObjectFactory.h"
-//#include "InsertVariableAction_p.h"
+#include "InsertVariableAction_p.h"
 
 #include <KoCanvasBase.h>
 #include <KoPluginLoader.h>
@@ -47,8 +47,8 @@ QList<KAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase
     QList<KAction*> answer;
     foreach(QString key, keys()) {
         KoInlineObjectFactory *factory = get(key);
-//        if(factory->type() == KoInlineObjectFactory::TextVariable)
-//            answer.append(new InsertVariableAction(host, factory));
+        if(factory->type() == KoInlineObjectFactory::TextVariable)
+            answer.append(new InsertVariableAction(host, factory));
     }
     return answer;
 }

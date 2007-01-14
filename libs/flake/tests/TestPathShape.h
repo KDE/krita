@@ -32,6 +32,7 @@ private slots:
 
     void pathPointIndex();
     void pointByIndex();
+    void segmentByIndex();
     void pointCount();
     void pointCountSubpath();
     void isClosedSubpath();

@@ -802,6 +802,31 @@ KoPathPoint * KoPathShape::pointByIndex( const KoPathPointIndex &pointIndex ) co
     return subpath->at( pointIndex.second );
 }
 
+KoPathSegment KoPathShape::segmentByIndex( const KoPathPointIndex &pointIndex ) const
+{
+    KoPathSegment segment( 0, 0 );
+
+    KoSubpath * subpath = subPath( pointIndex.first );
+
+    if ( subpath != 0 && pointIndex.second >= 0 && pointIndex.second < subpath->size() )
+    {
+        KoPathPoint * point = subpath->at( pointIndex.second );
+        int index = pointIndex.second;
+        ++index;
+        if ( point->properties() & KoPathPoint::CloseSubpath )
+        {
+            index = 0;
+        }
+
+        if ( index < subpath->size() )
+        {
+            segment.first = point;
+            segment.second = subpath->at( index );
+        }
+    }
+    return segment;
+}
+
 int KoPathShape::pointCount() const
 {
     int i = 0;

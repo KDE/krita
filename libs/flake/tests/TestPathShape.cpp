@@ -101,6 +101,35 @@ void TestPathShape::pointByIndex()
     QVERIFY( point5 == path.pointByIndex( path.pathPointIndex( point5 ) ) );
 }
 
+void TestPathShape::segmentByIndex()
+{
+    KoPathShape path;
+    KoPathPoint * point1 = path.moveTo( QPointF( 20, 20 ) );
+    KoPathPoint * point2 = path.lineTo( QPointF( 15, 25 ) );
+    path.lineTo( QPointF( 10, 20 ) );
+    path.close();
+    path.moveTo( QPointF( 20, 30 ) ); 
+    KoPathPoint * point3 = path.lineTo( QPointF( 20, 30 ) );
+    path.moveTo( QPointF( 30, 30 ) ); 
+    path.lineTo( QPointF( 40, 30 ) );
+    path.lineTo( QPointF( 40, 40 ) );
+    path.curveTo( QPointF( 40, 45 ), QPointF( 30, 45 ), QPointF( 30, 40 ) );
+    KoPathPoint * point4 = path.moveTo( QPointF( 50, 50 ) ); 
+    path.lineTo( QPointF( 60, 50 ) );
+    path.lineTo( QPointF( 60, 60 ) );
+    KoPathPoint * point5 = path.curveTo( QPointF( 60, 65 ), QPointF( 50, 65 ), QPointF( 50, 60 ) );
+    path.close();
+
+    QVERIFY( KoPathSegment( point1, point2 ) == path.segmentByIndex( path.pathPointIndex( point1 ) ) );
+    // test last point in a open path
+    QVERIFY( KoPathSegment( 0, 0 ) == path.segmentByIndex( path.pathPointIndex( point3 ) ) );
+    // test last point in a closed path
+    QVERIFY( KoPathSegment( point5, point4 ) == path.segmentByIndex( path.pathPointIndex( point5 ) ) );
+    // test out of bounds
+    QVERIFY( KoPathSegment( 0, 0 ) == path.segmentByIndex( KoPathPointIndex( 3, 4 ) ) );
+    QVERIFY( KoPathSegment( 0, 0 ) == path.segmentByIndex( KoPathPointIndex( 4, 0 ) ) );
+}
+
 void TestPathShape::pointCount()
 {
     KoPathShape path;

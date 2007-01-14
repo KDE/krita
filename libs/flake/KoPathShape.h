@@ -494,11 +494,25 @@ public:
     /**
      * @brief Get the point defined by a path point index
      *
-     * @param pathPointIndex of the point to get
+     * @param pointIndex of the point to get
      *
      * @return KoPathPoint on success, 0 otherwise e.g. out of bounds
      */
     KoPathPoint * pointByIndex( const KoPathPointIndex &pointIndex ) const;
+
+    /**
+     * @brief Get the segment defined by a path point index
+     *
+     * A semgent is defined by the point index of the first point in the segment.
+     * A segment contains the defined point and its following point. If the subpath is 
+     * closed and the and the pointIndex point to the last point in the subpath, the 
+     * following point is the first point in the subpath.
+     *
+     * @param pointIndex of the first point of the segment
+     *
+     * @return Segment containing both points of the segment or KoPathSegment( 0, 0 ) on error e.g. out of bounds
+     */
+    KoPathSegment segmentByIndex( const KoPathPointIndex &pointIndex ) const;
 
     /**
      * @brief Get the number of points in the path

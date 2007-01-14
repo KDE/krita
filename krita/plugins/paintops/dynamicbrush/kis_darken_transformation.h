@@ -28,7 +28,7 @@ class KisDarkenTransformation : public KisDynamicTransformation {
         KisDarkenTransformation(KisTransformParameter* transfoParameter);
         virtual ~KisDarkenTransformation();
     public:
-        virtual void transformBrush(KisDynamicBrush* dabsrc, const KisPaintInformation& info);
+        virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
         virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
     private:
         KisTransformParameter* m_transfoParameter;

@@ -18,7 +18,7 @@
 
 #include "kis_size_transformation.h"
 
-#include "kis_dynamic_brush.h"
+#include "kis_dynamic_shape.h"
 #include "kis_transform_parameter.h"
         
 
@@ -33,7 +33,7 @@ KisSizeTransformation::~KisSizeTransformation()
     delete m_horizTransfoParameter;
 }
 
-void KisSizeTransformation::transformBrush(KisDynamicBrush* dabsrc, const KisPaintInformation& info)
+void KisSizeTransformation::transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info)
 {
     dabsrc->resize(m_horizTransfoParameter->parameter(info), m_vertiTransfoParameter->parameter(info));
 }

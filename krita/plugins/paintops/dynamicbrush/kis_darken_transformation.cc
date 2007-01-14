@@ -32,7 +32,7 @@ KisDarkenTransformation::~KisDarkenTransformation()
     delete m_transfoParameter;
 }
 
-void KisDarkenTransformation::transformBrush(KisDynamicBrush* dabsrc, const KisPaintInformation& info)
+void KisDarkenTransformation::transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info)
 {
     Q_UNUSED(dabsrc);
     Q_UNUSED(info);

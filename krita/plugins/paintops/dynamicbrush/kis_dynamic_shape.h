@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -24,10 +24,10 @@
 
 class KisAutobrushShape;
 
-class KisDynamicBrush {
+class KisDynamicShape {
     public:
-        KisDynamicBrush() {}
-        virtual ~KisDynamicBrush() {}
+        KisDynamicShape() {}
+        virtual ~KisDynamicShape() {}
     public:
         virtual void resize(double xs, double ys) = 0;
 };
@@ -40,7 +40,7 @@ struct KisAutoDab {
     Shape shape;
 };
 
-struct KisDabBrush : public KisDynamicBrush {
+struct KisDabBrush : public KisDynamicShape {
     KisDabBrush();
     virtual ~KisDabBrush();
     enum DabType {

@@ -20,7 +20,7 @@
 #define _KISDYNAMICTRANSFORMATION_H_
 
 class KisPaintInformation;
-class KisDynamicBrush;
+class KisDynamicShape;
 class KisDynamicColoring;
 
 /**
@@ -31,7 +31,7 @@ class KisDynamicTransformation {
     public:
         KisDynamicTransformation() : m_next(0) {}
         virtual ~KisDynamicTransformation() { if(m_next) delete m_next; }
-        virtual void transformBrush(KisDynamicBrush* dabsrc, const KisPaintInformation& info) =0;
+        virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info) =0;
         virtual void transformColoring(KisDynamicColoring* dabsrc, const KisPaintInformation& info) =0;
         inline void setNextTransformation(KisDynamicTransformation* n) { m_next = n; }
         inline KisDynamicTransformation* nextTransformation() { return m_next; }

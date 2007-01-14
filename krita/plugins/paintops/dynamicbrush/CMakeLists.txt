@@ -2,7 +2,7 @@
 
 set(kritadynamicbrush_PART_SRCS
     dynamicbrush.cc
-    kis_dynamic_brush.cc
+    kis_dynamic_shape.cc
     kis_dynamic_coloring.cc
     kis_dynamic_transformation.cc
     kis_size_transformation.cc

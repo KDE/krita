@@ -42,7 +42,7 @@
 #include <kis_types.h>
 
 #include "kis_darken_transformation.h"
-#include "kis_dynamic_brush.h"
+#include "kis_dynamic_shape.h"
 #include "kis_dynamic_coloring.h"
 #include "kis_size_transformation.h"
 #include "kis_transform_parameter.h"

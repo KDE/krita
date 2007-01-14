@@ -69,10 +69,21 @@ public:
      */
     void insertInlineObject(QTextCursor &cursor, KoInlineObjectFactory *factory);
 
+    /**
+     * Set a property that may have changed which will be forwarded to all registered textObjects.
+     * If the key has changed then all registered InlineObject instances that have stated to want
+     * updates will get called with the change.
+     * The property will be stored to allow it to be retrieved via the intProperty() and friends.
+     * @see KoInlineObject::propertyChangeListener()
+     */
     void setProperty(KoInlineObject::Property key, QVariant value);
+    /// retrieve a propery
     QVariant property(KoInlineObject::Property key) const;
+    /// retrieve an int property
     int intProperty(KoInlineObject::Property key) const;
+    /// retrieve a bool property
     bool boolProperty(KoInlineObject::Property key) const;
+    /// retrieve a string property
     QString stringProperty(KoInlineObject::Property key) const;
 
 signals:

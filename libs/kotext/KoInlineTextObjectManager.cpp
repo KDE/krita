@@ -20,6 +20,7 @@
 
 #include <QTextCursor>
 #include <QPainter>
+#include <kdebug.h>
 
 KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
     : QObject(parent),
@@ -46,6 +47,8 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     object->setId(m_lastObjectId);
     m_objects.insert(m_lastObjectId, object);
     object->setManager(this);
+kDebug() << "calling setup!\n";
+    object->setup();
     if(object->propertyChangeListener())
         m_listeners.append(object);
 }

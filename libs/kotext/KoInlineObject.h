@@ -31,6 +31,7 @@ class QRectF;
 class QVariant;
 
 class KoInlineTextObjectManager;
+class InlineObjectPrivate;
 
 /**
  * Base class for all inline-text-objects.
@@ -75,14 +76,34 @@ public:
         User = 10000
     };
 
-    /// constructor
-    KoInlineObject(bool propertyChangeListener = false)
-        : m_manager(0), m_id(-1), m_propertyChangeListener(propertyChangeListener) {}
-    virtual ~KoInlineObject() {}
+    /**
+     * constructor
+     * @param propertyChangeListener if set to true this instance will be notified of changes of properties.
+     * @see KoInlineTextObjectManager::setProperty()
+     * @see propertyChangeListener()
+     */
+    KoInlineObject(bool propertyChangeListener = false);
+    virtual ~KoInlineObject();
 
-    void setManager(KoInlineTextObjectManager *manager) { m_manager = manager; }
-    virtual void initialize() {}
+    /**
+     * Will be called by the manager when this variable is added.
+     * Remember that inheriting classes should not use the manager() in the constructor, since it will be 0
+     * @param manager the object manager for this object.
+     */
+    void setManager(KoInlineTextObjectManager *manager);
 
+    /**
+     * Return the object manager set on this inline object.
+     */
+    KoInlineTextObjectManager *manager();
+
+    /**
+     * Just prior to the first time this object will be shown this method will be called.
+     * The object plugin should reimplement this to initialize the object after the manager
+     * has been set, but before the text has been layouted.
+     * The default implementation does nothing.
+     */
+    virtual void setup() {}
 
     /**
      * Update position of the inline object.
@@ -128,20 +149,39 @@ public:
     virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
             const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) = 0;
 
-    virtual void propertyChanged(Property key, const QVariant &value) { Q_UNUSED(key); Q_UNUSED(value); }
+    /**
+     * Overwrite this if you are interrested in propertychanges.
+     * @param property the property id that has been changed, one from the Property enum.
+     *    You should ignore all properties you don't use as new properties can be added at any time.
+     * @param value the new value of the property wrapped in a QVariant.  Properties can be a lot of
+     *     different class types. Ints, bools, QStrings etc.
+     * example:
+     * @code
+     *  void KoDateVariable::propertyChanged(Property key, const QVariant &value) {
+     *      if(key == KoInlineObject::PageCount)
+     *          setValue(QString::number(value.toInt()));
+     *  }
+     * @endcode
+     * @see propertyChangeListener()
+     */
+    virtual void propertyChanged(Property property, const QVariant &value);
 
     /// return the inline-object Id that is assigned for this object.
-    int id() const { return m_id; }
+    int id() const;
     /// Set the inline-object Id that is assigned for this object by the KoInlineTextObjectManager.
-    void setId(int id) { m_id = id; }
+    void setId(int id);
 
-    bool propertyChangeListener() const { return m_propertyChangeListener; }
-
-protected:
-    KoInlineTextObjectManager *m_manager;
+    /**
+     * When true, notify this object of property changes.
+     * Each inlineObject can use properties like the PageCount or the document name.
+     * Only objects that actually have a need for such information be a listener to avoid unneeded
+     * overhead.
+     * When this returns true, the propertyChanged() method will be called.
+     * @see KoInlineTextObjectManager::setProperty()
+     */
+    bool propertyChangeListener() const;
 
 private:
-    int m_id;
-    const bool m_propertyChangeListener;
+    InlineObjectPrivate *d;
 };
 #endif

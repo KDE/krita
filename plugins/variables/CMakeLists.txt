@@ -2,20 +2,20 @@ project(textvariables)
 
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOFFICECORE_INCLUDES} )
 
-set(textvariables_PART_SRCS
+set(textvariables_SRCS
     KoVariablesPlugin.cpp
     KoDateVariable.cpp
     KoDateVariableFactory.cpp
     FixedDateFormat.cpp
 )
 
-kde4_automoc(${textvariables_PART_SRCS})
+kde4_automoc(${textvariables_SRCS})
 
-kde4_add_ui_files( ${textvariables_PART_SRCS}
+kde4_add_ui_files( textvariables_SRCS
     FixedDateFormat.ui
 )
 
-kde4_add_plugin(textvariables ${textvariables_PART_SRCS})
+kde4_add_plugin(textvariables ${textvariables_SRCS})
 
 target_link_libraries(textvariables kotext)
 

@@ -1172,6 +1172,12 @@ bool KoDocument::saveNativeFormat( const QString & file )
             return false;
         }
         kDebug(30003) << "Saving done of url: " << url().url() << endl;
+        if ( !store->finalize() )
+        {
+            delete store;
+            return false;
+        }
+        // Success
         delete store;
     }
     if ( !saveExternalChildren() )
@@ -2044,6 +2050,11 @@ bool KoDocument::addVersion( const QString& comment )
       return false;
     }
 
+    if ( !store->finalize() )
+    {
+        delete store;
+        return false;
+    }
     delete store;
 
     if ( !saveExternalChildren() )

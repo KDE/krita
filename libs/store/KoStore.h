@@ -264,6 +264,12 @@ public:
    */
   void disallowNameExpansion( void );
 
+  /**
+   * Call this before destroying the store, to be able to catch errors
+   * (e.g. from ksavefile)
+   */
+  bool finalize();
+
 protected:
 
   KoStore() {}
@@ -273,6 +279,13 @@ protected:
    * @return true on success
    */
   virtual bool init( Mode mode );
+
+  /**
+   * Finalize store - called by finalize.
+   * @return true on success
+   */
+  virtual bool doFinalize() { return true; }
+
   /**
    * Open the file @p name in the store, for writing
    * On success, this method must set m_stream to a stream in which we can write.
@@ -380,6 +393,7 @@ protected:
   bool m_bIsOpen;
   /// Must be set by the constructor.
   bool m_bGood;
+  bool m_bFinalized;
 
   static const int s_area;
 

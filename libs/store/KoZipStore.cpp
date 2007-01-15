@@ -75,7 +75,6 @@ KoZipStore::KoZipStore( QWidget* window, const KUrl & _url, const QString & _fil
 KoZipStore::~KoZipStore()
 {
     kDebug(s_area) << "KoZipStore::~KoZipStore" << endl;
-    m_pZip->close();
     delete m_pZip;
 
     // Now we have still some job to do for remote files.
@@ -110,6 +109,11 @@ bool KoZipStore::init( Mode _mode, const QByteArray& appIdentification )
         // We don't need the extra field in KOffice - so we leave it as "no extra field".
     }
     return good;
+}
+
+bool KoZipStore::doFinalize()
+{
+    return m_pZip->close();
 }
 
 bool KoZipStore::openWrite( const QString& name )

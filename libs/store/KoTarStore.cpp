@@ -83,7 +83,6 @@ KoTarStore::KoTarStore( QWidget* window, const KUrl& _url, const QString & _file
 
 KoTarStore::~KoTarStore()
 {
-    m_pTar->close();
     delete m_pTar;
 
     // Now we have still some job to do for remote files.
@@ -119,6 +118,11 @@ bool KoTarStore::init( Mode _mode )
     if ( good && _mode == Read )
         good = m_pTar->directory() != 0;
     return good;
+}
+
+bool KoTarStore::doFinalize()
+{
+    return m_pTar->close();
 }
 
 // When reading, m_stream comes directly from KArchiveFile::device()

@@ -43,7 +43,6 @@
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 
-//#define DefaultFormat KoStore::Tar
 #define DefaultFormat KoStore::Zip
 
 const int KoStore::s_area = 30002;
@@ -214,6 +213,7 @@ bool KoStore::init( Mode _mode )
   m_bIsOpen = false;
   m_mode = _mode;
   m_stream = 0;
+  m_bFinalized = false;
 
   // Assume new style names.
   m_namingVersion = NAMING_VERSION_2_2;
@@ -222,6 +222,8 @@ bool KoStore::init( Mode _mode )
 
 KoStore::~KoStore()
 {
+  if ( !m_bFinalized )
+    finalize(); // ### no error checking when the app forgot to call finalize itself
   delete m_stream;
 }
 
@@ -709,4 +711,11 @@ void KoStore::disallowNameExpansion( void )
 bool KoStore::hasFile( const QString& fileName ) const
 {
   return fileExists( toExternalNaming( currentPath() + fileName ) );
+}
+
+bool KoStore::finalize()
+{
+  Q_ASSERT( !m_bFinalized ); // call this only once!
+  m_bFinalized = true;
+  return doFinalize();
 }

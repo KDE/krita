@@ -42,6 +42,7 @@ public:
     ~KoTarStore();
 protected:
     virtual bool init( Mode _mode );
+    virtual bool doFinalize();
     virtual bool openWrite( const QString& name );
     virtual bool openRead( const QString& name );
     virtual bool closeWrite();

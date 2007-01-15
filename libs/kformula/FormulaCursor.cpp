@@ -118,7 +118,7 @@ void FormulaCursor::moveHome()
 
 void FormulaCursor::moveEnd()
 {
-    if( m_currentElement->elementType() == Sequence )
+    if( m_currentElement->elementType() == Row )
 	m_positionInElement = m_currentElement->childElements().count();
     else
         m_positionInElement = 1;
@@ -131,7 +131,7 @@ bool FormulaCursor::isHome() const
 
 bool FormulaCursor::isEnd() const
 {
-    if( currentElement()->elementType() == Sequence )
+    if( currentElement()->elementType() == Row )
         return ( m_positionInElement == m_currentElement->childElements().count() );
     else
 	return ( m_positionInElement == 1 );

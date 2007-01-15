@@ -57,11 +57,11 @@ void AttributeManager::disinheritAttributes()
     m_scriptLevelStack.pop();                         
 }
 
-QVariant AttributeManager::valueOf( const QString& attribute )
+QVariant AttributeManager::valueOf( const QString& attribute ) const
 {
     // check if the current element has a value assigned
     QString value;
-    value = m_attributeStack.first()->hasAttribute( attribute );
+    value = m_attributeStack.first()->attribute( attribute );
     if( !value.isEmpty() )
         return parseValue( value );
 
@@ -95,7 +95,7 @@ void AttributeManager::buildHeritageOf( const BasicElement* element )
 void AttributeManager::alterScriptLevel( const BasicElement* element )
 {
     // set the scriptlevel explicitly
-    QString value = element->hasAttribute( "scriptlevel" );
+    QString value = element->attribute( "scriptlevel" );
     if( !value.isEmpty() )
     {
         // catch increments or decrements that may only affect scriptlevel

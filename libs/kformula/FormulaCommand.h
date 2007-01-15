@@ -159,7 +159,7 @@ class FormulaCommandAttribute : public QUndoCommand {
 public:
     /**
      * The constructor
-     * @param owner The BasicElement which owns the changed attributes
+     * @param cursor The FormulaCursor where the elements will be replaced 
      * @param attributes The list of the old attributes
      */
     FormulaCommandAttribute( FormulaCursor* cursor, QHash<QString,QString> attributes );

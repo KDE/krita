@@ -23,12 +23,27 @@
 #include <KoToolFactory.h>
 #include <QStringList>
 
+/**
+ * @short The factory for KoFormulaTool
+ *
+ * This reimplements the KoToolFactory class from the flake library in order
+ * to provide a factory for the KoTool based class KoFormulaTool. This is the
+ * KoTool that is used to edit a KoFormulaShape.
+ * This class is part of the FormulaShape plugin and follows the factory design
+ * pattern.
+ *
+ * @since 2.0
+ */
 class KoFormulaToolFactory : public KoToolFactory {
     Q_OBJECT
 public:
+    /// The constructor - reimplemented from KoToolFactory
     explicit KoFormulaToolFactory( QObject* parent );
+
+    /// The destructor - reimplemented from KoToolFactory
     ~KoFormulaToolFactory();
 
+    /// @return an instance of KoFormulaTool
     KoTool* createTool( KoCanvasBase* canvas );
 };
 

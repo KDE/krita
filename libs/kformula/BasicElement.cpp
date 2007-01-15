@@ -85,7 +85,18 @@ BasicElement* BasicElement::childElementAt( const QPointF& p )
     return this;    // if no child contains the point, it's the FormulaElement itsself
 }
 
-QString BasicElement::hasAttribute( const QString& attribute ) const
+void BasicElement::setAttribute( const QString& name, QVariant value )
+{
+    if( name.isEmpty() || !value.canConvert( QVariant::String ) )
+        return;
+
+    if( value.isNull() )
+        m_attributes.remove( name );
+    else
+        m_attributes.insert( name, value.toString() );
+}
+
+QString BasicElement::attribute( const QString& attribute ) const
 {
     QString tmp = m_attributes.value( attribute );
     if( tmp.isEmpty() )
@@ -134,16 +145,6 @@ void BasicElement::moveDown( FormulaCursor* cursor, BasicElement* )
         parentElement()->moveDown( cursor, this );
     else
         cursor->setCursorTo( this, 0 );
-}
-
-void BasicElement::moveHome( FormulaCursor* cursor )
-{
-    parentElement()->moveHome( cursor );
-}
-
-void BasicElement::moveEnd( FormulaCursor* cursor )
-{
-    parentElement()->moveEnd( cursor );
 }
 
 void BasicElement::readMathML( const KoXmlElement& element )

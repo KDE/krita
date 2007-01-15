@@ -1,5 +1,6 @@
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 
+#add_subdirectory( tests )
 
 include_directories(${QT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
@@ -13,7 +14,7 @@ set( formulashape_PART_SRCS
    FormulaRenderer.cpp
    FormulaCursor.cpp 
    BasicElement.cpp 
-#   SequenceElement.cpp
+   RowElement.cpp
    FormulaElement.cpp 
 #   MultiscriptElement.cpp
 #   UnderOverElement.cpp
@@ -24,7 +25,7 @@ set( formulashape_PART_SRCS
 #   MatrixEntryElement.cpp
 #   FractionElement.cpp
 #   RootElement.cpp
-#   SpaceElement.cpp
+   SpaceElement.cpp
 #   EncloseElement.cpp
 #   ActionElement.cpp
 #   PaddedElement.cpp
@@ -39,11 +40,11 @@ set( formulashape_PART_SRCS
    OperatorDictionary.cpp
    Entities.cpp
    ElementFactory.cpp 
-   MatrixDialog.cc 
+#   MatrixDialog.cc 
 #   contextstyle.cc 
-   symboltable.cc 
-   kformulaconfigpage.cc 
-   symbolaction.cc 
+#   symboltable.cc 
+#   kformulaconfigpage.cc 
+#   symbolaction.cc 
 #   fontstyle.cc 
 )
 

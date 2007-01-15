@@ -23,11 +23,9 @@
 #ifndef ROOTELEMENT_H
 #define ROOTELEMENT_H
 
-#include <QPoint>
-
 #include "BasicElement.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
 /**
  * A nice graphical root.
@@ -37,12 +35,9 @@ public:
     /// The standard constructor
     RootElement( BasicElement* parent = 0 );
 
+    /// The standard destructor
     ~RootElement();
 
-    void insertInExponent( int index, BasicElement* element );
-
-    void insertInRadicand( int index, BasicElement* element );
-     
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
@@ -50,121 +45,68 @@ public:
     const QList<BasicElement*> childElements();
 
     /**
-     * Calculates our width and height and
-     * our children's parentPosition.
+     * Insert a new child at the cursor position
+     * @param cursor The cursor holding the position where to inser
+     * @param child A BasicElement to insert
      */
-    virtual void calcSizes( const ContextStyle& style, 
-                            ContextStyle::TextStyle tstyle, 
-                            ContextStyle::IndexStyle istyle,
-                            StyleAttributes& style );
+    void insertChild( FormulaCursor* cursor, BasicElement* child );
+   
+    /**
+     * Remove a child element
+     * @param element The BasicElement to remove
+     */ 
+    void removeChild( BasicElement* element );
 
     /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
      */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
+    void paint( QPainter& painter, const AttributeManager* am );
 
     /**
-     * Enters this element while moving to the left starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the left of it.
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
      */
-    virtual void moveLeft(FormulaCursor* cursor, BasicElement* from);
+    void layout( const AttributeManager* am );
+    
+    /**
+     * Move the FormulaCursor left
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveLeft( FormulaCursor* cursor, BasicElement* from );
 
     /**
-     * Enters this element while moving to the right starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the right of it.
+     * Move the FormulaCursor right 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
      */
-    virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
+    void moveRight( FormulaCursor* cursor, BasicElement* from );
 
     /**
-     * Enters this element while moving up starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or above it.
+     * Move the FormulaCursor up 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
      */
-    virtual void moveUp(FormulaCursor* cursor, BasicElement* from);
+    void moveUp( FormulaCursor* cursor, BasicElement* from );
 
     /**
-     * Enters this element while moving down starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or below it.
+     * Move the FormulaCursor down 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
      */
-    virtual void moveDown(FormulaCursor* cursor, BasicElement* from);
+    void moveDown( FormulaCursor* cursor, BasicElement* from );
 
-    /**
-     * Reinserts the index if it has been removed.
-     */
-    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
+    /// @return The element's ElementType
+    ElementType elementType() const;
 
-    /**
-     * Removes all selected children and returns them. Places the
-     * cursor to where the children have been.
-     *
-     * We remove ourselve if we are requested to remove our content.
-     */
-    virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
+    /// @return The value of the attribute if it is inherited
+    QString inheritsAttribute( const QString& attribute ) const;
 
-    // main child
-    //
-    // If an element has children one has to become the main one.
-
-    virtual SequenceElement* getMainChild();
-
-    /**
-     * Sets the cursor to select the child. The mark is placed before,
-     * the position behind it.
-     */
-    virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
-
-    // Moves the cursor inside the index. The index has to exist.
-    void moveToIndex(FormulaCursor*, Direction);
-
-    // Sets the cursor to point to the place where the index normaly
-    // is. These functions are only used if there is no such index and
-    // we want to insert them.
-    void setToIndex(FormulaCursor*);
-
-    bool hasIndex() const { return m_exponent != 0; }
+    /// @return The default value of the attribute for this element
+    QVariant attributesDefaultValue( const QString& attribute ) const;
 
 protected:
-    //Save/load support
-
-    /**
-     * Returns the tag name of this element type.
-     */
-    virtual QString getTagName() const { return "ROOT"; }
-
-    /**
-     * Appends our attributes to the dom element.
-     */
-    virtual void writeDom(QDomElement element);
-
-    /**
-     * Reads our attributes from the element.
-     * Returns false if it failed.
-     */
-    virtual bool readAttributesFromDom(QDomElement element);
-
-    /**
-     * Reads our content from the node. Sets the node to the next node
-     * that needs to be read.
-     * Returns false if it failed.
-     */
-    virtual bool readContentFromDom(QDomNode& node);
-
-    /**
-     * Reads our attributes from the MathML element.
-     * Also checks whether it's a msqrt or mroot.
-     */
-//    virtual void readMathMLAttributes( const QDomElement& element );
-
     /**
      * Reads our content from the MathML node. Sets the node to the next node
      * that needs to be read.
@@ -172,31 +114,13 @@ protected:
 //    virtual int readMathML( KoXmlNode& node );
 
 private:
-    virtual QString getElementName() const { return hasIndex() ? "mroot" : "msqrt"; }
-    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = true );
-    /*
-    virtual void writeMathMLContent( QDomDocument& doc, 
-                                     QDomElement& element,
-                                     bool oasisFormat ) const ;
-    */
-
     /// The element that is the radicand of the root
     BasicElement* m_radicand;
 
     /// The element that is the exponent of the root
     BasicElement* m_exponent;
-
-    /// The point the artwork relates to.
-    LuPixelPoint rootOffset;
-
-	/**
-	 * Whether it is msqrt or mroot element. It is only used while reading
-	 * from MathML. When reading element contents we must know which of them
-	 * it is. After reading, hasIndex() should be used instead.
-	 */
-	bool square;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // ROOTELEMENT_H

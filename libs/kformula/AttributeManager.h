@@ -64,16 +64,28 @@ enum NamedSpaces {
     VeryVeryThickMathSpace
 };
 
+/** Enum encoding all possibilities to align */
 enum Align {
-    Left,
-    Center,
-    Right
+    Left /**< Align to the left*/,
+    Center /**< Align to the center*/,
+    Right /**< Align to the right*/
 };
 
+/** Enum encoding all states of  mo's form attribute */
 enum Form {
-    Prefix,
-    Infix,
-    Postfix
+    Prefix /**< mo is a prefix*/,
+    Infix /**< mo is a infix - used for all cases where it's not prefix or postfix*/,
+    Postfix /**< mo is a postfix*/
+};
+
+/** Enum encoding all states of mspace's linebreak attribute */
+enum LineBreak {
+    Auto /**< Renderer should use default linebreaking algorithm*/,
+    NewLine /**< Start a new line and do not indent*/,
+    IndentingNewLine /**< Start a new line and do indent*/,
+    NoBreak /**< Do not allow a linebreak here*/,
+    GoodBreak /**< If a linebreak is needed on the line, here is a good spot*/,
+    BadBreak /**< If a linebreak is needed on the line, try to avoid breaking here*/
 };
 
 /**
@@ -109,7 +121,7 @@ public:
      * @param attribute A string with the attribute to look up
      * @return QVariant with the value
      */
-    QVariant valueOf( const QString& attribute );
+    QVariant valueOf( const QString& attribute ) const;
 
     /**
      * Inherit the attributes of an element

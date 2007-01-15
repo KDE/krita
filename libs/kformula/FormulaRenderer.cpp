@@ -39,6 +39,7 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
     m_attributeManager->inheritAttributes( element );
 
       // TODO add more general painting code like: background, scriptlevel and so on
+      // p.save !!!
       // p.setBrush( QBrush( m_attributeManager->valueOf( "mathbackground" ) ) );
       // p.setPen( m_attributeManager->valueOf( "mathcolor" ) );
     element->paint( p, m_attributeManager );

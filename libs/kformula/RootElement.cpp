@@ -19,18 +19,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QPainter>
-#include <QPen>
-
-#include <kdebug.h>
-
-#include "FormulaCursor.h"
-#include "FormulaElement.h"
-//#include "kformulacommand.h"
 #include "RootElement.h"
-#include "SequenceElement.h"
+#include "FormulaCursor.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
 RootElement::RootElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -52,39 +44,20 @@ const QList<BasicElement*> RootElement::childElements()
     return tmp << m_radicand;
 }
 
-/*
-void RootElement::readMathMLContent( const KoXmlNode& node )
+void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
 }
-*/
 
-void RootElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
+void RootElement::removeChild( BasicElement* element )
 {
-/*    if( m_exponent->elementType() == Basic )
-        writer->startElement( oasisFormat ? "math:msqrt" : "msqrt" );
-    else
-        writer->startElement( oasisFormat ? "math:mroot" : "mroot" );
-
-    writeMathMLAttributes( writer );
-    m_radicand->writeMathML( writer, oasisFormat );
-    if( m_exponent->elementType() != Basic )
-        m_exponent->writeMathML( writer, oasisFormat );
-
-    writer->endElement();*/
 }
 
-/**
- * Calculates our width and height and
- * our children's parentPosition.
- */
-void RootElement::calcSizes( const ContextStyle& context,
-                             ContextStyle::TextStyle tstyle, 
-                             ContextStyle::IndexStyle istyle,
-                             StyleAttributes& style )
+void RootElement::paint( QPainter& painter, const AttributeManager* am )
 {
-    m_radicand->calcSizes( context, tstyle,
-                           context.convertIndexStyleLower(istyle), style );
+}
 
+void RootElement::layout( const AttributeManager* am )
+{
     luPixel indexWidth = 0;
     luPixel indexHeight = 0;
     if ( m_exponent) {
@@ -132,11 +105,30 @@ void RootElement::calcSizes( const ContextStyle& context,
     setBaseline(m_radicand->getBaseline() + m_radicand->getY());
 }
 
-/**
- * Draws the whole element including its children.
- * The `parentOrigin' is the point this element's parent starts.
- * We can use our parentPosition to get our own origin then.
- */
+void RootElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
+{
+}
+
+void RootElement::moveRight( FormulaCursor* cursor, BasicElement* from )
+{
+}
+
+void RootElement::moveUp( FormulaCursor* cursor, BasicElement* from )
+{
+}
+
+    /**
+     * Move the FormulaCursor down 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+
+void RootElement::calcSizes( const ContextStyle& context,
+                             ContextStyle::TextStyle tstyle, 
+                             ContextStyle::IndexStyle istyle,
+                             StyleAttributes& style )
+{
+}
+
 void RootElement::draw( QPainter& painter, const LuPixelRect& r,
                         const ContextStyle& context,
                         ContextStyle::TextStyle tstyle,
@@ -301,225 +293,19 @@ void RootElement::moveDown(FormulaCursor* cursor, BasicElement* from)
     }*/
 }
 
-/**
- * Reinserts the index if it has been removed.
- */
-void RootElement::insert(FormulaCursor* cursor,
-                         QList<BasicElement*>& newChildren,
-                         Direction direction)
+void RootElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-/*    if (cursor->getPos() == upperLeftPos) {
-        m_radicand = static_cast<SequenceElement*>(newChildren.takeAt(0));
-        m_radicand->setParent(this);
-
-        if (direction == beforeCursor) {
-            m_radicand->moveLeft(cursor, this);
-        }
-        else {
-            m_radicand->moveRight(cursor, this);
-        }
-        cursor->setSelection(false);
-        //formula()->changed();
-    }*/
-}
-
-/**
- * Removes all selected children and returns them. Places the
- * cursor to where the children have been.
- *
- * We remove ourselve if we are requested to remove our content.
- */
-void RootElement::remove(FormulaCursor* cursor,
-                         QList<BasicElement*>& removedChildren,
-                         Direction direction)
-{
-/*    switch (cursor->getPos()) {
-    case contentPos:
-        getParent()->selectChild(cursor, this);
-        getParent()->remove(cursor, removedChildren, direction);
-        break;
-    case upperLeftPos:
-        removedChildren.append(m_exponent);
-        //formula()->elementRemoval(m_exponent);
-        m_exponent = 0;
-        cursor->setTo(this, upperLeftPos);
-        //formula()->changed();
-        break;
-    }*/
-}
-
-
-// main child
-//
-// If an element has children one has to become the main one.
-
-SequenceElement* RootElement::getMainChild()
-{
-    return 0; //m_radicand;
-}
-
-/**
- * Sets the cursor to select the child. The mark is placed before,
- * the position behind it.
- */
-void RootElement::selectChild(FormulaCursor* cursor, BasicElement* child)
-{
-/*    if (child == m_radicand) {
-        cursor->setTo(this, contentPos);
-    }
-    else if (child == m_exponent) {
-        cursor->setTo(this, upperLeftPos);
-    }*/
-}
-
-
-void RootElement::moveToIndex(FormulaCursor* cursor, Direction direction)
-{
-    if (m_exponent) {
-        if (direction == beforeCursor) {
-            m_exponent->moveLeft(cursor, this);
-        }
-        else {
-            m_exponent->moveRight(cursor, this);
-        }
-    }
-}
-
-void RootElement::setToIndex(FormulaCursor* cursor)
-{
- //   cursor->setTo(this, upperLeftPos);
-}
-
-
-/**
- * Appends our attributes to the dom element.
- */
-void RootElement::writeDom(QDomElement element)
-{
-    BasicElement::writeDom(element);
-
-    QDomDocument doc = element.ownerDocument();
-
-    QDomElement con = doc.createElement("CONTENT");
-    con.appendChild(m_radicand->getElementDom(doc));
-    element.appendChild(con);
-
-    if(m_exponent) {
-        QDomElement ind = doc.createElement("ROOTINDEX");
-        ind.appendChild(m_exponent->getElementDom(doc));
-        element.appendChild(ind);
-    }
-}
-
-/**
- * Reads our attributes from the element.
- * Returns false if it failed.
- */
-bool RootElement::readAttributesFromDom(QDomElement element)
-{
-    return BasicElement::readAttributesFromDom(element);
-}
-
-/**
- * Reads our content from the node. Sets the node to the next node
- * that needs to be read.
- * Returns false if it failed.
- */
-bool RootElement::readContentFromDom(QDomNode& node)
-{
-/*    if (!BasicElement::readContentFromDom(node)) {
-        return false;
-    }
-
-    if ( !buildChild( m_radicand, node, "CONTENT" ) ) {
-        kWarning( DEBUGID ) << "Empty content in RootElement." << endl;
-        return false;
-    }
-    node = node.nextSibling();
-
-    if ( node.nodeName().toUpper() == "ROOTINDEX" ) {
-        if ( !buildChild( m_exponent=new SequenceElement( this ), node, "ROOTINDEX" ) ) {
-            return false;
-        }
-    }
-    // backward compatibility
-    else if ( node.nodeName().toUpper() == "INDEX" ) {
-        if ( !buildChild( m_exponent=new SequenceElement( this ), node, "INDEX" ) ) {
-            return false;
-        }
-    }
-    node = node.nextSibling();
-*/
-    return true;
-}
-
-/**
- * Reads our attributes from the MathML element.
- * Also checks whether it's a msqrt or mroot.
- * Returns false if it failed.
- */
-/*
-bool RootElement::readAttributesFromMathMLDom(const QDomElement& element)
-{
-    if ( element.tagName().lower() == "mroot" )
-        square = false;
+/*    if( m_exponent->elementType() == Basic )
+        writer->startElement( oasisFormat ? "math:msqrt" : "msqrt" );
     else
-        square = true;
-    return true;
-}
-*/
+        writer->startElement( oasisFormat ? "math:mroot" : "mroot" );
 
-/**
- * Reads our content from the MathML node. Sets the node to the next node
- * that needs to be read.
- * Returns false if it failed.
- */
-/*
-int RootElement::readContentFromMathMLDom(QDomNode& node)
-{
-    if ( BasicElement::readContentFromMathMLDom( node ) == -1 ) {
-        return -1;
-    }
+    writeMathMLAttributes( writer );
+    m_radicand->writeMathML( writer, oasisFormat );
+    if( m_exponent->elementType() != Basic )
+        m_exponent->writeMathML( writer, oasisFormat );
 
-    if ( square ) {
-        // Any number of arguments are allowed
-        if ( content->readContentFromMathMLDom( node ) == -1 ) {
-            kdWarning( DEBUGID ) << "Empty content in RootElement." << endl;
-            return -1;
-        }
-    }
-    else {
-        // Exactly two arguments are required
-        int contentNumber = content->buildMathMLChild( node );
-        if ( contentNumber == -1 ) {
-            kdWarning( DEBUGID ) << "Empty content in RootElement." << endl;
-            return -1;
-        }
-        for (int i = 0; i < contentNumber; i++ ) {
-            if ( node.isNull() ) {
-                return -1;
-            }
-            node = node.nextSibling();
-        }
-
-        index = new SequenceElement( this );
-        if ( index->buildMathMLChild( node ) == -1 ) {
-            kdWarning( DEBUGID ) << "Empty index in RootElement." << endl;
-            return -1;
-        }
-    }
-
-    return 1;
+    writer->endElement();*/
 }
 
-void RootElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const
-{
-    content->writeMathML( doc, element, oasisFormat );
-    if( hasIndex() )
-    {
-        index->writeMathML( doc, element, oasisFormat );
-    }
-}
-*/
-
-} // namespace KFormula
+} // namespace FormulaShape

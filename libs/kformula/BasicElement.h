@@ -40,7 +40,8 @@ class FormulaCursor;
 enum ElementType {
     Basic,
     Formula,
-    Sequence,
+    Row,
+    Space,
     Fraction,
     Matrix,
     MatrixRow,
@@ -116,7 +117,10 @@ public:
      */
     virtual void paint( QPainter& painter, const AttributeManager* am );
 
-    /// the former calculateSize
+    /**
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
+     */
     virtual void layout( const AttributeManager* am );
     
     /**
@@ -146,18 +150,6 @@ public:
      * @param from The BasicElement which was the last owner of the FormulaCursor
      */
     virtual void moveDown( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor at the first position of the line 
-     * @param cursor The FormulaCursor to be moved
-     */
-    virtual void moveHome( FormulaCursor* cursor );
-
-    /**
-     * Move the FormulaCursor at the end of the line
-     * @param cursor The FormulaCursor to be moved 
-     */
-    virtual void moveEnd( FormulaCursor* cursor );
 
     /// @return The element's ElementType
     virtual ElementType elementType() const;
@@ -195,8 +187,15 @@ public:
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
 
+    /**
+     * Set an attribute's value
+     * @param name The name of the attribute to be set
+     * @param value The value to set for the attribute
+     */
+    void setAttribute( const QString& name, QVariant value );
+
     /// @return The value of the attribute if it is set for this element
-    QString hasAttribute( const QString& attribute ) const;
+    QString attribute( const QString& attribute ) const;
 
     /// @return The value of the attribute if it is inherited
     virtual QString inheritsAttribute( const QString& attribute ) const;

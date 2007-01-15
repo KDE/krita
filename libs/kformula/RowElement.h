@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+                      Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,32 +19,46 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef SEQUENCEELEMENT_H
-#define SEQUENCEELEMENT_H
+#ifndef ROWELEMENT_H
+#define ROWELEMENT_H
 
 #include "BasicElement.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
 /**
- * The element that contains a number of children.
- * The children are aligned in one line.
+ * @short Implementation of the MathML mrow element
+ *
+ * The mrow element is specified in the MathML spec section 3.3.1. It primarily
+ * serves as container for other elements that are grouped together and aligned
+ * in a row.
+ * mrow has no own visual representance that is why the paint() method is empty.
+ * The handling of background and other global attributes is done generically
+ * inside FormulaRenderer.
+ * The layout() method implements the layouting and size calculation for the mrow
+ * element. The calculations assume that spacing is done per element and therefore
+ * do not handle it.
+ * At the moment there is no linebreaking implementation in RowElement.
  */
-class SequenceElement : public BasicElement {
+class RowElement : public BasicElement {
 public:
     /// The standard constructor
-    SequenceElement( BasicElement* parent = 0 );
-   
-    /// The standard destructor 
-    ~SequenceElement();
+    RowElement( BasicElement* parent = 0 );
+
+    /// The standard destructor
+    ~RowElement();
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      */
-    virtual void paint( QPainter& painter ) const;
+    virtual void paint( QPainter& painter, const AttributeManager* am );
 
-    virtual void calculateSize();
+    /**
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
+     */
+    virtual void layout( const AttributeManager* am );
 
     /**
      * Insert a new child at the cursor position - reimplemented from BasicElement
@@ -52,11 +66,11 @@ public:
      * @param child A BasicElement to insert
      */
     virtual void insertChild( FormulaCursor* cursor, BasicElement* child );
-   
+
     /**
      * Remove a child element
      * @param element The BasicElement to remove
-     */ 
+     */
     virtual void removeChild( BasicElement* element );
 
     /**
@@ -66,10 +80,10 @@ public:
      */
     virtual const QList<BasicElement*> childElements();
 
-    /// @return The child element at the position @p index - 0 if the sequence is empty
+    /// @return The child element at the position @p index - 0 if the row is empty
     BasicElement* childAt( int index );
 
-    /// @return The index of the @p element in the sequence - -1 if not in sequence
+    /// @return The index of the @p element in the row - -1 if not in row
     int indexOfElement( const BasicElement* element ) const;
 
     /**
@@ -86,56 +100,18 @@ public:
      */
     virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
 
+    /// Read the element from MathML
     virtual void readMathML( const KoXmlElement& element );
-    
+
+    /// Save the element to MathML
     virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
-   
-
-
-
- 
-
-   /**
-     * Stores the given childrens dom in the element.
-     */
-    void getChildrenDom( QDomDocument& doc, QDomElement elem, uint from, uint to);
-
-    /**
-     * Builds elements from the given node and its siblings and
-     * puts them into the list.
-     * Returns false if an error occures.
-     */
-    bool buildChildrenFromDom(QList<BasicElement*>& list, QDomNode n);
-
-protected:
-    /**
-     * Returns the tag name of this element type.
-     */
-    virtual QString getTagName() const { return "SEQUENCE"; }
-
-    /**
-     * Appends our attributes to the dom element.
-     */
-    virtual void writeDom(QDomElement element);
-
-    /**
-     * Reads our attributes from the element.
-     * Returns false if it failed.
-     */
-    virtual bool readAttributesFromDom(QDomElement element);
-
-    /**
-     * Reads our content from the node. Sets the node to the next node
-     * that needs to be read.
-     * Returns false if it failed.
-     */
-    virtual bool readContentFromDom(QDomNode& node);
 
 private:
-    /// The sorted list of all elements in this sequence
-    QList<BasicElement*> m_sequenceElements;
+    /// The sorted list of all elements in this row
+    QList<BasicElement*> m_rowElements;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
-#endif // SEQUENCEELEMENT_H
+#endif // ROWELEMENT_H
+

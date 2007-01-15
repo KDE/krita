@@ -25,112 +25,45 @@
 
 #include "BasicElement.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
 /**
- * A element that represents a space.
+ * @short Implementation of the MathML mspace element
+ *
+ * The mspace element is specified in the MathML spec section 3.2.7. As
+ * FormulaShape currently does not implement linebreaking the linebreaking
+ * attributes of SpaceElement are ignored.
  */
 class SpaceElement : public BasicElement {
-    enum LineBreakType {
-        NoBreakType,
-        AutoBreak,
-        NewLineBreak,
-        IndentingNewLineBreak,
-        NoBreak,
-        GoodBreak,
-        BadBreak
-    };
 public:
     /// The standard constructor
     SpaceElement( BasicElement* parent = 0 );
 
     /**
-     * Calculates our width and height and
-     * our children's parentPosition.
-     * DEPRECATED: use calculateSize()
-     */
-    virtual void calcSizes( const ContextStyle& style,
-						    ContextStyle::TextStyle tstyle,
-						    ContextStyle::IndexStyle istyle,
-							StyleAttributes& style );
-
-    /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
-     * DEPRECATED: Use paint()
-     */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-					   StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
-
-    /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      */
-    void paint( QPainter& painter ) const;
-    
-    /// Calculate the element's sizes and the size of its children
-    void calculateSize();
+    void paint( QPainter& painter, const AttributeManager* am );
 
+    /**
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
+     */
+    void layout( const AttributeManager* am );
+
+    /// @return The element's ElementType
+    ElementType elementType() const;
+
+    /// @return The default value of the attribute for this element
+    QVariant attributesDefaultValue( const QString& attribute ) const;
+    
     /// Read the element from MathML
-    void readMathML( const QDomElement& element );
+    void readMathML( const KoXmlElement& element );
 
     /// Save the element to MathML 
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
-
-protected:
-    /**
-     * @returns the tag name of this element type.
-     */
-    virtual QString getTagName() const { return "SPACE"; }
-
-    /**
-     * Appends our attributes to the dom element.
-     */
-    virtual void writeDom(QDomElement element);
-
-    /**
-     * Reads our attributes from the element.
-     * Returns false if it failed.
-     */
-    virtual bool readAttributesFromDom(QDomElement element);
-
-    /**
-     * Reads our content from the node. Sets the node to the next node
-     * that needs to be read.
-     * Returns false if it failed.
-     */
-    virtual bool readContentFromDom(QDomNode& node);
-    /**
-     * Reads our attributes from the MathML element.
-     * Returns false if it failed.
-     */
-	virtual bool readAttributesFromMathMLDom(const QDomElement& element);
-
-private:
-
-    virtual QString getElementName() const { return "mspace"; }
-    virtual void writeMathMLAttributes( KoXmlWriter* writer ) const ;
-
-    /**
-     * Whether this space behaves like a tab.
-     */
-    bool m_tab;
-
-    // MathML Attributes, Section 3.2.7.2
-    SizeType m_widthType;
-    double m_width;
-    SizeType m_heightType;
-    double m_height;
-    SizeType m_depthType;
-    double m_depth;
-    LineBreakType m_lineBreak;
+    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // SPACEELEMENT_H

@@ -79,9 +79,9 @@
       <enum>QFrame::NoFrame</enum>
      </property>
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="page" >
+     <widget class="QWidget" name="normalPage" >
       <layout class="QVBoxLayout" >
        <property name="margin" >
         <number>9</number>
@@ -103,7 +103,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_3" >
+     <widget class="QWidget" name="customPage" >
       <layout class="QVBoxLayout" >
        <property name="margin" >
         <number>9</number>

@@ -24,14 +24,24 @@
 #include "ui_FixedDateFormat.h"
 
 class DateVariable;
+class QListWidgetItem;
+class QMenu;
 
 class FixedDateFormat : public QWidget {
+    Q_OBJECT
 public:
     FixedDateFormat(DateVariable *variable);
+
+private slots:
+    void customClicked(int state);
+    void listClicked(QListWidgetItem *item);
+    void offsetChanged(int offset);
+    void insertCustomButtonPressed();
 
 private:
     Ui::FixedDateFormat widget;
     DateVariable *m_variable;
+    QMenu *m_popup;
 };
 
 #endif

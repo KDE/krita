@@ -24,27 +24,40 @@
 
 DateVariable::DateVariable(DateType type)
     : KoVariable(),
-    m_type(type)
+    m_type(type),
+    m_offset(0)
 {
     m_time = QDateTime::currentDateTime();
 }
 
 void DateVariable::setProperties(const KoProperties *props) {
     m_definition = qvariant_cast<QString> (props->getProperty("definition"));
-    switch(m_type) {
-        case Fixed:
-            setValue(m_time.toString(m_definition));
-            break;
-    }
+    m_offset = props->getProperty("offset").toInt();
+    update();
 }
 
 QWidget *DateVariable::createOptionsWidget() {
     switch(m_type) {
         case Fixed:
-            if(m_definition.isEmpty()) {
-                return new FixedDateFormat(this);
-            }
-            break;
+            return new FixedDateFormat(this);
     }
     return 0;
+}
+
+void DateVariable::setDefinition(const QString &definition) {
+    m_definition = definition;
+    update();
+}
+
+void DateVariable::setOffset(int offset) {
+    m_offset = offset;
+    update();
+}
+
+void DateVariable::update() {
+    switch(m_type) {
+        case Fixed:
+            setValue(m_time.addDays(m_offset).toString(m_definition));
+            break;
+    }
 }

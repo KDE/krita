@@ -44,8 +44,17 @@ public:
 
     QWidget *createOptionsWidget();
 
+    QString definition() const { return m_definition; }
+    void setDefinition(const QString &definition);
+
+    int offset() const { return m_offset; }
+    void setOffset(int offset);
+
 private:
+    void update();
+
     DateType m_type;
     QString m_definition;
     QDateTime m_time;
+    int m_offset;
 };

@@ -166,7 +166,6 @@ public:
                       unzoomItXOld( r.right() ), unzoomItYOld( r.bottom() ) );
         return _r;
     }
-
     // KoViewConverter-interface methods
 
     /**
@@ -222,7 +221,7 @@ public:
     virtual double viewToDocumentY( double viewY ) const;
 
     /**
-     * set the zoom levels of the individual x and y axis to the pointer parameters.
+     * Get the zoom levels of the individual x and y axis. Copy them to the pointer parameters.
      * @param zoomX a pointer to a double which will be modified to set the horizontal zoom.
      * @param zoomY a pointer to a double which will be modified to set the vertical zoom.
      */

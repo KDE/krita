@@ -21,6 +21,9 @@
 
 #include <QMenu>
 #include <QAction>
+#include <kicon.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 static void createTimeAction(QMenu *parent, const QString &title, const QString &data) {
     QAction *action = new QAction(title, parent );
@@ -71,10 +74,13 @@ FixedDateFormat::FixedDateFormat(DateVariable *variable)
         widget.custom->setChecked(true);
     }
 
+    widget.formatButton->setIcon(KIcon("add"));
+
     connect (widget.custom, SIGNAL(stateChanged(int)), this, SLOT(customClicked(int)));
     connect (widget.formatList, SIGNAL(itemPressed(QListWidgetItem*)), this, SLOT(listClicked(QListWidgetItem*)));
     connect (widget.correction, SIGNAL(valueChanged(int)), this, SLOT(offsetChanged(int)));
     connect (widget.formatButton, SIGNAL(clicked()), this, SLOT(insertCustomButtonPressed()));
+    connect (widget.customString, SIGNAL(textChanged(const QString&)), this, SLOT(customTextChanged(const QString&)));
 }
 
 void FixedDateFormat::customClicked(int state) {
@@ -86,9 +92,21 @@ void FixedDateFormat::customClicked(int state) {
 
 void FixedDateFormat::listClicked(QListWidgetItem *item) {
     // TODO parse out the first two values...
-    m_variable->setDefinition(item->text());
-
-    widget.customString->setText(m_variable->definition());
+    QString format;
+    switch(widget.formatList->row(item)) {
+        case 0: format = KGlobal::locale()->dateFormat(); break;
+        case 1: format = KGlobal::locale()->dateFormatShort(); break;
+        case 2:
+            format = KGlobal::locale()->dateFormat() +" "+ KGlobal::locale()->timeFormat();
+            break;
+        case 3:
+            format = KGlobal::locale()->dateFormatShort() +" "+ KGlobal::locale()->timeFormat();
+            break;
+        default:
+            format = item->text();
+    }
+    m_variable->setDefinition(format);
+    widget.customString->setText(format);
 }
 
 void FixedDateFormat::offsetChanged(int offset) {
@@ -111,10 +129,10 @@ void FixedDateFormat::insertCustomButtonPressed() {
         m_popup->addMenu(minute);
         m_popup->addMenu(second);
 
-        createTimeAction(day, i18n("Flexible digits (1-31)"), "d");
+        createTimeAction(day, i18n("Flexible Digits (1-31)"), "d");
         createTimeAction(day, i18n("2 Digits (01-31)"), "dd");
         createTimeAction(day, i18n( "Abbreviated Name"), "ddd");
-        createTimeAction(day, i18n( "Long Name)"), "dddd");
+        createTimeAction(day, i18n( "Long Name"), "dddd");
         createTimeAction( month, i18n("Flexible Digits (1-12)" ), "M" );
         createTimeAction( month, i18n("2 Digits (01-12)" ), "MM" );
         createTimeAction( month, i18n("Abbreviated Name" ), "MMM" );
@@ -126,9 +144,9 @@ void FixedDateFormat::insertCustomButtonPressed() {
         createTimeAction( hour, i18n("Flexible Digits (1-23)" ), "h" );
         createTimeAction( hour, i18n("2 Digits (01-23)" ), "hh" );
         createTimeAction( minute, i18n("Flexible Digits (1-59)" ), "m" );
-        createTimeAction( minute, i18n("2 Digits, (01-59(" ), "mm" );
+        createTimeAction( minute, i18n("2 Digits (01-59)" ), "mm" );
         createTimeAction( second, i18n("Flexible Digits (1-59)" ), "s" );
-        createTimeAction( second, i18n("2 Digits (01-59))" ), "sss" );
+        createTimeAction( second, i18n("2 Digits (01-59)" ), "sss" );
         createTimeAction( m_popup, i18n("am/pm" ), "ap" );
         createTimeAction( m_popup, i18n("AM/PM" ), "AP" );
     }
@@ -136,8 +154,18 @@ void FixedDateFormat::insertCustomButtonPressed() {
     QAction *action = m_popup->exec(position);
     if(action)
         widget.customString->insert(qvariant_cast<QString>(action->data()));
+}
 
-    m_variable->setDefinition(widget.customString->text());
+void FixedDateFormat::customTextChanged(const QString& text) {
+    m_variable->setDefinition(text);
+
+    if(widget.custom->isChecked()) {
+        // altering the custom text will deselect the list item so the user can easilly switch
+        // back by selecting one.
+        QListWidgetItem * item = widget.formatList->currentItem();
+        if(item) // deselect it.
+            widget.formatList->setItemSelected(item, false);
+    }
 }
 
 #include "FixedDateFormat.moc"

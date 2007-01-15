@@ -839,6 +839,8 @@ protected:
      */
     int arcToCurve( double rx, double ry, double startAngle, double sweepAngle, const QPointF & offset, QPointF * curvePoints ) const;
 
+    friend class KoParameterToPathCommand;
+
     KoSubpathList m_subpaths;
 };
 

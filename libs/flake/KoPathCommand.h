@@ -418,6 +418,9 @@ public:
     void undo();
 private:
     QList<KoParameterShape*> m_shapes;
+    QList<KoSubpathList> m_oldSubpaths;
+    QList<KoSubpathList> m_newSubpaths;
+    bool m_newPointsActive;
 };
 
 /// The undo / redo command for separating subpaths into different paths

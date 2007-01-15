@@ -67,7 +67,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="customCheckbox" >
+    <widget class="QCheckBox" name="custom" >
      <property name="text" >
       <string>Custom format</string>
      </property>
@@ -146,7 +146,7 @@
          <property name="sizeHint" >
           <size>
            <width>20</width>
-           <height>205</height>
+           <height>10</height>
           </size>
          </property>
         </spacer>

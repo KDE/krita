@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,27 +17,35 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoDateVariableFactory.h"
-#include "KoDateVariable.h"
+#include <KoVariable.h>
 
-#include <KoProperties.h>
+#include <QString>
+#include <QVariant>
+#include <QDateTime>
 
-#include <klocale.h>
+/**
+ * Base class for in-text variables.
+ * A variable is a field inserted into the text and the content is set to a specific value that
+ * is used as text.  This class is pretty boring in that it has just a setValue() to alter the
+ * text shown; we depend on plugin writers to create more exciting ways to update variables.
+ */
+class DateVariable : public KoVariable {
+public:
+    enum DateType {
+        Fixed
+    };
 
-KoDateVariableFactory::KoDateVariableFactory(QObject *parent)
-    : KoInlineObjectFactory(parent, "date")
-{
-    KoInlineObjectTemplate var;
-    var.id = "fixed";
-    var.name = i18n("Fixed");
-    KoProperties *props = new KoProperties();
-    props->setProperty("id", KoDateVariable::Fixed);
-    var.properties = props;
-    addTemplate(var);
-}
+    /**
+     * Constructor.
+     */
+    DateVariable(DateType type);
 
-KoInlineObject *KoDateVariableFactory::createInlineObject(const KoProperties *properties) const {
-    KoDateVariable *var = new KoDateVariable(static_cast<KoDateVariable::DateType> (properties->getProperty("id").toInt()));
-    var->setProperties(properties);
-    return var;
-}
+    void setProperties(const KoProperties *props);
+
+    QWidget *createOptionsWidget();
+
+private:
+    DateType m_type;
+    QString m_definition;
+    QDateTime m_time;
+};

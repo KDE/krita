@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,33 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoDateVariable.h"
-#include "FixedDateFormat.h"
+#ifndef KO_DATE_VARIABLE_FACTORY
+#define KO_DATE_VARIABLE_FACTORY
 
-#include <KoProperties.h>
+#include <KoInlineObjectFactory.h>
 
-KoDateVariable::KoDateVariable(DateType type)
-    : KoVariable(),
-    m_type(type)
-{
-}
+class KoVariable;
 
-void KoDateVariable::setProperties(const KoProperties *props) {
-    m_definition = qvariant_cast<QString> (props->getProperty("definition"));
-    switch(m_type) {
-        case Fixed:
-            setValue(m_definition);
-            break;
-    }
-}
+class DateVariableFactory : public KoInlineObjectFactory {
+public:
+    explicit DateVariableFactory(QObject *parent);
+    ~DateVariableFactory() {}
 
-QWidget *KoDateVariable::createOptionsWidget() {
-    switch(m_type) {
-        case Fixed:
-            if(m_definition.isEmpty()) {
-                return new FixedDateFormat(this);
-            }
-            break;
-    }
-    return 0;
-}
+    KoInlineObject *createInlineObject(const KoProperties *properties) const;
+
+    ObjectType type() const { return TextVariable; }
+};
+
+#endif

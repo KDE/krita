@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,20 +16,35 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <KoInlineObjectRegistry.h>
 
-#include "KoVariablesPlugin.h"
-#include "KoDateVariableFactory.h"
-#include <kgenericfactory.h>
+#include "DateVariable.h"
+#include "FixedDateFormat.h"
 
-K_EXPORT_COMPONENT_FACTORY(textvariables,
-                           KGenericFactory<KoVariablesPlugin>( "VariablesPlugin" ) )
+#include <KoProperties.h>
 
-KoVariablesPlugin::KoVariablesPlugin( QObject *parent, const QStringList& )
-    : QObject(parent)
+DateVariable::DateVariable(DateType type)
+    : KoVariable(),
+    m_type(type)
 {
-    KoInlineObjectRegistry::instance()->add( new KoDateVariableFactory( parent));
+    m_time = QDateTime::currentDateTime();
 }
 
-#include "KoVariablesPlugin.moc"
+void DateVariable::setProperties(const KoProperties *props) {
+    m_definition = qvariant_cast<QString> (props->getProperty("definition"));
+    switch(m_type) {
+        case Fixed:
+            setValue(m_time.toString(m_definition));
+            break;
+    }
+}
 
+QWidget *DateVariable::createOptionsWidget() {
+    switch(m_type) {
+        case Fixed:
+            if(m_definition.isEmpty()) {
+                return new FixedDateFormat(this);
+            }
+            break;
+    }
+    return 0;
+}

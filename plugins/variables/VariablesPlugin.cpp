@@ -16,22 +16,20 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include <KoInlineObjectRegistry.h>
 
-#ifndef KO_DATE_VARIABLE_FACTORY
-#define KO_DATE_VARIABLE_FACTORY
+#include "VariablesPlugin.h"
+#include "DateVariableFactory.h"
+#include <kgenericfactory.h>
 
-#include <KoInlineObjectFactory.h>
+K_EXPORT_COMPONENT_FACTORY(textvariables,
+                           KGenericFactory<VariablesPlugin>( "VariablesPlugin" ) )
 
-class KoVariable;
+VariablesPlugin::VariablesPlugin( QObject *parent, const QStringList& )
+    : QObject(parent)
+{
+    KoInlineObjectRegistry::instance()->add( new DateVariableFactory( parent));
+}
 
-class KoDateVariableFactory : public KoInlineObjectFactory {
-public:
-    explicit KoDateVariableFactory(QObject *parent);
-    ~KoDateVariableFactory() {}
+#include "VariablesPlugin.moc"
 
-    KoInlineObject *createInlineObject(const KoProperties *properties) const;
-
-    ObjectType type() const { return TextVariable; }
-};
-
-#endif

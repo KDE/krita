@@ -3,9 +3,9 @@ project(textvariables)
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOFFICECORE_INCLUDES} )
 
 set(textvariables_SRCS
-    KoVariablesPlugin.cpp
-    KoDateVariable.cpp
-    KoDateVariableFactory.cpp
+    VariablesPlugin.cpp
+    DateVariable.cpp
+    DateVariableFactory.cpp
     FixedDateFormat.cpp
 )
 

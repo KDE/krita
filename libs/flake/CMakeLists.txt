@@ -58,6 +58,7 @@ set(flake_SRCS
     commands/KoShapeSizeCommand.cpp
     commands/KoUngroupShapesCommand.cpp
     commands/KoShapeReorderCommand.cpp
+    commands/KoShapeKeepAspectRatioCommand.cpp
 )
 
 kde4_automoc(${flake_SRCS})

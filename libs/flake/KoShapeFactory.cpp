@@ -45,7 +45,7 @@ const QString& KoShapeFactory::name() const {
     return m_name;
 }
 
-void KoShapeFactory::addTemplate(KoShapeTemplate params) {
+void KoShapeFactory::addTemplate(KoShapeTemplate &params) {
     params.id = shapeId();
     m_templates.append(params);
 }

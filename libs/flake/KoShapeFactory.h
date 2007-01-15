@@ -183,7 +183,7 @@ protected:
      * using the createShape() method.
      * @param params the new template this factory knows to produce
      */
-    void addTemplate(KoShapeTemplate params);
+    void addTemplate(KoShapeTemplate &params);
     /**
      * Set the tooltip to be used for a selector of shapes
      * @param tooltip the tooltip

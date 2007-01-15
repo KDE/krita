@@ -157,131 +157,13 @@ public:
     KoShapeController * shapeController() const { return m_shapeController; }
 
 
-#if 0
-/*  The next list of methods are naming taken from Krita, which means they have already been
-    toughened by time.  So, if you ever need a method in this interface; please uncomment the
-    respective one here for good naming conventions.  It will probably save you time in
-    implementing some of the methods in the different KOffice apps as well ;)
-*/
-
-
-    virtual KoSelection * currentSelection() const 0;
-
-    /**
-     * @return the value of the horizontal scrollbar.
-     */
-    virtual qint32 horizontalScrollbarValue() const  0;
-
-    /**
-     * @return the value of the vertical scrollbar
-     */
-    virtual qint32 verticalScrollbarValue() const  0;
-q
-    /**
-     * Sets the horizontal and vertical scrollbars to the specified values
-     *
-     * @param x the value the horizontal scrollbar is set to
-     * @param y the value the vertical scrollbar is set to
-     */
-    virtual void scrollTo(qint32 x, qint32 y)  0;
-
-    /**
-     * Tell all of the canvas to repaint itself.
-     */
-    virtual void updateCanvas()  0;
-
-    /**
-     * Tell the canvas to repaint the rectangle defined by x, y, w and h.
-     * The coordinates are document coordinates.
-     */
-    virtual void updateCanvas(qint32 x, qint32 y, qint32 w, qint32 h)  0;
-
-    /**
-     * Increase the zoomlevel one step
-     */
-    virtual void zoomIn()  0;
-
-    /**
-      Increase the zoomlevel one step and make sure that x,y is the center
-       point of the view.
-
-      @param x The x coordinate of the visible point in document
-               coordinates
-      @param y the y coordinate of the visible point in document
-               coordinates
-     */
-    virtual void zoomIn(qint32 x, qint32 y)  0;
-
-    /**
-     * Decrease the zoomlevel one step
-     */
-    virtual void zoomOut()  0;
-
-
-    /**
-     * Decrease the zoomlevel one step and make sure that x,y is the center point of the view.
-     *
-     * @param x the x coordinate of the visible point in document coordinates
-     * @param y the y coordinate of the visible point in document coordinates
-     */
-    virtual void zoomOut(qint32 x, qint32 y)  0;
-
-    /**
-     * To center the view on the given point with the given zoom factor.
-     *
-     * @param x the x coordinate of the center point in document coordinates
-     * @param y the y coordinate of the center point in document coordinates
-     * @param zf the zoomfactor
-     */
-    virtual void zoomAroundPoint(double x, double y, double zf)  0;
-
-    /**
-     * Make the rect defined by x, y, w and h visible, zooming in or
-     * out as necessary. The view will be centered around the center point
-     * of the specified rect.
-     */
-    virtual void zoomTo(qint32 x, qint32 y, qint32 w, qint32 h)  0;
-
-    /**
-     * Make the rect defined by x, y, w and h visible, zooming in or
-     * out as necessary. The view will be centered around the center point
-     * of the specified rect.
-     */
-    virtual void zoomTo(const QRect& r)  0;
-
-    /**
-     * Make the rect defined by x, y, w and h visible, zooming in or
-     * out as necessary. The view will be centered around the center point
-     * of the specified rect.
-     */
-    virtual void zoomTo(const QRectF& r)  0;
-
-    /**
-     * Conversion functions from view coordinates to document coordinates
-     *
-     * You can get the rectangle of the document that's visible using the
-     * viewToWindow() functions (KoCanvasBase). E.g.
-     * viewToWindow(QRect(0, 0, canvasWidth, canvasHeight)).
-     *
-     * Here, the view is the canvas widget in the view widget, and the window
-     * is the window on the document.
-     */
-    virtual QPoint viewToWindow(const QPoint& pt)  0;
-    virtual QPointF viewToWindow(const QPointF& pt)  0;
-    virtual QRect viewToWindow(const QRect& rc)  0;
-    virtual QRectF viewToWindow(const QRectF& rc)  0;
-    virtual void viewToWindow(qint32 *x, qint32 *y)  0;
-
-    /**
-     * Conversion functions from document coordinates to view coordinates
-     */
-    virtual QPoint windowToView(const QPoint& pt)  0;
-    virtual QPointF windowToView(const QPointF& pt)  0;
-    virtual QRect windowToView(const QRect& rc)  0;
-    virtual QRectF windowToView(const QRectF& rc)  0;
-    virtual void windowToView(qint32 *x, qint32 *y)  0;
-
-#endif
+    /*
+     The following 3 methods should be implemented by all canvasses soon so we can work on features
+     like a zoom tool and a way to make the canvasController implement zoom-by-scrollwheel (and ctrl).
+    */
+    virtual void zoomIn(const QPointF &center) { if(center.x()); /* poor mans Q_UNUSED */}
+    virtual void zoomOut(const QPointF &center) { if(center.x());}
+    virtual void zoomTo(const QRectF &newSize) { if(newSize.x());}
 
 private:
     // we need a KoShapeControllerBase so that it can work

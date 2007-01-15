@@ -39,7 +39,7 @@ public:
      */
     KoDateVariable(DateType type);
 
-    void setProperties(KoProperties *props);
+    void setProperties(const KoProperties *props);
 
     QWidget *createOptionsWidget();
 

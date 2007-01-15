@@ -56,7 +56,7 @@ public:
     /// @return the current value of this variable.
     const QString &value() const;
 
-    virtual void setProperties(KoProperties *props) { Q_UNUSED(props); }
+    virtual void setProperties(const KoProperties *props) { Q_UNUSED(props); }
 
 // TODO create interface that will allow me to get a Properties object.
 // or, maybe the widget should just act on the variable directly???

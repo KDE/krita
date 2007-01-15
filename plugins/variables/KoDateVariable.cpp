@@ -28,7 +28,7 @@ KoDateVariable::KoDateVariable(DateType type)
 {
 }
 
-void KoDateVariable::setProperties(KoProperties *props) {
+void KoDateVariable::setProperties(const KoProperties *props) {
     m_definition = qvariant_cast<QString> (props->getProperty("definition"));
     switch(m_type) {
         case Fixed:

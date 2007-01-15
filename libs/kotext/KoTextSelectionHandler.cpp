@@ -30,6 +30,13 @@
 #include <QTextCursor>
 #include <QTextBlock>
 
+KoTextSelectionHandler::KoTextSelectionHandler()
+: m_textShape(0),
+    m_textShapeData(0),
+    m_caret(0)
+{
+}
+
 void KoTextSelectionHandler::bold(bool bold) {
     Q_ASSERT(m_caret);
     QTextCharFormat cf = m_caret->charFormat();

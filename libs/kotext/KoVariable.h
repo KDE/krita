@@ -28,6 +28,9 @@
 class QTextInlineObject;
 class QTextDocument;
 class KoShape;
+class KoProperties;
+class QWidget;
+class VariablePrivate;
 
 /**
  * Base class for in-text variables.
@@ -41,7 +44,7 @@ public:
      * Constructor.
      */
     KoVariable(bool propertyChangeListener = false);
-    virtual ~KoVariable() {}
+    virtual ~KoVariable();
 
     /**
      * The new value this variable will show.
@@ -51,7 +54,13 @@ public:
     void setValue(const QString &value);
 
     /// @return the current value of this variable.
-    const QString &value() const { return m_value; }
+    const QString &value() const;
+
+    virtual void setProperties(KoProperties *props) { Q_UNUSED(props); }
+
+// TODO create interface that will allow me to get a Properties object.
+// or, maybe the widget should just act on the variable directly???
+    virtual QWidget *createOptionsWidget() { return 0; }
 
 protected:
     /**
@@ -70,8 +79,5 @@ private:
             const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
-    QString m_value;
-    bool m_modified;
-    const QTextDocument *m_document;
-    int m_lastPositionInDocument;
+    VariablePrivate *d;
 };

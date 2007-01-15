@@ -43,12 +43,15 @@ KoInlineObjectRegistry* KoInlineObjectRegistry::instance() {
     return KoInlineObjectRegistry::s_instance;
 }
 
-QList<KAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const {
-    QList<KAction*> answer;
+QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const {
+    QList<QAction*> answer;
     foreach(QString key, keys()) {
         KoInlineObjectFactory *factory = get(key);
-        if(factory->type() == KoInlineObjectFactory::TextVariable)
-            answer.append(new InsertVariableAction(host, factory));
+        if(factory->type() == KoInlineObjectFactory::TextVariable) {
+            foreach(KoInlineObjectTemplate templ, factory->templates()) {
+                answer.append(new InsertVariableAction(host, factory, templ));
+            }
+        }
     }
     return answer;
 }

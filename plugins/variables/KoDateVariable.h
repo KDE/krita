@@ -30,10 +30,20 @@
  */
 class KoDateVariable : public KoVariable {
 public:
+    enum DateType {
+        Fixed
+    };
+
     /**
      * Constructor.
      */
-    KoDateVariable();
+    KoDateVariable(DateType type);
 
-    void propertyChanged(Property key, const QVariant &value);
+    void setProperties(KoProperties *props);
+
+    QWidget *createOptionsWidget();
+
+private:
+    DateType m_type;
+    QString m_definition;
 };

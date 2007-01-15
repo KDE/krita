@@ -18,12 +18,32 @@
  */
 
 #include "KoDateVariable.h"
+#include "FixedDateFormat.h"
 
-KoDateVariable::KoDateVariable() : KoVariable(true) {
-    setValue("NoValue");
+#include <KoProperties.h>
+
+KoDateVariable::KoDateVariable(DateType type)
+    : KoVariable(),
+    m_type(type)
+{
 }
 
-void KoDateVariable::propertyChanged(Property key, const QVariant &value) {
-    if(key == KoInlineObject::KWordStart)
-        setValue(QString::number(value.toInt()));
+void KoDateVariable::setProperties(KoProperties *props) {
+    m_definition = qvariant_cast<QString> (props->getProperty("definition"));
+    switch(m_type) {
+        case Fixed:
+            setValue(m_definition);
+            break;
+    }
+}
+
+QWidget *KoDateVariable::createOptionsWidget() {
+    switch(m_type) {
+        case Fixed:
+            if(m_definition.isEmpty()) {
+                return new FixedDateFormat(this);
+            }
+            break;
+    }
+    return 0;
 }

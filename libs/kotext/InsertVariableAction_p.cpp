@@ -24,13 +24,17 @@
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 #include "KoInlineObjectFactory.h"
+#include <kpagedialog.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
-InsertVariableAction::InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactory *factory)
-    : KAction(KIcon(factory->icon()), factory->name(), base->canvasWidget()),
+InsertVariableAction::InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactory *factory, const KoInlineObjectTemplate &templ)
+    : KAction(templ.name, base->canvasWidget()),
     m_canvas(base),
-    m_factory(factory)
+    m_factory(factory),
+    m_templateId(templ.id),
+    m_properties (templ.properties)
 {
     Q_ASSERT(factory->type() == KoInlineObjectFactory::TextVariable);
 
@@ -41,12 +45,23 @@ void InsertVariableAction::activated() {
     Q_ASSERT(m_canvas->toolProxy());
     KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (m_canvas->toolProxy()->selection());
     if(handler) {
-        KoVariable *variable = static_cast<KoVariable*> (m_factory->createInlineObject());
-        handler->insertVariable(variable);
+        KoVariable *variable = static_cast<KoVariable*> (m_factory->createInlineObject(m_properties));
+        QWidget *widget = variable->createOptionsWidget();
+        if(widget) {
+            KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
+            dialog->setCaption(i18n("%1 Options", text()));
+            dialog->addPage(widget, "");
+            if(dialog->exec() != KPageDialog::Accepted) {
+                delete variable;
+                variable = 0;
+            }
+            delete dialog;
+        }
+        if(variable)
+            handler->insertVariable(variable);
     }
     else
         kWarning(32500) << "InsertVariableAction: No texttool selected while trying to insert variable\n";
 }
-
 
 #include "InsertVariableAction_p.moc"

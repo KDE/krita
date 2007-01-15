@@ -47,18 +47,9 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     object->setId(m_lastObjectId);
     m_objects.insert(m_lastObjectId, object);
     object->setManager(this);
-kDebug() << "calling setup!\n";
     object->setup();
     if(object->propertyChangeListener())
         m_listeners.append(object);
-}
-
-/**
- * overloaded method, provided for your convenience.
- */
-void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInlineObjectFactory *factory) {
-    Q_ASSERT(factory);
-    insertInlineObject(cursor, factory->createInlineObject());
 }
 
 void KoInlineTextObjectManager::setProperty(KoInlineObject::Property key, QVariant value) {

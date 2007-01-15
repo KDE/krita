@@ -30,13 +30,14 @@ class KoTextShape;
 class KoTextShapeData;
 class KoVariable;
 class QTextCursor;
+class QStackedWidget;
 
 /**
  * The public class that is able to manipulate selected text.
  */
 class KOTEXT_EXPORT KoTextSelectionHandler : public KoToolSelection {
 public:
-    KoTextSelectionHandler() {}
+    KoTextSelectionHandler();
 
     /**
      * Make the currently selected text bold

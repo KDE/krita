@@ -65,11 +65,6 @@ public:
     void insertInlineObject(QTextCursor &cursor, KoInlineObject *object);
 
     /**
-     * overloaded method, provided for your convenience.
-     */
-    void insertInlineObject(QTextCursor &cursor, KoInlineObjectFactory *factory);
-
-    /**
      * Set a property that may have changed which will be forwarded to all registered textObjects.
      * If the key has changed then all registered InlineObject instances that have stated to want
      * updates will get called with the change.

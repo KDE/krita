@@ -20,21 +20,23 @@
 #define INSERTVARIABLEACTION_H
 
 #include <kaction.h>
+#include "KoInlineObjectFactory.h"
 
 class KoCanvasBase;
-class KoInlineObjectFactory;
 
 class InsertVariableAction : public KAction {
     Q_OBJECT
 public:
-    InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactory *factory);
+    InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactory *factory, const KoInlineObjectTemplate &templ);
 
 private slots:
     void activated();
 
 private:
-    KoCanvasBase *m_canvas;
-    KoInlineObjectFactory *m_factory;
+    KoCanvasBase *const m_canvas;
+    KoInlineObjectFactory *const m_factory;
+    const QString m_templateId;
+    const KoProperties *const m_properties;
 };
 
 #endif

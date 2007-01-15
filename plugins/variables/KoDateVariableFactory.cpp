@@ -20,13 +20,24 @@
 #include "KoDateVariableFactory.h"
 #include "KoDateVariable.h"
 
+#include <KoProperties.h>
+
 #include <klocale.h>
 
 KoDateVariableFactory::KoDateVariableFactory(QObject *parent)
-    : KoInlineObjectFactory(parent, "date", i18n("date"))
+    : KoInlineObjectFactory(parent, "date")
 {
+    KoInlineObjectTemplate var;
+    var.id = "fixed";
+    var.name = i18n("Fixed");
+    KoProperties *props = new KoProperties();
+    props->setProperty("id", KoDateVariable::Fixed);
+    var.properties = props;
+    addTemplate(var);
 }
 
-KoInlineObject *KoDateVariableFactory::createInlineObject() {
-    return new KoDateVariable();
+KoInlineObject *KoDateVariableFactory::createInlineObject(const KoProperties *properties) const {
+    KoDateVariable *var = new KoDateVariable(static_cast<KoDateVariable::DateType> (properties->getProperty("id").toInt()));
+    var->setProperties(properties);
+    return var;
 }

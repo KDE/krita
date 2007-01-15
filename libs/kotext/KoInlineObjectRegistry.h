@@ -26,9 +26,9 @@
 #include <QList>
 
 class KoShape;
-class KAction;
 class KoInlineObjectFactory;
 class KoCanvasBase;
+class QAction;
 
 /**
  * This singleton class keeps a register of all available flake shapes,
@@ -47,7 +47,7 @@ public:
      */
     static KoInlineObjectRegistry * instance();
 
-    QList<KAction*> createInsertVariableActions(KoCanvasBase *host) const;
+    QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
 private:
     KoInlineObjectRegistry() {}

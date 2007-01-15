@@ -19,23 +19,44 @@
 
 #include "KoInlineObjectFactory.h"
 
-KoInlineObjectFactory::KoInlineObjectFactory(QObject *parent, const QString &id, const QString &name)
-    : QObject(parent),
-    m_id(id),
-    m_name(name)
+class InlineObjectFactoryPrivate {
+public:
+    InlineObjectFactoryPrivate(const QString &identifier)
+        : id(identifier)
+    {
+    }
+
+    const QString id;
+    QString iconName;
+    QList<KoInlineObjectTemplate> templates;
+};
+
+KoInlineObjectFactory::KoInlineObjectFactory(QObject *parent, const QString &id)
+    : QObject(parent)
 {
+    d = new InlineObjectFactoryPrivate(id);
+}
+
+KoInlineObjectFactory::~KoInlineObjectFactory() {
+    delete d;
+    d = 0;
 }
 
 const KoID KoInlineObjectFactory::id() const {
-    return KoID(m_id, m_name);
-}
-
-const QString& KoInlineObjectFactory::name() const {
-    return m_name;
+    // can we please get rid of KoID.  There is no reason that we should encode a name with every Id.
+    return KoID(d->id, "");
 }
 
 const QString &KoInlineObjectFactory::objectId() const {
-    return m_id;
+    return d->id;
+}
+
+const QList<KoInlineObjectTemplate> KoInlineObjectFactory::templates() const {
+    return d->templates;
+}
+
+void KoInlineObjectFactory::addTemplate(const KoInlineObjectTemplate &params) {
+    d->templates.append(params);
 }
 
 #include "KoInlineObjectFactory.moc"

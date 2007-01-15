@@ -27,6 +27,20 @@
 #include <koffice_export.h>
 
 class KoInlineObject;
+class InlineObjectFactoryPrivate;
+class KoProperties;
+
+struct KOTEXT_EXPORT KoInlineObjectTemplate {
+    QString id;         ///< The id of the inlineObject
+    QString name;       ///< The name to be shown for this template
+    //QString toolTip;    ///< The tooltip text for the template
+    //QString icon;       ///< Icon name
+    /**
+     * The properties which, when passed to the KoInlineObjectFactory::createInlineObject() method
+     * result in the object this template represents.
+     */
+    KoProperties *properties;
+};
 
 /**
  * A factory for inline text objects. There should be one for each plugin type to
@@ -50,21 +64,14 @@ public:
      * Create the new factory
      * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the variable-type.
-     * @param name the user visible name of the tool this factory creates.
      */
-    KoInlineObjectFactory(QObject *parent, const QString &id, const QString &name);
-    virtual ~KoInlineObjectFactory() {}
+    KoInlineObjectFactory(QObject *parent, const QString &id);
+    virtual ~KoInlineObjectFactory();
 
     /**
      * Create a new instance of an inline object.
      */
-    virtual KoInlineObject *createInlineObject() = 0;
-
-    /**
-     * return the user visible (and translated) name to be seen by the user.
-     * @return the user visible (and translated) name to be seen by the user.
-     */
-    const QString &name() const;
+    virtual KoInlineObject *createInlineObject(const KoProperties *properties) const = 0;
 
     /**
      * return the id for the variable this factory creates.
@@ -78,29 +85,28 @@ public:
     const KoID id() const;
 
     /**
-     * return the basename of the icon for this inlineObject when its shown in menus
-     * @return the basename of the icon for this inlineObject when its shown in menus
-     */
-    const QString & icon() const { return m_iconName; }
-
-    /**
      * Returns the type of object this factory creates.
      * The main purpose is to group plugins per type in, for example, a menu.
      * The default returns Other which means it will not be shown in any menu.
      */
     virtual ObjectType type() const { return Other; }
 
+    /**
+     * Return all the templates this factory knows about.
+     * Each template shows a different way to create an object this factory is specialized in.
+     */
+    const QList<KoInlineObjectTemplate> templates() const;
+
 protected:
     /**
-     * Set an icon to be used in menus
-     * @param iconName the basename (without extension) of the icon
-     * @see KIconLoader
+     * Add a template with the properties of a speficic type of object this factory can generate
+     * using the createInlineObject() method.
+     * @param params The new template this factory knows to produce
      */
-    void setIcon(const QString & iconName) { m_iconName = iconName; }
+    void addTemplate(const KoInlineObjectTemplate &params);
 
 private:
-    const QString m_id, m_name;
-    QString m_iconName;
+    InlineObjectFactoryPrivate *d;
 };
 
 #endif

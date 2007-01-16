@@ -801,17 +801,16 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
 
 
 
-void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
+void KisImage::rotate(double radians, KisProgressDisplayInterface *progress)
 {
     lock();
 
-    angle *= M_PI/180;
     Q_INT32 w = width();
     Q_INT32 h = height();
-    Q_INT32 tx = Q_INT32((w*cos(angle) - h*sin(angle) - w) / 2 + 0.5);
-    Q_INT32 ty = Q_INT32((h*cos(angle) + w*sin(angle) - h) / 2 + 0.5);
-    w = (Q_INT32)(width()*QABS(cos(angle)) + height()*QABS(sin(angle)) + 0.5);
-    h = (Q_INT32)(height()*QABS(cos(angle)) + width()*QABS(sin(angle)) + 0.5);
+    Q_INT32 tx = Q_INT32((w*cos(radians) - h*sin(radians) - w) / 2 + 0.5);
+    Q_INT32 ty = Q_INT32((h*cos(radians) + w*sin(radians) - h) / 2 + 0.5);
+    w = (Q_INT32)(width()*QABS(cos(radians)) + height()*QABS(sin(radians)) + 0.5);
+    h = (Q_INT32)(height()*QABS(cos(radians)) + width()*QABS(sin(radians)) + 0.5);
 
     tx -= (w - width()) / 2;
     ty -= (h - height()) / 2;
@@ -822,7 +821,7 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
     }
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KisID("Triangle"));
-    KisTransformVisitor visitor (this, 1.0, 1.0, 0, 0, angle, -tx, -ty, progress, filter);
+    KisTransformVisitor visitor (this, 1.0, 1.0, 0, 0, radians, -tx, -ty, progress, filter);
     m_rootLayer->accept(visitor);
 
     if (undo()) m_adapter->addCommand(new KisResizeImageCmd(undoAdapter(), this, w, h, width(), height()));

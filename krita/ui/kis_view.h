@@ -193,7 +193,7 @@ public slots:
     void mirrorLayerX();
     void mirrorLayerY();
     void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
-    void rotateLayer(double angle);
+    void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY);
 
     void slotCreateMask();
@@ -215,7 +215,7 @@ public:
 
     void resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers = false);
     void scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy);
-    void rotateCurrentImage(double angle);
+    void rotateCurrentImage(double radians);
     void shearCurrentImage(double angleX, double angleY);
 
     void insertPart(const QRect& viewRect, const KoDocumentEntry& entry,

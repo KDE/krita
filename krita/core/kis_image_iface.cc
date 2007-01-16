@@ -68,6 +68,7 @@ void KisImageIface::rotate180()
 void KisImageIface::rotate(double angle)
 {
     // XXX: Add progressdisplay if there is a view
+    angle *= M_PI/180;
     m_img->rotate(angle, 0);
 }
 

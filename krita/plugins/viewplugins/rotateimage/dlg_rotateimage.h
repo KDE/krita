@@ -42,8 +42,8 @@ public:
              const char* name = 0);
     ~DlgRotateImage();
 
-    void setAngle(Q_UINT32 w);
-    Q_INT32 angle();
+    void setAngle(double w);
+    double angle();
 
     void setDirection (enumRotationDirection direction);
     enumRotationDirection direction();
@@ -52,7 +52,7 @@ private slots:
 
     void okClicked();
     void resetPreview();
-    void slotAngleValueChanged( int );
+    void slotAngleValueChanged( double );
 
 private:
 

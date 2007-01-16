@@ -194,12 +194,15 @@
                                 <bool>true</bool>
                             </property>
                         </widget>
-                        <widget class="KIntSpinBox">
+                        <widget class="KDoubleSpinBox">
                             <property name="name">
-                                <cstring>intCustom</cstring>
+                                <cstring>doubleCustom</cstring>
                             </property>
                             <property name="maxValue">
-                                <number>359</number>
+                                <number>360</number>
+                            </property>
+                            <property name="lineStep">
+                                <number>1</number>
                             </property>
                         </widget>
                     </hbox>

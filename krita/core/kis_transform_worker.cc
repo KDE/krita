@@ -576,7 +576,7 @@ bool KisTransformWorker::run()
             m_progressTotalSteps = r.width() * r.height();
             break;
         case 3:
-            rotation += M_PI/2 + 2*M_PI;
+            rotation -= -M_PI/2 + 2*M_PI;
             tmp = xscale;
             xscale = yscale;
             yscale = tmp;

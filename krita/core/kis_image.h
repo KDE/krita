@@ -159,7 +159,7 @@ public:
     void resize(const QRect& rc, bool cropLayers = false);
 
     void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
-    void rotate(double angle, KisProgressDisplayInterface *m_progress);
+    void rotate(double radians, KisProgressDisplayInterface *m_progress);
     void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 
     /**

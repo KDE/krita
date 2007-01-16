@@ -89,7 +89,8 @@ void RotateImage::slotRotateImage()
     dlgRotateImage->setCaption(i18n("Rotate Image"));
 
         if (dlgRotateImage->exec() == QDialog::Accepted) {
-        Q_INT32 angle = dlgRotateImage->angle();
+        double angle = dlgRotateImage->angle();
+        angle *= M_PI/180;
         m_view->rotateCurrentImage(angle);
     }
     delete dlgRotateImage;
@@ -97,18 +98,18 @@ void RotateImage::slotRotateImage()
 
 void RotateImage::slotRotateImage90()
 {
-    m_view->rotateCurrentImage( 90 );
+    m_view->rotateCurrentImage( M_PI/2);
 }
 
 void RotateImage::slotRotateImage180()
 {
-    m_view->rotateCurrentImage( 180 );
+    m_view->rotateCurrentImage( M_PI );
 }
 
 
 void RotateImage::slotRotateImage270()
 {
-    m_view->rotateCurrentImage( 270 );
+    m_view->rotateCurrentImage( - M_PI/2 + M_PI*2 );
 }
 
 void RotateImage::slotRotateLayer()
@@ -123,9 +124,9 @@ void RotateImage::slotRotateLayer()
     dlgRotateImage->setCaption(i18n("Rotate Layer"));
 
     if (dlgRotateImage->exec() == QDialog::Accepted) {
-                Q_INT32 angle = dlgRotateImage->angle();
+        double angle = dlgRotateImage->angle();
+        angle *= M_PI/180;
         m_view->rotateLayer(angle);
-
     }
     delete dlgRotateImage;
 }

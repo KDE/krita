@@ -1151,7 +1151,7 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-    KFileDialog *dialog = new 
+    KFileDialog *dialog = new
 KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString::null, this);
     dialog->setObjectName( "file dialog" );
     dialog->setMode(KFile::File);
@@ -1764,6 +1764,19 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
         dockWidget = d->m_dockWidgetMap[ factory->dockId() ];
     }
 
+    // XXX: Create koffice-wide dialog pane with the palette font size
+    // option
+
+    KConfig * cfg = KGlobal::config();
+    Q_ASSERT(cfg);
+    cfg->setGroup("");
+    QFont f  = KGlobalSettings::generalFont();
+    float ps = qMin(9.0, KGlobalSettings::generalFont().pointSize() * 0.8);
+    ps = cfg->readEntry("palettefontsize", (int)ps);
+    if (ps < 6) ps = 6;
+
+    f.setPointSize(6);
+    dockWidget->setFont(f);
     return dockWidget;
 }
 

@@ -364,13 +364,13 @@ public:
    * Add a new dock widget.
    * XXX: Figure out how to create dock widgets tabbed initially
    * XXX: Figure out how to add the show/hide widgets menu entries to the menu
-   *
+   * XXX: Isn't this method deprecated (Boudewijn)?
    * @param title Title of the docker
    * @param w     Widget that's to be embedded (may be 0)
    * @return the dock widget itself
    */
    QDockWidget * createDock(const QString & title, QWidget * w);
-    
+
   /**
    * You have to implement this method and disable/enable certain functionality (actions for example) in
    * your view to allow/disallow editing of the document.

@@ -26,6 +26,7 @@
 #include <KoDocumentChild.h>
 #include <KoDockFactory.h>
 #include <kactioncollection.h>
+#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>
@@ -480,9 +481,20 @@ void KoView::removeStatusBarItem( QWidget * widget )
 
 QDockWidget * KoView::createDock(const QString & title, QWidget * w)
 {
+    kDebug() << "Creating palette " << title << endl;
     QDockWidget * d = new QDockWidget(title, mainWindow());
     d->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     d->setWidget(w);
+
+    KConfig * cfg = KGlobal::config();
+    cfg->setGroup("");
+    QFont f  = KGlobalSettings::generalFont();
+    float ps = qMin(9.0, KGlobalSettings::generalFont().pointSize() * 0.8);
+    ps = cfg->readEntry("palettefontsize", (int)ps);
+    if (ps < 6) ps = 6;
+    f.setPointSize(6);
+    d->setFont( f );
+
     d->setObjectName(title);
     mainWindow()->addDockWidget(Qt::RightDockWidgetArea, d);
 

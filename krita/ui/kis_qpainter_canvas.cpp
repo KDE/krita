@@ -50,6 +50,16 @@
 #define PATTERN_WIDTH 256
 #define PATTERN_HEIGHT 256
 
+QRect toAlignedRect(QRectF rc) const
+{
+    int xmin = int(floor(rc.x()));
+    int xmax = int(ceil(rc.x() + rc.width()));
+    int ymin = int(floor(rc.y()));
+    int ymax = int(ceil(rc.y() + rc.height()));
+    return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
+}
+
+
 
 class KisQPainterCanvas::Private {
 public:
@@ -146,7 +156,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     // Don't go outside the image and convert to whole pixels
 
-    QRect rc = imageRect.intersected( canvasImage.rect() ).toAlignedRect();
+    QRect rc = toAlignedRect(imageRect.intersected( canvasImage.rect() ));
 
     // Compute the scale factors
     double scaleX = sx / pppx;

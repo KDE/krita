@@ -43,6 +43,16 @@
 #include "kis_opengl_canvas2.h"
 
 
+QRect toAlignedRect(QRectF rc) const
+{
+    int xmin = int(floor(rc.x()));
+    int xmax = int(ceil(rc.x() + rc.width()));
+    int ymin = int(floor(rc.y()));
+    int ymax = int(ceil(rc.y() + rc.height()));
+    return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
+}
+
+
 class KisCanvas2::KisCanvas2Private {
 
 public:
@@ -147,7 +157,7 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     //kDebug() << "KiSCanvas2::updateCanvas viewrect becomes: " <<
     //viewRect << endl;
     viewRect.adjust(-5, -5, 5, 5); // floor, ceil?
-    m_d->canvasWidget->widget()->update( viewRect.toAlignedRect() );
+    m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
 
 }
 
@@ -167,7 +177,7 @@ void KisCanvas2::updateCanvas(const QRegion & rc)
 
     while ( it != end ) {
         it->adjust( -5, -5, 5, 5 );
-        widgetRegion += QRegion( m_d->viewConverter->documentToView( *it ).toAlignedRect() );
+        widgetRegion += QRegion( m_d->viewConverter->documentToView( toAlignedRect(*it )) );
         ++it;
     }
     m_d->canvasWidget->widget()->update( widgetRegion );
@@ -194,7 +204,7 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
     docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
     QRectF viewRect = m_d->viewConverter->documentToView(docRect);
     viewRect.adjust( -5, -5, 5, 5 );
-    m_d->canvasWidget->widget()->update( viewRect.toAlignedRect() );
+    m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
 
 /*
     kDebug(41010 ) << ">>>>>>>>>>>>>>>>>> canvas cache size: " << m_d->canvasCache.size() << endl;

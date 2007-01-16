@@ -469,12 +469,6 @@ void KisView2::connectCurrentImage()
         connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), m_d->canvas, SLOT(updateCanvas()));
         connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
 
-#if 0 // XXX: What about parts
-        KisConnectPartLayerVisitor v(img, this, true);
-        img->rootLayer()->accept(v);
-        connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)),
-                SLOT(handlePartLayerAdded(KisLayerSP)));
-#endif
         m_d->maskManager->maskUpdated();
 #if 0
 #ifdef HAVE_OPENGL
@@ -514,11 +508,6 @@ void KisView2::disconnectCurrentImage()
         m_d->layerBox->setImage(KisImageSP(0));
         m_d->birdEyeBox->setImage(KisImageSP(0));
 
-#if 0 // XXX: What about parts?
-        KisConnectPartLayerVisitor v(img, this, false);
-        img->rootLayer()->accept(v);
-
-#endif
     }
 #if 0
 #ifdef HAVE_OPENGL

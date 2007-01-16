@@ -92,7 +92,6 @@ public:
         return true;
     }
 
-    bool visit(KisPartLayer*) { return true; }
     bool visit(KisAdjustmentLayer *) { return true; }
 private:
     double m_xshear;

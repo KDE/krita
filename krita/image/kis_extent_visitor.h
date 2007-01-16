@@ -27,7 +27,6 @@
 
 class KisPaintLayer;
 class KisGroupLayer;
-class KisPartLayer;
 class KisAdjustmentLayer;
 
 /**
@@ -78,17 +77,6 @@ public:
             child = child->nextSibling();
         }
 
-        return true;
-    }
-
-    bool visit(KisPartLayer *layer)
-    {
-        if (m_exact) {
-            m_region = m_region.united(layer->exactBounds());
-        }
-        else {
-            m_region = m_region.united(layer->extent());
-        }
         return true;
     }
 

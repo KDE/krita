@@ -54,7 +54,6 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
-#include "kis_part_layer.h"
 #include "kis_selected_transaction.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
@@ -247,11 +246,9 @@ void KisSelectionManager::updateGUI()
         l = img->activeLayer();
         dev = img->activeDevice();
 
-
-        KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(l.data());
         KisAdjustmentLayer * adjLayer = dynamic_cast<KisAdjustmentLayer*>(l.data());
 
-        enable = l && dev&& dev->hasSelection() && !l->locked() && l->visible() && (partLayer==0);
+        enable = l && dev&& dev->hasSelection() && !l->locked() && l->visible();
 
         if(dev && !adjLayer)
             m_reselect->setEnabled( dev->selectionDeselected() );

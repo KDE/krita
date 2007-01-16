@@ -134,11 +134,6 @@ public:
         return true;
     }
 
-    bool visit(KisPartLayer *)
-    {
-        return true;
-    }
-
     bool visit(KisAdjustmentLayer* layer)
     {
 
@@ -172,7 +167,7 @@ public:
         m_count++;
         return true;
     }
-    
+
 private:
     KisImageSP m_img;
     KoStore *m_store;

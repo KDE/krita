@@ -40,7 +40,6 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
-#include "kis_part_layer.h"
 #include "kis_previewdialog.h"
 #include "kis_previewwidget.h"
 #include "kis_selection.h"
@@ -247,9 +246,7 @@ void KisFilterManager::updateGUI()
     KisLayerSP layer = img->activeLayer();
     if (!layer) return;
 
-    KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(layer.data());
-
-    bool enable =  !(layer->locked() || !layer->visible() || partLayer);
+    bool enable =  !(layer->locked() || !layer->visible());
     KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>( layer.data()));
     if(!player)
     {

@@ -26,7 +26,6 @@
 class KoOasisStore;
 class KisPaintLayer;
 class KisGroupLayer;
-class KisPartLayer;
 class KisAdjustmentLayer;
 
 class KisOasisLoadDataVisitor : public KisLayerVisitor {
@@ -35,11 +34,10 @@ class KisOasisLoadDataVisitor : public KisLayerVisitor {
             : m_oasisStore(os), m_layerFilenames(filenames)
         {}
         virtual ~KisOasisLoadDataVisitor() {}
-    
+
     public:
         bool visit(KisPaintLayer *layer);
         bool visit(KisGroupLayer *layer);
-        bool visit(KisPartLayer *layer);
         bool visit(KisAdjustmentLayer *layer);
 
         bool visit( KisExternalLayer * )

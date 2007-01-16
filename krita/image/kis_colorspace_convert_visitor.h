@@ -41,7 +41,6 @@ public:
 
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
-    bool visit(KisPartLayer *layer);
     bool visit(KisAdjustmentLayer* layer);
 
 private:
@@ -82,11 +81,6 @@ bool KoColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
     layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
 
     layer->setDirty();
-    return true;
-}
-
-bool KoColorSpaceConvertVisitor::visit(KisPartLayer *)
-{
     return true;
 }
 

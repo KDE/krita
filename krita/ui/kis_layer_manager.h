@@ -82,11 +82,6 @@ public slots:
 
     void addGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
 
-    void insertPart( const QRect& viewRect, const KoDocumentEntry& entry, KisGroupLayerSP parent, KisLayerSP above );
-    void addPartLayer();
-    void addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry);
-    void reconnectAfterPartInsert();
-
     void addAdjustmentLayer();
     void addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above);
     void addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
@@ -113,7 +108,6 @@ public slots:
 
     void saveLayerAsImage();
     bool activeLayerHasSelection();
-    void handlePartLayerAdded(KisLayerSP layer);
 
 private:
 
@@ -124,7 +118,6 @@ private:
 
     QAction *m_imgFlatten;
     QAction *m_imgMergeLayer;
-    KoPartSelectAction * m_actionPartLayer;
     QAction * m_actionAdjustmentLayer;
     QAction *m_layerAdd;
     QAction *m_layerBottom;

@@ -87,7 +87,6 @@
 #include "kis_config.h"
 #include "kis_custom_image_widget.h"
 #include "kis_load_visitor.h"
-#include "kis_part_layer.h"
 #include "kis_save_visitor.h"
 #include "kis_savexml_visitor.h"
 #include "kis_oasis_load_data_visitor.h"
@@ -657,10 +656,6 @@ KisLayerSP KisDoc2::loadLayer(const QDomElement& element, KisImageSP img)
     if(attr == "adjustmentlayer")
         return KisLayerSP(loadAdjustmentLayer(element, img, name, x, y, opacity, visible, locked, compositeOpName).data());
 
-#if 0
-    if(attr == "partlayer")
-        return KisLayerSP(loadPartLayer(element, img, name, x, y, opacity, visible, locked, compositeOpName).data());
-#endif
     kWarning(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
     return KisLayerSP(0);
 }
@@ -772,48 +767,6 @@ KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const QDomElement& element, Ki
         m_d->layerFilenames[layer.data()] = QString(element.attribute("filename"));
 
     return layer;
-}
-
-KisPartLayerSP KisDoc2::loadPartLayer(const QDomElement& element, KisImageSP img,
-                                      const QString & name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
-                                      bool visible, bool locked,
-                                      const QString & compositeOp)
-{
-#ifdef __GNUC__
-#warning "Kill or port the partlayer stuff"
-#endif
-    Q_UNUSED(element);
-    Q_UNUSED(img);
-    Q_UNUSED(name);
-    Q_UNUSED(opacity);
-    Q_UNUSED(visible);
-    Q_UNUSED(locked);
-    Q_UNUSED(compositeOp);
-#if 0
-    KisChildDoc* child = new KisChildDoc(this);
-    QString filename(element.attribute("filename"));
-    QDomElement partElement = element.namedItem("object").toElement();
-
-    if (partElement.isNull()) {
-        kWarning() << "loadPartLayer failed with partElement isNull" << endl;
-        return KisPartLayerSP(0);
-    }
-
-    child->load(partElement);
-    insertChild(child);
-
-    KisPartLayerSP layer = KisPartLayerSP(new KisPartLayerImpl(img, child));
-    Q_CHECK_PTR(layer);
-    const KoCompositeOp * op = img->colorSpace()->compositeOp(compositeOp);
-    layer->setCompositeOp(op);
-    layer->setVisible(visible);
-    layer->setLocked(locked);
-    layer->setOpacity(opacity);
-    layer->setName(name);
-
-    return layer;
-#endif
-    return KisPartLayerSP();
 }
 
 
@@ -966,20 +919,6 @@ QWidget* KisDoc2::createCustomDocumentWidget(QWidget *parent)
 
 KoDocument* KisDoc2::hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix) {
     KoDocument* doc = KoDocument::hitTest(pos, view, matrix);
-    if (doc && doc != this) {
-        // We hit a child document. We will only acknowledge we hit it, if the hit child
-        // is the currently active parts layer.
-        KisPartLayerImpl* partLayer
-                = dynamic_cast<KisPartLayerImpl*>(currentImage()->activeLayer().data());
-
-        if (!partLayer)
-            return this;
-
-        if (doc == partLayer->childDoc()->document()) {
-            return doc;
-        }
-        return this;
-    }
     return doc;
 }
 
@@ -1438,7 +1377,6 @@ void KisDoc2::slotLayerAdded( KisLayerSP layer )
     else if ( dynamic_cast<KisShapeLayer*>( layer.data() ) ) {
         shape = dynamic_cast<KisShapeLayer*>( layer.data() );
     }
-    // XXX: We don't do part layers anymore
     Q_ASSERT( shape );
 
     // Put the layer in the right place in the hierarchy

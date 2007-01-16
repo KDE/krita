@@ -32,7 +32,6 @@
 #include "kis_adjustment_layer.h"
 #include "kis_external_layer_iface.h"
 #include "kis_paint_layer.h"
-#include "kis_part_layer_iface.h"
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
 #include "kis_filter_registry.h"
@@ -229,39 +228,6 @@ public:
 
             KisPainter gc(m_projection);
             gc.bitBlt(dx, dy, layer->compositeOp(), dev, layer->opacity(), sx, sy, w, h);
-
-            return true;
-        }
-
-    virtual bool visit(KisPartLayer* layer)
-        {
-
-            kDebug(41010) << "Visiting on part layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
-                          << layer->extent() << ", paint rect: " << m_rc << endl;
-
-            if (m_projection.isNull()) {
-                return false;
-            }
-            if (!layer->visible())
-                return true;
-
-            KisPaintDeviceSP dev(layer->prepareProjection(m_projection, m_rc));
-            if (!dev)
-                return true;
-
-            qint32 sx, sy, dx, dy, w, h;
-
-            QRect rc = dev->extent() & m_rc;
-
-            sx= rc.left();
-            sy = rc.top();
-            w = rc.width();
-            h = rc.height();
-            dx = sx;
-            dy = sy;
-
-            KisPainter gc(m_projection);
-            gc.bitBlt(dx, dy, layer->compositeOp() , dev, layer->opacity(), sx, sy, w, h);
 
             return true;
         }

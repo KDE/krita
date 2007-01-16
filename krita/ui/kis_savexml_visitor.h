@@ -112,12 +112,6 @@ public:
         return true;
     }
 
-    bool visit(KisPartLayer* layer)
-    {
-        bool ok = layer->saveToXML(m_doc, m_elem);
-        return ok;
-    }
-
     bool visit(KisAdjustmentLayer* layer)
     {
         QDomElement layerElement = m_doc.createElement("layer");

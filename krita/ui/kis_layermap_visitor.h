@@ -32,7 +32,6 @@
 
 class KisPaintLayer;
 class KisGroupLayer;
-class KisPartLayer;
 class KisAdjustmentLayer;
 
 /**
@@ -102,16 +101,6 @@ public:
                 child = child->nextSibling();
             }
 
-            return true;
-        }
-
-    bool visit(KisPartLayer *layer)
-        {
-            kDebug(41007) << "KisLayerMap visitor adding part layer: " << layer->name() << endl;
-
-#ifdef __GNUC__
-            #warning "Kill or fix part layers"
-#endif
             return true;
         }
 

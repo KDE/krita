@@ -38,7 +38,6 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoPointerEvent.h>
-#include <KoPartSelectAction.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 
@@ -61,7 +60,6 @@
 #include "kis_zoom_manager.h"
 #include "kis_doc2.h"
 #include "kis_view2.h"
-#include "kis_part_layer.h"
 #include "kis_dlg_adj_layer_props.h"
 #include "kis_dlg_layer_properties.h"
 #include "kis_dlg_adjustment_layer.h"
@@ -77,7 +75,6 @@ KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     , m_doc( doc )
     , m_imgFlatten( 0 )
     , m_imgMergeLayer( 0 )
-    , m_actionPartLayer( 0 )
     , m_actionAdjustmentLayer( 0 )
     , m_layerAdd( 0 )
     , m_layerBottom( 0 )
@@ -114,10 +111,6 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("insert_layer", m_layerAdd );
     m_layerAdd->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     connect(m_layerAdd, SIGNAL(triggered()), this, SLOT(layerAdd()));
-
-    m_actionPartLayer = new KoPartSelectAction( i18n( "&Object Layer" ), "frame_query",
-                                                    this, SLOT( addPartLayer() ),
-                                                    actionCollection, "insert_part_layer" );
 
     m_actionAdjustmentLayer  = new KAction(i18n("&Adjustment Layer"), this);
     actionCollection->addAction("insert_adjustment_layer", m_actionAdjustmentLayer );
@@ -227,12 +220,6 @@ void KisLayerManager::updateGUI()
     m_imgMergeLayer->setEnabled(nlayers > 1 && layer && layer->nextSibling());
 
 
-#if 0 //Port if we want to keep embedded parts
-    KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(layer.data());
-    if (partLayer) {
-        setCanvasCursor( KisCursor::arrowCursor() );
-    }
-#endif
     if (img && img->activeDevice())
         emit currentColorSpaceChanged(img->activeDevice()->colorSpace());
 
@@ -526,100 +513,6 @@ void KisLayerManager::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
     }
 }
 
-void KisLayerManager::insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
-                                 KisGroupLayerSP parent, KisLayerSP above)
-{
-#ifdef __GNUC__
-#warning "Port or remove the part layers!"
-#endif
-    Q_UNUSED(viewRect);
-    Q_UNUSED(entry);
-    Q_UNUSED(parent);
-    Q_UNUSED(above);
-#if 0 // XXX: What shall we do with parts?
-    KisImageSP img = m_view->image();
-    if (!img) return;
-
-    KoDocument* doc = entry.createDoc(0, m_doc);
-    if ( !doc )
-        return;
-
-    if ( !doc->showEmbedInitDialog(m_view) )
-        return;
-
-    QRect rect = viewToWindow(viewRect);
-
-    KisChildDoc * childDoc = m_doc->createChildDoc(rect, doc);
-
-    KisPartLayerImpl* partLayer = new KisPartLayerImpl(img, childDoc);
-    partLayer->setDocType(entry.service()->genericName());
-    img->addLayer(KisLayerSP(partLayer), parent, above);
-    m_doc->setModified(true);
-
-    reconnectAfterPartInsert();
-#endif
-}
-
-
-void KisLayerManager::addPartLayer()
-{
-    KisImageSP img = m_view->image();
-    if (!img) return;
-
-    addPartLayer(img->rootLayer(), img->rootLayer()->firstChild(), m_actionPartLayer->documentEntry());
-}
-
-void KisLayerManager::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry)
-{
-#ifdef __GNUC__
-#warning "Port addPartLayer or remove it!"
-#endif
-    Q_UNUSED(parent);
-    Q_UNUSED(above);
-    Q_UNUSED(entry);
-#if 0 // XXX: commented out because the canvas works differently and
-
-    delete m_partHandler; // Only one at a time
-    m_partHandler = new KisPartLayerHandler(m_view, entry, parent, above);
-      // will we use embeddded parts in krita 2.0 at all?
-    disconnect(m_canvas, SIGNAL(sigGotButtonPressEvent(KoPointerEvent*)), this, 0);
-    disconnect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KoPointerEvent*)), this, 0);
-    disconnect(m_canvas, SIGNAL(sigGotMoveEvent(KoPointerEvent*)), this, 0);
-    disconnect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)), this, 0);
-
-    connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KoPointerEvent*)),
-            m_partHandler, SLOT(gotButtonPressEvent(KoPointerEvent*)));
-    connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KoPointerEvent*)),
-            m_partHandler, SLOT(gotButtonReleaseEvent(KoPointerEvent*)));
-    connect(m_canvas, SIGNAL(sigGotMoveEvent(KoPointerEvent*)),
-            m_partHandler, SLOT(gotMoveEvent(KoPointerEvent*)));
-    connect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)),
-            m_partHandler, SLOT(gotKeyPressEvent(QKeyEvent*)));
-
-    connect(m_partHandler, SIGNAL(sigGotMoveEvent(KoPointerEvent*)),
-            this, SLOT(canvasGotMoveEvent(KoPointerEvent*)));
-    connect(m_partHandler, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)),
-            this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
-    connect(m_partHandler, SIGNAL(handlerDone()),
-            this, SLOT(reconnectAfterPartInsert()));
-#endif
-}
-
-void KisLayerManager::reconnectAfterPartInsert() {
-#if 0
-    connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KoPointerEvent*)),
-            this, SLOT(canvasGotButtonPressEvent(KoPointerEvent*)));
-    connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KoPointerEvent*)),
-            this, SLOT(canvasGotButtonReleaseEvent(KoPointerEvent*)));
-    connect(m_canvas, SIGNAL(sigGotMoveEvent(KoPointerEvent*)),
-            this, SLOT(canvasGotMoveEvent(KoPointerEvent*)));
-    connect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)),
-            this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
-
-    delete m_partHandler;
-    m_partHandler = 0;
-#endif
-}
 
 void KisLayerManager::addAdjustmentLayer()
 {
@@ -1017,17 +910,6 @@ void KisLayerManager::saveLayerAsImage()
 bool KisLayerManager::activeLayerHasSelection()
 {
     return m_view->image() && m_view->image()->activeDevice() && m_view->image()->activeDevice()->hasSelection();
-}
-
-void KisLayerManager::handlePartLayerAdded(KisLayerSP layer)
-{
-    KisPartLayer* l = dynamic_cast<KisPartLayer*>(layer.data());
-    if (!l)
-        return;
-#if 0 // XXX: What shall we do with part layers?
-    connect(m_view, SIGNAL(childActivated(KoDocumentChild*)),
-            layer.data(), SLOT(childActivated(KoDocumentChild*)));
-#endif
 }
 
 

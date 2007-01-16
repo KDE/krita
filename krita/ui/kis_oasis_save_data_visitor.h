@@ -29,7 +29,6 @@ class KoXmlWriter;
 class KisAdjustmentLayer;
 class KisGroupLayer;
 class KisPaintLayer;
-class KisPartLayer;
 
 class KisOasisSaveDataVisitor : public KisLayerVisitor {
 public:
@@ -39,7 +38,6 @@ public:
 public:
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
-    bool visit(KisPartLayer *layer);
     bool visit(KisAdjustmentLayer *layer);
     bool visit( KisExternalLayer * )
         {

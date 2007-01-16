@@ -47,7 +47,6 @@ public:
 
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
-    bool visit(KisPartLayer *layer);
     bool visit(KisAdjustmentLayer* layer);
 
 private:
@@ -95,11 +94,6 @@ bool KisChangeProfileVisitor::visit(KisPaintLayer *layer)
 
         layer->setDirty();
     }
-    return true;
-}
-
-bool KisChangeProfileVisitor::visit(KisPartLayer *)
-{
     return true;
 }
 

@@ -54,7 +54,7 @@ bool KisOasisSaveVisitor::visit(KisGroupLayer *layer)
 {
     m_bodyWriter->startElement("image:layer");
     saveLayerInfo(layer);
-    
+
     KisLayerSP child = layer->lastChild();
 
     while(child)
@@ -66,12 +66,7 @@ bool KisOasisSaveVisitor::visit(KisGroupLayer *layer)
     m_bodyWriter->endElement();
     return true;
 }
-bool KisOasisSaveVisitor::visit(KisPartLayer *layer)
-{
-    Q_UNUSED(layer);
-    kDebug(41008) << "not supported by OpenRaster" << endl;
-    return false;
-}
+
 bool KisOasisSaveVisitor::visit(KisAdjustmentLayer *layer)
 {
     saveLayerInfo(layer);

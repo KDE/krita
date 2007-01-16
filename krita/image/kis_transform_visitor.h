@@ -101,11 +101,6 @@ public:
         return true;
     };
 
-    bool visit(KisPartLayer */*layer*/)
-    {
-        return true;
-    };
-
     virtual bool visit(KisAdjustmentLayer* layer)
     {
         layer->resetCache();

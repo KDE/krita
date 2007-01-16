@@ -137,11 +137,6 @@ public:
         return true;
     }
 
-    bool visit(KisPartLayer *)
-    {
-        return true;
-    }
-    
     bool visit(KisAdjustmentLayer* layer)
     {
         //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
@@ -180,7 +175,7 @@ public:
         return true;
 
     }
-    
+
 private:
     KisImageSP m_img;
     KoStore *m_store;

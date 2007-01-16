@@ -42,7 +42,8 @@
 #include "kis_qpainter_canvas.h"
 #include "kis_opengl_canvas2.h"
 
-
+namespace {
+// XXX: Remove this with Qt 4.3
 static QRect toAlignedRect(QRectF rc)
 {
     int xmin = int(floor(rc.x()));
@@ -50,6 +51,7 @@ static QRect toAlignedRect(QRectF rc)
     int ymin = int(floor(rc.y()));
     int ymax = int(ceil(rc.y() + rc.height()));
     return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
+}
 }
 
 

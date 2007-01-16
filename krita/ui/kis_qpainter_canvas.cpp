@@ -50,6 +50,8 @@
 #define PATTERN_WIDTH 256
 #define PATTERN_HEIGHT 256
 
+namespace {
+// XXX: Remove this with Qt 4.3
 static QRect toAlignedRect(QRectF rc)
 {
     int xmin = int(floor(rc.x()));
@@ -58,7 +60,7 @@ static QRect toAlignedRect(QRectF rc)
     int ymax = int(ceil(rc.y() + rc.height()));
     return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
 }
-
+}
 
 
 class KisQPainterCanvas::Private {

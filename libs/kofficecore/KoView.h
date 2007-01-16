@@ -362,9 +362,9 @@ public:
 
   /**
    * Add a new dock widget.
-   * XXX: Figure out how to create dock widgets tabbed initially
-   * XXX: Figure out how to add the show/hide widgets menu entries to the menu
-   * XXX: Isn't this method deprecated (Boudewijn)?
+   *
+   * @deprecated Use the factory method instead
+   *
    * @param title Title of the docker
    * @param w     Widget that's to be embedded (may be 0)
    * @return the dock widget itself

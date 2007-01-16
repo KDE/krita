@@ -103,10 +103,10 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
     }
 
 #if 0 // #ifndef NDEBUG
-    kDebug() << "style: " << name << endl;
+    kDebug(30003) << "style: " << name << endl;
     printDebug();
     if ( parentStyle ) {
-        kDebug() << " parent: " << m_parentName << endl;
+        kDebug(30003) << " parent: " << m_parentName << endl;
         parentStyle->printDebug();
     }
 #endif
@@ -187,37 +187,37 @@ void KoGenStyle::addAttributePt( const QString& attrName, double attrValue )
 void KoGenStyle::printDebug() const
 {
     int i = DefaultType;
-    kDebug() << m_properties[i].count() << " properties." << endl;
+    kDebug(30003) << m_properties[i].count() << " properties." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug() << "     " << it.key() << " = " << it.value() << endl;
+        kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
     }
     i = TextType;
-    kDebug() << m_properties[i].count() << " text properties." << endl;
+    kDebug(30003) << m_properties[i].count() << " text properties." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug() << "     " << it.key() << " = " << it.value() << endl;
+        kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
     }
     i = ParagraphType;
-    kDebug() << m_properties[i].count() << " paragraph properties." << endl;
+    kDebug(30003) << m_properties[i].count() << " paragraph properties." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug() << "     " << it.key() << " = " << it.value() << endl;
+        kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
     }
     i = ChildElement;
-    kDebug() << m_properties[i].count() << " child elements." << endl;
+    kDebug(30003) << m_properties[i].count() << " child elements." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug() << "     " << it.key() << " = " << it.value() << endl;
+        kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
     }
-    kDebug() << m_attributes.count() << " attributes." << endl;
+    kDebug(30003) << m_attributes.count() << " attributes." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_attributes.begin(); it != m_attributes.end(); ++it ) {
-        kDebug() << "     " << it.key() << " = " << it.value() << endl;
+        kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
     }
-    kDebug() << m_maps.count() << " maps." << endl;
+    kDebug(30003) << m_maps.count() << " maps." << endl;
     for ( int i = 0; i < m_maps.count(); ++i ) {
-        kDebug() << "map " << i << ":" << endl;
+        kDebug(30003) << "map " << i << ":" << endl;
         for( QMap<QString,QString>::ConstIterator it = m_maps[i].begin(); it != m_maps[i].end(); ++it ) {
-            kDebug() << "     " << it.key() << " = " << it.value() << endl;
+            kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
         }
     }
-    kDebug() << endl;
+    kDebug(30003) << endl;
 }
 #endif
 

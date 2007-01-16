@@ -162,7 +162,6 @@ KoView::KoView( KoDocument *document, QWidget *parent )
 
 
   actionCollection()->setAssociatedWidget(this);
-  actionCollection()->setDefaultShortcutContext(Qt::ApplicationShortcut);
   setupGlobalActions();
   /**** not needed anymore, according to David (Werner)
   KActionCollection *coll = actionCollection();
@@ -481,7 +480,7 @@ void KoView::removeStatusBarItem( QWidget * widget )
 
 QDockWidget * KoView::createDock(const QString & title, QWidget * w)
 {
-    kDebug() << "Creating palette " << title << endl;
+    kDebug(30003) << "Creating palette " << title << endl;
     QDockWidget * d = new QDockWidget(title, mainWindow());
     d->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     d->setWidget(w);
@@ -693,12 +692,12 @@ void KoView::setupGlobalActions()
 
 void KoView::setupPrinter( KPrinter & )
 {
-    kDebug() << "KoView::setupPrinter not implemented by the application!" << endl;
+    kDebug(30003) << "KoView::setupPrinter not implemented by the application!" << endl;
 }
 
 void KoView::print( KPrinter & )
 {
-    kDebug() << "KoView::print not implemented by the application!" << endl;
+    kDebug(30003) << "KoView::print not implemented by the application!" << endl;
 }
 
 void KoView::newView() {

@@ -93,7 +93,7 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
 
 void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool fastMode)
 {
-    //kDebug() << "KoImage::draw currentSize:" << currentSize.width() << "x" << currentSize.height() << endl;
+    //kDebug(30003) << "KoImage::draw currentSize:" << currentSize.width() << "x" << currentSize.height() << endl;
     if ( !width || !height )
         return;
     QSize origSize = getOriginalSize();
@@ -117,7 +117,7 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     else
     {
         QSize screenSize( width, height );
-        //kDebug() << "KoPictureImage::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
+        //kDebug(30003) << "KoPictureImage::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
 
         scaleAndCreatePixmap(screenSize, fastMode);
 
@@ -149,7 +149,7 @@ bool KoPictureImage::loadData(const QByteArray& array, const QString& /* extensi
 
 bool KoPictureImage::save(QIODevice* io) const
 {
-    kDebug() << k_funcinfo << "writing raw data. size=" << m_rawData.size() << endl;
+    kDebug(30003) << k_funcinfo << "writing raw data. size=" << m_rawData.size() << endl;
     // We save the raw data, to avoid damaging the file by many load/save cycles (especially for JPEG)
     qint64 size = io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return ( size==m_rawData.size() );

@@ -164,7 +164,7 @@ void KoOpenPane::showOpenFileDialog()
 
   if (mimeFilter.isEmpty()) 
   {
-      kDebug() << "No mime types found!\n";  
+      kDebug(30003) << "No mime types found!\n";  
       return;
   }
   KUrl url = KFileDialog::getOpenUrl(KUrl("kfiledialog:///OpenDialog"), mimeFilter.join(" "), this);

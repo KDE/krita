@@ -140,17 +140,17 @@ void KoGenStyles::markStyleForStylesXml( const QString& name )
 
 void KoGenStyles::dump()
 {
-    kDebug() << "Style array:" << endl;
+    kDebug(30003) << "Style array:" << endl;
     StyleArray::const_iterator it = m_styleArray.begin();
     const StyleArray::const_iterator end = m_styleArray.end();
     for ( ; it != end ; ++it ) {
-        kDebug() << (*it).name << endl;
+        kDebug(30003) << (*it).name << endl;
     }
     for ( NameMap::const_iterator it = m_styleNames.begin(); it != m_styleNames.end(); ++it ) {
-        kDebug() << "style: " << it.key() << endl;
+        kDebug(30003) << "style: " << it.key() << endl;
     }
     for ( NameMap::const_iterator it = m_autoStylesInStylesDotXml.begin(); it != m_autoStylesInStylesDotXml.end(); ++it ) {
-        kDebug() << "auto style for style.xml: " << it.key() << endl;
+        kDebug(30003) << "auto style for style.xml: " << it.key() << endl;
         const KoGenStyle* s = style( it.key() );
         Q_ASSERT( s );
         Q_ASSERT( s->autoStyleInStylesDotXml() );

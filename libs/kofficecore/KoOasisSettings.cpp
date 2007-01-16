@@ -28,7 +28,7 @@ KoOasisSettings::KoOasisSettings( const KoXmlDocument& doc )
 {
     const KoXmlElement contents = doc.documentElement();
     if ( m_settingsElement.isNull() )
-        kDebug() << " document doesn't have tag 'office:settings'\n";
+        kDebug(30003) << " document doesn't have tag 'office:settings'\n";
 }
 
 KoOasisSettings::KoOasisSettings( const KoXmlDocument& doc, const char* officeNSURI, const char* configNSURI )
@@ -37,7 +37,7 @@ KoOasisSettings::KoOasisSettings( const KoXmlDocument& doc, const char* officeNS
 {
     const KoXmlElement contents = doc.documentElement();
     if ( m_settingsElement.isNull() )
-        kDebug() << " document doesn't have tag 'office:settings'\n";
+        kDebug(30003) << " document doesn't have tag 'office:settings'\n";
 }
 
 KoOasisSettings::Items KoOasisSettings::itemSet( const QString& itemSetName ) const

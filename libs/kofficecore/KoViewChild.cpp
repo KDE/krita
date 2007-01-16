@@ -119,7 +119,7 @@ void KoViewChild::slotFrameGeometryChanged()
         // We don't want to trigger slotDocGeometryChanged again
         lock();
         QRect childGeom = parentView()->reverseViewTransformations( borderLessRect );
-        kDebug() << "KoChild::slotFrameGeometryChanged child geometry "
+        kDebug(30003) << "KoChild::slotFrameGeometryChanged child geometry "
         << ( geometry() == childGeom ? "already " : "set to " )
         << childGeom << endl;
         m_child->setGeometry( childGeom );
@@ -138,7 +138,7 @@ void KoViewChild::slotDocGeometryChanged()
                       geom.y() - m_frame->topBorder() - parentView()->canvasYOffset(),
                       geom.width() + m_frame->leftBorder() + m_frame->rightBorder(),
                       geom.height() + m_frame->topBorder() + m_frame->bottomBorder() );
-    kDebug() << "KoViewChild::slotDocGeometryChanged frame geometry "
+    kDebug(30003) << "KoViewChild::slotDocGeometryChanged frame geometry "
     << ( m_frame->geometry() == borderRect ? "already " : "set to " )
     << borderRect << endl;
 
@@ -147,7 +147,7 @@ void KoViewChild::slotDocGeometryChanged()
 
 void KoViewChild::setInitialFrameGeometry()
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug(30003) << k_funcinfo << endl;
 
     // Connect only now, so that the GUI building doesn't move us around.
     connect( m_frame, SIGNAL( geometryChanged() ),

@@ -89,7 +89,7 @@ KoDocumentChild::KoDocumentChild( KoDocument* parent )
 
 void KoDocumentChild::setDocument( KoDocument *doc, const QRect &geometry )
 {
-  kDebug()<<k_funcinfo<<"doc: "<<doc->url().url()<<endl;
+  kDebug(30003)<<k_funcinfo<<"doc: "<<doc->url().url()<<endl;
   d->m_doc = doc;
   setGeometry( geometry );
 
@@ -135,7 +135,7 @@ void KoDocumentChild::loadOasis( const KoXmlElement &frameElement, const KoXmlEl
         m_tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
     else
         m_tmpURL = url;
-    kDebug() << k_funcinfo << m_tmpURL << endl;
+    kDebug(30003) << k_funcinfo << m_tmpURL << endl;
 }
 
 
@@ -216,7 +216,7 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const KoXmlDocument& ma
     if ( !path.endsWith( "/" ) )
         path += '/';
     const QString mimeType = KoOasisStore::mimeForPath( manifestDoc, path );
-    kDebug() << k_funcinfo << "path for manifest file=" << path << " mimeType=" << mimeType << endl;
+    kDebug(30003) << k_funcinfo << "path for manifest file=" << path << " mimeType=" << mimeType << endl;
     if ( mimeType.isEmpty() ) {
         kError(30003) << "Manifest doesn't have media-type for " << path << endl;
         return false;
@@ -225,7 +225,7 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const KoXmlDocument& ma
     const bool oasis = mimeType.startsWith( "application/vnd.oasis.opendocument" );
     if ( !oasis ) {
         m_tmpURL += "/maindoc.xml";
-        kDebug() << " m_tmpURL adjusted to " << m_tmpURL << endl;
+        kDebug(30003) << " m_tmpURL adjusted to " << m_tmpURL << endl;
     }
     return createAndLoadDocument( store, true /*open url*/, oasis, mimeType );
 }
@@ -396,11 +396,11 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         // parent document).
         assert( d->m_doc->url().protocol() == INTERNAL_PROTOCOL );
         const QString name = d->m_doc->url().path();
-        kDebug() << k_funcinfo << "saving " << name << endl;
+        kDebug(30003) << k_funcinfo << "saving " << name << endl;
 
         if ( d->m_doc->nativeOasisMimeType().isEmpty() ) {
             // Embedded object doesn't support OASIS OpenDocument, save in the old format.
-            kDebug() << k_funcinfo << "Embedded object doesn't support OASIS OpenDocument, save in the old format." << endl;
+            kDebug(30003) << k_funcinfo << "Embedded object doesn't support OASIS OpenDocument, save in the old format." << endl;
 
             if ( !d->m_doc->saveToStore( store, name ) )
                 return false;
@@ -448,7 +448,7 @@ void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString
         KUrl u;
         u.setProtocol( INTERNAL_PROTOCOL );
         u.setPath( name );
-        kDebug() << k_funcinfo << u << endl;
+        kDebug(30003) << k_funcinfo << u << endl;
         d->m_doc->setURL( u );
     }
 
@@ -469,14 +469,14 @@ QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
         QDomElement e = doc.createElement( ( uppercase ? "OBJECT" : "object" ) );
         if ( d->m_doc->url().protocol() != INTERNAL_PROTOCOL ) {
             e.setAttribute( "url", d->m_doc->url().url() );
-            kDebug() << "KoDocumentChild::save url=" << d->m_doc->url().url() << endl;
+            kDebug(30003) << "KoDocumentChild::save url=" << d->m_doc->url().url() << endl;
         }
         else {
             e.setAttribute( "url", d->m_doc->url().path().mid( 1 ) );
-            kDebug() << "KoDocumentChild::save url=" << d->m_doc->url().path().mid( 1 ) << endl;
+            kDebug(30003) << "KoDocumentChild::save url=" << d->m_doc->url().path().mid( 1 ) << endl;
         }
         e.setAttribute( "mime", QString( d->m_doc->nativeFormatMimeType() ) );
-        kDebug() << "KoDocumentChild::save mime=" << d->m_doc->nativeFormatMimeType() << endl;
+        kDebug(30003) << "KoDocumentChild::save mime=" << d->m_doc->nativeFormatMimeType() << endl;
         QDomElement rect = doc.createElement( ( uppercase ? "RECT" : "rect" ) );
         rect.setAttribute( "x", geometry().left() );
         rect.setAttribute( "y", geometry().top() );

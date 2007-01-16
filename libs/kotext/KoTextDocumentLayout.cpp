@@ -29,44 +29,13 @@
 #include "ListItemsHelper_p.h"
 
 #include <KoInsets.h>
+#include <KoPostscriptPaintDevice.h>
 #include <KoShape.h>
 
 #include <kdebug.h>
 #include <QTextBlock>
 #include <QTextList>
 #include <QTimer>
-
-#include <limits.h>
-
-/// helper class to disable any screen convertion as thats done in flake.
-class PostscriptPaintDevice : public QPaintDevice {
-public:
-    PostscriptPaintDevice() {
-    }
-//   int devType () const {
-//   }
-    QPaintEngine *paintEngine () const {
-        return 0;
-    }
-    int metric (PaintDeviceMetric metric) const {
-        switch(metric) {
-            case QPaintDevice::PdmWidth:
-            case QPaintDevice::PdmHeight:
-            case QPaintDevice::PdmWidthMM:
-            case QPaintDevice::PdmHeightMM:
-            case QPaintDevice::PdmNumColors:
-                return INT_MAX;
-            case QPaintDevice::PdmDepth:
-                return 32;
-            case QPaintDevice::PdmDpiX:
-            case QPaintDevice::PdmDpiY:
-            case QPaintDevice::PdmPhysicalDpiX:
-            case QPaintDevice::PdmPhysicalDpiY:
-                return 72;
-        }
-        return 0; // should never be hit
-    }
-};
 
 class LayoutStatePrivate {
 public:
@@ -520,7 +489,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc)
     m_scheduled(false)
 {
     m_state = new KoTextDocumentLayout::LayoutState(this);
-    setPaintDevice( new PostscriptPaintDevice() );
+    setPaintDevice( new KoPostscriptPaintDevice() );
 }
 
 KoTextDocumentLayout::~KoTextDocumentLayout() {

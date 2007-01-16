@@ -225,7 +225,7 @@ void KoZoomAction::zoomIn()
     while(i <= 32 && m_sliderLookup[i] < m_effectiveZoom)
         i++;
 
-    if(m_sliderLookup[i] == m_effectiveZoom && i < 32)
+    if(i < 32 && m_sliderLookup[i] == m_effectiveZoom)
         i++;
     // else i is the next zoom level already
 

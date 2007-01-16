@@ -28,6 +28,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <QLayout>
 
 InsertVariableAction::InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactory *factory, const KoInlineObjectTemplate &templ)
     : KAction(templ.name, base->canvasWidget()),
@@ -48,6 +49,8 @@ void InsertVariableAction::activated() {
         KoVariable *variable = static_cast<KoVariable*> (m_factory->createInlineObject(m_properties));
         QWidget *widget = variable->createOptionsWidget();
         if(widget) {
+            if(widget->layout())
+                widget->layout()->setMargin(0);
             KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
             dialog->setCaption(i18n("%1 Options", text()));
             dialog->addPage(widget, "");

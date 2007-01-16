@@ -650,72 +650,6 @@ public:
     bool addSubpath( KoSubpath * subpath, int subpathIndex );
 
     /**
-     * @brief Inserts a new point into the given subpath at the specified position
-     * @param point the point to insert
-     * @param subpath the subpath to insert the point into
-     * @param position the position within the subpath to insert the point at 
-     */
-    void insertPoint( KoPathPoint* point, KoSubpath* subpath, int position );
-
-    /**
-     * @brief Removes point from the path.
-     * @param point the point to remove
-     * @return A QPair of the KoSubpath and the position in the subpath the removed point had
-     */
-    KoPointPosition removePoint( KoPathPoint *point );
-
-    /**
-     * @brief Splits the given path segment at the specified position.
-     * @param segment the path segment to split
-     * @param t the segment position in interval [0..1]
-     * @return the inserted path point or 0 if splitting failed
-     */
-    KoPathPoint* splitAt( const KoPathSegment &segment, double t );
-
-    /**
-     * @brief Breaks the path at the given path point.
-     *
-     * The subpath which owns the given point is broken into two subpaths,
-     * where the break point is doubled. The old breakpoint becomes an
-     * ending node in the first part and the doubled breakpoint a starting
-     * node in the second part.
-     * If the subpath is closed, it is just opened at the given position.
-     *
-     * @param breakPoint the point at which to break
-     * @param insertedPoint the new inserted point if any
-     * @return true if the subpath was broken, else false
-     */
-    bool breakAt( KoPathPoint *breakPoint, KoPathPoint* &insertedPoint );
-
-    /**
-     * @brief Breaks the path at the given segment.
-     *
-     * The subpath is broken by deleting the given segment. If the
-     * segment points are the start and end point of a single closed
-     * subpath, the subpath is simply unclosed. If the segment points
-     * are in the middle of the subpath, two new subpaths are made out
-     * of the subpath to break. So both segment points become
-     * starting/ending nodes of the new subpaths.
-     *
-     * @param segment the segment at which to break the path
-     * @return true if breaking the path was successful, else false
-     */
-    bool breakAt( const KoPathSegment &segment );
-
-    /**
-     * @brief Joins the two given end subpath end points.
-     *
-     * If the two end points are of the same subpath, the subpath is simply closed.
-     * If they belong to different subpaths, these subpaths are merged into one
-     * subpath.
-     *
-     * @param endPoint1 the first end point to join
-     * @param endPoint2 the second end point to join
-     * @return true if the point could be joined, else false
-     */
-    bool joinBetween( KoPathPoint *endPoint1, KoPathPoint *endPoint2 );
-
-    /**
      * @brief Combines two path by appending the data of the specified path.
      * @param path the path to combine with
      * @return true if combining was successful, else false
@@ -728,31 +662,6 @@ public:
      * @return true if separating the path was successful, else false 
      */
     bool separate( QList<KoPathShape*> & separatedPaths );
-
-#if 0 // not used yet
-    /**
-     * @brief Inserts a new point after an existing path point.
-     * @param point the point to insert
-     * @param prevPoint the point the new point is inserted after
-     * @return true if point could be inserted, else false
-     */
-    bool insertPointAfter( KoPathPoint *point, KoPathPoint *prevPoint );
-
-    /**
-     * @brief Inserts a new point before an existing path point.
-     * @param point the point to insert
-     * @param nextPoint the point the new point is inserted before
-     * @return true if point could be inserted, else false
-     */
-    bool insertPointBefore( KoPathPoint *point, KoPathPoint *nextPoint );
-
-#endif
-    /**
-     * @brief Returns the subpath of the given path point.
-     * @param point the point to return subpath for
-     * @return the subpath of the point if it is part of this shape, else null
-     */
-    KoSubpath* subpathOfPoint( KoPathPoint * point );
 
     /**
      * @brief print debug information about a the points of the path
@@ -804,12 +713,6 @@ private:
     void closeSubpath( KoSubpath *subpath );
     /// close-merges specified subpath
     void closeMergeSubpath( KoSubpath *subpath );
-    /// opens specified subpath
-    void openSubpath( KoSubpath *subpath );
-    /// return subpath and position of specified point
-    KoPointPosition findPoint( KoPathPoint* point );
-    /// reverses specified subpath (last point becomes first point)
-    void reverseSubpath( KoSubpath &subpath );
 
     /**
      * @brief Get subpath at subpathIndex

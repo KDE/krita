@@ -222,12 +222,6 @@ private:
         const KoPathShapePointMap & selectedPointMap() const { return m_shapePointMap; }
 
         /**
-         * @brief Returns a list of selected segments
-         * @return the list of selected segments
-         */
-        QList<KoPathSegment> selectedSegments() const;
-
-        /**
          * @brief trigger a repaint
          */
         void repaint();

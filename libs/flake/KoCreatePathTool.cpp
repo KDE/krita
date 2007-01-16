@@ -118,7 +118,7 @@ void KoCreatePathTool::mouseDoubleClickEvent( KoPointerEvent *event )
     if ( m_shape )
     {
         // the first click of the double click created a new point which has the be removed again
-        m_shape->removePoint( m_activePoint );
+        m_shape->removePoint( m_shape->pathPointIndex( m_activePoint ) );
         
         addPathShape();
     }

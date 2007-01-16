@@ -511,9 +511,9 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 break;
 #endif
             case Qt::Key_B:
-                if( m_pointSelection.selectedPoints().size() == 1 )
+                if( selectedPoints.size() == 1 )
                     breakAtPoint();
-                else if( m_pointSelection.selectedPoints().size() >= 2 )
+                else if( selectedPoints.size() >= 2 )
                     breakAtSegment();
                 break;
             case Qt::Key_J:
@@ -885,23 +885,6 @@ QList<KoPathPointData> KoPathTool::KoPathPointSelection::selectedSegmentsData() 
     }
 
     return pointData;
-}
-
-QList<KoPathSegment> KoPathTool::KoPathPointSelection::selectedSegments() const
-{
-    QList<KoPathSegment> segments;
-    foreach( KoPathPoint* p, m_selectedPoints )
-    {
-        KoSubpath *subpath = p->parent()->subpathOfPoint( p );
-        int index = subpath->indexOf( p );
-        if( index < subpath->size()-1 )
-        {
-            KoPathPoint *n = subpath->at( index+1 );
-            if( n && m_selectedPoints.contains( n ) )
-                segments << qMakePair( p, n );
-        }
-    }
-    return segments;
 }
 
 #include "KoPathTool.moc"

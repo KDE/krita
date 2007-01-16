@@ -1,3 +1,7 @@
+// This file includes code for scaling images, in two versions.
+// One ported from ImageMagick (slower, but can achieve better quality),
+// and from Imlib2 ported by Mosfet (very fast).
+
 // Imlib2/Mosfet code begin
 // ------------------------
 
@@ -82,85 +86,82 @@
 
 #include "scale.h"
 
+#include <QDebug>
 #include <QImage>
 #include <QRect>
 #include <QSize>
 
+#include <kcpuinfo.h>
+
 #include <config-endian.h> // WORDS_BIGENDIAN
+//#include <config-processor.h>
 
+namespace MImageScale{
+    typedef struct __mimage_scale_info
+    {
+        int *xpoints;
+        unsigned int **ypoints;
+        int *xapoints, *yapoints;
+        int xup_yup;
+    } MImageScaleInfo;
 
-typedef struct __mimage_scale_info
-{
-    int *xpoints;
-    unsigned int **ypoints;
-    int *xapoints, *yapoints;
-    int xup_yup;
-} MImageScaleInfo;
-
-unsigned int** mimageCalcYPoints(unsigned int *src, int sow, int sh, int dh);
-
-int* mimageCalcXPoints(int sw, int dw);
-
-int* mimageCalcApoints(int s, int d, int up);
-
-MImageScaleInfo* mimageFreeScaleInfo(MImageScaleInfo *isi);
-
-MImageScaleInfo *mimageCalcScaleInfo(const QImage &img, int sw, int sh,
-                                     int dw, int dh, char aa, int sow);
-
-void mimageScaleAARGBA(MImageScaleInfo *isi, unsigned int *dest, int dxx,
-                       int dyy, int dx, int dy, int dw, int dh, int dow,
-                       int sow);
-
-void smoothScale(const QImage & srcImage, const QRect & srcRect, QImage & dstImage, const QSize & dstSize);
-
+    unsigned int** mimageCalcYPoints(unsigned int *src, int sow, int sh,
+                                     int dh);
+    int* mimageCalcXPoints(int sw, int dw);
+    int* mimageCalcApoints(int s, int d, int up);
+    MImageScaleInfo* mimageFreeScaleInfo(MImageScaleInfo *isi);
+    MImageScaleInfo *mimageCalcScaleInfo(const QImage &img, int sw, int sh,
+                                         int dw, int dh, char aa, int sow);
+    void mimageScaleAARGBA(MImageScaleInfo *isi, unsigned int *dest, int dxx,
+                           int dyy, int dx, int dy, int dw, int dh, int dow,
+                           int sow);
+    QImage smoothScale(const QImage& img, int dw, int dh);
+}
 
 #ifdef HAVE_X86_MMX
 extern "C" {
-    void __mimageScale_mmx_AARGBA(MImageScaleInfo *isi,
+    void __mimageScale_mmx_AARGBA(MImageScale::MImageScaleInfo *isi,
                                   unsigned int *dest, int dxx, int dyy,
                                   int dx, int dy, int dw, int dh,
                                   int dow, int sow);
 }
 #endif
 
-void smoothScale(const QImage & srcImage, const QRect & srcRect, QImage & dstImage, const QSize & dstSize)
+using namespace MImageScale;
+
+QImage MImageScale::smoothScale(const QImage& image, int dw, int dh)
 {
-    int dw = dstSize.width();
-    int dh = dstSize.height();
+    //qDebug() << "smoothScale " << image.rect() << ", " << image.format() << "," << image.hasAlphaChannel() << " (" << dw << "," << dh << ")\n";
 
-    int w = srcRect.width();
-    int h = srcRect.height();
+    // We only do 32 bit images with alpha channel
+    QImage img = image;
 
-    int sow = srcImage.bytesPerLine();
+    int w = img.width();
+    int h = img.height();
 
-    // handle CroppedQImage
-    if( srcImage.height() > 1 && sow != srcImage.scanLine( 1 ) - srcImage.scanLine( 0 ))
-        sow = srcImage.scanLine( 1 ) - srcImage.scanLine( 0 );
+    int sow = img.bytesPerLine() / ( img.depth() / 8 );
 
-    sow = sow / ( srcImage.depth() / 8 );
-
-    MImageScaleInfo *scaleinfo = 0;
-    //mimageCalcScaleInfo(srcImage, srcRect.x(), srcRect.y(), w, h, dw, dh, true, sow);
-
+    MImageScaleInfo *scaleinfo = mimageCalcScaleInfo(img, w, h, dw, dh, true, sow);
     if(!scaleinfo)
-        return;
+        return QImage();
 
+    QImage buffer( dw, dh, QImage::Format_ARGB32 );
 
 #ifdef HAVE_X86_MMX
 //#warning Using MMX Smoothscale
     bool haveMMX = KCPUInfo::haveExtension( KCPUInfo::IntelMMX );
     if(haveMMX){
-        __mimageScale_mmx_AARGBA(scaleinfo, (unsigned int *)dstImage.scanLine(0),
+        __mimageScale_mmx_AARGBA(scaleinfo, (unsigned int *)buffer.scanLine(0),
                                  0, 0, 0, 0, dw, dh, dw, sow);
     }
     else
 #endif
     {
-        mimageScaleAARGBA(scaleinfo, (unsigned int *)dstImage.scanLine(0), 0, 0,
+        mimageScaleAARGBA(scaleinfo, (unsigned int *)buffer.scanLine(0), 0, 0,
                           0, 0, dw, dh, dw, sow);
     }
     mimageFreeScaleInfo(scaleinfo);
+    return(buffer);
 }
 
 //
@@ -186,9 +187,10 @@ void smoothScale(const QImage & srcImage, const QRect & srcRect, QImage & dstIma
 #define INV_YAP                   (256 - yapoints[dyy + y])
 #define YAP                       (yapoints[dyy + y])
 
-unsigned int** mimageCalcYPoints(unsigned int *src,
-                                 int sow, int sh, int dh)
+unsigned int** MImageScale::mimageCalcYPoints(unsigned int *src,
+                                              int sow, int sh, int dh)
 {
+    //qDebug() << "mimageCalcYPoints. sow: " << sow << ", sh: " << sh << ", dh: " << dh << endl;
     unsigned int **p;
     int i, j = 0;
     int val, inc, rv = 0;
@@ -215,8 +217,9 @@ unsigned int** mimageCalcYPoints(unsigned int *src,
     return(p);
 }
 
-int* mimageCalcXPoints(int sw, int dw)
+int* MImageScale::mimageCalcXPoints(int sw, int dw)
 {
+    //qDebug() << "mimageCalcXPoints. sw: " << sw << ", dw: " << dw << endl;
     int *p, i, j = 0;
     int val, inc, rv = 0;
 
@@ -243,8 +246,9 @@ int* mimageCalcXPoints(int sw, int dw)
     return(p);
 }
 
-int* mimageCalcApoints(int s, int d, int up)
+int* MImageScale::mimageCalcApoints(int s, int d, int up)
 {
+    //qDebug() << "mimageCalcAPoints. s: " << s << ", d: " << d << ", up: " << up << endl;
     int *p, i, j = 0, rv = 0;
 
     if(d < 0){
@@ -290,7 +294,7 @@ int* mimageCalcApoints(int s, int d, int up)
     return(p);
 }
 
-MImageScaleInfo* mimageFreeScaleInfo(MImageScaleInfo *isi)
+MImageScaleInfo* MImageScale::mimageFreeScaleInfo(MImageScaleInfo *isi)
 {
     if(isi){
         delete[] isi->xpoints;
@@ -302,9 +306,11 @@ MImageScaleInfo* mimageFreeScaleInfo(MImageScaleInfo *isi)
     return(NULL);
 }
 
-MImageScaleInfo* mimageCalcScaleInfo(const QImage &img, int sw, int sh,
-                                     int dw, int dh, char aa, int sow)
+MImageScaleInfo* MImageScale::mimageCalcScaleInfo(const QImage &img, int sw, int sh,
+                                                  int dw, int dh, char aa, int sow)
 {
+    //qDebug() << "mimageCalcScaleInfo. img " << img.rect() << ", sw " << sw << ", sh " << sh
+    //         << ", dw " << dw << ", dh " << dh << ", aa " << aa << ", sow " << sow << endl;
     MImageScaleInfo *isi;
     int scw, sch;
 
@@ -316,7 +322,7 @@ MImageScaleInfo* mimageCalcScaleInfo(const QImage &img, int sw, int sh,
         return(NULL);
     memset(isi, 0, sizeof(MImageScaleInfo));
 
-    isi->xup_yup = (QABS(dw) >= sw) + ((QABS(dh) >= sh) << 1);
+    isi->xup_yup = (abs(dw) >= sw) + ((abs(dh) >= sh) << 1);
 
     isi->xpoints = mimageCalcXPoints(img.width(), scw);
     if(!isi->xpoints)
@@ -336,13 +342,15 @@ MImageScaleInfo* mimageCalcScaleInfo(const QImage &img, int sw, int sh,
     return(isi);
 }
 
+
 /* FIXME: NEED to optimise ScaleAARGBA - currently its "ok" but needs work*/
 
 /* scale by area sampling */
-void mimageScaleAARGBA(MImageScaleInfo *isi, unsigned int *dest,
-                       int dxx, int dyy, int dx, int dy, int dw,
-                       int dh, int dow, int sow)
+void MImageScale::mimageScaleAARGBA(MImageScaleInfo *isi, unsigned int *dest,
+                                    int dxx, int dyy, int dx, int dy, int dw,
+                                    int dh, int dow, int sow)
 {
+    //qDebug() << "mimageScaleAARGBA " << endl;
     unsigned int *sptr, *dptr;
     int x, y, end;
     unsigned int **ypoints = isi->ypoints;
@@ -699,15 +707,23 @@ void mimageScaleAARGBA(MImageScaleInfo *isi, unsigned int *dest,
     }
 }
 
+// public functions :
+// ------------------
 
-// Imlib2/Mosfet code end
 
-void scale(const QImage& srcImage, const QRect & srcRect,  QImage & dstImage, QSize dstSize)
+QImage ImageUtils::scale(const QImage& image, int width, int height, Qt::AspectRatioMode mode)
 {
-    if( srcImage.isNull()) return;
-    if( dstImage.isNull()) return;
+    if( image.isNull()) return image.copy();
 
-    smoothScale( srcImage, srcRect, dstImage, dstSize );
+    QSize newSize( image.size() );
+    newSize.scale( QSize( width, height ), mode ); // ### remove cast in Qt 4.0
+    newSize = newSize.expandedTo( QSize( 1, 1 )); // make sure it doesn't become null
+
+    //qDebug() << "Scaling image " << image.rect() << " to " << newSize << endl;
+
+    if ( newSize == image.size() ) return image.copy();
+
+    return MImageScale::smoothScale( image, newSize.width(), newSize.height() );
 
 }
 

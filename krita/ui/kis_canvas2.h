@@ -96,6 +96,13 @@ public: // KoCanvasBase implementation
 
     void resetMonitorProfile();
 
+    virtual void zoomIn(const QPointF & center);
+
+    virtual void zoomOut(const QPointF & center);
+
+    virtual void zoomTo(const QRectF & newSize);
+
+
     // Temporary!
 #ifdef __GNUC__
 #warning: "Make the tools get the current paint device from the shape selection instead of directly from the canvas!"

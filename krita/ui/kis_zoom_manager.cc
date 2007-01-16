@@ -41,7 +41,7 @@
 #include "kis_config.h"
 
 KisZoomManager::KisZoomManager( KisView2 * view, KoZoomHandler * zoomHandler,
-            KoCanvasController * canvasController)
+                                KoCanvasController * canvasController)
     : m_view( view )
     , m_zoomHandler( zoomHandler )
     , m_canvasController( canvasController )
@@ -161,7 +161,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
         double zoomF = 72.0 * img->xRes() / KoGlobal::dpiX();
         m_zoomAction->setEffectiveZoom(int(100*zoomF+0.5));
     }
-    else 
+    else
     {
         double zoomF;
         if(mode == KoZoomMode::ZOOM_CONSTANT)

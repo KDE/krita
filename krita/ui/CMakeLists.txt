@@ -1,4 +1,9 @@
+configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-processor.h )
+
+include(kdefx.cmake)
+
 include_directories(${CMAKE_SOURCE_DIR}/krita/ui/obsolete/)
+
 set(kritaui_LIB_SRCS
     asm_scale.S
     scale.cpp

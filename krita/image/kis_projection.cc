@@ -116,9 +116,10 @@ bool KisProjection::upToDate(const QRegion & region)
 void KisProjection::slotAddDirtyRegion( const QRegion & region )
 {
 
+    m_d->dirtyRegion += region;
+
     //kDebug(41010) << "KisProjection::slotAddDirtyRegion " << region << ", bounding rect: " << region.boundingRect() << endl;
 #if 1
-    m_d->dirtyRegion += region;
     if ( !m_d->locked )
         scheduleRect( region.boundingRect() );
 #else

@@ -26,7 +26,7 @@
 #include <QColor>
 #include <QString>
 #include <QTime>
-#include <QDebug>
+#include <QPixmap>
 
 #include <kdebug.h>
 
@@ -45,6 +45,7 @@
 #include "kis_canvas2.h"
 #include "kis_resource_provider.h"
 #include "kis_view2.h"
+#include "scale.h"
 
 #define PATTERN_WIDTH 256
 #define PATTERN_HEIGHT 256
@@ -57,7 +58,7 @@ public:
     KoViewConverter * viewConverter;
     QImage * checkTexture;
     QBrush * checkBrush;
-    QImage * displayCache;
+    QPixmap displayCache;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
@@ -68,7 +69,6 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     m_d->canvas =  canvas;
     m_d->viewConverter = canvas->viewConverter();
     m_d->toolProxy = KoToolManager::instance()->createToolProxy(m_d->canvas);
-    m_d->displayCache = 0;
     setAttribute(Qt::WA_NoSystemBackground);
     setAutoFillBackground(false);
     m_d->checkTexture = new QImage(PATTERN_WIDTH, PATTERN_HEIGHT, QImage::Format_RGB32);
@@ -91,7 +91,6 @@ KisQPainterCanvas::~KisQPainterCanvas()
 {
     delete m_d->checkTexture;
     delete m_d->checkBrush;
-    delete m_d->displayCache;
     delete m_d;
 }
 
@@ -99,67 +98,82 @@ KisQPainterCanvas::~KisQPainterCanvas()
 
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
-    QImage canvasPixmap = m_d->canvas->canvasCache();
+    QRect updateRect = ev->rect();
+
+    kDebug() << "Paint event: " << updateRect << endl;
+
+    const QImage canvasImage = m_d->canvas->canvasCache();
+
+    if ( m_d->displayCache.width() < updateRect.width() ||
+         m_d->displayCache.height() < updateRect.height() )
+    {
+        kDebug() << "Oops, display cache too small\n";
+        m_d->displayCache = QPixmap( updateRect.size() );
+    }
 
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
 
     QTime t;
 
-    setAutoFillBackground(false);
+//    setAutoFillBackground(false);
 
-    QRegion paintRegion = ev->region();
-    QPainter gc( this );
-    gc.setRenderHint(QPainter::SmoothPixmapTransform, false);
-    gc.setRenderHint(QPainter::Antialiasing, false);
-
-    // Then draw the checks in the rects that are inside the image
-    // and which we need to repaint. We must paint all checks because we
-    // don't know where our image is transparent. In the same loop, ask
-    // the image to paint itself. (And later, the selections and so
-    // on.)
-
-    QVector<QRect> repaintRects = paintRegion.rects();
-
-    kDebug() << "painting on " << repaintRects.count() << " rects, bounding rect: " << ev->rect() << "\n";
-
-    QVector<QRect>::iterator it = repaintRects.begin();
-    QVector<QRect>::iterator end = repaintRects.end();
+    QPainter gc( &m_d->displayCache );
 
     double sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
 
-    while (it != end) {
-        //kDebug(41010) << "Starting with checkers on rect " << (*it) << endl;
-        t.start();
-        // Checks
-        gc.fillRect((*it), *m_d->checkBrush );
+    t.start();
+    // Checks
+    gc.fillRect(updateRect, *m_d->checkBrush );
 
-        //qDebug( "Painting checks: %d", t.elapsed() );
-        t.restart();
+    //kDebug() "Painting checks:" << t.elapsed() << endl;
+    t.restart();
 
-        double pppx,pppy;
-        pppx = img->xRes();
-        pppy = img->yRes();
-        QRectF imageRect = m_d->viewConverter->viewToDocument(*it);
-        imageRect.adjust(-1, -1, 1, 1);
-        imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
-                            imageRect.right() * pppx, imageRect.bottom() * pppy);
-        QRect rc = imageRect.toRect();
+    double pppx,pppy;
+    pppx = img->xRes();
+    pppy = img->yRes();
 
-        gc.setWorldMatrixEnabled( true );
-        //kDebug(41010) << "scale: " << sx / pppx << ", " << sy / pppy << endl;
-        gc.scale( sx / pppx, sy / pppy );
+    // Go from the widget coordinates to points
+    QRectF imageRect = m_d->viewConverter->viewToDocument(updateRect);
 
-        gc.drawImage( rc.x(), rc.y(), canvasPixmap, rc.x(), rc.y(), rc.width(), rc.height() );
+    // Go from points to pixels
+    imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
+                        imageRect.right() * pppx, imageRect.bottom() * pppy);
 
-        //qDebug( "painting image: %d",  t.elapsed() );
-        gc.resetMatrix( ); // important when the region has more than one rect or for subsequent drawing
+    // Because when too small, the scaling will make the update disappear
+    imageRect.adjust(-5, -5, 5, 5);
 
-        t.restart();
+    // Don't go outside the image and convert to whole pixels
 
-        ++it;
+    QRect rc = imageRect.intersected( canvasImage.rect() ).toAlignedRect();
+
+    // Compute the scale factors
+    double scaleX = sx / pppx;
+    double scaleY = sy / pppy;
+
+    // Pixel-for-pixel mode
+    if ( scaleX == 1.0 && scaleY == 1.0 ) {
+        gc.drawImage( 0, 0, canvasImage, rc.x(), rc.y(), rc.width(), rc.height() );
     }
+    else {
+        QSize sz = QSize( ( int )( rc.width() * ( sx / pppx ) ), ( int )( rc.height() * ( sy / pppy ) ));
+        t.restart();
+        QImage croppedImage = canvasImage.copy( rc ); // This is way
+                                                      // faster than
+                                                      // in Qt 3.x. No
+                                                      // need for
+                                                      // GwenView's
+                                                      // croppeqimage
+                                                      // class anymore.
+        kDebug() << "Copying subrect:" << t.elapsed() << endl;
+        t.restart();
+        QImage scaledImage = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
+        kDebug() << "Scaling subimage: " << t.elapsed() << endl;
+        t.restart();
+        gc.drawImage( 0, 0, scaledImage, 0, 0, sz.width(), sz.height() );
+    }
+    kDebug( "painting image: %d",  t.elapsed() );
 
 #if 0
     // ask the current layer to paint its selection (and potentially
@@ -180,11 +194,21 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 #endif
     // ask the guides, grids, etc to paint themselves
 
+
+
+    gc.end();
+    t.restart();
+
+    QPainter gc2(  this );
+    gc2.drawPixmap( updateRect.x(), updateRect.y(), m_d->displayCache, 0, 0, updateRect.width(), updateRect.height() );
+
+    kDebug( "putting pixmap on widget %d", t.elapsed() );
+
     // Give the tool a chance to paint its stuff
     //kDebug(41010) << "Tool starts painting\n";
-    m_d->toolProxy->paint(gc, *m_d->viewConverter );
+    m_d->toolProxy->paint(gc2, *m_d->viewConverter );
+    kDebug( "Done painting tool stuff %d", t.elapsed() );
 
-    //qDebug( "Done painting tool stuff %d", t.elapsed() );
 }
 
 
@@ -226,10 +250,13 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
 
 void KisQPainterCanvas::parentSizeChanged(const QSize & size )
 {
-    if (!m_d->displayCache || ( size.width() > m_d->displayCache->size().width() ||
-                                size.height() > m_d->displayCache->size().height()) ) {
+    if (m_d->displayCache.isNull() ||
+        ( size.width() > m_d->displayCache.width() ||
+          size.height() > m_d->displayCache.height())
+        )
+    {
         kDebug() << "KisQPainterCanvas::parentSizeChanged " << size << endl;
-        m_d->displayCache = new QImage(size, QImage::Format_RGB32);
+        m_d->displayCache = QPixmap( size );
     }
 }
 

@@ -18,20 +18,15 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef SCALE_H
-#define SCALE_H
+#ifndef IMAGEUTILS_H
+#define IMAGEUTILS_H
 
 // Qt
-class QImage;
-class QRect;
-class QSize;
+#include <QImage>
 
-/**
-   Scale the specified rect from srcImage right into the 0,0
-   position of dstImage up or down to dstSize. There are two
-   variets: unsmooth and smooth, with unsmooth being the fastest,
-   apparently.
-*/
-void scale(const QImage& srcImage, const QRect & srcRect,  QImage & dstImage, QSize dstSize);
+namespace ImageUtils {
 
+    QImage scale(const QImage& image, int width, int height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
+
+}
 #endif

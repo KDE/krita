@@ -26,6 +26,7 @@
 #include <kdebug.h>
 
 #include <KoUnit.h>
+#include <KoZoomHandler.h>
 #include <KoViewConverter.h>
 #include <KoShapeManager.h>
 #include <KoColorProfile.h>
@@ -143,8 +144,11 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
 
     // First convert from document coordinated to widget coordinates
     QRectF viewRect  = m_d->viewConverter->documentToView(rc);
-    //kDebug() << "KiSCanvas2::updateCanvas viewrect becomes: " << viewRect << endl;
-    m_d->canvasWidget->widget()->update( viewRect.toRect() );
+    //kDebug() << "KiSCanvas2::updateCanvas viewrect becomes: " <<
+    //viewRect << endl;
+    viewRect.adjust(-5, -5, 5, 5); // floor, ceil?
+    m_d->canvasWidget->widget()->update( viewRect.toAlignedRect() );
+
 }
 
 
@@ -162,11 +166,12 @@ void KisCanvas2::updateCanvas(const QRegion & rc)
     QVector<QRect>::iterator end = rcRects.end();
 
     while ( it != end ) {
-        it->adjust( -4, -4, 4, 4 );
-        widgetRegion += QRegion( m_d->viewConverter->documentToView( *it ).toRect() );
+        it->adjust( -5, -5, 5, 5 );
+        widgetRegion += QRegion( m_d->viewConverter->documentToView( *it ).toAlignedRect() );
         ++it;
     }
     m_d->canvasWidget->widget()->update( widgetRegion );
+
 }
 
 void KisCanvas2::updateCanvasProjection( const QRect & rc )
@@ -188,7 +193,8 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
     QRectF docRect;
     docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
     QRectF viewRect = m_d->viewConverter->documentToView(docRect);
-    m_d->canvasWidget->widget()->update( viewRect.toRect() );
+    viewRect.adjust( -5, -5, 5, 5 );
+    m_d->canvasWidget->widget()->update( viewRect.toAlignedRect() );
 
 /*
     kDebug(41010 ) << ">>>>>>>>>>>>>>>>>> canvas cache size: " << m_d->canvasCache.size() << endl;
@@ -260,6 +266,22 @@ void KisCanvas2::resetMonitorProfile()
         m_d->monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
     }
 }
+
+void KisCanvas2::zoomIn(const QPointF & center)
+{
+    KoZoomHandler * zoomHandler = dynamic_cast<KoZoomHandler *>( m_d->viewConverter );
+}
+
+void KisCanvas2::zoomOut(const QPointF & center)
+{
+    KoZoomHandler * zoomHandler = dynamic_cast<KoZoomHandler *>( m_d->viewConverter );
+}
+
+void KisCanvas2::zoomTo(const QRectF & newSize)
+{
+    KoZoomHandler * zoomHandler = dynamic_cast<KoZoomHandler *>( m_d->viewConverter );
+}
+
 
 KisImageSP KisCanvas2::currentImage()
 {

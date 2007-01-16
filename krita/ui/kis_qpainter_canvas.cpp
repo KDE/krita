@@ -100,14 +100,14 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
     QRect updateRect = ev->rect();
 
-    kDebug() << "Paint event: " << updateRect << endl;
+    kDebug(41010) << "Paint event: " << updateRect << endl;
 
     const QImage canvasImage = m_d->canvas->canvasCache();
 
     if ( m_d->displayCache.width() < updateRect.width() ||
          m_d->displayCache.height() < updateRect.height() )
     {
-        kDebug() << "Oops, display cache too small\n";
+        kDebug(41010) << "Oops, display cache too small\n";
         m_d->displayCache = QPixmap( updateRect.size() );
     }
 
@@ -116,7 +116,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     QTime t;
 
-//    setAutoFillBackground(false);
+    setAutoFillBackground(false);
 
     QPainter gc( &m_d->displayCache );
 
@@ -127,7 +127,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     // Checks
     gc.fillRect(updateRect, *m_d->checkBrush );
 
-    //kDebug() "Painting checks:" << t.elapsed() << endl;
+    kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
     t.restart();
 
     double pppx,pppy;
@@ -166,14 +166,14 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
                                                       // GwenView's
                                                       // croppeqimage
                                                       // class anymore.
-        kDebug() << "Copying subrect:" << t.elapsed() << endl;
+        kDebug(41010) << "Copying subrect:" << t.elapsed() << endl;
         t.restart();
         QImage scaledImage = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
-        kDebug() << "Scaling subimage: " << t.elapsed() << endl;
+        kDebug(41010) << "Scaling subimage: " << t.elapsed() << endl;
         t.restart();
         gc.drawImage( 0, 0, scaledImage, 0, 0, sz.width(), sz.height() );
     }
-    kDebug( "painting image: %d",  t.elapsed() );
+    kDebug(41010 ) << "painting image: " <<  t.elapsed() << endl;
 
 #if 0
     // ask the current layer to paint its selection (and potentially
@@ -202,12 +202,11 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     QPainter gc2(  this );
     gc2.drawPixmap( updateRect.x(), updateRect.y(), m_d->displayCache, 0, 0, updateRect.width(), updateRect.height() );
 
-    kDebug( "putting pixmap on widget %d", t.elapsed() );
+    kDebug(41010 ) << "putting pixmap on widget " << t.elapsed() << endl;
 
     // Give the tool a chance to paint its stuff
-    //kDebug(41010) << "Tool starts painting\n";
     m_d->toolProxy->paint(gc2, *m_d->viewConverter );
-    kDebug( "Done painting tool stuff %d", t.elapsed() );
+    kDebug( 41010 ) << "Done painting tool stuff " << t.elapsed() << endl;
 
 }
 

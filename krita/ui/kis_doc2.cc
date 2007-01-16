@@ -208,8 +208,6 @@ public:
             }
 
             KisLayerSP activeLayer = m_currentImage->activeLayer();
-            kDebug(41007) << "activeLayerShape() current image's current layer: " << activeLayer << endl;
-
             if ( activeLayer ) kDebug(41007) << "Active layer is not 0 and has name: " << activeLayer->name() << endl;
 
             if ( layerShapes.contains( m_currentImage->activeLayer() ) ) {
@@ -1474,14 +1472,21 @@ void KisDoc2::slotLayersChanged( KisGroupLayerSP rootLayer )
 
 void KisDoc2::slotLayerActivated( KisLayerSP layer )
 {
-    kDebug(41007) << ">>>>> KisDoc2::slotLayerActivated. Activating layer " << layer->name() << ", active layer: " << m_d->activeLayerShape()  << endl;
-
+    if ( layer )
+        kDebug(41007) << ">>>>> KisDoc2::slotLayerActivated. Activating layer " << layer->name() << ", active layer: " << m_d->activeLayerShape()  << endl;
+    else {
+        kDebug(41007) << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> layer is 0";
+        return;
+    }
     if (!m_d->layerShapes.contains( layer ) ) {
         kDebug(41007) << "A layer activated that is _not_ in the layer-shapes map!\n";
         return;
     }
 
-    kDebug(41007) << "Active layer shape has id: " << m_d->activeLayerShape()->shapeId() << endl;
+    if ( m_d->activeLayerShape() )
+        kDebug(41007) << "Active layer shape has id: " << m_d->activeLayerShape()->shapeId() << endl;
+    else
+        kDebug( 41007 ) << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> no active layer shape\n";
 
     if ( m_d->activeLayerShape()->shapeId() == KIS_SHAPE_LAYER_ID ) {
         // Automatically select all shapes in this newly selected shape layer?
@@ -1492,7 +1497,6 @@ void KisDoc2::slotLayerActivated( KisLayerSP layer )
         KoSelection * selection = canvas->shapeManager()->selection();
         selection->deselectAll();
         selection->select( m_d->activeLayerShape() );
-        kDebug(41007) << "Selection now contains: " << selection->firstSelectedShape()->shapeId() << endl;
     }
 
 }

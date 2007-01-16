@@ -1,9 +1,11 @@
 [Desktop Entry]
 Comment=Transform an image in a lenscorrection
+Comment[el]=Μετασχηματισμός μιας εικόνας με διόρθωση οπτικών φακών
 Comment[ja]=レンズ補正によって画像を変形
 Encoding=UTF-8
 Icon=
 Name=LensCorrection Filter
+Name[el]=Φίλτρο οπτικών φακών
 Name[ja]=レンズ補正フィルタ
 ServiceTypes=Krita/Filter
 Type=Service

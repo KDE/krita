@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Pixelize Filter
+Name[el]=Φίλτρο δημιουργίας εικονοστοιχείων
 Name[fr]=Filtre pixélisation
 Name[ja]=ピクセル化フィルタ
 Name[x-test]=xxPixelize Filterxx
 Comment=Pixelize filter
+Comment[el]=Φίλτρο δημιουργίας εικονοστοιχείων
 Comment[fr]=Filtre pixélisation
 Comment[ja]=ピクセル化フィルタ
 Comment[x-test]=xxPixelize filterxx

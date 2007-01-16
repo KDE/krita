@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Modify Selection
+Name[el]=Τροποποίηση επιλογής
 Name[ja]=選択領域を変更
 ServiceTypes=Krita/ViewPlugin
 Type=Service

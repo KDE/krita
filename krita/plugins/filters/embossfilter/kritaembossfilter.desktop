@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Emboss Filter
+Name[el]=Φίλτρο εμβάθυνσης
 Name[fr]=Filtre gravure
 Name[ja]=エンボスフィルタ
 Name[x-test]=xxEmboss Filterxx
 Comment=Emboss filter
+Comment[el]=Φίλτρο εμβάθυνσης
 Comment[fr]=Filtre gravure
 Comment[ja]=エンボスフィルタ
 Comment[x-test]=xxEmboss filterxx

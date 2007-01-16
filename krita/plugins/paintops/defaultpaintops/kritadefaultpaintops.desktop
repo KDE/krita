@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Default Paint Operations
+Name[el]=Προκαθορισμένες λειτουργίες ζωγραφικής
 Name[fr]=Opérations de dessin par défaut
 Name[ja]=標準の描画操作
 Name[x-test]=xxDefault Paint Operationsxx
 Comment=Default paint operations
+Comment[el]=Προκαθορισμένες λειτουργίες ζωγραφικής
 Comment[fr]=Opérations de dessin par défaut
 Comment[ja]=標準の描画操作
 Comment[x-test]=xxDefault paint operationsxx

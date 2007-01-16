@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Oilpaint Filter
+Name[el]=Φίλτρο ελαιογραφίας
 Name[fr]=Filtre de peinture à l'huile
 Name[ja]=油絵フィルタ
 Name[x-test]=xxOilpaint Filterxx
 Comment=Oilpaint filter
+Comment[el]=Φίλτρο ελαιογραφίας
 Comment[fr]=Filtre peinture à l'huile
 Comment[ja]=油絵フィルタ
 Comment[x-test]=xxOilpaint filterxx

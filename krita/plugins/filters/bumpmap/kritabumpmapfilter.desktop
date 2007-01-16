@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Bumpmap Filter
+Name[el]=Φίλτρο ανάγλυφου χάρτη
 Name[fr]=Filtre bumpmap
 Name[ja]=Bumpmap フィルタ
 Name[x-test]=xxBumpmap Filterxx
 Comment=Bumpmap filter
+Comment[el]=Φίλτρο ανάγλυφου χάρτη
 Comment[fr]=Filtre bumpmap
 Comment[ja]=Bumpmap フィルタ
 Comment[x-test]=xxBumpmap filterxx

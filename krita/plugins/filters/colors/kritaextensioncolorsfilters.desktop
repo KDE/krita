@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=Color Filters (Extension)
+Name[el]=Χρωματικά φίλτρα (Επέκταση)
 Name[ja]=カラーフィルタ (拡張)
 ServiceTypes=Krita/Filter
 Type=Service

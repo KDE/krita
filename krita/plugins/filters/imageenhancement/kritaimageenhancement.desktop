@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Enhancement Filters
+Name[el]=Φίλτρα βελτίωσης
 Name[fr]=Filtres d'amélioration
 Name[ja]=エンハンスメントフィルタ
 Name[x-test]=xxEnhancement Filtersxx
 Comment=Enhance the quality of an image
+Comment[el]=Βελτίωση της ποιότητας μίας εικόνας
 Comment[fr]=Améliore la qualité d'une image
 Comment[ja]=画質を高める
 Comment[x-test]=xxEnhance the quality of an imagexx

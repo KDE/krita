@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Grayscale Color Model
+Name[el]=Χρωματικό μοντέλο διαβαθμίσεων του γκρι
 Name[fr]=Modèle de couleurs en niveaux de gris
 Name[ja]=グレースケール カラーモデル
 Name[x-test]=xxGrayscale Color Modelxx
 Comment=Color model for 8-bit grayscale images
+Comment[el]=Χρωματικό μοντέλο για 8-bit με διαβαθμίσεις του γκρι εικόνες
 Comment[fr]=Modèle de couleurs pour des images en niveaux de gris 8 bits
 Comment[ja]=8 ビット グレースケール画像のためのカラーモデル
 Comment[x-test]=xxColor model for 8-bit grayscale imagesxx

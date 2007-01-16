@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Raindrops Filter
+Name[el]=Φίλτρο σταγόνων βροχής
 Name[fr]=Filtre gouttes de pluie
 Name[ja]=雨滴フィルタ
 Name[x-test]=xxRaindrops Filterxx
 Comment=Raindrops filter
+Comment[el]=Φίλτρο σταγόνων βροχής
 Comment[fr]=Filtre gouttes de pluie
 Comment[ja]=雨滴フィルタ
 Comment[x-test]=xxRaindrops filterxx

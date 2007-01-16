@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Watercolor Paint Plugin
+Name[el]=Πρόσθετο υδατογραφίας
 Name[fr]=Module de dessin à l'aquarelle
 Name[ja]=水彩プラグイン
 Name[x-test]=xxWatercolor Paint Pluginxx
 Comment=Color model and tools for painting with simulated watercolors
+Comment[el]=Χρωματικό μοντέλο και εργαλεία για τη ζωγραφική με εξομοίωση χρωμάτων υδατογραφίας
 Comment[fr]=Modèle de couleurs et outils pour dessiner avec des couleurs simulées d'aquarelle
 Comment[ja]=水彩画をシミュレートして描画するためのカラーモデルとツール
 Comment[x-test]=xxColor model and tools for painting with simulated watercolorsxx

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Curves Tool
+Name[el]=Εργαλείο καμπύλων
 Name[ja]=曲線ツール
 ServiceTypes=Krita/Tool
 Type=Service

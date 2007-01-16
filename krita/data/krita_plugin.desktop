@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=Krita/ViewPlugin
 Comment=GUI functionality for Krita
+Comment[el]=Άρθρωμα λειτουργικότητας περιβάλλοντος για το Krita
 Comment[fr]=Interface graphique pour Krita
 Comment[ja]=Krita の GUI 機能
 Comment[x-test]=xxGUI functionality for Kritaxx

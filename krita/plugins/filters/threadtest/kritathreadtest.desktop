@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Invert Filter with Threads
+Name[el]=Φίλτρο αντιστροφής με νήματα
 Name[fr]=Filtre d'inversion avec fils
 Name[x-test]=xxInvert Filter with Threadsxx
 ServiceTypes=Krita/Filter

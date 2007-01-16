@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Scripting plugin
+Name[el]=Πρόσθετο γραφής σεναρίων
 Name[fr]=Module de scriptage
 Name[ja]=スクリプトプラグイン
 Name[x-test]=xxScripting pluginxx
 Comment=Allow execution of scripts
+Comment[el]=Επιτρέπει την εκτέλεση σεναρίων
 Comment[fr]=Permet d'exécuter des scripts
 Comment[ja]=スクリプトの実行を可能にします
 Comment[x-test]=xxAllow execution of scriptsxx

@@ -503,32 +503,21 @@ KoSplitSegmentCommand::KoSplitSegmentCommand( const QList<KoPathPointData> & poi
     {
         KoPathShape * pathShape = it->m_pathShape;
 
-        KoPathPointIndex pi( it->m_pointIndex );
-        KoPathPoint * before = pathShape->pointByIndex( pi );
-
-        if ( before->properties() & KoPathPoint::CloseSubpath )
-        {
-            pi.second = 0;
-        }
-        else
-        {
-            ++pi.second;
-        }
-        KoPathPoint * after = pathShape->pointByIndex( pi );
+        KoPathSegment segment = pathShape->segmentByIndex( it->m_pointIndex );
 
         // should not happen but to be sure
-        if ( !before || !after )
+        if ( !segment.first || !segment.second )
             continue;
 
         m_pointDataList.append( *it );
-        if ( before->activeControlPoint2() || after->activeControlPoint1() )
+        if ( segment.first->activeControlPoint2() || segment.second->activeControlPoint1() )
         {
             QPointF q[4] =
             { 
-               before->point(), 
-               before->activeControlPoint2() ? before->controlPoint2() : before->point(), 
-               after->activeControlPoint1() ? after->controlPoint1() : after->point(), 
-               after->point()
+               segment.first->point(), 
+               segment.first->activeControlPoint2() ? segment.first->controlPoint2() : segment.first->point(), 
+               segment.second->activeControlPoint1() ? segment.second->controlPoint1() : segment.second->point(), 
+               segment.second->point()
             };
 
             QPointF p[3];
@@ -551,9 +540,9 @@ KoSplitSegmentCommand::KoSplitSegmentCommand( const QList<KoPathPointData> & poi
         }
         else
         {
-            QPointF splitPointPos = before->point() + splitPosition * ( after->point() - before->point());
+            QPointF splitPointPos = segment.first->point() + splitPosition * ( segment.second->point() - segment.first->point());
             m_points.append( new KoPathPoint( pathShape, splitPointPos, KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2 ) );
-            m_controlPoints.append( QPair<QPointF, QPointF>( before->controlPoint2(), after->controlPoint1() ) );
+            m_controlPoints.append( QPair<QPointF, QPointF>( segment.first->controlPoint2(), segment.second->controlPoint1() ) );
         }
     }
 }
@@ -570,38 +559,28 @@ void KoSplitSegmentCommand::redo()
 {
     for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
     {
-        const KoPathPointData &pdBefore = m_pointDataList.at( i );
-        KoPathShape * pathShape = pdBefore.m_pathShape;
-        KoPathPointIndex piAfter = pdBefore.m_pointIndex;
+        KoPathPointData pointData = m_pointDataList.at( i );
+        KoPathShape * pathShape = pointData.m_pathShape;
 
-        KoPathPoint * before = pathShape->pointByIndex( pdBefore.m_pointIndex );
+        KoPathSegment segment = pathShape->segmentByIndex( pointData.m_pointIndex );
 
-        if ( before->properties() & KoPathPoint::CloseSubpath )
-        {
-            piAfter.second = 0;
-        }
-        else
-        {
-            ++piAfter.second;
-        }
-        KoPathPoint * after = pathShape->pointByIndex( piAfter );
-        piAfter.second = pdBefore.m_pointIndex.second + 1;
+        ++pointData.m_pointIndex.second;
 
-        if ( before->activeControlPoint2() )
+        if ( segment.first->activeControlPoint2() )
         {
-            QPointF controlPoint2 = before->controlPoint2();
+            QPointF controlPoint2 = segment.first->controlPoint2();
             qSwap( controlPoint2, m_controlPoints[i].first );
-            before->setControlPoint2( controlPoint2 );
+            segment.first->setControlPoint2( controlPoint2 );
         }
 
-        if ( after->activeControlPoint1() )
+        if ( segment.second->activeControlPoint1() )
         {
-            QPointF controlPoint1 = after->controlPoint1();
+            QPointF controlPoint1 = segment.second->controlPoint1();
             qSwap( controlPoint1, m_controlPoints[i].second );
-            after->setControlPoint1( controlPoint1 );
+            segment.second->setControlPoint1( controlPoint1 );
         }
 
-        pathShape->insertPoint( m_points.at( i ), piAfter );
+        pathShape->insertPoint( m_points.at( i ), pointData.m_pointIndex );
         pathShape->repaint();
     }
     m_deletePoints = false;

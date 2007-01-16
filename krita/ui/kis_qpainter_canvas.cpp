@@ -50,7 +50,7 @@
 #define PATTERN_WIDTH 256
 #define PATTERN_HEIGHT 256
 
-QRect toAlignedRect(QRectF rc) const
+QRect toAlignedRect(QRectF rc)
 {
     int xmin = int(floor(rc.x()));
     int xmax = int(ceil(rc.x() + rc.width()));

@@ -43,7 +43,7 @@
 #include "kis_opengl_canvas2.h"
 
 
-QRect toAlignedRect(QRectF rc) const
+QRect toAlignedRect(QRectF rc)
 {
     int xmin = int(floor(rc.x()));
     int xmax = int(ceil(rc.x() + rc.width()));
@@ -177,7 +177,7 @@ void KisCanvas2::updateCanvas(const QRegion & rc)
 
     while ( it != end ) {
         it->adjust( -5, -5, 5, 5 );
-        widgetRegion += QRegion( m_d->viewConverter->documentToView( toAlignedRect(*it )) );
+        widgetRegion += QRegion( toAlignedRect( m_d->viewConverter->documentToView( (*it )) ) );
         ++it;
     }
     m_d->canvasWidget->widget()->update( widgetRegion );

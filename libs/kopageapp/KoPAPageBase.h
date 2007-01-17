@@ -42,15 +42,15 @@ public:
 
     /**
      * Return page title
-     * @param return page title
+     * @return page title
      */
     QString pageTitle() const;
 
     /**
      * Set page title
-     * @param set page title
+     * @param title set page title
      */
-    void setPageTitle( const QString &);
+    void setPageTitle( const QString &title);
 
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
 

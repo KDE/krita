@@ -43,6 +43,7 @@ public:
     void run()
         {
             kDebug(41010) << "ProjectionJob::run " << m_rc << endl;
+
             m_rootLayer->updateProjection( m_rc );
             // XXX: Also convert to QImage in the thread?
         }

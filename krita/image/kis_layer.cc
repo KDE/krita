@@ -352,13 +352,7 @@ void KisLayer::setDirty()
 {
     kDebug(41001) << "KisLayer::setDirty " << name() << endl;
     QRect rc = extent();
-
-    // If we're dirty, our parent is dirty, if we've got a parent
-    if (m_parent && rc.isValid()) m_parent->setDirty(rc);
-
-    if (m_image && rc.isValid()) {
-        m_image->notifyLayerUpdated(KisLayerSP(this));
-    }
+    setDirty( QRegion( rc ) );
 }
 
 void KisLayer::setDirty(const QRect & rc)
@@ -379,6 +373,18 @@ void KisLayer::setDirty( const QRegion & region)
     if (m_image) {
         m_image->notifyLayerUpdated(KisLayerSP(this));
     }
+
+    m_dirtyRegion += region;
+}
+
+bool KisLayer::isDirty( const QRect & rect )
+{
+    return m_dirtyRegion.intersects( rect );
+}
+
+void KisLayer::setClean( QRect rc )
+{
+    m_dirtyRegion -= QRegion( rc );
 }
 
 KisGroupLayerSP KisLayer::parent() const

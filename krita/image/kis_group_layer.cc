@@ -113,6 +113,7 @@ KisPaintDeviceSP KisGroupLayer::projection()
     if (parent().isNull() && childCount() == 1) {
         KisPaintLayerSP l = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(firstChild().data()));
         if (paintLayerInducesProjectionOptimization(l)) {
+            kDebug() << ">>>>>>>>>>>> Returning the single child layer\n";
             return l->paintDevice();
         }
     }
@@ -315,11 +316,6 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     KisLayerSP startWith = KisLayerSP(0);
 
-#ifdef __GNUC__
-#warning "KisGroupLayer::updateProjection. Reenable adjustmentlayer optimization!"
-#endif
-#if 0
-
     KisAdjustmentLayerSP adjLayer = KisAdjustmentLayerSP(0);
     KisLayerSP tmpPaintLayer = KisLayerSP(0);
 
@@ -336,11 +332,11 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             if (gotPaintLayer) {
                 // If this adjustment layer is dirty, start compositing with the
                 // previous layer, if there's one.
-                if (tmpAdjLayer->dirty(rc) && !adjLayer.isNull() && adjLayer->visible()) {
+                if (tmpAdjLayer->isDirty(rc) && !adjLayer.isNull() && adjLayer->visible()) {
                     startWith = adjLayer->prevSibling();
                     break;
                 }
-                else if (tmpAdjLayer->visible() && !tmpAdjLayer->dirty(rc)) {
+                else if (tmpAdjLayer->visible() && !tmpAdjLayer->isDirty(rc)) {
                     // This is the first adj. layer that is not dirty -- the perfect starting point
                     adjLayer = tmpAdjLayer;
                 }
@@ -354,7 +350,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             gotPaintLayer = true;
             // A non-adjustmentlayer that's dirty; if there's an adjustmentlayer
             // with a cache, we'll start from there.
-            if (child->dirty(rc)) {
+            if (child->isDirty(rc)) {
                 if (!adjLayer.isNull() && adjLayer->visible()) {
                     // the first layer on top of the adj. layer
                     startWith = adjLayer->prevSibling();
@@ -377,7 +373,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     if (adjLayer.isNull()) {
         startWith = lastChild();
     }
-#endif
+
 
     startWith = lastChild();
 
@@ -389,7 +385,6 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     // Fill the projection either with the cached data, or erase it.
     KisFillPainter gc(m_projection);
-#if 0
     if (!adjLayer.isNull()) {
         gc.bitBlt(rc.left(), rc.top(),
                   COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
@@ -397,10 +392,9 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         first = false;
     }
     else {
-#endif
         gc.eraseRect(rc);
         first = true;
-//    }
+    }
     gc.end();
 
     KisMergeVisitor visitor(m_projection, rc);
@@ -411,6 +405,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     {
         if(first)
         {
+            kDebug() << "First is true: " << child->name() << "\n";
             // Copy the lowest layer rather than compositing it with the background
             // or an empty image. This means the layer's composite op is ignored,
             // which is consistent with Photoshop and gimp.

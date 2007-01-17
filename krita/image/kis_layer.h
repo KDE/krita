@@ -87,6 +87,17 @@ public:
     */
     virtual void setDirty( const QRegion & region);
 
+    /**
+       @return true if the given rect overlapts with the dirty region
+       of this adjustement layer
+    */
+    bool isDirty( const QRect & rect );
+
+    /**
+       Mark the specified area as clean
+    */
+    void setClean( QRect rc );
+
     /// Return a copy of this layer
     virtual KisLayerSP clone() const = 0;
 
@@ -265,6 +276,8 @@ private:
     // Operation used to composite this layer with the projection of
     // the layers _under_ this layer
     const KoCompositeOp * m_compositeOp;
+
+    QRegion m_dirtyRegion;
 };
 
 // For classes that support indirect painting
@@ -293,8 +306,6 @@ private:
     KisPaintDeviceSP m_temporaryTarget;
     const KoCompositeOp* m_compositeOp;
     Q_UINT8 m_compositeOpacity;
-
-
 
 };
 

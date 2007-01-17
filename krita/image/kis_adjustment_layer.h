@@ -35,7 +35,10 @@ class KisFilterConfiguration;
 /**
  * Class that contains a KisFilter and optionally a KisSelection. The combination
  * is used by to influence the rendering of the layers under this layer in the
- * layerstack
+ * layerstack.
+ *
+ * AdjustmentLayers also function as a kind of "fixating layers" == as
+ * long as they
  **/
 class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer, public KisLayerSupportsIndirectPainting
 {
@@ -50,6 +53,7 @@ public:
     KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
+
 
     virtual QIcon icon() const;
     virtual PropertyList properties() const;
@@ -101,6 +105,7 @@ private:
     KisFilterConfiguration * m_filterConfig;
     KisSelectionSP m_selection;
     KisPaintDeviceSP m_cachedPaintDev;
+    QRegion m_dirtyRegion;
 private slots:
     void slotSelectionChanged(KisImageSP image);
 

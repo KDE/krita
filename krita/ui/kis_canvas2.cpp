@@ -192,11 +192,14 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
     QTime t;
     t.start();
     QPainter p( &m_d->canvasCache );
+    p.setCompositionMode( QPainter::CompositionMode_Source );
+
     p.drawImage( rc.x(), rc.y(),
                  image()->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
                                           m_d->monitorProfile,
                                           m_d->view->resourceProvider()->HDRExposure() )
                 , 0, 0, rc.width(), rc.height() );
+    p.end();
     kDebug(41010) << "Converting image part took " << t.elapsed() << " ms\n";
 
     double pppx,pppy;

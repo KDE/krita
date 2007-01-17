@@ -167,6 +167,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     // Pixel-for-pixel mode
     if ( scaleX == 1.0 && scaleY == 1.0 ) {
+        kDebug() << "Pixel for pixel!\n";
         gc.drawImage( dstTopLeft.x(), dstTopLeft.y(), canvasImage, rc.x(), rc.y(), rc.width(), rc.height() );
     }
     else {

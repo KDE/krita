@@ -66,6 +66,7 @@ KisAdjustmentLayer::~KisAdjustmentLayer()
     delete m_filterConfig;
 }
 
+
 QIcon KisAdjustmentLayer::icon() const
 {
     return KIcon("tool_filter");

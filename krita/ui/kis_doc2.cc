@@ -1395,17 +1395,17 @@ void KisDoc2::slotLayerAdded( KisLayerSP layer )
 
 void KisDoc2::slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis )
 {
-    kDebug(41007) << ">>>>> KisDoc2::slotLayerRemoved " << layer->name() << ", wasParent: " << wasParent->name() << ", wasAboveThis: " << wasAboveThis->name() << ", active layer: " << m_d->activeLayerShape()  << endl;
+//    kDebug(41007) << ">>>>> KisDoc2::slotLayerRemoved " << layer->name() << ", wasParent: " << wasParent->name() << ", wasAboveThis: " << wasAboveThis->name() << ", active layer: " << m_d->activeLayerShape()  << endl;
 }
 
 void KisDoc2::slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis )
 {
-    kDebug(41007) << ">>>>> KisDoc2::slotLayerMmoved " << layer->name() << ", previousParent: " << previousParent->name() << ", wasAboveThis: " << wasAboveThis->name()  << ", active layer: " << m_d->activeLayerShape() << endl;
+//    kDebug(41007) << ">>>>> KisDoc2::slotLayerMmoved " << layer->name() << ", previousParent: " << previousParent->name() << ", wasAboveThis: " << wasAboveThis->name()  << ", active layer: " << m_d->activeLayerShape() << endl;
 }
 
 void KisDoc2::slotLayersChanged( KisGroupLayerSP rootLayer )
 {
-    kDebug(41007) << ">>>>> KisDoc2::slotLayersChanged " << rootLayer->name()  << ", active layer: " << m_d->activeLayerShape() << endl;
+//    kDebug(41007) << ">>>>> KisDoc2::slotLayersChanged " << rootLayer->name()  << ", active layer: " << m_d->activeLayerShape() << endl;
 }
 
 void KisDoc2::slotLayerActivated( KisLayerSP layer )

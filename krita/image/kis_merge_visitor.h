@@ -84,7 +84,7 @@ public:
 
             KisPainter gc(m_projection);
             gc.bitBlt(dx, dy, layer->compositeOp() , dev, layer->opacity(), sx, sy, w, h);
-
+            layer->setClean( rc );
             return true;
         }
 
@@ -195,19 +195,19 @@ public:
                                     layer->opacity(), sx, sy, w, h);
                 }
             }
-
+            layer->setClean( rc );
             return true;
         }
 
     bool visit(KisGroupLayer *layer)
         {
+            kDebug(41010) << "Visiting on group layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+                          << layer->extent() << ", paint rect: " << m_rc << endl;
+
 
             if (m_projection.isNull()) {
                 return false;
             }
-
-            kDebug(41010) << "Visiting on group layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
-                          << layer->extent() << ", paint rect: " << m_rc << endl;
 
             if (!layer->visible())
                 return true;
@@ -228,7 +228,7 @@ public:
 
             KisPainter gc(m_projection);
             gc.bitBlt(dx, dy, layer->compositeOp(), dev, layer->opacity(), sx, sy, w, h);
-
+            layer->setClean( rc );
             return true;
         }
 
@@ -329,7 +329,7 @@ public:
             gc.bitBlt(m_rc.left(), m_rc.top(),
                       COMPOSITE_COPY, m_projection, OPACITY_OPAQUE,
                       m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
-
+            layer->setClean( m_rc );
             return true;
         }
 

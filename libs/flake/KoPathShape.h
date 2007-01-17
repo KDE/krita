@@ -522,6 +522,13 @@ public:
     int pointCount() const;
 
     /**
+     * @brief Get the number of subpaths in the path
+     *
+     * @return The number of subpaths in the path
+     */
+    int subpathCount() const;
+
+    /**
      * @brief Get the number of points in a subpath
      *
      * @return The number of points in the subpath or -1 if subpath out of bounds

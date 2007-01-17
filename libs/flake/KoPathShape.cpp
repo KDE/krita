@@ -839,6 +839,11 @@ int KoPathShape::pointCount() const
     return i;
 }
 
+int KoPathShape::subpathCount() const
+{
+    return m_subpaths.count();
+}
+
 int KoPathShape::pointCountSubpath( int subpathIndex ) const
 {
     KoSubpath * subpath = subPath( subpathIndex );

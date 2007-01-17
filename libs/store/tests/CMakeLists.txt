@@ -46,7 +46,7 @@ kde4_automoc(${koxmlreader_SRCS})
 
 kde4_add_executable(koxmlreadertest RUN_UNINSTALLED ${koxmlreader_SRCS})
 
-target_link_libraries(koxmlreadertest kofficecore ${QT_QTTEST_LIBRARY} )
+target_link_libraries(koxmlreadertest kstore ${QT_QTTEST_LIBRARY} )
 
 add_test(libs-store-koxmlreadertest koxmlreadertest)
 
@@ -68,7 +68,7 @@ kde4_automoc(${kodomtest_SRCS})
 
 kde4_add_executable(kodomtest RUN_UNINSTALLED ${kodomtest_SRCS})
 
-target_link_libraries(kodomtest ${KDE4_KDECORE_LIBS} kstore kofficecore ${QT_QTTEST_LIBRARY} )
+target_link_libraries(kodomtest ${KDE4_KDECORE_LIBS} kstore ${QT_QTTEST_LIBRARY} )
 
 add_test(libs-store-kodomtest kodomtest)
 

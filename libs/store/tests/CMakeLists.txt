@@ -1,5 +1,5 @@
 
-if(KDE4_BUILD_TESTS)
+#if(KDE4_BUILD_TESTS)
 
 ########### next target ###############
 
@@ -12,6 +12,19 @@ kde4_add_executable(storage_test RUN_UNINSTALLED ${storage_test_SRCS})
 target_link_libraries(storage_test  ${KDE4_KDECORE_LIBS} kstore )
 
 add_test(libs-store-storage_test storage_test)
+
+
+########### next target ###############
+
+set(storage_test2_SRCS storage_test2.cpp )
+
+kde4_automoc(${storage_test2_SRCS})
+
+kde4_add_executable(storage_test2 RUN_UNINSTALLED ${storage_test2_SRCS})
+
+target_link_libraries(storage_test2  ${KDE4_KDECORE_LIBS} kstore )
+
+add_test(libs-store-storage_test2 storage_test2)
 
 ########### next target ###############
 
@@ -61,5 +74,5 @@ add_test(libs-store-kodomtest kodomtest)
 
 ########### end ###############
 
-endif(KDE4_BUILD_TESTS)
+#endif(KDE4_BUILD_TESTS)
 

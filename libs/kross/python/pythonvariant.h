@@ -28,11 +28,16 @@
 #include <QVariant>
 #include <QMetaType>
 
-#include <typeinfo>
+#include <QSize>
+#include <QPointer>
+#include <QRect>
 
+#include <QDate>
 #include <QDate>
 #include <QTime>
 #include <QDateTime>
+
+#include <typeinfo>
 
 namespace Kross {
 
@@ -324,21 +329,123 @@ namespace Kross {
 
     /// \internal
     template<>
+    struct PythonType<QSize>
+    {
+        inline static Py::Object toPyObject(const QSize& size) {
+            Py::List list;
+            list.append( PythonType<int>::toPyObject(size.width()) );
+            list.append( PythonType<int>::toPyObject(size.height()) );
+            return list;
+        }
+        inline static QSize toVariant(const Py::Object& obj) {
+            Py::List list(obj);
+            return QSize(PythonType<int>::toVariant(list[0]), PythonType<int>::toVariant(list[1]));
+        }
+    };
+
+    /// \internal
+    template<>
+    struct PythonType<QSizeF>
+    {
+        inline static Py::Object toPyObject(const QSizeF& size) {
+            Py::List list;
+            list.append( PythonType<double>::toPyObject(size.width()) );
+            list.append( PythonType<double>::toPyObject(size.height()) );
+            return list;
+        }
+        inline static QSizeF toVariant(const Py::Object& obj) {
+            Py::List list(obj);
+            return QSizeF(PythonType<double>::toVariant(list[0]), PythonType<double>::toVariant(list[1]));
+        }
+    };
+
+    /// \internal
+    template<>
+    struct PythonType<QPoint>
+    {
+        inline static Py::Object toPyObject(const QPoint& point) {
+            Py::List list;
+            list.append( PythonType<int>::toPyObject(point.x()) );
+            list.append( PythonType<int>::toPyObject(point.y()) );
+            return list;
+        }
+        inline static QPoint toVariant(const Py::Object& obj) {
+            Py::List list(obj);
+            return QPoint(PythonType<int>::toVariant(list[0]), PythonType<int>::toVariant(list[1]));
+        }
+    };
+
+    /// \internal
+    template<>
+    struct PythonType<QPointF>
+    {
+        inline static Py::Object toPyObject(const QPointF& point) {
+krossdebug( QString("--------1") );
+            Py::List list;
+krossdebug( QString("--------2") );
+            list.append( PythonType<double>::toPyObject(point.x()) );
+            list.append( PythonType<double>::toPyObject(point.y()) );
+krossdebug( QString("--------3") );
+            return list;
+        }
+        inline static QPointF toVariant(const Py::Object& obj) {
+krossdebug( QString("--------10") );
+            Py::List list(obj);
+krossdebug( QString("--------11") );
+QPointF p(PythonType<double>::toVariant(list[0]), PythonType<double>::toVariant(list[1]));
+krossdebug( QString("--------12") );
+            return p;
+        }
+    };
+
+    /// \internal
+    template<>
+    struct PythonType<QRect>
+    {
+        inline static Py::Object toPyObject(const QRect& rect) {
+            Py::List list;
+            list.append( PythonType<int>::toPyObject(rect.x()) );
+            list.append( PythonType<int>::toPyObject(rect.y()) );
+            list.append( PythonType<int>::toPyObject(rect.width()) );
+            list.append( PythonType<int>::toPyObject(rect.height()) );
+            return list;
+        }
+        inline static QRect toVariant(const Py::Object& obj) {
+            Py::List list(obj);
+            return QRect(PythonType<int>::toVariant(list[0]), PythonType<int>::toVariant(list[1]),
+                         PythonType<int>::toVariant(list[2]), PythonType<int>::toVariant(list[3]));
+        }
+    };
+
+    /// \internal
+    template<>
+    struct PythonType<QRectF>
+    {
+        inline static Py::Object toPyObject(const QRectF& rect) {
+            Py::List list;
+            list.append( PythonType<double>::toPyObject(rect.x()) );
+            list.append( PythonType<double>::toPyObject(rect.y()) );
+            list.append( PythonType<double>::toPyObject(rect.width()) );
+            list.append( PythonType<double>::toPyObject(rect.height()) );
+            return list;
+        }
+        inline static QRectF toVariant(const Py::Object& obj) {
+            Py::List list(obj);
+            return QRectF(PythonType<double>::toVariant(list[0]), PythonType<double>::toVariant(list[1]),
+                          PythonType<double>::toVariant(list[2]), PythonType<double>::toVariant(list[3]));
+        }
+    };
+
+    // this is a testcase and not activly used yet cause there seems to be still some
+    // open issues. Please see also the unittest.py which contains tests for all cases.
+    /// \internal
+    template<>
     struct PythonType<QColor>
     {
         static Py::Object toPyObject(const QColor& color);
         static QColor toVariant(const Py::Object& obj);
     };
 
-//aaaaaaaaaaaaaaaaaaaaaaaaaaa;
-//QVariant::Size
-//QVariant::SizeF
-//QVariant::Point
-//QVariant::PointArray
-//QVariant::PointF
-//QVariant::Rect
-//QVariant::RectF
-//QVariant::Url
 #if 0
     /// \internal
     template<>
@@ -350,7 +457,6 @@ namespace Kross {
         }
         inline static QFont toVariant(const Py::Object& obj) {
             //TODO
-aaaaaaaaaaaa;
         }
     };
 
@@ -436,6 +542,7 @@ aaaaaaaaaaaa;
     };
     */
 #endif
+
     /*
     /// \internal
     template<>

@@ -56,6 +56,19 @@ Py::Object PythonType<QVariant>::toPyObject(const QVariant& v)
         case QVariant::ULongLong:
             return PythonType<qlonglong>::toPyObject(v.toULongLong());
 
+        case QVariant::Size:
+            return PythonType<QSize>::toPyObject(v.toSize());
+        case QVariant::SizeF:
+            return PythonType<QSizeF>::toPyObject(v.toSizeF());
+        case QVariant::Point:
+            return PythonType<QPoint>::toPyObject(v.toPoint());
+        case QVariant::PointF:
+            return PythonType<QPointF>::toPyObject(v.toPointF());
+        case QVariant::Rect:
+            return PythonType<QRect>::toPyObject(v.toRect());
+        case QVariant::RectF:
+            return PythonType<QRectF>::toPyObject(v.toRectF());
+
         case QVariant::Color:
             return PythonType<QColor>::toPyObject( v.value<QColor>() );
 
@@ -209,7 +222,6 @@ krossdebug( QString("....3") );
 
 QColor PythonType<QColor>::toVariant(const Py::Object& obj)
 {
-krossdebug( QString("...........9999999999999999999999999") );
     if( PythonExtension::check(obj.ptr()) ) {
         Py::ExtensionObject<PythonExtension> extobj(obj);
         Q_ASSERT( extobj.extensionObject() );
@@ -283,6 +295,19 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
             return new PythonMetaTypeVariant<qlonglong>(object);
         case QVariant::ULongLong:
             return new PythonMetaTypeVariant<qulonglong>(object);
+
+        case QVariant::Size:
+            return new PythonMetaTypeVariant<QSize>(object);
+        case QVariant::SizeF:
+            return new PythonMetaTypeVariant<QSizeF>(object);
+        case QVariant::Point:
+            return new PythonMetaTypeVariant<QPoint>(object);
+        case QVariant::PointF:
+            return new PythonMetaTypeVariant<QPointF>(object);
+        case QVariant::Rect:
+            return new PythonMetaTypeVariant<QRect>(object);
+        case QVariant::RectF:
+            return new PythonMetaTypeVariant<QRectF>(object);
 
         case QVariant::Color:
             //QColor c = PythonType<QColor>::toVariant(object);

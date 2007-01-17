@@ -92,7 +92,7 @@ public:
      */
     virtual void paintHandle( QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius );
 
-    virtual void resize( const QSizeF &newSize );
+    virtual void resize( const QSizeF &size );
 
     /**
      * @brief Check if object is a parametric shape 

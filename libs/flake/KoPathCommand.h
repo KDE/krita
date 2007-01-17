@@ -79,7 +79,6 @@ class KoControlPointMoveCommand : public QUndoCommand
 public:
     /**
      * Command to move one control path point.
-     * @param point the path point to control point belongs to
      * @param offset the offset by which the point is moved in document coordinates
      * @param pointType the type of the point to move
      * @param parent the parent command used for macro commands

@@ -638,7 +638,7 @@ public:
      *
      * The last point becomes the first point and the first one becomes the last one.
      *
-     * @param pointIndex of the subpath to reverse
+     * @param subpathIndex the pointIndex of the subpath to reverse
      */
     bool reverseSubpath( int subpathIndex );
 

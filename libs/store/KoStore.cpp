@@ -324,21 +324,7 @@ QByteArray KoStore::read( qint64 max )
     return data;
   }
 
-  if ( m_stream->atEnd() )
-  {
-    return data;
-  }
-
-  if ( max > m_iSize - m_stream->pos() )
-    max = m_iSize - m_stream->pos();
-  if ( max == 0 )
-  {
-    return data;
-  }
-
-  data = m_stream->read( max );
-
-  return data;
+  return m_stream->read( max );
 }
 
 qint64 KoStore::write( const QByteArray& data )
@@ -358,14 +344,6 @@ qint64 KoStore::read( char *_buffer, qint64 _len )
     kError(s_area) << "KoStore: Can not read from store that is opened for writing" << endl;
     return -1;
   }
-
-  if ( m_stream->atEnd() )
-    return 0;
-
-  if ( _len > m_iSize - m_stream->pos() )
-    _len = m_iSize - m_stream->pos();
-  if ( _len == 0 )
-    return 0;
 
   return m_stream->read( _buffer, _len );
 }

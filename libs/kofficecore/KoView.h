@@ -369,7 +369,7 @@ public:
    * @param w     Widget that's to be embedded (may be 0)
    * @return the dock widget itself
    */
-   QDockWidget * createDock(const QString & title, QWidget * w);
+   KDE_DEPRECATED QDockWidget * createDock(const QString & title, QWidget * w);
 
   /**
    * You have to implement this method and disable/enable certain functionality (actions for example) in

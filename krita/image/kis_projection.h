@@ -21,10 +21,13 @@
 #include <QObject>
 
 #include "kis_types.h"
+#include <threadweaver/Job.h>
 
 class QRegion;
 class QRect;
 class QVariant;
+
+using namespace ThreadWeaver;
 
 /**
    KisProjection is responsible for keeping the projection of the
@@ -95,8 +98,7 @@ private slots:
     void slotAddDirtyRegion( const QRegion & region );
     void slotAddDirtyRect( const QRect & rect );
 
-    void slotTriggered( const QVariant & params );
-    void slotUpdateUi( const QVariant & params );
+    void slotUpdateUi( Job* );
 
 private:
 

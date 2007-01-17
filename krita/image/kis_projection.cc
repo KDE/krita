@@ -19,9 +19,7 @@
 
 #include <QRegion>
 #include <QRect>
-#include <QVariant>
 
-#include <threadAction/KoAction.h>
 #include <KoExecutePolicy.h>
 #include <threadweaver/ThreadWeaver.h>
 
@@ -30,11 +28,38 @@
 
 const int UPDATE_RECT_SIZE = 1024;
 
+using namespace ThreadWeaver;
+
+class ProjectionJob : public Job
+{
+public:
+    ProjectionJob( const QRect & rc, KisGroupLayerSP layer, QObject * parent )
+        : Job( parent )
+        , m_rc( rc )
+        , m_rootLayer( layer )
+        {
+        }
+
+    void run()
+        {
+            kDebug(41010) << "ProjectionJob::run " << m_rc << endl;
+            m_rootLayer->updateProjection( m_rc );
+            // XXX: Also convert to QImage in the thread?
+        }
+
+    QRect rect() const { return m_rc; }
+
+private:
+
+    QRect m_rc;
+    KisGroupLayerSP m_rootLayer;
+};
+
 class KisProjection::Private {
 public:
     KisImageSP image;
     KisGroupLayerSP rootLayer;
-    KoAction * action;
+
     QRegion dirtyRegion; // The Qt manual assures me that QRegion is
                          // threadsafe... Let's hope that's really
                          // true!
@@ -48,14 +73,9 @@ KisProjection::KisProjection( KisImageSP image, KisGroupLayerSP rootLayer )
     m_d->image = image;
     m_d->rootLayer = rootLayer;
     m_d->locked = false;
-    m_d->action = new KoAction( this );
-    // XXX: I need a policy that enables me to run a given number of
-    // jobs concurrently, say 4 or so.
-    m_d->action->setExecutePolicy( KoExecutePolicy::directPolicy ); // Why doesn't it execute with the simpleQueuedPolicy? That's what I want.
-    m_d->action->setWeaver( ThreadWeaver::Weaver::instance() );
 
-    connect( m_d->action, SIGNAL( triggered( const QVariant & ) ), SLOT( slotTriggered (const QVariant &)) );
-    connect( m_d->action, SIGNAL( updateUi( const QVariant & ) ), SLOT( slotUpdateUi (const QVariant &)) );
+    Weaver::instance()->setMaximumNumberOfThreads( 4 );
+    connect( Weaver::instance(), SIGNAL( jobDone(Job*) ), this, SLOT( slotUpdateUi( Job* ) ) );
 
     connect( this, SIGNAL( sigProjectionUpdated( const QRect & ) ), image.data(), SLOT(slotProjectionUpdated( const QRect &) ) );
 
@@ -65,7 +85,6 @@ KisProjection::KisProjection( KisImageSP image, KisGroupLayerSP rootLayer )
 
 KisProjection::~KisProjection()
 {
-    delete m_d->action;
     delete m_d;
 }
 
@@ -146,19 +165,13 @@ void KisProjection::slotAddDirtyRect( const QRect & rect )
     }
 }
 
-void KisProjection::slotTriggered( const QVariant & rect )
+void KisProjection::slotUpdateUi( Job* job )
 {
-    // Recomposite
-    kDebug(41010) << "KisProjection::slotTriggered " << rect.toRect() << endl;
-    m_d->rootLayer->updateProjection( rect.toRect() );
-}
-
-void KisProjection::slotUpdateUi( const QVariant & rect )
-{
-    kDebug(41010) << "KisProjection::slotUpdateUI " << rect.toRect() << endl;
-    QRect rc = rect.toRect();
-    m_d->dirtyRegion -= QRegion( rc );
-    emit sigProjectionUpdated( rc );
+    ProjectionJob* pjob = static_cast<ProjectionJob*>( job );
+    kDebug(41010) << "KisProjection::slotUpdateUI " << pjob->rect() << endl;
+    m_d->dirtyRegion -= QRegion( pjob->rect() );
+    emit sigProjectionUpdated( pjob->rect() );
+    delete pjob;
 }
 
 void KisProjection::scheduleRect( const QRect & rc )
@@ -168,14 +181,12 @@ void KisProjection::scheduleRect( const QRect & rc )
     int w = rc.width();
     QRect imageRect = m_d->image->bounds();
 
-    QVariant v;
-
     // Note: we're doing columns first, so when we have small strip left
     // at the bottom, we have as few and as long runs of pixels left
     // as possible.
     if ( w <= UPDATE_RECT_SIZE && h <= UPDATE_RECT_SIZE ) {
-        v = QRect( rc );
-        m_d->action->execute( &v );
+        ProjectionJob * job = new ProjectionJob( rc, m_d->rootLayer, this );
+        Weaver::instance()->enqueue( job );
     }
 
     int x = rc.x();
@@ -187,9 +198,9 @@ void KisProjection::scheduleRect( const QRect & rc )
         int hleft = h;
         int row = 0;
         while ( hleft > 0 ) {
-            v = QRect( col + x, row + y, qMin( wleft, UPDATE_RECT_SIZE ), qMin( hleft, UPDATE_RECT_SIZE ) );
-            kDebug(41010) << "Scheduling subrect : " << v << ", wleft: " << wleft << ", hleft:" << hleft << endl;
-            m_d->action->execute( &v );
+            QRect rc( col + x, row + y, qMin( wleft, UPDATE_RECT_SIZE ), qMin( hleft, UPDATE_RECT_SIZE ) );
+            ProjectionJob * job = new ProjectionJob( rc, m_d->rootLayer, this );
+            Weaver::instance()->enqueue( job );
             hleft -= UPDATE_RECT_SIZE;
             row += UPDATE_RECT_SIZE;
 

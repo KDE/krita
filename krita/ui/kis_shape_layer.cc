@@ -79,8 +79,8 @@ QIcon KisShapeLayer::icon() const
 KisPaintDeviceSP KisShapeLayer::prepareProjection(KisPaintDeviceSP projection, const QRect& r)
 {
     kDebug(41007) << "KisShapeLayer::prepareProjection " << r << endl;
-    QPainter p( projection.data() );
-    KoShapeLayer::paint( p, *m_d->converter );
+    //QPainter p( projection.data() );
+    //KoShapeLayer::paint( p, *m_d->converter );
 
     return projection;
 }

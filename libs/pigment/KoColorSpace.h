@@ -125,7 +125,7 @@ protected:
 
 public:
     /// Should be called by real color spaces
-    KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp );
+    KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp, DWORD cmType, icColorSpaceSignature colorSpaceSignature );
     virtual ~KoColorSpace();
 
     virtual bool operator==(const KoColorSpace& rhs) const {
@@ -209,9 +209,9 @@ public:
     /**
      * lcms colorspace type definition.
      */
-    virtual quint32 colorSpaceType() const = 0;
+    virtual quint32 colorSpaceType() const;
 
-    virtual icColorSpaceSignature colorSpaceSignature() const = 0;
+    virtual icColorSpaceSignature colorSpaceSignature() const;
 
     /**
      * If false, images in this colorspace will degrade considerably by

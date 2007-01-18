@@ -172,13 +172,8 @@ private:
     void init();
 
 private:
-
-    QMap<QString, KoColorProfile * > m_profileMap;
-    QMap<QString, KoColorSpace * > m_csMap;
-    typedef QList<KisPaintDeviceAction *> PaintActionList;
-    QMap<QString, PaintActionList> m_paintDevActionMap;
-    KoColorSpace *m_alphaCs;
-    static KoColorSpaceRegistry *m_singleton;
+    class Private;
+    Private* d;
 };
 
 #endif // KOCOLORSPACEFACTORYREGISTRY_H

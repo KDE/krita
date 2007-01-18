@@ -40,16 +40,25 @@
 #include "colorspaces/KoLabColorSpace.h"
 #include "colorspaces/KoRgbU16ColorSpace.h"
 
-KoColorSpaceRegistry *KoColorSpaceRegistry::m_singleton = 0;
+struct KoColorSpaceRegistry::Private {
+    QMap<QString, KoColorProfile * > profileMap;
+    QMap<QString, KoColorSpace * > csMap;
+    typedef QList<KisPaintDeviceAction *> PaintActionList;
+    QMap<QString, PaintActionList> paintDevActionMap;
+    KoColorSpace *alphaCs;
+    static KoColorSpaceRegistry *singleton;
+};
+
+KoColorSpaceRegistry *KoColorSpaceRegistry::Private::singleton = 0;
 
 KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
 {
-    if(KoColorSpaceRegistry::m_singleton == 0)
+    if(KoColorSpaceRegistry::Private::singleton == 0)
     {
-        KoColorSpaceRegistry::m_singleton = new KoColorSpaceRegistry();
-        KoColorSpaceRegistry::m_singleton->init();
+        KoColorSpaceRegistry::Private::singleton = new KoColorSpaceRegistry();
+        KoColorSpaceRegistry::Private::singleton->init();
     }
-    return KoColorSpaceRegistry::m_singleton;
+    return KoColorSpaceRegistry::Private::singleton;
 }
 
 
@@ -65,19 +74,19 @@ void KoColorSpaceRegistry::init()
     profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICC");
     profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icc");
 
-    QDir d("/usr/share/color/icc/", "*.icc;*.ICC;*.icm;*.ICM");
+    QDir dir("/usr/share/color/icc/", "*.icc;*.ICC;*.icm;*.ICM");
 
-    QStringList filenames = d.entryList();
+    QStringList filenames = dir.entryList();
 
     for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
-        profileFilenames += d.absoluteFilePath(*it);
+        profileFilenames += dir.absoluteFilePath(*it);
     }
 
-    d.setPath(QDir::homePath() + "/.color/icc/");
-    filenames = d.entryList();
+    dir.setPath(QDir::homePath() + "/.color/icc/");
+    filenames = dir.entryList();
 
     for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
-        profileFilenames += d.absoluteFilePath(*it);
+        profileFilenames += dir.absoluteFilePath(*it);
     }
 
     // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.
@@ -92,7 +101,7 @@ void KoColorSpaceRegistry::init()
 
             profile->load();
             if (profile->valid()) {
-                m_profileMap[profile->productName()] = profile;
+                d->profileMap[profile->productName()] = profile;
             }
         }
     }
@@ -117,7 +126,7 @@ void KoColorSpaceRegistry::init()
     addProfile(defProfile);
 
     // Create the built-in colorspaces
-    m_alphaCs = new KoAlphaColorSpace(this);
+    d->alphaCs = new KoAlphaColorSpace(this);
 
     // Load all colorspace modules
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/ColorSpace"),
@@ -132,21 +141,22 @@ void KoColorSpaceRegistry::init()
     KoPluginLoader::instance()->load("KOffice/ColorSpace","[X-Pigment-Version] == 1");
 }
 
-KoColorSpaceRegistry::KoColorSpaceRegistry()
+KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())
 {
 }
 
 KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
+    delete d;
 }
 
 KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name) const
 {
-    if (m_profileMap.find(name) == m_profileMap.end()) {
+    if (d->profileMap.find(name) == d->profileMap.end()) {
         return 0;
     }
 
-    return m_profileMap[name];
+    return d->profileMap[name];
 }
 
 QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const QString &id)
@@ -159,7 +169,7 @@ QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoColorSpaceFactory *
     QList<KoColorProfile *>  profiles;
 
     QMap<QString, KoColorProfile * >::Iterator it;
-    for (it = m_profileMap.begin(); it != m_profileMap.end(); ++it) {
+    for (it = d->profileMap.begin(); it != d->profileMap.end(); ++it) {
         KoColorProfile *  profile = it.value();
         if (profile->colorSpaceSignature() == csf->colorSpaceSignature()) {
             profiles.push_back(profile);
@@ -171,18 +181,18 @@ QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoColorSpaceFactory *
 void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
 {
       if (p->valid()) {
-          m_profileMap[p->productName()] = p;
+          d->profileMap[p->productName()] = p;
       }
 }
 
 void KoColorSpaceRegistry::addPaintDeviceAction(KoColorSpace* cs,
         KisPaintDeviceAction* action) {
-    m_paintDevActionMap[cs->id()].append(action);
+    d->paintDevActionMap[cs->id()].append(action);
 }
 
 QList<KisPaintDeviceAction *>
 KoColorSpaceRegistry::paintDeviceActionsFor(KoColorSpace* cs) {
-    return m_paintDevActionMap[cs->id()];
+    return d->paintDevActionMap[cs->id()];
 }
 
 KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QString &pName)
@@ -201,7 +211,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QStri
 
     QString name = csID + "<comb>" + profileName;
 
-    if (m_csMap.find(name) == m_csMap.end()) {
+    if (d->csMap.find(name) == d->csMap.end()) {
         KoColorSpaceFactory *csf = get(csID);
         if(!csf)
             return 0;
@@ -213,11 +223,11 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QStri
         if(!cs)
             return 0;
 
-        m_csMap[name] = cs;
+        d->csMap[name] = cs;
     }
 
-    if(m_csMap.contains(name))
-        return m_csMap[name];
+    if(d->csMap.contains(name))
+        return d->csMap[name];
     else
         return 0;
 }
@@ -241,7 +251,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoCol
                 return 0;
 
             QString name = csID + "<comb>" + profile->productName();
-            m_csMap[name] = cs;
+            d->csMap[name] = cs;
         }
 
         return cs;
@@ -252,7 +262,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoCol
 
 KoColorSpace * KoColorSpaceRegistry::alpha8()
 {
-   return m_alphaCs;
+   return d->alphaCs;
 }
 
 KoColorSpace * KoColorSpaceRegistry::rgb8()

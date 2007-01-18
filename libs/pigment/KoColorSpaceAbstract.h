@@ -198,16 +198,10 @@ class KoColorSpaceAbstract : public KoColorSpace {
     public:
         KoColorSpaceAbstract(const QString &id, const QString &name, KoColorSpaceRegistry * parent, DWORD cmType,
                          icColorSpaceSignature colorSpaceSignature ) :
-            KoColorSpace(id, name, parent, new KoMixColorsOpImpl< _CSTraits>(), new KoConvolutionOpImpl< _CSTraits>()),
-            m_cmType(cmType),
-            m_colorSpaceSignature(colorSpaceSignature)
+            KoColorSpace(id, name, parent, new KoMixColorsOpImpl< _CSTraits>(), new KoConvolutionOpImpl< _CSTraits>(), cmType, colorSpaceSignature)
         {
             this->addCompositeOp( new CompositeCopy( this ) );
         };
-        
-        virtual void setColorSpaceType(quint32 type) { m_cmType = type; }
-        virtual quint32 colorSpaceType() const { return m_cmType; }
-        virtual icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }
         
         virtual quint32 colorChannelCount() const { return _CSTraits::channels_nb - 1; }
         virtual quint32 channelCount() const { return _CSTraits::channels_nb; };
@@ -312,11 +306,6 @@ class KoColorSpaceAbstract : public KoColorSpace {
         {
             return KoID("Basic");
         }
-
-    private:
-        DWORD m_cmType;                           // The colorspace type as defined by littlecms
-        icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files
-
 };
 
 

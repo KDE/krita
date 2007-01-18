@@ -102,88 +102,115 @@ struct KoLcmsDarkenTransformation : public KoColorTransformation
  */
 template<class _CSTraits>
 class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
+        struct Private {
+                mutable quint8 * qcolordata; // A small buffer for conversion from and to qcolor.
+                cmsHTRANSFORM defaultToRGB;    // Default transform to 8 bit sRGB
+                cmsHTRANSFORM defaultFromRGB;  // Default transform from 8 bit sRGB
+                cmsHTRANSFORM defaultToRGB16;    // Default transform to 16 bit sRGB
+                cmsHTRANSFORM defaultFromRGB16;  // Default transform from 16 bit sRGB
+        
+                mutable cmsHPROFILE   lastRGBProfile;  // Last used profile to transform to/from RGB
+                mutable cmsHTRANSFORM lastToRGB;       // Last used transform to transform to RGB
+                mutable cmsHTRANSFORM lastFromRGB;     // Last used transform to transform from RGB
+        
+                cmsHTRANSFORM defaultToLab;
+                cmsHTRANSFORM defaultFromLab;
+        
+                KoColorProfile *  profile;
+                mutable const KoColorSpace *lastUsedDstColorSpace;
+                mutable cmsHTRANSFORM lastUsedTransform;
+                
+            // cmsHTRANSFORM is a void *, so this should work.
+                typedef QMap<const KoColorSpace *, cmsHTRANSFORM>  TransformMap;
+                mutable TransformMap transforms; // Cache for existing transforms
+        };
     protected:
         KoLcmsColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, DWORD cmType,
                          icColorSpaceSignature colorSpaceSignature,
-                         KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name, parent, cmType, colorSpaceSignature), m_profile( p )
+                         KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name, parent, cmType, colorSpaceSignature), d( new Private())
 
         {
-            m_qcolordata = 0;
-            m_lastUsedDstColorSpace = 0;
-            m_lastUsedTransform = 0;
-            m_lastRGBProfile = 0;
-            m_lastToRGB = 0;
-            m_lastFromRGB = 0;
-            m_defaultFromRGB = 0;
-            m_defaultToRGB = 0;
-            m_defaultFromLab = 0;
-            m_defaultToLab = 0;
-            m_defaultToRGB16 = 0;
-            m_defaultFromRGB16 = 0;
+            d->profile = p;
+            d->qcolordata = 0;
+            d->lastUsedDstColorSpace = 0;
+            d->lastUsedTransform = 0;
+            d->lastRGBProfile = 0;
+            d->lastToRGB = 0;
+            d->lastFromRGB = 0;
+            d->defaultFromRGB = 0;
+            d->defaultToRGB = 0;
+            d->defaultFromLab = 0;
+            d->defaultToLab = 0;
+            d->defaultToRGB16 = 0;
+            d->defaultFromRGB16 = 0;
+        }
+        virtual ~KoLcmsColorSpace()
+        {
+            delete d;
         }
 
         void init()
         {
     // Default pixel buffer for QColor conversion
-            m_qcolordata = new quint8[3];
-            Q_CHECK_PTR(m_qcolordata);
-            Q_ASSERT(m_profile );
-//             if (m_profile == 0) { return; }
+            d->qcolordata = new quint8[3];
+            Q_CHECK_PTR(d->qcolordata);
+            Q_ASSERT(d->profile );
+//             if (d->profile == 0) { return; }
 
     // For conversions from default rgb
-            m_lastFromRGB = cmsCreate_sRGBProfile();
+            d->lastFromRGB = cmsCreate_sRGBProfile();
 
-            m_defaultFromRGB = cmsCreateTransform(m_lastFromRGB, TYPE_BGR_8,
-                    m_profile->profile(), this->colorSpaceType(),
+            d->defaultFromRGB = cmsCreateTransform(d->lastFromRGB, TYPE_BGR_8,
+                    d->profile->profile(), this->colorSpaceType(),
                     INTENT_PERCEPTUAL, 0);
 
-            m_defaultToRGB =  cmsCreateTransform(m_profile->profile(), this->colorSpaceType(),
-                    m_lastFromRGB, TYPE_BGR_8,
+            d->defaultToRGB =  cmsCreateTransform(d->profile->profile(), this->colorSpaceType(),
+                    d->lastFromRGB, TYPE_BGR_8,
                     INTENT_PERCEPTUAL, 0);
 
-            m_defaultFromRGB16 = cmsCreateTransform(m_lastFromRGB, TYPE_BGRA_16,
-                    m_profile->profile(), this->colorSpaceType(),
+            d->defaultFromRGB16 = cmsCreateTransform(d->lastFromRGB, TYPE_BGRA_16,
+                    d->profile->profile(), this->colorSpaceType(),
                     INTENT_PERCEPTUAL, 0);
 
-            m_defaultToRGB16 =  cmsCreateTransform(m_profile->profile(), this->colorSpaceType(),
-                    m_lastFromRGB, TYPE_BGRA_16,
+            d->defaultToRGB16 =  cmsCreateTransform(d->profile->profile(), this->colorSpaceType(),
+                    d->lastFromRGB, TYPE_BGRA_16,
                     INTENT_PERCEPTUAL, 0);
 
             cmsHPROFILE hLab  = cmsCreateLabProfile(NULL);
 
-            m_defaultFromLab = cmsCreateTransform(hLab,  (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), m_profile->profile(), this->colorSpaceType(),
+            d->defaultFromLab = cmsCreateTransform(hLab,  (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), d->profile->profile(), this->colorSpaceType(),
                     INTENT_PERCEPTUAL, 0);
 
-            m_defaultToLab = cmsCreateTransform(m_profile->profile(), this->colorSpaceType(), hLab,  (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)),
+            d->defaultToLab = cmsCreateTransform(d->profile->profile(), this->colorSpaceType(), hLab,  (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)),
                     INTENT_PERCEPTUAL, 0);
         }
     public:
         
         virtual bool hasHighDynamicRange() const { return false; }
-        virtual KoColorProfile * profile() const { return m_profile; };
+        virtual KoColorProfile * profile() const { return d->profile; };
         
         virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile=0) const
         {
-            m_qcolordata[2] = color.red();
-            m_qcolordata[1] = color.green();
-            m_qcolordata[0] = color.blue();
+            d->qcolordata[2] = color.red();
+            d->qcolordata[1] = color.green();
+            d->qcolordata[0] = color.blue();
 
 
             if (profile == 0) {
 	    // Default sRGB
-                if (!m_defaultFromRGB) return;
+                if (!d->defaultFromRGB) return;
 
-                cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
+                cmsDoTransform(d->defaultFromRGB, d->qcolordata, dst, 1);
             }
             else {
-                if (m_lastFromRGB == 0 || (m_lastFromRGB != 0 && m_lastRGBProfile != profile->profile())) {
-                    m_lastFromRGB = cmsCreateTransform(profile->profile(), TYPE_BGR_8,
-                            m_profile->profile(), this->colorSpaceType(),
+                if (d->lastFromRGB == 0 || (d->lastFromRGB != 0 && d->lastRGBProfile != profile->profile())) {
+                    d->lastFromRGB = cmsCreateTransform(profile->profile(), TYPE_BGR_8,
+                            d->profile->profile(), this->colorSpaceType(),
                             INTENT_PERCEPTUAL, 0);
-                    m_lastRGBProfile = profile->profile();
+                    d->lastRGBProfile = profile->profile();
 
                 }
-                cmsDoTransform(m_lastFromRGB, m_qcolordata, dst, 1);
+                cmsDoTransform(d->lastFromRGB, d->qcolordata, dst, 1);
             }
 
             this->setAlpha(dst, OPACITY_OPAQUE, 1);
@@ -199,19 +226,19 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         {
             if (profile == 0) {
 	// Default sRGB transform
-                if (!m_defaultToRGB) return;
-                cmsDoTransform(m_defaultToRGB, const_cast <quint8 *>(src), m_qcolordata, 1);
+                if (!d->defaultToRGB) return;
+                cmsDoTransform(d->defaultToRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
             }
             else {
-                if (m_lastToRGB == 0 || (m_lastToRGB != 0 && m_lastRGBProfile != profile->profile())) {
-                    m_lastToRGB = cmsCreateTransform(m_profile->profile(), this->colorSpaceType(),
+                if (d->lastToRGB == 0 || (d->lastToRGB != 0 && d->lastRGBProfile != profile->profile())) {
+                    d->lastToRGB = cmsCreateTransform(d->profile->profile(), this->colorSpaceType(),
                             profile->profile(), TYPE_BGR_8,
                             INTENT_PERCEPTUAL, 0);
-                    m_lastRGBProfile = profile->profile();
+                    d->lastRGBProfile = profile->profile();
                 }
-                cmsDoTransform(m_lastToRGB, const_cast <quint8 *>(src), m_qcolordata, 1);
+                cmsDoTransform(d->lastToRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
             }
-            c->setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
+            c->setRgb(d->qcolordata[2], d->qcolordata[1], d->qcolordata[0]);
         }
 
         virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile =0) const
@@ -238,9 +265,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         }
         virtual void toLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
         {
-            if ( m_defaultToLab == 0 ) return;
+            if ( d->defaultToLab == 0 ) return;
 
-            cmsDoTransform( m_defaultToLab, const_cast<quint8 *>( src ), dst, nPixels );
+            cmsDoTransform( d->defaultToLab, const_cast<quint8 *>( src ), dst, nPixels );
             quint16* dstU16 = reinterpret_cast<quint16*>(dst);
             for(quint32 i = 0; i < nPixels; i++)
             {
@@ -251,9 +278,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
         virtual void fromLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
         {
-            if ( m_defaultFromLab == 0 ) return;
+            if ( d->defaultFromLab == 0 ) return;
 
-            cmsDoTransform( m_defaultFromLab,  const_cast<quint8 *>( src ), dst,  nPixels );
+            cmsDoTransform( d->defaultFromLab,  const_cast<quint8 *>( src ), dst,  nPixels );
             const quint16* srcU16 = reinterpret_cast<const quint16*>(src);
             for(quint32 i = 0; i < nPixels; i++)
             {
@@ -263,9 +290,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         }
         virtual void fromRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
         {
-            if ( m_defaultFromRGB16 == 0 ) return;
+            if ( d->defaultFromRGB16 == 0 ) return;
 
-            cmsDoTransform( m_defaultFromRGB16,  const_cast<quint8 *>( src ), dst,  nPixels );
+            cmsDoTransform( d->defaultFromRGB16,  const_cast<quint8 *>( src ), dst,  nPixels );
             const quint16* srcU16 = reinterpret_cast<const quint16*>(src);
             for(quint32 i = 0; i < nPixels; i++)
             {
@@ -275,9 +302,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         }
         virtual void toRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
         {
-            if ( m_defaultToRGB16 == 0 ) return;
+            if ( d->defaultToRGB16 == 0 ) return;
 
-            cmsDoTransform( m_defaultToRGB16, const_cast<quint8 *>( src ), dst, nPixels );
+            cmsDoTransform( d->defaultToRGB16, const_cast<quint8 *>( src ), dst, nPixels );
             quint16* dstU16 = reinterpret_cast<quint16*>(dst);
             for(quint32 i = 0; i < nPixels; i++)
             {
@@ -306,32 +333,32 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             qint32 srcPixelSize = this->pixelSize();
             qint32 dstPixelSize = dstColorSpace->pixelSize();
 
-            if (m_lastUsedTransform != 0 && m_lastUsedDstColorSpace != 0) {
-                if (dstColorSpace->colorSpaceType() == m_lastUsedDstColorSpace->colorSpaceType() &&
-                    dstColorSpace->profile() == m_lastUsedDstColorSpace->profile()) {
-                    tf = m_lastUsedTransform;
+            if (d->lastUsedTransform != 0 && d->lastUsedDstColorSpace != 0) {
+                if (dstColorSpace->colorSpaceType() == d->lastUsedDstColorSpace->colorSpaceType() &&
+                    dstColorSpace->profile() == d->lastUsedDstColorSpace->profile()) {
+                    tf = d->lastUsedTransform;
                     }
             }
 
-            if (!tf && m_profile && dstColorSpace->profile()) {
+            if (!tf && d->profile && dstColorSpace->profile()) {
 
-                if (!m_transforms.contains(dstColorSpace)) {
+                if (!d->transforms.contains(dstColorSpace)) {
                     tf = this->createTransform(dstColorSpace,
-                            m_profile,
+                            d->profile,
                             dstColorSpace->profile(),
                             renderingIntent);
                     if (tf) {
             // XXX: Should we clear the transform cache if it gets too big?
-                        m_transforms[dstColorSpace] = tf;
+                        d->transforms[dstColorSpace] = tf;
                     }
                 }
                 else {
-                    tf = m_transforms[dstColorSpace];
+                    tf = d->transforms[dstColorSpace];
                 }
 
                 if ( tf ) {
-                    m_lastUsedTransform = tf;
-                    m_lastUsedDstColorSpace = dstColorSpace;
+                    d->lastUsedTransform = tf;
+                    d->lastUsedDstColorSpace = dstColorSpace;
                 }
             }
 
@@ -358,7 +385,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
         virtual KoColorTransformation *createBrightnessContrastAdjustment(quint16 *transferValues) const
         {
-            if (!m_profile) return 0;
+            if (!d->profile) return 0;
 
             LPGAMMATABLE transferFunctions[3];
             transferFunctions[0] = cmsBuildGamma(256, 1.0);
@@ -372,23 +399,23 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             adj->profiles[1] = cmsCreateLinearizationDeviceLink(icSigLabData, transferFunctions);
             cmsSetDeviceClass(adj->profiles[1], icSigAbstractClass);
 
-            adj->profiles[0] = m_profile->profile();
-            adj->profiles[2] = m_profile->profile();
+            adj->profiles[0] = d->profile->profile();
+            adj->profiles[2] = d->profile->profile();
             adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(), INTENT_PERCEPTUAL, 0);
-            adj->csProfile = m_profile->profile();
+            adj->csProfile = d->profile->profile();
             return adj;
         }
 
 
         virtual KoColorTransformation *createDesaturateAdjustment() const
         {
-            if (!m_profile) return 0;
+            if (!d->profile) return 0;
 
             KoLcmsColorTransformation *adj = new KoLcmsColorTransformation;
 
-            adj->profiles[0] = m_profile->profile();
-            adj->profiles[2] = m_profile->profile();
-            adj->csProfile = m_profile->profile();
+            adj->profiles[0] = d->profile->profile();
+            adj->profiles[2] = d->profile->profile();
+            adj->csProfile = d->profile->profile();
 
             LPLUT Lut;
             BCHSWADJUSTS bchsw;
@@ -440,7 +467,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
         virtual KoColorTransformation *createPerChannelAdjustment(quint16 **transferValues) const
         {
-            if (!m_profile) return 0;
+            if (!d->profile) return 0;
 
             LPGAMMATABLE *transferFunctions = new LPGAMMATABLE[ _CSTraits::channels_nb +1];
 
@@ -455,7 +482,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             adj->profiles[0] = cmsCreateLinearizationDeviceLink(this->colorSpaceSignature(), transferFunctions);
             adj->profiles[1] = NULL;
             adj->profiles[2] = NULL;
-            adj->csProfile = m_profile->profile();
+            adj->csProfile = d->profile->profile();
             adj->cmstransform  = cmsCreateTransform(adj->profiles[0], this->colorSpaceType(), NULL, this->colorSpaceType(), INTENT_PERCEPTUAL, 0);
 
             delete [] transferFunctions;
@@ -465,12 +492,12 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
         virtual KoColorTransformation *createDarkenAdjustement(qint32 shade, bool compensate, double compensation) const
         {
-            return new KoLcmsDarkenTransformation(this, m_defaultToLab, m_defaultFromLab, shade, compensate, compensation);
+            return new KoLcmsDarkenTransformation(this, d->defaultToLab, d->defaultFromLab, shade, compensate, compensation);
         }
 
         virtual quint8 difference(const quint8* src1, const quint8* src2) const
         {
-            if (m_defaultToLab) {
+            if (d->defaultToLab) {
 
                 quint8 lab1[8], lab2[8];
                 cmsCIELab labF1, labF2;
@@ -478,8 +505,8 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                 if (this->alpha(src1) == OPACITY_TRANSPARENT || this->alpha(src2) == OPACITY_TRANSPARENT)
                     return (this->alpha(src1) == this->alpha(src2) ? 0 : 255);
 
-                cmsDoTransform( m_defaultToLab, const_cast<quint8*>( src1 ), lab1, 1);
-                cmsDoTransform( m_defaultToLab, const_cast<quint8*>( src2 ), lab2, 1);
+                cmsDoTransform( d->defaultToLab, const_cast<quint8*>( src1 ), lab1, 1);
+                cmsDoTransform( d->defaultToLab, const_cast<quint8*>( src2 ), lab2, 1);
                 cmsLabEncoded2Float(&labF1, (WORD *)lab1);
                 cmsLabEncoded2Float(&labF2, (WORD *)lab2);
                 double diff = cmsDeltaE(&labF1, &labF2);
@@ -559,28 +586,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             }
             return 0;
         }
-    private:
-        mutable quint8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
-        cmsHTRANSFORM m_defaultToRGB;    // Default transform to 8 bit sRGB
-        cmsHTRANSFORM m_defaultFromRGB;  // Default transform from 8 bit sRGB
-        cmsHTRANSFORM m_defaultToRGB16;    // Default transform to 16 bit sRGB
-        cmsHTRANSFORM m_defaultFromRGB16;  // Default transform from 16 bit sRGB
-
-        mutable cmsHPROFILE   m_lastRGBProfile;  // Last used profile to transform to/from RGB
-        mutable cmsHTRANSFORM m_lastToRGB;       // Last used transform to transform to RGB
-        mutable cmsHTRANSFORM m_lastFromRGB;     // Last used transform to transform from RGB
-
-        cmsHTRANSFORM m_defaultToLab;
-        cmsHTRANSFORM m_defaultFromLab;
-
-        KoColorProfile *  m_profile;
-        mutable const KoColorSpace *m_lastUsedDstColorSpace;
-        mutable cmsHTRANSFORM m_lastUsedTransform;
-        
-    // cmsHTRANSFORM is a void *, so this should work.
-        typedef QMap<const KoColorSpace *, cmsHTRANSFORM>  TransformMap;
-        mutable TransformMap m_transforms; // Cache for existing transforms
-
+        Private * d;
 };
 
 

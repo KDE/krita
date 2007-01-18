@@ -33,16 +33,20 @@ struct KoColorSpace::Private {
     KoMixColorsOp* mixColorsOp;
     KoConvolutionOp* convolutionOp;
     mutable Q3MemArray<quint8> conversionCache; // XXX: This will be a bad problem when we have threading.
+    DWORD cmType;                           // The colorspace type as defined by littlecms
+    icColorSpaceSignature colorSpaceSignature; // The colorspace signature as defined in icm/icc files
 };
 
-KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp )
+KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp, DWORD cmType, icColorSpaceSignature colorSpaceSignature )
     : d (new Private())
 {
-  d->id = id;
-  d->name = name;
-  d->parent = parent;
-  d->mixColorsOp = mixColorsOp;
-  d->convolutionOp = convolutionOp;
+    d->id = id;
+    d->name = name;
+    d->parent = parent;
+    d->mixColorsOp = mixColorsOp;
+    d->convolutionOp = convolutionOp;
+    d->cmType = cmType;
+    d->colorSpaceSignature = colorSpaceSignature;
 }
 
 KoColorSpace::~KoColorSpace()
@@ -55,6 +59,9 @@ KoColorSpace::~KoColorSpace()
 QString KoColorSpace::id() const {return d->id;}
 
 QString KoColorSpace::name() const {return d->name;}
+
+quint32 KoColorSpace::colorSpaceType() const { return d->cmType; }
+icColorSpaceSignature KoColorSpace::colorSpaceSignature() const { return d->colorSpaceSignature; }
 
 Q3ValueVector<KoChannelInfo *> KoColorSpace::channels() const
 {

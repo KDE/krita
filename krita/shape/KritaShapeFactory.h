@@ -1,0 +1,51 @@
+/* This file is part of the KDE project
+   Copyright 2007 Boudewijn Rempt <boud@valdyas.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef PICTURE_SHAPE_FACTORY
+#define PICTURE_SHAPE_FACTORY
+
+#include <QStringList>
+
+#include <KoShapeFactory.h>
+
+
+class KoShape;
+
+class KritaShapePlugin : public QObject
+{
+    Q_OBJECT
+
+public:
+
+    KritaShapePlugin( QObject * parent,  const QStringList & );
+    ~KritaShapePlugin() {}
+
+};
+
+class KritaShapeFactory : public KoShapeFactory
+{
+    Q_OBJECT
+public:
+    KritaShapeFactory( QObject* parent, const QStringList& );
+    ~KritaShapeFactory() {}
+
+    KoShape* createDefaultShape() const;
+    KoShape* createShape( const KoProperties* params ) const;
+};
+
+#endif

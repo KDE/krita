@@ -60,7 +60,7 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument, public KoShapeControllerBase, 
     Q_OBJECT
 
 public:
-    KisDoc2(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+    KisDoc2(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false, bool flake = false);
     virtual ~KisDoc2();
 
 public:

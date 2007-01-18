@@ -273,12 +273,14 @@ private:
 };
 
 
-KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
+KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode, bool flake)
     : KoDocument(parentWidget, parent, singleViewMode)
     , m_d( new KisDocPrivate() )
 {
 
-    setInstance( KisFactory2::instance(), false );
+    if ( !flake ) {
+        setInstance( KisFactory2::instance(), false );
+    }
     setTemplateType( "krita_template" );
     init();
 

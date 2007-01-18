@@ -59,7 +59,7 @@ KritaShape::~KritaShape()
 void KritaShape::importImage(const KUrl & url )
 {
     delete m_d->doc;
-    m_d->doc = new KisDoc2(0, 0, true, true);
+    m_d->doc = new KisDoc2(0, 0, false);
     m_d->doc->openURL(url);
     if ( !m_d->doc->isLoading() ) {
         slotLoadingFinished();

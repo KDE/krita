@@ -92,8 +92,10 @@ KInstance* KisFactory2::instance()
 
     if ( !s_instance )
     {
-
-        s_instance = new KInstance(s_aboutData);
+        if ( s_aboutData )
+            s_instance = new KInstance(s_aboutData);
+        else
+            s_instance = new KInstance( newKritaAboutData() );
         Q_CHECK_PTR(s_instance);
 
         // Load the krita-specific tools

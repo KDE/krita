@@ -54,7 +54,6 @@
 #include <KoOasisStore.h>
 #include <KoQueryTrader.h>
 #include <KoShape.h>
-#include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
 #include <KoStore.h>
@@ -273,14 +272,12 @@ private:
 };
 
 
-KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode, bool flake)
+KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
     : KoDocument(parentWidget, parent, singleViewMode)
     , m_d( new KisDocPrivate() )
 {
 
-    if ( !flake ) {
-        setInstance( KisFactory2::instance(), false );
-    }
+    setInstance( KisFactory2::instance(), false );
     setTemplateType( "krita_template" );
     init();
 

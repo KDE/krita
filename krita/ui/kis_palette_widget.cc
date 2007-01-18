@@ -21,37 +21,48 @@
 
 #include <kdebug.h>
 
+#include "kis_view2.h"
 #include "kis_palette_widget.h"
 #include "kis_resource.h"
 #include "kis_palette.h"
 #include "kis_palette_view.h"
+#include "kis_resourceserver.h"
+#include "kis_resource_provider.h"
 
-KisPaletteWidget::KisPaletteWidget( QWidget *parent, int minWidth, int cols)
-    : QWidget( parent ), mMinWidth(minWidth), mCols(cols)
+KisPaletteWidget::KisPaletteWidget( KisView2 * view )
+    : QDockWidget( i18n("Layers") ), mMinWidth(210), mCols(16)
 {
+    m_view = view;
     init = false;
+
+    QWidget* mainWidget = new QWidget(this);
+    setWidget(mainWidget);
 
     m_currentPalette = 0;
 
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    QVBoxLayout *layout = new QVBoxLayout( mainWidget );
 
     combo = new QComboBox( this );
     combo->setFocusPolicy( Qt::ClickFocus );
     layout->addWidget(combo);
 
-    m_view = new KisPaletteView(this, 0, minWidth, cols);
-    layout->addWidget( m_view );
+    m_paletteView = new KisPaletteView(this, 0, mMinWidth, mCols);
+    layout->addWidget( m_paletteView );
 
     //setFixedSize(sizeHint());
 
     connect(combo, SIGNAL(activated(const QString &)),
             this, SLOT(slotSetPalette(const QString &)));
-    connect(m_view, SIGNAL(colorSelected(const KoColor &)),
-            this, SIGNAL(colorSelected(const KoColor &)));
-    connect(m_view, SIGNAL(colorSelected(const QColor &)),
-            this, SIGNAL(colorSelected(const QColor &)));
-    connect(m_view, SIGNAL(colorDoubleClicked(const KoColor &, const QString &)),
-            this, SIGNAL(colorDoubleClicked(const KoColor &, const QString &)));
+    connect(m_paletteView, SIGNAL(colorSelected(const KoColor &)),
+            this, SLOT(colorSelected(const KoColor &)));
+
+    KisResourceServerBase* rServer;
+    rServer = KisResourceServerRegistry::instance()->get("PaletteServer");
+    QList<KisResource*> resources = rServer->resources();
+
+    foreach (KisResource *resource, resources) {
+        slotAddPalette(resource);
+    }
 }
 
 KisPaletteWidget::~KisPaletteWidget()
@@ -76,7 +87,7 @@ QString KisPaletteWidget::palette() const
 void KisPaletteWidget::slotSetPalette( const QString &_paletteName )
 {
     setPalette( _paletteName );
-    m_view->slotColorCellSelected(0); // FIXME: We need to save the current value!!
+    m_paletteView->slotColorCellSelected(0); // FIXME: We need to save the current value!!
 }
 
 
@@ -98,7 +109,7 @@ void KisPaletteWidget::setPalette( const QString &_paletteName )
         }
     }
 
-    m_view->setPalette(m_currentPalette);
+    m_paletteView->setPalette(m_currentPalette);
 }
 
 void KisPaletteWidget::slotAddPalette(KisResource * palette)
@@ -116,6 +127,29 @@ void KisPaletteWidget::slotAddPalette(KisResource * palette)
             init = true;
         }
     }
+}
+
+void KisPaletteWidget::colorSelected( const KoColor& color )
+{
+    m_view->resourceProvider()->setFGColor(color);
+}
+
+QString KisPaletteDockerFactory::dockId() const
+{
+    return QString("KisPaletteDocker");
+}
+
+Qt::DockWidgetArea KisPaletteDockerFactory::defaultDockWidgetArea() const
+{
+    return Qt::RightDockWidgetArea;
+}
+
+QDockWidget* KisPaletteDockerFactory::createDockWidget()
+{
+    KisPaletteWidget* dockWidget = new KisPaletteWidget(m_view);
+    dockWidget->setObjectName(dockId());
+
+    return dockWidget;
 }
 
 

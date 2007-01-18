@@ -20,6 +20,10 @@
 #define __KIS_PALETTE_WIDGET_H__
 
 #include <q3dict.h>
+#include <QDockWidget>
+#include <klocale.h>
+
+#include <KoDockFactory.h>
 #include "kis_palette_view.h"
 
 class QComboBox;
@@ -28,6 +32,7 @@ class KListBox;
 class KisPalette;
 class KisResource;
 class KoColor;
+class KisView2;
 
 /**
  * A color palette in table form.
@@ -36,26 +41,22 @@ class KoColor;
  *  @author was Waldo Bastian <bastian@kde.org> -- much has changed, though,
  * to work with KisPalettes and the resource server.
  */
-class KisPaletteWidget : public QWidget
+class KisPaletteWidget : public QDockWidget
 {
     Q_OBJECT
 public:
-    KisPaletteWidget( QWidget *parent, int minWidth=210, int cols = 16);
+    KisPaletteWidget( KisView2 * view );
     virtual ~KisPaletteWidget();
 
     QString palette() const;
-    KisPaletteEntry currentEntry() const { return m_view->currentEntry(); }
+    KisPaletteEntry currentEntry() const { return m_paletteView->currentEntry(); }
 
 public slots:
     void setPalette(const QString &paletteName);
 
-signals:
-    void colorSelected(const KoColor &);
-    void colorSelected(const QColor&);
-    void colorDoubleClicked( const KoColor &, const QString &);
-
 protected slots:
     void slotSetPalette( const QString &_paletteName );
+    void colorSelected( const KoColor& color );
 
 public slots:
     // Called by the resource server whenever a palette is loaded.
@@ -65,7 +66,7 @@ protected:
     void readNamedColor( void );
 
 protected:
-    KisPaletteView* m_view;
+    KisPaletteView* m_paletteView;
     Q3Dict<KisPalette> m_namedPaletteMap;
     KisPalette * m_currentPalette;
     QComboBox *combo;
@@ -73,6 +74,21 @@ protected:
     int mMinWidth;
     int mCols;
     bool init;
+    KisView2 * m_view;
+};
+
+class KisPaletteDockerFactory : public KoDockFactory
+{
+public:
+    KisPaletteDockerFactory(KisView2 * view) { m_view = view; }
+    ~KisPaletteDockerFactory() {}
+
+    QString dockId() const;
+    Qt::DockWidgetArea defaultDockWidgetArea() const;
+    QDockWidget * createDockWidget();
+
+private:
+    KisView2 * m_view;
 };
 
 #endif

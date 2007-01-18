@@ -19,6 +19,8 @@
 #ifndef KOVARIABLEMANAGER_H
 #define KOVARIABLEMANAGER_H
 
+#include "kotext_export.h"
+
 #include <QString>
 
 class KoVariable;
@@ -36,7 +38,7 @@ class KoVariableManagerPrivate;
  * inserted into the document.
  * @see KoInlineTextObjectManager::createInsertVariableActions()
  */
-class KoVariableManager {
+class KOTEXT_EXPORT KoVariableManager {
 public:
     /// constructor
     explicit KoVariableManager(KoInlineTextObjectManager *inlineObjectManager);

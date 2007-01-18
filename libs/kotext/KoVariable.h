@@ -30,6 +30,7 @@ class QTextDocument;
 class KoShape;
 class KoProperties;
 class QWidget;
+class KoVariableManager;
 class VariablePrivate;
 
 /**
@@ -56,10 +57,20 @@ public:
     /// @return the current value of this variable.
     const QString &value() const;
 
+    /**
+     * Shortly after instantiating this variable the factory should set the
+     * properties using this method.
+     * Note that the loading mechanism will fill this properties object with the
+     * attributes from the ODF file (if applicable), so it would be usefull to synchronize
+     * the property names based on that.
+     */
     virtual void setProperties(const KoProperties *props) { Q_UNUSED(props); }
 
-// TODO create interface that will allow me to get a Properties object.
-// or, maybe the widget should just act on the variable directly???
+    /**
+     * If this variable has user-editable options it should provide a widget that is capable
+     * of manipulating these options so the text-tool can use it to show that to the user.
+     * Note that all manipulations should have a direct effect on the variable itself.
+     */
     virtual QWidget *createOptionsWidget() { return 0; }
 
 protected:
@@ -69,6 +80,9 @@ protected:
      * you should implement this method and act on it.
      */
     virtual void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
+
+    friend class KoVariableManager;
+    int positionInDocument() const;
 
 private:
     void updatePosition(const QTextDocument *document, QTextInlineObject object,

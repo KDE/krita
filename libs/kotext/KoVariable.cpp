@@ -136,3 +136,7 @@ void KoVariable::variableMoved(const KoShape *shape, const QTextDocument *docume
 const QString &KoVariable::value() const {
     return d->value;
 }
+
+int KoVariable::positionInDocument() const {
+    return d->lastPositionInDocument;
+}

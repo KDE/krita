@@ -39,6 +39,7 @@
 #include <kurl.h>
 #include <kxmlguifactory.h>
 #include <kxmlguifactory.h>
+#include <kmessagebox.h>
 
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
@@ -81,6 +82,9 @@
 #include "kis_mask_manager.h"
 #include "kis_dlg_preferences.h"
 #include "kis_group_layer.h"
+#include "kis_custom_palette.h"
+#include "ui_wdgpalettechooser.h"
+#include "kis_resourceserver.h"
 
 class KisView2::KisView2Private {
 
@@ -402,6 +406,10 @@ void KisView2::createActions()
 {
     actionCollection()->addAction(KStandardAction::FullScreen, "full_screen", this, SLOT( slotUpdateFullScreen( bool )));
     actionCollection()->addAction(KStandardAction::Preferences,  "preferences", this, SLOT(slotPreferences()));
+
+    KAction* action = new KAction(i18n("Edit Palette..."), this);
+    actionCollection()->addAction("edit_palette", action );
+    connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
 }
 
 
@@ -585,6 +593,29 @@ void KisView2::slotPreferences()
 #endif
 
     }
+}
+
+void KisView2::slotEditPalette()
+{
+    KisResourceServerBase* srv = KisResourceServerRegistry::instance()->get("PaletteServer");
+    if (!srv) {
+        return;
+    }
+    QList<KisResource*> resources = srv->resources();
+    QList<KisPalette*> palettes;
+
+    foreach (KisResource *resource, resources) {
+        KisPalette* palette = dynamic_cast<KisPalette*>(resource);
+        palettes.append(palette);
+    }
+
+    KDialog* base = new KDialog(this );
+    base->setCaption(  i18n("Edit Palette") );
+    base->setButtons( KDialog::Ok);
+    base->setDefaultButton( KDialog::Ok);
+    KisCustomPalette* cp = new KisCustomPalette(palettes, base, "edit palette", i18n("Edit Palette"), this);
+    base->setMainWidget(cp);
+    base->show();
 }
 
 void KisView2::loadPlugins()

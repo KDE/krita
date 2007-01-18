@@ -35,27 +35,26 @@ class KisWdgCustomPalette : public QWidget, public Ui::KisWdgCustomPalette
     Q_OBJECT
 
     public:
-        KisWdgCustomPalette(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+        KisWdgCustomPalette( QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
 };
 
 class KisCustomPalette : public KisWdgCustomPalette
 {
     Q_OBJECT
 public:
-    KisCustomPalette(QWidget *parent, const char* name, const QString& caption, KisView2* view);
+    KisCustomPalette( QList<KisPalette*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view);
     virtual ~KisCustomPalette();
     void setResourceServer(KisResourceServerBase* server) { m_server = server; }
-    void setEditMode(bool b);
-    bool editMode() const { return m_editMode; }
     void setPalette(KisPalette* p);
 
 signals:
     void activatedResource(KisResource *);
 
 private slots:
-    void slotAddPredefined();
+    void slotAddPalette();
     void slotAddNew();
     void slotRemoveCurrent();
+    void slotPaletteChanged( QListWidgetItem * current, QListWidgetItem * previous );
 
 private:
     bool m_ownPalette;
@@ -64,6 +63,7 @@ private:
     KisPalette* m_palette;
     KisResourceMediator* m_mediator;
     KisResourceServerBase* m_server;
+    QMap<QListWidgetItem*, KisPalette*> m_palettes;
 };
 
 

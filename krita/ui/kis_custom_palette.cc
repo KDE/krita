@@ -17,12 +17,13 @@
  */
 
 #include <KoImageResource.h>
-#include <kdebug.h>
 #include <QLineEdit>
 #include <QImage>
 #include <QPushButton>
 #include <QRegExp>
 #include <QValidator>
+#include <QMap>
+#include <QListWidgetItem>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -31,6 +32,7 @@
 #include <kinputdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 #include "kis_view2.h"
 #include "kis_palette.h"
@@ -39,45 +41,38 @@
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
 
-KisCustomPalette::KisCustomPalette(QWidget *parent, const char* name, const QString& caption, KisView2* view)
+KisCustomPalette::KisCustomPalette( QList<KisPalette*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view)
     : KisWdgCustomPalette(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
     m_mediator = 0;
     m_server = 0;
+    m_palette = 0;
     m_editMode = false;
     setWindowTitle(caption);
 
-    m_palette = new KisPalette();
-    m_ownPalette = true;
-    this->view->setPalette(m_palette);
-
+    foreach (KisPalette *palette, palettes) {
+        QListWidgetItem* item = new QListWidgetItem(palette->name());
+        paletteList->addItem(item);
+        m_palettes[item] = palette;
+    }
+    if(paletteList->count()>0) {
+        paletteList->setCurrentRow(0);
+        setPalette(m_palettes.value(paletteList->currentItem()));
+    }
+    connect(paletteList, SIGNAL(currentItemChanged( QListWidgetItem*, QListWidgetItem* )), this, SLOT(slotPaletteChanged( QListWidgetItem*, QListWidgetItem* )));
     connect(addColor, SIGNAL(pressed()), this, SLOT(slotAddNew()));
     connect(removeColor, SIGNAL(pressed()), this, SLOT(slotRemoveCurrent()));
     connect(addPalette, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
 }
 
 KisCustomPalette::~KisCustomPalette() {
-    if (m_ownPalette)
-        delete m_palette;
 }
 
 void KisCustomPalette::setPalette(KisPalette* p) {
-    if (m_ownPalette)
-        delete m_palette;
-    m_ownPalette = false;
     m_palette = p;
     view->setPalette(m_palette);
-}
-
-void KisCustomPalette::setEditMode(bool b) {
-    m_editMode = b;
-
-    if (m_editMode) {
-        addPalette->setText(i18n("Save changes"));
-    } else {
-        addPalette->setText(i18n("Add to Predefined Palettes"));
-    }
+    palettename->setText(p->name());
 }
 
 void KisCustomPalette::slotAddNew() {
@@ -107,41 +102,56 @@ void KisCustomPalette::slotAddNew() {
 
     // Just reload the palette completely for the view updating
     view->setPalette(m_palette);
+
+    if (!m_palette->save())
+        KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.",m_palette->filename()), i18n("Palette"));
 }
 
 void KisCustomPalette::slotRemoveCurrent() {
-    m_palette->remove(view->currentEntry());
-    // Just reload the palette completely for the view updating
-    view->setPalette(m_palette);
+    if(m_palette) {
+        m_palette->remove(view->currentEntry());
+        // Just reload the palette completely for the view updating
+        view->setPalette(m_palette);
+
+        if (!m_palette->save())
+           KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.",m_palette->filename()), i18n("Palette"));
+    }
 }
 
-void KisCustomPalette::slotAddPredefined() {
-    m_palette->setName(palettename->text());
+void KisCustomPalette::slotAddPalette() {
 
-    if (!m_editMode) {
-        // Save in the directory that is likely to be: ~/.kde/share/apps/krita/palettes
-        // a unique file with this palettename
-        QString dir = KGlobal::dirs()->saveLocation("data", "krita/palettes");
-        QString extension;
+    bool ok;
+    QRegExpValidator validator(QRegExp("\\S+"), this);
+    QString name = KInputDialog::getText(i18n("Add New Palette"),
+                                         i18n("Palette name:"),
+                                         i18n("Unnamed"), &ok,
+                                         0, &validator);
 
-        extension = ".gpl";
-        QString tempFileName;
-        {
-            KTemporaryFile file;
-            file.setPrefix(dir);
-            file.setSuffix(extension);
-            file.setAutoRemove(false);
-            file.open();
-            tempFileName = file.fileName();
-        }
+    if (!ok)
+        return;
 
-        // Save it to that file
-        m_palette->setFilename(tempFileName);
-    } else {
-        // The filename is already set
+    KisPalette* palette = new KisPalette();
+    palette->setName(name);
+
+    // Save in the directory that is likely to be: ~/.kde/share/apps/krita/palettes
+    // a unique file with this palettename
+    QString dir = KGlobal::dirs()->saveLocation("data", "krita/palettes");
+    QString extension;
+
+    extension = ".gpl";
+    QString tempFileName;
+    {
+         KTemporaryFile file;
+         file.setPrefix(dir);
+         file.setSuffix(extension);
+         file.setAutoRemove(false);
+         file.open();
+         tempFileName = file.fileName();
     }
+    // Save it to that file
+    palette->setFilename(tempFileName);
 
-    if (!m_palette->save()) {
+    if (!palette->save()) {
         KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.",m_palette->filename()), i18n("Palette"));
         return;
     }
@@ -150,7 +160,17 @@ void KisCustomPalette::slotAddPredefined() {
     // so to the other choosers can pick it up, if they want to
     // This probably leaks!
     if (m_server)
-        m_server->addResource(new KisPalette(*m_palette));
+        m_server->addResource(palette);
+
+    QListWidgetItem* item = new QListWidgetItem(palette->name());
+    paletteList->addItem(item);
+    m_palettes[item] = palette;
+    paletteList->setCurrentItem(item);
+}
+
+void KisCustomPalette::slotPaletteChanged( QListWidgetItem* current, QListWidgetItem* previous ) {
+    Q_UNUSED( previous ); 
+    setPalette(m_palettes.value(current));
 }
 
 

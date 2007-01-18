@@ -130,6 +130,8 @@ private slots:
     void slotUpdateFullScreen(bool);
     void slotPreferences();
 
+    void slotEditPalette();
+
 private:
 
     /// Connects the signals from the current image to the various

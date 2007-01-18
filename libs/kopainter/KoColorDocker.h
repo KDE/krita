@@ -40,7 +40,7 @@ class KOPAINTER_EXPORT KoColorDocker : public QDockWidget
     Q_OBJECT
 
 public:
-    KoColorDocker();
+    KoColorDocker(bool showOpacitySlider);
     virtual ~KoColorDocker();
 
 private:
@@ -51,12 +51,17 @@ private:
 class KOPAINTER_EXPORT KoColorDockerFactory : public KoDockFactory
 {
 public:
-    KoColorDockerFactory() {}
+    KoColorDockerFactory(bool showOpacitySlider = false)
+        : m_showOpacitySlider( showOpacitySlider )
+        {}
     ~KoColorDockerFactory() {}
 
     QString dockId() const;
     Qt::DockWidgetArea defaultDockWidgetArea() const;
     QDockWidget * createDockWidget();
+private:
+
+    bool m_showOpacitySlider;
 };
 
 #endif

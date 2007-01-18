@@ -53,6 +53,8 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_colorpatch->setFixedSize(18, 18);
 
     /* setup channel labels */
+
+    // HSV
     m_HLabel = new QLabel("H:", this);
     m_HLabel->setFixedSize(10, 18);
     m_HLabel->setEnabled(false);
@@ -62,20 +64,28 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_VLabel = new QLabel("V:", this);
     m_VLabel->setFixedSize(10, 18);
     m_VLabel->setEnabled(false);
+
+    // RGB
     m_RLabel = new QLabel("R:", this);
     m_RLabel->setFixedSize(10, 18);
     m_GLabel = new QLabel("G:", this);
     m_GLabel->setFixedSize(10, 18);
     m_BLabel = new QLabel("B:", this);
     m_BLabel->setFixedSize(10, 18);
-    m_CLabel = new QLabel("C:", this);
-    m_CLabel->setFixedSize(10, 18);
-    m_MLabel = new QLabel("M:", this);
-    m_MLabel->setFixedSize(10, 18);
-    m_YLabel = new QLabel("Y:", this);
-    m_YLabel->setFixedSize(10, 18);
-    m_KLabel = new QLabel("K:", this);
-    m_KLabel->setFixedSize(10, 18);
+
+    // CMYK
+    if ( cmykColorSpace() ) {
+        m_CLabel = new QLabel("C:", this);
+        m_CLabel->setFixedSize(10, 18);
+        m_MLabel = new QLabel("M:", this);
+        m_MLabel->setFixedSize(10, 18);
+        m_YLabel = new QLabel("Y:", this);
+        m_YLabel->setFixedSize(10, 18);
+        m_KLabel = new QLabel("K:", this);
+        m_KLabel->setFixedSize(10, 18);
+    }
+
+    // LAB
     m_LLabel = new QLabel("L:", this);
     m_LLabel->setFixedSize(10, 18);
     m_aLabel = new QLabel("a:", this);
@@ -87,13 +97,15 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_HRB = new QRadioButton(this);
     m_SRB = new QRadioButton(this);
     m_VRB = new QRadioButton(this);
+
     m_RRB = new QRadioButton(this);
     m_GRB = new QRadioButton(this);
     m_BRB = new QRadioButton(this);
+
     m_LRB = new QRadioButton(this);
     m_aRB = new QRadioButton(this);
     m_bRB = new QRadioButton(this);
-    
+
     /* setup spin box */
     m_HIn = new QSpinBox(this);
     m_HIn->setMinimum(0);
@@ -146,37 +158,39 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_BIn->setFocusPolicy( Qt::ClickFocus );
     m_BIn->setToolTip( i18n( "Blue" ) );
 
-    m_CIn = new QSpinBox(this);
-    m_CIn->setMinimum(0);
-    m_CIn->setMaximum(255);
-    m_CIn->setSingleStep(1);
-    m_CIn->setFixedSize(40, 18);
-    m_CIn->setFocusPolicy( Qt::ClickFocus );
-    m_CIn->setToolTip( i18n( "Cyan" ) );
+    if ( cmykColorSpace() ) {
+        m_CIn = new QSpinBox(this);
+        m_CIn->setMinimum(0);
+        m_CIn->setMaximum(255);
+        m_CIn->setSingleStep(1);
+        m_CIn->setFixedSize(40, 18);
+        m_CIn->setFocusPolicy( Qt::ClickFocus );
+        m_CIn->setToolTip( i18n( "Cyan" ) );
 
-    m_MIn = new QSpinBox(this);
-    m_MIn->setMinimum(0);
-    m_MIn->setMaximum(255);
-    m_MIn->setSingleStep(1);
-    m_MIn->setFixedSize(40, 18);
-    m_MIn->setFocusPolicy( Qt::ClickFocus );
-    m_MIn->setToolTip( i18n( "Magenta" ) );
+        m_MIn = new QSpinBox(this);
+        m_MIn->setMinimum(0);
+        m_MIn->setMaximum(255);
+        m_MIn->setSingleStep(1);
+        m_MIn->setFixedSize(40, 18);
+        m_MIn->setFocusPolicy( Qt::ClickFocus );
+        m_MIn->setToolTip( i18n( "Magenta" ) );
 
-    m_YIn = new QSpinBox(this);
-    m_YIn->setMinimum(0);
-    m_YIn->setMaximum(255);
-    m_YIn->setSingleStep(1);
-    m_YIn->setFixedSize(40, 18);
-    m_YIn->setFocusPolicy( Qt::ClickFocus );
-    m_YIn->setToolTip( i18n( "Yellow" ) );
+        m_YIn = new QSpinBox(this);
+        m_YIn->setMinimum(0);
+        m_YIn->setMaximum(255);
+        m_YIn->setSingleStep(1);
+        m_YIn->setFixedSize(40, 18);
+        m_YIn->setFocusPolicy( Qt::ClickFocus );
+        m_YIn->setToolTip( i18n( "Yellow" ) );
 
-    m_KIn = new QSpinBox(this);
-    m_KIn->setMinimum(0);
-    m_KIn->setMaximum(255);
-    m_KIn->setSingleStep(1);
-    m_KIn->setFixedSize(40, 18);
-    m_KIn->setFocusPolicy( Qt::ClickFocus );
-    m_KIn->setToolTip( i18n( "Black" ) );
+        m_KIn = new QSpinBox(this);
+        m_KIn->setMinimum(0);
+        m_KIn->setMaximum(255);
+        m_KIn->setSingleStep(1);
+        m_KIn->setFixedSize(40, 18);
+        m_KIn->setFocusPolicy( Qt::ClickFocus );
+        m_KIn->setToolTip( i18n( "Black" ) );
+    }
 
     m_LIn = new QSpinBox(this);
     m_LIn->setMinimum(0);
@@ -214,9 +228,11 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     mGrid->addWidget(m_HRB, 1, 2, Qt::AlignCenter);
     mGrid->addWidget(m_SRB, 2, 2, Qt::AlignCenter);
     mGrid->addWidget(m_VRB, 3, 2, Qt::AlignCenter);
+
     mGrid->addWidget(m_RRB, 5, 2, Qt::AlignCenter);
     mGrid->addWidget(m_GRB, 6, 2, Qt::AlignCenter);
     mGrid->addWidget(m_BRB, 7, 2, Qt::AlignCenter);
+
     mGrid->addWidget(m_LRB, 5, 6, Qt::AlignCenter);
     mGrid->addWidget(m_aRB, 6, 6, Qt::AlignCenter);
     mGrid->addWidget(m_bRB, 7, 6, Qt::AlignCenter);
@@ -224,13 +240,19 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     mGrid->addWidget(m_HLabel, 1, 3, Qt::AlignTop);
     mGrid->addWidget(m_SLabel, 2, 3, Qt::AlignTop);
     mGrid->addWidget(m_VLabel, 3, 3, Qt::AlignTop);
+
     mGrid->addWidget(m_RLabel, 5, 3, Qt::AlignTop);
     mGrid->addWidget(m_GLabel, 6, 3, Qt::AlignTop);
     mGrid->addWidget(m_BLabel, 7, 3, Qt::AlignTop);
-    mGrid->addWidget(m_CLabel, 0, 7, Qt::AlignTop);
-    mGrid->addWidget(m_MLabel, 1, 7, Qt::AlignTop);
-    mGrid->addWidget(m_YLabel, 2, 7, Qt::AlignTop);
-    mGrid->addWidget(m_KLabel, 3, 7, Qt::AlignTop);
+
+    if ( cmykColorSpace() ) {
+        mGrid->addWidget(m_CLabel, 0, 7, Qt::AlignTop);
+        mGrid->addWidget(m_MLabel, 1, 7, Qt::AlignTop);
+        mGrid->addWidget(m_YLabel, 2, 7, Qt::AlignTop);
+        mGrid->addWidget(m_KLabel, 3, 7, Qt::AlignTop);
+
+    }
+
     mGrid->addWidget(m_LLabel, 5, 7, Qt::AlignTop);
     mGrid->addWidget(m_aLabel, 6, 7, Qt::AlignTop);
     mGrid->addWidget(m_bLabel, 7, 7, Qt::AlignTop);
@@ -238,13 +260,18 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     mGrid->addWidget(m_HIn, 1, 4, Qt::AlignTop);
     mGrid->addWidget(m_SIn, 2, 4, Qt::AlignTop);
     mGrid->addWidget(m_VIn, 3, 4, Qt::AlignTop);
+
     mGrid->addWidget(m_RIn, 5, 4, Qt::AlignTop);
     mGrid->addWidget(m_GIn, 6, 4, Qt::AlignTop);
     mGrid->addWidget(m_BIn, 7, 4, Qt::AlignTop);
-    mGrid->addWidget(m_CIn, 0, 8, Qt::AlignTop);
-    mGrid->addWidget(m_MIn, 1, 8, Qt::AlignTop);
-    mGrid->addWidget(m_YIn, 2, 8, Qt::AlignTop);
-    mGrid->addWidget(m_KIn, 3, 8, Qt::AlignTop);
+
+    if ( cmykColorSpace() ) {
+        mGrid->addWidget(m_CIn, 0, 8, Qt::AlignTop);
+        mGrid->addWidget(m_MIn, 1, 8, Qt::AlignTop);
+        mGrid->addWidget(m_YIn, 2, 8, Qt::AlignTop);
+        mGrid->addWidget(m_KIn, 3, 8, Qt::AlignTop);
+    }
+
     mGrid->addWidget(m_LIn, 5, 8, Qt::AlignTop);
     mGrid->addWidget(m_aIn, 6, 8, Qt::AlignTop);
     mGrid->addWidget(m_bIn, 7, 8, Qt::AlignTop);
@@ -280,6 +307,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     connect(m_HIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
     connect(m_SIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
     connect(m_VIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
+
     connect(m_RIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
     connect(m_GIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
     connect(m_BIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
@@ -288,6 +316,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     connect(m_HRB, SIGNAL(toggled(bool)), this, SLOT(slotHSelected(bool)));
     connect(m_SRB, SIGNAL(toggled(bool)), this, SLOT(slotSSelected(bool)));
     connect(m_VRB, SIGNAL(toggled(bool)), this, SLOT(slotVSelected(bool)));
+
     connect(m_RRB, SIGNAL(toggled(bool)), this, SLOT(slotRSelected(bool)));
     connect(m_GRB, SIGNAL(toggled(bool)), this, SLOT(slotGSelected(bool)));
     connect(m_BRB, SIGNAL(toggled(bool)), this, SLOT(slotBSelected(bool)));
@@ -527,7 +556,7 @@ void KoUniColorChooser::updateSelectorsR()
     data[1] = 0;
     data[0] = 255;
     KoColor bottomright(data, rgbColorSpace());
-    
+
     m_xycolorselector->setColors(topleft,topright,bottomleft,bottomright);
 
     data[2] = 0;
@@ -605,7 +634,7 @@ void KoUniColorChooser::updateSelectorsB()
     data[2] = 255;
     data[1] = 0;
     KoColor bottomright(data, rgbColorSpace());
-    
+
     m_xycolorselector->setColors(topleft,topright,bottomleft,bottomright);
 
     data[2] = m_RIn->value();
@@ -630,13 +659,13 @@ void KoUniColorChooser::updateSelectorsCurrent()
     switch(m_activeChannel)
     {
         case CHANNEL_H:
-            //slotRSelected(true);
+            slotHSelected(true);
             break;
         case CHANNEL_S:
-            //slotGSelected(true);
+            slotSSelected(true);
             break;
         case CHANNEL_V:
-            //slotBSelected(true);
+            slotVSelected(true);
             break;
         case CHANNEL_R:
             updateSelectorsR();
@@ -724,14 +753,15 @@ void KoUniColorChooser::updateValues()
     m_aIn->setValue(((quint16 *)tmpColor.data())[1]/256);
     m_bIn->setValue(((quint16 *)tmpColor.data())[2]/256);
 
-#if 0
-    tmpColor = m_currentColor;
-    tmpColor.convertTo(cmykColorSpace());
-    m_CIn->setValue((tmpColor.data()[0]*100)/255);
-    m_MIn->setValue((tmpColor.data()[1]*100/255));
-    m_YIn->setValue((tmpColor.data()[2]*100)/255);
-    m_KIn->setValue((tmpColor.data()[3]*100)/255);
-#endif
+    if ( cmykColorSpace() ) {
+        tmpColor = m_currentColor;
+        tmpColor.convertTo(cmykColorSpace());
+        m_CIn->setValue((tmpColor.data()[0]*100)/255);
+        m_MIn->setValue((tmpColor.data()[1]*100/255));
+        m_YIn->setValue((tmpColor.data()[2]*100)/255);
+        m_KIn->setValue((tmpColor.data()[3]*100)/255);
+    }
+
     m_HIn->blockSignals(false);
     m_SIn->blockSignals(false);
     m_VIn->blockSignals(false);

@@ -26,12 +26,12 @@
 #include <KoUniColorChooser.h>
 
 
-KoColorDocker::KoColorDocker()
+KoColorDocker::KoColorDocker(bool showOpacitySlider)
     : QDockWidget()
 {
     setWindowTitle( i18n( "Color Chooser" ) );
 
-    m_colorChooser = new KoUniColorChooser( this, true );
+    m_colorChooser = new KoUniColorChooser( this, showOpacitySlider );
     setWidget( m_colorChooser );
     setMinimumWidth( 194 );
 }
@@ -52,7 +52,7 @@ Qt::DockWidgetArea KoColorDockerFactory::defaultDockWidgetArea() const
 
 QDockWidget* KoColorDockerFactory::createDockWidget()
 {
-    KoColorDocker* widget = new KoColorDocker();
+    KoColorDocker* widget = new KoColorDocker(m_showOpacitySlider);
     widget->setObjectName(dockId());
 
     return widget;

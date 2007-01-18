@@ -62,7 +62,7 @@ set(kritaui_LIB_SRCS
     kis_opengl_canvas2.cpp
     kis_paintop_box.cc 
     kis_palette_view.cc
-    kis_palette_widget.cc
+    kis_palette_docker.cc
     kis_pattern_chooser.cc
     kis_perspective_grid_manager.cpp
     kis_previewdialog.cc

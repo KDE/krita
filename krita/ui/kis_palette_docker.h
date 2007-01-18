@@ -41,12 +41,12 @@ class KisView2;
  *  @author was Waldo Bastian <bastian@kde.org> -- much has changed, though,
  * to work with KisPalettes and the resource server.
  */
-class KisPaletteWidget : public QDockWidget
+class KisPaletteDocker : public QDockWidget
 {
     Q_OBJECT
 public:
-    KisPaletteWidget( KisView2 * view );
-    virtual ~KisPaletteWidget();
+    KisPaletteDocker( KisView2 * view );
+    virtual ~KisPaletteDocker();
 
     QString palette() const;
     KisPaletteEntry currentEntry() const { return m_paletteView->currentEntry(); }

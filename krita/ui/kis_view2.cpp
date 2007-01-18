@@ -85,7 +85,7 @@
 #include "kis_custom_palette.h"
 #include "ui_wdgpalettechooser.h"
 #include "kis_resourceserver.h"
-#include "kis_palette_widget.h"
+#include "kis_palette_docker.h"
 
 class KisView2::KisView2Private {
 
@@ -389,8 +389,8 @@ void KisView2::createGUI()
     Q_UNUSED( docker );
 
     KisPaletteDockerFactory paletteDockerFactory(this);
-    KisPaletteWidget * paletteDocker = qobject_cast<KisPaletteWidget*>( createDockWidget( &paletteDockerFactory ) );
-    Q_UNUSED( paletteDockerFactory );
+    KisPaletteDocker* paletteDocker = qobject_cast<KisPaletteDocker*>( createDockWidget( &paletteDockerFactory ) );
+    Q_UNUSED( paletteDocker );
 
     KoToolManager::instance()->addControllers(m_d->canvasController);
 

@@ -22,15 +22,15 @@
 #include <kdebug.h>
 
 #include "kis_view2.h"
-#include "kis_palette_widget.h"
+#include "kis_palette_docker.h"
 #include "kis_resource.h"
 #include "kis_palette.h"
 #include "kis_palette_view.h"
 #include "kis_resourceserver.h"
 #include "kis_resource_provider.h"
 
-KisPaletteWidget::KisPaletteWidget( KisView2 * view )
-    : QDockWidget( i18n("Layers") ), mMinWidth(210), mCols(16)
+KisPaletteDocker::KisPaletteDocker( KisView2 * view )
+    : QDockWidget( i18n("Palettes") ), mMinWidth(210), mCols(16)
 {
     m_view = view;
     init = false;
@@ -65,11 +65,11 @@ KisPaletteWidget::KisPaletteWidget( KisView2 * view )
     }
 }
 
-KisPaletteWidget::~KisPaletteWidget()
+KisPaletteDocker::~KisPaletteDocker()
 {
 }
 
-QString KisPaletteWidget::palette() const
+QString KisPaletteDocker::palette() const
 {
     return combo->currentText();
 }
@@ -84,14 +84,14 @@ QString KisPaletteWidget::palette() const
 // set the palette and then use the information to emit a signal with the
 // new color setting. It is only used by the combobox widget.
 //
-void KisPaletteWidget::slotSetPalette( const QString &_paletteName )
+void KisPaletteDocker::slotSetPalette( const QString &_paletteName )
 {
     setPalette( _paletteName );
     m_paletteView->slotColorCellSelected(0); // FIXME: We need to save the current value!!
 }
 
 
-void KisPaletteWidget::setPalette( const QString &_paletteName )
+void KisPaletteDocker::setPalette( const QString &_paletteName )
 {
     QString paletteName( _paletteName);
 
@@ -112,7 +112,7 @@ void KisPaletteWidget::setPalette( const QString &_paletteName )
     m_paletteView->setPalette(m_currentPalette);
 }
 
-void KisPaletteWidget::slotAddPalette(KisResource * palette)
+void KisPaletteDocker::slotAddPalette(KisResource * palette)
 {
     KisPalette * p = dynamic_cast<KisPalette*>(palette);
 
@@ -129,7 +129,7 @@ void KisPaletteWidget::slotAddPalette(KisResource * palette)
     }
 }
 
-void KisPaletteWidget::colorSelected( const KoColor& color )
+void KisPaletteDocker::colorSelected( const KoColor& color )
 {
     m_view->resourceProvider()->setFGColor(color);
 }
@@ -146,12 +146,12 @@ Qt::DockWidgetArea KisPaletteDockerFactory::defaultDockWidgetArea() const
 
 QDockWidget* KisPaletteDockerFactory::createDockWidget()
 {
-    KisPaletteWidget* dockWidget = new KisPaletteWidget(m_view);
+    KisPaletteDocker* dockWidget = new KisPaletteDocker(m_view);
     dockWidget->setObjectName(dockId());
 
     return dockWidget;
 }
 
 
-#include "kis_palette_widget.moc"
+#include "kis_palette_docker.moc"
 

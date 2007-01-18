@@ -51,6 +51,7 @@
 #include <KoViewConverter.h>
 #include <KoView.h>
 #include <KoToolDockerFactory.h>
+#include <KoColorDocker.h>
 
 #include <kactioncollection.h>
 
@@ -377,6 +378,10 @@ void KisView2::createGUI()
 
     KoShapeSelectorFactory shapeSelectorFactory;
     createDockWidget( &shapeSelectorFactory );
+
+    KoColorDockerFactory colorDockerFactory;
+    KoColorDocker * docker = qobject_cast<KoColorDocker*>( createDockWidget( &colorDockerFactory ) );
+    Q_UNUSED( docker );
 
     KoToolManager::instance()->addControllers(m_d->canvasController);
 

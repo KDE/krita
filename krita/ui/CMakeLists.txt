@@ -2,8 +2,6 @@ configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-proce
 
 include(kdefx.cmake)
 
-include_directories(${CMAKE_SOURCE_DIR}/krita/ui/obsolete/)
-
 set(kritaui_LIB_SRCS
     asm_scale.S
     scale.cpp
@@ -127,7 +125,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS})
 
-target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} kritaimage kofficeui )
+target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} kritaimage kofficeui kopainter)
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui

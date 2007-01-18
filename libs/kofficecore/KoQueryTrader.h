@@ -23,7 +23,7 @@
 #include <kservice.h>
 #include <ksharedptr.h>
 #include <q3valuelist.h>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 
 class QObject;
 class QStringList;

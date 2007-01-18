@@ -22,7 +22,7 @@
 
 #include "KoSelection.h"
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include <QUndoCommand>
 #include <QList>

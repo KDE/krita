@@ -20,7 +20,7 @@
 #ifndef KOGRIDDATA_H
 #define KOGRIDDATA_H
 
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 #include <QColor>
 
 class KOFFICECORE_EXPORT KoGridData

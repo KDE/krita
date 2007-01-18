@@ -23,7 +23,7 @@
 
 #include <QBrush>
 
-#include "koffice_export.h"
+#include "kofficeui_export.h"
 
 class KoGenStyle;
 class KoGenStyles;

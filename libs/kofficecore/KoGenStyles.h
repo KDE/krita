@@ -24,7 +24,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QString>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 #include "KoGenStyle.h"
 
 class KoXmlWriter;

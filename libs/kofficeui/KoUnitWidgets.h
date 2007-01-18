@@ -26,7 +26,7 @@
 #include <klineedit.h>
 #include <kcombobox.h>
 #include <KoUnit.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 //Added by qt3to4:
 #include <QEvent>
 

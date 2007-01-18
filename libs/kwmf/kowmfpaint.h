@@ -19,12 +19,12 @@
 #define _KOWMFPAINT_H_
 
 #include <QPainter>
-//Added by qt3to4:
 #include <QPolygon>
 #include <Q3PtrList>
 
 #include "kowmfread.h"
-#include <koffice_export.h>
+#include <kowmf_export.h>
+
 /**
  * KoWmfPaint inherits the abstract class KoWmfRead
  * and redirects WMF actions onto a QPaintDevice.

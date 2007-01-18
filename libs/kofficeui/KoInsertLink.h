@@ -21,7 +21,7 @@
 #define __KoInsertLink__
 
 #include <kpagedialog.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 class QLineEdit;
 class KUrlRequester;
 

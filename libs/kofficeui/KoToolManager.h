@@ -21,7 +21,7 @@
 #ifndef KO_TOOL_MANAGER
 #define KO_TOOL_MANAGER
 
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 #include <QObject>
 #include <QCursor>
 #include <QStack>

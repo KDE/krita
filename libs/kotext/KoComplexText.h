@@ -38,7 +38,7 @@
 #ifndef QCOMPLEXTEXT_H
 #define QCOMPLEXTEXT_H
 
-#include <koffice_export.h>
+#include <kotext_export.h>
 
 #include <QString>
 #include <q3pointarray.h>

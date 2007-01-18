@@ -20,7 +20,7 @@
 #define _KIS_CONVERSIONS_H_
 
 #include <qglobal.h>
-#include <koffice_export.h>
+#include <pigment_export.h>
 
 /**
  * A number of often-used conversions between color models

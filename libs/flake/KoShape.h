@@ -29,7 +29,7 @@
 #include <QSet>
 #include <QBrush>
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 class QPainter;
 class QRectF;

@@ -21,7 +21,7 @@
 #define KOPARAMETERSHAPE_H
 
 #include "KoPathShape.h"
-#include <koffice_export.h>
+#include <flake_export.h>
 
 /**
  * KoParameterShape is the base class for all parametric shapes

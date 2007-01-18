@@ -23,7 +23,7 @@
 #include <sonnet/loader.h>
 #include <QObject>
 #include <QStringList>
-#include <koffice_export.h>
+#include <kotext_export.h>
 class KoTextObject;
 class KoDocument;
 class KoTextParag;

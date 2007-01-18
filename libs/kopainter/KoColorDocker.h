@@ -26,6 +26,7 @@
 #include <QDockWidget>
 
 #include <KoDockFactory.h>
+#include "kopainter_export.h"
 
 class KoUniColorChooser;
 

@@ -21,7 +21,7 @@
 #define kopicturefilepreview_h
 
 #include <kpreviewwidgetbase.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 class KoPictureFilePreviewWidget;
 
 /**

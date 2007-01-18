@@ -25,6 +25,7 @@
 #include <KoUnit.h>
 #include <KoPageLayout.h>
 #include "ui_KoPageLayoutColumns.h"
+#include "kofficeui_export.h"
 
 class QWidget;
 class KoUnitDoubleSpinBox;

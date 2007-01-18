@@ -29,7 +29,7 @@
 #include <QResizeEvent>
 #include <QCloseEvent>
 #include <k3listview.h>
-#include <koffice_export.h>
+#include <kotext_export.h>
 #include <kvbox.h>
 class QComboBox;
 class KVBox;

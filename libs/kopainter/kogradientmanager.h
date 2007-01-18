@@ -26,7 +26,7 @@
 #include <QFile>
 #include <qdom.h>
 #include <QColor>
-#include <koffice_export.h>
+#include <kopainter_export.h>
 struct KoColorStop
 {
 	double offset;

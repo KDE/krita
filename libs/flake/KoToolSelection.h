@@ -19,7 +19,7 @@
 #ifndef KOTOOLSELECTION_H
 #define KOTOOLSELECTION_H
 
-#include <koffice_export.h>
+#include <flake_export.h>
 #include <QObject>
 
 /**

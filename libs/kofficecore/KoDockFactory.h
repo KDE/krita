@@ -22,7 +22,7 @@
 
 #include <QString>
 
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 
 class QDockWidget;
 

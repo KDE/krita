@@ -29,7 +29,7 @@
 #include "KoLanguageTab.h"
 
 // koffice
-//#include <koffice_export.h>
+//#include <kotext_export.h>
 
 // kde + Qt
 #include <QTabWidget>

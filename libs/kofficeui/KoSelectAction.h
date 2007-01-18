@@ -20,7 +20,7 @@
 #define KOSELECTACTION_H
 
 #include <kaction.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 class KMenu;
 class QPoint;
 

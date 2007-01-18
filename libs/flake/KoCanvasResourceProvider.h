@@ -24,7 +24,7 @@
 #include <QVariant>
 
 #include <KoID.h>
-#include <koffice_export.h>
+#include <flake_export.h>
 class KoColor;
 
 namespace KoCanvasResource {

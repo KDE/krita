@@ -28,7 +28,7 @@
 #include <QStringList>
 
 #include <kconfig.h>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 #include <KoXmlReader.h>
 
 class QDomDocument;

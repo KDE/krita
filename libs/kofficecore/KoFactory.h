@@ -21,7 +21,7 @@
 #define __koFactory_h__
 
 #include <kparts/factory.h>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 class KInstance;
 
 class KOFFICECORE_EXPORT KoFactory : public KParts::Factory

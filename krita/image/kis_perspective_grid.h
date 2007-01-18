@@ -27,7 +27,7 @@
 #include <kis_perspective_math.h>
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KisPerspectiveGridNode : public QPointF, public KisShared {
     public:

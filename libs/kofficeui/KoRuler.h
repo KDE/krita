@@ -27,7 +27,7 @@
 
 #include <QWidget>
 
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 #include <KoUnit.h>
 
 class QPainter;

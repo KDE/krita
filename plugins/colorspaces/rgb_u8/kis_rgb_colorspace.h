@@ -18,16 +18,16 @@
 #ifndef KIS_STRATEGY_COLORSPACE_RGB_H_
 #define KIS_STRATEGY_COLORSPACE_RGB_H_
 
-#include "klocale.h"
-#include <koffice_export.h>
-#include "KoLcmsColorSpace.h"
+#include <klocale.h>
+#include "pigment_rgb_u8_export.h"
+#include <KoLcmsColorSpace.h>
 #include <KoColorSpaceTraits.h>
 
 typedef KoRgbTraits<quint8>  RgbU8Traits;
 
 const qint32 MAX_CHANNEL_RGB = 3;
 
-class KRITARGB_EXPORT KisRgbColorSpace : public KoLcmsColorSpace<RgbU8Traits>
+class PIGMENT_RGB_U8_EXPORT KisRgbColorSpace : public KoLcmsColorSpace<RgbU8Traits>
 {
     public:
         KisRgbColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);

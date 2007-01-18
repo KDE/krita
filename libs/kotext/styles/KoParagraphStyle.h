@@ -23,7 +23,7 @@
 #include <QString>
 #include <QVariant>
 #include <QTextFormat>
-#include <koffice_export.h>
+#include <kotext_export.h>
 
 struct Property;
 class KoCharacterStyle;

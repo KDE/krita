@@ -25,7 +25,7 @@
 
 #include <QList>
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 class QPainter;
 class QPointF;

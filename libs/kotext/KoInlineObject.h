@@ -20,7 +20,7 @@
 #define KOINLINEOBJECTBASE_H
 
 #include <Qt> // for Q_UNUSED
-#include <koffice_export.h>
+#include <kotext_export.h>
 
 class QTextDocument;
 class QTextCharFormat;

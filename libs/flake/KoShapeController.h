@@ -22,7 +22,7 @@
 #ifndef KOSHAPECONTROLLER_H
 #define KOSHAPECONTROLLER_H
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include <QList>
 

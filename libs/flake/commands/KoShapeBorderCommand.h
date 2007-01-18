@@ -21,7 +21,7 @@
 #ifndef KOSHAPEBORDERCOMMAND_H
 #define KOSHAPEBORDERCOMMAND_H
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include <QUndoCommand>
 #include <QList>

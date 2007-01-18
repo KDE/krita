@@ -21,7 +21,7 @@
 #ifndef __koDocumentInfoDlg_h__
 #define __koDocumentInfoDlg_h__
 
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 #include <kpagedialog.h>
 
 class KoDocumentInfo;

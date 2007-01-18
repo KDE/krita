@@ -23,7 +23,7 @@
 #include "KoUniColorChooser.h"
 
 #include <kpagedialog.h>
-#include <koffice_export.h>
+#include <kopainter_export.h>
 
 
 /**

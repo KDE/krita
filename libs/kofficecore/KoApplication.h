@@ -23,7 +23,7 @@
 namespace std { }
 using namespace std;
 #include <kapplication.h>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 
 class KoApplicationPrivate;
 

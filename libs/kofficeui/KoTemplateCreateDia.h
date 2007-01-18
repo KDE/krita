@@ -23,7 +23,7 @@
 #define koTemplateCreateDia_h
 
 #include <kdialog.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QByteArray>

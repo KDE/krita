@@ -30,7 +30,7 @@
 #include <QImage>
 #include <q3ptrlist.h>
 #include <q3pointarray.h>
-#include <koffice_export.h>
+#include <kowmf_export.h>
 #include <QPainter>
 class KoWmfWritePrivate;
 

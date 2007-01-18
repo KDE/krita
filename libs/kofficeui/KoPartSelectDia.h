@@ -24,6 +24,7 @@
 #include <KoQueryTrader.h>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include "kofficeui_export.h"
 
 class Q3ListView;
 class Q3ListViewItem;

@@ -22,7 +22,7 @@
 #include <QString>
 #include <QMap>
 #include <QVariant>
-#include "koffice_export.h"
+#include "kofficecore_export.h"
 
 
 /**

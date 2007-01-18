@@ -23,6 +23,7 @@
 #include <kxyselector.h>
 
 #include "KoColor.h"
+#include "kopainter_export.h"
 
 class QPainter;
 class KoColorSpace;

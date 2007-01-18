@@ -24,10 +24,9 @@
 
 #include <QMap>
 #include <QString>
-//Added by qt3to4:
 #include <QByteArray>
 #include "hyphen.h"
-#include <koffice_export.h>
+#include "../kotext_export.h"
 
 class KoHyphenatorException{
 public:

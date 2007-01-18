@@ -22,7 +22,7 @@
 
 #include <QColor>
 #include <QPen>
-#include <koffice_export.h>
+#include <kotext_export.h>
 #include <KoXmlReader.h>
 class QDomElement;
 class KoZoomHandler;

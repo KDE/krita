@@ -22,7 +22,7 @@
 
 #include <kdialog.h>
 #include <QStringList>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 class KEditListBox;
 class KUrlRequester;
 class QCheckBox;

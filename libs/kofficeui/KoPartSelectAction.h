@@ -22,8 +22,8 @@
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <KoQueryTrader.h>
-//Added by qt3to4:
 #include <Q3ValueList>
+#include "kofficeui_export.h"
 
 class KActionCollection;
 

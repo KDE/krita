@@ -20,7 +20,7 @@
 #ifndef KOINSETS_H
 #define KOINSETS_H
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 /**
  * An Insets object is a representation of the borders of a shape.

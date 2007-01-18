@@ -25,11 +25,10 @@
 
 #include <lcms.h>
 
-#include <q3valuevector.h>
+#include <QByteArray>
+#include <QString>
 
-#include <kio/job.h>
-
-#include <koffice_export.h>
+#include <pigment_export.h>
 
 /**
  * This class contains an ICC color profile.

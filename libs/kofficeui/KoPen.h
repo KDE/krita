@@ -22,7 +22,7 @@
 
 #include <QPen>
 
-#include "koffice_export.h"
+#include "kofficeui_export.h"
 
 class KoZoomHandler;
 

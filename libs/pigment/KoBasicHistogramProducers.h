@@ -28,7 +28,7 @@
 
 #include "KoColorSpace.h"
 #include "KoID.h"
-#include <koffice_export.h>
+#include <pigment_export.h>
 
 class KoLabColorSpace;
 

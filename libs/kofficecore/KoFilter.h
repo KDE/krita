@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QMap>
 #include <q3ptrstack.h>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 class QIODevice;
 class KoFilterChain;
 

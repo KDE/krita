@@ -24,7 +24,7 @@
 
 #include "KoInteractionTool.h"
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include <QString>
 

@@ -18,7 +18,7 @@
 */
 
 #include <QString>
-#include <koffice_export.h>
+#include <kotext_export.h>
 class QDomElement;
 class KoXmlWriter;
 class KoGenStyle;

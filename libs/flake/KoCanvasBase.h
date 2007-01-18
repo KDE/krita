@@ -32,6 +32,7 @@
 #include <QRegion>
 #include <QWidget>
 
+#include "flake_export.h"
 
 class KoCanvasResourceProvider;
 class KoSelection;

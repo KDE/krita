@@ -24,7 +24,7 @@
 #include <QStack>
 #include <QMap>
 #include <QIODevice>
-#include <koffice_export.h>
+#include <kostore_export.h>
 
 
 /**
@@ -33,7 +33,7 @@
  * document in memory (like QDom does), and avoids using QTextStream at all
  * (which in Qt3 has major performance issues when converting to utf8).
  */
-class KSTORE_EXPORT KoXmlWriter
+class KOSTORE_EXPORT KoXmlWriter
 {
 public:
     /**

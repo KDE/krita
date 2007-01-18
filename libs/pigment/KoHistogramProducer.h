@@ -23,7 +23,7 @@
 #include <Q3ValueVector>
 #include <ksharedptr.h>
 
-#include <koffice_export.h>
+#include <pigment_export.h>
 
 #include "KoGenericRegistry.h"
 

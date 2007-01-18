@@ -21,7 +21,7 @@
 #ifndef KOTEXTBOOKMARK_H
 #define KOTEXTBOOKMARK_H
 
-#include <koffice_export.h>
+#include <kotext_export.h>
 #include <QString>
 #include <q3valuelist.h>
 #include <QMap>

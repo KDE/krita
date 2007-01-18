@@ -22,6 +22,7 @@
 #include <QFrame>
 
 #include <KoColor.h>
+#include "kopainter_export.h"
 
 /**
  *  The small widget showing the selected color

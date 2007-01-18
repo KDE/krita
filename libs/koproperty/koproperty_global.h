@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_GLOBAL_H
 #define KPROPERTY_GLOBAL_H
 
-#include <koffice_export.h>
+#include "koproperty_export.h"
 
 //convenience defines
 #define kopropertydbg  kDebug(30007)

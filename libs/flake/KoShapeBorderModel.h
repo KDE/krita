@@ -24,7 +24,7 @@
 
 #include <QPainter>
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 class KoShape;
 class KoViewConverter;

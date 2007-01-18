@@ -23,7 +23,7 @@
 
 #include <kparts/mainwindow.h>
 #include <kfiledialog.h>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 #include "KoDocument.h"
 #include <krecentfilesaction.h>
 #include <ktoggleaction.h>

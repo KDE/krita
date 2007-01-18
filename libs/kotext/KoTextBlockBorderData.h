@@ -25,7 +25,7 @@
 #include <QPen>
 #include <QRectF>
 #include <QPainter>
-#include <koffice_export.h>
+#include <kotext_export.h>
 
 /**
  * This class holds data for paragraph-borders.

@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 /**
  * The KoShapeUserData class is used to associate custom data with a shape.

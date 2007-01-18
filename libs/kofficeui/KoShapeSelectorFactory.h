@@ -21,7 +21,7 @@
 #define KOSHAPESELECTORFACTORY_H
 
 #include <KoDockFactory.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 class KOFFICEUI_EXPORT KoShapeSelectorFactory : public KoDockFactory
 {

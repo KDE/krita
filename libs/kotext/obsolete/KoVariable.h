@@ -32,7 +32,7 @@
 #include <kaction.h>
 #include "KoRichText.h"
 #include <QVariant>
-#include <koffice_export.h>
+#include <kotext_export.h>
 #include <KoXmlReader.h>
 
 class QDomElement;

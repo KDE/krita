@@ -21,7 +21,7 @@
 #ifndef KOSHAPESHEARCOMMAND_H
 #define KOSHAPESHEARCOMMAND_H
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include <QUndoCommand>
 #include <QList>

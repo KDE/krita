@@ -25,7 +25,7 @@
 
 #include <KoGenericRegistry.h>
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 class KoShape;
 class KoShapeFactory;

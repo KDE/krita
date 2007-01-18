@@ -19,7 +19,7 @@
 #ifndef KOGENERALPROPERTYUI_DUMMY_H
 #define KOGENERALPROPERTYUI_DUMMY_H
 
-#include "koffice_export.h"
+#include "kofficeui_export.h"
 
 #include "ui_KoGeneralPropertyUi.h"
 

@@ -21,7 +21,7 @@
 #define KO_COLORSLIDER_H
 
 #include <kselector.h>
-#include <koffice_export.h>
+#include <kopainter_export.h>
 
 #include "KoColor.h"
 

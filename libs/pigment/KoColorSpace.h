@@ -34,7 +34,7 @@
 #include "KoColorSpaceConstants.h"
 #include <KoChannelInfo.h>
 #include <KoID.h>
-#include <koffice_export.h>
+#include <pigment_export.h>
 
 class KoCompositeOp;
 class KoColorProfile;

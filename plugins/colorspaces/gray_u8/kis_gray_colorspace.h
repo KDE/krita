@@ -20,13 +20,13 @@
 #include <QColor>
 
 #include <klocale.h>
-#include <koffice_export.h>
-#include "KoLcmsColorSpace.h"
+#include <pigment_gray_u8_export.h>
+#include <KoLcmsColorSpace.h>
 #include <KoColorSpaceTraits.h>
 
 typedef KoColorSpaceTrait<quint8, 2, 1> GrayAU8Traits;
 
-class KRITAGRAYSCALE_EXPORT KisGrayAU8ColorSpace : public KoLcmsColorSpace<GrayAU8Traits>
+class PIGMENT_GRAY_U8_EXPORT KisGrayAU8ColorSpace : public KoLcmsColorSpace<GrayAU8Traits>
 {
     public:
         KisGrayAU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);

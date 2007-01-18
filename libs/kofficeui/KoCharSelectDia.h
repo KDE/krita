@@ -21,7 +21,7 @@
 #define KOCHARSELECTDIA_H
 
 #include <kdialog.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 class QWidget;
 class QGridLayout;

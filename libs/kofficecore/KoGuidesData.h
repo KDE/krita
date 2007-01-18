@@ -20,7 +20,7 @@
 #ifndef KOGUIDEDATA_H
 #define KOGUIDEDATA_H
 
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 #include <QList>
 #include <qnamespace.h>
 class KOFFICECORE_EXPORT KoGuidesData

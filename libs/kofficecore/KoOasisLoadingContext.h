@@ -27,7 +27,7 @@ class KoPictureCollection;
 class KoStore;
 
 #include <QMap>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 #include <QStringList>
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>

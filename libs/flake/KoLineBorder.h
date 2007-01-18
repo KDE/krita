@@ -24,7 +24,7 @@
 #include "KoInsets.h"
 #include "KoShapeBorderModel.h"
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 class KoShape;
 class QPainter;

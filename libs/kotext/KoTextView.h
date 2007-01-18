@@ -29,7 +29,7 @@
 #include <QKeyEvent>
 #include <KoRuler.h> // for KoTabulatorList
 #include <KoTextObject.h> // for KoTextView
-#include <koffice_export.h>
+#include <kotext_export.h>
 class KActionCollection;
 class KoBgSpellCheck;
 class KoTextObject;

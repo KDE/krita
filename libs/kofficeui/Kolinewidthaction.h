@@ -24,7 +24,7 @@
 
 #include <KoUnit.h>
 #include <KoSelectAction.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 /** A line width selection action */
 class KOFFICEUI_EXPORT KoLineWidthAction : public KoSelectAction

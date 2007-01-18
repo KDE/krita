@@ -29,7 +29,7 @@ class QTabletEvent;
 class QMouseEvent;
 class QWheelEvent;
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 /**
  * KoPointerEvent is a synthetic event that can be built from a mouse

@@ -20,7 +20,7 @@
 #ifndef KOPATHSHAPE_H
 #define KOPATHSHAPE_H
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include <QFlags>
 #include <QPainterPath>

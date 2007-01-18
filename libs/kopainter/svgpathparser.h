@@ -22,7 +22,7 @@
 
 class QString;
 
-#include <koffice_export.h>
+#include <kopainter_export.h>
 /**
  * Parser for svg path data, contained in the d attribute.
  *

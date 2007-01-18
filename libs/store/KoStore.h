@@ -26,7 +26,7 @@
 #include <QIODevice>
 #include <QStack>
 #include <QByteArray>
-#include <koffice_export.h>
+#include <kostore_export.h>
 
 class QWidget;
 
@@ -38,7 +38,7 @@ class KUrl;
  * We call a "store" the file on the hard disk (the one the users sees)
  * and call a "file" a file inside the store.
  */
-class KSTORE_EXPORT KoStore
+class KOSTORE_EXPORT KoStore
 {
 public:
 

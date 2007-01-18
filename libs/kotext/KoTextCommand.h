@@ -30,7 +30,7 @@ class KoTextDocument;
 class KoVariable;
 #include <KoParagLayout.h>
 #include <KoTextDocument.h>
-#include <koffice_export.h>
+#include <kotext_export.h>
 /**
  * Wraps a KoTextDocCommand into a KCommand, for the UI
  * In fact the KoTextDocCommand isn't even known from here.

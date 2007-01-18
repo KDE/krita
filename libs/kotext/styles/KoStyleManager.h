@@ -19,7 +19,7 @@
 #ifndef KOSTYLEMANAGER_H
 #define KOSTYLEMANAGER_H
 
-#include <koffice_export.h>
+#include <kotext_export.h>
 
 #include <QObject>
 #include <QTextDocument>

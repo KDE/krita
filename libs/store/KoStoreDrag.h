@@ -23,7 +23,7 @@
 #include <q3dragobject.h>
 //Added by qt3to4:
 #include <QByteArray>
-#include <koffice_export.h>
+#include <kostore_export.h>
 /**
  * A generic drag object that holds a store (e.g. KoZipStore) in memory.
  * This allows to drag-n-drop and copy-paste complex koffice objects.
@@ -35,7 +35,7 @@
  * then KoStore::createStore( theBuffer, .... ), save the
  * data into the store and delete it. Finally, call setEncodedData().
  */
-class KSTORE_EXPORT KoStoreDrag : public Q3StoredDrag
+class KOSTORE_EXPORT KoStoreDrag : public Q3StoredDrag
 {
 public:
     /** Constructor.

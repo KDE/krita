@@ -21,7 +21,7 @@
 #define KO_INPUT_DEVICE_H_
 
 #include <QList>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 class KOFFICEUI_EXPORT KoInputDevice {
 public:

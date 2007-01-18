@@ -25,7 +25,7 @@
 #include <kdialog.h>
 #include <KoUnit.h>
 
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 class KoUnitDoubleSpinBox;
 class QRadioButton;
 

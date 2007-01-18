@@ -25,7 +25,7 @@
 
 #include "KoGenericRegistry.h"
 #include <KoToolFactory.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 /**
  * This singleton class keeps a register of all available flake tools,

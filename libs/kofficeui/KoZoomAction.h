@@ -22,7 +22,7 @@
 
 #include <QLineEdit>
 #include <kaction.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 #include <kselectaction.h>
 #include <KoZoomMode.h>
 

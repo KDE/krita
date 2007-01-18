@@ -26,7 +26,7 @@
 
 #include <QPointF>
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 class KoCanvasBase;
 class KoTool;

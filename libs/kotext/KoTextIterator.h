@@ -23,7 +23,7 @@
 #include <QString>
 #include <QPair>
 #include <QObject>
-#include <koffice_export.h>
+#include <kotext_export.h>
 class KoTextParag;
 class KoTextObject;
 class KoTextView;

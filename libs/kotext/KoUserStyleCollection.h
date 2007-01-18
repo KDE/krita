@@ -20,7 +20,7 @@
 #define KOUSERSTYLECOLLECTION_H
 
 class KoUserStyle;
-#include <koffice_export.h>
+#include <kotext_export.h>
 #include <QStringList>
 
 /**

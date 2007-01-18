@@ -24,7 +24,7 @@
 #include <q3ptrlist.h>
 #include <QStringList>
 #include <QPixmap>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 
 class KInstance;
 

@@ -24,7 +24,7 @@
 
 #include <KoGenStyles.h>
 #include <QStringList>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 #include <KoXmlReader.h>
 
 class QDomElement;

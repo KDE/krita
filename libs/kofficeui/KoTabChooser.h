@@ -22,7 +22,7 @@
 
 #include <QFrame>
 
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 class QMouseEvent;
 class QPainter;

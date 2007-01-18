@@ -25,7 +25,7 @@
 #include <QMap>
 #include <QList>
 #include <QString>
-#include <koffice_export.h>
+#include <pigment_export.h>
 
 #include <KoGenericRegistry.h>
 

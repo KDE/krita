@@ -27,6 +27,7 @@
 #include <KoUnit.h>
 #include <KoPageLayout.h>
 #include <kpagedialog.h>
+#include "kofficeui_export.h"
 
 class QComboBox;
 class QLineEdit;

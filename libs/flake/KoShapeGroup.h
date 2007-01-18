@@ -24,7 +24,7 @@
 
 #include <QList>
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 /**
  * Provide grouping for shapes.

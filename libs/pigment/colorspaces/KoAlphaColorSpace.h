@@ -21,7 +21,7 @@
 
 #include <QColor>
 
-#include <koffice_export.h>
+#include <pigment_export.h>
 
 #include "KoLcmsColorSpace.h"
 #include "KoColorSpaceTraits.h"

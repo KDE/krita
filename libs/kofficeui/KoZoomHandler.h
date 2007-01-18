@@ -20,7 +20,7 @@
 #ifndef kozoomhandler_h
 #define kozoomhandler_h
 
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 #include <KoZoomMode.h>
 #include <KoViewConverter.h>
 

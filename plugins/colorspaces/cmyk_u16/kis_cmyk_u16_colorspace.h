@@ -23,11 +23,11 @@
 #include <KoLcmsColorSpace.h>
 #include <KoColorSpaceTraits.h>
 
-#include <koffice_export.h>
+#include <pigment_cmyk_u16_export.h>
 
 typedef KoColorSpaceTrait<quint16, 5, 4> CmykU16Traits;
 
-class KRITA_CMYK_U16_EXPORT KisCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
+class PIGMENT_CMYK_U16_EXPORT KisCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
 {
     public:
         KisCmykU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);

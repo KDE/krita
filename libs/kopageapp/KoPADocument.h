@@ -24,12 +24,13 @@
 
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
+#include "kopageapp_export.h"
 
 class KoPAPage;
 class KoPAMasterPage;
 
 /// Document class that stores KoPAPage and KoPAMasterPage objects
-class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase 
+class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase
 {
     Q_OBJECT
 public:

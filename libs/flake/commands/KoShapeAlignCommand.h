@@ -21,7 +21,7 @@
 #ifndef KOSHAPEALIGNCOMMAND_H
 #define KOSHAPEALIGNCOMMAND_H
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include <QRectF>
 #include <QUndoCommand>

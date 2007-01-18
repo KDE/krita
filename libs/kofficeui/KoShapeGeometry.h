@@ -22,7 +22,7 @@
 #include "ui_KoShapeGeometry.h"
 
 #include <KoShapeConfigWidgetBase.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 #include <QWidget>
 #include <QList>
 

@@ -22,13 +22,13 @@
 #include "kis_rgb_float_hdr_colorspace.h"
 
 #include <half.h>
-#include <koffice_export.h>
+#include <krita_rgbf32_export.h>
 
 #include <KoColorSpaceTraits.h>
 
 typedef KoRgbTraits<half> RgbF16Traits;
 
-class KRITAGRAYSCALE_EXPORT KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
+class KRITA_RGBF32_EXPORT KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
 {
     public:
         KisRgbF16HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);

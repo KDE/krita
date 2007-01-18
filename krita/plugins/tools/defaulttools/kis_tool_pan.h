@@ -22,12 +22,11 @@
 
 #include "kis_tool_non_paint.h"
 #include "KoToolFactory.h"
-#include <koffice_export.h>
 #include <kis_layer_shape.h>
 class KisCanvasSubject;
 class QPointF;
 
-class KRITATOOL_EXPORT KisToolPan : public KisToolNonPaint
+class KisToolPan : public KisToolNonPaint
 {
 
     typedef KisToolNonPaint super;

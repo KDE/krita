@@ -28,7 +28,7 @@
 #include <q3dict.h>
 #include <QLabel>
 #include <QWidget>
-#include <koffice_export.h>
+#include <kotext_export.h>
 
 class KoDocument;
 class KoTextParag;

@@ -19,7 +19,7 @@
 #ifndef KOUSERSTYLE_H
 #define KOUSERSTYLE_H
 
-#include <koffice_export.h>
+#include <kotext_export.h>
 #include <QString>
 
 /**

@@ -20,7 +20,7 @@
 #ifndef KOCANVASVIEW_H
 #define KOCANVASVIEW_H
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include "KoCanvasBase.h"
 

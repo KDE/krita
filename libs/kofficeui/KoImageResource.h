@@ -20,7 +20,7 @@
 
 #ifndef __ko_imageresource__
 #define __ko_imageresource__
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 class KOFFICEUI_EXPORT KoImageResource
 {

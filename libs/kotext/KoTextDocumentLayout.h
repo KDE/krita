@@ -20,7 +20,7 @@
 #ifndef KOTEXTDOCUMENTLAYOUT_H
 #define KOTEXTDOCUMENTLAYOUT_H
 
-#include <koffice_export.h>
+#include <kotext_export.h>
 
 #include <QAbstractTextDocumentLayout>
 #include <QRectF>

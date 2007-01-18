@@ -21,7 +21,7 @@
 #define KOINLINEOBJECTREGISTRY_H
 
 #include <KoGenericRegistry.h>
-#include <koffice_export.h>
+#include <kotext_export.h>
 #include <QObject>
 #include <QList>
 
@@ -39,7 +39,7 @@ class QAction;
  * @see KoInlineObject
  * @see KoVariable
  */
-class FLAKE_EXPORT KoInlineObjectRegistry : public QObject,  public KoGenericRegistry<KoInlineObjectFactory*>
+class KOTEXT_EXPORT KoInlineObjectRegistry : public QObject,  public KoGenericRegistry<KoInlineObjectFactory*>
 {
     Q_OBJECT
 public:

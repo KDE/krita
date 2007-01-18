@@ -31,7 +31,7 @@
 #include <QEvent>
 
 // KOffice includes.
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 
 class KKbdAccessExtensionsPrivate;
 class KMainWindow;

@@ -21,6 +21,7 @@
 #define kotextzoomhandler_h
 
 #include <KoZoomHandler.h>
+#include "kotext_export.h"
 /**
  * This class extends KoZoomHandler to add support for WYSIWYG text layouting.
  */
@@ -118,7 +119,7 @@ public:
     { return QPointF( ptToLayoutUnitPt( p.x() ),
                       ptToLayoutUnitPt( p.y() ) ); }
     static QRectF ptToLayoutUnitPt( const QRectF &r )
-    { return QRectF( ptToLayoutUnitPt( r.topLeft() ).x(),ptToLayoutUnitPt( r.topLeft() ).y(), 
+    { return QRectF( ptToLayoutUnitPt( r.topLeft() ).x(),ptToLayoutUnitPt( r.topLeft() ).y(),
                      ptToLayoutUnitPt( r.bottomRight() ).x(), ptToLayoutUnitPt( r.bottomRight() ).y() ); }
 
     static double layoutUnitPtToPt( double lupt )

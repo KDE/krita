@@ -21,7 +21,7 @@
 #define _koDocumentPropsPage_h_
 
 #include <kpropertiesdialog.h>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 
 #include <QString>
 

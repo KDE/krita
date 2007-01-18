@@ -23,7 +23,7 @@
 #include <QString>
 #include <QIODevice>
 #include <QPixmap>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 
 #include "KoPictureKey.h"
 

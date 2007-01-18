@@ -52,7 +52,7 @@
 #include <QByteArray>
 #include <Q3GridLayout>
 
-#include <koffice_export.h>
+#include <kotext_export.h>
 class KoXmlWriter;
 class KoGenStyles;
 class KoTextParag;

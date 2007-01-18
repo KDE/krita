@@ -23,7 +23,7 @@
 
 #include "KoToolFactory.h"
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 /// The factory for the KoCreateShapesTool
 class FLAKE_EXPORT KoCreateShapesToolFactory : public KoToolFactory {

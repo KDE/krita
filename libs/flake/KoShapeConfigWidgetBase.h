@@ -22,7 +22,7 @@
 
 #include <QWidget>
 
-#include <koffice_export.h>
+#include <flake_export.h>
 #include <kaction.h>
 
 #include <KoUnit.h>

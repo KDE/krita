@@ -26,7 +26,7 @@
 //Added by qt3to4:
 #include <QByteArray>
 #include "KoBorder.h"
-#include <koffice_export.h>
+#include <kotext_export.h>
 class KoSavingContext;
 class KoGenStyle;
 class KoParagCounter;

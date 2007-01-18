@@ -23,7 +23,7 @@
 
 #include "KoToolFactory.h"
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 /// Factory for the KoInteractionTool
 class FLAKE_EXPORT KoInteractionToolFactory : public KoToolFactory {

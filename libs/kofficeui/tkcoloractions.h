@@ -22,7 +22,7 @@
 #define TKCOLORACTION_H
 
 #include "tkaction.h"
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 #include <kmenu.h>
 #include <q3dict.h>
 #include <QMouseEvent>

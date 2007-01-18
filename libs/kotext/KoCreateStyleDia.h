@@ -22,7 +22,7 @@
 
 #include <kdialog.h>
 #include <QStringList>
-#include <koffice_export.h>
+#include <kotext_export.h>
 
 class QLineEdit;
 class KOTEXT_EXPORT KoCreateStyleDia : public KDialog

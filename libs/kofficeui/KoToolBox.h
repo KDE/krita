@@ -23,7 +23,7 @@
 #include <QList>
 #include <QMap>
 #include <QDockWidget>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 class QButtonGroup;
 class QBoxLayout;

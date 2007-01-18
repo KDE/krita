@@ -22,7 +22,7 @@
 
 #include <QPaintDevice>
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 /**
  * helper class to disable any screen convertion as thats done in flake.

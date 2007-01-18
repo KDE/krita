@@ -21,7 +21,7 @@
 #define KOTOOLBOXFACTORY_H
 
 #include <KoDockFactory.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 #include <QString>
 #include <QDockWidget>

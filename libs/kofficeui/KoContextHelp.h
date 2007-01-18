@@ -35,7 +35,7 @@
 
 #include <kaction.h>
 #include <ktoggleaction.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 class KActionCollection;
 class QPixmap;

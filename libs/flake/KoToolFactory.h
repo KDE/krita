@@ -23,7 +23,7 @@
 
 #include "KoTool.h"
 #include <KoID.h>
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include <klocale.h>
 #include <kshortcut.h>

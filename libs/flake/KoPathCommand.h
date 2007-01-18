@@ -26,7 +26,7 @@
 #include <QMap>
 #include <QPointF>
 #include "KoPathShape.h"
-#include <koffice_export.h>
+#include <flake_export.h>
 
 class KoParameterShape;
 class KoShapeController;

@@ -22,7 +22,7 @@
 #include <QMap>
 #include <q3valuevector.h>
 #include <QString>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 
 class KoGenStyles;
 class KoXmlWriter;

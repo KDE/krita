@@ -20,7 +20,7 @@
 #ifndef KOGROUPSHAPESCOMMAND_H
 #define KOGROUPSHAPESCOMMAND_H
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include <QList>
 #include <QUndoCommand>

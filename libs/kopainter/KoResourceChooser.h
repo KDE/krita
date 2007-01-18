@@ -31,7 +31,7 @@
 #include <QPaintEvent>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-#include <koffice_export.h>
+#include <kopainter_export.h>
 
 #include "KoItemToolTip.h"
 

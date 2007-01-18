@@ -22,7 +22,7 @@
 #define KOTEXTDOCUMENT_H
 
 #include "KoRichText.h"
-#include <koffice_export.h>
+#include <kotext_export.h>
 #include <KoXmlReader.h>
 //Added by qt3to4:
 #include <QPixmap>

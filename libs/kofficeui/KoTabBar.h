@@ -31,7 +31,7 @@
 #include <QWheelEvent>
 #include <QResizeEvent>
 #include <QPaintEvent>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 class KoTabBarPrivate;
 
 /**

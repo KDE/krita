@@ -21,7 +21,7 @@
 #define KO_DOCUMENT_SECTION_DELEGATE_H
 
 #include <QAbstractItemDelegate>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 #include "KoDocumentSectionView.h"
 
 class QTreeView;

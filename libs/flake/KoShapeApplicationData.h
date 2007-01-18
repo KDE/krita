@@ -20,7 +20,7 @@
 #ifndef KOSHAPEAPPLICATIONDATA_H
 #define KOSHAPEAPPLICATIONDATA_H
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 /**
  * The KoShapeAppliationData class is used to associate application specific data with a shape.

@@ -22,7 +22,7 @@
 #include <QColor>
 #include <QMetaType>
 
-#include <koffice_export.h>
+#include <pigment_export.h>
 
 class KoColorProfile;
 class KoColorSpace;

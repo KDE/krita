@@ -20,7 +20,7 @@
 #include <QColor>
 
 #include <klocale.h>
-#include <koffice_export.h>
+#include <krita_gray_u16_export.h>
 #include "KoLcmsColorSpace.h"
 #include <KoColorSpaceTraits.h>
 

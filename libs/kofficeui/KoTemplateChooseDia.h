@@ -28,7 +28,7 @@
 #include <kpagedialog.h>
 #include <kicondialog.h>
 #include <k3iconview.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QHideEvent>

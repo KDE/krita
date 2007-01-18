@@ -29,7 +29,7 @@
 #include <QList>
 #include <QKeyEvent>
 
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 class QPaintDevice;
 class KoView;

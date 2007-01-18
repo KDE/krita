@@ -27,7 +27,7 @@
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QResizeEvent>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 class QPushButton;
 class QPixmap;
 class KoKoolBar;

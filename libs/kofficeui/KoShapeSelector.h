@@ -24,7 +24,7 @@
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
 #include <KoShapeControllerBase.h>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 #include <QDockWidget>
 #include <QRectF>

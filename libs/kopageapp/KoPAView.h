@@ -25,6 +25,7 @@
 #include <KoView.h>
 #include <KoZoomHandler.h>
 #include <KoRuler.h>
+#include "kopageapp_export.h"
 
 class KoCanvasController;
 class KoPACanvas;

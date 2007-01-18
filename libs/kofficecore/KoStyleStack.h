@@ -28,7 +28,7 @@
 
 #include <kdemacros.h>
 
-#include "koffice_export.h"
+#include "kofficecore_export.h"
 #include <KoXmlReader.h>
 
 /**

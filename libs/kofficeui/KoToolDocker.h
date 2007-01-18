@@ -23,7 +23,7 @@
 
 #include <QDockWidget>
 
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 class QStackedWidget;
 class QWidget;

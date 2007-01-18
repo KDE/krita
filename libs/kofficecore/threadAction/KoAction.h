@@ -21,7 +21,7 @@
 
 #include <ThreadWeaver.h>
 
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 
 class KoExecutePolicy;
 class DirectPolicy;

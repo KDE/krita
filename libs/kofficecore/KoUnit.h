@@ -23,7 +23,7 @@
 #include <QString>
 #include <QStringList>
 #include <math.h> // for floor
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 
 class KoXmlWriter;
 class QDomElement;

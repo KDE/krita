@@ -21,7 +21,7 @@
 #define KO_DOCUMENT_SECTION_VIEW_H
 
 #include <QTreeView>
-#include <koffice_export.h>
+#include <kofficeui_export.h>
 
 class QStyleOptionViewItem;
 class KoDocumentSectionModel;

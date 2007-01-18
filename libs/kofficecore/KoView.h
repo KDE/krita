@@ -27,7 +27,7 @@
 #include <kparts/part.h>
 
 #include <KoChild.h>
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 #include <KoDocumentChild.h>
 #include <KoFrame.h>
 #include <KoViewChild.h>

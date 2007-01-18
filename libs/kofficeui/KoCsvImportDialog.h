@@ -26,7 +26,7 @@
 
 #include <kdialog.h>
 
-#include "koffice_export.h"
+#include "kofficeui_export.h"
 
 #include "ui_KoCsvImportDialog.h"
 

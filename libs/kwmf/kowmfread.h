@@ -31,7 +31,7 @@
 #include <q3pointarray.h>
 #include <QPainter>
 
-#include <koffice_export.h>
+#include <kowmf_export.h>
 class KoWmfReadPrivate;
 
 /**

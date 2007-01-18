@@ -23,7 +23,7 @@
 
 #include "KoColor.h"
 
-#include <koffice_export.h>
+#include <kopainter_export.h>
 
 class KoColor;
 class KoXYColorSelector;

@@ -21,7 +21,7 @@
 #define __KOSHAPELAYER_H__
 
 #include <KoShapeContainer.h>
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include <QRectF>
 

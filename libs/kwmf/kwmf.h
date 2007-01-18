@@ -30,7 +30,7 @@ DESCRIPTION
 #ifndef KWMF_H
 #define KWMF_H
 
-#include <koffice_export.h>
+#include <kwmf_export.h>
 
 #include <QList>
 
@@ -39,7 +39,7 @@ DESCRIPTION
 class QDataStream;
 class QPolygon;
 
-class KOWMF_EXPORT KWmf
+class KWMF_EXPORT KWmf
 {
 public:
 
@@ -57,7 +57,7 @@ public:
         QDataStream &stream,
         unsigned size);
 
-    class KOWMF_EXPORT DrawContext
+    class KWMF_EXPORT DrawContext
     {
     public:
         DrawContext();

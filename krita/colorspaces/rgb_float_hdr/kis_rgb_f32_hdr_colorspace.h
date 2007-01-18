@@ -20,13 +20,13 @@
 
 #include "klocale.h"
 #include "kis_rgb_float_hdr_colorspace.h"
-#include <koffice_export.h>
+#include <krita_rgbf32_export.h>
 
 #include <KoColorSpaceTraits.h>
 
 typedef KoRgbTraits<float> RgbF32Traits;
 
-class KRITAGRAYSCALE_EXPORT KisRgbF32HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF32Traits>
+class KRITA_RGBF32_EXPORT KisRgbF32HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF32Traits>
 {
     public:
         KisRgbF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
@@ -41,7 +41,7 @@ class KRITAGRAYSCALE_EXPORT KisRgbF32HDRColorSpace : public KisRgbFloatHDRColorS
 // FIXME: lcms doesn't support 32-bit float
 #define RGBAF32FLOAT_LCMS_TYPE TYPE_BGRA_16
 
-class KRITAGRAYSCALE_EXPORT KisRgbF32HDRColorSpaceFactory : public KoColorSpaceFactory
+class KRITA_RGBF32_EXPORT KisRgbF32HDRColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**

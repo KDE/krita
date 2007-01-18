@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QCursor>
 
-#include <koffice_export.h>
+#include <flake_export.h>
 
 #include <KoCanvasResourceProvider.h>
 

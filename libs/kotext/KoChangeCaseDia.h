@@ -21,7 +21,7 @@
 #define __KoChangeCaseDia__
 
 #include <kdialog.h>
-#include <koffice_export.h>
+#include <kotext_export.h>
 
 class QRadioButton;
 class QPushButton;

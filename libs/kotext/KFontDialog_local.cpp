@@ -52,8 +52,6 @@
 #include <kdebug.h>
 #include <knuminput.h>
 
-#include <koffice_export.h>
-
 #include "KFontDialog_local.h"
 #include "KFontDialog_local.moc"
 

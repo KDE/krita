@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QStringList>
 
-#include <koffice_export.h>
+#include <kofficecore_export.h>
 
 /**
  * The pluginloader singleton is responsible for loading the plugins
@@ -62,7 +62,7 @@ MyPlugin::MyPlugin( QObject *parent, const QStringList& ) : QObject(parent) {
  *
  * TODO: make plugins manageable.
  */
-class FLAKE_EXPORT KoPluginLoader : public QObject
+class KOFFICECORE_EXPORT KoPluginLoader : public QObject
 {
 
     Q_OBJECT

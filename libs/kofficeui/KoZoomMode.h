@@ -22,7 +22,7 @@
 
 #include <QString>
 #include <QFlags>
-#include "koffice_export.h"
+#include "kofficeui_export.h"
 
 /**
  * The ZoomMode container

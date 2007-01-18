@@ -25,7 +25,7 @@
 #include "KoStyleCollection.h"
 #include "KoTextDocument.h"
 #include <KoXmlReader.h>
-#include <koffice_export.h>
+#include <kotext_export.h>
 //Added by qt3to4:
 #include <QByteArray>
 #include <Q3MemArray>

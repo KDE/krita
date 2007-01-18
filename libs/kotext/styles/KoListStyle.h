@@ -22,7 +22,7 @@
 #include <QMap>
 #include <QPointer>
 #include <QTextList>
-#include <koffice_export.h>
+#include <kotext_export.h>
 class StylePrivate;
 
 

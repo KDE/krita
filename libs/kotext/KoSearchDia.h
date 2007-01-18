@@ -35,7 +35,7 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3ValueList>
-#include <koffice_export.h>
+#include <kotext_export.h>
 
 class QPushButton;
 class QRadioButton;

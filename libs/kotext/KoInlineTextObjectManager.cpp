@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoInlineTextObjectManager.h"
+#include "InsertNamedVariableAction_p.h"
+#include "KoInlineObjectRegistry.h"
 
 #include <QTextCursor>
 #include <QPainter>
@@ -24,7 +26,8 @@
 
 KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
     : QObject(parent),
-    m_lastObjectId(0)
+    m_lastObjectId(0),
+    m_variableManager(this)
 {
 }
 
@@ -83,6 +86,27 @@ QString KoInlineTextObjectManager::stringProperty(KoInlineObject::Property key) 
     if(!m_properties.contains(key))
         return QString();
     return qvariant_cast<QString>(m_properties.value(key));
+}
+
+const KoVariableManager *KoInlineTextObjectManager::variableManager() const {
+    return &m_variableManager;
+}
+
+KoVariableManager *KoInlineTextObjectManager::variableManager() {
+    return &m_variableManager;
+}
+
+void KoInlineTextObjectManager::removeProperty(KoInlineObject::Property key) {
+    m_properties.remove(key);
+}
+
+QList<QAction*> KoInlineTextObjectManager::createInsertVariableActions(KoCanvasBase *host) const {
+    QList<QAction *> answer = KoInlineObjectRegistry::instance()->createInsertVariableActions(host);
+    int i=0;
+    foreach(QString name, m_variableManager.variables()) {
+        answer.insert(i++, new InsertNamedVariableAction(host, this, name));
+    }
+    return answer;
 }
 
 #include "KoInlineTextObjectManager.moc"

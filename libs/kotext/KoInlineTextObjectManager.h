@@ -21,12 +21,16 @@
 
 #include "KoInlineObject.h"
 #include "KoInlineObjectFactory.h"
+#include "KoVariableManager.h"
 
 #include <koffice_export.h>
 
 // Qt + kde
 #include <QHash>
 #include <QTextCharFormat>
+
+class KoCanvasBase;
+class QAction;
 
 /**
  * A container to register all the inlineTextObjects with.
@@ -80,6 +84,13 @@ public:
     bool boolProperty(KoInlineObject::Property key) const;
     /// retrieve a string property
     QString stringProperty(KoInlineObject::Property key) const;
+    /// remove a property from the store.
+    void removeProperty(KoInlineObject::Property key);
+
+    const KoVariableManager *variableManager() const;
+    KoVariableManager *variableManager();
+
+    QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
 signals:
     void propertyChanged(int, const QVariant &variant);
@@ -93,6 +104,8 @@ private:
     QList<KoInlineObject*> m_listeners; // holds objects also in m_objects, but which want propertyChanges
     int m_lastObjectId;
     QHash<int, QVariant> m_properties;
+
+    KoVariableManager m_variableManager;
 };
 
 #endif

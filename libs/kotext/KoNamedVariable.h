@@ -16,28 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef INSERTVARIABLEACTION_H
-#define INSERTVARIABLEACTION_H
+#ifndef KONAMEDVARIABLE_H
+#define KONAMEDVARIABLE_H
 
-#include <kaction.h>
-#include "KoInlineObjectFactory.h"
+#include "KoVariable.h"
 
-class KoCanvasBase;
-
-/// \internal
-class InsertVariableAction : public KAction {
-    Q_OBJECT
+class KoNamedVariable : public KoVariable {
 public:
-    InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactory *factory, const KoInlineObjectTemplate &templ);
+    KoNamedVariable(Property key, const QString &name);
 
-private slots:
-    void activated();
+    void propertyChanged(Property property, const QVariant &value);
 
 private:
-    KoCanvasBase *const m_canvas;
-    KoInlineObjectFactory *const m_factory;
-    const QString m_templateId;
-    const KoProperties *const m_properties;
-};
+    void setup();
 
+    const QString m_name;
+    const Property m_key;
+};
 #endif

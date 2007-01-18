@@ -26,6 +26,9 @@
 class KoCanvasBase;
 class KoInlineTextObjectManager;
 
+/**
+ * helper class
+ */
 class InsertNamedVariableAction : public KAction {
     Q_OBJECT
 public:

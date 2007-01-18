@@ -87,12 +87,31 @@ public:
     /// remove a property from the store.
     void removeProperty(KoInlineObject::Property key);
 
+    /**
+     * Return the variableManager.
+     */
     const KoVariableManager *variableManager() const;
+    /**
+     * Return the variableManager.
+     */
     KoVariableManager *variableManager();
 
+    /**
+     * Create a list of actions that can be used to plug into a menu, for example.
+     * This method internally uses KoInlineObjectRegistry::createInsertVariableActions() but extends
+     * the list with all registered variable-names.
+     * Each of thse actions, when executed, will insert the relevant variable in the current text-position.
+     * The actions assume that the text tool is selected, if thats not the case then they will silently fail.
+     * @param host the canvas for which these actions are created.  Note that the actions will get these
+     *  actions as a parent (for memory management purposes) as well.
+     * @see KoVariableManager
+     */
     QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
 signals:
+    /**
+     * Emitted whenever a propery is set and it turns out to be changed.
+     */
     void propertyChanged(int, const QVariant &variant);
 
 private:

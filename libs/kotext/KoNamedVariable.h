@@ -21,16 +21,32 @@
 
 #include "KoVariable.h"
 
+/**
+ * This inlineObject shows the curent value of a variable as registered in the KoVariableManager.
+ * The proper way to create a new class is to use KoVariableManager::createVariable()
+ */
 class KoNamedVariable : public KoVariable {
 public:
+    /// return the name of this named variable
+    QString name() const { return m_name; }
+
+protected:
+    friend class KoVariableManager;
+    /**
+     * Constructor
+     * @param key the property that represents the named variable. As defined internally in the KoVariableManager
+     * @param name the name of the variable.
+     */
     KoNamedVariable(Property key, const QString &name);
 
-    void propertyChanged(Property property, const QVariant &value);
-
 private:
+    /// reimplemented method
+    void propertyChanged(Property property, const QVariant &value);
+    /// reimplemented method
     void setup();
 
     const QString m_name;
     const Property m_key;
 };
+
 #endif

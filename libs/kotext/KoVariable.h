@@ -82,6 +82,10 @@ protected:
     virtual void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
 
     friend class KoVariableManager;
+    /**
+     * return the last known position in the document. Note that if the variable has not yet been layouted,
+     * it does not know the position.
+     */
     int positionInDocument() const;
 
 private:

@@ -51,6 +51,17 @@ public:
      */
     static KoInlineObjectRegistry * instance();
 
+    /**
+     * Create a list of actions that can be used to plug into a menu, for example.
+     * This method will find all the InlineObjectFactories that are installed in the system and
+     * find out which object they provide. If a factory provides a variable, then all its
+     * templates will be added to the response.
+     * Each of thse actions, when executed, will insert the relevant variable in the current text-position.
+     * The actions assume that the text tool is selected, if thats not the case then they will silently fail.
+     * @param host the canvas for which these actions are created.  Note that the actions will get these
+     *  actions as a parent (for memory management purposes) as well.
+     * @see KoInlineTextObjectManager::createInsertVariableActions()
+     */
     QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
 private:

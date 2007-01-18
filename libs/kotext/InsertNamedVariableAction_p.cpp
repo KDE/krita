@@ -33,6 +33,7 @@ InsertNamedVariableAction::InsertNamedVariableAction(KoCanvasBase *canvas, const
     m_manager(manager),
     m_name(name)
 {
+    connect(this, SIGNAL(triggered(bool)), this, SLOT(activated()));
 }
 
 void InsertNamedVariableAction::activated() {

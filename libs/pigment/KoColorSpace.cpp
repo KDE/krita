@@ -24,19 +24,46 @@
 #include "KoCompositeOp.h"
 #include "KoColorTransformation.h"
 
-KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent)
-    : m_id(id)
-    , m_name( name )
-    , m_parent( parent )
-    , m_mixColorsOp( 0 )
-    , m_convolutionOp( 0 )
+struct KoColorSpace::Private {
+    QString id;
+    QString name;
+    QHash<QString, KoCompositeOp *> compositeOps;
+    KoColorSpaceRegistry * parent;
+    Q3ValueVector<KoChannelInfo *> channels;
+    KoMixColorsOp* mixColorsOp;
+    KoConvolutionOp* convolutionOp;
+    mutable Q3MemArray<quint8> conversionCache; // XXX: This will be a bad problem when we have threading.
+};
+
+KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp )
+    : d (new Private())
 {
-    //m_dcop = 0;
+  d->id = id;
+  d->name = name;
+  d->parent = parent;
+  d->mixColorsOp = mixColorsOp;
+  d->convolutionOp = convolutionOp;
 }
 
 KoColorSpace::~KoColorSpace()
 {
-    //delete m_dcop;
+    delete d->mixColorsOp;
+    delete d->convolutionOp;
+    delete d;
+}
+
+QString KoColorSpace::id() const {return d->id;}
+
+QString KoColorSpace::name() const {return d->name;}
+
+Q3ValueVector<KoChannelInfo *> KoColorSpace::channels() const
+{
+    return d->channels;
+}
+
+void KoColorSpace::addChannel(KoChannelInfo * ci)
+{
+    d->channels.push_back(ci);
 }
 
 quint8 *KoColorSpace::allocPixelBuffer(quint32 numPixels) const
@@ -46,21 +73,41 @@ quint8 *KoColorSpace::allocPixelBuffer(quint32 numPixels) const
 
 QList<KoCompositeOp*> KoColorSpace::userVisiblecompositeOps() const
 {
-    return m_compositeOps.values();
+    return d->compositeOps.values();
+}
+
+void KoColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
+{
+    Q_ASSERT(d->mixColorsOp);
+    d->mixColorsOp->mixColors(colors, weights, nColors, dst);
+}
+
+KoMixColorsOp* KoColorSpace::mixColorsOp() const {
+    return d->mixColorsOp;
+}
+
+void KoColorSpace::convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const
+{
+    Q_ASSERT(d->convolutionOp);
+    d->convolutionOp->convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nPixels);
+}
+
+KoConvolutionOp* KoColorSpace::convolutionOp() const {
+    return d->convolutionOp;
 }
 
 const KoCompositeOp * KoColorSpace::compositeOp(const QString & id) const
 {
-    if ( m_compositeOps.contains( id ) )
-        return m_compositeOps.value( id );
+    if ( d->compositeOps.contains( id ) )
+        return d->compositeOps.value( id );
     else
-        return m_compositeOps.value( COMPOSITE_OVER );
+        return d->compositeOps.value( COMPOSITE_OVER );
 }
 
 void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
 {
     if ( op->colorSpace()->id() == id()) {
-        m_compositeOps.insert( op->id(), const_cast<KoCompositeOp*>( op ) );
+        d->compositeOps.insert( op->id(), const_cast<KoCompositeOp*>( op ) );
     }
 }
 
@@ -95,11 +142,11 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           const QString & op,
                           const QBitArray & channelFlags) const
 {
-    if ( m_compositeOps.contains( op ) ) {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, m_compositeOps.value( op ), channelFlags);
+    if ( d->compositeOps.contains( op ) ) {
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value( op ), channelFlags);
     }
     else {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, m_compositeOps.value( COMPOSITE_OVER ), channelFlags);
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value( COMPOSITE_OVER ), channelFlags);
     }
 
 }
@@ -116,11 +163,11 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           qint32 cols,
                           const QString& op) const
 {
-    if ( m_compositeOps.contains( op ) ) {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, m_compositeOps.value( op ));
+    if ( d->compositeOps.contains( op ) ) {
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value( op ));
     }
     else {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, m_compositeOps.value( COMPOSITE_OVER ) );
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value( COMPOSITE_OVER ) );
     }
 }
 
@@ -144,7 +191,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
         quint32 len = pixelSize() * rows * cols;
 
         // If our conversion cache is too small, extend it.
-        if (!m_conversionCache.resize( len, Q3GArray::SpeedOptim )) {
+        if (!d->conversionCache.resize( len, Q3GArray::SpeedOptim )) {
             kWarning() << "Could not allocate enough memory for the conversion!\n";
             // XXX: We should do a slow, pixel by pixel bitblt here...
             abort();
@@ -152,7 +199,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
 
         for (qint32 row = 0; row < rows; row++) {
             srcSpace->convertPixelsTo(src + row * srcRowStride,
-                                      m_conversionCache.data() + row * cols * pixelSize(), this,
+                                      d->conversionCache.data() + row * cols * pixelSize(), this,
                                       cols);
         }
 
@@ -160,7 +207,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
         srcRowStride = cols * pixelSize();
 
         op->composite( dst, dststride,
-                       m_conversionCache.data(), srcRowStride,
+                       d->conversionCache.data(), srcRowStride,
                        srcAlphaMask, maskRowStride,
                        rows,  cols,
                        opacity, channelFlags );
@@ -197,7 +244,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
         quint32 len = pixelSize() * rows * cols;
 
         // If our conversion cache is too small, extend it.
-        if (!m_conversionCache.resize( len, Q3GArray::SpeedOptim )) {
+        if (!d->conversionCache.resize( len, Q3GArray::SpeedOptim )) {
             kWarning() << "Could not allocate enough memory for the conversion!\n";
             // XXX: We should do a slow, pixel by pixel bitblt here...
             abort();
@@ -205,7 +252,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
 
         for (qint32 row = 0; row < rows; row++) {
             srcSpace->convertPixelsTo(src + row * srcRowStride,
-                                      m_conversionCache.data() + row * cols * pixelSize(), this,
+                                      d->conversionCache.data() + row * cols * pixelSize(), this,
                                       cols);
         }
 
@@ -213,7 +260,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
         srcRowStride = cols * pixelSize();
 
         op->composite( dst, dststride,
-                       m_conversionCache.data(), srcRowStride,
+                       d->conversionCache.data(), srcRowStride,
                        srcAlphaMask, maskRowStride,
                        rows,  cols,
                        opacity);

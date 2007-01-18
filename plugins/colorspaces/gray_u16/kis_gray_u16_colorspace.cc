@@ -31,11 +31,11 @@
 KisGrayAU16ColorSpace ::KisGrayAU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
             KoLcmsColorSpace<GrayAU16Traits>("GRAYA16", i18n("Grayscale 16-bit integer/channel)"), parent, TYPE_GRAYA_16, icSigGrayData, p)
 {
-    m_channels.push_back(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
-    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 1, KoChannelInfo::ALPHA, KoChannelInfo::UINT16));
+    addChannel(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    addChannel(new KoChannelInfo(i18n("Alpha"), 1, KoChannelInfo::ALPHA, KoChannelInfo::UINT16));
 
     init();
 
-    m_compositeOps.insert( COMPOSITE_OVER, new KoCompositeOpOver<GrayAU16Traits>( this ) );
-    m_compositeOps.insert( COMPOSITE_ERASE, new KoCompositeOpErase<GrayAU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpOver<GrayAU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpErase<GrayAU16Traits>( this ) );
 }

@@ -29,13 +29,13 @@
 KoLabColorSpace::KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
  KoLcmsColorSpace<KoLabU16Traits>("LABA", i18n("L*a*b* (16-bit integer/channel)"), parent, COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1), icSigLabData, p)
 {
-    m_channels.push_back(new KoChannelInfo(i18n("Lightness"), CHANNEL_L * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(100,100,100)));
-    m_channels.push_back(new KoChannelInfo(i18n("a*"), CHANNEL_A * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(150,150,150)));
-    m_channels.push_back(new KoChannelInfo(i18n("b*"), CHANNEL_B * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(200,200,200)));
-    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
+    addChannel(new KoChannelInfo(i18n("Lightness"), CHANNEL_L * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(100,100,100)));
+    addChannel(new KoChannelInfo(i18n("a*"), CHANNEL_A * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(150,150,150)));
+    addChannel(new KoChannelInfo(i18n("b*"), CHANNEL_B * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(200,200,200)));
+    addChannel(new KoChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
     init();
-    m_compositeOps.insert( COMPOSITE_OVER, new KoCompositeOpOver<KoLabU16Traits>( this ) );
-    m_compositeOps.insert( COMPOSITE_ERASE, new KoCompositeOpErase<KoLabU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpOver<KoLabU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpErase<KoLabU16Traits>( this ) );
 }
 
 bool KoLabColorSpace::willDegrade(ColorSpaceIndependence independence) const

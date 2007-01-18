@@ -51,10 +51,10 @@ KisLmsF32ColorSpace::KisLmsF32ColorSpace(KoColorSpaceRegistry * parent, KoColorP
     , KoF32ColorSpaceTrait(PIXEL_ALPHA * sizeof(float))
     , KoLcmsColorSpaceTrait(F32_LCMS_TYPE, icSig3colorData, 0)
 {
-    m_channels.push_back(new KoChannelInfo(i18n("Long"), PIXEL_LONGWAVE * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KoChannelInfo(i18n("Middle"), PIXEL_MIDDLEWAVE * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KoChannelInfo(i18n("Short"), PIXEL_SHORTWAVE * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32, sizeof(float)));
+    addChannel(new KoChannelInfo(i18n("Long"), PIXEL_LONGWAVE * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
+    addChannel(new KoChannelInfo(i18n("Middle"), PIXEL_MIDDLEWAVE * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
+    addChannel(new KoChannelInfo(i18n("Short"), PIXEL_SHORTWAVE * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
+    addChannel(new KoChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32, sizeof(float)));
 }
 
 KisLmsF32ColorSpace::~KisLmsF32ColorSpace()

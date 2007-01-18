@@ -31,10 +31,10 @@
 KisGrayColorSpace ::KisGrayColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
             KoLcmsColorSpace<GrayU8Traits>("GRAYU8", i18n("Grayscale 8-bit integer/channel)"), parent, TYPE_GRAY_8, icSigGrayData, p)
 {
-    m_channels.push_back(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
+    addChannel(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
 
     init();
 
-    m_compositeOps.insert( COMPOSITE_OVER, new KoCompositeOpOver<GrayU8Traits>( this ) );
-    m_compositeOps.insert( COMPOSITE_ERASE, new KoCompositeOpErase<GrayU8Traits>( this ) );
+    addCompositeOp( new KoCompositeOpOver<GrayU8Traits>( this ) );
+    addCompositeOp( new KoCompositeOpErase<GrayU8Traits>( this ) );
 }

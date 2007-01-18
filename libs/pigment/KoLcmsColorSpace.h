@@ -229,10 +229,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
             KoColorSpace * dstCS;
 
-            if (dstProfile)
-                dstCS = this->m_parent->colorSpace("RGBA", dstProfile);
-            else
-                dstCS = this->m_parent->rgb8();
+            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", dstProfile);
 
             if (data)
                 convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent);

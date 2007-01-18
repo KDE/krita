@@ -268,11 +268,11 @@ namespace {
 KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceRegistry * parent) :
         KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"),  parent, TYPE_GRAY_8, icSigGrayData )
 {
-    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
-    m_compositeOps.insert( COMPOSITE_OVER, new CompositeOver( this ) );
-    m_compositeOps.insert( COMPOSITE_CLEAR,  new CompositeClear( this ) );
-    m_compositeOps.insert( COMPOSITE_ERASE, new CompositeErase( this ) );
-    m_compositeOps.insert( COMPOSITE_SUBTRACT, new CompositeSubtract( this ) );
+    addChannel(new KoChannelInfo(i18n("Alpha"), 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
+    addCompositeOp( new CompositeOver( this ) );
+    addCompositeOp( new CompositeClear( this ) );
+    addCompositeOp( new CompositeErase( this ) );
+    addCompositeOp( new CompositeSubtract( this ) );
 }
 
 KoAlphaColorSpace::~KoAlphaColorSpace()
@@ -353,7 +353,7 @@ bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
 QString KoAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < channelCount());
-    quint32 channelPosition = m_channels[channelIndex]->pos();
+    quint32 channelPosition = channels()[channelIndex]->pos();
 
     return QString().setNum(pixel[channelPosition]);
 }
@@ -361,7 +361,7 @@ QString KoAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channel
 QString KoAlphaColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < channelCount());
-    quint32 channelPosition = m_channels[channelIndex]->pos();
+    quint32 channelPosition = channels()[channelIndex]->pos();
 
     return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
 }

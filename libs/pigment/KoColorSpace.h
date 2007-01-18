@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -125,7 +125,7 @@ protected:
 
 public:
     /// Should be called by real color spaces
-    KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent);
+    KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp );
     virtual ~KoColorSpace();
 
     virtual bool operator==(const KoColorSpace& rhs) const {
@@ -138,10 +138,7 @@ public:
     //========== Channels =====================================================//
 
     /// Return a vector describing all the channels this color model has.
-    virtual Q3ValueVector<KoChannelInfo *> channels() const
-    {
-        return m_channels;
-    }
+    virtual Q3ValueVector<KoChannelInfo *> channels() const;
 
     /**
      * The total number of channels for a single pixel in this color model
@@ -202,12 +199,12 @@ public:
     /**
      * ID for use in files and internally: unchanging name
      */
-    virtual QString id() const {return m_id;};
+    virtual QString id() const;
 
     /**
      * i18n name.
      */
-    virtual QString name() const {return m_name;};
+    virtual QString name() const;
 
     /**
      * lcms colorspace type definition.
@@ -473,34 +470,23 @@ public:
     /**
      * Mix the colors given their weights and return in dst
      * The sum of weights is assumed 255 */
-    inline KDE_DEPRECATED void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
-    {
-      Q_ASSERT(m_mixColorsOp);
-      m_mixColorsOp->mixColors(colors, weights, nColors, dst);
-    }
+    KDE_DEPRECATED void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
     /**
      * @return the mix color operation of this colorspace (do not delete it locally, it's deleted by the colorspace).
      */
-    inline KoMixColorsOp* mixColorsOp() const {
-      return m_mixColorsOp;
-    }
+    virtual KoMixColorsOp* mixColorsOp() const;
 
     /**
      * Convolve the given array of pointers to pixels and return the result
      * in dst. The kernel values are clamped between -128 and 128
      */
-    inline KDE_DEPRECATED void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const
-    {
-      Q_ASSERT(m_convolutionOp);
-      m_convolutionOp->convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nPixels);
-    }
+    KDE_DEPRECATED void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const;
+    
     /**
      * @return the convolution operation of this colorspace (do not delete it locally, it's deleted by the colorspace).
      */
-    inline KoConvolutionOp* convolutionOp() const {
-      return m_convolutionOp;
-    }
+    virtual KoConvolutionOp* convolutionOp() const;
 
     /**
      * Calculate the intensity of the given pixel, scaled down to the range 0-255. XXX: Maybe this should be more flexible
@@ -599,19 +585,15 @@ public:
      */
     virtual Q3ValueList<KisFilter*> createBackgroundFilters() const
         { return Q3ValueList<KisFilter*>(); };
-
-private:
-
-    QString m_id;
-    QString m_name;
-
 protected:
-    KoColorSpaceRegistry * m_parent;
-    Q3ValueVector<KoChannelInfo *> m_channels;
-    QHash<QString, KoCompositeOp *> m_compositeOps;
-    mutable Q3MemArray<quint8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
-    KoMixColorsOp* m_mixColorsOp;
-    KoConvolutionOp* m_convolutionOp;
+    /**
+     * Use this function in the constructor of your colorspace to add the information about a channel.
+     * @param ci a pointer to the information about a channel
+     */
+    virtual void addChannel(KoChannelInfo * ci);
+private:
+    class Private;
+    Private* d;
 };
 
 class KoColorSpaceFactory {

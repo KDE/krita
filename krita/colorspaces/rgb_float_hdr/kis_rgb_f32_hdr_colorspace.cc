@@ -37,11 +37,11 @@
 KisRgbF32HDRColorSpace::KisRgbF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile */*p*/)
 : KisRgbFloatHDRColorSpace<RgbF32Traits>("RGBAF32", i18n("RGB (32-bit float/channel) for High Dynamic Range imaging"), parent, RGBAF32FLOAT_LCMS_TYPE)
 {
-    m_channels.push_back(new KoChannelInfo(i18n("Red"), 2 * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(255,0,0)));
-    m_channels.push_back(new KoChannelInfo(i18n("Green"), 1 * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(0,255,0)));
-    m_channels.push_back(new KoChannelInfo(i18n("Blue"), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(double), QColor(0,0,255)));
-    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 3 * sizeof(float), KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32));
+    addChannel(new KoChannelInfo(i18n("Red"), 2 * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(255,0,0)));
+    addChannel(new KoChannelInfo(i18n("Green"), 1 * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(0,255,0)));
+    addChannel(new KoChannelInfo(i18n("Blue"), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(double), QColor(0,0,255)));
+    addChannel(new KoChannelInfo(i18n("Alpha"), 3 * sizeof(float), KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32));
 
-    m_compositeOps.insert( COMPOSITE_OVER, new KoCompositeOpOver<RgbF32Traits>( this ) );
-    m_compositeOps.insert( COMPOSITE_ERASE, new KoCompositeOpErase<RgbF32Traits>( this ) );
+    addCompositeOp( new KoCompositeOpOver<RgbF32Traits>( this ) );
+    addCompositeOp( new KoCompositeOpErase<RgbF32Traits>( this ) );
 }

@@ -36,7 +36,7 @@ namespace {
         public:
 
             explicit CompositeCopy(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Copy" ) )
+            : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Copy" ) )
             {
             }
 
@@ -197,10 +197,12 @@ template<class _CSTraits>
 class KoColorSpaceAbstract : public KoColorSpace {
     public:
         KoColorSpaceAbstract(const QString &id, const QString &name, KoColorSpaceRegistry * parent, DWORD cmType,
-                         icColorSpaceSignature colorSpaceSignature) : KoColorSpace(id, name, parent), m_cmType(cmType), m_colorSpaceSignature(colorSpaceSignature) {
-            this->m_compositeOps.insert( COMPOSITE_COPY, new CompositeCopy( this ) );
-            m_mixColorsOp = new KoMixColorsOpImpl< _CSTraits>();
-            m_convolutionOp = new KoConvolutionOpImpl< _CSTraits>();
+                         icColorSpaceSignature colorSpaceSignature ) :
+            KoColorSpace(id, name, parent, new KoMixColorsOpImpl< _CSTraits>(), new KoConvolutionOpImpl< _CSTraits>()),
+            m_cmType(cmType),
+            m_colorSpaceSignature(colorSpaceSignature)
+        {
+            this->addCompositeOp( new CompositeCopy( this ) );
         };
         
         virtual void setColorSpaceType(quint32 type) { m_cmType = type; }

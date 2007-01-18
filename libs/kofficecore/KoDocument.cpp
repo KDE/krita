@@ -2367,7 +2367,7 @@ QByteArray KoDocument::nativeFormatMimeType() const
     if ( nativeMimeType.isEmpty() ) {
         // shouldn't happen, let's find out why it happened
         if ( !service->serviceTypes().contains( "KOfficePart" ) )
-            kWarning(30003) << "Wrong desktop file, KOfficePart isn't mentionned" << endl;
+            kWarning(30003) << "Wrong desktop file, KOfficePart isn't mentioned" << endl;
         else if ( !KServiceType::serviceType( "KOfficePart" ) )
             kWarning(30003) << "The KOfficePart service type isn't installed!" << endl;
         else

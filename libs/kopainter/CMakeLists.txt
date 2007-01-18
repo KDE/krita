@@ -4,6 +4,7 @@ include_directories( ${KOFFICECORE_INCLUDES} ${KOFFICEUI_INCLUDES} ${PIGMENT_INC
 ########### next target ###############
 
 set(kopainter_LIB_SRCS
+   KoColorDocker.cpp
    svgpathparser.cc
    KoResourceChooser.cpp
    kogradientmanager.cc

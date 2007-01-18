@@ -23,12 +23,10 @@
 #ifndef __KO_COLOR_DOCKER_H__
 #define __KO_COLOR_DOCKER_H__
 
-#include <QMouseEvent>
-#include <KoColor.h>
+#include <QDockWidget>
+
 #include <KoDockFactory.h>
 
-class QDockWidget;
-class KarbonView;
 class KoUniColorChooser;
 
 /**
@@ -37,44 +35,28 @@ class KoUniColorChooser;
    just a band of colors -- and have the unified color selector popup.
    This just takes a tad too much place.
 */
-class KoColorDocker : public QDockWidget
+class KOPAINTER_EXPORT KoColorDocker : public QDockWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	 KoColorDocker();
-	 virtual ~KoColorDocker();
-
-	 KoColor color() { return m_color; }
-
-	virtual void update();
-
-signals:
-	void fgColorChanged( const QColor &c );
-	void bgColorChanged( const QColor &c );
-
-private slots:
-	void updateColor( const KoColor &c );
-	void updateFgColor(const KoColor &c);
-	void updateBgColor(const KoColor &c);
+    KoColorDocker();
+    virtual ~KoColorDocker();
 
 private:
-	virtual void mouseReleaseEvent( QMouseEvent *e );
-
-	KoUniColorChooser *m_colorChooser;
-	KoColor m_color;
-	KoColor m_oldColor;
+    KoUniColorChooser *m_colorChooser;
 };
 
 
-class KoColorDockerFactory : public KoDockFactory
+class KOPAINTER_EXPORT KoColorDockerFactory : public KoDockFactory
 {
 public:
-    KoColorDockerFactory();
+    KoColorDockerFactory() {}
+    ~KoColorDockerFactory() {}
 
-    virtual QString dockId() const;
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
-    virtual KoColorDocker * createDockWidget();
+    QString dockId() const;
+    Qt::DockWidgetArea defaultDockWidgetArea() const;
+    QDockWidget * createDockWidget();
 };
 
 #endif

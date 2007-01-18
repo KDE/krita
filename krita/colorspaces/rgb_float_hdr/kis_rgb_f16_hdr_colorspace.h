@@ -22,13 +22,13 @@
 #include "kis_rgb_float_hdr_colorspace.h"
 
 #include <half.h>
-#include <krita_rgbf32_export.h>
+#include <krita_rgbf16_export.h>
 
 #include <KoColorSpaceTraits.h>
 
 typedef KoRgbTraits<half> RgbF16Traits;
 
-class KRITA_RGBF32_EXPORT KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
+class KRITA_RGBF16_EXPORT KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
 {
     public:
         KisRgbF16HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
@@ -43,7 +43,7 @@ class KRITA_RGBF32_EXPORT KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpa
 // FIXME: lcms doesn't support 16-bit float
 #define RGBAF16HALF_LCMS_TYPE TYPE_BGRA_16
 
-class KRITAGRAYSCALE_EXPORT KisRgbF16HDRColorSpaceFactory : public KoColorSpaceFactory
+class KRITA_RGBF16_EXPORT KisRgbF16HDRColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**

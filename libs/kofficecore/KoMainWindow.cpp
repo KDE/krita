@@ -887,6 +887,14 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
                 break;
             }
 
+            // adjust URL before doing checks on whether the file exists.
+            if ( specialOutputFlag == KoDocument::SaveAsDirectoryStore ) {
+                QString fileName = newURL.fileName();
+                if ( fileName != "content.xml"  ) {
+                    newURL.addPath( "content.xml" );
+                }
+            }
+
             // this file exists and we are not just clicking "Save As" to change filter options
             // => ask for confirmation
             if ( KIO::NetAccess::exists( newURL, false /*will write*/, this ) && !justChangingFilterOptions )

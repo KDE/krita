@@ -55,7 +55,7 @@ public:
     /// The type of inlineObject this factory creates.
     enum ObjectType {
         TextVariable,   ///< The factory creates KoVariable inherting objects.
-        Other = 0x100,  ///< The factory creates objects that should not be shown in any menu
+        Other = 0x100  ///< The factory creates objects that should not be shown in any menu
     };
 
     /**

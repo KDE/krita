@@ -22,7 +22,7 @@
 #include <QObject>
 #include <krita_export.h>
 
-class KRITAUI_EXPORT KisProgressSubject : public QObject {
+class KRITAIMAGE_EXPORT KisProgressSubject : public QObject {
     Q_OBJECT
 
 protected:

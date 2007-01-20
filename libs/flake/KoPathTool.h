@@ -52,6 +52,7 @@ public:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
 
+public slots:
     void activate (bool temporary=false);
     void deactivate();
 

@@ -1,0 +1,100 @@
+KDE_CHECK_LIB(Xi, XOpenDisplay, [
+	LIB_XINPUTEXT="-lXi"
+	AC_DEFINE(HAVE_XINPUTEXT, 1, [Define if you have the X11 Input Extension])
+	])
+AC_SUBST(LIB_XINPUTEXT)
+
+# Check for lcms
+AC_MSG_CHECKING([for lcms >= 1.12])
+
+have_lcms_header='no'
+KDE_CHECK_HEADER(lcms/lcms.h,have_lcms_header='yes',,)
+if test "$have_lcms_header" = 'yes'
+then
+        AC_DEFINE(LCMS_HEADER, <lcms/lcms.h>, [The correct header])
+
+	echo "#include <lcms/lcms.h>" > conftest.$ac_ext
+	echo "#if LCMS_VERSION < 112" >> conftest.$ac_ext
+	echo "#error Need lcms >= 1.12" >> conftest.$ac_ext
+	echo "#endif" >> conftest.$ac_ext
+	echo "int main() {}" >> conftest.$ac_ext
+
+else
+        # Alternative! Debian does it this way...
+	KDE_CHECK_HEADER(lcms.h,have_lcms_header='yes',,)
+
+       	AC_DEFINE(LCMS_HEADER, <lcms.h>, [The correct header])
+
+	echo "#include <lcms.h>" > conftest.$ac_ext
+	echo "#if LCMS_VERSION < 112" >> conftest.$ac_ext
+	echo "#error Need lcms >= 1.12" >> conftest.$ac_ext
+	echo "#endif" >> conftest.$ac_ext
+	echo "int main() {}" >> conftest.$ac_ext
+fi
+
+
+ac_link='$LIBTOOL_SHELL --mode=link ${CXX-g++} -o conftest $CXXFLAGS $all_includes $CPPFLAGS $LDFLAGS $all_libraries conftest.$ac_ext -llcms 1>&5'
+
+if AC_TRY_EVAL(ac_link) && test -s conftest; then
+    	AC_MSG_RESULT(yes)
+        HAVELCMS="yes"
+        LCMS_LIBS="-llcms"
+else
+	AC_MSG_RESULT(no)
+	HAVELCMS="no"
+	LCMS_LIBS=""
+        DO_NOT_COMPILE="$DO_NOT_COMPILE krita"
+fi
+
+AC_SUBST(LCMS_LIBS)
+
+# Check if the 1.14 version of lcms is detected
+if test ! "$LCMS_LIBS" = ""
+then
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE(
+   [#include LCMS_HEADER
+     #if LCMS_VERSION == 114
+     #error lcms 1.14 detected
+     #endif ] , [ ], lcms_version_114='no', lcms_version_114='yes' )
+AC_LANG_RESTORE
+fi
+
+# IM 6.1.3 changed the number of arguments to GetMagickInfoList
+
+AC_MSG_CHECKING(if GetMagickInfoList has only 2 arguments)
+CPPFLAGS_TMP="$CPPFLAGS"   # Save preprocessor flags
+CPPFLAGS="$LIBMAGICK_CPPFLAGS"
+
+AC_TRY_COMPILE(
+	[#include <stdio.h>
+	#if HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+	#endif
+	#include "magick/api.h"],
+	[const char *pattern; unsigned long ncolors; (void)GetMagickInfoList(pattern, &ncolors)],
+	magick_info_list='yes',
+	magick_info_list='no')
+
+CPPFLAGS="$CPPFLAGS_TMP"  # Restore preprocessor flags
+
+if test "$magick_info_list" = 'yes'; then
+	AC_MSG_RESULT(yes)
+  AC_DEFINE([HAVE_OLD_GETMAGICKINFOLIST], 1, [GetMagickInfoList has different number of arguments with versions >= 6.1.3])
+else
+	AC_MSG_RESULT(no)
+fi
+
+# Check for kunittest
+AC_MSG_CHECKING([for kunittest])
+
+have_kunittest_header="no"
+KDE_CHECK_HEADER(kunittest/tester.h, have_kunittest_header="yes", , )
+AM_CONDITIONAL(include_kunittest_tests, test "$have_kunittest_header" = "yes")
+
+# --- OpenGL check ---
+
+AC_HAVE_GL( [], [] )
+
+# --- End of OpenGL check ---

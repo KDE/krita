@@ -30,7 +30,7 @@ namespace Scripting {
  * The Progress object enables displaying of a progressbar
  * in Krita to visualize the progress your script makes.
  */
-class KRITASCRIPTING_EXPORT Progress : public KisProgressSubject
+class KROSSKRITACORE_EXPORT Progress : public KisProgressSubject
 {
         Q_OBJECT
     public:

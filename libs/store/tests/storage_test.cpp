@@ -213,12 +213,14 @@ int main( int argc, char **argv )
 {
     KCmdLineArgs::init( argc, argv, "storage_test", "Storage Test", "A test for the KoStore classes", "1" );
     //KApplication::disableAutoDcopRegistration();
-    KApplication app(false);
+    KApplication app(true); // SCHAAP: Instead of using a GUI, try and find a way to test with setPassword
 
     if ( test( "Tar", KoStore::Tar, "test.tgz" ) != 0 )
       return 1;
     if ( test( "Directory", KoStore::Directory, "testdir/maindoc.xml" ) != 0 )
       return 1;
     if ( test( "Zip", KoStore::Zip, "test.zip" ) != 0 )
+      return 1;
+    if ( test( "Encrypted", KoStore::Encrypted, "testEncrypted.zip" ) != 0 )
       return 1;
 }

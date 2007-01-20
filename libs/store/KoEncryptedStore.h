@@ -30,6 +30,9 @@ class QByteArray;
 class QIODevice;
 class QWidget;
 class KUrl;
+class KZip;
+class KArchiveDirectory;
+class KTemporaryFile;
 class KoZipStore;
 struct KoEncryptedStore_EncryptionData;
 
@@ -40,47 +43,6 @@ public:
     KoEncryptedStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification );
     KoEncryptedStore( QWidget* window, const KUrl& url, const QString & filename, Mode _mode, const QByteArray & appIdentification );
     ~KoEncryptedStore();
-
-    /**
-     * Creates a KoStore to read a ZIP-file.
-     *
-     * This method will return a KoEncryptedStore if the file is encrypted or a KoZipStore if it's not.
-     * It is advisable to use to function when trying to read a ZIP-file: this function contains the logic to determine if a ZIP
-     * is encrypted and will give you the fastest KoStore to read the file that will actually work.
-     *
-     * The arguments are the same as in the constructors.
-     *
-     * @return  A store to read the file.
-     */
-    // Creating a KoEncryptedStore will give more overhead and a KoZipStore can't decrypt encrypted files
-    static KoStore* createEncryptedStoreReader( const QString & filename, const QByteArray & appIdentification );
-    /**
-     * Creates a KoStore to read a ZIP-file.
-     *
-     * This method will return a KoEncryptedStore if the file is encrypted or a KoZipStore if it's not.
-     * It is advisable to use to function when trying to read a ZIP-file: this function contains the logic to determine if a ZIP
-     * is encrypted and will give you the fastest KoStore to read the file that will actually work.
-     *
-     * The arguments are the same as in the constructors.
-     *
-     * @return  A store to read the device.
-     */
-    // Creating a KoEncryptedStore will give more overhead and a KoZipStore can't decrypt encrypted files
-    static KoStore* createEncryptedStoreReader( QIODevice *dev, const QByteArray & appIdentification );
-
-    /**
-     * Creates a KoStore to read a ZIP-file.
-     *
-     * This method will return a KoEncryptedStore if the file is encrypted or a KoZipStore if it's not.
-     * It is advisable to use to function when trying to read a ZIP-file: this function contains the logic to determine if a ZIP
-     * is encrypted and will give you the fastest KoStore to read the file that will actually work.
-     *
-     * The arguments are the same as in the constructors.
-     *
-     * @return  A store to read the url.
-     */
-    // Creating a KoEncryptedStore will give more overhead and a KoZipStore can't decrypt encrypted files
-    static KoStore* createEncryptedStoreReader( QWidget* window, const KUrl& url, const QString & filename, const QByteArray & appIdentification );
 
     /**
      * Sets the password to be used for decryption or encryption of the file.
@@ -94,16 +56,6 @@ public:
      */
     bool setPassword( const QString& password );
 
-protected:
-    virtual bool init( Mode mode, const QByteArray& appIdentification );
-    virtual bool openWrite( const QString& name );
-    virtual bool openRead( const QString& name );
-    virtual bool closeWrite();
-    virtual bool closeRead();
-    virtual bool enterRelativeDirectory( const QString& dirName );
-    virtual bool enterAbsoluteDirectory( const QString& path );
-    virtual bool fileExists( const QString& absPath ) const;
-
     /**
      * Returns whether a store opened for reading is actually encrypted.
      * This function will always return true in Write-mode.
@@ -112,15 +64,16 @@ protected:
      */
     bool isEncrypted( );
 
-    /**
-     * Internal function.
-     * Rips the zip-store that drives the encrypted store from it. The encrypted store won't work anymore after this.
-     * Never use this function once a writing action has begun: the encryption-data will be lost and so will all data that
-     * has been written.
-     *
-     * @return  The KoZipStore driving this store.
-     */
-    KoZipStore *ripZipStore( );
+protected:
+    virtual bool init( Mode mode, const QByteArray& appIdentification );
+    virtual bool doFinalize( );
+    virtual bool openWrite( const QString& name );
+    virtual bool openRead( const QString& name );
+    virtual bool closeWrite();
+    virtual bool closeRead();
+    virtual bool enterRelativeDirectory( const QString& dirName );
+    virtual bool enterAbsoluteDirectory( const QString& path );
+    virtual bool fileExists( const QString& absPath ) const;
 
     /**
      * Tries and find a password for this document in KWallet.
@@ -136,30 +89,22 @@ protected:
 
 private:
     QSecureArray decryptFile( QSecureArray & encryptedFile, KoEncryptedStore_EncryptionData & encData, QSecureArray & password );
-    QString normalizedFullPath( const QString& fullpath );
-    QString filenameOnly( const QString& fullpath );
-    bool initBackend( );
-    /* Deferred loading is used to prevent dataloss because the backend store would have opened the file,
-     * but the user won't provide a password. The backend store is not loaded until a password is provided,
-     * so files are not overwritten until they *can* be overwritten.
-     */
-    // Temporary store for a possible url, used for deferred loading of the backend store
-    KUrl m_init_url;
-    // Temporary store for a possible device, used for deferred loading of the backend store
-    QIODevice *m_init_dev;
-    // A flag used for deferred loading of the backend store
-    bool m_init_deferred;
-    // Temporary store for the application identification, used for deferred loading of the backend store
-    QByteArray m_init_appIdentification;
+
+    /** returns true if the file should be encrypted, false otherwise **/
+    bool isToBeEncrypted( const QString& fullpath );
 
 protected:
     QCA::Initializer m_qcaInit;
     QHash<QString, KoEncryptedStore_EncryptionData> m_encryptionData;
-    KoZipStore *m_store;
     QSecureArray m_password;
-    QWidget *m_window;
     QString m_filename;
     QByteArray m_manifestBuffer;
+    KZip *m_pZip;
+    KTemporaryFile *m_tempFile;
+
+    /** In "Read" mode this pointer is pointing to the
+    current directory in the archive to speed up the verification process */
+    const KArchiveDirectory* m_currentDir;
 };
 
 #endif

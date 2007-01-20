@@ -88,8 +88,8 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QByteAr
   case Zip:
 #ifdef QCA2
     if( automatic && mode == Read ) {
-        // Determines if the ZIP-store is encrypted and gives us the fastest reader that can read the store
-        return KoEncryptedStore::createEncryptedStoreReader( fileName, appIdentification );
+        // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
+        return new KoEncryptedStore( fileName, Read, appIdentification );
     }
 #endif
     return new KoZipStore( fileName, mode, appIdentification );
@@ -130,8 +130,8 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QByteArray & 
   case Zip:
 #ifdef QCA2
     if( automatic && mode == Read ) {
-        // Determines if the ZIP-store is encrypted and gives us the fastest reader that can read the store
-        return KoEncryptedStore::createEncryptedStoreReader( device, appIdentification );
+        // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
+        return new KoEncryptedStore( device, Read, appIdentification );
     }
 #endif
     return new KoZipStore( device, mode, appIdentification );
@@ -184,8 +184,8 @@ KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, cons
   case Zip:
 #ifdef QCA2
     if( automatic && mode == Read ) {
-        // Determines if the ZIP store is encrypted and gives the fastest reader that can read the store
-        return KoEncryptedStore::createEncryptedStoreReader( window, url, tmpFile, appIdentification );
+        // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
+        return new KoEncryptedStore( window, url, tmpFile, Read, appIdentification );
     }
 #endif
     return new KoZipStore( window, url, tmpFile, mode, appIdentification );

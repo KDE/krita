@@ -427,6 +427,10 @@ void KoInteractionTool::activate(bool temporary) {
     repaintDecorations();
 }
 
+void KoInteractionTool::deactivate() {
+    repaintDecorations();
+}
+
 // ##########  SelectionDecorator ############
 QImage * SelectionDecorator::s_rotateCursor=0;
 static KStaticDeleter<QImage> staticRotateCursorDeleter;

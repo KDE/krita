@@ -74,6 +74,7 @@ public:
 
 public slots:
     void activate(bool temporary = false);
+    void deactivate();
 
 public: // Events
 

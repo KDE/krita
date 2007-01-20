@@ -44,8 +44,7 @@ void KoPathBaseCommand::repaint( bool normalizeShapes )
     {
         if( normalizeShapes )
             shape->normalize();
-        // TODO use the proper adjustment if the actual point size could be retrieved
-        shape->repaint( shape->outline().controlPointRect().adjusted( -5.0, -5.0, 5.0, 5.0 ) );
+        shape->repaint();
     }
 }
 

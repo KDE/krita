@@ -43,6 +43,8 @@ public:
 
     void paint( QPainter &painter, KoViewConverter &converter );
 
+    void repaintDecorations();
+
     void mousePressEvent( KoPointerEvent *event );
     void mouseDoubleClickEvent( KoPointerEvent *event );
     void mouseMoveEvent( KoPointerEvent *event );
@@ -98,6 +100,8 @@ private:
         virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0; 
         virtual void repaint() const = 0;
         virtual void mousePressEvent( KoPointerEvent *event ) = 0;
+        // test if handle is still valid 
+        virtual bool check() = 0;
 
         KoPathTool *m_tool;
     };
@@ -113,6 +117,7 @@ private:
         void paint( QPainter &painter, KoViewConverter &converter );
         void repaint() const;
         void mousePressEvent( KoPointerEvent *event );
+        bool check();
 
         KoPathPoint *m_activePoint;
         KoPathPoint::KoPointType m_activePointType;
@@ -129,6 +134,7 @@ private:
         void paint( QPainter &painter, KoViewConverter &converter );
         void repaint() const;
         void mousePressEvent( KoPointerEvent *event );
+        bool check();
 
         KoParameterShape *m_parameterShape;
         int m_handleId;
@@ -225,6 +231,17 @@ private:
          * @brief trigger a repaint
          */
         void repaint();
+
+        /**
+         * @brief Update the selection to contain only valid points
+         *
+         * This function checks which points are no longer valid and removes them
+         * from the selection.
+         * If e.g. some points are selected and the shape which contains the points
+         * is removed by undo, the points are no longer valid and have therefore to 
+         * be removed from the selection.
+         */
+        void update();
 
     private:
         QSet<KoPathPoint *> m_selectedPoints;

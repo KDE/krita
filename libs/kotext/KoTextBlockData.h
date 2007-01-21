@@ -37,7 +37,7 @@ public:
     /// return if this block has up-to-date counter data
     bool hasCounterData() const;
     /// return the width (in pt) of the counter.
-    double counterWidth() const { return m_counterWidth; }
+    double counterWidth() const;
     /// set the width of the counter in pt.
     void setCounterWidth(double width) { m_counterWidth = width; }
     /// return the spacing (in pt) between the counter and the text

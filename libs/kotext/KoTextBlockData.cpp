@@ -35,6 +35,10 @@ bool KoTextBlockData::hasCounterData() const {
     return m_counterWidth >= 0 && !m_counterText.isNull();
 }
 
+double KoTextBlockData::counterWidth() const {
+    return qMax(0., m_counterWidth);
+}
+
 void KoTextBlockData::setBorder(KoTextBlockBorderData *border) {
     if(m_border && m_border->removeUser() == 0)
         delete m_border;

@@ -71,6 +71,10 @@
 //#define KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
 //#define KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
 //#define KROSS_PYTHON_EXTENSION_CALL_DEBUG
+//#define KROSS_PYTHON_EXTENSION_CONNECT_DEBUG
+
+// Enable debugging for Kross::Function
+//#define KROSS_PYTHON_FUNCTION_DEBUG
 
 // Enable debugging for Kross::PythonType and Kross::PythonMetaTypeFactory
 //#define KROSS_PYTHON_VARIANT_DEBUG

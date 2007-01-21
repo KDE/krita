@@ -18,77 +18,87 @@
  ***************************************************************************/
 
 #include "rubycallcache.h"
-
+#include "rubyvariant.h"
 
 #include <QVariant>
-        
-#include <rubyvariant.h>
-        
+#include <QMetaObject>
+#include <QMetaMethod>
+
 namespace Kross {
-    struct RubyCallCachePrivate {
-        RubyCallCachePrivate(QObject* nobject, int nmethodindex, bool nhasreturnvalue, int nreturnTypeId, int nreturnMetaTypeId, QVarLengthArray<int> nvariantargs) :
-                object(nobject), methodindex(nmethodindex), hasreturnvalue(nhasreturnvalue), returnTypeId(nreturnTypeId), returnMetaTypeId(nreturnMetaTypeId), varianttypes(nvariantargs)
+
+    struct RubyCallCachePrivate
+    {
+        RubyCallCachePrivate(QObject* nobject, int nmethodindex, bool nhasreturnvalue, int nreturnTypeId, QVarLengthArray<int> nvariantargs)
+            : object(nobject), methodindex(nmethodindex), hasreturnvalue(nhasreturnvalue), returnTypeId(nreturnTypeId), varianttypes(nvariantargs)
         {
-            
         }
         QObject* object;
         int methodindex;
         bool hasreturnvalue;
         int returnTypeId;
-        int returnMetaTypeId;
         QVarLengthArray<int> varianttypes;
         static VALUE s_rccObject;
     };
+
     VALUE RubyCallCachePrivate::s_rccObject = 0;
-    RubyCallCache::RubyCallCache(QObject* object, int methodindex, bool hasreturnvalue, int returnTypeId, int returnMetaTypeId, QVarLengthArray<int> variantargs) :
-            d(new RubyCallCachePrivate(object, methodindex, hasreturnvalue, returnTypeId, returnMetaTypeId, variantargs)), m_self(0)
+
+    RubyCallCache::RubyCallCache(QObject* object, int methodindex, bool hasreturnvalue, int returnTypeId, QVarLengthArray<int> variantargs)
+        : d(new RubyCallCachePrivate(object, methodindex, hasreturnvalue, returnTypeId, variantargs)), m_self(0)
     {
     }
+
     RubyCallCache::~RubyCallCache()
     {
         delete d;
     }
-    
+
     VALUE RubyCallCache::execfunction( int argc, VALUE *argv )
     {
-        Q_UNUSED( argc );
-
         int typelistcount = d->varianttypes.count();
         QVarLengthArray<MetaType*> variantargs( typelistcount );
         QVarLengthArray<void*> voidstarargs( typelistcount );
 
-        // set the return value
-        if(d->hasreturnvalue) {
-            MetaType* returntype;
-            if(d->returnTypeId != QVariant::Invalid) {
-                returntype = new MetaTypeVariant< QVariant >( QVariant( (QVariant::Type) d->returnTypeId ) );
-            }
-            else {
-                if(d->returnMetaTypeId == QMetaType::Void) {
-                    returntype = new MetaTypeVariant< QVariant >( QVariant() );
-                }
-                else {
-                    //if (id != -1) {
-                    void* myClassPtr = QMetaType::construct(d->returnMetaTypeId, 0);
-                    //QMetaType::destroy(id, myClassPtr);
-                    returntype = new MetaTypeVoidStar( d->returnMetaTypeId, myClassPtr );
-                }
-            }
+        #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            QMetaMethod metamethod = d->object->metaObject()->method(d->methodindex);
+            krossdebug( QString("RubyCallCache::execfunction signature=%1 typeName=%2 argc=%3 typelistcount=%4").arg(metamethod.signature()).arg(metamethod.typeName()).arg(argc).arg(typelistcount) );
+            for(int i = 0; i < d->varianttypes.count(); ++i)
+                krossdebug( QString("  argument index=%1 typeId=%2 typeName=%3").arg(i).arg(d->varianttypes[i]).arg(QVariant::typeToName( (QVariant::Type)d->varianttypes[i] )) );
+        #endif
 
+        Q_ASSERT(argc >= typelistcount);
+
+        // set the return value
+        if(d->hasreturnvalue)
+        {
+            void* ptr = QMetaType::construct(d->returnTypeId, 0);
+            MetaType* returntype = new MetaTypeVoidStar( d->returnTypeId, ptr, true );
+            /*
+            MetaType* returntype;
+            if(d->returnTypeId != QVariant::Invalid)
+                returntype = new MetaTypeVariant< QVariant >( QVariant( (QVariant::Type) d->returnTypeId, 0 ) );
+            else
+                if(d->returnTypeId == QMetaType::Void)
+                    returntype = new MetaTypeVariant< QVariant >( QVariant() );
+                else {
+                    void* myClassPtr = QMetaType::construct(d->returnTypeId, 0);
+                    returntype = new MetaTypeVoidStar( d->returnTypeId, myClassPtr, false );
+                }
+            }
+            */
             variantargs[0] = returntype;
             voidstarargs[0] = returntype->toVoidStar();
         }
-        else {
+        else
+        {
             variantargs[0] = 0;
             voidstarargs[0] = (void*)0;
         }
-        
-                //Set the arguments values
-        
-        for(int idx = 1; idx < typelistcount; ++idx) {
-            MetaType* metatype = RubyMetaTypeFactory::create( d->varianttypes[idx ], argv[idx]);
-            if(! metatype) {
-                // Seems RubyMetaTypeFactory::create returned an invalid RubyType.
+
+        // set the arguments values
+        for(int idx = 1; idx < typelistcount; ++idx)
+        {
+            MetaType* metatype = RubyMetaTypeFactory::create( d->varianttypes[idx], argv[idx] );
+            if(! metatype) { // Seems RubyMetaTypeFactory::create returned an invalid RubyType.
                 krosswarning( QString("RubyExtension::callMetaMethod Aborting cause RubyMetaTypeFactory::create returned NULL.") );
                 for(int i = 0; i < idx; ++i) // Clear already allocated instances.
                     delete variantargs[i];
@@ -98,8 +108,7 @@ namespace Kross {
             voidstarargs[idx] = metatype->toVoidStar();
         }
 
-        
-                // call the method now
+        // call the method now
         int r = d->object->qt_metacall(QMetaObject::InvokeMetaMethod, d->methodindex, &voidstarargs[0]);
         #ifdef KROSS_RUBY_EXTENSION_DEBUG
             krossdebug( QString("RESULT nr=%1").arg(r) );
@@ -107,25 +116,28 @@ namespace Kross {
             Q_UNUSED(r);
         #endif
 
-                // eval the return-value
+        // free the arguments
         for(int idx = 1; idx < typelistcount; ++idx)
         {
             delete variantargs[idx];
         }
-        if(d->hasreturnvalue) {
-            int tp = d->returnTypeId;
-            if(tp == QVariant::UserType /*|| tp == QVariant::Invalid*/) {
-                tp = d->returnMetaTypeId;
-                //QObject* obj = (*reinterpret_cast< QObject*(*)>( variantargs[0]->toVoidStar() ));
-            }
-            QVariant result (tp, variantargs[0]->toVoidStar());
+
+        // eval the return-value
+        if(d->hasreturnvalue)
+        {
+            QVariant result(variantargs[0]->typeId(), variantargs[0]->toVoidStar());
             #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                krossdebug( QString("Returnvalue id=%1 metamethod.typename=%2 variant.toString=%3 variant.typeName=%4").arg(tp).arg(metamethod.typeName()).arg(result.toString()).arg(result.typeName()) );
+                QMetaMethod metamethod = d->object->metaObject()->method(d->methodindex);
+                krossdebug( QString("RubyExtension::callMetaMethod Returnvalue typeId=%1 metamethod.typename=%2 variant.toString=%3 variant.typeName=%4").arg(variantargs[0]->typeId()).arg(metamethod.typeName()).arg(result.toString()).arg(result.typeName()) );
             #endif
+            // free the return argument
+            delete variantargs[0];
+            // return the result
             return result.isNull() ? 0 : RubyType<QVariant>::toVALUE(result);
         }
         return 0;
     }
+
     void RubyCallCache::delete_object(void* object)
     {
         #ifdef KROSS_RUBY_EXTENSION_DEBUG
@@ -135,6 +147,7 @@ namespace Kross {
         delete extension;
         extension = 0;
     }
+
     VALUE RubyCallCache::method_cacheexec(int argc, VALUE *argv, VALUE self)
     {
         #ifdef KROSS_RUBY_EXTENSION_DEBUG
@@ -144,6 +157,7 @@ namespace Kross {
         Data_Get_Struct(self, RubyCallCache, callcache);
         return callcache->execfunction(argc, argv);
     }
+
     VALUE RubyCallCache::toValue()
     {
         if(m_self == 0)
@@ -157,4 +171,5 @@ namespace Kross {
         }
         return m_self;
     }
+
 }

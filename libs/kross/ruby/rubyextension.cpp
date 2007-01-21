@@ -178,55 +178,37 @@ VALUE RubyExtension::callMetaMethod(const QByteArray& funcname, int argc, VALUE 
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
         krossdebug( QString("QMetaMethod idx=%1 sig=%2 tag=%3 type=%4").arg(methodindex).arg(metamethod.signature()).arg(metamethod.tag()).arg(metamethod.typeName()) );
     #endif
-    
+
     QList<QByteArray> typelist = metamethod.parameterTypes();
     const int typelistcount = typelist.count();
     bool hasreturnvalue = strcmp(metamethod.typeName(),"") != 0;
 
     // exact 1 returnvalue + 0..9 arguments
     Q_ASSERT(typelistcount <= 10);
-    QVarLengthArray<MetaType*> variantargs( typelistcount + 1 );
-    QVarLengthArray<void*> voidstarargs( typelistcount + 1 );
+    //QVarLengthArray<MetaType*> variantargs( typelistcount + 1 );
+    //QVarLengthArray<void*> voidstarargs( typelistcount + 1 );
     QVarLengthArray<int> varianttypes( typelistcount + 1 );
-    
+
     // set the return type
     int returnTypeId = QVariant::Invalid;
-    int returnMetaTypeId = QMetaType::Void;
     if(hasreturnvalue) {
         returnTypeId = QVariant::nameToType( metamethod.typeName() );
-        if(returnTypeId != QVariant::Invalid) {
-            if(returnTypeId == QVariant::UserType)
-            {
-                returnMetaTypeId = QMetaType::type( metamethod.typeName() );
-            }
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                krossdebug( QString("RubyExtension::callMetaMethod typeName=%1 variant.typeid=%2").arg(metamethod.typeName()).arg(returnTypeId) );
-            #endif
-        }
-        else {
-            returnMetaTypeId = QMetaType::type( metamethod.typeName() );
-            if(returnMetaTypeId == QMetaType::Void) {
-                #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                    krossdebug( QString("RubyExtension::callMetaMethod typeName=%1 metatype.typeid is QMetaType::Void").arg(metamethod.typeName()) );
-                #endif
-            }
-            else {
-                #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                    krossdebug( QString("RubyExtension::callMetaMethod typeName=%1 metatype.typeid=%2").arg(metamethod.typeName()).arg(returnMetaTypeId) );
-                #endif
-            }
-        }
+        if( returnTypeId == QVariant::Invalid || returnTypeId == QVariant::UserType )
+            returnTypeId = QMetaType::type( metamethod.typeName() );
+        #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            krossdebug( QString("RubyExtension::callMetaMethod typeName=%1 typeId=%2").arg(metamethod.typeName()).arg(returnTypeId) );
+        #endif
     }
     // set the arguments types
     int idx = 1;
     for(; idx <= typelistcount; ++idx) {
-        varianttypes[idx ] = QVariant::nameToType(typelist[idx - 1].constData());
+        varianttypes[idx] = QVariant::nameToType(typelist[idx - 1].constData());
     }
 
     // Create a cache of the function call
-    RubyCallCache* callobj = new RubyCallCache(object, methodindex, hasreturnvalue, returnTypeId, returnMetaTypeId, varianttypes);
+    RubyCallCache* callobj = new RubyCallCache(object, methodindex, hasreturnvalue, returnTypeId, varianttypes);
     QByteArray varcallcache = QByteArray("@callcache") + funcname;
-    rb_iv_set(self, varcallcache , callobj->toValue() );
+    rb_iv_set(self, varcallcache, callobj->toValue());
     rb_define_variable("$krossinternallastclass", &self);
     rb_eval_string("def $krossinternallastclass." + funcname + "(*args)\n "+ varcallcache +".cacheexec(args) \nend");
     return callobj->execfunction(argc, argv);

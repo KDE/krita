@@ -204,16 +204,22 @@ QVariant RubyType<QVariant>::toVariant(VALUE value)
     }
 }
 
+/*
 MetaType* RubyMetaTypeFactory::create(const char* typeName, VALUE value)
 {
     int typeId = QVariant::nameToType(typeName);
-
     #ifdef KROSS_RUBY_VARIANT_DEBUG
         krossdebug( QString("RubyMetaTypeFactory::create typeName=%1 metatype.id=%2 variant.id=%3").arg(typeName).arg(QMetaType::type(typeName)).arg(typeId) );
     #endif
     return RubyMetaTypeFactory::create(typeId, value);
 }
-MetaType* RubyMetaTypeFactory::create(int typeId, VALUE value) {
+*/
+
+MetaType* RubyMetaTypeFactory::create(int typeId, VALUE value)
+{
+    #ifdef KROSS_RUBY_VARIANT_DEBUG
+        krossdebug( QString("RubyMetaTypeFactory::create typeId=%1 typeName=%2").arg(QMetaType::typeName(typeId)).arg(typeId) );
+    #endif
 
     switch(typeId) {
         case QVariant::Int:
@@ -245,11 +251,9 @@ MetaType* RubyMetaTypeFactory::create(int typeId, VALUE value) {
         case QVariant::Invalid: // fall through
         case QVariant::UserType: // fall through
         default: {
-            //int metaid = QMetaType::type(typeName);
-
             if( RubyExtension::isRubyExtension(value) ) {
                 #ifdef KROSS_RUBY_VARIANT_DEBUG
-                    krossdebug( QString("RubyMetaTypeFactory::create VALUE with typename '%1' is a RubyExtension object").arg(typeName) );
+                    krossdebug( QString("RubyMetaTypeFactory::create VALUE with typeId '%1' is a RubyExtension object").arg(typeId) );
                 #endif
 
                 RubyExtension* extension;
@@ -262,7 +266,7 @@ MetaType* RubyMetaTypeFactory::create(int typeId, VALUE value) {
                     return 0;
                 }
 
-                return new MetaTypeVoidStar( typeId, object );
+                return new MetaTypeVoidStar( typeId, object, false );
             }
 
             //QVariant v = RubyType<QVariant>::toVariant(object);

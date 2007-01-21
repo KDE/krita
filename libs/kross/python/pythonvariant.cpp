@@ -338,7 +338,7 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
                 Py::ExtensionObject<PythonExtension> extobj(object);
                 PythonExtension* extension = extobj.extensionObject();
                 Q_ASSERT( extension->object() );
-                return new MetaTypeVoidStar( typeId, extension->object() );
+                return new MetaTypeVoidStar( typeId, extension->object(), false );
             }
 
             //QVariant v = PythonType<QVariant>::toVariant(object);

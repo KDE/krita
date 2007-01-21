@@ -25,12 +25,14 @@
 #include <QVarLengthArray>
 class QObject;
 class QVariant;
+
 namespace Kross {
-    class MetaType;
+
     struct RubyCallCachePrivate;
-    class RubyCallCache {
+    class RubyCallCache
+    {
         public:
-            RubyCallCache(QObject* object, int methodindex, bool hasreturnvalue, int returnTypeId, int returnMetaTypeId, QVarLengthArray<int> variantargs);
+            RubyCallCache(QObject* object, int methodindex, bool hasreturnvalue, int returnTypeId, QVarLengthArray<int> variantargs);
             ~RubyCallCache();
             VALUE execfunction( int argc, VALUE *argv );
             VALUE toValue();
@@ -40,6 +42,7 @@ namespace Kross {
             RubyCallCachePrivate* d;
             VALUE m_self;
     };
+
 }
 
 #endif

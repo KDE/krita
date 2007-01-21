@@ -72,6 +72,9 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
     if ( store->bad() )
         return cleanUp( store, testFile, badStorage );
 
+    if ( store->isEncrypted( ) )
+        store->setPassword( "password" );
+
     if ( store->open( "test1/with/a/relative/dir.txt" ) ) {
         for ( int i = 0; i < 100; ++i )
             store->write( test1, strlen( test1 ) );
@@ -119,6 +122,9 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
     store = KoStore::createStore( testFile, KoStore::Read, "", backend );
     if ( store->bad() )
         return cleanUp( store, testFile, badStorage );
+
+    if ( store->isEncrypted( ) )
+        store->setPassword( "password" );
 
     if ( store->open( "test1/with/a/relative/dir.txt" ) ) {
         QIODevice* dev = store->device();
@@ -213,7 +219,7 @@ int main( int argc, char **argv )
 {
     KCmdLineArgs::init( argc, argv, "storage_test", "Storage Test", "A test for the KoStore classes", "1" );
     //KApplication::disableAutoDcopRegistration();
-    KApplication app(true); // SCHAAP: Instead of using a GUI, try and find a way to test with setPassword
+    KApplication app(false);
 
     if ( test( "Tar", KoStore::Tar, "test.tgz" ) != 0 )
       return 1;

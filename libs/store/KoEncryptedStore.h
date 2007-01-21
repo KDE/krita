@@ -44,7 +44,7 @@ public:
     KoEncryptedStore( QWidget* window, const KUrl& url, const QString & filename, Mode _mode, const QByteArray & appIdentification );
     ~KoEncryptedStore();
 
-    /**
+    /*
      * Sets the password to be used for decryption or encryption of the file.
      *
      * This method only works if no password has been set or found yet,
@@ -54,15 +54,15 @@ public:
      *
      * @return  True if the password was set
      */
-    bool setPassword( const QString& password );
+    virtual bool setPassword( const QString& password );
 
-    /**
+    /*
      * Returns whether a store opened for reading is actually encrypted.
      * This function will always return true in Write-mode.
      *
      * @return  True if the store is encrypted.
      */
-    bool isEncrypted( );
+    virtual bool isEncrypted( );
 
 protected:
     virtual bool init( Mode mode, const QByteArray& appIdentification );
@@ -97,6 +97,7 @@ protected:
     QCA::Initializer m_qcaInit;
     QHash<QString, KoEncryptedStore_EncryptionData> m_encryptionData;
     QSecureArray m_password;
+    bool m_bPasswordUsed;
     QString m_filename;
     QByteArray m_manifestBuffer;
     KZip *m_pZip;

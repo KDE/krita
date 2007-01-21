@@ -53,4 +53,4 @@ install(TARGETS kstore  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  KoStore.h KoStoreDevice.h KoXmlReader.h KoXmlWriter.h  DESTINATION ${INCLUDE_INSTALL_DIR})
+install( FILES  KoStore.h KoStoreDevice.h KoXmlReader.h KoXmlWriter.h kostore_export.h DESTINATION ${INCLUDE_INSTALL_DIR})

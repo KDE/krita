@@ -270,6 +270,31 @@ public:
    */
   bool finalize();
 
+  /**
+   * Sets the password to be used for decryption or encryption of the store.
+   * Use of this function is optional: an encryptable store should make
+   * a best effort in obtaining a password if it wasn't supplied.
+   *
+   * This method only works before opening a file. It might fail when a file
+   * has already been opened before calling this method.
+   * 
+   * This method will not function for any store that is not encrypted or
+   * can't be encrypted when saving.
+   *
+   * @param   password    A non-empty password.
+   *
+   * @return  True if the password was set.
+   */
+  virtual bool setPassword( const QString& password );
+
+  /**
+   * Returns whether a store opened for reading is encrypted or a store opened
+   * for saving will be encrypted.
+   *
+   * @return  True if the store is encrypted.
+   */
+  virtual bool isEncrypted( );
+
 protected:
 
   KoStore() {}

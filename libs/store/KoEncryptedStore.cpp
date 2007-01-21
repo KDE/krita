@@ -62,7 +62,7 @@ namespace {
 }
 
 KoEncryptedStore::KoEncryptedStore( const QString & filename, Mode mode, const QByteArray & appIdentification )
-    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( filename ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_currentDir( NULL ) {
+    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( filename ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_bPasswordUsed( false ), m_currentDir( NULL ) {
 
     m_pZip = new KZip( filename );
     m_bGood = true;
@@ -71,7 +71,7 @@ KoEncryptedStore::KoEncryptedStore( const QString & filename, Mode mode, const Q
 }
 
 KoEncryptedStore::KoEncryptedStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification )
-    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_currentDir( NULL ) {
+    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_bPasswordUsed( false ), m_currentDir( NULL ) {
 
     m_pZip = new KZip( dev );
     m_bGood = true;
@@ -80,7 +80,7 @@ KoEncryptedStore::KoEncryptedStore( QIODevice *dev, Mode mode, const QByteArray 
 }
 
 KoEncryptedStore::KoEncryptedStore( QWidget* window, const KUrl& url, const QString & filename, Mode mode, const QByteArray & appIdentification )
-    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( url.url( ) ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_currentDir( NULL ) {
+    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( url.url( ) ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_bPasswordUsed( false ), m_currentDir( NULL ) {
 
     m_window = window;
     m_bGood = true;
@@ -541,6 +541,7 @@ bool KoEncryptedStore::openRead( const QString& name ) {
 
             // The password passed all possible tests, so let's accept it
             m_password = password;
+            m_bPasswordUsed = true;
 
             if( keepPass ) {
                 savePasswordInKWallet( );
@@ -618,7 +619,7 @@ QSecureArray KoEncryptedStore::decryptFile( QSecureArray & encryptedFile, KoEncr
 }
 
 bool KoEncryptedStore::setPassword( const QString& password ) {
-    if( !m_password.isEmpty() || password.isEmpty() ) {
+    if( m_bPasswordUsed || password.isEmpty() ) {
         return false;
     }
     m_password = QSecureArray( password.toUtf8() );
@@ -683,6 +684,7 @@ bool KoEncryptedStore::closeWrite() {
         resultData = static_cast<QBuffer*>( m_stream )->buffer( );
     }
     else {
+        m_bPasswordUsed = true;
         // Build all cryptographic data
         QSecureArray passwordHash = QCA::Hash( "sha1" ).hash( m_password );
         QCA::Random random;

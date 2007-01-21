@@ -697,3 +697,13 @@ bool KoStore::finalize()
   m_bFinalized = true;
   return doFinalize();
 }
+
+bool KoStore::isEncrypted()
+{
+    return false;
+}
+
+bool KoStore::setPassword( const QString& /*password*/ )
+{
+    return false;
+}

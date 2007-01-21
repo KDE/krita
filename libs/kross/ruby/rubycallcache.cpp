@@ -71,25 +71,7 @@ namespace Kross {
         if(d->hasreturnvalue)
         {
             void* ptr = QMetaType::construct(d->returnTypeId, 0);
-//FIXME remove
-#if KROSS_VERSION > 1
             MetaType* returntype = new MetaTypeVoidStar( d->returnTypeId, ptr, true );
-#else
-            MetaType* returntype = new MetaTypeVoidStar( d->returnTypeId, ptr );
-#endif
-            /*
-            MetaType* returntype;
-            if(d->returnTypeId != QVariant::Invalid)
-                returntype = new MetaTypeVariant< QVariant >( QVariant( (QVariant::Type) d->returnTypeId, 0 ) );
-            else
-                if(d->returnTypeId == QMetaType::Void)
-                    returntype = new MetaTypeVariant< QVariant >( QVariant() );
-                else {
-                    void* myClassPtr = QMetaType::construct(d->returnTypeId, 0);
-                    returntype = new MetaTypeVoidStar( d->returnTypeId, myClassPtr, false );
-                }
-            }
-            */
             variantargs[0] = returntype;
             voidstarargs[0] = returntype->toVoidStar();
         }

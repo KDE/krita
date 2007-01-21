@@ -512,12 +512,7 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
                     krossdebug( QString("PythonExtension::proxyhandler typeName=%1 variant.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
                 #endif
                 void* ptr = QMetaType::construct(typeId, 0);
-//FIXME remove
-#if KROSS_VERSION > 1
                 MetaType* returntype = new MetaTypeVoidStar( typeId, ptr, true );
-#else
-                MetaType* returntype = new MetaTypeVoidStar( typeId, ptr );
-#endif
                 variantargs[0] = returntype;
                 voidstarargs[0] = returntype->toVoidStar();
             }

@@ -1,4 +1,4 @@
-Kross uses PyCXX 5.3.5 (http://cxx.sourceforge.net/)
+Kross uses PyCXX 5.4.0 (http://cxx.sourceforge.net/)
 to access the Python C API.
 
 See the patch-list for panding patches;

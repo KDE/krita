@@ -44,6 +44,7 @@ class KoShapeManager;
 class KoShapeUserData;
 class KoViewConverter;
 class KoShapeApplicationData;
+class KoShapePrivate;
 
 /**
  *
@@ -121,12 +122,12 @@ public:
     /**
      * Return the current scaling adjustment over the X axis.
      */
-    double scaleX() const { return m_scaleX; }
+    double scaleX() const;
 
     /**
      * Return the current scaling adjustment over the Y axis.
      */
-    double scaleY() const { return m_scaleY; }
+    double scaleY() const;
 
     /**
      * @brief Rotate the shape
@@ -140,7 +141,7 @@ public:
     /**
      * Return the current rotation in degrees.
      */
-    double rotation() const { return m_angle; }
+    double rotation() const;
 
     /**
      * @brief Shear the shape
@@ -156,13 +157,13 @@ public:
      * Return the current horizontal shearing angle for this shape.
      * @return the current horizontal shearing angle for this shape.
      */
-    double shearX() const { return m_shearX; }
+    double shearX() const;
 
     /**
      * Return the current vertical shearing angle for this shape.
      * @return the current vertical shearing angle for this shape.
      */
-    double shearY() const { return m_shearY; }
+    double shearY() const;
 
     /**
      * @brief Resize the shape
@@ -180,7 +181,7 @@ public:
      *
      * @return the size of the shape as set by resize()
      */
-    virtual QSizeF size() const { return m_size; }
+    virtual QSizeF size() const;
 
     /**
      * @brief Set the position of the shape in pt
@@ -194,7 +195,7 @@ public:
      *
      * @return the position of the shape
      */
-    virtual QPointF position() const { return m_pos; }
+    virtual QPointF position() const;
 
     /**
      * @brief Check if the shape is hit on position
@@ -222,7 +223,7 @@ public:
      *   The point does not have to be inside the boundings rectangle.  The point is in pt,
      *   just like the rest of the KoShape class uses.
      */
-    void addConnectionPoint( const QPointF &point ) { m_connectors.append( point ); }
+    void addConnectionPoint( const QPointF &point );
 
     /**
      * Return a list of the connectors that have been added to this shape.
@@ -230,7 +231,7 @@ public:
      * effect on the shape.
      * @return a list of the connectors that have been added to this shape.
      */
-    QList<QPointF> connectors() const { return m_connectors.toList(); }
+    QList<QPointF> connectors() const;
 
     /**
      * Set the background of the shape.
@@ -239,7 +240,7 @@ public:
      * will be able to tell if its transparent or not.
      * @param brush the brush for the background.
      */
-    void setBackground ( const QBrush & brush ) { m_backgroundBrush = brush; }
+    void setBackground ( const QBrush & brush );
 
     /**
      * return the brush used to paint te background of this shape with.
@@ -248,7 +249,7 @@ public:
      * will be able to tell if its transparent or not.
      * @return the background-brush
      */
-    const QBrush& background () { return m_backgroundBrush; }
+    const QBrush& background ();
 
     /**
      * Returns true if there is some transparency, false if the shape is fully opaque.
@@ -278,7 +279,7 @@ public:
      * and probably depends on the order in which they are added to the shape manager.
      * @param zIndex the new z-index;
      */
-    void setZIndex(int zIndex) { m_zIndex = zIndex; }
+    void setZIndex(int zIndex);
 
     /**
      * Changes the Shape to be visible or invisible.
@@ -286,45 +287,45 @@ public:
      *   things like guidelines or searches.
      * @param on when true; set the shape to be visible.
      */
-    void setVisible(bool on) { m_visible = on; }
+    void setVisible(bool on);
     /**
      * Returns current visibility state of this shape.
      * Being visible means being painted and printed, as well as being used for
      *   things like guidelines or searches.
      * @return current visibility state of this shape.
      */
-    bool isVisible() const { return m_visible; }
+    bool isVisible() const;
 
     /**
      * Makes it possible for the user to select this shape.
      * This parameter defaults to true.
      * @param selectable when true; set the shape to be selectable.
      */
-    void setSelectable(bool selectable) { m_selectable = selectable; }
+    void setSelectable(bool selectable);
     /**
      * Returns wheather this shape can be selected by the user.
      * @return true only when the object is selectable.
      */
-    bool isSelectable() const { return m_selectable; }
+    bool isSelectable() const;
 
     /**
      * Changes the Shape to be locked in place.
      * Being locked means the shape can no longer change shape or position.
      * @param locked when true; set the shape to be locked.
      */
-    void setLocked(bool locked) { m_locked = locked; }
+    void setLocked(bool locked);
     /**
      * Returns current locked state of this shape.
      * Being locked means the shape can no longer change shape or position.
      * @return current locked state of this shape.
      */
-    bool isLocked() const { return m_locked; }
+    bool isLocked() const;
 
     /**
      * Returns the parent, or 0 if there is no parent.
      * @return the parent, or 0 if there is no parent.
      */
-    KoShapeContainer *parent() const { return m_parent; }
+    KoShapeContainer *parent() const;
 
     /**
      * Set the parent of this shape.
@@ -410,7 +411,7 @@ public:
      * ratio.
      * @param keepAspect the new value
      */
-    void setKeepAspectRatio(bool keepAspect) { m_keepAspect = keepAspect; }
+    void setKeepAspectRatio(bool keepAspect);
 
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
@@ -418,7 +419,7 @@ public:
      * ratio.
      * @return whether to keep aspect ratio of this shape
      */
-    bool keepAspectRatio() const { return m_keepAspect; }
+    bool keepAspectRatio() const;
 
     /**
      * Return the position of this shape regardless of rotation/skew/scaling and regardless of
@@ -482,14 +483,14 @@ public:
      * @see KoShapeFactory::shapeId()
      * @return the id of the shape-type
      */
-    const QString & shapeId() const { return m_shapeId; }
+    const QString & shapeId() const;
     /**
      * Set the Id of this shape.  A shapeFactory is expected to set the Id at creation
      * so applications can find out what kind of shape this is.
      * @see KoShapeFactory::shapeId()
      * @param id the ID from the factory that created this shape
      */
-    void setShapeId(const QString &id) { m_shapeId = id; }
+    void setShapeId(const QString &id);
 
     /**
      * Create a matrix that describes all the transformations done on this shape.
@@ -543,38 +544,15 @@ protected:
      */
     virtual void shapeChanged(ChangeType type) { Q_UNUSED(type); }
 
-    void setCollisionDetection(bool detect) { m_detectCollision = detect; }
-    bool collisionDetection() { return m_detectCollision; }
-
-private:
-    double m_scaleX;
-    double m_scaleY;
-    double m_angle; // degrees
-    double m_shearX;
-    double m_shearY;
-
-    QSizeF m_size; // size in pt
-    QPointF m_pos; // position (top left) in pt
-    QString m_shapeId;
-
-    QMatrix m_matrix;
-
-    QVector<QPointF> m_connectors; // in pt
-
-    int m_zIndex;
-    KoShapeContainer *m_parent;
-
-    bool m_visible, m_locked, m_keepAspect, m_selectable, m_detectCollision;
-
-
-    QSet<KoShapeManager *> m_shapeManagers;
+    void setCollisionDetection(bool detect);
+    bool collisionDetection();
 
 private:
     friend class KoShapeManager;
-    void addShapeManager( KoShapeManager * manager ) { m_shapeManagers.insert( manager ); }
-    void removeShapeManager( KoShapeManager * manager ) { m_shapeManagers.remove( manager ); }
-    KoShapeUserData *m_userData;
-    KoShapeApplicationData *m_appData;
+    void addShapeManager( KoShapeManager * manager );
+    void removeShapeManager( KoShapeManager * manager );
+
+    KoShapePrivate *d;
 };
 
 #endif

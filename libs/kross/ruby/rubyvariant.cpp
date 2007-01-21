@@ -265,8 +265,12 @@ MetaType* RubyMetaTypeFactory::create(int typeId, VALUE value)
                     krosswarning("RubyType<QVariant>::toVariant QObject is NULL.");
                     return 0;
                 }
-
+//FIXME remove
+#if KROSS_VERSION > 1
                 return new MetaTypeVoidStar( typeId, object, false );
+#else
+                return new MetaTypeVoidStar( typeId, object );
+#endif
             }
 
             //QVariant v = RubyType<QVariant>::toVariant(object);

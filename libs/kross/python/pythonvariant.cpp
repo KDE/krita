@@ -338,7 +338,12 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
                 Py::ExtensionObject<PythonExtension> extobj(object);
                 PythonExtension* extension = extobj.extensionObject();
                 Q_ASSERT( extension->object() );
+//FIXME remove
+#if KROSS_VERSION > 1
                 return new MetaTypeVoidStar( typeId, extension->object(), false );
+#else
+                return new MetaTypeVoidStar( typeId, extension->object() );
+#endif
             }
 
             //QVariant v = PythonType<QVariant>::toVariant(object);

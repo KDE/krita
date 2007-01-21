@@ -157,14 +157,18 @@ public:
      */
     KoShapeController * shapeController() const { return m_shapeController; }
 
-
     /*
-     The following 3 methods should be implemented by all canvasses soon so we can work on features
-     like a zoom tool and a way to make the canvasController implement zoom-by-scrollwheel (and ctrl).
-    */
-    virtual void zoomIn(const QPointF &center) { if(center.x()); /* poor mans Q_UNUSED */}
-    virtual void zoomOut(const QPointF &center) { if(center.x());}
-    virtual void zoomTo(const QRectF &newSize) { if(newSize.x());}
+     * The following 2 methods should be implemented by all canvasses soon so we can work on features
+     * like a zoom tool and a way to make the canvasController implement zoom-by-scrollwheel (and ctrl).
+     * Specifically; the canvasController should implement these:
+     *  void zoomIn(const QPointF &center)
+     *  void zoomOut(const QPointF &center)
+     *  void zoomTo(const QRectF &newSize)
+     *
+     * This will allow a new zoom tool in KofficeUI to do everything it needs.
+     */
+    virtual void setZoom(double zoom) { if(zoom); /* poor mans Q_UNUSED */}
+    virtual double zoom() const { return 0;}
 
 private:
     // we need a KoShapeControllerBase so that it can work

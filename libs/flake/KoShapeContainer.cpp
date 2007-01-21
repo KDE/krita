@@ -83,7 +83,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 
     QList<KoShape*> sortedObjects = m_children->iterator();
     qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
-    painter.setMatrix( m_invMatrix * painter.matrix() );
+    painter.setMatrix( matrix().inverted() * painter.matrix() );
     QMatrix myMatrix = transformationMatrix(&converter);
     foreach (KoShape *shape, sortedObjects) {
         kDebug() << "painting shape: " << shape->shapeId() << ", " << shape->boundingRect() << endl;

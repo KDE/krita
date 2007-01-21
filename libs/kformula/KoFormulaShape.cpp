@@ -67,7 +67,7 @@ void KoFormulaShape::resize( const QSizeF& )
 
 QRectF KoFormulaShape::boundingRect() const
 {
-    return m_invMatrix.inverted().mapRect( m_formulaElement->boundingRect() );
+    return matrix().mapRect( m_formulaElement->boundingRect() );
 }
 
 BasicElement* KoFormulaShape::formulaElement() const

@@ -391,13 +391,13 @@ public:
      * Returns the currently set border, or 0 if there is no border.
      * @return the currently set border, or 0 if there is no border.
      */
-    KoShapeBorderModel *border() { return m_border; }
+    KoShapeBorderModel *border() const;
 
     /**
      * Set a new border, removing the old one.
      * @param border the new border, or 0 if there should be no border.
      */
-    void setBorder(KoShapeBorderModel *border) { m_border = border; }
+    void setBorder(KoShapeBorderModel *border);
 
     /**
      * Return the insets of the border.
@@ -517,10 +517,6 @@ public:
     static void applyConversion(QPainter &painter, const KoViewConverter &converter);
 
 protected:
-    QMatrix m_invMatrix; ///< The inverted matrix; for convenience
-    QBrush m_backgroundBrush; ///< Stands for the background color / fill etc.
-    KoShapeBorderModel *m_border; ///< points to a border, or 0 if there is no border
-
     /**
      * Update the position of the shape in the tree of the KoShapeManager.
      */
@@ -546,6 +542,8 @@ protected:
 
     void setCollisionDetection(bool detect);
     bool collisionDetection();
+
+    const QMatrix& matrix() const;
 
 private:
     friend class KoShapeManager;

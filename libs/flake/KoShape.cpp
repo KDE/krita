@@ -36,8 +36,6 @@
 class KoShapePrivate {
 public:
     KoShapePrivate()
-        //: backgroundBrush(Qt::NoBrush),
-        //border(0),
         : scaleX( 1 ),
         scaleY( 1 ),
         angle( 0 ),
@@ -53,7 +51,9 @@ public:
         selectable( true ),
         detectCollision( false ),
         userData(0),
-        appData(0)
+        appData(0),
+        backgroundBrush(Qt::NoBrush),
+        border(0)
     {
     }
 
@@ -88,11 +88,12 @@ public:
     QSet<KoShapeManager *> shapeManagers;
     KoShapeUserData *userData;
     KoShapeApplicationData *appData;
+    QBrush backgroundBrush; ///< Stands for the background color / fill etc.
+    KoShapeBorderModel *border; ///< points to a border, or 0 if there is no border
 };
 
 KoShape::KoShape()
     : d(new KoShapePrivate())
-    , m_border(0)
 {
     recalcMatrix();
 }
@@ -186,10 +187,10 @@ bool KoShape::hitTest( const QPointF &position ) const
     if(d->parent && d->parent->childClipped(this) && !d->parent->hitTest(position))
         return false;
 
-    QPointF point( position * m_invMatrix );
+    QPointF point( position * d->matrix.inverted() );
     KoInsets insets(0, 0, 0, 0);
-    if(m_border)
-        m_border->borderInsets(this, insets);
+    if(d->border)
+        d->border->borderInsets(this, insets);
 
     QSizeF s( size() );
     return point.x() >= -insets.left && point.x() <= s.width() + insets.right &&
@@ -205,7 +206,6 @@ QRectF KoShape::boundingRect() const
 void KoShape::recalcMatrix()
 {
     d->matrix = transformationMatrix(0);
-    m_invMatrix = d->matrix.inverted();
     notifyChanged();
 }
 
@@ -271,9 +271,9 @@ void KoShape::repaint() const {
         foreach( KoShapeManager * manager, d->shapeManagers )
         {
             QRectF rect(QPointF(0, 0), size() );
-            if(m_border) {
+            if(d->border) {
                 KoInsets insets(0, 0, 0, 0);
-                m_border->borderInsets(this, insets);
+                d->border->borderInsets(this, insets);
                 rect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
             }
             rect = d->matrix.mapRect(rect);
@@ -396,15 +396,15 @@ KoShapeApplicationData *KoShape::applicationData() const {
 }
 
 bool KoShape::hasTransparency() {
-    if(m_backgroundBrush.style() == Qt::NoBrush)
+    if(d->backgroundBrush.style() == Qt::NoBrush)
         return true;
-    return !m_backgroundBrush.isOpaque();
+    return !d->backgroundBrush.isOpaque();
 }
 
 KoInsets KoShape::borderInsets() const {
     KoInsets answer;
-    if(m_border)
-        m_border->borderInsets(this, answer);
+    if(d->border)
+        d->border->borderInsets(this, answer);
     return answer;
 }
 
@@ -444,11 +444,11 @@ QList<QPointF> KoShape::connectors() const {
 }
 
 void KoShape::setBackground ( const QBrush & brush ) {
-    m_backgroundBrush = brush;
+    d->backgroundBrush = brush;
 }
 
 const QBrush& KoShape::background () {
-    return m_backgroundBrush;
+    return d->backgroundBrush;
 }
 
 void KoShape::setZIndex(int zIndex) {
@@ -514,6 +514,19 @@ void KoShape::addShapeManager( KoShapeManager * manager ) {
 void KoShape::removeShapeManager( KoShapeManager * manager ) {
     d->shapeManagers.remove( manager );
 }
+
+KoShapeBorderModel *KoShape::border() const {
+    return d->border;
+}
+
+void KoShape::setBorder(KoShapeBorderModel *border) {
+    d->border = border;
+}
+
+const QMatrix& KoShape::matrix() const {
+    return d->matrix;
+}
+
 
 // static
 void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converter) {

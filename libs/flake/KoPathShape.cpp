@@ -520,10 +520,10 @@ const QPainterPath KoPathShape::outline() const
 QRectF KoPathShape::boundingRect() const
 {
     QRectF bb( outline().boundingRect() );
-    if( m_border )
+    if( border() )
     {
         KoInsets inset;
-        m_border->borderInsets( this, inset );
+        border()->borderInsets( this, inset );
         bb.adjust( -inset.left, -inset.top, inset.right, inset.bottom );
     }
     //qDebug() << "KoPathShape::boundingRect = " << bb;

@@ -102,6 +102,11 @@ namespace Kross {
         // set the arguments values
         for(int idx = 1; idx < typelistcount; ++idx)
         {
+QString zz = STR2CSTR( rb_inspect(argv[idx]) );
+//QString zz = TYPE( argv[idx] );
+krossdebug( QString("-----------> %1").arg(zz) );
+
+
             MetaType* metatype = RubyMetaTypeFactory::create( d->varianttypes[idx], argv[idx] );
             if(! metatype) { // Seems RubyMetaTypeFactory::create returned an invalid RubyType.
                 krosswarning( QString("RubyExtension::callMetaMethod Aborting cause RubyMetaTypeFactory::create returned NULL.") );

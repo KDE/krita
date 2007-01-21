@@ -210,7 +210,7 @@ VALUE RubyExtension::callMetaMethod(const QByteArray& funcname, int argc, VALUE 
     QByteArray varcallcache = QByteArray("@callcache") + funcname;
     rb_iv_set(self, varcallcache, callobj->toValue());
     rb_define_variable("$krossinternallastclass", &self);
-    rb_eval_string("def $krossinternallastclass." + funcname + "(*args)\n "+ varcallcache +".cacheexec(args) \nend");
+    rb_eval_string("def $krossinternallastclass." + funcname + "(*args)\n "+ varcallcache +".cacheexec(nil,*args)\nend");
     return callobj->execfunction(argc, argv);
 }
 

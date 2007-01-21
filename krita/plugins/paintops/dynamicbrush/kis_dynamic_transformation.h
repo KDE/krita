@@ -19,6 +19,8 @@
 #ifndef _KISDYNAMICTRANSFORMATION_H_
 #define _KISDYNAMICTRANSFORMATION_H_
 
+#include <KoID.h>
+
 class KisPaintInformation;
 class KisDynamicShape;
 class KisDynamicColoring;
@@ -29,13 +31,14 @@ class KisDynamicColoring;
  */
 class KisDynamicTransformation {
     public:
-        KisDynamicTransformation() : m_next(0) {}
+        KisDynamicTransformation(const KoID& name) : m_name(name), m_next(0) {}
         virtual ~KisDynamicTransformation() { if(m_next) delete m_next; }
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info) =0;
         virtual void transformColoring(KisDynamicColoring* dabsrc, const KisPaintInformation& info) =0;
-        inline void setNextTransformation(KisDynamicTransformation* n) { m_next = n; }
+        inline void setNextTransformation(KisDynamicTransformation* n) { if(m_next) { delete m_next; } m_next = n; }
         inline KisDynamicTransformation* nextTransformation() { return m_next; }
     private:
+        KoID m_name;
         KisDynamicTransformation* m_next;
 };
 

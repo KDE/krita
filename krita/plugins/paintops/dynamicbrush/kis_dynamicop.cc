@@ -42,8 +42,9 @@
 #include <kis_types.h>
 
 #include "kis_darken_transformation.h"
-#include "kis_dynamic_shape.h"
+#include "kis_dynamic_brush.h"
 #include "kis_dynamic_coloring.h"
+#include "kis_dynamic_shape.h"
 #include "kis_size_transformation.h"
 #include "kis_transform_parameter.h"
 
@@ -59,12 +60,13 @@ KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, K
 KisDynamicOp::KisDynamicOp( KisPainter *painter)
     : super(painter)
 {
-    m_firstTransfo = new KisSizeTransformation(new KisTransformParameterXTilt(), new KisTransformParameterYTilt() );
+    m_brush->rootTransfo()->setNextTransformation(
+        new KisSizeTransformation(new KisTransformParameterXTilt(), new KisTransformParameterYTilt() ) );
 }
 
 KisDynamicOp::~KisDynamicOp()
 {
-    delete m_firstTransfo;
+    delete m_brush;
 }
 
 void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
@@ -115,10 +117,10 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     dabsrc->autoDab.height = 10;
     dabsrc->autoDab.hfade = 2;
     dabsrc->autoDab.vfade = 2;
-    KisDynamicTransformation* transfo = m_firstTransfo;
+    KisDynamicTransformation* transfo = m_brush->rootTransfo();
     while(transfo)
     {
-        m_firstTransfo->transformBrush(dabsrc, adjustedInfo);
+        transfo->transformBrush(dabsrc, adjustedInfo);
         transfo = transfo->nextTransformation();
     }
 
@@ -126,7 +128,7 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     KisDynamicColoring* coloringsrc = new KisPlainColoring;
     coloringsrc->type = KisDynamicColoring::ColoringPlainColor;
     coloringsrc->color = KoColor(QColor(255,200,100), 255, coloringsrc->color.colorSpace() );
-    transfo = m_firstTransfo;
+    transfo = m_brush->rootTransfo();
     while(transfo)
     {
         transfo->transformColoring(coloringsrc, adjustedInfo);

@@ -22,7 +22,7 @@
 #include "kis_transform_parameter.h"
 
 KisDarkenTransformation::KisDarkenTransformation(KisTransformParameter* transfoParameter)
-    : m_transfoParameter(transfoParameter)
+    : KisDynamicTransformation(KoID("darken",i18n("Darken"))), m_transfoParameter(transfoParameter)
 {
     
 }

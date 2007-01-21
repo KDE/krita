@@ -26,7 +26,7 @@ class QLabel;
 class QPointF;
 class KisPainter;
 
-class KisDynamicTransformation;
+class KisDynamicBrush;
 
 class KisDynamicOpFactory : public KisPaintOpFactory  {
 
@@ -51,7 +51,7 @@ public:
     void paintAt(const QPointF &pos, const KisPaintInformation& info);
 
 private:
-    KisDynamicTransformation* m_firstTransfo;
+    KisDynamicBrush* m_brush;
 };
 
 #endif // KIS_DYNAMICOP_H_

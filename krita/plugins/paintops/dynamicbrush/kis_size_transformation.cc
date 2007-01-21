@@ -23,7 +23,7 @@
         
 
 KisSizeTransformation::KisSizeTransformation(KisTransformParameter* hTransfoParameter, KisTransformParameter* vTransfoParameter)
-    : m_horizTransfoParameter(hTransfoParameter), m_vertiTransfoParameter(vTransfoParameter)
+    : KisDynamicTransformation(KoID("size",i18n("Resize"))), m_horizTransfoParameter(hTransfoParameter), m_vertiTransfoParameter(vTransfoParameter)
 {
 }
 KisSizeTransformation::~KisSizeTransformation()

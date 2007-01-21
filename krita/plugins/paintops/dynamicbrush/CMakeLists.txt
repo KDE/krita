@@ -7,6 +7,8 @@ set(kritadynamicbrush_PART_SRCS
     kis_dynamic_transformation.cc
     kis_size_transformation.cc
     kis_darken_transformation.cc
+    kis_dynamic_brush_registry.cc
+    kis_dynamic_brush.cc
     kis_dynamicop.cc
     )
 

@@ -113,26 +113,6 @@ set_target_properties(kotext PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} S
 install(TARGETS kotext  DESTINATION ${LIB_INSTALL_DIR})
 
 
-########### Flake Plugin library ###############
-set(kotext2_PART_SRCS
-    KoTextShape.cpp
-    KoTextShapeFactory.cpp
-    KoTextTool.cpp
-    KoTextToolFactory.cpp
-    KoTextPlugin.cpp
- )
-
-kde4_automoc(${kotext2_PART_SRCS})
-
-kde4_add_plugin(kotext2 ${kotext2_PART_SRCS})
-
-
-
-target_link_libraries(kotext2 kotext flake kofficeui)
-
-install(TARGETS kotext2  DESTINATION ${PLUGIN_INSTALL_DIR})
-
 ########### install files ###############
 
-install( FILES textshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES inlinetextobject.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})

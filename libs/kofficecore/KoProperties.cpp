@@ -16,7 +16,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <kdebug.h>
 #include <qdom.h>
 #include <QString>
 
@@ -44,8 +43,10 @@ void KoProperties::load(const QString & s)
                 const QString name = e.attribute("name");
                 const QString type = e.attribute("type");
                 const QString value = e.text();
-                // XXX Convert the variant pro-actively to the right type?
-                m_properties[name] = QVariant(value);
+                QDataStream in( value.toAscii() );
+                QVariant v;
+                in >> v;
+                m_properties[name] = v;
             }
         }
         n = n.nextSibling();
@@ -65,8 +66,11 @@ QString KoProperties::store()
         e.setAttribute( "name", QString(it.key().toLatin1()) );
         QVariant v = it.value();
         e.setAttribute( "type", v.typeName() );
-        QString s = v.toString();
-        QDomText text = doc.createCDATASection(v.toString() ); // XXX: Unittest this!
+
+        QByteArray bytes;
+        QDataStream out( &bytes, QIODevice::WriteOnly );
+        out << v;
+        QDomText text = doc.createCDATASection( QString::fromAscii( bytes, bytes.size() ) ); // XXX: Unittest this!
         e.appendChild(text);
         root.appendChild(e);
     }

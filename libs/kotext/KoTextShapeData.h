@@ -75,6 +75,9 @@ public:
     /// return if the shape is marked dirty and its text content needs to be relayout
     bool isDirty() const { return m_dirty; }
 
+    /// emits a relayout
+    void fireResizeEvent() { emit relayout(); }
+
 signals:
     /**
      * emitted when the shape thinks it should be relayouted, for example after
@@ -83,10 +86,6 @@ signals:
      * requests.
      */
     void relayout();
-
-private:
-    friend class KoTextShape;
-    void fireResizeEvent() { emit relayout(); }
 
 private:
     QTextDocument *m_document;

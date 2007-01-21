@@ -21,12 +21,12 @@
 #define KOTEXTSELECTIONHANDLER_H
 
 #include <KoToolSelection.h>
+#include <KoShape.h>
 
 #include <kotext_export.h>
 
 #include <QColor>
 
-class KoTextShape;
 class KoTextShapeData;
 class KoVariable;
 class QTextCursor;
@@ -94,13 +94,13 @@ public:
     void insertVariable(KoVariable *variable);
 
 protected:
-    friend class KoTextTool;
-    void setShape(KoTextShape *shape) { m_textShape = shape; }
+    friend class TextTool;
+    void setShape(KoShape *shape) { m_textShape = shape; }
     void setShapeData(KoTextShapeData *data) { m_textShapeData = data; }
     void setCaret(QTextCursor *caret) { m_caret = caret; }
 
 private:
-    KoTextShape *m_textShape;
+    KoShape *m_textShape;
     KoTextShapeData *m_textShapeData;
     QTextCursor *m_caret;
 };

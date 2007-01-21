@@ -50,6 +50,7 @@ public:
     bool addLine(QTextLine &) { return false; }
     bool nextParag() { return false; }
     double documentOffsetInShape() { return 0; }
+    void draw(QPainter *) {}
 
 protected:
     void setStyleManager(KoStyleManager *) {}
@@ -60,7 +61,6 @@ protected:
 KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLayout::LayoutState *layout)
     : QAbstractTextDocumentLayout(doc),
     m_state(layout),
-    m_styleManager(0),
     m_inlineTextObjectManager(0),
     m_scheduled(false)
 {
@@ -70,7 +70,6 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLay
 }
 
 KoTextDocumentLayout::~KoTextDocumentLayout() {
-    m_styleManager = 0;
     delete m_state;
     m_state = 0;
 }
@@ -101,7 +100,6 @@ void KoTextDocumentLayout::addShape(KoShape *shape) {
 }
 
 void KoTextDocumentLayout::setStyleManager(KoStyleManager *sm) {
-    m_styleManager = sm;
     m_state->setStyleManager(sm);
 }
 
@@ -127,152 +125,8 @@ QSizeF KoTextDocumentLayout::documentSize() const {
 }
 
 void KoTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) {
-painter->setPen(Qt::black); // TODO use theme color, or a kword wide hardcoded default.
     Q_UNUSED(context);
-    const QRegion clipRegion = painter->clipRegion();
-    // da real work
-    QTextBlock block = document()->begin();
-    bool started=false;
-    while(block.isValid()) {
-        QTextLayout *layout = block.layout();
-
-        // the following line is simpler, but due to a Qt bug doesn't work. Try to see if enabling this for Qt4.3
-        // will not paint all paragraphs.
-        //if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
-        if(layout->lineCount() >= 1) {
-            QTextLine first = layout->lineAt(0);
-            QTextLine last = layout->lineAt(layout->lineCount()-1);
-            QRectF parag(qMin(first.x(), last.x()), first.y(), qMax(first.width(), last.width()), last.y() + last.height());
-            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
-            if(blockData) {
-                KoTextBlockBorderData *border = blockData->border();
-                if(blockData->hasCounterData()) {
-                    if(block.layout()->textOption().textDirection() == Qt::RightToLeft)
-                        parag.setRight(parag.right() + blockData->counterWidth() + blockData->counterSpacing());
-                    else
-                        parag.setLeft(blockData->counterPosition().x());
-                }
-                if(border) {
-                    KoInsets insets;
-                    border->applyInsets(insets, parag.top(), true);
-                    parag.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-                }
-            }
-            if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(parag.toRect())).isEmpty()) {
-                started=true;
-                painter->save();
-                decorateParagraph(painter, block);
-                painter->restore();
-                layout->draw(painter, QPointF(0,0));
-            }
-            else if(started) // when out of the cliprect, then we are done drawing.
-                return;
-        }
-        block = block.next();
-    }
-}
-
-void KoTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock &block) {
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
-    if(data == 0)
-        return;
-
-    QTextList *list = block.textList();
-    if(list && data->hasCounterData()) {
-        QTextListFormat listFormat = list->format();
-        QTextCharFormat cf;
-        bool filled=false;
-        if(m_styleManager) {
-            const int id = listFormat.intProperty(KoListStyle::CharacterStyleId);
-            KoCharacterStyle *cs = m_styleManager->characterStyle(id);
-            if(cs) {
-                cs->applyStyle(cf);
-                filled = true;
-            }
-        }
-        if(! filled) {
-            // use first char of block.
-            QTextCursor cursor(block); // I know this is longwinded, but just using the blocks
-            // charformat does not work, apparantly
-            cf = cursor.charFormat();
-        }
-        if(! data->counterText().isEmpty()) {
-            QFont font(cf.font(), paintDevice());
-            QTextLayout layout(data->counterText(), font, paintDevice());
-            layout.setCacheEnabled(true);
-            QList<QTextLayout::FormatRange> layouts;
-            QTextLayout::FormatRange format;
-            format.start=0;
-            format.length=data->counterText().length();
-            format.format = cf;
-            layouts.append(format);
-            layout.setAdditionalFormats(layouts);
-
-            Qt::Alignment align = static_cast<Qt::Alignment> (listFormat.intProperty(KoListStyle::Alignment));
-            if(align == 0)
-                align = Qt::AlignLeft;
-            else if(align != Qt::AlignAuto)
-                align |= Qt::AlignAbsolute;
-            QTextOption option( align );
-            option.setTextDirection(block.layout()->textOption().textDirection());
-            if(option.textDirection() == Qt::RightToLeft || data->counterText().isRightToLeft())
-                option.setAlignment(Qt::AlignRight);
-            layout.setTextOption(option);
-            layout.beginLayout();
-            QTextLine line = layout.createLine();
-            line.setLineWidth(data->counterWidth() - data->counterSpacing());
-            layout.endLayout();
-            layout.draw(painter, data->counterPosition());
-        }
-
-        KoListStyle::Style listStyle = static_cast<KoListStyle::Style> ( listFormat.style() );
-        if(listStyle == KoListStyle::SquareItem || listStyle == KoListStyle::DiscItem ||
-                listStyle == KoListStyle::CircleItem || listStyle == KoListStyle::BoxItem) {
-            QFontMetricsF fm(cf.font(), paintDevice());
-#if 0
-// helper lines to show the anatomy of this font.
-painter->setPen(Qt::green);
-painter->drawLine(QLineF(-1, data->counterPosition().y(), 200, data->counterPosition().y()));
-painter->setPen(Qt::yellow);
-painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.ascent() - fm.xHeight(), 200, data->counterPosition().y() + fm.ascent() - fm.xHeight()));
-painter->setPen(Qt::blue);
-painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.ascent(), 200, data->counterPosition().y() + fm.ascent()));
-painter->setPen(Qt::gray);
-painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, data->counterPosition().y() + fm.height()));
-#endif
-
-            double width = fm.xHeight();
-            double y = data->counterPosition().y() + fm.ascent() - fm.xHeight(); // at top of text.
-            int percent = listFormat.intProperty(KoListStyle::BulletSize);
-            if(percent > 0)
-                width *= percent / 100.0;
-            y -= width / 10.; // move it up just slightly
-            double x = qMax(1., data->counterPosition().x() + fm.width(listFormat.stringProperty( KoListStyle::ListItemPrefix )));
-            switch( listStyle ) {
-                case KoListStyle::SquareItem:
-                    painter->fillRect(QRectF(x, y, width, width), QBrush(Qt::black));
-                    break;
-                case KoListStyle::DiscItem:
-                    painter->setBrush(QBrush(Qt::black));
-                    // fall through!
-                case KoListStyle::CircleItem:
-                    painter->drawEllipse(QRectF(x, y, width, width));
-                    break;
-                case KoListStyle::BoxItem:
-                    painter->drawRect(QRectF(x, y, width, width));
-                    break;
-                default:; // others we ignore.
-            }
-        }
-    }
-
-    KoTextBlockBorderData *border = dynamic_cast<KoTextBlockBorderData*> (data->border());
-    // TODO make sure we only paint a border-set one time.
-    if(border) {
-        painter->save();
-        border->paint(*painter);
-        painter->restore();
-    }
+    m_state->draw(painter);
 }
 
 QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const {

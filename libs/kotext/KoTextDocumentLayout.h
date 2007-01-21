@@ -117,6 +117,8 @@ public:
         /// prepare for next paragraph; return false if there is no next parag.
         virtual bool nextParag() = 0;
         virtual double documentOffsetInShape() = 0;
+        /// paint the document
+        virtual void draw(QPainter *painter) = 0;
 
         int shapeNumber;
         KoShape *shape;
@@ -145,13 +147,9 @@ private:
     /// reimplemented
     void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
 
-    /// paints paragraph specific decorations.
-    void decorateParagraph(QPainter *painter, const QTextBlock &block);
-
     virtual void scheduleLayout();
 
 private:
-    KoStyleManager *m_styleManager;
     KoInlineTextObjectManager *m_inlineTextObjectManager;
     int m_lastKnownFrameCount;
     bool m_moreFramesRequested;

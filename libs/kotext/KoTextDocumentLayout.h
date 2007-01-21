@@ -27,8 +27,7 @@
 #include <QSizeF>
 #include <QList>
 
-class LayoutState;
-class LayoutStatePrivate;
+class KoTextDocumentLayout;
 class KoShape;
 class KoStyleManager;
 class QTextLayout;
@@ -42,8 +41,9 @@ class KoInlineTextObjectManager;
 class KOTEXT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayout {
     Q_OBJECT
 public:
+    class LayoutState;
     /// constructor
-    explicit KoTextDocumentLayout(QTextDocument *document);
+    explicit KoTextDocumentLayout(QTextDocument *document, KoTextDocumentLayout::LayoutState *layout = 0);
     virtual ~KoTextDocumentLayout();
 
     /**
@@ -52,6 +52,9 @@ public:
      * Setting the stylemanager on this layouter is therefor required if there is one.
      */
     void setStyleManager(KoStyleManager *sm);
+
+    void setLayout(LayoutState *layout);
+    bool hasLayouter() const;
 
     void setInlineObjectTextManager(KoInlineTextObjectManager *iom);
     KoInlineTextObjectManager *inlineObjectTextManager();
@@ -93,44 +96,35 @@ public:
     virtual QList<KoShape*> shapes() const { return m_shapes; }
 
     class KOTEXT_EXPORT LayoutState {
+// TODO move decorate parag to this one as well.
     public:
-        LayoutState(KoTextDocumentLayout *parent);
+        LayoutState() : shapeNumber(-1), shape(0), layout(0) {}
+        virtual ~LayoutState() {}
         /// start layouting, return false when there is nothing to do
-        bool start();
+        virtual bool start() = 0;
         /// end layouting
-        void end();
-        void reset();
+        virtual void end() = 0;
+        virtual void reset() = 0;
         /// returns true if reset has been called.
-        bool interrupted();
-        double width();
-        double x();
-        double y();
+        virtual bool interrupted() = 0;
+        virtual double width() = 0;
+        virtual double x() = 0;
+        virtual double y() = 0;
         /// return the y offset of the document at start of shape.
-        double docOffsetInShape() const;
+        virtual double docOffsetInShape() const = 0;
         /// when a line is added, update internal vars.  Return true if line does not fit in shape
-        bool addLine(QTextLine &line);
+        virtual bool addLine(QTextLine &line) = 0;
         /// prepare for next paragraph; return false if there is no next parag.
-        bool nextParag();
-        double documentOffsetInShape();
+        virtual bool nextParag() = 0;
+        virtual double documentOffsetInShape() = 0;
 
         int shapeNumber;
         KoShape *shape;
         QTextLayout *layout;
 
-    private:
+    protected:
         friend class KoTextDocumentLayout;
-        void setStyleManager(KoStyleManager *sm);
-        void updateBorders();
-        double topMargin();
-        double listIndent();
-        void cleanupShapes();
-        void cleanupShape(KoShape *daShape);
-        void nextShape();
-
-        void resetPrivate();
-
-        LayoutStatePrivate *d;
-
+        virtual void setStyleManager(KoStyleManager *sm) = 0;
     };
 
 protected:

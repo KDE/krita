@@ -26,7 +26,6 @@
 #include "KoTextBlockData.h"
 #include "KoTextBlockBorderData.h"
 #include "KoInlineTextObjectManager.h"
-#include "ListItemsHelper_p.h"
 
 #include <KoInsets.h>
 #include <KoPostscriptPaintDevice.h>
@@ -37,466 +36,59 @@
 #include <QTextList>
 #include <QTimer>
 
-class LayoutStatePrivate {
+class LayoutStateDummy : public KoTextDocumentLayout::LayoutState {
 public:
-    LayoutStatePrivate() : blockData(0), data(0), reset(true), isRtl(false)  { }
-    KoStyleManager *styleManager;
+    LayoutStateDummy() {}
+    bool start() { return false; }
+    void end() {}
+    void reset() {}
+    bool interrupted() { return false; }
+    double width() { return 0; }
+    double x() { return 0; }
+    double y() { return 0; }
+    double docOffsetInShape() const { return 0; }
+    bool addLine(QTextLine &) { return false; }
+    bool nextParag() { return false; }
+    double documentOffsetInShape() { return 0; }
 
-    double y;
-    QTextBlock block;
-    KoTextBlockData *blockData;
-    QTextBlockFormat format;
-    QTextBlock::Iterator fragmentIterator;
-    KoTextShapeData *data;
-    bool newShape, newParag, reset, isRtl;
-    KoInsets borderInsets;
-    KoInsets shapeBorder;
-    KoTextDocumentLayout *parent;
+protected:
+    void setStyleManager(KoStyleManager *) {}
 };
 
-// ---------------- layout helper ----------------
-KoTextDocumentLayout::LayoutState::LayoutState(KoTextDocumentLayout *parent) {
-    d = new LayoutStatePrivate();
-    d->parent = parent;
-    layout = 0;
-}
-
-bool KoTextDocumentLayout::LayoutState::start() {
-    if(d->reset)
-        resetPrivate();
-    else
-        nextParag();
-    d->reset = false;
-    return !(layout == 0 || d->parent->shapes().count() <= shapeNumber);
-}
-
-void KoTextDocumentLayout::LayoutState::end() {
-    if(layout)
-        layout->endLayout();
-    layout = 0;
-}
-
-void KoTextDocumentLayout::LayoutState::reset() {
-    d->reset = true;
-}
-
-bool KoTextDocumentLayout::LayoutState::interrupted() {
-    return d->reset;
-}
-
-void KoTextDocumentLayout::LayoutState::setStyleManager(KoStyleManager *sm) {
-    d->styleManager = sm;
-}
-
-double KoTextDocumentLayout::LayoutState::width() {
-    double ptWidth = shape->size().width() - d->format.leftMargin() - d->format.rightMargin();
-    if(d->newParag)
-        ptWidth -= d->format.textIndent();
-    if(d->newParag && d->blockData)
-        ptWidth -= d->blockData->counterWidth() + d->blockData->counterSpacing();
-    ptWidth -= d->borderInsets.left + d->borderInsets.right + d->shapeBorder.right;
-    return ptWidth;
-}
-
-double KoTextDocumentLayout::LayoutState::x() {
-    double result = d->newParag?d->format.textIndent():0.0;
-    result += d->isRtl ? d->format.rightMargin() : d->format.leftMargin();
-    result += listIndent();
-    result += d->borderInsets.left + d->shapeBorder.left;
-    return result;
-}
-
-double KoTextDocumentLayout::LayoutState::y() {
-    return d->y;
-}
-
-double KoTextDocumentLayout::LayoutState::docOffsetInShape() const {
-    return d->data->documentOffset();
-}
-
-bool KoTextDocumentLayout::LayoutState::addLine(QTextLine &line) {
-    double height = d->format.doubleProperty(KoParagraphStyle::FixedLineHeight);
-    bool useFixedLineHeight = height != 0.0;
-    bool useFontProperties = d->format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
-    if(! useFixedLineHeight) {
-        if(useFontProperties)
-            height = line.height();
-        else {
-            if(d->fragmentIterator.atEnd()) // no text in parag.
-                height = d->block.charFormat().fontPointSize();
-            else {
-                // read max font height
-                height = qMax(height,
-                        d->fragmentIterator.fragment().charFormat().fontPointSize());
-                while(! (d->fragmentIterator.atEnd() || d->fragmentIterator.fragment().contains(
-                               d->block.position() + line.textStart() + line.textLength() -1))) {
-                    d->fragmentIterator++;
-                    height = qMax(height, d->fragmentIterator.fragment().charFormat().fontPointSize());
-                }
-            }
-            if(height < 0.01) height = 12; // default size for uninitialized styles.
-        }
-    }
-
-    if(d->data->documentOffset() + shape->size().height() < d->y + height + d->shapeBorder.bottom) {
-//kDebug() << "   NEXT shape" << endl;
-        // line does not fit.
-        d->data->setEndPosition(d->block.position() + line.textStart()-1);
-        nextShape();
-        if(d->data)
-            d->data->setPosition(d->block.position() + line.textStart());
-        return true;
-    }
-
-    // add linespacing
-    if(! useFixedLineHeight) {
-        double linespacing = d->format.doubleProperty(KoParagraphStyle::LineSpacing);;
-        if(linespacing == 0.0) { // unset
-            int percent = d->format.intProperty(KoParagraphStyle::FixedLineHeight);
-            if(percent != 0)
-                linespacing = height * ((percent - 100) / 100.0);
-            else if(linespacing == 0.0)
-                linespacing = height * 0.2; // default
-        }
-        height += linespacing;
-    }
-
-    double minimum = d->format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
-    if(minimum > 0.0)
-        height = qMax(height, minimum);
-    if(qAbs(d->y - line.y()) < 0.126) // rounding problems due to Qt-scribe internally using ints.
-        d->y += height;
-    else
-        d->y = line.y() + height; // The line got a pos <> from y(), follow that lead.
-    d->newShape = false;
-    d->newParag = false;
-    return false;
-}
-
-bool KoTextDocumentLayout::LayoutState::nextParag() {
-    if(layout) { // guard against first time
-        layout->endLayout();
-        d->block = d->block.next();
-        double borderBottom = d->y;
-        if(!d->newShape) { // only add bottom of prev parag if we did not go to a new shape for this parag.
-            if(d->format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysAfter ||
-                    d->format.boolProperty(KoParagraphStyle::BreakAfter)) {
-                d->data->setEndPosition(d->block.position()-1);
-                nextShape();
-                if(d->data)
-                    d->data->setPosition(d->block.position());
-            }
-            d->y += d->borderInsets.bottom;
-            borderBottom = d->y; // don't inlude the bottom margin!
-            d->y += d->format.bottomMargin();
-        }
-        if(d->blockData && d->blockData->border())
-            d->blockData->border()->setParagraphBottom(borderBottom);
-    }
-    layout = 0;
-    d->blockData = 0;
-    if(! d->block.isValid()) {
-        QTextBlock block = d->block.previous(); // last correct one.
-        d->data->setEndPosition(block.position() + block.length());
-
-        // cleanupShapes();
-        return false;
-    }
-    d->format = d->block.blockFormat();
-    d->blockData = dynamic_cast<KoTextBlockData*> (d->block.userData());
-    d->isRtl = d->block.text().isRightToLeft();
-
-    // initialize list item stuff for this parag.
-    QTextList *textList = d->block.textList();
-    if(textList) {
-        QTextListFormat format = textList->format();
-        int styleId = format.intProperty(KoListStyle::CharacterStyleId);
-        KoCharacterStyle *charStyle = 0;
-        if(styleId > 0 && d->styleManager)
-            charStyle = d->styleManager->characterStyle(styleId);
-        if(!charStyle && d->styleManager) { // try the one from paragraph style
-            KoParagraphStyle *ps = d->styleManager->paragraphStyle(
-                    d->format.intProperty(KoParagraphStyle::StyleId));
-            if(ps)
-                charStyle = ps->characterStyle();
-        }
-
-        if(! (d->blockData && d->blockData->hasCounterData())) {
-            QFont font;
-            if(charStyle)
-                font = QFont(charStyle->fontFamily(), qRound(charStyle->fontPointSize()),
-                        charStyle->fontWeight(), charStyle->fontItalic());
-            else {
-                QTextCursor cursor(d->block);
-                font = cursor.charFormat().font();
-            }
-            ListItemsHelper lih(textList, font);
-            lih.recalculate();
-            d->blockData = dynamic_cast<KoTextBlockData*> (d->block.userData());
-        }
-    }
-
-    updateBorders(); // fill the border inset member vars.
-    d->y += d->borderInsets.top;
-
-    if(!d->newShape && (d->format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore ||
-            d->format.boolProperty(KoParagraphStyle::BreakBefore))) {
-        d->data->setEndPosition(d->block.position()-1);
-        nextShape();
-        if(d->data)
-            d->data->setPosition(d->block.position());
-    }
-    d->y += topMargin();
-    layout = d->block.layout();
-    QTextOption options = layout->textOption();
-    options.setAlignment(d->format.alignment());
-    if(d->isRtl)
-        options.setTextDirection(Qt::RightToLeft);
-    layout->setTextOption(options);
-
-    layout->beginLayout();
-    d->fragmentIterator = d->block.begin();
-    d->newParag = true;
-
-    if(textList) {
-        // if list set list-indent. Do this after borders init to we can account for them.
-        // Also after we account for indents etc so the y() pos is correct.
-        if(d->isRtl)
-            d->blockData->setCounterPosition(QPointF(shape->size().width() - d->borderInsets.right -
-                d->shapeBorder.right - d->format.leftMargin() - d->blockData->counterWidth(), y()));
-        else
-            d->blockData->setCounterPosition(QPointF(d->borderInsets.left + d->shapeBorder.left +
-                        d->format.textIndent() + d->format.leftMargin() , y()));
-    }
-
-    return true;
-}
-
-double KoTextDocumentLayout::LayoutState::documentOffsetInShape() {
-    return d->data->documentOffset();
-}
-
-void KoTextDocumentLayout::LayoutState::nextShape() {
-    d->newShape = true;
-
-    if(d->data) {
-// TODO add weduwen wezen algoritm here. May require me to relayout a parag..
-        Q_ASSERT(d->data->endPosition() >= d->data->position());
-        d->y = d->data->documentOffset() + shape->size().height() + 10.0;
-        d->data->wipe();
-    }
-
-    shape = 0;
-    d->data = 0;
-
-    QList<KoShape *> shapes = d->parent->shapes();
-    for(shapeNumber++; shapeNumber < shapes.count(); shapeNumber++) {
-        shape = shapes[shapeNumber];
-        d->data = dynamic_cast<KoTextShapeData*> (shape->userData());
-        if(d->data != 0)
-            break;
-        shape = 0;
-        d->data = 0;
-    }
-
-    if(shape == 0)
-        return;
-    d->data->setDocumentOffset(d->y);
-    d->data->faul(); // make dirty since this one needs relayout at this point.
-    d->shapeBorder = shape->borderInsets();
-    d->y += d->shapeBorder.top;
-}
-
-// and the end of text, make sure the rest of the frames have something sane to show.
-void KoTextDocumentLayout::LayoutState::cleanupShapes() {
-    int i = shapeNumber + 1;
-    QList<KoShape *> shapes = d->parent->shapes();
-    while(i < shapes.count())
-        cleanupShape(shapes[i++]);
-}
-
-void KoTextDocumentLayout::LayoutState::cleanupShape(KoShape *daShape) {
-    KoTextShapeData *textData = dynamic_cast<KoTextShapeData*> (daShape->userData());
-    if(textData) {
-        textData->setPosition(-1);
-        textData->wipe();
-    }
-    daShape->repaint();
-}
-
-double KoTextDocumentLayout::LayoutState::listIndent() {
-    if(d->blockData == 0)
-        return 0;
-    if(d->isRtl)
-        return 0;
-    return d->blockData->counterWidth();
-}
-
-void KoTextDocumentLayout::LayoutState::resetPrivate() {
-    d->y = 0;
-    d->data = 0;
-    shape =0;
-    layout = 0;
-    d->newShape = true;
-    d->blockData = 0;
-    d->newParag = true;
-    d->block = d->parent->document()->begin();
-
-    shapeNumber = 0;
-    int lastPos = -1;
-    QList<KoShape *> shapes = d->parent->shapes();
-    foreach(KoShape *shape, shapes) {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
-        Q_ASSERT(data);
-        if(data->isDirty()) {
-            // this shape needs to be recalculated.
-            data->setPosition(lastPos+1);
-            d->block = d->parent->document()->findBlock( lastPos+1 );
-            d->y = data->documentOffset();
-            d->format = d->block.blockFormat();
-
-            if(shapeNumber == 0) {
-                // no matter what the previous data says, just start from zero.
-                d->y = 0;
-                data->setDocumentOffset(0);
-                Q_ASSERT(lastPos == -1);
-                break;
-            }
-            if(d->block.layout() && d->block.layout()->lineCount() > 0) {
-                // block has been layouted. So use its offset.
-                d->y = d->block.layout()->lineAt(0).position().y();
-                if(d->y < data->documentOffset() - 0.126) { // 0.126 to account of rounding in Qt-scribe
-                    Q_ASSERT(shapeNumber > 0);
-                    // since we only recalc whole parags; we need to go back a little.
-                    shapeNumber--;
-                    shape = shapes[shapeNumber];
-                    data = dynamic_cast<KoTextShapeData*> (shape->userData());
-                    d->newShape = false;
-                }
-                if(d->y > data->documentOffset() + shape->size().height()) {
-                    // hang on; this line is explicitly placed outside the shape. Shape is empty!
-                    d->y = data->documentOffset();
-                    break;
-                }
-                // in case this parag has a border we have to subtract that as well
-                d->blockData = dynamic_cast<KoTextBlockData*> (d->block.userData());
-                if(d->blockData && d->blockData->border()) {
-                    double top = d->blockData->border()->inset(KoTextBlockBorderData::Top);
-                    // but only when this border actually makes us have an indent.
-                    if(qAbs(d->blockData->border()->rect().top() + top - d->y) < 1E-10)
-                        d->y -= top;
-                }
-                // subtract the top margins as well.
-                d->y -= topMargin();
-            }
-            break;
-        }
-        lastPos = data->endPosition();
-        shapeNumber++;
-    }
-    Q_ASSERT(shapeNumber >= 0);
-    if(shapes.count() == 0)
-        return;
-    shape = shapes[shapeNumber];
-    d->data = dynamic_cast<KoTextShapeData*> (shape->userData());
-    d->shapeBorder = shape->borderInsets();
-    if(d->y == 0)
-        d->y = d->shapeBorder.top;
-
-   if(! nextParag())
-       shapeNumber++;
-}
-
-void KoTextDocumentLayout::LayoutState::updateBorders() {
-    d->borderInsets.top = d->format.doubleProperty(KoParagraphStyle::TopPadding);
-    d->borderInsets.left = d->format.doubleProperty(KoParagraphStyle::LeftPadding);
-    d->borderInsets.bottom = d->format.doubleProperty(KoParagraphStyle::BottomPadding);
-    d->borderInsets.right = d->format.doubleProperty(KoParagraphStyle::RightPadding);
-
-    KoTextBlockBorderData border(QRectF(this->x() - listIndent(), d->y + d->borderInsets.top + topMargin(), width(), 1.));
-    border.setEdge(border.Left, d->format, KoParagraphStyle::LeftBorderStyle,
-        KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
-        KoParagraphStyle::LeftBorderSpacing, KoParagraphStyle::LeftInnerBorderWidth);
-    border.setEdge(border.Right, d->format, KoParagraphStyle::RightBorderStyle,
-        KoParagraphStyle::RightBorderWidth, KoParagraphStyle::RightBorderColor,
-        KoParagraphStyle::RightBorderSpacing, KoParagraphStyle::RightInnerBorderWidth);
-    border.setEdge(border.Top, d->format, KoParagraphStyle::TopBorderStyle,
-        KoParagraphStyle::TopBorderWidth, KoParagraphStyle::TopBorderColor,
-        KoParagraphStyle::TopBorderSpacing, KoParagraphStyle::TopInnerBorderWidth);
-    border.setEdge(border.Bottom, d->format, KoParagraphStyle::BottomBorderStyle,
-        KoParagraphStyle::BottomBorderWidth, KoParagraphStyle::BottomBorderColor,
-        KoParagraphStyle::BottomBorderSpacing, KoParagraphStyle::BottomInnerBorderWidth);
-
-    // check if prev parag had a border.
-    QTextBlock prev = d->block.previous();
-    KoTextBlockBorderData *prevBorder = 0;
-    if(prev.isValid()) {
-        KoTextBlockData *bd = dynamic_cast<KoTextBlockData*> (prev.userData());
-        if(bd)
-            prevBorder = bd->border();
-    }
-    if(border.hasBorders()) {
-        if(d->blockData == 0) {
-            d->blockData = new KoTextBlockData();
-            d->block.setUserData(d->blockData);
-        }
-
-        // then check if we can merge with the previous parags border.
-        if(prevBorder && prevBorder->equals(border))
-            d->blockData->setBorder(prevBorder);
-        else {
-            // can't merge; then these are our new borders.
-            KoTextBlockBorderData *newBorder = new KoTextBlockBorderData(border);
-            d->blockData->setBorder(newBorder);
-            if(prevBorder && !d->newShape)
-                d->y += prevBorder->inset(KoTextBlockBorderData::Bottom);
-        }
-        d->blockData->border()->applyInsets(d->borderInsets, d->y + d->borderInsets.top, false);
-    }
-    else { // this parag has no border.
-        if(prevBorder && !d->newShape)
-            d->y += prevBorder->inset(KoTextBlockBorderData::Bottom);
-        if(d->blockData)
-            d->blockData->setBorder(0); // remove an old one, if there was one.
-    }
-}
-
-double KoTextDocumentLayout::LayoutState::topMargin() {
-    bool allowMargin = true; // wheather to allow margins at top of shape
-    if(d->newShape) {
-        allowMargin = false; // false by default, but check 2 exceptions.
-        if(d->format.boolProperty(KoParagraphStyle::BreakBefore))
-            allowMargin = true;
-        else if( d->styleManager && d->format.topMargin() > 0) {
-            // also allow it when the paragraph has the margin, but the style has a different one.
-            KoParagraphStyle *ps = d->styleManager->paragraphStyle(
-                    d->format.intProperty(KoParagraphStyle::StyleId));
-            if(ps == 0 || ps->topMargin() != d->format.topMargin())
-                allowMargin = true;
-        }
-    }
-    if(allowMargin)
-        return d->format.topMargin();
-    return 0.0;
-}
 
 // ------------------- KoTextDocumentLayout --------------------
-KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc)
+KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLayout::LayoutState *layout)
     : QAbstractTextDocumentLayout(doc),
-    m_state(0),
+    m_state(layout),
     m_styleManager(0),
     m_inlineTextObjectManager(0),
     m_scheduled(false)
 {
-    m_state = new KoTextDocumentLayout::LayoutState(this);
     setPaintDevice( new KoPostscriptPaintDevice() );
+    if(m_state == 0)
+        m_state = new LayoutStateDummy();
 }
 
 KoTextDocumentLayout::~KoTextDocumentLayout() {
     m_styleManager = 0;
     delete m_state;
+    m_state = 0;
 }
 
+void KoTextDocumentLayout::setLayout(LayoutState *layout) {
+    Q_ASSERT(layout);
+    delete m_state;
+    m_state = layout;
+    relayout();
+}
+
+bool KoTextDocumentLayout::hasLayouter() const {
+    if(dynamic_cast<LayoutStateDummy*> (m_state) != 0)
+        return false;
+    if(m_state == 0)
+        return false;
+    return true;
+}
 
 void KoTextDocumentLayout::addShape(KoShape *shape) {
     m_shapes.append(shape);

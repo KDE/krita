@@ -97,10 +97,10 @@ void FixedDateFormat::listClicked(QListWidgetItem *item) {
         case 0: format = KGlobal::locale()->dateFormat(); break;
         case 1: format = KGlobal::locale()->dateFormatShort(); break;
         case 2:
-            format = KGlobal::locale()->dateFormat() +" "+ KGlobal::locale()->timeFormat();
+            format = KGlobal::locale()->dateFormat() +' '+ KGlobal::locale()->timeFormat();
             break;
         case 3:
-            format = KGlobal::locale()->dateFormatShort() +" "+ KGlobal::locale()->timeFormat();
+            format = KGlobal::locale()->dateFormatShort() +' '+ KGlobal::locale()->timeFormat();
             break;
         default:
             format = item->text();

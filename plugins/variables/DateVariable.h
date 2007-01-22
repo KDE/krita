@@ -38,7 +38,7 @@ public:
     /**
      * Constructor.
      */
-    DateVariable(DateType type);
+    explicit DateVariable(DateType type);
 
     void setProperties(const KoProperties *props);
 

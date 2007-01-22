@@ -30,7 +30,7 @@ class QMenu;
 class FixedDateFormat : public QWidget {
     Q_OBJECT
 public:
-    FixedDateFormat(DateVariable *variable);
+    explicit FixedDateFormat(DateVariable *variable);
 
 private slots:
     void customClicked(int state);

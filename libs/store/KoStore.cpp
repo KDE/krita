@@ -222,8 +222,6 @@ bool KoStore::init( Mode _mode )
 
 KoStore::~KoStore()
 {
-  if ( !m_bFinalized )
-    finalize(); // ### no error checking when the app forgot to call finalize itself
   delete m_stream;
 }
 

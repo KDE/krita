@@ -470,7 +470,7 @@ bool KoEncryptedStore::openRead( const QString& name ) {
     const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>( fileArchiveEntry );
 
     delete m_stream;
-    m_stream = fileZipEntry->device( );
+    m_stream = fileZipEntry->createDevice( );
     m_iSize = fileZipEntry->size( );
     if( m_encryptionData.contains( name ) ) {
         // This file is encrypted, do some decryption first

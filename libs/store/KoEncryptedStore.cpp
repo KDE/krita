@@ -143,12 +143,13 @@ bool KoEncryptedStore::init( Mode mode, const QByteArray & appIdentification ) {
             // No manifest file? OK, *I* won't complain
             return true;
         }
-        QIODevice *dev = (static_cast< const KArchiveFile* >( manifestArchiveEntry ))->device( );
+        QIODevice *dev = (static_cast< const KArchiveFile* >( manifestArchiveEntry ))->createDevice( );
 
         KoXmlDocument xmldoc;
         if( !xmldoc.setContent( dev ) ) {
             KMessage::message( KMessage::Warning, i18n( "The manifest file seems to be corrupted. The document could not be opened." ) );
             dev->close( );
+            delete dev;
             m_pZip->close( );
             m_bGood = false;
             return false;
@@ -157,6 +158,7 @@ bool KoEncryptedStore::init( Mode mode, const QByteArray & appIdentification ) {
         if( xmlroot.tagName( ) != "manifest:manifest" ) {
             KMessage::message( KMessage::Warning, i18n( "The manifest file seems to be corrupted. The document could not be opened." ) );
             dev->close( );
+            delete dev;
             m_pZip->close( );
             m_bGood = false;
             return false;
@@ -282,6 +284,7 @@ bool KoEncryptedStore::init( Mode mode, const QByteArray & appIdentification ) {
             }
         }
         dev->close( );
+        delete dev;
 
         if( isEncrypted( ) && !( QCA::isSupported( "sha1" ) && QCA::isSupported( "pbkdf2(sha1)" ) && QCA::isSupported( "blowfish-cfb" ) ) ) {
             m_bGood = false;

@@ -34,7 +34,7 @@
 #include <QMetaType>
 
 #include <QSize>
-#include <QPointer>
+#include <QPoint>
 #include <QRect>
 
 #include <QDate>

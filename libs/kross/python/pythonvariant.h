@@ -29,10 +29,9 @@
 #include <QMetaType>
 
 #include <QSize>
-#include <QPointer>
+#include <QPoint>
 #include <QRect>
 
-#include <QDate>
 #include <QDate>
 #include <QTime>
 #include <QDateTime>

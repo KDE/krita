@@ -33,6 +33,10 @@
 #include <QVariant>
 #include <QMetaType>
 
+#include <QSize>
+#include <QPointer>
+#include <QRect>
+
 #include <QDate>
 #include <QTime>
 #include <QDateTime>
@@ -53,6 +57,12 @@ namespace Kross {
      *   \li QVariant::ULongLong
      *   \li QVariant::ByteArray
      *   \li QVariant::String
+     *   \li QVariant::Size
+     *   \li QVariant::SizeF
+     *   \li QVariant::Point
+     *   \li QVariant::PointF
+     *   \li QVariant::Rect
+     *   \li QVariant::RectF
      *   \li QVariant::StringList
      *   \li QVariant::List
      *   \li QVariant::Map
@@ -77,16 +87,10 @@ namespace Kross {
      *   \li QVariant::Palette
      *   \li QVariant::Pen
      *   \li QVariant::Pixmap
-     *   \li QVariant::Point
      *   \li QVariant::PointArray
-     *   \li QVariant::PointF
      *   \li QVariant::Polygon
-     *   \li QVariant::Rect
-     *   \li QVariant::RectF
      *   \li QVariant::RegExp
      *   \li QVariant::Region
-     *   \li QVariant::Size
-     *   \li QVariant::SizeF
      *   \li QVariant::SizePolicy
      *   \li QVariant::TextFormat
      *   \li QVariant::TextLength
@@ -208,7 +212,7 @@ namespace Kross {
         }
         inline static QByteArray toVariant(VALUE value) {
             if( TYPE(value) != T_STRING ) {
-                rb_raise(rb_eTypeError, "ByteArray must be a string");
+                rb_raise(rb_eTypeError, "QByteArray must be a string");
                 //return STR2CSTR( rb_inspect(value) );
                 return QByteArray("");
             }
@@ -238,6 +242,127 @@ namespace Kross {
 
     /// \internal
     template<>
+    struct RubyType<QSize>
+    {
+        inline static VALUE toVALUE(const QSize& s) {
+            VALUE l = rb_ary_new();
+            rb_ary_push(l, RubyType<int>::toVALUE(s.width()));
+            rb_ary_push(l, RubyType<int>::toVALUE(s.height()));
+            return l;
+        }
+        inline static QSize toVariant(VALUE value) {
+            if( TYPE(value) != T_ARRAY || RARRAY(value)->len != 2 ) {
+                rb_raise(rb_eTypeError, "QSize must be an array with 2 elements");
+                return QSize();
+            }
+            return QSize( RubyType<int>::toVariant( rb_ary_entry(value,0) ), RubyType<int>::toVariant( rb_ary_entry(value,1) ) );
+        }
+    };
+
+    /// \internal
+    template<>
+    struct RubyType<QSizeF>
+    {
+        inline static VALUE toVALUE(const QSizeF& s) {
+            VALUE l = rb_ary_new();
+            rb_ary_push(l, RubyType<double>::toVALUE(s.width()));
+            rb_ary_push(l, RubyType<double>::toVALUE(s.height()));
+            return l;
+        }
+        inline static QSizeF toVariant(VALUE value) {
+            if( TYPE(value) != T_ARRAY || RARRAY(value)->len != 2 ) {
+                rb_raise(rb_eTypeError, "QSizeF must be an array with 2 elements");
+                return QSizeF();
+            }
+            return QSizeF( RubyType<double>::toVariant( rb_ary_entry(value,0) ), RubyType<double>::toVariant( rb_ary_entry(value,1) ) );
+
+        }
+    };
+
+    /// \internal
+    template<>
+    struct RubyType<QPoint>
+    {
+        inline static VALUE toVALUE(const QPoint& s) {
+            VALUE l = rb_ary_new();
+            rb_ary_push(l, RubyType<int>::toVALUE(s.x()));
+            rb_ary_push(l, RubyType<int>::toVALUE(s.y()));
+            return l;
+        }
+        inline static QPoint toVariant(VALUE value) {
+            if( TYPE(value) != T_ARRAY || RARRAY(value)->len != 2 ) {
+                rb_raise(rb_eTypeError, "QPoint must be an array with 2 elements");
+                return QPoint();
+            }
+            return QPoint( RubyType<int>::toVariant( rb_ary_entry(value,0) ), RubyType<int>::toVariant( rb_ary_entry(value,1) ) );
+        }
+    };
+
+    /// \internal
+    template<>
+    struct RubyType<QPointF>
+    {
+        inline static VALUE toVALUE(const QPointF& s) {
+            VALUE l = rb_ary_new();
+            rb_ary_push(l, RubyType<double>::toVALUE(s.x()));
+            rb_ary_push(l, RubyType<double>::toVALUE(s.y()));
+            return l;
+        }
+        inline static QPointF toVariant(VALUE value) {
+            if( TYPE(value) != T_ARRAY || RARRAY(value)->len != 2 ) {
+                rb_raise(rb_eTypeError, "QPointF must be an array with 2 elements");
+                return QPointF();
+            }
+            return QPointF( RubyType<double>::toVariant( rb_ary_entry(value,0) ), RubyType<double>::toVariant( rb_ary_entry(value,1) ) );
+        }
+    };
+
+    /// \internal
+    template<>
+    struct RubyType<QRect>
+    {
+        inline static VALUE toVALUE(const QRect& s) {
+            VALUE l = rb_ary_new();
+            rb_ary_push(l, RubyType<int>::toVALUE(s.x()));
+            rb_ary_push(l, RubyType<int>::toVALUE(s.y()));
+            rb_ary_push(l, RubyType<int>::toVALUE(s.width()));
+            rb_ary_push(l, RubyType<int>::toVALUE(s.height()));
+            return l;
+        }
+        inline static QRect toVariant(VALUE value) {
+            if( TYPE(value) != T_ARRAY || RARRAY(value)->len != 4 ) {
+                rb_raise(rb_eTypeError, "QRect must be an array with 4 elements");
+                return QRect();
+            }
+            return QRect( RubyType<int>::toVariant( rb_ary_entry(value,0) ), RubyType<int>::toVariant( rb_ary_entry(value,1) ),
+                           RubyType<int>::toVariant( rb_ary_entry(value,2) ), RubyType<int>::toVariant( rb_ary_entry(value,3) ) );
+        }
+    };
+
+    /// \internal
+    template<>
+    struct RubyType<QRectF>
+    {
+        inline static VALUE toVALUE(const QRectF& s) {
+            VALUE l = rb_ary_new();
+            rb_ary_push(l, RubyType<double>::toVALUE(s.x()));
+            rb_ary_push(l, RubyType<double>::toVALUE(s.y()));
+            rb_ary_push(l, RubyType<double>::toVALUE(s.width()));
+            rb_ary_push(l, RubyType<double>::toVALUE(s.height()));
+            return l;
+        }
+        inline static QRectF toVariant(VALUE value) {
+            if( TYPE(value) != T_ARRAY || RARRAY(value)->len != 4 ) {
+                rb_raise(rb_eTypeError, "QRectF must be an array with 4 elements");
+                return QRectF();
+            }
+            return QRectF( RubyType<double>::toVariant( rb_ary_entry(value,0) ), RubyType<double>::toVariant( rb_ary_entry(value,1) ),
+                           RubyType<double>::toVariant( rb_ary_entry(value,2) ), RubyType<double>::toVariant( rb_ary_entry(value,3) ) );
+        }
+    };
+
+    /// \internal
+    template<>
     struct RubyType<QStringList>
     {
         inline static VALUE toVALUE(const QStringList& list) {
@@ -248,7 +373,7 @@ namespace Kross {
         }
         inline static QStringList toVariant(VALUE value) {
             if( TYPE(value) != T_ARRAY ) {
-                rb_raise(rb_eTypeError, "StringList must be an array");
+                rb_raise(rb_eTypeError, "QStringList must be an array");
                 return QStringList();
             }
             QStringList l;
@@ -270,7 +395,7 @@ namespace Kross {
         }
         inline static QVariantList toVariant(VALUE value) {
             if( TYPE(value) != T_ARRAY ) {
-                rb_raise(rb_eTypeError, "VariantList must be an array");
+                rb_raise(rb_eTypeError, "QVariantList must be an array");
                 return QVariantList();
             }
             QVariantList l;
@@ -300,7 +425,7 @@ namespace Kross {
         }
         inline static QVariantMap toVariant(VALUE value) {
             if( TYPE(value) != T_HASH ) {
-                rb_raise(rb_eTypeError, "VariantMap must be a hash");
+                rb_raise(rb_eTypeError, "QVariantMap must be a hash");
                 return QVariantMap();
             }
             QVariantMap map;

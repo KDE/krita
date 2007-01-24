@@ -505,6 +505,26 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
             // set the return value
             if(hasreturnvalue) {
+
+/*
+                int typeId = QVariant::nameToType( metamethod.typeName() );
+                if( typeId == QVariant::Invalid || typeId == QVariant::UserType ) {
+                    typeId = QMetaType::type( metamethod.typeName() );
+
+                    void* ptr = QMetaType::construct(typeId, 0);
+//MetaType* returntype = new MetaTypeVoidStar( typeId, ptr, true );
+MetaType* returntype = new MetaTypeVoidStar( typeId, ptr, false );
+                    variantargs[0] = returntype;
+                    voidstarargs[0] = returntype->toVoidStar();
+                }
+                else {
+                    QVariant v( (QVariant::Type)typeId , 0 );
+                    MetaType* returntype = new MetaTypeVariant<QVariant>(v);
+                    variantargs[0] = returntype;
+                    voidstarargs[0] = returntype->toVoidStar();
+                }
+*/
+
                 int typeId = QVariant::nameToType( metamethod.typeName() );
                 if( typeId == QVariant::Invalid || typeId == QVariant::UserType )
                     typeId = QMetaType::type( metamethod.typeName() );
@@ -515,6 +535,7 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
                 MetaType* returntype = new MetaTypeVoidStar( typeId, ptr, true );
                 variantargs[0] = returntype;
                 voidstarargs[0] = returntype->toVoidStar();
+
             }
             else {
                 variantargs[0] = 0;
@@ -547,11 +568,23 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
             // eval the return-value
             if(hasreturnvalue) {
+
+/*
+                int returnTypeId = QVariant::nameToType( metamethod.typeName() );
+                if( returnTypeId == QVariant::Invalid || returnTypeId == QVariant::UserType ) {
+
+                }
+                else {
+                    QVariant v(variantargs[0]->typeId(), variantargs[0]->toVoidStar());
+                    pyresult = PythonType<QVariant>::toPyObject(v);
+                }
+*/
                 QVariant v(variantargs[0]->typeId(), variantargs[0]->toVoidStar());
                 pyresult = PythonType<QVariant>::toPyObject(v);
                 #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
                     krossdebug( QString("Returnvalue typeId=%1 metamethod.typename=%2 variant.toString=%3 variant.typeName=%4 pyobject=%5").arg(variantargs[0]->typeId()).arg(metamethod.typeName()).arg(v.toString()).arg(v.typeName()).arg(pyresult.as_string().c_str()) );
                 #endif
+
             }
 
             // finally free the PythonVariable instances

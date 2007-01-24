@@ -55,6 +55,19 @@ VALUE RubyType<QVariant>::toVALUE(const QVariant& v)
         case QVariant::ULongLong:
             return RubyType<qlonglong>::toVALUE(v.toULongLong());
 
+        case QVariant::Size:
+            return RubyType<QSize>::toVALUE(v.toSize());
+        case QVariant::SizeF:
+            return RubyType<QSizeF>::toVALUE(v.toSizeF());
+        case QVariant::Point:
+            return RubyType<QPoint>::toVALUE(v.toPoint());
+        case QVariant::PointF:
+            return RubyType<QPointF>::toVALUE(v.toPointF());
+        case QVariant::Rect:
+            return RubyType<QRect>::toVALUE(v.toRect());
+        case QVariant::RectF:
+            return RubyType<QRectF>::toVALUE(v.toRectF());
+
         case QVariant::Invalid: {
             #ifdef KROSS_RUBY_VARIANT_DEBUG
                 krossdebug( QString("RubyType<QVariant>::toVALUE variant=%1 is QVariant::Invalid. Returning Py:None.").arg(v.toString()) );
@@ -247,6 +260,19 @@ MetaType* RubyMetaTypeFactory::create(int typeId, VALUE value)
             return new RubyMetaTypeVariant<qlonglong>(value);
         case QVariant::ULongLong:
             return new RubyMetaTypeVariant<qulonglong>(value);
+
+        case QVariant::Size:
+            return new RubyMetaTypeVariant<QSize>(value);
+        case QVariant::SizeF:
+            return new RubyMetaTypeVariant<QSizeF>(value);
+        case QVariant::Point:
+            return new RubyMetaTypeVariant<QPoint>(value);
+        case QVariant::PointF:
+            return new RubyMetaTypeVariant<QPointF>(value);
+        case QVariant::Rect:
+            return new RubyMetaTypeVariant<QRect>(value);
+        case QVariant::RectF:
+            return new RubyMetaTypeVariant<QRectF>(value);
 
         case QVariant::Invalid: // fall through
         case QVariant::UserType: // fall through

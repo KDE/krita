@@ -54,6 +54,12 @@ namespace Kross {
      *   \li QVariant::LongLong
      *   \li QVariant::ULongLong
      *   \li QVariant::ByteArray
+     *   \li QVariant::Size
+     *   \li QVariant::SizeF
+     *   \li QVariant::Point
+     *   \li QVariant::PointF
+     *   \li QVariant::Rect
+     *   \li QVariant::RectF
      *   \li QVariant::String
      *   \li QVariant::StringList
      *   \li QVariant::List
@@ -79,16 +85,10 @@ namespace Kross {
      *   \li QVariant::Palette
      *   \li QVariant::Pen
      *   \li QVariant::Pixmap
-     *   \li QVariant::Point
      *   \li QVariant::PointArray
-     *   \li QVariant::PointF
      *   \li QVariant::Polygon
-     *   \li QVariant::Rect
-     *   \li QVariant::RectF
      *   \li QVariant::RegExp
      *   \li QVariant::Region
-     *   \li QVariant::Size
-     *   \li QVariant::SizeF
      *   \li QVariant::SizePolicy
      *   \li QVariant::TextFormat
      *   \li QVariant::TextLength
@@ -380,21 +380,14 @@ namespace Kross {
     struct PythonType<QPointF>
     {
         inline static Py::Object toPyObject(const QPointF& point) {
-krossdebug( QString("--------1") );
             Py::List list;
-krossdebug( QString("--------2") );
             list.append( PythonType<double>::toPyObject(point.x()) );
             list.append( PythonType<double>::toPyObject(point.y()) );
-krossdebug( QString("--------3") );
             return list;
         }
         inline static QPointF toVariant(const Py::Object& obj) {
-krossdebug( QString("--------10") );
             Py::List list(obj);
-krossdebug( QString("--------11") );
-QPointF p(PythonType<double>::toVariant(list[0]), PythonType<double>::toVariant(list[1]));
-krossdebug( QString("--------12") );
-            return p;
+            return QPointF(PythonType<double>::toVariant(list[0]), PythonType<double>::toVariant(list[1]));
         }
     };
 

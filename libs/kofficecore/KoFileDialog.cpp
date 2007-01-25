@@ -60,6 +60,7 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
 
     bool addUncompressed = supportedSpecialFormats & KoDocument::SaveAsDirectoryStore;
     bool addFlatXML = supportedSpecialFormats & KoDocument::SaveAsFlatXML;
+    bool addEncrypted = supportedSpecialFormats & KoDocument::SaveEncrypted;
 
     int idxSpecialOutputFlag = 0;
     int numSpecialEntries = 0;
@@ -73,6 +74,12 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
         ++numSpecialEntries;
         m_specialFormats.append( KoDocument::SaveAsFlatXML );
         if ( specialOutputFlag == KoDocument::SaveAsFlatXML )
+            idxSpecialOutputFlag = numSpecialEntries;
+    }
+    if ( addEncrypted ) {
+        ++numSpecialEntries;
+        m_specialFormats.append( KoDocument::SaveEncrypted );
+        if ( specialOutputFlag == KoDocument::SaveEncrypted )
             idxSpecialOutputFlag = numSpecialEntries;
     }
 
@@ -95,6 +102,8 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
         filterWidget->setItemText( idx++, i18n("%1 (Uncompressed XML Files)", type->comment() ) );
     if ( addFlatXML )
         filterWidget->setItemText( idx++, i18n("%1 (Flat XML File)", type->comment() ) );
+    if ( addEncrypted )
+        filterWidget->setItemText( idx++, i18n("%1 (Encrypted)", type->comment() ) );
     // if you add an entry here, update numSpecialEntries above and specialEntrySelected() below
 
     // For native format...

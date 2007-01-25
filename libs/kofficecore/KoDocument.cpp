@@ -568,7 +568,8 @@ bool KoDocument::isAutoErrorHandlingEnabled() const
 
 void KoDocument::slotAutoSave()
 {
-    if ( isModified() && d->modifiedAfterAutosave && !d->m_bLoading )
+    // Autosaving is currently disabled for encrypted files, since every autosave would request the password
+    if ( isModified() && d->modifiedAfterAutosave && !d->m_bLoading && d->m_specialOutputFlag != SaveEncrypted )
     {
         connect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
         emit sigStatusBarMessage( i18n("Autosaving...") );
@@ -990,6 +991,13 @@ bool KoDocument::saveNativeFormat( const QString & file )
         backend = KoStore::Directory;
         kDebug(30003) << "Saving as uncompressed XML, using directory store." << endl;
     }
+#ifdef QCA2
+    else if ( d->m_specialOutputFlag == SaveEncrypted )
+    {
+        backend = KoStore::Encrypted;
+        kDebug(30003) << "Saving using encrypted backend." << endl;
+    }
+#endif
     else if ( d->m_specialOutputFlag == SaveAsFlatXML )
     {
         kDebug(30003) << "Saving as a flat XML file." << endl;
@@ -1804,6 +1812,10 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
     return false;
   }
 
+  // Remember that the file was encrypted
+  if( d->m_specialOutputFlag == 0 && store->isEncrypted( ) )
+    d->m_specialOutputFlag = SaveEncrypted;
+
   return loadNativeFormatFromStoreInternal( store );
 }
 
@@ -1815,6 +1827,10 @@ bool KoDocument::loadNativeFormatFromStore( QByteArray &data )
 
   if ( store->bad() )
     return false;
+
+  // Remember that the file was encrypted
+  if( d->m_specialOutputFlag == 0 && store->isEncrypted( ) )
+    d->m_specialOutputFlag = SaveEncrypted;
 
   return loadNativeFormatFromStoreInternal( store );
 }
@@ -2480,7 +2496,12 @@ int KoDocument::supportedSpecialFormats() const
     // Apps which support special output flags can add reimplement and add to this.
     // E.g. this is how did "saving in the 1.1 format".
     // SaveAsDirectoryStore is a given since it's implemented by KoDocument itself.
+    // SaveEncrypted is implemented in KoDocument as well, if QCA2 was found.
+#ifdef QCA2
+    return SaveAsDirectoryStore | SaveEncrypted;
+#else
     return SaveAsDirectoryStore;
+#endif
 }
 
 void KoDocument::addShell( KoMainWindow *shell )

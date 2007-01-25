@@ -253,8 +253,9 @@ public:
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
     enum { /*SaveAsKOffice1dot1 = 1,*/ // old and removed
            SaveAsDirectoryStore = 2,
-           SaveAsFlatXML = 4
-           // bitfield! next value is 8
+           SaveAsFlatXML = 4,
+           SaveEncrypted = 8
+           // bitfield! next value is 16
          };
 
     /**

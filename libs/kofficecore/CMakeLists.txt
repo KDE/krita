@@ -6,6 +6,10 @@ include_directories( ${KWMF_INCLUDES} ${KOSTORE_INCLUDES} ${KDE4_INCLUDE_DIR}/th
 
 ########### next target ###############
 
+if( QCA2_FOUND )
+add_definitions( -DQCA2 )
+endif( QCA2_FOUND )
+
 set(kofficecore_LIB_SRCS
    KoDocument.cpp
    KoPluginLoader.cpp

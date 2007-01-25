@@ -711,6 +711,111 @@ void MImageScale::mimageScaleAARGBA(MImageScaleInfo *isi, unsigned int *dest,
 // ------------------
 
 
+QImage ImageUtils::sampleImage(const QImage& image, int columns, int rows)
+{
+    int *x_offset;
+    int *y_offset;
+
+    long j;
+    long y;
+
+    uchar *pixels;
+
+    register const uchar *p;
+
+    register long x;
+
+    register uchar *q;
+
+    /*
+      Initialize sampled image attributes.
+    */
+    if ((columns == image.width()) && (rows == image.height()))
+        return image;
+    // This function is modified to handle any image depth, not only
+    // 32bit like the ImageMagick original. This avoids the relatively
+    // expensive conversion.
+    const int d = image.depth() / 8;
+    QImage sample_image( columns, rows, image.depth());
+    sample_image.setAlphaBuffer( image.hasAlphaBuffer());
+    /*
+      Allocate scan line buffer and column offset buffers.
+    */
+    pixels= new uchar[ image.width() * d ];
+    x_offset= new int[ sample_image.width() ];
+    y_offset= new int[ sample_image.height() ];
+    /*
+      Initialize pixel offsets.
+    */
+// In the following several code 0.5 needs to be added, otherwise the image
+// would be moved by half a pixel to bottom-right, just like
+// with Qt's QImage::scale()
+    for (x=0; x < (long) sample_image.width(); x++)
+    {
+        x_offset[x]=int((x+0.5)*image.width()/sample_image.width());
+    }
+    for (y=0; y < (long) sample_image.height(); y++)
+    {
+        y_offset[y]=int((y+0.5)*image.height()/sample_image.height());
+    }
+    /*
+      Sample each row.
+    */
+    j=(-1);
+    for (y=0; y < (long) sample_image.height(); y++)
+    {
+        q= sample_image.scanLine( y );
+        if (j != y_offset[y] )
+        {
+            /*
+              Read a scan line.
+            */
+            j= y_offset[y];
+            p= image.scanLine( j );
+            (void) memcpy(pixels,p,image.width()*d);
+        }
+        /*
+          Sample each column.
+        */
+        switch( d )
+        {
+        case 1: // 8bit
+            for (x=0; x < (long) sample_image.width(); x++)
+            {
+                *q++=pixels[ x_offset[x] ];
+            }
+            break;
+        case 4: // 32bit
+            for (x=0; x < (long) sample_image.width(); x++)
+            {
+                *(QRgb*)q=((QRgb*)pixels)[ x_offset[x] ];
+                q += d;
+            }
+            break;
+        default:
+            for (x=0; x < (long) sample_image.width(); x++)
+            {
+                memcpy( q, pixels + x_offset[x] * d, d );
+                q += d;
+            }
+            break;
+        }
+    }
+    if( d != 4 ) // != 32bit
+    {
+        sample_image.setNumColors( image.numColors());
+        for( int i = 0; i < image.numColors(); ++i )
+            sample_image.setColor( i, image.color( i ));
+    }
+    delete[] y_offset;
+    delete[] x_offset;
+    delete[] pixels;
+    return sample_image;
+}
+
+
+
+
 QImage ImageUtils::scale(const QImage& image, int width, int height, Qt::AspectRatioMode mode)
 {
     if( image.isNull()) return image.copy();

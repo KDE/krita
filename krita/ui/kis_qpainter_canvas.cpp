@@ -187,7 +187,16 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
                                                       // class anymore.
         kDebug(41010) << "Copying subrect:" << t.elapsed() << endl;
         t.restart();
-        QImage scaledImage = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
+
+        QImage scaledImage;
+
+        if ( scaleX > 1.0 && scaleY > 1.0 ) {
+            scaledImage = ImageUtils::sampleImage( croppedImage, sz.width(), sz.height() );
+        }
+        else {
+            scaledImage = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
+        }
+
         kDebug(41010) << "Scaling subimage: " << t.elapsed() << endl;
         t.restart();
         gc.drawImage( dstTopLeft.x(), dstTopLeft.y(), scaledImage, 0, 0, sz.width(), sz.height() );

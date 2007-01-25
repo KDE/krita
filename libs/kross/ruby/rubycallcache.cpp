@@ -71,7 +71,7 @@ namespace Kross {
         if(d->hasreturnvalue)
         {
             void* ptr = QMetaType::construct(d->returnTypeId, 0);
-            MetaType* returntype = new MetaTypeVoidStar( d->returnTypeId, ptr, true );
+            MetaType* returntype = new MetaTypeVoidStar( d->returnTypeId, ptr, false /*true*/ );
             variantargs[0] = returntype;
             voidstarargs[0] = returntype->toVoidStar();
         }

@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef TESTPATHPOINTSELECTION_H
-#define TESTPATHPOINTSELECTION_H
+#ifndef TESTPATHTOOL_H
+#define TESTPATHTOOL_H
 
 #include <QtTest/QtTest>
 
@@ -28,4 +28,4 @@ private slots:
     void koPathPointSelection_selectedSegmentsData();
 };
 
-#endif // TESTPATHPOINTSELECTION_H
+#endif // TESTPATHTOOL_H

@@ -17,6 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifdef QCA2
+
 #include <KoXmlReader.h>
 #include <QString>
 #include <QByteArray>
@@ -769,3 +771,5 @@ bool KoEncryptedStore::fileExists( const QString& absPath ) const {
     const KArchiveEntry *entry = m_pZip->directory()->entry( absPath );
     return ( entry && entry->isFile() ) || ( absPath == MANIFEST_FILE && !m_manifestBuffer.isNull( ) );
 }
+
+#endif // QCA2

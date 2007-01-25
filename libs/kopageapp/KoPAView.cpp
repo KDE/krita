@@ -220,7 +220,7 @@ void KoPAView::viewZoom(KoZoomMode::Mode mode, int zoom)
     {
         zoomString = KoZoomMode::toString( mode );
         KoPageLayout layout = m_activePage->pageLayout();
-        newZoom = qRound(static_cast<double>( m_canvasController->visibleWidth() * 100 ) /
+        newZoom = qRound(static_cast<double>(m_canvasController->viewport()->size().width() * 100 ) /
             ( m_zoomHandler.resolutionX() * layout.ptWidth ) ) - 1;
 
         if ( ( newZoom != m_zoomHandler.zoomInPercent() ) &&
@@ -235,8 +235,10 @@ void KoPAView::viewZoom(KoZoomMode::Mode mode, int zoom)
         KoPageLayout layout = m_activePage->pageLayout();
         double height = m_zoomHandler.resolutionY() * layout.ptHeight;
         double width = m_zoomHandler.resolutionX() * layout.ptWidth;
-        newZoom = qMin(qRound(static_cast<double>( m_canvasController->visibleHeight() * 100) / height ),
-                    qRound(static_cast<double>( m_canvasController->visibleWidth() * 100) / width ) ) - 1;
+        QSize viewportSize = m_canvasController->viewport()->size();
+        newZoom = qMin(qRound(static_cast<double>(viewportSize.height() * 100) / height ),
+                    qRound(static_cast<double>( viewportSize.width() * 100) / width ) ) - 1;
+
     } 
     else 
     {

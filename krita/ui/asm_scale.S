@@ -1,3 +1,4 @@
+#include <config-processor.h>
 #ifdef HAVE_X86_MMX
 
 #ifdef __EMX__

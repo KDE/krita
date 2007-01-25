@@ -94,7 +94,7 @@
 #include <kcpuinfo.h>
 
 #include <config-endian.h> // WORDS_BIGENDIAN
-//#include <config-processor.h>
+#include <config-processor.h>
 
 namespace MImageScale{
     typedef struct __mimage_scale_info

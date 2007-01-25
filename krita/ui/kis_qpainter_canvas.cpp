@@ -47,8 +47,8 @@
 #include "kis_view2.h"
 #include "scale.h"
 
-#define PATTERN_WIDTH 256
-#define PATTERN_HEIGHT 256
+#define PATTERN_WIDTH 32
+#define PATTERN_HEIGHT 32
 
 namespace {
 // XXX: Remove this with Qt 4.3
@@ -68,8 +68,7 @@ public:
     KoToolProxy * toolProxy;
     KisCanvas2 * canvas;
     KoViewConverter * viewConverter;
-    QImage * checkTexture;
-    QBrush * checkBrush;
+    QBrush checkBrush;
     QPixmap displayCache;
 };
 
@@ -83,26 +82,22 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     m_d->toolProxy = KoToolManager::instance()->createToolProxy(m_d->canvas);
     setAttribute(Qt::WA_NoSystemBackground);
     setAutoFillBackground(false);
-    m_d->checkTexture = new QImage(PATTERN_WIDTH, PATTERN_HEIGHT, QImage::Format_RGB32);
 
-    for (int y = 0; y < PATTERN_HEIGHT; y++)
-    {
-        for (int x = 0; x < PATTERN_WIDTH; x++)
-        {
-            // XXX: make size of checks configurable
-            quint8 v = 128 + 63 * ((x / 16 + y / 16) % 2);
-            m_d->checkTexture->setPixel(x, y, qRgb(v, v, v));
-        }
-    }
+    QPixmap tile(PATTERN_WIDTH * 2, PATTERN_HEIGHT * 2);
+    tile.fill(Qt::white);
+    QPainter pt(&tile);
+    QColor color(220, 220, 220);
+    pt.fillRect(0, 0, PATTERN_WIDTH, PATTERN_HEIGHT, color);
+    pt.fillRect(PATTERN_WIDTH, PATTERN_HEIGHT, PATTERN_WIDTH, PATTERN_HEIGHT, color);
+    pt.end();
+    QBrush b(tile);
 
-    m_d->checkBrush = new QBrush( *m_d->checkTexture );
+    m_d->checkBrush = b;
 }
 
 
 KisQPainterCanvas::~KisQPainterCanvas()
 {
-    delete m_d->checkTexture;
-    delete m_d->checkBrush;
     delete m_d;
 }
 
@@ -115,14 +110,22 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     kDebug(41010) << "Paint event: " << updateRect << endl;
 
     const QImage canvasImage = m_d->canvas->canvasCache();
-/*
+#if 0
     if ( m_d->displayCache.width() < updateRect.width() ||
          m_d->displayCache.height() < updateRect.height() )
     {
+        QSize size = updateRect.size();
+        size.setWidth( size.width() + 64 );
+        size.setHeight( size.height() + 64 );
+
         kDebug(41010) << "Oops, display cache too small\n";
-        m_d->displayCache = QPixmap( updateRect.size() );
+        m_d->displayCache = QPixmap( size );
+        QPainter p( &m_d->displayCache );
+        p.fillRect( 0, 0, m_d->displayCache.width(), m_d->displayCache.height(), m_d->checkBrush );
+        p.end();
+
     }
-*/
+#endif
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
 
@@ -137,8 +140,10 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     t.start();
     // Checks
-    gc.fillRect(updateRect, *m_d->checkBrush );
-
+    gc.fillRect(updateRect, m_d->checkBrush );
+    //gc.drawPixmap( - (updateRect.x() % PATTERN_WIDTH ),
+    //               -( updateRect.y() % PATTERN_HEIGHT ),
+    //               m_d->displayCache );
     kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
     t.restart();
 
@@ -261,14 +266,20 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
 
 void KisQPainterCanvas::parentSizeChanged(const QSize & size )
 {
+    Q_UNUSED( size );
+#if 0
     if (m_d->displayCache.isNull() ||
         ( size.width() > m_d->displayCache.width() ||
           size.height() > m_d->displayCache.height())
         )
     {
         kDebug() << "KisQPainterCanvas::parentSizeChanged " << size << endl;
-        m_d->displayCache = QPixmap( size );
+        m_d->displayCache = QPixmap( size.width() + 64, size.height() + 64 );
+        QPainter p( &m_d->displayCache );
+        p.fillRect( 0, 0, m_d->displayCache.width(), m_d->displayCache.height(), m_d->checkBrush );
+        p.end();
     }
+#endif
 }
 
 #include "kis_qpainter_canvas.moc"

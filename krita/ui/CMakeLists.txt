@@ -1,5 +1,9 @@
 configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-processor.h )
 
+add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/asm_scale.o
+                   COMMAND gcc -c -I. ${CMAKE_CURRENT_SOURCE_DIR}/asm_scale.S 
+                   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/asm_scale.S )
+
 include(kdefx.cmake)
 
 set(kritaui_LIB_SRCS
@@ -123,7 +127,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgnewimage.ui
 )
 
-kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS})
+kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/asm_scale.o )
 
 target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} kritaimage kofficeui kopainter)
 

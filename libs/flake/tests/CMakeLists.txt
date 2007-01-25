@@ -41,6 +41,18 @@ add_test(flake-TestPathShape ${EXECUTABLE_OUTPUT_PATH}/TestPathShape)
 
 ########### next target ###############
 
+set(TestPathTool_test_SRCS TestPathTool.cpp )
+
+kde4_automoc(${TestPathTool_test_SRCS})
+
+kde4_add_executable(TestPathTool RUN_UNINSTALLED ${TestPathTool_test_SRCS})
+
+target_link_libraries(TestPathTool  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+add_test(flake-TestPathTool ${EXECUTABLE_OUTPUT_PATH}/TestPathTool)
+
+########### next target ###############
+
 set(TestShapeAt_test_SRCS TestShapeAt.cpp )
 
 kde4_automoc(${TestShapeAt_test_SRCS})

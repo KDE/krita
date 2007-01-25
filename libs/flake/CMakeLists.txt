@@ -1,5 +1,11 @@
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOFFICECORE_INCLUDES} ${PIGMENT_INCLUDES})
 
+if(KDE4_BUILD_TESTS)
+    # only with this definition will the FLAKE_TEST_EXPORT macro do something
+    add_definitions(-DCOMPILING_TESTS)
+endif(KDE4_BUILD_TESTS)
+
+
 add_subdirectory(tests)
 
 set(flake_SRCS

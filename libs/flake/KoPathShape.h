@@ -61,6 +61,12 @@ public:
                      m_pointIndex.second < other.m_pointIndex.second ) ) );
 
     }
+    bool operator==( const KoPathPointData & other ) const
+    {
+        return m_pathShape == other.m_pathShape && 
+               m_pointIndex.first == other.m_pointIndex.first &&
+               m_pointIndex.second == other.m_pointIndex.second;
+    }
     /// path shape the path point belongs too
     KoPathShape *m_pathShape;
     /// position of the point in the path shape

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@ class KoPathPointMoveStrategy;
 class KoPathPointRubberSelectStrategy;
 
 /// The tool for editing a KoPathShape or a KoParameterShape
-class KoPathTool : public KoTool {
+class FLAKE_TEST_EXPORT KoPathTool : public KoTool {
     Q_OBJECT
 public:
     explicit KoPathTool(KoCanvasBase *canvas);
@@ -147,7 +147,7 @@ private:
      * This class handles the selection of points. It makes sure 
      * the canvas is repainted when the selection changes.
      */
-    class KoPathPointSelection
+    class FLAKE_TEST_EXPORT KoPathPointSelection
     {
     public:    
         explicit KoPathPointSelection( KoPathTool * tool )

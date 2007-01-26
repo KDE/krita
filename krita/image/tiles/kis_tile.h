@@ -20,6 +20,7 @@
 
 #include <qglobal.h>
 #include <QRect>
+#include <QMutex>
 
 class KisTiledDataManager;
 class KisTiledIterator;
@@ -88,7 +89,7 @@ private:
     qint32 m_col;
     qint32 m_pixelSize;
     KisTile *m_nextTile;
-
+    QMutex m_lock;
 public:
     static const qint32 WIDTH;
     static const qint32 HEIGHT;

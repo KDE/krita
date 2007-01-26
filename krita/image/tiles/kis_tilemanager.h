@@ -118,6 +118,7 @@ private:
     PoolFreeList *m_poolFreeList;
     QMutex * m_poolMutex;
     QMutex * m_swapMutex;
+    QMutex * m_bigKritaLock; // The 'BKL' ;)
 
     // This is the constant that we will use to see if we want to add a new tempfile
     // We use 1<<30 (one gigabyte) because apparently 32bit systems don't really like very

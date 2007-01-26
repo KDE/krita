@@ -18,6 +18,8 @@
 #include <assert.h>
 #include <kdebug.h>
 
+#include <QMutexLocker>
+
 #include "kis_tile_global.h"
 #include "kis_tile.h"
 #include "kis_tileddatamanager.h"
@@ -28,6 +30,7 @@ const qint32 KisTile::HEIGHT = 64;
 
 
 KisTile::KisTile(qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixel)
+    : m_lock(QMutex::Recursive)
 {
     m_pixelSize = pixelSize;
     m_data = 0;
@@ -45,6 +48,7 @@ KisTile::KisTile(qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixe
 }
 
 KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
+    : m_lock(QMutex::Recursive)
 {
     if (this != &rhs) {
         m_pixelSize = rhs.m_pixelSize;
@@ -67,6 +71,7 @@ KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
 }
 
 KisTile::KisTile(const KisTile& rhs)
+    : m_lock(QMutex::Recursive)
 {
     if (this != &rhs) {
         m_pixelSize = rhs.m_pixelSize;
@@ -99,6 +104,7 @@ KisTile::~KisTile()
 
 void KisTile::allocate()
 {
+    QMutexLocker lock(&m_lock);
     if (m_data == 0) {
         assert (!readers());
         m_data = KisTileManager::instance()->requestTileData(m_pixelSize);
@@ -108,11 +114,13 @@ void KisTile::allocate()
 
 void KisTile::setNext(KisTile *n)
 {
+    QMutexLocker lock(&m_lock);
     m_nextTile = n;
 }
 
 void KisTile::setData(const quint8 *pixel)
 {
+    QMutexLocker lock(&m_lock);
     addReader();
     quint8 *dst = m_data;
     for(int i=0; i <WIDTH * HEIGHT;i++)
@@ -125,6 +133,7 @@ void KisTile::setData(const quint8 *pixel)
 
 void KisTile::addReader() const
 {
+    QMutexLocker lock(const_cast<QMutex*>(&m_lock)); // YUCK ! ###
     if (m_nReadlock++ == 0)
         KisTileManager::instance()->ensureTileLoaded(this);
     else if (m_nReadlock < 0) {
@@ -136,6 +145,7 @@ void KisTile::addReader() const
 
 void KisTile::removeReader() const
 {
+    QMutexLocker lock(const_cast<QMutex*>(&m_lock)); // YUCK ! ###
     if (--m_nReadlock == 0)
         KisTileManager::instance()->maySwapTile(this);
 }

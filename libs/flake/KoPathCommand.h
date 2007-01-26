@@ -74,7 +74,7 @@ private:
 };
 
 /// The undo / redo command for path point moving.
-class KoControlPointMoveCommand : public QUndoCommand
+class FLAKE_TEST_EXPORT KoControlPointMoveCommand : public QUndoCommand
 {
 public:
     /**

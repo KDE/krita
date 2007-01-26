@@ -53,6 +53,18 @@ add_test(flake-TestPathTool ${EXECUTABLE_OUTPUT_PATH}/TestPathTool)
 
 ########### next target ###############
 
+set(TestControlPointMoveCommand_test_SRCS TestControlPointMoveCommand.cpp )
+
+kde4_automoc(${TestControlPointMoveCommand_test_SRCS})
+
+kde4_add_executable(TestControlPointMoveCommand RUN_UNINSTALLED ${TestControlPointMoveCommand_test_SRCS})
+
+target_link_libraries(TestControlPointMoveCommand  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+add_test(flake-TestControlPointMoveCommand ${EXECUTABLE_OUTPUT_PATH}/TestControlPointMoveCommand)
+
+########### next target ###############
+
 set(TestShapeAt_test_SRCS TestShapeAt.cpp )
 
 kde4_automoc(${TestShapeAt_test_SRCS})

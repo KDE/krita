@@ -118,6 +118,7 @@ namespace MImageScale{
     QImage smoothScale(const QImage& img, int dw, int dh);
 }
 
+#if defined(QT_ARCH_I386)
 #ifdef HAVE_X86_MMX
 extern "C" {
     void __mimageScale_mmx_AARGBA(MImageScale::MImageScaleInfo *isi,
@@ -125,6 +126,7 @@ extern "C" {
                                   int dx, int dy, int dw, int dh,
                                   int dow, int sow);
 }
+#endif
 #endif
 
 using namespace MImageScale;
@@ -147,6 +149,7 @@ QImage MImageScale::smoothScale(const QImage& image, int dw, int dh)
 
     QImage buffer( dw, dh, QImage::Format_ARGB32 );
 
+#if defined(QT_ARCH_I386)
 #ifdef HAVE_X86_MMX
 //#warning Using MMX Smoothscale
     bool haveMMX = KCPUInfo::haveExtension( KCPUInfo::IntelMMX );
@@ -155,6 +158,7 @@ QImage MImageScale::smoothScale(const QImage& image, int dw, int dh)
                                  0, 0, 0, 0, dw, dh, dw, sow);
     }
     else
+#endif
 #endif
     {
         mimageScaleAARGBA(scaleinfo, (unsigned int *)buffer.scanLine(0), 0, 0,

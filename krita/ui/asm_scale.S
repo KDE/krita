@@ -1,4 +1,5 @@
 #include <config-processor.h>
+#if defined(__i386__)
 #ifdef HAVE_X86_MMX
 
 #ifdef __EMX__
@@ -806,6 +807,7 @@ PR_(mimageScale_mmx_AARGBA):
 
 SIZE(mimageScale_mmx_AARGBA)
 
+#endif
 #endif
 
 .section	.note.GNU-stack,"",%progbits

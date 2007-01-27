@@ -657,10 +657,10 @@ bool KoEncryptedStore::closeWrite() {
 
     // Find a password
     // Do not accept empty passwords for compatiblity with OOo
-    if( m_password.isEmpty() || m_password == "" ) {
+    if(m_password.isEmpty()) {
         findPasswordInKWallet( );
     }
-    while( m_password.isEmpty( ) || m_password == "" ) {
+    while(m_password.isEmpty()) {
         KNewPasswordDialog dlg(m_window );
         dlg.setPrompt(i18n( "Please enter the password to encrypt the document with." ) );
         if( ! dlg.exec() ) {

@@ -31,8 +31,8 @@ DateVariable::DateVariable(DateType type)
 }
 
 void DateVariable::setProperties(const KoProperties *props) {
-    m_definition = qvariant_cast<QString> (props->getProperty("definition"));
-    m_offset = props->getProperty("offset").toInt();
+    m_definition = props->stringProperty("definition");
+    m_offset = props->intProperty("offset", 0);
     update();
 }
 

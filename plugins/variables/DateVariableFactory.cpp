@@ -38,7 +38,8 @@ DateVariableFactory::DateVariableFactory(QObject *parent)
 }
 
 KoInlineObject *DateVariableFactory::createInlineObject(const KoProperties *properties) const {
-    DateVariable *var = new DateVariable(static_cast<DateVariable::DateType> (properties->getProperty("id").toInt()));
+    DateVariable *var = new DateVariable(static_cast<DateVariable::DateType>
+            (properties->intProperty("id", DateVariable::Fixed)));
     var->setProperties(properties);
     return var;
 }

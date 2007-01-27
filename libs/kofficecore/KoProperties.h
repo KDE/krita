@@ -1,6 +1,7 @@
 /*
    Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
- 
+   Copyright (c) 2006 Thomas Zander <zander@kde.org>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -30,7 +31,6 @@
  * a key-value map. The serialisation format is XML.
  */
 class KOFFICECORE_EXPORT KoProperties {
-
 public:
 
     /**
@@ -43,32 +43,34 @@ public:
      */
     KoProperties(const KoProperties & rhs);
 
-    virtual ~KoProperties() {}
+    ~KoProperties() {}
 
 public:
 
     /**
-     * Fill the filter configuration object from the XML encoded representation in s.
+     * Fill the filter configuration object from the XML encoded representation in string.
+     * @param string the stored properties.
      */
-    virtual void load(const QString &);
+    void load(const QString &string);
 
 
     /**
      * Create a serialized version of this filter config
+     * @return the string version of this properties object
      */
-    virtual QString store();
+    QString store();
 
 
     /**
      * Set the property with name to value.
      */
-    virtual void setProperty(const QString & name, const QVariant & value);
+    void setProperty(const QString & name, const QVariant & value);
 
     /**
      * Set value to the value associated with property name
      * @return false if the specified property did not exist.
      */
-    virtual bool getProperty(const QString & name, QVariant & value) const;
+    bool property(const QString & name, QVariant & value) const;
 
     /**
      * Return a property by name, wrapped in a QVariant.
@@ -77,14 +79,14 @@ public:
      *      KoProperties *props = new KoProperties();
      *      props->setProperty("name", "Marcy");
      *      props->setProperty("age", 25);
-     *      QString name = props->getProperty("name").toString();
-     *      int age = props->getProperty("age").toInt();
+     *      QString name = props->property("name").toString();
+     *      int age = props->property("age").toInt();
      *  @endcode
      * @return a property by name, wrapped in a QVariant.
      * @param name the name (or key) with which the variant was registered.
-     * @see getInt() getString()
+     * @see intProperty() stringProperty()
      */
-    virtual QVariant getProperty(const QString & name) const;
+    QVariant property(const QString & name) const;
 
     /**
      * Return an integer property by name.
@@ -92,48 +94,44 @@ public:
      *  @code
      *      KoProperties *props = new KoProperties();
      *      props->setProperty("age", 25);
-     *      int age = props->getInt("age");
+     *      int age = props->intProperty("age");
      *  @endcode
      * @return an integer property by name
      * @param name the name (or key) with which the variant was registered.
      * @param def the default value, should there not be any property by the name this will be returned.
-     * @see getProperty() getString()
+     * @see property() stringProperty()
      */
-    int getInt(const QString & name, int def = 0) const;
+    int intProperty(const QString & name, int def = 0) const;
     /**
      * Return a double property by name.
      * @param name the name (or key) with which the variant was registered.
      * @param def the default value, should there not be any property by the name this will be returned.
      */
-    double getDouble(const QString & name, double def = 0.0) const;
+    double doubleProperty(const QString & name, double def = 0.0) const;
     /**
      * Return a boolean property by name.
      * @param name the name (or key) with which the variant was registered.
      * @param def the default value, should there not be any property by the name this will be returned.
      */
-    bool getBool(const QString & name, bool def = false) const;
+    bool boolProperty(const QString & name, bool def = false) const;
     /**
      * Return an QString property by name.
      * A typical usage:
      *  @code
      *      KoProperties *props = new KoProperties();
      *      props->setProperty("name", "Marcy");
-     *      QString name = props->getString("name");
+     *      QString name = props->stringProperty("name");
      *  @endcode
      * @return an QString property by name
      * @param name the name (or key) with which the variant was registered.
-     * @see getProperty() getInt()
+     * @see property() intProperty()
      * @param def the default value, should there not be any property by the name this will be returned.
      */
-    QString getString(const QString & name, const QString & def = QString::null) const;
+    QString stringProperty(const QString & name, const QString & def = QString::null) const;
 
 private:
-    void dump();
-
-protected:
 
     QMap<QString, QVariant> m_properties;
-
 };
 
 #endif // _KO_PROPERTIES_H

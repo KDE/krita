@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -85,7 +86,7 @@ void KoProperties::setProperty(const QString & name, const QVariant & value)
     m_properties.insert( name, value );
 }
 
-bool KoProperties::getProperty(const QString & name, QVariant & value) const
+bool KoProperties::property(const QString & name, QVariant & value) const
 {
    QMap<QString, QVariant>::const_iterator it = m_properties.find( name ); 
    if ( it == m_properties.end() ) {
@@ -97,15 +98,15 @@ bool KoProperties::getProperty(const QString & name, QVariant & value) const
    }
 }
 
-QVariant KoProperties::getProperty(const QString & name) const
+QVariant KoProperties::property(const QString & name) const
 {
     return m_properties.value( name, QVariant() );
 }
 
 
-int KoProperties::getInt(const QString & name, int def) const
+int KoProperties::intProperty(const QString & name, int def) const
 {
-    const QVariant v = getProperty(name);
+    const QVariant v = property(name);
     if (v.isValid())
         return v.toInt();
     else
@@ -113,37 +114,29 @@ int KoProperties::getInt(const QString & name, int def) const
 
 }
 
-double KoProperties::getDouble(const QString & name, double def) const
+double KoProperties::doubleProperty(const QString & name, double def) const
 {
-    const QVariant v = getProperty(name);
+    const QVariant v = property(name);
     if (v.isValid())
         return v.toDouble();
     else
         return def;
 }
 
-bool KoProperties::getBool(const QString & name, bool def) const
+bool KoProperties::boolProperty(const QString & name, bool def) const
 {
-    const QVariant v = getProperty(name);
+    const QVariant v = property(name);
     if (v.isValid())
         return v.toBool();
     else
         return def;
 }
 
-QString KoProperties::getString(const QString & name, const QString & def) const
+QString KoProperties::stringProperty(const QString & name, const QString & def) const
 {
-    const QVariant v = getProperty(name);
+    const QVariant v = property(name);
     if (v.isValid())
         return v.toString();
     else
         return def;
-}
-
-void KoProperties::dump()
-{
-    QMap<QString, QVariant>::Iterator it;
-    for ( it = m_properties.begin(); it != m_properties.end(); ++it ) {
-        // ### TODO finish
-    }
 }

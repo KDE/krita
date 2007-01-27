@@ -61,7 +61,7 @@ public:
      * Shortly after instantiating this variable the factory should set the
      * properties using this method.
      * Note that the loading mechanism will fill this properties object with the
-     * attributes from the ODF file (if applicable), so it would be usefull to synchronize
+     * attributes from the ODF file (if applicable), so it would be useful to synchronize
      * the property names based on that.
      */
     virtual void setProperties(const KoProperties *props) { Q_UNUSED(props); }

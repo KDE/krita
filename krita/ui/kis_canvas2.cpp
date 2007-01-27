@@ -248,7 +248,9 @@ KoToolProxy * KisCanvas2::toolProxy() {
 
 void KisCanvas2::setCanvasSize(int w, int h)
 {
+    m_d->canvasWidget->widget()->setUpdatesEnabled(false);
     m_d->canvasWidget->widget()->setMinimumSize( w, h );
+    m_d->canvasWidget->widget()->setUpdatesEnabled(true);
 }
 
 KisImageSP KisCanvas2::image()

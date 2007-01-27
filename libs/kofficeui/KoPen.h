@@ -27,14 +27,15 @@
 class KoZoomHandler;
 
 /**
- * Pen that handles line widths in points
+ * This class is deprecated.
+ * This class is a Pen that handles line widths in points and can zoom.  Qt4 and Flake make this class obsolete.
  */
 class KOFFICEUI_EXPORT KoPen : public QPen
 {
   public:
-    KoPen();
-    KoPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style);
-    explicit KoPen(const QColor& _color);
+    KDE_DEPRECATED KoPen();
+    KDE_DEPRECATED KoPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style);
+    KDE_DEPRECATED explicit KoPen(const QColor& _color);
     ~KoPen();
 
     /**

@@ -276,7 +276,7 @@ public:
      * @param pointData describing the point 
      * @param parent the parent command used for macro commands
      */
-    KoBreakSegmentCommand( const KoPathPointData & pointData, QUndoCommand *parent = 0 );
+    explicit KoBreakSegmentCommand( const KoPathPointData & pointData, QUndoCommand *parent = 0 );
     ~KoBreakSegmentCommand();
     
     /// redo the command

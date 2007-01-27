@@ -290,10 +290,10 @@ bool KoEncryptedStore::init( Mode mode, const QByteArray & appIdentification ) {
 
         if( isEncrypted( ) && !( QCA::isSupported( "sha1" ) && QCA::isSupported( "pbkdf2(sha1)" ) && QCA::isSupported( "blowfish-cfb" ) ) ) {
             m_bGood = false;
-            KMessage::message( KMessage::Error, i18n( "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can't be opened." ) );
+            KMessage::message( KMessage::Error, i18n( "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can not be opened." ) );
         }
     }
-    
+
     return m_bGood;
 }
 
@@ -656,7 +656,7 @@ bool KoEncryptedStore::closeWrite() {
     }
 
     // Find a password
-    // Do not accept empty passwords for compatiblity with OOo
+    // Do not accept empty passwords for compatibility with OOo
     if(m_password.isEmpty()) {
         findPasswordInKWallet( );
     }

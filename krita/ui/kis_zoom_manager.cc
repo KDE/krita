@@ -155,7 +155,6 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
     {
         m_zoomHandler->setZoomedResolution(img->xRes(), img->yRes());
         m_view->canvasBase()->setCanvasSize(int(img->width()), int(img->height()));
-        m_view->canvas()->update();
 
         // Now try to calculate a zoomvalue for display purposes, eventhough it can never be correct
         double zoomF = 72.0 * img->xRes() / KoGlobal::dpiX();
@@ -208,7 +207,6 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
         m_view->canvasBase()->setCanvasSize(
                         int(m_zoomHandler->documentToViewX(img->width() / img->xRes())),
                         int(m_zoomHandler->documentToViewY(img->height() / img->yRes())));
-        m_view->canvas()->update();
     }
 }
 

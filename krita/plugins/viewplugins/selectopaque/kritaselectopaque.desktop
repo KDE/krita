@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SelectOpaque
+Name[da]=Markér ugennemsigtig
 Name[de]=UndurchsichtigeAuswählen
 Name[et]=Läbipaistmatute pikslite valik
 Name[it]=Seleziona i pixel opachi
@@ -10,6 +11,7 @@ Name[pt]=Selecção Opaca
 Name[pt_BR]=Selecção Opaca
 Name[ru]=Выделение непрозрачных областей
 Name[sv]=Markera ogenomskinliga
+Name[uk]=Виділення непрозорих ділянок
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaselectopaque

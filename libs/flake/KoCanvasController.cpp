@@ -328,7 +328,7 @@ void KoCanvasController::Viewport::repaint(KoShape *shape) {
     Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
     rect.moveLeft(rect.left() + canvasWidget->x());
     rect.moveTop(rect.top() + canvasWidget->y());
-    rect.adjust(-2, -2, 2, 2); // update for antialias
+    rect.adjust(-2, -2, 2, 2); // adjust for antialias
     update(rect);
 }
 

@@ -96,7 +96,6 @@ public:
     virtual QList<KoShape*> shapes() const { return m_shapes; }
 
     class KOTEXT_EXPORT LayoutState {
-// TODO move decorate parag to this one as well.
     public:
         LayoutState() : shapeNumber(-1), shape(0), layout(0) {}
         virtual ~LayoutState() {}

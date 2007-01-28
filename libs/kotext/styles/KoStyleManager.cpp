@@ -25,20 +25,38 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-KoStyleManager::KoStyleManager(QObject *parent)
-    : QObject(parent),
-    m_updateTriggered(false)
+class KoStyleManager::Private
 {
-    m_standard = new KoParagraphStyle();
-    m_standard->setLeftMargin(0);
-    m_standard->setTopMargin(0);
-    m_standard->setBottomMargin(0);
-    m_standard->setRightMargin(0);
-    m_standard->setTextIndent(0);
-    m_standard->setIndent(0);
-    m_standard->setAlignment(Qt::AlignLeft);
-    m_standard->setName( i18n("[No Paragraph Style]"));
-    add(m_standard);
+public:
+    static int s_stylesNumber; // For giving out unique numbers to the styles for referencing
+
+    QList<KoCharacterStyle*> m_charStyles;
+    QList<KoParagraphStyle*> m_paragStyles;
+    QList<ChangeFollower*> m_documentUpdaterProxies;
+
+    bool m_updateTriggered;
+    QList<int> m_updateQueue;
+
+    KoParagraphStyle *m_standard;
+};
+
+// static
+int KoStyleManager::Private::s_stylesNumber = 100;
+
+KoStyleManager::KoStyleManager(QObject *parent)
+    : QObject(parent), d(new Private())
+{
+    d->m_updateTriggered = false;
+    d->m_standard = new KoParagraphStyle();
+    d->m_standard->setLeftMargin(0);
+    d->m_standard->setTopMargin(0);
+    d->m_standard->setBottomMargin(0);
+    d->m_standard->setRightMargin(0);
+    d->m_standard->setTextIndent(0);
+    d->m_standard->setIndent(0);
+    d->m_standard->setAlignment(Qt::AlignLeft);
+    d->m_standard->setName( i18n("[No Paragraph Style]"));
+    add(d->m_standard);
 /* for testing ;)
 KoParagraphStyle *a = new KoParagraphStyle();
 a->setName("A");
@@ -52,32 +70,36 @@ b->setRightMargin(400);
 add(b); */
 }
 
+KoStyleManager::~KoStyleManager() {
+    delete d;
+}
+
 void KoStyleManager::add(KoCharacterStyle *style) {
-    if(m_charStyles.contains(style))
+    if(d->m_charStyles.contains(style))
         return;
-    style->setStyleId( s_stylesNumber++ );
-    m_charStyles.append(style);
+    style->setStyleId( d->s_stylesNumber++ );
+    d->m_charStyles.append(style);
 }
 
 void KoStyleManager::add(KoParagraphStyle *style) {
-    if(m_paragStyles.contains(style))
+    if(d->m_paragStyles.contains(style))
         return;
-    style->setStyleId( s_stylesNumber++ );
-    m_paragStyles.append(style);
+    style->setStyleId( d->s_stylesNumber++ );
+    d->m_paragStyles.append(style);
     if(style->characterStyle())
         add(style->characterStyle());
 }
 
 void KoStyleManager::remove(KoCharacterStyle *style) {
-    m_charStyles.removeAll(style);
+    d->m_charStyles.removeAll(style);
 }
 
 void KoStyleManager::remove(KoParagraphStyle *style) {
-    m_paragStyles.removeAll(style);
+    d->m_paragStyles.removeAll(style);
 }
 
 void KoStyleManager::remove(ChangeFollower *cf) {
-    m_documentUpdaterProxies.removeAll(cf);
+    d->m_documentUpdaterProxies.removeAll(cf);
 }
 
 void KoStyleManager::alteredStyle(const KoParagraphStyle *style) {
@@ -87,12 +109,12 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *style) {
         kWarning(32500) << "alteredStyle received from a non registered style!" << endl;
         return;
     }
-    if(! m_updateQueue.contains(id))
-        m_updateQueue.append(id);
+    if(! d->m_updateQueue.contains(id))
+        d->m_updateQueue.append(id);
     requestFireUpdate();
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
-    foreach(KoParagraphStyle *ps, m_paragStyles) {
+    foreach(KoParagraphStyle *ps, d->m_paragStyles) {
         if(ps->parent() == style)
             alteredStyle(ps);
     }
@@ -105,47 +127,47 @@ void KoStyleManager::alteredStyle(const KoCharacterStyle *style) {
         kWarning(32500) << "alteredStyle received from a non registered style!" << endl;
         return;
     }
-    if(! m_updateQueue.contains(id))
-        m_updateQueue.append(id);
+    if(! d->m_updateQueue.contains(id))
+        d->m_updateQueue.append(id);
     requestFireUpdate();
 }
 
 void KoStyleManager::updateAlteredStyles() {
-    foreach(ChangeFollower *cf, m_documentUpdaterProxies) {
-        cf->processUpdates(m_updateQueue);
+    foreach(ChangeFollower *cf, d->m_documentUpdaterProxies) {
+        cf->processUpdates(d->m_updateQueue);
     }
-    m_updateQueue.clear();
-    m_updateTriggered = false;
+    d->m_updateQueue.clear();
+    d->m_updateTriggered = false;
 }
 
 void KoStyleManager::requestFireUpdate() {
-    if(m_updateTriggered)
+    if(d->m_updateTriggered)
         return;
     QTimer::singleShot(0, this, SLOT(updateAlteredStyles()));
-    m_updateTriggered = true;
+    d->m_updateTriggered = true;
 }
 
 void KoStyleManager::add(QTextDocument *document) {
-    foreach(ChangeFollower *cf, m_documentUpdaterProxies) {
+    foreach(ChangeFollower *cf, d->m_documentUpdaterProxies) {
         if(cf->document() == document) {
             return; // already present.
         }
     }
     ChangeFollower *cf = new ChangeFollower(document, this);
-    m_documentUpdaterProxies.append(cf);
+    d->m_documentUpdaterProxies.append(cf);
 }
 
 void KoStyleManager::remove(QTextDocument *document) {
-    foreach(ChangeFollower *cf, m_documentUpdaterProxies) {
+    foreach(ChangeFollower *cf, d->m_documentUpdaterProxies) {
         if(cf->document() == document) {
-            m_documentUpdaterProxies.removeAll(cf);
+            d->m_documentUpdaterProxies.removeAll(cf);
             return;
         }
     }
 }
 
 KoCharacterStyle *KoStyleManager::characterStyle(int id) const {
-    foreach(KoCharacterStyle *style, m_charStyles) {
+    foreach(KoCharacterStyle *style, d->m_charStyles) {
         if(style->styleId() == id)
             return style;
     }
@@ -153,7 +175,7 @@ KoCharacterStyle *KoStyleManager::characterStyle(int id) const {
 }
 
 KoParagraphStyle *KoStyleManager::paragraphStyle(int id) const {
-    foreach(KoParagraphStyle *style, m_paragStyles) {
+    foreach(KoParagraphStyle *style, d->m_paragStyles) {
         if(style->styleId() == id)
             return style;
     }
@@ -161,7 +183,7 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(int id) const {
 }
 
 KoCharacterStyle *KoStyleManager::characterStyle(const QString &name) const {
-    foreach(KoCharacterStyle *style, m_charStyles) {
+    foreach(KoCharacterStyle *style, d->m_charStyles) {
         if(style->name() == name)
             return style;
     }
@@ -169,7 +191,7 @@ KoCharacterStyle *KoStyleManager::characterStyle(const QString &name) const {
 }
 
 KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const {
-    foreach(KoParagraphStyle *style, m_paragStyles) {
+    foreach(KoParagraphStyle *style, d->m_paragStyles) {
         if(style->name() == name)
             return style;
     }
@@ -177,10 +199,7 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const {
 }
 
 KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const {
-    return m_standard;
+    return d->m_standard;
 }
-
-// static
-int KoStyleManager::s_stylesNumber = 100;
 
 #include "KoStyleManager.moc"

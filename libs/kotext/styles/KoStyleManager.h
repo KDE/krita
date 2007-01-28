@@ -39,7 +39,12 @@ public:
      * Create a new style manager.
      * @param parent pass a parent to use qobject memory management
      */
-    KoStyleManager(QObject *parent = 0);
+    explicit KoStyleManager(QObject *parent = 0);
+
+    /**
+     * Destructor.
+     */
+    virtual ~KoStyleManager();
 
     /**
      * Add a new style, automatically giving it a new styleId.
@@ -137,17 +142,8 @@ private:
     void remove(ChangeFollower *cf);
 
 private:
-    static int s_stylesNumber; // For giving out unique numbers to the styles for referencing
-
-    QList<KoCharacterStyle*> m_charStyles;
-    QList<KoParagraphStyle*> m_paragStyles;
-    QList<ChangeFollower*> m_documentUpdaterProxies;
-
-    bool m_updateTriggered;
-    QList<int> m_updateQueue;
-
-
-    KoParagraphStyle *m_standard;
+    class Private;
+    Private* const d;
 };
 
 #endif

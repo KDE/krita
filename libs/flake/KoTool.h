@@ -246,6 +246,15 @@ protected:
      */
     virtual QWidget *  createOptionWidget();
 
+    /**
+     * Add an action under the given name to the collection.
+     *
+     * Inserting an action under a name that is already used for another action will replace
+     * the other action in the collection.
+     *
+     * @param name The name by which the action be retrieved again from the collection.
+     * @param action The action to add.
+     */
     void addAction(const QString &name, QAction *action);
 
 protected:

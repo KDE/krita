@@ -123,6 +123,8 @@ public:
      */
     QVariant valueOf( const QString& attribute ) const;
 
+    Align alignValueOf( const QString& attribute ) const;
+
     /**
      * Inherit the attributes of an element
      * @param element The BasicElement to herit from
@@ -138,11 +140,10 @@ public:
     /// Obtain the @r current displystyle
     bool displayStyle() const;
 
+    double mathSpaceValue( const QString& value ) const;
+
     /// Set the KoViewConverter to use
     void setViewConverter( KoViewConverter* converter );
-
-    /// Set the QPaintDevice to use
-    void setPaintDevice( QPaintDevice* paintDevice );
 
 protected:
     /**
@@ -174,7 +175,6 @@ protected:
 
     int alignValue( const QString& value ) const;
 
-    double mathSpaceValue( const QString& value ) const;
 
 private:
     /// The stack of attribute heritage, the topmost element is the currently active
@@ -185,6 +185,9 @@ private:
 
     /// The current font
     QFont m_currentFont; 
+
+    /// The currently questioned attribute's name
+    QString m_attribute;
 
     /// The KoViewConverter used to determine the point values of pixels
     KoViewConverter* m_viewConverter;

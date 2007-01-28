@@ -30,10 +30,10 @@
 
 class SymbolTable;
 
-
 namespace KFormula {
 
 /**
+ * @short Implementation of the MathML
  * An element that represents one char.
  */
 class TextElement : public BasicElement {

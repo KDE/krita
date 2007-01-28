@@ -26,7 +26,7 @@
 namespace KFormula {
 
 /**
- * @short 
+ * @short Implementation of the msub, msup, msubsup and mmultiscript element
  */
 class MultiscriptElement : public BasicElement {
 public:
@@ -42,37 +42,78 @@ public:
      */
     const QList<BasicElement*> childElements();
 
-    void calcSizes( const ContextStyle& context, 
-                    ContextStyle::TextStyle tstyle, 
-                    ContextStyle::IndexStyle istyle,
-                    StyleAttributes& style );
+    /**
+     * Insert a new child at the cursor position
+     * @param cursor The cursor holding the position where to inser
+     * @param child A BasicElement to insert
+     */
+    void insertChild( FormulaCursor* cursor, BasicElement* child );
+   
+    /**
+     * Remove a child element
+     * @param element The BasicElement to remove
+     */ 
+    void removeChild( BasicElement* element );
 
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
+    /**
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     */
+    void paint( QPainter& painter, const AttributeManager* am );
+
+    /**
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
+     */
+    void layout( const AttributeManager* am );
+    
+    /**
+     * Move the FormulaCursor left
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveLeft( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor right 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveRight( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor up 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveUp( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor down 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
 
     void readMathML( const QDomElement& element );
     
-    
 private:
+    /// The BasicElement representing the base element of the multiscript
+    BasicElement* m_baseElement;
+
+    /// The BasicElement representing the subscript left to the base element
+    BasicElement* m_preSubscript;
+
+    /// The BasicElement representing the superscript left to the base element
+    BasicElement* m_preSuperscript;
+
+    /// The BasicElement representing the subscript right to the base element
+    BasicElement* m_postSubscript;
+
+    /// The BasicElement representing the superscript right to the base element
+    BasicElement* m_postSuperscript;
+
+
     virtual QString getElementName() const { return "mmultiscript"; }
     virtual void writeMathMLContent( KoXmlWriter* writer, bool oasisFormat = false );
-    /**
-     * Reads our content from the MathML node. Sets the node to the next node
-     * that needs to be read. It is sometimes needed to read more than one node
-     * (e. g. for fence operators).
-     * Returns the number of nodes processed or -1 if it failed.
-     */
-//    virtual int readContentFromMathMLDom( QDomNode& node );
-
-    BasicElement* m_baseElement;
-    BasicElement* m_preSubscript;
-    BasicElement* m_preSuperscript;
-    BasicElement* m_postSubscript;
-    BasicElement* m_postSuperscript;
 };
 
 } // namespace KFormula

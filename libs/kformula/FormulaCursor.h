@@ -32,16 +32,20 @@ namespace FormulaShape {
 class BasicElement;
 
 /**
- * @short The cursor being moved through the formula
+ * @short The cursor being moved through a formula
  *
- * The FormulaTool instanciates FormulaCursor to move around in the formula. Each
- * element implements its own cursor behaviour. There are always at least two
- * positions the cursor can have in an element: before and after the element. Only
- * in sequences there are more positions possible and in a BasicElement there is
- * only one position. Before the element is 0, after it 1 and so on.
+ * The FormulaTool instanciates FormulaCursor to move around in the formula and edit
+ * it. Each element can implement special cursor behaviour for its children. There
+ * are always at least two positions the cursor can have in an element: before and
+ * after the element. Only in mrow and some token elements there are more positions
+ * possible and in a BasicElement there is only one position. Before the element is
+ * position 0, after it position 1 and so on.
  * FormulaTool calls the moveLeft, moveRight, moveUp and moveDown methods. It also
  * sets with setSelection and setWordMovement the further behaviour of the cursor
  * according to the modifiers the user pressed.
+ * The FormulaCursor class is also used to save a certain place in the formula. With
+ * the currentElement() and position() methods it is possible to act with a special
+ * place.
  */
 class FormulaCursor {
 public:
@@ -50,12 +54,6 @@ public:
      * @param element The element the FormulaCursor is set to at the beginning
      */
     explicit FormulaCursor( BasicElement* element );
-
-    /// @return The element the FormulaCursor is currently inside
-    BasicElement* currentElement() const;
-
-    /// @return The current position in m_currentElement
-    int position() const;
 
     /**
      * Draw the cursor to the given QPainter
@@ -68,7 +66,7 @@ public:
      * @param current The new element the pointer is inside
      * @þaram position The position in the new element the cursor is set to
      */
-    void setCursorTo( BasicElement* current, int position );
+    void moveCursorTo( BasicElement* current, int position );
 
     /// Move the cursor to the left
     void moveLeft();
@@ -102,6 +100,12 @@ public:
 
     /// @return @c true when the cursor is selecting
     bool hasSelection() const;
+
+    /// @return The element the FormulaCursor is currently inside
+    BasicElement* currentElement() const;
+
+    /// @return The current position in m_currentElement
+    int position() const;
 
     /**
      * Make the cursor move a whole element

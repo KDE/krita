@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef NUMBERELEMENT_H
@@ -22,7 +22,7 @@
 
 #include "TokenElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace FormulaShape {
 
 class NumberElement : public TokenElement {
     typedef TokenElement inherited;
@@ -42,6 +42,6 @@ public:
     virtual QString getElementName() const { return "mn"; }
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace FormulaShape
 
 #endif // NUMBERELEMENT_H

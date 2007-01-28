@@ -46,6 +46,23 @@ const QList<BasicElement*> RootElement::childElements()
 
 void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
+    BasicElement* tmp = cursor->currentElement();
+    if( tmp == m_radicand && m_radicand->elementType == Basic )
+    {
+        m_radicand = child;
+        cursor->moveCursorTo( m_radicand, 1 );
+        delete tmp;
+    }
+    else if( tmp == m_radicand && m_radicant->elementType != Basic )
+    {
+        m_radicand = new SequenceElement;
+    }
+    else if( tmp == m_exponent && m_exponent->elementType == Basic )
+    {
+        m_exponent = child;
+        cursor->moveCursorTo( m_exponent, 1 );
+        delete tmp;
+    }
 }
 
 void RootElement::removeChild( BasicElement* element )
@@ -115,12 +132,19 @@ void RootElement::moveRight( FormulaCursor* cursor, BasicElement* from )
 
 void RootElement::moveUp( FormulaCursor* cursor, BasicElement* from )
 {
+    if( from == m_radicand )
+        cursor->moveCursorTo( m_exponent, -1 );
+    else
+        parentElement()->moveUp( cursor, from );
 }
 
-    /**
-     * Move the FormulaCursor down 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
+void RootElement::moveDown( FormulaCursor* cursor, BasicElement* from )
+{
+    if( from == m_exponent )
+        cursor->moveCursorTo( m_radicand, 0 );
+    else
+        parentElement()->moveDown( cursor, this );
+}
 
 void RootElement::calcSizes( const ContextStyle& context,
                              ContextStyle::TextStyle tstyle, 
@@ -177,120 +201,6 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
                       context.layoutUnitToPixelY( y+unit+distY/2 ),
                       context.layoutUnitToPixelX( x ),
                       context.layoutUnitToPixelY( y+unit+unit/2 ) );
-}
-
-/**
- * Enters this element while moving to the left starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the left of it.
- */
-void RootElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
-{
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveLeft(cursor, this);
-    }
-    else {
-        bool linear = cursor->getLinearMovement();
-        if (from == getParent()) {
-            m_radicand->moveLeft(cursor, this);
-        }
-        else if (from == m_radicand) {
-            if (linear && m_exponent) {
-                m_radicand->moveLeft(cursor, this);
-            }
-            else {
-                getParent()->moveLeft(cursor, this);
-            }
-        }
-        else {
-            getParent()->moveLeft(cursor, this);
-        }
-    }*/
-}
-
-/**
- * Enters this element while moving to the right starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the right of it.
- */
-void RootElement::moveRight(FormulaCursor* cursor, BasicElement* from)
-{
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveRight(cursor, this);
-    }
-    else {
-        bool linear = cursor->getLinearMovement();
-        if (from == getParent()) {
-            if (linear && m_exponent) {
-                m_exponent->moveRight(cursor, this);
-            }
-            else {
-                m_radicand->moveRight(cursor, this);
-            }
-        }
-        else if (from == m_radicand) {
-            m_radicand->moveRight(cursor, this);
-        }
-        else {
-            getParent()->moveRight(cursor, this);
-        }
-    }*/
-}
-
-/**
- * Enters this element while moving up starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or above it.
- */
-void RootElement::moveUp(FormulaCursor* cursor, BasicElement* from)
-{
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveUp(cursor, this);
-    }
-    else {
-        if (from == getParent()) {
-            m_radicand->moveRight(cursor, this);
-        }
-        else if (from == m_radicand) {
-            if (m_exponent) {
-                m_radicand->moveRight(cursor, this);
-            }
-            else {
-                getParent()->moveUp(cursor, this);
-            }
-        }
-        else {
-            getParent()->moveUp(cursor, this);
-        }
-    }*/
-}
-
-/**
- * Enters this element while moving down starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or below it.
- */
-void RootElement::moveDown(FormulaCursor* cursor, BasicElement* from)
-{
-/*    if (cursor->isSelectionMode()) {
-        getParent()->moveDown(cursor, this);
-    }
-    else {
-        if (from == getParent()) {
-            if (m_exponent) {
-                m_radicand->moveRight(cursor, this);
-            }
-            else {
-                m_radicand->moveRight(cursor, this);
-            }
-        }
-        else if (from == m_radicand) {
-            m_radicand->moveRight(cursor, this);
-        }
-        else {
-            getParent()->moveDown(cursor, this);
-        }
-    }*/
 }
 
 void RootElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )

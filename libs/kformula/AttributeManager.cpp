@@ -21,7 +21,8 @@
 #include "BasicElement.h"
 #include <KoUnit.h>
 #include <KoViewConverter.h>
-#include <QFontMetrics>
+#include <KoPostscriptPaintDevice.h>
+#include <QFontMetricsF>
 #include <QColor>
 
 namespace FormulaShape {
@@ -77,6 +78,40 @@ QVariant AttributeManager::valueOf( const QString& attribute ) const
     return m_attributeStack.first()->attributesDefaultValue( attribute );
 }
 
+Align AttributeManager::alignValueOf( const QString& attribute ) const
+{
+    QString tmpAlignValue = valueOf( attribute ).toString();
+    if( tmpAlignValue == "right" )
+        return Right;
+    else if( tmpAlignValue == "left" )
+        return Left;
+    else 
+        return Center;
+}
+
+QVariant AttributeManager::parseValue( const QString& value ) const
+{
+    // check if the value includes metric units
+    if( parseMetrics( value ).isValid() )
+        return parseMetrics( value );
+
+    // look for attributes that are enums
+    if( mathVariantValue( value ) != -1 )
+        return mathVariantValue( value );
+    else if( mathSpaceValue( value ) != -1.0)
+        return mathSpaceValue( value );
+    else if( formValue( value ) != -1 )
+        return formValue( value );
+
+    // look if the value is color
+    QColor tmpColor( value );
+    if( tmpColor.isValid() )
+        return tmpColor;    
+    
+    // all other values don't need special treatment
+    return QVariant( value );
+}
+
 void AttributeManager::buildHeritageOf( const BasicElement* element )
 {
     m_attributeStack.clear();
@@ -123,43 +158,6 @@ void AttributeManager::alterScriptLevel( const BasicElement* element )
         m_scriptLevelStack.push( m_scriptLevelStack.top()+2 ); // only for roots index
     else
         m_scriptLevelStack.push( m_scriptLevelStack.top() );
-}
-
-QVariant AttributeManager::parseValue( const QString& value ) const
-{
-    // check if the value includes metric units
-    if( parseMetrics( value ).isValid() )
-        return parseMetrics( value );
-
-    // look for attributes that are enums
-    if( alignValue( value ) != -1 )
-        return alignValue( value );
-    else if( mathVariantValue( value ) != -1 )
-        return mathVariantValue( value );
-    else if( mathSpaceValue( value ) != -1.0)
-        return mathSpaceValue( value );
-    else if( formValue( value ) != -1 )
-        return formValue( value );
-
-    // look if the value is color
-    QColor tmpColor( value );
-    if( tmpColor.isValid() )
-        return tmpColor;    
-    
-    // all other values don't need special treatment
-    return QVariant( value );
-}
-
-int AttributeManager::alignValue( const QString& value ) const
-{
-    if( value == "right" )
-        return Right;
-    else if( value == "left" )
-        return Left;
-    else if( value == "center" )
-        return Center;
-    else
-        return -1;
 }
 
 int AttributeManager::formValue( const QString& value ) const
@@ -245,9 +243,14 @@ double AttributeManager::mathSpaceValue( const QString& value ) const
 QVariant AttributeManager::parseMetrics( const QString& value ) const
 {
     QString tmpValue = value.trimmed();
+/*    if( value.endsWith( "%" ) )
+    {
+        tmpValue.chop( 1 );
+        return defaultValueOf( m_attribute ) * (tmpValue.toDouble()/100);
+    }*/
+
     QString unit = tmpValue.right( 2 );
     tmpValue.chop( 2 );
-
     if( unit == "em" )
         return calculateEmExUnits( tmpValue.toDouble(), true );
     else if( unit == "ex" )
@@ -257,29 +260,20 @@ QVariant AttributeManager::parseMetrics( const QString& value ) const
     else if( unit == "in" || unit == "cm" || unit == "pc" || unit == "mm" ||
              unit == "pt" )
         return KoUnit::parseValue( value );
-//    else if( value.endsWith( "%" ) )
-//        return defaultValueOf( attribute )*value.trimmed().chop( 1 ).toInt();
 
     return QVariant();
 }
 
 double AttributeManager::calculateEmExUnits( double value, bool isEm ) const
 {
-    // ThomasZ said that with KoViewConverter it does not work but atm otherwise
-    // it is to hard to realize
-    // The constructor of QFontMetrics needs as second argument a postscript based
-    // QPaintDevice so that width() and xHeight() return values that are also
-    // postscript based.
-    if( !m_paintDevice )
-        return 0.0;
-
-    QFontMetrics fm( m_currentFont, m_paintDevice );
+    // use a postscript paint device so that font metrics returns postscript points
+    KoPostscriptPaintDevice paintDevice;
+    QFontMetricsF fm( m_currentFont, &paintDevice );
     if( isEm )
-        return value * fm.width( 'm' );
+        return value* fm.width( 'm' );
     else
         return value* fm.xHeight();
 }
-
 
 int AttributeManager::scriptLevel() const
 {
@@ -289,11 +283,6 @@ int AttributeManager::scriptLevel() const
 void AttributeManager::setViewConverter( KoViewConverter* converter )
 {
     m_viewConverter = converter;
-}
-
-void AttributeManager::setPaintDevice( QPaintDevice* paintDevice )
-{
-    m_paintDevice = paintDevice;
 }
 
 } // namespace FormulaShape

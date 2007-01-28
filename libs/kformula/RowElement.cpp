@@ -79,21 +79,21 @@ void RowElement::removeChild( BasicElement* element )
 void RowElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
 {
     if( from == parentElement() )  // parent element enters the seqeunce from the left
-        cursor->setCursorTo( this, m_rowElements.count() );
+        cursor->moveCursorTo( this, m_rowElements.count() );
     else if( from == this )        // moveLeft was invoked in this element
         m_rowElements[ cursor->position()-1 ]->moveLeft( cursor, this );
     else                           // the cursor comes from a child element
-        cursor->setCursorTo( this, m_rowElements.indexOf( from ) );
+        cursor->moveCursorTo( this, m_rowElements.indexOf( from ) );
 }
 
 void RowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
 {
     if( from == parentElement() )  // parent element enters the seqeunce from the right
-        cursor->setCursorTo( this, 0 );
+        cursor->moveCursorTo( this, 0 );
     else if( from == this )        // moveRight was invoked in this element
         m_rowElements[ cursor->position() ]->moveRight( cursor, this );
     else                           // the cursor comes from a child element
-        cursor->setCursorTo( this, m_rowElements.indexOf( from )+1 );
+        cursor->moveCursorTo( this, m_rowElements.indexOf( from )+1 );
 }
 
 const QList<BasicElement*> RowElement::childElements()

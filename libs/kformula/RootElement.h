@@ -28,7 +28,7 @@
 namespace FormulaShape {
 
 /**
- * A nice graphical root.
+ * @short Implementation of the MathML mroot and msqrt elements 
  */
 class RootElement : public BasicElement {
 public:
@@ -119,6 +119,9 @@ private:
 
     /// The element that is the exponent of the root
     BasicElement* m_exponent;
+
+    /// The QPainterPath that holds the lines for the root sign   
+    QPainterPath m_rootPath;
 };
 
 } // namespace FormulaShape

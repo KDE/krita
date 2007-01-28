@@ -33,31 +33,6 @@ FormulaCursor::FormulaCursor( BasicElement* element )
     m_positionInElement = 0;
 }
 
-BasicElement* FormulaCursor::currentElement() const
-{
-    return m_currentElement;
-}
-
-int FormulaCursor::position() const
-{
-    return m_positionInElement;
-}
-
-bool FormulaCursor::hasSelection() const
-{
-    return m_selecting;
-}
-
-void FormulaCursor::setSelecting( bool selecting )
-{
-    m_selecting = selecting;
-}
-
-void FormulaCursor::setWordMovement( bool wordMovement )
-{
-    m_wordMovement = wordMovement;
-}
-
 void FormulaCursor::paint( QPainter& painter ) const
 {
     QPointF top = m_currentElement->boundingRect().topLeft();
@@ -75,7 +50,7 @@ void FormulaCursor::paint( QPainter& painter ) const
     painter.drawLine( top, bottom );
 }
 
-void FormulaCursor::setCursorTo( BasicElement* current, int position )
+void FormulaCursor::moveCursorTo( BasicElement* current, int position )
 {
     m_currentElement = current;
     m_positionInElement = position;
@@ -135,6 +110,31 @@ bool FormulaCursor::isEnd() const
         return ( m_positionInElement == m_currentElement->childElements().count() );
     else
 	return ( m_positionInElement == 1 );
+}
+
+BasicElement* FormulaCursor::currentElement() const
+{
+    return m_currentElement;
+}
+
+int FormulaCursor::position() const
+{
+    return m_positionInElement;
+}
+
+bool FormulaCursor::hasSelection() const
+{
+    return m_selecting;
+}
+
+void FormulaCursor::setSelecting( bool selecting )
+{
+    m_selecting = selecting;
+}
+
+void FormulaCursor::setWordMovement( bool wordMovement )
+{
+    m_wordMovement = wordMovement;
 }
 
 } // namespace FormulaShape

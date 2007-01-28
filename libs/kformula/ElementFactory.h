@@ -28,10 +28,27 @@ namespace FormulaShape {
 
 class BasicElement;
 
+/**
+ * @short An implementation of the factory pattern to create element instances
+ *
+ * The creation of new BasicElement derived classes is an often done task. While
+ * loading ElementFactory provides a very simple way to achieve an element by
+ * passing its MathML name. Just use the static createElement() method.
+ *
+ * @since 2.0
+ * @author Martin Pfeiffer
+ */
 class ElementFactory {
 public:
+    /// The default constructor
     ElementFactory();
 
+    /**
+     * Obtain new instances of elements by passing the MathML tag name
+     * @param tagName The MathML tag name of the new element
+     * @param parent The parent element of the newly created element
+     * @return A pointer to the new BasicElement derived element
+     */
     static BasicElement* createElement( const QString& tagName, BasicElement* parent );
 };
 

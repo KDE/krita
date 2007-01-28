@@ -23,15 +23,16 @@
 #define FRACTIONELEMENT_H
 
 #include "BasicElement.h"
+#include <QLineF>
 
-namespace KFormula {
+namespace FormulaShape {
 	
 /**
- * @short A fraction element in a formula
+ * @short Implementation of the MathML mfrac element
  *
- * The fraction consists of two @see SequenceElement, the denominator and the numerator.
- * The SequenceElements can be set but actually altered they are with the
- * insertElementInNumerator() and insertElementInDenominator() methods.
+ * The mfrac element is specified in the MathML spec section 3.3.2. The
+ * FractionElement holds two child elements that are the numerator and the
+ * denominator.
  */
 class FractionElement : public BasicElement {
 public:
@@ -45,10 +46,19 @@ public:
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      */
-    void paint( QPainter& painter ) const;
+    void paint( QPainter& painter, const AttributeManager* am );
 
-    /// Calculate the element's sizes and the size of its children
-    void calculateSize();
+    /**
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
+     */
+    void layout( const AttributeManager* am );
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    const QList<BasicElement*> childElements();
 
     /**
      * Insert a new child at the cursor position - reimplemented from BasicElement
@@ -62,26 +72,6 @@ public:
      * @param element The BasicElement to remove
      */ 
     void removeChild( BasicElement* element );
-   
-    /**
-     * Obtain a list of all child elements of this element
-     * @return a QList with pointers to all child elements
-     */
-    const QList<BasicElement*> childElements();
-
-    /**
-     * Move the FormulaCursor left
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveLeft( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor right 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveRight( FormulaCursor* cursor, BasicElement* from );
 
     /**
      * Move the FormulaCursor up 
@@ -96,36 +86,27 @@ public:
      * @param from The BasicElement which was the last owner of the FormulaCursor
      */
     void moveDown( FormulaCursor* cursor, BasicElement* from );
-
     
     void readMathML( const QDomElement& element );
     
     void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
-protected:
-    /// Returns the tag name of this element type.
-    virtual QString getTagName() const { return "FRACTION"; }
-
-    /// Appends our attributes to the dom element.
-    virtual void writeDom(QDomElement element);
-
-    /// Reads our attributes from the element. Returns false if it failed.
-    virtual bool readAttributesFromDom(QDomElement element);
-
-    /**
-     * Reads our content from the node. Sets the node to the next node
-     * that needs to be read. Returns false if it failed.
-     */
-    virtual bool readContentFromDom(QDomNode& node);
+    ElementType elementType() const;
 
 private:
+    /// Layout the fraction in a bevelled way
+    void layoutBevelledFraction( const AttributeManager* am );
+
     /// The element representing the fraction's numerator
     BasicElement* m_numerator;
 
     /// The element representing the fraction's denominator 
     BasicElement* m_denominator;
+
+    /// The line that separates the denominator and the numerator
+    QLineF m_fractionLine;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // FRACTIONELEMENT_H

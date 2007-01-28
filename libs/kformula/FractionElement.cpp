@@ -22,10 +22,11 @@
 #include "FractionElement.h"
 #include "ElementFactory.h"
 #include "FormulaCursor.h"
+#include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <QPainter>
 
-namespace KFormula {
+namespace FormulaShape {
 
 FractionElement::FractionElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -39,60 +40,72 @@ FractionElement::~FractionElement()
     delete m_denominator;
 }
 
-void FractionElement::paint( QPainter& painter ) const
+void FractionElement::paint( QPainter& painter, const AttributeManager* am )
 {
-    m_numerator->paint( painter );       // first paint the children
-    m_denominator->paint( painter );
+    QPen pen( painter.pen() );
+    pen.setWidthF( am->valueOf( "linethickness" ).toDouble() );
 
-//    if( bevelled )
-//        paintBevelled( painter );
-    
-    // now paint the line
-/*    QPointF startPoint = origin() + QPointF( m_numerator->height()+distY );
-    QPointF endPoint = startPoint + QPointF( width(), 0 );
-    
     painter.save();
-    painter.setPen();
-    painter.drawLine( startPoint, endPoint );
-    painter.restore();*/
+    painter.setPen( pen );                           // set the line width
+    painter.drawLine( m_fractionLine );              // draw the line
+    painter.restore();
 }
 
-void FractionElement::calculateSize()
+void FractionElement::layout( const AttributeManager* am )
 {
-/*    m_numerator->calculateSize();
-    m_denominator->calculateSize();
+    if( am->valueOf( "bevelled" ).toBool() )
+    {
+        layoutBevelledFraction( am );
+        return;
+    }
 
-    if( bevelled )
-        calculateSizeBevelled();
-    
     QPointF numeratorOrigin;
     QPointF denominatorOrigin;
-    double linethickness = AttributeManager::valueOf( attribute( "linethickness" ) );
-//    double distY = AttributeManager::valueOf( "" );
-    Align numalign = AttributeManager::valueOf( attribute( "numalign" ) ); 
-    Align denomalign = AttributeManager::valueOf( attribute( "denomalign" ) ); 
+    double linethickness = am->valueOf( "linethickness" ).toDouble();
+    double distY = am->mathSpaceValue( "thinmathspace" );
+    Align numalign = am->alignValueOf( "numalign" ); 
+    Align denomalign = am->alignValueOf( "denomalign" ); 
     
     setWidth( qMax( m_numerator->width(), m_denominator->width() ) );
     setHeight( m_numerator->height() + m_denominator->height() +
                linethickness + 2*distY );
-    setBaseline( m_numerator->height() + distY + 0.5*linethickness );
-
+    setBaseLine( m_numerator->height() + distY + 0.5*linethickness );
+    
     if( numalign == Left )
-        numeratorOrigin.setX( 0.0 )
+        numeratorOrigin.setX( 0.0 );
     else if( numalign == Right )
         numeratorOrigin.setX( width() - m_numerator->width() );
     else
 	numeratorOrigin.setX( ( width() - m_numerator->width() ) / 2 );
 
     if( denomalign == Left )
-        denominatorOrigin.setX( 0.0 )
+        denominatorOrigin.setX( 0.0 );
     else if( denomalign == Right )
         denominatorOrigin.setX( width() - m_denominator->width() );
     else
 	denominatorOrigin.setX( ( width() - m_denominator->width() ) / 2 );
-		    
+
     m_numerator->setOrigin( numeratorOrigin );
-    m_denominator->setOrigin( denominatorOrigin );*/
+    m_denominator->setOrigin( denominatorOrigin );
+    m_fractionLine = QLineF( QPointF( 0.0, baseLine() ),
+                             QPointF( width(), baseLine() ) );
+}
+
+void FractionElement::layoutBevelledFraction( const AttributeManager* am )
+{
+    // the shown line should have a width that has 1/3 of the height
+    // the line is heigher as the content by 2*thinmathspace = 2*borderY
+
+    double borderY = am->valueOf( "thinmathspace" ).toDouble();
+    setHeight( m_numerator->height() + m_denominator->height() + 2*borderY );
+    setWidth( m_numerator->width() + m_denominator->width() + height()/3 );
+    setBaseLine( height()/2 );
+
+    m_numerator->setOrigin( QPointF( 0.0, borderY ) );
+    m_denominator->setOrigin( QPointF( width()-m_denominator->width(),
+                                       borderY+m_numerator->height() ) );
+    m_fractionLine = QLineF( QPointF( m_numerator->width(), height() ),
+                             QPointF( width()-m_denominator->width(), 0.0 ) );
 }
 
 const QList<BasicElement*> FractionElement::childElements()
@@ -104,6 +117,13 @@ const QList<BasicElement*> FractionElement::childElements()
 
 void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
+    BasicElement* tmp = cursor->currentElement();
+    if( tmp == m_numerator && m_numerator->elementType() == Basic )
+        m_numerator = child;
+    else if( tmp == m_denominator && m_denominator->elementType() == Basic )
+        m_denominator = child;
+
+    delete tmp;       // finally delete the old BasicElement
 }
    
 void FractionElement::removeChild( BasicElement* element )
@@ -118,6 +138,22 @@ void FractionElement::removeChild( BasicElement* element )
         delete m_denominator;
         m_denominator = new BasicElement( this );
     }
+}
+
+void FractionElement::moveUp( FormulaCursor* cursor, BasicElement* from )
+{
+    if( from == m_denominator )
+        m_numerator->moveUp( cursor, this );
+    else
+        parentElement()->moveUp( cursor, this );
+}
+
+void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
+{
+    if( from == m_numerator )
+        m_denominator->moveDown( cursor, this );
+    else
+        parentElement()->moveDown( cursor, this );
 }
 
 void FractionElement::readMathML( const QDomElement& element )
@@ -147,104 +183,9 @@ void FractionElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
     writer->endElement();
 }
 
-void FractionElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
+ElementType FractionElement::elementType() const
 {
-    if( from == parentElement() )
-        m_denominator->moveLeft( cursor, this );
-    else
-        parentElement()->moveLeft( cursor, this ); 
+    return Fraction;
 }
 
-void FractionElement::moveRight( FormulaCursor* cursor, BasicElement* from )
-{
-    if( from == parentElement() )
-        m_numerator->moveRight( cursor, this );
-    else
-        parentElement()->moveRight( cursor, this ); 
-}
-
-void FractionElement::moveUp( FormulaCursor* cursor, BasicElement* from )
-{
-    if( from == m_denominator )
-        m_numerator->moveUp( cursor, this );
-    else
-        parentElement()->moveUp( cursor, this );
-}
-
-void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
-{
-    if( from == m_numerator )
-        m_denominator->moveDown( cursor, this );
-    else
-        parentElement()->moveDown( cursor, this );
-}
-
-
-
-
-
-
-
-
-/**
- * Appends our attributes to the dom element.
- */
-void FractionElement::writeDom(QDomElement element)
-{
-    BasicElement::writeDom(element);
-
-    QDomDocument doc = element.ownerDocument();
-//    if (!withLine) element.setAttribute("NOLINE", 1);
-
-    QDomElement num = doc.createElement("NUMERATOR");
-    num.appendChild(m_numerator->getElementDom(doc));
-    element.appendChild(num);
-
-    QDomElement den = doc.createElement("DENOMINATOR");
-    den.appendChild(m_denominator->getElementDom(doc));
-    element.appendChild(den);
-}
-
-/**
- * Reads our attributes from the element.
- * Returns false if it failed.
- */
-bool FractionElement::readAttributesFromDom(QDomElement element)
-{
-    if (!BasicElement::readAttributesFromDom(element)) {
-        return false;
-    }
-    QString lineStr = element.attribute("NOLINE");
-    if(!lineStr.isNull()) {
-//        withLine = lineStr.toInt() == 0;
-    }
-    return true;
-}
-
-/**
- * Reads our content from the node. Sets the node to the next node
- * that needs to be read.
- * Returns false if it failed.
- */
-bool FractionElement::readContentFromDom(QDomNode& node)
-{
-/*    if (!BasicElement::readContentFromDom(node)) {
-        return false;
-    }
-
-    if ( !buildChild( m_numerator, node, "NUMERATOR" ) ) {
-        kWarning( DEBUGID ) << "Empty numerator in FractionElement." << endl;
-        return false;
-    }
-    node = node.nextSibling();
-
-    if ( !buildChild( m_denominator, node, "DENOMINATOR" ) ) {
-        kWarning( DEBUGID ) << "Empty denominator in FractionElement." << endl;
-        return false;
-    }
-    node = node.nextSibling();
-*/
-    return true;
-}
-
-}  // namespace KFormula
+} // namespace FormulaShape

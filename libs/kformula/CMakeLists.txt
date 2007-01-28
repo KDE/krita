@@ -23,7 +23,7 @@ set( formulashape_PART_SRCS
 #   MatrixElement.cpp
 #   MatrixRowElement.cpp
 #   MatrixEntryElement.cpp
-#   FractionElement.cpp
+   FractionElement.cpp
 #   RootElement.cpp
    SpaceElement.cpp
 #   EncloseElement.cpp

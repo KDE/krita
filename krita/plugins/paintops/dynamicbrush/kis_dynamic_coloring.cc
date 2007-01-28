@@ -31,3 +31,8 @@ void KisPlainColoring::darken(double v)
     transfo->transform( color.data(),  color.data(), 1);
     delete transfo;
 }
+
+void KisPlainColoring::colorAt(int x, int y, KoColor* c)
+{
+    c->fromKoColor(color);
+}

@@ -23,13 +23,27 @@
 #include <kis_types.h>
 
 class KisAutobrushShape;
+class KisDynamicColoring;
 
 class KisDynamicShape {
     public:
         KisDynamicShape() {}
         virtual ~KisDynamicShape() {}
     public:
+        virtual int width() =0;
+        virtual int height() =0;
+        /**
+         * Call this function to resize the shape.
+         * @param xs horizontal scaling
+         * @param ys vertical scaling
+         */
         virtual void resize(double xs, double ys) = 0;
+        /**
+         * Call this function to create the stamp to apply on the paint device
+         * @param stamp the temporary paint device on which the shape will draw the stamp
+         * @param coloringsrc the color source to use for the stamp
+         */
+        virtual void createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc) =0;
 };
 
 struct KisAutoDab {
@@ -65,6 +79,9 @@ struct KisAutoMaskBrush : public KisDabBrush {
     virtual ~KisAutoMaskBrush();
     virtual quint8 alphaAt(int x, int y);
     virtual void resize(double xs, double ys);
+    virtual void createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc);
+    virtual int width() { return autoDab.width; }
+    virtual int height() { return autoDab.height; }
 };
 
 #endif

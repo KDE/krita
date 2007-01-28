@@ -18,8 +18,12 @@
 
 #include "kis_dynamic_shape.h"
 
-#include "kis_qimage_mask.h"
-#include "kis_autobrush_resource.h"
+#include <kis_autobrush_resource.h>
+#include <kis_iterators_pixel.h>
+#include <kis_paint_device.h>
+#include <kis_qimage_mask.h>
+
+#include "kis_dynamic_coloring.h"
 
 quint8 KisAlphaMaskBrush::alphaAt(int x, int y)
 {
@@ -46,9 +50,54 @@ void KisAlphaMaskBrush::resize(double xs, double ys)
 
 void KisAutoMaskBrush::resize(double xs, double ys)
 {
-    autoDab.width *= 2 * xs;
-    autoDab.hfade *= 2 * xs;
-    autoDab.height *= 2 * ys;
-    autoDab.vfade *= 2 * ys;
+    autoDab.width *= (int)(2 * xs);
+    autoDab.hfade *= (int)(2 * xs);
+    autoDab.height *= (int)(2 * ys);
+    autoDab.vfade *= (int)(2 * ys);
 }
 
+void KisAutoMaskBrush::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc)
+{
+    // Transform into the paintdevice to apply
+    switch(type)
+    {
+        case KisDabBrush::DabAuto:
+        {
+            switch(autoDab.shape)
+            {
+                case KisAutoDab::ShapeCircle:
+                    m_shape = new KisAutobrushCircleShape(autoDab.width, autoDab.height, autoDab.hfade, autoDab.vfade);
+                    break;
+                case KisAutoDab::ShapeRectangle:
+                    m_shape = new KisAutobrushRectShape(autoDab.width, autoDab.height, autoDab.hfade, autoDab.vfade);
+                    break;
+            }
+        }
+            break;
+        case KisDabBrush::DabAlphaMask:
+            break;
+    }
+
+    // Apply the coloring
+    KoColorSpace * colorSpace = stamp->colorSpace();
+
+    // Convert the kiscolor to the right colorspace.
+    KoColor kc = coloringsrc->color;
+    kc.convertTo(colorSpace);
+    qint32 pixelSize = colorSpace->pixelSize();
+
+    KisHLineIteratorPixel hiter = stamp->createHLineIterator(0, 0, autoDab.width); // hum cheating
+    for (int y = 0; y < autoDab.height; y++) // hum cheating (once again) /me slaps himself
+    {
+        int x=0;
+        while(! hiter.isDone())
+        {
+            coloringsrc->colorAt(x,y, &kc);
+            colorSpace->setAlpha(kc.data(), alphaAt(x, y), 1);
+            memcpy(hiter.rawData(), kc.data(), pixelSize);
+            x++;
+            ++hiter;
+        }
+        hiter.nextRow();
+    }
+}

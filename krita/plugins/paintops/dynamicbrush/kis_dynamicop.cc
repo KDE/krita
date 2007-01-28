@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -32,7 +32,6 @@
 #include <kis_autobrush_resource.h>
 #include <kis_brush.h>
 #include <kis_global.h>
-#include <kis_iterators_pixel.h>
 #include <KoInputDevice.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
@@ -60,6 +59,7 @@ KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, K
 KisDynamicOp::KisDynamicOp( KisPainter *painter)
     : super(painter)
 {
+    m_brush = new KisDynamicBrush(i18n("example"));
     m_brush->rootTransfo()->setNextTransformation(
         new KisSizeTransformation(new KisTransformParameterXTilt(), new KisTransformParameterYTilt() ) );
 }
@@ -111,12 +111,7 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     KoColor origColor = m_painter->paintColor();
 
     // First apply the transfo to the dab source
-    KisDabBrush* dabsrc = new KisAutoMaskBrush;
-    dabsrc->autoDab.shape = KisAutoDab::ShapeCircle;
-    dabsrc->autoDab.width = 10;
-    dabsrc->autoDab.height = 10;
-    dabsrc->autoDab.hfade = 2;
-    dabsrc->autoDab.vfade = 2;
+    KisDynamicShape* dabsrc = m_brush->shape();
     KisDynamicTransformation* transfo = m_brush->rootTransfo();
     while(transfo)
     {
@@ -125,9 +120,7 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     }
 
     // Then to the coloring source
-    KisDynamicColoring* coloringsrc = new KisPlainColoring;
-    coloringsrc->type = KisDynamicColoring::ColoringPlainColor;
-    coloringsrc->color = KoColor(QColor(255,200,100), 255, coloringsrc->color.colorSpace() );
+    KisDynamicColoring* coloringsrc = m_brush->coloring();
     transfo = m_brush->rootTransfo();
     while(transfo)
     {
@@ -135,74 +128,10 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
         transfo = transfo->nextTransformation();
     }
 
-    // Transform into the paintdevice to apply
-    switch(dabsrc->type)
-    {
-        case KisDabBrush::DabAuto:
-        {
-            switch(dabsrc->autoDab.shape)
-            {
-                case KisAutoDab::ShapeCircle:
-                    dabsrc->m_shape = new KisAutobrushCircleShape(dabsrc->autoDab.width, dabsrc->autoDab.height, dabsrc->autoDab.hfade, dabsrc->autoDab.vfade);
-                    break;
-                case KisAutoDab::ShapeRectangle:
-                    dabsrc->m_shape = new KisAutobrushRectShape(dabsrc->autoDab.width, dabsrc->autoDab.height, dabsrc->autoDab.hfade, dabsrc->autoDab.vfade);
-                    break;
-            }
-        }
-            break;
-        case KisDabBrush::DabAlphaMask:
-            break;
-    }
+    dabsrc->createStamp(dab, coloringsrc);
 
-    // Apply the coloring
-    switch(coloringsrc->type)
-    {
-        case KisDynamicColoring::ColoringPlainColor:
-        {
-            KoColorSpace * colorSpace = dab->colorSpace();
-
-            // Convert the kiscolor to the right colorspace.
-            KoColor kc = coloringsrc->color;
-            kc.convertTo(colorSpace);
-            qint32 pixelSize = colorSpace->pixelSize();
-
-            KisHLineIteratorPixel hiter = dab->createHLineIterator(0, 0, dabsrc->autoDab.width); // hum cheating
-            for (int y = 0; y < dabsrc->autoDab.height; y++) // hum cheating (once again) /me slaps himself
-            {
-                int x=0;
-                while(! hiter.isDone())
-                {
-                    // XXX: Set mask
-                    colorSpace->setAlpha(kc.data(), dabsrc->alphaAt(x++, y), 1);
-                    memcpy(hiter.rawData(), kc.data(), pixelSize);
-//                     kDebug() << x << " " << y << " " << (int)dabsrc->alphaAt(x, y)  << " " << (int)hiter.rawData()[0] << " " << (int)hiter.rawData()[1] << " " << (int)hiter.rawData()[2] << " " << (int)hiter.rawData()[3] << endl;
-                    ++hiter;
-                }
-                hiter.nextRow();
-            }
-
-        }
-            break;
-        case KisDynamicColoring::ColoringPaintDevice:
-            // TODO: implement it
-            break;
-    }
-
-
-
-
-//     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-//         dab = brush->image(device->colorSpace(), adjustedInfo, xFraction, yFraction);
-//     }
-//     else {
-//         KisQImagemaskSP mask = brush->mask(adjustedInfo, xFraction, yFraction);
-//         dab = computeDab(mask);
-//     }
-
-//     m_painter->setPressure(adjustedInfo.pressure);
-
-    QRect dabRect = QRect(0, 0, dabsrc->autoDab.width, dabsrc->autoDab.height); // cheating again
+    // paint the dab
+    QRect dabRect = QRect(0, 0, dabsrc->width(), dabsrc->height());
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     KisImageSP image = device->image();
@@ -228,5 +157,4 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     m_painter->setOpacity(origOpacity);
     m_painter->setPaintColor(origColor);
-    delete dabsrc;
 }

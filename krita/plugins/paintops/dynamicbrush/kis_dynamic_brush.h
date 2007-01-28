@@ -21,17 +21,24 @@
 #include <QString>
 #include <KoID.h>
 
+class KisDynamicColoring;
+class KisDynamicShape;
 class KisDynamicTransformation;
 
 class KisDynamicBrush {
     public:
         KisDynamicBrush(const QString& name);
-        inline QString name() { return m_name; }
-        inline KisDynamicTransformation* rootTransfo() { return m_rootTransfo; }
-        inline KoID id() { return KoID(name(), name()); }
+        ~KisDynamicBrush();
+        inline QString name() const { return m_name; }
+        inline KisDynamicTransformation* rootTransfo() const { return m_rootTransfo; }
+        inline KoID id() const { return KoID(name(), name()); }
+        inline /*const */KisDynamicShape* shape() const { return m_shape; }
+        inline /*const */KisDynamicColoring* coloring() const { return m_coloring; }
     private:
         QString m_name;
         KisDynamicTransformation* m_rootTransfo;
+        KisDynamicShape* m_shape;
+        KisDynamicColoring* m_coloring;
 };
 
 #endif

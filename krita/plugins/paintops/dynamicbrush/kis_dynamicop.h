@@ -29,7 +29,6 @@ class KisPainter;
 class KisDynamicBrush;
 
 class KisDynamicOpFactory : public KisPaintOpFactory  {
-
 public:
     KisDynamicOpFactory() {}
     virtual ~KisDynamicOpFactory() {}

@@ -31,7 +31,9 @@ class KoCanvasBase;
 class KoPointerEvent;
 class KoViewConverter;
 class KoToolSelection;
+class KoToolPrivate;
 
+class QAction;
 class QKeyEvent;
 class QWidget;
 class QPainter;
@@ -136,7 +138,10 @@ public:
      */
     virtual KoToolSelection* selection() { return 0; }
 
-public: // Events
+    /**
+     * Retrieves the entire collection of actions for the tool.
+     */
+    QHash<QString, QAction*> actions() const;
 
     /**
      * Called when (one of) the mouse or stylus buttons is pressed.
@@ -241,8 +246,9 @@ protected:
      */
     virtual QWidget *  createOptionWidget();
 
-protected:
+    void addAction(const QString &name, QAction *action);
 
+protected:
     KoCanvasBase * const m_canvas; ///< the canvas interface this tool will work for.
 
 private:
@@ -250,8 +256,7 @@ private:
     KoTool(const KoTool&);
     KoTool& operator=(const KoTool&);
 
-    QWidget * m_optionWidget; ///< the optionwidget this tool will show in the option widget palette
-    QCursor m_previousCursor;
+    KoToolPrivate *d;
 };
 
 #endif /* KOTOOL_H */

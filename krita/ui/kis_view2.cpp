@@ -392,7 +392,7 @@ void KisView2::createGUI()
     KisPaletteDocker* paletteDocker = qobject_cast<KisPaletteDocker*>( createDockWidget( &paletteDockerFactory ) );
     Q_UNUSED( paletteDocker );
 
-    KoToolManager::instance()->addControllers(m_d->canvasController);
+    KoToolManager::instance()->addController(m_d->canvasController);
 
     KisBirdEyeBoxFactory birdeyeFactory(this);
     m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>( createDockWidget( &birdeyeFactory ) );

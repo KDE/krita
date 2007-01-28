@@ -86,7 +86,7 @@ void KoPAView::initGUI()
     m_canvas = new KoPACanvas( this, m_doc );
     m_canvasController = new KoCanvasController( this );
     m_canvasController->setCanvas( m_canvas );
-    KoToolManager::instance()->addControllers( m_canvasController );
+    KoToolManager::instance()->addController( m_canvasController );
 
     //Ruler
     m_horizontalRuler = new KoRuler(this, Qt::Horizontal, viewConverter());

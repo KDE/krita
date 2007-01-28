@@ -121,8 +121,7 @@ KoToolBox *KoToolManager::toolBox(const QString &applicationName) {
     return toolBox;
 }
 
-void KoToolManager::registerTools(KActionCollection *ac) {
-    Q_UNUSED(ac);
+void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *controller) {
     setup();
 
     class ToolSwitchAction : public KAction {
@@ -139,13 +138,20 @@ void KoToolManager::registerTools(KActionCollection *ac) {
 
     foreach(ToolHelper *th, m_tools) {
         ToolSwitchAction *tsa = new ToolSwitchAction(ac, th->id());
-        ac->addAction("tools"+ th->name(), tsa);
-        //tsa->setShortcut(th->shortcut()); // this crashes currently, lets try tomorrow with the kdelibs updates
+        ac->addAction("tool_"+ th->name(), tsa);
+        tsa->setShortcut(th->shortcut());
         tsa->setText(i18n("Activate %1", th->name()));
+    }
+
+    QHash<QString, KoTool*> toolsHash = m_allTools.value(controller);
+    foreach(KoTool *tool, toolsHash.values()) {
+        QHash<QString, QAction*> actions = tool->actions();
+        foreach(QString name, actions.keys())
+            ac->addAction(name, actions[name]);
     }
 }
 
-void KoToolManager::addControllers(KoCanvasController *controller ) {
+void KoToolManager::addController(KoCanvasController *controller ) {
     if (m_canvases.contains(controller))
         return;
     setup();
@@ -175,7 +181,7 @@ void KoToolManager::removeCanvasController(KoCanvasController *controller) {
 }
 
 void KoToolManager::toolActivated(ToolHelper *tool) {
-
+    Q_ASSERT(m_activeCanvas);
     QHash<QString, KoTool*> toolsHash = m_allTools.value(m_activeCanvas);
     KoTool *t = toolsHash.value(tool->id());
 
@@ -207,6 +213,8 @@ void KoToolManager::switchTool(KoTool *tool) {
         return;
     }
     if (m_activeTool) {
+        foreach(QAction *action, m_activeTool->actions().values())
+            action->setEnabled(false);
         m_activeTool->deactivate();
         disconnect(m_activeTool, SIGNAL(sigCursorChanged(QCursor)),
                 this, SLOT(updateCursor(QCursor)));
@@ -232,6 +240,8 @@ void KoToolManager::switchTool(KoTool *tool) {
         // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
         controller->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     }
+    foreach(QAction *action, m_activeTool->actions().values())
+        action->setEnabled(true);
     m_activeTool->activate();
 
     if(m_activeCanvas->canvas()) {
@@ -260,20 +270,22 @@ void KoToolManager::switchTool(KoTool *tool) {
 }
 
 void KoToolManager::attachCanvas(KoCanvasController *controller) {
+    //detachCanvas(controller); // so we don't end up with a lot of unused instances
     QHash<QString, KoTool*> toolsHash;
     foreach(ToolHelper *tool, m_tools) {
-        kDebug() << "Creating tool " << tool->id() << ", " << tool->activationShapeId() << endl;
+        kDebug(30004) << "Creating tool " << tool->id() << ", " << tool->activationShapeId() << endl;
         KoTool *tl = tool->createTool(controller->canvas());
         m_uniqueToolIds.insert(tl, tool->uniqueId());
         toolsHash.insert(tool->id(), tl);
         tl->setObjectName(tool->id());
+        foreach(QAction *action, tl->actions().values())
+            action->setEnabled(false);
     }
     KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsHash.value(KoCreateShapesTool_ID));
     Q_ASSERT(createTool);
     QString id = KoShapeRegistry::instance()->keys()[0];
     createTool->setShapeId(id);
 
-    m_allTools.remove(controller);
     m_allTools.insert(controller, toolsHash);
 
     if (m_activeTool == 0) {
@@ -316,13 +328,14 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
 }
 
 void KoToolManager::detachCanvas(KoCanvasController *controller) {
+    if(controller == 0)
+        return;
     if (m_activeCanvas == controller)
         m_activeCanvas = 0;
     m_activeTool = 0;
     QHash<QString, KoTool*> toolsHash = m_allTools.value(controller);
-    foreach(KoTool *tool, toolsHash.values())
-        delete tool;
-    toolsHash.clear();
+    qDeleteAll(toolsHash);
+    m_allTools.remove(controller);
 }
 
 void KoToolManager::updateCursor(QCursor cursor) {

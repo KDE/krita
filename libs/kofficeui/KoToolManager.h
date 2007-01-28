@@ -127,14 +127,15 @@ public:
      * If the application calls this in their KoView extending class they will have all the benefits
      * from allowing this in the menus and to allow the use to configure the shortcuts used.
      * @param ac the actionCollection that will be the parent of the actions.
+     * @param controller tools registered with this controller will have all their actions added as well.
      */
-    void registerTools(KActionCollection *ac);
+    void registerTools(KActionCollection *ac, KoCanvasController *controller = 0);
 
     /**
      * Register a new canvas controller
      * @param controller the view controller that this toolmanager will manage the tools for
      */
-    void addControllers(KoCanvasController *controller);
+    void addController(KoCanvasController *controller);
 
     /**
      * Remove a set of controllers
@@ -152,7 +153,7 @@ public:
      * This is typically used by the KoShapeSelector to set which shape to create next.
      * @param canvas the canvas that is a child of a previously registered controller
      *    who's tool you want.
-     * @see addControllers()
+     * @see addController()
      */
     KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 

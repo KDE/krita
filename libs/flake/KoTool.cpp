@@ -17,22 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QWidget>
-#include <QLabel>
-
-#include <klocale.h>
-#include <kdebug.h>
-
 #include "KoTool.h"
 #include "KoCanvasBase.h"
-#include "KoViewConverter.h"
 #include "KoPointerEvent.h"
-#include "KoCanvasResourceProvider.h"
+
+#include <kactioncollection.h>
+#include <QWidget>
+
+class KoToolPrivate {
+public:
+    KoToolPrivate()
+        : optionWidget(0),
+        previousCursor(Qt::ArrowCursor) { }
+
+    QWidget *optionWidget; ///< the optionwidget this tool will show in the option widget palette
+    QCursor previousCursor;
+    QHash<QString, QAction*> actionCollection;
+};
 
 KoTool::KoTool(KoCanvasBase *canvas )
-    : m_canvas(canvas)
-    , m_optionWidget( 0 )
-    , m_previousCursor(Qt::ArrowCursor)
+    : m_canvas(canvas),
+    d(new KoToolPrivate())
 {
     if(m_canvas) { // in the case of KoToolManagers dummytool it can be zero :(
         KoCanvasResourceProvider * crp = m_canvas->resourceProvider();
@@ -47,8 +52,8 @@ KoTool::KoTool(KoCanvasBase *canvas )
 
 KoTool::~KoTool()
 {
-    if (m_optionWidget && !m_optionWidget->parentWidget())
-        delete m_optionWidget;
+    if (d->optionWidget && !d->optionWidget->parentWidget())
+        delete d->optionWidget;
 }
 
 void KoTool::activate(bool temporary) {
@@ -86,17 +91,25 @@ void KoTool::wheelEvent( KoPointerEvent * e ) {
 
 
 void KoTool::useCursor(QCursor cursor, bool force) {
-    if(!force && cursor.shape() == m_previousCursor.shape())
+    if(!force && cursor.shape() == d->previousCursor.shape())
         return;
-    m_previousCursor = cursor;
-    emit sigCursorChanged(m_previousCursor);
+    d->previousCursor = cursor;
+    emit sigCursorChanged(d->previousCursor);
 }
 
 QWidget * KoTool::optionWidget() {
-    if (m_optionWidget == 0) {
-        m_optionWidget = createOptionWidget();
+    if (d->optionWidget == 0) {
+        d->optionWidget = createOptionWidget();
     }
-    return m_optionWidget;
+    return d->optionWidget;
+}
+
+void KoTool::addAction(const QString &name, QAction *action) {
+    d->actionCollection.insert(name, action);
+}
+
+QHash<QString, QAction*> KoTool::actions() const {
+    return d->actionCollection;
 }
 
 

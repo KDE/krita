@@ -14,67 +14,71 @@
 		interpreter="python"
 		file="extensions/pilexport.py" />
 
-	<script
-		name="rbinvert"
-		text="Invert with Ruby"
-		comment="Invert the pixel of an image with Ruby"
-		interpreter="ruby"
-		file="extensions/invert.rb" />
+    <collection name="samples" text="Samples">
 
-	<script
-		name="pyinvert"
-		text="Invert with Python"
-		comment="Invert the pixel of an image with Python"
-		interpreter="python"
-		file="extensions/invert.py" />
+		<script
+			name="rbinvert"
+			text="Invert with Ruby"
+			comment="Invert the pixel of an image with Ruby"
+			interpreter="ruby"
+			file="extensions/invert.rb" />
 
-	<script
-		name="jsinvert"
-		text="Invert with JavaScript"
-		comment="Invert the pixel of an image with JavaScript"
-		interpreter="javascript"
-		file="extensions/invert.js" />
+		<script
+			name="pyinvert"
+			text="Invert with Python"
+			comment="Invert the pixel of an image with Python"
+			interpreter="python"
+			file="extensions/invert.py" />
 
-	<script
-		name="rbrandompaint"
-		text="Random painting"
-		comment="Demonstrate how to use the Painter scripting API and paint random shape on screen"
-		interpreter="ruby"
-		file="extensions/randompaint.rb" />
+		<script
+			name="jsinvert"
+			text="Invert with JavaScript"
+			comment="Invert the pixel of an image with JavaScript"
+			interpreter="javascript"
+			file="extensions/invert.js" />
 
-	<script
-		name="rbfilterstest"
-		text="Filters test"
-		comment="Test of filters in a ruby-scripting"
-		interpreter="ruby"
-		file="extensions/filterstest.rb" />
+		<script
+			name="rbrandompaint"
+			text="Random painting"
+			comment="Demonstrate how to use the Painter scripting API and paint random shape on screen"
+			interpreter="ruby"
+			file="extensions/randompaint.rb" />
 
-	<script
-		name="rbchangecs"
-		text="Change colorspace"
-		comment="Demonstrate how to change the colorspace in a script"
-		interpreter="ruby"
-		file="extensions/changecs.rb" />
-	
-	<script
-		name="pyreshapehisto"
-		text="Reshape Histogram"
-		comment="It's an experimental script to try to reshape histogram, while the results are far to be convincing yet it is still an example on how to use histogram in a script."
-		interpreter="python"
-		file="extensions/reshapehisto.py" />
+		<script
+			name="rbfilterstest"
+			text="Filters test"
+			comment="Test of filters in a ruby-scripting"
+			interpreter="ruby"
+			file="extensions/filterstest.rb" />
 
-	<script
-		name="rbtorturepainting"
-		text="Torture Krita with painting"
-		comment="Paint on an image and create multiple layers"
-		interpreter="ruby"
-		file="extensions/torture-painting.rb" />
+		<script
+			name="rbchangecs"
+			text="Change colorspace"
+			comment="Demonstrate how to change the colorspace in a script"
+			interpreter="ruby"
+			file="extensions/changecs.rb" />
 
-	<script
-		name="rbtorturefilters"
-		text="Torture Krita with filters"
-		comment="Test all filters with all colorspaces"
-		interpreter="ruby"
-		file="extensions/torture-filters.rb" />
+		<script
+			name="pyreshapehisto"
+			text="Reshape Histogram"
+			comment="It's an experimental script to try to reshape histogram, while the results are far to be convincing yet it is still an example on how to use histogram in a script."
+			interpreter="python"
+			file="extensions/reshapehisto.py" />
+
+		<script
+			name="rbtorturepainting"
+			text="Torture Krita with painting"
+			comment="Paint on an image and create multiple layers"
+			interpreter="ruby"
+			file="extensions/torture-painting.rb" />
+
+		<script
+			name="rbtorturefilters"
+			text="Torture Krita with filters"
+			comment="Test all filters with all colorspaces"
+			interpreter="ruby"
+			file="extensions/torture-filters.rb" />
+
+	</collection>
 
 </KrossScripting>

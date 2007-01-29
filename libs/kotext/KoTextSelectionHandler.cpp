@@ -23,6 +23,8 @@
 #include "KoTextShapeData.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoVariable.h"
+#include "styles/KoParagraphStyle.h"
+#include "styles/KoCharacterStyle.h"
 
 #include <kdebug.h>
 #include <QTextCharFormat>
@@ -30,8 +32,9 @@
 #include <QTextCursor>
 #include <QTextBlock>
 
-KoTextSelectionHandler::KoTextSelectionHandler()
-: m_textShape(0),
+KoTextSelectionHandler::KoTextSelectionHandler(QObject *parent)
+: KoToolSelection(parent),
+    m_textShape(0),
     m_textShapeData(0),
     m_caret(0)
 {
@@ -136,3 +139,15 @@ void KoTextSelectionHandler::insertVariable(KoVariable *variable) {
     layout->inlineObjectTextManager()->insertInlineObject(*m_caret, variable);
 }
 
+void KoTextSelectionHandler::setStyle(KoParagraphStyle* style) {
+    Q_ASSERT(style);
+    QTextBlock block = m_caret->block();
+    style->applyStyle(block);
+}
+
+void KoTextSelectionHandler::setStyle(KoCharacterStyle* style) {
+    Q_ASSERT(style);
+    style->applyStyle(m_caret);
+}
+
+#include <KoTextSelectionHandler.moc>

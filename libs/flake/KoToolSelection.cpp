@@ -19,4 +19,12 @@
  */
 #include "KoToolSelection.h"
 
+KoToolSelection::KoToolSelection(QObject *parent)
+    : QObject(parent)
+{
+}
+
+KoToolSelection::~KoToolSelection() {
+}
+
 #include "KoToolSelection.moc"

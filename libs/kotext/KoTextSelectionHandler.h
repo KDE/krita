@@ -27,6 +27,8 @@
 
 #include <QColor>
 
+class KoParagraphStyle;
+class KoCharacterStyle;
 class KoTextShapeData;
 class KoVariable;
 class QTextCursor;
@@ -36,8 +38,13 @@ class QStackedWidget;
  * The public class that is able to manipulate selected text.
  */
 class KOTEXT_EXPORT KoTextSelectionHandler : public KoToolSelection {
+    Q_OBJECT
 public:
-    KoTextSelectionHandler();
+    KoTextSelectionHandler(QObject *parent = 0);
+
+    QString selectedText() const;
+
+public slots:
 
     /**
      * Make the currently selected text bold
@@ -88,10 +95,12 @@ public:
     void setTextColor(const QColor &color);
     void setTextBackgroundColor(const QColor &color);
     void insert(const QString &text);
-    QString selectedText() const;
     void selectFont(QWidget *parent = 0);
 
     void insertVariable(KoVariable *variable);
+
+    void setStyle(KoParagraphStyle* style);
+    void setStyle(KoCharacterStyle* style);
 
 protected:
     friend class TextTool;

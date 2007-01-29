@@ -1,6 +1,7 @@
 
 
 add_subdirectory( tests )
+add_subdirectory( threadAction/tests )
 
 include_directories( ${KWMF_INCLUDES} ${KOSTORE_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 

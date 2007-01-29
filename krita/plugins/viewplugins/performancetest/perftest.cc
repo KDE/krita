@@ -33,7 +33,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -80,7 +80,7 @@ PerfTest::PerfTest(QObject *parent, const QStringList &)
 {
     if ( parent->inherits("KisView2") )
     {
-        setInstance(PerfTestFactory::instance());
+        setComponentData(PerfTestFactory::componentData());
 
 setXMLFile(KStandardDirs::locate("data","kritaplugins/perftest.rc"),
 true);

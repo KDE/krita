@@ -30,7 +30,7 @@ K_EXPORT_COMPONENT_FACTORY( kritacimg, KisCImgPluginFactory( "krita" ) )
 
 KisCImgPlugin::KisCImgPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
 {
-    setInstance(KisCImgPluginFactory::instance());
+    setComponentData(KisCImgPluginFactory::componentData());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);

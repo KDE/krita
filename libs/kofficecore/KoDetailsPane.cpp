@@ -31,7 +31,7 @@
 #include <QPixmap>
 #include <QStandardItemModel>
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kconfig.h>
@@ -52,19 +52,19 @@ class KoDetailsPanePrivate
 {
   public:
     KoDetailsPanePrivate() :
-      m_instance(0)
+      m_componentData(0)
     {
     }
 
-    KInstance* m_instance;
+    KComponentData m_componentData;
     QStandardItemModel* m_model;
 };
 
-KoDetailsPane::KoDetailsPane(QWidget* parent, KInstance* _instance, const QString& header)
+KoDetailsPane::KoDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header)
   : QWidget(parent), Ui_KoDetailsPaneBase()
 {
   d = new KoDetailsPanePrivate;
-  d->m_instance = _instance;
+  d->m_componentData = _componentData;
   d->m_model = new QStandardItemModel;
   d->m_model->setHorizontalHeaderItem(0, new QStandardItem(header));
 
@@ -91,9 +91,9 @@ KoDetailsPane::~KoDetailsPane()
   delete d;
 }
 
-KInstance* KoDetailsPane::instance()
+KComponentData KoDetailsPane::componentData()
 {
-  return d->m_instance;
+  return d->m_componentData;
 }
 
 bool KoDetailsPane::eventFilter(QObject* watched, QEvent* e)

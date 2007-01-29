@@ -51,6 +51,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <knuminput.h>
+#include <kconfiggroup.h>
 
 #include "KFontDialog_local.h"
 #include "KFontDialog_local.moc"
@@ -342,7 +343,7 @@ KFontChooser_local::KFontChooser_local(QWidget *parent,
   if( sizeIsRelativeState && sizeIsRelativeCheckBox )
     setSizeIsRelative( *sizeIsRelativeState );
 
-  KConfig *config = KGlobal::config();
+  KSharedConfig::Ptr config = KGlobal::config();
   KConfigGroup group(config, QString::fromLatin1("General"));
   showXLFDArea(group.readEntry(QString::fromLatin1("fontSelectorShowXLFD"), false));
 }

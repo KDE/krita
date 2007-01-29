@@ -24,7 +24,7 @@
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kgenericfactory.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -61,7 +61,7 @@ Bracketing2HDRPlugin::Bracketing2HDRPlugin(QObject *parent, const QStringList &)
     {
         m_view = (KisView2*) parent;
 
-        setInstance(Bracketing2HDRPluginFactory::instance());
+        setComponentData(Bracketing2HDRPluginFactory::componentData());
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/bracketing2hdr.rc"), true);
 

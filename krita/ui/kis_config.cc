@@ -49,7 +49,7 @@ KisConfig::KisConfig()
     if (!m_cfg) {
         // Allow unit tests to test parts of the code without having to run the
         // full application.
-        m_cfg = new KConfig();
+        m_cfg = KSharedConfig::openConfig();
     }
     m_cfg->setGroup("");
 }

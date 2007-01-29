@@ -19,14 +19,14 @@
 
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
 //Added by qt3to4:
 #include <Q3CString>
 
 int main( int /*argc*/, char ** /*argv*/ )
 {
-    KInstance instance( "filterchain_test" );  // we need an instance when using the trader
+    KComponentData componentData( "filterchain_test" );  // we need an instance when using the trader
     KOffice::Graph g( "application/x-kspread" );
     g.dump();
     g.setSourceMimeType( "application/x-kword" );

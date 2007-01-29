@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -52,7 +52,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaselectiontools, SelectionToolsFactory( "krita" 
 SelectionTools::SelectionTools(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(SelectionToolsFactory::instance());
+    setComponentData(SelectionToolsFactory::componentData());
 
     if ( parent->inherits("KoToolRegistry") )
     {

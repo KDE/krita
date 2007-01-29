@@ -153,7 +153,7 @@ KisView2::KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * par
     : KoView(doc, parent)
 {
 
-    setInstance(KisFactory2::instance(), false);
+    setComponentData(KisFactory2::componentData(), false);
 
     if (!doc->isReadWrite())
         setXMLFile("krita_readonly.rc");

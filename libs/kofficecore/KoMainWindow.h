@@ -66,7 +66,7 @@ public:
      *
      *  Initializes a KOffice main window (with its basic GUI etc.).
      */
-    explicit KoMainWindow( KInstance *instance );
+    explicit KoMainWindow( const KComponentData &instance );
 
     /**
      *  Destructor.

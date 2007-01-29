@@ -30,7 +30,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaunsharpfilter, UnsharpPluginFactory( "krita" ) 
 UnsharpPlugin::UnsharpPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(UnsharpPluginFactory::instance());
+    setComponentData(UnsharpPluginFactory::componentData());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);

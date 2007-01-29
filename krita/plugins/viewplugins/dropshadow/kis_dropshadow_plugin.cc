@@ -20,7 +20,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -46,7 +46,7 @@ KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QStringList &)
 {
     if ( parent->inherits("KisView2") ) {
 
-        setInstance(KGenericFactory<KisDropshadowPlugin>::instance());
+        setComponentData(KGenericFactory<KisDropshadowPlugin>::componentData());
 
 setXMLFile(KStandardDirs::locate("data","kritaplugins/dropshadow.rc"),
 true);

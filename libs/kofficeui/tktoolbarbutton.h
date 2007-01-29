@@ -29,7 +29,7 @@
 #include <kglobal.h>
 
 class KToolBar;
-class KInstance;
+class KComponentData;
 class KMenu;
 class QPainter;
 class QIcon;
@@ -39,7 +39,7 @@ class TKToolBarButton : public QToolButton
 public:
   TKToolBarButton(const QString& icon, const QString& txt,
                      QWidget* parent = 0, const char *name=0L,
-                     KInstance *_instance = KGlobal::instance());
+                     const KComponentData &_componentData = KGlobal::mainComponent());
 
   TKToolBarButton(const QPixmap&, const QString&, QWidget* parent=0, const char* name=0);
   ~TKToolBarButton();

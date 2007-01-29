@@ -20,7 +20,7 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
@@ -37,7 +37,7 @@ K_EXPORT_COMPONENT_FACTORY( kofficescan, ScanFactory( "kscan_plugin" ) )
 Scan::Scan(QObject *parent, const QStringList &)
     : KParts::Plugin(parent), scanDialog( 0 )
 {
-    setInstance(ScanFactory::instance());
+    setComponentData(ScanFactory::componentData());
 
     KAction *action  = new KAction(KIcon("scanner"), i18n("&Scan Image..."), this);
     actionCollection()->addAction("scan_image", action );

@@ -19,7 +19,6 @@
 #include <QWidget>
 
 #include <kdebug.h>
-#include <kinstance.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>

@@ -1456,12 +1456,12 @@ pixels in the brush." visibility="public" xmi.id="705" type="virtual KisAlphaMas
      <UML:Parameter visibility="private" xmi.id="1124" value="" type="const char *" name="classname" />
      <UML:Parameter visibility="private" xmi.id="1125" value="" type="const QStringList &amp;" name="args" />
     </UML:Operation>
-    <UML:Operation visibility="public" xmi.id="1126" type="KInstance *" name="global" ownerScope="classifier" />
+    <UML:Operation visibility="public" xmi.id="1126" type="KComponentData " name="global" ownerScope="classifier" />
     <UML:Operation visibility="public" xmi.id="1127" type="KisPluginServer *" name="pServer" ownerScope="classifier" />
     <UML:Operation visibility="public" xmi.id="1128" type="KisResourceServer *" name="rServer" ownerScope="classifier" />
     <UML:Operation visibility="public" xmi.id="1129" type="" name="~KisFactory" />
     <UML:Attribute visibility="private" xmi.id="1111" value="" type="KAboutData *" name="s_aboutData" />
-    <UML:Attribute visibility="private" xmi.id="1112" value="" type="KInstance *" name="s_global" />
+    <UML:Attribute visibility="private" xmi.id="1112" value="" type="KComponentData " name="s_global" />
     <UML:Attribute visibility="private" xmi.id="1113" value="" type="KisPluginServer *" name="s_pserver" />
     <UML:Attribute visibility="private" xmi.id="1114" value="" type="KisResourceServer *" name="s_rserver" />
    </UML:Class>
@@ -38415,7 +38415,7 @@ in the constructor, you have to call loadAsync.
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1112" tag="tblock_1" canDelete="false" indentLevel="1" role_id="-1" text=" KInstance * s_global;" >
+              <ccfdeclarationcodeblock parent_id="1112" tag="tblock_1" canDelete="false" indentLevel="1" role_id="-1" text=" KComponentData * s_global;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -38551,7 +38551,7 @@ in the constructor, you have to call loadAsync.
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1112" tag="tblock_1" canDelete="false" indentLevel="1" role_id="-1" text=" KInstance * s_global;" >
+       <ccfdeclarationcodeblock parent_id="1112" tag="tblock_1" canDelete="false" indentLevel="1" role_id="-1" text=" KComponentData * s_global;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>

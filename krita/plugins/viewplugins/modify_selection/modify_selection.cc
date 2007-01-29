@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -59,7 +59,7 @@ ModifySelection::ModifySelection(QObject *parent, const QStringList &)
 {
     if ( parent->inherits("KisView2") )
     {
-        setInstance(ModifySelectionFactory::instance());
+        setComponentData(ModifySelectionFactory::componentData());
 
 setXMLFile(KStandardDirs::locate("data","kritaplugins/modify_selection.rc"),
 true);

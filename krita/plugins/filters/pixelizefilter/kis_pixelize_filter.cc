@@ -31,7 +31,6 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>

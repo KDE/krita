@@ -4,7 +4,7 @@
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -25,7 +25,7 @@ K_EXPORT_COMPONENT_FACTORY( krita%{APPNAMELC}, %{APPNAME}PluginFactory( "krita" 
     {
         m_view = (KisView2*) parent;
 
-        setInstance(%{APPNAME}PluginFactory::instance());
+        setComponentData(%{APPNAME}PluginFactory::componentData());
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/%{APPNAMELC}.rc"), true);
 

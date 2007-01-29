@@ -101,7 +101,7 @@ bool KoApplication::start()
     KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
     if ( entry.isEmpty() )
     {
-        kError( 30003 ) << instanceName() << "part.desktop not found." << endl;
+        kError( 30003 ) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
         kError( 30003 ) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
         kError( 30003 ) << "Check your installation (did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
         return false;
@@ -140,7 +140,7 @@ bool KoApplication::start()
                 KMessageBox::error( 0, errorMsg );
             return false;
         }
-        KoMainWindow *shell = new KoMainWindow( doc->instance() );
+        KoMainWindow *shell = new KoMainWindow( doc->componentData() );
         shell->show();
         QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
         // for initDoc to fill in the recent docs list
@@ -172,7 +172,7 @@ bool KoApplication::start()
             if ( doc )
             {
                 // show a shell asap
-                KoMainWindow *shell = new KoMainWindow( doc->instance() );
+                KoMainWindow *shell = new KoMainWindow( doc->componentData() );
                 if (!print)
                     shell->show();
 		// are we just trying to open a template?
@@ -184,7 +184,7 @@ bool KoApplication::start()
 		    kDebug(30003) << "using full path..." << endl;
 		  } else {
 		     QString desktopName(args->arg(i));
-		     QString appName = KGlobal::instance()->instanceName();
+		     QString appName = KGlobal::mainComponent().componentName();
 
 		     paths = KGlobal::dirs()->findAllResources("data", appName +"/templates/*/" + desktopName );
 		     if ( paths.isEmpty()) {

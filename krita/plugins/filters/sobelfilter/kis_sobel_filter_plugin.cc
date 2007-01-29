@@ -29,7 +29,7 @@ K_EXPORT_COMPONENT_FACTORY( kritasobelfilter, KisSobelFilterPluginFactory( "krit
 KisSobelFilterPlugin::KisSobelFilterPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(KisSobelFilterPluginFactory::instance());
+    setComponentData(KisSobelFilterPluginFactory::componentData());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);

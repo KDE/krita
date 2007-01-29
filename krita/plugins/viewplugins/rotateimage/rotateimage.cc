@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -56,7 +56,7 @@ RotateImage::RotateImage(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
     if ( parent->inherits("KisView2") ) {
-        setInstance(RotateImageFactory::instance());
+        setComponentData(RotateImageFactory::componentData());
 
 setXMLFile(KStandardDirs::locate("data","kritaplugins/rotateimage.rc"),
 true);

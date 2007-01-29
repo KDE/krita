@@ -72,7 +72,7 @@ QHash<QString, KisFilterConfiguration*> KisFilter::bookmarkedConfigurations( con
 
 void KisFilter::saveToBookmark(const QString& configname, KisFilterConfiguration* config)
 {
-    KConfig * cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup(configEntryGroup());
     cfg->writeEntry(configname,config->toString());
     cfg->setGroup("");
@@ -81,7 +81,7 @@ void KisFilter::saveToBookmark(const QString& configname, KisFilterConfiguration
 KisFilterConfiguration* KisFilter::loadFromBookmark(const QString& configname)
 {
     if(not existInBookmark(configname)) return 0;
-    KConfig * cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup(configEntryGroup());
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
     config->fromXML(cfg->readEntry<QString>(configname, ""));
@@ -91,7 +91,7 @@ KisFilterConfiguration* KisFilter::loadFromBookmark(const QString& configname)
 
 bool KisFilter::existInBookmark(const QString& configname)
 {
-    KConfig * cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     QMap< QString, QString > m = cfg->entryMap(configEntryGroup());
     return (m.find(configname) != m.end());
 }

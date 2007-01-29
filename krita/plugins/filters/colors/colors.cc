@@ -31,7 +31,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaextensioncolorsfilters, KritaExtensionsColorsFa
 KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(KritaExtensionsColorsFactory::instance());
+    setComponentData(KritaExtensionsColorsFactory::componentData());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);

@@ -19,7 +19,7 @@
  */
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -38,7 +38,7 @@ K_EXPORT_COMPONENT_FACTORY( kritawsplugin, WetStickyPluginFactory( "kritacore" )
 WetStickyPlugin::WetStickyPlugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-           setInstance(WetStickyPluginFactory::instance());
+           setComponentData(WetStickyPluginFactory::componentData());
 
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisFactory") )

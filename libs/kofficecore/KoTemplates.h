@@ -25,8 +25,7 @@
 #include <QStringList>
 #include <QPixmap>
 #include <kofficecore_export.h>
-
-class KInstance;
+#include <kcomponentdata.h>
 
 /** @internal */
 class KOFFICECORE_EXPORT KoTemplate {
@@ -46,7 +45,7 @@ public:
     QString file() const { return m_file; }
     QString picture() const { return m_picture; }
     QString fileName() const { return m_fileName; }
-    const QPixmap &loadPicture( KInstance* instance );
+    const QPixmap &loadPicture( const KComponentData &instance );
 
     bool isHidden() const { return m_hidden; }
     void setHidden(bool hidden=true) { m_hidden=hidden; m_touched=true; }
@@ -108,12 +107,12 @@ private:
 class KOFFICECORE_EXPORT KoTemplateTree {
 
 public:
-    KoTemplateTree(const QByteArray &templateType, KInstance *instance,
+    KoTemplateTree(const QByteArray &templateType, const KComponentData &instance,
 		   bool readTree=false);
     ~KoTemplateTree() {}
 
     QByteArray templateType() const { return m_templateType; }
-    KInstance *instance() const { return m_instance; }
+    KComponentData componentData() const { return m_componentData; }
     void readTemplateTree();
     void writeTemplateTree();
 
@@ -136,7 +135,7 @@ private:
 		       const QString &localDir);
 
     QByteArray m_templateType;
-    KInstance *m_instance;
+    KComponentData m_componentData;
     Q3PtrList<KoTemplateGroup> m_groups;
     KoTemplateGroup *m_defaultGroup;
     KoTemplate *m_defaultTemplate;

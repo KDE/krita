@@ -23,7 +23,7 @@
 
 #include <QMap>
 #include <QPoint>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QFocusEvent>
@@ -153,7 +153,7 @@ public:
      */
     KoToolButton( const QString& icon, int id, QWidget* parent,
                   const char* name = 0L, const QString& txt = QString::null,
-                  KInstance* _instance = KGlobal::instance() );
+                  const KComponentData &_componentData = KGlobal::mainComponent() );
 
     /**
      * Construct a button with an existing pixmap.  It is not

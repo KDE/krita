@@ -17,7 +17,7 @@
  */
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -35,7 +35,7 @@ K_EXPORT_COMPONENT_FACTORY(kritasmearybrush, SmearyBrushFactory("kritacore"))
 SmearyBrush::SmearyBrush(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(SmearyBrushFactory::instance());
+    setComponentData(SmearyBrushFactory::componentData());
 
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisPaintOpRegistry") )

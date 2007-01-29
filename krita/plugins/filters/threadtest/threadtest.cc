@@ -25,7 +25,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -49,7 +49,7 @@ K_EXPORT_COMPONENT_FACTORY( kritathreadtest, KritaThreadTestFactory( "krita" ) )
 KritaThreadTest::KritaThreadTest(QObject *parent, const char *name, const QStringList &)
         : KParts::Plugin(parent, name)
 {
-    setInstance(KritaThreadTestFactory::instance());
+    setComponentData(KritaThreadTestFactory::componentData());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * r = dynamic_cast<KisFilterRegistry *>(parent);

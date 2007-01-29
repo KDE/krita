@@ -75,12 +75,12 @@ int TKAction::plug(QWidget* widget, int index)
   if ( widget->inherits("KToolBar") ) {
     KToolBar* bar = static_cast<KToolBar*>(widget);
     int id_ = KAction::getToolButtonID();
-    KInstance *instance;
+    KComponentData instance;
 
     if ( parentCollection() )
-      instance = parentCollection()->instance();
+      instance = parentCollection()->componentData();
     else
-      instance = KGlobal::instance();
+      instance = KGlobal::mainComponent();
 
     TKToolBarButton* b = new TKToolBarButton(icon(),plainText(),bar,name(),instance);
     // we don't need clicked() and buttonClicked(), do we?

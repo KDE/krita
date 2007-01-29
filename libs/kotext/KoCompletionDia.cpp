@@ -33,6 +33,7 @@
 #include <QComboBox>
 #include <q3groupbox.h>
 #include <q3whatsthis.h>
+#include <kconfiggroup.h>
 
 KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoFormat * autoFormat )
     : KDialog( parent )

@@ -479,7 +479,7 @@ void KisSelectionManager::pasteNew()
 
     doc->undoAdapter()->setUndo(true);
 
-    KoMainWindow *win = new KoMainWindow( doc->instance() );
+    KoMainWindow *win = new KoMainWindow( doc->componentData() );
     win->show();
     win->setRootDocument( doc );
 }

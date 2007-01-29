@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -43,7 +43,7 @@ K_EXPORT_COMPONENT_FACTORY( kritatoolselectsimilar, SelectSimilarFactory( "krita
 SelectSimilar::SelectSimilar(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(SelectSimilarFactory::instance());
+    setComponentData(SelectSimilarFactory::componentData());
 
     if ( parent->inherits("KoToolRegistry") )
     {

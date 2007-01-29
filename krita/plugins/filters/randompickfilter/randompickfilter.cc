@@ -27,7 +27,7 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -51,7 +51,7 @@ K_EXPORT_COMPONENT_FACTORY( kritarandompickfilter, KritaRandomPickFilterFactory(
 KritaRandomPickFilter::KritaRandomPickFilter(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(KritaRandomPickFilterFactory::instance());
+    setComponentData(KritaRandomPickFilterFactory::componentData());
 
 
     if (parent->inherits("KisFilterRegistry")) {

@@ -22,7 +22,7 @@
 
 #include <kparts/factory.h>
 #include <kofficecore_export.h>
-class KInstance;
+class KComponentData;
 
 class KOFFICECORE_EXPORT KoFactory : public KParts::Factory
 {

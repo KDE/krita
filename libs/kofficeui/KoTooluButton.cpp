@@ -654,8 +654,8 @@ void KoColorPopupProxy::slotMoreColors()
 
 
 KoToolButton::KoToolButton( const QString& icon, int id, QWidget* parent,
-                            const char* name, const QString& txt, KInstance* _instance ) :
-    KToolBarButton( icon, id, parent, name, txt, _instance ), m_arrowPressed( false )
+                            const char* name, const QString& txt, const KComponentData &_componentData ) :
+    KToolBarButton( icon, id, parent, name, txt, _componentData ), m_arrowPressed( false )
 {
     init();
 }

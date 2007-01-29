@@ -23,7 +23,7 @@
 #include <QDir>
 
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -42,7 +42,7 @@
 #include "kis_factory2.h"
 
 KAboutData* KisFactory2::s_aboutData = 0;
-KInstance* KisFactory2::s_instance = 0;
+KComponentData* KisFactory2::s_instance = 0;
 
 
 
@@ -51,7 +51,7 @@ KisFactory2::KisFactory2( QObject* parent )
 {
     s_aboutData = newKritaAboutData();
 
-    (void)instance();
+    (void)componentData();
 }
 
 KisFactory2::~KisFactory2()
@@ -86,16 +86,16 @@ KAboutData* KisFactory2::aboutData()
     return s_aboutData;
 }
 
-KInstance* KisFactory2::instance()
+const KComponentData &KisFactory2::componentData()
 {
     QString homedir = getenv("HOME");
 
     if ( !s_instance )
     {
         if ( s_aboutData )
-            s_instance = new KInstance(s_aboutData);
+            s_instance = new KComponentData(s_aboutData);
         else
-            s_instance = new KInstance( newKritaAboutData() );
+            s_instance = new KComponentData( newKritaAboutData() );
         Q_CHECK_PTR(s_instance);
 
         // Load the krita-specific tools
@@ -140,7 +140,7 @@ KInstance* KisFactory2::instance()
 
     }
 
-    return s_instance;
+    return *s_instance;
 }
 
 #include "kis_factory2.moc"

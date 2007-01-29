@@ -27,7 +27,7 @@
 
 #include <kcursor.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
 #include "kis_factory2.h"
@@ -334,7 +334,7 @@ QCursor KisCursor::rotateCursor()
 
 QCursor KisCursor::load(const QString & iconName, int hotspotX, int hotspotY)
 {
-    QString filename = KisFactory2::instance()->dirs()->findResource("kis_pics", iconName);
+    QString filename = KisFactory2::componentData().dirs()->findResource("kis_pics", iconName);
     QImage cursorImage;
 
     cursorImage.load(filename);

@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -44,7 +44,7 @@ K_EXPORT_COMPONENT_FACTORY( kritatoolperspectivegrid, ToolPerspectiveGridFactory
 ToolPerspectiveGrid::ToolPerspectiveGrid(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(ToolPerspectiveGridFactory::instance());
+    setComponentData(ToolPerspectiveGridFactory::componentData());
 
     if ( parent->inherits("KoToolRegistry") )
     {

@@ -565,7 +565,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                 KoColorProfile *  dstProfile,
                 qint32 renderingIntent) const
         {
-            KConfig * cfg = KGlobal::config();
+            KSharedConfig::Ptr cfg = KGlobal::config();
             bool bpCompensation = cfg->readEntry("useBlackPointCompensation", false);
 
             int flags = 0;

@@ -277,7 +277,7 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
     , m_d( new KisDocPrivate() )
 {
 
-    setInstance( KisFactory2::instance(), false );
+    setComponentData( KisFactory2::componentData(), false );
     setTemplateType( "krita_template" );
     init();
 

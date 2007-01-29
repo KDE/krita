@@ -40,10 +40,10 @@ class KoRecentDocumentsPane : public KoDetailsPane
     /**
      * Constructor.
      * @param parent the parent widget
-     * @param _instance the instance object for the app
+     * @param _componentData the instance object for the app
      * @param header string used as header text in the listview
      */
-    KoRecentDocumentsPane(QWidget* parent, KInstance* _instance, const QString& header);
+    KoRecentDocumentsPane(QWidget* parent, const KComponentData &_componentData, const QString& header);
     ~KoRecentDocumentsPane();
 
   protected slots:

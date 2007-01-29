@@ -43,7 +43,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -76,7 +76,7 @@ K_EXPORT_COMPONENT_FACTORY( kritabumpmap, KritaBumpmapFactory( "krita" ) )
     KritaBumpmap::KritaBumpmap(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(KritaBumpmapFactory::instance());
+    setComponentData(KritaBumpmapFactory::componentData());
 
 
     if (parent->inherits("KisFilterRegistry")) {

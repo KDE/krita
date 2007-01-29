@@ -54,7 +54,7 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const QStringList &)
 {
     if ( parent->inherits("KisView2") )
     {
-        setInstance(KritaFiltersGallery::instance());
+        setComponentData(KritaFiltersGallery::componentData());
 
 setXMLFile(KStandardDirs::locate("data","kritaplugins/kritafiltersgallery.rc"),
 true);

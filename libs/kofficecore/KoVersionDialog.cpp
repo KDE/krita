@@ -219,7 +219,7 @@ void KoVersionDialog::slotOpen()
             KMessageBox::error( 0, errorMsg );
           return;
         }
-        KoMainWindow *shell = new KoMainWindow( doc->instance() );
+        KoMainWindow *shell = new KoMainWindow( doc->componentData() );
         shell->openDocument( tmp.fileName() );
         shell->show();
     }

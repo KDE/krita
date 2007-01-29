@@ -29,7 +29,7 @@ KisThreadPool::KisThreadPool()
 
     KisThreadPool::m_singleton = this;
 
-    KConfig * cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("");
     m_maxThreads = cfg->readEntry("maxthreads",  10);
     m_numberOfRunningThreads = 0;

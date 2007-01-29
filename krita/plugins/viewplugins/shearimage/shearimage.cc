@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -55,7 +55,7 @@ K_EXPORT_COMPONENT_FACTORY( kritashearimage, ShearImageFactory( "krita" ) )
 {
     if ( parent->inherits("KisView2") )
     {
-        setInstance(ShearImageFactory::instance());
+        setComponentData(ShearImageFactory::componentData());
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/shearimage.rc"),
                    true);

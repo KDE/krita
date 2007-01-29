@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
@@ -94,7 +94,7 @@ class KisTriangleWaveCurve : public KisWaveCurve {
 KritaWaveFilter::KritaWaveFilter(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(KritaWaveFilterFactory::instance());
+    setComponentData(KritaWaveFilterFactory::componentData());
 
 
     if (parent->inherits("KisFilterRegistry")) {

@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 #include <klocale.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kgenericfactory.h>
 
 #include <kis_convolution_painter.h>
@@ -61,7 +61,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFact
 KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(KritaConvolutionFiltersFactory::instance());
+    setComponentData(KritaConvolutionFiltersFactory::componentData());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);

@@ -20,7 +20,7 @@
 
 #include "ycbcr_u8_plugin.h"
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
@@ -36,7 +36,7 @@ K_EXPORT_COMPONENT_FACTORY( krita_ycbcr_u16_plugin, YCbCrU8PluginFactory( "krita
 YCbCrU8Plugin::YCbCrU8Plugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-    setInstance(YCbCrU8PluginFactory::instance());
+    setComponentData(YCbCrU8PluginFactory::componentData());
 
     if ( parent->inherits("KoColorSpaceRegistry") )
     {

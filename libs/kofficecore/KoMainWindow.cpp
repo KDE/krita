@@ -37,7 +37,7 @@
 #include <kdeversion.h>
 #include <kstandardaction.h>
 #include <kmessagebox.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
@@ -197,11 +197,11 @@ public:
     QMap<QDockWidget*, bool> m_dockWidgetVisibilityMap;
 };
 
-KoMainWindow::KoMainWindow( KInstance *instance )
+KoMainWindow::KoMainWindow( const KComponentData &componentData )
     : KParts::MainWindow( )
 {
     setStandardToolBarMenuEnabled(true);
-    Q_ASSERT(instance);
+    Q_ASSERT(componentData.isValid());
     d = new KoMainWindowPrivate;
 
     d->m_manager = new KoPartManager( this );
@@ -209,10 +209,10 @@ KoMainWindow::KoMainWindow( KInstance *instance )
     connect( d->m_manager, SIGNAL( activePartChanged( KParts::Part * ) ),
              this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
 
-    if ( instance )
-        setInstance( instance, false ); // don't load plugins! we don't want
+    if ( componentData.isValid() )
+        setComponentData( componentData, false ); // don't load plugins! we don't want
     // the part's plugins with this shell, even though we are using the
-    // part's instance! (Simon)
+    // part's componentData! (Simon)
 
     QString doc;
     QStringList allFiles = KGlobal::dirs()->findAllResources( "data", "koffice/koffice_shell.rc" );
@@ -311,8 +311,8 @@ KoMainWindow::KoMainWindow( KInstance *instance )
     d->m_dockWidgetMenu->setVisible( false );
 
     // Load list of recent files
-    KConfig * config = instance ? instance->config() : KGlobal::config();
-    m_recent->loadEntries( config );
+    KSharedConfigPtr config = componentData.isValid() ? componentData.config() : KGlobal::config();
+    m_recent->loadEntries( config.data() );
 
     createShellGUI();
     d->bMainWindowGUIBuilt = true;
@@ -332,7 +332,7 @@ KoMainWindow::KoMainWindow( KInstance *instance )
     // Saved size
     config->setGroup( "MainWindow" );
     //kDebug(30003) << "KoMainWindow::restoreWindowSize" << endl;
-    restoreWindowSize( config );
+    restoreWindowSize( config.data() );
 }
 
 KoMainWindow::~KoMainWindow()
@@ -512,9 +512,9 @@ void KoMainWindow::addRecentURL( const KUrl& url )
 void KoMainWindow::saveRecentFiles()
 {
     // Save list of recent files
-    KConfig * config = instance() ? instance()->config() : KGlobal::config();
-    kDebug(30003) << this << " Saving recent files list into config. instance()=" << instance() << endl;
-    m_recent->saveEntries( config );
+    KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
+    kDebug(30003) << this << " Saving recent files list into config. componentData()=" << componentData().componentName() << endl;
+    m_recent->saveEntries( config.data() );
     config->sync();
 
     // Tell all windows to reload their list, after saving
@@ -525,8 +525,8 @@ void KoMainWindow::saveRecentFiles()
 
 void KoMainWindow::reloadRecentFileList()
 {
-    KConfig * config = instance() ? instance()->config() : KGlobal::config();
-    m_recent->loadEntries( config );
+    KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
+    m_recent->loadEntries( config.data() );
 }
 
 KoDocument* KoMainWindow::createDoc() const
@@ -673,7 +673,7 @@ void KoMainWindow::slotLoadCompleted()
         // Open in a new shell
         // (Note : could create the shell first and the doc next for this
         // particular case, that would give a better user feedback...)
-        KoMainWindow *s = new KoMainWindow( newdoc->instance() );
+        KoMainWindow *s = new KoMainWindow( newdoc->componentData() );
         s->show();
         newdoc->removeShell( this );
         s->setRootDocument( newdoc );
@@ -1042,14 +1042,15 @@ void KoMainWindow::saveWindowSettings()
 {
     if (d->m_windowSizeDirty && rootDocument())
     {
-        // Save window size into the config file of our instance
-        instance()->config()->setGroup( "MainWindow" );
+        KSharedConfigPtr config = componentData().config();
+        // Save window size into the config file of our componentData
+        config->setGroup( "MainWindow" );
         //kDebug(30003) << "KoMainWindow::saveWindowSettings" << endl;
-        saveWindowSize( instance()->config() );
+        saveWindowSize( config.data() );
         d->m_windowSizeDirty = false;
-        // Save toolbar position into the config file of the app, under the doc's instance name
-        //kDebug(30003) << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's instance=" << rootDocument()->instance()->instanceName() << endl;
-        saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
+        // Save toolbar position into the config file of the app, under the doc's component name
+        //kDebug(30003) << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's componentData=" << rootDocument()->componentData().componentName() << endl;
+        saveMainWindowSettings( KGlobal::config().data(), rootDocument()->componentData().componentName() );
         KGlobal::config()->sync();
         resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
     }
@@ -1135,7 +1136,7 @@ void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFl
 
     if ( ( !doc  && ( initDocFlags == KoDocument::InitDocFileNew ) ) || ( doc && !doc->isEmpty() ) )
     {
-        KoMainWindow *s = new KoMainWindow( newdoc->instance() );
+        KoMainWindow *s = new KoMainWindow( newdoc->componentData() );
         s->show();
         newdoc->addShell( s );
         newdoc->showStartUpWidget( s, true /*Always show widget*/ );
@@ -1265,7 +1266,7 @@ void KoMainWindow::print(bool quick) {
         title = fileName;
     if ( title.isEmpty() ) {
         // #139905
-        const QString programName = instance()->aboutData() ? instance()->aboutData()->programName() : instance()->instanceName();
+        const QString programName = componentData().aboutData() ? componentData().aboutData()->programName() : componentData().componentName();
         title = i18n("%1 unsaved document (%2)").arg(programName).arg(KGlobal::locale()->formatDate(QDate::currentDate(), true/*short*/));
     }
     printer.setDocName( title );
@@ -1331,7 +1332,7 @@ void KoMainWindow::slotConfigureKeys()
 void KoMainWindow::slotConfigureToolbars()
 {
     if (rootDocument())
-        saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
+        saveMainWindowSettings( KGlobal::config().data(), rootDocument()->componentData().componentName() );
     KEditToolbar edit(factory(), this);
     connect(&edit,SIGNAL(newToolbarConfig()),this,SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1340,7 +1341,7 @@ void KoMainWindow::slotConfigureToolbars()
 void KoMainWindow::slotNewToolbarConfig()
 {
   if (rootDocument())
-      applyMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
+      applyMainWindowSettings( KGlobal::config().data(), rootDocument()->componentData().componentName() );
   KXMLGUIFactory *factory = guiFactory();
 
   // Check if there's an active view
@@ -1371,7 +1372,7 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
       bar->hide();
 
     if (rootDocument())
-        saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
+        saveMainWindowSettings( KGlobal::config().data(), rootDocument()->componentData().componentName() );
   }
   else
     kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!" << endl;
@@ -1553,7 +1554,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   if ( !d->bMainWindowGUIBuilt )
   {
     // Load mainwindow plugins
-    KParts::Plugin::loadPlugins( this, this, instance(), true );
+    KParts::Plugin::loadPlugins( this, this, componentData(), true );
     createShellGUI();
   }
 
@@ -1574,7 +1575,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
         factory->plugActionList(d->m_activeView, "view_split", d->m_splitViewActionList );
 
     // Position and show toolbars according to user's preference
-    setAutoSaveSettings( newPart->instance()->instanceName(), false );
+    setAutoSaveSettings( newPart->componentData().componentName(), false );
 
     // Create and plug toolbar list for Settings menu
     //QPtrListIterator<KToolBar> it = toolBarIterator();
@@ -1777,7 +1778,7 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
     // XXX: Create koffice-wide dialog pane with the palette font size
     // option
 
-    KConfig * cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     Q_ASSERT(cfg);
     cfg->setGroup("");
     QFont f  = KGlobalSettings::generalFont();

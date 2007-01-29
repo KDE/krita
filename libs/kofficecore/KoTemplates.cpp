@@ -28,7 +28,7 @@
 #include <ksimpleconfig.h>
 #include <kdebug.h>
 #include <kdeversion.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <ksavefile.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
@@ -46,7 +46,7 @@ KoTemplate::KoTemplate(const QString &name, const QString &description, const QS
 {
 }
 
-const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
+const QPixmap &KoTemplate::loadPicture( const KComponentData &componentData ) {
     if(m_cached)
         return m_pixmap;
     m_cached=true;
@@ -66,7 +66,7 @@ const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
         m_pixmap = QPixmap::fromImage(img);
         return m_pixmap;
     } else { // relative path
-        KIconLoader iconLoader(instance);
+        KIconLoader iconLoader(componentData);
         m_pixmap = iconLoader.loadIcon( m_picture, K3Icon::Desktop, 128 );
         return m_pixmap;
     }
@@ -131,8 +131,8 @@ KoTemplate *KoTemplateGroup::find(const QString &name) const {
 
 
 KoTemplateTree::KoTemplateTree(const QByteArray &templateType,
-                               KInstance *instance, bool readTree) :
-    m_templateType(templateType), m_instance(instance), m_defaultGroup(0L),
+                               const KComponentData &componentData, bool readTree) :
+    m_templateType(templateType), m_componentData(componentData), m_defaultGroup(0L),
     m_defaultTemplate(0L) {
 
     m_groups.setAutoDelete(true);
@@ -147,7 +147,7 @@ void KoTemplateTree::readTemplateTree() {
 }
 
 void KoTemplateTree::writeTemplateTree() {
-    QString localDir=m_instance->dirs()->saveLocation(m_templateType);
+    QString localDir=m_componentData.dirs()->saveLocation(m_templateType);
 
     for(KoTemplateGroup *group=m_groups.first(); group!=0L; group=m_groups.next()) {
         //kDebug() << "---------------------------------" << endl;
@@ -210,7 +210,7 @@ KoTemplateGroup *KoTemplateTree::find(const QString &name) const {
 
 void KoTemplateTree::readGroups() {
 
-    QStringList dirs = m_instance->dirs()->resourceDirs(m_templateType);
+    QStringList dirs = m_componentData.dirs()->resourceDirs(m_templateType);
     for(QStringList::ConstIterator it=dirs.begin(); it!=dirs.end(); ++it) {
         //kDebug() << "dir: " << *it << endl;
         QDir dir(*it);

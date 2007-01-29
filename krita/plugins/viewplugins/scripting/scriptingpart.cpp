@@ -32,7 +32,7 @@
 #include <kfiledialog.h>
 #include <kgenericfactory.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -67,7 +67,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
     , d(new Private())
 {
-    setInstance(ScriptingPart::instance());
+    setComponentData(ScriptingPart::componentData());
 
     d->view = dynamic_cast< KisView2* >(parent);
     Q_ASSERT(d->view);

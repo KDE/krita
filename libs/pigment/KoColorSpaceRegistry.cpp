@@ -23,7 +23,7 @@
 #include <QStringList>
 #include <QDir>
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -65,14 +65,14 @@ KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
 void KoColorSpaceRegistry::init()
 {
     // prepare a list of the profiles
-    KGlobal::instance()->dirs()->addResourceType("kis_profiles",
+    KGlobal::mainComponent().dirs()->addResourceType("kis_profiles",
                                                      KStandardDirs::kde_default("data") + "krita/profiles/");
 
     QStringList profileFilenames;
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icm");
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICM");
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICC");
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icc");
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.icm");
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.ICM");
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.ICC");
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.icc");
 
     QDir dir("/usr/share/color/icc/", "*.icc;*.ICC;*.icm;*.ICM");
 

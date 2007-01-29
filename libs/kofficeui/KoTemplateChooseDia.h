@@ -24,7 +24,7 @@
 #ifndef koTemplateChooseDia_h
 #define koTemplateChooseDia_h
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kpagedialog.h>
 #include <kicondialog.h>
 #include <k3iconview.h>
@@ -54,7 +54,7 @@ class KoTCDIconCanvas : public KIconCanvas
 	    : KIconCanvas( parent ) { Q_UNUSED(name) }
 
 	bool isCurrentValid() { return currentItem(); }
-	Q3IconViewItem * load(KoTemplateGroup *group, const QString& name, KInstance* instance);
+	Q3IconViewItem * load(KoTemplateGroup *group, const QString& name, const KComponentData &instance);
 
     protected:
 	virtual void keyPressEvent( QKeyEvent *e ) {
@@ -122,7 +122,6 @@ class KoTCDRecentFilesIconView : public KFileIconView {
         QLabel* toolTip;
 };
 
-class KInstance;
 class KoTemplateChooseDiaPrivate;
 
 /**
@@ -162,7 +161,7 @@ public:
      * This is the static method you'll normally use to show the
      * dialog.
      *
-     * @param instance the KInstance of your app
+     * @param instance the KComponentData of your app
      * The native mimetype is retrieved from the (desktop file of) that instance.
      * @param file this is the filename which is returned to your app
      * More precisely, it's a url (to give to KUrl) if ReturnType is File
@@ -174,14 +173,14 @@ public:
      * @param parent pointer to parent widget
      * @return The return type (see above)
      */
-    static ReturnType choose(KInstance* instance, QString &file,
+    static ReturnType choose(const KComponentData &instance, QString &file,
                              const DialogType &dialogType,
                              const QByteArray& templateType,
                              QWidget* parent);
 
 private:
     /// Ditto, with extraNativeMimeTypes added
-    static ReturnType choose(KInstance* instance, QString &file,
+    static ReturnType choose(const KComponentData &instance, QString &file,
                              const QByteArray &format,
                              const QString &nativeName,
                              const QStringList& extraNativeMimeTypes,
@@ -218,7 +217,7 @@ private:
      *
      * @param parent parent the parent of the dialog
      * @param name the Qt internal name
-     * @param instance the KInstance of your app
+     * @param instance the KComponentData of your app
      * @param format is the mimetype of the app (e.g. application/x-kspread)
      * @param nativeName is the name of your app (e.g KSpread)
      * @param dialogType the type of the dialog
@@ -227,7 +226,7 @@ private:
      *
      * @return The return type (see above)
      */
-    KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* instance,
+    KoTemplateChooseDia(QWidget *parent, const char *name, const KComponentData &instance,
                         const QByteArray &format,
                         const QString &nativeName,
                         const QStringList &extraNativeMimeTypes,

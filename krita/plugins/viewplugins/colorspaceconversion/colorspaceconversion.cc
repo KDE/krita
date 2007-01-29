@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -63,7 +63,7 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QStringList &)
     {
         m_view = (KisView2*) parent;
 
-        setInstance(ColorSpaceConversionFactory::instance());
+        setComponentData(ColorSpaceConversionFactory::componentData());
 
 setXMLFile(KStandardDirs::locate("data","kritaplugins/colorspaceconversion.rc"),
 true);

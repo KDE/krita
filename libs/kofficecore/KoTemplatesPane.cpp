@@ -30,13 +30,14 @@
 #include <QPixmap>
 #include <QStandardItemModel>
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kconfig.h>
 #include <kurl.h>
 #include <kdebug.h>
 #include <ktextbrowser.h>
+#include <kconfiggroup.h>
 
 #include "KoTemplates.h"
 
@@ -53,16 +54,16 @@ class KoTemplatesPanePrivate
 };
 
 
-KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* _instance, const QString& header,
+KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_componentData, const QString& header,
                                   KoTemplateGroup *group, KoTemplate* /*defaultTemplate*/)
-  : KoDetailsPane(parent, _instance, header)
+  : KoDetailsPane(parent, _componentData, header)
 {
   d = new KoTemplatesPanePrivate;
   setFocusProxy(m_documentList);
 
   KGuiItem openGItem(i18n("Use This Template"));
   m_openButton->setGuiItem(openGItem);
-  KConfigGroup cfgGrp(instance()->config(), "TemplateChooserDialog");
+  KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
   QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName");
   d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate");
   connect(m_alwaysUseCheckBox, SIGNAL(clicked()), this, SLOT(alwaysUseClicked()));
@@ -74,7 +75,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* _instance, const QS
     if(t->isHidden())
       continue;
 
-    QPixmap preview = t->loadPicture(instance());
+    QPixmap preview = t->loadPicture(componentData());
     QImage icon = preview.toImage();
     icon = icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     icon.convertToFormat(QImage::Format_ARGB32);
@@ -135,7 +136,7 @@ void KoTemplatesPane::openFile(const QModelIndex& index)
 {
   if(index.isValid()) {
     QStandardItem* item = model()->itemFromIndex(index);
-    KConfigGroup cfgGrp(instance()->config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
     cfgGrp.writePathEntry("FullTemplateName", item->data(Qt::UserRole + 1).toString());
     cfgGrp.writeEntry("LastReturnType", "Template");
     cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
@@ -153,7 +154,7 @@ void KoTemplatesPane::alwaysUseClicked()
   QStandardItem* item = model()->itemFromIndex(m_documentList->selectionModel()->currentIndex());
 
   if(!m_alwaysUseCheckBox->isChecked()) {
-    KConfigGroup cfgGrp(instance()->config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
     cfgGrp.writeEntry("AlwaysUseTemplate", QString());
     d->m_alwaysUseTemplate = QString();
   } else {

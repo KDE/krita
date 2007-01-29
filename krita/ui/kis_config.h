@@ -21,6 +21,8 @@
 #include <QString>
 #include <QColor>
 
+#include <kconfig.h>
+
 #include "kis_global.h"
 #include "krita_export.h"
 
@@ -143,7 +145,7 @@ private:
     KisConfig& operator=(const KisConfig&);
 
 private:
-    mutable KConfig *m_cfg;
+    mutable KSharedConfigPtr m_cfg;
 };
 
 #endif // KIS_CONFIG_H_

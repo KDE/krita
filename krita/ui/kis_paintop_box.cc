@@ -35,7 +35,6 @@
 #include <kacceleratormanager.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
-#include <kinstance.h>
 
 #include <KoToolManager.h>
 
@@ -150,7 +149,7 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
         return QPixmap();
     }
 
-    QString fname = KisFactory2::instance()->dirs()->findResource("kis_images", pixmapName);
+    QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", pixmapName);
 
     return QPixmap(fname);
 }

@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -48,7 +48,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaexample, KritaExampleFactory( "krita" ) )
 KritaExample::KritaExample(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(KritaExampleFactory::instance());
+    setComponentData(KritaExampleFactory::componentData());
 
 
     if (parent->inherits("KisFilterRegistry")) {

@@ -19,7 +19,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
@@ -33,7 +33,7 @@ K_EXPORT_COMPONENT_FACTORY(kritadynamicbrush, DynamicBrushFactory("kritacore"))
         DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(DynamicBrushFactory::instance());
+    setComponentData(DynamicBrushFactory::componentData());
 
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisPaintOpRegistry") )

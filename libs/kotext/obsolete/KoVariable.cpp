@@ -42,7 +42,7 @@
 #include <kdialog.h>
 #include <kconfig.h>
 #include <kdeversion.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kcalendarsystem.h>
 #include <kseparatoraction.h>
 #include <ktoggleaction.h>
@@ -56,6 +56,7 @@
 //Added by qt3to4:
 #include <QString>
 #include <Q3PtrList>
+#include <kconfiggroup.h>
 
 #include "IsoDuration.h"
 

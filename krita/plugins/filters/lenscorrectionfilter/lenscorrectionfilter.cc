@@ -31,7 +31,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
@@ -54,7 +54,7 @@ K_EXPORT_COMPONENT_FACTORY( kritalenscorrectionfilter, KritaLensCorrectionFilter
 KritaLensCorrectionFilter::KritaLensCorrectionFilter(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(KritaLensCorrectionFilterFactory::instance());
+    setComponentData(KritaLensCorrectionFilterFactory::componentData());
 
 
     if (parent->inherits("KisFilterRegistry")) {

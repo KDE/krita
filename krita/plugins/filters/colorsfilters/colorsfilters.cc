@@ -30,7 +30,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -58,7 +58,7 @@ K_EXPORT_COMPONENT_FACTORY( kritacolorsfilters, ColorsFiltersFactory( "krita" ) 
 ColorsFilters::ColorsFilters(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(ColorsFiltersFactory::instance());
+    setComponentData(ColorsFiltersFactory::componentData());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);

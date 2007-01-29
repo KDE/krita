@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -45,7 +45,7 @@ K_EXPORT_COMPONENT_FACTORY( kritatoolpolyline, ToolPolylineFactory( "krita" ) )
 ToolPolyline::ToolPolyline(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(ToolPolylineFactory::instance());
+    setComponentData(ToolPolylineFactory::componentData());
 
     if ( parent->inherits("KoToolRegistry") )
     {

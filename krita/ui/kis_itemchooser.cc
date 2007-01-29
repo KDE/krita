@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kinstance.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <KoResourceChooser.h>

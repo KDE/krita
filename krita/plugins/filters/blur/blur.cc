@@ -30,7 +30,7 @@ K_EXPORT_COMPONENT_FACTORY( kritablurfilter, BlurFilterPluginFactory( "krita" ) 
 BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(BlurFilterPluginFactory::instance());
+    setComponentData(BlurFilterPluginFactory::componentData());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);

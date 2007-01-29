@@ -18,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
@@ -34,7 +34,7 @@ K_EXPORT_COMPONENT_FACTORY( krita_ycbcr_u16_plugin, YCbCrU16PluginFactory( "krit
 YCbCrU16Plugin::YCbCrU16Plugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-    setInstance(YCbCrU16PluginFactory::instance());
+    setComponentData(YCbCrU16PluginFactory::componentData());
 
     if ( parent->inherits("KoColorSpaceRegistry") )
     {

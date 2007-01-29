@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 #include "kis_resource.h"
 #include "kis_factory2.h"
@@ -134,7 +134,7 @@ QStringList getFileNames( const QString & extensions, const QString & type )
     QStringList fileNames;
 
     foreach (QString extension, extensionList) {
-        fileNames += KisFactory2::instance()->dirs()->findAllResources(type.toAscii(), extension);
+        fileNames += KisFactory2::componentData().dirs()->findAllResources(type.toAscii(), extension);
     }
     return fileNames;
 }

@@ -40,7 +40,7 @@ class KoParagCounter;
 class KCommand;
 class QTimer;
 class KAction;
-class KInstance;
+class KComponentData;
 class KDataToolInfo;
 class KoLinkVariable;
 class KoVariable;
@@ -136,7 +136,7 @@ public:
     QString wordUnderCursor( const KoTextCursor& cursor );
 
     /** Return the list of actions from data-tools. Used to populate a RMB popupmenu usually. */
-    QList<QAction *> dataToolActionList( KInstance * instance, KActionCollection* parent, const QString& word, bool & _singleWord );
+    QList<QAction *> dataToolActionList( const KComponentData &instance, KActionCollection* parent, const QString& word, bool & _singleWord );
 
     void insertSoftHyphen();
     void insertLineBreak();

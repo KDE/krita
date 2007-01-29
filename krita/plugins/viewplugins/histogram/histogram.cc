@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -56,7 +56,7 @@ Histogram::Histogram(QObject *parent, const QStringList &)
 {
     if ( parent->inherits("KisView2") ) {
 
-        setInstance(HistogramFactory::instance());
+        setComponentData(HistogramFactory::componentData());
 
 setXMLFile(KStandardDirs::locate("data","kritaplugins/histogram.rc"),
 true);

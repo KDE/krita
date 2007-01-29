@@ -24,12 +24,12 @@
 #include <QList>
 #include <KoQueryTrader.h>
 #include <KoFilterManager.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
 
 int main( int /*argc*/, char ** /*argv*/ )
 {
-    KInstance instance( "filter_graph" );  // we need an instance when using the trader
+    KComponentData componentData( "filter_graph" );  // we need an instance when using the trader
 
     Q3CString output = "digraph filters {\n";
 

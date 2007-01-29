@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -53,7 +53,7 @@ ColorRange::ColorRange(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setInstance(ColorRangeFactory::instance());
+        setComponentData(ColorRangeFactory::componentData());
 
 setXMLFile(KStandardDirs::locate("data","kritaplugins/colorrange.rc"),
 true);

@@ -22,7 +22,7 @@
 #include "ui_koDetailsPaneBase.h"
 
 class QEvent;
-class KInstance;
+class KComponentData;
 class KUrl;
 class QStandardItemModel;
 
@@ -32,10 +32,10 @@ class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
 {
   Q_OBJECT
   public:
-    KoDetailsPane(QWidget* parent, KInstance* _instance, const QString& header);
+    KoDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header);
     virtual ~KoDetailsPane();
 
-    KInstance* instance();
+    KComponentData componentData();
 
     virtual bool eventFilter(QObject* watched, QEvent* e);
 

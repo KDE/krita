@@ -41,6 +41,7 @@ class TKToolBarButton::TKToolBarButtonPrivate
 {
 public:
   TKToolBarButtonPrivate()
+    : m_componentData(KGlobal::mainComponent())
   {
     m_iconMode     = TK::IconOnly;
 m_isPopup      = false;
@@ -59,7 +60,6 @@ m_isPopup      = false;
     m_disabledIconName.clear();
     m_defaultIconName .clear();
 
-    m_instance = KGlobal::instance();
   }
 
   ~TKToolBarButtonPrivate()
@@ -86,19 +86,19 @@ m_isPopup      = false;
   QTimer     *m_delayTimer;
   KMenu *m_popup;
 
-  KInstance  *m_instance;
+  KComponentData m_componentData;
 };
 
 TKToolBarButton::TKToolBarButton( const QString& icon, const QString& txt,
                                         QWidget* parent, const char* name,
-                                        KInstance *instance )
+                                        const KComponentData &instance )
 : QToolButton(parent)
 {
   setObjectName(name);
 
   d = new TKToolBarButtonPrivate;
   d->m_text = txt;
-  d->m_instance = instance;
+  d->m_componentData = instance;
 
   setFocusPolicy( Qt::NoFocus );
 

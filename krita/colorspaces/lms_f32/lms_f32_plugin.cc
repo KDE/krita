@@ -21,7 +21,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
@@ -36,7 +36,7 @@ K_EXPORT_COMPONENT_FACTORY( krita_lms_f32_plugin, LMSF32PluginFactory( "krita" )
 LMSF32Plugin::LMSF32Plugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(LMSF32PluginFactory::instance());
+    setComponentData(LMSF32PluginFactory::componentData());
 
     if ( parent->inherits("KoColorSpaceRegistry") )
     {

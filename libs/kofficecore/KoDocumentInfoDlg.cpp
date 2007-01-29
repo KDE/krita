@@ -38,6 +38,7 @@
 #include <QTextEdit>
 #include <QPixmap>
 #include <QDateTime>
+#include <kconfiggroup.h>
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {

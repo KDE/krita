@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
@@ -50,7 +50,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaimageenhancement, KritaImageEnhancementFactory(
 KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const QStringList &)
   : KParts::Plugin(parent)
 {
-    setInstance(KritaImageEnhancementFactory::instance());
+    setComponentData(KritaImageEnhancementFactory::componentData());
 
     kDebug(41006) << "Image enhancement filter plugin. Class: "
            << metaObject()->className()

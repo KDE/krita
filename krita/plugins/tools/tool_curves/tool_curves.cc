@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -44,7 +44,7 @@ K_EXPORT_COMPONENT_FACTORY( kritatoolcurves, ToolCurvesFactory( "krita" ) )
 ToolCurves::ToolCurves(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(ToolCurvesFactory::instance());
+    setComponentData(ToolCurvesFactory::componentData());
 
     if ( parent->inherits("KoToolRegistry") )
     {

@@ -30,7 +30,7 @@
 #include <QPixmap>
 #include <QStandardItemModel>
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kconfig.h>
@@ -39,6 +39,7 @@
 #include <kio/previewjob.h>
 #include <kdebug.h>
 #include <ktextbrowser.h>
+#include <kconfiggroup.h>
 
 class KoFileListItem : public QStandardItem
 {
@@ -92,9 +93,9 @@ class KoRecentDocumentsPanePrivate
 };
 
 
-KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* _instance,
+KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentData &_componentData,
                                               const QString& header)
-  : KoDetailsPane(parent, _instance, header)
+  : KoDetailsPane(parent, _componentData, header)
 {
   d = new KoRecentDocumentsPanePrivate;
   setFocusProxy(m_documentList);
@@ -104,8 +105,9 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* _instan
 
   model()->setSortRole(0); // Disable sorting
 
-  QString oldGroup = instance()->config()->group();
-  instance()->config()->setGroup("RecentFiles");
+  QString oldGroup = componentData().config()->group();
+  KSharedConfigPtr config = componentData().config();
+  config->setGroup("RecentFiles");
 
   int i = 0;
   QString value;
@@ -114,7 +116,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* _instan
 
   do {
     QString key = QString("File%1").arg(i);
-    value = instance()->config()->readPathEntry(key);
+    value = config->readPathEntry(key);
 
     if(!value.isEmpty()) {
       QString path = value;
@@ -151,7 +153,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* _instan
   } while ( !value.isEmpty() || i<=10 );
 
 
-  instance()->config()->setGroup( oldGroup );
+  config->setGroup( oldGroup );
 
   //Select the first file
   QModelIndex firstIndex = model()->indexFromItem(model()->item(0));
@@ -204,7 +206,7 @@ void KoRecentDocumentsPane::openFile(const QModelIndex& index)
 {
   if(!index.isValid()) return;
 
-  KConfigGroup cfgGrp(instance()->config(), "TemplateChooserDialog");
+  KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
   cfgGrp.writeEntry("LastReturnType", "File");
 
   KoFileListItem* item = static_cast<KoFileListItem*>(model()->itemFromIndex(index));

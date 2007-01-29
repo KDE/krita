@@ -20,7 +20,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -44,7 +44,7 @@ KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QStr
     : KParts::Plugin(parent)
 {
     if ( parent->inherits("KisView2") ) {
-        setInstance(KGenericFactory<KisSeparateChannelsPlugin>::instance());
+        setComponentData(KGenericFactory<KisSeparateChannelsPlugin>::componentData());
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/imageseparate.rc"), true);
         m_view = (KisView2*) parent;

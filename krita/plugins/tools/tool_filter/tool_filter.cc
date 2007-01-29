@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -47,7 +47,7 @@ K_EXPORT_COMPONENT_FACTORY( kritatoolfilter, ToolFilterFactory( "krita" ) )
 ToolFilter::ToolFilter(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(ToolFilterFactory::instance());
+    setComponentData(ToolFilterFactory::componentData());
 
     if ( parent->inherits("KoToolRegistry") )
     {

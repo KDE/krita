@@ -9,7 +9,7 @@
 #include <QtGui>
 
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 void TestDocumentLayout::initTestCase() {
     //  To get around this error

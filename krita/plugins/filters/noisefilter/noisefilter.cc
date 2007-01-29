@@ -27,7 +27,7 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -50,7 +50,7 @@ K_EXPORT_COMPONENT_FACTORY( kritanoisefilter, KritaNoiseFilterFactory( "krita" )
 KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(KritaNoiseFilterFactory::instance());
+    setComponentData(KritaNoiseFilterFactory::componentData());
 
 
     if (parent->inherits("KisFilterRegistry")) {

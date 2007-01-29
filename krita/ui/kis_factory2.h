@@ -29,7 +29,7 @@
 
 #include <krita_export.h>
 
-class KInstance;
+class KComponentData;
 class KAboutData;
 
 class KRITAUI_EXPORT KisFactory2 : public KoFactory
@@ -47,10 +47,10 @@ public:
 					   const QStringList &args = QStringList() );
     
     static KAboutData * aboutData();
-    static KInstance * instance();
+    static const KComponentData &componentData();
 
 private:
-    static KInstance * s_instance;
+    static KComponentData * s_instance;
     static KAboutData * s_aboutData;
 };
 

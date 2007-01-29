@@ -485,7 +485,7 @@ QDockWidget * KoView::createDock(const QString & title, QWidget * w)
     d->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     d->setWidget(w);
 
-    KConfig * cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("");
     QFont f  = KGlobalSettings::generalFont();
     float ps = qMin(9.0, KGlobalSettings::generalFont().pointSize() * 0.8);
@@ -704,7 +704,7 @@ void KoView::newView() {
     assert( ( d!=0L && d->m_doc ) );
 
     KoDocument *thisDocument = d->m_doc;
-    KoMainWindow *shell = new KoMainWindow( thisDocument->instance() );
+    KoMainWindow *shell = new KoMainWindow( thisDocument->componentData() );
     shell->setRootDocument(thisDocument);
     shell->show();
 }

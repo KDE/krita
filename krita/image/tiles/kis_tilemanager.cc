@@ -69,7 +69,7 @@ KisTileManager::KisTileManager() {
     }
     m_currentInMem = 0;
 
-    KConfig * cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("");
     m_maxInMem = cfg->readEntry("maxtilesinmem",  4000);
     m_swappiness = cfg->readEntry("swappiness", 100);
@@ -557,7 +557,7 @@ void KisTileManager::reclaimTileToPool(quint8* data, qint32 pixelSize) {
 
 void KisTileManager::configChanged() {
     QMutexLocker lock(m_bigKritaLock);
-    KConfig * cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("");
     m_maxInMem = cfg->readEntry("maxtilesinmem",  4000);
     m_swappiness = cfg->readEntry("swappiness", 100);

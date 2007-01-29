@@ -8,7 +8,7 @@
 //   #include <QtGui>
 //
 //   #include <kdebug.h>
-//   #include <kinstance.h>
+//   #include <kcomponentdata.h>
 
 void TestBorder::testBorder() {
     KoParagraphStyle style;

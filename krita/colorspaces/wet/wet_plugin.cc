@@ -29,7 +29,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
@@ -62,7 +62,7 @@ K_EXPORT_COMPONENT_FACTORY( kritawetplugin, WetPluginFactory( "kritacore" ) )
 WetPlugin::WetPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(WetPluginFactory::instance());
+    setComponentData(WetPluginFactory::componentData());
 
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KoColorSpaceRegistry") ) {
@@ -92,7 +92,7 @@ WetPlugin::WetPlugin(QObject *parent, const QStringList &)
     }
     else if (parent->inherits("KisView"))
     {
-        setInstance(WetPluginFactory::instance());
+        setComponentData(WetPluginFactory::componentData());
 
 setXMLFile(KStandardDirs::locate("data","kritaplugins/wetplugin.rc"),
 true);

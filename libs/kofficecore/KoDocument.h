@@ -35,6 +35,7 @@ class KoTextDocument;
 #include <kparts/part.h>
 #include <kurl.h>
 #include <kservice.h>
+#include <kcomponentdata.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -195,33 +196,33 @@ public:
     /**
      * @brief Used by KoApplication, and by KoMainWindow, when no document exists yet.
      *
-     * With the help of @p instance or KApplication::instance() this
+     * With the help of @p instance or KApplication::componentData() this
      * method figures out which .desktop file matches this application. In this
      * file it searches for the "X-KDE-NativeMimeType" entry and returns it.
      *
      * @see KService
      * @see KDesktopFile
      */
-    static QByteArray readNativeFormatMimeType( KInstance *instance = 0 );
+    static QByteArray readNativeFormatMimeType( const KComponentData &instance = KComponentData() );
 
     /**
      * Used by KoMainWindow, when no document exists yet.
      *
-     * With the help of @p instance or KApplication::instance() this
+     * With the help of @p instance or KApplication::componentData() this
      * method figures out which .desktop file matches this application. In this
      * file it searches for the "X-KDE-ExtraNativeMimeTypes" entry and returns it.
      *
      * @see KService
      * @see KDesktopFile
      */
-    static QStringList readExtraNativeMimeTypes( KInstance *instance = 0 );
+    static QStringList readExtraNativeMimeTypes( const KComponentData &instance = KComponentData() );
 
     /**
-     * With the help of @p instance or KApplication::instance() this
+     * With the help of @p instance or KApplication::componentData() this
      * method figures out which .desktop file matches this application,
      * and returns the KService instance for it.
      */
-    static KService::Ptr readNativeService( KInstance *instance = 0 );
+    static KService::Ptr readNativeService( const KComponentData &instance = KComponentData() );
 
     /**
      * setup the XML reader, so that we don't have to duplicate the code.
@@ -1158,11 +1159,11 @@ protected:
     /**
      * Creates the open widget showed at application start up.
      * @param parent the parent widget
-     * @param instance the KInstance to be used for KConfig data
+     * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
      * @since 1.5
      */
-    KoOpenPane* createOpenPane( QWidget* parent, KInstance* instance,
+    KoOpenPane* createOpenPane( QWidget* parent, const KComponentData &instance,
                                 const QString& templateType = QString::null);
 
 private slots:

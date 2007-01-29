@@ -48,7 +48,7 @@ DlgDropshadow::DlgDropshadow( const QString & /*imageCS*/,
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    KConfig * cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("dropshadow");
     m_page->xOffsetSpinBox->setValue( cfg->readEntry<int>("x", 8) );
     m_page->yOffsetSpinBox->setValue( cfg->readEntry<int>("y", 8) );
@@ -105,7 +105,7 @@ bool DlgDropshadow::allowResizingChecked()
 
 void DlgDropshadow::okClicked()
 {
-    KConfig * cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("dropshadow");
     cfg->writeEntry("x", m_page->xOffsetSpinBox->value());
     cfg->writeEntry("y", m_page->yOffsetSpinBox->value());

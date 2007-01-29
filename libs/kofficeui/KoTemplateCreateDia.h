@@ -31,7 +31,7 @@
 class QString;
 class QPixmap;
 class QWidget;
-class KInstance;
+class KComponentData;
 class KLineEdit;
 class Q3ListViewItem;
 class KoTemplateCreateDiaPrivate;
@@ -47,11 +47,11 @@ class KOFFICEUI_EXPORT KoTemplateCreateDia : public KDialog
     Q_OBJECT
 
 public:
-    KoTemplateCreateDia( const QByteArray &templateType, KInstance *instance,
+    KoTemplateCreateDia( const QByteArray &templateType, const KComponentData &instance,
                          const QString &file, const QPixmap &pix, QWidget *parent=0L );
     ~KoTemplateCreateDia();
 
-    static void createTemplate( const QByteArray &templateType, KInstance *instance,
+    static void createTemplate( const QByteArray &templateType, const KComponentData &instance,
                                 const QString &file, const QPixmap &pix, QWidget *parent=0L );
 
 protected:

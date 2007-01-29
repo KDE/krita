@@ -27,7 +27,7 @@ class KoCustomDocumentCreator;
 class KConfig;
 class KoTemplateGroup;
 class KoOpenPanePrivate;
-class KInstance;
+class KComponentData;
 class QPixmap;
 class Q3ListViewItem;
 class KoTemplatesPane;
@@ -42,10 +42,10 @@ class KoOpenPane : public QWidget
     /**
      * Constructor
      * @param parent the parent widget
-     * @param instance the KInstance to be used for KConfig data
+     * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
      */
-    KoOpenPane(QWidget *parent, KInstance* instance, const QString& templateType = QString::null);
+    KoOpenPane(QWidget *parent, const KComponentData &instance, const QString& templateType = QString::null);
     virtual ~KoOpenPane();
 
     Q3ListViewItem* addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight);

@@ -8,7 +8,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -27,7 +27,7 @@ K_EXPORT_COMPONENT_FACTORY( krita%{APPNAMELC}, %{APPNAME}PluginFactory( "krita" 
 %{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setInstance(%{APPNAME}PluginFactory::instance());
+    setComponentData(%{APPNAME}PluginFactory::componentData());
 
 
     if (parent->inherits("KisFilterRegistry")) {

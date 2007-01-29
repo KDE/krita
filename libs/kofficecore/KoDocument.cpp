@@ -42,7 +42,8 @@
 #include <kdeversion.h>
 #include <kfileitem.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
+#include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
@@ -1338,7 +1339,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
         // Never saved? Use a temp file in $HOME then
         // Yes, two open unnamed docs will overwrite each other's autosave file,
         // but hmm, we can only do something if that's in the same process anyway...
-        QString ret = QDir::homePath() + "/." + QString::fromLatin1(instance()->instanceName()) + ".autosave" + extension;
+        QString ret = QDir::homePath() + "/." + QString::fromLatin1(componentData().componentName()) + ".autosave" + extension;
         return ret;
     }
     else
@@ -2300,7 +2301,7 @@ bool KoDocument::completeSaving( KoStore* )
 
 QDomDocument KoDocument::createDomDocument( const QString& tagName, const QString& version ) const
 {
-    return createDomDocument( instance()->instanceName(), tagName, version );
+    return createDomDocument( componentData().componentName(), tagName, version );
 }
 
 //static
@@ -2367,7 +2368,7 @@ QDomDocument KoDocument::saveXML()
 KService::Ptr KoDocument::nativeService()
 {
     if ( !m_nativeService )
-        m_nativeService = readNativeService( instance() );
+        m_nativeService = readNativeService( componentData() );
 
     return m_nativeService;
 }
@@ -2402,9 +2403,9 @@ QByteArray KoDocument::nativeOasisMimeType() const
 
 
 //static
-KService::Ptr KoDocument::readNativeService( KInstance *instance )
+KService::Ptr KoDocument::readNativeService( const KComponentData &componentData )
 {
-    QString instname = instance ? instance->instanceName() : KGlobal::instance()->instanceName();
+    QString instname = componentData.isValid() ? componentData.componentName() : KGlobal::mainComponent().componentName();
 
     // The new way is: we look for a foopart.desktop in the kde_services dir.
     QString servicepartname = instname + "part.desktop";
@@ -2426,9 +2427,9 @@ KService::Ptr KoDocument::readNativeService( KInstance *instance )
     return service;
 }
 
-QByteArray KoDocument::readNativeFormatMimeType( KInstance *instance ) //static
+QByteArray KoDocument::readNativeFormatMimeType( const KComponentData &componentData ) //static
 {
-    KService::Ptr service = readNativeService( instance );
+    KService::Ptr service = readNativeService( componentData );
     if ( !service )
         return QByteArray();
 
@@ -2439,7 +2440,7 @@ QByteArray KoDocument::readNativeFormatMimeType( KInstance *instance ) //static
         if ( !ptr )
             kError(30003) << "The serviceType KOfficePart is missing. Check that you have a kofficepart.desktop file in the share/servicetypes directory." << endl;
         else {
-            QString instname = instance ? instance->instanceName() : KGlobal::instance()->instanceName();
+            QString instname = componentData.isValid() ? componentData.componentName() : KGlobal::mainComponent().componentName();
             if ( instname != "koshell" ) // hack for koshell
                 kWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!" << endl;
         }
@@ -2448,9 +2449,9 @@ QByteArray KoDocument::readNativeFormatMimeType( KInstance *instance ) //static
     return service->property( "X-KDE-NativeMimeType" ).toString().toLatin1();
 }
 
-QStringList KoDocument::readExtraNativeMimeTypes( KInstance *instance ) //static
+QStringList KoDocument::readExtraNativeMimeTypes( const KComponentData &componentData ) //static
 {
-    KService::Ptr service = readNativeService( instance );
+    KService::Ptr service = readNativeService( componentData );
     if ( !service )
         return QStringList();
     return service->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
@@ -2737,7 +2738,7 @@ QString KoDocument::unitName() const
 void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
 {
     if(!alwaysShow) {
-        KConfigGroup cfgGrp( instance()->config(), "TemplateChooserDialog" );
+        KConfigGroup cfgGrp( componentData().config(), "TemplateChooserDialog" );
         QString fullTemplateName = cfgGrp.readPathEntry( "AlwaysUseTemplate" );
 
         if( !fullTemplateName.isEmpty() ) {
@@ -2750,7 +2751,7 @@ void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
     if(d->m_startUpWidget){
         d->m_startUpWidget->show();
     } else {
-        d->m_startUpWidget = createOpenPane( parent->centralWidget(), instance(), templateType() );
+        d->m_startUpWidget = createOpenPane( parent->centralWidget(), componentData(), templateType() );
     }
 
     parent->setDocToOpen( this );
@@ -2791,10 +2792,10 @@ void KoDocument::startCustomDocument() {
     deleteOpenPane();
 }
 
-KoOpenPane* KoDocument::createOpenPane( QWidget* parent, KInstance* instance,
+KoOpenPane* KoDocument::createOpenPane( QWidget* parent, const KComponentData &componentData,
                                         const QString& templateType )
 {
-    KoOpenPane* openPane = new KoOpenPane( parent, instance, templateType );
+    KoOpenPane* openPane = new KoOpenPane( parent, componentData, templateType );
     QWidget *customDoc = createCustomDocumentWidget(openPane);
     if(customDoc) {
         openPane->setCustomDocumentWidget( customDoc );
@@ -2847,7 +2848,7 @@ bool KoDocument::showEmbedInitDialog(QWidget* parent)
 {
     KDialog dlg( parent );
     dlg.setCaption( i18n("Embedding Object") );
-    KoOpenPane* pane = createOpenPane(&dlg, instance(), templateType());
+    KoOpenPane* pane = createOpenPane(&dlg, componentData(), templateType());
     pane->layout()->setMargin(0);
     dlg.setMainWidget(pane);
     KConfig cfg("EmbedInitDialog");

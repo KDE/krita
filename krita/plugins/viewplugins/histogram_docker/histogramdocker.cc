@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -93,7 +93,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
     if ( parent->inherits("KisView2") ) {
         m_view = dynamic_cast<KisView2*>(parent);
 
-        setInstance(KritaHistogramDockerFactory::instance());
+        setComponentData(KritaHistogramDockerFactory::componentData());
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/kritahistogramdocker.rc"), true);
 

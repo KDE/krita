@@ -19,7 +19,7 @@
  */
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -43,7 +43,7 @@ K_EXPORT_COMPONENT_FACTORY( kritadefaultpaintops, DefaultPaintOpsPluginFactory( 
 DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(DefaultPaintOpsPluginFactory::instance());
+    setComponentData(DefaultPaintOpsPluginFactory::componentData());
 
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisPaintOpRegistry") )

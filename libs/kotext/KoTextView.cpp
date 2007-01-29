@@ -30,7 +30,7 @@
 #include <kstandarddirs.h>
 #include <kstandardshortcut.h>
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kdatatool.h>
 #include <krun.h>
 #include <kmessagebox.h>
@@ -1084,7 +1084,7 @@ KoLinkVariable * KoTextView::linkVariable()
     return dynamic_cast<KoLinkVariable *>(variable());
 }
 
-QList<QAction *> KoTextView::dataToolActionList(KInstance * instance, KActionCollection* parent, const QString& word, bool & _singleWord )
+QList<QAction *> KoTextView::dataToolActionList(const KComponentData &instance, KActionCollection* parent, const QString& word, bool & _singleWord )
 {
     m_singleWord = false;
     m_wordUnderCursor.clear();

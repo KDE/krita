@@ -29,7 +29,7 @@ K_EXPORT_COMPONENT_FACTORY( kritapixelizefilter, KisPixelizeFilterPluginFactory(
 KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setInstance(KisPixelizeFilterPluginFactory::instance());
+    setComponentData(KisPixelizeFilterPluginFactory::componentData());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);

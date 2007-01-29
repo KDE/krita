@@ -35,7 +35,6 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kpushbutton.h>
-#include <kinstance.h>
 
 #include <kis_cursor.h>
 #include <KoColorSpace.h>

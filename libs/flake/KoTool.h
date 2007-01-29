@@ -144,6 +144,11 @@ public:
     QHash<QString, QAction*> actions() const;
 
     /**
+     * Retrieve an action by name.
+     */
+    QAction *action(const QString &name) const;
+
+    /**
      * Called when (one of) the mouse or stylus buttons is pressed.
      * Implementors should call event->ignore() if they do not actually use the event.
      * @param event state and reason of this mouse or stylus press

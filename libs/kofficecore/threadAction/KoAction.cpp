@@ -25,17 +25,36 @@
 
 #include <QVariant>
 
+class KoAction::Private {
+public:
+    Private()
+        :policy(KoExecutePolicy::simpleQueuedPolicy),
+        weaver(0),
+        enabled(true)
+    {
+        jobsQueue = new KoJobsListPolicy();
+    }
+
+    ~Private() {
+        delete jobsQueue;
+    }
+
+    KoExecutePolicy *policy;
+    ThreadWeaver::WeaverInterface *weaver;
+    bool enabled;
+    KoJobsListPolicy *jobsQueue;
+};
+
+
 KoAction::KoAction(QObject *parent)
     : QObject(parent),
-    m_policy(KoExecutePolicy::simpleQueuedPolicy),
-    m_weaver(0),
-    m_enabled(true)
+    d(new Private())
 {
-    m_jobsQueue = new KoJobsListPolicy();
 }
+
 KoAction::~KoAction() {
-    delete m_jobsQueue;
-    m_jobsQueue = 0;
+    delete d;
+    d = 0;
 }
 
 void KoAction::execute() {
@@ -43,10 +62,10 @@ void KoAction::execute() {
 }
 
 void KoAction::execute(QVariant *params) {
-    if(!m_enabled)
+    if(!d->enabled)
         return;
-    Q_ASSERT(m_weaver);
-    m_policy->schedule(this, m_jobsQueue, params);
+    Q_ASSERT(d->weaver);
+    d->policy->schedule(this, d->jobsQueue, params);
 }
 
 void KoAction::doAction(QVariant *params) {
@@ -68,7 +87,27 @@ void KoAction::doActionUi(QVariant *params) {
 }
 
 int KoAction::jobCount() {
-    return m_jobsQueue->count();
+    return d->jobsQueue->count();
+}
+
+void KoAction::setWeaver(ThreadWeaver::WeaverInterface *weaver) {
+    d->weaver = weaver;
+}
+
+ThreadWeaver::WeaverInterface *KoAction::weaver() const {
+    return d->weaver;
+}
+
+void KoAction::setExecutePolicy(KoExecutePolicy *policy) {
+    d->policy = policy;
+}
+
+void KoAction::setEnabled(bool enabled) {
+    d->enabled = enabled;
+}
+
+bool KoAction::isEnabled() const {
+    return d->enabled;
 }
 
 #include "KoAction.moc"

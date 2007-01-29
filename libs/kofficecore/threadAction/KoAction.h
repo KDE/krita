@@ -66,31 +66,35 @@ public:
     /**
      * Set a ThreadWeaver on this action which is used to execute the action in a
      * different thread when it is activated;
+     * Notice that setting the static weaver instance is enough for most cases;
+     * @code
+     *    setWeaver(ThreadWeaver::Weaver::instance());
+     * @endcode
      * @param weaver the weaver to be used
      */
-    void setWeaver(ThreadWeaver::WeaverInterface *weaver) { m_weaver = weaver; }
+    void setWeaver(ThreadWeaver::WeaverInterface *weaver);
 
     /**
      * Return the currently set threadWeaver
      */
-    ThreadWeaver::WeaverInterface *weaver() const { return m_weaver; }
+    ThreadWeaver::WeaverInterface *weaver() const;
 
     /**
      * Set a new policy for this action.
      */
-    void setExecutePolicy(KoExecutePolicy *policy) { m_policy = policy; }
+    void setExecutePolicy(KoExecutePolicy *policy);
 
     /**
      * Enable disable this action and all its registered components. Incoming
      * events will not cause the action to be committed when the action is disabled.
      * @param enabled the new state of the action.
      */
-    void setEnabled(bool enabled) { m_enabled = enabled; }
+    void setEnabled(bool enabled);
 
     /**
      * return if the action is enabled.
      */
-    bool isEnabled() const { return m_enabled; }
+    bool isEnabled() const;
 
     /**
      * Return te amount of executes there are still to finish.
@@ -134,10 +138,8 @@ private:
     void doAction(QVariant *params); // called from ActionJob
     void doActionUi(QVariant *params); // called from ActionJob
 
-    KoExecutePolicy *m_policy;
-    ThreadWeaver::WeaverInterface *m_weaver;
-    bool m_enabled;
-    KoJobsListPolicy *m_jobsQueue;
+    class Private;
+    Private *d;
 };
 
 #endif

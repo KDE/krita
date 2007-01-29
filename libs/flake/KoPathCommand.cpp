@@ -172,8 +172,8 @@ KoPointTypeCommand::KoPointTypeCommand( const QList<KoPathPointData> & pointData
         if ( point )
         {
             PointData pointData( *it );
-            pointData.m_oldControlPoint1 = point->controlPoint1();
-            pointData.m_oldControlPoint2 = point->controlPoint2();
+            pointData.m_oldControlPoint1 = it->m_pathShape->shapeToDocument( point->controlPoint1() );
+            pointData.m_oldControlPoint2 = it->m_pathShape->shapeToDocument( point->controlPoint2() );
             pointData.m_oldProperties = point->properties();
 
             m_oldPointData.append( pointData );
@@ -255,11 +255,12 @@ void KoPointTypeCommand::undo()
     QList<PointData>::iterator it( m_oldPointData.begin() );
     for ( ; it != m_oldPointData.end(); ++it )
     {
-        KoPathPoint *point = it->m_pointData.m_pathShape->pointByIndex( it->m_pointData.m_pointIndex );;
+        KoPathShape *pathShape = it->m_pointData.m_pathShape;
+        KoPathPoint *point = pathShape->pointByIndex( it->m_pointData.m_pointIndex );;
 
         point->setProperties( it->m_oldProperties );
-        point->setControlPoint1( it->m_oldControlPoint1 );
-        point->setControlPoint2( it->m_oldControlPoint2 );
+        point->setControlPoint1( pathShape->documentToShape( it->m_oldControlPoint1 ) );
+        point->setControlPoint2( pathShape->documentToShape( it->m_oldControlPoint2 ) );
     }
     repaint( true );
 }

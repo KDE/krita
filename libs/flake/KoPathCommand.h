@@ -97,7 +97,7 @@ private:
 };
 
 /// The undo / redo command for changing the path point type.
-class KoPointTypeCommand : public KoPathBaseCommand
+class FLAKE_TEST_EXPORT KoPointTypeCommand : public KoPathBaseCommand
 {
 public:
     /// The type of the point

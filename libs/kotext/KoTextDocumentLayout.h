@@ -93,7 +93,9 @@ public:
 
     void addShape(KoShape *shape);
 
-    virtual QList<KoShape*> shapes() const { return m_shapes; }
+    virtual QList<KoShape*> shapes() const;
+
+    KoStyleManager *styleManager() const;
 
     class KOTEXT_EXPORT LayoutState {
     public:
@@ -126,6 +128,7 @@ public:
     protected:
         friend class KoTextDocumentLayout;
         virtual void setStyleManager(KoStyleManager *sm) = 0;
+        virtual KoStyleManager *styleManager() const = 0;
     };
 
 protected:
@@ -149,11 +152,8 @@ private:
     virtual void scheduleLayout();
 
 private:
-    KoInlineTextObjectManager *m_inlineTextObjectManager;
-    int m_lastKnownFrameCount;
-    bool m_moreFramesRequested;
-    QList<KoShape *> m_shapes;
-    bool m_scheduled;
+    class Private;
+    Private *d;
 };
 
 #endif

@@ -119,6 +119,10 @@ public:
      */
     KoParagraphStyle *defaultParagraphStyle() const;
 
+    QList<KoCharacterStyle*> characterStyles() const;
+
+    QList<KoParagraphStyle*> paragraphStyles() const;
+
 public slots:
     /**
      * Slot that should be called whenever a style is changed. This will update

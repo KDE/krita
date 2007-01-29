@@ -47,7 +47,7 @@ public:
         HasHyphenation
     };
 
-    KoCharacterStyle(QObject *parent = 0);
+    explicit KoCharacterStyle(QObject *parent = 0);
     /// clone constructor
     KoCharacterStyle(const KoCharacterStyle &other);
     ~KoCharacterStyle();

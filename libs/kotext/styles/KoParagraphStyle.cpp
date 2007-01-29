@@ -38,7 +38,6 @@ KoParagraphStyle::KoParagraphStyle()
 
 KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
     : QObject(0),
-    m_charStyle(new KoCharacterStyle(this)),
     m_listStyle(0),
     m_parent(0),
     m_next(0)

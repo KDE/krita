@@ -38,7 +38,7 @@
 
 class LayoutStateDummy : public KoTextDocumentLayout::LayoutState {
 public:
-    LayoutStateDummy() {}
+    LayoutStateDummy() : m_styleManager(0) {}
     bool start() { return false; }
     void end() {}
     void reset() {}
@@ -51,18 +51,30 @@ public:
     bool nextParag() { return false; }
     double documentOffsetInShape() { return 0; }
     void draw(QPainter *) {}
+    KoStyleManager *styleManager() const { return m_styleManager; }
+    void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
 
-protected:
-    void setStyleManager(KoStyleManager *) {}
+    KoStyleManager *m_styleManager;
 };
 
+class KoTextDocumentLayout::Private {
+public:
+    Private()
+        : inlineTextObjectManager(0),
+        scheduled(false)
+    {
+    }
+
+    QList<KoShape *> shapes;
+    KoInlineTextObjectManager *inlineTextObjectManager;
+    bool scheduled;
+};
 
 // ------------------- KoTextDocumentLayout --------------------
 KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLayout::LayoutState *layout)
     : QAbstractTextDocumentLayout(doc),
     m_state(layout),
-    m_inlineTextObjectManager(0),
-    m_scheduled(false)
+    d(new Private())
 {
     setPaintDevice( new KoPostscriptPaintDevice() );
     if(m_state == 0)
@@ -76,8 +88,12 @@ KoTextDocumentLayout::~KoTextDocumentLayout() {
 
 void KoTextDocumentLayout::setLayout(LayoutState *layout) {
     Q_ASSERT(layout);
+    KoStyleManager *sm = 0;
+    if(m_state)
+        sm = m_state->styleManager();
     delete m_state;
     m_state = layout;
+    m_state->setStyleManager(sm);
     relayout();
 }
 
@@ -90,7 +106,7 @@ bool KoTextDocumentLayout::hasLayouter() const {
 }
 
 void KoTextDocumentLayout::addShape(KoShape *shape) {
-    m_shapes.append(shape);
+    d->shapes.append(shape);
 
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
     if(data) {
@@ -104,11 +120,11 @@ void KoTextDocumentLayout::setStyleManager(KoStyleManager *sm) {
 }
 
 void KoTextDocumentLayout::setInlineObjectTextManager(KoInlineTextObjectManager *iom) {
-    m_inlineTextObjectManager = iom;
+    d->inlineTextObjectManager = iom;
 }
 
 KoInlineTextObjectManager *KoTextDocumentLayout::inlineObjectTextManager() {
-    return m_inlineTextObjectManager;
+    return d->inlineTextObjectManager;
 }
 
 QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const {
@@ -169,7 +185,6 @@ int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accu
 }
 
 int KoTextDocumentLayout::pageCount () const {
-kDebug() << "KoTextDocumentLayout::pageCount"<< endl;
     return 1;
 }
 
@@ -201,38 +216,38 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
 
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format) {
     Q_ASSERT(format.isCharFormat());
-    if(m_inlineTextObjectManager == 0)
+    if(d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();
-    KoInlineObject *obj = m_inlineTextObjectManager->inlineTextObject(cf);
+    KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     if(obj)
         obj->paint(*painter, paintDevice(), document(), rect, object, position, cf);
 }
 
 void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format) {
     Q_ASSERT(format.isCharFormat());
-    if(m_inlineTextObjectManager == 0)
+    if(d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();
-    KoInlineObject *obj = m_inlineTextObjectManager->inlineTextObject(cf);
+    KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     if(obj)
         obj->updatePosition(document(), item, position, cf);
 }
 
 void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format) {
     Q_ASSERT(format.isCharFormat());
-    if(m_inlineTextObjectManager == 0)
+    if(d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();
-    KoInlineObject *obj = m_inlineTextObjectManager->inlineTextObject(cf);
+    KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     if(obj)
         obj->resize(document(), item, position, cf, paintDevice());
 }
 
 void KoTextDocumentLayout::scheduleLayout() {
-    if(m_scheduled)
+    if(d->scheduled)
         return;
-    m_scheduled = true;
+    d->scheduled = true;
     QTimer::singleShot(0, this, SLOT(relayout()));
 }
 
@@ -245,7 +260,7 @@ void KoTextDocumentLayout::interruptLayout() {
 }
 
 void KoTextDocumentLayout::layout() {
-    m_scheduled = false;
+    d->scheduled = false;
 //kDebug() << "KoTextDocumentLayout::layout" << endl;
     class End {
     public:
@@ -291,6 +306,14 @@ void KoTextDocumentLayout::layout() {
         repaintRect.setWidth(m_state->shape->size().width()); // where lines were before layout.
         m_state->shape->repaint(repaintRect);
     }
+}
+
+QList<KoShape*> KoTextDocumentLayout::shapes() const {
+    return d->shapes;
+}
+
+KoStyleManager *KoTextDocumentLayout::styleManager() const {
+    return m_state->styleManager();
 }
 
 #include "KoTextDocumentLayout.moc"

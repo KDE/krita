@@ -99,13 +99,34 @@ void KoTextSelectionHandler::decreaseFontSize() {
 }
 
 void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
-    // TODO
-    // left,right,center,justified
+    QTextBlockFormat format = m_caret->blockFormat();
+    format.setAlignment(align);
+    m_caret->setBlockFormat(format);
 }
 
 void KoTextSelectionHandler::setVerticalTextAlignment(Qt::Alignment align) {
-    // TODO
-    // superscript, subscript, normal
+    QTextCharFormat format = m_caret->charFormat();
+    QTextCharFormat::VerticalAlignment charAlign = QTextCharFormat::AlignNormal;
+    if(align == Qt::AlignTop)
+        charAlign = QTextCharFormat::AlignSuperScript;
+    else if(align == Qt::AlignBottom)
+        charAlign = QTextCharFormat::AlignSubScript;
+    format.setVerticalAlignment(charAlign);
+    m_caret->mergeCharFormat(format);
+}
+
+void KoTextSelectionHandler::increaseIndent() {
+    QTextBlockFormat format = m_caret->blockFormat();
+    // TODO make the 10 configurable.
+    format.setLeftMargin(format.leftMargin() + 10);
+    m_caret->setBlockFormat(format);
+}
+
+void KoTextSelectionHandler::decreaseIndent() {
+    QTextBlockFormat format = m_caret->blockFormat();
+    // TODO make the 10 configurable.
+    format.setLeftMargin(qMax(0., format.leftMargin() - 10));
+    m_caret->setBlockFormat(format);
 }
 
 void KoTextSelectionHandler::setTextColor(const QColor &color) {

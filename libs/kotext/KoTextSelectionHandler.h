@@ -96,10 +96,25 @@ public slots:
     void setTextBackgroundColor(const QColor &color);
     void insert(const QString &text);
     void selectFont(QWidget *parent = 0);
+    void increaseIndent();
+    void decreaseIndent();
 
+    /**
+     * Insert a variable at the current cursor position. Possibly replacing the selection.
+     * @param variable the new variable.
+     */
     void insertVariable(KoVariable *variable);
 
+    /**
+     * Set the selected text to follow the layout of the paragraph style.
+     * @param style the new style for all selected paragraphs, or the parag where the cursor is in now.
+     */
     void setStyle(KoParagraphStyle* style);
+
+    /**
+     * Set the selected text to follow the layout of the character style.
+     * @param style the new style for all selected text, or for the text that will be typed where the cursor is now.
+     */
     void setStyle(KoCharacterStyle* style);
 
 protected:

@@ -50,10 +50,11 @@
 
 class KoDetailsPanePrivate
 {
-  public:
-    KoDetailsPanePrivate() :
-      m_componentData(0)
+public:
+    KoDetailsPanePrivate(const KComponentData &componentData)
+        : m_componentData(componentData)
     {
+        m_model = new QStandardItemModel;
     }
 
     KComponentData m_componentData;
@@ -61,11 +62,10 @@ class KoDetailsPanePrivate
 };
 
 KoDetailsPane::KoDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header)
-  : QWidget(parent), Ui_KoDetailsPaneBase()
+  : QWidget(parent),
+    Ui_KoDetailsPaneBase(),
+    d(new KoDetailsPanePrivate(_componentData))
 {
-  d = new KoDetailsPanePrivate;
-  d->m_componentData = _componentData;
-  d->m_model = new QStandardItemModel;
   d->m_model->setHorizontalHeaderItem(0, new QStandardItem(header));
 
   setupUi(this);

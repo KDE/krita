@@ -215,7 +215,7 @@ KoPatternChooser::KoPatternChooser( const Q3PtrList<QTableWidgetItem> &list, QWi
     //frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     chooser = new KoResourceChooser( QSize(30,30), this);
 
-	QObject::connect( chooser, SIGNAL(selected( QTableWidgetItem * ) ),
+	QObject::connect( chooser, SIGNAL(itemClicked( QTableWidgetItem * ) ),
 					            this, SIGNAL( selected( QTableWidgetItem * )));
 
 	Q3PtrListIterator<QTableWidgetItem> itr( list );

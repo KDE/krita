@@ -2,7 +2,6 @@ if(KDE4_BUILD_TESTS)
 
 include_directories(
     ${KOFFICECORE_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/kofficecore/threadAction
     ${KDE4_INCLUDE_DIR}/threadweaver/
 )
 

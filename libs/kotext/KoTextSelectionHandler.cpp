@@ -32,14 +32,14 @@
 #include <QTextCursor>
 #include <QTextBlock>
 
-class CharFormatVisiter {
+class CharFormatVisitor {
 public:
-    CharFormatVisiter() {}
-    virtual ~CharFormatVisiter() {}
+    CharFormatVisitor() {}
+    virtual ~CharFormatVisitor() {}
 
     virtual void visit(QTextCharFormat &format) const = 0;
 
-    static void visitSelection(QTextCursor *caret, const CharFormatVisiter &visitor) {
+    static void visitSelection(QTextCursor *caret, const CharFormatVisitor &visitor) {
         int start = caret->position();
         int end = caret->anchor();
         if(start > end) { // swap
@@ -87,14 +87,14 @@ public:
     }
 };
 
-class BlockFormatVisiter {
+class BlockFormatVisitor {
 public:
-    BlockFormatVisiter() {}
-    virtual ~BlockFormatVisiter() {}
+    BlockFormatVisitor() {}
+    virtual ~BlockFormatVisitor() {}
 
     virtual void visit(QTextBlockFormat &format) const = 0;
 
-    static void visitSelection(QTextCursor *caret, const BlockFormatVisiter &visitor) {
+    static void visitSelection(QTextCursor *caret, const BlockFormatVisitor &visitor) {
         int start = caret->position();
         int end = caret->anchor();
         if(start > end) { // swap
@@ -128,7 +128,7 @@ KoTextSelectionHandler::KoTextSelectionHandler(QObject *parent)
 
 void KoTextSelectionHandler::bold(bool bold) {
     Q_ASSERT(m_caret);
-    class Bolder : public CharFormatVisiter {
+    class Bolder : public CharFormatVisitor {
     public:
         Bolder(bool on) : bold(on) {}
         void visit(QTextCharFormat &format) const {
@@ -137,12 +137,12 @@ void KoTextSelectionHandler::bold(bool bold) {
         bool bold;
     };
     Bolder bolder(bold);
-    CharFormatVisiter::visitSelection(m_caret, bolder);
+    CharFormatVisitor::visitSelection(m_caret, bolder);
 }
 
 void KoTextSelectionHandler::italic(bool italic) {
     Q_ASSERT(m_caret);
-    class Italic : public CharFormatVisiter {
+    class Italic : public CharFormatVisitor {
     public:
         Italic(bool on) : italic(on) {}
         void visit(QTextCharFormat &format) const {
@@ -151,12 +151,12 @@ void KoTextSelectionHandler::italic(bool italic) {
         bool italic;
     };
     Italic ital(italic);
-    CharFormatVisiter::visitSelection(m_caret, ital);
+    CharFormatVisitor::visitSelection(m_caret, ital);
 }
 
 void KoTextSelectionHandler::underline(bool underline) {
     Q_ASSERT(m_caret);
-    class Underliner : public CharFormatVisiter {
+    class Underliner : public CharFormatVisitor {
     public:
         Underliner(bool on) : underline(on) {}
         void visit(QTextCharFormat &format) const {
@@ -165,12 +165,12 @@ void KoTextSelectionHandler::underline(bool underline) {
         bool underline;
     };
     Underliner underliner(underline);
-    CharFormatVisiter::visitSelection(m_caret, underliner);
+    CharFormatVisitor::visitSelection(m_caret, underliner);
 }
 
 void KoTextSelectionHandler::strikeOut(bool strikeout) {
     Q_ASSERT(m_caret);
-    class Striker : public CharFormatVisiter {
+    class Striker : public CharFormatVisitor {
     public:
         Striker(bool on) : strikeout(on) {}
         void visit(QTextCharFormat &format) const {
@@ -179,7 +179,7 @@ void KoTextSelectionHandler::strikeOut(bool strikeout) {
         bool strikeout;
     };
     Striker striker(strikeout);
-    CharFormatVisiter::visitSelection(m_caret, striker);
+    CharFormatVisitor::visitSelection(m_caret, striker);
 }
 
 void KoTextSelectionHandler::insertFrameBreak() {
@@ -214,7 +214,7 @@ void KoTextSelectionHandler::decreaseFontSize() {
 
 void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
     Q_ASSERT(m_caret);
-    class Aligner : public BlockFormatVisiter {
+    class Aligner : public BlockFormatVisitor {
     public:
         Aligner(Qt::Alignment align) : alignment(align) {}
         void visit(QTextBlockFormat &format) const {
@@ -223,12 +223,12 @@ void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
         Qt::Alignment alignment;
     };
     Aligner aligner(align);
-    BlockFormatVisiter::visitSelection(m_caret, aligner);
+    BlockFormatVisitor::visitSelection(m_caret, aligner);
 }
 
 void KoTextSelectionHandler::setVerticalTextAlignment(Qt::Alignment align) {
     Q_ASSERT(m_caret);
-    class Aligner : public CharFormatVisiter {
+    class Aligner : public CharFormatVisitor {
     public:
         Aligner(QTextCharFormat::VerticalAlignment align) : alignment(align) {}
         void visit(QTextCharFormat &format) const {
@@ -244,11 +244,11 @@ void KoTextSelectionHandler::setVerticalTextAlignment(Qt::Alignment align) {
         charAlign = QTextCharFormat::AlignSubScript;
 
     Aligner aligner(charAlign);
-    CharFormatVisiter::visitSelection(m_caret, aligner);
+    CharFormatVisitor::visitSelection(m_caret, aligner);
 }
 
 void KoTextSelectionHandler::increaseIndent() {
-    class Indenter : public BlockFormatVisiter {
+    class Indenter : public BlockFormatVisitor {
     public:
         void visit(QTextBlockFormat &format) const {
             // TODO make the 10 configurable.
@@ -257,11 +257,11 @@ void KoTextSelectionHandler::increaseIndent() {
         Qt::Alignment alignment;
     };
     Indenter indenter;
-    BlockFormatVisiter::visitSelection(m_caret, indenter);
+    BlockFormatVisitor::visitSelection(m_caret, indenter);
 }
 
 void KoTextSelectionHandler::decreaseIndent() {
-    class Indenter : public BlockFormatVisiter {
+    class Indenter : public BlockFormatVisitor {
     public:
         void visit(QTextBlockFormat &format) const {
             // TODO make the 10 configurable.
@@ -270,7 +270,7 @@ void KoTextSelectionHandler::decreaseIndent() {
         Qt::Alignment alignment;
     };
     Indenter indenter;
-    BlockFormatVisiter::visitSelection(m_caret, indenter);
+    BlockFormatVisitor::visitSelection(m_caret, indenter);
 }
 
 void KoTextSelectionHandler::setTextColor(const QColor &color) {

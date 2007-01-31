@@ -32,6 +32,62 @@
 #include <QTextCursor>
 #include <QTextBlock>
 
+class CharFormatVisiter {
+public:
+    CharFormatVisiter() {}
+    virtual ~CharFormatVisiter() {}
+
+    virtual void visit(QTextCharFormat &format) const = 0;
+
+    static void visitSelection(QTextCursor *caret, const CharFormatVisiter &visiter) {
+        int start = caret->position();
+        int end = caret->anchor();
+        caret->setPosition(start);
+        if(start > end) { // swap
+            int tmp = start;
+            start = end;
+            end = tmp;
+        }
+        else if(start == end) { // just set a new one.
+            QTextCharFormat format = caret->charFormat();
+            visiter.visit(format);
+            caret->setCharFormat(format);
+            return;
+        }
+
+        QTextBlock block = caret->block();
+        if(block.position() > start)
+            block = block.document()->findBlock(start);
+
+        // now loop over all blocks that the selection contains and alter the text fragments where applicable.
+        while(block.isValid() && block.position() < end) {
+            QTextBlock::iterator iter = block.begin();
+            while(! iter.atEnd()) {
+                QTextFragment fragment = iter.fragment();
+                if(fragment.position() > end)
+                    break;
+                if(fragment.position() + fragment.length() <= start) {
+                    iter++;
+                    continue;
+                }
+
+                QTextCursor cursor(block);
+                cursor.setPosition(fragment.position() +1);
+                QTextCharFormat format = cursor.charFormat(); // this gets the format one char before the postion.
+                visiter.visit(format);
+
+                cursor.setPosition(qMax(start, fragment.position()));
+                int to = qMin(end, fragment.position() + fragment.length()) -1;
+                cursor.setPosition(to, QTextCursor::KeepAnchor);
+                cursor.mergeCharFormat(format);
+
+                iter++;
+            }
+            block = block.next();
+        }
+    }
+};
+
 KoTextSelectionHandler::KoTextSelectionHandler(QObject *parent)
 : KoToolSelection(parent),
     m_textShape(0),
@@ -42,30 +98,58 @@ KoTextSelectionHandler::KoTextSelectionHandler(QObject *parent)
 
 void KoTextSelectionHandler::bold(bool bold) {
     Q_ASSERT(m_caret);
-    QTextCharFormat cf = m_caret->charFormat();
-    cf.setFontWeight( bold ? QFont::Bold : QFont::Normal );
-    m_caret->mergeCharFormat(cf);
+    class Bolder : public CharFormatVisiter {
+    public:
+        Bolder(bool on) : bold(on) {}
+        void visit(QTextCharFormat &format) const {
+            format.setFontWeight( bold ? QFont::Bold : QFont::Normal );
+        }
+        bool bold;
+    };
+    Bolder bolder(bold);
+    CharFormatVisiter::visitSelection(m_caret, bolder);
 }
 
 void KoTextSelectionHandler::italic(bool italic) {
     Q_ASSERT(m_caret);
-    QTextCharFormat cf = m_caret->charFormat();
-    cf.setFontItalic(italic);
-    m_caret->mergeCharFormat(cf);
+    class Italic : public CharFormatVisiter {
+    public:
+        Italic(bool on) : italic(on) {}
+        void visit(QTextCharFormat &format) const {
+            format.setFontItalic(italic);
+        }
+        bool italic;
+    };
+    Italic ital(italic);
+    CharFormatVisiter::visitSelection(m_caret, ital);
 }
 
 void KoTextSelectionHandler::underline(bool underline) {
     Q_ASSERT(m_caret);
-    QTextCharFormat cf = m_caret->charFormat();
-    cf.setFontUnderline(underline);
-    m_caret->mergeCharFormat(cf);
+    class Underliner : public CharFormatVisiter {
+    public:
+        Underliner(bool on) : underline(on) {}
+        void visit(QTextCharFormat &format) const {
+            format.setFontUnderline(underline);
+        }
+        bool underline;
+    };
+    Underliner underliner(underline);
+    CharFormatVisiter::visitSelection(m_caret, underliner);
 }
 
 void KoTextSelectionHandler::strikeOut(bool strikeout) {
     Q_ASSERT(m_caret);
-    QTextCharFormat cf = m_caret->charFormat();
-    cf.setFontStrikeOut(strikeout);
-    m_caret->mergeCharFormat(cf);
+    class Striker : public CharFormatVisiter {
+    public:
+        Striker(bool on) : strikeout(on) {}
+        void visit(QTextCharFormat &format) const {
+            format.setFontStrikeOut(strikeout);
+        }
+        bool strikeout;
+    };
+    Striker striker(strikeout);
+    CharFormatVisiter::visitSelection(m_caret, striker);
 }
 
 void KoTextSelectionHandler::insertFrameBreak() {

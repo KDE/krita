@@ -39,10 +39,9 @@ public:
 
     virtual void visit(QTextCharFormat &format) const = 0;
 
-    static void visitSelection(QTextCursor *caret, const CharFormatVisiter &visiter) {
+    static void visitSelection(QTextCursor *caret, const CharFormatVisiter &visitor) {
         int start = caret->position();
         int end = caret->anchor();
-        caret->setPosition(start);
         if(start > end) { // swap
             int tmp = start;
             start = end;
@@ -50,7 +49,7 @@ public:
         }
         else if(start == end) { // just set a new one.
             QTextCharFormat format = caret->charFormat();
-            visiter.visit(format);
+            visitor.visit(format);
             caret->setCharFormat(format);
             return;
         }
@@ -74,7 +73,7 @@ public:
                 QTextCursor cursor(block);
                 cursor.setPosition(fragment.position() +1);
                 QTextCharFormat format = cursor.charFormat(); // this gets the format one char before the postion.
-                visiter.visit(format);
+                visitor.visit(format);
 
                 cursor.setPosition(qMax(start, fragment.position()));
                 int to = qMin(end, fragment.position() + fragment.length()) -1;
@@ -83,6 +82,37 @@ public:
 
                 iter++;
             }
+            block = block.next();
+        }
+    }
+};
+
+class BlockFormatVisiter {
+public:
+    BlockFormatVisiter() {}
+    virtual ~BlockFormatVisiter() {}
+
+    virtual void visit(QTextBlockFormat &format) const = 0;
+
+    static void visitSelection(QTextCursor *caret, const BlockFormatVisiter &visitor) {
+        int start = caret->position();
+        int end = caret->anchor();
+        if(start > end) { // swap
+            int tmp = start;
+            start = end;
+            end = tmp;
+        }
+
+        QTextBlock block = caret->block();
+        if(block.position() > start)
+            block = block.document()->findBlock(start);
+
+        // now loop over all blocks that the selection contains and alter the text fragments where applicable.
+        while(block.isValid() && block.position() < end) {
+            QTextBlockFormat format = block.blockFormat();
+            visitor.visit(format);
+            QTextCursor cursor(block);
+            cursor.setBlockFormat(format);
             block = block.next();
         }
     }
@@ -183,34 +213,64 @@ void KoTextSelectionHandler::decreaseFontSize() {
 }
 
 void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
-    QTextBlockFormat format = m_caret->blockFormat();
-    format.setAlignment(align);
-    m_caret->setBlockFormat(format);
+    Q_ASSERT(m_caret);
+    class Aligner : public BlockFormatVisiter {
+    public:
+        Aligner(Qt::Alignment align) : alignment(align) {}
+        void visit(QTextBlockFormat &format) const {
+            format.setAlignment(alignment);
+        }
+        Qt::Alignment alignment;
+    };
+    Aligner aligner(align);
+    BlockFormatVisiter::visitSelection(m_caret, aligner);
 }
 
 void KoTextSelectionHandler::setVerticalTextAlignment(Qt::Alignment align) {
-    QTextCharFormat format = m_caret->charFormat();
+    Q_ASSERT(m_caret);
+    class Aligner : public CharFormatVisiter {
+    public:
+        Aligner(QTextCharFormat::VerticalAlignment align) : alignment(align) {}
+        void visit(QTextCharFormat &format) const {
+            format.setVerticalAlignment(alignment);
+        }
+        QTextCharFormat::VerticalAlignment alignment;
+    };
+
     QTextCharFormat::VerticalAlignment charAlign = QTextCharFormat::AlignNormal;
     if(align == Qt::AlignTop)
         charAlign = QTextCharFormat::AlignSuperScript;
     else if(align == Qt::AlignBottom)
         charAlign = QTextCharFormat::AlignSubScript;
-    format.setVerticalAlignment(charAlign);
-    m_caret->mergeCharFormat(format);
+
+    Aligner aligner(charAlign);
+    CharFormatVisiter::visitSelection(m_caret, aligner);
 }
 
 void KoTextSelectionHandler::increaseIndent() {
-    QTextBlockFormat format = m_caret->blockFormat();
-    // TODO make the 10 configurable.
-    format.setLeftMargin(format.leftMargin() + 10);
-    m_caret->setBlockFormat(format);
+    class Indenter : public BlockFormatVisiter {
+    public:
+        void visit(QTextBlockFormat &format) const {
+            // TODO make the 10 configurable.
+            format.setLeftMargin(format.leftMargin() + 10);
+        }
+        Qt::Alignment alignment;
+    };
+    Indenter indenter;
+    BlockFormatVisiter::visitSelection(m_caret, indenter);
 }
 
 void KoTextSelectionHandler::decreaseIndent() {
-    QTextBlockFormat format = m_caret->blockFormat();
-    // TODO make the 10 configurable.
-    format.setLeftMargin(qMax(0., format.leftMargin() - 10));
-    m_caret->setBlockFormat(format);
+    class Indenter : public BlockFormatVisiter {
+    public:
+        void visit(QTextBlockFormat &format) const {
+            // TODO make the 10 configurable.
+            format.setLeftMargin(qMax(0.0, format.leftMargin() - 10));
+        }
+        Qt::Alignment alignment;
+    };
+    Indenter indenter;
+    BlockFormatVisiter::visitSelection(m_caret, indenter);
 }
 
 void KoTextSelectionHandler::setTextColor(const QColor &color) {

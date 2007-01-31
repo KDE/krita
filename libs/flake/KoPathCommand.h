@@ -140,7 +140,7 @@ private:
 };
 
 /// The undo / redo command for removing path points.
-class KoPointRemoveCommand : public QUndoCommand 
+class FLAKE_TEST_EXPORT KoPointRemoveCommand : public QUndoCommand 
 {
 public:
     /**

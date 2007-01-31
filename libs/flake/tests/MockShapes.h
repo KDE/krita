@@ -1,5 +1,8 @@
 #include <KoShapeGroup.h>
 #include <KoCanvasBase.h>
+#include <KoShapeControllerBase.h>
+
+#include "kdebug.h"
 
 #ifndef MOCKSHAPES_H
 #define MOCKSHAPES_H
@@ -10,6 +13,7 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
+        //qDebug() << "Shape" << kBacktrace( 10 );
         paintedCount++;
     }
     int paintedCount;
@@ -21,6 +25,7 @@ public:
     void paintComponent(QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
+        //qDebug() << "Container:" << kBacktrace( 10 );
         paintedCount++;
     }
 
@@ -65,6 +70,25 @@ class MockViewConverter : public KoViewConverter {
     double viewToDocumentX( double viewX ) const { return viewX; }
     double viewToDocumentY( double viewY ) const { return viewY; }
     void zoom(double *zoomX, double *zoomY) const { *zoomX = 1.0; *zoomY = 1.0; }
+};
+
+class MockShapeController : public KoShapeControllerBase
+{
+public:
+    void addShape( KoShape* shape )
+    {
+        m_shapes.insert( shape );
+    }
+    void removeShape( KoShape* shape )
+    {
+        m_shapes.remove( shape );
+    }
+    bool contains(  KoShape* shape )
+    {
+        return m_shapes.contains( shape );
+    }
+private:
+    QSet<KoShape * > m_shapes;
 };
 
 #endif

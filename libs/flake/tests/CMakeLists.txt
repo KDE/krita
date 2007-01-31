@@ -77,6 +77,18 @@ add_test(flake-TestPointTypeCommand ${EXECUTABLE_OUTPUT_PATH}/TestPointTypeComma
 
 ########### next target ###############
 
+set(TestPointRemoveCommand_test_SRCS TestPointRemoveCommand.cpp )
+
+kde4_automoc(${TestPointRemoveCommand_test_SRCS})
+
+kde4_add_executable(TestPointRemoveCommand RUN_UNINSTALLED ${TestPointRemoveCommand_test_SRCS})
+
+target_link_libraries(TestPointRemoveCommand  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+add_test(flake-TestPointRemoveCommand ${EXECUTABLE_OUTPUT_PATH}/TestPointRemoveCommand)
+
+########### next target ###############
+
 set(TestShapeAt_test_SRCS TestShapeAt.cpp )
 
 kde4_automoc(${TestShapeAt_test_SRCS})

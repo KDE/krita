@@ -822,7 +822,9 @@ PR_(mimageScale_mmx_AARGBA):
 
 SIZE(mimageScale_mmx_AARGBA)
 
+#ifdef __linux__
 .section	.note.GNU-stack,"",%progbits
+#endif
 
 #endif
 #endif

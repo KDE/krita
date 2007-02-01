@@ -119,7 +119,7 @@ public:
         virtual bool nextParag() = 0;
         virtual double documentOffsetInShape() = 0;
         /// paint the document
-        virtual void draw(QPainter *painter) = 0;
+        virtual void draw(QPainter *painter, const PaintContext & context ) = 0;
 
         int shapeNumber;
         KoShape *shape;

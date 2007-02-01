@@ -50,7 +50,7 @@ public:
     bool addLine(QTextLine &) { return false; }
     bool nextParag() { return false; }
     double documentOffsetInShape() { return 0; }
-    void draw(QPainter *) {}
+    void draw(QPainter *, const QAbstractTextDocumentLayout::PaintContext &) {}
     KoStyleManager *styleManager() const { return m_styleManager; }
     void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
 
@@ -141,8 +141,7 @@ QSizeF KoTextDocumentLayout::documentSize() const {
 }
 
 void KoTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) {
-    Q_UNUSED(context);
-    m_state->draw(painter);
+    m_state->draw(painter, context);
 }
 
 QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const {

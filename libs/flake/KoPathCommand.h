@@ -180,7 +180,7 @@ private:
 };
 
 /// The undo / redo command for removing a subpath
-class KoRemoveSubpathCommand : public QUndoCommand
+class FLAKE_TEST_EXPORT KoRemoveSubpathCommand : public QUndoCommand
 {
 public:
     KoRemoveSubpathCommand( KoPathShape *pathShape, int subpathIndex, QUndoCommand *parent = 0 );

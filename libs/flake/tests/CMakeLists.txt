@@ -89,6 +89,18 @@ add_test(flake-TestPointRemoveCommand ${EXECUTABLE_OUTPUT_PATH}/TestPointRemoveC
 
 ########### next target ###############
 
+set(TestRemoveSubpathCommand_test_SRCS TestRemoveSubpathCommand.cpp )
+
+kde4_automoc(${TestRemoveSubpathCommand_test_SRCS})
+
+kde4_add_executable(TestRemoveSubpathCommand RUN_UNINSTALLED ${TestRemoveSubpathCommand_test_SRCS})
+
+target_link_libraries(TestRemoveSubpathCommand  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+add_test(flake-TestRemoveSubpathCommand ${EXECUTABLE_OUTPUT_PATH}/TestRemoveSubpathCommand)
+
+########### next target ###############
+
 set(TestShapeAt_test_SRCS TestShapeAt.cpp )
 
 kde4_automoc(${TestShapeAt_test_SRCS})

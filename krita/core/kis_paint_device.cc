@@ -51,6 +51,7 @@
 #include "kis_paint_device.h"
 #include "kis_datamanager.h"
 #include "kis_memento.h"
+#include "kis_selection.h"
 
 #include "kis_exif_info.h"
 
@@ -300,8 +301,13 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
         m_x = rhs.m_x;
         m_y = rhs.m_y;
         m_colorSpace = rhs.m_colorSpace;
-        m_hasSelection = false;
-        m_selection = 0;
+        m_hasSelection = rhs.m_hasSelection;
+
+        if  ( m_hasSelection )
+            m_selection = new KisSelection(*rhs.m_selection);
+        else
+            m_selection = 0;
+
         m_pixelSize = rhs.m_pixelSize;
         m_nChannels = rhs.m_nChannels;
         if(rhs.m_exifInfo)

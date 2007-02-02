@@ -550,7 +550,7 @@ private:
     void addShapeManager( KoShapeManager * manager );
     void removeShapeManager( KoShapeManager * manager );
 
-    KoShapePrivate *d;
+    KoShapePrivate * const d;
 };
 
 #endif

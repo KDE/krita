@@ -81,6 +81,8 @@ public:
      */
     KoOasisSettings( const KoXmlDocument& doc, const char* officeNSURI, const char* configNSURI );
 
+    ~KoOasisSettings();
+
     class Items;
 
     /**
@@ -174,7 +176,7 @@ private:
     const char* m_configNSURI;
 
     class Private;
-    Private* d;
+    Private * const d;
 };
 
 #endif

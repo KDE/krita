@@ -55,8 +55,8 @@ public:
 
 KoFrame::KoFrame( QWidget *parent, const char* /*name*/ )
  : QWidget( parent )
+ , d( new KoFramePrivate )
 {
-  d = new KoFramePrivate;
   d->m_state = Inactive;
   d->m_mode = -1;
   d->m_view = 0;

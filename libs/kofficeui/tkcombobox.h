@@ -37,7 +37,7 @@ protected:
 
 private:
   class TKComboBoxPrivate;
-  TKComboBoxPrivate *d;
+  TKComboBoxPrivate * const d;
 };
 
 #endif

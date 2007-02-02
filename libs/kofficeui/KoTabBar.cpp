@@ -356,8 +356,8 @@ void KoTabBarPrivate::updateButtons()
 // creates a new tabbar
 KoTabBar::KoTabBar( QWidget* parent, const char* /*name*/ )
     : QWidget( parent, Qt::WResizeNoErase | Qt::WNoAutoErase )
+    , d( new KoTabBarPrivate )
 {
-    d = new KoTabBarPrivate;
     d->tabbar = this;
     d->readOnly = false;
     d->reverseLayout = false;

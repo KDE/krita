@@ -134,6 +134,7 @@ public:
 
 KoView::KoView( KoDocument *document, QWidget *parent )
  : QWidget( parent )
+ , d( new KoViewPrivate )
 {
   Q_ASSERT( document );
 
@@ -143,7 +144,6 @@ KoView::KoView( KoDocument *document, QWidget *parent )
   QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 
   //kDebug(30003) << "KoView::KoView " << this << endl;
-  d = new KoViewPrivate;
   d->m_doc = document;
   KParts::PartBase::setPartObject( this );
 

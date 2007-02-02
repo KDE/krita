@@ -33,7 +33,7 @@ public:
 
 private:
   class KoFactoryPrivate;
-  KoFactoryPrivate *d;
+  KoFactoryPrivate * const d;
 };
 
 #endif

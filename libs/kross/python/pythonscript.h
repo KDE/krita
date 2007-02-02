@@ -106,7 +106,7 @@ namespace Kross {
 
         private:
             /// Private d-pointer class.
-            PythonScriptPrivate* d;
+            PythonScriptPrivate * const d;
 
             /// \return the script's module dictonary.
             Py::Dict moduleDict() const;

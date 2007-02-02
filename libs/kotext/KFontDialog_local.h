@@ -322,7 +322,7 @@ protected:
   virtual void virtual_hook( int id, void* data );
 private:
   class KFontChooser_localPrivate;
-  KFontChooser_localPrivate *d;
+  KFontChooser_localPrivate * const d;
 };
 
 /**
@@ -510,7 +510,7 @@ protected:
   virtual void virtual_hook( int id, void* data );
 private:
   class KFontDialog_localPrivate;
-  KFontDialog_localPrivate *d;
+  KFontDialog_localPrivate * const d;
 
 };
 

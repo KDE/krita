@@ -101,8 +101,8 @@ class KoOpenPanePrivate : public Ui_KoOpenPaneBase
 
 KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, const QString& templateType)
   : QWidget(parent)
+  , d( new KoOpenPanePrivate )
 {
-  d = new KoOpenPanePrivate;
   d->m_componentData = componentData;
   d->setupUi(this);
 

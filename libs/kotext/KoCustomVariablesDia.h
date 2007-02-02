@@ -109,7 +109,7 @@ protected slots:
 
 private:
     class Private;
-    Private* d; // currently unused
+    Private * const d; // currently unused
 };
 
 /**

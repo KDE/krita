@@ -57,8 +57,8 @@ class KoTemplatesPanePrivate
 KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_componentData, const QString& header,
                                   KoTemplateGroup *group, KoTemplate* /*defaultTemplate*/)
   : KoDetailsPane(parent, _componentData, header)
+  , d( new KoTemplatesPanePrivate )
 {
-  d = new KoTemplatesPanePrivate;
   setFocusProxy(m_documentList);
 
   KGuiItem openGItem(i18n("Use This Template"));

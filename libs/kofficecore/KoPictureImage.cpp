@@ -33,12 +33,17 @@
 #include <QApplication>
 #include <q3dragobject.h>
 
-KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true)
+class KoPictureImage::Private
+{
+};
+
+KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true), d( 0 )
 {
 }
 
 KoPictureImage::~KoPictureImage(void)
 {
+    delete d;
 }
 
 KoPictureBase* KoPictureImage::newCopy(void) const

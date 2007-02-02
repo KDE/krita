@@ -23,12 +23,18 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
+class KoGenStyles::Private
+{
+};
+
 KoGenStyles::KoGenStyles()
+    : d( 0 )
 {
 }
 
 KoGenStyles::~KoGenStyles()
 {
+    delete d;
 }
 
 QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int flags )

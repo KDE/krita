@@ -586,7 +586,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             }
             return 0;
         }
-        Private * d;
+        Private * const d;
 };
 
 

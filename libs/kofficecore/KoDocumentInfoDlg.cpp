@@ -58,8 +58,8 @@ public:
 
 KoDocumentInfoDlg::KoDocumentInfoDlg( QWidget* parent, KoDocumentInfo* docInfo )
     : KPageDialog( parent )
+    , d( new KoDocumentInfoDlgPrivate )
 {
-    d = new KoDocumentInfoDlgPrivate;
     d->m_info = docInfo;
 
     setCaption( i18n( "Document Information" ) );

@@ -259,8 +259,8 @@ bool GroupContainer::event( QEvent * e ) {
 EditorItem::EditorItem(Editor *editor, EditorItem *parent, Property *property, Q3ListViewItem *after)
  : K3ListViewItem(parent, after,
 	property->captionForDisplaying().isEmpty() ? property->name() : property->captionForDisplaying())
+ , d( new EditorItemPrivate )
 {
-	d = new EditorItemPrivate();
 	d->property = property;
 	d->editor = editor;
 
@@ -284,8 +284,8 @@ EditorItem::EditorItem(Editor *editor, EditorItem *parent, Property *property, Q
 
 EditorItem::EditorItem(K3ListView *parent)
  : K3ListViewItem(parent)
+ , d( new EditorItemPrivate )
 {
-	d = new EditorItemPrivate();
 	d->property = 0;
 	d->editor = 0;
 	setMultiLinesEnabled(true);
@@ -293,8 +293,8 @@ EditorItem::EditorItem(K3ListView *parent)
 
 EditorItem::EditorItem(EditorItem *parent, const QString &text)
  : K3ListViewItem(parent, text)
+ , d( new EditorItemPrivate )
 {
-	d = new EditorItemPrivate();
 	d->property = 0;
 	d->editor = 0;
 	setMultiLinesEnabled(true);
@@ -302,8 +302,8 @@ EditorItem::EditorItem(EditorItem *parent, const QString &text)
 
 EditorItem::EditorItem(EditorItem *parent, EditorItem *after, const QString &text)
  : K3ListViewItem(parent, after, text)
+ , d( new EditorItemPrivate )
 {
-	d = new EditorItemPrivate();
 	d->property = 0;
 	d->editor = 0;
 	setMultiLinesEnabled(true);

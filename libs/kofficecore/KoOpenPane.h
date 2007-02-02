@@ -89,7 +89,7 @@ class KoOpenPane : public QWidget
     void updateSectionListMaxHeight();
 
   private:
-    KoOpenPanePrivate* d;
+    KoOpenPanePrivate * const d;
 };
 
 #endif //KOOPENPANE_H

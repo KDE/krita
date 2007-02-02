@@ -70,7 +70,7 @@ protected:
     QAction* mCenter;
     QAction* mDecPoint;
 
-    KoTabChooserPrivate *d;
+    KoTabChooserPrivate * const d;
 
 protected slots:
     void rbLeft() { currType = TAB_LEFT; update(); }

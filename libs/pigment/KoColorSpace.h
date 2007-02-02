@@ -121,7 +121,7 @@ class PIGMENT_EXPORT KoColorSpace {
 
 protected:
     /// Only for use by classes that serve as baseclass for real color spaces
-    KoColorSpace() {};
+    KoColorSpace();
 
 public:
     /// Should be called by real color spaces
@@ -593,7 +593,7 @@ protected:
     virtual void addChannel(KoChannelInfo * ci);
 private:
     class Private;
-    Private* d;
+    Private * const d;
 };
 
 class KoColorSpaceFactory {

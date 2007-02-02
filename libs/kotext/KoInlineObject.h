@@ -183,6 +183,6 @@ public:
     bool propertyChangeListener() const;
 
 private:
-    InlineObjectPrivate *d;
+    InlineObjectPrivate * const d;
 };
 #endif

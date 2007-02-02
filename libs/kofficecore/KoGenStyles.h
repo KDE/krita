@@ -170,7 +170,7 @@ private:
     StyleArray m_styleArray;
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif /* KOGENSTYLES_H */

@@ -178,7 +178,7 @@ private:
   bool finishLoadingDocument( KoStore* store, KoDocument* doc, bool doOpenURL, bool oasis );
 
 private:
-  KoDocumentChildPrivate *d;
+  KoDocumentChildPrivate * const d;
 };
 
 #endif

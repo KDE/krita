@@ -158,7 +158,7 @@ class KOFFICECORE_EXPORT KKbdAccessExtensions : public QObject
         bool handleAccessKey( const QKeyEvent* ev );
 
     private:
-        KKbdAccessExtensionsPrivate* d;
+        KKbdAccessExtensionsPrivate * const d;
 };
 
 /** Provides a way to sort QLabelss using a QValueList based on their screen position. */

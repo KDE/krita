@@ -54,7 +54,7 @@ class KoRecentDocumentsPane : public KoDetailsPane
     void updatePreview(const KFileItem* fileItem, const QPixmap& preview);
 
   private:
-    KoRecentDocumentsPanePrivate* d;
+    KoRecentDocumentsPanePrivate * const d;
 };
 
 #endif

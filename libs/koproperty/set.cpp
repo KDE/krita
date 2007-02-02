@@ -131,10 +131,10 @@ Set::Iterator::current() const
 
 Set::Set(QObject *parent, const QString &typeName)
 : QObject(parent)
+, d( new SetPrivate )
 {
 	setObjectName(typeName.toLatin1());
 
-	d = new SetPrivate();
 	d->ownProperty = true;
 	d->groupDescriptions.insert("common", i18nc("General properties", "General"));
 	d->typeName = typeName;
@@ -143,16 +143,16 @@ Set::Set(QObject *parent, const QString &typeName)
 
 Set::Set(const Set &set)
  : QObject(0 /* implicit sharing the parent is dangerous */)
+, d( new SetPrivate )
 {
 	setObjectName(set.objectName());
-	d = new SetPrivate();
 	*this = set;
 }
 
 Set::Set(bool propertyOwner)
  : QObject(0)
+, d( new SetPrivate )
 {
-	d = new SetPrivate();
 	d->ownProperty = propertyOwner;
 	d->groupDescriptions.insert("common", i18nc("General properties", "General"));
 }

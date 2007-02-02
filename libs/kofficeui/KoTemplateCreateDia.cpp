@@ -106,15 +106,14 @@ public:
 
 KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, const KComponentData &componentData,
                                           const QString &file, const QPixmap &pix, QWidget *parent ) :
-    KDialog( parent ), m_file(file), m_pixmap(pix) {
+    KDialog( parent ), m_file(file), m_pixmap(pix), d( new KoTemplateCreateDiaPrivate( parent, componentData ) )
+{
 
     setButtons( KDialog::Ok|KDialog::Cancel );
     setDefaultButton( KDialog::Ok );
     setCaption( i18n( "Create Template" ) );
     setModal( true );
     setObjectName( "template create dia" );
-
-    d=new KoTemplateCreateDiaPrivate( parent, componentData );
 
     QWidget *mainwidget=mainWidget();
     QHBoxLayout *mbox=new QHBoxLayout( mainwidget );

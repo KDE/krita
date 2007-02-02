@@ -125,9 +125,9 @@ using namespace KoProperty;
 
 Editor::Editor(QWidget *parent, bool autoSync, const char *name)
  : K3ListView(parent)
+ , d( new EditorPrivate(this) )
 {
 	setObjectName(name);
-	d = new EditorPrivate(this);
 	d->itemDict.setAutoDelete(false);
 
 	d->set = 0;
@@ -181,7 +181,6 @@ Editor::~Editor()
 {
 	clearWidgetCache();
 	delete d;
-	d = 0;
 }
 
 void

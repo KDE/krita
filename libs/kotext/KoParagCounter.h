@@ -221,7 +221,7 @@ private:
     int m_align;
 
     class Private;
-    Private *d; // define operator= and copy ctor when using this!
+    Private * const d; // define operator= and copy ctor when using this!
 
     /** The cached, calculated values for this counter:
      *

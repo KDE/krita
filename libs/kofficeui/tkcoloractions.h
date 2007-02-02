@@ -98,7 +98,7 @@ protected:
   QColor m_pCurrentColor;
 
 private:
-  TKSelectColorActionPrivate *d;
+  TKSelectColorActionPrivate * const d;
 };
 /****************************************************************************************/
 class TKColorPanelButton : public Q3Frame
@@ -125,7 +125,7 @@ protected:
 
 private:
   class TKColorPanelButtonPrivate;
-  TKColorPanelButtonPrivate *d;
+  TKColorPanelButtonPrivate * const d;
 };
 /****************************************************************************************/
 class TKColorPanel : public QWidget
@@ -168,7 +168,7 @@ private:
   void fillPanel();
 
   class TKColorPanelPrivate;
-  TKColorPanelPrivate *d;
+  TKColorPanelPrivate * const d;
 };
 
 #endif

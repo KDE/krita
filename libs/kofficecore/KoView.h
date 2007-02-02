@@ -498,7 +498,7 @@ protected slots:
 private:
   KAction *actionNewView;
   virtual void setupGlobalActions( void );
-  KoViewPrivate *d;
+  KoViewPrivate * const d;
   int autoScrollAcceleration( int offset ) const;
 };
 

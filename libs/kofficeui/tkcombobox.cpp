@@ -30,13 +30,13 @@
 
 
 TKComboBox::TKComboBox(QWidget* parent, const char* name)
-: Q3ComboBox(false,parent,name)
+: Q3ComboBox(false,parent,name), d( 0 )
 {
 }
 
 
 TKComboBox::TKComboBox( bool isEditable, QWidget* parent, const char* name )
-: Q3ComboBox(isEditable,parent,name)
+: Q3ComboBox(isEditable,parent,name), d( 0 )
 {
 }
 

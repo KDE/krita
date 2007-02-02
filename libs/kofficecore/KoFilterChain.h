@@ -208,7 +208,7 @@ private:
         KoFilter* m_filter;
 
         class Private;
-        Private* d;
+        Private * const d;
     };
 
     // "A whole is that which has beginning, middle, and end" - Aristotle
@@ -252,7 +252,7 @@ private:
     QStringList m_internalEmbeddingDirectories;
 
     class Private;
-    Private* d;
+    Private * const d;
 };
 
 
@@ -296,7 +296,7 @@ namespace KOffice
         KoFilterEntry::Ptr m_filterEntry;
 
         class Private;
-        Private* d;
+        Private * const d;
     };
 
 
@@ -355,7 +355,7 @@ namespace KOffice
         int m_index; // position inside the queue, needed for a fast keyDecreased()
 
         class Private;
-        Private* d;
+        Private * const d;
     };
 
 
@@ -400,7 +400,7 @@ namespace KOffice
         bool m_graphValid;
 
         class Private;
-        Private* d;
+        Private * const d;
     };
 
 } // namespace KOffice

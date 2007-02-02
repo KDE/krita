@@ -153,7 +153,7 @@ private:
 
 private:
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif

@@ -110,7 +110,7 @@ private:
     KoFilter& operator=( const KoFilter& rhs );
 
     class Private;
-    Private* d;
+    Private * const d;
 };
 
 
@@ -309,7 +309,7 @@ private:
     Q3PtrStack<PartState> m_partStack;
 
     class Private;
-    Private* d;
+    Private * const d;
 };
 
 #endif

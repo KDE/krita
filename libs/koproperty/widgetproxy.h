@@ -56,7 +56,7 @@ class KOPROPERTY_EXPORT WidgetProxy : public QWidget
 		void setWidget();
 
 	private:
-		WidgetProxyPrivate    *d;
+		WidgetProxyPrivate * const d;
 };
 
 }

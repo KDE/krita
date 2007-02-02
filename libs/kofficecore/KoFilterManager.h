@@ -174,7 +174,7 @@ private:
     static QMap<QString, bool> m_filterAvailable;
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif  // __koffice_filter_manager_h__

@@ -63,7 +63,7 @@ class KoTemplatesPane : public KoDetailsPane
     void changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse);
 
   private:
-    KoTemplatesPanePrivate* d;
+    KoTemplatesPanePrivate * const d;
 };
 
 #endif

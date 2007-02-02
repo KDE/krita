@@ -123,9 +123,8 @@ const int KoFilterManager::s_area = 30500;
 
 
 KoFilterManager::KoFilterManager( KoDocument* document ) :
-    m_document( document ), m_parentChain( 0 ), m_graph( "" ), d( 0 )
+    m_document( document ), m_parentChain( 0 ), m_graph( "" ), d( new Private )
 {
-    d = new KoFilterManager::Private;
     d -> m_batch = false;
     if ( document )
         QObject::connect( this, SIGNAL( sigProgress( int ) ),
@@ -136,9 +135,8 @@ KoFilterManager::KoFilterManager( KoDocument* document ) :
 KoFilterManager::KoFilterManager( const QString& url, const QByteArray& mimetypeHint,
                                   KoFilterChain* const parentChain ) :
     m_document( 0 ), m_parentChain( parentChain ), m_importUrl( url ), m_importUrlMimetypeHint( mimetypeHint ),
-    m_graph( "" ), d( 0 )
+    m_graph( "" ), d( new Private )
 {
-    d = new KoFilterManager::Private;
     d -> m_batch = false;
 }
 

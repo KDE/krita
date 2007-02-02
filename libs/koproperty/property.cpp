@@ -242,7 +242,6 @@ Property::Property(const Property &prop)
 Property::~Property()
 {
 	delete d;
-	d = 0;
 }
 
 QByteArray

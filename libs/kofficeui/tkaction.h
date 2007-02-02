@@ -67,7 +67,7 @@ public slots:
 private:
   TK::IconMode m_imode;
   class TKActionPrivate;
-  TKActionPrivate *d;
+  TKActionPrivate * const d;
 };
 /******************************************************************************/
 class KOFFICEUI_EXPORT TKBaseSelectAction : public TKAction
@@ -105,7 +105,7 @@ private:
   int m_current;
   bool m_editable;
   class TKBaseSelectActionPrivate;
-  TKBaseSelectActionPrivate *d;
+  TKBaseSelectActionPrivate * const d;
 };
 /******************************************************************************/
 class KOFFICEUI_EXPORT TKSelectAction : public TKBaseSelectAction
@@ -133,7 +133,7 @@ signals:
 private:
   QStringList m_list;
   class TKSelectActionPrivate;
-  TKSelectActionPrivate *d;
+  TKSelectActionPrivate * const d;
 };
 /******************************************************************************/
 #endif

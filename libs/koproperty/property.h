@@ -429,7 +429,7 @@ class KOPROPERTY_EXPORT Property
 		void debug();
 
 		//! @internal
-		PropertyPrivate *d;
+		PropertyPrivate * const d;
 
 	friend class Set;
 	friend class Buffer;

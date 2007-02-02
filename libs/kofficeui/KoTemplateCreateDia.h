@@ -72,7 +72,7 @@ private:
 
     QString m_file;
     QPixmap m_pixmap;
-    KoTemplateCreateDiaPrivate *d;
+    KoTemplateCreateDiaPrivate * const d;
 };
 
 #endif

@@ -33,13 +33,12 @@ public:
 
 KoInlineObjectFactory::KoInlineObjectFactory(QObject *parent, const QString &id)
     : QObject(parent)
+    , d( new InlineObjectFactoryPrivate(id) )
 {
-    d = new InlineObjectFactoryPrivate(id);
 }
 
 KoInlineObjectFactory::~KoInlineObjectFactory() {
     delete d;
-    d = 0;
 }
 
 const KoID KoInlineObjectFactory::id() const {

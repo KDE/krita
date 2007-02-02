@@ -80,7 +80,7 @@ class KOFFICEUI_EXPORT KoLineWidthAction : public KoSelectAction
 
   private:
     class KoLineWidthActionPrivate;
-    KoLineWidthActionPrivate* d;
+    KoLineWidthActionPrivate * const d;
 };
 
 /** This class provides a dialog for setting a custom line width. */
@@ -106,7 +106,7 @@ class KoLineWidthChooser : public KDialogBase
 
   private:
     class KoLineWidthChooserPrivate;
-    KoLineWidthChooserPrivate* d;
+    KoLineWidthChooserPrivate * const d;
 };
 
 #endif

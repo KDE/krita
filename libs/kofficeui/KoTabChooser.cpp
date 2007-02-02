@@ -47,10 +47,10 @@ public:
 /*================================================================*/
 KoTabChooser::KoTabChooser( QWidget *parent, int _flags )
     : QFrame( parent )
+    , d( new KoTabChooserPrivate )
 {
     setFrameStyle( QFrame::StyledPanel );
     flags = _flags;
-    d=new KoTabChooserPrivate();
 
     d->m_bReadWrite=true;
 

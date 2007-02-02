@@ -81,7 +81,7 @@ public:
     QList<QString> variables() const;
 
 private:
-    KoVariableManagerPrivate *d;
+    KoVariableManagerPrivate * const d;
 };
 
 #endif

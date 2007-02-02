@@ -207,9 +207,13 @@ namespace {
   const char* const MAINNAME = "maindoc.xml";
 }
 
+KoStore::KoStore()
+    : d( 0 )
+{
+}
+
 bool KoStore::init( Mode _mode )
 {
-  d = 0;
   m_bIsOpen = false;
   m_mode = _mode;
   m_stream = 0;
@@ -223,6 +227,7 @@ bool KoStore::init( Mode _mode )
 KoStore::~KoStore()
 {
   delete m_stream;
+  delete d;
 }
 
 bool KoStore::open( const QString & _name )

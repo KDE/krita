@@ -96,8 +96,8 @@ class KoRecentDocumentsPanePrivate
 KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentData &_componentData,
                                               const QString& header)
   : KoDetailsPane(parent, _componentData, header)
+  , d( new KoRecentDocumentsPanePrivate )
 {
-  d = new KoRecentDocumentsPanePrivate;
   setFocusProxy(m_documentList);
   KGuiItem openGItem(i18n("Open This Document"), "fileopen");
   m_openButton->setGuiItem(openGItem);

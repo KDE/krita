@@ -56,10 +56,9 @@ public:
 };
 
 KoApplication::KoApplication()
-        : KApplication( initHack() )
+    : KApplication( initHack() )
+    , d( new KoApplicationPrivate )
 {
-    d = new KoApplicationPrivate;
-
     // Tell the iconloader about share/apps/koffice/icons
     KIconLoader::global()->addAppDir("koffice");
 

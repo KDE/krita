@@ -63,7 +63,7 @@ protected:
   int m_id;
   bool m_bEnabled;
   class KoKoolBarItemPrivate;
-  KoKoolBarItemPrivate *d;
+  KoKoolBarItemPrivate * const d;
 };
 
 class KoKoolBarGroup : public QObject
@@ -96,7 +96,7 @@ protected:
   QPushButton* m_pButton;
   bool m_bEnabled;
   class KoKoolBarGroupPrivate;
-  KoKoolBarGroupPrivate *d;
+  KoKoolBarGroupPrivate * const d;
 };
 
 class KoKoolBarBox : public Q3Frame
@@ -134,7 +134,7 @@ protected:
   QPushButton* m_pButtonUp;
   QPushButton* m_pButtonDown;
   class KoKoolBarBoxPrivate;
-  KoKoolBarBoxPrivate *d;
+  KoKoolBarBoxPrivate * const d;
 };
 
 class KOFFICEUI_EXPORT KoKoolBar : public QWidget
@@ -163,7 +163,7 @@ protected:
   int m_iActiveGroup;
   KoKoolBarBox* m_pBox;
   class KoKoolBarPrivate;
-  KoKoolBarPrivate *d;
+  KoKoolBarPrivate * const d;
 };
 
 #endif

@@ -216,7 +216,7 @@ private:
   QPixmap disabledPixmap;
   virtual void setIcon(const QPixmap &p) { QWidget::setWindowIcon(p); }
   class TKToolBarButtonPrivate;
-  TKToolBarButtonPrivate *d;
+  TKToolBarButtonPrivate * const d;
 
 
 protected slots:

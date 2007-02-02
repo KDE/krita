@@ -57,15 +57,14 @@ class WidgetPrivate
 
 Widget::Widget(Property *property, QWidget *parent)
  : QWidget(parent)
+ , d( new WidgetPrivate )
 {
-	d = new WidgetPrivate();
 	d->property = property;
 }
 
 Widget::~Widget()
 {
 	delete d;
-	d = 0;
 }
 
 Property*

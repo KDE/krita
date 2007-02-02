@@ -234,7 +234,7 @@ private:
                         const QByteArray& templateType="");
 
 private:
-    KoTemplateChooseDiaPrivate *d;
+    KoTemplateChooseDiaPrivate * const d;
 
     QString descriptionText(const QString &name, const QString &description);
     void setupDialog();

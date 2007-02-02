@@ -53,9 +53,8 @@ class KoRulerPrivate {
 
 KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, KoViewConverter* viewConverter)
   : QWidget(parent)
+  , d( new KoRulerPrivate )
 {
-    d = new KoRulerPrivate;
-
     d->m_orientation = orientation;
     d->m_viewConverter = viewConverter;
 
@@ -71,7 +70,6 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, KoViewConverter* 
 KoRuler::~KoRuler()
 {
     delete d;
-    d = 0;
 }
 
 KoUnit KoRuler::unit() const

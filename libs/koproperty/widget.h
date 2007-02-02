@@ -115,7 +115,7 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 		void setVisibleFlag(bool visible);
 
 	protected:
-		WidgetPrivate  *d;
+		WidgetPrivate * const d;
 };
 
 }

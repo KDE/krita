@@ -35,8 +35,8 @@ public:
 };
 
 KoInlineObject::KoInlineObject(bool propertyChangeListener)
+    : d( new InlineObjectPrivate )
 {
-    d = new InlineObjectPrivate();
     d->propertyChangeListener = propertyChangeListener;
 }
 

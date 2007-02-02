@@ -192,6 +192,13 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, cons
                                          const DialogType &dialogType,
                                          const QByteArray& templateType) :
     KPageDialog( parent )
+    , d( new KoTemplateChooseDiaPrivate( templateType,
+                                         componentData,
+                                         format,
+                                         nativeName,
+                                         extraNativeMimeTypes,
+                                         dialogType) )
+
 {
 
     setModal( true );
@@ -199,14 +206,6 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, cons
     setButtons( KDialog::Ok | KDialog::Cancel );
     setDefaultButton( KDialog::Ok );
     setObjectName( name );
-
-    d = new KoTemplateChooseDiaPrivate(
-        templateType,
-        componentData,
-        format,
-        nativeName,
-        extraNativeMimeTypes,
-        dialogType);
 
 //     QPushButton* ok = actionButton( KDialog::Ok );
 //     QPushButton* cancel = actionButton( KDialog::Cancel );
@@ -230,7 +229,6 @@ KoTemplateChooseDia::~KoTemplateChooseDia()
 {
     delete d->tree;
     delete d;
-    d=0L;
 }
 
 // Keep in sync with KoMainWindow::chooseNewDocument

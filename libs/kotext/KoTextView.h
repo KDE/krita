@@ -292,7 +292,7 @@ private:
     KoTextFormat *m_currentFormat;
     QTimer *blinkTimer, *dragStartTimer;
     class KoTextViewPrivate;
-    KoTextViewPrivate *d;
+    KoTextViewPrivate * const d;
     QPoint dragStartPos;
     bool m_cursorVisible;
     bool blinkCursorVisible;

@@ -139,7 +139,7 @@ private:
     void doActionUi(QVariant *params); // called from ActionJob
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif

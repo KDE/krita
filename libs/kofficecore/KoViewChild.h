@@ -57,7 +57,7 @@ class KoViewChild : public KoChild
         QPointer<KoFrame> m_frame;
         QPointer<KoView> m_parentView;
         class KoViewChildPrivate;
-        KoViewChildPrivate *d;
+        KoViewChildPrivate * const d;
 };
 
 #endif

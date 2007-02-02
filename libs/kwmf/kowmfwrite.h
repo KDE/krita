@@ -135,7 +135,7 @@ private:
 
 
 private:
-    KoWmfWritePrivate *d;
+    KoWmfWritePrivate * const d;
 
 };
 

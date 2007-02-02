@@ -93,7 +93,7 @@ KFontChooser_local::KFontChooser_local(QWidget *parent,
 			   bool onlyFixed, const QStringList &fontList,
 			   bool makeFrame, int visibleListSize, bool diff,
                            Qt::CheckState *sizeIsRelativeState )
-  : QWidget(parent), usingFixed(onlyFixed)
+  : QWidget(parent), usingFixed(onlyFixed), d( new KFontChooser_localPrivate )
 {
   charsetsCombo = 0;
 
@@ -101,7 +101,6 @@ KFontChooser_local::KFontChooser_local(QWidget *parent,
     i18n( "Here you can choose the font to be used." );
   this->setWhatsThis( mainWhatsThisText );
 
-  d = new KFontChooser_localPrivate;
   Q3VBoxLayout *topLayout = new Q3VBoxLayout( this, 0, KDialog::spacingHint() );
   int checkBoxGap = KDialog::spacingHint() / 2;
 
@@ -758,7 +757,7 @@ KFontDialog_local::KFontDialog_local( QWidget *parent, const char* name,
 			  bool onlyFixed, bool modal,
 			  const QStringList &fontList, bool makeFrame, bool diff,
                           Qt::CheckState *sizeIsRelativeState )
-  : KDialog( parent )
+  : KDialog( parent ), d( 0 )
 {
   setCaption( i18n("Select Font") );
   setModal( modal );

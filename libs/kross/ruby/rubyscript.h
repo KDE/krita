@@ -92,7 +92,7 @@ namespace Kross {
 
         private:
             /// Private d-pointer.
-            RubyScriptPrivate* d;
+            RubyScriptPrivate * const d;
     };
 
 }

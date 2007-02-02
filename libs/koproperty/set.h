@@ -220,7 +220,7 @@ class KOPROPERTY_EXPORT Set : public QObject
 		void aboutToBeDeleted();
 
 	protected:
-		SetPrivate *d;
+		SetPrivate * const d;
 
 	friend class Iterator;
 	friend class Property;

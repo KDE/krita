@@ -29,20 +29,25 @@
 
 //#define DEBUG_STYLESTACK
 
+class KoStyleStack::KoStyleStackPrivate
+{
+};
+
 KoStyleStack::KoStyleStack()
-    : m_styleNSURI( KoXmlNS::style ), m_foNSURI( KoXmlNS::fo )
+    : m_styleNSURI( KoXmlNS::style ), m_foNSURI( KoXmlNS::fo ), d( 0 )
 {
     clear();
 }
 
 KoStyleStack::KoStyleStack( const char* styleNSURI, const char* foNSURI )
-    : m_propertiesTagName( "properties" ), m_styleNSURI( styleNSURI ), m_foNSURI( foNSURI )
+    : m_propertiesTagName( "properties" ), m_styleNSURI( styleNSURI ), m_foNSURI( foNSURI ), d( 0 )
 {
     clear();
 }
 
 KoStyleStack::~KoStyleStack()
 {
+    delete d;
 }
 
 void KoStyleStack::clear()

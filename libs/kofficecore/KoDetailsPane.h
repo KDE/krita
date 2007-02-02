@@ -62,7 +62,7 @@ class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
     void changePalette();
 
   private:
-    KoDetailsPanePrivate* d;
+    KoDetailsPanePrivate * const d;
 };
 
 #endif //KODETAILSPANE_H

@@ -38,8 +38,8 @@ class KoViewChild::KoViewChildPrivate
 };
 
 KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
+    : d( new KoViewChildPrivate )
 {
-    d = new KoViewChildPrivate;
     m_parentView = _parentView;
     m_child = child;
 

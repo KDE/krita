@@ -1189,7 +1189,7 @@ private:
     bool savePreview( KoStore* store );
     bool saveOasisPreview( KoStore* store, KoXmlWriter* manifestWriter );
     class Private;
-    Private *d;
+    Private * const d;
     KService::Ptr m_nativeService;
     bool m_bEmpty;
     KoGridData m_gridData;

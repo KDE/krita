@@ -84,7 +84,7 @@ class EditorItem : public K3ListViewItem
 		virtual void setHeight( int height );
 
 	protected:
-		EditorItemPrivate *d;
+		EditorItemPrivate * const d;
 };
 
 //! @internal

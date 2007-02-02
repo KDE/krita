@@ -166,11 +166,11 @@ class KKbdAccessExtensionsPrivate
         KMainWindow* mainWindow;
 };
 
-KKbdAccessExtensions::KKbdAccessExtensions(KMainWindow* parent, const char* /*name*/) :
-    QObject( parent )
+KKbdAccessExtensions::KKbdAccessExtensions(KMainWindow* parent, const char* /*name*/)
+    : QObject( parent )
+    , d( new KKbdAccessExtensionsPrivate )
 {
     // kDebug() << "KKbdAccessExtensions::KKbdAccessExtensions: running." << endl;
-    d = new KKbdAccessExtensionsPrivate;
     d->mainWindow = parent;
     d->fwdAction  = new KAction(i18n("Resize Panel Forward"), this);
     parent->actionCollection()->addAction("resize_panel_forward", d->fwdAction );

@@ -118,7 +118,7 @@ class KOFFICEUI_EXPORT KoRuler : public QWidget
         double numberStepForUnit() const;
 
     private:
-        KoRulerPrivate* d;
+        KoRulerPrivate * const d;
 };
 
 #endif

@@ -29,7 +29,7 @@
 static int g_koKoolBarId = 0;
 
 KoKoolBar::KoKoolBar( QWidget *_parent, const char* /*_name*/ ) :
-  QWidget( _parent ), m_iActiveGroup( -1 )
+  QWidget( _parent ), m_iActiveGroup( -1 ), d( 0 )
 {
   m_mapGroups.setAutoDelete( true );
   m_pBox = new KoKoolBarBox( this );
@@ -212,7 +212,7 @@ void KoKoolBar::enableGroup( int _grp, bool _enable )
 
 KoKoolBarBox::KoKoolBarBox( KoKoolBar *_bar ) :
   Q3Frame( _bar ), m_pBar( _bar ),
-  m_pButtonUp( 0L ), m_pButtonDown( 0L )
+  m_pButtonUp( 0L ), m_pButtonDown( 0L ), d( 0 )
 {
   m_iYOffset = 0;
   m_iYIcon = 0;
@@ -410,7 +410,7 @@ void KoKoolBarBox::drawContents( QPainter * painter )
 }
 
 KoKoolBarGroup::KoKoolBarGroup( KoKoolBar *_bar, const QString& _text ) :
-  m_pBar( _bar )
+  m_pBar( _bar ), d( 0 )
 {
   m_mapItems.setAutoDelete( true );
 
@@ -438,7 +438,7 @@ void KoKoolBarGroup::pressed()
 }
 
 KoKoolBarItem::KoKoolBarItem( KoKoolBarGroup *_grp, const QPixmap& _pix, const QString&_text )
-  : m_pGroup( _grp )
+  : m_pGroup( _grp ), d( 0 )
 {
   m_pixmap = _pix;
   m_strText = _text;

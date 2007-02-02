@@ -29,12 +29,21 @@
 #include <KoFilterManager.h>
 
 
-KoFilter::KoFilter( QObject* parent ) : QObject( parent ), m_chain( 0 )
+class KoFilter::Private
+{
+};
+
+class KoEmbeddingFilter::Private
+{
+};
+
+KoFilter::KoFilter( QObject* parent ) : QObject( parent ), m_chain( 0 ), d( 0 )
 {
 }
 
 KoFilter::~KoFilter()
 {
+    delete d;
 }
 
 
@@ -43,6 +52,7 @@ KoEmbeddingFilter::~KoEmbeddingFilter()
     if ( m_partStack.count() != 1 )
         kWarning() << "Someone messed with the part stack" << endl;
     delete m_partStack.pop();
+    delete d;
 }
 
 int KoEmbeddingFilter::lruPartIndex() const
@@ -60,7 +70,7 @@ QString KoEmbeddingFilter::mimeTypeByExtension( const QString& extension )
     return m->name();
 }
 
-KoEmbeddingFilter::KoEmbeddingFilter() : KoFilter()
+KoEmbeddingFilter::KoEmbeddingFilter() : KoFilter(), d( 0 )
 {
     m_partStack.push( new PartState() );
 }

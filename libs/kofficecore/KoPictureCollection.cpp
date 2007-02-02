@@ -32,6 +32,11 @@
 
 //#define DEBUG_PICTURES
 
+KoPictureCollection::KoPictureCollection()
+    : d( 0 )
+{
+}
+
 KoPicture KoPictureCollection::findPicture(const KoPictureKey& key) const
 {
 #ifdef DEBUG_PICTURES

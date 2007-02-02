@@ -116,7 +116,7 @@ private:
     KoXmlDocument m_manifestDoc;
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif /* KOOASISLOADINGCONTEXT_H */

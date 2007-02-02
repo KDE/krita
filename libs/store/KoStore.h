@@ -297,7 +297,7 @@ public:
 
 protected:
 
-  KoStore() {}
+  KoStore();
 
   /**
    * Init store - called by constructor.
@@ -431,7 +431,7 @@ private:
   KoStore& operator=( const KoStore& store );  ///< don't assign
 
   class Private;
-  Private * d;
+  Private * const d;
 
 };
 

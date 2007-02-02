@@ -73,7 +73,7 @@ protected:
     bool eventFilter( QObject*, QEvent* );
 
 private:
-    KoPartResizeHandlerPrivate *d;
+    KoPartResizeHandlerPrivate * const d;
 };
 
 /**
@@ -92,7 +92,7 @@ protected:
     bool eventFilter( QObject*, QEvent* );
 
 private:
-    KoPartMoveHandlerPrivate *d;
+    KoPartMoveHandlerPrivate * const d;
 };
 
 /**

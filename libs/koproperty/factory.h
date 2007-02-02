@@ -157,7 +157,7 @@ class KOPROPERTY_EXPORT FactoryManager : public QObject
 		FactoryManager();
 		~FactoryManager();
 
-		FactoryManagerPrivate *d;
+		FactoryManagerPrivate * const d;
 		friend class KStaticDeleter<KoProperty::FactoryManager>;
 };
 

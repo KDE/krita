@@ -308,7 +308,7 @@ protected:
 private:
 
   class KoChildPrivate;
-  KoChildPrivate *d;
+  KoChildPrivate * const d;
 };
 
 #endif

@@ -54,7 +54,6 @@ KoAction::KoAction(QObject *parent)
 
 KoAction::~KoAction() {
     delete d;
-    d = 0;
 }
 
 void KoAction::execute() {

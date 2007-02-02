@@ -65,7 +65,7 @@ namespace Kross {
             static VALUE require (VALUE, VALUE);
         private:
             /// Private d-pointer.
-            static RubyInterpreterPrivate* d;
+            static RubyInterpreterPrivate * d;
     };
 
 }

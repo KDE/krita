@@ -37,6 +37,11 @@ struct KoColorSpace::Private {
     icColorSpaceSignature colorSpaceSignature; // The colorspace signature as defined in icm/icc files
 };
 
+KoColorSpace::KoColorSpace()
+    : d (new Private())
+{
+}
+
 KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp, DWORD cmType, icColorSpaceSignature colorSpaceSignature )
     : d (new Private())
 {

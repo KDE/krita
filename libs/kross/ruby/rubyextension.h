@@ -138,9 +138,9 @@ namespace Kross {
 
         private:
             /// @internal private d-pointer.
-            RubyExtensionPrivate* d;
+            RubyExtensionPrivate * const d;
             /// @internal unwanted copy-ctor.
-            RubyExtension(const RubyExtension&) {}
+            RubyExtension(const RubyExtension&);
     };
 
 }

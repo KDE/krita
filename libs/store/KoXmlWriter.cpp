@@ -27,8 +27,12 @@
 
 static const int s_indentBufferLength = 100;
 
+class KoXmlWriter::Private
+{
+};
+
 KoXmlWriter::KoXmlWriter( QIODevice* dev, int indentLevel )
-    : m_dev( dev ), m_baseIndentLevel( indentLevel )
+    : m_dev( dev ), m_baseIndentLevel( indentLevel ), d( 0 )
 {
     init();
 }
@@ -48,6 +52,7 @@ KoXmlWriter::~KoXmlWriter()
 {
     delete[] m_indentBuffer;
     delete[] m_escapeBuffer;
+    delete d;
 }
 
 void KoXmlWriter::startDocument( const char* rootElemName, const char* publicId, const char* systemId )

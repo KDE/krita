@@ -182,7 +182,7 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
 			const QByteArray& propertyToSelect);
 
 	private:
-		EditorPrivate *d;
+		EditorPrivate * const d;
 
 	friend class EditorItem;
 	friend class Widget;

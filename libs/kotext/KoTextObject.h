@@ -605,7 +605,7 @@ private:
 
 private:
     class KoTextObjectPrivate;
-    KoTextObjectPrivate* d;
+    KoTextObjectPrivate * const d;
     /** The text document, containing the paragraphs */
     KoTextDocument *textdoc;
 

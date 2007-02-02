@@ -52,7 +52,7 @@ class KOFFICEUI_EXPORT KoLineStyleAction : public KoSelectAction
   
   private:
     class KoLineStyleActionPrivate;
-    KoLineStyleActionPrivate* d;
+    KoLineStyleActionPrivate * const d;
 };
 
 #endif

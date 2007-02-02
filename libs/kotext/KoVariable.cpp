@@ -44,13 +44,12 @@ public:
 
 KoVariable::KoVariable(bool propertyChangeListener)
     : KoInlineObject(propertyChangeListener)
+    , d( new VariablePrivate )
 {
-    d = new VariablePrivate();
 }
 
 KoVariable::~KoVariable() {
     delete d;
-    d = 0;
 }
 
 void KoVariable::setValue(const QString &value) {

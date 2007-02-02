@@ -65,9 +65,8 @@ public:
 
 
 TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, KActionCollection* parent, const char* name, bool menuDefaultColor )
-: TKAction(parent,name)
+: TKAction(parent,name), d( new TKSelectColorActionPrivate )
 {
-    d=new TKSelectColorActionPrivate();
     d->defaultColorMenu=menuDefaultColor;
     d->defaultColor=QColor();
     setText(text);
@@ -81,8 +80,8 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type,
 					  const char* name,
 					  bool menuDefaultColor)
 : TKAction(parent,name)
+, d( new TKSelectColorActionPrivate )
 {
-    d=new TKSelectColorActionPrivate();
     d->defaultColorMenu=menuDefaultColor;
     d->defaultColor=QColor();
     setText(text);
@@ -312,8 +311,8 @@ public:
 /****************************************************************************************/
 TKColorPanel::TKColorPanel( QWidget* parent, const char* /*name*/ )
 : QWidget(parent)
+, d( new TKColorPanelPrivate )
 {
-  d = new TKColorPanel::TKColorPanelPrivate();
   m_activeColor = Qt::black;
 
   //m_iX = 0;  // happens in setNumCols() -> resetGrid()
@@ -590,7 +589,7 @@ void TKColorPanel::fillPanel()
 
 /****************************************************************************************/
 TKColorPanelButton::TKColorPanelButton( const QColor& color, QWidget* parent, const char* name )
-: Q3Frame(parent,name), m_Color(color), m_bActive(false)
+: Q3Frame(parent,name), m_Color(color), m_bActive(false), d( 0 )
 {
   setFixedSize(16,16);
   setFrameStyle( NoFrame );

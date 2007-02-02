@@ -101,7 +101,6 @@ KoShape::KoShape()
 KoShape::~KoShape()
 {
     delete d;
-    d = 0;
 }
 
 void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected) {

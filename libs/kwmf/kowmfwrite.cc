@@ -46,9 +46,9 @@ public:
 
 
 
-KoWmfWrite::KoWmfWrite( const QString& fileName ) {
-    d = new KoWmfWritePrivate;
-
+KoWmfWrite::KoWmfWrite( const QString& fileName )
+    : d( new KoWmfWritePrivate )
+{
     d->mDpi = 1024;
     d->mMaxRecordSize = 0;
     d->mFileOut.setFileName( fileName );

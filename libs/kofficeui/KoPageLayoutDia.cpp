@@ -148,7 +148,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
                                   const KoPageLayout& layout,
                                   const KoHeadFoot& hf, int tabs,
                                   KoUnit unit, bool modal )
-    : KPageDialog( parent )
+    : KPageDialog( parent ), d( 0 )
 {
     setCaption( i18n("Page Layout") );
     setFaceType( KPageDialog::Tabbed );
@@ -180,7 +180,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
                   const KoColumns& columns,
                   const KoKWHeaderFooter& kwhf,
                   int tabs, KoUnit unit )
-    : KPageDialog( parent )
+    : KPageDialog( parent ), d( 0 )
 {
     setCaption( i18n("Page Layout") );
     setFaceType( KPageDialog::Tabbed );

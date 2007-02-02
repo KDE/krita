@@ -94,7 +94,7 @@ private:
     int m_cursorTextIndex;
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 // TODO extract non-text base class for kofficecore, see KoOasisLoadingContext
@@ -182,7 +182,7 @@ private:
     bool m_hasColumns;
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif /* KOOASISCONTEXT_H */

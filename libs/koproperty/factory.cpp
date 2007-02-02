@@ -78,9 +78,9 @@ using namespace KoProperty;
 
 FactoryManager::FactoryManager()
 : QObject(0)
+, d( new FactoryManagerPrivate )
 {
 	setObjectName("KoProperty::FactoryManager");
-	d = new FactoryManagerPrivate();
 }
 
 FactoryManager::~FactoryManager()

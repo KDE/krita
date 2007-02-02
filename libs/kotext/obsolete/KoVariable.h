@@ -112,7 +112,7 @@ class KOTEXT_EXPORT KoVariableSettings
     bool m_underlineLink;
     bool m_displayFieldCode;
     class KoVariableSettingPrivate;
-    KoVariableSettingPrivate *d;
+    KoVariableSettingPrivate * const d;
 };
 
 /**
@@ -451,7 +451,7 @@ protected:
     //typedef QMap<KAction *, int> SubTextMap;
     //SubTextMap m_subTextMap;
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 

@@ -74,6 +74,6 @@ protected:
     void markWord( KoTextParag* parag, int pos, int length, bool misspelled );
 private:
     class Private;
-    Private *d;
+    Private * const d;
 };
 #endif

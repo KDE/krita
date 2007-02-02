@@ -128,7 +128,7 @@ private:
      */
     bool m_cacheIsInFastMode;
     class Private;
-    Private* d;
+    Private * const d;
 };
 
 #endif /* __koPictureImage_h__ */

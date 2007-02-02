@@ -76,16 +76,15 @@ public:
 KoPartResizeHandler::KoPartResizeHandler( QWidget* widget, const QMatrix& matrix, KoView* view, KoChild* child,
                                       KoChild::Gadget gadget, const QPoint& point )
     : KoEventHandler( widget )
+    ,d( new KoPartResizeHandlerPrivate(matrix, view, child, gadget, point) )
 {
     child->lock();
-    d=new KoPartResizeHandlerPrivate(matrix, view, child, gadget, point);
 }
 
 KoPartResizeHandler::~KoPartResizeHandler()
 {
     d->m_child->unlock();
     delete d;
-    d=0L;
 }
 
 void KoPartResizeHandler::repaint(QRegion &rgn)
@@ -235,16 +234,15 @@ public:
 KoPartMoveHandler::KoPartMoveHandler( QWidget* widget, const QMatrix& matrix, KoView* view, KoChild* child,
                                   const QPoint& point )
     : KoEventHandler( widget )
+    , d( new KoPartMoveHandlerPrivate(matrix, view, child, point) )
 {
     child->lock();
-    d=new KoPartMoveHandlerPrivate(matrix, view, child, point);
 }
 
 KoPartMoveHandler::~KoPartMoveHandler()
 {
     d->m_dragChild->unlock();
     delete d;
-    d=0L;
 }
 
 bool KoPartMoveHandler::eventFilter( QObject*, QEvent* ev )

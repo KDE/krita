@@ -63,7 +63,7 @@ namespace Kross {
 
         private:
             /// Internal d-pointer class.
-            PythonModulePrivate* d;
+            PythonModulePrivate * const d;
 
             /// Import hook used to load external kross libs on demand.
             Py::Object import(const Py::Tuple&);

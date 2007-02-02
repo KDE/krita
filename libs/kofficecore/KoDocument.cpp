@@ -252,12 +252,12 @@ void KoBrowserExtension::print()
 
 KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleViewMode )
     : KParts::ReadWritePart( parent )
+    , d( new Private )
 {
     if(s_documentList==0L)
         s_documentList=new Q3PtrList<KoDocument>;
     s_documentList->append(this);
 
-    d = new Private;
     m_bEmpty = true;
     connect( &d->m_autoSaveTimer, SIGNAL( timeout() ), this, SLOT( slotAutoSave() ) );
     setAutoSave( s_defaultAutoSave );

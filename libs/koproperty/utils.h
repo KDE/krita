@@ -39,7 +39,7 @@ class KOPROPERTY_EXPORT GroupContainer : public QWidget
 		virtual bool event( QEvent * e );
 
 		class Private;
-		Private *d;
+		Private * const d;
 };
 
 KOPROPERTY_EXPORT QMap<QByteArray, QVariant> propertyValues(const Set& set);

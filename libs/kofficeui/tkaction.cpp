@@ -47,7 +47,7 @@
 #endif
 
 TKAction::TKAction(KActionCollection* parent, const char* name)
-: KAction( "", parent )
+: KAction( "", parent ), d( 0 )
 {
   m_imode = TK::IconOnly;
     if(parent)
@@ -201,7 +201,7 @@ void TKAction::updateLayout(QWidget* base)
 }
 /******************************************************************************/
 TKBaseSelectAction::TKBaseSelectAction( KActionCollection* parent, const char* name )
-: TKAction(parent,name)
+: TKAction(parent,name), d( 0 )
 {
   m_current = 0;
   m_editable = false;
@@ -296,7 +296,7 @@ void TKBaseSelectAction::activate(int id)
 }
 /******************************************************************************/
 TKSelectAction::TKSelectAction( KActionCollection* parent, const char* name )
-: TKBaseSelectAction(parent,name)
+: TKBaseSelectAction(parent,name), d( 0 )
 {
 }
 

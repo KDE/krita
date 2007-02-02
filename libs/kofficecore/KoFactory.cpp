@@ -33,14 +33,14 @@ public:
 
 KoFactory::KoFactory( QObject *parent, const char *name )
   : KParts::Factory( parent )
+  , d( 0 )
 {
 	setObjectName(name);
-  //d = new KoFactoryPrivate;
 }
 
 KoFactory::~KoFactory()
 {
-  //delete d;
+  delete d;
 }
 
 #include <KoFactory.moc>

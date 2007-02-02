@@ -95,7 +95,7 @@ private:
     QPushButton *m_moveUpButton;
     QPushButton *m_moveDownButton;
     QComboBox *m_inheritCombo;
-    KoStyleManagerPrivate *d;
+    KoStyleManagerPrivate * const d;
 
     KoParagStyle *m_currentStyle;
     Q3PtrList<KoParagStyle> m_origStyles;      // internal list of orig styles we have modified

@@ -39,7 +39,7 @@ namespace Kross {
             static VALUE method_cacheexec(int argc, VALUE *argv, VALUE self);
             static void delete_object(void* object);
         private:
-            RubyCallCachePrivate* d;
+            RubyCallCachePrivate * const d;
             VALUE m_self;
     };
 

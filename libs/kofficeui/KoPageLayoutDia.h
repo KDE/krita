@@ -199,7 +199,7 @@ private:
     KoPageLayoutSize *m_pageSizeTab;
     KoPageLayoutColumns *m_columnsTab;
     KoPageLayoutHeader *m_headerTab;
-    KoPageLayoutDiaPrivate *d;
+    KoPageLayoutDiaPrivate * const d;
 };
 
 #endif

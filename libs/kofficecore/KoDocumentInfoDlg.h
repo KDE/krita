@@ -82,7 +82,7 @@ class KOFFICECORE_EXPORT KoDocumentInfoDlg : public KPageDialog
     void saveAuthorData();
 
     class KoDocumentInfoDlgPrivate;
-    KoDocumentInfoDlgPrivate *d;
+    KoDocumentInfoDlgPrivate * const d;
 };
 
 #endif

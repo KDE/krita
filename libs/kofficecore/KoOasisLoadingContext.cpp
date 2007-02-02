@@ -24,10 +24,14 @@
 #include <kdebug.h>
 #include <KoDom.h>
 
+class KoOasisLoadingContext::Private
+{
+};
+
 KoOasisLoadingContext::KoOasisLoadingContext( KoDocument* doc,
                                               KoOasisStyles& styles, KoStore* store )
     : m_doc( doc ), m_store( store ), m_styles( styles ),
-      m_metaXmlParsed( false ), m_useStylesAutoStyles( false )
+      m_metaXmlParsed( false ), m_useStylesAutoStyles( false ), d( 0 )
 {
     // Ideally this should be done by KoDocument and passed as argument here...
     KoOasisStore oasisStore( store );
@@ -38,7 +42,7 @@ KoOasisLoadingContext::KoOasisLoadingContext( KoDocument* doc,
 
 KoOasisLoadingContext::~KoOasisLoadingContext()
 {
-
+    delete d;
 }
 
 void KoOasisLoadingContext::fillStyleStack( const KoXmlElement& object, const char* nsURI, const char* attrName, const char* family )

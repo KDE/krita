@@ -97,5 +97,5 @@ private:
             const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
-    VariablePrivate *d;
+    VariablePrivate * const d;
 };

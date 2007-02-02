@@ -84,7 +84,7 @@ class KOFFICEUI_EXPORT KoSelectAction : public KAction
         
   private:
     class KoSelectActionPrivate;
-    KoSelectActionPrivate* d;
+    KoSelectActionPrivate * const d;
 };
 
 #endif

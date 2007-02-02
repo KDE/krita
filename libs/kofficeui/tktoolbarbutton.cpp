@@ -93,10 +93,10 @@ TKToolBarButton::TKToolBarButton( const QString& icon, const QString& txt,
                                         QWidget* parent, const char* name,
                                         const KComponentData &instance )
 : QToolButton(parent)
+, d( new TKToolBarButtonPrivate )
 {
   setObjectName(name);
 
-  d = new TKToolBarButtonPrivate;
   d->m_text = txt;
   d->m_componentData = instance;
 
@@ -114,8 +114,8 @@ TKToolBarButton::TKToolBarButton( const QString& icon, const QString& txt,
 
 TKToolBarButton::TKToolBarButton( const QPixmap& pixmap, const QString& txt, QWidget* parent, const char* /*name*/ )
 : QToolButton(parent )
+, d( new TKToolBarButtonPrivate )
 {
-  d = new TKToolBarButtonPrivate;
   d->m_text = txt;
 
   setFocusPolicy( Qt::NoFocus );

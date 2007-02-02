@@ -268,7 +268,7 @@ protected:
     virtual void wheelEvent ( QWheelEvent * e );
 
 private:
-    KoTabBarPrivate *d;
+    KoTabBarPrivate * const d;
 
     // don't allow copy or assignment
     KoTabBar( const KoTabBar& );

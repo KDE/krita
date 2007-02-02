@@ -192,7 +192,7 @@ private:
     const char* m_foNSURI;
 
     class KoStyleStackPrivate;
-    KoStyleStackPrivate *d;
+    KoStyleStackPrivate * const d;
 
     // forbidden
     void operator=( const KoStyleStack& );

@@ -270,7 +270,7 @@ private:
     KoTool(const KoTool&);
     KoTool& operator=(const KoTool&);
 
-    KoToolPrivate *d;
+    KoToolPrivate * const d;
 };
 
 #endif /* KOTOOL_H */

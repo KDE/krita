@@ -40,7 +40,7 @@ public:
 private:
     void copy( const QString &path, const KArchiveEntry *entry );
     class KoDocumentInfoPropsPagePrivate;
-    KoDocumentInfoPropsPagePrivate *d;
+    KoDocumentInfoPropsPagePrivate * const d;
 };
 
 #endif

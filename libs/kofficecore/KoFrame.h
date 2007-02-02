@@ -64,7 +64,7 @@ protected:
   virtual bool eventFilter( QObject*, QEvent* );
 
 private:
-  KoFramePrivate *d;
+  KoFramePrivate * const d;
 };
 
 #endif

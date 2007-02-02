@@ -63,9 +63,9 @@ namespace Kross {
 
         private:
             /// Private d-pointer.
-            RubyModulePrivate* d;
+            RubyModulePrivate * const d;
             /// Unwanted copy-ctor.
-            RubyModule(const RubyModule&) {}
+            RubyModule(const RubyModule&);
     };
 
 }

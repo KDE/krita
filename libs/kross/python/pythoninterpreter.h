@@ -75,7 +75,7 @@ namespace Kross {
 
         private:
             /// \internal d-pointer instance.
-            PythonInterpreterPrivate* d;
+            PythonInterpreterPrivate * const d;
 
             /// Initialize the python interpreter.
             inline void initialize();

@@ -198,11 +198,11 @@ public:
 };
 
 KoMainWindow::KoMainWindow( const KComponentData &componentData )
-    : KParts::MainWindow( )
+    : KParts::MainWindow()
+    , d( new KoMainWindowPrivate )
 {
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
-    d = new KoMainWindowPrivate;
 
     d->m_manager = new KoPartManager( this );
 

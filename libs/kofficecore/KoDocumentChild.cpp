@@ -68,8 +68,8 @@ public:
 
 KoDocumentChild::KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry )
     : KoChild( parent )
+    , d( new KoDocumentChildPrivate )
 {
-  d = new KoDocumentChildPrivate;
   d->m_parent = parent;
   d->m_doc = doc;
   setGeometry( geometry );
@@ -80,8 +80,8 @@ KoDocumentChild::KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRe
 
 KoDocumentChild::KoDocumentChild( KoDocument* parent )
     : KoChild( parent )
+    , d( new KoDocumentChildPrivate )
 {
-  d = new KoDocumentChildPrivate;
   d->m_parent = parent;
   d->m_doc = 0L;
   d->m_deleted = false;

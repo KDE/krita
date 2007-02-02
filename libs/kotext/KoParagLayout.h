@@ -174,7 +174,7 @@ private:
     KoTabulatorList m_tabList;
     double lineSpacing;
     class Private;
-    Private *d;
+    Private * const d;
 
     /** Common setup. */
     void initialise();

@@ -50,6 +50,8 @@ public:
         CollectionClipart
     };
 
+    KoPictureCollection();
+
     /**
      * Looks for a clipart in the collection, returns a new KoPicture with that key if not found.
      */
@@ -166,7 +168,7 @@ private:
     QString getFileName(const Type pictureType, KoPicture& picture, int& counter);
 
     class Private;
-    Private* d;
+    Private * const d;
 };
 
 #endif /* __koPictureCollection_h_- */

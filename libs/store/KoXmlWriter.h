@@ -259,7 +259,7 @@ private:
     int m_baseIndentLevel;
 
     class Private;
-    Private *d;
+    Private * const d;
 
     char* m_indentBuffer; // maybe make it static, but then it needs a KStaticDeleter,
                           // and would eat 1K all the time... Maybe refcount it :)

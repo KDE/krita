@@ -53,10 +53,9 @@ public:
 };
 
 KoChild::KoChild( QObject *parent, const char* /*name*/ )
-: QObject( parent )
+  : QObject( parent )
+  , d( new KoChildPrivate )
 {
-  d = new KoChildPrivate;
-
   d->m_scaleX = d->m_scaleY = 1.0;
   d->m_shearX = d->m_shearY = 0.0;
   d->m_rotation = 0.0;

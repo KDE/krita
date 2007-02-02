@@ -398,7 +398,7 @@ private slots:
     void slotSaveCanceled(const QString &);
 
 private:
-    KoMainWindowPrivate *d;
+    KoMainWindowPrivate * const d;
 
 };
 

@@ -104,7 +104,7 @@ protected:
     void addTemplate(const KoInlineObjectTemplate &params);
 
 private:
-    InlineObjectFactoryPrivate *d;
+    InlineObjectFactoryPrivate * const d;
 };
 
 #endif

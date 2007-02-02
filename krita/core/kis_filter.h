@@ -60,9 +60,18 @@ public:
     virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&) = 0;
 
 public:
-    virtual KisFilterConfiguration * configuration(QWidget*);
+     /**
+      * @return a new configuration derived from the widget. If the widget is NULL or not the correct type,
+      *         a default configuration object will be returned
+      */
+     virtual KisFilterConfiguration * configuration(QWidget*);
+
+     /**
+      * @return a default configuration object
+      * Normally this doesn't need to be overriden
+      */
     virtual KisFilterConfiguration * configuration();
-            
+
     /**
          * If true, this filter can be used in painting tools as a paint operation
          */
@@ -114,11 +123,11 @@ public:
     /**
      * Determine the colorspace independence of this filter.
      * @see ColorSpaceIndependence
-     * 
+     *
      * @return the degree of independence
      */
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_RGBA8; };
-    
+
     /**
      * Determine if this filter can work with this colorSpace. For instance, some
      * colorspaces don't depend on lcms, and cannot do certain tasks. The colorsfilters
@@ -126,11 +135,11 @@ public:
      * BSAR: I'm still not convinced that this is the right approach. I think that every
      * colorspace should implement the api fully; and that the filter should simply call
      * that api. After all, you don't need lcms to desaturate.
-     * 
+     *
      * @param colorsSpace
      */
     virtual bool workWith(KisColorSpace*) { return true; }
-    
+
     virtual void enableProgress();
     virtual void disableProgress();
 
@@ -150,6 +159,8 @@ public:
      *
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
+     * @return NULL if the filter does not use user-settable configuration settings.
+     *         else return a pointer to the new configuration widget
      */
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, KisPaintDeviceSP dev);
 

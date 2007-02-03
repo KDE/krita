@@ -124,6 +124,7 @@ KoXmlWriter* KoOasisStore::manifestWriter( const char* mimeType )
 
 bool KoOasisStore::closeManifestWriter()
 {
+    Q_ASSERT(m_manifestWriter);
     m_manifestWriter->endElement();
     m_manifestWriter->endDocument();
     QBuffer* buffer = static_cast<QBuffer *>( m_manifestWriter->device() );

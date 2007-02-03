@@ -35,15 +35,44 @@
 #include <kross/core/guiclient.h>
 //#include <core/actioncollection.h>
 
+/***********************************************************************
+ * ScriptingDockerFactory
+ */
+
+ScriptingDockerFactory::ScriptingDockerFactory(QWidget* parent, Kross::GUIClient* guiclient)
+    : KoDockFactory(), m_parent(parent), m_guiclient(guiclient)
+{
+}
+
+QString ScriptingDockerFactory::dockId() const
+{
+    return "KisScripting";
+}
+
+Qt::DockWidgetArea ScriptingDockerFactory::defaultDockWidgetArea() const
+{
+    return Qt::RightDockWidgetArea;
+}
+
+QDockWidget* ScriptingDockerFactory::createDockWidget()
+{
+    return new ScriptingDocker(m_parent, m_guiclient);
+}
+
+/***********************************************************************
+ * ScriptingDocker
+ */
+
 ScriptingDocker::ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
-    : QWidget(parent)
+    : QDockWidget(i18n("Scripts"), parent)
     , m_guiclient(guiclient)
 {
-    QBoxLayout* layout = new QVBoxLayout(this);
+    QWidget* widget = new QWidget(this);
+    QBoxLayout* layout = new QVBoxLayout(widget);
     layout->setMargin(0);
-    setLayout(layout);
+    widget->setLayout(layout);
 
-    m_view = new QTreeView(this);
+    m_view = new QTreeView(widget);
     m_view->setRootIsDecorated(false);
     m_view->header()->hide();
     m_model = new Kross::ActionCollectionProxyModel(this);
@@ -51,13 +80,16 @@ ScriptingDocker::ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
     layout->addWidget(m_view, 1);
     m_view->expandAll();
 
-    QToolBar* tb = new QToolBar(this);
+    QToolBar* tb = new QToolBar(widget);
     layout->addWidget(tb);
     tb->setMovable(false);
     //tb->setOrientation(Qt::Vertical);
     //tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     tb->addAction(KIcon("player_play"), i18n("Run"), this, SLOT(runScript()) );
     tb->addAction(KIcon("player_stop"), i18n("Stop"), this, SLOT(stopScript()) );
+
+    setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
+    setWidget(widget);
 
     connect(m_view, SIGNAL(doubleClicked(const QModelIndex&)), SLOT(runScript()));
 }

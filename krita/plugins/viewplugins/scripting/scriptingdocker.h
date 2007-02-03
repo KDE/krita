@@ -21,7 +21,8 @@
 #ifndef SCRIPTINGDOCKER_H
 #define SCRIPTINGDOCKER_H
 
-#include <QWidget>
+#include <QDockWidget>
+#include <KoDockFactory.h>
 
 class QTreeView;
 
@@ -30,7 +31,19 @@ namespace Kross {
     class ActionCollectionProxyModel;
 }
 
-class ScriptingDocker : public QWidget
+class ScriptingDockerFactory : public KoDockFactory
+{
+    public:
+        ScriptingDockerFactory(QWidget* parent, Kross::GUIClient* guiclient);
+        virtual QString dockId() const;
+        virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
+        virtual QDockWidget* createDockWidget();
+    private:
+        QWidget* m_parent;
+        Kross::GUIClient* m_guiclient;
+};
+
+class ScriptingDocker : public QDockWidget
 {
         Q_OBJECT
     public:

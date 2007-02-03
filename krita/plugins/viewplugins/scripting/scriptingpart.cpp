@@ -92,7 +92,9 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     QAction* scriptmenuaction = d->guiclient->action("scripts");
     actionCollection()->addAction("scripts", scriptmenuaction);
 
-    d->view->createDock(i18n("Scripts"), new ScriptingDocker(d->view, d->guiclient));
+    ScriptingDockerFactory factory(d->view, d->guiclient);
+    QDockWidget* dock = d->view->createDockWidget(&factory);
+    Q_UNUSED(dock);
 
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));

@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=Dropshadow
 Name[el]=Ρίψη σκιάς
 Name[fr]=Jet d'ombre
-Name[ja]=影付け
 Name[x-test]=xxDropshadowxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

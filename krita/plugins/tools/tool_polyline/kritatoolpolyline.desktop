@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=Polyline Tool
 Name[el]=Εργαλείο συνεχούς γραμμής
 Name[fr]=Outil lignes multiples
-Name[ja]=ポリラインツール
 Name[x-test]=xxPolyline Toolxx
 ServiceTypes=Krita/Tool
 Type=Service

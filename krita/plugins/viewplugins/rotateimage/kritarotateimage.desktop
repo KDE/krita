@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=Rotate Image Plugin
 Name[el]=Πρόσθετο περιστροφής εικόνας
 Name[fr]=Module de rotation d'images
-Name[ja]=画像回転プラグイン
 Name[x-test]=xxRotate Image Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

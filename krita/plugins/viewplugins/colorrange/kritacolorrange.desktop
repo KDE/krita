@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=Colorrange
 Name[el]=Χρωματικό εύρος
 Name[fr]=Plage de couleurs
-Name[ja]=色の範囲
 Name[x-test]=xxColorrangexx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

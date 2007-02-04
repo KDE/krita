@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=Colorspace Conversion
 Name[el]=Μετατροπή χρωματικού χώρου
 Name[fr]=Conversion d'espaces de couleurs
-Name[ja]=カラースペース変換
 Name[x-test]=xxColorspace Conversionxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=Performance Test
 Name[el]=Δοκιμή επίδοσης
 Name[fr]=Test de performances
-Name[ja]=パフォーマンステスト
 Name[x-test]=xxPerformance Testxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

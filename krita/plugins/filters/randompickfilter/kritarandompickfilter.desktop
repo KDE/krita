@@ -5,7 +5,6 @@ Encoding=UTF-8
 Icon=
 Name=Random pick Filter
 Name[el]=Φίλτρο τυχαίας ανύψωσης
-Name[ja]=ランダムピックフィルタ
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritarandompickfilter

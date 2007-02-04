@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=Histogram Plugin
 Name[el]=Πρόσθετο ιστογράμματος
 Name[fr]=Module d'histogramme
-Name[ja]=ヒストグラムプラグイン
 Name[x-test]=xxHistogram Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

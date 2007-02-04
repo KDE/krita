@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=Default Tools
 Name[el]=Προκαθορισμένα εργαλεία
 Name[fr]=Outils par défaut
-Name[ja]=標準ツール
 Name[x-test]=xxDefault Toolsxx
 ServiceTypes=Krita/Tool
 Type=Service

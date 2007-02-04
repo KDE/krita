@@ -5,7 +5,6 @@ X-KDE-ServiceType=Krita/Tool
 Comment=Tool plugin for Krita
 Comment[el]=Πρόσθετο εργαλείων για το Krita
 Comment[fr]=Module d'outils pour Krita
-Comment[ja]=Krita ツールプラグイン
 Comment[x-test]=xxTool plugin for Kritaxx
 [PropertyDef::X-Krita-Version]
 Type=int

@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=Image Resize and Scale Plugin
 Name[el]=Πρόσθετο αλλαγής μεγέθους και κλιμάκωσης εικόνας
 Name[fr]=Module de redimensionnement d'images
-Name[ja]=画像 リサイズ/スケール プラグイン
 Name[x-test]=xxImage Resize and Scale Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

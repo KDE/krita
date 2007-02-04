@@ -7,7 +7,6 @@ Name[x-test]=xxWet & Sticky Paintbrush Paintopxx
 Comment=Wet & Sticky paintbrush
 Comment[el]=Βούρτσα υγρής και κολλώδους μπογιάς
 Comment[fr]=Pinceau mouillé et gluant
-Comment[ja]=Wet & Sticky ペイントブラシ
 Comment[x-test]=xxWet & Sticky paintbrushxx
 ServiceTypes=Krita/ColorSpace
 Type=Service

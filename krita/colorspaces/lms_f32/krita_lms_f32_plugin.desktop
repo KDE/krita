@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=LMS Color Model (32-bit float)
 Name[el]=Χρωματικό μοντέλο LMS (32 bit δεκαδικοί)
 Name[fr]=Modèle de couleurs LMS (flottants 32 bits)
-Name[ja]=LMS カラーモデル (32 ビット浮動小数)
 Name[x-test]=xxLMS Color Model (32-bit float)xx
 Comment=Color model for LMS cone space (Long Middle and Short wavelengths)
 Comment[el]=Χρωματικό μοντέλο για χώρο χρωμάτων LMS (Μακρά μεσαία και σύντομα μήκη κύματος)

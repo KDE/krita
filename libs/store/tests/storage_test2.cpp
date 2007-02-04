@@ -106,7 +106,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
         stream->readLine(str, DATALEN);      // << as is this
         qint64 len = store->read(str, DATALEN);
         if (len != DATALEN) {
-            kdDebug() << "Final length was too small: " << len << " < " << DATALEN << endl;
+            kDebug() << "Final length was too small: " << len << " < " << DATALEN << endl;
             return 1;
         }
 

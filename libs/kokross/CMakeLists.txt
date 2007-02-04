@@ -1,0 +1,6 @@
+include_directories(${KDE4_KDECORE_INCLUDES} ${KOFFICECORE_INCLUDES})
+set(kokross_LIB_SRCS KoScriptingDocker.cpp)
+kde4_automoc(kokross ${kokross_LIB_SRCS})
+kde4_add_library(kokross SHARED ${kokross_LIB_SRCS})
+target_link_libraries(kokross ${KDE4_KDECORE_LIBS} krosscore kofficecore)
+install(TARGETS kokross DESTINATION ${LIB_INSTALL_DIR})

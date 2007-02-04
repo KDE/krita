@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2006 by Sebastian Sauer (mail@dipe.org)
+ * Copyright (C) 2006-2007 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "scriptingdocker.h"
+#include "KoScriptingDocker.h"
 
 #include <QToolBar>
 #include <QBoxLayout>
@@ -36,49 +36,79 @@
 //#include <core/actioncollection.h>
 
 /***********************************************************************
- * ScriptingDockerFactory
+ * KoScriptingDockerFactory
  */
 
-ScriptingDockerFactory::ScriptingDockerFactory(QWidget* parent, Kross::GUIClient* guiclient)
-    : KoDockFactory(), m_parent(parent), m_guiclient(guiclient)
+class KoScriptingDockerFactory::Private
 {
+    public:
+        QWidget* parent;
+        Kross::GUIClient* guiclient;
+};
+
+KoScriptingDockerFactory::KoScriptingDockerFactory(QWidget* parent, Kross::GUIClient* guiclient)
+    : KoDockFactory()
+    , d(new Private())
+{
+    d->parent = parent;
+    d->guiclient = guiclient;
 }
 
-QString ScriptingDockerFactory::dockId() const
+KoScriptingDockerFactory::~KoScriptingDockerFactory()
 {
-    return "KisScripting";
+    delete d;
 }
 
-Qt::DockWidgetArea ScriptingDockerFactory::defaultDockWidgetArea() const
+Kross::GUIClient* KoScriptingDockerFactory::guiClient() const
+{
+    return d->guiclient;
+}
+
+QString KoScriptingDockerFactory::dockId() const
+{
+    return "Scripting";
+}
+
+Qt::DockWidgetArea KoScriptingDockerFactory::defaultDockWidgetArea() const
 {
     return Qt::RightDockWidgetArea;
 }
 
-QDockWidget* ScriptingDockerFactory::createDockWidget()
+QDockWidget* KoScriptingDockerFactory::createDockWidget()
 {
-    return new ScriptingDocker(m_parent, m_guiclient);
+    return new KoScriptingDocker(d->parent, d->guiclient);
 }
 
 /***********************************************************************
- * ScriptingDocker
+ * KoScriptingDocker
  */
 
-ScriptingDocker::ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
-    : QDockWidget(i18n("Scripts"), parent)
-    , m_guiclient(guiclient)
+class KoScriptingDocker::Private
 {
+    public:
+        Kross::GUIClient* guiclient;
+        Kross::ActionCollectionProxyModel* model;
+        QTreeView* view;
+};
+
+KoScriptingDocker::KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
+    : QDockWidget(i18n("Scripts"), parent)
+    , d(new Private())
+{
+    d->guiclient = guiclient;
+
     QWidget* widget = new QWidget(this);
     QBoxLayout* layout = new QVBoxLayout(widget);
     layout->setMargin(0);
     widget->setLayout(layout);
 
-    m_view = new QTreeView(widget);
-    m_view->setRootIsDecorated(false);
-    m_view->header()->hide();
-    m_model = new Kross::ActionCollectionProxyModel(this);
-    m_view->setModel(m_model);
-    layout->addWidget(m_view, 1);
-    m_view->expandAll();
+    d->view = new QTreeView(widget);
+    d->view->setRootIsDecorated(false);
+    d->view->header()->hide();
+    d->model = new Kross::ActionCollectionProxyModel(this);
+    d->view->setModel(d->model);
+    layout->addWidget(d->view, 1);
+    d->view->expandAll();
 
     QToolBar* tb = new QToolBar(widget);
     layout->addWidget(tb);
@@ -91,35 +121,41 @@ ScriptingDocker::ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
     setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
     setWidget(widget);
 
-    connect(m_view, SIGNAL(doubleClicked(const QModelIndex&)), SLOT(runScript()));
+    connect(d->view, SIGNAL(doubleClicked(const QModelIndex&)), SLOT(runScript()));
 }
 
-ScriptingDocker::~ScriptingDocker()
+KoScriptingDocker::~KoScriptingDocker()
 {
+    delete d;
 }
 
-void ScriptingDocker::runScript()
+Kross::GUIClient* KoScriptingDocker::guiClient() const
 {
-    QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
+    return d->guiclient;
+}
+
+void KoScriptingDocker::runScript()
+{
+    QModelIndex index = d->model->mapToSource( d->view->currentIndex() );
     if( index.isValid() ) {
         Kross::Action* action = Kross::ActionCollectionModel::action(index);
         if( action ) {
-            kDebug() << "ScriptingDocker::runScript execute action=" << action->objectName() << endl;
+            kDebug() << "KoScriptingDocker::runScript execute action=" << action->objectName() << endl;
             action->trigger();
         }
     }
 }
 
-void ScriptingDocker::stopScript()
+void KoScriptingDocker::stopScript()
 {
-    QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
+    QModelIndex index = d->model->mapToSource( d->view->currentIndex() );
     if( index.isValid() ) {
         Kross::Action* action = Kross::ActionCollectionModel::action(index);
         if( action ) {
-            kDebug() << "ScriptingDocker::stopScript finalize action=" << action->objectName() << endl;
+            kDebug() << "KoScriptingDocker::stopScript finalize action=" << action->objectName() << endl;
             action->finalize();
         }
     }
 }
 
-#include "scriptingdocker.moc"
+#include "KoScriptingDocker.moc"

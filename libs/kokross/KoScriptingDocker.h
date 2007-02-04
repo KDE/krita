@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (C) 2006 by Sebastian Sauer (mail@dipe.org)
+ * Copyright (C) 2006-2007 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,46 +18,45 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef SCRIPTINGDOCKER_H
-#define SCRIPTINGDOCKER_H
+#ifndef KOSCRIPTINGDOCKER_H
+#define KOSCRIPTINGDOCKER_H
 
 #include <QDockWidget>
 #include <KoDockFactory.h>
 
-class QTreeView;
-
 namespace Kross {
     class GUIClient;
-    class ActionCollectionProxyModel;
 }
 
-class ScriptingDockerFactory : public KoDockFactory
+#define KOKROSS_EXPORT KDE_EXPORT
+
+class KOKROSS_EXPORT KoScriptingDockerFactory : public KoDockFactory
 {
     public:
-        ScriptingDockerFactory(QWidget* parent, Kross::GUIClient* guiclient);
+        KoScriptingDockerFactory(QWidget* parent, Kross::GUIClient* guiclient);
+        virtual ~KoScriptingDockerFactory();
+        Kross::GUIClient* guiClient() const;
         virtual QString dockId() const;
         virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
         virtual QDockWidget* createDockWidget();
     private:
-        QWidget* m_parent;
-        Kross::GUIClient* m_guiclient;
+        class Private;
+        Private* const d;
 };
 
-class ScriptingDocker : public QDockWidget
+class KOKROSS_EXPORT KoScriptingDocker : public QDockWidget
 {
         Q_OBJECT
     public:
-        ScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient);
-        virtual ~ScriptingDocker();
-
+        KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient);
+        virtual ~KoScriptingDocker();
+        Kross::GUIClient* guiClient() const;
     private slots:
         void runScript();
         void stopScript();
-
     private:
-        Kross::GUIClient* m_guiclient;
-        Kross::ActionCollectionProxyModel* m_model;
-        QTreeView* m_view;
+        class Private;
+        Private* const d;
 };
 
 #endif

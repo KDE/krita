@@ -18,7 +18,6 @@
  */
 
 #include "scriptingpart.h"
-#include "scriptingdocker.h"
 
 #include <stdlib.h>
 #include <vector>
@@ -38,17 +37,20 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 
+// krita
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view2.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_doc2.h>
-
+// koffice/libs/kokross
+#include <KoScriptingDocker.h>
+// kdelibs/kross
 #include <kross/core/manager.h>
 #include <kross/core/model.h>
 #include <kross/core/guiclient.h>
-
+// kritacore
 #include "kritacore/krs_module.h"
 #include "kritacore/krs_progress.h"
 
@@ -92,7 +94,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     QAction* scriptmenuaction = d->guiclient->action("scripts");
     actionCollection()->addAction("scripts", scriptmenuaction);
 
-    ScriptingDockerFactory factory(d->view, d->guiclient);
+    KoScriptingDockerFactory factory(d->view, d->guiclient);
     QDockWidget* dock = d->view->createDockWidget(&factory);
     Q_UNUSED(dock);
 

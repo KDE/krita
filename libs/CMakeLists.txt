@@ -1,4 +1,3 @@
-# scripting is disabled for now.
 OPTION(KOFFICE_ENABLE_SCRIPTING   "build scripting library (Kross)" ON)
 #OPTION(KOFFICE_ENABLE_SCRIPTING   "build scripting library (Kross)" OFF)
 
@@ -13,7 +12,11 @@ add_subdirectory( kopainter )
 add_subdirectory( flake )
 add_subdirectory( pigment )
 add_subdirectory( kopageapp )
+
 if(KOFFICE_ENABLE_SCRIPTING)
-add_subdirectory(kross)
+    # the kokross directory contains extensions for koffice scripting with Kross
+    add_subdirectory(kokross)
+    # following directory will be moved to kdebindings
+    add_subdirectory(kross)
 endif(KOFFICE_ENABLE_SCRIPTING)
 

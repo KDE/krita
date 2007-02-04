@@ -390,8 +390,10 @@ private:
 protected slots:
     virtual void slotActivePartChanged( KParts::Part *newPart );
 
-private slots:
+public slots:
     void slotProgress(int value);
+
+private slots:
     void slotLoadCompleted();
     void slotLoadCanceled (const QString &);
     void slotSaveCompleted();

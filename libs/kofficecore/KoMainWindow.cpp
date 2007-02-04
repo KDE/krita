@@ -1477,7 +1477,7 @@ void KoMainWindow::slotSetOrientation() {
 
 void KoMainWindow::slotProgress(int value) {
     //kDebug(30003) << "KoMainWindow::slotProgress " << value << endl;
-    if(value==-1) {
+    if(value<=-1) {
         if ( d->m_progress )
         {
             statusBar()->removeWidget(d->m_progress);

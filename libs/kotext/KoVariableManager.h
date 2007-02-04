@@ -72,8 +72,11 @@ public:
     /**
      * Create a new variable that can be inserted into the document using
      * KoInlineTextObjectManager::insertInlineObject()
+     * This is a factory method that creates a visible variable object of an already existing
+     * name/value pair previously inserted into the manager.
      * @param name the named variable.
-     * @return the new variable, or 0 when the name was not found.
+     * @return the new variable, or 0 when the name was not previously set on this manager
+     * @see setValue()
      */
     KoVariable *createVariable(const QString &name) const;
 

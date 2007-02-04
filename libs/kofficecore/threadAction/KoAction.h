@@ -60,7 +60,7 @@ public:
      * The action will start with a SimpleQueuedPolicy.
      * @param parent the parent QObject, for memory mangement purposes.
      */
-    KoAction(QObject *parent = 0);
+    explicit KoAction(QObject *parent = 0);
     virtual ~KoAction();
 
     /**

@@ -44,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    KoVariable(bool propertyChangeListener = false);
+    explicit KoVariable(bool propertyChangeListener = false);
     virtual ~KoVariable();
 
     /**

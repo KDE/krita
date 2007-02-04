@@ -40,7 +40,7 @@ class QStackedWidget;
 class KOTEXT_EXPORT KoTextSelectionHandler : public KoToolSelection {
     Q_OBJECT
 public:
-    KoTextSelectionHandler(QObject *parent = 0);
+    explicit KoTextSelectionHandler(QObject *parent = 0);
 
     QString selectedText() const;
 

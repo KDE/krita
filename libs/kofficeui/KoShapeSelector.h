@@ -45,7 +45,7 @@ class QPainter;
 class KOFFICEUI_EXPORT KoShapeSelector : public QDockWidget {
     Q_OBJECT
 public:
-    KoShapeSelector(QWidget *parent = 0);
+    explicit KoShapeSelector(QWidget *parent = 0);
     ~KoShapeSelector();
 
 private slots:

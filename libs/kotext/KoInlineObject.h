@@ -83,7 +83,7 @@ public:
      * @see KoInlineTextObjectManager::setProperty()
      * @see propertyChangeListener()
      */
-    KoInlineObject(bool propertyChangeListener = false);
+    explicit KoInlineObject(bool propertyChangeListener = false);
     virtual ~KoInlineObject();
 
     /**

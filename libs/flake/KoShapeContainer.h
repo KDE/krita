@@ -145,7 +145,7 @@ public:
      * container normally has (like clipping).  Use the default constructor in those cases.
      * @param model the custom model to be used for maintaining the list of children.
      */
-    KoShapeContainer(KoShapeContainerModel *model);
+    explicit KoShapeContainer(KoShapeContainerModel *model);
 
     /// destructor
     virtual ~KoShapeContainer();
@@ -233,7 +233,7 @@ private:
              */
             class Relation {
                 public:
-                    Relation(KoShape *child);
+                    explicit Relation(KoShape *child);
                     KoShape* child() { return m_child; }
                     bool m_inside; ///< if true, the child will be clipped by the parent.
                 private:

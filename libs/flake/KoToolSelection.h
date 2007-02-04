@@ -31,7 +31,7 @@
 class FLAKE_EXPORT KoToolSelection : public QObject {
     Q_OBJECT
 public:
-    KoToolSelection(QObject *parent = 0);
+    explicit KoToolSelection(QObject *parent = 0);
     virtual ~KoToolSelection();
 
     /// return true if the tool currently has something selected that can be copied or deleted

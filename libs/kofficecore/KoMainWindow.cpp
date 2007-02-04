@@ -1188,7 +1188,7 @@ KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString::null, this);
 
 void KoMainWindow::slotFileOpenRecent( const KUrl & url )
 {
-    // Create a copy, because the orignal KUrl in the map of recent files in
+    // Create a copy, because the original KUrl in the map of recent files in
     // KRecentFilesAction may get deleted.
     (void) openDocument( KUrl( url ) );
 }

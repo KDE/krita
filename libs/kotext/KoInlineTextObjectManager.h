@@ -44,7 +44,7 @@ class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject {
 // TODO, when to delete the inlineObject s
 public:
      /// Constructor
-    KoInlineTextObjectManager(QObject *parent = 0);
+    explicit KoInlineTextObjectManager(QObject *parent = 0);
 
     /**
      * Retrieve a formerly added inline object based on the format.

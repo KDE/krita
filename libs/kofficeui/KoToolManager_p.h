@@ -72,7 +72,7 @@ private:
 class Connector : public QObject {
     Q_OBJECT
 public:
-    Connector(KoShapeManager *parent);
+    explicit Connector(KoShapeManager *parent);
 
 public slots:
     void selectionChanged();

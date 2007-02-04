@@ -51,7 +51,6 @@ class KOKROSS_EXPORT KoScriptingDocker : public QDockWidget
         virtual ~KoScriptingDocker();
         Kross::GUIClient* guiClient() const;
     private slots:
-        void filterChanged();
         void runScript();
         void stopScript();
     private:

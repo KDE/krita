@@ -25,7 +25,6 @@
 #include <QModelIndex>
 #include <QHeaderView>
 #include <QLineEdit>
-#include <QTimer>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -90,7 +89,6 @@ class KoScriptingDocker::Private
         Kross::GUIClient* guiclient;
         Kross::ActionCollectionProxyModel* model;
         QTreeView* view;
-        QLineEdit* filter;
 };
 
 KoScriptingDocker::KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
@@ -121,17 +119,14 @@ KoScriptingDocker::KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclien
     tb->addAction(KIcon("player_stop"), i18n("Stop"), this, SLOT(stopScript()) );
     tb->addSeparator();
 
-    d->filter = new QLineEdit(tb);
-    tb->addWidget(d->filter);
+    /*
+    QLineEdit* filter = new QLineEdit(tb);
+    tb->addWidget(filter);
+    connect(filter, SIGNAL(textChanged(const QString&)), d->model, SLOT(setFilterRegExp(const QString&)));
+    */
 
     setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
     setWidget(widget);
-
-    QTimer* timer = new QTimer(this);
-    timer->setSingleShot(true);
-    timer->setInterval(200);
-    connect(timer, SIGNAL(timeout()), this, SLOT(filterChanged()));
-    connect(d->filter, SIGNAL(textChanged(const QString&)), timer, SLOT(start()));
 
     connect(d->view, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(runScript()));
 }
@@ -144,13 +139,6 @@ KoScriptingDocker::~KoScriptingDocker()
 Kross::GUIClient* KoScriptingDocker::guiClient() const
 {
     return d->guiclient;
-}
-
-void KoScriptingDocker::filterChanged()
-{
-    const QString pattern = d->filter->text();
-    d->model->setFilterRegExp(pattern);
-    d->view->expandAll();
 }
 
 void KoScriptingDocker::runScript()

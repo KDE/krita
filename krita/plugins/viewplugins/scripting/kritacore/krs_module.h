@@ -23,6 +23,7 @@
 #include <QVariant>
 #include <QObject>
 #include <krita_export.h>
+#include <KoScriptingModule.h>
 
 class KisView2;
 
@@ -33,27 +34,16 @@ namespace Scripting {
      * functionality from within the supported Kross scripting
      * backends like for example Python or Ruby.
      */
-    class KROSSKRITACORE_EXPORT Module : public QObject
+    class KROSSKRITACORE_EXPORT Module : public KoScriptingModule
     {
             Q_OBJECT
         public:
             Module(KisView2* view);
             virtual ~Module();
 
+            virtual KoDocument* doc();
+
         public slots:
-
-            /**
-            * Returns the \a KoApplicationAdaptor object.
-            */
-            QObject* application();
-
-#if 0
-            //TODO KisView2::document() needs to be public to have this working!
-            /**
-            * Returns the \a KoDocumentAdaptor object.
-            */
-            QObject* document();
-#endif
 
             /**
             * Returns the \a Progress object which could be

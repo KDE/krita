@@ -46,65 +46,43 @@
 //#include <kis_image.h>
 #include <kis_meta_registry.h>
 
-#if 0
-extern "C"
-{
-    /**
-     * Exported an loadable function as entry point to use
-     * the \a KexiAppModule.
-     */
-    Kross::Api::Object* init_module(Kross::Api::Manager* manager)
-    {
-        return new Scripting::Module(manager);
-    }
-}
-#endif
-
 using namespace Scripting;
 
 namespace Scripting {
 
-	/// \internal d-pointer class.
-	class Module::Private
-	{
-		public:
-			KisView2* view;
-			Progress* progress;
-
-			Private(KisView2* v) : view(v), progress(0) {}
-			~Private() { delete progress; }
-	};
+    /// \internal d-pointer class.
+    class Module::Private
+    {
+        public:
+            KisView2* view;
+            Progress* progress;
+    };
 
 }
 
 Module::Module(KisView2* view)
-	: QObject()
-	, d(new Private(view))
+	: KoScriptingModule("Krita")
+	, d(new Private())
 {
-	setObjectName("Krita");
-
-#if 0
-	Kross::Manager::self().addObject(d->view->canvasSubject()->document(), "KritaDocument");
-	Kross::Manager::self().addObject(d->view, "KritaView");
-#endif
+    d->view = view;
+    d->progress = 0;
+    setView(view);
+    /*
+    Kross::Manager::self().addObject(d->view->canvasSubject()->document(), "KritaDocument");
+    Kross::Manager::self().addObject(d->view, "KritaView");
+    */
 }
 
 Module::~Module()
 {
-	delete d;
+    delete d->progress;
+    delete d;
 }
 
-QObject* Module::application()
+KoDocument* Module::doc()
 {
-	return qApp->findChild< KoApplicationAdaptor* >();
+    return d->view->document();
 }
-
-#if 0
-QObject* Module::document()
-{
-	return d->view->document() ? d->view->document()->findChild< KoDocumentAdaptor* >() : 0;
-}
-#endif
 
 QObject* Module::progress()
 {

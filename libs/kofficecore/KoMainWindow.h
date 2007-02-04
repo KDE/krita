@@ -71,7 +71,7 @@ public:
     /**
      *  Destructor.
      */
-    ~KoMainWindow();
+    virtual ~KoMainWindow();
 
     /**
      * Called when a document is assigned to this mainwindow.

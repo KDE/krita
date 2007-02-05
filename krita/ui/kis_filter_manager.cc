@@ -320,7 +320,17 @@ bool KisFilterManager::apply()
     KisTransaction * cmd = 0;
     if (img->undo()) cmd = new KisTransaction(m_d->lastFilter->id().name(), dev);
 
-    m_d->lastFilter->process(dev, rect, m_d->lastFilterConfig);
+
+    if ( !m_d->lastFilter->supportsThreading() ) {
+        m_d->lastFilter->process(dev, rect, m_d->lastFilterConfig);
+    }
+    else {
+        // Chop up in rects.
+            m_d->lastFilter->process(dev, rect, m_d->lastFilterConfig);
+    }
+
+
+
     m_d->reapplyAction->setEnabled(m_d->lastFilterConfig);
     if (m_d->lastFilterConfig)
         m_d->reapplyAction->setText(i18n("Apply Filter Again") + ": "

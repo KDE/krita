@@ -58,8 +58,8 @@ public:
 
     bool visit( KisExternalLayer * layer )
         {
-            kDebug(41010) << "Visiting on external layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
-                          << layer->extent() << ", paint rect: " << m_rc << endl;
+//             kDebug(41010) << "Visiting on external layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+//                           << layer->extent() << ", paint rect: " << m_rc << endl;
 
             if (m_projection.isNull()) {
                 return false;
@@ -95,9 +95,9 @@ public:
                 return false;
             }
 
-            kDebug(41010) << "Visiting on paint layer " << layer->name() << ", visible: " << layer->visible()
-                          << ", temporary: " << layer->temporary() << ", extent: "
-                          << layer->extent() << ", paint rect: " << m_rc << endl;
+//             kDebug(41010) << "Visiting on paint layer " << layer->name() << ", visible: " << layer->visible()
+//                           << ", temporary: " << layer->temporary() << ", extent: "
+//                           << layer->extent() << ", paint rect: " << m_rc << endl;
             if (!layer->visible())
                 return true;
 
@@ -201,8 +201,8 @@ public:
 
     bool visit(KisGroupLayer *layer)
         {
-            kDebug(41010) << "Visiting on group layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
-                          << layer->extent() << ", paint rect: " << m_rc << endl;
+//             kDebug(41010) << "Visiting on group layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+//                           << layer->extent() << ", paint rect: " << m_rc << endl;
 
 
             if (m_projection.isNull()) {
@@ -234,8 +234,8 @@ public:
 
     bool visit(KisAdjustmentLayer* layer)
         {
-            kDebug(41010) << "Visiting on adjustment layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
-                          << layer->extent() << ", paint rect: " << m_rc << endl;
+//             kDebug(41010) << "Visiting on adjustment layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+//                           << layer->extent() << ", paint rect: " << m_rc << endl;
 
             if (m_projection.isNull()) {
                 return true;

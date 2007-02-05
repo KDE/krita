@@ -34,7 +34,6 @@
 #include <QRegion>
 
 #include <kcommand.h>
-#include <kdebug.h>
 #include <klocale.h>
 
 #include "KoColorSpaceRegistry.h"
@@ -1101,9 +1100,6 @@ KisPaintDeviceSP KisImage::projection()
 KisLayerSP KisImage::activateLayer(KisLayerSP layer)
 {
 
-    kDebug(41001) << "activateLayer called on image " << this << endl;
-    kDebug(41001) << "Layer " << ( layer ? layer->name() : "zero" )  << " activated. Active layer was: " << ( m_d->activeLayer ? m_d->activeLayer->name() : "empty" ) << endl;
-
 //    if (layer != m_d->activeLayer) {
 
         if (m_d->activeLayer)
@@ -1114,7 +1110,6 @@ KisLayerSP KisImage::activateLayer(KisLayerSP layer)
         if (m_d->activeLayer) {
             m_d->activeLayer->activate();
 
-            kDebug(41001) << "Going to emit signal: " << m_d->activeLayer->name() << " activated\n";
             emit sigLayerActivated(m_d->activeLayer);
         }
 
@@ -1137,7 +1132,6 @@ KisLayerSP KisImage::findLayer(int id) const
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
 {
-    kDebug(41001) << "KisImage::addLayer. layer: " << layer << ", parent: " << parent << endl;
     if ( parent )
         return addLayer(layer, parent, parent->firstChild());
     else
@@ -1146,8 +1140,6 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
 {
-    kDebug(41001) << "KisImage::addLayer. layer: " << layer << ", parent: " << parent << ", aboveThis: " << aboveThis << endl;
-
     if (!parent)
         return false;
 
@@ -1171,7 +1163,6 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
         if (layer->extent().isValid()) layer->setDirty();
 
         if (!layer->temporary()) {
-            kDebug(41001) << "Going to emit sigLayerAdded\n";
             emit sigLayerAdded(layer);
             activateLayer(layer);
         }
@@ -1447,7 +1438,6 @@ QImage KisImage::convertToQImage(qint32 x,
 #if 0
 QImage KisImage::convertToQImage(const QRect& r, const double xScale, const double yScale, KoColorProfile *profile, float exposure)
 {
-    kDebug(41001) << "convertToQImage r: " << r << ", xScale: " << xScale << ", yScale: " << yScale << endl;
     if (r.isEmpty()) {
         return QImage();
     }
@@ -1681,7 +1671,6 @@ KisPerspectiveGrid* KisImage::perspectiveGrid()
 
 void KisImage::slotProjectionUpdated( const QRect & rc )
 {
-    kDebug(41010) << "KisImage::slotProjectionUpdated " << rc << endl;
     emit sigImageUpdated( rc );
 }
 

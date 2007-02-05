@@ -62,7 +62,7 @@ public:
      * @param canvasType determines which kind of canvas widget the
      *                   canvas initially creates.
      */
-    KisCanvas2(KoViewConverter * viewConverter, KisCanvasType canvasType, KisView2 * view, KoShapeControllerBase * sc);
+    KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc);
 
     virtual ~KisCanvas2();
 
@@ -94,14 +94,12 @@ public: // KoCanvasBase implementation
 
     KoColorProfile * monitorProfile();
 
-    void resetMonitorProfile();
 
-    virtual void zoomIn(const QPointF & center);
+    void connectCurrentImage();
 
-    virtual void zoomOut(const QPointF & center);
+    void disconnectCurrentImage();
 
-    virtual void zoomTo(const QRectF & newSize);
-
+    void resetCanvas();
 
     // Temporary!
 #ifdef __GNUC__
@@ -115,6 +113,9 @@ public: // KisCanvas2 methods
 
     KisImageSP image();
     KisView2* view();
+
+    bool isOpenGLCanvas() { return false; }
+
 public slots:
 
     /// Update the entire canvas area
@@ -130,6 +131,7 @@ public slots:
 
 private:
 
+    void resetMonitorProfile();
 
     KisCanvas2(const KisCanvas2&);
 

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_opengl_canvas2.h"
-#ifdef HAVE_OPENGL
+#if HAVE_OPENGL
 
 
 #include <QtOpenGL>
@@ -29,42 +29,44 @@
 #include <QPaintEvent>
 
 #include <kdebug.h>
+#include <KoToolProxy.h>
+#include <KoToolManager.h>
+
+#include "kis_canvas2.h"
+#include "kis_opengl_image_context.h"
 
 #define PATTERN_WIDTH 64
 #define PATTERN_HEIGHT 64
 
-KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent )
+class KisOpenGLCanvas2::Private
+{
+public:
+    KisCanvas2 * canvas;
+    KoToolProxy * toolProxy;
+    KisOpenGLImageContextSP openGLImageContext;
+    KoViewConverter * viewConverter;
+ };
+
+KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageContextSP context )
     : QGLWidget( QGLFormat(QGL::SampleBuffers), parent )
-    , m_canvas( canvas )
 {
+    m_d = new Private();
+    m_d->canvas = canvas;
+    m_d->toolProxy = KoToolManager::instance()->createToolProxy(m_d->canvas);
+    m_d->openGLImageContext = context;
+    m_d->viewConverter = canvas->viewConverter();
 
-    setAttribute(Qt::WA_NoSystemBackground);
-
-    m_checkTexture = new QImage(PATTERN_WIDTH, PATTERN_HEIGHT, QImage::Format_RGB32);
-
-    for (int y = 0; y < PATTERN_HEIGHT; y++)
-    {
-        for (int x = 0; x < PATTERN_WIDTH; x++)
-        {
-            quint8 v = 128 + 63 * ((x / 16 + y / 16) % 2);
-            m_checkTexture->setPixel(x, y, qRgb(v, v, v));
-        }
+    if (isSharing()) {
+        kDebug(41001) << "Created QGLWidget with sharing\n";
+    } else {
+        kDebug(41001) << "Created QGLWidget with no sharing\n";
     }
-
-    m_checkBrush = new QBrush( *m_checkTexture );
 }
 
-KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, QGLContext * context, QWidget * parent, QGLWidget *sharedContextWidget)
-    : QGLWidget( context, parent, sharedContextWidget )
-    , m_canvas( canvas )
-{
-}
 
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
-    delete m_checkTexture;
-    delete m_checkBrush;
 }
 
 void KisOpenGLCanvas2::initializeGL()
@@ -77,19 +79,118 @@ void KisOpenGLCanvas2::initializeGL()
 
 void KisOpenGLCanvas2::resizeGL(int w, int h)
 {
-    kDebug(41007) << "Resize gl to " << w << ", " << h << endl;
     glViewport(0, 0, (GLint)w, (GLint)h);
 }
 
-void KisOpenGLCanvas2::paintEvent( QPaintEvent * ev )
+
+void KisOpenGLCanvas2::paintGL()
 {
-    QPainter gc;
-    gc.setRenderHint(QPainter::Antialiasing);
-    gc.begin( this );
-    gc.fillRect( ev->rect(), *m_checkBrush );
-    gc.end();
+#if 0
+    if ( ev.rect().isNull() ) return;
+
+
+    glDrawBuffer(GL_BACK);
+
+    QColor widgetBackgroundColor = palette().color(QPalette::Mid);
+
+    glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, widgetBackgroundColor.blue() / 255.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    KisImageSP img = currentImg();
+
+    if ( !img ) return;
+    QRect vr = ev.rect(); // &= QRect(0, 0, m_canvas->width(), m_canvas->height());
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glViewport(0, 0, m_canvas->width(), m_canvas->height());
+    glOrtho(0, m_canvas->width(), m_canvas->height(), 0, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glBindTexture(GL_TEXTURE_2D, m_d->openGLImageContext->backgroundTexture());
+
+    glTranslatef(m_canvasXOffset, m_canvasYOffset, 0.0);
+
+    glEnable(GL_TEXTURE_2D);
+    glBegin(GL_QUADS);
+
+    glTexCoord2f(0.0, 0.0);
+    glVertex2f(0.0, 0.0);
+
+    glTexCoord2f((img->width() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH, 0.0);
+    glVertex2f(img->width() * zoom(), 0.0);
+
+    glTexCoord2f((img->width() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH,
+                     (img->height() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_HEIGHT);
+    glVertex2f(img->width() * zoom(), img->height() * zoom());
+
+    glTexCoord2f(0.0, (img->height() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_HEIGHT);
+    glVertex2f(0.0, img->height() * zoom());
+
+    glEnd();
+
+    glTranslatef(-m_canvasXOffset, -m_canvasYOffset, 0.0);
+
+    glTranslatef(-horzValue(), -vertValue(), 0.0);
+    glScalef(zoomFactor(), zoomFactor(), 1.0);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    QRect wr = viewToWindow(QRect(0, 0, m_canvas->width(), m_canvas->height()));
+    wr &= QRect(0, 0, img->width(), img->height());
+
+    m_d->openGLImageContext->setHDRExposure(HDRExposure());
+
+    for (int x = (wr.left() / m_d->openGLImageContext->imageTextureTileWidth()) * m_d->openGLImageContext->imageTextureTileWidth();
+         x <= wr.right();
+         x += m_d->openGLImageContext->imageTextureTileWidth()) {
+        for (int y = (wr.top() / m_d->openGLImageContext->imageTextureTileHeight()) * m_d->openGLImageContext->imageTextureTileHeight();
+             y <= wr.bottom();
+             y += m_d->openGLImageContext->imageTextureTileHeight()) {
+
+            glBindTexture(GL_TEXTURE_2D, m_d->openGLImageContext->imageTextureTile(x, y));
+
+            glBegin(GL_QUADS);
+
+            glTexCoord2f(0.0, 0.0);
+            glVertex2f(x, y);
+
+            glTexCoord2f(1.0, 0.0);
+            glVertex2f(x + m_d->openGLImageContext->imageTextureTileWidth(), y);
+
+            glTexCoord2f(1.0, 1.0);
+            glVertex2f(x + m_d->openGLImageContext->imageTextureTileWidth(), y + m_d->openGLImageContext->imageTextureTileHeight());
+
+            glTexCoord2f(0.0, 1.0);
+            glVertex2f(x, y + m_d->openGLImageContext->imageTextureTileHeight());
+
+            glEnd();
+        }
+    }
+
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
+
+    // Unbind the texture otherwise the ATI driver crashes when the canvas context is
+    // made current after the textures are deleted following an image resize.
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    // XXX: Draw selections, masks, visualisations, grids, guides
+    //m_gridManager->drawGrid(wr, 0, true);
+    QPainter gc ( this );
+    m_d->toolProxy->paint(gc, *m_d->viewConverter );
+
+    swapBuffers();
+#endif
+
 }
 
+KoToolProxy * KisOpenGLCanvas2::toolProxy() {
+    return m_d->toolProxy;
+}
 
 #include "kis_opengl_canvas2.moc"
 #endif // HAVE_OPENGL

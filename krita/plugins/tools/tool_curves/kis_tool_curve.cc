@@ -29,7 +29,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 #include "kis_global.h"
 //#include "kis_doc2.h"

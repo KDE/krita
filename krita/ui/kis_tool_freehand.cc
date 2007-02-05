@@ -86,7 +86,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         m_prevYTilt = e->yTilt();
 
         QRegion r = m_painter->dirtyRegion();
-        kDebug() << "KisToolFreehand::mousePressEvent " << r.boundingRect() << endl;
 
         if (!m_paintOnSelection) {
             if (!m_paintIncremental) {
@@ -114,7 +113,6 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         m_prevYTilt = e->yTilt();
 
         QRegion region = m_painter->dirtyRegion();
-        kDebug() << "KisToolFreehand::mouseNoveEvent: " << region.boundingRect() << endl;
 
         if (!m_paintOnSelection) {
             m_currentImage->activeLayer()->setDirty(region);
@@ -239,7 +237,6 @@ void KisToolFreehand::endPaint()
                     painter.beginTransaction(m_transactionText);
 
                 QRegion r = painter.dirtyRegion();
-                kDebug() << "endPaint: " << r.boundingRect() << endl;
                 QVector<QRect> dirtyRects = r.rects();
                 QVector<QRect>::iterator it = dirtyRects.begin();
                 QVector<QRect>::iterator end = dirtyRects.end();

@@ -107,7 +107,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
     QRect updateRect = ev->rect();
 
-    kDebug(41010) << "Paint event: " << updateRect << endl;
+//     kDebug(41010) << "Paint event: " << updateRect << endl;
 
     const QImage canvasImage = m_d->canvas->canvasCache();
 #if 0
@@ -118,7 +118,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
         size.setWidth( size.width() + 64 );
         size.setHeight( size.height() + 64 );
 
-        kDebug(41010) << "Oops, display cache too small\n";
+//         kDebug(41010) << "Oops, display cache too small\n";
         m_d->displayCache = QPixmap( size );
         QPainter p( &m_d->displayCache );
         p.fillRect( 0, 0, m_d->displayCache.width(), m_d->displayCache.height(), m_d->checkBrush );
@@ -144,7 +144,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     //gc.drawPixmap( - (updateRect.x() % PATTERN_WIDTH ),
     //               -( updateRect.y() % PATTERN_HEIGHT ),
     //               m_d->displayCache );
-    kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
+//     kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
     t.restart();
 
     double pppx,pppy;
@@ -172,7 +172,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     // Pixel-for-pixel mode
     if ( scaleX == 1.0 && scaleY == 1.0 ) {
-        kDebug() << "Pixel for pixel!\n";
+//         kDebug() << "Pixel for pixel!\n";
         gc.drawImage( dstTopLeft.x(), dstTopLeft.y(), canvasImage, rc.x(), rc.y(), rc.width(), rc.height() );
     }
     else {
@@ -185,7 +185,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
                                                       // GwenView's
                                                       // croppeqimage
                                                       // class anymore.
-        kDebug(41010) << "Copying subrect:" << t.elapsed() << endl;
+//         kDebug(41010) << "Copying subrect:" << t.elapsed() << endl;
         t.restart();
 
         QImage scaledImage;
@@ -197,11 +197,11 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
             scaledImage = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
         }
 
-        kDebug(41010) << "Scaling subimage: " << t.elapsed() << endl;
+//         kDebug(41010) << "Scaling subimage: " << t.elapsed() << endl;
         t.restart();
         gc.drawImage( dstTopLeft.x(), dstTopLeft.y(), scaledImage, 0, 0, sz.width(), sz.height() );
     }
-    kDebug(41010 ) << "painting image: " <<  t.elapsed() << endl;
+//     kDebug(41010 ) << "painting image: " <<  t.elapsed() << endl;
 
 #if 0
     // ask the current layer to paint its selection (and potentially
@@ -229,11 +229,11 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     QPainter gc2(  this );
 
-    kDebug(41010 ) << "putting pixmap on widget " << t.elapsed() << endl;
+//     kDebug(41010 ) << "putting pixmap on widget " << t.elapsed() << endl;
 
     // Give the tool a chance to paint its stuff
     m_d->toolProxy->paint(gc2, *m_d->viewConverter );
-    kDebug( 41010 ) << "Done painting tool stuff " << t.elapsed() << endl;
+//     kDebug( 41010 ) << "Done painting tool stuff " << t.elapsed() << endl;
 }
 
 
@@ -259,7 +259,7 @@ void KisQPainterCanvas::keyReleaseEvent (QKeyEvent *e) {
 
 void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
 {
-    kDebug(41010) << "tablet event: " << e->pressure() << endl;
+//     kDebug(41010) << "tablet event: " << e->pressure() << endl;
     m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument(  e->pos() ) );
 }
 
@@ -282,13 +282,18 @@ void KisQPainterCanvas::parentSizeChanged(const QSize & size )
           size.height() > m_d->displayCache.height())
         )
     {
-        kDebug() << "KisQPainterCanvas::parentSizeChanged " << size << endl;
+//         kDebug() << "KisQPainterCanvas::parentSizeChanged " << size << endl;
         m_d->displayCache = QPixmap( size.width() + 64, size.height() + 64 );
         QPainter p( &m_d->displayCache );
         p.fillRect( 0, 0, m_d->displayCache.width(), m_d->displayCache.height(), m_d->checkBrush );
         p.end();
     }
 #endif
+}
+
+void KisQPainterCanvas::moveEvent(QMoveEvent * ev)
+{
+    kDebug() << "Move event: " << ev->pos() << ", was " << ev->oldPos() << endl;
 }
 
 #include "kis_qpainter_canvas.moc"

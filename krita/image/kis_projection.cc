@@ -20,13 +20,15 @@
 #include <QRegion>
 #include <QRect>
 
-#include <KoExecutePolicy.h>
 #include <threadweaver/ThreadWeaver.h>
+
+#include <kglobal.h>
+#include <kconfig.h>
 
 #include "kis_image.h"
 #include "kis_group_layer.h"
 
-const int UPDATE_RECT_SIZE = 1024;
+const int UPDATE_RECT_SIZE = 256;
 
 using namespace ThreadWeaver;
 
@@ -42,8 +44,6 @@ public:
 
     void run()
         {
-            kDebug(41010) << "ProjectionJob::run " << m_rc << endl;
-
             m_rootLayer->updateProjection( m_rc );
             // XXX: Also convert to QImage in the thread?
         }
@@ -65,6 +65,7 @@ public:
                          // threadsafe... Let's hope that's really
                          // true!
     bool locked;
+    Weaver * weaver;
 };
 
 
@@ -75,8 +76,12 @@ KisProjection::KisProjection( KisImageSP image, KisGroupLayerSP rootLayer )
     m_d->rootLayer = rootLayer;
     m_d->locked = false;
 
-    Weaver::instance()->setMaximumNumberOfThreads( 4 );
-    connect( Weaver::instance(), SIGNAL( jobDone(Job*) ), this, SLOT( slotUpdateUi( Job* ) ) );
+    m_d->weaver = new Weaver();
+    KSharedConfig::Ptr cfg = KGlobal::config();
+    cfg->setGroup("");
+    m_d->weaver->setMaximumNumberOfThreads( cfg->readEntry("maxthreads",  10) );
+
+    connect( m_d->weaver, SIGNAL( jobDone(Job*) ), this, SLOT( slotUpdateUi( Job* ) ) );
 
     connect( this, SIGNAL( sigProjectionUpdated( const QRect & ) ), image.data(), SLOT(slotProjectionUpdated( const QRect &) ) );
 
@@ -86,20 +91,18 @@ KisProjection::KisProjection( KisImageSP image, KisGroupLayerSP rootLayer )
 
 KisProjection::~KisProjection()
 {
+    m_d->weaver->finish();
+    delete m_d->weaver;
     delete m_d;
 }
 
 void KisProjection::lock()
 {
-    kDebug(41010 ) << "KisProjection::lock()\n";
-
     m_d->locked = true;
 }
 
 void KisProjection::unlock()
 {
-    kDebug(41010 ) << "KisProjection::unlock()\n";
-
     m_d->locked = false;
     QVector<QRect> regionRects = m_d->dirtyRegion.rects();
 
@@ -114,7 +117,6 @@ void KisProjection::unlock()
 
 void KisProjection::setRootLayer( KisGroupLayerSP rootLayer )
 {
-    kDebug(41010) << "KisProjection::setRootLayer old: " << m_d->rootLayer << ", new: " << rootLayer << endl;
     m_d->rootLayer->disconnect( this );
     m_d->rootLayer = rootLayer;
     connect( rootLayer.data(), SIGNAL( sigDirtyRegionAdded( const QRegion & ) ), this, SLOT( slotAddDirtyRegion( const QRegion & ) ) );
@@ -123,13 +125,11 @@ void KisProjection::setRootLayer( KisGroupLayerSP rootLayer )
 
 bool KisProjection::upToDate(const QRect & rect)
 {
-    kDebug(41010) << "KisProjection::upToDate " << rect << endl;
     return m_d->dirtyRegion.intersects( QRegion( rect ) );
 }
 
 bool KisProjection::upToDate(const QRegion & region)
 {
-    kDebug(41010) << "KisProjection::upToDate " << region << endl;
     return m_d->dirtyRegion.intersects( region );
 }
 
@@ -138,7 +138,6 @@ void KisProjection::slotAddDirtyRegion( const QRegion & region )
 
     m_d->dirtyRegion += region;
 
-    //kDebug(41010) << "KisProjection::slotAddDirtyRegion " << region << ", bounding rect: " << region.boundingRect() << endl;
 #if 1
     if ( !m_d->locked )
         scheduleRect( region.boundingRect() );
@@ -159,7 +158,6 @@ void KisProjection::slotAddDirtyRegion( const QRegion & region )
 
 void KisProjection::slotAddDirtyRect( const QRect & rect )
 {
-    kDebug(41010) << "KisProjection::slotAddDirtyRect " << rect << endl;
     m_d->dirtyRegion += QRegion( rect );
     if ( !m_d->locked ) {
         scheduleRect( rect );
@@ -169,7 +167,6 @@ void KisProjection::slotAddDirtyRect( const QRect & rect )
 void KisProjection::slotUpdateUi( Job* job )
 {
     ProjectionJob* pjob = static_cast<ProjectionJob*>( job );
-    kDebug(41010) << "KisProjection::slotUpdateUI " << pjob->rect() << endl;
     m_d->dirtyRegion -= QRegion( pjob->rect() );
     emit sigProjectionUpdated( pjob->rect() );
     delete pjob;
@@ -177,21 +174,19 @@ void KisProjection::slotUpdateUi( Job* job )
 
 void KisProjection::scheduleRect( const QRect & rc )
 {
-    kDebug(41010) << "Scheduled big rect: " << rc << endl;
     int h = rc.height();
     int w = rc.width();
-    QRect imageRect = m_d->image->bounds();
+    int x = rc.x();
+    int y = rc.y();
 
     // Note: we're doing columns first, so when we have small strip left
     // at the bottom, we have as few and as long runs of pixels left
     // as possible.
     if ( w <= UPDATE_RECT_SIZE && h <= UPDATE_RECT_SIZE ) {
         ProjectionJob * job = new ProjectionJob( rc, m_d->rootLayer, this );
-        Weaver::instance()->enqueue( job );
+        m_d->weaver->enqueue( job );
     }
 
-    int x = rc.x();
-    int y = rc.y();
 
     int wleft = w;
     int col = 0;
@@ -201,7 +196,7 @@ void KisProjection::scheduleRect( const QRect & rc )
         while ( hleft > 0 ) {
             QRect rc( col + x, row + y, qMin( wleft, UPDATE_RECT_SIZE ), qMin( hleft, UPDATE_RECT_SIZE ) );
             ProjectionJob * job = new ProjectionJob( rc, m_d->rootLayer, this );
-            Weaver::instance()->enqueue( job );
+            m_d->weaver->enqueue( job );
             hleft -= UPDATE_RECT_SIZE;
             row += UPDATE_RECT_SIZE;
 

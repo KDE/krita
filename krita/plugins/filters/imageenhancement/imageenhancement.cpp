@@ -52,13 +52,6 @@ KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const QStringList 
 {
     setComponentData(KritaImageEnhancementFactory::componentData());
 
-    kDebug(41006) << "Image enhancement filter plugin. Class: "
-           << metaObject()->className()
-           << ", Parent: "
-           << parent->metaObject()->className()
-           << "\n";
-
-
     if ( parent->inherits("KisFilterRegistry") )
     {
         KisFilterRegistry * r = dynamic_cast<KisFilterRegistry*>(parent);

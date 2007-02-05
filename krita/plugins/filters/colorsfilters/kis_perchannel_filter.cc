@@ -194,7 +194,7 @@ void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
         delete configBC->adjustment;
         configBC->adjustment =
                 src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
-        kDebug() << configBC->adjustment << endl;
+//         kDebug() << configBC->adjustment << endl;
         configBC->oldCs = src->colorSpace();
         configBC->dirty = false;
     }

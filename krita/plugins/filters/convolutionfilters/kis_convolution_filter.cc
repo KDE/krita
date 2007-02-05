@@ -39,7 +39,7 @@ void KisConvolutionFilter::process(const KisPaintDeviceSP src, const QPoint& src
 
 
     if (dst != src) { // TODO: fix the convolution painter to avoid that stupid copy
-        kDebug() << "src != dst\n";
+//         kDebug() << "src != dst\n";
         KisPainter gc(dst);
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();

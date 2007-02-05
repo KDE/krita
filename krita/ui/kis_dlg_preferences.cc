@@ -32,11 +32,12 @@
 #include <QToolButton>
 #include <QGridLayout>
 
-#ifdef HAVE_OPENGL
+#if HAVE_OPENGL
 #include <qgl.h>
 #endif
 
 #include <KoImageResource.h>
+#include <KoColorProfile.h>
 
 #include <kcolorbutton.h>
 #include <kcombobox.h>
@@ -77,7 +78,7 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 //     m_dockabilityGroup.addButton(radioAllowDocking, DOCK_ENABLED);
 //     m_dockabilityGroup.addButton(radioDisallowDocking, DOCK_DISABLED);
 //     m_dockabilityGroup.addButton(radioSmartDocking, DOCK_SMART);
-// 
+//
 //     kDebug(41007) << "Dock is " << cfg.dockability() << endl;
 
 
@@ -113,7 +114,7 @@ enumCursorStyle GeneralTab::cursorStyle()
 // {
 //     return (enumKoDockability)m_dockabilityGroup.checkedId();
 // }
-// 
+//
 // float GeneralTab::dockerFontSize()
 // {
 //     return (float)numDockerFontSize->value();
@@ -164,6 +165,16 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
     }
 
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
+
+    if ( KoColorProfile * profile = KoColorProfile::getScreenProfile() ) {
+        // We've got an X11 profile, don't allow to override
+        m_page->cmbMonitorProfile->hide();
+        m_page->lblMonitorProfile->setText( i18n( "Monitor profile: " ) + profile->productName() );
+    }
+    else {
+        m_page->cmbMonitorProfile->show();
+        m_page->lblMonitorProfile->setText( i18n( "&Monitor profile: " ) );
+    }
 
     connect(m_page->cmbPrintingColorSpace, SIGNAL(activated(const KoID &)),
             this, SLOT(refillPrintProfiles(const KoID &)));
@@ -663,7 +674,7 @@ void TabletSettingsTab::applyTabletDeviceSettings()
 DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
     : WdgDisplaySettings( parent, name )
 {
-#ifdef HAVE_OPENGL
+#if HAVE_OPENGL
     KisConfig cfg;
 
     if (!QGLFormat::hasOpenGL()) {
@@ -783,12 +794,12 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     page->setIcon(  KIcon(BarIcon( "misc", K3Icon::SizeMedium )) );
     addPage( page );
     m_general = new GeneralTab( vbox );
-#ifdef HAVE_OPENGL
+#if HAVE_OPENGL
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Display" ));
     page->setHeader( i18n( "Display" ) );
-    page->setIcon(  KIcon(BarIcon( "kscreensaver", K3Icon::SizeMedium 
-)) 
+    page->setIcon(  KIcon(BarIcon( "kscreensaver", K3Icon::SizeMedium
+))
 );
     addPage( page );
 
@@ -836,7 +847,7 @@ void PreferencesDialog::slotDefault()
     m_colorSettings->setDefault();
     m_tabletSettings->setDefault();
     m_performanceSettings->setDefault();
-#ifdef HAVE_OPENGL
+#if HAVE_OPENGL
     m_displaySettings->setDefault();
 #endif
     m_gridSettings->setDefault();
@@ -873,7 +884,7 @@ bool PreferencesDialog::editPreferences()
 
         dialog->m_tabletSettings->applySettings();
 
-#ifdef HAVE_OPENGL
+#if HAVE_OPENGL
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         //cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
 #endif

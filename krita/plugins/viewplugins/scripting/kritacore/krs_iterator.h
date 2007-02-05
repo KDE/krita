@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
@@ -229,7 +230,6 @@ class Iterator : public IteratorBase
 
         virtual void invalidateIterator()
         {
-            kDebug(41011) << "invalidating iterator" << endl;
             delete m_it; m_it = 0;
         }
 

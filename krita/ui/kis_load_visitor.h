@@ -89,9 +89,7 @@ public:
             // replace the old colorspace
             layer->paintDevice()->setData(layer->paintDevice()->dataManager(), cs);
             QRect rc = layer->paintDevice()->extent();
-            kDebug(41007) << "After loading " << layer->name() << " extent is: " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << endl;
             layer->setDirty(rc);
-            kDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
         }
 
         // mask

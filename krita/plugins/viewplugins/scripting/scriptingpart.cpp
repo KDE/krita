@@ -110,13 +110,13 @@ ScriptingPart::~ScriptingPart()
 
 void ScriptingPart::started(Kross::Action*)
 {
-    kDebug() << "ScriptingPart::executionStarted" << endl;
+//     kDebug() << "ScriptingPart::executionStarted" << endl;
     Kross::Manager::self().addObject(d->module, "Krita");
 }
 
 void ScriptingPart::finished(Kross::Action*)
 {
-    kDebug() << "ScriptingPart::executionFinished" << endl;
+//     kDebug() << "ScriptingPart::executionFinished" << endl;
     d->view->document()->setModified(true);
     d->view->image()->activeLayer()->setDirty();
     static_cast< Scripting::Progress* >( d->module->progress() )->progressDone();

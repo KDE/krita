@@ -53,37 +53,37 @@ void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopL
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
-    
+
     setProgressTotalSteps(areaSize.width() * areaSize.height());
 
     if(!config) config = new KisFilterConfiguration(id().id(), 1);
-    
+
     QVariant value;
     uint halfSize = (config->getProperty("halfSize", value)) ? value.toUInt() : 5;
     uint size = 2 * halfSize + 1;
     double amount = (config->getProperty("amount", value)) ? value.toDouble() : 0.5;
     uint threshold = (config->getProperty("threshold", value)) ? value.toUInt() : 10;
-    
-    kDebug() << " brush size = " << size << " " << halfSize << endl;
+
+//     kDebug() << " brush size = " << size << " " << halfSize << endl;
     KisAutobrushShape* kas = new KisAutobrushCircleShape(size, size , halfSize, halfSize);
-    
+
     QImage mask;
     kas->createBrush(&mask);
     mask.save("testmask.png", "PNG");
-    
+
     KisKernelSP kernel = KisKernelSP(KisKernel::fromQImage(mask));
-    
+
     KisPaintDeviceSP interm = KisPaintDeviceSP(new KisPaintDevice(*src));
     KoColorSpace * cs = src->colorSpace();
 
     KisConvolutionPainter painter( interm );
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, srcTopLeft.x(), srcTopLeft.y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
-    
+
     if (painter.cancelRequested()) {
         cancel();
     }
-    
+
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), areaSize.width());
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), areaSize.width());
     KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), areaSize.width());
@@ -92,7 +92,7 @@ void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     quint8 *colors[2];
     colors[0] = new quint8[cdepth];
     colors[1] = new quint8[cdepth];
-    
+
     int pixelsProcessed = 0;
     qint32 weights[2];
 /*    weights[0] = 128;
@@ -102,7 +102,7 @@ void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     // XXX: Added static cast to avoid warning
     weights[0] = static_cast<qint32>(factor * ( 1. + amount));
     weights[1] = static_cast<qint32>(-factor * amount);
-    kDebug() << (int) weights[0] << " " << (int)weights[1] << " " << factor << endl;
+//     kDebug() << (int) weights[0] << " " << (int)weights[1] << " " << factor << endl;
     for( int j = 0; j < areaSize.height(); j++)
     {
         while( ! srcIt.isDone() )

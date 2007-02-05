@@ -141,7 +141,6 @@ KCommand *KisPainter::endTransaction()
 
 QRegion KisPainter::dirtyRegion()
 {
-    kDebug(41010) << "KisPainter::dirtyRegion, dirty region is: " << m_dirtyRegion << ", " << m_device->name() << endl;
     QRegion r = m_dirtyRegion;
 
     m_dirtyRegion = QRegion();
@@ -153,7 +152,6 @@ QRegion KisPainter::dirtyRegion()
 QRegion KisPainter::addDirtyRect(QRect r)
 {
     m_dirtyRegion += QRegion( r );
-    kDebug(41010) << "KisPainter::addDirtyRect << " << r << ", dirty region has become: " << m_dirtyRegion.boundingRect()  << ", " << m_device->name() << endl;
     return m_dirtyRegion;
 }
 
@@ -164,7 +162,6 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         qint32 sx, qint32 sy,
                         qint32 sw, qint32 sh)
 {
-    kDebug(41010) << "KisPainter::bitBlt with QImage" << endl;
 #ifdef __GNUC__
     #warning "Don't assume the same resulution for a QImage and a KisPaintDevice -- see QImage::dotsPerMeterX|Y"
 #endif
@@ -230,8 +227,6 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         qint32 sx, qint32 sy,
                         qint32 sw, qint32 sh)
 {
-    kDebug(41010) << "KisPainter::bitBlt. dx:" << dx << ", dy: " << dy << ", sx: " << sx << ", sy: " << sy << ", sw: " << sw << ", sh: " << sh  << ", " << m_device->name() << endl;
-
     if (srcdev.isNull()) {
         return;
     }
@@ -320,8 +315,6 @@ void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
                  Q_INT32 sx, Q_INT32 sy,
                  Q_INT32 sw, Q_INT32 sh)
 {
-    kDebug(41010) << "KisPainter::bltMaskdx:" << dx << ", dy: " << dy << ", sx: " << sx << ", sy: " << sy << ", sw: " << sw << ", sh: " << sh  << ", " << m_device->name() << endl;
-
     if (srcdev.isNull()) return;
 
     if (selMask.isNull()) return;

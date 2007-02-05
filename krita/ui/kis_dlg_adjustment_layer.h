@@ -22,7 +22,7 @@
 #include <QLabel>
 
 class KisFilter;
-class Q3IconViewItem;
+class QListWidgetItem;
 class QLabel;
 class QHBoxLayout;
 class KisPreviewWidget;
@@ -67,7 +67,7 @@ protected slots:
     void slotNameChanged( const QString & );
     void slotConfigChanged();
     void refreshPreview();
-    void selectionHasChanged ( Q3IconViewItem * item );
+    void selectionHasChanged ( QListWidgetItem * item );
 
 private:
     KisImage * m_image;

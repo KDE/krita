@@ -399,19 +399,16 @@ void KisPaintDevice::setParentLayer(KisLayer *parentLayer)
 
 void KisPaintDevice::setDirty(const QRect & rc)
 {
-    kDebug(41001) << "KisPaintDevice " << name() << " setDirty " << m_parentLayer << ", " << rc << endl;
     if (m_parentLayer) m_parentLayer->setDirty(rc);
 }
 
 void KisPaintDevice::setDirty( const QRegion & region )
 {
-    kDebug(41001) << "KisPaintDevice " << name() << " setDirty " << m_parentLayer << ", " << region << endl;
     if ( m_parentLayer ) m_parentLayer->setDirty( region );
 }
 
 void KisPaintDevice::setDirty()
 {
-        kDebug(41001) << "KisPaintDevice " << name() << " setDirty " << m_parentLayer << endl;
     if (m_parentLayer) m_parentLayer->setDirty();
 }
 
@@ -688,8 +685,6 @@ bool KisPaintDevice::read(KoStore *store)
 
 void KisPaintDevice::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
 {
-    kDebug(41004) << "Converting " << objectName() << " to " << dstColorSpace->id() << " from "
-              << m_colorSpace->id() << "\n";
     if ( (colorSpace()->id() == dstColorSpace->id()) )
     {
         return;

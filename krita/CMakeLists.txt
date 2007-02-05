@@ -20,11 +20,11 @@ if (SHOULD_BUILD_KRITA)
         message(STATUS "Did NOT find OpenGL libraries")
     endif(OPENGL_FOUND)
 
-#    if(NOT HAVE_OPENGL)
-#        message(STATUS " * krita will not be able to use OpenGL for")
-#        message(STATUS "   hardware accelerated rendering.")
-#    endif(NOT HAVE_OPENGL)
-#
+    if(NOT HAVE_OPENGL)
+        message(STATUS " * krita will not be able to use OpenGL for")
+        message(STATUS "   hardware accelerated rendering.")
+    endif(NOT HAVE_OPENGL)
+
 #    if(X11_Xinput_FOUND)
 #        set(HAVE_XINPUTEXT 1)
 #        message(STATUS "Found XInput extension")

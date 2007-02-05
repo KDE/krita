@@ -34,7 +34,6 @@
 #include <QRect>
 #include <QString>
 
-#include <kdebug.h>
 #include <klocale.h>
 
 #include "kis_brush.h"
@@ -710,7 +709,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     }*/
 
     if (!m_cancelRequested) {
-        kDebug(41001) << "Have we got a selection? " << m_device->hasSelection() << endl;
         bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);
     }
     delete shapeStrategy;

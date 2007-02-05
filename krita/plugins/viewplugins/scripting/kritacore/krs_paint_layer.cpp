@@ -201,7 +201,7 @@ QByteArray PaintLayer::bytes()
         out << data[i];
     delete [] data;
 
-    kDebug()<<"PaintLayer::bytes width="<<w<<" height="<<h<<" pixelsize="<<pixelsize<<" size="<<size<<endl;
+//     kDebug()<<"PaintLayer::bytes width="<<w<<" height="<<h<<" pixelsize="<<pixelsize<<" size="<<size<<endl;
     return bytearray;
 }
 

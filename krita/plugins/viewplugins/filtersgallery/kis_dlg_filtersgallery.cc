@@ -56,7 +56,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView2* view, QWidget* parent,const
 
     setMainWidget(m_widget);
     // Initialize filters list
-    connect(m_widget->filtersList , SIGNAL(selectionChanged(Q3IconViewItem*)), this, SLOT(selectionHasChanged(Q3IconViewItem* )));
+    connect(m_widget->filtersList , SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(selectionHasChanged(QListWidgetItem* )));
     // Initialize configWidgetHolder
     //m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     // Initialize preview widget
@@ -78,7 +78,7 @@ KisDlgFiltersGallery::~KisDlgFiltersGallery()
 {
 }
 
-void KisDlgFiltersGallery::selectionHasChanged ( Q3IconViewItem * item )
+void KisDlgFiltersGallery::selectionHasChanged ( QListWidgetItem * item )
 {
     KisFiltersIconViewItem* kisitem = (KisFiltersIconViewItem*) item;
     m_currentFilter = kisitem->filter();
@@ -97,7 +97,9 @@ void KisDlgFiltersGallery::selectionHasChanged ( Q3IconViewItem * item )
        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_widget->configWidgetHolder, activeLayer->paintDevice());
 
     if(m_currentConfigWidget != 0) {
-        //m_currentConfigWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        //m_currentConfigWidget->setSizePolicy(QSizePolicy::Fixed,
+        //m_currentConfigWidget->QSizePolicy::Fixed);
+        m_currentConfigWidget->setConfiguration( kisitem->filterConfiguration() );
         m_widget->configWidgetHolder->layout()->addWidget(m_currentConfigWidget);
         m_currentConfigWidget->show();
         connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));

@@ -1,5 +1,12 @@
-/* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
+/*
+ *  This file is part of KimageShop^WKrayon^WKrita
+ *
+ *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
+ *                1999 Michael Koch    <koch@kde.org>
+ *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
+ *                2002 Patrick Julien <freak@codepimps.org>
+ *                2003-2007 Boudewijn Rempt <boud@valdyas.org>
+ *                2004 Clarence Dang <dang@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -66,8 +73,6 @@
 #include "kis_doc2.h"
 #include "kis_factory2.h"
 #include "kis_filter_manager.h"
-#include "kis_opengl_canvas2.h"
-#include "kis_qpainter_canvas.h"
 #include "kis_resource_provider.h"
 #include "kis_resource_provider.h"
 #include "kis_selection_manager.h"
@@ -166,7 +171,7 @@ KisView2::KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * par
 
     m_d->doc = doc;
     m_d->viewConverter = viewConverter;
-    m_d->canvas = new KisCanvas2( m_d->viewConverter, QPAINTER, this, static_cast<KoShapeControllerBase*>( doc ) );
+    m_d->canvas = new KisCanvas2( m_d->viewConverter, this, static_cast<KoShapeControllerBase*>( doc ) );
     m_d->canvasController = new KoCanvasController( this );
     connect( m_d->canvasController, SIGNAL( sizeChanged(const QSize & ) ),
              m_d->canvas, SLOT( controllerSizeChanged( const QSize & ) ) );
@@ -364,13 +369,13 @@ void KisView2::slotLoadingFinished()
     if(d)
         m_d->canvasController->setToolOptionDocker( d );
     else
-        kDebug(41007) << "Could not create tool docker: " << d << endl;
+        kWarning(41007) << "Could not create tool docker: " << d << endl;
 
     connectCurrentImage();
     img->blockSignals( false );
     img->unlock();
 
-    kDebug(41007) << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
+//     kDebug(41007) << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
 
 }
 
@@ -471,7 +476,7 @@ void KisView2::connectCurrentImage()
 {
     KisImageSP img = image();
     if (img) {
-        kDebug(41007) << "Going to connect current image\n";
+//         kDebug(41007) << "Going to connect current image\n";
 
         connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_d->selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
         //connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), this, SLOT(updateCanvas()));
@@ -488,14 +493,8 @@ void KisView2::connectCurrentImage()
         connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
 
         m_d->maskManager->maskUpdated();
-#if 0
-#ifdef HAVE_OPENGL
-        if (!m_OpenGLImageContext.isNull()) {
-            connect(m_OpenGLImageContext.data(), SIGNAL(sigImageUpdated(QRegion)), SLOT(slotOpenGLImageUpdated(QRegion)));
-            connect(m_OpenGLImageContext.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize(qint32, qint32)));
-        } else
-#endif
-#endif
+
+
         {
             connect(img.data(), SIGNAL(sigImageUpdated(const QRect &)), m_d->canvas, SLOT(updateCanvasProjection(const QRect &)));
             connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->canvas, SLOT(setImageSize( qint32, qint32)) );
@@ -503,7 +502,7 @@ void KisView2::connectCurrentImage()
 
         connect( m_d->doc, SIGNAL( sigCommandExecuted() ), img.data(), SLOT( slotCommandExecuted() ) );
     }
-
+    m_d->canvas->connectCurrentImage();
     m_d->layerBox->setImage(img);
     m_d->birdEyeBox->setImage(img);
 
@@ -525,15 +524,11 @@ void KisView2::disconnectCurrentImage()
 
         m_d->layerBox->setImage(KisImageSP(0));
         m_d->birdEyeBox->setImage(KisImageSP(0));
+        m_d->canvas->disconnectCurrentImage();
 
     }
-#if 0
-#ifdef HAVE_OPENGL
-    if (!m_OpenGLImageContext.isNull()) {
-        m_OpenGLImageContext->disconnect(this);
-    }
-#endif
-#endif
+
+
 }
 
 void KisView2::slotUpdateFullScreen(bool toggle)
@@ -554,49 +549,8 @@ void KisView2::slotUpdateFullScreen(bool toggle)
 
 void KisView2::slotPreferences()
 {
-#if 0
-#ifdef HAVE_OPENGL
-    bool canvasWasOpenGL = m_canvas->isOpenGLCanvas();
-#endif
-#endif
-    if (PreferencesDialog::editPreferences())
-    {
-        KisConfig cfg;
-        m_d->canvas->resetMonitorProfile();
-#if 0
-#ifdef HAVE_OPENGL
-        if (cfg.useOpenGL() != canvasWasOpenGL) {
-
-            disconnectCurrentImg();
-
-            //XXX: Need to notify other views that this global setting has changed.
-            if (cfg.useOpenGL()) {
-                m_OpenGLImageContext = KisOpenGLImageContext::getImageContext(m_image, monitorProfile());
-                m_canvas->createOpenGLCanvas(m_OpenGLImageContext->sharedContextWidget());
-            } else
-            {
-                m_OpenGLImageContext = 0;
-                m_canvas->createQPaintDeviceCanvas();
-            }
-
-            connectCurrentImg();
-
-            resizeEvent(0);
-        }
-
-        if (cfg.useOpenGL()) {
-            m_OpenGLImageContext->setMonitorProfile(monitorProfile());
-        }
-#endif
-#endif
-        m_d->canvas->canvasWidget()->update();
-
-#if 0 // XXX: How to do this with KoToolManager?
-        if (m_toolManager->currentTool()) {
-            setCanvasCursor(m_toolManager->currentTool()->cursor());
-        }
-#endif
-
+    if (PreferencesDialog::editPreferences()) {
+        m_d->canvas->resetCanvas();
     }
 }
 
@@ -637,14 +591,14 @@ void KisView2::loadPlugins()
         KParts::Plugin* plugin =
             KService::createInstance<KParts::Plugin> ( service, this, QStringList(), &errCode);
         if ( plugin ) {
-            kDebug(41006) << "found plugin " << service->property("Name").toString() << "\n";
+//             kDebug(41006) << "found plugin " << service->property("Name").toString() << "\n";
             insertChildClient(plugin);
         }
         else {
-            kDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
+//             kDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
             if( errCode == KLibLoader::ErrNoLibrary)
             {
-                kWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
+                kWarning() << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
             }
         }
     }

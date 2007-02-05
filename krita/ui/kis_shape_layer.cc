@@ -66,7 +66,6 @@ void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &con
 
 void KisShapeLayer::addChild(KoShape *object)
 {
-    kDebug(41007) << "KisShapeLayer::addChild " << object->shapeId() << ", " << object->boundingRect() << endl;
     KoShapeLayer::addChild( object );
     setDirty( object->boundingRect().toRect() ); // XXX: convert to pixels
 }
@@ -78,7 +77,6 @@ QIcon KisShapeLayer::icon() const
 
 KisPaintDeviceSP KisShapeLayer::prepareProjection(KisPaintDeviceSP projection, const QRect& r)
 {
-    kDebug(41007) << "KisShapeLayer::prepareProjection " << r << endl;
     //QPainter p( projection.data() );
     //KoShapeLayer::paint( p, *m_d->converter );
 

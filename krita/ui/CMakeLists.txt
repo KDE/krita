@@ -11,6 +11,7 @@ set(kritaui_LIB_SRCS
     scale.cpp
     imageviewer.cc
     kcurve.cc
+    kis_filters_listview.cc
     kis_autobrush.cc
     kis_autogradient.cc
     kis_birdeye_box.cc
@@ -39,7 +40,6 @@ set(kritaui_LIB_SRCS
     kis_double_widget.cc
     kis_factory2.cc
     kis_filter_manager.cc
-    kis_filters_listview.cc
     kis_gradient_chooser.cc
     kis_gradient_slider_widget.cc
     kis_grid_drawer.cpp
@@ -64,6 +64,7 @@ set(kritaui_LIB_SRCS
     kis_oasis_save_data_visitor.cc
     kis_oasis_save_visitor.cc
     kis_opengl_canvas2.cpp
+    kis_opengl_image_context.cc
     kis_paintop_box.cc 
     kis_palette_view.cc
     kis_palette_docker.cc

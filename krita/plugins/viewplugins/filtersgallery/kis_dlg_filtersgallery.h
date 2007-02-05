@@ -27,7 +27,7 @@
 
 #include <kis_filter_config_widget.h>
 
-class Q3IconViewItem;
+class QListWidgetItem;
 class QLabel;
 
 class KisView2;
@@ -62,7 +62,7 @@ class KisDlgFiltersGallery : public KDialog
     private slots:
         void slotConfigChanged();
         void refreshPreview();
-        void selectionHasChanged ( Q3IconViewItem * item );
+        void selectionHasChanged ( QListWidgetItem * item );
     private:
         KisWdgFiltersGallery* m_widget;
         KisView2* m_view;

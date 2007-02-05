@@ -27,7 +27,7 @@ int KisSubPerspectiveGrid::s_lastIndex = 0;
 KisSubPerspectiveGrid::KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, KisPerspectiveGridNodeSP topRight, KisPerspectiveGridNodeSP bottomRight, KisPerspectiveGridNodeSP bottomLeft)
     : m_topLeft(topLeft), m_topRight(topRight), m_bottomLeft(bottomLeft), m_bottomRight(bottomRight), m_leftGrid(0), m_rightGrid(0), m_topGrid(0), m_bottomGrid(0), m_subdivisions(5), m_index(++s_lastIndex)
 {
-    
+
 }
 
 bool KisSubPerspectiveGrid::contains(const QPointF p) const
@@ -40,15 +40,15 @@ bool KisSubPerspectiveGrid::contains(const QPointF p) const
     if( p.y() >= p.x() * d1.a + d1.b)
     {
         d1 = KisPerspectiveMath::computeLineEquation( topRight().data(), bottomRight().data() );
-        kDebug(41001) << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+//         kDebug(41001) << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
         if( p.y() >= p.x() * d1.a + d1.b)
         {
             d1 = KisPerspectiveMath::computeLineEquation( bottomRight().data(), bottomLeft().data() );
-            kDebug(41001) << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+//             kDebug(41001) << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
             if( p.y() <= p.x() * d1.a + d1.b)
             {
                 d1 = KisPerspectiveMath::computeLineEquation( bottomLeft().data(), topLeft().data() );
-                kDebug(41001) << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+//                 kDebug(41001) << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
                 if( p.y() <= p.x() * d1.a + d1.b)
                 {
                     return true;

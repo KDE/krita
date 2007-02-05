@@ -2,6 +2,7 @@
  * This file is part of Krita
  *
  * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,112 +24,74 @@
 
 #include <QEvent>
 #include <QPixmap>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QWidget>
 
-#include <k3iconview.h>
-#include <krita_export.h>
+#include <threadweaver/ThreadWeaver.h>
+
 #include "KoID.h"
+
+#include <krita_export.h>
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kis_thread.h"
 
 class KisView;
 class KisFilter;
 class KisFilterConfiguration;
 class KisPreviewView;
-class QTimer;
 class KisFiltersIconViewItem;
 class KisFiltersListView;
-class KisThreadPool;
 
-class KisThumbnailDoneEvent : public QEvent
+class KRITAUI_EXPORT KisFiltersIconViewItem : public QListWidgetItem
 {
+
 public:
 
-    KisThumbnailDoneEvent(KisFiltersIconViewItem * iconItem, const QImage & img)
-        : QEvent(static_cast<QEvent::Type>(QEvent::User + 1969))
-        , m_iconItem(iconItem)
-        , m_image(img) {}
+    KisFiltersIconViewItem( KisFilter * filter, KisFilterConfiguration * config )
+        : QListWidgetItem()
+        , m_filter( filter )
+        , m_config( config )
+        {
+        }
 
-    KisFiltersIconViewItem * m_iconItem;
-    QImage m_image;
-};
-
-
-class KisFiltersThumbnailThread : public KisThread
-{
-public:
-
-    KisFiltersThumbnailThread(Q3IconView * parent,
-                              KisFiltersIconViewItem * iconItem,
-                              KisFilterConfiguration * config, KisFilter * filter,
-                              KisPaintDeviceSP dev, const QRect & bounds,
-                              KoColorProfile * profile);
-
-    ~KisFiltersThumbnailThread();
-
-    virtual void run();
-    QPixmap pixmap();
-    void cancel();
-
+    KisFilter * filter() { return m_filter; }
+    KisFilterConfiguration * filterConfiguration() { return m_config; }
 private:
-    Q3IconView * m_parent;
-    KisFiltersIconViewItem * m_iconItem;
-    KisFilterConfiguration * m_config;
+
     KisFilter * m_filter;
-    KisPaintDeviceSP m_dev;
-    const QRect m_bounds;
-    KoColorProfile * m_profile;
-    QImage m_image;
+    KisFilterConfiguration * m_config;
 };
 
-class KisFiltersIconViewItem : public Q3IconViewItem {
+class KRITAUI_EXPORT KisFiltersListView : public QListWidget {
+
+    Q_OBJECT
+
 public:
-    KisFiltersIconViewItem( Q3IconView * parent, const QString & text, const QPixmap & icon,
-                            KoID id, KisFilter* filter, KisFilterConfiguration* filterConfig,
-                            KisPaintDeviceSP thumb, const QRect & bounds, KoColorProfile * profile);
 
-    virtual ~KisFiltersIconViewItem();
-    KoID id() { return m_id; }
-    KisFilter* filter() { return m_filter; }
-    void setFilterConfiguration(KisFilterConfiguration* fc) { m_filterconfig = fc; }
+    KisFiltersListView(QWidget* parent, bool filterForAdjustmentLayers = false);
 
-    void resetThread() { m_thread = 0; };
-    KisThread * thread() { return m_thread; }
+    KisFiltersListView(KisLayerSP layer, QWidget* parent, bool filterForAdjustmentLayers = false) KDE_DEPRECATED;
+
+    KisFiltersListView(KisPaintDeviceSP layer, QWidget* parent, bool filterForAdjustmentLayers = false);
 
 private:
-    KoID m_id;
-    KisFilter* m_filter;
-    KisFilterConfiguration* m_filterconfig;
-    KisFiltersThumbnailThread * m_thread;
-};
-
-class KRITAUI_EXPORT KisFiltersListView : public K3IconView {
-
-public:
-    KisFiltersListView(QWidget* parent, bool filterForAdjustmentLayers = false, const char* name = 0);
-    KisFiltersListView(KisLayerSP layer, QWidget* parent, bool filterForAdjustmentLayers = false, const char * name = 0) KDE_DEPRECATED;
-    KisFiltersListView(KisPaintDeviceSP layer, QWidget* parent, bool filterForAdjustmentLayers = false, const char * name = 0);
-
-    virtual void customEvent(QCustomEvent *);
-
-    private:
 
     void init();
 
 public:
+
     void setLayer(KisLayerSP layer);
     void setProfile(KoColorProfile * profile) { m_profile = profile; };
-
-    inline void setPaintDevice(KisPaintDeviceSP pd) {
-        if( pd != m_original)
-        {
-            m_original = pd;
-            buildPreview();
-        }
-    }
-    void buildPreview();
+    void setPaintDevice(KisPaintDeviceSP pd);
+    void buildPreviews();
     void setCurrentFilter(KoID filter);
+
+
+private slots:
+
+    void itemDone( ThreadWeaver::Job * );
 
 private:
 
@@ -136,8 +99,9 @@ private:
     KisImageSP m_imgthumb;
     KisPaintDeviceSP m_thumb;
     KoColorProfile * m_profile;
-    KisThreadPool * threadPool;
     bool m_filterForAdjustmentLayers;
+
+    ThreadWeaver::Weaver * m_weaver;
 
 };
 

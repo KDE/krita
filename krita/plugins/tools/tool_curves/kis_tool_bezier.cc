@@ -27,7 +27,6 @@
 #include <QPolygon>
 
 #include <kaction.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <knuminput.h>
@@ -168,7 +167,7 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
         control1 = ++origin;
     } else
         return;
-        
+
     if ((*tend).hint() == BEZIERENDHINT) {
         dest = tend;
         control2 = tend.previous();
@@ -183,7 +182,7 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
 
     deleteCurve(control1, control2);
     recursiveCurve((*origin).point(),(*control1).point(),(*control2).point(),(*dest).point(),1,control2);
-    
+
 }
 
 KisCurve::iterator KisCurveBezier::pushPivot (const QPointF& point)
@@ -213,7 +212,7 @@ KisCurve::iterator KisCurveBezier::pushPivot (const QPointF& point)
 	kDebug(0) << "QUI" << endl;
         addPoint(it,point,true,false,BEZIERPREVCONTROLHINT);
     }
-    
+
     it = pushPoint(point,true,false,BEZIERNEXTCONTROLHINT);
 */
     return selectPivot(it);
@@ -248,7 +247,7 @@ KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const QPoint
                 (*groupNextControl(it)).setPoint(newPt+trans);
         }
     }
-    
+
     if (nextEnd != end() && count() > 4)
         calculateCurve (thisEnd,nextEnd,iterator());
     if (prevEnd != thisEnd && count() > 4)
@@ -333,7 +332,7 @@ KisCurve::iterator KisToolBezier::drawPoint (QPainter& gc, KisCurve::iterator po
     KisCanvasController *controller = m_subject->canvasController();
 
     // Now draw the bezier
-    
+
     KisCurve::iterator origin,control1,control2,destination;
 
     origin = point;

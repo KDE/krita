@@ -61,7 +61,6 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
         kDebug(41008) << "Opening of data file failed :" << filename << endl;
         return false;
     }
-    kDebug(41008) << "Successfull saving of layer: " << layer->name() << endl;
     return true;
 }
 

@@ -75,7 +75,7 @@ void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
     Q_ASSERT(src);
     Q_ASSERT(dst);
     Q_ASSERT(configuration);
-    
+
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 tileSize = ((KisCubismFilterConfiguration*)configuration)->tileSize();
     quint32 tileSaturation = ((KisCubismFilterConfiguration*)configuration)->tileSaturation();
@@ -88,21 +88,21 @@ void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
     }
     else {
         if (src->image()) src->image()->lock();
-    
+
         KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary");
         KisPainter gc(dev);
         gc.bitBlt(0, 0, COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
         gc.end();
-        
-        kDebug() << src->colorSpace()->id().id() << endl;
+
+//         kDebug() << src->colorSpace()->id().id() << endl;
         cubism(dev, dev, QRect(0, 0, rect.width(), rect.height()), tileSize, tileSaturation);
 
         gc.begin(dst);
         gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, dev, 0, 0, rect.width(), rect.height());
-        gc.end();      
+        gc.end();
         if (src->image()) src->image()->unlock();
-    
-        kDebug() << src->colorSpace()->id().id() << endl;
+
+//         kDebug() << src->colorSpace()->id().id() << endl;
     }
 }
 
@@ -272,7 +272,7 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
                         xs = static_cast<qint32>((*it).x());
                         ys = static_cast<qint32>((*it).y());
                         ++it;
-                        
+
                         if( it != poly->end() )
                         {
                             xe = static_cast<qint32>((*it).x());
@@ -346,7 +346,7 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
                                                             buf[b] = ((col[b] * alpha) + (buf[b] * (255 - alpha))) / 255;
                                                         }
                                                 #endif
-                                                        
+
                                                         dst->writeBytes(buf, x, y, 1, 1);
                                                 }
                                         }
@@ -363,7 +363,7 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
 {
     Q_ASSERT(src);
     Q_ASSERT(dst);
-    
+
         //fill the destination image with the background color (black for now)
         KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
         qint32 depth = src->colorSpace()->colorChannelCount();

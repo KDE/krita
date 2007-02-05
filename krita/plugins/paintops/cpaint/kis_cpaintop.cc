@@ -123,7 +123,6 @@ void KisCPaintOpSettings::resetCurrentBrush()
 KisCPaintOp::KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, KisPainter * painter)
     : super(painter)
 {
-    kDebug() << "Create a new cpaintop\n";
     m_currentBrush = brush;
     m_ink = settings->ink();
     m_water = settings->water();
@@ -159,9 +158,7 @@ void KisCPaintOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     newSam->SetTY ( info.yTilt );
 
 
-    kDebug() << "New stroke flag: " << newStrokeFlag << ", stroke: " << curStroke << endl;
     if ( newStrokeFlag ) {
-        kDebug() << "new stroke\n";
         curStroke = new Stroke( m_currentBrush);
         curStroke->StoreColor( m_color );
         curStroke->sampleV.push_back( newSam );

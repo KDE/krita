@@ -19,13 +19,14 @@
 #ifndef KIS_OPENGL_CANVAS_2_H
 #define KIS_OPENGL_CANVAS_2_H
 #include "config-krita.h"
-#ifdef HAVE_OPENGL
+#if HAVE_OPENGL
 
 #include <QGLWidget>
 
 #include <KoCanvasBase.h>
 
 #include "kis_abstract_canvas_widget.h"
+#include "kis_opengl_image_context.h"
 
 class QWidget;
 class QGLContext;
@@ -33,6 +34,7 @@ class QPaintEvent;
 class QImage;
 class QBrush;
 class KisCanvas2;
+
 
 /**
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
@@ -45,34 +47,26 @@ class KisOpenGLCanvas2 : public QGLWidget, public KisAbstractCanvasWidget
 
 public:
 
-    KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent );
-
-    KisOpenGLCanvas2(KisCanvas2 * canvas, QGLContext * context, QWidget * parent, QGLWidget *sharedContextWidget);
+    KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageContextSP context);
 
     virtual ~KisOpenGLCanvas2();
 
 protected:
+
     void initializeGL();
     void resizeGL(int w, int h);
-
-public: // QWidget
-
-    void paintEvent ( QPaintEvent * event );
+    void paintGL();
 
 public: // KisAbstractCanvasWidget
 
     QWidget * widget() { return this; }
 
-    KoToolProxy * toolProxy() {
-        return m_toolProxy;
-    }
+    KoToolProxy * toolProxy();
 private:
-    KisCanvas2 * m_canvas;
-    QImage * m_checkTexture;
-    QBrush * m_checkBrush;
-    KoToolProxy * m_toolProxy;
+    class Private;
+    Private * m_d;
 
 };
 
-#endif
-#endif
+#endif // HAVE_OPENGL
+#endif // KIS_OPENGL_CANVAS_2_H

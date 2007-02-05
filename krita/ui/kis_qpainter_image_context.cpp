@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,23 +18,18 @@
 
 #include <config-krita.h>
 
-#if HAVE_OPENGL
-
 #include <kdebug.h>
 #include <ksharedptr.h>
 
-#include <KoColorSpaceRegistry.h>
-#include <KoColorProfile.h>
-#include <KoIntegerMaths.h>
-
 #include "kis_global.h"
 #include "kis_meta_registry.h"
+#include "KoColorSpaceRegistry.h"
+#include <KoIntegerMaths.h>
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
 #include "kis_background.h"
-//#include "kis_opengl_canvas.h"
-#include "kis_opengl_image_context.h"
+#include "kis_qpainter_image_context.h"
 
 
 #define PATTERN_WIDTH 64
@@ -42,24 +37,21 @@
 
 using namespace std;
 
-QGLWidget *KisOpenGLImageContext::SharedContextWidget = 0;
-int KisOpenGLImageContext::SharedContextWidgetRefCount = 0;
+KisQpainterImageContext::ImageContextMap KisQpainterImageContext::imageContextMap;
 
-KisOpenGLImageContext::ImageContextMap KisOpenGLImageContext::imageContextMap;
+const int KisQpainterImageContext::PREFERRED_IMAGE_TEXTURE_WIDTH = 256;
+const int KisQpainterImageContext::PREFERRED_IMAGE_TEXTURE_HEIGHT = 256;
 
-const int KisOpenGLImageContext::PREFERRED_IMAGE_TEXTURE_WIDTH = 256;
-const int KisOpenGLImageContext::PREFERRED_IMAGE_TEXTURE_HEIGHT = 256;
-
-KisOpenGLImageContext::KisOpenGLImageContext()
+KisQpainterImageContext::KisQpainterImageContext()
 {
     m_image = 0;
     m_monitorProfile = 0;
     m_exposure = 0;
 }
 
-KisOpenGLImageContext::~KisOpenGLImageContext()
+KisQpainterImageContext::~KisQpainterImageContext()
 {
-    kDebug(41001) << "Destroyed KisOpenGLImageContext\n";
+    kDebug(41001) << "Destroyed KisQpainterImageContext\n";
 
     --SharedContextWidgetRefCount;
     kDebug(41001) << "Shared context widget ref count now " << SharedContextWidgetRefCount << endl;
@@ -74,47 +66,31 @@ KisOpenGLImageContext::~KisOpenGLImageContext()
     imageContextMap.erase(m_image);
 }
 
-KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KoColorProfile *monitorProfile)
+KisQpainterImageContext::KisQpainterImageContext(KisImageSP image, KoColorProfile *monitorProfile)
 {
-    kDebug(41001) << "Created KisOpenGLImageContext\n";
+    kDebug(41001) << "Created KisQpainterImageContext\n";
 
     m_image = image;
     m_monitorProfile = monitorProfile;
     m_exposure = 0;
     m_displaySelection = true;
 
-    if (SharedContextWidget == 0) {
-        kDebug(41001) << "Creating shared context widget\n";
-
-        SharedContextWidget = new QGLWidget();//KisOpenGLCanvasFormat);
-    }
-
-    ++SharedContextWidgetRefCount;
-
-    kDebug(41001) << "Shared context widget ref count now " << SharedContextWidgetRefCount << endl;
-
-    SharedContextWidget->makeCurrent();
-    glGenTextures(1, &m_backgroundTexture);
     generateBackgroundTexture();
 
     GLint max_texture_size;
 
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
-
-    m_imageTextureTileWidth = qMin((GLint)PREFERRED_IMAGE_TEXTURE_WIDTH, max_texture_size);
-    m_imageTextureTileHeight = qMin((GLint)PREFERRED_IMAGE_TEXTURE_HEIGHT, max_texture_size);
+    m_imageTextureTileWidth = PREFERRED_IMAGE_TEXTURE_WIDTH;
+    m_imageTextureTileHeight = PREFERRED_IMAGE_TEXTURE_HEIGHT;
 
     createImageTextureTiles();
 
-    connect(m_image.data(), SIGNAL(sigImageUpdated(QRect)),
-            SLOT(slotImageUpdated(QRect)));
-    connect(m_image.data(), SIGNAL(sigSizeChanged(qint32, qint32)),
-            SLOT(slotImageSizeChanged(qint32, qint32)));
+    connect(m_image.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
+    connect(m_image.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
 
     updateImageTextureTiles(m_image->bounds());
 }
 
-KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image, KoColorProfile *monitorProfile)
+KisQpainterImageContextSP KisQpainterImageContext::getImageContext(KisImageSP image, KoColorProfile *monitorProfile)
 {
     if (imageCanShareImageContext(image)) {
         ImageContextMap::iterator it = imageContextMap.find(image);
@@ -123,26 +99,26 @@ KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image,
 
             kDebug(41001) << "Sharing image context from map\n";
 
-            KisOpenGLImageContextSP context = KisOpenGLImageContextSP((*it).second);
+            KisQpainterImageContextSP context = KisQpainterImageContextSP((*it).second);
             context->setMonitorProfile(monitorProfile);
 
             return context;
         } else {
-            KisOpenGLImageContext *imageContext = new KisOpenGLImageContext(image, monitorProfile);
+            KisQpainterImageContext *imageContext = new KisQpainterImageContext(image, monitorProfile);
             imageContextMap[image] = imageContext;
 
             kDebug(41001) << "Added shareable context to map\n";
 
-            return KisOpenGLImageContextSP(imageContext);
+            return KisQpainterImageContextSP(imageContext);
         }
     } else {
         kDebug(41001) << "Creating non-shareable image context\n";
 
-        return KisOpenGLImageContextSP(new KisOpenGLImageContext(image, monitorProfile));
+        return KisQpainterImageContextSP(new KisQpainterImageContext(image, monitorProfile));
     }
 }
 
-bool KisOpenGLImageContext::imageCanShareImageContext(KisImageSP image)
+bool KisQpainterImageContext::imageCanShareImageContext(KisImageSP image)
 {
     if (image->colorSpace()->hasHighDynamicRange()) {
         //XXX: and we don't have shaders...
@@ -152,20 +128,18 @@ bool KisOpenGLImageContext::imageCanShareImageContext(KisImageSP image)
     }
 }
 
-QGLWidget *KisOpenGLImageContext::sharedContextWidget() const
+QGLWidget *KisQpainterImageContext::sharedContextWidget() const
 {
     return SharedContextWidget;
 }
 
-void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
+void KisQpainterImageContext::updateImageTextureTiles(const QRect& rect)
 {
     //kDebug(41007) << "updateImageTextureTiles " << rect << endl;
 
     QRect updateRect = rect & m_image->bounds();
 
     if (!updateRect.isEmpty()) {
-
-        SharedContextWidget->makeCurrent();
 
         int firstColumn = updateRect.left() / m_imageTextureTileWidth;
         int lastColumn = updateRect.right() / m_imageTextureTileWidth;
@@ -179,14 +153,6 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                                m_imageTextureTileWidth, m_imageTextureTileHeight);
 
                 QRect tileUpdateRect = tileRect & updateRect;
-
-                glBindTexture(GL_TEXTURE_2D, imageTextureTile(tileRect.x(), tileRect.y()));
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);//GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-                glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
                 QImage tileUpdateImage = m_image->convertToQImage(tileUpdateRect.left(), tileUpdateRect.top(),
                                                                   tileUpdateRect.right(), tileUpdateRect.bottom(),
@@ -212,23 +178,17 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                                     GL_BGRA, GL_UNSIGNED_BYTE, tileUpdateImage.bits());
                 }
 
-                GLenum error = glGetError ();
-
-                if (error != GL_NO_ERROR)
-                {
-                    kDebug(41001) << "Error loading texture: " << endl;
-                }
             }
         }
     }
 }
 
-KoColorSpace* KisOpenGLImageContext::textureColorSpaceForImageColorSpace(KoColorSpace */*imageColorSpace*/)
+KoColorSpace* KisQpainterImageContext::textureColorSpaceForImageColorSpace(KoColorSpace */*imageColorSpace*/)
 {
     return KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
 }
 
-void KisOpenGLImageContext::setMonitorProfile(KoColorProfile *monitorProfile)
+void KisQpainterImageContext::setMonitorProfile(KoColorProfile *monitorProfile)
 {
     if (monitorProfile != m_monitorProfile) {
         m_monitorProfile = monitorProfile;
@@ -237,7 +197,7 @@ void KisOpenGLImageContext::setMonitorProfile(KoColorProfile *monitorProfile)
     }
 }
 
-void KisOpenGLImageContext::setHDRExposure(float exposure)
+void KisQpainterImageContext::setHDRExposure(float exposure)
 {
     if (exposure != m_exposure) {
         m_exposure = exposure;
@@ -249,44 +209,27 @@ void KisOpenGLImageContext::setHDRExposure(float exposure)
     }
 }
 
-void KisOpenGLImageContext::generateBackgroundTexture()
+void KisQpainterImageContext::generateBackgroundTexture()
 {
-    SharedContextWidget->makeCurrent();
+    QPixmap tile(PATTERN_WIDTH * 2, PATTERN_HEIGHT * 2);
+    tile.fill(Qt::white);
+    QPainter pt(&tile);
+    QColor color(220, 220, 220);
+    pt.fillRect(0, 0, PATTERN_WIDTH, PATTERN_HEIGHT, color);
+    pt.fillRect(PATTERN_WIDTH, PATTERN_HEIGHT, PATTERN_WIDTH, PATTERN_HEIGHT, color);
+    pt.end();
+    QBrush b(tile);
 
-    glBindTexture(GL_TEXTURE_2D, m_backgroundTexture);
+    m_backgroundTexture = b;
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-    QImage backgroundImage (PATTERN_WIDTH, PATTERN_HEIGHT, QImage::Format_RGB32);
-
-    for (int y = 0; y < PATTERN_HEIGHT; y++)
-    {
-        for (int x = 0; x < PATTERN_WIDTH; x++)
-        {
-            quint8 v = 128 + 63 * ((x / 16 + y / 16) % 2);
-            backgroundImage.setPixel(x, y, qRgb(v, v, v));
-        }
-    }
-
-    // XXX: temp.
-    Q_ASSERT(backgroundImage.width() == BACKGROUND_TEXTURE_WIDTH);
-    Q_ASSERT(backgroundImage.height() == BACKGROUND_TEXTURE_HEIGHT);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, 0,
-                 GL_BGRA, GL_UNSIGNED_BYTE, backgroundImage.bits());
 }
 
-GLuint KisOpenGLImageContext::backgroundTexture() const
+QBrush * KisQpainterImageContext::backgroundTexture() const
 {
-    return m_backgroundTexture;
+    return &m_backgroundTexture;
 }
 
-int KisOpenGLImageContext::imageTextureTileIndex(int x, int y) const
+int KisQpainterImageContext::imageTextureTileIndex(int x, int y) const
 {
     int column = x / m_imageTextureTileWidth;
     int row = y / m_imageTextureTileHeight;
@@ -294,7 +237,7 @@ int KisOpenGLImageContext::imageTextureTileIndex(int x, int y) const
     return column + (row * m_numImageTextureTileColumns);
 }
 
-GLuint KisOpenGLImageContext::imageTextureTile(int pixelX, int pixelY) const
+GLuint KisQpainterImageContext::imageTextureTile(int pixelX, int pixelY) const
 {
     qint32 textureTileIndex = imageTextureTileIndex(pixelX, pixelY);
 
@@ -303,17 +246,17 @@ GLuint KisOpenGLImageContext::imageTextureTile(int pixelX, int pixelY) const
     return m_imageTextureTiles[textureTileIndex];
 }
 
-int KisOpenGLImageContext::imageTextureTileWidth() const
+int KisQpainterImageContext::imageTextureTileWidth() const
 {
     return m_imageTextureTileWidth;
 }
 
-int KisOpenGLImageContext::imageTextureTileHeight() const
+int KisQpainterImageContext::imageTextureTileHeight() const
 {
     return m_imageTextureTileHeight;
 }
 
-void KisOpenGLImageContext::createImageTextureTiles()
+void KisQpainterImageContext::createImageTextureTiles()
 {
     SharedContextWidget->makeCurrent();
 
@@ -326,7 +269,6 @@ void KisOpenGLImageContext::createImageTextureTiles()
     m_imageTextureTiles.resize(numImageTextureTiles);
     glGenTextures(numImageTextureTiles, &(m_imageTextureTiles[0]));
 
-    //XXX: will be float/half with shaders
 #define RGBA_BYTES_PER_PIXEL 4
 
     QByteArray emptyTilePixelData(m_imageTextureTileWidth * m_imageTextureTileHeight * RGBA_BYTES_PER_PIXEL, 0);
@@ -346,7 +288,7 @@ void KisOpenGLImageContext::createImageTextureTiles()
     }
 }
 
-void KisOpenGLImageContext::destroyImageTextureTiles()
+void KisQpainterImageContext::destroyImageTextureTiles()
 {
     if (!m_imageTextureTiles.empty()) {
         SharedContextWidget->makeCurrent();
@@ -355,17 +297,17 @@ void KisOpenGLImageContext::destroyImageTextureTiles()
     }
 }
 
-void KisOpenGLImageContext::update(const QRect& imageRect)
+void KisQpainterImageContext::update(const QRect& imageRect)
 {
     updateImageTextureTiles(imageRect);
 }
 
-void KisOpenGLImageContext::setSelectionDisplayEnabled(bool enable)
+void KisQpainterImageContext::setSelectionDisplayEnabled(bool enable)
 {
     m_displaySelection = enable;
 }
 
-void KisOpenGLImageContext::slotImageUpdated(QRect rc)
+void KisQpainterImageContext::slotImageUpdated(QRect rc)
 {
     QRect r = rc & m_image->bounds();
 
@@ -373,7 +315,7 @@ void KisOpenGLImageContext::slotImageUpdated(QRect rc)
     emit sigImageUpdated(r);
 }
 
-void KisOpenGLImageContext::slotImageSizeChanged(qint32 w, qint32 h)
+void KisQpainterImageContext::slotImageSizeChanged(qint32 w, qint32 h)
 {
     createImageTextureTiles();
     updateImageTextureTiles(m_image->bounds());
@@ -381,7 +323,7 @@ void KisOpenGLImageContext::slotImageSizeChanged(qint32 w, qint32 h)
     emit sigSizeChanged(w, h);
 }
 
-#include "kis_opengl_image_context.moc"
+#include "kis_qpainter_image_context.moc"
 
-#endif // HAVE_OPENGL
+
 

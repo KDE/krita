@@ -2,6 +2,7 @@
  * This file is part of Krita
  *
  * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,9 +27,10 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QTime>
+#include <QListWidgetItem>
+ #include <QListWidget>
 
-//Added by qt3to4:
-#include <QCustomEvent>
+#include <threadweaver/Job.h>
 
 #include <kglobalsettings.h>
 
@@ -40,78 +42,63 @@
 #include "kis_group_layer.h"
 #include "kis_filter.h"
 #include "kis_filter_strategy.h"
-#include "kis_thread_pool.h"
 
 // ------------------------------------------------
 
-KisFiltersThumbnailThread::KisFiltersThumbnailThread(Q3IconView * parent, KisFiltersIconViewItem * iconItem, KisFilterConfiguration * config, KisFilter * filter, KisPaintDeviceSP dev, const QRect & bounds, KoColorProfile * profile)
-    : m_parent(parent)
-    , m_iconItem(iconItem)
-    , m_config(config)
-    , m_filter(filter)
-    , m_dev(dev)
-    , m_bounds(bounds)
-    , m_profile(profile)
+class ThumbnailJob : public ThreadWeaver::Job
 {
-}
 
-KisFiltersThumbnailThread::~KisFiltersThumbnailThread()
-{
-    m_iconItem->resetThread();
-}
+public:
 
-void KisFiltersThumbnailThread::run()
-{
-    if (m_canceled) return;
+    ThumbnailJob(QObject * parent, KisPaintDeviceSP dev, KisFiltersIconViewItem * item, KoColorProfile * profile, const QRect & bounds)
+        : ThreadWeaver::Job( parent )
+        , m_dev( dev )
+        , m_item( item )
+        , m_canceled( false )
+        , m_profile( profile )
+        , m_bounds( bounds )
+        {
+        }
 
-    KisPaintDeviceSP thumbPreview = KisPaintDeviceSP(new KisPaintDevice(*m_dev));
-    m_filter->disableProgress();
-    m_filter->process(thumbPreview, m_bounds, m_config);
+    void requestAbort()
+        {
+            m_item->filter()->cancel();
+            m_canceled = true;
+        }
 
-    if (!m_canceled) {
-        m_image = thumbPreview->convertToQImage(m_profile);
+    void run()
+        {
+            KisPaintDeviceSP thumbPreview = KisPaintDeviceSP(new KisPaintDevice(*m_dev));
+            m_item->filter()->disableProgress();
+            m_item->filter()->process(thumbPreview, m_bounds, m_item->filterConfiguration());
 
-        qApp->postEvent(m_parent, new KisThumbnailDoneEvent (m_iconItem, m_image));
+            if (!m_canceled) {
+                m_image = thumbPreview->convertToQImage(m_profile);
 
-    }
-}
+            }
 
-QPixmap KisFiltersThumbnailThread::pixmap()
-{
-    return QPixmap::fromImage(m_image);
-}
+            m_item->setIcon( QPixmap::fromImage( m_image ) );
+            m_item->setText( m_filter->id().name() );
+            setFinished( true );
+        }
 
-void KisFiltersThumbnailThread::cancel()
-{
-    m_canceled = true;
-    m_filter->cancel();
+    KisFiltersIconViewItem * item() { return m_item; }
 
-}
-
+private:
+    KisPaintDeviceSP m_dev;
+    KisFiltersIconViewItem * m_item;
+    KisFilter * m_filter;
+    bool m_canceled;
+    QImage m_image;
+    KisFilterConfiguration * m_config;
+    KoColorProfile * m_profile;
+    const QRect m_bounds;
+};
 
 // ------------------------------------------------
 
-KisFiltersIconViewItem::KisFiltersIconViewItem(Q3IconView * parent, const QString & text, const QPixmap & icon,
-                                               KoID id, KisFilter* filter, KisFilterConfiguration* filterConfig,
-                                               KisPaintDeviceSP thumb, const QRect & bounds, KoColorProfile * profile)
-    : Q3IconViewItem(parent, text, icon)
-    , m_id(id)
-    , m_filter(filter)
-    , m_filterconfig(filterConfig)
-{
-    m_thread = new KisFiltersThumbnailThread(parent, this, filterConfig, filter, thumb, bounds, profile);
-}
-
-KisFiltersIconViewItem::~KisFiltersIconViewItem()
-{
-    if (m_thread) m_thread->cancel();
-}
-
-
-// ------------------------------------------------
-
-KisFiltersListView::KisFiltersListView(QWidget* parent, bool filterForAdjustmentLayers, const char* name)
-    : K3IconView(parent, name)
+KisFiltersListView::KisFiltersListView(QWidget* parent, bool filterForAdjustmentLayers)
+    : QListWidget(parent)
     , m_original(0)
     , m_profile(0)
     , m_filterForAdjustmentLayers(filterForAdjustmentLayers)
@@ -119,42 +106,53 @@ KisFiltersListView::KisFiltersListView(QWidget* parent, bool filterForAdjustment
     init();
 }
 
-KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, bool filterForAdjustmentLayers, const char * name)
-    : K3IconView(parent, name)
+KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, bool filterForAdjustmentLayers)
+    : QListWidget(parent)
     , m_original(0)
     , m_profile(0)
     , m_filterForAdjustmentLayers(filterForAdjustmentLayers)
 {
+    init();
+
     KisPaintLayer* pl = dynamic_cast<KisPaintLayer*>(layer.data());
     if(pl != 0)
     {
         m_original = pl->paintDevice();
-        buildPreview();
+        buildPreviews();
     }
-    init();
+
 }
 
-KisFiltersListView::KisFiltersListView(KisPaintDeviceSP device, QWidget* parent, bool filterForAdjustmentLayers, const char * name)
-    : K3IconView(parent, name)
+KisFiltersListView::KisFiltersListView(KisPaintDeviceSP device, QWidget* parent, bool filterForAdjustmentLayers)
+    : QListWidget(parent)
     , m_original(device)
     , m_profile(0)
     , m_filterForAdjustmentLayers(filterForAdjustmentLayers)
 {
-    buildPreview();
     init();
+
+    buildPreviews();
+
 }
 
 void KisFiltersListView::init()
 {
     setWindowTitle(i18n("Filters List"));
-    setItemsMovable(false);
-    setSelectionMode(Q3IconView::Single);
+    setViewMode( QListView::IconMode );
+    setSelectionMode(QAbstractItemView::SingleSelection);
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding ));
     setMinimumWidth(160);
+
+    m_weaver = new ThreadWeaver::Weaver();
+    KSharedConfig::Ptr cfg = KGlobal::config();
+    cfg->setGroup("");
+    m_weaver->setMaximumNumberOfThreads( cfg->readEntry("maxthreads",  10) );
+    connect( m_weaver, SIGNAL( jobDone(Job*) ), this, SLOT( itemDone( Job* ) ) );
 
 }
 
 void KisFiltersListView::setLayer(KisLayerSP layer) {
+
     KisPaintLayer* pl = dynamic_cast<KisPaintLayer*>(layer.data());
     if(pl == 0)
         return;
@@ -162,53 +160,51 @@ void KisFiltersListView::setLayer(KisLayerSP layer) {
     if(npd!= m_original)
     {
         m_original = npd;
-        buildPreview();
+        buildPreviews();
     }
 }
 
 void KisFiltersListView::setCurrentFilter(KoID filter)
 {
-    setCurrentItem(findItem(filter.name()));
+    // XXX!
+//    setCurrentItem(findItem(filter.name()));
 }
 
-void KisFiltersListView::buildPreview()
+void KisFiltersListView::buildPreviews()
 {
-    QTime t;
+    m_weaver->requestAbort();
+
     if(m_original.isNull())
         return;
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
-    t.start();
     m_thumb = m_original->createThumbnailDevice(150, 150);
 
-    t.start();
     QRect bounds = m_thumb->exactBounds();
-    QPixmap pm(bounds.width(), bounds.height());
-    QPainter gc(&pm);
-    gc.fillRect(0, 0, bounds.width(), bounds.height(), palette().background());
-    gc.end();
 
-    t.start();
     QList<KoID> l = KisFilterRegistry::instance()->listKeys();
     QList<KoID>::iterator it;
     it = l.begin();
     // Iterate over the list of filters
     for (it = l.begin(); it !=  l.end(); ++it) {
-        KisFilterSP f = KisFilterRegistry::instance()->get(*it);
+        KisFilterSP filter = KisFilterRegistry::instance()->get(*it);
+
         // Check if filter support the preview and work with the current colorspace
-        if (f->supportsPreview() && f->workWith( m_original->colorSpace() ) ) {
+        if (filter->supportsPreview() && filter->workWith( m_original->colorSpace() ) ) {
 
-            if (m_filterForAdjustmentLayers && !f->supportsAdjustmentLayers()) continue;
+            if (m_filterForAdjustmentLayers && !filter->supportsAdjustmentLayers()) continue;
 
-             const QHash<QString, KisFilterConfiguration*>& configlist = f->bookmarkedConfigurations(m_thumb);
+            const QHash<QString, KisFilterConfiguration*>& configlist = filter->bookmarkedConfigurations(m_thumb);
+
             // apply the filter for each of example of configuration
-            for(QHash<QString, KisFilterConfiguration*>::const_iterator itc = configlist.begin();
+            for ( QHash<QString, KisFilterConfiguration*>::const_iterator itc = configlist.begin();
                 itc != configlist.end();
                 itc++)
             {
-                KisFiltersIconViewItem * icon = new KisFiltersIconViewItem( this, (*it).name(), pm, *it, f.data(), itc.value(), m_thumb, bounds, m_profile );
-                //KisThreadPool::instance()->enqueue(icon->thread());
-                icon->thread()->runDirectly();
+                KisFiltersIconViewItem * item = new KisFiltersIconViewItem(filter.data(), itc.value());
+                // XXX: deep copy the thumb?
+                ThumbnailJob * job = new ThumbnailJob( this, m_thumb, item, m_profile, bounds );
+                m_weaver->enqueue( job );
             }
         }
     }
@@ -216,28 +212,23 @@ void KisFiltersListView::buildPreview()
 }
 
 
-void KisFiltersListView::customEvent(QCustomEvent * e)
+
+void KisFiltersListView::setPaintDevice(KisPaintDeviceSP pd)
 {
-    KisThumbnailDoneEvent * ev = dynamic_cast<KisThumbnailDoneEvent *>(e);
-    if (ev) {
-        QPixmap * p = ev->m_iconItem->pixmap();
-        QImage img = ev->m_image;
-        int x, y;
-
-        if (p->width() > img.width())
-            x = (p->width() - img.width()) / 2;
-        else
-            x = 0;
-        if (p->height() > img.height())
-            y = (p->height() - img.height()) / 2;
-        else
-            y = 0;
-
-        QPainter gc(p);
-        gc.drawImage(QPoint(x,y), img);
-        gc.end();
-
-        //ev->m_iconItem->setPixmap(QPixmap(*p));
-        arrangeItemsInGrid();
+    if( pd != m_original)
+    {
+        m_original = pd;
+        buildPreviews();
     }
 }
+
+void KisFiltersListView::itemDone( ThreadWeaver::Job * job)
+{
+    ThumbnailJob * thumbnailJob = dynamic_cast<ThumbnailJob*>( job );
+    if ( thumbnailJob ) {
+        addItem( thumbnailJob->item() );
+    }
+    delete job;
+}
+
+#include "kis_filters_listview.moc"

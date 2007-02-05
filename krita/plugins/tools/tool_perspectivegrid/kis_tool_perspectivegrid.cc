@@ -131,35 +131,35 @@ void KisToolPerspectiveGrid::buttonPress(KoPointerEvent *event)
             KisSubPerspectiveGrid* grid = *it;
             if( mouseNear( mousep, controller->windowToView(grid->topLeft()->toPoint() ) ) )
             {
-                kDebug() << " PRESS TOPLEFT HANDLE " << endl;
+//                 kDebug() << " PRESS TOPLEFT HANDLE " << endl;
                 m_mode = MODE_DRAGING_NODE;
                 m_selectedNode1 = grid->topLeft();
                 break;
             }
             else if( mouseNear( mousep, controller->windowToView(grid->topRight()->toPoint() ) ) )
             {
-                kDebug() << " PRESS TOPRIGHT HANDLE " << endl;
+//                 kDebug() << " PRESS TOPRIGHT HANDLE " << endl;
                 m_mode = MODE_DRAGING_NODE;
                 m_selectedNode1 = grid->topRight();
                 break;
             }
             else if( mouseNear( mousep, controller->windowToView(grid->bottomLeft()->toPoint() ) ) )
             {
-                kDebug() << " PRESS BOTTOMLEFT HANDLE " << endl;
+//                 kDebug() << " PRESS BOTTOMLEFT HANDLE " << endl;
                 m_mode = MODE_DRAGING_NODE;
                 m_selectedNode1 = grid->bottomLeft();
                 break;
             }
             else if( mouseNear( mousep, controller->windowToView(grid->bottomRight()->toPoint() ) ) )
             {
-                kDebug() << " PRESS BOTTOMRIGHT HANDLE " << endl;
+//                 kDebug() << " PRESS BOTTOMRIGHT HANDLE " << endl;
                 m_mode = MODE_DRAGING_NODE;
                 m_selectedNode1 = grid->bottomRight();
                 break;
             }
             else if( !grid->leftGrid() && mouseNear( mousep, controller->windowToView( QPointF( ((*grid->topLeft() + *grid->bottomLeft() )*0.5) ) ).roundQPoint() ) )
             {
-                kDebug() << " PRESS LEFT HANDLE " << endl;
+//                 kDebug() << " PRESS LEFT HANDLE " << endl;
                 m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
                 drawGrid();
                 m_selectedNode1 = new KisPerspectiveGridNode( *grid->topLeft() );
@@ -174,7 +174,7 @@ void KisToolPerspectiveGrid::buttonPress(KoPointerEvent *event)
             }
             else if( !grid->rightGrid() && mouseNear( mousep, controller->windowToView( ((*grid->topRight() + *grid->bottomRight() )*0.5) ).roundQPoint() ) )
             {
-                kDebug() << " PRESS RIGHT HANDLE " << endl;
+//                 kDebug() << " PRESS RIGHT HANDLE " << endl;
                 m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
                 drawGrid();
                 m_selectedNode1 = new KisPerspectiveGridNode( *grid->topRight() );
@@ -189,7 +189,7 @@ void KisToolPerspectiveGrid::buttonPress(KoPointerEvent *event)
             }
             else if( !grid->topGrid() && mouseNear( mousep, controller->windowToView( ((*grid->topLeft() + *grid->topRight() )*0.5) ).roundQPoint() ) )
             {
-                kDebug() << " PRESS TOP HANDLE " << endl;
+//                 kDebug() << " PRESS TOP HANDLE " << endl;
                 m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
                 drawGrid();
                 m_selectedNode1 = new KisPerspectiveGridNode( *grid->topLeft() );
@@ -204,7 +204,7 @@ void KisToolPerspectiveGrid::buttonPress(KoPointerEvent *event)
             }
             else if( !grid->bottomGrid() && mouseNear( mousep, controller->windowToView( ((*grid->bottomLeft() + *grid->bottomRight() )*0.5) ).roundQPoint() ) )
             {
-                kDebug() << " PRESS BOTTOM HANDLE " << endl;
+//                 kDebug() << " PRESS BOTTOM HANDLE " << endl;
                 m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
                 drawGrid();
                 m_selectedNode1 = new KisPerspectiveGridNode( *grid->bottomLeft() );

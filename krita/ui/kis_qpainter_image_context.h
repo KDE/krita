@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,16 +15,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_OPENGL_IMAGE_CONTEXT_H_
-#define KIS_OPENGL_IMAGE_CONTEXT_H_
+#ifndef KIS_QPAINTER_IMAGE_CONTEXT_H_
+#define KIS_QPAINTER_IMAGE_CONTEXT_H_
 
 #include <config-krita.h>
 
-#if HAVE_OPENGL
-
 #include <map>
 
-#include <qgl.h>
 #include <QObject>
 #include <q3valuevector.h>
 
@@ -34,41 +31,31 @@
 #include "kis_types.h"
 
 class QRegion;
-
-// XXX: Qt 4.1 provides a QGLContext class that may be relevant here
-
-class KisOpenGLImageContext;
-typedef KisSharedPtr<KisOpenGLImageContext> KisOpenGLImageContextSP;
-
 class KoColorSpace;
-class KoColorProfile;
+class QBrush;
 
-class KRITAUI_EXPORT KisOpenGLImageContext : public QObject , public KisShared {
+class KisQPainterImageContext;
+typedef KisSharedPtr<KisQPainterImageContext> KisQPainterImageContextSP;
+
+class KRITAUI_EXPORT KisQPainterImageContext : public QObject , public KisShared {
 
     Q_OBJECT
 
 public:
-    static KisOpenGLImageContextSP getImageContext(KisImageSP image, KoColorProfile *monitorProfile);
+    static KisQPainterImageContextSP getImageContext(KisImageSP image, KoColorProfile *monitorProfile);
 
-    KisOpenGLImageContext();
-    virtual ~KisOpenGLImageContext();
+    KisQPainterImageContext();
+    virtual ~KisQPainterImageContext();
 
 public:
-    // In order to use the image textures, the caller must pass
-    // the sharedContextWidget() as the shareWidget argument to the
-    // QGLWidget constructor.
-    QGLWidget *sharedContextWidget() const;
 
     void setMonitorProfile(KoColorProfile *profile);
     void setHDRExposure(float exposure);
 
-    GLuint backgroundTexture() const;
+    QBrush * backgroundTexture() const;
 
-    static const int BACKGROUND_TEXTURE_WIDTH = 32;
-    static const int BACKGROUND_TEXTURE_HEIGHT = 32;
-
-    // Get the image texture tile containing the point (pixelX, pixelY).
-    GLuint imageTextureTile(int pixelX, int pixelY) const;
+    // Get the image tile containing the point (pixelX, pixelY).
+    QImage * imageTextureTile(int pixelX, int pixelY) const;
 
     int imageTextureTileWidth() const;
     int imageTextureTileHeight() const;
@@ -89,7 +76,7 @@ public:
 
 signals:
     /**
-     * Clients using the KisOpenGLImageContext should connect to the
+     * Clients using the KisQPainterImageContext should connect to the
      * following signals rather than to the KisImage's own equivalent
      * signals. This ensures that the image textures are always up to date
      * when used.
@@ -111,7 +98,7 @@ signals:
     void sigSizeChanged(qint32 width, qint32 height);
 
 protected:
-    KisOpenGLImageContext(KisImageSP image, KoColorProfile *monitorProfile);
+    KisQPainterImageContext(KisImageSP image, KoColorProfile *monitorProfile);
 
     void generateBackgroundTexture();
     void createImageTextureTiles();
@@ -132,28 +119,22 @@ private:
     float m_exposure;
     bool m_displaySelection;
 
-    GLuint m_backgroundTexture;
+    QBrush m_backgroundTexture;
 
     static const int PREFERRED_IMAGE_TEXTURE_WIDTH;
     static const int PREFERRED_IMAGE_TEXTURE_HEIGHT;
 
-    Q3ValueVector<GLuint> m_imageTextureTiles;
+    Q3ValueVector<QImage*> m_imageTextureTiles;
     int m_imageTextureTileWidth;
     int m_imageTextureTileHeight;
     int m_numImageTextureTileColumns;
 
-    // We create a single OpenGL context and share it between all views
-    // in the process. Apparently with some OpenGL implementations, only
-    // one context will be hardware accelerated.
-    static QGLWidget *SharedContextWidget;
-    static int SharedContextWidgetRefCount;
-
-    typedef std::map<KisImageSP, KisOpenGLImageContext*> ImageContextMap;
+    // There is one image context per image, so multiple views don't
+    // duplicate the cached qimages.
+    typedef std::map<KisImageSP, KisQPainterImageContext*> ImageContextMap;
 
     static ImageContextMap imageContextMap;
 };
 
-#endif // HAVE_OPENGL
-
-#endif // KIS_OPENGL_IMAGE_CONTEXT_H_
+#endif // KIS_QPAINTER_IMAGE_CONTEXT_H_
 

@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaglsl" version="7">
+<MenuBar>
+<Menu name="Filter"><text>&amp;Filter</text>
+	<Seperator/>
+	<Action name="kritaglsl"/>
+</Menu>
+</MenuBar>
+</kpartgui>

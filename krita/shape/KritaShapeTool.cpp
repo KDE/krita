@@ -66,7 +66,6 @@ void KritaShapeTool::activate (bool temporary)
 
 void KritaShapeTool::deactivate()
 {
-    kDebug()<<"KritaShapeTool::deactivate\n";
     m_kritaShapeshape = 0;
 }
 
@@ -111,7 +110,6 @@ QWidget * KritaShapeTool::createOptionWidget()
 
 void KritaShapeTool::slotChangeUrl()
 {
-    kDebug()<<" KritaShapeTool::slotChangeUrl \n";
     KUrl url = KFileDialog::getOpenUrl();
     if(!url.isEmpty() && m_kritaShapeshape)
         m_kritaShapeshape->importImage(url);

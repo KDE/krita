@@ -61,7 +61,7 @@ void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint&
     {
         config = defaultConfiguration(src);
     }
-    
+
     threshold = config->getDouble("threshold", BEST_WAVELET_THRESHOLD_VALUE);
 
     qint32 depth = src->colorSpace()->colorChannelCount();
@@ -76,9 +76,9 @@ void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint&
     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
 
 
-    kDebug(41005) << size << " " << maxrectsize << " " << srcTopLeft.x() << " " << srcTopLeft.y() << endl;
+//     kDebug(41005) << size << " " << maxrectsize << " " << srcTopLeft.x() << " " << srcTopLeft.y() << endl;
 
-    kDebug(41005) << "Transforming..." << endl;
+//     kDebug(41005) << "Transforming..." << endl;
     setProgressStage( i18n("Fast wavelet transformation") ,progress());
     KisMathToolbox::KisWavelet* buff = 0;
     KisMathToolbox::KisWavelet* wav = 0;
@@ -97,7 +97,7 @@ void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint&
         return;
     }
 
-    kDebug(41005) << "Thresholding..." << endl;
+//     kDebug(41005) << "Thresholding..." << endl;
     float* fin = wav->coeffs + wav->depth*wav->size*wav->size;
     setProgressStage( i18n("Thresholding") ,progress());
     for(float* it = wav->coeffs + wav->depth; it < fin; it++)
@@ -113,7 +113,7 @@ void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint&
         incProgress();
     }
 
-    kDebug(41005) << "Untransforming..." << endl;
+//     kDebug(41005) << "Untransforming..." << endl;
 
     setProgressStage( i18n("Fast wavelet untransformation") ,progress());
     mathToolbox->fastWaveletUntransformation( dst, QRect(dstTopLeft, areaSize ), wav, buff);

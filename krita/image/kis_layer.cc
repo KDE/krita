@@ -350,20 +350,17 @@ void KisLayer::setActive()
 
 void KisLayer::setDirty()
 {
-    kDebug(41001) << "KisLayer::setDirty " << name() << endl;
     QRect rc = extent();
     setDirty( QRegion( rc ) );
 }
 
 void KisLayer::setDirty(const QRect & rc)
 {
-    kDebug(41001) << "KisLayer::setDirty " << name() << ", " << rc << endl;
     setDirty( QRegion( rc ) );
 }
 
 void KisLayer::setDirty( const QRegion & region)
 {
-    kDebug(41001) << "KisLayer::setDirty " << name() << ", " << region << endl;
     // If we're dirty, our parent is dirty, if we've got a parent
     if ( region.isEmpty() ) return;
 

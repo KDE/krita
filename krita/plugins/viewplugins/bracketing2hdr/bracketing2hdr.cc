@@ -88,37 +88,37 @@ void Bracketing2HDRPlugin::addImage(const QString& filename)
     }
     if(!projection)
     {
-        kDebug() << "Image " << filename << " has fail to load." << endl;
+//         kDebug() << "Image " << filename << " has fail to load." << endl;
         return;
     }
     KisExifInfo* exifInfo = projection->exifInfo();
     ExifValue v;
     bool found = exifInfo->getValue("ExposureTime", v); // type = 5
-    kDebug() << " Exposure Time : " << found << " " << v.toString() << " " << v.type() << endl;
+//     kDebug() << " Exposure Time : " << found << " " << v.toString() << " " << v.type() << endl;
     double exposure = 0.;
     if(found)
     {
         KisExifRational r = v.asRational(0);
         exposure = r.numerator / (double) r.denominator;
-        kDebug() << exposure << " = " <<  r.numerator << " / " << r.denominator << endl;
+//         kDebug() << exposure << " = " <<  r.numerator << " / " << r.denominator << endl;
     }
     found = exifInfo->getValue("ApertureValue", v); // type = 5
-    kDebug() << " Aperture : " << found << " " << v.toString() << " " << v.type() << endl;
+//     kDebug() << " Aperture : " << found << " " << v.toString() << " " << v.type() << endl;
     double aperture = 0.;
     if(found)
     {
         KisExifRational r = v.asRational(0);
         aperture = r.numerator / (double) r.denominator;
         aperture = pow(2.0, aperture * 0.5 );
-        kDebug() << aperture << " = " << r.numerator << " / " << r.denominator << endl;
+//         kDebug() << aperture << " = " << r.numerator << " / " << r.denominator << endl;
     }
     found = exifInfo->getValue("ISOSpeedRatings", v); // type = 3
-    kDebug() << " ISO : " << found << " " << v.toString() << " " << v.type() << endl;
+//     kDebug() << " ISO : " << found << " " << v.toString() << " " << v.type() << endl;
     qint32 iso = 100;
     if(found)
     {
         iso = v.asShort(0);
-        kDebug() << iso << endl;
+//         kDebug() << iso << endl;
     }
     int index = m_wdgBracketing2HDR->tableWidgetImages->rowCount();
     m_wdgBracketing2HDR->tableWidgetImages->insertRow( index );
@@ -130,9 +130,9 @@ void Bracketing2HDRPlugin::addImage(const QString& filename)
 
 void Bracketing2HDRPlugin::slotAddImages()
 {
-    kDebug() << "Add image" << endl;
+//     kDebug() << "Add image" << endl;
     QStringList openfiles = KFileDialog::getOpenFileNames(KUrl(),"*", m_view);
-    kDebug() << openfiles.size() << " files selected for inclusion" << endl;
+//     kDebug() << openfiles.size() << " files selected for inclusion" << endl;
     QString filename;
     foreach(filename, openfiles)
     {
@@ -153,7 +153,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
     connect(m_wdgBracketing2HDR->pushButtonCalculateCameraResponse, SIGNAL(released()), this, SLOT(computeCameraResponse()));
     if(dialog->exec()==QDialog::Accepted)
     {
-        kDebug() << "Start creating the HDR layer" << endl;
+//         kDebug() << "Start creating the HDR layer" << endl;
         computeCameraResponse();
         KisImageSP img = m_view->image();
         KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBAF32", 0);
@@ -174,7 +174,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
             parent = m_view->image()->rootLayer();
         above = parent->firstChild();
         img->addLayer(layer, parent, above);
-        
+
         createHDRPaintDevice( layer->paintDevice() );
         m_view->canvas()->update();
     }
@@ -264,7 +264,7 @@ void Bracketing2HDRPlugin::normalize(QVector<double>& intensity)
 
 void Bracketing2HDRPlugin::computeCameraResponse()
 {
-    kDebug() << "computeCameraResponse()" << endl;
+//     kDebug() << "computeCameraResponse()" << endl;
     loadImagesInMemory();
     switch(responseType())
     {
@@ -299,7 +299,7 @@ void Bracketing2HDRPlugin::computeCameraResponse()
     int height = m_images[0].image->height();
     while(true)
     {
-        kDebug() << "New loop" << endl;
+//         kDebug() << "New loop" << endl;
         // Compute answer
         createHDRPaintDevice( device );
         // Copy the old responses
@@ -382,7 +382,7 @@ void Bracketing2HDRPlugin::computeCameraResponse()
             DIFF(m_intensityB, iBOld);
         }
         #undef DIFF
-        kDebug() << "Optimization delta = " << (sumdiff/count) << " = " << sumdiff << " / " << count << endl;
+//         kDebug() << "Optimization delta = " << (sumdiff/count) << " = " << sumdiff << " / " << count << endl;
         if( sumdiff/count < epsilon)
             return;
     }
@@ -404,8 +404,8 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
         f.apexBrightness = 2.0 * log(f.aperture ) + log( 1.0 / f.exposure) - log( f.sensitivity / 3.125 );
         f.apexBrightness /= log(2.0);
         f.apexBrightness = 1.0 / ( powf(2.0, f.apexBrightness) * ( 1.0592f * 11.4f / 3.125f ) ); // TODO: the magic number is apparrently dependent of the camera, this value is taken from pfscalibrate, this need to be configurable (it is the reflected-light meter calibration constant)
-        
-        kDebug() << "Loading fileName " << fileName << " Exposure = " << f.exposure << " Adjusted exposure = " << f.apexBrightness << " Aperture " << f.aperture << " Sensitivity = " << f.sensitivity << endl;
+
+//         kDebug() << "Loading fileName " << fileName << " Exposure = " << f.exposure << " Adjusted exposure = " << f.apexBrightness << " Aperture " << f.aperture << " Sensitivity = " << f.sensitivity << endl;
         // import the image
         KisDoc2 d;
         d.import(fileName);
@@ -417,7 +417,7 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
         }
         if(!f.device)
         {
-            kDebug() << "Image " << fileName << " has fail to load." << endl;
+//             kDebug() << "Image " << fileName << " has fail to load." << endl;
             return false;
         }
         // compute the maximum and minimu response

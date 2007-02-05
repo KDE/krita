@@ -16,7 +16,6 @@
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kicon.h>
 #include <QImage>
@@ -71,7 +70,6 @@ QIcon KisGroupLayer::icon() const
 
 void KisGroupLayer::setDirty()
 {
-    kDebug(41001) << "KisGroupLayer::setDirty " << name() << endl;
     QRect rc = extent();
     KisLayer::setDirty(rc);
     emit sigDirtyRegionAdded( extent() );
@@ -79,14 +77,12 @@ void KisGroupLayer::setDirty()
 
 void KisGroupLayer::setDirty(const QRect & rc)
 {
-    kDebug(41001) << "KisGroupLayer::setDirty " << name() << ", " << rc << endl;
     KisLayer::setDirty(rc);
     emit sigDirtyRectAdded( rc );
 }
 
 void KisGroupLayer::setDirty( const QRegion & region)
 {
-    kDebug(41001) << "KisGroupLayer::setDirty " << name() << ", " << region << endl;
     KisLayer::setDirty( region );
     emit sigDirtyRegionAdded( region );
 }
@@ -106,14 +102,11 @@ bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) {
 
 KisPaintDeviceSP KisGroupLayer::projection()
 {
-    kDebug(41001) << "KisGroupLayer::projection\n";
-
     // We don't have a parent, and we've got only one child: abuse the child's
     // paint device as the projection if the child is visible
     if (parent().isNull() && childCount() == 1) {
         KisPaintLayerSP l = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(firstChild().data()));
         if (paintLayerInducesProjectionOptimization(l)) {
-            kDebug() << ">>>>>>>>>>>> Returning the single child layer\n";
             return l->paintDevice();
         }
     }
@@ -305,7 +298,6 @@ QImage KisGroupLayer::createThumbnail(qint32 w, qint32 h)
 
 void KisGroupLayer::updateProjection(const QRect & rc)
 {
-    kDebug(41001) << "KisGroupLayer::updateProjection " << rc << endl;
     if ( !rc.isValid() ) return ;
 
     // Get the first layer in this group to start compositing with
@@ -405,7 +397,6 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     {
         if(first)
         {
-            kDebug() << "First is true: " << child->name() << "\n";
             // Copy the lowest layer rather than compositing it with the background
             // or an empty image. This means the layer's composite op is ignored,
             // which is consistent with Photoshop and gimp.

@@ -17,7 +17,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <kdebug.h>
 #include <klocale.h>
 
 #include "kis_debug_areas.h"
@@ -149,7 +148,6 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
 
 void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
-    kDebug(41001) << "rotateLeft90 called\n";
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
@@ -205,7 +203,6 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
 
 void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
-    kDebug(41001) << "Rotating 180\n";
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;

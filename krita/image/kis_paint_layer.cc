@@ -243,7 +243,6 @@ KisPaintDeviceSP KisPaintLayer::createMask() {
     if (hasMask())
         return m_mask;
 
-    kDebug(41001) << k_funcinfo << endl;
     // Grey8 nicely fits our needs of being intuitively comparable to other apps'
     // mask layer interfaces. It does have an alpha component though, which is a bit
     // less appropriate in this context.
@@ -262,14 +261,12 @@ void KisPaintLayer::createMaskFromPaintDevice(KisPaintDeviceSP from) {
     if (hasMask())
         return; // Or overwrite? XXX
 
-    kDebug(41001) << k_funcinfo << endl;
     m_mask = from; // KisPaintDevice(*from); XXX
 
     genericMaskCreationHelper();
 }
 
 void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
-    kDebug(41001) << k_funcinfo << endl;
     m_mask = new KisPaintDevice(KoColorSpaceRegistry::instance()
             ->colorSpace(KoID("GRAYA"), 0));
     m_mask->setParentLayer(this);
@@ -311,13 +308,11 @@ void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
 
 KisPaintDeviceSP KisPaintLayer::getMask() {
     createMask();
-    kDebug(41001) << k_funcinfo << endl;
     return m_mask;
 }
 
 KisSelectionSP KisPaintLayer::getMaskAsSelection() {
     createMask();
-    kDebug(41001) << k_funcinfo << endl;
     return m_maskAsSelection;
 }
 
@@ -365,7 +360,6 @@ void KisPaintLayer::genericMaskCreationHelper() {
 }
 
 void KisPaintLayer::setDirty() {
-    kDebug(41001) << "KisPaintLayer::setDirty " << name() << endl;
     QRect rc = extent();
     if (hasMask())
         convertMaskToSelection(rc);
@@ -373,14 +367,12 @@ void KisPaintLayer::setDirty() {
 }
 
 void KisPaintLayer::setDirty(const QRect & rect) {
-    kDebug(41001) << "KisPaintLayer::setDirty " << name() << "," << rect << endl;
     if (hasMask())
         convertMaskToSelection(rect);
     super::setDirty(rect);
 }
 
 void KisPaintLayer::setDirty(const QRegion & region) {
-    kDebug(41001) << "KisPaintLayer::setDirty " << name() << "," << region << endl;
     if (hasMask()) {
         QVector<QRect> regionRects = region.rects();
         QVector<QRect>::iterator it = regionRects.begin();
@@ -404,7 +396,6 @@ namespace {
         KisCreateMaskCommand(const QString& name, KisPaintLayer* layer)
             : super(name), m_layer(layer) {}
         virtual void execute() {
-            kDebug(41001) << k_funcinfo << endl;
             if (!m_mask)
                 m_mask = m_layer->createMask();
             else
@@ -490,7 +481,6 @@ namespace {
             m_mask = m_layer->getMask();
             }
             virtual void execute() {
-                kDebug(41001) << k_funcinfo << endl;
                 m_layer->removeMask();
             }
             virtual void unexecute() {

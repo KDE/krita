@@ -75,19 +75,19 @@ void KisBlurFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
-    
+
 
     if (dst != src) { // TODO: fix the convolution painter to avoid that stupid copy
-        kDebug() << "src != dst\n";
+//         kDebug() << "src != dst\n";
         KisPainter gc(dst);
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
-    
+
     setProgressTotalSteps(size.width() * size.height());
 
     if(!config) config = new KisFilterConfiguration(id().id(), 1);
-    
+
     QVariant value;
     int shape = (config->getProperty("shape", value)) ? value.toInt() : 0;
     uint halfWidth = (config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
@@ -96,12 +96,12 @@ void KisBlurFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
     uint height = 2 * halfHeight + 1;
     int rotate = (config->getProperty("rotate", value)) ? value.toInt() : 0;
     int strength = 100 - (config->getProperty("strength", value)) ? value.toUInt() : 0;
-    
+
     int hFade = (halfWidth * strength) / 100;
     int vFade = (halfHeight * strength) / 100;
-    
+
     KisAutobrushShape* kas;
-    kDebug() << width << " " << height << " " << hFade << " " << vFade << endl;
+//     kDebug() << width << " " << height << " " << hFade << " " << vFade << endl;
     switch(shape)
     {
         case 1:
@@ -114,9 +114,9 @@ void KisBlurFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
     }
     QImage mask;
     kas->createBrush(&mask);
-    
-    mask.convertToFormat(QImage::Format_Mono); 
-    
+
+    mask.convertToFormat(QImage::Format_Mono);
+
     if( rotate != 0)
     {
         QWMatrix m;
@@ -124,17 +124,17 @@ void KisBlurFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
         mask = mask.transformed( m );
         if( (mask.height() & 1) || mask.width() & 1)
         {
-            mask.scaled( mask.width() + !(mask.width() & 1), 
-                         mask.height() + !(mask.height() & 1), 
+            mask.scaled( mask.width() + !(mask.width() & 1),
+                         mask.height() + !(mask.height() & 1),
                          Qt::KeepAspectRatio,
                          Qt::SmoothTransformation );
         }
     }
-    
-    KisKernelSP kernel = KisKernelSP(KisKernel::fromQImage(mask)); 
+
+    KisKernelSP kernel = KisKernelSP(KisKernel::fromQImage(mask));
     KisConvolutionPainter painter( dst );
     painter.applyMatrix(kernel, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
-    
+
     if (painter.cancelRequested()) {
         cancel();
     }

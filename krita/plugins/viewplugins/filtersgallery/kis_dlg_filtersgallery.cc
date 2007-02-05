@@ -57,6 +57,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView2* view, QWidget* parent,const
     setMainWidget(m_widget);
     // Initialize filters list
     connect(m_widget->filtersList , SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(selectionHasChanged(QListWidgetItem* )));
+    connect(m_widget->filtersList , SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectionHasChanged(QListWidgetItem* )));
     // Initialize configWidgetHolder
     //m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     // Initialize preview widget

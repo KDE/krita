@@ -23,15 +23,14 @@
 #include "kis_filters_listview.h"
 
 #include <QApplication>
-#include <QTimer>
 #include <QPainter>
 #include <QPixmap>
-#include <QTime>
 #include <QListWidgetItem>
- #include <QListWidget>
+#include <QListWidget>
 
 #include <threadweaver/Job.h>
 
+#include <kdebug.h>
 #include <kglobalsettings.h>
 
 #include "kis_types.h"
@@ -43,15 +42,17 @@
 #include "kis_filter.h"
 #include "kis_filter_strategy.h"
 
+using namespace ThreadWeaver;
+
 // ------------------------------------------------
 
-class ThumbnailJob : public ThreadWeaver::Job
+class ThumbnailJob : public Job
 {
 
 public:
 
     ThumbnailJob(QObject * parent, KisPaintDeviceSP dev, KisFiltersIconViewItem * item, KoColorProfile * profile, const QRect & bounds)
-        : ThreadWeaver::Job( parent )
+        : Job( parent )
         , m_dev( dev )
         , m_item( item )
         , m_canceled( false )
@@ -68,21 +69,23 @@ public:
 
     void run()
         {
-            KisPaintDeviceSP thumbPreview = KisPaintDeviceSP(new KisPaintDevice(*m_dev));
+
             m_item->filter()->disableProgress();
-            m_item->filter()->process(thumbPreview, m_bounds, m_item->filterConfiguration());
+            m_item->filter()->process(m_dev, m_bounds, m_item->filterConfiguration());
 
             if (!m_canceled) {
-                m_image = thumbPreview->convertToQImage(m_profile);
+                m_image = m_dev->convertToQImage(m_profile);
 
             }
 
-            m_item->setIcon( QPixmap::fromImage( m_image ) );
-            m_item->setText( m_filter->id().name() );
             setFinished( true );
         }
 
-    KisFiltersIconViewItem * item() { return m_item; }
+    KisFiltersIconViewItem * item()
+        {
+            m_item->setIcon( QPixmap::fromImage( m_image ) );
+            return m_item;
+        }
 
 private:
     KisPaintDeviceSP m_dev;
@@ -143,7 +146,7 @@ void KisFiltersListView::init()
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding ));
     setMinimumWidth(160);
 
-    m_weaver = new ThreadWeaver::Weaver();
+    m_weaver = new Weaver();
     KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("");
     m_weaver->setMaximumNumberOfThreads( cfg->readEntry("maxthreads",  10) );
@@ -203,11 +206,14 @@ void KisFiltersListView::buildPreviews()
             {
                 KisFiltersIconViewItem * item = new KisFiltersIconViewItem(filter.data(), itc.value());
                 // XXX: deep copy the thumb?
-                ThumbnailJob * job = new ThumbnailJob( this, m_thumb, item, m_profile, bounds );
+                item->setText( filter->id().name() );
+                KisPaintDeviceSP thumbPreview = KisPaintDeviceSP(new KisPaintDevice(*m_thumb));
+                ThumbnailJob * job = new ThumbnailJob( this, thumbPreview, item, m_profile, bounds );
                 m_weaver->enqueue( job );
             }
         }
     }
+    m_weaver->finish();
     QApplication::restoreOverrideCursor();
 }
 
@@ -222,7 +228,7 @@ void KisFiltersListView::setPaintDevice(KisPaintDeviceSP pd)
     }
 }
 
-void KisFiltersListView::itemDone( ThreadWeaver::Job * job)
+void KisFiltersListView::itemDone( Job * job)
 {
     ThumbnailJob * thumbnailJob = dynamic_cast<ThumbnailJob*>( job );
     if ( thumbnailJob ) {

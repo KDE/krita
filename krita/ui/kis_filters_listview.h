@@ -29,7 +29,7 @@
 #include <QWidget>
 
 #include <threadweaver/ThreadWeaver.h>
-
+#include <threadweaver/Job.h>
 #include "KoID.h"
 
 #include <krita_export.h>
@@ -43,6 +43,8 @@ class KisFilterConfiguration;
 class KisPreviewView;
 class KisFiltersIconViewItem;
 class KisFiltersListView;
+
+using namespace ThreadWeaver;
 
 class KRITAUI_EXPORT KisFiltersIconViewItem : public QListWidgetItem
 {
@@ -91,7 +93,7 @@ public:
 
 private slots:
 
-    void itemDone( ThreadWeaver::Job * );
+    void itemDone( Job * );
 
 private:
 

@@ -28,7 +28,6 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
-#include "kis_background.h"
 #include "kis_qpainter_image_context.h"
 
 

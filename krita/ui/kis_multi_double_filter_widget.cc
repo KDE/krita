@@ -97,6 +97,8 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QString filterid, QWidget
 void KisMultiDoubleFilterWidget::setConfiguration(KisFilterConfiguration * config)
 {
 
+    if ( !config ) return;
+
     for (int i = 0; i < m_nbdoubleWidgets ; ++i) {
         double val = config->getDouble(m_doubleWidgets[i]->objectName());
         m_doubleWidgets[i]->setValue(val);

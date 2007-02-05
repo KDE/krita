@@ -74,15 +74,18 @@ public:
             m_item->filter()->process(m_dev, m_bounds, m_item->filterConfiguration());
 
             if (!m_canceled) {
+                kDebug() << "Converting to qimage " << endl;
                 m_image = m_dev->convertToQImage(m_profile);
 
             }
 
             setFinished( true );
+            kDebug() << "done " << m_item->filter()->id().name() << endl;
         }
 
     KisFiltersIconViewItem * item()
         {
+            kDebug() << "getting item " << m_item->filter()->id().name() << endl;
             m_item->setIcon( QPixmap::fromImage( m_image ) );
             return m_item;
         }
@@ -90,10 +93,8 @@ public:
 private:
     KisPaintDeviceSP m_dev;
     KisFiltersIconViewItem * m_item;
-    KisFilter * m_filter;
     bool m_canceled;
     QImage m_image;
-    KisFilterConfiguration * m_config;
     KoColorProfile * m_profile;
     const QRect m_bounds;
 };
@@ -137,6 +138,12 @@ KisFiltersListView::KisFiltersListView(KisPaintDeviceSP device, QWidget* parent,
     buildPreviews();
 
 }
+
+KisFiltersListView::~KisFiltersListView()
+{
+    m_weaver->requestAbort();
+}
+
 
 void KisFiltersListView::init()
 {
@@ -223,6 +230,7 @@ void KisFiltersListView::setPaintDevice(KisPaintDeviceSP pd)
 {
     if( pd != m_original)
     {
+        kDebug() << "pd: " << pd->name() << endl;
         m_original = pd;
         buildPreviews();
     }

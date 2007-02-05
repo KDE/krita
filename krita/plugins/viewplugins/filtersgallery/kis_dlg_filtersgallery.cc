@@ -51,12 +51,11 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView2* view, QWidget* parent,const
     setObjectName(name);
    // Initialize main widget
     m_widget = new KisWdgFiltersGallery(this);
-    m_widget->filtersList->setLayer(view->image()->activeLayer());
+
     m_widget->filtersList->setProfile(view->canvasBase()->monitorProfile());
 
     setMainWidget(m_widget);
     // Initialize filters list
-    connect(m_widget->filtersList , SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(selectionHasChanged(QListWidgetItem* )));
     connect(m_widget->filtersList , SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectionHasChanged(QListWidgetItem* )));
     // Initialize configWidgetHolder
     //m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -65,7 +64,9 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView2* view, QWidget* parent,const
     if (m_view->image() && m_view->image()->activeDevice())
     {
         m_widget->previewWidget->slotSetDevice( m_view->image()->activeDevice() );
+        m_widget->filtersList->setPaintDevice( m_view->image()->activeDevice() );
     }
+
     connect( m_widget->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
     resize( minimumSizeHint());
     m_widget->previewWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
@@ -130,13 +131,14 @@ void KisDlgFiltersGallery::refreshPreview( )
 
     KisPaintDeviceSP layer =  m_widget->previewWidget->getDevice();
 
-    KisTransaction cmd("Temporary transaction", layer);
-    KisFilterConfiguration* config = m_currentConfigWidget->configuration();
-
-    QRect rect = layer->exactBounds();
-    m_currentFilter->process(layer, rect, config);
-    m_widget->previewWidget->slotUpdate();
-    cmd.unexecute();
+    if ( m_currentConfigWidget ) {
+        KisFilterConfiguration* config = m_currentConfigWidget->configuration();
+        KisTransaction cmd("Temporary transaction", layer);
+        QRect rect = layer->exactBounds();
+        m_currentFilter->process(layer, rect, config);
+        m_widget->previewWidget->slotUpdate();
+        cmd.unexecute();
+    }
 
 }
 

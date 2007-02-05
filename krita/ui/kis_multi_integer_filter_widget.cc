@@ -94,6 +94,8 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QString filterid, QWidg
 
 void KisMultiIntegerFilterWidget::setConfiguration( KisFilterConfiguration * config )
 {
+    if ( !config ) return;
+
     for (int i = 0; i < nbValues(); ++i) {
         KisDelayedActionIntegerInput *  w = m_integerWidgets[i];
         if (w) {

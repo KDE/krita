@@ -61,6 +61,7 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QString filterid, QWidget * p
 
 void KisMultiBoolFilterWidget::setConfiguration(KisFilterConfiguration * config)
 {
+    if ( !config ) return;
 
     for (int i = 0; i < m_nbboolWidgets; ++i) {
         double val = config->getBool(m_boolWidgets[i]->objectName());

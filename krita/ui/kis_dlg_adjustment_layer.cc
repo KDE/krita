@@ -95,7 +95,6 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
     m_filtersList = new KisFiltersListView(m_dev, page, true);
-    connect(m_filtersList , SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(selectionHasChanged(Q3IconViewItem* )));
     connect(m_filtersList , SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectionHasChanged(Q3IconViewItem* )));
     grid->addWidget(m_filtersList, 1, 0, 2, 1);
 

@@ -78,6 +78,8 @@ public:
 
     KisFiltersListView(KisPaintDeviceSP layer, QWidget* parent, bool filterForAdjustmentLayers = false);
 
+    ~KisFiltersListView();
+
 private:
 
     void init();

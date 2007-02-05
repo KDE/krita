@@ -64,8 +64,8 @@ public:
 
     GLuint backgroundTexture() const;
 
-    static const int BACKGROUND_TEXTURE_WIDTH = 32;
-    static const int BACKGROUND_TEXTURE_HEIGHT = 32;
+    static const int BACKGROUND_TEXTURE_WIDTH = 64;
+    static const int BACKGROUND_TEXTURE_HEIGHT = 64;
 
     // Get the image texture tile containing the point (pixelX, pixelY).
     GLuint imageTextureTile(int pixelX, int pixelY) const;

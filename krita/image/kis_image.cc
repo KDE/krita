@@ -584,6 +584,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisShared(rhs)
 
 KisImage::~KisImage()
 {
+    delete m_d->projection;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;

@@ -72,6 +72,8 @@ QHash<QString, KisFilterConfiguration*> KisFilter::bookmarkedConfigurations( con
 
 void KisFilter::saveToBookmark(const QString& configname, KisFilterConfiguration* config)
 {
+    if ( config == 0 ) return;
+
     KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup(configEntryGroup());
     cfg->writeEntry(configname,config->toString());

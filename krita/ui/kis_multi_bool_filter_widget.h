@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <QCheckBox>
+#include <QVector>
 
 #include "krita_export.h"
 #include <kis_filter_config_widget.h>
@@ -46,11 +47,10 @@ public:
     virtual void setConfiguration(KisFilterConfiguration * cfg);
     virtual KisFilterConfiguration* configuration() const;
 public:
-    inline qint32 nbValues() const { return m_nbboolWidgets; };
+    inline qint32 nbValues() const { return m_boolWidgets.count(); };
     inline bool valueAt( qint32 i ) const { return m_boolWidgets[i]->isChecked(); };
 private:
-    QCheckBox** m_boolWidgets;
-    qint32 m_nbboolWidgets;
+    QVector<QCheckBox*> m_boolWidgets;
     QString m_filterid;
 };
 

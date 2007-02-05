@@ -29,6 +29,9 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 
+#include <threadweaver/ThreadWeaver.h>
+#include <threadweaver/Job.h>
+
 #include "KoID.h"
 
 #include "kis_doc2.h"
@@ -46,8 +49,31 @@
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_view2.h"
-#include <kis_progress_display_interface.h>
+#include "kis_progress_display_interface.h"
+#include "kis_threaded_applicator.h"
+/*
+class FilterJob : public KisJob
+{
+public:
 
+
+};
+
+class FilterJobFactory : public KisJobFactory
+{
+public:
+
+    KisJobFactory()
+        : KisJobFactory()
+        , m_filter( filter )
+        , m_config( config )
+        {
+        }
+    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin)
+        {
+        }
+};
+*/
 
 class KisFilterManager::KisFilterManagerPrivate {
 public:

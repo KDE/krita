@@ -36,25 +36,24 @@ KisBoolWidgetParam::KisBoolWidgetParam(  bool ninitvalue, const QString & nlabel
 KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QString filterid, QWidget * parent, const QString & caption, vKisBoolWidgetParam iwparam) :
     KisFilterConfigWidget( parent ), m_filterid(filterid)
 {
-    qint32 m_nbboolWidgets = iwparam.size();
+    qint32 nbboolWidgets = iwparam.size();
 
     this->setWindowTitle(caption);
 
     QVBoxLayout *widgetLayout = new QVBoxLayout(this);
-    widgetLayout->setMargin(m_nbboolWidgets + 1);
+    widgetLayout->setMargin(nbboolWidgets + 1);
 
-    m_boolWidgets = new QCheckBox*[ m_nbboolWidgets ];
 
-    for( qint32 i = 0; i < m_nbboolWidgets; ++i)
+    for( qint32 i = 0; i < nbboolWidgets; ++i)
     {
-        m_boolWidgets[i] = new QCheckBox(this);
-        m_boolWidgets[i]->setObjectName(iwparam[i].name);
-        m_boolWidgets[i]->setChecked(iwparam[i].initvalue);
-        m_boolWidgets[i]->setText(iwparam[i].label);
-        connect(m_boolWidgets[i], SIGNAL(toggled( bool ) ), SIGNAL(sigPleaseUpdatePreview()));
-        widgetLayout->addWidget(m_boolWidgets[i]);
+        QCheckBox * cb = new QCheckBox(this);
+        cb->setObjectName(iwparam[i].name);
+        cb->setChecked(iwparam[i].initvalue);
+        cb->setText(iwparam[i].label);
+        connect(cb, SIGNAL(toggled( bool ) ), SIGNAL(sigPleaseUpdatePreview()));
+        widgetLayout->addWidget(cb);
+        m_boolWidgets.append(cb);
     }
-//     QSpacerItem * sp = new QSpacerItem(1, 1);
     widgetLayout->addStretch();
 }
 
@@ -63,7 +62,7 @@ void KisMultiBoolFilterWidget::setConfiguration(KisFilterConfiguration * config)
 {
     if ( !config ) return;
 
-    for (int i = 0; i < m_nbboolWidgets; ++i) {
+    for (int i = 0; i < nbValues(); ++i) {
         double val = config->getBool(m_boolWidgets[i]->objectName());
         m_boolWidgets[i]->setChecked(val);
     }

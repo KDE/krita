@@ -105,7 +105,11 @@ KoScriptingDocker::KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclien
     d->view = new QTreeView(widget);
     d->view->setRootIsDecorated(false);
     d->view->header()->hide();
+
+    //Kross::ActionCollectionModel::Mode modelmode = Kross::ActionCollectionModel::Mode( Kross::ActionCollectionModel::ToolTips );
+    //d->model = new Kross::ActionCollectionProxyModel(this, new Kross::ActionCollectionModel(this, 0, modelmode));
     d->model = new Kross::ActionCollectionProxyModel(this);
+
     d->view->setModel(d->model);
     layout->addWidget(d->view, 1);
     d->view->expandAll();

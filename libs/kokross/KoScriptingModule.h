@@ -48,16 +48,16 @@ class KOKROSS_EXPORT KoScriptingModule : public QObject
     public Q_SLOTS:
 
         /** Return the \a KoApplicationAdaptor object. */
-        QObject* application();
+        virtual QObject* application();
 
         /** Return the \a KoMainWindow object. */
-        QObject* shell();
+        virtual QObject* shell();
 
         /** Return the \a KMainWindow object. */
-        QWidget* mainWindow();
+        virtual QWidget* mainWindow();
 
         /** Return the \a KoDocumentAdaptor object. */
-        QObject* document();
+        virtual QObject* document();
 
     private:
         QPointer<KoView> m_view;

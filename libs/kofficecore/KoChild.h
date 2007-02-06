@@ -253,22 +253,6 @@ public:
   virtual QPolygon oldPointArray( const QMatrix &matrix );
 
   /**
-   * Marks this child as either transparent or not.
-   * @param transparent set this child to transparent (true)
-   *           or opaque (false).
-   *
-   * @see #isTransparent
-   */
-  virtual void setTransparent( bool transparent );
-
-  /**
-   * It might be interesting for view updates and repainting in general
-   * whether a child is transparent or not.
-   * @return true when this child is marked as transparent.
-   */
-  virtual bool isTransparent() const;
-
-  /**
    * Different actions are taken depending on where a child frame is
    * hit. Two gadgets are known: one for the border (5 pixels) and one
    * for the inner area.

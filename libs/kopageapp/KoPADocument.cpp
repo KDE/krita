@@ -43,14 +43,10 @@ KoPADocument::~KoPADocument()
     qDeleteAll( m_masterPages );
 }
 
-void KoPADocument::paintContent( QPainter &painter, const QRect &rect, bool transparent,
-                                double zoomX, double zoomY )
+void KoPADocument::paintContent( QPainter &painter, const QRect &rect)
 {
     Q_UNUSED( painter );
     Q_UNUSED( rect );
-    Q_UNUSED( transparent );
-    Q_UNUSED( zoomX );
-    Q_UNUSED( zoomY );
 }
 
 bool KoPADocument::loadXML( QIODevice *, const KoXmlDocument & doc )

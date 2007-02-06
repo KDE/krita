@@ -1019,13 +1019,11 @@ KoView* KisDoc2::createViewInstance(QWidget* parent)
     return v;
 }
 
-void KisDoc2::paintContent(QPainter& painter, const QRect& rc, bool transparent, double zoomX, double zoomY)
+void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
 {
-    Q_UNUSED(transparent);
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
     KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
-    painter.scale(zoomX, zoomY);
     QRect rect = rc & m_d->currentImage()->bounds();
     m_d->currentImage()->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
 }

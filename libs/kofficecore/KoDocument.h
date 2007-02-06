@@ -398,13 +398,9 @@ public:
      *
      *  @param painter     The painter object onto which will be drawn.
      *  @param rect        The rect that should be used in the painter object.
-     *  @param transparent If true then the entire rectangle is erased before painting.
      *  @param view        The KoView is needed to fiddle about with the active widget, when painting children.
-     *  @param zoomX       The zoom value to be applied to X coordinates when painting.
-     *  @param zoomY       The zoom value to be applied to Y coordinates when painting.
      */
-    virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false,
-                                  KoView *view = 0L, double zoomX = 1.0, double zoomY = 1.0 );
+    virtual void paintEverything( QPainter &painter, const QRect &rect, KoView *view = 0);
 
     /**
      * @brief Generates a preview picture of the document
@@ -418,12 +414,10 @@ public:
      *  @param painter     The painter object onto which will be drawn.
      *  @param rect        The rect that should be used in the painter object.
      *  @param view        The KoView is needed to fiddle about with the active widget.
-     *  @param zoomX       The zoom value to be applied to X coordinates when painting.
-     *  @param zoomY       The zoom value to be applied to Y coordinates when painting.
      *
      *  @see #paintChild #paintEverything #paintContent
      */
-    virtual void paintChildren( QPainter &painter, const QRect &rect, KoView *view, double zoomX = 1.0, double zoomY = 1.0 );
+    virtual void paintChildren( QPainter &painter, const QRect &rect, KoView *view);
 
     /**
      *  Paint a given child. Normally called by paintChildren().
@@ -431,13 +425,10 @@ public:
      *  @param child       The child to be painted.
      *  @param painter     The painter object onto which will be drawn.
      *  @param view        The KoView is needed to fiddle about with the active widget.
-     *  @param zoomX       The zoom value to be applied to X coordinates when painting.
-     *  @param zoomY       The zoom value to be applied to Y coordinates when painting.
      *
      *  @see #paintEverything #paintChildren #paintContent
      */
-    virtual void paintChild( KoDocumentChild *child, QPainter &painter, KoView *view,
-                             double zoomX = 1.0, double zoomY = 1.0 );
+    virtual void paintChild( KoDocumentChild *child, QPainter &painter, KoView *view);
 
     /**
      *  Paints the data itself. Normally called by paintEverything(). It does not
@@ -446,14 +437,10 @@ public:
      *
      *  @param painter     The painter object onto which will be drawn.
      *  @param rect        The rect that should be used in the painter object.
-     *  @param transparent If false the implementing method should fill the background.
-     *  @param zoomX       The zoom value to be applied to X coordinates when painting.
-     *  @param zoomY       The zoom value to be applied to Y coordinates when painting.
      *
      *  @see #paintEverything
      */
-    virtual void paintContent( QPainter &painter, const QRect &rect, bool transparent = false,
-                               double zoomX = 1.0, double zoomY = 1.0 ) = 0;
+    virtual void paintContent( QPainter &painter, const QRect &rect) = 0;
 
     /**
      * Called by koApplication to check for an autosave file in $HOME

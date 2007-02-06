@@ -37,8 +37,7 @@ public:
     explicit KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
     virtual ~KoPADocument();
 
-    void paintContent( QPainter &painter, const QRect &rect, bool transparent = false,
-                       double zoomX = 1.0, double zoomY = 1.0 );
+    void paintContent( QPainter &painter, const QRect &rect);
 
     bool loadXML( QIODevice *, const KoXmlDocument & doc );
     bool loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,

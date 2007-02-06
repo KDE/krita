@@ -802,25 +802,25 @@ QDomDocument KoDocument::viewBuildDocument( KoView *view )
     return res;
 }
 
-void KoDocument::paintEverything( QPainter &painter, const QRect &rect, bool transparent, KoView *view, double zoomX, double zoomY )
+void KoDocument::paintEverything( QPainter &painter, const QRect &rect, KoView *view)
 {
-    paintContent( painter, rect, transparent, zoomX, zoomY );
-    paintChildren( painter, rect, view, zoomX, zoomY );
+    paintContent( painter, rect );
+    paintChildren( painter, rect, view);
 }
 
-void KoDocument::paintChildren( QPainter &painter, const QRect &/*rect*/, KoView *view, double zoomX, double zoomY )
+void KoDocument::paintChildren( QPainter &painter, const QRect &/*rect*/, KoView *view)
 {
     Q3PtrListIterator<KoDocumentChild> it( d->m_children );
     for (; it.current(); ++it )
     {
         // #### todo: paint only if child is visible inside rect
         painter.save();
-        paintChild( it.current(), painter, view, zoomX, zoomY );
+        paintChild( it.current(), painter, view);
         painter.restore();
     }
 }
 
-void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *view, double zoomX, double zoomY )
+void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *view)
 {
     if ( child->isDeleted() )
         return;
@@ -828,11 +828,10 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
     // QRegion rgn = painter.clipRegion();
 
     child->transform( painter );
-    child->document()->paintEverything( painter, child->contentRect(), child->isTransparent(), view, zoomX, zoomY );
+    child->document()->paintEverything( painter, child->contentRect(), view);
 
     if ( view && view->partManager() )
     {
-        // ### do we need to apply zoomX and zoomY here ?
         KParts::PartManager *manager = view->partManager();
 
         painter.scale( 1.0 / child->xScaling(), 1.0 / child->yScaling() );
@@ -1319,7 +1318,7 @@ QPixmap KoDocument::generatePreview( const QSize& size )
 
     QPainter p;
     p.begin(&pix);
-    paintEverything(p, rc, false);
+    paintEverything(p, rc);
     p.end();
 
     return pix.scaled(QSize(previewWidth, previewHeight), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);

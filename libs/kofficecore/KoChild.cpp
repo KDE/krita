@@ -47,7 +47,6 @@ public:
   QMatrix m_matrix;
   bool m_lock;
   QPolygon m_old;
-  bool m_transparent;
   int m_contentsX;
   int m_contentsY;
 };
@@ -60,7 +59,6 @@ KoChild::KoChild( QObject *parent, const char* /*name*/ )
   d->m_shearX = d->m_shearY = 0.0;
   d->m_rotation = 0.0;
   d->m_lock = false;
-  d->m_transparent = false;
 
   updateMatrix();
 }
@@ -325,16 +323,6 @@ QPolygon KoChild::oldPointArray( const QMatrix &matrix )
       arr.setPoint( i, matrix.map( arr.point( i ) ) );
 
   return arr;
-}
-
-void KoChild::setTransparent( bool transparent )
-{
-  d->m_transparent = transparent;
-}
-
-bool KoChild::isTransparent() const
-{
-  return d->m_transparent;
 }
 
 KoChild::Gadget KoChild::gadgetHitTest( const QPoint &p )

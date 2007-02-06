@@ -78,12 +78,8 @@ public:
 
     /**
      * Draw the image embedded in another KOffice document
-     *
-     * XXX: Use of transparent, zoomX and zoomY is not supported
-     *      by Krita because we appear to be doing our zooming
-     *      elsewhere. This may affect KOffice compatibility.
      */
-    virtual void paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/);
+    virtual void paintContent(QPainter& painter, const QRect& rect);
 
     virtual QDomDocument saveXML();
 

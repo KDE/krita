@@ -238,7 +238,7 @@ public:
   /**
    * calls KoDocument::paintEverything()
    */
-  virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false );
+  virtual void paintEverything( QPainter &painter, const QRect &rect);
 
   /**
    * @return TRUE if the document @p doc is represented in this view by

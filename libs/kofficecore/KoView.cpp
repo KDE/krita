@@ -372,7 +372,7 @@ void KoView::partActivateEvent( KParts::PartActivateEvent *event )
     KoDocumentChild *child = koDocument()->child( (KoDocument *)event->part() );
     if ( child && event->activated() )
     {
-      if ( child->isRectangle() && !child->isTransparent() )
+      if ( child->isRectangle() )
       {
         KoViewChild *viewChild = new KoViewChild( child, this );
         d->m_children.append( viewChild );
@@ -539,9 +539,9 @@ void KoView::disableAutoScroll( )
     d->m_scrollTimer->stop();
 }
 
-void KoView::paintEverything( QPainter &painter, const QRect &rect, bool transparent )
+void KoView::paintEverything( QPainter &painter, const QRect &rect)
 {
-  koDocument()->paintEverything( painter, rect, transparent, this );
+  koDocument()->paintEverything( painter, rect, this );
 }
 
 KoViewChild *KoView::child( KoView *view )

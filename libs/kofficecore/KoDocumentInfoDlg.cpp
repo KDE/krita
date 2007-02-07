@@ -104,7 +104,7 @@ void KoDocumentInfoDlg::initAboutTab()
     KMimeType::Ptr mime = KMimeType::mimeType( doc->mimeType() );
     if ( ! mime )
         mime = KMimeType::defaultMimeTypePtr();
-    QPixmap p = mime->pixmap( K3Icon::Desktop, 48 );
+    QPixmap p = KIconLoader::global()->loadMimeTypeIcon(mime->iconName(), K3Icon::Desktop, 48 );
     d->m_aboutUi->lblPixmap->setPixmap( p );
 
     d->m_aboutUi->leTitle->setText( d->m_info->aboutInfo( "title" ) );

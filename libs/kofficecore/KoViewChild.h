@@ -37,9 +37,9 @@ class KoViewChild : public KoChild
         KoViewChild( KoDocumentChild *child, KoView *_parentView );
         virtual ~KoViewChild();
 
-        KoDocumentChild *documentChild() const { return m_child; }
-        KoView *parentView() const { return m_parentView; }
-        KoFrame *frame() const { return m_frame; }
+        KoDocumentChild *documentChild() const;
+        KoView *parentView() const;
+        KoFrame *frame() const;
 
         void setInitialFrameGeometry();
 

@@ -21,6 +21,7 @@
 #define KOCOLORSPACEMATHS_H_
 
 #include <KoIntegerMaths.h>
+#undef _T
 
 template<typename _T>
 class KoColorSpaceMathsTraits {

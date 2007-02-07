@@ -161,4 +161,19 @@ void KoViewChild::setInitialFrameGeometry()
     slotFrameGeometryChanged();
 }
 
+KoView* KoViewChild::parentView() const
+{
+   return m_parentView;
+}
+
+KoDocumentChild *KoViewChild::documentChild() const
+{
+    return m_child;
+}
+
+KoFrame *KoViewChild::frame() const
+{
+    return m_frame;
+}
+
 #include "KoViewChild.moc"

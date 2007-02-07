@@ -128,8 +128,8 @@ KoShapeSelector::KoShapeSelector(QWidget *parent)
     m_canvas = new Canvas(this);
     setWidget(m_canvas);
     m_shapeManager = new KoShapeManager(m_canvas);
-    setMinimumSize(30, 200);
-    setFeatures(DockWidgetMovable|DockWidgetFloatable);
+    setMinimumSize(30, 30);
+    //setFeatures(DockWidgetClosable|DockWidgetMovable|DockWidgetFloatable);
 
     QTimer::singleShot(0, this, SLOT(loadShapeTypes()));
 }

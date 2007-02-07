@@ -77,9 +77,6 @@ void KoToolManager::setup() {
     if (m_tools.size() > 0)
         return;
 
-    // add defaults. XXX: Make these settable? We have not yet solved
-    // the problem of application-specific versus generic flake tools,
-    // have we?
     m_tools.append( new ToolHelper(new KoCreatePathToolFactory(this, QStringList())) );
     m_tools.append( new ToolHelper(new KoCreateShapesToolFactory(this, QStringList())) );
     m_defaultTool = new ToolHelper(new KoInteractionToolFactory(this, QStringList()));
@@ -384,7 +381,6 @@ KoInputDevice KoToolManager::currentInputDevice() const
 }
 
 void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
-
     QList<QString> types;
     foreach(KoShape *shape, shapes) {
         if (! types.contains(shape->shapeId())) {
@@ -410,6 +406,27 @@ KoToolProxy *KoToolManager::createToolProxy(KoCanvasBase *parentCanvas) {
     ToolProxy *tp = new ToolProxy(parentCanvas);
     m_proxies.insert(parentCanvas, tp);
     return tp;
+}
+
+QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes) {
+    QList<QString> types;
+    foreach(KoShape *shape, shapes)
+        if (! types.contains(shape->shapeId()))
+            types.append(shape->shapeId());
+
+    QString toolType = KoInteractionTool_ID;
+    int prio = INT_MIN;
+    foreach(ToolHelper *helper, m_tools) {
+        if(helper->priority() <= prio)
+            continue;
+        if(helper->toolType() == KoToolFactory::mainToolType())
+            continue;
+        if(types.contains(helper->activationShapeId())) {
+            toolType = helper->id();
+            prio = helper->priority();
+        }
+    }
+    return toolType;
 }
 
 //static

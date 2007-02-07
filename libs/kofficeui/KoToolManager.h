@@ -160,6 +160,13 @@ public:
     /// @return the currently active pointing device
     KoInputDevice currentInputDevice() const;
 
+    /**
+     * For the list of shapes find out which tool is the highest priorty tool that can handle it.
+     * @returns the toolId for the shapes.
+     * @param a list of shapes, a selection for example, that is used to look for the tool.
+     */
+    QString preferredToolForSelection(const QList<KoShape*> &shapes);
+
 public slots:
     /**
      * Request switching tool

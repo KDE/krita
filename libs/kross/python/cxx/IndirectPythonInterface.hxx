@@ -188,6 +188,6 @@ void _XINCREF( PyObject *op );
 void _XDECREF( PyObject *op );
 
 char *__Py_PackageContext();
-};
+}
 
 #endif    // __CXX_INDIRECT_PYTHON_INTERFACE__HXX__

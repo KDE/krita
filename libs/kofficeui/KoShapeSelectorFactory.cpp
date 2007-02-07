@@ -39,8 +39,5 @@ Qt::DockWidgetArea KoShapeSelectorFactory::defaultDockWidgetArea() const
 
 QDockWidget* KoShapeSelectorFactory::createDockWidget()
 {
-    KoShapeSelector* widget = new KoShapeSelector();
-    widget->setObjectName(dockId());
-
-    return widget;
+    return new KoShapeSelector();
 }

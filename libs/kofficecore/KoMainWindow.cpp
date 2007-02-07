@@ -1763,6 +1763,7 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 
     if( !d->m_dockWidgetMap.contains( factory->dockId() ) ) {
         dockWidget = factory->createDockWidget();
+        dockWidget->setObjectName(factory->dockId());
         dockWidget->setParent( this );
         addDockWidget( factory->defaultDockWidgetArea(), dockWidget );
         d->m_dockWidgetMap.insert( factory->dockId(), dockWidget );

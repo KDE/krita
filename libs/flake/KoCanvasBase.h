@@ -102,12 +102,10 @@ public:
     virtual void updateCanvas(const QRectF& rc) = 0;
 
     /**
-     * Tell the canvas to repaint the specified region. The
-     * are document coordinates, not view coordinates. The
-     * default implementation calls the slow QRegion::boundingRect()
-     * method.
+     * This method should not be here; a QRegion is integer based and thus can only be used on whole points.
+     * Code should use the QRectF version instead.
      */
-    virtual void updateCanvas(const QRegion & region);
+    virtual void updateCanvas(const QRegion & region) KDE_DEPRECATED;
 
     /**
      * Return the proxy to the active tool (determining which tool

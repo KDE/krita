@@ -31,7 +31,7 @@ endif (APPLE)
 
 
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} -DHAVE_CONFIG_H=1)
+add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 
 include (MacroAdditionalCleanFiles)
@@ -111,7 +111,7 @@ endif(FREETYPE_FOUND AND FONTCONFIG_FOUND)
 
 if(SHOULD_BUILD_KARBON)
 	add_subdirectory(karbon)
-endif(SHOULD_BUILD_KARBON)	
+endif(SHOULD_BUILD_KARBON)
 
 add_subdirectory(kdgantt)
 add_subdirectory(kchart)
@@ -136,7 +136,7 @@ add_subdirectory(shapes)
 add_subdirectory(autocorrect)
 add_subdirectory(doc)
 add_subdirectory( cmake )
-message( STATUS "Re-add kexi when we will port them")
+message( STATUS "Re-add kexi when ported")
 
 
 ADD_CUSTOM_TARGET(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

@@ -90,7 +90,8 @@ public:
         CharacterStyleId,///< CharacterStyle used for markup of the counter
         BulletCharacter,///< an int with the unicode value of the character
         BulletSize,     ///< size in percent relative to the height of the text
-        Alignment       ///< Alignment of the counter
+        Alignment,      ///< Alignment of the counter
+        MinimumWidth    ///< The minimum width, in pt, of the listItem including the prefix/suffix.
     };
 
     /**
@@ -138,6 +139,8 @@ public:
     int relativeBulletSize() const { return propertyInt (BulletSize); }
     void setAlignment(Qt::Alignment align) { setProperty(Alignment, static_cast<int> (align) ); }
     Qt::Alignment alignment() const { return static_cast<Qt::Alignment>(propertyInt(Alignment)); }
+    void setMinimumWidth(double width) { setProperty(MinimumWidth, width); }
+    double minimumWidth() { return propertyDouble(MinimumWidth); }
 
     /// return the name of the style.
     const QString& name() const { return m_name; }
@@ -167,6 +170,7 @@ private:
     void setProperty(int key, const QVariant &value);
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
+    double propertyDouble(int key) const;
     QString propertyString(int key) const;
 
 private:

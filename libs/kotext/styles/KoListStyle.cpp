@@ -71,6 +71,13 @@ int KoListStyle::propertyInt(int key) const {
     return variant->toInt();
 }
 
+double KoListStyle::propertyDouble(int key) const {
+    const QVariant *variant = m_stylesPrivate->get(key);
+    if(variant == 0)
+        return 0.;
+    return variant->toDouble();
+}
+
 bool KoListStyle::propertyBoolean(int key) const {
     const QVariant *variant = m_stylesPrivate->get(key);
     if(variant == 0)
@@ -153,5 +160,3 @@ kDebug() << "  yap, equal\n";
 QTextList *KoListStyle::textList(const QTextDocument *doc) {
     return m_textLists[doc];
 }
-
-// TODO; what did I invent m_textLists for?  Can it be removed?

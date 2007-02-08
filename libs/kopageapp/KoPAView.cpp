@@ -118,9 +118,8 @@ void KoPAView::initGUI()
     createDockWidget( &shapeSelectorFactory );
     KoToolDockerFactory toolDockerFactory;
     KoToolDocker* toolDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
-    m_canvasController->setToolOptionDocker(toolDocker);
 
-
+    connect(m_canvasController, SIGNAL(setToolOptionDocker(QWidget*)), toolDocker, SLOT(newOptionWidget(QWidget*)));
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 
     show();

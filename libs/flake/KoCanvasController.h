@@ -31,7 +31,6 @@ class QGridLayout;
 class QPaintEvent;
 class QEvent;
 class KoShape;
-class KoToolDocker;
 
 /**
  * This widget is a wrapper around your canvas providing scrollbars.
@@ -127,24 +126,7 @@ public:
      */
     void ensureVisible( KoShape *shape );
 
-
-    /**
-     * Return a pointer to the dock widget that will contain the
-     * options widget associated with the current tool for this
-     * canvas. May be 0.
-     */
-    KoToolDocker * toolOptionDocker()
-        {
-            return m_toolOptionDocker;
-        }
-
-    /**
-     * Set the tool option dock widget.
-     */
-    void setToolOptionDocker( KoToolDocker * toolOptionDocker )
-        {
-            m_toolOptionDocker = toolOptionDocker;
-        }
+    void setToolOptionWidget(QWidget *widget);
 
 signals:
     /**
@@ -181,6 +163,8 @@ signals:
      * @param size the size in widget pixels.
      */
     void sizeChanged(const QSize & size );
+
+    void toolOptionWidgetChanged(QWidget *widget);
 
 protected slots:
 
@@ -221,9 +205,7 @@ private:
     KoCanvasBase *m_canvas;
     Viewport *m_viewport;
     bool m_centerCanvas;
-    KoToolDocker * m_toolOptionDocker;
-
-
+    QWidget *m_toolOptionWidget;
 };
 
 #endif

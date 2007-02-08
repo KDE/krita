@@ -34,21 +34,20 @@ class QWidget;
  */
 class KOFFICEUI_EXPORT KoToolDocker : public QDockWidget
 {
+    Q_OBJECT
 public:
+    KoToolDocker(QWidget *parent = 0);
+    ~KoToolDocker();
 
-    KoToolDocker();
-
-    virtual ~KoToolDocker();
-
+public slots:
     /**
      * Update the option widget to the argument one, removing the currently set widget.
      */
-    void setOptionWidget(QWidget * widget);
+    void newOptionWidget(QWidget *widget);
 
 private:
-
-    QStackedWidget * m_stack;
-    QWidget * m_label;
+    class Private;
+    Private *d;
 };
 
 #endif

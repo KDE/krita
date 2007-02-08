@@ -10,7 +10,6 @@ include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} )
 
 set(kofficeui_LIB_SRCS
    KoBrush.cpp 
-   KoInputDevice.cpp
    KoCharSelectDia.cpp
    KoContextHelp.cpp
    KoCsvImportDialog.cpp
@@ -41,9 +40,6 @@ set(kofficeui_LIB_SRCS
    KoTemplateChooseDia.cpp
    KoTemplateCreateDia.cpp
    KoToolBox.cpp
-   KoToolManager.cpp
-   KoToolManager_p.cpp
-   KoToolRegistry.cpp
    KoUnitWidgets.cpp
    KoZoomAction.cpp
    KoZoomHandler.cpp
@@ -56,7 +52,6 @@ set(kofficeui_LIB_SRCS
    KoShapeSelectorFactory.cpp
     KoToolDocker.cpp
     KoToolDockerFactory.cpp
-    ToolProxy_p.cpp
 )
 
 kde4_automoc(${kofficeui_LIB_SRCS})

@@ -39,5 +39,5 @@ Qt::DockWidgetArea KoToolBoxFactory::defaultDockWidgetArea() const
 
 QDockWidget* KoToolBoxFactory::createDockWidget()
 {
-    return KoToolManager::instance()->toolBox(m_appName);
+    return new KoToolBox(m_appName);
 }

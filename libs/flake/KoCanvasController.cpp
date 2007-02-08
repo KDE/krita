@@ -42,7 +42,7 @@
 KoCanvasController::KoCanvasController(QWidget *parent)
     : QScrollArea(parent)
     , m_canvas(0)
-    , m_toolOptionDocker(0)
+    , m_toolOptionWidget(0)
 {
     setFrameShape(NoFrame);
     m_viewport = new Viewport(this);
@@ -202,6 +202,12 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
     }
 }
 
+void KoCanvasController::setToolOptionWidget(QWidget *widget) {
+//   if(m_toolOptionWidget)
+//       m_toolOptionWidget->deleteLater();
+    m_toolOptionWidget = widget;
+    emit toolOptionWidgetChanged(m_toolOptionWidget);
+}
 
 // ********** Viewport **********
 KoCanvasController::Viewport::Viewport(KoCanvasController* parent)

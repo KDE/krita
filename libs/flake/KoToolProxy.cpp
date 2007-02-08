@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
- *
- * Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,17 +17,10 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-//   // local lib
-#include "KoToolManager.h"
-#include "ToolProxy_p.h"
+#include "KoToolProxy.h"
 
-//   // koffice
-#include <KoTool.h>
-#include <KoPointerEvent.h>
-#include <KoInputDevice.h>
-
-//   // Qt + kde
-#include <QEvent>
+#include "KoTool.h"
+#include "KoPointerEvent.h"
 
 /* Unused for now.
 #if 0
@@ -75,81 +67,97 @@ namespace {
 }
 #endif */
 
-// ******** ToolProxy **********
-ToolProxy::ToolProxy(KoCanvasBase *canvas)
-    : m_canvas(canvas),
-    m_activeTool(0)
+
+class KoToolProxy::Private {
+public:
+    Private() : canvas(0), activeTool(0) {}
+
+    KoCanvasBase *canvas;
+    KoTool *activeTool;
+};
+
+KoToolProxy::KoToolProxy(KoCanvasBase *canvas)
+    : d(new Private())
 {
+    d->canvas = canvas;
 }
 
-void ToolProxy::paint( QPainter &painter, KoViewConverter &converter )
-{
-    if (m_activeTool) m_activeTool->paint(painter, converter);
+KoToolProxy::~KoToolProxy() {
+    delete d;
 }
 
-void ToolProxy::repaintDecorations()
-{
-    if (m_activeTool) m_activeTool->repaintDecorations();
+void KoToolProxy::paint( QPainter &painter, KoViewConverter &converter ) {
+    if (d->activeTool) d->activeTool->paint(painter, converter);
 }
 
-void ToolProxy::tabletEvent( QTabletEvent *event, const QPointF &point )
+void KoToolProxy::repaintDecorations()
+{
+    if (d->activeTool) d->activeTool->repaintDecorations();
+}
+
+void KoToolProxy::tabletEvent( QTabletEvent *event, const QPointF &point )
 {
     KoPointerEvent ev( event, point );
     switch( event->type() ) {
     case ( QEvent::TabletPress ):
-        if (m_activeTool) m_activeTool->mousePressEvent( &ev );
+        if (d->activeTool) d->activeTool->mousePressEvent( &ev );
         break;
     case ( QEvent::TabletRelease ):
-        if (m_activeTool) m_activeTool->mouseReleaseEvent( &ev );
+        if (d->activeTool) d->activeTool->mouseReleaseEvent( &ev );
         break;
-    case ( QEvent::TabletMove ):
+    //case ( QEvent::TabletMove ):
     default:
-        if (m_activeTool) m_activeTool->mouseMoveEvent( &ev );
+        if (d->activeTool) d->activeTool->mouseMoveEvent( &ev );
     }
 }
 
-void ToolProxy::mousePressEvent( QMouseEvent *event, const QPointF &point )
+void KoToolProxy::mousePressEvent( QMouseEvent *event, const QPointF &point )
 {
     KoPointerEvent ev( event, point );
-    if (m_activeTool) m_activeTool->mousePressEvent( &ev );
+    if (d->activeTool) d->activeTool->mousePressEvent( &ev );
 }
 
-void ToolProxy::mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point )
+void KoToolProxy::mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point )
 {
     KoPointerEvent ev( event, point );
-    if (m_activeTool) m_activeTool->mouseDoubleClickEvent( &ev );
+    if (d->activeTool) d->activeTool->mouseDoubleClickEvent( &ev );
 }
 
-void ToolProxy::mouseMoveEvent( QMouseEvent *event, const QPointF &point )
+void KoToolProxy::mouseMoveEvent( QMouseEvent *event, const QPointF &point )
 {
     KoPointerEvent ev( event, point );
-    if (m_activeTool) m_activeTool->mouseMoveEvent( &ev );
+    if (d->activeTool) d->activeTool->mouseMoveEvent( &ev );
 }
 
-void ToolProxy::mouseReleaseEvent( QMouseEvent *event, const QPointF &point )
+void KoToolProxy::mouseReleaseEvent( QMouseEvent *event, const QPointF &point )
 {
     KoPointerEvent ev( event, point );
-    if (m_activeTool) m_activeTool->mouseReleaseEvent( &ev );
+    if (d->activeTool) d->activeTool->mouseReleaseEvent( &ev );
 }
 
-void ToolProxy::keyPressEvent(QKeyEvent *event)
+void KoToolProxy::keyPressEvent(QKeyEvent *event)
 {
-    if (m_activeTool) m_activeTool->keyPressEvent( event );
+    if (d->activeTool) d->activeTool->keyPressEvent( event );
 }
 
-void ToolProxy::keyReleaseEvent(QKeyEvent *event)
+void KoToolProxy::keyReleaseEvent(QKeyEvent *event)
 {
-    if (m_activeTool) m_activeTool->keyReleaseEvent( event );
+    if (d->activeTool) d->activeTool->keyReleaseEvent( event );
 }
 
-void ToolProxy::wheelEvent ( QWheelEvent * event, const QPointF &point )
+void KoToolProxy::wheelEvent ( QWheelEvent * event, const QPointF &point )
 {
     KoPointerEvent ev( event, point );
-    if (m_activeTool) m_activeTool->wheelEvent( &ev );
+    if (d->activeTool) d->activeTool->wheelEvent( &ev );
 }
 
-KoToolSelection* ToolProxy::selection() {
-    if (m_activeTool)
-        return m_activeTool->selection();
+KoToolSelection* KoToolProxy::selection() {
+    if (d->activeTool)
+        return d->activeTool->selection();
     return 0;
 }
+
+void KoToolProxy::setActiveTool(KoTool *tool) {
+    d->activeTool = tool;
+}
+

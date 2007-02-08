@@ -51,7 +51,6 @@ class FLAKE_EXPORT KoTool : public QObject
 {
     Q_OBJECT
 public:
-
     /**
      * Constructor, normally only called by the factory (see KoToolFactory)
      * @param canvas the canvas interface this tool will work for.
@@ -59,48 +58,13 @@ public:
     explicit KoTool(KoCanvasBase *canvas );
     virtual ~KoTool();
 
-public:
-
     /**
      * request a repaint of the decorations to be made. This triggers
      * an update call on the canvas, but does not paint directly.
      */
     virtual void repaintDecorations() {};
 
-public slots:
-    /**
-     * This method is called when this tool instance is activated.
-     * For any main window there is only one tool active at a time, which then gets all
-     * user input.  Switching between tools will call deactivate on one and activate on the
-     * new tool allowing the tool to flush items (like a selection) when it is not in use.
-     * <p>There is one case where two tools are activated at the same.  This is the case
-     * where one tool delegates work to another temporarily.  For example, while shift is
-     * being held down.  The second tool will get activated with temporary=true and
-     * it should emit sigDone() when the state that activated it is ended.
-     * <p>One of the important tasks of activate is to call useCursor()
-     *
-     * @param temporary if true, this tool is only temporarily actived
-     *                  and should emit sigDone when it is done.
-     * @see deactivate()
-     */
-    virtual void activate(bool temporary = false);
-
-    /**
-     * This method is called whenever this tool is no longer the
-     * active tool
-     * @see activate()
-     */
-    virtual void deactivate();
-
-    /**
-     * This method is called whenever a property in the resource
-     * provider associated with the canvas this tool belongs to
-     * changes. An example is currently selected foreground color.
-     */
-    virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
-
 public:
-
     /**
      * Return if dragging (moving with the mouse down) to the edge of a canvas should scroll the
      * canvas (default is true).
@@ -199,6 +163,42 @@ public:
      * @param event state of this wheel event
      */
     virtual void wheelEvent ( KoPointerEvent * event );
+
+    void setToolId(const QString &id);
+    QString toolId() const;
+
+public slots:
+    /**
+     * This method is called when this tool instance is activated.
+     * For any main window there is only one tool active at a time, which then gets all
+     * user input.  Switching between tools will call deactivate on one and activate on the
+     * new tool allowing the tool to flush items (like a selection) when it is not in use.
+     * <p>There is one case where two tools are activated at the same.  This is the case
+     * where one tool delegates work to another temporarily.  For example, while shift is
+     * being held down.  The second tool will get activated with temporary=true and
+     * it should emit sigDone() when the state that activated it is ended.
+     * <p>One of the important tasks of activate is to call useCursor()
+     *
+     * @param temporary if true, this tool is only temporarily actived
+     *                  and should emit sigDone when it is done.
+     * @see deactivate()
+     */
+    virtual void activate(bool temporary = false);
+
+    /**
+     * This method is called whenever this tool is no longer the
+     * active tool
+     * @see activate()
+     */
+    virtual void deactivate();
+
+    /**
+     * This method is called whenever a property in the resource
+     * provider associated with the canvas this tool belongs to
+     * changes. An example is currently selected foreground color.
+     */
+    virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
+
 
 signals:
 

@@ -21,28 +21,27 @@
 #ifndef KO_TOOL_MANAGER
 #define KO_TOOL_MANAGER
 
-#include <kofficeui_export.h>
+#include <KoInputDevice.h>
+#include <flake_export.h>
+
 #include <QObject>
 #include <QCursor>
-#include <QStack>
-#include <QLabel>
-#include <QHash>
-
-#include <KoInputDevice.h>
+//#include <QStack>
+//#include <QLabel>
+//#include <QHash>
+#include <QList>
 
 class ToolHelper;
 class KoCanvasController;
 class KoCanvasBase;
 class KoTool;
 class KoCreateShapesTool;
-class KoToolBox;
 class KActionCollection;
 class KoShape;
-class KoToolSelection;
-class KoToolDocker;
-class ToolProxy;
+// class KoToolSelection;
+// class KoToolDocker;
 class KoToolProxy;
-
+class QAbstractButton;
 
 /**
  * This class manages the activation and deactivation of tools for
@@ -98,7 +97,7 @@ class KoToolProxy;
    the tool stuff.)
 
  */
-class KOFFICEUI_EXPORT KoToolManager : public QObject {
+class FLAKE_EXPORT KoToolManager : public QObject {
     Q_OBJECT
 
 public:
@@ -107,19 +106,6 @@ public:
     ~KoToolManager();
 
     KoToolProxy *createToolProxy(KoCanvasBase *parentCanvas);
-
-    /**
-     * Create a new ToolBox with title.
-     * This creates a new toolbox that is initialized with all tools registered for you
-     * to attach to the view of your application.
-     * If your view extends KoView the line of code is:
-@code
-    shell()->addDockWidget(Qt::LeftDockWidgetArea,
-        KoToolManager::instance()->toolBox("MyApp"));
-@endcode
-     * @param applicationName the title for the toolbox
-     */
-    KoToolBox *toolBox(const QString &applicationName = QString());
 
     /**
      * Register actions for switching to tools at the actionCollection parameter.
@@ -166,6 +152,15 @@ public:
      * @param a list of shapes, a selection for example, that is used to look for the tool.
      */
     QString preferredToolForSelection(const QList<KoShape*> &shapes);
+
+    struct Button {
+        QAbstractButton *button;
+        QString section;
+        int priority;
+        int buttonGroupId;
+        QString visibilityCode;
+    };
+    QList<Button> createToolList() const;
 
 public slots:
     /**
@@ -215,21 +210,10 @@ private slots:
     void selectionChanged(QList<KoShape*> shapes);
 
 private:
+    class Private;
+    Private *const d;
 
     static KoToolManager* s_instance;
-
-    QList<ToolHelper*> m_tools;
-    QList<KoCanvasController*> m_canvases;
-    KoCanvasController *m_activeCanvas;
-    KoTool *m_activeTool;
-    ToolHelper *m_defaultTool; // the pointer thingy
-    QString m_activeToolId;
-    QString m_activationShapeId;
-
-    QHash<KoTool*, int> m_uniqueToolIds; // for the changedTool signal
-    QHash<KoCanvasController*, QHash<QString, KoTool*> > m_allTools;
-    QHash<KoCanvasBase*, ToolProxy*> m_proxies;
-    QStack<QString> m_stack; // stack of temporary tools
 };
 
 #endif

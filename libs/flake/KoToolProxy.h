@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 #define _KO_TOOL_PROXY_H_
 
 #include <KoViewConverter.h>
+#include <flake_export.h>
 
 #include <QPainter>
 
@@ -30,6 +32,8 @@ class QKeyEvent;
 class QWheelEvent;
 class QTabletEvent;
 class KoToolSelection;
+class KoTool;
+class KoCanvasBase;
 
 /**
  * Simple proxy interface that provides a point d'appui for canvas
@@ -40,33 +44,38 @@ class KoToolSelection;
  * The implementator of KoToolProxy should be solely responsible
  * for knowing which tool is currently in the user's hands.
  */
-class KoToolProxy {
+class FLAKE_EXPORT KoToolProxy {
 
 public:
-    KoToolProxy() {}
-    virtual ~KoToolProxy(){}
+    explicit KoToolProxy(KoCanvasBase *canvas);
+    ~KoToolProxy();
 
     /**
      * Call this when the tools in the current tool stack need to
      * repaint their decorations
      */
-    virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0;
-    virtual void repaintDecorations() = 0;
-    virtual void tabletEvent( QTabletEvent *event, const QPointF &pnt ) = 0;
-    virtual void mousePressEvent( QMouseEvent *event, const QPointF &pnt  ) = 0;
-    virtual void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &pnt  ) = 0;
-    virtual void mouseMoveEvent( QMouseEvent *event, const QPointF &pnt  ) = 0;
-    virtual void mouseReleaseEvent( QMouseEvent *event, const QPointF &pnt  ) = 0;
-    virtual void keyPressEvent(QKeyEvent *event) = 0;
-    virtual void keyReleaseEvent(QKeyEvent *event) = 0;
-    virtual void wheelEvent ( QWheelEvent * event, const QPointF &pnt  ) = 0;
+    void paint( QPainter &painter, KoViewConverter &converter );
+    void repaintDecorations();
+    void tabletEvent( QTabletEvent *event, const QPointF &point );
+    void mousePressEvent( QMouseEvent *event, const QPointF &point  );
+    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point  );
+    void mouseMoveEvent( QMouseEvent *event, const QPointF &point  );
+    void mouseReleaseEvent( QMouseEvent *event, const QPointF &point  );
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+    void wheelEvent ( QWheelEvent * event, const QPointF &point  );
+    void setActiveTool(KoTool *tool);
 
     /**
      * Call this to get data _from_ the tool, instead of events _to_ the tool,
      * namely what the tool thinks is the current selection on the data contained
      * inside the tool.
      */
-    virtual KoToolSelection* selection() = 0;
+    KoToolSelection* selection();
+
+private:
+    class Private;
+    Private * const d;
 };
 
 

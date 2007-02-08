@@ -19,57 +19,41 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoToolDocker.h"
-#include <QStackedWidget>
-#include <QGridLayout>
-#include <QLabel>
-#include <QWidget>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <QVBoxLayout>
 
-#include <KoToolManager.h>
+class KoToolDocker::Private {
+public:
+    Private() : currentWidget(0) {}
+    QWidget *currentWidget;
+};
 
-KoToolDocker::KoToolDocker()
-    : QDockWidget(i18n("Tool Options"))
+
+KoToolDocker::KoToolDocker(QWidget *parent)
+    : QDockWidget(i18n("Tool Options"), parent)
 {
+    d = new Private();
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_stack = new QStackedWidget(this);
-    setWidget(m_stack);
-
-    m_label = new QWidget();
-    QGridLayout *lay = new QGridLayout(m_label);
-    QLabel *label = new QLabel(i18n("No options for current tool"), m_label);
-    lay->addWidget(label, 0, 0, Qt::AlignTop | Qt::AlignHCenter);
-
-    m_stack->addWidget( m_label );
-    m_stack->setCurrentWidget( m_label );
+    QWidget *child = new QWidget();
+    QLayout *layout = new QVBoxLayout(child);
+    layout->setMargin(0);
+    child->setLayout(layout);
+    setWidget(child);
 }
 
-KoToolDocker::~KoToolDocker()
-{
-    // Remove the tool option widgets from our layout: we don't own them,
-    // we are not going to delete them. 
-    // XXX: The Right (tm) solution here is to use QPointer (bsar, see http://doc.trolltech.com/qq/qq14-guardedpointers.html)
-    while (m_stack->count() > 0) {
-        QWidget * w = m_stack->widget(0);
-        kDebug(30004) << "Stack count: " << m_stack->count() << ", widget: " << w << endl;
-        m_stack->removeWidget(w);
-        w->setParent(0);
-    }
-    delete m_label;
+KoToolDocker::~KoToolDocker() {
+    delete d;
 }
 
-void KoToolDocker::setOptionWidget(QWidget * widget)
-{
-    kDebug() << "Setting to " << widget << endl;
-    if (widget ) {
-        if ( m_stack->indexOf(widget) == -1) {
-                m_stack->addWidget(widget);
-        }
-        m_stack->setCurrentWidget(widget);
+void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
+   if(d->currentWidget) {
+       widget()->layout()->removeWidget(d->currentWidget);
+        d->currentWidget->setParent(0);
+        //d->currentWidget->deleteLater();
     }
-    else {
-        kDebug() << "index of label " << m_stack->indexOf(m_label) << endl;
-        m_stack->setCurrentWidget( m_label );
-    }
+    d->currentWidget = optionWidget;
+    widget()->layout()->addWidget(optionWidget);
 }
+
+#include "KoToolDocker.moc"

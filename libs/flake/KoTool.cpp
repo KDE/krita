@@ -33,6 +33,7 @@ public:
     QWidget *optionWidget; ///< the optionwidget this tool will show in the option widget palette
     QCursor previousCursor;
     QHash<QString, QAction*> actionCollection;
+    QString toolId;
 };
 
 KoTool::KoTool(KoCanvasBase *canvas )
@@ -119,6 +120,14 @@ QAction *KoTool::action(const QString &name) const {
 QWidget * KoTool::createOptionWidget()
 {
     return 0;
+}
+
+void KoTool::setToolId(const QString &id) {
+    d->toolId = id;
+}
+
+QString KoTool::toolId() const {
+    return d->toolId;
 }
 
 #include "KoTool.moc"

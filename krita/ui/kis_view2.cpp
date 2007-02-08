@@ -367,7 +367,7 @@ void KisView2::slotLoadingFinished()
     KoToolDockerFactory toolDockerFactory;
     KoToolDocker * d =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
     if(d)
-        m_d->canvasController->setToolOptionDocker( d );
+        connect(m_d->canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), d, SLOT(newOptionWidget(QWidget*)));
     else
         kWarning(41007) << "Could not create tool docker: " << d << endl;
 

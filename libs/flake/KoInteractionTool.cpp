@@ -257,6 +257,23 @@ void KoInteractionTool::mouseReleaseEvent( KoPointerEvent *event ) {
     updateCursor();
 }
 
+void KoInteractionTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
+    QList<KoShape*> shapes;
+    foreach(KoShape *shape, koSelection()->selectedShapes()) {
+        if(shape->boundingRect().contains(event->point) && // first 'cheap' check
+                shape->outline().contains(event->point)) // this is more expensive but weeds out the almost hits
+            shapes.append(shape);
+    }
+    if(shapes.count() == 0) { // nothing in the selection was clicked on.
+        KoShape *shape = m_canvas->shapeManager()->shapeAt (event->point, KoFlake::ShapeOnTop, true);
+        //KoShape *shape = m_canvas->shapeManager()->shapeAt(event->point);
+        if(shape)
+            shapes.append(shape);
+    }
+
+    
+}
+
 void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
     if(m_currentStrategy &&
        (event->key() == Qt::Key_Control ||

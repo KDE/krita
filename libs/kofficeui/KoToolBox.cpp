@@ -22,6 +22,7 @@
 
 // koffice includes
 #include <KoToolFactory.h>
+#include <KoToolManager.h>
 
 // kde + qt includes
 #include <kdialog.h>
@@ -30,9 +31,24 @@
 #include <QMainWindow>
 #include <QBoxLayout>
 
-KoToolBox::KoToolBox() : QDockWidget() {
+KoToolBox::KoToolBox(const QString &title) : QDockWidget() {
     m_buttonGroup = new QButtonGroup(this);
     setFeatures(DockWidgetMovable | DockWidgetFloatable);
+    setWindowTitle(title);
+    setObjectName("ToolBox_"+ title);
+
+    foreach(KoToolManager::Button button, KoToolManager::instance()->createToolList()) {
+        addButton(button.button, button.section, button.priority, button.buttonGroupId);
+        if(! button.visibilityCode.isEmpty())
+            setVisibilityCode(button.button, button.visibilityCode);
+    }
+    setup();
+    connect(KoToolManager::instance(), SIGNAL(changedTool(int)), this, SLOT(setActiveTool(int)));
+    connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)),
+            this, SLOT(setButtonsVisible(QList<QString>)));
+    QList<QString> empty;
+    setButtonsVisible(empty);
+    //toolBox->setActiveTool(d->defaultTool->uniqueId());
 }
 
 KoToolBox::~KoToolBox() {

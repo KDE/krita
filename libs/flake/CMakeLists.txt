@@ -51,6 +51,11 @@ set(flake_SRCS
     KoToolSelection.cpp
     KoShapeLayer.cpp
     KoPostscriptPaintDevice.cpp
+    KoInputDevice.cpp
+    KoToolManager_p.cpp
+    KoToolManager.cpp
+    KoToolRegistry.cpp
+    KoToolProxy.cpp
     commands/KoGroupShapesCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp

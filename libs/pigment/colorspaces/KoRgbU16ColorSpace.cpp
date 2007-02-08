@@ -24,6 +24,7 @@
 
 #include "../compositeops/KoCompositeOpOver.h"
 #include "../compositeops/KoCompositeOpErase.h"
+#include "../compositeops/KoCompositeOpMultiply.h"
 
 
 KoRgbU16ColorSpace::KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
@@ -36,6 +37,7 @@ KoRgbU16ColorSpace::KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorPro
     init();
     addCompositeOp( new KoCompositeOpOver<KoRgbU16Traits>( this ) );
     addCompositeOp( new KoCompositeOpErase<KoRgbU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpMultiply<KoRgbU16Traits>( this ) );
 }
 
 bool KoRgbU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const

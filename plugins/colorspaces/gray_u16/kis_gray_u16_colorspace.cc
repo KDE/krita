@@ -26,6 +26,7 @@
 
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
+#include "compositeops/KoCompositeOpMultiply.h"
 
 
 KisGrayAU16ColorSpace ::KisGrayAU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
@@ -38,4 +39,5 @@ KisGrayAU16ColorSpace ::KisGrayAU16ColorSpace(KoColorSpaceRegistry * parent, KoC
 
     addCompositeOp( new KoCompositeOpOver<GrayAU16Traits>( this ) );
     addCompositeOp( new KoCompositeOpErase<GrayAU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpMultiply<GrayAU16Traits>( this ) );
 }

@@ -24,7 +24,7 @@
 
 #include "../compositeops/KoCompositeOpOver.h"
 #include "../compositeops/KoCompositeOpErase.h"
-
+#include "../compositeops/KoCompositeOpMultiply.h"
 
 KoLabColorSpace::KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
  KoLcmsColorSpace<KoLabU16Traits>("LABA", i18n("L*a*b* (16-bit integer/channel)"), parent, COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1), icSigLabData, p)
@@ -36,6 +36,7 @@ KoLabColorSpace::KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *
     init();
     addCompositeOp( new KoCompositeOpOver<KoLabU16Traits>( this ) );
     addCompositeOp( new KoCompositeOpErase<KoLabU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpMultiply<KoLabU16Traits>( this ) );
 }
 
 bool KoLabColorSpace::willDegrade(ColorSpaceIndependence independence) const

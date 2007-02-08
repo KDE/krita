@@ -33,9 +33,9 @@ class KoZoomHandler;
 class KOFFICEUI_EXPORT KoPen : public QPen
 {
   public:
-    KDE_DEPRECATED KoPen();
-    KDE_DEPRECATED KoPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style);
-    KDE_DEPRECATED explicit KoPen(const QColor& _color);
+    KDE_CONSTRUCTOR_DEPRECATED KoPen();
+    KDE_CONSTRUCTOR_DEPRECATED KoPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style);
+    KDE_CONSTRUCTOR_DEPRECATED explicit KoPen(const QColor& _color);
     ~KoPen();
 
     /**

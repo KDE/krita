@@ -13,6 +13,7 @@ Name[ru]=Выделение непрозрачных областей
 Name[sk]=Invertovať Výber
 Name[sv]=Markera ogenomskinliga
 Name[uk]=Виділення непрозорих ділянок
+Name[zh_TW]=選擇不透明
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaselectopaque

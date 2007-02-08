@@ -26,9 +26,6 @@
 
 #include <QObject>
 #include <QCursor>
-//#include <QStack>
-//#include <QLabel>
-//#include <QHash>
 #include <QList>
 
 class ToolHelper;
@@ -38,8 +35,6 @@ class KoTool;
 class KoCreateShapesTool;
 class KActionCollection;
 class KoShape;
-// class KoToolSelection;
-// class KoToolDocker;
 class KoToolProxy;
 class QAbstractButton;
 

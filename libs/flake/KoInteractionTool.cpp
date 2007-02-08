@@ -27,6 +27,7 @@
 #include <QBitmap>
 
 #include "KoPointerEvent.h"
+#include "KoToolManager.h"
 #include "KoShape.h"
 #include "KoSelection.h"
 #include "KoShapeManager.h"
@@ -271,7 +272,8 @@ void KoInteractionTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
             shapes.append(shape);
     }
 
-    
+    KoToolManager::instance()->switchToolRequested(
+            KoToolManager::instance()->preferredToolForSelection(shapes));
 }
 
 void KoInteractionTool::keyPressEvent(QKeyEvent *event) {

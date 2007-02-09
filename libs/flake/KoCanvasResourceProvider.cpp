@@ -29,7 +29,7 @@ KoCanvasResourceProvider::KoCanvasResourceProvider(QObject * parent)
     setHandleRadius( 3 );
 }
 
-void KoCanvasResourceProvider::setResource( KoCanvasResource::EnumCanvasResource key, const QVariant & value )
+void KoCanvasResourceProvider::setResource( int key, const QVariant & value )
 {
     if ( m_resources.contains( key ) ) {
         m_resources[key] = value;
@@ -40,7 +40,7 @@ void KoCanvasResourceProvider::setResource( KoCanvasResource::EnumCanvasResource
     emit sigResourceChanged( key, value );
 }
 
-QVariant KoCanvasResourceProvider::resource(KoCanvasResource::EnumCanvasResource key)
+QVariant KoCanvasResourceProvider::resource(int key)
 {
     if ( !m_resources.contains( key ) )
         return m_empty;
@@ -48,14 +48,14 @@ QVariant KoCanvasResourceProvider::resource(KoCanvasResource::EnumCanvasResource
         return m_resources.value( key );
 }
 
-void KoCanvasResourceProvider::setKoColor( KoCanvasResource::EnumCanvasResource key, const KoColor & color )
+void KoCanvasResourceProvider::setKoColor( int key, const KoColor & color )
 {
     QVariant v;
     v.setValue( color );
     setResource( key, v );
 }
 
-KoColor KoCanvasResourceProvider::koColor( KoCanvasResource::EnumCanvasResource key )
+KoColor KoCanvasResourceProvider::koColor( int key )
 {
     return resource( key ).value<KoColor>();
 }
@@ -89,7 +89,7 @@ KoColor KoCanvasResourceProvider::backgroundColor()
 }
 
 
-void KoCanvasResourceProvider::setKoID( KoCanvasResource::EnumCanvasResource key, const KoID & id )
+void KoCanvasResourceProvider::setKoID( int key, const KoID & id )
 {
     QVariant  v;
     v.setValue( id );
@@ -97,7 +97,7 @@ void KoCanvasResourceProvider::setKoID( KoCanvasResource::EnumCanvasResource key
 
 }
 
-KoID KoCanvasResourceProvider::koID(KoCanvasResource::EnumCanvasResource key)
+KoID KoCanvasResourceProvider::koID(int key)
 {
     return resource( key ).value<KoID>();
 }

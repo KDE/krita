@@ -26,6 +26,10 @@ public:
     static QStringList underlineTypeList();
     static QStringList underlineStyleList();
 
+    enum Options {
+        ShowTextFrames =  278622039
+    };
+
 private:
     KoText() {}
 };

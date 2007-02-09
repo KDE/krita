@@ -626,7 +626,7 @@ void KoPathTool::deactivate() {
     m_currentStrategy = 0;
 }
 
-void KoPathTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
+void KoPathTool::resourceChanged( int key, const QVariant & res )
 {
     switch( key )
     {

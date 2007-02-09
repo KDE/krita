@@ -45,9 +45,9 @@ KoTool::KoTool(KoCanvasBase *canvas )
         Q_ASSERT_X(crp, "KoTool::KoTool", "No KoCanvasResourceProvider");
         if (crp)
             connect( m_canvas->resourceProvider(),
-                 SIGNAL( sigResourceChanged(KoCanvasResource::EnumCanvasResource, const QVariant & ) ),
+                 SIGNAL( sigResourceChanged(int, const QVariant & ) ),
                  this,
-                 SLOT( resourceChanged( KoCanvasResource::EnumCanvasResource, const QVariant &  ) ) );
+                 SLOT( resourceChanged( int, const QVariant &  ) ) );
     }
 }
 
@@ -64,7 +64,7 @@ void KoTool::activate(bool temporary) {
 void KoTool::deactivate() {
 }
 
-void KoTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
+void KoTool::resourceChanged( int key, const QVariant & res )
 {
     Q_UNUSED( key );
     Q_UNUSED( res );

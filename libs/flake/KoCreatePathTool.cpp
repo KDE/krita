@@ -168,7 +168,7 @@ void KoCreatePathTool::activate( bool temporary )
     m_handleRadius = m_canvas->resourceProvider()->handleRadius();
 }
 
-void KoCreatePathTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
+void KoCreatePathTool::resourceChanged( int key, const QVariant & res )
 {
     switch( key )
     {

@@ -72,15 +72,15 @@ public:
     explicit KoCanvasResourceProvider(QObject * parent);
     ~KoCanvasResourceProvider() {}
 
-    void setResource( KoCanvasResource::EnumCanvasResource key, const QVariant & value );
+    void setResource( int key, const QVariant & value );
 
     /// @return a qvariant containing the specified resource or 0 if the
     /// specified resource does not exist.
-    QVariant resource(KoCanvasResource::EnumCanvasResource key);
+    QVariant resource(int key);
 
 
-    void setKoColor( KoCanvasResource::EnumCanvasResource key, const KoColor & color );
-    KoColor koColor( KoCanvasResource::EnumCanvasResource key );
+    void setKoColor( int key, const KoColor & color );
+    KoColor koColor( int key );
 
     void setForegroundColor( const KoColor & color );
     KoColor foregroundColor();
@@ -88,8 +88,8 @@ public:
     void setBackgroundColor( const KoColor & color );
     KoColor backgroundColor();
 
-    void setKoID( KoCanvasResource::EnumCanvasResource key, const KoID & id );
-    KoID koID(KoCanvasResource::EnumCanvasResource key);
+    void setKoID( int key, const KoID & id );
+    KoID koID(int key);
 
     /// Sets the actual handle radius
     void setHandleRadius( int handleSize );
@@ -101,7 +101,7 @@ public:
 
 signals:
 
-    void sigResourceChanged(KoCanvasResource::EnumCanvasResource key, const QVariant & res);
+    void sigResourceChanged(int key, const QVariant & res);
 
 private:
 

@@ -197,7 +197,7 @@ public slots:
      * provider associated with the canvas this tool belongs to
      * changes. An example is currently selected foreground color.
      */
-    virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
+    virtual void resourceChanged( int key, const QVariant & res );
 
 
 signals:

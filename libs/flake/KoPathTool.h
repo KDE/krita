@@ -88,7 +88,7 @@ private slots:
     void joinPoints();
     void breakAtPoint();
     void breakAtSegment();
-    void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
+    void resourceChanged( int key, const QVariant & res );
 private:
 
     class ActiveHandle

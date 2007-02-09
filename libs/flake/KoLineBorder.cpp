@@ -92,3 +92,13 @@ void KoLineBorder::setMiterLimit( double miterLimit ) {
 double KoLineBorder::miterLimit() const {
     return m_pen.miterLimit();
 }
+
+const QColor & KoLineBorder::color() const
+{
+    return m_color;
+}
+
+void KoLineBorder::setColor( const QColor & color )
+{
+    m_color = color;
+}

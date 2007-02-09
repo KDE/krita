@@ -64,6 +64,11 @@ public:
     /// Returns the miter limit
     double miterLimit() const;
 
+    /// Returns the color
+    const QColor & color() const;
+    /// Stes the color
+    void setColor( const QColor & color );
+
     virtual KoInsets* borderInsets(const KoShape *shape, KoInsets &insets);
     virtual bool hasTransparency();
     virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter);

@@ -47,10 +47,6 @@ public:
     /// inherited from KoShape
     void paint( QPainter &painter, const KoViewConverter &converter );
 
-    /// inherited from KoShape
-    void paintDecorations( QPainter &painter, const KoViewConverter &converter,
-		           bool selected );
-
     /// @return The element at the point @p p
     BasicElement* elementAt( const QPointF& p );
 

@@ -103,7 +103,8 @@ KoShape::~KoShape()
     delete d;
 }
 
-void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected) {
+void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
+/* Since this code is not actually used (kivio is going to be the main user) lets disable instead of fix.
     if ( selected )
     {
         // draw connectors
@@ -117,7 +118,7 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
             painter.drawLine( QPointF( p.x() - 2, p.y() + 2 ), QPointF( p.x() + 2, p.y() - 2 ) );
             painter.drawLine( QPointF( p.x() + 2, p.y() + 2 ), QPointF( p.x() - 2, p.y() - 2 ) );
         }
-    }
+    }*/
 }
 
 void KoShape::scale( double sx, double sy )

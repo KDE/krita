@@ -45,6 +45,7 @@ class KoShapeUserData;
 class KoViewConverter;
 class KoShapeApplicationData;
 class KoShapePrivate;
+class KoCanvasBase;
 
 /**
  *
@@ -108,7 +109,7 @@ public:
      * @param selected true if the shape is currently selected
      * @param converter to convert between internal and view coordinates.
      */
-    virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected);
+    virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.

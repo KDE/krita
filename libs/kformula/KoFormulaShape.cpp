@@ -42,16 +42,6 @@ void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter 
     m_formulaRenderer->paintElement( painter, m_formulaElement );  // paint the formula
 }
 
-void KoFormulaShape::paintDecorations( QPainter &painter,
-                                       const KoViewConverter &converter, bool selected )
-{
-    Q_UNUSED( painter )
-    Q_UNUSED( converter )
-    Q_UNUSED( selected )
-    // TODO how to highlight things?? do we need it btw?
-}
-
-
 BasicElement* KoFormulaShape::elementAt( const QPointF& p )
 {
     return m_formulaElement->childElementAt( p );

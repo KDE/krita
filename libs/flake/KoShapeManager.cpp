@@ -161,7 +161,7 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
         if(! forPrint) {
             painter.save();
             painter.setRenderHint( QPainter::Antialiasing, false );
-            shape->paintDecorations( painter, converter, m_selection->isSelected(shape) );
+            shape->paintDecorations( painter, converter, m_canvas );
             painter.restore();
         }
         painter.restore();  // for the matrix

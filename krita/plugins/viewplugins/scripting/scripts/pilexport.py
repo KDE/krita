@@ -84,19 +84,32 @@ class Exporter:
         height = krtlayer.height()
         width = krtlayer.width()
 
-        progress = Krita.progress()
-        progress.setProgressTotalSteps(width * height)
+        shell = Krita.shell()
+        shell.slotSetStatusBarText("Python Imaging Library Export")
+        shell.slotProgress(0)
+        size = width * height
+        progress = 0
+        pixeldone = 0
+        try:
+            pilimage = Image.new( "RGB", (width,height) )
 
-        pilimage = Image.new( "RGB", (width,height) )
+            it = krtlayer.createRectIterator(0, 0, width, height)
+            finesh = it.isDone()
+            while (not finesh):
+                pilimage.putpixel( (it.x(),it.y()), tuple(it.pixel()) )
 
-        it = krtlayer.createRectIterator(0, 0, width, height)
-        finesh = it.isDone()
-        while (not finesh):
-            pilimage.putpixel( (it.x(),it.y()), tuple(it.pixel()) )
-            progress.incProgress()
-            finesh = it.next()
+                percent = pixeldone * 100 / size
+                if percent != progress:
+                    progress = percent
+                    shell.slotProgress( progress )
+                pixeldone += 1
 
-        #pilimage.save(self.filename,"JPEG")
-        pilimage.save(self.filename)
+                finesh = it.next()
+
+            #pilimage.save(self.filename,"JPEG")
+            pilimage.save(self.filename)
+        finally:
+            shell.slotProgress(-1)
+            shell.slotSetStatusBarText("")
 
 Exporter( self )

@@ -166,17 +166,30 @@ class Importer:
         #else:
             #raise "The Krita colorspace \"%s\" is not supported by the KritaPil-plugin"
 
-        krtprogress = Krita.progress()
-        krtprogress.setProgressTotalSteps(width * height)
-
+        shell = Krita.shell()
+        shell.slotSetStatusBarText("Python Imaging Library Import")
+        shell.slotProgress(0)
+        size = width * height
+        progress = 0
+        pixeldone = 0
         krtlayer.beginPainting("PIL import")
-        it = krtlayer.createRectIterator(0, 0, width, height)
-        finesh = it.isDone()
-        while (not finesh):
-            data = pilimage.getpixel( (it.x(),it.y()) )
-            it.setPixel( list(data) )
-            krtprogress.incProgress()
-            finesh = it.next()
-        krtlayer.endPainting()
+        try:
+            it = krtlayer.createRectIterator(0, 0, width, height)
+            finesh = it.isDone()
+            while (not finesh):
+                data = pilimage.getpixel( (it.x(),it.y()) )
+                it.setPixel( list(data) )
+
+                percent = pixeldone * 100 / size
+                if percent != progress:
+                    progress = percent
+                    shell.slotProgress( progress )
+                pixeldone += 1
+
+                finesh = it.next()
+        finally:
+            krtlayer.endPainting()
+            shell.slotProgress(-1)
+            shell.slotSetStatusBarText("")
 
 Importer( self )

@@ -27,7 +27,7 @@
 #include <QByteArray>
 #include "KoBorder.h"
 #include <kotext_export.h>
-class KoSavingContext;
+class KoTextSavingContext;
 class KoGenStyle;
 class KoParagCounter;
 class KoParagStyle;
@@ -152,7 +152,7 @@ public:
     ///                    false when saving a paragraph
     /// @param gs the style where all the properties will be saved to
     /// @param context the current context
-    void saveOasis( KoGenStyle& gs, KoSavingContext& context, bool savingStyle ) const;
+    void saveOasis( KoGenStyle& gs, KoTextSavingContext& context, bool savingStyle ) const;
 
     /// Convert an alignment string into an alignment flag (load)
     static Qt::AlignmentFlag loadOasisAlignment( const QByteArray& str );

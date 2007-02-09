@@ -540,7 +540,7 @@ void KoTextFormat::load( KoOasisContext& context )
     addRef();
 }
 
-void KoTextFormat::save( KoGenStyle& gs, KoSavingContext& context, KoTextFormat * refFormat ) const
+void KoTextFormat::save( KoGenStyle& gs, KoTextSavingContext& context, KoTextFormat * refFormat ) const
 {
     KoGenStyle::PropertyType tt = KoGenStyle::TextType;
     if ( !refFormat || this->color() != refFormat->color() )

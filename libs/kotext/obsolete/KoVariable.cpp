@@ -1031,7 +1031,7 @@ void KoVariable::loadOasis( const KoXmlElement &/*elem*/, KoOasisContext& /*cont
     // nothing to do here, reimplemented in subclasses (make it pure virtual?)
 }
 
-void KoVariable::saveOasis( KoXmlWriter& /*writer*/, KoSavingContext& /*context*/ ) const
+void KoVariable::saveOasis( KoXmlWriter& /*writer*/, KoTextSavingContext& /*context*/ ) const
 {
 }
 
@@ -1289,7 +1289,7 @@ void KoDateVariable::load( KoXmlElement& elem )
     }
 }
 
-void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoDateVariable::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const
 {
     switch( m_subtype )
     {
@@ -1571,7 +1571,7 @@ void KoTimeVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*cont
     }
 }
 
-void KoTimeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoTimeVariable::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const
 {
     writer.startElement( "text:time" );
     if ( m_correctTime != 0 ) {
@@ -1748,7 +1748,7 @@ void KoCustomVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*co
     }
 }
 
-void KoCustomVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
+void KoCustomVariable::saveOasis( KoXmlWriter& writer, KoTextSavingContext& /*context*/ ) const
 {
     //TODO save value into meta:user-defined
     writer.startElement( "text:user-field-get" ); //see 6.3.6
@@ -1796,7 +1796,7 @@ void KoMailMergeVariable::loadOasis( const KoXmlElement &/*elem*/, KoOasisContex
     // TODO
 }
 
-void KoMailMergeVariable::saveOasis( KoXmlWriter& /*writer*/, KoSavingContext& /*context*/ ) const
+void KoMailMergeVariable::saveOasis( KoXmlWriter& /*writer*/, KoTextSavingContext& /*context*/ ) const
 {
         kWarning(32500) << "Not implemented: OASIS saving of mail merge variables" << endl;
 }
@@ -1889,7 +1889,7 @@ void KoPageVariable::load( KoXmlElement& elem )
     }
 }
 
-void KoPageVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
+void KoPageVariable::saveOasis( KoXmlWriter& writer, KoTextSavingContext& /*context*/ ) const
 {
     switch( m_subtype )
     {
@@ -2154,7 +2154,7 @@ void KoFieldVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*con
     m_varValue = QVariant( elem.text() );
 }
 
-void KoFieldVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
+void KoFieldVariable::saveOasis( KoXmlWriter& writer, KoTextSavingContext& /*context*/ ) const
 {
     switch( m_subtype )
     {
@@ -2460,7 +2460,7 @@ void KoLinkVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*cont
     }
 }
 
-void KoLinkVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
+void KoLinkVariable::saveOasis( KoXmlWriter& writer, KoTextSavingContext& /*context*/ ) const
 {
     //<text:a xlink:type="simple" xlink:href="http://www.kde.org/" office:name="sdgfsdfgs">kde org wxc &lt;wxc </text:a>
     writer.startElement( "text:a" );
@@ -2566,7 +2566,7 @@ void KoNoteVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*cont
     m_varValue = QVariant( note  );
 }
 
-void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
+void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoTextSavingContext& /*context*/ ) const
 {
 //    <office:annotation><dc:date>2004-11-10</dc:date><text:p/><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p>dfgsdfsdfg</text:p><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p/><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p>gs</text:p><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p>fg</text:p></office:annotation>
     writer.startElement( "office:annotation" );
@@ -2791,7 +2791,7 @@ void KoStatisticVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /
     //TODO other copy
 }
 
-void KoStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
+void KoStatisticVariable::saveOasis( KoXmlWriter& writer, KoTextSavingContext& /*context*/ ) const
 {
     switch( m_subtype )
     {

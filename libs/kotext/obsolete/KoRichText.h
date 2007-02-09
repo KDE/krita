@@ -75,7 +75,7 @@ class KoTextFormatter;
 class KoParagVisitor;
 class KoTextDocCommand;
 class KoXmlWriter;
-class KoSavingContext;
+class KoTextSavingContext;
 
 #define QT_NO_COMPLEXTEXT
 

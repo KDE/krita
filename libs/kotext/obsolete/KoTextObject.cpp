@@ -2214,7 +2214,7 @@ KoTextCursor KoTextObject::pasteOasisText( const KoXmlElement &bodyElem, KoOasis
     return resultCursor;
 }
 
-void KoTextObject::saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoTextObject::saveOasisContent( KoXmlWriter& writer, KoTextSavingContext& context ) const
 {
     textDocument()->saveOasisContent( writer, context );
 }

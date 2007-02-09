@@ -672,7 +672,7 @@ QString KoTextDocument::selectedText( int id, bool withCustom ) const
     return s;
 }
 
-QString KoTextDocument::copySelection( KoXmlWriter& writer, KoSavingContext& context, int selectionId )
+QString KoTextDocument::copySelection( KoXmlWriter& writer, KoTextSavingContext& context, int selectionId )
 {
     KoTextCursor c1 = selectionStartCursor( selectionId );
     KoTextCursor c2 = selectionEndCursor( selectionId );
@@ -1586,7 +1586,7 @@ KoTextParag* KoTextDocument::loadList( const KoXmlElement& list, KoOasisContext&
     return lastParagraph;
 }
 
-void KoTextDocument::saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoTextDocument::saveOasisContent( KoXmlWriter& writer, KoTextSavingContext& context ) const
 {
     // Basically just call saveOasis on every paragraph.
     // KWord doesn't use this method because it does table-of-contents-handling in addition.

@@ -213,9 +213,9 @@ public:
     // For normal loading nextParagraph and pos are 0.
     KoTextParag* loadOasisText( const KoXmlElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph );
 
-    QString copySelection( KoXmlWriter& writer, KoSavingContext& context, int selectionId );
+    QString copySelection( KoXmlWriter& writer, KoTextSavingContext& context, int selectionId );
 
-    void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
+    void saveOasisContent( KoXmlWriter& writer, KoTextSavingContext& context ) const;
 
     virtual KoTextParag *createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = true );
 

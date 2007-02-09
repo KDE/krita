@@ -31,7 +31,7 @@
 #include <Q3MemArray>
 #include <Q3ValueList>
 
-class KoSavingContext;
+class KoTextSavingContext;
 class KCommand;
 class KoTextFormat;
 class QProgressDialog;
@@ -450,7 +450,7 @@ public:
     KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,KoTextCursor *cursor, KoTextParag *parag);
 
     void loadOasisContent( const KoXmlElement &bodyElem, KoOasisContext& context, KoStyleCollection * styleColl );
-    void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
+    void saveOasisContent( KoXmlWriter& writer, KoTextSavingContext& context ) const;
 
     // Similar to KoTextDocument::loadOasisText but there's no newline inserted before the first paragraph
     // or after the last one - so it's possible to paste just a few chars.

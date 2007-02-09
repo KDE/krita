@@ -104,7 +104,7 @@ int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
     return stylesLoaded;
 }
 
-void KoStyleCollection::saveOasis( KoGenStyles& styles, int styleType, KoSavingContext& context ) const
+void KoStyleCollection::saveOasis( KoGenStyles& styles, int styleType, KoTextSavingContext& context ) const
 {
     // In order to reduce the bloat, we define that the first style (usually Standard)
     // is the "parent" (reference) for the others.

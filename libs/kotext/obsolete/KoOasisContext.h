@@ -32,6 +32,7 @@ class KoVariableCollection;
 
 #include "KoListStyleStack.h"
 #include "KoTextBookmark.h"
+#include <KoSavingContext.h>
 
 // ####### TODO rename to KoTextOasisLoadingContext (wow that's long).
 // ####### maybe KoTextLoadingContext?
@@ -110,7 +111,7 @@ private:
  *
  * @author David Faure <faure@kde.org>
  */
-class KOTEXT_EXPORT KoSavingContext
+class KOTEXT_EXPORT KoTextSavingContext : public KoSavingContext
 {
 public:
     enum SavingMode { Store, Flat };
@@ -120,15 +121,9 @@ public:
     /// @param settings optional, used for saving the page-number in the first paragraph
     /// @param hasColumns optional, used by KoParagLayout for the type of page breaks
     /// @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
-    KoSavingContext( KoGenStyles& mainStyles, KoVariableSettings* settings = 0, bool hasColumns = false, SavingMode savingMode = Store );
+    KoTextSavingContext( KoGenStyles& mainStyles, KoVariableSettings* settings = 0, bool hasColumns = false, SavingMode savingMode = Store );
 
-    ~KoSavingContext();
-
-
-    KoGenStyles& mainStyles() { return m_mainStyles; }
-
-    /// @return the saving mode: Store (a KoStore will be used) or Flat (all data must be inline in the XML)
-    SavingMode savingMode() const { return m_savingMode; }
+    ~KoTextSavingContext();
 
     /// Set cursor position (so that KoTextParag can insert a processing instruction)
     void setCursorPosition( KoTextParag* cursorTextParagraph,

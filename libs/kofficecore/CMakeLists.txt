@@ -60,6 +60,7 @@ set(kofficecore_LIB_SRCS
    KoTemplates.cpp
    KoDetailsPane.cpp
    KoOasisLoadingContext.cpp
+   KoSavingContext.cpp
    KoDocumentInfoPropsPage.cpp
    KoTemplatesPane.cpp
    KoRecentDocumentsPane.cpp

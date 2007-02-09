@@ -416,7 +416,7 @@ public:
 
     /** Save the variable. Public API, does the common job and then calls saveVariable. */
     virtual void save( QDomElement &parentElem );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const;
     virtual void load( KoXmlElement &elem );
     virtual void loadOasis( const KoXmlElement &elem, KoOasisContext& context );
 
@@ -478,7 +478,7 @@ public:
     virtual int correctValue() const { return m_correctDate;}
     virtual void load( KoXmlElement &elem );
     virtual void loadOasis( const KoXmlElement &elem, KoOasisContext& context );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const;
 
     virtual QStringList subTypeList();
     /// Set this variable's subtype.
@@ -524,7 +524,7 @@ public:
     virtual int correctValue() const { return m_correctTime;}
     virtual void load( KoXmlElement &elem );
     virtual void loadOasis( const KoXmlElement &elem, KoOasisContext& context );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const;
 
     virtual QStringList subTypeList();
     virtual void setVariableSubType( short int subtype )
@@ -562,7 +562,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( KoXmlElement &elem );
     virtual void loadOasis( const KoXmlElement &elem, KoOasisContext& context );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const;
 
     QString name() const { return m_varValue.toString(); }
     virtual void recalc();
@@ -603,7 +603,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( KoXmlElement &elem );
     virtual void loadOasis( const KoXmlElement &elem, KoOasisContext& context );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const;
     virtual QString fieldCode();
 
     virtual void recalc();
@@ -645,7 +645,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( KoXmlElement &elem );
     virtual void loadOasis( const KoXmlElement &elem, KoOasisContext& context );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const;
 
     virtual QString text(bool realValue=false);
     QString name() const { return m_varValue.toString(); }
@@ -689,7 +689,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( KoXmlElement &elem );
     virtual void loadOasis( const KoXmlElement &elem, KoOasisContext& context );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const;
 protected:
     short int m_subtype;
 };
@@ -710,7 +710,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( KoXmlElement &elem );
     virtual void loadOasis( const KoXmlElement &elem, KoOasisContext& context );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const;
 
     virtual QString text(bool realValue=false);
     QString value() const { return m_varValue.toString(); }
@@ -745,7 +745,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( KoXmlElement &elem );
     virtual void loadOasis( const KoXmlElement &elem, KoOasisContext& context );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const;
 
     virtual QString text(bool realValue=false);
     QString note() const { return m_varValue.toString(); }
@@ -787,7 +787,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( KoXmlElement &elem );
     virtual void loadOasis( const KoXmlElement &elem, KoOasisContext& context );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const;
 
     virtual short int subType() const { return m_subtype; }
 

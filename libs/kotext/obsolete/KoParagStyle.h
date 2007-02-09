@@ -83,7 +83,7 @@ public:
     void loadStyle( KoXmlElement & styleElem, KoOasisContext& context );
     /// Save the style to OASIS
     /// Don't use, use the method in KoStyleCollection instead
-    QString saveStyle( KoGenStyles& genStyles, int styleType, const QString& parentStyleName, KoSavingContext& context ) const;
+    QString saveStyle( KoGenStyles& genStyles, int styleType, const QString& parentStyleName, KoTextSavingContext& context ) const;
 
     KoParagStyle * parentStyle() const {return m_parentStyle;}
     void setParentStyle( KoParagStyle *_style){ m_parentStyle = _style;}

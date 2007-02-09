@@ -809,7 +809,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
     }
 }
 
-void KoParagLayout::saveOasis( KoGenStyle& gs, KoSavingContext& context, bool savingStyle ) const
+void KoParagLayout::saveOasis( KoGenStyle& gs, KoTextSavingContext& context, bool savingStyle ) const
 {
     gs.addProperty( "fo:text-align", saveOasisAlignment( (Qt::AlignmentFlag)alignment ).data() );
     // Don't save the direction for a style, if "auto", so that the

@@ -187,7 +187,7 @@ void KoParagStyle::loadStyle( KoXmlElement & styleElem, KoOasisContext& context 
     context.styleStack().restore();
 }
 
-QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QString& parentStyleName, KoSavingContext& context ) const
+QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QString& parentStyleName, KoTextSavingContext& context ) const
 {
     KoGenStyle gs( styleType, "paragraph", parentStyleName );
 

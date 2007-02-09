@@ -27,7 +27,7 @@
 class KoGenStyles;
 class KoParagStyle;
 class KoOasisContext;
-class KoSavingContext;
+class KoTextSavingContext;
 class KoXmlWriter;
 
 struct KoStyleChangeDef {
@@ -95,7 +95,7 @@ public:
 
     /// Save the entire style collection in the OASIS OpenDocument format
     /// @p styleType is the STYLE_* value for this style.
-    void saveOasis( KoGenStyles& styles, int styleType, KoSavingContext& context ) const;
+    void saveOasis( KoGenStyles& styles, int styleType, KoTextSavingContext& context ) const;
 
     /// Save the text:outline-style element, mostly for OOo.
     void saveOasisOutlineStyles( KoXmlWriter& writer ) const;

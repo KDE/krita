@@ -93,9 +93,8 @@ KoOasisContext::~KoOasisContext()
 
 ////
 
-KoSavingContext::KoSavingContext( KoGenStyles& mainStyles, KoVariableSettings* settings, bool hasColumns, SavingMode savingMode )
-    : m_mainStyles( mainStyles ),
-      m_savingMode( savingMode ),
+KoTextSavingContext::KoTextSavingContext( KoGenStyles& mainStyles, KoVariableSettings* settings, bool hasColumns, SavingMode savingMode )
+    : KoSavingContext( mainStyles, savingMode ),
       m_cursorTextParagraph( 0 ),
       m_variableSettings( settings ),
       m_hasColumns( hasColumns )
@@ -103,23 +102,23 @@ KoSavingContext::KoSavingContext( KoGenStyles& mainStyles, KoVariableSettings* s
 }
 
 
-KoSavingContext::~KoSavingContext()
+KoTextSavingContext::~KoTextSavingContext()
 {
 }
 
-void KoSavingContext::setCursorPosition( KoTextParag* cursorTextParagraph,
+void KoTextSavingContext::setCursorPosition( KoTextParag* cursorTextParagraph,
                                          int cursorTextIndex )
 {
     m_cursorTextParagraph = cursorTextParagraph;
     m_cursorTextIndex = cursorTextIndex;
 }
 
-void KoSavingContext::addFontFace( const QString& fontName )
+void KoTextSavingContext::addFontFace( const QString& fontName )
 {
     m_fontFaces[fontName] = true;
 }
 
-void KoSavingContext::writeFontFaces( KoXmlWriter& writer )
+void KoTextSavingContext::writeFontFaces( KoXmlWriter& writer )
 {
     writer.startElement( "office:font-face-decls" );
     const QStringList fontFaces = m_fontFaces.keys();

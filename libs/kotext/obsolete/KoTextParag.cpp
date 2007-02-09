@@ -2849,7 +2849,7 @@ void KoTextParag::loadOasis( const KoXmlElement& parent, KoOasisContext& context
     invalidate( 0 );
 }
 
-void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
+void KoTextParag::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
                              int from /* default 0 */, int to /* usually length()-2 */,
                              bool /*saveAnchorsFramesets*/ /* default false */ ) const
 {
@@ -2974,7 +2974,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     // Make (shallow) copy of bookmark list, since saving an inline frame might overwrite it
     // from the context while we're saving this paragraph.
-    typedef KoSavingContext::BookmarkPositions BookmarkPositions;
+    typedef KoTextSavingContext::BookmarkPositions BookmarkPositions;
     BookmarkPositions bookmarkStarts = context.bookmarkStarts();
     BookmarkPositions::const_iterator bkStartIter = bookmarkStarts.begin();
     while ( bkStartIter != bookmarkStarts.end() && (*bkStartIter).pos < from )

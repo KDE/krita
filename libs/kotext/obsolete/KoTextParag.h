@@ -38,7 +38,7 @@ class KoParagCounter;
 class KoParagStyle;
 class KoTextCustomItem;
 class KoOasisContext;
-class KoSavingContext;
+class KoTextSavingContext;
 class KoStyleCollection;
 #include <KoXmlReader.h>
 
@@ -328,7 +328,7 @@ public:
     /// Save to XML
     /// By default the whole paragraph is saved. from/to allow to save only a portion of it.
     /// The 'from' and 'to' characters are both included.
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context,
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
                             int from, int to, bool saveAnchorsFramesets = false ) const;
 
     void loadOasisSpan( const KoXmlElement& parent, KoOasisContext& context, uint& pos );

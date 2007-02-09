@@ -19,8 +19,12 @@ var width = layer.width();
 var height = layer.height();
 
 // we like to use the progressbar
-var progress = Krita.progress();
-progress.setProgressTotalSteps(width * height);
+shell = Krita.shell();
+shell.slotSetStatusBarText("invert.js");
+shell.slotProgress(0);
+size = width * height;
+progress = 0;
+pixeldone = 0;
 
 // tell Krita that painting starts. the whole painting session will be
 // counted till layer.endPainting() was called as one undo/redo-step.
@@ -35,7 +39,12 @@ while( ! it.isDone() ) {
     it.invertColor();
 
     // increment the progress to show, that work on this pixel is done.
-    progress.incProgress();
+    percent = pixeldone * 100 / size;
+    if (percent != progress) {
+        progress = percent;
+        shell.slotProgress( progress );
+    }
+    pixeldone += 1;
 
     // go to the next pixel.
     it.next();
@@ -43,3 +52,7 @@ while( ! it.isDone() ) {
 
 // painting is done now.
 layer.endPainting();
+
+// finish progressbar
+shell.slotProgress(-1)
+shell.slotSetStatusBarText("")

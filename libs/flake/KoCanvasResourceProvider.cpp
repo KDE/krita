@@ -115,4 +115,10 @@ int KoCanvasResourceProvider::handleRadius()
     return resource( KoCanvasResource::HandleRadius ).toInt();
 }
 
+bool KoCanvasResourceProvider::boolProperty(int key) const {
+    if(! m_resources.contains(key))
+        return false;
+    return m_resources[key].toBool();
+}
+
 #include "KoCanvasResourceProvider.moc"

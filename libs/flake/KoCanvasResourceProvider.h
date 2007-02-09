@@ -96,6 +96,9 @@ public:
     /// Returns the actual handle radius
     int handleRadius();
 
+
+    bool boolProperty(int key) const;
+
 signals:
 
     void sigResourceChanged(KoCanvasResource::EnumCanvasResource key, const QVariant & res);

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Icon=
 Name=Convolution Filters (Extension)
 Name[el]=Φίλτρα περιέλιξης (Επέκταση)
+Name[fr]=Filtres de convolution (extension)
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritablurfilter

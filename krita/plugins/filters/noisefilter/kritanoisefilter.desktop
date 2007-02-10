@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Name=Noise Filter
 Name[el]=Φίλτρο θορύβου
+Name[fr]=Filtre de bruit
 Comment=Add noise to an image
 Comment[el]=Προσθήκη θορύβου σε μια εικόνα
+Comment[fr]=Ajouter du bruit à une image
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritanoisefilter

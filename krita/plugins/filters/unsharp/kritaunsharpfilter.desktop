@@ -3,6 +3,7 @@ Encoding=UTF-8
 Icon=
 Name=Image enhancement Filters (Extension)
 Name[el]=Φίλτρα βελτίωσης εικόνας (Επέκταση)
+Name[fr]=Filtres d'amélioration d'images (extension)
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaunsharpfilter

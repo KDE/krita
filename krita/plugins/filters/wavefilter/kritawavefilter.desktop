@@ -1,10 +1,12 @@
 [Desktop Entry]
 Comment=Transform an image in a wave
 Comment[el]=Μετασχηματισμός μιας εικόνας με κυματομορφή
+Comment[fr]=Transformer une image en une vague
 Encoding=UTF-8
 Icon=
 Name=Wave Filter
 Name[el]=Φίλτρο κυμματομορφής
+Name[fr]=Filtre vague
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritawavefilter

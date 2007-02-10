@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Modify Selection
 Name[el]=Τροποποίηση επιλογής
+Name[fr]=Modifier la sélection
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritamodifyselection

@@ -40,9 +40,6 @@
 
 KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : super(parent), m_showOpacitySlider(opacitySlider)
 {
-    QGridLayout *mGrid = new QGridLayout;
-    QGridLayout *mGrowGrid = new QGridLayout;
-
     m_xycolorselector = new KoXYColorSelector(rgbColorSpace(), this);
     m_xycolorselector->setFixedSize(137, 137);
 
@@ -216,6 +213,60 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_bIn->setFocusPolicy( Qt::ClickFocus );
     m_bIn->setToolTip( i18n( "Blue to yellow" ) );
 
+    if(m_showOpacitySlider)
+    {
+        m_opacityLabel = new QLabel(i18n( "Opacity:" ), this);
+
+        m_opacitySlider = new KoColorSlider(Qt::Horizontal, this);
+        m_opacitySlider->setFixedHeight(25);
+        m_opacitySlider->setRange(0, 100);
+
+        m_opacityIn = new QSpinBox(this);
+        m_opacityIn->setRange(0, 100);
+        m_opacityIn->setSingleStep(1);
+        m_opacityIn->setFixedSize(40, 18);
+        m_opacityIn->setFocusPolicy( Qt::ClickFocus );
+
+        connect(m_opacitySlider, SIGNAL(valueChanged(int)), this, SLOT(slotOpacityChanged(int)));
+        connect(m_opacityIn, SIGNAL(valueChanged(int)), this, SLOT(slotOpacityChanged(int)));
+    }
+
+    /* connect spin box */
+    connect(m_HIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
+    connect(m_SIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
+    connect(m_VIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
+
+    connect(m_RIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
+    connect(m_GIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
+    connect(m_BIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
+
+    /* connect radio buttons */
+    connect(m_HRB, SIGNAL(toggled(bool)), this, SLOT(slotHSelected(bool)));
+    connect(m_SRB, SIGNAL(toggled(bool)), this, SLOT(slotSSelected(bool)));
+    connect(m_VRB, SIGNAL(toggled(bool)), this, SLOT(slotVSelected(bool)));
+
+    connect(m_RRB, SIGNAL(toggled(bool)), this, SLOT(slotRSelected(bool)));
+    connect(m_GRB, SIGNAL(toggled(bool)), this, SLOT(slotGSelected(bool)));
+    connect(m_BRB, SIGNAL(toggled(bool)), this, SLOT(slotBSelected(bool)));
+
+    /* connect slider */
+    connect(m_xycolorselector, SIGNAL(valueChanged(int,int)), this, SLOT(slotXYChanged(int,int)));
+
+    /* connect sxy */
+    connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSliderChanged(int)));
+
+    m_RRB->setChecked(true);
+
+    doComplexLayout();
+
+    updateValues();
+}
+
+void KoUniColorChooser::doComplexLayout()
+{
+    QGridLayout *mGrid = new QGridLayout;
+    QGridLayout *mGrowGrid = new QGridLayout;
+
     mGrid->setSpacing(1);
     mGrid->setMargin(0);
 
@@ -278,56 +329,14 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
 
     if(m_showOpacitySlider)
     {
-        m_opacityLabel = new QLabel(i18n( "Opacity:" ), this);
-
-        m_opacitySlider = new KoColorSlider(Qt::Horizontal, this);
-        m_opacitySlider->setFixedHeight(25);
-        m_opacitySlider->setRange(0, 100);
-
-        m_opacityIn = new QSpinBox(this);
-        m_opacityIn->setRange(0, 100);
-        m_opacityIn->setSingleStep(1);
-        m_opacityIn->setFixedSize(40, 18);
-        m_opacityIn->setFocusPolicy( Qt::ClickFocus );
-
         mGrid->addItem( new QSpacerItem( 4, 4, QSizePolicy::Fixed, QSizePolicy::Fixed), 8, 5 );
 
         mGrid->addWidget(m_opacityLabel, 9, 0, Qt::AlignRight | Qt::AlignTop);
         mGrid->addWidget(m_opacitySlider, 9, 1, 1, 7, Qt::AlignTop);
         mGrid->addWidget(m_opacityIn, 9, 8, Qt::AlignTop);
-
-        connect(m_opacitySlider, SIGNAL(valueChanged(int)), this, SLOT(slotOpacityChanged(int)));
-        connect(m_opacityIn, SIGNAL(valueChanged(int)), this, SLOT(slotOpacityChanged(int)));
     }
 
     mGrid->addItem( new QSpacerItem( 4, 4, QSizePolicy::Fixed, QSizePolicy::Fixed), 4, 5 );
-    //mGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding ), 8, 9 );
-
-    /* connect spin box */
-    connect(m_HIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
-    connect(m_SIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
-    connect(m_VIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
-
-    connect(m_RIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
-    connect(m_GIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
-    connect(m_BIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
-
-    /* connect radio buttons */
-    connect(m_HRB, SIGNAL(toggled(bool)), this, SLOT(slotHSelected(bool)));
-    connect(m_SRB, SIGNAL(toggled(bool)), this, SLOT(slotSSelected(bool)));
-    connect(m_VRB, SIGNAL(toggled(bool)), this, SLOT(slotVSelected(bool)));
-
-    connect(m_RRB, SIGNAL(toggled(bool)), this, SLOT(slotRSelected(bool)));
-    connect(m_GRB, SIGNAL(toggled(bool)), this, SLOT(slotGSelected(bool)));
-    connect(m_BRB, SIGNAL(toggled(bool)), this, SLOT(slotBSelected(bool)));
-
-    /* connect slider */
-    connect(m_xycolorselector, SIGNAL(valueChanged(int,int)), this, SLOT(slotXYChanged(int,int)));
-
-    /* connect sxy */
-    connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSliderChanged(int)));
-
-    m_RRB->setChecked(true);
 
     mGrowGrid->addLayout(mGrid, 0, 0);
     mGrowGrid->setSpacing(0);
@@ -335,8 +344,113 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     mGrowGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding ), 1, 1 );
 
     setLayout(mGrowGrid);
+}
 
-    updateValues();
+void KoUniColorChooser::doSimpleLayout()
+{
+    m_HRB->setVisible( false );
+    m_SRB->setVisible( false );
+    m_VRB->setVisible( false );
+
+    m_RRB->setVisible( false );
+    m_GRB->setVisible( false );
+    m_BRB->setVisible( false );
+
+    m_LRB->setVisible( false );
+    m_aRB->setVisible( false );
+    m_bRB->setVisible( false );
+
+    m_HLabel->setVisible( false );
+    m_SLabel->setVisible( false );
+    m_VLabel->setVisible( false );
+
+    m_RLabel->setVisible( false );
+    m_GLabel->setVisible( false );
+    m_BLabel->setVisible( false );
+
+    if ( cmykColorSpace() ) {
+        m_CLabel->setVisible( false );
+        m_MLabel->setVisible( false );
+        m_YLabel->setVisible( false );
+        m_KLabel->setVisible( false );
+
+    }
+
+    m_LLabel->setVisible( false );
+    m_aLabel->setVisible( false );
+    m_bLabel->setVisible( false );
+
+    m_HIn->setVisible( false );
+    m_SIn->setVisible( false );
+    m_VIn->setVisible( false );
+
+    m_RIn->setVisible( false );
+    m_GIn->setVisible( false );
+    m_BIn->setVisible( false );
+
+    if ( cmykColorSpace() ) {
+        m_CIn->setVisible( false );
+        m_MIn->setVisible( false );
+        m_YIn->setVisible( false );
+        m_KIn->setVisible( false );
+    }
+
+    m_LIn->setVisible( false );
+    m_aIn->setVisible( false );
+    m_bIn->setVisible( false );
+
+    if(m_showOpacitySlider)
+    {
+        m_opacityLabel->setVisible( false );
+        m_opacityIn->setVisible( false );
+    }
+
+    QGridLayout * layout = new QGridLayout;
+
+    layout->setSpacing( 5 );
+
+    if( m_showOpacitySlider )
+    {
+        m_opacitySlider->setFixedSize( 137, 25 );
+        m_opacitySlider->setToolTip( i18n( "Opacity" ) );
+        m_colorSlider->setFixedSize( 25, 137 );
+
+        layout->addWidget(m_xycolorselector, 0, 0, 1, 1 );
+        layout->addWidget(m_colorSlider, 0, 1, 1, 1 );
+        layout->addWidget(m_colorpatch, 1, 1, 1, 1, Qt::AlignLeft|Qt::AlignTop);
+        layout->addWidget(m_opacitySlider, 1, 0, 1, 1);
+    }
+    else
+    {
+        m_colorSlider->setFixedSize( 25, 115 );
+        layout->addWidget(m_xycolorselector, 0, 0, 2, 1 );
+        layout->addWidget(m_colorSlider, 0, 1, 1, 1 );
+        layout->addWidget(m_colorpatch, 1, 1, 1, 1, Qt::AlignLeft|Qt::AlignTop);
+    }
+
+    layout->setColumnStretch( 0, 1 );
+    layout->setColumnStretch( 1, 0 );
+    layout->setColumnStretch( 2, 1 );
+    layout->setRowStretch( 0, 1 );
+    layout->setRowStretch( 1, 0 );
+    layout->setRowStretch( 2, 1 );
+
+    setLayout( layout );
+}
+
+void KoUniColorChooser::changeLayout( LayoutType type )
+{
+    delete layout();
+
+    switch( type )
+    {
+        case ComplexLayout:
+            doComplexLayout();
+            break;
+        case SimpleLayout:
+            doSimpleLayout();
+            break;
+    }
 }
 
 KoColor KoUniColorChooser::color()

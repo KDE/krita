@@ -41,8 +41,15 @@ class KOPAINTER_EXPORT KoUniColorChooser
     typedef QWidget super;
 
 public:
+    enum LayoutType{
+        ComplexLayout, ///< complex, with all bells and whistles
+        SimpleLayout   ///< simple, no input fields
+    };
+
     KoUniColorChooser(QWidget *parent = 0L, bool opacitySlider = false);
     virtual ~KoUniColorChooser() {}
+
+    void changeLayout( LayoutType type );
 
       /**
       * @return the current color
@@ -96,6 +103,9 @@ private:
 
     void HSVtoRGB(int H, int S, int V, quint8 *R, quint8 *G, quint8 *B);
     void RGBtoHSV(int R, int G, int B, int *H, int *S, int *V);
+
+    void doComplexLayout();
+    void doSimpleLayout();
 
     KoXYColorSelector *m_xycolorselector;
     KoColorSlider *m_colorSlider;

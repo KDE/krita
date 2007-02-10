@@ -28,8 +28,6 @@
 #include "kis_image.h"
 #include "kis_group_layer.h"
 
-const int UPDATE_RECT_SIZE = 256;
-
 using namespace ThreadWeaver;
 
 class ProjectionJob : public Job
@@ -66,6 +64,7 @@ public:
                          // true!
     bool locked;
     Weaver * weaver;
+    int updateRectSize;
 };
 
 
@@ -80,7 +79,7 @@ KisProjection::KisProjection( KisImageSP image, KisGroupLayerSP rootLayer )
     KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("");
     m_d->weaver->setMaximumNumberOfThreads( cfg->readEntry("maxthreads",  10) );
-
+    m_d->updateRectSize = cfg->readEntry( "updaterectsize", 512 );
     connect( m_d->weaver, SIGNAL( jobDone(Job*) ), this, SLOT( slotUpdateUi( Job* ) ) );
 
     connect( this, SIGNAL( sigProjectionUpdated( const QRect & ) ), image.data(), SLOT(slotProjectionUpdated( const QRect &) ) );
@@ -182,7 +181,7 @@ void KisProjection::scheduleRect( const QRect & rc )
     // Note: we're doing columns first, so when we have small strip left
     // at the bottom, we have as few and as long runs of pixels left
     // as possible.
-    if ( w <= UPDATE_RECT_SIZE && h <= UPDATE_RECT_SIZE ) {
+    if ( w <= m_d->updateRectSize && h <= m_d->updateRectSize ) {
         ProjectionJob * job = new ProjectionJob( rc, m_d->rootLayer, this );
         m_d->weaver->enqueue( job );
     }
@@ -194,15 +193,15 @@ void KisProjection::scheduleRect( const QRect & rc )
         int hleft = h;
         int row = 0;
         while ( hleft > 0 ) {
-            QRect rc( col + x, row + y, qMin( wleft, UPDATE_RECT_SIZE ), qMin( hleft, UPDATE_RECT_SIZE ) );
+            QRect rc( col + x, row + y, qMin( wleft, m_d->updateRectSize ), qMin( hleft, m_d->updateRectSize ) );
             ProjectionJob * job = new ProjectionJob( rc, m_d->rootLayer, this );
             m_d->weaver->enqueue( job );
-            hleft -= UPDATE_RECT_SIZE;
-            row += UPDATE_RECT_SIZE;
+            hleft -= m_d->updateRectSize;
+            row += m_d->updateRectSize;
 
         }
-        wleft -= UPDATE_RECT_SIZE;
-        col += UPDATE_RECT_SIZE;
+        wleft -= m_d->updateRectSize;
+        col += m_d->updateRectSize;
     }
 }
 #include "kis_projection.moc"

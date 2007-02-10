@@ -164,14 +164,6 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
                     m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
                 }
             }
-// XXX: This should not be necessary; after composition is
-// done, the KisProjection instance should notify the GUI
-// that everything is ready for a paintevent.
-#if 0
-            // XXX 2: shouldn't this be
-            // convertToPt(painter.dirtyRegion()) anyway?
-            m_canvas->updateCanvas( painter.dirtyRegion() );
-#endif
         }
     }
 }

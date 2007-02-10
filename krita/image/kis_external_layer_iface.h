@@ -37,7 +37,6 @@ class KoColorSpace;
 class KisFilterStrategy;
 class KisProgressDisplayInterface;
 class KisUndoAdapter;
-
 /**
    A base interface for layers that are implemented outside the Krita
    core.
@@ -48,7 +47,8 @@ public:
     KisExternalLayer(KisImageSP img, const QString &name, quint8 opacity)
         : KisLayer(img, name, opacity) {}
     virtual QIcon icon() const { return KIcon("gear"); }
-    virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r) = 0;
+    virtual void prepareProjection(const QRect& r) = 0;
+    virtual KisPaintDeviceSP projection() = 0;
     virtual bool saveToXML(QDomDocument doc, QDomElement elem) = 0;
 
 };

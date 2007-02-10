@@ -60,7 +60,13 @@ public:
 
     // KisExternalLayer implementation
     QIcon icon() const;
-    KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r);
+
+    // Keep the projection up to date
+    void prepareProjection(const QRect& r);
+
+    // Retrieve the projection for
+    KisPaintDeviceSP projection();
+
     bool saveToXML(QDomDocument doc, QDomElement elem);
 
     // KisLayer implementation

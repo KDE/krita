@@ -31,7 +31,6 @@ class QDragEnterEvent;
 class QDropEvent;
 class QPoint;
 
-class KoCanvasController;
 class KoViewChield;
 class KoViewConverter;
 

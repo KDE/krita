@@ -168,7 +168,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     double scaleX = sx / pppx;
     double scaleY = sy / pppy;
 
-    QPoint dstTopLeft(rc.x() * scaleX, rc.y() * scaleY);
+    QPoint dstTopLeft = QPointF(rc.x() * scaleX, rc.y() * scaleY).toPoint();
 
     // Pixel-for-pixel mode
     if ( scaleX == 1.0 && scaleY == 1.0 ) {
@@ -224,16 +224,10 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
 
 
-    gc.end();
-    t.restart();
-
-    QPainter gc2(  this );
-
-//     kDebug(41010 ) << "putting pixmap on widget " << t.elapsed() << endl;
-
     // Give the tool a chance to paint its stuff
-    m_d->toolProxy->paint(gc2, *m_d->viewConverter );
-//     kDebug( 41010 ) << "Done painting tool stuff " << t.elapsed() << endl;
+    gc.setRenderHint( QPainter::Antialiasing );
+    gc.setRenderHint( QPainter::SmoothPixmapTransform );
+    m_d->toolProxy->paint(gc, *m_d->viewConverter );
 }
 
 
@@ -289,11 +283,6 @@ void KisQPainterCanvas::parentSizeChanged(const QSize & size )
         p.end();
     }
 #endif
-}
-
-void KisQPainterCanvas::moveEvent(QMoveEvent * ev)
-{
-    kDebug() << "Move event: " << ev->pos() << ", was " << ev->oldPos() << endl;
 }
 
 #include "kis_qpainter_canvas.moc"

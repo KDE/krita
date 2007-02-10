@@ -80,8 +80,6 @@ public: // KoCanvasBase implementation
 
     void updateCanvas(const QRectF& rc);
 
-    void updateCanvas( const QRegion & region );
-
     KoViewConverter *viewConverter();
 
     QWidget* canvasWidget();

@@ -35,6 +35,7 @@
 
 #include <kis_image.h>
 
+#include "kis_shape_layer.h"
 #include "kis_resource_provider.h"
 #include "kis_view2.h"
 #include "kis_config.h"
@@ -169,33 +170,17 @@ KoShapeManager* KisCanvas2::shapeManager() const
 
 void KisCanvas2::updateCanvas(const QRectF& rc)
 {
-    // First convert from document coordinated to widget coordinates
-    QRectF viewRect  = m_d->viewConverter->documentToView(rc);
-    viewRect.adjust(-5, -5, 5, 5); // floor, ceil?
-    m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
-
-}
-
-
-void KisCanvas2::updateCanvas(const QRegion & rc)
-{
-    // Loop through all rects in the region and call update() on the
-    // canvas widget for all these rects after conversion: Qt will
-    // then schedule a paint event for the rects in the region.
-    QRegion widgetRegion;
-    QVector<QRect> rcRects = rc.rects();
-
-    QVector<QRect>::iterator it = rcRects.begin();
-    QVector<QRect>::iterator end = rcRects.end();
-
-    while ( it != end ) {
-        it->adjust( -5, -5, 5, 5 );
-        widgetRegion += QRegion( toAlignedRect( m_d->viewConverter->documentToView( (*it )) ) );
-        ++it;
+    if ( KisShapeLayer * sl = dynamic_cast<KisShapeLayer*> ( m_d->view->image()->activeLayer().data() ) ) {
+        sl->prepareProjection(toAlignedRect( rc) );
     }
-    m_d->canvasWidget->widget()->update( widgetRegion );
-
+    else {
+        // First convert from document coordinated to widget coordinates
+        QRectF viewRect  = m_d->viewConverter->documentToView(rc);
+        viewRect.adjust(-5, -5, 5, 5); // floor, ceil?
+        m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
+    }
 }
+
 
 void KisCanvas2::updateCanvasProjection( const QRect & rc )
 {

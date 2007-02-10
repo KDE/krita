@@ -39,6 +39,7 @@ public:
     KoViewConverter * converter;
     qint32 x;
     qint32 y;
+    KisPaintDeviceSP projection;
 };
 
 KisShapeLayer::KisShapeLayer( KoShapeContainer * parent, KoViewConverter * converter, KisImageSP img, const QString &name, quint8 opacity )
@@ -51,6 +52,7 @@ KisShapeLayer::KisShapeLayer( KoShapeContainer * parent, KoViewConverter * conve
     m_d->converter = converter;
     m_d->x = 0;
     m_d->y = 0;
+    m_d->projection = new KisPaintDevice( img->colorSpace() );
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -75,12 +77,19 @@ QIcon KisShapeLayer::icon() const
     return KIcon("gear");
 }
 
-KisPaintDeviceSP KisShapeLayer::prepareProjection(KisPaintDeviceSP projection, const QRect& r)
+void KisShapeLayer::prepareProjection(const QRect& r)
 {
-    //QPainter p( projection.data() );
-    //KoShapeLayer::paint( p, *m_d->converter );
+    // XXX: Is r in document, widget or pixel coordinates? I hope in
+    // document coordinates. Note: see dox for updateCanvas.
+    QPainter p( m_d->projection.data() );
+    p.setClipRect( r );
+    KoShapeLayer::paint( p, *m_d->converter );
+    setDirty( r ); // Convert to right coordinates
+}
 
-    return projection;
+KisPaintDeviceSP KisShapeLayer::projection()
+{
+    return m_d->projection;
 }
 
 bool KisShapeLayer::saveToXML(QDomDocument doc, QDomElement elem)

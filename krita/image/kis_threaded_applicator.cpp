@@ -25,7 +25,6 @@
 #include <kconfig.h>
 
 #include "kis_paint_device.h"
-#include "kis_config.h"
 
 using namespace ThreadWeaver;
 

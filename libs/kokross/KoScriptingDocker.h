@@ -53,6 +53,7 @@ class KOKROSS_EXPORT KoScriptingDocker : public QDockWidget
     private slots:
         void runScript();
         void stopScript();
+        void configureScript();
     private:
         class Private;
         Private* const d;

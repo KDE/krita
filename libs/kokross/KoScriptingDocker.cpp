@@ -117,13 +117,13 @@ KoScriptingDocker::KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclien
     QToolBar* tb = new QToolBar(widget);
     layout->addWidget(tb);
     tb->setMovable(false);
-    //tb->setOrientation(Qt::Vertical);
     //tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    tb->addAction(KIcon("player_play"), i18n("Run"), this, SLOT(runScript()) );
-    tb->addAction(KIcon("player_stop"), i18n("Stop"), this, SLOT(stopScript()) );
-    tb->addSeparator();
+    tb->addAction(KIcon("player_play"), i18n("Run Script"), this, SLOT(runScript()) );
+    tb->addAction(KIcon("player_stop"), i18n("Stop Script"), this, SLOT(stopScript()) );
+    tb->addAction(KIcon("player_eject"), i18n("Script Manager..."), this, SLOT(configureScript()) );
 
     /*
+    tb->addSeparator();
     QLineEdit* filter = new QLineEdit(tb);
     tb->addWidget(filter);
     connect(filter, SIGNAL(textChanged(const QString&)), d->model, SLOT(setFilterRegExp(const QString&)));
@@ -167,6 +167,11 @@ void KoScriptingDocker::stopScript()
             action->finalize();
         }
     }
+}
+
+void KoScriptingDocker::configureScript()
+{
+    d->guiclient->showManager();
 }
 
 #include "KoScriptingDocker.moc"

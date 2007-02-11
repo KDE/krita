@@ -328,7 +328,16 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
         case QVariant::Invalid: // fall through
         case QVariant::UserType: // fall through
         default: {
-            //int metaid = QMetaType::type(typeName);
+            /*
+            int metaid = QMetaType::type(typeName);
+            //if( metaid == QMetaType::QObjectStar )
+            if( metaid == QMetaType::QWidgetStar ) {
+                if( qVariantCanConvert< QWidget* >(v) ) {
+                    QWidget* widget = qvariant_cast< QWidget* >(v);
+                    return new MetaTypeVoidStar( metaid, widget, false );
+                }
+            }
+            */
 
             if(Py::PythonExtension<PythonExtension>::check( object )) {
                 #ifdef KROSS_PYTHON_VARIANT_DEBUG
@@ -349,7 +358,7 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
             #ifdef KROSS_PYTHON_VARIANT_DEBUG
                 krosswarning( QString("PythonMetaTypeFactory::create Not possible to convert the Py::Object '%1' to QVariant with '%2' and metaid '%3'").arg(object.as_string().c_str()).arg(typeName).arg(typeId) );
             #endif
-            throw Py::TypeError( QString("Invalid typename %1").arg(typeName).toLatin1().constData() );
+            throw Py::TypeError( QString("Invalid object \"%1\" for typename \"%2\"").arg(object.as_string().c_str()).arg(typeName).toLatin1().constData() );
         } break;
     }
 }

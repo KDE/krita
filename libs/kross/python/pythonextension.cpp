@@ -347,10 +347,16 @@ Py::Object PythonExtension::doConnect(const Py::Tuple& args)
 {
     #ifdef KROSS_PYTHON_EXTENSION_CONNECT_DEBUG
         krossdebug( QString("PythonExtension::doConnect" ) );
-        for(uint i = 0; i < args.size(); ++i) {
-            QVariant v = PythonType<QVariant>::toVariant( args[i] );
-            krossdebug( QString("  Argument index=%1 variant.toString=%2 variant.typeName=%3").arg(i).arg(v.toString()).arg(v.typeName()) );
-        }
+        for(uint i = 0; i < args.size(); ++i)
+            try {
+                QVariant v = PythonType<QVariant>::toVariant( args[i] );
+                krossdebug( QString("  Argument index=%1 variant.toString=%2 variant.typeName=%3").arg(i).arg(v.toString()).arg(v.typeName()) );
+            }
+            catch(Py::Exception& e) { // may happen e.g. on "function" types
+                PyTypeObject *type = (PyTypeObject*) args[i].type().ptr();
+                krossdebug( QString("  Argument index=%1 tp_name=%2").arg(i).arg(type->tp_name) );
+                e.clear();
+            }
     #endif
 
     if( args.size() < 2 ) {
@@ -362,11 +368,13 @@ Py::Object PythonExtension::doConnect(const Py::Tuple& args)
     QObject* sender; // the sender object
     QByteArray sendersignal; // the sender signal
     if( args[0].isString() ) { // connect(signal, ...)
+        //krossdebug( QString("PythonExtension::doConnect connect(signal, ...)" ) );
         sender = d->object;
         sendersignal = PythonType<QByteArray>::toVariant( args[0] );
         idx = 1;
     }
     else { // connect(sender, signal, ...)
+        //krossdebug( QString("PythonExtension::doConnect connect(sender, signal, ...)" ) );
         Py::ExtensionObject<PythonExtension> extobj(args[0]);
         PythonExtension* extension = extobj.extensionObject();
         if(! extension) {
@@ -389,13 +397,15 @@ Py::Object PythonExtension::doConnect(const Py::Tuple& args)
     QObject* receiver; // the receiver object
     QByteArray receiverslot; // the receiver slot
     if( args[idx].isCallable() ) { // connect with python function
+        //krossdebug( QString("PythonExtension::doConnect connect with python function" ) );
         Py::Callable func(args[idx]); // the callable python function
         PythonFunction* function = new PythonFunction(sender, sendersignal, func);
         d->functions.insertMulti(sendersignal, function);
         receiver = function;
         receiverslot = sendersignal;
     }
-    else { // connect with receiver+slot
+    else { // connect with receiver and slot
+        //krossdebug( QString("PythonExtension::doConnect connect with receiver and slot" ) );
         if( args[idx].isString() ) { // connect(..., slot)
             receiver = d->object;
             receiverslot = PythonType<QByteArray>::toVariant( args[idx] );

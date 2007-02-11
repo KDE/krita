@@ -273,13 +273,15 @@ QVariant PythonScript::callFunction(const QString& name, const QVariantList& arg
 
     if(! d->m_module) { // initialize if not already done before.
         if(! initialize())
-            return QStringList();
+            return QVariant();
+        execute();
     }
 
     if(hadError()) {
         #ifdef KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
             krossdebug( QString("PythonScript::callFunction() name=%1 had errors: %2").arg(name).arg(errorMessage()) );
         #endif
+        finalize();
         return QVariant();
     }
 
@@ -290,6 +292,7 @@ QVariant PythonScript::callFunction(const QString& name, const QVariantList& arg
         PyObject* func = PyDict_GetItemString(moduledict.ptr(), name.toLatin1().data());
         if(! func) {
             setError( QString("No such function '%1'.").arg(name) );
+            finalize();
             return QVariant();
         }
 
@@ -297,18 +300,22 @@ QVariant PythonScript::callFunction(const QString& name, const QVariantList& arg
         Py::Callable funcobject(func, true);
         if(! funcobject.isCallable()) {
             setError( QString("Function '%1' is not callable.").arg(name) );
+            finalize();
             return QVariant();
         }
 
         // Finally call the function.
         Py::Object result = funcobject.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
-        //TODO return Kross::Object::Ptr( PythonExtension::toObject(result) );
-        krossdebug( QString("PythonScript::callFunction() result=%1").arg(result.as_string().c_str()) );
+        QVariant v = PythonType<QVariant>::toVariant(result);
+        krossdebug( QString("PythonScript::callFunction() result=%1 variant.toString=%2 variant.typeName=%3").arg(result.as_string().c_str()).arg(v.toString()).arg(v.typeName()) );
+        finalize();
+        return v;
     }
     catch(Py::Exception& e) {
         setError( Py::value(e).as_string().c_str() );
         e.clear(); // exception is handled. clear it now.
     }
+    finalize();
     return QVariant();
 }
 

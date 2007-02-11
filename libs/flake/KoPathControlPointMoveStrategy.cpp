@@ -21,10 +21,9 @@
 #include "KoPathControlPointMoveStrategy.h"
 
 #include "KoPathTool.h"
-#include "KoPathCommand.h"
+#include "commands/KoPathControlPointMoveCommand.h"
 
-KoPathControlPointMoveStrategy::KoPathControlPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, const KoPathPointData &pointData, 
-                                                                KoPathPoint::KoPointType type, const QPointF &pos )
+KoPathControlPointMoveStrategy::KoPathControlPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, const KoPathPointData &pointData, KoPathPoint::KoPointType type, const QPointF &pos )
 : KoInteractionStrategy( tool, canvas )
 , m_lastPosition( pos )
 , m_move( 0, 0 )
@@ -48,7 +47,7 @@ void KoPathControlPointMoveStrategy::handleMouseMove( const QPointF &mouseLocati
 
     m_move += move;
 
-    KoControlPointMoveCommand cmd( m_pointData, move, m_pointType );
+    KoPathControlPointMoveCommand cmd( m_pointData, move, m_pointType );
     cmd.redo();
 }
 
@@ -62,7 +61,7 @@ QUndoCommand* KoPathControlPointMoveStrategy::createCommand()
     QUndoCommand *cmd = 0;
     if( !m_move.isNull() )
     {
-        cmd = new KoControlPointMoveCommand( m_pointData, m_move, m_pointType );
+        cmd = new KoPathControlPointMoveCommand( m_pointData, m_move, m_pointType );
         cmd->undo();
     }
     return cmd;

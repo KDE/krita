@@ -40,7 +40,6 @@ set(flake_SRCS
     KoCreatePathToolFactory.cpp
     KoPathToolFactory.cpp
     KoPathTool.cpp
-    KoPathCommand.cpp
     KoPathPointRubberSelectStrategy.cpp
     KoPathPointMoveStrategy.cpp
     KoPathControlPointMoveStrategy.cpp
@@ -71,6 +70,21 @@ set(flake_SRCS
     commands/KoUngroupShapesCommand.cpp
     commands/KoShapeReorderCommand.cpp
     commands/KoShapeKeepAspectRatioCommand.cpp
+    commands/KoPathBaseCommand.cpp
+    commands/KoPathPointMoveCommand.cpp
+    commands/KoPathControlPointMoveCommand.cpp
+    commands/KoPathPointTypeCommand.cpp
+    commands/KoPathPointRemoveCommand.cpp
+    commands/KoPathPointInsertCommand.cpp
+    commands/KoPathSegmentBreakCommand.cpp
+    commands/KoPathBreakAtPointCommand.cpp
+    commands/KoPathSegmentTypeCommand.cpp
+    commands/KoPathCombineCommand.cpp
+    commands/KoPathSeparateCommand.cpp
+    commands/KoSubpathRemoveCommand.cpp
+    commands/KoSubpathJoinCommand.cpp
+    commands/KoParameterHandleMoveCommand.cpp
+    commands/KoParameterToPathCommand.cpp
 )
 
 kde4_automoc(${flake_SRCS})

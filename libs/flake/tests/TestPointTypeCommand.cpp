@@ -20,7 +20,7 @@
 
 #include <QPainterPath>
 #include "KoPathShape.h"
-#include "KoPathCommand.h"
+#include "KoPathPointTypeCommand.h"
 
 void TestPointTypeCommand::redoUndoSymmetric()
 {
@@ -45,7 +45,7 @@ void TestPointTypeCommand::redoUndoSymmetric()
     QPainterPath ppath1Org = path1.outline();
     QPainterPath ppath2Org = path2.outline();
 
-    KoPointTypeCommand cmd( pd, KoPointTypeCommand::Symmetric );
+    KoPathPointTypeCommand cmd( pd, KoPathPointTypeCommand::Symmetric );
     cmd.redo();
 
     QPainterPath ppath( QPointF( 0, 0 ) );
@@ -88,7 +88,7 @@ void TestPointTypeCommand::redoUndoSmooth()
     QPainterPath ppath1Org = path1.outline();
     QPainterPath ppath2Org = path2.outline();
 
-    KoPointTypeCommand cmd( pd, KoPointTypeCommand::Smooth );
+    KoPathPointTypeCommand cmd( pd, KoPathPointTypeCommand::Smooth );
     cmd.redo();
 
     QPainterPath ppath( QPointF( 0, 0 ) );
@@ -131,10 +131,10 @@ void TestPointTypeCommand::redoUndoCorner()
     QPainterPath ppath1Org = path1.outline();
     QPainterPath ppath2Org = path2.outline();
 
-    KoPointTypeCommand cmd1( pd, KoPointTypeCommand::Symmetric );
+    KoPathPointTypeCommand cmd1( pd, KoPathPointTypeCommand::Symmetric );
     cmd1.redo();
 
-    KoPointTypeCommand cmd2( pd, KoPointTypeCommand::Corner );
+    KoPathPointTypeCommand cmd2( pd, KoPathPointTypeCommand::Corner );
     cmd2.redo();
 
     QPainterPath ppath( QPointF( 0, 0 ) );

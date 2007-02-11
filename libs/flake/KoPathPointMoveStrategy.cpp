@@ -20,7 +20,7 @@
 
 #include "KoPathPointMoveStrategy.h"
 
-#include "KoPathCommand.h"
+#include "commands/KoPathPointMoveCommand.h"
 #include "KoPathTool.h"
 
 KoPathPointMoveStrategy::KoPathPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, const QPointF &pos )
@@ -45,7 +45,7 @@ void KoPathPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt:
 
     m_move += move;
 
-    KoPointMoveCommand cmd( m_tool->m_pointSelection.selectedPointMap(), move );
+    KoPathPointMoveCommand cmd( m_tool->m_pointSelection.selectedPointMap(), move );
     cmd.redo();
 }
 
@@ -60,7 +60,7 @@ QUndoCommand* KoPathPointMoveStrategy::createCommand()
     if( !m_move.isNull() )
     {
         // as the point is already at the new position we need to undo the command
-        cmd = new KoPointMoveCommand( m_tool->m_pointSelection.selectedPointMap(), m_move );
+        cmd = new KoPathPointMoveCommand( m_tool->m_pointSelection.selectedPointMap(), m_move );
         cmd->undo();
     }
     return cmd;

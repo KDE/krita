@@ -25,6 +25,7 @@
 #include <QFlags>
 #include <QPainterPath>
 #include <QSet>
+#include <QMap>
 #include <QList>
 
 #include "KoShape.h"

@@ -20,7 +20,7 @@
 
 #include <QPainterPath>
 #include "KoPathShape.h"
-#include "KoPathCommand.h"
+#include "KoSubpathRemoveCommand.h"
 
 void TestRemoveSubpathCommand::redoUndo()
 {
@@ -39,7 +39,7 @@ void TestRemoveSubpathCommand::redoUndo()
 
     QPainterPath ppathOrg = path.outline();
 
-    QUndoCommand *cmd1 = new KoRemoveSubpathCommand( &path, 0 );
+    QUndoCommand *cmd1 = new KoSubpathRemoveCommand( &path, 0 );
     cmd1->redo();
 
     QPainterPath ppath1( QPointF( 0, 0 ) );
@@ -55,7 +55,7 @@ void TestRemoveSubpathCommand::redoUndo()
 
     QVERIFY( ppathOrg == path.outline() );
 
-    QUndoCommand *cmd2 = new KoRemoveSubpathCommand( &path, 1 );
+    QUndoCommand *cmd2 = new KoSubpathRemoveCommand( &path, 1 );
     cmd2->redo();
 
     QPainterPath ppath2( QPointF( 0, 0 ) );
@@ -72,7 +72,7 @@ void TestRemoveSubpathCommand::redoUndo()
 
     QVERIFY( ppathOrg == path.outline() );
 
-    QUndoCommand *cmd3 = new KoRemoveSubpathCommand( &path, 2 );
+    QUndoCommand *cmd3 = new KoSubpathRemoveCommand( &path, 2 );
     cmd3->redo();
 
     QPainterPath ppath3( QPointF( 0, 0 ) );

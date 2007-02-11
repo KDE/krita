@@ -19,7 +19,7 @@
 #include "KoParameterChangeStrategy.h"
 
 #include "KoParameterShape.h"
-#include "KoPathCommand.h"
+#include "commands/KoParameterHandleMoveCommand.h"
 
 KoParameterChangeStrategy::KoParameterChangeStrategy( KoTool *tool, KoCanvasBase *canvas, KoParameterShape * parameterShape, int handleId )
 : KoInteractionStrategy( tool, canvas )
@@ -40,11 +40,11 @@ void KoParameterChangeStrategy::handleMouseMove( const QPointF &mouseLocation, Q
 
 QUndoCommand* KoParameterChangeStrategy::createCommand()
 {
-    KoParameterChangeCommand *cmd = 0;
+    KoParameterHandleMoveCommand *cmd = 0;
     // check if handle position changed
     if ( m_startPoint != m_parameterShape->handlePosition( m_handleId ) )
     {
-        cmd = new KoParameterChangeCommand( m_parameterShape, m_handleId, m_startPoint, m_parameterShape->shapeToDocument( m_parameterShape->handlePosition( m_handleId ) ) );
+        cmd = new KoParameterHandleMoveCommand( m_parameterShape, m_handleId, m_startPoint, m_parameterShape->shapeToDocument( m_parameterShape->handlePosition( m_handleId ) ) );
     }
     return cmd;
 }

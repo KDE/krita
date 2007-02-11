@@ -2,7 +2,7 @@
 #define TESTDOCUMENTAYOUT_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <qtest_kde.h>
 
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>

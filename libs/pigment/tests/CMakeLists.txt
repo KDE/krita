@@ -12,7 +12,7 @@ kde4_add_executable(TestColorConversion RUN_UNINSTALLED ${TestColorConversion_te
 
 target_link_libraries(TestColorConversion  ${KDE4_KDECORE_LIBS} pigment ${QT_QTTEST_LIBRARY})
 
-add_test(pigment-TestColorConversion ${EXECUTABLE_OUTPUT_PATH}/TestColorConversion)
+add_test(libs-pigment-TestColorConversion ${EXECUTABLE_OUTPUT_PATH}/TestColorConversion)
 
 ########### install files ###############
 

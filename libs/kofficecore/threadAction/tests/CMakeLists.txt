@@ -15,7 +15,7 @@ kde4_add_executable(TestAction RUN_UNINSTALLED ${TestAction_SRCS})
 
 target_link_libraries(TestAction kofficecore ${QT_QTTEST_LIBRARY} )
 
-add_test(TestAction TestAction)
+add_test(libs-kofficecore-threadAction-TestAction TestAction)
 
 ########### end ###############
 

@@ -44,7 +44,7 @@ kde4_add_executable(kogenstylestest RUN_UNINSTALLED ${kogenstylestest_SRCS})
 
 target_link_libraries(kogenstylestest  ${KDE4_KDECORE_LIBS} kofficecore )
 
-add_test(kofficecore-kogenstylestest kogenstylestest)
+add_test(libs-kofficecore-kogenstylestest kogenstylestest)
 
 ########### next target ###############
 
@@ -56,7 +56,7 @@ kde4_add_executable(kooasissettingstest RUN_UNINSTALLED ${kooasissettingstest_SR
 
 target_link_libraries(kooasissettingstest  ${KDE4_KDECORE_LIBS} kofficecore )
 
-add_test(kofficecore-kooasissettingstest kooasissettingstest)
+add_test(libs-kofficecore-kooasissettingstest kooasissettingstest)
 
 ########### next target ###############
 
@@ -68,7 +68,7 @@ kde4_add_executable(kooasisstoretest RUN_UNINSTALLED ${kooasisstoretest_SRCS})
 
 target_link_libraries(kooasisstoretest  ${KDE4_KDECORE_LIBS} kofficecore )
 
-add_test(kofficecore-kooasisstoretest kooasisstoretest)
+add_test(libs-kofficecore-kooasisstoretest kooasisstoretest)
 
 ########### next target ###############
 

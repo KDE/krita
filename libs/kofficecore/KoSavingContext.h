@@ -1,9 +1,11 @@
 #ifndef KOSAVINGCONTEXT_H
 #define KOSAVINGCONTEXT_H
 
+#include <kofficecore_export.h>
+
 class KoGenStyles;
 
-class KoSavingContext
+class KOFFICECORE_EXPORT KoSavingContext
 {
 public:    
     enum SavingMode { Store, Flat };

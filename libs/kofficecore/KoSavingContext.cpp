@@ -27,3 +27,7 @@ KoSavingContext::KoSavingContext( KoGenStyles& mainStyles, SavingMode savingMode
 , d( 0 )
 {
 }
+
+KoSavingContext::~KoSavingContext()
+{
+}

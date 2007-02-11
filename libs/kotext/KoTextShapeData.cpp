@@ -20,36 +20,82 @@
 #include "KoTextShapeData.h"
 #include <QTextDocument>
 
+class KoTextShapeData::Private {
+public:
+    Private() : ownsDocument(true), dirty(true), offset(0.0), position(-1), endPosition(-1) {}
+    QTextDocument *document;
+    bool ownsDocument, dirty;
+    double offset;
+    int position, endPosition;
+};
+
+
 KoTextShapeData::KoTextShapeData()
-: m_ownsDocument(true)
-, m_dirty(true)
-, m_offset(0.0)
-, m_position(-1)
-, m_endPosition(-1)
+: d(new Private())
 {
-    m_document = new QTextDocument();
-    m_document->setUseDesignMetrics(true);
-    m_document->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false));
+    d->document = new QTextDocument();
+    d->document->setUseDesignMetrics(true);
+    d->document->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false));
 }
 
 KoTextShapeData::~KoTextShapeData() {
-    if(m_ownsDocument)
-        delete m_document;
+    if(d->ownsDocument)
+        delete d->document;
 }
 
 void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnership) {
     Q_ASSERT(document);
-    if(m_ownsDocument && document != m_document)
-        delete m_document;
-    m_document = document;
+    if(d->ownsDocument && document != d->document)
+        delete d->document;
+    d->document = document;
     // The following avoids the normal case where the glyph metrices are rounded to integers and
     // hinted to the screen by freetype, which you of course don't want for WYSIWYG
-    m_document->setUseDesignMetrics(true);
-    m_ownsDocument = transferOwnership;
+    d->document->setUseDesignMetrics(true);
+    d->ownsDocument = transferOwnership;
 }
 
 QTextDocument *KoTextShapeData::document() {
-    return m_document;
+    return d->document;
+}
+
+double KoTextShapeData::documentOffset() const {
+    return d->offset;
+}
+
+void KoTextShapeData::setDocumentOffset(double offset) {
+    d->offset = offset;
+}
+
+int KoTextShapeData::position() const {
+    return d->position;
+}
+
+void KoTextShapeData::setPosition(int position) {
+    d->position = position;
+}
+
+int KoTextShapeData::endPosition() const {
+    return d->endPosition;
+}
+
+void KoTextShapeData::setEndPosition(int position) {
+    d->endPosition = position;
+}
+
+void KoTextShapeData::faul() {
+    d->dirty = true;
+}
+
+void KoTextShapeData::wipe() {
+    d->dirty = false;
+}
+
+bool KoTextShapeData::isDirty() const {
+    return d->dirty;
+}
+
+void KoTextShapeData::fireResizeEvent() {
+    emit relayout();
 }
 
 #include "KoTextShapeData.moc"

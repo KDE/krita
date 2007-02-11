@@ -55,28 +55,28 @@ public:
     /**
      * return the amount of points into the document (y) this shape will display.
      */
-    double documentOffset() const { return m_offset; }
+    double documentOffset() const;
     /**
      * Set the amount of points into the document (y direction) that is relevant for this
      * data-shape.  This allows multiple shapes to all use one document at different offsets
      * into the document.
      */
-    void setDocumentOffset(double offset) { m_offset = offset; }
+    void setDocumentOffset(double offset);
 
-    int position() const { return m_position; }
-    void setPosition(int position) { m_position = position; }
-    int endPosition() const { return m_endPosition; }
-    void setEndPosition(int position) { m_endPosition = position; }
+    int position() const;
+    void setPosition(int position);
+    int endPosition() const;
+    void setEndPosition(int position);
 
     /// mark shape as dirty triggering a re-layout of its text.
-    void faul() { m_dirty = true; }
+    void faul();
     /// mark shape as not-dirty
-    void wipe() { m_dirty = false; }
+    void wipe();
     /// return if the shape is marked dirty and its text content needs to be relayout
-    bool isDirty() const { return m_dirty; }
+    bool isDirty() const;
 
     /// emits a relayout
-    void fireResizeEvent() { emit relayout(); }
+    void fireResizeEvent();
 
 signals:
     /**
@@ -88,10 +88,8 @@ signals:
     void relayout();
 
 private:
-    QTextDocument *m_document;
-    bool m_ownsDocument, m_dirty;
-    double m_offset;
-    int m_position, m_endPosition;
+    class Private;
+    Private *const d;
 };
 
 #endif

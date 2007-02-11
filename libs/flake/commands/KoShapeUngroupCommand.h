@@ -18,28 +18,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoUngroupShapesCommand.h"
-#include "KoShapeContainer.h"
+#ifndef KOSHAPEUNGROUPCOMMAND_H
+#define KOSHAPEUNGROUPCOMMAND_H
 
-#include <klocale.h>
+#include "commands/KoShapeGroupCommand.h"
 
-KoUngroupShapesCommand::KoUngroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes, QUndoCommand *parent)
-: KoGroupShapesCommand(parent)
-{
-    m_shapes = shapes;
-    m_container = container;
-    foreach(KoShape *shape, m_shapes) {
-        m_clipped.append( m_container->childClipped(shape) );
-        m_oldParents.append( m_container->parent() );
-    }
+#include <flake_export.h>
 
-    setText(i18n( "Ungroup shapes" ));
-}
+#include <QUndoCommand>
 
-void KoUngroupShapesCommand::redo () {
-    KoGroupShapesCommand::undo();
-}
+/// The undo / redo command for ungrouping shapes
+class FLAKE_EXPORT KoShapeUngroupCommand : public KoShapeGroupCommand {
+public:
+    /**
+     * Command to ungroup a set of shapes from one parent container.
+     * @param container the group to ungroup the shapes from.
+     * @param shapes a list of all the shapes that should be ungrouped.
+     * @param parent the parent command used for macro commands
+     */
+    KoShapeUngroupCommand(KoShapeContainer *container, QList<KoShape *> shapes, QUndoCommand *parent = 0);
+    /// redo the command
+    void redo ();
+    /// revert the actions done in redo
+    void undo ();
+};
 
-void KoUngroupShapesCommand::undo () {
-    KoGroupShapesCommand::redo();
-}
+#endif

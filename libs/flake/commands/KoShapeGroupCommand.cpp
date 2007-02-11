@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoGroupShapesCommand.h"
+#include "KoShapeGroupCommand.h"
 #include "KoShape.h"
 #include "KoShapeGroup.h"
 #include "KoShapeContainer.h"
@@ -26,7 +26,7 @@
 #include <klocale.h>
 //#include <kdebug.h>
 
-KoGroupShapesCommand::KoGroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes, QList<bool> clipped,
+KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, QList<KoShape *> shapes, QList<bool> clipped,
                                             QUndoCommand *parent)
 : QUndoCommand( parent )
 , m_shapes(shapes)
@@ -40,7 +40,7 @@ KoGroupShapesCommand::KoGroupShapesCommand(KoShapeContainer *container, QList<Ko
     setText( i18n( "Group shapes" ) );
 }
 
-KoGroupShapesCommand::KoGroupShapesCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent)
+KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent)
 : QUndoCommand(parent)
 , m_shapes(shapes)
 , m_container(container)
@@ -54,12 +54,12 @@ KoGroupShapesCommand::KoGroupShapesCommand(KoShapeGroup *container, QList<KoShap
     setText( i18n( "Group shapes" ) );
 }
 
-KoGroupShapesCommand::KoGroupShapesCommand(QUndoCommand *parent)
+KoShapeGroupCommand::KoShapeGroupCommand(QUndoCommand *parent)
 : QUndoCommand(parent)
 {
 }
 
-void KoGroupShapesCommand::redo () {
+void KoShapeGroupCommand::redo () {
     QList <QPointF> positions;
     bool boundingRectInitialized=true;
     QRectF bound;
@@ -86,7 +86,7 @@ void KoGroupShapesCommand::redo () {
 //kDebug() << "after group: " << m_container->position().x() << ", " << m_container->position().y() << endl;
 }
 
-void KoGroupShapesCommand::undo () {
+void KoShapeGroupCommand::undo () {
     QList <QPointF> positions;
     foreach(KoShape *shape, m_shapes)
         positions.append(shape->absolutePosition());

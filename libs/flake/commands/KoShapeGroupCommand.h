@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOGROUPSHAPESCOMMAND_H
-#define KOGROUPSHAPESCOMMAND_H
+#ifndef KOSHAPEGROUPCOMMAND_H
+#define KOSHAPEGROUPCOMMAND_H
 
 #include <flake_export.h>
 
@@ -30,7 +30,7 @@ class KoShapeGroup;
 class KoShapeContainer;
 
 /// The undo / redo command for grouping shapes
-class FLAKE_EXPORT KoGroupShapesCommand : public QUndoCommand {
+class FLAKE_EXPORT KoShapeGroupCommand : public QUndoCommand {
 public:
     /**
      * Command to group a set of shapes into a predefined container.
@@ -40,7 +40,7 @@ public:
      *      See KoShapeContainer::childClipped()
      * @param parent the parent command used for macro commands
      */
-    KoGroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes, QList<bool> clipped,
+    KoShapeGroupCommand(KoShapeContainer *container, QList<KoShape *> shapes, QList<bool> clipped,
                           QUndoCommand *parent = 0);
     /**
      * Command to group a set of shapes into a predefined container.
@@ -48,15 +48,15 @@ public:
      * @param container the group to group the shapes under.
      * @param shapes a list of all the shapes that should be grouped.
      */
-    KoGroupShapesCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent = 0);
-    virtual ~KoGroupShapesCommand() { };
+    KoShapeGroupCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent = 0);
+    virtual ~KoShapeGroupCommand() { };
     /// redo the command
     virtual void redo ();
     /// revert the actions done in redo
     virtual void undo ();
 
 protected:
-    KoGroupShapesCommand(QUndoCommand* parent = 0); ///< protected constructor for child classes
+    KoShapeGroupCommand(QUndoCommand* parent = 0); ///< protected constructor for child classes
     QList<KoShape*> m_shapes; ///<list of shapes to be grouped
     QList<bool> m_clipped; ///< list of booleas to specify the shape of the same index to eb clipped
     KoShapeContainer *m_container; ///< the container where the grouping should be for.

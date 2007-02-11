@@ -55,7 +55,7 @@ set(flake_SRCS
     KoToolManager.cpp
     KoToolRegistry.cpp
     KoToolProxy.cpp
-    commands/KoGroupShapesCommand.cpp
+    commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
     commands/KoShapeBorderCommand.cpp
@@ -67,7 +67,7 @@ set(flake_SRCS
     commands/KoShapeRotateCommand.cpp
     commands/KoShapeShearCommand.cpp
     commands/KoShapeSizeCommand.cpp
-    commands/KoUngroupShapesCommand.cpp
+    commands/KoShapeUngroupCommand.cpp
     commands/KoShapeReorderCommand.cpp
     commands/KoShapeKeepAspectRatioCommand.cpp
     commands/KoPathBaseCommand.cpp

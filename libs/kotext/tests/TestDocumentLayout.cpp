@@ -12,13 +12,6 @@
 #include <kcomponentdata.h>
 
 void TestDocumentLayout::initTestCase() {
-    //  To get around this error
-    // ASSERT failure in QFontDatabase: "A QApplication object needs to be constructed before FontConfig is used.", file text/qfontdatabase_x11.cpp, line 942
-    QCoreApplication::instance()->exit();
-    QCoreApplication::instance()->~QCoreApplication();
-    QApplication::setQuitOnLastWindowClosed(false);
-    m_app = new QApplication(0, 0, false);
-
     shape1 = 0;
     doc = 0;
     layout = 0;
@@ -87,5 +80,22 @@ void TestDocumentLayout:: testHitTest() {
     QVERIFY(layout->hitTest(QPointF(20, paragOffets[1] + 20), Qt::FuzzyHit) > 109);
 }
 
-QTEST_MAIN(TestDocumentLayout)
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <kapplication.h>
+
+#define KOFFICE_TEST(TestObject) \
+int main(int argc, char *argv[]) \
+{ \
+    setenv("LC_ALL", "C", 1); \
+    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
+    KAboutData aboutData( "qttest", "qttest", "version" );  \
+    KCmdLineArgs::init(&aboutData); \
+    KApplication app; \
+    TestObject tc; \
+    return QTest::qExec( &tc, argc, argv ); \
+}
+
+KOFFICE_TEST(TestDocumentLayout)
+
 #include "TestDocumentLayout.moc"

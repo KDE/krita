@@ -1134,6 +1134,7 @@ bool KoPathShape::combine( KoPathShape *path )
             KoPathPoint *newPoint = new KoPathPoint( *point );
             newPoint->map( pathMatrix );
             newPoint->map( myMatrix );
+            newPoint->setParent( this );
             newSubpath->append( newPoint );
         }
         m_subpaths.append( newSubpath );

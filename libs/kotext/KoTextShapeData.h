@@ -21,6 +21,7 @@
 #define KOTEXTSHAPEDATA_H
 
 #include <KoShapeUserData.h>
+#include <KoInsets.h>
 
 #include <kotext_export.h>
 
@@ -63,9 +64,29 @@ public:
      */
     void setDocumentOffset(double offset);
 
+    /**
+     * Return the position in the text-document that this shape shows.
+     * It returns -1 if this shape contains no text.
+     * Note that the text needs to be layouted seperately for this to be updated.
+     */
     int position() const;
+    /**
+     * Set the position in the text-document that this shape shows, or -1 if there is no text.
+     * This is set by the text-layout engine.
+     * @param position the new position
+     */
     void setPosition(int position);
+    /**
+     * Return the end-position in the text-document that this shape shows.
+     * It returns -1 if this shape contains no text.
+     * Note that the text needs to be layouted seperately for this to be updated.
+     */
     int endPosition() const;
+    /**
+     * Set the end-position in the text-document that this shape shows, or -1 if there is no text.
+     * This is set by the text-layout engine.
+     * @param position the new position
+     */
     void setEndPosition(int position);
 
     /// mark shape as dirty triggering a re-layout of its text.
@@ -77,6 +98,9 @@ public:
 
     /// emits a relayout
     void fireResizeEvent();
+
+    void setShapeMargins(const KoInsets &margins);
+    KoInsets shapeMargins() const;
 
 signals:
     /**

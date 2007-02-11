@@ -27,6 +27,7 @@ public:
     bool ownsDocument, dirty;
     double offset;
     int position, endPosition;
+    KoInsets margins;
 };
 
 
@@ -96,6 +97,14 @@ bool KoTextShapeData::isDirty() const {
 
 void KoTextShapeData::fireResizeEvent() {
     emit relayout();
+}
+
+void KoTextShapeData::setShapeMargins(const KoInsets &margins) {
+    d->margins = margins;
+}
+
+KoInsets KoTextShapeData::shapeMargins() const {
+    return d->margins;
 }
 
 #include "KoTextShapeData.moc"

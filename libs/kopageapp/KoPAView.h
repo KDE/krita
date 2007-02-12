@@ -54,8 +54,8 @@ public:
 
     KoZoomHandler* zoomHandler() { return &m_zoomHandler; }
 
-    KoPACanvas * kogaCanvas() { return m_canvas; }
-    KoPACanvas * kogaCanvas() const { return m_canvas; }
+    KoPACanvas * kopaCanvas() { return m_canvas; }
+    KoPACanvas * kopaCanvas() const { return m_canvas; }
 
     /// @return Page that is shown in the canvas
     KoPAPage* activePage() const;

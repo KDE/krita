@@ -94,10 +94,10 @@ void KoPADocument::addShape( KoShape * shape )
 
     foreach( KoView *view, views() )
     {
-        KoPAView * kogaView = static_cast<KoPAView*>( view );
-        if ( page == kogaView->activePage() )
+        KoPAView * kopaView = static_cast<KoPAView*>( view );
+        if ( page == kopaView->activePage() )
         {
-            KoPACanvas *canvas = kogaView->kogaCanvas();
+            KoPACanvas *canvas = kopaView->kopaCanvas();
             canvas->shapeManager()->add( shape );
         }
     }
@@ -118,11 +118,11 @@ void KoPADocument::removeShape( KoShape *shape )
 
     foreach( KoView *view, views() ) 
     {
-        KoPAView * kogaView = static_cast<KoPAView*>( view );
+        KoPAView * kopaView = static_cast<KoPAView*>( view );
 
-        if ( page == kogaView->activePage() )    
+        if ( page == kopaView->activePage() )    
         {
-            KoPACanvas *canvas = kogaView->kogaCanvas();
+            KoPACanvas *canvas = kopaView->kopaCanvas();
             canvas->shapeManager()->remove( shape );
         }
     }

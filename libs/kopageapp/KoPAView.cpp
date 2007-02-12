@@ -309,55 +309,55 @@ void KoPAView::recalculateZoom()
 }
 
 void KoPAView::textBold(bool bold) {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kogaCanvas()->toolProxy()->selection());
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kopaCanvas()->toolProxy()->selection());
     if(handler)
         handler->bold(bold);
 }
 
 void KoPAView::textItalic(bool italic) {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kogaCanvas()->toolProxy()->selection());
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kopaCanvas()->toolProxy()->selection());
     if(handler)
         handler->italic(italic);
 }
 
 void KoPAView::textUnderline(bool underline) {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kogaCanvas()->toolProxy()->selection());
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kopaCanvas()->toolProxy()->selection());
     if(handler)
         handler->underline(underline);
 }
 
 void KoPAView::textStrikeOut(bool strikeout) {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kogaCanvas()->toolProxy()->selection());
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kopaCanvas()->toolProxy()->selection());
     if(handler)
         handler->strikeOut(strikeout);
 }
 
 void KoPAView::slotNonbreakingSpace() {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kogaCanvas()->toolProxy()->selection());
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kopaCanvas()->toolProxy()->selection());
     if(handler)
         handler->insert(QString(QChar(0xa0)));
 }
 
 void KoPAView::slotNonbreakingHyphen() {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kogaCanvas()->toolProxy()->selection());
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kopaCanvas()->toolProxy()->selection());
     if(handler)
         handler->insert(QString(QChar(0x2013)));
 }
 
 void KoPAView::slotSoftHyphen() {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kogaCanvas()->toolProxy()->selection());
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kopaCanvas()->toolProxy()->selection());
     if(handler)
         handler->insert(QString(QChar(0xad)));
 }
 
 void KoPAView::slotLineBreak() {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kogaCanvas()->toolProxy()->selection());
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kopaCanvas()->toolProxy()->selection());
     if(handler)
         handler->insert(QString(QChar('\n')));
 }
 
 void KoPAView::formatFont() {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kogaCanvas()->toolProxy()->selection());
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kopaCanvas()->toolProxy()->selection());
     if(handler)
         handler->selectFont(this);
 }

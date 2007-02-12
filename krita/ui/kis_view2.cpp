@@ -382,6 +382,7 @@ void KisView2::slotLoadingFinished()
 
 void KisView2::createGUI()
 {
+    KoToolManager::instance()->addController(m_d->canvasController);
 
     KoToolBoxFactory toolBoxFactory( "Krita" );
     createDockWidget( &toolBoxFactory );
@@ -396,8 +397,6 @@ void KisView2::createGUI()
     KisPaletteDockerFactory paletteDockerFactory(this);
     KisPaletteDocker* paletteDocker = qobject_cast<KisPaletteDocker*>( createDockWidget( &paletteDockerFactory ) );
     Q_UNUSED( paletteDocker );
-
-    KoToolManager::instance()->addController(m_d->canvasController);
 
     KisBirdEyeBoxFactory birdeyeFactory(this);
     m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>( createDockWidget( &birdeyeFactory ) );

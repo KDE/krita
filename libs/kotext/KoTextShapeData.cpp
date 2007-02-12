@@ -42,6 +42,7 @@ KoTextShapeData::KoTextShapeData()
 KoTextShapeData::~KoTextShapeData() {
     if(d->ownsDocument)
         delete d->document;
+    delete d;
 }
 
 void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnership) {

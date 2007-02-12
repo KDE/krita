@@ -27,7 +27,8 @@
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpMultiply.h"
-
+#include "compositeops/KoCompositeOpDivide.h"
+#include "compositeops/KoCompositeOpBurn.h"
 
 KisGrayAU16ColorSpace ::KisGrayAU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
             KoLcmsColorSpace<GrayAU16Traits>("GRAYA16", i18n("Grayscale 16-bit integer/channel)"), parent, TYPE_GRAYA_16, icSigGrayData, p)
@@ -40,4 +41,6 @@ KisGrayAU16ColorSpace ::KisGrayAU16ColorSpace(KoColorSpaceRegistry * parent, KoC
     addCompositeOp( new KoCompositeOpOver<GrayAU16Traits>( this ) );
     addCompositeOp( new KoCompositeOpErase<GrayAU16Traits>( this ) );
     addCompositeOp( new KoCompositeOpMultiply<GrayAU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpDivide<GrayAU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpBurn<GrayAU16Traits>( this ) );
 }

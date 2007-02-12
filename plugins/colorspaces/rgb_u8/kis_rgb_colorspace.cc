@@ -33,7 +33,8 @@
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpMultiply.h"
-
+#include "compositeops/KoCompositeOpDivide.h"
+#include "compositeops/KoCompositeOpBurn.h"
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))
@@ -51,9 +52,10 @@ KisRgbColorSpace ::KisRgbColorSpace(KoColorSpaceRegistry * parent, KoColorProfil
     addCompositeOp( new KoCompositeOpOver<RgbU8Traits>( this ) );
     addCompositeOp( new KoCompositeOpErase<RgbU8Traits>( this ) );
     addCompositeOp( new KoCompositeOpMultiply<RgbU8Traits>( this ) );
-    addCompositeOp( new KisRgbU8CompositeOp(this, COMPOSITE_BURN,  i18n( "Burn" )) );
+    addCompositeOp( new KoCompositeOpDivide<RgbU8Traits>( this ) );
+    addCompositeOp( new KoCompositeOpBurn<RgbU8Traits>( this ) );
+//     addCompositeOp( new KisRgbU8CompositeOp(this, COMPOSITE_BURN,  i18n( "Burn" )) );
     addCompositeOp( new KisRgbU8CompositeOp(this, COMPOSITE_DODGE,  i18n( "Dodge" )));
-    addCompositeOp( new KisRgbU8CompositeOp(this, COMPOSITE_DIVIDE,  i18n( "Divide" )));
     addCompositeOp( new KisRgbU8CompositeOp(this, COMPOSITE_SCREEN,  i18n( "Screen" )));
     addCompositeOp( new KisRgbU8CompositeOp(this, COMPOSITE_OVERLAY,  i18n( "Overlay" )));
     addCompositeOp( new KisRgbU8CompositeOp(this, COMPOSITE_DARKEN,  i18n( "Darken" )));

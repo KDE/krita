@@ -46,7 +46,7 @@ class KoColorSpaceMathsTraits<quint8> {
 template<>
 class KoColorSpaceMathsTraits<quint16> {
     public:
-        typedef qint32 compositetype;
+        typedef qint64 compositetype;
         inline static quint16 max() { return 0xFFFF; }
         inline static quint16 min() { return 0; }
         inline static qint8 bits() { return 16; }
@@ -55,7 +55,7 @@ class KoColorSpaceMathsTraits<quint16> {
 template<>
 class KoColorSpaceMathsTraits<qint16> {
     public:
-        typedef qint32 compositetype;
+        typedef qint64 compositetype;
         inline static qint16 max() { return 32767; }
         inline static qint16 min() { return -32768; }
         inline static qint8 bits() { return 16; }

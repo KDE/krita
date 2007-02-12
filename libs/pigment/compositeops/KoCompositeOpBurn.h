@@ -17,12 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOCOMPOSITEOPMULTIPLY_H_
-#define KOCOMPOSITEOPMULTIPLY_H_
+#ifndef KOCOMPOSITEOPBURN_H_
+#define KOCOMPOSITEOPBURN_H_
 
 #include "KoColorSpaceMaths.h"
 #include "KoCompositeOp.h"
 
+#define NATIVE_MAX_VALUE KoColorSpaceMathsTraits<channels_type>::max()
 #define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::max()
 #define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::min()
 
@@ -30,12 +31,13 @@
  * A template version of the over composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpMultiply : public KoCompositeOp {
+class KoCompositeOpBurn : public KoCompositeOp {
     typedef typename _CSTraits::channels_type channels_type;
+    typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
     public:
 
-        KoCompositeOpMultiply(KoColorSpace * cs)
-        : KoCompositeOp(cs, COMPOSITE_MULT, i18n("Multiply" ) )
+        KoCompositeOpBurn(KoColorSpace * cs)
+        : KoCompositeOp(cs, COMPOSITE_BURN, i18n("Burn" ) )
         {
         }
 
@@ -104,13 +106,15 @@ class KoCompositeOpMultiply : public KoCompositeOp {
                         {
                           if( (int)i != _CSTraits::alpha_pos)
                           {
-                            channels_type srcColor = src[i];
-                            channels_type dstColor = dst[i];
-            
-                            srcColor = KoColorSpaceMaths<channels_type>::multiply(srcColor, dstColor);
-            
-                            dst[i] = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
-                          
+                            compositetype srcColor = src[i];
+                            compositetype dstColor = dst[i];
+        
+                            srcColor = qMin(((NATIVE_MAX_VALUE - dstColor) * (NATIVE_MAX_VALUE + 1)) / (srcColor + 1), (compositetype)NATIVE_MAX_VALUE);
+                            if (NATIVE_MAX_VALUE - srcColor > NATIVE_MAX_VALUE) srcColor = NATIVE_MAX_VALUE;
+        
+                            channels_type newColor = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
+        
+                            dst[i] = newColor;
                           }
                         }
                     }

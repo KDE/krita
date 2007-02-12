@@ -25,7 +25,8 @@
 #include "../compositeops/KoCompositeOpOver.h"
 #include "../compositeops/KoCompositeOpErase.h"
 #include "../compositeops/KoCompositeOpMultiply.h"
-
+#include "../compositeops/KoCompositeOpDivide.h"
+#include "../compositeops/KoCompositeOpBurn.h"
 
 KoRgbU16ColorSpace::KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
  KoLcmsColorSpace<KoRgbU16Traits>("RGBU16", i18n("RGB 16-bit integer/channel)"), parent, TYPE_BGRA_16, icSigRgbData, p)
@@ -38,6 +39,8 @@ KoRgbU16ColorSpace::KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorPro
     addCompositeOp( new KoCompositeOpOver<KoRgbU16Traits>( this ) );
     addCompositeOp( new KoCompositeOpErase<KoRgbU16Traits>( this ) );
     addCompositeOp( new KoCompositeOpMultiply<KoRgbU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpDivide<KoRgbU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpBurn<KoRgbU16Traits>( this ) );
 }
 
 bool KoRgbU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const

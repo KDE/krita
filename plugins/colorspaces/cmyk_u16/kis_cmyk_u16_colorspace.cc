@@ -25,6 +25,8 @@
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpMultiply.h"
+#include "compositeops/KoCompositeOpDivide.h"
+#include "compositeops/KoCompositeOpBurn.h"
 
 KisCmykU16ColorSpace::KisCmykU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
  KoLcmsColorSpace<CmykU16Traits>("CMYKA16", i18n("CMYK (16-bit integer/channel)"), parent, TYPE_CMYK5_16, icSigCmykData, p)
@@ -39,6 +41,8 @@ KisCmykU16ColorSpace::KisCmykU16ColorSpace(KoColorSpaceRegistry * parent, KoColo
     addCompositeOp( new KoCompositeOpOver<CmykU16Traits>( this ) );
     addCompositeOp( new KoCompositeOpErase<CmykU16Traits>( this ) );
     addCompositeOp( new KoCompositeOpMultiply<CmykU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpDivide<CmykU16Traits>( this ) );
+    addCompositeOp( new KoCompositeOpBurn<CmykU16Traits>( this ) );
 }
 
 bool KisCmykU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const

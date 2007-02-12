@@ -22,7 +22,7 @@
 
 #include <config-krita.h>
 
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
 #include <qgl.h>
 #endif
 
@@ -152,21 +152,21 @@ void GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
 
 OpenGLGridDrawer::OpenGLGridDrawer()
 {
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     glPushAttrib(GL_ALL_ATTRIB_BITS);
 #endif
 }
 
 OpenGLGridDrawer::~OpenGLGridDrawer()
 {
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     glPopAttrib();
 #endif
 }
 
 void OpenGLGridDrawer::setPen(const QPen& pen)
 {
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     Qt::PenStyle penStyle = pen.style();
 
     if (penStyle == Qt::SolidLine) {
@@ -210,7 +210,7 @@ void OpenGLGridDrawer::setPen(const QPen& pen)
 
 void OpenGLGridDrawer::drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2)
 {
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     glBegin(GL_LINES);
     glVertex2i(x1, y1);
     glVertex2i(x2, y2);

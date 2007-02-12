@@ -68,6 +68,7 @@ void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &con
 
 void KisShapeLayer::addChild(KoShape *object)
 {
+    kDebug() << "KisShapeLayer::addChild\n";
     KoShapeLayer::addChild( object );
     setDirty( object->boundingRect().toRect() ); // XXX: convert to pixels
 }
@@ -79,6 +80,7 @@ QIcon KisShapeLayer::icon() const
 
 void KisShapeLayer::prepareProjection(const QRect& r)
 {
+    kDebug() << "KisShapeLayer::prepareProjection " << r << endl;
     // XXX: Is r in document, widget or pixel coordinates? I hope in
     // document coordinates. Note: see dox for updateCanvas.
     QPainter p( m_d->projection.data() );
@@ -89,6 +91,7 @@ void KisShapeLayer::prepareProjection(const QRect& r)
 
 KisPaintDeviceSP KisShapeLayer::projection()
 {
+    kDebug() << "KisShapeLayer::projection\n";
     return m_d->projection;
 }
 

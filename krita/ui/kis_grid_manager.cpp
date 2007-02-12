@@ -22,7 +22,7 @@
 
 #include <config-krita.h>
 
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
 #include <qgl.h>
 #endif
 

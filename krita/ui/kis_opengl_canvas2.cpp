@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_opengl_canvas2.h"
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
 
 
 #include <QtOpenGL>

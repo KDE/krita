@@ -32,7 +32,7 @@
 #include <QToolButton>
 #include <QGridLayout>
 
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
 #include <qgl.h>
 #endif
 
@@ -674,7 +674,7 @@ void TabletSettingsTab::applyTabletDeviceSettings()
 DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
     : WdgDisplaySettings( parent, name )
 {
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     KisConfig cfg;
 
     if (!QGLFormat::hasOpenGL()) {
@@ -794,7 +794,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     page->setIcon(  KIcon(BarIcon( "misc", K3Icon::SizeMedium )) );
     addPage( page );
     m_general = new GeneralTab( vbox );
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Display" ));
     page->setHeader( i18n( "Display" ) );
@@ -847,7 +847,7 @@ void PreferencesDialog::slotDefault()
     m_colorSettings->setDefault();
     m_tabletSettings->setDefault();
     m_performanceSettings->setDefault();
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     m_displaySettings->setDefault();
 #endif
     m_gridSettings->setDefault();
@@ -884,7 +884,7 @@ bool PreferencesDialog::editPreferences()
 
         dialog->m_tabletSettings->applySettings();
 
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         //cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
 #endif

@@ -44,7 +44,7 @@
 #include "kis_opengl_canvas2.h"
 #include "kis_opengl_image_context.h"
 
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
 #include <QGLFormat>
 #endif
 
@@ -89,7 +89,7 @@ public:
     bool currentCanvasIsOpenGL;
     QImage canvasCache; // XXX: use KisQPainterImageContext to share
                         // cache data between views. Finish that class.
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     KisOpenGLImageContextSP openGLImageContext;
 #endif
 };
@@ -102,7 +102,7 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
 
     KisConfig cfg;
     if ( cfg.useOpenGL() ) {
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
         if ( !QGLFormat::hasOpenGL() ) {
             kWarning() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
             setCanvasWidget( new KisQPainterCanvas( this, view ) );
@@ -131,7 +131,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     widget->setAutoFillBackground( false );
     widget->setAttribute( Qt::WA_OpaquePaintEvent );
     widget->setMouseTracking( true );
-    widget->setAcceptDrops( true );
+//    widget->setAcceptDrops( true );
 
 }
 
@@ -184,7 +184,7 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
 
 void KisCanvas2::updateCanvasProjection( const QRect & rc )
 {
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     if ( m_d->currentCanvasIsOpenGL ) {
 
         Q_ASSERT( !m_d->openGLImageContext.isNull() );
@@ -213,7 +213,7 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
         QRectF viewRect = m_d->viewConverter->documentToView(docRect);
         viewRect.adjust( -5, -5, 5, 5 );
         m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     }
 #endif
 }
@@ -302,7 +302,7 @@ void KisCanvas2::controllerSizeChanged( const QSize & size )
 
 void KisCanvas2::connectCurrentImage()
 {
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     if (!m_d->openGLImageContext.isNull()) {
         connect(m_d->openGLImageContext.data(), SIGNAL(sigImageUpdated(QRegion)), SLOT(slotOpenGLImageUpdated(QRegion)));
         connect(m_d->openGLImageContext.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize(qint32, qint32)));
@@ -313,7 +313,7 @@ void KisCanvas2::connectCurrentImage()
 
 void KisCanvas2::disconnectCurrentImage()
 {
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
     if (!m_d->openGLImageContext.isNull()) {
         m_d->openGLImageContext->disconnect(this);
     }

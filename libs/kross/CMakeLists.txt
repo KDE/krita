@@ -35,12 +35,12 @@ if(ENABLE_KROSSRUBY)
 
             # 2007-02-12 sebsauer; this is a workaround for the case we failed to load
             # the "mkmf" library what is the case e.g. on some debian distributions.
-            EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r mkmf -e "exit(0)" RESULT_VARIABLE RUBY_HASH_FOREACH OUTPUT_QUIET ERROR_QUIET)
-            if (${RUBY_HASH_FOREACH} EQUAL 0)
-                message(STATUS "The detected Ruby is too old for kross. A Ruby which has rb_hash_foreach is required. Upgrade to 1.8.2 or later")
-            else (${RUBY_HASH_FOREACH} EQUAL 0)
-                message(STATUS "Failed to load the Ruby mkmf library. Please install the Ruby developer packages.")
-            endif (${RUBY_HASH_FOREACH} EQUAL 0)
+            #EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r mkmf -e "exit(0)" RESULT_VARIABLE RUBY_HASH_FOREACH OUTPUT_QUIET ERROR_QUIET)
+            #if (${RUBY_HASH_FOREACH} EQUAL 0)
+            message(STATUS "The detected Ruby is too old for kross. A Ruby which has rb_hash_foreach is required. Upgrade to 1.8.2 or later")
+            #else (${RUBY_HASH_FOREACH} EQUAL 0)
+            #    message(STATUS "Failed to load the Ruby mkmf library. Please install the Ruby developer packages.")
+            #endif (${RUBY_HASH_FOREACH} EQUAL 0)
 
         endif (${RUBY_HASH_FOREACH} EQUAL 0)
     endif (RUBY_EXECUTABLE AND RUBY_LIBRARY AND RUBY_INCLUDE_PATH)

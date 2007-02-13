@@ -27,8 +27,16 @@
 #include <flake_export.h>
 class KoColor;
 
+/**
+ * The KoCanvasResource contains a set of per-canvas
+ * properties, like current foreground color, current background
+ * color and more.
+ */
 namespace KoCanvasResource {
 
+    /**
+     * This enum holds identifiers to the resources that can be stored in here.
+     */
     enum EnumCanvasResource {
         ForegroundColor,    ///< The active forground color selected for this canvas.
         BackgroundColor,    ///< The active background color selected for this canvas.
@@ -69,18 +77,29 @@ class FLAKE_EXPORT KoCanvasResourceProvider : public QObject {
 
 public:
 
+    /**
+     * Constructor.
+     * @param parent the parent QObject, used for memory management.
+     */
     explicit KoCanvasResourceProvider(QObject * parent);
     ~KoCanvasResourceProvider() {}
 
+    /**
+     * Set a resource of any type.
+     * @param key the integer key, based on KoCanvasResource::EnumCanvasResource
+     * @param value the new value for the key.
+     */
     void setResource( int key, const QVariant & value );
 
-    /// @return a qvariant containing the specified resource or 0 if the
-    /// specified resource does not exist.
-    QVariant resource(int key);
+    /**
+     * Returns a qvariant containing the specified resource or a standard one if the
+     * specified resource does not exist.
+     * @param key the key.
+     */
+    QVariant resource(int key);     // TODO make it return a QVariant pointer
 
-
-    void setKoColor( int key, const KoColor & color );
-    KoColor koColor( int key );
+    void setKoColor( int key, const KoColor & color ); // TODO remove this, setResource does the same.
+    KoColor koColor( int key ); // TODO rename to kocolorResource
 
     void setForegroundColor( const KoColor & color );
     KoColor foregroundColor();
@@ -88,20 +107,32 @@ public:
     void setBackgroundColor( const KoColor & color );
     KoColor backgroundColor();
 
-    void setKoID( int key, const KoID & id );
+    void setKoID( int key, const KoID & id ); // TODO remove this, setResource does the same.
     KoID koID(int key);
 
-    /// Sets the actual handle radius
+    /**
+     * Tools that provide a handle for controlling the content that the tool can edit can
+     * use this property to alter the radius that a circular handle should have on screen.
+     * @param handleSize the radius in pixels.
+     */
     void setHandleRadius( int handleSize );
     /// Returns the actual handle radius
     int handleRadius();
 
-
-    bool boolProperty(int key) const;
+    /**
+     * Return the resource determined by param key as a boolean.
+     * @param key the indentifying key for the resource.
+     */
+    bool boolProperty(int key) const; // TODO rename to boolResource
 
 signals:
-
-    void sigResourceChanged(int key, const QVariant & res);
+    /**
+     * This signal is emitted every time a resource is set that is either
+     * new or different from the previous set value.
+     * @param key the indentifying key for the resource
+     * @param value the variants new value.
+     */
+    void sigResourceChanged(int key, const QVariant & value);
 
 private:
 
@@ -109,9 +140,8 @@ private:
     KoCanvasResourceProvider& operator=(const KoCanvasResourceProvider&);
 
 private:
-    QVariant m_empty;
-    QHash<int, QVariant> m_resources;
-
+    class Private;
+    Private *const d;
 };
 
 #endif // KO_CANVAS_RESOURCE_PROVIDER_

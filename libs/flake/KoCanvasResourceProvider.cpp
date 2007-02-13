@@ -22,8 +22,14 @@
 #include <KoColor.h> // Zut, do we want this? It's convenient, but
                      // also makes flake dependent on pigment. (BSAR)
 
+class KoCanvasResourceProvider::Private {
+public:
+    QHash<int, QVariant> resources;
+};
+
 KoCanvasResourceProvider::KoCanvasResourceProvider(QObject * parent)
-    : QObject( parent )
+    : QObject( parent ),
+    d( new Private() )
 {
     // initialize handle radius to a sane value
     setHandleRadius( 3 );
@@ -31,21 +37,23 @@ KoCanvasResourceProvider::KoCanvasResourceProvider(QObject * parent)
 
 void KoCanvasResourceProvider::setResource( int key, const QVariant & value )
 {
-    if ( m_resources.contains( key ) ) {
-        m_resources[key] = value;
+    if ( d->resources.contains( key ) ) {
+        d->resources[key] = value;
     }
     else {
-        m_resources.insert( key, value );
+        d->resources.insert( key, value );
     }
     emit sigResourceChanged( key, value );
 }
 
 QVariant KoCanvasResourceProvider::resource(int key)
 {
-    if ( !m_resources.contains( key ) )
-        return m_empty;
+    if ( !d->resources.contains( key ) ) {
+        QVariant empty;
+        return empty;
+    }
     else
-        return m_resources.value( key );
+        return d->resources.value( key );
 }
 
 void KoCanvasResourceProvider::setKoColor( int key, const KoColor & color )
@@ -116,9 +124,9 @@ int KoCanvasResourceProvider::handleRadius()
 }
 
 bool KoCanvasResourceProvider::boolProperty(int key) const {
-    if(! m_resources.contains(key))
+    if(! d->resources.contains(key))
         return false;
-    return m_resources[key].toBool();
+    return d->resources[key].toBool();
 }
 
 #include "KoCanvasResourceProvider.moc"

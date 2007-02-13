@@ -55,6 +55,7 @@
 #include "kis_cursor.h"
 #include "kis_cmb_composite.h"
 #include "kis_int_spinbox.h"
+#include "kis_resource_provider.h"
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
@@ -76,12 +77,12 @@ KisToolPaint::~KisToolPaint()
 {
 }
 
-void KisToolPaint::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & v )
+void KisToolPaint::resourceChanged( int key, const QVariant & v )
 {
     KisTool::resourceChanged( key, v );
 
     switch ( key ) {
-    case ( KoCanvasResource::CurrentKritaLayer ):
+    case ( KisResourceProvider::CurrentKritaLayer ):
         m_currentLayer = v.value<KisLayerSP>();
         updateCompositeOpComboBox();
         break;

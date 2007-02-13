@@ -49,16 +49,6 @@ namespace KoCanvasResource {
         KPlatoStart = 4000,      ///< Base number for kplato specific values.
         KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
         KritaStart = 6000,       ///< Base number for krita specific values.
-        // XXX: Maybe we should move the next section to Kritas classes.
-        //      (where there is a new enum with the first value being
-        //          Foo = KoCanvasResourceProvider::Krita+1
-        HdrExposure,
-        CurrentBrush,
-        CurrentPattern,
-        CurrentGradient,
-        CurrentPaintop,
-        CurrentPaintopSettings,
-        CurrentKritaLayer,
         KSpreadStart = 7000,     ///< Base number for kspread specific values.
         KWordStart = 8000        ///< Base number for kword specific values.
     };
@@ -90,25 +80,35 @@ public:
      * @param value the new value for the key.
      */
     void setResource( int key, const QVariant & value );
+    void setResource( int key, const KoColor & color );
+    void setResource( int key, const KoID & id );
 
     /**
      * Returns a qvariant containing the specified resource or a standard one if the
      * specified resource does not exist.
      * @param key the key.
      */
-    QVariant resource(int key);     // TODO make it return a QVariant pointer
+    QVariant resource(int key);
 
-    void setKoColor( int key, const KoColor & color ); // TODO remove this, setResource does the same.
-    KoColor koColor( int key ); // TODO rename to kocolorResource
-
+    /**
+     * Set the foregroundColor resource.
+     * @param color the new foreground color
+     */
     void setForegroundColor( const KoColor & color );
+    /**
+     * Return the foregroundColor
+     */
     KoColor foregroundColor();
 
+    /**
+     * Set the backgroundColor resource.
+     * @param color the new background color
+     */
     void setBackgroundColor( const KoColor & color );
+    /**
+     * Return the backgroundColor
+     */
     KoColor backgroundColor();
-
-    void setKoID( int key, const KoID & id ); // TODO remove this, setResource does the same.
-    KoID koID(int key);
 
     /**
      * Tools that provide a handle for controlling the content that the tool can edit can
@@ -123,7 +123,31 @@ public:
      * Return the resource determined by param key as a boolean.
      * @param key the indentifying key for the resource.
      */
-    bool boolProperty(int key) const; // TODO rename to boolResource
+    bool boolResource(int key) const;
+
+    /**
+     * Return the resource determined by param key as an integer.
+     * @param key the indentifying key for the resource.
+     */
+    bool intResource(int key) const;
+
+    /**
+     * Return the resource determined by param key as a double.
+     * @param key the indentifying key for the resource.
+     */
+    bool doubleResource(int key) const;
+
+    /**
+     * Return the resource determined by param key as a KoColor.
+     * @param key the indentifying key for the resource.
+     */
+    KoColor koColorResource( int key );
+
+    /**
+     * Return the resource determined by param key as a KoID.
+     * @param key the indentifying key for the resource.
+     */
+    KoID koIDResource(int key);
 
 signals:
     /**

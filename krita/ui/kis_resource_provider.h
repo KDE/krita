@@ -50,6 +50,17 @@ class KisResourceProvider : public QObject {
 
 public:
 
+    enum Resources {
+        HdrExposure = KoCanvasResource::KritaStart+1,
+        CurrentBrush,
+        CurrentPattern,
+        CurrentGradient,
+        CurrentPaintop,
+        CurrentPaintopSettings,
+        CurrentKritaLayer
+    };
+
+
     KisResourceProvider(KisView2 * view);
     ~KisResourceProvider();
 
@@ -86,7 +97,8 @@ public slots:
 
 private slots:
 
-    void slotResourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
+    // TODO:  this method is not called or connected. (TZ)
+    void slotResourceChanged( int key, const QVariant & res );
 
 signals:
 

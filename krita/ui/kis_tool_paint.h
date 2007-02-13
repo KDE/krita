@@ -81,7 +81,7 @@ public:
 
 public:
 
-    virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & v );
+    virtual void resourceChanged( int key, const QVariant & v );
 
     virtual void paint(QPainter& gc, KoViewConverter &converter);
 

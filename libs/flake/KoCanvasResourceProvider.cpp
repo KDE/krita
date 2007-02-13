@@ -56,14 +56,21 @@ QVariant KoCanvasResourceProvider::resource(int key)
         return d->resources.value( key );
 }
 
-void KoCanvasResourceProvider::setKoColor( int key, const KoColor & color )
+void KoCanvasResourceProvider::setResource( int key, const KoColor & color )
 {
     QVariant v;
     v.setValue( color );
     setResource( key, v );
 }
 
-KoColor KoCanvasResourceProvider::koColor( int key )
+void KoCanvasResourceProvider::setResource( int key, const KoID & id )
+{
+    QVariant v;
+    v.setValue( id );
+    setResource( key, v );
+}
+
+KoColor KoCanvasResourceProvider::koColorResource( int key )
 {
     return resource( key ).value<KoColor>();
 }
@@ -71,41 +78,31 @@ KoColor KoCanvasResourceProvider::koColor( int key )
 
 void KoCanvasResourceProvider::setForegroundColor( const KoColor & color )
 {
-    QVariant v;
-    v.setValue( color );
-    setResource( KoCanvasResource::ForegroundColor, v );
-
+    //QVariant v;
+    //v.setValue( color );
+    setResource( KoCanvasResource::ForegroundColor, color );
 }
 
 KoColor KoCanvasResourceProvider::foregroundColor()
 {
-    return resource( KoCanvasResource::ForegroundColor ).value<KoColor>();
+    return koColorResource( KoCanvasResource::ForegroundColor );
 }
 
 
 void KoCanvasResourceProvider::setBackgroundColor( const KoColor & color )
 {
-    QVariant v;
-    v.setValue( color );
-    setResource( KoCanvasResource::BackgroundColor, v );
+    //QVariant v;
+    //v.setValue( color );
+    setResource( KoCanvasResource::BackgroundColor, color );
 
 }
 
 KoColor KoCanvasResourceProvider::backgroundColor()
 {
-    return resource( KoCanvasResource::BackgroundColor ).value<KoColor>();
+    return koColorResource( KoCanvasResource::BackgroundColor );
 }
 
-
-void KoCanvasResourceProvider::setKoID( int key, const KoID & id )
-{
-    QVariant  v;
-    v.setValue( id );
-    setResource( key, v );
-
-}
-
-KoID KoCanvasResourceProvider::koID(int key)
+KoID KoCanvasResourceProvider::koIDResource(int key)
 {
     return resource( key ).value<KoID>();
 }
@@ -123,10 +120,22 @@ int KoCanvasResourceProvider::handleRadius()
     return resource( KoCanvasResource::HandleRadius ).toInt();
 }
 
-bool KoCanvasResourceProvider::boolProperty(int key) const {
+bool KoCanvasResourceProvider::boolResource(int key) const {
     if(! d->resources.contains(key))
         return false;
     return d->resources[key].toBool();
+}
+
+bool KoCanvasResourceProvider::intResource(int key) const {
+    if(! d->resources.contains(key))
+        return 0;
+    return d->resources[key].toInt();
+}
+
+bool KoCanvasResourceProvider::doubleResource(int key) const {
+    if(! d->resources.contains(key))
+        return 0.;
+    return d->resources[key].toDouble();
 }
 
 #include "KoCanvasResourceProvider.moc"

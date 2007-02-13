@@ -59,7 +59,7 @@ public slots:
 
     virtual void activate(bool temporary = false);
     virtual void deactivate();
-    virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
+    virtual void resourceChanged( int key, const QVariant & res );
 
 public:
 

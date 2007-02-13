@@ -29,6 +29,7 @@
 #include <kis_brush.h>
 #include <kis_pattern.h>
 #include <kis_gradient.h>
+#include "kis_resource_provider.h"
 
 #include "kis_canvas2.h"
 #include "kis_tool.h"
@@ -49,13 +50,13 @@ void KisTool::activate(bool )
 
     m_currentFgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::ForegroundColor ).value<KoColor>();
     m_currentBgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::BackgroundColor ).value<KoColor>();
-    m_currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentBrush ).value<void *>() );
-    m_currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentPattern).value<void *>() );
-    m_currentGradient = static_cast<KisGradient *>( m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentGradient ).value<void *>() );
-    m_currentPaintOp = m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentPaintop ).value<KoID >();
-    m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentPaintopSettings ).value<void *>() );
-    m_currentLayer = m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentKritaLayer ).value<KisLayerSP>();
-    m_currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( KoCanvasResource::HdrExposure ).toDouble() );
+    m_currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentBrush ).value<void *>() );
+    m_currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPattern).value<void *>() );
+    m_currentGradient = static_cast<KisGradient *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentGradient ).value<void *>() );
+    m_currentPaintOp = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintop ).value<KoID >();
+    m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintopSettings ).value<void *>() );
+    m_currentLayer = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    m_currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( KisResourceProvider::HdrExposure ).toDouble() );
     m_currentImage = image();
 }
 
@@ -65,7 +66,7 @@ void KisTool::deactivate()
 {
 }
 
-void KisTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & v )
+void KisTool::resourceChanged( int key, const QVariant & v )
 {
     switch ( key ) {
     case ( KoCanvasResource::ForegroundColor ):
@@ -74,22 +75,22 @@ void KisTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const Q
     case ( KoCanvasResource::BackgroundColor ):
         m_currentBgColor = v.value<KoColor>();
         break;
-    case ( KoCanvasResource::CurrentBrush ):
+    case ( KisResourceProvider::CurrentBrush ):
         m_currentBrush = static_cast<KisBrush *>( v.value<void *>() );
         break;
-    case ( KoCanvasResource::CurrentPattern ):
+    case ( KisResourceProvider::CurrentPattern ):
         m_currentPattern = static_cast<KisPattern *>( v.value<void *>() );
         break;
-    case ( KoCanvasResource::CurrentGradient ):
+    case ( KisResourceProvider::CurrentGradient ):
         m_currentGradient = static_cast<KisGradient *>( v.value<void *>() );
         break;
-    case ( KoCanvasResource::CurrentPaintop ):
+    case ( KisResourceProvider::CurrentPaintop ):
         m_currentPaintOp = v.value<KoID >();
         break;
-    case ( KoCanvasResource::CurrentPaintopSettings ):
+    case ( KisResourceProvider::CurrentPaintopSettings ):
         m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( v.value<void *>() );
         break;
-    case ( KoCanvasResource::HdrExposure ):
+    case ( KisResourceProvider::HdrExposure ):
         m_currentExposure = static_cast<float>( v.toDouble() );
     default:
         ;

@@ -429,10 +429,6 @@ private:
 private:
   KoStore( const KoStore& store );  ///< don't copy
   KoStore& operator=( const KoStore& store );  ///< don't assign
-
-  class Private;
-  Private * const d;
-
 };
 
 #endif

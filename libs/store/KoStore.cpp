@@ -208,7 +208,6 @@ namespace {
 }
 
 KoStore::KoStore()
-    : d( 0 )
 {
 }
 
@@ -227,7 +226,6 @@ bool KoStore::init( Mode _mode )
 KoStore::~KoStore()
 {
   delete m_stream;
-  delete d;
 }
 
 bool KoStore::open( const QString & _name )

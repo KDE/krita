@@ -46,7 +46,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <QLineEdit>
-#include <klistbox.h>
+#include <k3listbox.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -95,8 +95,6 @@ KFontChooser_local::KFontChooser_local(QWidget *parent,
                            Qt::CheckState *sizeIsRelativeState )
   : QWidget(parent), usingFixed(onlyFixed), d( new KFontChooser_localPrivate )
 {
-  charsetsCombo = 0;
-
   QString mainWhatsThisText =
     i18n( "Here you can choose the font to be used." );
   this->setWhatsThis( mainWhatsThisText );
@@ -191,7 +189,7 @@ KFontChooser_local::KFontChooser_local(QWidget *parent,
   //
   // now create the actual boxes that hold the info
   //
-  familyListBox = new KListBox( page, "familyListBox");
+  familyListBox = new K3ListBox( page, "familyListBox");
   familyListBox->setEnabled( !diff );
   gridLayout->addWidget( familyListBox, row, 0 );
   QString fontFamilyWhatsThisText =
@@ -216,7 +214,7 @@ KFontChooser_local::KFontChooser_local(QWidget *parent,
   familyListBox->setMinimumHeight(
     minimumListHeight( familyListBox, visibleListSize  ) );
 
-  styleListBox = new KListBox( page, "styleListBox");
+  styleListBox = new K3ListBox( page, "styleListBox");
   styleListBox->setEnabled( !diff );
   gridLayout->addWidget(styleListBox, row, 1);
   QString fontStyleWhatsThisText =
@@ -242,7 +240,7 @@ KFontChooser_local::KFontChooser_local(QWidget *parent,
 	  SLOT(style_chosen_slot(const QString &)));
 
 
-  sizeListBox = new KListBox( page, "sizeListBox");
+  sizeListBox = new K3ListBox( page, "sizeListBox");
   sizeOfFont = new KIntNumInput( page );
   sizeOfFont->setObjectName("sizeOfFont");
   sizeOfFont->setMinimum(4);

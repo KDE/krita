@@ -43,7 +43,7 @@ class QFont;
 class Q3GroupBox;
 class QLabel;
 class QStringList;
-class KListBox;
+class K3ListBox;
 class KIntNumInput;
 /**
  * @short A font selection widget.
@@ -303,10 +303,9 @@ private:
   QCheckBox    *styleCheckbox;
   QCheckBox    *sizeCheckbox;
   QLabel       *sizeLabel;
-  KListBox     *familyListBox;
-  KListBox     *styleListBox;
-  KListBox     *sizeListBox;
-  QComboBox    *charsetsCombo; // BIC: remove in KDE4
+  K3ListBox    *familyListBox;
+  K3ListBox    *styleListBox;
+  K3ListBox    *sizeListBox;
   QCheckBox    *sizeIsRelativeCheckBox;
 
   QFont        selFont;

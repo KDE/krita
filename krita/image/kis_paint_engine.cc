@@ -65,7 +65,7 @@ bool KisPaintEngine::begin(QPaintDevice *pdev)
 
 bool KisPaintEngine::end()
 {
-    kDebug(41001) << "KisPaintEngine::end\n";
+//     kDebug(41001) << "KisPaintEngine::end\n";
     // XXX: End transaction for undo?
     return true;
 }
@@ -73,7 +73,7 @@ bool KisPaintEngine::end()
 
 void KisPaintEngine::updateState(const QPaintEngineState &state)
 {
-    kDebug(41001) << "KisPaintEngine::update state\n";
+//     kDebug(41001) << "KisPaintEngine::update state\n";
     m_d->state = state;
 }
 
@@ -119,10 +119,10 @@ void KisPaintEngine::drawEllipse(const QRect &r)
 
 void KisPaintEngine::drawPath(const QPainterPath &path)
 {
-    kDebug(41001) << "KisPaintEngine::drawPath with bounding rect " << path.boundingRect() << endl;
+    kDebug(41001) << "KisPaintEngine::drawPath with bounding rect " << path.boundingRect().toRect() << endl;
     // Simple-minded implementation
 
-    QRectF rc = path.boundingRect();
+    QRectF rc(0, 0, 640, 480);
     QImage img( rc.toRect().width(), rc.toRect().height(), QImage::Format_ARGB32 );
     QPainter p( &img );
     p.drawPath( path );

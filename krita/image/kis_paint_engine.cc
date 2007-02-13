@@ -36,8 +36,13 @@
 class KisPaintEngine::KisPaintEnginePrivate {
 public:
     KisPaintDevice * dev;
-    QPaintEngineState state;
     QMatrix matrix;
+    qreal opacity;
+    QPen pen;
+    QBrush brush;
+    QFont font;
+    QPainter::RenderHints hints;
+    QPointF brushOrigin;
 };
 
 KisPaintEngine::KisPaintEngine()
@@ -46,7 +51,6 @@ KisPaintEngine::KisPaintEngine()
 
     // Set capabilities
     gccaps = AllFeatures;
-
 }
 
 KisPaintEngine::~KisPaintEngine()
@@ -75,11 +79,33 @@ bool KisPaintEngine::end()
 
 void KisPaintEngine::updateState(const QPaintEngineState &state)
 {
-//     kDebug(41001) << "KisPaintEngine::update state\n";
-    m_d->state = state;
-    m_d->matrix = state.matrix();
-}
+    QPaintEngine::DirtyFlags flags = state.state();
 
+    if (flags & DirtyOpacity) {
+        m_d->opacity = state.opacity();
+        if (m_d->opacity > 1)
+            m_d->opacity = 1;
+        if (m_d->opacity < 0)
+            m_d->opacity = 0;
+        // Force update pen/brush as to get proper alpha colors propagated
+        flags |= DirtyPen;
+        flags |= DirtyBrush;
+    }
+
+    if (flags & DirtyTransform) m_d->matrix = state.matrix();
+    if (flags & DirtyPen) m_d->pen = state.pen();
+    if (flags & (DirtyBrush | DirtyBrushOrigin)) {m_d->brush = state.brush(); m_d->brushOrigin = state.brushOrigin();}
+    if (flags & DirtyFont) m_d->font = state.font();
+
+    if (state.state() & DirtyClipEnabled) {
+        // TODO: What is this intended to do? DirtyClipEnabled
+    }
+
+    if (flags & DirtyClipPath) {
+        // TODO: What is this intended to do? DirtyClipPath
+    }
+    if (flags & DirtyHints) m_d->hints = state.renderHints();
+}
 
 void KisPaintEngine::drawRects(const QRect *rects, int rectCount)
 {
@@ -129,11 +155,15 @@ void KisPaintEngine::drawPath(const QPainterPath &path)
     QImage img( rc.toRect().width(), rc.toRect().height(), QImage::Format_ARGB32 );
     QPainter p( &img );
     p.setMatrix(m_d->matrix);
+    p.setPen(m_d->pen);
+    p.setBrush(m_d->brush);
+    p.setFont(m_d->font);
+    p.setRenderHints(m_d->hints);
+    p.setBrushOrigin(m_d->brushOrigin);
     p.drawPath( path );
     p.end();
 
     drawImage(rc, img, QRectF( 0, 0, rc.width(), rc.height() ));
-
 }
 
 

@@ -35,7 +35,7 @@
 #include <kmessagebox.h>
 #include <KoDocument.h>
 #include <klibloader.h>
-#include <klistbox.h>
+#include <k3listbox.h>
 #include <kmimetype.h>
 #include <kdebug.h>
 
@@ -66,7 +66,7 @@ KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
     setMainWidget (page);
 
     QLabel *filterLabel = new QLabel( i18n ("Select a filter:"), page );
-    m_filterList = new KListBox (page, "filterlist");
+    m_filterList = new K3ListBox (page, "filterlist");
 
     QVBoxLayout *layout = new QVBoxLayout( page );
     layout->addWidget (filterLabel);

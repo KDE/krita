@@ -24,7 +24,7 @@
 
 #include <kdialog.h>
 
-class KListBox;
+class K3ListBox;
 
 
 class KoFilterChooser : public KDialog
@@ -40,7 +40,7 @@ public:
 
 private:
     QStringList m_mimeTypes;
-    KListBox *m_filterList;
+    K3ListBox *m_filterList;
 };
 
 #endif

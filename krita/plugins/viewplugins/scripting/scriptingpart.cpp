@@ -100,6 +100,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
 
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
+    Kross::Manager::self().addObject(d->module, "Krita");
 }
 
 ScriptingPart::~ScriptingPart()
@@ -111,7 +112,6 @@ ScriptingPart::~ScriptingPart()
 void ScriptingPart::started(Kross::Action*)
 {
 //     kDebug() << "ScriptingPart::executionStarted" << endl;
-    Kross::Manager::self().addObject(d->module, "Krita");
 }
 
 void ScriptingPart::finished(Kross::Action*)

@@ -27,6 +27,7 @@
 #include <QLine>
 #include <QLineF>
 #include <QPainterPath>
+#include <QMatrix>
 
 #include "kis_paint_device.h"
 #include "kis_painter.h"
@@ -36,6 +37,7 @@ class KisPaintEngine::KisPaintEnginePrivate {
 public:
     KisPaintDevice * dev;
     QPaintEngineState state;
+    QMatrix matrix;
 };
 
 KisPaintEngine::KisPaintEngine()
@@ -75,6 +77,7 @@ void KisPaintEngine::updateState(const QPaintEngineState &state)
 {
 //     kDebug(41001) << "KisPaintEngine::update state\n";
     m_d->state = state;
+    m_d->matrix = state.matrix();
 }
 
 
@@ -125,6 +128,7 @@ void KisPaintEngine::drawPath(const QPainterPath &path)
     QRectF rc(0, 0, 640, 480);
     QImage img( rc.toRect().width(), rc.toRect().height(), QImage::Format_ARGB32 );
     QPainter p( &img );
+    p.setMatrix(m_d->matrix);
     p.drawPath( path );
     p.end();
 

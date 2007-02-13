@@ -86,15 +86,15 @@ void KisShapeLayer::prepareProjection(const QRect& r)
     // XXX: Is r in document, widget or pixel coordinates? I hope in
     // document coordinates. Note: see dox for updateCanvas.
 
-//     QPainter p( m_d->projection.data() );
-//     p.setClipRect( r );
-//     KoShapeLayer::paint( p, *m_d->converter );
-
-    QImage img(640, 480, QImage::Format_ARGB32 );
-    QPainter p ( &img );
+    QPainter p( m_d->projection.data() );
     p.setClipRect( r );
     KoShapeLayer::paint( p, *m_d->converter );
-    m_d->projection->convertFromQImage(img, "");
+
+//     QImage img(640, 480, QImage::Format_ARGB32 );
+//     QPainter p ( &img );
+//     p.setClipRect( r );
+//     KoShapeLayer::paint( p, *m_d->converter );
+//     m_d->projection->convertFromQImage(img, "");
 
     setDirty( r ); // Convert to right coordinates
 }

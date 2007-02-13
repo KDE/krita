@@ -28,10 +28,10 @@ if(ENABLE_KROSSRUBY)
     macro_optional_find_package(RUBY)
     if (RUBY_EXECUTABLE AND RUBY_LIBRARY AND RUBY_INCLUDE_PATH)
         EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r mkmf -e "exit(have_func('rb_hash_foreach') ? 0 : 1)" RESULT_VARIABLE RUBY_HASH_FOREACH OUTPUT_QUIET)
-        if (${RUBY_HASH_FOREACH} EQUAL 0)
+        if (RUBY_HASH_FOREACH EQUAL 0)
             add_subdirectory(ruby)
             set(KROSSRUBY_ENABLED "yes")
-        else (${RUBY_HASH_FOREACH} EQUAL 0)
+        else (RUBY_HASH_FOREACH EQUAL 0)
 
             # 2007-02-12 sebsauer; this is a workaround for the case we failed to load
             # the "mkmf" library what is the case e.g. on some debian distributions.
@@ -42,7 +42,7 @@ if(ENABLE_KROSSRUBY)
             #    message(STATUS "Failed to load the Ruby mkmf library. Please install the Ruby developer packages.")
             #endif (${RUBY_HASH_FOREACH} EQUAL 0)
 
-        endif (${RUBY_HASH_FOREACH} EQUAL 0)
+        endif (RUBY_HASH_FOREACH EQUAL 0)
     endif (RUBY_EXECUTABLE AND RUBY_LIBRARY AND RUBY_INCLUDE_PATH)
     message(STATUS "Ruby Executable: " ${RUBY_EXECUTABLE})
     message(STATUS "Ruby Libraries: " ${RUBY_LIBRARY})

@@ -83,7 +83,7 @@ class QAbstractButton;
    it you no longer have to manually implement methods to route mouse,
    tablet, key or wheel events to the active tool. In fact, it's no
    longer interesting to you which tool is active; you can safely
-   route the paint event through KoToolManager::paint().
+   route the paint event through KoToolProxy::paint().
 
    (The reason the input events are handled completely by the
    toolmanager and the paint events not is that, generally speaking,

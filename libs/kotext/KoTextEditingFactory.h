@@ -1,0 +1,63 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#ifndef KOTEXTEDITINGPLUGINFACTORY_H
+#define KOTEXTEDITINGPLUGINFACTORY_H
+
+#include <QString>
+
+#include <KoID.h>
+
+#include <kotext_export.h>
+
+class KoTextEditingPlugin;
+
+class KOTEXT_EXPORT KoTextEditingFactory : public QObject {
+    Q_OBJECT
+public:
+    /**
+     * Create the new factory
+     * @param parent the parent QObject for memory management usage.
+     * @param id a string that will be used internally for referencing the variable-type.
+     */
+    KoTextEditingFactory(QObject *parent, const QString &id);
+    virtual ~KoTextEditingFactory();
+
+    /**
+     * Create a new instance of an inline object.
+     */
+    virtual KoTextEditingPlugin *create() const = 0;
+
+    /**
+     * return the id for the variable this factory creates.
+     * @return the id for the variable this factory creates.
+     */
+    const QString &objectId() const;
+
+    /**
+     * Create a KoID for the variable this factory creates.
+     */
+    const KoID id() const;
+
+private:
+    class Private;
+    Private * const d;
+};
+
+#endif

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Autocorrection plugin
+ServiceTypes=KOffice/Text-EditingPlugin
+Type=Service
+X-KoText-Version=1
+X-KDE-Library=autocorrect

@@ -31,6 +31,11 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoTextSelectionHandler.cpp
     KoTextBlockBorderData.cpp
     KoTextDocumentLayout.cpp
+
+    KoTextEditingRegistry.cpp
+    KoTextEditingFactory.cpp
+    KoTextEditingPlugin.cpp
+
     KoInlineTextObjectManager.cpp
     KoInlineObjectFactory.cpp
     KoInlineObjectRegistry.cpp
@@ -40,6 +45,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp
+
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
     styles/KoParagraphStyle.cpp
@@ -74,4 +80,4 @@ install(TARGETS kotext  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES inlinetextobject.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES texteditingplugin.desktop inlinetextobject.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})

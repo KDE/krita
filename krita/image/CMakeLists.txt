@@ -63,6 +63,7 @@ set(kritaimage_LIB_SRCS
    kis_paintop_registry.cc
    kis_palette.cc
    kis_pattern.cc
+   kis_png_converter.cc
    kis_random_accessor.cpp
    kis_random_sub_accessor.cpp
    kis_rect.cc
@@ -102,9 +103,7 @@ kde4_automoc(${kritaimage_LIB_SRCS})
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KDECORE_LIBS} pigment kofficecore kopainter
-    threadweaver
-)
+target_link_libraries(kritaimage ${KDE4_KDECORE_LIBS} pigment kofficecore kopainter threadweaver ${PNG_LIBRARIES} )
 
 set_target_properties(kritaimage PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kritaimage  DESTINATION ${LIB_INSTALL_DIR})
@@ -127,5 +126,5 @@ install(TARGETS kritaimage  DESTINATION ${LIB_INSTALL_DIR})
 #kis_resource.h kis_selection.h  	kis_transaction.h kis_types.h
 #kis_vec.h kis_filter_config_widget.h  	kis_filter_configuration.h
 #kis_exif_info.h kis_exif_value.h kis_perspective_grid.h
-#kis_perspective_math.h kis_threaded_applicator.h DESTINATION ${INCLUDE_INSTALL_DIR})
+#kis_perspective_math.h kis_threaded_applicator.h kis_png_converter.h DESTINATION ${INCLUDE_INSTALL_DIR})
 

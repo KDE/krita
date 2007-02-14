@@ -31,6 +31,8 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"
+#include <krita_export.h>
+
 
 class KisDoc2;
 class KisUndoAdapter;
@@ -55,7 +57,7 @@ enum KisImageBuilder_Result {
         KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE = 600
 };
 
-class KisPNGConverter : public KisProgressSubject {
+class KRITAIMAGE_EXPORT KisPNGConverter : public KisProgressSubject {
         Q_OBJECT
     public:
         KisPNGConverter(KisDoc2 *doc, KisUndoAdapter *adapter);

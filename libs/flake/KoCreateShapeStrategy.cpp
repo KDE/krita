@@ -53,7 +53,7 @@ QUndoCommand* KoCreateShapeStrategy::createCommand() {
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(m_parent);
     KoShapeFactory *factory = KoShapeRegistry::instance()->get(parent->shapeId());
     if(! factory) {
-        kWarning(30001) << "Application requested a shape that is not registered '" <<
+        kWarning(30006) << "Application requested a shape that is not registered '" <<
             parent->shapeId() << "'" << endl;
         return 0;
     }

@@ -84,7 +84,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
     else if(m_right)
         m_solidPoint -= QPointF(m_initialSize.width() / 2, 0);
 
-kDebug() << " PREsol.x=" << m_solidPoint.x() << " sol.y=" << m_solidPoint.y() <<endl;
+kDebug(30006) << " PREsol.x=" << m_solidPoint.x() << " sol.y=" << m_solidPoint.y() <<endl;
         QMatrix matrix = canvas->shapeManager()->selection()->transformationMatrix(0);
         m_solidPoint = matrix.map(m_solidPoint);
 }
@@ -114,7 +114,7 @@ void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMod
     applyMatrix.rotate(-m_initialSelectionAngle);
     applyMatrix.translate(-m_solidPoint.x(), -m_solidPoint.y());
 
-kDebug() << "Begin retransform" <<endl;
+kDebug(30006) << "Begin retransform" <<endl;
     int counter=0;
     foreach(KoShape *shape, m_selectedShapes) {
         shape->repaint();
@@ -122,7 +122,7 @@ kDebug() << "Begin retransform" <<endl;
         QMatrix orm = m_startRotationMatrices[counter];
         shape->shear((m.m21() - orm.m21()) / orm.m11(), (m.m12() - orm.m12()) / orm.m22());
         QPointF p = applyMatrix.map(m_startPositions[counter]);
-kDebug() << " px=" << p.x() << " py=" << p.y() <<endl;
+kDebug(30006) << " px=" << p.x() << " py=" << p.y() <<endl;
         shape->setPosition(p);
         shape->repaint();
         counter++;

@@ -86,7 +86,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     painter.setMatrix( matrix().inverted() * painter.matrix() );
     QMatrix myMatrix = transformationMatrix(&converter);
     foreach (KoShape *shape, sortedObjects) {
-        kDebug() << "painting shape: " << shape->shapeId() << ", " << shape->boundingRect() << endl;
+        kDebug(30006) << "painting shape: " << shape->shapeId() << ", " << shape->boundingRect() << endl;
         if(! shape->isVisible())
             continue;
         // TODO this is not perfect yet..
@@ -107,8 +107,8 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
             painter.setClipRegion(QRegion(clip));
         }
 
-//kDebug() << "rect: " << position() << endl;
-//kDebug() << "polygon: " << clip.boundingRect() << endl;
+//kDebug(30006) << "rect: " << position() << endl;
+//kDebug(30006) << "polygon: " << clip.boundingRect() << endl;
         //painter.drawPolygon(clip);
         painter.setMatrix( shape->transformationMatrix(&converter) * painter.matrix() );
         shape->paint(painter, converter);

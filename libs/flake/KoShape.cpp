@@ -344,7 +344,7 @@ void KoShape::setAbsolutePosition(QPointF newPosition) {
     matrix.scale( d->scaleX, d->scaleY );
 
     QPointF vector2 = matrix.map( QPointF(size().width() / 2.0, size().height() / 2.0) );
-    //kDebug() << "vector1: " << vector1 << ", vector2: " << vector2 << endl;
+    //kDebug(30006) << "vector1: " << vector1 << ", vector2: " << vector2 << endl;
 
     setPosition(newPosition + vector1 - vector2);
 }

@@ -272,7 +272,7 @@ void KoCanvasController::Viewport::dragEnterEvent(QDragEnterEvent *event) {
         // So, lets remove this again when Zagge adds his new class that does this kind of thing. (KoLoadSave)
         KoShapeFactory *factory = KoShapeRegistry::instance()->get(id);
         if(! factory) {
-            kWarning(30001) << "Application requested a shape that is not registered '" <<
+            kWarning(30006) << "Application requested a shape that is not registered '" <<
                 id << "', Ignoring" << endl;
             event->ignore();
             return;

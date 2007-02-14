@@ -16,38 +16,131 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
+
 #include "kis_paint_engine.h"
 
-#include <QPaintEngine>
-#include <QPaintDevice>
-#include <QPaintEngineState>
-#include <QPolygon>
-#include <QRect>
-#include <QRectF>
-#include <QLine>
-#include <QLineF>
-#include <QPainterPath>
-#include <QMatrix>
+#include <QtCore>
+#include <QtGui>
 
 #include "kis_paint_device.h"
 #include "kis_painter.h"
+#include "kis_brush.h"
+#include "kis_paintop.h"
+#include "kis_iterators_pixel.h"
 #include "KoCompositeOp.h"
+
+class KisInternalPaintOp : public KisPaintOp {
+
+    typedef KisPaintOp super;
+
+public:
+    KisInternalPaintOp(KisPainter * painter);
+    ~KisInternalPaintOp();
+
+    void paintAt(const QPointF &pos, const KisPaintInformation& info);
+
+};
+
+KisInternalPaintOp::KisInternalPaintOp(KisPainter * painter) : super (painter)
+{
+}
+
+KisInternalPaintOp::~KisInternalPaintOp()
+{
+}
+
+void KisInternalPaintOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
+{
+    if (!m_painter) return;
+    KisPaintDeviceSP device = m_painter->device();
+    if (!device) return;
+    KisBrush * brush = m_painter->brush();
+    if (!brush) return;
+    if (! brush->canPaintFor(info) )
+        return;
+
+    QPointF hotSpot = brush->hotSpot(info);
+    QPointF pt = pos - hotSpot;
+
+    qint32 x = qRound(pt.x());
+    qint32 y = qRound(pt.y());
+
+    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
+    if (brush->brushType() == IMAGE ||
+        brush->brushType() == PIPE_IMAGE) {
+        dab = brush->image(device->colorSpace(), info);
+    }
+    else {
+        // Compute mask without sub-pixel positioning
+        KisQImagemaskSP mask = brush->mask(info);
+        dab = computeDab(mask);
+    }
+
+    m_painter->setPressure(info.pressure);
+    QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
+    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
+
+    KisImageSP image = device->image();
+
+    if (image != 0) {
+        dstRect &= image->bounds();
+    }
+
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+
+    KoColorSpace * cs = dab->colorSpace();
+
+    // Set all alpha > opaque/2 to opaque, the rest to transparent.
+    // XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.
+
+    KisRectIteratorPixel pixelIt = dab->createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height());
+
+    while (!pixelIt.isDone()) {
+        quint8 alpha = cs->alpha(pixelIt.rawData());
+
+        if (alpha < (4 * OPACITY_OPAQUE) / 10) {
+            cs->setAlpha(pixelIt.rawData(), OPACITY_TRANSPARENT, 1);
+        } else {
+            cs->setAlpha(pixelIt.rawData(), OPACITY_OPAQUE, 1);
+        }
+
+        ++pixelIt;
+    }
+
+    qint32 sx = dstRect.x() - x;
+    qint32 sy = dstRect.y() - y;
+    qint32 sw = dstRect.width();
+    qint32 sh = dstRect.height();
+
+    if (m_source->hasSelection()) {
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab,
+                                m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
+    }
+    else {
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab, m_painter->opacity(), sx, sy, sw, sh);
+    }
+}
+
+
 
 class KisPaintEngine::KisPaintEnginePrivate {
 public:
     KisPaintDevice * dev;
+    KisPainter * p;
+    KisBrush * brush;
     QMatrix matrix;
     qreal opacity;
-    QPen pen;
-    QBrush brush;
-    QFont font;
     QPainter::RenderHints hints;
     QPointF brushOrigin;
 };
 
+
+
 KisPaintEngine::KisPaintEngine()
 {
-    m_d = new KisPaintEnginePrivate;
+    d = new KisPaintEnginePrivate;
+    d->p = 0;
+    d->brush = 0;
 
     // Set capabilities
     gccaps = AllFeatures;
@@ -55,47 +148,105 @@ KisPaintEngine::KisPaintEngine()
 
 KisPaintEngine::~KisPaintEngine()
 {
-    delete m_d;
+    delete d->brush;
+    delete d->p;
+    delete d;
 }
 
 bool KisPaintEngine::begin(QPaintDevice *pdev)
 {
     kDebug(41001) << "KisPaintEngine::begin\n";
+
     KisPaintDevice * dev = dynamic_cast<KisPaintDevice*>( pdev );
     Q_ASSERT_X(dev, "KisPaintEngine::begin",
                "Can only work on KisPaintDevices, nothing else!");
-    m_d->dev = dev;
+    d->dev = dev;
+
+    initPainter();
+
     // XXX: Start transaction for undo?
     return true;
 }
 
+void KisPaintEngine::initPainter()
+{
+    KisInternalPaintOp * po;
+    QBrush defaultPen(Qt::white);
+    QImage img(1, 1, QImage::Format_ARGB32 );
+    QPainter p(&img);
+
+    if (d->p)
+        delete d->p;
+    if (d->brush)
+        delete d->brush;
+
+    p.setBrush(defaultPen);
+    p.drawRect(0, 0, 1, 1);
+    defaultPen.setColor(Qt::black);
+    p.setBrush(defaultPen);
+    p.drawEllipse(0, 0, 1, 1);
+    p.end();
+
+    d->brush = new KisBrush(img);
+    d->p = new KisPainter(d->dev);
+    po = new KisInternalPaintOp(d->p);
+    d->p->setBrush(d->brush);
+    d->p->setPaintOp(po);
+    d->p->setFillStyle(KisPainter::FillStyleForegroundColor);
+}
+
 bool KisPaintEngine::end()
 {
-//     kDebug(41001) << "KisPaintEngine::end\n";
+    kDebug(41001) << "KisPaintEngine::end\n";
     // XXX: End transaction for undo?
     return true;
 }
 
 
+void KisPaintEngine::updatePen (const QPen& newPen)
+{
+    kDebug(41001) << "Inside KisPaintEngine::updatePen(): " << ceil(newPen.widthF()) << endl;
+    double width = (newPen.width() < 1) ? 1 : newPen.width();
+    QImage img((int)width, (int)width, QImage::Format_ARGB32 );
+    QPainter p(&img);
+    p.setPen(newPen);
+    p.drawPoint(QPointF(width/2.0,width/2.0));
+    p.end();
+
+    if (d->brush)
+        delete d->brush;
+    d->brush = new KisBrush(img);
+
+    d->p->setBrush(d->brush);
+}
+
+void KisPaintEngine::updateBrush (const QBrush& newBrush, const QPointF& newOrigin)
+{
+    kDebug(41001) << "Inside KisPaintEngine::updateBrush(): " << newBrush.color() << endl;
+    d->p->setPaintColor(KoColor(newBrush.color(), d->dev->colorSpace()));
+}
+
+
 void KisPaintEngine::updateState(const QPaintEngineState &state)
 {
+    kDebug(41001) << "Inside KisPaintEngine::updateState()" << endl;
     QPaintEngine::DirtyFlags flags = state.state();
 
     if (flags & DirtyOpacity) {
-        m_d->opacity = state.opacity();
-        if (m_d->opacity > 1)
-            m_d->opacity = 1;
-        if (m_d->opacity < 0)
-            m_d->opacity = 0;
+        d->opacity = state.opacity();
+        if (d->opacity > 1)
+            d->opacity = 1;
+        if (d->opacity < 0)
+            d->opacity = 0;
         // Force update pen/brush as to get proper alpha colors propagated
         flags |= DirtyPen;
         flags |= DirtyBrush;
     }
 
-    if (flags & DirtyTransform) m_d->matrix = state.matrix();
-    if (flags & DirtyPen) m_d->pen = state.pen();
-    if (flags & (DirtyBrush | DirtyBrushOrigin)) {m_d->brush = state.brush(); m_d->brushOrigin = state.brushOrigin();}
-    if (flags & DirtyFont) m_d->font = state.font();
+    if (flags & DirtyTransform) d->matrix = state.matrix();
+    if (flags & DirtyPen) updatePen(state.pen());
+    if (flags & (DirtyBrush | DirtyBrushOrigin)) updateBrush(state.brush(), state.brushOrigin());
+//     if (flags & DirtyFont) d->font = state.font();
 
     if (state.state() & DirtyClipEnabled) {
         // TODO: What is this intended to do? DirtyClipEnabled
@@ -104,7 +255,7 @@ void KisPaintEngine::updateState(const QPaintEngineState &state)
     if (flags & DirtyClipPath) {
         // TODO: What is this intended to do? DirtyClipPath
     }
-    if (flags & DirtyHints) m_d->hints = state.renderHints();
+    if (flags & DirtyHints) d->hints = state.renderHints();
 }
 
 void KisPaintEngine::drawRects(const QRect *rects, int rectCount)
@@ -148,22 +299,20 @@ void KisPaintEngine::drawEllipse(const QRect &r)
 
 void KisPaintEngine::drawPath(const QPainterPath &path)
 {
-    kDebug(41001) << "KisPaintEngine::drawPath with bounding rect " << path.boundingRect().toRect() << endl;
+    kDebug(41001) << "KisPaintEngine::drawPath with bounding rect " << d->matrix.mapRect(path.boundingRect()) << endl;
     // Simple-minded implementation
 
-    QRectF rc(0, 0, 640, 480);
-    QImage img( rc.toRect().width(), rc.toRect().height(), QImage::Format_ARGB32 );
-    QPainter p( &img );
-    p.setMatrix(m_d->matrix);
-    p.setPen(m_d->pen);
-    p.setBrush(m_d->brush);
-    p.setFont(m_d->font);
-    p.setRenderHints(m_d->hints);
-    p.setBrushOrigin(m_d->brushOrigin);
-    p.drawPath( path );
-    p.end();
+    QList<QPolygonF> polys = path.toFillPolygons(d->matrix);
 
-    drawImage(rc, img, QRectF( 0, 0, rc.width(), rc.height() ));
+    d->p->begin(d->dev);
+
+//     QPolygonF poly;
+//     foreach (poly, polys)
+//         d->p->paintPolygon(poly);
+
+    d->p->paintPolygon(path.toFillPolygon(d->matrix));
+
+    d->p->end();
 }
 
 
@@ -222,19 +371,19 @@ void KisPaintEngine::drawImage(const QRectF &r, const QImage &pm, const QRectF &
     QRect srcRect = sr.toRect();
     QRect dstRect = r.toRect();
 
-    KisPainter p( m_d->dev );
+    KisPainter p( d->dev );
     // XXX: Get the right porter-duff composite op from the state, for
     // now use OVER.
 
 
 #if 0
-    p.bitBlt(dstRect.x(), dstRect.y(), m_d->dev->colorSpace()->compositeOp( COMPOSITE_OVER ),
-             &pm, static_cast<quint8>( m_d->state.opacity() * 255 ),
+    p.bitBlt(dstRect.x(), dstRect.y(), d->dev->colorSpace()->compositeOp( COMPOSITE_OVER ),
+             &pm, static_cast<quint8>( d->state.opacity() * 255 ),
              srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
 #else
-    KisPaintDeviceSP dev = new KisPaintDevice( m_d->dev->colorSpace() );
+    KisPaintDeviceSP dev = new KisPaintDevice( d->dev->colorSpace() );
     dev->convertFromQImage(pm, "");
-    p.bitBlt(dstRect.x(), dstRect.y(), m_d->dev->colorSpace()->compositeOp( COMPOSITE_OVER ),
+    p.bitBlt(dstRect.x(), dstRect.y(), d->dev->colorSpace()->compositeOp( COMPOSITE_OVER ),
              dev, OPACITY_OPAQUE,
              srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
 

@@ -83,7 +83,12 @@ public:
 private:
 
     class KisPaintEnginePrivate;
-    KisPaintEnginePrivate * m_d;
+    KisPaintEnginePrivate * d;
+
+    void updatePen (const QPen &newPen);
+    void updateBrush (const QBrush &newBrush, const QPointF& newOrigin);
+    void initPainter ();
+    // TODO: updateFont(), clipping...
 
 };
 

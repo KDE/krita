@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (c) 2005-2006 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2005-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,13 +23,12 @@
 #include <QList>
 #include <QMap>
 #include <QDockWidget>
-#include <kofficeui_export.h>
 
 class QButtonGroup;
 class QBoxLayout;
 class QAbstractButton;
 class ToolArea;
-
+class KoCanvasController;
 
 /**
  * KoToolBox is a kind of super-specialized toolbar that can order
@@ -45,11 +44,11 @@ class ToolArea;
  * rotating in a smart way to show the buttons optimally.
  * @see KoToolManager
  */
-class KOFFICEUI_EXPORT KoToolBox : public QDockWidget {
+class KoToolBox : public QDockWidget {
     Q_OBJECT
 public:
     /// constructor
-    KoToolBox(const QString &title);
+    KoToolBox(KoCanvasController *canvas, const QString &title);
     ~KoToolBox();
 
     /**
@@ -68,12 +67,6 @@ public:
     void addButton(QAbstractButton *button, const QString &section, int priority, int buttonGroupId=-1);
 
     /**
-     * Setup the toolbox by adding the buttons in the right configuration to the ui.
-     * You should only call this method one time, and you should call it prior to showing.
-     */
-    void setup();
-
-    /**
      * For a button added to this toolbox you can regiter a visibility-code by which that
      * button will be known.  Using setButtonsVisible() you can then show only the buttons
      * you want visible.
@@ -86,24 +79,33 @@ public slots:
     /**
      * Using the buttongroup id passed in addButton() you can set the new active button.
      * If the id does not resolve to a visible button, this call is ignored.
+     * @param canvas the currently active canvas.
      * @param id an id to identify the button to activate.
      */
-    void setActiveTool(int id);
+    void setActiveTool(const KoCanvasController *canvas, int id);
 
     /**
      * Show only the dynamic buttons that have a code from parameter codes.
      * The toolbox allows buttons to be optionally registered with a visibilityCode. This code
      * can be passed here and all buttons that have that code are shown. All buttons that
      * have another visibility code registered are hidden.
+     * @param canvas the currently active canvas.
      * @param codes a list of all the codes to show.
      */
-    void setButtonsVisible(const QList<QString> &codes);
+    void setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes);
 
     /**
      * Enables or disables all the tools that this toolbox shows.
      * @param enable if true, then the tools will be clickable.
      */
     void enableTools(bool enable);
+
+private:
+    /**
+     * Setup the toolbox by adding the buttons in the right configuration to the ui.
+     * You should only call this method one time, and you should call it prior to showing.
+     */
+    void setup();
 
 
 private:
@@ -138,6 +140,7 @@ private:
     QMap<QString, ToolArea*> m_toolAreas;
 
     void showEvent(QShowEvent *event);
+    const KoCanvasController * const m_canvas;
 };
 
 #endif // _KO_TOOLBOX_H_

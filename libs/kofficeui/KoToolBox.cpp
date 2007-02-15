@@ -1,6 +1,6 @@
 /*
    Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (c) 2005-2006 Thomas Zander <zander@kde.org>
+   Copyright (c) 2005-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,7 +31,10 @@
 #include <QMainWindow>
 #include <QBoxLayout>
 
-KoToolBox::KoToolBox(const QString &title) : QDockWidget() {
+KoToolBox::KoToolBox(KoCanvasController *canvas, const QString &title)
+    : QDockWidget(),
+    m_canvas(canvas)
+{
     m_buttonGroup = new QButtonGroup(this);
     setFeatures(DockWidgetMovable | DockWidgetFloatable);
     setWindowTitle(title);
@@ -43,12 +46,11 @@ KoToolBox::KoToolBox(const QString &title) : QDockWidget() {
             setVisibilityCode(button.button, button.visibilityCode);
     }
     setup();
-    connect(KoToolManager::instance(), SIGNAL(changedTool(int)), this, SLOT(setActiveTool(int)));
-    connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)),
-            this, SLOT(setButtonsVisible(QList<QString>)));
-    QList<QString> empty;
-    setButtonsVisible(empty);
-    //toolBox->setActiveTool(d->defaultTool->uniqueId());
+
+    connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*, int)),
+            this, SLOT(setActiveTool(const KoCanvasController*, int)));
+    connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(const KoCanvasController*, QList<QString>)),
+            this, SLOT(setButtonsVisible(const KoCanvasController*, QList<QString>)));
 }
 
 KoToolBox::~KoToolBox() {
@@ -98,6 +100,9 @@ void KoToolBox::setup() {
     layout()->addWidget(widget);
     layout()->setAlignment(widget, Qt::AlignLeft | Qt::AlignTop);
     layout()->setMargin(0);
+
+    QList<QString> empty;
+    setButtonsVisible(m_canvas, empty);
 }
 
 void KoToolBox::showEvent(QShowEvent *event) {
@@ -126,7 +131,11 @@ void KoToolBox::showEvent(QShowEvent *event) {
     adjustSize(); // make the toolbox be a sane size not depending on the last place it was docked
 }
 
-void KoToolBox::setActiveTool(int id) {
+void KoToolBox::setActiveTool(const KoCanvasController *canvas, int id) {
+kDebug() << "KoToolBox::setActiveTool\n";
+    if(canvas != m_canvas)
+        return;
+kDebug() << "  still here\n";
     QAbstractButton *button = m_buttonGroup->button(id);
     if(button)
         button->setChecked(true);
@@ -138,10 +147,11 @@ void KoToolBox::setVisibilityCode(QAbstractButton *button, const QString &code) 
     m_visibilityCodes.insert(button, code);
 }
 
-void KoToolBox::setButtonsVisible(const QList<QString> &codes) {
-    foreach(QAbstractButton *button, m_visibilityCodes.keys()) {
+void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes) {
+    if(canvas != m_canvas)
+        return;
+    foreach(QAbstractButton *button, m_visibilityCodes.keys())
         button->setVisible( codes.contains(m_visibilityCodes.value(button)) );
-    }
 }
 
 void KoToolBox::enableTools(bool enable) {

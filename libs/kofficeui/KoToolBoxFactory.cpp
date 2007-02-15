@@ -22,9 +22,22 @@
 #include <KoToolManager.h>
 #include <KoToolBox.h>
 
-KoToolBoxFactory::KoToolBoxFactory(const QString& appName)
+class KoToolBoxFactory::Private {
+public:
+    KoCanvasController *canvas;
+    QString appName;
+};
+
+
+KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvas, const QString& appName)
+    : d( new Private())
 {
-    m_appName = appName;
+    d->appName = appName;
+    d->canvas = canvas;
+}
+
+KoToolBoxFactory::~KoToolBoxFactory() {
+    delete d;
 }
 
 QString KoToolBoxFactory::dockId() const
@@ -39,5 +52,5 @@ Qt::DockWidgetArea KoToolBoxFactory::defaultDockWidgetArea() const
 
 QDockWidget* KoToolBoxFactory::createDockWidget()
 {
-    return new KoToolBox(m_appName);
+    return new KoToolBox(d->canvas, d->appName);
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2006 Peter Simonsson <peter.simonsson@gmail.com>
+ * Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,17 +27,21 @@
 #include <QString>
 #include <QDockWidget>
 
+class KoCanvasController;
+
 class KOFFICEUI_EXPORT KoToolBoxFactory : public KoDockFactory
 {
-    public:
-        explicit KoToolBoxFactory(const QString& appName);
+public:
+    explicit KoToolBoxFactory(KoCanvasController *canvas, const QString& appName);
+    ~KoToolBoxFactory();
 
-        virtual QString dockId() const;
-        virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
-        virtual QDockWidget* createDockWidget();
+    QString dockId() const;
+    Qt::DockWidgetArea defaultDockWidgetArea() const;
+    QDockWidget* createDockWidget();
 
-    private:
-        QString m_appName;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

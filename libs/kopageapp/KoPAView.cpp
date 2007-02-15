@@ -113,7 +113,7 @@ void KoPAView::initGUI()
     connect(m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint&)),
              this, SLOT(updateMousePosition(const QPoint&)));
 
-    KoToolBoxFactory toolBoxFactory( "Tools" );
+    KoToolBoxFactory toolBoxFactory(m_canvasController, "Tools" );
     createDockWidget( &toolBoxFactory );
     KoShapeSelectorFactory shapeSelectorFactory;
     createDockWidget( &shapeSelectorFactory );

@@ -24,7 +24,6 @@
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
 #include <KoShapeControllerBase.h>
-#include <kofficeui_export.h>
 
 #include <QDockWidget>
 #include <QRectF>
@@ -42,7 +41,7 @@ class QPainter;
  * The shape selector shows a widget that holds templates and clipboard data
  * for the user to easilly move that between apps and maintain functionality.
  */
-class KOFFICEUI_EXPORT KoShapeSelector : public QDockWidget {
+class KoShapeSelector : public QDockWidget {
     Q_OBJECT
 public:
     explicit KoShapeSelector(QWidget *parent = 0);

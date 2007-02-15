@@ -25,12 +25,12 @@
 
 class KOFFICEUI_EXPORT KoShapeSelectorFactory : public KoDockFactory
 {
-    public:
-        KoShapeSelectorFactory();
+public:
+    KoShapeSelectorFactory();
 
-        virtual QString dockId() const;
-        virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
-        virtual QDockWidget* createDockWidget();
+    QString dockId() const;
+    Qt::DockWidgetArea defaultDockWidgetArea() const;
+    QDockWidget* createDockWidget();
 };
 
 #endif

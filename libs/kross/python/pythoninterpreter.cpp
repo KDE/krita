@@ -155,7 +155,9 @@ PythonInterpreter::PythonInterpreter(Kross::InterpreterInfo* info)
         "        __builtin__.__import__ = self._import\n"
         "    def _import(self, name, globals=None, locals=None, fromlist=[]):\n"
         "        mod = __main__._import(name, globals, locals, fromlist)\n"
-        "        if mod != None: return mod\n"
+        "        if mod != None:\n"
+        "            globals[name] = mod\n"
+        "            return mod\n"
         "        return self.realImporter(name, globals, locals, fromlist)\n"
         "_Importer()\n"
         ;

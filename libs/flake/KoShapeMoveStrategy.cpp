@@ -21,9 +21,6 @@
 
 #include "KoShapeMoveStrategy.h"
 
-#include <QPainter>
-#include <QMouseEvent>
-
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
 #include "KoSelection.h"
@@ -31,6 +28,11 @@
 #include "commands/KoShapeMoveCommand.h"
 #include "kcommand.h"
 #include "KoInteractionTool.h"
+
+#include <kdebug.h>
+#include <QPainter>
+#include <QMouseEvent>
+#include <QPainterPath>
 
 KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoInteractionStrategy(tool, canvas)
@@ -52,20 +54,36 @@ KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, co
 }
 
 void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
-    m_diff = point - m_start;
+    QPointF diff = point - m_start;
     if(m_canvas->snapToGrid() && (modifiers & Qt::ShiftModifier) == 0) {
-        QPointF newPos = m_initialTopLeft + m_diff;
+        QPointF newPos = m_initialTopLeft + diff;
         applyGrid(newPos);
-        m_diff = newPos - m_initialTopLeft;
+        diff = newPos - m_initialTopLeft;
     }
     if(modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
         // keep x or y position unchanged
-        if(qAbs(m_diff.x()) < qAbs(m_diff.y()))
-            m_diff.setX(0);
+        if(qAbs(diff.x()) < qAbs(diff.y()))
+            diff.setX(0);
         else
-            m_diff.setY(0);
+            diff.setY(0);
     }
 
+    Q_ASSERT(m_newPositions.count());
+    QRectF canvasRect (QPointF(0.,0.) - m_canvas->documentOrigin(), QSizeF(m_canvas->canvasWidget()->size()));
+    canvasRect = m_canvas->viewConverter()->viewToDocument(canvasRect);
+    canvasRect.adjust(5, 5, -5, -5);
+    int x=0;
+    foreach(KoShape *shape, m_selectedShapes) {
+        QRectF s = canvasRect; // the outline is not translated, so translate this rect.
+        s.moveTopLeft(s.topLeft() - (m_previousPositions.at(x) + diff));
+        if(! shape->outline().intersects(s))
+            return;
+            // TODO, instead of just returning here; we should allow the move to be converted into
+            // a QDrag for DnD purposes.
+        x++;
+    }
+
+    m_diff = diff;
     int i=0;
     foreach(KoShape *shape, m_selectedShapes) {
         QPointF newPos (m_previousPositions.at(i) + m_diff);

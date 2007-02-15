@@ -132,10 +132,8 @@ void KoToolBox::showEvent(QShowEvent *event) {
 }
 
 void KoToolBox::setActiveTool(const KoCanvasController *canvas, int id) {
-kDebug() << "KoToolBox::setActiveTool\n";
     if(canvas != m_canvas)
         return;
-kDebug() << "  still here\n";
     QAbstractButton *button = m_buttonGroup->button(id);
     if(button)
         button->setChecked(true);

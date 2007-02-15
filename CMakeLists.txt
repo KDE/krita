@@ -137,7 +137,7 @@ add_subdirectory(shapes)
 add_subdirectory(autocorrect)
 add_subdirectory(doc)
 add_subdirectory( cmake )
-message( STATUS "Re-add kexi when ported")
+message( STATUS "Re-add kexi/koshell when ported")
 
 
 ADD_CUSTOM_TARGET(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

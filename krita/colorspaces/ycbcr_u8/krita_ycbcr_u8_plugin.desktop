@@ -16,6 +16,7 @@ Name[ja]=YCbCr カラーモデル (8 ビット整数)
 Name[km]=គំរូ​ពណ៌ CMYK (ចំនួនគត់ ១៦ ប៊ីត)
 Name[nb]=YCbCr fargemodell (8-bit heltall)
 Name[nds]=YCbCr-Klöörmodell (8-Bit Heeltall)
+Name[ne]=वाईसीबीसीआर रङ मोडेल (८-बिट इन्टिजर)
 Name[nl]=YCbCr-kleurmodel (8-bit integer)
 Name[pl]=Przestrzeń barw YCbCr (8-bitowa liczbowa całkowita)
 Name[pt]=Modelo de Cor YCbCr (inteiros de 8 bits)
@@ -45,6 +46,7 @@ Comment[ja]=8 ビット整数/チャンネル YCbCr 画像のためのカラー�
 Comment[km]=ម៉ូដែល​ពណ៌​សម្រាប់​ចំនួន​គត់ 8-bit ក្នុង​ឆានែល​រូបភាព YCbCr
 Comment[nb]=Fargemodell for YCbCr-bilder med 8 bit heltall per kanal
 Comment[nds]=Klöörmodell för YCbCr-Biller mit 8-Bit Heeltall pro Kanaal
+Comment[ne]=प्रति वाईसीबीसीआर छविहरूको ८-बिट इन्टिजरका लागि रङ मोडेल
 Comment[nl]=Kleurmodel voor 8-bit/kanaal van YCbCr-afbeeldingen
 Comment[pl]=Przestrzeń barw dla obrazków YCbCr z 8-bitowymi liczbami całkowitymi na kanał
 Comment[pt]=Modelo de cor para imagens YCbCr com 8 bits por canal

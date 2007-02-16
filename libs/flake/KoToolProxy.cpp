@@ -70,16 +70,15 @@ namespace {
 
 class KoToolProxy::Private {
 public:
-    Private() : canvas(0), activeTool(0) {}
+    Private() : activeTool(0) {}
 
-    KoCanvasBase *canvas;
     KoTool *activeTool;
 };
 
 KoToolProxy::KoToolProxy(KoCanvasBase *canvas)
     : d(new Private())
 {
-    d->canvas = canvas;
+    // TODO register myself with the ToolManager
 }
 
 KoToolProxy::~KoToolProxy() {

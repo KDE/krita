@@ -134,7 +134,10 @@ protected:
      */
     virtual void updatePath( const QSizeF &size ) = 0;
 
+    /// the handles that the user can grab and change
     QList<QPointF> m_handles;
+
+private:
     bool m_modified;
 };
 

@@ -106,8 +106,9 @@ public:
      * The default implementation is empty.
      *
      * @param painter used for painting the shape
-     * @param selected true if the shape is currently selected
      * @param converter to convert between internal and view coordinates.
+     * @param canvas the canvas that requested this paint.  This can be used to retrieve canvas specific properties
+     *      like selection and get a reference to the KoCanvasResourceProvider.
      */
     virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
 
@@ -541,9 +542,20 @@ protected:
      */
     virtual void shapeChanged(ChangeType type) { Q_UNUSED(type); }
 
+    /**
+     * Set the property collision detection.
+     * Setting this to true will result in calls to shapeChanged() with the CollisionDetected
+     * parameter whenever either this or another shape is moved/rotated etc and intersects this shape.
+     * @param detect if true detect collisions.
+     */
     void setCollisionDetection(bool detect);
+    /**
+     * get the property collision detection.
+     * @returns true if collision detection is on.
+     */
     bool collisionDetection();
 
+    /// return the current matrix that contains the rotation/scale/position of this shape
     const QMatrix& matrix() const;
 
 private:

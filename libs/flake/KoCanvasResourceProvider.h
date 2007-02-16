@@ -80,7 +80,17 @@ public:
      * @param value the new value for the key.
      */
     void setResource( int key, const QVariant & value );
+    /**
+     * Set a resource of type KoColor.
+     * @param key the integer key, based on KoCanvasResource::EnumCanvasResource
+     * @param value the new value for the key.
+     */
     void setResource( int key, const KoColor & color );
+    /**
+     * Set a resource of type KoId.
+     * @param key the integer key, based on KoCanvasResource::EnumCanvasResource
+     * @param value the new value for the key.
+     */
     void setResource( int key, const KoID & id );
 
     /**
@@ -148,6 +158,12 @@ public:
      * @param key the indentifying key for the resource.
      */
     KoID koIDResource(int key);
+
+    /**
+     * Return the resource determined by param key as a QString .
+     * @param key the indentifying key for the resource.
+     */
+    QString stringResource(int key);
 
 signals:
     /**

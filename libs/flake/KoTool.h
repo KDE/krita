@@ -164,7 +164,17 @@ public:
      */
     virtual void wheelEvent ( KoPointerEvent * event );
 
+    /**
+     * Set the identifier code from the KoToolFactory that created this tool.
+     * @param id the indentifier code
+     * @see KoToolFactory::toolId()
+     */
     void setToolId(const QString &id);
+    /**
+     * get the identifier code from the KoToolFactory that created this tool.
+     * @return the toolId.
+     * @see KoToolFactory::toolId()
+     */
     QString toolId() const;
 
 public slots:

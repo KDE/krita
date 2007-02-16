@@ -47,23 +47,34 @@ class KoCanvasBase;
 class FLAKE_EXPORT KoToolProxy {
 
 public:
+    /**
+     * Constructor
+     * @param canvas Each canvas has 1 toolProxy. Pass the parent here.
+     */
     explicit KoToolProxy(KoCanvasBase *canvas);
     ~KoToolProxy();
 
-    /**
-     * Call this when the tools in the current tool stack need to
-     * repaint their decorations
-     */
+    /// Forwarded to the current KoTool
     void paint( QPainter &painter, KoViewConverter &converter );
+    /// Forwarded to the current KoTool
     void repaintDecorations();
+    /// Forwarded to the current KoTool
     void tabletEvent( QTabletEvent *event, const QPointF &point );
+    /// Forwarded to the current KoTool
     void mousePressEvent( QMouseEvent *event, const QPointF &point  );
+    /// Forwarded to the current KoTool
     void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point  );
+    /// Forwarded to the current KoTool
     void mouseMoveEvent( QMouseEvent *event, const QPointF &point  );
+    /// Forwarded to the current KoTool
     void mouseReleaseEvent( QMouseEvent *event, const QPointF &point  );
+    /// Forwarded to the current KoTool
     void keyPressEvent(QKeyEvent *event);
+    /// Forwarded to the current KoTool
     void keyReleaseEvent(QKeyEvent *event);
+    /// Forwarded to the current KoTool
     void wheelEvent ( QWheelEvent * event, const QPointF &point  );
+    /// Set the new active tool.
     void setActiveTool(KoTool *tool);
 
     /**

@@ -56,6 +56,7 @@ public:
      * @brief Add a shape to the document.
      *
      * @param shape to add to the document
+     * @parent parent the parent command if the resulting command is a compound undo command.
      * 
      * @return command which will insert the shape into the document or 0 if the 
      *         insertion was canceled. The command is not yet executed.
@@ -66,6 +67,7 @@ public:
      * @brief Remove a shape from the document.
      *
      * @param shape to remove from the document
+     * @parent parent the parent command if the resulting command is a compound undo command.
      * 
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
@@ -76,6 +78,7 @@ public:
      * Remove a shape from the document.
      *
      * @param shapes the set of shapes to remove from the document
+     * @parent parent the parent command if the resulting command is a compound undo command.
      * 
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.

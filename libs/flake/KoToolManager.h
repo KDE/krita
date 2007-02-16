@@ -100,6 +100,7 @@ public:
     static KoToolManager* instance();
     ~KoToolManager();
 
+    // TODO let creating a toolProxy implicitly register
     KoToolProxy *createToolProxy(KoCanvasBase *parentCanvas);
 
     /**
@@ -148,13 +149,20 @@ public:
      */
     QString preferredToolForSelection(const QList<KoShape*> &shapes);
 
+    /// Struct for the createToolList return type.
     struct Button {
-        QAbstractButton *button;
-        QString section;
-        int priority;
-        int buttonGroupId;
-        QString visibilityCode;
+        QAbstractButton *button;///< a newly created button.
+        QString section;        ///< The section the button wants to be in.
+        int priority;           ///< Higher priority means coming first in the section.
+        int buttonGroupId;      ///< An unique ID for this button as passed by changedTool()
+        QString visibilityCode; ///< This button should become visible when we emit this string in toolCodesSelected()
     };
+
+    /**
+     * Create a list of buttons to represent all the tools.
+     * @returns a list of Buttons.
+     * This is a factory method for buttons and meta information on the button to better display the button.
+     */
     QList<Button> createToolList() const;
 
 public slots:

@@ -72,6 +72,10 @@ void KoCanvasResourceProvider::setResource( int key, const KoID & id )
 
 KoColor KoCanvasResourceProvider::koColorResource( int key )
 {
+    if(! d->resources.contains(key)) {
+        KoColor empty;
+        return empty;
+    }
     return resource( key ).value<KoColor>();
 }
 
@@ -136,6 +140,15 @@ bool KoCanvasResourceProvider::doubleResource(int key) const {
     if(! d->resources.contains(key))
         return 0.;
     return d->resources[key].toDouble();
+}
+
+QString KoCanvasResourceProvider::stringResource(int key)
+{
+    if(! d->resources.contains(key)) {
+        QString empty;
+        return empty;
+    }
+    return qvariant_cast<QString>(resource(key));
 }
 
 #include "KoCanvasResourceProvider.moc"

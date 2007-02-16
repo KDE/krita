@@ -31,7 +31,17 @@ class KoParameterShape;
 class KoParameterToPathCommand : public QUndoCommand
 {
 public:
+    /**
+     * Constructor.
+     * @param shape the shape this command works on
+     * @parent parent the parent command if this is a compound undo command.
+     */
     KoParameterToPathCommand( KoParameterShape *shape, QUndoCommand *parent = 0 );
+    /**
+     * Constructor.
+     * @param shapes the list of shapes this command works on
+     * @parent parent the parent command if this is a compound undo command.
+     */
     KoParameterToPathCommand( const QList<KoParameterShape*> &shapes, QUndoCommand *parent = 0 );
     virtual ~KoParameterToPathCommand();
 

@@ -24,6 +24,7 @@
 
 #include <QStringList>
 
+/// Factory for the KoPathTool
 class FLAKE_EXPORT KoPathToolFactory : public KoToolFactory {
     Q_OBJECT
 public:

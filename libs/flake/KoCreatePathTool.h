@@ -34,6 +34,10 @@ class KoPathPoint;
 class KoCreatePathTool : public KoTool 
 {
 public:
+    /**
+     * Constructor for the tool that allows you to create new paths by hand.
+     * @param canvas the canvas this tool will be working for.
+     */
     explicit KoCreatePathTool( KoCanvasBase * canvas );
     virtual ~KoCreatePathTool();
 
@@ -48,7 +52,7 @@ public slots:
     void activate( bool temporary = false );
     void resourceChanged( int key, const QVariant & res );
 
-protected:
+private:
     /// add path shape to document
     void addPathShape();
     QRectF handleRect( const QPointF &p );

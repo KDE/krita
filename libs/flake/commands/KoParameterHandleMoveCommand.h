@@ -31,6 +31,14 @@ class KoParameterShape;
 class KoParameterHandleMoveCommand : public QUndoCommand
 {
 public:
+    /**
+     * Constructor.
+     * @param shape the shape this command works on
+     * @param handleId the ID under which the parameterShape knows the handle in KoParameterShape::moveHandle()
+     * @param startPoint The old position
+     * @param endPoint The new position
+     * @parent parent the parent command if this is a compound undo command.
+     */
     KoParameterHandleMoveCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, QUndoCommand *parent = 0 );
     virtual ~KoParameterHandleMoveCommand();
 

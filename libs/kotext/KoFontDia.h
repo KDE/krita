@@ -28,25 +28,12 @@
 #include "KoLayoutTab.h"
 #include "KoLanguageTab.h"
 
-// koffice
-//#include <kotext_export.h>
-
 // kde + Qt
 #include <QTabWidget>
 #include <kdialog.h>
 #include <sonnet/loader.h>
 
 #include <QTextCharFormat>
-
-//   #include <kfontdialog.h>
-//   #include <QCheckBox>
-//
-//
-//   #include "KoFontDiaPreview.h"
-//
-
-//class QComboBox;
-
 
 class KoFontDia : public KDialog
 {

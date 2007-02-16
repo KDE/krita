@@ -18,7 +18,6 @@ set(libkohyphen_SRCS
 	)
 
 set(kotext_LIB_SRCS ${libkohyphen_SRCS}
-    KFontDialog_local.cpp 
     KoFontTab.cpp 
     KoHighlightingTab.cpp 
     KoDecorationTab.cpp 
@@ -64,7 +63,6 @@ kde4_add_ui_files(kotext_LIB_SRCS
     KoLayoutTab.ui
     KoHighlightingTab.ui
     KoCompletionBase.ui
-   kofonttabbase.ui
 )
 
 # kde4_add_dcop_skels(kotext_LIB_SRCS KoTextViewIface.h )

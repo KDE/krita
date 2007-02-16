@@ -20,30 +20,7 @@
 
 #include "KoFontDia.h"
 
-
-
-//
-//   #include "KoRichText.h"
-//
-//   #include <kcolordialog.h>
 #include <klocale.h>
-//   #include <kdebug.h>
-//
-//   #include <q3groupbox.h>
-//   #include <QPushButton>
-//   #include <QTabWidget>
-//   #include <QLabel>
-//   #include <QComboBox>
-//   #include <QRadioButton>
-//   #include <QCheckBox>
-//   #include <knuminput.h>
-//   #include <KoGlobal.h>
-//   #include <QGroupBox>
-//
-//
-//   #include <QButtonGroup>
-//   #include <kcolorbutton.h>
-//   #include <kiconloader.h>
 #include <kvbox.h>
 #include <kfontdialog.h>
 

@@ -21,10 +21,10 @@
 #ifndef __kofonttab_h__
 #define __kofonttab_h__
 
-#include "ui_kofonttabbase.h"
-
 #include <QFont>
 #include <QWidget>
+
+class KFontChooser;
 
 class KoFontTab : public QWidget
 {
@@ -50,8 +50,7 @@ signals:
     void fontChanged( const QFont &font );
 
 private:
-    //QFont comparisonFont;
-    Ui::KoFontTabBase widget;
+    KFontChooser *m_fontChooser;
 };
 
 #endif

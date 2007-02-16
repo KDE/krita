@@ -20,29 +20,35 @@
 
 #include "KoFontTab.h"
 
+#include <kfontdialog.h>
+#include <QVBoxLayout>
+
 KoFontTab::KoFontTab( uint fontListCriteria, QWidget* parent)
         : QWidget( parent)
 {
-    widget.setupUi(this);
+    QLayout *layout = new QVBoxLayout(this);
+    setLayout(layout);
 
     QStringList list;
-    KFontChooser_local::getFontList(list, fontListCriteria);
+    KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
+    m_fontChooser = new KFontChooser(this, false, list, false);
+    m_fontChooser->setSampleBoxVisible( false );
 
-    widget.characterFont->setSampleBoxVisible( false );
-    widget.characterFont->setFamilyList( list );
-    //comparisonFont = widget.characterFont->font();
-    connect( widget.characterFont, SIGNAL( fontSelected( const QFont & ) ), this, SIGNAL( fontChanged( const QFont & ) ) );
+    layout->addWidget(m_fontChooser);
+
+    connect( m_fontChooser, SIGNAL( fontSelected( const QFont & ) ), this, SIGNAL( fontChanged( const QFont & ) ) );
 }
 
 QFont KoFontTab::font()
 {
-    return widget.characterFont->font();
+    return m_fontChooser->font();
 }
 
 void KoFontTab::setFont( const QFont &font )
 {
-    widget.characterFont->setFont( font );
+    m_fontChooser->setFont( font );
 }
+
 /*
 void KoFontTab::slotFontChanged( const QFont &font )
 {

@@ -102,14 +102,14 @@ public:
      * @param selection controls which shape is returned when more than one shape is at the specific point
      * @param omitHiddenShapes if true, only visible shapes are considered
      */
-    KoShape * shapeAt( const QPointF &position, KoFlake::ShapeSelection selection = KoFlake::ShapeOnTop, bool omitHiddenShapes = false );
+    KoShape * shapeAt( const QPointF &position, KoFlake::ShapeSelection selection = KoFlake::ShapeOnTop, bool omitHiddenShapes = true );
 
     /**
      * Returns the shapes which intersects the specific rect in the document.
      * @param rect the rectangle in the document coordinate system.
      * @param omitHiddenShapes if true, only visible shapes are considered
      */
-    QList<KoShape *> shapesAt( const QRectF &rect, bool omitHiddenShapes = false );
+    QList<KoShape *> shapesAt( const QRectF &rect, bool omitHiddenShapes = true );
 
     /**
      * Request a repaint to be queued.

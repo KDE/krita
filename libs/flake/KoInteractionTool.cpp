@@ -266,8 +266,7 @@ void KoInteractionTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
             shapes.append(shape);
     }
     if(shapes.count() == 0) { // nothing in the selection was clicked on.
-        KoShape *shape = m_canvas->shapeManager()->shapeAt (event->point, KoFlake::ShapeOnTop, true);
-        //KoShape *shape = m_canvas->shapeManager()->shapeAt(event->point);
+        KoShape *shape = m_canvas->shapeManager()->shapeAt (event->point, KoFlake::ShapeOnTop);
         if(shape)
             shapes.append(shape);
     }

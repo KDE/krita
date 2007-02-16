@@ -455,6 +455,7 @@ const QBrush& KoShape::background () {
 }
 
 void KoShape::setZIndex(int zIndex) {
+    notifyChanged();
     d->zIndex = zIndex;
 }
 

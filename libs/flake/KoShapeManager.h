@@ -69,7 +69,7 @@ public:
     void setShapes( const QList<KoShape *> &shapes );
 
     /// returns the list of maintained shapes
-    const QList<KoShape *> & shapes() const { return m_shapes; }
+    const QList<KoShape *> & shapes() const;
 
     /**
      * Add a KoShape to be displayed and managed by this manager.
@@ -84,7 +84,7 @@ public:
     void remove(KoShape *shape);
 
     /// return the selection shapes for this shapeManager
-    KoSelection * selection() const { return m_selection; }
+    KoSelection * selection() const;
 
     /**
      * Paint all shapes and their selection handles etc.
@@ -146,12 +146,8 @@ signals:
     void selectionChanged();
 
 private:
-    QList<KoShape *> m_shapes;
-    KoSelection * m_selection;
-    KoCanvasBase * m_canvas;
-    KoRTree<KoShape *> m_tree;
-    QSet<KoShape *> m_aggregate4update;
+    class Private;
+    Private * const d;
 };
 
 #endif
-

@@ -70,9 +70,22 @@ void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &con
 
 void KisShapeLayer::addChild(KoShape *object)
 {
-    kDebug(41007) << "KisShapeLayer::addChild: " << object->boundingRect().toRect() << endl;
+    kDebug(41001) << "KisShapeLayer::addChild {" << endl;
+    QRect r = m_d->converter->documentToView(object->boundingRect()).toRect();
+    kDebug(41001) << "\tRettangolo: " << r << endl;
+
     KoShapeLayer::addChild( object );
-    setDirty( object->boundingRect().toRect() ); // XXX: convert to pixels
+
+    QPainter p( m_d->projection.data() );
+    p.setClipping( true );
+    p.setClipRegion( QRegion(r) );
+    if (p.hasClipping())
+        kDebug(41001) << "\tAbbiamo il clipping" << endl;
+    p.setMatrix( object->transformationMatrix(m_d->converter) * p.matrix() );
+    object->paint( p, *m_d->converter );
+
+    setDirty( r ); // XXX: convert to pixels
+    kDebug(41001) << "}" << endl;
 }
 
 QIcon KisShapeLayer::icon() const
@@ -82,15 +95,11 @@ QIcon KisShapeLayer::icon() const
 
 void KisShapeLayer::prepareProjection(const QRect& r)
 {
-    kDebug() << "KisShapeLayer::prepareProjection " << r << endl;
+//     kDebug(41001) << "KisShapeLayer::prepareProjection " << r << endl;
     // XXX: Is r in document, widget or pixel coordinates? I hope in
     // document coordinates. Note: see dox for updateCanvas.
 
-    QPainter p( m_d->projection.data() );
-    p.setClipRect( r );
-    KoShapeLayer::paint( p, *m_d->converter );
-
-    setDirty( r ); // Convert to right coordinates
+//     setDirty( r ); // Convert to right coordinates
 }
 
 KisPaintDeviceSP KisShapeLayer::projection()

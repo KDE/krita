@@ -126,12 +126,14 @@ void KisInternalPaintOp::paintAt(const QPointF &pos, const KisPaintInformation& 
 class KisPaintEngine::KisPaintEnginePrivate {
 public:
     KisPaintDevice * dev;
-    KisPainter * p;
+    KisPainter p;
     KisBrush * brush;
+// About the state
     QMatrix matrix;
     qreal opacity;
     QPainter::RenderHints hints;
     QPointF brushOrigin;
+    QPainterPath clipPath;
 };
 
 
@@ -139,7 +141,6 @@ public:
 KisPaintEngine::KisPaintEngine()
 {
     d = new KisPaintEnginePrivate;
-    d->p = 0;
     d->brush = 0;
 
     // Set capabilities
@@ -148,8 +149,6 @@ KisPaintEngine::KisPaintEngine()
 
 KisPaintEngine::~KisPaintEngine()
 {
-    delete d->brush;
-    delete d->p;
     delete d;
 }
 
@@ -162,6 +161,7 @@ bool KisPaintEngine::begin(QPaintDevice *pdev)
                "Can only work on KisPaintDevices, nothing else!");
     d->dev = dev;
 
+    d->p.begin(d->dev);
     initPainter();
 
     // XXX: Start transaction for undo?
@@ -175,8 +175,6 @@ void KisPaintEngine::initPainter()
     QImage img(1, 1, QImage::Format_ARGB32 );
     QPainter p(&img);
 
-    if (d->p)
-        delete d->p;
     if (d->brush)
         delete d->brush;
 
@@ -188,24 +186,24 @@ void KisPaintEngine::initPainter()
     p.end();
 
     d->brush = new KisBrush(img);
-    d->p = new KisPainter(d->dev);
-    po = new KisInternalPaintOp(d->p);
-    d->p->setBrush(d->brush);
-    d->p->setPaintOp(po);
-    d->p->setFillStyle(KisPainter::FillStyleForegroundColor);
+    po = new KisInternalPaintOp(&d->p);
+    d->p.setBrush(d->brush);
+    d->p.setPaintOp(po);
+    d->p.setFillStyle(KisPainter::FillStyleNone);
 }
 
 bool KisPaintEngine::end()
 {
     kDebug(41001) << "KisPaintEngine::end\n";
     // XXX: End transaction for undo?
+    d->p.end();
     return true;
 }
 
 
 void KisPaintEngine::updatePen (const QPen& newPen)
 {
-    kDebug(41001) << "Inside KisPaintEngine::updatePen(): " << ceil(newPen.widthF()) << endl;
+//     kDebug(41001) << "Inside KisPaintEngine::updatePen() " << ceil(newPen.widthF()) << endl;
     double width = (newPen.width() < 1) ? 1 : newPen.width();
     QImage img((int)width, (int)width, QImage::Format_ARGB32 );
     QPainter p(&img);
@@ -215,24 +213,28 @@ void KisPaintEngine::updatePen (const QPen& newPen)
 
     if (d->brush)
         delete d->brush;
-    d->brush = new KisBrush(img);
+     d->brush = new KisBrush(img);
 
-    d->p->setBrush(d->brush);
+    d->p.setBrush(d->brush);
 }
 
 void KisPaintEngine::updateBrush (const QBrush& newBrush, const QPointF& newOrigin)
 {
-    kDebug(41001) << "Inside KisPaintEngine::updateBrush(): " << newBrush.color() << endl;
-    d->p->setPaintColor(KoColor(newBrush.color(), d->dev->colorSpace()));
+    QColor c = newBrush.color();
+    if (!c.spec())
+        c = QColor(Qt::white);
+    d->p.setFillStyle(KisPainter::FillStyleBackgroundColor);
+    d->p.setBackgroundColor(KoColor(c, d->dev->colorSpace()));
 }
 
 
 void KisPaintEngine::updateState(const QPaintEngineState &state)
 {
-    kDebug(41001) << "Inside KisPaintEngine::updateState()" << endl;
+    kDebug(41001) << "KisPaintEngine::updateState() {" << endl;
     QPaintEngine::DirtyFlags flags = state.state();
 
     if (flags & DirtyOpacity) {
+        kDebug(41001) << "\tDirtyOpacity" << endl;
         d->opacity = state.opacity();
         if (d->opacity > 1)
             d->opacity = 1;
@@ -243,19 +245,51 @@ void KisPaintEngine::updateState(const QPaintEngineState &state)
         flags |= DirtyBrush;
     }
 
-    if (flags & DirtyTransform) d->matrix = state.matrix();
-    if (flags & DirtyPen) updatePen(state.pen());
-    if (flags & (DirtyBrush | DirtyBrushOrigin)) updateBrush(state.brush(), state.brushOrigin());
-//     if (flags & DirtyFont) d->font = state.font();
-
-    if (state.state() & DirtyClipEnabled) {
-        // TODO: What is this intended to do? DirtyClipEnabled
+    if (flags & DirtyTransform) {
+        kDebug(41001) << "\tDirtyTransform" << endl;
+        d->matrix = state.matrix();
     }
-
+    if (flags & DirtyPen) {
+        kDebug(41001) << "\tDirtyPen" << endl;
+        updatePen(state.pen());
+    }
+    if (flags & (DirtyBrush | DirtyBrushOrigin)) {
+        kDebug(41001) << "\tDirtyBrush | DirtyBrushOrigin" << endl;
+        updateBrush(state.brush(), state.brushOrigin());
+    }
+    if (flags & DirtyFont) {
+        kDebug(41001) << "\tDirtyFont" << endl;
+//         d->font = state.font();
+    }
+    if (flags & DirtyBackground) {
+        kDebug(41001) << "\tDirtyBackground" << endl;
+    }
+    if (flags & DirtyBackgroundMode) {
+        kDebug(41001) << "\tDirtyBackgroundMode" << endl;
+    }
+    if (flags & DirtyCompositionMode) {
+        kDebug(41001) << "\tDirtyCompositionMode" << endl;
+    }
+    if (flags & DirtyClipEnabled) {
+        kDebug(41001) << "\tDirtyClipEnabled" << endl;
+    }
+    if (flags & DirtyClipRegion) {
+        kDebug(41001) << "\tDirtyClipRegion {" << endl;
+        QPainterPath clipPath;
+        clipPath.addRect(state.clipRegion().boundingRect());
+        d->clipPath = clipPath;
+        kDebug(41001) << "\t\t" << state.clipRegion().boundingRect() << endl << "\t}" << endl;
+    }
     if (flags & DirtyClipPath) {
-        // TODO: What is this intended to do? DirtyClipPath
+        kDebug(41001) << "\tDirtyClipPath {" << endl;
+        d->clipPath = state.clipPath();
+        kDebug(41001) << "\t\t" << state.clipPath().boundingRect() << endl << "\t}" << endl;
     }
-    if (flags & DirtyHints) d->hints = state.renderHints();
+    if (flags & DirtyHints) {
+        kDebug(41001) << "\tDirtyHints" << endl;
+        d->hints = state.renderHints();
+    }
+    kDebug(41001) << "}" << endl;
 }
 
 void KisPaintEngine::drawRects(const QRect *rects, int rectCount)
@@ -299,20 +333,21 @@ void KisPaintEngine::drawEllipse(const QRect &r)
 
 void KisPaintEngine::drawPath(const QPainterPath &path)
 {
-    kDebug(41001) << "KisPaintEngine::drawPath with bounding rect " << d->matrix.mapRect(path.boundingRect()) << endl;
-    // Simple-minded implementation
+    kDebug(41001) << "KisPaintEngine::drawPath() {" << endl;
+    kDebug(41001) << "\tBounding rect " << d->matrix.mapRect(path.boundingRect()) << endl;
+    kDebug(41001) << "\tLa matrice: " << d->matrix << endl;
+    // TODO Implement clipping
 
     QList<QPolygonF> polys = path.toFillPolygons(d->matrix);
 
-    d->p->begin(d->dev);
+    QPolygonF poly;
+    foreach (poly, polys)
+        if (d->clipPath.intersects(poly.boundingRect()))
+            d->p.paintPolygon(poly);
+        else
+            kDebug(41001) << "\tSalto un poligono!" << endl;
 
-//     QPolygonF poly;
-//     foreach (poly, polys)
-//         d->p->paintPolygon(poly);
-
-    d->p->paintPolygon(path.toFillPolygon(d->matrix));
-
-    d->p->end();
+    kDebug(41001) << "} // drawPath()" << endl;
 }
 
 

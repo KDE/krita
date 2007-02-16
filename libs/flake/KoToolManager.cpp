@@ -148,6 +148,10 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
         tsa->setText(i18n("Activate %1", th->name()));
     }
 
+    if(! d->canvasses.contains(controller)) {
+        kWarning(30006) << "registerTools called on a canvasController that has not been registered (yet)!\n";
+        return;
+    }
     CanvasData cd = d->canvasses.value(controller);
     foreach(KoTool *tool, cd.allTools) {
         QHash<QString, QAction*> actions = tool->actions();
@@ -286,6 +290,7 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
     if(d->canvasData.canvas) // backup
         d->canvasses[d->canvasData.canvas] = d->canvasData;
     d->canvasData = cd;
+    d->canvasses[controller] = d->canvasData;
 
     if (cd.activeTool == 0)
         toolActivated(d->defaultTool);

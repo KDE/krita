@@ -36,7 +36,7 @@ class KOFFICEUI_EXPORT KoToolDocker : public QDockWidget
 {
     Q_OBJECT
 public:
-    KoToolDocker(QWidget *parent = 0);
+    explicit KoToolDocker(QWidget *parent = 0);
     ~KoToolDocker();
 
 public slots:
@@ -47,7 +47,7 @@ public slots:
 
 private:
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif

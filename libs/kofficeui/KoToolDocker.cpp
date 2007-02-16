@@ -31,9 +31,9 @@ public:
 
 
 KoToolDocker::KoToolDocker(QWidget *parent)
-    : QDockWidget(i18n("Tool Options"), parent)
+    : QDockWidget(i18n("Tool Options"), parent),
+    d( new Private() )
 {
-    d = new Private();
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     QWidget *child = new QWidget();
     QLayout *layout = new QVBoxLayout(child);

@@ -77,7 +77,7 @@ private:
     /// \internal
     class Canvas : public QWidget, public KoCanvasBase {
         public:
-            Canvas(KoShapeSelector *parent);
+            explicit Canvas(KoShapeSelector *parent);
             void gridSize (double *horizontal, double *vertical) const;
             bool snapToGrid() const { return false; }
             void addCommand (QUndoCommand *command);

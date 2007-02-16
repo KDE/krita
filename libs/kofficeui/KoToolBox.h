@@ -48,7 +48,7 @@ class KoToolBox : public QDockWidget {
     Q_OBJECT
 public:
     /// constructor
-    KoToolBox(KoCanvasController *canvas, const QString &title);
+    explicit KoToolBox(KoCanvasController *canvas, const QString &title);
     ~KoToolBox();
 
     /**

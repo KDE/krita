@@ -83,13 +83,13 @@ public:
     /**
      * Set a resource of type KoColor.
      * @param key the integer key, based on KoCanvasResource::EnumCanvasResource
-     * @param value the new value for the key.
+     * @param color the new value for the key.
      */
     void setResource( int key, const KoColor & color );
     /**
      * Set a resource of type KoId.
      * @param key the integer key, based on KoCanvasResource::EnumCanvasResource
-     * @param value the new value for the key.
+     * @param id the new value for the key.
      */
     void setResource( int key, const KoID & id );
 

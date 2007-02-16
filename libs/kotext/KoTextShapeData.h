@@ -67,7 +67,7 @@ public:
     /**
      * Return the position in the text-document that this shape shows.
      * It returns -1 if this shape contains no text.
-     * Note that the text needs to be layouted seperately for this to be updated.
+     * Note that the text needs to be layouted separately for this to be updated.
      */
     int position() const;
     /**
@@ -79,7 +79,7 @@ public:
     /**
      * Return the end-position in the text-document that this shape shows.
      * It returns -1 if this shape contains no text.
-     * Note that the text needs to be layouted seperately for this to be updated.
+     * Note that the text needs to be layouted separately for this to be updated.
      */
     int endPosition() const;
     /**

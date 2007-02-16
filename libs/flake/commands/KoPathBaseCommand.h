@@ -32,7 +32,7 @@ public:
     /**
      * @param parent the parent command used for macro commands
      */
-    KoPathBaseCommand( QUndoCommand *parent = 0 );
+    explicit KoPathBaseCommand( QUndoCommand *parent = 0 );
     /** initialize the base command with a single shape
      * @param parent the parent command used for macro commands
      */

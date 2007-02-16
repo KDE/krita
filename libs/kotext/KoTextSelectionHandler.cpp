@@ -282,8 +282,7 @@ void KoTextSelectionHandler::setTextBackgroundColor(const QColor &color) {
 }
 
 QString KoTextSelectionHandler::selectedText() const {
-    // TODO
-    return "";
+    return m_caret->selectedText();
 }
 
 void KoTextSelectionHandler::insert(const QString &text) {

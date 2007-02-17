@@ -1287,9 +1287,11 @@ void KisDoc2::addShape( KoShape* shape )
             // a signal that is caught by us (the document) and the
             // layerbox and makes sure the new layer is in the
             // layer-shape map and in the layerbox
+
             // XXX: This casting around of layers is a blight and
             // a blot on the landscape. Especially when I have to
             // wriggle the pointer out of the shared pointer.
+
             if ( container )
                 m_d->currentImage()->addLayer( shapeLayer,
                                                qobject_cast<KisGroupLayer*>( container->groupLayer().data() ) );

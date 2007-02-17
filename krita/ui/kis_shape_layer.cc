@@ -30,10 +30,14 @@
 
 #include <KoShapeContainer.h>
 #include <KoViewConverter.h>
+#include <KoShapeManager.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
+#include "kis_shape_layer_canvas.h"
+#include <kis_painter.h>
+#include <KoCompositeOp.h>
 
 class KisShapeLayer::Private
 {
@@ -42,9 +46,14 @@ public:
     qint32 x;
     qint32 y;
     KisPaintDeviceSP projection;
+    KisShapeLayerCanvas * canvas;
 };
 
-KisShapeLayer::KisShapeLayer( KoShapeContainer * parent, KoViewConverter * converter, KisImageSP img, const QString &name, quint8 opacity )
+KisShapeLayer::KisShapeLayer( KoShapeContainer * parent,
+                              KoViewConverter * converter,
+                              KisImageSP img,
+                              const QString &name,
+                              quint8 opacity )
     : KisExternalLayer( img, name, opacity )
 {
     KoShapeContainer::setParent( parent );
@@ -55,6 +64,8 @@ KisShapeLayer::KisShapeLayer( KoShapeContainer * parent, KoViewConverter * conve
     m_d->x = 0;
     m_d->y = 0;
     m_d->projection = new KisPaintDevice( img->colorSpace() );
+    m_d->canvas = new KisShapeLayerCanvas( converter );
+    m_d->canvas->setProjection( m_d->projection );
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -71,10 +82,12 @@ void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &con
 void KisShapeLayer::addChild(KoShape *object)
 {
     kDebug(41001) << "KisShapeLayer::addChild {" << endl;
+//     KoShapeLayer::addChild( object );
+    m_d->canvas->shapeManager()->add( object );
+/*
     QRect r = m_d->converter->documentToView(object->boundingRect()).toRect();
     kDebug(41001) << "\tRettangolo: " << r << endl;
 
-    KoShapeLayer::addChild( object );
 
     QPainter p( m_d->projection.data() );
     p.setClipping( true );
@@ -85,7 +98,9 @@ void KisShapeLayer::addChild(KoShape *object)
     object->paint( p, *m_d->converter );
 
     setDirty( r ); // XXX: convert to pixels
+*/
     kDebug(41001) << "}" << endl;
+*/
 }
 
 QIcon KisShapeLayer::icon() const
@@ -95,11 +110,24 @@ QIcon KisShapeLayer::icon() const
 
 void KisShapeLayer::prepareProjection(const QRect& r)
 {
-//     kDebug(41001) << "KisShapeLayer::prepareProjection " << r << endl;
+    kDebug(41001) << "KisShapeLayer::prepareProjection()" << r << endl;
     // XXX: Is r in document, widget or pixel coordinates? I hope in
     // document coordinates. Note: see dox for updateCanvas.
 
-//     setDirty( r ); // Convert to right coordinates
+    QImage img(1024, 768, QImage::Format_ARGB32);
+    QPainter p;
+
+    p.begin(&img);
+    p.setClipRect(r);
+    m_d->canvas->shapeManager()->paint(p, *m_d->converter, false);
+    p.end();
+
+    KisPainter kp(m_d->projection.data());
+    kp.bitBlt(r.x(), r.y(), m_d->projection->colorSpace()->compositeOp( COMPOSITE_OVER ), &img,
+              OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+    kp.end();
+
+    setDirty( r ); // Convert to right coordinates
 }
 
 KisPaintDeviceSP KisShapeLayer::projection()

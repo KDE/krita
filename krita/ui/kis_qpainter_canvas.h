@@ -74,6 +74,9 @@ public: // QWidget
     /// reimplemented method from superclass
     void wheelEvent( QWheelEvent *e );
 
+    /// reimplemented method from superclass
+    bool event(QEvent *event);
+
 public: // KisAbstractCanvasWidget
 
     QWidget * widget() { return this; }

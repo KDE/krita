@@ -20,6 +20,7 @@
 #define AUTOCORRECT_H
 
 #include <KoTextEditingPlugin.h>
+#include <QTextCursor>
 
 class Autocorrect : public KoTextEditingPlugin {
 public:
@@ -29,7 +30,41 @@ public:
     void finishedParagraph(QTextDocument *document, int cursorPosition);
 
 private:
-    bool m_replaceQuotes;
+    void uppercaseFirstCharOfSentence();
+    void fixTwoUppercaseChars();
+    /// @returns true if processing should stop here.
+    bool autoFormatURLs();
+    /// @returns true if processing should stop here.
+    bool singleSpaces();
+    /// @returns true if processing should stop here.
+    bool autoBoldUnderline();
+    /// @returns true if processing should stop here.
+    bool autoFractions();
+    void autoNumbering();
+    void superscriptAppendix();
+    void capitalizeWeekDays();
+    void autoFormatBulletList();
+    void replaceDoubleQuotes();
+    void replaceSingleQuotes();
+
+private:
+    bool m_uppercaseFirstCharOfSentence; // convert first letter of a sentence automaticall to uppercase
+    bool m_fixTwoUppercaseChars;  // convert two uppercase characters to one upper and one lowercase.
+    bool m_autoFormatURLs;
+    bool m_singleSpaces; // suppress double spaces.
+    bool m_trimParagraphs; // remove spaces at beginning and end of paragraphs
+    bool m_autoBoldUnderline; // automatically do bold and underline formatting
+    bool m_autoFractions; // replace 1/2 with ½
+    bool m_autoNumbering; //use autonumbering for numbered paragraphs
+    bool m_superscriptAppendix; // replace 1st with 1 and a superscript "st"
+    bool m_capitalizeWeekDays;
+    bool m_autoFormatBulletList; // use list formatting for bulletted paragraphs.
+
+    bool m_replaceDoubleQuotes;  // replace double quotes with typographical quotes
+    bool m_replaceSingleQuotes;  // replace single quotes with typographical quotes
+
+    QString m_word;
+    QTextCursor m_cursor;
 };
 
 #endif

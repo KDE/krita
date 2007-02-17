@@ -18,26 +18,122 @@
  */
 #include "Autocorrect.h"
 
-#include <QTextCursor>
+#include <QTextBlock>
 #include <kdebug.h>
 
 Autocorrect::Autocorrect() {
-    m_replaceQuotes = true;
+    m_singleSpaces = true;
+    m_uppercaseFirstCharOfSentence = false;
+    m_fixTwoUppercaseChars = false;
+    m_autoFormatURLs = false;
+    m_trimParagraphs = true;
+    m_autoBoldUnderline = false;
+    m_autoFractions = true;
+    m_autoNumbering = false;
+    m_capitalizeWeekDays = false;
+    m_autoFormatBulletList = false;
+    m_replaceDoubleQuotes = false;
+    m_replaceSingleQuotes = false;
+
+    // default double quote open 0x201c
+    // default double quote close 0x201d
 }
 
 void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
-    if(m_replaceQuotes) {
-        QTextCursor cursor(document);
-        selectWord(cursor, cursorPosition);
+    m_cursor = QTextCursor(document);
+    selectWord(m_cursor, cursorPosition);
+    m_word = m_cursor.selectedText();
 
-        QString text = cursor.selectedText();
-        text = text.replace('\"', QChar(0x201c)); // qoute open
-        //word.replace('\"', QChar(0x201d)); // qoute close
-        if(cursor.selectedText() != text)
-            cursor.insertText(text);
-    }
+    bool done = autoFormatURLs();
+    if(!done) done = singleSpaces();
+    if(!done) done = autoBoldUnderline();
+    if(!done) done = autoFractions();
+    if(!done) uppercaseFirstCharOfSentence();
+    if(!done) fixTwoUppercaseChars();
+    if(!done) autoNumbering();
+    if(!done) superscriptAppendix();
+    if(!done) capitalizeWeekDays();
+    if(!done) autoFormatBulletList();
+    if(!done) replaceDoubleQuotes();
+    if(!done) replaceSingleQuotes();
+
+    if(m_cursor.selectedText() != m_word)
+        m_cursor.insertText(m_word);
 }
 
 void Autocorrect::finishedParagraph(QTextDocument *document, int cursorPosition) {
-    kDebug() << "Autocorrect::finishedParagraph\n";
+    if(! m_trimParagraphs) return;
+    // TODO
 }
+
+// ******************** individual features;
+
+void Autocorrect::uppercaseFirstCharOfSentence() {
+    if(! m_uppercaseFirstCharOfSentence) return;
+    // TODO
+}
+
+void Autocorrect::fixTwoUppercaseChars() {
+    if(! m_fixTwoUppercaseChars) return;
+    // TODO
+}
+
+bool Autocorrect::autoFormatURLs() {
+    if(! m_autoFormatURLs) return false;
+    // TODO
+}
+
+bool Autocorrect::singleSpaces() {
+    if(! m_singleSpaces) return false;
+    if(!m_cursor.atBlockStart() && m_word.length() == 1 && m_word.at(0) == ' ') {
+        // then when the prev char is also a space, don't insert one.
+        QTextBlock block = m_cursor.block();
+        QString text = block.text();
+        if(text.at(m_cursor.position() -1 - block.position()) == ' ') {
+            m_word.clear();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Autocorrect::autoBoldUnderline() {
+    if(! m_autoBoldUnderline) return false;
+    // TODO
+}
+
+bool Autocorrect::autoFractions() {
+    if(! m_autoFractions) return false;
+    // TODO
+}
+
+void Autocorrect::autoNumbering() {
+    if(! m_autoNumbering) return;
+    // TODO
+}
+
+void Autocorrect::superscriptAppendix() {
+    if(! m_superscriptAppendix) return;
+    // TODO
+}
+
+void Autocorrect::capitalizeWeekDays() {
+    if(! m_capitalizeWeekDays) return;
+    // TODO
+}
+
+void Autocorrect::autoFormatBulletList() {
+    if(! m_autoFormatBulletList) return;
+    // TODO
+}
+
+void Autocorrect::replaceDoubleQuotes() {
+    if(! m_replaceDoubleQuotes) return;
+    // TODO
+}
+
+void Autocorrect::replaceSingleQuotes() {
+    if(! m_replaceSingleQuotes) return;
+    // TODO
+}
+

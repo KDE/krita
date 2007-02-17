@@ -118,7 +118,13 @@ endif(SHOULD_BUILD_KARBON)
 
 if(EIGEN_FOUND)
     set(SHOULD_BUILD_KSPREAD true)
+else(EIGEN_FOUND)
+        set(SHOULD_BUILD_KSPREAD FALSE)
+        message(STATUS  "KSpread requires the eigen library, KSpread will not be built.\n"
+                        "   If you want to compile KSpread you should install:\n"
+                        "   lib eigen http://eigen.tuxfamily.org")
 endif(EIGEN_FOUND)
+
 if(SHOULD_BUILD_KSPREAD)
     add_subdirectory(kspread)
 endif(SHOULD_BUILD_KSPREAD)

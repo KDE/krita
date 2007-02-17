@@ -163,7 +163,7 @@ int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accu
     while(block.isValid()) {
         QTextLayout *layout = block.layout();
         if(point.y() > layout->boundingRect().bottom()) {
-            position = block.position() + block.length();
+            position = block.position() + block.length() -1;
             block = block.next();
             continue;
         }

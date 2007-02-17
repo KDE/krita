@@ -99,7 +99,14 @@ public:
     /// emits a relayout
     void fireResizeEvent();
 
+    /**
+     * Set the margins that will make the shapes text area smaller.
+     * The shape that owns this textShapeData object will layout text in an area
+     * confined by the shape size made smaller by the margins set here.
+     * @param margins the margins that shrink the text area.
+     */
     void setShapeMargins(const KoInsets &margins);
+    /// returns the currently set margins for the shape.
     KoInsets shapeMargins() const;
 
 signals:

@@ -25,6 +25,7 @@
 #include "KoVariable.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
+#include "styles/KoStyleManager.h"
 
 #include <kdebug.h>
 #include <QTextCharFormat>
@@ -193,7 +194,7 @@ void KoTextSelectionHandler::insertFrameBreak() {
         QTextBlockFormat bf = m_caret->blockFormat();
 //       if(m_caret->position() != block.position() + block.length() -1 ||
 //               bf.pageBreakPolicy() != QTextFormat::PageBreak_Auto) // end of parag or already a pagebreak
-            m_caret->insertText("\n");
+            nextParagraph();
         bf = m_caret->blockFormat();
         bf.setPageBreakPolicy(QTextFormat::QTextFormat::PageBreak_AlwaysBefore);
         m_caret->setBlockFormat(bf);
@@ -312,6 +313,25 @@ void KoTextSelectionHandler::setStyle(KoParagraphStyle* style) {
 void KoTextSelectionHandler::setStyle(KoCharacterStyle* style) {
     Q_ASSERT(style);
     style->applyStyle(m_caret);
+}
+
+void KoTextSelectionHandler::nextParagraph() {
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+    KoParagraphStyle *nextStyle = 0;
+    if(lay && lay->styleManager()) {
+        int id = m_caret->blockFormat().intProperty(KoParagraphStyle::StyleId);
+        KoParagraphStyle *currentStyle = lay->styleManager()->paragraphStyle(id);
+        if(currentStyle == 0) // not a style based parag.  Lets make the next one correct.
+            nextStyle = lay->styleManager()->defaultParagraphStyle();
+        else
+            nextStyle = lay->styleManager()->paragraphStyle(currentStyle->nextStyle());
+        Q_ASSERT(nextStyle);
+    }
+    m_caret->insertText("\n");
+    if(nextStyle) {
+        QTextBlock block = m_caret->block();
+        nextStyle->applyStyle(block);
+    }
 }
 
 #include <KoTextSelectionHandler.moc>

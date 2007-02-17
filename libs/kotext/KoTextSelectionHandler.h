@@ -98,6 +98,7 @@ public slots:
     void selectFont(QWidget *parent = 0);
     void increaseIndent();
     void decreaseIndent();
+    void nextParagraph();
 
     /**
      * Insert a variable at the current cursor position. Possibly replacing the selection.

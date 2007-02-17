@@ -155,4 +155,20 @@ void KoPACanvas::wheelEvent ( QWheelEvent * event )
     m_toolProxy->wheelEvent( event, viewConverter()->viewToDocument( event->pos() ) );
 }
 
+bool KoPACanvas::event (QEvent *event) {
+    // we should forward tabs, and let tools decide if they should be used or ignored.
+    // if the tool ignores it, it will move focus.
+    if(event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*> (event);
+        if(keyEvent->key() == Qt::Key_Backtab)
+            return true;
+        if(keyEvent->key() == Qt::Key_Tab && event->type() == QEvent::KeyPress) {
+            // we loose key-release events, which I think is not an issue.
+            keyPressEvent(keyEvent);
+            return true;
+        }
+    }
+    return QWidget::event(event);
+}
+
 #include "KoPACanvas.moc"

@@ -50,15 +50,26 @@ public slots:
     void updateSize();
 
 protected:
+    /// reimplemented method from superclass
     void paintEvent( QPaintEvent* event );
+    /// reimplemented method from superclass
     void tabletEvent( QTabletEvent *event );
+    /// reimplemented method from superclass
     void mousePressEvent( QMouseEvent *event );
+    /// reimplemented method from superclass
     void mouseDoubleClickEvent( QMouseEvent *event );
+    /// reimplemented method from superclass
     void mouseMoveEvent( QMouseEvent *event );
+    /// reimplemented method from superclass
     void mouseReleaseEvent( QMouseEvent *event );
+    /// reimplemented method from superclass
     void keyPressEvent( QKeyEvent *event );
+    /// reimplemented method from superclass
     void keyReleaseEvent( QKeyEvent *event );
+    /// reimplemented method from superclass
     void wheelEvent ( QWheelEvent * event );
+    /// reimplemented method from superclass
+    bool event(QEvent *event);
 
     KoPAView * m_view;
     KoPADocument * m_doc;

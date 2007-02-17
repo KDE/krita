@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2005-2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -153,28 +153,44 @@ class KisPNGStream {
         quint8* m_buf;
 };
 
-KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
+static
+void /*CALLBACK_CALL_TYPE */_read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+    QIODevice *in = (QIODevice *)png_get_io_ptr(png_ptr);
+
+    while (length) {
+        int nr = in->read((char*)data, length);
+        if (nr <= 0) {
+            png_error(png_ptr, "Read Error");
+            return;
+        }
+        length -= nr;
+    }
+}
+
+
+KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 {
     kDebug(41008) << "Start decoding PNG File" << endl;
-    // open the file
-    kDebug(41008) << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri << endl;
-    FILE *fp = fopen(QFile::encodeName(uri.path()), "rb");
-    if (!fp)
+    if(not iod->open(QIODevice::ReadOnly))
     {
-        return (KisImageBuilder_RESULT_NOT_EXIST);
+        kDebug(41008) << "Failed to open PNG File" << endl;
+        return (KisImageBuilder_RESULT_FAILURE);
     }
+    
     png_byte signature[8];
-    fread(signature, 1, 8, fp);
+    iod->peek((char*)signature, 8);
     if (!png_check_sig(signature, 8))
     {
-        fclose(fp);
+        iod->close();
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
 
     // Initialize the internal structures
     png_structp png_ptr =  png_create_read_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
-    if (!KisImageBuilder_RESULT_FAILURE) {
-        fclose(fp);
+    if (!png_ptr)
+    {
+        iod->close();
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -182,7 +198,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     if (!info_ptr)
     {
         png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-        fclose(fp);
+        iod->close();
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -190,7 +206,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     if (!end_info)
     {
         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-        fclose(fp);
+        iod->close();
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -198,13 +214,15 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     if (setjmp(png_jmpbuf(png_ptr)))
     {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-        fclose(fp);
+        iod->close();
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
-    png_init_io(png_ptr, fp);
-    png_set_sig_bytes(png_ptr, 8);
-
+    // Initialize the special 
+    png_set_read_fn(png_ptr, iod, _read_fn);
+    
+    // Ignore signature
+//     png_set_sig_bytes(png_ptr, 8);
     // read all PNG info up to image data
     png_read_info(png_ptr, info_ptr);
 
@@ -223,7 +241,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     QString csName = getColorSpaceForColorType(color_type, color_nb_bits);
     if(csName.isEmpty()) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-        fclose(fp);
+        iod->close();
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
     bool hasalpha = (color_type == PNG_COLOR_TYPE_RGB_ALPHA || color_type == PNG_COLOR_TYPE_GRAY_ALPHA);
@@ -286,20 +304,23 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     png_text* text_ptr;
     int num_comments;
     png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
-    KoDocumentInfo * info = m_doc->documentInfo();
-    kDebug(41008) << "There are " << num_comments << " comments in the text" << endl;
-    for(int i = 0; i < num_comments; i++)
+    if(m_doc)
     {
-        kDebug(41008) << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text << endl;
-        if(QString::compare(text_ptr[i].key, "title") == 0)
+        KoDocumentInfo * info = m_doc->documentInfo();
+        kDebug(41008) << "There are " << num_comments << " comments in the text" << endl;
+        for(int i = 0; i < num_comments; i++)
         {
-                info->setAboutInfo("title", text_ptr[i].text);
-        } else if(QString::compare(text_ptr[i].key, "abstract")  == 0)
-        {
-                info->setAboutInfo("description", text_ptr[i].text);
-        } else if(QString::compare(text_ptr[i].key, "author") == 0)
-        {
-                info->setAuthorInfo("creator", text_ptr[i].text);
+            kDebug(41008) << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text << endl;
+            if(QString::compare(text_ptr[i].key, "title") == 0)
+            {
+                    info->setAboutInfo("title", text_ptr[i].text);
+            } else if(QString::compare(text_ptr[i].key, "abstract")  == 0)
+            {
+                    info->setAboutInfo("description", text_ptr[i].text);
+            } else if(QString::compare(text_ptr[i].key, "author") == 0)
+            {
+                    info->setAuthorInfo("creator", text_ptr[i].text);
+            }
         }
     }
 
@@ -335,8 +356,8 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
 //    fclose(fp);
 
     // Creating the KisImageSP
-    if( ! m_img) {
-        m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
+    if( m_img) {
+        m_img = new KisImage(m_adapter, width, height, cs, "built image");
         Q_CHECK_PTR(m_img);
         if(profile && !profile->isSuitableForOutput())
         {
@@ -435,7 +456,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     m_img->addLayer(KisLayerSP( layer ), m_img->rootLayer(), KisLayerSP( 0 ));
 
     png_read_end(png_ptr, end_info);
-    fclose(fp);
+    iod->close();
 
     // Freeing memory
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
@@ -463,7 +484,17 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
     if (KIO::NetAccess::download(uri, tmpFile, qApp -> activeWindow())) {
         KUrl uriTF;
         uriTF.setPath( tmpFile );
-        result = decode(uriTF);
+        
+        // open the file
+        kDebug(41008) << QFile::encodeName(uriTF.path()) << " " << uriTF.path() << " " << uriTF << endl;
+        QFile *fp = new QFile(QFile::encodeName(uriTF.path()) );
+        if (fp->exists())
+        {
+            result = buildImage(fp);
+        } else {
+            result = (KisImageBuilder_RESULT_NOT_EXIST);
+        }
+
         KIO::NetAccess::removeTempFile(tmpFile);
     }
 
@@ -477,13 +508,13 @@ KisImageSP KisPNGConverter::image()
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
+KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
     kDebug(41008) << "Start writing PNG File" << endl;
-    if (!layer)
+    if (!device)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageSP img = KisImageSP(layer -> image());
+    KisImageSP img = device -> image();
     if (!img)
         return KisImageBuilder_RESULT_EMPTY;
 
@@ -541,8 +572,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     png_set_compression_method(png_ptr, 8);
     png_set_compression_buffer_size(png_ptr, 8192);
 
-    int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
-    int color_type = getColorTypeforColorSpace(layer->paintDevice()->colorSpace(), alpha);
+    int color_nb_bits = 8 * device->pixelSize() / device->channelCount();
+    int color_type = getColorTypeforColorSpace(device->colorSpace(), alpha);
 
     if(color_type == -1)
     {
@@ -552,10 +583,10 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     // Try to compute a table of color if the colorspace is RGB8f
     png_colorp palette = 0;
     int num_palette = 0;
-    if(!alpha && KoID(layer->paintDevice()->colorSpace()->id()) == KoID("RGBA") )
+    if(!alpha && KoID(device->colorSpace()->id()) == KoID("RGBA") )
     { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
         palette = new png_color[255];
-        KisRectConstIteratorPixel it = layer->paintDevice()->createRectConstIterator(0,0, img->width(), img->height());
+        KisRectConstIteratorPixel it = device->createRectConstIterator(0,0, img->width(), img->height());
         bool toomuchcolor = false;
         while( !it.isDone() )
         {
@@ -644,30 +675,32 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     }
 
     // read comments from the document information
-    png_text texts[3];
-    int nbtexts = 0;
-    KoDocumentInfo * info = m_doc->documentInfo();
-    QString title = info->aboutInfo("creator");
-    if(!title.isEmpty())
+    if(m_doc)
     {
-        fillText(texts+nbtexts, "title", title);
-        nbtexts++;
+        png_text texts[3];
+        int nbtexts = 0;
+        KoDocumentInfo * info = m_doc->documentInfo();
+        QString title = info->aboutInfo("creator");
+        if(!title.isEmpty())
+        {
+            fillText(texts+nbtexts, "title", title);
+            nbtexts++;
+        }
+        QString abstract = info->aboutInfo("description");
+        if(!abstract.isEmpty())
+        {
+            fillText(texts+nbtexts, "abstract", abstract);
+            nbtexts++;
+        }
+        QString author = info->authorInfo("creator");
+        if(!author.isEmpty())
+        {
+            fillText(texts+nbtexts, "author", author);
+            nbtexts++;
+        }
+    
+        png_set_text(png_ptr, info_ptr, texts, nbtexts);
     }
-    QString abstract = info->aboutInfo("description");
-    if(!abstract.isEmpty())
-    {
-        fillText(texts+nbtexts, "abstract", abstract);
-        nbtexts++;
-    }
-    QString author = info->authorInfo("creator");
-    if(!author.isEmpty())
-    {
-        fillText(texts+nbtexts, "author", author);
-        nbtexts++;
-    }
-
-    png_set_text(png_ptr, info_ptr, texts, nbtexts);
-
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);
     png_write_flush(png_ptr);
@@ -685,8 +718,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     png_byte** row_pointers= new png_byte*[height];
 
     for (int y = 0; y < height; y++) {
-        KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, y, width);
-        row_pointers[y] = new png_byte[width*layer->paintDevice()->pixelSize()];
+        KisHLineConstIterator it = device->createHLineConstIterator(0, y, width);
+        row_pointers[y] = new png_byte[width*device->pixelSize()];
         switch(color_type)
         {
             case PNG_COLOR_TYPE_GRAY:
@@ -759,7 +792,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
             default:
                 KIO::del(uri); // async
 #ifdef __GNUC__
-#warning Leaks row_pointers and all rows so far allocated (CID 3087)
+#warning Leaks row_pointers and all rows so far allocated (CID 3087) but that code is never called unless someone either introduce a bug/hack in a png and or the png specification gets extended
 #endif
                 return KisImageBuilder_RESULT_UNSUPPORTED;
         }

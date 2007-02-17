@@ -1,1 +1,5 @@
+# make sure to run this plugins in this subdir
+CHECK dpointer,inline
+
+# skip files matching this regex in this subdir
 SKIP /kotext/obsolete\|/koproperty/\|/kotext/kohyphen

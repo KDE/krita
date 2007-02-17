@@ -378,7 +378,7 @@ bool KisDoc2::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocu
                 return false;
             KoOasisStore* oasisStore =  new KoOasisStore( store );
             KisOasisLoadDataVisitor oldv(oasisStore, olv.layerFilenames());
-            m_d->currentImage()->rootLayer()->accept(oldv);
+            olv.image()->rootLayer()->accept(oldv);
 
             setCurrentImage( olv.image() );
 

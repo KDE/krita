@@ -46,7 +46,6 @@ bool KisOasisLoadDataVisitor::visit(KisPaintLayer *layer)
             return false;
         }
         layer->paintDevice()->convertFromQImage(img, "");
-        img.save("testouille.png", "PNG", 0);
         io.close();
         m_oasisStore->store()->close();
         kDebug(41008) << "Loading was successful" << endl;

@@ -83,16 +83,6 @@ protected slots:
     void viewGrid();
     void viewZoom(KoZoomMode::Mode mode, int zoom);
 
-    void textBold(bool bold);
-    void textItalic(bool italic);
-    void textUnderline(bool underline);
-    void textStrikeOut(bool strikeout);
-    void slotNonbreakingSpace();
-    void slotNonbreakingHyphen();
-    void slotSoftHyphen();
-    void slotLineBreak();
-    void formatFont();
-
     /// Called when the canvas controller is resized
     virtual void canvasControllerResized();
 

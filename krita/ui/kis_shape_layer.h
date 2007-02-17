@@ -40,6 +40,13 @@ const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 /**
    A KisShapeLayer contains any number of non-krita flakes, such as
    path shapes, text shapes and anything else people come up with.
+
+   The KisShapeLayer has a shapemanager and a canvas of its own. The
+   canvas paints onto the projection, and the projection is what we
+   render in Krita. This means that no matter how many views you have,
+   you cannot have a different view on your shapes per view.
+
+   XXX: what about removing shapes?
 */
 class KisShapeLayer : public KisExternalLayer, public KoShapeLayer
 {
@@ -66,6 +73,9 @@ public:
 
     // Retrieve the projection for
     KisPaintDeviceSP projection();
+
+    /// Retrieve the shape layer canvas
+    KoCanvasBase * canvas();
 
     bool saveToXML(QDomDocument doc, QDomElement elem);
 

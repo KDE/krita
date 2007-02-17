@@ -84,23 +84,6 @@ void KisShapeLayer::addChild(KoShape *object)
     kDebug(41001) << "KisShapeLayer::addChild {" << endl;
 //     KoShapeLayer::addChild( object );
     m_d->canvas->shapeManager()->add( object );
-/*
-    QRect r = m_d->converter->documentToView(object->boundingRect()).toRect();
-    kDebug(41001) << "\tRettangolo: " << r << endl;
-
-
-    QPainter p( m_d->projection.data() );
-    p.setClipping( true );
-    p.setClipRegion( QRegion(r) );
-    if (p.hasClipping())
-        kDebug(41001) << "\tAbbiamo il clipping" << endl;
-    p.setMatrix( object->transformationMatrix(m_d->converter) * p.matrix() );
-    object->paint( p, *m_d->converter );
-
-    setDirty( r ); // XXX: convert to pixels
-*/
-    kDebug(41001) << "}" << endl;
-*/
 }
 
 QIcon KisShapeLayer::icon() const

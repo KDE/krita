@@ -2,9 +2,10 @@
 
 #include <stdlib.h>
 
+#include <kactioncollection.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
-#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -29,7 +30,8 @@ K_EXPORT_COMPONENT_FACTORY( krita%{APPNAMELC}, %{APPNAME}PluginFactory( "krita" 
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/%{APPNAMELC}.rc"), true);
 
-        KAction *action = new KAction(i18n("&My action !"), actionCollection(), "%{APPNAME}");
+        KAction *action  = new KAction(i18n("&My action !"), this);
+        actionCollection()->addAction("%{APPNAME}", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotMyAction()));
     }
 }

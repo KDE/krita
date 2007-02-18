@@ -167,6 +167,10 @@ class PaintLayer : public QObject
          */
         bool fastWaveletUntransformation(QObject* wavelet);
 
+        /**
+         * clone this paint layer, making a deep copy.
+         */
+        PaintLayer* clone();
 #if 0
 //Disabled yet cause it's not wanted to expose the Krita internals.
 

@@ -205,18 +205,15 @@ namespace Kross {
             return s.isNull() ? Py::String() : Py::String(s.toLatin1().data());
         }
         inline static QString toVariant(const Py::Object& obj) {
-            /*
             #ifdef Py_USING_UNICODE
-                //if(obj.isUnicode())
-                PyTypeObject *type = (PyTypeObject*) object.type().ptr();
+                PyTypeObject *type = (PyTypeObject*) obj.type().ptr();
                 if(type == &PyUnicode_Type) {
-                    Py::unicodestring u = Py::String(object).as_unicodestring();
+                    Py::unicodestring u = Py::String(obj).as_unicodestring();
                     std::string s;
                     std::copy(u.begin(), u.end(), std::back_inserter(s));
                     return s.c_str();
                 }
             #endif
-            */
             return obj.isString() ? Py::String(obj).as_string().c_str() : QString();
         }
     };

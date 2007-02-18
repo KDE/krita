@@ -642,6 +642,11 @@ void KoRTree<T>::adjustTree( Node *node1, Node *node2 )
     else
     {
         NoneLeafNode * parent = dynamic_cast<NoneLeafNode *>( node1->parent() );
+        if ( !parent )
+        {
+            qFatal( "KoRTree::adjustTree: no parent node found!" );
+            return;
+        }
         //QRectF pbbold( parent->boundingBox() );
         parent->setChildBoundingBox( node1->place(), node1->boundingBox() );
         parent->updateBoundingBox();

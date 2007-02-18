@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,7 +43,7 @@ public:
      * Those values can be extended by applications (starting at number 20),
      * it's for their own consumption anyway.
      * (The reason for having the very common ones here, is to make it possible to
-     * use them from libkotext).
+     * use them from libkotext and flake).
      */
     enum { STYLE_PAGELAYOUT = 0,
            STYLE_USER = 1,
@@ -59,7 +60,8 @@ public:
            STYLE_NUMERIC_CURRENCY = 12,
            STYLE_NUMERIC_TEXT = 13,
            STYLE_HATCH = 14,
-           STYLE_GRAPHICAUTO = 15};
+           STYLE_GRAPHICAUTO = 15,
+           STYLE_PRESENTATIONAUTO = 16};
 
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),

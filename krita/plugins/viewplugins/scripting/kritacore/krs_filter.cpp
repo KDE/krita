@@ -80,8 +80,14 @@ bool Filter::process(QObject* layer)
     }
 
     QRect r1 = paintlayer->paintLayer()->paintDevice()->extent();
-    QRect r2 = paintlayer->paintLayer()->image()->bounds();
-    QRect rect = r1.intersect(r2);
+    QRect rect;
+    if(paintlayer->paintLayer()->image())
+    {
+        QRect r2 = paintlayer->paintLayer()->image()->bounds();
+        rect = r1.intersect(r2);
+    } else {
+        rect = r1;
+    }
     m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, 0/*m_filter->configuration()*/);
     return true;
 }

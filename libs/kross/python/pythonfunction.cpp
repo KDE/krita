@@ -127,13 +127,38 @@ int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
                 int idx = 1;
                 foreach(QByteArray param, params) {
                     int tp = QVariant::nameToType( param.constData() );
-                    if(tp != QVariant::Invalid) {
-                        args.append( QVariant(tp, _a[idx]) );
-                    }
-                    else {
-                        krosswarning("PythonFunction::qt_metacall: Not supported yet!");
-                        //TODO implement
-                        args.append( QVariant() );
+                    switch(tp) {
+                        case QVariant::Invalid: // fall through
+                        case QVariant::UserType: {
+                            tp = QMetaType::type( param.constData() );
+                            #ifdef KROSS_PYTHON_FUNCTION_DEBUG
+                                krossdebug( QString("PythonFunction::qt_metacall: metatypeId=%1").arg(tp) );
+                            #endif
+                            switch( tp ) {
+                                case QMetaType::QObjectStar: {
+                                    QObject* obj = (*reinterpret_cast< QObject*(*)>( _a[idx] ));
+                                    QVariant v;
+                                    v.setValue( obj );
+                                    args.append(v);
+                                } break;
+                                case QMetaType::QWidgetStar: {
+                                    QWidget* obj = (*reinterpret_cast< QWidget*(*)>( _a[idx] ));
+                                    QVariant v;
+                                    v.setValue( obj );
+                                    args.append(v);
+                                } break;
+                                default: {
+                                    args.append( QVariant() );
+                                } break;
+                            }
+                        } break;
+                        default: {
+                            QVariant v(tp, _a[idx]);
+                            #ifdef KROSS_PYTHON_FUNCTION_DEBUG
+                                krossdebug( QString("PythonFunction::qt_metacall argument param=%1 typeId=%2").arg(param.constData()).arg(tp) );
+                            #endif
+                            args.append(v);
+                        } break;
                     }
                     ++idx;
                 }

@@ -211,7 +211,7 @@ template <class T>
 Q_INLINE_TEMPLATE  KisSharedPtr<T>::KisSharedPtr(const KisWeakSharedPtr<T>& o)
  : d(o.d)
 {
-    Q_ASSERT(o.dataPtr && o.dataPtr->valid);
+    Q_ASSERT(not o.dataPtr or ( o.dataPtr and o.dataPtr->valid));
     if(d) d->ref.ref();
 }
 

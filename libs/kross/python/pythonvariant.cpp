@@ -328,17 +328,6 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
         case QVariant::Invalid: // fall through
         case QVariant::UserType: // fall through
         default: {
-            /*
-            int metaid = QMetaType::type(typeName);
-            //if( metaid == QMetaType::QObjectStar )
-            if( metaid == QMetaType::QWidgetStar ) {
-                if( qVariantCanConvert< QWidget* >(v) ) {
-                    QWidget* widget = qvariant_cast< QWidget* >(v);
-                    return new MetaTypeVoidStar( metaid, widget, false );
-                }
-            }
-            */
-
             if(Py::PythonExtension<PythonExtension>::check( object )) {
                 #ifdef KROSS_PYTHON_VARIANT_DEBUG
                     krossdebug( QString("PythonMetaTypeFactory::create Py::Object '%1' with typename '%2' is a PythonExtension object").arg(object.as_string().c_str()).arg(typeName) );
@@ -347,7 +336,25 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
                 Py::ExtensionObject<PythonExtension> extobj(object);
                 PythonExtension* extension = extobj.extensionObject();
                 Q_ASSERT( extension->object() );
-                return new MetaTypeVoidStar( typeId, extension->object(), false );
+                return new MetaTypeVoidStar( typeId, extension->object(), false /*owner*/ );
+            }
+
+            /*
+            //if( metaid == QMetaType::QObjectStar )
+            if( metaid == QMetaType::QWidgetStar ) {
+                if( qVariantCanConvert< QWidget* >(v) ) {
+                    QWidget* widget = qvariant_cast< QWidget* >(v);
+                    return new MetaTypeVoidStar( metaid, widget, false );
+                }
+            }
+            */
+            if( object.isNone() ) {
+                int metaid = QMetaType::type(typeName);
+                #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                    krossdebug( QString("PythonMetaTypeFactory::create Py::Object isNone. Create empty type '%1'").arg(metaid) );
+                #endif
+                void* ptr = QMetaType::construct(metaid, 0);
+                return new MetaTypeVoidStar( metaid, ptr, false /*owner*/ );
             }
 
             //QVariant v = PythonType<QVariant>::toVariant(object);

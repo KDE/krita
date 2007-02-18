@@ -443,8 +443,7 @@ namespace Kross {
     class RubyMetaTypeFactory
     {
         public:
-            //static MetaType* create(const char* typeName, VALUE valueect);
-            static MetaType* create(int typeId, VALUE valueect);
+            static MetaType* create(int typeId, int metaTypeId, VALUE valueect = Qnil);
     };
 
     /// \internal

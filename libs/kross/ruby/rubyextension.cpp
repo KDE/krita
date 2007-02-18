@@ -2,7 +2,7 @@
  * rubyinterpreter.cpp
  * This file is part of the KDE project
  * copyright (C)2005,2007 by Cyrille Berger (cberger@cberger.net)
- * copyright (C)2006 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2006,2007 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -140,7 +140,7 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
 VALUE RubyExtension::clone(VALUE self)
 {
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
-    krossdebug("Cloning...");
+        krossdebug("Cloning...");
     #endif
     RubyExtension* extension;
     Data_Get_Struct(self, RubyExtension, extension);
@@ -218,26 +218,51 @@ VALUE RubyExtension::callMetaMethod(const QByteArray& funcname, int argc, VALUE 
     Q_ASSERT(typelistcount <= 10);
     //QVarLengthArray<MetaType*> variantargs( typelistcount + 1 );
     //QVarLengthArray<void*> voidstarargs( typelistcount + 1 );
-    QVarLengthArray<int> varianttypes( typelistcount + 1 );
+    QVarLengthArray<int> types( typelistcount + 1 );
+    QVarLengthArray<int> metatypes( typelistcount + 1 );
 
     // set the return type
-    int returnTypeId = QVariant::Invalid;
     if(hasreturnvalue) {
-        returnTypeId = QVariant::nameToType( metamethod.typeName() );
-        if( returnTypeId == QVariant::Invalid || returnTypeId == QVariant::UserType )
-            returnTypeId = QMetaType::type( metamethod.typeName() );
-        #ifdef KROSS_RUBY_EXTENSION_DEBUG
-            krossdebug( QString("RubyExtension::callMetaMethod typeName=%1 typeId=%2").arg(metamethod.typeName()).arg(returnTypeId) );
-        #endif
+        types[0] = QVariant::nameToType( metamethod.typeName() );
+        if( types[0] == QVariant::Invalid || types[0] == QVariant::UserType ) {
+            metatypes[0] = QMetaType::type( metamethod.typeName() );
+            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+                krossdebug( QString("RubyExtension::callMetaMethod return typeName=%1 typeId=%2").arg(metamethod.typeName()).arg(metatypes[0]) );
+            #endif
+        }
+        else {
+            metatypes[0] = QMetaType::Void; //FIXME: diable before release
+            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+                krossdebug( QString("RubyExtension::callMetaMethod return typeName=%1 typeId=%2 (with metatype=QMetaType::Void)").arg(metamethod.typeName()).arg(metatypes[0]) );
+            #endif
+        }
     }
+    else {
+        types[0] = QVariant::Invalid; //FIXME: diable before release
+        metatypes[0] = QMetaType::Void;
+    }
+
     // set the arguments types
-    int idx = 1;
-    for(; idx <= typelistcount; ++idx) {
-        varianttypes[idx] = QVariant::nameToType(typelist[idx - 1].constData());
+    for(int idx = 1; idx <= typelistcount; ++idx) {
+        const char* typeName = typelist[idx - 1].constData();
+        types[idx] = QVariant::nameToType(typeName);
+        if( types[idx] == QVariant::Invalid || types[idx] == QVariant::UserType ) {
+            metatypes[idx] = QMetaType::type(typeName);
+            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+                krossdebug( QString("RubyExtension::callMetaMethod argument typeName=%1 typeId=%2").arg(metamethod.typeName()).arg(metatypes[idx]) );
+            #endif
+        }
+        else {
+            metatypes[idx] = QMetaType::Void; //FIXME: diable before release
+            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+                krossdebug( QString("RubyExtension::callMetaMethod argument typeName=%1 typeId=%2 set metatype=QMetaType::Void").arg(metamethod.typeName()).arg(metatypes[idx]) );
+            #endif
+        }
+
     }
 
     // Create a cache of the function call
-    RubyCallCache* callobj = new RubyCallCache(object, methodindex, hasreturnvalue, returnTypeId, varianttypes);
+    RubyCallCache* callobj = new RubyCallCache(object, methodindex, hasreturnvalue, types, metatypes);
     QByteArray varcallcache = QByteArray("@callcache") + funcname;
     rb_iv_set(self, varcallcache, callobj->toValue());
     rb_define_variable("$krossinternallastclass", &self);
@@ -350,7 +375,7 @@ VALUE RubyExtension::toVALUE(RubyExtension* extension)
     if( RubyExtensionPrivate::s_krossObject == 0 ) {
         RubyExtensionPrivate::s_krossObject = rb_define_class("KrossObject", rb_cObject);
         rb_define_method(RubyExtensionPrivate::s_krossObject, "method_missing",  (VALUE (*)(...))RubyExtension::method_missing, -1);
-        rb_define_method(RubyExtensionPrivate::s_krossObject, "clone",  (VALUE (*)(...))RubyExtension::clone, 0);
+        rb_define_method(RubyExtensionPrivate::s_krossObject, "clone", (VALUE (*)(...))RubyExtension::clone, 0);
     }
 
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, extension);

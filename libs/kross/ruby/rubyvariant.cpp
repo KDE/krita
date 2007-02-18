@@ -228,7 +228,7 @@ MetaType* RubyMetaTypeFactory::create(const char* typeName, VALUE value)
 }
 */
 
-MetaType* RubyMetaTypeFactory::create(int typeId, VALUE value)
+MetaType* RubyMetaTypeFactory::create(int typeId, int metaTypeId, VALUE value)
 {
     #ifdef KROSS_RUBY_VARIANT_DEBUG
         krossdebug( QString("RubyMetaTypeFactory::create typeId=%1 typeName=%2").arg(QMetaType::typeName(typeId)).arg(typeId) );
@@ -288,11 +288,19 @@ MetaType* RubyMetaTypeFactory::create(int typeId, VALUE value)
 
                 QObject* object = extension->object();
                 if(! object) {
-                    krosswarning("RubyType<QVariant>::toVariant QObject is NULL.");
+                    krosswarning("RubyMetaTypeFactory::create QObject is NULL.");
                     return 0;
                 }
 
-                return new MetaTypeVoidStar( typeId, object, false );
+                return new MetaTypeVoidStar( typeId, object, false /*owner*/ );
+            }
+
+            if( TYPE(value) == T_NIL ) {
+                #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                    krossdebug( QString("RubyMetaTypeFactory::create VALUE is T_NIL. Create empty type '%1'").arg(metaTypeId) );
+                #endif
+                void* ptr = QMetaType::construct(metaTypeId, 0);
+                return new MetaTypeVoidStar( metaTypeId, ptr, false /*owner*/ );
             }
 
             //QVariant v = RubyType<QVariant>::toVariant(object);

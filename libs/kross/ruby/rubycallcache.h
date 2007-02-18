@@ -32,7 +32,7 @@ namespace Kross {
     class RubyCallCache
     {
         public:
-            RubyCallCache(QObject* object, int methodindex, bool hasreturnvalue, int returnTypeId, QVarLengthArray<int> variantargs);
+            RubyCallCache(QObject* object, int methodindex, bool hasreturnvalue, QVarLengthArray<int> ntypes, QVarLengthArray<int> nmetatypes);
             ~RubyCallCache();
             VALUE execfunction( int argc, VALUE *argv );
             VALUE toValue();

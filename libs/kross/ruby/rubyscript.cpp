@@ -171,7 +171,7 @@ QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
         //krossdebug(QString("RubyScript::callFunction() ===> %1").arg(STR2CSTR(rb_inspect(self))));
 
         const int rnargs = args.size();
-        VALUE rargs[ rnargs ];
+        VALUE *rargs = new VALUE[rnargs];
         for(int i = 0; i < rnargs; ++i) {
             rargs[i] = RubyType<QVariant>::toVALUE( args[i] );
         }
@@ -179,6 +179,7 @@ QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
         //VALUE r = rb_eval_string("myFunc()");
         VALUE v = rb_funcall2(self, rb_intern(name.toLatin1()), rnargs, rargs);
         result = RubyType<QVariant>::toVariant(v);
+        delete[] rargs;
     }
 
     ruby_in_eval--;

@@ -28,6 +28,7 @@
 
 namespace Kross {
 
+    class RubyModule;
     class RubyInterpreterPrivate;
 
     /**
@@ -54,7 +55,12 @@ namespace Kross {
             /**
             * Factory method to create and return a new \a RubyScript instance.
             */
-            virtual Kross::Script* createScript(Kross::Action* Action);
+            virtual Kross::Script* createScript(Kross::Action* action);
+
+            /**
+            * @return the hash of \a RubyModule instances we know about.
+            */
+            QHash<QString, RubyModule* > modules() const;
 
         private:
             /// Initialize the ruby interpreter.

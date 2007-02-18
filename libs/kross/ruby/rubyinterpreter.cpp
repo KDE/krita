@@ -74,9 +74,14 @@ RubyInterpreter::~RubyInterpreter()
     finalizeRuby();
 }
 
-Kross::Script* RubyInterpreter::createScript(Kross::Action* Action)
+QHash<QString, RubyModule* > RubyInterpreter::modules() const
 {
-    return new RubyScript(this, Action);
+    return d->modules;
+}
+
+Kross::Script* RubyInterpreter::createScript(Kross::Action* action)
+{
+    return new RubyScript(this, action);
 }
 
 void RubyInterpreter::initRuby()

@@ -137,6 +137,21 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
     return RubyExtension::call_method_missing(extension, argc, argv, self);
 }
 
+#if 0
+VALUE RubyExtension::callConnect(int argc, VALUE *argv, VALUE self)
+{
+    //TODO
+    //connect(d->m_object, ...
+    return Qtrue;
+}
+
+VALUE RubyExtension::callDisconnect(int argc, VALUE *argv, VALUE self);
+{
+    //TODO
+    return Qfalse;
+}
+#endif
+
 VALUE RubyExtension::callMetaMethod(const QByteArray& funcname, int argc, VALUE *argv, VALUE self)
 {
     const int argumentcount = argc - 1;
@@ -151,6 +166,8 @@ VALUE RubyExtension::callMetaMethod(const QByteArray& funcname, int argc, VALUE 
 
     int methodindex = d->m_methods[funcname];
     if(methodindex < 0) {
+        //if(funcname == "connect") return callConnect(argc, argv, self);
+        //if(funcname == "disconnect") return callDisconnect(argc, argv, self);
         krosswarning(QString("No such function '%1'").arg(funcname.constData()));
         return Qfalse;
     }

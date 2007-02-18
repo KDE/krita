@@ -43,12 +43,7 @@ namespace Kross {
         friend class RubyScript;
         RubyScriptPrivate() : m_compile(0) { }
         RNode* m_compile;
-        /// A list of functionnames.
         QStringList m_functions;
-        #if 0
-        /// A list of classnames.
-        QStringList m_classes;
-        #endif
     };
 
 }
@@ -75,16 +70,17 @@ void RubyScript::compile()
         krossdebug("RubyScript::compile()");
     #endif
 
-    int critical;
-
     ruby_nerrs = 0;
     ruby_errinfo = Qnil;
     VALUE src = RubyType<QString>::toVALUE( action()->code() );
     StringValue(src);
-    critical = rb_thread_critical;
+
+    const int critical = rb_thread_critical;
     rb_thread_critical = Qtrue;
     ruby_in_eval++;
+
     d->m_compile = rb_compile_string((char*) action()->objectName().toLatin1().data(), src, 0);
+
     ruby_in_eval--;
     rb_thread_critical = critical;
 
@@ -111,15 +107,12 @@ void RubyScript::execute()
         compile();
     }
 
-    #ifdef KROSS_RUBY_SCRIPT_DEBUG
-        krossdebug("Start execution");
-    #endif
-
     selectScript();
-    int result = ruby_exec();
+
+    const int result = ruby_exec();
     if (result != 0) {
         #ifdef KROSS_RUBY_SCRIPT_DEBUG
-            krossdebug("Execution has failed");
+            krossdebug("RubyScript::execute failed");
         #endif
 
         /*
@@ -132,10 +125,6 @@ void RubyScript::execute()
     }
 
     unselectScript();
-
-    #ifdef KROSS_RUBY_SCRIPT_DEBUG
-        krossdebug("Execution is finished");
-    #endif
 }
 
 QStringList RubyScript::functionNames()
@@ -152,45 +141,53 @@ QStringList RubyScript::functionNames()
 
 QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
 {
-    Q_UNUSED(name)
-    Q_UNUSED(args)
-
     #ifdef KROSS_RUBY_SCRIPT_DEBUG
-        krossdebug("RubyScript::callFunction()");
+        krossdebug(QString("RubyScript::callFunction() name=%1").arg(name));
     #endif
 
+    const int critical = rb_thread_critical;
+    rb_thread_critical = Qtrue;
+    ruby_in_eval++;
+    //ruby_current_node
+
+    //FIXME cache it!
     if(d->m_compile == 0) {
         compile();
     }
+
     selectScript();
+    Q_ASSERT( d->m_compile );
+
+    QVariant result;
+    int r = ruby_exec();
+    if (r != 0) {
+        #ifdef KROSS_RUBY_SCRIPT_DEBUG
+            krossdebug("RubyScript::callFunction failed");
+        #endif
+        setError( QString("Failed to call function \"%1\": %2").arg(name).arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )) ); // TODO: get the error
+    }
+    else {
+        VALUE self = rb_eval_string("self");
+        //krossdebug(QString("RubyScript::callFunction() ===> %1").arg(STR2CSTR(rb_inspect(self))));
+
+        const int rnargs = args.size();
+        VALUE rargs[ rnargs ];
+        for(int i = 0; i < rnargs; ++i) {
+            rargs[i] = RubyType<QVariant>::toVALUE( args[i] );
+        }
+
+        //VALUE r = rb_eval_string("myFunc()");
+        VALUE v = rb_funcall2(self, rb_intern(name.toLatin1()), rnargs, rargs);
+        result = RubyType<QVariant>::toVariant(v);
+    }
+
+    ruby_in_eval--;
+    rb_thread_critical = critical;
+
     unselectScript();
 
-    return QVariant();
+    #ifdef KROSS_RUBY_SCRIPT_DEBUG
+        krossdebug(QString("RubyScript::callFunction() Result typeName=%1 toString=%2").arg(result.typeName()).arg(result.toString()));
+    #endif
+    return result;
 }
-
-#if 0
-const QStringList& RubyScript::getClassNames()
-{
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-    krossdebug("RubyScript::getClassNames()");
-#endif
-    if(d->m_compile == 0) {
-        compile();
-    }
-    return d->m_classes;
-}
-
-Kross::Object::Ptr RubyScript::classInstance(const QString& name)
-{
-    Q_UNUSED(name)
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-    krossdebug("RubyScript::classInstance()");
-#endif
-    if(d->m_compile == 0) {
-        compile();
-    }
-    selectScript();
-    unselectScript();
-    return Kross::Object::Ptr(0);
-}
-#endif

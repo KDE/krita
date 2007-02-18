@@ -50,7 +50,7 @@ RubyModule::RubyModule(QObject* object, const QString & modname)
 
     d->modulename = modname.left(1).toUpper() + modname.right(modname.length() - 1 );
     #ifdef KROSS_RUBY_MODULE_DEBUG
-        krossdebug(QString("Ctor Module: %1").arg(d->modulename));
+        krossdebug(QString("RubyModule Ctor: %1").arg(d->modulename));
     #endif
 
     VALUE rmodule = rb_define_module(d->modulename.toAscii());
@@ -62,7 +62,7 @@ RubyModule::RubyModule(QObject* object, const QString & modname)
 RubyModule::~RubyModule()
 {
     #ifdef KROSS_RUBY_MODULE_DEBUG
-        krossdebug(QString("Dtor Module: %1").arg(d->modulename));
+        krossdebug(QString("RubyModule Dtor: %1").arg(d->modulename));
     #endif
 
     // Don't delete the RubyExtension object since it will be deleted by Ruby if not needed any longer.

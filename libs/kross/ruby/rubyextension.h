@@ -63,6 +63,11 @@ namespace Kross {
 
         private:
 
+            /// Connect was called.
+            //VALUE callConnect(int argc, VALUE *argv, VALUE self);
+            /// Disconnect was called.
+            //VALUE callDisconnect(int argc, VALUE *argv, VALUE self);
+
             /**
             * Handle the function call.
             */

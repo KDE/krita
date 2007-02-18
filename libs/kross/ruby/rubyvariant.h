@@ -453,7 +453,12 @@ namespace Kross {
     {
         public:
             RubyMetaTypeVariant(VALUE value)
-                : MetaTypeVariant<VARIANTTYPE>( RubyType<VARIANTTYPE>::toVariant(value) ) {}
+                : MetaTypeVariant<VARIANTTYPE>(
+                    (TYPE(value) == T_NIL)
+                        ? QVariant().value<VARIANTTYPE>()
+                        : RubyType<VARIANTTYPE>::toVariant(value)
+                ) {}
+
             virtual ~RubyMetaTypeVariant() {}
     };
 

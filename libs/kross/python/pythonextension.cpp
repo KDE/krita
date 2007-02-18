@@ -515,17 +515,12 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
             // set the return value
             if(hasreturnvalue) {
-                int typeId = QVariant::nameToType( metamethod.typeName() );
-                if( typeId == QVariant::Invalid || typeId == QVariant::UserType )
-                    typeId = QMetaType::type( metamethod.typeName() );
-                #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
-                    krossdebug( QString("PythonExtension::proxyhandler typeName=%1 variant.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
-                #endif
-                void* ptr = QMetaType::construct(typeId, 0);
-                MetaType* returntype = new MetaTypeVoidStar( typeId, ptr, false /*true*/ );
+                MetaType* returntype = PythonMetaTypeFactory::create( metamethod.typeName() );
                 variantargs[0] = returntype;
                 voidstarargs[0] = returntype->toVoidStar();
-
+                #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+                    krossdebug( QString("PythonExtension::proxyhandler typeName=%1").arg(metamethod.typeName()) );
+                #endif
             }
             else {
                 variantargs[0] = 0;

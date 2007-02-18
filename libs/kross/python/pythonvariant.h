@@ -154,7 +154,7 @@ namespace Kross {
         inline static Py::Object toPyObject(bool b) {
             return Py::Int(b);
         }
-        inline static double toVariant(const Py::Object& obj) {
+        inline static bool toVariant(const Py::Object& obj) {
             return bool(Py::Int(obj));
         }
     };
@@ -588,7 +588,7 @@ namespace Kross {
     class PythonMetaTypeFactory
     {
         public:
-            static MetaType* create(const char* typeName, const Py::Object& object);
+            static MetaType* create(const char* typeName, const Py::Object& object = Py::Object());
     };
 
     /// \internal
@@ -597,7 +597,11 @@ namespace Kross {
     {
         public:
             PythonMetaTypeVariant(const Py::Object& obj)
-                : MetaTypeVariant<VARIANTTYPE>( PythonType<VARIANTTYPE>::toVariant(obj) ) {}
+                : MetaTypeVariant<VARIANTTYPE>(
+                    obj.isNone()
+                        ? QVariant().value<VARIANTTYPE>()
+                        : PythonType<VARIANTTYPE>::toVariant(obj)
+                ) {}
             virtual ~PythonMetaTypeVariant() {}
     };
 

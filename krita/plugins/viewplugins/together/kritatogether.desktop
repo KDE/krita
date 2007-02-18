@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Together
+Comment=Together
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritatogether
+X-Krita-Version=3

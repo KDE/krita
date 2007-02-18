@@ -125,7 +125,8 @@ class Painter : public QObject
          *  - vertical offset
          */
         void setDuplicateOffset(double x1, double y1);
-
+    public slots: // Composite operations
+        void copyFrom(qint32 dx, qint32 dy, const QString& compositeOp, const QObject* source, qint32 sx, qint32 sy, qint32 sw, qint32 sh);
     public slots: // Painting operations
 
         /**

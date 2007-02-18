@@ -142,6 +142,16 @@ void Painter::setOpacity(uint opacity)
     m_painter->setOpacity( (quint8)opacity );
 }
 
+void Painter::copyFrom(qint32 dx, qint32 dy, const QString& compositeOp, const QObject* source, qint32 sx, qint32 sy, qint32 sw, qint32 sh)
+{
+    const PaintLayer* sourcePL = dynamic_cast< const PaintLayer* >(source);
+    if(sourcePL)
+    {
+        m_painter->bitBlt(dx, dy, compositeOp, sourcePL->paintLayer()->paintDevice(), sx, sy, sw, sh);
+    }
+}
+
+
 void Painter::setStrokeStyle(uint style)
 {
     KisPainter::StrokeStyle strokestyle;

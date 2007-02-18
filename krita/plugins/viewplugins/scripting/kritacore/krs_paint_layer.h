@@ -170,7 +170,7 @@ class PaintLayer : public QObject
         /**
          * clone this paint layer, making a deep copy.
          */
-        PaintLayer* clone();
+        QObject* clone();
 #if 0
 //Disabled yet cause it's not wanted to expose the Krita internals.
 
@@ -205,6 +205,7 @@ class PaintLayer : public QObject
 
     public:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
+        inline const KisPaintLayerSP paintLayer() const { return m_layer; }
         inline KisDoc2* doc() { return m_doc; }
     private:
         KisPaintLayerSP m_layer;

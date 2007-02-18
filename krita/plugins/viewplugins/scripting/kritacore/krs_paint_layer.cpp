@@ -180,7 +180,7 @@ bool PaintLayer::fastWaveletUntransformation(QObject* wavelet)
     return true;
 }
 
-PaintLayer* PaintLayer::clone()
+QObject* PaintLayer::clone()
 {
     KisPaintLayerSP pl = new KisPaintLayer(*paintLayer());
     return new PaintLayer(0, pl);

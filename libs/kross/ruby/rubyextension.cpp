@@ -1,7 +1,7 @@
 /***************************************************************************
  * rubyinterpreter.cpp
  * This file is part of the KDE project
- * copyright (C)2005 by Cyrille Berger (cberger@cberger.net)
+ * copyright (C)2005,2007 by Cyrille Berger (cberger@cberger.net)
  * copyright (C)2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
@@ -135,6 +135,20 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, RubyExtension, extension);
     Q_ASSERT(extension);
     return RubyExtension::call_method_missing(extension, argc, argv, self);
+}
+
+VALUE RubyExtension::clone(VALUE self)
+{
+    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+    krossdebug("Cloning...");
+    #endif
+    RubyExtension* extension;
+    Data_Get_Struct(self, RubyExtension, extension);
+    Q_ASSERT(extension);
+    if( extension->d->m_methods.contains("clone") ) {
+        return extension->callMetaMethod("clone", 1, 0, self);
+    }
+    return Qnil; // TODO: is it usefull to call the ruby clone function if no clone function is available ?
 }
 
 #if 0
@@ -336,6 +350,7 @@ VALUE RubyExtension::toVALUE(RubyExtension* extension)
     if( RubyExtensionPrivate::s_krossObject == 0 ) {
         RubyExtensionPrivate::s_krossObject = rb_define_class("KrossObject", rb_cObject);
         rb_define_method(RubyExtensionPrivate::s_krossObject, "method_missing",  (VALUE (*)(...))RubyExtension::method_missing, -1);
+        rb_define_method(RubyExtensionPrivate::s_krossObject, "clone",  (VALUE (*)(...))RubyExtension::clone, 0);
     }
 
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, extension);

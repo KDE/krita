@@ -1,7 +1,7 @@
 /***************************************************************************
  * rubyinterpreter.cpp
  * This file is part of the KDE project
- * copyright (C)2005 by Cyrille Berger (cberger@cberger.net)
+ * copyright (C)2005,2007 by Cyrille Berger (cberger@cberger.net)
  * copyright (C)2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
@@ -89,6 +89,11 @@ namespace Kross {
             * @param argv the lists of arguments (the first argument is the Ruby ID of the function)
             */
             static VALUE call_method_missing(RubyExtension* extension, int argc, VALUE *argv, VALUE self);
+
+            /**
+             * This function override the clone function behaviour
+             */
+            static VALUE clone(VALUE self);
 
 #if 0
             /**

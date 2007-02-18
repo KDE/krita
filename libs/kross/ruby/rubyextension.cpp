@@ -146,7 +146,7 @@ VALUE RubyExtension::clone(VALUE self)
     Data_Get_Struct(self, RubyExtension, extension);
     Q_ASSERT(extension);
     if( extension->d->m_methods.contains("clone") ) {
-        return extension->callMetaMethod("clone", 1, 0, self);
+        return extension->callMetaMethod("clone", 1, &self, self);
     }
     return Qnil; // TODO: is it usefull to call the ruby clone function if no clone function is available ?
 }

@@ -122,11 +122,18 @@ namespace Kross {
             return INT2FIX(i);
         }
         inline static int toVariant(VALUE value) {
-            if(TYPE(value) != T_FIXNUM) {
-                rb_raise(rb_eTypeError, "Integer must be a fixed number");
-                return 0;
+            switch( TYPE(value) ) {
+                case T_FIXNUM:
+                    return FIX2INT(value);
+                case T_BIGNUM:
+                    return rb_big2int(value);
+                case T_FLOAT:
+                    return (int)(RFLOAT(value)->value);
+                default:
+                    break;
             }
-            return FIX2INT(value);
+            rb_raise(rb_eTypeError, "Integer must be a fixed number");
+            return 0;
         }
     };
 
@@ -138,11 +145,18 @@ namespace Kross {
             return UINT2NUM(i);
         }
         inline static uint toVariant(VALUE value) {
-            if(TYPE(value) != T_FIXNUM) {
-                rb_raise(rb_eTypeError, "Unsigned integer must be a fixed number");
-                return 0;
+            switch( TYPE(value) ) {
+                case T_FIXNUM:
+                    return FIX2UINT(value);
+                case T_BIGNUM:
+                    return rb_big2uint(value);
+                case T_FLOAT:
+                    return (uint)(RFLOAT(value)->value);
+                default:
+                    break;
             }
-            return FIX2UINT(value);
+            rb_raise(rb_eTypeError, "Unsigned integer must be a fixed number");
+            return 0;
         }
     };
 

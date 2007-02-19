@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOEMPTYBORDER_H
-#define KOEMPTYBORDER_H
+#ifndef KOLINEBORDER_H
+#define KOLINEBORDER_H
 
 #include "KoInsets.h"
 #include "KoShapeBorderModel.h"

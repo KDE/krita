@@ -81,6 +81,7 @@ void Autocorrect::fixTwoUppercaseChars() {
 bool Autocorrect::autoFormatURLs() {
     if(! m_autoFormatURLs) return false;
     // TODO
+    return true;
 }
 
 bool Autocorrect::singleSpaces() {
@@ -100,11 +101,13 @@ bool Autocorrect::singleSpaces() {
 bool Autocorrect::autoBoldUnderline() {
     if(! m_autoBoldUnderline) return false;
     // TODO
+    return true;
 }
 
 bool Autocorrect::autoFractions() {
     if(! m_autoFractions) return false;
     // TODO
+    return true;
 }
 
 void Autocorrect::autoNumbering() {

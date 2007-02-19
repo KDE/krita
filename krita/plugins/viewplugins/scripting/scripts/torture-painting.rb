@@ -14,19 +14,37 @@ class TorturePainting
         @height = @image.height()
         @width = @image.width()
 
-        @progress = Krita.progress()
-        @progress.setProgressTotalSteps(30 * 30)
+        @shell = Krita.shell()
+        begin
+            @progressTotalSteps = 30 * 30
+            @progressDone = 0
+            @progressPercent = 0
+            @shell.slotSetStatusBarText("torture-painting.rb")
+            @shell.slotProgress(0)
 
-        testColorspace("RGBA")
-        testColorspace("RGBA16")
-        testColorspace("RGBAF16HALF")
-        testColorspace("RGBAF32")
-        testColorspace("CMYK")
-        testColorspace("CMYKA16")
-        testColorspace("CMYK")
-        testColorspace("CMYKA16")
-        testColorspace("LABA")
-        testColorspace("LMSAF32")
+            testColorspace("RGBA")
+            testColorspace("RGBA16")
+            testColorspace("RGBAF16HALF")
+            testColorspace("RGBAF32")
+            testColorspace("CMYK")
+            testColorspace("CMYKA16")
+            testColorspace("CMYK")
+            testColorspace("CMYKA16")
+            testColorspace("LABA")
+            testColorspace("LMSAF32")
+        ensure
+            @shell.slotSetStatusBarText("")
+            @shell.slotProgress(-1)
+        end
+    end
+
+    def incProgress()
+        @progressDone += 1
+        percent = @progressDone * 100 / @progressTotalSteps
+        if(percent != @progressPercent)
+            @progressPercent = percent
+            @shell.slotProgress(@progressPercent)
+        end
     end
 
     def randomizeStyle(painter)
@@ -101,7 +119,7 @@ class TorturePainting
                 randomizeStyle(painter)
                 painter.paintRect(rand * @width, rand * @height, rand * @width, rand * @height, 1.1)
             end
-            @progress.incProgress()
+            incProgress()
         end
         layer.endPainting()
     end

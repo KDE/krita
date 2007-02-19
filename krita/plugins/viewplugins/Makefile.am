@@ -16,9 +16,9 @@ SUBDIRS = \
     screenshot \
     separate_channels \
     shearimage \
+    selectopaque \
     $(SCRIPTINGDIR)
 
-#selectopaque
 # variations
 # history_docker
 # performancetest

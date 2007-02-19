@@ -37,8 +37,6 @@
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 
-// TODO: Compatibility tests with other programs
-
 struct KoEncryptedStore_EncryptionData {
     // Needed for Key Derivation
     QSecureArray salt;
@@ -56,7 +54,9 @@ struct KoEncryptedStore_EncryptionData {
     qint64 filesize;
 };
 
-// TODO: Fix support from programs, so this filter will actually be called
+// TODO: Discuss naming of this filer in saving-dialogues
+// TODO: Discuss possibility of allowing programs to remember the password after opening to enable them to supply it when saving
+// TODO: Discuss autosaving and password/leakage-problem (currently: hardcoded no autosave)
 namespace {
     const char* MANIFEST_FILE = "META-INF/manifest.xml";
     const char* META_FILE = "meta.xml";
@@ -307,7 +307,7 @@ bool KoEncryptedStore::doFinalize( ) {
             // We'll use the QDom classes here, since KoXmlReader and KoXmlWriter have no way of copying a complete xml-file
             // other than parsing it completely and rebuilding it.
             // Errorhandling here is done to prevent data from being lost whatever happens
-            // TODO: See if this can be converted to KoXml
+            // TODO: Convert this to KoXML when KoXML is extended enough
             // Note: right now this is impossible due to lack of possibilities to copy an element as-is
             QDomDocument document;
             if( m_manifestBuffer.isEmpty( ) ) {
@@ -515,7 +515,6 @@ bool KoEncryptedStore::openRead( const QString& name ) {
                 dlg.setPrompt(i18n( "Please enter the password to open this file." ) );
                 if( ! dlg.exec() )
                     return false;
-                // TODO: Check if UTF8 works (make up some strange characters in a password and see if it works in both KOffice and OpenOffice)
                 password = QSecureArray( dlg.password().toUtf8() );
                 if( keepPass )
                     keepPass = dlg.keepPassword();
@@ -631,6 +630,13 @@ bool KoEncryptedStore::setPassword( const QString& password ) {
     return true;
 }
 
+QString KoEncryptedStore::password( ) {
+    if( m_password.isEmpty( ) ) {
+        return QString( );
+    }
+    return QString( m_password.toByteArray( ) );
+}
+
 bool KoEncryptedStore::openWrite( const QString& name ) {
     if( bad( ) )
         return false;
@@ -670,7 +676,6 @@ bool KoEncryptedStore::closeWrite() {
             m_bGood = false;
             return false;
         }
-        // TODO: See if the UTF8 works (see earlier TODO about utf8)
         m_password = QSecureArray( dlg.password().toUtf8() );
         passWasAsked = true;
     }

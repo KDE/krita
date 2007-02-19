@@ -288,6 +288,15 @@ public:
   virtual bool setPassword( const QString& password );
 
   /**
+   * Retrieves the password used to encrypt or decrypt the store. Note that
+   * QString() will returned if no password has been given or the store is
+   * not encrypted.
+   *
+   * @return  The password this store is encrypted with.
+   */
+  virtual QString password( );
+
+  /**
    * Returns whether a store opened for reading is encrypted or a store opened
    * for saving will be encrypted.
    *

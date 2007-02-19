@@ -708,3 +708,8 @@ bool KoStore::setPassword( const QString& /*password*/ )
 {
     return false;
 }
+
+QString KoStore::password( )
+{
+    return QString();
+}

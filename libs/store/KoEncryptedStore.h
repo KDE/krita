@@ -81,6 +81,15 @@ protected:
      */
     void findPasswordInKWallet( );
 
+    /*
+     * Retrieves the password used to encrypt or decrypt the store. Note that
+     * QString() will returned if no password has been given or the store is
+     * not encrypted.
+     *
+     * @return  The password this store is encrypted with.
+     */
+    virtual QString password( );
+
     /**
      * Stores the password for this document in KWallet.
      * Uses m_filename as base for storing the password and stores the value in m_password.
@@ -97,11 +106,11 @@ protected:
     QCA::Initializer m_qcaInit;
     QHash<QString, KoEncryptedStore_EncryptionData> m_encryptionData;
     QSecureArray m_password;
-    bool m_bPasswordUsed;
     QString m_filename;
     QByteArray m_manifestBuffer;
     KZip *m_pZip;
     KTemporaryFile *m_tempFile;
+    bool m_bPasswordUsed;
 
     /** In "Read" mode this pointer is pointing to the
     current directory in the archive to speed up the verification process */

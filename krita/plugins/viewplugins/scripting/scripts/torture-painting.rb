@@ -11,7 +11,6 @@ class TorturePainting
 
     def initialize()
         @image = Krita.image()
-        @width = @image.getWidth()
         @height = @image.height()
         @width = @image.width()
 

@@ -65,8 +65,6 @@ kde4_add_ui_files(kotext_LIB_SRCS
     KoCompletionBase.ui
 )
 
-# kde4_add_dcop_skels(kotext_LIB_SRCS KoTextViewIface.h )
-
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
 

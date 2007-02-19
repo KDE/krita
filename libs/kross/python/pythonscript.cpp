@@ -285,6 +285,10 @@ QVariant PythonScript::callFunction(const QString& name, const QVariantList& arg
         return QVariant();
     }
 
+    // Acquire interpreter lock
+    //PyGILState_STATE gilstate = PyGILState_Ensure();
+
+    QVariant result;
     try {
         Py::Dict moduledict = d->m_module->getDict();
 
@@ -292,6 +296,7 @@ QVariant PythonScript::callFunction(const QString& name, const QVariantList& arg
         PyObject* func = PyDict_GetItemString(moduledict.ptr(), name.toLatin1().data());
         if(! func) {
             setError( QString("No such function '%1'.").arg(name) );
+            //PyGILState_Release(gilstate);
             finalize();
             return QVariant();
         }
@@ -300,23 +305,27 @@ QVariant PythonScript::callFunction(const QString& name, const QVariantList& arg
         Py::Callable funcobject(func, true);
         if(! funcobject.isCallable()) {
             setError( QString("Function '%1' is not callable.").arg(name) );
+            //PyGILState_Release(gilstate);
             finalize();
             return QVariant();
         }
 
         // Finally call the function.
-        Py::Object result = funcobject.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
-        QVariant v = PythonType<QVariant>::toVariant(result);
-        krossdebug( QString("PythonScript::callFunction() result=%1 variant.toString=%2 variant.typeName=%3").arg(result.as_string().c_str()).arg(v.toString()).arg(v.typeName()) );
+        Py::Object pyresult = funcobject.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
+        result = PythonType<QVariant>::toVariant(pyresult);
+        krossdebug( QString("PythonScript::callFunction() result=%1 variant.toString=%2 variant.typeName=%3").arg(pyresult.as_string().c_str()).arg(result.toString()).arg(result.typeName()) );
         finalize();
-        return v;
     }
     catch(Py::Exception& e) {
         setError( Py::value(e).as_string().c_str() );
         e.clear(); // exception is handled. clear it now.
+        finalize();
     }
-    finalize();
-    return QVariant();
+
+    // Free interpreter lock
+    //PyGILState_Release(gilstate);
+
+    return result;
 }
 
 #if 0

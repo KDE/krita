@@ -458,6 +458,17 @@ Py::Object PythonExtension::doDisconnect(const Py::Tuple&)
 
 PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject *args)
 {
+    /*
+    class GilState {
+        public:
+            GilState() { m_gilstate = PyGILState_Ensure(); } // Acquire interpreter lock
+            ~GilState() { PyGILState_Release( m_gilstate ); } // Free interpreter lock
+        private:
+            PyGILState_STATE m_gilstate;
+    };
+    GilState gil;
+    */
+
     try {
         Py::Tuple selftuple(_self_and_name_tuple);
         PythonExtension *self = static_cast<PythonExtension*>( selftuple[0].ptr() );

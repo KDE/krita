@@ -148,7 +148,7 @@ VALUE RubyExtension::clone(VALUE self)
     if( extension->d->m_methods.contains("clone") ) {
         return extension->callMetaMethod("clone", 1, &self, self);
     }
-    return Qnil; // TODO: is it usefull to call the ruby clone function if no clone function is available ?
+    return Qnil; // TODO: is it useful to call the ruby clone function if no clone function is available ?
 }
 
 #if 0
@@ -231,14 +231,14 @@ VALUE RubyExtension::callMetaMethod(const QByteArray& funcname, int argc, VALUE 
             #endif
         }
         else {
-            metatypes[0] = QMetaType::Void; //FIXME: diable before release
+            metatypes[0] = QMetaType::Void; //FIXME: disable before release
             #ifdef KROSS_RUBY_EXTENSION_DEBUG
                 krossdebug( QString("RubyExtension::callMetaMethod return typeName=%1 typeId=%2 (with metatype=QMetaType::Void)").arg(metamethod.typeName()).arg(metatypes[0]) );
             #endif
         }
     }
     else {
-        types[0] = QVariant::Invalid; //FIXME: diable before release
+        types[0] = QVariant::Invalid; //FIXME: disable before release
         metatypes[0] = QMetaType::Void;
     }
 
@@ -253,7 +253,7 @@ VALUE RubyExtension::callMetaMethod(const QByteArray& funcname, int argc, VALUE 
             #endif
         }
         else {
-            metatypes[idx] = QMetaType::Void; //FIXME: diable before release
+            metatypes[idx] = QMetaType::Void; //FIXME: disable before release
             #ifdef KROSS_RUBY_EXTENSION_DEBUG
                 krossdebug( QString("RubyExtension::callMetaMethod argument typeName=%1 typeId=%2 set metatype=QMetaType::Void").arg(metamethod.typeName()).arg(metatypes[idx]) );
             #endif

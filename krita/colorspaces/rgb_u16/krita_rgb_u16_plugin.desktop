@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model (16-bit integer)
+Name[bg]=Цветови модел RGB (16 бита)
 Name[ca]=Model de color RGB (enter de 16 bits)
 Name[cy]=Model Lliw RGB (cyfanrif 16-did)
 Name[da]=RGB-farvemodel (16-bit heltal)
@@ -35,6 +36,7 @@ Name[uk]=Модель кольору RGB (16-бітне ціле число)
 Name[uz]=RGB ранг усули (16-бит бутун)
 Name[zh_TW]=RGB 色彩模型 (16-bit 整數)
 Comment=Color model for 16-bit integer per channel RGB images
+Comment[bg]=Цветови модел за 16 битови изображения RGB
 Comment[ca]=Model de color enter de 16 bits per canal d'imatges RGB
 Comment[cy]=Model lliw ar gyfer delweddau RGB â chyfanrif 16-did/sianel
 Comment[da]=Farvemodel for 16-bit heltal pr kanal RGB-billeder

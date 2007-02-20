@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=CMYK Color Model (16-bit integer)
+Name[bg]=Цветови модел CMYK (16 бита)
 Name[ca]=Model de color CMYK (enters de 16 bits)
 Name[cy]=Model Lliw CMYK (cyfanrif 16-did)
 Name[da]=CMYK-farvemodel (16-bit heltal)
@@ -36,6 +37,7 @@ Name[uz]=CMYK ранг усули (16-бит бутун)
 Name[zh_CN]=CMYK 色彩模型(16 位整数)
 Name[zh_TW]=CMYK 色彩模型 (16-bit 整數)
 Comment=Color model for 16-bit integer per channel CMYK images
+Comment[bg]=Цветови модел за 16 битови изображения CMYK
 Comment[ca]=Model de color d'enters de 16 bits per a canal d'imatges CMYK
 Comment[cy]=Model lliw ar gyfer delweddau CMYK â chyfanrif 16-did/sianel
 Comment[da]=Farvemodel for 16-bit heltal pr kanal CMYK-billeder

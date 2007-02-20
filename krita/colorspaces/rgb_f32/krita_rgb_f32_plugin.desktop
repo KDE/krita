@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model (32-bit float)
+Name[bg]=Цветови модел RGB (32 бита)
 Name[ca]=Model de color RGB (paleta de 32 bits)
 Name[cy]=Model Lliw RGB (arnawf 32-did)
 Name[da]=RGB-farvemodel (32-bit float)
@@ -35,6 +36,7 @@ Name[uk]=Модель кольорів RGB (32-бітне дробове чис�
 Name[uz]=RGB ранг усули (32-бит каср)
 Name[zh_TW]=RGB 色彩模型 (32-bit 浮點數)
 Comment=Color model for 32-bit floating point per channel RGB images
+Comment[bg]=Цветови модел за 32 битови изображения RGB
 Comment[ca]=Model de color per a punt flotant de 32 bits-canal d'imatges RGB
 Comment[da]=Farvemodel for 32-bit decimaltal pr kanal RGB-billeder
 Comment[de]=Farbmodell für 32-bit Fließkomma pro Kanal RGB-Bilder

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Filter Tool
+Name[bg]=Инструмент за филтриране
 Name[br]=Ostil ar sil
 Name[ca]=Eina de filtre
 Name[cy]=Erfyn Hidlen
@@ -43,6 +44,7 @@ Name[uz]=Филтер воситаси
 Name[zh_CN]=过滤工具
 Name[zh_TW]=濾鏡工具
 Comment=Filter tool and paint operation
+Comment[bg]=Инструмент за филтриране и рисуване
 Comment[ca]=Operació d'eina de filtre i pintura
 Comment[cy]=Erfyn hidlen a gweithrediadau paent
 Comment[da]=Filterværktøj og maleoperation

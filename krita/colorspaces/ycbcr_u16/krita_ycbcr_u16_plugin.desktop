@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=YCbCr Color Model (16-bit integer)
+Name[bg]=Цветови модел YCbCr (16 бита)
 Name[ca]=Model de color YCbCr (enters de 16 bits)
 Name[da]=YCbCr-farvemodel (16-bit heltal)
 Name[de]=YCbCr-Farbmodell (16-bit Ganzzahl)
@@ -31,6 +32,7 @@ Name[uk]=Модель кольорів YCbCr (16-бітне ціле)
 Name[uz]=YCbCr ранг усули (16-бит бутун)
 Name[zh_TW]=YCbCr 色彩模型 (16-bit 整數)
 Comment=Color model for 16-bit integer per channel YCbCr images
+Comment[bg]=Цветови модел за 16 битови YCbCr изображения
 Comment[ca]=Model de color d'enters de 16 bits per a canal d'imatges YCbCr
 Comment[da]=Farvemodel for 16-bit heltal pr kanal YCbCr-billeder
 Comment[de]=Farbmodell für 16-bit pro Kanal YCbCr-Bilder

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Enhancement Filters
+Name[bg]=Филтри за подобрения
 Name[ca]=Filtres de millora
 Name[cy]=Hidlau Tecáu
 Name[da]=Forbedringsfilter
@@ -34,6 +35,7 @@ Name[uz]=Яхшилаш филтери
 Name[zh_CN]=增强过滤器
 Name[zh_TW]=增強過濾器
 Comment=Enhance the quality of an image
+Comment[bg]=Подобряване на качеството на изображения
 Comment[ca]=Millora la qualitat de la imatge
 Comment[cy]=Tecâu ansawdd delwedd
 Comment[da]=Forbedr kvaliteten af et billede

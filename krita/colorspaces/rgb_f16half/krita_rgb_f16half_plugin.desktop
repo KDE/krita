@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model (16-bit float 'half')
+Name[bg]=Цветови модел RGB (16-bit float 'half')
 Name[ca]=Model de color RGB (paleta 'mitja' de 16 bits)
 Name[cy]=Model Lliw RGB (arnawf 16-did 'hanner')
 Name[da]=RGB-farvemodel (16-bit heltal 'halv')
@@ -35,6 +36,7 @@ Name[uk]=Модель кольору RGB (16-бітне дробове числ�
 Name[uz]=RGB ранг усули (16-бит 'ярим' каср)
 Name[zh_TW]=RGB 色彩模型 (32-bit 浮點數「半」)
 Comment=Color model for 16-bit floating point 'half' per channel RGB images
+Comment[bg]=Цветови модел за 16 битови изображения RGB за полуканал
 Comment[ca]=Model de color per a paleta 'mitja' de 16 bits-canal d'imatges RGB
 Comment[da]=Farvemodel for 16-bit decimaltal 'halvdel' pr kanal RGB-billeder
 Comment[de]=Farbmodell für 16-bit Fließkomma 'Halb' pro Kanal RGB-Bilder

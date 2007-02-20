@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Color Filters
+Name[bg]=Цветови филтри
 Name[br]=Siloù liv
 Name[ca]=Filtres de color
 Name[cy]=Hidlau lliw
@@ -39,6 +40,7 @@ Name[uk]=Фільтри кольору
 Name[uz]=Ранг филтерлари
 Name[zh_TW]=色彩過濾器
 Comment=Color filters
+Comment[bg]=Цветови филтри
 Comment[br]=Siloù liv
 Comment[ca]=Filtres de color
 Comment[cy]=Hidlau lliw

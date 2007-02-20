@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Emboss Filter
+Name[bg]=Релефен филтър
 Name[ca]=Filtre d'Emboss
 Name[cy]=Hidlen Foglynnu
 Name[da]=Relieffilter
@@ -31,6 +32,7 @@ Name[sv]=Relieffilter
 Name[uk]=Фільтр барельєфу
 Name[zh_TW]=浮雕過濾器
 Comment=Emboss filter
+Comment[bg]=Релефен филтър
 Comment[ca]=Filtre d'Emboss
 Comment[cy]=Hidlen foglynnu
 Comment[da]=Relieffilter

@@ -53,6 +53,7 @@ public:
     void draw(QPainter *, const QAbstractTextDocumentLayout::PaintContext &) {}
     KoStyleManager *styleManager() const { return m_styleManager; }
     void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
+    bool setFollowupShape(KoShape *) { return false; }
 
     KoStyleManager *m_styleManager;
 };
@@ -94,7 +95,7 @@ void KoTextDocumentLayout::setLayout(LayoutState *layout) {
     delete m_state;
     m_state = layout;
     m_state->setStyleManager(sm);
-    relayout();
+    scheduleLayout();
 }
 
 bool KoTextDocumentLayout::hasLayouter() const {

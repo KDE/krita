@@ -97,6 +97,10 @@ public:
 
     KoStyleManager *styleManager() const;
 
+    /**
+     * This inner class is an interface that allows the KoTextDocumentLayout to do rough layout
+     * while the LayoutState implementation can do all the boring details.
+     */
     class KOTEXT_EXPORT LayoutState {
     public:
         LayoutState() : shapeNumber(-1), shape(0), layout(0) {}
@@ -120,9 +124,19 @@ public:
         virtual double documentOffsetInShape() = 0;
         /// paint the document
         virtual void draw(QPainter *painter, const PaintContext & context ) = 0;
+        /**
+         * After all shapes have been used and there is still text left, use the param shape to continue
+         * layout.
+         * @param shape the dummy shape to layout in.
+         * @return true if the request for continued layout is honored, false otherwise.
+         */
+        virtual bool setFollowupShape(KoShape *shape) = 0;
 
+        /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;
+        /// the currently layoute shape
         KoShape *shape;
+        /// The current paragraph layout.
         QTextLayout *layout;
 
     protected:

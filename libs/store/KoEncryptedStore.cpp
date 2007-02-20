@@ -429,7 +429,10 @@ bool KoEncryptedStore::doFinalize( ) {
             }
         }
     }
-    return m_pZip->close( );
+    if( m_pZip )
+        return m_pZip->close( );
+    else
+        return true;
 }
 
 KoEncryptedStore::~KoEncryptedStore() {
@@ -673,6 +676,7 @@ bool KoEncryptedStore::closeWrite() {
             // Without the first password, prevent asking again by deadsimply refusing to continue functioning
             // TODO: This feels rather hackish. There should be a better way to do this.
             delete m_pZip;
+            m_pZip = 0;
             m_bGood = false;
             return false;
         }

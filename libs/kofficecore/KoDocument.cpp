@@ -123,6 +123,7 @@ public:
         filterManager( 0L ),
         m_specialOutputFlag( 0 ), // default is native format
         m_isImporting( false ), m_isExporting( false ),
+        m_password( QString::null ),
         m_numOperations( 0 ),
         modifiedAfterAutosave( false ),
         m_autosaving( false ),
@@ -166,6 +167,7 @@ public:
                                      // (Save/Save As, Export)
     int m_specialOutputFlag; // See KoFileDialog in koMainWindow.cc
     bool m_isImporting, m_isExporting; // File --> Import/Export vs File --> Open/Save
+    QString m_password; // The password used to encrypt an encrypted document
 
     QTimer m_autoSaveTimer;
     QString lastErrorMessage; // see openFile()
@@ -569,23 +571,30 @@ bool KoDocument::isAutoErrorHandlingEnabled() const
 
 void KoDocument::slotAutoSave()
 {
-    // Autosaving is currently disabled for encrypted files, since every autosave would request the password
-    if ( isModified() && d->modifiedAfterAutosave && !d->m_bLoading && d->m_specialOutputFlag != SaveEncrypted )
+    if ( isModified() && d->modifiedAfterAutosave && !d->m_bLoading )
     {
-        connect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
-        emit sigStatusBarMessage( i18n("Autosaving...") );
-        d->m_autosaving = true;
-        bool ret = saveNativeFormat( autoSaveFile( m_file ) );
-        setModified( true );
-        if ( ret ) {
-            d->modifiedAfterAutosave = false;
-            d->m_autoSaveTimer.stop(); // until the next change
+        // Give a warning when trying to autosave an encrypted file when no password is known (should not happen)
+        if ( d->m_specialOutputFlag == SaveEncrypted && d->m_password.isNull( ) )
+        {
+            // That advice should also fix this error from occurring again
+            emit sigStatusBarMessage( i18n( "The password of this encrypted document is not known. Autosave aborted! Please save your work manually." ) );
         }
-        d->m_autosaving = false;
-        emit sigClearStatusBarMessage();
-        disconnect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
-        if ( !ret )
-            emit sigStatusBarMessage( i18n("Error during autosave! Partition full?") );
+        else {
+            connect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
+            emit sigStatusBarMessage( i18n("Autosaving...") );
+            d->m_autosaving = true;
+            bool ret = saveNativeFormat( autoSaveFile( m_file ) );
+            setModified( true );
+            if ( ret ) {
+                d->modifiedAfterAutosave = false;
+                d->m_autoSaveTimer.stop(); // until the next change
+            }
+            d->m_autosaving = false;
+            emit sigClearStatusBarMessage();
+            disconnect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
+            if ( !ret )
+                emit sigStatusBarMessage( i18n("Error during autosave! Partition full?") );
+        }
     }
 }
 
@@ -1021,6 +1030,8 @@ bool KoDocument::saveNativeFormat( const QString & file )
     // TODO: use std::auto_ptr or create store on stack [needs API fixing],
     // to remove all the 'delete store' in all the branches
     KoStore* store = KoStore::createStore( file, KoStore::Write, mimeType, backend );
+    if ( d->m_specialOutputFlag == SaveEncrypted && !d->m_password.isNull( ) )
+        store->setPassword( d->m_password );
     if ( store->bad() )
     {
         d->lastErrorMessage = i18n( "Could not create the file for saving" ); // more details needed?
@@ -1126,6 +1137,10 @@ bool KoDocument::saveNativeFormat( const QString & file )
             delete store;
             return false;
         }
+
+        // Remember the given password, if necessary
+        if ( store->isEncrypted( ) && !d->m_isExporting )
+            d->m_password = store->password( );
 
         delete store;
     }
@@ -1801,6 +1816,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
 bool KoDocument::loadNativeFormatFromStore( const QString& file )
 {
+  bool succes;
   KoStore::Backend backend = (d->m_specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
   KoStore * store = KoStore::createStore( file, KoStore::Read, "", backend );
 
@@ -1813,14 +1829,23 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
   }
 
   // Remember that the file was encrypted
-  if( d->m_specialOutputFlag == 0 && store->isEncrypted( ) )
+  if( d->m_specialOutputFlag == 0 && store->isEncrypted( ) && !d->m_isImporting )
     d->m_specialOutputFlag = SaveEncrypted;
 
-  return loadNativeFormatFromStoreInternal( store );
+  succes = loadNativeFormatFromStoreInternal( store );
+
+  // Retrieve the password after loading the file, only then is it guaranteed to exist
+  if( succes && store->isEncrypted( ) && !d->m_isImporting )
+    d->m_password = store->password( );
+
+  delete store;
+
+  return succes;
 }
 
 bool KoDocument::loadNativeFormatFromStore( QByteArray &data )
 {
+  bool succes;
   KoStore::Backend backend = (d->m_specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
   QBuffer buffer( &data );
   KoStore * store = KoStore::createStore( &buffer, KoStore::Read, "", backend );
@@ -1829,10 +1854,18 @@ bool KoDocument::loadNativeFormatFromStore( QByteArray &data )
     return false;
 
   // Remember that the file was encrypted
-  if( d->m_specialOutputFlag == 0 && store->isEncrypted( ) )
+  if( d->m_specialOutputFlag == 0 && store->isEncrypted( ) && !d->m_isImporting )
     d->m_specialOutputFlag = SaveEncrypted;
 
-  return loadNativeFormatFromStoreInternal( store );
+  succes = loadNativeFormatFromStoreInternal( store );
+
+  // Retrieve the password after loading the file, only then is it guaranteed to exist
+  if( succes && store->isEncrypted( ) && !d->m_isImporting )
+    d->m_password = store->password( );
+
+  delete store;
+
+  return succes;
 }
 
 bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
@@ -1847,7 +1880,6 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
         // We could check the 'mimetype' file, but let's skip that and be tolerant.
 
         if ( !loadOasisFromStore( store ) ) {
-            delete store;
             QApplication::restoreOverrideCursor();
             return false;
         }
@@ -1862,7 +1894,6 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
             ok = loadXML( store->device(), doc );
         if ( !ok )
         {
-            delete store;
             QApplication::restoreOverrideCursor();
             return false;
         }
@@ -1878,7 +1909,6 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
     {
         kError(30003) << "ERROR: No maindoc.xml" << endl;
         d->lastErrorMessage = i18n( "Invalid document: no file 'maindoc.xml'." );
-        delete store;
         QApplication::restoreOverrideCursor();
         return false;
     }
@@ -1930,7 +1960,6 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
     }
 
     bool res = completeLoading( store );
-    delete store;
     QApplication::restoreOverrideCursor();
     m_bEmpty = false;
     return res;

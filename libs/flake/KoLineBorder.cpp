@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +25,8 @@
 
 #include <QPainterPath>
 
+#include <KoGenStyle.h>
+
 KoLineBorder::KoLineBorder()
 : m_color(Qt::black)
 {
@@ -35,6 +38,15 @@ KoLineBorder::KoLineBorder(double lineWidth, QColor color)
 {
     m_pen.setWidthF( qMax(0.0,lineWidth) );
     m_pen.setJoinStyle(Qt::MiterJoin);
+}
+
+void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
+{
+    Q_UNUSED( context );
+    // TODO implement all possibilities
+    style.addProperty( "draw:stroke", "solid" );
+    style.addProperty( "svg:stroke-color", color().name() );
+    style.addPropertyPt( "svg:stroke-width", lineWidth() );
 }
 
 KoInsets* KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) {

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,11 +28,18 @@
 #include "KoShapeManager.h"
 #include "KoShapeUserData.h"
 #include "KoShapeApplicationData.h"
+#include "KoShapeSavingContext.h"
 #include "KoViewConverter.h"
+
+#include <KoXmlWriter.h>
+#include <KoGenStyles.h>
+#include <KoGenStyle.h>
 
 #include <QPainter>
 #include <QVariant>
 #include <QPainterPath>
+
+#include <kdebug.h>
 
 class KoShapePrivate {
 public:
@@ -122,6 +130,66 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
             painter.drawLine( QPointF( p.x() + 2, p.y() + 2 ), QPointF( p.x() - 2, p.y() - 2 ) );
         }
     }*/
+}
+
+bool KoShape::saveOdf( KoShapeSavingContext & context )
+{
+    const char * tag = odfTagName();
+    if ( tag[0] == '\0' )
+    {
+        kWarning(30006) << "No support for shape yet. Not saving!" << endl;
+    }
+    else
+    {
+        context.xmlWriter().startElement( tag );
+        context.xmlWriter().addAttribute( context.isSet( KoShapeSavingContext::PresentationShape ) ? 
+                                          "presentation:style-name": "draw:style-name", 
+                                          getStyle( context ) );
+
+        if ( context.isSet( KoShapeSavingContext::DrawId ) )
+        {
+            context.xmlWriter().addAttribute( "draw:id", context.drawId( this ) );
+        }
+
+        saveOdfData( context );
+        context.xmlWriter().endElement();
+    }
+    return true;
+}
+
+QString KoShape::getStyle( KoShapeSavingContext &context )
+{
+    KoGenStyle style;
+    if ( context.isSet( KoShapeSavingContext::PresentationShape ) )
+        style = KoGenStyle( KoGenStyle::STYLE_PRESENTATIONAUTO, "presentation" );
+    else
+        style = KoGenStyle( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
+
+    fillStyle( style, context );
+    
+    if ( KoShapeSavingContext::AutoStyleInStyleXml )
+        style.setAutoStyleInStylesDotXml( true );
+
+    return context.mainStyles().lookup( style, context.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
+}
+
+void KoShape::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
+{
+    KoShapeBorderModel * b = border();
+    if ( b )
+    {
+        b->fillStyle( style, context );
+    }
+    QBrush bg( background() );
+    switch ( bg.style() )
+    {
+        case Qt::NoBrush:
+            style.addProperty( "draw:fill","none" );
+            break;
+        default:    
+            //KoOasisStyles::saveOasisFillStyle( style, context.mainStyles(), bg );
+            break;
+    }
 }
 
 void KoShape::scale( double sx, double sy )

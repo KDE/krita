@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
 
@@ -45,7 +45,9 @@ class KoShapeUserData;
 class KoViewConverter;
 class KoShapeApplicationData;
 class KoShapePrivate;
+class KoShapeSavingContext;
 class KoCanvasBase;
+class KoGenStyle;
 
 /**
  *
@@ -111,6 +113,31 @@ public:
      *      like selection and get a reference to the KoCanvasResourceProvider.
      */
     virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+
+    /**
+     * @brief Save the shape
+     *
+     * This is the method that will be called when saving a shape as a described in 
+     * OpenDocument 9.2 Drawing Shapes. This method saves the common attributes of the
+     * drawing shapes.
+     * The special data for every shape is saved in @see saveOdfData().
+     *
+     * Please don't use yet as the design is not yet finished.
+     *
+     * @see saveOdfContent
+     */
+    bool saveOdf( KoShapeSavingContext & context );
+
+    /**
+     * @brief Save the shape
+     *
+     * This is used to save a shape that is not used as a Drawing Shape, e.g.
+     * a text shape that is used as main part of the document as described in
+     * OpenDocument 2.3.1 Text Documents.
+     *
+     * Please don't use yet as the design is not yet finished.
+     */
+    virtual bool saveOdfContext( KoShapeSavingContext & context ) { Q_UNUSED( context ); return true; }
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -520,6 +547,40 @@ public:
 
 protected:
     /**
+     * @brief Get the tag name used for saving
+     *
+     * Get the name of the tag used for saving drawing shape
+     *
+     * This will be a pure virtual function once all shapes implemented it.
+     *
+     * @return the name of the tag
+     *
+     * @see saveOdf()
+     */
+    virtual const char * odfTagName() const { return ""; }
+    
+    /**
+     * @brief Save the data that is special by each shape
+     *
+     * This will be a pure virtual function once all shapes implemented it.
+     *
+     * @return true if successful, false otherwise
+     *
+     * @see saveOdf()
+     */
+    virtual bool saveOdfData( KoShapeSavingContext &context ) const { Q_UNUSED( context ); return true; }
+
+    /**
+     * @brief Fill the style object
+     *
+     * @param style object
+     * @param context used for saving
+     *
+     * @see saveOdf()
+     */
+    void fillStyle( KoGenStyle &style, KoShapeSavingContext &context ); 
+
+    /**
      * Update the position of the shape in the tree of the KoShapeManager.
      */
     void notifyChanged();
@@ -559,6 +620,16 @@ protected:
     const QMatrix& matrix() const;
 
 private:
+    /**
+     * @brief Get the style used for the shape
+     *
+     * This method calls fillStyle and add then the style to the context
+     *
+     * @param context used for saving
+     * @return the name of the style
+     */
+    QString getStyle( KoShapeSavingContext &context );
+
     friend class KoShapeManager;
     void addShapeManager( KoShapeManager * manager );
     void removeShapeManager( KoShapeManager * manager );

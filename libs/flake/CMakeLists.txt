@@ -55,6 +55,7 @@ set(flake_SRCS
     KoToolManager.cpp
     KoToolRegistry.cpp
     KoToolProxy.cpp
+    KoShapeSavingContext.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp

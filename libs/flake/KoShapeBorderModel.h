@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +28,8 @@
 #include <flake_export.h>
 
 class KoShape;
+class KoGenStyle;
+class KoShapeSavingContext;
 class KoViewConverter;
 
 /**
@@ -41,6 +44,14 @@ class FLAKE_EXPORT KoShapeBorderModel {
 public:
     KoShapeBorderModel() {}
     virtual ~KoShapeBorderModel() {}
+
+    /**
+     * @brief Fill the style object
+     *
+     * @param style object
+     * @param context used for saving
+     */
+    virtual void fillStyle( KoGenStyle &style, KoShapeSavingContext &context ) = 0; 
 
     /**
      * Return a new borderInsets object filled with the size around the shape that this

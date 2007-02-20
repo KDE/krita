@@ -51,24 +51,27 @@ class KoGenStyle;
 
 /**
  *
- * Base class for all flake objects. Flake objects extend this class
+ * Base class for all flake shapes. Shapes extend this class
  * to allow themselves to be manipulated. This class just represents
  * a graphical shape in the document and can be manipulated by some default
  * tools in this library.
  *
- * <p>Due to the limited responsibility of this class, the extending object
+ * Due to the limited responsibility of this class, the extending object
  * can have any data backend and is responsible for painting itself.
  *
- * <p>We strongly suggest that any extending class will use a Model View
+ * We strongly suggest that any extending class will use a Model View
  * Controller (MVC) design where the View part is all in this class, as well
- * as the one that inharits from this one.  This allows the data that rests
+ * as the one that inherits from this one.  This allows the data that rests
  * in the model to be reused in different parts of the document. For example
- * by having two flake objects that show it. Or each showing a section of it.
+ * by having two flake objects that show that same data. Or each showing a section of it.
  *
- * <p>The KoShape data is completely in postscript-points (pt) (see KoUnit
- * for conversion methods to and from pt).
+ * The KoShape data is completely in postscript-points (pt) (see KoUnit
+ * for conversion methods to and from points).
+ * This image will explain the real-world use of the shape and its options.
+ * <img src="../flake_shape_coords.png" align=center><br>
+ *  The Rotation center can be returned with absolutePosition()
  *
- * <p>Flake objects can be created in three ways: 
+ * <p>Flake objects can be created in three ways:
  * <ul>
  *   <li>a simple new KoDerivedFlake(),
  *   <li>through an associated tool,
@@ -97,6 +100,8 @@ public:
      * <code>
        painter.fillRect(converter.normalToView(QRectF(QPointF(0.0,0.0), size())), background());</code>
      * Or equavalent for non-square objects.
+     * Do note that a shape's top-left is always at coordinate 0,0. Even if the shape itself is rotated
+     * or translated.
      * @param painter used for painting the shape
      * @param converter to convert between internal and view coordinates.
      * @see applyConversion()

@@ -22,7 +22,7 @@
 #include <threadweaver/ThreadWeaver.h>
 
 #include <kglobal.h>
-#include <kconfig.h>
+#include <ksharedconfig.h>
 
 #include "kis_paint_device.h"
 

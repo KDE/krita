@@ -21,7 +21,7 @@
 #include <QString>
 #include <QColor>
 
-#include <kconfig.h>
+#include <ksharedconfig.h>
 
 #include "kis_global.h"
 #include "krita_export.h"

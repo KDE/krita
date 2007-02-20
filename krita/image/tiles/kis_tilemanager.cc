@@ -34,7 +34,7 @@
 
 #include <kstaticdeleter.h>
 #include <kglobal.h>
-#include <kconfig.h>
+#include <ksharedconfig.h>
 
 #include "kis_tileddatamanager.h"
 #include "kis_tile.h"
@@ -122,7 +122,7 @@ KisTileManager::~KisTileManager() {
     delete m_poolMutex;
     delete m_swapMutex;
     delete m_bigKritaLock;
-    // Where did this go to? delete [] m_poolFreeList; 
+    // Where did this go to? delete [] m_poolFreeList;
 }
 
 KisTileManager* KisTileManager::instance()

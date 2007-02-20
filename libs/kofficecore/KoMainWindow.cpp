@@ -312,7 +312,7 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
 
     // Load list of recent files
     KSharedConfigPtr config = componentData.isValid() ? componentData.config() : KGlobal::config();
-    m_recent->loadEntries( config.data() );
+    m_recent->loadEntries( config->group( QString() ) );
 
     createShellGUI();
     d->bMainWindowGUIBuilt = true;
@@ -330,9 +330,8 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
     }
 
     // Saved size
-    config->setGroup( "MainWindow" );
     //kDebug(30003) << "KoMainWindow::restoreWindowSize" << endl;
-    restoreWindowSize( config.data() );
+    restoreWindowSize( config->group( "MainWindow" ) );
 }
 
 KoMainWindow::~KoMainWindow()
@@ -514,7 +513,7 @@ void KoMainWindow::saveRecentFiles()
     // Save list of recent files
     KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
     kDebug(30003) << this << " Saving recent files list into config. componentData()=" << componentData().componentName() << endl;
-    m_recent->saveEntries( config.data() );
+    m_recent->saveEntries( config->group( QString() ) );
     config->sync();
 
     // Tell all windows to reload their list, after saving
@@ -526,7 +525,7 @@ void KoMainWindow::saveRecentFiles()
 void KoMainWindow::reloadRecentFileList()
 {
     KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
-    m_recent->loadEntries( config.data() );
+    m_recent->loadEntries( config->group( QString() ) );
 }
 
 KoDocument* KoMainWindow::createDoc() const
@@ -1044,13 +1043,12 @@ void KoMainWindow::saveWindowSettings()
     {
         KSharedConfigPtr config = componentData().config();
         // Save window size into the config file of our componentData
-        config->setGroup( "MainWindow" );
         //kDebug(30003) << "KoMainWindow::saveWindowSettings" << endl;
-        saveWindowSize( config.data() );
+        saveWindowSize( config->group( "MainWindow" ) );
         d->m_windowSizeDirty = false;
         // Save toolbar position into the config file of the app, under the doc's component name
         //kDebug(30003) << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's componentData=" << rootDocument()->componentData().componentName() << endl;
-        saveMainWindowSettings( KGlobal::config().data(), rootDocument()->componentData().componentName() );
+        saveMainWindowSettings( KGlobal::config()->group( rootDocument()->componentData().componentName() ) );
         KGlobal::config()->sync();
         resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
     }
@@ -1332,7 +1330,7 @@ void KoMainWindow::slotConfigureKeys()
 void KoMainWindow::slotConfigureToolbars()
 {
     if (rootDocument())
-        saveMainWindowSettings( KGlobal::config().data(), rootDocument()->componentData().componentName() );
+        saveMainWindowSettings( KGlobal::config()->group( rootDocument()->componentData().componentName() ) );
     KEditToolbar edit(factory(), this);
     connect(&edit,SIGNAL(newToolbarConfig()),this,SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1341,7 +1339,7 @@ void KoMainWindow::slotConfigureToolbars()
 void KoMainWindow::slotNewToolbarConfig()
 {
   if (rootDocument())
-      applyMainWindowSettings( KGlobal::config().data(), rootDocument()->componentData().componentName() );
+      applyMainWindowSettings( KGlobal::config()->group( rootDocument()->componentData().componentName() ) );
   KXMLGUIFactory *factory = guiFactory();
 
   // Check if there's an active view
@@ -1372,7 +1370,7 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
       bar->hide();
 
     if (rootDocument())
-        saveMainWindowSettings( KGlobal::config().data(), rootDocument()->componentData().componentName() );
+        saveMainWindowSettings( KGlobal::config()->group( rootDocument()->componentData().componentName() ) );
   }
   else
     kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!" << endl;

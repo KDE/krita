@@ -56,7 +56,7 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displa
   internetLink = new  internetLinkPage(page );
   connect(internetLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged (  )));
 
-  page = new KVBox(); 
+  page = new KVBox();
   p2=addPage(page, i18n("Mail & News") );
   p2->setIcon( KIcon(BarIcon("mail_generic",K3Icon::SizeMedium)) );
   mailLink = new  mailLinkPage(page );
@@ -135,7 +135,7 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
             slotTextChanged ( );
         }
         return;
-    } 
+    }
     if( _href.contains("http://") || _href.contains("https://") || _href.contains("ftp://") )
     {
         internetLink->setHrefName(_href);
@@ -232,7 +232,7 @@ internetLinkPage::internetLinkPage( QWidget *parent , char* /*name*/  )
   lay2->addWidget(m_hrefName);
 
   lay2->addStretch( 1 );
-  
+
   m_linkName->setFocus();
 
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
@@ -306,7 +306,7 @@ bookmarkLinkPage::bookmarkLinkPage( QWidget *parent , char* /*name*/  )
   lay2->addWidget(m_hrefName);
 
   lay2->addStretch( 1 );
-  
+
   m_linkName->setFocus();
 
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
@@ -388,7 +388,7 @@ mailLinkPage::mailLinkPage( QWidget *parent , char* /*name*/  )
 
   lay2->addWidget(m_hrefName);
   lay2->addStretch( 1 );
-  
+
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   KSeparator* bar1 = new KSeparator( Qt::Horizontal, this);
@@ -464,7 +464,7 @@ fileLinkPage::fileLinkPage( QWidget *parent , char* /*name*/  )
   lst <<"";
   for (QStringList::ConstIterator it = fileList.begin();it != fileList.end(); ++it)
   {
-      KDesktopFile f(*it, true /* read only */);
+      KDesktopFile f(*it);
       if ( !f.readUrl().isEmpty())
           lst.append( f.readUrl());
   }
@@ -476,9 +476,9 @@ fileLinkPage::fileLinkPage( QWidget *parent , char* /*name*/  )
   }
   else
       recentFile->addItems( lst );
-  
+
   recentFile->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-  
+
   connect( recentFile , SIGNAL(highlighted ( const QString &)), this,  SLOT( slotSelectRecentFile( const QString & )));
 
   tmpQLabel = new QLabel( this);

@@ -23,7 +23,7 @@
 #include <threadweaver/ThreadWeaver.h>
 
 #include <kglobal.h>
-#include <kconfig.h>
+#include <ksharedconfig.h>
 
 #include "kis_image.h"
 #include "kis_group_layer.h"

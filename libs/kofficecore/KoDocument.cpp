@@ -2850,13 +2850,13 @@ bool KoDocument::showEmbedInitDialog(QWidget* parent)
     KoOpenPane* pane = createOpenPane(&dlg, componentData(), templateType());
     pane->layout()->setMargin(0);
     dlg.setMainWidget(pane);
-    KConfig cfg("EmbedInitDialog");
-    /*dlg.setInitialSize(*/dlg.restoreDialogSize( &cfg /*)*/);
+    KConfigGroup cfg = KSharedConfig::openConfig("EmbedInitDialog")->group( QString() );
+    /*dlg.setInitialSize(*/dlg.restoreDialogSize( cfg /*)*/);
     connect(this, SIGNAL(closeEmbedInitDialog()), &dlg, SLOT(accept()));
 
     bool ok = dlg.exec() == QDialog::Accepted;
 
-    dlg.saveDialogSize(&cfg);
+    dlg.saveDialogSize(cfg);
 
     return ok;
 }

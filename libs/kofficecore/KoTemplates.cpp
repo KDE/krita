@@ -25,7 +25,7 @@
 #include <QPrinter>
 
 #include <kdesktopfile.h>
-#include <ksimpleconfig.h>
+#include <kconfig.h>
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kcomponentdata.h>
@@ -227,11 +227,11 @@ void KoTemplateTree::readGroups() {
             QString defaultTab;
             int sortingWeight = 1000;
             if(templateDir.exists(".directory")) {
-                KSimpleConfig config(templateDir.absolutePath()+"/.directory", true);
-                config.setDesktopGroup();
-                name=config.readEntry("Name");
-                defaultTab=config.readEntry("X-KDE-DefaultTab");
-                sortingWeight=config.readEntry("X-KDE-SortingWeight", 1000);
+                KDesktopFile config(templateDir.absolutePath()+"/.directory");
+                KConfigGroup dg = config.desktopGroup();
+                name=dg.readEntry("Name");
+                defaultTab=dg.readEntry("X-KDE-DefaultTab");
+                sortingWeight=dg.readEntry("X-KDE-SortingWeight", 1000);
                 //kDebug() << "name: " << name <<endl;
             }
             KoTemplateGroup *g=new KoTemplateGroup(name, *it+*tdirIt+QChar('/'), sortingWeight);
@@ -272,8 +272,8 @@ void KoTemplateTree::readTemplates() {
                 // If a desktop file, then read the name from it.
                 // Otherwise (or if no name in it?) use file name
                 if (KDesktopFile::isDesktopFile(filePath)) {
-                    KSimpleConfig config(filePath, true);
-                    config.setDesktopGroup();
+                    KConfig _config(filePath, KConfig::OnlyLocal);
+                    KConfigGroup config( &_config, "Desktop Entry" );
                     if (config.readEntry("Type")=="Link") {
                         text=config.readEntry("Name");
                         fileName=filePath;
@@ -357,8 +357,8 @@ void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
         fileName = path + fill + name + ".desktop";
     }
 
-    KSimpleConfig config( fileName );
-    config.setDesktopGroup();
+    KConfig _config( fileName, KConfig::OnlyLocal);
+    KConfigGroup config( &_config, "Desktop Entry" );
     config.writeEntry("Type", "Link");
     config.writePathEntry("URL", t->file());
     config.writeEntry("Name", t->name());

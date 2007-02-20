@@ -32,7 +32,7 @@
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <ksimpleconfig.h>
+#include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kstaticdeleter.h>
 #include <kimageio.h>
@@ -108,7 +108,7 @@ QStringList KoGlobal::_listOfLanguages()
 
 void KoGlobal::createListOfLanguages()
 {
-    KConfig config( "all_languages", true, false, "locale" );
+    KConfig config( "locale", "all_languages", KConfig::NoGlobals );
     // Note that we could also use KLocale::allLanguagesTwoAlpha
 
     QMap<QString, bool> seenLanguages;
@@ -145,7 +145,7 @@ void KoGlobal::createListOfLanguages()
         tag = tag.mid(index+1);
 
         if ( seenLanguages.find( tag ) == seenLanguages.end() ) {
-            KSimpleConfig entry(*it);
+            KConfig entry(*it, KConfig::OnlyLocal);
             entry.setGroup("KCM Locale");
 
             const QString name = entry.readEntry("Name", tag);

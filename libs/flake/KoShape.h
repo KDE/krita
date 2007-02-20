@@ -213,6 +213,8 @@ public:
     /**
      * @brief Get the size of the shape in pt.
      *
+     * The size is in shape coordinates.
+     *
      * @return the size of the shape as set by resize()
      */
     virtual QSizeF size() const;

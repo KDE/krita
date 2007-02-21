@@ -21,8 +21,7 @@
 #ifndef KIS_PAINTOP_BOX_H_
 #define KIS_PAINTOP_BOX_H_
 
-#include <map>
-
+#include <QMap>
 #include <QWidget>
 #include <QComboBox>
 #include <QList>
@@ -54,8 +53,6 @@ class KisPaintopBox : public QWidget {
 
     Q_OBJECT
 
-    typedef QWidget super;
-
 public:
     KisPaintopBox (KisView2 * view,  QWidget * parent, const char * name = 0);
 
@@ -80,7 +77,7 @@ private:
     void updateOptionWidget();
     const KoID & currentPaintop();
     void setCurrentPaintop(const KoID & paintop);
-    KoID defaultPaintop(const KoInputDevice& inputDevice);
+    KoID defaultPaintop(const KoInputDevice & inputDevice);
     const KisPaintOpSettings *paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice);
 
 private:
@@ -92,10 +89,10 @@ private:
     QList<KoID> m_paintops;
     QList<KoID> m_displayedOps;
 
-    typedef std::map<KoInputDevice, KoID> InputDevicePaintopMap;
+    typedef QMap<KoInputDevice*, KoID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;
 
-    typedef std::map<KoInputDevice, QList<KisPaintOpSettings *> > InputDevicePaintopSettingsMap;
+    typedef QMap<KoInputDevice*, QList<KisPaintOpSettings *> > InputDevicePaintopSettingsMap;
     InputDevicePaintopSettingsMap m_inputDevicePaintopSettings;
 };
 

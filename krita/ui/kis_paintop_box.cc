@@ -48,7 +48,7 @@
 #include <kis_layer_manager.h>
 
 KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * name)
-    : super (parent),
+    : QWidget(parent),
       m_resourceProvider(view->resourceProvider())
 {
     Q_ASSERT(view != 0);
@@ -64,6 +64,7 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
     m_cmbPaintops->setObjectName("KisPaintopBox::m_cmbPaintops");
     m_cmbPaintops->setMinimumWidth(150);
     m_cmbPaintops->setToolTip("Styles of painting for the painting tools");
+
     m_layout = new QHBoxLayout(this);
     m_layout->setMargin(1);
     m_layout->setSpacing(1);
@@ -83,9 +84,9 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
             this, SLOT(colorSpaceChanged(KoColorSpace*)));
 
     connect(KoToolManager::instance(),
-            SIGNAL(inputDeviceChanged(const KoInputDevice&)),
+            SIGNAL(inputDeviceChanged(const KoInputDevice &)),
             this,
-            SLOT(slotInputDeviceChanged(const KoInputDevice&)));
+            SLOT(slotInputDeviceChanged(const KoInputDevice &)));
 
     setCurrentPaintop(defaultPaintop(KoToolManager::instance()->currentInputDevice()));
 
@@ -154,15 +155,18 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
     return QPixmap(fname);
 }
 
-void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
+void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & dev)
 {
+
+    KoInputDevice * inputDevice = const_cast<KoInputDevice*>( &dev );
+
     KoID paintop;
     InputDevicePaintopMap::iterator it = m_currentID.find(inputDevice);
 
     if (it == m_currentID.end()) {
-        paintop = defaultPaintop(inputDevice);
+        paintop = defaultPaintop(dev);
     } else {
-        paintop = (*it).second;
+        paintop = (*it);
     }
 
     int index = m_displayedOps.indexOf(paintop);
@@ -200,19 +204,19 @@ void KisPaintopBox::updateOptionWidget()
 
 const KoID& KisPaintopBox::currentPaintop()
 {
-    return m_currentID[KoToolManager::instance()->currentInputDevice()];
+    return m_currentID[&KoToolManager::instance()->currentInputDevice()];
 }
 
 void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 {
-    m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
+    m_currentID[&KoToolManager::instance()->currentInputDevice()] = paintop;
 
     updateOptionWidget();
 
     emit selected(paintop, paintopSettings(paintop, KoToolManager::instance()->currentInputDevice()));
 }
 
-KoID KisPaintopBox::defaultPaintop(const KoInputDevice& inputDevice)
+KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)
 {
     if (inputDevice == KoInputDevice::eraser()) {
         return KoID("eraser","");
@@ -224,7 +228,7 @@ KoID KisPaintopBox::defaultPaintop(const KoInputDevice& inputDevice)
 const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice)
 {
     QList<KisPaintOpSettings *> settingsArray;
-    InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find(inputDevice);
+    InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find(const_cast<KoInputDevice*>( &inputDevice ) );
     if (it == m_inputDevicePaintopSettings.end()) {
         // Create settings for each paintop.
 
@@ -235,9 +239,9 @@ const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, c
                 settings->widget()->hide();
             }
         }
-        m_inputDevicePaintopSettings[inputDevice] = settingsArray;
+        m_inputDevicePaintopSettings[const_cast<KoInputDevice*>( &inputDevice )] = settingsArray;
     } else {
-        settingsArray = (*it).second;
+        settingsArray = (*it);
     }
 
     const int index = m_paintops.indexOf(paintop);

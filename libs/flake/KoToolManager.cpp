@@ -73,6 +73,8 @@ public:
     QHash<KoCanvasBase*, KoToolProxy*> proxies;
 
     CanvasData canvasData; // data about the active canvas.
+
+    KoInputDevice inputDevice;
 };
 
 // ******** KoToolManager **********
@@ -376,11 +378,6 @@ KoCreateShapesTool * KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const
     return 0;
 }
 
-KoInputDevice KoToolManager::currentInputDevice() const
-{
-    return KoInputDevice::mouse();
-}
-
 void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
     QList<QString> types;
     foreach(KoShape *shape, shapes) {
@@ -426,6 +423,11 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes) 
         }
     }
     return toolType;
+}
+
+void KoToolManager::switchInputDevice(const KoInputDevice &device) {
+    if(d->inputDevice == device) return;
+    kDebug() << "New input device!\n";
 }
 
 //static

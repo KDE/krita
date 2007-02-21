@@ -70,14 +70,14 @@ public:
      * Acceptance signifies that you have handled this event and found it useful, the effect
      * of that will be that the event will not be handled to other event handlers.
      */
-    void accept() { m_event->accept(); }
+    inline void accept() { m_event->accept(); }
 
     /**
      * For classes that are handed this event, you can choose to ignore this event.
      * Ignoring this event means you have not handled it and want to allow other event
      * handlers to try to handle it.
      */
-    void ignore() { m_event->ignore(); }
+    inline void ignore() { m_event->ignore(); }
 
     /**
      * Returns the keyboard modifier flags that existed immediately before the event occurred.
@@ -86,10 +86,10 @@ public:
     Qt::KeyboardModifiers modifiers () const { return m_event->modifiers(); }
 
     /// return if the event has been accepted.
-    bool isAccepted () const { return m_event->isAccepted(); }
+    inline bool isAccepted () const { return m_event->isAccepted(); }
 
     /// return if this event was spontaneous (see QMouseEvent::spontaneous())
-    bool spontaneous () const { return m_event->spontaneous(); }
+    inline bool spontaneous () const { return m_event->spontaneous(); }
 
     /// return button pressed (see QMouseEvent::button());
     Qt::MouseButton button () const;
@@ -122,7 +122,10 @@ public:
      */
     qreal tangentialPressure () const;
 
-    /// Return the x position in widget coordinates.
+    /**
+     * Return the x position in widget coordinates.
+     * @see point
+     */
     int x () const;
 
     /**
@@ -133,7 +136,10 @@ public:
      */
     int xTilt () const;
 
-    /// Return the y position in widget coordinates.
+    /**
+     * Return the y position in widget coordinates.
+     * @see point
+     */
     int y () const;
 
     /**

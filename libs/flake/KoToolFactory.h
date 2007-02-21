@@ -122,6 +122,8 @@ public:
      */
     const KShortcut& shortcut() const;
 
+    bool inputDeviceAgnostic() const;
+
     /**
      * Returns the main toolType
      * Each tool has a toolType which it uses to be grouped in the toolbox.

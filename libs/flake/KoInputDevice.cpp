@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,84 +19,44 @@
 
 #include "KoInputDevice.h"
 
-#define UNKNOWN_INPUT_DEVICE_ID -1
-#define FIRST_INPUT_DEVICE_ID 0
+class KoInputDevice::Private {
+public:
+    Private( QTabletEvent::TabletDevice d, QTabletEvent::PointerType p, qint64 id, bool m)
+        : device(d),
+        pointer(p),
+        uniqueTabletId(id),
+        mouse(m)
+    {
+    }
+    QTabletEvent::TabletDevice device;
+    QTabletEvent::PointerType pointer;
+    qint64 uniqueTabletId;
+    bool mouse;
+};
 
-qint32 KoInputDevice::NextInputDeviceID = FIRST_INPUT_DEVICE_ID;
+KoInputDevice::KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer)
+    : d(new Private(device, pointer, -1, false))
+{
+}
 
-KoInputDevice KoInputDevice::Mouse;
-KoInputDevice KoInputDevice::Stylus;
-KoInputDevice KoInputDevice::Eraser;
-KoInputDevice KoInputDevice::Puck;
-KoInputDevice KoInputDevice::Unknown(UNKNOWN_INPUT_DEVICE_ID);
-
-QList<KoInputDevice> KoInputDevice::InputDevices;
+KoInputDevice::KoInputDevice(qint64 uniqueTabletId)
+    : d(new Private(QTabletEvent::NoDevice, QTabletEvent::UnknownPointer, uniqueTabletId, false))
+{
+}
 
 KoInputDevice::KoInputDevice()
+    : d(new Private(QTabletEvent::NoDevice, QTabletEvent::UnknownPointer, -1, true))
 {
-    m_id = UNKNOWN_INPUT_DEVICE_ID;
 }
 
-KoInputDevice KoInputDevice::allocateNextDevice()
-{
-    KoInputDevice inputDevice(NextInputDeviceID);
-    NextInputDeviceID++;
-    InputDevices.append(inputDevice);
 
-    return inputDevice;
+bool KoInputDevice::operator==(const KoInputDevice &other)
+{
+    return d->device == other.d->device && d->pointer == other.d->pointer &&
+        d->uniqueTabletId == other.d->uniqueTabletId && d->mouse == other.d->mouse;
 }
 
-KoInputDevice KoInputDevice::allocateInputDevice()
+bool KoInputDevice::operator!=(const KoInputDevice &other)
 {
-    allocateDefaultDevicesIfNeeded();
-
-    return allocateNextDevice();
+    return ! (operator==(other));
 }
-
-void KoInputDevice::allocateDefaultDevicesIfNeeded()
-{
-    if (NextInputDeviceID == FIRST_INPUT_DEVICE_ID) {
-        Mouse = allocateNextDevice();
-        Stylus = allocateNextDevice();
-        Eraser = allocateNextDevice();
-        Puck = allocateNextDevice();
-    }
-}
-
-QList<KoInputDevice> KoInputDevice::inputDevices()
-{
-    allocateDefaultDevicesIfNeeded();
-
-    return InputDevices;
-}
-
-KoInputDevice KoInputDevice::mouse()
-{
-    allocateDefaultDevicesIfNeeded();
-    return Mouse;
-}
-
-KoInputDevice KoInputDevice::stylus()
-{
-    allocateDefaultDevicesIfNeeded();
-    return Stylus;
-}
-
-KoInputDevice KoInputDevice::eraser()
-{
-    allocateDefaultDevicesIfNeeded();
-    return Eraser;
-}
-
-KoInputDevice KoInputDevice::puck()
-{
-    allocateDefaultDevicesIfNeeded();
-    return Puck;
-}
-
-KoInputDevice KoInputDevice::unknown()
-{
-    allocateDefaultDevicesIfNeeded();
-    return Unknown;
-}
-

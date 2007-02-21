@@ -21,16 +21,12 @@
 
 #include "KoTool.h"
 #include "KoPointerEvent.h"
+#include "KoInputDevice.h"
+#include "KoToolManager.h"
 
 /* Unused for now.
 #if 0
 namespace {
-
-    // Time in ms that must pass after a tablet event before a mouse event is allowed to
-    // change the input device to the mouse. This is needed because mouse events are always
-    // sent to a receiver if it does not accept the tablet event.
-    static const int MOUSE_CHANGE_EVENT_DELAY = 100;
-
 
     // Helper class to determine when the user might switch between
     // tablet and mouse.
@@ -96,40 +92,60 @@ void KoToolProxy::repaintDecorations()
 
 void KoToolProxy::tabletEvent( QTabletEvent *event, const QPointF &point )
 {
+    KoInputDevice id(event->device(), event->pointerType());
+    KoToolManager::instance()->switchInputDevice(id);
+
     KoPointerEvent ev( event, point );
     switch( event->type() ) {
-    case ( QEvent::TabletPress ):
+    case QEvent::TabletPress:
         if (d->activeTool) d->activeTool->mousePressEvent( &ev );
         break;
-    case ( QEvent::TabletRelease ):
+    case QEvent::TabletRelease:
         if (d->activeTool) d->activeTool->mouseReleaseEvent( &ev );
         break;
-    //case ( QEvent::TabletMove ):
-    default:
+    case QEvent::TabletMove:
         if (d->activeTool) d->activeTool->mouseMoveEvent( &ev );
+    default:
+        ; // ignore the rest.
     }
+
+    // Always accept tablet events as they are useless to parent widgets and they will
+    // get re-send as mouseevents if we don't accept them.
+    event->accept();
 }
 
 void KoToolProxy::mousePressEvent( QMouseEvent *event, const QPointF &point )
 {
+    KoInputDevice id;
+    KoToolManager::instance()->switchInputDevice(id);
+
     KoPointerEvent ev( event, point );
     if (d->activeTool) d->activeTool->mousePressEvent( &ev );
 }
 
 void KoToolProxy::mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point )
 {
+    KoInputDevice id;
+    KoToolManager::instance()->switchInputDevice(id);
+
     KoPointerEvent ev( event, point );
     if (d->activeTool) d->activeTool->mouseDoubleClickEvent( &ev );
 }
 
 void KoToolProxy::mouseMoveEvent( QMouseEvent *event, const QPointF &point )
 {
+    KoInputDevice id;
+    KoToolManager::instance()->switchInputDevice(id);
+
     KoPointerEvent ev( event, point );
     if (d->activeTool) d->activeTool->mouseMoveEvent( &ev );
 }
 
 void KoToolProxy::mouseReleaseEvent( QMouseEvent *event, const QPointF &point )
 {
+    KoInputDevice id;
+    KoToolManager::instance()->switchInputDevice(id);
+
     KoPointerEvent ev( event, point );
     if (d->activeTool) d->activeTool->mouseReleaseEvent( &ev );
 }
@@ -159,4 +175,3 @@ KoToolSelection* KoToolProxy::selection() {
 void KoToolProxy::setActiveTool(KoTool *tool) {
     d->activeTool = tool;
 }
-

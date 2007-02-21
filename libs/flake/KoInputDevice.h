@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,70 +21,36 @@
 #ifndef KO_INPUT_DEVICE_H_
 #define KO_INPUT_DEVICE_H_
 
-#include <QList>
 #include <flake_export.h>
 
+#include <QTabletEvent>
 
+/**
+ * This class represents an input device.
+ * A user can manipulate flake-shapes using a large variety of input devices. This ranges from
+ * a mouse to a paintbrush-like tool connected to a tablet.  All of those need to be handled
+ * separately and be given their own tool instance to do their work.
+ * @see KoToolFactory::inputDeviceAgnostic()
+ */
 class FLAKE_EXPORT KoInputDevice {
 public:
-    KoInputDevice();
+    explicit KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer);
+    explicit KoInputDevice(qint64 uniqueTabletId);
+    explicit KoInputDevice();
 
-    static KoInputDevice allocateInputDevice();
-    static QList<KoInputDevice> inputDevices();
+    bool operator==(const KoInputDevice& other);
+    bool operator!=(const KoInputDevice& other);
 
-    friend inline bool operator==(const KoInputDevice&, const KoInputDevice&);
-    friend inline bool operator!=(const KoInputDevice&, const KoInputDevice&);
-
-    friend inline bool operator<(const KoInputDevice &, const KoInputDevice &);
-    friend inline bool operator>(const KoInputDevice &, const KoInputDevice &);
-
-    static KoInputDevice mouse();     // Standard mouse
-    static KoInputDevice stylus();    // Wacom stylus via QTabletEvent
-    static KoInputDevice eraser();    // Wacom eraser via QTabletEvent
-    static KoInputDevice puck();      // Wacom puck via QTabletEvent
-    static KoInputDevice unknown();
+// readd if we think these are actually useful.
+//   static KoInputDevice mouse();     // Standard mouse
+//   static KoInputDevice stylus();    // Wacom stylus via QTabletEvent
+//   static KoInputDevice eraser();    // Wacom eraser via QTabletEvent
+//   static KoInputDevice puck();      // Wacom puck via QTabletEvent
 
 private:
-    KoInputDevice(qint32 id) : m_id(id) {}
-
-    qint32 id() const { return m_id; }
-
-    static void allocateDefaultDevicesIfNeeded();
-    static KoInputDevice allocateNextDevice();
-
-private:
-     qint32 m_id;
-
-     static qint32 NextInputDeviceID;
-     static QList<KoInputDevice> InputDevices;
-
-     static KoInputDevice Mouse;
-     static KoInputDevice Stylus;
-     static KoInputDevice Eraser;
-     static KoInputDevice Puck;
-     static KoInputDevice Unknown;
+    class Private;
+    Private * const d;
 };
 
-inline bool operator==(const KoInputDevice &a, const KoInputDevice &b)
-{
-    return a.id() == b.id();
-}
-
-inline bool operator!=(const KoInputDevice &a, const KoInputDevice &b)
-{
-    return a.id() != b.id();
-}
-
-inline bool operator<(const KoInputDevice &a, const KoInputDevice &b)
-{
-    return a.id() < b.id();
-}
-
-
-inline bool operator>(const KoInputDevice &a, const KoInputDevice &b)
-{
-    return a.id() > b.id();
-}
-
-#endif // KIS_INPUT_DEVICE_H_
+#endif
 

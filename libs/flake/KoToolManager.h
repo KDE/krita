@@ -188,6 +188,10 @@ signals:
      */
     void toolCodesSelected(const KoCanvasController *canvas, QList<QString> types);
 
+protected:
+    friend class KoToolProxy;
+    void switchInputDevice(const KoInputDevice &device);
+
 private:
 
     KoToolManager();

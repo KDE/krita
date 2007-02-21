@@ -2,7 +2,7 @@
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,152 +26,156 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 
+class KoPointerEvent::Private {
+public:
+    Private() : tabletEvent(0), mouseEvent(0), wheelEvent(0) {}
+    QTabletEvent * tabletEvent;
+    QMouseEvent * mouseEvent;
+    QWheelEvent * wheelEvent;
+};
 
 KoPointerEvent::KoPointerEvent( QMouseEvent *ev, const QPointF &pnt )
-: point( pnt )
-, m_tabletEvent( 0 )
-, m_mouseEvent( ev )
-, m_wheelEvent( 0 )
-, m_event( ev )
+    : point( pnt ),
+    m_event(ev),
+    d(new Private())
 {
+    d->mouseEvent = ev;
 }
 
 KoPointerEvent::KoPointerEvent( QTabletEvent *ev, const QPointF &pnt )
-: point( pnt )
-, m_tabletEvent( ev )
-, m_mouseEvent( 0 )
-, m_wheelEvent( 0 )
-, m_event( ev )
+    : point( pnt ),
+    m_event(ev),
+    d(new Private())
 {
+    d->tabletEvent = ev;
 }
 
 KoPointerEvent::KoPointerEvent( QWheelEvent *ev, const QPointF &pnt )
-: point( pnt )
-, m_tabletEvent( 0 )
-, m_mouseEvent( 0 )
-, m_wheelEvent( ev )
-, m_event( ev )
+    : point( pnt ),
+    m_event(ev),
+    d(new Private())
 {
+    d->wheelEvent = ev;
 }
 
 Qt::MouseButton KoPointerEvent::button () const
 {
-    if (m_mouseEvent)
-        return m_mouseEvent->button();
+    if (d->mouseEvent)
+        return d->mouseEvent->button();
     else
         return Qt::NoButton;
 }
 
 Qt::MouseButtons KoPointerEvent::buttons () const
 {
-    if (m_mouseEvent)
-        return m_mouseEvent->buttons();
-    else if (m_wheelEvent)
-        return m_wheelEvent->buttons();
+    if (d->mouseEvent)
+        return d->mouseEvent->buttons();
+    else if (d->wheelEvent)
+        return d->wheelEvent->buttons();
     else
         return Qt::NoButton;
 }
 
 const QPoint & KoPointerEvent::globalPos()
 {
-    if (m_mouseEvent)
-        return m_mouseEvent->globalPos();
-    else if (m_wheelEvent)
-        return m_wheelEvent->globalPos();
+    if (d->mouseEvent)
+        return d->mouseEvent->globalPos();
+    else if (d->wheelEvent)
+        return d->wheelEvent->globalPos();
     else
-        return m_tabletEvent->globalPos();
+        return d->tabletEvent->globalPos();
 }
 
 const QPoint & KoPointerEvent::pos () const
 {
-    if (m_mouseEvent)
-        return m_mouseEvent->pos();
-    else if (m_wheelEvent)
-        return m_wheelEvent->pos();
+    if (d->mouseEvent)
+        return d->mouseEvent->pos();
+    else if (d->wheelEvent)
+        return d->wheelEvent->pos();
     else
-        return m_tabletEvent->pos();
+        return d->tabletEvent->pos();
 }
 
 qreal KoPointerEvent::pressure () const
 {
-    if (m_tabletEvent)
-        return m_tabletEvent->pressure();
+    if (d->tabletEvent)
+        return d->tabletEvent->pressure();
     else
         return 0.5;
 }
 
 qreal KoPointerEvent::rotation () const
 {
-    if (m_tabletEvent)
-        return m_tabletEvent->rotation();
+    if (d->tabletEvent)
+        return d->tabletEvent->rotation();
     else
         return 0.0;
 }
 
 qreal KoPointerEvent::tangentialPressure () const
 {
-    if (m_tabletEvent)
-        return m_tabletEvent->tangentialPressure();
+    if (d->tabletEvent)
+        return d->tabletEvent->tangentialPressure();
     else
         return 0.0;
 }
 
 int KoPointerEvent::x () const
 {
-    if (m_tabletEvent)
-        return m_tabletEvent->x();
-    if (m_wheelEvent)
-        return m_wheelEvent->x();
+    if (d->tabletEvent)
+        return d->tabletEvent->x();
+    if (d->wheelEvent)
+        return d->wheelEvent->x();
     else
-        return m_mouseEvent->x();
+        return d->mouseEvent->x();
 }
 
 int KoPointerEvent::xTilt () const
 {
-    if (m_tabletEvent)
-        return m_tabletEvent->xTilt();
+    if (d->tabletEvent)
+        return d->tabletEvent->xTilt();
     else
         return 0;
 }
 
 int KoPointerEvent::y () const
 {
-    if (m_tabletEvent)
-        return m_tabletEvent->y();
-    if (m_wheelEvent)
-        return m_wheelEvent->y();
+    if (d->tabletEvent)
+        return d->tabletEvent->y();
+    if (d->wheelEvent)
+        return d->wheelEvent->y();
     else
-        return m_mouseEvent->y();
+        return d->mouseEvent->y();
 }
 
 int KoPointerEvent::yTilt () const
 {
-    if (m_tabletEvent)
-        return m_tabletEvent->yTilt();
+    if (d->tabletEvent)
+        return d->tabletEvent->yTilt();
     else
         return 0;
 }
 
 int KoPointerEvent::z () const
 {
-    if (m_tabletEvent)
-        return m_tabletEvent->z();
+    if (d->tabletEvent)
+        return d->tabletEvent->z();
     else
         return 0;
 }
 
 int KoPointerEvent::delta() const
 {
-    if (m_wheelEvent)
-        return m_wheelEvent->delta();
+    if (d->wheelEvent)
+        return d->wheelEvent->delta();
     else
         return 0;
 }
 
 Qt::Orientation KoPointerEvent::orientation() const
 {
-    if (m_wheelEvent)
-        return m_wheelEvent->orientation();
+    if (d->wheelEvent)
+        return d->wheelEvent->orientation();
     else
         return Qt::Horizontal;
 }

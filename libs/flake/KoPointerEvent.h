@@ -2,7 +2,7 @@
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -167,11 +167,12 @@ public:
     const QPointF &point;
 
 private:
-    QTabletEvent * m_tabletEvent;
-    QMouseEvent * m_mouseEvent;
-    QWheelEvent * m_wheelEvent;
+    // for the d-pointer police; we want to make accessors to the event inline, so this one stays here.
     QInputEvent * m_event;
+
+    class Private;
+    Private * const d;
 };
 
-#endif /* KOGFXEVENT_H */
+#endif
 

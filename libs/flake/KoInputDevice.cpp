@@ -49,14 +49,42 @@ KoInputDevice::KoInputDevice()
 {
 }
 
-
-bool KoInputDevice::operator==(const KoInputDevice &other)
+KoInputDevice::KoInputDevice(const KoInputDevice &other)
+    : d(new Private(other.d->device, other.d->pointer, other.d->uniqueTabletId, other.d->mouse))
 {
+}
+
+bool KoInputDevice::operator==(const KoInputDevice &other) const {
     return d->device == other.d->device && d->pointer == other.d->pointer &&
         d->uniqueTabletId == other.d->uniqueTabletId && d->mouse == other.d->mouse;
 }
 
-bool KoInputDevice::operator!=(const KoInputDevice &other)
-{
+bool KoInputDevice::operator!=(const KoInputDevice &other) const {
     return ! (operator==(other));
 }
+
+KoInputDevice & KoInputDevice::operator=(const KoInputDevice &other) {
+    d->device = other.d->device;
+    d->pointer = other.d->pointer;
+    d->uniqueTabletId = other.d->uniqueTabletId;
+    d->mouse = other.d->mouse;
+    return *this;
+}
+
+// static
+KoInputDevice KoInputDevice::mouse() {
+    KoInputDevice id;
+    return id;
+}
+// static
+KoInputDevice KoInputDevice::stylus() {
+    KoInputDevice id(QTabletEvent::Stylus, QTabletEvent::Pen);
+    return id;
+}
+
+// static
+KoInputDevice KoInputDevice::eraser() {
+    KoInputDevice id(QTabletEvent::Stylus, QTabletEvent::Eraser);
+    return id;
+}
+

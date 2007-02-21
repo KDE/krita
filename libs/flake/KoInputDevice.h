@@ -34,18 +34,18 @@
  */
 class FLAKE_EXPORT KoInputDevice {
 public:
+    KoInputDevice(const KoInputDevice &other);
     explicit KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer);
     explicit KoInputDevice(qint64 uniqueTabletId);
     explicit KoInputDevice();
 
-    bool operator==(const KoInputDevice& other);
-    bool operator!=(const KoInputDevice& other);
+    bool operator==(const KoInputDevice&) const;
+    bool operator!=(const KoInputDevice&) const;
+    KoInputDevice & operator=(const KoInputDevice &);
 
-// readd if we think these are actually useful.
-//   static KoInputDevice mouse();     // Standard mouse
-//   static KoInputDevice stylus();    // Wacom stylus via QTabletEvent
-//   static KoInputDevice eraser();    // Wacom eraser via QTabletEvent
-//   static KoInputDevice puck();      // Wacom puck via QTabletEvent
+   static KoInputDevice mouse();     // Standard mouse
+   static KoInputDevice stylus();    // Wacom style/pen
+   static KoInputDevice eraser();    // Wacom eraser
 
 private:
     class Private;

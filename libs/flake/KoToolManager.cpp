@@ -84,6 +84,28 @@ public:
     CanvasData *canvasData; // data about the active canvas.
 
     KoInputDevice inputDevice;
+
+    CanvasData *createCanvasData(KoCanvasController *controller, KoInputDevice device) {
+        QHash<QString, KoTool*> toolsHash;
+        foreach(ToolHelper *tool, tools) {
+            // TODO reuse ones that are marked as inputDeviceAgnostic();
+            kDebug(30006) << "Creating tool " << tool->id() << ", " << tool->activationShapeId() << endl;
+            KoTool *tl = tool->createTool(controller->canvas());
+            uniqueToolIds.insert(tl, tool->uniqueId());
+            toolsHash.insert(tool->id(), tl);
+            tl->setObjectName(tool->id());
+            foreach(QAction *action, tl->actions().values())
+                action->setEnabled(false);
+        }
+        KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsHash.value(KoCreateShapesTool_ID));
+        Q_ASSERT(createTool);
+        QString id = KoShapeRegistry::instance()->keys()[0];
+        createTool->setShapeId(id);
+
+        CanvasData *cd = new CanvasData(controller, device);
+        cd->allTools = toolsHash;
+        return cd;
+    }
 };
 
 // ******** KoToolManager **********
@@ -135,6 +157,10 @@ QList<KoToolManager::Button> KoToolManager::createToolList() const {
         answer.append(button);
     }
     return answer;
+}
+
+KoInputDevice KoToolManager::currentInputDevice() const {
+    return d->inputDevice;
 }
 
 void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *controller) {
@@ -247,6 +273,10 @@ void KoToolManager::switchTool(KoTool *tool) {
             tp->setActiveTool(d->canvasData->activeTool);
     }
 
+    postSwitchTool();
+}
+
+void KoToolManager::postSwitchTool() {
     QWidget *toolWidget = d->canvasData->activeTool->optionWidget();
     if(toolWidget == 0) { // no option widget.
         QString name;
@@ -268,27 +298,12 @@ void KoToolManager::switchTool(KoTool *tool) {
     emit changedTool(d->canvasData->canvas, d->uniqueToolIds.value(d->canvasData->activeTool));
 }
 
-void KoToolManager::attachCanvas(KoCanvasController *controller) {
-    QHash<QString, KoTool*> toolsHash;
-    foreach(ToolHelper *tool, d->tools) {
-        kDebug(30006) << "Creating tool " << tool->id() << ", " << tool->activationShapeId() << endl;
-        KoTool *tl = tool->createTool(controller->canvas());
-        d->uniqueToolIds.insert(tl, tool->uniqueId());
-        toolsHash.insert(tool->id(), tl);
-        tl->setObjectName(tool->id());
-        foreach(QAction *action, tl->actions().values())
-            action->setEnabled(false);
-    }
-    KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsHash.value(KoCreateShapesTool_ID));
-    Q_ASSERT(createTool);
-    QString id = KoShapeRegistry::instance()->keys()[0];
-    createTool->setShapeId(id);
 
-    KoInputDevice mouse;
-    CanvasData *cd = new CanvasData(controller, mouse);
-    cd->allTools = toolsHash;
+void KoToolManager::attachCanvas(KoCanvasController *controller) {
+    CanvasData *cd = d->createCanvasData(controller, KoInputDevice::mouse());
     // switch to new canvas as the active one.
     d->canvasData = cd;
+    d->inputDevice = cd->inputDevice;
     QList<CanvasData*> canvasses;
     canvasses.append(cd);
     d->canvasses[controller] = canvasses;
@@ -440,7 +455,30 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes) 
 
 void KoToolManager::switchInputDevice(const KoInputDevice &device) {
     if(d->inputDevice == device) return;
-    kDebug() << "New input device!\n";
+    d->inputDevice = device;
+kDebug(30006) << "New input device!\n";
+    QList<CanvasData*> items = d->canvasses[d->canvasData->canvas];
+    foreach(CanvasData *cd, items) {
+        if(cd->inputDevice == device) {
+            d->canvasData = cd;
+            if(cd->activeTool == 0)
+                switchTool(KoInteractionTool_ID, false);
+            else
+                postSwitchTool();
+            return;
+        }
+    }
+
+    // still here?  That means we need to create a new CanvasData instance with the current InputDevice.
+    CanvasData *cd = d->createCanvasData(d->canvasData->canvas, device);
+    // switch to new canvas as the active one.
+    QString oldTool = d->canvasData->activeToolId;
+
+    d->canvasData = cd;
+    items.append(cd);
+    d->canvasses[d->canvasData->canvas] = items;
+
+    switchToolRequested(oldTool);
 }
 
 //static

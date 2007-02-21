@@ -200,6 +200,7 @@ private:
     void setup();
     void switchTool(KoTool *tool);
     void switchTool(const QString &id, bool temporary);
+    void postSwitchTool();
 
 private slots:
 

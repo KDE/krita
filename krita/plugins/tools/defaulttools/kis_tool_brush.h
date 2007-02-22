@@ -80,6 +80,7 @@ public:
             setShortcut( KShortcut( Qt::Key_B ) );
             setPriority( 0 );
             setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setInputDeviceAgnostic(false);
         }
 
     virtual ~KisToolBrushFactory(){}

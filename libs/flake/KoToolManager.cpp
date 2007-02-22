@@ -85,10 +85,19 @@ public:
 
     KoInputDevice inputDevice;
 
+    // helper method.
     CanvasData *createCanvasData(KoCanvasController *controller, KoInputDevice device) {
+        QHash<QString, KoTool*> origHash;
+        if(canvasses.contains(controller))
+            origHash = canvasses.value(controller).first()->allTools;
+
         QHash<QString, KoTool*> toolsHash;
         foreach(ToolHelper *tool, tools) {
-            // TODO reuse ones that are marked as inputDeviceAgnostic();
+            if(tool->inputDeviceAgnostic() && origHash.contains(tool->id())) {
+                // reuse ones that are marked as inputDeviceAgnostic();
+                toolsHash.insert(tool->id(), origHash.value(tool->id()));
+                continue;
+            }
             kDebug(30006) << "Creating tool " << tool->id() << ", " << tool->activationShapeId() << endl;
             KoTool *tl = tool->createTool(controller->canvas());
             uniqueToolIds.insert(tl, tool->uniqueId());
@@ -300,7 +309,7 @@ void KoToolManager::postSwitchTool() {
 
 
 void KoToolManager::attachCanvas(KoCanvasController *controller) {
-    CanvasData *cd = d->createCanvasData(controller, KoInputDevice::mouse());
+    CanvasData *cd = d->createCanvasData(controller, KoInputDevice::eraser());
     // switch to new canvas as the active one.
     d->canvasData = cd;
     d->inputDevice = cd->inputDevice;

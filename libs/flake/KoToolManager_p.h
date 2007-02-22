@@ -54,6 +54,8 @@ public:
     int uniqueId() const { return m_uniqueId; }
     /// wrapper around KoToolFactory::shortcut()
     const KShortcut& shortcut() const;
+    /// wrapper around KoToolFactory::inputDeviceAgnostic()
+    bool inputDeviceAgnostic() const;
 
 signals:
     /// emitted when one of the generated buttons was pressed.

@@ -75,6 +75,9 @@ const KShortcut& ToolHelper::shortcut() const {
     return m_toolFactory->shortcut();
 }
 
+bool ToolHelper::inputDeviceAgnostic() const {
+    return m_toolFactory->inputDeviceAgnostic();
+}
 
 //   ************ Connector **********
 Connector::Connector(KoShapeManager *parent)

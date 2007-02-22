@@ -19,12 +19,30 @@
 
 #include "KoToolFactory.h"
 
+class KoToolFactory::Private {
+public:
+    Private(const QString &i, const QString &n)
+        : priority(100),
+        inputDeviceAgnostic(true),
+        id(i),
+        name(n)
+    {
+    }
+    int priority;
+    bool inputDeviceAgnostic;
+    QString toolType;
+    QString tooltip;
+    QString activationId;
+    QString icon;
+    const QString id, name;
+    KShortcut shortcut;
+};
+
+
 KoToolFactory::KoToolFactory(QObject *parent, const QString &id, const QString &name)
-: QObject(parent)
-, m_name(name)
-, m_id(id)
+    : QObject(parent),
+    d(new Private(id, name))
 {
-    m_priority=100;
 }
 
 KoToolFactory::~KoToolFactory()
@@ -32,65 +50,73 @@ KoToolFactory::~KoToolFactory()
 }
 
 const QString &KoToolFactory::toolId() const {
-    return m_id;
+    return d->id;
 }
 
 int KoToolFactory::priority() const {
-    return m_priority;
+    return d->priority;
 }
 
 const QString& KoToolFactory::toolType() const {
-    return m_toolType;
+    return d->toolType;
 }
 
 const QString& KoToolFactory::toolTip() const {
-    return m_tooltip;
+    return d->tooltip;
 }
 
 const QString& KoToolFactory::icon() const {
-    return m_icon;
+    return d->icon;
 }
 
 const QString &KoToolFactory::activationShapeId() const {
-    return m_activationId;
+    return d->activationId;
 }
 
 const KShortcut& KoToolFactory::shortcut() const {
-    return m_shortcut;
+    return d->shortcut;
 }
 
 void KoToolFactory::setActivationShapeID(const QString &activationShapeId) {
-    m_activationId = activationShapeId;
+    d->activationId = activationShapeId;
 }
 
 void KoToolFactory::setToolTip(const QString & tooltip) {
-    m_tooltip = tooltip;
+    d->tooltip = tooltip;
 }
 
 void KoToolFactory::setToolType(const QString & toolType) {
-    m_toolType = toolType;
+    d->toolType = toolType;
 }
 
 void KoToolFactory::setIcon(const QString & icon) {
-    m_icon = icon;
+    d->icon = icon;
 }
 
 void KoToolFactory::setPriority(int newPriority) {
-    m_priority = newPriority;
+    d->priority = newPriority;
 }
 
 void KoToolFactory::setShortcut(const KShortcut & shortcut)
 {
-    m_shortcut = shortcut;
+    d->shortcut = shortcut;
 }
 
 
 const KoID KoToolFactory::id() const {
-    return KoID(m_id, m_name);
+    return KoID(d->id, d->name);
 }
 
 const QString& KoToolFactory::name() const {
-    return m_name;
+    return d->name;
+}
+
+void KoToolFactory::setInputDeviceAgnostic(bool agnostic) {
+    d->inputDeviceAgnostic = agnostic;
+}
+
+bool KoToolFactory::inputDeviceAgnostic() const {
+    return d->inputDeviceAgnostic;
 }
 
 #include "KoToolFactory.moc"

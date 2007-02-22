@@ -122,6 +122,10 @@ public:
      */
     const KShortcut& shortcut() const;
 
+    /**
+     * Returns if the tools instance this factory creates can be reused between input devices.
+     * @return true when the tool instance can be reused, false if a new instance needs to be created.
+     */
     bool inputDeviceAgnostic() const;
 
     /**
@@ -184,14 +188,15 @@ protected:
      */
     void setShortcut(const KShortcut & shortcut);
 
+    /**
+     * set wheater the tools instance this factory creates can be reused between input devices.
+     * @param agnostic when true the tool instance can be reused, false if a new instance needs to be created.
+     */
+    void setInputDeviceAgnostic(bool agnostic);
+
 private:
-    QString m_toolType;
-    QString m_tooltip;
-    QString m_activationId;
-    QString m_icon;
-    const QString m_name, m_id;
-    int m_priority;
-    KShortcut m_shortcut;
+    class Private;
+    Private * const d;
 };
 
 #endif

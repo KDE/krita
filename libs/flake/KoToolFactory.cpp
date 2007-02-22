@@ -47,6 +47,7 @@ KoToolFactory::KoToolFactory(QObject *parent, const QString &id, const QString &
 
 KoToolFactory::~KoToolFactory()
 {
+    delete d;
 }
 
 const QString &KoToolFactory::toolId() const {

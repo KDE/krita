@@ -188,6 +188,12 @@ signals:
      */
     void toolCodesSelected(const KoCanvasController *canvas, QList<QString> types);
 
+    /**
+     * Every time a new input device gets used by a tool, this event is emitted.
+     * @param device the new input device that the user picked up.
+     */
+    void inputDeviceChanged(const KoInputDevice &device);
+
 protected:
     friend class KoToolProxy;
     void switchInputDevice(const KoInputDevice &device);

@@ -267,16 +267,16 @@ void KoToolManager::switchTool(KoTool *tool) {
         action->setEnabled(true);
     d->canvasData->activeTool->activate();
 
+    postSwitchTool();
+}
+
+void KoToolManager::postSwitchTool() {
     if(d->canvasData->canvas->canvas()) {
         KoToolProxy *tp = d->proxies.value(d->canvasData->canvas->canvas());
         if(tp)
             tp->setActiveTool(d->canvasData->activeTool);
     }
 
-    postSwitchTool();
-}
-
-void KoToolManager::postSwitchTool() {
     QWidget *toolWidget = d->canvasData->activeTool->optionWidget();
     if(toolWidget == 0) { // no option widget.
         QString name;
@@ -479,6 +479,7 @@ kDebug(30006) << "New input device!\n";
     d->canvasses[d->canvasData->canvas] = items;
 
     switchToolRequested(oldTool);
+    emit inputDeviceChanged(device);
 }
 
 //static

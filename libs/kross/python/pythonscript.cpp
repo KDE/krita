@@ -79,7 +79,6 @@ Py::Dict PythonScript::moduleDict() const
 bool PythonScript::initialize()
 {
     finalize(); // finalize before initialize
-    clearError(); // clear previous errors.
 
     try {
         if(action()->code().isNull()) {
@@ -153,11 +152,12 @@ bool PythonScript::initialize()
         }
     }
     catch(Py::Exception& e) {
+        PyErr_Print();
         QStringList trace;
         int lineno;
         PythonInterpreter::extractException(trace, lineno);
         setError(Py::value(e).as_string().c_str(), trace.join("\n"), lineno);
-        e.clear(); // exception is handled. clear it now.
+        //e.clear(); // exception is handled. clear it now.
         return false;
     }
     return true;
@@ -169,6 +169,8 @@ void PythonScript::finalize()
         krossdebug( QString("PythonScript::finalize() module=%1").arg(d->m_module ? d->m_module->as_string().c_str() : "NULL") );
     #endif
 
+    PyErr_Clear();
+    clearError();
     delete d->m_module; d->m_module = 0;
     delete d->m_code; d->m_code = 0;
 }
@@ -179,7 +181,16 @@ void PythonScript::execute()
         krossdebug( QString("PythonScript::execute()") );
     #endif
 
-    clearError(); // clear previous errors.
+    if( hadError() ) {
+        #ifdef KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
+            krosswarning( QString("PythonScript::execute() Abort cause of prev error: %1\n%2").arg(errorMessage()).arg(errorTrace()) );
+        #endif
+        Py::AttributeError(errorMessage());
+        return;
+    }
+
+    PyErr_Clear();
+    //clearError(); // clear previous errors.
 
     if(! d->m_module) { // initialize if not already done before.
         if(! initialize())
@@ -231,15 +242,15 @@ void PythonScript::execute()
         #ifdef KROSS_PYTHON_SCRIPT_EXEC_DEBUG
             krossdebug( QString("PythonScript::execute() result=%1").arg(result.as_string().c_str()) );
         #endif
-        //Kross::Object* r = PythonExtension::toObject(result);
-        //return Kross::Object::Ptr(r);
+        //return PythonExtension::toObject(result);
     }
     catch(Py::Exception& e) {
         Py::Object errobj = Py::value(e);
         if(errobj.ptr() == Py_None) // e.g. string-exceptions have there errormessage in the type-object
             errobj = Py::type(e);
         setError( errobj.as_string().c_str() );
-        PyErr_Clear(); // exception is handled.
+        //PyErr_Clear(); // exception is handled.
+        PyErr_Print();
     }
 }
 
@@ -262,6 +273,8 @@ QStringList PythonScript::functionNames()
 
 QVariant PythonScript::callFunction(const QString& name, const QVariantList& args)
 {
+    //TODO do we need to acquire interpreter lock here?
+
     #ifdef KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
         QString s;
         foreach(QVariant v, args)
@@ -269,63 +282,66 @@ QVariant PythonScript::callFunction(const QString& name, const QVariantList& arg
         krossdebug( QString("PythonScript::callFunction() name=%1 args=[%2]").arg(name).arg(s) );
     #endif
 
-    clearError(); // clear previous errors.
+    if( hadError() ) {
+        #ifdef KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
+            krosswarning( QString("PythonScript::callFunction() Abort cause of prev error: %1\n%2").arg(errorMessage()).arg(errorTrace()) );
+        #endif
+        Py::AttributeError( errorMessage() );
+        return QVariant();
+    }
+
+    PyErr_Clear();
+    //clearError(); // clear previous errors.
 
     if(! d->m_module) { // initialize if not already done before.
         if(! initialize())
             return QVariant();
-        execute();
+        execute(); // execute if not already done before.
+        if( hadError() )
+            return QVariant();
     }
 
-    if(hadError()) {
-        #ifdef KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
-            krossdebug( QString("PythonScript::callFunction() name=%1 had errors: %2").arg(name).arg(errorMessage()) );
-        #endif
-        finalize();
-        return QVariant();
-    }
-
-    // Acquire interpreter lock
-    //PyGILState_STATE gilstate = PyGILState_Ensure();
-
-    QVariant result;
     try {
         Py::Dict moduledict = d->m_module->getDict();
 
         // Try to determinate the function we like to execute.
         PyObject* func = PyDict_GetItemString(moduledict.ptr(), name.toLatin1().data());
         if(! func) {
-            setError( QString("No such function '%1'.").arg(name) );
-            //PyGILState_Release(gilstate);
-            finalize();
+            Py::AttributeError( ::QString("No such function '%1'.").arg(name).toLatin1().constData() );
+            //setError( QString("No such function '%1'.").arg(name) );
+            //finalize();
             return QVariant();
         }
 
         // Check if the object is really a function and callable.
         Py::Callable funcobject(func, true);
         if(! funcobject.isCallable()) {
-            setError( QString("Function '%1' is not callable.").arg(name) );
-            //PyGILState_Release(gilstate);
-            finalize();
+            Py::AttributeError( ::QString("Function '%1' is not callable.").arg(name).toLatin1().constData() );
+            //setError( QString("Function '%1' is not callable.").arg(name) );
+            //finalize();
             return QVariant();
         }
 
         // Finally call the function.
         Py::Object pyresult = funcobject.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
-        result = PythonType<QVariant>::toVariant(pyresult);
-        krossdebug( QString("PythonScript::callFunction() result=%1 variant.toString=%2 variant.typeName=%3").arg(pyresult.as_string().c_str()).arg(result.toString()).arg(result.typeName()) );
-        finalize();
+        QVariant result = PythonType<QVariant>::toVariant(pyresult);
+        #ifdef KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
+            krossdebug( QString("PythonScript::callFunction() result=%1 variant.toString=%2 variant.typeName=%3").arg(pyresult.as_string().c_str()).arg(result.toString()).arg(result.typeName()) );
+        #endif
+        //finalize();
+        return result;
     }
     catch(Py::Exception& e) {
-        setError( Py::value(e).as_string().c_str() );
-        e.clear(); // exception is handled. clear it now.
-        finalize();
+        #ifdef KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
+            krosswarning( QString("PythonScript::callFunction() Exception: %1").arg(Py::value(e).as_string().c_str()) );
+        #endif
+        //setError( Py::value(e).as_string().c_str() );
+        //e.clear(); // exception is handled. clear it now.
+        //finalize();
+        PyErr_Print();
     }
 
-    // Free interpreter lock
-    //PyGILState_Release(gilstate);
-
-    return result;
+    return QVariant();
 }
 
 #if 0

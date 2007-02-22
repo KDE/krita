@@ -2,6 +2,7 @@
 
    Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -116,10 +117,8 @@ private:
     void requestSelectionChangedEvent();
     void selectGroupChilds( KoShapeGroup *group );
 
-    QList<KoShape*> m_selectedShapes;
-    bool m_eventTriggered;
-
-    KoShapeLayer *m_activeLayer;
+    class Private;
+    Private * const d;
 };
 
 #endif

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,8 +23,14 @@
 #include <QDebug>
 #include <QPainter>
 
+class KoParameterShape::Private {
+public:
+    Private() : modified(false) {}
+    bool modified;
+};
+
 KoParameterShape::KoParameterShape()
-: m_modified( false )
+    : d(new Private())
 {
 }
 
@@ -132,3 +139,10 @@ QPointF KoParameterShape::normalize()
     return offset;
 }
 
+bool KoParameterShape::isParametricShape() const {
+    return !d->modified;
+}
+
+void KoParameterShape::setModified( bool modified ) {
+    d->modified = modified;
+}

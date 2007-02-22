@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -107,19 +107,9 @@ private:
 
     // convenience method;
     KoSelection * koSelection();
-    KoFlake::SelectionHandle m_lastHandle;
-    bool m_mouseWasInsideHandles;
-    QPointF m_selectionBox[8];
-    QPolygonF m_selectionOutline;
-    QPointF m_lastPoint;
-    KoShapeMoveCommand *m_moveCommand;
-    QTime m_lastUsedMoveCommand;
 
-    // TODO alter these 3 arrays to be static const instead
-    QCursor m_sizeCursors[8];
-    QCursor m_rotateCursors[8];
-    QCursor m_shearCursors[8];
-    double m_angle;
+    class Private;
+    Private * const d;
 };
 
 /**

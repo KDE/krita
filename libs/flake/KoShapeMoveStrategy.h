@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,15 +26,13 @@
 
 #include <QPointF>
 
-#include <flake_export.h>
-
 class KoCanvasBase;
 class KoTool;
 
 /**
  * Implements the Move action on an object or selected objects.
  */
-class FLAKE_EXPORT KoShapeMoveStrategy : public KoInteractionStrategy
+class KoShapeMoveStrategy : public KoInteractionStrategy
 {
 public:
     /**

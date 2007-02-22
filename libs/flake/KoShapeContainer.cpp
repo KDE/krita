@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,54 +23,64 @@
 #include <QPointF>
 #include <QPainter>
 
-KoShapeContainer::KoShapeContainer() : KoShape() {
-    m_children = 0;
+class KoShapeContainer::Private {
+public:
+    Private() : children(0) {}
+    ~Private() {
+        if(children)
+        {
+            foreach (KoShape *shape, children->iterator())
+                shape->setParent(0);
+            delete children;
+        }
+    }
+    KoShapeContainerModel *children;
+};
+
+KoShapeContainer::KoShapeContainer() : KoShape(), d(new Private()) {
 }
 
 KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
-: KoShape()
-, m_children(model) {
+: KoShape(),
+ d(new Private())
+{
+    d->children = model;
 }
 
 KoShapeContainer::~KoShapeContainer() {
-    if(m_children)
-    {
-        foreach (KoShape *shape, m_children->iterator())
-            shape->setParent(0);
-        delete m_children;
-    }
+    delete d;
 }
 
 void KoShapeContainer::addChild(KoShape *shape) {
     Q_ASSERT(shape);
-    if(m_children == 0)
-        m_children = new ChildrenData();
+    if(d->children == 0)
+        d->children = new ChildrenData();
     if( shape->parent() )
         shape->parent()->removeChild( shape );
-    m_children->add(shape);
+    d->children->add(shape);
     shape->setParent(this);
     childCountChanged();
 }
 
 void KoShapeContainer::removeChild(KoShape *shape) {
     Q_ASSERT(shape);
-    if(m_children == 0)
+    if(d->children == 0)
         return;
-    m_children->remove(shape);
+    d->children->remove(shape);
     shape->setParent(0);
     childCountChanged();
 }
 
 int  KoShapeContainer::childCount() const {
-    if(m_children == 0)
+    if(d->children == 0)
         return 0;
-    return m_children->count();
+    return d->children->count();
 }
 
 void KoShapeContainer::setClipping(const KoShape *child, bool clipping) {
-    if(m_children == 0)
+    if(d->children == 0)
         return;
-    m_children->setClipping(child, clipping);
+    d->children->setClipping(child, clipping);
 }
 
 void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter) {
@@ -78,10 +88,10 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     applyConversion(painter, converter);
     paintComponent(painter, converter);
     painter.restore();
-    if(m_children == 0 || m_children->count() == 0)
+    if(d->children == 0 || d->children->count() == 0)
         return;
 
-    QList<KoShape*> sortedObjects = m_children->iterator();
+    QList<KoShape*> sortedObjects = d->children->iterator();
     qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
     painter.setMatrix( matrix().inverted() * painter.matrix() );
     QMatrix myMatrix = transformationMatrix(&converter);
@@ -117,19 +127,19 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 }
 
 void KoShapeContainer::shapeChanged(ChangeType type) {
-    if(m_children == 0)
+    if(d->children == 0)
         return;
     if(! (type == RotationChanged || type == ScaleChanged || type == ShearChanged || type == SizeChanged))
         return;
-    m_children->containerChanged(this);
-    foreach (KoShape *shape, m_children->iterator())
+    d->children->containerChanged(this);
+    foreach (KoShape *shape, d->children->iterator())
         shape->recalcMatrix();
 }
 
 bool KoShapeContainer::childClipped(const KoShape *child) const {
-    if(m_children == 0) // throw exception??
+    if(d->children == 0) // throw exception??
         return false;
-    return m_children->childClipped(child);
+    return d->children->childClipped(child);
 }
 
 
@@ -197,16 +207,16 @@ void KoShapeContainer::ChildrenData::containerChanged(KoShapeContainer *containe
 
 void KoShapeContainer::repaint() const {
     KoShape::repaint();
-    if(m_children)
-        foreach ( KoShape *shape, m_children->iterator())
+    if(d->children)
+        foreach ( KoShape *shape, d->children->iterator())
             shape->repaint();
 }
 
 QList<KoShape*> KoShapeContainer::iterator() const {
-    if(m_children == 0)
+    if(d->children == 0)
         return QList<KoShape*>();
 
-    return m_children->iterator();
+    return d->children->iterator();
 }
 
 // ## inner class KoShapeContainerModel::Relation

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,57 +43,78 @@
 
 #define HANDLE_DISTANCE 10
 
+class KoInteractionTool::Private {
+public:
+    Private() : lastHandle(KoFlake::NoHandle), mouseWasInsideHandles( false ), moveCommand(0) { }
+    ~Private() {
+        moveCommand = 0;
+    }
+
+    KoFlake::SelectionHandle lastHandle;
+    bool mouseWasInsideHandles;
+    QPointF selectionBox[8];
+    QPolygonF selectionOutline;
+    QPointF lastPoint;
+    KoShapeMoveCommand *moveCommand;
+    QTime lastUsedMoveCommand;
+
+    // TODO alter these 3 arrays to be static const instead
+    QCursor sizeCursors[8];
+    QCursor rotateCursors[8];
+    QCursor shearCursors[8];
+    double angle;
+};
+
 KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
-: KoTool( canvas )
-, m_currentStrategy( 0 )
-, m_lastHandle(KoFlake::NoHandle)
-, m_mouseWasInsideHandles( false )
-, m_moveCommand(0)
+    : KoTool( canvas ),
+    m_currentStrategy(0),
+    d( new Private())
 {
     QPixmap rotatePixmap, shearPixmap;
     rotatePixmap.load(KStandardDirs::locate("data", "koffice/icons/rotate.png"));
     shearPixmap.load(KStandardDirs::locate("data", "koffice/icons/shear.png"));
 
-    m_rotateCursors[0] = QCursor(rotatePixmap.transformed(QMatrix().rotate(45)));
-    m_rotateCursors[1] = QCursor(rotatePixmap.transformed(QMatrix().rotate(90)));
-    m_rotateCursors[2] = QCursor(rotatePixmap.transformed(QMatrix().rotate(135)));
-    m_rotateCursors[3] = QCursor(rotatePixmap.transformed(QMatrix().rotate(180)));
-    m_rotateCursors[4] = QCursor(rotatePixmap.transformed(QMatrix().rotate(225)));
-    m_rotateCursors[5] = QCursor(rotatePixmap.transformed(QMatrix().rotate(270)));
-    m_rotateCursors[6] = QCursor(rotatePixmap.transformed(QMatrix().rotate(315)));
-    m_rotateCursors[7] = QCursor(rotatePixmap);
+    d->rotateCursors[0] = QCursor(rotatePixmap.transformed(QMatrix().rotate(45)));
+    d->rotateCursors[1] = QCursor(rotatePixmap.transformed(QMatrix().rotate(90)));
+    d->rotateCursors[2] = QCursor(rotatePixmap.transformed(QMatrix().rotate(135)));
+    d->rotateCursors[3] = QCursor(rotatePixmap.transformed(QMatrix().rotate(180)));
+    d->rotateCursors[4] = QCursor(rotatePixmap.transformed(QMatrix().rotate(225)));
+    d->rotateCursors[5] = QCursor(rotatePixmap.transformed(QMatrix().rotate(270)));
+    d->rotateCursors[6] = QCursor(rotatePixmap.transformed(QMatrix().rotate(315)));
+    d->rotateCursors[7] = QCursor(rotatePixmap);
 /*
-    m_rotateCursors[0] = QCursor(Qt::RotateNCursor);
-    m_rotateCursors[1] = QCursor(Qt::RotateNECursor);
-    m_rotateCursors[2] = QCursor(Qt::RotateECursor);
-    m_rotateCursors[3] = QCursor(Qt::RotateSECursor);
-    m_rotateCursors[4] = QCursor(Qt::RotateSCursor);
-    m_rotateCursors[5] = QCursor(Qt::RotateSWCursor);
-    m_rotateCursors[6] = QCursor(Qt::RotateWCursor);
-    m_rotateCursors[7] = QCursor(Qt::RotateNWCursor);
+    d->rotateCursors[0] = QCursor(Qt::RotateNCursor);
+    d->rotateCursors[1] = QCursor(Qt::RotateNECursor);
+    d->rotateCursors[2] = QCursor(Qt::RotateECursor);
+    d->rotateCursors[3] = QCursor(Qt::RotateSECursor);
+    d->rotateCursors[4] = QCursor(Qt::RotateSCursor);
+    d->rotateCursors[5] = QCursor(Qt::RotateSWCursor);
+    d->rotateCursors[6] = QCursor(Qt::RotateWCursor);
+    d->rotateCursors[7] = QCursor(Qt::RotateNWCursor);
 */
-    m_shearCursors[0] = QCursor(shearPixmap);
-    m_shearCursors[1] = QCursor(shearPixmap.transformed(QMatrix().rotate(45)));
-    m_shearCursors[2] = QCursor(shearPixmap.transformed(QMatrix().rotate(90)));
-    m_shearCursors[3] = QCursor(shearPixmap.transformed(QMatrix().rotate(135)));
-    m_shearCursors[4] = QCursor(shearPixmap.transformed(QMatrix().rotate(180)));
-    m_shearCursors[5] = QCursor(shearPixmap.transformed(QMatrix().rotate(225)));
-    m_shearCursors[6] = QCursor(shearPixmap.transformed(QMatrix().rotate(270)));
-    m_shearCursors[7] = QCursor(shearPixmap.transformed(QMatrix().rotate(315)));
-    m_sizeCursors[0] = KCursor::sizeVerCursor();
-    m_sizeCursors[1] = KCursor::sizeBDiagCursor();
-    m_sizeCursors[2] = KCursor::sizeHorCursor();
-    m_sizeCursors[3] = KCursor::sizeFDiagCursor();
-    m_sizeCursors[4] = KCursor::sizeVerCursor();
-    m_sizeCursors[5] = KCursor::sizeBDiagCursor();
-    m_sizeCursors[6] = KCursor::sizeHorCursor();
-    m_sizeCursors[7] = KCursor::sizeFDiagCursor();
+    d->shearCursors[0] = QCursor(shearPixmap);
+    d->shearCursors[1] = QCursor(shearPixmap.transformed(QMatrix().rotate(45)));
+    d->shearCursors[2] = QCursor(shearPixmap.transformed(QMatrix().rotate(90)));
+    d->shearCursors[3] = QCursor(shearPixmap.transformed(QMatrix().rotate(135)));
+    d->shearCursors[4] = QCursor(shearPixmap.transformed(QMatrix().rotate(180)));
+    d->shearCursors[5] = QCursor(shearPixmap.transformed(QMatrix().rotate(225)));
+    d->shearCursors[6] = QCursor(shearPixmap.transformed(QMatrix().rotate(270)));
+    d->shearCursors[7] = QCursor(shearPixmap.transformed(QMatrix().rotate(315)));
+    d->sizeCursors[0] = KCursor::sizeVerCursor();
+    d->sizeCursors[1] = KCursor::sizeBDiagCursor();
+    d->sizeCursors[2] = KCursor::sizeHorCursor();
+    d->sizeCursors[3] = KCursor::sizeFDiagCursor();
+    d->sizeCursors[4] = KCursor::sizeVerCursor();
+    d->sizeCursors[5] = KCursor::sizeBDiagCursor();
+    d->sizeCursors[6] = KCursor::sizeHorCursor();
+    d->sizeCursors[7] = KCursor::sizeFDiagCursor();
 }
 
 KoInteractionTool::~KoInteractionTool()
 {
+    delete d;
     delete m_currentStrategy;
-    m_moveCommand = 0;
+    m_currentStrategy = 0;
 }
 
 bool KoInteractionTool::wantsAutoScroll()
@@ -112,37 +133,37 @@ void KoInteractionTool::updateCursor() {
         }
 
         if(koSelection()->count()>1)
-            m_angle = koSelection()->rotation();
+            d->angle = koSelection()->rotation();
         else
-            m_angle = koSelection()->firstSelectedShape()->rotation();
+            d->angle = koSelection()->firstSelectedShape()->rotation();
 
-        int rotOctant = 8 + int(8.5 + m_angle / 45);
+        int rotOctant = 8 + int(8.5 + d->angle / 45);
 
-        if(!m_mouseWasInsideHandles) {
-            switch(m_lastHandle) {
+        if(!d->mouseWasInsideHandles) {
+            switch(d->lastHandle) {
                 case KoFlake::TopMiddleHandle:
-                    cursor = m_shearCursors[(0 +rotOctant)%8];
+                    cursor = d->shearCursors[(0 +rotOctant)%8];
                     break;
                 case KoFlake::TopRightHandle:
-                    cursor = m_rotateCursors[(1 +rotOctant)%8];
+                    cursor = d->rotateCursors[(1 +rotOctant)%8];
                     break;
                 case KoFlake::RightMiddleHandle:
-                    cursor = m_shearCursors[(2 +rotOctant)%8];
+                    cursor = d->shearCursors[(2 +rotOctant)%8];
                     break;
                 case KoFlake::BottomRightHandle:
-                    cursor = m_rotateCursors[(3 +rotOctant)%8];
+                    cursor = d->rotateCursors[(3 +rotOctant)%8];
                     break;
                 case KoFlake::BottomMiddleHandle:
-                    cursor = m_shearCursors[(4 +rotOctant)%8];
+                    cursor = d->shearCursors[(4 +rotOctant)%8];
                     break;
                 case KoFlake::BottomLeftHandle:
-                    cursor = m_rotateCursors[(5 +rotOctant)%8];
+                    cursor = d->rotateCursors[(5 +rotOctant)%8];
                     break;
                 case KoFlake::LeftMiddleHandle:
-                    cursor = m_shearCursors[(6 +rotOctant)%8];
+                    cursor = d->shearCursors[(6 +rotOctant)%8];
                     break;
                 case KoFlake::TopLeftHandle:
-                    cursor = m_rotateCursors[(7 +rotOctant)%8];
+                    cursor = d->rotateCursors[(7 +rotOctant)%8];
                     break;
                 case KoFlake::NoHandle:
                     cursor = Qt::ArrowCursor;
@@ -150,30 +171,30 @@ void KoInteractionTool::updateCursor() {
              }
         }
         else {
-            switch(m_lastHandle) {
+            switch(d->lastHandle) {
                 case KoFlake::TopMiddleHandle:
-                    cursor = m_sizeCursors[(0 +rotOctant)%8];
+                    cursor = d->sizeCursors[(0 +rotOctant)%8];
                     break;
                 case KoFlake::TopRightHandle:
-                    cursor = m_sizeCursors[(1 +rotOctant)%8];
+                    cursor = d->sizeCursors[(1 +rotOctant)%8];
                     break;
                 case KoFlake::RightMiddleHandle:
-                    cursor = m_sizeCursors[(2 +rotOctant)%8];
+                    cursor = d->sizeCursors[(2 +rotOctant)%8];
                     break;
                 case KoFlake::BottomRightHandle:
-                    cursor = m_sizeCursors[(3 +rotOctant)%8];
+                    cursor = d->sizeCursors[(3 +rotOctant)%8];
                     break;
                 case KoFlake::BottomMiddleHandle:
-                    cursor = m_sizeCursors[(4 +rotOctant)%8];
+                    cursor = d->sizeCursors[(4 +rotOctant)%8];
                     break;
                 case KoFlake::BottomLeftHandle:
-                    cursor = m_sizeCursors[(5 +rotOctant)%8];
+                    cursor = d->sizeCursors[(5 +rotOctant)%8];
                     break;
                 case KoFlake::LeftMiddleHandle:
-                    cursor = m_sizeCursors[(6 +rotOctant)%8];
+                    cursor = d->sizeCursors[(6 +rotOctant)%8];
                     break;
                 case KoFlake::TopLeftHandle:
-                    cursor = m_sizeCursors[(7 +rotOctant)%8];
+                    cursor = d->sizeCursors[(7 +rotOctant)%8];
                     break;
                 case KoFlake::NoHandle:
                     cursor = Qt::SizeAllCursor;
@@ -190,7 +211,7 @@ void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
     if ( m_currentStrategy )
         m_currentStrategy->paint( painter, converter);
     else if(koSelection()->count() > 0) {
-        SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle,
+        SelectionDecorator decorator(d->mouseWasInsideHandles ? d->lastHandle : KoFlake::NoHandle,
                  true, true);
         decorator.setSelection(koSelection());
         decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
@@ -201,14 +222,14 @@ void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
 void KoInteractionTool::mousePressEvent( KoPointerEvent *event ) {
     Q_ASSERT(m_currentStrategy == 0);
     m_currentStrategy = KoInteractionStrategy::createStrategy(event, this, m_canvas);
-    m_moveCommand = 0;
+    d->moveCommand = 0;
     updateCursor();
 }
 
 void KoInteractionTool::mouseMoveEvent( KoPointerEvent *event ) {
     if(m_currentStrategy) {
-        m_lastPoint = event->point;
-        m_currentStrategy->handleMouseMove( m_lastPoint, event->modifiers() );
+        d->lastPoint = event->point;
+        m_currentStrategy->handleMouseMove( d->lastPoint, event->modifiers() );
     }
     else {
         if(koSelection()->count() > 0) {
@@ -216,16 +237,16 @@ void KoInteractionTool::mouseMoveEvent( KoPointerEvent *event ) {
             if(bound.contains(event->point)) {
                 bool inside;
                 KoFlake::SelectionHandle newDirection = handleAt(event->point, &inside);
-                if(inside != m_mouseWasInsideHandles || m_lastHandle != newDirection) {
-                    m_lastHandle = newDirection;
-                    m_mouseWasInsideHandles = inside;
+                if(inside != d->mouseWasInsideHandles || d->lastHandle != newDirection) {
+                    d->lastHandle = newDirection;
+                    d->mouseWasInsideHandles = inside;
                     repaintDecorations();
                 }
             } else {
-                if(m_lastHandle != KoFlake::NoHandle)
+                if(d->lastHandle != KoFlake::NoHandle)
                     repaintDecorations();
-                m_lastHandle = KoFlake::NoHandle;
-                m_mouseWasInsideHandles = false;
+                d->lastHandle = KoFlake::NoHandle;
+                d->mouseWasInsideHandles = false;
             }
         }
         event->ignore();
@@ -280,7 +301,7 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
        (event->key() == Qt::Key_Control ||
             event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift ||
             event->key() == Qt::Key_Meta)) {
-        m_currentStrategy->handleMouseMove( m_lastPoint, event->modifiers() );
+        m_currentStrategy->handleMouseMove( d->lastPoint, event->modifiers() );
     } else if(m_currentStrategy == 0) {
         double x=0.0, y=0.0;
         if(event->key() == Qt::Key_Left)
@@ -313,16 +334,16 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
             }
             if(shapes.count() > 0) {
                 // use a timeout to make sure we don't reuse a command possibly deleted by the commandHistory
-                if(m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000)
-                    m_moveCommand = 0;
-                if(m_moveCommand) { // alter previous instead of creating new one.
-                    m_moveCommand->setNewPositions(newPos);
-                    m_moveCommand->redo();
+                if(d->lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000)
+                    d->moveCommand = 0;
+                if(d->moveCommand) { // alter previous instead of creating new one.
+                    d->moveCommand->setNewPositions(newPos);
+                    d->moveCommand->redo();
                 } else {
-                    m_moveCommand = new KoShapeMoveCommand(shapes, prevPos, newPos);
-                    m_canvas->addCommand(m_moveCommand);
+                    d->moveCommand = new KoShapeMoveCommand(shapes, prevPos, newPos);
+                    m_canvas->addCommand(d->moveCommand);
                 }
-                m_lastUsedMoveCommand = QTime::currentTime();
+                d->lastUsedMoveCommand = QTime::currentTime();
             }
         }
     }
@@ -340,7 +361,7 @@ void KoInteractionTool::keyReleaseEvent(QKeyEvent *event) {
     else if(event->key() == Qt::Key_Control ||
             event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift ||
             event->key() == Qt::Key_Meta) {
-        m_currentStrategy->handleMouseMove( m_lastPoint, event->modifiers() );
+        m_currentStrategy->handleMouseMove( d->lastPoint, event->modifiers() );
     }
 }
 
@@ -376,12 +397,12 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
     if(innerHandleMeaning != 0)
     {
         QPainterPath path;
-        path.addPolygon(m_selectionOutline);
+        path.addPolygon(d->selectionOutline);
         *innerHandleMeaning =  path.contains(point);
     }
     for ( int i = 0; i < KoFlake::NoHandle; ++i ) {
         KoFlake::SelectionHandle handle = handleOrder[i];
-        QPointF pt = converter->documentToView(point) - converter->documentToView(m_selectionBox[handle]);
+        QPointF pt = converter->documentToView(point) - converter->documentToView(d->selectionBox[handle]);
 
         // if just inside the outline
         if(qAbs(pt.x()) < HANDLE_DISTANCE &&
@@ -404,43 +425,43 @@ void KoInteractionTool::recalcSelectionBox() {
     if(koSelection()->count()>1)
     {
         QMatrix matrix = koSelection()->transformationMatrix(0);
-        m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->size())));
-        m_angle = koSelection()->rotation();
+        d->selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->size())));
+        d->angle = koSelection()->rotation();
     }
     else
     {
         QMatrix matrix = koSelection()->firstSelectedShape()->transformationMatrix(0);
-        m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->firstSelectedShape()->size())));
-        m_angle = koSelection()->firstSelectedShape()->rotation();
+        d->selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->firstSelectedShape()->size())));
+        d->angle = koSelection()->firstSelectedShape()->rotation();
     }
-    QPolygonF outline = m_selectionOutline; //shorter name in the following :)
-    m_selectionBox[KoFlake::TopMiddleHandle] = (outline.value(0)+outline.value(1))/2;
-    m_selectionBox[KoFlake::TopRightHandle] = outline.value(1);
-    m_selectionBox[KoFlake::RightMiddleHandle] = (outline.value(1)+outline.value(2))/2;
-    m_selectionBox[KoFlake::BottomRightHandle] = outline.value(2);
-    m_selectionBox[KoFlake::BottomMiddleHandle] = (outline.value(2)+outline.value(3))/2;
-    m_selectionBox[KoFlake::BottomLeftHandle] = outline.value(3);
-    m_selectionBox[KoFlake::LeftMiddleHandle] = (outline.value(3)+outline.value(0))/2;
-    m_selectionBox[KoFlake::TopLeftHandle] = outline.value(0);
+    QPolygonF outline = d->selectionOutline; //shorter name in the following :)
+    d->selectionBox[KoFlake::TopMiddleHandle] = (outline.value(0)+outline.value(1))/2;
+    d->selectionBox[KoFlake::TopRightHandle] = outline.value(1);
+    d->selectionBox[KoFlake::RightMiddleHandle] = (outline.value(1)+outline.value(2))/2;
+    d->selectionBox[KoFlake::BottomRightHandle] = outline.value(2);
+    d->selectionBox[KoFlake::BottomMiddleHandle] = (outline.value(2)+outline.value(3))/2;
+    d->selectionBox[KoFlake::BottomLeftHandle] = outline.value(3);
+    d->selectionBox[KoFlake::LeftMiddleHandle] = (outline.value(3)+outline.value(0))/2;
+    d->selectionBox[KoFlake::TopLeftHandle] = outline.value(0);
     if(koSelection()->count() == 1) {
         KoShape *s = koSelection()->firstSelectedShape();
         if(s->scaleX() < 0) { // vertically mirrored: swap left / right
-            qSwap(m_selectionBox[KoFlake::TopLeftHandle], m_selectionBox[KoFlake::TopRightHandle]);
-            qSwap(m_selectionBox[KoFlake::LeftMiddleHandle], m_selectionBox[KoFlake::RightMiddleHandle]);
-            qSwap(m_selectionBox[KoFlake::BottomLeftHandle], m_selectionBox[KoFlake::BottomRightHandle]);
+            qSwap(d->selectionBox[KoFlake::TopLeftHandle], d->selectionBox[KoFlake::TopRightHandle]);
+            qSwap(d->selectionBox[KoFlake::LeftMiddleHandle], d->selectionBox[KoFlake::RightMiddleHandle]);
+            qSwap(d->selectionBox[KoFlake::BottomLeftHandle], d->selectionBox[KoFlake::BottomRightHandle]);
         }
         if(s->scaleY() < 0) { // vertically mirrored: swap top / bottom
-            qSwap(m_selectionBox[KoFlake::TopLeftHandle], m_selectionBox[KoFlake::BottomLeftHandle]);
-            qSwap(m_selectionBox[KoFlake::TopMiddleHandle], m_selectionBox[KoFlake::BottomMiddleHandle]);
-            qSwap(m_selectionBox[KoFlake::TopRightHandle], m_selectionBox[KoFlake::BottomRightHandle]);
+            qSwap(d->selectionBox[KoFlake::TopLeftHandle], d->selectionBox[KoFlake::BottomLeftHandle]);
+            qSwap(d->selectionBox[KoFlake::TopMiddleHandle], d->selectionBox[KoFlake::BottomMiddleHandle]);
+            qSwap(d->selectionBox[KoFlake::TopRightHandle], d->selectionBox[KoFlake::BottomRightHandle]);
         }
     }
 }
 
 void KoInteractionTool::activate(bool temporary) {
     Q_UNUSED(temporary);
-    m_mouseWasInsideHandles = false;
-    m_lastHandle = KoFlake::NoHandle;
+    d->mouseWasInsideHandles = false;
+    d->lastHandle = KoFlake::NoHandle;
     useCursor(Qt::ArrowCursor, true);
     repaintDecorations();
 }

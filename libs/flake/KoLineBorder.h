@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
@@ -46,7 +46,7 @@ public:
      * @param color the color we draw the outline in.
      */
     explicit KoLineBorder(double lineWidth, QColor color = Qt::black);
-    virtual ~KoLineBorder() {};
+    virtual ~KoLineBorder();
 
     /// Sets the lines cap style
     void setCapStyle( Qt::PenCapStyle style );
@@ -76,8 +76,8 @@ public:
     virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
 
 private:
-    QColor m_color;
-    QPen m_pen;
+    class Private;
+    Private * const d;
 };
 
 #endif

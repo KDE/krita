@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -94,7 +94,7 @@ public:
      * @param name the user visible name of the tool this factory creates.
      */
     KoShapeFactory(QObject *parent, const QString &id, const QString &name);
-    virtual ~KoShapeFactory() {}
+    virtual ~KoShapeFactory();
 
     /**
      * This method should be implemented by factories to create a shape that the user
@@ -159,7 +159,7 @@ public:
      * Return all the templates this factory knows about.
      * Each template shows a different way to create a shape this factory is specialized in.
      */
-    const QList<KoShapeTemplate> templates() const { return m_templates; }
+    const QList<KoShapeTemplate> templates() const;
     /**
      * return a translated tooltip Text for a selector of shapes
      * @return a translated tooltip Text
@@ -197,12 +197,8 @@ protected:
     void setIcon(const QString & iconName);
 
 private:
-
-    QList<KoShapeTemplate> m_templates;
-    QList<KoShapeConfigFactory*> m_configPanels;
-    const QString m_id, m_name;
-    QString m_tooltip;
-    QString m_iconName;
+    class Private;
+    Private * const d;
 };
 
 #endif // _KO_SHAPE_FACTORY_

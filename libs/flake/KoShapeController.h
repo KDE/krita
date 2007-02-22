@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@ public:
      */
     KoShapeController( KoCanvasBase *canvas, KoShapeControllerBase *shapeController );
     /// destructor
-    ~KoShapeController() {}
+    ~KoShapeController();
 
     /**
      * @brief Add a shape to the document.
@@ -90,11 +90,11 @@ public:
      *
      * @param shapeControllerBase the new shapeControllerBase
      */
-    void setShapeControllerBase(KoShapeControllerBase* shapeControllerBase) { m_shapeController = shapeControllerBase; }
+    void setShapeControllerBase(KoShapeControllerBase* shapeControllerBase);
 
 private:
-    KoCanvasBase *m_canvas;
-    KoShapeControllerBase *m_shapeController;
+    class Private;
+    Private * const d;
 };
 
 #endif

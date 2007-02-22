@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
@@ -27,17 +27,28 @@
 
 #include <KoGenStyle.h>
 
+class KoLineBorder::Private {
+public:
+    QColor color;
+    QPen pen;
+};
+
 KoLineBorder::KoLineBorder()
-: m_color(Qt::black)
+    : d(new Private())
 {
-    m_pen.setWidthF( 0.0 );
+    d->color = QColor(Qt::black);
+    d->pen.setWidthF( 0.0 );
 }
 
 KoLineBorder::KoLineBorder(double lineWidth, QColor color)
-: m_color(color)
+    : d(new Private())
 {
-    m_pen.setWidthF( qMax(0.0,lineWidth) );
-    m_pen.setJoinStyle(Qt::MiterJoin);
+    d->pen.setWidthF( qMax(0.0,lineWidth) );
+    d->pen.setJoinStyle(Qt::MiterJoin);
+}
+
+KoLineBorder::~KoLineBorder() {
+    delete d;
 }
 
 void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
@@ -51,7 +62,7 @@ void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
 
 KoInsets* KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) {
     Q_UNUSED(shape);
-    double lineWidth = m_pen.widthF();
+    double lineWidth = d->pen.widthF();
     if(lineWidth < 0)
          lineWidth = 1;
     lineWidth /= 2; // since we draw a line half inside, and half outside the object.
@@ -63,54 +74,54 @@ KoInsets* KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) {
 }
 
 bool KoLineBorder::hasTransparency() {
-    return m_color.alpha() > 0;
+    return d->color.alpha() > 0;
 }
 
 void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter) {
     KoShape::applyConversion( painter, converter );
 
-    m_pen.setColor(m_color);
-    painter.strokePath( shape->outline(), m_pen );
+    d->pen.setColor(d->color);
+    painter.strokePath( shape->outline(), d->pen );
 }
 
 void KoLineBorder::setCapStyle( Qt::PenCapStyle style ) {
-    m_pen.setCapStyle( style );
+    d->pen.setCapStyle( style );
 }
 
 Qt::PenCapStyle KoLineBorder::capStyle() const {
-    return m_pen.capStyle();
+    return d->pen.capStyle();
 }
 
 void KoLineBorder::setJoinStyle( Qt::PenJoinStyle style ) {
-    m_pen.setJoinStyle( style );
+    d->pen.setJoinStyle( style );
 }
 
 Qt::PenJoinStyle KoLineBorder::joinStyle() const {
-    return m_pen.joinStyle();
+    return d->pen.joinStyle();
 }
 
 void KoLineBorder::setLineWidth( double lineWidth ) {
-    m_pen.setWidthF( qMax(0.0,lineWidth) );
+    d->pen.setWidthF( qMax(0.0,lineWidth) );
 }
 
 double KoLineBorder::lineWidth() const {
-    return m_pen.widthF();
+    return d->pen.widthF();
 }
 
 void KoLineBorder::setMiterLimit( double miterLimit ) {
-    m_pen.setMiterLimit( miterLimit );
+    d->pen.setMiterLimit( miterLimit );
 }
 
 double KoLineBorder::miterLimit() const {
-    return m_pen.miterLimit();
+    return d->pen.miterLimit();
 }
 
 const QColor & KoLineBorder::color() const
 {
-    return m_color;
+    return d->color;
 }
 
 void KoLineBorder::setColor( const QColor & color )
 {
-    m_color = color;
+    d->color = color;
 }

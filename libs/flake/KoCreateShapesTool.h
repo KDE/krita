@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -56,30 +56,30 @@ public:
      * create the new shape.
      * @param id the SHAPEID of the to be generated shape
      */
-    void setShapeId( const QString &id ) { m_shapeId = id; }
+    void setShapeId( const QString &id );
     /**
      * return the shape Id that is to be created.
      * @return the shape Id that is to be created.
      */
-    const QString &shapeId() const { return m_shapeId; }
+    const QString &shapeId() const;
 
     /**
      * Set the shape properties that the create controller will use for the next shape it will
      * create.
      * @param properties the properties or 0 if the default shape should be created.
      */
-    void setShapeProperties( KoProperties *properties ) { m_newShapeProperties = properties; }
+    void setShapeProperties( KoProperties *properties );
     /**
      * return the properties to be used for creating the next shape
      * @return the properties to be used for creating the next shape
      */
-    KoProperties const * shapeProperties() { return m_newShapeProperties; }
+    KoProperties const * shapeProperties();
 
-private:    
+private:
     friend class KoCreateShapeStrategy;
 
-    QString m_shapeId;
-    KoProperties *m_newShapeProperties;
+    class Private;
+    Private * const d;
 };
 
 #endif

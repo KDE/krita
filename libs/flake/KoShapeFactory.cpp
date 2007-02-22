@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,54 +20,70 @@
 
 #include "KoShapeFactory.h"
 
+class KoShapeFactory::Private {
+public:
+    Private(const QString &i, const QString &n) : id(i), name(n) {}
+    QList<KoShapeTemplate> templates;
+    QList<KoShapeConfigFactory*> configPanels;
+    const QString id, name;
+    QString tooltip;
+    QString iconName;
+};
+
+
 KoShapeFactory::KoShapeFactory(QObject *parent, const QString &id, const QString &name)
-: QObject(parent)
-, m_id(id)
-, m_name(name)
-, m_tooltip("")
-, m_iconName("")
+    : QObject(parent),
+    d(new Private(id, name))
 {
 }
 
+KoShapeFactory::~KoShapeFactory() {
+    delete d;
+}
+
 const KoID KoShapeFactory::id() const {
-    return KoID(m_id, m_name);
+    return KoID(d->id, d->name);
 }
 
 const QString & KoShapeFactory::toolTip() const {
-    return m_tooltip;
+    return d->tooltip;
 }
 
 const QString & KoShapeFactory::icon() const {
-    return m_iconName;
+    return d->iconName;
 }
 
 const QString& KoShapeFactory::name() const {
-    return m_name;
+    return d->name;
 }
 
 void KoShapeFactory::addTemplate(KoShapeTemplate &params) {
     params.id = shapeId();
-    m_templates.append(params);
+    d->templates.append(params);
 }
 
 void KoShapeFactory::setToolTip(const QString & tooltip) {
-    m_tooltip = tooltip;
+    d->tooltip = tooltip;
 }
 
 void KoShapeFactory::setIcon(const QString & iconName) {
-    m_iconName = iconName;
+    d->iconName = iconName;
 }
 
 const QString &KoShapeFactory::shapeId() const {
-    return m_id;
+    return d->id;
 }
 
 void KoShapeFactory::setOptionPanels(QList<KoShapeConfigFactory*> &panelFactories) {
-    m_configPanels = panelFactories;
+    d->configPanels = panelFactories;
 }
 
 const QList<KoShapeConfigFactory*> &KoShapeFactory::panelFactories() {
-    return m_configPanels;
+    return d->configPanels;
+}
+
+const QList<KoShapeTemplate> KoShapeFactory::templates() const {
+    return d->templates;
 }
 
 #include "KoShapeFactory.moc"

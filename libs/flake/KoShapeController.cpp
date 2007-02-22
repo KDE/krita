@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -36,25 +36,37 @@
 #include <kpagedialog.h>
 #include <klocale.h>
 
+class KoShapeController::Private {
+public:
+    Private() : canvas(0), shapeController(0) {}
+    KoCanvasBase *canvas;
+    KoShapeControllerBase *shapeController;
+};
+
 KoShapeController::KoShapeController( KoCanvasBase *canvas, KoShapeControllerBase *shapeController )
-: m_canvas( canvas )
-, m_shapeController( shapeController )
+    : d(new Private())
 {
+    d->canvas = canvas;
+    d->shapeController = shapeController;
+}
+
+KoShapeController::~KoShapeController() {
+    delete d;
 }
 
 QUndoCommand* KoShapeController::addShape( KoShape *shape, QUndoCommand *parent )
 {
-    Q_ASSERT(m_canvas->shapeManager());
+    Q_ASSERT(d->canvas->shapeManager());
 
     KoShapeFactory *factory = KoShapeRegistry::instance()->get( shape->shapeId() );
     Q_ASSERT(factory);
     int z=0;
-    foreach(KoShape *sh, m_canvas->shapeManager()->shapes())
+    foreach(KoShape *sh, d->canvas->shapeManager()->shapes())
         z = qMax(z, sh->zIndex());
     shape->setZIndex(z+1);
 
     // show config dialog.
-    KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
+    KPageDialog *dialog = new KPageDialog(d->canvas->canvasWidget());
     dialog->setCaption(i18n("%1 Options", factory->name()));
 
     int pageCount = 0;
@@ -68,14 +80,14 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape, QUndoCommand *parent 
         if(widget == 0)
             continue;
         widgets.append(widget);
-        widget->setUnit(m_canvas->unit());
+        widget->setUnit(d->canvas->unit());
         dialog->addPage(widget, panelFactory->name());
         pageCount ++;
     }
     foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
         panel->open(shape);
         widgets.append(panel);
-        panel->setUnit(m_canvas->unit());
+        panel->setUnit(d->canvas->unit());
         dialog->addPage(panel, panel->objectName());
         pageCount ++;
     }
@@ -96,18 +108,22 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape, QUndoCommand *parent 
     // set the active layer as parent if there is not yet a parent.
     if ( !shape->parent() )
     {
-        shape->setParent( m_canvas->shapeManager()->selection()->activeLayer() );
+        shape->setParent( d->canvas->shapeManager()->selection()->activeLayer() );
     }
 
-    return new KoShapeCreateCommand( m_shapeController, shape, parent );
+    return new KoShapeCreateCommand( d->shapeController, shape, parent );
 }
 
 QUndoCommand* KoShapeController::removeShape( KoShape *shape, QUndoCommand *parent  )
 {
-    return new KoShapeDeleteCommand( m_shapeController, shape, parent );
+    return new KoShapeDeleteCommand( d->shapeController, shape, parent );
 }
 
 QUndoCommand* KoShapeController::removeShapes( const QList<KoShape*> &shapes, QUndoCommand *parent )
 {
-    return new KoShapeDeleteCommand( m_shapeController, shapes, parent );
+    return new KoShapeDeleteCommand( d->shapeController, shapes, parent );
+}
+
+void KoShapeController::setShapeControllerBase(KoShapeControllerBase* shapeControllerBase) {
+    d->shapeController = shapeControllerBase;
 }

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -101,7 +102,7 @@ public:
      *
      * @return true if it is a parametic shape, false otherwise
      */
-    bool isParametricShape() const { return !m_modified; }
+    bool isParametricShape() const;
 
     /**
      * @brief Set the modified status.
@@ -111,7 +112,7 @@ public:
      *
      * @param modified the modification state
      */
-    void setModified( bool modified ) { m_modified = modified; }
+    void setModified( bool modified );
 
     virtual QPointF normalize();
 
@@ -138,7 +139,8 @@ protected:
     QList<QPointF> m_handles;
 
 private:
-    bool m_modified;
+    class Private;
+    Private * const d;
 };
 
 #endif /* KOPARAMETERSHAPE_H */

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -28,8 +28,17 @@
 
 #include <kcommand.h>
 
+class KoCreateShapesTool::Private {
+public:
+    Private() : newShapeProperties(0) {}
+
+    QString shapeId;
+    KoProperties *newShapeProperties;
+};
+
 KoCreateShapesTool::KoCreateShapesTool(KoCanvasBase *canvas)
-: KoInteractionTool( canvas )
+    : KoInteractionTool( canvas ),
+    d(new Private())
 {
 }
 
@@ -41,4 +50,20 @@ void KoCreateShapesTool::paint( QPainter &painter, KoViewConverter &converter) {
 void KoCreateShapesTool::mouseReleaseEvent( KoPointerEvent *event ) {
     KoInteractionTool::mouseReleaseEvent(event);
     emit KoTool::sigDone();
+}
+
+void KoCreateShapesTool::setShapeId( const QString &id ) {
+    d->shapeId = id;
+}
+
+const QString &KoCreateShapesTool::shapeId() const {
+    return d->shapeId;
+}
+
+void KoCreateShapesTool::setShapeProperties( KoProperties *properties ) {
+    d->newShapeProperties = properties;
+}
+
+KoProperties const * KoCreateShapesTool::shapeProperties() {
+    return d->newShapeProperties;
 }

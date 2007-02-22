@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -86,6 +87,7 @@ public:
 class FLAKE_EXPORT KoPathPoint
 {
 public:
+    /// property enum
     enum KoPointProperty
     {
         Normal = 0, ///< it has no control points
@@ -110,12 +112,7 @@ public:
     Q_DECLARE_FLAGS( KoPointTypes, KoPointType )
 
     /// Default constructor
-    KoPathPoint()
-    : m_shape( 0 )
-    , m_point( 0.0, 0.0 )
-    , m_properties( Normal )
-    , m_pointGroup( 0 )
-    {}
+    KoPathPoint();
 
     /**
      * @brief Constructor
@@ -124,12 +121,7 @@ public:
      * @param point the position relative to the shape origin
      * @param properties describing the point
      */
-    KoPathPoint( KoPathShape * path, const QPointF & point, KoPointProperties properties = Normal )
-    : m_shape( path )
-    , m_point( point )
-    , m_properties( properties )
-    , m_pointGroup( 0 )
-    {}
+    KoPathPoint( KoPathShape * path, const QPointF & point, KoPointProperties properties = Normal );
 
     /**
      * @brief Copy Constructor
@@ -144,14 +136,14 @@ public:
     /**
      * @brief Destructor
      */
-    ~KoPathPoint() {}
+    ~KoPathPoint();
 
     /**
      * @brief return the position relative to the shape origin
      *
      * @return point
      */
-    QPointF point() const { return m_point; }
+    QPointF point() const;
 
     /**
      * @brief get the control point 1
@@ -160,7 +152,7 @@ public:
      *
      * @return control point 1 of this point
      */
-    QPointF controlPoint1() const { return m_controlPoint1; }
+    QPointF controlPoint1() const;
 
     /**
      * @brief get the second control point
@@ -169,7 +161,7 @@ public:
      *
      * @return control point 2 of this point
      */
-    QPointF controlPoint2() const { return m_controlPoint2; }
+    QPointF controlPoint2() const;
 
     /**
      * @brief alter the point
@@ -200,7 +192,7 @@ public:
      *
      * @return properties of the point
      */
-    KoPointProperties properties() const { return m_properties; }
+    KoPointProperties properties() const;
 
     /**
      * @brief Set the properties of a point
@@ -268,7 +260,7 @@ public:
      * @brief Get the path shape the point belongs to
      * @return the path shape the point belongs to
      */
-    KoPathShape * parent() const { return m_shape; }
+    KoPathShape * parent() const;
 
     /**
      * @brief Get the bounding rect of the point.
@@ -295,14 +287,10 @@ protected:
     friend class KoPathShape;
     void removeFromGroup();
     void addToGroup( KoPointGroup *pointGroup );
-    KoPointGroup * group() { return m_pointGroup; }
+    KoPointGroup * group();
 private:
-    KoPathShape * m_shape;
-    QPointF m_point;
-    QPointF m_controlPoint1;
-    QPointF m_controlPoint2;
-    KoPointProperties m_properties;
-    KoPointGroup * m_pointGroup;
+    class Private;
+    Private * const d;
 };
 
 /**
@@ -759,6 +747,10 @@ protected:
     friend class KoParameterToPathCommand;
 
     KoSubpathList m_subpaths;
+
+private:
+    class Private;
+    Private * const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( KoPathPoint::KoPointProperties )

@@ -309,7 +309,7 @@ void KoToolManager::postSwitchTool() {
 
 
 void KoToolManager::attachCanvas(KoCanvasController *controller) {
-    CanvasData *cd = d->createCanvasData(controller, KoInputDevice::eraser());
+    CanvasData *cd = d->createCanvasData(controller, KoInputDevice::mouse());
     // switch to new canvas as the active one.
     d->canvasData = cd;
     d->inputDevice = cd->inputDevice;

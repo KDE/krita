@@ -21,7 +21,7 @@
 #ifndef KIS_PAINTOP_BOX_H_
 #define KIS_PAINTOP_BOX_H_
 
-#include <QMap>
+#include <QHash>
 #include <QWidget>
 #include <QComboBox>
 #include <QList>
@@ -89,10 +89,10 @@ private:
     QList<KoID> m_paintops;
     QList<KoID> m_displayedOps;
 
-    typedef QMap<KoInputDevice*, KoID> InputDevicePaintopMap;
+    typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;
 
-    typedef QMap<KoInputDevice*, QList<KisPaintOpSettings *> > InputDevicePaintopSettingsMap;
+    typedef QHash<KoInputDevice, QList<KisPaintOpSettings *> > InputDevicePaintopSettingsMap;
     InputDevicePaintopSettingsMap m_inputDevicePaintopSettings;
 };
 

@@ -155,16 +155,15 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
     return QPixmap(fname);
 }
 
-void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & dev)
+void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
 {
 
-    KoInputDevice * inputDevice = const_cast<KoInputDevice*>( &dev );
 
     KoID paintop;
     InputDevicePaintopMap::iterator it = m_currentID.find(inputDevice);
 
     if (it == m_currentID.end()) {
-        paintop = defaultPaintop(dev);
+        paintop = defaultPaintop(inputDevice);
     } else {
         paintop = (*it);
     }
@@ -204,12 +203,12 @@ void KisPaintopBox::updateOptionWidget()
 
 const KoID& KisPaintopBox::currentPaintop()
 {
-    return m_currentID[&KoToolManager::instance()->currentInputDevice()];
+    return m_currentID[KoToolManager::instance()->currentInputDevice()];
 }
 
 void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 {
-    m_currentID[&KoToolManager::instance()->currentInputDevice()] = paintop;
+    m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
 
     updateOptionWidget();
 
@@ -228,7 +227,7 @@ KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)
 const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice)
 {
     QList<KisPaintOpSettings *> settingsArray;
-    InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find(const_cast<KoInputDevice*>( &inputDevice ) );
+    InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find( inputDevice );
     if (it == m_inputDevicePaintopSettings.end()) {
         // Create settings for each paintop.
 
@@ -239,7 +238,7 @@ const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, c
                 settings->widget()->hide();
             }
         }
-        m_inputDevicePaintopSettings[const_cast<KoInputDevice*>( &inputDevice )] = settingsArray;
+        m_inputDevicePaintopSettings[ inputDevice ] = settingsArray;
     } else {
         settingsArray = (*it);
     }

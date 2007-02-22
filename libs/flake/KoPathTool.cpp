@@ -45,6 +45,7 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QToolButton>
+#include <QPainterPath>
 
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
 : KoTool(canvas)

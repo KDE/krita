@@ -43,6 +43,7 @@ set(flake_SRCS
     KoPathPointRubberSelectStrategy.cpp
     KoPathPointMoveStrategy.cpp
     KoPathControlPointMoveStrategy.cpp
+    KoPointGroup.cpp
     KoParameterShape.cpp
     KoParameterChangeStrategy.cpp
     KoPointerEvent.cpp

@@ -24,6 +24,7 @@
 #include <QUndoCommand>
 #include <QPointF>
 #include "KoPathShape.h"
+#include "KoPathPointData.h"
 
 /// The undo / redo command for joining two subpath end points
 class KoSubpathJoinCommand : public QUndoCommand

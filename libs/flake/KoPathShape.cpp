@@ -20,12 +20,13 @@
 */
 
 #include "KoPathShape.h"
-#include "KoInsets.h"
+#include "KoPointGroup.h"
 #include "KoShapeBorderModel.h"
 #include "KoViewConverter.h"
 
 #include <QDebug>
 #include <QPainter>
+#include <QPainterPath>
 #include <math.h>
 
 class KoPathPoint::Private {
@@ -332,7 +333,6 @@ QPointF KoPathPoint::controlPoint2() const {
     return d->controlPoint2;
 }
 
-
 KoPathShape * KoPathPoint::parent() const {
     return d->shape;
 }
@@ -341,34 +341,6 @@ KoPointGroup * KoPathPoint::group() {
     return d->pointGroup;
 }
 
-void KoPointGroup::add( KoPathPoint * point )
-{ 
-    m_points.insert( point ); 
-    point->addToGroup( this );
-}
-
-void KoPointGroup::remove( KoPathPoint * point ) 
-{ 
-    if ( m_points.remove( point ) ) 
-    {    
-        point->removeFromGroup();
-        if ( m_points.size() == 1 )
-        {
-            ( * m_points.begin() )->removeFromGroup();
-            //commit suicide as it is no longer used
-            delete this;
-        }
-    }
-}
-
-void KoPointGroup::map( const QMatrix &matrix )
-{
-    QSet<KoPathPoint *>::iterator it = m_points.begin();
-    for ( ; it != m_points.end(); ++it )
-    {
-        ( *it )->map( matrix, false );
-    }
-}
 
 KoPathShape::KoPathShape()
     : d(0) // while we don't actually have any private data, just leave it as this.

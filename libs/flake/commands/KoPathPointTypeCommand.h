@@ -25,6 +25,7 @@
 #include <QList>
 #include "KoPathBaseCommand.h"
 #include "KoPathShape.h"
+#include "KoPathPointData.h"
 #include <flake_export.h>
 
 /// The undo / redo command for changing the path point type.

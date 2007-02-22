@@ -25,6 +25,7 @@
 #include <QList>
 #include <QPointF>
 #include "KoPathShape.h"
+#include "KoPathPointData.h"
 
 /// The undo / redo command for changing segments to curves/lines
 class KoPathSegmentTypeCommand : public QUndoCommand

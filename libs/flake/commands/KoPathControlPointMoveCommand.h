@@ -24,6 +24,7 @@
 #include <QUndoCommand>
 #include <QPointF>
 #include "KoPathShape.h"
+#include "KoPathPointData.h"
 #include <flake_export.h>
 
 class KoParameterShape;

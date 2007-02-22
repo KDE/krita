@@ -22,6 +22,7 @@
 #define KOPATHTOOL_H
 
 #include "KoPathShape.h"
+#include "KoPathPointData.h"
 
 #include <KoTool.h>
 #include <QMap>

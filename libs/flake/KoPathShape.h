@@ -23,11 +23,11 @@
 
 #include <flake_export.h>
 
-#include <QFlags>
-#include <QPainterPath>
-#include <QSet>
+//   #include <QFlags>
+//   #include <QPainterPath>
+//   #include <QSet>
 #include <QMap>
-#include <QList>
+//   #include <QList>
 
 #include "KoShape.h"
 
@@ -40,40 +40,6 @@ class KoPathPoint;
 typedef QMap<KoPathShape *, QSet<KoPathPoint *> > KoPathShapePointMap;
 typedef QPair<int,int> KoPathPointIndex;
 typedef QMap<KoPathShape *, QSet<KoPathPointIndex> > KoPathShapePointIndexMap;
-
-/**
- * @brief Describe a KoPathPoint by a KoPathShape and its indices
- */
-class KoPathPointData
-{
-public:
-    /// contructor
-    KoPathPointData( KoPathShape * pathShape, const KoPathPointIndex & pathPointIndex )
-    : m_pathShape( pathShape )
-    , m_pointIndex( pathPointIndex )
-    {}
-
-    /// operator used for sorting
-    bool operator<( const KoPathPointData & other ) const 
-    { 
-        return m_pathShape < other.m_pathShape ||
-               ( m_pathShape == other.m_pathShape && 
-                 ( m_pointIndex.first < other.m_pointIndex.first ||
-                   ( m_pointIndex.first == other.m_pointIndex.first &&
-                     m_pointIndex.second < other.m_pointIndex.second ) ) );
-
-    }
-    bool operator==( const KoPathPointData & other ) const
-    {
-        return m_pathShape == other.m_pathShape && 
-               m_pointIndex.first == other.m_pointIndex.first &&
-               m_pointIndex.second == other.m_pointIndex.second;
-    }
-    /// path shape the path point belongs too
-    KoPathShape *m_pathShape;
-    /// position of the point in the path shape
-    KoPathPointIndex m_pointIndex;
-};
 
 /**
  * @brief A KoPathPoint represents a point in a path.
@@ -291,46 +257,6 @@ protected:
 private:
     class Private;
     Private * const d;
-};
-
-/**
- * @brief A KoPointGroup represents points in a path that should be treated as one
- *
- * In svg it is possible when you use a close and the create a new subpath not using 
- * a moveTo that the new subpath starts at the same point as the last subpath. As 
- * every point can only have 2 control points we have this class to group points 
- * together which should be handled as one in e.g. a move. 
- */
-class KoPointGroup
-{
-public:    
-    KoPointGroup() {}
-    ~KoPointGroup() {}
-
-    /**
-     * @brief Add a point to the group
-     */
-    void add( KoPathPoint * point );
-    /**
-     * @brief Remove a point from the group
-     * 
-     * This also remove the pointer to the group in the point.
-     * When the second last point is removed from the group, the 
-     * group removes also the last point and deletes itself.
-     */
-    void remove( KoPathPoint * point );
-
-    void map( const QMatrix &matrix );
-
-    /**
-     * @brief get The point belonging to the group
-     *
-     * @return all points of the group
-     */
-    const QSet<KoPathPoint *> & points() const { return m_points; }
-
-private:
-    QSet<KoPathPoint *> m_points;
 };
 
 /// a KoSubpath contains a path from a moveTo until a close or a new moveTo

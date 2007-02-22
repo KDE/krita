@@ -24,6 +24,7 @@
 #include <QUndoCommand>
 #include <QList>
 #include "KoPathShape.h"
+#include "KoPathPointData.h"
 
 /// Command to break a subpath at points.
 class KoPathBreakAtPointCommand : public QUndoCommand

@@ -25,6 +25,7 @@
 #include <QList>
 #include <QPointF>
 #include "KoPathShape.h"
+#include "KoPathPointData.h"
 #include <flake_export.h>
 
 /// The undo / redo command for inserting path points

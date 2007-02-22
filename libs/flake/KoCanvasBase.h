@@ -144,16 +144,13 @@ public:
      * canvas. The resource provider contains per-canvas settings such
      * as current foreground and background color.
      */
-    KoCanvasResourceProvider * resourceProvider() const
-    {
-        return m_resourceProvider;
-    }
+    KoCanvasResourceProvider * resourceProvider() const;
 
     /**
      * Return the shape controller for this canvas.
      * A shape controller is used to create or delete shapes and show the relevant dialogs to the user.
      */
-    KoShapeController * shapeController() const { return m_shapeController; }
+    KoShapeController * shapeController() const;
 
     /*
      * The following 2 methods should be implemented by all canvasses soon so we can work on features
@@ -172,8 +169,8 @@ private:
     // we need a KoShapeControllerBase so that it can work
     KoCanvasBase();
 
-    KoShapeController *m_shapeController;
-    KoCanvasResourceProvider * m_resourceProvider;
+    class Private;
+    Private * const d;
 };
 
 

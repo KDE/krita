@@ -22,20 +22,39 @@
 #include "KoCanvasResourceProvider.h"
 #include "KoShapeController.h"
 
+class KoCanvasBase::Private {
+public:
+    Private() : shapeController(0), resourceProvider(0) {}
+    ~Private() {
+        delete shapeController;
+        delete resourceProvider;
+    }
+    KoShapeController *shapeController;
+    KoCanvasResourceProvider * resourceProvider;
+};
+
 KoCanvasBase::KoCanvasBase( KoShapeControllerBase * shapeControllerBase )
+    : d(new Private())
 {
-    m_resourceProvider = new KoCanvasResourceProvider(0);
-    m_shapeController = new KoShapeController( this, shapeControllerBase );
+    d->resourceProvider = new KoCanvasResourceProvider(0);
+    d->shapeController = new KoShapeController( this, shapeControllerBase );
 }
 
 KoCanvasBase::~KoCanvasBase()
 {
-    delete m_resourceProvider;
-    delete m_shapeController;
+    delete d;
 }
-
 
 void KoCanvasBase::updateCanvas( const QRegion & region )
 {
     updateCanvas( QRectF( region.boundingRect() ) );
+}
+
+KoShapeController * KoCanvasBase::shapeController() const {
+    return d->shapeController;
+}
+
+KoCanvasResourceProvider * KoCanvasBase::resourceProvider() const
+{
+    return d->resourceProvider;
 }

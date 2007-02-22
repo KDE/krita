@@ -152,12 +152,12 @@ bool PythonScript::initialize()
         }
     }
     catch(Py::Exception& e) {
-        PyErr_Print();
         QStringList trace;
         int lineno;
         PythonInterpreter::extractException(trace, lineno);
         setError(Py::value(e).as_string().c_str(), trace.join("\n"), lineno);
         //e.clear(); // exception is handled. clear it now.
+        PyErr_Print();
         return false;
     }
     return true;

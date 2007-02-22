@@ -54,6 +54,28 @@ KoInputDevice::KoInputDevice(const KoInputDevice &other)
 {
 }
 
+
+QTabletEvent::TabletDevice KoInputDevice::device() const
+{
+    return d->device;
+}
+
+QTabletEvent::PointerType KoInputDevice::pointer() const
+{
+    return d->pointer;
+}
+
+qint64 KoInputDevice::uniqueTabletId() const
+{
+    return d->uniqueTabletId;
+}
+
+bool KoInputDevice::isMouse() const
+{
+    return d->mouse;
+}
+
+
 bool KoInputDevice::operator==(const KoInputDevice &other) const {
     return d->device == other.d->device && d->pointer == other.d->pointer &&
         d->uniqueTabletId == other.d->uniqueTabletId && d->mouse == other.d->mouse;

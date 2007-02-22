@@ -23,6 +23,7 @@
 
 #include <flake_export.h>
 
+#include <QHash>
 #include <QTabletEvent>
 
 /**
@@ -39,18 +40,33 @@ public:
     explicit KoInputDevice(qint64 uniqueTabletId);
     explicit KoInputDevice();
 
+    QTabletEvent::TabletDevice device() const;
+    QTabletEvent::PointerType pointer() const;
+    qint64 uniqueTabletId() const;
+    bool isMouse() const;
+
     bool operator==(const KoInputDevice&) const;
     bool operator!=(const KoInputDevice&) const;
     KoInputDevice & operator=(const KoInputDevice &);
 
-   static KoInputDevice mouse();     // Standard mouse
-   static KoInputDevice stylus();    // Wacom style/pen
-   static KoInputDevice eraser();    // Wacom eraser
+    static KoInputDevice mouse();     // Standard mouse
+    static KoInputDevice stylus();    // Wacom style/pen
+    static KoInputDevice eraser();    // Wacom eraser
+
 
 private:
     class Private;
     Private * const d;
 };
+
+inline uint qHash( const KoInputDevice & key )
+{
+    return qHash( QString(":%1:%2:%3:%4")
+                  .arg( key.device() )
+                  .arg( key.pointer() )
+                  .arg( key.uniqueTabletId() )
+                  .arg( key.isMouse() ) );
+}
 
 #endif
 

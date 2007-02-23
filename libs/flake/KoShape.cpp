@@ -160,15 +160,18 @@ bool KoShape::saveOdf( KoShapeSavingContext & context )
 QString KoShape::getStyle( KoShapeSavingContext &context )
 {
     KoGenStyle style;
-    if ( context.isSet( KoShapeSavingContext::PresentationShape ) )
+    if ( context.isSet( KoShapeSavingContext::PresentationShape ) ) {
         style = KoGenStyle( KoGenStyle::STYLE_PRESENTATIONAUTO, "presentation" );
-    else
+    }
+    else {
         style = KoGenStyle( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
+    }
 
     fillStyle( style, context );
     
-    if ( KoShapeSavingContext::AutoStyleInStyleXml )
+    if ( context.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
         style.setAutoStyleInStylesDotXml( true );
+    }
 
     return context.mainStyles().lookup( style, context.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
 }

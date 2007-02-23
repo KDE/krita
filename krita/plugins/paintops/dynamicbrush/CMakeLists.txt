@@ -1,5 +1,4 @@
-
-
+include_directories(editors/advanced)
 set(kritadynamicbrush_PART_SRCS
     dynamicbrush.cc
     kis_dynamic_shape.cc
@@ -10,12 +9,16 @@ set(kritadynamicbrush_PART_SRCS
     kis_dynamic_brush_registry.cc
     kis_dynamic_brush.cc
     kis_dynamicop.cc
+    editors/advanced/kis_dynamic_brush_advanced_editor.cc
+    editors/advanced/kis_filters_model.cc
     )
 
-kde4_automoc(kritadynamicbrush ${kritadynamicbrush_PART_SRCS})
+kde4_automoc(${kritadynamicbrush_PART_SRCS})
+
+kde4_add_ui_files(kritadynamicbrush_PART_SRCS editors/advanced/AdvancedEditor.ui )
+
 
 kde4_add_plugin(kritadynamicbrush ${kritadynamicbrush_PART_SRCS})
-
 
 
 target_link_libraries(kritadynamicbrush kritaui)
@@ -26,4 +29,5 @@ install(TARGETS kritadynamicbrush  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kritadynamicbrush.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  dynamicbrush.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 

@@ -25,9 +25,9 @@
 KisDynamicColoring::~KisDynamicColoring() { }
 KisPlainColoring::~KisPlainColoring() { }
 
-void KisPlainColoring::darken(double v)
+void KisPlainColoring::darken(qint32 v)
 {
-    KoColorTransformation* transfo = color.colorSpace()->createDarkenAdjustement((qint32)(255  - 75 * v), false, 0.0);
+    KoColorTransformation* transfo = color.colorSpace()->createDarkenAdjustement(v, false, 0.0);
     transfo->transform( color.data(),  color.data(), 1);
     delete transfo;
 }

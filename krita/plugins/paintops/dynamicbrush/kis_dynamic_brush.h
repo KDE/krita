@@ -30,15 +30,22 @@ class KisDynamicBrush {
         KisDynamicBrush(const QString& name);
         ~KisDynamicBrush();
         inline QString name() const { return m_name; }
-        inline KisDynamicTransformation* rootTransfo() const { return m_rootTransfo; }
         inline KoID id() const { return KoID(name(), name()); }
         inline /*const */KisDynamicShape* shape() const { return m_shape; }
         inline /*const */KisDynamicColoring* coloring() const { return m_coloring; }
+        inline QList<KisDynamicTransformation*>::iterator beginTransformation() { return m_transformations.begin(); }
+        inline QList<KisDynamicTransformation*>::iterator endTransformation() { return m_transformations.end(); }
+        inline KisDynamicTransformation* transfoAt(uint i) { return m_transformations[i]; }
+        inline void removeTransformationAt(uint i) { m_transformations.removeAt(i); }
+        inline uint countTransformations() const { return m_transformations.size(); }
+        inline void appendTransformation(KisDynamicTransformation* transfo) {
+            m_transformations.append(transfo);
+        }
     private:
         QString m_name;
-        KisDynamicTransformation* m_rootTransfo;
         KisDynamicShape* m_shape;
         KisDynamicColoring* m_coloring;
+        QList<KisDynamicTransformation*> m_transformations;
 };
 
 #endif

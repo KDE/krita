@@ -20,6 +20,7 @@
 #define _KIS_SIZE_TRANSFORMATION_
 
 #include "kis_dynamic_transformation.h"
+#include <klocale.h>
 
 class KisTransformParameter;
 
@@ -28,6 +29,8 @@ class KisSizeTransformation : public KisDynamicTransformation {
         KisSizeTransformation(KisTransformParameter* hTransfoParameter, KisTransformParameter* vTransfoParameter);
         virtual ~KisSizeTransformation();
     public:
+        virtual QString id() { return "size="; };
+        virtual QString name() { return i18n("size"); };
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
         virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
     private:

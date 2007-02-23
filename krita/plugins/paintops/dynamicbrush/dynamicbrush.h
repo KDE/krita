@@ -21,6 +21,8 @@
 
 #include <kparts/plugin.h>
 
+class KisView2;
+
 /**
  * A plugin wrapper that adds the Dynamic brush paintop
  */
@@ -30,6 +32,10 @@ class DynamicBrush : public KParts::Plugin
     public:
         DynamicBrush(QObject *parent, const QStringList &);
         virtual ~DynamicBrush();
+    private slots:
+        void slotEditDynamicBrush();
+    private:
+        KisView2 * m_view;
 };
 
 #endif // DYNAMIC_BRUSH_H

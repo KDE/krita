@@ -41,5 +41,5 @@ void KisDarkenTransformation::transformBrush(KisDynamicShape* dabsrc, const KisP
 
 void KisDarkenTransformation::transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info)
 {
-    coloringsrc->darken(m_transfoParameter->parameter(info));
+    coloringsrc->darken((qint32)(255  - 75 * m_transfoParameter->parameter(info)));
 }

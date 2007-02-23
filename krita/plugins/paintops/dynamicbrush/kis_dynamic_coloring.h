@@ -31,7 +31,7 @@ class KisDynamicColoring {
         virtual ~KisDynamicColoring();
     public:
         virtual void resize(double xs, double ys) = 0;
-        virtual void darken(double v) = 0;
+        virtual void darken(qint32 v) = 0;
         virtual void colorAt(int x, int y, KoColor*) = 0;
     public:
         KoColor color;
@@ -42,7 +42,7 @@ class KisDynamicColoring {
 class KisPlainColoring : public KisDynamicColoring {
     public:
         virtual ~KisPlainColoring();
-        virtual void darken(double v);
+        virtual void darken(qint32 v);
         virtual void resize(double , double ) {
             // Do nothing as plain color doesn't have size
         };

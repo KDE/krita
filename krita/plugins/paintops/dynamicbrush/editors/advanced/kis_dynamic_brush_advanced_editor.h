@@ -16,30 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_DYNAMIC_BRUSH_REGISTRY_H_
-#define _KIS_DYNAMIC_BRUSH_REGISTRY_H_
+#ifndef _KIS_DYNAMIC_BRUSH_ADVANCED_EDITOR_H_
+#define _KIS_DYNAMIC_BRUSH_ADVANCED_EDITOR_H_
 
-#include <KoGenericRegistry.h>
-
-class KisDynamicBrush;
-
-class KisDynamicBrushRegistry : public KoGenericRegistry<KisDynamicBrush *> {
-
-  protected:
-    void init();
+class KisDynamicBrushAdvancedEditor {
   public:
-    /**
-     * @return an instance of the KisDynamicBrushRegistry
-     * Creates an instance if that has never happened before and returns the singleton instance.
-     */
-    static KisDynamicBrushRegistry* instance();
-    /**
-     * @return the currently selected dynamic brush
-     */
-    inline KisDynamicBrush* current() { return m_current; }
-  private:
-    static KisDynamicBrushRegistry *singleton;
-    KisDynamicBrush* m_current;
+    void editBrush();
 };
 
 #endif

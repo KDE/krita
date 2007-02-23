@@ -33,6 +33,8 @@ class KisDynamicTransformation {
     public:
         KisDynamicTransformation(const KoID& name) : m_name(name), m_next(0) {}
         virtual ~KisDynamicTransformation() { if(m_next) delete m_next; }
+        virtual QString id() =0;
+        virtual QString name() =0;
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info) =0;
         virtual void transformColoring(KisDynamicColoring* dabsrc, const KisPaintInformation& info) =0;
         inline void setNextTransformation(KisDynamicTransformation* n) { if(m_next) { delete m_next; } m_next = n; }

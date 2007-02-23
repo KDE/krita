@@ -40,12 +40,11 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 
-#include "kis_darken_transformation.h"
 #include "kis_dynamic_brush.h"
+#include "kis_dynamic_brush_registry.h"
 #include "kis_dynamic_coloring.h"
 #include "kis_dynamic_shape.h"
 #include "kis_size_transformation.h"
-#include "kis_transform_parameter.h"
 
 KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter)
 {
@@ -59,14 +58,12 @@ KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, K
 KisDynamicOp::KisDynamicOp( KisPainter *painter)
     : super(painter)
 {
-    m_brush = new KisDynamicBrush(i18n("example"));
-    m_brush->rootTransfo()->setNextTransformation(
-        new KisSizeTransformation(new KisTransformParameterXTilt(), new KisTransformParameterYTilt() ) );
+    m_brush = KisDynamicBrushRegistry::instance()->current();
 }
 
 KisDynamicOp::~KisDynamicOp()
 {
-    delete m_brush;
+//     delete m_brush;
 }
 
 void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
@@ -112,20 +109,18 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     // First apply the transfo to the dab source
     KisDynamicShape* dabsrc = m_brush->shape();
-    KisDynamicTransformation* transfo = m_brush->rootTransfo();
-    while(transfo)
+    for(QList<KisDynamicTransformation*>::iterator transfo = m_brush->beginTransformation();
+        transfo != m_brush->endTransformation(); ++transfo)
     {
-        transfo->transformBrush(dabsrc, adjustedInfo);
-        transfo = transfo->nextTransformation();
+        (*transfo)->transformBrush(dabsrc, adjustedInfo);
     }
 
     // Then to the coloring source
     KisDynamicColoring* coloringsrc = m_brush->coloring();
-    transfo = m_brush->rootTransfo();
-    while(transfo)
+    for(QList<KisDynamicTransformation*>::iterator transfo = m_brush->beginTransformation();
+        transfo != m_brush->endTransformation(); ++transfo)
     {
-        transfo->transformColoring(coloringsrc, adjustedInfo);
-        transfo = transfo->nextTransformation();
+        (*transfo)->transformColoring(coloringsrc, adjustedInfo);
     }
 
     dabsrc->createStamp(dab, coloringsrc);

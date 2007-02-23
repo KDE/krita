@@ -20,6 +20,7 @@
 #define _KIS_DARKEN_TRANSFORMATION_
 
 #include "kis_dynamic_transformation.h"
+#include <klocale.h>
 
 class KisTransformParameter;
 
@@ -28,6 +29,8 @@ class KisDarkenTransformation : public KisDynamicTransformation {
         KisDarkenTransformation(KisTransformParameter* transfoParameter);
         virtual ~KisDarkenTransformation();
     public:
+        virtual QString id() { return "darken"; };
+        virtual QString name() { return i18n("darken"); };
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
         virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
     private:

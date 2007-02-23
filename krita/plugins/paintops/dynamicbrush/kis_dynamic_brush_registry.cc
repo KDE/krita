@@ -18,6 +18,12 @@
 
 #include "kis_dynamic_brush_registry.h"
 
+#include <klocale.h>
+
+#include "kis_dynamic_brush.h"
+#include "kis_size_transformation.h"
+#include "kis_transform_parameter.h"
+
 KisDynamicBrushRegistry *KisDynamicBrushRegistry::singleton = 0;
 
 KisDynamicBrushRegistry* KisDynamicBrushRegistry::instance()
@@ -32,5 +38,8 @@ KisDynamicBrushRegistry* KisDynamicBrushRegistry::instance()
 
 void KisDynamicBrushRegistry::init()
 {
+    m_current = new KisDynamicBrush(i18n("example"));
+    m_current->appendTransformation(
+        new KisSizeTransformation(new KisTransformParameterXTilt(), new KisTransformParameterYTilt() ) );
 
 }

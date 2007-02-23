@@ -84,6 +84,18 @@ namespace Kross {
              */
             virtual int setattr(const char* name, const Py::Object& value);
 
+            /**
+             * Compare two objects.
+             *
+             * \param other The object this object should be compared with.
+             * \return 0 if the equal, 1 if self is bigger then other and -1
+             * if self is smaller then other.
+             */
+            virtual int compare(const Py::Object& other);
+
+            //hmmm, doc says "If an __eq__ or __cmp__ method exists, there must be a __hash__" but it seems to work fine without too.
+            //virtual long hash() {}
+
             virtual int sequence_length();
             virtual Py::Object sequence_concat(const Py::Object&);
             virtual Py::Object sequence_repeat(int);

@@ -97,6 +97,18 @@ bool PythonScript::initialize()
                 setError( QString("Failed to initialize local module context for script '%1'").arg(action()->objectName()) );
                 return false;
             }
+
+            /* Register in module dict to allow such codes like: from whatever.module import
+            PyObject* importdict = PyImport_GetModuleDict();
+            if(! importdict) {
+                //finalize();
+                setError( QString("Failed to fetch the import dictornary for script '%1'").arg(action()->objectName()) );
+                return false;
+            }
+            PyDict_SetItemString(importdict, name, pymod);
+            */
+
+            //PyModule_AddStringConstant(pymod, "__file__", "...");
         }
 
         #ifdef KROSS_PYTHON_SCRIPT_INIT_DEBUG
@@ -226,7 +238,8 @@ void PythonScript::execute()
         // Evaluate the already compiled code.
         PyObject* pyresult = PyEval_EvalCode(
             (PyCodeObject*)d->m_code->ptr(),
-            mainmoduledict.ptr(),
+mainmoduledict.ptr(),
+//moduledict.ptr(), //mainmoduledict.ptr(),
             moduledict.ptr()
         );
 

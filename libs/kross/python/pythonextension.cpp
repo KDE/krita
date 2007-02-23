@@ -84,6 +84,8 @@ PythonExtension::PythonExtension(QObject* object, bool owner)
     //behaviors().supportRepr();
     behaviors().supportGetattr();
     behaviors().supportSetattr();
+    behaviors().supportCompare();
+    //behaviors().supportHash();
     behaviors().supportSequenceType();
     behaviors().supportMappingType();
 
@@ -254,6 +256,18 @@ int PythonExtension::setattr(const char* n, const Py::Object& value)
 
     // finally redirect the unhandled attribute-request...
     return Py::PythonExtension<PythonExtension>::setattr(n, value);
+}
+
+int PythonExtension::compare(const Py::Object& other)
+{
+    if(Py::PythonExtension<PythonExtension>::check( other )) {
+        Py::ExtensionObject<PythonExtension> extobj( other );
+        PythonExtension* extension = extobj.extensionObject();
+        QObject* obj = extension->object();
+        return obj == object() ? 0 : ( obj > object() ? 1 : -1 );
+    }
+    PyErr_SetObject(PyExc_TypeError, other.ptr());
+    return -1;
 }
 
 /* objectName is a property anyway and therefore already accessible

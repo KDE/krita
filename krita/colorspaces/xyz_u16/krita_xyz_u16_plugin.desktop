@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=XYZ Color Model (16-bit integer)
+Comment=Color model for 16-bit integer per channel XYZ images
+ServiceTypes=KOffice/ColorSpace
+Type=Service
+X-KDE-Library=krita_xyz_u16_plugin
+X-Pigment-Version=1

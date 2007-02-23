@@ -264,7 +264,7 @@ int PythonExtension::compare(const Py::Object& other)
         Py::ExtensionObject<PythonExtension> extobj( other );
         PythonExtension* extension = extobj.extensionObject();
         QObject* obj = extension->object();
-        return obj == object() ? 0 : ( obj > object() ? 1 : -1 );
+        return obj == object() ? 0 : ( obj > object() ? -1 : 1 );
     }
     PyErr_SetObject(PyExc_TypeError, other.ptr());
     return -1;

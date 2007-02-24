@@ -52,7 +52,7 @@ bool KisOasisSaveVisitor::visit(KisPaintLayer *layer)
 
 bool KisOasisSaveVisitor::visit(KisGroupLayer *layer)
 {
-    m_bodyWriter->startElement("image:layer");
+    m_bodyWriter->startElement("image:stack");
     saveLayerInfo(layer);
 
     KisLayerSP child = layer->lastChild();

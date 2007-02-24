@@ -37,7 +37,7 @@ void KisOasisLoadVisitor::loadImage(const QDomElement& elem)
 
     m_image->blockSignals( true );  // Don't send out signals while we're building the image
     for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
-        if (node.isElement() && node.nodeName() == "image:layer") { // it's the root layer !
+        if (node.isElement() && node.nodeName() == "image:stack") { // it's the root layer !
             QDomElement subelem = node.toElement();
             loadGroupLayer(subelem, m_image->rootLayer());
             return;
@@ -67,20 +67,26 @@ void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerS
         if (node.isElement())
         {
             QDomElement subelem = node.toElement();
-            if(node.nodeName()== "image:layer")
+            if(node.nodeName()== "image:stack")
             {
                 quint8 opacity = 255;
-                if(!subelem.attribute("opacity").isNull())
+                if( not subelem.attribute("opacity").isNull())
                 {
                     opacity = subelem.attribute("opacity").toInt();
                 }
+                KisGroupLayerSP layer = new KisGroupLayer(m_image.data(), "", opacity);
+                gL->addLayer(layer, gL->childCount() );
+                loadGroupLayer(subelem, layer);
+            } else if(node.nodeName()== "image:layer")
+            {
                 QString srcAttr = subelem.attribute("src");
-                if( srcAttr.isNull() )
-                { // Group layer
-                    KisGroupLayerSP layer = new KisGroupLayer(m_image.data(), "", opacity);
-                    gL->addLayer(layer, gL->childCount() );
-                    loadGroupLayer(subelem, layer);
-                } else { // paint layer
+                if( not srcAttr.isNull() )
+                {
+                    quint8 opacity = 255;
+                    if( not subelem.attribute("opacity").isNull())
+                    {
+                        opacity = subelem.attribute("opacity").toInt();
+                    }
                     KisPaintLayerSP layer = new KisPaintLayer( m_image.data(), "", opacity); // TODO: support of colorspacess
                     m_layerFilenames[layer.data()] = srcAttr;
                     gL->addLayer(layer, gL->childCount() );

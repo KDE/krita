@@ -22,6 +22,9 @@
 #include <QDomNode>
 
 #include <KoColorSpaceRegistry.h>
+#include <KoOasisStore.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 
 // Includes from krita/image
 #include <kis_image.h>
@@ -58,6 +61,31 @@ void KisOasisLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayer* layer
 void KisOasisLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL)
 {
     loadLayerInfo(elem, pL.data());
+    
+    QString filename = m_layerFilenames[pL.data()];
+    kDebug(41008) << "Loading file : " << filename << endl;
+    if (m_oasisStore->store()->open(filename) ) {
+        KoStoreDevice io ( m_oasisStore->store() );
+        if ( !io.open( QIODevice::ReadOnly ) )
+        {
+            kDebug(41008) << "Couldn't open for reading: " << filename << endl;
+//             return false;
+        }
+        QImage img;
+        if ( ! img.load( &io, "PNG" ) )
+        {
+            kDebug(41008) << "Loading PNG failed: " << filename << endl;
+            m_oasisStore->store()->close();
+            io.close();
+//             return false;
+        }
+        pL->paintDevice()->convertFromQImage(img, "");
+        io.close();
+        m_oasisStore->store()->close();
+        kDebug(41008) << "Loading was successful" << endl;
+//         return true;
+    }
+    kDebug(41008) << "Loading was unsuccessful" << endl;
 }
 
 void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL)

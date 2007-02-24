@@ -21,6 +21,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 
+class KoOasisStore;
 class QDomElement;
 class KisPaintLayer;
 class KisGroupLayer;
@@ -29,7 +30,7 @@ class KisDoc2;
 
 class KisOasisLoadVisitor {
 public:
-    KisOasisLoadVisitor(KisDoc2* doc) : m_doc(doc) {};
+    KisOasisLoadVisitor(KisDoc2* doc, KoOasisStore* os) : m_doc(doc), m_oasisStore(os) {};
     virtual ~KisOasisLoadVisitor() {};
 
 public:
@@ -43,6 +44,7 @@ private:
     KisImageSP m_image;
     KisDoc2* m_doc;
     QMap<KisLayer *, QString> m_layerFilenames;
+    KoOasisStore* m_oasisStore;
 };
 
 

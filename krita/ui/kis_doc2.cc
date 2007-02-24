@@ -88,7 +88,6 @@
 #include "kis_load_visitor.h"
 #include "kis_save_visitor.h"
 #include "kis_savexml_visitor.h"
-#include "kis_oasis_load_data_visitor.h"
 #include "kis_oasis_load_visitor.h"
 #include "kis_oasis_save_data_visitor.h"
 #include "kis_oasis_save_visitor.h"
@@ -372,13 +371,11 @@ bool KisDoc2::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocu
     for (QDomNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "office:body") {
             QDomElement elem = node.toElement();
-            KisOasisLoadVisitor olv(this);
+            KoOasisStore* oasisStore =  new KoOasisStore( store );
+            KisOasisLoadVisitor olv(this,oasisStore);
             olv.loadImage(elem);
             if (!olv.image() )
                 return false;
-            KoOasisStore* oasisStore =  new KoOasisStore( store );
-            KisOasisLoadDataVisitor oldv(oasisStore, olv.layerFilenames());
-            olv.image()->rootLayer()->accept(oldv);
 
             setCurrentImage( olv.image() );
 

@@ -28,7 +28,7 @@
 #include <kis_paintop_registry.h>
 
 #include "kis_dynamicop.h"
-#include "kis_dynamic_brush_advanced_editor.h"
+#include "kis_filters_list_dynamic_programs_editor.h"
 
 typedef KGenericFactory<DynamicBrush> DynamicBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritadynamicbrush, DynamicBrushFactory("kritacore"))
@@ -64,7 +64,7 @@ DynamicBrush::~DynamicBrush()
 void DynamicBrush::slotEditDynamicBrush()
 {
     kDebug() << " BOUH " << endl;
-    KisDynamicBrushAdvancedEditor dbae;
+    KisFiltersListDynamicProgramsEditor dbae;
     dbae.editBrush();
 }
 

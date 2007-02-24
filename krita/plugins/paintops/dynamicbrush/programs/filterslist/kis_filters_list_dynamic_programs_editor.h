@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_DYNAMIC_BRUSH_ADVANCED_EDITOR_H_
-#define _KIS_DYNAMIC_BRUSH_ADVANCED_EDITOR_H_
+#ifndef _KIS_FILTERS_LIST_DYNAMIC_PROGRAMS_EDITOR_H_
+#define _KIS_FILTERS_LIST_DYNAMIC_PROGRAMS_EDITOR_H_
 
-class KisDynamicBrushAdvancedEditor {
+class KisFiltersListDynamicProgramsEditor {
   public:
     void editBrush();
 };

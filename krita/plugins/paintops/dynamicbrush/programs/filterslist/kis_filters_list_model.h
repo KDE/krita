@@ -21,14 +21,14 @@
 
 #include <QAbstractListModel>
 
-class KisDynamicBrush;
+class KisFiltersListDynamicProgram;
 
-class KisFiltersModel : public QAbstractListModel {
+class KisFiltersListModel : public QAbstractListModel {
     Q_OBJECT
 
     public:
-        KisFiltersModel(KisDynamicBrush* db, QObject *parent = 0);
-        ~KisFiltersModel();
+        KisFiltersListModel(KisFiltersListDynamicProgram* db, QObject *parent = 0);
+        ~KisFiltersListModel();
         int rowCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role) const;
         Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -46,7 +46,7 @@ class KisFiltersModel : public QAbstractListModel {
         void setCurrentFilterType(int filterType);
         void setCurrentFilter(const QModelIndex&);
     private:
-        KisDynamicBrush* m_dynamicBrush;
+        KisFiltersListDynamicProgram* m_program;
         int m_currentFilterType;
         int m_currentTransformation;
 };

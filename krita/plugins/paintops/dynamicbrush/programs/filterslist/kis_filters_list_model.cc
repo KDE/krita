@@ -16,24 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_filters_model.h"
+#include "kis_filters_list_model.h"
 
-#include "kis_dynamic_brush.h"
 #include "kis_dynamic_transformation.h"
-
 #include "kis_darken_transformation.h"
 #include "kis_size_transformation.h"
 
-KisFiltersModel::KisFiltersModel(KisDynamicBrush* db, QObject *parent)
-     : QAbstractListModel(parent), m_dynamicBrush(db), m_currentFilterType(0)
+#include "kis_filters_list_dynamic_program.h"
+
+KisFiltersListModel::KisFiltersListModel(KisFiltersListDynamicProgram* db, QObject *parent)
+     : QAbstractListModel(parent), m_program(db), m_currentFilterType(0)
 {
 }
 
-KisFiltersModel::~KisFiltersModel()
+KisFiltersListModel::~KisFiltersListModel()
 {
 }
 
-QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
+QVariant KisFiltersListModel::data(const QModelIndex &index, int role) const
 {
      if (!index.isValid())
          return QVariant();
@@ -41,19 +41,19 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
      if (role != Qt::DisplayRole and role != Qt::EditRole)
         return QVariant();
 
-     return QVariant(  m_dynamicBrush->transfoAt( index.row() )->name() );
+     return QVariant(  m_program->transfoAt( index.row() )->name() );
 }
 
-int KisFiltersModel::rowCount(const QModelIndex &parent) const
+int KisFiltersListModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
     else
-        return m_dynamicBrush->countTransformations();
+        return m_program->countTransformations();
 }
 
 
-Qt::ItemFlags KisFiltersModel::flags(const QModelIndex &index) const
+Qt::ItemFlags KisFiltersListModel::flags(const QModelIndex &index) const
 {
      if (!index.isValid())
          return Qt::ItemIsEnabled;
@@ -61,12 +61,12 @@ Qt::ItemFlags KisFiltersModel::flags(const QModelIndex &index) const
      return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-void KisFiltersModel::setCurrentFilterType(int filterType)
+void KisFiltersListModel::setCurrentFilterType(int filterType)
 {
     m_currentFilterType = filterType;
 }
 
-void KisFiltersModel::addNewFilter()
+void KisFiltersListModel::addNewFilter()
 {
     kDebug() << "addNewFilter " << m_currentFilterType << endl;
     KisDynamicTransformation* transfo = 0;
@@ -82,26 +82,26 @@ void KisFiltersModel::addNewFilter()
             kDebug() << "Unknown filter type" << endl;
             return;
     }
-    beginInsertRows( createIndex(0, 0, 0), m_dynamicBrush->countTransformations(), m_dynamicBrush->countTransformations());
-    m_dynamicBrush->appendTransformation( transfo );
+    beginInsertRows( createIndex(0, 0, 0), m_program->countTransformations(), m_program->countTransformations());
+    m_program->appendTransformation( transfo );
     endInsertRows();
 }
 
-void KisFiltersModel::deleteCurrentFilter()
+void KisFiltersListModel::deleteCurrentFilter()
 {
     kDebug() << "Remove filter at " << m_currentTransformation << endl;
     if( m_currentTransformation == -1)
         return;
     beginRemoveRows( createIndex(0, 0, 0), m_currentTransformation, m_currentTransformation);
-    m_dynamicBrush->removeTransformationAt( m_currentTransformation );
+    m_program->removeTransformationAt( m_currentTransformation );
     endRemoveRows();
     m_currentTransformation = -1;
 }
 
-void KisFiltersModel::setCurrentFilter(const QModelIndex& midx)
+void KisFiltersListModel::setCurrentFilter(const QModelIndex& midx)
 {
     kDebug() << "Set current filter " << midx.row() << endl;
     m_currentTransformation = midx.row();
 }
 
-#include "kis_filters_model.moc"
+#include "kis_filters_list_model.moc"

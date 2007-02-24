@@ -44,6 +44,7 @@
 #include "kis_dynamic_brush_registry.h"
 #include "kis_dynamic_coloring.h"
 #include "kis_dynamic_shape.h"
+#include "kis_dynamic_program.h"
 #include "kis_size_transformation.h"
 
 KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter)
@@ -107,22 +108,11 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     quint8 origOpacity = m_painter->opacity();
     KoColor origColor = m_painter->paintColor();
 
-    // First apply the transfo to the dab source
     KisDynamicShape* dabsrc = m_brush->shape();
-    for(QList<KisDynamicTransformation*>::iterator transfo = m_brush->beginTransformation();
-        transfo != m_brush->endTransformation(); ++transfo)
-    {
-        (*transfo)->transformBrush(dabsrc, adjustedInfo);
-    }
-
-    // Then to the coloring source
     KisDynamicColoring* coloringsrc = m_brush->coloring();
-    for(QList<KisDynamicTransformation*>::iterator transfo = m_brush->beginTransformation();
-        transfo != m_brush->endTransformation(); ++transfo)
-    {
-        (*transfo)->transformColoring(coloringsrc, adjustedInfo);
-    }
 
+    m_brush->program()->apply(dabsrc, coloringsrc, adjustedInfo);
+    
     dabsrc->createStamp(dab, coloringsrc);
 
     // paint the dab

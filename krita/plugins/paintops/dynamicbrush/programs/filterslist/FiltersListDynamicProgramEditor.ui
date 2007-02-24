@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>DynamicBrushAdvancedEditor</class>
- <widget class="QWidget" name="DynamicBrushAdvancedEditor" >
+ <class>FiltersListDynamicProgramEditor</class>
+ <widget class="QWidget" name="FiltersListDynamicProgramEditor" >
   <property name="geometry" >
    <rect>
     <x>0</x>

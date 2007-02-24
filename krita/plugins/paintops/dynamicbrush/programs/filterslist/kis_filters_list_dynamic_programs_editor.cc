@@ -16,16 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_dynamic_brush_advanced_editor.h"
+#include "kis_filters_list_dynamic_programs_editor.h"
 
 #include <kdialog.h>
 
 #include "ui_AdvancedEditor.h"
 
-#include "kis_filters_model.h"
+#include "kis_filters_list_model.h"
+#include "kis_dynamic_brush.h"
 #include "kis_dynamic_brush_registry.h"
 
-void KisDynamicBrushAdvancedEditor::editBrush()
+void KisFiltersListDynamicProgramsEditor::editBrush()
 {
    KDialog *dialog = new KDialog( 0 );
    dialog->setCaption( i18n("Dynamic Brush Advanced Editor") );
@@ -33,7 +34,7 @@ void KisDynamicBrushAdvancedEditor::editBrush()
    QWidget* widget = new QWidget(dialog);
    Ui_DynamicBrushAdvancedEditor ae;
    ae.setupUi(widget);
-   KisFiltersModel* filtersModel = new KisFiltersModel(  KisDynamicBrushRegistry::instance()->current() , ae.listViewFilters);
+   KisFiltersListModel* filtersModel = new KisFiltersListModel(  (KisFiltersListDynamicProgram*)KisDynamicBrushRegistry::instance()->current()->program() , ae.listViewFilters);
    ae.listViewFilters->setModel( filtersModel );
    filtersModel->connect(ae.comboBoxFilter, SIGNAL(activated(int)), SLOT(setCurrentFilterType(int)));
    filtersModel->connect(ae.pushButtonAdd, SIGNAL(pressed()), SLOT(addNewFilter()));

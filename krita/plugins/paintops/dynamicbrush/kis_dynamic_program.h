@@ -16,32 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_DYNAMIC_BRUSH_HPP_
-#define _KIS_DYNAMIC_BRUSH_HPP_
+#ifndef _KIS_DYNAMIC_PROGRAM_H_
+#define _KIS_DYNAMIC_PROGRAM_H_
 
 #include <QString>
-#include <KoID.h>
 
-class KisDynamicColoring;
 class KisDynamicShape;
-class KisDynamicTransformation;
-class KisDynamicProgram;
+class KisDynamicColoring;
+class KisPaintInformation;
 
-class KisDynamicBrush {
+/**
+ * This is the base class of a dynamic program.
+ */
+class KisDynamicProgram {
+    protected:
+        KisDynamicProgram(const QString& name) : m_name(name) { }
     public:
-        KisDynamicBrush(const QString& name);
-        ~KisDynamicBrush();
-        inline QString name() const { return m_name; }
-        inline KoID id() const { return KoID(name(), name()); }
-        inline /*const */KisDynamicShape* shape() const { return m_shape; }
-        inline /*const */KisDynamicColoring* coloring() const { return m_coloring; }
-        inline KisDynamicProgram* program() const { return m_program; }
-        inline void setProgram(KisDynamicProgram* p) { m_program = p; }
+        /// @return the name of this program
+        const QString& name() { return m_name; }
+        /**
+         * Apply the program on the shape and the coloring
+         */
+        virtual void apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo) = 0;
     private:
         QString m_name;
-        KisDynamicShape* m_shape;
-        KisDynamicColoring* m_coloring;
-        KisDynamicProgram* m_program;
 };
+
 
 #endif

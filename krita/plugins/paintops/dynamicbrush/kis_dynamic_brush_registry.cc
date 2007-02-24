@@ -24,6 +24,9 @@
 #include "kis_size_transformation.h"
 #include "kis_transform_parameter.h"
 
+// TODO: temporary stuff
+#include "kis_filters_list_dynamic_program.h"
+
 KisDynamicBrushRegistry *KisDynamicBrushRegistry::singleton = 0;
 
 KisDynamicBrushRegistry* KisDynamicBrushRegistry::instance()
@@ -38,8 +41,11 @@ KisDynamicBrushRegistry* KisDynamicBrushRegistry::instance()
 
 void KisDynamicBrushRegistry::init()
 {
+    // TODO: temporary stuff
     m_current = new KisDynamicBrush(i18n("example"));
-    m_current->appendTransformation(
+    KisFiltersListDynamicProgram* program = new KisFiltersListDynamicProgram("example program");
+    program->appendTransformation(
         new KisSizeTransformation(new KisTransformParameterXTilt(), new KisTransformParameterYTilt() ) );
+    m_current->setProgram(program);
 
 }

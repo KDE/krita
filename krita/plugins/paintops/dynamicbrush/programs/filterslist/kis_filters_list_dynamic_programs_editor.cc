@@ -20,7 +20,7 @@
 
 #include <kdialog.h>
 
-#include "ui_AdvancedEditor.h"
+#include "ui_FiltersListDynamicProgramEditor.h"
 
 #include "kis_filters_list_model.h"
 #include "kis_dynamic_brush.h"
@@ -32,7 +32,7 @@ void KisFiltersListDynamicProgramsEditor::editBrush()
    dialog->setCaption( i18n("Dynamic Brush Advanced Editor") );
    dialog->setButtons( KDialog::Ok );
    QWidget* widget = new QWidget(dialog);
-   Ui_DynamicBrushAdvancedEditor ae;
+   Ui_FiltersListDynamicProgramEditor ae;
    ae.setupUi(widget);
    KisFiltersListModel* filtersModel = new KisFiltersListModel(  (KisFiltersListDynamicProgram*)KisDynamicBrushRegistry::instance()->current()->program() , ae.listViewFilters);
    ae.listViewFilters->setModel( filtersModel );

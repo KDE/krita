@@ -19,6 +19,7 @@
 #include "kis_filters_list_dynamic_programs_editor.h"
 
 #include <kdialog.h>
+#include <klocale.h>
 
 #include "ui_FiltersListDynamicProgramEditor.h"
 

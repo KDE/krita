@@ -30,6 +30,14 @@
 #include "kis_dynamicop.h"
 #include "kis_filters_list_dynamic_programs_editor.h"
 
+// TEMP
+#include <kis_dynamic_brush.h>
+#include <kis_dynamic_brush_registry.h>
+#include <kis_filters_list_dynamic_program.h>
+#include <kis_size_transformation.h>
+#include <kis_transform_parameter.h>
+// TEMP
+
 typedef KGenericFactory<DynamicBrush> DynamicBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritadynamicbrush, DynamicBrushFactory("kritacore"))
 
@@ -43,6 +51,13 @@ K_EXPORT_COMPONENT_FACTORY(kritadynamicbrush, DynamicBrushFactory("kritacore"))
     {
         KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
         r->add (KisPaintOpFactorySP(new KisDynamicOpFactory));
+        
+        // TODO: remove this, temp stuff for testing only
+        KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
+        KisFiltersListDynamicProgram* program = new KisFiltersListDynamicProgram("example program");
+        program->appendTransformation( new KisSizeTransformation(new KisTransformParameterXTilt(), new KisTransformParameterYTilt() ) );
+        current->setProgram(program);
+        KisDynamicBrushRegistry::instance()->setCurrent(current);
     }
     if ( parent->inherits("KisView2") )
     {

@@ -16,30 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_DYNAMIC_BRUSH_REGISTRY_H_
-#define _KIS_DYNAMIC_BRUSH_REGISTRY_H_
+#include "kis_dynamic_brush_registry.h"
 
-#include <KoGenericRegistry.h>
+#include <klocale.h>
 
-class KisDynamicBrush;
+#include "kis_dynamic_brush.h"
+#include "kis_size_transformation.h"
+#include "kis_transform_parameter.h"
 
-class KisDynamicBrushRegistry : public KoGenericRegistry<KisDynamicBrush *> {
+// TODO: temporary stuff
+#include "kis_filters_list_dynamic_program.h"
 
-  protected:
-    void init();
-  public:
-    /**
-     * @return an instance of the KisDynamicBrushRegistry
-     * Creates an instance if that has never happened before and returns the singleton instance.
-     */
-    static KisDynamicBrushRegistry* instance();
-    /**
-     * @return the currently selected dynamic brush
-     */
-    inline KisDynamicBrush* current() { return m_current; }
-  private:
-    static KisDynamicBrushRegistry *singleton;
-    KisDynamicBrush* m_current;
-};
+KisDynamicBrushRegistry *KisDynamicBrushRegistry::singleton = 0;
 
-#endif
+KisDynamicBrushRegistry* KisDynamicBrushRegistry::instance()
+{
+    if(KisDynamicBrushRegistry::singleton == 0)
+    {
+        KisDynamicBrushRegistry::singleton = new KisDynamicBrushRegistry();
+        KisDynamicBrushRegistry::singleton->init();
+    }
+    return KisDynamicBrushRegistry::singleton;
+}
+
+void KisDynamicBrushRegistry::init()
+{
+    // TODO: temporary stuff
+    m_current = 0;
+}

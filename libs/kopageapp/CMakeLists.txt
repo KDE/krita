@@ -5,6 +5,7 @@ set( kopageapp_LIB_SRCS
      KoPADocument.cpp
      KoPAView.cpp
      KoPACanvas.cpp
+     KoPASavingContext.cpp
      KoPAPageBase.cpp
      KoPAMasterPage.cpp
      KoPAPage.cpp

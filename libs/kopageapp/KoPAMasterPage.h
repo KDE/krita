@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,11 +34,14 @@ public:
 
     /// @return the page layout set for this masterpage
     KoPageLayout & pageLayout() { return m_pageLayout; }
+    const KoPageLayout & pageLayout() const { return m_pageLayout; }
 
     /// Set the page layout to @p layout
     void setPageLayout(const KoPageLayout& layout) { m_pageLayout = layout; }
 
 protected:
+    virtual void createOdfPageTag( KoPASavingContext &paContext ) const;
+
     KoPageLayout m_pageLayout;
 };
 

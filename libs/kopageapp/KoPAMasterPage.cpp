@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,11 @@
 
 #include "KoPAMasterPage.h"
 
+#include <KoGenStyle.h>
+#include <KoXmlWriter.h>
+
+#include "KoPASavingContext.h"
+
 KoPAMasterPage::KoPAMasterPage()
 : KoPAPageBase()
 {
@@ -27,4 +32,15 @@ KoPAMasterPage::KoPAMasterPage()
 
 KoPAMasterPage::~KoPAMasterPage()
 {
+}
+
+void KoPAMasterPage::createOdfPageTag( KoPASavingContext &paContext ) const
+{
+    KoGenStyle pageLayoutStyle = pageLayout().saveOasis();
+    pageLayoutStyle.addAttribute( "style:page-usage", "all" );
+    QString pageLayoutName( paContext.mainStyles().lookup( pageLayoutStyle, "pm" ) );
+
+    paContext.xmlWriter().startElement( "style:master-page" );
+    paContext.xmlWriter().addAttribute( "style:name", "Standard" ); //TODO
+    paContext.xmlWriter().addAttribute( "style:page-layout-name", pageLayoutName );
 }

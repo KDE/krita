@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -58,7 +58,8 @@ public:
     void removeShape( KoShape* shape );
 
 protected:
-    virtual KoView *createViewInstance(  QWidget *parent ) = 0;
+    virtual KoView *createViewInstance( QWidget *parent ) = 0;
+    virtual const char *odfTagName() = 0;
 
 private:
     QList<KoPAPage*> m_pages;

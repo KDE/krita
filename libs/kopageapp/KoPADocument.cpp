@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,12 @@
 #include "KoPADocument.h"
 
 #include <kcommand.h>
+#include <KTemporaryFile>
 
+#include <KoStore.h>
+#include <KoStoreDevice.h>
+#include <KoXmlWriter.h>
+#include <KoSavingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 
@@ -28,6 +33,8 @@
 #include "KoPAView.h"
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"
+#include "KoPASavingContext.h"
+#include "KoPAStyles.h"
 
 KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoDocument( parentWidget, parent, singleViewMode )
@@ -70,8 +77,66 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
 
 bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
-    Q_UNUSED( store );
-    Q_UNUSED( manifestWriter );
+    if ( !store->open( "content.xml" ) )
+        return false;
+
+    KoStoreDevice contentDev( store );
+    KoXmlWriter* contentWriter = createOasisXmlWriter( &contentDev, "office:document-content" );
+
+    KoGenStyles mainStyles;
+    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
+
+    KTemporaryFile contentTmpFile;
+    contentTmpFile.open();
+    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
+
+    contentTmpWriter.startElement( "office:body" );
+    contentTmpWriter.startElement( odfTagName() );
+
+    KoPASavingContext paContext( contentTmpWriter, savingContext, 1 );
+
+    // save pages
+    QList<KoPAPage*>::const_iterator pageIt( m_pages.constBegin() );
+    foreach ( KoPAPage *page, m_pages )
+    {
+        page->saveOdf( paContext );
+        paContext.incrementPage();
+    }
+
+    contentTmpWriter.endElement(); // office:odfTagName()
+    contentTmpWriter.endElement(); // office:body
+
+    contentTmpFile.close();
+
+    // test style writing
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO, false );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) 
+    {
+        qDebug() << "style:style" << ( *it ).name;
+        ( *it ).style->writeStyle( contentWriter, mainStyles, "style:style", ( *it ).name , "style:graphic-properties"  );
+    }
+    styles = mainStyles.styles( KoPAStyles::STYLE_PAGE, false );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) 
+    {
+        qDebug() << "style:style" << ( *it ).name;
+        ( *it ).style->writeStyle( contentWriter, mainStyles, "style:style", ( *it ).name , "style:drawing-page-properties"  );
+    }
+
+    // And now we can copy over the contents from the tempfile to the real one
+    contentWriter->addCompleteElement( &contentTmpFile );
+
+    contentWriter->endElement(); // root element
+    contentWriter->endDocument();
+    delete contentWriter;
+
+    if ( !store->close() ) // done with content.xml
+        return false;
+
+    //add manifest line for content.xml
+    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+
     return true;
 }
 

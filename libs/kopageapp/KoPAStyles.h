@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,32 +17,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoPAPage.h"
+#ifndef KOPASTYLES_H
+#define KOPASTYLES_H
 
-#include <KoShapeSavingContext.h>
-#include <KoShapeLayer.h>
-#include <KoXmlWriter.h>
-
-#include "KoPAMasterPage.h"
-#include "KoPASavingContext.h"
-
-KoPAPage::KoPAPage( KoPAMasterPage * masterPage )
-: KoPAPageBase()
-, m_masterPage( masterPage )
+/**
+ * This namespace contains style types needed for kopageapp
+ */
+namespace KoPAStyles
 {
+    enum { 
+        STYLE_PAGE = 20 /// style for drawing-page see ODF 14.13.2 Drawing Page Style
+    };
 }
 
-KoPAPage::~KoPAPage()
-{
-}
-
-KoPageLayout & KoPAPage::pageLayout()
-{
-    return m_masterPage->pageLayout();
-}
-
-void KoPAPage::createOdfPageTag( KoPASavingContext &paContext ) const
-{
-    paContext.xmlWriter().startElement( "draw:page" );
-    paContext.xmlWriter().addAttribute( "draw:id", "page" + QString::number( paContext.page() ) );
-}
+#endif // KOPASTYLES_H

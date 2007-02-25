@@ -31,6 +31,7 @@
 #include <kis_group_layer.h>
 #include <kis_meta_registry.h>
 #include <kis_paint_layer.h>
+#include <kis_png_converter.h>
 
 #include "kis_doc2.h"
 
@@ -64,7 +65,7 @@ void KisOasisLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerS
     
     QString filename = m_layerFilenames[pL.data()];
     kDebug(41008) << "Loading file : " << filename << endl;
-    if (m_oasisStore->store()->open(filename) ) {
+/*    if (m_oasisStore->store()->open(filename) ) {
         KoStoreDevice io ( m_oasisStore->store() );
         if ( !io.open( QIODevice::ReadOnly ) )
         {
@@ -84,7 +85,7 @@ void KisOasisLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerS
         m_oasisStore->store()->close();
         kDebug(41008) << "Loading was successful" << endl;
 //         return true;
-    }
+    }*/
     kDebug(41008) << "Loading was unsuccessful" << endl;
 }
 
@@ -107,18 +108,33 @@ void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerS
                 loadGroupLayer(subelem, layer);
             } else if(node.nodeName()== "image:layer")
             {
-                QString srcAttr = subelem.attribute("src");
-                if( not srcAttr.isNull() )
+                QString filename = subelem.attribute("src");
+                if( not filename.isNull() )
                 {
                     quint8 opacity = 255;
                     if( not subelem.attribute("opacity").isNull())
                     {
                         opacity = subelem.attribute("opacity").toInt();
                     }
-                    KisPaintLayerSP layer = new KisPaintLayer( m_image.data(), "", opacity); // TODO: support of colorspacess
-                    m_layerFilenames[layer.data()] = srcAttr;
-                    gL->addLayer(layer, gL->childCount() );
-                    loadPaintLayer(subelem, layer);
+//                     KisPaintLayerSP layer = new KisPaintLayer( m_image.data(), "", opacity); // TODO: support of colorspacess
+//                     m_layerFilenames[layer.data()] = srcAttr;
+                    if (m_oasisStore->store()->open(filename) ) {
+                        KoStoreDevice io ( m_oasisStore->store() );
+                        if ( !io.open( QIODevice::ReadOnly ) )
+                        {
+                            kDebug(41008) << "Couldn't open for reading: " << filename << endl;
+                //             return false;
+                        }
+                        KisPNGConverter pngConv(0, gL->image()->undoAdapter() );
+                        pngConv.buildImage( &io );
+                        io.close();
+                        m_oasisStore->store()->close();
+                        KisPaintLayerSP layer = new KisPaintLayer( gL->image() , "", opacity, pngConv.image()->projection());
+                        gL->addLayer(layer, gL->childCount() );
+                        loadPaintLayer(subelem, layer);
+                        kDebug(41008) << "Loading was successful" << endl;
+                //         return true;
+                    }
                 }
             }
         }

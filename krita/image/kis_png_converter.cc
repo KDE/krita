@@ -110,7 +110,7 @@ namespace {
 
 KisPNGConverter::KisPNGConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
-    Q_ASSERT(doc);
+//     Q_ASSERT(doc);
     Q_ASSERT(adapter);
 
     m_doc = doc;
@@ -356,7 +356,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 //    fclose(fp);
 
     // Creating the KisImageSP
-    if( m_img) {
+    if( m_img == 0 ) {
         m_img = new KisImage(m_adapter, width, height, cs, "built image");
         Q_CHECK_PTR(m_img);
         if(profile && !profile->isSuitableForOutput())

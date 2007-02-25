@@ -31,7 +31,7 @@
 #include "kis_tool_freehand.h"
 #include "kis_tool_gradient.h"
 #include "kis_tool_rectangle.h"
-//#include "kis_tool_colorpicker.h"
+#include "kis_tool_colorpicker.h"
 #include "kis_tool_line.h"
 //#include "kis_tool_text.h"
 //#include "kis_tool_duplicate.h"
@@ -53,7 +53,7 @@ DefaultTools::DefaultTools(QObject *parent, const QStringList &)
     r->add(new KisToolFillFactory(r, QStringList()));
     r->add(new KisToolGradientFactory(r, QStringList()));
     r->add(new KisToolBrushFactory(r, QStringList()));
-    //r->add(KoToolFactorySP(new KisToolColorPickerFactory()));
+    r->add(new KisToolColorPickerFactory(r, QStringList()));
     r->add(new KisToolLineFactory(r, QStringList()));
     //r->add(KoToolFactorySP(new KisToolTextFactory()));
     //r->add(KoToolFactorySP(new KisToolDuplicateFactory()));

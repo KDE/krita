@@ -25,22 +25,21 @@
 #include <QSpinBox>
 #include <QListWidget>
 #include <QList>
+#include <QWidget>
 
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <klocale.h>
-#include <QColor>
 #include <kmessagebox.h>
 
 #include "kis_layer.h"
 #include "kis_cursor.h"
-#include "kis_canvas_subject.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_colorpicker.moc"
 #include "KoPointerEvent.h"
-#include "kis_canvas_subject.h"
+#include "KoCanvasBase.h"
 #include "kis_iterators_pixel.h"
 #include "KoColor.h"
 #include "kis_resourceserver.h"
@@ -51,13 +50,11 @@ namespace {
     const int SAMPLE_MERGED = 0;
 }
 
-KisToolColorPicker::KisToolColorPicker()
-    : super (i18n("Color Picker"))
+KisToolColorPicker::KisToolColorPicker(KoCanvasBase* canvas)
+    :  KisTool(canvas, KisCursor::pickerCursor())
 {
     setObjectName("tool_colorpicker");
-    setCursor(KisCursor::pickerCursor());
     m_optionsWidget = 0;
-    m_subject = 0;
     m_radius = 1;
     m_addPalette = false;
     m_updateColor = true;
@@ -69,15 +66,20 @@ KisToolColorPicker::~KisToolColorPicker()
 {
 }
 
-void KisToolColorPicker::buttonPress(KoPointerEvent *e)
+
+void KisToolColorPicker::paint(QPainter& gc, KoViewConverter &converter)
 {
-    if (m_subject) {
-        if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
+    Q_UNUSED(gc);
+    Q_UNUSED(converter);
+}
+
+void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
+{
+    if (m_canvas) {
+        if (event->button() != Qt::LeftButton && event->button() != Qt::RightButton)
             return;
 
-        KisImageSP m_currentImage;
-
-        if (!m_subject || !(m_currentImage = m_currentImage))
+        if (!m_currentImage)
             return;
 
         KisPaintDeviceSP dev = m_currentImage->activeDevice();
@@ -97,7 +99,7 @@ void KisToolColorPicker::buttonPress(KoPointerEvent *e)
             }
         }
 
-        QPoint pos = QPoint(e->pos().floorX(), e->pos().floorY());
+        QPoint pos = convertToPixelCoord(event).toPoint();
 
         if (!m_currentImage->bounds().contains(pos)) {
             return;
@@ -159,10 +161,10 @@ void KisToolColorPicker::buttonPress(KoPointerEvent *e)
         displayPickedColor();
 
         if (m_updateColor) {
-            if (e->button() == Qt::LeftButton)
-                m_subject->setFGColor(m_pickedColor);
+            if (event->button() == Qt::LeftButton)
+                m_canvas->resourceProvider()->setResource(KoCanvasResource::ForegroundColor, m_pickedColor);
             else
-                m_subject->setBGColor(m_pickedColor);
+                m_canvas->resourceProvider()->setResource(KoCanvasResource::BackgroundColor, m_pickedColor);
         }
 
         if (m_addPalette) {
@@ -179,6 +181,16 @@ void KisToolColorPicker::buttonPress(KoPointerEvent *e)
             }
         }
     }
+}
+
+void KisToolColorPicker::mouseMoveEvent(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void KisToolColorPicker::mouseReleaseEvent(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
 }
 
 void KisToolColorPicker::displayPickedColor()
@@ -204,26 +216,9 @@ void KisToolColorPicker::displayPickedColor()
     }
 }
 
-void KisToolColorPicker::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("colorpicker"),
-                               i18n("&Color Picker"),
-                               collection,
-                               objectName());
-        m_action->setShortcut(QKeySequence(Qt::Key_P));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Color picker"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
-}
-
 QWidget* KisToolColorPicker::createOptionWidget()
 {
-    m_optionsWidget = new ColorPickerOptionsWidget(parent);
+    m_optionsWidget = new ColorPickerOptionsWidget(0);
 
     m_optionsWidget->cbUpdateCurrentColor->setChecked(m_updateColor);
 

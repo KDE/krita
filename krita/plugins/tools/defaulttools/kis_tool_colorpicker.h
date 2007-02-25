@@ -22,9 +22,9 @@
 
 #include <QList>
 
-#include "kis_tool_non_paint.h"
 #include "KoToolFactory.h"
 #include "ui_wdgcolorpicker.h"
+#include "kis_tool.h"
 #include <kis_layer_shape.h>
 class KisResource;
 class KisPalette;
@@ -37,22 +37,26 @@ class ColorPickerOptionsWidget : public QWidget, public Ui::ColorPickerOptionsWi
         ColorPickerOptionsWidget(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
-class KisToolColorPicker : public KisToolNonPaint {
+class KisToolColorPicker : public KisTool {
 
     Q_OBJECT
-    typedef KisToolNonPaint super;
+    typedef KisTool super;
 
 public:
-    KisToolColorPicker();
+    KisToolColorPicker(KoCanvasBase* canvas);
     virtual ~KisToolColorPicker();
 
 public:
-    virtual void setup(KActionCollection *collection);
-    virtual void buttonPress(KoPointerEvent *e);
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
-    virtual enumToolType toolType() { return TOOL_FILL; }
+   // virtual enumToolType toolType() { return TOOL_FILL; }
     virtual quint32 priority() { return 3; }
+
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+
+    virtual void paint(QPainter& gc, KoViewConverter &converter);
 
 public slots:
     void slotSetUpdateColor(bool);
@@ -87,7 +91,7 @@ public:
             setActivationShapeID( KIS_LAYER_SHAPE_ID );
             setPriority(0);
             setIcon("colorpicker");
-            setShortcut( QKeySequence( Qt::Key_P ) );
+            setShortcut( KShortcut( Qt::Key_P ) );
         }
 
     virtual ~KisToolColorPickerFactory(){}

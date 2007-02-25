@@ -206,23 +206,4 @@ void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
     }
 }
 
-
-
-
-
-// void KisToolRectangle::draw(const QPointF& start, const QPointF& end )
-// {
-//     if (!m_canvas)
-//         return;
-
-//     QPainter p (m_canvas->canvasWidget());
-//     const QPoint startFloor = QPoint(static_cast<int>(start.x()), static_cast<int>(start.y()));
-//     const QPoint endFloor = QPoint(static_cast<int>(end.x()), static_cast<int>(end.y()));
-//     //p.setRasterOp (Qt::NotROP);
-//     p.drawRect (QRect(startFloor, endFloor));
-//     p.end ();
-// }
-
-
-
 #include "kis_tool_rectangle.moc"

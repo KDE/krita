@@ -162,7 +162,7 @@ public:
      *
      * This will allow a new zoom tool in KofficeUI to do everything it needs.
      */
-    virtual void setZoom(double zoom) { if(zoom); /* poor mans Q_UNUSED */}
+    virtual void setZoom(double /*zoom*/) { }
     virtual double zoom() const { return 0;}
 
 private:

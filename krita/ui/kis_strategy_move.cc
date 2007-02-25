@@ -45,6 +45,10 @@ KisStrategyMove::~KisStrategyMove()
 {
 }
 
+void KisStrategyMove::setImage(KisImageSP image)
+{
+    m_image = image;
+}
 
 void KisStrategyMove::startDrag(const QPoint& pos)
 {

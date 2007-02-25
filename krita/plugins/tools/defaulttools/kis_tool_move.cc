@@ -65,6 +65,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
         if (!m_currentImage || !(dev = m_currentImage->activeLayer()))
             return;
 
+        m_strategy.setImage(m_currentImage);
         m_dragStart = QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y()));
         m_strategy.startDrag(m_dragStart);
     }
@@ -82,6 +83,7 @@ void KisToolMove::mouseMoveEvent(KoPointerEvent *e)
                 pos.setX(m_dragStart.x());
         }
         m_strategy.drag(pos);
+        notifyModified();
     }
 }
 
@@ -92,21 +94,3 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
 	m_strategy.endDrag(QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y())));
     }
 }
-
-// void KisToolMove::setup(KActionCollection *collection)
-// {
-//     m_action = collection->action(objectName());
-
-//     if (m_action == 0) {
-//         m_action = new KAction(KIcon("move"),
-//                                i18n("&Move"),
-//                                collection,
-//                                objectName());
-//         m_action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_V));
-//         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-//         m_action->setToolTip(i18n("Move"));
-//         m_action->setActionGroup(actionGroup());
-//         m_ownAction = true;
-//     }
-// }
-

@@ -33,6 +33,7 @@ public:
 
 public:
 
+    void setImage(KisImageSP image);
     void startDrag(const QPoint& pos);
     void drag(const QPoint& pos);
     void endDrag(const QPoint& pos, bool undo = true);

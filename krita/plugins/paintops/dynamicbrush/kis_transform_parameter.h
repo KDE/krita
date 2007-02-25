@@ -20,11 +20,14 @@
 #define _KIS_TRANSFORM_PARAMETER_H_
 
 #include <kis_paintop.h>
+#include <KoID.h>
 
 class KisTransformParameter {
     public:
         virtual ~KisTransformParameter() { }
         virtual double parameter(const KisPaintInformation& info) = 0;
+        static KisTransformParameter* id2TransformParameter(const KoID&);
+        static QList<KoID> transformParameterIds();
 };
 
 class KisTransformParameterPressure : public KisTransformParameter {

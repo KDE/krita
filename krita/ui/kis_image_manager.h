@@ -56,7 +56,7 @@ public slots:
 
     void resizeCurrentImage(qint32 w, qint32 h, bool cropLayers = false);
     void scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy);
-    void rotateCurrentImage(double angle);
+    void rotateCurrentImage(double radians);
     void shearCurrentImage(double angleX, double angleY);
     void slotImageProperties();
 

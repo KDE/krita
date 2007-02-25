@@ -172,7 +172,7 @@ public:
     /**
      * Execute a rotate transform on all layers in this image.
      */
-    void rotate(double angle, KisProgressDisplayInterface *m_progress);
+    void rotate(double radians, KisProgressDisplayInterface *m_progress);
 
     /**
      * Execute a shear transform on all layers in this image.

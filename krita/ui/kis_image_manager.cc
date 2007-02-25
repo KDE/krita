@@ -119,10 +119,10 @@ void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy 
     m_view->layerManager()->layersUpdated();
 }
 
-void KisImageManager::rotateCurrentImage(double angle)
+void KisImageManager::rotateCurrentImage(double radians)
 {
     if (!m_view->image()) return;
-    m_view->image()->rotate(angle, m_view->statusBar()->progress());
+    m_view->image()->rotate(radians, m_view->statusBar()->progress());
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
 }

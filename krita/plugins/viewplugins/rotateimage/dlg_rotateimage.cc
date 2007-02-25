@@ -45,7 +45,7 @@ DlgRotateImage::DlgRotateImage( QWidget *  parent,
 
     connect(this, SIGNAL(okClicked()),
         this, SLOT(okClicked()));
-        connect( m_page->intCustom, SIGNAL( valueChanged ( int ) ),
+        connect( m_page->doubleCustom, SIGNAL( valueChanged ( int ) ),
                  this, SLOT( slotAngleValueChanged( int ) ) );
 
 }
@@ -73,7 +73,7 @@ void DlgRotateImage::setAngle(quint32 angle)
     }
     else {
         m_page->radioCustom->setChecked(true);
-        m_page->intCustom->setValue(angle);
+        m_page->doubleCustom->setValue(angle);
     }
 
     if (m_oldAngle != angle)
@@ -96,7 +96,7 @@ qint32 DlgRotateImage::angle()
         angle = 270;
     }
     else {
-        angle = qRound(m_page->intCustom->value());
+        angle = qRound(m_page->doubleCustom->value());
     }
     if (m_page->radioCW->isChecked()) {
         return qint32(angle);

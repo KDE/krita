@@ -679,17 +679,17 @@ void KisLayerManager::layerBack()
 
 void KisLayerManager::rotateLayer180()
 {
-    rotateLayer( 180 );
+    rotateLayer( M_PI );
 }
 
 void KisLayerManager::rotateLayerLeft90()
 {
-    rotateLayer( 270 );
+    rotateLayer( M_PI/2 - 2*M_PI );
 }
 
 void KisLayerManager::rotateLayerRight90()
 {
-    rotateLayer( 90 );
+    rotateLayer( M_PI/2 );
 }
 
 void KisLayerManager::mirrorLayerX()
@@ -756,7 +756,7 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     m_view->canvas()->update();
 }
 
-void KisLayerManager::rotateLayer(double angle)
+void KisLayerManager::rotateLayer(double radians)
 {
     if (!m_view->image()) return;
 
@@ -770,7 +770,6 @@ void KisLayerManager::rotateLayer(double angle)
     }
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KoID("Triangle"));
-    angle *= M_PI/180;
     QRect r;
     if(dev->hasSelection())
         r = dev->selection()->selectedExactRect();
@@ -778,9 +777,9 @@ void KisLayerManager::rotateLayer(double angle)
         r = dev->exactBounds();
     double cx = r.x()+r.width()/2.0;
     double cy = r.y()+r.height()/2.0;
-    Q_INT32 tx = Q_INT32(cx*cos(angle) - cy*sin(angle) - cx + 0.5);
-    Q_INT32 ty = Q_INT32(cy*cos(angle) + cx*sin(angle) - cy + 0.5);
-    KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, angle, -tx, -ty, m_view->statusBar()->progress(), filter);
+    Q_INT32 tx = Q_INT32(cx*cos(radians) - cy*sin(radians) - cx + 0.5);
+    Q_INT32 ty = Q_INT32(cy*cos(radians) + cx*sin(radians) - cy + 0.5);
+    KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, radians, -tx, -ty, m_view->statusBar()->progress(), filter);
     tw.run();
 
     if (t) m_view->undoAdapter()->addCommand(t);

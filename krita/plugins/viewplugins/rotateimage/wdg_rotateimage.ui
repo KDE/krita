@@ -166,9 +166,12 @@
                   </widget>
                 </item>
                 <item>
-                  <widget class="KIntSpinBox" name="intCustom" >
+                  <widget class="KDoubleSpinBox" name="doubleCustom" >
                     <property name="maximum" >
-                      <number>359</number>
+                      <number>360</number>
+                    </property>
+                    <property name="lineStep" >
+                      <number>1</number>
                     </property>
                   </widget>
                 </item>
@@ -199,7 +202,7 @@
   <pixmapfunction></pixmapfunction>
   <customwidgets>
     <customwidget>
-      <class>KIntSpinBox</class>
+      <class>KDoubleSpinBox</class>
       <extends>QSpinBox</extends>
       <header>knuminput.h</header>
       <container>1</container>

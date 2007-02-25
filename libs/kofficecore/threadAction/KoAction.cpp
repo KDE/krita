@@ -72,7 +72,7 @@ void KoAction::doAction(QVariant *params) {
         emit triggered(*params);
     else {
         QVariant variant(0);
-        emit triggered(&variant);
+        emit triggered(variant);
     }
 }
 
@@ -81,7 +81,7 @@ void KoAction::doActionUi(QVariant *params) {
         emit updateUi(*params);
     else {
         QVariant variant(0);
-        emit updateUi(&variant);
+        emit updateUi(variant);
     }
 }
 

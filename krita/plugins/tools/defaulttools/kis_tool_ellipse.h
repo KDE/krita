@@ -50,16 +50,9 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
     virtual void paint(QPainter& gc, KoViewConverter &converter);
 
-    //protected:
-    //virtual void draw(const QPointF& start, const QPointF& stop);
-
 private:
-    void paintEllipse();
     void paintEllipse(QPainter& gc, const QRect& rc);
 
 

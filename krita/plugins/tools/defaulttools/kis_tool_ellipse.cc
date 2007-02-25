@@ -54,20 +54,12 @@ KisToolEllipse::~KisToolEllipse()
 {
 }
 
-void KisToolEllipse::paint(QPainter& gc)
-{
-    if (m_dragging)
-        paintEllipse(gc, QRect());
-}
-
-void KisToolEllipse::paint(QPainter& gc, const QRect& rc)
-{
-    if (m_dragging)
-        paintEllipse(gc, rc);
-}
-
 void KisToolEllipse::paint(QPainter& gc, KoViewConverter &converter)
 {
+    double sx, sy;
+    converter.zoom(&sx, &sy);
+
+    gc.scale( sx, sy );
     if (m_dragging)
         paintEllipse(gc, QRect());
 }
@@ -161,7 +153,8 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
 	m_painter = new KisPainter( device );
 	Q_CHECK_PTR(m_painter);
 
-        if (m_currentImage->undo()) m_painter->beginTransaction (i18n ("Ellipse"));
+        if (m_currentImage->undo())
+            m_painter->beginTransaction (i18n ("Ellipse"));
 
         m_painter->setPaintColor(m_currentFgColor);
         m_painter->setBackgroundColor(m_currentBgColor);
@@ -174,39 +167,18 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
         m_painter->setPaintOp(op); // Painter takes ownership
 
         m_painter->paintEllipse(m_dragStart, m_dragEnd-m_dragStart, PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());
-	QRegion bound = m_painter->dirtyRegion();
-	device->setDirty( bound );
+        QRegion bound = m_painter->dirtyRegion();
+        device->setDirty( bound );
         notifyModified();
-// Should no longer be necessary
-#if 0
-	if (m_canvas) {
-	    m_canvas->updateCanvas(convertToPt(bound.normalized()));
-	    //m_canvas->updateCanvas(convertToPt(bound.normalized()));
-	}
-#endif
-	if (m_currentImage->undo()) {
+
+        if (m_currentImage->undo()) {
             m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
         }
-	delete m_painter;
-	m_painter = 0;
-
-        //KisUndoAdapter *adapter = m_currentImage->undoAdapter();
-        //if (adapter) {
-        //    adapter->addCommand(painter.endTransaction());
-        //}
+        delete m_painter;
+        m_painter = 0;
     }
 }
 
-
-void KisToolEllipse::paintEllipse()
-{
-    if (m_canvas) {
-        QPainter gc(m_canvas->canvasWidget());
-        QRect rc;
-
-        paintEllipse(gc, rc);
-    }
-}
 
 void KisToolEllipse::paintEllipse(QPainter& gc, const QRect&)
 {
@@ -224,21 +196,5 @@ void KisToolEllipse::paintEllipse(QPainter& gc, const QRect&)
         gc.setPen(old);
     }
 }
-
-
-// void KisToolEllipse::draw(const QPointF& start, const QPointF& end )
-// {
-//     if (!m_subject || !m_currentImage)
-//         return;
-
-//     KisCanvasController *controller = m_subject->canvasController ();
-//     KisCanvas *canvas = controller->kiscanvas();
-//     QPainter p (canvas->canvasWidget());
-
-//     //p.setRasterOp (Qt::NotROP);
-//     p.drawEllipse (QRect (controller->windowToView (start).floorQPoint(), controller->windowToView (end).floorQPoint()));
-//     p.end ();
-// }
-
 
 #include "kis_tool_ellipse.moc"

@@ -121,7 +121,7 @@ PythonInterpreter::PythonInterpreter(Kross::InterpreterInfo* info)
 
     // Prepare the interpreter.
     QString s =
-        "import sys\n"
+        "import sys, os\n"
         //"sys.setdefaultencoding('latin-1')\n"
 
         // Dirty hack to get sys.argv defined. Needed for e.g. TKinter.
@@ -151,14 +151,19 @@ PythonInterpreter::PythonInterpreter(Kross::InterpreterInfo* info)
         "import __main__\n"
         "class _Importer:\n"
         "    def __init__(self):\n"
-        "        self.realImporter = __builtin__.__import__\n"
-        "        __builtin__.__import__ = self._import\n"
+        "        self.realImporter = __main__.__builtin__.__import__\n"
+        "        __main__.__builtin__.__import__ = self._import\n"
+        //"        self.realImporter = __builtin__.__import__\n"
+        //"        __builtin__.__import__ = self._import\n"
         "    def _import(self, name, globals=None, locals=None, fromlist=[]):\n"
         "        mod = __main__._import(name, globals, locals, fromlist)\n"
         "        if mod != None:\n"
         "            globals[name] = mod\n"
         "            return mod\n"
-        "        return self.realImporter(name, globals, locals, fromlist)\n"
+        "        if name in sys.modules:\n" // hack to preserve module paths
+        "            return sys.modules[name]\n"
+        "        mod = self.realImporter(name, globals, locals, fromlist)\n"
+        "        return mod\n"
         "_Importer()\n"
         ;
 

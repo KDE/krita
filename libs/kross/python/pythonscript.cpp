@@ -98,7 +98,9 @@ bool PythonScript::initialize()
                 return false;
             }
 
-            /* Register in module dict to allow such codes like: from whatever.module import
+            /*
+            // Register in module dict to allow such codes like: from whatever import mymodule
+            const char* name = action()->objectName().toLatin1().data();
             PyObject* importdict = PyImport_GetModuleDict();
             if(! importdict) {
                 //finalize();
@@ -117,6 +119,11 @@ bool PythonScript::initialize()
 
         { // Add additional stuff to the modules dictonary of this PythonScript.
             Py::Dict moduledict = d->m_module->getDict();
+
+            // Add the builtin and main module.
+            PythonModule* pythonmodule = ((PythonInterpreter*)interpreter())->mainModule();
+            moduledict["__builtins__"] = pythonmodule->getDict()["__builtins__"];
+            moduledict["__main__"] = pythonmodule->module();
 
             // Add our Action instance as "self" to the modules dictonary.
             moduledict[ "self" ] = Py::asObject(new PythonExtension(action()));
@@ -218,19 +225,27 @@ void PythonScript::execute()
         // the local context dictonary.
         Py::Dict moduledict( d->m_module->getDict().ptr() );
 
+        /*
         // Initialize context before execution.
         QString s =
-            "import sys\n"
+            "import sys, os\n"
+            //"__import__ = __main__.__import__\n"
             //"if self.has(\"stdout\"):\n"
             //"  sys.stdout = Redirect( self.get(\"stdout\") )\n"
             //"if self.has(\"stderr\"):\n"
             //"  sys.stderr = Redirect( self.get(\"stderr\") )\n"
             ;
 
-        PyObject* pyrun = PyRun_String(s.toLatin1().data(), Py_file_input, mainmoduledict.ptr(), moduledict.ptr());
+        PyObject* pyrun = PyRun_String(
+            s.toLatin1().data(),
+            Py_file_input,
+            mainmoduledict.ptr(),
+            moduledict.ptr()
+        );
         if(! pyrun)
             throw Py::Exception(); // throw exception
         Py_XDECREF(pyrun); // free the reference.
+        */
 
         // Acquire interpreter lock
         PyGILState_STATE gilstate = PyGILState_Ensure();
@@ -238,8 +253,7 @@ void PythonScript::execute()
         // Evaluate the already compiled code.
         PyObject* pyresult = PyEval_EvalCode(
             (PyCodeObject*)d->m_code->ptr(),
-mainmoduledict.ptr(),
-//moduledict.ptr(), //mainmoduledict.ptr(),
+            moduledict.ptr(), //mainmoduledict.ptr(),
             moduledict.ptr()
         );
 

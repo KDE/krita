@@ -38,7 +38,7 @@
 
 #include <QColor>
 
-
+#include "KoCanvasBase.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
@@ -46,27 +46,23 @@
 #include "kis_cursor.h"
 #include "kis_tool_text.h"
 #include "kis_paint_device.h"
-#include "kis_canvas_subject.h"
 #include "KoPointerEvent.h"
 #include "KoColor.h"
 #include "kis_undo_adapter.h"
 
-KisToolText::KisToolText()
-    : super(i18n("Text"))
+KisToolText::KisToolText(KoCanvasBase * canvas)
+    :  KisToolPaint(canvas, KisCursor::load("tool_text_cursor.png", 6, 6))
 {
     setObjectName("tool_text");
-    m_subject = 0;
-    setCursor(KisCursor::load("tool_text_cursor.png", 6, 6));
 }
 
 KisToolText::~KisToolText()
 {
 }
 
-void KisToolText::buttonRelease(KoPointerEvent *e)
+void KisToolText::mouseReleaseEvent(KoPointerEvent *e)
 {
-    if (m_subject && e->button() == Qt::LeftButton) {
-        
+    if (m_canvas && e->button() == Qt::LeftButton) {
 
         bool ok;
         QString text = KInputDialog::getText(i18n("Font Tool"), i18n("Enter text:"),
@@ -104,12 +100,12 @@ void KisToolText::buttonRelease(KoPointerEvent *e)
         if (m_currentImage->activeLayer())
             parent = m_currentImage->activeLayer()->parent();
         m_currentImage->addLayer(KisLayerSP(layer), parent, m_currentImage->activeLayer());
+        QColor c = m_canvas->resourceProvider()->foregroundColor().toQColor();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 QRgb pixel = image.pixel(x, y);
                  // use the 'blackness' as alpha :)
                 quint8 alpha = 255 - qRed(pixel) * OPACITY_OPAQUE / 255;
-                QColor c = m_subject->fgColor().toQColor();
                 layer->paintDevice()->setPixel(x, y, c, alpha);
             }
         }
@@ -117,8 +113,10 @@ void KisToolText::buttonRelease(KoPointerEvent *e)
         layer->setOpacity(m_opacity);
         layer->setCompositeOp(m_compositeOp);
         layer->setVisible(false);
-        qint32 x = qMax(0, static_cast<int>(e->x() - width/2));
-        qint32 y = qMax(0, static_cast<int>(e->y() - height/2));
+
+        QPoint pos = convertToPixelCoord(e).toPoint();
+        qint32 x = qMax(0, static_cast<int>(pos.x() - width/2));
+        qint32 y = qMax(0, static_cast<int>(pos.y() - height/2));
         layer->setX(x);
         layer->setY(y);
         layer->setVisible(true);
@@ -137,7 +135,7 @@ void KisToolText::setFont() {
 
 QWidget* KisToolText::createOptionWidget()
 {
-    QWidget *widget = super::createOptionWidget(parent);
+    QWidget *widget = super::createOptionWidget();
 
     m_lbFont = new QLabel(i18n("Font: "), widget);
 
@@ -151,23 +149,6 @@ QWidget* KisToolText::createOptionWidget()
     addOptionWidgetOption(fontBox, m_lbFont);
 
     return widget;
-}
-
-void KisToolText::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_text"),
-                               i18n("T&ext"),
-                               collection,
-                               objectName());
-        m_action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_T));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setActionGroup(actionGroup());
-        m_action->setToolTip(i18n("Text"));
-        m_ownAction = true;
-    }
 }
 
 #include "kis_tool_text.moc"

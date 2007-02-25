@@ -35,12 +35,11 @@ class KisToolText : public KisToolPaint {
     Q_OBJECT
 
 public:
-    KisToolText();
+    KisToolText(KoCanvasBase * canvas);
     virtual ~KisToolText();
 
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_FILL; }
-    virtual void buttonRelease(KoPointerEvent *e);
+    //virtual enumToolType toolType() { return TOOL_FILL; }
+    virtual void mouseReleaseEvent(KoPointerEvent *e);
 
     virtual QWidget* createOptionWidget();
 public slots:

@@ -24,7 +24,7 @@ macro_optional_find_package(PythonLibs)
 macro_optional_find_package(LibArt)
 macro_optional_find_package(Freetype)
 macro_optional_find_package(Fontconfig)
-macro_log_feature(EIGEN_FOUND "Eigen" "Eigen is needed by KSpread, KSpread won't be built" "http://eigen.tuxfamily.org" TRUE "1.0.4")
+macro_log_feature(EIGEN_FOUND "Eigen" "Eigen is needed by KSpread, KSpread won't be built" "http://eigen.tuxfamily.org" TRUE "1.0.5")
 
 macro_log_feature(QCA2_FOUND "libqca2" "QCA2 is needed to compile support for encrypted OpenDocument files" "Module into kdesupport" FALSE "2.0" "" )
 

@@ -9,12 +9,12 @@ set(kritadynamicbrush_PART_SRCS
 
 kde4_automoc(${kritadynamicbrush_PART_SRCS})
 
-kde4_add_plugin(kritadynamicbrush ${kritadynamicbrush_PART_SRCS})
+kde4_add_plugin(kritadynamicbrushpaintop ${kritadynamicbrush_PART_SRCS})
 
 
-target_link_libraries(kritadynamicbrush kritaui kritadynamicbrushlib kritafilterslistdynamicprogramlib)
+target_link_libraries(kritadynamicbrushpaintop kritaui kritadynamicbrush kritafilterslistdynamicprogram )
 
-install(TARGETS kritadynamicbrush  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritadynamicbrushpaintop DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

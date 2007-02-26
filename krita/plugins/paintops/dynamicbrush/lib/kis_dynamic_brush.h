@@ -33,8 +33,8 @@ class KisDynamicBrush {
         ~KisDynamicBrush();
         inline QString name() const { return m_name; }
         inline KoID id() const { return KoID(name(), name()); }
-        inline /*const */KisDynamicShape* shape() const { return m_shape; }
-        inline /*const */KisDynamicColoring* coloring() const { return m_coloring; }
+        inline const KisDynamicShape* shape() const { return m_shape; }
+        inline const KisDynamicColoring* coloring() const { return m_coloring; }
         inline KisDynamicProgram* program() const { return m_program; }
         inline void setProgram(KisDynamicProgram* p) { m_program = p; }
     private:

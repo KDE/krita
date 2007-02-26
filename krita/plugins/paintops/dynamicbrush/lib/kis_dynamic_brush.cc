@@ -20,6 +20,8 @@
 
 #include <klocale.h>
 
+#include <KoColorSpaceRegistry.h>
+
 #include <kis_paint_device.h>
 
 #include "kis_dynamic_coloring.h"
@@ -30,9 +32,7 @@ KisDynamicBrush::KisDynamicBrush(const QString& name)
     : m_name(name), m_shape(0), m_coloring(0)
 {
     // for debug purpose only
-    KisPlainColoring* coloringsrc = new KisPlainColoring;
-    coloringsrc->type = KisDynamicColoring::ColoringPlainColor;
-    coloringsrc->color = KoColor(QColor(255,200,100), 255, coloringsrc->color.colorSpace() );
+    KisPlainColoring* coloringsrc = new KisPlainColoring( KoColor(QColor(255,200,100), 255, KoColorSpaceRegistry::instance()->rgb8() ) );
     m_coloring = coloringsrc;
     
     KisAutoMaskBrush* dabsrc = new KisAutoMaskBrush;

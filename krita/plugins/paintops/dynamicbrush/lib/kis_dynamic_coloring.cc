@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -25,14 +25,19 @@
 KisDynamicColoring::~KisDynamicColoring() { }
 KisPlainColoring::~KisPlainColoring() { }
 
+KisDynamicColoring* KisPlainColoring::clone() const
+{
+    return new KisPlainColoring(*this);
+}
+
 void KisPlainColoring::darken(qint32 v)
 {
-    KoColorTransformation* transfo = color.colorSpace()->createDarkenAdjustement(v, false, 0.0);
-    transfo->transform( color.data(),  color.data(), 1);
+    KoColorTransformation* transfo = m_color.colorSpace()->createDarkenAdjustement(v, false, 0.0);
+    transfo->transform( m_color.data(),  m_color.data(), 1);
     delete transfo;
 }
 
 void KisPlainColoring::colorAt(int x, int y, KoColor* c)
 {
-    c->fromKoColor(color);
+    c->fromKoColor(m_color);
 }

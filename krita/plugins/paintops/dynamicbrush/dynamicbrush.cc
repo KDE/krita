@@ -39,9 +39,9 @@
 // TEMP
 
 typedef KGenericFactory<DynamicBrush> DynamicBrushFactory;
-K_EXPORT_COMPONENT_FACTORY(kritadynamicbrush, DynamicBrushFactory("kritacore"))
+K_EXPORT_COMPONENT_FACTORY(kritadynamicbrushpaintop, DynamicBrushFactory("kritacore"))
 
-        DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
+DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
     setComponentData(DynamicBrushFactory::componentData());

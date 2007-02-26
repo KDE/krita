@@ -108,8 +108,8 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     quint8 origOpacity = m_painter->opacity();
     KoColor origColor = m_painter->paintColor();
 
-    KisDynamicShape* dabsrc = m_brush->shape();
-    KisDynamicColoring* coloringsrc = m_brush->coloring();
+    KisDynamicShape* dabsrc = m_brush->shape()->clone();
+    KisDynamicColoring* coloringsrc = m_brush->coloring()->clone();
 
     m_brush->program()->apply(dabsrc, coloringsrc, adjustedInfo);
     

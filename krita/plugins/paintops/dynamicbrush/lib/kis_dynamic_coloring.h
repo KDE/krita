@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -25,28 +25,27 @@
 
 class KisDynamicColoring {
     public:
-        enum ColoringType {
-            ColoringPlainColor, ColoringPaintDevice
-        };
         virtual ~KisDynamicColoring();
     public:
+        virtual KisDynamicColoring* clone() const = 0;
         virtual void resize(double xs, double ys) = 0;
         virtual void darken(qint32 v) = 0;
         virtual void colorAt(int x, int y, KoColor*) = 0;
-    public:
-        KoColor color;
-        KisPaintDeviceSP paintDevice;
-        ColoringType type;
 };
 
 class KisPlainColoring : public KisDynamicColoring {
     public:
+        KisPlainColoring(KoColor color) : m_color(color) {}
+//         KisPlainColoring(const KisPlainColoring& kpc);
         virtual ~KisPlainColoring();
+        virtual KisDynamicColoring* clone() const;
         virtual void darken(qint32 v);
         virtual void resize(double , double ) {
             // Do nothing as plain color doesn't have size
         };
         virtual void colorAt(int x, int y, KoColor*);
+    private:
+        KoColor m_color;
 };
 
 #endif

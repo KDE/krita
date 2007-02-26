@@ -33,6 +33,7 @@ class KisDynamicProgram {
         KisDynamicProgram(const QString& name) : m_name(name) { }
         virtual ~KisDynamicProgram() {}
     public:
+        virtual ~KisDynamicProgram() {}
         /// @return the name of this program
         const QString& name() { return m_name; }
         /**

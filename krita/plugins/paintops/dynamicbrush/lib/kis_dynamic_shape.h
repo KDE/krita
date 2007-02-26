@@ -32,6 +32,7 @@ class KisDynamicShape {
     public:
         virtual int width() =0;
         virtual int height() =0;
+        virtual KisDynamicShape* clone() const = 0;
         /**
          * Call this function to resize the shape.
          * @param xs horizontal scaling
@@ -77,6 +78,7 @@ struct KisAlphaMaskBrush : public KisDabBrush {
 struct KisAutoMaskBrush : public KisDabBrush {
     KisAutoMaskBrush()  { type = DabAuto; m_shape = 0; }
     virtual ~KisAutoMaskBrush();
+    virtual KisDynamicShape* clone() const;
     virtual quint8 alphaAt(int x, int y);
     virtual void resize(double xs, double ys);
     virtual void createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc);

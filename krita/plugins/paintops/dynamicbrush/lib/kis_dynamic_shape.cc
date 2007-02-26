@@ -48,6 +48,11 @@ void KisAlphaMaskBrush::resize(double xs, double ys)
     // TODO: implement it
 }
 
+KisDynamicShape* KisAutoMaskBrush::clone() const
+{
+    return new KisAutoMaskBrush(*this);
+}
+
 void KisAutoMaskBrush::resize(double xs, double ys)
 {
     autoDab.width *= (int)(2 * xs);
@@ -82,8 +87,7 @@ void KisAutoMaskBrush::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* c
     KoColorSpace * colorSpace = stamp->colorSpace();
 
     // Convert the kiscolor to the right colorspace.
-    KoColor kc = coloringsrc->color;
-    kc.convertTo(colorSpace);
+    KoColor kc;
     qint32 pixelSize = colorSpace->pixelSize();
 
     KisHLineIteratorPixel hiter = stamp->createHLineIterator(0, 0, autoDab.width); // hum cheating

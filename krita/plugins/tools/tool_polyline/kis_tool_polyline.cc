@@ -26,41 +26,32 @@
 //Added by qt3to4:
 #include <QKeyEvent>
 
-#include <kaction.h>
 #include <kdebug.h>
-#include <kactioncollection.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <knuminput.h>
 
+#include "KoCanvasBase.h"
 #include "kis_undo_adapter.h"
 #include "kis_painter.h"
-#include "kis_canvas_subject.h"
-#include "kis_canvas_controller.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
-#include "kis_canvas.h"
-#include "QPainter"
 #include "kis_cursor.h"
 
 #include "kis_tool_polyline.h"
 
-KisToolPolyline::KisToolPolyline()
-        : super(i18n ("Polyline")),
-          m_dragging (false),
-          m_currentImage (0)
+KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
+        : super(canvas, KisCursor::load("tool_polyline_cursor.png", 6, 6)),
+          m_dragging (false)
 {
     setObjectName("tool_polyline");
-    setCursor(KisCursor::load("tool_polyline_cursor.png", 6, 6));
 }
 
 KisToolPolyline::~KisToolPolyline()
 {
 }
 
-void KisToolPolyline::buttonPress(KoPointerEvent *event)
+void KisToolPolyline::mousePressEvent(KoPointerEvent *event)
 {
     if (m_currentImage) {
         if (event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier ) {
@@ -69,13 +60,13 @@ void KisToolPolyline::buttonPress(KoPointerEvent *event)
 
             if (m_points.isEmpty())
             {
-                m_dragStart = event->pos();
-                m_dragEnd = event->pos();
+                m_dragStart = convertToPixelCoord(event);
+                m_dragEnd = convertToPixelCoord(event);
                 m_points.append(m_dragStart);
+                m_boundingRect = QRectF(m_dragStart.x(), m_dragStart.y(), 0, 0);
             } else {
                 m_dragStart = m_dragEnd;
-                m_dragEnd = event->pos();
-                draw();
+                m_dragEnd = convertToPixelCoord(event);
             }
         } else if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier ) {
             finish();
@@ -85,15 +76,12 @@ void KisToolPolyline::buttonPress(KoPointerEvent *event)
 
 void KisToolPolyline::deactivate()
 {
-    draw();
     m_points.clear();
     m_dragging = false;
 }
 
 void KisToolPolyline::finish()
 {
-    // erase old lines on canvas
-    draw();
     m_dragging = false;
 
     KisPaintDeviceSP device = m_currentImage->activeDevice ();
@@ -102,11 +90,11 @@ void KisToolPolyline::finish()
     KisPainter painter (device);
     if (m_currentImage->undo()) painter.beginTransaction (i18n ("Polyline"));
 
-    painter.setPaintColor(m_subject->fgColor());
-    painter.setBrush(m_subject->currentBrush());
+    painter.setPaintColor(m_currentFgColor);
+    painter.setBrush(m_currentBrush);
     painter.setOpacity(m_opacity);
     painter.setCompositeOp(m_compositeOp);
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintOp(), m_subject->currentPaintOpSettings(), &painter);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, &painter);
     painter.setPaintOp(op); // Painter takes ownership
 
     QPointF start,end;
@@ -132,115 +120,80 @@ void KisToolPolyline::finish()
     }
 
 }
-void KisToolPolyline::move(KoPointerEvent *event)
+void KisToolPolyline::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
-        // erase old lines on canvas
-        draw();
+        //Erase old lines
+        m_canvas->updateCanvas(m_boundingRect.unite(QRectF(m_dragStart.x(), m_dragStart.y(), m_dragEnd.x() - m_dragStart.x(), m_dragEnd.y() - m_dragStart.y())));
+
         // get current mouse position
-        m_dragEnd = event->pos();
-        // draw new lines on canvas
-        draw();
+        m_dragEnd = convertToPixelCoord(event);
     }
+    m_canvas->updateCanvas(m_boundingRect.unite(QRectF(m_dragStart.x(), m_dragStart.y(), m_dragEnd.x() - m_dragStart.x(), m_dragEnd.y() - m_dragStart.y())));
 }
 
-void KisToolPolyline::buttonRelease(KoPointerEvent *event)
+void KisToolPolyline::mouseReleaseEvent(KoPointerEvent *event)
 {
-        if (!m_subject || !m_currentImage)
+    if (!m_canvas || !m_currentImage)
             return;
 
-        if (m_dragging && event->button() == Qt::LeftButton)  {
-                m_dragging = false;
-                m_points.append (m_dragEnd);
+    if (m_dragging && event->button() == Qt::LeftButton)  {
+        m_dragging = false;
+        m_points.append (m_dragEnd);
+        m_boundingRect = m_boundingRect.unite(QRectF(m_dragStart.x(), m_dragStart.y(), m_dragEnd.x() - m_dragStart.x(), m_dragEnd.y() -m_dragStart.y()));
     }
 
     if (m_dragging && event->button() == Qt::RightButton) {
-
+    // FIXME shouldn't something happen here?
         }
+    m_canvas->updateCanvas(m_boundingRect);
 }
 
 
-void KisToolPolyline::doubleClick(KoPointerEvent *)
+void KisToolPolyline::mouseDoubleClickEvent(KoPointerEvent *)
 {
     finish();
 }
 
-
-void KisToolPolyline::paint(QPainter& gc)
+void KisToolPolyline::paint(QPainter& gc, KoViewConverter &converter)
 {
-    draw(gc);
-}
+    if (!m_canvas || !m_currentImage)
+        return;
 
-void KisToolPolyline::paint(QPainter& gc, const QRect&)
-{
-    draw(gc);
-}
+    double sx, sy;
+    converter.zoom(&sx, &sy);
 
-void KisToolPolyline::draw()
-{
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        KisCanvas *canvas = controller->kiscanvas();
-        QPainter gc(canvas->canvasWidget());
+    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
 
-        draw(gc);
-    }
-}
 
-void KisToolPolyline::draw(QPainter& gc)
-{
-        if (!m_subject || !m_currentImage)
-            return;
-
-        QPen pen(Qt::white, 0, Qt::SolidLine);
-
+    QPen pen( Qt::SolidLine);
     gc.setPen(pen);
     //gc.setRasterOp(Qt::XorROP);
 
-    KisCanvasController *controller = m_subject->canvasController();
     QPointF start, end;
-    QPoint startPos;
-    QPoint endPos;
+    QPointF startPos;
+    QPointF endPos;
 
     if (m_dragging) {
-        startPos = controller->windowToView(m_dragStart.floorQPoint());
-        endPos = controller->windowToView(m_dragEnd.floorQPoint());
+        startPos = m_dragStart;
+        endPos = m_dragEnd;
         gc.drawLine(startPos, endPos);
-    } else {
-        for (KoPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
-
-            if (it == m_points.begin())
-            {
-                start = (*it);
-            } else {
-                end = (*it);
-
-                startPos = controller->windowToView(start.floorQPoint());
-                endPos = controller->windowToView(end.floorQPoint());
-
-                gc.drawLine(startPos, endPos);
-
-                start = end;
-            }
-        }
     }
-}
+    for (KoPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
-void KisToolPolyline::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
+        if (it == m_points.begin())
+        {
+            start = (*it);
+        } else {
+            end = (*it);
 
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("polyline"),
-                               i18n("&Polyline"),
-                               collection,
-                               objectName());
-        Q_CHECK_PTR(m_action);
-        m_action->setShortcut(KShortcut(Qt::Key_Plus, Qt::Key_F9));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Draw a polyline. Shift-mouseclick ends the polyline."));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
+            startPos = start;
+            endPos = end;
+
+            gc.drawLine(startPos, endPos);
+
+            start = end;
+        }
     }
 }
 
@@ -249,13 +202,12 @@ QString KisToolPolyline::quickHelp() const
     return i18n("Press shift-mouseclick to end the polyline.");
 }
 
-void KisToolPolyline::keyPress(QKeyEvent *e)
+void KisToolPolyline::keyPressEvent(QKeyEvent *event)
 {
-    if (e->key()==Qt::Key_Escape);
-    // erase old lines on canvas
-    draw();
-    m_dragging = false;
-    m_points.clear();
+    if (event->key()==Qt::Key_Escape) {
+       m_dragging = false;
+       m_points.clear();
+    }
 }
 
 #include "kis_tool_polyline.moc"

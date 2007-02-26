@@ -27,6 +27,7 @@
 #include <QKeyEvent>
 
 #include "kis_tool_paint.h"
+#include "kis_layer_shape.h"
 
 
 class KisCanvas;
@@ -42,41 +43,36 @@ class KisToolPolyline : public KisToolPaint {
     Q_OBJECT
 
 public:
-    KisToolPolyline();
+    KisToolPolyline(KoCanvasBase * canvas);
     virtual ~KisToolPolyline();
 
-
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
+//     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual quint32 priority() { return 5; }
 
-    virtual void buttonPress(KoPointerEvent *event);
-    virtual void doubleClick(KoPointerEvent *e);
-    virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KoPointerEvent *event);
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
+
     virtual QString quickHelp() const;
     void finish();
-    virtual void keyPress(QKeyEvent *e);
+
+    virtual void paint(QPainter& gc, KoViewConverter &converter);
 
 public slots:
 
     void deactivate();
 
 protected:
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
-    void draw(QPainter& gc);
-    void draw();
-
-protected:
     QPointF m_dragStart;
     QPointF m_dragEnd;
 
     bool m_dragging;
-    KisImageSP m_currentImage;
 private:
     typedef Q3ValueVector<QPointF> KoPointVector;
     KoPointVector m_points;
+    QRectF m_boundingRect;
 };
 
 
@@ -89,7 +85,9 @@ public:
         : KoToolFactory(parent, "KisToolPolyline", i18n( "Polyline" ))
         {
             setToolTip( i18n( "Draw a polyline. Shift-mouseclick ends the polyline." ) );
-            setToolType( TOOL_TYPE_SHAPE );
+//             setToolType( TOOL_TYPE_SHAPE );
+            setToolType( dynamicToolType() );
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
             setIcon( "polyline" );
             setPriority( 0 );
         }

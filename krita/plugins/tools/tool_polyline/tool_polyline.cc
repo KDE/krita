@@ -47,12 +47,8 @@ ToolPolyline::ToolPolyline(QObject *parent, const QStringList &)
 {
     setComponentData(ToolPolylineFactory::componentData());
 
-    if ( parent->inherits("KoToolRegistry") )
-    {
-        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
-
-        r->add(KoToolFactorySP(new KisToolPolylineFactory()));
-    }
+    KoToolRegistry * r = KoToolRegistry::instance();
+    r->add(new KisToolPolylineFactory(r, QStringList()));
 
 }
 

@@ -92,7 +92,7 @@ kde4_add_ui_files( kofficecore_LIB_SRCS
 
 kde4_add_library(kofficecore SHARED ${kofficecore_LIB_SRCS})
 
-target_link_libraries(kofficecore ${KDE4_KPARTS_LIBS} kstore ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} kowmf threadweaver ${KDE4_KDE3SUPPORT_LIBRARY})
+target_link_libraries(kofficecore ${KDE4_KPARTS_LIBS} kstore ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} kowmf ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBRARY})
 
 set_target_properties(kofficecore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kofficecore DESTINATION ${LIB_INSTALL_DIR} )

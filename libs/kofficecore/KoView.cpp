@@ -457,7 +457,6 @@ void KoView::addStatusBarItem( QWidget * widget, int stretch, bool permanent )
     d->m_statusBarItems.append(item);
     Q3ValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.fromLast();
     KStatusBar * sb = statusBar();
-    Q_ASSERT(sb);
     if (sb)
         (*it).ensureItemShown( sb );
 }

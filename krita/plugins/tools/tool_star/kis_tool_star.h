@@ -23,6 +23,7 @@
 
 #include "kis_tool_shape.h"
 #include "ui_wdg_tool_star.h"
+#include "kis_layer_shape.h"
 
 class KisCanvas;
 class KisDoc;
@@ -44,24 +45,16 @@ class KisToolStar : public KisToolShape {
     Q_OBJECT
 
 public:
-    KisToolStar();
+    KisToolStar(KoCanvasBase * canvas);
     virtual ~KisToolStar();
 
     virtual QWidget* createOptionWidget();
 
-    //
-    // KisToolPaint interface
-    //
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual void buttonPress(KoPointerEvent *event);
-    virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KoPointerEvent *event);
-
-protected:
-    virtual void draw(const QPointF& start, const QPointF& stop);
-    //virtual void draw(KisPainter *gc, const QRect& rc);
+    virtual void paint(QPainter& gc, KoViewConverter &converter);
 
 protected:
     int m_lineThickness;
@@ -89,9 +82,11 @@ public:
         : KoToolFactory(parent, "KisToolStar", i18n( "Star" ))
         {
             setToolTip(i18n("Draw a star with the current brush"));
-            setToolType(TOOL_TYPE_SHAPE);
+            //setToolType(TOOL_TYPE_SHAPE);
+            setToolType( dynamicToolType() );
             setPriority(0);
             setIcon("tool_star");
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolStarFactory(){}

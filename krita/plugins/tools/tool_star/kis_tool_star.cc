@@ -33,30 +33,26 @@
 #include <kdebug.h>
 #include <knuminput.h>
 
+#include "KoCanvasBase.h"
+#include "kis_canvas2.h"
 #include "kis_undo_adapter.h"
-#include "kis_view.h"
+#include "kis_view2.h"
 #include "kis_painter.h"
 #include "kis_int_spinbox.h"
-#include "kis_canvas_subject.h"
-#include "kis_canvas_controller.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
-#include "kis_canvas.h"
 #include "QPainter"
 #include "kis_cursor.h"
 #include "kis_int_spinbox.h"
 
 #include "kis_tool_star.h"
 
-KisToolStar::KisToolStar()
-    : super(i18n("Star")),
+KisToolStar::KisToolStar(KoCanvasBase * canvas)
+    : super(canvas, KisCursor::load("tool_star_cursor.png", 6, 6)),
       m_dragging (false),
-      m_currentImage (0)
+      m_currentImage(0)
 {
     setObjectName("tool_star");
-    setCursor(KisCursor::load("tool_star_cursor.png", 6, 6));
     m_innerOuterRatio=40;
     m_vertices=5;
 }
@@ -64,51 +60,38 @@ KisToolStar::KisToolStar()
 KisToolStar::~KisToolStar()
 {
 }
-
-void KisToolStar::update (KisCanvasSubject *subject)
+void KisToolStar::mousePressEvent(KoPointerEvent *event)
 {
-    super::update (subject);
-    if (m_subject)
-        m_currentImage = m_subject->currentImg ();
-}
-
-void KisToolStar::buttonPress(KoPointerEvent *event)
-{
-    if (m_currentImage && event->button() == Qt::LeftButton) {
+    if (m_canvas && event->button() == Qt::LeftButton) {
         m_dragging = true;
-        m_dragStart = event->pos();
-        m_dragEnd = event->pos();
+        m_dragStart = convertToPixelCoord(event);
+        m_dragEnd = convertToPixelCoord(event);
         m_vertices = m_optWidget->verticesSpinBox->value();
         m_innerOuterRatio = m_optWidget->ratioSpinBox->value();
     }
 }
 
-void KisToolStar::move(KoPointerEvent *event)
+void KisToolStar::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
-        // erase old lines on canvas
-        draw(m_dragStart, m_dragEnd);
-        // move (alt) or resize star
         if (event->modifiers() & Qt::AltModifier) {
-            QPointF trans = event->pos() - m_dragEnd;
+            QPointF trans = convertToPixelCoord(event); - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
         } else {
             m_dragEnd = event->pos();
         }
-        // draw new lines on canvas
-        draw(m_dragStart, m_dragEnd);
+        //TODO proper updating
+        m_canvas->updateCanvas(QRectF(0.0,0.0,500.0,500.0));
     }
 }
 
-void KisToolStar::buttonRelease(KoPointerEvent *event)
+void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!m_subject || !m_currentImage)
+    if (!m_canvas)
         return;
 
     if (m_dragging && event->button() == Qt::LeftButton) {
-        // erase old lines on canvas
-        draw(m_dragStart, m_dragEnd);
         m_dragging = false;
 
         if (m_dragStart == m_dragEnd)
@@ -120,18 +103,18 @@ void KisToolStar::buttonRelease(KoPointerEvent *event)
         if (!m_currentImage->activeDevice())
             return;
 
-        KisPaintDeviceSP device = m_currentImage->activeDevice ();;
+        KisPaintDeviceSP device = m_currentImage->activeDevice ();
         KisPainter painter (device);
         if (m_currentImage->undo()) painter.beginTransaction (i18n("Star"));
 
-        painter.setPaintColor(m_subject->fgColor());
-        painter.setBackgroundColor(m_subject->bgColor());
+        painter.setPaintColor(m_currentFgColor);
+        painter.setBackgroundColor(m_currentBgColor);
         painter.setFillStyle(fillStyle());
-        painter.setBrush(m_subject->currentBrush());
-        painter.setPattern(m_subject->currentPattern());
+        painter.setBrush(m_currentBrush);
+        painter.setPattern(m_currentPattern);
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintOp(), m_subject->currentPaintOpSettings(), &painter);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, &painter);
         painter.setPaintOp(op); // Painter takes ownership
 
         vQPointF coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
@@ -147,49 +130,20 @@ void KisToolStar::buttonRelease(KoPointerEvent *event)
     }
 }
 
-void KisToolStar::draw(const QPointF& start, const QPointF& end )
+void KisToolStar::paint(QPainter& gc, KoViewConverter &converter)
 {
-    if (!m_subject || !m_currentImage)
+    if (!m_canvas)
         return;
 
-    KisCanvasController *controller = m_subject->canvasController();
-    KisCanvas *canvas = controller->kiscanvas();
-    QPainter p (canvas->canvasWidget());
     QPen pen(Qt::SolidLine);
+    gc.setPen(pen);
 
-    QPointF startPos;
-    QPointF endPos;
-    startPos = controller->windowToView(start);
-    endPos = controller->windowToView(end);
-
-    //p.setRasterOp(Qt::NotROP);
-
-    vQPointF points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
+    vQPointF points = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
     for (int i = 0; i < points.count() - 1; i++) {
-        p.drawLine(points[i].floorQPoint(), points[i + 1].floorQPoint());
+        gc.drawLine(points[i], points[i + 1]);
     }
-    p.drawLine(points[points.count() - 1].floorQPoint(), points[0].floorQPoint());
-
-    p.end ();
-}
-
-void KisToolStar::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_star"),
-                               i18n("&Star"),
-                               collection,
-                               objectName());
-        Q_CHECK_PTR(m_action);
-        m_action->setShortcut(KShortcut(Qt::Key_Plus, Qt::Key_F9));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Draw a star"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
+    gc.drawLine(points[points.count() - 1], points[0]);
 }
 
 vQPointF KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
@@ -224,7 +178,7 @@ vQPointF KisToolStar::starCoordinates(int N, double mx, double my, double x, dou
 
 QWidget* KisToolStar::createOptionWidget()
 {
-    QWidget *widget = super::createOptionWidget(parent);
+    QWidget *widget = super::createOptionWidget();
 
     m_optWidget = new WdgToolStar(widget);
     Q_CHECK_PTR(m_optWidget);

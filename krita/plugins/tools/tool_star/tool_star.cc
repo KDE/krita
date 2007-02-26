@@ -47,11 +47,8 @@ ToolStar::ToolStar(QObject *parent, const QStringList &)
 {
     setComponentData(ToolStarFactory::componentData());
 
-    if ( parent->inherits("KoToolRegistry") )
-    {
-        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>( parent );
-        r->add(KoToolFactorySP(new KisToolStarFactory()));
-    }
+    KoToolRegistry * r =KoToolRegistry::instance();
+    r->add(new KisToolStarFactory(r, QStringList()));
 
 }
 

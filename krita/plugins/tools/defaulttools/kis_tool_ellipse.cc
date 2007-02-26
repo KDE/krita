@@ -56,7 +56,7 @@ void KisToolEllipse::paint(QPainter& gc, KoViewConverter &converter)
     double sx, sy;
     converter.zoom(&sx, &sy);
 
-    gc.scale( sx, sy );
+    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
     if (m_dragging)
         paintEllipse(gc, QRect());
 }

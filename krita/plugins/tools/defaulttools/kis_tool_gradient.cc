@@ -66,6 +66,10 @@ KisToolGradient::~KisToolGradient()
 
 void KisToolGradient::paint( QPainter &painter, KoViewConverter &converter )
 {
+    double sx, sy;
+    converter.zoom(&sx, &sy);
+
+    painter.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
     if (m_dragging && m_startPos != m_endPos)
         paintLine(painter);
 }

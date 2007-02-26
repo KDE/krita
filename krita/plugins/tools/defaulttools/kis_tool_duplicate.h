@@ -24,7 +24,7 @@
 #include "kis_tool_freehand.h"
 #include "KoToolFactory.h"
 #include <kis_layer_shape.h>
-class KoPointerEvent;
+
 class KoPointerEvent;
 
 class QCheckBox;
@@ -36,13 +36,13 @@ class KisToolDuplicate : public KisToolFreehand {
     Q_OBJECT
 
 public:
-    KisToolDuplicate();
+    KisToolDuplicate(KoCanvasBase * canvas);
     virtual ~KisToolDuplicate();
 
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_FREEHAND; }
-    virtual void buttonPress(KoPointerEvent *e);
-    virtual void move(KoPointerEvent *e);
+//     virtual void setup(KActionCollection *collection);
+//     virtual enumToolType toolType() { return TOOL_FREEHAND; }
+    virtual void mousePressEvent(KoPointerEvent *e);
+    virtual void mouseMoveEvent(KoPointerEvent *e);
 
     virtual void paintAt(const QPointF &pos,
                  const double pressure,

@@ -26,19 +26,14 @@
 #include <QPainter>
 #include <QSpinBox>
 
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
 
 #include "kis_brush.h"
 #include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_painter.h"
-#include "KoPointerEvent.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 #include "kis_perspective_grid.h"
@@ -47,12 +42,12 @@
 #include "QPainter"
 #include "kis_boundary_painter.h"
 
-KisToolDuplicate::KisToolDuplicate()
-    : super(i18n("Duplicate Brush")), m_isOffsetNotUptodate(true), m_position(QPoint(-1,-1))
+KisToolDuplicate::KisToolDuplicate(KoCanvasBase * canvas)
+    : super(canvas, KisCursor::load("tool_duplicate_cursor.png", 6, 6), i18n("Duplicate Brush")),
+      m_isOffsetNotUptodate(true),
+      m_position(QPoint(-1,-1))
 {
     setObjectName("tool_duplicate");
-    m_subject = 0;
-    setCursor(KisCursor::load("tool_duplicate_cursor.png", 5, 5));
 }
 
 KisToolDuplicate::~KisToolDuplicate()
@@ -72,33 +67,15 @@ void KisToolDuplicate::activate()
     }
 }
 
-void KisToolDuplicate::buttonPress(KoPointerEvent *e)
+void KisToolDuplicate::mousePressEvent(KoPointerEvent *e)
 {
     if (e->modifiers() == Qt::ShiftModifier) {
-        m_position = e->pos();
+        m_position = convertToPixelCoord(e);
         m_isOffsetNotUptodate = true;
     } else {
         if (m_position != QPoint(-1, -1)) {
-            super::buttonPress(e);
+            super::mousePressEvent(e);
         }
-    }
-}
-
-
-void KisToolDuplicate::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("stamp"),
-                               i18n("&Duplicate Brush"),
-                               collection,
-                               objectName());
-        m_action->setShortcut(QKeySequence(Qt::Key_C));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Duplicate parts of the image. Shift-click to select the point to duplicate from to begin."));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
     }
 }
 
@@ -108,24 +85,25 @@ void KisToolDuplicate::initPaint(KoPointerEvent *e)
     {
         if(m_isOffsetNotUptodate)
         {
-            m_offset = e->pos() - m_position;
+            m_offset = convertToPixelCoord(e) - m_position;
             m_isOffsetNotUptodate = false;
         }
         m_paintIncremental = false;
         super::initPaint(e);
-        painter()->setDuplicateOffset( m_offset );
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("duplicate", 0, painter());
+        m_painter->setDuplicateOffset( m_offset );
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("duplicate", 0, m_painter);
         if (op && m_source) {
             op->setSource(m_source);
-            painter()->setPaintOp(op);
+            m_painter->setPaintOp(op);
         }
-        m_positionStartPainting = e->pos();
-        painter()->setDuplicateStart( e->pos() );
+        m_positionStartPainting = convertToPixelCoord(e);
+        m_painter->setDuplicateStart( convertToPixelCoord(e) );
     }
 }
 
-void KisToolDuplicate::move(KoPointerEvent *e)
+void KisToolDuplicate::mouseMoveEvent(KoPointerEvent *e)
 {
+    QPointF pos = convertToPixelCoord(e);
 
     // Paint the outline where we will (or are) copying from
     if( m_position == QPoint(-1,-1) )
@@ -181,22 +159,22 @@ void KisToolDuplicate::move(KoPointerEvent *e)
         // Compute the translation in the perspective transformation space:
             QPointF translat;
             {
-                QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF());
-                QPointF currentPositionT = KisPerspectiveMath::matProd(endM, e->pos().toPointF() );
-                QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_positionStartPainting.toPointF() - m_offset.toPointF());
-                QPointF duplicateRealPosition = KisPerspectiveMath::matProd(startM, duplicateStartPoisitionT.toPointF() + (currentPositionT.toPointF() - positionStartPaintingT.toPointF()) );
-                QPointF p = e->pos() - duplicateRealPosition;
-                srcPos = p.floorQPoint();
+                QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_positionStartPainting);
+                QPointF currentPositionT = KisPerspectiveMath::matProd(endM, e->pos() );
+                QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_positionStartPainting - m_offset);
+                QPointF duplicateRealPosition = KisPerspectiveMath::matProd(startM, duplicateStartPoisitionT + (currentPositionT - positionStartPaintingT) );
+                QPointF p = pos - duplicateRealPosition;
+                srcPos = QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y()));
             }
 
         }else {
-            srcPos = painter()->duplicateOffset().floorQPoint();
+            srcPos = QPoint(static_cast<int>(m_painter->duplicateOffset().x()), static_cast<int>(m_painter->duplicateOffset().y()));
         }
     } else {
         if(m_isOffsetNotUptodate)
-            srcPos = e->pos().floorQPoint() - m_position.floorQPoint();
+            srcPos = QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y())) - QPoint(static_cast<int>(m_position.x()), static_cast<int>(m_position.y()));
         else
-            srcPos = m_offset.floorQPoint();
+            srcPos = QPoint(static_cast<int>(m_offset.x()), static_cast<int>(m_offset.y()));
     }
 
     qint32 x;
@@ -208,7 +186,7 @@ void KisToolDuplicate::move(KoPointerEvent *e)
     srcPos = QPoint(x - srcPos.x(), y - srcPos.y());
 
     paintOutline(srcPos);
-    super::move(e);
+    super::mouseMoveEvent(e);
 }
 
 void KisToolDuplicate::paintAt(const QPointF &pos,
@@ -223,10 +201,10 @@ void KisToolDuplicate::paintAt(const QPointF &pos,
             m_offset = pos - m_position;
             m_isOffsetNotUptodate = false;
         }
-        painter()->setDuplicateHealing( m_healing->isChecked() );
-        painter()->setDuplicateHealingRadius( m_healingRadius->value() );
-        painter()->setDuplicatePerspectiveCorrection( m_perspectiveCorrection->isChecked() );
-        painter()->paintAt( pos, pressure, xtilt, ytilt);
+        m_painter->setDuplicateHealing( m_healing->isChecked() );
+        m_painter->setDuplicateHealingRadius( m_healingRadius->value() );
+        m_painter->setDuplicatePerspectiveCorrection( m_perspectiveCorrection->isChecked() );
+        m_painter->paintAt( pos, pressure, xtilt, ytilt);
     }
 }
 
@@ -236,17 +214,16 @@ QString KisToolDuplicate::quickHelp() const {
 
 QWidget* KisToolDuplicate::createOptionWidget()
 {
-    QWidget* widget = KisToolPaint::createOptionWidget(parent);
+    QWidget* widget = KisToolPaint::createOptionWidget();
     m_healing = new QCheckBox(widget);
     m_healing->setChecked( false);
     addOptionWidgetOption(m_healing, new QLabel(i18n("Healing"), widget ));
     m_healingRadius = new QSpinBox(widget);
-    
-    KisBrush *brush = m_subject->currentBrush();
+
     int healingradius = 20;
-    if( brush )
+    if( m_currentBrush )
     {
-        healingradius = 2 * QMAX(brush->width(),brush->height());
+        healingradius = 2 * QMAX(m_currentBrush->width(),m_currentBrush->height());
     }
     
     m_healingRadius->setValue( healingradius );

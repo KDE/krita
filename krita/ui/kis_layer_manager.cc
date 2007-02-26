@@ -225,8 +225,8 @@ void KisLayerManager::updateGUI()
 
     m_imgResizeToLayer->setEnabled(img && img->activeLayer());
 
-    m_view->statusBar()->setProfile(img);
-
+    if( m_view->statusBar() )
+        m_view->statusBar()->setProfile(img);
 }
 
 void KisLayerManager::imgResizeToActiveLayer()

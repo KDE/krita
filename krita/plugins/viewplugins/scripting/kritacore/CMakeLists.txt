@@ -1,6 +1,6 @@
 include_directories(${KOKROSS_INCLUDES})
 
-set(krosskritacore_LIB_SRCS
+set(krossmodulekrita_LIB_SRCS
    krs_module.cpp
    krs_progress.cpp
    krs_paint_layer.cpp
@@ -14,9 +14,9 @@ set(krosskritacore_LIB_SRCS
    krs_wavelet.cpp
    )
 
-kde4_automoc(${krosskritacore_LIB_SRCS})
-qt4_wrap_cpp(krosskritacore_LIB_SRCS krs_iterator.h)
-kde4_add_library(krosskritacore SHARED ${krosskritacore_LIB_SRCS})
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
-target_link_libraries(krosskritacore kokross kritaui)
-install(TARGETS krosskritacore DESTINATION ${LIB_INSTALL_DIR})
+kde4_automoc(${krossmodulekrita_LIB_SRCS})
+qt4_wrap_cpp(krossmodulekrita_LIB_SRCS krs_iterator.h)
+kde4_add_library(krossmodulekrita SHARED ${krossmodulekrita_LIB_SRCS})
+##add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+target_link_libraries(krossmodulekrita kokross kritaui)
+install(TARGETS krossmodulekrita DESTINATION ${LIB_INSTALL_DIR})

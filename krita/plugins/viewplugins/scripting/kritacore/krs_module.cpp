@@ -46,6 +46,23 @@
 //#include <kis_image.h>
 #include <kis_meta_registry.h>
 
+extern "C"
+{
+    KROSSKRITACORE_EXPORT QObject* krossmodule()
+    {
+        KisDoc2* doc = new KisDoc2(0, 0, true);
+
+        // dirty hack to get an image defined
+        KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+        doc->newImage("unnamed", 100,100,cs /*,KoColor(QColor(255,255,255),cs)*/);
+        //doc->prepareForImport();
+
+        KisView2* view = dynamic_cast< KisView2* >( doc->createViewInstance(0 /*no parent widget*/) );
+        Q_ASSERT(view);
+        return new Scripting::Module(view);
+    }
+}
+
 using namespace Scripting;
 
 namespace Scripting {

@@ -165,7 +165,7 @@ signals:
      */
     void sigCommandExecuted();
 
-protected:
+public:
     // Overide KoDocument
     virtual KoView* createViewInstance(QWidget *parent);
 

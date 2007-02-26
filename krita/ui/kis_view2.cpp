@@ -165,7 +165,8 @@ KisView2::KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * par
     else
         setXMLFile("krita.rc");
 
-    actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT( configureShortcuts() ));
+    if( mainWindow() )
+        actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT( configureShortcuts() ));
 
     m_d = new KisView2Private();
 
@@ -404,7 +405,7 @@ void KisView2::createGUI()
     KisLayerBoxFactory layerboxFactory( this );
     m_d->layerBox = qobject_cast<KisLayerBox*>( createDockWidget( &layerboxFactory ) );
 
-    m_d->statusBar = new KisStatusBar( KoView::statusBar(), this );
+    m_d->statusBar = KoView::statusBar() ? new KisStatusBar( KoView::statusBar(), this ) : 0;
     m_d->controlFrame = new KisControlFrame( mainWindow(), this );
 
     show();
@@ -479,8 +480,10 @@ void KisView2::connectCurrentImage()
 
         connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_d->selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
         //connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), this, SLOT(updateCanvas()));
-        connect(img.data(), SIGNAL(sigColorSpaceChanged(KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-        connect(img.data(), SIGNAL(sigProfileChanged(KoColorProfile * )), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+        if( m_d->statusBar ) {
+            connect(img.data(), SIGNAL(sigColorSpaceChanged(KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(img.data(), SIGNAL(sigProfileChanged(KoColorProfile * )), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+        }
 
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
         connect(img.data(), SIGNAL(sigMaskInfoChanged()), m_d->maskManager, SLOT(maskUpdated()));
@@ -502,8 +505,10 @@ void KisView2::connectCurrentImage()
         connect( m_d->doc, SIGNAL( sigCommandExecuted() ), img.data(), SLOT( slotCommandExecuted() ) );
     }
     m_d->canvas->connectCurrentImage();
-    m_d->layerBox->setImage(img);
-    m_d->birdEyeBox->setImage(img);
+    if( m_d->layerBox )
+        m_d->layerBox->setImage(img);
+    if( m_d->birdEyeBox )
+        m_d->birdEyeBox->setImage(img);
 
 }
 
@@ -517,12 +522,15 @@ void KisView2::disconnectCurrentImage()
         img->disconnect( m_d->layerManager );
         img->disconnect( m_d->canvas );
         img->disconnect( m_d->selectionManager );
-        img->disconnect( m_d->statusBar );
+        if( m_d->statusBar )
+            img->disconnect( m_d->statusBar );
 
         disconnect( m_d->doc, SIGNAL( sigCommandExecuted() ), img.data(), SLOT( slotCommandExecuted() ) );
 
-        m_d->layerBox->setImage(KisImageSP(0));
-        m_d->birdEyeBox->setImage(KisImageSP(0));
+        if( m_d->layerBox )
+            m_d->layerBox->setImage(KisImageSP(0));
+        if( m_d->birdEyeBox )
+            m_d->birdEyeBox->setImage(KisImageSP(0));
         m_d->canvas->disconnectCurrentImage();
 
     }

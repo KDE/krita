@@ -73,15 +73,16 @@ void KisToolStar::mousePressEvent(KoPointerEvent *event)
 void KisToolStar::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
+        //Erase old lines
+        m_canvas->updateCanvas(boundingRect());
         if (event->modifiers() & Qt::AltModifier) {
-            QPointF trans = convertToPixelCoord(event); - m_dragEnd;
+            QPointF trans = convertToPixelCoord(event) - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
         } else {
-            m_dragEnd = event->pos();
+            m_dragEnd = convertToPixelCoord(event);
         }
-        //TODO proper updating
-        m_canvas->updateCanvas(QRectF(0.0,0.0,500.0,500.0));
+        m_canvas->updateCanvas(boundingRect());
     }
 }
 
@@ -131,6 +132,11 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolStar::paint(QPainter& gc, KoViewConverter &converter)
 {
+    double sx, sy;
+    converter.zoom(&sx, &sy);
+
+    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
+
     if (!m_canvas)
         return;
 
@@ -173,6 +179,13 @@ vQPointF KisToolStar::starCoordinates(int N, double mx, double my, double x, dou
     }
 
     return starCoordinatesArray;
+}
+
+QRectF KisToolStar::boundingRect()
+{
+    //Calculating the radius
+    double radius = sqrt((m_dragEnd.x()-m_dragStart.x())*(m_dragEnd.x()-m_dragStart.x())+(m_dragEnd.y()-m_dragStart.y())*((m_dragEnd.y()-m_dragStart.y())));
+    return QRectF(m_dragStart.x()-radius, m_dragStart.y()-radius, 2*radius, 2*radius);
 }
 
 QWidget* KisToolStar::createOptionWidget()

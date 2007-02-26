@@ -66,6 +66,8 @@ protected:
     bool m_dragging;
 private:
     vQPointF starCoordinates(int N, double mx, double my, double x, double y);
+    QRectF boundingRect();
+
     qint32 m_innerOuterRatio;
     qint32 m_vertices;
     WdgToolStar* m_optWidget;

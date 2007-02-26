@@ -64,7 +64,6 @@ protected:
     QRect m_final_lines;
 
     bool m_dragging;
-    KisImageSP m_currentImage;
 private:
     vQPointF starCoordinates(int N, double mx, double my, double x, double y);
     qint32 m_innerOuterRatio;

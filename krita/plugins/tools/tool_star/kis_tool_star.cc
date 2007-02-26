@@ -49,8 +49,7 @@
 
 KisToolStar::KisToolStar(KoCanvasBase * canvas)
     : super(canvas, KisCursor::load("tool_star_cursor.png", 6, 6)),
-      m_dragging (false),
-      m_currentImage(0)
+      m_dragging (false)
 {
     setObjectName("tool_star");
     m_innerOuterRatio=40;

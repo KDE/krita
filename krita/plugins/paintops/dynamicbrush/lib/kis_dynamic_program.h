@@ -31,7 +31,6 @@ class KisPaintInformation;
 class KisDynamicProgram {
     protected:
         KisDynamicProgram(const QString& name) : m_name(name) { }
-        virtual ~KisDynamicProgram() {}
     public:
         virtual ~KisDynamicProgram() {}
         /// @return the name of this program

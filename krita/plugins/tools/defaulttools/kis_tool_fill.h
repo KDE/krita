@@ -49,7 +49,6 @@ public:
     KisToolFill(KoCanvasBase * canvas);
     virtual ~KisToolFill();
 
-    //    virtual void setup(KActionCollection *collection);
     //     virtual enumToolType toolType() { return TOOL_FILL; }
 
     virtual void mousePressEvent(KoPointerEvent *event);
@@ -74,7 +73,6 @@ private:
     KisPainter *m_painter;
     KisFillPainter *m_fillPainter;
 
-    //KisImageSP m_currentImage;
     bool *m_map, m_unmerged, m_usePattern, m_fillOnlySelection;
     KisSelectionSP m_selection;
 

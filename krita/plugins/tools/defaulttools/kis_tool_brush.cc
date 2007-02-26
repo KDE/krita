@@ -29,8 +29,6 @@
 #include <QGridLayout>
 
 #include <kdebug.h>
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kcommand.h>
 #include <klocale.h>
 

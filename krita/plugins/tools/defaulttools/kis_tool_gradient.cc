@@ -27,8 +27,6 @@
 #include <QCheckBox>
 
 #include <kdebug.h>
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kcommand.h>
 #include <klocale.h>
 #include <knuminput.h>
@@ -48,7 +46,7 @@
 #include "kis_resource_provider.h"
 
 KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
-    : super(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6)), // TODO, i18n("Gradient")),
+    : super(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6)),
       m_dragging( false )
 {
     setObjectName("tool_gradient");

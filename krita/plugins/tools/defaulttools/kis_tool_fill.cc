@@ -20,8 +20,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcommand.h>
@@ -48,7 +46,6 @@
 #include "kis_fill_painter.h"
 #include "kis_progress_display_interface.h"
 #include "kis_undo_adapter.h"
-//#include "kis_canvas_subject.h"
 #include "kis_selection.h"
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
@@ -248,22 +245,5 @@ void KisToolFill::slotSetFillSelection(bool state)
     m_slThreshold->setEnabled(!state);
     m_checkSampleMerged->setEnabled(!state);
 }
-
-// void KisToolFill::setup(KActionCollection *collection)
-// {
-//     m_action = collection->action(objectName());
-
-//     if (m_action == 0) {
-//         m_action = new KAction(KIcon("color_fill"),
-//                                i18n("&Fill"),
-//                                collection,
-//                                objectName());
-//         m_action->setShortcut(QKeySequence(Qt::Key_F));
-//         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-//         m_action->setToolTip(i18n("Contiguous fill"));
-//         m_action->setActionGroup(actionGroup());
-//         m_ownAction = true;
-//     }
-// }
 
 #include "kis_tool_fill.moc"

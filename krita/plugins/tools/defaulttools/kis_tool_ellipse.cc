@@ -23,8 +23,6 @@
 
 #include <QPainter>
 
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -33,7 +31,6 @@
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
 #include "kis_undo_adapter.h"
-#include "QPainter"
 #include "kis_cursor.h"
 #include "KoCanvasBase.h"
 

@@ -24,8 +24,6 @@
 #include <QColor>
 #include <QMouseEvent>
 
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <klocale.h>
 
 #include "kis_cursor.h"

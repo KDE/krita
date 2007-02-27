@@ -23,10 +23,8 @@
 
 #include "KoToolFactory.h"
 
-#include <flake_export.h>
-
 /// Factory for the KoInteractionTool
-class FLAKE_EXPORT KoInteractionToolFactory : public KoToolFactory {
+class KoInteractionToolFactory : public KoToolFactory {
 public:
     /// constructor
     KoInteractionToolFactory(QObject *parent, const QStringList&);

@@ -23,10 +23,8 @@
 
 #include "KoToolFactory.h"
 
-#include <flake_export.h>
-
 /// The factory for the KoCreatePathTool
-class FLAKE_EXPORT KoCreatePathToolFactory : public KoToolFactory 
+class KoCreatePathToolFactory : public KoToolFactory 
 {
 public:
     /// Constructor

@@ -23,10 +23,8 @@
 
 #include "KoToolFactory.h"
 
-#include <flake_export.h>
-
 /// The factory for the KoCreateShapesTool
-class FLAKE_EXPORT KoCreateShapesToolFactory : public KoToolFactory {
+class KoCreateShapesToolFactory : public KoToolFactory {
 public:
     /// Constructor
     KoCreateShapesToolFactory(QObject *parent, const QStringList&);

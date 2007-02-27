@@ -63,7 +63,7 @@ private:
 class ZoomToolFactory : public KoToolFactory {
 
 public:
-    ZoomToolFactory(QObject *parent, const QStringList&)
+    ZoomToolFactory(QObject *parent)
         : KoToolFactory(parent,  "KritaView/ZoomTool", i18n( "Zoom tool") )
         {
             setToolTip( i18n( "Zoom" ) );

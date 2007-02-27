@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Default Flake Tools
+ServiceTypes=KOffice/Flake
+Type=Service
+X-KDE-Library=defaulttools
+X-Flake-Version=1

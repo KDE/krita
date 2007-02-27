@@ -16,29 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_transform_parameter.h"
+#include "kis_dynamic_sensor.h"
 
 const KoID PressureId("pressure", i18n("Pressure"));
 const KoID XTiltId ("xtilt", i18n("X-Tilt"));
 const KoID YTiltId ("ytilt", i18n("Y-Tilt"));
 
-static KisTransformParameter* KisTransformParameter::id2TransformParameter(const KoID& id)
+static KisDynamicSensor* KisDynamicSensor::id2TransformParameter(const KoID& id)
 {
     if( id == "pressure")
     {
-        return new KisTransformParameterPressure();
+        return new KisDynamicSensorPressure();
     } else if( id == "xtilt")
     {
-        return new KisTransformParameterXTilt();
+        return new KisDynamicSensorXTilt();
     } else if( id == "ytilt")
     {
-        return new KisTransformParameterYTilt();
+        return new KisDynamicSensorYTilt();
     }
     kDebug() << "Unknown transform parameter : " << id << endl;
     return 0;
 }
 
-static QList<KoID> KisTransformParameter::transformParameterIds()
+static QList<KoID> KisDynamicSensor::transformParameterIds()
 {
     QList<KoID> ids << PressureId << XTiltId << YTiltId;
     return ids;

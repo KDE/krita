@@ -35,7 +35,7 @@
 #include <kis_dynamic_brush_registry.h>
 #include <kis_filters_list_dynamic_program.h>
 #include <kis_size_transformation.h>
-#include <kis_transform_parameter.h>
+#include <kis_dynamic_sensor.h>
 // TEMP
 
 typedef KGenericFactory<DynamicBrush> DynamicBrushFactory;
@@ -55,7 +55,7 @@ DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
         // TODO: remove this, temp stuff for testing only
         KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
         KisFiltersListDynamicProgram* program = new KisFiltersListDynamicProgram("example program");
-        program->appendTransformation( new KisSizeTransformation(new KisTransformParameterXTilt(), new KisTransformParameterYTilt() ) );
+        program->appendTransformation( new KisSizeTransformation(new KisDynamicSensorSpeed(), new KisDynamicSensorSpeed() ) );
         current->setProgram(program);
         KisDynamicBrushRegistry::instance()->setCurrent(current);
     }

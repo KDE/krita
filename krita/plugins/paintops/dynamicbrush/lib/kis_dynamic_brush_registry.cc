@@ -22,7 +22,7 @@
 
 #include "kis_dynamic_brush.h"
 #include "kis_size_transformation.h"
-#include "kis_transform_parameter.h"
+#include "kis_dynamic_sensor.h"
 
 // TODO: temporary stuff
 #include "kis_filters_list_dynamic_program.h"

@@ -19,9 +19,9 @@
 #include "kis_darken_transformation.h"
 
 #include "kis_dynamic_coloring.h"
-#include "kis_transform_parameter.h"
+#include "kis_dynamic_sensor.h"
 
-KisDarkenTransformation::KisDarkenTransformation(KisTransformParameter* transfoParameter)
+KisDarkenTransformation::KisDarkenTransformation(KisDynamicSensor* transfoParameter)
     : KisDynamicTransformation(KoID("darken",i18n("Darken"))), m_transfoParameter(transfoParameter)
 {
     

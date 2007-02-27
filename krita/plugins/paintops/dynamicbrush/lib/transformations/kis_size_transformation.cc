@@ -19,10 +19,10 @@
 #include "kis_size_transformation.h"
 
 #include "kis_dynamic_shape.h"
-#include "kis_transform_parameter.h"
+#include "kis_dynamic_sensor.h"
         
 
-KisSizeTransformation::KisSizeTransformation(KisTransformParameter* hTransfoParameter, KisTransformParameter* vTransfoParameter)
+KisSizeTransformation::KisSizeTransformation(KisDynamicSensor* hTransfoParameter, KisDynamicSensor* vTransfoParameter)
     : KisDynamicTransformation(KoID("size",i18n("Resize"))), m_horizTransfoParameter(hTransfoParameter), m_vertiTransfoParameter(vTransfoParameter)
 {
 }

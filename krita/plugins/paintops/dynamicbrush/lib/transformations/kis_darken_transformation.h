@@ -22,11 +22,11 @@
 #include "kis_dynamic_transformation.h"
 #include <klocale.h>
 
-class KisTransformParameter;
+class KisDynamicSensor;
 
 class KisDarkenTransformation : public KisDynamicTransformation {
     public:
-        KisDarkenTransformation(KisTransformParameter* transfoParameter);
+        KisDarkenTransformation(KisDynamicSensor* transfoParameter);
         virtual ~KisDarkenTransformation();
     public:
         virtual QString id() { return "darken"; };
@@ -34,7 +34,7 @@ class KisDarkenTransformation : public KisDynamicTransformation {
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
         virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
     private:
-        KisTransformParameter* m_transfoParameter;
+        KisDynamicSensor* m_transfoParameter;
 };
 
 #endif

@@ -22,31 +22,38 @@
 #include <kis_paintop.h>
 #include <KoID.h>
 
-class KisTransformParameter {
+class KisDynamicSensor {
     public:
-        virtual ~KisTransformParameter() { }
+        virtual ~KisDynamicSensor() { }
         virtual double parameter(const KisPaintInformation& info) = 0;
-        static KisTransformParameter* id2TransformParameter(const KoID&);
+        static KisDynamicSensor* id2TransformParameter(const KoID&);
         static QList<KoID> transformParameterIds();
 };
 
-class KisTransformParameterPressure : public KisTransformParameter {
+class KisDynamicSensorSpeed : public KisDynamicSensor {
     public:
-    virtual ~KisTransformParameterPressure() { }
+    virtual ~KisDynamicSensorSpeed() { }
+        virtual double parameter(const KisPaintInformation& info)
+        { return 1.0 + info.movement.length() * 0.1; }
+};
+
+class KisDynamicSensorPressure : public KisDynamicSensor {
+    public:
+    virtual ~KisDynamicSensorPressure() { }
         virtual double parameter(const KisPaintInformation& info)
         { return info.pressure; }
 };
 
-class KisTransformParameterXTilt : public KisTransformParameter {
+class KisDynamicSensorXTilt : public KisDynamicSensor {
     public:
-    virtual ~KisTransformParameterXTilt() { }
+    virtual ~KisDynamicSensorXTilt() { }
         virtual double parameter(const KisPaintInformation& info)
         { return 1.0 - info.xTilt; }
 };
 
-class KisTransformParameterYTilt : public KisTransformParameter {
+class KisDynamicSensorYTilt : public KisDynamicSensor {
     public:
-    virtual ~KisTransformParameterYTilt() { }
+    virtual ~KisDynamicSensorYTilt() { }
         virtual double parameter(const KisPaintInformation& info)
         { return 1.0 - info.yTilt; }
 };

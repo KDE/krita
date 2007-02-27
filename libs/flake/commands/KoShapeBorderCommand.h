@@ -33,7 +33,7 @@ class KoShapeBorderModel;
 class FLAKE_EXPORT KoShapeBorderCommand : public QUndoCommand {
 public:
     /**
-     * Command to set a new shape background.
+     * Command to set a new shape border.
      * @param shapes a set of all the shapes that should get the new background.
      * @param border the new border
      * @param parent the parent command used for macro commands

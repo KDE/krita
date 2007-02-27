@@ -39,6 +39,7 @@ class QVariant;
 class KoSelection;
 class KoPointerEvent;
 class KoShapeContainer;
+class KoShapeConnection;
 class KoShapeBorderModel;
 class KoShapeManager;
 class KoShapeUserData;
@@ -552,6 +553,8 @@ public:
      */
     static void applyConversion(QPainter &painter, const KoViewConverter &converter);
 
+    QList<KoShapeConnection*> connections() const;
+
 protected:
     /**
      * @brief Get the tag name used for saving
@@ -625,6 +628,10 @@ protected:
 
     /// return the current matrix that contains the rotation/scale/position of this shape
     const QMatrix& matrix() const;
+
+    friend class KoShapeConnection;
+    void addConnection(KoShapeConnection *connection);
+    void removeConnection(KoShapeConnection *connection);
 
 private:
     /**

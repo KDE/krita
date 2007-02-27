@@ -33,6 +33,7 @@ class KoShape;
 class KoSelection;
 class KoViewConverter;
 class KoCanvasBase;
+class KoShapeConnection;
 
 class QPainter;
 class QPointF;
@@ -133,6 +134,8 @@ public:
      * @param shape the shape to updated its position in the tree.
      */
     void notifyShapeChanged( KoShape * shape );
+
+    void addShapeConnection(KoShapeConnection *connection);
 
 private:
     /**

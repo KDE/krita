@@ -6,8 +6,8 @@ include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOFFICECORE_INCLUDES} )
 
 SET ( defaulttools_SRCS
     Plugin.cpp
-    #ConnectionTool.cpp
-    #ConnectionToolFactory.cpp
+    ConnectionTool.cpp
+    ConnectionToolFactory.cpp
     ZoomTool.cpp
 )
 

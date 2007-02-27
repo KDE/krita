@@ -16,22 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "ConnectionToolFactory.h"
-#include "ZoomTool.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#ifndef CONNECTIONTOOLFACTORY_H
+#define CONNECTIONTOOLFACTORY_H
 
-#include <kgenericfactory.h>
+#include <KoToolFactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(defaulttools, KGenericFactory<Plugin>( "Plugin" ) )
+#include <QStringList>
 
-Plugin::Plugin(QObject * parent, const QStringList &)
-    : QObject(parent)
-{
-    KoToolRegistry::instance()->add(new ConnectionToolFactory(parent));
-    KoToolRegistry::instance()->add(new ZoomToolFactory(parent));
-}
+class ConnectionToolFactory : public KoToolFactory {
+    Q_OBJECT
+public:
+    explicit ConnectionToolFactory(QObject *parent);
+    ~ConnectionToolFactory();
 
-#include "Plugin.moc"
+    KoTool * createTool(KoCanvasBase *canvas);
+};
+
+#endif

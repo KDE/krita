@@ -22,6 +22,7 @@
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "KoShape.h"
+#include "KoShapeConnection.h"
 #include "KoCanvasBase.h"
 #include "KoShapeContainer.h"
 #include "KoShapeBorderModel.h"
@@ -33,13 +34,14 @@
 
 class KoShapeManager::Private {
 public:
-    Private(KoCanvasBase *c) : canvas(c), tree(4, 2) {
+    Private(KoCanvasBase *c) : canvas(c), tree(4, 2), connectionTree(4, 2) {
         selection = new KoSelection();
     }
     QList<KoShape *> shapes;
     KoSelection * selection;
     KoCanvasBase * canvas;
     KoRTree<KoShape *> tree;
+    KoRTree<KoShapeConnection *> connectionTree;
     QSet<KoShape *> aggregate4update;
     QHash<KoShape*, int> shapeIndexesBeforeUpdate;
 };
@@ -174,6 +176,12 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
             painter.restore();
         }
         painter.restore();  // for the matrix
+    }
+
+    foreach(KoShapeConnection *sc, d->connectionTree.intersects( clipRegion.boundingRect() ) ) {
+        painter.save();
+        sc->paint( painter, converter );
+        painter.restore();
     }
 
 #ifdef KOFFICE_RTREE_DEBUG
@@ -329,6 +337,13 @@ const QList<KoShape *> & KoShapeManager::shapes() const {
 
 KoSelection * KoShapeManager::selection() const {
     return d->selection;
+}
+
+void KoShapeManager::addShapeConnection(KoShapeConnection *connection) {
+// TODO remove this simple implementation, should use the proper start and end point.
+    QRectF br = connection->shape1()->boundingRect();
+    br.unite(connection->shape1()->boundingRect());
+    d->connectionTree.insert( br, connection );
 }
 
 #include "KoShapeManager.moc"

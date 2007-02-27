@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,22 +16,28 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
+
 #include "ConnectionToolFactory.h"
-#include "ZoomTool.h"
+#include "ConnectionTool.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include <klocale.h>
+#include <kdebug.h>
 
-#include <kgenericfactory.h>
-
-K_EXPORT_COMPONENT_FACTORY(defaulttools, KGenericFactory<Plugin>( "Plugin" ) )
-
-Plugin::Plugin(QObject * parent, const QStringList &)
-    : QObject(parent)
+ConnectionToolFactory::ConnectionToolFactory(QObject *parent)
+: KoToolFactory(parent, "ConnectionToolFactory_ID", i18n("Connection tool"))
 {
-    KoToolRegistry::instance()->add(new ConnectionToolFactory(parent));
-    KoToolRegistry::instance()->add(new ZoomToolFactory(parent));
+kDebug() << "ConnectionToolFactory::ConnectionToolFactory\n";
+    setToolTip (i18n("Connection Creation tool"));
+    setToolType (mainToolType());
+    //setIcon ("connections");
+    setPriority (9);
 }
 
-#include "Plugin.moc"
+ConnectionToolFactory::~ConnectionToolFactory() {
+}
+
+KoTool * ConnectionToolFactory::createTool(KoCanvasBase *canvas) {
+    return new ConnectionTool(canvas);
+}
+
+#include "ConnectionToolFactory.moc"

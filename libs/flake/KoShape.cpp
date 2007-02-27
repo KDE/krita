@@ -38,6 +38,7 @@
 #include <QPainter>
 #include <QVariant>
 #include <QPainterPath>
+#include <QList>
 
 #include <kdebug.h>
 
@@ -98,6 +99,7 @@ public:
     KoShapeApplicationData *appData;
     QBrush backgroundBrush; ///< Stands for the background color / fill etc.
     KoShapeBorderModel *border; ///< points to a border, or 0 if there is no border
+    QList<KoShapeConnection*> connections;
 };
 
 KoShape::KoShape()
@@ -316,6 +318,11 @@ QMatrix KoShape::transformationMatrix(const KoViewConverter *converter) const {
     }
     matrix.shear( d->shearX, d->shearY );
     matrix.scale( d->scaleX, d->scaleY );
+    if(false && converter) {
+        double zoomX, zoomY;
+        converter->zoom(&zoomX, &zoomY);
+        matrix.scale(zoomX, zoomY);
+    }
     return matrix;
 }
 
@@ -602,6 +609,19 @@ const QMatrix& KoShape::matrix() const {
     return d->matrix;
 }
 
+void KoShape::addConnection(KoShapeConnection *connection) {
+    d->connections.append(connection);
+    foreach(KoShapeManager *sm, d->shapeManagers)
+        sm->addShapeConnection( connection );
+}
+
+void KoShape::removeConnection(KoShapeConnection *connection) {
+    d->connections.removeAll(connection);
+}
+
+QList<KoShapeConnection*> KoShape::connections() const {
+    return d->connections;
+}
 
 // static
 void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converter) {

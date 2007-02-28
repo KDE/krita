@@ -27,7 +27,7 @@
 class KoInteractionToolFactory : public KoToolFactory {
 public:
     /// constructor
-    KoInteractionToolFactory(QObject *parent, const QStringList&);
+    KoInteractionToolFactory(QObject *parent);
     ~KoInteractionToolFactory();
 
     KoTool* createTool(KoCanvasBase *canvas);

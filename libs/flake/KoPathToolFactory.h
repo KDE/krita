@@ -22,13 +22,11 @@
 
 #include <KoToolFactory.h>
 
-#include <QStringList>
-
 /// Factory for the KoPathTool
-class FLAKE_EXPORT KoPathToolFactory : public KoToolFactory {
+class KoPathToolFactory : public KoToolFactory {
     Q_OBJECT
 public:
-    KoPathToolFactory(QObject *parent, const QStringList&);
+    KoPathToolFactory(QObject *parent);
     ~KoPathToolFactory();
 
     KoTool * createTool(KoCanvasBase *canvas);

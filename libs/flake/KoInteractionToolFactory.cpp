@@ -25,7 +25,7 @@
 
 #include <QPixmap>
 
-KoInteractionToolFactory::KoInteractionToolFactory(QObject *parent, const QStringList&)
+KoInteractionToolFactory::KoInteractionToolFactory(QObject *parent)
 : KoToolFactory(parent, KoInteractionTool_ID, i18n("Default Tool"))
 {
     setToolTip(i18n("Default tool"));

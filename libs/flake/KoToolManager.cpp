@@ -28,6 +28,7 @@
 #include "KoCreateShapesToolFactory.h"
 #include "KoCreateShapesTool.h"
 #include "KoInteractionToolFactory.h"
+#include "KoPathToolFactory.h"
 #include "KoCanvasController.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
@@ -134,9 +135,10 @@ void KoToolManager::setup() {
     if (d->tools.size() > 0)
         return;
 
-    d->tools.append( new ToolHelper(new KoCreatePathToolFactory(this, QStringList())) );
-    d->tools.append( new ToolHelper(new KoCreateShapesToolFactory(this, QStringList())) );
-    d->defaultTool = new ToolHelper(new KoInteractionToolFactory(this, QStringList()));
+    d->tools.append( new ToolHelper(new KoCreatePathToolFactory(this)) );
+    d->tools.append( new ToolHelper(new KoCreateShapesToolFactory(this)) );
+    d->tools.append( new ToolHelper(new KoPathToolFactory(this)) );
+    d->defaultTool = new ToolHelper(new KoInteractionToolFactory(this));
     d->tools.append(d->defaultTool);
 
     KoShapeRegistry::instance();

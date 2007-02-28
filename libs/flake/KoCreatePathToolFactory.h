@@ -24,11 +24,11 @@
 #include "KoToolFactory.h"
 
 /// The factory for the KoCreatePathTool
-class KoCreatePathToolFactory : public KoToolFactory 
+class KoCreatePathToolFactory : public KoToolFactory
 {
 public:
     /// Constructor
-    KoCreatePathToolFactory(QObject *parent, const QStringList&);
+    KoCreatePathToolFactory(QObject *parent);
     /// Destructor
     ~KoCreatePathToolFactory();
 

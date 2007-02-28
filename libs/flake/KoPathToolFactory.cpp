@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 
-KoPathToolFactory::KoPathToolFactory(QObject *parent, const QStringList&)
+KoPathToolFactory::KoPathToolFactory(QObject *parent)
 : KoToolFactory(parent, "PathToolFactoryId", i18n("Path tool"))
 {
     setToolTip (i18n("Path editing tool"));

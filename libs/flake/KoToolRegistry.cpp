@@ -21,7 +21,6 @@
 #include "KoToolRegistry.h"
 #include <kstaticdeleter.h>
 
-#include <KoPathToolFactory.h>
 #include <KoPluginLoader.h>
 
 KoToolRegistry::KoToolRegistry() {
@@ -32,9 +31,6 @@ void KoToolRegistry::init() {
                                       QString::fromLatin1("[X-Flake-Version] == 1"));
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Tool"),
                                       QString::fromLatin1("[X-Flake-Version] == 1"));
-
-    // path tool is always there
-    add( new KoPathToolFactory(this, QStringList()) );
 }
 
 KoToolRegistry::~KoToolRegistry()

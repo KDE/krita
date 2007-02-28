@@ -23,6 +23,82 @@
 #include <QPointF>
 #include <QPainter>
 
+class ChildrenData : public KoShapeContainerModel {
+public:
+    ChildrenData() {}
+    ~ChildrenData() {
+        qDeleteAll(m_relations);
+    }
+
+    void add(KoShape *child) {
+        Relation *r = new Relation(child);
+        m_relations.append(r);
+    }
+
+    void setClipping(const KoShape *child, bool clipping) {
+        Relation *relation = findRelation(child);
+        if(relation == 0) // throw exception?
+            return;
+        if(relation->m_inside == clipping)
+            return;
+        relation->m_inside = clipping;
+        relation->child()->repaint();
+        relation->child()->recalcMatrix();
+        relation->child()->repaint();
+    }
+
+    bool childClipped(const KoShape *child) const {
+        Relation *relation = findRelation(child);
+        if(relation == 0) // throw exception?
+            return false;
+        return relation->m_inside;
+    }
+
+    void remove(KoShape *child) {
+        Relation *relation = findRelation(child);
+        if(relation == 0)
+            return;
+        m_relations.removeAll(relation);
+    }
+
+    int count() const {
+        return m_relations.count();
+    }
+
+    QList<KoShape*> iterator() const {
+        QList<KoShape*> answer;
+        foreach (Relation *relation, m_relations)
+            answer.append(relation->child());
+        return answer;
+    }
+
+    void containerChanged(KoShapeContainer *) { }
+
+private:
+    /**
+     * This class is a simple data-storage class for Relation objects.
+     */
+    class Relation {
+        public:
+            explicit Relation(KoShape *child) :m_inside(false) , m_child(child) { }
+            KoShape* child() { return m_child; }
+            bool m_inside; ///< if true, the child will be clipped by the parent.
+        private:
+            KoShape *m_child;
+    };
+
+    Relation* findRelation(const KoShape *child) const {
+        foreach(Relation *relation, m_relations) {
+            if(relation->child() == child)
+                return relation;
+        }
+        return 0;
+    }
+
+private: // members
+    QList <Relation *> m_relations;
+};
+
 class KoShapeContainer::Private {
 public:
     Private() : children(0) {}
@@ -142,69 +218,6 @@ bool KoShapeContainer::childClipped(const KoShape *child) const {
     return d->children->childClipped(child);
 }
 
-
-// ##  inner class ChildrenData
-KoShapeContainer::ChildrenData::ChildrenData() {
-}
-
-KoShapeContainer::ChildrenData::~ChildrenData() {
-    qDeleteAll(m_relations);
-}
-
-void KoShapeContainer::ChildrenData::add(KoShape *child) {
-    Relation *r = new Relation(child);
-    m_relations.append(r);
-}
-
-KoShapeContainer::ChildrenData::Relation* KoShapeContainer::ChildrenData::findRelation(const KoShape *child) const {
-    foreach(Relation *relation, m_relations) {
-        if(relation->child() == child)
-            return relation;
-    }
-    return 0;
-}
-
-void KoShapeContainer::ChildrenData::setClipping(const KoShape *child, bool clipping) {
-    Relation *relation = findRelation(child);
-    if(relation == 0) // throw exception?
-        return;
-    if(relation->m_inside == clipping)
-        return;
-    relation->m_inside = clipping;
-    relation->child()->repaint();
-    relation->child()->recalcMatrix();
-    relation->child()->repaint();
-}
-
-void KoShapeContainer::ChildrenData::remove(KoShape *child) {
-    Relation *relation = findRelation(child);
-    if(relation == 0)
-        return;
-    m_relations.removeAll(relation);
-}
-
-int KoShapeContainer::ChildrenData::count() const {
-    return m_relations.count();
-}
-
-bool KoShapeContainer::ChildrenData::childClipped(const KoShape *child) const {
-    Relation *relation = findRelation(child);
-    if(relation == 0) // throw exception?
-        return false;
-    return relation->m_inside;
-}
-
-QList<KoShape*> KoShapeContainer::ChildrenData::iterator() const {
-    QList<KoShape*> answer;
-    foreach (Relation *relation, m_relations)
-        answer.append(relation->child());
-    return answer;
-}
-
-void KoShapeContainer::ChildrenData::containerChanged(KoShapeContainer *container) {
-    Q_UNUSED(container);
-}
-
 void KoShapeContainer::repaint() const {
     KoShape::repaint();
     if(d->children)
@@ -219,8 +232,4 @@ QList<KoShape*> KoShapeContainer::iterator() const {
     return d->children->iterator();
 }
 
-// ## inner class KoShapeContainerModel::Relation
-KoShapeContainer::ChildrenData::Relation::Relation(KoShape *child)
-:m_inside(false)
-, m_child(child) {
-}
+

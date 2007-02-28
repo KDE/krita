@@ -213,38 +213,6 @@ protected:
     virtual void childCountChanged() { }
 
 private:
-    /**
-     */
-    class ChildrenData : public KoShapeContainerModel {
-        public:
-            ChildrenData();
-            ~ChildrenData();
-            void add(KoShape *child);
-            void setClipping(const KoShape *child, bool clipping);
-            bool childClipped(const KoShape *child) const;
-            void remove(KoShape *child);
-            int count() const;
-            QList<KoShape*> iterator() const;
-            void containerChanged(KoShapeContainer *container);
-
-        private:
-            /**
-             * This class is a simple data-storage class for Relation objects.
-             */
-            class Relation {
-                public:
-                    explicit Relation(KoShape *child);
-                    KoShape* child() { return m_child; }
-                    bool m_inside; ///< if true, the child will be clipped by the parent.
-                private:
-                    KoShape *m_child;
-            };
-
-            Relation* findRelation(const KoShape *child) const;
-
-        private: // members
-            QList <Relation *> m_relations;
-    };
     void shapeChanged(ChangeType type);
 
     class Private;

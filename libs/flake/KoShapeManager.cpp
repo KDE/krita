@@ -137,14 +137,23 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
     updateTree();
     painter.setPen( Qt::NoPen );// painters by default have a black stroke, lets turn that off.
     painter.setBrush( Qt::NoBrush );
-    QList<KoShape*> sortedShapes;
-    if(painter.hasClipping())
-        sortedShapes = d->tree.intersects( converter.viewToDocument( painter.clipRegion().boundingRect() ) );
-    else
-        sortedShapes = shapes();
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
-    const QRegion clipRegion = painter.clipRegion();
 
+    QList<KoShapeConnection*> sortedConnections;
+    QList<KoShape*> sortedShapes;
+    if(painter.hasClipping()) {
+        QRectF rect = converter.viewToDocument( painter.clipRegion().boundingRect() );
+        sortedShapes = d->tree.intersects( rect );
+        sortedConnections = d->connectionTree.intersects( rect );
+    }
+    else {
+        sortedShapes = shapes();
+        kWarning() << "KoShapeManager::paint  Painting with a painter that has no clipping will lead to too much being painted and no connections being painted!\n";
+    }
+    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    qSort(sortedConnections.begin(), sortedConnections.end(), KoShapeConnection::compareConnectionZIndex);
+    QList<KoShapeConnection*>::iterator connectionIterator = sortedConnections.begin();
+
+    const QRegion clipRegion = painter.clipRegion();
     foreach ( KoShape * shape, sortedShapes ) {
         if(! shape->isVisible() || ( shape->parent() && ! shape->parent()->isVisible() ) )
             continue;
@@ -157,6 +166,13 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
 
             if(clipRegion.intersect(shapeRegion).isEmpty())
                 continue;
+        }
+
+        while(connectionIterator != sortedConnections.end() && (*connectionIterator)->zIndex() < shape->zIndex()) {
+            painter.save();
+            (*connectionIterator)->paint( painter, converter );
+            painter.restore();
+            connectionIterator++;
         }
         painter.save();
         painter.setMatrix( shape->transformationMatrix(&converter) * painter.matrix() );
@@ -178,10 +194,11 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
         painter.restore();  // for the matrix
     }
 
-    foreach(KoShapeConnection *sc, d->connectionTree.intersects( clipRegion.boundingRect() ) ) {
+    while(connectionIterator != sortedConnections.end()) { // paint connections that are above the rest.
         painter.save();
-        sc->paint( painter, converter );
+        (*connectionIterator)->paint( painter, converter );
         painter.restore();
+        connectionIterator++;
     }
 
 #ifdef KOFFICE_RTREE_DEBUG

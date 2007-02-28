@@ -345,8 +345,8 @@ QMatrix KoShape::transformationMatrix(const KoViewConverter *converter) const {
 }
 
 
-bool KoShape::compareShapeZIndex(KoShape *g1, KoShape *g2) {
-    return g1->zIndex() < g2->zIndex();
+bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2) {
+    return s1->zIndex() < s2->zIndex();
 }
 
 void KoShape::setParent(KoShapeContainer *parent) {

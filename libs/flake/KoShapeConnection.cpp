@@ -33,11 +33,14 @@ public:
         gluePointIndex2(gp2)
     {
         Q_ASSERT(shape1->connectors().count() > gp1);
-        Q_ASSERT(shape2 && shape2->connectors().count() > gp2);
+        Q_ASSERT(shape2 == 0 || shape2->connectors().count() > gp2);
 
         point1 = shape1->connectors()[gp1];
-        if(shape2)
-            point2 = shape1->connectors()[gp2];
+        zIndex = shape1->zIndex() + 1;
+        if(shape2) {
+            point2 = shape2->connectors()[gp2];
+            zIndex = qMax(zIndex, shape2->zIndex() + 1);
+        }
     }
 
     KoShape * const shape1;
@@ -45,10 +48,7 @@ public:
     QPointF point1, point2;
     int gluePointIndex1;
     int gluePointIndex2;
-
-    /*
-      Properties like ConnectionType
-    */
+    int zIndex;
 };
 
 KoShapeConnection::KoShapeConnection(KoShape *from, int gp1, KoShape *to, int gp2)
@@ -90,5 +90,33 @@ KoShape *KoShapeConnection::shape1() const {
 
 KoShape *KoShapeConnection::shape2() const {
     return d->shape2;
+}
+
+int KoShapeConnection::zIndex() const {
+    return d->zIndex;
+}
+
+void KoShapeConnection::setZIndex(int index) {
+    d->zIndex = index;
+}
+
+int KoShapeConnection::gluePointIndex1() const {
+    return d->gluePointIndex1;
+}
+
+int KoShapeConnection::gluePointIndex2() const {
+    return d->gluePointIndex2;
+}
+
+QPointF KoShapeConnection::gluePoint1() const {
+    return d->point1;
+}
+
+QPointF KoShapeConnection::gluePoint2() const {
+    return d->point2;
+}
+
+bool KoShapeConnection::compareConnectionZIndex(KoShapeConnection *c1, KoShapeConnection *c2) {
+    return c1->zIndex() < c2->zIndex();
 }
 

@@ -19,7 +19,9 @@
 #ifndef KOSHAPECONNECTION_H
 #define KOSHAPECONNECTION_H
 
-#include <flake_export.h>
+#include "flake_export.h"
+
+#include <QPointF>
 
 class KoShape;
 class QPainter;
@@ -41,6 +43,22 @@ public:
 
     KoShape *shape1() const;
     KoShape *shape2() const;
+
+    int zIndex() const;
+    void setZIndex(int index);
+
+    int gluePointIndex1() const;
+    int gluePointIndex2() const;
+
+    QPointF gluePoint1() const;
+    QPointF gluePoint2() const;
+
+    /**
+     * This is a method used to sort a list using the STL sorting methods.
+     * @param c1 the first connection
+     * @param c2 the second connection
+     */
+    static bool compareConnectionZIndex(KoShapeConnection*c1, KoShapeConnection *c2);
 
 private:
     class Private;

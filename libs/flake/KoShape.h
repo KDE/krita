@@ -405,10 +405,10 @@ public:
 
     /**
      * This is a method used to sort a list using the STL sorting methods.
-     * @param g1 the first shape
-     * @param g2 the second shape
+     * @param s1 the first shape
+     * @param s2 the second shape
      */
-    static bool compareShapeZIndex(KoShape *g1, KoShape *g2);
+    static bool compareShapeZIndex(KoShape *s1, KoShape *s2);
 
     /**
      * Called internally whenever a property is changed that requires the matrix to be recalculated.

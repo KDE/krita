@@ -159,6 +159,29 @@ bool KoShape::saveOdf( KoShapeSavingContext & context )
     return true;
 }
 
+void KoShape::saveOdfSizeAndPosition( KoShapeSavingContext &context ) const
+{
+    QSizeF s( size() );
+    context.xmlWriter().addAttributePt( "svg:width", s.width() );
+    context.xmlWriter().addAttributePt( "svg:height", s.height() );
+
+    if ( d->scaleX == 1 and d->scaleY == 1 && d->angle == 0 && d->shearX == 0 && d->shearY == 0 )
+    {
+        QPointF pos( position() );
+        context.xmlWriter().addAttributePt( "svg:x", pos.x() );
+        context.xmlWriter().addAttributePt( "svg:y", pos.y() );
+    }
+    else
+    {
+        // looks like position is not needed it would be svg:x="0" and svg:y="0"
+        // looks like OO 2.0 can not load the translation in the matrix 
+        QString m = QString( "matrix(%1 %2 %3 %4 %5 %6)" ).arg( d->matrix.m11() ).arg( d->matrix.m12() )
+                                                          .arg( d->matrix.m21() ).arg( d->matrix.m22() )
+                                                          .arg( d->matrix.dx() ) .arg( d->matrix.dy() );
+        context.xmlWriter().addAttribute( "draw:transform", m );
+    }
+}
+
 QString KoShape::getStyle( KoShapeSavingContext &context )
 {
     KoGenStyle style;

@@ -581,6 +581,15 @@ protected:
     virtual bool saveOdfData( KoShapeSavingContext &context ) const { Q_UNUSED( context ); return true; }
 
     /**
+     * @brief Save the size and the position of a shape 
+     *
+     * This also takes the transformation into account. Use in shapes which have
+     * Size, Position and transformation as defined in ODF 9.2.15 Common Drawing 
+     * Shape Attributes.
+     */
+    void saveOdfSizeAndPosition( KoShapeSavingContext &context ) const;
+
+    /**
      * @brief Fill the style object
      *
      * @param style object

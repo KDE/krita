@@ -26,19 +26,33 @@
 
 class KoShapeConnection::Private {
 public:
-    Private(KoShape *from, KoShape *to) : shape1(from), shape2(to) {}
+    Private(KoShape *from, int gp1, KoShape *to, int gp2)
+        : shape1(from),
+        shape2(to),
+        gluePointIndex1(gp1),
+        gluePointIndex2(gp2)
+    {
+        Q_ASSERT(shape1->connectors().count() > gp1);
+        Q_ASSERT(shape2 && shape2->connectors().count() > gp2);
+
+        point1 = shape1->connectors()[gp1];
+        if(shape2)
+            point2 = shape1->connectors()[gp2];
+    }
 
     KoShape * const shape1;
     KoShape * const shape2;
     QPointF point1, point2;
+    int gluePointIndex1;
+    int gluePointIndex2;
 
     /*
       Properties like ConnectionType
     */
 };
 
-KoShapeConnection::KoShapeConnection(KoShape *from, KoShape *to)
-    : d(new Private(from, to))
+KoShapeConnection::KoShapeConnection(KoShape *from, int gp1, KoShape *to, int gp2)
+    : d(new Private(from, gp1, to, gp2))
 {
     d->shape1->addConnection(this);
     d->shape2->addConnection(this);
@@ -51,8 +65,19 @@ KoShapeConnection::~KoShapeConnection() {
 }
 
 void KoShapeConnection::paint(QPainter &painter, const KoViewConverter &converter) {
-    QPointF a = converter.documentToView(d->shape1->absolutePosition());
-    QPointF b = converter.documentToView(d->shape2->absolutePosition());
+    double x, y;
+    converter.zoom(&x, &y);
+    QMatrix matrix = d->shape1->transformationMatrix(&converter);
+    matrix.scale(x, y);
+    QPointF a = matrix.map(d->point1);
+    QPointF b;
+    if(d->shape2) {
+        matrix = d->shape2->transformationMatrix(&converter);
+        matrix.scale(x, y);
+        b = matrix.map(d->point2);
+    }
+    else
+        b = converter.documentToView(d->point2);
 
     QPen pen(Qt::black);
     painter.setPen(pen);

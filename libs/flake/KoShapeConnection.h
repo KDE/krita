@@ -34,7 +34,7 @@ public:
         // etc?
     };
 
-    KoShapeConnection(KoShape *from, KoShape *to = 0);
+    KoShapeConnection(KoShape *from, int gluePointIndex1, KoShape *to = 0,  int gluePointIndex2 = 0);
     ~KoShapeConnection();
 
     void paint(QPainter &painter, const KoViewConverter &converter);
@@ -52,9 +52,6 @@ private:
     KoShapeConnectionManager as a member of KoShapeManager ? Or 'integrated' in the KoShapeManager ?
     This class will have an rtree of all the connectors.
     This class will recalculate the perfect path when shapes move/etc.
-
-    ConnectionTool (under koffice/plugins)
-    Used to create new connections.
 
     Add a strategy for InteractionTool that when it selects a connection it can be used to change
         the properties or delete it.

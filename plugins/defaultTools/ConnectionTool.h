@@ -47,11 +47,11 @@ public:
     void deactivate();
 
 private:
-    void createConnection(KoShape *shape1, QPointF point1, KoShape *shape2, QPointF point2);
+    void createConnection(KoShape *shape1, int gluePointIndex1, KoShape *shape2, int gluePointIndex2);
 
 private:
     KoShape *m_startShape;
-    QPointF m_startPoint;
+    int m_gluePointIndex;
     QList<KoShape*> m_shapesPaintedWithConnections;
 };
 

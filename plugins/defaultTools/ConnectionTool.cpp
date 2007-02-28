@@ -30,7 +30,8 @@
 
 ConnectionTool::ConnectionTool(KoCanvasBase *canvas)
 : KoTool(canvas),
-    m_startShape(0)
+    m_startShape(0),
+    m_gluePointIndex(-1)
 {
 }
 
@@ -61,19 +62,22 @@ void ConnectionTool::mousePressEvent( KoPointerEvent *event ) {
 
     foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(region)) {
         QMatrix matrix = shape->transformationMatrix(0);
+        int index = 0;
         foreach(QPointF point, shape->connectors()) {
             QPointF p = matrix.map(point);
             QPointF distance = m_canvas->viewConverter()->documentToView(p - event->point);
             if(qAbs(distance.x()) < 10 && qAbs(distance.y()) < 10) { // distance is in pixels.
                 if(m_startShape == 0) {
                     m_startShape = shape;
-                    m_startPoint = point;
+                    m_gluePointIndex = index;
                 }
                 else {
-                    createConnection(m_startShape, m_startPoint, shape, point);
-                    m_startShape = 0;
+                    createConnection(m_startShape, m_gluePointIndex, shape, index);
+                    m_gluePointIndex = 0;
                 }
+                return;
             }
+            index++;
         }
     }
 }
@@ -111,9 +115,9 @@ void ConnectionTool::deactivate() {
     m_startShape = 0;
 }
 
-void ConnectionTool::createConnection(KoShape *shape1, QPointF point1, KoShape *shape2, QPointF point2) {
+void ConnectionTool::createConnection(KoShape *shape1, int gluePointIndex1, KoShape *shape2, int gluePointIndex2) {
     kDebug() << "create Connection!\n";
-    KoShapeConnection *connection = new KoShapeConnection(shape1, shape2); // will add itself.
+    new KoShapeConnection(shape1, gluePointIndex1, shape2, gluePointIndex2); // will add itself.
 }
 
 #include "ConnectionTool.moc"

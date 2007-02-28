@@ -35,19 +35,16 @@ public:
         Q_ASSERT(shape1->connectors().count() > gp1);
         Q_ASSERT(shape2 == 0 || shape2->connectors().count() > gp2);
 
-        point1 = shape1->connectors()[gp1];
         zIndex = shape1->zIndex() + 1;
-        if(shape2) {
-            point2 = shape2->connectors()[gp2];
+        if(shape2)
             zIndex = qMax(zIndex, shape2->zIndex() + 1);
-        }
     }
 
     KoShape * const shape1;
     KoShape * const shape2;
-    QPointF point1, point2;
     int gluePointIndex1;
     int gluePointIndex2;
+    QPointF endPoint;
     int zIndex;
 };
 
@@ -69,15 +66,15 @@ void KoShapeConnection::paint(QPainter &painter, const KoViewConverter &converte
     converter.zoom(&x, &y);
     QMatrix matrix = d->shape1->transformationMatrix(&converter);
     matrix.scale(x, y);
-    QPointF a = matrix.map(d->point1);
+    QPointF a = matrix.map(d->shape1->connectors()[d->gluePointIndex1]);
     QPointF b;
     if(d->shape2) {
         matrix = d->shape2->transformationMatrix(&converter);
         matrix.scale(x, y);
-        b = matrix.map(d->point2);
+        b = matrix.map(d->shape2->connectors()[d->gluePointIndex2]);
     }
     else
-        b = converter.documentToView(d->point2);
+        b = converter.documentToView(d->endPoint);
 
     QPen pen(Qt::black);
     painter.setPen(pen);
@@ -108,15 +105,24 @@ int KoShapeConnection::gluePointIndex2() const {
     return d->gluePointIndex2;
 }
 
-QPointF KoShapeConnection::gluePoint1() const {
-    return d->point1;
+QPointF KoShapeConnection::startPoint() const {
+    return d->shape1->transformationMatrix(0).map(d->shape1->connectors()[d->gluePointIndex1]);
 }
 
-QPointF KoShapeConnection::gluePoint2() const {
-    return d->point2;
+QPointF KoShapeConnection::endPoint() const {
+    if(d->shape2)
+        return d->shape2->transformationMatrix(0).map(d->shape2->connectors()[d->gluePointIndex2]);
+    return d->endPoint;
 }
 
+QRectF KoShapeConnection::boundingRect() const {
+    QPointF start = startPoint();
+    QPointF end = endPoint();
+    QRectF br(start.x(), start.y(), end.x() - start.x(), end.y() - start.y());
+    return br.normalized();
+}
+
+//static
 bool KoShapeConnection::compareConnectionZIndex(KoShapeConnection *c1, KoShapeConnection *c2) {
     return c1->zIndex() < c2->zIndex();
 }
-

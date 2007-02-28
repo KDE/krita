@@ -291,6 +291,10 @@ void KoShapeManager::repaint( QRectF &rect, const KoShape *shape, bool selection
         if ( d->canvas->toolProxy() )
             d->canvas->toolProxy()->repaintDecorations();
     }
+    if(selectionHandles) {
+        foreach(KoShapeConnection *connection, shape->connections())
+            d->canvas->updateCanvas( connection->boundingRect() );
+    }
 }
 
 void KoShapeManager::notifyShapeChanged( KoShape * shape )
@@ -337,6 +341,11 @@ void KoShapeManager::updateTree()
         d->tree.remove( shape );
         QRectF br( shape->boundingRect() );
         d->tree.insert( br, shape );
+
+        foreach(KoShapeConnection *connection, shape->connections()) {
+            d->connectionTree.remove(connection);
+            d->connectionTree.insert(connection->boundingRect(), connection);
+        }
     }
 
     // do it again to see which shapes we intersect with _after_ moving.
@@ -357,10 +366,7 @@ KoSelection * KoShapeManager::selection() const {
 }
 
 void KoShapeManager::addShapeConnection(KoShapeConnection *connection) {
-// TODO remove this simple implementation, should use the proper start and end point.
-    QRectF br = connection->shape1()->boundingRect();
-    br.unite(connection->shape1()->boundingRect());
-    d->connectionTree.insert( br, connection );
+    d->connectionTree.insert(connection->boundingRect(), connection);
 }
 
 #include "KoShapeManager.moc"

@@ -22,6 +22,7 @@
 #include "flake_export.h"
 
 #include <QPointF>
+#include <QRectF>
 
 class KoShape;
 class QPainter;
@@ -36,7 +37,7 @@ public:
         // etc?
     };
 
-    KoShapeConnection(KoShape *from, int gluePointIndex1, KoShape *to = 0,  int gluePointIndex2 = 0);
+    explicit KoShapeConnection(KoShape *from, int gluePointIndex1, KoShape *to = 0,  int gluePointIndex2 = 0);
     ~KoShapeConnection();
 
     void paint(QPainter &painter, const KoViewConverter &converter);
@@ -50,8 +51,8 @@ public:
     int gluePointIndex1() const;
     int gluePointIndex2() const;
 
-    QPointF gluePoint1() const;
-    QPointF gluePoint2() const;
+    QPointF startPoint() const;
+    QPointF endPoint() const;
 
     /**
      * This is a method used to sort a list using the STL sorting methods.
@@ -59,6 +60,8 @@ public:
      * @param c2 the second connection
      */
     static bool compareConnectionZIndex(KoShapeConnection*c1, KoShapeConnection *c2);
+
+    QRectF boundingRect() const;
 
 private:
     class Private;

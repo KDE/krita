@@ -341,11 +341,6 @@ QMatrix KoShape::transformationMatrix(const KoViewConverter *converter) const {
     }
     matrix.shear( d->shearX, d->shearY );
     matrix.scale( d->scaleX, d->scaleY );
-    if(false && converter) {
-        double zoomX, zoomY;
-        converter->zoom(&zoomX, &zoomY);
-        matrix.scale(zoomX, zoomY);
-    }
     return matrix;
 }
 

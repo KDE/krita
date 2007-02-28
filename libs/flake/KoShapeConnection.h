@@ -70,10 +70,6 @@ private:
 
 /*
      TODO
-    KoShapeConnectionManager as a member of KoShapeManager ? Or 'integrated' in the KoShapeManager ?
-    This class will have an rtree of all the connectors.
-    This class will recalculate the perfect path when shapes move/etc.
-
     Add a strategy for InteractionTool that when it selects a connection it can be used to change
         the properties or delete it.
 */

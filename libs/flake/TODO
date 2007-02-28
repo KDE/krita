@@ -2,15 +2,32 @@ For anyone that wants to hack on flake here is a list of things that need to be 
 
 * Add a 'name' (QString) field to KoShape with the proper setter + getter.
 
-* For shapes that are scaled to a negative size (using setScale) the interaction tool doesn't work
-  properly anymore. Moving the mouse left makes the action go right. And visa versa.
+== Connectors ==
+* Add properties to KoShapeConnector (Private class)
+  - line width
+  - line style (which does ODF support?
+  - start + end arrow shapes
+* Add multi-line and curve styled properties to KoShapeConnector
+  They should be drawn properly as well. Preferrably using the flake-path classes.
+* Add  bool KoShapeConnector::isHit(QPointF docPoint, double radius) const;  method.
+  This method should return true if the point lies within radius of any line of the connector.
+  Note that all params are in doc-coordinates. (pt)
+* Get the KoInteractionTool to detect if the click was on or near a connection in which case it should
+  'select' the connection and create a strategy to allows the user to alter the connection.
+  For example by altering the points of the multi-line or the vector shape of the connection.
+In the plugins/defaultTools/ConnectorTool:
+* show a preview-line on screen after clicking the first connection point.
+* Allow to insert multi-lines much the same way Kivio did previously.
+* Create and use an undo command for inserting the connection and the points.
+
+
+== More Advanced ==
 * Add shadow to a KoShape
   - shadow properties as described by the odf spec are (offsetx, offsety, color, opacity)
     -> maybe have a KoShapeShadow class to hold these
   - painting done in the shape itself. The angle is set in the document space, not in the shape-coordianate system
   - on insert into the rTree (KoShapeManager) extend the boudingrect with shadow (note that KoShapeManager is
     a friend of KoShape).
-
 
 * Add a way to make sure a shape will never be printed partially due to it still doing work
   for example by a kexi shape downloading data before it will show that.
@@ -27,6 +44,3 @@ For anyone that wants to hack on flake here is a list of things that need to be 
      */
     virtual void waitUntilReady(KoProgressIndicator *pi) const {}
 
-
-Other:
-Use xcursorgen to create real xcursors ? (boemann)

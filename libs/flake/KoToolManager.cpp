@@ -286,6 +286,18 @@ void KoToolManager::switchTool(KoTool *tool) {
 }
 
 void KoToolManager::postSwitchTool() {
+#ifndef NDEBUG
+    int canvasCount = 1;
+    foreach(QList<CanvasData*> list, d->canvasses) {
+        bool first = true;
+        foreach(CanvasData *data, list) {
+            if(first)
+                kDebug(30006) << "Canvas " << canvasCount++ << endl;
+            kDebug(30006) << "  +- Tool: " << data->activeToolId  << (data == d->canvasData?" *":"") << endl;
+            first = false;
+        }
+    }
+#endif
     if(d->canvasData->canvas->canvas()) {
         KoToolProxy *tp = d->proxies.value(d->canvasData->canvas->canvas());
         if(tp)
@@ -360,6 +372,8 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
     foreach(CanvasData *data, d->canvasses.value(newCanvas)) {
         if(data->inputDevice == d->inputDevice) {
             d->canvasData = data;
+            postSwitchTool();
+            d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
             return;
         }
     }
@@ -476,7 +490,6 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes) 
 void KoToolManager::switchInputDevice(const KoInputDevice &device) {
     if(d->inputDevice == device) return;
     d->inputDevice = device;
-kDebug(30006) << "New input device!\n";
     QList<CanvasData*> items = d->canvasses[d->canvasData->canvas];
     foreach(CanvasData *cd, items) {
         if(cd->inputDevice == device) {

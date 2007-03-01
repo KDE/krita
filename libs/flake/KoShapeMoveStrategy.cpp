@@ -54,6 +54,7 @@ KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, co
 }
 
 void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
+    if(m_selectedShapes.isEmpty()) return;
     QPointF diff = point - m_start;
     if(m_canvas->snapToGrid() && (modifiers & Qt::ShiftModifier) == 0) {
         QPointF newPos = m_initialTopLeft + diff;

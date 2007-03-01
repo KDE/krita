@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ KisOasisSaveDataVisitor::KisOasisSaveDataVisitor(KoOasisStore* os, KoXmlWriter* 
 
 bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
 {
-    QString filename = "data/" + layer->name() + ".png";
+/*    QString filename = "data/" + layer->name() + ".png";
     QImage img = layer->paintDevice()->convertToQImage(0);
     if( m_oasisStore->store()->open(filename))
     {
@@ -60,7 +60,36 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
     } else {
         kDebug(41008) << "Opening of data file failed :" << filename << endl;
         return false;
+    }*/
+    QString filename = "data/" + layer->name() + ".png";
+    if( m_oasisStore->store()->open(filename))
+    {
+        KoStoreDevice io ( m_oasisStore->store() );
+        if ( !io.open( QIODevice::WriteOnly ) )
+        {
+            kDebug(41008) << "Couldn't open for writing: " << filename << endl;
+            return false;
+        }
+        KisPNGConverter pngconv(0, layer->image()->undoAdapter());
+        vKisAnnotationSP_it annotIt;
+        if( pngconv.buildFile(io, layer->paintDevice(), annotIt, annotIt, 0, false, true) != KisImageBuilder_RESULT_OK)
+        {
+            kDebug(41008) << "Saving PNG failed: " << filename << endl;
+            return false;
+        }
+        io.close();
+        if(m_oasisStore->store()->close())
+        {
+            m_manifestWriter->addManifestEntry( filename, "" );
+        } else {
+            kDebug(41008) << "Closing of data file failed: " << filename << endl;
+            return false;
+        }
+    } else {
+        kDebug(41008) << "Opening of data file failed :" << filename << endl;
+        return false;
     }
+
     return true;
 }
 

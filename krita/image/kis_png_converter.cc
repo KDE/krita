@@ -154,7 +154,7 @@ class KisPNGStream {
 };
 
 static
-void /*CALLBACK_CALL_TYPE */_read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
+void _read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
 {
     QIODevice *in = (QIODevice *)png_get_io_ptr(png_ptr);
 
@@ -166,6 +166,23 @@ void /*CALLBACK_CALL_TYPE */_read_fn(png_structp png_ptr, png_bytep data, png_si
         }
         length -= nr;
     }
+}
+
+static
+void _write_fn(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+    QIODevice* out = (QIODevice*)png_get_io_ptr(png_ptr);
+
+    uint nr = out->write((char*)data, length);
+    if (nr != length) {
+        png_error(png_ptr, "Write Error");
+        return;
+    }
+}
+
+static
+void _flush_fn(png_structp png_ptr)
+{
 }
 
 
@@ -511,6 +528,26 @@ KisImageSP KisPNGConverter::image()
 KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
     kDebug(41008) << "Start writing PNG File" << endl;
+    if (uri.isEmpty())
+        return KisImageBuilder_RESULT_NO_URI;
+
+    if (!uri.isLocalFile())
+        return KisImageBuilder_RESULT_NOT_LOCAL;
+    // Open a QIODevice for writting
+    QFile *fp = new QFile(QFile::encodeName(uri.path()) );
+    return buildFile(fp, device, annotationsStart, annotationsEnd, compression, interlace, alpha);
+// TODO: if failure do            KIO::del(uri); // async
+
+}
+
+KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
+{
+    if(not iodevice->open(QIODevice::WriteOnly))
+    {
+        kDebug(41008) << "Failed to open PNG File for writting" << endl;
+        return (KisImageBuilder_RESULT_FAILURE);
+    }
+
     if (!device)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
@@ -518,31 +555,19 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintDevic
     if (!img)
         return KisImageBuilder_RESULT_EMPTY;
 
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-    // Open file for writing
-    FILE *fp = fopen(QFile::encodeName(uri.path()), "wb");
-    if (!fp)
-    {
-        return (KisImageBuilder_RESULT_FAILURE);
-    }
+    // Setup the writting callback of libpng
     int height = img->height();
     int width = img->width();
     // Initialize structures
     png_structp png_ptr =  png_create_write_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
     if (!png_ptr)
     {
-        KIO::del(uri); // async
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
     {
-        KIO::del(uri); // async
         png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
         return (KisImageBuilder_RESULT_FAILURE);
     }
@@ -550,13 +575,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintDevic
     // If an error occurs during writing, libpng will jump here
     if (setjmp(png_jmpbuf(png_ptr)))
     {
-        KIO::del(uri); // async
         png_destroy_write_struct(&png_ptr, &info_ptr);
-        fclose(fp);
         return (KisImageBuilder_RESULT_FAILURE);
     }
     // Initialize the writing
-    png_init_io(png_ptr, fp);
+//     png_init_io(png_ptr, fp);
     // Setup the progress function
 // FIXME    png_set_write_status_fn(png_ptr, progress);
 //     setProgressTotalSteps(100/*height*/);
@@ -565,6 +588,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintDevic
     /* set the zlib compression level */
     png_set_compression_level(png_ptr, compression);
 
+    
+    png_set_write_fn(png_ptr, (void*)iodevice, _write_fn, _flush_fn);
+    
     /* set other zlib parameters */
     png_set_compression_mem_level(png_ptr, 8);
     png_set_compression_strategy(png_ptr, Z_DEFAULT_STRATEGY);
@@ -790,7 +816,6 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintDevic
             }
             break;
             default:
-                KIO::del(uri); // async
 #ifdef __GNUC__
 #warning Leaks row_pointers and all rows so far allocated (CID 3087) but that code is never called unless someone either introduce a bug/hack in a png and or the png specification gets extended
 #endif
@@ -814,8 +839,6 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintDevic
     {
         delete [] palette;
     }
-
-    fclose(fp);
 
     return KisImageBuilder_RESULT_OK;
 }

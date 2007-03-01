@@ -47,7 +47,7 @@ void KisImportCatcher::slotLoadingFinished()
     if (importedImage) {
         KisLayerSP importedImageLayer = KisLayerSP( importedImage->rootLayer().data() );
 
-        if (importedImageLayer.isNull()) {
+        if (!importedImageLayer.isNull()) {
 
             if (importedImageLayer->numLayers() == 2) {
                 // Don't import the root if this is not a layered image (1 group layer

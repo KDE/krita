@@ -63,6 +63,9 @@ public: // QWidget
     void mouseReleaseEvent(QMouseEvent *e);
 
     /// reimplemented method from superclass
+    void mouseDoubleClickEvent(QMouseEvent *e);
+
+    /// reimplemented method from superclass
     void keyReleaseEvent (QKeyEvent *e);
 
     /// reimplemented method from superclass

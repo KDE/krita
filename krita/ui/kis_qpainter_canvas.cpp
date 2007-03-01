@@ -243,6 +243,10 @@ void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e) {
     m_d->toolProxy->mouseReleaseEvent( e, m_d->viewConverter->viewToDocument(e->pos()) );
 }
 
+void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e) {
+    m_d->toolProxy->mouseDoubleClickEvent( e, m_d->viewConverter->viewToDocument(e->pos()) );
+}
+
 void KisQPainterCanvas::keyPressEvent( QKeyEvent *e ) {
     m_d->toolProxy->keyPressEvent(e);
 }

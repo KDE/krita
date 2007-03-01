@@ -23,9 +23,13 @@
 #include <KoDockFactory.h>
 #include <kofficeui_export.h>
 
+/**
+ * The factory used for creating the shape KoShapeSelector as a dockFactory
+ */
 class KOFFICEUI_EXPORT KoShapeSelectorFactory : public KoDockFactory
 {
 public:
+    /// constructor
     KoShapeSelectorFactory();
 
     QString dockId() const;

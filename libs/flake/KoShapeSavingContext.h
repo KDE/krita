@@ -72,6 +72,16 @@ public:
     KoXmlWriter & xmlWriter();
 
     /**
+     * @brief Set the xml writer
+     *
+     * Change the xmlWriter that is used in the Context e.g. for saving to styles.xml 
+     * instead of content.xml
+     *
+     * @param xmlWriter to use
+     */
+    void setXmlWriter( KoXmlWriter & _xmlWriter );
+
+    /**
      * @brief Get the main styles
      *
      * @return main styles 
@@ -102,17 +112,16 @@ public:
      *
      * @retrun the draw id for the shape or and empty string if it was not found
      */
-    const QString & drawId( KoShape * shape, bool insert = true );
+    const QString drawId( KoShape * shape, bool insert = true );
 
 protected:    
-    KoXmlWriter &m_xmlWriter;
+    KoXmlWriter *m_xmlWriter;
     KoSavingContext &m_context;
 
     KoShapeSavingOptions m_savingOptions;
 
     QMap<KoShape *, QString> m_drawIds;
     int m_drawId;
-    QString m_emptyString;
     // TODO handle realtive positions
 };
 

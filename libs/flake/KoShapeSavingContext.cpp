@@ -22,9 +22,10 @@
 
 #include <KoGenStyles.h>
 #include <KoSavingContext.h>
+#include <KoXmlWriter.h>
 
 KoShapeSavingContext::KoShapeSavingContext( KoXmlWriter &xmlWriter, KoSavingContext &context )
-: m_xmlWriter( xmlWriter )
+: m_xmlWriter( &xmlWriter )
 , m_context( context )
 , m_savingOptions( 0 )
 , m_drawId( 0 )
@@ -37,7 +38,12 @@ KoShapeSavingContext::~KoShapeSavingContext()
 
 KoXmlWriter & KoShapeSavingContext::xmlWriter() 
 {
-    return m_xmlWriter; 
+    return *m_xmlWriter; 
+}
+
+void KoShapeSavingContext::setXmlWriter( KoXmlWriter &_xmlWriter )
+{
+    m_xmlWriter = &_xmlWriter;
 }
 
 KoGenStyles & KoShapeSavingContext::mainStyles() 
@@ -50,7 +56,7 @@ bool KoShapeSavingContext::isSet( KoShapeSavingOption option ) const
     return m_savingOptions && option;
 }
 
-const QString & KoShapeSavingContext::drawId( KoShape * shape, bool insert )
+const QString KoShapeSavingContext::drawId( KoShape * shape, bool insert )
 {
     QMap<KoShape *, QString>::const_iterator it( m_drawIds.find( shape ) );
     if ( it == m_drawIds.constEnd() && insert == true )
@@ -58,5 +64,5 @@ const QString & KoShapeSavingContext::drawId( KoShape * shape, bool insert )
         it = m_drawIds.insert( shape, QString( "shape" ).arg( ++m_drawId ) );
         return it.value();
     }
-    return m_emptyString;
+    return QString();
 }

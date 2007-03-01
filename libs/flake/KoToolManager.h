@@ -196,6 +196,10 @@ signals:
 
 protected:
     friend class KoToolProxy;
+    /**
+     * Request a switch from to the param input device.
+     * This will cause the tool for that device to be selected.
+     */
     void switchInputDevice(const KoInputDevice &device);
 
 private:

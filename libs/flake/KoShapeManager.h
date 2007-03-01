@@ -135,6 +135,10 @@ public:
      */
     void notifyShapeChanged( KoShape * shape );
 
+    /**
+     * Add a shape connection to the manager so it can be taken into account for drawing purposes.
+     * Note that this is typically called by the shape instance only.
+     */
     void addShapeConnection(KoShapeConnection *connection);
 
 private:

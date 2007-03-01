@@ -56,7 +56,7 @@ public:
      * @brief Add a shape to the document.
      *
      * @param shape to add to the document
-     * @parent parent the parent command if the resulting command is a compound undo command.
+     * @param parent the parent command if the resulting command is a compound undo command.
      * 
      * @return command which will insert the shape into the document or 0 if the 
      *         insertion was canceled. The command is not yet executed.

@@ -32,6 +32,9 @@ class KoXmlWriter;
 class KoSavingContext;
 class KoGenStyles;
 
+/**
+ * The set of data for the ODF file format used during saving of a shape.
+ */
 class FLAKE_EXPORT KoShapeSavingContext
 {
 public:

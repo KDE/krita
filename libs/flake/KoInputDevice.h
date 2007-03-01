@@ -35,23 +35,47 @@
  */
 class FLAKE_EXPORT KoInputDevice {
 public:
+    /**
+     * Copy constructor.
+     */
     KoInputDevice(const KoInputDevice &other);
+    /**
+     * Constructor for a tablet.
+     * Create a new input device with one of the many types that the tablet can have.
+     * @param device the device as found on a QTabletEvent
+     * @param pointer the pointer as found on a QTabletEvent
+     */
     explicit KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer);
     explicit KoInputDevice(qint64 uniqueTabletId);
+    /**
+     * Constuctor for the mouse as input device.
+     */
     explicit KoInputDevice();
 
+    /**
+     * Return the tablet device used
+     */
     QTabletEvent::TabletDevice device() const;
+    /**
+     * Return the pointer used
+     */
     QTabletEvent::PointerType pointer() const;
     qint64 uniqueTabletId() const;
+    /**
+     * Return if this is a mouse device.
+     */
     bool isMouse() const;
 
+    /// equal
     bool operator==(const KoInputDevice&) const;
+    /// not equal
     bool operator!=(const KoInputDevice&) const;
+    /// assignment
     KoInputDevice & operator=(const KoInputDevice &);
 
-    static KoInputDevice mouse();     // Standard mouse
-    static KoInputDevice stylus();    // Wacom style/pen
-    static KoInputDevice eraser();    // Wacom eraser
+    static KoInputDevice mouse();     ///< Standard mouse
+    static KoInputDevice stylus();    ///< Wacom style/pen
+    static KoInputDevice eraser();    ///< Wacom eraser
 
 
 private:

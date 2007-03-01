@@ -553,6 +553,9 @@ public:
      */
     static void applyConversion(QPainter &painter, const KoViewConverter &converter);
 
+    /**
+     * Return all the connections made to or from this shape.
+     */
     QList<KoShapeConnection*> connections() const;
 
 protected:
@@ -639,7 +642,15 @@ protected:
     const QMatrix& matrix() const;
 
     friend class KoShapeConnection;
+    /**
+     * Add a connection to the list of connections of this shape.
+     * This is typically called only from the constructor of the KoShapeConnection class.
+     */
     void addConnection(KoShapeConnection *connection);
+    /**
+     * Remove a connection to the list of connections of this shape.
+     * This is typically called only from the destructor of the KoShapeConnection class.
+     */
     void removeConnection(KoShapeConnection *connection);
 
 private:

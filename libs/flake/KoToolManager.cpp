@@ -58,7 +58,9 @@ public:
     CanvasData(KoCanvasController *cc, const KoInputDevice &id)
         : activeTool(0),
         canvas(cc),
-        inputDevice(id)
+        inputDevice(id),
+        dummyToolWidget(0),
+        dummyToolLabel(0)
     {
     }
 
@@ -69,6 +71,8 @@ public:
     QStack<QString> stack; // stack of temporary tools
     KoCanvasController *const canvas;
     const KoInputDevice inputDevice;
+    QWidget *dummyToolWidget;  // the widget shown in the toolDocker.
+    QLabel *dummyToolLabel;
 };
 
 class KoToolManager::Private {
@@ -297,13 +301,18 @@ void KoToolManager::postSwitchTool() {
                 break;
             }
         }
-        toolWidget = new QWidget();
-        QVBoxLayout *layout = new QVBoxLayout(toolWidget);
-        layout->setMargin(3);
-        QLabel *label = new QLabel(i18n("Active tool: %1", name), toolWidget);
-        layout->addWidget(label);
-        layout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        toolWidget->setLayout(layout);
+        toolWidget = d->canvasData->dummyToolWidget;
+        if(toolWidget == 0) {
+            toolWidget = new QWidget();
+            QVBoxLayout *layout = new QVBoxLayout(toolWidget);
+            layout->setMargin(3);
+            d->canvasData->dummyToolLabel = new QLabel(toolWidget);
+            layout->addWidget(d->canvasData->dummyToolLabel);
+            layout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding));
+            toolWidget->setLayout(layout);
+            d->canvasData->dummyToolWidget = toolWidget;
+        }
+        d->canvasData->dummyToolLabel->setText(i18n("Active tool: %1", name));
     }
     d->canvasData->canvas->setToolOptionWidget(toolWidget);
     emit changedTool(d->canvasData->canvas, d->uniqueToolIds.value(d->canvasData->activeTool));
@@ -343,7 +352,7 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
 
     if (newCanvas == 0)
         return;
-    if (newCanvas == d->canvasData->canvas)
+    if (d->canvasData && newCanvas == d->canvasData->canvas)
         return;
 
     if(! d->canvasses.contains(newCanvas))

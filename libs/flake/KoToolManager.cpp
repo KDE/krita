@@ -474,8 +474,10 @@ kDebug(30006) << "New input device!\n";
             d->canvasData = cd;
             if(cd->activeTool == 0)
                 switchTool(KoInteractionTool_ID, false);
-            else
+            else {
                 postSwitchTool();
+                d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
+            }
             return;
         }
     }

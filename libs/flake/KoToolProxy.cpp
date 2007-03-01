@@ -66,9 +66,10 @@ namespace {
 
 class KoToolProxy::Private {
 public:
-    Private() : activeTool(0) {}
+    Private() : activeTool(0), tabletPressed(false) {}
 
     KoTool *activeTool;
+    bool tabletPressed;
 };
 
 KoToolProxy::KoToolProxy(KoCanvasBase *canvas)
@@ -98,12 +99,16 @@ void KoToolProxy::tabletEvent( QTabletEvent *event, const QPointF &point )
     KoPointerEvent ev( event, point );
     switch( event->type() ) {
     case QEvent::TabletPress:
+        d->tabletPressed = true;
+        ev.setTabletButton(Qt::LeftButton);
         if (d->activeTool) d->activeTool->mousePressEvent( &ev );
         break;
     case QEvent::TabletRelease:
+        d->tabletPressed = false;
         if (d->activeTool) d->activeTool->mouseReleaseEvent( &ev );
         break;
     case QEvent::TabletMove:
+        if(d->tabletPressed) ev.setTabletButton(Qt::LeftButton);
         if (d->activeTool) d->activeTool->mouseMoveEvent( &ev );
     default:
         ; // ignore the rest.

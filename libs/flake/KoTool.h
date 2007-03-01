@@ -177,6 +177,8 @@ public:
      */
     QString toolId() const;
 
+    QCursor cursor() const;
+
 public slots:
     /**
      * This method is called when this tool instance is activated.
@@ -241,8 +243,6 @@ signals:
      * The KoToolManager should connect to this signal to handle cursors further.
      */
     void sigCursorChanged(QCursor cursor);
-
-
 
 protected:
     /**

@@ -130,4 +130,8 @@ QString KoTool::toolId() const {
     return d->toolId;
 }
 
+QCursor KoTool::cursor() const {
+    return d->previousCursor;
+}
+
 #include "KoTool.moc"

@@ -28,10 +28,11 @@
 
 class KoPointerEvent::Private {
 public:
-    Private() : tabletEvent(0), mouseEvent(0), wheelEvent(0) {}
+    Private() : tabletEvent(0), mouseEvent(0), wheelEvent(0), tabletButton(Qt::NoButton) {}
     QTabletEvent * tabletEvent;
     QMouseEvent * mouseEvent;
     QWheelEvent * wheelEvent;
+    Qt::MouseButton tabletButton;
 };
 
 KoPointerEvent::KoPointerEvent( QMouseEvent *ev, const QPointF &pnt )
@@ -62,6 +63,8 @@ Qt::MouseButton KoPointerEvent::button () const
 {
     if (d->mouseEvent)
         return d->mouseEvent->button();
+    else if(d->tabletEvent)
+        return d->tabletButton;
     else
         return Qt::NoButton;
 }
@@ -72,6 +75,8 @@ Qt::MouseButtons KoPointerEvent::buttons () const
         return d->mouseEvent->buttons();
     else if (d->wheelEvent)
         return d->wheelEvent->buttons();
+    else if(d->tabletEvent)
+        return d->tabletButton;
     else
         return Qt::NoButton;
 }
@@ -178,4 +183,8 @@ Qt::Orientation KoPointerEvent::orientation() const
         return d->wheelEvent->orientation();
     else
         return Qt::Horizontal;
+}
+
+void KoPointerEvent::setTabletButton(Qt::MouseButton button) {
+    d->tabletButton = button;
 }

@@ -172,6 +172,10 @@ public:
     /// The point in normal space.
     const QPointF &point;
 
+protected:
+    friend class KoToolProxy;
+    void setTabletButton(Qt::MouseButton button);
+
 private:
     // for the d-pointer police; we want to make accessors to the event inline, so this one stays here.
     QInputEvent * m_event;

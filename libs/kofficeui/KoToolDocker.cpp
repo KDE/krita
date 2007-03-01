@@ -49,8 +49,8 @@ KoToolDocker::~KoToolDocker() {
 void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
    if(d->currentWidget) {
        widget()->layout()->removeWidget(d->currentWidget);
-        d->currentWidget->setParent(0);
-        //d->currentWidget->deleteLater();
+       d->currentWidget->hide();
+       d->currentWidget->setParent(0);
     }
     d->currentWidget = optionWidget;
     widget()->layout()->addWidget(optionWidget);

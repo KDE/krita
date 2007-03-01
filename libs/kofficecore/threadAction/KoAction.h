@@ -36,7 +36,7 @@ class KoJobsListPolicy;
  * action is implicitly multithreading.
  * Example usage:
  * @code
-    Action *myAction = new Action();
+    Action *myAction = new KoAction();
     myAction->setWeaver(m_weaver);
     myAction->connect(myAction, SIGNAL(triggered(const QVariant&)),
         target, SLOT(slot()), Qt::DirectConnection);

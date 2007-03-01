@@ -42,6 +42,7 @@ class KoCompositeOpDivide : public KoCompositeOpAlphaBase<_CSTraits, KoComposite
                                                const channels_type* src,
                                                channels_type* dst, qint32 pixelSize)
         {
+            Q_UNUSED(pixelSize);
             for(uint i = 0; i < _CSTraits::channels_nb; i++)
             {
                 if( (int)i != _CSTraits::alpha_pos)

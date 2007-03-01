@@ -98,7 +98,8 @@ class KoColorSpaceMaths {
     typedef KoColorSpaceMathsTraits<_T> traits;
     typedef typename traits::compositetype traits_compositetype;
     public:
-        inline static _T multiply(_T a, _Tdst b)
+        inline static traits_compositetype multiply(traits_compositetype a, 
+            typename  KoColorSpaceMathsTraits<_Tdst>::compositetype b)
         {
             return ((traits_compositetype)a * b ) /  KoColorSpaceMathsTraits<_Tdst>::max();
         }

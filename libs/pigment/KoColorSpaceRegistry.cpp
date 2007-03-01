@@ -279,7 +279,7 @@ KoColorSpace * KoColorSpaceRegistry::lab16()
 
 KoColorSpace * KoColorSpaceRegistry::rgb16()
 {
-    return colorSpace("RGBU16", "");
+    return colorSpace("RGBA16", "");
 }
 
 #include "KoColorSpaceRegistry.moc"

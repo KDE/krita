@@ -17,22 +17,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOCOMPOSITEOPBURN_H_
-#define KOCOMPOSITEOPBURN_H_
+#ifndef _KOCOMPOSITEOPDODGE_H_
+#define _KOCOMPOSITEOPDODGE_H_
 
 #include "KoCompositeOpAlphaBase.h"
 
+
 /**
- * A template version of the burn composite operation to use in colorspaces.
+ * A template version of the dodge composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpBurn : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpBurn<_CSTraits> > {
+class KoCompositeOpDodge : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDodge<_CSTraits> > {
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
     public:
 
-        KoCompositeOpBurn(KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpBurn<_CSTraits> >(cs, COMPOSITE_BURN, i18n("Burn" ) )
+        KoCompositeOpDodge(KoColorSpace * cs)
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDodge<_CSTraits> >(cs, COMPOSITE_DODGE, i18n("Dodge" ) )
         {
         }
 
@@ -43,23 +44,20 @@ class KoCompositeOpBurn : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
                                                channels_type* dst, qint32 pixelSize)
         {
             Q_UNUSED(pixelSize);
-            for(uint i = 0; i < _CSTraits::channels_nb; i++)
-            {
-                if( (int)i != _CSTraits::alpha_pos)
+            for (uint channel = 0; channel < _CSTraits::channels_nb; channel++) {
+                if( (int)channel != _CSTraits::alpha_pos)
                 {
-                    compositetype srcColor = src[i];
-                    compositetype dstColor = dst[i];
-        
-                    srcColor = qMin(((NATIVE_MAX_VALUE - dstColor) * (NATIVE_MAX_VALUE + 1)) / (srcColor + 1), (compositetype)NATIVE_MAX_VALUE);
-                    if (NATIVE_MAX_VALUE - srcColor > NATIVE_MAX_VALUE) srcColor = NATIVE_MAX_VALUE;
-        
-                    channels_type newColor = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
-        
-                    dst[i] = newColor;
+                  compositetype srcColor = src[channel];
+                  compositetype dstColor = dst[channel];
+      
+                  srcColor = qMin((compositetype)(dstColor * (NATIVE_MAX_VALUE + 1)) / (NATIVE_MAX_VALUE + 1 - srcColor), (compositetype)NATIVE_MAX_VALUE);
+      
+                  channels_type newColor = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
+      
+                  dst[channel] = newColor;
                 }
             }
         }
-
 
 };
 

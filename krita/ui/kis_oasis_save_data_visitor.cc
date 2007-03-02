@@ -28,6 +28,7 @@
 #include "kis_adjustment_layer.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
+#include "kis_png_converter.h"
 
 KisOasisSaveDataVisitor::KisOasisSaveDataVisitor(KoOasisStore* os, KoXmlWriter* manifestWriter) : m_oasisStore(os), m_manifestWriter(manifestWriter)
 {}
@@ -72,7 +73,7 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
         }
         KisPNGConverter pngconv(0, layer->image()->undoAdapter());
         vKisAnnotationSP_it annotIt;
-        if( pngconv.buildFile(io, layer->paintDevice(), annotIt, annotIt, 0, false, true) != KisImageBuilder_RESULT_OK)
+        if( pngconv.buildFile(&io, layer->paintDevice(), annotIt, annotIt, 0, false, true) != KisImageBuilder_RESULT_OK)
         {
             kDebug(41008) << "Saving PNG failed: " << filename << endl;
             return false;

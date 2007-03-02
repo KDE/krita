@@ -67,7 +67,7 @@ public:
      * @brief Remove a shape from the document.
      *
      * @param shape to remove from the document
-     * @parent parent the parent command if the resulting command is a compound undo command.
+     * @param parent the parent command if the resulting command is a compound undo command.
      * 
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
@@ -78,7 +78,7 @@ public:
      * Remove a shape from the document.
      *
      * @param shapes the set of shapes to remove from the document
-     * @parent parent the parent command if the resulting command is a compound undo command.
+     * @param parent the parent command if the resulting command is a compound undo command.
      * 
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.

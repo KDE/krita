@@ -134,32 +134,33 @@ void KisPerspectiveGridManager::stopEdition()
 
 void KisPerspectiveGridManager::drawGrid(QRect wr, QPainter *p, bool openGL )
 {
-    KisImageSP image = m_view->image();
-
-
-    if (image && m_toggleGrid->isChecked() && !m_toggleEdition) {
-        KisPerspectiveGrid* pGrid = image->perspectiveGrid();
-
-        GridDrawer *gridDrawer = 0;
-
-        if (openGL) {
-            gridDrawer = new OpenGLGridDrawer();
-        } else {
-            Q_ASSERT(p);
-
-            if (p) {
-                gridDrawer = new QPainterGridDrawer(p);
-            }
-        }
-
-        Q_ASSERT(gridDrawer != 0);
-
-        for( QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
-        {
-            gridDrawer->drawPerspectiveGrid(image, wr, *it );
-        }
-        delete gridDrawer;
-    }
+// TODO: port
+//     KisImageSP image = m_view->image();
+// 
+// 
+//     if (image && m_toggleGrid->isChecked() && !m_toggleEdition) {
+//         KisPerspectiveGrid* pGrid = image->perspectiveGrid();
+// 
+//         GridDrawer *gridDrawer = 0;
+// 
+//         if (openGL) {
+//             gridDrawer = new OpenGLGridDrawer();
+//         } else {
+//             Q_ASSERT(p);
+// 
+//             if (p) {
+//                 gridDrawer = new QPainterGridDrawer(p);
+//             }
+//         }
+// 
+//         Q_ASSERT(gridDrawer != 0);
+// 
+//         for( QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
+//         {
+//             gridDrawer->drawPerspectiveGrid(image, wr, *it );
+//         }
+//         delete gridDrawer;
+//     }
 }
 
 

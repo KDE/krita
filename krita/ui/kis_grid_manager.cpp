@@ -39,6 +39,7 @@
 #include "kis_grid_drawer.h"
 #include "kis_image.h"
 #include "kis_view2.h"
+#include "kis_doc2.h"
 
 KisGridManager::KisGridManager(KisView2 * parent)
     : QObject(parent), m_view(parent)
@@ -53,12 +54,18 @@ KisGridManager::~KisGridManager()
 
 void KisGridManager::setup(KActionCollection * collection)
 {
+    //there is no grid by default
+    m_view->document()->gridData().setShowGrid( false );
+
+    KisConfig config;
+    m_view->document()->gridData().setGrid( config.getGridHSpacing(), config.getGridVSpacing() );
+
     m_toggleGrid  = new KToggleAction(i18n("Show Grid"), this);
     collection->addAction("view_toggle_grid", m_toggleGrid );
     connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleGrid()));
 
     m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Grid")));
-    m_toggleGrid->setChecked(false);
+    m_toggleGrid->setChecked(m_view->document()->gridData().showGrid());
 
     // Fast grid config
     m_gridFastConfig1x1  = new KAction(i18n("1x1"), this);
@@ -93,7 +100,8 @@ void KisGridManager::updateGUI()
 
 void KisGridManager::toggleGrid()
 {
-    //m_view->updateCanvas();
+    m_view->document()->gridData().setShowGrid( !m_view->document()->gridData().showGrid() );
+    m_view->canvas()->update();
 }
 
 void KisGridManager::fastConfig1x1()
@@ -142,35 +150,6 @@ void KisGridManager::fastConfig40x40()
     cfg.setGridHSpacing(40);
     cfg.setGridVSpacing(40);
     //m_view->updateCanvas();
-}
-
-void KisGridManager::drawGrid(QRect wr, QPainter *p, bool openGL)
-{
-    KisImageSP image = m_view->image();
-
-    if (image) {
-        if (m_toggleGrid->isChecked())
-        {
-            GridDrawer *gridDrawer = 0;
-
-            if (openGL) {
-                gridDrawer = new OpenGLGridDrawer();
-            } else {
-                Q_ASSERT(p);
-
-                if (p) {
-                    gridDrawer = new QPainterGridDrawer(p);
-                }
-            }
-
-            Q_ASSERT(gridDrawer != 0);
-
-            if (gridDrawer) {
-                gridDrawer->drawGrid(image, wr);
-                delete gridDrawer;
-            }
-        }
-    }
 }
 
 #include "kis_grid_manager.moc"

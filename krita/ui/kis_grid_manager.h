@@ -39,7 +39,7 @@ class KisGridManager : public QObject
         ~KisGridManager();
     public:
         void setup(KActionCollection * collection);
-        void drawGrid(QRect wr, QPainter *p, bool openGL = false);
+
     public slots:
         void updateGUI();
     private slots:

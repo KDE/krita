@@ -26,7 +26,10 @@
 #include <qgl.h>
 #endif
 
+#include <KoViewConverter.h>
+
 #include "kis_config.h"
+#include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_perspective_grid.h"
 #include "kis_perspective_grid_manager.h"
@@ -89,32 +92,33 @@ void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& wr, const Ki
         drawLine( pol2.toPoint(), pol2b.toPoint() );
     }
     setPen(mainPen);
-    drawLine( grid->topLeft().data(), grid->topRight().data() );
-    drawLine( grid->topRight().data(), grid->bottomRight().data() );
-    drawLine( grid->bottomRight().data(), grid->bottomLeft().data() );
-    drawLine( grid->bottomLeft().data(), grid->topLeft().data() );
+    drawLine( *grid->topLeft().data(), *grid->topRight().data() );
+    drawLine( *grid->topRight().data(), *grid->bottomRight().data() );
+    drawLine( *grid->bottomRight().data(), *grid->bottomLeft().data() );
+    drawLine( *grid->bottomLeft().data(), *grid->topLeft().data() );
 }
 
-void GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
+void GridDrawer::drawGrid(const QRectF& area)
 {
+    if(!m_doc->gridData().showGrid())
+        return;
+
     KisConfig cfg;
 
     quint32 offsetx = cfg.getGridOffsetX();
     quint32 offsety = cfg.getGridOffsetY();
-    quint32 hspacing = cfg.getGridHSpacing();
-    quint32 vspacing = cfg.getGridVSpacing();
+    double hspacing = m_doc->gridData().gridX();
+    double vspacing = m_doc->gridData().gridY();
     quint32 subdivision = cfg.getGridSubdivisions() - 1;
     //double ihspsub = hspacing / (double)subdivision;
     //double ivspsub = hspacing / (double)subdivision;
-
-    qint32 imageWidth = image->width();
-    qint32 imageHeight = image->height();
 
     // Draw vertical line
     QPen mainPen = QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
     QPen subdivisionPen = QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
     quint32 i = 0;
-    for( qint32 x = offsetx; x <= wr.right(); x +=hspacing)
+    double x = offsetx;
+    while( x <= area.right())
     {
         if( i == subdivision )
         {
@@ -124,16 +128,18 @@ void GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
             setPen(subdivisionPen);
             i++;
         }
-        if( x >= wr.x() )
+        if( x >= area.x() )
         {
             // Always draw the full line otherwise the line stippling varies
-            // with the location of wr and we get glitchy patterns.
-            drawLine(x, 0, x, imageHeight);
+            // with the location of area and we get glitchy patterns.
+            drawLine( m_viewConverter->documentToView( QPointF( x, area.top() ) ), m_viewConverter->documentToView( QPointF( x, area.bottom() ) ) );
         }
+        x += hspacing;
     }
     // Draw horizontal line
     i = 0;
-    for( qint32 y = offsety; y <= wr.bottom(); y +=vspacing)
+    double y = offsety;
+    while( y <= area.bottom())
     {
         if( i == subdivision )
         {
@@ -143,14 +149,26 @@ void GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
             setPen(subdivisionPen);
             i++;
         }
-        if( y >= wr.y() )
+        if( y >= area.y() )
         {
-            drawLine(0, y, imageWidth, y);
+            drawLine( m_viewConverter->documentToView( QPointF( area.left(), y ) ), m_viewConverter->documentToView( QPointF( area.right(), y ) ) );
         }
+        y += vspacing;
     }
 }
 
-OpenGLGridDrawer::OpenGLGridDrawer()
+QPainterGridDrawer::QPainterGridDrawer(KisDoc2* doc, KoViewConverter * viewConverter): GridDrawer(doc, viewConverter),
+ m_painter(0)
+{
+}
+
+void QPainterGridDrawer::draw(QPainter *p, const QRectF &area)
+{
+    m_painter = p;
+    drawGrid(area);
+}
+
+OpenGLGridDrawer::OpenGLGridDrawer(KisDoc2* doc, KoViewConverter * viewConverter): GridDrawer(doc, viewConverter)
 {
 #ifdef HAVE_OPENGL
     glPushAttrib(GL_ALL_ATTRIB_BITS);

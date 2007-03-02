@@ -26,47 +26,55 @@
 
 #include "kis_types.h"
 
+class KoViewConverter;
 class KisView;
 class KActionCollection;
 class KToggleAction;
 class KAction;
 class KisSubPerspectiveGrid;
+class KisDoc2;
 
 class GridDrawer {
     public:
-        GridDrawer() {}
+        GridDrawer(KisDoc2* doc, KoViewConverter * viewConverter) { m_doc = doc; m_viewConverter = viewConverter; }
         virtual ~GridDrawer() {}
     
     public:
-        void drawGrid(KisImageSP image, const QRect& wr);
+        void drawGrid(const QRectF& area);
         void drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisSubPerspectiveGrid* grid);
     
         virtual void setPen(const QPen& pen) = 0;
         virtual void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2) = 0;
+        virtual void drawLine(const QPointF& p1, const QPointF& p2) { drawLine( p1.toPoint(), p2.toPoint()); }
         inline void drawLine(const QPoint& p1, const QPoint& p2) { drawLine(p1.x(), p1.y(), p2.x(), p2.y() ); }
-        inline void drawLine(const QPointF* p1, const QPointF* p2) { drawLine( p1->toPoint(), p2->toPoint()); }
     private:
+
+    protected:
         Qt::PenStyle gs2style(quint32 s);
+        KisDoc2* m_doc;
+        KoViewConverter * m_viewConverter;
 };
 
 class QPainterGridDrawer : public GridDrawer {
     public:
-        QPainterGridDrawer(QPainter *p) { m_painter = p; }
-    
+        QPainterGridDrawer(KisDoc2* doc, KoViewConverter * viewConverter);
+
+        virtual void draw(QPainter* p, const QRectF& area);
         virtual void setPen(const QPen& pen) { m_painter->setPen(pen); }
         virtual void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2) { m_painter->drawLine(x1, y1, x2, y2); }
-    
+        virtual void drawLine(const QPointF& p1, const QPointF& p2) { m_painter->drawLine( p1, p2); }
     private:
-        QPainter *m_painter;
+        QPainter* m_painter;
 };
 
 class OpenGLGridDrawer : public GridDrawer {
     public:
-        OpenGLGridDrawer();
+        OpenGLGridDrawer(KisDoc2* doc, KoViewConverter * viewConverter);
         virtual ~OpenGLGridDrawer();
     
         virtual void setPen(const QPen& pen);
         virtual void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2);
 };
+
 
 #endif

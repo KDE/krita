@@ -46,6 +46,8 @@
 #include "kis_resource_provider.h"
 #include "kis_view2.h"
 #include "scale.h"
+#include "kis_doc2.h"
+#include "kis_grid_drawer.h"
 
 #define PATTERN_WIDTH 32
 #define PATTERN_HEIGHT 32
@@ -70,6 +72,7 @@ public:
     KoViewConverter * viewConverter;
     QBrush checkBrush;
     QPixmap displayCache;
+    QPainterGridDrawer* gridDrawer;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
@@ -80,6 +83,7 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     m_d->canvas =  canvas;
     m_d->viewConverter = canvas->viewConverter();
     m_d->toolProxy = KoToolManager::instance()->createToolProxy(m_d->canvas);
+    m_d->gridDrawer = new QPainterGridDrawer(canvas->view()->document(), canvas->viewConverter());
     setAttribute(Qt::WA_NoSystemBackground);
     setAutoFillBackground(false);
 
@@ -221,15 +225,13 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     }
 #endif
     // ask the guides, grids, etc to paint themselves
-
-
+    m_d->gridDrawer->draw(&gc, m_d->viewConverter->viewToDocument(ev->rect()));
 
     // Give the tool a chance to paint its stuff
     gc.setRenderHint( QPainter::Antialiasing );
     gc.setRenderHint( QPainter::SmoothPixmapTransform );
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
 }
-
 
 void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {
     m_d->toolProxy->mouseMoveEvent( e, m_d->viewConverter->viewToDocument(e->pos()) );

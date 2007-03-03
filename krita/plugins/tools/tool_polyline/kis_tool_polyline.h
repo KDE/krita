@@ -56,12 +56,12 @@ public:
     virtual void keyPressEvent(QKeyEvent *event);
 
     virtual QString quickHelp() const;
-    void finish();
 
     virtual void paint(QPainter& gc, KoViewConverter &converter);
 
 public slots:
-
+    void finish();
+    void cancel();
     void deactivate();
 
 protected:

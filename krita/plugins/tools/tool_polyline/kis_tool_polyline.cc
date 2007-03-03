@@ -23,8 +23,8 @@
 
 #include <QPainter>
 #include <QSpinBox>
-//Added by qt3to4:
 #include <QKeyEvent>
+#include <QMenu>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -70,6 +70,12 @@ void KisToolPolyline::mousePressEvent(KoPointerEvent *event)
             }
         } else if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier ) {
             finish();
+        }
+        if (event->button() == Qt::RightButton && (m_dragging || !m_points.isEmpty()) ) {
+            QMenu menu;
+            menu.addAction(i18n("&Finish Polyline"), this, SLOT(finish()));
+            menu.addAction(KIcon("cancel"), i18n("&Cancel"), this, SLOT(cancel()));
+            menu.exec(QCursor::pos());
         }
     }
 }
@@ -118,8 +124,14 @@ void KisToolPolyline::finish()
     if (m_currentImage->undo()) {
         m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
     }
-
 }
+
+void KisToolPolyline::cancel()
+{
+       m_dragging = false;
+       m_points.clear();
+}
+
 void KisToolPolyline::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
@@ -142,10 +154,6 @@ void KisToolPolyline::mouseReleaseEvent(KoPointerEvent *event)
         m_points.append (m_dragEnd);
         m_boundingRect = m_boundingRect.unite(QRectF(m_dragStart.x(), m_dragStart.y(), m_dragEnd.x() - m_dragStart.x(), m_dragEnd.y() -m_dragStart.y()));
     }
-
-    if (m_dragging && event->button() == Qt::RightButton) {
-    // FIXME shouldn't something happen here?
-        }
     m_canvas->updateCanvas(m_boundingRect);
 }
 
@@ -204,10 +212,8 @@ QString KisToolPolyline::quickHelp() const
 
 void KisToolPolyline::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key()==Qt::Key_Escape) {
-       m_dragging = false;
-       m_points.clear();
-    }
+    if (event->key()==Qt::Key_Escape)
+       cancel();
 }
 
 #include "kis_tool_polyline.moc"

@@ -30,11 +30,13 @@
 // #define DEBUG_REPAINT
 
 KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter)
-    : KoCanvasBase( 0 )
+    : QObject(parent)
+    , KoCanvasBase( 0 )
     , m_viewConverter( viewConverter )
     , m_shapeManager( new KoShapeManager( this ) )
     , m_projection( 0 )
     , m_parentLayer( parent)
+    , m_repaintTriggered(false)
 {
 }
 
@@ -74,6 +76,15 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 
     QRect r = m_viewConverter->documentToView(rc).toRect();
     r.adjust(-2, -2, 2, 2); // for antialias
+    m_dirty += r;
+    if(! m_repaintTriggered) {
+        QTimer::singleShot (0, this, SLOT(repaint()));
+        m_repaintTriggered = true;
+    }
+}
+
+void KisShapeLayerCanvas::repaint() {
+    QRect r = m_dirty.boundingRect();
     QImage img(r.width(), r.height(), QImage::Format_ARGB32);
     img.fill(0);
     QPainter p(&img);
@@ -95,6 +106,8 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
               dev, OPACITY_OPAQUE, 0, 0, r.width(), r.height());
     kp.end();
     m_parentLayer->setDirty(r);
+    m_dirty = QRegion();
+    m_repaintTriggered = false;
 }
 
 KoToolProxy * KisShapeLayerCanvas::toolProxy()
@@ -118,3 +131,5 @@ KoUnit KisShapeLayerCanvas::unit()
     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     return KoUnit(KoUnit::Point);
 }
+
+#include "kis_shape_layer_canvas.moc"

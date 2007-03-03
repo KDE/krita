@@ -38,8 +38,9 @@ class KoUnit;
  * Do NOT give this canvas to tools or to the KoCanvasController, it's
  * not made for that.
  */
-class KRITAUI_EXPORT KisShapeLayerCanvas : public KoCanvasBase
+class KRITAUI_EXPORT KisShapeLayerCanvas : public QObject, public KoCanvasBase
 {
+    Q_OBJECT
 public:
 
     KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter);
@@ -61,12 +62,18 @@ public:
     QWidget* canvasWidget();
     KoUnit unit();
 
+private slots:
+    void repaint();
+
 private:
 
     KoViewConverter * m_viewConverter;
     KoShapeManager * m_shapeManager;
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer;
+
+    QRegion m_dirty;
+    bool m_repaintTriggered;
 };
 
 #endif

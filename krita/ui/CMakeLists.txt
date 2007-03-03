@@ -92,7 +92,7 @@ set(kritaui_LIB_SRCS
     kis_image_manager.cc
     kis_mask_manager.cc
     kis_shape_layer.cc
-	kis_shape_layer_canvas.cpp
+    kis_shape_layer_canvas.cpp
     kis_layer_shape.cc
     kis_mask_shape.cc
     kis_layer_container_shape.cc

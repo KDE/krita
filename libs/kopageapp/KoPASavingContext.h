@@ -55,7 +55,7 @@ public:
      * @param masterPage the master page
      * @param name the style name of the master page
      */
-    void addMasterPage( KoPAMasterPage * masterPage, QString name );
+    void addMasterPage( const KoPAMasterPage * masterPage, QString name );
 
     /**
      * @brief Get the name of the masterpage
@@ -64,7 +64,7 @@ public:
      *
      * @return the style name of the masterPage
      */
-    QString masterPageName( KoPAMasterPage * masterPage );
+    QString masterPageName( const KoPAMasterPage * masterPage );
 
     /**
      * @brief Increment the page
@@ -79,7 +79,7 @@ public:
     int page();
 
 private:
-    QMap<KoPAMasterPage *, QString> m_masterPageNames;
+    QMap<const KoPAMasterPage *, QString> m_masterPageNames;
     int m_page;
 };
 

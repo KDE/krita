@@ -29,14 +29,14 @@ KoPASavingContext::~KoPASavingContext()
 {
 }
 
-void KoPASavingContext::addMasterPage( KoPAMasterPage * masterPage, QString name )
+void KoPASavingContext::addMasterPage( const KoPAMasterPage * masterPage, QString name )
 {
     m_masterPageNames.insert( masterPage, name );
 }
 
-QString KoPASavingContext::masterPageName( KoPAMasterPage * masterPage )
+QString KoPASavingContext::masterPageName( const KoPAMasterPage * masterPage )
 {
-    QMap<KoPAMasterPage *, QString>::const_iterator it( m_masterPageNames.find( masterPage ) );
+    QMap<const KoPAMasterPage *, QString>::const_iterator it( m_masterPageNames.find( masterPage ) );
     if (  it != m_masterPageNames.constEnd() ) {
         return it.value();
     }

@@ -71,6 +71,12 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
     QImage img(r.width(), r.height(), QImage::Format_ARGB32);
     img.fill(0);
     QPainter p(&img);
+
+    p.save();
+    p.translate(-rc.toRect().topLeft());
+    p.fillRect(rc.toRect(), Qt::blue);
+    p.restore();
+
     p.translate(-r.topLeft());
     p.setClipRect(r);
     m_shapeManager->paint(p, *m_viewConverter, false);

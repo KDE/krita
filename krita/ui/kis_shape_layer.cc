@@ -64,7 +64,7 @@ KisShapeLayer::KisShapeLayer( KoShapeContainer * parent,
     m_d->x = 0;
     m_d->y = 0;
     m_d->projection = new KisPaintDevice( img->colorSpace() );
-    m_d->canvas = new KisShapeLayerCanvas( this, converter );
+    m_d->canvas = new KisShapeLayerCanvas( this, m_d->converter );
     m_d->canvas->setProjection( m_d->projection );
 }
 

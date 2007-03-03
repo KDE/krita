@@ -164,19 +164,25 @@ void KoPADocument::saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyl
     // test style writing
     QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO, stylesDotXml );
     QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) 
-    {
+    for ( ; it != styles.end() ; ++it ) {
         //qDebug() << "style:style" << ( *it ).name;
-        ( *it ).style->writeStyle( &contentWriter, mainStyles, "style:style", ( *it ).name , "style:graphic-properties"  );
+        ( *it ).style->writeStyle( &contentWriter, mainStyles, "style:style", ( *it ).name , "style:graphic-properties" );
     }
 
     styles = mainStyles.styles( KoPAStyles::STYLE_PAGE, stylesDotXml );
     it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) 
-    {
+    for ( ; it != styles.end() ; ++it ) {
         //qDebug() << "style:style" << ( *it ).name;
-        ( *it ).style->writeStyle( &contentWriter, mainStyles, "style:style", ( *it ).name , "style:drawing-page-properties"  );
+        ( *it ).style->writeStyle( &contentWriter, mainStyles, "style:style", ( *it ).name , "style:drawing-page-properties" );
     }
+
+    styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT, stylesDotXml );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        //qDebug() << "style:style" << ( *it ).name;
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties" );
+    }
+
 }
 
 void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyles, QFile *masterStyles )

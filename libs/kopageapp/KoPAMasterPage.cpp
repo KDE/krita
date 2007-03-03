@@ -37,6 +37,7 @@ KoPAMasterPage::~KoPAMasterPage()
 void KoPAMasterPage::createOdfPageTag( KoPASavingContext &paContext ) const
 {
     KoGenStyle pageLayoutStyle = pageLayout().saveOasis();
+    pageLayoutStyle.setAutoStyleInStylesDotXml( true );
     pageLayoutStyle.addAttribute( "style:page-usage", "all" );
     QString pageLayoutName( paContext.mainStyles().lookup( pageLayoutStyle, "pm" ) );
 

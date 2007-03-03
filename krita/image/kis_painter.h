@@ -109,12 +109,13 @@ public:
      *
      * @param dx the destination x-coordinate
      * @param dy the destination y-coordinate
-     * @param op a pointer to the composite op use to blast the pixels from src on dst
+     * @param op a pointer to the composite op used to blast the pixels from src on dst
      * @param src the source device
      * @param opacity the opacity of the source pixel
      * @param sx the source x-coordinate
      * @param sy the source y-coordinate
      * @param sw the width of the region
+     * @param sh the height of the region
      */
     void bitBlt(qint32 dx, qint32 dy,
                 const KoCompositeOp* op,

@@ -25,6 +25,8 @@
 #include <kis_painter.h>
 #include <KoCompositeOp.h>
 
+// #define DEBUG_REPAINT
+
 KisShapeLayerCanvas::KisShapeLayerCanvas(KoViewConverter * viewConverter)
     : KoCanvasBase( 0 )
     , m_viewConverter( viewConverter )
@@ -61,24 +63,27 @@ KoShapeManager *KisShapeLayerCanvas::shapeManager() const
     return m_shapeManager;
 }
 
+#ifdef DEBUG_REPAINT
+# include <stdlib.h>
+#endif
 void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 {
-    // XXX: This is the interesting bit! Render the shapes in the
-    // shape manager onto the projection.
     kDebug(41001) << "KisShapeLayerCanvas::updateCanvas()" << endl;
 
     QRect r = m_viewConverter->documentToView(rc).toRect();
+    r.adjust(-2, -2, 2, 2); // for antialias
     QImage img(r.width(), r.height(), QImage::Format_ARGB32);
     img.fill(0);
     QPainter p(&img);
-
-    p.save();
-    p.translate(-rc.toRect().topLeft());
-    p.fillRect(rc.toRect(), Qt::blue);
-    p.restore();
-
-    p.translate(-r.topLeft());
+    p.setRenderHint(QPainter::Antialiasing);
+    p.translate(-r.x(), -r.y());
     p.setClipRect(r);
+#ifdef DEBUG_REPAINT
+    QColor color = QColor(random()%255, random()%255, random()%255);
+    p.fillRect(r, color);
+    p.fillRect(QRect(0, 0, 1000, 1000), color);
+#endif
+
     m_shapeManager->paint(p, *m_viewConverter, false);
     p.end();
 

@@ -136,4 +136,30 @@ void KoZoomHandler::zoom(double *zoomX, double *zoomY) const {
     *zoomY = zoomItY(100.0) / 100.0;
 }
 
+QPoint KoZoomHandler::zoomPointOld( const QPointF & p ) const {
+    return QPoint( zoomItXOld( p.x() ), zoomItYOld( p.y() ) );
+}
+
+QRect KoZoomHandler::zoomRectOld( const QRectF & r ) const {
+    QRect _r;
+    _r.setCoords( zoomItXOld( r.left() ),  zoomItYOld( r.top() ),
+            zoomItXOld( r.right() ), zoomItYOld( r.bottom() ) );
+    return _r;
+}
+
+QSize KoZoomHandler::zoomSizeOld( const QSizeF & s ) const {
+    return QSize( zoomItXOld( s.width() ), zoomItYOld( s.height() ) );
+}
+
+QPointF KoZoomHandler::unzoomPointOldF( const QPoint & p ) const {
+    return QPointF( unzoomItXOld( p.x() ), unzoomItYOld( p.y() ) );
+}
+
+QRectF KoZoomHandler::unzoomRectOldF (const QRect & r ) const {
+    QRectF _r;
+    _r.setCoords( unzoomItXOld( r.left() ),  unzoomItYOld( r.top() ),
+                  unzoomItXOld( r.right() ), unzoomItYOld( r.bottom() ) );
+    return _r;
+}
+
 #include "KoZoomHandler.moc"

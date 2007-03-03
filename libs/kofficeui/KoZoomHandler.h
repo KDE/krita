@@ -138,18 +138,9 @@ public:
             return m_zoomedResolutionY * z ;
         }
 
-    QPoint zoomPointOld( const QPointF & p ) const KDE_DEPRECATED
-        {
-            return QPoint( zoomItXOld( p.x() ), zoomItYOld( p.y() ) );
-        }
+    QPoint zoomPointOld( const QPointF & p ) const KDE_DEPRECATED;
 
-    QRect zoomRectOld( const QRectF & r ) const KDE_DEPRECATED
-        {
-            QRect _r;
-            _r.setCoords( zoomItXOld( r.left() ),  zoomItYOld( r.top() ),
-                          zoomItXOld( r.right() ), zoomItYOld( r.bottom() ) );
-            return _r;
-        }
+    QRect zoomRectOld( const QRectF & r ) const KDE_DEPRECATED;
 
     /**
      * Returns the size in pixels for a input size in points.
@@ -161,10 +152,7 @@ public:
      * (like when inserting a picture), but then please take
      * care of it afterwards, when you know the reference point.
      */
-    QSize zoomSizeOld( const QSizeF & s ) const KDE_DEPRECATED
-        {
-            return QSize( zoomItXOld( s.width() ), zoomItYOld( s.height() ) );
-        }
+    QSize zoomSizeOld( const QSizeF & s ) const KDE_DEPRECATED;
 
     // Input: pixels. Output: pt.
     double unzoomItXOld( int x ) const KDE_DEPRECATED
@@ -187,18 +175,9 @@ public:
             return  y / m_zoomedResolutionY;
         }
 
-    QPointF unzoomPointOldF( const QPoint & p ) const KDE_DEPRECATED
-        {
-            return QPointF( unzoomItXOld( p.x() ), unzoomItYOld( p.y() ) );
-        }
+    QPointF unzoomPointOldF( const QPoint & p ) const KDE_DEPRECATED;
 
-    QRectF unzoomRectOldF (const QRect & r ) const KDE_DEPRECATED
-        {
-            QRectF _r;
-            _r.setCoords( unzoomItXOld( r.left() ),  unzoomItYOld( r.top() ),
-                          unzoomItXOld( r.right() ), unzoomItYOld( r.bottom() ) );
-            return _r;
-        }
+    QRectF unzoomRectOldF (const QRect & r ) const KDE_DEPRECATED;
 
     // KoViewConverter-interface methods
 

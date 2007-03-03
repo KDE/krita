@@ -383,6 +383,9 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
 }
 
 void KoToolManager::detachCanvas(KoCanvasController *controller) {
+    if (d->canvasData && d->canvasData->canvas == controller)
+        d->canvasData = 0; // replace with a blank one
+
     QList<KoTool *> tools;
     foreach(CanvasData *cd, d->canvasses.value(controller)) {
         foreach(KoTool *tool, cd->allTools.values())
@@ -394,9 +397,6 @@ void KoToolManager::detachCanvas(KoCanvasController *controller) {
         d->uniqueToolIds.remove(tool);
         delete tool;
     }
-
-    if (d->canvasData && d->canvasData->canvas == controller)
-        d->canvasData = 0; // replace with a blank one
     d->canvasses.remove(controller);
 }
 

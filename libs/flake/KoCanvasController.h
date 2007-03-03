@@ -194,10 +194,10 @@ signals:
     /**
      * Emitted whenever the document is scrolled.
      *
-     * @param pt the new top-left point from which the document should
+     * @param point the new top-left point from which the document should
      * be drawn.
      */
-    void moveDocumentOffset( QPoint pt );
+    void moveDocumentOffset( const QPoint &point );
 
 
 public slots:

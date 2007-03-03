@@ -131,7 +131,7 @@ private slots:
      *
      * @param documentOffset the offset in widget pixels
      */
-    void documentOffsetMoved( QPoint documentOffset );
+    void documentOffsetMoved( const QPoint &documentOffset );
 
 private:
 

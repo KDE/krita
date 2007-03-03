@@ -123,8 +123,8 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
         setCanvasWidget( new KisQPainterCanvas( this, view ) );
     }
 
-    connect( view->canvasController(), SIGNAL( moveDocumentOffset( QPoint ) ),
-             this, SLOT( documentOffsetMoved( QPoint ) ) );
+    connect( view->canvasController(), SIGNAL( moveDocumentOffset( const QPoint& ) ),
+             this, SLOT( documentOffsetMoved( const QPoint& ) ) );
 
 
 }
@@ -350,7 +350,7 @@ void KisCanvas2::resetCanvas()
 
 }
 
-void KisCanvas2::documentOffsetMoved( QPoint documentOffset )
+void KisCanvas2::documentOffsetMoved( const QPoint &documentOffset )
 {
     kDebug() << "KisCanvas2:: Moving document offset to " << documentOffset << endl;
     m_d->canvasWidget->documentOffsetMoved( documentOffset );

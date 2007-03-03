@@ -81,13 +81,21 @@ PythonExtension::PythonExtension(QObject* object, bool owner)
 
     behaviors().name("KrossPythonExtension");
     behaviors().doc("The KrossPythonExtension object wraps a QObject into the world of python.");
-    //behaviors().supportRepr();
+    //behaviors().supportPrint();
     behaviors().supportGetattr();
     behaviors().supportSetattr();
+    //behaviors().supportGetattro();
+    //behaviors().supportSetattro();
     behaviors().supportCompare();
-    //behaviors().supportHash();
+    //behaviors().supportRepr();
+    //behaviors().supportStr();
+    behaviors().supportHash();
+    //behaviors().supportIter();
+    //behaviors().supportCall();
     behaviors().supportSequenceType();
     behaviors().supportMappingType();
+    behaviors().supportNumberType();
+    //behaviors().supportBufferType();
 
     add_varargs_method("className", &PythonExtension::getClassName, "Return the name of the QObject class.");
     //add_varargs_method("classInfo", &PythonExtension::getClassInfo, "Return a list of key,value-tuples of class information.");
@@ -268,6 +276,11 @@ int PythonExtension::compare(const Py::Object& other)
     }
     PyErr_SetObject(PyExc_TypeError, other.ptr());
     return -1;
+}
+
+long PythonExtension::hash()
+{
+    return long( (QObject*) d->object );
 }
 
 /* objectName is a property anyway and therefore already accessible
@@ -671,4 +684,15 @@ Py::Object PythonExtension::mapping_subscript(const Py::Object& obj)
 int PythonExtension::mapping_ass_subscript(const Py::Object& obj1, const Py::Object& obj2)
 {
     throw Py::RuntimeError( QString("Unsupported: PythonExtension::mapping_ass_subscript %1 %2").arg(obj1.as_string().c_str()).arg(obj2.as_string().c_str()).toLatin1().constData() );
+}
+
+Py::Object PythonExtension::number_long()
+{
+    return Py::Long( hash() );
+}
+
+Py::Object PythonExtension::number_hex()
+{
+    void* ptr = (QObject*) d->object;
+    return Py::Object(PyString_FromFormat("%p",ptr),true);
 }

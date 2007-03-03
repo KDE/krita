@@ -93,9 +93,9 @@ namespace Kross {
              */
             virtual int compare(const Py::Object& other);
 
-            //hmmm, doc says "If an __eq__ or __cmp__ method exists, there must be a __hash__" but it seems to work fine without too.
-            //virtual long hash() {}
+            virtual long hash();
 
+            // Sequence
             virtual int sequence_length();
             virtual Py::Object sequence_concat(const Py::Object&);
             virtual Py::Object sequence_repeat(int);
@@ -104,9 +104,39 @@ namespace Kross {
             virtual int sequence_ass_item(int, const Py::Object&);
             virtual int sequence_ass_slice(int, int, const Py::Object&);
 
+            // Mapping
             virtual int mapping_length();
             virtual Py::Object mapping_subscript(const Py::Object&);
             virtual int mapping_ass_subscript(const Py::Object&, const Py::Object&);
+
+            // Number
+            //virtual int number_nonzero();
+            //virtual Py::Object number_negative();
+            //virtual Py::Object number_positive();
+            //virtual Py::Object number_absolute();
+            //virtual Py::Object number_invert();
+            //virtual Py::Object number_int();
+            //virtual Py::Object number_float();
+            virtual Py::Object number_long();
+            //virtual Py::Object number_oct();
+            virtual Py::Object number_hex();
+            //virtual Py::Object number_add( const Py::Object & );
+            //virtual Py::Object number_subtract( const Py::Object & );
+            //virtual Py::Object number_multiply( const Py::Object & );
+            //virtual Py::Object number_divide( const Py::Object & );
+            //virtual Py::Object number_remainder( const Py::Object & );
+            //virtual Py::Object number_divmod( const Py::Object & );
+            //virtual Py::Object number_lshift( const Py::Object & );
+            //virtual Py::Object number_rshift( const Py::Object & );
+            //virtual Py::Object number_and( const Py::Object & );
+            //virtual Py::Object number_xor( const Py::Object & );
+            //virtual Py::Object number_or( const Py::Object & );
+            //virtual Py::Object number_power( const Py::Object &, const Py::Object & );
+
+            // Buffer
+            //virtual Py_ssize_t buffer_getreadbuffer( Py_ssize_t, void** );
+            //virtual Py_ssize_t buffer_getwritebuffer( Py_ssize_t, void** );
+            //virtual Py_ssize_t buffer_getsegcount( Py_ssize_t* );
 
         private:
             /// \internal d-pointer class.

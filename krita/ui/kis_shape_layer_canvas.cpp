@@ -25,7 +25,7 @@
 #include <kis_painter.h>
 #include <KoCompositeOp.h>
 
-// #define DEBUG_REPAINT
+#define DEBUG_REPAINT
 
 KisShapeLayerCanvas::KisShapeLayerCanvas(KoViewConverter * viewConverter)
     : KoCanvasBase( 0 )
@@ -81,7 +81,6 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random()%255, random()%255, random()%255);
     p.fillRect(r, color);
-    p.fillRect(QRect(0, 0, 1000, 1000), color);
 #endif
 
     m_shapeManager->paint(p, *m_viewConverter, false);

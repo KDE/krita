@@ -318,9 +318,7 @@ void KoCanvasController::resetScrollBars()
         hScroll->setRange(0, docW - drawW);
     }
 
-    // XXX: The singlestep should be configurable per app?
-    //int fontheight = QFontMetrics(KGlobalSettings::generalFont()).height() * 3;
-    int fontheight = 40;
+    int fontheight = QFontMetrics(font()).height();
     vScroll->setPageStep(drawH);
     vScroll->setSingleStep(fontheight);
     hScroll->setPageStep(drawW);

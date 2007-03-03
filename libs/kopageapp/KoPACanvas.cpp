@@ -53,19 +53,21 @@ KoPACanvas::~KoPACanvas()
 
 void KoPACanvas::updateSize()
 {
-  int width = 0;
-  int height = 0;
+    QSize size;
 
   if ( m_view->activePage() ) 
   {
     KoPageLayout pageLayout = m_view->activePage()->pageLayout();
-    width = qRound( m_view->zoomHandler()->zoomItX( pageLayout.ptWidth ) );
-    height = qRound( m_view->zoomHandler()->zoomItX( pageLayout.ptHeight ) );
+        size.setWidth( qRound( m_view->zoomHandler()->zoomItX( pageLayout.ptWidth ) ) );
+        size.setHeight( qRound( m_view->zoomHandler()->zoomItX( pageLayout.ptHeight ) ) );
   }
 
-  setMinimumSize( width, height );
+    emit documentSize(size);
 }
 
+void KoPACanvas::setDocumentOffset(const QPoint &offset) {
+    m_documentOffset = offset;
+}
 
 void KoPACanvas::gridSize( double *horizontal, double *vertical ) const
 {
@@ -92,6 +94,7 @@ void KoPACanvas::updateCanvas( const QRectF& rc )
 {
     QRect clipRect( viewConverter()->documentToView( rc ).toRect() );
     clipRect.adjust( -2, -2, 2, 2 ); // Resize to fit anti-aliasing
+    clipRect.moveTopLeft( clipRect.topLeft() - m_documentOffset);
     update( clipRect );
 }
 
@@ -108,8 +111,9 @@ KoUnit KoPACanvas::unit()
 void KoPACanvas::paintEvent( QPaintEvent *event )
 {
     QPainter painter( this );
+    painter.translate(-m_documentOffset);
     painter.setRenderHint( QPainter::Antialiasing );
-    painter.setClipRect( event->rect() );
+    painter.setClipRect( event->rect().translated(m_documentOffset) );
 
     m_shapeManager->paint( painter, *( viewConverter() ), false );
     m_toolProxy->paint( painter, *( viewConverter() ) );
@@ -117,27 +121,27 @@ void KoPACanvas::paintEvent( QPaintEvent *event )
 
 void KoPACanvas::tabletEvent( QTabletEvent *event )
 {
-    m_toolProxy->tabletEvent( event, viewConverter()->viewToDocument( event->pos() ) );
+    m_toolProxy->tabletEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::mousePressEvent( QMouseEvent *event )
 {
-    m_toolProxy->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() ) );
+    m_toolProxy->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::mouseDoubleClickEvent( QMouseEvent *event )
 {
-    m_toolProxy->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() ) );
+    m_toolProxy->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::mouseMoveEvent( QMouseEvent *event )
 {
-    m_toolProxy->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() ) );
+    m_toolProxy->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::mouseReleaseEvent( QMouseEvent *event )
 {
-    m_toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() ) );
+    m_toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::keyPressEvent( QKeyEvent *event )
@@ -152,7 +156,7 @@ void KoPACanvas::keyReleaseEvent( QKeyEvent *event )
 
 void KoPACanvas::wheelEvent ( QWheelEvent * event )
 {
-    m_toolProxy->wheelEvent( event, viewConverter()->viewToDocument( event->pos() ) );
+    m_toolProxy->wheelEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 bool KoPACanvas::event (QEvent *event) {

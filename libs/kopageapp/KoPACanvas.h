@@ -48,6 +48,10 @@ public:
 public slots:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
     void updateSize();
+    void setDocumentOffset(const QPoint &offset);
+
+signals:
+    void documentSize(const QSize &size);
 
 protected:
     /// reimplemented method from superclass
@@ -75,7 +79,7 @@ protected:
     KoPADocument * m_doc;
     KoShapeManager * m_shapeManager;
     KoToolProxy * m_toolProxy;
-
+    QPoint m_documentOffset;
 };
 
 #endif /* KOPACANVAS_H */

@@ -22,4 +22,6 @@ install(TARGETS defaulttools DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES defaulttools.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+
+install( FILES tool_zoom_plus_cursor.png tool_zoom_minus_cursor.png tool_zoom.png DESTINATION ${DATA_INSTALL_DIR}/koffice/icons)
 #kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons )

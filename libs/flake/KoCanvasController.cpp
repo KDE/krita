@@ -4,6 +4,7 @@
  * Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -219,7 +220,7 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
     cp.rx() += m_d->canvas->canvasWidget()->x() + frameWidth();
     cp.ry() += m_d->canvas->canvasWidget()->y() + frameWidth();
 
-    // calculate the differance to the viewport centerpoint
+    // calculate the difference to the viewport centerpoint
     QPoint centerDiff = cp - 0.5 * QPoint( viewport()->width(), viewport()->height() );
 
     QScrollBar *hBar = horizontalScrollBar();
@@ -237,6 +238,41 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
         centerDiff.ry() = qMin( centerDiff.y(), vBar->maximum() );
         vBar->setValue( centerDiff.y() );
     }
+}
+
+void KoCanvasController::zoomIn(const QPointF &center)
+{
+    // convert the document based point into a canvas based point
+    QPoint cp = m_d->canvas->viewConverter()->documentToView( center ).toPoint() + m_d->canvas->documentOrigin();
+    cp.rx() += m_d->canvas->canvasWidget()->x() + frameWidth();
+    cp.ry() += m_d->canvas->canvasWidget()->y() + frameWidth();
+
+    // calculate the difference to the viewport centerpoint
+    QPoint centerDiff = cp - 0.5 * QPoint( viewport()->width(), viewport()->height() );
+
+    QScrollBar *hBar = horizontalScrollBar();
+    // try to centralize the centerpoint which we want to make visible
+    if( hBar && hBar->isVisible() ) {
+        centerDiff.rx() += int( 0.5 * (float)hBar->maximum() );
+        centerDiff.rx() = qMax( centerDiff.x(), hBar->minimum() );
+        centerDiff.rx() = qMin( centerDiff.x(), hBar->maximum() );
+        hBar->setValue( centerDiff.x() );
+    }
+    QScrollBar *vBar = verticalScrollBar();
+    if( vBar && vBar->isVisible() ) {
+        centerDiff.ry() += int( 0.5 * (float)vBar->maximum() );
+        centerDiff.ry() = qMax( centerDiff.y(), vBar->minimum() );
+        centerDiff.ry() = qMin( centerDiff.y(), vBar->maximum() );
+        vBar->setValue( centerDiff.y() );
+    }
+}
+
+void KoCanvasController::zoomOut(const QPointF &center)
+{
+}
+
+void KoCanvasController::zoomTo(const QRectF &rect)
+{
 }
 
 void KoCanvasController::setToolOptionWidget(QWidget *widget) {

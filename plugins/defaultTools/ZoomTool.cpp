@@ -25,6 +25,9 @@
 #include "QPainter"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
+#include <kstandarddirs.h>
+#include <kcursor.h>
+
 #include "ZoomTool.h"
 
 
@@ -35,9 +38,12 @@ ZoomTool::ZoomTool(KoCanvasBase *canvas)
     m_dragging = false;
     m_startPos = QPointF(0, 0);
     m_endPos = QPointF(0, 0);
-//    m_plusCursor = KisCursor::load("tool_zoom_plus_cursor.png", 8, 8);
-//    m_minusCursor = KisCursor::load("tool_zoom_minus_cursor.png", 8, 8);
-//    setCursor(m_plusCursor);
+    QPixmap plusPixmap, minusPixmap;
+    plusPixmap.load(KStandardDirs::locate("data", "koffice/icons/tool_zoom_plus_cursor.png"));
+    minusPixmap.load(KStandardDirs::locate("data", "koffice/icons/tool_zoom_minus_cursor.png"));
+    m_plusCursor = KCursor::sizeVerCursor();//QCursor(plusPixmap);
+    m_minusCursor = QCursor(minusPixmap);
+    useCursor(m_plusCursor);
     connect(&m_timer, SIGNAL(timeout()), SLOT(slotTimer()));
 }
 
@@ -70,13 +76,13 @@ void ZoomTool::mouseMoveEvent(KoPointerEvent *e)
 }
 
 void ZoomTool::mouseReleaseEvent(KoPointerEvent *e)
-{/*
+{
     if (m_dragging && e->button() == Qt::LeftButton) {
         m_endPos = e->pos();
         m_dragging = false;
 
         QPointF delta = m_endPos - m_startPos;
-
+/*
         if (sqrt(delta.x() * delta.x() + delta.y() * delta.y()) < 10) {
             if (e->modifiers() & Qt::ControlModifier) {
                 controller->zoomOut(m_endPos.x(), m_endPos.y());
@@ -86,7 +92,7 @@ void ZoomTool::mouseReleaseEvent(KoPointerEvent *e)
         } else {
             controller->zoomTo(QRect(m_startPos, m_endPos));
         }
-    }*/
+*/    }
 }
 
 void ZoomTool::mouseDoubleClickEvent(KoPointerEvent *e)

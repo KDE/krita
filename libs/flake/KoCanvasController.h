@@ -144,6 +144,36 @@ public:
      */
     void setToolOptionWidget(QWidget *widget);
 
+    /**
+     * @brief zooms in around the center.
+     *
+     * The center must be specified in document coordinates. The scrollbar positions
+     * are changed so that the center becomes center if possible.
+     *
+     * @param center the position to zoom in on
+     */
+    void zoomIn(const QPointF &center);
+
+    /**
+     * @brief zooms out around the center.
+     *
+     * The center must be specified in document coordinates. The scrollbar positions
+     * are changed so that the center becomes center if possible.
+     *
+     * @param center the position to zoom out around
+     */
+    void zoomOut(const QPointF &center);
+
+    /**
+     * @brief zoom so that rect is exactly visible (as close as possible)
+     *
+     * The rect must be specified in document coordinates. The scrollbar positions
+     * are changed so that the center of the rect becomes center if possible.
+     *
+     * @param rect the rect that should fit the view afterwards
+     */
+    void zoomTo(const QRectF &rect);
+
 signals:
     /**
      * Emitted when a previously added canvas is about to be removed.

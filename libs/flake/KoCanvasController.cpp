@@ -58,9 +58,9 @@ public:
 };
 
 KoCanvasController::KoCanvasController(QWidget *parent)
-    : QAbstractScrollArea(parent)
+    : QAbstractScrollArea(parent),
+    m_d(new Private())
 {
-    m_d = new Private();
     m_d->canvas = 0;
     m_d->toolOptionWidget = 0;
 
@@ -77,7 +77,7 @@ KoCanvasController::KoCanvasController(QWidget *parent)
 
     KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("");
-    m_d->margin = cfg->readEntry("canvasmargin",  30);
+    m_d->margin = cfg->readEntry("canvasmargin",  0);
 
     connect( this, SIGNAL( moveDocumentOffset( QPoint ) ), m_d->viewportWidget, SLOT( documentOffsetMoved( QPoint ) ) );
 
@@ -374,7 +374,7 @@ Viewport::Viewport(KoCanvasController* parent)
 
     KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("");
-    m_margin = cfg->readEntry("canvasmargin",  30);
+    m_margin = cfg->readEntry("canvasmargin",  0);
 
 }
 

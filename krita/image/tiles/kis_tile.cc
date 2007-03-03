@@ -68,6 +68,11 @@ KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
 
         KisTileManager::instance()->registerTile(this);
     }
+    else {
+        //m_data = 0;
+        //m_nextTile = 0;
+        m_nReadlock = 0;
+    }
 }
 
 KisTile::KisTile(const KisTile& rhs)
@@ -88,6 +93,11 @@ KisTile::KisTile(const KisTile& rhs)
         rhs.removeReader();
 
         KisTileManager::instance()->registerTile(this);
+    }
+    else {
+        //m_data = 0;
+        //m_nextTile = 0;
+        m_nReadlock = 0;
     }
 }
 

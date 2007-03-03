@@ -155,7 +155,7 @@ void PaintLayer::endPainting()
     }
     if(m_cmd != 0)
     {
-        paintLayer()->image()->undoAdapter()->addCommand(m_cmd);
+        paintLayer()->image()->undoAdapter()->addCommandOld(m_cmd);
     }
 }
 

@@ -255,12 +255,12 @@ void KisToolFreehand::endPaint()
                 m_source->parentLayer()->setDirty(painter.dirtyRegion());
 
                 if (m_currentImage->undo()) {
-                    m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
+                    m_currentImage->undoAdapter()->addCommandOld(painter.endTransaction());
                     m_currentImage->undoAdapter()->endMacro();
                 }
             } else {
                 if (m_currentImage->undo())
-                    m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
+                    m_currentImage->undoAdapter()->addCommandOld(m_painter->endTransaction());
             }
         }
         delete m_painter;

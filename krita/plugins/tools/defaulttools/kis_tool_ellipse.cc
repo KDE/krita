@@ -169,7 +169,7 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
         notifyModified();
 
         if (m_currentImage->undo()) {
-            m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
+            m_currentImage->undoAdapter()->addCommandOld(m_painter->endTransaction());
         }
         delete m_painter;
         m_painter = 0;

@@ -161,7 +161,7 @@ void KisToolSelectSimilar::buttonPress(KoPointerEvent *e)
         dev->emitSelectionChanged();
 
         if(m_currentImage->undo())
-            m_currentImage->undoAdapter()->addCommand(t);
+            m_currentImage->undoAdapter()->addCommandOld(t);
         m_subject->canvasController()->updateCanvas();
 
         QApplication::restoreOverrideCursor();

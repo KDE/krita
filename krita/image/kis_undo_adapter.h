@@ -50,7 +50,7 @@ public:
     virtual void removeCommandHistoryListener(const KisCommandHistoryListener *) = 0;
 
     virtual KCommand * presentCommand() = 0;
-    virtual void addCommand(KCommand *cmd) = 0;
+    virtual void addCommandOld(KCommand *cmd) = 0;
     virtual void setUndo(bool undo) = 0;
     virtual bool undo() const = 0;
     virtual void beginMacro(const QString& macroName) = 0;

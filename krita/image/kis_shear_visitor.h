@@ -71,7 +71,7 @@ public:
         v.shear(m_xshear, m_yshear, m_progress);
 
         if (m_undo && m_undo->undo())
-            m_undo->addCommand(t);
+            m_undo->addCommandOld(t);
 
         if (!m_strategy)
             delete strategy;

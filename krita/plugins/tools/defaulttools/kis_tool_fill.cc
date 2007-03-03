@@ -120,7 +120,7 @@ bool KisToolFill::flood(int startX, int startY)
         device->setDirty(dirty);
 
         if (m_currentImage->undo()) {
-            m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
+            m_currentImage->undoAdapter()->addCommandOld(m_painter->endTransaction());
         }
     }
     else {
@@ -154,7 +154,7 @@ bool KisToolFill::flood(int startX, int startY)
         device->setDirty(dirtyRegion);
 
         if (m_currentImage->undo()) {
-            m_currentImage->undoAdapter()->addCommand(m_fillPainter->endTransaction());
+            m_currentImage->undoAdapter()->addCommandOld(m_fillPainter->endTransaction());
         }
 
         delete m_fillPainter;

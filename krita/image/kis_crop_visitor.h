@@ -68,13 +68,13 @@ public:
         dev->crop(m_rect);
 
         if (layer->undoAdapter() && layer->undoAdapter()->undo()) {
-            layer->undoAdapter()->addCommand(t);
+            layer->undoAdapter()->addCommandOld(t);
         }
 
         if(m_movelayers) {
             if(layer->undoAdapter() && layer->undoAdapter()->undo()) {
                 KNamedCommand * cmd = dev->moveCommand(layer->x() - m_rect.x(), layer->y() - m_rect.y());
-      	        layer->undoAdapter()->addCommand(cmd);
+      	        layer->undoAdapter()->addCommandOld(cmd);
     	    }
         }
         layer->setDirty();

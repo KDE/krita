@@ -122,7 +122,7 @@ void KisToolPolyline::finish()
     notifyModified();
 
     if (m_currentImage->undo()) {
-        m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
+        m_currentImage->undoAdapter()->addCommandOld(painter.endTransaction());
     }
 }
 

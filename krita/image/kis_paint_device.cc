@@ -729,7 +729,7 @@ void KisPaintDevice::convertTo(KoColorSpace * dstColorSpace, qint32 renderingInt
     setData(dst.m_datamanager, dstColorSpace);
 
     if (undoAdapter() && undoAdapter()->undo()) {
-        undoAdapter()->addCommand(new KisConvertLayerTypeCmd(undoAdapter(), KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_colorSpace));
+        undoAdapter()->addCommandOld(new KisConvertLayerTypeCmd(undoAdapter(), KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_colorSpace));
     }
     // XXX: emit colorSpaceChanged(dstColorSpace);
 }

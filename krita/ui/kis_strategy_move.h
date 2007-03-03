@@ -25,6 +25,8 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
+class QUndoCommand;
+
 class KRITAUI_EXPORT KisStrategyMove {
 public:
     KisStrategyMove();
@@ -36,7 +38,7 @@ public:
     void setImage(KisImageSP image);
     void startDrag(const QPoint& pos);
     void drag(const QPoint& pos);
-    void endDrag(const QPoint& pos, bool undo = true);
+    QUndoCommand* endDrag(const QPoint& pos, bool undo = true);
     void simpleMove(const QPoint& pt1, const QPoint& pt2);
     void simpleMove(qint32 x1, qint32 y1, qint32 x2, qint32 y2);
 

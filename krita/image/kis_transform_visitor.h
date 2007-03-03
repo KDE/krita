@@ -82,7 +82,7 @@ public:
         tw.run();
 
         if (m_img->undo()) {
-            m_img->undoAdapter()->addCommand(t);
+            m_img->undoAdapter()->addCommandOld(t);
 	}
         layer->setDirty();
         return true;

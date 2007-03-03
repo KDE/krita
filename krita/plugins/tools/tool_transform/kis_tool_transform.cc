@@ -749,7 +749,7 @@ void KisToolTransform::transform()
     // method.
     if (transaction) {
         if (m_currentImage->undo())
-            m_currentImage->undoAdapter()->addCommand(transaction);
+            m_currentImage->undoAdapter()->addCommandOld(transaction);
         else
             delete transaction;
     }

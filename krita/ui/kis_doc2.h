@@ -97,7 +97,7 @@ private: // Undo adapter
     virtual void removeCommandHistoryListener(const KisCommandHistoryListener *);
 
     virtual KCommand * presentCommand();
-    virtual void addCommand(KCommand *cmd);
+    virtual void addCommandOld(KCommand *cmd) KDE_DEPRECATED;
     virtual void setUndo(bool undo);
     virtual bool undo() const;
     virtual void beginMacro(const QString& macroName);

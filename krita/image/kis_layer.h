@@ -32,7 +32,7 @@
 #include "KoDocumentSectionModel.h"
 #include "kis_paint_device.h"
 
-class KNamedCommand;
+class QUndoCommand;
 class QIcon;
 class QPainter;
 class KisUndoAdapter;
@@ -188,7 +188,7 @@ public:
     virtual qint32 y() const = 0;
     virtual void setY(qint32) = 0;
 
-    virtual KNamedCommand *moveCommand(QPoint oldPosition, QPoint newPosition);
+    virtual QUndoCommand *moveCommand(QPoint oldPosition, QPoint newPosition);
 
     /// Returns an approximation of where the bounds on actual data are in this layer
     virtual QRect extent() const = 0;
@@ -197,18 +197,18 @@ public:
 
     virtual const bool visible() const;
     virtual void setVisible(bool v);
-    KNamedCommand *setVisibleCommand(bool visiblel);
+    QUndoCommand *setVisibleCommand(bool visiblel);
 
     quint8 opacity() const; //0-255
     void setOpacity(quint8 val); //0-255
     quint8 percentOpacity() const; //0-100
     void setPercentOpacity(quint8 val); //0-100
-    KNamedCommand *setOpacityCommand(quint8 val);
-    KNamedCommand *setOpacityCommand(quint8 prevOpacity, quint8 newOpacity);
+    QUndoCommand *setOpacityCommand(quint8 val);
+    QUndoCommand *setOpacityCommand(quint8 prevOpacity, quint8 newOpacity);
 
     bool locked() const;
     void setLocked(bool l);
-    KNamedCommand *setLockedCommand(bool locked);
+    QUndoCommand *setLockedCommand(bool locked);
 
     void notifyPropertyChanged();
     void notifyCommandExecuted();
@@ -221,7 +221,7 @@ public:
 
     const KoCompositeOp * compositeOp() const { return m_compositeOp; }
     void setCompositeOp(const KoCompositeOp * compositeOp);
-    KNamedCommand * setCompositeOpCommand(const KoCompositeOp * compositeOp);
+    QUndoCommand * setCompositeOpCommand(const KoCompositeOp * compositeOp);
 
     KisImageSP image() const { return m_image; }
     virtual void setImage(KisImageWSP image) { m_image = image; }

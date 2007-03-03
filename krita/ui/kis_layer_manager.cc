@@ -262,11 +262,7 @@ void KisLayerManager::layerCompositeOp(const KoCompositeOp* compositeOp)
     KisLayerSP layer = img->activeLayer();
     if (!layer) return;
 
-    if (img->undo()) {
-        KNamedCommand *cmd = layer->setCompositeOpCommand(compositeOp);
-        cmd->execute();
-        m_view->undoAdapter()->addCommand(cmd);
-    }
+    m_doc->addCommand(layer->setCompositeOpCommand(compositeOp));
 }
 
 // range: 0 - 100
@@ -288,11 +284,7 @@ void KisLayerManager::layerOpacity(int opacity, bool dontundo)
         layer->setOpacity( opacity );
     else
     {
-        if (img->undo()) {
-            KNamedCommand *cmd = layer->setOpacityCommand(opacity);
-            cmd->execute();
-            m_view->undoAdapter()->addCommand(cmd);
-        }
+        m_doc->addCommand(layer->setOpacityCommand(opacity));
     }
 }
 
@@ -314,10 +306,7 @@ void KisLayerManager::layerOpacityFinishedChanging( int previous, int opacity )
 
     if (previous == opacity) return;
 
-    if (img->undo()) {
-        KNamedCommand *cmd = layer->setOpacityCommand(previous, opacity);
-        m_view->undoAdapter()->addCommand(cmd);
-    }
+    m_doc->addCommand(layer->setOpacityCommand(previous, opacity));
 }
 
 void KisLayerManager::layerToggleVisible()
@@ -424,7 +413,7 @@ void KisLayerManager::showLayerProperties(KisLayerSP layer)
                     before,
                     dlg.filterConfiguration()->toString());
             cmd->execute();
-            m_view->undoAdapter()->addCommand(cmd);
+            m_view->undoAdapter()->addCommandOld(cmd);
             m_doc->setModified( true );
         }
     }
@@ -706,7 +695,7 @@ void KisLayerManager::mirrorLayerX()
 
     dev->mirrorX();
 
-    if (t) m_view->undoAdapter()->addCommand(t);
+    if (t) m_view->undoAdapter()->addCommandOld(t);
 
     m_doc->setModified(true);
     layersUpdated();
@@ -727,7 +716,7 @@ void KisLayerManager::mirrorLayerY()
 
     dev->mirrorY();
 
-    if (t) m_view->undoAdapter()->addCommand(t);
+    if (t) m_view->undoAdapter()->addCommandOld(t);
 
     m_doc->setModified(true);
     layersUpdated();
@@ -750,7 +739,7 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     KisTransformWorker worker(dev, sx, sy, 0, 0, 0.0, 0, 0, m_view->statusBar()->progress(), filterStrategy);
     worker.run();
 
-    if (t) m_view->undoAdapter()->addCommand(t);
+    if (t) m_view->undoAdapter()->addCommandOld(t);
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();
@@ -782,7 +771,7 @@ void KisLayerManager::rotateLayer(double radians)
     KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, radians, -tx, -ty, m_view->statusBar()->progress(), filter);
     tw.run();
 
-    if (t) m_view->undoAdapter()->addCommand(t);
+    if (t) m_view->undoAdapter()->addCommandOld(t);
 
     m_doc->setModified(true);
     layersUpdated();

@@ -35,6 +35,7 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
+#include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
@@ -149,18 +150,11 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
                         newRootY += -shadowBounds.top();
                     }
 
-                    KCommand *moveCommand = image->rootLayer()->moveCommand(QPoint(image->rootLayer()->x(), image->rootLayer()->y()),
+                    QUndoCommand *moveCommand = image->rootLayer()->moveCommand(QPoint(image->rootLayer()->x(), image->rootLayer()->y()),
                                                                             QPoint(newRootX, newRootY));
                     Q_ASSERT(moveCommand != 0);
 
-                    if (moveCommand) {
-                        moveCommand->execute();
-                        if (image->undo()) {
-                            image->undoAdapter()->addCommand(moveCommand);
-                        } else {
-                            delete moveCommand;
-                        }
-                    }
+                    m_view->document()->addCommand(moveCommand);
                 }
             }
         }

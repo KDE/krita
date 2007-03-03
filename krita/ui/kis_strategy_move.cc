@@ -97,7 +97,7 @@ void KisStrategyMove::drag(const QPoint& original)
     }
 }
 
-void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
+QUndoCommand* KisStrategyMove::endDrag(const QPoint& pos, bool undo)
 {
     if (m_image && m_dragging) {
         KisLayerSP dev;
@@ -107,19 +107,15 @@ void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
             m_dragging = false;
 
             if (undo && m_image->undo()) {
-                KCommand *cmd = dev->moveCommand(m_layerStart, m_layerPosition);
+                QUndoCommand *cmd = dev->moveCommand(m_layerStart, m_layerPosition);
                 Q_CHECK_PTR(cmd);
 
-                KisUndoAdapter *adapter = m_image->undoAdapter();
-                if (adapter) {
-                    adapter->addCommand(cmd);
-                } else {
-                    delete cmd;
-                }
+                return cmd;
             }
             m_image->setModified();
         }
     }
+    return 0;
 }
 
 void KisStrategyMove::simpleMove(const QPoint& pt1, const QPoint& pt2)

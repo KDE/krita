@@ -86,7 +86,7 @@ void KisMaskManager::slotCreateMask() {
     KNamedCommand *cmd = layer->createMaskCommand();
     cmd->execute();
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        m_view->undoAdapter()->addCommand(cmd);
+        m_view->undoAdapter()->addCommandOld(cmd);
     }
 }
 void KisMaskManager::slotMaskFromSelection() {
@@ -97,7 +97,7 @@ void KisMaskManager::slotMaskFromSelection() {
     KNamedCommand *cmd = layer->maskFromSelectionCommand();
     cmd->execute();
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        m_view->undoAdapter()->addCommand(cmd);
+        m_view->undoAdapter()->addCommandOld(cmd);
     }
 }
 
@@ -110,7 +110,7 @@ void KisMaskManager::slotMaskToSelection() {
     KNamedCommand *cmd = layer->maskToSelectionCommand();
     cmd->execute();
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        m_view->undoAdapter()->addCommand(cmd);
+        m_view->undoAdapter()->addCommandOld(cmd);
     }
 }
 
@@ -122,7 +122,7 @@ void KisMaskManager::slotApplyMask() {
     KNamedCommand *cmd = layer->applyMaskCommand();
     cmd->execute();
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        m_view->undoAdapter()->addCommand(cmd);
+        m_view->undoAdapter()->addCommandOld(cmd);
     }
 }
 
@@ -134,7 +134,7 @@ void KisMaskManager::slotRemoveMask() {
     KNamedCommand *cmd = layer->removeMaskCommand();
     cmd->execute();
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        m_view->undoAdapter()->addCommand(cmd);
+        m_view->undoAdapter()->addCommandOld(cmd);
     }
 }
 

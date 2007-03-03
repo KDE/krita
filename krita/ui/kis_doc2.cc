@@ -921,7 +921,7 @@ void KisDoc2::renameImage(const QString& oldName, const QString& newName)
     m_d->currentImage()->setName(newName);
 
     if (undo())
-        addCommand(new KisCommandImageMv(this, this, newName, oldName));
+        addCommandOld(new KisCommandImageMv(this, this, newName, oldName));
 }
 
 
@@ -1082,7 +1082,7 @@ KCommand * KisDoc2::presentCommand()
     return m_d->cmdHistory->presentCommand();
 }
 
-void KisDoc2::addCommand(KCommand *cmd)
+void KisDoc2::addCommandOld(KCommand *cmd)
 {
     Q_ASSERT(cmd);
 

@@ -378,7 +378,7 @@ bool KisFilterManager::apply()
     } else {
         if (dev->parentLayer()) dev->parentLayer()->setDirty(rect);
         m_d->doc->setModified(true);
-        if (img->undo() && cmd) img->undoAdapter()->addCommand(cmd);
+        if (img->undo() && cmd) img->undoAdapter()->addCommandOld(cmd);
         m_d->lastFilter->disableProgress();
         QApplication::restoreOverrideCursor();
         m_d->lastFilter->saveToBookmark(KisFilter::ConfigLastUsed.id(), m_d->lastFilterConfig);

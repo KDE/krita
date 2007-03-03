@@ -118,7 +118,7 @@ void KisToolSelectBrush::endPaint()
         if (m_currentImage->undo() && m_painter) {
             // If painting in mouse release, make sure painter
             // is destructed or end()ed
-            m_currentImage->undoAdapter()->addCommand(m_transaction);
+            m_currentImage->undoAdapter()->addCommandOld(m_transaction);
         }
         delete m_painter;
         m_painter = 0;

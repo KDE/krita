@@ -349,7 +349,7 @@ void KisSelectionManager::cut()
     dev->emitSelectionChanged();
 
     if (img->undo()) {
-        img->undoAdapter()->addCommand(t);
+        img->undoAdapter()->addCommandOld(t);
     }
 }
 
@@ -502,7 +502,7 @@ void KisSelectionManager::selectAll()
     dev->emitSelectionChanged();
 
     if (img->undo())
-        img->undoAdapter()->addCommand(t);
+        img->undoAdapter()->addCommandOld(t);
 }
 
 void KisSelectionManager::deselect()
@@ -526,7 +526,7 @@ void KisSelectionManager::deselect()
     dev->emitSelectionChanged();
 
     if (img->undo())
-        img->undoAdapter()->addCommand(t);
+        img->undoAdapter()->addCommandOld(t);
 }
 
 
@@ -550,7 +550,7 @@ void KisSelectionManager::clear()
     dev->setDirty();
     dev->emitSelectionChanged();
 
-    if (img->undo()) img->undoAdapter()->addCommand(t);
+    if (img->undo()) img->undoAdapter()->addCommandOld(t);
 }
 
 void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const QString& transactionText)
@@ -587,7 +587,7 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
     dev->emitSelectionChanged();
 
     if (img->undo()) {
-        img->undoAdapter()->addCommand(painter2.endTransaction());
+        img->undoAdapter()->addCommandOld(painter2.endTransaction());
     }
 }
 
@@ -623,7 +623,7 @@ void KisSelectionManager::reselect()
     dev->emitSelectionChanged();
 
     if (img->undo())
-        img->undoAdapter()->addCommand(t);
+        img->undoAdapter()->addCommandOld(t);
 }
 
 
@@ -650,7 +650,7 @@ void KisSelectionManager::invert()
         dev->emitSelectionChanged();
 
         if (t) {
-            img->undoAdapter()->addCommand(t);
+            img->undoAdapter()->addCommandOld(t);
         }
     }
 }
@@ -732,7 +732,7 @@ void KisSelectionManager::feather()
     dev->emitSelectionChanged();
 
     if (img->undo())
-        img->undoAdapter()->addCommand(t);
+        img->undoAdapter()->addCommandOld(t);
 
 }
 
@@ -904,7 +904,7 @@ void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
     dev->emitSelectionChanged();
 
     if (t) {
-        img->undoAdapter()->addCommand(t);
+        img->undoAdapter()->addCommandOld(t);
     }
 }
 

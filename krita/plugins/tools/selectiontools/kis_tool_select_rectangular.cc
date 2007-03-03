@@ -222,7 +222,7 @@ void KisToolSelectRectangular::buttonRelease(KoPointerEvent *e)
                 }
 
                 if (m_currentImage->undo())
-                    m_currentImage->undoAdapter()->addCommand(t);
+                    m_currentImage->undoAdapter()->addCommandOld(t);
 
                 KisCanvasController *controller = m_subject -> canvasController();
                 controller -> kiscanvas() -> update();

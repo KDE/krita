@@ -22,7 +22,6 @@
 #define KIS_TOOL_MOVE_H_
 
 #include "kis_strategy_move.h"
-//#include "kis_tool_non_paint.h"
 #include "KoToolFactory.h"
 #include "kis_tool.h"
 #include <kis_layer_shape.h>

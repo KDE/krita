@@ -169,7 +169,7 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
 #endif
         if (m_currentImage->undo()) {
-            m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
+            m_currentImage->undoAdapter()->addCommandOld(m_painter->endTransaction());
         }
 	delete m_painter;
 	m_painter = 0;

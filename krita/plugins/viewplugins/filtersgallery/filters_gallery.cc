@@ -124,7 +124,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
             } else {
                 dev->setDirty(rect);
                 if (img->undo())
-                    img->undoAdapter()->addCommand(cmd);
+                    img->undoAdapter()->addCommandOld(cmd);
                 else
                     delete cmd;
             }

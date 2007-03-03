@@ -226,7 +226,7 @@ void KisToolSelectElliptical::buttonRelease(KoPointerEvent *e)
                 }
 
                 if (m_currentImage->undo())
-                    m_currentImage->undoAdapter()->addCommand(t);
+                    m_currentImage->undoAdapter()->addCommandOld(t);
 
                 QApplication::restoreOverrideCursor();
             }

@@ -747,8 +747,8 @@ void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
             else
                 m_d->adapter->beginMacro(i18n("Resize Image"));
 
-            m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), true));
-            m_d->adapter->addCommand(new KisResizeImageCmd(m_d->adapter, KisImageSP(this), w, h, width(), height()));
+            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
+            m_d->adapter->addCommandOld(new KisResizeImageCmd(m_d->adapter, KisImageSP(this), w, h, width(), height()));
         }
 
         m_d->width = w;
@@ -764,7 +764,7 @@ void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
         unlock();
 
         if (undo()) {
-            m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), false));
+            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
             m_d->adapter->endMacro();
         }
     }
@@ -796,7 +796,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
 
         if (undo()) {
             m_d->adapter->beginMacro(i18n("Scale Image"));
-            m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), true));
+            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
         }
 
         {
@@ -805,7 +805,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
         }
 
         if (undo()) {
-            m_d->adapter->addCommand(new KisResizeImageCmd(m_d->adapter, KisImageSP(this), w, h, width(), height()));
+            m_d->adapter->addCommandOld(new KisResizeImageCmd(m_d->adapter, KisImageSP(this), w, h, width(), height()));
         }
 
         m_d->width = w;
@@ -816,7 +816,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
         unlock();
 
         if (undo()) {
-            m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), false));
+            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
             m_d->adapter->endMacro();
         }
     }
@@ -840,14 +840,14 @@ void KisImage::rotate(double radians, KisProgressDisplayInterface *progress)
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Rotate Image"));
-        m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), true));
+        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
     }
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KoID("Triangle"));
     KisTransformVisitor visitor (KisImageSP(this), 1.0, 1.0, 0, 0, radians, -tx, -ty, progress, filter);
     m_d->rootLayer->accept(visitor);
 
-    if (undo()) m_d->adapter->addCommand(new KisResizeImageCmd(undoAdapter(), KisImageSP(this), w, h, width(), height()));
+    if (undo()) m_d->adapter->addCommandOld(new KisResizeImageCmd(undoAdapter(), KisImageSP(this), w, h, width(), height()));
 
     m_d->width = w;
     m_d->height = h;
@@ -857,7 +857,7 @@ void KisImage::rotate(double radians, KisProgressDisplayInterface *progress)
     unlock();
 
     if (undo()) {
-        m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), false));
+        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
         m_d->adapter->endMacro();
     }
 }
@@ -892,14 +892,14 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
         if (undo()) {
             m_d->adapter->beginMacro(i18n("Shear Image"));
-            m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), true));
+            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
         }
 
         KisShearVisitor v(angleX, angleY, progress);
         v.setUndoAdapter(undoAdapter());
         rootLayer()->accept(v);
 
-        if (undo()) m_d->adapter->addCommand(new KisResizeImageCmd(m_d->adapter, KisImageSP(this), w, h, width(), height()));
+        if (undo()) m_d->adapter->addCommandOld(new KisResizeImageCmd(m_d->adapter, KisImageSP(this), w, h, width(), height()));
 
         m_d->width = w;
         m_d->height = h;
@@ -909,7 +909,7 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
         unlock();
 
         if (undo()) {
-            m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), false));
+            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
             m_d->adapter->endMacro();
         }
     }
@@ -928,7 +928,7 @@ void KisImage::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Convert Image Type"));
-        m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), true));
+        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
     }
 
     setColorSpace(dstColorSpace);
@@ -942,9 +942,9 @@ void KisImage::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
 
     if (undo()) {
 
-        m_d->adapter->addCommand(new KisConvertImageTypeCmd(undoAdapter(), KisImageSP(this),
+        m_d->adapter->addCommandOld(new KisConvertImageTypeCmd(undoAdapter(), KisImageSP(this),
                                                          oldCs, dstColorSpace));
-        m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), false));
+        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
         m_d->adapter->endMacro();
     }
 }
@@ -1073,7 +1073,7 @@ void KisImage::setLayerProperties(KisLayerSP layer, quint8 opacity, const KoComp
             layer->setName(name);
             layer->setOpacity(opacity);
             layer->setCompositeOp(compositeOp);
-            m_d->adapter->addCommand(new LayerPropsCmd(layer, KisImageSP(this), m_d->adapter, oldname, oldopacity, oldCompositeOp));
+            m_d->adapter->addCommandOld(new LayerPropsCmd(layer, KisImageSP(this), m_d->adapter, oldname, oldopacity, oldCompositeOp));
         } else {
             layer->setName(name);
             layer->setOpacity(opacity);
@@ -1169,7 +1169,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
 
 
         if (!layer->temporary() && undo()) {
-            m_d->adapter->addCommand(new LayerAddCmd(m_d->adapter, KisImageSP(this), layer));
+            m_d->adapter->addCommandOld(new LayerAddCmd(m_d->adapter, KisImageSP(this), layer));
         }
     }
 
@@ -1219,7 +1219,7 @@ bool KisImage::removeLayer(KisLayerSP layer)
         if (success) {
             layer->setImage(0);
             if (!layer->temporary() && undo()) {
-                m_d->adapter->addCommand(new LayerRmCmd(m_d->adapter, KisImageSP(this), layer, parent, wasAbove));
+                m_d->adapter->addCommandOld(new LayerRmCmd(m_d->adapter, KisImageSP(this), layer, parent, wasAbove));
             }
             if (!layer->temporary()) {
                 emit sigLayerRemoved(layer, parent, wasAbove);
@@ -1301,13 +1301,13 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
     {
         emit sigLayerMoved(layer, wasParent, wasAbove);
         if (undo())
-            m_d->adapter->addCommand(new LayerMoveCmd(m_d->adapter, KisImageSP(this), layer, wasParent, wasAbove));
+            m_d->adapter->addCommandOld(new LayerMoveCmd(m_d->adapter, KisImageSP(this), layer, wasParent, wasAbove));
     }
     else //we already removed the layer above, but re-adding it failed, so...
     {
         emit sigLayerRemoved(layer, wasParent, wasAbove);
         if (undo())
-            m_d->adapter->addCommand(new LayerRmCmd(m_d->adapter, KisImageSP(this), layer, wasParent, wasAbove));
+            m_d->adapter->addCommandOld(new LayerRmCmd(m_d->adapter, KisImageSP(this), layer, wasParent, wasAbove));
     }
 
     return success;
@@ -1340,8 +1340,8 @@ void KisImage::flatten()
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Flatten Image"));
-        m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), true));
-        m_d->adapter->addCommand(new KisChangeLayersCmd(m_d->adapter, KisImageSP(this), oldRootLayer, m_d->rootLayer, ""));
+        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
+        m_d->adapter->addCommandOld(new KisChangeLayersCmd(m_d->adapter, KisImageSP(this), oldRootLayer, m_d->rootLayer, ""));
     }
 
     lock();
@@ -1354,7 +1354,7 @@ void KisImage::flatten()
     notifyLayersChanged();
 
     if (undo()) {
-        m_d->adapter->addCommand(new LockImageCommand(KisImageSP(this), false));
+        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
         m_d->adapter->endMacro();
     }
 }

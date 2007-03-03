@@ -23,6 +23,7 @@
 #include <QPoint>
 #include <QColor>
 #include <QMouseEvent>
+#include <QUndoCommand>
 
 #include <klocale.h>
 
@@ -89,6 +90,8 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
 {
     if (m_canvas && e->button() == Qt::LeftButton) {
 	QPointF pos = convertToPixelCoord(e);
-	m_strategy.endDrag(QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y())));
+        QUndoCommand* cmd = m_strategy.endDrag(QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y())));
+        if(cmd)
+            m_canvas->addCommand(cmd);
     }
 }

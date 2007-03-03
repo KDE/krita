@@ -443,7 +443,7 @@ void KisToolCurve::paintCurve()
     notifyModified();
 
     if (m_currentImage->undo()) {
-        m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
+        m_currentImage->undoAdapter()->addCommandOld(painter.endTransaction());
     }
 
     draw(false);
@@ -527,7 +527,7 @@ void KisToolCurve::selectCurve()
     }
 
     if (m_currentImage->undo())
-        m_currentImage->undoAdapter()->addCommand(t);
+        m_currentImage->undoAdapter()->addCommandOld(t);
 
     QApplication::restoreOverrideCursor();
 

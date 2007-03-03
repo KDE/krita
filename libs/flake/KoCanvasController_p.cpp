@@ -191,9 +191,8 @@ void Viewport::handleDragLeaveEvent(QDragLeaveEvent *) {
 
 void Viewport::handlePaintEvent(QPainter & painter, QPaintEvent *event)
 {
-
-    // XXX: This is the shadow, right?
-    if(false && m_parent->canvas() && m_parent->canvas()->canvasWidget()) {
+    // Draw the shadow around the canvas.
+    if(m_parent->canvas() && m_parent->canvas()->canvasWidget()) {
         QWidget *canvas = m_parent->canvas()->canvasWidget();
         painter.setPen(Qt::black);
         QRect rect(canvas->x(), canvas->y(), canvas->width(), canvas->height());

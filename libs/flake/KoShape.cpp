@@ -367,17 +367,15 @@ int KoShape::zIndex() const {
 void KoShape::repaint() const {
     if ( !d->shapeManagers.empty() )
     {
-        foreach( KoShapeManager * manager, d->shapeManagers )
-        {
-            QRectF rect(QPointF(0, 0), size() );
-            if(d->border) {
-                KoInsets insets(0, 0, 0, 0);
-                d->border->borderInsets(this, insets);
-                rect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-            }
-            rect = d->matrix.mapRect(rect);
-            manager->repaint( rect, this, true );
+        QRectF rect(QPointF(0, 0), size() );
+        if(d->border) {
+            KoInsets insets(0, 0, 0, 0);
+            d->border->borderInsets(this, insets);
+            rect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
         }
+        rect = d->matrix.mapRect(rect);
+        foreach( KoShapeManager * manager, d->shapeManagers )
+            manager->repaint( rect, this, true );
     }
 }
 

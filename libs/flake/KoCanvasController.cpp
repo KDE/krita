@@ -278,6 +278,13 @@ void KoCanvasController::setDocumentOffset()
     if ( pt.x() > m_d->documentSize.width() ) pt.setX( m_d->documentSize.width() );
     if ( pt.y() > m_d->documentSize.height() ) pt.setY( m_d->documentSize.height() );
     emit( moveDocumentOffset( pt ) );
+
+    if(m_d->canvas->canvasWidget()) {
+        QPoint diff = m_d->documentOffset - pt;
+        m_d->canvas->canvasWidget()->scroll(diff.x(), diff.y());
+    }
+
+    m_d->documentOffset = pt;
 }
 
 void KoCanvasController::resetScrollBars()

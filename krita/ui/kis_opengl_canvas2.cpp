@@ -27,6 +27,7 @@
 #include <QBrush>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QPoint>
 
 #include <kdebug.h>
 #include <KoToolProxy.h>
@@ -45,6 +46,7 @@ public:
     KoToolProxy * toolProxy;
     KisOpenGLImageContextSP openGLImageContext;
     KoViewConverter * viewConverter;
+    QPoint documentOffset;
  };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageContextSP context )
@@ -191,6 +193,12 @@ void KisOpenGLCanvas2::paintGL()
 KoToolProxy * KisOpenGLCanvas2::toolProxy() {
     return m_d->toolProxy;
 }
+
+void KisOpenGLCanvas2::documentOffsetMoved( QPoint pt )
+{
+    m_d->documentOffset = pt;
+}
+
 
 #include "kis_opengl_canvas2.moc"
 #endif // HAVE_OPENGL

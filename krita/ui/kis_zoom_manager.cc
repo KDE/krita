@@ -66,10 +66,14 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
 {
     KisConfig cfg;
     // view actions
-    m_zoomAction = new KoZoomAction(KoZoomMode::ZOOM_PIXELS |
-                     KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), KIcon("14_zoom"), KShortcut(), actionCollection, "zoom" );
+    m_zoomAction = new KoZoomAction(KoZoomMode::ZOOM_PIXELS | KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
+                                    i18n("Zoom"),
+                                    KIcon("14_zoom"),
+                                    KShortcut(),
+                                    actionCollection,
+                                    "zoom" );
     connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
-          this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
+            this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
 
     m_view->viewBar()->addAction(m_zoomAction);
 
@@ -154,7 +158,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
     if(mode == KoZoomMode::ZOOM_PIXELS)
     {
         m_zoomHandler->setZoomedResolution(img->xRes(), img->yRes());
-        m_view->canvasBase()->setCanvasSize(int(img->width()), int(img->height()));
+        m_view->canvasController()->setDocumentSize( QSize( int( ceil( img->width() ) ), int( ceil( img->height() ) ) ) );
 
         // Now try to calculate a zoomvalue for display purposes, eventhough it can never be correct
         double zoomF = 72.0 * img->xRes() / KoGlobal::dpiX();
@@ -171,26 +175,6 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
         else if(mode == KoZoomMode::ZOOM_WIDTH)
         {
             zoomF = m_canvasController->visibleWidth() / (m_zoomHandler->resolutionX() * (img->width() / img->xRes()));
-
-            int newheight = zoomF * (m_zoomHandler->resolutionY() * (img->height() / img->yRes()));
-
-            // Now we need to handle the appearing and disappereing of the vertical scrollbar.
-            // We could have a horizontal which is about to disappear, but it still has
-            // influence on what we see as visibleHeight
-            // Four possible combinations of verticalscrollbar and vertical visibleheight exists
-            // Two of them are stable - the other two are as follows:
-            //if(newheight >  m_canvasController->visibleHeight() && !m_gui->verticalScrollBarVisible())
-                // A vertical scrollbar will appear if we go ahead. This is what we want
-                // Which means we will be too big which means we''ll end up somewhere else in next recalc
-            //if(newheight <=  m_canvasController->visibleHeight() && m_gui->verticalScrollBarVisible()) {
-                // The vertical scrollbar will disappear if we go ahead
-                //if(!m_gui->horizontalScrollBarVisible())
-                    // We are zooming in and will hit it this time. yay
-                //else
-                    //we are zoming out which means the both scrollbars are disappearing
-                    // but we will be too small triggering another round
-           // }
-
             m_zoomAction->setEffectiveZoom(int(100*zoomF+0.5));
         }
         else if(mode == KoZoomMode::ZOOM_PAGE)
@@ -203,10 +187,12 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
 
         m_view->setZoom(zoomF);
         m_zoomHandler->setZoom(zoomF);
+        m_view->canvas()->repaint();
 
-        m_view->canvasBase()->setCanvasSize(
-                        int(m_zoomHandler->documentToViewX(img->width() / img->xRes())),
-                        int(m_zoomHandler->documentToViewY(img->height() / img->yRes())));
+        m_view->canvasController()->setDocumentSize (
+            QSize( int( ceil( m_zoomHandler->documentToViewX(img->width() / img->xRes() ) ) ),
+                   int( ceil( m_zoomHandler->documentToViewY(img->height() / img->yRes() ) ) ) ) );
+
     }
 }
 

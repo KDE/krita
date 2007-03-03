@@ -107,8 +107,6 @@ public: // KoCanvasBase implementation
 
 public: // KisCanvas2 methods
 
-    void setCanvasSize(int w, int h);
-
     KisImageSP image();
     KisView2* view();
 
@@ -125,7 +123,15 @@ public slots:
 
     void setImageSize(qint32 w, qint32 h);
 
-    void controllerSizeChanged( const QSize & size );
+private slots:
+
+    /**
+     * Called whenever the view widget needs to show a different part of
+     * the document
+     *
+     * @param documentOffset the offset in widget pixels
+     */
+    void documentOffsetMoved( QPoint documentOffset );
 
 private:
 

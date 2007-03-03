@@ -45,10 +45,6 @@ KoCanvasBase::~KoCanvasBase()
     delete d;
 }
 
-void KoCanvasBase::updateCanvas( const QRegion & region )
-{
-    updateCanvas( QRectF( region.boundingRect() ) );
-}
 
 KoShapeController * KoCanvasBase::shapeController() const {
     return d->shapeController;

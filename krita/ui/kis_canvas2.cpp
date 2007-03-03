@@ -31,6 +31,7 @@
 #include <KoShapeManager.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCanvasController.h>
 #include <KoDocument.h>
 
 #include <kis_image.h>
@@ -121,6 +122,11 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
     else {
         setCanvasWidget( new KisQPainterCanvas( this, view ) );
     }
+
+    connect( view->canvasController(), SIGNAL( moveDocumentOffset( QPoint ) ),
+             this, SLOT( documentOffsetMoved( QPoint ) ) );
+
+
 }
 
 void KisCanvas2::setCanvasWidget(QWidget * widget)
@@ -131,7 +137,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     widget->setAutoFillBackground( false );
     widget->setAttribute( Qt::WA_OpaquePaintEvent );
     widget->setMouseTracking( true );
-//    widget->setAcceptDrops( true );
+    widget->setAcceptDrops( true );
 
 }
 
@@ -174,7 +180,7 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     // First convert from document coordinated to widget coordinates
     QRectF viewRect  = m_d->viewConverter->documentToView(rc);
     viewRect.adjust(-5, -5, 5, 5); // floor, ceil?
-    m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
+    m_d->canvasWidget->widget()->update(); // toAlignedRect(viewRect) );
 }
 
 
@@ -208,7 +214,7 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
         docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
         QRectF viewRect = m_d->viewConverter->documentToView(docRect);
         viewRect.adjust( -5, -5, 5, 5 );
-        m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
+        m_d->canvasWidget->widget()->update();// toAlignedRect(viewRect) );
 #ifdef HAVE_OPENGL
     }
 #endif
@@ -239,13 +245,6 @@ KoUnit KisCanvas2::unit()
 
 KoToolProxy * KisCanvas2::toolProxy() {
     return m_d->canvasWidget->toolProxy();
-}
-
-void KisCanvas2::setCanvasSize(int w, int h)
-{
-    m_d->canvasWidget->widget()->setUpdatesEnabled(false);
-    m_d->canvasWidget->widget()->setMinimumSize( w, h );
-    m_d->canvasWidget->widget()->setUpdatesEnabled(true);
 }
 
 KisImageSP KisCanvas2::image()
@@ -288,12 +287,11 @@ KisImageSP KisCanvas2::currentImage()
 void KisCanvas2::setImageSize( qint32 w, qint32 h )
 {
     m_d->canvasCache = QImage( w, h, QImage::Format_ARGB32 );
-}
-
-void KisCanvas2::controllerSizeChanged( const QSize & size )
-{
-    if ( m_d->canvasWidget )
-        m_d->canvasWidget->parentSizeChanged( size );
+    if ( m_d->view && m_d->view->canvasController() && m_d->view->image()) {
+        KisImageSP img = m_d->view->image();
+        m_d->view->canvasController()->setDocumentSize( QSize( int( ceil( m_d->viewConverter->documentToViewX( img->width() / img->xRes() ) ) ),
+                                                               int( ceil( m_d->viewConverter->documentToViewY( img->height() / img->yRes() ) ) ) ) );
+    }
 }
 
 void KisCanvas2::connectCurrentImage()
@@ -304,7 +302,6 @@ void KisCanvas2::connectCurrentImage()
         connect(m_d->openGLImageContext.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize(qint32, qint32)));
     }
 #endif
-
 }
 
 void KisCanvas2::disconnectCurrentImage()
@@ -351,6 +348,12 @@ void KisCanvas2::resetCanvas()
         m_d->canvasWidget->widget()->update();
 
 
+}
+
+void KisCanvas2::documentOffsetMoved( QPoint documentOffset )
+{
+    kDebug() << "KisCanvas2:: Moving document offset to " << documentOffset << endl;
+    m_d->canvasWidget->documentOffsetMoved( documentOffset );
 }
 
 #include "kis_canvas2.moc"

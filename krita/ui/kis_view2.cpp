@@ -154,7 +154,7 @@ public:
 };
 
 
-KisView2::KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * parent)
+KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     : KoView(doc, parent)
 {
 
@@ -171,11 +171,9 @@ KisView2::KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * par
     m_d = new KisView2Private();
 
     m_d->doc = doc;
-    m_d->viewConverter = viewConverter;
-    m_d->canvas = new KisCanvas2( m_d->viewConverter, this, static_cast<KoShapeControllerBase*>( doc ) );
+    m_d->viewConverter = new KoZoomHandler();
     m_d->canvasController = new KoCanvasController( this );
-    connect( m_d->canvasController, SIGNAL( sizeChanged(const QSize & ) ),
-             m_d->canvas, SLOT( controllerSizeChanged( const QSize & ) ) );
+    m_d->canvas = new KisCanvas2( m_d->viewConverter, this, static_cast<KoShapeControllerBase*>( doc ) );
     m_d->canvasController->setCanvas( m_d->canvas );
     m_d->resourceProvider = new KisResourceProvider( this );
 
@@ -199,12 +197,14 @@ KisView2::KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * par
 
 KisView2::~KisView2()
 {
+    delete m_d->viewConverter;
     delete m_d;
 }
 
 
 void KisView2::dragEnterEvent(QDragEnterEvent *event)
 {
+    kDebug() << "KisView2::dragEnterEvent" << endl;
     // Only accept drag if we're not busy, particularly as we may
     // be showing a progress bar and calling qApp->processEvents().
     if (K3URLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
@@ -326,6 +326,11 @@ KisSelectionManager * KisView2::selectionManager()
     return m_d->selectionManager;
 }
 
+KoCanvasController * KisView2::canvasController()
+{
+    return m_d->canvasController;
+}
+
 KisLayerManager * KisView2::layerManager()
 {
     return m_d->layerManager;
@@ -358,8 +363,6 @@ void KisView2::slotLoadingFinished()
 
     KisImageSP img = image();
 
-    m_d->canvas->setCanvasSize( int(m_d->viewConverter->documentToViewX(img->width() / img->xRes())),
-                                int(m_d->viewConverter->documentToViewY(img->height() / img->yRes())));
     m_d->canvas->setImageSize( img->width(), img->height() );
 
     m_d->layerManager->layersUpdated();

@@ -69,8 +69,8 @@ public:
     virtual void mouseReleaseEvent( KoPointerEvent * ) {};
     virtual void wheelEvent( KoPointerEvent * ) {};
 
-    /// @returnThe Px events have the event already translated to image
-    /// pixels from the KOffice native points
+    /// Convert from native (postscript points) to image pixel
+    /// coordinates.
     QPointF convertToPixelCoord( KoPointerEvent *e );
 
     QRectF convertToPt( const QRectF &rect );

@@ -28,6 +28,7 @@
 
 #include <kicon.h>
 
+#include <KoZoomHandler.h>
 #include <KoShapeContainer.h>
 #include <KoViewConverter.h>
 #include <KoShapeManager.h>
@@ -42,7 +43,7 @@
 class KisShapeLayer::Private
 {
 public:
-    KoViewConverter * converter;
+    KoZoomHandler * converter;
     qint32 x;
     qint32 y;
     KisPaintDeviceSP projection;
@@ -50,7 +51,6 @@ public:
 };
 
 KisShapeLayer::KisShapeLayer( KoShapeContainer * parent,
-                              KoViewConverter * converter,
                               KisImageSP img,
                               const QString &name,
                               quint8 opacity )
@@ -60,7 +60,7 @@ KisShapeLayer::KisShapeLayer( KoShapeContainer * parent,
     setShapeId( KIS_SHAPE_LAYER_ID );
 
     m_d = new Private();
-    m_d->converter = converter;
+    m_d->converter = new KoZoomHandler();
     m_d->x = 0;
     m_d->y = 0;
     m_d->projection = new KisPaintDevice( img->colorSpace() );
@@ -70,6 +70,8 @@ KisShapeLayer::KisShapeLayer( KoShapeContainer * parent,
 
 KisShapeLayer::~KisShapeLayer()
 {
+    delete m_d->converter;
+    delete m_d->canvas;
     delete m_d;
 }
 

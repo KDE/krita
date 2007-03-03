@@ -59,8 +59,6 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
-#include <KoViewConverter.h>
-#include <KoZoomHandler.h>
 #include <KoSelection.h>
 
 // Krita Image
@@ -171,14 +169,12 @@ public:
         , ioProgressTotalSteps( 0 )
         , ioProgressBase( 0 )
         {
-            viewConverter = new KoZoomHandler();
         }
 
     ~KisDocPrivate()
         {
             delete cmdHistory;
             delete nserver;
-            delete viewConverter;
             undoListeners.setAutoDelete( false );
         }
 
@@ -193,7 +189,6 @@ public:
     int ioProgressTotalSteps;
     int ioProgressBase;
     KisLayerMap layerShapes; // maps from krita/image layers to shapes
-    KoViewConverter * viewConverter;
     QMap<KisLayer *, QString> layerFilenames; // temp storage during
                                               // load
 
@@ -1010,7 +1005,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
 
 KoView* KisDoc2::createViewInstance(QWidget* parent)
 {
-    KisView2 * v = new KisView2(this, m_d->viewConverter, parent);
+    KisView2 * v = new KisView2(this, parent);
     Q_CHECK_PTR(v);
 
     return v;
@@ -1275,7 +1270,6 @@ void KisDoc2::addShape( KoShape* shape )
             }
 
             shapeLayer = new KisShapeLayer(container,
-                                           m_d->viewConverter,
                                            currentImage(),
                                            i18n( "Flake shapes %1", m_d->nserver->number() ),
                                            OPACITY_OPAQUE);

@@ -78,7 +78,7 @@ KisProjection::KisProjection( KisImageSP image, KisGroupLayerSP rootLayer )
     m_d->weaver = new Weaver();
     KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("");
-    m_d->weaver->setMaximumNumberOfThreads( cfg->readEntry("maxthreads",  10) );
+    m_d->weaver->setMaximumNumberOfThreads( cfg->readEntry("maxprojectionthreads",  10) );
     m_d->updateRectSize = cfg->readEntry( "updaterectsize", 512 );
     connect( m_d->weaver, SIGNAL( jobDone(Job*) ), this, SLOT( slotUpdateUi( Job* ) ) );
 

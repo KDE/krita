@@ -1,7 +1,9 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,91 +33,141 @@
 #include <KoProperties.h>
 
 #include <kdebug.h>
+#include <ksharedconfig.h>
+
 #include <QUndoCommand>
 #include <QMouseEvent>
-#include <QGridLayout>
 #include <QPainter>
 #include <QScrollBar>
 #include <QEvent>
+#include <QSize>
+#include <QPoint>
+
 #include <limits.h>
 
-KoCanvasController::KoCanvasController(QWidget *parent)
-    : QScrollArea(parent)
-    , m_canvas(0)
-    , m_toolOptionWidget(0)
+class KoCanvasController::Private
 {
+public:
+    KoCanvasBase * canvas;
+    bool centerCanvas;
+    QWidget * toolOptionWidget;
+    int margin; // The viewport margin around the document
+    QSize documentSize;
+    QPoint documentOffset;
+    Viewport * viewportWidget;
+};
+
+KoCanvasController::KoCanvasController(QWidget *parent)
+    : QAbstractScrollArea(parent)
+{
+    m_d = new Private();
+    m_d->canvas = 0;
+    m_d->toolOptionWidget = 0;
+
     setFrameShape(NoFrame);
-    m_viewport = new Viewport(this);
-    setWidget(m_viewport);
-    setWidgetResizable(true);
+    m_d->viewportWidget = new Viewport( this );
+    setViewport(m_d->viewportWidget);
+
     setAutoFillBackground(false);
+
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetX()));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetY()));
 
     setMouseTracking( true );
 
+    KSharedConfig::Ptr cfg = KGlobal::config();
+    cfg->setGroup("");
+    m_d->margin = cfg->readEntry("canvasmargin",  30);
+
+    connect( this, SIGNAL( moveDocumentOffset( QPoint ) ), m_d->viewportWidget, SLOT( documentOffsetMoved( QPoint ) ) );
+
+}
+
+KoCanvasController::~KoCanvasController()
+{
+    delete m_d;
+}
+
+
+void KoCanvasController::scrollContentsBy ( int dx, int dy )
+{
+    Q_UNUSED( dx );
+    Q_UNUSED( dy );
+    setDocumentOffset();
+}
+
+void KoCanvasController::resizeEvent(QResizeEvent * resizeEvent)
+{
+    emit sizeChanged(resizeEvent->size());
+
+    // XXX: When resizing, keep the area we're looking at now in the
+    // center of the resized view.
+    resetScrollBars();
+    setDocumentOffset();
 }
 
 void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
+
     Q_ASSERT(canvas); // param is not null
-    if(m_canvas) {
+    if(m_d->canvas) {
         emit canvasRemoved(this);
-        m_viewport->removeCanvas(m_canvas->canvasWidget());
     }
-    m_viewport->setCanvas(canvas->canvasWidget());
-    m_canvas = canvas;
-    m_canvas->canvasWidget()->installEventFilter(this);
-    m_canvas->canvasWidget()->setMouseTracking( true );
+    m_d->viewportWidget->setCanvas(canvas->canvasWidget());
+    m_d->canvas = canvas;
+    m_d->canvas->canvasWidget()->installEventFilter(this);
+    m_d->canvas->canvasWidget()->setMouseTracking( true );
 
     emit canvasSet(this);
 }
 
 KoCanvasBase* KoCanvasController::canvas() const {
-    return m_canvas;
+    return m_d->canvas;
 }
 
 int KoCanvasController::visibleHeight() const {
-    if(m_canvas == 0)
+    if(m_d->canvas == 0)
         return 0;
     QWidget *canvasWidget = canvas()->canvasWidget();
 
     int height1;
     if(canvasWidget == 0)
-        height1 = m_viewport->height();
+        height1 = viewport()->height();
     else
-        height1 = qMin(m_viewport->height(), canvasWidget->height());
+        height1 = qMin(viewport()->height(), canvasWidget->height());
     int height2 = height();
     return qMin(height1, height2);
 }
 
 int KoCanvasController::visibleWidth() const {
-    if(m_canvas == 0)
+    if(m_d->canvas == 0)
         return 0;
     QWidget *canvasWidget = canvas()->canvasWidget();
 
     int width1;
     if(canvasWidget == 0)
-        width1 = m_viewport->width();
+        width1 = viewport()->width();
     else
-        width1 = qMin(m_viewport->width(), canvasWidget->width());
+        width1 = qMin(viewport()->width(), canvasWidget->width());
     int width2 = width();
     return qMin(width1, width2);
 }
 
-void KoCanvasController::centerCanvas(bool centered) {
-    m_centerCanvas = centered;
-    m_viewport->centerCanvas(centered);
+bool KoCanvasController::isCanvasCentered() const {
+    return m_d->centerCanvas;
 }
 
-bool KoCanvasController::isCanvasCentered() const {
-    return m_centerCanvas;
+void KoCanvasController::centerCanvas(bool centered)
+{
+    // XXX: Move the document so it's midpoint is in the middle
+    Q_UNUSED( centered );
+    m_d->centerCanvas = true;
 }
 
 int KoCanvasController::canvasOffsetX() const {
     int offset = 0;
 
-    if(m_canvas) {
-        offset = m_canvas->canvasWidget()->x() + frameWidth();
+    if(m_d->canvas) {
+        offset = m_d->canvas->canvasWidget()->x() + frameWidth();
     }
 
     if(horizontalScrollBar()) {
@@ -128,8 +180,8 @@ int KoCanvasController::canvasOffsetX() const {
 int KoCanvasController::canvasOffsetY() const {
     int offset = 0;
 
-    if(m_canvas) {
-        offset = m_canvas->canvasWidget()->y() + frameWidth();
+    if(m_d->canvas) {
+        offset = m_d->canvas->canvasWidget()->y() + frameWidth();
     }
 
     if(verticalScrollBar()) {
@@ -147,13 +199,10 @@ void KoCanvasController::updateCanvasOffsetY() {
     emit canvasOffsetYChanged(canvasOffsetY());
 }
 
-void KoCanvasController::resizeEvent(QResizeEvent * resizeEvent) {
-    QScrollArea::resizeEvent(resizeEvent);
-    emit sizeChanged(resizeEvent->size());
-}
+
 
 bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
-    if(m_canvas && m_canvas->canvasWidget() && (watched == m_canvas->canvasWidget())) {
+    if(m_d->canvas && m_d->canvas->canvasWidget() && (watched == m_d->canvas->canvasWidget())) {
         if((event->type() == QEvent::Resize) || event->type() == QEvent::Move) {
             updateCanvasOffsetX();
             updateCanvasOffsetY();
@@ -164,7 +213,6 @@ bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
                 emit canvasMousePositionChanged( mouseEvent->pos() );
         }
     }
-
     return false;
 }
 
@@ -175,15 +223,15 @@ void KoCanvasController::ensureVisible( KoShape *shape ) {
 
 void KoCanvasController::ensureVisible( const QRectF &rect ) {
     // convert the document based rect into a canvas based rect
-    QRect viewRect = m_canvas->viewConverter()->documentToView( rect ).toRect();
+    QRect viewRect = m_d->canvas->viewConverter()->documentToView( rect ).toRect();
 
     // calculate position of the centerpoint of the rect we want to make visible
-    QPoint cp = viewRect.center() + m_canvas->documentOrigin();
-    cp.rx() += m_canvas->canvasWidget()->x() + frameWidth();
-    cp.ry() += m_canvas->canvasWidget()->y() + frameWidth();
+    QPoint cp = viewRect.center() + m_d->canvas->documentOrigin();
+    cp.rx() += m_d->canvas->canvasWidget()->x() + frameWidth();
+    cp.ry() += m_d->canvas->canvasWidget()->y() + frameWidth();
 
     // calculate the differance to the viewport centerpoint
-    QPoint centerDiff = cp - 0.5 * QPoint( m_viewport->width(), m_viewport->height() );
+    QPoint centerDiff = cp - 0.5 * QPoint( viewport()->width(), viewport()->height() );
 
     QScrollBar *hBar = horizontalScrollBar();
     // try to centralize the centerpoint of the rect which we want to make visible
@@ -205,43 +253,153 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
 void KoCanvasController::setToolOptionWidget(QWidget *widget) {
 //   if(m_toolOptionWidget)
 //       m_toolOptionWidget->deleteLater();
-    m_toolOptionWidget = widget;
-    emit toolOptionWidgetChanged(m_toolOptionWidget);
+    m_d->toolOptionWidget = widget;
+    emit toolOptionWidgetChanged(m_d->toolOptionWidget);
 }
+
+
+void KoCanvasController::setDocumentSize( const QSize & sz )
+{
+    m_d->documentSize = sz;
+    m_d->viewportWidget->setDocumentSize( sz );
+    resetScrollBars();
+}
+
+void KoCanvasController::setDocumentOffset()
+{
+    // The margins scroll the canvas widget inside the viewport, not
+    // the document. The documentOffset is meant the be the value that
+    // the canvas must add to the update rect in its paint event, to
+    // compensate.
+
+    QPoint pt( horizontalScrollBar()->value(), verticalScrollBar()->value() );
+    if ( pt.x() < m_d->margin ) pt.setX( 0 );
+    if ( pt.y() < m_d->margin ) pt.setY( 0 );
+    if ( pt.x() > m_d->documentSize.width() ) pt.setX( m_d->documentSize.width() );
+    if ( pt.y() > m_d->documentSize.height() ) pt.setY( m_d->documentSize.height() );
+    emit( moveDocumentOffset( pt ) );
+}
+
+void KoCanvasController::resetScrollBars()
+{
+    // The scrollbar value always points at the top-left corner of the
+    // bit of image we paint.
+
+    int docH = m_d->documentSize.height() + m_d->margin;
+    int docW = m_d->documentSize.width() + m_d->margin;
+    int drawH = m_d->viewportWidget->height();
+    int drawW = m_d->viewportWidget->width();
+
+    QScrollBar * hScroll = horizontalScrollBar();
+    QScrollBar * vScroll = verticalScrollBar();
+
+    if (docH <= drawH && docW <= drawW) {
+        // we need no scrollbars
+        vScroll->setRange( 0, 0 );
+        hScroll->setRange( 0, 0 );
+    } else if (docH <= drawH) {
+        // we need a horizontal scrollbar only
+        vScroll->setRange( 0, 0 );
+        hScroll->setRange(0, docW - drawW);
+    } else if(docW <= drawW) {
+        // we need a vertical scrollbar only
+        hScroll->setRange( 0, 0 );
+        vScroll->setRange(0, docH - drawH);
+    } else {
+        // we need both scrollbars
+        vScroll->setRange(0, docH - drawH);
+        hScroll->setRange(0, docW - drawW);
+    }
+
+    // XXX: The singlestep should be configurable per app?
+    //int fontheight = QFontMetrics(KGlobalSettings::generalFont()).height() * 3;
+    int fontheight = 40;
+    vScroll->setPageStep(drawH);
+    vScroll->setSingleStep(fontheight);
+    hScroll->setPageStep(drawW);
+    hScroll->setSingleStep(fontheight);
+
+}
+
+
+// XXX: Apparently events are not propagated to the viewport widget by
+// QAbstractScrollArea
+
+void KoCanvasController::paintEvent( QPaintEvent * event )
+{
+    QPainter gc( viewport() );
+    m_d->viewportWidget->handlePaintEvent( gc, event );
+}
+
+void KoCanvasController::dragEnterEvent( QDragEnterEvent * event )
+{
+    m_d->viewportWidget->handleDragEnterEvent( event );
+}
+
+void KoCanvasController::dropEvent( QDropEvent *event )
+{
+    m_d->viewportWidget->handleDropEvent( event );
+}
+
+void KoCanvasController::dragMoveEvent ( QDragMoveEvent *event )
+{
+    m_d->viewportWidget->handleDragMoveEvent( event );
+}
+
+void KoCanvasController::dragLeaveEvent( QDragLeaveEvent *event )
+{
+    m_d->viewportWidget->handleDragLeaveEvent( event );
+}
+
 
 // ********** Viewport **********
-KoCanvasController::Viewport::Viewport(KoCanvasController* parent)
-: QWidget(parent)
-, m_draggedShape(0)
+Viewport::Viewport(KoCanvasController* parent)
+    : QWidget(parent)
+    , m_draggedShape(0)
+    , m_canvas( 0 )
+    , m_documentOffset( QPoint( 0, 0 ) )
 {
     setBackgroundRole(QPalette::Dark);
-    setAutoFillBackground(false);
-    m_layout = new QGridLayout(this);
-    m_layout->setSpacing(0);
-    m_layout->setMargin(0);
-    centerCanvas(true);
+    setAutoFillBackground(true);
     setAcceptDrops(true);
+    setMouseTracking( true );
     m_parent = parent;
+
+    KSharedConfig::Ptr cfg = KGlobal::config();
+    cfg->setGroup("");
+    m_margin = cfg->readEntry("canvasmargin",  30);
+
 }
 
-void KoCanvasController::Viewport::setCanvas(QWidget *canvas) {
-    m_layout->addWidget(canvas, 1, 1, Qt::AlignHCenter | Qt::AlignVCenter);
+void Viewport::setCanvas(QWidget *canvas)
+{
+    if ( !canvas ) return;
+    // XXX: Should we delete the old canvas if we set a new one, or
+    // leave that to the owning application?
+    if ( m_canvas ) {
+        m_canvas->hide();
+        delete m_canvas;
+    }
+    m_canvas = canvas;
+    m_canvas->setParent( this );
+    resetLayout();
 }
 
-void KoCanvasController::Viewport::removeCanvas(QWidget *canvas) {
-    m_layout->removeWidget(canvas);
+void Viewport::setDocumentSize( QSize size )
+{
+    m_documentSize = size;
+    resetLayout();
 }
 
-void KoCanvasController::Viewport::centerCanvas(bool centered) {
-    m_layout->setColumnStretch(0,centered?1:0);
-    m_layout->setColumnStretch(1,1);
-    m_layout->setColumnStretch(2,centered?1:2);
-    m_layout->setRowStretch(0,centered?1:0);
-    m_layout->setRowStretch(1,1);
-    m_layout->setRowStretch(2,centered?1:2);
+void Viewport::documentOffsetMoved( QPoint pt )
+{
+    m_documentOffset = pt;
+    resetLayout();
 }
 
-void KoCanvasController::Viewport::dragEnterEvent(QDragEnterEvent *event) {
+
+void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
+{
     // if not a canvas set then ignore this, makes it possible to assume
     // we have a canvas in all the support methods.
     if(! (m_parent->canvas() && m_parent->canvas()->canvasWidget()))
@@ -295,7 +453,7 @@ void KoCanvasController::Viewport::dragEnterEvent(QDragEnterEvent *event) {
     }
 }
 
-void KoCanvasController::Viewport::dropEvent(QDropEvent *event) {
+void Viewport::handleDropEvent(QDropEvent *event) {
     m_draggedShape->setAbsolutePosition( correctPosition(event->pos()) );
     m_parent->canvas()->shapeManager()->remove(m_draggedShape); // remove it to not interfere with z-index calc.
     QUndoCommand * cmd = m_parent->canvas()->shapeController()->addShape( m_draggedShape );
@@ -310,7 +468,7 @@ void KoCanvasController::Viewport::dropEvent(QDropEvent *event) {
     m_draggedShape = 0;
 }
 
-QPointF KoCanvasController::Viewport::correctPosition(const QPoint &point) const {
+QPointF Viewport::correctPosition(const QPoint &point) const {
     QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
     Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
     QPoint correctedPos(point.x() - canvasWidget->x(), point.y() - canvasWidget->y());
@@ -318,7 +476,7 @@ QPointF KoCanvasController::Viewport::correctPosition(const QPoint &point) const
     return m_parent->canvas()->viewConverter()->viewToDocument(correctedPos);
 }
 
-void KoCanvasController::Viewport::dragMoveEvent (QDragMoveEvent *event) {
+void Viewport::handleDragMoveEvent (QDragMoveEvent *event) {
     if(m_draggedShape == 0)
         return;
     m_draggedShape->repaint();
@@ -328,17 +486,17 @@ void KoCanvasController::Viewport::dragMoveEvent (QDragMoveEvent *event) {
     repaint(m_draggedShape);
 }
 
-void KoCanvasController::Viewport::repaint(KoShape *shape) {
+void Viewport::repaint(KoShape *shape) {
     QRect rect = m_parent->canvas()->viewConverter()->documentToView(shape->boundingRect()).toRect();
     QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
     Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
     rect.moveLeft(rect.left() + canvasWidget->x());
     rect.moveTop(rect.top() + canvasWidget->y());
     rect.adjust(-2, -2, 2, 2); // adjust for antialias
-    update(rect);
+    update();
 }
 
-void KoCanvasController::Viewport::dragLeaveEvent(QDragLeaveEvent *) {
+void Viewport::handleDragLeaveEvent(QDragLeaveEvent *) {
     if(m_draggedShape) {
         repaint(m_draggedShape);
         m_parent->canvas()->shapeManager()->remove(m_draggedShape);
@@ -347,9 +505,10 @@ void KoCanvasController::Viewport::dragLeaveEvent(QDragLeaveEvent *) {
     }
 }
 
-void KoCanvasController::Viewport::paintEvent(QPaintEvent *event) {
-    QPainter painter( this );
-    painter.setClipRect(event->rect());
+void Viewport::handlePaintEvent(QPainter & painter, QPaintEvent *event)
+{
+
+    // XXX: This is the shadow, right?
     if(false && m_parent->canvas() && m_parent->canvas()->canvasWidget()) {
         QWidget *canvas = m_parent->canvas()->canvasWidget();
         painter.setPen(Qt::black);
@@ -374,7 +533,89 @@ void KoCanvasController::Viewport::paintEvent(QPaintEvent *event) {
         painter.restore();
     }
 
-    painter.end();
+}
+
+void Viewport::resetLayout()
+{
+    // Determine the area we have to show
+    QRect viewRect( m_documentOffset, size() );
+
+    int viewH = viewRect.height();
+    int viewW = viewRect.width();
+
+    int docH = m_documentSize.height();
+    int docW = m_documentSize.width();
+
+    int moveX = 0;
+    int moveY = 0;
+
+    int resizeW = viewW;
+    int resizeH = viewH;
+
+//     kDebug() << "viewH: " << viewH << endl
+//              << "docH: " << docH << endl
+//              << "viewW: " << viewW << endl
+//              << "docW: " << docW << endl;
+
+    if ( viewH == docH && viewW == docW )
+    {
+        // Do nothing
+        resizeW = docW;
+        resizeH = docH;
+    }
+    else if ( viewH > docH && viewW > docW )
+    {
+        // Show entire canvas centered
+        moveX = ( viewW - docW ) / 2;
+        moveY = ( viewH - docH ) / 2;
+        resizeW = docW;
+        resizeH = docH;
+    }
+    else  if ( viewH < docH && viewW > docW ) {
+        // Center canvas horizontally
+        moveX = ( viewW - docW ) / 2;
+        resizeW = docW;
+
+        int marginTop = m_margin - m_documentOffset.y();
+        int marginBottom = viewH  - ( m_documentSize.height() - m_documentOffset.y() );
+
+        if ( marginTop > 0 ) moveY = marginTop;
+        if ( marginTop > 0 ) resizeH = viewH - marginTop;
+        if ( marginBottom > 0 ) resizeH = viewH - marginBottom;
+    }
+    else  if ( viewW < docW && viewH > docH ) {
+        // Center canvas vertically
+        moveY = ( viewH - docH ) / 2;
+        resizeH = docH;
+
+        int marginLeft = m_margin - m_documentOffset.x();
+        int marginRight = viewW - ( m_documentSize.width() - m_documentOffset.x() );
+
+        if ( marginLeft > 0 ) moveX = marginLeft;
+        if ( marginLeft > 0 ) resizeW = viewW - marginLeft;
+        if ( marginRight > 0 ) resizeW = viewW - marginRight;
+
+    }
+    else {
+        // Take care of the margin around the canvas
+        int marginTop = m_margin - m_documentOffset.y();
+        int marginLeft = m_margin - m_documentOffset.x();
+        int marginRight = viewW - ( m_documentSize.width() - m_documentOffset.x() );
+        int marginBottom = viewH  - ( m_documentSize.height() - m_documentOffset.y() );
+
+        if ( marginTop > 0 ) moveY = marginTop;
+        if ( marginLeft > 0 ) moveX = marginLeft;
+
+        if ( marginTop > 0 ) resizeH = viewH - marginTop;
+        if ( marginLeft > 0 ) resizeW = viewW - marginLeft;
+        if ( marginRight > 0 ) resizeW = viewW - marginRight;
+        if ( marginBottom > 0 ) resizeH = viewH - marginBottom;
+
+    }
+    m_canvas->setGeometry( moveX, moveY, resizeW, resizeH );
+
+//     kDebug() << "View port geom: " << geometry() << endl;
+//     kDebug() << "Canvas widget geom: " << m_canvas->geometry() << endl;
 }
 
 #include "KoCanvasController.moc"

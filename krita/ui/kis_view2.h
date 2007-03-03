@@ -33,6 +33,7 @@ class QPoint;
 
 class KoViewChield;
 class KoViewConverter;
+class KoCanvasController;
 
 class KisCanvas2;
 class KisDoc2;
@@ -64,7 +65,7 @@ public:
      * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
      */
-    KisView2(KisDoc2 * doc, KoViewConverter * viewConverter, QWidget * parent);
+    KisView2(KisDoc2 * doc, QWidget * parent);
     virtual ~KisView2();
 
 public:
@@ -99,6 +100,11 @@ public:  // Krita specific interfaces
     /// The selection manager handles everything action related to
     /// selections.
     KisSelectionManager * selectionManager();
+
+    /// The CanvasController decorates the canvas with scrollbars
+    /// and knows where to start painting on the canvas widget, i.e.,
+    /// the document offset.
+    KoCanvasController * canvasController();
 
     /// The layer manager handles everything action related to
     /// layers

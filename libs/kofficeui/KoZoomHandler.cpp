@@ -23,11 +23,17 @@
 #include <KoUnit.h> // for POINT_TO_INCH
 #include <KoGlobal.h>
 
-KoZoomHandler::KoZoomHandler() : KoViewConverter()
+
+KoZoomHandler::KoZoomHandler()
+    : KoViewConverter()
 {
     // Note that this calls the method below, not the derived one
     setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
     setZoomMode( KoZoomMode::ZOOM_CONSTANT );
+}
+
+KoZoomHandler::~KoZoomHandler()
+{
 }
 
 void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
@@ -78,25 +84,30 @@ void KoZoomHandler::setZoom( int zoom )
     setZoom(zoom / 100.0);
 }
 
-QPointF KoZoomHandler::documentToView( const QPointF &documentPoint )  const{
-    return QPointF( zoomItX( documentPoint.x() ), zoomItY( documentPoint.y() ) );
+QPointF KoZoomHandler::documentToView( const QPointF &documentPoint )  const
+{
+    return QPointF( zoomItX( documentPoint.x() ),
+                    zoomItY( documentPoint.y() ));
 }
 
 QPointF KoZoomHandler::viewToDocument( const QPointF &viewPoint )  const{
-    return QPointF( unzoomItX( viewPoint.x() ), unzoomItY( viewPoint.y() ) );
+    return QPointF( unzoomItX( viewPoint.x() ),
+                    unzoomItY( viewPoint.y() ) );
 }
 
-QRectF KoZoomHandler::documentToView( const QRectF &documentRect )  const{
-    QRectF r;
-    r.setCoords( zoomItX( documentRect.left() ),  zoomItY( documentRect.top() ),
-                  zoomItX( documentRect.right() ), zoomItY( documentRect.bottom() ) );
+QRectF KoZoomHandler::documentToView( const QRectF &documentRect )  const {
+    QRectF r (zoomItX( documentRect.x() ),
+              zoomItY( documentRect.y() ),
+              zoomItX( documentRect.width() ),
+              zoomItY( documentRect.height() ) );
     return r;
 }
 
 QRectF KoZoomHandler::viewToDocument( const QRectF &viewRect )  const{
-    QRectF r;
-    r.setCoords( unzoomItX( viewRect.left() ),  unzoomItY( viewRect.top() ),
-                  unzoomItX( viewRect.right() ), unzoomItY( viewRect.bottom() ) );
+    QRectF r (  unzoomItX( viewRect.x() ),
+                unzoomItY( viewRect.y()),
+                unzoomItX( viewRect.width() ),
+                unzoomItY( viewRect.height() ) );
     return r;
 }
 
@@ -124,3 +135,5 @@ void KoZoomHandler::zoom(double *zoomX, double *zoomY) const {
     *zoomX = zoomItX(100.0) / 100.0;
     *zoomY = zoomItY(100.0) / 100.0;
 }
+
+#include "KoZoomHandler.moc"

@@ -62,6 +62,9 @@ public: // KisAbstractCanvasWidget
     QWidget * widget() { return this; }
 
     KoToolProxy * toolProxy();
+
+    void documentOffsetMoved( QPoint pt );
+
 private:
     class Private;
     Private * m_d;

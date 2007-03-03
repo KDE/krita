@@ -227,12 +227,12 @@ public:
     KoColorSpace * colorSpace() const;
 
     /**
-     * X resolution in pixels per inch (or KoUnit?)
+     * X resolution in pixels per pt
      */
     double xRes();
 
     /**
-     * Y resolution in pixels per inch (or KoUnit?)
+     * Y resolution in pixels per pt
      */
     double yRes();
 

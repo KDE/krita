@@ -102,12 +102,6 @@ public:
     virtual void updateCanvas(const QRectF& rc) = 0;
 
     /**
-     * This method should not be here; a QRegion is integer based and thus can only be used on whole points.
-     * Code should use the QRectF version instead.
-     */
-    virtual void updateCanvas(const QRegion & region) KDE_DEPRECATED;
-
-    /**
      * Return the proxy to the active tool (determining which tool
      * is really, really active is hard when tablets are involved,
      * so leave that to others.

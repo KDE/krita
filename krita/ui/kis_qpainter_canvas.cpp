@@ -34,6 +34,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <KoZoomHandler.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 
@@ -72,6 +73,7 @@ public:
     KoViewConverter * viewConverter;
     QBrush checkBrush;
     QPixmap displayCache;
+    QPoint documentOffset;
     QPainterGridDrawer* gridDrawer;
 };
 
@@ -82,11 +84,10 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     m_d = new Private();
     m_d->canvas =  canvas;
     m_d->viewConverter = canvas->viewConverter();
-    m_d->toolProxy = KoToolManager::instance()->createToolProxy(m_d->canvas);
     m_d->gridDrawer = new QPainterGridDrawer(canvas->view()->document(), canvas->viewConverter());
-    setAttribute(Qt::WA_NoSystemBackground);
-    setAutoFillBackground(false);
-
+    m_d->toolProxy = KoToolManager::instance()->createToolProxy(m_d->canvas);
+    setAutoFillBackground(true);
+    //setAttribute( Qt::WA_OpaquePaintEvent );
     QPixmap tile(PATTERN_WIDTH * 2, PATTERN_HEIGHT * 2);
     tile.fill(Qt::white);
     QPainter pt(&tile);
@@ -94,11 +95,9 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     pt.fillRect(0, 0, PATTERN_WIDTH, PATTERN_HEIGHT, color);
     pt.fillRect(PATTERN_WIDTH, PATTERN_HEIGHT, PATTERN_WIDTH, PATTERN_HEIGHT, color);
     pt.end();
-    QBrush b(tile);
-
-    m_d->checkBrush = b;
+    m_d->checkBrush = QBrush(tile);
+    setAcceptDrops( true );
 }
-
 
 KisQPainterCanvas::~KisQPainterCanvas()
 {
@@ -109,27 +108,10 @@ KisQPainterCanvas::~KisQPainterCanvas()
 
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
-    QRect updateRect = ev->rect();
-
-//     kDebug(41010) << "Paint event: " << updateRect << endl;
-
     const QImage canvasImage = m_d->canvas->canvasCache();
-#if 0
-    if ( m_d->displayCache.width() < updateRect.width() ||
-         m_d->displayCache.height() < updateRect.height() )
-    {
-        QSize size = updateRect.size();
-        size.setWidth( size.width() + 64 );
-        size.setHeight( size.height() + 64 );
 
-//         kDebug(41010) << "Oops, display cache too small\n";
-        m_d->displayCache = QPixmap( size );
-        QPainter p( &m_d->displayCache );
-        p.fillRect( 0, 0, m_d->displayCache.width(), m_d->displayCache.height(), m_d->checkBrush );
-        p.end();
+    QRect updateRect = ev->rect().translated( m_d->documentOffset );
 
-    }
-#endif
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
 
@@ -144,11 +126,8 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     t.start();
     // Checks
-    gc.fillRect(updateRect, m_d->checkBrush );
-    //gc.drawPixmap( - (updateRect.x() % PATTERN_WIDTH ),
-    //               -( updateRect.y() % PATTERN_HEIGHT ),
-    //               m_d->displayCache );
-//     kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
+    gc.fillRect(ev->rect(), m_d->checkBrush );
+    kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
     t.restart();
 
     double pppx,pppy;
@@ -172,12 +151,13 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     double scaleX = sx / pppx;
     double scaleY = sy / pppy;
 
-    QPoint dstTopLeft = QPointF(rc.x() * scaleX, rc.y() * scaleY).toPoint();
+    //QPoint dstTopLeft = QPointF(rc.x() * scaleX, rc.y() * scaleY).toPoint();
 
     // Pixel-for-pixel mode
     if ( scaleX == 1.0 && scaleY == 1.0 ) {
 //         kDebug() << "Pixel for pixel!\n";
-        gc.drawImage( dstTopLeft.x(), dstTopLeft.y(), canvasImage, rc.x(), rc.y(), rc.width(), rc.height() );
+//        gc.drawImage( dstTopLeft.x(), dstTopLeft.y(), canvasImage, rc.x(), rc.y(), rc.width(), rc.height() );
+        gc.drawImage( ev->rect().x(), ev->rect().y(), canvasImage, updateRect.x(), updateRect.y(), updateRect.width(), updateRect.height() );
     }
     else {
         QSize sz = QSize( ( int )( rc.width() * ( sx / pppx ) ), ( int )( rc.height() * ( sy / pppy ) ));
@@ -189,7 +169,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
                                                       // GwenView's
                                                       // croppeqimage
                                                       // class anymore.
-//         kDebug(41010) << "Copying subrect:" << t.elapsed() << endl;
+        kDebug(41010) << "Copying subrect:" << t.elapsed() << endl;
         t.restart();
 
         QImage scaledImage;
@@ -201,11 +181,11 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
             scaledImage = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
         }
 
-//         kDebug(41010) << "Scaling subimage: " << t.elapsed() << endl;
+        kDebug(41010) << "Scaling subimage: " << t.elapsed() << endl;
         t.restart();
-        gc.drawImage( dstTopLeft.x(), dstTopLeft.y(), scaledImage, 0, 0, sz.width(), sz.height() );
+        gc.drawImage( ev->rect().x(), ev->rect().y(), scaledImage, 0, 0, sz.width(), sz.height() );
     }
-//     kDebug(41010 ) << "painting image: " <<  t.elapsed() << endl;
+    kDebug(41010 ) << "painting image: " <<  t.elapsed() << endl;
 
 #if 0
     // ask the current layer to paint its selection (and potentially
@@ -230,23 +210,24 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     // Give the tool a chance to paint its stuff
     gc.setRenderHint( QPainter::Antialiasing );
     gc.setRenderHint( QPainter::SmoothPixmapTransform );
+    gc.translate( QPoint( -m_d->documentOffset.x(), -m_d->documentOffset.y() ) );
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
 }
 
 void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {
-    m_d->toolProxy->mouseMoveEvent( e, m_d->viewConverter->viewToDocument(e->pos()) );
+    m_d->toolProxy->mouseMoveEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
 }
 
 void KisQPainterCanvas::mousePressEvent(QMouseEvent *e) {
-    m_d->toolProxy->mousePressEvent( e, m_d->viewConverter->viewToDocument(e->pos()) );
+    m_d->toolProxy->mousePressEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
 }
 
 void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e) {
-    m_d->toolProxy->mouseReleaseEvent( e, m_d->viewConverter->viewToDocument(e->pos()) );
+    m_d->toolProxy->mouseReleaseEvent( e, m_d->viewConverter->viewToDocument(e->pos()  + m_d->documentOffset ) );
 }
 
 void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e) {
-    m_d->toolProxy->mouseDoubleClickEvent( e, m_d->viewConverter->viewToDocument(e->pos()) );
+    m_d->toolProxy->mouseDoubleClickEvent( e, m_d->viewConverter->viewToDocument(e->pos()  + m_d->documentOffset ) );
 }
 
 void KisQPainterCanvas::keyPressEvent( QKeyEvent *e ) {
@@ -259,13 +240,13 @@ void KisQPainterCanvas::keyReleaseEvent (QKeyEvent *e) {
 
 void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
 {
-//     kDebug(41010) << "tablet event: " << e->pressure() << endl;
-    m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument(  e->pos() ) );
+    kDebug(41010) << "tablet event: " << e->pressure() << endl;
+    m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument(  e->pos() + m_d->documentOffset ) );
 }
 
 void KisQPainterCanvas::wheelEvent( QWheelEvent *e )
 {
-    m_d->toolProxy->wheelEvent( e, m_d->viewConverter->viewToDocument( e->pos()  ) );
+    m_d->toolProxy->wheelEvent( e, m_d->viewConverter->viewToDocument( e->pos() + m_d->documentOffset ) );
 }
 
 bool KisQPainterCanvas::event (QEvent *event) {
@@ -289,22 +270,11 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
     return m_d->toolProxy;
 }
 
-void KisQPainterCanvas::parentSizeChanged(const QSize & size )
+void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 {
-    Q_UNUSED( size );
-#if 0
-    if (m_d->displayCache.isNull() ||
-        ( size.width() > m_d->displayCache.width() ||
-          size.height() > m_d->displayCache.height())
-        )
-    {
-//         kDebug() << "KisQPainterCanvas::parentSizeChanged " << size << endl;
-        m_d->displayCache = QPixmap( size.width() + 64, size.height() + 64 );
-        QPainter p( &m_d->displayCache );
-        p.fillRect( 0, 0, m_d->displayCache.width(), m_d->displayCache.height(), m_d->checkBrush );
-        p.end();
-    }
-#endif
+    kDebug() << "KisQPainterCanvas::documentOffsetMoved offset is now: " << pt << endl;
+    m_d->documentOffset = pt;
+    update();
 }
 
 #include "kis_qpainter_canvas.moc"

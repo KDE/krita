@@ -1,6 +1,6 @@
 
-
 add_subdirectory( pics )
+add_subdirectory( tests )
 
 
 include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} )

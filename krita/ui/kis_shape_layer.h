@@ -52,7 +52,7 @@ class KisShapeLayer : public KisExternalLayer, public KoShapeLayer
 {
 public:
 
-    KisShapeLayer( KoShapeContainer * parent, KoViewConverter * converter, KisImageSP img, const QString &name, quint8 opacity );
+    KisShapeLayer( KoShapeContainer * parent, KisImageSP img, const QString &name, quint8 opacity );
     virtual ~KisShapeLayer();
 
 public:

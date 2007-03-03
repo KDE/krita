@@ -93,6 +93,7 @@ public:
      * @param zoomY a pointer to a double which will be modified to the vertical zoom.
      */
     virtual void zoom(double *zoomX, double *zoomY) const = 0;
+
 };
 
 #endif

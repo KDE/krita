@@ -26,6 +26,7 @@ class QBrush;
 class QImage;
 class QPaintEvent;
 class QMoveEvent;
+class QPoint;
 class KisCanvas2;
 class KoViewConverter;
 class KoToolProxy;
@@ -86,9 +87,8 @@ public: // KisAbstractCanvasWidget
 
     KoToolProxy * toolProxy();
 
-public slots:
+    void documentOffsetMoved( QPoint );
 
-    void parentSizeChanged( const QSize & size );
 
 private:
 

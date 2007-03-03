@@ -155,7 +155,7 @@ void KisCanvas2::gridSize(double *horizontal, double *vertical) const
 
 bool KisCanvas2::snapToGrid() const
 {
-    m_d->view->document()->gridData().snapToGrid();
+    return m_d->view->document()->gridData().snapToGrid();
 }
 
 void KisCanvas2::addCommand(QUndoCommand *command)

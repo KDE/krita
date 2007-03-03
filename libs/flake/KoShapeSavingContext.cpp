@@ -56,6 +56,15 @@ bool KoShapeSavingContext::isSet( KoShapeSavingOption option ) const
     return m_savingOptions && option;
 }
 
+void KoShapeSavingContext::setOptions( KoShapeSavingOptions options )
+{
+    m_savingOptions = options;
+}
+KoShapeSavingContext::KoShapeSavingOptions KoShapeSavingContext::options() const
+{
+    return m_savingOptions;
+}
+
 const QString KoShapeSavingContext::drawId( KoShape * shape, bool insert )
 {
     QMap<KoShape *, QString>::const_iterator it( m_drawIds.find( shape ) );

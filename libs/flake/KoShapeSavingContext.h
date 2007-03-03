@@ -103,7 +103,14 @@ public:
      *
      * @param options to use
      */
-    void set( KoShapeSavingOptions options );
+    void setOptions( KoShapeSavingOptions options );
+
+    /**
+     * @brief Get the options used
+     *
+     * @return options used
+     */
+    KoShapeSavingOptions options() const;
 
     /**
      * @brief Get the draw id for a shape

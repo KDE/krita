@@ -22,16 +22,19 @@
 #include <KoViewConverter.h>
 
 #include <kis_paint_device.h>
+#include <kis_layer.h>
 #include <kis_painter.h>
+#include <kis_shape_layer.h>
 #include <KoCompositeOp.h>
 
-#define DEBUG_REPAINT
+// #define DEBUG_REPAINT
 
-KisShapeLayerCanvas::KisShapeLayerCanvas(KoViewConverter * viewConverter)
+KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter)
     : KoCanvasBase( 0 )
     , m_viewConverter( viewConverter )
     , m_shapeManager( new KoShapeManager( this ) )
     , m_projection( 0 )
+    , m_parentLayer( parent)
 {
 }
 
@@ -41,21 +44,20 @@ KisShapeLayerCanvas::~KisShapeLayerCanvas()
 
 void KisShapeLayerCanvas::gridSize(double *horizontal, double *vertical) const
 {
-    // XXX: implement grids & snapping to grids for shapes in Krita
+    Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     Q_UNUSED( horizontal );
     Q_UNUSED( vertical );
 }
 
 bool KisShapeLayerCanvas::snapToGrid() const
 {
-    // XXX: implement snapping to grids for shapes in a layer
+    Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     return false;
 }
 
-void KisShapeLayerCanvas::addCommand(QUndoCommand *command)
+void KisShapeLayerCanvas::addCommand(QUndoCommand *)
 {
-    // XXX: implement this one way or another! (via the image?)
-    kDebug(41001) << "KisShapeLayerCanvas::addCommand()" << endl;
+    Q_ASSERT(false); // This should never be called as this canvas should have no tools.
 }
 
 KoShapeManager *KisShapeLayerCanvas::shapeManager() const
@@ -92,10 +94,12 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
     kp.bitBlt(r.x(), r.y(), m_projection->colorSpace()->compositeOp( COMPOSITE_COPY ),
               dev, OPACITY_OPAQUE, 0, 0, r.width(), r.height());
     kp.end();
+    m_parentLayer->setDirty(r);
 }
 
 KoToolProxy * KisShapeLayerCanvas::toolProxy()
 {
+    Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     return 0;
 }
 
@@ -111,6 +115,6 @@ QWidget* KisShapeLayerCanvas::canvasWidget()
 
 KoUnit KisShapeLayerCanvas::unit()
 {
-    // XXX: Is this right?
+    Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     return KoUnit(KoUnit::Point);
 }

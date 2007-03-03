@@ -42,7 +42,7 @@ class KRITAUI_EXPORT KisShapeLayerCanvas : public KoCanvasBase
 {
 public:
 
-    KisShapeLayerCanvas(KoViewConverter * viewConverter);
+    KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter);
     virtual ~KisShapeLayerCanvas();
 
     /// This canvas won't render onto a widget, but a projection
@@ -66,6 +66,7 @@ private:
     KoViewConverter * m_viewConverter;
     KoShapeManager * m_shapeManager;
     KisPaintDeviceSP m_projection;
+    KisShapeLayer *m_parentLayer;
 };
 
 #endif

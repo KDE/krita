@@ -41,6 +41,7 @@
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kactioncollection.h>
 
 // KOffice
 #include <KoApplication.h>
@@ -325,7 +326,9 @@ bool KisDoc2::init()
         m_d->nserver = 0;
     }
 
-    m_d->cmdHistory = new KCommandHistory(actionCollection(), true);
+    //The command history is connected to a fake action collection, so KoDocument history is shown in the ui
+    // TODO: remove after all commands are ported
+    m_d->cmdHistory = new KCommandHistory(new KActionCollection(new QObject()), true);
     Q_CHECK_PTR(m_d->cmdHistory);
 
     connect(m_d->cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
@@ -1082,6 +1085,8 @@ KCommand * KisDoc2::presentCommand()
 void KisDoc2::addCommand(KCommand *cmd)
 {
     Q_ASSERT(cmd);
+
+    kDebug(41007) << "Warning! Old command added: " << cmd->name() << ". Port it to new undo system"  << endl;
 
     KisCommandHistoryListener* l = 0;
 

@@ -67,30 +67,20 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
     // shape manager onto the projection.
     kDebug(41001) << "KisShapeLayerCanvas::updateCanvas()" << endl;
 
-
-    // XXX: Convert rc to krita image pixels
-
-    // Create the image as big as the pixels size calculated above
-
-    QImage img(1024, 768, QImage::Format_ARGB32);
-
-    QPainter p;
-
-    p.begin(&img);
-
-    // Translate the painter so that rc.x(),rc.y() == 0,0, to fit with the qimage we created
-
-    p.setClipRect(rc.toRect());
-
+    QRect r = m_viewConverter->documentToView(rc).toRect();
+    QImage img(r.width(), r.height(), QImage::Format_ARGB32);
+    img.fill(0);
+    QPainter p(&img);
+    p.translate(-r.topLeft());
+    p.setClipRect(r);
     m_shapeManager->paint(p, *m_viewConverter, false);
     p.end();
 
+    KisPaintDeviceSP dev = new KisPaintDevice(m_projection->colorSpace());
+    dev->convertFromQImage(img, "");
     KisPainter kp(m_projection.data());
-
-    // Use the image pixels rect we calculated above here
-    QRect r = rc.toRect();
-    kp.bitBlt(r.x(), r.y(), m_projection->colorSpace()->compositeOp( COMPOSITE_OVER ), &img,
-              OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+    kp.bitBlt(r.x(), r.y(), m_projection->colorSpace()->compositeOp( COMPOSITE_COPY ),
+              dev, OPACITY_OPAQUE, 0, 0, r.width(), r.height());
     kp.end();
 }
 

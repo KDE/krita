@@ -170,15 +170,10 @@ KoShapeManager* KisCanvas2::shapeManager() const
 
 void KisCanvas2::updateCanvas(const QRectF& rc)
 {
-    if ( KisShapeLayer * sl = dynamic_cast<KisShapeLayer*> ( m_d->view->image()->activeLayer().data() ) ) {
-        sl->prepareProjection(toAlignedRect( rc) );
-    }
-    else {
-        // First convert from document coordinated to widget coordinates
-        QRectF viewRect  = m_d->viewConverter->documentToView(rc);
-        viewRect.adjust(-5, -5, 5, 5); // floor, ceil?
-        m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
-    }
+    // First convert from document coordinated to widget coordinates
+    QRectF viewRect  = m_d->viewConverter->documentToView(rc);
+    viewRect.adjust(-5, -5, 5, 5); // floor, ceil?
+    m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
 }
 
 

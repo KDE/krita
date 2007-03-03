@@ -82,8 +82,10 @@ void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &con
 void KisShapeLayer::addChild(KoShape *object)
 {
     kDebug(41001) << "KisShapeLayer::addChild {" << endl;
-//     KoShapeLayer::addChild( object );
+    KoShapeLayer::addChild( object );
     m_d->canvas->shapeManager()->add( object );
+
+    setDirty(m_d->converter->documentToView(object->boundingRect()).toRect());
 }
 
 QIcon KisShapeLayer::icon() const
@@ -94,21 +96,9 @@ QIcon KisShapeLayer::icon() const
 void KisShapeLayer::prepareProjection(const QRect& r)
 {
     kDebug(41001) << "KisShapeLayer::prepareProjection()" << r << endl;
+
     // XXX: Is r in document, widget or pixel coordinates? I hope in
     // document coordinates. Note: see dox for updateCanvas.
-
-    QImage img(1024, 768, QImage::Format_ARGB32);
-    QPainter p;
-
-    p.begin(&img);
-    p.setClipRect(r);
-    m_d->canvas->shapeManager()->paint(p, *m_d->converter, false);
-    p.end();
-
-    KisPainter kp(m_d->projection.data());
-    kp.bitBlt(r.x(), r.y(), m_d->projection->colorSpace()->compositeOp( COMPOSITE_OVER ), &img,
-              OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
-    kp.end();
 
     setDirty( r ); // Convert to right coordinates
 }

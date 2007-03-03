@@ -194,8 +194,8 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     for ( qint32 row = 0; row < sh; ++row ) {
 
         KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dx, dy + row, sw);
-        qint32 pixels = dstIt.nConseqHPixels();
         while ( !dstIt.isDone() ) {
+            qint32 pixels = dstIt.nConseqHPixels();
             m_colorSpace->bitBlt(dstIt.rawData(),
                                  0,
                                  srcCs,

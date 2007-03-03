@@ -74,9 +74,6 @@ public:
     // Retrieve the projection for
     KisPaintDeviceSP projection();
 
-    /// Retrieve the shape layer canvas
-    KoCanvasBase * canvas();
-
     bool saveToXML(QDomDocument doc, QDomElement elem);
 
     // KisLayer implementation

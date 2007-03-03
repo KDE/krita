@@ -53,7 +53,7 @@ KoGenStyles & KoShapeSavingContext::mainStyles()
 
 bool KoShapeSavingContext::isSet( KoShapeSavingOption option ) const
 {
-    return m_savingOptions && option;
+    return m_savingOptions & option;
 }
 
 void KoShapeSavingContext::setOptions( KoShapeSavingOptions options )

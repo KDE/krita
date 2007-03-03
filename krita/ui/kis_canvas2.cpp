@@ -34,7 +34,7 @@
 #include <KoDocument.h>
 
 #include <kis_image.h>
-
+#include "kis_doc2.h"
 #include "kis_shape_layer.h"
 #include "kis_resource_provider.h"
 #include "kis_view2.h"
@@ -147,14 +147,15 @@ KisView2* KisCanvas2::view()
 
 void KisCanvas2::gridSize(double *horizontal, double *vertical) const
 {
-    Q_UNUSED( horizontal );
-    Q_UNUSED( vertical );
-
+    if( horizontal )
+        *horizontal = m_d->view->document()->gridData().gridX();
+    if( vertical )
+        *vertical = m_d->view->document()->gridData().gridY();
 }
 
 bool KisCanvas2::snapToGrid() const
 {
-    return true;
+    m_d->view->document()->gridData().snapToGrid();
 }
 
 void KisCanvas2::addCommand(QUndoCommand *command)

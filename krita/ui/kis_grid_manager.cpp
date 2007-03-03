@@ -67,6 +67,10 @@ void KisGridManager::setup(KActionCollection * collection)
     m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Grid")));
     m_toggleGrid->setChecked(m_view->document()->gridData().showGrid());
 
+    m_toggleSnapToGrid  = new KToggleAction(i18n("Snap To Grid"), this);
+    collection->addAction("view_snap_to_grid", m_toggleSnapToGrid );
+    connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
+
     // Fast grid config
     m_gridFastConfig1x1  = new KAction(i18n("1x1"), this);
     collection->addAction("view_fast_grid_1x1", m_gridFastConfig1x1 );
@@ -101,6 +105,12 @@ void KisGridManager::updateGUI()
 void KisGridManager::toggleGrid()
 {
     m_view->document()->gridData().setShowGrid( !m_view->document()->gridData().showGrid() );
+    m_view->canvas()->update();
+}
+
+void KisGridManager::toggleSnapToGrid()
+{
+    m_view->document()->gridData().setSnapToGrid( m_toggleSnapToGrid->isChecked() );
     m_view->canvas()->update();
 }
 

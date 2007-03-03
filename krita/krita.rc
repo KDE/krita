@@ -41,6 +41,7 @@
   <!--Action name="view_guidelines"/-->
   <Separator/>
   <Action name="view_toggle_grid" />
+  <Action name="view_snap_to_grid" />
   <Menu name="view_fast_grid_config"><text>Grid Spacing</text>
    <Action name="view_fast_grid_1x1" />
    <Action name="view_fast_grid_2x2" />

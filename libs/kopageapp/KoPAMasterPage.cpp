@@ -42,5 +42,6 @@ void KoPAMasterPage::createOdfPageTag( KoPASavingContext &paContext ) const
 
     paContext.xmlWriter().startElement( "style:master-page" );
     paContext.xmlWriter().addAttribute( "style:name", "Standard" ); //TODO
+    paContext.addMasterPage( this, "Standard" );
     paContext.xmlWriter().addAttribute( "style:page-layout-name", pageLayoutName );
 }

@@ -66,7 +66,7 @@ bool KoPADocument::loadXML( QIODevice *, const KoXmlDocument & doc )
 }
 
 bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
-                             const KoXmlDocument & settings, KoStore* store )
+                              const KoXmlDocument & settings, KoStore* store )
 {
     Q_UNUSED( doc );
     Q_UNUSED( oasisStyles );
@@ -86,6 +86,27 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoGenStyles mainStyles;
     KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
 
+    // for office:master-styles
+    KTemporaryFile masterStyles;
+    masterStyles.open();
+    KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
+
+    KoPASavingContext paContext( masterStylesTmpWriter, savingContext, 1 );
+
+    paContext.setOptions( KoPASavingContext::DrawId | KoPASavingContext::AutoStyleInStyleXml );
+
+    masterStylesTmpWriter.startElement( "office:master-styles" );
+
+    // save master pages
+    foreach( KoPAMasterPage *page, m_masterPages )
+    {
+        page->saveOdf( paContext );
+    }
+    masterStylesTmpWriter.endElement();
+
+    masterStyles.close();
+
+    // for office:body
     KTemporaryFile contentTmpFile;
     contentTmpFile.open();
     KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
@@ -93,7 +114,8 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.startElement( "office:body" );
     contentTmpWriter.startElement( odfTagName() );
 
-    KoPASavingContext paContext( contentTmpWriter, savingContext, 1 );
+    paContext.setXmlWriter( contentTmpWriter );
+    paContext.setOptions( KoPASavingContext::DrawId );
 
     // save pages
     QList<KoPAPage*>::const_iterator pageIt( m_pages.constBegin() );
@@ -108,21 +130,9 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     contentTmpFile.close();
 
-    // test style writing
-    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO, false );
-    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) 
-    {
-        qDebug() << "style:style" << ( *it ).name;
-        ( *it ).style->writeStyle( contentWriter, mainStyles, "style:style", ( *it ).name , "style:graphic-properties"  );
-    }
-    styles = mainStyles.styles( KoPAStyles::STYLE_PAGE, false );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) 
-    {
-        qDebug() << "style:style" << ( *it ).name;
-        ( *it ).style->writeStyle( contentWriter, mainStyles, "style:style", ( *it ).name , "style:drawing-page-properties"  );
-    }
+    contentWriter->startElement( "office:automatic-styles" );
+    saveOdfAutomaticStyles( *contentWriter, mainStyles, false );
+    contentWriter->endElement();
 
     // And now we can copy over the contents from the tempfile to the real one
     contentWriter->addCompleteElement( &contentTmpFile );
@@ -137,7 +147,57 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
+    if ( !store->open( "styles.xml" ) )
+        return false;
+
+    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
+    saveOdfDocumentStyles( store, mainStyles, &masterStyles );
+
+    if ( !store->close() ) // done with styles.xml
+        return false;
+
     return true;
+}
+
+void KoPADocument::saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, bool stylesDotXml )
+{
+    // test style writing
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO, stylesDotXml );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) 
+    {
+        //qDebug() << "style:style" << ( *it ).name;
+        ( *it ).style->writeStyle( &contentWriter, mainStyles, "style:style", ( *it ).name , "style:graphic-properties"  );
+    }
+
+    styles = mainStyles.styles( KoPAStyles::STYLE_PAGE, stylesDotXml );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) 
+    {
+        //qDebug() << "style:style" << ( *it ).name;
+        ( *it ).style->writeStyle( &contentWriter, mainStyles, "style:style", ( *it ).name , "style:drawing-page-properties"  );
+    }
+}
+
+void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyles, QFile *masterStyles )
+{
+    KoStoreDevice stylesDev( store );
+    KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
+
+    stylesWriter->startElement( "office:styles" );
+    stylesWriter->endElement(); // office:styles
+
+    stylesWriter->startElement( "office:automatic-styles" );
+    saveOdfAutomaticStyles( *stylesWriter, mainStyles, true );
+    stylesWriter->endElement(); // office:automatic-styles
+
+    stylesWriter->startElement( "office:master-styles" );
+    stylesWriter->addCompleteElement( masterStyles );
+    stylesWriter->endElement();
+
+    stylesWriter->endElement(); // root element (office:document-styles)
+    stylesWriter->endDocument();
+    delete stylesWriter;
 }
 
 KoPAPage* KoPADocument::pageByIndex(int index)

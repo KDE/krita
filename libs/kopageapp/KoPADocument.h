@@ -61,6 +61,9 @@ protected:
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
     virtual const char *odfTagName() = 0;
 
+    void saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, bool stylesDotXml );
+    void saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyles, QFile *masterStyles );
+
 private:
     QList<KoPAPage*> m_pages;
     QList<KoPAMasterPage*> m_masterPages;

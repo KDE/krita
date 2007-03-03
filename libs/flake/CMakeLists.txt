@@ -28,6 +28,7 @@ set(flake_SRCS
     KoShapeRubberSelectStrategy.cpp
     KoTool.cpp
     KoCanvasController.cpp
+    KoCanvasController_p.cpp
     KoCreateShapeStrategy.cpp
     KoCreateShapesTool.cpp
     KoShapeRegistry.cpp

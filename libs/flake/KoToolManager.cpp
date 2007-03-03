@@ -32,6 +32,7 @@
 #include "KoCanvasController.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
+#include "KoCanvasBase.h"
 
 // Qt + kde
 #include <QWidget>

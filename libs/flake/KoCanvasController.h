@@ -21,18 +21,12 @@
 #ifndef KOCANVASVIEW_H
 #define KOCANVASVIEW_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 
-#include "KoCanvasBase.h"
-
-#include <QWidget>
 #include <QAbstractScrollArea>
 
-class QGridLayout;
-class QPaintEvent;
-class QEvent;
 class KoShape;
-class KoToolDocker;
+class KoCanvasBase;
 
 /**
  * This widget is a wrapper around your canvas providing scrollbars.
@@ -65,7 +59,7 @@ public:
      * Constructor.
      * @param parent the parent this widget will belong to
      */
-    explicit KoCanvasController(QWidget *parent);
+    explicit KoCanvasController(QWidget *parent = 0);
     virtual ~KoCanvasController();
 
     /**
@@ -238,58 +232,6 @@ private:
 
     class Private;
     Private * const m_d;
-
-
-};
-
-class Viewport : public QWidget {
-
-    Q_OBJECT
-
-public:
-
-    Viewport(KoCanvasController *parent);
-    ~Viewport() {};
-
-    void setCanvas( QWidget *canvas );
-    void setDocumentSize( QSize size );
-
-                        public slots:
-
-                        void documentOffsetMoved( QPoint );
-
-public:
-
-    void handleDragEnterEvent( QDragEnterEvent *event );
-    void handleDropEvent( QDropEvent *event );
-    void handleDragMoveEvent ( QDragMoveEvent *event );
-    void handleDragLeaveEvent( QDragLeaveEvent *event );
-    void handlePaintEvent( QPainter & gc, QPaintEvent *event );
-
-private:
-
-    QPointF correctPosition( const QPoint &point ) const;
-    void repaint( KoShape *shape );
-
-    /**
-       Decides whether the containing canvas widget should be as
-       big as the viewport (i.e., no margins are visible) or whether
-       there are margins to be left blank, and then places the canvas
-       widget accordingly.
-    */
-    void resetLayout();
-
-private:
-
-    KoCanvasController *m_parent;
-    KoShape *m_draggedShape;
-
-    QWidget * m_canvas;
-    QSize m_documentSize; // Size in pixels of the document
-    QPoint m_documentOffset; // Place where the canvas widget should
-    // start painting the document.
-    int m_margin; // The viewport margin around the document
-
 };
 
 #endif

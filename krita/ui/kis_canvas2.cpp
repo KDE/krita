@@ -147,10 +147,10 @@ KisView2* KisCanvas2::view()
 
 void KisCanvas2::gridSize(double *horizontal, double *vertical) const
 {
-    if( horizontal )
-        *horizontal = m_d->view->document()->gridData().gridX();
-    if( vertical )
-        *vertical = m_d->view->document()->gridData().gridY();
+    Q_ASSERT(horizontal);
+    Q_ASSERT(vertical);
+    *horizontal = m_d->view->document()->gridData().gridX();
+    *vertical = m_d->view->document()->gridData().gridY();
 }
 
 bool KisCanvas2::snapToGrid() const

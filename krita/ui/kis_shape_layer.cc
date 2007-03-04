@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +44,7 @@
 class KisShapeLayer::Private
 {
 public:
-    KoZoomHandler * converter;
+    KoViewConverter * converter;
     qint32 x;
     qint32 y;
     KisPaintDeviceSP projection;
@@ -60,7 +61,7 @@ KisShapeLayer::KisShapeLayer( KoShapeContainer * parent,
     setShapeId( KIS_SHAPE_LAYER_ID );
 
     m_d = new Private();
-    m_d->converter = new KoZoomHandler();
+    m_d->converter = new KisImageViewConverter(image());
     m_d->x = 0;
     m_d->y = 0;
     m_d->projection = new KisPaintDevice( img->colorSpace() );
@@ -168,4 +169,43 @@ QRect KisShapeLayer::exactBounds() const
 bool KisShapeLayer::accept(KisLayerVisitor& visitor)
 {
     return visitor.visit(this);
+}
+
+
+KisImageViewConverter::KisImageViewConverter(const KisImage *image)
+: m_image(image)
+{
+    Q_ASSERT(image);
+kDebug() << "xRes: " << m_image->xRes() << ", yRes: " << m_image->yRes() << endl;
+}
+
+// remember here; document is postscript points;  view is krita pixels.
+
+QPointF KisImageViewConverter::documentToView( const QPointF &documentPoint ) const
+{
+    return QPointF( documentToViewX(documentPoint.x()), documentToViewX(documentPoint.y()) );
+}
+
+QPointF KisImageViewConverter::viewToDocument( const QPointF &viewPoint ) const
+{
+    return QPointF( viewToDocumentX(viewPoint.x()), viewToDocumentY(viewPoint.y()) );
+}
+
+QRectF KisImageViewConverter::documentToView( const QRectF &documentRect ) const
+{
+    return QRectF( documentToView(documentRect.topLeft()),
+        QSizeF(documentToViewX(documentRect.width()), documentToViewY(documentRect.height())) );
+}
+
+QRectF KisImageViewConverter::viewToDocument( const QRectF &viewRect ) const
+{
+    return QRectF( viewToDocument(viewRect.topLeft()),
+        QSizeF(viewToDocumentX(viewRect.width()), viewToDocumentY(viewRect.height())) );
+}
+
+void KisImageViewConverter::zoom(double *zoomX, double *zoomY) const
+{
+kDebug() << "xRes: " << m_image->xRes() << ", yRes: " << m_image->yRes() << endl;
+    *zoomX = m_image->xRes();
+    *zoomY = m_image->yRes();
 }

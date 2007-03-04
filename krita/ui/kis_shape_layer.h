@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -92,6 +93,23 @@ private:
     class Private;
     Private * m_d;
 
+};
+
+class KisImageViewConverter : public KoViewConverter {
+public:
+    KisImageViewConverter(const KisImage *image);
+    QPointF documentToView( const QPointF &documentPoint ) const;
+    QPointF viewToDocument( const QPointF &viewPoint ) const;
+    QRectF documentToView( const QRectF &documentRect ) const;
+    QRectF viewToDocument( const QRectF &viewRect ) const;
+    inline double documentToViewX( double documentX ) const { return documentX * m_image->xRes(); }
+    inline double documentToViewY( double documentY ) const { return documentY * m_image->yRes(); }
+    inline double viewToDocumentX( double viewX ) const { return viewX / m_image->xRes(); }
+    inline double viewToDocumentY( double viewY ) const { return viewY / m_image->yRes(); }
+    void zoom(double *zoomX, double *zoomY) const;
+
+private:
+    const KisImage *m_image;
 };
 
 #endif

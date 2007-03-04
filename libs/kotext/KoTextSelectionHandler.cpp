@@ -315,6 +315,10 @@ void KoTextSelectionHandler::setStyle(KoCharacterStyle* style) {
     style->applyStyle(m_caret);
 }
 
+QTextCursor KoTextSelectionHandler::caret() const {
+    return m_caret ? *m_caret : QTextCursor();
+}
+
 void KoTextSelectionHandler::nextParagraph() {
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
     KoParagraphStyle *nextStyle = 0;

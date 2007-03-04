@@ -121,7 +121,7 @@ public slots:
     /**
      * @return the QTextCursor caret or NULL if no caret was set so far.
      */
-    QTextCursor* caret() const { return m_caret; }
+    QTextCursor caret() const;
 
 protected:
     friend class TextTool;

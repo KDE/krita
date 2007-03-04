@@ -20,7 +20,8 @@
 
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_sensor.h"
-        
+
+#include "ui_SizeTransformationEditor.h"
 
 KisSizeTransformation::KisSizeTransformation(KisDynamicSensor* hTransfoParameter, KisDynamicSensor* vTransfoParameter)
     : KisDynamicTransformation(KoID("size",i18n("Resize"))), m_horizTransfoParameter(hTransfoParameter), m_vertiTransfoParameter(vTransfoParameter)
@@ -43,4 +44,14 @@ void KisSizeTransformation::transformColoring(KisDynamicColoring* coloringsrc, c
     Q_UNUSED(coloringsrc);
     Q_UNUSED(info);
     // TODO: implement it
+}
+
+QWidget* KisSizeTransformation::createConfigWidget(QWidget* parent)
+{
+    QWidget* editorWidget = new QWidget(parent);
+    Ui_SizeTransformationEditor ste;
+    ste.setupUi(editorWidget);
+    ste.comboBoxHorizontalSensor->setIDList( KisDynamicSensor::sensorsIds() );
+    ste.comboBoxVerticalSensor->setIDList( KisDynamicSensor::sensorsIds() );
+    return editorWidget;
 }

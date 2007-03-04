@@ -18,10 +18,15 @@
 
 #include "kis_filters_list_dynamic_program.h"
 
+#include <QWidget>
+
+// Dynamic Brush lib includes
 #include "kis_dynamic_coloring.h"
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_transformation.h"
 
+// Filterslist program includes
+#include "kis_filters_list_dynamic_program_editor.h"
 
 KisFiltersListDynamicProgram::~KisFiltersListDynamicProgram()
 {
@@ -48,4 +53,9 @@ void KisFiltersListDynamicProgram::apply(KisDynamicShape* shape, KisDynamicColor
         (*transfo)->transformColoring(coloringsrc, adjustedInfo);
     }
 
+}
+
+QWidget* KisFiltersListDynamicProgram::createEditor(QWidget* parent)
+{
+    return new KisFiltersListDynamicProgramEditor(this);
 }

@@ -24,12 +24,16 @@
 class KisDynamicShape;
 class KisDynamicColoring;
 class KisPaintInformation;
+class QWidget;
 
 /**
  * This is the base class of a dynamic program.
  */
 class KisDynamicProgram {
     protected:
+        /**
+         * @param name the name of this program, will be displayed in the list of programs
+         */
         KisDynamicProgram(const QString& name) : m_name(name) { }
     public:
         virtual ~KisDynamicProgram() {}
@@ -39,6 +43,11 @@ class KisDynamicProgram {
          * Apply the program on the shape and the coloring
          */
         virtual void apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo) = 0;
+        /**
+         * Create and return an editor for that program.
+         * @return a QWidget which display editing option for that program
+         */
+        virtual QWidget* createEditor(QWidget* parent) = 0;
     private:
         QString m_name;
 };

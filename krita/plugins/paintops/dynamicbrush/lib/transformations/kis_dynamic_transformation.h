@@ -19,8 +19,10 @@
 #ifndef _KISDYNAMICTRANSFORMATION_H_
 #define _KISDYNAMICTRANSFORMATION_H_
 
+#include <QObject>
 #include <KoID.h>
 
+class QWidget;
 class KisPaintInformation;
 class KisDynamicShape;
 class KisDynamicColoring;
@@ -29,7 +31,8 @@ class KisDynamicColoring;
  * This is the base class for transformation.
  * 
  */
-class KisDynamicTransformation {
+class KisDynamicTransformation : public QObject {
+    Q_OBJECT
     public:
         KisDynamicTransformation(const KoID& name) : m_name(name), m_next(0) {}
         virtual ~KisDynamicTransformation() { if(m_next) delete m_next; }
@@ -37,6 +40,7 @@ class KisDynamicTransformation {
         virtual QString name() =0;
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info) =0;
         virtual void transformColoring(KisDynamicColoring* dabsrc, const KisPaintInformation& info) =0;
+        virtual QWidget* createConfigWidget(QWidget* parent) =0;
         inline void setNextTransformation(KisDynamicTransformation* n) { if(m_next) { delete m_next; } m_next = n; }
         inline KisDynamicTransformation* nextTransformation() { return m_next; }
     private:

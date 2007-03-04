@@ -22,21 +22,35 @@
 #include "kis_paintop.h"
 
 class QWidget;
-class QCheckBox;
-class QLabel;
 class QPointF;
 class KisPainter;
 
 class KisDynamicBrush;
+class Ui_DynamicBrushOptions;
 
 class KisDynamicOpFactory : public KisPaintOpFactory  {
-public:
-    KisDynamicOpFactory() {}
-    virtual ~KisDynamicOpFactory() {}
+    public:
+        KisDynamicOpFactory() {}
+        virtual ~KisDynamicOpFactory() {}
+    
+        virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
+        virtual KoID id() { return KoID("dynamicbrush", i18n("Dynamic Brush")); }
+        virtual QString pixmap() { return "dynamicbrush.png"; }
+        virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice);
+    private:
+};
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-    virtual KoID id() { return KoID("dynamicbrush", i18n("Dynamic Brush")); }
-    virtual QString pixmap() { return "dynamicbrush.png"; }
+class KisDynamicOpSettings : public QObject, public KisPaintOpSettings {
+    Q_OBJECT
+    public:
+        KisDynamicOpSettings(QWidget* parent);
+        virtual ~KisDynamicOpSettings();
+        virtual QWidget *widget() const { return m_optionsWidget; }
+        /// @return a brush with the current shapes, coloring and program
+        KisDynamicBrush* createBrush() const;
+    private:
+        QWidget* m_optionsWidget;
+        Ui_DynamicBrushOptions* m_uiOptions;
 };
 
 class KisDynamicOp : public KisPaintOp {
@@ -45,13 +59,14 @@ class KisDynamicOp : public KisPaintOp {
 
 public:
 
-    KisDynamicOp(KisPainter * painter);
+    KisDynamicOp(const KisDynamicOpSettings *settings, KisPainter * painter);
     virtual ~KisDynamicOp();
 
     void paintAt(const QPointF &pos, const KisPaintInformation& info);
 
 private:
     KisDynamicBrush* m_brush;
+    const KisDynamicOpSettings *m_settings;
 };
 
 #endif // KIS_DYNAMICOP_H_

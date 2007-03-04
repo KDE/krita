@@ -40,6 +40,7 @@ class KisFiltersListDynamicProgram : public KisDynamicProgram {
         inline void appendTransformation(KisDynamicTransformation* transfo) {
             m_transformations.append(transfo);
         }
+        virtual QWidget* createEditor(QWidget* parent);
     private:
         QList<KisDynamicTransformation*> m_transformations;
 };

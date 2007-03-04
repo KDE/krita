@@ -33,6 +33,7 @@ class KisDarkenTransformation : public KisDynamicTransformation {
         virtual QString name() { return i18n("darken"); };
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
         virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
+        virtual QWidget* createConfigWidget(QWidget* parent) { Q_UNUSED(parent); return 0; }
     private:
         KisDynamicSensor* m_transfoParameter;
 };

@@ -18,3 +18,4 @@
 
 #include "kis_dynamic_transformation.h"
 
+#include "kis_dynamic_transformation.moc"

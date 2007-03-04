@@ -16,26 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DYNAMIC_BRUSH_H
-#define DYNAMIC_BRUSH_H
+#ifndef _KIS_DYNAMIC_PROGRAMS_EDITOR_H_
+#define _KIS_DYNAMIC_PROGRAMS_EDITOR_H_
 
-#include <kparts/plugin.h>
+#include <kdialog.h>
 
-class KisView2;
+class QVBoxLayout;
+class Ui_DynamicProgramsEditor;
 
-/**
- * A plugin wrapper that adds the Dynamic brush paintop
- */
-class DynamicBrush : public KParts::Plugin
-{
+class KisDynamicProgramsEditor : public KDialog {
     Q_OBJECT
     public:
-        DynamicBrush(QObject *parent, const QStringList &);
-        virtual ~DynamicBrush();
-    private slots:
-        void slotEditDynamicPrograms();
+        KisDynamicProgramsEditor(QWidget* parent);
+        ~KisDynamicProgramsEditor();
+    public slots:
+        void setCurrentProgram(const QString& text);
     private:
-        KisView2 * m_view;
+        Ui_DynamicProgramsEditor* m_dynamicProgramsEditor;
+        QWidget* m_currentEditor;
+        QVBoxLayout *m_frameVBoxLayout;
+ 
 };
 
-#endif // DYNAMIC_BRUSH_H
+#endif

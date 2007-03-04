@@ -22,12 +22,14 @@
 #include <kis_paintop.h>
 #include <KoID.h>
 
+class QListString;
+
 class KisDynamicSensor {
     public:
         virtual ~KisDynamicSensor() { }
         virtual double parameter(const KisPaintInformation& info) = 0;
-        static KisDynamicSensor* id2TransformParameter(const KoID&);
-        static QList<KoID> transformParameterIds();
+        static KisDynamicSensor* id2Sensor(const KoID&);
+        static QList<KoID> sensorsIds();
 };
 
 class KisDynamicSensorSpeed : public KisDynamicSensor {

@@ -33,6 +33,7 @@ class KisSizeTransformation : public KisDynamicTransformation {
         virtual QString name() { return i18n("size"); };
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
         virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
+        virtual QWidget* createConfigWidget(QWidget* parent);
     private:
         KisDynamicSensor* m_horizTransfoParameter;
         KisDynamicSensor* m_vertiTransfoParameter;

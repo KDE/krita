@@ -26,13 +26,15 @@
 #include <kstandarddirs.h>
 
 #include <kis_paintop_registry.h>
+#include <kis_view2.h>
 
 #include "kis_dynamicop.h"
-#include "kis_filters_list_dynamic_programs_editor.h"
+#include "kis_dynamic_programs_editor.h"
 
 // TEMP
 #include <kis_dynamic_brush.h>
 #include <kis_dynamic_brush_registry.h>
+#include <kis_dynamic_program_registry.h>
 #include <kis_filters_list_dynamic_program.h>
 #include <kis_size_transformation.h>
 #include <kis_dynamic_sensor.h>
@@ -52,12 +54,15 @@ DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
         KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
         r->add (KisPaintOpFactorySP(new KisDynamicOpFactory));
         
-        // TODO: remove this, temp stuff for testing only
-        KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
-        KisFiltersListDynamicProgram* program = new KisFiltersListDynamicProgram("example program");
-        program->appendTransformation( new KisSizeTransformation(new KisDynamicSensorSpeed(), new KisDynamicSensorSpeed() ) );
-        current->setProgram(program);
-        KisDynamicBrushRegistry::instance()->setCurrent(current);
+        {
+            // TODO: remove this, temp stuff for testing only
+            KisFiltersListDynamicProgram* programSpeed = new KisFiltersListDynamicProgram("speed");
+            programSpeed->appendTransformation( new KisSizeTransformation(new KisDynamicSensorSpeed(), new KisDynamicSensorSpeed() ) );
+            KisDynamicProgramRegistry::instance()->add( KoID( programSpeed->name() ), programSpeed);
+            KisFiltersListDynamicProgram* programPressure = new KisFiltersListDynamicProgram("pressure");
+            programPressure->appendTransformation( new KisSizeTransformation(new KisDynamicSensorPressure(), new KisDynamicSensorPressure() ) );
+            KisDynamicProgramRegistry::instance()->add( KoID( programPressure->name() ), programPressure);
+        }
     }
     if ( parent->inherits("KisView2") )
     {
@@ -65,9 +70,9 @@ DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/dynamicbrush.rc"), true);
 
-        KAction *action  = new KAction(i18n("Edit dynamic brush"), this);
-        actionCollection()->addAction("EditDynamicBrush", action );
-        connect(action, SIGNAL(triggered()), this, SLOT(slotEditDynamicBrush()));
+        KAction *action  = new KAction(i18n("Edit dynamic programs"), this);
+        actionCollection()->addAction("EditDynamicPrograms", action );
+        connect(action, SIGNAL(triggered()), this, SLOT(slotEditDynamicPrograms()));
     }
 
 }
@@ -76,11 +81,11 @@ DynamicBrush::~DynamicBrush()
 {
 }
 
-void DynamicBrush::slotEditDynamicBrush()
+void DynamicBrush::slotEditDynamicPrograms()
 {
     kDebug() << " BOUH " << endl;
-    KisFiltersListDynamicProgramsEditor dbae;
-    dbae.editBrush();
+    KisDynamicProgramsEditor editor(m_view);
+    editor.exec();
 }
 
 #include "dynamicbrush.moc"

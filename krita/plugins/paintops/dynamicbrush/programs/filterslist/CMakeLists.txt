@@ -1,14 +1,14 @@
 # include_directories(../../lib/ ../../lib/transformations)
 
 set( libkritafilterslistdynamicprogram_LIB_SRCS
-    kis_filters_list_dynamic_programs_editor.cc
     kis_filters_list_model.cc
     kis_filters_list_dynamic_program.cc
+    kis_filters_list_dynamic_program_editor.cc
 )
 
 kde4_automoc(${libkritafilterslistdynamicprogram_LIB_SRCS})
 
-kde4_add_ui_files(libkritafilterslistdynamicprogram_LIB_SRCS FiltersListDynamicProgramEditor.ui )
+kde4_add_ui_files(libkritafilterslistdynamicprogram_LIB_SRCS FiltersListDynamicProgramEditor.ui  )
 
 kde4_add_library(kritafilterslistdynamicprogram SHARED ${libkritafilterslistdynamicprogram_LIB_SRCS})
 

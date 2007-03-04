@@ -4,14 +4,17 @@ set(kritadynamicbrushlib_LIB_SRCS
     kis_dynamic_shape.cc
     kis_dynamic_coloring.cc
     kis_dynamic_brush_registry.cc
+    kis_dynamic_program_registry.cc
     kis_dynamic_brush.cc
+    kis_dynamic_sensor.cc
     transformations/kis_dynamic_transformation.cc
     transformations/kis_size_transformation.cc
     transformations/kis_darken_transformation.cc
-
 )
 
 kde4_automoc(${kritadynamicbrushlib_LIB_SRCS})
+
+kde4_add_ui_files(kritadynamicbrushlib_LIB_SRCS transformations/SizeTransformationEditor.ui )
 
 kde4_add_library(kritadynamicbrush SHARED ${kritadynamicbrushlib_LIB_SRCS})
 

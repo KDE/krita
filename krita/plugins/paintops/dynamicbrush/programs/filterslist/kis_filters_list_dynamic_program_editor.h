@@ -16,31 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_dynamic_sensor.h"
+#ifndef _KIS_FILTERS_LIST_DYNAMIC_PROGRAM_EDITOR_H_
+#define _KIS_FILTERS_LIST_DYNAMIC_PROGRAM_EDITOR_H_
 
-const KoID PressureId("pressure", i18n("Pressure"));
-const KoID XTiltId ("xtilt", i18n("X-Tilt"));
-const KoID YTiltId ("ytilt", i18n("Y-Tilt"));
+#include <QWidget>
 
-KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
-{
-    if( id.id() == "pressure")
-    {
-        return new KisDynamicSensorPressure();
-    } else if( id.id() == "xtilt")
-    {
-        return new KisDynamicSensorXTilt();
-    } else if( id.id() == "ytilt")
-    {
-        return new KisDynamicSensorYTilt();
-    }
-    kDebug() << "Unknown transform parameter : " << id.id() << endl;
-    return 0;
-}
+class QModelIndex;
+class Ui_FiltersListDynamicProgramEditor;
 
-QList<KoID> KisDynamicSensor::sensorsIds()
-{
-    QList<KoID> ids;
-    ids << PressureId << XTiltId << YTiltId;
-    return ids;
-}
+class KisFiltersListDynamicProgram;
+class KisFiltersListModel;
+
+class KisFiltersListDynamicProgramEditor : public QWidget {
+    Q_OBJECT
+    public:
+        KisFiltersListDynamicProgramEditor(KisFiltersListDynamicProgram* program);
+        ~KisFiltersListDynamicProgramEditor();
+    private slots:
+        void setCurrentFilter(const QModelIndex&);
+    private:
+        KisFiltersListModel* m_filtersModel;
+        Ui_FiltersListDynamicProgramEditor* m_filtersListDynamicProgramEditor;
+        KisFiltersListDynamicProgram* m_program;
+        QWidget* m_currentFilterEditor;
+};
+
+#endif

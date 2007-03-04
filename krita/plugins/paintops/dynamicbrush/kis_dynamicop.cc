@@ -40,31 +40,72 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 
+#include "ui_DynamicBrushOptions.h"
+
 #include "kis_dynamic_brush.h"
 #include "kis_dynamic_brush_registry.h"
 #include "kis_dynamic_coloring.h"
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_program.h"
+#include "kis_dynamic_program_registry.h"
 #include "kis_size_transformation.h"
 
 KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter)
 {
-    Q_UNUSED(settings);
+    const KisDynamicOpSettings *dosettings = dynamic_cast<const KisDynamicOpSettings *>(settings);
+    Q_ASSERT(dosettings);
 
-    KisPaintOp * op = new KisDynamicOp(painter);
+    KisPaintOp * op = new KisDynamicOp(dosettings, painter);
     Q_CHECK_PTR(op);
     return op;
 }
 
-KisDynamicOp::KisDynamicOp( KisPainter *painter)
-    : super(painter)
+KisPaintOpSettings *KisDynamicOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice)
 {
-    m_brush = KisDynamicBrushRegistry::instance()->current();
+    Q_UNUSED(inputDevice);
+    return new KisDynamicOpSettings(parent);
+}
+
+KisDynamicOpSettings::KisDynamicOpSettings(QWidget* parent) :
+        QObject(parent),
+        KisPaintOpSettings(parent),
+        m_optionsWidget(new QWidget(parent)),
+        m_uiOptions(new Ui_DynamicBrushOptions())
+{
+    m_uiOptions->setupUi(m_optionsWidget);
+    m_uiOptions->comboBoxPrograms->addItems( KisDynamicProgramRegistry::instance()->keys() );
+}
+
+KisDynamicOpSettings::~KisDynamicOpSettings()
+{
+    delete m_uiOptions;
+}
+
+// TEMP
+#include <kis_dynamic_brush.h>
+#include <kis_dynamic_program_registry.h>
+// TEMP
+
+
+KisDynamicBrush* KisDynamicOpSettings::createBrush() const
+{
+    KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
+    KisDynamicProgram* program = KisDynamicProgramRegistry::instance()->get( m_uiOptions->comboBoxPrograms->currentText() );
+    Q_ASSERT(program);
+    current->setProgram(program);
+    return current;
+}
+
+KisDynamicOp::KisDynamicOp(const KisDynamicOpSettings *settings, KisPainter *painter)
+    : super(painter), m_settings(settings)
+{
+    Q_ASSERT(settings);
+    m_brush = m_settings->createBrush();
 }
 
 KisDynamicOp::~KisDynamicOp()
 {
-//     delete m_brush;
+    delete m_brush;
 }
 
 void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
@@ -143,3 +184,5 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     m_painter->setOpacity(origOpacity);
     m_painter->setPaintColor(origColor);
 }
+
+#include "kis_dynamicop.moc"

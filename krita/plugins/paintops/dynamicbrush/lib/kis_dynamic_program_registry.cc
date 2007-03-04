@@ -16,31 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_dynamic_program_registry.h"
+
+#include <klocale.h>
+
+#include "kis_dynamic_program.h"
+#include "kis_size_transformation.h"
 #include "kis_dynamic_sensor.h"
 
-const KoID PressureId("pressure", i18n("Pressure"));
-const KoID XTiltId ("xtilt", i18n("X-Tilt"));
-const KoID YTiltId ("ytilt", i18n("Y-Tilt"));
+KisDynamicProgramRegistry *KisDynamicProgramRegistry::singleton = 0;
 
-KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
+KisDynamicProgramRegistry* KisDynamicProgramRegistry::instance()
 {
-    if( id.id() == "pressure")
+    if(KisDynamicProgramRegistry::singleton == 0)
     {
-        return new KisDynamicSensorPressure();
-    } else if( id.id() == "xtilt")
-    {
-        return new KisDynamicSensorXTilt();
-    } else if( id.id() == "ytilt")
-    {
-        return new KisDynamicSensorYTilt();
+        KisDynamicProgramRegistry::singleton = new KisDynamicProgramRegistry();
+        KisDynamicProgramRegistry::singleton->init();
     }
-    kDebug() << "Unknown transform parameter : " << id.id() << endl;
-    return 0;
+    return KisDynamicProgramRegistry::singleton;
 }
 
-QList<KoID> KisDynamicSensor::sensorsIds()
+void KisDynamicProgramRegistry::init()
 {
-    QList<KoID> ids;
-    ids << PressureId << XTiltId << YTiltId;
-    return ids;
 }

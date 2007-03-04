@@ -16,12 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_FILTERS_LIST_DYNAMIC_PROGRAMS_EDITOR_H_
-#define _KIS_FILTERS_LIST_DYNAMIC_PROGRAMS_EDITOR_H_
+#ifndef _KIS_DYNAMIC_PROGRAM_REGISTRY_H_
+#define _KIS_DYNAMIC_PROGRAM_REGISTRY_H_
 
-class KisFiltersListDynamicProgramsEditor {
+#include <KoGenericRegistry.h>
+
+class KisDynamicProgram;
+
+class KisDynamicProgramRegistry : public KoGenericRegistry<KisDynamicProgram *> {
+
+  protected:
+    void init();
   public:
-    void editBrush();
+    /**
+     * @return an instance of the KisDynamicProgramRegistry
+     * Creates an instance if that has never happened before and returns the singleton instance.
+     */
+    static KisDynamicProgramRegistry* instance();
+  private:
+    static KisDynamicProgramRegistry *singleton;
 };
 
 #endif

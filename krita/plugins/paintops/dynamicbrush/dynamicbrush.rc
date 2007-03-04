@@ -1,8 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritadynamicbrush" version="1">
+<kpartgui library="kritadynamicbrush" version="2">
 <MenuBar>
     <Menu name="Tools"><text>&amp;Tools</text>
-        <Action name="EditDynamicBrush"/>
+        <Action name="EditDynamicPrograms"/>
     </Menu>
 </MenuBar>
 </kpartgui>

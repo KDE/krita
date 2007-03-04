@@ -97,6 +97,7 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     pt.end();
     m_d->checkBrush = QBrush(tile);
     setAcceptDrops( true );
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 KisQPainterCanvas::~KisQPainterCanvas()

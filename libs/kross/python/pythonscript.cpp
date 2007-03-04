@@ -93,7 +93,7 @@ bool PythonScript::initialize()
         Q_ASSERT( ! action()->objectName().isNull() );
         QFileInfo fi( action()->objectName() );
         QString n = QFileInfo(fi.absolutePath(), fi.baseName()).absoluteFilePath();
-        const char* name = n.isNull() ? action()->objectName().toLatin1() : n.toLatin1();
+        char* name = n.isNull() ? action()->objectName().toLatin1().data() : n.toLatin1().data();
         //krossdebug( QString("------------------> %1").arg(name) );
 
         { // Each Action uses an own module as scope.

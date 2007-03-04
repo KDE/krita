@@ -85,11 +85,11 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 
 void KisShapeLayerCanvas::repaint() {
     QRect r = m_dirty.boundingRect();
-//     QImage img(r.width(), r.height(), QImage::Format_ARGB32);
-//     img.fill(0);
-    QPainter p(m_projection.data());
+    QImage img(r.width(), r.height(), QImage::Format_ARGB32);
+    img.fill(0);
+    QPainter p(&img);
     p.setRenderHint(QPainter::Antialiasing);
-//     p.translate(-r.x(), -r.y());
+    p.translate(-r.x(), -r.y());
     p.setClipRect(r);
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random()%255, random()%255, random()%255);
@@ -99,12 +99,12 @@ void KisShapeLayerCanvas::repaint() {
     m_shapeManager->paint(p, *m_viewConverter, false);
     p.end();
 
-//     KisPaintDeviceSP dev = new KisPaintDevice(m_projection->colorSpace());
-//     dev->convertFromQImage(img, "");
-//     KisPainter kp(m_projection.data());
-//     kp.bitBlt(r.x(), r.y(), m_projection->colorSpace()->compositeOp( COMPOSITE_COPY ),
-//               dev, OPACITY_OPAQUE, 0, 0, r.width(), r.height());
-//     kp.end();
+    KisPaintDeviceSP dev = new KisPaintDevice(m_projection->colorSpace());
+    dev->convertFromQImage(img, "");
+    KisPainter kp(m_projection.data());
+    kp.bitBlt(r.x(), r.y(), m_projection->colorSpace()->compositeOp( COMPOSITE_COPY ),
+              dev, OPACITY_OPAQUE, 0, 0, r.width(), r.height());
+    kp.end();
     m_parentLayer->setDirty(r);
     m_dirty = QRegion();
     m_repaintTriggered = false;

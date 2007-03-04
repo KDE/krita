@@ -203,15 +203,10 @@ void KisPaintEngine::initPainter(QPainter &p)
         // kDebug(41001) << "\tDirtyClipPath" << endl;
         p.setClipPath(d->clipPath);
     }
-    if (d->flags & DirtyTransform) {
-        // kDebug(41001) << "\tDirtyTransform" << endl;
-//         QMatrix tmp;
-//         tmp.scale(d->matrix.m11(), d->matrix.m22());
-//         tmp.shear(d->matrix.m21(), d->matrix.m12());
-//         tmp.translate(d->matrix.dx()+p.worldMatrix().dx(), d->matrix.dy()+p.worldMatrix().dy());
-//         p.setWorldMatrix(tmp);
-        p.setWorldMatrix(d->matrix);
-    }
+//     if (d->flags & DirtyTransform) {
+//         // kDebug(41001) << "\tDirtyTransform" << endl;
+// //         p.setWorldMatrix(d->matrix);
+//     }
     if (d->flags & DirtyPen) {
         // kDebug(41001) << "\tDirtyPen" << endl;
         p.setPen(d->pen);
@@ -252,21 +247,22 @@ void KisPaintEngine::drawPath(const QPainterPath &path)
 //     // kDebug(41001) << "\tBounding rect " << d->matrix.mapRect(path.boundingRect()) << endl;
 //     // kDebug(41001) << "\tLa matrice: " << d->matrix << endl;
 
-    QRect r = d->matrix.mapRect(path.boundingRect()).toRect();
+    QPainterPath newPath = d->matrix.map(path);
+    QRect r = newPath.boundingRect().toRect();
 
-    QImage img(r.x()+r.width(), r.y()+r.height(), QImage::Format_ARGB32);
+    QImage img(r.width(), r.height(), QImage::Format_ARGB32);
     img.fill(0);
     QPainter p(&img);
-//     p.translate(-r.x(), -r.y());
+    p.translate(-r.x(), -r.y());
     initPainter(p);
-    p.drawPath(path);
+    p.drawPath(newPath);
     p.end();
 
     KisPaintDeviceSP dev = new KisPaintDevice(d->dev->colorSpace());
     dev->convertFromQImage(img, "");
     KisPainter kp(d->buffer.data());
     kp.bitBlt(r.x(), r.y(), d->dev->colorSpace()->compositeOp( COMPOSITE_OVER ),
-              dev, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+              dev, OPACITY_OPAQUE, 0, 0, r.width(), r.height());
     kp.end();
 
     d->dirty += QRegion(r);

@@ -118,6 +118,11 @@ public slots:
      */
     void setStyle(KoCharacterStyle* style);
 
+    /**
+     * @return the QTextCursor caret or NULL if no caret was set so far.
+     */
+    QTextCursor* caret() const { return m_caret; }
+
 protected:
     friend class TextTool;
     void setShape(KoShape *shape) { m_textShape = shape; }

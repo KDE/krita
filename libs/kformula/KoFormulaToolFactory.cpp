@@ -30,7 +30,7 @@ KoFormulaToolFactory::KoFormulaToolFactory( QObject* parent )
     setToolType( dynamicToolType() );
     setIcon( "edittext" );
     setPriority( 1 );
-    setActivationShapeID( KoFormulaShapeId );
+    setActivationShapeId( KoFormulaShapeId );
 }
 
 KoFormulaToolFactory::~KoFormulaToolFactory()

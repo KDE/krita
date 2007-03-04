@@ -85,7 +85,7 @@ private:
     class KisPaintEnginePrivate;
     KisPaintEnginePrivate * d;
 
-    void initPainter (QPainter *p);
+    void initPainter (QPainter &p);
 
 };
 

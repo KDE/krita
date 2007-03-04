@@ -717,7 +717,7 @@ void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingI
 {
     kdDebug(41004) << "Converting " << name() << " to " << dstColorSpace->id().id() << " from "
               << m_colorSpace->id().id() << "\n";
-    if ( (colorSpace()->id() == dstColorSpace->id()) )
+    if ( colorSpace() == dstColorSpace )
     {
         return;
     }

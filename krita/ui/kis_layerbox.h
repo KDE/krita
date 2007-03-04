@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
+ *  Copyright (C) 2007 Thomas Zander <zander@kde.or>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,8 +53,7 @@ class KisLayerBox : public QDockWidget, public Ui::WdgLayerBox {
     Q_OBJECT
 
 public:
-
-    KisLayerBox(KisView2 * view, const char *name = 0);
+    KisLayerBox();
     virtual ~KisLayerBox();
 
     void setUpdatesAndSignalsEnabled(bool enable);
@@ -103,7 +103,6 @@ private:
 
     KMenu *m_viewModeMenu;
     KMenu *m_newLayerMenu;
-    KisView2 * m_view;
     KisImageSP m_image;
 };
 
@@ -111,10 +110,7 @@ class KisLayerBoxFactory : public KoDockFactory
 {
 
 public:
-    KisLayerBoxFactory(KisView2 * view)
-        {
-            m_view = view;
-        }
+    KisLayerBoxFactory() { }
 
     virtual QString dockId() const
         {
@@ -128,15 +124,12 @@ public:
 
     virtual QDockWidget* createDockWidget()
         {
-            KisLayerBox * dockWidget = new KisLayerBox(m_view);
+            KisLayerBox * dockWidget = new KisLayerBox();
 
             dockWidget->setObjectName(dockId());
 
             return dockWidget;
         }
-
-private:
-    KisView2 * m_view;
 };
 
 

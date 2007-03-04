@@ -405,13 +405,34 @@ void KisView2::createGUI()
     KisBirdEyeBoxFactory birdeyeFactory(this);
     m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>( createDockWidget( &birdeyeFactory ) );
 
-    KisLayerBoxFactory layerboxFactory( this );
+    KisLayerBoxFactory layerboxFactory;
     m_d->layerBox = qobject_cast<KisLayerBox*>( createDockWidget( &layerboxFactory ) );
 
     m_d->statusBar = KoView::statusBar() ? new KisStatusBar( KoView::statusBar(), this ) : 0;
     m_d->controlFrame = new KisControlFrame( mainWindow(), this );
 
     show();
+
+    connect(m_d->layerBox, SIGNAL(sigRequestLayer(KisGroupLayerSP, KisLayerSP)),
+            m_d->layerManager, SLOT(addLayer(KisGroupLayerSP, KisLayerSP)));
+
+    connect(m_d->layerBox, SIGNAL(sigRequestGroupLayer(KisGroupLayerSP, KisLayerSP)),
+            m_d->layerManager, SLOT(addGroupLayer(KisGroupLayerSP, KisLayerSP)));
+
+    connect(m_d->layerBox, SIGNAL(sigRequestAdjustmentLayer(KisGroupLayerSP, KisLayerSP)),
+            m_d->layerManager, SLOT(addAdjustmentLayer(KisGroupLayerSP, KisLayerSP)));
+
+    connect(m_d->layerBox, SIGNAL(sigRequestLayerProperties(KisLayerSP)),
+            m_d->layerManager, SLOT(showLayerProperties(KisLayerSP)));
+
+    connect(m_d->layerBox, SIGNAL(sigOpacityChanged(int, bool)),
+            m_d->layerManager, SLOT(layerOpacity(int, bool)));
+
+    connect(m_d->layerBox, SIGNAL(sigOpacityFinishedChanging(int, int)),
+            m_d->layerManager, SLOT(layerOpacityFinishedChanging(int, int)));
+
+    connect(m_d->layerBox, SIGNAL(sigItemComposite(const KoCompositeOp*)),
+            m_d->layerManager, SLOT(layerCompositeOp(const KoCompositeOp*)));
 }
 
 

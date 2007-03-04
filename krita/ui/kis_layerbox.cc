@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
+ *  Copyright (C) 2007 Thomas Zander <zander@kde.or>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -62,13 +63,11 @@
 #include "kis_view2.h"
 #include "kis_layer_manager.h"
 
-KisLayerBox::KisLayerBox(KisView2 *view, const char *name)
+KisLayerBox::KisLayerBox()
     : QDockWidget( i18n("Layers" ) )
     , Ui::WdgLayerBox()
-    , m_view( view )
     , m_image( 0 )
 {
-    setObjectName(name);
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     QWidget* mainWidget = new QWidget(this);
@@ -130,29 +129,6 @@ KisLayerBox::KisLayerBox(KisView2 *view, const char *name)
     connect(intOpacity, SIGNAL(valueChanged(int, bool)), SIGNAL(sigOpacityChanged(int, bool)));
     connect(intOpacity, SIGNAL(finishedChanging(int, int)), SIGNAL(sigOpacityFinishedChanging(int, int)));
     connect(cmbComposite, SIGNAL(activated(const KoCompositeOp*)), SIGNAL(sigItemComposite(const KoCompositeOp*)));
-
-
-    connect(this, SIGNAL(sigRequestLayer(KisGroupLayerSP, KisLayerSP)),
-            m_view->layerManager(), SLOT(addLayer(KisGroupLayerSP, KisLayerSP)));
-
-    connect(this, SIGNAL(sigRequestGroupLayer(KisGroupLayerSP, KisLayerSP)),
-            m_view->layerManager(), SLOT(addGroupLayer(KisGroupLayerSP, KisLayerSP)));
-
-    connect(this, SIGNAL(sigRequestAdjustmentLayer(KisGroupLayerSP, KisLayerSP)),
-            m_view->layerManager(), SLOT(addAdjustmentLayer(KisGroupLayerSP, KisLayerSP)));
-
-    connect(this, SIGNAL(sigRequestLayerProperties(KisLayerSP)),
-            m_view->layerManager(), SLOT(showLayerProperties(KisLayerSP)));
-
-    connect(this, SIGNAL(sigOpacityChanged(int, bool)),
-            m_view->layerManager(), SLOT(layerOpacity(int, bool)));
-
-    connect(this, SIGNAL(sigOpacityFinishedChanging(int, int)),
-            m_view->layerManager(), SLOT(layerOpacityFinishedChanging(int, int)));
-
-    connect(this, SIGNAL(sigItemComposite(const KoCompositeOp*)),
-            m_view->layerManager(), SLOT(layerCompositeOp(const KoCompositeOp*)));
-
 }
 
 KisLayerBox::~KisLayerBox()
@@ -180,7 +156,7 @@ void KisLayerBox::setImage(KisImageSP img)
                 this, SLOT(updateUI()));
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(updateUI()));
 
-        listLayers->setModel(m_view->image()->rootLayer().data());
+        listLayers->setModel(img->rootLayer().data());
 
         m_image = img;
 
@@ -212,23 +188,23 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 
 void KisLayerBox::updateUI()
 {
-    kDebug(41007)  << "###### KisLayerBox::updateUI " << m_view->image()->activeLayer() << endl;
+    Q_ASSERT(! m_image.isNull());
+    kDebug(41007)  << "###### KisLayerBox::updateUI " << m_image->activeLayer() << endl;
 
-    bnDelete->setEnabled(m_view->image()->activeLayer());
-    bnRaise->setEnabled(m_view->image()->activeLayer() && (m_view->image()->activeLayer()->prevSibling() || m_view->image()->activeLayer()->parent()));
-    bnLower->setEnabled(m_view->image()->activeLayer() && m_view->image()->activeLayer()->nextSibling());
-    intOpacity->setEnabled(m_view->image()->activeLayer());
-    cmbComposite->setEnabled(m_view->image()->activeLayer());
-    if (m_view->image())
-        if (KisLayerSP active = m_view->image()->activeLayer())
-        {
-            if (m_view->image()->activeDevice())
-                slotSetColorSpace(m_view->image()->activeDevice()->colorSpace());
-            else
-                slotSetColorSpace(m_view->image()->colorSpace());
-            slotSetOpacity(int(float(active->opacity() * 100) / 255 + 0.5));
-            slotSetCompositeOp(active->compositeOp());
-        }
+    bnDelete->setEnabled(m_image->activeLayer());
+    bnRaise->setEnabled(m_image->activeLayer() && (m_image->activeLayer()->prevSibling() || m_image->activeLayer()->parent()));
+    bnLower->setEnabled(m_image->activeLayer() && m_image->activeLayer()->nextSibling());
+    intOpacity->setEnabled(m_image->activeLayer());
+    cmbComposite->setEnabled(m_image->activeLayer());
+    if (KisLayerSP active = m_image->activeLayer())
+    {
+        if (m_image->activeDevice())
+            slotSetColorSpace(m_image->activeDevice()->colorSpace());
+        else
+            slotSetColorSpace(m_image->colorSpace());
+        slotSetOpacity(int(float(active->opacity() * 100) / 255 + 0.5));
+        slotSetCompositeOp(active->compositeOp());
+    }
 }
 
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
@@ -293,8 +269,8 @@ void KisLayerBox::slotThumbnailView()
 
 void KisLayerBox::getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above)
 {
-    KisGroupLayerSP root = m_view->image()->rootLayer();
-    if (KisLayerSP active = m_view->image()->activeLayer())
+    KisGroupLayerSP root = m_image->rootLayer();
+    if (KisLayerSP active = m_image->activeLayer())
     {
         if (KisGroupLayer* pactive = qobject_cast<KisGroupLayer*>(active.data()))
         {
@@ -312,7 +288,7 @@ void KisLayerBox::getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above
     else
     {
         parent = root;
-        above = m_view->image()->rootLayer()->firstChild();
+        above = m_image->rootLayer()->firstChild();
     }
 }
 
@@ -351,25 +327,25 @@ void KisLayerBox::slotRmClicked()
     QModelIndexList l = selectedLayers();
 
     for (int i = 0, n = l.count(); i < n; ++i)
-        m_view->image()->removeLayer(m_view->image()->rootLayer()->layerFromIndex(l.at(i)));
+        m_image->removeLayer(m_image->rootLayer()->layerFromIndex(l.at(i)));
 }
 
 void KisLayerBox::slotRaiseClicked()
 {
     QModelIndexList l = selectedLayers();
 
-    KisLayerSP layer = m_view->image()->rootLayer()->layerFromIndex(l.first());
-    if( l.count() == 1 && layer == layer->parent()->firstChild() && layer->parent() != m_view->image()->rootLayer())
+    KisLayerSP layer = m_image->rootLayer()->layerFromIndex(l.first());
+    if( l.count() == 1 && layer == layer->parent()->firstChild() && layer->parent() != m_image->rootLayer())
     {
         if (KisGroupLayerSP grandparent = layer->parent()->parent())
-            m_view->image()->moveLayer(layer, grandparent, KisLayerSP(layer->parent().data()));
+            m_image->moveLayer(layer, grandparent, KisLayerSP(layer->parent().data()));
     }
     else
     {
         for (int i = 0, n = l.count(); i < n; ++i)
-            if (KisLayerSP li = m_view->image()->rootLayer()->layerFromIndex(l[i]))
+            if (KisLayerSP li = m_image->rootLayer()->layerFromIndex(l[i]))
                 if (li->prevSibling())
-                    m_view->image()->moveLayer(li, li->parent(), li->prevSibling());
+                    m_image->moveLayer(li, li->parent(), li->prevSibling());
     }
 
     if( !l.isEmpty() )
@@ -381,13 +357,13 @@ void KisLayerBox::slotLowerClicked()
     QModelIndexList l = selectedLayers();
 
     for (int i = l.count() - 1; i >= 0; --i)
-        if (KisLayerSP layer = m_view->image()->rootLayer()->layerFromIndex(l[i]))
+        if (KisLayerSP layer = m_image->rootLayer()->layerFromIndex(l[i]))
             if (layer->nextSibling())
             {
                 if (layer->nextSibling()->nextSibling())
-                    m_view->image()->moveLayer(layer, layer->parent(), layer->nextSibling()->nextSibling());
+                    m_image->moveLayer(layer, layer->parent(), layer->nextSibling()->nextSibling());
                 else
-                    m_view->image()->moveLayer(layer, layer->parent(), KisLayerSP(0));
+                    m_image->moveLayer(layer, layer->parent(), KisLayerSP(0));
             }
 
     if( !l.isEmpty() )
@@ -396,7 +372,7 @@ void KisLayerBox::slotLowerClicked()
 
 void KisLayerBox::slotPropertiesClicked()
 {
-    if (KisLayerSP active = m_view->image()->activeLayer())
+    if (KisLayerSP active = m_image->activeLayer())
         emit sigRequestLayerProperties(active);
 }
 
@@ -413,7 +389,7 @@ void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
 QModelIndexList KisLayerBox::selectedLayers() const
 {
     QModelIndexList l = listLayers->selectionModel()->selectedIndexes();
-    if (l.count() < 2 && m_view->image()->activeLayer() && !l.contains(listLayers->currentIndex()))
+    if (l.count() < 2 && m_image->activeLayer() && !l.contains(listLayers->currentIndex()))
     {
         l.clear();
         l.append(listLayers->currentIndex());

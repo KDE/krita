@@ -120,7 +120,7 @@ public:
 
     //========== Display profiles =============================================//
 
-    virtual KisProfile * getProfile() { return m_profile; };
+    virtual KisProfile * getProfile() const { return m_profile; };
 
 
 //================= Conversion functions ==================================//

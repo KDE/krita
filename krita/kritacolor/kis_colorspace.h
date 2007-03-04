@@ -179,7 +179,7 @@ public:
     /**
      * Return the profile of this color space. This may be 0
      */
-    virtual KisProfile * getProfile() = 0;
+    virtual KisProfile * getProfile() const = 0;
 
 //================= Conversion functions ==================================//
 

@@ -268,11 +268,11 @@ int PythonExtension::setattr(const char* n, const Py::Object& value)
 
 int PythonExtension::compare(const Py::Object& other)
 {
-    //krossdebug( QString("PythonExtension::compare this.name='%1' other='%2'").arg(d->object ? d->object->objectName() : "NULL").arg(other.as_string().c_str()) );
     if(Py::PythonExtension<PythonExtension>::check( other )) {
         Py::ExtensionObject<PythonExtension> extobj( other );
         PythonExtension* extension = extobj.extensionObject();
         QObject* obj = extension->object();
+        krossdebug( QString("PythonExtension::compare this.name='%1' other.name='%2' other.pyobject='%3'").arg(d->object ? d->object->objectName() : "NULL").arg(obj ? obj->objectName() : "NULL").arg(other.as_string().c_str()) );
         //Q_ASSERT( obj );
         //Q_ASSERT( object() );
         return obj == object() ? 0 : ( obj > object() ? -1 : 1 );

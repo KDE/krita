@@ -90,17 +90,31 @@ bool PythonScript::initialize()
             return false;
         }
 
+        Q_ASSERT( ! action()->objectName().isNull() );
+        QFileInfo fi( action()->objectName() );
+        QString n = QFileInfo(fi.absolutePath(), fi.baseName()).absoluteFilePath();
+        const char* name = n.isNull() ? action()->objectName().toLatin1() : n.toLatin1();
+        //krossdebug( QString("------------------> %1").arg(name) );
+
         { // Each Action uses an own module as scope.
-            PyObject* pymod = PyModule_New( const_cast< char* >( action()->objectName().toLatin1().data() ) );
+            PyObject* pymod = PyModule_New(name);
+            Q_ASSERT(pymod);
+            PyModule_AddStringConstant(pymod, "__file__", name);
+
+            //pymod = PyImport_AddModule(name);
+            //pymod = PyImport_Import( Py::String(name).ptr() );
+//pymod = PyImport_ImportModule(name);
+PyObject* m = PyImport_ImportModule(name);
+            //PyImport_ImportModuleEx(  char *name, PyObject *globals, PyObject *locals, PyObject *fromlist)
+
             d->m_module = new Py::Module(pymod, true);
             if(! d->m_module) {
                 setError( QString("Failed to initialize local module context for script '%1'").arg(action()->objectName()) );
                 return false;
             }
 
-            /*
+/*
             // Register in module dict to allow such codes like: from whatever import mymodule
-            const char* name = action()->objectName().toLatin1().data();
             PyObject* importdict = PyImport_GetModuleDict();
             if(! importdict) {
                 //finalize();
@@ -108,9 +122,8 @@ bool PythonScript::initialize()
                 return false;
             }
             PyDict_SetItemString(importdict, name, pymod);
-            */
+*/
 
-            //PyModule_AddStringConstant(pymod, "__file__", "...");
         }
 
         #ifdef KROSS_PYTHON_SCRIPT_INIT_DEBUG
@@ -136,9 +149,9 @@ bool PythonScript::initialize()
             }
 
             // Set up the import hook
-            PyObject* pyrun1 = PyRun_String("__main__._Importer(self)", Py_file_input, moduledict.ptr(), moduledict.ptr());
-            if(! pyrun1) throw Py::Exception(); // throw exception
-            Py_XDECREF(pyrun1); // free the reference.
+            //PyObject* pyrun1 = PyRun_String("__main__._Importer(self)", Py_file_input, moduledict.ptr(), moduledict.ptr());
+            //if(! pyrun1) throw Py::Exception(); // throw exception
+            //Py_XDECREF(pyrun1); // free the reference.
 
             // Add the script's directory to the sys.path
             if( ! action()->currentPath().isNull() ) {

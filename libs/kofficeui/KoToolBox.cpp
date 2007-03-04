@@ -41,7 +41,6 @@ KoToolBox::KoToolBox(KoCanvasController *canvas, const QString &title)
     setObjectName("ToolBox_"+ title);
 
     foreach(KoToolManager::Button button, KoToolManager::instance()->createToolList()) {
-kDebug() << button.button->toolTip() << " === " << button.visibilityCode << endl;
         addButton(button.button, button.section, button.priority, button.buttonGroupId);
         m_visibilityCodes.insert(button.button, button.visibilityCode);
     }
@@ -146,7 +145,6 @@ void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<
         return;
     foreach(QAbstractButton *button, m_visibilityCodes.keys()) {
         QString code = m_visibilityCodes.value(button);
-kDebug() << "code: " << code << endl;
         if(code == "flake/always")
             continue;
         if(code.isEmpty()) {

@@ -160,7 +160,7 @@ PythonInterpreter::PythonInterpreter(Kross::InterpreterInfo* info)
         "       self.realImporter = __main__.__builtin__.__import__\n"
         "       __main__.__builtin__.__import__ = self._import\n"
         "   def _import(self, name, globals=None, locals=None, fromlist=[]):\n"
-        "       print \"_Importer name=%s fromlist=%s\" % (name,fromlist)\n"
+        //"       print \"_Importer name=%s fromlist=%s\" % (name,fromlist)\n"
         "       if fromlist == None:\n"
         "           mod = __main__._import(name, globals, locals, fromlist)\n"
         "           if mod != None:\n"

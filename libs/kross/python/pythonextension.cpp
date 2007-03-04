@@ -268,10 +268,13 @@ int PythonExtension::setattr(const char* n, const Py::Object& value)
 
 int PythonExtension::compare(const Py::Object& other)
 {
+    //krossdebug( QString("PythonExtension::compare this.name='%1' other='%2'").arg(d->object ? d->object->objectName() : "NULL").arg(other.as_string().c_str()) );
     if(Py::PythonExtension<PythonExtension>::check( other )) {
         Py::ExtensionObject<PythonExtension> extobj( other );
         PythonExtension* extension = extobj.extensionObject();
         QObject* obj = extension->object();
+        //Q_ASSERT( obj );
+        //Q_ASSERT( object() );
         return obj == object() ? 0 : ( obj > object() ? -1 : 1 );
     }
     PyErr_SetObject(PyExc_TypeError, other.ptr());
@@ -686,13 +689,21 @@ int PythonExtension::mapping_ass_subscript(const Py::Object& obj1, const Py::Obj
     throw Py::RuntimeError( QString("Unsupported: PythonExtension::mapping_ass_subscript %1 %2").arg(obj1.as_string().c_str()).arg(obj2.as_string().c_str()).toLatin1().constData() );
 }
 
+Py::Object PythonExtension::number_int()
+{
+    //krossdebug("PythonExtension::number_int");
+    return Py::Int( hash() );
+}
+
 Py::Object PythonExtension::number_long()
 {
+    //krossdebug("PythonExtension::number_long");
     return Py::Long( hash() );
 }
 
 Py::Object PythonExtension::number_hex()
 {
+    //krossdebug("PythonExtension::number_hex");
     void* ptr = (QObject*) d->object;
     return Py::Object(PyString_FromFormat("%p",ptr),true);
 }

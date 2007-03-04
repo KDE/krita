@@ -115,7 +115,7 @@ namespace Kross {
             //virtual Py::Object number_positive();
             //virtual Py::Object number_absolute();
             //virtual Py::Object number_invert();
-            //virtual Py::Object number_int();
+            virtual Py::Object number_int();
             //virtual Py::Object number_float();
             virtual Py::Object number_long();
             //virtual Py::Object number_oct();

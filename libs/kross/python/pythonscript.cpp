@@ -299,12 +299,19 @@ void PythonScript::execute()
         //return PythonExtension::toObject(result);
     }
     catch(Py::Exception& e) {
+        QStringList trace;
+        int lineno;
+        PythonInterpreter::extractException(trace, lineno);
+        setError(Py::value(e).as_string().c_str(), trace.join("\n"), lineno);
+        PyErr_Print(); //e.clear();
+/*
         Py::Object errobj = Py::value(e);
         if(errobj.ptr() == Py_None) // e.g. string-exceptions have there errormessage in the type-object
             errobj = Py::type(e);
         setError( errobj.as_string().c_str() );
         //PyErr_Clear(); // exception is handled.
         PyErr_Print();
+*/
     }
 }
 
@@ -389,10 +396,14 @@ QVariant PythonScript::callFunction(const QString& name, const QVariantList& arg
         #ifdef KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
             krosswarning( QString("PythonScript::callFunction() Exception: %1").arg(Py::value(e).as_string().c_str()) );
         #endif
+        QStringList trace;
+        int lineno;
+        PythonInterpreter::extractException(trace, lineno);
+        setError(Py::value(e).as_string().c_str(), trace.join("\n"), lineno);
+        PyErr_Print(); //e.clear();
         //setError( Py::value(e).as_string().c_str() );
         //e.clear(); // exception is handled. clear it now.
         //finalize();
-        PyErr_Print();
     }
 
     return QVariant();

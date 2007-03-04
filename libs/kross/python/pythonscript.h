@@ -117,7 +117,7 @@ namespace Kross {
             void finalize();
 
             /// \return a \a Kross::Exception instance.
-            void setErrorFromException(const QString& error);
+            //void setErrorFromException(const QString& error);
     };
 
 }

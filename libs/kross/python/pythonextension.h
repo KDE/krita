@@ -110,7 +110,7 @@ namespace Kross {
             virtual int mapping_ass_subscript(const Py::Object&, const Py::Object&);
 
             // Number
-            //virtual int number_nonzero();
+            virtual int number_nonzero();
             //virtual Py::Object number_negative();
             //virtual Py::Object number_positive();
             //virtual Py::Object number_absolute();

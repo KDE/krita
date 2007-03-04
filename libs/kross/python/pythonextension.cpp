@@ -689,21 +689,27 @@ int PythonExtension::mapping_ass_subscript(const Py::Object& obj1, const Py::Obj
     throw Py::RuntimeError( QString("Unsupported: PythonExtension::mapping_ass_subscript %1 %2").arg(obj1.as_string().c_str()).arg(obj2.as_string().c_str()).toLatin1().constData() );
 }
 
+int PythonExtension::number_nonzero()
+{
+    krossdebug("PythonExtension::number_nonzero");
+    return d->object ? 1 : 0;
+}
+
 Py::Object PythonExtension::number_int()
 {
-    //krossdebug("PythonExtension::number_int");
+    krossdebug("PythonExtension::number_int");
     return Py::Int( hash() );
 }
 
 Py::Object PythonExtension::number_long()
 {
-    //krossdebug("PythonExtension::number_long");
+    krossdebug("PythonExtension::number_long");
     return Py::Long( hash() );
 }
 
 Py::Object PythonExtension::number_hex()
 {
-    //krossdebug("PythonExtension::number_hex");
+    krossdebug("PythonExtension::number_hex");
     void* ptr = (QObject*) d->object;
     return Py::Object(PyString_FromFormat("%p",ptr),true);
 }

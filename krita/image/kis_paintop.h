@@ -50,7 +50,9 @@ class KoInputDevice;
 class KisQImagemask;
 class KisPainter;
 
-
+/**
+ * KisPaintOp are use by tools to draw on a paint device.
+ */
 class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
 {
 
@@ -90,6 +92,10 @@ private:
     KisPaintDeviceSP m_dab;
 };
 
+/**
+ * This class is used to cache the settings (and the associated widget) for a paintop
+ * between two creation. There is one KisPaintOpSettings per input device (mouse, tablet, etc...).
+ */
 class KisPaintOpSettings {
 
 public:
@@ -97,6 +103,9 @@ public:
     KisPaintOpSettings(QWidget *parent) { Q_UNUSED(parent); }
     virtual ~KisPaintOpSettings() {}
 
+    /**
+     * @return a pointer to the widget displaying the settings
+     */
     virtual QWidget *widget() const { return 0; }
 };
 
@@ -112,6 +121,11 @@ public:
     KisPaintOpFactory() {}
     virtual ~KisPaintOpFactory() {}
 
+    /**
+     * Create a KisPaintOp with the given settings and painter.
+     * @param settings the settings associated with the input device
+     * @param painter the painter used to draw
+     */
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter) = 0;
     virtual KoID id() { return KoID("abstractpaintop", i18n("Abstract PaintOp")); }
 

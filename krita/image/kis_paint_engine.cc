@@ -202,6 +202,7 @@ void KisPaintEngine::initPainter(QPainter &p)
     if (d->flags & (DirtyClipRegion | DirtyClipPath)) {
         // kDebug(41001) << "\tDirtyClipPath" << endl;
         p.setClipPath(d->clipPath);
+        d->dirty += QRegion(d->clipPath.boundingRect().toRect());
     }
 //     if (d->flags & DirtyTransform) {
 //         // kDebug(41001) << "\tDirtyTransform" << endl;

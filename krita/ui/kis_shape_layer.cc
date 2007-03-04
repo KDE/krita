@@ -176,7 +176,6 @@ KisImageViewConverter::KisImageViewConverter(const KisImage *image)
 : m_image(image)
 {
     Q_ASSERT(image);
-kDebug() << "xRes: " << m_image->xRes() << ", yRes: " << m_image->yRes() << endl;
 }
 
 // remember here; document is postscript points;  view is krita pixels.
@@ -205,7 +204,6 @@ QRectF KisImageViewConverter::viewToDocument( const QRectF &viewRect ) const
 
 void KisImageViewConverter::zoom(double *zoomX, double *zoomY) const
 {
-kDebug() << "xRes: " << m_image->xRes() << ", yRes: " << m_image->yRes() << endl;
     *zoomX = m_image->xRes();
     *zoomY = m_image->yRes();
 }

@@ -79,7 +79,7 @@ public:
             setIcon( "tool_freehand" );
             setShortcut( KShortcut( Qt::Key_B ) );
             setPriority( 0 );
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setInputDeviceAgnostic(false);
         }
 

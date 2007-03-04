@@ -32,6 +32,7 @@ KoInteractionToolFactory::KoInteractionToolFactory(QObject *parent)
     setToolType(mainToolType());
     setPriority(0);
     setIcon("select");
+    setActivationShapeId("flake/always");
 }
 
 KoInteractionToolFactory::~KoInteractionToolFactory() {

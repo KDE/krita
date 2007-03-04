@@ -41,9 +41,9 @@ KoToolBox::KoToolBox(KoCanvasController *canvas, const QString &title)
     setObjectName("ToolBox_"+ title);
 
     foreach(KoToolManager::Button button, KoToolManager::instance()->createToolList()) {
+kDebug() << button.button->toolTip() << " === " << button.visibilityCode << endl;
         addButton(button.button, button.section, button.priority, button.buttonGroupId);
-        if(! button.visibilityCode.isEmpty())
-            setVisibilityCode(button.button, button.visibilityCode);
+        m_visibilityCodes.insert(button.button, button.visibilityCode);
     }
     setup();
 
@@ -141,15 +141,21 @@ void KoToolBox::setActiveTool(const KoCanvasController *canvas, int id) {
         kWarning(30004) << "KoToolBox::setActiveTool(" << id << "): no such button found\n";
 }
 
-void KoToolBox::setVisibilityCode(QAbstractButton *button, const QString &code) {
-    m_visibilityCodes.insert(button, code);
-}
-
 void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes) {
     if(canvas != m_canvas)
         return;
-    foreach(QAbstractButton *button, m_visibilityCodes.keys())
-        button->setVisible( codes.contains(m_visibilityCodes.value(button)) );
+    foreach(QAbstractButton *button, m_visibilityCodes.keys()) {
+        QString code = m_visibilityCodes.value(button);
+kDebug() << "code: " << code << endl;
+        if(code == "flake/always")
+            continue;
+        if(code.isEmpty()) {
+            button->setVisible(true);
+            button->setEnabled( codes.count() != 0 );
+        }
+        else
+            button->setVisible( codes.contains(code) );
+    }
 }
 
 void KoToolBox::enableTools(bool enable) {

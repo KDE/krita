@@ -31,7 +31,7 @@ KritaShapeToolFactory::KritaShapeToolFactory( QObject* parent, const QStringList
     setIcon( "kritashape" );
     setToolType( dynamicToolType() );
     setPriority( 1 );
-    setActivationShapeID( KritaShapeId );
+    setActivationShapeId( KritaShapeId );
 }
 
 KritaShapeToolFactory::~KritaShapeToolFactory()

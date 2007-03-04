@@ -107,9 +107,39 @@ public:
      * @return the basename of the icon for this tool
      */
     const QString& icon() const;
+
     /**
      * Return the id of the shape we can process.
-     * This is the shape ID the tool we create is associated with.  So a TextTool for a TextShape.
+     * This is the shape Id the tool we create is associated with.  So a TextTool for a TextShape.
+     * In combination with the toolType the following situations can occur;
+     <table><tr><th>Type</th><th>shapeId</th><th>Result</th></tr>
+     <tr>
+        <td>'main'</td>
+        <td>Foo</td>
+        <td>Tool will always be visible, but only active when shape with shapeId 'Foo' is in the selection.</td></tr>
+     <tr>
+        <td>'main'</td>
+        <td>''</td>
+        <td>Tool will always be visible, but only active when at least one shape is selected</td></tr>
+     <tr>
+        <td>'main'</td>
+        <td>'flake/always'</td>
+        <td>Tool will always be visible.</td></tr>
+     <tr>
+        <td>'dynamic'</td>
+        <td>Foo</td>
+        <td>Tool will only be visible when shape with shapeId 'Foo' is in the selection.</td></tr>
+     <tr>
+        <td>'dynamic'</td>
+        <td>''</td>
+        <td>Tool will always be visible. We recommend you don't use this one.</td></tr>
+     <tr>
+        <td>'other'</td>
+        <td>any</td>
+        <td>similar to the 'dynamic' items, but segmented in its own section.</td></tr>
+     </table>
+     * @see KoShapeFactory::shapeId()
+     * @see setActivationShapeId()
      * @return the id of a shape, or an empty string for all shapes.
      */
     const QString &activationShapeId() const;
@@ -176,12 +206,13 @@ protected:
     void setPriority(int newPriority);
     /**
      * Set the id of the shape we can process.
-     * This is the ID, as passed to the constructor of a KoShapeFactory, that the tool
+     * This is the Id, as passed to the constructor of a KoShapeFactory, that the tool
      * we create is associated with. This means that if a KoTextShape is selected, then
      * all tools that have its id set here will be added to the dynamic part of the toolbox.
-     * @param activationShapeId the ID of the shape
+     * @param activationShapeId the Id of the shape
+     * @see activationShapeId()
      */
-    void setActivationShapeID(const QString &activationShapeId);
+    void setActivationShapeId(const QString &activationShapeId);
 
     /**
      * Set the default shortcut for activation of this tool.

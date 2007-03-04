@@ -78,7 +78,7 @@ const KShortcut& KoToolFactory::shortcut() const {
     return d->shortcut;
 }
 
-void KoToolFactory::setActivationShapeID(const QString &activationShapeId) {
+void KoToolFactory::setActivationShapeId(const QString &activationShapeId) {
     d->activationId = activationShapeId;
 }
 

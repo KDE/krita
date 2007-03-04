@@ -141,7 +141,7 @@ public:
         {
             setToolTip(i18n("Crop the image to an area"));
      //       setToolType(TOOL_TYPE_TRANSFORM);
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setToolType( dynamicToolType() );
             setPriority(0);
             setIcon("tool_crop");

@@ -78,7 +78,7 @@ public:
         {
             setToolTip( i18n( "Duplicate parts of the image. Shift-click to select the point to duplicate from to begin." ) );
             //setToolType( TOOL_TYPE_FREEHAND );
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setToolType( dynamicToolType() );
             setIcon( "tool_duplicate" );
             setPriority( 0 );

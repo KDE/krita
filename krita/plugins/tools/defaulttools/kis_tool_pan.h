@@ -64,7 +64,7 @@ public:
             setToolTip( i18n( "Pan the current view" ) );
             //setToolType( TOOL_TYPE_VIEW );
             setToolType( dynamicToolType() );
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_pan" );
             setPriority( 0 );
             setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_H ) );

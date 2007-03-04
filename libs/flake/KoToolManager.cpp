@@ -168,8 +168,7 @@ QList<KoToolManager::Button> KoToolManager::createToolList() const {
         button.section = tool->toolType();
         button.priority = tool->priority();
         button.buttonGroupId = tool->uniqueId();
-        if (tool->toolType() == KoToolFactory::dynamicToolType())
-            button.visibilityCode = tool->activationShapeId();
+        button.visibilityCode = tool->activationShapeId();
         answer.append(button);
     }
     return answer;

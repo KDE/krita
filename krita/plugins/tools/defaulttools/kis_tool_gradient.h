@@ -109,7 +109,7 @@ public:
             setIcon( "tool_gradient" );
             setShortcut( KShortcut( Qt::Key_G ) );
             setPriority( 0 );
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolGradientFactory(){}

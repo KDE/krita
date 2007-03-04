@@ -22,6 +22,7 @@
 
 #include <QList>
 #include <QMap>
+#include <QHash>
 #include <QDockWidget>
 
 class QButtonGroup;
@@ -65,15 +66,6 @@ public:
      * @see setup()
      */
     void addButton(QAbstractButton *button, const QString &section, int priority, int buttonGroupId=-1);
-
-    /**
-     * For a button added to this toolbox you can regiter a visibility-code by which that
-     * button will be known.  Using setButtonsVisible() you can then show only the buttons
-     * you want visible.
-     * @param button the previously registered button
-     * @param code that we recognize this button by, does not have to be unique.
-     */
-    void setVisibilityCode(QAbstractButton *button, const QString &code);
 
 public slots:
     /**
@@ -133,7 +125,7 @@ private:
     QButtonGroup *m_buttonGroup;
     QBoxLayout* m_layout;
     QList<ToolArea *> m_toolBoxes;
-    QMap<QAbstractButton*, QString> m_visibilityCodes;
+    QHash<QAbstractButton*, QString> m_visibilityCodes;
 
     // Section,  [prio, button]
     QMap<QString, QMultiMap<int, QAbstractButton*> > m_buttons;

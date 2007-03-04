@@ -88,7 +88,7 @@ public:
             setToolTip(i18n("Select a color from the image or current layer"));
             //setToolType(TOOL_TYPE_SELECTED);
             setToolType( dynamicToolType() );
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority(0);
             setIcon("colorpicker");
             setShortcut( KShortcut( Qt::Key_P ) );

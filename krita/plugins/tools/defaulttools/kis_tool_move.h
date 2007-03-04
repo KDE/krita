@@ -65,7 +65,7 @@ public:
             setToolTip(i18n("Move a layer"));
             //setToolType(TOOL_TYPE_TRANSFORM);
             setToolType( dynamicToolType() );
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority(0);
             setIcon("tool_move");
             //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );

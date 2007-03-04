@@ -85,7 +85,7 @@ public:
             // Temporarily
             //setToolType(TOOL_TYPE_SHAPE);
             setToolType( dynamicToolType() );
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority(0);
             setIcon("tool_line");
         }

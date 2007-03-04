@@ -87,7 +87,7 @@ public:
             setToolType( dynamicToolType() );
             setPriority(0);
             setIcon("tool_star");
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolStarFactory(){}

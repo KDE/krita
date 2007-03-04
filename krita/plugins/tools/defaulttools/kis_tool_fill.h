@@ -95,7 +95,7 @@ public:
             setToolTip( i18n( "Fill a contiguous area of color with a color, or fill a selection." ) );
             //setToolType( TOOL_TYPE_FILL );
             setToolType( dynamicToolType() );
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "color_fill" );
             //setShortcut( QKeySequence( Qt::Key_F ) );
             setPriority( 0 );

@@ -85,7 +85,7 @@ public:
             setToolTip( i18n( "Zoom" ) );
             //setToolType( TOOL_TYPE_VIEW );
             setToolType( dynamicToolType() );
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
 
             setIcon( "viewmag" );
             setPriority( 0 );

@@ -62,7 +62,7 @@ public:
         {
             setToolTip(i18n("Place a single line of uneditable text on the canvas"));
             //setToolType(TOOL_TYPE_FILL);
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setToolType( dynamicToolType() );
             setPriority(0);
             setIcon("tool_text");

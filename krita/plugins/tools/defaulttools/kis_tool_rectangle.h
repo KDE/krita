@@ -88,7 +88,7 @@ public:
             setToolTip( i18n( "Draw a rectangle" ) );
             // Temporarily
             //setToolType( TOOL_TYPE_SHAPE );
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setToolType( dynamicToolType() );
             setIcon( "tool_rectangle" );
             //setShortcut( Qt::Key_F6 );

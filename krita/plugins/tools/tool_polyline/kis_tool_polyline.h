@@ -87,7 +87,7 @@ public:
             setToolTip( i18n( "Draw a polyline. Shift-mouseclick ends the polyline." ) );
 //             setToolType( TOOL_TYPE_SHAPE );
             setToolType( dynamicToolType() );
-            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "polyline" );
             setPriority( 0 );
         }

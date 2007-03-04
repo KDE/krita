@@ -30,7 +30,7 @@ KoPathToolFactory::KoPathToolFactory(QObject *parent)
     setToolType (dynamicToolType());
     setIcon ("group");
     setPriority (2);
-    setActivationShapeID (KoPathShapeId);
+    setActivationShapeId (KoPathShapeId);
 }
 
 KoPathToolFactory::~KoPathToolFactory() {

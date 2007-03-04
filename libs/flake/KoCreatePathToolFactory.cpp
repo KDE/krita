@@ -34,6 +34,7 @@ KoCreatePathToolFactory::KoCreatePathToolFactory(QObject *parent)
     setToolType(mainToolType());
     setPriority(2);
     setIcon("createpath");
+    setActivationShapeId("flake/always");
 }
 
 KoCreatePathToolFactory::~KoCreatePathToolFactory() 

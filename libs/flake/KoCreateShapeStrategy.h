@@ -53,5 +53,5 @@ private:
     QRectF m_outlineBoundingRect;
 };
 
-#endif /* KOSHAPEROTATESTRATEGY_H */
+#endif
 

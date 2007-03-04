@@ -33,6 +33,7 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
 #include "KoCanvasBase.h"
+#include "KoZoomTool.h"
 
 // Qt + kde
 #include <QWidget>
@@ -111,6 +112,9 @@ public:
             tl->setObjectName(tool->id());
             foreach(QAction *action, tl->actions().values())
                 action->setEnabled(false);
+            KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*> (tl);
+            if(zoomTool)
+                zoomTool->setCanvasController(controller);
         }
         KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsHash.value(KoCreateShapesTool_ID));
         Q_ASSERT(createTool);
@@ -144,6 +148,7 @@ void KoToolManager::setup() {
     d->tools.append( new ToolHelper(new KoCreateShapesToolFactory(this)) );
     d->tools.append( new ToolHelper(new KoPathToolFactory(this)) );
     d->defaultTool = new ToolHelper(new KoInteractionToolFactory(this));
+    d->defaultTool = new ToolHelper(new KoZoomToolFactory(this));
     d->tools.append(d->defaultTool);
 
     KoShapeRegistry::instance();

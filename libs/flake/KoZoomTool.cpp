@@ -102,7 +102,8 @@ void KoZoomTool::mouseDoubleClickEvent(KoPointerEvent *e)
 
 void KoZoomTool::activate()
 {
-    super::activate();
+    if(m_controller == 0)
+        emit sigDone();
     m_timer.start(50);
 }
 

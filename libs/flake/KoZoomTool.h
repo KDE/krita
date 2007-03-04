@@ -26,6 +26,10 @@
 
 #include <KoToolFactory.h>
 
+#define KoZoomTool_ID "flake/zoomTool"
+
+class KoCanvasController;
+
 class KoZoomTool : public KoTool {
 
     typedef KoTool super;
@@ -43,6 +47,8 @@ public:
 
     virtual void paint(QPainter &painter, KoViewConverter &converter);
 
+    void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
+
 public slots:
     void activate();
     void deactivate();
@@ -57,6 +63,7 @@ private:
     QCursor m_plusCursor;
     QCursor m_minusCursor;
     QTimer m_timer;
+    KoCanvasController *m_controller;
 };
 
 
@@ -64,14 +71,14 @@ class KoZoomToolFactory : public KoToolFactory {
 
 public:
     KoZoomToolFactory(QObject *parent)
-        : KoToolFactory(parent,  "KritaView/KoZoomTool", i18n( "Zoom tool") )
+        : KoToolFactory(parent,  KoZoomTool_ID, i18n( "Zoom Tool") )
         {
             setToolTip( i18n( "Zoom" ) );
             //setToolType( TOOL_TYPE_VIEW );
-            setToolType( dynamicToolType() );
+            setToolType( mainToolType() );
 
             setIcon( "viewmag" );
-            setPriority( 0 );
+            setPriority( 5 );
 //            setShortcut( KShortcut( Qt:Key_Z ) );
         }
 

@@ -20,6 +20,7 @@
 #include <kdebug.h>
 #include <QIcon>
 #include <QImage>
+#include <QUndoCommand>
 
 #include <KoColorProfile.h>
 
@@ -388,33 +389,33 @@ void KisPaintLayer::setDirty(const QRegion & region) {
 
 // Undoable versions code
 namespace {
-    class KisCreateMaskCommand : public KNamedCommand {
-        typedef KNamedCommand super;
+    class KisCreateMaskCommand : public QUndoCommand {
+        typedef QUndoCommand super;
         KisPaintLayerSP m_layer;
         KisPaintDeviceSP m_mask;
     public:
-        KisCreateMaskCommand(const QString& name, KisPaintLayer* layer)
-            : super(name), m_layer(layer) {}
-        virtual void execute() {
+        KisCreateMaskCommand(KisPaintLayer* layer)
+            : super(i18n("Create Layer Mask")), m_layer(layer) {}
+        virtual void redo() {
             if (!m_mask)
                 m_mask = m_layer->createMask();
             else
                 m_layer->createMaskFromPaintDevice(m_mask);
         }
-        virtual void unexecute() {
+        virtual void undo() {
             m_layer->removeMask();
         }
     };
 
-    class KisMaskFromSelectionCommand : public KNamedCommand {
-        typedef KNamedCommand super;
+    class KisMaskFromSelectionCommand : public QUndoCommand {
+        typedef QUndoCommand super;
         KisPaintLayerSP m_layer;
         KisPaintDeviceSP m_maskBefore;
         KisPaintDeviceSP m_maskAfter;
         KisSelectionSP m_selection;
     public:
-        KisMaskFromSelectionCommand(const QString& name, KisPaintLayer* layer)
-            : super(name), m_layer(layer) {
+        KisMaskFromSelectionCommand(KisPaintLayer* layer)
+            : super(i18n("Mask From Selection")), m_layer(layer) {
             if (m_layer->hasMask())
                 m_maskBefore = m_layer->getMask();
             else
@@ -425,7 +426,7 @@ namespace {
             else
                 m_selection = 0;
         }
-        virtual void execute() {
+        virtual void redo() {
             if (!m_maskAfter) {
                 m_layer->createMaskFromSelection(m_selection);
                 m_maskAfter = m_layer->getMask();
@@ -434,7 +435,7 @@ namespace {
                 m_layer->createMaskFromPaintDevice(m_maskAfter);
             }
         }
-        virtual void unexecute() {
+        virtual void undo() {
             m_layer->paintDevice()->setSelection(m_selection);
             if (m_maskBefore)
                 m_layer->createMaskFromPaintDevice(m_maskBefore);
@@ -443,25 +444,25 @@ namespace {
         }
     };
 
-    class KisMaskToSelectionCommand : public KNamedCommand {
-        typedef KNamedCommand super;
+    class KisMaskToSelectionCommand : public QUndoCommand {
+        typedef QUndoCommand super;
         KisPaintLayerSP m_layer;
         KisPaintDeviceSP m_mask;
         KisSelectionSP m_selection;
     public:
-        KisMaskToSelectionCommand(const QString& name, KisPaintLayer* layer)
-            : super(name), m_layer(layer) {
+        KisMaskToSelectionCommand(KisPaintLayer* layer)
+            : super(i18n("Mask To Selection")), m_layer(layer) {
             m_mask = m_layer->getMask();
             if (m_layer->paintDevice()->hasSelection())
                 m_selection = m_layer->paintDevice()->selection();
             else
                 m_selection = 0;
         }
-        virtual void execute() {
+        virtual void redo() {
             m_layer->paintDevice()->setSelection(m_layer->getMaskAsSelection());
             m_layer->removeMask();
         }
-        virtual void unexecute() {
+        virtual void undo() {
             if (m_selection)
                 m_layer->paintDevice()->setSelection(m_selection);
             else
@@ -471,40 +472,40 @@ namespace {
     };
 
 
-    class KisRemoveMaskCommand : public KNamedCommand {
-        typedef KNamedCommand super;
+    class KisRemoveMaskCommand : public QUndoCommand {
+        typedef QUndoCommand super;
         KisPaintLayerSP m_layer;
         KisPaintDeviceSP m_mask;
     public:
-        KisRemoveMaskCommand(const QString& name, KisPaintLayer* layer)
-            : super(name), m_layer(layer) {
+        KisRemoveMaskCommand(KisPaintLayer* layer)
+            : super(i18n("Remove Layer Mask")), m_layer(layer) {
             m_mask = m_layer->getMask();
             }
-            virtual void execute() {
+            virtual void redo() {
                 m_layer->removeMask();
             }
-            virtual void unexecute() {
+            virtual void undo() {
                 // I hope that if the undo stack unwinds, it will end up here in the right
                 // state again; taking a deep-copy sounds like wasteful to me
                 m_layer->createMaskFromPaintDevice(m_mask);
             }
     };
 
-    class KisApplyMaskCommand : public KNamedCommand {
-        typedef KNamedCommand super;
+    class KisApplyMaskCommand : public QUndoCommand {
+        typedef QUndoCommand super;
         KisPaintLayerSP m_layer;
         KisPaintDeviceSP m_mask;
         KisPaintDeviceSP m_original;
     public:
-        KisApplyMaskCommand(const QString& name, KisPaintLayer* layer)
-            : super(name), m_layer(layer) {
+        KisApplyMaskCommand(KisPaintLayer* layer)
+            : super(i18n("Apply Layer Mask")), m_layer(layer) {
             m_mask = m_layer->getMask();
             m_original = new KisPaintDevice(*m_layer->paintDevice());
         }
-        virtual void execute() {
+        virtual void redo() {
             m_layer->applyMask();
         }
-        virtual void unexecute() {
+        virtual void undo() {
             // I hope that if the undo stack unwinds, it will end up here in the right
             // state again; taking a deep-copy sounds like wasteful to me
             KisPainter gc(m_layer->paintDevice());
@@ -519,23 +520,24 @@ namespace {
     };
 }
 
-KNamedCommand* KisPaintLayer::createMaskCommand() {
-    return new KisCreateMaskCommand(i18n("Create Layer Mask"), this);
-}
-KNamedCommand* KisPaintLayer::maskFromSelectionCommand() {
-    return new KisMaskFromSelectionCommand(i18n("Mask From Selection"), this);
+QUndoCommand* KisPaintLayer::createMaskCommand() {
+    return new KisCreateMaskCommand(this);
 }
 
-KNamedCommand* KisPaintLayer::maskToSelectionCommand() {
-    return new KisMaskToSelectionCommand(i18n("Mask To Selection"), this);
+QUndoCommand* KisPaintLayer::maskFromSelectionCommand() {
+    return new KisMaskFromSelectionCommand(this);
 }
 
-KNamedCommand* KisPaintLayer::removeMaskCommand() {
-    return new KisRemoveMaskCommand(i18n("Remove Layer Mask"), this);
+QUndoCommand* KisPaintLayer::maskToSelectionCommand() {
+    return new KisMaskToSelectionCommand(this);
 }
 
-KNamedCommand* KisPaintLayer::applyMaskCommand() {
-    return new KisApplyMaskCommand(i18n("Apply Layer Mask"), this);
+QUndoCommand* KisPaintLayer::removeMaskCommand() {
+    return new KisRemoveMaskCommand(this);
+}
+
+QUndoCommand* KisPaintLayer::applyMaskCommand() {
+    return new KisApplyMaskCommand(this);
 }
 
 #include "kis_paint_layer.moc"

@@ -26,7 +26,7 @@
 
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
-
+#include "kis_doc2.h"
 #include "kis_view2.h"
 
 KisMaskManager::KisMaskManager( KisView2 * view)
@@ -83,22 +83,16 @@ void KisMaskManager::slotCreateMask() {
     KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
     if (!layer)
         return;
-    KNamedCommand *cmd = layer->createMaskCommand();
-    cmd->execute();
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        m_view->undoAdapter()->addCommandOld(cmd);
-    }
+    QUndoCommand *cmd = layer->createMaskCommand();
+    m_view->document()->addCommand(cmd);
 }
 void KisMaskManager::slotMaskFromSelection() {
     KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
     if (!layer)
         return;
 
-    KNamedCommand *cmd = layer->maskFromSelectionCommand();
-    cmd->execute();
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        m_view->undoAdapter()->addCommandOld(cmd);
-    }
+    QUndoCommand *cmd = layer->maskFromSelectionCommand();
+    m_view->document()->addCommand(cmd);
 }
 
 
@@ -107,11 +101,8 @@ void KisMaskManager::slotMaskToSelection() {
     if (!layer)
         return;
 
-    KNamedCommand *cmd = layer->maskToSelectionCommand();
-    cmd->execute();
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        m_view->undoAdapter()->addCommandOld(cmd);
-    }
+    QUndoCommand *cmd = layer->maskToSelectionCommand();
+    m_view->document()->addCommand(cmd);
 }
 
 void KisMaskManager::slotApplyMask() {
@@ -119,11 +110,8 @@ void KisMaskManager::slotApplyMask() {
     if (!layer)
         return;
 
-    KNamedCommand *cmd = layer->applyMaskCommand();
-    cmd->execute();
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        m_view->undoAdapter()->addCommandOld(cmd);
-    }
+    QUndoCommand *cmd = layer->applyMaskCommand();
+    m_view->document()->addCommand(cmd);
 }
 
 void KisMaskManager::slotRemoveMask() {
@@ -131,11 +119,8 @@ void KisMaskManager::slotRemoveMask() {
     if (!layer)
         return;
 
-    KNamedCommand *cmd = layer->removeMaskCommand();
-    cmd->execute();
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        m_view->undoAdapter()->addCommandOld(cmd);
-    }
+    QUndoCommand *cmd = layer->removeMaskCommand();
+    m_view->document()->addCommand(cmd);
 }
 
 void KisMaskManager::slotEditMask() {

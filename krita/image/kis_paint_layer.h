@@ -23,6 +23,8 @@
 #include "kis_paint_device.h"
 #include "KoColorSpace.h"
 
+class QUndoCommand;
+
 /**
  * This layer is of a type that can be painted on.
  */
@@ -99,15 +101,15 @@ public:
     KisSelectionSP getMaskAsSelection();
 
     /// Undoable version of createMask
-    KNamedCommand* createMaskCommand();
+    QUndoCommand* createMaskCommand();
     /// Undoable version of createMaskFromSelection
-    KNamedCommand* maskFromSelectionCommand();
+    QUndoCommand* maskFromSelectionCommand();
     /// Undoable, removes the current mask, but converts it to the current selection
-    KNamedCommand* maskToSelectionCommand();
+    QUndoCommand* maskToSelectionCommand();
     /// Undoable version of removeMask
-    KNamedCommand* removeMaskCommand();
+    QUndoCommand* removeMaskCommand();
     /// Undoable version of applyMask
-    KNamedCommand* applyMaskCommand();
+    QUndoCommand* applyMaskCommand();
 
     /// Returns true if the masked part of the mask will be rendered instead of being transparent
     bool renderMask() const { return m_renderMask; }

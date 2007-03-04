@@ -197,9 +197,7 @@ void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyl
     saveOdfAutomaticStyles( *stylesWriter, mainStyles, true );
     stylesWriter->endElement(); // office:automatic-styles
 
-    stylesWriter->startElement( "office:master-styles" );
     stylesWriter->addCompleteElement( masterStyles );
-    stylesWriter->endElement();
 
     stylesWriter->endElement(); // root element (office:document-styles)
     stylesWriter->endDocument();

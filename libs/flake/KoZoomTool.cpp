@@ -28,10 +28,10 @@
 #include <kstandarddirs.h>
 #include <kcursor.h>
 
-#include "ZoomTool.h"
+#include "KoZoomTool.h"
 
 
-ZoomTool::ZoomTool(KoCanvasBase *canvas)
+KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
     : super(canvas)
 {
     setObjectName("tool_zoom");
@@ -47,11 +47,11 @@ ZoomTool::ZoomTool(KoCanvasBase *canvas)
     connect(&m_timer, SIGNAL(timeout()), SLOT(slotTimer()));
 }
 
-ZoomTool::~ZoomTool()
+KoZoomTool::~KoZoomTool()
 {
 }
 
-void ZoomTool::mousePressEvent(KoPointerEvent *e)
+void KoZoomTool::mousePressEvent(KoPointerEvent *e)
 {
     if (!m_dragging) {
         if (e->button() == Qt::LeftButton) {
@@ -62,7 +62,7 @@ void ZoomTool::mousePressEvent(KoPointerEvent *e)
     }
 }
 
-void ZoomTool::mouseMoveEvent(KoPointerEvent *e)
+void KoZoomTool::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_dragging) {
 	QRectF bound;
@@ -75,7 +75,7 @@ void ZoomTool::mouseMoveEvent(KoPointerEvent *e)
     }
 }
 
-void ZoomTool::mouseReleaseEvent(KoPointerEvent *e)
+void KoZoomTool::mouseReleaseEvent(KoPointerEvent *e)
 {
     if (m_dragging && e->button() == Qt::LeftButton) {
         m_endPos = e->pos();
@@ -95,23 +95,23 @@ void ZoomTool::mouseReleaseEvent(KoPointerEvent *e)
 */    }
 }
 
-void ZoomTool::mouseDoubleClickEvent(KoPointerEvent *e)
+void KoZoomTool::mouseDoubleClickEvent(KoPointerEvent *e)
 {
 }
 
 
-void ZoomTool::activate()
+void KoZoomTool::activate()
 {
     super::activate();
     m_timer.start(50);
 }
 
-void ZoomTool::deactivate()
+void KoZoomTool::deactivate()
 {
     m_timer.stop();
 }
 
-void ZoomTool::slotTimer()
+void KoZoomTool::slotTimer()
 {
 /*    int state = QApplication::keyboardModifiers() & (Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier);
 
@@ -124,9 +124,9 @@ void ZoomTool::slotTimer()
 }
 
 
-void ZoomTool::paint(QPainter &painter, KoViewConverter &converter)
+void KoZoomTool::paint(QPainter &painter, KoViewConverter &converter)
 {
-    if (m_canvas) {
+    if (m_canvas && m_dragging) {
         QPen old = painter.pen();
         QPen pen(Qt::DotLine);
         QPoint start;
@@ -139,4 +139,4 @@ void ZoomTool::paint(QPainter &painter, KoViewConverter &converter)
     }
 }
 
-#include "ZoomTool.moc"
+#include "KoZoomTool.moc"

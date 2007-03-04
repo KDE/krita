@@ -18,7 +18,6 @@
  */
 #include "Plugin.h"
 #include "ConnectionToolFactory.h"
-#include "ZoomTool.h"
 
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
@@ -31,7 +30,6 @@ Plugin::Plugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new ConnectionToolFactory(parent));
-    KoToolRegistry::instance()->add(new ZoomToolFactory(parent));
 }
 
 #include "Plugin.moc"

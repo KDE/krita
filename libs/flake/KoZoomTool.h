@@ -26,14 +26,14 @@
 
 #include <KoToolFactory.h>
 
-class ZoomTool : public KoTool {
+class KoZoomTool : public KoTool {
 
     typedef KoTool super;
     Q_OBJECT
 
 public:
-    ZoomTool(KoCanvasBase *canvas);
-    virtual ~ZoomTool();
+    KoZoomTool(KoCanvasBase *canvas);
+    virtual ~KoZoomTool();
 
 public:
     virtual void mousePressEvent(KoPointerEvent *event);
@@ -60,11 +60,11 @@ private:
 };
 
 
-class ZoomToolFactory : public KoToolFactory {
+class KoZoomToolFactory : public KoToolFactory {
 
 public:
-    ZoomToolFactory(QObject *parent)
-        : KoToolFactory(parent,  "KritaView/ZoomTool", i18n( "Zoom tool") )
+    KoZoomToolFactory(QObject *parent)
+        : KoToolFactory(parent,  "KritaView/KoZoomTool", i18n( "Zoom tool") )
         {
             setToolTip( i18n( "Zoom" ) );
             //setToolType( TOOL_TYPE_VIEW );
@@ -75,10 +75,10 @@ public:
 //            setShortcut( KShortcut( Qt:Key_Z ) );
         }
 
-    virtual ~ZoomToolFactory(){}
+    virtual ~KoZoomToolFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
-        return new ZoomTool(canvas);
+        return new KoZoomTool(canvas);
     }
 
 };

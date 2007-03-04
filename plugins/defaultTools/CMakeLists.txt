@@ -8,7 +8,6 @@ SET ( defaulttools_SRCS
     Plugin.cpp
     ConnectionTool.cpp
     ConnectionToolFactory.cpp
-    ZoomTool.cpp
 )
 
 #kde4_add_ui_files(defaulttools_SRCS

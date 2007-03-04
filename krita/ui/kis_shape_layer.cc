@@ -38,6 +38,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include "kis_shape_layer_canvas.h"
+#include "kis_image_view_converter.h"
 #include <kis_painter.h>
 #include <KoCompositeOp.h>
 
@@ -169,41 +170,4 @@ QRect KisShapeLayer::exactBounds() const
 bool KisShapeLayer::accept(KisLayerVisitor& visitor)
 {
     return visitor.visit(this);
-}
-
-
-KisImageViewConverter::KisImageViewConverter(const KisImage *image)
-: m_image(image)
-{
-    Q_ASSERT(image);
-}
-
-// remember here; document is postscript points;  view is krita pixels.
-
-QPointF KisImageViewConverter::documentToView( const QPointF &documentPoint ) const
-{
-    return QPointF( documentToViewX(documentPoint.x()), documentToViewX(documentPoint.y()) );
-}
-
-QPointF KisImageViewConverter::viewToDocument( const QPointF &viewPoint ) const
-{
-    return QPointF( viewToDocumentX(viewPoint.x()), viewToDocumentY(viewPoint.y()) );
-}
-
-QRectF KisImageViewConverter::documentToView( const QRectF &documentRect ) const
-{
-    return QRectF( documentToView(documentRect.topLeft()),
-        QSizeF(documentToViewX(documentRect.width()), documentToViewY(documentRect.height())) );
-}
-
-QRectF KisImageViewConverter::viewToDocument( const QRectF &viewRect ) const
-{
-    return QRectF( viewToDocument(viewRect.topLeft()),
-        QSizeF(viewToDocumentX(viewRect.width()), viewToDocumentY(viewRect.height())) );
-}
-
-void KisImageViewConverter::zoom(double *zoomX, double *zoomY) const
-{
-    *zoomX = m_image->xRes();
-    *zoomY = m_image->yRes();
 }

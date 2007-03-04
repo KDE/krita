@@ -1,4 +1,4 @@
-/* This file is part of the KDE project Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+/* This file is part of the KDE project
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>

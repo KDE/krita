@@ -2,6 +2,11 @@ include_directories( ${KOFFICECORE_INCLUDES} )
 
 #####################################################################
 # Kross Python
+#
+# Install examples:
+#   cmake -DCMAKE_INSTALL_PREFIX=/opt/kde4/ ..
+#   cmake -DCMAKE_INSTALL_PREFIX=/opt/kde4/ -DENABLE_KROSSPYTHON=off
+#   cmake -DCMAKE_INSTALL_PREFIX=/opt/kde4/ -DCMAKE_BUILD_TYPE=debugfull -DPYTHON_LIBRARY=/usr/lib/python2.5/config/libpython2.5.so -DPYTHON_LIBRARIES=/usr/lib/python2.5/config/libpython2.5.so -DPYTHON_INCLUDE_PATH=/usr/include/python2.5 ..
 
 OPTION(ENABLE_KROSSPYTHON "build Python scripting library (Kross)" ON)
 #OPTION(ENABLE_KROSSPYTHON "build Python scripting library (Kross)" OFF)
@@ -19,6 +24,11 @@ message(STATUS "Compile Kross Python... " ${KROSSPYTHON_ENABLED})
 
 #####################################################################
 # Kross Ruby
+#
+# Install examples:
+#   cmake -DCMAKE_INSTALL_PREFIX=/opt/kde4/ ..
+#   cmake -DCMAKE_INSTALL_PREFIX=/opt/kde4/ -DENABLE_KROSSRUBY=off
+#   cmake -DCMAKE_INSTALL_PREFIX=/opt/kde4/ -DCMAKE_BUILD_TYPE=debugfull -DKOFFICE_ENABLE_SCRIPTING=y -DRUBY_INCLUDE_PATH=/usr/lib/ruby/1.8/i486-linux/ -DRUBY_LIBRARY=/usr/lib/libruby1.8.so ..
 
 OPTION(ENABLE_KROSSRUBY "build Ruby scripting library (Kross)" ON)
 #OPTION(ENABLE_KROSSRUBY "build Ruby scripting library (Kross)" OFF)

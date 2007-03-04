@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,30 +18,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOZOOMTOOL_H
-#define KOZOOMTOOL_H
+#include "KoZoomToolFactory.h"
+#include "KoZoomTool.h"
 
-#include "KoInteractionTool.h"
+#include <klocale.h>
 
-class KoCanvasBase;
-class KoCanvasController;
-
-class KoZoomTool : public KoInteractionTool
+KoZoomToolFactory::KoZoomToolFactory(QObject *parent)
+: KoToolFactory(parent, "KoZoomToolId", i18n("Zoom Tool"))
 {
-public:
-    /**
-     * Create a new tool; typically not called by applications, only by the KoToolManager
-     * @param canvas the canvas this tool works for.
-     */
-    explicit KoZoomTool( KoCanvasBase *canvas );
-    void mouseReleaseEvent( KoPointerEvent *event );
-    void mousePressEvent( KoPointerEvent *event );
+    setToolTip(i18n("Zoom"));
+    setToolType(mainToolType());
+    setPriority(5);
+    setIcon("viewmag");
+    setActivationShapeId("flake/always");
+}
 
-    void paint( QPainter &painter, KoViewConverter &converter );
-    void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
-
-private:
-    KoCanvasController *m_controller;
-};
-
-#endif
+KoTool* KoZoomToolFactory::createTool(KoCanvasBase *canvas) {
+    return new KoZoomTool(canvas);
+}

@@ -34,6 +34,7 @@
 #include "KoShapeManager.h"
 #include "KoCanvasBase.h"
 #include "KoZoomTool.h"
+#include "KoZoomToolFactory.h"
 
 // Qt + kde
 #include <QWidget>
@@ -147,8 +148,8 @@ void KoToolManager::setup() {
     d->tools.append( new ToolHelper(new KoCreatePathToolFactory(this)) );
     d->tools.append( new ToolHelper(new KoCreateShapesToolFactory(this)) );
     d->tools.append( new ToolHelper(new KoPathToolFactory(this)) );
+    d->tools.append( new ToolHelper(new KoZoomToolFactory(this)) );
     d->defaultTool = new ToolHelper(new KoInteractionToolFactory(this));
-    d->defaultTool = new ToolHelper(new KoZoomToolFactory(this));
     d->tools.append(d->defaultTool);
 
     KoShapeRegistry::instance();

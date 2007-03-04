@@ -150,7 +150,8 @@ PythonInterpreter::PythonInterpreter(Kross::InterpreterInfo* info)
         "import __builtin__\n"
         "import __main__\n"
         "class _Importer:\n"
-        "    def __init__(self):\n"
+        "    def __init__(self, script):\n"
+        //"        self.script = script\n"
         "        self.realImporter = __main__.__builtin__.__import__\n"
         "        __main__.__builtin__.__import__ = self._import\n"
         //"        self.realImporter = __builtin__.__import__\n"
@@ -164,7 +165,6 @@ PythonInterpreter::PythonInterpreter(Kross::InterpreterInfo* info)
         "            return sys.modules[name]\n"
         "        mod = self.realImporter(name, globals, locals, fromlist)\n"
         "        return mod\n"
-        "_Importer()\n"
         ;
 
     PyObject* pyrun = PyRun_String(s.toLatin1().data(), Py_file_input, moduledict.ptr(), moduledict.ptr());

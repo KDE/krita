@@ -134,6 +134,21 @@ bool PythonScript::initialize()
                 objectsit.next();
                 moduledict[ objectsit.key().toLatin1().data() ] = Py::asObject(new PythonExtension(objectsit.value()));
             }
+
+            // Set up the import hook
+            PyObject* pyrun = PyRun_String("__main__._Importer(self)", Py_file_input, moduledict.ptr(), moduledict.ptr());
+            if(! pyrun) throw Py::Exception(); // throw exception
+            Py_XDECREF(pyrun); // free the reference.
+
+            // Add the script's directory to the sys.path
+            if( ! action()->currentPath().isNull() ) {
+                //FIXME: should we remove the dir again after the job is done?
+                //FIXME: escape the path + propably do it like in pythoninterpreter.cpp?
+                QString s = QString("import sys\nsys.path.append(\"%1\")").arg( action()->currentPath() );
+                pyrun = PyRun_String(s.toLatin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
+                if(! pyrun) throw Py::Exception(); // throw exception
+                Py_XDECREF(pyrun); // free the reference.
+            }
         }
 
         /*

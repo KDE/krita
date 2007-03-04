@@ -30,6 +30,8 @@ public:
     KoZoomStrategy( KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked );
 
     void finishInteraction( Qt::KeyboardModifiers modifiers );
+private:
+    KoCanvasController *m_controller;
 };
 
 #endif

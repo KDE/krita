@@ -25,7 +25,8 @@
 #include <kdebug.h>
 
 KoZoomStrategy::KoZoomStrategy( KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked)
-: KoShapeRubberSelectStrategy(tool, controller->canvas(), clicked, false)
+: KoShapeRubberSelectStrategy(tool, controller->canvas(), clicked, false),
+m_controller(controller)
 {
 }
 
@@ -36,4 +37,5 @@ void KoZoomStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) {
 kDebug() << "zoom!\n";
     // the next line can be removed, or just altered to just update the whole thing.
     m_canvas->updateCanvas(selectRect());
+    m_controller->zoomIn(selectRect().center());
 }

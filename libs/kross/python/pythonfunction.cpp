@@ -173,6 +173,7 @@ int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
                     int lineno;
                     PythonInterpreter::extractException(trace, lineno);
                     krosswarning( QString("PythonFunction::qt_metacall exception on line %1:\n%2 \n%3").arg(lineno).arg(Py::value(e).as_string().c_str()).arg(trace.join("\n")) );
+                    PyErr_Print(); //e.clear();
                     return -1;
                 }
 

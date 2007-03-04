@@ -47,11 +47,9 @@ ToolCrop::ToolCrop(QObject *parent, const QStringList &)
 {
     setComponentData(ToolCropFactory::componentData());
 
-    if ( parent->inherits("KoToolRegistry") )
-    {
-        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
-        r->add(KoToolFactorySP(new KisToolCropFactory()));
-    }
+    KoToolRegistry * r = KoToolRegistry::instance();
+    r->add(new KisToolCropFactory(r, QStringList()));
+
 
 }
 

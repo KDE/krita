@@ -24,8 +24,9 @@
 #include <QPoint>
 #include <qregion.h>
 
-#include <kis_tool_non_paint.h>
 #include <KoToolFactory.h>
+#include "kis_tool.h"
+#include "kis_layer_shape.h"
 
 #include "ui_wdg_tool_crop.h"
 
@@ -47,40 +48,38 @@ class WdgToolCrop : public QWidget, public Ui::WdgToolCrop
  *       - (when moving to Qt 4: replace rectangle with  darker, dimmer overlay layer
  *         like we have for selections right now)
  */
-class KisToolCrop : public KisToolNonPaint {
+class KisToolCrop : public KisTool {
 
-    typedef KisToolNonPaint super;
+    typedef KisTool super;
     Q_OBJECT
 
 public:
 
-    KisToolCrop();
+    KisToolCrop(KoCanvasBase * canvas);
     virtual ~KisToolCrop();
 
-    virtual QWidget* createOptionWidget();
+     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_TRANSFORM; }
+//     virtual enumToolType toolType() { return TOOL_TRANSFORM; }
     virtual quint32 priority() { return 1; }
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
-    virtual void buttonPress(KoPointerEvent *e);
-    virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KoPointerEvent *e);
-    virtual void doubleClick(KoPointerEvent *);
+
+    virtual void mousePressEvent(KoPointerEvent *e);
+    virtual void mouseMoveEvent(KoPointerEvent *e);
+    virtual void mouseReleaseEvent(KoPointerEvent *e);
+    virtual void mouseDoubleClickEvent( KoPointerEvent *e );
+
+    virtual void paint( QPainter &painter, KoViewConverter &converter );
 
 public slots:
 
     virtual void activate();
     virtual void deactivate();
 private:
-
-    void clearRect();
-    QRegion handles(QRect rect);
-    void paintOutlineWithHandles();
-    void paintOutlineWithHandles(QPainter& gc, const QRect& rc);
-    qint32 mouseOnHandle (const QPoint currentViewPoint);
+    QRectF boundingRect();
+    QRegion handles(QRectF rect);
+    void paintOutlineWithHandles(QPainter& gc);
+    qint32 mouseOnHandle (const QPointF currentViewPoint);
     void setMoveResizeCursor (qint32 handle);
     void validateSelection(bool updateratio = true);
     void setOptionWidgetX(qint32 x);
@@ -107,15 +106,15 @@ private:
 //     QPoint m_startPos;
 //     QPoint m_endPos;
     bool m_selecting;
-    QPoint m_dragStart;
-    QPoint m_dragStop;
+    QPointF m_dragStart;
+    QPointF m_dragStop;
 
     WdgToolCrop* m_optWidget;
 
     qint32 m_handleSize;
     QRegion m_handlesRegion;
     bool m_haveCropSelection;
-    qint32 m_dx, m_dy;
+    double m_dx, m_dy;
     qint32 m_mouseOnHandleType;
     QCursor m_cropCursor;
 
@@ -141,7 +140,9 @@ public:
         : KoToolFactory(parent, "KisToolCrop", i18n( "Crop" ))
         {
             setToolTip(i18n("Crop the image to an area"));
-            setToolType(TOOL_TYPE_TRANSFORM);
+     //       setToolType(TOOL_TYPE_TRANSFORM);
+            setActivationShapeID( KIS_LAYER_SHAPE_ID );
+            setToolType( dynamicToolType() );
             setPriority(0);
             setIcon("tool_crop");
         };

@@ -975,12 +975,12 @@ void KisImage::setProfile(const KoColorProfile * profile)
     }
 }
 
-double KisImage::xRes()
+double KisImage::xRes() const
 {
     return m_d->xres;
 }
 
-double KisImage::yRes()
+double KisImage::yRes() const
 {
     return m_d->yres;
 }

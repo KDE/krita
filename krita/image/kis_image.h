@@ -229,12 +229,12 @@ public:
     /**
      * X resolution in pixels per pt
      */
-    double xRes();
+    double xRes() const;
 
     /**
      * Y resolution in pixels per pt
      */
-    double yRes();
+    double yRes() const;
 
     /**
      * Set the resolution in pixels per pt.

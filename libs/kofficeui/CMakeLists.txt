@@ -24,10 +24,10 @@ set(kofficeui_LIB_SRCS
    KoInsertLink.cpp
    KoItemToolTip.cpp
    KoKoolBar.cpp
-   KoPageLayoutColumns.cpp
-   KoPageLayoutDia.cpp
-   KoPageLayoutHeader.cpp
-   KoPageLayoutSize.cpp 
+   #KoPageLayoutColumns.cpp
+   #KoPageLayoutDia.cpp
+   #KoPageLayoutHeader.cpp
+   #KoPageLayoutSize.cpp 
    KoPartSelectDia.cpp
    KoPartSelectAction.cpp
    KoPen.cpp
@@ -59,8 +59,8 @@ kde4_automoc(${kofficeui_LIB_SRCS})
 kde4_add_ui_files( kofficeui_LIB_SRCS
     KoCsvImportDialog.ui
     KoGeneralPropertyUi.ui
-    KoPageLayoutColumns.ui
-    KoPageLayoutHeaderBase.ui
+    #KoPageLayoutColumns.ui
+    #KoPageLayoutHeaderBase.ui
     KoShapeGeometry.ui
 )
 
@@ -89,10 +89,10 @@ install(
     KoInsertLink.h
     KoItemToolTip.h
     KoKoolBar.h
-    KoPageLayoutColumns.h
-    KoPageLayoutDia.h
-    KoPageLayoutHeader.h
-    KoPageLayoutSize.h
+    #KoPageLayoutColumns.h
+    #KoPageLayoutDia.h
+    #KoPageLayoutHeader.h
+    #KoPageLayoutSize.h
     KoPartSelectAction.h
     KoPartSelectDia.h
     KoPen.h

@@ -173,6 +173,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
+#if 0
 /*==================== constructor ===============================*/
 KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
                   const KoPageLayout& layout,
@@ -207,6 +208,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
     setFocus();
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
+#endif
 
 /*===================== destructor ===============================*/
 KoPageLayoutDia::~KoPageLayoutDia()

@@ -95,8 +95,8 @@ void KoGuides::paintGuides( QPainter &painter )
 {
     //painter.setRasterOp( NotROP );
     const KoPageLayout& pl = m_view->koDocument()->pageLayout();
-    int width = qMax( m_view->canvas()->width(), m_zoomHandler->zoomItXOld( pl.ptWidth ) );
-    int height = qMax( m_view->canvas()->height(), m_zoomHandler->zoomItYOld( pl.ptHeight ) );
+    int width = qMax( m_view->canvas()->width(), m_zoomHandler->zoomItXOld( pl.width ) );
+    int height = qMax( m_view->canvas()->height(), m_zoomHandler->zoomItYOld( pl.height ) );
 
     for ( int i = 0; i < GL_END; ++i )
     {
@@ -730,11 +730,11 @@ void KoGuides::slotChangePosition()
     double max = 0.0;
     if ( guideLine->orientation == Qt::Vertical )
     {
-        max = qMax( pl.ptWidth, m_zoomHandler->unzoomItXOld( m_view->canvas()->size().width() + m_view->canvasXOffset() - 1 ) );
+        max = qMax( pl.width, m_zoomHandler->unzoomItXOld( m_view->canvas()->size().width() + m_view->canvasXOffset() - 1 ) );
     }
     else
     {
-        max = qMax( pl.ptHeight, m_zoomHandler->unzoomItYOld( m_view->canvas()->size().height() + m_view->canvasYOffset() - 1 ) );
+        max = qMax( pl.height, m_zoomHandler->unzoomItYOld( m_view->canvas()->size().height() + m_view->canvasYOffset() - 1 ) );
     }
 
     KoGuideLineDia dia( 0, guideLine->position, 0.0, max, m_view->koDocument()->unit() );
@@ -858,8 +858,8 @@ void KoGuides::moveSelectedBy( QPoint &p )
     if ( m_guideLines[GL_SELECTED].count() > 1 )
     {
         const KoPageLayout& pl = m_view->koDocument()->pageLayout();
-        double right = qMax( pl.ptWidth, m_zoomHandler->unzoomItXOld( m_view->canvas()->width() + m_view->canvasXOffset() - 1 ) );
-        double bottom = qMax( pl.ptHeight, m_zoomHandler->unzoomItYOld( m_view->canvas()->height() + m_view->canvasYOffset() - 1 ) );
+        double right = qMax( pl.width, m_zoomHandler->unzoomItXOld( m_view->canvas()->width() + m_view->canvasXOffset() - 1 ) );
+        double bottom = qMax( pl.height, m_zoomHandler->unzoomItYOld( m_view->canvas()->height() + m_view->canvasYOffset() - 1 ) );
 
         QList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
         for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )

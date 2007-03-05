@@ -49,6 +49,7 @@ set(kofficecore_LIB_SRCS
    KoGenStyles.cpp
    KoGenStyle.cpp
    KoOasisSettings.cpp
+   KoPageFormat.cpp
    KoPageLayout.cpp
    KoFileDialog.cpp
    KoXmlNS.cpp
@@ -148,6 +149,7 @@ install( FILES
     KoStyleStack.h 
     KoGenStyles.h 
     KoOasisSettings.h 
+    KoPageFormat.h 
     KoPageLayout.h 
     KoXmlNS.h 
     KoDom.h 

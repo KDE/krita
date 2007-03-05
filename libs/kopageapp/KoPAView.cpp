@@ -175,7 +175,7 @@ void KoPAView::viewZoom(KoZoomMode::Mode mode, int zoom)
         zoomString = KoZoomMode::toString( mode );
         KoPageLayout layout = m_activePage->pageLayout();
         newZoom = qRound(static_cast<double>(m_canvasController->viewport()->size().width() * 100 ) /
-            ( m_zoomHandler.resolutionX() * layout.ptWidth ) ) - 1;
+            ( m_zoomHandler.resolutionX() * layout.width ) ) - 1;
 
         if ( ( newZoom != m_zoomHandler.zoomInPercent() ) &&
             m_canvasController->verticalScrollBar()->isHidden() )
@@ -187,8 +187,8 @@ void KoPAView::viewZoom(KoZoomMode::Mode mode, int zoom)
     {
         zoomString = KoZoomMode::toString( mode );
         KoPageLayout layout = m_activePage->pageLayout();
-        double height = m_zoomHandler.resolutionY() * layout.ptHeight;
-        double width = m_zoomHandler.resolutionX() * layout.ptWidth;
+        double height = m_zoomHandler.resolutionY() * layout.height;
+        double width = m_zoomHandler.resolutionX() * layout.width;
         QSize viewportSize = m_canvasController->viewport()->size();
         newZoom = qMin(qRound(static_cast<double>(viewportSize.height() * 100) / height ),
                     qRound(static_cast<double>( viewportSize.width() * 100) / width ) ) - 1;
@@ -240,10 +240,10 @@ void KoPAView::setActivePage( KoPAPage* page )
 
     m_canvas->updateSize();
     KoPageLayout layout = page->pageLayout();
-    m_horizontalRuler->setRulerLength(layout.ptWidth);
-    m_verticalRuler->setRulerLength(layout.ptHeight);
-    m_horizontalRuler->setActiveRange(layout.ptLeft, layout.ptWidth - layout.ptRight);
-    m_verticalRuler->setActiveRange(layout.ptTop, layout.ptHeight - layout.ptBottom);
+    m_horizontalRuler->setRulerLength(layout.width);
+    m_verticalRuler->setRulerLength(layout.height);
+    m_horizontalRuler->setActiveRange(layout.left, layout.width - layout.right);
+    m_verticalRuler->setActiveRange(layout.top, layout.height - layout.bottom);
 
 }
 

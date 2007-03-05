@@ -58,8 +58,8 @@ void KoPACanvas::updateSize()
   if ( m_view->activePage() ) 
   {
     KoPageLayout pageLayout = m_view->activePage()->pageLayout();
-        size.setWidth( qRound( m_view->zoomHandler()->zoomItX( pageLayout.ptWidth ) ) );
-        size.setHeight( qRound( m_view->zoomHandler()->zoomItX( pageLayout.ptHeight ) ) );
+        size.setWidth( qRound( m_view->zoomHandler()->zoomItX( pageLayout.width ) ) );
+        size.setHeight( qRound( m_view->zoomHandler()->zoomItX( pageLayout.height ) ) );
   }
 
     emit documentSize(size);

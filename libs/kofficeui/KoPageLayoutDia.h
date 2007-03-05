@@ -106,6 +106,7 @@ public:
              const KoHeadFoot& headfoot,
              int flags, KoUnit unit, bool modal=true );
 
+#if 0
     /**
      *  Constructor.
      *
@@ -124,6 +125,7 @@ public:
              const KoColumns& columns,
              const KoKWHeaderFooter& kwheadfoot,
              int tabs, KoUnit unit );
+#endif
 
     /**
      *  Destructor.

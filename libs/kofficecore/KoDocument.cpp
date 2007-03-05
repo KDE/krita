@@ -289,12 +289,12 @@ KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleView
 
     d->m_docInfo = new KoDocumentInfo( this );
 
-    m_pageLayout.ptWidth = 0;
-    m_pageLayout.ptHeight = 0;
-    m_pageLayout.ptTop = 0;
-    m_pageLayout.ptBottom = 0;
-    m_pageLayout.ptLeft = 0;
-    m_pageLayout.ptRight = 0;
+    m_pageLayout.width = 0;
+    m_pageLayout.height = 0;
+    m_pageLayout.top = 0;
+    m_pageLayout.bottom = 0;
+    m_pageLayout.left = 0;
+    m_pageLayout.right = 0;
 
     d->m_undoStack = new KUndoStack( this );
     d->m_undoStack->createUndoAction( actionCollection() );
@@ -1301,9 +1301,9 @@ QPixmap KoDocument::generatePreview( const QSize& size )
     double docWidth, docHeight;
     int pixmapSize = qMax(size.width(), size.height());
 
-    if (m_pageLayout.ptWidth > 1.0) {
-        docWidth = m_pageLayout.ptWidth / 72 * KoGlobal::dpiX();
-        docHeight = m_pageLayout.ptHeight / 72 * KoGlobal::dpiY();
+    if (m_pageLayout.width > 1.0) {
+        docWidth = m_pageLayout.width / 72 * KoGlobal::dpiX();
+        docHeight = m_pageLayout.height / 72 * KoGlobal::dpiY();
 
     } else {
         // If we don't have a page layout, just draw the top left hand corner

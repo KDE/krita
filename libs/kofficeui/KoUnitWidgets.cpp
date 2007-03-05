@@ -182,7 +182,7 @@ KoUnitDoubleSpinBox::setUnit( KoUnit unit )
     setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
 }
 
-double KoUnitDoubleSpinBox::value( void ) const
+double KoUnitDoubleSpinBox::value( ) const
 {
     return KoUnit::fromUserValue( KDoubleSpinBox::value(), m_unit );
 }
@@ -277,7 +277,7 @@ KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
             return QLineEdit::eventFilter( o, ev );
 }
 
-double KoUnitDoubleLineEdit::value( void ) const
+double KoUnitDoubleLineEdit::value( ) const
 {
     return KoUnit::fromUserValue( m_value, m_unit );
 }
@@ -369,7 +369,7 @@ KoUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
             return QComboBox::eventFilter( o, ev );
 }
 
-double KoUnitDoubleComboBox::value( void ) const
+double KoUnitDoubleComboBox::value( ) const
 {
     return KoUnit::fromUserValue( m_value, m_unit );
 }

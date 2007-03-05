@@ -155,7 +155,7 @@ public:
     virtual void setUnit( KoUnit );
 
     /// @return the current value, converted in points
-    double value( void ) const;
+    double value( ) const;
 
     /// Set minimum value in points.
     void setMinimum(double min);
@@ -202,7 +202,7 @@ public:
     virtual void setUnit( KoUnit );
 
     /// @return the current value, converted in points
-    double value( void ) const;
+    double value( ) const;
 
 protected:
     bool eventFilter( QObject* obj, QEvent* ev );
@@ -231,7 +231,7 @@ public:
     virtual void setUnit( KoUnit );
 
     /// @return the current value, converted in points
-    double value( void ) const;
+    double value( ) const;
     void insertItem( double, int index = -1 );
 
 protected:
@@ -265,7 +265,7 @@ public:
     void insertItem( double, int index = -1 );
     void updateValue( double );
     /// @return the current value, converted in points
-    double value( void ) const;
+    double value( ) const;
 
 signals:
     void valueChanged(double);

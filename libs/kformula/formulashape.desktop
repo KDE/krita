@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Formula Shape
+Name[x-test]=xxFormula Shapexx
 ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=formulashape

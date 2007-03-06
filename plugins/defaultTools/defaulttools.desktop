@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Default Flake Tools
+Name[x-test]=xxDefault Flake Toolsxx
 ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=defaulttools

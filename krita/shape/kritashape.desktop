@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KritaShape Shape
+Name[x-test]=xxKritaShape Shapexx
 ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=kritashape

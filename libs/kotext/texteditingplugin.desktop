@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Text Editing plugin for the KOffce texttool
+Name[x-test]=xxText Editing plugin for the KOffce texttoolxx
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-EditingPlugin
 Comment=Definition of a text-editing plugin
+Comment[x-test]=xxDefinition of a text-editing pluginxx
 [PropertyDef::X-KoText-Version]
 Type=int

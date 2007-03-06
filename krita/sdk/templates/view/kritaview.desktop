@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=%{APPNAME}
+Name[x-test]=xx%{APPNAME}xx
 Comment=%{APPNAME}
+Comment[x-test]=xx%{APPNAME}xx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=krita%{APPNAMELC}

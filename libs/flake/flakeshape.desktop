@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Shape definition
+Name[x-test]=xxShape definitionxx
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Shape
 Comment=Definition of a flake shape object
+Comment[x-test]=xxDefinition of a flake shape objectxx
 [PropertyDef::X-Flake-Version]
 Type=int

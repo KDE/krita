@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Chinese Brush
+Name[x-test]=xxChinese Brushxx
 Comment=Chinese Brush
+Comment[x-test]=xxChinese Brushxx
 ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacpaintbrush

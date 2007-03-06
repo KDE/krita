@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=Text Variables
+Name[x-test]=xxText Variablesxx
 ServiceTypes=KOffice/Text-InlineObject
 Type=Service
 X-KoText-Version=1

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Together
+Name[x-test]=xxTogetherxx
 Comment=Together
+Comment[x-test]=xxTogetherxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritatogether

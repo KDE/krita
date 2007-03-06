@@ -3,5 +3,6 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KOffice/ColorSpace
 Comment=A module implementing a complete colorspace for use with libpigment
+Comment[x-test]=xxA module implementing a complete colorspace for use with libpigmentxx
 [PropertyDef::X-Pigment-Version]
 Type=int

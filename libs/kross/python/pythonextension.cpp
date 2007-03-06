@@ -272,7 +272,7 @@ int PythonExtension::compare(const Py::Object& other)
         Py::ExtensionObject<PythonExtension> extobj( other );
         PythonExtension* extension = extobj.extensionObject();
         QObject* obj = extension->object();
-        krossdebug( QString("PythonExtension::compare this.name='%1' other.name='%2' other.pyobject='%3'").arg(d->object ? d->object->objectName() : "NULL").arg(obj ? obj->objectName() : "NULL").arg(other.as_string().c_str()) );
+        //krossdebug( QString("PythonExtension::compare this.name='%1' other.name='%2' other.pyobject='%3'").arg(d->object ? d->object->objectName() : "NULL").arg(obj ? obj->objectName() : "NULL").arg(other.as_string().c_str()) );
         //Q_ASSERT( obj );
         //Q_ASSERT( object() );
         return obj == object() ? 0 : ( obj > object() ? -1 : 1 );
@@ -691,25 +691,33 @@ int PythonExtension::mapping_ass_subscript(const Py::Object& obj1, const Py::Obj
 
 int PythonExtension::number_nonzero()
 {
-    krossdebug("PythonExtension::number_nonzero");
+    #ifdef KROSS_PYTHON_EXTENSION_NUMERIC_DEBUG
+        krossdebug("PythonExtension::number_nonzero");
+    #endif
     return d->object ? 1 : 0;
 }
 
 Py::Object PythonExtension::number_int()
 {
-    krossdebug("PythonExtension::number_int");
+    #ifdef KROSS_PYTHON_EXTENSION_NUMERIC_DEBUG
+        krossdebug("PythonExtension::number_int");
+    #endif
     return Py::Int( hash() );
 }
 
 Py::Object PythonExtension::number_long()
 {
-    krossdebug("PythonExtension::number_long");
+    #ifdef KROSS_PYTHON_EXTENSION_NUMERIC_DEBUG
+        krossdebug("PythonExtension::number_long");
+    #endif
     return Py::Long( hash() );
 }
 
 Py::Object PythonExtension::number_hex()
 {
-    krossdebug("PythonExtension::number_hex");
+    #ifdef KROSS_PYTHON_EXTENSION_NUMERIC_DEBUG
+        krossdebug("PythonExtension::number_hex");
+    #endif
     void* ptr = (QObject*) d->object;
     return Py::Object(PyString_FromFormat("%p",ptr),true);
 }

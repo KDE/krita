@@ -46,10 +46,8 @@ public:
     /// revert the actions done in redo
     void undo();
 private:
-    KoShapeControllerBase *m_controller;
-    QList<KoPathShape*> m_paths;
-    QList<KoPathShape*> m_separatedPaths;
-    bool m_isSeparated;
+    class Private;
+    Private * const d;
 };
 
 #endif // KOPATHSEPARATECOMMAND_H

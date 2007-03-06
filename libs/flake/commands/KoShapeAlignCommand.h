@@ -58,7 +58,8 @@ public:
     /// revert the actions done in redo
     virtual void undo();
 private:
-    KoShapeMoveCommand *m_command;
+    class Private;
+    Private * const d;
 };
 
 #endif

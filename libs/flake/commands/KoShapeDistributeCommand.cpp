@@ -24,17 +24,26 @@
 
 #include <klocale.h>
 
+class KoShapeDistributeCommand::Private {
+public:
+    Private() : command(0) {}
+    ~Private() { delete command; }
+    Distribute distribute;
+    KoShapeMoveCommand *command;
+};
+
 KoShapeDistributeCommand::KoShapeDistributeCommand( const QList<KoShape*> &shapes, Distribute distribute,  QRectF boundingRect, QUndoCommand *parent )
-: QUndoCommand( parent )
-, m_distribute( distribute )
+: QUndoCommand( parent ),
+    d(new Private())
 {
+    d->distribute = distribute;
     QMap<double,KoShape*> sortedPos;
     QRectF bRect;
     double extent = 0.0;
     // sort by position and calculate sum of objects widht/height
     foreach( KoShape *shape, shapes ) {
         bRect = shape->boundingRect();
-        switch( m_distribute ) {
+        switch( d->distribute ) {
             case HorizontalCenterDistribution:
                 sortedPos[bRect.center().x()] = shape;
                 break;
@@ -78,7 +87,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand( const QList<KoShape*> &shape
         previousPositions  << position;
 
         bRect = it.value()->boundingRect();
-        switch( m_distribute )        {
+        switch( d->distribute )        {
             case HorizontalCenterDistribution:
                 delta = QPointF( boundingRect.x() + first->boundingRect().width()/2 + pos - bRect.width()/2, bRect.y() ) - bRect.topLeft();
                 break;
@@ -109,29 +118,29 @@ KoShapeDistributeCommand::KoShapeDistributeCommand( const QList<KoShape*> &shape
         newPositions  << position + delta;
         pos += step;
     }
-    m_command = new KoShapeMoveCommand(sortedPos.values(), previousPositions, newPositions);
+    d->command = new KoShapeMoveCommand(sortedPos.values(), previousPositions, newPositions);
 
     setText( i18n( "Distribute shapes" ) );
 }
 
 KoShapeDistributeCommand::~KoShapeDistributeCommand()
 {
-    delete m_command;
+    delete d;
 }
 
 void KoShapeDistributeCommand::redo()
 {
-    m_command->redo();
+    d->command->redo();
 }
 
 void KoShapeDistributeCommand::undo()
 {
-    m_command->undo();
+    d->command->undo();
 }
 
 double KoShapeDistributeCommand::getAvailableSpace( KoShape *first, KoShape *last, double extent, QRectF boundingRect  )
 {
-    switch( m_distribute ) {
+    switch( d->distribute ) {
         case HorizontalCenterDistribution:
             return boundingRect.width() - last->boundingRect().width()/2 - first->boundingRect().width()/2;
             break;

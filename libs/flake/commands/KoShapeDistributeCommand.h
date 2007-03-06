@@ -61,8 +61,9 @@ public:
     virtual void undo();
 private:
     double getAvailableSpace( KoShape *first, KoShape *last, double extent, QRectF boundingRect );
-    Distribute m_distribute;
-    KoShapeMoveCommand *m_command;
+
+    class Private;
+    Private * const d;
 };
 
 #endif

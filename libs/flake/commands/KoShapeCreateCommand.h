@@ -47,10 +47,8 @@ private:
     enum AddRemove { Add, Remove };
     void recurse(KoShape *shape, const AddRemove ar);
 
-    KoShapeControllerBase *m_controller;
-    KoShape *m_shape;
-    KoShapeContainer *m_shapeParent;
-    bool m_deleteShape;
+    class Private;
+    Private * const d;
 };
 
 #endif

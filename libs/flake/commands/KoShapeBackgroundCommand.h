@@ -45,9 +45,8 @@ public:
     /// revert the actions done in redo
     void undo ();
 private:
-    QList<KoShape*> m_shapes;    ///< the shapes to set background for
-    QList<QBrush> m_oldBrushes; ///< the old background brushes, one for each shape
-    QBrush m_newBrush;           ///< the new background brush to set
+    class Private;
+    Private * const d;
 };
 
 #endif

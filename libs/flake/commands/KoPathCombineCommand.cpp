@@ -23,72 +23,86 @@
 #include "KoShapeContainer.h"
 #include <klocale.h>
 
-KoPathCombineCommand::KoPathCombineCommand(
-    KoShapeControllerBase *controller,
-    const QList<KoPathShape*> &paths,
-    QUndoCommand *parent )
-: QUndoCommand( parent )
-, m_controller( controller )
-, m_paths( paths )
-, m_combinedPath( 0 )
-, m_isCombined( false )
+class KoPathCombineCommand::Private {
+public:
+    Private(KoShapeControllerBase *c, const QList<KoPathShape*> &p)
+        : controller(c),
+        paths(p),
+        combinedPath( 0 ),
+        isCombined( false )
+    {
+    }
+    ~Private() {
+        if( isCombined && controller )
+        {
+            foreach( KoPathShape* path, paths )
+                delete path;
+        }
+        else
+            delete combinedPath;
+    }
+
+    KoShapeControllerBase *controller;
+    QList<KoPathShape*> paths;
+    KoPathShape *combinedPath;
+    bool isCombined;
+};
+
+KoPathCombineCommand::KoPathCombineCommand( KoShapeControllerBase *controller,
+        const QList<KoPathShape*> &paths, QUndoCommand *parent )
+    : QUndoCommand( parent ),
+    d(new Private(controller, paths))
 {
     setText( i18n( "Combine paths" ) );
 }
 
 KoPathCombineCommand::~KoPathCombineCommand()
 {
-    if( m_isCombined && m_controller )
-    {
-        foreach( KoPathShape* path, m_paths )
-            delete path;
-    }
-    else
-        delete m_combinedPath;
+    delete d;
 }
 
 void KoPathCombineCommand::redo()
 {
-    if( ! m_paths.size() )
+    if( ! d->paths.size() )
         return;
 
-    if( ! m_combinedPath )
+    if( ! d->combinedPath )
     {
-        m_combinedPath = new KoPathShape();
-        KoShapeContainer * parent = m_paths.first()->parent();
+        d->combinedPath = new KoPathShape();
+        KoShapeContainer * parent = d->paths.first()->parent();
         if(parent)
-            parent->addChild(m_combinedPath);
-        m_combinedPath->setBorder( m_paths.first()->border() );
-        m_combinedPath->setShapeId( m_paths.first()->shapeId() );
+            parent->addChild(d->combinedPath);
+        d->combinedPath->setBorder( d->paths.first()->border() );
+        d->combinedPath->setShapeId( d->paths.first()->shapeId() );
         // combine the paths
-        foreach( KoPathShape* path, m_paths )
-            m_combinedPath->combine( path );
+        foreach( KoPathShape* path, d->paths )
+            d->combinedPath->combine( path );
     }
 
-    m_isCombined = true;
+    d->isCombined = true;
 
-    if( m_controller )
+    if( d->controller )
     {
-        foreach( KoPathShape* p, m_paths )
-            m_controller->removeShape( p );
+        foreach( KoPathShape* p, d->paths )
+            d->controller->removeShape( p );
 
-        m_controller->addShape( m_combinedPath );
+        d->controller->addShape( d->combinedPath );
     }
 }
 
 void KoPathCombineCommand::undo()
 {
-    if( ! m_paths.size() )
+    if( ! d->paths.size() )
         return;
 
-    m_isCombined = false;
+    d->isCombined = false;
 
-    if( m_controller )
+    if( d->controller )
     {
-        m_controller->removeShape( m_combinedPath );
-        foreach( KoPathShape* p, m_paths )
+        d->controller->removeShape( d->combinedPath );
+        foreach( KoPathShape* p, d->paths )
         {
-            m_controller->addShape( p );
+            d->controller->addShape( p );
         }
     }
 }

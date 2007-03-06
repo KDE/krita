@@ -22,30 +22,42 @@
 
 #include <klocale.h>
 
+class KoShapeBackgroundCommand::Private {
+public:
+    Private(const QBrush &b) : newBrush(b)
+    {
+    }
+
+    QList<KoShape*> shapes;    ///< the shapes to set background for
+    QList<QBrush> oldBrushes; ///< the old background brushes, one for each shape
+    QBrush newBrush;           ///< the new background brush to set
+};
+
 KoShapeBackgroundCommand::KoShapeBackgroundCommand( const QList<KoShape*> &shapes, const QBrush &brush,
                                                     QUndoCommand *parent )
 : QUndoCommand( parent )
-, m_newBrush( brush )
+, d(new Private(brush))
 {
-    m_shapes = shapes;
+    d->shapes = shapes;
 
     setText( i18n( "Set background" ) );
 }
 
 KoShapeBackgroundCommand::~KoShapeBackgroundCommand() {
+    delete d;
 }
 
 void KoShapeBackgroundCommand::redo () {
-    foreach( KoShape *shape, m_shapes ) {
-        m_oldBrushes.append( shape->background() );
-        shape->setBackground( m_newBrush );
+    foreach( KoShape *shape, d->shapes ) {
+        d->oldBrushes.append( shape->background() );
+        shape->setBackground( d->newBrush );
         shape->repaint();
     }
 }
 
 void KoShapeBackgroundCommand::undo () {
-    QList<QBrush>::iterator brushIt = m_oldBrushes.begin();
-    foreach( KoShape *shape, m_shapes ) {
+    QList<QBrush>::iterator brushIt = d->oldBrushes.begin();
+    foreach( KoShape *shape, d->shapes ) {
         shape->setBackground( *brushIt );
         shape->repaint();
         brushIt++;

@@ -24,31 +24,43 @@
 
 #include <klocale.h>
 
+class KoShapeBorderCommand::Private {
+public:
+    Private(KoShapeBorderModel *border) : newBorder(border) {}
+    QList<KoShape*> shapes;                ///< the shapes to set border for
+    QList<KoShapeBorderModel*> oldBorders; ///< the old borders, one for each shape
+    KoShapeBorderModel * newBorder;        ///< the new border to set
+
+};
 
 KoShapeBorderCommand::KoShapeBorderCommand( const QList<KoShape*> &shapes, KoShapeBorderModel *border,
                                             QUndoCommand *parent )
 : QUndoCommand( parent )
-, m_newBorder( border )
+, d(new Private( border ))
 {
-    m_shapes = shapes;
+    d->shapes = shapes;
+    // XXX this command forgets to delete the old border on a shape and assumes someone else is still
+    // using it.  For such cases we should probably create a new border for each shape in the redo method.
+    // and delete the old borders in the destructor
 
     setText( i18n( "Set border" ) );
 }
 
 KoShapeBorderCommand::~KoShapeBorderCommand() {
+    delete d;
 }
 
 void KoShapeBorderCommand::redo () {
-    foreach( KoShape *shape, m_shapes ) {
-        m_oldBorders.append( shape->border() );
-        shape->setBorder( m_newBorder );
+    foreach( KoShape *shape, d->shapes ) {
+        d->oldBorders.append( shape->border() ); // TODO this seems buggy. Why append every redo?
+        shape->setBorder( d->newBorder );
         shape->repaint();
     }
 }
 
 void KoShapeBorderCommand::undo () {
-    QList<KoShapeBorderModel*>::iterator borderIt = m_oldBorders.begin();
-    foreach( KoShape *shape, m_shapes ) {
+    QList<KoShapeBorderModel*>::iterator borderIt = d->oldBorders.begin();
+    foreach( KoShape *shape, d->shapes ) {
         shape->setBorder( *borderIt );
         shape->repaint();
         borderIt++;

@@ -45,10 +45,8 @@ public:
     /// revert the actions done in redo
     void undo();
 private:
-    KoShapeControllerBase *m_controller;
-    QList<KoPathShape*> m_paths;
-    KoPathShape *m_combinedPath;
-    bool m_isCombined;
+    class Private;
+    Private * const d;
 };
 
 #endif // KOPATHCOMBINECOMMAND_H

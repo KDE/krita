@@ -45,9 +45,8 @@ public:
     /// revert the actions done in redo
     void undo ();
 private:
-    QList<KoShape*> m_shapes;                ///< the shapes to set border for
-    QList<KoShapeBorderModel*> m_oldBorders; ///< the old borders, one for each shape
-    KoShapeBorderModel * m_newBorder;        ///< the new border to set
+    class Private;
+    Private * const d;
 };
 
 #endif

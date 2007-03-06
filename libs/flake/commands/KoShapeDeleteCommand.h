@@ -52,10 +52,8 @@ public:
     /// revert the actions done in redo
     void undo ();
 private:
-    KoShapeControllerBase *m_controller; ///< the shape controller to use for removing/readding
-    QList<KoShape*> m_shapes; ///< the list of shapes to delete
-    QList<KoShapeContainer*> m_oldParents; ///< the old parents of the shapes
-    bool m_deleteShapes;  ///< shows if shapes should be deleted when deleting the command
+    class Private;
+    Private * const d;
 };
 
 #endif

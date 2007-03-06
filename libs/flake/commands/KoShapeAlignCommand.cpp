@@ -26,9 +26,19 @@
 #include <klocale.h>
 // #include <kdebug.h>
 
+class KoShapeAlignCommand::Private {
+public:
+    Private() : command(0) {}
+    ~Private() {
+        delete command;
+    }
+    KoShapeMoveCommand *command;
+};
+
 KoShapeAlignCommand::KoShapeAlignCommand( const QList<KoShape*> &shapes, Align align, QRectF boundingRect,
                                           QUndoCommand *parent )
-: QUndoCommand( parent )
+: QUndoCommand( parent ),
+    d(new Private())
 {
     QList<QPointF> previousPositions;
     QList<QPointF> newPositions;
@@ -70,22 +80,22 @@ KoShapeAlignCommand::KoShapeAlignCommand( const QList<KoShape*> &shapes, Align a
 //kDebug() << "-> moving " <<  position.x() << "," << position.y() << " to " <<
 //        (position + delta).x() << ", " << (position+delta).y() << endl;
     }
-    m_command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
+    d->command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 
     setText( i18n( "Align shapes" ) );
 }
 
 KoShapeAlignCommand::~KoShapeAlignCommand()
 {
-    delete m_command;
+    delete d;
 }
 
 void KoShapeAlignCommand::redo()
 {
-    m_command->redo();
+    d->command->redo();
 }
 
 void KoShapeAlignCommand::undo()
 {
-    m_command->undo();
+    d->command->undo();
 }

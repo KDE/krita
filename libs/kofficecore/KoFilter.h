@@ -199,7 +199,7 @@ protected:
      */
     int embedPart( const QByteArray& from, QByteArray& to,
                    KoFilter::ConversionStatus& status,
-                   const QString& key = QString::null );
+                   const QString& key = QString() );
 
     /**
      * Method to perform "internal" embedding of parts in olefilter-style.

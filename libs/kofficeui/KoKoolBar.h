@@ -38,7 +38,7 @@ class KoKoolBarItem : public QObject
 private:
   Q_OBJECT
 public:
-  KoKoolBarItem( KoKoolBarGroup *_grp, const QPixmap& _pix, const QString& _text = QString::null );
+  KoKoolBarItem( KoKoolBarGroup *_grp, const QPixmap& _pix, const QString& _text = QString() );
 
   int id() const { return m_id; }
   void press();
@@ -145,7 +145,7 @@ public:
   virtual ~KoKoolBar() { };
 
   virtual int insertGroup( const QString& _text );
-  virtual int insertItem( int _grp, const QPixmap& _pix, const QString& _text = QString::null,
+  virtual int insertItem( int _grp, const QPixmap& _pix, const QString& _text = QString(),
 			  QObject *_obj = 0L, const char *_slot = 0L );
   virtual void removeGroup( int _grp );
   virtual void removeItem( int _grp, int _id );

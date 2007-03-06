@@ -58,7 +58,7 @@ KoOasisSettings::Items KoOasisSettings::itemSet( const QString& itemSetName ) co
     {
         if ( e.localName() == "config-item-set" &&
              e.namespaceURI() == m_configNSURI &&
-             e.attributeNS( m_configNSURI, "name", QString::null ) == itemSetName )
+             e.attributeNS( m_configNSURI, "name", QString() ) == itemSetName )
         {
             return Items( e, this );
         }
@@ -74,7 +74,7 @@ KoOasisSettings::IndexedMap KoOasisSettings::Items::indexedMap( const QString& i
     {
         if ( configItem.localName() == "config-item-map-indexed" &&
              configItem.namespaceURI() == m_settings->m_configNSURI &&
-             configItem.attributeNS( m_settings->m_configNSURI, "name", QString::null ) == itemMapName )
+             configItem.attributeNS( m_settings->m_configNSURI, "name", QString() ) == itemMapName )
         {
             return IndexedMap( configItem, m_settings );
         }
@@ -89,7 +89,7 @@ KoOasisSettings::NamedMap KoOasisSettings::Items::namedMap( const QString& itemM
     {
         if ( configItem.localName() == "config-item-map-named" &&
              configItem.namespaceURI() == m_settings->m_configNSURI &&
-             configItem.attributeNS( m_settings->m_configNSURI, "name", QString::null ) == itemMapName )
+             configItem.attributeNS( m_settings->m_configNSURI, "name", QString() ) == itemMapName )
         {
             return NamedMap( configItem, m_settings );
         }
@@ -122,7 +122,7 @@ KoOasisSettings::Items KoOasisSettings::NamedMap::entry( const QString& entryNam
     {
         if ( entry.localName() == "config-item-map-entry" &&
              entry.namespaceURI() == m_settings->m_configNSURI &&
-             entry.attributeNS( m_settings->m_configNSURI, "name", QString::null ) == entryName )
+             entry.attributeNS( m_settings->m_configNSURI, "name", QString() ) == entryName )
         {
             return Items( entry, m_settings );
         }
@@ -139,7 +139,7 @@ QString KoOasisSettings::Items::findConfigItem( const KoXmlElement& element,
     {
         if ( it.localName() == "config-item" &&
              it.namespaceURI() == m_settings->m_configNSURI &&
-             it.attributeNS( m_settings->m_configNSURI, "name", QString::null ) == item )
+             it.attributeNS( m_settings->m_configNSURI, "name", QString() ) == item )
         {
             *ok = true;
             return it.text();

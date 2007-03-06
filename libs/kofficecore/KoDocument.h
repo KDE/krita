@@ -1151,7 +1151,7 @@ protected:
      * @since 1.5
      */
     KoOpenPane* createOpenPane( QWidget* parent, const KComponentData &instance,
-                                const QString& templateType = QString::null);
+                                const QString& templateType = QString());
 
 private slots:
     void slotChildChanged( KoChild *c );

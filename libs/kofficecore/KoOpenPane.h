@@ -45,7 +45,7 @@ class KoOpenPane : public QWidget
      * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
      */
-    KoOpenPane(QWidget *parent, const KComponentData &instance, const QString& templateType = QString::null);
+    KoOpenPane(QWidget *parent, const KComponentData &instance, const QString& templateType = QString());
     virtual ~KoOpenPane();
 
     Q3ListViewItem* addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight);

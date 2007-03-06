@@ -206,7 +206,7 @@ bool KoDocumentInfo::loadOasisAuthorInfo( const KoXmlNode& metaDoc )
                     e.localName() == "user-defined" && !e.text().isEmpty() ) )
             continue;
 
-        QString name = e.attributeNS( KoXmlNS::meta, "name", QString::null );
+        QString name = e.attributeNS( KoXmlNS::meta, "name", QString() );
         setAuthorInfo( name, e.text() );
     }
 

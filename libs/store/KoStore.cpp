@@ -437,7 +437,7 @@ void KoStore::pushDirectory()
 void KoStore::popDirectory()
 {
   m_currentPath.clear();
-  enterAbsoluteDirectory( QString::null );
+  enterAbsoluteDirectory( QString() );
   enterDirectory( m_directoryStack.pop() );
 }
 

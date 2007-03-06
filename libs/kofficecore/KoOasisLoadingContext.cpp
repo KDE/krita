@@ -49,7 +49,7 @@ void KoOasisLoadingContext::fillStyleStack( const KoXmlElement& object, const ch
 {
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttributeNS( nsURI, attrName ) ) {
-        const QString styleName = object.attributeNS( nsURI, attrName, QString::null );
+        const QString styleName = object.attributeNS( nsURI, attrName, QString() );
         const KoXmlElement* style = 0;
         bool isStyleAutoStyle = false;
         if ( m_useStylesAutoStyles ) {
@@ -74,7 +74,7 @@ void KoOasisLoadingContext::addStyles( const KoXmlElement* style, const char* fa
     if ( !style ) return;
     // this recursive function is necessary as parent styles can have parents themselves
     if ( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) ) {
-        const QString parentStyleName = style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
+        const QString parentStyleName = style->attributeNS( KoXmlNS::style, "parent-style-name", QString() );
         const KoXmlElement* parentStyle = 0;
         if ( usingStylesAutoStyles ) {
             // When loading something from styles.xml, look into the styles.xml auto styles first
@@ -91,12 +91,12 @@ void KoOasisLoadingContext::addStyles( const KoXmlElement* style, const char* fa
     else if ( family ) {
         const KoXmlElement* def = m_styles.defaultStyle( family );
         if ( def ) { // on top of all, the default style for this family
-            //kDebug(32500) << "pushing default style " << style->attributeNS( KoXmlNS::style, "name", QString::null ) << endl;
+            //kDebug(32500) << "pushing default style " << style->attributeNS( KoXmlNS::style, "name", QString() ) << endl;
             m_styleStack.push( *def );
         }
     }
 
-    //kDebug(32500) << "pushing style " << style->attributeNS( KoXmlNS::style, "name", QString::null ) << endl;
+    //kDebug(32500) << "pushing style " << style->attributeNS( KoXmlNS::style, "name", QString() ) << endl;
     m_styleStack.push( *style );
 }
 

@@ -127,21 +127,21 @@ public:
     const DataFormatsMap& dataFormats() const;
 
     static QString saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
-                                       const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+                                       const QString &_prefix = QString() , const QString &_suffix= QString() );
     static QString saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
-                                       const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+                                       const QString &_prefix = QString() , const QString &_suffix= QString() );
     static QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format,
-                                           const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+                                           const QString &_prefix = QString() , const QString &_suffix= QString() );
     static QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format,
-                                             const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+                                             const QString &_prefix = QString() , const QString &_suffix= QString() );
     static QString saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format,
-                                         const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+                                         const QString &_prefix = QString() , const QString &_suffix= QString() );
     static QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format,
-                                             const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+                                             const QString &_prefix = QString() , const QString &_suffix= QString() );
     static QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &symbol,
-                                           const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+                                           const QString &_prefix = QString() , const QString &_suffix= QString() );
     static QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format,
-                                       const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+                                       const QString &_prefix = QString() , const QString &_suffix= QString() );
 
     static void saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush );
     static QString saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrush &brush );

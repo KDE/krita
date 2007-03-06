@@ -92,7 +92,7 @@ void KoStyleStack::push( const KoXmlElement& style )
 {
     m_stack.append( style );
 #ifdef DEBUG_STYLESTACK
-    kDebug(30003) << "pushed " << style.attributeNS( m_styleNSURI, "name", QString::null ) << " -> count=" << m_stack.count() << endl;
+    kDebug(30003) << "pushed " << style.attributeNS( m_styleNSURI, "name", QString() ) << " -> count=" << m_stack.count() << endl;
 #endif
 }
 
@@ -151,9 +151,9 @@ QString KoStyleStack::attributeNS( const char* nsURI, const char* name, const ch
         --it;
         KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
         if ( properties.hasAttributeNS( nsURI, name ) )
-            return properties.attributeNS( nsURI, name, QString::null );
+            return properties.attributeNS( nsURI, name, QString() );
         if ( detail && properties.hasAttributeNS( nsURI, fullName ) )
-            return properties.attributeNS( nsURI, fullName, QString::null );
+            return properties.attributeNS( nsURI, fullName, QString() );
     }
     return QString();
 }
@@ -192,7 +192,7 @@ double KoStyleStack::fontSize() const
         --it;
         KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName ).toElement();
         if ( properties.hasAttributeNS( m_foNSURI, name ) ) {
-            const QString value = properties.attributeNS( m_foNSURI, name, QString::null );
+            const QString value = properties.attributeNS( m_foNSURI, name, QString() );
             if ( value.endsWith( "%" ) )
                 percent *= value.left( value.length() - 1 ).toDouble() / 100.0;
             else
@@ -263,7 +263,7 @@ KoXmlElement KoStyleStack::childNodeNS( const char* nsURI, const char* localName
 
 bool KoStyleStack::isUserStyle( const KoXmlElement& e, const QString& family ) const
 {
-    if ( e.attributeNS( m_styleNSURI, "family", QString::null ) != family )
+    if ( e.attributeNS( m_styleNSURI, "family", QString() ) != family )
         return false;
     const KoXmlElement parent = e.parentNode().toElement();
     //kDebug(30003) << k_funcinfo << "tagName=" << e.tagName() << " parent-tagName=" << parent.tagName() << endl;
@@ -276,9 +276,9 @@ QString KoStyleStack::userStyleName( const QString& family ) const
     while ( it != m_stack.begin() )
     {
         --it;
-        //kDebug(30003) << k_funcinfo << (*it).attributeNS( m_styleNSURI, "name", QString::null) << endl;
+        //kDebug(30003) << k_funcinfo << (*it).attributeNS( m_styleNSURI, "name", QString()) << endl;
         if ( isUserStyle( *it, family ) )
-            return (*it).attributeNS( m_styleNSURI, "name", QString::null );
+            return (*it).attributeNS( m_styleNSURI, "name", QString() );
     }
     // Can this ever happen?
     return "Standard";
@@ -292,7 +292,7 @@ QString KoStyleStack::userStyleDisplayName( const QString& family ) const
         --it;
         //kDebug(30003) << k_funcinfo << (*it).attributeNS( m_styleNSURI, "display-name") << endl;
         if ( isUserStyle( *it, family ) )
-            return (*it).attributeNS( m_styleNSURI, "display-name", QString::null );
+            return (*it).attributeNS( m_styleNSURI, "display-name", QString() );
     }
     return QString(); // no display name, this can happen since it's optional
 }

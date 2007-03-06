@@ -80,7 +80,7 @@ public:
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  static Q3ValueList<KoDocumentEntry> query( const QString &  _constr = QString::null );
+  static Q3ValueList<KoDocumentEntry> query( const QString &  _constr = QString() );
 
   /**
    *  This function will query the system to find all available filters.
@@ -96,7 +96,7 @@ public:
   // ### TODO: MERGE WITH ABOVE METHODE WHEN BIC+SIC CHANGES ARE ALLOWED
   static Q3ValueList<KoDocumentEntry> query( bool _onlyDocEmb,const QString& _constr);
   /* this is how the signature should be looking after merging
-  static QValueList<KoDocumentEntry> query( bool _onlyDocEmb =true, const QString& _constr = QString::null );
+  static QValueList<KoDocumentEntry> query( bool _onlyDocEmb =true, const QString& _constr = QString() );
   or better: use an enum for the first arg.
   */
 
@@ -167,7 +167,7 @@ public:
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  static Q3ValueList<KoFilterEntry::Ptr> query( const QString& _constr = QString::null );
+  static Q3ValueList<KoFilterEntry::Ptr> query( const QString& _constr = QString() );
 
   KService::Ptr service() const { return m_service; }
 

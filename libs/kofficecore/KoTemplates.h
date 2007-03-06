@@ -32,11 +32,11 @@ class KOFFICECORE_EXPORT KoTemplate {
 
 public:
     explicit KoTemplate(const QString &name,
-               const QString &description=QString::null,
-               const QString &file=QString::null,
-               const QString &picture=QString::null,
-               const QString &fileName=QString::null,
-               const QString &_measureSystem=QString::null,
+               const QString &description=QString(),
+               const QString &file=QString(),
+               const QString &picture=QString(),
+               const QString &fileName=QString(),
+               const QString &_measureSystem=QString(),
                bool hidden=false, bool touched=false);
     ~KoTemplate() {}
 
@@ -69,7 +69,7 @@ class KOFFICECORE_EXPORT KoTemplateGroup {
 
 public:
     explicit KoTemplateGroup(const QString &name,
-                    const QString &dir=QString::null,
+                    const QString &dir=QString(),
                     int _sortingWeight=0,
                     bool touched=false);
     ~KoTemplateGroup() {}

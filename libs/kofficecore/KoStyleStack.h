@@ -101,13 +101,13 @@ public:
      * where detail is e.g. left, right, top or bottom.
      * This allows to also find 'name' alone (e.g. padding implies padding-left, padding-right etc.)
      */
-    bool hasAttribute( const QString& name, const QString& detail = QString::null ) const KDE_DEPRECATED;
+    bool hasAttribute( const QString& name, const QString& detail = QString() ) const KDE_DEPRECATED;
 
     /**
      * Search for the attribute called 'name', starting on top of the stack,
      * and return it.
      */
-    QString attribute( const QString& name, const QString& detail = QString::null ) const KDE_DEPRECATED;
+    QString attribute( const QString& name, const QString& detail = QString() ) const KDE_DEPRECATED;
 
     /**
      * Check if any of the styles on the stack has an attribute called 'name'-'detail'

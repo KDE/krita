@@ -104,7 +104,7 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
         {
             if ( master.localName() == "master-page" &&
                  master.namespaceURI() == KoXmlNS::style ) {
-                const QString name = master.attributeNS( KoXmlNS::style, "name", QString::null );
+                const QString name = master.attributeNS( KoXmlNS::style, "name", QString() );
                 kDebug(30003) << "Master style: '" << name << "' loaded " << endl;
                 d->masterPages.insert( name, new KoXmlElement( master ) );
             } else
@@ -163,7 +163,7 @@ void KoOasisStyles::insertOfficeStyles( const KoXmlElement& styles )
                       || localName == "opacity" ) )
              )
         {
-            const QString name = e.attributeNS( KoXmlNS::draw, "name", QString::null );
+            const QString name = e.attributeNS( KoXmlNS::draw, "name", QString() );
             Q_ASSERT( !name.isEmpty() );
             KoXmlElement* ep = new KoXmlElement( e );
             d->drawStyles.insert( name, ep );
@@ -187,9 +187,9 @@ void KoOasisStyles::insertStyle( const KoXmlElement& e, TypeAndLocation typeAndL
     const QString localName = e.localName();
     const QString ns = e.namespaceURI();
 
-    const QString name = e.attributeNS( KoXmlNS::style, "name", QString::null );
+    const QString name = e.attributeNS( KoXmlNS::style, "name", QString() );
     if ( ns == KoXmlNS::style && localName == "style" ) {
-        const QString family = e.attributeNS( KoXmlNS::style, "family", QString::null );
+        const QString family = e.attributeNS( KoXmlNS::style, "family", QString() );
 
         if ( typeAndLocation == AutomaticInContent ) {
             QHash<QString, KoXmlElement*>& dict = d->contentAutoStyles[ family ];
@@ -231,7 +231,7 @@ void KoOasisStyles::insertStyle( const KoXmlElement& e, TypeAndLocation typeAndL
         }
         d->styles.insert( name, new KoXmlElement( e ) );
     } else if ( localName == "default-style" && ns == KoXmlNS::style ) {
-        const QString family = e.attributeNS( KoXmlNS::style, "family", QString::null );
+        const QString family = e.attributeNS( KoXmlNS::style, "family", QString() );
         if ( !family.isEmpty() )
             d->defaultStyles.insert( family, new KoXmlElement( e ) );
     } else if ( localName == "list-style" && ns == KoXmlNS::text ) {
@@ -292,18 +292,18 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
         if ( e.namespaceURI() != KoXmlNS::number )
             continue;
         QString localName = e.localName();
-        const QString numberStyle = e.attributeNS( KoXmlNS::number, "style", QString::null );
+        const QString numberStyle = e.attributeNS( KoXmlNS::number, "style", QString() );
         const bool shortForm = numberStyle == "short" || numberStyle.isEmpty();
         if ( localName == "day" ) {
             format += shortForm ? "d" : "dd";
         } else if ( localName == "day-of-week" ) {
             format += shortForm ? "ddd" : "dddd";
         } else if ( localName == "month" ) {
-            if ( e.attributeNS( KoXmlNS::number, "possessive-form", QString::null ) == "true" ) {
+            if ( e.attributeNS( KoXmlNS::number, "possessive-form", QString() ) == "true" ) {
                 format += shortForm ? "PPP" : "PPPP";
             }
             // TODO the spec has a strange mention of number:format-source
-            else if ( e.attributeNS( KoXmlNS::number, "textual", QString::null ) == "true" ) {
+            else if ( e.attributeNS( KoXmlNS::number, "textual", QString() ) == "true" ) {
                 format += shortForm ? "MMM" : "MMMM";
             } else { // month number
                 format += shortForm ? "M" : "MM";
@@ -341,13 +341,13 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
             // TODO: number:grouping="true"
             if ( e.hasAttributeNS( KoXmlNS::number, "decimal-places" ) )
             {
-                int d = e.attributeNS( KoXmlNS::number, "decimal-places", QString::null ).toInt( &ok );
+                int d = e.attributeNS( KoXmlNS::number, "decimal-places", QString() ).toInt( &ok );
                 if ( ok )
                     precision = d;
             }
             if ( e.hasAttributeNS( KoXmlNS::number, "min-integer-digits" ) )
             {
-                int d = e.attributeNS( KoXmlNS::number, "min-integer-digits", QString::null ).toInt( &ok );
+                int d = e.attributeNS( KoXmlNS::number, "min-integer-digits", QString() ).toInt( &ok );
                 if ( ok )
                     leadingZ = d;
             }
@@ -377,21 +377,21 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
 
             if ( e.hasAttributeNS( KoXmlNS::number, "decimal-places" ) )
             {
-                int d = e.attributeNS( KoXmlNS::number, "decimal-places", QString::null ).toInt( &ok );
+                int d = e.attributeNS( KoXmlNS::number, "decimal-places", QString() ).toInt( &ok );
                 if ( ok )
                     precision = d;
             }
 
             if ( e.hasAttributeNS( KoXmlNS::number, "min-integer-digits" ) )
             {
-                int d = e.attributeNS( KoXmlNS::number, "min-integer-digits", QString::null ).toInt( &ok );
+                int d = e.attributeNS( KoXmlNS::number, "min-integer-digits", QString() ).toInt( &ok );
                 if ( ok )
                     leadingZ = d;
             }
 
             if ( e.hasAttributeNS( KoXmlNS::number, "min-exponent-digits" ) )
             {
-                int d = e.attributeNS( KoXmlNS::number, "min-exponent-digits", QString::null ).toInt( &ok );
+                int d = e.attributeNS( KoXmlNS::number, "min-exponent-digits", QString() ).toInt( &ok );
                 if ( ok )
                     exp = d;
                 if ( exp <= 0 )
@@ -431,25 +431,25 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
                 int denominatorValue=0;
                 if ( e.hasAttributeNS( KoXmlNS::number, "min-integer-digits" ) )
                 {
-                    int d = e.attributeNS( KoXmlNS::number, "min-integer-digits", QString::null ).toInt( &ok );
+                    int d = e.attributeNS( KoXmlNS::number, "min-integer-digits", QString() ).toInt( &ok );
                     if ( ok )
                         integer = d;
                 }
                 if ( e.hasAttributeNS( KoXmlNS::number, "min-numerator-digits" ) )
                 {
-                    int d = e.attributeNS( KoXmlNS::number, "min-numerator-digits", QString::null ).toInt( &ok );
+                    int d = e.attributeNS( KoXmlNS::number, "min-numerator-digits", QString() ).toInt( &ok );
                     if ( ok )
                         numerator = d;
                 }
                 if ( e.hasAttributeNS( KoXmlNS::number, "min-denominator-digits" ) )
                 {
-                    int d = e.attributeNS( KoXmlNS::number, "min-denominator-digits", QString::null ).toInt( &ok );
+                    int d = e.attributeNS( KoXmlNS::number, "min-denominator-digits", QString() ).toInt( &ok );
                     if ( ok )
                         denominator = d;
                 }
                 if ( e.hasAttributeNS( KoXmlNS::number, "denominator-value" ) )
                 {
-                    int d = e.attributeNS( KoXmlNS::number, "denominator-value", QString::null ).toInt( &ok );
+                    int d = e.attributeNS( KoXmlNS::number, "denominator-value", QString() ).toInt( &ok );
                     if ( ok )
                         denominatorValue = d;
                 }
@@ -478,7 +478,7 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
 
     }
 
-    const QString styleName = parent.attributeNS( KoXmlNS::style, "name", QString::null );
+    const QString styleName = parent.attributeNS( KoXmlNS::style, "name", QString() );
     kDebug(30003) << "data style: " << styleName << " qt format=" << format << endl;
     if ( !prefix.isEmpty() )
     {
@@ -1525,13 +1525,13 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
             int angle = 0;
             if( draw->hasAttributeNS( KoXmlNS::draw, "rotation" ))
             {
-                angle = (draw->attributeNS( KoXmlNS::draw, "rotation", QString::null ).toInt())/10;
+                angle = (draw->attributeNS( KoXmlNS::draw, "rotation", QString() ).toInt())/10;
                 kDebug(30003)<<"angle :"<<angle<<endl;
             }
             if(draw->hasAttributeNS( KoXmlNS::draw, "color" ) )
             {
-                //kDebug(30003)<<" draw:color :"<<draw->attributeNS( KoXmlNS::draw, "color", QString::null )<<endl;
-                tmpBrush.setColor(draw->attributeNS( KoXmlNS::draw, "color", QString::null ) );
+                //kDebug(30003)<<" draw:color :"<<draw->attributeNS( KoXmlNS::draw, "color", QString() )<<endl;
+                tmpBrush.setColor(draw->attributeNS( KoXmlNS::draw, "color", QString() ) );
             }
             if( draw->hasAttributeNS( KoXmlNS::draw, "distance" ))
             {
@@ -1544,7 +1544,7 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
             if( draw->hasAttributeNS( KoXmlNS::draw, "style" ))
             {
                 //todo implemente it into kpresenter
-                QString styleHash = draw->attributeNS( KoXmlNS::draw, "style", QString::null );
+                QString styleHash = draw->attributeNS( KoXmlNS::draw, "style", QString() );
                 if( styleHash == "single")
                 {
                     switch( angle )
@@ -1648,7 +1648,7 @@ const KoXmlElement* KoOasisStyles::findStyleCustomStyle( const QString& styleNam
 {
     const KoXmlElement* style = d->customStyles.value( family ).value( styleName );
     if ( style && !family.isEmpty() ) {
-        const QString styleFamily = style->attributeNS( KoXmlNS::style, "family", QString::null );
+        const QString styleFamily = style->attributeNS( KoXmlNS::style, "family", QString() );
         if ( styleFamily != family ) {
             kWarning() << "KoOasisStyles: was looking for style " << styleName
                         << " in family " << family << " but got " << styleFamily << endl;
@@ -1661,7 +1661,7 @@ const KoXmlElement* KoOasisStyles::findStyleAutoStyle( const QString& styleName,
 {
     const KoXmlElement* style = d->stylesAutoStyles.value( family ).value( styleName );
     if ( style ) {
-        const QString styleFamily = style->attributeNS( KoXmlNS::style, "family", QString::null );
+        const QString styleFamily = style->attributeNS( KoXmlNS::style, "family", QString() );
         if ( styleFamily != family ) {
             kWarning() << "KoOasisStyles: was looking for style " << styleName
                         << " in family " << family << " but got " << styleFamily << endl;
@@ -1674,7 +1674,7 @@ const KoXmlElement* KoOasisStyles::findContentAutoStyle( const QString& styleNam
 {
     const KoXmlElement* style = d->contentAutoStyles.value( family ).value( styleName );
     if ( style ) {
-        const QString styleFamily = style->attributeNS( KoXmlNS::style, "family", QString::null );
+        const QString styleFamily = style->attributeNS( KoXmlNS::style, "family", QString() );
         if ( styleFamily != family ) {
             kWarning() << "KoOasisStyles: was looking for style " << styleName
                         << " in family " << family << " but got " << styleFamily << endl;

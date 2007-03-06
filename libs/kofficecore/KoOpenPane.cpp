@@ -258,7 +258,7 @@ void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
   KoSectionListItem* separator = new KoSectionListItem(d->m_sectionList, "", INT_MAX-1);
   separator->setEnabled(false);
 
-  Q3ListViewItem* item = addPane(i18n("Custom Document"), QString::null, widget, INT_MAX);
+  Q3ListViewItem* item = addPane(i18n("Custom Document"), QString(), widget, INT_MAX);
 
   KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
 

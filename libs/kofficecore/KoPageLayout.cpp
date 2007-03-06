@@ -42,16 +42,16 @@ void KoPageLayout::loadOasis(const KoXmlElement &style)
     KoXmlElement properties( KoDom::namedItemNS( style, KoXmlNS::style, "page-layout-properties" ) );
     if ( !properties.isNull() )
     {
-        width = KoUnit::parseValue(properties.attributeNS( KoXmlNS::fo, "page-width", QString::null ) );
-        height = KoUnit::parseValue(properties.attributeNS( KoXmlNS::fo, "page-height", QString::null ) );
-        if (properties.attributeNS( KoXmlNS::style, "print-orientation", QString::null)=="portrait")
+        width = KoUnit::parseValue(properties.attributeNS( KoXmlNS::fo, "page-width", QString() ) );
+        height = KoUnit::parseValue(properties.attributeNS( KoXmlNS::fo, "page-height", QString() ) );
+        if (properties.attributeNS( KoXmlNS::style, "print-orientation", QString())=="portrait")
             orientation=KoPageFormat::Portrait;
         else
             orientation=KoPageFormat::Landscape;
-        right = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-right", QString::null ) );
-        bottom = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-bottom", QString::null ) );
-        left = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-left", QString::null ) );
-        top = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-top", QString::null ) );
+        right = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-right", QString() ) );
+        bottom = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-bottom", QString() ) );
+        left = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-left", QString() ) );
+        top = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-top", QString() ) );
         // guessFormat takes millimeters
         if ( orientation == KoPageFormat::Landscape )
             format = KoPageFormat::guessFormat( POINT_TO_MM(height), POINT_TO_MM(width) );

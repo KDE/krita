@@ -187,8 +187,8 @@ QString KoOasisStore::mimeForPath( const KoXmlDocument& doc, const QString& full
     {
         if ( elem.localName() == "file-entry" && elem.namespaceURI() == KoXmlNS::manifest )
         {
-            if ( elem.attributeNS( KoXmlNS::manifest, "full-path", QString::null ) == fullPath )
-                return elem.attributeNS( KoXmlNS::manifest, "media-type", QString::null );
+            if ( elem.attributeNS( KoXmlNS::manifest, "full-path", QString() ) == fullPath )
+                return elem.attributeNS( KoXmlNS::manifest, "media-type", QString() );
         }
     }
     return QString();

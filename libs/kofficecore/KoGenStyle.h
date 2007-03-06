@@ -76,7 +76,7 @@ public:
      * @param parentName If set, name of the parent style from which this one inherits.
      */
     explicit KoGenStyle( int type = 0, const char* familyName = 0,
-                         const QString& parentName = QString::null );
+                         const QString& parentName = QString() );
     ~KoGenStyle();
 
     /*

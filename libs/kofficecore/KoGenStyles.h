@@ -95,7 +95,7 @@ public:
      * @return the name for this style
      * @todo ### rename lookup to insert
      */
-    QString lookup( const KoGenStyle& style, const QString& name = QString::null, int flags = NoFlag );
+    QString lookup( const KoGenStyle& style, const QString& name = QString(), int flags = NoFlag );
 
     typedef QMap<KoGenStyle, QString> StyleMap;
     /**

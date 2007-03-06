@@ -123,14 +123,14 @@ public:
         filterManager( 0L ),
         m_specialOutputFlag( 0 ), // default is native format
         m_isImporting( false ), m_isExporting( false ),
-        m_password( QString::null ),
+        m_password( QString() ),
         m_numOperations( 0 ),
         modifiedAfterAutosave( false ),
         m_autosaving( false ),
         m_shouldCheckAutoSaveFile( true ),
         m_autoErrorHandlingEnabled( true ),
         m_backupFile( true ),
-        m_backupPath( QString::null ),
+        m_backupPath( QString() ),
         m_doNotSaveExtDoc( false ),
         m_current( false ),
         m_storeInternal( false ),
@@ -1368,7 +1368,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
 
 bool KoDocument::checkAutoSaveFile()
 {
-    QString asf = autoSaveFile( QString::null ); // the one in $HOME
+    QString asf = autoSaveFile( QString() ); // the one in $HOME
     //kDebug(30003) << "asf=" << asf << endl;
     if ( QFile::exists( asf ) )
     {
@@ -2621,7 +2621,7 @@ void KoDocument::removeAutoSaveFiles()
         QString asf = autoSaveFile( m_file ); // the one in the current dir
         if ( QFile::exists( asf ) )
             QFile::remove( asf );
-        asf = autoSaveFile( QString::null ); // and the one in $HOME
+        asf = autoSaveFile( QString() ); // and the one in $HOME
         if ( QFile::exists( asf ) )
             QFile::remove( asf );
 }

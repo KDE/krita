@@ -33,7 +33,7 @@ Q_OBJECT
 
 public:
     KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
-                     const QString &nativeFormat = QString::null);
+                     const QString &nativeFormat = QString());
     ~KoFilterChooser ();
 
     QString filterSelected ();

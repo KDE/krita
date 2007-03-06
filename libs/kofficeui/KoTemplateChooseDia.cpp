@@ -360,7 +360,7 @@ void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, QGridLayout * la
     QPoint point( 0, 0 );
 
     d->m_filedialog=new MyFileDialog(dir,
-	    QString::null,
+            QString(),
 	    widgetbase);
 
     layout->addWidget(d->m_filedialog,0,0);

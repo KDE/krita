@@ -539,7 +539,7 @@ void KoMainWindow::updateCaption()
 {
   //kDebug(30003) << "KoMainWindow::updateCaption()" << endl;
   if ( !d->m_rootDoc )
-    setCaption(QString::null);
+    setCaption(QString());
   else if ( rootDocument()->isCurrent() )
   {
       QString caption;
@@ -838,7 +838,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
         bool justChangingFilterOptions = false;
 
         KoFileDialog *dialog = new KoFileDialog( (isExporting() && !d->m_lastExportURL.isEmpty() )? d->m_lastExportURL.url () : suggestedURL.url (),
-                                                QString::null, this, "file dialog", true);
+                                                QString(), this, "file dialog", true);
 
         if (!isExporting())
             dialog->setCaption( i18n("Save Document As") );
@@ -1090,7 +1090,7 @@ bool KoMainWindow::queryClose()
 
         int res = KMessageBox::warningYesNoCancel( this,
                         i18n( "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name ),
-                        QString::null,
+                        QString(),
                         KStandardGuiItem::save(),
                         KStandardGuiItem::discard());
 
@@ -1159,7 +1159,7 @@ void KoMainWindow::slotFileNew()
 void KoMainWindow::slotFileOpen()
 {
     KFileDialog *dialog = new
-KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString::null, this);
+KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
     dialog->setObjectName( "file dialog" );
     dialog->setMode(KFile::File);
     if (!isImporting())
@@ -1681,9 +1681,9 @@ void KoMainWindow::slotEmailFile()
 
     if (!fileURL.isEmpty())
     {
-        KToolInvocation::invokeMailer(QString::null, QString::null, QString::null, theSubject,
-                            QString::null, //body
-                            QString::null,
+        KToolInvocation::invokeMailer(QString(), QString(), QString(), theSubject,
+                            QString(), //body
+                            QString(),
                             urls); // attachments
     }
 }

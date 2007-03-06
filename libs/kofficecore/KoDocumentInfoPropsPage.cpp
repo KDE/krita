@@ -163,7 +163,7 @@ void KoDocumentInfoPropsPage::applyChanges()
             docInfoSaved = true;
         }
         else
-            copy( QString::null, entry );
+            copy( QString(), entry );
     }
 
     d->m_dst->close();

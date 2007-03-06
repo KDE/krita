@@ -121,14 +121,14 @@ KoDocument* KoDocumentChild::hitTest( const QPoint& p, KoView* view, const QMatr
 void KoDocumentChild::loadOasis( const KoXmlElement &frameElement, const KoXmlElement& objectElement )
 {
     double x, y, w, h;
-    x = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "x", QString::null ) );
-    y = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "y", QString::null ) );
-    w = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "width", QString::null ) );
-    h = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "height", QString::null ) );
+    x = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "x", QString() ) );
+    y = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "y", QString() ) );
+    w = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "width", QString() ) );
+    h = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "height", QString() ) );
     m_tmpGeometry = QRect((int)x, (int)y, (int)w, (int)h); // #### double->int conversion
     setGeometry(m_tmpGeometry);
 
-    QString url = objectElement.attributeNS( KoXmlNS::xlink, "href", QString::null );
+    QString url = objectElement.attributeNS( KoXmlNS::xlink, "href", QString() );
     if ( url[0] == '#' )
         url = url.mid( 1 );
     if ( url.startsWith( "./" ) )

@@ -152,7 +152,7 @@ public:
      * @param txt    This button's text (in a tooltip or otherwise)
      */
     KoToolButton( const QString& icon, int id, QWidget* parent,
-                  const char* name = 0L, const QString& txt = QString::null,
+                  const char* name = 0L, const QString& txt = QString(),
                   const KComponentData &_componentData = KGlobal::mainComponent() );
 
     /**
@@ -167,7 +167,7 @@ public:
      * @param txt    This button's text (in a tooltip or otherwise)
      */
     KoToolButton( const QPixmap& pixmap, int id, QWidget* parent,
-                  const char* name = 0L, const QString& txt = QString::null );
+                  const char* name = 0L, const QString& txt = QString() );
 
     virtual ~KoToolButton();
 

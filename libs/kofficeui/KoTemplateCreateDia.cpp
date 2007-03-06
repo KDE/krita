@@ -296,7 +296,7 @@ void KoTemplateCreateDia::slotOk() {
     }
     bool ignore = false;
     kDebug(30004) << "Trying to create template: " << d->m_name->text() << "URL=" << ".source/"+file+ext << " ICON=" << tmpIcon << endl;
-    KoTemplate *t=new KoTemplate(d->m_name->text(), QString::null, ".source/"+file+ext, tmpIcon, "", "", false, true);
+    KoTemplate *t=new KoTemplate(d->m_name->text(), QString(), ".source/"+file+ext, tmpIcon, "", "", false, true);
     if(!group->add(t)) {
         KoTemplate *existingTemplate=group->find(d->m_name->text());
         if(existingTemplate && !existingTemplate->isHidden()) {
@@ -411,7 +411,7 @@ void KoTemplateCreateDia::slotNameChanged(const QString &name) {
 
 void KoTemplateCreateDia::slotAddGroup() {
     bool ok=false;
-    const QString name ( KInputDialog::getText( i18n("Add Group"), i18n("Enter group name:"), QString::null, &ok, this ) );
+    const QString name ( KInputDialog::getText( i18n("Add Group"), i18n("Enter group name:"), QString(), &ok, this ) );
     if(!ok)
         return;
     KoTemplateGroup *group=d->m_tree->find(name);
@@ -484,7 +484,7 @@ void KoTemplateCreateDia::updatePixmap() {
         if(d->m_customPixmap.isNull()) {
             kDebug(30004) << "Trying to load picture " << d->m_customFile << endl;
             // use the code in KoTemplate to load the image... hacky, I know :)
-            KoTemplate t("foo", "bar", QString::null, d->m_customFile);
+            KoTemplate t("foo", "bar", QString(), d->m_customFile);
             d->m_customPixmap=t.loadPicture(d->m_tree->componentData());
         }
         else

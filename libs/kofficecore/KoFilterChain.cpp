@@ -214,7 +214,7 @@ QString KoFilterChain::inputFile()
     }
     else
         if ( m_inputFile.isEmpty() )
-            inputFileHelper( m_inputDocument, QString::null );
+            inputFileHelper( m_inputDocument, QString() );
 
     return m_inputFile;
 }

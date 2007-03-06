@@ -127,7 +127,7 @@ public:
      * @see property() intProperty()
      * @param def the default value, should there not be any property by the name this will be returned.
      */
-    QString stringProperty(const QString & name, const QString & def = QString::null) const;
+    QString stringProperty(const QString & name, const QString & def = QString()) const;
 
 private:
 

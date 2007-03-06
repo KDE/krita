@@ -63,7 +63,7 @@ bool KoDirectoryStore::openReadOrWrite( const QString& name, QIODevice::OpenMode
     if ( pos != -1 ) // there are subdirs in the name -> maybe need to create them, when writing
     {
         pushDirectory(); // remember where we were
-        enterAbsoluteDirectory( QString::null );
+        enterAbsoluteDirectory( QString() );
         //kDebug(s_area) << "KoDirectoryStore::openReadOrWrite entering " << name.left(pos) << endl;
         bool ret = enterDirectory( name.left( pos ) );
         popDirectory();

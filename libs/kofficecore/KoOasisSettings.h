@@ -122,7 +122,7 @@ public:
 
         int parseConfigItemInt( const QString& configName, int defValue = 0 ) const;
         double parseConfigItemDouble( const QString& configName, double defValue = 0 ) const;
-        QString parseConfigItemString( const QString& configName, const QString& defValue = QString::null ) const;
+        QString parseConfigItemString( const QString& configName, const QString& defValue = QString() ) const;
         bool parseConfigItemBool( const QString& configName, bool defValue = false ) const;
         short parseConfigItemShort( const QString& configName, short defValue = 0 ) const;
         long parseConfigItemLong( const QString& configName, long defValue = 0 ) const;

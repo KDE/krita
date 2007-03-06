@@ -184,15 +184,16 @@ PyObject* m = PyImport_ImportModule(name);
             krossdebug( QString("PythonScript::initialize() name=%1").arg(action()->objectName()) );
         #endif
 
-        //PyCompilerFlags* cf = new PyCompilerFlags;
-        //cf->cf_flags |= PyCF_SOURCE_IS_UTF8;
-
         { // Compile the python script code. It will be later on request executed. That way we cache the compiled code.
-            PyObject* code = Py_CompileString(
+            //PyCompilerFlags* cf = new PyCompilerFlags;
+            //cf->cf_flags |= PyCF_SOURCE_IS_UTF8;
+            PyObject* code = Py_CompileString( //Py_CompileStringFlags(
                 (char*) action()->code().toLatin1().data(),
                 (char*) action()->objectName().toLatin1().data(),
                 Py_file_input
+                //,cf
             );
+            //delete cf;
             if(! code)
                 throw Py::Exception();
             d->m_code = new Py::Object(code, true);

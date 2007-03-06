@@ -202,7 +202,7 @@ namespace Kross {
     struct PythonType<QString>
     {
         inline static Py::Object toPyObject(const QString& s) {
-            return s.isNull() ? Py::String() : Py::String(s.toLatin1().data());
+            return s.isNull() ? Py::None() : Py::String(s.toLatin1().data());
         }
         inline static QString toVariant(const Py::Object& obj) {
             #ifdef Py_USING_UNICODE

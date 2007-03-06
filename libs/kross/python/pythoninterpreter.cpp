@@ -121,6 +121,13 @@ PythonInterpreter::PythonInterpreter(Kross::InterpreterInfo* info)
 
     // Prepare the interpreter.
     QString s =
+        //"# -*- coding: iso-8859-1 -*-\n"
+        //"import locale\n"
+        //"locale.setlocale(locale.LC_ALL, '')\n"
+        //"# -*- coding: latin-1 -*\n"
+        //"# -*- coding: utf-8 -*-\n"
+        //"import locale\n"
+        //"locale.setlocale(locale.LC_ALL, '')\n"
         //"from __future__ import absolute_import\n"
         "import sys\n"
         //"import os, os.path\n"

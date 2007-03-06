@@ -45,7 +45,7 @@ public:
     /**
      *  Constructor.
      */
-    KoPartSelectDia( QWidget* parent = 0, const char* name = 0 );
+    explicit KoPartSelectDia( QWidget* parent = 0, const char* name = 0 );
 
     /**
      *  Retrieves the result of the part selection.

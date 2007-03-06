@@ -31,7 +31,7 @@ class KOFFICECORE_EXPORT KoDocumentInfoPropsPage : public KPropertiesDialogPlugi
   Q_OBJECT
 
 public:
-    KoDocumentInfoPropsPage( KPropertiesDialog *props,
+    explicit KoDocumentInfoPropsPage( KPropertiesDialog *props,
                               const QStringList & = QStringList() );
     virtual ~KoDocumentInfoPropsPage();
 

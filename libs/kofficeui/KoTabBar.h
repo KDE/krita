@@ -76,7 +76,7 @@ public:
     /**
      * Creates a new tabbar.
      */
-    KoTabBar( QWidget* parent = 0, const char *name = 0 );
+    explicit KoTabBar( QWidget* parent = 0, const char *name = 0 );
 
     /**
      * Destroy the tabbar.

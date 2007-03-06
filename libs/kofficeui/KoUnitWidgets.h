@@ -127,7 +127,7 @@ public:
      * @param parent the parent widget
      * @param name unused
      */
-    KoUnitDoubleSpinBox( QWidget *parent = 0L, const char *name = 0L );
+    explicit KoUnitDoubleSpinBox( QWidget *parent = 0L, const char *name = 0L );
     /**
      * Create a new spinBox with specified range.
      * Use this constructor to set the range, steps and value in points in one go. We don't advice
@@ -195,7 +195,7 @@ class KOFFICEUI_EXPORT KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDou
 {
     Q_OBJECT
 public:
-    KoUnitDoubleLineEdit( QWidget *parent = 0L, const char *name = 0L );
+    explicit KoUnitDoubleLineEdit( QWidget *parent = 0L, const char *name = 0L );
     KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit unit = KoUnit(KoUnit::Point), unsigned int precision = 2, const char *name = 0 );
 
     virtual void changeValue( double );
@@ -223,7 +223,7 @@ class KOFFICEUI_EXPORT KoUnitDoubleComboBox : public KComboBox, public KoUnitDou
 {
     Q_OBJECT
 public:
-    KoUnitDoubleComboBox( QWidget *parent = 0L, const char *name = 0L );
+    explicit KoUnitDoubleComboBox( QWidget *parent = 0L, const char *name = 0L );
     KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit unit = KoUnit(KoUnit::Point), unsigned int precision = 2, const char *name = 0 );
 
     virtual void changeValue( double );
@@ -259,7 +259,7 @@ class KOFFICEUI_EXPORT KoUnitDoubleSpinComboBox : public QWidget
 {
     Q_OBJECT
 public:
-    KoUnitDoubleSpinComboBox( QWidget *parent = 0L, const char *name = 0L );
+    explicit KoUnitDoubleSpinComboBox( QWidget *parent = 0L, const char *name = 0L );
     KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value = 0.0, KoUnit unit = KoUnit(KoUnit::Point), unsigned int precision = 2, const char *name = 0 );
 
     void insertItem( double, int index = -1 );

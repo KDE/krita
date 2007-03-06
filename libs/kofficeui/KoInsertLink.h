@@ -33,7 +33,7 @@ class internetLinkPage : public QWidget
 {
     Q_OBJECT
 public:
-    internetLinkPage( QWidget *parent = 0, char *name = 0 );
+    explicit internetLinkPage( QWidget *parent = 0, char *name = 0 );
     QString linkName()const;
     QString hrefName();
     void setLinkName(const QString & _name);
@@ -54,7 +54,7 @@ class bookmarkLinkPage : public QWidget
 {
     Q_OBJECT
 public:
-    bookmarkLinkPage( QWidget *parent = 0, char *name = 0 );
+    explicit bookmarkLinkPage( QWidget *parent = 0, char *name = 0 );
     QString linkName()const;
     QString hrefName();
     void setLinkName(const QString & _name);
@@ -77,7 +77,7 @@ class mailLinkPage : public QWidget
 {
     Q_OBJECT
 public:
-    mailLinkPage( QWidget *parent = 0, char *name = 0 );
+    explicit mailLinkPage( QWidget *parent = 0, char *name = 0 );
     QString linkName()const;
     QString hrefName();
     void setLinkName(const QString & _name);
@@ -99,7 +99,7 @@ class fileLinkPage : public QWidget
 {
     Q_OBJECT
 public:
-    fileLinkPage( QWidget *parent = 0, char *name = 0 );
+    explicit fileLinkPage( QWidget *parent = 0, char *name = 0 );
     QString linkName()const;
     QString hrefName();
     void setLinkName(const QString & _name);

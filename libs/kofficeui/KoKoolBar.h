@@ -141,7 +141,7 @@ class KOFFICEUI_EXPORT KoKoolBar : public QWidget
 {
   Q_OBJECT
 public:
-  KoKoolBar( QWidget *_parent = 0L, const char *_name = 0L );
+  explicit KoKoolBar( QWidget *_parent = 0L, const char *_name = 0L );
   virtual ~KoKoolBar() { };
 
   virtual int insertGroup( const QString& _text );

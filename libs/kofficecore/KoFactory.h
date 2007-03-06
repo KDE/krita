@@ -28,7 +28,7 @@ class KOFFICECORE_EXPORT KoFactory : public KParts::Factory
 {
   Q_OBJECT
 public:
-  KoFactory( QObject *parent = 0, const char *name = 0 );
+  explicit KoFactory( QObject *parent = 0, const char *name = 0 );
   virtual ~KoFactory();
 
 private:

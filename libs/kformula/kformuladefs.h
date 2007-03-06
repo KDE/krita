@@ -349,7 +349,7 @@ class TextCharRequest : public Request {
     QChar m_ch;
     bool m_isSymbol;
 public:
-    TextCharRequest( QChar ch, bool isSymbol=false ) : Request( req_addTextChar ), m_ch( ch ), m_isSymbol( isSymbol ) {}
+    explicit TextCharRequest( QChar ch, bool isSymbol=false ) : Request( req_addTextChar ), m_ch( ch ), m_isSymbol( isSymbol ) {}
     QChar ch() const { return m_ch; }
     bool isSymbol() const { return m_isSymbol; }
 };

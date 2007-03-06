@@ -57,7 +57,7 @@ public:
   enum Gadget { NoGadget, TopLeft, TopMid, TopRight, MidLeft, MidRight,
 		BottomLeft, BottomMid, BottomRight, Move };
 
-  KoChild( QObject *parent = 0, const char *name = 0 );
+  explicit KoChild( QObject *parent = 0, const char *name = 0 );
   virtual ~KoChild();
 
   /**

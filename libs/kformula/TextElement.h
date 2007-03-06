@@ -39,7 +39,7 @@ namespace KFormula {
 class TextElement : public BasicElement {
 public:
     /// The standard constructor
-    TextElement(QChar ch = ' ', bool beSymbol = false, BasicElement* parent = 0);
+    explicit TextElement(QChar ch = ' ', bool beSymbol = false, BasicElement* parent = 0);
 
     /**
      * Obtain a list of all child elements of this element

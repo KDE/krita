@@ -88,7 +88,7 @@ class KoLineWidthChooser : public KDialogBase
 {
   Q_OBJECT
   public:
-    KoLineWidthChooser(QWidget* parent = 0, const char* name = 0);
+    explicit KoLineWidthChooser(QWidget* parent = 0, const char* name = 0);
     ~KoLineWidthChooser();
 
     /** Returns the selected line width in points. */

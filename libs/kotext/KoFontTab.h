@@ -31,7 +31,7 @@ class KoFontTab : public QWidget
     Q_OBJECT
 
 public:
-    KoFontTab( uint fontListCriteria=0, QWidget* parent=0);
+    explicit KoFontTab( uint fontListCriteria=0, QWidget* parent=0);
     ~KoFontTab() {}
 
     QFont font();

@@ -47,7 +47,7 @@ class KoVerticalLabel : public QWidget
 	Q_OBJECT
 	
 	public:
-		KoVerticalLabel( QWidget* parent = 0, const char* name = 0 );
+        explicit KoVerticalLabel( QWidget* parent = 0, const char* name = 0 );
 		~KoVerticalLabel();
 		
 	public slots:
@@ -248,7 +248,7 @@ class KoContextHelpWidget : public QWidget
 	Q_OBJECT
 
 	public:
-		KoContextHelpWidget( QWidget* parent = 0, const char* name = 0 );
+        explicit KoContextHelpWidget( QWidget* parent = 0, const char* name = 0 );
 		~KoContextHelpWidget();
 
 	public slots:
@@ -271,7 +271,7 @@ class KoContextHelpDocker : public Q3DockWindow
 	Q_OBJECT
 
 	public:
-		KoContextHelpDocker( QWidget* parent = 0, const char* name = 0 );
+        explicit KoContextHelpDocker( QWidget* parent = 0, const char* name = 0 );
 		~KoContextHelpDocker();
 
 	public slots:

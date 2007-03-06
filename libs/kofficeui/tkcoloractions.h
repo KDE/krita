@@ -38,7 +38,7 @@ class TKSelectColorActionPrivate;
 class TKColorPopupMenu : public KMenu
 { Q_OBJECT
 public:
-  TKColorPopupMenu( QWidget* parent = 0, const char* name = 0 );
+  explicit TKColorPopupMenu( QWidget* parent = 0, const char* name = 0 );
   ~TKColorPopupMenu();
 
 public slots:
@@ -132,7 +132,7 @@ class TKColorPanel : public QWidget
 { Q_OBJECT
 
 public:
-  TKColorPanel( QWidget* parent = 0L, const char* name = 0 );
+  explicit TKColorPanel( QWidget* parent = 0L, const char* name = 0 );
   ~TKColorPanel();
 
   void setActiveColor( const QColor& );

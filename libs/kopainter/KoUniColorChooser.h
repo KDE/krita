@@ -46,7 +46,7 @@ public:
         SimpleLayout   ///< simple, no input fields
     };
 
-    KoUniColorChooser(QWidget *parent = 0L, bool opacitySlider = false);
+    explicit KoUniColorChooser(QWidget *parent = 0L, bool opacitySlider = false);
     virtual ~KoUniColorChooser() {}
 
     void changeLayout( LayoutType type );

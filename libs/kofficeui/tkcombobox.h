@@ -26,7 +26,7 @@
 class TKComboBox : public Q3ComboBox
 { Q_OBJECT
 public:
-  TKComboBox(QWidget* parent=0, const char* name=0);
+  explicit TKComboBox(QWidget* parent=0, const char* name=0);
   TKComboBox(bool isEditable, QWidget* parent=0, const char* name=0);
   ~TKComboBox();
 

@@ -50,7 +50,7 @@ class KoTCDIconCanvas : public KIconCanvas
 {
     Q_OBJECT
     public:
-	KoTCDIconCanvas( QWidget *parent = 0, const char *name = 0L )
+    explicit KoTCDIconCanvas( QWidget *parent = 0, const char *name = 0L )
 	    : KIconCanvas( parent ) { Q_UNUSED(name) }
 
 	bool isCurrentValid() { return currentItem(); }
@@ -73,7 +73,7 @@ class KoTCDIconViewItem : public K3IconViewItem
 	    : K3IconViewItem ( parent )
 	    {}
 
-	KoTCDIconViewItem(Q3IconView *parent=0, const QString &text=0, const QPixmap &icon=0,
+    explicit KoTCDIconViewItem(Q3IconView *parent=0, const QString &text=0, const QPixmap &icon=0,
                       const QString &descr=0, const QString &fullname=0)
 	    : K3IconViewItem(parent, text, icon)
 	    {

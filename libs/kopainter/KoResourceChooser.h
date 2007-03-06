@@ -55,7 +55,7 @@ class KOPAINTER_EXPORT KoResourceChooser: public QTableWidget
     Q_OBJECT
 public:
     // To make the items sorted, set 'sort' to true and override QTableWidgetItem::compare().
-    KoResourceChooser(QSize iconSize, QWidget *parent = 0L);
+    explicit KoResourceChooser(QSize iconSize, QWidget *parent = 0L);
     virtual ~KoResourceChooser();
 
     void addItem(QTableWidgetItem *item);

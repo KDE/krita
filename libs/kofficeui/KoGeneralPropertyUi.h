@@ -28,7 +28,7 @@
 class KOFFICEUI_EXPORT KoGeneralPropertyUI : public QWidget, public Ui::KoGeneralPropertyUI
 {
 public:
-  KoGeneralPropertyUI(QWidget* parent = 0, Qt::WFlags fl = 0);
+    explicit KoGeneralPropertyUI(QWidget* parent = 0, Qt::WFlags fl = 0);
 };
 
 #endif // KOGENERALPROPERTYUI_DUMMY_H

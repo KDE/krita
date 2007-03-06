@@ -522,7 +522,7 @@ namespace Py
     {
     public:
         // Constructor
-        Int (PyObject *pyob, bool owned = false): Object (pyob, owned)
+        explicit Int (PyObject *pyob, bool owned = false): Object (pyob, owned)
         {
             validate();
         }
@@ -2535,7 +2535,7 @@ namespace Py
                 , pos()
             {}
 
-            iterator (MapBase<T>* m, bool end = false )
+            explicit iterator (MapBase<T>* m, bool end = false )
                 : map( m )
                 , keys( m->keys() )
                 , pos( end ? keys.end() : keys.begin() )

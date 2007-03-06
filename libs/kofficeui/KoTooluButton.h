@@ -41,7 +41,7 @@ class KoColorPanel : public QWidget
 {
     Q_OBJECT
 public:
-    KoColorPanel( QWidget* parent = 0, const char* name = 0 );
+    explicit KoColorPanel( QWidget* parent = 0, const char* name = 0 );
     virtual ~KoColorPanel();
 
     virtual QSize sizeHint() const;

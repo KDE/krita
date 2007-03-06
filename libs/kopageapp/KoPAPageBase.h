@@ -35,7 +35,7 @@ class KoShape;
 /**
  * Base class used for KoPAMasterPage and KoPAPage
  *
- * A Page contains KoShapeLayer shapes as direct childs. The layers than can
+ * A Page contains KoShapeLayer shapes as direct children. The layers than can
  * contain all the different shapes.
  */
 class KOPAGEAPP_EXPORT KoPAPageBase : public KoShapeContainer

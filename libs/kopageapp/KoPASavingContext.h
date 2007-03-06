@@ -55,7 +55,7 @@ public:
      * @param masterPage the master page
      * @param name the style name of the master page
      */
-    void addMasterPage( const KoPAMasterPage * masterPage, QString name );
+    void addMasterPage( const KoPAMasterPage * masterPage, const QString &name );
 
     /**
      * @brief Get the name of the masterpage

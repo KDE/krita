@@ -29,7 +29,7 @@ KoPASavingContext::~KoPASavingContext()
 {
 }
 
-void KoPASavingContext::addMasterPage( const KoPAMasterPage * masterPage, QString name )
+void KoPASavingContext::addMasterPage( const KoPAMasterPage * masterPage, const QString &name )
 {
     m_masterPageNames.insert( masterPage, name );
 }

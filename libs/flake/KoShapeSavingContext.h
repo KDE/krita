@@ -115,7 +115,7 @@ public:
     /**
      * @brief Get the draw id for a shape
      *
-     * The draw:id is uniq for all shapes.
+     * The draw:id is unique for all shapes.
      *
      * @param shape for which the draw id should be returned
      * @param if true a new draw id will be generated if there is non yet

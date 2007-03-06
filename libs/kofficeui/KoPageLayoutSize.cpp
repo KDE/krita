@@ -100,7 +100,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     // linedit width
     epgWidth = new KoUnitDoubleSpinBox( formatFrame, "Width" );
     lpgWidth->setBuddy( epgWidth );
-    if ( m_layout.format != PG_CUSTOM )
+    if ( m_layout.format != KoPageFormat::CustomSize )
         epgWidth->setEnabled( false );
     layoutPageSize->addWidget( epgWidth, 1, 1 );
     connect( epgWidth, SIGNAL( valueChangedPt(double) ), this, SLOT( widthChanged(double) ) );
@@ -112,7 +112,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     // linedit height
     epgHeight = new KoUnitDoubleSpinBox( formatFrame, "Height" );
     lpgHeight->setBuddy( epgHeight );
-    if ( m_layout.format != PG_CUSTOM )
+    if ( m_layout.format != KoPageFormat::CustomSize )
         epgHeight->setEnabled( false );
     layoutPageSize->addWidget( epgHeight, 1, 3 );
     connect( epgHeight, SIGNAL( valueChangedPt(double ) ), this, SLOT( heightChanged(double) ) );
@@ -140,8 +140,8 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     layoutOrientation->addWidget( rbLandscape, 0, 3 );
 
     m_orientGroup = new QButtonGroup( m_orientBox );
-    m_orientGroup->addButton( rbPortrait, PG_PORTRAIT );
-    m_orientGroup->addButton( rbLandscape, PG_LANDSCAPE );
+    m_orientGroup->addButton( rbPortrait, KoPageFormat::Portrait );
+    m_orientGroup->addButton( rbLandscape, KoPageFormat::Landscape );
     connect( m_orientGroup, SIGNAL (buttonClicked (int)), this, SLOT( orientationChanged(int) ));
 
     // --------------- page margins ---------------
@@ -262,14 +262,14 @@ void KoPageLayoutSize::setUnitInt( int unit ) {
 }
 
 void KoPageLayoutSize::formatChanged( int format ) {
-    if ( ( KoFormat )format == m_layout.format )
+    if ( ( KoPageFormat::Format )format == m_layout.format )
         return;
-    m_layout.format = ( KoFormat )format;
-    bool enable =  (KoFormat) format == PG_CUSTOM;
+    m_layout.format = ( KoPageFormat::Format )format;
+    bool enable =  (KoPageFormat::Format) format == KoPageFormat::CustomSize;
     epgWidth->setEnabled( enable );
     epgHeight->setEnabled( enable );
 
-    if ( m_layout.format != PG_CUSTOM ) {
+    if ( m_layout.format != KoPageFormat::CustomSize ) {
         m_layout.ptWidth = MM_TO_POINT( KoPageFormat::width(
                     m_layout.format, m_layout.orientation ) );
         m_layout.ptHeight = MM_TO_POINT( KoPageFormat::height(
@@ -284,7 +284,7 @@ void KoPageLayoutSize::formatChanged( int format ) {
 }
 
 void KoPageLayoutSize::orientationChanged(int which) {
-    m_layout.orientation = which == PG_PORTRAIT ? PG_PORTRAIT : PG_LANDSCAPE;
+    m_layout.orientation = which == KoPageFormat::Portrait ? KoPageFormat::Portrait : KoPageFormat::Landscape;
 
     // swap dimension
     double val = epgWidth->value();
@@ -293,7 +293,7 @@ void KoPageLayoutSize::orientationChanged(int which) {
     // and adjust margins
     m_blockSignals = true;
     val = ebrTop->value();
-    if(m_layout.orientation == PG_PORTRAIT) { // clockwise
+    if(m_layout.orientation == KoPageFormat::Portrait) { // clockwise
         ebrTop->changeValue(ebrRight->value());
         ebrRight->changeValue(ebrBottom->value());
         ebrBottom->changeValue(ebrLeft->value());

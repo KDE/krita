@@ -27,7 +27,6 @@
 
 /**
  * Helper class for KoStore (mainly for remote file support)
- * @since 1.4
  */
 class KoStoreBase : public KoStore
 {

@@ -85,7 +85,6 @@ public:
    *
    * If the file is remote, the backend Directory cannot be used!
    *
-   * @since 1.4
    * @bug saving not completely implemented (fixed temporary file)
    */
   static KoStore* createStore( QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification = "", Backend backend = Auto );

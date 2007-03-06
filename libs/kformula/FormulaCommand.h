@@ -37,8 +37,6 @@ class FormulaCursor;
  * created to make it possible to revert the changes. The added elements may have
  * child elements but m_addedElements contains only the top elements that need to
  * be removed to revert the changes again.
- * 
- * @since 2.0
  */
 class FormulaCommandAdd : public QUndoCommand {
 public:
@@ -74,8 +72,6 @@ private:
  * created to make it possible to revert the changes. The removed elements may have
  * child elements but m_removedElements contains only the top elements that need to
  * be added to revert the changes again.
- * 
- * @since 2.0
  */
 class FormulaCommandRemove : public QUndoCommand {
 public:
@@ -111,8 +107,6 @@ private:
  * created to make it possible to revert the changes. The replaced elements are
  * stored in m_replacedElements and the elements that have replaced the old are
  * stored in m_replacingElements.
- *
- * @since 2.0
  */
 class FormulaCommandReplace : public QUndoCommand {
 public:
@@ -152,8 +146,6 @@ private:
  * Whenever the user changes the attributes assigned to an element an instance of this
  * class is created to make it possible to revert the changes. The former attributes
  * are stored in m_oldAttributes.
- * 
- * @since 2.0
  */
 class FormulaCommandAttribute : public QUndoCommand {
 public:

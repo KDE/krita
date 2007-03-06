@@ -30,8 +30,6 @@
  * latter has code in it. All functionality has to be in the constructor.
  * In the constructor the plugin registers a shape and a tool in the KoShapeRegistry
  * so that the applications "know" that the formula plugin exists.
- *
- * @since 2.0
  */
 class KoFormulaShapePlugin : public QObject {
     Q_OBJECT

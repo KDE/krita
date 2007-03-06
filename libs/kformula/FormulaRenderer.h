@@ -46,7 +46,6 @@ class BasicElement;
  * anymore.
  *
  * @author Martin Pfeiffer <hubipete@gmx.net>
- * @since 2.0
  */
 class FormulaRenderer {
 public:

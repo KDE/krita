@@ -83,7 +83,6 @@ struct KoPageLayout
     /**
      * @return a page layout with the default page size depending on the locale settings,
      * default margins (2 cm), and portrait orientation.
-     * @since 1.4
      */
     static KOFFICECORE_EXPORT KoPageLayout standardLayout();
 };

@@ -320,7 +320,6 @@ public:
     /**
      * Return the last error message. Usually KoDocument takes care of
      * showing it; this method is mostly provided for non-interactive use.
-     * @since 1.4
      */
     QString errorMessage() const;
 
@@ -328,7 +327,6 @@ public:
      * Show the last error message in a message box.
      * The dialog box will mention a saving problem.
      * Note that save/saveFile takes care of doing it.
-     * @since 1.4
      */
     void showSavingErrorDialog();
 
@@ -337,7 +335,6 @@ public:
      * The dialog box will mention a loading problem.
      * openURL/openFile takes care of doing it, but not loadNativeFormat itself,
      * so this is often called after loadNativeFormat returned false.
-     * @since 1.4
      */
     void showLoadingErrorDialog();
 
@@ -460,7 +457,6 @@ public:
      * Creates and shows the start up widget.
      * @param parent the KoMainWindow used as parent for the widget.
      * @param alwaysShow always show the widget even if the user has configured it to not show.
-     * @since 1.5
      */
     virtual void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
 
@@ -547,7 +543,7 @@ public:
      *  @param version the DTD version (usually the application's version).
      *  @deprecated use createOasisXmlWriter instead
      */
-    QDomDocument createDomDocument( const QString& tagName, const QString& version ) const;
+    QDomDocument createDomDocument( const QString& tagName, const QString& version ) const KDE_DEPRECATED;
 
     /**
      *  Return an XML writer for saving Oasis XML into the device @p dev,
@@ -635,7 +631,6 @@ public:
 
     /**
      * Checks whether error message boxes should be shown.
-     * @since 1.3.1
      */
     bool isAutoErrorHandlingEnabled() const;
 
@@ -856,19 +851,16 @@ public:
     /**
      * @return all kotext-based text objects in the document
      * This is used by some text-analyzer plugins.
-     * @since 1.5
      */
     virtual QList<KoTextDocument *> allTextDocuments() const;
 
     /**
      * Returns the unit used to display all measures/distances.
-     * @since 1.5
      */
     KoUnit unit() const;
 
     /**
      * Sets the unit used to display all measures/distances.
-     * @since 1.5
      */
     void setUnit( KoUnit u );
 
@@ -876,27 +868,23 @@ public:
      * Returns the name of the unit used to display all measures/distances.
      * Use this method for displaying it in the user interface, but use
      * unit() for everything else (conversions etc.)
-     * @since 1.5
      */
     QString unitName() const;
 
     /**
      * Set the template type used. This is used by the start up widget to show
      * the correct templates.
-     * @since 1.5
      */
     void setTemplateType(const QString& _templateType);
     /**
      * Template type used. This is used by the start up widget to show
      * the correct templates.
-     * @since 1.5
      */
     QString templateType() const;
 
     /**
      * Shows the init dialog when embeding
      * @param parent the parent widget
-     * @since 1.5
      */
     virtual bool showEmbedInitDialog(QWidget* parent);
 
@@ -919,7 +907,6 @@ public:
 public slots:
     /**
      * Initialize an empty document using default values
-     * @since 1.5
      */
     virtual void initEmpty();
 
@@ -993,13 +980,11 @@ protected slots:
     /**
      * This slot loads an existing file and deletes the start up widget.
      * @param url the file to load
-     * @since 1.5
      */
     virtual void openExistingFile( const KUrl& url );
     /**
      * This slot loads a template and deletes the start up widget.
      * @param url the template to load
-     * @since 1.5
      */
     virtual void openTemplate( const KUrl& url );
 
@@ -1148,7 +1133,6 @@ protected:
      * @param parent the parent widget
      * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
-     * @since 1.5
      */
     KoOpenPane* createOpenPane( QWidget* parent, const KComponentData &instance,
                                 const QString& templateType = QString());
@@ -1161,7 +1145,6 @@ private slots:
     void startCustomDocument();
     /**
      * Removes the open widget showed at application start up.
-     * @since 1.5
      */
     void deleteOpenPane();
 

@@ -106,7 +106,6 @@ enum LineBreak {
  * method is used.
  *
  * @author Martin Pfeiffer <hubipete@gmx.net>
- * @since 2.0
  */
 class AttributeManager {
 public:

@@ -31,8 +31,6 @@ class KoShape;
  * way to obtain instances of the KoFormulaShape class.
  * It follows the factory design pattern and implements the two virtual methods 
  * createDefaultShape() and createShape() of KoShapeFactory.
- *
- * @since 2.0
  */
 class KoFormulaShapeFactory : public KoShapeFactory {
     Q_OBJECT

@@ -36,7 +36,6 @@ public:
     /**
      * KUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
-     * @since 1.4
      */
     KoTarStore( QWidget* window, const KUrl& url, const QString & _filename, Mode _mode, const QByteArray & appIdentification );
     ~KoTarStore();

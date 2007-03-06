@@ -34,7 +34,6 @@ class FormulaRenderer;
 /**
  * @short The flake shape for a formula
  * @author Martin Pfeiffer <hubipete@gmx.net>
- * @since 2.0
  */
 class KoFormulaShape : public KoShape {
 public:

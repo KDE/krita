@@ -32,7 +32,6 @@ class FormulaCursor;
 /**
  * @short The flake tool for a formula
  * @author Martin Pfeiffer <hubipete@gmx.net>
- * @since 2.0
  */
 class KoFormulaTool : public KoTool {
 public:

@@ -1,9 +1,6 @@
-/** @file
+/**
 *   This file is part of the KDE/KOffice project.
 *   Copyright (C) 2005, Gary Cramblitt <garycramblitt@comcast.net>
-*
-*   @author Gary Cramblitt <garycramblitt@comcast.net>
-*   @since KOffice 1.5
 *
 *   This library is free software; you can redistribute it and/or
 *   modify it under the terms of the GNU Library General Public

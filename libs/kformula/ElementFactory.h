@@ -35,7 +35,6 @@ class BasicElement;
  * loading ElementFactory provides a very simple way to achieve an element by
  * passing its MathML name. Just use the static createElement() method.
  *
- * @since 2.0
  * @author Martin Pfeiffer
  */
 class ElementFactory {

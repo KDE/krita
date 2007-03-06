@@ -31,8 +31,6 @@ namespace KFormula {
  * 
  * The lines behaviour is (a little) different from that
  * of ordinary sequences. Its MathML tag is \<mtd\>.
- *
- * @since 2.0
  */
 class MatrixEntryElement : public SequenceElement {
 public:

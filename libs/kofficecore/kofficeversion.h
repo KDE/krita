@@ -51,34 +51,29 @@ namespace KOffice
      * installed KOffice version, not the number of the KOffice version that was
      * installed when the program was compiled.
      * @return the version number, encoded in a single uint
-     * @since 1.3
      */
     unsigned int version();
     /**
      * Returns the major number of KOffice's version, e.g.
      * 1 for KOffice 1.2.3.
      * @return the major version number
-     * @since 1.3
      */
     unsigned int versionMajor();
     /**
      * Returns the minor number of KOffice's version, e.g.
      * 2 for KOffice 1.2.3.
      * @return the minor version number
-     * @since 1.3
      */
     unsigned int versionMinor();
     /**
      * Returns the release of KOffice's version, e.g.
      * 3 for KOffice 1.2.3.
      * @return the release number
-     * @since 1.3
      */
     unsigned int versionRelease();
     /**
      * Returns the KOffice version as string, e.g. "1.2.3".
      * @return the KOffice version. You can keep the string forever
-     * @since 1.3
      */
     const char *versionString();
 }

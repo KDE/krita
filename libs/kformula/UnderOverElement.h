@@ -30,7 +30,6 @@ namespace KFormula {
  *
  * 
  * @author Martin Pfeiffer <hubipete@gmx.net>
- * @since 2.0
  */
 class UnderOverElement : public BasicElement {
 public:

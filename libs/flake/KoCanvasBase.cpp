@@ -21,16 +21,18 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasResourceProvider.h"
 #include "KoShapeController.h"
+#include "KoCanvasController.h"
 
 class KoCanvasBase::Private {
 public:
-    Private() : shapeController(0), resourceProvider(0) {}
+    Private() : shapeController(0), resourceProvider(0), controller(0) {}
     ~Private() {
         delete shapeController;
         delete resourceProvider;
     }
     KoShapeController *shapeController;
     KoCanvasResourceProvider * resourceProvider;
+    KoCanvasController *controller;
 };
 
 KoCanvasBase::KoCanvasBase( KoShapeControllerBase * shapeControllerBase )
@@ -53,4 +55,13 @@ KoShapeController * KoCanvasBase::shapeController() const {
 KoCanvasResourceProvider * KoCanvasBase::resourceProvider() const
 {
     return d->resourceProvider;
+}
+
+void KoCanvasBase::ensureVisible(const QRectF &rect) {
+    if(d->controller)
+        d->controller->ensureVisible(rect);
+}
+
+void KoCanvasBase::setCanvasController(KoCanvasController *controller) {
+    d->controller = controller;
 }

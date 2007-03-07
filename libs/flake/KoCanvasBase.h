@@ -42,6 +42,7 @@ class KoToolProxy;
 class KoViewConverter;
 class KoShapeController;
 class KoShapeControllerBase;
+class KoCanvasController;
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
@@ -158,6 +159,19 @@ public:
      */
     virtual void setZoom(double /*zoom*/) { }
     virtual double zoom() const { return 0;}
+
+    /**
+     * @brief Scrolls the content of the canvas so that the given rect is visible.
+     *
+     * The rect is to be specified in document coordinates.
+     *
+     * @param rect the rectangle to make visible
+     */
+    virtual void ensureVisible(const QRectF &rect);
+
+protected:
+    friend class KoCanvasController;
+    void setCanvasController(KoCanvasController *controller);
 
 private:
     // we need a KoShapeControllerBase so that it can work

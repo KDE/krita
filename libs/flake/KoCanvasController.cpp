@@ -97,15 +97,16 @@ void KoCanvasController::resizeEvent(QResizeEvent * resizeEvent)
 }
 
 void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
-
     Q_ASSERT(canvas); // param is not null
     if(m_d->canvas) {
         emit canvasRemoved(this);
+        canvas->setCanvasController(0);
     }
     m_d->viewportWidget->setCanvas(canvas->canvasWidget());
     m_d->canvas = canvas;
     m_d->canvas->canvasWidget()->installEventFilter(this);
     m_d->canvas->canvasWidget()->setMouseTracking( true );
+    canvas->setCanvasController(this);
 
     emit canvasSet(this);
 }

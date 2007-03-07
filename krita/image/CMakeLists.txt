@@ -96,6 +96,7 @@ set(kritaimage_LIB_SRCS
    kis_mixability_mask.cc
    kis_progress_updater.cpp
    kis_progress_updater_p.cpp
+   kis_image_view_converter.cpp
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

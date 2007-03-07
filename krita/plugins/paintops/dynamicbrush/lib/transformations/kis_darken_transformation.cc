@@ -43,3 +43,5 @@ void KisDarkenTransformation::transformColoring(KisDynamicColoring* coloringsrc,
 {
     coloringsrc->darken((qint32)(255  - 75 * m_transfoParameter->parameter(info)));
 }
+
+#include "kis_darken_transformation.moc"

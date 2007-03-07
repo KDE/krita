@@ -26,36 +26,44 @@ class QListString;
 
 class KisDynamicSensor {
     public:
+        KisDynamicSensor(const KoID& id);
         virtual ~KisDynamicSensor() { }
         virtual double parameter(const KisPaintInformation& info) = 0;
         static KisDynamicSensor* id2Sensor(const KoID&);
         static QList<KoID> sensorsIds();
+        inline const KoID& id() { return m_id; }
+    private:
+        const KoID& m_id;
 };
 
 class KisDynamicSensorSpeed : public KisDynamicSensor {
     public:
-    virtual ~KisDynamicSensorSpeed() { }
+        KisDynamicSensorSpeed();
+        virtual ~KisDynamicSensorSpeed() { }
         virtual double parameter(const KisPaintInformation& info)
         { return 1.0 + info.movement.length() * 0.1; }
 };
 
 class KisDynamicSensorPressure : public KisDynamicSensor {
     public:
-    virtual ~KisDynamicSensorPressure() { }
+        KisDynamicSensorPressure();
+        virtual ~KisDynamicSensorPressure() { }
         virtual double parameter(const KisPaintInformation& info)
         { return info.pressure; }
 };
 
 class KisDynamicSensorXTilt : public KisDynamicSensor {
     public:
-    virtual ~KisDynamicSensorXTilt() { }
+        KisDynamicSensorXTilt();
+        virtual ~KisDynamicSensorXTilt() { }
         virtual double parameter(const KisPaintInformation& info)
         { return 1.0 - info.xTilt; }
 };
 
 class KisDynamicSensorYTilt : public KisDynamicSensor {
     public:
-    virtual ~KisDynamicSensorYTilt() { }
+        KisDynamicSensorYTilt();
+        virtual ~KisDynamicSensorYTilt() { }
         virtual double parameter(const KisPaintInformation& info)
         { return 1.0 - info.yTilt; }
 };

@@ -46,12 +46,38 @@ void KisSizeTransformation::transformColoring(KisDynamicColoring* coloringsrc, c
     // TODO: implement it
 }
 
+void KisSizeTransformation::setHSensor(const KoID& id)
+{
+    kDebug() << "H: " << id.id() << endl;
+    if(id != m_horizTransfoParameter->id() )
+    {
+        delete m_horizTransfoParameter;
+        m_horizTransfoParameter = KisDynamicSensor::id2Sensor(id);
+    }
+}
+
+void KisSizeTransformation::setVSensor(const KoID& id)
+{
+    kDebug() << "V: " << id.id() << endl;
+    if(id != m_vertiTransfoParameter->id() )
+    {
+        delete m_vertiTransfoParameter;
+        m_vertiTransfoParameter = KisDynamicSensor::id2Sensor(id);
+    }
+}
+
 QWidget* KisSizeTransformation::createConfigWidget(QWidget* parent)
 {
     QWidget* editorWidget = new QWidget(parent);
     Ui_SizeTransformationEditor ste;
     ste.setupUi(editorWidget);
     ste.comboBoxHorizontalSensor->setIDList( KisDynamicSensor::sensorsIds() );
+    connect(ste.comboBoxHorizontalSensor, SIGNAL(activated(const KoID &)), this, SLOT(setHSensor(const KoID& )));
+    ste.comboBoxHorizontalSensor->setCurrent( m_horizTransfoParameter->id() );
     ste.comboBoxVerticalSensor->setIDList( KisDynamicSensor::sensorsIds() );
+    connect(ste.comboBoxVerticalSensor, SIGNAL(activated(const KoID &)), this, SLOT(setVSensor(const KoID& )));
+    ste.comboBoxVerticalSensor->setCurrent( m_vertiTransfoParameter->id() );
     return editorWidget;
 }
+
+#include "kis_size_transformation.moc"

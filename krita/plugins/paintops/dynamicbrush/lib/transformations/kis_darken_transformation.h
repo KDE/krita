@@ -25,6 +25,7 @@
 class KisDynamicSensor;
 
 class KisDarkenTransformation : public KisDynamicTransformation {
+    Q_OBJECT
     public:
         KisDarkenTransformation(KisDynamicSensor* transfoParameter);
         virtual ~KisDarkenTransformation();

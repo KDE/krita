@@ -25,6 +25,7 @@
 class KisDynamicSensor;
 
 class KisSizeTransformation : public KisDynamicTransformation {
+    Q_OBJECT
     public:
         KisSizeTransformation(KisDynamicSensor* hTransfoParameter, KisDynamicSensor* vTransfoParameter);
         virtual ~KisSizeTransformation();
@@ -34,6 +35,9 @@ class KisSizeTransformation : public KisDynamicTransformation {
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
         virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
         virtual QWidget* createConfigWidget(QWidget* parent);
+    public slots:
+        void setHSensor(const KoID& id);
+        void setVSensor(const KoID& id);
     private:
         KisDynamicSensor* m_horizTransfoParameter;
         KisDynamicSensor* m_vertiTransfoParameter;

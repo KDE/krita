@@ -19,6 +19,8 @@
 #define _KIS_ABSTRACT_CANVAS_WIDGET_
 
 class QWidget;
+class QRect;
+class QPoint;
 class KoToolProxy;
 
 class KisAbstractCanvasWidget {
@@ -34,6 +36,14 @@ public:
     virtual KoToolProxy * toolProxy() = 0;
 
     virtual void documentOffsetMoved( QPoint ) = 0;
+
+    /**
+     * Prescale the canvas represention of the image (if necessary, it
+     * is for QPainter, not for OpenGL).
+     */
+    virtual void preScale() {};
+
+    virtual void preScale( const QRect & rc ) {};
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

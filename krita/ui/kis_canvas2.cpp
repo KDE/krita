@@ -177,6 +177,9 @@ KoShapeManager* KisCanvas2::shapeManager() const
 
 void KisCanvas2::updateCanvas(const QRectF& rc)
 {
+    // updateCanvas is called from tools, never from the projection
+    // updates, so no need to prescale!
+
     // First convert from document coordinated to widget coordinates
     QRectF viewRect  = m_d->viewConverter->documentToView(rc);
     viewRect.adjust(-5, -5, 5, 5); // floor, ceil?
@@ -214,6 +217,7 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
         docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
         QRectF viewRect = m_d->viewConverter->documentToView(docRect);
         viewRect.adjust( -5, -5, 5, 5 );
+        m_d->canvasWidget->preScale( toAlignedRect( viewRect ) );
         m_d->canvasWidget->widget()->update();// toAlignedRect(viewRect) );
 #ifdef HAVE_OPENGL
     }
@@ -354,6 +358,11 @@ void KisCanvas2::documentOffsetMoved( const QPoint &documentOffset )
 {
     kDebug() << "KisCanvas2:: Moving document offset to " << documentOffset << endl;
     m_d->canvasWidget->documentOffsetMoved( documentOffset );
+}
+
+void KisCanvas2::preScale()
+{
+    m_d->canvasWidget->preScale();
 }
 
 #include "kis_canvas2.moc"

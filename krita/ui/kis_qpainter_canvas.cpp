@@ -55,14 +55,14 @@
 
 namespace {
 // XXX: Remove this with Qt 4.3
-static QRect toAlignedRect(QRectF rc)
-{
-    int xmin = int(floor(rc.x()));
-    int xmax = int(ceil(rc.x() + rc.width()));
-    int ymin = int(floor(rc.y()));
-    int ymax = int(ceil(rc.y() + rc.height()));
-    return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
-}
+    static QRect toAlignedRect(QRectF rc)
+    {
+        int xmin = int(floor(rc.x()));
+        int xmax = int(ceil(rc.x() + rc.width()));
+        int ymin = int(floor(rc.y()));
+        int ymax = int(ceil(rc.y() + rc.height()));
+        return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
+    }
 }
 
 
@@ -72,7 +72,7 @@ public:
     KisCanvas2 * canvas;
     KoViewConverter * viewConverter;
     QBrush checkBrush;
-    QPixmap displayCache;
+    QImage prescaledImage;
     QPoint documentOffset;
     QPainterGridDrawer* gridDrawer;
 };
@@ -109,8 +109,6 @@ KisQPainterCanvas::~KisQPainterCanvas()
 
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
-    const QImage canvasImage = m_d->canvas->canvasCache();
-
     QRect updateRect = ev->rect().translated( m_d->documentOffset );
 
     KisImageSP img = m_d->canvas->image();
@@ -131,87 +129,36 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
     t.restart();
 
-    double pppx,pppy;
-    pppx = img->xRes();
-    pppy = img->yRes();
-
-    // Go from the widget coordinates to points
-    QRectF imageRect = m_d->viewConverter->viewToDocument(updateRect);
-
-    // Go from points to pixels
-    imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
-                        imageRect.right() * pppx, imageRect.bottom() * pppy);
-
-    // Because when too small, the scaling will make the update disappear
-    imageRect.adjust(-5, -5, 5, 5);
-
-    // Don't go outside the image and convert to whole pixels
-    QRect rc = toAlignedRect(imageRect.intersected( canvasImage.rect() ));
-
-    // Compute the scale factors
-    double scaleX = sx / pppx;
-    double scaleY = sy / pppy;
-
-    //QPoint dstTopLeft = QPointF(rc.x() * scaleX, rc.y() * scaleY).toPoint();
-
-    // Pixel-for-pixel mode
-    if ( scaleX == 1.0 && scaleY == 1.0 ) {
-//         kDebug() << "Pixel for pixel!\n";
-//        gc.drawImage( dstTopLeft.x(), dstTopLeft.y(), canvasImage, rc.x(), rc.y(), rc.width(), rc.height() );
-        gc.drawImage( ev->rect().x(), ev->rect().y(), canvasImage, updateRect.x(), updateRect.y(), updateRect.width(), updateRect.height() );
-    }
-    else {
-        QSize sz = QSize( ( int )( rc.width() * ( sx / pppx ) ), ( int )( rc.height() * ( sy / pppy ) ));
-        t.restart();
-        QImage croppedImage = canvasImage.copy( rc ); // This is way
-                                                      // faster than
-                                                      // in Qt 3.x. No
-                                                      // need for
-                                                      // GwenView's
-                                                      // croppeqimage
-                                                      // class anymore.
-        kDebug(41010) << "Copying subrect:" << t.elapsed() << endl;
-        t.restart();
-
-        QImage scaledImage;
-
-        if ( scaleX > 1.0 && scaleY > 1.0 ) {
-            scaledImage = ImageUtils::sampleImage( croppedImage, sz.width(), sz.height() );
-        }
-        else {
-            scaledImage = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
-        }
-
-        kDebug(41010) << "Scaling subimage: " << t.elapsed() << endl;
-        t.restart();
-        gc.drawImage( ev->rect().x(), ev->rect().y(), scaledImage, 0, 0, sz.width(), sz.height() );
-    }
-    kDebug(41010 ) << "painting image: " <<  t.elapsed() << endl;
+    gc.drawImage( ev->rect().topLeft(), m_d->prescaledImage, ev->rect() );
 
 #if 0
     // ask the current layer to paint its selection (and potentially
     // other things, like wetness and active-layer outline
     KisLayerSP currentLayer = img->activeLayer();
     QVector<QRect>layerRects = QRegion(currentLayer->extent().translate(xoffset, yoffset))
-                                .intersected(paintRegions);
+                               .intersected(paintRegions);
 
     it = outsideRects.begin();
     end = outsideRects.end();
     while (it != end) {
-            currentLayer->renderDecorationsToPainter((*it).x() - xoffset,
-                                                     (*it).y() - yoffset,
-                                                     (*it).x(), (*it).y(),
-                                                     (*it).width(), (*it).height(),
-                                                     gc);
+        currentLayer->renderDecorationsToPainter((*it).x() - xoffset,
+                                                 (*it).y() - yoffset,
+                                                 (*it).x(), (*it).y(),
+                                                 (*it).width(), (*it).height(),
+                                                 gc);
     }
 #endif
+
+    // Setup the painter to take care of the offset; all that the
+    // classes that do painting need to keep track of is resolution
+    gc.setRenderHint( QPainter::Antialiasing );
+    gc.setRenderHint( QPainter::SmoothPixmapTransform );
+    gc.translate( QPoint( -m_d->documentOffset.x(), -m_d->documentOffset.y() ) );
+
     // ask the guides, grids, etc to paint themselves
     m_d->gridDrawer->draw(&gc, m_d->viewConverter->viewToDocument(ev->rect()));
 
     // Give the tool a chance to paint its stuff
-    gc.setRenderHint( QPainter::Antialiasing );
-    gc.setRenderHint( QPainter::SmoothPixmapTransform );
-    gc.translate( QPoint( -m_d->documentOffset.x(), -m_d->documentOffset.y() ) );
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
 }
 
@@ -274,8 +221,139 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
 void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 {
     kDebug() << "KisQPainterCanvas::documentOffsetMoved offset is now: " << pt << endl;
+/*
+    // XXX: Redo the prescaledImage, otherwise scrolling is broken.
+
+    int deltaX = m_d->documentOffset.x() - pt.x();
+    int deltaY = m_d->documentOffset.y() - pt.y();
+
+    QPainter gc( &m_d->prescaledImage );
+
+    // Move the bit of the image we can keep
+    gc.drawImage( deltaX, deltaY, m_d->prescaledImage );
+
+    kDebug() << "documentOffset moved deltaX: " << deltaX << ", deltaY: " << deltaY << endl;
+
+    // Determine the bands we need to add, top, left, right or bottom.
+
+    if ( qAbs( deltaX ) > width() || qAbs( deltaY ) > height() ) {
+        preScale();
+    }
+    else {
+        if ( deltaX > 0 ) {
+            // Moved left, need to add a band to the right
+        }
+        else if ( deltaX < 0 )
+        {
+            // Moved right, need to add a band to the left
+        }
+
+        if ( deltaY > 0 ) {
+            // Moved down, need to add  band to the top
+
+        }
+        else if ( deltaY < 0 ) {
+            // Moved up, need to add band to the bottom
+        }
+    }
+*/
     m_d->documentOffset = pt;
+    preScale();
     update();
+}
+
+
+QImage KisQPainterCanvas::scaledImage( const QRect & rc )
+{
+    KisImageSP img = m_d->canvas->image();
+    if (img == 0) return QImage();
+
+    double sx, sy;
+    m_d->viewConverter->zoom(&sx, &sy);
+
+    double pppx,pppy;
+    pppx = img->xRes();
+    pppy = img->yRes();
+
+    // Go from the widget coordinates to points
+    QRect updateRect = rc.translated( m_d->documentOffset );
+    QRectF imageRect = m_d->viewConverter->viewToDocument( updateRect );
+
+    // Go from points to pixels
+    imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
+                        imageRect.right() * pppx, imageRect.bottom() * pppy);
+
+
+    const QImage canvasImage = m_d->canvas->canvasCache();
+
+    // Don't go outside the image and convert to whole pixels
+    QRect alignedRect = toAlignedRect(imageRect.intersected( canvasImage.rect() ));
+
+    // Compute the scale factors
+    double scaleX = sx / pppx;
+    double scaleY = sy / pppy;
+
+    // Pixel-for-pixel mode
+    if ( scaleX == 1.0 && scaleY == 1.0 ) {
+        return canvasImage.copy( alignedRect );
+    }
+    else {
+        QSize sz = QSize( ( int )( alignedRect.width() * ( sx / pppx ) ), ( int )( alignedRect.height() * ( sy / pppy ) ));
+
+        QImage croppedImage = canvasImage.copy( alignedRect );
+
+        if ( scaleX > 2.0 && scaleY > 2.0 ) {
+            return ImageUtils::sampleImage( croppedImage, sz.width(), sz.height() );
+        }
+        else {
+            return ImageUtils::scale( croppedImage, sz.width(), sz.height() );
+        }
+    }
+}
+
+void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
+{
+
+    kDebug() << "KisQPainterCanvas::ResizeEvent. Old: " << e->oldSize() << ", new: " << e->size() << endl;
+
+    QSize newSize = e->size();
+    QSize oldSize = m_d->prescaledImage.size();
+
+    QImage img = QImage(e->size(), QImage::Format_ARGB32);
+    QPainter gc( &img );
+
+    gc.drawImage( 0, 0, m_d->prescaledImage, 0, 0, m_d->prescaledImage.width(), m_d->prescaledImage.height() );
+
+
+    if ( newSize.width() > oldSize.width() || newSize.height() > oldSize.height() ) {
+
+        QRect right( oldSize.width(), 0, newSize.width() - oldSize.width(), newSize.height() );
+        if ( right.width() > 0 ) {
+            gc.drawImage( oldSize.width(), 0, scaledImage( right ) );
+        }
+        // Subtract the right hand overlap part (right.width() from
+        // the bottom band so we don't scale the same area twice.
+        QRect bottom( 0, oldSize.height(), newSize.width() - right.width(), newSize.height() - oldSize.height() );
+        if ( bottom.height() > 0 ) {
+            gc.drawImage( 0, oldSize.height(), scaledImage( bottom ) );
+        }
+
+    }
+    m_d->prescaledImage = img;
+}
+
+void KisQPainterCanvas::preScale()
+{
+    kDebug() << "KisQPainterCanvas::preScale()" << endl;
+    // Thread this!
+    m_d->prescaledImage = scaledImage( QRect( QPoint( 0, 0 ), size() ) );
+}
+
+void KisQPainterCanvas::preScale( const QRect & rc )
+{
+    QRect rc2 = QRect( QPoint( 0, 0 ), size() ).intersected( rc );
+    QPainter gc( &m_d->prescaledImage );
+    gc.drawImage( rc2.topLeft(), scaledImage( rc2 ) );
 }
 
 #include "kis_qpainter_canvas.moc"

@@ -92,6 +92,11 @@ public: // KoCanvasBase implementation
 
     KoColorProfile * monitorProfile();
 
+    /**
+     * Prescale the canvas represention of the image (if necessary, it
+     * is for QPainter, not for OpenGL).
+     */
+    void preScale();
 
     void connectCurrentImage();
 

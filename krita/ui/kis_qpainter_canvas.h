@@ -27,6 +27,7 @@ class QImage;
 class QPaintEvent;
 class QMoveEvent;
 class QPoint;
+class QRect;
 class KisCanvas2;
 class KoViewConverter;
 class KoToolProxy;
@@ -81,6 +82,8 @@ public: // QWidget
     /// reimplemented method from superclass
     bool event(QEvent *event);
 
+    void resizeEvent( QResizeEvent *e );
+
 public: // KisAbstractCanvasWidget
 
     QWidget * widget() { return this; }
@@ -89,6 +92,18 @@ public: // KisAbstractCanvasWidget
 
     void documentOffsetMoved( QPoint );
 
+    void preScale();
+
+    void preScale( const QRect & rc );
+
+private:
+
+    /**
+     * Return a scaled QImage of the projection
+     *
+     * @param rc The desired rect in pixels
+     */
+    QImage scaledImage( const QRect & rc);
 
 private:
 

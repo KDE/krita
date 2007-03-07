@@ -148,7 +148,6 @@ bool KoCanvasController::isCanvasCentered() const {
 
 void KoCanvasController::centerCanvas(bool centered)
 {
-    // XXX: Move the document so it's midpoint is in the middle
     Q_UNUSED( centered );
     m_d->centerCanvas = true;
 }
@@ -212,32 +211,31 @@ void KoCanvasController::ensureVisible( KoShape *shape ) {
 }
 
 void KoCanvasController::ensureVisible( const QRectF &rect ) {
+    QRect currentVisible (qMax(0, -canvasOffsetX()), qMax(0, -canvasOffsetY()), visibleWidth(), visibleHeight());
+
     // convert the document based rect into a canvas based rect
     QRect viewRect = m_d->canvas->viewConverter()->documentToView( rect ).toRect();
+    if(! viewRect.isValid() || currentVisible.contains(viewRect))
+        return; // its visible. Nothing to do.
 
-    // calculate position of the centerpoint of the rect we want to make visible
-    QPoint cp = viewRect.center() + m_d->canvas->documentOrigin();
-    cp.rx() += m_d->canvas->canvasWidget()->x() + frameWidth();
-    cp.ry() += m_d->canvas->canvasWidget()->y() + frameWidth();
+    int horizontalMove = 0;
+    if(currentVisible.x() > viewRect.x())               // move left
+        horizontalMove = qMax(0, currentVisible.x() - currentVisible.width() / 5) - viewRect.x();
+    else if(currentVisible.right() < viewRect.right())  // move right
+        horizontalMove = viewRect.right() - qMax(0, currentVisible.right() - currentVisible.width() / 5);
 
-    // calculate the difference to the viewport centerpoint
-    QPoint centerDiff = cp - 0.5 * QPoint( viewport()->width(), viewport()->height() );
+    int verticalMove = 0;
+    if(currentVisible.y() > viewRect.y())               // move up
+        verticalMove = qMax(0, currentVisible.y() - currentVisible.height() / 5) - viewRect.y();
+    else if(currentVisible.bottom() < viewRect.bottom()) // move down
+        verticalMove = viewRect.bottom() - qMax(0, currentVisible.bottom() - currentVisible.height() / 5);
 
     QScrollBar *hBar = horizontalScrollBar();
-    // try to centralize the centerpoint of the rect which we want to make visible
-    if( hBar && hBar->isVisible() ) {
-        centerDiff.rx() += int( 0.5 * (float)hBar->maximum() );
-        centerDiff.rx() = qMax( centerDiff.x(), hBar->minimum() );
-        centerDiff.rx() = qMin( centerDiff.x(), hBar->maximum() );
-        hBar->setValue( centerDiff.x() );
-    }
+    if( hBar && hBar->isVisible() )
+        hBar->setValue( hBar->value() + horizontalMove);
     QScrollBar *vBar = verticalScrollBar();
-    if( vBar && vBar->isVisible() ) {
-        centerDiff.ry() += int( 0.5 * (float)vBar->maximum() );
-        centerDiff.ry() = qMax( centerDiff.y(), vBar->minimum() );
-        centerDiff.ry() = qMin( centerDiff.y(), vBar->maximum() );
-        vBar->setValue( centerDiff.y() );
-    }
+    if( vBar && vBar->isVisible() )
+        vBar->setValue( vBar->value() + verticalMove);
 }
 
 void KoCanvasController::zoomIn(const QPointF &center)

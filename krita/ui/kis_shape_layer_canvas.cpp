@@ -27,6 +27,8 @@
 #include <kis_shape_layer.h>
 #include <KoCompositeOp.h>
 
+#include <kdebug.h>
+
 // #define DEBUG_REPAINT
 
 KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter)
@@ -37,6 +39,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter 
     , m_projection( 0 )
     , m_parentLayer( parent)
     , m_repaintTriggered(false)
+    , m_antialias(false)
 {
 }
 
@@ -78,6 +81,10 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
     r.adjust(-2, -2, 2, 2); // for antialias
     m_dirty += r;
     if(! m_repaintTriggered) {
+        double x, y;
+        m_viewConverter->zoom(&x, &y);
+        m_antialias = x < 3 || y < 3;
+
         QTimer::singleShot (0, this, SLOT(repaint()));
         m_repaintTriggered = true;
     }
@@ -88,7 +95,8 @@ void KisShapeLayerCanvas::repaint() {
     QImage img(r.width(), r.height(), QImage::Format_ARGB32);
     img.fill(0);
     QPainter p(&img);
-    p.setRenderHint(QPainter::Antialiasing);
+    if(m_antialias)
+        p.setRenderHint(QPainter::Antialiasing);
     p.translate(-r.x(), -r.y());
     p.setClipRect(r);
 #ifdef DEBUG_REPAINT

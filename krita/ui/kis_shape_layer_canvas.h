@@ -20,8 +20,6 @@
 
 #include <KoCanvasBase.h>
 
-#include <krita_export.h>
-
 #include <kis_types.h>
 
 class KoShapeManager;
@@ -38,7 +36,7 @@ class KoUnit;
  * Do NOT give this canvas to tools or to the KoCanvasController, it's
  * not made for that.
  */
-class KRITAUI_EXPORT KisShapeLayerCanvas : public QObject, public KoCanvasBase
+class KisShapeLayerCanvas : public QObject, public KoCanvasBase
 {
     Q_OBJECT
 public:
@@ -73,7 +71,7 @@ private:
     KisShapeLayer *m_parentLayer;
 
     QRegion m_dirty;
-    bool m_repaintTriggered;
+    bool m_repaintTriggered, m_antialias;
 };
 
 #endif

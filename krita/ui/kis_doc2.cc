@@ -1011,6 +1011,14 @@ KoView* KisDoc2::createViewInstance(QWidget* parent)
     KisView2 * v = new KisView2(this, parent);
     Q_CHECK_PTR(v);
 
+    if(! m_d->layerShapes.isEmpty()) {
+        Q_ASSERT(v->canvasBase());
+        KoSelection *selection = v->canvasBase()->shapeManager()->selection();
+        selection->select(m_d->layerShapes.values().first());
+        KoToolManager::instance()->switchToolRequested(
+                KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
+    }
+
     return v;
 }
 

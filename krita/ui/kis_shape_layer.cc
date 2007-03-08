@@ -68,6 +68,8 @@ KisShapeLayer::KisShapeLayer( KoShapeContainer * parent,
     m_d->projection = new KisPaintDevice( img->colorSpace() );
     m_d->canvas = new KisShapeLayerCanvas( this, m_d->converter );
     m_d->canvas->setProjection( m_d->projection );
+
+    KoShape::setLocked(true); // user can't move the layer around using the default tool.
 }
 
 KisShapeLayer::~KisShapeLayer()

@@ -245,6 +245,7 @@ protected slots:
 
 protected:
 
+    void centerOnPoint(const QPointF &center);
     void paintEvent( QPaintEvent * event );
     void resizeEvent(QResizeEvent * resizeEvent);
     void dragEnterEvent( QDragEnterEvent * event );

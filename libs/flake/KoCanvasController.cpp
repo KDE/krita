@@ -239,7 +239,7 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
         vBar->setValue( vBar->value() + verticalMove);
 }
 
-void KoCanvasController::zoomIn(const QPointF &center)
+void KoCanvasController::centerOnPoint(const QPointF &center)
 {
     // convert the document based point into a canvas based point
     QPoint cp = m_d->canvas->viewConverter()->documentToView( center ).toPoint() + m_d->canvas->documentOrigin();
@@ -247,31 +247,50 @@ void KoCanvasController::zoomIn(const QPointF &center)
     cp.ry() += m_d->canvas->canvasWidget()->y() + frameWidth();
 
     // calculate the difference to the viewport centerpoint
-    QPoint centerDiff = cp - 0.5 * QPoint( viewport()->width(), viewport()->height() );
+    QPoint topLeft = cp - 0.5 * QPoint( viewport()->width(), viewport()->height() );
 
     QScrollBar *hBar = horizontalScrollBar();
     // try to centralize the centerpoint which we want to make visible
     if( hBar && hBar->isVisible() ) {
-        centerDiff.rx() += int( 0.5 * (float)hBar->maximum() );
-        centerDiff.rx() = qMax( centerDiff.x(), hBar->minimum() );
-        centerDiff.rx() = qMin( centerDiff.x(), hBar->maximum() );
-        hBar->setValue( centerDiff.x() );
+        topLeft.rx() = qMax( topLeft.x(), hBar->minimum() );
+        topLeft.rx() = qMin( topLeft.x(), hBar->maximum() );
+        hBar->setValue( topLeft.x() );
     }
     QScrollBar *vBar = verticalScrollBar();
     if( vBar && vBar->isVisible() ) {
-        centerDiff.ry() += int( 0.5 * (float)vBar->maximum() );
-        centerDiff.ry() = qMax( centerDiff.y(), vBar->minimum() );
-        centerDiff.ry() = qMin( centerDiff.y(), vBar->maximum() );
-        vBar->setValue( centerDiff.y() );
+        topLeft.ry() = qMax( topLeft.y(), vBar->minimum() );
+        topLeft.ry() = qMin( topLeft.y(), vBar->maximum() );
+        vBar->setValue( topLeft.y() );
     }
+}
+
+void KoCanvasController::zoomIn(const QPointF &center)
+{
+    m_d->canvas->zoomIn();
+    centerOnPoint(center);
 }
 
 void KoCanvasController::zoomOut(const QPointF &center)
 {
+    m_d->canvas->zoomOut();
+    centerOnPoint(center);
 }
 
 void KoCanvasController::zoomTo(const QRectF &rect)
 {
+    // convert the document based rect into a canvas based rect
+    QRect viewRect = m_d->canvas->viewConverter()->documentToView( rect ).toRect();
+
+    double scale;
+
+    if(1.0 * viewport()->width() / viewRect.width() > 1.0 * viewport()->height() / viewRect.height())
+        scale = 1.0 * viewport()->height() / viewRect.height();
+    else
+        scale = 1.0 * viewport()->width() / viewRect.width();
+
+    m_d->canvas->setZoom(scale * m_d->canvas->zoom());
+
+    centerOnPoint(rect.center());
 }
 
 void KoCanvasController::setToolOptionWidget(QWidget *widget) {

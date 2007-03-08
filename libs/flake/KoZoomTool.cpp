@@ -22,6 +22,7 @@
 #include "KoZoomTool.h"
 #include "KoZoomStrategy.h"
 #include "KoPointerEvent.h"
+#include "KoCanvasController.h"
 
 //   #include <QMouseEvent>
 //   #include <QPainter>
@@ -40,9 +41,22 @@ void KoZoomTool::paint( QPainter &painter, KoViewConverter &converter) {
         m_currentStrategy->paint( painter, converter);
 }
 
+void KoZoomTool::wheelEvent ( KoPointerEvent * event )
+{
+    if(event->modifiers() & Qt::ControlModifier)
+    {
+        if(event->delta() >0)
+            m_controller->zoomIn(event->point);
+        else
+            m_controller->zoomOut(event->point);
+    }
+    else
+        event->ignore();
+}
+
 void KoZoomTool::mouseReleaseEvent( KoPointerEvent *event ) {
     KoInteractionTool::mouseReleaseEvent(event);
-    emit KoTool::sigDone();
+    //emit KoTool::sigDone();
 }
 
 void KoZoomTool::mousePressEvent( KoPointerEvent *event ) {

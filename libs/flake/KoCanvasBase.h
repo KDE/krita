@@ -148,17 +148,14 @@ public:
     KoShapeController * shapeController() const;
 
     /*
-     * The following 2 methods should be implemented by all canvasses soon so we can work on features
-     * like a zoom tool and a way to make the canvasController implement zoom-by-scrollwheel (and ctrl).
-     * Specifically; the canvasController should implement these:
-     *  void zoomIn(const QPointF &center)
-     *  void zoomOut(const QPointF &center)
-     *  void zoomTo(const QRectF &newSize)
+     * The following 4 methods should be implemented by all canvasses to allow the canvascontroller to
+     * provide the stuff needed for a zoom tool
      *
-     * This will allow a new zoom tool in KofficeUI to do everything it needs.
      */
     virtual void setZoom(double /*zoom*/) { }
     virtual double zoom() const { return 0;}
+    virtual void zoomIn() { }
+    virtual void zoomOut() { }
 
     /**
      * @brief Scrolls the content of the canvas so that the given rect is visible.

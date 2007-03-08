@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,11 +32,11 @@ m_controller(controller)
 }
 
 void KoZoomStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) {
-    Q_UNUSED( modifiers );
 
-    // TODO zoom
-kDebug() << "zoom!\n";
-    // the next line can be removed, or just altered to just update the whole thing.
-    m_canvas->updateCanvas(selectRect());
-    m_controller->zoomIn(selectRect().center());
+    if(selectRect().width() > 5 && selectRect().height() > 5)
+        m_controller->zoomTo(selectRect());
+    else if( modifiers & Qt::ControlModifier)
+        m_controller->zoomOut(selectRect().center());
+    else
+        m_controller->zoomIn(selectRect().center());
 }

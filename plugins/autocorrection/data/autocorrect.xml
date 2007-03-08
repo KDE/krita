@@ -1,0 +1,22 @@
+<!DOCTYPE autocorrection>
+<Word>
+ <items>
+  <item find="(C)" replace="©" />
+  <item find="(R)" replace="®" />
+  <item find="(c)" replace="©" />
+  <item find="(r)" replace="®" />
+  <item find="--" replace="—" />
+ </items>
+ <SuperScript>
+  <superscript find="1st" super="st" />
+  <superscript find="2nd" super="nd" />
+  <superscript find="3rd" super="rd" />
+  <superscript find="othernb" super="th" />
+ </SuperScript>
+ <DoubleQuote>
+  <doublequote begin="«" end="»" />
+ </DoubleQuote>
+ <SimpleQuote>
+  <simplequote begin="'" end="'" />
+ </SimpleQuote>
+</Word>

@@ -272,6 +272,7 @@ void KoToolManager::switchTool(KoTool *tool) {
         disconnect(d->canvasData->activeTool, SIGNAL(sigActivateTemporary(const QString &)),
                 this, SLOT(switchToolTemporaryRequested(const QString &)));
         disconnect(d->canvasData->activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
+        d->canvasData->activeTool->repaintDecorations();
     }
     d->canvasData->activeTool = tool;
     connect(d->canvasData->activeTool, SIGNAL(sigCursorChanged(QCursor)),

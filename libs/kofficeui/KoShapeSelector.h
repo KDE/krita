@@ -92,6 +92,7 @@ private:
             void mouseMoveEvent(QMouseEvent *e);
             void mousePressEvent(QMouseEvent *e);
             void mouseReleaseEvent(QMouseEvent *e);
+            void tabletEvent(QTabletEvent *e);
             void paintEvent(QPaintEvent * e);
             void dragEnterEvent(QDragEnterEvent *e);
             void dropEvent(QDropEvent *e);

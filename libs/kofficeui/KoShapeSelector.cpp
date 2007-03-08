@@ -273,6 +273,22 @@ void KoShapeSelector::Canvas::mousePressEvent(QMouseEvent *event) {
     clickedShape->repaint();
 }
 
+void KoShapeSelector::Canvas::tabletEvent(QTabletEvent *event) {
+    event->ignore();
+    if(event->type() != QEvent::TabletMove)
+        return;
+    KoShape *clickedShape = shapeManager()->selection()->firstSelectedShape();
+    if(clickedShape == 0) {
+        event->accept();
+        return;
+    }
+    QPointF distance = clickedShape->position() - event->pos();
+    if(qAbs(distance.x()) < 15 && qAbs(distance.y()) < 15)
+        event->accept();
+
+    // if not accepted it will fall through and be offered as a mouseMoveEvent
+}
+
 void KoShapeSelector::Canvas::mouseMoveEvent(QMouseEvent *event) {
     KoShape *clickedShape = shapeManager()->selection()->firstSelectedShape();
     if(clickedShape == 0)

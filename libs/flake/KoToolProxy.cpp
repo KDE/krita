@@ -99,9 +99,10 @@ void KoToolProxy::tabletEvent( QTabletEvent *event, const QPointF &point )
     KoPointerEvent ev( event, point );
     switch( event->type() ) {
     case QEvent::TabletPress:
-        d->tabletPressed = true;
         ev.setTabletButton(Qt::LeftButton);
-        if (d->activeTool) d->activeTool->mousePressEvent( &ev );
+        if(! d->tabletPressed && d->activeTool)
+            d->activeTool->mousePressEvent( &ev );
+        d->tabletPressed = true;
         break;
     case QEvent::TabletRelease:
         d->tabletPressed = false;
@@ -123,6 +124,9 @@ void KoToolProxy::mousePressEvent( QMouseEvent *event, const QPointF &point )
 {
     KoInputDevice id;
     KoToolManager::instance()->switchInputDevice(id);
+
+    if(d->tabletPressed) // refuse to send a press unless there was a release first.
+        return;
 
     KoPointerEvent ev( event, point );
     if (d->activeTool) d->activeTool->mousePressEvent( &ev );

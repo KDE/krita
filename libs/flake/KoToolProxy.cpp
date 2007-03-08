@@ -93,7 +93,7 @@ void KoToolProxy::repaintDecorations()
 
 void KoToolProxy::tabletEvent( QTabletEvent *event, const QPointF &point )
 {
-    KoInputDevice id(event->device(), event->pointerType());
+    KoInputDevice id(event->device(), event->pointerType(), event->uniqueId());
     KoToolManager::instance()->switchInputDevice(id);
 
     KoPointerEvent ev( event, point );

@@ -34,13 +34,8 @@ public:
     bool mouse;
 };
 
-KoInputDevice::KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer)
-    : d(new Private(device, pointer, -1, false))
-{
-}
-
-KoInputDevice::KoInputDevice(qint64 uniqueTabletId)
-    : d(new Private(QTabletEvent::NoDevice, QTabletEvent::UnknownPointer, uniqueTabletId, false))
+KoInputDevice::KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer, qint64 uniqueTabletId)
+    : d(new Private(device, pointer, uniqueTabletId, false))
 {
 }
 

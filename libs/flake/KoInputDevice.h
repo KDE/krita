@@ -44,9 +44,9 @@ public:
      * Create a new input device with one of the many types that the tablet can have.
      * @param device the device as found on a QTabletEvent
      * @param pointer the pointer as found on a QTabletEvent
+     * @param uniqueTabletId the uniqueId as found on a QTabletEvent
      */
-    explicit KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer);
-    explicit KoInputDevice(qint64 uniqueTabletId);
+    explicit KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer, qint64 uniqueTabletId = -1);
     /**
      * Constuctor for the mouse as input device.
      */

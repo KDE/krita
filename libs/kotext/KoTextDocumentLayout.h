@@ -89,12 +89,16 @@ public:
      */
     void layout();
 
+    /// stop layouting the text document until manually restarted.
     void interruptLayout();
 
+    /// Add a shape to the list of shapes that the text can run into.
     void addShape(KoShape *shape);
 
+    /// return the list of shapes that will be used to run all the text into.
     virtual QList<KoShape*> shapes() const;
 
+    /// return the current styleManager.  Can be 0 if none set.
     KoStyleManager *styleManager() const;
 
     /**
@@ -131,6 +135,8 @@ public:
          * @return true if the request for continued layout is honored, false otherwise.
          */
         virtual bool setFollowupShape(KoShape *shape) = 0;
+        /// remove layout information from the current layout position to the end of the document.
+        virtual void clearTillEnd() = 0;
 
         /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;
@@ -153,6 +159,7 @@ protected:
     void documentChanged(int position, int charsRemoved, int charsAdded);
 
 private slots:
+    /// make sure we start a layout run
     void relayout();
 
 private:
@@ -163,6 +170,7 @@ private:
     /// reimplemented
     void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
 
+    /// make sure we start a layout run
     virtual void scheduleLayout();
 
 private:

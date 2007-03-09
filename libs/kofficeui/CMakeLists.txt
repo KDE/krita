@@ -30,7 +30,6 @@ set(kofficeui_LIB_SRCS
    #KoPageLayoutSize.cpp 
    KoPartSelectDia.cpp
    KoPartSelectAction.cpp
-   KoPen.cpp
    KoPictureFilePreview.cpp
    KoRuler.cpp
    KoShapeSelector.cpp
@@ -95,7 +94,6 @@ install(
     #KoPageLayoutSize.h
     KoPartSelectAction.h
     KoPartSelectDia.h
-    KoPen.h
     KoPictureFilePreview.h
     KoRuler.h
     KoTabBar.h

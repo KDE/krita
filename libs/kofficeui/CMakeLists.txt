@@ -23,7 +23,6 @@ set(kofficeui_LIB_SRCS
    KoImageResource.cpp
    KoInsertLink.cpp
    KoItemToolTip.cpp
-   KoKoolBar.cpp
    #KoPageLayoutColumns.cpp
    #KoPageLayoutDia.cpp
    #KoPageLayoutHeader.cpp
@@ -87,7 +86,6 @@ install(
     KoImageResource.h
     KoInsertLink.h
     KoItemToolTip.h
-    KoKoolBar.h
     #KoPageLayoutColumns.h
     #KoPageLayoutDia.h
     #KoPageLayoutHeader.h

@@ -2,6 +2,7 @@
  * This file is part of the KDE project
  *
  * Copyright (c) 2005 Boudewijn <boud@valdyas.org>
+ * Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,6 +48,7 @@
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kcombobox.h>
 
 #include <kis_doc.h>
 #include <kis_image.h>
@@ -487,14 +489,23 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
 
     l->add(m_page);
     m_filter->setAutoUpdate(false);
-    m_page->txtSourceLayer->setText( "" );
+
+    // Find all of the layers in the group
+    if(dev->image() ) {
+        KisGroupLayerSP root = dev->image()->rootLayer();
+        for(KisLayerSP layer = root->firstChild(); layer; layer = layer->nextSibling())
+        {
+            m_page->cboxSourceLayer->insertItem(layer->name());
+        }
+    }
+
     connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 KisBumpmapConfiguration * KisBumpmapConfigWidget::config()
 {
     KisBumpmapConfiguration * cfg = new KisBumpmapConfiguration();
-    cfg->bumpmap = m_page->txtSourceLayer->text();
+    cfg->bumpmap = m_page->cboxSourceLayer->currentText();
     cfg->azimuth = m_page->dblAzimuth->value();
     cfg->elevation = m_page->dblElevation->value();
     cfg->depth = m_page->dblDepth->value();
@@ -515,7 +526,8 @@ void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * config)
     KisBumpmapConfiguration * cfg = dynamic_cast<KisBumpmapConfiguration*>(config);
     if (!cfg) return;
 
-    m_page->txtSourceLayer->setText( cfg->bumpmap );
+    // NOTE: maybe we should find the item instead?
+    m_page->cboxSourceLayer->setCurrentText( cfg->bumpmap );
     m_page->dblAzimuth->setValue(cfg->azimuth);
     m_page->dblElevation->setValue(cfg->elevation);
     m_page->dblDepth->setValue(cfg->depth);

@@ -144,7 +144,7 @@ void KoPAView::initActions()
     setShowRulers(true);
 
     m_viewZoomAction = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
-                                        i18n("Zoom"), KIcon("viewmag"), KShortcut(),
+                                        i18n("Zoom"), KIcon("zoom-original"), KShortcut(),
                                         actionCollection(), "view_zoom");
     connect(m_viewZoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
             this, SLOT(viewZoom(KoZoomMode::Mode, int)));

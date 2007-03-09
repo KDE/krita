@@ -59,11 +59,11 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     m_autoupdate = true;
     m_previewIsDisplayed = true;
 
-    btnZoomIn->setIcon(KIcon("viewmag+"));
+    btnZoomIn->setIcon(KIcon("zoom-in"));
     connect(btnZoomIn, SIGNAL(clicked()), this, SLOT(zoomIn()));
-    btnZoomOut->setIcon(KIcon("viewmag-"));
+    btnZoomOut->setIcon(KIcon("zoom-out"));
     connect(btnZoomOut, SIGNAL(clicked()), this, SLOT(zoomOut()));
-    btnUpdate->setIcon(KIcon("reload"));
+    btnUpdate->setIcon(KIcon("view-refresh"));
     connect(btnUpdate, SIGNAL(clicked()), this, SLOT(forceUpdate()));
 
     connect(radioBtnPreview, SIGNAL(toggled(bool)), this, SLOT(setPreviewDisplayed(bool)));

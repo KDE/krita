@@ -155,7 +155,7 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("layer_properties", m_layerProperties );
     connect(m_layerProperties, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
-    m_layerSaveAs  = new KAction(KIcon("filesave"), i18n("Save Layer as Image..."), this);
+    m_layerSaveAs  = new KAction(KIcon("document-save"), i18n("Save Layer as Image..."), this);
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs );
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 

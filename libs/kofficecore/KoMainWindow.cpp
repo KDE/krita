@@ -275,7 +275,7 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
     new KKbdAccessExtensions(this, "mw-panelSizer");
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
-    QAction *closeAllViews  = new KAction(KIcon("fileclose"), i18n("&Close All Views"), this);
+    QAction *closeAllViews  = new KAction(KIcon("window-close"), i18n("&Close All Views"), this);
     actionCollection()->addAction("view_closeallviews", closeAllViews );
     closeAllViews->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
     connect( closeAllViews, SIGNAL(triggered(bool)), this, SLOT(slotCloseAllViews()) );

@@ -101,7 +101,7 @@ Test::Test()
 		m_set->setGroupIcon(group, "appearance");
 	}
 	m_set->addProperty(new Property("Color", palette().color(QPalette::Active, QPalette::Background),"Color"), group);
-	QPixmap pm(DesktopIcon("network"));
+	QPixmap pm(DesktopIcon("network-wired"));
 	m_set->addProperty(p = new Property("Pixmap", pm,"Pixmap"), group);
 	p->setIcon("kpaint");
 	m_set->addProperty(p = new Property("Font", this->font(),"Font"), group);

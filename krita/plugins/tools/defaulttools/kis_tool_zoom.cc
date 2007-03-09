@@ -170,7 +170,7 @@ void KisToolZoom::setup(KActionCollection *collection)
     m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(KIcon("viewmag"),
+        m_action = new KAction(KIcon("zoom-original"),
                                i18n("&Zoom"),
                                collection,
                                objectName());

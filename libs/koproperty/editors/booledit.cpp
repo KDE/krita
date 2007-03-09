@@ -37,7 +37,7 @@ using namespace KoProperty;
 
 BoolEdit::BoolEdit(Property *property, QWidget *parent)
  : Widget(property, parent)
- , m_yesIcon( SmallIcon("button_ok") )
+ , m_yesIcon( SmallIcon("dialog-ok") )
  , m_noIcon( SmallIcon("button_no") )
 {
     m_toggle = new QToolButton(this);
@@ -113,7 +113,7 @@ BoolEdit::setState(bool state)
 {
     if(state)
     {
-        m_toggle->setIcon(QIcon(SmallIcon("button_ok")));
+        m_toggle->setIcon(QIcon(SmallIcon("dialog-ok")));
         m_toggle->setText(i18n("Yes"));
     }
     else
@@ -154,7 +154,7 @@ BoolEdit::setReadOnlyInternal(bool readOnly)
 
 ThreeStateBoolEdit::ThreeStateBoolEdit(Property *property, QWidget *parent)
  : ComboBox(property, parent)
- , m_yesIcon( SmallIcon("button_ok") )
+ , m_yesIcon( SmallIcon("dialog-ok") )
  , m_noIcon( SmallIcon("button_no") )
 {
 	m_edit->addItem( m_yesIcon, i18n("Yes") );

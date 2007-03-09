@@ -165,12 +165,12 @@ void KoStyleDialog::setupWidget(const KoStyleCollection& styleCollection)
 
 
     m_moveUpButton = new QPushButton( frame1 );
-    m_moveUpButton->setIcon( KIcon( "up" ) );
+    m_moveUpButton->setIcon( KIcon( "go-up" ) );
     connect( m_moveUpButton, SIGNAL( clicked() ), this, SLOT( moveUpStyle() ) );
     frame1Layout->addWidget( m_moveUpButton, 1, 1 );
 
     m_moveDownButton = new QPushButton( frame1 );
-    m_moveDownButton->setIcon( KIcon( "down" ) );
+    m_moveDownButton->setIcon( KIcon( "go-down" ) );
     connect( m_moveDownButton, SIGNAL( clicked() ), this, SLOT( moveDownStyle() ) );
     frame1Layout->addWidget( m_moveDownButton, 1, 0 );
 

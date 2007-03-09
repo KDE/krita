@@ -99,7 +99,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
   , d( new KoRecentDocumentsPanePrivate )
 {
   setFocusProxy(m_documentList);
-  KGuiItem openGItem(i18n("Open This Document"), "fileopen");
+  KGuiItem openGItem(i18n("Open This Document"), "document-open");
   m_openButton->setGuiItem(openGItem);
   m_alwaysUseCheckBox->hide();
 

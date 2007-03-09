@@ -61,7 +61,7 @@ KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name) : super(pa
     box->setMargin(0);
     box->setAlignment(Qt::AlignTop);
 
-    QIcon cancelIconSet = KIcon("stop");
+    QIcon cancelIconSet = KIcon("process-stop");
 
     m_cancelButton = new EscapeButton(this, "cancel_button");
     m_cancelButton->setIcon(cancelIconSet);

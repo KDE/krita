@@ -118,9 +118,9 @@ KoScriptingDocker::KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclien
     layout->addWidget(tb);
     tb->setMovable(false);
     //tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    tb->addAction(KIcon("player_play"), i18n("Run Script"), this, SLOT(runScript()) );
-    tb->addAction(KIcon("player_stop"), i18n("Stop Script"), this, SLOT(stopScript()) );
-    tb->addAction(KIcon("player_eject"), i18n("Script Manager..."), this, SLOT(configureScript()) );
+    tb->addAction(KIcon("media-playback-start"), i18n("Run Script"), this, SLOT(runScript()) );
+    tb->addAction(KIcon("media-playback-stop"), i18n("Stop Script"), this, SLOT(stopScript()) );
+    tb->addAction(KIcon("media-eject"), i18n("Script Manager..."), this, SLOT(configureScript()) );
 
     /*
     tb->addSeparator();

@@ -408,7 +408,7 @@ KoContextHelpPopup::~KoContextHelpPopup()
 
 void KoContextHelpPopup::setContextHelp( const QString& title, const QString& text, const QPixmap* icon )
 {
-	m_helpIcon->setPixmap( icon ? *icon : BarIcon( "help" ) );
+	m_helpIcon->setPixmap( icon ? *icon : BarIcon( "help-contents" ) );
 	m_helpTitle->setText( title );
 	m_helpViewer->setText( text );
 } // KoContextHelpPopup::updateHelp
@@ -515,7 +515,7 @@ void KoContextHelpPopup::keyReleaseEvent( QKeyEvent* e )
 } // KoContextHelpPopup::keyPressEvent
 
 KoContextHelpAction::KoContextHelpAction( KActionCollection* parent, QWidget* /*popupParent*/ )
-    : KToggleAction( KIcon(BarIcon("help")), i18n("Context Help"), parent)
+    : KToggleAction( KIcon(BarIcon("help-contents")), i18n("Context Help"), parent)
 {
     Q_ASSERT(parent);
     setShortcut(KShortcut("CTRL+Qt::SHIFT+F1"));
@@ -567,7 +567,7 @@ KoContextHelpWidget::~KoContextHelpWidget()
 
 void KoContextHelpWidget::setContextHelp( const QString& title, const QString& text, const QPixmap* icon )
 {
-	m_helpIcon->setPixmap( icon ? *icon : BarIcon( "help" ) );
+	m_helpIcon->setPixmap( icon ? *icon : BarIcon( "help-contents" ) );
 	m_helpTitle->setText( title );
 	m_helpViewer->setText( text );
 } // KoContextHelpWidget::updateHelp
@@ -598,7 +598,7 @@ KoContextHelpDocker::~KoContextHelpDocker()
 
 void KoContextHelpDocker::setContextHelp( const QString& title, const QString& text, const QPixmap* icon )
 {
-	m_helpIcon->setPixmap( icon ? *icon : BarIcon( "help" ) );
+	m_helpIcon->setPixmap( icon ? *icon : BarIcon( "help-contents" ) );
 	m_helpTitle->setText( title );
 	m_helpViewer->setText( text );
 } // KoContextHelpDocker::updateHelp

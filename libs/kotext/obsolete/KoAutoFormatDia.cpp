@@ -189,7 +189,7 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name,
     setObjectName( name );
     setButtons( Ok | Cancel | User1 );
     setDefaultButton( Ok );
-    setButtonGuiItem( User1, KGuiItem( i18n( "&Reset" ), "undo" ) );
+    setButtonGuiItem( User1, KGuiItem( i18n( "&Reset" ), "edit-undo" ) );
     showButtonSeparator( true );
 
     noSignal=true;

@@ -44,7 +44,7 @@ KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoForma
     setButtons( Ok|Cancel|User1 );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    setButtonGuiItem( User1, KGuiItem( i18n( "&Reset" ), "undo" )  );
+    setButtonGuiItem( User1, KGuiItem( i18n( "&Reset" ), "edit-undo" )  );
 
     KVBox *page = new KVBox();
     setMainWidget(page);

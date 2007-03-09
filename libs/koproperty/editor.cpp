@@ -143,7 +143,7 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	d->undoButton->setFocusPolicy(Qt::NoFocus);
 	setFocusPolicy(Qt::ClickFocus);
 	d->undoButton->setMinimumSize(QSize(5,5)); // allow to resize undoButton even below pixmap size
-	d->undoButton->setIcon(SmallIcon("undo"));
+	d->undoButton->setIcon(SmallIcon("edit-undo"));
 	d->undoButton->setToolTip( i18n("Undo changes"));
 	d->undoButton->hide();
 	connect(d->undoButton, SIGNAL(clicked()), this, SLOT(undo()));

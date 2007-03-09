@@ -87,7 +87,7 @@ public:
             setToolType( dynamicToolType() );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
 
-            setIcon( "viewmag" );
+            setIcon( "zoom-original" );
             setPriority( 0 );
             setShortcut( QKeySequence( Qt:Key_Z ) );
         }

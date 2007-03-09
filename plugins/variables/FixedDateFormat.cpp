@@ -74,7 +74,7 @@ FixedDateFormat::FixedDateFormat(DateVariable *variable)
         widget.custom->setChecked(true);
     }
 
-    widget.formatButton->setIcon(KIcon("add"));
+    widget.formatButton->setIcon(KIcon("list-add"));
 
     connect (widget.custom, SIGNAL(stateChanged(int)), this, SLOT(customClicked(int)));
     connect (widget.formatList, SIGNAL(itemPressed(QListWidgetItem*)), this, SLOT(listClicked(QListWidgetItem*)));

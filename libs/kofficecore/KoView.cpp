@@ -684,7 +684,7 @@ void KoView::slotAutoScroll(  )
 
 void KoView::setupGlobalActions()
 {
-    actionNewView  = new KAction(KIcon("window_new"), i18n("&New View"), this);
+    actionNewView  = new KAction(KIcon("window-new"), i18n("&New View"), this);
     actionCollection()->addAction("view_newview", actionNewView );
   connect( actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()) );
 }

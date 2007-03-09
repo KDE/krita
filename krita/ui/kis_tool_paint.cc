@@ -146,7 +146,7 @@ QWidget * KisToolPaint::createOptionWidget()
     verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     if (!quickHelp().isEmpty()) {
-        QPushButton* push = new QPushButton(KIcon( "help" ), "", optionWidget);
+        QPushButton* push = new QPushButton(KIcon( "help-contents" ), "", optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
 
         QHBoxLayout* hLayout = new QHBoxLayout(optionWidget);

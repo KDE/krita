@@ -117,7 +117,7 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
   connect(d->m_sectionList, SIGNAL(returnPressed(Q3ListViewItem*)),
           this, SLOT(itemClicked(Q3ListViewItem*)));
 
-  KGuiItem openExistingGItem(i18n("Open Existing Document..."), "fileopen");
+  KGuiItem openExistingGItem(i18n("Open Existing Document..."), "document-open");
   d->m_openExistingButton->setGuiItem(openExistingGItem);
   connect(d->m_openExistingButton, SIGNAL(clicked()), this, SLOT(showOpenFileDialog()));
 
@@ -181,7 +181,7 @@ void KoOpenPane::initRecentDocs()
   QString header = i18n("Recent Documents");
   KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(this, d->m_componentData, header);
   connect(recentDocPane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openExistingFile(const KUrl&)));
-  Q3ListViewItem* item = addPane(header, "fileopen", recentDocPane, 0);
+  Q3ListViewItem* item = addPane(header, "document-open", recentDocPane, 0);
   connect(recentDocPane, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
           this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)));
   connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),

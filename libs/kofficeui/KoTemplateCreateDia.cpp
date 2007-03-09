@@ -449,7 +449,7 @@ void KoTemplateCreateDia::slotRemove() {
         }
 
     if(KMessageBox::warningContinueCancel(this, what,
-                                 removed,KGuiItem(i18n("&Delete"),"editdelete"))==KMessageBox::Cancel) {
+                                 removed,KGuiItem(i18n("&Delete"),"edit-delete"))==KMessageBox::Cancel) {
         d->m_name->setFocus();
         return;
     }

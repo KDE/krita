@@ -47,7 +47,7 @@ KoLanguageTab::KoLanguageTab( KSpell2::Loader::Ptr loader, QWidget* parent, cons
     for ( ; itName != langNames.end() && itTag != langTags.end(); ++itName, ++itTag )
     {
         if ( spellCheckLanguages.find( *itTag ) != spellCheckLanguages.end() )
-            languageKComboBox->addItem( SmallIcon( "spellcheck" ), *itName );
+            languageKComboBox->addItem( SmallIcon( "tools-check-spelling" ), *itName );
         else
             languageKComboBox->addItem( *itName );
     }

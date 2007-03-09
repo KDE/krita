@@ -9,7 +9,6 @@ include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} )
 ########### next target ###############
 
 set(kofficeui_LIB_SRCS
-   KoBrush.cpp 
    KoCharSelectDia.cpp
    KoContextHelp.cpp
    KoCsvImportDialog.cpp
@@ -74,7 +73,6 @@ install( FILES zoom-width.png zoom-page.png zoom-pixels.png DESTINATION ${DATA_I
 ########### install files ###############
 install(
     FILES
-    KoBrush.h
     KoCharSelectDia.h
     KoContextHelp.h
     KoDocumentSectionModel.h

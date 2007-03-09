@@ -15,7 +15,6 @@ set(kofficeui_LIB_SRCS
    KoDocumentSectionDelegate.cpp
    KoDocumentSectionView.cpp
    KoDocumentSectionToolTip.cpp
-   KoEditPath.cpp 
    KoGeneralPropertyUi.cpp
    KoGuideLineDia.cpp 
    KoGuides.cpp 
@@ -77,7 +76,6 @@ install(
     KoContextHelp.h
     KoDocumentSectionModel.h
     KoDocumentSectionView.h
-    KoEditPath.h
     KoGeneralPropertyUi.h
     KoGuideLineDia.h
     KoGuides.h

@@ -106,7 +106,7 @@ public:
                 toolsHash.insert(tool->id(), origHash.value(tool->id()));
                 continue;
             }
-            kDebug(30006) << "Creating tool " << tool->id() << ", " << tool->activationShapeId() << endl;
+            kDebug(30006) << "Creating tool " << tool->id() << ". Activated on: " << tool->activationShapeId() << ", prio:" << tool->priority() << endl;
             KoTool *tl = tool->createTool(controller->canvas());
             uniqueToolIds.insert(tl, tool->uniqueId());
             toolsHash.insert(tool->id(), tl);

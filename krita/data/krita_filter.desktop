@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=Krita/Filter
 Comment=Filter plugin for Krita
+Comment[bg]=Приставка за филтриране за Krita
 Comment[ca]=Connector de filtre per a Krita
 Comment[da]=Plugin med filter for Krita
 Comment[de]=Filter-Plugin für Krita

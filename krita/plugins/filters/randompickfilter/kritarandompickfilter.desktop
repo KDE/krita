@@ -1,5 +1,6 @@
 [Desktop Entry]
 Comment=Random pick to an image
+Comment[bg]=Случайно избиране на изображение
 Comment[ca]=Agafa aleatòriament una imatge
 Comment[da]=Udfør tilfældigt valg i et billede
 Comment[de]=Zufallsauswahl zu einem Bild
@@ -29,6 +30,7 @@ Comment[zh_TW]=隨機挑選圖片
 Encoding=UTF-8
 Icon=
 Name=Random pick Filter
+Name[bg]=Филтър за случайно избиране
 Name[ca]=Aplica un filtre aleatòriament
 Name[da]=Tilfældigt udvalgsfilter
 Name[de]=Zufallsauswahlfilter

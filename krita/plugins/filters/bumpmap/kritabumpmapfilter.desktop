@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Bumpmap Filter
+Name[bg]=Филтър Bumpmap
 Name[ca]=Filtre Bumpmap
 Name[cy]=Hidlen chwyddfap
 Name[da]=Bumpkortfilter
@@ -33,6 +34,7 @@ Name[uk]=Рельєф
 Name[x-test]=xxBumpmap Filterxx
 Name[zh_TW]=Bumpmap 過濾器
 Comment=Bumpmap filter
+Comment[bg]=Филтър Bumpmap
 Comment[ca]=Filtre de Bumpmap
 Comment[cy]=Hidlen chwyddfap
 Comment[da]=Bumpkortfilter

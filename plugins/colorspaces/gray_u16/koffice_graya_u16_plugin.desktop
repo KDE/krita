@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Grayscale Color Model with Alpha Channel (16-bit integer)
 Name[x-test]=xxGrayscale Color Model with Alpha Channel (16-bit integer)xx
 Comment=Color model for 16-bit integer per channel Grayscale images
+Comment[bg]=Цветови модел за 16 битови изображения в сива гама
 Comment[ca]=Model de color d'enters de 16 bits per a canal d'imatges d'escala de grisos
 Comment[cy]=Model lliw ar gyfer delweddau Graddlwyd â chyfanrif 16-did/sianel
 Comment[da]=Farvemodel for 16-bit heltal pr kanal Gråskala-billeder

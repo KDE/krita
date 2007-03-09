@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Invert Filter
+Name[bg]=Инвертиращ филтър
 Name[ca]=Inverteix filtre
 Name[cy]=Hidlen Wrthdroi
 Name[da]=Inverteringsfilter
@@ -33,6 +34,7 @@ Name[uk]=Фільтр інвертування
 Name[x-test]=xxInvert Filterxx
 Name[zh_TW]=倒轉過濾器
 Comment=Invert the colors of an image
+Comment[bg]=Инвертиращ филтър
 Comment[ca]=Inverteix els colors d'una imatge
 Comment[cy]=Gwrthdroi lliwiau delwedd
 Comment[da]=Invertér farverne i et billede

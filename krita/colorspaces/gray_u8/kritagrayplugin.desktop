@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Grayscale Color Model
+Name[bg]=Цветови модел със степени на сивото
 Name[ca]=Model de color d'escala de grisos
 Name[cy]=Model Lliw Graddlwyd
 Name[da]=Farvemodel med gråskala
@@ -43,6 +44,7 @@ Name[uz]=Кул ранг усули
 Name[x-test]=xxGrayscale Color Modelxx
 Name[zh_TW]=灰階色彩模型
 Comment=Color model for 8-bit grayscale images
+Comment[bg]=Цветови модел за 8 битови сиви изображения
 Comment[ca]=Model de color d'escala de grisos de 8 bits
 Comment[cy]=Model lliw ar gyfer delweddau graddlwyd 8-did
 Comment[da]=Farvemodel for 8-bit gråskala-billeder

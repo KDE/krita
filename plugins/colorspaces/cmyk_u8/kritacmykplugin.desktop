@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=CMYK Color Model
+Name[bg]=Цветови модел CMYK
 Name[br]=Gobari al livioù CMYK
 Name[ca]=Model de color CMYK
 Name[cy]=Model Lliw CMYK
@@ -43,6 +44,7 @@ Name[uz]=CMYK ранг усули
 Name[x-test]=xxCMYK Color Modelxx
 Name[zh_TW]=CMYK 色彩模型
 Comment=Color model for 8-bit/channel CMYK images
+Comment[bg]=Цветови модел за 8 битови изображения CMYK
 Comment[ca]=Model de color d'enters de 8 bits per a canal d'imatges CMYK
 Comment[cy]=Model lliw ar gyfer delweddau CMYK 8-did/sianel
 Comment[da]=Farvemodel for 8-bit/kanal CMYK-billeder

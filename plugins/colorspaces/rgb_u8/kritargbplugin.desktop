@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model
+Name[bg]=Цветови модел RGB
 Name[br]=Gobari al livioù RGB
 Name[ca]=Model de color RGB
 Name[cy]=Model Lliw RGB
@@ -44,6 +45,7 @@ Name[uz]=RGB ранг усули
 Name[x-test]=xxRGB Color Modelxx
 Name[zh_TW]=RGB 色彩模型
 Comment=Color model for 8-bit/channel RGB images
+Comment[bg]=Цветови модел за 8 битови изображения RGB
 Comment[ca]=Model de color per a 8 bits/canal d'imatges RGB
 Comment[cy]=Model lliw ar gyfer delweddau RGB 8-did/sianel
 Comment[da]=Farvemodel for 8-bit/kanal RGB-billeder

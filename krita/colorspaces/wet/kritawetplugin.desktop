@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Watercolor Paint Plugin
+Name[bg]=Приставка акварелни бои
 Name[ca]=Connector de pintura aquarel·la
 Name[cy]=Ategyn Paent Dyfrlliw
 Name[da]=Plugin for vandfarvemaling
@@ -38,6 +39,7 @@ Name[uk]=Втулок малювання акварельними фарбами
 Name[x-test]=xxWatercolor Paint Pluginxx
 Name[zh_TW]=水色繪畫外掛程式
 Comment=Color model and tools for painting with simulated watercolors
+Comment[bg]=Цветови модел и инструменти за рисуване със симулирани акварелни бои
 Comment[ca]=Model de color i eines per a pintar amb aquarel·les simulades
 Comment[cy]=Model lliw ac offer ar gyfer paentio efo dyfrliwiau wedi'u hefelychu
 Comment[da]=Farvemodel og værktøjer til at male med simulerede vandfarver

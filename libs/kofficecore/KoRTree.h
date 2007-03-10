@@ -120,6 +120,7 @@ public:
     void clear() {
         delete m_root;
         m_root = createLeafNode( m_capacity + 1, 0, 0 );
+        m_leafMap.clear();
     }
 
 #ifdef KOFFICE_RTREE_DEBUG

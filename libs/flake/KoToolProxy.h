@@ -51,8 +51,9 @@ public:
     /**
      * Constructor
      * @param canvas Each canvas has 1 toolProxy. Pass the parent here.
+     * @param parent a parent QObject for memory management purposes.
      */
-    explicit KoToolProxy(KoCanvasBase *canvas);
+    explicit KoToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
     ~KoToolProxy();
 
     /// Forwarded to the current KoTool

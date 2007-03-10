@@ -113,8 +113,9 @@ public:
     KoCanvasController *controller;
 };
 
-KoToolProxy::KoToolProxy(KoCanvasBase *canvas)
-    : d(new Private())
+KoToolProxy::KoToolProxy(KoCanvasBase *canvas, QObject *parent)
+    : QObject(parent),
+    d(new Private())
 {
     KoToolManager::instance()->registerToolProxy(this, canvas);
 

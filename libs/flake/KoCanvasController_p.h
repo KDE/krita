@@ -34,6 +34,7 @@ public:
     ~Viewport() {};
 
     void setCanvas( QWidget *canvas );
+    QWidget *canvas() { return m_canvas; }
     void setDocumentSize( QSize size );
 
 public slots:

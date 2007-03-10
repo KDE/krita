@@ -183,10 +183,12 @@ int KoCanvasController::canvasOffsetY() const {
 
 void KoCanvasController::updateCanvasOffsetX() {
     emit canvasOffsetXChanged(canvasOffsetX());
+    m_d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
 }
 
 void KoCanvasController::updateCanvasOffsetY() {
     emit canvasOffsetYChanged(canvasOffsetY());
+    m_d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
 }
 
 

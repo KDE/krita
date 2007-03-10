@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +25,7 @@
 #include <kmessagebox.h>
 #include <kguiitem.h>
 
+#include <kis_cursor.h>
 #include "kaction.h"
 
 #include "kis_part_layer.h"
@@ -396,19 +398,12 @@ void KisFilterManager::slotConfigChanged()
 
 void KisFilterManager::refreshPreview( )
 {
-    if( m_lastDialog == 0 )
-        return;
-
-    KisPaintDeviceSP dev = m_lastDialog->previewWidget()->getDevice();
-    if (!dev) return;
+    if( m_lastDialog == 0 ) return;
 
     KisFilterConfiguration* config = m_lastFilter->configuration(m_lastWidget);
 
-    QRect rect = dev->extent();
-    KisTransaction cmd("Temporary transaction", dev);
-    m_lastFilter->process(dev, dev, config, rect);
-    m_lastDialog->previewWidget()->slotUpdate();
-    cmd.unexecute();
+    // The preview widget is in charge of running the filter so it can optimize the performance
+    m_lastDialog->previewWidget()->runFilter(m_lastFilter, config);
 }
 
 

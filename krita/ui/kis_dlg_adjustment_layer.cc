@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -109,6 +110,8 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     m_currentConfigWidget = 0;
 
     enableButtonOK(0);
+
+    connect(&m_delayer, SIGNAL(timeout()), this, SLOT(refreshPreview()));
 }
 
 void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
@@ -134,7 +137,8 @@ void KisDlgAdjustmentLayer::slotConfigChanged()
 {
     if(m_preview->getAutoUpdate())
     {
-        refreshPreview();
+        // refreshPreview();
+        m_delayer.start(1000, true);
     } else {
         m_preview->needUpdate();
     }
@@ -142,15 +146,9 @@ void KisDlgAdjustmentLayer::slotConfigChanged()
 
 void KisDlgAdjustmentLayer::refreshPreview()
 {
-    KisPaintDeviceSP layer =  m_preview->getDevice();
-
-    KisTransaction cmd("Temporary transaction", layer.data());
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
 
-    QRect rect = layer->extent();
-    m_currentFilter->process(layer.data(), layer.data(), config, rect);
-    m_preview->slotUpdate();
-    cmd.unexecute();
+    m_preview->runFilter(m_currentFilter, config);
 }
 
 void KisDlgAdjustmentLayer::selectionHasChanged ( QIconViewItem * item )

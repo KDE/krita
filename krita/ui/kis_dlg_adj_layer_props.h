@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,6 +20,8 @@
 #define KIS_DLG_ADJ_LAYER_PROPS_H
 
 #include <kdialogbase.h>
+
+#include <qtimer.h>
 
 class KisFilter;
 class QIconViewItem;
@@ -74,6 +77,8 @@ private:
     KisFilterConfiguration * m_currentConfiguration;
     KisAdjustmentLayer * m_layer;
     KLineEdit * m_layerName;
+
+    QTimer m_delayer;
 };
 
 #endif // KIS_DLG_ADJ_LAYER_PROPS_H

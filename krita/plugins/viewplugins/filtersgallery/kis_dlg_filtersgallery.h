@@ -2,6 +2,7 @@
  * This file is part of Krita
  *
  * Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +23,7 @@
 #define KISDLGFILTERSPREVIEW_H
 
 #include <kdialogbase.h>
+#include <qtimer.h>
 
 class KisView;
 class KisFilter;
@@ -58,6 +60,7 @@ class KisDlgFiltersGallery : public KDialogBase
         QWidget* m_currentConfigWidget;
         KisFilter* m_currentFilter;
         QLabel* m_labelNoCW;
+        QTimer m_delayer;
 };
 
 }

@@ -4,6 +4,7 @@
  *  Copyright (c) 2001 John Califf  <jcaliff@compuzone.net>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
  *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +32,11 @@
 
 class QWidget;
 class KisProfile;
+class KisFilter;
+class KisFilterConfiguration;
+class QTimer;
+class KisLabelProgress;
+
 /**
  * A widget that can be used by plugins to show a preview of the effect of the
  * plugin to the user. This is a convenience class thand handily packs a source and a
@@ -46,24 +52,20 @@ class KisPreviewWidget : public PreviewWidgetBase
 public:
     /** Constructs the widget */
     KisPreviewWidget( QWidget* parent = 0, const char* name = 0 );
-
-    /** @return the scaled down copy of the layer, so the dialog can apply its effect on it. */
-    KisPaintDeviceSP getDevice();
+    virtual ~KisPreviewWidget();
 
     /** returns if the preview is automatically updated */
     bool getAutoUpdate() const;
 
     void wheelEvent(QWheelEvent * e);
-    
+
+    /** This gives control to the KisPreviewFilter of how to run the filter */
+    void runFilter(KisFilter * filter, KisFilterConfiguration * config);
+
 public slots:
 
     /** Sets the preview to use the layer specified as argument */
     void slotSetDevice(KisPaintDeviceSP dev);
-
-    /**
-     * Call this when the effect has finished updating the layer. Makes the preview
-     * repaint itself. */
-    void slotUpdate();
 
     /** Enables or disables the automatically updating of the preview */
     void slotSetAutoUpdate(bool set);
@@ -80,26 +82,48 @@ signals:
 
 private slots:
 
+    /**
+     * Call this when the effect has finished updating the layer. Makes the preview
+     * repaint itself. */
+    void slotUpdate();
+
     void zoomIn();
     void zoomOut();
     void zoomOneToOne();
 
     void forceUpdate();
-    
+
+    // void cancelFilterOperation();
+    void filterNextBlock();
+
 private:
 
-    bool zoomChanged();
-    
-    bool m_autoupdate, m_previewIsDisplayed;
+    void updateInternal();
 
-    QImage m_scaledOriginal;
-    QImage m_scaledPreview;
-    KisPaintDeviceSP m_previewDevice;
-    
-    double m_zoom;
-    KisProfile * m_profile;
+    void zoomChanged(const double zoom);
 
-    KisPaintDeviceSP m_origDevice;
+    bool m_autoupdate; /// Flag indicating that the widget should auto update whenever a setting is changed
+    bool m_previewIsDisplayed; /// Flag indicating whether the filtered or original image is displayed
+
+    QImage m_scaledOriginal; /// QImage copy of the original image
+    bool m_dirtyOriginal; /// flag indicating that the original image is dirty
+    KisPaintDeviceSP m_origDevice; /// Pointer to the original image
+    
+    QImage m_scaledPreview; /// QImage copy of the filtered image
+    bool m_dirtyPreview; /// flag indicating that the preview image is dirty
+    KisPaintDeviceSP m_previewDevice; /// Pointer to the preview image
+    
+    double m_zoom; /// Zoom amount
+    KisProfile * m_profile; /// the color profile to use when converting to QImage
+
+    QTimer* m_filterTimer; /// Timer used to run the filtering operation.
+    int m_filterX, m_filterY; /// Coordinates of the current filtering operation
+    // NOTE: ADD METHOD to cancel filtering operation!!
+    bool m_runFilter; /// Flag indicating that its ok to continue filtering
+    KisFilter* m_filter; // filter to use in operation
+    KisFilterConfiguration* m_filterConfig; // filter configuration, used when running with jobs
+
+    KisLabelProgress *m_progress; // Progress bar of the preview.
 };
 
 #endif

@@ -2,6 +2,7 @@
  * This file is part of Krita
  *
  * Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +39,7 @@ class KisBlurFilter : public KisFilter
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
         virtual bool supportsAdjustmentLayers() { return false; }
+        virtual bool supportsThreading() { return false; }
         virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; };
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);

@@ -2,6 +2,7 @@
  * This file is part of Krita
  *
  * Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -68,6 +69,8 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     m_labelNoCW = new QLabel(i18n("No configuration options are available for this filter."), m_widget->configWidgetHolder);
     m_widget->configWidgetHolder->layout()->add(m_labelNoCW);
     m_labelNoCW->hide();
+
+    connect(&m_delayer, SIGNAL(timeout()), this, SLOT(refreshPreview()));
 }
 
 KisDlgFiltersGallery::~KisDlgFiltersGallery()
@@ -109,7 +112,8 @@ void KisDlgFiltersGallery::slotConfigChanged()
 {
     if(m_widget->previewWidget->getAutoUpdate())
     {
-        refreshPreview();
+        // refreshPreview();
+        m_delayer.start(1000, true);
     } else {
         m_widget->previewWidget->needUpdate();
     }
@@ -118,19 +122,11 @@ void KisDlgFiltersGallery::slotConfigChanged()
 
 void KisDlgFiltersGallery::refreshPreview( )
 {
-    if(!m_currentFilter)
-        return;
+    if(!m_currentFilter) return;
 
-    KisPaintDeviceSP layer =  m_widget->previewWidget->getDevice();
-
-    KisTransaction cmd("Temporary transaction", layer.data());
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
 
-    QRect rect = layer->exactBounds();
-    m_currentFilter->process(layer.data(), layer.data(), config, rect);
-    m_widget->previewWidget->slotUpdate();
-    cmd.unexecute();
-
+    m_widget->previewWidget->runFilter(m_currentFilter, config);
 }
 
 }

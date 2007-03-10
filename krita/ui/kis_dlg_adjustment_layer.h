@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,6 +20,7 @@
 #define KISDLGAdjustMENTLAYER_H
 
 #include <kdialogbase.h>
+#include <qtimer.h>
 
 class KisFilter;
 class QIconViewItem;
@@ -79,6 +81,7 @@ private:
     QLabel* m_labelNoConfigWidget;
     bool m_customName;
     bool m_freezeName;
+    QTimer m_delayer;
 };
 
 #endif

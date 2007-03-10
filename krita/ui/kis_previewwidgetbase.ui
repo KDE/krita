@@ -26,14 +26,17 @@
             <height>0</height>
         </size>
     </property>
-    <grid>
+    <property name="caption">
+        <string>PreviewWidgetBase</string>
+    </property>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
+        <widget class="QGroupBox">
             <property name="name">
                 <cstring>m_groupBox</cstring>
             </property>
@@ -71,9 +74,9 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QLayoutWidget" row="1" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout10</cstring>
+                <cstring>layout4</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -210,6 +213,17 @@
                         </widget>
                     </vbox>
                 </widget>
+                <widget class="QFrame">
+                    <property name="name">
+                        <cstring>frmProgress</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>spacer1</cstring>
@@ -222,14 +236,14 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>16</width>
+                            <width>70</width>
                             <height>20</height>
                         </size>
                     </property>
                 </spacer>
             </hbox>
         </widget>
-    </grid>
+    </vbox>
 </widget>
 <customwidgets>
     <customwidget>

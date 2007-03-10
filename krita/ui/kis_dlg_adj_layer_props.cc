@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -123,6 +124,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     refreshPreview();
     enableButtonOK( !m_layerName->text().isEmpty() );
 
+    connect(&m_delayer, SIGNAL(timeout()), this, SLOT(refreshPreview()));
 }
 
 void KisDlgAdjLayerProps::slotNameChanged( const QString & text )
@@ -144,7 +146,8 @@ void KisDlgAdjLayerProps::slotConfigChanged()
 {
     if(m_preview->getAutoUpdate())
     {
-        refreshPreview();
+        // refreshPreview();
+        m_delayer.start(1000, true);
     } else {
         m_preview->needUpdate();
     }
@@ -157,22 +160,12 @@ void KisDlgAdjLayerProps::refreshPreview()
         return;
     }
 
-    KisPaintDeviceSP layer =  m_preview->getDevice();
-
-    if (!layer) {
-        return;
-    }
-
     if (!m_currentFilter) {
         return;
     }
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
 
-    QRect rect = layer->extent();
-    KisTransaction cmd("Temporary transaction", layer.data());
-    m_currentFilter->process(layer.data(), layer.data(), config, rect);
-    m_preview->slotUpdate();
-    cmd.unexecute();
+    m_preview->runFilter(m_currentFilter, config);
 }
 
 #include "kis_dlg_adj_layer_props.moc"

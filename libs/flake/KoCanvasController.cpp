@@ -220,12 +220,16 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
         return; // its visible. Nothing to do.
 
     int horizontalMove = 0;
-    if(currentVisible.x() > viewRect.x())               // move left
-        horizontalMove = qMax(0, currentVisible.x() - currentVisible.width() / 5) - viewRect.x();
+    if(currentVisible.width() <= viewRect.width())      // center view
+        horizontalMove = viewRect.center().x() - currentVisible.center().x();
+    else if(currentVisible.x() > viewRect.x())          // move left
+        horizontalMove = viewRect.x() - currentVisible.x() - currentVisible.width() / 5;
     else if(currentVisible.right() < viewRect.right())  // move right
         horizontalMove = viewRect.right() - qMax(0, currentVisible.right() - currentVisible.width() / 5);
 
     int verticalMove = 0;
+    if(currentVisible.width() <= viewRect.width())       // center view
+        verticalMove = viewRect.center().y() - currentVisible.center().y();
     if(currentVisible.y() > viewRect.y())               // move up
         verticalMove = qMax(0, currentVisible.y() - currentVisible.height() / 5) - viewRect.y();
     else if(currentVisible.bottom() < viewRect.bottom()) // move down

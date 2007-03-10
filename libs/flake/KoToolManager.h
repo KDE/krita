@@ -100,8 +100,8 @@ public:
     static KoToolManager* instance();
     ~KoToolManager();
 
-    // TODO let creating a toolProxy implicitly register
-    KoToolProxy *createToolProxy(KoCanvasBase *parentCanvas);
+    /// You can just create a toolProxy with new, no need to use this method.
+    KoToolProxy *createToolProxy(KoCanvasBase *parentCanvas) KDE_DEPRECATED;
 
     /**
      * Register actions for switching to tools at the actionCollection parameter.
@@ -201,6 +201,8 @@ protected:
      * This will cause the tool for that device to be selected.
      */
     void switchInputDevice(const KoInputDevice &device);
+
+    void registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas);
 
 private:
 

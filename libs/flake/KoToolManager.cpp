@@ -354,6 +354,10 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
     canvasses.append(cd);
     d->canvasses[controller] = canvasses;
 
+    KoToolProxy *tp = d->proxies[controller->canvas()];
+    if(tp)
+        tp->setCanvasController(controller);
+
     if (cd->activeTool == 0)
         toolActivated(d->defaultTool);
 
@@ -531,6 +535,17 @@ void KoToolManager::switchInputDevice(const KoInputDevice &device) {
     switchToolRequested(oldTool);
     emit inputDeviceChanged(device);
 }
+
+void KoToolManager::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas) {
+    d->proxies.insert(canvas, proxy);
+    foreach(KoCanvasController *controller, d->canvasses.keys()) {
+        if(controller->canvas() == canvas) {
+            proxy->setCanvasController(controller);
+            break;
+        }
+    }
+}
+
 
 //static
 KoToolManager* KoToolManager::s_instance = 0;

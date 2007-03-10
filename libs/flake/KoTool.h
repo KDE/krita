@@ -177,6 +177,7 @@ public:
      */
     QString toolId() const;
 
+    /// return the last emitted cursor
     QCursor cursor() const;
 
 public slots:
@@ -273,6 +274,7 @@ protected:
     void addAction(const QString &name, QAction *action);
 
 protected:
+    friend class KoToolProxy;
     KoCanvasBase * const m_canvas; ///< the canvas interface this tool will work for.
 
 private:

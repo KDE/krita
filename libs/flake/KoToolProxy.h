@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,6 +34,7 @@ class QTabletEvent;
 class KoToolSelection;
 class KoTool;
 class KoCanvasBase;
+class KoCanvasController;
 
 /**
  * Simple proxy interface that provides a point d'appui for canvas
@@ -44,8 +45,8 @@ class KoCanvasBase;
  * The implementator of KoToolProxy should be solely responsible
  * for knowing which tool is currently in the user's hands.
  */
-class FLAKE_EXPORT KoToolProxy {
-
+class FLAKE_EXPORT KoToolProxy : public QObject {
+    Q_OBJECT
 public:
     /**
      * Constructor
@@ -84,7 +85,13 @@ public:
      */
     KoToolSelection* selection();
 
+protected:
+    friend class KoToolManager;
+    void setCanvasController(KoCanvasController *controller);
+
 private:
+    Q_PRIVATE_SLOT(d, void timeout())
+
     class Private;
     Private * const d;
 };

@@ -556,7 +556,7 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
             // set the return value
             if(hasreturnvalue) {
-                MetaType* returntype = PythonMetaTypeFactory::create( metamethod.typeName() );
+                MetaType* returntype = PythonMetaTypeFactory::create( metamethod.typeName(), Py::Object(), false /*owner*/ );
                 variantargs[0] = returntype;
                 voidstarargs[0] = returntype->toVoidStar();
                 #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
@@ -572,7 +572,7 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
             int idx = 1;
             try {
                 for(; idx <= typelistcount; ++idx) {
-                    variantargs[idx] = PythonMetaTypeFactory::create(typelist[idx - 1].constData(), argstuple[idx - 1]);
+                    variantargs[idx] = PythonMetaTypeFactory::create( typelist[idx-1].constData(), argstuple[idx - 1], false /*owner*/ );
                     voidstarargs[idx] = variantargs[idx]->toVoidStar();
                 }
             }

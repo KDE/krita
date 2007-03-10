@@ -95,7 +95,9 @@ VALUE RubyType<QVariant>::toVALUE(const QVariant& v)
                 #endif
                 QWidget* widget = qvariant_cast< QWidget* >(v);
                 if(! widget) {
-                    krosswarning( QString("RubyType<QVariant>::toVALUE To QWidget casted '%1' is NULL").arg(v.typeName()) );
+                    #ifdef KROSS_RUBY_VARIANT_DEBUG
+                        krosswarning( QString("RubyType<QVariant>::toVALUE To QWidget casted '%1' is NULL").arg(v.typeName()) );
+                    #endif
                     return 0;
                 }
                 return RubyExtension::toVALUE( new RubyExtension(widget) );
@@ -107,7 +109,9 @@ VALUE RubyType<QVariant>::toVALUE(const QVariant& v)
                 #endif
                 QObject* obj = qvariant_cast< QObject* >(v);
                 if(! obj) {
-                    krosswarning( QString("RubyType<QVariant>::toVALUE To QObject casted '%1' is NULL").arg(v.typeName()) );
+                    #ifdef KROSS_RUBY_VARIANT_DEBUG
+                        krosswarning( QString("RubyType<QVariant>::toVALUE To QObject casted '%1' is NULL").arg(v.typeName()) );
+                    #endif
                     return 0;
                 }
                 return RubyExtension::toVALUE( new RubyExtension(obj) );
@@ -116,8 +120,9 @@ VALUE RubyType<QVariant>::toVALUE(const QVariant& v)
             //QObject* obj = (*reinterpret_cast< QObject*(*)>( variantargs[0]->toVoidStar() ));
             //PyObject* qobjectptr = PyLong_FromVoidPtr( (void*) variantargs[0]->toVoidStar() );
 
-            //if(v.type() == QVariant::Invalid) return Py::None();
-            krosswarning( QString("RubyType<QVariant>::toVALUE Not possible to convert the QVariant '%1' with type '%2' (%3) to a VALUE.").arg(v.toString()).arg(v.typeName()).arg(v.type()) );
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
+                krosswarning( QString("RubyType<QVariant>::toVALUE Not possible to convert the QVariant '%1' with type '%2' (%3) to a VALUE.").arg(v.toString()).arg(v.typeName()).arg(v.type()) );
+            #endif
             //throw Py::TypeError( QString("Variant of type %1 can not be casted to a python object.").arg(v.typeName()).toLatin1().constData() );
             return 0;
         }

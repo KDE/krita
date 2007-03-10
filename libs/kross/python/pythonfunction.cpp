@@ -23,6 +23,7 @@
 #include "pythonfunction.h"
 #include "pythonvariant.h"
 #include "pythoninterpreter.h"
+#include "pythonextension.h"
 #include <kross/core/metatype.h>
 
 #include <QByteArray>
@@ -121,9 +122,9 @@ int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         switch(_id) {
             case 0: {
                 // convert the arguments
-                QVariantList args;
                 QMetaMethod method = metaObject()->method( metaObject()->indexOfMethod(d->signature) );
                 QList<QByteArray> params = method.parameterTypes();
+                Py::Tuple args( params.size() );
                 int idx = 1;
                 foreach(QByteArray param, params) {
                     int tp = QVariant::nameToType( param.constData() );
@@ -137,18 +138,14 @@ int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
                             switch( tp ) {
                                 case QMetaType::QObjectStar: {
                                     QObject* obj = (*reinterpret_cast< QObject*(*)>( _a[idx] ));
-                                    QVariant v;
-                                    v.setValue( obj );
-                                    args.append(v);
+                                    args[idx-1] = Py::asObject(new PythonExtension(obj));
                                 } break;
                                 case QMetaType::QWidgetStar: {
                                     QWidget* obj = (*reinterpret_cast< QWidget*(*)>( _a[idx] ));
-                                    QVariant v;
-                                    v.setValue( obj );
-                                    args.append(v);
+                                    args[idx-1] = Py::asObject(new PythonExtension(obj));
                                 } break;
                                 default: {
-                                    args.append( QVariant() );
+                                    args[idx-1] = Py::None();
                                 } break;
                             }
                         } break;
@@ -157,7 +154,7 @@ int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
                             #ifdef KROSS_PYTHON_FUNCTION_DEBUG
                                 krossdebug( QString("PythonFunction::qt_metacall argument param=%1 typeId=%2").arg(param.constData()).arg(tp) );
                             #endif
-                            args.append(v);
+                            args[idx-1] = PythonType<QVariant>::toPyObject(v);
                         } break;
                     }
                     ++idx;
@@ -166,7 +163,7 @@ int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
                 Py::Object result;
                 try {
                     // call the python function
-                    result = d->callable.apply( PythonType<QVariantList,Py::Tuple>::toPyObject(args) );
+                    result = d->callable.apply(args);
                 }
                 catch(Py::Exception& e) {
                     QStringList trace;

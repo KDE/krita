@@ -261,7 +261,7 @@ QColor PythonType<QColor>::toVariant(const Py::Object& obj)
     return QColor();
 }
 
-MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& object)
+MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& object, bool owner)
 {
     int typeId = QVariant::nameToType(typeName);
 
@@ -336,7 +336,7 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
                 Py::ExtensionObject<PythonExtension> extobj(object);
                 PythonExtension* extension = extobj.extensionObject();
                 Q_ASSERT( extension->object() );
-                return new MetaTypeVoidStar( typeId, extension->object(), false /*owner*/ );
+                return new MetaTypeVoidStar( typeId, extension->object(), owner );
             }
 
             /*
@@ -354,7 +354,7 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
                     krossdebug( QString("PythonMetaTypeFactory::create Py::Object isNone. Create empty type '%1'").arg(metaid) );
                 #endif
                 void* ptr = QMetaType::construct(metaid, 0);
-                return new MetaTypeVoidStar( metaid, ptr, false /*owner*/ );
+                return new MetaTypeVoidStar( metaid, ptr, owner );
             }
 
             //QVariant v = PythonType<QVariant>::toVariant(object);

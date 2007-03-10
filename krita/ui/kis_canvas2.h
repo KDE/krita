@@ -151,6 +151,9 @@ private:
 
     KisCanvas2(const KisCanvas2&);
 
+    void createCanvas();
+    void createQPainterCanvas();
+
 private:
 
     class KisCanvas2Private;

@@ -43,7 +43,7 @@ public:
      */
     virtual void preScale() {};
 
-    virtual void preScale( const QRect & rc ) {};
+    virtual void preScale( const QRect & rc ) { Q_UNUSED( rc ); }
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

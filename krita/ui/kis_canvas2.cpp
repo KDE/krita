@@ -102,32 +102,42 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
 {
     m_d = new KisCanvas2Private(this, viewConverter, view);
     resetMonitorProfile();
+    createCanvas();
+    connect( view->canvasController(), SIGNAL( moveDocumentOffset( const QPoint& ) ),
+             this, SLOT( documentOffsetMoved( const QPoint& ) ) );
+}
 
+void KisCanvas2::createQPainterCanvas()
+{
+    if ( m_d->openGLImageContext ) delete m_d->openGLImageContext;
+    m_d->openGLImageContext = 0;
+    setCanvasWidget( new KisQPainterCanvas( this, m_d->view ) );
+}
+
+void KisCanvas2::createCanvas()
+{
     KisConfig cfg;
     if ( cfg.useOpenGL() ) {
 #ifdef HAVE_OPENGL
         if ( !QGLFormat::hasOpenGL() ) {
             kWarning() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
-            setCanvasWidget( new KisQPainterCanvas( this, view ) );
+            createQPainterCanvas();
         }
         else {
             // XXX: The image isn't done loading here!
-            m_d->openGLImageContext = KisOpenGLImageContext::getImageContext(view->image(), m_d->monitorProfile);
-            setCanvasWidget( new KisOpenGLCanvas2( this, view, m_d->openGLImageContext ) );
+            if ( m_d->openGLImageContext ) delete m_d->openGLImageContext;
+            m_d->openGLImageContext = KisOpenGLImageContext::getImageContext(m_d->view->image(), m_d->monitorProfile);
+            setCanvasWidget( new KisOpenGLCanvas2( this, m_d->view, m_d->openGLImageContext ) );
             m_d->currentCanvasIsOpenGL = true;
         }
 #else
         kWarning() << "OpenGL requested while its not available, starting qpainter canvas";
-        setCanvasWidget( new KisQPainterCanvas( this, view ) );
+        createQPainterCanvas();
 #endif
     }
     else {
-        setCanvasWidget( new KisQPainterCanvas( this, view ) );
+        createQPainterCanvas();
     }
-
-    connect( view->canvasController(), SIGNAL( moveDocumentOffset( const QPoint& ) ),
-             this, SLOT( documentOffsetMoved( const QPoint& ) ) );
-
 
 }
 
@@ -185,7 +195,7 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     // First convert from document coordinated to widget coordinates
     QRectF viewRect  = m_d->viewConverter->documentToView(rc);
     viewRect.adjust(-5, -5, 5, 5); // floor, ceil?
-    m_d->canvasWidget->widget()->update(); // toAlignedRect(viewRect) );
+    m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
 }
 
 
@@ -220,7 +230,7 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
         QRectF viewRect = m_d->viewConverter->documentToView(docRect);
         viewRect.adjust( -5, -5, 5, 5 );
         m_d->canvasWidget->preScale( toAlignedRect( viewRect ) );
-        m_d->canvasWidget->widget()->update();// toAlignedRect(viewRect) );
+        m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
 #ifdef HAVE_OPENGL
     }
 #endif
@@ -323,35 +333,24 @@ void KisCanvas2::resetCanvas()
 {
     resetMonitorProfile();
 
-#if 0 // HAVE_OPENGL
+#if HAVE_OPENGL
     KisConfig cfg;
 
     bool canvasWasOpenGL = m_d->canvasWidget->widget()->inherits("KisOpenGLCanvas2");
     if (cfg.useOpenGL() != m_d->currentCanvasIsOpenGL) {
 
-        m_d->view->disconnectCurrentImg(); // Calls the local
+        m_d->view->disconnectCurrentImage(); // Calls the local
                                            // disConnectCurrentImg, too.
 
-        //XXX: Need to notify other views that this global setting has changed.
-        if (cfg.useOpenGL()) {
-            m_d->openGLImageContext = KisOpenGLImageContext::getImageContext(image(), m_d->monitorProfile);
-            //m_d->canvas->createOpenGLCanvas(m_d->openGLImageContext->sharedContextWidget());
-        } else
-        {
-            m_d->openGLImageContext = 0;
-            //m_d->canvas->createQPaintDeviceCanvas();
-        }
-
-        connectCurrentImg();
-
-        resizeEvent(0);
+        createCanvas();
+        m_d->view->connectCurrentImage();
     }
 
     if (cfg.useOpenGL()) {
         m_d->openGLImageContext->setMonitorProfile(monitorProfile());
     }
 #endif
-        m_d->canvasWidget->widget()->update();
+    m_d->canvasWidget->widget()->update();
 
 
 }

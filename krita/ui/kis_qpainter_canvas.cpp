@@ -221,44 +221,44 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
 void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 {
     kDebug() << "KisQPainterCanvas::documentOffsetMoved offset is now: " << pt << endl;
-/*
-    // XXX: Redo the prescaledImage, otherwise scrolling is broken.
 
-    int deltaX = m_d->documentOffset.x() - pt.x();
-    int deltaY = m_d->documentOffset.y() - pt.y();
+    qint32 width = m_d->prescaledImage.width();
+    qint32 height = m_d->prescaledImage.height();
+
+    QRegion exposedRegion = QRect(0, 0, width, height);
+
+    qint32 oldCanvasXOffset = m_d->documentOffset.x();
+    qint32 oldCanvasYOffset = m_d->documentOffset.y();
+
+    m_d->documentOffset = pt;
 
     QPainter gc( &m_d->prescaledImage );
 
-    // Move the bit of the image we can keep
-    gc.drawImage( deltaX, deltaY, m_d->prescaledImage );
+    if (!m_d->prescaledImage.isNull()) {
 
-    kDebug() << "documentOffset moved deltaX: " << deltaX << ", deltaY: " << deltaY << endl;
+        if (oldCanvasXOffset != m_d->documentOffset.x() || oldCanvasYOffset != m_d->documentOffset.y()) {
 
-    // Determine the bands we need to add, top, left, right or bottom.
+            qint32 deltaX = m_d->documentOffset.x() - oldCanvasXOffset;
+            qint32 deltaY = m_d->documentOffset.y() - oldCanvasYOffset;
 
-    if ( qAbs( deltaX ) > width() || qAbs( deltaY ) > height() ) {
-        preScale();
-    }
-    else {
-        if ( deltaX > 0 ) {
-            // Moved left, need to add a band to the right
-        }
-        else if ( deltaX < 0 )
-        {
-            // Moved right, need to add a band to the left
-        }
+            kDebug() << "Delta: x " << deltaX << ", y " << deltaY << endl;
 
-        if ( deltaY > 0 ) {
-            // Moved down, need to add  band to the top
-
-        }
-        else if ( deltaY < 0 ) {
-            // Moved up, need to add band to the bottom
+            gc.drawImage( -deltaX, -deltaY, m_d->prescaledImage );
+            exposedRegion -= QRegion(QRect(-deltaX, -deltaY, width - deltaX, height - deltaY));
         }
     }
-*/
-    m_d->documentOffset = pt;
-    preScale();
+
+
+    if (!m_d->prescaledImage.isNull() && !exposedRegion.isEmpty()) {
+
+        QVector<QRect> rects = exposedRegion.rects();
+
+        for (int i = 0; i < rects.count(); i++) {
+            QRect r = rects[i];
+            gc.drawImage( r.x(), r.y(), scaledImage( r ) );
+        }
+    }
+
     update();
 }
 

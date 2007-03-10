@@ -129,6 +129,14 @@ public:  // Krita specific interfaces
 
     KisDoc2* document() const;
 
+    /// Connects the signals from the current image to the various
+    /// slots of the various managers
+    void connectCurrentImage();
+
+    /// Disconnect the current image (for instance, before connecting
+    /// another image) from the slots in the various managers
+    void disconnectCurrentImage();
+
 private slots:
 
     void slotLoadingFinished();
@@ -139,13 +147,6 @@ private slots:
 
 private:
 
-    /// Connects the signals from the current image to the various
-    /// slots of the various managers
-    void connectCurrentImage();
-
-    /// Disconnect the current image (for instance, before connecting
-    /// another image) from the slots in the various managers
-    void disconnectCurrentImage();
 
     void createGUI();
     void createActions();

@@ -117,6 +117,11 @@ public:
      */
     QList<T> values() const;
 
+    void clear() {
+        delete m_root;
+        m_root = createLeafNode( m_capacity + 1, 0, 0 );
+    }
+
 #ifdef KOFFICE_RTREE_DEBUG
     /**
      * @brief Paint the tree
@@ -387,7 +392,7 @@ void KoRTree<T>::remove( const T&data )
     LeafNode * leaf = m_leafMap[data];
     if ( leaf == 0 )
     {
-        qWarning( "KoRTree<T>::remove( const T&data) data not found" );
+        //qWarning( "KoRTree<T>::remove( const T&data) data not found" );
         return;
     }
     m_leafMap.remove(data);

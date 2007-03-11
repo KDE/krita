@@ -383,7 +383,6 @@ void KisCanvas2::zoomOut()
 
 void KisCanvas2::documentOffsetMoved( const QPoint &documentOffset )
 {
-    kDebug() << "KisCanvas2:: Moving document offset to " << documentOffset << endl;
     m_d->canvasWidget->documentOffsetMoved( documentOffset );
 }
 

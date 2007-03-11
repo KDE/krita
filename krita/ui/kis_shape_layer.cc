@@ -111,7 +111,6 @@ void KisShapeLayer::prepareProjection(const QRect& r)
 
 KisPaintDeviceSP KisShapeLayer::projection()
 {
-    kDebug() << "KisShapeLayer::projection\n";
     return m_d->projection;
 }
 

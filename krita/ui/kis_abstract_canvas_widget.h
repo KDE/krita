@@ -43,6 +43,12 @@ public:
      */
     virtual void preScale() {};
 
+    /**
+     * Prescale the canvas represetation of the image.
+     *
+     * @param rc The target rect in view coordinates of the prescaled
+     * image.
+     */
     virtual void preScale( const QRect & rc ) { Q_UNUSED( rc ); }
 };
 

@@ -220,8 +220,6 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
 
 void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 {
-    kDebug() << "KisQPainterCanvas::documentOffsetMoved offset is now: " << pt << endl;
-
     qint32 width = m_d->prescaledImage.width();
     qint32 height = m_d->prescaledImage.height();
 
@@ -232,7 +230,8 @@ void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 
     m_d->documentOffset = pt;
 
-    QPainter gc( &m_d->prescaledImage );
+    QImage img = QImage( width, height, QImage::Format_ARGB32 );
+    QPainter gc( &img );
 
     if (!m_d->prescaledImage.isNull()) {
 
@@ -240,8 +239,6 @@ void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 
             qint32 deltaX = m_d->documentOffset.x() - oldCanvasXOffset;
             qint32 deltaY = m_d->documentOffset.y() - oldCanvasYOffset;
-
-            kDebug() << "Delta: x " << deltaX << ", y " << deltaY << endl;
 
             gc.drawImage( -deltaX, -deltaY, m_d->prescaledImage );
             exposedRegion -= QRegion(QRect(-deltaX, -deltaY, width - deltaX, height - deltaY));
@@ -258,7 +255,7 @@ void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
             gc.drawImage( r.x(), r.y(), scaledImage( r ) );
         }
     }
-
+    m_d->prescaledImage = img;
     update();
 }
 
@@ -314,8 +311,6 @@ QImage KisQPainterCanvas::scaledImage( const QRect & rc )
 void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
 {
 
-    kDebug() << "KisQPainterCanvas::ResizeEvent. Old: " << e->oldSize() << ", new: " << e->size() << endl;
-
     QSize newSize = e->size();
     QSize oldSize = m_d->prescaledImage.size();
 
@@ -344,7 +339,6 @@ void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
 
 void KisQPainterCanvas::preScale()
 {
-    kDebug() << "KisQPainterCanvas::preScale()" << endl;
     // Thread this!
     m_d->prescaledImage = scaledImage( QRect( QPoint( 0, 0 ), size() ) );
 }

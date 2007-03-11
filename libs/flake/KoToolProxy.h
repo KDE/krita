@@ -26,6 +26,7 @@
 
 #include <QPainter>
 
+class QAction;
 class QPaintEvent;
 class QMouseEvent;
 class QKeyEvent;
@@ -78,6 +79,12 @@ public:
     void wheelEvent ( QWheelEvent * event, const QPointF &point  );
     /// Set the new active tool.
     void setActiveTool(KoTool *tool);
+
+    /**
+     * Retrieves the entire collection of actions for the active tool
+     * or an empty hash if there is no active tool yet.
+     */
+    QHash<QString, QAction*> actions() const;
 
     /**
      * Call this to get data _from_ the tool, instead of events _to_ the tool,

@@ -240,4 +240,8 @@ void KoToolProxy::setCanvasController(KoCanvasController *controller) {
     d->controller = controller;
 }
 
+QHash<QString, QAction*> KoToolProxy::actions() const {
+    return d->activeTool ? d->activeTool->actions() : QHash<QString, QAction*>();
+}
+
 #include <KoToolProxy.moc>

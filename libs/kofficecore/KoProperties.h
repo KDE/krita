@@ -1,6 +1,6 @@
 /*
    Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (c) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,14 +36,14 @@ public:
     /**
      * Create a new filter config.
      */
-    KoProperties() {}
+    KoProperties();
 
     /**
      * Deep copy the filter configFile
      */
     KoProperties(const KoProperties & rhs);
 
-    ~KoProperties() {}
+    ~KoProperties();
 
 public:
 
@@ -131,7 +131,8 @@ public:
 
 private:
 
-    QMap<QString, QVariant> m_properties;
+    class Private;
+    Private * const d;
 };
 
 #endif // _KO_PROPERTIES_H

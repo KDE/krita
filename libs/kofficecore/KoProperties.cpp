@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2006 Thomas Zander <zander@kde.org>
+ *  Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,14 +22,29 @@
 
 #include "KoProperties.h"
 
-KoProperties::KoProperties(const KoProperties & rhs)
-    : m_properties( rhs.m_properties )
+class KoProperties::Private {
+public:
+    QMap<QString, QVariant> properties;
+};
+
+KoProperties::KoProperties()
+    : d(new Private())
 {
+}
+
+KoProperties::KoProperties(const KoProperties & rhs)
+    : d(new Private())
+{
+    d->properties = rhs.d->properties;
+}
+
+KoProperties::~KoProperties() {
+    delete d;
 }
 
 void KoProperties::load(const QString & s)
 {
-    m_properties.clear();
+    d->properties.clear();
 
     QDomDocument doc;
     doc.setContent( s );
@@ -47,7 +62,7 @@ void KoProperties::load(const QString & s)
                 QDataStream in( value.toAscii() );
                 QVariant v;
                 in >> v;
-                m_properties[name] = v;
+                d->properties[name] = v;
             }
         }
         n = n.nextSibling();
@@ -62,7 +77,7 @@ QString KoProperties::store()
     doc.appendChild( root );
 
     QMap<QString, QVariant>::Iterator it;
-    for ( it = m_properties.begin(); it != m_properties.end(); ++it ) {
+    for ( it = d->properties.begin(); it != d->properties.end(); ++it ) {
         QDomElement e = doc.createElement( "property" );
         e.setAttribute( "name", QString(it.key().toLatin1()) );
         QVariant v = it.value();
@@ -83,13 +98,13 @@ QString KoProperties::store()
 void KoProperties::setProperty(const QString & name, const QVariant & value)
 {
     // If there's an existing value for this name already, replace it.
-    m_properties.insert( name, value );
+    d->properties.insert( name, value );
 }
 
 bool KoProperties::property(const QString & name, QVariant & value) const
 {
-   QMap<QString, QVariant>::const_iterator it = m_properties.find( name ); 
-   if ( it == m_properties.end() ) {
+   QMap<QString, QVariant>::const_iterator it = d->properties.find( name ); 
+   if ( it == d->properties.end() ) {
        return false;
    }
    else {
@@ -100,7 +115,7 @@ bool KoProperties::property(const QString & name, QVariant & value) const
 
 QVariant KoProperties::property(const QString & name) const
 {
-    return m_properties.value( name, QVariant() );
+    return d->properties.value( name, QVariant() );
 }
 
 

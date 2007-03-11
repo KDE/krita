@@ -917,6 +917,17 @@ public slots:
     virtual void addCommand(QUndoCommand* command);
 
     /**
+     * Begins recording of a macro command. At the end endMacro needs to be called.
+     * @param text command description
+     */
+    virtual void beginMacro( const QString & text );
+
+    /**
+     * Ends the recording of a macro command.
+     */
+    virtual void endMacro();
+
+    /**
      *  Sets the modified flag on the document. This means that it has
      *  to be saved or not before deleting it.
      */

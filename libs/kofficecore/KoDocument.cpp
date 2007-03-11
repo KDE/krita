@@ -2900,6 +2900,17 @@ void KoDocument::addCommand(QUndoCommand* command)
     d->m_undoStack->push( command );
 }
 
+void KoDocument::beginMacro( const QString & text )
+{
+    d->m_undoStack->beginMacro( text );
+}
+
+void KoDocument::endMacro()
+{
+    d->m_undoStack->endMacro();
+}
+
+
 void KoDocument::setDocumentClean(bool clean)
 {
     setModified(!clean);

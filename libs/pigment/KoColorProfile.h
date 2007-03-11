@@ -1,8 +1,8 @@
 /*
- *  KoColorProfile.h - part of Krayon
- *
+ * This file is part of the KDE project
  *  Copyright (c) 2000 Matthias Elter  <elter@kde.org>
  *                2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -69,57 +69,57 @@ public:
     /**
      * @return the ICC color space signature
      */
-    inline icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }
+    icColorSpaceSignature colorSpaceSignature() const;
     /**
      * @return the class of the color space signature
      */
-    inline icProfileClassSignature deviceClass() const { return m_deviceClass; }
+    icProfileClassSignature deviceClass() const;
     /**
      * @return the name of the profile
      */
-    inline QString productName() const { return m_productName; }
+    QString productName() const;
     /**
      * @return the description of the profile
      */
-    inline QString productDescription() const { return m_productDescription; }
+    QString productDescription() const;
     /**
      * @return some information about the profile
      */
-    inline QString productInfo() const { return m_productInfo; }
+    QString productInfo() const;
     /**
      * @return the name of the manufacturer
      */
-    inline QString manufacturer() const { return m_manufacturer; }
-    
+    QString manufacturer() const;
+
     /**
      * @return the structure to use with LCMS functions
      */
     cmsHPROFILE profile();
 
-    friend inline bool operator==( const KoColorProfile &,  const KoColorProfile & );
+    friend bool operator==( const KoColorProfile &,  const KoColorProfile & );
 
     /**
      * @return true if the profile is valid, false if it isn't been loaded in memory yet, or
      * if the loaded memory is a bad profile
      */
-    inline bool valid() const { return m_valid; };
+    bool valid() const;
 
     /**
      * @return true if you can use this profile can be used to convert color from a different
      * profile to this one
      */
-    inline bool isSuitableForOutput() { return m_suitableForOutput; };
+    bool isSuitableForOutput();
 
     /**
      * @return the filename of the profile (it's an empty string if it was initialized from
      * a memory pointer or from a LCMS structure)
      */
-    inline QString filename() const { return m_filename; }
+    QString filename() const;
 
     /**
      * @return an array with the raw data of the profile
      */
-    inline QByteArray rawData() const { return m_rawData; }
+    QByteArray rawData() const;
 
 public:
     /**
@@ -130,26 +130,9 @@ public:
 private:
     bool init();
 
-    cmsHPROFILE m_profile;
-    icColorSpaceSignature m_colorSpaceSignature;
-    icProfileClassSignature m_deviceClass;
-    QString m_productName;
-    QString m_productDescription;
-    QString m_productInfo;
-    QString m_manufacturer;
-
-    QByteArray m_rawData;
-
-    QString m_filename;
-    bool m_valid;
-    bool m_suitableForOutput;
-
+    class Private;
+    Private * const d;
 };
-
-inline bool operator==( const KoColorProfile & p1,  const KoColorProfile & p2 )
-{
-    return p1.m_profile == p2.m_profile;
-}
 
 #endif // KOCOLORPROFILE_H
 

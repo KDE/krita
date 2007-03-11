@@ -1,9 +1,9 @@
 /*
- *  kis_profile.cc - part of Krayon
- *
+ * This file is part of the KDE project
  *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
  *                2001 John Califf
  *                2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,62 +41,80 @@
 #endif
 
 
+class KoColorProfile::Private {
+public:
+    Private() : valid(false), suitableForOutput(false) { }
+
+    cmsHPROFILE profile;
+    icColorSpaceSignature colorSpaceSignature;
+    icProfileClassSignature deviceClass;
+    QString productName;
+    QString productDescription;
+    QString productInfo;
+    QString manufacturer;
+
+    QByteArray rawData;
+
+    QString filename;
+    bool valid;
+    bool suitableForOutput;
+};
+
 KoColorProfile::KoColorProfile(const QByteArray& rawData)
-    : m_rawData(rawData),
-      m_filename( QString() ),
-      m_valid( false ),
-      m_suitableForOutput(false)
+    : d(new Private())
 {
-    m_profile = cmsOpenProfileFromMem((void*)rawData.constData(), (DWORD)rawData.size());
+    d->rawData = rawData;
+    d->profile = cmsOpenProfileFromMem((void*)rawData.constData(), (DWORD)rawData.size());
     init();
 }
 
 KoColorProfile::KoColorProfile(const QString& file)
-    : m_filename(file),
-      m_valid( false ),
-      m_suitableForOutput( false )
+    : d(new Private())
 {
+    d->filename = file;
 }
 
 KoColorProfile::KoColorProfile(const cmsHPROFILE profile)
-    : m_profile(profile),
-      m_filename( QString() ),
-      m_valid( true )
+    : d(new Private())
 {
+    d->profile = profile;
+    d->valid = true;
+
     size_t  bytesNeeded=0;
 
     // Make a raw data image ready for saving
-    _cmsSaveProfileToMem(m_profile, 0, &bytesNeeded); // calc size
-    m_rawData.resize(bytesNeeded);
-    if(m_rawData.size() >= (int)bytesNeeded)
+    _cmsSaveProfileToMem(d->profile, 0, &bytesNeeded); // calc size
+    d->rawData.resize(bytesNeeded);
+    if(d->rawData.size() >= (int)bytesNeeded)
     {
-        _cmsSaveProfileToMem(m_profile, m_rawData.data(), &bytesNeeded); // fill buffer
-        cmsHPROFILE newprofile = cmsOpenProfileFromMem((void*)m_rawData.constData(), (DWORD) bytesNeeded);
-        cmsCloseProfile(m_profile);
-        m_profile = newprofile;
+        _cmsSaveProfileToMem(d->profile, d->rawData.data(), &bytesNeeded); // fill buffer
+        cmsHPROFILE newprofile = cmsOpenProfileFromMem((void*)d->rawData.constData(), (DWORD) bytesNeeded);
+        cmsCloseProfile(d->profile);
+        d->profile = newprofile;
     }
     else
-        m_rawData.resize(0);
+        d->rawData.resize(0);
 
     init();
 }
 
 KoColorProfile::~KoColorProfile()
 {
-    cmsCloseProfile(m_profile);
+    cmsCloseProfile(d->profile);
+    delete d;
 }
 
 
 bool KoColorProfile::load()
 {
-    QFile file(m_filename);
+    QFile file(d->filename);
     file.open(QIODevice::ReadOnly);
-    m_rawData = file.readAll();
-    m_profile = cmsOpenProfileFromMem((void*)m_rawData.constData(), (DWORD)m_rawData.size());
+    d->rawData = file.readAll();
+    d->profile = cmsOpenProfileFromMem((void*)d->rawData.constData(), (DWORD)d->rawData.size());
     file.close();
 
-    if (m_profile == 0) {
-        kWarning() << "Failed to load profile from " << m_filename << endl;
+    if (d->profile == 0) {
+        kWarning() << "Failed to load profile from " << d->filename << endl;
     }
 
     return init();
@@ -105,33 +123,33 @@ bool KoColorProfile::load()
 
 bool KoColorProfile::init()
 {
-    if (m_profile) {
-        m_colorSpaceSignature = cmsGetColorSpace(m_profile);
-        m_deviceClass = cmsGetDeviceClass(m_profile);
-        m_productName = cmsTakeProductName(m_profile);
-        m_productDescription = cmsTakeProductDesc(m_profile);
-        m_productInfo = cmsTakeProductInfo(m_profile);
-        m_valid = true;
+    if (d->profile) {
+        d->colorSpaceSignature = cmsGetColorSpace(d->profile);
+        d->deviceClass = cmsGetDeviceClass(d->profile);
+        d->productName = cmsTakeProductName(d->profile);
+        d->productDescription = cmsTakeProductDesc(d->profile);
+        d->productInfo = cmsTakeProductInfo(d->profile);
+        d->valid = true;
 
         // Check if the profile can convert (something->this)
-//         LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(m_profile);
+//         LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(d->profile);
 //         if( OutMatShaper )
 //         {
-//             m_suitableForOutput = true;
+//             d->suitableForOutput = true;
 //         }
         cmsCIEXYZTRIPLE Primaries;
 
-        if (cmsTakeColorants(&Primaries, m_profile))
+        if (cmsTakeColorants(&Primaries, d->profile))
         {
-            m_suitableForOutput = true;
+            d->suitableForOutput = true;
         }
 
 #if 0
     // XXX: It wasn't that easy to save a little memory: thsi gives an lcms error
         // Okay, we know enough. Free the memory; we'll load it again if needed.
 
-        cmsCloseProfile(m_profile);
-        m_profile = 0;
+        cmsCloseProfile(d->profile);
+        d->profile = 0;
 
 #endif
         return true;
@@ -142,15 +160,15 @@ bool KoColorProfile::init()
 cmsHPROFILE KoColorProfile::profile()
 {
 #if 0
-	if (m_profile = 0) {
-	    QFile file(m_filename);
+	if (d->profile = 0) {
+	    QFile file(d->filename);
 	    file.open(QIODevice::ReadOnly);
-	    m_rawData = file.readAll();
-	    m_profile = cmsOpenProfileFromMem((void*)m_rawData.constData(), (DWORD)m_rawData.size());
+	    d->rawData = file.readAll();
+	    d->profile = cmsOpenProfileFromMem((void*)d->rawData.constData(), (DWORD)d->rawData.size());
         file.close();
 	}
 #endif
-	return m_profile;
+	return d->profile;
 }
 
 bool KoColorProfile::save()
@@ -199,4 +217,49 @@ KoColorProfile *  KoColorProfile::getScreenProfile (int screen)
 #endif
 }
 
+
+icColorSpaceSignature KoColorProfile::colorSpaceSignature() const {
+    return d->colorSpaceSignature;
+}
+
+icProfileClassSignature KoColorProfile::deviceClass() const {
+    return d->deviceClass;
+}
+
+QString KoColorProfile::productName() const {
+    return d->productName;
+}
+
+QString KoColorProfile::productDescription() const {
+    return d->productDescription;
+}
+
+QString KoColorProfile::productInfo() const {
+    return d->productInfo;
+}
+
+QString KoColorProfile::manufacturer() const {
+    return d->manufacturer;
+}
+
+bool KoColorProfile::valid() const {
+    return d->valid;
+}
+
+bool KoColorProfile::isSuitableForOutput() {
+    return d->suitableForOutput;
+}
+
+QString KoColorProfile::filename() const {
+    return d->filename;
+}
+
+QByteArray KoColorProfile::rawData() const {
+    return d->rawData;
+}
+
+bool operator==( const KoColorProfile & p1,  const KoColorProfile & p2 )
+{
+    return p1.d->profile == p2.d->profile;
+}
 

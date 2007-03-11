@@ -80,16 +80,16 @@ public:
         int offsetX = controller->canvasOffsetX();
         int offsetY = controller->canvasOffsetY();
         // get the points version of 10 pixels offset.
-        QPointF offset = activeTool->m_canvas->viewConverter()->viewToDocument(QPointF(10, 10));
+        QPointF offset = controller->canvas()->viewConverter()->viewToDocument(QPointF(10, 10));
         QRectF mouseArea(scrollEdgePoint, QSizeF(offset.x(), offset.y()));
         mouseArea.setTopLeft(mouseArea.center());
 
-        activeTool->m_canvas->ensureVisible(mouseArea);
+        controller->canvas()->ensureVisible(mouseArea);
 
         QPoint moved(offsetX - controller->canvasOffsetX(), offsetY - controller->canvasOffsetY());
         if(moved.x() == 0 && moved.y() == 0)
             return;
-        scrollEdgePoint += activeTool->m_canvas->viewConverter()->viewToDocument(moved);
+        scrollEdgePoint += controller->canvas()->viewConverter()->viewToDocument(moved);
 
         QMouseEvent event(QEvent::MouseMove, scrollEdgePoint.toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
         KoPointerEvent ev( &event, scrollEdgePoint );

@@ -191,6 +191,31 @@ KoShapeManager* KisCanvas2::shapeManager() const
     return m_d->shapeManager;
 }
 
+QRect KisCanvas2::viewRectFromDoc( const QRectF & rc )
+{
+    QRect viewRect = toAlignedRect( m_d->viewConverter->documentToView(rc) );
+    viewRect = viewRect.translated( -m_d->documentOffset );
+    viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height() ) );
+    return viewRect;
+}
+
+
+QRect KisCanvas2::viewRectFromImagePixels( const QRect & rc )
+{
+    double pppx,pppy;
+    pppx = image()->xRes();
+    pppy = image()->yRes();
+
+    QRectF docRect;
+    docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
+
+    QRect viewRect = toAlignedRect( m_d->viewConverter->documentToView(docRect) );
+    viewRect = viewRect.translated( -m_d->documentOffset );
+    viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height() ) );
+
+    return viewRect;
+
+}
 
 void KisCanvas2::updateCanvas(const QRectF& rc)
 {
@@ -198,16 +223,10 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     // updates, so no need to prescale!
 
     // First convert from document coordinated to widget coordinates
-
-    double pppx,pppy;
-    pppx = image()->xRes();
-    pppy = image()->yRes();
-    QRectF docRect;
-    docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
-    QRectF viewRect = m_d->viewConverter->documentToView(docRect);
-    viewRect.adjust( -5, -5, 5, 5 );
-
-    m_d->canvasWidget->widget()->update( toAlignedRect(viewRect).translated( -m_d->documentOffset ) );
+    QRect vRect = viewRectFromDoc( rc );
+    if ( !vRect.isEmpty() ) {
+        m_d->canvasWidget->widget()->update( vRect );
+    }
 }
 
 
@@ -234,20 +253,12 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
                      , 0, 0, rc.width(), rc.height() );
         p.end();
 
-        double pppx,pppy;
-        pppx = image()->xRes();
-        pppy = image()->yRes();
-        QRectF docRect;
-        docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
-        QRectF viewRect = m_d->viewConverter->documentToView(docRect);
-        viewRect.adjust( -5, -5, 5, 5 );
+        QRect vRect = viewRectFromImagePixels( rc );
 
-        kDebug() << "going to prescale\n";
-        m_d->canvasWidget->preScale( toAlignedRect( viewRect ) );
-        kDebug() << "going to update\n";
-        m_d->canvasWidget->widget()->update( toAlignedRect(viewRect).translated( -m_d->documentOffset ) );
-        kDebug() << "done updating\n";
-
+        if ( !vRect.isEmpty() ) {
+            m_d->canvasWidget->preScale( vRect );
+            m_d->canvasWidget->widget()->update( vRect );
+        }
 #ifdef HAVE_OPENGL
     }
 #endif
@@ -353,7 +364,6 @@ void KisCanvas2::resetCanvas()
 #if HAVE_OPENGL
     KisConfig cfg;
 
-    bool canvasWasOpenGL = m_d->canvasWidget->widget()->inherits("KisOpenGLCanvas2");
     if (cfg.useOpenGL() != m_d->currentCanvasIsOpenGL) {
 
         m_d->view->disconnectCurrentImage(); // Calls the local

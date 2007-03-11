@@ -154,6 +154,14 @@ private:
     void createCanvas();
     void createQPainterCanvas();
 
+    /**
+     * Returns a rect in widget pixels that is translated for document
+     * offset, resolution and zoom and that is guaranteed to be inside
+     * the widget.
+     */
+    QRect viewRectFromDoc( const QRectF & docRect );
+    QRect viewRectFromImagePixels( const QRect & imageRect );
+
 private:
 
     class KisCanvas2Private;

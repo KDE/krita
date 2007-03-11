@@ -265,15 +265,15 @@ QImage KisQPainterCanvas::scaledImage( const QRect & rc )
     double sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
 
+    // Go from the widget coordinates to points
+    QRectF imageRect = m_d->viewConverter->viewToDocument( rc.translated( m_d->documentOffset ) );
+
+    // Go from points to pixels using the resolutions
+
     double pppx,pppy;
     pppx = img->xRes();
     pppy = img->yRes();
 
-    // Go from the widget coordinates to points
-    QRect updateRect = rc.translated( m_d->documentOffset );
-    QRectF imageRect = m_d->viewConverter->viewToDocument( updateRect );
-
-    // Go from points to pixels
     imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
                         imageRect.right() * pppx, imageRect.bottom() * pppy);
 
@@ -350,14 +350,14 @@ void KisQPainterCanvas::preScale()
 
 void KisQPainterCanvas::preScale( const QRect & rc )
 {
-    QTime t;
-    t.start();
-    QRect translatedRect = rc.translated( -m_d->documentOffset );
-    QPainter gc( &m_d->prescaledImage );
-    gc.drawImage( translatedRect.topLeft(), scaledImage( translatedRect ) );
-    kDebug(41010) << "preScale: doc offset " << m_d->documentOffset << ", rc: "
-                  << rc << ", translated: " << translatedRect << " took " << t.elapsed() << endl;
-
+    kDebug() << "prescaling for " << rc << endl;
+    if ( !rc.isEmpty() ) {
+        QTime t;
+        t.start();
+        QPainter gc( &m_d->prescaledImage );
+        gc.drawImage( rc.topLeft(), scaledImage( rc ) );
+        kDebug(41010) << "Prescaling took " << t.elapsed() << endl;
+    }
 }
 
 #include "kis_qpainter_canvas.moc"

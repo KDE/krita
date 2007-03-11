@@ -47,7 +47,7 @@ public:
      * Prescale the canvas represetation of the image.
      *
      * @param rc The target rect in view coordinates of the prescaled
-     * image.
+     * image, pre-translated with the document offset
      */
     virtual void preScale( const QRect & rc ) { Q_UNUSED( rc ); }
 };

@@ -109,8 +109,10 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
 
 void KisCanvas2::createQPainterCanvas()
 {
+#ifdef HAVE_OPENG
     if ( m_d->openGLImageContext ) delete m_d->openGLImageContext;
     m_d->openGLImageContext = 0;
+#endif
     setCanvasWidget( new KisQPainterCanvas( this, m_d->view ) );
 }
 
@@ -195,7 +197,7 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     // First convert from document coordinated to widget coordinates
     QRectF viewRect  = m_d->viewConverter->documentToView(rc);
     viewRect.adjust(-5, -5, 5, 5); // floor, ceil?
-    m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
+    m_d->canvasWidget->widget()->update();// toAlignedRect(viewRect) );
 }
 
 
@@ -230,7 +232,7 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
         QRectF viewRect = m_d->viewConverter->documentToView(docRect);
         viewRect.adjust( -5, -5, 5, 5 );
         m_d->canvasWidget->preScale( toAlignedRect( viewRect ) );
-        m_d->canvasWidget->widget()->update( toAlignedRect(viewRect) );
+        m_d->canvasWidget->widget()->update();// toAlignedRect(viewRect) );
 #ifdef HAVE_OPENGL
     }
 #endif

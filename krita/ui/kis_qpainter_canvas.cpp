@@ -53,6 +53,8 @@
 #define PATTERN_WIDTH 32
 #define PATTERN_HEIGHT 32
 
+//#define DEBUG_REPAINT
+
 namespace {
 // XXX: Remove this with Qt 4.3
     static QRect toAlignedRect(QRectF rc)
@@ -109,8 +111,7 @@ KisQPainterCanvas::~KisQPainterCanvas()
 
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
-    QRect updateRect = ev->rect().translated( m_d->documentOffset );
-
+//    kDebug() << "paintEvent: rect " << ev->rect() << ", doc offset: " << m_d->documentOffset << endl;
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
 
@@ -129,25 +130,18 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
     t.restart();
 
+
     gc.drawImage( ev->rect().topLeft(), m_d->prescaledImage, ev->rect() );
 
-#if 0
+#ifdef DEBUG_REPAINT
+    QColor color = QColor(random()%255, random()%255, random()%255, 150);
+    gc.fillRect(ev->rect(), color);
+#endif
+
+
     // ask the current layer to paint its selection (and potentially
     // other things, like wetness and active-layer outline
-    KisLayerSP currentLayer = img->activeLayer();
-    QVector<QRect>layerRects = QRegion(currentLayer->extent().translate(xoffset, yoffset))
-                               .intersected(paintRegions);
 
-    it = outsideRects.begin();
-    end = outsideRects.end();
-    while (it != end) {
-        currentLayer->renderDecorationsToPainter((*it).x() - xoffset,
-                                                 (*it).y() - yoffset,
-                                                 (*it).x(), (*it).y(),
-                                                 (*it).width(), (*it).height(),
-                                                 gc);
-    }
-#endif
 
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution
@@ -171,11 +165,11 @@ void KisQPainterCanvas::mousePressEvent(QMouseEvent *e) {
 }
 
 void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e) {
-    m_d->toolProxy->mouseReleaseEvent( e, m_d->viewConverter->viewToDocument(e->pos()  + m_d->documentOffset ) );
+    m_d->toolProxy->mouseReleaseEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
 }
 
 void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e) {
-    m_d->toolProxy->mouseDoubleClickEvent( e, m_d->viewConverter->viewToDocument(e->pos()  + m_d->documentOffset ) );
+    m_d->toolProxy->mouseDoubleClickEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
 }
 
 void KisQPainterCanvas::keyPressEvent( QKeyEvent *e ) {
@@ -345,9 +339,11 @@ void KisQPainterCanvas::preScale()
 
 void KisQPainterCanvas::preScale( const QRect & rc )
 {
-    QRect rc2 = QRect( QPoint( 0, 0 ), size() ).intersected( rc );
+    QRect translatedRect = rc.translated( -m_d->documentOffset );
+//    kDebug() << "preScale: doc offset " << m_d->documentOffset << ", rc: "
+//             << rc << ", translated: " << translatedRect << endl;
     QPainter gc( &m_d->prescaledImage );
-    gc.drawImage( rc2.topLeft(), scaledImage( rc2 ) );
+    gc.drawImage( translatedRect.topLeft(), scaledImage( translatedRect ) );
 }
 
 #include "kis_qpainter_canvas.moc"

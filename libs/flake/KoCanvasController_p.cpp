@@ -157,6 +157,8 @@ QPointF Viewport::correctPosition(const QPoint &point) const {
     Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
     QPoint correctedPos(point.x() - canvasWidget->x(), point.y() - canvasWidget->y());
     correctedPos -= m_parent->canvas()->documentOrigin();
+    correctedPos += m_documentOffset;
+
     return m_parent->canvas()->viewConverter()->viewToDocument(correctedPos);
 }
 

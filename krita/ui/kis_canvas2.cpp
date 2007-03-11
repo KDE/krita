@@ -112,7 +112,7 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
 
 void KisCanvas2::createQPainterCanvas()
 {
-#ifdef HAVE_OPENG
+#ifdef HAVE_OPENGL
     if ( m_d->openGLImageContext ) delete m_d->openGLImageContext;
     m_d->openGLImageContext = 0;
 #endif

@@ -150,6 +150,7 @@ void KoToolProxy::tabletEvent( QTabletEvent *event, const QPointF &point )
         break;
     case QEvent::TabletRelease:
         d->tabletPressed = false;
+        d->scrollTimer.stop();
         if (d->activeTool) d->activeTool->mouseReleaseEvent( &ev );
         break;
     case QEvent::TabletMove:

@@ -111,7 +111,7 @@ KisQPainterCanvas::~KisQPainterCanvas()
 
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
-//    kDebug() << "paintEvent: rect " << ev->rect() << ", doc offset: " << m_d->documentOffset << endl;
+    kDebug(41010) << "paintEvent: rect " << ev->rect() << ", doc offset: " << m_d->documentOffset << endl;
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
 
@@ -128,16 +128,15 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     // Checks
     gc.fillRect(ev->rect(), m_d->checkBrush );
     kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
+
     t.restart();
-
-
-    gc.drawImage( ev->rect().topLeft(), m_d->prescaledImage, ev->rect() );
+    gc.drawImage( 0, 0, m_d->prescaledImage );
+    kDebug(41010) << "Drawing image:" << t.elapsed() << endl;
 
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random()%255, random()%255, random()%255, 150);
     gc.fillRect(ev->rect(), color);
 #endif
-
 
     // ask the current layer to paint its selection (and potentially
     // other things, like wetness and active-layer outline
@@ -150,10 +149,14 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     gc.translate( QPoint( -m_d->documentOffset.x(), -m_d->documentOffset.y() ) );
 
     // ask the guides, grids, etc to paint themselves
+    t.restart();
     m_d->gridDrawer->draw(&gc, m_d->viewConverter->viewToDocument(ev->rect()));
+    kDebug(41010) << "Drawing grid:" << t.elapsed() << endl;
 
+    t.restart();
     // Give the tool a chance to paint its stuff
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
+    kDebug(41010) << "Drawing tools:" << t.elapsed() << endl;
 }
 
 void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {
@@ -304,6 +307,9 @@ QImage KisQPainterCanvas::scaledImage( const QRect & rc )
 
 void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
 {
+    QTime t;
+    t.start();
+
 
     QSize newSize = e->size();
     QSize oldSize = m_d->prescaledImage.size();
@@ -312,7 +318,6 @@ void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
     QPainter gc( &img );
 
     gc.drawImage( 0, 0, m_d->prescaledImage, 0, 0, m_d->prescaledImage.width(), m_d->prescaledImage.height() );
-
 
     if ( newSize.width() > oldSize.width() || newSize.height() > oldSize.height() ) {
 
@@ -329,21 +334,30 @@ void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
 
     }
     m_d->prescaledImage = img;
+
+    kDebug(41010) << "Resize event:" << t.elapsed() << endl;
 }
 
 void KisQPainterCanvas::preScale()
 {
     // Thread this!
+    QTime t;
+    t.start();
     m_d->prescaledImage = scaledImage( QRect( QPoint( 0, 0 ), size() ) );
+    kDebug(41010) << "preScale():" << t.elapsed() << endl;
+
 }
 
 void KisQPainterCanvas::preScale( const QRect & rc )
 {
+    QTime t;
+    t.start();
     QRect translatedRect = rc.translated( -m_d->documentOffset );
-//    kDebug() << "preScale: doc offset " << m_d->documentOffset << ", rc: "
-//             << rc << ", translated: " << translatedRect << endl;
     QPainter gc( &m_d->prescaledImage );
     gc.drawImage( translatedRect.topLeft(), scaledImage( translatedRect ) );
+    kDebug(41010) << "preScale: doc offset " << m_d->documentOffset << ", rc: "
+                  << rc << ", translated: " << translatedRect << " took " << t.elapsed() << endl;
+
 }
 
 #include "kis_qpainter_canvas.moc"

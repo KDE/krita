@@ -90,7 +90,10 @@ public:
     KoColorProfile * monitorProfile;
     bool currentCanvasIsOpenGL;
     QImage canvasCache; // XXX: use KisQPainterImageContext to share
+                        //
                         // cache data between views. Finish that class.
+    QPoint documentOffset;
+
 #ifdef HAVE_OPENGL
     KisOpenGLImageContextSP openGLImageContext;
 #endif
@@ -195,9 +198,16 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     // updates, so no need to prescale!
 
     // First convert from document coordinated to widget coordinates
-    QRectF viewRect  = m_d->viewConverter->documentToView(rc);
-    viewRect.adjust(-5, -5, 5, 5); // floor, ceil?
-    m_d->canvasWidget->widget()->update();// toAlignedRect(viewRect) );
+
+    double pppx,pppy;
+    pppx = image()->xRes();
+    pppy = image()->yRes();
+    QRectF docRect;
+    docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
+    QRectF viewRect = m_d->viewConverter->documentToView(docRect);
+    viewRect.adjust( -5, -5, 5, 5 );
+
+    m_d->canvasWidget->widget()->update( toAlignedRect(viewRect).translated( -m_d->documentOffset ) );
 }
 
 
@@ -231,8 +241,13 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
         docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
         QRectF viewRect = m_d->viewConverter->documentToView(docRect);
         viewRect.adjust( -5, -5, 5, 5 );
+
+        kDebug() << "going to prescale\n";
         m_d->canvasWidget->preScale( toAlignedRect( viewRect ) );
-        m_d->canvasWidget->widget()->update();// toAlignedRect(viewRect) );
+        kDebug() << "going to update\n";
+        m_d->canvasWidget->widget()->update( toAlignedRect(viewRect).translated( -m_d->documentOffset ) );
+        kDebug() << "done updating\n";
+
 #ifdef HAVE_OPENGL
     }
 #endif
@@ -385,6 +400,7 @@ void KisCanvas2::zoomOut()
 
 void KisCanvas2::documentOffsetMoved( const QPoint &documentOffset )
 {
+    m_d->documentOffset = documentOffset;
     m_d->canvasWidget->documentOffsetMoved( documentOffset );
 }
 

@@ -173,6 +173,7 @@ void KisProjection::slotUpdateUi( Job* job )
 
 void KisProjection::scheduleRect( const QRect & rc )
 {
+
     int h = rc.height();
     int w = rc.width();
     int x = rc.x();
@@ -184,6 +185,7 @@ void KisProjection::scheduleRect( const QRect & rc )
     if ( w <= m_d->updateRectSize && h <= m_d->updateRectSize ) {
         ProjectionJob * job = new ProjectionJob( rc, m_d->rootLayer, this );
         m_d->weaver->enqueue( job );
+        return;
     }
 
 

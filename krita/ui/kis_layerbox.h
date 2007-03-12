@@ -48,6 +48,9 @@ class KMenu;
 class KoDocumentEntry;
 class KoCompositeOp;
 
+/**
+ * A widget that visualized the layer structure.
+ */
 class KisLayerBox : public QDockWidget, public Ui::WdgLayerBox {
 
     Q_OBJECT

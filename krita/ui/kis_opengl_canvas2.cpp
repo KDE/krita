@@ -33,11 +33,28 @@
 #include <KoToolProxy.h>
 #include <KoToolManager.h>
 
+#include "kis_types.h"
 #include "kis_canvas2.h"
+#include "kis_image.h"
 #include "kis_opengl_image_context.h"
+#include "kis_view2.h"
+#include "kis_resource_provider.h"
 
 #define PATTERN_WIDTH 64
 #define PATTERN_HEIGHT 64
+
+
+namespace {
+// XXX: Remove this with Qt 4.3
+    static QRect toAlignedRect(QRectF rc)
+    {
+        int xmin = int(floor(rc.x()));
+        int xmax = int(ceil(rc.x() + rc.width()));
+        int ymin = int(floor(rc.y()));
+        int ymax = int(ceil(rc.y() + rc.height()));
+        return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
+    }
+}
 
 class KisOpenGLCanvas2::Private
 {
@@ -87,9 +104,7 @@ void KisOpenGLCanvas2::resizeGL(int w, int h)
 
 void KisOpenGLCanvas2::paintGL()
 {
-#if 0
-    if ( ev.rect().isNull() ) return;
-
+#if 1
 
     glDrawBuffer(GL_BACK);
 
@@ -98,22 +113,22 @@ void KisOpenGLCanvas2::paintGL()
     glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, widgetBackgroundColor.blue() / 255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    KisImageSP img = currentImg();
+    KisImageSP img = m_d->canvas->image();
 
     if ( !img ) return;
-    QRect vr = ev.rect(); // &= QRect(0, 0, m_canvas->width(), m_canvas->height());
+    QRect vr = QRect(0, 0, width(), height());
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glViewport(0, 0, m_canvas->width(), m_canvas->height());
-    glOrtho(0, m_canvas->width(), m_canvas->height(), 0, -1, 1);
+    glViewport(0, 0, width(), height());
+    glOrtho(0, width(), height(), 0, -1, 1);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     glBindTexture(GL_TEXTURE_2D, m_d->openGLImageContext->backgroundTexture());
 
-    glTranslatef(m_canvasXOffset, m_canvasYOffset, 0.0);
+    glTranslatef(m_d->documentOffset.x(), m_d->documentOffset.y(), 0.0);
 
     glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS);
@@ -121,30 +136,44 @@ void KisOpenGLCanvas2::paintGL()
     glTexCoord2f(0.0, 0.0);
     glVertex2f(0.0, 0.0);
 
-    glTexCoord2f((img->width() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH, 0.0);
-    glVertex2f(img->width() * zoom(), 0.0);
+    // Zoom factor
+    double sx, sy;
+    m_d->viewConverter->zoom(&sx, &sy);
 
-    glTexCoord2f((img->width() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH,
-                     (img->height() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_HEIGHT);
-    glVertex2f(img->width() * zoom(), img->height() * zoom());
+    // Resolution
+    double pppx,pppy;
+    pppx = img->xRes();
+    pppy = img->yRes();
 
-    glTexCoord2f(0.0, (img->height() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_HEIGHT);
-    glVertex2f(0.0, img->height() * zoom());
+    // Compute the scale factors
+    double scaleX = sx / pppx;
+    double scaleY = sy / pppy;
+
+
+    glTexCoord2f((img->width() * scaleX) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH, 0.0);
+    glVertex2f(img->width() * scaleX, 0.0);
+
+    glTexCoord2f((img->width() * scaleX) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH,
+                     (img->height() * scaleY) / KisOpenGLImageContext::BACKGROUND_TEXTURE_HEIGHT);
+    glVertex2f(img->width() * scaleX, img->height() * scaleY);
+
+    glTexCoord2f(0.0, (img->height() * scaleX) / KisOpenGLImageContext::BACKGROUND_TEXTURE_HEIGHT);
+    glVertex2f(0.0, img->height() * scaleY);
 
     glEnd();
 
-    glTranslatef(-m_canvasXOffset, -m_canvasYOffset, 0.0);
+    glTranslatef(-m_d->documentOffset.x(), -m_d->documentOffset.y(), 0.0);
 
-    glTranslatef(-horzValue(), -vertValue(), 0.0);
-    glScalef(zoomFactor(), zoomFactor(), 1.0);
+//    glTranslatef(-horzValue(), -vertValue(), 0.0);
+    glScalef(scaleX, scaleY, 1.0);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    QRect wr = viewToWindow(QRect(0, 0, m_canvas->width(), m_canvas->height()));
+    QRect wr = toAlignedRect( m_d->viewConverter->viewToDocument( QRectF( 0, 0, width(), height() ) ) );
     wr &= QRect(0, 0, img->width(), img->height());
 
-    m_d->openGLImageContext->setHDRExposure(HDRExposure());
+    m_d->openGLImageContext->setHDRExposure(m_d->canvas->view()->resourceProvider()->HDRExposure());
 
     for (int x = (wr.left() / m_d->openGLImageContext->imageTextureTileWidth()) * m_d->openGLImageContext->imageTextureTileWidth();
          x <= wr.right();
@@ -197,6 +226,7 @@ KoToolProxy * KisOpenGLCanvas2::toolProxy() {
 void KisOpenGLCanvas2::documentOffsetMoved( QPoint pt )
 {
     m_d->documentOffset = pt;
+    update();
 }
 
 

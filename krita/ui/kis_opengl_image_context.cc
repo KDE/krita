@@ -190,7 +190,7 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                 QImage tileUpdateImage = m_image->convertToQImage(tileUpdateRect.left(), tileUpdateRect.top(),
                                                                   tileUpdateRect.right(), tileUpdateRect.bottom(),
                                                                   m_monitorProfile, m_exposure);
-
+                kDebug() << "tileUpdateImage: " << tileUpdateImage.size() << endl;
                 if (m_displaySelection) {
                     if (!m_image->activeLayer().isNull()) {
                         m_image->activeLayer()->paint(tileUpdateImage,

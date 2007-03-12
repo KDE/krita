@@ -38,9 +38,14 @@ class KisSizeTransformation : public KisDynamicTransformation {
     public slots:
         void setHSensor(const KoID& id);
         void setVSensor(const KoID& id);
+        void setHMaximum(double v);
+        void setVMaximum(double v);
+        void setHMinimum(double v);
+        void setVMinimum(double v);
     private:
         KisDynamicSensor* m_horizTransfoParameter;
         KisDynamicSensor* m_vertiTransfoParameter;
+        double m_hmax, m_hmin, m_vmax, m_vmin;
 };
 
 #endif

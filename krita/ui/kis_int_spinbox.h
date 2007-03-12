@@ -19,7 +19,6 @@
 #ifndef KIS_INT_SPINBOX_H_
 #define KIS_INT_SPINBOX_H_
 
-#include <QHBoxLayout>
 #include <QWidget>
 
 #include <krita_export.h>

@@ -82,7 +82,7 @@ public:
      *
      * @param xmlWriter to use
      */
-    void setXmlWriter( KoXmlWriter & _xmlWriter );
+    void setXmlWriter( KoXmlWriter & xmlWriter );
 
     /**
      * @brief Get the main styles
@@ -118,9 +118,9 @@ public:
      * The draw:id is unique for all shapes.
      *
      * @param shape for which the draw id should be returned
-     * @param if true a new draw id will be generated if there is non yet
+     * @param insert if true a new draw id will be generated if there is non yet
      *
-     * @retrun the draw id for the shape or and empty string if it was not found
+     * @return the draw id for the shape or and empty string if it was not found
      */
     const QString drawId( KoShape * shape, bool insert = true );
 

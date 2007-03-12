@@ -34,7 +34,6 @@
 
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kcommand.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <knuminput.h>

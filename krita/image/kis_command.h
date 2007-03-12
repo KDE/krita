@@ -24,7 +24,6 @@
 #include <kcommand.h>
 #include "krita_export.h"
 
-class KisUndoAdapter;
 
 class KRITAIMAGE_EXPORT KisCommand : public KCommand {
     typedef KCommand super;

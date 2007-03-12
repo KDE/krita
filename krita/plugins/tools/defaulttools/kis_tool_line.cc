@@ -25,7 +25,6 @@
 #include <QWidget>
 
 #include <kdebug.h>
-#include <kcommand.h>
 #include <klocale.h>
 
 #include "kis_cursor.h"
@@ -33,7 +32,6 @@
 #include "kis_tool_line.h"
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
-#include "kis_undo_adapter.h"
 #include "QPainter"
 #include "kis_cursor.h"
 #include "kis_layer.h"
@@ -133,7 +131,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 m_painter = new KisPainter( device );
                 Q_CHECK_PTR(m_painter);
 
-                if (m_currentImage->undo()) m_painter->beginTransaction(i18n("Line"));
+                m_painter->beginTransaction(i18n("Line"));
 
                 m_painter->setPaintColor(m_currentFgColor);
                 m_painter->setBrush(m_currentBrush);
@@ -149,9 +147,9 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 #if 0
                 m_canvas->updateCanvas(convertToPt(dirtyRegion));
 #endif
-                if (m_currentImage->undo() && m_painter) {
-                    m_currentImage->undoAdapter()->addCommandOld(m_painter->endTransaction());
-                }
+
+                m_canvas->addCommand(m_painter->endTransaction());
+
                 delete m_painter;
                 m_painter = 0;
             } else {

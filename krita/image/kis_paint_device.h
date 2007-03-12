@@ -44,13 +44,13 @@ class QMatrix;
 class QTimer;
 class QPaintEngine;
 class KNamedCommand;
+class QUndoCommand;
 
 class KoStore;
 
 class KisExifInfo;
 class KisImage;
 class KisRandomSubAccessorPixel;
-class KisUndoAdapter;
 class KisFilter;
 class KisDataManager;
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
@@ -141,12 +141,6 @@ public:
      * Convenience method for the above
      */
     virtual void move(const QPoint& pt);
-
-    /**
-     * Move the paint device to the specified location and make it possible to
-     * undo the move.
-     */
-    virtual KNamedCommand * moveCommand(qint32 x, qint32 y);
 
     /**
      * Returns true of x,y is within the extent of this paint device
@@ -563,15 +557,15 @@ public:
      */
     void emitSelectionChanged();
 
+
+    KisUndoAdapter *undoAdapter() const;
+
     /**
      * Notify the owning image that the current selection has changed.
      *
      * @param r the area for which the selection has changed
      */
     void emitSelectionChanged(const QRect& r);
-
-
-    KisUndoAdapter *undoAdapter() const;
 
     /**
      * Return the exifInfo associated with this layer. If no exif infos are

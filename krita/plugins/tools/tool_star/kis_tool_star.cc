@@ -26,8 +26,6 @@
 #include <QLayout>
 #include <QGridLayout>
 
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -35,7 +33,6 @@
 
 #include "KoCanvasBase.h"
 #include "kis_canvas2.h"
-#include "kis_undo_adapter.h"
 #include "kis_view2.h"
 #include "kis_painter.h"
 #include "kis_int_spinbox.h"
@@ -105,7 +102,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
         KisPaintDeviceSP device = m_currentImage->activeDevice ();
         KisPainter painter (device);
-        if (m_currentImage->undo()) painter.beginTransaction (i18n("Star"));
+        painter.beginTransaction (i18n("Star"));
 
         painter.setPaintColor(m_currentFgColor);
         painter.setBackgroundColor(m_currentBgColor);
@@ -124,9 +121,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
         device->setDirty( painter.dirtyRegion() );
         notifyModified();
 
-        if (m_currentImage->undo()) {
-            m_currentImage->undoAdapter()->addCommandOld(painter.endTransaction());
-        }
+        m_canvas->addCommand(painter.endTransaction());
     }
 }
 

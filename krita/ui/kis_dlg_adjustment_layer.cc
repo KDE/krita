@@ -161,7 +161,7 @@ void KisDlgAdjustmentLayer::refreshPreview()
     QRect rect = layer->extent();
     m_currentFilter->process(layer, rect, config);
     m_preview->slotUpdate();
-    cmd.unexecute();
+    cmd.undo();
 }
 
 void KisDlgAdjustmentLayer::selectionHasChanged ( QListWidgetItem * item )

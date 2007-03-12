@@ -33,15 +33,14 @@
 #include <QRect>
 #include <QRegion>
 
-#include <kcommand.h>
 #include <klocale.h>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
 #include "KoColorProfile.h"
 
+#include "kis_doc2.h"
 #include "kis_annotation.h"
-#include "kis_command.h"
 #include "kis_types.h"
 #include "kis_meta_registry.h"
 #include "kis_paint_device.h"
@@ -54,7 +53,6 @@
 #include "kis_paint_layer.h"
 #include "kis_colorspace_convert_visitor.h"
 #include "kis_nameserver.h"
-#include "kis_undo_adapter.h"
 #include "kis_merge_visitor.h"
 #include "kis_transaction.h"
 #include "kis_crop_visitor.h"
@@ -68,439 +66,8 @@
 #include "kis_perspective_grid.h"
 #include "kis_extent_visitor.h"
 #include "kis_projection.h"
+#include "kis_image_commands.h"
 
-namespace {
-
-    class KisResizeImageCmd : public KNamedCommand {
-        typedef KNamedCommand super;
-
-    public:
-        KisResizeImageCmd(KisUndoAdapter *adapter,
-                          KisImageSP img,
-                          qint32 width,
-                          qint32 height,
-                          qint32 oldWidth,
-                          qint32 oldHeight) : super(i18n("Resize Image"))
-            {
-                m_adapter = adapter;
-                m_img = img;
-                m_before = QSize(oldWidth, oldHeight);
-                m_after = QSize(width, height);
-            }
-
-        virtual ~KisResizeImageCmd()
-            {
-            }
-
-    public:
-        virtual void execute()
-            {
-                m_adapter->setUndo(false);
-                m_img->resize(m_after.width(), m_after.height());
-                m_adapter->setUndo(true);
-            }
-
-        virtual void unexecute()
-            {
-                m_adapter->setUndo(false);
-                m_img->resize(m_before.width(), m_before.height());
-                m_adapter->setUndo(true);
-            }
-
-    private:
-        KisUndoAdapter *m_adapter;
-        KisImageSP m_img;
-        QSize m_before;
-        QSize m_after;
-    };
-
-    // -------------------------------------------------------
-
-    class KisChangeLayersCmd : public KNamedCommand {
-        typedef KNamedCommand super;
-
-    public:
-        KisChangeLayersCmd(KisUndoAdapter *adapter, KisImageSP img,
-                           KisGroupLayerSP oldRootLayer, KisGroupLayerSP newRootLayer, const QString& name)
-            : super(name)
-            {
-                m_adapter = adapter;
-                m_img = img;
-                m_oldRootLayer = oldRootLayer;
-                m_newRootLayer = newRootLayer;
-            }
-
-        virtual ~KisChangeLayersCmd()
-            {
-            }
-
-    public:
-        virtual void execute()
-            {
-                m_adapter->setUndo(false);
-                m_img->setRootLayer(m_newRootLayer);
-                m_adapter->setUndo(true);
-                m_img->notifyLayersChanged();
-            }
-
-        virtual void unexecute()
-            {
-                m_adapter->setUndo(false);
-                m_img->setRootLayer(m_oldRootLayer);
-                m_adapter->setUndo(true);
-                m_img->notifyLayersChanged();
-            }
-
-    private:
-        KisUndoAdapter *m_adapter;
-        KisImageSP m_img;
-        KisGroupLayerSP m_oldRootLayer;
-        KisGroupLayerSP m_newRootLayer;
-    };
-
-
-    // -------------------------------------------------------
-
-    class KisConvertImageTypeCmd : public KNamedCommand {
-        typedef KNamedCommand super;
-
-    public:
-        KisConvertImageTypeCmd(KisUndoAdapter *adapter, KisImageSP img,
-                               KoColorSpace * beforeColorSpace, KoColorSpace * afterColorSpace
-            ) : super(i18n("Convert Image Type"))
-            {
-                m_adapter = adapter;
-                m_img = img;
-                m_beforeColorSpace = beforeColorSpace;
-                m_afterColorSpace = afterColorSpace;
-            }
-
-        virtual ~KisConvertImageTypeCmd()
-            {
-            }
-
-    public:
-        virtual void execute()
-            {
-                m_adapter->setUndo(false);
-
-                m_img->setColorSpace(m_afterColorSpace);
-                m_img->setProfile(m_afterColorSpace->profile());
-
-                m_adapter->setUndo(true);
-            }
-
-        virtual void unexecute()
-            {
-                m_adapter->setUndo(false);
-
-                m_img->setColorSpace(m_beforeColorSpace);
-                m_img->setProfile(m_beforeColorSpace->profile());
-
-                m_adapter->setUndo(true);
-            }
-
-    private:
-        KisUndoAdapter *m_adapter;
-        KisImageSP m_img;
-        KoColorSpace * m_beforeColorSpace;
-        KoColorSpace * m_afterColorSpace;
-    };
-
-
-    // -------------------------------------------------------
-
-    class KisImageCommand : public KNamedCommand {
-        typedef KNamedCommand super;
-
-    public:
-        KisImageCommand(const QString& name, KisImageSP image);
-        virtual ~KisImageCommand() {}
-
-        virtual void execute() = 0;
-        virtual void unexecute() = 0;
-
-    protected:
-        void setUndo(bool undo);
-
-        KisImageSP m_image;
-    };
-
-    KisImageCommand::KisImageCommand(const QString& name, KisImageSP image) :
-        super(name), m_image(image)
-    {
-    }
-
-    void KisImageCommand::setUndo(bool undo)
-    {
-        if (m_image->undoAdapter()) {
-            m_image->undoAdapter()->setUndo(undo);
-        }
-    }
-
-
-    // -------------------------------------------------------
-
-    class KisLayerPositionCommand : public KisImageCommand {
-        typedef KisImageCommand super;
-
-    public:
-        KisLayerPositionCommand(const QString& name, KisImageSP image, KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis) : super(name, image)
-            {
-                m_layer = layer;
-                m_oldParent = layer->parent();
-                m_oldAboveThis = layer->nextSibling();
-                m_newParent = parent;
-                m_newAboveThis = aboveThis;
-           }
-
-        virtual void execute()
-            {
-                setUndo(false);
-                m_image->moveLayer(m_layer, m_newParent, m_newAboveThis);
-                setUndo(true);
-            }
-
-        virtual void unexecute()
-            {
-                setUndo(false);
-                m_image->moveLayer(m_layer, m_oldParent, m_oldAboveThis);
-                setUndo(true);
-            }
-
-    private:
-        KisLayerSP m_layer;
-        KisGroupLayerSP m_oldParent;
-        KisLayerSP m_oldAboveThis;
-        KisGroupLayerSP m_newParent;
-        KisLayerSP m_newAboveThis;
-    };
-
-
-    // -------------------------------------------------------
-
-    class LayerAddCmd : public KisCommand {
-        typedef KisCommand super;
-
-    public:
-        LayerAddCmd(KisUndoAdapter *adapter, KisImageSP img, KisLayerSP layer) : super(i18n("Add Layer"), adapter)
-            {
-                m_img = img;
-                m_layer = layer;
-                m_parent = layer->parent();
-                m_aboveThis = layer->nextSibling();
-            }
-
-        virtual ~LayerAddCmd()
-            {
-            }
-
-        virtual void execute()
-            {
-                adapter()->setUndo(false);
-                m_img->addLayer(m_layer, m_parent, m_aboveThis);
-                adapter()->setUndo(true);
-            }
-
-        virtual void unexecute()
-            {
-                adapter()->setUndo(false);
-                m_img->removeLayer(m_layer);
-                adapter()->setUndo(true);
-            }
-
-    private:
-        KisImageSP m_img;
-        KisLayerSP m_layer;
-        KisGroupLayerSP m_parent;
-        KisLayerSP m_aboveThis;
-    };
-
-    // -------------------------------------------------------
-
-    class LayerRmCmd : public KNamedCommand {
-        typedef KNamedCommand super;
-
-    public:
-        LayerRmCmd(KisUndoAdapter *adapter, KisImageSP img,
-                   KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAbove)
-            : super(i18n("Remove Layer"))
-            {
-                m_adapter = adapter;
-                m_img = img;
-                m_layer = layer;
-                m_prevParent = wasParent;
-                m_prevAbove = wasAbove;
-            }
-
-        virtual ~LayerRmCmd()
-            {
-            }
-
-        virtual void execute()
-            {
-                m_adapter->setUndo(false);
-                m_img->removeLayer(m_layer);
-                m_adapter->setUndo(true);
-            }
-
-        virtual void unexecute()
-            {
-                m_adapter->setUndo(false);
-                m_img->addLayer(m_layer, m_prevParent, m_prevAbove);
-                m_adapter->setUndo(true);
-            }
-
-    private:
-        KisUndoAdapter *m_adapter;
-        KisImageSP m_img;
-        KisLayerSP m_layer;
-        KisGroupLayerSP m_prevParent;
-        KisLayerSP m_prevAbove;
-    };
-
-    class LayerMoveCmd: public KNamedCommand {
-        typedef KNamedCommand super;
-
-    public:
-        LayerMoveCmd(KisUndoAdapter *adapter, KisImageSP img,
-                         KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAbove)
-            : super(i18n("Move Layer"))
-            {
-                m_adapter = adapter;
-                m_img = img;
-                m_layer = layer;
-                m_prevParent = wasParent;
-                m_prevAbove = wasAbove;
-                m_newParent = layer->parent();
-                m_newAbove = layer->nextSibling();
-            }
-
-        virtual ~LayerMoveCmd()
-            {
-            }
-
-        virtual void execute()
-            {
-                m_adapter->setUndo(false);
-                m_img->moveLayer(m_layer, m_newParent, m_newAbove);
-                m_adapter->setUndo(true);
-            }
-
-        virtual void unexecute()
-            {
-                m_adapter->setUndo(false);
-                m_img->moveLayer(m_layer, m_prevParent, m_prevAbove);
-                m_adapter->setUndo(true);
-            }
-
-    private:
-        KisUndoAdapter *m_adapter;
-        KisImageSP m_img;
-        KisLayerSP m_layer;
-        KisGroupLayerSP m_prevParent;
-        KisLayerSP m_prevAbove;
-        KisGroupLayerSP m_newParent;
-        KisLayerSP m_newAbove;
-    };
-
-
-    // -------------------------------------------------------
-
-    class LayerPropsCmd : public KNamedCommand {
-        typedef KNamedCommand super;
-
-    public:
-        LayerPropsCmd(KisLayerSP layer,
-                      KisImageSP img,
-                      KisUndoAdapter *adapter,
-                      const QString& name,
-                      qint32 opacity,
-                      const KoCompositeOp* compositeOp) : super(i18n("Layer Property Changes"))
-            {
-                m_layer = layer;
-                m_img = img;
-                m_adapter = adapter;
-                m_name = name;
-                m_opacity = opacity;
-                m_compositeOp = compositeOp;
-            }
-
-        virtual ~LayerPropsCmd()
-            {
-            }
-
-    public:
-        virtual void execute()
-            {
-                QString name = m_layer->name();
-                qint32 opacity = m_layer->opacity();
-                m_compositeOp = m_layer->compositeOp();
-
-                m_adapter->setUndo(false);
-                m_img->setLayerProperties(m_layer,
-                                            m_opacity,
-                                            m_compositeOp,
-                                            m_name);
-                m_adapter->setUndo(true);
-                m_name = name;
-                m_opacity = opacity;
-                m_layer->setDirty();
-            }
-
-        virtual void unexecute()
-            {
-                execute();
-            }
-
-    private:
-        KisUndoAdapter *m_adapter;
-        KisLayerSP m_layer;
-        KisImageSP m_img;
-        QString m_name;
-        qint32 m_opacity;
-        const KoCompositeOp * m_compositeOp;
-    };
-
-    // -------------------------------------------------------
-
-    class LockImageCommand : public KNamedCommand {
-        typedef KNamedCommand super;
-
-    public:
-        LockImageCommand(KisImageSP img, bool lockImage) : super("lock image")  // Not for translation, this
-            {                                                                   // is only ever used inside a macro command.
-                m_img = img;
-                m_lockImage = lockImage;
-            }
-
-        virtual ~LockImageCommand()
-            {
-            }
-
-        virtual void execute()
-            {
-                if (m_lockImage) {
-                    m_img->lock();
-                } else {
-                    m_img->unlock();
-                }
-            }
-
-        virtual void unexecute()
-            {
-                if (m_lockImage) {
-                    m_img->unlock();
-                } else {
-                    m_img->lock();
-                }
-            }
-
-    private:
-        KisImageSP m_img;
-        bool m_lockImage;
-    };
-}
 
 class KisImage::KisImagePrivate {
 public:
@@ -747,15 +314,15 @@ void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
             else
                 m_d->adapter->beginMacro(i18n("Resize Image"));
 
-            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
-            m_d->adapter->addCommandOld(new KisResizeImageCmd(m_d->adapter, KisImageSP(this), w, h, width(), height()));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
+            m_d->adapter->addCommand(new KisImageResizeCommand(KisImageSP(this), w, h, width(), height()));
         }
 
         m_d->width = w;
         m_d->height = h;
 
         if (cropLayers) {
-            KisCropVisitor v(QRect(x, y, w, h));
+            KisCropVisitor v(QRect(x, y, w, h), m_d->adapter);
             m_d->rootLayer->accept(v);
         }
 
@@ -764,7 +331,7 @@ void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
         unlock();
 
         if (undo()) {
-            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
             m_d->adapter->endMacro();
         }
     }
@@ -796,7 +363,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
 
         if (undo()) {
             m_d->adapter->beginMacro(i18n("Scale Image"));
-            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
         }
 
         {
@@ -805,7 +372,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
         }
 
         if (undo()) {
-            m_d->adapter->addCommandOld(new KisResizeImageCmd(m_d->adapter, KisImageSP(this), w, h, width(), height()));
+            m_d->adapter->addCommand(new KisImageResizeCommand(KisImageSP(this), w, h, width(), height()));
         }
 
         m_d->width = w;
@@ -816,7 +383,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
         unlock();
 
         if (undo()) {
-            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
             m_d->adapter->endMacro();
         }
     }
@@ -840,14 +407,14 @@ void KisImage::rotate(double radians, KisProgressDisplayInterface *progress)
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Rotate Image"));
-        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
     }
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KoID("Triangle"));
     KisTransformVisitor visitor (KisImageSP(this), 1.0, 1.0, 0, 0, radians, -tx, -ty, progress, filter);
     m_d->rootLayer->accept(visitor);
 
-    if (undo()) m_d->adapter->addCommandOld(new KisResizeImageCmd(undoAdapter(), KisImageSP(this), w, h, width(), height()));
+    if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageSP(this), w, h, width(), height()));
 
     m_d->width = w;
     m_d->height = h;
@@ -857,7 +424,7 @@ void KisImage::rotate(double radians, KisProgressDisplayInterface *progress)
     unlock();
 
     if (undo()) {
-        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
         m_d->adapter->endMacro();
     }
 }
@@ -892,14 +459,13 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
         if (undo()) {
             m_d->adapter->beginMacro(i18n("Shear Image"));
-            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
         }
 
         KisShearVisitor v(angleX, angleY, progress);
-        v.setUndoAdapter(undoAdapter());
         rootLayer()->accept(v);
 
-        if (undo()) m_d->adapter->addCommandOld(new KisResizeImageCmd(m_d->adapter, KisImageSP(this), w, h, width(), height()));
+        if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageSP(this), w, h, width(), height()));
 
         m_d->width = w;
         m_d->height = h;
@@ -909,7 +475,7 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
         unlock();
 
         if (undo()) {
-            m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
             m_d->adapter->endMacro();
         }
     }
@@ -928,7 +494,7 @@ void KisImage::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Convert Image Type"));
-        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
     }
 
     setColorSpace(dstColorSpace);
@@ -942,9 +508,8 @@ void KisImage::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
 
     if (undo()) {
 
-        m_d->adapter->addCommandOld(new KisConvertImageTypeCmd(undoAdapter(), KisImageSP(this),
-                                                         oldCs, dstColorSpace));
-        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
+        m_d->adapter->addCommand(new KisImageConvertTypeCommand(KisImageSP(this), oldCs, dstColorSpace));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
         m_d->adapter->endMacro();
     }
 }
@@ -1065,21 +630,9 @@ KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const QString
 
 void KisImage::setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp* compositeOp, const QString& name)
 {
-    if (layer && (layer->opacity() != opacity || layer->compositeOp() != compositeOp || layer->name() != name)) {
-        if (undo()) {
-            QString oldname = layer->name();
-            qint32 oldopacity = layer->opacity();
-            const KoCompositeOp * oldCompositeOp = layer->compositeOp();
-            layer->setName(name);
-            layer->setOpacity(opacity);
-            layer->setCompositeOp(compositeOp);
-            m_d->adapter->addCommandOld(new LayerPropsCmd(layer, KisImageSP(this), m_d->adapter, oldname, oldopacity, oldCompositeOp));
-        } else {
-            layer->setName(name);
-            layer->setOpacity(opacity);
-            layer->setCompositeOp(compositeOp);
-        }
-    }
+    layer->setName(name);
+    layer->setOpacity(opacity);
+    layer->setCompositeOp(compositeOp);
 }
 
 KisGroupLayerSP KisImage::rootLayer() const
@@ -1168,8 +721,9 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
         }
 
 
-        if (!layer->temporary() && undo()) {
-            m_d->adapter->addCommandOld(new LayerAddCmd(m_d->adapter, KisImageSP(this), layer));
+        if (!layer->temporary()) {
+            QUndoCommand* cmd = new KisImageLayerAddCommand(KisImageSP(this), layer);
+            cmd->redo();
         }
     }
 
@@ -1219,7 +773,7 @@ bool KisImage::removeLayer(KisLayerSP layer)
         if (success) {
             layer->setImage(0);
             if (!layer->temporary() && undo()) {
-                m_d->adapter->addCommandOld(new LayerRmCmd(m_d->adapter, KisImageSP(this), layer, parent, wasAbove));
+                m_d->adapter->addCommand(new KisImageLayerRemoveCommand(KisImageSP(this), layer, parent, wasAbove));
             }
             if (!layer->temporary()) {
                 emit sigLayerRemoved(layer, parent, wasAbove);
@@ -1301,13 +855,13 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
     {
         emit sigLayerMoved(layer, wasParent, wasAbove);
         if (undo())
-            m_d->adapter->addCommandOld(new LayerMoveCmd(m_d->adapter, KisImageSP(this), layer, wasParent, wasAbove));
+            m_d->adapter->addCommand(new KisImageLayerMoveCommand(KisImageSP(this), layer, wasParent, wasAbove));
     }
     else //we already removed the layer above, but re-adding it failed, so...
     {
         emit sigLayerRemoved(layer, wasParent, wasAbove);
         if (undo())
-            m_d->adapter->addCommandOld(new LayerRmCmd(m_d->adapter, KisImageSP(this), layer, wasParent, wasAbove));
+            m_d->adapter->addCommand(new KisImageLayerRemoveCommand(KisImageSP(this), layer, wasParent, wasAbove));
     }
 
     return success;
@@ -1340,8 +894,8 @@ void KisImage::flatten()
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Flatten Image"));
-        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), true));
-        m_d->adapter->addCommandOld(new KisChangeLayersCmd(m_d->adapter, KisImageSP(this), oldRootLayer, m_d->rootLayer, ""));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
+        m_d->adapter->addCommand(new KisImageChangeLayersCommand(KisImageSP(this), oldRootLayer, m_d->rootLayer, ""));
     }
 
     lock();
@@ -1354,7 +908,7 @@ void KisImage::flatten()
     notifyLayersChanged();
 
     if (undo()) {
-        m_d->adapter->addCommandOld(new LockImageCommand(KisImageSP(this), false));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
         m_d->adapter->endMacro();
     }
 }

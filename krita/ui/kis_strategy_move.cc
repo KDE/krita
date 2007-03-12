@@ -20,7 +20,6 @@
 #include <QColor>
 
 #include <kaction.h>
-#include <kcommand.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -28,6 +27,7 @@
 #include "kis_layer.h"
 #include "kis_strategy_move.h"
 #include "kis_undo_adapter.h"
+#include "kis_layer_commands.h"
 
 KisStrategyMove::KisStrategyMove()
     : m_image(0)
@@ -100,14 +100,14 @@ void KisStrategyMove::drag(const QPoint& original)
 QUndoCommand* KisStrategyMove::endDrag(const QPoint& pos, bool undo)
 {
     if (m_image && m_dragging) {
-        KisLayerSP dev;
+        KisLayerSP layer;
 
-        if (m_image && (dev = m_image->activeLayer())) {
+        if (m_image && (layer = m_image->activeLayer())) {
             drag(pos);
             m_dragging = false;
 
             if (undo && m_image->undo()) {
-                QUndoCommand *cmd = dev->moveCommand(m_layerStart, m_layerPosition);
+                QUndoCommand *cmd = new KisLayerMoveCommand(layer, m_layerStart, m_layerPosition);
                 Q_CHECK_PTR(cmd);
 
                 return cmd;

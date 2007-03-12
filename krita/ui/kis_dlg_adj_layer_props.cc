@@ -185,7 +185,7 @@ void KisDlgAdjLayerProps::refreshPreview()
     KisTransaction cmd("Temporary transaction", layer);
     m_currentFilter->process(layer, rect, config);
     m_preview->slotUpdate();
-    cmd.unexecute();
+    cmd.undo();
 }
 
 #include "kis_dlg_adj_layer_props.moc"

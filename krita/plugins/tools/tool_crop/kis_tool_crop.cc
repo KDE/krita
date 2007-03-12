@@ -30,7 +30,6 @@
 #include <QRect>
 
 #include <kdebug.h>
-#include <kcommand.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kdebug.h>

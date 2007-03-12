@@ -30,7 +30,6 @@
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "kis_tool_rectangle.h"
-#include "kis_undo_adapter.h"
 #include "kis_cursor.h"
 #include "kis_layer.h"
 #include "KoCanvasBase.h"
@@ -147,8 +146,7 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
         m_painter = new KisPainter( device );
         Q_CHECK_PTR(m_painter);
 
-        if (m_currentImage->undo())
-            m_painter->beginTransaction (i18n ("Rectangle"));
+        m_painter->beginTransaction (i18n ("Rectangle"));
 
         m_painter->setPaintColor(m_currentFgColor);
         m_painter->setBackgroundColor(m_currentBgColor);
@@ -168,9 +166,9 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
 #if 0
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
 #endif
-        if (m_currentImage->undo()) {
-            m_currentImage->undoAdapter()->addCommandOld(m_painter->endTransaction());
-        }
+
+        m_canvas->addCommand(m_painter->endTransaction());
+
 	delete m_painter;
 	m_painter = 0;
     }

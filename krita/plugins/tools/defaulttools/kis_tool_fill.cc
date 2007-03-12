@@ -22,7 +22,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kcommand.h>
 #include <QLabel>
 #include <QLayout>
 #include <QCheckBox>
@@ -45,7 +44,6 @@
 #include "kis_pattern.h"
 #include "kis_fill_painter.h"
 #include "kis_progress_display_interface.h"
-#include "kis_undo_adapter.h"
 #include "kis_selection.h"
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
@@ -102,7 +100,7 @@ bool KisToolFill::flood(int startX, int startY)
 	Q_CHECK_PTR(m_painter);
 
 
-        if (m_currentImage->undo()) m_painter->beginTransaction(i18n("Fill"));
+        m_painter->beginTransaction(i18n("Fill"));
 
         QVector<QRect> rects = dirty.rects();
 
@@ -119,9 +117,7 @@ bool KisToolFill::flood(int startX, int startY)
 
         device->setDirty(dirty);
 
-        if (m_currentImage->undo()) {
-            m_currentImage->undoAdapter()->addCommandOld(m_painter->endTransaction());
-        }
+        m_canvas->addCommand(m_painter->endTransaction());
     }
     else {
 
@@ -129,7 +125,7 @@ bool KisToolFill::flood(int startX, int startY)
         m_fillPainter = new KisFillPainter (device);
         Q_CHECK_PTR(m_fillPainter);
 
-        if (m_currentImage->undo()) m_fillPainter->beginTransaction(i18n("Flood Fill"));
+        m_fillPainter->beginTransaction(i18n("Flood Fill"));
 
         m_fillPainter->setPaintColor(m_currentFgColor);
         m_fillPainter->setOpacity(m_opacity);
@@ -153,9 +149,7 @@ bool KisToolFill::flood(int startX, int startY)
         QRegion dirtyRegion = m_fillPainter->dirtyRegion();
         device->setDirty(dirtyRegion);
 
-        if (m_currentImage->undo()) {
-            m_currentImage->undoAdapter()->addCommandOld(m_fillPainter->endTransaction());
-        }
+        m_canvas->addCommand(m_fillPainter->endTransaction());
 
         delete m_fillPainter;
         m_fillPainter = 0;

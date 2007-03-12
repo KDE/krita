@@ -30,7 +30,6 @@
 #include "kis_tool_ellipse.h"
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
-#include "kis_undo_adapter.h"
 #include "kis_cursor.h"
 #include "KoCanvasBase.h"
 
@@ -150,8 +149,7 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
 	m_painter = new KisPainter( device );
 	Q_CHECK_PTR(m_painter);
 
-        if (m_currentImage->undo())
-            m_painter->beginTransaction (i18n ("Ellipse"));
+        m_painter->beginTransaction (i18n ("Ellipse"));
 
         m_painter->setPaintColor(m_currentFgColor);
         m_painter->setBackgroundColor(m_currentBgColor);
@@ -168,9 +166,8 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
         device->setDirty( bound );
         notifyModified();
 
-        if (m_currentImage->undo()) {
-            m_currentImage->undoAdapter()->addCommandOld(m_painter->endTransaction());
-        }
+        m_canvas->addCommand(m_painter->endTransaction());
+
         delete m_painter;
         m_painter = 0;
     }

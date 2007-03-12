@@ -27,7 +27,6 @@
 #include <QCheckBox>
 
 #include <kdebug.h>
-#include <kcommand.h>
 #include <klocale.h>
 #include <knuminput.h>
 
@@ -42,7 +41,6 @@
 #include "kis_painter.h"
 #include "kis_progress_display_interface.h"
 #include "kis_tool_gradient.h"
-#include "kis_undo_adapter.h"
 #include "kis_resource_provider.h"
 
 KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
@@ -140,7 +138,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
             KisGradientPainter painter(device);
 
-            if (m_currentImage->undo())  painter.beginTransaction(i18n("Gradient"));
+            painter.beginTransaction(i18n("Gradient"));
 
             painter.setPaintColor(m_currentFgColor);
             painter.setGradient(m_currentGradient);
@@ -162,9 +160,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
                 notifyModified();
 
-                if (m_currentImage->undo()) {
-                    m_currentImage->undoAdapter()->addCommandOld(painter.endTransaction());
-                }
+                m_canvas->addCommand(painter.endTransaction());
             }
         }
     }

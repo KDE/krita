@@ -32,6 +32,7 @@
 #include "kis_transform_worker.h"
 #include "kis_selected_transaction.h"
 #include "kis_external_layer_iface.h"
+#include "kis_undo_adapter.h"
 
 class KisProgressDisplayInterface;
 class KisFilterStrategy;
@@ -82,7 +83,7 @@ public:
         tw.run();
 
         if (m_img->undo()) {
-            m_img->undoAdapter()->addCommandOld(t);
+            m_img->undoAdapter()->addCommand(t);
 	}
         layer->setDirty();
         return true;

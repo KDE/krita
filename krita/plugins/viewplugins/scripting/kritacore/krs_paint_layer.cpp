@@ -29,6 +29,7 @@
 #include <kis_iterators_pixel.h>
 #include <kis_transaction.h>
 #include <kis_math_toolbox.h>
+#include <kis_undo_adapter.h>
 
 #include "krs_iterator.h"
 #include "krs_histogram.h"
@@ -155,7 +156,7 @@ void PaintLayer::endPainting()
     }
     if(m_cmd != 0)
     {
-        paintLayer()->image()->undoAdapter()->addCommandOld(m_cmd);
+        paintLayer()->image()->undoAdapter()->addCommand(m_cmd);
     }
 }
 

@@ -26,8 +26,6 @@
 #include "QPainter"
 
 #include <kdebug.h>
-#include <kaction.h>
-#include <kcommand.h>
 #include <klocale.h>
 
 #include <KoPointerEvent.h>
@@ -41,7 +39,6 @@
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
-#include "kis_undo_adapter.h"
 
 #include "kis_boundary_painter.h"
 #include "kis_canvas2.h"
@@ -156,8 +153,6 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             delete m_painter;
 
         if (!m_paintIncremental) {
-            if (m_currentImage->undo())
-                m_currentImage->undoAdapter()->beginMacro(m_transactionText);
 
             KisLayerSupportsIndirectPainting* layer;
             if ((layer = dynamic_cast<KisLayerSupportsIndirectPainting*>(
@@ -191,7 +186,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         m_painter = new KisPainter( m_target );
         Q_CHECK_PTR(m_painter);
         m_source = device;
-        if (m_currentImage->undo()) m_painter->beginTransaction(m_transactionText);
+        m_painter->beginTransaction(m_transactionText);
     }
 
     m_painter->setPaintColor(m_currentFgColor);
@@ -228,13 +223,12 @@ void KisToolFreehand::endPaint()
             // If painting in mouse release, make sure painter
             // is destructed or end()ed
             if (!m_paintIncremental) {
-                if (m_currentImage->undo())
-                    m_painter->endTransaction();
+                m_painter->endTransaction();
+
                 KisPainter painter( m_source );
                 painter.setCompositeOp(m_compositeOp);
 
-                if (m_currentImage->undo())
-                    painter.beginTransaction(m_transactionText);
+                painter.beginTransaction(m_transactionText);
 
                 QRegion r = painter.dirtyRegion();
                 QVector<QRect> dirtyRects = r.rects();
@@ -254,13 +248,9 @@ void KisToolFreehand::endPaint()
                 layer->setTemporaryTarget(0);
                 m_source->parentLayer()->setDirty(painter.dirtyRegion());
 
-                if (m_currentImage->undo()) {
-                    m_currentImage->undoAdapter()->addCommandOld(painter.endTransaction());
-                    m_currentImage->undoAdapter()->endMacro();
-                }
+                m_canvas->addCommand(painter.endTransaction());
             } else {
-                if (m_currentImage->undo())
-                    m_currentImage->undoAdapter()->addCommandOld(m_painter->endTransaction());
+                m_canvas->addCommand(m_painter->endTransaction());
             }
         }
         delete m_painter;

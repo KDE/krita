@@ -22,7 +22,6 @@
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
-#include <kcommand.h>
 
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>

@@ -22,6 +22,7 @@
 
 #include "klocale.h"
 
+#include "kis_doc2.h"
 #include "kis_layer_visitor.h"
 #include "kis_types.h"
 #include "kis_layer.h"
@@ -31,6 +32,8 @@
 #include "kis_transaction.h"
 #include "kis_selected_transaction.h"
 #include "kis_external_layer_iface.h"
+#include "kis_undo_adapter.h"
+#include "kis_layer_commands.h"
 
 class KisProgressDisplayInterface;
 class KisFilterStrategy;
@@ -61,21 +64,25 @@ public:
     bool visit(KisPaintLayer *layer)
     {
         KisPaintDeviceSP dev = layer->paintDevice();
+        KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
+
         KisSelectedTransaction * t = 0;
-        if (layer->undoAdapter() && layer->undoAdapter()->undo())
+        if (undoAdapter && undoAdapter->undo())
             t = new KisSelectedTransaction(i18n("Crop"), dev);
 
         dev->crop(m_rect);
 
-        if (layer->undoAdapter() && layer->undoAdapter()->undo()) {
-            layer->undoAdapter()->addCommandOld(t);
+        if (undoAdapter && undoAdapter->undo()) {
+            undoAdapter->addCommand(t);
         }
 
         if(m_movelayers) {
-            if(layer->undoAdapter() && layer->undoAdapter()->undo()) {
-                KNamedCommand * cmd = dev->moveCommand(layer->x() - m_rect.x(), layer->y() - m_rect.y());
-      	        layer->undoAdapter()->addCommandOld(cmd);
-    	    }
+            if(undoAdapter && undoAdapter->undo()) {
+                QPoint oldPos(layer->x(), layer->y());
+                QPoint newPos(layer->x() - m_rect.x(), layer->y() - m_rect.y());
+                QUndoCommand * cmd = new KisLayerMoveCommand(layer, oldPos, newPos);
+                undoAdapter->addCommand(cmd);
+            }
         }
         layer->setDirty();
         return true;

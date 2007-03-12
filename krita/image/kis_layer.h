@@ -32,10 +32,8 @@
 #include "KoDocumentSectionModel.h"
 #include "kis_paint_device.h"
 
-class QUndoCommand;
 class QIcon;
 class QPainter;
-class KisUndoAdapter;
 class KisGroupLayer;
 
 /**
@@ -188,8 +186,6 @@ public:
     virtual qint32 y() const = 0;
     virtual void setY(qint32) = 0;
 
-    virtual QUndoCommand *moveCommand(QPoint oldPosition, QPoint newPosition);
-
     /// Returns an approximation of where the bounds on actual data are in this layer
     virtual QRect extent() const = 0;
     /// Returns the exact bounds of where the actual data resides in this layer
@@ -226,7 +222,7 @@ public:
     KisImageSP image() const { return m_image; }
     virtual void setImage(KisImageWSP image) { m_image = image; }
 
-    KisUndoAdapter *undoAdapter() const;
+//     KisUndoAdapter *undoAdapter() const;
 
     /// paints a mask where the selection on this layer resides
     virtual void paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);

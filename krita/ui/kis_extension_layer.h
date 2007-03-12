@@ -33,7 +33,6 @@ class KoColorSpace;
 
 class KisFilterStrategy;
 class KisProgressDisplayInterface;
-class KisUndoAdapter;
 
 /**
    This interface extends the KisExternalLayer interface with the

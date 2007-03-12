@@ -23,8 +23,8 @@
 #include <QApplication>
 #include <QList>
 #include <QTimer>
+#include <QUndoCommand>
 
-#include <kcommand.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -40,7 +40,6 @@
 #include "kis_types.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
-#include "kis_undo_adapter.h"
 #include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"
@@ -51,20 +50,19 @@
 #include "kis_paint_device.h"
 #include "kis_datamanager.h"
 #include "kis_memento.h"
+#include "kis_undo_adapter.h"
 
 #include "kis_exif_info.h"
 
+
 namespace {
 
-    class KisPaintDeviceCommand : public KNamedCommand {
-        typedef KNamedCommand super;
+    class KisPaintDeviceCommand : public QUndoCommand {
+        typedef QUndoCommand super;
 
     public:
         KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice);
         virtual ~KisPaintDeviceCommand() {}
-
-        virtual void execute() = 0;
-        virtual void unexecute() = 0;
 
     protected:
         void setUndo(bool undo);
@@ -84,83 +82,15 @@ namespace {
         }
     }
 
-    class MoveCommand : public KNamedCommand {
-        typedef KNamedCommand super;
+    class KisConvertLayerTypeCmd : public KisPaintDeviceCommand {
+        typedef KisPaintDeviceCommand super;
 
     public:
-        MoveCommand(KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
-        virtual ~MoveCommand();
-
-        virtual void execute();
-        virtual void unexecute();
-
-    private:
-        void moveTo(const QPoint& pos);
-        void undoOff();
-        void undoOn();
-
-    private:
-        KisPaintDeviceSP m_device;
-        QPoint m_oldPos;
-        QPoint m_newPos;
-    };
-
-    MoveCommand::MoveCommand(KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
-        super(i18n("Move Layer"))
-    {
-        m_device = device;
-        m_oldPos = oldpos;
-        m_newPos = newpos;
-    }
-
-    MoveCommand::~MoveCommand()
-    {
-    }
-
-    void MoveCommand::undoOff()
-    {
-        if (m_device->undoAdapter()) {
-            m_device->undoAdapter()->setUndo(false);
-        }
-    }
-
-    void MoveCommand::undoOn()
-    {
-        if (m_device->undoAdapter()) {
-            m_device->undoAdapter()->setUndo(true);
-        }
-    }
-
-    void MoveCommand::execute()
-    {
-        undoOff();
-        moveTo(m_newPos);
-        undoOn();
-    }
-
-    void MoveCommand::unexecute()
-    {
-        undoOff();
-        moveTo(m_oldPos);
-        undoOn();
-    }
-
-    void MoveCommand::moveTo(const QPoint& pos)
-    {
-        m_device->move(pos.x(), pos.y());
-    }
-
-    class KisConvertLayerTypeCmd : public KNamedCommand {
-        typedef KNamedCommand super;
-
-    public:
-        KisConvertLayerTypeCmd(KisUndoAdapter *adapter, KisPaintDeviceSP paintDevice,
+        KisConvertLayerTypeCmd(KisPaintDeviceSP paintDevice,
                        KisDataManagerSP beforeData, KoColorSpace * beforeColorSpace,
                        KisDataManagerSP afterData, KoColorSpace * afterColorSpace
-                ) : super(i18n("Convert Layer Type"))
+                ) : super(i18n("Convert Layer Type"), paintDevice)
             {
-                m_adapter = adapter;
-                m_paintDevice = paintDevice;
                 m_beforeData = beforeData;
                 m_beforeColorSpace = beforeColorSpace;
                 m_afterData = afterData;
@@ -172,25 +102,21 @@ namespace {
             }
 
     public:
-        virtual void execute()
+        virtual void redo()
             {
-                m_adapter->setUndo(false);
+                setUndo(false);
                 m_paintDevice->setData(m_afterData, m_afterColorSpace);
-                m_adapter->setUndo(true);
+                setUndo(true);
             }
 
-        virtual void unexecute()
+        virtual void undo()
             {
-                m_adapter->setUndo(false);
+                setUndo(false);
                 m_paintDevice->setData(m_beforeData, m_beforeColorSpace);
-                m_adapter->setUndo(true);
+                setUndo(true);
             }
 
     private:
-        KisUndoAdapter *m_adapter;
-
-        KisPaintDeviceSP m_paintDevice;
-
         KisDataManagerSP m_beforeData;
         KoColorSpace * m_beforeColorSpace;
 
@@ -445,14 +371,6 @@ void KisPaintDevice::move(qint32 x, qint32 y)
 void KisPaintDevice::move(const QPoint& pt)
 {
     move(pt.x(), pt.y());
-}
-
-KNamedCommand * KisPaintDevice::moveCommand(qint32 x, qint32 y)
-{
-    KNamedCommand * cmd = new MoveCommand(KisPaintDeviceSP(this), QPoint(m_x, m_y), QPoint(x, y));
-    Q_CHECK_PTR(cmd);
-    cmd->execute();
-    return cmd;
 }
 
 void KisPaintDevice::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
@@ -729,7 +647,7 @@ void KisPaintDevice::convertTo(KoColorSpace * dstColorSpace, qint32 renderingInt
     setData(dst.m_datamanager, dstColorSpace);
 
     if (undoAdapter() && undoAdapter()->undo()) {
-        undoAdapter()->addCommandOld(new KisConvertLayerTypeCmd(undoAdapter(), KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_colorSpace));
+        undoAdapter()->addCommand(new KisConvertLayerTypeCmd(KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_colorSpace));
     }
     // XXX: emit colorSpaceChanged(dstColorSpace);
 }

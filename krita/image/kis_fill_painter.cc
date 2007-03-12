@@ -36,7 +36,6 @@
 #include <QString>
 
 #include <kdebug.h>
-#include <kcommand.h>
 #include <klocale.h>
 
 #include "kis_brush.h"

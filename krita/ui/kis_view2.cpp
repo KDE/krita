@@ -526,7 +526,6 @@ void KisView2::connectCurrentImage()
             connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->canvas, SLOT(setImageSize( qint32, qint32)) );
         }
 
-        connect( m_d->doc, SIGNAL( sigCommandExecuted() ), img.data(), SLOT( slotCommandExecuted() ) );
     }
     m_d->canvas->connectCurrentImage();
     if( m_d->layerBox )
@@ -548,8 +547,6 @@ void KisView2::disconnectCurrentImage()
         img->disconnect( m_d->selectionManager );
         if( m_d->statusBar )
             img->disconnect( m_d->statusBar );
-
-        disconnect( m_d->doc, SIGNAL( sigCommandExecuted() ), img.data(), SLOT( slotCommandExecuted() ) );
 
         if( m_d->layerBox )
             m_d->layerBox->setImage(KisImageSP(0));

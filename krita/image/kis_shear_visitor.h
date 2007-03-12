@@ -19,6 +19,7 @@
 #ifndef KIS_SHEAR_VISITOR_H_
 #define KIS_SHEAR_VISITOR_H_
 
+#include "kis_doc2.h"
 #include "kis_types.h"
 #include "kis_progress_subject.h"
 #include "kis_layer_visitor.h"
@@ -71,7 +72,7 @@ public:
         v.shear(m_xshear, m_yshear, m_progress);
 
         if (m_undo && m_undo->undo())
-            m_undo->addCommandOld(t);
+            m_undo->addCommand(t);
 
         if (!m_strategy)
             delete strategy;

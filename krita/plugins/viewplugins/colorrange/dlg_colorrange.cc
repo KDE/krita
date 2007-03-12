@@ -248,13 +248,13 @@ void DlgColorRange::updatePreview()
 
 void DlgColorRange::okClicked()
 {
-    if (m_dev->image()->undo()) m_view->undoAdapter()->addCommandOld(m_transaction);
+    if (m_dev->image()->undo()) m_view->undoAdapter()->addCommand(m_transaction);
     accept();
 }
 
 void DlgColorRange::cancelClicked()
 {
-    if (m_dev->image()->undo()) m_transaction->unexecute();
+    if (m_dev->image()->undo()) m_transaction->undo();
 
     m_view->canvas()->update();
     reject();

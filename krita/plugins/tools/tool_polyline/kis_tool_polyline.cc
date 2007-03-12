@@ -26,13 +26,13 @@
 #include <QKeyEvent>
 #include <QMenu>
 
+#include <kicon.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <knuminput.h>
 
 #include "KoCanvasBase.h"
-#include "kis_undo_adapter.h"
 #include "kis_painter.h"
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
@@ -94,7 +94,7 @@ void KisToolPolyline::finish()
     if (!device) return;
 
     KisPainter painter (device);
-    if (m_currentImage->undo()) painter.beginTransaction (i18n ("Polyline"));
+    painter.beginTransaction (i18n ("Polyline"));
 
     painter.setPaintColor(m_currentFgColor);
     painter.setBrush(m_currentBrush);
@@ -121,9 +121,7 @@ void KisToolPolyline::finish()
     device->setDirty( painter.dirtyRegion() );
     notifyModified();
 
-    if (m_currentImage->undo()) {
-        m_currentImage->undoAdapter()->addCommandOld(painter.endTransaction());
-    }
+    m_canvas->addCommand(painter.endTransaction());
 }
 
 void KisToolPolyline::cancel()

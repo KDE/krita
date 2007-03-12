@@ -36,7 +36,7 @@ class KoColorSpace;
 
 class KisFilterStrategy;
 class KisProgressDisplayInterface;
-class KisUndoAdapter;
+
 /**
    A base interface for layers that are implemented outside the Krita
    core.

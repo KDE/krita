@@ -30,13 +30,13 @@
 class KRITAIMAGE_EXPORT KisSelectedTransaction : public KisTransaction {
     typedef KisTransaction super;
 public:
-    KisSelectedTransaction(const QString& name, KisPaintDeviceSP device);
+    KisSelectedTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent = 0);
     virtual ~KisSelectedTransaction();
 
 public:
-    virtual void execute();
-    virtual void unexecute();
-    virtual void unexecuteNoUpdate();
+    virtual void redo();
+    virtual void undo();
+    virtual void undoNoUpdate();
 
 public:
 

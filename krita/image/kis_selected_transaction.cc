@@ -20,8 +20,8 @@
 #include "kis_selected_transaction.h"
 #include "kis_selection.h"
 
-KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDeviceSP device) :
-    KisTransaction(name, device),
+KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent) :
+    KisTransaction(name, device, parent),
     m_device(device),
     m_hadSelection(device->hasSelection())
 {
@@ -36,10 +36,10 @@ KisSelectedTransaction::~KisSelectedTransaction()
     delete m_selTransaction;
 }
 
-void KisSelectedTransaction::execute()
+void KisSelectedTransaction::redo()
 {
-    super::execute();
-    m_selTransaction->execute();
+    super::redo();
+    m_selTransaction->redo();
     if(m_redoHasSelection)
         m_device->selection();
     else
@@ -47,12 +47,12 @@ void KisSelectedTransaction::execute()
     m_device->emitSelectionChanged();
 }
 
-void KisSelectedTransaction::unexecute()
+void KisSelectedTransaction::undo()
 {
     m_redoHasSelection = m_device->hasSelection();
 
-    super::unexecute();
-    m_selTransaction->unexecute();
+    super::undo();
+    m_selTransaction->undo();
     if(m_hadSelection)
         m_device->selection();
     else
@@ -60,12 +60,12 @@ void KisSelectedTransaction::unexecute()
     m_device->emitSelectionChanged();
 }
 
-void KisSelectedTransaction::unexecuteNoUpdate()
+void KisSelectedTransaction::undoNoUpdate()
 {
     m_redoHasSelection = m_device->hasSelection();
 
-    super::unexecuteNoUpdate();
-    m_selTransaction->unexecuteNoUpdate();
+    super::undoNoUpdate();
+    m_selTransaction->undoNoUpdate();
     if(m_hadSelection)
         m_device->selection();
     else

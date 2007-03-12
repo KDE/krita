@@ -20,8 +20,7 @@
 #define KIS_TILE_COMMAND_H_
 
 #include <QString>
-
-#include <kcommand.h>
+#include <QUndoCommand>
 
 #include "kis_types.h"
 #include <krita_export.h>
@@ -29,16 +28,15 @@
 class QRect;
 class KisTransactionPrivate;
 
-class KRITAIMAGE_EXPORT KisTransaction : public KCommand {
+class KRITAIMAGE_EXPORT KisTransaction : public QUndoCommand {
 public:
-    KisTransaction(const QString& name, KisPaintDeviceSP device);
+    KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent = 0);
     virtual ~KisTransaction();
 
 public:
-    virtual void execute();
-    virtual void unexecute();
-    virtual void unexecuteNoUpdate();
-    virtual QString name() const;
+    virtual void redo();
+    virtual void undo();
+    virtual void undoNoUpdate();
 private:
     KisTransactionPrivate * m_private;
 };

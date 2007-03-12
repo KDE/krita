@@ -33,7 +33,6 @@
 #include <QList>
 
 // KDE
-#include <kcommand.h>
 #include <kdebug.h>
 #include <kimageio.h>
 #include <kfiledialog.h>
@@ -73,7 +72,6 @@
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
-#include "kis_command.h"
 #include "kis_meta_registry.h"
 #include "kis_nameserver.h"
 #include "kis_external_layer_iface.h"
@@ -96,6 +94,7 @@
 #include "kis_shape_layer.h"
 #include "kis_mask_shape.h"
 #include "kis_layermap_visitor.h"
+#include "kis_undo_adapter.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -113,58 +112,14 @@ static const char *CURRENT_DTD_VERSION = "1.3";
 
 typedef QMap<KisLayerSP, KoShape*> KisLayerMap;
 
-namespace {
-
-    class KisCommandImageMv : public KisCommand {
-
-
-    public:
-        KisCommandImageMv(KisDoc2 *doc,
-                          KisUndoAdapter *adapter,
-                          const QString& name,
-                          const QString& oldName) : KisCommand(i18n("Rename Image"), adapter)
-            {
-                m_doc = doc;
-                m_name = name;
-                m_oldName = oldName;
-            }
-
-        virtual ~KisCommandImageMv()
-            {
-            }
-
-        virtual void execute()
-            {
-                adapter()->setUndo(false);
-                m_doc->renameImage(m_oldName, m_name);
-                adapter()->setUndo(true);
-            }
-
-        virtual void unexecute()
-            {
-                adapter()->setUndo(false);
-                m_doc->renameImage(m_name, m_oldName);
-                adapter()->setUndo(true);
-            }
-
-    private:
-        KisDoc2 *m_doc;
-        QString m_name;
-        QString m_oldName;
-    };
-
-}
-
 class KisDoc2::KisDocPrivate
 {
 
 public:
 
     KisDocPrivate()
-        : undo( false )
-        , cmdHistory( 0 )
+        : undoAdapter( 0 )
         , nserver( 0 )
-        , currentMacro( 0 )
         , macroNestDepth( 0 )
         , conversionDepth( 0 )
         , ioProgressTotalSteps( 0 )
@@ -174,17 +129,12 @@ public:
 
     ~KisDocPrivate()
         {
-            delete cmdHistory;
+            delete undoAdapter;
             delete nserver;
-            undoListeners.setAutoDelete( false );
         }
 
-    bool undo;
-
-    KCommandHistory *cmdHistory;
-    Q3PtrList<KisCommandHistoryListener> undoListeners;
+    KisUndoAdapter *undoAdapter;
     KisNameServer *nserver;
-    KMacroCommand *currentMacro;
     qint32 macroNestDepth;
     qint32 conversionDepth;
     int ioProgressTotalSteps;
@@ -316,9 +266,9 @@ void KisDoc2::openTemplate(const KUrl& url)
 
 bool KisDoc2::init()
 {
-    if (m_d->cmdHistory) {
-        delete m_d->cmdHistory;
-        m_d->cmdHistory = 0;
+    if (m_d->undoAdapter) {
+        delete m_d->undoAdapter;
+        m_d->undoAdapter = 0;
     }
 
     if (m_d->nserver) {
@@ -326,13 +276,9 @@ bool KisDoc2::init()
         m_d->nserver = 0;
     }
 
-    //The command history is connected to a fake action collection, so KoDocument history is shown in the ui
-    // TODO: remove after all commands are ported
-    m_d->cmdHistory = new KCommandHistory(new KActionCollection(new QObject()), true);
-    Q_CHECK_PTR(m_d->cmdHistory);
+    m_d->undoAdapter = new KisUndoAdapter(this);
+    Q_CHECK_PTR(m_d->undoAdapter);
 
-    connect(m_d->cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
-    connect(m_d->cmdHistory, SIGNAL(commandExecuted(KCommand *)), this, SLOT(slotCommandExecuted(KCommand *)));
     setUndo(true);
 
     m_d->nserver = new KisNameServer(1);
@@ -342,8 +288,6 @@ bool KisDoc2::init()
         KMessageBox::sorry(0, i18n("No colorspace modules loaded: cannot run Krita"));
         return false;
     }
-
-    m_d->undoListeners.setAutoDelete(false);
 
     return true;
 }
@@ -554,7 +498,7 @@ KisImageSP KisDoc2::loadImage(const QDomElement& element)
             return KisImageSP(0);
         }
 
-        img = new KisImage(this, width, height, cs, name);
+        img = new KisImage(m_d->undoAdapter, width, height, cs, name);
         Q_CHECK_PTR(img);
         connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
         img->setDescription(description);
@@ -916,14 +860,6 @@ KoDocument* KisDoc2::hitTest(const QPoint &pos, KoView* view, const QMatrix& mat
     return doc;
 }
 
-void KisDoc2::renameImage(const QString& oldName, const QString& newName)
-{
-    m_d->currentImage()->setName(newName);
-
-    if (undo())
-        addCommandOld(new KisCommandImageMv(this, this, newName, oldName));
-}
-
 
 KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * colorspace)
 {
@@ -932,7 +868,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
 
     setUndo(false);
 
-    KisImageSP img = KisImageSP(new KisImage(this, width, height, colorspace, name));
+    KisImageSP img = KisImageSP(new KisImage(m_d->undoAdapter, width, height, colorspace, name));
     Q_CHECK_PTR(img);
     connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
 
@@ -971,7 +907,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
 
     setUndo(false);
 
-    img = new KisImage(this, width, height, cs, name);
+    img = new KisImage(m_d->undoAdapter, width, height, cs, name);
     Q_CHECK_PTR(img);
     connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
     img->setResolution(imgResolution, imgResolution);
@@ -1042,126 +978,14 @@ void KisDoc2::slotImageUpdated(const QRect& rect)
     emit sigDocUpdated(rect);
 }
 
-void KisDoc2::beginMacro(const QString& macroName)
-{
-    if (m_d->undo) {
-        if (m_d->macroNestDepth == 0) {
-            Q_ASSERT(m_d->currentMacro == 0);
-            m_d->currentMacro = new KMacroCommand(macroName);
-            Q_CHECK_PTR(m_d->currentMacro);
-        }
-
-        m_d->macroNestDepth++;
-    }
-}
-
-void KisDoc2::endMacro()
-{
-    if (m_d->undo) {
-        Q_ASSERT(m_d->macroNestDepth > 0);
-        if (m_d->macroNestDepth > 0) {
-            m_d->macroNestDepth--;
-
-            if (m_d->macroNestDepth == 0) {
-                Q_ASSERT(m_d->currentMacro != 0);
-
-                m_d->cmdHistory->addCommand(m_d->currentMacro, false);
-                m_d->currentMacro = 0;
-                emit sigCommandExecuted();
-            }
-        }
-    }
-}
-
-void KisDoc2::setCommandHistoryListener(const KisCommandHistoryListener * l)
-{
-   // Never have more than one instance of a listener around. Qt should prove a Set class for this...
-    m_d->undoListeners.removeRef(l);
-    m_d->undoListeners.append(l);
-}
-
-void KisDoc2::removeCommandHistoryListener(const KisCommandHistoryListener * l)
-{
-   m_d->undoListeners.removeRef(l);
-}
-
-KCommand * KisDoc2::presentCommand()
-{
-    return m_d->cmdHistory->presentCommand();
-}
-
-void KisDoc2::addCommandOld(KCommand *cmd)
-{
-    Q_ASSERT(cmd);
-
-    kDebug(41007) << "Warning! Old command added: " << cmd->name() << ". Port it to new undo system"  << endl;
-
-    KisCommandHistoryListener* l = 0;
-
-    for (l = m_d->undoListeners.first(); l; l = m_d->undoListeners.next()) {
-        l->notifyCommandAdded(cmd);
-    }
-
-    setModified(true);
-
-    if (m_d->undo) {
-        if (m_d->currentMacro)
-            m_d->currentMacro->addCommand(cmd);
-        else {
-            m_d->cmdHistory->addCommand(cmd, false);
-            emit sigCommandExecuted();
-        }
-    } else {
-        kDebug(41007) << "Deleting command\n";
-        delete cmd;
-    }
-}
-
 void KisDoc2::setUndo(bool undo)
 {
-    m_d->undo = undo;
-    if (m_d->undo && m_d->cmdHistory->undoLimit() == 50 /*default*/) {
-        KisConfig cfg;
-        setUndoLimit( cfg.defUndoLimit() );
-    }
-}
-
-qint32 KisDoc2::undoLimit() const
-{
-    return m_d->cmdHistory->undoLimit();
-}
-
-void KisDoc2::setUndoLimit(qint32 limit)
-{
-    m_d->cmdHistory->setUndoLimit(limit);
-}
-
-qint32 KisDoc2::redoLimit() const
-{
-    return m_d->cmdHistory->redoLimit();
-}
-
-void KisDoc2::setRedoLimit(qint32 limit)
-{
-    m_d->cmdHistory->setRedoLimit(limit);
+    m_d->undoAdapter->setUndo(undo);
 }
 
 void KisDoc2::slotDocumentRestored()
 {
     setModified(false);
-}
-
-void KisDoc2::slotCommandExecuted(KCommand *command)
-{
-    setModified(true);
-    emit sigCommandExecuted();
-
-    KisCommandHistoryListener* l = 0;
-
-    for (l = m_d->undoListeners.first(); l; l = m_d->undoListeners.next()) {
-        l->notifyCommandExecuted(command);
-    }
-
 }
 
 void KisDoc2::slotUpdate(KisImageSP, quint32 x, quint32 y, quint32 w, quint32 h)
@@ -1173,7 +997,7 @@ void KisDoc2::slotUpdate(KisImageSP, quint32 x, quint32 y, quint32 w, quint32 h)
 
 bool KisDoc2::undo() const
 {
-    return m_d->undo;
+    return m_d->undoAdapter->undo();
 }
 
 void KisDoc2::setIOSteps(qint32 nsteps)
@@ -1307,6 +1131,11 @@ void KisDoc2::addShape( KoShape* shape )
     }
 
     setModified( true );
+}
+
+KisUndoAdapter* KisDoc2::undoAdapter()
+{
+    return m_d->undoAdapter;
 }
 
 void KisDoc2::removeShape( KoShape* shape )

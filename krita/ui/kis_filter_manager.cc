@@ -368,7 +368,7 @@ bool KisFilterManager::apply()
     if (m_d->lastFilter->cancelRequested()) {
         delete m_d->lastFilterConfig;
         if (cmd) {
-            cmd->unexecute();
+            cmd->undo();
             delete cmd;
         }
         m_d->lastFilter->disableProgress();
@@ -378,7 +378,7 @@ bool KisFilterManager::apply()
     } else {
         if (dev->parentLayer()) dev->parentLayer()->setDirty(rect);
         m_d->doc->setModified(true);
-        if (img->undo() && cmd) img->undoAdapter()->addCommandOld(cmd);
+        if (cmd) m_d->doc->addCommand(cmd);
         m_d->lastFilter->disableProgress();
         QApplication::restoreOverrideCursor();
         m_d->lastFilter->saveToBookmark(KisFilter::ConfigLastUsed.id(), m_d->lastFilterConfig);
@@ -505,7 +505,7 @@ void KisFilterManager::slotDelayedRefreshPreview()
     KisTransaction cmd("Temporary transaction", dev);
     m_d->lastFilter->process(dev, rect, config);
     m_d->lastDialog->previewWidget()->slotUpdate();
-    cmd.unexecute();
+    cmd.undo();
 }
 
 

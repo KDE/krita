@@ -26,16 +26,11 @@
 #include <KoShapeControllerBase.h>
 
 #include "kis_types.h"
-#include "kis_undo_adapter.h"
 
 #include <krita_export.h>
 
 class QImage;
 class QString;
-
-class KCommand;
-class KCommandHistory;
-class KMacroCommand;
 
 class KoColorProfile;
 class KoColorSpace;
@@ -44,6 +39,7 @@ class KoColor;
 class KisView2;
 class KisNameServer;
 class KisChildDoc;
+class KisUndoAdapter;
 
 /**
  * The class that represents a Krita document containing content and
@@ -54,7 +50,7 @@ class KisChildDoc;
    tools.
 
  */
-class KRITAUI_EXPORT KisDoc2 : public KoDocument, public KoShapeControllerBase, private KisUndoAdapter
+class KRITAUI_EXPORT KisDoc2 : public KoDocument, public KoShapeControllerBase
 {
 
     Q_OBJECT
@@ -83,6 +79,9 @@ public:
 
     virtual QDomDocument saveXML();
 
+    virtual void setUndo(bool undo);
+    virtual bool undo() const;
+
 public slots:
 
     /**
@@ -91,27 +90,7 @@ public slots:
      */
      virtual void initEmpty();
 
-private: // Undo adapter
-
-    virtual void setCommandHistoryListener(const KisCommandHistoryListener *);
-    virtual void removeCommandHistoryListener(const KisCommandHistoryListener *);
-
-    virtual KCommand * presentCommand();
-    virtual void addCommandOld(KCommand *cmd) KDE_DEPRECATED;
-    virtual void setUndo(bool undo);
-    virtual bool undo() const;
-    virtual void beginMacro(const QString& macroName);
-    virtual void endMacro();
-
-
 public:
-
-
-    qint32 undoLimit() const;
-    void setUndoLimit(qint32 limit);
-
-    qint32 redoLimit() const;
-    void setRedoLimit(qint32 limit);
 
     /**
      * Create a new image that has this document as a parent and
@@ -124,8 +103,6 @@ public:
      * replace the current image with this image.
      */
     KisImageSP newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * colorspace);
-
-    void renameImage(const QString& oldName, const QString& newName);
 
     /**
      * Adds the specified child document to this document; this
@@ -146,13 +123,12 @@ public:
      */
     void setCurrentImage(KisImageSP image);
 
-    KisUndoAdapter * undoAdapter() { return this; }
+    KisUndoAdapter * undoAdapter();
 
 public slots:
     void slotImageUpdated();
     void slotImageUpdated(const QRect& rect);
     void slotDocumentRestored();
-    void slotCommandExecuted(KCommand *command);
 
 signals:
     void sigDocUpdated();

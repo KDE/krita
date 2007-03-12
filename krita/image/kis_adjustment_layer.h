@@ -28,7 +28,6 @@
 
 class KNamedCommand;
 class QPainter;
-class KisUndoAdapter;
 class KisGroupLayer;
 class KisFilterConfiguration;
 

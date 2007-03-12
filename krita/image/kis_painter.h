@@ -20,8 +20,6 @@
 #ifndef KIS_PAINTER_H_
 #define KIS_PAINTER_H_
 
-#include <kcommand.h>
-
 #include "KoColor.h"
 #include "kis_global.h"
 #include "kis_types.h"
@@ -35,6 +33,7 @@
 
 #include <krita_export.h>
 
+class QUndoCommand;
 class QRect;
 class KisTransaction;
 class KisBrush;
@@ -77,13 +76,13 @@ public:
     /**
      * Finish painting on the current device
      */
-    KCommand *end();
+    QUndoCommand *end();
 
     /// Begin an undoable paint operation
     void beginTransaction(const QString& customName = QString::null);
 
     /// Finish the undoable paint operation
-    KCommand *endTransaction();
+    QUndoCommand *endTransaction();
 
     /// begin a transaction with the given command
     void beginTransaction( KisTransaction* command);

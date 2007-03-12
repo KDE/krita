@@ -20,8 +20,12 @@
 #define KIS_UNDO_ADAPTER_H_
 
 #include <QString>
+#include <QVector>
 
-class KCommand;
+#include <krita_export.h>
+
+class QUndoCommand;
+class KoDocument;
 
 /**
  * Undo listeners want to be notified of undo and redo actions.
@@ -35,30 +39,35 @@ public:
 
     KisCommandHistoryListener(){};
     virtual ~KisCommandHistoryListener() {}
-    virtual void notifyCommandAdded(KCommand * cmd) = 0;
-    virtual void notifyCommandExecuted(KCommand * cmd) = 0;
+    virtual void notifyCommandAdded(QUndoCommand * cmd) = 0;
+    virtual void notifyCommandExecuted(QUndoCommand * cmd) = 0;
 };
 
-class KisUndoAdapter {
+class KRITAIMAGE_EXPORT KisUndoAdapter {
 public:
-    KisUndoAdapter() {};
-    virtual ~KisUndoAdapter() {};
+    KisUndoAdapter(KoDocument* doc);
+    virtual ~KisUndoAdapter();
 
 public:
 
-    virtual void setCommandHistoryListener(const KisCommandHistoryListener *) = 0;
-    virtual void removeCommandHistoryListener(const KisCommandHistoryListener *) = 0;
+    virtual void setCommandHistoryListener( KisCommandHistoryListener * l);
+    virtual void removeCommandHistoryListener( KisCommandHistoryListener * l);
+    virtual void notifyCommandExecuted(QUndoCommand *command);
 
-    virtual KCommand * presentCommand() = 0;
-    virtual void addCommandOld(KCommand *cmd) = 0;
-    virtual void setUndo(bool undo) = 0;
-    virtual bool undo() const = 0;
-    virtual void beginMacro(const QString& macroName) = 0;
-    virtual void endMacro() = 0;
+    virtual QUndoCommand * presentCommand();
+    virtual void addCommand(QUndoCommand *cmd);
+    virtual void setUndo(bool undo);
+    virtual bool undo() const;
+    virtual void beginMacro(const QString& macroName);
+    virtual void endMacro();
 
 private:
     KisUndoAdapter(const KisUndoAdapter&);
     KisUndoAdapter& operator=(const KisUndoAdapter&);
+
+    QVector<KisCommandHistoryListener*> m_undoListeners;
+    KoDocument* m_doc;
+    bool m_undo;
 };
 
 

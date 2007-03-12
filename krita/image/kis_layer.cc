@@ -21,208 +21,12 @@
 #include <kicon.h>
 #include <QIcon>
 #include <QImage>
-#include <QUndoCommand>
 
 #include "kis_debug_areas.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
-#include "kis_undo_adapter.h"
-
-namespace {
-
-    class KisLayerCommand : public QUndoCommand {
-        typedef QUndoCommand super;
-
-    public:
-        KisLayerCommand(const QString& name, KisLayerSP layer);
-        virtual ~KisLayerCommand() {}
-
-    protected:
-        KisLayerSP m_layer;
-    };
-
-    KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
-        super(name), m_layer(layer)
-    {
-    }
-
-    class KisLayerLockedCommand : public KisLayerCommand {
-        typedef KisLayerCommand super;
-
-    public:
-        KisLayerLockedCommand(KisLayerSP layer, bool newLocked);
-
-        virtual void redo();
-        virtual void undo();
-
-    private:
-        bool m_newLocked;
-    };
-
-    KisLayerLockedCommand::KisLayerLockedCommand(KisLayerSP layer, bool newLocked) :
-        super(i18n("Lock Layer"), layer)
-    {
-        m_newLocked = newLocked;
-    }
-
-    void KisLayerLockedCommand::redo()
-    {
-        m_layer->setLocked(m_newLocked);
-    }
-
-    void KisLayerLockedCommand::undo()
-    {
-        m_layer->setLocked(!m_newLocked);
-    }
-
-    class KisLayerOpacityCommand : public KisLayerCommand {
-        typedef KisLayerCommand super;
-
-    public:
-        KisLayerOpacityCommand(KisLayerSP layer, quint8 oldOpacity, quint8 newOpacity);
-
-        virtual void redo();
-        virtual void undo();
-
-    private:
-        quint8 m_oldOpacity;
-        quint8 m_newOpacity;
-    };
-
-    KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, quint8 oldOpacity, quint8 newOpacity) :
-        super(i18n("Layer Opacity"), layer)
-    {
-        m_oldOpacity = oldOpacity;
-        m_newOpacity = newOpacity;
-    }
-
-    void KisLayerOpacityCommand::redo()
-    {
-        m_layer->setOpacity(m_newOpacity);
-    }
-
-    void KisLayerOpacityCommand::undo()
-    {
-        m_layer->setOpacity(m_oldOpacity);
-    }
-
-    class KisLayerVisibilityCommand : public KisLayerCommand {
-        typedef KisLayerCommand super;
-
-    public:
-        KisLayerVisibilityCommand(KisLayerSP layer, bool newVisibility);
-
-        virtual void redo();
-        virtual void undo();
-
-    private:
-        bool m_newVisibility;
-    };
-
-    KisLayerVisibilityCommand::KisLayerVisibilityCommand(KisLayerSP layer, bool newVisibility) :
-        super(i18n("Layer Visibility"), layer)
-    {
-        m_newVisibility = newVisibility;
-    }
-
-    void KisLayerVisibilityCommand::redo()
-    {
-        m_layer->setVisible(m_newVisibility);
-    }
-
-    void KisLayerVisibilityCommand::undo()
-    {
-        m_layer->setVisible(!m_newVisibility);
-    }
-
-    class KisLayerCompositeOpCommand : public KisLayerCommand {
-        typedef KisLayerCommand super;
-
-    public:
-        KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp * oldCompositeOp, const KoCompositeOp * newCompositeOp);
-
-        virtual void redo();
-        virtual void undo();
-
-    private:
-        const KoCompositeOp * m_oldCompositeOp;
-        const KoCompositeOp * m_newCompositeOp;
-    };
-
-    KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp* oldCompositeOp,
-                                       const KoCompositeOp* newCompositeOp) :
-        super(i18n("Layer Composite Mode"), layer)
-    {
-        m_oldCompositeOp = oldCompositeOp;
-        m_newCompositeOp = newCompositeOp;
-    }
-
-    void KisLayerCompositeOpCommand::redo()
-    {
-        m_layer->setCompositeOp(m_newCompositeOp);
-    }
-
-    void KisLayerCompositeOpCommand::undo()
-    {
-        m_layer->setCompositeOp(m_oldCompositeOp);
-    }
-
-    class KisLayerOffsetCommand : public KisLayerCommand {
-        typedef KisLayerCommand super;
-
-    public:
-        KisLayerOffsetCommand(KisLayerSP layer, const QPoint& oldpos, const QPoint& newpos);
-        virtual ~KisLayerOffsetCommand();
-
-        virtual void redo();
-        virtual void undo();
-
-    private:
-        void moveTo(const QPoint& pos);
-
-    private:
-        QRect m_updateRect;
-        QPoint m_oldPos;
-        QPoint m_newPos;
-    };
-
-    KisLayerOffsetCommand::KisLayerOffsetCommand(KisLayerSP layer, const QPoint& oldpos, const QPoint& newpos) :
-        super(i18n("Move Layer"), layer)
-    {
-        m_oldPos = oldpos;
-        m_newPos = newpos;
-
-        QRect currentBounds = m_layer->exactBounds();
-        QRect oldBounds = currentBounds;
-        oldBounds.translate(oldpos.x() - newpos.x(), oldpos.y() - newpos.y());
-
-        m_updateRect = currentBounds | oldBounds;
-    }
-
-    KisLayerOffsetCommand::~KisLayerOffsetCommand()
-    {
-    }
-
-    void KisLayerOffsetCommand::redo()
-    {
-        moveTo(m_newPos);
-    }
-
-    void KisLayerOffsetCommand::undo()
-    {
-        moveTo(m_oldPos);
-    }
-
-    void KisLayerOffsetCommand::moveTo(const QPoint& pos)
-    {
-        m_layer->setX(pos.x());
-        m_layer->setY(pos.y());
-
-        m_layer->setDirty(m_updateRect);
-    }
-}
 
 static int getID()
 {
@@ -465,16 +269,6 @@ void KisLayer::setPercentOpacity(quint8 val)
     setOpacity(int(float(val * 255) / 100 + 0.5));
 }
 
-QUndoCommand *KisLayer::setOpacityCommand(quint8 newOpacity)
-{
-    return new KisLayerOpacityCommand(KisLayerSP(this), opacity(), newOpacity);
-}
-
-QUndoCommand *KisLayer::setOpacityCommand(quint8 prevOpacity, quint8 newOpacity)
-{
-    return new KisLayerOpacityCommand(KisLayerSP(this), prevOpacity, newOpacity);
-}
-
 const bool KisLayer::visible() const
 {
     return m_visible;
@@ -488,11 +282,6 @@ void KisLayer::setVisible(bool v)
         notifyPropertyChanged();
         setDirty();
     }
-}
-
-QUndoCommand *KisLayer::setVisibleCommand(bool newVisibility)
-{
-    return new KisLayerVisibilityCommand(KisLayerSP(this), newVisibility);
 }
 
 bool KisLayer::locked() const
@@ -518,11 +307,6 @@ void KisLayer::setTemporary(bool t)
     m_temporary = t;
 }
 
-QUndoCommand *KisLayer::setLockedCommand(bool newLocked)
-{
-    return new KisLayerLockedCommand(KisLayerSP(this), newLocked);
-}
-
 QString KisLayer::name() const
 {
         return m_name;
@@ -546,24 +330,6 @@ void KisLayer::setCompositeOp(const KoCompositeOp* compositeOp)
        setDirty();
 
     }
-}
-
-QUndoCommand *KisLayer::setCompositeOpCommand(const KoCompositeOp* newCompositeOp)
-{
-    return new KisLayerCompositeOpCommand(KisLayerSP(this), compositeOp(), newCompositeOp);
-}
-
-QUndoCommand *KisLayer::moveCommand(QPoint oldPosition, QPoint newPosition)
-{
-    return new KisLayerOffsetCommand(KisLayerSP(this), oldPosition, newPosition);
-}
-
-KisUndoAdapter *KisLayer::undoAdapter() const
-{
-    if (m_image) {
-        return m_image->undoAdapter();
-    }
-    return 0;
 }
 
 void KisLayer::paintMaskInactiveLayers(QImage &, qint32, qint32, qint32, qint32)

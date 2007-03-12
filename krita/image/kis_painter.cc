@@ -38,9 +38,9 @@
 #include <QPixmap>
 #include <QRect>
 #include <QString>
+#include <QUndoCommand>
 
 #include <kdebug.h>
-#include <kcommand.h>
 #include <klocale.h>
 
 #include "kis_brush.h"
@@ -111,7 +111,7 @@ void KisPainter::begin(KisPaintDeviceSP device)
     m_pixelSize = device->pixelSize();
 }
 
-KCommand *KisPainter::end()
+QUndoCommand *KisPainter::end()
 {
     return endTransaction();
 }
@@ -132,11 +132,11 @@ void KisPainter::beginTransaction( KisTransaction* command)
 }
 
 
-KCommand *KisPainter::endTransaction()
+QUndoCommand *KisPainter::endTransaction()
 {
-    KCommand *command = m_transaction;
-        m_transaction = 0;
-        return command;
+    QUndoCommand *command = m_transaction;
+    m_transaction = 0;
+    return command;
 }
 
 QRegion KisPainter::dirtyRegion()

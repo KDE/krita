@@ -28,7 +28,6 @@
 #include <ktoggleaction.h>
 #include <klocale.h>
 #include <kstandardaction.h>
-#include <kcommand.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kurl.h>
@@ -69,6 +68,8 @@
 #include "kis_resource_provider.h"
 #include "kis_statusbar.h"
 #include "kis_label_progress.h"
+#include "kis_image_commands.h"
+#include "kis_layer_commands.h"
 
 KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     : m_view( view )
@@ -262,7 +263,7 @@ void KisLayerManager::layerCompositeOp(const KoCompositeOp* compositeOp)
     KisLayerSP layer = img->activeLayer();
     if (!layer) return;
 
-    m_doc->addCommand(layer->setCompositeOpCommand(compositeOp));
+    m_doc->addCommand(new KisLayerCompositeOpCommand(layer, layer->compositeOp(), compositeOp));
 }
 
 // range: 0 - 100
@@ -284,7 +285,7 @@ void KisLayerManager::layerOpacity(int opacity, bool dontundo)
         layer->setOpacity( opacity );
     else
     {
-        m_doc->addCommand(layer->setOpacityCommand(opacity));
+        m_doc->addCommand(new KisLayerOpacityCommand(layer, layer->opacity(), opacity));
     }
 }
 
@@ -306,7 +307,7 @@ void KisLayerManager::layerOpacityFinishedChanging( int previous, int opacity )
 
     if (previous == opacity) return;
 
-    m_doc->addCommand(layer->setOpacityCommand(previous, opacity));
+    m_doc->addCommand(new KisLayerOpacityCommand(layer, previous, opacity));
 }
 
 void KisLayerManager::layerToggleVisible()
@@ -343,8 +344,8 @@ void KisLayerManager::layerProperties()
 }
 
 namespace {
-        class KisChangeFilterCmd : public KNamedCommand {
-            typedef KNamedCommand super;
+        class KisChangeFilterCmd : public QUndoCommand {
+            typedef QUndoCommand super;
         public:
             // The QStrings are the _serialized_ configs
             KisChangeFilterCmd(KisAdjustmentLayerSP layer,
@@ -358,7 +359,7 @@ namespace {
                 m_after = after;
             }
         public:
-            virtual void execute()
+            virtual void redo()
             {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 m_config->fromXML(m_after);
@@ -368,7 +369,7 @@ namespace {
                 QApplication::restoreOverrideCursor();
             }
 
-            virtual void unexecute()
+            virtual void undo()
             {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 m_config->fromXML(m_before);
@@ -412,8 +413,8 @@ void KisLayerManager::showLayerProperties(KisLayerSP layer)
                     dlg.filterConfiguration(),
                     before,
                     dlg.filterConfiguration()->toString());
-            cmd->execute();
-            m_view->undoAdapter()->addCommandOld(cmd);
+            cmd->redo();
+            m_view->undoAdapter()->addCommand(cmd);
             m_doc->setModified( true );
         }
     }
@@ -430,10 +431,8 @@ void KisLayerManager::showLayerProperties(KisLayerSP layer)
                 layer->compositeOp() != dlg.getCompositeOp())
             {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
-                m_view->undoAdapter()->beginMacro(i18n("Property Changes"));
-                layer->image()->setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
+                m_view->undoAdapter()->addCommand(new KisImageLayerPropsCommand(layer->image(), layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName()));
                 layer->setDirty();
-                m_view->undoAdapter()->endMacro();
                 QApplication::restoreOverrideCursor();
                 m_doc->setModified( true );
             }
@@ -695,7 +694,7 @@ void KisLayerManager::mirrorLayerX()
 
     dev->mirrorX();
 
-    if (t) m_view->undoAdapter()->addCommandOld(t);
+    if (t) m_view->undoAdapter()->addCommand(t);
 
     m_doc->setModified(true);
     layersUpdated();
@@ -716,7 +715,7 @@ void KisLayerManager::mirrorLayerY()
 
     dev->mirrorY();
 
-    if (t) m_view->undoAdapter()->addCommandOld(t);
+    if (t) m_view->undoAdapter()->addCommand(t);
 
     m_doc->setModified(true);
     layersUpdated();
@@ -739,7 +738,7 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     KisTransformWorker worker(dev, sx, sy, 0, 0, 0.0, 0, 0, m_view->statusBar()->progress(), filterStrategy);
     worker.run();
 
-    if (t) m_view->undoAdapter()->addCommandOld(t);
+    if (t) m_view->undoAdapter()->addCommand(t);
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();
@@ -771,7 +770,7 @@ void KisLayerManager::rotateLayer(double radians)
     KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, radians, -tx, -ty, m_view->statusBar()->progress(), filter);
     tw.run();
 
-    if (t) m_view->undoAdapter()->addCommandOld(t);
+    if (t) m_view->undoAdapter()->addCommand(t);
 
     m_doc->setModified(true);
     layersUpdated();

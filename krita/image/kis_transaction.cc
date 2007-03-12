@@ -33,11 +33,10 @@ public:
 
 };
 
-KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
+KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent) : QUndoCommand(name, parent)
 {
     m_private = new KisTransactionPrivate;
 
-    m_private->m_name = name;
     m_private->m_device = device;
     m_private->m_memento = device->getMemento();
 }
@@ -51,7 +50,7 @@ KisTransaction::~KisTransaction()
     delete m_private;
 }
 
-void KisTransaction::execute()
+void KisTransaction::redo()
 {
     Q_ASSERT(!m_private->m_memento.isNull());
 
@@ -66,7 +65,7 @@ void KisTransaction::execute()
     if (l) l->setDirty(rc);
 }
 
-void KisTransaction::unexecute()
+void KisTransaction::undo()
 {
     Q_ASSERT(!m_private->m_memento.isNull());
     m_private->m_device->rollback(m_private->m_memento);
@@ -81,14 +80,9 @@ void KisTransaction::unexecute()
 
 }
 
-void KisTransaction::unexecuteNoUpdate()
+void KisTransaction::undoNoUpdate()
 {
     Q_ASSERT(!m_private->m_memento.isNull());
 
     m_private->m_device->rollback(m_private->m_memento);
-}
-
-QString KisTransaction::name() const
-{
-    return m_private->m_name;
 }

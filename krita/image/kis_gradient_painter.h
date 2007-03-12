@@ -18,8 +18,6 @@
 #ifndef KIS_GRADIENT_PAINTER_H_
 #define KIS_GRADIENT_PAINTER_H_
 
-#include <kcommand.h>
-
 #include "kis_global.h"
 #include "kis_types.h"
 

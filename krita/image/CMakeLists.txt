@@ -39,7 +39,6 @@ set(kritaimage_LIB_SRCS
    kis_autogradient_resource.cc
    kis_boundary.cc
    kis_brush.cc
-   kis_command.cc
    kis_convolution_painter.cc
    kis_fill_painter.cc
    kis_filter.cc
@@ -97,6 +96,9 @@ set(kritaimage_LIB_SRCS
    kis_progress_updater.cpp
    kis_progress_updater_p.cpp
    kis_image_view_converter.cpp
+   kis_image_commands.cc
+   kis_layer_commands.cc
+   kis_undo_adapter.cc
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

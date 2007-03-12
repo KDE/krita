@@ -137,7 +137,7 @@ void KisDlgFiltersGallery::refreshPreview( )
         QRect rect = layer->exactBounds();
         m_currentFilter->process(layer, rect, config);
         m_widget->previewWidget->slotUpdate();
-        cmd.unexecute();
+        cmd.undo();
     }
 
 }

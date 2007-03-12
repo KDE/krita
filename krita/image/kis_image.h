@@ -34,9 +34,6 @@
 
 #include <krita_export.h>
 
-class KCommand;
-
-class KoCommandHistory;
 class KoColorSpace;
 class KoCompositeOp;
 class KoColor;
@@ -340,11 +337,6 @@ public:
 
     qint32 nlayers() const;
     qint32 nHiddenLayers() const;
-
-    KCommand *raiseLayerCommand(KisLayerSP layer);
-    KCommand *lowerLayerCommand(KisLayerSP layer);
-    KCommand *topLayerCommand(KisLayerSP layer);
-    KCommand *bottomLayerCommand(KisLayerSP layer);
 
     /**
      * Merge all visible layers and discard hidden ones.

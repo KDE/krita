@@ -29,7 +29,6 @@
 #include <QGridLayout>
 
 #include <kdebug.h>
-#include <kcommand.h>
 #include <klocale.h>
 
 #include "KoPointerEvent.h"

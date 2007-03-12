@@ -27,7 +27,6 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <kcommand.h>
 #include <klocale.h>
 
 #include <KoPointerEvent.h>

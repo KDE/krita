@@ -119,12 +119,12 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
 
             delete config;
             if (filter->cancelRequested()) {
-                cmd->unexecute();
+                cmd->undo();
                 delete cmd;
             } else {
                 dev->setDirty(rect);
                 if (img->undo())
-                    img->undoAdapter()->addCommandOld(cmd);
+                    img->undoAdapter()->addCommand(cmd);
                 else
                     delete cmd;
             }

@@ -29,6 +29,7 @@
 #include <QHBoxLayout>
 #include <QFrame>
 #include <QToolButton>
+#include <QMenu>
 
 #include <knuminput.h>
 #include <kglobal.h>
@@ -36,7 +37,9 @@
 #include <kdebug.h>
 #include <knumvalidator.h>
 
+#include "kis_int_spinbox_p.h"
 #include "kis_int_spinbox.h"
+
 
 class KisIntSpinbox::KisIntSpinboxPrivate {
 public:

@@ -49,6 +49,7 @@ set(kritaui_LIB_SRCS
     kis_iconwidget.cc
     kis_import_catcher.cc
     kis_int_spinbox.cc
+    kis_int_spinbox_p.cc
     kis_itemchooser.cc
     kis_label_cursor_pos.cc
     kis_label_progress.cc

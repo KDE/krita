@@ -85,7 +85,7 @@ KisPaintOpSettings *KisCPaintOpFactory::settings(QWidget * parent, const KoInput
 
 //=================
 
-KisCPaintOpSettings::KisCPaintOpSettings( QWidget * parent,  QValueVector<Brush*> brushes)
+KisCPaintOpSettings::KisCPaintOpSettings( QWidget * parent,  Q3ValueVector<Brush*> brushes)
     : KisPaintOpSettings( parent )
 {
     m_brushes = brushes;
@@ -143,7 +143,7 @@ void KisCPaintOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     if (!m_painter->device()) return;
 
     KisPaintDeviceSP device = m_painter->device();
-    KisColorSpace * colorSpace = device->colorSpace();
+    KoColorSpace * colorSpace = device->colorSpace();
 
 
     Sample *newSam;

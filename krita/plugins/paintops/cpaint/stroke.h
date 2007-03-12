@@ -24,7 +24,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <kis_types.h>
-#include <kis_color.h>
+#include <KoColor.h>
 
 #include "brush.h"
 #define MAXBRUSHSIZE 100
@@ -34,7 +34,7 @@ class Stroke {
 
   private :
 
-    KisColor m_color;
+    KoColor m_color;
 
     double lastx1, lasty1, lastx2, lasty2;
     vector<double> *oldPathx, *oldPathy;
@@ -59,7 +59,7 @@ class Stroke {
     void Draw (KisPaintDeviceSP);
     void Redraw ();
     void FreeSamples ();
-    void StoreColor ( const KisColor & c );
+    void StoreColor ( const KoColor & c );
     void StoreOldPath ( double, double );
     void ResetBrush ();
 

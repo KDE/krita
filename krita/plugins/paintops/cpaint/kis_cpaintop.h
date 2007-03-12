@@ -19,9 +19,9 @@
 #ifndef KIS_CPAINTOP_H_
 #define KIS_CPAINTOP_H_
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
-#include <kis_color.h>
+#include <KoColor.h>
 #include <kis_paintop.h>
 
 #include "wdgcpaintoptions.h"
@@ -38,12 +38,12 @@ public:
     virtual ~KisCPaintOpFactory();
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-    virtual KisID id() { return KisID("paintCPaint", i18n("Chinese Brush")); }
+    virtual KoID id() { return KoID("paintCPaint", i18n("Chinese Brush")); }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice);
 
 private:
 
-    QValueVector<Brush*> m_brushes;
+    Q3ValueVector<Brush*> m_brushes;
 };
 
 
@@ -51,7 +51,7 @@ private:
 class KisCPaintOpSettings : public KisPaintOpSettings {
 
 public:
-    KisCPaintOpSettings(QWidget * parent,  QValueVector<Brush*> m_brushes);
+    KisCPaintOpSettings(QWidget * parent,  Q3ValueVector<Brush*> m_brushes);
     virtual ~KisCPaintOpSettings() {}
 
     int brush() const;
@@ -66,7 +66,7 @@ private:
 
 private:
 
-    QValueVector<Brush*> m_brushes;
+    Q3ValueVector<Brush*> m_brushes;
     WdgCPaintOptions * m_options;
 };
 
@@ -86,7 +86,7 @@ public:
 private:
 
     Brush * m_currentBrush;
-    KisColor m_color;
+    KoColor m_color;
     int m_ink;
     int m_water;
 

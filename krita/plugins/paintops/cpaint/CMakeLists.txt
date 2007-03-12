@@ -10,7 +10,7 @@ kde4_add_plugin(kritacpaintbrush ${kritacpaintbrush_PART_SRCS})
 
 
 
-target_link_libraries(kritacpaintbrush  ${KDE4_KDECORE_LIBS} kritacommon kopainter kofficecore )
+target_link_libraries(kritacpaintbrush  ${KDE4_KDECORE_LIBS} kritaui kopainter kofficecore )
 
 install(TARGETS kritacpaintbrush DESTINATION ${PLUGIN_INSTALL_DIR} )
 

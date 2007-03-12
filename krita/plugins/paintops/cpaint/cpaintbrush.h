@@ -28,7 +28,7 @@ class CPaintBrush : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    CPaintBrush(QObject *parent, const char *name, const QStringList &);
+    CPaintBrush(QObject *parent, const QStringList &);
     virtual ~CPaintBrush();
 };
 

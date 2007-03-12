@@ -32,8 +32,8 @@
 typedef KGenericFactory<CPaintBrush> CPaintBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritacpaintbrush, CPaintBrushFactory("kritacore"))
 
-CPaintBrush::CPaintBrush(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+CPaintBrush::CPaintBrush(QObject *parent, const QStringList &)
+    : KParts::Plugin(parent)
 {
     setComponentData(CPaintBrushFactory::componentData());
 

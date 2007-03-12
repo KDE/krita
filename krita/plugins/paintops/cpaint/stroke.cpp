@@ -78,7 +78,7 @@ void Stroke::Redraw ()
 }
 
 
-void drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KisColor & color )
+void drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color )
 {
 
     if (!dev) return;
@@ -113,7 +113,7 @@ void drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2,
 
         QPointF p(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale));
 //         kDebug() << "paint at: " << p.roundX() << ", " << p.roundY() << endl;
-        dev->setPixel(p.roundX(), p.roundY(), Qt::blue, OPACITY_OPAQUE);
+        dev->setPixel(p.toPoint().x(), p.toPoint().y(), Qt::blue, OPACITY_OPAQUE);
         dist -= 1;
     }
 }
@@ -190,7 +190,7 @@ void Stroke::FreeSamples ()
 }
 
 
-void Stroke::StoreColor ( const KisColor & color )
+void Stroke::StoreColor ( const KoColor & color )
 {
     m_color = color;
 }

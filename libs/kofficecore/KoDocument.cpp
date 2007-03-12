@@ -371,8 +371,8 @@ bool KoDocument::exp0rt( const KUrl & _url )
     // reimplementing saveFile() (Note: import() and export() will remain
     // non-virtual).
     //
-    KUrl oldURL = m_url;
-    QString oldFile = m_file;
+    KUrl oldURL = url ();
+    QString oldFile = localFilePath ();
 
     bool wasModified = isModified ();
     QByteArray oldMimeType = mimeType ();
@@ -390,8 +390,8 @@ bool KoDocument::exp0rt( const KUrl & _url )
 
     // always restore m_url & m_file because KParts has changed them
     // (regardless of failure or success)
-    m_url = oldURL;
-    m_file = oldFile;
+    setUrl(oldURL);
+    setLocalFilePath(oldFile);
 
     // on successful export we need to restore modified etc. too
     // on failed export, mimetype/modified hasn't changed anyway
@@ -446,18 +446,18 @@ bool KoDocument::saveFile()
     bool ret = false;
     bool suppressErrorDialog = false;
     if ( !isNativeFormat( outputMimeType ) ) {
-        kDebug(30003) << "Saving to format " << outputMimeType << " in " << m_file << endl;
+        kDebug(30003) << "Saving to format " << outputMimeType << " in " << localFilePath() << endl;
         // Not native format : save using export filter
         if ( !d->filterManager )
             d->filterManager = new KoFilterManager( this );
 
-        KoFilter::ConversionStatus status = d->filterManager->exp0rt( m_file, outputMimeType );
+        KoFilter::ConversionStatus status = d->filterManager->exp0rt( localFilePath(), outputMimeType );
         ret = status == KoFilter::OK;
         suppressErrorDialog = (status == KoFilter::UserCancelled || status == KoFilter::BadConversionGraph );
     } else {
         // Native format => normal save
-        Q_ASSERT( !m_file.isEmpty() );
-        ret = saveNativeFormat( m_file );
+        Q_ASSERT( !localFilePath().isEmpty() );
+        ret = saveNativeFormat( localFilePath() );
     }
 
     if ( ret ) {
@@ -583,7 +583,7 @@ void KoDocument::slotAutoSave()
             connect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
             emit sigStatusBarMessage( i18n("Autosaving...") );
             d->m_autosaving = true;
-            bool ret = saveNativeFormat( autoSaveFile( m_file ) );
+            bool ret = saveNativeFormat( autoSaveFile( localFilePath() ) );
             setModified( true );
             if ( ret ) {
                 d->modifiedAfterAutosave = false;
@@ -1229,9 +1229,9 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 
     // Use the path as the internal url
     if ( _path.startsWith( STORE_PROTOCOL ) )
-        m_url = KUrl( _path );
+        setUrl(KUrl( _path ));
     else // ugly hack to pass a relative URI
-        m_url = KUrl( INTERNAL_PREFIX +  _path );
+        setUrl(KUrl( INTERNAL_PREFIX +  _path ));
 
     // To make the children happy cd to the correct directory
     _store->pushDirectory();
@@ -1481,13 +1481,13 @@ bool KoDocument::openURL( const KUrl & _url )
 
 bool KoDocument::openFile()
 {
-    //kDebug(30003) << "KoDocument::openFile for " << m_file << endl;
-    if ( !QFile::exists(m_file) )
+    //kDebug(30003) << "KoDocument::openFile for " << localFilePath() << endl;
+    if ( !QFile::exists(localFilePath()) )
     {
         QApplication::restoreOverrideCursor();
         if ( d->m_autoErrorHandlingEnabled )
             // Maybe offer to create a new document with that name ?
-            KMessageBox::error(0L, i18n("The file %1 does not exist.", m_file) );
+            KMessageBox::error(0L, i18n("The file %1 does not exist.", localFilePath()) );
         d->m_bLoading = false;
         return false;
     }
@@ -1498,7 +1498,7 @@ bool KoDocument::openFile()
     QByteArray _native_format = nativeFormatMimeType();
 
     KUrl u;
-    u.setPath( m_file );
+    u.setPath( localFilePath() );
     QString typeName = KMimeType::findByUrl( u, 0, true )->name();
 
     // Allow to open backup files, don't keep the mimetype application/x-trash.
@@ -1527,17 +1527,17 @@ bool KoDocument::openFile()
     {
         typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
         d->m_specialOutputFlag = SaveAsDirectoryStore;
-        kDebug(30003) << "KoDocument::openFile loading " << u.fileName() << ", using directory store for " << m_file << "; typeName=" << typeName << endl;
+        kDebug(30003) << "KoDocument::openFile loading " << u.fileName() << ", using directory store for " << localFilePath() << "; typeName=" << typeName << endl;
     }
-    kDebug(30003) << "KoDocument::openFile " << m_file << " type:" << typeName << endl;
+    kDebug(30003) << "KoDocument::openFile " << localFilePath() << " type:" << typeName << endl;
 
-    QString importedFile = m_file;
+    QString importedFile = localFilePath();
 
     if ( !isNativeFormat( typeName.toLatin1() ) ) {
         if ( !d->filterManager )
             d->filterManager = new KoFilterManager( this );
         KoFilter::ConversionStatus status;
-        importedFile = d->filterManager->import( m_file, status );
+        importedFile = d->filterManager->import( localFilePath(), status );
         if ( status != KoFilter::OK )
         {
             QApplication::restoreOverrideCursor();
@@ -1623,7 +1623,7 @@ bool KoDocument::openFile()
         }
     }
 
-    if ( importedFile != m_file )
+    if ( importedFile != localFilePath() )
     {
         // We opened a temporary file (result of an import filter)
         // Set document URL to empty - we don't want to save in /tmp !
@@ -1985,9 +1985,9 @@ bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
     _store->pushDirectory();
     // Store as document URL
     if ( url.startsWith( STORE_PROTOCOL ) ) {
-        m_url = KUrl( url );
+        setUrl( url );
     } else {
-        m_url = KUrl( INTERNAL_PREFIX + url );
+        setUrl( KUrl( INTERNAL_PREFIX + url ) );
         _store->enterDirectory( url );
     }
 
@@ -2585,11 +2585,11 @@ void KoDocument::showSavingErrorDialog()
 {
     if ( d->lastErrorMessage.isEmpty() )
     {
-        KMessageBox::error( 0L, i18n( "Could not save\n%1", m_file ) );
+        KMessageBox::error( 0L, i18n( "Could not save\n%1", localFilePath() ) );
     }
     else if ( d->lastErrorMessage != "USER_CANCELED" )
     {
-        KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2", m_file, d->lastErrorMessage ) );
+        KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2", localFilePath(), d->lastErrorMessage ) );
     }
 }
 
@@ -2617,13 +2617,13 @@ bool KoDocument::isLoading() const
 
 void KoDocument::removeAutoSaveFiles()
 {
-        // Eliminate any auto-save file
-        QString asf = autoSaveFile( m_file ); // the one in the current dir
-        if ( QFile::exists( asf ) )
-            QFile::remove( asf );
-        asf = autoSaveFile( QString() ); // and the one in $HOME
-        if ( QFile::exists( asf ) )
-            QFile::remove( asf );
+    // Eliminate any auto-save file
+    QString asf = autoSaveFile( localFilePath() ); // the one in the current dir
+    if ( QFile::exists( asf ) )
+        QFile::remove( asf );
+    asf = autoSaveFile( QString() ); // and the one in $HOME
+    if ( QFile::exists( asf ) )
+        QFile::remove( asf );
 }
 
 void KoDocument::setBackupFile( bool _b )

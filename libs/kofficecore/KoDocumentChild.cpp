@@ -449,7 +449,7 @@ void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString
         u.setProtocol( INTERNAL_PROTOCOL );
         u.setPath( name );
         kDebug(30003) << k_funcinfo << u << endl;
-        d->m_doc->setURL( u );
+        d->m_doc->setUrl( u );
     }
 
     //<draw:object draw:style-name="standard" draw:id="1" draw:layer="layout" svg:width="14.973cm" svg:height="4.478cm" svg:x="11.641cm" svg:y="14.613cm" xlink:href="#./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>

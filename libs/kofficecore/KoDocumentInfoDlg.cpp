@@ -98,7 +98,7 @@ void KoDocumentInfoDlg::initAboutTab()
     if( !doc )
         return;
 
-    d->m_aboutUi->leFileName->setText( doc->file() );
+    d->m_aboutUi->leFileName->setText( doc->localFilePath() );
     d->m_aboutUi->leFileName->setReadOnly( true );
     
     KMimeType::Ptr mime = KMimeType::mimeType( doc->mimeType() );

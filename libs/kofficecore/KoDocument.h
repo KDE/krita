@@ -798,7 +798,7 @@ public:
      * After using loadNativeFormat on a template, one wants
      * to set the url to KUrl()
      */
-    void resetURL() { m_url = KUrl(); m_file.clear(); }
+    void resetURL() { setUrl(KUrl()); setLocalFilePath(QString()); }
 
     /**
      * Set when you want an external embedded document to be stored internally
@@ -811,32 +811,6 @@ public:
     bool storeInternal() const;
 
     bool hasExternURL() const;
-
-    /**
-     * Sets the document URL to @p url
-     * KParts doesn't really allow this, but it is needed for undo of setStoreInternal()
-     */
-    void setURL( const KUrl& url ) { m_url = url; }
-
-    /**
-     * _Only_ use these functions to restore m_file (in KoMainWindow) after a
-     * failed save (remember to use setURL() to restore the URL as well).
-     *
-     * @warning Do _not_ use these functions for any other purpose.
-     *
-     * @internal
-     */
-    QString &file() { return m_file; }
-
-    /**
-     * _Only_ use these functions to restore m_file (in KoMainWindow) after a
-     * failed save (remember to use setURL() to restore the URL as well).
-     *
-     * @warning Do _not_ use these functions for any other purpose.
-     *
-     * @internal
-     */
-    void setFile( const QString &file ) { m_file = file; }
 
     /**
      * @internal (public for KoMainWindow)
@@ -903,6 +877,10 @@ public:
     KoGridData &gridData() {return m_gridData;}
 
     KoGuidesData &guidesData() {return m_guidesData;}
+
+    using ReadWritePart::setUrl;
+    using ReadWritePart::localFilePath;
+    using ReadWritePart::setLocalFilePath;
 
 public slots:
     /**

@@ -611,12 +611,12 @@ bool KoMainWindow::openDocument( KoDocument *newdoc, const KUrl & url )
         }
 
         setRootDocument( newdoc );
-        newdoc->setURL(url);
+        newdoc->setUrl(url);
         QString mime = KMimeType::findByUrl(url)->name();
         if ( mime.isEmpty() || mime == KMimeType::defaultMimeType() )
             mime = newdoc->nativeFormatMimeType();
         if ( url.isLocalFile() ) // workaround for kde<=3.3 kparts bug, fixed for 3.4
-            newdoc->setFile(url.path());
+            newdoc->setLocalFilePath(url.path());
         newdoc->setMimeTypeAfterLoading( mime );
         updateCaption();
         return true;
@@ -782,7 +782,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
             this, SLOT(slotSaveCanceled( const QString & )));
 
     KUrl oldURL = pDoc->url();
-    QString oldFile = pDoc->file();
+    QString oldFile = pDoc->localFilePath();
     QByteArray _native_format = pDoc->nativeFormatMimeType();
     QByteArray oldOutputFormat = pDoc->outputMimeType();
     int oldSpecialOutputFlag = pDoc->specialOutputFlag();
@@ -957,7 +957,8 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
                     else
                     {
                         kDebug(30003) << "Failed Save As!" << endl;
-                        pDoc->setURL( oldURL ), pDoc->setFile( oldFile );
+                        pDoc->setUrl( oldURL );
+                        pDoc->setLocalFilePath( oldFile );
                         pDoc->setOutputMimeType( oldOutputFormat, oldSpecialOutputFlag );
                     }
                 }
@@ -999,7 +1000,8 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
             if (!ret)
             {
                 kDebug(30003) << "Failed Save!" << endl;
-                pDoc->setURL( oldURL ), pDoc->setFile( oldFile );
+                pDoc->setUrl( oldURL );
+                pDoc->setLocalFilePath( oldFile );
             }
         }
         else
@@ -1656,7 +1658,7 @@ void KoMainWindow::slotEmailFile()
         tmpfile.open();
         KUrl u;
         u.setPath(tmpfile.fileName());
-        rootDocument()->setURL(u);
+        rootDocument()->setUrl(u);
         rootDocument()->setModified(true);
         rootDocument()->setOutputMimeType(rootDocument()->nativeFormatMimeType());
 
@@ -1666,7 +1668,7 @@ void KoMainWindow::slotEmailFile()
         theSubject = i18n("Document");
         urls.append( fileURL );
 
-        rootDocument()->setURL(tmp_url);
+        rootDocument()->setUrl(tmp_url);
         rootDocument()->setModified(tmp_modified);
         rootDocument()->setOutputMimeType(tmp_mimetype);
     }

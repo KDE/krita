@@ -93,6 +93,7 @@ protected:
 private:
 
     bool m_paintedOutline;
+    QRegion m_incrementalDirtyRegion;
 };
 
 

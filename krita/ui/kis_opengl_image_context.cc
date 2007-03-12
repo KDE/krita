@@ -23,6 +23,9 @@
 #include <kdebug.h>
 #include <ksharedptr.h>
 
+
+#include <QGLWidget>
+
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoIntegerMaths.h>
@@ -190,7 +193,7 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                 QImage tileUpdateImage = m_image->convertToQImage(tileUpdateRect.left(), tileUpdateRect.top(),
                                                                   tileUpdateRect.right(), tileUpdateRect.bottom(),
                                                                   m_monitorProfile, m_exposure);
-                kDebug() << "tileUpdateImage: " << tileUpdateImage.size() << endl;
+
                 if (m_displaySelection) {
                     if (!m_image->activeLayer().isNull()) {
                         m_image->activeLayer()->paint(tileUpdateImage,
@@ -202,13 +205,13 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                 if (tileUpdateRect.width() == m_imageTextureTileWidth && tileUpdateRect.height() == m_imageTextureTileHeight) {
 
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_imageTextureTileWidth, m_imageTextureTileHeight, 0,
-                                 GL_BGRA, GL_UNSIGNED_BYTE, tileUpdateImage.bits());
+                                 GL_BGRA, GL_UNSIGNED_BYTE, QGLWidget::convertToGLFormat( tileUpdateImage ).bits());
                 } else {
                     int xOffset = tileUpdateRect.x() - tileRect.x();
                     int yOffset = tileUpdateRect.y() - tileRect.y();
 
                     glTexSubImage2D(GL_TEXTURE_2D, 0, xOffset, yOffset, tileUpdateRect.width(), tileUpdateRect.height(),
-                                    GL_BGRA, GL_UNSIGNED_BYTE, tileUpdateImage.bits());
+                                    GL_BGRA, GL_UNSIGNED_BYTE, QGLWidget::convertToGLFormat( tileUpdateImage ).bits());
                 }
 
                 GLenum error = glGetError ();

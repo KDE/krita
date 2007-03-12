@@ -99,12 +99,13 @@ void KisOpenGLCanvas2::initializeGL()
 void KisOpenGLCanvas2::resizeGL(int w, int h)
 {
     glViewport(0, 0, (GLint)w, (GLint)h);
+    updateGL();
 }
 
 
 void KisOpenGLCanvas2::paintGL()
 {
-#if 1
+    kDebug() << "paintGL\n";
 
     glDrawBuffer(GL_BACK);
 
@@ -215,7 +216,6 @@ void KisOpenGLCanvas2::paintGL()
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
 
     swapBuffers();
-#endif
 
 }
 
@@ -226,7 +226,7 @@ KoToolProxy * KisOpenGLCanvas2::toolProxy() {
 void KisOpenGLCanvas2::documentOffsetMoved( QPoint pt )
 {
     m_d->documentOffset = pt;
-    update();
+    updateGL();
 }
 
 

@@ -60,8 +60,6 @@ public:
      *
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
-     * @param canvasType determines which kind of canvas widget the
-     *                   canvas initially creates.
      */
     KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc);
 

@@ -65,7 +65,7 @@ public:
      * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
      */
-    KisView2(KisDoc2 * doc, QWidget * parent);
+    KisView2(KisDoc2 * document, QWidget * parent);
     virtual ~KisView2();
 
 public:
@@ -110,7 +110,7 @@ public:  // Krita specific interfaces
     /// layers
     KisLayerManager * layerManager();
 
-    /// The zoommaanger handles everything action-related to zooming
+    /// The zoommanager handles everything action-related to zooming
     KisZoomManager * zoomManager();
 
     /// The filtermanager handles everything action-related to filters

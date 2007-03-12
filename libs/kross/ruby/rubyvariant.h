@@ -32,11 +32,10 @@
 #include <QStringList>
 #include <QVariant>
 #include <QMetaType>
-
 #include <QSize>
 #include <QPoint>
 #include <QRect>
-
+#include <QUrl>
 #include <QDate>
 #include <QTime>
 #include <QDateTime>
@@ -57,13 +56,14 @@ namespace Kross {
      *   \li QVariant::ULongLong
      *   \li QVariant::ByteArray
      *   \li QVariant::String
+     *   \li QVariant::StringList
      *   \li QVariant::Size
      *   \li QVariant::SizeF
      *   \li QVariant::Point
      *   \li QVariant::PointF
      *   \li QVariant::Rect
      *   \li QVariant::RectF
-     *   \li QVariant::StringList
+     *   \li QVariant::Url
      *   \li QVariant::List
      *   \li QVariant::Map
      *
@@ -94,7 +94,6 @@ namespace Kross {
      *   \li QVariant::SizePolicy
      *   \li QVariant::TextFormat
      *   \li QVariant::TextLength
-     *   \li QVariant::Url
      */
     template<typename VARIANTTYPE, typename RBTYPE = VALUE>
     struct RubyType
@@ -372,6 +371,18 @@ namespace Kross {
             }
             return QRectF( RubyType<double>::toVariant( rb_ary_entry(value,0) ), RubyType<double>::toVariant( rb_ary_entry(value,1) ),
                            RubyType<double>::toVariant( rb_ary_entry(value,2) ), RubyType<double>::toVariant( rb_ary_entry(value,3) ) );
+        }
+    };
+
+    /// \internal
+    template<>
+    struct RubyType<QUrl>
+    {
+        inline static VALUE toVALUE(const QUrl& url) {
+            return RubyType<QString>::toVALUE( url.toString() );
+        }
+        inline static QUrl toVariant(VALUE value) {
+            return QUrl( RubyType<QString>::toVariant(value) );
         }
     };
 

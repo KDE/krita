@@ -56,6 +56,9 @@ Py::Object PythonType<QVariant>::toPyObject(const QVariant& v)
         case QVariant::ULongLong:
             return PythonType<qlonglong>::toPyObject(v.toULongLong());
 
+        case QVariant::Url:
+            return PythonType<QUrl>::toPyObject(v.toUrl());
+
         case QVariant::Size:
             return PythonType<QSize>::toPyObject(v.toSize());
         case QVariant::SizeF:
@@ -308,6 +311,9 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
             return new PythonMetaTypeVariant<QRect>(object);
         case QVariant::RectF:
             return new PythonMetaTypeVariant<QRectF>(object);
+
+        case QVariant::Url:
+            return new PythonMetaTypeVariant<QUrl>(object);
 
         case QVariant::Color:
             //QColor c = PythonType<QColor>::toVariant(object);

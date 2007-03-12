@@ -55,6 +55,8 @@ VALUE RubyType<QVariant>::toVALUE(const QVariant& v)
         case QVariant::ULongLong:
             return RubyType<qlonglong>::toVALUE(v.toULongLong());
 
+        case QVariant::Url:
+            return RubyType<QUrl>::toVALUE(v.toUrl());
         case QVariant::Size:
             return RubyType<QSize>::toVALUE(v.toSize());
         case QVariant::SizeF:
@@ -266,6 +268,8 @@ MetaType* RubyMetaTypeFactory::create(int typeId, int metaTypeId, VALUE value)
         case QVariant::ULongLong:
             return new RubyMetaTypeVariant<qulonglong>(value);
 
+        case QVariant::Url:
+            return new RubyMetaTypeVariant<QUrl>(value);
         case QVariant::Size:
             return new RubyMetaTypeVariant<QSize>(value);
         case QVariant::SizeF:

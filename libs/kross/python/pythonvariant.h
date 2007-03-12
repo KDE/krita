@@ -27,11 +27,10 @@
 #include <QStringList>
 #include <QVariant>
 #include <QMetaType>
-
 #include <QSize>
 #include <QPoint>
 #include <QRect>
-
+#include <QUrl>
 #include <QDate>
 #include <QTime>
 #include <QDateTime>
@@ -61,6 +60,7 @@ namespace Kross {
      *   \li QVariant::RectF
      *   \li QVariant::String
      *   \li QVariant::StringList
+     *   \li QVariant::Url
      *   \li QVariant::List
      *   \li QVariant::Map
      *
@@ -91,7 +91,6 @@ namespace Kross {
      *   \li QVariant::SizePolicy
      *   \li QVariant::TextFormat
      *   \li QVariant::TextLength
-     *   \li QVariant::Url
      */
     template<typename VARIANTTYPE, typename PYTYPE = Py::Object>
     struct PythonType
@@ -422,6 +421,18 @@ namespace Kross {
             Py::List list(obj);
             return QRectF(PythonType<double>::toVariant(list[0]), PythonType<double>::toVariant(list[1]),
                           PythonType<double>::toVariant(list[2]), PythonType<double>::toVariant(list[3]));
+        }
+    };
+
+    /// \internal
+    template<>
+    struct PythonType<QUrl>
+    {
+        inline static Py::Object toPyObject(const QUrl& url) {
+            return PythonType<QString>::toPyObject( url.toString() );
+        }
+        inline static QUrl toVariant(const Py::Object& obj) {
+            return QUrl( PythonType<QString>::toVariant(obj) );
         }
     };
 

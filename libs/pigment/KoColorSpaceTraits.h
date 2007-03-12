@@ -40,10 +40,7 @@ struct KoColorSpaceTrait {
     /**
      * @return the size in byte of one pixel
      */
-    inline static quint32 pixelSize()
-    {
-        return channels_nb * sizeof(channels_type);
-    }
+    static const quint32 pixelSize = channels_nb * sizeof(channels_type);
     inline static quint8 alpha(const quint8 * U8_pixel)
     {
         if (alpha_pos < 0) return OPACITY_OPAQUE;
@@ -53,7 +50,7 @@ struct KoColorSpaceTrait {
     inline static void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels)
     {
         if (alpha_pos < 0) return;
-        qint32 psize = pixelSize();
+        qint32 psize = pixelSize;
         channels_type valpha =  KoColorSpaceMaths<quint8,channels_type>::scaleToA(alpha);
         for (; nPixels > 0; --nPixels, pixels += psize) {
             nativeArray(pixels)[alpha_pos] = valpha;
@@ -78,7 +75,7 @@ struct KoColorSpaceTrait {
      */
     inline static quint8* allocate(quint32 nPixels)
     {
-        return new quint8[ nPixels * pixelSize() ];
+        return new quint8[ nPixels * pixelSize ];
     }
 };
 

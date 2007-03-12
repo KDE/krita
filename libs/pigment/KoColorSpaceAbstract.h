@@ -161,25 +161,25 @@ namespace {
 
     class KoInvertColorTransformation : public KoColorTransformation {
         public:
-            KoInvertColorTransformation(const KoColorSpace* cs) : m_colorSpace(cs)
+            KoInvertColorTransformation(const KoColorSpace* cs) : m_colorSpace(cs), m_psize(cs->pixelSize())
             {
             }
             virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
             {
-                quint16 rgba[4];
-                quint32 psize = m_colorSpace->pixelSize();
+                quint16 m_rgba[4];
                 while(nPixels--)
                 {
-                    m_colorSpace->toRgbA16(src, reinterpret_cast<quint8 *>(rgba), 1);
-                    rgba[0] = KoColorSpaceMathsTraits<quint16>::max() - rgba[0];
-                    rgba[1] = KoColorSpaceMathsTraits<quint16>::max() - rgba[1];
-                    rgba[2] = KoColorSpaceMathsTraits<quint16>::max() - rgba[2];
-                    m_colorSpace->fromRgbA16(reinterpret_cast<quint8 *>(rgba), dst, 1);
-                    src += psize;
+                    m_colorSpace->toRgbA16(src, reinterpret_cast<quint8 *>(m_rgba), 1);
+                    m_rgba[0] = KoColorSpaceMathsTraits<quint16>::max() - m_rgba[0];
+                    m_rgba[1] = KoColorSpaceMathsTraits<quint16>::max() - m_rgba[1];
+                    m_rgba[2] = KoColorSpaceMathsTraits<quint16>::max() - m_rgba[2];
+                    m_colorSpace->fromRgbA16(reinterpret_cast<quint8 *>(m_rgba), dst, 1);
+                    src += m_psize;
                 }
             }
         private:
             const KoColorSpace* m_colorSpace;
+            quint32 m_psize;
     };
 
 }
@@ -205,7 +205,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
         
         virtual quint32 colorChannelCount() const { return _CSTraits::channels_nb - 1; }
         virtual quint32 channelCount() const { return _CSTraits::channels_nb; };
-        virtual quint32 pixelSize() const { return _CSTraits::pixelSize(); }
+        virtual quint32 pixelSize() const { return _CSTraits::pixelSize; }
 
         virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const
         {

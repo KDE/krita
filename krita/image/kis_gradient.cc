@@ -423,7 +423,7 @@ bool KisGradientSegment::isValid() const
 }
 
 KisGradientSegment::RGBColorInterpolationStrategy::RGBColorInterpolationStrategy()
-    : m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() ), buffer(m_colorSpace)
+    : m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() ), buffer(m_colorSpace),m_start(m_colorSpace), m_end(m_colorSpace)
 {
 }
 
@@ -437,10 +437,10 @@ KisGradientSegment::RGBColorInterpolationStrategy *KisGradientSegment::RGBColorI
     return m_instance;
 }
 
-void KisGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, double t, KoColor start, KoColor end) const
+void KisGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
 {
-    start.convertTo(m_colorSpace);
-    end.convertTo(m_colorSpace);
+    m_start.fromKoColor(start);
+    m_end.fromKoColor(end);
 
     const quint8 *colors[2];
     colors[0] = start.data();
@@ -470,7 +470,7 @@ KisGradientSegment::HSVCWColorInterpolationStrategy *KisGradientSegment::HSVCWCo
     return m_instance;
 }
 
-void KisGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, double t, KoColor start, KoColor end) const
+void KisGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
 {
     QColor sc;
     QColor ec;
@@ -518,7 +518,7 @@ KisGradientSegment::HSVCCWColorInterpolationStrategy *KisGradientSegment::HSVCCW
     return m_instance;
 }
 
-void KisGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, double t, KoColor start, KoColor end) const
+void KisGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
 {
     QColor sc;
     QColor se;

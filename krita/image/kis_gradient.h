@@ -86,7 +86,7 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
             ColorInterpolationStrategy() {}
             virtual ~ColorInterpolationStrategy() {}
 
-            virtual void colorAt(KoColor& dst, double t, KoColor start, KoColor end) const = 0;
+            virtual void colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const = 0;
             virtual int type() const = 0;
         };
 
@@ -94,7 +94,7 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
         public:
             static RGBColorInterpolationStrategy *instance();
 
-            virtual void colorAt(KoColor& dst, double t, KoColor start, KoColor end) const;
+            virtual void colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const;
             virtual int type() const { return COLOR_INTERP_RGB; }
 
         private:
@@ -103,13 +103,15 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
             static RGBColorInterpolationStrategy *m_instance;
             KoColorSpace * m_colorSpace;
             KoColor buffer;
+            mutable KoColor m_start;
+            mutable KoColor m_end;
         };
 
         class HSVCWColorInterpolationStrategy : public ColorInterpolationStrategy {
         public:
             static HSVCWColorInterpolationStrategy *instance();
 
-            virtual void colorAt(KoColor& dst, double t, KoColor start, KoColor end) const;
+            virtual void colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const;
             virtual int type() const { return COLOR_INTERP_HSV_CW; }
         private:
             HSVCWColorInterpolationStrategy();
@@ -122,7 +124,7 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
         public:
             static HSVCCWColorInterpolationStrategy *instance();
 
-            virtual void colorAt(KoColor& dst, double t, KoColor start, KoColor end) const;
+            virtual void colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const;
             virtual int type() const { return COLOR_INTERP_HSV_CCW; }
         private:
             HSVCCWColorInterpolationStrategy();

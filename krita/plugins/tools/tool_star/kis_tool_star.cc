@@ -71,7 +71,7 @@ void KisToolStar::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
         //Erase old lines
-        m_canvas->updateCanvas(boundingRect());
+        m_canvas->updateCanvas(convertToPt(boundingRect()));
         if (event->modifiers() & Qt::AltModifier) {
             QPointF trans = convertToPixelCoord(event) - m_dragEnd;
             m_dragStart += trans;
@@ -79,7 +79,7 @@ void KisToolStar::mouseMoveEvent(KoPointerEvent *event)
         } else {
             m_dragEnd = convertToPixelCoord(event);
         }
-        m_canvas->updateCanvas(boundingRect());
+        m_canvas->updateCanvas(convertToPt(boundingRect()));
     }
 }
 
@@ -120,6 +120,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
         device->setDirty( painter.dirtyRegion() );
         notifyModified();
+        m_canvas->updateCanvas(convertToPt(boundingRect()));
 
         m_canvas->addCommand(painter.endTransaction());
     }
@@ -127,6 +128,9 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolStar::paint(QPainter& gc, KoViewConverter &converter)
 {
+    if (!m_dragging)
+        return;
+
     double sx, sy;
     converter.zoom(&sx, &sy);
 

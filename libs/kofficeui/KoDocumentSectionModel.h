@@ -26,8 +26,23 @@
 #include <QString>
 #include <QVariant>
 
-/** Inherit from this class for use with @see KoDocumentSectionView. */
-
+/**
+ * Model class for use with KoDocumentSectionView. The document
+ * sections that an application uses need to inherit from this class
+ * to be displayable in the KoDocumentSectionView. That would be,
+ * for instance, pages in KWord or KPresenter, layers in Krita or
+ * Karbon, sheets in KSpread.
+ *
+ * The KoDocumentSectionView will display a thumbnail and a row of
+ * icon properties for every document section.
+ *
+ * See also the Qt documentation for QAbstractItemModel. This class
+ * only extends that interface to provide a name and set of toggle
+ * properties (like visible, locked, selected -- let your imagination
+ * run riot).
+ *
+ * See for an example implementation KisLayer.
+ */
 class KoDocumentSectionModel: public QAbstractItemModel
 {
     public:

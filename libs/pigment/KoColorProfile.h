@@ -123,7 +123,11 @@ public:
 
 public:
     /**
-     * @return the color profile of the screen
+     *
+     * XXX: We need to make sure we always have the right profile even
+     *      when running on multiple screens.
+     *
+     * @return the color profile of the screen.
      */
     static KoColorProfile *  getScreenProfile(int screen = -1);
 

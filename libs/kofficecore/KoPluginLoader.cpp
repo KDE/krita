@@ -63,6 +63,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         int errCode = 0;
         QObject * plugin = KService::createInstance<QObject>(service, this, QStringList(), &errCode );
         if ( plugin ) {
+            kDebug(30008) << "Loaded plugin " << service->name() << endl;
             delete plugin;
         }
         else {

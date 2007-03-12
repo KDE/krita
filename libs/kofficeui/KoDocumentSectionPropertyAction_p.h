@@ -24,6 +24,13 @@
 #include "KoDocumentSectionModel.h"
 #include "KoDocumentSectionView.h"
 
+/**
+ * Internal class for the KoDocumentSectionView widget. Provides a
+ * toggle action for a particular property associated with a document
+ * section, such as visible, selected, locked. Property actions have
+ * associated on/off icons to show their state in the
+ * KoDocumentSectionView.
+ */
 class KoDocumentSectionView::PropertyAction: public QAction
 {
     typedef QAction super;

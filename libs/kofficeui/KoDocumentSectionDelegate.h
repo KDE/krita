@@ -28,6 +28,11 @@ class QTreeView;
 class KoDocumentSectionModel;
 class KoDocumentSectionToolTip;
 
+/**
+ * The KoDocumentSectionDelegate is the gui pendnat ofr a
+ * KoDocumentSectionModel: the graphical representation of one item in
+ * a KoDocumentSectionView.
+ */
 class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
 {
     typedef QAbstractItemDelegate super;
@@ -45,7 +50,6 @@ class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
         virtual void setEditorData( QWidget *editor, const QModelIndex &index ) const;
         virtual void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
         virtual void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index ) const;
-
 
     protected:
         virtual bool eventFilter( QObject *object, QEvent *event );

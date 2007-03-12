@@ -72,7 +72,7 @@ KoDocumentSectionView::DisplayMode KoDocumentSectionView::displayMode() const
 void KoDocumentSectionView::addPropertyActions( QMenu *menu, const QModelIndex &index )
 {
     Model::PropertyList list = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
-    for( int i = 0, n = list.count(); i < n; ++i )
+    for( int i = 0, n = list.count(); i < n; ++i ) {
         if( list.at( i ).isMutable )
         {
             PropertyAction *a = new PropertyAction( i, list.at( i ), index, menu );
@@ -80,6 +80,7 @@ void KoDocumentSectionView::addPropertyActions( QMenu *menu, const QModelIndex &
                      this, SLOT( slotActionToggled( bool, const QPersistentModelIndex&, int ) ) );
             menu->addAction( a );
         }
+    }
 }
 
 bool KoDocumentSectionView::viewportEvent( QEvent *e )

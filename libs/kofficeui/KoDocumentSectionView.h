@@ -26,20 +26,43 @@
 class QStyleOptionViewItem;
 class KoDocumentSectionModel;
 
+/**
+ * A View widget on document sections (for example, layers, pages,
+ * sheets...). The widget can show the document sections as big
+ * thumbnails, in a listview with two rows of informative text and
+ * icons per document section or as single rows of text and property
+ * icons.
+ *
+ * The KoDocumentSectionView is designed as a Qt4 model-view widget.
+ * See the relevant (extensive) Qt documentation about the design
+ * basis for this widget.
+ *
+ * Usage: simply use this widget in your designer .ui file. Krita's
+ * and karbon's layerboxes are KoDocumentSectionView based.
+ */
 class KOFFICEUI_EXPORT KoDocumentSectionView: public QTreeView
 {
     typedef QTreeView super;
     Q_OBJECT
 
-    signals:
-        void contextMenuRequested( const QPoint &globalPos, const QModelIndex &index );
+signals:
+    /**
+     * Emitted whenever the user clicks with the secondary mouse
+     * button on an item. It is up to the application to design the
+     * contents of the context menu and show it.
+     */
+    void contextMenuRequested( const QPoint &globalPos, const QModelIndex &index );
 
-    public:
-        KoDocumentSectionView( QWidget *parent = 0 );
-        virtual ~KoDocumentSectionView();
+public:
 
-        /// how items should be displayed
-        enum DisplayMode
+    /**
+     * Create a new KoDocumentSectionView.
+     */
+    KoDocumentSectionView( QWidget *parent = 0 );
+    virtual ~KoDocumentSectionView();
+
+    /// how items should be displayed
+    enum DisplayMode
         {
             /// large fit-to-width thumbnails, with only titles or page numbers
             ThumbnailMode,
@@ -51,30 +74,66 @@ class KOFFICEUI_EXPORT KoDocumentSectionView: public QTreeView
             MinimalMode
         };
 
-        void setDisplayMode( DisplayMode mode );
+    /**
+     * Set the display mode of the view to one of the options.
+     *
+     * @param mode The KoDocumentSectionView::DisplayMode mode
+     */
+    void setDisplayMode( DisplayMode mode );
 
-        DisplayMode displayMode() const;
+    /**
+     * @return the currently active display mode
+     */
+    DisplayMode displayMode() const;
 
-        void addPropertyActions( QMenu *menu, const QModelIndex &index );
+    /**
+     * Add toggle actions for all the properties associated with the
+     * current document section associated with the model index to the
+     * specified menu.
+     *
+     * For instance, if a document section can be locked and visible,
+     * the menu will be expanded with locked and visilbe toggle
+     * actions.
+     *
+     * For instance
+     @code
+     KoDocumentSectionView * sectionView;
+     QModelIndex index = getCurrentDocumentSection();
+     QMenu menu;
+     if (index.isValid()) {
+         sectionView->addPropertyActions(&menu, index);
+      }
+      else {
+         menu.addAction(...); // Something to create a new document section, for example.
+      }
 
-    protected:
-        virtual bool viewportEvent( QEvent *event );
-        virtual void contextMenuEvent( QContextMenuEvent *event );
-        virtual void showContextMenu( const QPoint &globalPos, const QModelIndex &index );
+     @endcode
+     *
+     * @param menu A pointer to the menu that will be expanded with
+     * the toglge actions
+     * @param index The model index associated with the document
+     * section that may or may not provide a number of toggle actions.
+     */
+    void addPropertyActions( QMenu *menu, const QModelIndex &index );
 
-    protected slots:
-        virtual void currentChanged( const QModelIndex &current, const QModelIndex &previous );
-        virtual void dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight );
+protected:
+    virtual bool viewportEvent( QEvent *event );
+    virtual void contextMenuEvent( QContextMenuEvent *event );
+    virtual void showContextMenu( const QPoint &globalPos, const QModelIndex &index );
 
-    private slots:
-        void slotActionToggled( bool on, const QPersistentModelIndex &index, int property );
+protected slots:
+    virtual void currentChanged( const QModelIndex &current, const QModelIndex &previous );
+    virtual void dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight );
 
-    private:
-        QStyleOptionViewItem optionForIndex( const QModelIndex &index ) const;
-        typedef KoDocumentSectionModel Model;
-        class PropertyAction;
-        class Private;
-        Private* const d;
+private slots:
+    void slotActionToggled( bool on, const QPersistentModelIndex &index, int property );
+
+private:
+    QStyleOptionViewItem optionForIndex( const QModelIndex &index ) const;
+    typedef KoDocumentSectionModel Model;
+    class PropertyAction;
+    class Private;
+    Private* const d;
 };
 
 #endif

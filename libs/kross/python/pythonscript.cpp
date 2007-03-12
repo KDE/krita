@@ -66,7 +66,8 @@ PythonScript::~PythonScript()
     #ifdef KROSS_PYTHON_SCRIPT_DTOR_DEBUG
         krossdebug("PythonScript::Destructor.");
     #endif
-    finalize();
+    delete d->m_module; d->m_module = 0;
+    delete d->m_code; d->m_code = 0;
     delete d;
 }
 

@@ -2,6 +2,7 @@
  * This file is part of Krita
  *
  * Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,6 +74,7 @@ public:
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return true; }
     virtual bool supportsAdjustmentLayers() { return false; }
+    virtual bool supportsThreading() { return false; }
 
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration * configuration(QWidget*);
@@ -119,13 +121,9 @@ public:
     KisBumpmapConfiguration * config();
     void setConfiguration(KisFilterConfiguration * config);
 
-    WdgBumpmap * m_page;
-
 private:
 
-    KisFilter * m_filter;
-    KisPaintDeviceSP m_device;
-
+    WdgBumpmap * m_page;
 };
 
 #endif

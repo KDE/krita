@@ -35,6 +35,7 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
+#include <qradiobutton.h>
 #include <qstring.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
@@ -119,6 +120,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
     KisBumpmapConfiguration * config = (KisBumpmapConfiguration*)cfg;
 
+    Q_INT32 xofs, yofs; /// The x,y offset values
     Q_INT32 lx, ly;       /* X and Y components of light vector */
     Q_INT32 nz2, nzlz;    /* nz^2, nz*lz */
     Q_INT32 background;   /* Shade for vertical normals */
@@ -132,6 +134,10 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     double n;
 
     // ------------------ Prepare parameters
+
+    /* Convert the offsets */
+    xofs = -config->xofs;
+    yofs = -config->yofs;
 
     /* Convert to radians */
     azimuth   = M_PI * config->azimuth / 180.0;
@@ -219,35 +225,11 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
      else {
          bmRect = rect;
          bumpmap = src;
-    }
+     }
 
-
-    Q_INT32 sel_h = rect.height();
-    Q_INT32 sel_w = rect.width();
-    Q_INT32 sel_x = rect.x();
-    Q_INT32 sel_y = rect.y();
-
-    Q_INT32 bm_h = bmRect.height();
-    Q_INT32 bm_w = bmRect.width();
-    Q_INT32 bm_x = bmRect.x();
-
-    setProgressTotalSteps(sel_h);
-
-    // ------------------- Map the bumps
-    Q_INT32 yofs1, yofs2, yofs3;
-
-    // ------------------- Initialize offsets
-    if (config->tiled) {
-        yofs2 = MOD (config->yofs + sel_y, bm_h);
-        yofs1 = MOD (yofs2 - 1, bm_h);
-        yofs3 = MOD (yofs2 + 1,  bm_h);
-    }
-    else {
-          yofs2 = CLAMP (config->yofs + sel_y, 0, bm_h - 1);
-          yofs1 = yofs2;
-          yofs3 = CLAMP (yofs2 + 1, 0, bm_h - 1);
-
-    }
+     kdDebug(12345) << "KisFilterBumpmap::process: rect=" << rect << ", bumpmap rect=" << bmRect << "\n";
+     
+    setProgressTotalSteps(rect.height());
 
     // ---------------------- Load initial three bumpmap scanlines
 
@@ -255,105 +237,103 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     QValueVector<KisChannelInfo *> channels = srcCs->channels();
 
     // One byte per pixel, converted from the bumpmap layer.
-    Q_UINT8 * bm_row1 = new Q_UINT8[bm_w];
-    Q_UINT8 * bm_row2 = new Q_UINT8[bm_w];
-    Q_UINT8 * bm_row3 = new Q_UINT8[bm_w];
+    Q_UINT8 * bm_row1 = new Q_UINT8[bmRect.width()];
+    Q_UINT8 * bm_row2 = new Q_UINT8[bmRect.width()];
+    Q_UINT8 * bm_row3 = new Q_UINT8[bmRect.width()];
     Q_UINT8 * tmp_row;
 
-    convertRow(bumpmap, bm_row1, bm_x, yofs1, bm_w, lut, config->waterlevel);
-    convertRow(bumpmap, bm_row2, bm_x, yofs2, bm_w, lut, config->waterlevel);
-    convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->waterlevel);
+    // ------------------- Map the bumps
+    Q_INT32 yofs1, yofs2, yofs3;
+    
+    // ------------------- Initialize offsets
+    if (config->tiled) {
+        yofs2 = MOD (yofs, bmRect.height());
+        yofs1 = MOD (yofs2 - 1, bmRect.height());
+        yofs3 = MOD (yofs2 + 1, bmRect.height());
+    }
+    else {
+        yofs2 = 0;
+        yofs1 = yofs2 - 1;
+        yofs3 = yofs2 + 1;
+    }
+    convertRow(bumpmap, bm_row1, bmRect.x(), yofs1+bmRect.top(), bmRect.width(), lut, config->waterlevel);
+    convertRow(bumpmap, bm_row2, bmRect.x(), yofs2+bmRect.top(), bmRect.width(), lut, config->waterlevel);
+    convertRow(bumpmap, bm_row3, bmRect.x(), yofs3+bmRect.top(), bmRect.width(), lut, config->waterlevel);
 
-    bool row_in_bumpmap;
+    for (int y = rect.top(); y<=rect.bottom(); y++) {
+        const Q_INT32 yBump = y+yofs;
+        if(config->tiled || (bmRect.top()<=yBump && yBump<=bmRect.bottom()) ) {
+            // Get the iterators
+            KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, rect.width(), true);
+            KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y, rect.width(), false);
 
-    Q_INT32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
-    for (int y = sel_y; y < sel_h + sel_y; y++) {
+            //while (x < sel_w || cancelRequested()) {
+            while (!srcIt.isDone() && !cancelRequested()) {
+                if (srcIt.isSelected()) {
+                    
+                    const Q_INT32 xBump = srcIt.x()+xofs;
+                    Q_INT32 nx, ny;
+                    // Calculate surface normal from bumpmap
+                    if (config->tiled || bmRect.left() <= xBump && xBump <= bmRect.right()) {
+                        
+                        Q_INT32 xofs1, xofs2, xofs3;
+                        if (config->tiled) {
+                            xofs2 = MOD (xBump-bmRect.left(), bmRect.width());
+                            xofs1 = MOD (xofs2 - 1, bmRect.width());
+                            xofs3 = MOD (xofs2 + 1, bmRect.width());
+                        } else {
+                            xofs2 = MOD (xBump-bmRect.left(), bmRect.width());
+                            xofs1 = ::max (xofs2 - 1, 0);
+                            xofs3 = ::min (xofs2 + 1, bmRect.width());
+                        }
 
-        row_in_bumpmap = (y >= - config->yofs && y < - config->yofs + bm_h);
-
-        // Bumpmap
-
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, sel_w, true);
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y, sel_w, false);
-
-        Q_INT32 tmp = config->xofs + sel_x;
-        xofs2 = MOD (tmp, bm_w);
-
-        Q_INT32 x = 0;
-        //while (x < sel_w || cancelRequested()) {
-        while (!srcIt.isDone() && !cancelRequested()) {
-            if (srcIt.isSelected()) {
-                // Calculate surface normal from bumpmap
-                if (config->tiled || row_in_bumpmap &&
-                    x >= - tmp&& x < - tmp + bm_w) {
-
-                    if (config->tiled) {
-                        xofs1 = MOD (xofs2 - 1, bm_w);
-                        xofs3 = MOD (xofs2 + 1, bm_w);
+                        nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
+                              bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
+                        ny = (bm_row3[xofs1] + bm_row3[xofs2] + bm_row3[xofs3] -
+                              bm_row1[xofs1] - bm_row1[xofs2] - bm_row1[xofs3]);   
+                    } else {
+                        nx = 0;
+                        ny = 0;
                     }
-                    else {
-                        xofs1 = CLAMP (xofs2 - 1, 0, bm_w - 1);
-                        xofs3 = CLAMP (xofs2 + 1, 0, bm_w - 1);
+
+                    // Shade
+                    Q_INT32 shade;
+                    if ((nx == 0) && (ny == 0)) {
+                        shade = background;
+                    } else {
+                        Q_INT32 ndotl = (nx * lx) + (ny * ly) + nzlz;
+                        
+                        if (ndotl < 0) {
+                            shade = (Q_INT32)(compensation * config->ambient);
+                        } else {
+                            shade = (Q_INT32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
+                            shade = (Q_INT32)(shade + QMAX(0, (255 * compensation - shade)) * config->ambient / 255);
+                        }
                     }
 
-                    nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
-                        bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
-                    ny = (bm_row3[xofs1] + bm_row3[xofs2] + bm_row3[xofs3] -
-                        bm_row1[xofs1] - bm_row1[xofs2] - bm_row1[xofs3]);
-
-
-                }
-                else {
-                    nx = 0;
-                    ny = 0;
+                    // Paint
+                    srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->compensate, compensation, 1);
                 }
 
-                // Shade
-
-                if ((nx == 0) && (ny == 0)) {
-                    shade = background;
-                }
-                else {
-                    ndotl = (nx * lx) + (ny * ly) + nzlz;
-
-                    if (ndotl < 0) {
-                        shade = (Q_INT32)(compensation * config->ambient);
-                    }
-                    else {
-                        shade = (Q_INT32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
-                        shade = (Q_INT32)(shade + QMAX(0, (255 * compensation - shade)) * config->ambient / 255);
-                    }
-                }
-
-                // Paint
-                srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->compensate, compensation, 1);
+                ++srcIt;
+                ++dstIt;
             }
-              if (++xofs2 == bm_w)
-                xofs2 = 0;
-            ++srcIt;
-            ++dstIt;
-            ++x;
-        }
 
-
-        // Next line
-        if (config->tiled || row_in_bumpmap) {
+            // Go to the next row
             tmp_row = bm_row1;
             bm_row1 = bm_row2;
             bm_row2 = bm_row3;
             bm_row3 = tmp_row;
 
-            if (++yofs2 == bm_h) {
-                yofs2 = 0;
-            }
-            if (config->tiled) {
-                yofs3 = MOD(yofs2 + 1, bm_h);
-            }
-            else {
-                yofs3 = CLAMP(yofs2 + 1, 0, bm_h - 1);
-            }
+            yofs2++;
+            if (yofs2 >= bmRect.height()) { yofs2 = 0; }
 
-            convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->waterlevel);
+            if (config->tiled) {
+                yofs3 = MOD (yofs2 + 1, bmRect.height());
+            } else {
+                yofs3 = yofs2 + 1;
+            }
+            convertRow(bumpmap, bm_row3, bmRect.x(), yofs3+bmRect.top(), bmRect.width(), lut, config->waterlevel);
         }
 
         incProgress();
@@ -475,20 +455,14 @@ QString KisBumpmapConfiguration::toString()
     return KisFilterConfiguration::toString();
 }
 
-KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name, WFlags f)
-    : KisFilterConfigWidget(parent, name, f),
-      m_filter(filter),
-      m_device(dev)
+KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter *, KisPaintDeviceSP dev, QWidget * parent, const char * name, WFlags f)
+    : KisFilterConfigWidget(parent, name, f)
 {
-    Q_ASSERT(m_filter);
-    Q_ASSERT(m_device);
-
     m_page = new WdgBumpmap(this);
     QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
     l->add(m_page);
-    m_filter->setAutoUpdate(false);
 
     // Find all of the layers in the group
     if(dev->image() ) {
@@ -499,7 +473,20 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
         }
     }
 
-    connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
+    // Connect all of the widgets to update signal
+    connect( m_page->radioLinear, SIGNAL( toggled(bool)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->radioSpherical, SIGNAL( toggled(bool)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->radioSinusoidal, SIGNAL( toggled(bool)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->chkCompensate, SIGNAL( toggled(bool)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->chkInvert, SIGNAL( toggled(bool)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->chkTiled, SIGNAL( toggled(bool)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->dblAzimuth, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->dblElevation, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->dblDepth, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->intXOffset, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->intYOffset, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->intWaterLevel, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->intAmbient, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 KisBumpmapConfiguration * KisBumpmapConfigWidget::config()

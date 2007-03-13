@@ -20,6 +20,7 @@ find_path(EIGEN_INCLUDE_DIR NAMES eigen/matrix.h
      ${INCLUDE_INSTALL_DIR}
      /usr/include
      /usr/local/include
+     ${KDE4_INCLUDE_DIR}
    )
 
 if(EIGEN_INCLUDE_DIR)

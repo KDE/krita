@@ -150,7 +150,7 @@ namespace Kross {
         {
             if(RubyCallCachePrivate::s_rccObject  == 0)
             {
-                RubyCallCachePrivate::s_rccObject = rb_define_class("KrossCallCache", rb_cObject);
+                RubyCallCachePrivate::s_rccObject = rb_define_class_under(RubyInterpreter::krossModule(), "CallCache", rb_cObject);
                 rb_define_method(RubyCallCachePrivate::s_rccObject, "cacheexec",  (VALUE (*)(...))RubyCallCache::method_cacheexec, -1);
             }
             m_self = Data_Wrap_Struct(RubyCallCachePrivate::s_rccObject, 0, RubyCallCache::delete_object, this);

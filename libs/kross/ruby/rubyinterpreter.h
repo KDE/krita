@@ -61,6 +61,13 @@ namespace Kross {
             * @return the hash of \a RubyModule instances we know about.
             */
             QHash<QString, RubyModule* > modules() const;
+        public:
+            /**
+             * @return the ruby object with the module Kross, this module holds class
+             * definition used by kross, and scripts object. All kross specific objects
+             * should be member of that module.
+             */
+            static VALUE krossModule();
 
         private:
             /// Initialize the ruby interpreter.

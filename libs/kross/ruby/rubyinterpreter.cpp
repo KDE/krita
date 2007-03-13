@@ -1,7 +1,7 @@
 /***************************************************************************
  * rubyinterpreter.cpp
  * This file is part of the KDE project
- * copyright (C)2005 by Cyrille Berger (cberger@cberger.net)
+ * copyright (C)2005,2007 by Cyrille Berger (cberger@cberger.net)
  * copyright (C)2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
@@ -48,10 +48,12 @@ namespace Kross {
     class RubyInterpreterPrivate {
         friend class RubyInterpreter;
         QHash<QString, RubyModule* > modules;
+        static VALUE s_krossModule;
     };
 }
 
 RubyInterpreterPrivate* RubyInterpreter::d = 0;
+VALUE RubyInterpreterPrivate::s_krossModule = 0;
 
 RubyInterpreter::RubyInterpreter(Kross::InterpreterInfo* info)
     : Kross::Interpreter(info)
@@ -91,6 +93,16 @@ void RubyInterpreter::initRuby()
     ruby_init_loadpath();
     rb_define_global_function("require", (VALUE (*)(...))RubyInterpreter::require, 1);
 }
+
+VALUE RubyInterpreter::krossModule()
+{
+    if(RubyInterpreterPrivate::s_krossModule == 0)
+    {
+        RubyInterpreterPrivate::s_krossModule = rb_define_module("Kross");
+    }
+    return RubyInterpreterPrivate::s_krossModule;
+}
+
 
 void RubyInterpreter::finalizeRuby()
 {

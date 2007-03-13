@@ -22,6 +22,7 @@
 
 #include "rubycallcache.h"
 #include "rubyvariant.h"
+#include "rubyinterpreter.h"
 #include <kross/core/metatype.h>
 
 //#include <st.h>
@@ -355,7 +356,7 @@ Kross::Exception* RubyExtension::convertToException(VALUE value)
 VALUE RubyExtension::convertFromException(Kross::Exception::Ptr exc)
 {
     if(RubyExtensionPrivate::s_krossException == 0)
-        RubyExtensionPrivate::s_krossException = rb_define_class("KrossException", rb_eRuntimeError);
+        RubyExtensionPrivate::s_krossException = rb_define_class_under(RubyInterpreter::krossModule(), "KrossException", rb_eRuntimeError);
     //exc->_KShared_ref(); //TODO
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossException, 0, RubyExtension::delete_exception, exc.data() );
 }
@@ -373,7 +374,7 @@ VALUE RubyExtension::toVALUE(RubyExtension* extension)
         return 0;
 
     if( RubyExtensionPrivate::s_krossObject == 0 ) {
-        RubyExtensionPrivate::s_krossObject = rb_define_class("KrossObject", rb_cObject);
+        RubyExtensionPrivate::s_krossObject = rb_define_class_under(RubyInterpreter::krossModule(), "Object", rb_cObject );
         rb_define_method(RubyExtensionPrivate::s_krossObject, "method_missing",  (VALUE (*)(...))RubyExtension::method_missing, -1);
         rb_define_method(RubyExtensionPrivate::s_krossObject, "clone", (VALUE (*)(...))RubyExtension::clone, 0);
     }

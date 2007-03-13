@@ -66,6 +66,7 @@ public:
      * Fill a rectangle with a certain color.
      */
     void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c);
+
     /**
      * Overloaded version of the above function.
      */
@@ -85,6 +86,7 @@ public:
      * entire rectangle.
      */
     void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPattern * pattern);
+
     /**
      * Overloaded version of the above function.
      */
@@ -112,6 +114,7 @@ public:
      * fill parts that are the exact same color, 255 means anything will be filled
      */
     void setFillThreshold(int threshold);
+
     /** Returns the fill threshold, see setFillThreshold for details */
     int fillThreshold() const { return m_threshold; }
 
@@ -124,11 +127,13 @@ public:
     /** If sample merged is set to true, the paint device will get the bounds of the
      * floodfill from the complete image instead of the layer */
     bool sampleMerged() const { return m_sampleMerged; }
+
     /** Set sample merged. See sampleMerged() for details */
     void setSampleMerged(bool set) { m_sampleMerged = set; }
 
     /** If true, floodfill doesn't fill outside the selected area of a layer */
     bool careForSelection() const { return m_careForSelection; }
+
     /** Set caring for selection. See careForSelection for details */
     void setCareForSelection(bool set) { m_careForSelection = set; }
 
@@ -138,6 +143,7 @@ public:
      * position.
      */
     bool fuzzyFill() const { return m_fuzzy; }
+
     /** Sets the fuzzyfill parameter. See fuzzyFill for details */
     void setFuzzyFill(bool set) { m_fuzzy = set; }
 

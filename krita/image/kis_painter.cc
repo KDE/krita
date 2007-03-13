@@ -89,6 +89,7 @@ void KisPainter::init()
     m_fillStyle = FillStyleNone;
     m_strokeStyle = StrokeStyleBrush;
     m_pressure = PRESSURE_MIN;
+
 }
 
 KisPainter::~KisPainter()
@@ -163,7 +164,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         qint32 sw, qint32 sh)
 {
 #ifdef __GNUC__
-    #warning "Don't assume the same resulution for a QImage and a KisPaintDevice -- see QImage::dotsPerMeterX|Y"
+    #warning "Don't assume the same resolution for a QImage and a KisPaintDevice -- see QImage::dotsPerMeterX|Y"
 #endif
 
     if ( src == 0 ) return;
@@ -219,6 +220,10 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
 }
 
+void KisPainter::bitBlt(QPoint pos, const QImage * src, QRect srcRect )
+{
+    bitBlt( pos.x(), pos.y(), m_compositeOp, src, m_opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
+}
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         const KoCompositeOp* op,
@@ -305,6 +310,11 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
         dstY += rows;
         rowsRemaining -= rows;
     }
+}
+
+void KisPainter::bitBlt(QPoint pos, const KisPaintDeviceSP src, QRect srcRect )
+{
+    bitBlt( pos.x(), pos.y(), m_compositeOp, src, m_opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
 }
 
 void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
@@ -406,6 +416,10 @@ void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
     }
 }
 
+void KisPainter::bltMask(QPoint pos, const KisPaintDeviceSP src, KisPaintDeviceSP selMask, QRect srcRect )
+{
+    bltMask( pos.x(), pos.y(), m_compositeOp, src, selMask, m_opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
+}
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
                               const KoCompositeOp * op,
@@ -423,6 +437,12 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
     bltMask(dx, dy, op, srcdev, seldev, opacity, sx, sy, sw, sh);
 
 }
+
+void KisPainter::bltSelection(QPoint pos, const KisPaintDeviceSP src, const KisSelectionSP selDev, QRect srcRect )
+{
+    bltSelection( pos.x(), pos.y(), m_compositeOp, src, selDev, m_opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
+}
+
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
                   const KoCompositeOp* op,

@@ -123,6 +123,13 @@ public:
                 qint32 sx, qint32 sy,
                 qint32 sw, qint32 sh);
 
+
+    /**
+     * Convenience method that uses the opacity and composite op set
+     * in the painter. If nothing is set, opaque and OVER are assumed.
+     */
+    void bitBlt(QPoint pos, const QImage * src, QRect srcRect );
+
     /**
      * Blast the specified region from src onto the current paint device.
      * @param dx the destination x-coordinate
@@ -141,6 +148,13 @@ public:
                 quint8 opacity,
                 qint32 sx, qint32 sy,
                 qint32 sw, qint32 sh);
+
+    /**
+     * Convenience method that uses the opacity and composite op set
+     * in the painter. If nothing is set, opaque and OVER are assumed.
+     */
+    void bitBlt(QPoint pos, const KisPaintDeviceSP src, QRect srcRect );
+
 
     /**
      * Overloaded function of the previous which differs that you can pass the composite op using
@@ -228,6 +242,14 @@ public:
                       Q_INT32 sx, Q_INT32 sy,
                       Q_INT32 sw, Q_INT32 sh);
 
+
+    /**
+     * Convenience method that uses the opacity and composite op set
+     * in the painter. If noting is set, opaque and OVER are assumed.
+     */
+    void bltMask(QPoint pos, const KisPaintDeviceSP src, KisPaintDeviceSP selMask, QRect srcRect );
+
+
     /**
      * Overloaded function of the previous that take a KisSelection instead of a KisPaintDevice.
      * @param dx the destination x-coordinate
@@ -249,9 +271,18 @@ public:
                       qint32 sx, qint32 sy,
                       qint32 sw, qint32 sh);
 
+
     /**
-     * Overloaded function of the previous that take a KisSelection instead of a KisPaintDevice and
-     * you can pass the composite op using the name
+     * Convenience method that uses the opacity and composite op set
+     * in the painter. If noting is set, opaque and OVER are assumed.
+     */
+    void bltSelection(QPoint pos, const KisPaintDeviceSP src, const KisSelectionSP selDev, QRect srcRect );
+
+    /**
+     * Overloaded function of the previous that takes a KisSelection
+     * instead of a KisPaintDevice and you can pass the composite op
+     * using the name.
+     *
      * @param dx the destination x-coordinate
      * @param dy the destination y-coordinate
      * @param op the name of the composite op use to blast the pixels from src on dst

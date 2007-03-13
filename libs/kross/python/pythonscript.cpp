@@ -289,6 +289,9 @@ void PythonScript::execute()
         // Free interpreter lock
         PyGILState_Release(gilstate);
 
+        // valgrind complains, let's check it explicit ;)
+        Q_ASSERT( d->m_code->reference_count() == 1 );
+
         if(! pyresult)
             throw Py::Exception();
         Py::Object result(pyresult, true);

@@ -138,11 +138,13 @@ int PythonFunction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
                             switch( tp ) {
                                 case QMetaType::QObjectStar: {
                                     QObject* obj = (*reinterpret_cast< QObject*(*)>( _a[idx] ));
-                                    args[idx-1] = Py::asObject(new PythonExtension(obj));
+                                    //args[idx-1] = Py::asObject(new PythonExtension(obj, false));
+args[idx-1] = Py::asObject(new PythonExtension(obj, true));
                                 } break;
                                 case QMetaType::QWidgetStar: {
                                     QWidget* obj = (*reinterpret_cast< QWidget*(*)>( _a[idx] ));
-                                    args[idx-1] = Py::asObject(new PythonExtension(obj));
+                                    //args[idx-1] = Py::asObject(new PythonExtension(obj, false));
+args[idx-1] = Py::asObject(new PythonExtension(obj, true));
                                 } break;
                                 default: {
                                     args[idx-1] = Py::None();

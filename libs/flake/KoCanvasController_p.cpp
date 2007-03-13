@@ -37,6 +37,9 @@
 #include <QPainter>
 #include <QDragEnterEvent>
 
+#include <limits.h>
+#include <stdlib.h>
+
 // ********** Viewport **********
 Viewport::Viewport(KoCanvasController* parent)
     : QWidget(parent)

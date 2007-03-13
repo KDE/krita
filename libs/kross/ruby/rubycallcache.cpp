@@ -19,6 +19,7 @@
 
 #include "rubycallcache.h"
 #include "rubyvariant.h"
+#include "rubyinterpreter.h"
 
 #include <QVariant>
 #include <QMetaObject>

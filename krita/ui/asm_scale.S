@@ -29,10 +29,14 @@
 #else
 #define PR_(foo) __##foo
 #define PT_(foo,func) __##foo,func
+#ifdef __APPLE__    /* Apple's as does not know .size and it isn't really needed anyway */
+#define SIZE(sym) .align 8;
+#else
 #define SIZE(sym)                           \
 	.__end_##sym:;                      \
 	.size __##sym,.__end_##sym-__##sym; \
 	.align 8;
+#endif
 #endif
 
 /*\ 

@@ -24,8 +24,8 @@
 #include <kis_types.h>
 #include "kis_label_progress.h"
 
+class QLabel;
 class KStatusBar;
-class KStatusBarLabel;
 class KSqueezedTextLabel;
 
 class KoColorProfile;
@@ -67,9 +67,9 @@ private:
 
     KStatusBar * m_statusbar;
 
-    KStatusBarLabel *m_statusBarZoomLabel; // Make interactive line edit
-    KStatusBarLabel *m_statusBarPositionLabel;
-    KStatusBarLabel *m_sizeLabel;
+    QLabel *m_statusBarZoomLabel; // Make interactive line edit
+    QLabel *m_statusBarPositionLabel;
+    QLabel *m_sizeLabel;
 
     KSqueezedTextLabel *m_statusBarSelectionLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;

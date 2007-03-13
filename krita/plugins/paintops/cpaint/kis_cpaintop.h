@@ -19,17 +19,22 @@
 #ifndef KIS_CPAINTOP_H_
 #define KIS_CPAINTOP_H_
 
+#include <QImage>
+
 #include <q3valuevector.h>
 
 #include <KoColor.h>
 #include <kis_paintop.h>
 
-#include "wdgcpaintoptions.h"
+#include "ui_wdgcpaintoptions.h"
 
 class QPointF;
 class KisPainter;
 class Brush;
 class Stroke;
+
+class KisBrush;
+class KoCompositeOp;
 
 class KisCPaintOpFactory : public KisPaintOpFactory  {
 
@@ -48,7 +53,9 @@ private:
 
 
 
-class KisCPaintOpSettings : public KisPaintOpSettings {
+class KisCPaintOpSettings : public QObject, public KisPaintOpSettings {
+
+Q_OBJECT
 
 public:
     KisCPaintOpSettings(QWidget * parent,  Q3ValueVector<Brush*> m_brushes);
@@ -58,16 +65,17 @@ public:
     int ink() const;
     int water() const;
 
-    QWidget * widget() const { return m_options; };
+    QWidget * widget() const { return m_optionsWidget; };
 
-private:
+private slots:
 
     void resetCurrentBrush();
 
 private:
 
     Q3ValueVector<Brush*> m_brushes;
-    WdgCPaintOptions * m_options;
+    Ui::WdgCPaintOptions * m_options;
+    QWidget * m_optionsWidget;
 };
 
 
@@ -90,15 +98,13 @@ private:
     int m_ink;
     int m_water;
 
-    int pressure;
-    short int tiltx, tilty;
-
-    int lastx, lasty;
+    QPointF m_lastPoint;
 
     int sampleCount;
     bool newStrokeFlag;
+    Stroke * m_stroke;
 
-    Stroke * curStroke;
+    QImage m_tempImage;
 };
 
 #endif // KIS_CPAINTOP_H_

@@ -350,7 +350,6 @@ void KisQPainterCanvas::preScale()
 
 void KisQPainterCanvas::preScale( const QRect & rc )
 {
-    kDebug() << "prescaling for " << rc << endl;
     if ( !rc.isEmpty() ) {
         QTime t;
         t.start();

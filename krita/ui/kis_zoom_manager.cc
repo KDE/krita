@@ -192,7 +192,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
 
         // For smoother zooming in & out, repaint at the right
         // zoomlevel before changing the size of the viewport
-        m_view->canvas()->repaint();
+        m_view->canvas()->update();
 
         m_view->canvasController()->setDocumentSize (
             QSize( int( ceil( m_zoomHandler->documentToViewX(img->width() / img->xRes() ) ) ),

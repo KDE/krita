@@ -21,24 +21,33 @@
 
 class Sample {
 
-  private :
-
-    int x, y;
-    double p, tx, ty;
-
-  public :
+public:
 
     Sample ();
-    void SetPressure ( int pre ) { p = pre; }
-    void SetX ( int cx ) { x = cx; }
-    void SetY ( int cy ) { y = cy; }
-    void SetTX ( int cx ) { tx = cx; }
-    void SetTY ( int cy ) { ty = cy; }
-    int GetPressure () { return static_cast<int>(p); }
-    int GetX () { return x; }
-    int GetY () { return y; }
-    int GetTX () { return static_cast<int>(tx); }
-    int GetTY () { return static_cast<int>(ty); }
+
+    void setPressure ( int pressure ) { m_pressure = pressure; }
+    int pressure () { return static_cast<int>(m_pressure); }
+
+    void setX( int cx ) { m_x = cx; }
+    int x() { return m_x; }
+
+    void setY( int cy ) { m_y = cy; }
+    int y() { return m_y; }
+
+    void setTiltX( int cx ) { m_tiltX = cx; }
+    int tiltX() { return static_cast<int>(m_tiltX); }
+
+    void setTiltY( int cy ) { m_tiltY = cy; }
+    int tiltY() { return static_cast<int>(m_tiltY); }
+
+private:
+
+    int m_x;
+    int m_y;
+    double m_pressure;
+    double m_tiltX;
+    double m_tiltY;
+
 };
 
 #endif

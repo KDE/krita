@@ -16,8 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qrect.h>
-#include <qcombobox.h>
+#include <QRect>
+#include <QComboBox>
+#include <QPainter>
+#include <QColor>
 
 #include <kdebug.h>
 
@@ -42,6 +44,19 @@
 #include "sample.h"
 #include "bristle.h"
 
+
+namespace {
+// XXX: Remove this with Qt 4.3
+    static QRect toAlignedRect(QRectF rc)
+    {
+        int xmin = int(floor(rc.x()));
+        int xmax = int(ceil(rc.x() + rc.width()));
+        int ymin = int(floor(rc.y()));
+        int ymax = int(ceil(rc.y() + rc.height()));
+        return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
+    }
+}
+
 KisCPaintOpFactory::KisCPaintOpFactory()
 {
     m_brushes.resize( 6 );
@@ -63,6 +78,7 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
 {
     const KisCPaintOpSettings * cpaintOpSettings =
         dynamic_cast<const KisCPaintOpSettings*>( settings );
+
     Q_ASSERT( settings == 0 || cpaintOpSettings != 0 );
     int curBrush = cpaintOpSettings->brush();
     if ( curBrush > 5 ) {
@@ -80,6 +96,7 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
 
 KisPaintOpSettings *KisCPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice)
 {
+    Q_UNUSED( inputDevice );
     return new KisCPaintOpSettings( parent,  m_brushes);
 }
 
@@ -89,9 +106,14 @@ KisCPaintOpSettings::KisCPaintOpSettings( QWidget * parent,  Q3ValueVector<Brush
     : KisPaintOpSettings( parent )
 {
     m_brushes = brushes;
-    m_options = new WdgCPaintOptions( parent );
+    m_optionsWidget = new QWidget( parent );
+    m_options = new Ui::WdgCPaintOptions( );
+    m_options->setupUi( m_optionsWidget );
     m_options->intInk->setRange( 0, 255 );
     m_options->intWater->setRange( 0, 255 );
+
+
+    connect( m_options->bnInk, SIGNAL( clicked() ), this, SLOT( resetCurrentBrush() ) );
 }
 
 
@@ -114,7 +136,7 @@ int KisCPaintOpSettings::water() const
 void KisCPaintOpSettings::resetCurrentBrush()
 {
     Brush * b = m_brushes[m_options->cmbBrush->currentItem()];
-    b->AddInk();
+    b->addInk();
 }
 
 
@@ -128,12 +150,16 @@ KisCPaintOp::KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, Ki
     m_water = settings->water();
     newStrokeFlag = true;
     m_color = m_painter->paintColor();
-    curStroke = 0;
+    m_stroke = 0;
+    KisPaintDeviceSP dev = painter->device();
+
+    m_tempImage = QImage( dev->width(), dev->height(), QImage::Format_ARGB32 );
+
 }
 
 KisCPaintOp::~KisCPaintOp()
 {
-
+    delete m_stroke;
 }
 
 
@@ -143,33 +169,59 @@ void KisCPaintOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     if (!m_painter->device()) return;
 
     KisPaintDeviceSP device = m_painter->device();
-    KoColorSpace * colorSpace = device->colorSpace();
-
-
-    Sample *newSam;
-    Stroke *tmp;
 
     sampleCount++;
-    newSam = new Sample;
-    newSam->SetPressure ( info.pressure * 500 );
-    newSam->SetX ( pos.x() );
-    newSam->SetY ( pos.y() );
-    newSam->SetTX ( info.xTilt );
-    newSam->SetTY ( info.yTilt );
+    Sample * newSample = new Sample;
+    newSample->setPressure ( info.pressure * 500 );
+    newSample->setX ( pos.x() );
+    newSample->setY ( pos.y() );
+    newSample->setTiltX ( info.xTilt );
+    newSample->setTiltY ( info.yTilt );
 
 
     if ( newStrokeFlag ) {
-        curStroke = new Stroke( m_currentBrush);
-        curStroke->StoreColor( m_color );
-        curStroke->sampleV.push_back( newSam );
-        curStroke->StoreOldPath( pos.x(), pos.y() );
+        m_lastPoint = pos;
+        m_stroke = new Stroke( m_currentBrush);
+        m_stroke->setColor( m_color );
+        m_stroke->sampleV.push_back( newSample );
+        m_stroke->storeOldPath( pos.x(), pos.y() );
         newStrokeFlag = false;
     }
     else {
-        if ( curStroke )
-            curStroke->sampleV.push_back( newSam );
+        if ( m_stroke )
+            m_stroke->sampleV.push_back( newSample );
     }
-    if ( curStroke )
-        curStroke->Draw( device );
+
+    if ( m_stroke ) {
+        int brushSize = m_currentBrush->size();
+/*
+        QPointF topLeft = QPointF( qMin( pos.x(), m_lastPoint.x() ), qMin( pos.y(), m_lastPoint.y() ) );
+        QPointF bottomRight = QPointF( qMax( pos.x(), m_lastPoint.x() ), qMax( pos.y(), m_lastPoint.y() ) );
+        QSizeF size = QSizeF( bottomRight.x() - topLeft.x(), bottomRight.y() - topLeft.y() );
+        QRectF dabRect( topLeft.x() - brushSize, topLeft.y() - brushSize, size.width() + brushSize, size.height() + brushSize );
+
+        QRect alignedRect = toAlignedRect( dabRect );
+        if ( alignedRect.width() > m_tempImage.width() || alignedRect.height() > m_tempImage.height() ) {
+            m_tempImage = QImage(alignedRect.size(), QImage::Format_ARGB32 );
+        }
+*/
+        m_tempImage.fill( 0 );
+
+        QPainter gc( &m_tempImage );
+        gc.setRenderHint(QPainter::Antialiasing);
+
+//        kDebug() << "translating painter to " << topLeft << " rc.topleft = " << dabRect.topLeft() << endl;
+//        gc.translate( alignedRect.topLeft() );
+        m_stroke->draw( gc );
+        gc.end();
+
+        KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
+        dab->convertFromQImage( m_tempImage, "" ); // Use monitor profile?
+
+        m_painter->bitBlt( QPoint( 0, 0 ), dab, m_tempImage.rect() );
+
+    }
+    m_lastPoint = pos;
 }
 
+#include "kis_cpaintop.moc"

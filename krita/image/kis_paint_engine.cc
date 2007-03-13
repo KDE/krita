@@ -78,7 +78,7 @@ bool KisPaintEngine::begin(QPaintDevice *pdev)
 
     KisPaintDevice * dev = dynamic_cast<KisPaintDevice*>( pdev );
     Q_ASSERT_X(dev, "KisPaintEngine::begin",
-               "Can only work on KisPaintDevices, nothing else!");
+               "QPaintEngine can only work on KisPaintDevices, nothing else!");
     d->dev = dev;
     d->flags = 0;
     d->matrix.reset();
@@ -241,6 +241,7 @@ void KisPaintEngine::initPainter(QPainter &p)
 
 void KisPaintEngine::drawPath(const QPainterPath &path)
 {
+    kDebug(41001) << "KisPaintEngine::drawPath\n";
     QPainterPath newPath = d->matrix.map(path);
     QRect r = newPath.boundingRect().toRect();
 
@@ -278,13 +279,13 @@ void KisPaintEngine::drawPoints(const QPoint *points, int pointCount)
 
 void KisPaintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
 {
-    // kDebug(41001) << "KisPaintEngine::drawPolygon: " << pointCount << endl;
+    kDebug(41001) << "KisPaintEngine::drawPolygon QPointF: " << pointCount << endl;
     QPaintEngine::drawPolygon( points, pointCount, mode );
 }
 
 void KisPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode)
 {
-    // kDebug(41001) << "KisPaintEngine::drawPolygon: " << pointCount << endl;
+    kDebug(41001) << "KisPaintEngine::drawPolygon QPoint: " << pointCount << endl;
     QPaintEngine::drawPolygon( points, pointCount, mode );
 }
 

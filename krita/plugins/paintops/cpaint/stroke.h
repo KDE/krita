@@ -19,20 +19,31 @@
 #ifndef STROKE_H
 #define STROKE_H
 
-#include "sample.h"
 #include <vector.h>
 #include <math.h>
 #include <stdio.h>
-#include <kis_types.h>
-#include <KoColor.h>
 
-#include "brush.h"
-#define MAXBRUSHSIZE 100
-
+class Brush;
+class Sample;
+class KoColor;
+class QImage;
 
 class Stroke {
 
-  private :
+public:
+
+    vector<Sample*> sampleV;
+
+public:
+
+    Stroke (Brush *brush);
+    virtual ~Stroke();
+
+    void draw (QPainter &);
+    void setColor ( const KoColor & c );
+    void storeOldPath ( double, double );
+
+private:
 
     KoColor m_color;
 
@@ -41,27 +52,11 @@ class Stroke {
     vector<int> *valid;
     Brush *brush;
     int numBristles;
-    int newStroke;
 
-    int testThreshold ( int, double, double, double );
+    // test whether a bristle is touching the paper or not
+    // by testing the pressure threshold and test if there is any ink
+    bool testThreshold ( int, double, double, double );
 
-  protected :
-    
-    int sealFlag;
-    
-  public :
-
-    vector<Sample*> sampleV;
-
-    Stroke (Brush *brush);
-    virtual ~Stroke() {}
-
-    void Draw (KisPaintDeviceSP);
-    void Redraw ();
-    void FreeSamples ();
-    void StoreColor ( const KoColor & c );
-    void StoreOldPath ( double, double );
-    void ResetBrush ();
 
 };
 

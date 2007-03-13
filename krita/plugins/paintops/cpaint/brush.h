@@ -20,44 +20,38 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "gauss.h"
-#include "bristle.h"
 
-#define RADIUS_INCRE 1.5
-#define DX .8
-#define DY .8
-#define MAXPRESSURE 1023
-#define MAXTX 100
-#define MAXTY 100
-#define MAXINK 200  //max units of ink on a bristle
-#define SPREAD 1/350
+class Bristle;
 
 class Brush {
 
+public:
 
-private :
+    // Eeek....
+    Bristle * m_bristles;  // a list of bristles
 
-    int size;
-    int numBristles;
-    int shape;
-    double radius;
-
-    void setBristlesPos ();
-
-  public :
-
-    Bristle *bristle;  // a list of bristles
+public:
 
     Brush ( int );
-    ~Brush () { delete bristle; };
+    ~Brush ();
 
-    int GetNumBristles () { return numBristles; }
-    void SetSize ( int );
-    void SetInitPos ( double, double );
-    void RepositionBristles ( double );
+    int size() {
+        return m_size;
+    }
+    int numberOfBristles () { return m_numBristles; }
+    void setSize ( int );
+    void setInitialPosition ( double, double );
+    void repositionBristles ( double );
+    void setBristlesPos();
 
-    void AddInk ();
-    void RemoveInk ();
+    void addInk ();
+    void removeInk ();
+
+private:
+
+    int m_size;
+    int m_numBristles;
+    double m_radius;
 
 };
 

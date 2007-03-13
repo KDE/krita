@@ -161,5 +161,3 @@ QRectF KoZoomHandler::unzoomRectOldF (const QRect & r ) const {
                   unzoomItXOld( r.right() ), unzoomItYOld( r.bottom() ) );
     return _r;
 }
-
-#include "KoZoomHandler.moc"

@@ -19,12 +19,14 @@
 #ifndef _KIS_SIZE_TRANSFORMATION_
 #define _KIS_SIZE_TRANSFORMATION_
 
+#include "dynamicbrush_export.h"
+
 #include "kis_dynamic_transformation.h"
 #include <klocale.h>
 
 class KisDynamicSensor;
 
-class KisSizeTransformation : public KisDynamicTransformation {
+class DYNAMIC_BRUSH_EXPORT KisSizeTransformation : public KisDynamicTransformation {
     Q_OBJECT
     public:
         KisSizeTransformation(KisDynamicSensor* hTransfoParameter, KisDynamicSensor* vTransfoParameter);

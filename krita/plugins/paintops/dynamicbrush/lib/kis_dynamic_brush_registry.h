@@ -19,11 +19,13 @@
 #ifndef _KIS_DYNAMIC_BRUSH_REGISTRY_H_
 #define _KIS_DYNAMIC_BRUSH_REGISTRY_H_
 
+#include "dynamicbrush_export.h"
+
 #include <KoGenericRegistry.h>
 
 class KisDynamicBrush;
 
-class KisDynamicBrushRegistry : public KoGenericRegistry<KisDynamicBrush *> {
+class DYNAMIC_BRUSH_EXPORT KisDynamicBrushRegistry : public KoGenericRegistry<KisDynamicBrush *> {
 
   protected:
     void init();

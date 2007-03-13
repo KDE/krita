@@ -19,17 +19,20 @@
 #ifndef _KIS_TRANSFORM_PARAMETER_H_
 #define _KIS_TRANSFORM_PARAMETER_H_
 
+#include "dynamicbrush_export.h"
+
 #include <kis_paintop.h>
 #include <KoID.h>
 
 class QListString;
 
-class KisDynamicSensor {
+class DYNAMIC_BRUSH_EXPORT KisDynamicSensor {
     public:
         KisDynamicSensor(const KoID& id);
         virtual ~KisDynamicSensor() { }
         virtual double parameter(const KisPaintInformation& info) = 0;
         static KisDynamicSensor* id2Sensor(const KoID&);
+        static KisDynamicSensor* id2Sensor(const QString& s) { return id2Sensor(KoID(s)); }
         static QList<KoID> sensorsIds();
         inline const KoID& id() { return m_id; }
     private:

@@ -57,10 +57,10 @@ DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
         {
             // TODO: remove this, temp stuff for testing only
             KisFiltersListDynamicProgram* programSpeed = new KisFiltersListDynamicProgram("speed");
-            programSpeed->appendTransformation( new KisSizeTransformation(new KisDynamicSensorSpeed(), new KisDynamicSensorSpeed() ) );
+            programSpeed->appendTransformation( new KisSizeTransformation(KisDynamicSensor::id2Sensor("speed"), KisDynamicSensor::id2Sensor("speed") ) );
             KisDynamicProgramRegistry::instance()->add( KoID( programSpeed->name() ), programSpeed);
             KisFiltersListDynamicProgram* programPressure = new KisFiltersListDynamicProgram("pressure");
-            programPressure->appendTransformation( new KisSizeTransformation(new KisDynamicSensorPressure(), new KisDynamicSensorPressure() ) );
+            programPressure->appendTransformation( new KisSizeTransformation( KisDynamicSensor::id2Sensor("pressure"), KisDynamicSensor::id2Sensor("pressure") ) );
             KisDynamicProgramRegistry::instance()->add( KoID( programPressure->name() ), programPressure);
         }
     }

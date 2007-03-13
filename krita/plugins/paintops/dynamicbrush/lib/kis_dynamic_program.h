@@ -19,6 +19,8 @@
 #ifndef _KIS_DYNAMIC_PROGRAM_H_
 #define _KIS_DYNAMIC_PROGRAM_H_
 
+#include "dynamicbrush_export.h"
+
 #include <QString>
 
 class KisDynamicShape;
@@ -29,7 +31,7 @@ class QWidget;
 /**
  * This is the base class of a dynamic program.
  */
-class KisDynamicProgram {
+class DYNAMIC_BRUSH_EXPORT KisDynamicProgram {
     protected:
         /**
          * @param name the name of this program, will be displayed in the list of programs

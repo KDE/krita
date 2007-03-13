@@ -20,12 +20,14 @@
 #ifndef _KIS_DYNAMIC_BRUSH_H_
 #define _KIS_DYNAMIC_BRUSH_H_
 
+#include "dynamicbrush_export.h"
+
 #include <kis_types.h>
 
 class KisAutobrushShape;
 class KisDynamicColoring;
 
-class KisDynamicShape {
+class DYNAMIC_BRUSH_EXPORT KisDynamicShape {
     public:
         KisDynamicShape() {}
         virtual ~KisDynamicShape() {}

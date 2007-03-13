@@ -19,11 +19,13 @@
 #ifndef _KIS_DYNAMIC_COLORING_H_
 #define _KIS_DYNAMIC_COLORING_H_
 
+#include "dynamicbrush_export.h"
+
 #include <KoColor.h>
 
 #include <kis_types.h>
 
-class KisDynamicColoring {
+class DYNAMIC_BRUSH_EXPORT KisDynamicColoring {
     public:
         virtual ~KisDynamicColoring();
     public:

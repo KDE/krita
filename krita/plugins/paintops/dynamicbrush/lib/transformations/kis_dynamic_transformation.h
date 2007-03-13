@@ -19,6 +19,8 @@
 #ifndef _KISDYNAMICTRANSFORMATION_H_
 #define _KISDYNAMICTRANSFORMATION_H_
 
+#include "dynamicbrush_export.h"
+
 #include <QObject>
 #include <KoID.h>
 
@@ -31,7 +33,7 @@ class KisDynamicColoring;
  * This is the base class for transformation.
  * 
  */
-class KisDynamicTransformation : public QObject {
+class DYNAMIC_BRUSH_EXPORT KisDynamicTransformation : public QObject {
     Q_OBJECT
     public:
         KisDynamicTransformation(const KoID& name) : m_name(name), m_next(0) {}

@@ -19,13 +19,15 @@
 #ifndef _KIS_FILTERS_LIST_DYNAMIC_PROGRAM_H_
 #define _KIS_FILTERS_LIST_DYNAMIC_PROGRAM_H_
 
+#include "filterslistprogram_export.h"
+
 #include "kis_dynamic_program.h"
 
 #include <QList>
 
 class KisDynamicTransformation;
 
-class KisFiltersListDynamicProgram : public KisDynamicProgram {
+class FILTERS_LIST_PROGRAM_EXPORT KisFiltersListDynamicProgram : public KisDynamicProgram {
     public:
         KisFiltersListDynamicProgram(const QString& name) : KisDynamicProgram(name)
         {

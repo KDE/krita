@@ -19,6 +19,8 @@
 #ifndef _KIS_DYNAMIC_BRUSH_HPP_
 #define _KIS_DYNAMIC_BRUSH_HPP_
 
+#include "dynamicbrush_export.h"
+
 #include <QString>
 #include <KoID.h>
 
@@ -27,7 +29,7 @@ class KisDynamicShape;
 class KisDynamicTransformation;
 class KisDynamicProgram;
 
-class KisDynamicBrush {
+class DYNAMIC_BRUSH_EXPORT KisDynamicBrush {
     public:
         KisDynamicBrush(const QString& name);
         ~KisDynamicBrush();

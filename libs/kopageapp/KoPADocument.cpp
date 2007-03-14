@@ -25,7 +25,10 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
+#include <KoOasisStyles.h>
 #include <KoSavingContext.h>
+#include <KoOasisLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 
@@ -69,9 +72,19 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
                               const KoXmlDocument & settings, KoStore* store )
 {
     Q_UNUSED( doc );
-    Q_UNUSED( oasisStyles );
     Q_UNUSED( settings );
-    Q_UNUSED( store  );
+
+    KoOasisLoadingContext loadingContext( this, oasisStyles, store );
+
+    //load master pages
+    const QHash<QString, KoXmlElement*> masterStyles( oasisStyles.masterPages() );
+    QHash<QString, KoXmlElement*>::const_iterator it( masterStyles.constBegin() );
+    for ( ; it != masterStyles.constEnd(); ++it )
+    {
+        qDebug() << "Master:" << it.key();
+        m_masterPages[0]->loadOdf( *( it.value() ), loadingContext );
+    }
+
     return true;
 }
 
@@ -257,21 +270,42 @@ void KoPADocument::removeShape( KoShape *shape )
     }
 }
 
-void KoPADocument::addPage(KoPAPage* page, KoPAPage* before)
+void KoPADocument::addPage( KoPAPage* page, KoPAPage* before )
 {
-    if(!page)
+    if ( !page )
         return;
 
     int index = 0;
 
-    if(before != 0)
-        index = m_pages.indexOf(before);
+    if ( before != 0 )
+    {
+        index = m_pages.indexOf( before );
 
-    // Append the page if before wasn't found in m_pages
-    if(index == -1)
-        index = m_pages.count();
+        // Append the page if before wasn't found in m_pages
+        if ( index == -1 )
+            index = m_pages.count();
+    }
 
-    m_pages.insert(index, page);
+    m_pages.insert( index, page );
+}
+
+void KoPADocument::addMasterPage( KoPAMasterPage* masterPage, KoPAMasterPage* before )
+{
+    if ( !masterPage )
+        return;
+
+    int index = 0;
+
+    if ( before != 0 )
+    {
+        index = m_masterPages.indexOf( before );
+
+        // Append the page if before wasn't found in m_masterPages
+        if ( index == -1 )
+            index = m_masterPages.count();
+    }
+
+    m_masterPages.insert( index, masterPage );
 }
 
 #include "KoPADocument.moc"

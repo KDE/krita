@@ -26,8 +26,10 @@
 
 #include <KoShapeContainer.h>
 #include <kopageapp_export.h>
+#include <KoXmlReader.h>
 
 class KoPageLayout;
+class KoOasisLoadingContext;
 class KoPASavingContext;
 
 class KoShape;
@@ -53,6 +55,9 @@ public:
      * @return true on success, false otherwise
      */
     bool saveOdf( KoPASavingContext &paContext ) const;
+
+    bool loadOdf( const KoXmlElement &element, KoOasisLoadingContext & loadingContext );
+
 
     /// @return the layout of the page
     virtual KoPageLayout & pageLayout() = 0;

@@ -119,3 +119,18 @@ void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &p
     QBrush background( Qt::white );
     KoOasisStyles::saveOasisFillStyle( style, paContext.mainStyles(), background );
 }
+
+bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoOasisLoadingContext & loadingContext )
+{
+    // load shapes, this is only for testing
+    KoXmlNode n = element.firstChild();
+    for ( ; !n.isNull(); n = n.nextSibling() )
+    {
+        if ( n.isElement() )
+        {
+            KoXmlElement child = n.toElement();
+            qDebug() << "Element:" << child.tagName();
+        }
+    }
+    return true;
+}

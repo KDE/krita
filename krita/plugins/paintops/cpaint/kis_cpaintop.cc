@@ -37,7 +37,7 @@
 #include <kis_int_spinbox.h>
 
 #include "kis_cpaintop.h"
-#include "wdgcpaintoptions.h"
+#include "ui_wdgcpaintoptions.h"
 #include "brush.h"
 #include "qtoolbutton.h"
 #include "stroke.h"

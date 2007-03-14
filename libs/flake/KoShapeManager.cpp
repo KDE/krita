@@ -139,24 +139,45 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
     painter.setBrush( Qt::NoBrush );
 
     QList<KoShapeConnection*> sortedConnections;
-    QList<KoShape*> sortedShapes;
+    QList<KoShape*> unsortedShapes;
     if(painter.hasClipping()) {
         QRectF rect = converter.viewToDocument( painter.clipRegion().boundingRect() );
-        sortedShapes = d->tree.intersects( rect );
+        unsortedShapes = d->tree.intersects( rect );
         sortedConnections = d->connectionTree.intersects( rect );
     }
     else {
-        sortedShapes = shapes();
+        unsortedShapes = shapes();
         kWarning() << "KoShapeManager::paint  Painting with a painter that has no clipping will lead to too much being painted and no connections being painted!\n";
     }
+
+    // filter all hidden shapes from the list
+    QList<KoShape*> sortedShapes;
+    foreach( KoShape * shape, unsortedShapes )
+    {
+        if( ! shape->isVisible() )
+            continue;
+
+        bool hiddenFromParent = false;
+        KoShapeContainer * parent = shape->parent();
+        while( parent )
+        {
+            if( ! parent->isVisible() )
+            {
+                hiddenFromParent = true;
+                break;
+            }
+            parent = parent->parent();
+        }
+        if( ! hiddenFromParent )
+            sortedShapes.append( shape );
+    }
+
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     qSort(sortedConnections.begin(), sortedConnections.end(), KoShapeConnection::compareConnectionZIndex);
     QList<KoShapeConnection*>::iterator connectionIterator = sortedConnections.begin();
 
     const QRegion clipRegion = painter.clipRegion();
     foreach ( KoShape * shape, sortedShapes ) {
-        if(! shape->isVisible() || ( shape->parent() && ! shape->parent()->isVisible() ) )
-            continue;
         if(shape->parent() != 0 && shape->parent()->childClipped(shape))
             continue;
         if(painter.hasClipping()) {

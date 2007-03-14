@@ -31,7 +31,7 @@ class KoCanvasController;
 class KoPACanvas;
 class KoPADocument;
 class KToggleAction;
-class KoPAPage;
+class KoPAPageBase;
 class KoShapeManager;
 class KoZoomAction;
 
@@ -58,10 +58,10 @@ public:
     KoPACanvas * kopaCanvas() const { return m_canvas; }
 
     /// @return Page that is shown in the canvas
-    KoPAPage* activePage() const;
+    KoPAPageBase* activePage() const;
 
     /// Set page shown in the canvas to @p page
-    void setActivePage( KoPAPage* page );
+    void setActivePage( KoPAPageBase * page );
 
     /// @return the shape manager used for this view
     KoShapeManager* shapeManager() const;
@@ -95,7 +95,7 @@ protected slots:
 protected:
     KoPADocument *m_doc;
     KoPACanvas *m_canvas;
-    KoPAPage *m_activePage;
+    KoPAPageBase *m_activePage;
 
 private:
     void recalculateZoom();

@@ -66,7 +66,7 @@ KoPAView::~KoPAView()
 }
 
 
-KoPAPage* KoPAView::activePage() const
+KoPAPageBase* KoPAView::activePage() const
 {
     return m_activePage;
 }
@@ -224,7 +224,7 @@ KoShapeManager* KoPAView::shapeManager() const
 }
 
 
-void KoPAView::setActivePage( KoPAPage* page )
+void KoPAView::setActivePage( KoPAPageBase* page )
 {
     if ( !page )
         return;

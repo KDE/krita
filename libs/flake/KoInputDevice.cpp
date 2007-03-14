@@ -50,6 +50,10 @@ KoInputDevice::KoInputDevice(const KoInputDevice &other)
 }
 
 
+KoInputDevice::~KoInputDevice() {
+    delete d;
+}
+
 QTabletEvent::TabletDevice KoInputDevice::device() const
 {
     return d->device;

@@ -50,7 +50,9 @@ public:
     /**
      * Constuctor for the mouse as input device.
      */
-    explicit KoInputDevice();
+    KoInputDevice();
+
+    ~KoInputDevice();
 
     /**
      * Return the tablet device used

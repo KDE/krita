@@ -72,7 +72,7 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
             return false;
         }
         KisPNGConverter pngconv(0, layer->image()->undoAdapter());
-        vKisAnnotationSP_it annotIt;
+        vKisAnnotationSP_it annotIt = layer->image()->beginAnnotations();
         if( pngconv.buildFile(&io, layer->paintDevice(), annotIt, annotIt, 0, false, true) != KisImageBuilder_RESULT_OK)
         {
             kDebug(41008) << "Saving PNG failed: " << filename << endl;

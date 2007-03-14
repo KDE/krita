@@ -42,6 +42,26 @@
  * run riot).
  *
  * See for an example implementation KisLayer.
+ *
+ * Your class also needs to implement the following pure abstract
+ * virtuals from QAbstractItemModel:
+@code
+
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+
+    virtual QModelIndex parent(const QModelIndex &index) const;
+
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+@endcode
+
  */
 class KoDocumentSectionModel: public QAbstractItemModel
 {

@@ -45,8 +45,8 @@ namespace Kross {
                 rb_funcall(self, rb_intern("module_function"), unit);
                 return self;
             }
-        };
-    };
+        }
+    }
     /// \internal
     class RubyScriptPrivate {
         friend class RubyScript;

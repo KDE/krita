@@ -42,7 +42,7 @@ Brush::Brush ( int s )
 Brush::~Brush ()
 {
     delete m_bristles;
-};
+}
 
 void Brush::setInitialPosition ( double x, double y )
 {

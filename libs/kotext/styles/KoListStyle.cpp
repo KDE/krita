@@ -148,12 +148,11 @@ bool KoListStyle::operator==(const KoListStyle &other) const {
         }
         else {
             QVariant const *otherVariant = m_stylesPrivate->get(properties[i]);
-            if(*otherVariant != *variant)
+            if(otherVariant == 0 || *otherVariant != *variant)
                 return false;
         }
         i++;
     }
-kDebug() << "  yap, equal\n";
     return true;
 }
 

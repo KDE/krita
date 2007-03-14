@@ -205,7 +205,8 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( QListWidgetItem * item )
     }
 
     enableButtonOk( !m_layerName->text().isEmpty() );
-    refreshPreview();
+    if(m_currentConfigWidget)
+        refreshPreview();
 }
 
 #include "kis_dlg_adjustment_layer.moc"

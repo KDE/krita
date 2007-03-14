@@ -71,16 +71,17 @@ public:
     bool visit(KisPaintLayer *layer)
         {
 //             kDebug(41007) << "KisLayerMap visitor adding paint layer: " << layer->name() << endl;
-
-            KoShapeContainer * parent = 0;
+            Q_ASSERT( m_layerMap.contains( layer->parent() ) );
+            
             if ( m_layerMap.contains( layer->parent() ) ) {
-                parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parent()] );
+
+                KoShapeContainer * parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parent()] );
+                KisLayerShape * layerShape = new KisLayerShape( parent, layer );
+                m_layerMap[layer] = layerShape;
+
+                return true;
             }
-
-            KisLayerShape * layerShape = new KisLayerShape( parent, layer );
-            m_layerMap[layer] = layerShape;
-
-            return true;
+            return false;
         }
 
     bool visit(KisGroupLayer *layer)
@@ -108,17 +109,20 @@ public:
         {
 //             kDebug(41007) << "KisLayerMap visitor adding adjustment layer: " << layer->name() << endl;
 
+            Q_ASSERT( m_layerMap.contains( layer->parent() ) );
+
             KoShapeContainer * parent = 0;
             if ( m_layerMap.contains( layer->parent() ) ) {
                 parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parent()] );
+                KisLayerShape * layerShape = new KisLayerShape( parent, layer );
+                m_layerMap[layer] = layerShape;
+
+                return true;
             }
 
-            KisLayerShape * layerShape = new KisLayerShape( parent, layer );
-            m_layerMap[layer] = layerShape;
+            return false;
 
-            return true;
         }
-
 private:
 
     QMap<KisLayerSP, KoShape*> m_layerMap;

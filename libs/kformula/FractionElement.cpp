@@ -172,7 +172,7 @@ void FractionElement::readMathML( const QDomElement& element )
     m_denominator->readMathML( tmp );
 }
 
-void FractionElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
+void FractionElement::writeMathML( KoXmlWriter* writer, bool oasisFormat ) const
 {
     writer->startElement( oasisFormat ? "math:mfrac": "mfrac" );
     writeMathMLAttributes( writer );

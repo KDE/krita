@@ -89,7 +89,7 @@ public:
     
     void readMathML( const QDomElement& element );
     
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
+    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
 
     ElementType elementType() const;
 

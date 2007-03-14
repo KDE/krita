@@ -1,7 +1,7 @@
 /***************************************************************************
  * rubyscript.h
  * This file is part of the KDE project
- * copyright (C)2005 by Cyrille Berger (cberger@cberger.net)
+ * copyright (C)2005;2007 by Cyrille Berger (cberger@cberger.net)
  * copyright (C)2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
@@ -38,31 +38,46 @@ using namespace Kross;
 
 namespace Kross {
 
+    namespace Internals {
+        namespace Script {
+            static VALUE method_added(VALUE self, VALUE unit)
+            {
+                rb_funcall(self, rb_intern("module_function"), unit);
+                return self;
+            }
+        };
+    };
     /// \internal
     class RubyScriptPrivate {
         friend class RubyScript;
-        RubyScriptPrivate() : m_compile(0) { }
-        RNode* m_compile;
+        RubyScriptPrivate() : m_script(0), m_hasBeenCompiled(false)
+        {
+            if(RubyScriptPrivate::s_krossScript == 0)
+            {
+                RubyScriptPrivate::s_krossScript = rb_define_class_under(RubyInterpreter::krossModule(), "Script", rb_cModule);
+                rb_define_method(RubyScriptPrivate::s_krossScript, "method_added", (VALUE (*)(...))Internals::Script::method_added, 1);
+            }
+        }
+        VALUE m_script;
         QStringList m_functions;
+        static VALUE s_krossScript;
+        bool m_hasBeenCompiled;
     };
 
 }
 
+VALUE RubyScriptPrivate::s_krossScript = 0;
+
 RubyScript::RubyScript(Kross::Interpreter* interpreter, Kross::Action* Action)
     : Kross::Script(interpreter, Action), d(new RubyScriptPrivate())
 {
+    d->m_script = rb_funcall(RubyScriptPrivate::s_krossScript, rb_intern("new"), 0);
+    rb_global_variable(&d->m_script);
 }
 
 RubyScript::~RubyScript()
 {
 }
-
-#define selectScript() \
-    NODE* old_tree = ruby_eval_tree; \
-    ruby_eval_tree = d->m_compile;
-#define unselectScript() \
-    d->m_compile = 0; \
-    ruby_eval_tree = old_tree;
 
 void RubyScript::compile()
 {
@@ -74,13 +89,16 @@ void RubyScript::compile()
     ruby_errinfo = Qnil;
     VALUE src = RubyType<QString>::toVALUE( action()->code() );
     StringValue(src);
+    VALUE fileName = RubyType<QString>::toVALUE( action()->file() );
+    StringValue(fileName);
 
     const int critical = rb_thread_critical;
     rb_thread_critical = Qtrue;
     ruby_in_eval++;
 
-    d->m_compile = rb_compile_string((char*) action()->objectName().toLatin1().data(), src, 0);
+    rb_funcall(d->m_script, rb_intern("module_eval"), 2, src, fileName);
 
+    
     ruby_in_eval--;
     rb_thread_critical = critical;
 
@@ -89,7 +107,9 @@ void RubyScript::compile()
             krossdebug("Compilation has failed");
         #endif
         setError( QString("Failed to compile ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )) ); // TODO: get the error
-        d->m_compile = 0;
+        d->m_hasBeenCompiled = false;
+    } else {
+        d->m_hasBeenCompiled = true;
     }
 
     #ifdef KROSS_RUBY_SCRIPT_DEBUG
@@ -103,13 +123,9 @@ void RubyScript::execute()
         krossdebug("RubyScript::execute()");
     #endif
 
-    if(d->m_compile == 0) {
-        compile();
-    }
-
-    selectScript();
-
-    const int result = ruby_exec();
+    // TODO: catch ruby exception
+    compile();
+#if 0
     if (result != 0) {
         #ifdef KROSS_RUBY_SCRIPT_DEBUG
             krossdebug("RubyScript::execute failed");
@@ -123,8 +139,7 @@ void RubyScript::execute()
         */
         setError( QString("Failed to execute ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )) ); // TODO: get the error
     }
-
-    unselectScript();
+#endif
 }
 
 QStringList RubyScript::functionNames()
@@ -133,7 +148,7 @@ QStringList RubyScript::functionNames()
         krossdebug("RubyScript::getFunctionNames()");
     #endif
 
-    if(d->m_compile == 0) {
+    if(not d->m_hasBeenCompiled ) {
         compile();
     }
     return d->m_functions;
@@ -150,13 +165,11 @@ QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
     ruby_in_eval++;
     //ruby_current_node
 
-    //FIXME cache it!
-    if(d->m_compile == 0) {
+    if(not d->m_hasBeenCompiled) {
         compile();
     }
 
-    selectScript();
-    Q_ASSERT( d->m_compile );
+    Q_ASSERT(d->m_hasBeenCompiled );
 
     QVariant result;
     int r = ruby_exec();
@@ -184,8 +197,6 @@ QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
 
     ruby_in_eval--;
     rb_thread_critical = critical;
-
-    unselectScript();
 
     #ifdef KROSS_RUBY_SCRIPT_DEBUG
         krossdebug(QString("RubyScript::callFunction() Result typeName=%1 toString=%2").arg(result.typeName()).arg(result.toString()));

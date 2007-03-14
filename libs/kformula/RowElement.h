@@ -104,7 +104,7 @@ public:
     virtual void readMathML( const KoXmlElement& element );
 
     /// Save the element to MathML
-    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
+    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
 
 private:
     /// The sorted list of all elements in this row

@@ -121,7 +121,7 @@ void RowElement::readMathML( const KoXmlElement& element )
     }
 }
 
-void RowElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
+void RowElement::writeMathML( KoXmlWriter* writer, bool oasisFormat ) const
 {
     writer->startElement( oasisFormat ? "math:mrow" : "mrow" );
     writeMathMLAttributes( writer );                            // write the attributes

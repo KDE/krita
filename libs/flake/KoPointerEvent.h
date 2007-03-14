@@ -65,6 +65,8 @@ public:
      */
     KoPointerEvent( QWheelEvent *ev, const QPointF &pnt );
 
+    ~KoPointerEvent();
+
     /**
      * For classes that are handed this event, you can choose to accept (default) this event.
      * Acceptance signifies that you have handled this event and found it useful, the effect

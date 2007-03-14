@@ -59,6 +59,10 @@ KoPointerEvent::KoPointerEvent( QWheelEvent *ev, const QPointF &pnt )
     d->wheelEvent = ev;
 }
 
+KoPointerEvent::~KoPointerEvent() {
+    delete d;
+}
+
 Qt::MouseButton KoPointerEvent::button () const
 {
     if (d->mouseEvent)

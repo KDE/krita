@@ -816,9 +816,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisPaintD
             }
             break;
             default:
-#ifdef __GNUC__
-#warning Leaks row_pointers and all rows so far allocated (CID 3087) but that code is never called unless someone either introduce a bug/hack in a png and or the png specification gets extended
-#endif
+                delete[] row_pointers;
                 return KisImageBuilder_RESULT_UNSUPPORTED;
         }
     }

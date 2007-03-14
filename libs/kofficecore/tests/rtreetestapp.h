@@ -73,6 +73,7 @@ public slots:
     void selectInsertTool();
     void selectSelectTool();
     void selectRemoveTool();
+    void clear();
 
     void replay();
     void debug();
@@ -134,6 +135,7 @@ private:
     QAction * m_insertAct;
     QAction * m_selectAct;
     QAction * m_removeAct;
+    QAction * m_clearAct;
     QActionGroup *m_toolAct;
 
     QAction * m_replayAct;

@@ -211,7 +211,7 @@ protected:
     {
     public:
         NoneLeafNode( int capacity, int level, Node * parent );
-        virtual ~NoneLeafNode() {}
+        virtual ~NoneLeafNode();
 
         virtual void insert( const QRectF& bb, Node * data );
         virtual void remove( int index );
@@ -244,7 +244,7 @@ protected:
         static int dataIdCounter;
 
         LeafNode( int capacity, int level, Node * parent );
-        virtual ~LeafNode() {}
+        virtual ~LeafNode();
 
         virtual void insert( const QRectF& bb, const T& data, int id );
         virtual void remove( int index );
@@ -411,6 +411,8 @@ void KoRTree<T>::remove( const T&data )
             {
                 insertHelper( leaf->childBoundingBox(j), leaf->getData( j ), leaf->getDataId( j ) );
             }
+            // clear is needed as the data items are not removed when insert into a new node
+            leaf->clear();
             delete leaf;
         }
         else
@@ -420,6 +422,8 @@ void KoRTree<T>::remove( const T&data )
             {
                 insert( node->getNode( j ) );
             }
+            // clear is needed as the data items are not removed when insert into a new node
+            node->clear();
             delete node;
         }
     }
@@ -558,6 +562,8 @@ QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::spli
     }
 
     //qDebug() << " delete n1" << n1 << n1->nodeId();
+    // clear is needed as the data items are not removed
+    n1->clear();
     delete n1;
     return qMakePair( node, n2 );
 }
@@ -715,6 +721,8 @@ void KoRTree<T>::condenseTree( Node *node, QVector<Node*> & reinsert )
             if ( n )
             {
                 Node * kid = n->getNode( 0 );
+                // clear is needed as the data items are not removed
+                m_root->clear();
                 delete m_root;
                 m_root = kid;
                 m_root->setParent( 0 );
@@ -808,6 +816,17 @@ KoRTree<T>::NoneLeafNode::NoneLeafNode( int capacity, int level, Node * parent )
 : Node( capacity, level, parent )
 , m_childs( capacity )
 {
+    //qDebug() << "NoneLeafNode::NoneLeafNode()" << this;
+}
+
+template <typename T>
+KoRTree<T>::NoneLeafNode::~NoneLeafNode()
+{
+    //qDebug() << "NoneLeafNode::~NoneLeafNode()" << this;
+    for ( int i = 0; i < this->m_counter; ++i )
+    {
+        delete m_childs[i];
+    }
 }
 
 template <typename T>
@@ -973,6 +992,13 @@ KoRTree<T>::LeafNode::LeafNode( int capacity, int level, Node * parent )
 , m_data( capacity )
 , m_dataIds( capacity )
 {
+    //qDebug() << "LeafNode::LeafNode" << this;
+} 
+
+template <typename T>
+KoRTree<T>::LeafNode::~LeafNode()
+{ 
+    //qDebug() << "LeafNode::~LeafNode" << this;
 }
 
 template <typename T>

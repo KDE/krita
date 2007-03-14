@@ -50,7 +50,7 @@ Canvas::Canvas( )
 {
     m_tool = &m_createTool;
     setBackgroundRole(QPalette::Base);
-    m_file.open( QIODevice::WriteOnly );
+    m_file.open( QIODevice::WriteOnly | QIODevice::Unbuffered );
     m_out.setDevice( &m_file );
 }
 
@@ -61,7 +61,7 @@ void Canvas::updateCanvas()
 
 void Canvas::insert( QRectF & rect )
 {
-    m_out << "i " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << "\n";
+    m_out << "i " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << endl;
     Data * data = new Data( rect );
     m_rects.insert( data );
     m_rtree.insert( rect, data );
@@ -83,7 +83,7 @@ void Canvas::select( QRectF & rect )
 
 void Canvas::remove( QRectF & rect )
 {
-    m_out << "r " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << "\n";
+    m_out << "r " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << endl;
     m_found = QList<Data *>();
     QList<Data *> remove = m_rtree.intersects( rect );
     foreach ( Data * data, remove )
@@ -92,6 +92,15 @@ void Canvas::remove( QRectF & rect )
         m_rects.remove( data );
         delete data;
     }
+    update();
+}
+
+void Canvas::clear()
+{
+    m_out << "c" << endl;
+    m_rtree.clear();
+    qDeleteAll( m_rects );
+    m_rects.clear();
     update();
 }
 
@@ -108,6 +117,7 @@ void Canvas::replay()
         {
             m_list.push_back( in.readLine() );
         }
+        qDebug() << "commands:" << m_list.size();
         m_listId = 0;
         QTimer::singleShot( 1000, this, SLOT( replayStep() ) );
     }
@@ -119,18 +129,25 @@ void Canvas::replayStep()
     QString line = m_list.at( m_listId++ );
     qDebug() << "Line:" << line;
     QStringList values = line.split( " " );
-    int left = values[1].toInt();
-    int top = values[2].toInt();
-    int right = values[3].toInt();
-    int bottom = values[4].toInt();
-    QRectF rect( left, top, right, bottom );
-    if ( values[0] == "i" )
+    if ( values[0] == "c" )
     {
-        insert( rect );
+        clear();
     }
-    else if ( values[0] == "r" )
+    else
     {
-        remove( rect );
+        int left = values[1].toInt();
+        int top = values[2].toInt();
+        int right = values[3].toInt();
+        int bottom = values[4].toInt();
+        QRectF rect( left, top, right, bottom );
+        if ( values[0] == "i" )
+        {
+            insert( rect );
+        }
+        else if ( values[0] == "r" )
+        {
+            remove( rect );
+        }
     }
 
     update();
@@ -279,6 +296,10 @@ void MainWindow::createActions()
     m_removeAct->setStatusTip(tr("Remove Object"));
     connect(m_removeAct, SIGNAL(triggered()), m_canvas, SLOT( selectRemoveTool() ) );
 
+    m_clearAct = new QAction(tr("&Clear"), this);
+    m_clearAct->setStatusTip(tr("Clear Object"));
+    connect(m_clearAct, SIGNAL(triggered()), m_canvas, SLOT( clear() ) );
+
     m_replayAct = new QAction(tr("&Replay"), this);
     m_replayAct->setShortcut(QKeySequence(tr("Ctrl+R")));
     m_replayAct->setStatusTip(tr("Replay"));
@@ -309,6 +330,7 @@ void MainWindow::createMenus()
     m_editMenu->addAction(m_insertAct);
     m_editMenu->addAction(m_selectAct);
     m_editMenu->addAction(m_removeAct);
+    m_editMenu->addAction(m_clearAct);
     menuBar()->addSeparator();
 
 

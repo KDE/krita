@@ -110,8 +110,6 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     m_currentConfigWidget = 0;
 
     enableButtonOK(0);
-
-    connect(&m_delayer, SIGNAL(timeout()), this, SLOT(refreshPreview()));
 }
 
 void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
@@ -137,8 +135,7 @@ void KisDlgAdjustmentLayer::slotConfigChanged()
 {
     if(m_preview->getAutoUpdate())
     {
-        // refreshPreview();
-        m_delayer.start(1000, true);
+        refreshPreview();
     } else {
         m_preview->needUpdate();
     }

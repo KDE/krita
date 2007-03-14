@@ -81,7 +81,6 @@ private:
     QSignalMapper * m_filterMapper;
     
     QDict<KActionMenu> m_filterActionMenus;
-    QTimer m_delayer;
 };
 
 #endif

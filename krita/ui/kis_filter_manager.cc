@@ -57,7 +57,6 @@ KisFilterManager::KisFilterManager(KisView * view, KisDoc * doc)
     : m_view(view),
     m_doc(doc)
 {
-    connect(&m_delayer, SIGNAL(timeout()), this, SLOT(refreshPreview()));
     // XXX: Store & restore last filter & last filter configuration in session settings
     m_reapplyAction = 0;
     m_lastFilterConfig = 0;
@@ -388,8 +387,7 @@ void KisFilterManager::slotConfigChanged()
         return;
     if(m_lastDialog->previewWidget()->getAutoUpdate())
     {
-//         refreshPreview();
-      m_delayer.start(1000, true);
+        refreshPreview();
     } else {
         m_lastDialog->previewWidget()->needUpdate();
     }

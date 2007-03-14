@@ -46,7 +46,7 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
 {
     for(vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); ++it)
     {
-        m_layers.push_back( it->data()->clone() );
+        this->addLayer(it->data()->clone(), 0);
     }
     m_projection = new KisPaintDevice(*rhs.m_projection.data());
     m_projection->setParentLayer(this);

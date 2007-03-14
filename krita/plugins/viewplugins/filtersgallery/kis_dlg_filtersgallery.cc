@@ -69,8 +69,6 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     m_labelNoCW = new QLabel(i18n("No configuration options are available for this filter."), m_widget->configWidgetHolder);
     m_widget->configWidgetHolder->layout()->add(m_labelNoCW);
     m_labelNoCW->hide();
-
-    connect(&m_delayer, SIGNAL(timeout()), this, SLOT(refreshPreview()));
 }
 
 KisDlgFiltersGallery::~KisDlgFiltersGallery()
@@ -112,8 +110,7 @@ void KisDlgFiltersGallery::slotConfigChanged()
 {
     if(m_widget->previewWidget->getAutoUpdate())
     {
-        // refreshPreview();
-        m_delayer.start(1000, true);
+        refreshPreview();
     } else {
         m_widget->previewWidget->needUpdate();
     }

@@ -23,7 +23,6 @@
 #define KISDLGFILTERSPREVIEW_H
 
 #include <kdialogbase.h>
-#include <qtimer.h>
 
 class KisView;
 class KisFilter;
@@ -60,7 +59,6 @@ class KisDlgFiltersGallery : public KDialogBase
         QWidget* m_currentConfigWidget;
         KisFilter* m_currentFilter;
         QLabel* m_labelNoCW;
-        QTimer m_delayer;
 };
 
 }

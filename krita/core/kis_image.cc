@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2007 Benjamin Schleimer <bensch128@yahoo.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -545,13 +546,26 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 
         m_rootLayer = static_cast<KisGroupLayer*>(rhs.m_rootLayer->clone().data());
         connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
-
+            
         m_annotations = rhs.m_annotations; // XXX the annotations would probably need to be deep-copied
 
         m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver->currentSeed() + 1);
         Q_CHECK_PTR(m_nserver);
 
         //m_guides = rhs.m_guides;
+
+        // Set this as the current image for the layers
+        m_rootLayer->setImage(this);
+        // Set the active paint layer
+        if(rhs.activeLayer() != NULL) {
+            QString layerName = rhs.activeLayer()->name();
+            // kdDebug(12345) << "KisImage::KisImage: active layer = " << layerName << "\n";
+            KisLayerSP activeLayer = rootLayer()->findLayer(layerName);
+            Q_ASSERT(activeLayer);
+            activate(activeLayer);
+        } else {
+            activate(NULL);
+        }
     }
 }
 

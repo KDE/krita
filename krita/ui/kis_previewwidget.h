@@ -59,7 +59,12 @@ public:
 
     void wheelEvent(QWheelEvent * e);
 
-    /** This gives control to the KisPreviewFilter of how to run the filter */
+    /** Instructs the KisPreviewWidget to eventually update the preview. 
+     * KisPreviewWidget delays the actual running of the filter for 500ms 
+     * so if the user is changing a configuration setting, it won't run multiple time.
+     * @param filter to run on the image
+     * @config to use when filtering.
+     */
     void runFilter(KisFilter * filter, KisFilterConfiguration * config);
 
 public slots:
@@ -82,24 +87,28 @@ signals:
 
 private slots:
 
-    /**
-     * Call this when the effect has finished updating the layer. Makes the preview
-     * repaint itself. */
-    void slotUpdate();
-
     void zoomIn();
     void zoomOut();
     void zoomOneToOne();
 
+    /**
+     * Called when the "Force Update" button is clicked
+     */
     void forceUpdate();
 
-    // void cancelFilterOperation();
-    void filterNextBlock();
+    /**
+     * Updates the zoom and redisplays either the original or the preview (filtered) image
+     */
+    void updateZoom();
+
+    /** Internal method which actually runs the filter
+     */
+    void runFilterHelper();
 
 private:
-
-    void updateInternal();
-
+    /**
+     * Recalculates the zoom factor
+     */
     void zoomChanged(const double zoom);
 
     bool m_autoupdate; /// Flag indicating that the widget should auto update whenever a setting is changed
@@ -112,18 +121,20 @@ private:
     QImage m_scaledPreview; /// QImage copy of the filtered image
     bool m_dirtyPreview; /// flag indicating that the preview image is dirty
     KisPaintDeviceSP m_previewDevice; /// Pointer to the preview image
-    
-    double m_zoom; /// Zoom amount
+    KisImageSP m_scaledImage; /// Scaled image copied from the original
+
+    double m_filterZoom; /// Zoom amount when the filtering occurred
+    double m_zoom; /// Current zoom amount
     KisProfile * m_profile; /// the color profile to use when converting to QImage
 
-    QTimer* m_filterTimer; /// Timer used to run the filtering operation.
-    int m_filterX, m_filterY; /// Coordinates of the current filtering operation
-    // NOTE: ADD METHOD to cancel filtering operation!!
-    bool m_runFilter; /// Flag indicating that its ok to continue filtering
-    KisFilter* m_filter; // filter to use in operation
-    KisFilterConfiguration* m_filterConfig; // filter configuration, used when running with jobs
+    KisLabelProgress *m_progress; /// Progress bar of the preview.
 
-    KisLabelProgress *m_progress; // Progress bar of the preview.
+    QTimer * m_zoomTimer; /// Timer used to update the view whenever the zoom changes
+    QTimer * m_filterTimer; /// Timer used to update the view whenever the filter changes
+    KisFilter * m_filter; /// Filter used
+    KisFilterConfiguration * m_config; /// Configuration used
+    bool m_firstFilter; /// Flag to determine if we should delay the first filter or not
+    bool m_firstZoom; ///  Flag to determine if we should delay the first zoom or not
 };
 
 #endif

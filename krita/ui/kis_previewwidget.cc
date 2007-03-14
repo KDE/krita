@@ -46,17 +46,24 @@
 #include <kis_global.h>
 #include <kis_image.h>
 #include <kis_layer.h>
+#include <kis_paint_layer.h>
+#include <kis_group_layer.h>
 #include <kis_meta_registry.h>
 #include <kis_painter.h>
 #include <kis_profile.h>
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 #include <kis_label_progress.h>
+#include <kis_selection.h>
+#include <kis_transform_worker.h>
 
 #include "kis_previewwidgetbase.h"
 #include "kis_previewwidget.h"
 #include "imageviewer.h"
 
+static const int ZOOM_PAUSE = 100;
+static const int FILTER_PAUSE = 500;
+static const double ZOOM_FACTOR = 1.1;
 
 KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     : PreviewWidgetBase( parent, name )
@@ -68,15 +75,15 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     , m_scaledPreview()
     , m_dirtyPreview(true)
     , m_previewDevice(NULL)
+    , m_scaledImage(NULL)
+    , m_filterZoom(1.0)
     , m_zoom(-1.0)
     , m_profile(NULL)
-    , m_filterTimer(new QTimer(this, "filterTimer"))
-    , m_filterX(0)
-    , m_filterY(0)
-    , m_runFilter(false)
-    , m_filter(NULL)
-    , m_filterConfig(NULL)
     , m_progress( 0 )
+    , m_zoomTimer(new QTimer(this))
+    , m_filterTimer(new QTimer(this))
+    , m_firstFilter(true)
+    , m_firstZoom(true)
 {
     btnZoomIn->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag+", KIcon::MainToolbar, 16 ));
     connect(btnZoomIn, SIGNAL(clicked()), this, SLOT(zoomIn()));
@@ -91,8 +98,6 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     btnZoomOneToOne->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag1", KIcon::MainToolbar, 16 ));
     connect(btnZoomOneToOne, SIGNAL(clicked()), this, SLOT(zoomOneToOne()));
 
-    connect(m_filterTimer, SIGNAL(timeout()), this, SLOT(filterNextBlock()));
-
     m_progress = new KisLabelProgress(frmProgress);
     m_progress->setMaximumWidth(225);
     m_progress->setMinimumWidth(225);
@@ -100,6 +105,9 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     QVBoxLayout *vbox = new QVBoxLayout( frmProgress );
     vbox->addWidget(m_progress);
     m_progress->hide();
+
+    connect(m_zoomTimer, SIGNAL(timeout()), this, SLOT(updateZoom()));
+    connect(m_filterTimer, SIGNAL(timeout()), this, SLOT(runFilterHelper()));
 
 /*    kToolBar1->insertLineSeparator();
     kToolBar1->insertButton("reload",2, true, i18n("Update"));
@@ -115,15 +123,7 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
 //   kToolBar1->insertButton("",5, true, i18n("Popup Original and Preview"));
 }
 
-KisPreviewWidget::~KisPreviewWidget()
-{
-    if(m_runFilter)
-    {
-        // Make sure we clean up properly
-        QApplication::restoreOverrideCursor();
-        m_filterTimer->stop();
-    }
-}
+KisPreviewWidget::~KisPreviewWidget() { }
 
 void KisPreviewWidget::forceUpdate()
 {
@@ -142,6 +142,7 @@ void KisPreviewWidget::slotSetDevice(KisPaintDeviceSP dev)
 
     m_origDevice = dev;
     m_previewDevice = dev;
+    m_filterZoom = 1.0;
 
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
@@ -156,27 +157,18 @@ void KisPreviewWidget::slotSetDevice(KisPaintDeviceSP dev)
     zoomChanged(double(m_preview->width()) / double(r.width()) );
 }
 
-void KisPreviewWidget::slotUpdate()
+void KisPreviewWidget::updateZoom()
 {
-    // Always assume that the previewDevice was modified
-    m_dirtyPreview = true;
-
-    updateInternal();
-}
-
-void KisPreviewWidget::updateInternal()
-{
-    QSize r = m_origDevice->extent().size();
-    int w = r.width(), h = r.height();
-    int sw = int(ceil(w * m_zoom)), sh = int(ceil(h * m_zoom));
-
     QApplication::setOverrideCursor(KisCursor::waitCursor());    
 
     if(m_previewIsDisplayed)
     {
-        // Scale the preview
         if(m_dirtyPreview)
         {
+            QSize r = m_previewDevice->extent().size();
+            int w = r.width(), h = r.height();
+            int sw = int(ceil(m_zoom * w / m_filterZoom));
+            int sh = int(ceil(m_zoom * h / m_filterZoom));
             m_dirtyPreview = false;
             m_scaledPreview = m_previewDevice->convertToQImage(m_profile, 0, 0, w, h);
             m_scaledPreview = m_scaledPreview.scale(sw,sh, QImage::ScaleMax); // Use scale instead of smoothScale for speed up
@@ -184,9 +176,12 @@ void KisPreviewWidget::updateInternal()
         m_preview->setImage(m_scaledPreview);
     } else
     {
-        // Scale the preview
         if(m_dirtyOriginal)
         {
+            QSize r = m_origDevice->extent().size();
+            int w = r.width(), h = r.height();
+            int sw = int(ceil(m_zoom * w));
+            int sh = int(ceil(m_zoom * h));
             m_dirtyOriginal = false;
             m_scaledOriginal = m_origDevice->convertToQImage(m_profile, 0, 0, w, h);
             m_scaledOriginal = m_scaledOriginal.scale(sw,sh, QImage::ScaleMax); // Use scale instead of smoothScale for speed up
@@ -221,7 +216,8 @@ void KisPreviewWidget::setPreviewDisplayed(bool v)
         } else {
             m_groupBox->setTitle(i18n("Original: ") + m_origDevice->name());
         }
-        updateInternal();
+        // Call directly without any pause because there is no scaling
+        updateZoom();
     }
 }
 
@@ -247,102 +243,135 @@ void KisPreviewWidget::zoomChanged(const double zoom)
         m_zoom = tZoom;
         m_dirtyOriginal = true;
         m_dirtyPreview = true;
-//         if(m_previewIsDisplayed)
-//         {
-//             updated();
-//         } else
-        {
-            updateInternal();
+
+        if(m_firstZoom) {
+            m_firstZoom = false;
+            updateZoom();
+        } else {
+            m_zoomTimer->start(ZOOM_PAUSE, true);
         }
     }
 }
 
 void KisPreviewWidget::zoomIn() {
-    zoomChanged(m_zoom * 1.1);
+    zoomChanged(m_zoom * ZOOM_FACTOR);
 }
 
 void KisPreviewWidget::zoomOut() {
-    zoomChanged(m_zoom / 1.1);
+    zoomChanged(m_zoom / ZOOM_FACTOR);
 }
 
 void KisPreviewWidget::zoomOneToOne() {
     zoomChanged(1.0);
 }
 
-void KisPreviewWidget::runFilter(KisFilter * filter, KisFilterConfiguration * config)
-{
+class MyCropVisitor : public KisLayerVisitor {
+    const double m_zoom;
+
+    void cropDevice(KisPaintDevice * device) {
+        QRect r = device->exactBounds();
+        r.setX(int(m_zoom * r.x()) );
+        r.setY(int(m_zoom * r.y()) );
+        r.setWidth(int(m_zoom * r.width()) );
+        r.setHeight(int(m_zoom * r.height()) );
+        device->crop(r);
+    }
+
+public:
+    MyCropVisitor(const double & z) : m_zoom(z) { }
+    virtual ~MyCropVisitor() { }
+
+    virtual bool visit(KisPaintLayer *layer) {
+        KisPaintDeviceSP device = layer->paintDevice();
+        cropDevice(device.data());
+        // Make sure we have a tight fit for the selection
+        if(device->hasSelection()) {
+            cropDevice(device->selection().data());
+        }
+
+        return true;
+    }
+    virtual bool visit(KisGroupLayer *layer) {
+        for(KisLayerSP l = layer->firstChild(); l; l = l->nextSibling()) {
+            l->accept(*this);
+        }
+        return true;
+    }
+    virtual bool visit(KisPartLayer *) { return true; }
+    virtual bool visit(KisAdjustmentLayer *) { return true; }
+};
+
+void KisPreviewWidget::runFilter(KisFilter * filter, KisFilterConfiguration * config) {
     if(!filter) return;
     if(!config) return;
 
-    // Rebuild the preview device for the filtering
-    m_previewDevice = new KisPaintDevice(*m_origDevice);
-    if(!m_previewDevice) return;
-
     m_filter = filter;
-    m_filterConfig = config;
+    m_config = config;
 
-    // Setup a timer to filter only one chunk at a time.
-    // Alternatively, setup threads here to take advantage of multiple processors.
-    
+    if(m_firstFilter) {
+        m_firstFilter = false;
+        runFilterHelper();
+    } else {
+        m_filterTimer->start(FILTER_PAUSE, true);
+    }
+}
+
+void KisPreviewWidget::runFilterHelper() {
+    // Copy the image and scale
+    Q_ASSERT(m_origDevice->image());
+    m_filterZoom = m_zoom;
+    // Dont scale more then 1.0 so we don't waste time in preview widget for large scaling.
+    if(m_filterZoom > 1.0) {
+        m_filterZoom = 1.0;
+    }
+
+    m_scaledImage = new KisImage(*m_origDevice->image());
+    KisPaintDeviceSP scaledDevice = m_scaledImage->activeDevice();
+    Q_ASSERT(scaledDevice);
+
+
+    KisSelectionSP select;
+    if(scaledDevice->hasSelection())
+    {
+        select = new KisSelection(*scaledDevice->selection());
+        scaledDevice->deselect();
+        Q_ASSERT(scaledDevice->hasSelection() == false);
+    }
+    // Scale
+    m_scaledImage->setUndoAdapter(NULL);
+    KisHermiteFilterStrategy strategy;
+    m_scaledImage->scale(m_filterZoom, m_filterZoom, NULL, &strategy);
+    // Scale the selection
+    if(select)
+    {
+        KisPaintDeviceSP t = select.data();        
+        KisTransformWorker tw(t, m_filterZoom, m_filterZoom, 0.0, 0.0, 0.0, 0, 0, NULL, &strategy);
+        tw.run();
+        scaledDevice->setSelection(select);
+        select->setParentLayer(scaledDevice->parentLayer());
+    }
+
+    // Crop by the zoom value instead of cropping by rectangle. It gives better results
+    MyCropVisitor v(m_filterZoom);
+    m_scaledImage->rootLayer()->accept(v);
+
+    m_previewDevice = new KisPaintDevice(*scaledDevice);
+
     // Setup the progress display
     m_filter->enableProgress();
     m_progress->setSubject(m_filter, true, true);
     m_filter->setProgressDisplay(m_progress);
-    // QApplication::setOverrideCursor(KisCursor::waitCursor(), true);
-    if(filter->supportsThreading())
-    {
-        m_runFilter = true;
-        m_filterX = m_filterY = 0;
-        // NOTE: do a single shot to avoid recursion problems with the event queue 
-        m_filterTimer->start(0, true);
-    } else
-    {
-        QRect rect = m_origDevice->extent();
-        m_filter->process(m_origDevice, m_previewDevice, config, rect);
-        m_filter->disableProgress();
-        QApplication::restoreOverrideCursor();
-        slotUpdate();
+    m_filter->process(scaledDevice, m_previewDevice, m_config, scaledDevice->exactBounds());
+    m_filter->disableProgress();
+
+    m_dirtyPreview = true;
+
+    if(m_firstZoom) {
+        m_firstZoom = false;
+        updateZoom();
+    } else {
+        m_zoomTimer->start(ZOOM_PAUSE, true);
     }
 }
-
-#define FILTER_BLOCK_SIZE 128
-
-void KisPreviewWidget::filterNextBlock()
-{
-    // kdDebug(12345) << "KisPreviewWidget::filterNextBlock: called\n";
-    if(m_runFilter == false || m_filter->cancelRequested())
-    {
-        m_filterTimer->stop();
-        m_filter->disableProgress();
-        QApplication::restoreOverrideCursor();
-        // only update once all of the chunks are done.
-        // slotUpdate();
-        return;
-    }
-    m_filter->enableProgress();
-    m_progress->setSubject(m_filter, true, true);
-    m_filter->setProgressDisplay(m_progress);
-    QRect rect(m_filterX, m_filterY, FILTER_BLOCK_SIZE, FILTER_BLOCK_SIZE);
-    // clip the rect to render
-    rect = rect.intersect(m_origDevice->extent());
-
-    m_filter->process(m_origDevice, m_previewDevice, m_filterConfig, rect);
-    // Update after each chunk is done
-    slotUpdate();
-    m_filterX += FILTER_BLOCK_SIZE;
-    if(m_filterX >= m_origDevice->extent().width())
-    {
-        m_filterX = 0;
-        m_filterY += FILTER_BLOCK_SIZE;
-        if(m_filterY >= m_origDevice->extent().height())
-        {
-            // Stop once we are done
-            m_runFilter = false; 
-        }
-    }
-    // NOTE: do a single shot to avoid recursion problems with the event queue 
-    m_filterTimer->start(0, true);
-}
-
 
 #include "kis_previewwidget.moc"

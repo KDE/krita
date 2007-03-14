@@ -20,7 +20,6 @@
 #define KISDLGAdjustMENTLAYER_H
 
 #include <kdialogbase.h>
-#include <qtimer.h>
 
 class KisFilter;
 class QIconViewItem;
@@ -81,7 +80,6 @@ private:
     QLabel* m_labelNoConfigWidget;
     bool m_customName;
     bool m_freezeName;
-    QTimer m_delayer;
 };
 
 #endif

@@ -21,8 +21,6 @@
 
 #include <kdialogbase.h>
 
-#include <qtimer.h>
-
 class KisFilter;
 class QIconViewItem;
 class QLabel;
@@ -77,8 +75,6 @@ private:
     KisFilterConfiguration * m_currentConfiguration;
     KisAdjustmentLayer * m_layer;
     KLineEdit * m_layerName;
-
-    QTimer m_delayer;
 };
 
 #endif // KIS_DLG_ADJ_LAYER_PROPS_H

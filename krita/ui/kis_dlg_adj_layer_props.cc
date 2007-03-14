@@ -123,8 +123,6 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
 
     refreshPreview();
     enableButtonOK( !m_layerName->text().isEmpty() );
-
-    connect(&m_delayer, SIGNAL(timeout()), this, SLOT(refreshPreview()));
 }
 
 void KisDlgAdjLayerProps::slotNameChanged( const QString & text )
@@ -146,8 +144,7 @@ void KisDlgAdjLayerProps::slotConfigChanged()
 {
     if(m_preview->getAutoUpdate())
     {
-        // refreshPreview();
-        m_delayer.start(1000, true);
+        refreshPreview();
     } else {
         m_preview->needUpdate();
     }

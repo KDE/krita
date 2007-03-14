@@ -218,29 +218,12 @@
                         <cstring>frmProgress</cstring>
                     </property>
                     <property name="frameShape">
-                        <enum>StyledPanel</enum>
+                        <enum>NoFrame</enum>
                     </property>
                     <property name="frameShadow">
                         <enum>Raised</enum>
                     </property>
                 </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>70</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
             </hbox>
         </widget>
     </vbox>

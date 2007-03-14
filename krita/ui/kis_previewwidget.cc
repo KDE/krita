@@ -99,8 +99,6 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     connect(btnZoomOneToOne, SIGNAL(clicked()), this, SLOT(zoomOneToOne()));
 
     m_progress = new KisLabelProgress(frmProgress);
-    m_progress->setMaximumWidth(225);
-    m_progress->setMinimumWidth(225);
     m_progress->setMaximumHeight(fontMetrics().height() );
     QVBoxLayout *vbox = new QVBoxLayout( frmProgress );
     vbox->addWidget(m_progress);

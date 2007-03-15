@@ -95,7 +95,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
     m_filtersList = new KisFiltersListView(m_dev, page, true);
-    connect(m_filtersList , SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectionHasChanged(Q3IconViewItem* )));
+    connect(m_filtersList , SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectionHasChanged(QListWidgetItem* )));
     grid->addWidget(m_filtersList, 1, 0, 2, 1);
 
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
@@ -133,7 +133,10 @@ void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
 
 KisFilterConfiguration * KisDlgAdjustmentLayer::filterConfiguration() const
 {
-    return m_currentConfigWidget->configuration();
+    if(m_currentConfigWidget)
+        return m_currentConfigWidget->configuration();
+    else
+        return m_currentFilter->defaultConfiguration( 0);
 }
 
 QString KisDlgAdjustmentLayer::layerName() const
@@ -186,7 +189,10 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( QListWidgetItem * item )
     if (m_dev) {
         m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_configWidgetHolder,
                                                                            m_dev);
-        m_currentConfigWidget->setConfiguration( kisitem->filterConfiguration() );
+        if(m_currentConfigWidget)
+        {
+            m_currentConfigWidget->setConfiguration( kisitem->filterConfiguration() );
+        }
     }
 
     if (m_configWidgetHolder != 0 && m_currentConfigWidget != 0)

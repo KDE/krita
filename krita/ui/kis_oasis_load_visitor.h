@@ -36,6 +36,7 @@ public:
 public:
     void loadImage(const QDomElement& elem);
     void loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL);
+    void loadAdjustementLayer(const QDomElement& elem, KisAdjustmentLayerSP pL);
     void loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL);
     inline KisImageSP image() { return m_image; }
     QMap<KisLayer *, QString>& layerFilenames() { return m_layerFilenames; }

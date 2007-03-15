@@ -27,11 +27,15 @@
 #include <KoStoreDevice.h>
 
 // Includes from krita/image
-#include <kis_image.h>
+#include <kis_adjustment_layer.h>
+#include <kis_filter.h>
+#include <kis_filter_registry.h>
 #include <kis_group_layer.h>
+#include <kis_image.h>
 #include <kis_meta_registry.h>
 #include <kis_paint_layer.h>
 #include <kis_png_converter.h>
+#include <kis_selection.h>
 
 #include "kis_doc2.h"
 
@@ -58,6 +62,10 @@ void KisOasisLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayer* layer
     layer->setY(elem.attribute("y").toInt());
 }
 
+void KisOasisLoadVisitor::loadAdjustementLayer(const QDomElement& elem, KisAdjustmentLayerSP aL)
+{
+    loadLayerInfo(elem, aL.data());
+}
 
 void KisOasisLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL)
 {
@@ -92,7 +100,7 @@ void KisOasisLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerS
 void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL)
 {
     loadLayerInfo(elem, gL.data());
-    for (QDomNode node = elem.lastChild(); !node.isNull(); node = node.previousSibling()) {
+    for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement())
         {
             QDomElement subelem = node.toElement();
@@ -136,6 +144,24 @@ void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerS
                 //         return true;
                     }
                 }
+            } else if(node.nodeName()== "image:filter")
+            {
+    
+                QString filterType = subelem.attribute("type");
+                QStringList filterTypeSplit = filterType.split(":");
+                kDebug() << filterType << endl;
+                KisFilterSP f = 0;
+                kDebug() << filterTypeSplit[0] << " | " <<  filterTypeSplit[1] << " | " << filterTypeSplit[2] << endl;
+                if(filterTypeSplit[0] == "applications" and filterTypeSplit[1] == "krita")
+                {
+                    f = KisFilterRegistry::instance()->get(filterTypeSplit[2]);
+                }
+                kDebug() << f << endl;
+                KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+                KisAdjustmentLayerSP layer = new KisAdjustmentLayer( gL->image() , "", kfc, KisSelectionSP(0));
+                gL->addLayer(layer, gL->childCount() );
+                loadAdjustementLayer(subelem, layer);
+                
             }
         }
     }

@@ -26,6 +26,7 @@
 #include <KoXmlWriter.h>
 
 #include "kis_adjustment_layer.h"
+#include "kis_filter.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 
@@ -55,12 +56,12 @@ bool KisOasisSaveVisitor::visit(KisGroupLayer *layer)
     m_bodyWriter->startElement("image:stack");
     saveLayerInfo(layer);
 
-    KisLayerSP child = layer->lastChild();
+    KisLayerSP child = layer->firstChild();
 
     while(child)
     {
         child->accept(*this);
-        child = child->prevSibling();
+        child = child->nextSibling();
     }
 
     m_bodyWriter->endElement();
@@ -69,6 +70,9 @@ bool KisOasisSaveVisitor::visit(KisGroupLayer *layer)
 
 bool KisOasisSaveVisitor::visit(KisAdjustmentLayer *layer)
 {
+    m_bodyWriter->startElement("image:filter");
+    m_bodyWriter->addAttribute("type", "applications:krita:" + layer->filter()->name() );
     saveLayerInfo(layer);
+    m_bodyWriter->endElement();
     return true;
 }

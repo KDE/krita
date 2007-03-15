@@ -50,7 +50,7 @@ public:
      * @param shapes a list of all the shapes that should be grouped.
      */
     KoShapeGroupCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent = 0);
-    virtual ~KoShapeGroupCommand() { };
+    virtual ~KoShapeGroupCommand() { }
     /// redo the command
     virtual void redo ();
     /// revert the actions done in redo

@@ -37,7 +37,7 @@ public:
     /// The default constructor
     KoShapeLayer();
     /// empty implementation, as the layer itself is not visible
-    virtual void paintComponent(QPainter &, const KoViewConverter &) {};
+    virtual void paintComponent(QPainter &, const KoViewConverter &) {}
     bool hitTest( const QPointF &position ) const;
     virtual QRectF boundingRect() const;
 private:

@@ -62,7 +62,7 @@ public:
      * request a repaint of the decorations to be made. This triggers
      * an update call on the canvas, but does not paint directly.
      */
-    virtual void repaintDecorations() {};
+    virtual void repaintDecorations() {}
 
 public:
     /**

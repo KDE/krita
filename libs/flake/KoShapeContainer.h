@@ -40,10 +40,10 @@ class QPointF;
 class FLAKE_EXPORT KoShapeContainerModel {
 public:
     /// default constructor
-    KoShapeContainerModel() {} ;
+    KoShapeContainerModel() {}
 
     /// destructor
-    virtual ~KoShapeContainerModel() {} ;
+    virtual ~KoShapeContainerModel() {}
 
     /**
      * Add a child to this models store.

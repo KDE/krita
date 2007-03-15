@@ -42,7 +42,7 @@ public:
     /// Constructor
     KoShapeGroup();
     /// destructor
-    ~KoShapeGroup() {};
+    ~KoShapeGroup() {}
     /// This implementation is empty since a group is itself not visible.
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
     /// always returns false since the group itself can't be selected or hit
@@ -52,7 +52,7 @@ private:
     class GroupMembers: public KoShapeContainerModel {
         public:
             GroupMembers() {};
-            ~GroupMembers() {};
+            ~GroupMembers() {}
             void add(KoShape *child);
             void setClipping(const KoShape *child, bool clipping);
             bool childClipped(const KoShape *child) const;

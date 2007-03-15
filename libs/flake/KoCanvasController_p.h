@@ -31,7 +31,7 @@ class Viewport : public QWidget {
 public:
 
     Viewport(KoCanvasController *parent);
-    ~Viewport() {};
+    ~Viewport() {}
 
     void setCanvas( QWidget *canvas );
     QWidget *canvas() { return m_canvas; }

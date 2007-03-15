@@ -132,7 +132,7 @@ public:
      * By default the origin of the canvas widget and the position of the
      * document origin are coincident, thus an empty point is returned.
      */
-    virtual QPoint documentOrigin() { return QPoint(0,0); };
+    virtual QPoint documentOrigin() { return QPoint(0,0); }
 
     /**
      * Return a pointer to the resource provider associated with this

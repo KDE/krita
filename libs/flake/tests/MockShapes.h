@@ -53,7 +53,7 @@ public:
     bool snapToGrid() const  { return false; }
     void addCommand(QUndoCommand*) { }
     KoShapeManager *shapeManager() const  { return 0; }
-    void updateCanvas(const QRectF& )  {};
+    void updateCanvas(const QRectF& )  {}
     KoToolProxy * toolProxy() { return 0; }
     KoViewConverter *viewConverter() { return 0; }
     QWidget* canvasWidget() { return 0; }

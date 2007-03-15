@@ -63,7 +63,7 @@ public:
         KoInsets *insets = new KoInsets(0, 0, 0, 0);
         borderInsets(shape, *insets);
         return insets;
-    };
+    }
     /**
      * Return a borderInsets object filled with the size inside the shape that this border takes.
      * @param shape the shape the insets will be calculated for

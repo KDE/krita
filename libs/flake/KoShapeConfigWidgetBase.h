@@ -50,7 +50,7 @@ public:
     /**
      * Default constructor
      */
-    KoShapeConfigWidgetBase() {};
+    KoShapeConfigWidgetBase() {}
     virtual ~KoShapeConfigWidgetBase() {}
 
     /**

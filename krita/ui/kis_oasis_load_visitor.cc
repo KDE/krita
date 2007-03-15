@@ -92,7 +92,7 @@ void KisOasisLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerS
 void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL)
 {
     loadLayerInfo(elem, gL.data());
-    for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
+    for (QDomNode node = elem.lastChild(); !node.isNull(); node = node.previousSibling()) {
         if (node.isElement())
         {
             QDomElement subelem = node.toElement();

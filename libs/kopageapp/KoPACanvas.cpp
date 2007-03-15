@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,6 @@
 #include "KoPACanvas.h"
 
 #include <KoShapeManager.h>
-#include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoUnit.h>
 
@@ -37,7 +36,8 @@ KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
 , m_doc( doc )
 {
     m_shapeManager = new KoShapeManager( this );
-    m_toolProxy = KoToolManager::instance()->createToolProxy( this );
+    m_masterShapeManager = new KoShapeManager( this );
+    m_toolProxy = new KoToolProxy( this );
     setFocusPolicy( Qt::StrongFocus );
     // this is much faster than painting it in the paintevent
     setBackgroundRole( QPalette::Base );
@@ -48,6 +48,7 @@ KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
 KoPACanvas::~KoPACanvas()
 {
     delete m_toolProxy;
+    delete m_masterShapeManager;
     delete m_shapeManager;
 }
 
@@ -90,6 +91,11 @@ KoShapeManager * KoPACanvas::shapeManager() const
     return m_shapeManager;
 }
 
+KoShapeManager * KoPACanvas::masterShapeManager() const
+{
+    return m_masterShapeManager;
+}
+
 void KoPACanvas::updateCanvas( const QRectF& rc )
 {
     QRect clipRect( viewConverter()->documentToView( rc ).toRect() );
@@ -115,6 +121,7 @@ void KoPACanvas::paintEvent( QPaintEvent *event )
     painter.setRenderHint( QPainter::Antialiasing );
     painter.setClipRect( event->rect().translated(m_documentOffset) );
 
+    m_masterShapeManager->paint( painter, *( viewConverter() ), false );
     m_shapeManager->paint( painter, *( viewConverter() ), false );
     m_toolProxy->paint( painter, *( viewConverter() ) );
 }

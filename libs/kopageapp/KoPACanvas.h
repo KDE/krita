@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,6 +38,7 @@ public:
     bool snapToGrid() const;
     void addCommand( QUndoCommand *command );
     KoShapeManager * shapeManager() const;
+    KoShapeManager * masterShapeManager() const;
     void updateCanvas( const QRectF& rc );
 
     KoToolProxy * toolProxy() { return m_toolProxy; }
@@ -78,6 +79,7 @@ protected:
     KoPAView * m_view;
     KoPADocument * m_doc;
     KoShapeManager * m_shapeManager;
+    KoShapeManager * m_masterShapeManager;
     KoToolProxy * m_toolProxy;
     QPoint m_documentOffset;
 };

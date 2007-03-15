@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,6 +42,7 @@
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
 #include <KoPAPage.h>
+#include <KoPAMasterPage.h>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -223,6 +224,10 @@ KoShapeManager* KoPAView::shapeManager() const
     return m_canvas->shapeManager();
 }
 
+KoShapeManager* KoPAView::masterShapeManager() const
+{
+    return m_canvas->masterShapeManager();
+}
 
 void KoPAView::setActivePage( KoPAPageBase* page )
 {
@@ -233,9 +238,26 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     QList<KoShape*> shapes = page->iterator();
     shapeManager()->setShapes( shapes );
     //Make the top most layer active
-    if(!shapes.isEmpty()) {
-        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>(shapes.last());
-        shapeManager()->selection()->setActiveLayer(layer);
+    if ( !shapes.isEmpty() ) {
+        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
+        shapeManager()->selection()->setActiveLayer( layer );
+    }
+
+    // if the page is not a master page itself set shapes of the master page 
+    KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
+    if ( paPage ) {
+        KoPAMasterPage * masterPage = paPage->masterPage();
+        QList<KoShape*> masterShapes = masterPage->iterator();
+        masterShapeManager()->setShapes( masterShapes );
+        //Make the top most layer active
+        if ( !masterShapes.isEmpty() ) {
+            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
+            masterShapeManager()->selection()->setActiveLayer( layer );
+        }
+    }
+    else {
+        // if the page is a master page no shapes are in the masterShapeManager
+        masterShapeManager()->setShapes( QList<KoShape*>() );
     }
 
     m_canvas->updateSize();
@@ -244,7 +266,6 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     m_verticalRuler->setRulerLength(layout.height);
     m_horizontalRuler->setActiveRange(layout.left, layout.width - layout.right);
     m_verticalRuler->setActiveRange(layout.top, layout.height - layout.bottom);
-
 }
 
 void KoPAView::canvasControllerResized()

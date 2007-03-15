@@ -217,7 +217,9 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
     QRect currentVisible (qMax(0, -canvasOffsetX()), qMax(0, -canvasOffsetY()), visibleWidth(), visibleHeight());
 
     // convert the document based rect into a canvas based rect
-    QRect viewRect = m_d->canvas->viewConverter()->documentToView( rect ).toRect();
+    QRectF rect2 = rect;
+    rect2.moveTopLeft(rect2.topLeft() + m_d->canvas->documentOrigin());
+    QRect viewRect = m_d->canvas->viewConverter()->documentToView( rect2 ).toRect();
     if(! viewRect.isValid() || currentVisible.contains(viewRect))
         return; // its visible. Nothing to do.
 

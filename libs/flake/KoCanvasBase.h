@@ -128,7 +128,7 @@ public:
     virtual KoUnit unit() = 0;
 
     /**
-     * Return the position of the document origin inside the canvas widget.
+     * Return the position of the document origin inside the canvas widget, in pixels.
      * By default the origin of the canvas widget and the position of the
      * document origin are coincident, thus an empty point is returned.
      */

@@ -266,38 +266,30 @@ template <> KisVLineIteratorPixel createIterator <KisVLineIteratorPixel>
     return dev->createVLineIterator(lineNum, start, len, true);
 }
 
-template <class iter> void calcDimensions (KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines, Q_INT32 &srcStartData, Q_INT32 &srcLenData);
+template <class iter> void calcDimensions (KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines);
 
 template <> void calcDimensions <KisHLineIteratorPixel>
-        (KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines, Q_INT32 &srcStartData, Q_INT32 &srcLenData)
+(KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines)
 {
-    dev->exactBounds(srcStartData, firstLine, srcLenData, numLines);
     if(dev->hasSelection())
     {
         QRect r = dev->selection()->selectedExactRect();
         r.rect(&srcStart, &firstLine, &srcLen, &numLines);
     }
     else
-    {
-        srcStart = srcStartData;
-        srcLen = srcLenData;
-    }
+        dev->exactBounds(srcStart, firstLine, srcLen, numLines);
 }
 
 template <> void calcDimensions <KisVLineIteratorPixel>
-        (KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines, Q_INT32 &srcStartData, Q_INT32 &srcLenData)
+(KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines)
 {
-    dev->exactBounds(firstLine, srcStartData, numLines, srcLenData);
     if(dev->hasSelection())
     {
         QRect r = dev->selection()->selectedExactRect();
         r.rect(&firstLine, &srcStart, &numLines, &srcLen);
     }
     else
-    {
-        srcStart = srcStartData;
-        srcLen = srcLenData;
-    }
+        dev->exactBounds(firstLine, srcStart, numLines, srcLen);
 }
 
 struct FilterValues
@@ -309,7 +301,7 @@ struct FilterValues
 
 template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, double shear, Q_INT32 dx, KisFilterStrategy *filterStrategy)
 {
-    Q_INT32 lineNum,srcStart,firstLine,srcLen,numLines,srcStartData,srcLenData;
+    Q_INT32 lineNum,srcStart,firstLine,srcLen,numLines;
     Q_INT32 center, begin, end;    /* filter calculation variables */
     Q_UINT8 *data;
     Q_UINT8 pixelSize = src->pixelSize();
@@ -324,7 +316,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     else
         dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
 
-    calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines,srcStartData,srcLenData);
+    calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines);
 
     scale = int(floatscale*srcLen);
     scaleDenom = srcLen;
@@ -432,31 +424,25 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         dstStart += int(floor(lineNum * shear));
 
         // Build a temporary line
-        T srcIt = createIterator <T>(src, QMAX(srcStart - extraLen, srcStartData), lineNum, srcLen+2*extraLen);
+        T srcIt = createIterator <T>(src, srcStart - extraLen, lineNum, srcLen+2*extraLen);
         Q_INT32 i = 0;
-        Q_INT32 x = srcStart - extraLen;
-        while(i < srcLen + 2*extraLen)
+        while(!srcIt.isDone())
         {
             Q_UINT8 *data;
 
-            data = srcIt.rawData();
-            memcpy(&tmpLine[i*pixelSize], data, pixelSize);
+                data = srcIt.rawData();
+                memcpy(&tmpLine[i*pixelSize], data, pixelSize);
+
+                // XXX: Should set alpha = alpha*(1-selectedness)
+                cs->setAlpha(data, 0, 1);
             if(srcIt.isSelected())
             {
                 tmpSel[i] = 255;
             }
             else
-            {
                 tmpSel[i] = 0;
-            }
-            if(x >= srcStartData && x < srcStartData + srcLenData - 1)
-            {
-                // XXX: Should set alpha = alpha*(1-selectedness)
-                cs->setAlpha(data, 0, 1);
-                ++srcIt;
-            }
+            ++srcIt;
             i++;
-            x++;
         }
 
         T dstIt = createIterator <T>(dst, dstStart, lineNum, dstLen);

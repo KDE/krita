@@ -30,6 +30,7 @@ ConnectionToolFactory::ConnectionToolFactory(QObject *parent)
     setToolType (mainToolType());
     //setIcon ("connections");
     setPriority (9);
+    setActivationShapeId("flake/always");
 }
 
 ConnectionToolFactory::~ConnectionToolFactory() {

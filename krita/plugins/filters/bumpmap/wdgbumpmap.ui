@@ -12,9 +12,6 @@
             <height>603</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>WdgBumpmap</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>

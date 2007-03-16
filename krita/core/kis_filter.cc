@@ -60,6 +60,7 @@ void KisFilter::enableProgress() {
 void KisFilter::disableProgress() {
     m_progressEnabled = false;
     m_cancelRequested = false;
+    m_progressDisplay = 0;
 }
 
 void KisFilter::setProgressTotalSteps(Q_INT32 totalSteps)

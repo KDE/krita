@@ -50,8 +50,6 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
         m_selection = new KisSelection( *rhs.m_selection.data() );
         m_selection->setParentLayer(this);
         m_selection->setInterestedInDirtyness(true);
-        if (!m_selection->hasSelection())
-            m_selection->setSelection(m_selection);
         connect(rhs.image(), SIGNAL(sigSelectionChanged(KisImageSP)),
                 this, SLOT(slotSelectionChanged(KisImageSP)));
     }
@@ -113,9 +111,6 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 
     m_selection->setParentLayer(this);
     m_selection->setInterestedInDirtyness(true);
-
-    if (!m_selection->hasSelection())
-        m_selection->setSelection(m_selection);
 }
 
 void KisAdjustmentLayer::clearSelection()

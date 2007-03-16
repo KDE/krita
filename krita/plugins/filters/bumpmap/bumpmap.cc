@@ -222,12 +222,13 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
             bumpmap = src;
         }
      }
-     else {
-         bmRect = rect;
-         bumpmap = src;
-     }
 
-     kdDebug(12345) << "KisFilterBumpmap::process: rect=" << rect << ", bumpmap rect=" << bmRect << "\n";
+    if(!bmRect.isValid()) {
+        bmRect = rect;
+        bumpmap = src;
+    }
+
+    kdDebug(12345) << "KisFilterBumpmap::process: rect=" << rect << ", bumpmap rect=" << bmRect << "\n";
      
     setProgressTotalSteps(rect.height());
 

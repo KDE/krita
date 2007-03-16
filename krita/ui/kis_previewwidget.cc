@@ -71,10 +71,10 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     , m_previewIsDisplayed(true)
     , m_scaledOriginal()
     , m_dirtyOriginal(true)
-    , m_origDevice(NULL)
+    , m_origDevice(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "temp"))
     , m_scaledPreview()
     , m_dirtyPreview(true)
-    , m_previewDevice(NULL)
+    , m_previewDevice(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "temp"))
     , m_scaledImage(NULL)
     , m_filterZoom(1.0)
     , m_zoom(-1.0)
@@ -263,17 +263,17 @@ void KisPreviewWidget::zoomOneToOne() {
     zoomChanged(1.0);
 }
 
+static inline void cropDevice(KisPaintDevice * device, const double & zoom) {
+    QRect r = device->exactBounds();
+    r.setX(int(zoom * r.x()) );
+    r.setY(int(zoom * r.y()) );
+    r.setWidth(int(zoom * r.width()) );
+    r.setHeight(int(zoom * r.height()) );
+    device->crop(r);
+}
+
 class MyCropVisitor : public KisLayerVisitor {
     const double m_zoom;
-
-    void cropDevice(KisPaintDevice * device) {
-        QRect r = device->exactBounds();
-        r.setX(int(m_zoom * r.x()) );
-        r.setY(int(m_zoom * r.y()) );
-        r.setWidth(int(m_zoom * r.width()) );
-        r.setHeight(int(m_zoom * r.height()) );
-        device->crop(r);
-    }
 
 public:
     MyCropVisitor(const double & z) : m_zoom(z) { }
@@ -281,10 +281,10 @@ public:
 
     virtual bool visit(KisPaintLayer *layer) {
         KisPaintDeviceSP device = layer->paintDevice();
-        cropDevice(device.data());
+        ::cropDevice(device.data(), m_zoom);
         // Make sure we have a tight fit for the selection
         if(device->hasSelection()) {
-            cropDevice(device->selection().data());
+            ::cropDevice(device->selection().data(), m_zoom);
         }
 
         return true;
@@ -314,44 +314,78 @@ void KisPreviewWidget::runFilter(KisFilter * filter, KisFilterConfiguration * co
     }
 }
 
+/**
+ * XXX: Fix the situations which m_origDevice is NOT associated with a image.
+ * If it comes from a adjustment layer or projection or thumbnail. Currently, nothing happens
+ */
 void KisPreviewWidget::runFilterHelper() {
-    // Copy the image and scale
-    Q_ASSERT(m_origDevice->image());
+    
     m_filterZoom = m_zoom;
     // Dont scale more then 1.0 so we don't waste time in preview widget for large scaling.
     if(m_filterZoom > 1.0) {
         m_filterZoom = 1.0;
     }
 
-    m_scaledImage = new KisImage(*m_origDevice->image());
-    KisPaintDeviceSP scaledDevice = m_scaledImage->activeDevice();
-    Q_ASSERT(scaledDevice);
-
-
-    KisSelectionSP select;
-    if(scaledDevice->hasSelection())
-    {
-        select = new KisSelection(*scaledDevice->selection());
-        scaledDevice->deselect();
-        Q_ASSERT(scaledDevice->hasSelection() == false);
-    }
-    // Scale
-    m_scaledImage->setUndoAdapter(NULL);
+    KisPaintDeviceSP scaledDevice;
     KisHermiteFilterStrategy strategy;
-    m_scaledImage->scale(m_filterZoom, m_filterZoom, NULL, &strategy);
-    // Scale the selection
-    if(select)
-    {
-        KisPaintDeviceSP t = select.data();        
-        KisTransformWorker tw(t, m_filterZoom, m_filterZoom, 0.0, 0.0, 0.0, 0, 0, NULL, &strategy);
-        tw.run();
-        scaledDevice->setSelection(select);
-        select->setParentLayer(scaledDevice->parentLayer());
-    }
 
-    // Crop by the zoom value instead of cropping by rectangle. It gives better results
-    MyCropVisitor v(m_filterZoom);
-    m_scaledImage->rootLayer()->accept(v);
+    // Copy the image and scale
+    if (m_origDevice->image())
+    {
+        m_scaledImage = new KisImage(*m_origDevice->image());
+        if(!m_origDevice->parentLayer()) return;
+        QString layerName = m_origDevice->parentLayer()->name();
+        KisPaintLayerSP pl = ::qt_cast<KisPaintLayer*>(m_scaledImage->findLayer(layerName));
+        if(!pl) return;
+        scaledDevice = pl->paintDevice();
+        
+        KisSelectionSP select;
+        if(scaledDevice->hasSelection())
+        {
+            select = new KisSelection(*scaledDevice->selection());
+            scaledDevice->deselect();
+        }
+        // Scale
+        m_scaledImage->setUndoAdapter(NULL);
+        m_scaledImage->scale(m_filterZoom, m_filterZoom, NULL, &strategy);
+        // Scale the selection
+        if(select)
+        {
+            KisPaintDeviceSP t = select.data();        
+            KisTransformWorker tw(t, m_filterZoom, m_filterZoom, 
+                                  0.0, 0.0, 0.0, 0, 0, NULL, &strategy);
+            tw.run();
+            scaledDevice->setSelection(select);
+            select->setParentLayer(scaledDevice->parentLayer());
+        }
+        
+        // Crop by the zoom value instead of cropping by rectangle. It gives better results
+        MyCropVisitor v(m_filterZoom);
+        m_scaledImage->rootLayer()->accept(v);
+    } else
+    {
+        scaledDevice = new KisPaintDevice(*m_origDevice);
+        KisSelectionSP select;
+        if(scaledDevice->hasSelection())
+        {
+            select = new KisSelection(*scaledDevice->selection());
+            scaledDevice->deselect();
+        }
+        KisTransformWorker tw(scaledDevice, m_filterZoom, m_filterZoom, 
+                              0.0, 0.0, 0.0, 0, 0, NULL, &strategy);
+        tw.run();
+        // Scale the selection
+        if(select)
+        {
+            KisPaintDeviceSP t = select.data();        
+            KisTransformWorker tw(t, m_filterZoom, m_filterZoom, 
+                                  0.0, 0.0, 0.0, 0, 0, NULL, &strategy);
+            tw.run();
+            scaledDevice->setSelection(select);
+            ::cropDevice(select.data(), m_filterZoom);
+        }
+        ::cropDevice(scaledDevice.data(), m_filterZoom);
+    }
 
     m_previewDevice = new KisPaintDevice(*scaledDevice);
 

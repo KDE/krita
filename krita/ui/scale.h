@@ -30,13 +30,17 @@ namespace ImageUtils {
      * SampleImage() scales an image to the desired dimensions with pixel
      * sampling.  Unlike other scaling methods, this method does not introduce
      * any additional color into the scaled image.
+     * 
+     * The returned image is however only the rect (in coords after scaling) and the actual algorithm
+     * does only the work needed to calculate those pixels
      *
      * @param image The image.
-     * @param width The number of columns in the sampled image.
-     * @param heigh The number of rows in the sampled image.
+     * @param width The width the image is scaled to
+     * @param heigh The height the image is scaled to.
+     * @param dstRect The rect that is cut out of the scaled image and returned as an image
      *
      */
-    QImage sampleImage(const QImage& image, int width, int height);
+    QImage sampleImage(const QImage& image, int width, int height, const QRect &dstRect);
 
 
     /**

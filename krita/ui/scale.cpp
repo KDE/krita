@@ -715,8 +715,12 @@ void MImageScale::mimageScaleAARGBA(MImageScaleInfo *isi, unsigned int *dest,
 // ------------------
 
 
-QImage ImageUtils::sampleImage(const QImage& image, int columns, int rows)
+QImage ImageUtils::sampleImage(const QImage& image, int columns, int rows, const QRect &dstRect)
 {
+    // This function is modified to handle any image depth, not only
+    // 32bit like the ImageMagick original. This avoids the relatively
+    // expensive conversion.
+
     int *x_offset;
     int *y_offset;
 
@@ -735,12 +739,10 @@ QImage ImageUtils::sampleImage(const QImage& image, int columns, int rows)
       Initialize sampled image attributes.
     */
     if ((columns == image.width()) && (rows == image.height()))
-        return image;
-    // This function is modified to handle any image depth, not only
-    // 32bit like the ImageMagick original. This avoids the relatively
-    // expensive conversion.
+        return image.copy( dstRect );
+
     const int d = image.depth() / 8;
-    QImage sample_image( columns, rows, image.depth());
+    QImage sample_image( dstRect.width(), dstRect.height(), image.depth());
     sample_image.setAlphaBuffer( image.hasAlphaBuffer());
     /*
       Allocate scan line buffer and column offset buffers.
@@ -756,11 +758,11 @@ QImage ImageUtils::sampleImage(const QImage& image, int columns, int rows)
 // with Qt's QImage::scale()
     for (x=0; x < (long) sample_image.width(); x++)
     {
-        x_offset[x]=int((x+0.5)*image.width()/sample_image.width());
+        x_offset[x] = int((x + dstRect.left()) * image.width() / columns);
     }
     for (y=0; y < (long) sample_image.height(); y++)
     {
-        y_offset[y]=int((y+0.5)*image.height()/sample_image.height());
+        y_offset[y] = int((y + dstRect.top()) * image.height() / rows);
     }
     /*
       Sample each row.

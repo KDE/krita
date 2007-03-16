@@ -28,6 +28,7 @@ class QPaintEvent;
 class QMoveEvent;
 class QPoint;
 class QRect;
+class QPainter;
 class KisCanvas2;
 class KoViewConverter;
 class KoToolProxy;
@@ -99,11 +100,12 @@ public: // KisAbstractCanvasWidget
 private:
 
     /**
-     * Return a scaled QImage of the projection
+     * draw a scaled QImage of the projection onto the gc
      *
      * @param rc The desired rect in pixels
+     * @param gc The painter we draw on
      */
-    QImage scaledImage( const QRect & rc);
+    void  drawScaledImage( const QRect & rc, QPainter &gc);
 
 private:
 

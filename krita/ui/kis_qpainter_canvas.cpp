@@ -249,7 +249,7 @@ void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 
         for (int i = 0; i < rects.count(); i++) {
             QRect r = rects[i];
-            gc.drawImage( r.x(), r.y(), scaledImage( r ) );
+            drawScaledImage( r, gc);
         }
     }
     m_d->prescaledImage = img;
@@ -257,10 +257,11 @@ void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 }
 
 
-QImage KisQPainterCanvas::scaledImage( const QRect & rc )
+void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
 {
     KisImageSP img = m_d->canvas->image();
-    if (img == 0) return QImage();
+    if (img == 0) return;
+    QRect rc = r;
 
     double sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
@@ -289,18 +290,18 @@ QImage KisQPainterCanvas::scaledImage( const QRect & rc )
 
     // Pixel-for-pixel mode
     if ( scaleX == 1.0 && scaleY == 1.0 ) {
-        return canvasImage.copy( alignedRect );
+        gc.drawImage( rc.topLeft(), canvasImage.copy( alignedRect ) );
     }
     else {
-        QSize sz = QSize( ( int )( alignedRect.width() * ( sx / pppx ) ), ( int )( alignedRect.height() * ( sy / pppy ) ));
-
-        QImage croppedImage = canvasImage.copy( alignedRect );
-
         if ( scaleX > 2.0 && scaleY > 2.0 ) {
-            return ImageUtils::sampleImage( croppedImage, sz.width(), sz.height() );
+            gc.drawImage( rc.topLeft(), ImageUtils::sampleImage(canvasImage,
+                     canvasImage.width() * scaleX, canvasImage.height() * scaleY, rc.translated( m_d->documentOffset )));
         }
         else {
-            return ImageUtils::scale( croppedImage, sz.width(), sz.height() );
+            QSize sz = QSize( ( int )( alignedRect.width() * scaleX ), ( int )( alignedRect.height() * scaleY ));
+            QImage croppedImage = canvasImage.copy( alignedRect );
+            gc.drawImage( rc.topLeft(), ImageUtils::scale( croppedImage, sz.width(), sz.height() ));
+            //gc.drawImage( rc.topLeft(), croppedImage.scaled(sz.width(), sz.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ));
         }
     }
 }
@@ -323,13 +324,13 @@ void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
 
         QRect right( oldSize.width(), 0, newSize.width() - oldSize.width(), newSize.height() );
         if ( right.width() > 0 ) {
-            gc.drawImage( oldSize.width(), 0, scaledImage( right ) );
+            drawScaledImage( right, gc);
         }
         // Subtract the right hand overlap part (right.width() from
         // the bottom band so we don't scale the same area twice.
         QRect bottom( 0, oldSize.height(), newSize.width() - right.width(), newSize.height() - oldSize.height() );
         if ( bottom.height() > 0 ) {
-            gc.drawImage( 0, oldSize.height(), scaledImage( bottom ) );
+            drawScaledImage( bottom, gc);
         }
 
     }
@@ -343,7 +344,9 @@ void KisQPainterCanvas::preScale()
     // Thread this!
     QTime t;
     t.start();
-    m_d->prescaledImage = scaledImage( QRect( QPoint( 0, 0 ), size() ) );
+    m_d->prescaledImage = QImage( size(), QImage::Format_ARGB32);
+    QPainter gc( &m_d->prescaledImage );
+    drawScaledImage( QRect( QPoint( 0, 0 ), size() ), gc);
     kDebug(41010) << "preScale():" << t.elapsed() << endl;
 
 }
@@ -354,7 +357,7 @@ void KisQPainterCanvas::preScale( const QRect & rc )
         QTime t;
         t.start();
         QPainter gc( &m_d->prescaledImage );
-        gc.drawImage( rc.topLeft(), scaledImage( rc ) );
+        drawScaledImage( rc, gc);
         kDebug(41010) << "Prescaling took " << t.elapsed() << endl;
     }
 }

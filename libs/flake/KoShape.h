@@ -516,7 +516,7 @@ public:
     KoShapeApplicationData *applicationData() const;
 
     /**
-     * Return the Id of this shape, indentifying the type of shape by the id of the factory.
+     * Return the Id of this shape, identifying the type of shape by the id of the factory.
      * @see KoShapeFactory::shapeId()
      * @return the id of the shape-type
      */

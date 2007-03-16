@@ -166,7 +166,7 @@ public:
 
     /**
      * Set the identifier code from the KoToolFactory that created this tool.
-     * @param id the indentifier code
+     * @param id the identifier code
      * @see KoToolFactory::toolId()
      */
     void setToolId(const QString &id);

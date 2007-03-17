@@ -31,6 +31,7 @@
 #include <KoZoomAction.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
+#include <KoZoomController.h>
 #include <KoCanvasController.h>
 #include <KoGlobal.h>
 
@@ -65,16 +66,12 @@ KisZoomManager::~KisZoomManager()
 void KisZoomManager::setup( KActionCollection * actionCollection )
 {
     KisConfig cfg;
-    // view actions
-    m_zoomAction = new KoZoomAction(KoZoomMode::ZOOM_PIXELS | KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
-                                    i18n("Zoom"),
-                                    KIcon("14_zoom"),
-                                    KShortcut(),
-                                    actionCollection,
-                                    "zoom" );
-    connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
-            this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
+    m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection);
 
+    KisImageSP img = m_view->image();
+    m_zoomController->setPageSize(QSizeF(img->width() / img->xRes(), img->height() / img->yRes() ));
+
+    m_zoomAction = m_zoomController->zoomAction();
     m_view->viewBar()->addAction(m_zoomAction);
     m_view->canvasBase()->setZoomAction(m_zoomAction);
 
@@ -114,7 +111,8 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
 
     connect( m_canvasController, SIGNAL( canvasMousePositionChanged(const QPoint & ) ), this, SLOT( mousePositionChanged( const QPoint & ) ) );
 
-    connect(m_canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( availableSizeChanged( const QSize & ) ) );
+    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
+            this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
 }
 
 void KisZoomManager::mousePositionChanged(const QPoint &pos)
@@ -123,17 +121,9 @@ void KisZoomManager::mousePositionChanged(const QPoint &pos)
     m_verticalRuler->updateMouseCoordinate(pos.y());
 }
 
-void KisZoomManager::availableSizeChanged(const QSize &)
-{
-    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
-        slotZoomChanged(KoZoomMode::ZOOM_WIDTH, 0);
-    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
-        slotZoomChanged(KoZoomMode::ZOOM_PAGE, 0);
-}
-
 void KisZoomManager::slotActualSize()
 {
-    slotZoomChanged(KoZoomMode::ZOOM_CONSTANT, 100);
+    //slotZoomChanged(KoZoomMode::ZOOM_CONSTANT, 100);
 }
 
 void KisZoomManager::toggleShowRulers(bool show)
@@ -152,53 +142,13 @@ void KisZoomManager::updateGUI()
 
 void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
 {
-    m_zoomHandler->setZoomMode(mode);
-
     KisImageSP img = m_view->image();
 
-    if(mode == KoZoomMode::ZOOM_PIXELS)
-    {
-        m_zoomHandler->setZoomedResolution(img->xRes(), img->yRes());
-        m_view->canvasController()->setDocumentSize( QSize( int( ceil( img->width() ) ), int( ceil( img->height() ) ) ) );
+    m_view->canvasBase()->preScale();
 
-        // Now try to calculate a zoomvalue for display purposes, eventhough it can never be correct
-        double zoomF = 72.0 * img->xRes() / KoGlobal::dpiX();
-        m_zoomAction->setEffectiveZoom(int(100*zoomF+0.5));
-    }
-    else
-    {
-        double zoomF;
-        if(mode == KoZoomMode::ZOOM_CONSTANT)
-        {
-            zoomF = zoom / 100.0;
-            if(zoomF == 0.0) return;
-        }
-        else if(mode == KoZoomMode::ZOOM_WIDTH)
-        {
-            zoomF = m_canvasController->visibleWidth() / (m_zoomHandler->resolutionX() * (img->width() / img->xRes()));
-            m_zoomAction->setEffectiveZoom(int(100*zoomF+0.5));
-        }
-        else if(mode == KoZoomMode::ZOOM_PAGE)
-        {
-            zoomF = m_canvasController->visibleWidth() / (m_zoomHandler->resolutionX() * (img->width() / img->xRes()));
-            zoomF = qMin(zoomF, m_canvasController->visibleHeight() / (m_zoomHandler->resolutionY() * (img->height() / img->yRes())));
-
-            m_zoomAction->setEffectiveZoom(int(100*zoomF+0.5));
-        }
-
-        m_view->setZoom(zoomF);
-        m_zoomHandler->setZoom(zoomF);
-        m_view->canvasBase()->preScale();
-
-        // For smoother zooming in & out, repaint at the right
-        // zoomlevel before changing the size of the viewport
-        m_view->canvas()->update();
-
-        m_view->canvasController()->setDocumentSize (
-            QSize( int( ceil( m_zoomHandler->documentToViewX(img->width() / img->xRes() ) ) ),
-                   int( ceil( m_zoomHandler->documentToViewY(img->height() / img->yRes() ) ) ) ) );
-
-    }
+    // For smoother zooming in & out, repaint at the right
+    // zoomlevel before changing the size of the viewport
+    m_view->canvas()->update();
 }
 
 #include "kis_zoom_manager.moc"

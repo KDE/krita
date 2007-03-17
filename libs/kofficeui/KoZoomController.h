@@ -17,11 +17,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KOZOOMCONTROLLER_H
+#define KOZOOMCONTROLLER_H
+
+#include <QObject>
+#include <QSizeF>
 
 class KoCanvasController;
 class KoZoomAction;
 class KoZoomHandler;
+class KActionCollection;
 class QAction;
+class QSize;
+
+#include <KoZoomMode.h>
+#include <kofficeui_export.h>
 
 /**
  * This controller class to handle zoom levels for any canvas. (kofficeui)
@@ -46,14 +56,14 @@ class QAction;
  * which the zoomController then emits for the application to persist.  It
  * will alter the the mode to percent based.
 */
-class KoZoomController : public QObject {
+class KOFFICEUI_EXPORT KoZoomController : public QObject {
 Q_OBJECT
 public:
     /// one KoZoomController per canvasController.  The zoomAction is created in the constructor as a member.
-    KoZoomController(KoCanvasController *co);
+    KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *ac);
 
     /// return the zoomAction to be added to the actionCollection and Gui.
-    QAction *zoomAction() const;
+    KoZoomAction *zoomAction() const;
 
     /// setter for the view to set the zoom and level.
     void setZoom(double zoom);
@@ -61,7 +71,7 @@ public:
 
 public slots:
     /// every time the canvas changes content size, tell us.  Note that the size is in pt.
-    void setPageSize(const QRectF &pageSize);
+    void setPageSize(const QSizeF &pageSize);
 
 signals:
     // the document can use the emitted data for persistency purposes.
@@ -74,6 +84,10 @@ private slots:
     // slot for the canvasController to connect to.
     void setZoom(int zoom);
 
+    /// so we know when the canvasController changes size
+    void setAvailableSize(const QSize &Size);
+
+
 // important note;
 // it may look like we are duplicating setZoom like methods and they should be merged. This is not the case.
 // the idea behind the different methods is that a different unit connects to them and we may act slightly
@@ -81,8 +95,10 @@ private slots:
 
 private:
     // should be a d-pointer...
-    KoZoomAction *m_action;
-    KoZoomHandler *m_zoomHandler;
     KoCanvasController *m_canvasController;
+    KoZoomHandler *m_zoomHandler;
+    KoZoomAction *m_action;
+    QSizeF m_pageSize;
 };
 
+#endif

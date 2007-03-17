@@ -26,6 +26,7 @@
 #include <KoZoomMode.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
+#include <KoZoomController.h>
 
 class KoZoomHandler;
 class KisView2;
@@ -58,13 +59,13 @@ private slots:
     void slotActualSize();
     void toggleShowRulers(bool show);
     void mousePositionChanged(const QPoint &pos);
-    void availableSizeChanged(const QSize &size);
 
 private:
 
     KisView2 * m_view;
     KoZoomHandler * m_zoomHandler;
     KoCanvasController *m_canvasController;
+    KoZoomController *m_zoomController;
     KoRuler * m_horizontalRuler;
     KoRuler * m_verticalRuler;
     QAction *m_showRulersAction;

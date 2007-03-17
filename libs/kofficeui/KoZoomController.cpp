@@ -16,12 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include <KoZoomController.h>
+
+#include <kactioncollection.h>
+#include <kicon.h>
+#include <klocale.h>
+#include <kdebug.h>
+
 #include <KoView.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
 #include <KoCanvasController.h>
 
-KoZoomController::KoZoomController(KoCanvasController *co)
+KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection)
+    : m_canvasController(co)
+    , m_zoomHandler(zh)
 {
     m_action = new KoZoomAction(KoZoomMode::ZOOM_PIXELS | KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
                                     i18n("Zoom"),
@@ -31,23 +40,27 @@ KoZoomController::KoZoomController(KoCanvasController *co)
                                     "zoom" );
     connect(m_action, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
             this, SLOT(setZoom(KoZoomMode::Mode, int)));
+
+    connect(m_canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize( const QSize & ) ) );
 }
 
-QAction *KoZoomController::zoomAction() const
+KoZoomAction *KoZoomController::zoomAction() const
 {
     return m_action;
 }
 
-void KoZoomController::setZoom(double zoom)
+void KoZoomController::setZoom(double /*zoom*/)
 {
 }
 
-void KoZoomController::setZoomMode(KoZoomMode mode)
+void KoZoomController::setZoomMode(KoZoomMode /*mode*/)
 {
 }
 
-void KoZoomController::setPageSize(const QRectF &pageSize)
+void KoZoomController::setPageSize(const QSizeF &pageSize)
 {
+    m_pageSize = pageSize;
+
     if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
         setZoom(KoZoomMode::ZOOM_WIDTH, 0);
     if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
@@ -68,26 +81,43 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, int zoom)
     }
     else if(mode == KoZoomMode::ZOOM_WIDTH)
     {
-        zoomF = m_canvasController->visibleWidth() / (m_zoomHandler->resolutionX() * (img->width() / img->xRes()));
+        zoomF = m_canvasController->visibleWidth()
+                         / (m_zoomHandler->resolutionX() * m_pageSize.width());
         m_action->setEffectiveZoom(int(100*zoomF+0.5));
+kDebug() << "here in ZOOM_WIDTH " << zoomF << endl;
     }
     else if(mode == KoZoomMode::ZOOM_PAGE)
     {
-        zoomF = m_canvasController->visibleWidth() / (m_zoomHandler->resolutionX() * (img->width() / img->xRes()));
-        zoomF = qMin(zoomF, m_canvasController->visibleHeight() / (m_zoomHandler->resolutionY() * (img->height() / img->yRes())));
+        zoomF = m_canvasController->visibleWidth()
+                         / (m_zoomHandler->resolutionX() * m_pageSize.width());
+        zoomF = qMin(zoomF,
+             m_canvasController->visibleHeight() / (m_zoomHandler->resolutionY() * m_pageSize.height()));
 
         m_action->setEffectiveZoom(int(100*zoomF+0.5));
     }
 
-    emit zoomChanged(mode, zoom);
+ 
     m_zoomHandler->setZoom(zoomF);
-    //m_view->canvasBase()->preScale();
+    emit zoomChanged(mode, zoom);
 
-    // For smoother zooming in & out, repaint at the right
-    // zoomlevel before changing the size of the viewport
-    m_canvasController->canvas()->update();
+   // Tell the canvasController that the zoom has changed
+    // Actually canvasController doesn't know about zoom, but the document in pixels
+    // has change as a result of the zoom change
+    m_canvasController->setDocumentSize(
+            QSize( int(0.5 + m_zoomHandler->documentToViewX(m_pageSize.width())),
+                   int(0.5 + m_zoomHandler->documentToViewY(m_pageSize.height())) ) );
 }
 
-void KoZoomController::setZoom(int zoom)
+void KoZoomController::setZoom(int /*zoom*/)
 {
 }
+
+void KoZoomController::setAvailableSize(const QSize &/*size*/)
+{
+    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
+        setZoom(KoZoomMode::ZOOM_WIDTH, 0);
+    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
+        setZoom(KoZoomMode::ZOOM_PAGE, 0);
+}
+
+#include "KoZoomController.moc"

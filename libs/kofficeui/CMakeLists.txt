@@ -38,6 +38,7 @@ set(kofficeui_LIB_SRCS
    KoToolBox.cpp
    KoUnitWidgets.cpp
    KoZoomAction.cpp
+   KoZoomController.cpp
    KoZoomHandler.cpp
    KoZoomMode.cpp
    tkaction.cpp
@@ -97,6 +98,7 @@ install(
     KoTemplateCreateDia.h
     KoUnitWidgets.h
     KoZoomAction.h
+    KoZoomController.h
     KoZoomHandler.h
     KoZoomMode.h
     tkaction.h

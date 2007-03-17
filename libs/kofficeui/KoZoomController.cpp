@@ -81,17 +81,16 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, int zoom)
     }
     else if(mode == KoZoomMode::ZOOM_WIDTH)
     {
-        zoomF = m_canvasController->visibleWidth()
+        zoomF = m_canvasController->viewport()->size().width()
                          / (m_zoomHandler->resolutionX() * m_pageSize.width());
         m_action->setEffectiveZoom(int(100*zoomF+0.5));
-kDebug() << "here in ZOOM_WIDTH " << zoomF << endl;
-    }
+   }
     else if(mode == KoZoomMode::ZOOM_PAGE)
     {
-        zoomF = m_canvasController->visibleWidth()
+        zoomF = m_canvasController->viewport()->size().width()
                          / (m_zoomHandler->resolutionX() * m_pageSize.width());
-        zoomF = qMin(zoomF,
-             m_canvasController->visibleHeight() / (m_zoomHandler->resolutionY() * m_pageSize.height()));
+        zoomF = qMin(zoomF, m_canvasController->viewport()->size().height()
+                     / (m_zoomHandler->resolutionY() * m_pageSize.height()));
 
         m_action->setEffectiveZoom(int(100*zoomF+0.5));
     }

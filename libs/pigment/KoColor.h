@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -58,14 +59,17 @@ public:
     /// Copy constructor -- deep copies the colors.
     KoColor(const KoColor & rhs);
 
-    /// Effective C++, item 11
-    KoColor &operator=(const KoColor &);
+    /**
+     * assignment operator to copy the data from the param color into this one.
+     * @param other the color we are going to copy
+     * @return this color
+     */
+    KoColor &operator=(const KoColor &other);
 
-    /// For easy memcpy'ing etc.
-    quint8 * data() const { return m_data; }
+    /// return the current colorSpace
+    KoColorSpace * colorSpace() const;
 
-    KoColorSpace * colorSpace() const { return m_colorSpace; }
-
+    /// return the current profile
     KoColorProfile *  profile() const;
 
     /// Convert this KoColor to the specified colorspace. If the specified colorspace is the
@@ -74,29 +78,38 @@ public:
 
     /// Replace the existing color data, and colorspace with the specified data.
     void setColor(quint8 * data, KoColorSpace * colorSpace = 0);
-    
+
     /// Convert the color from src and replace the value of the current color with the converted data.
     /// Don't convert the color if src and this have the same colorspace.
     void fromKoColor(const KoColor& src);
-    
-    /// To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a
-    void toQColor(QColor *c) const;
-    void toQColor(QColor *c, quint8 *opacity) const;
 
+    /**
+     * Returns a QColor version of the color after converting it to rgb8.
+     * This is equivalent to using color->colorSpace()->toQColor(color->data(), &c, &a);
+     */
+    void toQColor(QColor *c, quint8 *opacity) const;
+    /// a convenience method for the above.
+    void toQColor(QColor *c) const;
+    /// a convenience method for the above.
+    QColor toQColor() const;
+
+// what about making the next two methods static factory methods?
     /// Convenient function for converting from a QColor
     void fromQColor(const QColor& c) const;
     /// Convenient function for converting from a QColor and setting the opacity
     void fromQColor(const QColor& c, quint8 opacity) const;
 
-    QColor toQColor() const;
+    /// For easy memcpy'ing etc.   WARNING; violates encapsulation.
+    quint8 * KDE_DEPRECATED data() const;
 
+#ifndef NODEBUG
+    /// use kDebug calls to print internal info 
     void dump() const;
+#endif
 
 private:
-
-    quint8 * m_data;
-
-    KoColorSpace * m_colorSpace;
+    class Private;
+    Private * const d;
 };
 
 Q_DECLARE_METATYPE( KoColor )

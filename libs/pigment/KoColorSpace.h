@@ -470,7 +470,7 @@ public:
     /**
      * Mix the colors given their weights and return in dst
      * The sum of weights is assumed 255 */
-    KDE_DEPRECATED void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
+    void KDE_DEPRECATED mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
     /**
      * @return the mix color operation of this colorspace (do not delete it locally, it's deleted by the colorspace).
@@ -481,7 +481,7 @@ public:
      * Convolve the given array of pointers to pixels and return the result
      * in dst. The kernel values are clamped between -128 and 128
      */
-    KDE_DEPRECATED void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const;
+    void KDE_DEPRECATED convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const;
     
     /**
      * @return the convolution operation of this colorspace (do not delete it locally, it's deleted by the colorspace).

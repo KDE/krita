@@ -194,31 +194,15 @@ void KisCPaintOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     if ( m_stroke ) {
         int brushSize = m_currentBrush->size();
-/*
-        QPointF topLeft = QPointF( qMin( pos.x(), m_lastPoint.x() ), qMin( pos.y(), m_lastPoint.y() ) );
-        QPointF bottomRight = QPointF( qMax( pos.x(), m_lastPoint.x() ), qMax( pos.y(), m_lastPoint.y() ) );
-        QSizeF size = QSizeF( bottomRight.x() - topLeft.x(), bottomRight.y() - topLeft.y() );
-        QRectF dabRect( topLeft.x() - brushSize, topLeft.y() - brushSize, size.width() + brushSize, size.height() + brushSize );
-
-        QRect alignedRect = toAlignedRect( dabRect );
-        if ( alignedRect.width() > m_tempImage.width() || alignedRect.height() > m_tempImage.height() ) {
-            m_tempImage = QImage(alignedRect.size(), QImage::Format_ARGB32 );
-        }
-*/
-        m_tempImage.fill( 0 );
-
-        QPainter gc( &m_tempImage );
+        QPainter gc( device.data() );
         gc.setRenderHint(QPainter::Antialiasing);
-
-//        kDebug() << "translating painter to " << topLeft << " rc.topleft = " << dabRect.topLeft() << endl;
-//        gc.translate( alignedRect.topLeft() );
         m_stroke->draw( gc );
         gc.end();
 
-        KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
-        dab->convertFromQImage( m_tempImage, "" ); // Use monitor profile?
+//        KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
+//        dab->convertFromQImage( m_tempImage, "" ); // Use monitor profile?
 
-        m_painter->bitBlt( QPoint( 0, 0 ), dab, m_tempImage.rect() );
+//        m_painter->bitBlt( QPoint( 0, 0 ), dab, m_tempImage.rect() );
 
     }
     m_lastPoint = pos;

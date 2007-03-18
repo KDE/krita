@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -45,6 +45,7 @@ KoLineBorder::KoLineBorder(double lineWidth, QColor color)
 {
     d->pen.setWidthF( qMax(0.0,lineWidth) );
     d->pen.setJoinStyle(Qt::MiterJoin);
+    d->color = color;
 }
 
 KoLineBorder::~KoLineBorder() {
@@ -125,3 +126,22 @@ void KoLineBorder::setColor( const QColor & color )
 {
     d->color = color;
 }
+
+void KoLineBorder::setLineStyle( Qt::PenStyle style, const QVector<qreal> &dashes )
+{
+    if( style < Qt::CustomDashLine )
+        d->pen.setStyle( style );
+    else
+        d->pen.setDashPattern( dashes );
+}
+
+Qt::PenStyle KoLineBorder::lineStyle() const
+{
+    return d->pen.style();
+}
+
+QVector<qreal> KoLineBorder::lineDashes() const
+{
+    return d->pen.dashPattern();
+}
+

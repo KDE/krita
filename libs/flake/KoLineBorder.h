@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -64,6 +64,12 @@ public:
     void setMiterLimit( double miterLimit );
     /// Returns the miter limit
     double miterLimit() const;
+    /// Sets the line style
+    void setLineStyle( Qt::PenStyle style, const QVector<qreal> &dashes );
+    /// Returns the line style
+    Qt::PenStyle lineStyle() const;
+    /// Returns the line dashes
+    QVector<qreal> lineDashes() const;
 
     /// Returns the color
     const QColor & color() const;

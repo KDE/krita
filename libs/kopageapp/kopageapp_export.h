@@ -42,4 +42,21 @@
 
 #endif
 
+/* Now the same for KOPAGEAPP_TEST_EXPORT, if compiling with unit tests enabled */
+
+#ifdef COMPILING_TESTS
+#if defined _WIN32 || defined _WIN64
+# if defined( MAKE_KOPAGEAPP_LIB )
+#       define KOPAGEAPP_TEST_EXPORT KDE_EXPORT
+#   else
+#       define KOPAGEAPP_TEST_EXPORT KDE_IMPORT
+#   endif
+# else /* not windows */
+#   define KOPAGEAPP_TEST_EXPORT KDE_EXPORT
+# endif
+#else /* not compiling tests */
+#   define KOPAGEAPP_TEST_EXPORT
+#endif
+
+
 #endif

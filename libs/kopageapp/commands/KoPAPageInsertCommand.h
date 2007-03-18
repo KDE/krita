@@ -22,13 +22,15 @@
 
 #include <QUndoCommand>
 
+#include "kopageapp_export.h"
+
 class KoPADocument;
 class KoPAPageBase;
 
 /**
  * Command for inserting a page into a Document
  */
-class KoPAPageInsertCommand : public QUndoCommand
+class KOPAGEAPP_TEST_EXPORT KoPAPageInsertCommand : public QUndoCommand
 {
 public:
     KoPAPageInsertCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, QUndoCommand *parent = 0 );

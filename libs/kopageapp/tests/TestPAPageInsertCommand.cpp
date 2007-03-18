@@ -20,7 +20,7 @@
 #include "TestPAPageInsertCommand.h"
 
 #include "PAMock.h"
-//#include "KoPAPageInsertCommand.h"
+#include "KoPAPageInsertCommand.h"
 
 void TestPAPageInsertCommand::redoUndo()
 {

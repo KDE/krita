@@ -27,6 +27,7 @@
 
 class StylePrivate;
 class QTextBlock;
+class KoStyleStack;
 
 /**
  * A container for all properties for a character style.
@@ -151,6 +152,12 @@ public:
      * Reset any styles and apply this style on the whole selection.
      */
     void applyStyle(QTextCursor *selection) const;
+
+    /**
+     * Load the style from the \a KoStyleStack style stack using the
+     * OpenDocument format.
+     */
+    void loadOasis(KoStyleStack& styleStack);
 
 private:
     void setProperty(int key, const QVariant &value);

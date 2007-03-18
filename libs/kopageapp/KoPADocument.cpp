@@ -31,6 +31,8 @@
 #include <KoOasisLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
+#include <KoPathShape.h>
+#include <KoLineBorder.h>
 
 #include "KoPACanvas.h"
 #include "KoPAView.h"
@@ -44,7 +46,7 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
 {
     KoPAMasterPage * masterPage = new KoPAMasterPage();
     m_masterPages.append( masterPage );
-    addPage( new KoPAPage( masterPage ), 0 /*add first*/ );
+    insertPage( new KoPAPage( masterPage ), 0 /*add first*/ );
 }
 
 KoPADocument::~KoPADocument()
@@ -111,7 +113,7 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     masterStylesTmpWriter.startElement( "office:master-styles" );
 
     // save master pages
-    foreach( KoPAMasterPage *page, m_masterPages )
+    foreach( KoPAPageBase *page, m_masterPages )
     {
         page->saveOdf( paContext );
     }
@@ -131,8 +133,7 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     paContext.setOptions( KoPASavingContext::DrawId );
 
     // save pages
-    QList<KoPAPage*>::const_iterator pageIt( m_pages.constBegin() );
-    foreach ( KoPAPage *page, m_pages )
+    foreach ( KoPAPageBase *page, m_pages )
     {
         page->saveOdf( paContext );
         paContext.incrementPage();
@@ -195,7 +196,6 @@ void KoPADocument::saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyl
         //qDebug() << "style:style" << ( *it ).name;
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties" );
     }
-
 }
 
 void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyles, QFile *masterStyles )
@@ -217,9 +217,16 @@ void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyl
     delete stylesWriter;
 }
 
-KoPAPage* KoPADocument::pageByIndex(int index)
+KoPAPageBase* KoPADocument::pageByIndex( int index, bool masterPage )
 {
-    return m_pages.at(index);
+    if ( masterPage )
+    {
+        return m_masterPages.at( index );
+    }
+    else
+    {
+        return m_pages.at( index );
+    }
 }
 
 void KoPADocument::addShape( KoShape * shape )
@@ -270,42 +277,52 @@ void KoPADocument::removeShape( KoShape *shape )
     }
 }
 
-void KoPADocument::addPage( KoPAPage* page, KoPAPage* before )
+void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* before )
 {
     if ( !page )
         return;
 
     int index = 0;
 
+    QList<KoPAPageBase *>& pages = m_pages;
+    if ( dynamic_cast<KoPAMasterPage *>( page ) )
+    {
+        pages = m_masterPages;
+    }
+    else if ( ! dynamic_cast<KoPAPage *>( page ) )
+    {
+        // this should not happen as the page should be either a KoPAMasterPage or a KoPAPage
+        Q_ASSERT( 0 );
+    }
+
     if ( before != 0 )
     {
-        index = m_pages.indexOf( before );
+        index = pages.indexOf( before );
 
         // Append the page if before wasn't found in m_pages
         if ( index == -1 )
-            index = m_pages.count();
+            index = pages.count();
     }
 
-    m_pages.insert( index, page );
+    pages.insert( index, page );
 }
 
-void KoPADocument::addMasterPage( KoPAMasterPage* masterPage, KoPAMasterPage* before )
+KoPAPageBase * KoPADocument::takePage( KoPAPageBase *page )
 {
-    if ( !masterPage )
-        return;
+    Q_ASSERT( page );
 
-    int index = 0;
-
-    if ( before != 0 )
+    QList<KoPAPageBase *>& pages = m_pages;
+    if ( dynamic_cast<KoPAMasterPage *>( page ) )
     {
-        index = m_masterPages.indexOf( before );
-
-        // Append the page if before wasn't found in m_masterPages
-        if ( index == -1 )
-            index = m_masterPages.count();
+        pages = m_masterPages;
+    }
+    else if ( ! dynamic_cast<KoPAPage *>( page ) )
+    {
+        // this should not happen as the page should be either a KoPAMasterPage or a KoPAPage
+        Q_ASSERT( 0 );
     }
 
-    m_masterPages.insert( index, masterPage );
+    return pages.removeAll( page ) > 0 ? page : 0;
 }
 
 #include "KoPADocument.moc"

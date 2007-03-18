@@ -1,5 +1,7 @@
 include_directories(${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
 
+add_subdirectory(tests)
+
 ### kopageapp ###
 set( kopageapp_LIB_SRCS
      KoPADocument.cpp
@@ -9,7 +11,8 @@ set( kopageapp_LIB_SRCS
      KoPAPageBase.cpp
      KoPAMasterPage.cpp
      KoPAPage.cpp
-   )
+     commands/KoPAPageInsertCommand.cpp
+)
 
 kde4_automoc(${kopageapp_LIB_SRCS})
 

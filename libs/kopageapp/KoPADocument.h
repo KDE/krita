@@ -27,6 +27,7 @@
 #include "kopageapp_export.h"
 
 class KoPAPage;
+class KoPAPageBase;
 class KoPAMasterPage;
 
 /// Document class that stores KoPAPage and KoPAMasterPage objects
@@ -45,21 +46,28 @@ public:
 
     bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
-    KoPAPage* pageByIndex(int index);
+    /**
+     * Get page by index.
+     *
+     * @param index of the page
+     * @param masterPage if true return a masterPage, if false a normal page
+     */
+    KoPAPageBase* pageByIndex( int index, bool masterPage );
 
     /**
-     * Add @p page to the document after page @p before
-     * @param page page to add to document
-     * @param before the page which the added page should come after. Set before to 0 to add at the beginning
+     * Insert @p page to the document after page @p before
+     * @param page to insert to document
+     * @param before the page which the inserted page should come after. Set before to 0 to add at the beginning
      */
-    void addPage( KoPAPage* page, KoPAPage* before );
+    void insertPage( KoPAPageBase* page, KoPAPageBase* before );
 
     /**
-     * Add @p masterPage to the document after master page @p before
-     * @param page page to add to document
-     * @param before the page which the added page should come after. Set before to 0 to add at the beginning
+     * Take @page from the page
+     *
+     * @param page taken from the document
+     * @return the page taken form the document
      */
-    void addMasterPage( KoPAMasterPage* masterPage, KoPAMasterPage* before );
+    KoPAPageBase * takePage( KoPAPageBase *page );
 
     void addShape( KoShape *shape );
     void removeShape( KoShape* shape );
@@ -72,8 +80,8 @@ protected:
     void saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyles, QFile *masterStyles );
 
 private:
-    QList<KoPAPage*> m_pages;
-    QList<KoPAMasterPage*> m_masterPages;
+    QList<KoPAPageBase*> m_pages;
+    QList<KoPAPageBase*> m_masterPages;
 };
 
 #endif /* KOPADOCUMENT_H */

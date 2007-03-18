@@ -58,7 +58,7 @@ KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
     initActions();
 
     if ( m_doc->pageCount() > 0 )
-        setActivePage( m_doc->pageByIndex( 0 ) );
+        setActivePage( m_doc->pageByIndex( 0, false ) );
 }
 
 KoPAView::~KoPAView()

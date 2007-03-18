@@ -68,19 +68,15 @@ public:
 
 
     /// Returns the paintDevice that accompanies this layer
-    inline KisPaintDeviceSP paintDevice() const { return m_paintdev; }
+    KisPaintDeviceSP paintDevice() const;
 
     /// Returns the paintDevice that accompanies this layer (or mask, see editMask)
-    inline KisPaintDeviceSP paintDeviceOrMask() const {
-        if (hasMask() && editMask())
-            return m_mask;
-        return m_paintdev;
-    }
+    KisPaintDeviceSP paintDeviceOrMask() const;
 
     // Mask Layer
 
     /// Does this layer have a layer mask?
-    bool hasMask() const { return !m_mask.isNull(); }
+    bool hasMask() const;
     // XXX TODO: Make these undo-able!
     /// Create a mask if it does not yet exist, and return it
     KisPaintDeviceSP createMask();
@@ -112,7 +108,7 @@ public:
     QUndoCommand* applyMaskCommand();
 
     /// Returns true if the masked part of the mask will be rendered instead of being transparent
-    bool renderMask() const { return m_renderMask; }
+    bool renderMask() const;
     /// Set the renderMask property
     void setRenderMask(bool b);
 
@@ -121,7 +117,8 @@ public:
      * be the layer mask (if there is one). This is so that tools can draw on the mask
      * without needing to know its existence.
      */
-    bool editMask() const { return m_editMask; }
+    bool editMask() const;
+
     /// Sets the editMask property
     void setEditMask(bool b);
 
@@ -145,16 +142,8 @@ private:
     void convertMaskToSelection(const QRect& r);
     void genericMaskCreationHelper();
 
-    KisPaintDeviceSP m_paintdev;
-
-    // Layer mask related:
-    // XXX It would be nice to merge the next 2 devices...
-    KisPaintDeviceSP m_mask; // The mask that we can edit and display easily
-    KisSelectionSP m_maskAsSelection; // The mask as selection, to apply and render easily
-
-
-    bool m_renderMask;
-    bool m_editMask;
+    class Private;
+    Private * m_d;
 };
 
 typedef KisSharedPtr<KisPaintLayer> KisPaintLayerSP;

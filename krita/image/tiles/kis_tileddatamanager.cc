@@ -372,13 +372,10 @@ void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 c
                 // Clear whole tile
                 memset(tile->data(), clearValue, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
             } else {
-
-                quint32 rowsRemaining = clearTileRect.height();
-
                 quint8 *dst = tile->data();
                 if ( dst ) {
+                    quint32 rowsRemaining = clearTileRect.height();
                     dst += m_pixelSize * ( ( clearTileRect.y() - tileRect.y() ) * KisTile::WIDTH +(clearTileRect.x() - tileRect.x() ) );
-
                     while (rowsRemaining > 0) {
                         memset(dst, clearValue, clearTileRect.width() * m_pixelSize);
                         dst += rowStride;

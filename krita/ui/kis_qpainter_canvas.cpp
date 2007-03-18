@@ -263,45 +263,47 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
     if (img == 0) return;
     QRect rc = r;
 
+    const QImage canvasImage = m_d->canvas->canvasCache();
+
     double sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
 
-    // Go from the widget coordinates to points
-    QRectF imageRect = m_d->viewConverter->viewToDocument( rc.translated( m_d->documentOffset ) );
-
-    // Go from points to pixels using the resolutions
-
-    double pppx,pppy;
-    pppx = img->xRes();
-    pppy = img->yRes();
-
-    imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
-                        imageRect.right() * pppx, imageRect.bottom() * pppy);
-
-
-    const QImage canvasImage = m_d->canvas->canvasCache();
-
-    // Don't go outside the image and convert to whole pixels
-    QRect alignedRect = toAlignedRect(imageRect.intersected( canvasImage.rect() ));
-
     // Compute the scale factors
-    double scaleX = sx / pppx;
-    double scaleY = sy / pppy;
+    double scaleX = sx / img->xRes();
+    double scaleY = sy / img->yRes();
+
+    // comput how large a fully scaled image is
+    QSize dstSize = QSize(int(canvasImage.width() * scaleX ), int( canvasImage.height() * scaleY));
+
+    // Don't go outside the image (will crash the sampleImage method below)
+    QRect drawRect = rc.translated( m_d->documentOffset).intersected(QRect(QPoint(),dstSize));
 
     // Pixel-for-pixel mode
     if ( scaleX == 1.0 && scaleY == 1.0 ) {
-        gc.drawImage( rc.topLeft(), canvasImage.copy( alignedRect ) );
+        gc.drawImage( rc.topLeft(), canvasImage.copy( drawRect ) );
     }
     else {
         if ( scaleX > 2.0 && scaleY > 2.0 ) {
             gc.drawImage( rc.topLeft(), ImageUtils::sampleImage(canvasImage,
-                     canvasImage.width() * scaleX, canvasImage.height() * scaleY, rc.translated( m_d->documentOffset )));
+                     dstSize.width(), dstSize.height(), drawRect));
         }
         else {
+            // Go from the widget coordinates to points
+            QRectF imageRect = m_d->viewConverter->viewToDocument( rc.translated( m_d->documentOffset ) );
+
+            double pppx,pppy;
+            pppx = img->xRes();
+            pppy = img->yRes();
+
+            imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
+                        imageRect.right() * pppx, imageRect.bottom() * pppy);
+
+            // Don't go outside the image and convert to whole pixels
+            QRect alignedRect = toAlignedRect(imageRect.intersected( canvasImage.rect() ));
+
             QSize sz = QSize( ( int )( alignedRect.width() * scaleX ), ( int )( alignedRect.height() * scaleY ));
             QImage croppedImage = canvasImage.copy( alignedRect );
             gc.drawImage( rc.topLeft(), ImageUtils::scale( croppedImage, sz.width(), sz.height() ));
-            //gc.drawImage( rc.topLeft(), croppedImage.scaled(sz.width(), sz.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ));
         }
     }
 }

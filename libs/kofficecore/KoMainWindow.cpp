@@ -1218,7 +1218,12 @@ void KoMainWindow::slotDocumentInfo()
   KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg( this, docInfo );
   if ( dlg->exec() )
   {
-    rootDocument()->setModified( true );
+    if( dlg->isDocumentSaved( ) ) {
+        rootDocument()->setModified( false );
+    }
+    else {
+        rootDocument()->setModified( true );
+    }
     rootDocument()->setTitleModified();
   }
 

@@ -24,6 +24,7 @@
 #include "ui_koDocumentInfoAuthorWidget.h"
 #include "KoDocumentInfo.h"
 #include "KoDocument.h"
+#include "KoMainWindow.h"
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -32,6 +33,7 @@
 #include <KoGlobal.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <kstdguiitem.h>
 
 #include <QLabel>
 #include <QLineEdit>
@@ -43,7 +45,10 @@
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
 public:
-    KoDocumentInfoDlgPrivate()
+    KoDocumentInfoDlgPrivate() :
+    m_toggleEncryption( false ),
+    m_applyToggleEncryption( false ),
+    m_documentSaved( false )
     {}
     ~KoDocumentInfoDlgPrivate()
     {}
@@ -51,9 +56,11 @@ public:
     KoDocumentInfo* m_info;
     Ui::KoDocumentInfoAboutWidget* m_aboutUi;
     Ui::KoDocumentInfoAuthorWidget* m_authorUi;
+
+    bool m_toggleEncryption;
+    bool m_applyToggleEncryption;
+    bool m_documentSaved;
 };
-
-
 
 
 KoDocumentInfoDlg::KoDocumentInfoDlg( QWidget* parent, KoDocumentInfo* docInfo )
@@ -83,6 +90,8 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( QWidget* parent, KoDocumentInfo* docInfo )
     initAuthorTab();
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
+    // Saving encryption implies saving the document, this is done after closing the dialog
+    connect( this, SIGNAL( hidden() ), this, SLOT( slotSaveEncryption() ) );
 }
 
 KoDocumentInfoDlg::~KoDocumentInfoDlg()
@@ -90,6 +99,11 @@ KoDocumentInfoDlg::~KoDocumentInfoDlg()
     delete d->m_authorUi;
     delete d->m_aboutUi;
     delete d;
+}
+
+bool KoDocumentInfoDlg::isDocumentSaved()
+{
+    return d->m_documentSaved;
 }
 
 void KoDocumentInfoDlg::initAboutTab()
@@ -138,8 +152,39 @@ void KoDocumentInfoDlg::initAboutTab()
 
     d->m_aboutUi->lblRevision->setText( d->m_info->aboutInfo( "editing-cycles" ) );
 
+    if( doc->specialOutputFlag( ) == KoDocument::SaveEncrypted ) {
+        if( d->m_toggleEncryption ) {
+            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );
+            d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be decrypted" ) );
+            d->m_aboutUi->lblEncryptedPic->setPixmap( p );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "Don't d&ecrypt" ) );
+        }
+        else {
+            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
+            d->m_aboutUi->lblEncrypted->setText( i18n( "This document is encrypted" ) );
+            d->m_aboutUi->lblEncryptedPic->setPixmap( p );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "D&ecrypt" ) );
+        }
+    }
+    else {
+        if( d->m_toggleEncryption ) {
+            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
+            d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be encrypted." ) );
+            d->m_aboutUi->lblEncryptedPic->setPixmap( p );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "Don't &encrypt" ) );
+        }
+        else {
+            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );
+            d->m_aboutUi->lblEncrypted->setText( i18n( "This document is not encrypted" ) );
+            d->m_aboutUi->lblEncryptedPic->setPixmap( p );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "&Encrypt" ) );
+        }
+    }
+
     connect( d->m_aboutUi->pbReset, SIGNAL( clicked() ),
             this, SLOT( slotResetMetaData() ) );
+    connect( d->m_aboutUi->pbEncrypt, SIGNAL( clicked() ),
+            this, SLOT( slotToggleEncryption() ) );
 }
 
 void KoDocumentInfoDlg::initAuthorTab()
@@ -183,6 +228,7 @@ void KoDocumentInfoDlg::saveAboutData()
     d->m_info->setAboutInfo( "title", d->m_aboutUi->leTitle->text() );
     d->m_info->setAboutInfo( "subject", d->m_aboutUi->leSubject->text() );
     d->m_info->setAboutInfo( "comments", d->m_aboutUi->meComments->toPlainText() );
+    d->m_applyToggleEncryption = d->m_toggleEncryption;
 }
 
 void KoDocumentInfoDlg::saveAuthorData()
@@ -236,6 +282,44 @@ void KoDocumentInfoDlg::slotResetMetaData()
     d->m_aboutUi->lblRevision->setText( d->m_info->aboutInfo( "editing-cycles" ) );
 }
 
+void KoDocumentInfoDlg::slotToggleEncryption()
+{
+    KoDocument* doc = dynamic_cast< KoDocument* >( d->m_info->parent() );
+    if( !doc )
+        return;
+
+    d->m_toggleEncryption = !d->m_toggleEncryption;
+
+    if( doc->specialOutputFlag( ) == KoDocument::SaveEncrypted ) {
+        if( d->m_toggleEncryption ) {
+            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );
+            d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be decrypted" ) );
+            d->m_aboutUi->lblEncryptedPic->setPixmap( p );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "Don't d&ecrypt" ) );
+        }
+        else {
+            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
+            d->m_aboutUi->lblEncrypted->setText( i18n( "This document is encrypted" ) );
+            d->m_aboutUi->lblEncryptedPic->setPixmap( p );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "D&ecrypt" ) );
+        }
+    }
+    else {
+        if( d->m_toggleEncryption ) {
+            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
+            d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be encrypted." ) );
+            d->m_aboutUi->lblEncryptedPic->setPixmap( p );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "Don't &encrypt" ) );
+        }
+        else {
+            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );
+            d->m_aboutUi->lblEncrypted->setText( i18n( "This document is not encrypted" ) );
+            d->m_aboutUi->lblEncryptedPic->setPixmap( p );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "&Encrypt" ) );
+        }
+    }
+}
+
 void KoDocumentInfoDlg::slotDeleteAuthorInfo()
 {
     d->m_authorUi->leFullName->clear();
@@ -287,6 +371,102 @@ void KoDocumentInfoDlg::slotLoadFromKABC()
     d->m_authorUi->lePostal->setText( a.postalCode() );
     d->m_authorUi->leCity->setText( a.locality() );
     d->m_authorUi->leStreet->setText( a.street() );
+}
+
+void KoDocumentInfoDlg::slotSaveEncryption()
+{
+    if( !d->m_applyToggleEncryption )
+        return;
+
+    KoDocument* doc = dynamic_cast< KoDocument* >( d->m_info->parent() );
+    if( !doc )
+        return;
+    KoMainWindow* mainWindow = dynamic_cast< KoMainWindow* >( parent() );
+
+    if( doc->specialOutputFlag( ) == KoDocument::SaveEncrypted ) {
+        // Decrypt
+        if( KMessageBox::warningContinueCancel(
+                    this,
+                    i18n( "<qt>Decrypting the document will remove the password protection from it."
+                          "<p>Do you still want to decrypt the file?</qt>" ),
+                    i18n( "Confirm Decrypt" ),
+                    KGuiItem( i18n( "Decrypt" ) ),
+                    "DecryptConfirmation"
+            ) != KMessageBox::Continue )
+        {
+            return;
+        }
+        bool modified = doc->isModified( );
+        doc->setOutputMimeType( doc->outputMimeType( ), doc->specialOutputFlag( ) & ~KoDocument::SaveEncrypted );
+        if( !mainWindow ) {
+            KMessageBox::information(
+                    this,
+                    i18n( "<qt>Your document could not be saved automatically."
+                          "<p>To complete the decryption, please save the document.</qt>" ),
+                    i18n( "Save Document" ),
+                    "DecryptSaveMessage" );
+            return;
+        }
+        if( modified && KMessageBox::questionYesNo(
+                    this,
+                    i18n( "<qt>The document has been changed since it was opened. To complete the decryption the document needs to be saved."
+                          "<p>Do you want to save the document now?</qt>" ),
+                    i18n( "Save Document" ),
+                    KStandardGuiItem::save(),
+                    KStandardGuiItem::dontSave(),
+                    "DecryptSaveConfirmation"
+            ) != KMessageBox::Yes )
+        {
+            return;
+        }
+    }
+    else {
+        // Encrypt
+        bool modified = doc->isModified( );
+        if( !doc->url( ).isEmpty( ) && !( doc->mimeType( ).startsWith( "application/vnd.oasis.opendocument." ) && doc->specialOutputFlag( ) == 0 ) ) {
+            KMimeType::Ptr mime = KMimeType::mimeType( doc->mimeType( ) );
+            QString comment = mime ? mime->comment() : i18n( "%1 (unknown file type)", QString::fromLatin1( doc->mimeType( ) ) );
+            if( KMessageBox::warningContinueCancel(
+                        this,
+                        i18n( "<qt>The document is currently saved as %1. The document needs to be changed to <b>OASIS OpenDocument</b> to be encrypted."
+                              "<p>Do you want to change the file to OASIS OpenDocument?</qt>", QString( "<b>%1</b>" ).arg( comment ) ),
+                        i18n( "Change Filetype" ),
+                        KGuiItem( i18n( "Change" ) ),
+                        "EncryptChangeFiletypeConfirmation"
+                ) != KMessageBox::Continue ) {
+                return;
+            }
+            doc->resetURL( );
+        }
+        doc->setMimeType( doc->nativeOasisMimeType( ) );
+        doc->setOutputMimeType( doc->nativeOasisMimeType( ), KoDocument::SaveEncrypted );
+        if( !mainWindow ) {
+            KMessageBox::information(
+                    this,
+                    i18n( "<qt>Your document could not be saved automatically."
+                          "<p>To complete the encryption, please save the document.</qt>" ),
+                    i18n( "Save Document" ),
+                    "EncryptSaveMessage" );
+            return;
+        }
+        if( modified && KMessageBox::questionYesNo(
+                    this,
+                    i18n( "<qt>The document has been changed since it was opened. To complete the encryption the document needs to be saved."
+                          "<p>Do you want to save the document now?</qt>" ),
+                    i18n( "Save Document" ),
+                    KStandardGuiItem::save(),
+                    KStandardGuiItem::dontSave(),
+                    "EncryptSaveConfirmation"
+            ) != KMessageBox::Yes )
+        {
+            return;
+        }
+    }
+    // Why do the dirty work ourselves?
+    mainWindow->slotFileSave( );
+    d->m_toggleEncryption = false;
+    d->m_applyToggleEncryption = false;
+    d->m_documentSaved = true;
 }
 
 #include "KoDocumentInfoDlg.moc"

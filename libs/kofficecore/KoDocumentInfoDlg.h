@@ -59,6 +59,9 @@ class KOFFICECORE_EXPORT KoDocumentInfoDlg : public KPageDialog
     /** The destructor */
     virtual ~KoDocumentInfoDlg();
 
+    /** Returns true if the document was saved when the dialog was closed */
+    bool isDocumentSaved();
+
   public slots:
     /** Connected to the okClicked() signal */
     void slotApply();
@@ -66,10 +69,14 @@ class KOFFICECORE_EXPORT KoDocumentInfoDlg : public KPageDialog
   private slots:
     /** Connected with clicked() from pbReset - Reset parts of the metadata */
     void slotResetMetaData();
+    /** Connected with clicked() from pbEncrypt - Toggle the encryption of the document */
+    void slotToggleEncryption();
     /** Connected with clicked() from pbDelete - Delete all author metadata */
     void slotDeleteAuthorInfo();
     /** Connected with clicked() from pbLoadKABC - Load metadata from KABC */
     void slotLoadFromKABC();
+    /** Saves the document with changed encryption */
+    void slotSaveEncryption();
 
   private:
     /** Sets up the aboutWidget and fills the widgets with content */

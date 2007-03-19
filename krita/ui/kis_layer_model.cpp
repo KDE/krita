@@ -27,10 +27,15 @@ public:
 
 KisLayerModel::KisLayerModel( KisGroupLayerSP rootLayer, QObject * parent )
     : KoDocumentSectionModel( parent )
+    , m_d( new Private )
 {
-    m_d = new Private();
     m_d->rootLayer = rootLayer;
 
+}
+
+KisLayerModel::~KisLayerModel()
+{
+    delete m_d;
 }
 
 QModelIndex KisLayerModel::indexFromLayer(KisLayer *layer) const

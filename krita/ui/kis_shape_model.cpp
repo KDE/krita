@@ -27,9 +27,14 @@ public:
 
 KisShapeModel::KisShapeModel( KisImageSP image, QObject * parent )
     : QObject( parent )
+    , m_d( new Private )
 {
-    m_d = new Private();
     m_d->image = image;
+}
+
+KisShapeModel::~KisShapeModel()
+{
+    delete m_d;
 }
 
 #include "kis_shape_model.moc"

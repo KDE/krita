@@ -34,11 +34,12 @@ class KisShapeModel : QObject {
 public:
 
     KisShapeModel( KisImageSP image, QObject *parent = 0 );
+    ~KisShapeModel();
 
 private:
 
     class Private;
-    Private * m_d;
+    Private * const m_d;
 
 };
 

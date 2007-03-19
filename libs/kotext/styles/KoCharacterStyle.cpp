@@ -33,6 +33,7 @@ KoCharacterStyle::KoCharacterStyle(QObject *parent)
     m_stylesPrivate = new StylePrivate();
     setFontPointSize(12.0);
     setFontWeight(QFont::Normal);
+    setFontItalic(false);
     setVerticalAlignment(QTextCharFormat::AlignNormal);
     setForeground(Qt::black);
 }

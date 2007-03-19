@@ -466,7 +466,8 @@ void KoDocumentInfoDlg::slotSaveEncryption()
     mainWindow->slotFileSave( );
     d->m_toggleEncryption = false;
     d->m_applyToggleEncryption = false;
-    d->m_documentSaved = true;
+    // Detects when the user cancelled saving
+    d->m_documentSaved = !doc->url( ).isEmpty( );
 }
 
 #include "KoDocumentInfoDlg.moc"

@@ -33,7 +33,6 @@ KoCharacterStyle::KoCharacterStyle(QObject *parent)
     m_stylesPrivate = new StylePrivate();
     setFontPointSize(12.0);
     setFontWeight(QFont::Normal);
-    setFontItalic(false);
     setVerticalAlignment(QTextCharFormat::AlignNormal);
     setForeground(Qt::black);
 }
@@ -252,12 +251,17 @@ void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
         setFontWeight( boldness );
     }
 
+    bool italic = false;
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) ) { // 3.10.19
         if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "italic" ||
              styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
-            setFontItalic( true );
+            //setFontItalic( true );
+            italic = true;
         }
     }
+    //sebsauer, 2007-03-19, we always call setFontItalic() here since it works
+    //for now in KWOpenDocumentLoader better that way.
+    setFontItalic( italic );
 
 //TODO
 #if 0

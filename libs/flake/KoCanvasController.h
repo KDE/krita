@@ -128,8 +128,9 @@ public:
      * are changed so that the centerpoint of the rectangle is centered if possible.
      *
      * @param rect the rectangle to make visible
+     * @param smooth if true the viewport translation will make be just enough to ensure visibility, no more.
      */
-    void ensureVisible( const QRectF &rect );
+    void ensureVisible( const QRectF &rect, bool smooth = false );
 
     /**
      * @brief Scrolls the content of the canvas so that the given shape is visible.

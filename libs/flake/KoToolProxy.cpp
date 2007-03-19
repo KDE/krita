@@ -84,7 +84,7 @@ public:
         QRectF mouseArea(scrollEdgePoint, QSizeF(offset.x(), offset.y()));
         mouseArea.setTopLeft(mouseArea.center());
 
-        controller->canvas()->ensureVisible(mouseArea);
+        controller->ensureVisible(mouseArea, true);
 
         QPoint moved(offsetX - controller->canvasOffsetX(), offsetY - controller->canvasOffsetY());
         if(moved.x() == 0 && moved.y() == 0)

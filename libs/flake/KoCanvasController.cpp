@@ -215,7 +215,7 @@ void KoCanvasController::ensureVisible( KoShape *shape ) {
     ensureVisible( shape->boundingRect() );
 }
 
-void KoCanvasController::ensureVisible( const QRectF &rect ) {
+void KoCanvasController::ensureVisible( const QRectF &rect, bool smooth ) {
     QRect currentVisible (qMax(0, -canvasOffsetX()), qMax(0, -canvasOffsetY()), visibleWidth(), visibleHeight());
 
     // convert the document based rect into a canvas based rect
@@ -225,11 +225,11 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
         return; // its visible. Nothing to do.
 
     // if we move, we move a little more so the amount of times we have to move is less.
-    int jumpWidth = currentVisible.width() / 5;
-    int jumpHeight = currentVisible.height() / 5;
-    if(viewRect.width() + jumpWidth > currentVisible.width())
+    int jumpWidth = smooth ? 0 : currentVisible.width() / 5;
+    int jumpHeight = smooth ? 0 : currentVisible.height() / 5;
+    if(!smooth && viewRect.width() + jumpWidth > currentVisible.width())
         jumpWidth = 0;
-    if(viewRect.height() + jumpHeight > currentVisible.height())
+    if(!smooth && viewRect.height() + jumpHeight > currentVisible.height())
         jumpHeight = 0;
 
     int horizontalMove = 0;
@@ -244,7 +244,7 @@ void KoCanvasController::ensureVisible( const QRectF &rect ) {
     if(currentVisible.height() <= viewRect.height())       // center view
         verticalMove = viewRect.center().y() - currentVisible.center().y();
     if(currentVisible.y() > viewRect.y())               // move up
-        verticalMove = qMax(0, currentVisible.y() - jumpHeight) - viewRect.y();
+        verticalMove = viewRect.y() - currentVisible.y() - jumpHeight;
     else if(currentVisible.bottom() < viewRect.bottom()) // move down
         verticalMove = viewRect.bottom() - qMax(0, currentVisible.bottom() - jumpHeight);
 

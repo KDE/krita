@@ -147,16 +147,6 @@ public:
      */
     KoShapeController * shapeController() const;
 
-    /*
-     * The following 4 methods should be implemented by all canvasses to allow the canvascontroller to
-     * provide the stuff needed for a zoom tool
-     *
-     */
-    virtual void setZoom(double /*zoom*/) { }
-    virtual double zoom() const { return 0;}
-    virtual void zoomIn() { }
-    virtual void zoomOut() { }
-
     /**
      * @brief Scrolls the content of the canvas so that the given rect is visible.
      *

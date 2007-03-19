@@ -153,17 +153,17 @@ public:
      *
      * @param center the position to zoom in on
      */
-    void zoomIn(const QPointF &center);
+    void zoomIn(const QPoint &center);
 
     /**
      * @brief zooms out around the center.
      *
-     * The center must be specified in document coordinates. The scrollbar positions
+     * The center must be specified in pixel coordinates. The scrollbar positions
      * are changed so that the center becomes center if possible.
      *
      * @param center the position to zoom out around
      */
-    void zoomOut(const QPointF &center);
+    void zoomOut(const QPoint &center);
 
     /**
      * @brief zoom so that rect is exactly visible (as close as possible)
@@ -171,9 +171,20 @@ public:
      * The rect must be specified in document coordinates. The scrollbar positions
      * are changed so that the center of the rect becomes center if possible.
      *
-     * @param rect the rect that should fit the view afterwards
+     * @param rect the rect in pixel coords that should fit the view afterwards
      */
-    void zoomTo(const QRectF &rect);
+    void zoomTo(const QRect &rect);
+
+    /**
+     * @brief repositions the scrollbars so previous center is once again center
+     *
+     * The previous center is cached from when the user uses the scrollbars or zoomTo
+     * are called. zoomTo is mostly used when a zoom tool of sorts have marked an area
+     * to zoom in on
+     *
+     * The success of this method is limited by the size of thing. But we try our best.
+     */
+    void recenterPreferred();
 
 signals:
     /**
@@ -224,6 +235,14 @@ signals:
      */
     void moveDocumentOffset( const QPoint &point );
 
+    /**
+     * Emitted when zoomTo have calculated a factor by which the zoom should change,
+     * or if someone calls requestZoomBy
+     * Someone needs to connect to this and take action
+     *
+     * @param factor by how much the zoom needs to change.
+     */
+    void zoomBy( const double factor );
 
 public slots:
 
@@ -246,7 +265,6 @@ protected slots:
 
 protected:
 
-    void centerOnPoint(const QPointF &center);
     void paintEvent( QPaintEvent * event );
     void resizeEvent(QResizeEvent * resizeEvent);
     void dragEnterEvent( QDragEnterEvent * event );

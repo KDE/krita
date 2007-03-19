@@ -135,7 +135,7 @@ public:
 
     KisCanvas2 *canvas;
     KisDoc2 *doc;
-    KoViewConverter * viewConverter;
+    KoZoomHandler * viewConverter;
     KoCanvasController * canvasController;
     KisResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
@@ -464,7 +464,7 @@ void KisView2::createManagers()
 
     // the following cast is not really safe, but better here than in the zoomManager
     // best place would be outside kisview too
-    m_d->zoomManager = new KisZoomManager( this,(KoZoomHandler *) m_d->viewConverter, m_d->canvasController);
+    m_d->zoomManager = new KisZoomManager( this, m_d->viewConverter, m_d->canvasController);
     m_d->zoomManager->setup( actionCollection() );
 
     m_d->imageManager = new KisImageManager( this );

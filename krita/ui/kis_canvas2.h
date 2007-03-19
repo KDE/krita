@@ -103,11 +103,6 @@ public: // KoCanvasBase implementation
 
     void resetCanvas();
 
-    virtual void setZoom(double /*zoom*/);
-    virtual double zoom() const;
-    virtual void zoomIn();
-    virtual void zoomOut();
-
     // Temporary!
 #ifdef __GNUC__
 #warning: "Make the tools get the current paint device from the shape selection instead of directly from the canvas!"
@@ -120,7 +115,6 @@ public: // KisCanvas2 methods
     KisView2* view();
 
     bool isOpenGLCanvas() { return false; }
-    void setZoomAction(KoZoomAction *a);
 
 public slots:
 

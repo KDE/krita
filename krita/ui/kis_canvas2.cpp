@@ -97,7 +97,6 @@ public:
 #ifdef HAVE_OPENGL
     KisOpenGLImageContextSP openGLImageContext;
 #endif
-    KoZoomAction *zoomAction;
 };
 
 KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc)
@@ -382,31 +381,6 @@ void KisCanvas2::resetCanvas()
 
 }
 
-void KisCanvas2::setZoomAction(KoZoomAction *a)
-{
-    m_d->zoomAction = a;
-}
-
-void KisCanvas2::setZoom(double zoom)
-{
-    m_d->zoomAction->setZoom(int(zoom));
-}
-
-
-double KisCanvas2::zoom() const
-{
-    return  1;//->viewConverter->zoom();
-}
-
-void KisCanvas2::zoomIn()
-{
-    m_d->zoomAction->zoomIn();
-}
-
-void KisCanvas2::zoomOut()
-{
-    m_d->zoomAction->zoomOut();
-}
 
 void KisCanvas2::documentOffsetMoved( const QPoint &documentOffset )
 {

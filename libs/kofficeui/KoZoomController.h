@@ -43,7 +43,6 @@ class QSize;
  * percent the zoom is forwarded, in mode pageWidth this is calculated based
  * on the page size and the canvas size (the latter can be fetched from the
  * canvasController)
- * Will set the effective zoom on the CanvasController.
  * 
  * # KoView or decendent calls setZoom(double) / setZoomMode(mode)
  * Mostly used just one time for the initialisation.
@@ -52,8 +51,8 @@ class QSize;
  * 
  * # The user uses the zoomTool to zoom to a specific rect.
  * The zoom tool acts on the CanvasController to adjust the zoom level.
- * The canvasController emits the new zoom level (in integer percent will do)
- * which the zoomController then emits for the application to persist.  It
+ * The canvasController emits the a request to alter zoom (as a factor of current zoom)
+ * which the zoomController then acts upon and emits for the application to persist.  It
  * will alter the the mode to percent based.
 */
 class KOFFICEUI_EXPORT KoZoomController : public QObject {
@@ -81,11 +80,12 @@ private slots:
     // should realy be on d pointer..
     /// slot for the zoomAction to connect to.
     void setZoom(KoZoomMode::Mode mode, int zoom);
-    // slot for the canvasController to connect to.
-    void setZoom(int zoom);
 
     /// so we know when the canvasController changes size
     void setAvailableSize(const QSize &Size);
+
+    /// when the canvas controller wants us to change zoom
+    void requestZoomBy(const double factor);
 
 
 // important note;

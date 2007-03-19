@@ -31,12 +31,14 @@ m_controller(controller)
 {
 }
 
-void KoZoomStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) {
+void KoZoomStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
+{
+    QRect pixelRect = m_controller->canvas()->viewConverter()->documentToView(selectRect()).toRect();
 
-    if(selectRect().width() > 5 && selectRect().height() > 5)
-        m_controller->zoomTo(selectRect());
+    if(pixelRect.width() > 5 && pixelRect.height() > 5)
+        m_controller->zoomTo(pixelRect);
     else if( modifiers & Qt::ControlModifier)
-        m_controller->zoomOut(selectRect().center());
+        m_controller->zoomOut(pixelRect.center());
     else
-        m_controller->zoomIn(selectRect().center());
+        m_controller->zoomIn(pixelRect.center());
 }

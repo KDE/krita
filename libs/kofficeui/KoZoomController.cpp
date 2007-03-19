@@ -42,6 +42,8 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
             this, SLOT(setZoom(KoZoomMode::Mode, int)));
 
     connect(m_canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize( const QSize & ) ) );
+
+    connect(m_canvasController, SIGNAL( zoomBy(const double ) ), this, SLOT( requestZoomBy( const double ) ) );
 }
 
 KoZoomAction *KoZoomController::zoomAction() const
@@ -70,8 +72,6 @@ void KoZoomController::setPageSize(const QSizeF &pageSize)
 void KoZoomController::setZoom(KoZoomMode::Mode mode, int zoom)
 {
     m_zoomHandler->setZoomMode(mode);
-
-//    KisImageSP img = m_view->image();
 
     double zoomF;
     if(mode == KoZoomMode::ZOOM_CONSTANT)
@@ -105,10 +105,9 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, int zoom)
     m_canvasController->setDocumentSize(
             QSize( int(0.5 + m_zoomHandler->documentToViewX(m_pageSize.width())),
                    int(0.5 + m_zoomHandler->documentToViewY(m_pageSize.height())) ) );
-}
 
-void KoZoomController::setZoom(int /*zoom*/)
-{
+    // Finally ask the canvasController to recenter
+    m_canvasController->recenterPreferred();
 }
 
 void KoZoomController::setAvailableSize(const QSize &/*size*/)
@@ -117,6 +116,14 @@ void KoZoomController::setAvailableSize(const QSize &/*size*/)
         setZoom(KoZoomMode::ZOOM_WIDTH, 0);
     if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
         setZoom(KoZoomMode::ZOOM_PAGE, 0);
+}
+
+void KoZoomController::requestZoomBy(const double factor)
+{
+    int zoom = m_zoomHandler->zoomInPercent();
+    m_action->setZoom(int(factor*zoom));
+    setZoom(KoZoomMode::ZOOM_CONSTANT, int(factor*zoom));
+    m_action->setEffectiveZoom(int(factor*zoom));
 }
 
 #include "KoZoomController.moc"

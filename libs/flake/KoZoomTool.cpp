@@ -22,6 +22,7 @@
 #include "KoZoomTool.h"
 #include "KoZoomStrategy.h"
 #include "KoPointerEvent.h"
+#include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 
 //   #include <QMouseEvent>
@@ -45,10 +46,11 @@ void KoZoomTool::wheelEvent ( KoPointerEvent * event )
 {
     if(event->modifiers() & Qt::ControlModifier)
     {
+        QPoint pt = m_controller->canvas()->viewConverter()->documentToView(event->point).toPoint();
         if(event->delta() >0)
-            m_controller->zoomIn(event->point);
+            m_controller->zoomIn(pt);
         else
-            m_controller->zoomOut(event->point);
+            m_controller->zoomOut(pt);
     }
     else
         event->ignore();

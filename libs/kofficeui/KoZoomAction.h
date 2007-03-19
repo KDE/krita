@@ -76,12 +76,14 @@ public Q_SLOTS:
   /**
    * Sets the zoom. If it's not yet on the list of zoom values, it will be inserted
    * into the list at proper place so that the the values remain sorted.
+   * emits zoomChanged
    */
   void setZoom( const QString& zoom );
 
   /**
    * Sets the zoom. If it's not yet on the list of zoom values, it will be inserted
    * into the list at proper place so that the the values remain sorted.
+   * emits zoomChanged
    */
   void setZoom( int zoom );
 

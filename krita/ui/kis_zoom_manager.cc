@@ -73,7 +73,6 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
 
     m_zoomAction = m_zoomController->zoomAction();
     m_view->viewBar()->addAction(m_zoomAction);
-    m_view->canvasBase()->setZoomAction(m_zoomAction);
 
     m_showRulersAction  = new KToggleAction(i18n("Show Rulers"), this);
     actionCollection->addAction("view_ruler", m_showRulersAction );

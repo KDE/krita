@@ -97,6 +97,7 @@ set(kritaui_LIB_SRCS
     kis_layer_shape.cc
     kis_mask_shape.cc
     kis_layer_container_shape.cc
+    kis_shape_model.cpp
 )
 
 

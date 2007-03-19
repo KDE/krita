@@ -3,7 +3,7 @@
  *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
  *  Copyright (c) 2001 Toshitaka Fujioka  <fujioka@kde.org>
  *  Copyright (c) 2002, 2003 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004-2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004-2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

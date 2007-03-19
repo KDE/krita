@@ -19,16 +19,18 @@
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 
-class KisLayerModel::Private {
-
+class KisLayerModel::Private
+{
+public:
     KisGroupLayerSP rootLayer;
 };
 
 KisLayerModel::KisLayerModel( KisGroupLayerSP rootLayer, QObject * parent )
     : KoDocumentSectionModel( parent )
-    , m_d( new Private() )
-    , m_d->rootLayer( rootLayer )
 {
+    m_d = new Private();
+    m_d->rootLayer = rootLayer;
+
 }
 
 QModelIndex KisLayerModel::indexFromLayer(KisLayer *layer) const

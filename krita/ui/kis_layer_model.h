@@ -32,8 +32,8 @@ class KisLayerModel : KoDocumentSectionModel
 
 public: // from QAbstractItemModel
 
-    KisLayerModel( KisLayerSP rootLayer, QObject * parent );
-
+    KisLayerModel( KisGroupLayerSP rootLayer, QObject * parent );
+    QModelIndex indexFromLayer(KisLayer *layer) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;

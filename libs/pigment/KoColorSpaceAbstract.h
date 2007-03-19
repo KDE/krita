@@ -101,16 +101,16 @@ namespace {
                     weights++;
                 }
                 // set totalAlpha to the minimum between its value and the maximum value of the channels
-                if (totalAlpha > KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max()) {
-                    totalAlpha = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max();
+                if (totalAlpha > KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max) {
+                    totalAlpha = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max;
                 }
                 typename _CSTraits::channels_type* dstColor = _CSTraits::nativeArray(dst);
                 if (totalAlpha > 0) {
                     for(uint i = 0; i < _CSTraits::channels_nb; i++)
                     {
                         typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype v = totals[i] / totalAlpha;
-                        if(v > KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max()) {
-                            v = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max();
+                        if(v > KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max) {
+                            v = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max;
                         }
                         dstColor[ i ] = v;
                     }
@@ -149,7 +149,7 @@ namespace {
                     for(uint i = 0; i < _CSTraits::channels_nb; i++)
                     {
                         typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype v = totals[i] / factor + offset;
-                        dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::min(), KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max());
+                        dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::min, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max);
                     }
     
                 }
@@ -170,9 +170,9 @@ namespace {
                 while(nPixels--)
                 {
                     m_colorSpace->toRgbA16(src, reinterpret_cast<quint8 *>(m_rgba), 1);
-                    m_rgba[0] = KoColorSpaceMathsTraits<quint16>::max() - m_rgba[0];
-                    m_rgba[1] = KoColorSpaceMathsTraits<quint16>::max() - m_rgba[1];
-                    m_rgba[2] = KoColorSpaceMathsTraits<quint16>::max() - m_rgba[2];
+                    m_rgba[0] = KoColorSpaceMathsTraits<quint16>::max - m_rgba[0];
+                    m_rgba[1] = KoColorSpaceMathsTraits<quint16>::max - m_rgba[1];
+                    m_rgba[2] = KoColorSpaceMathsTraits<quint16>::max - m_rgba[2];
                     m_colorSpace->fromRgbA16(reinterpret_cast<quint8 *>(m_rgba), dst, 1);
                     src += m_psize;
                 }
@@ -218,7 +218,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
         {
             if(channelIndex > _CSTraits::channels_nb) return QString("Error");
             typename _CSTraits::channels_type c = _CSTraits::nativeArray(pixel)[channelIndex];
-            return QString().setNum( 100. * ((double)c ) / KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max() );
+            return QString().setNum( 100. * ((double)c ) / KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max);
         }
         
         virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const {

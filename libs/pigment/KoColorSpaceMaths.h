@@ -26,61 +26,56 @@
 template<typename _T>
 class KoColorSpaceMathsTraits {
     public:
-        /// @return the maximum value of the channel
-        inline static _T max();
-        /// @return the minimum value of the channel
-        inline static _T min();
-        /// @return the number of bits
-        inline static qint8 bits();
 };
 
 template<>
 class KoColorSpaceMathsTraits<quint8> {
     public:
         typedef qint32 compositetype;
-        inline static quint8 max() { return 0x00FF; }
-        inline static quint8 min() { return 0; }
-        inline static qint8 bits() { return 8; }
+        static const quint8 max = 0x00FF;
+        static const quint8 min = 0;
+        static const qint8 bits = 8;
 };
 
 template<>
 class KoColorSpaceMathsTraits<quint16> {
     public:
         typedef qint64 compositetype;
-        inline static quint16 max() { return 0xFFFF; }
-        inline static quint16 min() { return 0; }
-        inline static qint8 bits() { return 16; }
+        static const quint16 max = 0xFFFF;
+        static const quint16 min = 0;
+        static const qint8 bits = 16;
 };
 
 template<>
 class KoColorSpaceMathsTraits<qint16> {
     public:
         typedef qint64 compositetype;
-        inline static qint16 max() { return 32767; }
-        inline static qint16 min() { return -32768; }
-        inline static qint8 bits() { return 16; }
+        static const qint16 max = 32767;
+        static const qint16 min = -32768;
+        static const qint8 bits = 16;
 };
 
 template<>
 class KoColorSpaceMathsTraits<quint32> {
     public:
         typedef qint64 compositetype;
-        inline static quint32 max() { return 0xFFFFFFFF; }
-        inline static quint32 min() { return 0; }
-        inline static qint8 bits() { return 32; }
+        static const quint32 max = 0xFFFFFFFF;
+        static const quint32 min = 0;
+        static const qint8 bits= 32;
 };
 
 #include <config-openexr.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
-
+#include <pigment_export.h>
+                 
 template<>
-class KoColorSpaceMathsTraits<half> {
+class PIGMENT_EXPORT KoColorSpaceMathsTraits<half> { // This class is exported as unfortunately half constants can't be defined in the class declaration
     public:
         typedef double compositetype;
-        inline static half max() { return 0.0; }
-        inline static half min() { return 1.0; }
-        inline static qint8 bits() { return 16; }
+        static const half max;
+        static const half min;
+        static const qint8 bits = 16;
 };
 #endif
 
@@ -88,9 +83,9 @@ template<>
 class KoColorSpaceMathsTraits<float> {
     public:
         typedef float compositetype;
-        inline static float max() { return 0.0; }
-        inline static float min() { return 1.0; }
-        inline static qint8 bits() { return 32; }
+        static const float max = 0.0;
+        static const float min = 1.0;
+        static const qint8 bits = 32;
 };
 
 template<typename _T, typename _Tdst = _T>
@@ -101,15 +96,15 @@ class KoColorSpaceMaths {
         inline static traits_compositetype multiply(traits_compositetype a, 
             typename  KoColorSpaceMathsTraits<_Tdst>::compositetype b)
         {
-            return ((traits_compositetype)a * b ) /  KoColorSpaceMathsTraits<_Tdst>::max();
+            return ((traits_compositetype)a * b ) /  KoColorSpaceMathsTraits<_Tdst>::max;
         }
         inline static _T divide(_T a, _Tdst b)
         {
-            return ((traits_compositetype)a *  KoColorSpaceMathsTraits<_Tdst>::max() ) / b;
+            return ((traits_compositetype)a *  KoColorSpaceMathsTraits<_Tdst>::max ) / b;
         }
         inline static _T blend(_T a, _T b, _T alpha)
         {
-            traits_compositetype c = ( ((traits_compositetype)a - (traits_compositetype)b) * alpha ) >> traits::bits();
+            traits_compositetype c = ( ((traits_compositetype)a - (traits_compositetype)b) * alpha ) >> traits::bits;
             return c+b;
         }
         /**

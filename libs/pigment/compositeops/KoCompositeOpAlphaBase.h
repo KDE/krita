@@ -24,9 +24,9 @@
 #include "KoCompositeOp.h"
 
 
-#define NATIVE_MAX_VALUE KoColorSpaceMathsTraits<channels_type>::max()
-#define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::max()
-#define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::min()
+#define NATIVE_MAX_VALUE KoColorSpaceMathsTraits<channels_type>::max
+#define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::max
+#define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::min
 
 /**
  * A template base class for all composite op that compose color channels values.

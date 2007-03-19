@@ -118,9 +118,9 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB1
             typename _CSTraits::channels_type *src = reinterpret_cast<typename _CSTraits::channels_type *>(srcU8);
             while(nPixels--)
             {
-                src[0] = KoColorSpaceMathsTraits<quint16>::max() - src[0];
-                src[1] = KoColorSpaceMathsTraits<quint16>::max() - src[1];
-                src[2] = KoColorSpaceMathsTraits<quint16>::max() - src[2];
+                src[0] = KoColorSpaceMathsTraits<quint16>::max - src[0];
+                src[1] = KoColorSpaceMathsTraits<quint16>::max - src[1];
+                src[2] = KoColorSpaceMathsTraits<quint16>::max - src[2];
                 src += this->pixelSize();
             }
         }

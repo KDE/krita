@@ -22,6 +22,7 @@
 
 #include <KoColorTransformation.h>
 #include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 
 /**
  * This class use a convertion to LabA16 to darken pixels. Do not use directly. Use KoColorSpace::createDarkenAdjustement

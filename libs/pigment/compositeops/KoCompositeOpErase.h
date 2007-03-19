@@ -23,8 +23,8 @@
 #include "KoColorSpaceMaths.h"
 #include "KoCompositeOp.h"
 
-#define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::max()
-#define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::min()
+#define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::max
+#define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::min
 
 /**
  * A template version of the erase composite operation to use in colorspaces<

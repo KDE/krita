@@ -21,3 +21,6 @@
 
 #include <KoColorSpaceMaths.h>
 
+const half KoColorSpaceMathsTraits<half>::max = 1.0;
+const half KoColorSpaceMathsTraits<half>::min = 0.0;
+

@@ -175,6 +175,30 @@ QString KoCharacterStyle::propertyString(int key) const {
     return qvariant_cast<QString>(*variant);
 }
 
+// OASIS 14.2.29
+static void importOasisUnderline( const QString& type, const QString& style,
+                                  QTextCharFormat::UnderlineStyle& formatstyle )
+{
+    formatstyle = QTextCharFormat::NoUnderline;
+    if ( type == "single" )
+        formatstyle = QTextCharFormat::SingleUnderline;
+    else if ( type == "double" )
+        formatstyle = QTextCharFormat::SingleUnderline; //TODO
+    else if ( style == "dotted" )
+        formatstyle = QTextCharFormat::DotLine;
+    else if ( style == "dash" || style == "long-dash" ) // not in kotext
+        formatstyle = QTextCharFormat::DashUnderline;
+    else if ( style == "dot-dash" )
+        formatstyle = QTextCharFormat::DashDotLine;
+    else if ( style == "dot-dot-dash" )
+        formatstyle = QTextCharFormat::DashDotDotLine;
+    else if ( style == "wave" )
+        formatstyle = QTextCharFormat::SingleUnderline; //TODO
+
+    // TODO bold. But this is another attribute in OASIS (text-underline-width), which makes sense.
+    // We should separate them in kotext...
+}
+
 void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
     //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
 
@@ -221,6 +245,7 @@ void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
             boldness = fontWeight.toInt() / 10;
         setFontWeight( boldness );
     }
+
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) ) { // 3.10.19
         if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "italic" ||
              styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
@@ -249,13 +274,17 @@ void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
         // not supported by OO: stylelines (solid, dash, dot, dashdot, dashdotdot)
     }
     */
+#endif
 
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-type" )
         || styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) ) { // OASIS 14.4.28
+        QTextCharFormat::UnderlineStyle underlineStyle;
         importOasisUnderline( styleStack.attributeNS( KoXmlNS::style, "text-underline-type" ),
                               styleStack.attributeNS( KoXmlNS::style, "text-underline-style" ),
-                              m_underlineType, m_underlineStyle );
+                              underlineStyle );
+        setUnderlineStyle(underlineStyle);
     }
+#if 0
     else if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline" ) ) { // OO compat (3.10.22), to be moved out
         importUnderline( styleStack.attributeNS( KoXmlNS::style, "text-underline" ),
                          m_underlineType, m_underlineStyle );

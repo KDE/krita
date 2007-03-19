@@ -64,7 +64,7 @@ namespace {
 }
 
 KoEncryptedStore::KoEncryptedStore( const QString & filename, Mode mode, const QByteArray & appIdentification )
-    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( filename ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_bPasswordUsed( false ), m_currentDir( NULL ) {
+    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( filename ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_bPasswordUsed( false ), m_bPasswordDeclined( false ), m_currentDir( NULL ) {
 
     m_pZip = new KZip( filename );
     m_bGood = true;
@@ -73,7 +73,7 @@ KoEncryptedStore::KoEncryptedStore( const QString & filename, Mode mode, const Q
 }
 
 KoEncryptedStore::KoEncryptedStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification )
-    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_bPasswordUsed( false ), m_currentDir( NULL ) {
+    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_bPasswordUsed( false ), m_bPasswordDeclined( false ), m_currentDir( NULL ) {
 
     m_pZip = new KZip( dev );
     m_bGood = true;
@@ -82,7 +82,7 @@ KoEncryptedStore::KoEncryptedStore( QIODevice *dev, Mode mode, const QByteArray 
 }
 
 KoEncryptedStore::KoEncryptedStore( QWidget* window, const KUrl& url, const QString & filename, Mode mode, const QByteArray & appIdentification )
-    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( url.url( ) ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_bPasswordUsed( false ), m_currentDir( NULL ) {
+    : m_qcaInit( QCA::Initializer() ), m_password( QSecureArray() ), m_filename( QString( url.url( ) ) ), m_manifestBuffer( QByteArray() ), m_tempFile( NULL ), m_bPasswordUsed( false ), m_bPasswordDeclined( false ), m_currentDir( NULL ) {
 
     m_window = window;
     m_bGood = true;
@@ -482,6 +482,16 @@ bool KoEncryptedStore::openRead( const QString& name ) {
     m_iSize = fileZipEntry->size( );
     if( m_encryptionData.contains( name ) ) {
         // This file is encrypted, do some decryption first
+        if( m_bPasswordDeclined ) {
+            // The user has already declined to give a password
+            // Open the file as empty
+            m_stream->close( );
+            delete m_stream;
+            m_stream = new QBuffer( );
+            m_stream->open( QIODevice::ReadOnly );
+            m_iSize = 0;
+            return true;
+        }
         QSecureArray encryptedFile( m_stream->readAll( ) );
         if( encryptedFile.size( ) != m_iSize ) {
             // Read error detected
@@ -516,8 +526,13 @@ bool KoEncryptedStore::openRead( const QString& name ) {
                     keepPass = false;
                 KPasswordDialog dlg( m_window , keepPass ? KPasswordDialog::ShowKeepPassword : static_cast<KPasswordDialog::KPasswordDialogFlags>(0) );
                 dlg.setPrompt(i18n( "Please enter the password to open this file." ) );
-                if( ! dlg.exec() )
-                    return false;
+                if( ! dlg.exec() ) {
+                    m_bPasswordDeclined = true;
+                    m_stream = new QBuffer( );
+                    m_stream->open( QIODevice::ReadOnly );
+                    m_iSize = 0;
+                    return true;
+                }
                 password = QSecureArray( dlg.password().toUtf8() );
                 if( keepPass )
                     keepPass = dlg.keepPassword();

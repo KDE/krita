@@ -111,6 +111,7 @@ protected:
     KZip *m_pZip;
     KTemporaryFile *m_tempFile;
     bool m_bPasswordUsed;
+    bool m_bPasswordDeclined;
 
     /** In "Read" mode this pointer is pointing to the
     current directory in the archive to speed up the verification process */

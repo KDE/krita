@@ -50,7 +50,7 @@ namespace Kross {
     /// \internal
     class RubyScriptPrivate {
         friend class RubyScript;
-        RubyScriptPrivate() : m_script(0), m_hasBeenCompiled(false)
+        RubyScriptPrivate() : m_script(0), m_hasBeenSuccessFullyExecuted(false)
         {
             if(RubyScriptPrivate::s_krossScript == 0)
             {
@@ -61,7 +61,7 @@ namespace Kross {
         VALUE m_script;
         QStringList m_functions;
         static VALUE s_krossScript;
-        bool m_hasBeenCompiled;
+        bool m_hasBeenSuccessFullyExecuted;
     };
 
 }
@@ -79,12 +79,13 @@ RubyScript::~RubyScript()
 {
 }
 
-void RubyScript::compile()
+void RubyScript::execute()
 {
     #ifdef KROSS_RUBY_SCRIPT_DEBUG
-        krossdebug("RubyScript::compile()");
+        krossdebug("RubyScript::execute()");
     #endif
 
+    // TODO: catch ruby exception
     ruby_nerrs = 0;
     ruby_errinfo = Qnil;
     VALUE src = RubyType<QString>::toVALUE( action()->code() );
@@ -107,24 +108,11 @@ void RubyScript::compile()
             krossdebug("Compilation has failed");
         #endif
         setError( QString("Failed to compile ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )) ); // TODO: get the error
-        d->m_hasBeenCompiled = false;
+        d->m_hasBeenSuccessFullyExecuted = false;
     } else {
-        d->m_hasBeenCompiled = true;
+        d->m_hasBeenSuccessFullyExecuted = true;
     }
-
-    #ifdef KROSS_RUBY_SCRIPT_DEBUG
-        krossdebug("Compilation was successful");
-    #endif
-}
-
-void RubyScript::execute()
-{
-    #ifdef KROSS_RUBY_SCRIPT_DEBUG
-        krossdebug("RubyScript::execute()");
-    #endif
-
-    // TODO: catch ruby exception
-    compile();
+    
 #if 0
     if (result != 0) {
         #ifdef KROSS_RUBY_SCRIPT_DEBUG
@@ -148,14 +136,15 @@ QStringList RubyScript::functionNames()
         krossdebug("RubyScript::getFunctionNames()");
     #endif
 
-    if(not d->m_hasBeenCompiled ) {
-        compile();
+    if(not d->m_hasBeenSuccessFullyExecuted ) {
+        execute();
     }
     return d->m_functions;
 }
 
 QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
 {
+    QVariant result;
     #ifdef KROSS_RUBY_SCRIPT_DEBUG
         krossdebug(QString("RubyScript::callFunction() name=%1").arg(name));
     #endif
@@ -165,15 +154,11 @@ QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
     ruby_in_eval++;
     //ruby_current_node
 
-    if(not d->m_hasBeenCompiled) {
-        compile();
+    if(not d->m_hasBeenSuccessFullyExecuted) {
+        execute();
     }
-
-    Q_ASSERT(d->m_hasBeenCompiled );
-
-    QVariant result;
-    int r = ruby_exec();
-    if (r != 0) {
+    if(not d->m_hasBeenSuccessFullyExecuted)
+    {
         #ifdef KROSS_RUBY_SCRIPT_DEBUG
             krossdebug("RubyScript::callFunction failed");
         #endif

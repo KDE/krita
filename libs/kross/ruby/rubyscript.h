@@ -84,13 +84,6 @@ namespace Kross {
             #endif
 
         private:
-
-            /**
-            * Compile the script.
-            */
-            void compile();
-
-        private:
             /// Private d-pointer.
             RubyScriptPrivate * const d;
     };

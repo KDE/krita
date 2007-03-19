@@ -327,7 +327,7 @@ QMatrix KoShape::transformationMatrix(const KoViewConverter *converter) const {
                 containerPos = converter->documentToView(containerPos);
             matrix.translate(containerPos.x(), containerPos.y());
         }
-        container = dynamic_cast<KoShapeContainer*>(container->parent());
+        container = container->parent();
         child = child->parent();
     }
 

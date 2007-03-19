@@ -24,6 +24,7 @@ set(kritaui_LIB_SRCS
     kis_color_cup.cc
     kis_config.cc
     kis_controlframe.cc
+    kis_layer_model.cpp
     kis_cursor.cc
     kis_custom_brush.cc
     kis_custom_image_widget.cc

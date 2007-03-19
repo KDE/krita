@@ -224,6 +224,7 @@ void KisLayerBox::slotSetColorSpace(const KoColorSpace * colorSpace)
 // range: 0-100
 void KisLayerBox::slotSetOpacity(int opacity)
 {
+    Q_ASSERT( opacity >= 0 && opacity <= 100 );
     intOpacity->blockSignals(true);
     intOpacity->setValue(opacity);
     intOpacity->blockSignals(false);

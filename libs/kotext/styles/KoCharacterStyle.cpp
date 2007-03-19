@@ -180,12 +180,14 @@ static void importOasisUnderline( const QString& type, const QString& style,
                                   QTextCharFormat::UnderlineStyle& formatstyle )
 {
     formatstyle = QTextCharFormat::NoUnderline;
+
+    //TODO needs to be supported via Qt::PenStyle/Qt::CustomDashLine
     if ( type == "single" )
         formatstyle = QTextCharFormat::SingleUnderline;
     else if ( type == "double" )
-        formatstyle = QTextCharFormat::SingleUnderline; //TODO
+        formatstyle = QTextCharFormat::SingleUnderline;
 
-    else if ( style == "solid" )
+    if ( style == "solid" )
         formatstyle = QTextCharFormat::SingleUnderline;
     else if ( style == "dotted" )
         formatstyle = QTextCharFormat::DotLine;

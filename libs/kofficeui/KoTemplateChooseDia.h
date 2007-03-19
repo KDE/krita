@@ -54,7 +54,7 @@ class KoTCDIconCanvas : public KIconCanvas
 	    : KIconCanvas( parent ) { Q_UNUSED(name) }
 
 	bool isCurrentValid() { return currentItem(); }
-	Q3IconViewItem * load(KoTemplateGroup *group, const QString& name, const KComponentData &instance);
+	QListWidgetItem * load(KoTemplateGroup *group, const QString& name, const KComponentData &instance);
 
     protected:
 	virtual void keyPressEvent( QKeyEvent *e ) {
@@ -66,17 +66,18 @@ class KoTCDIconCanvas : public KIconCanvas
 };
 
 /// @internal
-class KoTCDIconViewItem : public K3IconViewItem
+class KoTCDIconViewItem : public QListWidgetItem
 {
     public:
-	KoTCDIconViewItem(Q3IconView *parent=0)
-	    : K3IconViewItem ( parent )
+	KoTCDIconViewItem(QListWidget *parent=0)
+	    : QListWidgetItem ( parent )
 	    {}
 
-    explicit KoTCDIconViewItem(Q3IconView *parent=0, const QString &text=0, const QPixmap &icon=0,
+    explicit KoTCDIconViewItem(QListWidget *parent=0, const QString &text=0, const QPixmap &icon=0,
                       const QString &descr=0, const QString &fullname=0)
-	    : K3IconViewItem(parent, text, icon)
+	    : QListWidgetItem(text, parent)
 	    {
+            setIcon(icon);
             m_descr = descr;
             m_full = fullname;
 	    }
@@ -103,8 +104,8 @@ class KoTCDRecentFilesIconView : public KFileIconView {
 	KoTCDRecentFilesIconView( QWidget* parent, const char* name ) :
 		KFileIconView( parent, name ), toolTip(0)
 	{
-	    connect( this, SIGNAL( onItem( Q3IconViewItem * ) ),
-                     SLOT( showToolTip( Q3IconViewItem * ) ) );
+	    connect( this, SIGNAL( onItem( QListWidgetItem * ) ),
+                     SLOT( showToolTip( QListWidgetItem * ) ) );
 	    connect( this, SIGNAL( onViewport() ),
                      SLOT( removeToolTip() ) );
 	}
@@ -116,7 +117,7 @@ class KoTCDRecentFilesIconView : public KFileIconView {
         virtual void hideEvent( QHideEvent * );
 
     private slots:
-        void showToolTip( Q3IconViewItem* );
+        void showToolTip( QListWidgetItem* );
         void removeToolTip();
     private:
         QLabel* toolTip;
@@ -246,9 +247,9 @@ private:
 
 private slots:
 
-    void chosen(Q3IconViewItem *);
-    void currentChanged( Q3IconViewItem * );
-    void recentSelected( Q3IconViewItem * );
+    void chosen(QListWidgetItem *);
+    void currentChanged( QListWidgetItem * );
+    void recentSelected( QListWidgetItem * );
 };
 
 #endif

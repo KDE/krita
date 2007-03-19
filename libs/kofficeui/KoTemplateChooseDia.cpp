@@ -216,7 +216,7 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, cons
         d->tree = new KoTemplateTree(templateType, componentData, true);
 
     d->m_mainwidget = new QWidget();
-    setMainWidget( d->m_mainwidget ); 
+    setMainWidget( d->m_mainwidget );
 
     d->m_templateName = "";
     d->m_fullTemplateName = "";
@@ -317,15 +317,13 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
         d->m_recent->setSorting( static_cast<QDir::SortFlags>( QDir::Time | QDir::Reversed ) );
         layout->addWidget(d->m_recent,0,0);
 
-        QString oldGroup = d->m_componentData.config()->group();
-        KSharedConfigPtr config = d->m_componentData.config();
-        config->setGroup( "RecentFiles" );
+        KConfigGroup config( d->m_componentData.config(), "RecentFiles" );
 
         int i = 0;
         QString value;
         do {
                 QString key=QString( "File%1" ).arg( i );
-                value=config->readPathEntry( key );
+                value=config.readPathEntry( key );
                 if ( !value.isEmpty() ) {
                     // Support for kdelibs-3.5's new RecentFiles format: name[url]
                     QString s = value;
@@ -344,11 +342,10 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
                 i++;
         } while ( !value.isEmpty() || i<=10 );
 
-        config->setGroup( oldGroup );
         d->m_recent->showPreviews();
 
-	connect(d->m_recent, SIGNAL( doubleClicked ( Q3IconViewItem * ) ),
-			this, SLOT( recentSelected( Q3IconViewItem * ) ) );
+	connect(d->m_recent, SIGNAL( doubleClicked ( QListWidgetItem * ) ),
+			this, SLOT( recentSelected( QListWidgetItem * ) ) );
 
 }
 
@@ -409,7 +406,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 		templateName = d->tree->defaultTemplate()->name(); //select the default template for the app
 
     // item which will be selected initially
-    Q3IconViewItem * itemtoselect = 0;
+    QListWidgetItem * itemtoselect = 0;
 
     // count the templates inserted
     int entriesnumber = 0;
@@ -433,22 +430,22 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 	layout->addWidget(canvas,0,0);
 
 	canvas->setBackgroundRole( QPalette::Base );
-	canvas->setResizeMode(Q3IconView::Adjust);
-	canvas->setWordWrapIconText( true );
+	canvas->setResizeMode( QListView::Adjust );
+	// TODO canvas->setWordWrapIconText( true );
 	canvas->show();
 
-	Q3IconViewItem * tempitem = canvas->load(group, templateName, d->m_componentData);
+	QListWidgetItem * tempitem = canvas->load(group, templateName, d->m_componentData);
 	if (tempitem)
 	    itemtoselect = tempitem;
 
-	canvas->sort();
-	canvas->setSelectionMode(Q3IconView::Single);
+	// TODO canvas->sort();
+	canvas->setSelectionMode(QListView::SingleSelection);
 
-	connect( canvas, SIGNAL( clicked ( Q3IconViewItem * ) ),
-		this, SLOT( currentChanged( Q3IconViewItem * ) ) );
+	connect( canvas, SIGNAL( itemClicked ( QListWidgetItem * ) ),
+		this, SLOT( currentChanged( QListWidgetItem * ) ) );
 
-	connect( canvas, SIGNAL( doubleClicked( Q3IconViewItem * ) ),
-		this, SLOT( chosen(Q3IconViewItem *) ) );
+	connect( canvas, SIGNAL( itemDoubleClicked( QListWidgetItem * ) ),
+		this, SLOT( chosen(QListWidgetItem *) ) );
 
 	entriesnumber++;
     }
@@ -538,7 +535,7 @@ void KoTemplateChooseDia::setupDialog()
 	}
 
 	if ( cancelQuits() )
-	    setButtonGuiItem( KDialog::Cancel, KStandardGuiItem::quit() ); 
+	    setButtonGuiItem( KDialog::Cancel, KStandardGuiItem::quit() );
 
 	d->tabWidget = new QTabWidget( d->m_mainwidget );
 	maingrid->addWidget( d->tabWidget, 0, 0 );
@@ -594,12 +591,10 @@ void KoTemplateChooseDia::setupDialog()
 
 /*================================================================*/
 // private SLOT
-void KoTemplateChooseDia::currentChanged( Q3IconViewItem * item)
+void KoTemplateChooseDia::currentChanged( QListWidgetItem * item)
 {
     if (item)
     {
-	Q3IconView* canvas =  item->iconView();
-
 	// set text in the textarea
 	d->textedit->setPlainText( descriptionText(
 				item->text(),
@@ -607,8 +602,7 @@ void KoTemplateChooseDia::currentChanged( Q3IconViewItem * item)
 				));
 
 	// set the icon in the canvas selected
-	if (canvas)
-	    canvas->setSelected(item,1,0);
+        item->setSelected(true);
 
 	// register the current template
 	d->m_templateName = item->text();
@@ -618,7 +612,7 @@ void KoTemplateChooseDia::currentChanged( Q3IconViewItem * item)
 
 /*================================================================*/
 // private SLOT
-void KoTemplateChooseDia::chosen(Q3IconViewItem * item)
+void KoTemplateChooseDia::chosen(QListWidgetItem * item)
 {
     // the user double clicked on a template
     if (item)
@@ -630,7 +624,7 @@ void KoTemplateChooseDia::chosen(Q3IconViewItem * item)
 
 /* */
 // private SLOT
-void KoTemplateChooseDia::recentSelected( Q3IconViewItem * item)
+void KoTemplateChooseDia::recentSelected( QListWidgetItem * item)
 {
 	if (item)
 	{
@@ -755,14 +749,14 @@ QString KoTemplateChooseDia::descriptionText(const QString &name, const QString 
 
 /*================================================================*/
 
-Q3IconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group, const QString& name, const KComponentData &componentData )
+QListWidgetItem * KoTCDIconCanvas::load( KoTemplateGroup *group, const QString& name, const KComponentData &componentData )
 {
-    Q3IconViewItem * itemtoreturn = 0;
+    QListWidgetItem * itemtoreturn = 0;
 
     for (KoTemplate *t=group->first(); t!=0L; t=group->next()) {
 	if (t->isHidden())
 	    continue;
-	Q3IconViewItem *item = new KoTCDIconViewItem(
+	QListWidgetItem *item = new KoTCDIconViewItem(
 		this,
 		t->name(),
 		t->loadPicture(componentData),
@@ -774,9 +768,11 @@ Q3IconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group, const QString& n
 	    itemtoreturn = item;
 	}
 
+#if 0 // TODO
 	item->setKey(t->name());
 	item->setDragEnabled(false);
 	item->setDropEnabled(false);
+#endif
     }
 
     return itemtoreturn;
@@ -789,7 +785,7 @@ KoTCDRecentFilesIconView::~KoTCDRecentFilesIconView()
     removeToolTip();
 }
 
-void KoTCDRecentFilesIconView::showToolTip( Q3IconViewItem* item )
+void KoTCDRecentFilesIconView::showToolTip( QListWidgetItem* item )
 {
     removeToolTip();
     if ( !item )

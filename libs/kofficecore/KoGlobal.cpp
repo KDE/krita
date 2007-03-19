@@ -124,8 +124,7 @@ void KoGlobal::createListOfLanguages()
           itall != langlist.end(); ++itall )
     {
         const QString tag = *itall;
-        config.setGroup( tag );
-        const QString name = config.readEntry("Name", tag);
+        const QString name = config.group(tag).readEntry("Name", tag);
         // e.g. name is "French" and tag is "fr"
 
         // The QMap does the sorting on the display-name, so that
@@ -153,9 +152,8 @@ void KoGlobal::createListOfLanguages()
 
         if ( seenLanguages.find( tag ) == seenLanguages.end() ) {
             KConfig entry(*it, KConfig::OnlyLocal);
-            entry.setGroup("KCM Locale");
 
-            const QString name = entry.readEntry("Name", tag);
+            const QString name = entry.group("KCM Locale").readEntry("Name", tag);
             // e.g. name is "US English" and tag is "en_US"
             m_langMap.insert( name, tag );
 

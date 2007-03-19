@@ -105,9 +105,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
 
   model()->setSortRole(0); // Disable sorting
 
-  QString oldGroup = componentData().config()->group();
-  KSharedConfigPtr config = componentData().config();
-  config->setGroup("RecentFiles");
+  KConfigGroup config( componentData().config(), "RecentFiles" );
 
   int i = 0;
   QString value;
@@ -116,7 +114,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
 
   do {
     QString key = QString("File%1").arg(i);
-    value = config->readPathEntry(key);
+    value = config.readPathEntry(key);
 
     if(!value.isEmpty()) {
       QString path = value;
@@ -152,8 +150,6 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
     i++;
   } while ( !value.isEmpty() || i<=10 );
 
-
-  config->setGroup( oldGroup );
 
   //Select the first file
   QModelIndex firstIndex = model()->indexFromItem(model()->item(0));

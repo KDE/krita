@@ -325,6 +325,12 @@ void KoShapeManager::notifyShapeChanged( KoShape * shape )
         return;
     d->aggregate4update.insert( shape );
     d->shapeIndexesBeforeUpdate.insert(shape, shape->zIndex());
+
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer*> (shape);
+    if(container) {
+        foreach(KoShape *child, container->iterator())
+            d->aggregate4update.insert( child );
+    }
 }
 
 void KoShapeManager::updateTree()
@@ -354,8 +360,10 @@ void KoShapeManager::updateTree()
         QList<KoShape*> shapesWithCollisionDetection;
     };
     DetectCollision detector;
-    foreach ( KoShape *shape, d->aggregate4update )
-        detector.detect(d->tree, shape, d->shapeIndexesBeforeUpdate[shape]);
+    foreach ( KoShape *shape, d->aggregate4update ) {
+        if(d->shapeIndexesBeforeUpdate.contains(shape))
+            detector.detect(d->tree, shape, d->shapeIndexesBeforeUpdate[shape]);
+    }
 
     foreach ( KoShape * shape, d->aggregate4update )
     {

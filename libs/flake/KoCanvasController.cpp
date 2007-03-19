@@ -38,6 +38,7 @@
 class KoCanvasController::Private
 {
 public:
+    Private() : canvas(0), centerCanvas(false), toolOptionWidget(0), margin(0) {}
     KoCanvasBase * canvas;
     bool centerCanvas;
     QWidget * toolOptionWidget;
@@ -53,9 +54,6 @@ KoCanvasController::KoCanvasController(QWidget *parent)
     : QAbstractScrollArea(parent),
     m_d(new Private())
 {
-    m_d->canvas = 0;
-    m_d->toolOptionWidget = 0;
-
     setFrameShape(NoFrame);
     m_d->viewportWidget = new Viewport( this );
     setViewport(m_d->viewportWidget);
@@ -72,7 +70,6 @@ KoCanvasController::KoCanvasController(QWidget *parent)
     m_d->margin = cfg->readEntry("canvasmargin",  0);
 
     connect( this, SIGNAL( moveDocumentOffset( QPoint ) ), m_d->viewportWidget, SLOT( documentOffsetMoved( QPoint ) ) );
-
 }
 
 KoCanvasController::~KoCanvasController()

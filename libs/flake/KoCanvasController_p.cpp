@@ -61,15 +61,14 @@ Viewport::Viewport(KoCanvasController* parent)
 
 void Viewport::setCanvas(QWidget *canvas)
 {
-    if ( !canvas ) return;
-    // XXX: Should we delete the old canvas if we set a new one, or
-    // leave that to the owning application?
     if ( m_canvas ) {
         m_canvas->hide();
         delete m_canvas;
     }
     m_canvas = canvas;
+    if ( !canvas ) return;
     m_canvas->setParent( this );
+    m_documentSize = m_canvas->minimumSize();
     resetLayout();
 }
 
@@ -299,6 +298,10 @@ void Viewport::resetLayout()
         if ( marginRight > 0 ) resizeW = viewW - marginRight;
         if ( marginBottom > 0 ) resizeH = viewH - marginBottom;
 
+    }
+    if(!m_parent->isCanvasCentered()) {
+        resizeH -= moveY;
+        moveY = 0;
     }
     m_canvas->setGeometry( moveX, moveY, resizeW, resizeH );
 

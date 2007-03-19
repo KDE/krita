@@ -65,3 +65,6 @@ void KoCanvasBase::ensureVisible(const QRectF &rect) {
 void KoCanvasBase::setCanvasController(KoCanvasController *controller) {
     d->controller = controller;
 }
+
+void KoCanvasBase::clipToDocument(KoShape *, QPointF &) const {
+}

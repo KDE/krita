@@ -70,24 +70,13 @@ void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     }
 
     Q_ASSERT(m_newPositions.count());
-    QRectF canvasRect (QPointF(0.,0.) - m_canvas->documentOrigin(), QSizeF(m_canvas->canvasWidget()->size()));
-    canvasRect = m_canvas->viewConverter()->viewToDocument(canvasRect);
-    canvasRect.adjust(5, 5, -5, -5);
-    int x=0;
-    foreach(KoShape *shape, m_selectedShapes) {
-        QRectF s = canvasRect; // the outline is not translated, so translate this rect.
-        s.moveTopLeft(s.topLeft() - (m_previousPositions.at(x) + diff));
-        if(! shape->outline().intersects(s))
-            return;
-            // TODO, instead of just returning here; we should allow the move to be converted into
-            // a QDrag for DnD purposes.
-        x++;
-    }
 
     m_diff = diff;
     int i=0;
     foreach(KoShape *shape, m_selectedShapes) {
-        QPointF newPos (m_previousPositions.at(i) + m_diff);
+        diff = m_previousPositions.at(i) + m_diff - shape->position();
+        m_canvas->clipToDocument(shape, diff);
+        QPointF newPos (shape->position() + diff);
         m_newPositions[i] = newPos;
         shape->repaint();
         shape->setPosition(newPos);

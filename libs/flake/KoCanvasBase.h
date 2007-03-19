@@ -43,6 +43,7 @@ class KoViewConverter;
 class KoShapeController;
 class KoShapeControllerBase;
 class KoCanvasController;
+class KoShape;
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
@@ -126,6 +127,8 @@ public:
      * @see KoDocument::unit()
      */
     virtual KoUnit unit() = 0;
+
+    virtual void clipToDocument(KoShape *shape, QPointF &move) const; // TODO remove the default implementation?
 
     /**
      * Return the position of the document origin inside the canvas widget, in pixels.

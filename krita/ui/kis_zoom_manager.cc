@@ -110,8 +110,8 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
 
     connect( m_canvasController, SIGNAL( canvasMousePositionChanged(const QPoint & ) ), this, SLOT( mousePositionChanged( const QPoint & ) ) );
 
-    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
-            this, SLOT(slotZoomChanged(KoZoomMode::Mode, int)));
+    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
+            this, SLOT(slotZoomChanged(KoZoomMode::Mode, double)));
 }
 
 void KisZoomManager::mousePositionChanged(const QPoint &pos)
@@ -139,7 +139,7 @@ void KisZoomManager::updateGUI()
     m_verticalRuler->setRulerLength(img->height() / img->yRes());
 }
 
-void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, int zoom)
+void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, double zoom)
 {
     KisImageSP img = m_view->image();
 

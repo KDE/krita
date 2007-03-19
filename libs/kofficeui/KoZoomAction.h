@@ -85,7 +85,7 @@ public Q_SLOTS:
    * into the list at proper place so that the the values remain sorted.
    * emits zoomChanged
    */
-  void setZoom( int zoom );
+  void setZoom( double zoom );
 
   /**
    * Change the zoom modes that should be shown
@@ -110,7 +110,7 @@ public Q_SLOTS:
    * Set the actual zoom value used in the app. This is needed when using @ref zoomIn() , @ref zoomOut() and/or when
    * plugged into the viewbar.
    */
-  void setEffectiveZoom(int zoom);
+  void setEffectiveZoom(double zoom);
 
 protected Q_SLOTS:
 
@@ -118,7 +118,7 @@ protected Q_SLOTS:
   void sliderValueChanged(int value);
   void numberValueChanged();
   void zoomModeButtonClicked(int id);
-  void updateWidgets(KoZoomMode::Mode mode, int zoom);
+  void updateWidgets(KoZoomMode::Mode mode, double zoom);
 
 Q_SIGNALS:
 
@@ -126,9 +126,9 @@ Q_SIGNALS:
    * Signal zoomChanged is triggered when user changes the zoom value, either by
    * choosing it from the list or by entering new value.
    * @param mode The selected zoom mode
-   * @param zoom the zoom in percent, only defined if @p mode is KoZoomMode::ZOOM_CONSTANT
+   * @param zoom the zoom, only defined if @p mode is KoZoomMode::ZOOM_CONSTANT
    */
-  void zoomChanged( KoZoomMode::Mode mode, int zoom );
+  void zoomChanged( KoZoomMode::Mode mode, double zoom );
 
 protected:
 
@@ -142,10 +142,10 @@ protected:
     KoZoomMode::Modes m_zoomModes;
     ExtLineEdit *m_number;
     QSlider *m_slider;
-    int m_sliderLookup[33];
+    double m_sliderLookup[33];
     QButtonGroup* m_zoomButtonGroup;
 
-    int m_effectiveZoom;
+    double m_effectiveZoom;
 };
 
 class KoZoomAction::ExtLineEdit : public QLineEdit

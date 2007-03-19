@@ -74,12 +74,12 @@ public slots:
 
 signals:
     // the document can use the emitted data for persistency purposes.
-    void zoomChanged (KoZoomMode::Mode mode, int zoom);
+    void zoomChanged (KoZoomMode::Mode mode, double zoom);
 
 private slots:
     // should realy be on d pointer..
     /// slot for the zoomAction to connect to.
-    void setZoom(KoZoomMode::Mode mode, int zoom);
+    void setZoom(KoZoomMode::Mode mode, double zoom);
 
     /// so we know when the canvasController changes size
     void setAvailableSize(const QSize &Size);

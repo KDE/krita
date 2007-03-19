@@ -38,8 +38,8 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
                                     KShortcut(),
                                     actionCollection,
                                     "zoom" );
-    connect(m_action, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
-            this, SLOT(setZoom(KoZoomMode::Mode, int)));
+    connect(m_action, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
+            this, SLOT(setZoom(KoZoomMode::Mode, double)));
 
     connect(m_canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize( const QSize & ) ) );
 
@@ -69,34 +69,31 @@ void KoZoomController::setPageSize(const QSizeF &pageSize)
         setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }
 
-void KoZoomController::setZoom(KoZoomMode::Mode mode, int zoom)
+void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
 {
     m_zoomHandler->setZoomMode(mode);
 
-    double zoomF;
     if(mode == KoZoomMode::ZOOM_CONSTANT)
     {
-        zoomF = zoom / 100.0;
-        if(zoomF == 0.0) return;
+        if(zoom == 0.0) return;
     }
     else if(mode == KoZoomMode::ZOOM_WIDTH)
     {
-        zoomF = m_canvasController->viewport()->size().width()
+        zoom = m_canvasController->viewport()->size().width()
                          / (m_zoomHandler->resolutionX() * m_pageSize.width());
-        m_action->setEffectiveZoom(int(100*zoomF+0.5));
+        m_action->setEffectiveZoom(zoom);
    }
     else if(mode == KoZoomMode::ZOOM_PAGE)
     {
-        zoomF = m_canvasController->viewport()->size().width()
+        zoom = m_canvasController->viewport()->size().width()
                          / (m_zoomHandler->resolutionX() * m_pageSize.width());
-        zoomF = qMin(zoomF, m_canvasController->viewport()->size().height()
+        zoom = qMin(zoom, m_canvasController->viewport()->size().height()
                      / (m_zoomHandler->resolutionY() * m_pageSize.height()));
 
-        m_action->setEffectiveZoom(int(100*zoomF+0.5));
+        m_action->setEffectiveZoom(zoom);
     }
 
- 
-    m_zoomHandler->setZoom(zoomF);
+    m_zoomHandler->setZoom(zoom);
     emit zoomChanged(mode, zoom);
 
    // Tell the canvasController that the zoom has changed
@@ -120,10 +117,10 @@ void KoZoomController::setAvailableSize(const QSize &/*size*/)
 
 void KoZoomController::requestZoomBy(const double factor)
 {
-    int zoom = m_zoomHandler->zoomInPercent();
-    m_action->setZoom(int(factor*zoom));
-    setZoom(KoZoomMode::ZOOM_CONSTANT, int(factor*zoom));
-    m_action->setEffectiveZoom(int(factor*zoom));
+    double zoom = m_zoomHandler->zoomInPercent() / 100.0;
+    m_action->setZoom(factor*zoom);
+    setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom);
+    m_action->setEffectiveZoom(factor*zoom);
 }
 
 #include "KoZoomController.moc"

@@ -30,6 +30,7 @@ class KoCharacterStyle;
 class KoListStyle;
 class StylePrivate;
 class QTextBlock;
+class KoStyleStack;
 
 /**
  * A container for all properties for the paragraph wide style.
@@ -427,6 +428,12 @@ public:
      * Stops all paragraphs that follow this style from being a list item.
      */
     void removeListStyle();
+
+    /**
+     * Load the style from the \a KoStyleStack style stack using the
+     * OpenDocument format.
+     */
+    void loadOasis(KoStyleStack& styleStack);
 
 private:
     void setProperty(int key, const QVariant &value);

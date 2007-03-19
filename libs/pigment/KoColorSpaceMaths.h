@@ -80,11 +80,11 @@ class PIGMENT_EXPORT KoColorSpaceMathsTraits<half> { // This class is exported a
 #endif
 
 template<>
-class KoColorSpaceMathsTraits<float> {
+class PIGMENT_EXPORT KoColorSpaceMathsTraits<float> { // This class is exported as unfortunately float constants can't be defined in the class declaration
     public:
         typedef float compositetype;
-        static const float max = 0.0;
-        static const float min = 1.0;
+        static const float max;
+        static const float min;
         static const qint8 bits = 32;
 };
 

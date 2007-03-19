@@ -184,6 +184,9 @@ static void importOasisUnderline( const QString& type, const QString& style,
         formatstyle = QTextCharFormat::SingleUnderline;
     else if ( type == "double" )
         formatstyle = QTextCharFormat::SingleUnderline; //TODO
+
+    else if ( style == "solid" )
+        formatstyle = QTextCharFormat::SingleUnderline;
     else if ( style == "dotted" )
         formatstyle = QTextCharFormat::DotLine;
     else if ( style == "dash" || style == "long-dash" ) // not in kotext

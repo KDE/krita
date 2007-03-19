@@ -391,19 +391,6 @@ public:
     void repaint(const QRectF &shape) const;
 
     /**
-     * Request a repaint to be queued.
-     * The repaint will be restricted to the parameters rectangle, which is expected to be
-     * in points (the internal coordinates system of KoShape).
-     * <p>This method will return immediately and only request a repaint. Successive calls
-     * will be merged into an appropriate repaint action.
-     * @param x the x coordinate measured from the topleft position of this shape
-     * @param y the y coordinate measured from the topleft position of this shape
-     * @param width the width of the repaint rectangle
-     * @param height the height of the repaint rectangle
-     */
-    void repaint(double x, double y, double width, double height) const;
-
-    /**
      * This is a method used to sort a list using the STL sorting methods.
      * @param s1 the first shape
      * @param s2 the second shape

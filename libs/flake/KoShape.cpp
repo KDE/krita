@@ -390,11 +390,6 @@ void KoShape::repaint(const QRectF &shape) const {
     }
 }
 
-void KoShape::repaint(double x, double y, double width, double height) const {
-    QRectF rect(x, y, width, height);
-    repaint(rect);
-}
-
 const QPainterPath KoShape::outline() const {
     QPainterPath path;
     path.addRect(QRectF( QPointF(0, 0), size() ));

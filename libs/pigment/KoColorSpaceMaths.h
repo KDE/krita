@@ -20,6 +20,7 @@
 #ifndef KOCOLORSPACEMATHS_H_
 #define KOCOLORSPACEMATHS_H_
 
+#include <pigment_export.h>
 #include <KoIntegerMaths.h>
 #undef _T
 
@@ -67,7 +68,6 @@ class KoColorSpaceMathsTraits<quint32> {
 #include <config-openexr.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
-#include <pigment_export.h>
                  
 template<>
 class PIGMENT_EXPORT KoColorSpaceMathsTraits<half> { // This class is exported as unfortunately half constants can't be defined in the class declaration

@@ -21,8 +21,10 @@
 
 #include <KoColorSpaceMaths.h>
 
+#ifdef HAVE_OPENEXR
 const half KoColorSpaceMathsTraits<half>::max = 1.0;
 const half KoColorSpaceMathsTraits<half>::min = 0.0;
+#endif
 
 const float KoColorSpaceMathsTraits<float>::max = 1.0;
 const float KoColorSpaceMathsTraits<float>::min = 0.0;

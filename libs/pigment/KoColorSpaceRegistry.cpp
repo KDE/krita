@@ -214,11 +214,17 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QStri
     if (d->csMap.find(name) == d->csMap.end()) {
         KoColorSpaceFactory *csf = get(csID);
         if(!csf)
+        {
+            kdDebug() << "Unknown color space type : " << csf << endl;
             return 0;
+        }
 
         KoColorProfile *p = profileByName(profileName);
-        if(!p && profileName.isEmpty())
+        if(not p and not profileName.isEmpty())
+        {
+            kdDebug() << "Profile not found : " << profileName << endl;
             return 0;
+        }
         KoColorSpace *cs = csf->createColorSpace(this, p);
         if(!cs)
             return 0;
@@ -244,7 +250,10 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoCol
             // The profile was not stored and thus not the combination either
             KoColorSpaceFactory *csf = get(csID);
             if(!csf)
+            {
+                kdDebug() << "Unknown color space type : " << csf << endl;
                 return 0;
+            }
 
             cs = csf->createColorSpace(this, const_cast<KoColorProfile *>(profile));
             if(!cs )

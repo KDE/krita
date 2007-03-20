@@ -154,7 +154,7 @@ QString NewLayerDialog::layerName() const
 
 QString NewLayerDialog::profileName() const
 {
-    return m_page->cmbProfile-> currentText();
+    return m_page->cmbProfile-> itemData(m_page->cmbProfile->currentIndex()).toString();
 }
 
 #include "kis_dlg_new_layer.moc"

@@ -42,7 +42,7 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisImageSP image)
 
 void KisImportCatcher::slotLoadingFinished()
 {
-    KisImageSP importedImage = m_doc->currentImage();
+    KisImageSP importedImage = m_doc->image();
 
     if (importedImage) {
         KisLayerSP importedImageLayer = KisLayerSP( importedImage->rootLayer().data() );

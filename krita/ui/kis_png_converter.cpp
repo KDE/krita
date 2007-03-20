@@ -194,7 +194,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         kDebug(41008) << "Failed to open PNG File" << endl;
         return (KisImageBuilder_RESULT_FAILURE);
     }
-    
+
     png_byte signature[8];
     iod->peek((char*)signature, 8);
     if (!png_check_sig(signature, 8))
@@ -235,9 +235,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
-    // Initialize the special 
+    // Initialize the special
     png_set_read_fn(png_ptr, iod, _read_fn);
-    
+
     // Ignore signature
 //     png_set_sig_bytes(png_ptr, 8);
     // read all PNG info up to image data
@@ -501,7 +501,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
     if (KIO::NetAccess::download(uri, tmpFile, qApp -> activeWindow())) {
         KUrl uriTF;
         uriTF.setPath( tmpFile );
-        
+
         // open the file
         kDebug(41008) << QFile::encodeName(uriTF.path()) << " " << uriTF.path() << " " << uriTF << endl;
         QFile *fp = new QFile(QFile::encodeName(uriTF.path()) );
@@ -588,9 +588,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisPaintD
     /* set the zlib compression level */
     png_set_compression_level(png_ptr, compression);
 
-    
+
     png_set_write_fn(png_ptr, (void*)iodevice, _write_fn, _flush_fn);
-    
+
     /* set other zlib parameters */
     png_set_compression_mem_level(png_ptr, 8);
     png_set_compression_strategy(png_ptr, Z_DEFAULT_STRATEGY);
@@ -724,7 +724,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisPaintD
             fillText(texts+nbtexts, "author", author);
             nbtexts++;
         }
-    
+
         png_set_text(png_ptr, info_ptr, texts, nbtexts);
     }
     // Save the information to the file

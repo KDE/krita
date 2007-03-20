@@ -140,7 +140,7 @@ void KisCustomImageWidget::buttonClicked() {
 
     m_doc->newImage(txtName->text(), width, height, cs, KoColor(qc, cs), txtDescription->toPlainText(), resolution);
 
-    KisImageSP img = m_doc->currentImage();
+    KisImageSP img = m_doc->image();
     if (img) {
         KisLayerSP layer = img->activeLayer();
         if (layer) {

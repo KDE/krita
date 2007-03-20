@@ -80,7 +80,7 @@ void Bracketing2HDRPlugin::addImage(const QString& filename)
 {
     KisDoc2 d;
     d.import(filename);
-    KisImageSP importedImage = d.currentImage();
+    KisImageSP importedImage = d.image();
     KisPaintDeviceSP projection = 0;
     if(importedImage)
     {
@@ -409,7 +409,7 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
         // import the image
         KisDoc2 d;
         d.import(fileName);
-        f.image = d.currentImage();
+        f.image = d.image();
         f.device = 0;
         if(f.image)
         {

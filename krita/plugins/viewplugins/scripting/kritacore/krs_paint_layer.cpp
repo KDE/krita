@@ -152,7 +152,7 @@ void PaintLayer::endPainting()
     if(doc() !=0)
     {
         doc()->setModified(true);
-        doc()->currentImage()->activeLayer()->setDirty();
+        doc()->image()->activeLayer()->setDirty();
     }
     if(m_cmd != 0)
     {

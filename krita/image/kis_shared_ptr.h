@@ -23,10 +23,13 @@
 #include <qglobal.h>
 
 #include <kis_shared_data.h>
-        
+
 template<class T>
 class KisWeakSharedPtr;
 
+/**
+ * XXX!
+ */
 template<class T>
 class KisSharedPtr {
     friend class KisWeakSharedPtr<T>;
@@ -36,86 +39,89 @@ class KisSharedPtr {
          */
         inline KisSharedPtr()
             : d(0) { }
-        
+
         /**
          * Creates a new pointer.
          * @param p the pointer
          */
         inline KisSharedPtr( T* p )
             : d(p) { if(d) d->ref.ref(); }
-        
+
         inline KisSharedPtr(const KisWeakSharedPtr<T>& o);
-    
+
         /**
          * Copies a pointer.
          * @param o the pointer to copy
          */
         inline KisSharedPtr<T>( const KisSharedPtr<T>& o )
             : d(o.d) { if(d) d->ref.ref(); }
-    
+
         /**
          * Unreferences the object that this pointer points to. If it was
          * the last reference, the object will be deleted.
          */
         inline ~KisSharedPtr() { if (d && !d->ref.deref()) delete d; }
-        
+
         inline KisSharedPtr<T>& operator= ( const KisSharedPtr& o ) { attach(o.d); return *this; }
         inline const KisSharedPtr<T>& operator= ( const KisSharedPtr& o ) const {
-            attach(o.d); 
+            attach(o.d);
             return *this;
         }
         inline bool operator== ( const T* p ) const { return ( d == p ); }
         inline bool operator!= ( const T* p ) const { return ( d != p ); }
         inline bool operator== ( const KisSharedPtr& o ) const { return ( d == o.d ); }
         inline bool operator!= ( const KisSharedPtr& o ) const { return ( d != o.d ); }
-        
+
         inline KisSharedPtr<T>& operator= ( T* p ) { attach(p); return *this; }
-    
+
         inline operator const T* () const { return d; }
-        
+
         template< class T2> inline operator KisSharedPtr<T2>() const { return KisSharedPtr<T2>(d); }
-        
+
         /**
         * @return the pointer
         */
         inline T* data() { return d; }
-    
+
         /**
         * @return the pointer
         */
         inline const T* data() const { return d; }
-    
+
         /**
         * it is deleted.
         */
         void attach(T* p) const;
-    
+
         /**
         * Clear the pointer, i.e. make it a null pointer.
         */
         void clear();
-    
+
         /**
         * @return a const pointer to the shared object.
         */
         inline const T* constData() const { return d; }
-    
+
         inline const T& operator*() const { Q_ASSERT(d); return *d; }
         inline T& operator*() { Q_ASSERT(d); return *d; }
         inline const T* operator->() const { Q_ASSERT(d); return d; }
         inline T* operator->() { Q_ASSERT(d); return d; }
-    
+
         /**
         * @return true if the pointer is null
         */
         inline bool isNull() const { return (d == 0); }
-        
+
     private:
         mutable T* d;
 };
 
 
 
+/**
+ * XXX!
+ */
 template<class T>
 class KisWeakSharedPtr {
     friend class KisSharedPtr<T>;
@@ -125,7 +131,7 @@ class KisWeakSharedPtr {
          */
         inline KisWeakSharedPtr()
             : d(0) { }
-    
+
         /**
          * Creates a new pointer.
          * @param p the pointer
@@ -135,7 +141,7 @@ class KisWeakSharedPtr {
         {
             if(d) dataPtr = d->dataPtr;
         }
-    
+
         inline KisWeakSharedPtr<T>( const KisSharedPtr<T>& o )
             : d(o.d) { if(d) dataPtr = d->dataPtr; }
         /**
@@ -144,7 +150,7 @@ class KisWeakSharedPtr {
          */
         inline KisWeakSharedPtr<T>( const KisWeakSharedPtr<T>& o )
             : d(o.d) { if(d) dataPtr = d->dataPtr; }
-        
+
         inline KisWeakSharedPtr<T>& operator= ( const KisWeakSharedPtr& o ) { attach(o.d); return *this; }
         inline const KisWeakSharedPtr<T>& operator= ( const KisWeakSharedPtr& o ) const {
             attach(o.d);
@@ -154,47 +160,47 @@ class KisWeakSharedPtr {
         inline bool operator!= ( const T* p ) const { return ( d != p ); }
         inline bool operator== ( const KisWeakSharedPtr& o ) const { return ( d == o.d ); }
         inline bool operator!= ( const KisWeakSharedPtr& o ) const { return ( d != o.d ); }
-        
+
         inline KisWeakSharedPtr<T>& operator= ( T* p ) {
             attach(p);
             return *this;
         }
-        
+
         inline operator const T* () const { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
-        
+
         template< class T2> inline operator KisWeakSharedPtr<T2>() const { return KisWeakSharedPtr<T2>(d); }
-        
+
         /**
         * Note that if you use this function, the pointer might be destroyed if KisSharedPtr pointing
         * to this pointer are deleted, resulting in a segmentation fault. Use with care.
         * @return the pointer
         */
         inline T* data() { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
-    
+
         /**
         * Note that if you use this function, the pointer might be destroyed if KisSharedPtr pointing
         * to this pointer are deleted, resulting in a segmentation fault. Use with care.
         * @return the pointer
         */
         inline const T* data() const { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
-    
+
         /**
         * Note that if you use this function, the pointer might be destroyed if KisSharedPtr pointing
         * to this pointer are deleted, resulting in a segmentation fault. Use with care.
         * @return a const pointer to the shared object.
         */
         inline const T* constData() const { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
-    
+
         inline const T& operator*() const { Q_ASSERT(dataPtr && dataPtr->valid); return *d; }
         inline T& operator*() { Q_ASSERT(dataPtr && dataPtr->valid); return *d; }
         inline const T* operator->() const { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
         inline T* operator->() { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
-    
+
         /**
         * @return true if the pointer is null
         */
         inline bool isNull() const { return (d == 0); }
-        
+
     private:
         void attach(T* nd)
         {

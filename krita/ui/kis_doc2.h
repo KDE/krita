@@ -2,6 +2,7 @@
  *  Copyright (c) 1999-2000 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2001 Toshitaka Fujioka  <fujioka@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004-2007 Boudewijn Rempt <boud@valdyas.org<
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +24,6 @@
 #include <kdebug.h>
 
 #include <KoDocument.h>
-#include <KoShapeControllerBase.h>
 
 #include "kis_types.h"
 
@@ -36,8 +36,8 @@ class KoColorProfile;
 class KoColorSpace;
 class KoColor;
 
+class KoShapeControllerBase;
 class KisView2;
-class KisNameServer;
 class KisChildDoc;
 class KisUndoAdapter;
 
@@ -50,7 +50,7 @@ class KisUndoAdapter;
    tools.
 
  */
-class KRITAUI_EXPORT KisDoc2 : public KoDocument, public KoShapeControllerBase
+class KRITAUI_EXPORT KisDoc2 : public KoDocument
 {
 
     Q_OBJECT
@@ -104,6 +104,8 @@ public:
      */
     KisImageSP newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * colorspace);
 
+    KisImageSP image();
+
     /**
      * Adds the specified child document to this document; this
      * is not done with KoDocument::insertChild() because that
@@ -116,14 +118,14 @@ public:
      */
     void prepareForImport();
 
-    KisImageSP currentImage();
-
     /**
      * Set the current image to the specified image and turn undo on.
      */
     void setCurrentImage(KisImageSP image);
 
     KisUndoAdapter * undoAdapter();
+
+    KoShapeControllerBase * shapeController();
 
 public slots:
     void slotImageUpdated();
@@ -152,27 +154,8 @@ protected slots:
 
 private slots:
 
-
     void slotUpdate(KisImageSP img, quint32 x, quint32 y, quint32 w, quint32 h);
     void slotIOProgress(qint8 percentage);
-
-    // These slots keep track of changes in the layer stack and make
-    // sure that the shape stack doesn't get out of sync
-
-    void slotLayerAdded( KisLayerSP layer );
-    void slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis );
-    void slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis );
-    void slotLayersChanged( KisGroupLayerSP rootLayer );
-    void slotLayerActivated( KisLayerSP layer );
-
-    // XXX: The same is necessary for selections, masks etc.
-
-public:
-
-    // Implement KoShapeController
-
-    virtual void addShape( KoShape* shape );
-    virtual void removeShape( KoShape* shape );
 
 private:
 

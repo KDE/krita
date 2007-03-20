@@ -97,9 +97,11 @@ set(kritaui_LIB_SRCS
     kis_layer_shape.cc
     kis_mask_shape.cc
     kis_layer_container_shape.cc
-    kis_shape_model.cpp
+    kis_shape_controller.cpp
+    kis_png_converter.cpp
 )
 
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 kde4_automoc(${kritaui_LIB_SRCS})
 
@@ -132,7 +134,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/asm_scale.o )
 
-target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} kritaimage kofficeui kopainter)
+target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} kritaimage kofficeui kopainter  ${PNG_LIBRARIES})
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui

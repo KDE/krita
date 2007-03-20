@@ -72,7 +72,7 @@ void KritaShape::importImage(const KUrl & url )
 
 void KritaShape::slotLoadingFinished()
 {
-    if ( m_d && m_d->doc && m_d->doc->currentImage() ) {
+    if ( m_d && m_d->doc && m_d->doc->image() ) {
         repaint();
     }
 
@@ -80,11 +80,11 @@ void KritaShape::slotLoadingFinished()
 
 void KritaShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
-    if ( m_d && m_d->doc && m_d->doc->currentImage() ) {
+    if ( m_d && m_d->doc && m_d->doc->image() ) {
         // XXX: Only convert the bit the painter needs for painting?
         //      Or should we keep a converted qimage in readiness,
         //      just as with KisCanvas2?
-        KisImageSP kimage= m_d->doc->currentImage();
+        KisImageSP kimage= m_d->doc->image();
 
         QImage qimg = kimage->convertToQImage(0, 0, kimage->width(), kimage->height(),
                                               m_d->displayProfile); // XXX: How about exposure?

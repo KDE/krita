@@ -44,12 +44,21 @@ class KisPaintLayer::Private
 public:
     KisPaintDeviceSP paintdev;
     KisPaintDeviceSP mask; // The mask that we can edit and display easily
-    KisSelectionSP maskAsSelection; // The mask as selection, to apply and render easily
+    KisSelectionSP maskAsSelection; //
+                                    // The mask as selection, to apply and render easily
+    KisPaintDeviceSP projection;
+
+    KisMaskSP transparencyMask;
+    KisMaskSP protectionMask;
+    KisSelectionSP selection;
+    vKisMaskSP effectMasks; // The first mask is the bottom-one in the
+                            // mask stack!
+
     bool renderMask;
     bool editMask;
 };
 
-KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
+KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
     : super(img, name, opacity)
     , m_d( new Private() )
 {
@@ -61,7 +70,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacit
 }
 
 
-KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity)
+KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity)
     : super(img, name, opacity)
     , m_d( new Private() )
 {
@@ -70,7 +79,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacit
     init();
 }
 
-KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, KoColorSpace * colorSpace)
+KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KoColorSpace * colorSpace)
     : super(img, name, opacity)
     , m_d( new Private() )
 {
@@ -432,6 +441,51 @@ void KisPaintLayer::setDirty(const QRegion & region) {
     super::setDirty(region);
 }
 
+void KisPaintLayer::resetProjection(KisPaintDeviceSP to)
+{
+    if (to)
+        m_d->projection = new KisPaintDevice(*to); /// XXX ### look into Copy on Write here (CoW)
+    else
+        m_d->projection = new KisPaintDevice(this, image()->colorSpace(), name().toLatin1());
+
+}
+
+KisPaintDeviceSP KisPaintLayer::projection()
+{
+    // There are masks about that change the rendering, and there's no
+    // projection yet.
+    if ( !m_d->projection && ( m_d->transparencyMask || !m_d->effectMasks.isEmpty() ) ) {
+        updateProjection( m_d->paintdev->extent() );
+    }
+
+    if ( m_d->projection )
+        return m_d->projection;
+    else
+        return m_d->paintdev;
+}
+
+void KisPaintLayer::updateProjection(const QRect & rc)
+{
+    // Nothing that changes the rendering, get rid of the projection
+    if ( !m_d->transparencyMask && m_d->effectMasks.isEmpty() ) {
+        m_d->projection = 0;
+    }
+
+    KisPainter gc( m_d->projection );
+    gc.setCompositeOp( m_d->paintdev->colorSpace()->compositeOp( COMPOSITE_COPY ) );
+    gc.bitBlt( rc.topLeft(), m_d->paintdev, rc );
+
+    foreach( KisMaskSP mask, m_d->effectMasks ) {
+        // XXX: Filter the projection (once the effect mask class is done
+    }
+
+    // XXX: Filter the alpha with the transparency mask (once the apha
+    // filter is done)
+
+    // Done.
+}
+
+
 
 // Undoable versions code
 namespace {
@@ -585,5 +639,7 @@ QUndoCommand* KisPaintLayer::removeMaskCommand() {
 QUndoCommand* KisPaintLayer::applyMaskCommand() {
     return new KisApplyMaskCommand(this);
 }
+
+
 
 #include "kis_paint_layer.moc"

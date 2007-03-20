@@ -34,9 +34,9 @@ class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisLayerSupports
     Q_OBJECT
 
 public:
-    KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev);
-    KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity);
-    KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, KoColorSpace * colorSpace);
+    KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev);
+    KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity);
+    KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KoColorSpace * colorSpace);
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
 
@@ -77,22 +77,29 @@ public:
 
     /// Does this layer have a layer mask?
     bool hasMask() const;
+
     // XXX TODO: Make these undo-able!
     /// Create a mask if it does not yet exist, and return it
     KisPaintDeviceSP createMask();
+
     /// Convert the from argument to the mask
     void createMaskFromPaintDevice(KisPaintDeviceSP from);
+
     /**
      * Convert the from selection to a paint device (should convert the getMaskAsSelection
      * result back to the mask). Overwrites the current mask, if any. Also removes the selection
      */
     void createMaskFromSelection(KisSelectionSP from);
+
     /// Remove the layer mask
     void removeMask();
+
     /// Apply the layer mask to the paint device, this removes the mask afterwards
     void applyMask();
+
     /// Returns the layer mask's device. Creates one if there is currently none
     KisPaintDeviceSP getMask();
+
     /// Returns the layer mask's device, converted to a selection. Creates one if there is currently none
     KisSelectionSP getMaskAsSelection();
 
@@ -129,6 +136,35 @@ public:
 
     // KisLayerSupportsIndirectPainting
     virtual KisLayer* layer() { return this; }
+
+    /**
+       Clear the projection or create a projection from the specified
+       paint devide.
+
+       Warning: will copy from to, if !0,
+
+       Note for hackers: implement CoW!
+     */
+    virtual void resetProjection(KisPaintDeviceSP to = 0);
+
+    /**
+       Retrieve the projection for this group layer. Note that
+       The projection is _not_ guaranteed to be up to date with
+       the latest actions, and that you cannot discover whether it
+       is!
+
+       Note the second: this _may_ return the paint device of a paint
+       layer if that paint layer is the only child of this group layer.
+    */
+    virtual KisPaintDeviceSP projection();
+
+    /**
+       Update the given rect of the projection paint device.
+
+       Note for hackers: keep this method thread-safe!
+    */
+    void updateProjection(const QRect & rc);
+
 
 signals:
     /// When the mask is created/destroyed or the editmask or rendermask is changed

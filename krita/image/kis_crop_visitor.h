@@ -22,7 +22,6 @@
 
 #include "klocale.h"
 
-#include "kis_doc2.h"
 #include "kis_layer_visitor.h"
 #include "kis_types.h"
 #include "kis_layer.h"

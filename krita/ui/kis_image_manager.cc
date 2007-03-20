@@ -39,6 +39,7 @@
 #include "kis_statusbar.h"
 #include "kis_import_catcher.h"
 #include "kis_view2.h"
+#include "kis_doc2.h"
 #include "kis_label_progress.h"
 #include "kis_dlg_image_properties.h"
 #include "kis_image_commands.h"
@@ -154,7 +155,7 @@ void KisImageManager::slotImageProperties()
         }
         qint32 opacity = dlg.opacity();
         opacity = opacity * 255 / 100;
-        QUndoCommand* cmd = new KisImagePropsCommand(img, dlg.imageName(), dlg.description(), 
+        QUndoCommand* cmd = new KisImagePropsCommand(img, dlg.imageName(), dlg.description(),
                                                      dlg.colorSpace(), dlg.profile(), dlg.resolution());
         m_view->document()->addCommand(cmd);
     }

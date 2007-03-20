@@ -173,7 +173,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->doc = doc;
     m_d->viewConverter = new KoZoomHandler();
     m_d->canvasController = new KoCanvasController( this );
-    m_d->canvas = new KisCanvas2( m_d->viewConverter, this, static_cast<KoShapeControllerBase*>( doc ) );
+    m_d->canvas = new KisCanvas2( m_d->viewConverter, this, doc->shapeController() );
     m_d->canvasController->setCanvas( m_d->canvas );
     m_d->resourceProvider = new KisResourceProvider( this );
 
@@ -298,7 +298,7 @@ void KisView2::canvasAddChild(KoViewChild *child) {
 
 KisImageSP KisView2::image()
 {
-    return m_d->doc->currentImage();
+    return m_d->doc->image();
 }
 
 KisResourceProvider * KisView2::resourceProvider()

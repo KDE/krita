@@ -31,7 +31,7 @@
 #include "kis_merge_visitor.h"
 #include "kis_fill_painter.h"
 
-KisGroupLayer::KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacity) :
+KisGroupLayer::KisGroupLayer(KisImageSP img, const QString &name, quint8 opacity) :
     super(img, name, opacity),
     m_x(0),
     m_y(0)
@@ -96,7 +96,7 @@ void KisGroupLayer::resetProjection(KisPaintDeviceSP to)
 }
 
 bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) {
-    return l && l->paintDevice()->colorSpace() == m_image->colorSpace() && l->visible()
+    return l && l->paintDevice()->colorSpace() == image()->colorSpace() && l->visible()
              && l->opacity() == OPACITY_OPAQUE && !l->temporaryTarget() && !l->hasMask();
 }
 
@@ -165,19 +165,23 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
         m_layers.append(newLayer);
     else
         m_layers.insert(m_layers.begin() + reverseIndex(index) + 1, newLayer);
-    for (uint i = childCount() - 1; i > index; i--)
-        at(i)->m_index++;
-    newLayer->m_parent = this;
-    newLayer->m_index = index;
+
+    for (uint i = childCount() - 1; i > index; i--) {
+        KisLayerSP l = at( i );
+        l->setIndexPrivate( l->index() + 1 );
+    }
+    newLayer->setParentPrivate( this );
     newLayer->setImage(image());
+    newLayer->setIndexPrivate( index );
     newLayer->setDirty(newLayer->extent());
-    setDirty();
+
     notifyAdded(this, x);
     return true;
 }
 
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 {
+    kDebug() << "new layer: " << newLayer.data() << endl;
     if (aboveThis && aboveThis->parent().data() != this)
     {
         kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)!" << endl;
@@ -191,12 +195,14 @@ bool KisGroupLayer::removeLayer(int x)
     if (x >= 0 && qBound(uint(0), uint(x), childCount() - 1) == uint(x))
     {
         uint index(x);
-        for (uint i = childCount() - 1; i > index; i--)
-            at(i)->m_index--;
+        for (uint i = childCount() - 1; i > index; i--) {
+            KisLayerSP l = at( i );
+            l->setIndexPrivate( l->index() -1 );
+        }
         KisLayerSP removedLayer = at(index);
 
-        removedLayer->m_parent = 0;
-        removedLayer->m_index = -1;
+        removedLayer->setParentPrivate( 0 );
+        removedLayer->setIndexPrivate( -1 );
         notifyAboutToRemove(this, x);
         m_layers.erase(m_layers.begin() + reverseIndex(index));
         setDirty(removedLayer->extent());
@@ -223,7 +229,7 @@ bool KisGroupLayer::removeLayer(KisLayerSP layer)
     return removeLayer(layer->index());
 }
 
-void KisGroupLayer::setImage(KisImageWSP image)
+void KisGroupLayer::setImage(KisImageSP image)
 {
     super::setImage(image);
     for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); ++it)
@@ -409,14 +415,14 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             // to make a difference between a paintlayer with a mask, and one without
             KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(child.data());
             if (l && l->hasMask())
-                child->m_compositeOp = cop->colorSpace()->compositeOp( COMPOSITE_OVER );
+                child->setCompositeOpPrivate( cop->colorSpace()->compositeOp( COMPOSITE_OVER ) );
             else
-                child->m_compositeOp = cop->colorSpace()->compositeOp( COMPOSITE_COPY );
+                child->setCompositeOpPrivate( cop->colorSpace()->compositeOp( COMPOSITE_COPY ) );
 
             child->blockSignals(block);
             child->accept(visitor);
             child->blockSignals(true);
-            child->m_compositeOp = cop;
+            child->setCompositeOpPrivate( cop );
             child->blockSignals(block);
             first = false;
         }

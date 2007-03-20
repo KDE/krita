@@ -119,7 +119,7 @@ public:
             dy = sy;
 
             KisPainter gc(m_projection);
-            KisPaintDeviceSP source = layer->paintDevice();
+            KisPaintDeviceSP source = layer->projection();
 
             if (!layer->hasMask()) {
                 if (tempTarget) {

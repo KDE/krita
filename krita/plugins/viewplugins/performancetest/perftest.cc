@@ -1110,7 +1110,7 @@ QString PerfTest::paintViewTest(quint32 testCount)
 
     KisDoc2 * doc = m_view->canvasSubject()->document();
 
-    KisImageSP img = doc->currentImage();
+    KisImageSP img = doc->image();
     img->resize(512,512);
 
 

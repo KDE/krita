@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  this program is free software; you can redistribute it and/or modify
  *  it under the terms of the gnu general public license as published by
@@ -50,7 +51,7 @@ class KRITAIMAGE_EXPORT KisLayer: public KoDocumentSectionModel, public KisShare
     Q_OBJECT
 
 public:
-    KisLayer(KisImageWSP img, const QString &name, quint8 opacity);
+    KisLayer(KisImageSP img, const QString &name, quint8 opacity);
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
@@ -100,7 +101,7 @@ public:
     virtual KisLayerSP clone() const = 0;
 
     /// Returns the ID of the layer, which is guaranteed to be unique among all KisLayers.
-    int id() const { return m_id; }
+    int id() const;
 
     /* Returns the index of the layer in its parent's list of child layers. Indices
      * increase from 0, which is the topmost layer in the list, to the bottommost.
@@ -215,12 +216,12 @@ public:
     virtual QString name() const;
     virtual void setName(const QString& name);
 
-    const KoCompositeOp * compositeOp() const { return m_compositeOp; }
+    const KoCompositeOp * compositeOp() const;
     void setCompositeOp(const KoCompositeOp * compositeOp);
     QUndoCommand * setCompositeOpCommand(const KoCompositeOp * compositeOp);
 
-    KisImageSP image() const { return m_image; }
-    virtual void setImage(KisImageWSP image) { m_image = image; }
+    KisImageSP image() const;
+    virtual void setImage(KisImageSP image);
 
 //     KisUndoAdapter *undoAdapter() const;
 
@@ -252,31 +253,30 @@ protected:
 
     /// causes QAbstractItemModel::dataChanged() to be emitted and percolated up the tree
     void notifyPropertyChanged(KisLayer *layer);
+private:
+
+    bool matchesFlags(int flags) const;
 
 private:
     friend class KisGroupLayer;
 
-    bool matchesFlags(int flags) const;
+    // For KoGroupLayer. XXX: make the base KisLayer a group layer and
+    // remove these. (BSAR)
+    void setIndexPrivate( int index );
+    void setCompositeOpPrivate( const KoCompositeOp * op );
+    void setParentPrivate( KisGroupLayerSP parent );
 
-    int m_id;
-    int m_index;
-    quint8 m_opacity;
-    bool m_locked;
-    bool m_visible;
-    bool m_temporary;
+    class Private;
+    Private * const m_d;
 
-    QString m_name;
-    KisGroupLayerSP m_parent;
-    KisImageWSP m_image;
-
-    // Operation used to composite this layer with the projection of
-    // the layers _under_ this layer
-    const KoCompositeOp * m_compositeOp;
-
-    QRegion m_dirtyRegion;
 };
 
-// For classes that support indirect painting
+/**
+ * For classes that support indirect painting.
+ *
+ * XXX: Name doesn't suggest an object -- is KisIndirectPaintingLayer
+ * a better name? (BSAR)
+ */
 class KRITAIMAGE_EXPORT KisLayerSupportsIndirectPainting {
 
 public:
@@ -294,6 +294,7 @@ public:
 
     // Or I could make KisLayer a virtual base of KisLayerSupportsIndirectPainting and so, but
     // I'm sure virtual diamond inheritance isn't as appreciated as this
+
     virtual KisLayer* layer() = 0;
 
 private:

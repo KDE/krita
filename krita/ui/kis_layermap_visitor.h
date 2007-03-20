@@ -27,12 +27,11 @@
 #include "kis_external_layer_iface.h"
 
 #include <kis_layer_shape.h>
+#include <kis_paint_layer.h>
 #include <kis_shape_layer.h>
 #include <kis_layer_container_shape.h>
-
-class KisPaintLayer;
-class KisGroupLayer;
-class KisAdjustmentLayer;
+#include <kis_group_layer.h>
+#include <kis_adjustment_layer.h>
 
 /**
  * Creates the right layershape for all layers and puts them in the
@@ -72,7 +71,7 @@ public:
         {
 //             kDebug(41007) << "KisLayerMap visitor adding paint layer: " << layer->name() << endl;
             Q_ASSERT( m_layerMap.contains( layer->parent() ) );
-            
+
             if ( m_layerMap.contains( layer->parent() ) ) {
 
                 KoShapeContainer * parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parent()] );

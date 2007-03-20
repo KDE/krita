@@ -93,7 +93,7 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
 
     KisDoc2 d;
     d.import(fileName);
-    KisImageSP importedImage = d.currentImage();
+    KisImageSP importedImage = d.image();
 
     if(importedImage)
     {

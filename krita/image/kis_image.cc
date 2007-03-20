@@ -39,7 +39,6 @@
 #include "KoColor.h"
 #include "KoColorProfile.h"
 
-#include "kis_doc2.h"
 #include "kis_annotation.h"
 #include "kis_types.h"
 #include "kis_meta_registry.h"

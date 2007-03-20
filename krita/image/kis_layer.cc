@@ -34,38 +34,63 @@ static int getID()
     return id++;
 }
 
+class KisLayer::Private {
 
-KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity) :
-    KoDocumentSectionModel(0),
-    m_id(getID()),
-    m_index(-1),
-    m_opacity(opacity),
-    m_locked(false),
-    m_visible(true),
-    m_temporary(false),
-    m_name(name),
-    m_parent(0),
-    m_image(img),
-    m_compositeOp(const_cast<KoCompositeOp*>( img->colorSpace()->compositeOp( COMPOSITE_OVER )) )
+public:
+
+
+    int id;
+    int index;
+    quint8 opacity;
+    bool locked;
+    bool visible;
+    bool temporary;
+
+    QString name;
+    KisGroupLayerSP parent;
+    KisImageSP image;
+
+    // Operation used to composite this layer with the projection of
+    // the layers _under_ this layer
+    const KoCompositeOp * compositeOp;
+
+    QRegion dirtyRegion; // XXX: this should be part of the data manager!
+};
+
+
+KisLayer::KisLayer(KisImageSP img, const QString &name, quint8 opacity)
+    : KoDocumentSectionModel(0)
+    , m_d( new Private )
 {
+    m_d->id = getID();
+    m_d->index = -1;
+    m_d->opacity = opacity;
+    m_d->locked = false;
+    m_d->visible = true;
+    m_d->temporary = false;
+    m_d->name = name;
+    m_d->parent = 0;
+    m_d->image = img;
+    m_d->compositeOp = const_cast<KoCompositeOp*>( img->colorSpace()->compositeOp( COMPOSITE_OVER ) );
     setObjectName(name);
 }
 
-KisLayer::KisLayer(const KisLayer& rhs) :
-    KoDocumentSectionModel(0),
-    KisShared(rhs)
+KisLayer::KisLayer(const KisLayer& rhs)
+    : KoDocumentSectionModel( 0 )
+    , KisShared(rhs)
+    , m_d( new Private() )
 {
     if (this != &rhs) {
-        m_id = getID();
-        m_index = -1;
-        m_opacity = rhs.m_opacity;
-        m_locked = rhs.m_locked;
-        m_visible = rhs.m_visible;
-        m_temporary = rhs.m_temporary;
-        m_name = rhs.m_name;
-        m_image = rhs.m_image;
-        m_parent = 0;
-        m_compositeOp = rhs.m_compositeOp;
+        m_d->id = getID();
+        m_d->index = -1;
+        m_d->opacity = rhs.m_d->opacity;
+        m_d->locked = rhs.m_d->locked;
+        m_d->visible = rhs.m_d->visible;
+        m_d->temporary = rhs.m_d->temporary;
+        m_d->name = rhs.m_d->name;
+        m_d->image = rhs.m_d->image;
+        m_d->parent = 0;
+        m_d->compositeOp = rhs.m_d->compositeOp;
     }
 }
 
@@ -128,32 +153,38 @@ void KisLayer::setDirty(const QRect & rc)
 
 void KisLayer::setDirty( const QRegion & region)
 {
+    kDebug() << "setDirty " << m_d->name << " region, " << " m_d: " << m_d << endl;
     // If we're dirty, our parent is dirty, if we've got a parent
     if ( region.isEmpty() ) return;
 
-    if (m_parent)
-        m_parent->setDirty(region);
-
-    if (m_image) {
-        m_image->notifyLayerUpdated(KisLayerSP(this));
+    kDebug() << "parent: " << m_d->parent << endl;
+    if (m_d->parent) {
+        kDebug() << "going to set parent dirty anyway\n";
+        m_d->parent->setDirty(region);
+    }
+    kDebug() << "image: " << m_d->image.data() << endl;
+    if (m_d->image.data()) {
+        m_d->image->notifyLayerUpdated(KisLayerSP(this));
     }
 
-    m_dirtyRegion += region;
+    m_d->dirtyRegion += region;
 }
 
 bool KisLayer::isDirty( const QRect & rect )
 {
-    return m_dirtyRegion.intersects( rect );
+    return m_d->dirtyRegion.intersects( rect );
 }
 
 void KisLayer::setClean( QRect rc )
 {
-    m_dirtyRegion -= QRegion( rc );
+    m_d->dirtyRegion -= QRegion( rc );
 }
+
+int KisLayer::id() const { return m_d->id; }
 
 KisGroupLayerSP KisLayer::parent() const
 {
-    return m_parent;
+    return m_d->parent;
 }
 
 KisLayerSP KisLayer::prevSibling() const
@@ -172,7 +203,7 @@ KisLayerSP KisLayer::nextSibling() const
 
 int KisLayer::index() const
 {
-    return m_index;
+    return m_d->index;
 }
 
 void KisLayer::setIndex(int i)
@@ -246,14 +277,14 @@ vKisLayerSP KisLayer::layersFromIndexes(const QModelIndexList &in)
 
 quint8 KisLayer::opacity() const
 {
-    return m_opacity;
+    return m_d->opacity;
 }
 
 void KisLayer::setOpacity(quint8 val)
 {
-    if (m_opacity != val)
+    if (m_d->opacity != val)
     {
-        m_opacity = val;
+        m_d->opacity = val;
         setDirty();
         notifyPropertyChanged();
     }
@@ -271,14 +302,14 @@ void KisLayer::setPercentOpacity(quint8 val)
 
 const bool KisLayer::visible() const
 {
-    return m_visible;
+    return m_d->visible;
 }
 
 void KisLayer::setVisible(bool v)
 {
-    if (m_visible != v) {
+    if (m_d->visible != v) {
 
-        m_visible = v;
+        m_d->visible = v;
         notifyPropertyChanged();
         setDirty();
     }
@@ -286,50 +317,63 @@ void KisLayer::setVisible(bool v)
 
 bool KisLayer::locked() const
 {
-    return m_locked;
+    return m_d->locked;
 }
 
 void KisLayer::setLocked(bool l)
 {
-    if (m_locked != l) {
-        m_locked = l;
+    if (m_d->locked != l) {
+        m_d->locked = l;
         notifyPropertyChanged();
     }
 }
 
 bool KisLayer::temporary() const
 {
-    return m_temporary;
+    return m_d->temporary;
 }
 
 void KisLayer::setTemporary(bool t)
 {
-    m_temporary = t;
+    m_d->temporary = t;
 }
 
 QString KisLayer::name() const
 {
-        return m_name;
+        return m_d->name;
 }
 
 void KisLayer::setName(const QString& name)
 {
-    if (!name.isEmpty() && m_name != name)
+    if (!name.isEmpty() && m_d->name != name)
     {
-        m_name = name;
+        m_d->name = name;
         notifyPropertyChanged();
     }
 }
 
+const KoCompositeOp * KisLayer::compositeOp() const
+{
+    return m_d->compositeOp;
+}
+
 void KisLayer::setCompositeOp(const KoCompositeOp* compositeOp)
 {
-    if (m_compositeOp != compositeOp)
+    if (m_d->compositeOp != compositeOp)
     {
-       m_compositeOp = const_cast<KoCompositeOp*>( compositeOp );
+       m_d->compositeOp = const_cast<KoCompositeOp*>( compositeOp );
        notifyPropertyChanged();
        setDirty();
-
     }
+}
+
+KisImageSP KisLayer::image() const { return m_d->image; }
+
+void KisLayer::setImage(KisImageSP image)
+{
+    kDebug() << "setImage " << name() << endl;
+    kDebug() << ", image: " << image << endl;
+    m_d->image = image;
 }
 
 void KisLayer::paintMaskInactiveLayers(QImage &, qint32, qint32, qint32, qint32)
@@ -492,6 +536,22 @@ bool KisLayer::setData(const QModelIndex &index, const QVariant &value, int role
     return false;
 }
 
+
+void KisLayer::setIndexPrivate( int index )
+{
+    m_d->index = index;
+}
+
+void KisLayer::setCompositeOpPrivate( const KoCompositeOp * op )
+{
+    m_d->compositeOp = op;
+}
+
+void KisLayer::setParentPrivate( KisGroupLayerSP parent )
+{
+    kDebug() << "setParentPrivate " << parent << endl;
+    m_d->parent = parent;
+}
 
 void KisLayerSupportsIndirectPainting::setTemporaryTarget(KisPaintDeviceSP t) {
     m_temporaryTarget = t;

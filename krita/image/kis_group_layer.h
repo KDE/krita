@@ -40,7 +40,7 @@ class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer {
     Q_OBJECT
 
 public:
-    KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacity);
+    KisGroupLayer(KisImageSP img, const QString &name, quint8 opacity);
     KisGroupLayer(const KisGroupLayer& rhs);
     virtual ~KisGroupLayer();
 
@@ -92,7 +92,7 @@ public:
        Sets this layer and all its descendants' owner image to the
        given image.
     */
-    virtual void setImage(KisImageWSP image);
+    virtual void setImage(KisImageSP image);
 
     /**
        Return the united extents of all layers in this group layer;

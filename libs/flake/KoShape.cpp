@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -299,6 +299,11 @@ bool KoShape::hitTest( const QPointF &position ) const
 QRectF KoShape::boundingRect() const
 {
     QRectF bb( QPointF(0, 0), size() );
+    if(d->border) {
+        KoInsets insets;
+        d->border->borderInsets(this, insets);
+        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+    }
     return d->matrix.mapRect( bb );
 }
 

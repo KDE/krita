@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=YCbCr (integer 8-bit and 16-bit) Color Model
+Comment=Color model for 8-bit and 16-bit per channel for YCbCr images
+ServiceTypes=KOffice/ColorSpace
+Type=Service
+X-KDE-Library=kritaycbcrplugin
+X-Pigment-Version=1

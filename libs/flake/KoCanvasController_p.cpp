@@ -53,9 +53,8 @@ Viewport::Viewport(KoCanvasController* parent)
     setMouseTracking( true );
     m_parent = parent;
 
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    cfg->setGroup("");
-    m_margin = cfg->readEntry("canvasmargin",  0);
+    KConfigGroup cfg = KGlobal::config()->group("");
+    m_margin = cfg.readEntry("canvasmargin",  0);
 
 }
 

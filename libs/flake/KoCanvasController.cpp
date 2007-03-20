@@ -65,9 +65,8 @@ KoCanvasController::KoCanvasController(QWidget *parent)
 
     setMouseTracking( true );
 
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    cfg->setGroup("");
-    m_d->margin = cfg->readEntry("canvasmargin",  0);
+    KConfigGroup cfg = KGlobal::config()->group("");
+    m_d->margin = cfg.readEntry("canvasmargin",  0);
 
     connect( this, SIGNAL( moveDocumentOffset( QPoint ) ), m_d->viewportWidget, SLOT( documentOffsetMoved( QPoint ) ) );
 }

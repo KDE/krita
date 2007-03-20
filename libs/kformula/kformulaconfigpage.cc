@@ -216,12 +216,12 @@ void ConfigurePage::apply()
 //     contextStyle.setEmptyColor( emptyColorBtn->color() );
 //     contextStyle.setErrorColor( errorColorBtn->color() );
 
-    m_config->setGroup( "kformula Font" );
-    m_config->writeEntry( "defaultFont", defaultFont.toString() );
-    m_config->writeEntry( "nameFont", nameFont.toString() );
-    m_config->writeEntry( "numberFont", numberFont.toString() );
-    m_config->writeEntry( "operatorFont", operatorFont.toString() );
-    m_config->writeEntry( "baseSize", QString::number( sizeSpin->value() ) );
+    KConfigGroup group = m_config->group("kformula Font" );
+    group.writeEntry( "defaultFont", defaultFont.toString() );
+    group.writeEntry( "nameFont", nameFont.toString() );
+    group.writeEntry( "numberFont", numberFont.toString() );
+    group.writeEntry( "operatorFont", operatorFont.toString() );
+    group.writeEntry( "baseSize", QString::number( sizeSpin->value() ) );
 
 //     m_config->setGroup( "kformula Color" );
 //     m_config->writeEntry( "syntaxHighlighting", syntaxHighlighting->isChecked() );

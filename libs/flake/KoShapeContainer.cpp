@@ -22,6 +22,7 @@
 
 #include <QPointF>
 #include <QPainter>
+#include <QPainterPath>
 
 class ChildrenData : public KoShapeContainerModel {
 public:
@@ -129,6 +130,8 @@ KoShapeContainer::~KoShapeContainer() {
 
 void KoShapeContainer::addChild(KoShape *shape) {
     Q_ASSERT(shape);
+    if(shape->parent() == this)
+        return;
     if(d->children == 0)
         d->children = new ChildrenData();
     if( shape->parent() )
@@ -161,7 +164,6 @@ void KoShapeContainer::setClipping(const KoShape *child, bool clipping) {
 
 void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter) {
     painter.save();
-    applyConversion(painter, converter);
     paintComponent(painter, converter);
     painter.restore();
     if(d->children == 0 || d->children->count() == 0)
@@ -169,34 +171,31 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 
     QList<KoShape*> sortedObjects = d->children->iterator();
     qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
-    painter.setMatrix( matrix().inverted() * painter.matrix() );
-    QMatrix myMatrix = transformationMatrix(&converter);
+    QMatrix baseMatrix = matrix().inverted() * painter.matrix();
+
+    // clip the children to the parent outline.
+    QMatrix m;
+    double zoomX, zoomY;
+    converter.zoom(&zoomX, &zoomY);
+    m.scale(zoomX, zoomY);
+    painter.setClipPath(m.map(outline()));
+
     foreach (KoShape *shape, sortedObjects) {
-        kDebug(30006) << "painting shape: " << shape->shapeId() << ", " << shape->boundingRect() << endl;
+        //kDebug(30006) << "KoShapeContainer::painting shape: " << shape->shapeId() << ", " << shape->boundingRect() << endl;
         if(! shape->isVisible())
             continue;
-        // TODO this is not perfect yet..
-//           QRectF clipRect(QPoint(0,0), size()); // old
-//           QPolygon clip = (myMatrix * shapeMatrix.inverted()).mapToPolygon(clipRect.toRect());
-//           painter.setClipRegion(QRegion(clip));
-
-/*        if(! childClipped(shape) )
-            continue;*/
-        painter.save();
-
-        if( childClipped(shape) ) {
-            QRectF clipRect(QPointF(0, 0), size());
-            clipRect = converter.documentToView(clipRect);
-
-            QPolygon clip = myMatrix.mapToPolygon(clipRect.toRect());
-            clip.translate( (position() - converter.documentToView(position())).toPoint() );
-            painter.setClipRegion(QRegion(clip));
+        if(! childClipped(shape) ) // the shapeManager will have to draw those, or else we can't do clipRects
+            return;
+        if(painter.hasClipping()) {
+            QRectF rect = converter.viewToDocument( painter.clipRegion().boundingRect() );
+            rect = matrix().mapRect(rect);
+            // don't try to draw a child shape that is not in the clipping rect of the painter.
+            if(! rect.intersects(shape->boundingRect()))
+                continue;
         }
 
-//kDebug(30006) << "rect: " << position() << endl;
-//kDebug(30006) << "polygon: " << clip.boundingRect() << endl;
-        //painter.drawPolygon(clip);
-        painter.setMatrix( shape->transformationMatrix(&converter) * painter.matrix() );
+        painter.save();
+        painter.setMatrix( shape->transformationMatrix(&converter) * baseMatrix );
         shape->paint(painter, converter);
         painter.restore();
     }
@@ -232,5 +231,4 @@ QList<KoShape*> KoShapeContainer::iterator() const {
 
     return d->children->iterator();
 }
-
 

@@ -59,9 +59,9 @@ public:
      * @param shape the shape the insets will be calculated for
      * Note that the KoInsets is a new object that you are responsible to delete afterwards.
      */
-    KoInsets* borderInsets(const KoShape *shape) {
-        KoInsets *insets = new KoInsets(0, 0, 0, 0);
-        borderInsets(shape, *insets);
+    KoInsets borderInsets(const KoShape *shape) {
+        KoInsets insets;
+        borderInsets(shape, insets);
         return insets;
     }
     /**
@@ -69,7 +69,7 @@ public:
      * @param shape the shape the insets will be calculated for
      * @param insets the insets object that will be filled and returned.
      */
-    virtual KoInsets* borderInsets(const KoShape *shape, KoInsets &insets) = 0;
+    virtual void borderInsets(const KoShape *shape, KoInsets &insets) = 0;
     /**
      * Returns true if there is some transparency, false if the border is fully opaque.
      * @return if the border is transparent.

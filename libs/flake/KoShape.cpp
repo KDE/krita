@@ -389,7 +389,7 @@ void KoShape::repaint() const {
     {
         QRectF rect(QPointF(0, 0), size() );
         if(d->border) {
-            KoInsets insets(0, 0, 0, 0);
+            KoInsets insets;
             d->border->borderInsets(this, insets);
             rect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
         }

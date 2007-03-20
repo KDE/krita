@@ -61,7 +61,7 @@ void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
     style.addPropertyPt( "svg:stroke-width", lineWidth() );
 }
 
-KoInsets* KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) {
+void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) {
     Q_UNUSED(shape);
     double lineWidth = d->pen.widthF();
     if(lineWidth < 0)
@@ -71,7 +71,6 @@ KoInsets* KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) {
     insets.bottom = lineWidth;
     insets.left = lineWidth;
     insets.right = lineWidth;
-    return &insets;
 }
 
 bool KoLineBorder::hasTransparency() {

@@ -130,7 +130,7 @@ KoShapeContainer::~KoShapeContainer() {
 
 void KoShapeContainer::addChild(KoShape *shape) {
     Q_ASSERT(shape);
-    if(shape->parent() == this)
+    if(shape->parent() == this && iterator().contains( shape ) )
         return;
     if(d->children == 0)
         d->children = new ChildrenData();

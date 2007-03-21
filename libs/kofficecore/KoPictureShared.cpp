@@ -223,7 +223,7 @@ bool KoPictureShared::identifyAndLoad( const QByteArray& _array )
         // BZip2
         QBuffer buffer(&array);
         buffer.open(QIODevice::ReadOnly);
-        const bool flag = loadCompressed( &buffer, "application/x-bzip2", "tmp" );
+        const bool flag = loadCompressed( &buffer, "application/x-bzip", "tmp" );
         buffer.close();
         return flag;
     }
@@ -403,7 +403,7 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
         flag=loadTmp(io);
     else if ( ext == "bz2" )
     {
-        flag = loadCompressed( io, "application/x-bzip2", "tmp" );
+        flag = loadCompressed( io, "application/x-bzip", "tmp" );
     }
     else if ( ext == "gz" )
     {

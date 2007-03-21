@@ -52,12 +52,12 @@ int main( int /*argc*/, char ** /*argv*/ )
         chain->dump();
     }
 
-    mimeType = "text/x-csv";
+    mimeType = "text/csv";
     chain = g.chain( manager, mimeType );
     if ( !chain )
-        kError() << "Chain for 'text/x-csv' is not available!" << endl;
+        kError() << "Chain for 'text/csv' is not available!" << endl;
     else {
-        kDebug() << "Chain for 'text/x-csv' is available, OK" << endl;
+        kDebug() << "Chain for 'text/csv' is available, OK" << endl;
         chain->dump();
     }
 
@@ -69,13 +69,13 @@ int main( int /*argc*/, char ** /*argv*/ )
     else
         kError() << "We really got a chain? ugh :}" << endl;
 
-    g.setSourceMimeType( "text/x-csv" );
+    g.setSourceMimeType( "text/csv" );
     mimeType = "";
     chain = g.chain( manager, mimeType );
     if ( !chain )
         kError() << "Hmm... why didn't we find a chain?" << endl;
     else {
-        kDebug() << "Chain for 'text/x-csv' -> closest part is available ("
+        kDebug() << "Chain for 'text/csv' -> closest part is available ("
                   << mimeType << "), OK" << endl;
         chain->dump();
     }

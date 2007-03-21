@@ -34,6 +34,7 @@ class KToggleAction;
 class KoPAPageBase;
 class KoShapeManager;
 class KoZoomAction;
+class KoZoomController;
 
 /// Creates a view with a KoPACanvas and rulers
 class KOPAGEAPP_EXPORT KoPAView : public KoView
@@ -69,8 +70,6 @@ public:
     /// @return the master shape manager used for this view
     KoShapeManager* masterShapeManager() const;
 
-    void setZoom(int zoom);
-
 public slots:
     /// Shows/hides the rulers
     void setShowRulers(bool show);
@@ -84,7 +83,7 @@ protected:
 protected slots:
     void viewSnapToGrid();
     void viewGrid();
-    void viewZoom(KoZoomMode::Mode mode, int zoom);
+    void slotZoomChanged( KoZoomMode::Mode mode, double zoom );
 
     /// Called when the canvas controller is resized
     virtual void canvasControllerResized();
@@ -101,9 +100,8 @@ protected:
     KoPAPageBase *m_activePage;
 
 private:
-    void recalculateZoom();
-
     KoCanvasController * m_canvasController;
+    KoZoomController * m_zoomController;
     KoZoomHandler m_zoomHandler;
 
     KToggleAction *m_actionViewSnapToGrid;
@@ -117,7 +115,7 @@ private:
     KoRuler *m_verticalRuler;
     KToggleAction* m_viewRulers;
 
-    KoZoomAction *m_viewZoomAction;
+    KoZoomAction *m_zoomAction;
 
     KAction *m_actionFormatFont;
 };

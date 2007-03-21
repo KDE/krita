@@ -16,79 +16,20 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="textLabel1" >
-     <property name="text" >
-      <string>&amp;Name:</string>
-     </property>
-     <property name="buddy" >
-      <cstring>editName</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" >
-    <widget class="QLineEdit" name="editName" />
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="textLabel2" >
-     <property name="text" >
-      <string>Colorspace:</string>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="2" row="1" column="1" >
-    <widget class="KisCmbIDList" native="1" name="cmbColorSpaces" />
-   </item>
-   <item rowspan="2" row="2" column="0" >
-    <widget class="QLabel" name="textLabel1_2" >
-     <property name="text" >
-      <string>Profile:</string>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="2" row="3" column="1" >
-    <widget class="SqueezedComboBox" native="1" name="cmbProfile" />
-   </item>
-   <item rowspan="2" row="4" column="0" >
-    <widget class="QLabel" name="textLabel3" >
-     <property name="text" >
-      <string>&amp;Opacity:</string>
-     </property>
-     <property name="buddy" >
-      <cstring>intOpacity</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" >
-    <widget class="KisIntSpinbox" native="1" name="intOpacity" />
-   </item>
-   <item row="6" column="0" >
-    <widget class="QLabel" name="textLabel4" >
-     <property name="text" >
-      <string>Composite mode:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1" >
-    <widget class="KisCmbComposite" native="1" name="cmbComposite" />
-   </item>
-   <item row="7" column="0" >
-    <widget class="QLabel" name="lblChannelsst" >
-     <property name="text" >
-      <string>Visible channels:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-     <property name="buddy" >
-      <cstring>lstChannels</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1" >
-    <widget class="QListWidget" name="listChannels" />
-   </item>
    <item row="8" column="0" colspan="2" >
+    <widget class="QGroupBox" name="grpActiveChannels" >
+     <property name="toolTip" >
+      <string>Select the set of active channels.</string>
+     </property>
+     <property name="whatsThis" >
+      <string>Select the set of active channels. Only active channels will be visible, filtered or affected by painting.</string>
+     </property>
+     <property name="title" >
+      <string>&amp;Active Channels</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="2" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Painterly overlays</string>
@@ -183,10 +124,71 @@
      </layout>
     </widget>
    </item>
+   <item row="7" column="1" >
+    <widget class="KisCmbComposite" native="1" name="cmbComposite" />
+   </item>
+   <item rowspan="2" row="6" column="0" >
+    <widget class="QLabel" name="textLabel4" >
+     <property name="text" >
+      <string>Composite mode:</string>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="5" column="1" >
+    <widget class="KisIntSpinbox" native="1" name="intOpacity" />
+   </item>
+   <item rowspan="2" row="4" column="0" >
+    <widget class="QLabel" name="textLabel3" >
+     <property name="text" >
+      <string>&amp;Opacity:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>intOpacity</cstring>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="3" column="1" >
+    <widget class="SqueezedComboBox" native="1" name="cmbProfile" />
+   </item>
+   <item rowspan="2" row="2" column="0" >
+    <widget class="QLabel" name="textLabel1_2" >
+     <property name="text" >
+      <string>Profile:</string>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="1" column="1" >
+    <widget class="KisCmbIDList" native="1" name="cmbColorSpaces" />
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="textLabel2" >
+     <property name="text" >
+      <string>Colorspace:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QLineEdit" name="editName" />
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="textLabel1" >
+     <property name="text" >
+      <string>&amp;Name:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>editName</cstring>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
+  <customwidget>
+   <class>KisCmbComposite</class>
+   <extends>QWidget</extends>
+   <header>kis_cmb_composite.h</header>
+  </customwidget>
   <customwidget>
    <class>KisIntSpinbox</class>
    <extends>QWidget</extends>
@@ -201,11 +203,6 @@
    <class>KisCmbIDList</class>
    <extends>QWidget</extends>
    <header>kis_cmb_idlist.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisCmbComposite</class>
-   <extends>QWidget</extends>
-   <header>kis_cmb_composite.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

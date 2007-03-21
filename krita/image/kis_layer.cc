@@ -21,12 +21,14 @@
 #include <kicon.h>
 #include <QIcon>
 #include <QImage>
+#include <QBitArray>
 
 #include "kis_debug_areas.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
+
 
 static int getID()
 {
@@ -38,7 +40,6 @@ class KisLayer::Private {
 
 public:
 
-
     int id;
     int index;
     quint8 opacity;
@@ -49,6 +50,7 @@ public:
     QString name;
     KisGroupLayerSP parent;
     KisImageSP image;
+    QBitArray activeChannels;
 
     // Operation used to composite this layer with the projection of
     // the layers _under_ this layer
@@ -98,6 +100,11 @@ KisLayer::~KisLayer()
 {
 }
 
+KoColorSpace * KisLayer::colorSpace()
+{
+    return m_d->image->colorSpace();
+}
+
 KoDocumentSectionModel::PropertyList KisLayer::properties() const
 {
     PropertyList l;
@@ -113,6 +120,18 @@ void KisLayer::setProperties( const PropertyList &properties )
     setVisible( properties.at( 0 ).state.toBool() );
     setLocked( properties.at( 1 ).state.toBool() );
 }
+
+void KisLayer::setActiveChannels( QBitArray & activeChannels )
+{
+    Q_ASSERT( ( quint32 )activeChannels.count() == colorSpace()->channelCount() );
+    m_d->activeChannels = activeChannels;
+}
+
+QBitArray & KisLayer::activeChannels()
+{
+    return m_d->activeChannels;
+}
+
 
 void KisLayer::activate()
 {

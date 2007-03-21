@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
  *  Copyright (c) 2006 Bart Coppens <kde@bartcoppens.be>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  this program is free software; you can redistribute it and/or modify
  *  it under the terms of the gnu general public license as published by
@@ -21,7 +22,9 @@
 #include <QIcon>
 #include <QImage>
 #include <QUndoCommand>
+#include <QList>
 
+#include "KoColorSpace.h"
 #include <KoColorProfile.h>
 
 #include "kis_debug_areas.h"
@@ -36,22 +39,44 @@
 #include "KoColorSpaceRegistry.h"
 #include "kis_datamanager.h"
 #include "kis_undo_adapter.h"
-
+#include "kis_effect_mask.h"
+#include "kis_transparency_mask.h"
 
 
 class KisPaintLayer::Private
 {
 public:
+
+    Private()
+        {
+            transparencyMask = 0;
+            protectionMask = 0;
+            mask = 0;
+            maskAsSelection = 0;
+            renderMask = false;
+            editMask = true;
+        }
+
+    ~Private()
+        {
+            delete transparencyMask;
+            delete protectionMask;
+            foreach( KisEffectMask * mask, effectMasks ) {
+                delete mask;
+            }
+            effectMasks.clear();
+        }
+
     KisPaintDeviceSP paintdev;
     KisPaintDeviceSP mask; // The mask that we can edit and display easily
-    KisSelectionSP maskAsSelection; //
-                                    // The mask as selection, to apply and render easily
+    KisSelectionSP maskAsSelection; // The mask as selection, to apply and render easily
+
     KisPaintDeviceSP projection;
 
-    KisMaskSP transparencyMask;
-    KisMaskSP protectionMask;
-    KisSelectionSP selection;
-    vKisMaskSP effectMasks; // The first mask is the bottom-one in the
+    KisTransparencyMask * transparencyMask;
+    KisMask * protectionMask;
+
+    QList<KisEffectMask*> effectMasks; // The first mask is the bottom-one in the
                             // mask stack!
 
     bool renderMask;
@@ -103,16 +128,24 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) :
     m_d->editMask = rhs.m_d->editMask;
 }
 
+KisPaintLayer::~KisPaintLayer()
+{
+
+
+    if (!m_d->paintdev.isNull()) {
+        m_d->paintdev->setParentLayer(0);
+    }
+    delete m_d;
+}
+
+
 void KisPaintLayer::init()
 {
     m_d->paintdev->startBackgroundFilters();
     connect(m_d->paintdev.data(), SIGNAL(colorSpaceChanged(KoColorSpace*)), this, SLOT(slotColorSpaceChanged()));
     connect(m_d->paintdev.data(), SIGNAL(profileChanged(KoColorProfile*)), this, SLOT(slotColorSpaceChanged()));
 
-    m_d->mask = 0;
-    m_d->maskAsSelection = 0;
-    m_d->renderMask = false;
-    m_d->editMask = true;
+
 }
 
 QIcon KisPaintLayer::icon() const
@@ -135,12 +168,10 @@ KisLayerSP KisPaintLayer::clone() const
     return KisLayerSP(new KisPaintLayer(*this));
 }
 
-KisPaintLayer::~KisPaintLayer()
+
+KoColorSpace * KisPaintLayer::colorSpace()
 {
-    if (!m_d->paintdev.isNull()) {
-        m_d->paintdev->setParentLayer(0);
-    }
-    delete m_d;
+    return m_d->paintdev->colorSpace();
 }
 
 void KisPaintLayer::paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h)
@@ -475,8 +506,10 @@ void KisPaintLayer::updateProjection(const QRect & rc)
     gc.setCompositeOp( m_d->paintdev->colorSpace()->compositeOp( COMPOSITE_COPY ) );
     gc.bitBlt( rc.topLeft(), m_d->paintdev, rc );
 
-    foreach( KisMaskSP mask, m_d->effectMasks ) {
-        // XXX: Filter the projection (once the effect mask class is done
+    foreach( KisEffectMask * mask, m_d->effectMasks ) {
+        // XXX: Filter the projection (once the effect mask class is
+        // done
+        Q_UNUSED( mask );
     }
 
     // XXX: Filter the alpha with the transparency mask (once the apha

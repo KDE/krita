@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  this program is free software; you can redistribute it and/or modify
  *  it under the terms of the gnu general public license as published by
@@ -21,12 +22,18 @@
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "KoColorSpace.h"
 
+class KoColorSpace;
 class QUndoCommand;
 
 /**
- * This layer is of a type that can be painted on.
+ * This layer is of a type that can be painted on. A paint layer can
+ * have any number of effect masks, a transparency mask, a local
+ * selection and a protection mask.
+ *
+ * The protection mask can be read/write, read-only or write-only.
+ * The transparency mask has two rendering forms: as a selection mask
+ * and by changing the transparency of the paint layer's pixels.
  */
 class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisLayerSupportsIndirectPainting {
     typedef KisLayer super;
@@ -39,6 +46,8 @@ public:
     KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KoColorSpace * colorSpace);
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
+
+    KoColorSpace * colorSpace();
 
     virtual QIcon icon() const;
     virtual PropertyList properties() const;

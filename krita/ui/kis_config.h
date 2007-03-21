@@ -37,6 +37,9 @@ public:
     bool fixDockerWidth() const;
     void setFixedDockerWidth(bool fix);
 
+    bool useProjections() const;
+    void setUseProjections( bool useProj );
+
     bool undoEnabled() const;
     void setUndoEnabled(bool undo);
 

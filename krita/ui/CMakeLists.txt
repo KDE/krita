@@ -21,7 +21,6 @@ set(kritaui_LIB_SRCS
     kis_clipboard.cc
     kis_cmb_composite.cc
     kis_cmb_idlist.cc
-    kis_color_cup.cc
     kis_config.cc
     kis_controlframe.cc
     kis_layer_model.cpp
@@ -99,6 +98,7 @@ set(kritaui_LIB_SRCS
     kis_layer_container_shape.cc
     kis_shape_controller.cpp
     kis_png_converter.cpp
+    kis_channelflags_widget.cpp
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

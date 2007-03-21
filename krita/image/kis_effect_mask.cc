@@ -16,18 +16,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kis_filter_mask.h"
+#include "kis_effect_mask.h"
 
-KisFilterMask::KisFilterMask( KisPaintDeviceSP device )
-    : KisMask( device, "filter" )
+KisEffectMask::KisEffectMask( KisPaintDeviceSP device )
+    : KisMask( device, "effect" )
 {
 }
 
-KisFilterMask::~KisFilterMask()
+KisEffectMask::~KisEffectMask()
 {
 }
 
-KisFilterMask::KisFilterMask( const KisFilterMask& rhs )
+KisEffectMask::KisEffectMask( const KisEffectMask& rhs )
     : KisMask( rhs )
 {
 }

@@ -21,11 +21,18 @@
 #include <QLayout>
 #include <QSlider>
 #include <QString>
+#include <QBitArray>
+#include <q3valuevector.h>
+#include <QGroupBox>
+#include <QVBoxLayout>
 
 #include <klineedit.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <knuminput.h>
+
+#include <KoChannelInfo.h>
+#include <KoColorSpace.h>
 
 #include "kis_global.h"
 #include "squeezedcombobox.h"
@@ -35,6 +42,7 @@
 #include "KoColorProfile.h"
 #include "kis_int_spinbox.h"
 #include "KoColorSpace.h"
+#include "kis_channelflags_widget.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
                      qint32 opacity,
@@ -75,6 +83,13 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->cmbComposite->setCurrent(compositeOp);
 
     slotNameChanged( m_page->editName->text() );
+
+    QVBoxLayout * vbox = new QVBoxLayout;
+    KisChannelFlagsWidget * m_channelFlags = new KisChannelFlagsWidget( colorSpace );
+    vbox->addWidget( m_channelFlags );
+    vbox->addStretch( 1 );
+    m_page->grpActiveChannels->setLayout( vbox );
+
 }
 
 KisDlgLayerProperties::~KisDlgLayerProperties()
@@ -107,6 +122,11 @@ int KisDlgLayerProperties::getOpacity() const
 KoCompositeOp * KisDlgLayerProperties::getCompositeOp() const
 {
     return m_page->cmbComposite->currentItem();
+}
+
+QBitArray KisDlgLayerProperties::channelFlags() const
+{
+    return m_channelFlags->channelFlags();
 }
 
 #include "kis_dlg_layer_properties.moc"

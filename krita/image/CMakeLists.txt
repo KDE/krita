@@ -83,8 +83,8 @@ set(kritaimage_LIB_SRCS
    kis_perspective_math.cpp
    kis_mask.cc
    kis_adsorbency_mask.cc
-   kis_alpha_mask.cc
-   kis_filter_mask.cc
+   kis_transparency_mask.cc
+   kis_effect_mask.cc
    kis_gravity_mask.cc
    kis_height_mask.cc
    kis_viscosity_mask.cc

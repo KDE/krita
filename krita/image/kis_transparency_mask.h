@@ -16,24 +16,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_FILTER_MASK_
-#define _KIS_FILTER_MASK_
+#ifndef _KIS_TRANSPARENCY_MASK_
+#define _KIS_TRANSPARENCY_MASK_
 
 #include "kis_types.h"
 
 #include "kis_mask.h"
 /**
-   A filter mask is a single channel mask that applies a particular
-   filter to the layer the mask belongs to. It differs from an
+   A transparency mask is a single channel mask that applies a particular
+   transparency to the layer the mask belongs to. It differs from an
    adjustment layer in that it only works on its parent layer, while
    adjustment layers work on all layers below it in its layer group.
 */
 
-class KisFilterMask : public KisMask
+class KisTransparencyMask : public KisMask
 {
-    KisFilterMask( KisPaintDeviceSP device );
-    ~KisFilterMask();
-    KisFilterMask( const KisFilterMask& rhs );
+public:
+
+    KisTransparencyMask( KisPaintDeviceSP device );
+    ~KisTransparencyMask();
+    KisTransparencyMask( const KisTransparencyMask& rhs );
 };
 
-#endif //_KIS_FILTER_MASK_
+#endif //_KIS_TRANSPARENCY_MASK_

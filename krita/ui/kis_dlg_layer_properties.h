@@ -18,6 +18,9 @@
 #ifndef KIS_DLG_LAYER_PROPERTIES_H_
 #define KIS_DLG_LAYER_PROPERTIES_H_
 
+#include <QList>
+#include <QCheckBox>
+
 #include <kdialog.h>
 
 #include "ui_wdglayerproperties.h"
@@ -25,6 +28,8 @@
 class QWidget;
 class KoCompositeOp;
 class KoColorSpace;
+class QBitArray;
+class KisChannelFlagsWidget;
 
 class WdgLayerProperties : public QWidget, public Ui::WdgLayerProperties
 {
@@ -40,22 +45,24 @@ class KisDlgLayerProperties : public KDialog {
 
 public:
     KisDlgLayerProperties(const QString& deviceName,
-                        qint32 opacity,
-                        const KoCompositeOp* compositeOp,
-                        const KoColorSpace * colorSpace,
-                        QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
+                          qint32 opacity,
+                          const KoCompositeOp* compositeOp,
+                          const KoColorSpace * colorSpace,
+                          QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
 
     virtual ~KisDlgLayerProperties();
 
     QString getName() const;
     qint32 getOpacity() const;
     KoCompositeOp * getCompositeOp() const;
+    QBitArray channelFlags() const;
 
 protected slots:
     void slotNameChanged( const QString & );
 
 private:
     WdgLayerProperties * m_page;
+    KisChannelFlagsWidget * m_channelFlags;
 };
 
 #endif // KIS_DLG_LAYER_PROPERTIES_H_

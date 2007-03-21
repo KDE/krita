@@ -3,6 +3,7 @@
 set(kritawetplugin_PART_SRCS
    kis_wet_colorspace.cc
    wet_plugin.cc
+   kis_color_cup.cc
    kis_wetop.cc
    kis_wet_palette_widget.cc
    kis_wetness_visualisation_filter.cc

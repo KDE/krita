@@ -16,24 +16,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_ALPHA_MASK_
-#define _KIS_ALPHA_MASK_
+#ifndef _KIS_EFFECT_MASK_
+#define _KIS_EFFECT_MASK_
 
 #include "kis_types.h"
 
 #include "kis_mask.h"
 /**
-   A alpha mask is a single channel mask that applies a particular
-   alpha to the layer the mask belongs to. It differs from an
+   An effect mask is a single channel mask that applies a particular
+   filter to the layer the mask belongs to. It differs from an
    adjustment layer in that it only works on its parent layer, while
    adjustment layers work on all layers below it in its layer group.
 */
 
-class KisAlphaMask : public KisMask
+class KisEffectMask : public KisMask
 {
-    KisAlphaMask( KisPaintDeviceSP device );
-    ~KisAlphaMask();
-    KisAlphaMask( const KisAlphaMask& rhs );
+public:
+
+    KisEffectMask( KisPaintDeviceSP device );
+    ~KisEffectMask();
+    KisEffectMask( const KisEffectMask& rhs );
 };
 
-#endif //_KIS_ALPHA_MASK_
+#endif //_KIS_EFFECT_MASK_

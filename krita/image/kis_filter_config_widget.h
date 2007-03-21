@@ -31,27 +31,31 @@ class KRITAIMAGE_EXPORT KisFilterConfigWidget : public QWidget {
 
     Q_OBJECT
 
-    protected:
-        KisFilterConfigWidget(QWidget * parent, Qt::WFlags f = 0 );
-    public:
-        virtual ~KisFilterConfigWidget();
-    
-        /**
-        * @param config the configuration for this filter widget.
-        */
-        virtual void setConfiguration(KisFilterConfiguration * config) = 0;
-        /**
-        * @return the filter configuration
-        */
-        virtual KisFilterConfiguration* configuration() const = 0;
-    
-    signals:
-    
-        /**
-        * Subclasses should emit this signal whenever the preview should be
-        * be recalculated.
-        */
-        void sigPleaseUpdatePreview();
+protected:
+
+    KisFilterConfigWidget(QWidget * parent, Qt::WFlags f = 0 );
+
+public:
+    virtual ~KisFilterConfigWidget();
+
+    /**
+     * @param config the configuration for this filter widget.
+     */
+    virtual void setConfiguration(KisFilterConfiguration * config) = 0;
+
+    /**
+     * @return the filter configuration
+     */
+    virtual KisFilterConfiguration* configuration() const = 0;
+
+signals:
+
+    /**
+     * Subclasses should emit this signal whenever the preview should be
+     * be recalculated.
+     */
+    void sigPleaseUpdatePreview();
 };
+
 
 #endif

@@ -63,22 +63,37 @@ public:
 
     /**
      * Override this function with the implementation of your filter.
+     *
+     * XXX: May the filter may assume that src and dst have the same
+     * colorspace? (bsar)
+     *
      * @param src the source paint device
      * @param srcTopLeft the top left coordinate where the filter starts to be applied
      * @param dst the destination paint device
      * @param dstTopLeft he top left coordinate for the destination paint device
      * @param size the size of the area that is filtered
+     * @param channelFlags an array of bits that indicated which
+     *        channels must be excluded and which channels must be included
+     *        when filtering. Is _empty_ when all channels need to be filtered.
      * @param config the parameters of the filter
      */
-    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config) = 0;
+    virtual void process(const KisPaintDeviceSP src,
+                         const QPoint& srcTopLeft,
+                         KisPaintDeviceSP dst,
+                         const QPoint& dstTopLeft,
+                         const QSize& size,
+                         KisFilterConfiguration* config
+        ) = 0;
 
     /**
      * Provided for convenience only when source and destination are the same
      */
-    inline void process(KisPaintDeviceSP device, const QRect& rect,  KisFilterConfiguration* config)
-    {
-        process(device, rect.topLeft(), device, rect.topLeft(), rect.size(), config);
-    }
+    inline void process(KisPaintDeviceSP device, const QRect& rect, KisFilterConfiguration* config)
+        {
+            process(device, rect.topLeft(), device, rect.topLeft(), rect.size(), config);
+        }
+
+
 public:
     /**
      * This function return the configuration set as the default by the user or the default configuration from
@@ -182,10 +197,10 @@ public:
 
     /// @return Unique identification for this filter
     inline const KoID id() const { return m_id; };
-    
+
     /// @return the submenu in the filters menu does filter want to go?
     inline QString menuCategory() const { return m_category; };
-    
+
     /// @return the i18n'ed string this filter wants to show itself in the menu
     inline QString menuEntry() const { return m_entry; };
 
@@ -208,12 +223,14 @@ public:
      * @return true if cancel was requested and if progress is enabled
      */
     inline bool cancelRequested() const { return m_progressEnabled && m_cancelRequested; }
-    
+
 protected:
+
     /// @return the name of config group in KConfig
     inline QString configEntryGroup() { return id().id() + "_filter_bookmarks"; }
     /// @return the default configuration as defined by whoever wrote the plugin
     virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP); // FIXME: this name sucks so much
+
 protected slots:
 
     // Convenience functions for progress display.
@@ -223,6 +240,7 @@ protected slots:
     void setProgressStage(const QString& stage, qint32 progress);
     void setProgressDone();
     inline qint32 progress() { return m_progressSteps; }
+
 private:
     bool m_cancelRequested;
     bool m_progressEnabled;

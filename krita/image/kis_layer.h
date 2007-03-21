@@ -35,7 +35,9 @@
 
 class QIcon;
 class QPainter;
+class QBitArray;
 class KisGroupLayer;
+class KoColorSpace;
 
 /**
  * Abstract class that represents the concept of a Layer in Krita. This is not related
@@ -55,6 +57,8 @@ public:
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
+    virtual KoColorSpace * colorSpace();
+
     /// Whether this layer is the active one in its image
     bool isActive() const;
 
@@ -65,6 +69,9 @@ public:
 
     virtual PropertyList properties() const;
     virtual void setProperties( const PropertyList &properties  );
+
+    virtual void setActiveChannels( QBitArray & activeChannels );
+    QBitArray & activeChannels();
 
     /**
      * Set the entire layer extent dirty; this percolates up to parent layers all the

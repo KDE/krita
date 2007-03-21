@@ -26,6 +26,7 @@
 
 #include "kis_paint_layer.h"
 
+class KoColorSpace;
 class KisMergeVisitor;
 
 /**
@@ -61,6 +62,8 @@ signals:
     void sigDirtyRectAdded( const QRect & );
 
 public:
+
+    virtual KoColorSpace * colorSpace();
 
     /**
      * Set the entire layer extent dirty; this percolates up to parent layers all the

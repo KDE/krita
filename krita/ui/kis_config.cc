@@ -80,6 +80,16 @@ void KisConfig::setFixedDockerWidth(bool fix)
     m_cfg->writeEntry("fixDockerWidth", fix);
 }
 
+bool KisConfig::useProjections() const
+{
+    return m_cfg->readEntry( "useProjections", true );
+}
+
+void KisConfig::setUseProjections( bool useProj )
+{
+    m_cfg->writeEntry( "useProjections", useProj );
+}
+
 bool KisConfig::undoEnabled() const
 {
     return m_cfg->readEntry("undoEnabled", true);

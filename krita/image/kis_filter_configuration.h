@@ -20,6 +20,7 @@
 
 #include <QString>
 #include <QMap>
+#include <QBitArray>
 #include <QVariant>
 #include <kdebug.h>
 #include "krita_export.h"
@@ -97,6 +98,29 @@ public:
 
     QMap<QString, QVariant> getProperties() { return m_properties; }
 
+
+    /**
+     * @return an array with each colorspace channel a true/false bit
+     * that indicates whether the channel should be filtered or left
+     * alone. It is up to the filter to decide whether channels that
+     * are to be left alone are copied to the dest file or not.
+     */
+    QBitArray channelFlags()
+        {
+            return m_channelFlags;
+        };
+
+    /**
+     * Set the channel flags. An empty array is allowed; that means
+     * that all channels are to be filtered. Filters can optimize on
+     * that.
+     */
+    void setChannelFlags(QBitArray channelFlags)
+        {
+            m_channelFlags = channelFlags;
+        }
+
+
 private:
         void dump();
 
@@ -105,7 +129,7 @@ protected:
     QString m_name;
     qint32 m_version;
     QMap<QString, QVariant> m_properties;
-
+    QBitArray m_channelFlags;
 };
 
 #endif // _KIS_FILTER_CONFIGURATION_H_

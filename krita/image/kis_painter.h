@@ -20,6 +20,8 @@
 #ifndef KIS_PAINTER_H_
 #define KIS_PAINTER_H_
 
+#include <QBitArray>
+
 #include "KoColor.h"
 #include "kis_global.h"
 #include "kis_types.h"
@@ -444,6 +446,47 @@ public:
     // ------------------------------------------------------------------------
     // Set the parameters for the higher level graphics primitives.
 
+    /**
+     * Set the channelflags: a bit array where true means that the
+     * channel corresponding in position with the bit will be read
+     * by the operation, and false means that it will not be affected.
+     *
+     * An empty channelFlags parameter means that all channels are
+     * affected.
+     *
+     * @param the bit array that masks the source channels
+     */
+    void setSrcChannelFlags( QBitArray channelFlags )
+        {
+            m_srcChannelFlags = channelFlags;
+        }
+
+
+    QBitArray srcChannelFlags()
+        {
+            return m_srcChannelFlags;
+        }
+
+    /**
+     * Set the channelflags: a bit array where true means that the
+     * channel corresponding in position with the bit will be affected
+     * by the operation, and false means that it will not be affected.
+     *
+     * An empty channelFlags parameter means that all channels are
+     * affected.
+     *
+     * @param the bit array that masks the destination channels
+     */
+    void setDstChannelFlags( QBitArray channelFlags )
+        {
+            m_dstChannelFlags = channelFlags;
+        }
+
+    QBitArray dstChannelFlags()
+        {
+            return m_dstChannelFlags;
+        }
+
     // Set the current brush
     void setBrush(KisBrush* brush) { m_brush = brush; }
     // Returns the currently set brush
@@ -597,6 +640,8 @@ protected:
     KoColorProfile *  m_profile;
     KisPaintDeviceSP m_dab;
     const KoCompositeOp * m_compositeOp;
+    QBitArray m_srcChannelFlags;
+    QBitArray m_dstChannelFlags;
 
 };
 

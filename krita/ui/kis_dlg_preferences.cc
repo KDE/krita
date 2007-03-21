@@ -250,12 +250,14 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name  )
     // it's scaled from 0 - 6, but the config is in 0 - 300
     m_swappiness->setValue(cfg.swappiness() / 50);
     m_maxTiles->setValue(cfg.maxTilesInMem());
+    m_projection->setChecked( cfg.useProjections() );
 }
 
 void PerformanceTab::setDefault()
 {
     m_swappiness->setValue(3);
     m_maxTiles->setValue(500);
+    m_projection->setChecked( true );
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -879,6 +881,7 @@ bool PreferencesDialog::editPreferences()
         // it's scaled from 0 - 6, but the config is in 0 - 300
         cfg.setSwappiness(dialog->m_performanceSettings->m_swappiness->value() * 50);
         cfg.setMaxTilesInMem(dialog->m_performanceSettings->m_maxTiles->value());
+        cfg.setUseProjections( dialog->m_performanceSettings->m_projection->isChecked() );
         // let the tile manager know
         KisTileManager::instance()->configChanged();
 

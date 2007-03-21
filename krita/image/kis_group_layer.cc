@@ -21,6 +21,8 @@
 #include <QImage>
 #include <QDateTime>
 
+#include <KoColorSpace.h>
+
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
@@ -60,6 +62,14 @@ KisLayerSP KisGroupLayer::clone() const
 KisGroupLayer::~KisGroupLayer()
 {
     m_layers.clear();
+}
+
+KoColorSpace * KisGroupLayer::colorSpace()
+{
+    // Due to virtual void resetProjection(KisPaintDeviceSP to =
+    // 0), the colorspace of the group layer can be different from the
+    // colorspace of the image. (XXX: is that desirable? BSAR)
+    return m_projection->colorSpace();
 }
 
 QIcon KisGroupLayer::icon() const

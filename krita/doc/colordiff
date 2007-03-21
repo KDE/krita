@@ -1,16 +1,4 @@
 From: Mathew Brennesholtz <msb@philabs.research.philips.com>
-Subject: Re: contrast of color
-Date: 01 Oct 1999 00:00:00 GMT
-Message-ID: <37F4DD62.3AABA5D2@philabs.research.philips.com>
-Content-Transfer-Encoding: 7bit
-References: <37F3395E.484C921A@netvision.net.il>
-Content-Type: text/plain; charset=us-ascii
-X-Complaints-To: usenet@philabs.research.philips.com
-X-Trace: news.philabs.research.philips.com 938783269 3770 130.140.53.137 (1 Oct 1999 13:07:49 GMT)
-Organization: Philips Research, Briarcliff Manor, NY
-Mime-Version: 1.0
-NNTP-Posting-Date: 1 Oct 1999 13:07:49 GMT
-Newsgroups: sci.engr.color
 
 One intention of the L*a*b* formulation is that when you calculate:
 

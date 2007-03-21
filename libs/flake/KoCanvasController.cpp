@@ -38,7 +38,7 @@
 class KoCanvasController::Private
 {
 public:
-    Private() : canvas(0), centerCanvas(false), toolOptionWidget(0), margin(0) {}
+    Private() : canvas(0), centerCanvas(true), toolOptionWidget(0), margin(0) {}
     KoCanvasBase * canvas;
     bool centerCanvas;
     QWidget * toolOptionWidget;

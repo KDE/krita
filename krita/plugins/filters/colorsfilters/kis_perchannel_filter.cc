@@ -99,9 +99,9 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
 
                         foreach (QString pair, data) {
                             if (pair.indexOf(",") > -1) {
-                                QPair<double,double> p;
-                                p.first = pair.section(",", 0, 0).toDouble();
-                                p.second = pair.section(",", 1, 1).toDouble();
+                                QPointF p;
+                                p.rx() = pair.section(",", 0, 0).toDouble();
+                                p.ry() = pair.section(",", 1, 1).toDouble();
                                 curves[count].append(p);
                             }
                         }
@@ -147,11 +147,11 @@ QString KisPerChannelFilterConfiguration::toString()
         QDomElement t = doc.createElement("curve");
         KisCurve curve = curves[i];
         QString sCurve;
-        QPair<double,double> pair;
+        QPointF pair;
         foreach (pair, curve) {
-            sCurve += QString::number(pair.first);
+            sCurve += QString::number(pair.x());
             sCurve += ',';
-            sCurve += QString::number(pair.second);
+            sCurve += QString::number(pair.y());
             sCurve += ';';
         }
         QDomText text = doc.createCDATASection(sCurve);
@@ -313,8 +313,8 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     for(unsigned int ch = 0; ch < m_dev->colorSpace()->colorChannelCount(); ch++)
     {
         m_curves.append(KisCurve());
-        m_curves[ch].append(QPair<double,double>(0, 0));
-        m_curves[ch].append(QPair<double,double>(1, 1));
+        m_curves[ch].append(QPointF(0, 0));
+        m_curves[ch].append(QPointF(1, 1));
     }
 
     l->addWidget(m_page);

@@ -54,10 +54,10 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
         transfer[i] = i * 257;
     }
     m_adjustment = 0;
-    QPair<double,double> p;
-    p.first = 0.0; p.second=0.0;
+    QPointF p;
+    p.rx() = 0.0; p.ry()=0.0;
     curve.append(p);
-    p.first = 1.0; p.second=1.0;
+    p.rx() = 1.0; p.ry()=1.0;
     curve.append(p);
 }
 
@@ -92,9 +92,9 @@ void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
                 curve.clear();
                 foreach (QString pair, data) {
                     if (pair.indexOf(",") > -1) {
-                        QPair<double,double> p;
-                        p.first = pair.section(",", 0, 0).toDouble();
-                        p.second = pair.section(",", 1, 1).toDouble();
+                        QPointF p;
+                        p.rx() = pair.section(",", 0, 0).toDouble();
+                        p.ry() = pair.section(",", 1, 1).toDouble();
                         curve.append(p);
                     }
                 }
@@ -128,11 +128,11 @@ QString KisBrightnessContrastFilterConfiguration::toString()
 
     e = doc.createElement("curve");
     QString sCurve;
-    QPair<double,double> pair;
+    QPointF pair;
     foreach (pair, curve) {
-        sCurve += QString::number(pair.first);
+        sCurve += QString::number(pair.x());
         sCurve += ',';
-        sCurve += QString::number(pair.second);
+        sCurve += QString::number(pair.y());
         sCurve += ';';
     }
     text = doc.createCDATASection(sCurve);

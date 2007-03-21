@@ -38,7 +38,7 @@ class WdgPerChannel : public QWidget, public Ui::WdgPerChannel
         WdgPerChannel(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
-typedef QList<QPair<double,double> > KisCurve;
+typedef QList<QPointF> KisCurve;
 
 class KisPerChannelFilterConfiguration
     : public KisFilterConfiguration

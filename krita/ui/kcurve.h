@@ -23,7 +23,7 @@
 
 #include <QWidget>
 #include <QColor>
-#include <QPair>
+#include <QPointF>
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -38,7 +38,7 @@ class KRITAUI_EXPORT KCurve : public QWidget
 Q_OBJECT
 
 public:
-    KCurve(QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
+    KCurve(QWidget *parent = 0, Qt::WFlags f = 0);
 
     virtual ~KCurve();
 
@@ -61,14 +61,14 @@ protected:
     void leaveEvent ( QEvent * );
 
 public:
-    static double getCurveValue(const QList<QPair<double,double> > &curve, double x);
+    static double getCurveValue(const QList<QPointF> &curve, double x);
     double getCurveValue(double x);
 
-    QList<QPair<double,double> > getCurve();
-    void setCurve(QList<QPair<double,double> > inlist);
+    QList<QPointF> getCurve();
+    void setCurve(QList<QPointF> inlist);
 
 private:
-    int nearestPointInRange(double x, double y) const;
+    int nearestPointInRange(QPointF pt) const;
 
     int m_grab_point_index;
     bool m_dragging;
@@ -76,13 +76,13 @@ private:
     double m_grabOffsetY;
     double m_grabOriginalX;
     double m_grabOriginalY;
-    QPair<double,double>m_draggedawaypoint;
+    QPointF m_draggedawaypoint;
     int m_draggedawaypointindex;
 
     bool m_readOnlyMode;
     bool m_guideVisible;
     QColor m_colorGuide;
-    QList<QPair<double,double> > m_points;
+    QList<QPointF> m_points;
     QPixmap m_pix;
 };
 

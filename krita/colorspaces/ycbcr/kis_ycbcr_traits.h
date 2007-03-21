@@ -21,6 +21,11 @@
 
 #include "KoColorSpaceTraits.h"
 
+const double LUMA_RED = 0.2989;
+const double LUMA_GREEN = 0.587;
+const double LUMA_BLUE = 0.114;
+  
+
 template<typename _channels_type_>
 struct KoYCbCrTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
     
@@ -51,9 +56,6 @@ struct KoYCbCrTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
     }
 #undef CLAMP_TO_CHANNELSIZE
 
-    static const double LUMA_RED = 0.2989;
-    static const double LUMA_GREEN = 0.587;
-    static const double LUMA_BLUE = 0.114;
     static const _channels_type_ MIDDLE_VALUE = (KoColorSpaceMathsTraits<_channels_type_>::max + 1) / 2;
     static const Q_UINT8 y_pos = 0;
     static const Q_UINT8 cb_pos = 1;

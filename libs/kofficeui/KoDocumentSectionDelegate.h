@@ -29,8 +29,8 @@ class KoDocumentSectionModel;
 class KoDocumentSectionToolTip;
 
 /**
- * The KoDocumentSectionDelegate is the gui pendnat ofr a
- * KoDocumentSectionModel: the graphical representation of one item in
+ * The KoDocumentSectionDelegate is the gui pendant of a
+ * KoDocumentSectionModel: the graphical representation one item in
  * a KoDocumentSectionView.
  */
 class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate

@@ -210,7 +210,7 @@ private:
     KoToolManager(const KoToolManager&);
     KoToolManager operator=(const KoToolManager&);
     void setup();
-    void switchTool(KoTool *tool);
+    void switchTool(KoTool *tool, bool temporary);
     void switchTool(const QString &id, bool temporary);
     void postSwitchTool();
 

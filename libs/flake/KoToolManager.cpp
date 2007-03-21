@@ -247,7 +247,7 @@ void KoToolManager::toolActivated(ToolHelper *tool) {
     d->canvasData->activeToolId = tool->id();
     d->canvasData->activationShapeId = tool->activationShapeId();
 
-    switchTool(t);
+    switchTool(t, false);
 }
 
 void KoToolManager::switchTool(const QString &id, bool temporary) {
@@ -267,10 +267,10 @@ void KoToolManager::switchTool(const QString &id, bool temporary) {
         }
     }
 
-    switchTool(tool);
+    switchTool(tool, temporary);
 }
 
-void KoToolManager::switchTool(KoTool *tool) {
+void KoToolManager::switchTool(KoTool *tool, bool temporary) {
     Q_ASSERT(tool);
     if (d->canvasData == 0)
         return;
@@ -300,7 +300,7 @@ void KoToolManager::switchTool(KoTool *tool) {
     d->canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     foreach(QAction *action, d->canvasData->activeTool->actions().values())
         action->setEnabled(true);
-    d->canvasData->activeTool->activate();
+    d->canvasData->activeTool->activate(temporary);
 
     postSwitchTool();
 }

@@ -25,6 +25,8 @@
 
 class KoCanvasController;
 
+#define KoPanTool_ID "PanTool"
+
 class KoPanTool : public KoTool {
 public:
     explicit KoPanTool(KoCanvasBase *canvas);

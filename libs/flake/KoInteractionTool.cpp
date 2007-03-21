@@ -33,6 +33,7 @@
 #include "KoShapeManager.h"
 #include "KoInteractionStrategy.h"
 #include "KoCanvasBase.h"
+#include "KoPanTool.h"
 #include "commands/KoShapeMoveCommand.h"
 
 #include <QUndoCommand>
@@ -350,8 +351,10 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
 }
 
 void KoInteractionTool::keyReleaseEvent(QKeyEvent *event) {
-    if(m_currentStrategy == 0)
-        ; // catch all cases where no current strategy is needed
+    if(m_currentStrategy == 0) { // catch all cases where no current strategy is needed
+        if(event->key() == Qt::Key_Space)
+            emit sigActivateTemporary(KoPanTool_ID);
+    }
     else if(event->key() == Qt::Key_Escape) {
         m_currentStrategy->cancelInteraction();
         delete m_currentStrategy;

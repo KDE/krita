@@ -63,7 +63,7 @@ void KoPanTool::mouseReleaseEvent( KoPointerEvent *event ) {
 }
 
 void KoPanTool::keyPressEvent(QKeyEvent *event) {
-    // use arrow bottons to scroll.
+    // TODO use arrow bottons to scroll.
     event->accept();
 }
 
@@ -71,5 +71,5 @@ void KoPanTool::activate(bool temporary) {
     if(m_controller == 0)
         emit sigDone();
     m_temporary = temporary;
-    useCursor(QCursor(Qt::OpenHandCursor));
+    useCursor(QCursor(Qt::OpenHandCursor), true);
 }

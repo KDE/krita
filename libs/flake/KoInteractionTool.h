@@ -85,13 +85,6 @@ public: // Events
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
 
-signals:
-
-    void sigActivateTool( const QString &id );
-    void sigActivateTemporary(const QString &id);
-    void sigDone();
-
-
 protected:
     KoInteractionStrategy *m_currentStrategy; ///< the strategy that is 'in progress'
 

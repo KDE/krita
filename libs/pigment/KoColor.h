@@ -22,7 +22,7 @@
 
 #include <QColor>
 #include <QMetaType>
-
+#include <q3valuevector.h>
 #include <pigment_export.h>
 
 class KoColorProfile;
@@ -103,7 +103,7 @@ public:
     quint8 * KDE_DEPRECATED data() const;
 
 #ifndef NODEBUG
-    /// use kDebug calls to print internal info 
+    /// use kDebug calls to print internal info
     void dump() const;
 #endif
 

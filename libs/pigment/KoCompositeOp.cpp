@@ -42,6 +42,10 @@ void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                               qint32 rows, qint32 numColumns,
                               quint8 opacity) const
 {
+
+    // XXX: For filters the convention is to pass an emtpy channelflags
+    // parameter so the code can short-circuit if everything needs to
+    // be filtered: should we do the same here? (BSAR)
     if (m_defaultChannelFlags.isNull() || m_defaultChannelFlags.isEmpty()) {
         m_defaultChannelFlags.fill( true, m_colorSpace->channelCount() );
     }

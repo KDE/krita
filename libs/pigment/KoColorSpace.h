@@ -92,7 +92,7 @@ class KoConvolutionOp {
 
 /**
  * A KoColorSpace is the definition of a certain color space.
- * 
+ *
  * A color model and a color space are two related concepts. A color
  * model is more general in that it describes the channels involved and
  * how they in broad terms combine to describe a color. Examples are
@@ -102,7 +102,7 @@ class KoConvolutionOp {
  * the channels are combined. So for each color model there can be a
  * number of specific color spaces. So RGB is the model and sRGB,
  * adobeRGB, etc are colorspaces.
- * 
+ *
  * In Pigment KoColorSpace act as both a color model and a color space.
  * You can think of the class definition as the color model, but the
  * instance of the class as representing a colorspace.
@@ -242,7 +242,7 @@ public:
      * add a composite op to this colorspace.
      */
     virtual void addCompositeOp(const KoCompositeOp * op);
-    
+
     /**
      * Returns true if the colorspace supports channel values outside the
      * (normalised) range 0 to 1.
@@ -367,7 +367,7 @@ public:
      * @param nPixels the number of pixels in the array
      */
     virtual void fromRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const =0;
-    
+
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space
      * and put the converted bytes into the prepared byte array *dst.
@@ -482,7 +482,7 @@ public:
      * in dst. The kernel values are clamped between -128 and 128
      */
     void KDE_DEPRECATED convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const;
-    
+
     /**
      * @return the convolution operation of this colorspace (do not delete it locally, it's deleted by the colorspace).
      */
@@ -509,7 +509,7 @@ public:
      * @param srcSpace the colorspace of the source pixels that will be composited onto "us"
      * @param src pointer to the pixels that will be composited onto "us"
      * @param srcRowStride skip in bytes to the starting point of the next row of src pixels
-     * @param srcAlphaMask pointer to an alpha mask that determines whether and how much 
+     * @param srcAlphaMask pointer to an alpha mask that determines whether and how much
      *        of src will be composited onto dst
      * @param maskRowStride skip in bytes to the starting point of the next row of mask pixels
      * @param rows the number of rows of pixels we'll be compositing
@@ -544,7 +544,7 @@ public:
 			qint32 rows,
 			qint32 cols,
             const KoCompositeOp * op) const;
-    
+
     /**
      * Convenience function for the above if you don't have the composite op object yet.
      */
@@ -576,7 +576,7 @@ public:
 			qint32 cols,
             const QString& op) const;
 
-    
+
 
     /**
      * The backgroundfilters will be run periodically on the newly

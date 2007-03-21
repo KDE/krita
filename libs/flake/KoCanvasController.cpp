@@ -244,12 +244,7 @@ void KoCanvasController::ensureVisible( const QRectF &rect, bool smooth ) {
     else if(currentVisible.bottom() < viewRect.bottom()) // move down
         verticalMove = viewRect.bottom() - qMax(0, currentVisible.bottom() - jumpHeight);
 
-    QScrollBar *hBar = horizontalScrollBar();
-    if( hBar && hBar->isVisible() )
-        hBar->setValue( hBar->value() + horizontalMove);
-    QScrollBar *vBar = verticalScrollBar();
-    if( vBar && vBar->isVisible() )
-        vBar->setValue( vBar->value() + verticalMove);
+    pan(QPoint(horizontalMove, verticalMove));
 }
 
 void KoCanvasController::recenterPreferred()
@@ -394,6 +389,14 @@ void KoCanvasController::resetScrollBars()
 
 }
 
+void KoCanvasController::pan(const QPoint distance) {
+    QScrollBar *hBar = horizontalScrollBar();
+    if( hBar && hBar->isVisible() )
+        hBar->setValue( hBar->value() + distance.x());
+    QScrollBar *vBar = verticalScrollBar();
+    if( vBar && vBar->isVisible() )
+        vBar->setValue( vBar->value() + distance.y());
+}
 
 // XXX: Apparently events are not propagated to the viewport widget by
 // QAbstractScrollArea

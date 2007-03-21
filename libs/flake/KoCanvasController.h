@@ -187,6 +187,8 @@ public:
      */
     void recenterPreferred();
 
+    void pan(const QPoint distance);
+
 signals:
     /**
      * Emitted when a previously added canvas is about to be removed.

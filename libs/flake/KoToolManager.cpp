@@ -35,6 +35,8 @@
 #include "KoCanvasBase.h"
 #include "KoZoomTool.h"
 #include "KoZoomToolFactory.h"
+#include "KoPanTool.h"
+#include "KoPanToolFactory.h"
 
 // Qt + kde
 #include <QWidget>
@@ -116,6 +118,9 @@ public:
             KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*> (tl);
             if(zoomTool)
                 zoomTool->setCanvasController(controller);
+            KoPanTool *panTool = dynamic_cast<KoPanTool*> (tl);
+            if(panTool)
+                panTool->setCanvasController(controller);
         }
         KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsHash.value(KoCreateShapesTool_ID));
         Q_ASSERT(createTool);
@@ -149,6 +154,7 @@ void KoToolManager::setup() {
     d->tools.append( new ToolHelper(new KoCreateShapesToolFactory(this)) );
     d->tools.append( new ToolHelper(new KoPathToolFactory(this)) );
     d->tools.append( new ToolHelper(new KoZoomToolFactory(this)) );
+    d->tools.append( new ToolHelper(new KoPanToolFactory(this)) );
     d->defaultTool = new ToolHelper(new KoInteractionToolFactory(this));
     d->tools.append(d->defaultTool);
 

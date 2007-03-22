@@ -55,8 +55,9 @@ public:
     // Operation used to composite this layer with the projection of
     // the layers _under_ this layer
     const KoCompositeOp * compositeOp;
-
+#ifdef DIRTY_AND_PROJECTION
     QRegion dirtyRegion; // XXX: this should be part of the data manager!
+#endif
 };
 
 
@@ -186,10 +187,12 @@ void KisLayer::setDirty( const QRegion & region)
     if (m_d->image.data()) {
         m_d->image->notifyLayerUpdated(KisLayerSP(this));
     }
-
+#ifdef DIRTY_AND_PROJECTION
     m_d->dirtyRegion += region;
+#endif
 }
 
+#ifdef DIRTY_AND_PROJECTION
 bool KisLayer::isDirty( const QRect & rect )
 {
     return m_d->dirtyRegion.intersects( rect );
@@ -199,6 +202,7 @@ void KisLayer::setClean( QRect rc )
 {
     m_d->dirtyRegion -= QRegion( rc );
 }
+#endif
 
 int KisLayer::id() const { return m_d->id; }
 
@@ -570,27 +574,27 @@ void KisLayer::setParentPrivate( KisGroupLayerSP parent )
     m_d->parent = parent;
 }
 
-void KisLayerSupportsIndirectPainting::setTemporaryTarget(KisPaintDeviceSP t) {
+void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t) {
     m_temporaryTarget = t;
 }
 
-void KisLayerSupportsIndirectPainting::setTemporaryCompositeOp(const KoCompositeOp* c) {
+void KisIndirectPaintingSupport::setTemporaryCompositeOp(const KoCompositeOp* c) {
     m_compositeOp = c;
 }
 
-void KisLayerSupportsIndirectPainting::setTemporaryOpacity(Q_UINT8 o) {
+void KisIndirectPaintingSupport::setTemporaryOpacity(Q_UINT8 o) {
     m_compositeOpacity = o;
 }
 
-KisPaintDeviceSP KisLayerSupportsIndirectPainting::temporaryTarget() {
+KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget() {
     return m_temporaryTarget;
 }
 
-const KoCompositeOp* KisLayerSupportsIndirectPainting::temporaryCompositeOp() const {
+const KoCompositeOp* KisIndirectPaintingSupport::temporaryCompositeOp() const {
     return m_compositeOp;
 }
 
-Q_UINT8 KisLayerSupportsIndirectPainting::temporaryOpacity() const {
+Q_UINT8 KisIndirectPaintingSupport::temporaryOpacity() const {
     return m_compositeOpacity;
 }
 

@@ -92,7 +92,7 @@ public:
       layer, if propagate is true;
     */
     virtual void setDirty( const QRegion & region);
-
+#ifdef DIRTY_AND_PROJECTION
     /**
        @return true if the given rect overlapts with the dirty region
        of this adjustement layer
@@ -103,7 +103,7 @@ public:
        Mark the specified area as clean
     */
     void setClean( QRect rc );
-
+#endif
     /// Return a copy of this layer
     virtual KisLayerSP clone() const = 0;
 
@@ -284,12 +284,12 @@ private:
  * XXX: Name doesn't suggest an object -- is KisIndirectPaintingLayer
  * a better name? (BSAR)
  */
-class KRITAIMAGE_EXPORT KisLayerSupportsIndirectPainting {
+class KRITAIMAGE_EXPORT KisIndirectPaintingSupport {
 
 public:
 
-    KisLayerSupportsIndirectPainting() : m_compositeOp(0) { }
-    virtual ~KisLayerSupportsIndirectPainting() {}
+    KisIndirectPaintingSupport() : m_compositeOp(0) { }
+    virtual ~KisIndirectPaintingSupport() {}
 
     // Indirect painting
     void setTemporaryTarget(KisPaintDeviceSP t);
@@ -299,7 +299,7 @@ public:
     const KoCompositeOp* temporaryCompositeOp() const;
     Q_UINT8 temporaryOpacity() const;
 
-    // Or I could make KisLayer a virtual base of KisLayerSupportsIndirectPainting and so, but
+    // Or I could make KisLayer a virtual base of KisIndirectPaintingSupport and so, but
     // I'm sure virtual diamond inheritance isn't as appreciated as this
 
     virtual KisLayer* layer() = 0;

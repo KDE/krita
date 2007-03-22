@@ -84,7 +84,9 @@ public:
 
             KisPainter gc(m_projection);
             gc.bitBlt(dx, dy, layer->compositeOp() , dev, layer->opacity(), sx, sy, w, h);
+#ifdef DIRTY_AND_PROJECTION
             layer->setClean( rc );
+#endif
             return true;
         }
 
@@ -195,7 +197,9 @@ public:
                                     layer->opacity(), sx, sy, w, h);
                 }
             }
+#ifdef DIRTY_AND_PROJECTION
             layer->setClean( rc );
+#endif
             return true;
         }
 
@@ -228,7 +232,9 @@ public:
 
             KisPainter gc(m_projection);
             gc.bitBlt(dx, dy, layer->compositeOp(), dev, layer->opacity(), sx, sy, w, h);
+#ifdef DIRTY_AND_PROJECTION
             layer->setClean( rc );
+#endif
             return true;
         }
 
@@ -329,7 +335,9 @@ public:
             gc.bitBlt(m_rc.left(), m_rc.top(),
                       COMPOSITE_COPY, m_projection, OPACITY_OPAQUE,
                       m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+#ifdef DIRTY_AND_PROJECTION
             layer->setClean( m_rc );
+#endif
             return true;
         }
 
@@ -338,7 +346,7 @@ private:
     template<class Target>
     KisSharedPtr<Target> paintIndirect(KisPaintDeviceSP source,
                                        KisSharedPtr<Target> target,
-                                       KisLayerSupportsIndirectPainting* layer,
+                                       KisIndirectPaintingSupport* layer,
                                        Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
                                        Q_INT32 w, Q_INT32 h) {
         KisPainter gc2(target.data());

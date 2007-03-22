@@ -39,7 +39,7 @@ class KisFilterConfiguration;
  * AdjustmentLayers also function as a kind of "fixating layers" == as
  * long as they
  **/
-class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer, public KisLayerSupportsIndirectPainting
+class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer, public KisIndirectPaintingSupport
 {
     typedef KisLayer super;
     Q_OBJECT
@@ -97,15 +97,18 @@ public:
 
     virtual QImage createThumbnail(qint32 w, qint32 h);
 
-    // KisLayerSupportsIndirectPainting
+    // KisIndirectPaintingSupport
     virtual KisLayer* layer() { return this; }
+
 private:
     bool m_showSelection;
     KisFilterConfiguration * m_filterConfig;
     KisSelectionSP m_selection;
     KisPaintDeviceSP m_cachedPaintDev;
     QRegion m_dirtyRegion;
+
 private slots:
+
     void slotSelectionChanged(KisImageSP image);
 
 };

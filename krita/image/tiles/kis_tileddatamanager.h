@@ -109,7 +109,6 @@ protected:
     QRect extent() const;
     QRegion region() const;
 
-
     void setExtent(qint32 x, qint32 y, qint32 w, qint32 h);
 
 protected:

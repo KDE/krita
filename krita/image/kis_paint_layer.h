@@ -35,7 +35,7 @@ class QUndoCommand;
  * The transparency mask has two rendering forms: as a selection mask
  * and by changing the transparency of the paint layer's pixels.
  */
-class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisLayerSupportsIndirectPainting {
+class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaintingSupport {
     typedef KisLayer super;
 
     Q_OBJECT
@@ -143,7 +143,7 @@ public:
     virtual void setDirty(const QRect & rect);
     virtual void setDirty(const QRegion & region);
 
-    // KisLayerSupportsIndirectPainting
+    // KisIndirectPaintingSupport
     virtual KisLayer* layer() { return this; }
 
     /**

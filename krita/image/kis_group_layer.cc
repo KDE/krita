@@ -323,7 +323,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     if (!child) m_projection->clear();
 
     KisLayerSP startWith = KisLayerSP(0);
-
+#ifdef DIRTY_AND_PROJECTION
     KisAdjustmentLayerSP adjLayer = KisAdjustmentLayerSP(0);
     KisLayerSP tmpPaintLayer = KisLayerSP(0);
 
@@ -381,7 +381,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     if (adjLayer.isNull()) {
         startWith = lastChild();
     }
-
+#endif
 
     startWith = lastChild();
 
@@ -390,9 +390,10 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     }
 
     bool first = true; // The first layer in a stack needs special compositing
-
+#ifdef DIRTY_AND_PROJECTION
     // Fill the projection either with the cached data, or erase it.
     KisFillPainter gc(m_projection);
+
     if (!adjLayer.isNull()) {
         gc.bitBlt(rc.left(), rc.top(),
                   COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
@@ -404,7 +405,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         first = true;
     }
     gc.end();
-
+#endif
     KisMergeVisitor visitor(m_projection, rc);
 
     child = startWith;
@@ -424,6 +425,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             // Composite Op copy doesn't take a mask/selection into account, so we need
             // to make a difference between a paintlayer with a mask, and one without
             KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(child.data());
+
             if (l && l->hasMask())
                 child->setCompositeOpPrivate( cop->colorSpace()->compositeOp( COMPOSITE_OVER ) );
             else

@@ -157,8 +157,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
         if (!m_paintIncremental) {
 
-            KisLayerSupportsIndirectPainting* layer;
-            if ((layer = dynamic_cast<KisLayerSupportsIndirectPainting*>(
+            KisIndirectPaintingSupport* layer;
+            if ((layer = dynamic_cast<KisIndirectPaintingSupport*>(
                     m_currentImage->activeLayer().data()))) {
                 // Hack for the painting of single-layered layers using indirect painting,
                 // because the group layer would not have a correctly synched cache (
@@ -246,8 +246,8 @@ void KisToolFreehand::endPaint()
                                    it->width(), it->height());
                     ++it;
                 }
-                KisLayerSupportsIndirectPainting* layer =
-                    dynamic_cast<KisLayerSupportsIndirectPainting*>(m_source->parentLayer());
+                KisIndirectPaintingSupport* layer =
+                    dynamic_cast<KisIndirectPaintingSupport*>(m_source->parentLayer());
                 layer->setTemporaryTarget(0);
                 m_source->parentLayer()->setDirty(painter.dirtyRegion());
 

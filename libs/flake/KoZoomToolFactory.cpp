@@ -29,7 +29,7 @@ KoZoomToolFactory::KoZoomToolFactory(QObject *parent)
     setToolTip(i18n("Zoom"));
     setToolType(mainToolType());
     setPriority(5);
-    setIcon("viewmag");
+    setIcon("zoom-original");
     setActivationShapeId("flake/always");
 }
 

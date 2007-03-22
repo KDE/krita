@@ -25,7 +25,7 @@
 class KoPAMasterPage;
 
 /// Class representing a page
-class KoPAPage : public KoPAPageBase
+class KOPAGEAPP_EXPORT KoPAPage : public KoPAPageBase
 {
 public:
     /** Constructor

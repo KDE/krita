@@ -25,8 +25,9 @@
 #include <QString>
 
 #include <KoShapeContainer.h>
-#include <kopageapp_export.h>
 #include <KoXmlReader.h>
+
+#include "kopageapp_export.h"
 
 class KoPageLayout;
 class KoOasisLoadingContext;

@@ -26,7 +26,7 @@
 #include <KoPageLayout.h>
 
 /// Stores the masterpage's shapes and settings
-class KoPAMasterPage : public KoPAPageBase
+class KOPAGEAPP_EXPORT KoPAMasterPage : public KoPAPageBase
 {
 public:
     explicit KoPAMasterPage();

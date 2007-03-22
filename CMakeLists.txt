@@ -18,9 +18,7 @@ find_package(LCMS REQUIRED)
 find_package(PNG REQUIRED)
 find_package(Eigen)
 macro_optional_find_package(QCA2)
-macro_optional_find_package(OpenEXR)
 macro_optional_find_package(Exif)
-macro_optional_find_package(PythonLibs)
 macro_optional_find_package(LibArt)
 macro_optional_find_package(Freetype)
 macro_optional_find_package(Fontconfig)
@@ -39,12 +37,14 @@ add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
-include (ConfigureChecks.cmake)
-include (TestBigEndian)
 
 configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h )
+
+macro_optional_find_package(OpenEXR)
+macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
 
+include (TestBigEndian)
 TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 configure_file(config-endian.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-endian.h )
 

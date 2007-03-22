@@ -237,136 +237,122 @@ void KoParagraphStyle::removeListStyle() {
     delete m_listStyle; m_listStyle = 0;
 }
 
+static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle) {
+    if ( borderstyle == "none" )
+        return KoParagraphStyle::BorderNone;
+    if ( borderstyle == "dashed" )
+        return KoParagraphStyle::BorderDashed;
+    if ( borderstyle == "dotted" )
+        return KoParagraphStyle::BorderDotted;
+    if ( borderstyle == "dot-dash" )
+        return KoParagraphStyle::BorderDashDotPattern;
+    if ( borderstyle == "dot-dot-dash" )
+        return KoParagraphStyle::BorderDashDotDotPattern;
+    if ( borderstyle == "double" )
+        return KoParagraphStyle::BorderDouble;
+    if ( borderstyle == "groove" ) // NOT OASIS COMPATIBLE
+        return KoParagraphStyle::BorderGroove;
+    if ( borderstyle == "ridge" ) // NOT OASIS COMPATIBLE
+        return KoParagraphStyle::BorderRidge;
+    if ( borderstyle == "inset" ) // NOT OASIS COMPATIBLE
+        return KoParagraphStyle::BorderInset;
+    if ( borderstyle == "outset" ) // NOT OASIS COMPATIBLE
+        return KoParagraphStyle::BorderOutset;
+    return KoParagraphStyle::BorderSolid; // not needed to handle "solid" since it's the default
+}
+
 void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
     // in 1.6 this was defined at KoParagLayout::loadOasisParagLayout(KoParagLayout&, KoOasisContext&)
 
-#if 0
-    // code from OoWriterImport::writeLayout
-    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "text-align" ) ) {
-        QCString align = context.styleStack().attributeNS( KoXmlNS::fo, "text-align" ).latin1();
-        layout.alignment = loadOasisAlignment( align );
-    }
-#else
+    // Alignment
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) ) {
         QString align = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
         Qt::Alignment alignment = Qt::AlignAuto;
-        if(align == "left")
+        if ( align == "left" )
             alignment = Qt::AlignLeft;
-        else if(align == "right")
+        else if ( align == "right" )
             alignment = Qt::AlignRight;
-        else if(align == "start")
+        else if ( align == "start" )
             alignment = Qt::AlignLeft;
-        else if(align == "end")
+        else if ( align == "end" )
             alignment = Qt::AlignRight;
-        else if(align == "center")
+        else if ( align == "center" )
             alignment = Qt::AlignHCenter;
-        else if(align == "justify")
+        else if ( align == "justify" )
             alignment = Qt::AlignJustify;
         setAlignment(alignment);
     }
-#endif
 
 //TODO
 #if 0
-    if ( context.styleStack().hasAttributeNS( KoXmlNS::style, "writing-mode" ) ) { // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" ) ) { // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
         // LTR is lr-tb. RTL is rl-tb
-        QString writingMode = context.styleStack().attributeNS( KoXmlNS::style, "writing-mode" );
+        QString writingMode = styleStack.attributeNS( KoXmlNS::style, "writing-mode" );
         layout.direction = ( writingMode=="rl-tb" || writingMode=="rl" ) ? QChar::DirR : QChar::DirL;
     }
 #endif
 
-#if 0
-    // Indentation (margins)
-    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-left" ) || // 3.11.19
-         context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-right" ) ) {
-        layout.margins[QStyleSheetItem::MarginLeft] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-left" ) );
-        layout.margins[QStyleSheetItem::MarginRight] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-right" ) );
-        // *text-indent must always be bound to either margin-left or margin-right
-        double first = 0;
-        if ( context.styleStack().attributeNS( KoXmlNS::style, "auto-text-indent") == "true" ) // style:auto-text-indent takes precedence
-            // ### "indented by a value that is based on the current font size"
-            // ### and "requires margin-left and margin-right
-            // ### but how much is the indent?
-            first = 10;
-        else if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "text-indent") )
-            first = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "text-indent") );
+    // Spacing (padding)
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-left" ) )
+        setLeftPadding( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-left" ) ) );
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-right" ) )
+        setRightPadding( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-right" ) ) );
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-top" ) )
+        setTopPadding( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-top" ) ) );
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-bottom" ) )
+        setBottomPadding( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-bottom" ) ) );
 
-        layout.margins[QStyleSheetItem::MarginFirstLine] = first;
-    }
-
-    // Offset before and after paragraph
-    if( context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-top") || // 3.11.22
-        context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-bottom")) {
-        layout.margins[QStyleSheetItem::MarginTop] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-top" ) );
-        layout.margins[QStyleSheetItem::MarginBottom] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-bottom" ) );
-    }
-#else
-    // Indentation (margins)
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
+    // Indentation (margin)
+    bool hasMarginLeft = styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" );
+    bool hasMarginRight = styleStack.hasAttributeNS( KoXmlNS::fo, "margin-right" );
+    if ( hasMarginLeft )
         setLeftMargin( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ) ) );
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-right" ) )
+    if ( hasMarginRight )
         setRightMargin( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-right" ) ) );
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-top" ) )
         setTopMargin( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-top" ) ) );
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-bottom" ) )
         setBottomMargin( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-bottom" ) ) );
-#endif
+
+    // Automatic Text indent
+    if ( hasMarginLeft || hasMarginRight ) {
+        if ( styleStack.hasAttributeNS(KoXmlNS::fo, "auto-text-indent") ) { // style:auto-text-indent takes precedence
+            // "indented by a value that is based on the current font size"
+            const QString autotextindent = styleStack.attributeNS(KoXmlNS::style, "auto-text-indent");
+            if ( styleStack.attributeNS(KoXmlNS::style, "auto-text-indent") == "true" )
+                setTextIndent( 10.0 ); //hmmm, this was "10" on 1.6...
+            else
+                setTextIndent( KoUnit::parseValue(autotextindent) );
+        }
+        else if ( styleStack.hasAttributeNS(KoXmlNS::fo, "text-indent") ) {
+            setTextIndent( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "text-indent") ) );
+        }
+    }
+
+    // Line spacing
+    if( styleStack.hasAttributeNS( KoXmlNS::fo, "line-height") ) {  // 3.11.1
+        // Fixed line height
+        QString value = styleStack.attributeNS( KoXmlNS::fo, "line-height" );
+        if ( value != "normal" ) {
+            if ( value.indexOf('%') > -1 ) // percent value
+                setLineHeightPercent( value.remove( '%' ).toInt() );
+            else // fixed value
+                setLineHeightAbsolute( KoUnit::parseValue( value ) );
+        }
+    } // Line-height-at-least is mutually exclusive with line-height
+    else if ( styleStack.hasAttributeNS( KoXmlNS::style, "line-height-at-least") ) { // 3.11.2
+        setMinimumLineHeight( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "line-height-at-least" ) ) );
+    } // Line-spacing is mutually exclusive with line-height and line-height-at-least
+    else if ( styleStack.hasAttributeNS( KoXmlNS::style, "line-spacing") ) { // 3.11.3
+        setLineSpacing( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "line-spacing" ) ) );
+    }
 
 //TODO
 #if 0
-    // Line spacing
-    if( context.styleStack().hasAttributeNS( KoXmlNS::fo, "line-height") ) {  // 3.11.1
-        // Fixed line height
-        QString value = context.styleStack().attributeNS( KoXmlNS::fo, "line-height" );
-        if ( value != "normal" ) {
-            if ( value == "100%" )
-                layout.lineSpacingType = KoParagLayout::LS_SINGLE;
-            else if( value=="150%")
-                layout.lineSpacingType = KoParagLayout::LS_ONEANDHALF;
-            else if( value=="200%")
-                layout.lineSpacingType = KoParagLayout::LS_DOUBLE;
-            else if ( value.find('%') > -1 )
-            {
-                value = value.remove( '%' );
-                double percent = value.toDouble();
-                layout.lineSpacingType = KoParagLayout::LS_MULTIPLE;
-                layout.lineSpacing = percent / 100.0;
-                kdDebug(33001) << "line-height =" << percent << ", " << layout.lineSpacing << ", " << percent/100 << endl;
-            }
-            else // fixed value
-            {
-                layout.lineSpacingType = KoParagLayout::LS_FIXED;
-                layout.lineSpacing = KoUnit::parseValue( value );
-            }
-        }
-    }
-    // Line-height-at-least is mutually exclusive with line-height
-    else if ( context.styleStack().hasAttributeNS( KoXmlNS::style, "line-height-at-least") ) // 3.11.2
-    {
-        QString value = context.styleStack().attributeNS( KoXmlNS::style, "line-height-at-least" );
-        // kotext has "at least" but that's for the linespacing, not for the entire line height!
-        // Strange. kotext also has "at least" for the whole line height....
-        // Did we make the wrong choice in kotext?
-        //kdWarning() << "Unimplemented support for style:line-height-at-least: " << value << endl;
-        // Well let's see if this makes a big difference.
-        layout.lineSpacingType = KoParagLayout::LS_AT_LEAST;
-        layout.lineSpacing = KoUnit::parseValue( value );
-    }
-    // Line-spacing is mutually exclusive with line-height and line-height-at-least
-    else if ( context.styleStack().hasAttributeNS( KoXmlNS::style, "line-spacing") ) // 3.11.3
-    {
-        double value = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::style, "line-spacing" ) );
-        if ( value != 0.0 )
-        {
-            layout.lineSpacingType = KoParagLayout::LS_CUSTOM;
-            layout.lineSpacing = value;
-        }
-    }
-
     // Tabulators
     KoTabulatorList tabList;
-    if ( context.styleStack().hasChildNodeNS( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
-        QDomElement tabStops = context.styleStack().childNodeNS( KoXmlNS::style, "tab-stops" );
+    if ( styleStack.hasChildNodeNS( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
+        QDomElement tabStops = styleStack.childNodeNS( KoXmlNS::style, "tab-stops" );
         //kdDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
         QDomElement tabStop;
         forEachElement( tabStop, tabStops )
@@ -432,68 +418,119 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
     }
     qHeapSort( tabList );
     layout.setTabList( tabList );
+#endif
 
-    layout.joinBorder = !( context.styleStack().attributeNS( KoXmlNS::style, "join-border") == "false" );
+#if 0
+    layout.joinBorder = !( styleStack.attributeNS( KoXmlNS::style, "join-border") == "false" );
+#endif
 
     // Borders
-    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "border","left") )
-        layout.leftBorder.loadFoBorder( context.styleStack().attributeNS( KoXmlNS::fo, "border","left") );
-    else
-        layout.leftBorder.setPenWidth(0);
-    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "border","right") )
-        layout.rightBorder.loadFoBorder( context.styleStack().attributeNS( KoXmlNS::fo, "border","right") );
-    else
-        layout.rightBorder.setPenWidth(0);
-    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "border","top") )
-        layout.topBorder.loadFoBorder( context.styleStack().attributeNS( KoXmlNS::fo, "border","top") );
-    else
-        layout.topBorder.setPenWidth(0);
-    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "border","bottom") )
-        layout.bottomBorder.loadFoBorder( context.styleStack().attributeNS( KoXmlNS::fo, "border","bottom") );
-    else
-        layout.bottomBorder.setPenWidth(0);
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border", "left") ) {
+        QString border = styleStack.attributeNS( KoXmlNS::fo, "border", "left" );
+        if ( !border.isEmpty() && border!="none" && border!="hidden") {
+            // ## isn't it faster to use QStringList::split than parse it 3 times?
+            QString borderwidth = border.section(' ', 0, 0);
+            QString borderstyle = border.section(' ', 1, 1);
+            QString bordercolor = border.section(' ', 2, 2);
 
+            setLeftBorderWidth( KoUnit::parseValue( borderwidth, 1.0 ) );
+            //setLeftInnerBorderWidth(double width);
+            //setLeftBorderSpacing(double width);
+            setLeftBorderStyle( oasisBorderStyle(borderstyle) );
+            setLeftBorderColor( QColor(bordercolor) );
+        }
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border","top") ) {
+        QString border = styleStack.attributeNS( KoXmlNS::fo, "border", "top" );
+        if ( !border.isEmpty() && border!="none" && border!="hidden" ) {
+            setTopBorderWidth( KoUnit::parseValue( border.section(' ',0,0), 1.0 ) );
+            setTopBorderStyle( oasisBorderStyle(border.section(' ',1,1)) );
+            setTopBorderColor( QColor(border.section(' ',2,2)) );
+        }
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border","right") ) {
+        QString border = styleStack.attributeNS( KoXmlNS::fo, "border", "right" );
+        if ( !border.isEmpty() && border!="none" && border!="hidden") {
+            setRightBorderWidth( KoUnit::parseValue( border.section(' ',0,0), 1.0 ) );
+            setRightBorderStyle( oasisBorderStyle(border.section(' ',1,1)) );
+            setRightBorderColor( QColor(border.section(' ',2,2)) );
+        }
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border", "bottom") ) {
+        QString border = styleStack.attributeNS( KoXmlNS::fo, "border", "bottom" );
+        if ( !border.isEmpty() && border!="none" && border!="hidden") {
+            setBottomBorderWidth( KoUnit::parseValue( border.section(' ',0,0), 1.0 ) );
+            setBottomBorderStyle( oasisBorderStyle(border.section(' ',1,1)) );
+            setBottomBorderColor( QColor(border.section(' ',2,2)) );
+        }
+    }
 
     // Page breaking
+#if 0
     int pageBreaking = 0;
-    if( context.styleStack().hasAttributeNS( KoXmlNS::fo, "break-before") ||
-        context.styleStack().hasAttributeNS( KoXmlNS::fo, "break-after") ||
-        context.styleStack().hasAttributeNS( KoXmlNS::fo, "keep-together") ||
-        context.styleStack().hasAttributeNS( KoXmlNS::style, "keep-with-next") ||
-        context.styleStack().hasAttributeNS( KoXmlNS::fo, "keep-with-next") )
+    if( styleStack.hasAttributeNS( KoXmlNS::fo, "break-before") ||
+        styleStack.hasAttributeNS( KoXmlNS::fo, "break-after") ||
+        styleStack.hasAttributeNS( KoXmlNS::fo, "keep-together") ||
+        styleStack.hasAttributeNS( KoXmlNS::style, "keep-with-next") ||
+        styleStack.hasAttributeNS( KoXmlNS::fo, "keep-with-next") )
     {
-        if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "break-before") ) { // 3.11.24
+        if ( styleStack.hasAttributeNS( KoXmlNS::fo, "break-before") ) { // 3.11.24
             // TODO in KWord: implement difference between "column" and "page"
-            if ( context.styleStack().attributeNS( KoXmlNS::fo, "break-before" ) != "auto" )
+            if ( styleStack.attributeNS( KoXmlNS::fo, "break-before" ) != "auto" )
                 pageBreaking |= KoParagLayout::HardFrameBreakBefore;
         }
-        else if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "break-after") ) { // 3.11.24
+        else if ( styleStack.hasAttributeNS( KoXmlNS::fo, "break-after") ) { // 3.11.24
             // TODO in KWord: implement difference between "column" and "page"
-            if ( context.styleStack().attributeNS( KoXmlNS::fo, "break-after" ) != "auto" )
+            if ( styleStack.attributeNS( KoXmlNS::fo, "break-after" ) != "auto" )
                 pageBreaking |= KoParagLayout::HardFrameBreakAfter;
         }
 
-        if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "keep-together" ) ) { // was style:break-inside in OOo-1.1, renamed in OASIS
-            if ( context.styleStack().attributeNS( KoXmlNS::fo, "keep-together" ) != "auto" )
+        if ( styleStack.hasAttributeNS( KoXmlNS::fo, "keep-together" ) ) { // was style:break-inside in OOo-1.1, renamed in OASIS
+            if ( styleStack.attributeNS( KoXmlNS::fo, "keep-together" ) != "auto" )
                  pageBreaking |= KoParagLayout::KeepLinesTogether;
         }
-        if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "keep-with-next" ) ) {
+        if ( styleStack.hasAttributeNS( KoXmlNS::fo, "keep-with-next" ) ) {
             // OASIS spec says it's "auto"/"always", not a boolean.
-            QString val = context.styleStack().attributeNS( KoXmlNS::fo, "keep-with-next" );
+            QString val = styleStack.attributeNS( KoXmlNS::fo, "keep-with-next" );
             if ( val == "true" || val == "always" )
                 pageBreaking |= KoParagLayout::KeepWithNext;
         }
     }
     layout.pageBreaking = pageBreaking;
+#else
+    if( styleStack.hasAttributeNS( KoXmlNS::fo, "break-before") ) {
+        // TODO in KWord: implement difference between "column" and "page"
+        if ( styleStack.attributeNS( KoXmlNS::fo, "break-before" ) != "auto" )
+            setBreakBefore(true);
+    }
+    if( styleStack.hasAttributeNS( KoXmlNS::fo, "break-after") ) {
+        // TODO in KWord: implement difference between "column" and "page"
+        if ( styleStack.attributeNS( KoXmlNS::fo, "break-after" ) != "auto" )
+            setBreakAfter(true);
+    }
+#endif
 
+#if 0
     // Paragraph background color -  fo:background-color
     // The background color for parts of a paragraph that have no text underneath
-    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
-        QString bgColor = context.styleStack().attributeNS( KoXmlNS::fo, "background-color");
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
+        QString bgColor = styleStack.attributeNS( KoXmlNS::fo, "background-color");
         if (bgColor != "transparent")
             layout.backgroundColor.setNamedColor( bgColor );
     }
 #endif
+
+    //following properties KoParagraphStyle provides us are not handled now;
+    // LineSpacingFromFont,
+    // AlignLastLine,
+    // WidowThreshold,
+    // OrphanThreshold,
+    // DropCaps,
+    // DropCapsLength,
+    // DropCapsLines,
+    // DropCapsDistance,
+    // FollowDocBaseline,
+
 }
 
 #include "KoParagraphStyle.moc"

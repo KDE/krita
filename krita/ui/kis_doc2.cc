@@ -89,6 +89,7 @@
 #include "kis_canvas2.h"
 #include "kis_undo_adapter.h"
 #include "kis_shape_controller.h"
+#include "kis_layer_model.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -121,7 +122,7 @@ public:
 
     ~KisDocPrivate()
         {
-            // Don't delete m_d->shapeController because it's in a QObject hierarchy.
+            // Don't delete m_d->shapeController or m_d->layerModel because it's in a QObject hierarchy.
             //delete undoAdapter;
             //delete nserver;
         }
@@ -137,6 +138,7 @@ public:
 
     KisImageSP image;
     KisShapeController * shapeController;
+    KisLayerModel * layerModel;
 };
 
 
@@ -205,6 +207,7 @@ bool KisDoc2::init()
     }
 
     m_d->shapeController = new KisShapeController( this, m_d->nserver );
+    m_d->layerModel = new KisLayerModel( this );
 
     return true;
 }
@@ -916,6 +919,11 @@ KoShapeControllerBase * KisDoc2::shapeController()
     return m_d->shapeController;
 }
 
+KisLayerModel * KisDoc2::layerModel()
+{
+    return m_d->layerModel;
+}
+
 void KisDoc2::setIOSteps(qint32 nsteps)
 {
     m_d->ioProgressTotalSteps = nsteps * 100;
@@ -982,6 +990,7 @@ void KisDoc2::setCurrentImage(KisImageSP image)
     }
     m_d->image = image;
     m_d->shapeController->setImage( image );
+    m_d->layerModel->setRoot( image->rootLayer() );
     setUndo(true);
 
     emit sigLoadingFinished();

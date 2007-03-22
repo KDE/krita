@@ -47,6 +47,7 @@ class KIconLoader;
 class KMenu;
 class KoDocumentEntry;
 class KoCompositeOp;
+class KisLayerModel;
 
 /**
  * A widget that visualized the layer structure.
@@ -60,7 +61,7 @@ public:
     virtual ~KisLayerBox();
 
     void setUpdatesAndSignalsEnabled(bool enable);
-    void setImage(KisImageSP image);
+    void setImage(KisImageSP image, KisLayerModel * layerModel);
 
     virtual bool eventFilter(QObject *object, QEvent *event);
 

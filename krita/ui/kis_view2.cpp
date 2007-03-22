@@ -91,6 +91,7 @@
 #include "ui_wdgpalettechooser.h"
 #include "kis_resourceserver.h"
 #include "kis_palette_docker.h"
+#include "kis_layer_model.h"
 
 class KisView2::KisView2Private {
 
@@ -529,9 +530,9 @@ void KisView2::connectCurrentImage()
     }
     m_d->canvas->connectCurrentImage();
     if( m_d->layerBox )
-        m_d->layerBox->setImage(img);
+        m_d->layerBox->setImage( img, m_d->doc->layerModel() );
     if( m_d->birdEyeBox )
-        m_d->birdEyeBox->setImage(img);
+        m_d->birdEyeBox->setImage( img );
 
 }
 
@@ -549,7 +550,7 @@ void KisView2::disconnectCurrentImage()
             img->disconnect( m_d->statusBar );
 
         if( m_d->layerBox )
-            m_d->layerBox->setImage(KisImageSP(0));
+            m_d->layerBox->setImage(KisImageSP(0), 0);
         if( m_d->birdEyeBox )
             m_d->birdEyeBox->setImage(KisImageSP(0));
         m_d->canvas->disconnectCurrentImage();

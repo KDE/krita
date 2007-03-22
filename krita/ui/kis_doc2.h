@@ -40,6 +40,7 @@ class KoShapeControllerBase;
 class KisView2;
 class KisChildDoc;
 class KisUndoAdapter;
+class KisLayerModel;
 
 /**
  * The class that represents a Krita document containing content and
@@ -48,6 +49,11 @@ class KisUndoAdapter;
    KisDoc2 also keeps track of the correspondence between the layer
    structure of the KisImage and the shape tree that is used by the
    tools.
+
+
+   XXX: File format todos
+
+   * load/save the channel flags setting for layers
 
  */
 class KRITAUI_EXPORT KisDoc2 : public KoDocument
@@ -125,7 +131,17 @@ public:
 
     KisUndoAdapter * undoAdapter();
 
+    /**
+     * The shape controller matches internal krita image layers with
+     * the flake shape hierarchy.
+     */
     KoShapeControllerBase * shapeController();
+
+    /**
+     * The layer model provides a light-weight Qt model-view
+     * compatible model on the internal Krita image layer hierarchy.
+     */
+    KisLayerModel * layerModel();
 
 public slots:
     void slotImageUpdated();

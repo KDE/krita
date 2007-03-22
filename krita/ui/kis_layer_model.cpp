@@ -18,6 +18,8 @@
 #include "kis_layer_model.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
+#include "kis_adjustment_layer.h"
+#include "kis_paint_layer.h"
 
 class KisLayerModel::Private
 {
@@ -25,17 +27,21 @@ public:
     KisGroupLayerSP rootLayer;
 };
 
-KisLayerModel::KisLayerModel( KisGroupLayerSP rootLayer, QObject * parent )
+KisLayerModel::KisLayerModel( QObject * parent )
     : KoDocumentSectionModel( parent )
     , m_d( new Private )
 {
-    m_d->rootLayer = rootLayer;
 
 }
 
 KisLayerModel::~KisLayerModel()
 {
     delete m_d;
+}
+
+void KisLayerModel::setRoot( KisGroupLayerSP layer )
+{
+    m_d->rootLayer = layer;
 }
 
 QModelIndex KisLayerModel::indexFromLayer(KisLayer *layer) const
@@ -172,6 +178,21 @@ bool KisLayerModel::setData(const QModelIndex &index, const QVariant &value, int
     }
 */
     return false;
+}
+
+bool isGroupLayer( KisLayer * layer )
+{
+    return dynamic_cast<KisGroupLayer*>( layer ) != 0;
+}
+
+bool isPaintLayer( KisLayer * layer )
+{
+    return dynamic_cast<KisPaintLayer*>( layer ) != 0;
+}
+
+bool isAdjustmentLayer( KisLayer * layer )
+{
+    return dynamic_cast<KisAdjustmentLayer*>( layer ) != 0;
 }
 
 #include "kis_layer_model.moc"

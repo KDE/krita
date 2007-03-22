@@ -32,8 +32,10 @@ class KisLayerModel : KoDocumentSectionModel
 
 public: // from QAbstractItemModel
 
-    KisLayerModel( KisGroupLayerSP rootLayer, QObject * parent );
+    KisLayerModel(QObject * parent );
     ~KisLayerModel();
+
+    void setRoot( KisGroupLayerSP layer );
 
     QModelIndex indexFromLayer(KisLayer *layer) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -45,6 +47,10 @@ public: // from QAbstractItemModel
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
 private:
+
+    bool isGroupLayer( KisLayer * layer );
+    bool isPaintLayer( KisLayer * layer );
+    bool isAdjustmentLayer( KisLayer * layer );
 
     class Private;
     Private * const m_d;

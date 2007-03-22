@@ -135,7 +135,7 @@ KisLayerBox::~KisLayerBox()
 {
 }
 
-void KisLayerBox::setImage(KisImageSP img)
+void KisLayerBox::setImage(KisImageSP img, KisLayerModel * layerModel)
 {
     if (m_image == img)
         return;
@@ -156,8 +156,11 @@ void KisLayerBox::setImage(KisImageSP img)
                 this, SLOT(updateUI()));
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(updateUI()));
 
+#if 0
+        listLayers->setModel( layerModel );
+#else
         listLayers->setModel(img->rootLayer().data());
-
+#endif
         m_image = img;
 
         updateUI();

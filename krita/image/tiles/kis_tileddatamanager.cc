@@ -527,14 +527,6 @@ void KisTiledDataManager::clear()
     m_extentMaxY = qint32_MIN;
 }
 
-void KisTiledDataManager::paste(KisDataManagerSP data,  qint32 sx, qint32 sy, qint32 dx, qint32 dy,
-             qint32 w, qint32 h)
-{
-    //CBR_MISSING
-    sx=sy=dx=dy=w=h;data=0;
-}
-
-
 quint32 KisTiledDataManager::calcTileHash(qint32 col, qint32 row)
 {
     return ((row << 5) + (col & 0x1F)) & 0x3FF;

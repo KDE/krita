@@ -121,12 +121,6 @@ protected:
 
 protected:
 
-    void paste(KisDataManagerSP data,  qint32 sx, qint32 sy, qint32 dx, qint32 dy,
-                qint32 w, qint32 h);
-
-
-protected:
-
 
     /**
      * write the specified data to x, y. There is no checking on pixelSize!

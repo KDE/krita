@@ -147,16 +147,6 @@ public:
      */
     inline void clear() { ACTUAL_DATAMGR::clear(); }
 
-
-public:
-
-    /**
-     * Copy the specified rect from the specified data into this
-     * data.
-     */
-    inline void paste(KisDataManagerSP data,  qint32 sx, qint32 sy, qint32 dx, qint32 dy,
-           qint32 w, qint32 h) { ACTUAL_DATAMGR::paste(data, sx, sy, dx, dy, w, h); }
-
 public:
 
     /**

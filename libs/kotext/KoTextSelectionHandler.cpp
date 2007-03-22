@@ -196,7 +196,7 @@ void KoTextSelectionHandler::insertFrameBreak() {
 //               bf.pageBreakPolicy() != QTextFormat::PageBreak_Auto) // end of parag or already a pagebreak
             nextParagraph();
         bf = m_caret->blockFormat();
-        bf.setPageBreakPolicy(QTextFormat::QTextFormat::PageBreak_AlwaysBefore);
+        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
         m_caret->setBlockFormat(bf);
     //}
 }
@@ -332,6 +332,9 @@ void KoTextSelectionHandler::nextParagraph() {
         Q_ASSERT(nextStyle);
     }
     m_caret->insertText("\n");
+    QTextBlockFormat bf = m_caret->blockFormat();
+    bf.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+    m_caret->setBlockFormat(bf);
     if(nextStyle) {
         QTextBlock block = m_caret->block();
         nextStyle->applyStyle(block);

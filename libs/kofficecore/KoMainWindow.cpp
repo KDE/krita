@@ -249,7 +249,7 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->m_paDocInfo  = new KAction(KIcon("documentinfo"), i18n("&Document Information"), this);
+    d->m_paDocInfo  = new KAction(KIcon("documentinfo-koffice"), i18n("Document Information"), this);
     actionCollection()->addAction("file_documentinfo", d->m_paDocInfo );
     connect( d->m_paDocInfo, SIGNAL( triggered(bool) ), this, SLOT( slotDocumentInfo() ) );
 

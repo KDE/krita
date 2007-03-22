@@ -22,8 +22,7 @@
 #include <klocale.h>
 
 #include "KoPADocument.h"
-#include "KoPAMasterPage.h"
-#include "KoPAPage.h"
+#include "KoPAPageBase.h"
 
 KoPAPageInsertCommand::KoPAPageInsertCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, QUndoCommand *parent )
 : QUndoCommand( parent )

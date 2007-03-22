@@ -277,30 +277,21 @@ void KoPADocument::removeShape( KoShape *shape )
     }
 }
 
-void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* before )
+void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
 {
     if ( !page )
         return;
 
+    QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? m_masterPages : m_pages;
+
     int index = 0;
 
-    QList<KoPAPageBase *>& pages = m_pages;
-    if ( dynamic_cast<KoPAMasterPage *>( page ) )
+    if ( after != 0 )
     {
-        pages = m_masterPages;
-    }
-    else if ( ! dynamic_cast<KoPAPage *>( page ) )
-    {
-        // this should not happen as the page should be either a KoPAMasterPage or a KoPAPage
-        Q_ASSERT( 0 );
-    }
+        index = pages.indexOf( after ) + 1;
 
-    if ( before != 0 )
-    {
-        index = pages.indexOf( before );
-
-        // Append the page if before wasn't found in m_pages
-        if ( index == -1 )
+        // Append the page if after wasn't found in pages
+        if ( index == 0 )
             index = pages.count();
     }
 
@@ -311,16 +302,7 @@ KoPAPageBase * KoPADocument::takePage( KoPAPageBase *page )
 {
     Q_ASSERT( page );
 
-    QList<KoPAPageBase *>& pages = m_pages;
-    if ( dynamic_cast<KoPAMasterPage *>( page ) )
-    {
-        pages = m_masterPages;
-    }
-    else if ( ! dynamic_cast<KoPAPage *>( page ) )
-    {
-        // this should not happen as the page should be either a KoPAMasterPage or a KoPAPage
-        Q_ASSERT( 0 );
-    }
+    QList<KoPAPageBase *>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? m_masterPages : m_pages;
 
     return pages.removeAll( page ) > 0 ? page : 0;
 }

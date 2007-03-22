@@ -1,5 +1,11 @@
 include_directories(${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
 
+if(KDE4_BUILD_TESTS)
+    # only with this definition will the KOPAGEAPP_TEST_EXPORT macro do something
+    add_definitions(-DCOMPILING_TESTS)
+endif(KDE4_BUILD_TESTS)
+
+
 add_subdirectory(tests)
 
 ### kopageapp ###

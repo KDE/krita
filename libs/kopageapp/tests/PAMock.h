@@ -26,6 +26,10 @@ class KoView;
 
 class MockDocument : public KoPADocument
 {
+public:
+    MockDocument()
+    : KoPADocument( 0, 0 )
+    {}
     KoView *createViewInstance( QWidget * /* parent */ ) { return 0; }
     const char *odfTagName() { return ""; }
 };

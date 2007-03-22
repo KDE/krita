@@ -21,10 +21,59 @@
 
 #include "PAMock.h"
 #include "KoPAPageInsertCommand.h"
+#include "KoPAPage.h"
+#include "KoPAMasterPage.h"
+
+#include <qtest_kde.h>
 
 void TestPAPageInsertCommand::redoUndo()
 {
+    MockDocument doc;
+
+    KoPAPage * p1 = dynamic_cast<KoPAPage *>( doc.pageByIndex( 0, false ) );
+    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>( doc.pageByIndex( 0, true ) );
+
+    QVERIFY( p1 != 0 );
+    QVERIFY( m1 != 0 );
+
+    KoPAMasterPage * m2 = new KoPAMasterPage();
+    KoPAMasterPage * m3 = new KoPAMasterPage();
+
+    KoPAPageInsertCommand cmd( &doc, m2, m1 );
+    KoPAPageInsertCommand cmd2( &doc, m3, 0 );
+
+    cmd.redo();
+    cmd2.redo();
+
+    QList<KoPAMasterPage *> masterPages;
+    masterPages.append( m3 );
+    masterPages.append( m1 );
+    masterPages.append( m2 );
+
+    QList<KoPAMasterPage *> allMasterPages = masterPages;
+
+    for( int i = 0; i < masterPages.size(); ++i ) {
+        QVERIFY( masterPages[i] == doc.pageByIndex( i, true ) );
+    }
+
+    cmd2.undo();
+    masterPages.removeAll( m3 );
+    for( int i = 0; i < masterPages.size(); ++i ) {
+        QVERIFY( masterPages[i] == doc.pageByIndex( i, true ) );
+    }
+
+    cmd.undo();
+    masterPages.removeAll( m2 );
+    for( int i = 0; i < masterPages.size(); ++i ) {
+        QVERIFY( masterPages[i] == doc.pageByIndex( i, true ) );
+    }
+
+    cmd.redo();
+    cmd2.redo();
+    for( int i = 0; i < allMasterPages.size(); ++i ) {
+        QVERIFY( allMasterPages[i] == doc.pageByIndex( i, true ) );
+    }
 }
 
-QTEST_MAIN( TestPAPageInsertCommand )
+QTEST_KDEMAIN( TestPAPageInsertCommand, GUI )
 #include "TestPAPageInsertCommand.moc"

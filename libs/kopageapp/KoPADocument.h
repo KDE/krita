@@ -57,9 +57,9 @@ public:
     /**
      * Insert @p page to the document after page @p before
      * @param page to insert to document
-     * @param before the page which the inserted page should come after. Set before to 0 to add at the beginning
+     * @param after the page which the inserted page should come after. Set after to 0 to add at the beginning
      */
-    void insertPage( KoPAPageBase* page, KoPAPageBase* before );
+    void insertPage( KoPAPageBase* page, KoPAPageBase* after );
 
     /**
      * Take @page from the page

@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QString>
+#include <QBitArray>
 
 #include <klocale.h>
 
@@ -250,26 +251,32 @@ void KisImageLayerMoveCommand::undo()
 
 
 
-KisImageLayerPropsCommand::KisImageLayerPropsCommand(KisImageSP image, KisLayerSP layer, qint32 opacity, const KoCompositeOp* compositeOp, const QString& name)
+KisImageLayerPropsCommand::KisImageLayerPropsCommand(KisImageSP image, KisLayerSP layer, qint32 opacity, const KoCompositeOp* compositeOp, const QString& name, QBitArray channelFlags )
     : super(i18n("Property Changes"), image)
 {
     m_layer = layer;
     m_name = name;
     m_opacity = opacity;
     m_compositeOp = compositeOp;
+    m_channelFlags = channelFlags;
 }
 
 void KisImageLayerPropsCommand::redo()
 {
     QString name = m_layer->name();
     qint32 opacity = m_layer->opacity();
-    m_compositeOp = m_layer->compositeOp();
+    const KoCompositeOp* compositeOp = m_layer->compositeOp();
+    QBitArray channelFlags = m_layer->channelFlags();
 
-    m_image->setLayerProperties(m_layer, m_opacity, m_compositeOp, m_name);
+    m_image->setLayerProperties(m_layer, m_opacity, m_compositeOp, m_name, m_channelFlags);
 
+    m_compositeOp = compositeOp;
+    m_channelFlags = channelFlags;
     m_name = name;
     m_opacity = opacity;
+
     m_layer->setDirty();
+
 }
 
 void KisImageLayerPropsCommand::undo()

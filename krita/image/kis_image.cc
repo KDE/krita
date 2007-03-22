@@ -627,11 +627,12 @@ KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const QString
     return layerSP;
 }
 
-void KisImage::setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp* compositeOp, const QString& name)
+void KisImage::setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp* compositeOp, const QString& name, QBitArray channelFlags)
 {
     layer->setName(name);
     layer->setOpacity(opacity);
     layer->setCompositeOp(compositeOp);
+    layer->setChannelFlags( channelFlags );
 }
 
 KisGroupLayerSP KisImage::rootLayer() const

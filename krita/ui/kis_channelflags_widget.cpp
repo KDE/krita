@@ -28,15 +28,9 @@
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 
-class KisChannelFlagsWidget::Private
-{
-public:
-    QList<QCheckBox*> channelChecks;
-};
 
 KisChannelFlagsWidget::KisChannelFlagsWidget(const KoColorSpace * colorSpace, QWidget * parent )
     : QScrollArea( parent )
-    , m_d( new Private() )
 {
 
     setToolTip( "Check the active channels in this layer. Only these channels will be affected by any operation." );
@@ -50,7 +44,7 @@ KisChannelFlagsWidget::KisChannelFlagsWidget(const KoColorSpace * colorSpace, QW
         QCheckBox * bx = new QCheckBox(channel->name(), w );
         bx->setCheckState( Qt::Checked );
         vbl->addWidget( bx );
-        m_d->channelChecks << bx;
+        m_channelChecks.append( bx );
     }
 
     w->setLayout( vbl );
@@ -60,16 +54,30 @@ KisChannelFlagsWidget::KisChannelFlagsWidget(const KoColorSpace * colorSpace, QW
 
 KisChannelFlagsWidget::~KisChannelFlagsWidget()
 {
-    delete m_d;
+}
+
+void KisChannelFlagsWidget::setChannelFlags( const QBitArray & channelFlags )
+{
+    if ( channelFlags.isEmpty() ) return;
+
+    for ( int i = 0; i < qMin( m_channelChecks.size(), channelFlags.size() ); ++i ) {
+        kDebug() << i << ", " << m_channelChecks.at( i )->text() << ", " << channelFlags.testBit( i );
+        m_channelChecks.at( i )->setChecked( channelFlags.testBit( i ) );
+    }
 }
 
 QBitArray KisChannelFlagsWidget::channelFlags() const
 {
-    QBitArray ba( m_d->channelChecks.size() );
-    int i = 0;
-    foreach( QCheckBox * chk, m_d->channelChecks ) {
-        ba.setBit( i, ( chk->checkState() == Qt::Checked ) );
-        ++i;
+    bool allTrue = true;
+    QBitArray ba( m_channelChecks.size() );
+
+    for ( int i = 0; i < m_channelChecks.size(); ++i ) {
+        bool flag = m_channelChecks.at( i )->isChecked();
+        if ( !flag ) allTrue = false;
+        ba.setBit( i, flag );
     }
-    return ba;
+    if ( allTrue )
+        return QBitArray();
+    else
+        return ba;
 }

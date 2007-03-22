@@ -70,8 +70,8 @@ public:
     virtual PropertyList properties() const;
     virtual void setProperties( const PropertyList &properties  );
 
-    virtual void setActiveChannels( QBitArray & activeChannels );
-    QBitArray & activeChannels();
+    virtual void setChannelFlags( QBitArray & channelFlags );
+    QBitArray & channelFlags();
 
     /**
      * Set the entire layer extent dirty; this percolates up to parent layers all the

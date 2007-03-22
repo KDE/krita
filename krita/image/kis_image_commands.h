@@ -24,7 +24,7 @@
 
 #include <QUndoCommand>
 #include <QSize>
-
+#include <QBitArray>
 #include "kis_types.h"
 
 class KoCompositeOp;
@@ -127,7 +127,7 @@ public:
      * @param newDescription the new image description
      * @param newColorSpace the new image color space
      * @param newProfile the new image profile
-     * @param newResolution the new image resolution which will be used for xRes and yRes 
+     * @param newResolution the new image resolution which will be used for xRes and yRes
      */
     KisImagePropsCommand(KisImageSP image, const QString& newName, const QString& newDescription,
                       KoColorSpace* newColorSpace, KoColorProfile* newProfile, double newResolution);
@@ -256,7 +256,7 @@ public:
      * @param compositeOp the new layer composite op
      * @param name the new layer name
      */
-    KisImageLayerPropsCommand(KisImageSP image, KisLayerSP layer, qint32 opacity, const KoCompositeOp* compositeOp, const QString& name);
+    KisImageLayerPropsCommand(KisImageSP image, KisLayerSP layer, qint32 opacity, const KoCompositeOp* compositeOp, const QString& name, QBitArray channelFlags);
     virtual ~KisImageLayerPropsCommand() {}
 
     virtual void redo();
@@ -267,6 +267,7 @@ private:
     QString m_name;
     qint32 m_opacity;
     const KoCompositeOp * m_compositeOp;
+    QBitArray m_channelFlags;
 };
 
 #endif // KIS_IMAGE_COMMANDS_H_

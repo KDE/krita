@@ -18,6 +18,8 @@
 #ifndef KIS_CHANNELFLAGS_WIDGET_H
 #define KIS_CHANNELFLAGS_WIDGET_H
 
+#include <QList>
+#include <QCheckBox>
 #include "krita_export.h"
 
 #include <QScrollArea>
@@ -25,6 +27,7 @@
 
 class QBitArray;
 class KoColorSpace;
+
 
 /**
  * A simple widget that shows a list of checkboxes in a scrollable
@@ -43,12 +46,12 @@ public:
 
 public:
 
+    void setChannelFlags( const QBitArray & channelFlags );
     QBitArray channelFlags() const;
 
 private:
 
-    class Private;
-    Private * const m_d;
+    QList<QCheckBox*> m_channelChecks;
 
 };
 

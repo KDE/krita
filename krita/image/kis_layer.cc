@@ -50,7 +50,7 @@ public:
     QString name;
     KisGroupLayerSP parent;
     KisImageSP image;
-    QBitArray activeChannels;
+    QBitArray channelFlags;
 
     // Operation used to composite this layer with the projection of
     // the layers _under_ this layer
@@ -121,15 +121,20 @@ void KisLayer::setProperties( const PropertyList &properties )
     setLocked( properties.at( 1 ).state.toBool() );
 }
 
-void KisLayer::setActiveChannels( QBitArray & activeChannels )
+void KisLayer::setChannelFlags( QBitArray & channelFlags )
 {
-    Q_ASSERT( ( quint32 )activeChannels.count() == colorSpace()->channelCount() );
-    m_d->activeChannels = activeChannels;
+    kDebug() << "KisLayer:: Setting channel flags " << channelFlags.size() << endl;
+
+    for ( int i = 0; i < channelFlags.size(); ++i ) {
+        kDebug() << "Channel " << i << ", " << channelFlags.testBit( i ) << endl;
+    }
+    Q_ASSERT( ( ( quint32 )channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()) );
+    m_d->channelFlags = channelFlags;
 }
 
-QBitArray & KisLayer::activeChannels()
+QBitArray & KisLayer::channelFlags()
 {
-    return m_d->activeChannels;
+    return m_d->channelFlags;
 }
 
 
@@ -172,16 +177,12 @@ void KisLayer::setDirty(const QRect & rc)
 
 void KisLayer::setDirty( const QRegion & region)
 {
-    kDebug() << "setDirty " << m_d->name << " region, " << " m_d: " << m_d << endl;
     // If we're dirty, our parent is dirty, if we've got a parent
     if ( region.isEmpty() ) return;
 
-    kDebug() << "parent: " << m_d->parent << endl;
     if (m_d->parent) {
-        kDebug() << "going to set parent dirty anyway\n";
         m_d->parent->setDirty(region);
     }
-    kDebug() << "image: " << m_d->image.data() << endl;
     if (m_d->image.data()) {
         m_d->image->notifyLayerUpdated(KisLayerSP(this));
     }
@@ -390,8 +391,6 @@ KisImageSP KisLayer::image() const { return m_d->image; }
 
 void KisLayer::setImage(KisImageSP image)
 {
-    kDebug() << "setImage " << name() << endl;
-    kDebug() << ", image: " << image << endl;
     m_d->image = image;
 }
 
@@ -568,7 +567,6 @@ void KisLayer::setCompositeOpPrivate( const KoCompositeOp * op )
 
 void KisLayer::setParentPrivate( KisGroupLayerSP parent )
 {
-    kDebug() << "setParentPrivate " << parent << endl;
     m_d->parent = parent;
 }
 

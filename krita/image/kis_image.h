@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QRect>
 #include <QRegion>
+#include <QBitArray>
 
 #include <kis_shared.h>
 #include <kurl.h>
@@ -280,7 +281,7 @@ public:
     /// Get the active painting device. Returns 0 if the active layer does not have a paint device.
     KisPaintDeviceSP activeDevice();
 
-    void setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp * compositeOp, const QString& name);
+    void setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp * compositeOp, const QString& name, QBitArray channelFlags);
 
     KisGroupLayerSP rootLayer() const;
     KisLayerSP activeLayer() const;

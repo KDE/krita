@@ -48,6 +48,7 @@ public:
                           qint32 opacity,
                           const KoCompositeOp* compositeOp,
                           const KoColorSpace * colorSpace,
+                          const QBitArray & channelFlags,
                           QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
 
     virtual ~KisDlgLayerProperties();
@@ -55,7 +56,7 @@ public:
     QString getName() const;
     qint32 getOpacity() const;
     KoCompositeOp * getCompositeOp() const;
-    QBitArray channelFlags() const;
+    QBitArray getChannelFlags() const;
 
 protected slots:
     void slotNameChanged( const QString & );

@@ -45,10 +45,11 @@
 #include "kis_channelflags_widget.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
-                     qint32 opacity,
-                     const KoCompositeOp* compositeOp,
-                     const KoColorSpace * colorSpace,
-                     QWidget *parent, const char *name, Qt::WFlags f)
+                                             qint32 opacity,
+                                             const KoCompositeOp* compositeOp,
+                                             const KoColorSpace * colorSpace,
+                                             const QBitArray & channelFlags,
+                                             QWidget *parent, const char *name, Qt::WFlags f)
     : super(parent)
 {
     Q_UNUSED(f);
@@ -85,10 +86,11 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     slotNameChanged( m_page->editName->text() );
 
     QVBoxLayout * vbox = new QVBoxLayout;
-    KisChannelFlagsWidget * m_channelFlags = new KisChannelFlagsWidget( colorSpace );
+    m_channelFlags = new KisChannelFlagsWidget( colorSpace );
     vbox->addWidget( m_channelFlags );
     vbox->addStretch( 1 );
     m_page->grpActiveChannels->setLayout( vbox );
+    m_channelFlags->setChannelFlags( channelFlags );
 
 }
 
@@ -124,7 +126,7 @@ KoCompositeOp * KisDlgLayerProperties::getCompositeOp() const
     return m_page->cmbComposite->currentItem();
 }
 
-QBitArray KisDlgLayerProperties::channelFlags() const
+QBitArray KisDlgLayerProperties::getChannelFlags() const
 {
     return m_channelFlags->channelFlags();
 }

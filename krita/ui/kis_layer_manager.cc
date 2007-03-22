@@ -40,36 +40,36 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_paint_layer.h>
-#include <kis_group_layer.h>
 #include <kis_adjustment_layer.h>
 #include <kis_filter.h>
-#include <kis_selection.h>
-#include <kis_selected_transaction.h>
 #include <kis_filter_strategy.h>
+#include <kis_group_layer.h>
+#include <kis_image.h>
+#include <kis_layer.h>
+#include <kis_meta_registry.h>
+#include <kis_paint_layer.h>
+#include <kis_selected_transaction.h>
+#include <kis_selection.h>
 #include <kis_shear_visitor.h>
 #include <kis_transform_worker.h>
-#include <kis_meta_registry.h>
 #include <kis_undo_adapter.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
-#include "kis_zoom_manager.h"
-#include "kis_doc2.h"
-#include "kis_view2.h"
 #include "kis_dlg_adj_layer_props.h"
-#include "kis_dlg_layer_properties.h"
 #include "kis_dlg_adjustment_layer.h"
+#include "kis_dlg_layer_properties.h"
 #include "kis_dlg_new_layer.h"
-#include "kis_selection_manager.h"
+#include "kis_doc2.h"
 #include "kis_filter_manager.h"
-#include "kis_resource_provider.h"
-#include "kis_statusbar.h"
-#include "kis_label_progress.h"
 #include "kis_image_commands.h"
+#include "kis_label_progress.h"
 #include "kis_layer_commands.h"
+#include "kis_resource_provider.h"
+#include "kis_selection_manager.h"
+#include "kis_statusbar.h"
+#include "kis_view2.h"
+#include "kis_zoom_manager.h"
 
 KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     : m_view( view )
@@ -423,15 +423,26 @@ void KisLayerManager::showLayerProperties(KisLayerSP layer)
         KisDlgLayerProperties dlg(layer->name(),
                                   layer->opacity(),
                                   layer->compositeOp(),
-                                  cs);
+                                  cs,
+                                  layer->channelFlags());
         if (dlg.exec() == QDialog::Accepted)
         {
+            QBitArray newChannelFlags = dlg.getChannelFlags();
+            QBitArray oldChannelFlags = layer->channelFlags();
+
             if (layer->name() != dlg.getName() ||
                 layer->opacity() != dlg.getOpacity() ||
-                layer->compositeOp() != dlg.getCompositeOp())
+                layer->compositeOp() != dlg.getCompositeOp() ||
+                oldChannelFlags != newChannelFlags
+                )
             {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
-                m_view->undoAdapter()->addCommand(new KisImageLayerPropsCommand(layer->image(), layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName()));
+                m_view->undoAdapter()->addCommand(new KisImageLayerPropsCommand(layer->image(),
+                                                                                layer,
+                                                                                dlg.getOpacity(),
+                                                                                dlg.getCompositeOp(),
+                                                                                dlg.getName(),
+                                                                                newChannelFlags));
                 layer->setDirty();
                 QApplication::restoreOverrideCursor();
                 m_doc->setModified( true );
@@ -840,8 +851,6 @@ void KisLayerManager::mergeLayer()
 
 void KisLayerManager::layersUpdated()
 {
-    kDebug(41007) << "layersUpdated called\n";
-
     KisImageSP img = m_view->image();
     if (!img) return;
 

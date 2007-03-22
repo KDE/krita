@@ -47,20 +47,6 @@ public:
   /**
    * Creates a new zoom action.
    * @param zoomModes which zoom modes that should be shown
-   */
-  KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, const QIcon& pix,
-    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const QString &name = QString() ) KDE_DEPRECATED;
-
-  /**
-   * Creates a new zoom action.
-   * @param zoomModes which zoom modes that should be shown
-   */
-  KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, const QString& pix,
-    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const QString &name = QString() ) KDE_DEPRECATED;
-
-  /**
-   * Creates a new zoom action.
-   * @param zoomModes which zoom modes that should be shown
    * @param text The text that will be displayed.
    * @param parent The action's parent object.
    */
@@ -132,10 +118,8 @@ Q_SIGNALS:
 
 protected:
 
-  void init(KActionCollection* parent, const QString &name);
-
-  /// Regenerates the action's items
-  void regenerateItems( const QString& zoomString );
+    /// Regenerates the action's items
+    void regenerateItems( const QString& zoomString );
 
     class ExtLineEdit;
 

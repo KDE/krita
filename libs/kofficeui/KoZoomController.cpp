@@ -32,14 +32,13 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
     : m_canvasController(co)
     , m_zoomHandler(zh)
 {
-    m_action = new KoZoomAction(KoZoomMode::ZOOM_PIXELS | KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
-                                    i18n("Zoom"),
-                                    KIcon("14_zoom"),
-                                    KShortcut(),
-                                    actionCollection,
-                                    "zoom" );
+    m_action = new KoZoomAction(KoZoomMode::ZOOM_PIXELS | KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), 0);
     connect(m_action, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
             this, SLOT(setZoom(KoZoomMode::Mode, double)));
+
+    actionCollection->addAction("view_zoom", m_action);
+    actionCollection->addAction(KStandardAction::ZoomIn,  "zoom_in", m_action, SLOT(zoomIn()));
+    actionCollection->addAction(KStandardAction::ZoomOut,  "zoom_out", m_action, SLOT(zoomOut()));
 
     connect(m_canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize( const QSize & ) ) );
 

@@ -1785,12 +1785,10 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
     // XXX: Create koffice-wide dialog pane with the palette font size
     // option
 
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    Q_ASSERT(cfg);
-    cfg->setGroup("");
+    KConfigGroup group( KGlobal::config(), "GUI" );
     QFont f  = KGlobalSettings::generalFont();
-    float ps = qMin(9.0, KGlobalSettings::generalFont().pointSize() * 0.8);
-    ps = cfg->readEntry("palettefontsize", (int)ps);
+    double ps = qMin(9.0, f.pointSize() * 0.8);
+    ps = group.readEntry("palettefontsize", ps);
     if (ps < 6) ps = 6;
 
     f.setPointSize(6);

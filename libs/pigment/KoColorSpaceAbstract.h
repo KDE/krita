@@ -118,12 +118,12 @@ namespace {
                 } else {
                     memset(dst, 0, sizeof(typename _CSTraits::channels_type) * _CSTraits::channels_nb);
                 }
-              
+
             }
     };
-    
+
     template<class _CSTraits>
-    class KoConvolutionOpImpl : public KoConvolutionOp{
+    class KoConvolutionOpImpl : public KoConvolutionOp {
         public:
             KoConvolutionOpImpl() { }
             virtual ~KoConvolutionOpImpl() { }
@@ -143,7 +143,7 @@ namespace {
                     }
                     totalAlpha += alphaTimesWeight;
                 }
-                
+
                 if (channelFlags & KoChannelInfo::FLAG_COLOR) {
                     typename _CSTraits::channels_type* dstColor = _CSTraits::nativeArray(dst);
                     for(uint i = 0; i < _CSTraits::channels_nb; i++)
@@ -151,7 +151,7 @@ namespace {
                         typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype v = totals[i] / factor + offset;
                         dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::min, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max);
                     }
-    
+
                 }
                 if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
                     _CSTraits::setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, 0xFF ),1);
@@ -202,7 +202,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
         {
             this->addCompositeOp( new CompositeCopy( this ) );
         };
-        
+
         virtual quint32 colorChannelCount() const { return _CSTraits::channels_nb - 1; }
         virtual quint32 channelCount() const { return _CSTraits::channels_nb; };
         virtual quint32 pixelSize() const { return _CSTraits::pixelSize; }
@@ -220,7 +220,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
             typename _CSTraits::channels_type c = _CSTraits::nativeArray(pixel)[channelIndex];
             return QString().setNum( 100. * ((double)c ) / KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max);
         }
-        
+
         virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const {
             typename _CSTraits::channels_type c = _CSTraits::nativeArray(srcPixel)[channelIndex];
             return KoColorSpaceMaths<typename _CSTraits::channels_type, quint8>::scaleToA(c);
@@ -276,7 +276,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
                 *alphapixel = KoColorSpaceMaths<typename _CSTraits::channels_type>::multiply( *alphapixel, valpha );
             }
         }
-        
+
         virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const
         {
             if (_CSTraits::alpha_pos < 0) return;
@@ -288,7 +288,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
                 *alphapixel = KoColorSpaceMaths<typename _CSTraits::channels_type>::multiply( *alphapixel, valpha );
             }
         }
-        
+
         virtual quint8 intensity8(const quint8 * src) const
         {
             QColor c;

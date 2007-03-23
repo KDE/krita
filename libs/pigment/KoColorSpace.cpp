@@ -16,6 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#include <QThreadStorage>
+#include <QByteArray>
 
 #include "KoColorSpace.h"
 
@@ -32,8 +34,9 @@ struct KoColorSpace::Private {
     Q3ValueVector<KoChannelInfo *> channels;
     KoMixColorsOp* mixColorsOp;
     KoConvolutionOp* convolutionOp;
-    mutable Q3MemArray<quint8> conversionCache; // XXX: This will be a bad problem when we have threading.
-    DWORD cmType;                           // The colorspace type as defined by littlecms
+    QThreadStorage< QVector<quint8>* > conversionCache;
+
+    DWORD cmType;  // The colorspace type as defined by littlecms
     icColorSpaceSignature colorSpaceSignature; // The colorspace signature as defined in icm/icc files
 };
 
@@ -184,17 +187,17 @@ void KoColorSpace::bitBlt(quint8 *dst,
 }
 
 void KoColorSpace::bitBlt(quint8 *dst,
-                                   qint32 dststride,
-                                   KoColorSpace * srcSpace,
-                                   const quint8 *src,
-                                   qint32 srcRowStride,
-                                   const quint8 *srcAlphaMask,
-                                   qint32 maskRowStride,
-                                   quint8 opacity,
-                                   qint32 rows,
-                                   qint32 cols,
-                                   const KoCompositeOp * op,
-                                   const QBitArray & channelFlags) const
+                          qint32 dststride,
+                          KoColorSpace * srcSpace,
+                          const quint8 *src,
+                          qint32 srcRowStride,
+                          const quint8 *srcAlphaMask,
+                          qint32 maskRowStride,
+                          quint8 opacity,
+                          qint32 rows,
+                          qint32 cols,
+                          const KoCompositeOp * op,
+                          const QBitArray & channelFlags) const
 {
     if (rows <= 0 || cols <= 0)
         return;
@@ -202,16 +205,12 @@ void KoColorSpace::bitBlt(quint8 *dst,
     if (this != srcSpace) {
         quint32 len = pixelSize() * rows * cols;
 
-        // If our conversion cache is too small, extend it.
-        if (!d->conversionCache.resize( len, Q3GArray::SpeedOptim )) {
-            kWarning() << "Could not allocate enough memory for the conversion!\n";
-            // XXX: We should do a slow, pixel by pixel bitblt here...
-            abort();
-        }
+        QVector<quint8> * conversionCache = threadLocalConversionCache(len);
+        quint8* conversionData = conversionCache->data();
 
         for (qint32 row = 0; row < rows; row++) {
             srcSpace->convertPixelsTo(src + row * srcRowStride,
-                                      d->conversionCache.data() + row * cols * pixelSize(), this,
+                                      conversionData + row * cols * pixelSize(), this,
                                       cols);
         }
 
@@ -219,7 +218,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
         srcRowStride = cols * pixelSize();
 
         op->composite( dst, dststride,
-                       d->conversionCache.data(), srcRowStride,
+                       conversionData, srcRowStride,
                        srcAlphaMask, maskRowStride,
                        rows,  cols,
                        opacity, channelFlags );
@@ -238,16 +237,16 @@ void KoColorSpace::bitBlt(quint8 *dst,
 //      extra function call in this critical section of code. What to
 //      do?
 void KoColorSpace::bitBlt(quint8 *dst,
-                                   qint32 dststride,
-                                   KoColorSpace * srcSpace,
-                                   const quint8 *src,
-                                   qint32 srcRowStride,
-                                   const quint8 *srcAlphaMask,
-                                   qint32 maskRowStride,
-                                   quint8 opacity,
-                                   qint32 rows,
-                                   qint32 cols,
-                                   const KoCompositeOp * op) const
+                          qint32 dststride,
+                          KoColorSpace * srcSpace,
+                          const quint8 *src,
+                          qint32 srcRowStride,
+                          const quint8 *srcAlphaMask,
+                          qint32 maskRowStride,
+                          quint8 opacity,
+                          qint32 rows,
+                          qint32 cols,
+                          const KoCompositeOp * op) const
 {
     if (rows <= 0 || cols <= 0)
         return;
@@ -255,16 +254,12 @@ void KoColorSpace::bitBlt(quint8 *dst,
     if (this != srcSpace) {
         quint32 len = pixelSize() * rows * cols;
 
-        // If our conversion cache is too small, extend it.
-        if (!d->conversionCache.resize( len, Q3GArray::SpeedOptim )) {
-            kWarning() << "Could not allocate enough memory for the conversion!\n";
-            // XXX: We should do a slow, pixel by pixel bitblt here...
-            abort();
-        }
+        QVector<quint8> * conversionCache = threadLocalConversionCache(len);
+        quint8* conversionData = conversionCache->data();
 
         for (qint32 row = 0; row < rows; row++) {
             srcSpace->convertPixelsTo(src + row * srcRowStride,
-                                      d->conversionCache.data() + row * cols * pixelSize(), this,
+                                      conversionData + row * cols * pixelSize(), this,
                                       cols);
         }
 
@@ -272,7 +267,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
         srcRowStride = cols * pixelSize();
 
         op->composite( dst, dststride,
-                       d->conversionCache.data(), srcRowStride,
+                       conversionData, srcRowStride,
                        srcAlphaMask, maskRowStride,
                        rows,  cols,
                        opacity);
@@ -285,4 +280,19 @@ void KoColorSpace::bitBlt(quint8 *dst,
                        rows,  cols,
                        opacity);
     }
+}
+
+QVector<quint8> * KoColorSpace::threadLocalConversionCache(quint32 size) const
+{
+    QVector<quint8> * ba = 0;
+    if ( !d->conversionCache.hasLocalData() ) {
+        ba = new QVector<quint8>( '0', size );
+        d->conversionCache.setLocalData( ba );
+    }
+    else {
+        ba = d->conversionCache.localData();
+        if ( ( quint8 )ba->size() < size )
+            ba->resize( size );
+    }
+    return ba;
 }

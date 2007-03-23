@@ -24,10 +24,9 @@
 #include <limits.h>
 
 #include <QImage>
-#include <QBitArray>
 #include <QHash>
+#include <QVector>
 
-#include <Q3MemArray>
 #include <q3valuevector.h>
 #include <q3valuelist.h>
 
@@ -35,6 +34,7 @@
 #include <KoChannelInfo.h>
 #include <KoID.h>
 #include <pigment_export.h>
+
 
 class KoCompositeOp;
 class KoColorProfile;
@@ -592,6 +592,13 @@ protected:
      */
     virtual void addChannel(KoChannelInfo * ci);
 private:
+
+    /**
+     * Returns the thread-local conversion cache. If it doesn't exist
+     * yet, it is created. If it is currently too small, it is resized.
+     */
+    QVector<quint8> * threadLocalConversionCache(quint32 size) const;
+
     class Private;
     Private * const d;
 };

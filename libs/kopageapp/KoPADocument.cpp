@@ -277,6 +277,21 @@ void KoPADocument::removeShape( KoShape *shape )
     }
 }
 
+void KoPADocument::insertPage( KoPAPageBase* page, int index )
+{
+    if ( !page )
+        return;
+
+    QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? m_masterPages : m_pages;
+
+    if ( index > pages.size() || index < 0 )
+    {
+        index = pages.size();
+    }
+
+    pages.insert( index, page );
+}
+
 void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
 {
     if ( !page )
@@ -298,13 +313,18 @@ void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
     pages.insert( index, page );
 }
 
-KoPAPageBase * KoPADocument::takePage( KoPAPageBase *page )
+int KoPADocument::takePage( KoPAPageBase *page )
 {
     Q_ASSERT( page );
 
     QList<KoPAPageBase *>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? m_masterPages : m_pages;
 
-    return pages.removeAll( page ) > 0 ? page : 0;
+    int index = pages.indexOf( page );
+
+    if ( index != -1 ) {
+        pages.removeAt( index );
+    }
+    return index;
 }
 
 #include "KoPADocument.moc"

@@ -17,4 +17,16 @@ add_test(libs-kopageapp-TestPAPageInsertCommand ${EXECUTABLE_OUTPUT_PATH}/TestPA
 
 ########### next target ###############
 
+set(TestPAPageDeleteCommand_test_SRCS TestPAPageDeleteCommand.cpp )
+
+kde4_automoc(${TestPAPageDeleteCommand_test_SRCS})
+
+kde4_add_executable(TestPAPageDeleteCommand RUN_UNINSTALLED ${TestPAPageDeleteCommand_test_SRCS})
+
+target_link_libraries(TestPAPageDeleteCommand  ${KDE4_KDECORE_LIBS} kopageapp ${QT_QTTEST_LIBRARY})
+
+add_test(libs-kopageapp-TestPAPageDeleteCommand ${EXECUTABLE_OUTPUT_PATH}/TestPAPageDeleteCommand)
+
+########### next target ###############
+
 endif(KDE4_BUILD_TESTS)

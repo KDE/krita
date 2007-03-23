@@ -55,7 +55,22 @@ public:
     KoPAPageBase* pageByIndex( int index, bool masterPage );
 
     /**
+     * Insert page to the document at index
+     *
+     * The function checks if it is a normal or a master page and puts it in 
+     * the correct list.
+     *
+     * @param page to insert to document
+     * @param index where the page will be inserted.
+     */
+    void insertPage( KoPAPageBase* page, int index );
+
+    /**
      * Insert @p page to the document after page @p before
+     *
+     * The function checks if it is a normal or a master page and puts it in 
+     * the correct list.
+     *
      * @param page to insert to document
      * @param after the page which the inserted page should come after. Set after to 0 to add at the beginning
      */
@@ -65,9 +80,9 @@ public:
      * Take @page from the page
      *
      * @param page taken from the document
-     * @return the page taken form the document
+     * @return the position of the page was taken from the document
      */
-    KoPAPageBase * takePage( KoPAPageBase *page );
+    int takePage( KoPAPageBase *page );
 
     void addShape( KoShape *shape );
     void removeShape( KoShape* shape );

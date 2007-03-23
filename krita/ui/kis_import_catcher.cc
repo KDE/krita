@@ -53,7 +53,7 @@ void KisImportCatcher::slotLoadingFinished()
                 // Don't import the root if this is not a layered image (1 group layer
                 // plus 1 other).
                 importedImageLayer = importedImageLayer->firstChild();
-                importedImageLayer->parent()->removeLayer(importedImageLayer);
+                importedImage->removeLayer(importedImageLayer);
             }
 
             importedImageLayer->setName(m_url.prettyUrl());

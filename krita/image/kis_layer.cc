@@ -230,13 +230,6 @@ int KisLayer::index() const
     return m_d->index;
 }
 
-void KisLayer::setIndex(int i)
-{
-    if (!parent())
-        return;
-    parent()->setIndex(KisLayerSP(this), i);
-}
-
 KisLayerSP KisLayer::findLayer(const QString& n) const
 {
     if (name() == n)

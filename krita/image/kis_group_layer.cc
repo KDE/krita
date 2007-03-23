@@ -151,7 +151,7 @@ int KisGroupLayer::index(KisLayerSP layer) const
         return layer->index();
     return -1;
 }
-
+#if 0
 void KisGroupLayer::setIndex(KisLayerSP layer, int index)
 {
     if (layer->parent().data() != this)
@@ -160,7 +160,7 @@ void KisGroupLayer::setIndex(KisLayerSP layer, int index)
     removeLayer(layer);
     addLayer(layer, index);
 }
-
+#endif
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
 {
     if (x < 0 || qBound(uint(0), uint(x), childCount()) != uint(x) ||

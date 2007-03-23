@@ -70,7 +70,7 @@ void KisOasisLoadVisitor::loadAdjustementLayer(const QDomElement& elem, KisAdjus
 void KisOasisLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL)
 {
     loadLayerInfo(elem, pL.data());
-    
+
     QString filename = m_layerFilenames[pL.data()];
     kDebug(41008) << "Loading file : " << filename << endl;
 /*    if (m_oasisStore->store()->open(filename) ) {
@@ -112,7 +112,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerS
                     opacity = subelem.attribute("opacity").toInt();
                 }
                 KisGroupLayerSP layer = new KisGroupLayer(m_image.data(), "", opacity);
-                gL->addLayer(layer, gL->childCount() );
+                m_image->addLayer(layer, gL, gL->childCount() );
                 loadGroupLayer(subelem, layer);
             } else if(node.nodeName()== "image:layer")
             {
@@ -138,7 +138,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerS
                         io.close();
                         m_oasisStore->store()->close();
                         KisPaintLayerSP layer = new KisPaintLayer( gL->image() , "", opacity, pngConv.image()->projection());
-                        gL->addLayer(layer, gL->childCount() );
+                        m_image->addLayer(layer, gL, gL->childCount() );
                         loadPaintLayer(subelem, layer);
                         kDebug(41008) << "Loading was successful" << endl;
                 //         return true;
@@ -146,7 +146,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerS
                 }
             } else if(node.nodeName()== "image:filter")
             {
-    
+
                 QString filterType = subelem.attribute("type");
                 QStringList filterTypeSplit = filterType.split(":");
                 kDebug() << filterType << endl;
@@ -159,9 +159,9 @@ void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerS
                 kDebug() << f << endl;
                 KisFilterConfiguration * kfc = f->defaultConfiguration(0);
                 KisAdjustmentLayerSP layer = new KisAdjustmentLayer( gL->image() , "", kfc, KisSelectionSP(0));
-                gL->addLayer(layer, gL->childCount() );
+                m_image->addLayer(layer, gL, gL->childCount() );
                 loadAdjustementLayer(subelem, layer);
-                
+
             }
         }
     }

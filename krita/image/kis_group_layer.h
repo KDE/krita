@@ -181,9 +181,18 @@ public:
     */
     virtual int index(KisLayerSP layer) const;
 
+    virtual QImage createThumbnail(qint32 w, qint32 h);
+
+    /// Returns if the layer will induce the projection hack (if the only layer in this group)
+    virtual bool paintLayerInducesProjectionOptimization(KisPaintLayerSP l);
+
+private:
+
+    friend class KisImage; // Only KisImage is allowed to add layers
+#if 0
     /// Moves the specified layer to the specified index in the group, if it's already a member of this group.
     virtual void setIndex(KisLayerSP layer, int index);
-
+#endif
     /** Adds the layer to this group at the specified index. childCount() is a valid index and appends to the end.
         Fails and returns false if the layer is already in this group or any other (remove it first.) */
     virtual bool addLayer(KisLayerSP newLayer, int index);
@@ -197,11 +206,6 @@ public:
 
     /// Removes the layer from this group. Fails if there's no such layer in this group.
     virtual bool removeLayer(KisLayerSP layer);
-
-    virtual QImage createThumbnail(qint32 w, qint32 h);
-
-    /// Returns if the layer will induce the projection hack (if the only layer in this group)
-    virtual bool paintLayerInducesProjectionOptimization(KisPaintLayerSP l);
 
 protected:
 

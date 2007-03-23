@@ -321,6 +321,14 @@ public:
      */
     bool addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
 
+    /**
+     * Adds the layer to this group at the specified index.
+     * childCount() is a valid index and appends to the end. Fails and
+     * returns false if the layer is already in this group or any
+     * other (remove it first.)
+     */
+    bool addLayer( KisLayerSP layer,  KisGroupLayerSP parent, int index );
+
     /// Remove layer
     bool removeLayer(KisLayerSP layer);
 
@@ -466,7 +474,7 @@ private:
     KisImage& operator=(const KisImage& rhs);
     void init(KisUndoAdapter * adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace, const QString& name);
     void emitSizeChanged();
-
+    void preparePaintLayerAfterAdding( KisLayerSP layer );
 
 private:
     class KisImagePrivate;

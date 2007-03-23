@@ -115,9 +115,6 @@ public:
      */
     virtual int index() const;
 
-    /// Moves this layer to the specified index within its parent's list of child layers.
-    virtual void setIndex(int index);
-
     /**
      * Returns the parent layer of a layer. This is 0 only for a root layer; otherwise
      * this will be an actual GroupLayer */

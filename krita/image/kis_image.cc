@@ -683,6 +683,36 @@ KisLayerSP KisImage::findLayer(int id) const
 }
 
 
+void KisImage::preparePaintLayerAfterAdding( KisLayerSP layer )
+{
+    KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer.data()));
+    if (!player.isNull()) {
+
+        // XXX: This should also be done whenever a layer grows!
+        QList<KisPaintDeviceAction *> actions =
+            KoColorSpaceRegistry::instance()->paintDeviceActionsFor(player->paintDevice()->colorSpace());
+        for (int i = 0; i < actions.count(); i++) {
+            actions.at(i)->act(player.data()->paintDevice(), width(), height());
+        }
+
+        connect(player.data(), SIGNAL(sigMaskInfoChanged()),
+                this, SIGNAL(sigMaskInfoChanged()));
+    }
+
+    if (layer->extent().isValid()) layer->setDirty();
+
+    if (!layer->temporary()) {
+        emit sigLayerAdded(layer);
+        activateLayer(layer);
+    }
+
+
+    if (!layer->temporary()) {
+        QUndoCommand* cmd = new KisImageLayerAddCommand(KisImageSP(this), layer);
+            cmd->redo();
+    }
+}
+
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
 {
     if ( parent )
@@ -697,38 +727,22 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
         return false;
 
     const bool success = parent->addLayer(layer, aboveThis);
-    if (success)
-    {
-        KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer.data()));
-        if (!player.isNull()) {
-
-            // XXX: This should also be done whenever a layer grows!
-            QList<KisPaintDeviceAction *> actions =
-                KoColorSpaceRegistry::instance()->paintDeviceActionsFor(player->paintDevice()->colorSpace());
-            for (int i = 0; i < actions.count(); i++) {
-                actions.at(i)->act(player.data()->paintDevice(), width(), height());
-            }
-
-            connect(player.data(), SIGNAL(sigMaskInfoChanged()),
-                    this, SIGNAL(sigMaskInfoChanged()));
-        }
-
-        if (layer->extent().isValid()) layer->setDirty();
-
-        if (!layer->temporary()) {
-            emit sigLayerAdded(layer);
-            activateLayer(layer);
-        }
-
-
-        if (!layer->temporary()) {
-            QUndoCommand* cmd = new KisImageLayerAddCommand(KisImageSP(this), layer);
-            cmd->redo();
-        }
-    }
+    if (success) preparePaintLayerAfterAdding( layer );
 
     return success;
 }
+
+bool KisImage::addLayer( KisLayerSP layer,  KisGroupLayerSP parent, int index )
+{
+    if (!parent)
+        return false;
+
+    const bool success = parent->addLayer(layer, index);
+    if (success) preparePaintLayerAfterAdding( layer );
+
+    return success;
+}
+
 
 bool KisImage::removeLayer(KisLayerSP layer)
 {

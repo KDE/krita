@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=XYZ Color Model (16-bit integer)
+Name[uk]=Модель кольорів CMYK (16-бітне ціле число)
 Name[x-test]=xxXYZ Color Model (16-bit integer)xx
 Comment=Color model for 16-bit integer per channel XYZ images
+Comment[uk]=Модель кольорів з 16-бітним цілим числом на канал для зображень XYZ
 Comment[x-test]=xxColor model for 16-bit integer per channel XYZ imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service

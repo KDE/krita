@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Autocorrection plugin
+Name[uk]=Втулок автокоректування
 Name[x-test]=xxAutocorrection pluginxx
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Grayscale Color Model with Alpha
+Name[uk]=Модель кольору "відтінки сірого" з альфа
 Name[x-test]=xxGrayscale Color Model with Alphaxx
 Comment=Color model for 8-bit grayscale images
 Comment[bg]=Цветови модел за 8 битови сиви изображения

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Flake Plugin
+Name[uk]=Втулок Flake
 Name[x-test]=xxFlake Pluginxx
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Flake

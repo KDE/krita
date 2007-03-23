@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>362</width>
-    <height>395</height>
+    <width>684</width>
+    <height>387</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -16,7 +16,63 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="8" column="0" colspan="2" >
+   <item row="0" column="0" colspan="2" >
+    <widget class="QLabel" name="textLabel1" >
+     <property name="text" >
+      <string>&amp;Name:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>editName</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QLabel" name="textLabel3" >
+     <property name="text" >
+      <string>&amp;Opacity:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>intOpacity</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="3" >
+    <widget class="QLabel" name="textLabel4" >
+     <property name="text" >
+      <string>Composite mode:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3" colspan="2" >
+    <widget class="KisCmbComposite" native="1" name="cmbComposite" />
+   </item>
+   <item row="3" column="1" colspan="4" >
+    <widget class="KisIntSpinbox" native="1" name="intOpacity" />
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="textLabel1_2" >
+     <property name="text" >
+      <string>Profile:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2" colspan="3" >
+    <widget class="SqueezedComboBox" native="1" name="cmbProfile" />
+   </item>
+   <item row="1" column="2" colspan="3" >
+    <widget class="KisCmbIDList" native="1" name="cmbColorSpaces" />
+   </item>
+   <item row="0" column="2" colspan="3" >
+    <widget class="QLineEdit" name="editName" />
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QLabel" name="textLabel2" >
+     <property name="text" >
+      <string>Colorspace:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="4" >
     <widget class="QGroupBox" name="grpActiveChannels" >
      <property name="toolTip" >
       <string>Select the set of active channels.</string>
@@ -29,7 +85,7 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="0" colspan="2" >
+   <item row="5" column="4" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Painterly overlays</string>
@@ -122,62 +178,6 @@
        </widget>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item row="7" column="1" >
-    <widget class="KisCmbComposite" native="1" name="cmbComposite" />
-   </item>
-   <item rowspan="2" row="6" column="0" >
-    <widget class="QLabel" name="textLabel4" >
-     <property name="text" >
-      <string>Composite mode:</string>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="2" row="5" column="1" >
-    <widget class="KisIntSpinbox" native="1" name="intOpacity" />
-   </item>
-   <item rowspan="2" row="4" column="0" >
-    <widget class="QLabel" name="textLabel3" >
-     <property name="text" >
-      <string>&amp;Opacity:</string>
-     </property>
-     <property name="buddy" >
-      <cstring>intOpacity</cstring>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="2" row="3" column="1" >
-    <widget class="SqueezedComboBox" native="1" name="cmbProfile" />
-   </item>
-   <item rowspan="2" row="2" column="0" >
-    <widget class="QLabel" name="textLabel1_2" >
-     <property name="text" >
-      <string>Profile:</string>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="2" row="1" column="1" >
-    <widget class="KisCmbIDList" native="1" name="cmbColorSpaces" />
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="textLabel2" >
-     <property name="text" >
-      <string>Colorspace:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" >
-    <widget class="QLineEdit" name="editName" />
-   </item>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="textLabel1" >
-     <property name="text" >
-      <string>&amp;Name:</string>
-     </property>
-     <property name="buddy" >
-      <cstring>editName</cstring>
-     </property>
     </widget>
    </item>
   </layout>

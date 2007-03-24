@@ -28,6 +28,7 @@
 #include <QPen>
 #include <QPushButton>
 #include <QRect>
+#include <QVector>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -435,8 +436,8 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
 //        gc.drawLine(startx,endy + m_handleSize / 2 + 1, startx, controller->kiscanvas()->height());
         gc.drawLine(endx,0,endx,starty - m_handleSize / 2);
     //    gc.drawLine(endx + m_handleSize / 2 + 1,starty, controller->kiscanvas()->width(), starty);
-        Q3MemArray <QRect> rects = m_handlesRegion.rects ();
-        for (Q3MemArray <QRect>::ConstIterator it = rects.begin (); it != rects.end (); ++it)
+        QVector <QRect> rects = m_handlesRegion.rects ();
+        for (QVector <QRect>::ConstIterator it = rects.begin (); it != rects.end (); ++it)
         {
             gc.fillRect (*it, Qt::black);
         }

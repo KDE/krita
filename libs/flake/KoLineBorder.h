@@ -40,6 +40,10 @@ class FLAKE_EXPORT KoLineBorder : public KoShapeBorderModel {
 public:
     /// Constructor for a thin line in black
     KoLineBorder();
+
+    /// Copy constructor
+    KoLineBorder( const KoLineBorder &other );
+
     /**
      * Constructor for a lineBorder
      * @param lineWidth the width, in pt

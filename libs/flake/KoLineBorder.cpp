@@ -40,6 +40,13 @@ KoLineBorder::KoLineBorder()
     d->pen.setWidthF( 0.0 );
 }
 
+KoLineBorder::KoLineBorder( const KoLineBorder & other )
+    : KoShapeBorderModel(), d(new Private())
+{
+    d->color = other.d->color;
+    d->pen = other.d->pen;
+}
+
 KoLineBorder::KoLineBorder(double lineWidth, QColor color)
     : d(new Private())
 {

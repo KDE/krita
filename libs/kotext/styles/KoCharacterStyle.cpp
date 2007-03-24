@@ -213,15 +213,17 @@ void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
         setForeground(brush);
     }
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" )  // 3.10.9
-         || styleStack.hasAttributeNS( KoXmlNS::style, "font-name") ) { // 3.10.8
+    QString fontName;
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
+        fontName = styleStack.attributeNS( KoXmlNS::fo, "font-family" );
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-family" ) )
+        fontName = styleStack.attributeNS( KoXmlNS::style, "font-family" );
+    //if ( styleStack.hasAttributeNS( KoXmlNS::svg, "font-family" ) )
+    //    fontName = styleStack.attributeNS( KoXmlNS::svg, "font-family" );
+    if ( ! fontName.isNull() ) {
         // Hmm, the remove "'" could break it's in the middle of the fontname...
-        QString fontName = styleStack.attributeNS( KoXmlNS::fo, "font-family" ).remove( "'" );
-        if (fontName.isEmpty()) {
-            // ##### TODO. This is wrong. style:font-name refers to a font-decl entry.
-            // We have to look it up there, and retrieve _all_ font attributes from it, not just the name.
-            fontName = styleStack.attributeNS( KoXmlNS::style, "font-name" ).remove( "'" );
-        }
+        fontName = fontName.remove( "'" );
+
         // 'Thorndale' is not known outside OpenOffice so we substitute it
         // with 'Times New Roman' that looks nearly the same.
         if ( fontName == "Thorndale" )
@@ -251,17 +253,17 @@ void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
         setFontWeight( boldness );
     }
 
-    bool italic = false;
+    //bool italic = false;
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) ) { // 3.10.19
         if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "italic" ||
              styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
-            //setFontItalic( true );
-            italic = true;
+            setFontItalic( true );
+            //italic = true;
         }
     }
     //sebsauer, 2007-03-19, we always call setFontItalic() here since it works
     //for now in KWOpenDocumentLoader better that way.
-    setFontItalic( italic );
+    //setFontItalic( italic );
 
 //TODO
 #if 0

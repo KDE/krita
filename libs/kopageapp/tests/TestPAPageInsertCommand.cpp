@@ -36,6 +36,53 @@ void TestPAPageInsertCommand::redoUndo()
     QVERIFY( p1 != 0 );
     QVERIFY( m1 != 0 );
 
+    KoPAPage * p2 = new KoPAPage( m1 );
+    KoPAPage * p3 = new KoPAPage( m1 );
+
+    KoPAPageInsertCommand cmd( &doc, p2, p1 );
+    KoPAPageInsertCommand cmd2( &doc, p3, 0 );
+
+    cmd.redo();
+    cmd2.redo();
+
+    QList<KoPAPage *> pages;
+    pages.append( p3 );
+    pages.append( p1 );
+    pages.append( p2 );
+
+    QList<KoPAPage *> allPages = pages;
+
+    for( int i = 0; i < pages.size(); ++i ) {
+        QVERIFY( pages[i] == doc.pageByIndex( i, false ) );
+    }
+
+    cmd2.undo();
+    pages.removeAll( p3 );
+    for( int i = 0; i < pages.size(); ++i ) {
+        QVERIFY( pages[i] == doc.pageByIndex( i, false ) );
+    }
+
+    cmd.undo();
+    pages.removeAll( p2 );
+    for( int i = 0; i < pages.size(); ++i ) {
+        QVERIFY( pages[i] == doc.pageByIndex( i, false ) );
+    }
+
+    cmd.redo();
+    cmd2.redo();
+    for( int i = 0; i < allPages.size(); ++i ) {
+        QVERIFY( allPages[i] == doc.pageByIndex( i, false ) );
+    }
+}
+
+void TestPAPageInsertCommand::redoUndoMaster()
+{
+    MockDocument doc;
+
+    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>( doc.pageByIndex( 0, true ) );
+
+    QVERIFY( m1 != 0 );
+
     KoPAMasterPage * m2 = new KoPAMasterPage();
     KoPAMasterPage * m3 = new KoPAMasterPage();
 

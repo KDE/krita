@@ -27,6 +27,7 @@ class TestPAPageInsertCommand : public QObject
     Q_OBJECT
 private slots:
     void redoUndo();
+    void redoUndoMaster();
 };
 
 #endif // TESTPAPAGEINSERTCOMMAND_H

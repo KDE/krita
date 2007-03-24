@@ -450,7 +450,7 @@ void KisGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, do
     colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
     colorWeights[1] = 255 - colorWeights[0];
 
-    m_colorSpace->mixColors(colors, colorWeights, 2, buffer.data());
+    m_colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
 
     dst.fromKoColor(buffer);
 }

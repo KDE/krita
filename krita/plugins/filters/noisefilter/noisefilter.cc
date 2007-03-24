@@ -85,25 +85,28 @@ void KisFilterNoise::process(const KisPaintDeviceSP src, const QPoint& srcTopLef
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
-    
+
     setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
-    
+
     QVariant value;
     int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
     int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
-    
+
     KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height() );
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
-    
+
     Q_UINT8* interm = new Q_UINT8[ cs->pixelSize() ];
     Q_INT32 threshold = (RAND_MAX / 100) * (100 - level);
-    
+
     Q_UINT8 weights[2];
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
     const Q_UINT8* pixels[2];
     pixels[0] = interm;
+
+    KoMixColorsOp * mixOp = cs->mixColorsOp();
+
     while(!srcIt.isDone())
     {
         if(rand() > threshold)
@@ -114,13 +117,13 @@ void KisFilterNoise::process(const KisPaintDeviceSP src, const QPoint& srcTopLef
                             static_cast<int>((double)rand()/RAND_MAX * 255));
             cs->fromQColor( c, interm, 0 );
             pixels[1] = srcIt.oldRawData();
-            cs->mixColors( pixels, weights, 2, dstIt.rawData() );
+            mixOp->mixColors( pixels, weights, 2, dstIt.rawData() );
         }
         ++srcIt;
         ++dstIt;
         incProgress();
     }
-    
+
     delete [] interm;
     setProgressDone(); // Must be called even if you don't really support progression
 }

@@ -20,6 +20,7 @@
 #define KOALPHACOLORSPACE_H
 
 #include <QColor>
+#include <QBitArray>
 
 #include <pigment_export.h>
 
@@ -60,7 +61,7 @@ public:
     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags) const;
 
 
     virtual quint32 colorSpaceType() const { return 0; }
@@ -101,7 +102,7 @@ public:
             lab+=4;
         }
     }
-    
+
     virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const
     {
         quint16* rgb = reinterpret_cast<quint16*>(dst);

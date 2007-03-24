@@ -53,6 +53,8 @@ public:
                     quint8 U8_opacity,
                     const QBitArray & channelFlags) const
     {
+        // XXX: How to use channelflags here? It would be cool to
+        // erase all green from an image, for example.
         Q_UNUSED( U8_opacity );
         Q_UNUSED( channelFlags );
         while (rows-- > 0)
@@ -65,12 +67,14 @@ public:
             {
                 channels_type srcAlpha = s[_CSTraits::alpha_pos];
 
-            // apply the alphamask
+                // apply the alphamask
                 if (mask != 0) {
                     quint8 U8_mask = *mask;
 
                     if (U8_mask != OPACITY_OPAQUE) {
-                        srcAlpha = KoColorSpaceMaths< channels_type, channels_type >::blend(srcAlpha, NATIVE_OPACITY_OPAQUE, KoColorSpaceMaths<quint8, channels_type>::scaleToA( U8_mask) );
+                        srcAlpha = KoColorSpaceMaths< channels_type, channels_type >::blend(srcAlpha,
+                                                                                            NATIVE_OPACITY_OPAQUE,
+                                                                                            KoColorSpaceMaths<quint8,channels_type>::scaleToA( U8_mask) );
                     }
                     mask++;
                 }

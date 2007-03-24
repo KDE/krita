@@ -199,7 +199,7 @@ void KisBrightnessContrastFilter::process(const KisPaintDeviceSP src, const QPoi
 
     setProgressTotalSteps(size.width() * size.height());
     qint32 pixelsProcessed = 0;
-
+    KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
     while( ! iter.isDone()  && !cancelRequested())
     {
         quint32 npix=0, maxpix = iter.nConseqPixels();
@@ -240,7 +240,7 @@ void KisBrightnessContrastFilter::process(const KisPaintDeviceSP src, const QPoi
                 configBC->m_adjustment->transform(iter.oldRawData(), iter.rawData(), 1);
                 const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
                 quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
-                src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
+                mixOp->mixColors(pixels, weights, 2, iter.rawData());
                 ++iter;
                 pixelsProcessed++;
                 break;

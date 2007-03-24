@@ -149,7 +149,7 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
             }
             // Weird, I can't do that directly :/
             const quint8** cpixels = const_cast<const quint8**>(pixels);
-            cs->mixColors(cpixels, weights, counts[m_radius], data);
+            cs->mixColorsOp()->mixColors(cpixels, weights, counts[m_radius], data);
             m_pickedColor = KoColor(data, cs);
 
             for (i = 0; i < counts[m_radius]; i++)

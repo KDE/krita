@@ -78,17 +78,19 @@ public:
      * The channels flag determines which set out of color channels, alpha channels, substance or substrate
      * channels we convolve.
      *
-     * Note that we do not (currently) support different kernels for different channels _or_ channel types.
+     * Note that we do not (currently) support different kernels for
+     * different channels _or_ channel types.
+     *
+     * If you want to convolve a subset of the channels in a pixel,
+     * set those channels with KisPainter::setChannelFlags();
      */
     void applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
-                     KisConvolutionBorderOp borderOp = BORDER_AVOID,
-                     KoChannelInfo::enumChannelFlags channelFlags = KoChannelInfo::FLAG_COLOR);
+                     KisConvolutionBorderOp borderOp = BORDER_AVOID);
 private:
     /**
      * This function is called by applyMatrix when borderOp == BORDER_REPEAT
      */
-    void applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
-                           KoChannelInfo::enumChannelFlags channelFlags);
+    void applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h);
 
 
 };

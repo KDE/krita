@@ -171,6 +171,8 @@ void KisAutoContrast::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
     setProgressTotalSteps(size.width() * size.height());
     qint32 pixelsProcessed = 0;
 
+    KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
+
     while( ! iter.isDone()  && !cancelRequested())
     {
         quint32 npix=0, maxpix = iter.nConseqPixels();
@@ -210,7 +212,7 @@ void KisAutoContrast::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
                 adj->transform(iter.oldRawData(), iter.rawData(), 1);
                 const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
                 quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
-                src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
+                mixOp->mixColors(pixels, weights, 2, iter.rawData());
                 ++iter;
                 pixelsProcessed++;
                 break;
@@ -248,6 +250,8 @@ bool KisDesaturateFilter::workWith(KoColorSpace* cs)
 
 void KisDesaturateFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
+    Q_UNUSED( config );
+
     if (dst != src) {
         KisPainter gc(dst);
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
@@ -263,6 +267,7 @@ void KisDesaturateFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
 
     setProgressTotalSteps(size.width() * size.height());
     qint32 pixelsProcessed = 0;
+    KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
 
     while( ! iter.isDone()  && !cancelRequested())
     {
@@ -304,7 +309,7 @@ void KisDesaturateFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
                 m_adj->transform(iter.oldRawData(), iter.rawData(), 1);
                 const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
                 quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
-                src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
+                mixOp->mixColors(pixels, weights, 2, iter.rawData());
                 ++iter;
                 pixelsProcessed++;
                 break;

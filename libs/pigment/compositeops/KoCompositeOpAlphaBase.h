@@ -20,6 +20,8 @@
 #ifndef _KOCOMPOSITEOPALPHABASE_H_
 #define _KOCOMPOSITEOPALPHABASE_H_
 
+#include <QBitArray>
+
 #include "KoColorSpaceMaths.h"
 #include "KoCompositeOp.h"
 
@@ -65,11 +67,11 @@ class KoCompositeOpAlphaBase : public KoCompositeOp {
                 const channels_type *srcN = reinterpret_cast<const channels_type *>(srcRowStart);
                 channels_type *dstN = reinterpret_cast<channels_type *>(dstRowStart);
                 const quint8 *mask = maskRowStart;
-                
+
                 qint32 columns = cols;
 
                 while (columns > 0) {
-                    
+
                     channels_type srcAlpha = srcN[_CSTraits::alpha_pos];
 
                     // apply the alphamask
@@ -105,7 +107,7 @@ class KoCompositeOpAlphaBase : public KoCompositeOp {
                                     srcBlend = srcAlpha;
                                 }
                             }
-                            _compositeOp::composeColorChannels( srcBlend, srcN, dstN, pixelSize );
+                            _compositeOp::composeColorChannels( srcBlend, srcN, dstN, pixelSize, channelFlags );
 
                         }
                     }

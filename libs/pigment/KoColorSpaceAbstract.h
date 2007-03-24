@@ -20,6 +20,7 @@
 #ifndef KOCOLORSPACEABSTRACT_H
 #define KOCOLORSPACEABSTRACT_H
 
+#include <QBitArray>
 #include <klocale.h>
 
 #include <KoColorSpace.h>
@@ -124,15 +125,23 @@ namespace {
 
     template<class _CSTraits>
     class KoConvolutionOpImpl : public KoConvolutionOp {
-        public:
-            KoConvolutionOpImpl() { }
-            virtual ~KoConvolutionOpImpl() { }
-            virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const
+
+    public:
+
+        KoConvolutionOpImpl() { }
+
+        virtual ~KoConvolutionOpImpl() { }
+
+        virtual void convolveColors(quint8** colors, qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels, const QBitArray & channelFlags) const
             {
+
                 // Create and initialize to 0 the array of totals
                 typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype totals[_CSTraits::channels_nb];
+
                 qint32 totalAlpha = 0;
+
                 memset(totals, 0, sizeof(typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype) * _CSTraits::channels_nb);
+
                 for (;nPixels--; colors++, kernelValues++)
                 {
                     const typename _CSTraits::channels_type* color = _CSTraits::nativeArray(*colors);
@@ -144,26 +153,54 @@ namespace {
                     totalAlpha += alphaTimesWeight;
                 }
 
-                if (channelFlags & KoChannelInfo::FLAG_COLOR) {
-                    typename _CSTraits::channels_type* dstColor = _CSTraits::nativeArray(dst);
+                typename _CSTraits::channels_type* dstColor = _CSTraits::nativeArray(dst);
+
+                if ( channelFlags.isEmpty() ) {
+                    // Do all channels
+
                     for(uint i = 0; i < _CSTraits::channels_nb; i++)
                     {
                         typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype v = totals[i] / factor + offset;
-                        dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::min, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max);
+                        dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::min,
+                                              KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max);
                     }
-
-                }
-                if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
                     _CSTraits::setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, 0xFF ),1);
+                }
+                else {
+                    // Do only the selected channels. Keep track of the
+                    // alpha pos, too, since that determines what
+                    // we do, exactly.
+                    // XXX: This can, no doubt, be optimized in clever
+                    // ways. (BSAR)
+
+                    uint j = channelFlags.size();
+                    Q_ASSERT( j == _CSTraits::channels_nb );
+
+                    for ( uint i = 0; i < j; ++i ) {
+                        if ( channelFlags.testBit( i ) ) {
+                            if ( i == _CSTraits::alpha_pos ) {
+                                _CSTraits::setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, 0xFF ),1);
+                            }
+                            else {
+                                typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype v = totals[i] / factor + offset;
+                                dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::min,
+                                                      KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max);
+                            }
+                        }
+
+                    }
                 }
             }
     };
 
     class KoInvertColorTransformation : public KoColorTransformation {
+
         public:
+
             KoInvertColorTransformation(const KoColorSpace* cs) : m_colorSpace(cs), m_psize(cs->pixelSize())
             {
             }
+
             virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
             {
                 quint16 m_rgba[4];
@@ -176,8 +213,11 @@ namespace {
                     m_colorSpace->fromRgbA16(reinterpret_cast<quint8 *>(m_rgba), dst, 1);
                     src += m_psize;
                 }
+
             }
+
         private:
+
             const KoColorSpace* m_colorSpace;
             quint32 m_psize;
     };

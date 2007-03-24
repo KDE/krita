@@ -18,9 +18,10 @@
 */
 #include <QThreadStorage>
 #include <QByteArray>
+#include <QBitArray>
 
 #include "KoColorSpace.h"
-
+#include "KoChannelInfo.h"
 #include <kdebug.h>
 
 #include "KoCompositeOp.h"
@@ -76,6 +77,22 @@ Q3ValueVector<KoChannelInfo *> KoColorSpace::channels() const
     return d->channels;
 }
 
+QBitArray KoColorSpace::channelFlags(bool color, bool alpha, bool substance, bool substrate) const
+{
+    QBitArray ba( d->channels.size() );
+    if ( !color && !alpha && !substance && !substrate ) return ba;
+
+    for ( int i = 0; i < d->channels.size(); ++i ) {
+        KoChannelInfo * channel = d->channels.at( i );
+        if ( ( color && channel->channelType() == KoChannelInfo::COLOR ) ||
+             ( alpha && channel->channelType() == KoChannelInfo::ALPHA ) ||
+             ( substrate && channel->channelType() == KoChannelInfo::SUBSTRATE ) ||
+             ( substance && channel->channelType() == KoChannelInfo::SUBSTANCE ) )
+            ba.setBit( i, true );
+    }
+    return ba;
+}
+
 void KoColorSpace::addChannel(KoChannelInfo * ci)
 {
     d->channels.push_back(ci);
@@ -91,21 +108,11 @@ QList<KoCompositeOp*> KoColorSpace::userVisiblecompositeOps() const
     return d->compositeOps.values();
 }
 
-void KoColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
-{
-    Q_ASSERT(d->mixColorsOp);
-    d->mixColorsOp->mixColors(colors, weights, nColors, dst);
-}
 
 KoMixColorsOp* KoColorSpace::mixColorsOp() const {
     return d->mixColorsOp;
 }
 
-void KoColorSpace::convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const
-{
-    Q_ASSERT(d->convolutionOp);
-    d->convolutionOp->convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nPixels);
-}
 
 KoConvolutionOp* KoColorSpace::convolutionOp() const {
     return d->convolutionOp;
@@ -125,7 +132,6 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
         d->compositeOps.insert( op->id(), const_cast<KoCompositeOp*>( op ) );
     }
 }
-
 
 bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    quint8 * dst,

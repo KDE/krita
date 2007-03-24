@@ -21,6 +21,7 @@
 #include <stdlib.h>
 
 #include <QImage>
+#include <QBitArray>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -367,7 +368,7 @@ QString KoAlphaColorSpace::normalisedChannelValueText(const quint8 *pixel, quint
 }
 
 
-void KoAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
+void KoAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags) const
 {
     qint32 totalAlpha = 0;
 
@@ -382,7 +383,6 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, K
         kernelValues++;
     }
 
-    if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
+    if ( channelFlags.isEmpty() || channelFlags.testBit(PIXEL_MASK) )
         dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, SCHAR_MAX);
-    }
 }

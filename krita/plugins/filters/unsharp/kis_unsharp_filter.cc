@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#include <QBitArray>
 #include "kis_unsharp_filter.h"
 
 #include <kcombobox.h>
@@ -75,9 +75,13 @@ void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopL
 
     KisPaintDeviceSP interm = KisPaintDeviceSP(new KisPaintDevice(*src));
     KoColorSpace * cs = src->colorSpace();
+    KoConvolutionOp * convolutionOp = cs->convolutionOp();
+    QBitArray channelFlags = cs->channelFlags(); // Only convolve color channels
 
     KisConvolutionPainter painter( interm );
-    painter.beginTransaction("bouuh");
+    painter.setChannelFlags( channelFlags );
+    painter.beginTransaction("bouuh"); // XXX: What's this? Someone
+                                       // doing a Niobe impersonation?
     painter.applyMatrix(kernel, srcTopLeft.x(), srcTopLeft.y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
 
     if (painter.cancelRequested()) {
@@ -95,14 +99,12 @@ void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopL
 
     int pixelsProcessed = 0;
     qint32 weights[2];
-/*    weights[0] = 128;
-    qint32 factor = (quint32) 128 / amount;
-    weights[1] = (factor - 128);*/
     qint32 factor = 128;
+
     // XXX: Added static cast to avoid warning
     weights[0] = static_cast<qint32>(factor * ( 1. + amount));
     weights[1] = static_cast<qint32>(-factor * amount);
-//     kDebug() << (int) weights[0] << " " << (int)weights[1] << " " << factor << endl;
+
     for( int j = 0; j < areaSize.height(); j++)
     {
         while( ! srcIt.isDone() )
@@ -114,7 +116,7 @@ void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopL
                 {
                     memcpy(colors[0],srcIt.rawData(), cdepth);
                     memcpy(colors[1],intermIt.rawData(), cdepth);
-                    cs->convolveColors(colors, weights, KoChannelInfo::FLAG_COLOR, dstIt.rawData(),  factor, 0, 2 );
+                    convolutionOp->convolveColors(colors, weights, dstIt.rawData(),  factor, 0, 2, channelFlags );
                 }
             }
             setProgress(++pixelsProcessed);

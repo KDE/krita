@@ -23,9 +23,9 @@
 #include "qstring.h"
 #include "ksharedptr.h"
 
-/** 
+/**
  * This class gives some basic information about a channel,
- * that is, one of the components that makes up a particular 
+ * that is, one of the components that makes up a particular
  * pixel.
  */
 class KoChannelInfo : public KShared {
@@ -48,12 +48,6 @@ public:
         INT16,
         OTHER ///< Use this if the channel is neither an integer or a float
     };
-    enum enumChannelFlags {
-        FLAG_COLOR = 1,
-        FLAG_ALPHA = (1 << 1),
-        FLAG_SUBSTANCE = (1 << 2),
-        FLAG_SUBSTRATE = (1 << 3)
-    };
 
 public:
     KoChannelInfo() { };
@@ -64,12 +58,12 @@ public:
      * User-friendly name for this channel for presentation purposes in the gui
      */
     inline QString name() const { return m_name; };
-    
-    /** 
+
+    /**
      * returns the position of the first byte of the channel in the pixel
      */
     inline qint32 pos() const { return m_pos; };
-    
+
     /**
      * returns the number of bytes this channel takes
      */

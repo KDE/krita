@@ -39,15 +39,17 @@ class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
     public:
 
         inline static void composeColorChannels( channels_type srcBlend,
-                                               const channels_type* srcN,
-                                               channels_type* dstN, qint32 pixelSize)
+                                                 const channels_type* srcN,
+                                                 channels_type* dstN,
+                                                 qint32 pixelSize,
+                                                 const QBitArray & channelFlags )
         {
             if (srcBlend == NATIVE_OPACITY_OPAQUE) {
                 memcpy(dstN, srcN, pixelSize);
             } else {
                 for(uint i = 0; i <  _CSTraits::channels_nb; i++)
                 {
-                    if( (int)i != _CSTraits::alpha_pos)
+                    if( (int)i != _CSTraits::alpha_pos && (  channelFlags.isEmpty() || channelFlags.testBit( i ) ) )
                         dstN[i] = KoColorSpaceMaths<channels_type>::blend(srcN[i], dstN[i], srcBlend);
                 }
             }

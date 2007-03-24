@@ -287,9 +287,11 @@ KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
 
     QRect r = src->exactBounds();
 
-        double displacement;
-        qint32 displacementInt;
-        double weight;
+    double displacement;
+    qint32 displacementInt;
+    double weight;
+
+    KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
 
     for (qint32 y = r.top(); y <= r.bottom(); y++) {
 
@@ -315,7 +317,7 @@ KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
             pixelPtrs[0] = leftSrcIt.rawData();
             pixelPtrs[1] = srcIt.rawData();
 
-            src->colorSpace()->mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
+            mixOp->mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
 
             ++srcIt;
             ++leftSrcIt;
@@ -330,14 +332,16 @@ KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
 KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
 {
     KisPaintDeviceSP dst = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "yShear"));
+    KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
+
     dst->setX(src->getX());
     dst->setY(src->getY());
 
     QRect r = src->exactBounds();
 
-        double displacement;
-        qint32 displacementInt;
-        double weight;
+    double displacement;
+    qint32 displacementInt;
+    double weight;
 
     for (qint32 x = r.left(); x <= r.right(); x++) {
 
@@ -363,7 +367,7 @@ KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
             pixelPtrs[0] = leftSrcIt.rawData();
             pixelPtrs[1] = srcIt.rawData();
 
-            src->colorSpace()->mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
+            mixOp->mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
 
             ++srcIt;
             ++leftSrcIt;

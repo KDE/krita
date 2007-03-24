@@ -315,6 +315,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     quint8 pixelSize = src->pixelSize();
     KisSelectionSP dstSelection;
     KoColorSpace * cs = src->colorSpace();
+    KoMixColorsOp * mixOp = cs->mixColorsOp();
     qint32 scale;
     qint32 scaleDenom;
     qint32 shearFracOffset;
@@ -499,7 +500,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
                     num++;
                 }
                 data = dstIt.rawData();
-                cs->mixColors(colors, filterWeights[center&255].weight, filterWeights[center&255].numWeights, data);
+                mixOp->mixColors(colors, filterWeights[center&255].weight, filterWeights[center&255].numWeights, data);
                 data = dstSelIt.rawData();
                 *data = selectedness;
             }

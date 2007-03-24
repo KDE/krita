@@ -66,6 +66,8 @@ void KoColorSlider::drawContents( QPainter *painter )
   colors[0] = m_minColor.data();
   colors[1] = m_maxColor.data();
 
+  KoMixColorsOp * mixOp = c.colorSpace()->mixColorsOp();
+
   QImage image(contentsRect().width(), contentsRect().height(), QImage::Format_ARGB32 );
 
   if( orientation() == Qt::Horizontal ) {
@@ -77,7 +79,7 @@ void KoColorSlider::drawContents( QPainter *painter )
         colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
         colorWeights[1] = 255 - colorWeights[0];
 
-        c.colorSpace()->mixColors(colors, colorWeights, 2, c.data());
+        mixOp->mixColors(colors, colorWeights, 2, c.data());
 
         c.toQColor(&color, &opacity);
         color.setAlpha(opacity);
@@ -95,7 +97,7 @@ void KoColorSlider::drawContents( QPainter *painter )
         colorWeights[0] = static_cast<quint8>((t) * 255 + 0.5);
         colorWeights[1] = 255 - colorWeights[0];
 
-        c.colorSpace()->mixColors(colors, colorWeights, 2, c.data());
+        mixOp->mixColors(colors, colorWeights, 2, c.data());
 
         c.toQColor(&color, &opacity);
         color.setAlpha(opacity);

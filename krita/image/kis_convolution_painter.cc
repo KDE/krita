@@ -86,8 +86,7 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : super(de
 }
 
 void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
-                                        KisConvolutionBorderOp borderOp,
-                                        KoChannelInfo::enumChannelFlags  channelFlags )
+                                        KisConvolutionBorderOp borderOp )
 {
     // Make the area we cover as small as possible
     if (m_device->hasSelection()) {
@@ -119,13 +118,14 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
     emit notifyProgress(0);
 
     KoColorSpace * cs = m_device->colorSpace();
+    KoConvolutionOp * convolutionOp = cs->convolutionOp();
 
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {
     case BORDER_DEFAULT_FILL :
         break;
     case BORDER_REPEAT:
-        applyMatrixRepeat(kernel, x, y, w, h, channelFlags);
+        applyMatrixRepeat(kernel, x, y, w, h);
         return;
     case BORDER_WRAP:
     case BORDER_AVOID:
@@ -197,7 +197,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
                 }
             }
             if (hit.isSelected()) {
-                cs->convolveColors(pixelPtrCache, kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
+                convolutionOp->convolveColors(pixelPtrCache, kernel->data, hit.rawData(), kernel->factor, kernel->offset, kw * kh, m_channelFlags);
 //                 pixelPtrCache.fill(0);
             }
             ++col;
@@ -232,8 +232,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
     delete[] pixelPtrCache;
 }
 
-void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
-                                              KoChannelInfo::enumChannelFlags channelFlags)
+void KisConvolutionPainter::applyMatrixRepeat( KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h )
 {
     int lastProgressPercent = 0;
     // Determine the kernel's extent from the center pixel
@@ -247,6 +246,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
     yLastMinuskhh = y + (h - khalfHeight);
 
     KoColorSpace * cs = m_device->colorSpace();
+    KoConvolutionOp * convolutionOp = cs->convolutionOp();
 
     // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorspace.
 
@@ -395,7 +395,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
                 }
             }
             if (hit.isSelected()) {
-                cs->convolveColors(pixelPtrCache, kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
+                convolutionOp->convolveColors(pixelPtrCache, kernel->data, hit.rawData(), kernel->factor, kernel->offset, kw * kh, m_channelFlags);
             }
             ++col;
             ++hit;

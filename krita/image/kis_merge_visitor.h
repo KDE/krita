@@ -83,6 +83,7 @@ public:
             dy = sy;
 
             KisPainter gc(m_projection);
+            gc.setChannelFlags( layer->channelFlags() );
             gc.bitBlt(dx, dy, layer->compositeOp() , dev, layer->opacity(), sx, sy, w, h);
 #ifdef DIRTY_AND_PROJECTION
             layer->setClean( rc );
@@ -121,6 +122,7 @@ public:
             dy = sy;
 
             KisPainter gc(m_projection);
+            gc.setChannelFlags( layer->channelFlags() );
             KisPaintDeviceSP source = layer->projection();
 
             if (!layer->hasMask()) {
@@ -231,6 +233,7 @@ public:
             dy = sy;
 
             KisPainter gc(m_projection);
+            gc.setChannelFlags( layer->channelFlags() );
             gc.bitBlt(dx, dy, layer->compositeOp(), dev, layer->opacity(), sx, sy, w, h);
 #ifdef DIRTY_AND_PROJECTION
             layer->setClean( rc );

@@ -39,22 +39,24 @@ class KoCompositeOpBurn : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
     public:
 
         inline static void composeColorChannels( channels_type srcBlend,
-                                               const channels_type* src,
-                                               channels_type* dst, qint32 pixelSize)
+                                                 const channels_type* src,
+                                                 channels_type* dst,
+                                                 qint32 pixelSize,
+                                                 const QBitArray & channelFlags )
         {
             Q_UNUSED(pixelSize);
             for(uint i = 0; i < _CSTraits::channels_nb; i++)
             {
-                if( (int)i != _CSTraits::alpha_pos)
+                if( (int)i != _CSTraits::alpha_pos && ( channelFlags.isEmpty() || channelFlags.testBit( i ) ) )
                 {
                     compositetype srcColor = src[i];
                     compositetype dstColor = dst[i];
-        
+
                     srcColor = qMin(((NATIVE_MAX_VALUE - dstColor) * (NATIVE_MAX_VALUE + 1)) / (srcColor + 1), (compositetype)NATIVE_MAX_VALUE);
                     if (NATIVE_MAX_VALUE - srcColor > NATIVE_MAX_VALUE) srcColor = NATIVE_MAX_VALUE;
-        
+
                     channels_type newColor = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
-        
+
                     dst[i] = newColor;
                 }
             }

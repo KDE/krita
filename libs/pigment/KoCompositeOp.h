@@ -89,26 +89,26 @@ public:
       @param numColumns length of the row of pixels in pixels
       @param opacity transparency with which to blend
     */
-    virtual void composite(quint8 *dstRowStart, qint32 dstRowStride, 
-			   const quint8 *srcRowStart, qint32 srcRowStride, 
-			   const quint8 *maskRowStart, qint32 maskRowStride, 
-			   qint32 rows, qint32 numColumns, 
+    virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
+			   const quint8 *srcRowStart, qint32 srcRowStride,
+			   const quint8 *maskRowStart, qint32 maskRowStride,
+			   qint32 rows, qint32 numColumns,
 			   quint8 opacity) const;
 
     /**
      * Same as previous, but with a bit array that determines which channels
      * (channels are in the order of the channels in the colorspace) should
-     * be excluded (false) or included (true) in the bitBlt. 
+     * be excluded (false) or included (true) in the bitBlt.
      *
      * For instance:
      * if this is COMPOSITY_COPY
      * composite(..., [1, 0]) for grayscale is the same as old COMPOSITE_COPY_GRAY --
      * only the gray channel is copied.
      */
-    virtual void composite(quint8 *dstRowStart, qint32 dstRowStride, 
-			   const quint8 *srcRowStart, qint32 srcRowStride, 
-			   const quint8 *maskRowStart, qint32 maskRowStride, 
-			   qint32 rows, qint32 numColumns, 
+    virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
+			   const quint8 *srcRowStart, qint32 srcRowStride,
+			   const quint8 *maskRowStart, qint32 maskRowStride,
+			   qint32 rows, qint32 numColumns,
 			   quint8 opacity,
 			   const QBitArray & channelFlags) const = 0;
 
@@ -118,8 +118,8 @@ protected:
     KoColorSpace * m_colorSpace;
     QString m_id;
     QString m_description;
-    mutable QBitArray m_defaultChannelFlags;
     bool m_userVisible;
+    QBitArray m_defaultChannelFlags;
 };
 
 #endif // KOCOMPOSITEOP_H

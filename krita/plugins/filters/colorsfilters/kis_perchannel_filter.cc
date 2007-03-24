@@ -209,7 +209,7 @@ void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
     }
 
     KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height() );
-
+    KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
     setProgressTotalSteps(size.width() * size.height());
     qint32 pixelsProcessed = 0;
 
@@ -254,7 +254,7 @@ void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
                 adj->transform(iter.oldRawData(), iter.rawData(), 1);
                 const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
                 quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
-                src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
+                mixOp->mixColors(pixels, weights, 2, iter.rawData());
                 ++iter;
                 pixelsProcessed++;
                 break;

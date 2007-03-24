@@ -54,7 +54,7 @@ void KisRandomSubAccessorPixel::sampledOldRawData(Q_UINT8* dst)
     weights[3] = (int)round( hsub * vsub * 255 );
     m_randomAccessor.moveTo(x+1, y+1);
     pixels[3] = m_randomAccessor.oldRawData();
-    m_device->colorSpace()->mixColors(pixels, weights, 4, dst);
+    m_device->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 4, dst);
 }
 
 void KisRandomSubAccessorPixel::sampledRawData(Q_UINT8* dst)
@@ -79,6 +79,6 @@ void KisRandomSubAccessorPixel::sampledRawData(Q_UINT8* dst)
     weights[3] = (int)round( hsub * vsub * 255 );
     m_randomAccessor.moveTo(x+1, y+1);
     pixels[3] = m_randomAccessor.rawData();
-    m_device->colorSpace()->mixColors(pixels, weights, 4, dst);
+    m_device->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 4, dst);
 }
 

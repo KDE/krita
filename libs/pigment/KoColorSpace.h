@@ -26,6 +26,7 @@
 #include <QImage>
 #include <QHash>
 #include <QVector>
+#include <QBitArray>
 
 #include <q3valuevector.h>
 #include <q3valuelist.h>
@@ -42,6 +43,7 @@ class KoColorSpaceRegistry;
 class KoColorTransformation;
 class KisMathToolbox;
 class KisFilter;
+class QBitArray;
 
 enum ColorSpaceIndependence {
     FULLY_INDEPENDENT,
@@ -51,8 +53,10 @@ enum ColorSpaceIndependence {
 };
 
 /**
- * Base class of the mix color operation. It's defined by sum(colors[i] * weights[i]) / 255.
- * You access the KoConvolutionOp of a colorspace by calling KoColorSpace::mixColorsOp.
+ * Base class of the mix color operation. It's defined by
+ * sum(colors[i] * weights[i]) / 255. You access the KoConvolutionOp
+ *
+ * of a colorspace by calling KoColorSpace::mixColorsOp.
  */
 class KoMixColorsOp {
   public:
@@ -68,26 +72,32 @@ class KoMixColorsOp {
 };
 
 /**
- * Base class of a convolution operation. A convolution operation is defined
- * by sum(colors[i] * kernelValues[i]) / factor + offset). The most well known
- * convolution is the gaussian blur.
- * You access the KoConvolutionOp of a colorspace by calling KoColorSpace::convolutionOp.
+ * Base class of a convolution operation. A convolution operation is
+ * defined by sum(colors[i] * kernelValues[i]) / factor + offset). The
+ * most well known convolution is the gaussian blur.
+ *
+ * You access the KoConvolutionOp of a colorspace by calling
+ * KoColorSpace::convolutionOp.
  */
 class KoConvolutionOp {
   public:
     virtual ~KoConvolutionOp() { }
     /**
      * Convolve the colors.
+     *
      * @param colors a pointer toward the source pixels
      * @param kernelValues the coeffient of the source pixels
-     * @param channelFlags determines which channels are affected
      * @param dst the destination pixel
      * @param factor usually the factor is equal to the sum of kernelValues
-     * @param offset the offset which is added to the result, useful when the sum of kernelValues is equal to 0
-     * This function is thread-safe.
+     * @param offset the offset which is added to the result, useful
+     *        when the sum of kernelValues is equal to 0
      * @param nColors the number of pixels in the colors array
+     * @param channelFlags determines which channels are affected
+     *
+     * This function is thread-safe.
+     *
      */
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const = 0;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags) const = 0;
 };
 
 /**
@@ -135,41 +145,51 @@ public:
 
 public:
 
-    //========== Channels =====================================================//
+     //========== Channels =====================================================//
 
-    /// Return a vector describing all the channels this color model has.
-    virtual Q3ValueVector<KoChannelInfo *> channels() const;
+     /// Return a vector describing all the channels this color model has.
+     virtual Q3ValueVector<KoChannelInfo *> channels() const;
 
-    /**
-     * The total number of channels for a single pixel in this color model
-     */
-    virtual quint32 channelCount() const = 0;
+     /**
+      * The total number of channels for a single pixel in this color model
+      */
+     virtual quint32 channelCount() const = 0;
 
-    /**
-     * The total number of color channels (excludes alpha and substance) for a single
-     * pixel in this color model.
-     */
-    virtual quint32 colorChannelCount() const = 0;
+     /**
+      * The total number of color channels (excludes alpha and substance) for a single
+      * pixel in this color model.
+      */
+     virtual quint32 colorChannelCount() const = 0;
 
-    /**
-     * The total number of substance channels for a single pixel
-     * in this color model
-     */
-    virtual quint32 substanceChannelCount() const { return 0; };
+     /**
+      * returns a QBitArray that contains true for the specified
+      * channel types:
+      *
+      * @param color if true, set all color channels to true
+      * @param alpha if true, set all alpha channels to true
+      * @param substance if true, set all substance channels to true
+      * @param substrate if true, set all substrate channels to true
+      */
+     QBitArray channelFlags(bool color = true, bool alpha = false, bool substance = false, bool substrate = false) const;
 
-    /**
+
+     /**
      * The size in bytes of a single pixel in this color model
      */
-    virtual quint32 pixelSize() const = 0;
+     virtual quint32 pixelSize() const = 0;
 
-    /**
-     * Return a string with the channel's value suitable for display in the gui.
-     */
-    virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
+     /**
+      * Return a string with the channel's value suitable for display in the gui.
+      */
+     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
 
-    /**
-     * Return a string with the channel's value with integer
-     * channels normalised to the floating point range 0 to 1, if appropriate.
+     /**
+      * Return a string with the channel's value with integer
+      * channels normalised to the floating point range 0 to 1, if
+      * appropriate.
+      *
+      * XXX: Also have something like this that returns a QVector<float> in the range
+      * 0-1? And vice-versa -- fill the pixel from a QVector<float>?
      */
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
 
@@ -466,22 +486,10 @@ public:
      */
     virtual quint8 difference(const quint8* src1, const quint8* src2) const = 0;
 
-
-    /**
-     * Mix the colors given their weights and return in dst
-     * The sum of weights is assumed 255 */
-    void KDE_DEPRECATED mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
-
     /**
      * @return the mix color operation of this colorspace (do not delete it locally, it's deleted by the colorspace).
      */
     virtual KoMixColorsOp* mixColorsOp() const;
-
-    /**
-     * Convolve the given array of pointers to pixels and return the result
-     * in dst. The kernel values are clamped between -128 and 128
-     */
-    void KDE_DEPRECATED convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const;
 
     /**
      * @return the convolution operation of this colorspace (do not delete it locally, it's deleted by the colorspace).

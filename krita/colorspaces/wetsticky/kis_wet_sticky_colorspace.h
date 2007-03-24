@@ -19,6 +19,7 @@
 #define KIS_COLORSPACE_WET_STICKY_H_
 
 #include <QColor>
+#include <QBitArray>
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
@@ -111,7 +112,7 @@ public:
 
 
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags ) const;
     virtual void invertColor(quint8 * src, qint32 nPixels);
     virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
 

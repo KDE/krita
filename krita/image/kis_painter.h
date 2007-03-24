@@ -454,37 +454,19 @@ public:
      * An empty channelFlags parameter means that all channels are
      * affected.
      *
-     * @param the bit array that masks the source channels
+     * @param the bit array that masks the source channels; only
+     * the channels where the corresponding bit is true will will be
+     * composited onto the destination device.
      */
-    void setSrcChannelFlags( QBitArray channelFlags )
+    void setChannelFlags( QBitArray channelFlags )
         {
-            m_srcChannelFlags = channelFlags;
+            m_channelFlags = channelFlags;
         }
 
 
-    QBitArray srcChannelFlags()
+    QBitArray channelFlags()
         {
-            return m_srcChannelFlags;
-        }
-
-    /**
-     * Set the channelflags: a bit array where true means that the
-     * channel corresponding in position with the bit will be affected
-     * by the operation, and false means that it will not be affected.
-     *
-     * An empty channelFlags parameter means that all channels are
-     * affected.
-     *
-     * @param the bit array that masks the destination channels
-     */
-    void setDstChannelFlags( QBitArray channelFlags )
-        {
-            m_dstChannelFlags = channelFlags;
-        }
-
-    QBitArray dstChannelFlags()
-        {
-            return m_dstChannelFlags;
+            return m_channelFlags;
         }
 
     // Set the current brush
@@ -640,8 +622,7 @@ protected:
     KoColorProfile *  m_profile;
     KisPaintDeviceSP m_dab;
     const KoCompositeOp * m_compositeOp;
-    QBitArray m_srcChannelFlags;
-    QBitArray m_dstChannelFlags;
+    QBitArray m_channelFlags;
 
 };
 

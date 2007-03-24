@@ -529,7 +529,7 @@ public:
 			qint32 rows,
 			qint32 cols,
 			const KoCompositeOp * op,
-            const QBitArray & channelFlags) const;
+                        const QBitArray & channelFlags) const;
     /**
      * Convenience function for the above where all channels are turned on.
      */
@@ -543,7 +543,7 @@ public:
 			quint8 opacity,
 			qint32 rows,
 			qint32 cols,
-            const KoCompositeOp * op) const;
+                        const KoCompositeOp * op) const;
 
     /**
      * Convenience function for the above if you don't have the composite op object yet.
@@ -559,7 +559,7 @@ public:
 			qint32 rows,
 			qint32 cols,
 			const QString & op,
-            const QBitArray & channelFlags) const;
+                        const QBitArray & channelFlags) const;
 
     /**
      * Convenience function for the above, if you simply want all channels composited
@@ -574,7 +574,7 @@ public:
 			quint8 opacity,
 			qint32 rows,
 			qint32 cols,
-            const QString& op) const;
+                        const QString& op) const;
 
 
 

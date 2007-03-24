@@ -86,8 +86,8 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : super(de
 }
 
 void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
-                    KisConvolutionBorderOp borderOp,
-                    KoChannelInfo::enumChannelFlags  channelFlags )
+                                        KisConvolutionBorderOp borderOp,
+                                        KoChannelInfo::enumChannelFlags  channelFlags )
 {
     // Make the area we cover as small as possible
     if (m_device->hasSelection()) {
@@ -122,18 +122,18 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
 
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {
-        case BORDER_DEFAULT_FILL :
-            break;
-        case BORDER_REPEAT:
-            applyMatrixRepeat(kernel, x, y, w, h, channelFlags);
-            return;
-        case BORDER_WRAP:
-        case BORDER_AVOID:
-        default :
-            x += khalfWidth;
-            y += khalfHeight;
-            w -= kw - 1;
-            h -= kh - 1;
+    case BORDER_DEFAULT_FILL :
+        break;
+    case BORDER_REPEAT:
+        applyMatrixRepeat(kernel, x, y, w, h, channelFlags);
+        return;
+    case BORDER_WRAP:
+    case BORDER_AVOID:
+    default :
+        x += khalfWidth;
+        y += khalfHeight;
+        w -= kw - 1;
+        h -= kh - 1;
     }
 
     // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorspace.
@@ -233,7 +233,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
 }
 
 void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
-                           KoChannelInfo::enumChannelFlags channelFlags)
+                                              KoChannelInfo::enumChannelFlags channelFlags)
 {
     int lastProgressPercent = 0;
     // Determine the kernel's extent from the center pixel

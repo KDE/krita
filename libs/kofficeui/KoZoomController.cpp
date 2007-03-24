@@ -95,7 +95,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
     m_zoomHandler->setZoom(zoom);
     emit zoomChanged(mode, zoom);
 
-   // Tell the canvasController that the zoom has changed
+    // Tell the canvasController that the zoom has changed
     // Actually canvasController doesn't know about zoom, but the document in pixels
     // has change as a result of the zoom change
     m_canvasController->setDocumentSize(

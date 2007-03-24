@@ -26,16 +26,16 @@
 #include <climits>
 #include <strings.h>
 
-#include <QBrush>
-#include <qfontinfo.h>
-#include <QFontMetrics>
-#include <QPen>
+//#include <QBrush>
+//#include <qfontinfo.h>
+//#include <QFontMetrics>
+//#include <QPen>
 #include <qregion.h>
-#include <QMatrix>
+//#include <QMatrix>
 #include <QImage>
-#include <QMap>
-#include <QPainter>
-#include <QPixmap>
+//#include <QMap>
+//#include <QPainter>
+//#include <QPixmap>
 #include <QRect>
 #include <QString>
 #include <QUndoCommand>
@@ -164,7 +164,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         qint32 sw, qint32 sh)
 {
 #ifdef __GNUC__
-    #warning "Don't assume the same resolution for a QImage and a KisPaintDevice -- see QImage::dotsPerMeterX|Y"
+#warning "Don't assume the same resolution for a QImage and a KisPaintDevice -- see QImage::dotsPerMeterX|Y"
 #endif
 
     if ( src == 0 ) return;
@@ -207,7 +207,8 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
                                  opacity,
                                  1,
                                  pixels,
-                                 op);
+                                 op,
+                                 m_channelFlags);
 
             srcData += ( pixels * 4 ); // 4 bytes to one QImage pixel
 
@@ -290,16 +291,17 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
             quint8 *dstData = dstIt.rawData();
 
             m_colorSpace->bitBlt(dstData,
-                          dstRowStride,
-                          srcCs,
-                          srcData,
-                          srcRowStride,
-                          0,
-                          0,
-                          opacity,
-                          rows,
-                          columns,
-                          op);
+                                 dstRowStride,
+                                 srcCs,
+                                 srcData,
+                                 srcRowStride,
+                                 0,
+                                 0,
+                                 opacity,
+                                 rows,
+                                 columns,
+                                 op,
+                                 m_channelFlags);
 
             srcX += columns;
             dstX += columns;
@@ -318,12 +320,12 @@ void KisPainter::bitBlt(QPoint pos, const KisPaintDeviceSP src, QRect srcRect )
 }
 
 void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
-                 const KoCompositeOp *op,
-                 const KisPaintDeviceSP srcdev,
-                 const KisPaintDeviceSP selMask,
-                 Q_UINT8 opacity,
-                 Q_INT32 sx, Q_INT32 sy,
-                 Q_INT32 sw, Q_INT32 sh)
+                         const KoCompositeOp *op,
+                         const KisPaintDeviceSP srcdev,
+                         const KisPaintDeviceSP selMask,
+                         Q_UINT8 opacity,
+                         Q_INT32 sx, Q_INT32 sy,
+                         Q_INT32 sw, Q_INT32 sh)
 {
     if (srcdev.isNull()) return;
 
@@ -394,16 +396,17 @@ void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
             const quint8 *selData = selIt.rawData();
 
             m_colorSpace->bitBlt(dstData,
-                                   dstRowStride,
-                                   srcCs,
-                                   srcData,
-                                   srcRowStride,
-                                   selData,
-                                   selRowStride,
-                                   opacity,
-                                   rows,
-                                   columns,
-                                   op);
+                                 dstRowStride,
+                                 srcCs,
+                                 srcData,
+                                 srcRowStride,
+                                 selData,
+                                 selRowStride,
+                                 opacity,
+                                 rows,
+                                 columns,
+                                 op,
+                                 m_channelFlags);
 
             srcX += columns;
             dstX += columns;
@@ -430,7 +433,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
                               qint32 sw, qint32 sh)
 {
     if (!seldev) return;
-        // Better use a probablistic method than a too slow one
+    // Better use a probablistic method than a too slow one
     if (seldev->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
         return;
     }
@@ -445,11 +448,11 @@ void KisPainter::bltSelection(QPoint pos, const KisPaintDeviceSP src, const KisS
 
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
-                  const KoCompositeOp* op,
-                  const KisPaintDeviceSP srcdev,
-                  quint8 opacity,
-                  qint32 sx, qint32 sy,
-                  qint32 sw, qint32 sh)
+                              const KoCompositeOp* op,
+                              const KisPaintDeviceSP srcdev,
+                              quint8 opacity,
+                              qint32 sx, qint32 sy,
+                              qint32 sw, qint32 sh)
 {
     if (m_device.isNull()) return;
     if (!m_device->hasSelection()) {
@@ -460,14 +463,14 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
 }
 
 double KisPainter::paintLine(const QPointF & pos1,
-                 const double pressure1,
-                 const double xTilt1,
-                 const double yTilt1,
-                 const QPointF & pos2,
-                 const double pressure2,
-                 const double xTilt2,
-                 const double yTilt2,
-                 const double inSavedDist)
+                             const double pressure1,
+                             const double xTilt1,
+                             const double yTilt1,
+                             const QPointF & pos2,
+                             const double pressure2,
+                             const double xTilt2,
+                             const double yTilt2,
+                             const double inSavedDist)
 {
     if (!m_device) return 0;
     if (!m_paintOp) return 0;
@@ -577,15 +580,15 @@ void KisPainter::paintPolyline (const vQPointF &points,
     for (int i = index; i < index + numPoints - 1; i++)
     {
         paintLine (points [index], 0/*pressure*/, 0, 0, points [index + 1],
-               0/*pressure*/, 0, 0);
+                   0/*pressure*/, 0, 0);
     }
 }
 
 void KisPainter::getBezierCurvePoints(const QPointF &pos1,
-                      const QPointF &control1,
-                      const QPointF &control2,
-                      const QPointF &pos2,
-                      vQPointF& points)
+                                      const QPointF &control1,
+                                      const QPointF &control2,
+                                      const QPointF &pos2,
+                                      vQPointF& points)
 {
     double d1 = pointToLineDistance(control1, pos1, pos2);
     double d2 = pointToLineDistance(control2, pos1, pos2);
@@ -615,16 +618,16 @@ void KisPainter::getBezierCurvePoints(const QPointF &pos1,
 }
 
 double KisPainter::paintBezierCurve(const QPointF &pos1,
-                    const double pressure1,
-                    const double xTilt1,
-                    const double yTilt1,
-                    const QPointF &control1,
-                    const QPointF &control2,
-                    const QPointF &pos2,
-                    const double pressure2,
-                    const double xTilt2,
-                    const double yTilt2,
-                    const double savedDist)
+                                    const double pressure1,
+                                    const double xTilt1,
+                                    const double yTilt1,
+                                    const QPointF &control1,
+                                    const QPointF &control2,
+                                    const QPointF &pos2,
+                                    const double pressure2,
+                                    const double xTilt2,
+                                    const double yTilt2,
+                                    const double savedDist)
 {
     double newDistance;
     double d1 = pointToLineDistance(control1, pos1, pos2);
@@ -654,13 +657,13 @@ double KisPainter::paintBezierCurve(const QPointF &pos1,
         double midYTilt = (yTilt1 + yTilt2) / 2;
 
         newDistance = paintBezierCurve(l1.toKoPoint(), pressure1, xTilt1, yTilt1,
-                           l2.toKoPoint(), l3.toKoPoint(),
-                           l4.toKoPoint(), midPressure, midXTilt, midYTilt,
-                           savedDist);
+                                       l2.toKoPoint(), l3.toKoPoint(),
+                                       l4.toKoPoint(), midPressure, midXTilt, midYTilt,
+                                       savedDist);
         newDistance = paintBezierCurve(r1.toKoPoint(), midPressure, midXTilt, midYTilt,
-                           r2.toKoPoint(),
-                           r3.toKoPoint(),
-                           r4.toKoPoint(), pressure2, xTilt2, yTilt2, newDistance);
+                                       r2.toKoPoint(),
+                                       r3.toKoPoint(),
+                                       r4.toKoPoint(), pressure2, xTilt2, yTilt2, newDistance);
     }
 
     return newDistance;
@@ -669,8 +672,8 @@ double KisPainter::paintBezierCurve(const QPointF &pos1,
 void KisPainter::paintRect (const QPointF &startPoint,
                             const QPointF &endPoint,
                             const double /*pressure*/,
-                const double /*xTilt*/,
-                const double /*yTilt*/)
+                            const double /*xTilt*/,
+                            const double /*yTilt*/)
 {
     QRectF normalizedRect = KisRect (startPoint.x(),startPoint.y(), endPoint.x(),endPoint.y()).normalized ();
 
@@ -687,8 +690,8 @@ void KisPainter::paintRect (const QPointF &startPoint,
 void KisPainter::paintEllipse (const QPointF &startPoint,
                                const QPointF &endPoint,
                                const double /*pressure*/,
-                   const double /*xTilt*/,
-                   const double /*yTilt*/)
+                               const double /*xTilt*/,
+                               const double /*yTilt*/)
 {
     KisRect r = KisRect(startPoint.x(),startPoint.y(), endPoint.x(),endPoint.y()).normalized();
 

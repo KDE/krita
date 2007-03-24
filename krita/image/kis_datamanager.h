@@ -158,8 +158,7 @@ public:
 
      /**
       * Copy the bytes in the specified rect to a chunk of memory.
-      * The pixelSize in bytes is w * h * pixelSize. XXX: Better
-      * use QValueVector?
+      * The pixelSize in bytes is w * h * pixelSize
       */
      inline void readBytes(quint8 * data,
                qint32 x, qint32 y,
@@ -168,8 +167,7 @@ public:
 
      /**
       * Copy the bytes to the specified rect. w * h * pixelSize bytes
-      * will be read, whether the caller prepared them or not. XXX:
-      * Better use QValueVector?
+      * will be read, whether the caller prepared them or not.
       */
      inline void writeBytes(const quint8 * data,
              qint32 x, qint32 y,

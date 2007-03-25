@@ -1,6 +1,7 @@
 project(krita)
 
 macro_optional_find_package(Kunittest)
+include(CheckFunctionExists)
 
 if (SHOULD_BUILD_KRITA)
 

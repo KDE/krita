@@ -80,7 +80,7 @@ public:
      * Take @page from the page
      *
      * @param page taken from the document
-     * @return the position of the page was taken from the document
+     * @return the position of the page was taken from the document, or -1 if the page was not found
      */
     int takePage( KoPAPageBase *page );
 

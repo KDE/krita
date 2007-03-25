@@ -54,6 +54,15 @@ public:
         ShapeOnTop  ///< return the shape highest z-ordering, regardless of selection.
     };
 
+    /// position. See KoShape::absolutePosition()
+    enum Position {
+        TopLeftCorner,
+        TopRightCorner,
+        BottomLeftCorner,
+        BottomRightCorner,
+        CenteredPositon
+    };
+
 
 private:
     KoFlake();

@@ -23,6 +23,7 @@
 #define KOSHAPE_H
 
 #include "KoInsets.h"
+#include "KoFlake.h"
 
 #include <QMatrix>
 #include <QVector>
@@ -448,10 +449,10 @@ public:
     /**
      * Return the position of this shape regardless of rotation/skew/scaling and regardless of
      * this shape having a parent (being in a group) or not.<br>
-     * The returned value is the center of the shape.
+     * @param anchor The place on the (unaltered) shape that you want the position of.
      * @return the point that is the absolute, centered position of this shape.
      */
-    QPointF absolutePosition() const;
+    QPointF absolutePosition(KoFlake::Position anchor = KoFlake::CenteredPositon) const;
 
     /**
      * Move this shape to an absolute position where the end location will be the same
@@ -558,7 +559,7 @@ protected:
      * @see saveOdf()
      */
     virtual const char * odfTagName() const { return ""; }
-    
+
     /**
      * @brief Save the data that is special by each shape
      *

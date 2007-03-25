@@ -19,6 +19,7 @@ set( kopageapp_LIB_SRCS
      KoPAPage.cpp
      commands/KoPAPageInsertCommand.cpp
      commands/KoPAPageDeleteCommand.cpp
+     commands/KoPAPageMoveCommand.cpp
 )
 
 kde4_automoc(${kopageapp_LIB_SRCS})

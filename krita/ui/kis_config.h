@@ -142,6 +142,13 @@ public:
     quint32 getGridOffsetY();
     void setGridOffsetY(quint32 v);
 
+    qint32 checkSize();
+    void setCheckSize( qint32 checkSize );
+
+    bool scrollCheckers() const;
+    void setScrollingCheckers(bool scollCheckers);
+
+
 
 private:
     KisConfig(const KisConfig&);

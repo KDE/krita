@@ -438,7 +438,7 @@ quint32 KisConfig::getGridSubdivisions()
 
 void KisConfig::setGridSubdivisions(quint32 v)
 {
-    return m_cfg->writeEntry("gridsubsivisons", v);
+    m_cfg->writeEntry("gridsubsivisons", v);
 }
 
 quint32 KisConfig::getGridOffsetX()
@@ -463,3 +463,22 @@ void KisConfig::setGridOffsetY(quint32 v)
     m_cfg->writeEntry("gridoffsety", v);
 }
 
+qint32 KisConfig::checkSize()
+{
+    return m_cfg->readEntry( "checksize", 32 );
+}
+
+void KisConfig::setCheckSize( qint32 checksize )
+{
+    m_cfg->writeEntry( "checksize", checksize );
+}
+
+bool KisConfig::scrollCheckers() const
+{
+    return m_cfg->readEntry("scrollingcheckers", false);
+}
+
+void KisConfig::setScrollingCheckers(bool sc)
+{
+    m_cfg->writeEntry("scrollingcheckers", sc);
+}

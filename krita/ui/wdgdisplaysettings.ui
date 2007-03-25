@@ -1,77 +1,142 @@
-<ui version="4.0" stdsetdef="1" >
-  <author></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>WdgDisplaySettings</class>
-  <widget class="QWidget" name="WdgDisplaySettings" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>374</width>
-        <height>154</height>
-      </rect>
-    </property>
-    <property name="windowTitle" >
-      <string>Display</string>
-    </property>
-    <layout class="QGridLayout" >
+<ui version="4.0" >
+ <class>WdgDisplaySettings</class>
+ <widget class="QWidget" name="WdgDisplaySettings" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>374</width>
+    <height>209</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Display</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="2" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>81</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="grpCheckers" >
+     <property name="title" >
+      <string>Transparency Checks</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
       <item row="1" column="0" >
-        <spacer name="spacer3" >
-          <property name="sizeHint" >
-            <size>
-              <width>20</width>
-              <height>50</height>
-            </size>
-          </property>
-          <property name="sizeType" >
-            <enum>Expanding</enum>
-          </property>
-          <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-          </property>
-        </spacer>
+       <widget class="QLabel" name="lblCheckSize" >
+        <property name="text" >
+         <string>&amp;Checkers size</string>
+        </property>
+        <property name="buddy" >
+         <cstring>intCheckSize</cstring>
+        </property>
+       </widget>
       </item>
-      <item row="0" column="0" >
-        <widget class="QGroupBox" name="buttonGroup1" >
-          <property name="title" >
-            <string>OpenGL</string>
-          </property>
-          <layout class="QHBoxLayout" >
-            <item>
-              <layout class="QVBoxLayout" >
-                <property name="margin" >
-                  <number>0</number>
-                </property>
-                <item>
-                  <widget class="QCheckBox" name="cbUseOpenGL" >
-                    <property name="text" >
-                      <string>Enable OpenGL</string>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-            <item>
-              <spacer name="spacer4" >
-                <property name="sizeHint" >
-                  <size>
-                    <width>121</width>
-                    <height>31</height>
-                  </size>
-                </property>
-                <property name="sizeType" >
-                  <enum>Expanding</enum>
-                </property>
-                <property name="orientation" >
-                  <enum>Qt::Horizontal</enum>
-                </property>
-              </spacer>
-            </item>
-          </layout>
-        </widget>
+      <item row="1" column="1" >
+       <widget class="QSpinBox" name="intCheckSize" >
+        <property name="maximum" >
+         <number>256</number>
+        </property>
+        <property name="value" >
+         <number>32</number>
+        </property>
+       </widget>
       </item>
-    </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
+      <item row="0" column="0" colspan="2" >
+       <widget class="QCheckBox" name="chkMoving" >
+        <property name="toolTip" >
+         <string>If checked, the checkers will move when scrolling the canvas.</string>
+        </property>
+        <property name="whatsThis" >
+         <string>Determines whether the checks will stay put or whether they will scroll together with the canvas</string>
+        </property>
+        <property name="text" >
+         <string>&amp;Move checkers when scrolling</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="grpOpenGL" >
+     <property name="title" >
+      <string>OpenGL</string>
+     </property>
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>11</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QCheckBox" name="cbUseOpenGL" >
+          <property name="text" >
+           <string>Enable OpenGL</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>121</width>
+          <height>31</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <resources/>
+ <connections/>
 </ui>

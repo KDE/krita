@@ -676,8 +676,9 @@ void TabletSettingsTab::applyTabletDeviceSettings()
 DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
     : WdgDisplaySettings( parent, name )
 {
-#ifdef HAVE_OPENGL
     KisConfig cfg;
+
+#ifdef HAVE_OPENGL
 
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
@@ -688,10 +689,11 @@ DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
         //cbUseOpenGLShaders->setEnabled(cfg.useOpenGL());
     }
 #else
-    cbUseOpenGL->setEnabled(false);
+    grpOpenGL->setEnabled(false);
     //cbUseOpenGLShaders->setEnabled(false);
 #endif
-
+    intCheckSize->setValue( cfg.checkSize() );
+    chkMoving->setChecked( cfg.scrollCheckers() );
     connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
 }
 
@@ -700,6 +702,8 @@ void DisplaySettingsTab::setDefault()
     cbUseOpenGL->setChecked(false);
     //cbUseOpenGLShaders->setChecked(false);
     //cbUseOpenGLShaders->setEnabled(false);
+    chkMoving->setChecked( true );
+    intCheckSize->setValue( 32 );
 }
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool /*isChecked*/)
@@ -796,7 +800,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     page->setIcon(  KIcon(BarIcon( "misc", K3Icon::SizeMedium )) );
     addPage( page );
     m_general = new GeneralTab( vbox );
-#ifdef HAVE_OPENGL
+
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Display" ));
     page->setHeader( i18n( "Display" ) );
@@ -806,7 +810,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     addPage( page );
 
     m_displaySettings = new DisplaySettingsTab( vbox );
-#endif
+
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Color Management"));
     page->setHeader( i18n( "Color") );
@@ -891,6 +895,8 @@ bool PreferencesDialog::editPreferences()
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         //cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
 #endif
+        cfg.setCheckSize( dialog->m_displaySettings->intCheckSize->value() );
+        cfg.setScrollingCheckers( dialog->m_displaySettings->chkMoving->isChecked() );
 
         // Grid settings
         cfg.setGridMainStyle( dialog->m_gridSettings->selectMainStyle->currentIndex() );

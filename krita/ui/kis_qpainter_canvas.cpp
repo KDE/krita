@@ -83,6 +83,8 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     : QWidget( parent )
 
 {
+    KisConfig cfg;
+
     m_d = new Private();
     m_d->canvas =  canvas;
     m_d->viewConverter = canvas->viewConverter();
@@ -90,12 +92,12 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     m_d->toolProxy = KoToolManager::instance()->createToolProxy(m_d->canvas);
     setAutoFillBackground(true);
     //setAttribute( Qt::WA_OpaquePaintEvent );
-    QPixmap tile(PATTERN_WIDTH * 2, PATTERN_HEIGHT * 2);
+    QPixmap tile(cfg.checkSize() * 2, cfg.checkSize() * 2);
     tile.fill(Qt::white);
     QPainter pt(&tile);
     QColor color(220, 220, 220);
-    pt.fillRect(0, 0, PATTERN_WIDTH, PATTERN_HEIGHT, color);
-    pt.fillRect(PATTERN_WIDTH, PATTERN_HEIGHT, PATTERN_WIDTH, PATTERN_HEIGHT, color);
+    pt.fillRect(0, 0, cfg.checkSize(), cfg.checkSize(), color);
+    pt.fillRect(cfg.checkSize(), cfg.checkSize(), cfg.checkSize(), cfg.checkSize(), color);
     pt.end();
     m_d->checkBrush = QBrush(tile);
     setAcceptDrops( true );
@@ -111,6 +113,8 @@ KisQPainterCanvas::~KisQPainterCanvas()
 
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
+    KisConfig cfg;
+
     kDebug(41010) << "paintEvent: rect " << ev->rect() << ", doc offset: " << m_d->documentOffset << endl;
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
@@ -125,11 +129,14 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     m_d->viewConverter->zoom(&sx, &sy);
 
     t.start();
-    // Checks
-    gc.fillRect(ev->rect(), m_d->checkBrush );
-    kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
+    if ( !cfg.scrollCheckers() ) {
+        // Checks
 
-    t.restart();
+        gc.fillRect(ev->rect(), m_d->checkBrush );
+        kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
+
+        t.restart();
+    }
     gc.drawImage( 0, 0, m_d->prescaledImage );
     kDebug(41010) << "Drawing image:" << t.elapsed() << endl;
 
@@ -343,11 +350,17 @@ void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
 
 void KisQPainterCanvas::preScale()
 {
+    KisConfig cfg;
     // Thread this!
     QTime t;
     t.start();
     m_d->prescaledImage = QImage( size(), QImage::Format_ARGB32);
+
     QPainter gc( &m_d->prescaledImage );
+    if ( cfg.scrollCheckers() ) {
+        gc.fillRect(m_d->prescaledImage.rect(), m_d->checkBrush );
+    }
+
     drawScaledImage( QRect( QPoint( 0, 0 ), size() ), gc);
     kDebug(41010) << "preScale():" << t.elapsed() << endl;
 

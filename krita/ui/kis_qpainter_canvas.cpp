@@ -83,6 +83,8 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     : QWidget( parent )
 
 {
+    // XXX: Reset pattern size and color when the properties change!
+
     KisConfig cfg;
 
     m_d = new Private();
@@ -95,9 +97,8 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     QPixmap tile(cfg.checkSize() * 2, cfg.checkSize() * 2);
     tile.fill(Qt::white);
     QPainter pt(&tile);
-    QColor color(220, 220, 220);
-    pt.fillRect(0, 0, cfg.checkSize(), cfg.checkSize(), color);
-    pt.fillRect(cfg.checkSize(), cfg.checkSize(), cfg.checkSize(), cfg.checkSize(), color);
+    pt.fillRect(0, 0, cfg.checkSize(), cfg.checkSize(), cfg.checkersColor());
+    pt.fillRect(cfg.checkSize(), cfg.checkSize(), cfg.checkSize(), cfg.checkSize(), cfg.checkersColor());
     pt.end();
     m_d->checkBrush = QBrush(tile);
     setAcceptDrops( true );

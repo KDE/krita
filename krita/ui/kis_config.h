@@ -148,6 +148,8 @@ public:
     bool scrollCheckers() const;
     void setScrollingCheckers(bool scollCheckers);
 
+    QColor checkersColor();
+    void setCheckersColor(QColor v);
 
 
 private:

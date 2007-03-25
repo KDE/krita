@@ -388,7 +388,7 @@ void KisConfig::setGridSubdivisionStyle(quint32 v)
 
 QColor KisConfig::getGridMainColor()
 {
-	QColor col(99,99,99);
+    QColor col(99,99,99);
     return m_cfg->readEntry("gridmaincolor", col);
 }
 
@@ -481,4 +481,15 @@ bool KisConfig::scrollCheckers() const
 void KisConfig::setScrollingCheckers(bool sc)
 {
     m_cfg->writeEntry("scrollingcheckers", sc);
+}
+
+QColor KisConfig::checkersColor()
+{
+    QColor col(220, 220, 220);
+    return m_cfg->readEntry("checkerscolor", col);
+}
+
+void KisConfig::setCheckersColor(QColor v)
+{
+    m_cfg->writeEntry("checkerscolor", v);
 }

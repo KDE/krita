@@ -694,6 +694,8 @@ DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
 #endif
     intCheckSize->setValue( cfg.checkSize() );
     chkMoving->setChecked( cfg.scrollCheckers() );
+    colorChecks->setColor( cfg.checkersColor() );
+
     connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
 }
 
@@ -704,6 +706,7 @@ void DisplaySettingsTab::setDefault()
     //cbUseOpenGLShaders->setEnabled(false);
     chkMoving->setChecked( true );
     intCheckSize->setValue( 32 );
+    colorChecks->setColor( QColor( 220, 220, 220 ) );
 }
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool /*isChecked*/)
@@ -897,7 +900,7 @@ bool PreferencesDialog::editPreferences()
 #endif
         cfg.setCheckSize( dialog->m_displaySettings->intCheckSize->value() );
         cfg.setScrollingCheckers( dialog->m_displaySettings->chkMoving->isChecked() );
-
+        cfg.setCheckersColor( dialog->m_displaySettings->colorChecks->color() );
         // Grid settings
         cfg.setGridMainStyle( dialog->m_gridSettings->selectMainStyle->currentIndex() );
         cfg.setGridSubdivisionStyle( dialog->m_gridSettings->selectSubdivisionStyle->currentIndex() );

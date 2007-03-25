@@ -194,6 +194,7 @@ void Viewport::handleDragLeaveEvent(QDragLeaveEvent *) {
 
 void Viewport::handlePaintEvent(QPainter & painter, QPaintEvent *event)
 {
+    Q_UNUSED(event);
     // Draw the shadow around the canvas.
     if(m_parent->canvas() && m_parent->canvas()->canvasWidget()) {
         QWidget *canvas = m_parent->canvas()->canvasWidget();

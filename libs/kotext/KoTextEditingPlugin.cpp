@@ -23,6 +23,15 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
+KoTextEditingPlugin::KoTextEditingPlugin()
+    : d(0)
+{
+}
+
+KoTextEditingPlugin::~KoTextEditingPlugin() {
+    // delete d;
+}
+
 void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) const {
     cursor.setPosition(cursorPosition);
     QTextBlock block = cursor.block();

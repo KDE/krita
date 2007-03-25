@@ -30,6 +30,7 @@ class KoInlineObject;
 class InlineObjectFactoryPrivate;
 class KoProperties;
 
+/// A template used in the KoInlineObjectFactory
 struct KOTEXT_EXPORT KoInlineObjectTemplate {
     QString id;         ///< The id of the inlineObject
     QString name;       ///< The name to be shown for this template

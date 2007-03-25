@@ -19,11 +19,19 @@
 
 #include "KoInlineObjectFactory.h"
 
+#include <KoProperties.h>
+
 class InlineObjectFactoryPrivate {
 public:
     InlineObjectFactoryPrivate(const QString &identifier)
         : id(identifier)
     {
+    }
+
+    ~InlineObjectFactoryPrivate() {
+        foreach(KoInlineObjectTemplate t, templates)
+            delete t.properties;
+        templates.clear();
     }
 
     const QString id;

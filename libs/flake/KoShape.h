@@ -467,7 +467,7 @@ public:
     shape-&gt;setAbsolutePosition(QPointF(0,0));</pre>
      * @param newPosition the new absolute center of the shape.
      */
-    void setAbsolutePosition(QPointF newPosition);
+    void setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor = KoFlake::CenteredPositon);
 
     /**
      * Move this shape from its current (absolute) position over a specified distance.

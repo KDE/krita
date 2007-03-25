@@ -60,6 +60,16 @@ void TestPosition::testAbsolutePosition() {
     QCOMPARE(childShape2->absolutePosition(), QPointF(130, 232.5) );
     container2->setClipping(childShape2, true);
     QCOMPARE(childShape2->absolutePosition(), QPointF(167.5, 230) );
+
+    shape1->rotate(90);
+    shape1->setPosition(QPointF(10, 10));
+
+    QCOMPARE(shape1->absolutePosition(), QPointF(10 + 25, 10 + 25) );
+    QCOMPARE(shape1->absolutePosition(KoFlake::CenteredPositon), QPointF(10 + 25, 10 + 25) );
+    QCOMPARE(shape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(10 + 50, 10) );
+    QCOMPARE(shape1->absolutePosition(KoFlake::BottomRightCorner), QPointF(10, 10 + 50) );
+
+    QCOMPARE(container2->absolutePosition(KoFlake::TopLeftCorner), QPointF(200, 200));
 }
 
 void TestPosition::testSetAbsolutePosition() {
@@ -85,6 +95,28 @@ void TestPosition::testSetAbsolutePosition() {
     childShape2->setAbsolutePosition(QPointF(0, 0));
     QCOMPARE(childShape2->absolutePosition(), QPointF(0, 0) );
     QCOMPARE(childShape2->position(), QPointF(-200 - 5, 200 - 7.5) );
+}
+
+void TestPosition::testSetAbsolutePosition2() {
+    shape1->rotate(90);
+    shape1->setAbsolutePosition(QPointF(100, 100));
+    QCOMPARE(shape1->absolutePosition(), QPointF(100, 100));
+
+    shape1->setAbsolutePosition(QPointF(100, 100), KoFlake::TopLeftCorner);
+    QCOMPARE(shape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(100, 100));
+
+    childShape1->setAbsolutePosition(QPointF(0, 0), KoFlake::BottomRightCorner);
+    QCOMPARE(childShape1->position(), QPointF(-150, -150) );
+
+    childShape1->setAbsolutePosition(QPointF(0, 0), KoFlake::BottomLeftCorner);
+    QCOMPARE(childShape1->position(), QPointF(-100, -150) );
+
+    childShape1->setAbsolutePosition(QPointF(0, 0), KoFlake::TopRightCorner);
+    QCOMPARE(childShape1->position(), QPointF(-150, -100) );
+
+    container2->setClipping(childShape2, true);
+    childShape2->setAbsolutePosition(QPointF(0, 0), KoFlake::TopLeftCorner);
+    QCOMPARE(childShape2->position(), QPointF(-200, 200) );
 }
 
 QTEST_MAIN(TestPosition)

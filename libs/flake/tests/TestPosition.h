@@ -19,6 +19,7 @@ private slots:
     void testBasePosition();
     void testAbsolutePosition();
     void testSetAbsolutePosition();
+    void testSetAbsolutePosition2();
 
 private:
     void resetValues();

@@ -420,23 +420,15 @@ QPointF KoShape::absolutePosition(KoFlake::Position anchor) const {
     QPointF point;
     switch(anchor) {
         case KoFlake::TopLeftCorner: break;
-        case KoFlake::TopRightCorner:
-            point = QPointF(size().width(), 0.0);
-            break;
-        case KoFlake::BottomLeftCorner:
-            point = QPointF(0.0, size().height());
-            break;
-        case KoFlake::BottomRightCorner:
-            point = QPointF(size().width(), size().height());
-            break;
-        case KoFlake::CenteredPositon:
-            point = QPointF(size().width() / 2.0, size().height() / 2.0);
-            break;
+        case KoFlake::TopRightCorner: point = QPointF(size().width(), 0.0); break;
+        case KoFlake::BottomLeftCorner: point = QPointF(0.0, size().height()); break;
+        case KoFlake::BottomRightCorner: point = QPointF(size().width(), size().height()); break;
+        case KoFlake::CenteredPositon: point = QPointF(size().width() / 2.0, size().height() / 2.0); break;
     }
     return d->matrix.map(point);
 }
 
-void KoShape::setAbsolutePosition(QPointF newPosition) {
+void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor) {
     QPointF zero(0, 0);
     QMatrix matrix;
     // apply parents matrix to inherit any transformations done there.
@@ -468,7 +460,16 @@ void KoShape::setAbsolutePosition(QPointF newPosition) {
     matrix.shear( d->shearX, d->shearY );
     matrix.scale( d->scaleX, d->scaleY );
 
-    QPointF vector2 = matrix.map( QPointF(size().width() / 2.0, size().height() / 2.0) );
+    QPointF point;
+    switch(anchor) {
+        case KoFlake::TopLeftCorner: break;
+        case KoFlake::TopRightCorner: point = QPointF(size().width(), 0.0); break;
+        case KoFlake::BottomLeftCorner: point = QPointF(0.0, size().height()); break;
+        case KoFlake::BottomRightCorner: point = QPointF(size().width(), size().height()); break;
+        case KoFlake::CenteredPositon: point = QPointF(size().width() / 2.0, size().height() / 2.0); break;
+    }
+
+    QPointF vector2 = matrix.map( point ); // QPointF(size().width() / 2.0, size().height() / 2.0) );
     //kDebug(30006) << "vector1: " << vector1 << ", vector2: " << vector2 << endl;
 
     setPosition(newPosition + vector1 - vector2);

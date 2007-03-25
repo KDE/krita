@@ -469,7 +469,7 @@ void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor)
         case KoFlake::CenteredPositon: point = QPointF(size().width() / 2.0, size().height() / 2.0); break;
     }
 
-    QPointF vector2 = matrix.map( point ); // QPointF(size().width() / 2.0, size().height() / 2.0) );
+    QPointF vector2 = matrix.map( point );
     //kDebug(30006) << "vector1: " << vector1 << ", vector2: " << vector2 << endl;
 
     setPosition(newPosition + vector1 - vector2);

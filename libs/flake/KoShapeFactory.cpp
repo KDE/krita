@@ -19,10 +19,16 @@
  */
 
 #include "KoShapeFactory.h"
+#include <KoProperties.h>
 
 class KoShapeFactory::Private {
 public:
     Private(const QString &i, const QString &n) : id(i), name(n) {}
+    ~Private() {
+        foreach(KoShapeTemplate t, templates)
+            delete t.properties;
+        templates.clear();
+    }
     QList<KoShapeTemplate> templates;
     QList<KoShapeConfigFactory*> configPanels;
     const QString id, name;

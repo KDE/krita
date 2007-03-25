@@ -240,7 +240,7 @@ if( mm.find(n) != mm.end() ) return;
             doc
             );
             
-            mm[std::string( name )] = method_definition;
+            mm[n] = method_definition;
         }
 
         void initialize( const char *module_doc="" )
@@ -613,7 +613,9 @@ if( mm.find(n) != mm.end() ) return;
         
         static void add_varargs_method( const char *name, method_varargs_function_t function, const char *doc="" )
         {
+            std::string n( name );
             method_map_t &mm = methods();
+if( mm.find(n) != mm.end() ) return;
             
             MethodDefExt<T> *method_definition = new MethodDefExt<T>
             (
@@ -623,7 +625,7 @@ if( mm.find(n) != mm.end() ) return;
             doc
             );
             
-            mm[std::string( name )] = method_definition;
+            mm[n] = method_definition;
         }
         
         static void add_keyword_method( const char *name, method_keyword_function_t function, const char *doc="" )

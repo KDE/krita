@@ -45,7 +45,7 @@ class KoCanvasBase;
  * application.
  *
  * The canvas widget is at most as big as the viewport of the scroll
- * area, and when the view on th edocument is near its edges, smaller.
+ * area, and when the view on the document is near its edges, smaller.
  * In your canvas widget code, you can find the right place in your
  * document in pixel coordinates by adding the documentOffset
  *

@@ -106,10 +106,6 @@ private:
 
     KToggleAction *m_actionViewSnapToGrid;
     KToggleAction *m_actionViewShowGrid;
-    KToggleAction *m_actionFormatBold;
-    KToggleAction *m_actionFormatItalic;
-    KToggleAction *m_actionFormatUnderline;
-    KToggleAction *m_actionFormatStrikeOut;
 
     KoRuler *m_horizontalRuler;
     KoRuler *m_verticalRuler;

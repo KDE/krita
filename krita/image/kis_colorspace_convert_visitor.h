@@ -18,6 +18,8 @@
 #ifndef KIS_COLORSPACE_CONVERT_VISITOR_H_
 #define KIS_COLORSPACE_CONVERT_VISITOR_H_
 
+#include <QBitArray>
+
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
@@ -46,6 +48,7 @@ public:
 private:
     KoColorSpace *m_dstColorSpace;
     qint32 m_renderingIntent;
+    QBitArray m_emptyChannelFlags;
 };
 
 KoColorSpaceConvertVisitor::KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, qint32 renderingIntent) :
@@ -59,14 +62,12 @@ KoColorSpaceConvertVisitor::~KoColorSpaceConvertVisitor()
 {
 }
 
-
-
 bool KoColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
 {
     // Clear the projection, we will have to re-render everything.
     // The image is already set to the new colorspace, so this'll work.
     layer->resetProjection();
-
+    layer->setChannelFlags( m_emptyChannelFlags );
     KisLayerSP child = layer->firstChild();
     while (child) {
         child->accept(*this);
@@ -79,7 +80,7 @@ bool KoColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
 bool KoColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 {
     layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
-
+    layer->setChannelFlags( m_emptyChannelFlags );
     layer->setDirty();
     return true;
 }
@@ -95,6 +96,7 @@ bool KoColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
         KisFilterSP f = KisFilterRegistry::instance()->get("perchannel");
         layer->setFilter(f->defaultConfiguration(0));
     }
+    layer->setChannelFlags( m_emptyChannelFlags );
     layer->resetCache();
     layer->setDirty();
     return true;

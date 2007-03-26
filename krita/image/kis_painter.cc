@@ -26,16 +26,8 @@
 #include <climits>
 #include <strings.h>
 
-//#include <QBrush>
-//#include <qfontinfo.h>
-//#include <QFontMetrics>
-//#include <QPen>
 #include <qregion.h>
-//#include <QMatrix>
 #include <QImage>
-//#include <QMap>
-//#include <QPainter>
-//#include <QPixmap>
 #include <QRect>
 #include <QString>
 #include <QUndoCommand>

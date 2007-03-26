@@ -66,6 +66,10 @@ void Autocorrect::finishedParagraph(QTextDocument *document, int cursorPosition)
     // TODO
 }
 
+void Autocorrect::checkSection(QTextDocument *document, int startPosition, int endPosition) {
+    // TODO
+}
+
 // ******************** individual features;
 
 void Autocorrect::uppercaseFirstCharOfSentence() {

@@ -22,11 +22,14 @@
 class KoTextEditingFactory::Private {
 public:
     Private(const QString &identifier)
-        : id(identifier)
+        : id(identifier),
+        showInMenu(false)
     {
     }
 
     const QString id;
+    bool showInMenu;
+    QString title;
 };
 
 KoTextEditingFactory::KoTextEditingFactory(QObject *parent, const QString &id)
@@ -46,6 +49,22 @@ const KoID KoTextEditingFactory::id() const {
 
 const QString &KoTextEditingFactory::objectId() const {
     return d->id;
+}
+
+bool KoTextEditingFactory::showInMenu() const {
+    return d->showInMenu;
+}
+
+void KoTextEditingFactory::setShowInMenu(bool show) {
+    d->showInMenu = show;
+}
+
+QString KoTextEditingFactory::title() const {
+    return d->title;
+}
+
+void KoTextEditingFactory::setTitle(const QString &title) {
+    d->title = title;
 }
 
 #include "KoTextEditingFactory.moc"

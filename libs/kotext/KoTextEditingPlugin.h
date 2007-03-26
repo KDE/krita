@@ -63,6 +63,17 @@ public:
     */
     virtual void finishedParagraph(QTextDocument *document, int cursorPosition) = 0;
 
+    /**
+     * This method will be called when the user selects a portion of text and selects this plugin
+     * to handle it.
+     * You are free to alter the text via the textDocument.  Be aware that operations should be done
+     * via a QTextCursor and should retain any formatting already present on the text.
+     * @param document the text document that was altered.
+     * @param startPosition the position at the start of the selection
+     * @param endPosition the position at the end of the selection
+     */
+    virtual void checkSection(QTextDocument *document, int startPosition, int endPosition) = 0;
+
 protected:
     /**
      * Helper method that allows you to easily get the word out of the document.

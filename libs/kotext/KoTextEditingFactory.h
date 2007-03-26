@@ -60,6 +60,24 @@ public:
      */
     const KoID id() const;
 
+    /**
+     * return if the plugin this factory creates has to be shown in the context menu.
+     * @see KoTextEditingPlugin::checkSection()
+     */
+    bool showInMenu() const;
+
+    /// If showInMenu() returns true; the returned text is used in the context menu.
+    QString title() const;
+
+protected:
+    /**
+     * Set if the plugin this factory creates has to be shown in the context menu.
+     * @see KoTextEditingPlugin::checkSection()
+     */
+    void setShowInMenu(bool show);
+    /// set the title used in the context menu
+    void setTitle(const QString &title);
+
 private:
     class Private;
     Private * const d;

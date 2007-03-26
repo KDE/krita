@@ -56,6 +56,12 @@ public:
     QString getName() const;
     qint32 getOpacity() const;
     KoCompositeOp * getCompositeOp() const;
+
+    /**
+     * @return a bit array of channel flags in the order in which the
+     * channels appear in the pixel, not in the list of KoChannelInfo
+     * objects from the colorspace.
+     */
     QBitArray getChannelFlags() const;
 
 protected slots:
@@ -64,6 +70,7 @@ protected slots:
 private:
     WdgLayerProperties * m_page;
     KisChannelFlagsWidget * m_channelFlags;
+    const KoColorSpace * m_colorSpace;
 };
 
 #endif // KIS_DLG_LAYER_PROPERTIES_H_

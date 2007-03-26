@@ -51,6 +51,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
                                              const QBitArray & channelFlags,
                                              QWidget *parent, const char *name, Qt::WFlags f)
     : super(parent)
+    , m_colorSpace( colorSpace )
 {
     Q_UNUSED(f);
     setCaption( i18n("Layer Properties") );
@@ -128,7 +129,7 @@ KoCompositeOp * KisDlgLayerProperties::getCompositeOp() const
 
 QBitArray KisDlgLayerProperties::getChannelFlags() const
 {
-    return m_channelFlags->channelFlags();
+    return m_colorSpace->orderChannelFlags( m_channelFlags->channelFlags() );
 }
 
 #include "kis_dlg_layer_properties.moc"

@@ -13,10 +13,7 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( bracketing2hdr )
 add_subdirectory( together )
-
-if(KOFFICE_ENABLE_SCRIPTING)
-     add_subdirectory(scripting)
-endif(KOFFICE_ENABLE_SCRIPTING)	
+add_subdirectory( scripting )
 
 macro_optional_find_package(GLEW)
 macro_optional_find_package(GLUT)

@@ -30,7 +30,7 @@ public:
     QString m_name;
     KisPaintDeviceSP m_device;
     KisMementoSP m_memento;
-
+    bool m_firstRedo;
 };
 
 KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent) : QUndoCommand(name, parent)
@@ -39,6 +39,7 @@ KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device, QUn
 
     m_private->m_device = device;
     m_private->m_memento = device->getMemento();
+    m_private->m_firstRedo = true;
 }
 
 KisTransaction::~KisTransaction()
@@ -52,6 +53,12 @@ KisTransaction::~KisTransaction()
 
 void KisTransaction::redo()
 {
+    //QUndoStack calls redo(), so the first call needs to be blocked
+    if(m_private->m_firstRedo)
+    {
+        m_private->m_firstRedo = false;
+        return;
+    }
     Q_ASSERT(!m_private->m_memento.isNull());
 
     m_private->m_device->rollforward(m_private->m_memento);

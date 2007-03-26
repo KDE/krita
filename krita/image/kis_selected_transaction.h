@@ -45,6 +45,7 @@ private:
     KisTransaction *m_selTransaction;
     bool m_hadSelection;
     bool m_redoHasSelection;
+    bool m_firstRedo;
 };
 
 #endif // KIS_SELECTED_TRANSACTION_H_

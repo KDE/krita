@@ -33,12 +33,9 @@
 #include "kis_tool_rectangle.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_line.h"
-//#include "kis_tool_text.h"
 #include "kis_tool_duplicate.h"
 #include "kis_tool_move.h"
-//#include "kis_tool_zoom.h"
 #include "kis_tool_ellipse.h"
-//#include "kis_tool_pan.h"
 
 
 typedef KGenericFactory<DefaultTools> DefaultToolsFactory;
@@ -55,13 +52,10 @@ DefaultTools::DefaultTools(QObject *parent, const QStringList &)
     r->add(new KisToolBrushFactory(r, QStringList()));
     r->add(new KisToolColorPickerFactory(r, QStringList()));
     r->add(new KisToolLineFactory(r, QStringList()));
-    //r->add(new KisToolTextFactory(r, QStringList()));
     r->add((new KisToolDuplicateFactory(r, QStringList())));
     r->add(new KisToolMoveFactory(r, QStringList()));
-    //r->add(KoToolFactorySP(new KisToolZoomFactory()));
     r->add(new KisToolEllipseFactory(r, QStringList()));
     r->add(new KisToolRectangleFactory(r, QStringList()));
-    //r->add(KoToolFactorySP(new KisToolPanFactory()));
 }
 
 DefaultTools::~DefaultTools()

@@ -16,7 +16,7 @@ add_subdirectory( kopageapp )
 if(KOFFICE_ENABLE_SCRIPTING)
     # the kokross directory contains extensions for koffice scripting with Kross
     add_subdirectory(kokross)
-    # following directory will be moved to kdebindings
-    add_subdirectory(kross)
+    # content of following directory was moved to kdebindings
+    #add_subdirectory(kross)
 endif(KOFFICE_ENABLE_SCRIPTING)
 

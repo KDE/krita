@@ -62,6 +62,7 @@ public:
      * Return the pointer used
      */
     QTabletEvent::PointerType pointer() const;
+    /// return the unique tablet id as regitered by QTabletEvents.
     qint64 uniqueTabletId() const;
     /**
      * Return if this is a mouse device.

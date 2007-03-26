@@ -176,6 +176,7 @@ public:
 
 protected:
     friend class KoToolProxy;
+    /// called by KoToolProxy to set which button was pressed.
     void setTabletButton(Qt::MouseButton button);
 
 private:

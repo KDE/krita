@@ -128,7 +128,16 @@ public:
      */
     virtual KoUnit unit() = 0;
 
-    virtual void clipToDocument(KoShape *shape, QPointF &move) const; // TODO remove the default implementation?
+    /**
+     * Called when the user tries to move the argument shape to allow the application to limit the
+     * users movement to stay within the document bounds.
+     * An implementation can alter the parameter move to make sure that if the distance moved
+     * is applied to the shape it will not become unreachable for the user.
+     * The default implementation does not restrict movement.
+     * @param shape the shape that will be moved soon.
+     * @param move the distance the caller intends to move the shape.
+     */
+    virtual void clipToDocument(const KoShape *shape, QPointF &move) const;
 
     /**
      * Return the position of the document origin inside the canvas widget, in pixels.
@@ -161,6 +170,7 @@ public:
 
 protected:
     friend class KoCanvasController;
+    /// called by KoCanvasController to set the controller that handles this canvas.
     void setCanvasController(KoCanvasController *controller);
 
 private:
@@ -170,7 +180,5 @@ private:
     class Private;
     Private * const d;
 };
-
-
 
 #endif // KOCANVASBASE_H

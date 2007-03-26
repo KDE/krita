@@ -66,5 +66,5 @@ void KoCanvasBase::setCanvasController(KoCanvasController *controller) {
     d->controller = controller;
 }
 
-void KoCanvasBase::clipToDocument(KoShape *, QPointF &) const {
+void KoCanvasBase::clipToDocument(const KoShape *, QPointF &) const {
 }

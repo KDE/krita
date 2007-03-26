@@ -27,6 +27,9 @@ class KoCanvasController;
 
 #define KoPanTool_ID "PanTool"
 
+/**
+ * This is the tool that allows you to move the canvas by dragging it and 'panning' around.
+ */
 class KoPanTool : public KoTool {
 public:
     explicit KoPanTool(KoCanvasBase *canvas);
@@ -46,6 +49,7 @@ public:
     /// reimplemented from superclass
     virtual void activate(bool temporary = false);
 
+    /// set the canvasController this tool works on.
     void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
 
 private:

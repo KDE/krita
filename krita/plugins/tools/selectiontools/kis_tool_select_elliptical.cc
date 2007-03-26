@@ -25,36 +25,23 @@
 #include <QVBoxLayout>
 
 #include <kdebug.h>
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <kcommand.h>
 #include <klocale.h>
 
 #include "kis_autobrush_resource.h"
-#include "kis_canvas_controller.h"
-#include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_tool_select_elliptical.h"
 #include "kis_layer.h"
-#include "kis_undo_adapter.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
 #include "KoPointerEvent.h"
 #include "kis_selection.h"
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
-#include "kis_canvas.h"
-#include "QPainter"
+#include "kis_canvas2.h"
 
-KisToolSelectElliptical::KisToolSelectElliptical()
-    : super(i18n("Elliptical Select"))
+KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase * canvas)
+    : KisTool(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
 {
-    setObjectName("tool_select_elliptical");
-    setCursor(KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6));
-
-    m_subject = 0;
     m_selecting = false;
     m_centerPos = QPointF(0, 0);
     m_startPos = QPointF(0, 0);
@@ -76,26 +63,30 @@ void KisToolSelectElliptical::activate()
 
     m_optWidget->slotActivated();
 }
-
-void KisToolSelectElliptical::paint(QPainter& gc)
+void KisToolSelectElliptical::paint(QPainter& gc, KoViewConverter &converter)
 {
-    if (m_selecting)
-        paintOutline(gc, QRect());
-}
+    double sx, sy;
+    converter.zoom(&sx, &sy);
 
-void KisToolSelectElliptical::paint(QPainter& gc, const QRect& rc)
-{
-    if (m_selecting)
-        paintOutline(gc, rc);
+    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
+    if (m_selecting) {
+        QPen old = gc.pen();
+        QPen pen(Qt::DotLine);
+        QPoint start;
+        QPoint end;
+
+        gc.setPen(pen);
+
+        start = QPoint(static_cast<int>(m_startPos.x()), static_cast<int>(m_startPos.y()));
+        end = QPoint(static_cast<int>(m_endPos.x()), static_cast<int>(m_endPos.y()));
+        gc.drawEllipse(QRect(start, end));
+        gc.setPen(old);
+    }
 }
 
 void KisToolSelectElliptical::clearSelection()
 {
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        
-
-        Q_ASSERT(controller);
+    if (m_canvas) {
 
 //         if (m_currentImage && m_currentImage->floatingSelection().data() != 0) {
 //             m_currentImage->unsetFloatingSelection();
@@ -108,31 +99,33 @@ void KisToolSelectElliptical::clearSelection()
     }
 }
 
-void KisToolSelectElliptical::buttonPress(KoPointerEvent *e)
+void KisToolSelectElliptical::mousePressEvent(KoPointerEvent *e)
 {
-    if (m_subject) {
-        
+    if (m_canvas) {
 
         if (m_currentImage && m_currentImage->activeDevice() && e->button() == Qt::LeftButton) {
             clearSelection();
-            m_startPos = m_endPos = m_centerPos = e->pos();
+            m_startPos = m_endPos = m_centerPos = convertToPixelCoord(e);
             m_selecting = true;
-            paintOutline();
         }
     }
 }
 
-void KisToolSelectElliptical::move(KoPointerEvent *e)
+void KisToolSelectElliptical::mouseMoveEvent(KoPointerEvent *e)
 {
-    if (m_subject && m_selecting) {
-        paintOutline();
+    if (m_canvas && m_selecting) {
+        QRectF bound;
+        bound.setTopLeft(m_startPos);
+        bound.setBottomRight(m_endPos);
+        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+
         // move (alt) or resize ellipse
         if (e->modifiers() & Qt::AltModifier) {
-            QPointF trans = e->pos() - m_endPos;
+            QPointF trans = convertToPixelCoord(e) - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
         } else {
-            QPointF diag = e->pos() - (e->modifiers() & Qt::ControlModifier
+            QPointF diag = convertToPixelCoord(e) - (e->modifiers() & Qt::ControlModifier
                     ? m_centerPos : m_startPos);
             // circle?
             if (e->modifiers() & Qt::ShiftModifier) {
@@ -150,23 +143,23 @@ void KisToolSelectElliptical::move(KoPointerEvent *e)
                 m_endPos = m_startPos + diag;
             }
         }
-        paintOutline();
+        bound.setTopLeft(m_startPos);
+        bound.setBottomRight(m_endPos);
+        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+
         m_centerPos = QPointF((m_startPos.x() + m_endPos.x()) / 2,
                 (m_startPos.y() + m_endPos.y()) / 2);
     }
 }
 
-void KisToolSelectElliptical::buttonRelease(KoPointerEvent *e)
+void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 {
-     if (m_subject && m_selecting && e->button() == Qt::LeftButton) {
-
-        paintOutline();
+     if (m_canvas && m_selecting && e->button() == Qt::LeftButton) {
 
         if (m_startPos == m_endPos) {
             clearSelection();
         } else {
-            QApplication::setOverrideCursor(KisCursor::waitCursor());
-            
+//             QApplication::setOverrideCursor(KisCursor::waitCursor());
 
             if (!m_currentImage)
                 return;
@@ -185,8 +178,7 @@ void KisToolSelectElliptical::buttonRelease(KoPointerEvent *e)
 
             if (m_currentImage && m_currentImage->activeDevice()) {
                 KisPaintDeviceSP dev = m_currentImage->activeDevice();
-                KisSelectedTransaction *t = 0;
-                if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
+                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
 
                 bool hasSelection = dev->hasSelection();
                 if(! hasSelection)
@@ -195,7 +187,7 @@ void KisToolSelectElliptical::buttonRelease(KoPointerEvent *e)
                     if(m_selectAction==SELECTION_SUBTRACT)
                         dev->selection()->invert();
                 }
-                QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());
+                QRect rc( m_startPos.toPoint(), m_endPos.toPoint());
                 rc = rc.normalized();
 
                 KisSelectionSP tmpSel = KisSelectionSP(new KisSelection(dev));
@@ -225,47 +217,12 @@ void KisToolSelectElliptical::buttonRelease(KoPointerEvent *e)
                     dev->emitSelectionChanged();
                 }
 
-                if (m_currentImage->undo())
-                    m_currentImage->undoAdapter()->addCommandOld(t);
+                m_canvas->addCommand(t);
 
-                QApplication::restoreOverrideCursor();
+//                 QApplication::restoreOverrideCursor();
             }
         }
         m_selecting = false;
-    }
-}
-
-void KisToolSelectElliptical::paintOutline()
-{
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        KisCanvas *canvas = controller->kiscanvas();
-        QPainter gc(canvas->canvasWidget());
-        QRect rc;
-
-        paintOutline(gc, rc);
-    }
-}
-
-void KisToolSelectElliptical::paintOutline(QPainter& gc, const QRect&)
-{
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        //RasterOp op = gc.rasterOp();
-        QPen old = gc.pen();
-        QPen pen(Qt::DotLine);
-        QPoint start;
-        QPoint end;
-
-        Q_ASSERT(controller);
-        start = controller->windowToView(m_startPos).floorQPoint();
-        end = controller->windowToView(m_endPos).floorQPoint();
-
-        //gc.setRasterOp(Qt::NotROP);
-        gc.setPen(pen);
-        gc.drawEllipse(QRect(start, end));
-        //gc.setRasterOp(op);
-        gc.setPen(old);
     }
 }
 
@@ -274,27 +231,11 @@ void KisToolSelectElliptical::slotSetAction(int action) {
         m_selectAction =(enumSelectionMode)action;
 }
 
-void KisToolSelectElliptical::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_elliptical_selection"),
-                               i18n("&Elliptical Selection"),
-                               collection,
-                               objectName());
-        Q_CHECK_PTR(m_action);
-        m_action->setShortcut(QKeySequence(Qt::Key_J));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Select an elliptical area"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
-}
-
 QWidget* KisToolSelectElliptical::createOptionWidget()
 {
-    m_optWidget = new KisSelectionOptions(parent, m_subject);
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    Q_ASSERT(canvas);
+    m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Elliptical Selection"));
 

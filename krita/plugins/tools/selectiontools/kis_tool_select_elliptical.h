@@ -25,33 +25,32 @@
 
 #include <QPoint>
 
-
+#include "kis_tool.h"
 #include "kis_selection.h"
 #include "KoToolFactory.h"
-#include "kis_tool_non_paint.h"
+#include "kis_layer_shape.h"
 
 class KisSelectionOptions;
 
-class KisToolSelectElliptical : public KisToolNonPaint {
+class KisToolSelectElliptical : public KisTool {
 
-    typedef KisToolNonPaint super;
+    typedef KisTool super;
     Q_OBJECT
 
 public:
-    KisToolSelectElliptical();
+    KisToolSelectElliptical(KoCanvasBase * canvas);
     virtual ~KisToolSelectElliptical();
 
-    virtual void setup(KActionCollection *collection);
-    virtual quint32 priority() { return 4; }
+//     virtual quint32 priority() { return 4; }
     virtual QWidget * createOptionWidget();
         virtual QWidget* optionWidget();
-    virtual enumToolType toolType() { return TOOL_SELECT; }
+//     virtual enumToolType toolType() { return TOOL_SELECT; }
 
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
-    virtual void buttonPress(KoPointerEvent *e);
-    virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KoPointerEvent *e);
+    virtual void paint(QPainter& gc, KoViewConverter &converter);
+
+    virtual void mousePressEvent(KoPointerEvent *e);
+    virtual void mouseMoveEvent(KoPointerEvent *e);
+    virtual void mouseReleaseEvent(KoPointerEvent *e);
 
 public slots:
     virtual void slotSetAction(int);
@@ -60,11 +59,8 @@ public slots:
 
 private:
     void clearSelection();
-    void paintOutline();
-    void paintOutline(QPainter& gc, const QRect& rc);
 
 private:
-    
     QPointF m_centerPos;
     QPointF m_startPos;
     QPointF m_endPos;
@@ -80,9 +76,11 @@ public:
         : KoToolFactory(parent, "KisToolSelectElliptical", i18n( "Elliptical Selection" ))
         {
             setToolTip( i18n( "Select an elliptical area" ) );
-            setToolType( TOOL_TYPE_SELECTED);
+//             setToolType( TOOL_TYPE_SELECTED);
+            setToolType( dynamicToolType() );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_elliptical_selection" );
-            setShortcut( QKeySequence(Qt::Key_J) );
+            setShortcut( KShortcut(Qt::Key_J) );
             setPriority( 0 );
         }
 

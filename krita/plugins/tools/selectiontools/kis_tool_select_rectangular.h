@@ -22,46 +22,42 @@
 #ifndef KIS_TOOL_SELECT_RECTANGULAR_H_
 #define KIS_TOOL_SELECT_RECTANGULAR_H_
 
-
-#include "kis_tool_non_paint.h"
+#include "kis_tool.h"
 #include "kis_selection.h"
 #include "KoToolFactory.h"
+#include "kis_layer_shape.h"
 
 class KisSelectionOptions;
+class KoCanvasBase;
 
-class KisToolSelectRectangular : public KisToolNonPaint {
+class KisToolSelectRectangular : public KisTool {
 
-    typedef KisToolNonPaint super;
+    typedef KisTool super;
     Q_OBJECT
 
 public:
-    KisToolSelectRectangular();
+    KisToolSelectRectangular(KoCanvasBase * canvas);
     virtual ~KisToolSelectRectangular();
 
-    virtual void setup(KActionCollection *collection);
-    virtual quint32 priority() { return 3; }
-    virtual enumToolType toolType() { return TOOL_SELECT; }
+//     virtual quint32 priority() { return 3; }
+//     virtual enumToolType toolType() { return TOOL_SELECT; }
     virtual QWidget * createOptionWidget();
         virtual QWidget* optionWidget();
 
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
-    virtual void buttonPress(KoPointerEvent *e);
-    virtual void move(KoPointerEvent *e);
-    virtual void buttonRelease(KoPointerEvent *e);
+    virtual void paint(QPainter& gc, KoViewConverter &converter);
+
+    virtual void mousePressEvent(KoPointerEvent *e);
+    virtual void mouseMoveEvent(KoPointerEvent *e);
+    virtual void mouseReleaseEvent(KoPointerEvent *e);
 
 public slots:
     virtual void slotSetAction(int);
     virtual void activate();
 
-
 private:
     void clearSelection();
-    void paintOutline();
-    void paintOutline(QPainter& gc, const QRect& rc);
 
 private:
-    
     QPointF m_centerPos;
     QPointF m_startPos;
     QPointF m_endPos;
@@ -78,9 +74,11 @@ public:
         : KoToolFactory(parent, "KisToolSelectRectangular", i18n( "Rectangular Selection" ))
         {
             setToolTip( i18n( "Select a rectangular area" ) );
-            setToolType( TOOL_TYPE_SELECTED );
+//             setToolType( TOOL_TYPE_SELECTED );
+            setToolType( dynamicToolType() );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_rect_selection" );
-            setShortcut( QKeySequence( Qt::Key_R ) );
+            setShortcut( KShortcut( Qt::Key_R ) );
             setPriority( 0 );
         }
 

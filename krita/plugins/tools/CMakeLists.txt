@@ -1,5 +1,5 @@
 add_subdirectory( defaulttools )
-#add_subdirectory( selectiontools )
+add_subdirectory( selectiontools )
 add_subdirectory( tool_crop )
 #add_subdirectory( tool_curves )
 #add_subdirectory( tool_filter )

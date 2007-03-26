@@ -25,7 +25,7 @@
 
 #include "ui_wdgselectionoptions.h"
 
-class KisCanvasSubject;
+class KisCanvas2;
 
 class WdgSelectionOptions : public QWidget, public Ui::WdgSelectionOptions
 {
@@ -45,7 +45,7 @@ class KRITAUI_EXPORT KisSelectionOptions : public QWidget
     typedef QWidget super;
 
 public:
-    KisSelectionOptions(QWidget *parent, KisCanvasSubject * subject);
+    KisSelectionOptions(KisCanvas2 * subject);
     virtual ~KisSelectionOptions();
 
     int action();
@@ -58,7 +58,7 @@ public slots:
 
 private:
     WdgSelectionOptions * m_page;
-    KisCanvasSubject* m_subject;
+    KisCanvas2* m_canvas;
 };
 
 #endif

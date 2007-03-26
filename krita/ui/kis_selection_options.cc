@@ -22,17 +22,16 @@
 #include <QVBoxLayout>
 #include <QLayout>
 
-// #include "kis_canvas_subject.h"
 #include "kis_selection_options.h"
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_image.h"
 #include "kis_selection.h"
 #include "kis_paint_device.h"
+#include "kis_canvas2.h"
 
-KisSelectionOptions::KisSelectionOptions(QWidget *parent, KisCanvasSubject * subject)
-    : super(parent),
-      m_subject(subject)
+KisSelectionOptions::KisSelectionOptions(KisCanvas2 * canvas)
+    : m_canvas(canvas)
 {
     m_page = new WdgSelectionOptions(this);
     Q_CHECK_PTR(m_page);
@@ -54,16 +53,14 @@ int KisSelectionOptions::action()
 
 void KisSelectionOptions::slotActivated()
 {
-#if 0
-    if (!m_subject) return;
-//     KisImageSP img = m_subject->currentImg(); TODO: FIXME !
+    if (!m_canvas) return;
+     KisImageSP img = m_canvas->currentImage();
     if (!img) return;
     KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return;
 
     if (dev->hasSelection()) {
     }
-#endif
 }
 
 #include "kis_selection_options.moc"

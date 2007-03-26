@@ -37,13 +37,13 @@
 
 #include "selection_tools.h"
 
-#include "kis_tool_select_outline.h"
-#include "kis_tool_select_polygonal.h"
+// #include "kis_tool_select_outline.h"
+// #include "kis_tool_select_polygonal.h"
 #include "kis_tool_select_rectangular.h"
-#include "kis_tool_select_contiguous.h"
+// #include "kis_tool_select_contiguous.h"
 #include "kis_tool_select_elliptical.h"
-#include "kis_tool_select_eraser.h"
-#include "kis_tool_select_brush.h"
+// #include "kis_tool_select_eraser.h"
+// #include "kis_tool_select_brush.h"
 
 typedef KGenericFactory<SelectionTools> SelectionToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaselectiontools, SelectionToolsFactory( "krita" ) )
@@ -54,17 +54,15 @@ SelectionTools::SelectionTools(QObject *parent, const QStringList &)
 {
     setComponentData(SelectionToolsFactory::componentData());
 
-    if ( parent->inherits("KoToolRegistry") )
-    {
-        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
-        r->add(KoToolFactorySP(new KisToolSelectOutlineFactory()));
-        r->add(KoToolFactorySP(new KisToolSelectPolygonalFactory()));
-        r->add(KoToolFactorySP(new KisToolSelectRectangularFactory()));
-        r->add(KoToolFactorySP(new KisToolSelectBrushFactory()));
-        r->add(KoToolFactorySP(new KisToolSelectContiguousFactory()));
-        r->add(KoToolFactorySP(new KisToolSelectEllipticalFactory()));
-        r->add(KoToolFactorySP(new KisToolSelectEraserFactory()));
-    }
+    KoToolRegistry * r = KoToolRegistry::instance();
+
+//     r->add(KoToolFactorySP(new KisToolSelectOutlineFactory()));
+//     r->add(KoToolFactorySP(new KisToolSelectPolygonalFactory()));
+    r->add(new KisToolSelectRectangularFactory( r, QStringList()));
+//     r->add(KoToolFactorySP(new KisToolSelectBrushFactory()));
+//     r->add(KoToolFactorySP(new KisToolSelectContiguousFactory()));
+     r->add(new KisToolSelectEllipticalFactory( r, QStringList()));
+//     r->add(KoToolFactorySP(new KisToolSelectEraserFactory()));
 }
 
 SelectionTools::~SelectionTools()

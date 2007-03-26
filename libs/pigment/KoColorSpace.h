@@ -177,7 +177,7 @@ public:
      * channels are defined to the order in which the channels are
      * laid out in the pixel
      */
-    QBitArray orderChannelFlags(const QBitArray & origChannelFlags);
+    QBitArray orderChannelFlags(const QBitArray & origChannelFlags) const;
 
     /**
      * The size in bytes of a single pixel in this color model

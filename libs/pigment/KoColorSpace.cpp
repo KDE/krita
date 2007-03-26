@@ -93,7 +93,7 @@ QBitArray KoColorSpace::channelFlags(bool color, bool alpha, bool substance, boo
     return ba;
 }
 
-QBitArray KoColorSpace::orderChannelFlags(const QBitArray & origChannelFlags)
+QBitArray KoColorSpace::orderChannelFlags(const QBitArray & origChannelFlags) const
 {
     QBitArray orderedChannelFlags( orderedChannelFlags.size() );
     for ( int i = 0; i < origChannelFlags.size(); ++i ) {

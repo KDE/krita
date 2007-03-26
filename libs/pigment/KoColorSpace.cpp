@@ -93,6 +93,16 @@ QBitArray KoColorSpace::channelFlags(bool color, bool alpha, bool substance, boo
     return ba;
 }
 
+QBitArray KoColorSpace::orderChannelFlags(const QBitArray & origChannelFlags)
+{
+    QBitArray orderedChannelFlags( orderedChannelFlags.size() );
+    for ( int i = 0; i < origChannelFlags.size(); ++i ) {
+        KoChannelInfo * channel = d->channels.at( i );
+        orderedChannelFlags.setBit( channel->pos(), origChannelFlags.testBit( i ) );
+    }
+    return orderedChannelFlags;
+}
+
 void KoColorSpace::addChannel(KoChannelInfo * ci)
 {
     d->channels.push_back(ci);

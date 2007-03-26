@@ -16,7 +16,7 @@
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
 #ifndef KOCOLORSPACE_H
 #define KOCOLORSPACE_H
 
@@ -59,7 +59,7 @@ enum ColorSpaceIndependence {
  * of a colorspace by calling KoColorSpace::mixColorsOp.
  */
 class KoMixColorsOp {
-  public:
+public:
     virtual ~KoMixColorsOp() { }
     /**
      * Mix the colors.
@@ -80,7 +80,7 @@ class KoMixColorsOp {
  * KoColorSpace::convolutionOp.
  */
 class KoConvolutionOp {
-  public:
+public:
     virtual ~KoConvolutionOp() { }
     /**
      * Convolve the colors.
@@ -145,51 +145,57 @@ public:
 
 public:
 
-     //========== Channels =====================================================//
+    //========== Channels =====================================================//
 
-     /// Return a vector describing all the channels this color model has.
-     virtual Q3ValueVector<KoChannelInfo *> channels() const;
+    /// Return a vector describing all the channels this color model has.
+    virtual Q3ValueVector<KoChannelInfo *> channels() const;
 
-     /**
-      * The total number of channels for a single pixel in this color model
-      */
-     virtual quint32 channelCount() const = 0;
+    /**
+     * The total number of channels for a single pixel in this color model
+     */
+    virtual quint32 channelCount() const = 0;
 
-     /**
-      * The total number of color channels (excludes alpha and substance) for a single
-      * pixel in this color model.
-      */
-     virtual quint32 colorChannelCount() const = 0;
+    /**
+     * The total number of color channels (excludes alpha and substance) for a single
+     * pixel in this color model.
+     */
+    virtual quint32 colorChannelCount() const = 0;
 
-     /**
-      * returns a QBitArray that contains true for the specified
-      * channel types:
-      *
-      * @param color if true, set all color channels to true
-      * @param alpha if true, set all alpha channels to true
-      * @param substance if true, set all substance channels to true
-      * @param substrate if true, set all substrate channels to true
-      */
-     QBitArray channelFlags(bool color = true, bool alpha = false, bool substance = false, bool substrate = false) const;
+    /**
+     * returns a QBitArray that contains true for the specified
+     * channel types:
+     *
+     * @param color if true, set all color channels to true
+     * @param alpha if true, set all alpha channels to true
+     * @param substance if true, set all substance channels to true
+     * @param substrate if true, set all substrate channels to true
+     */
+    QBitArray channelFlags(bool color = true, bool alpha = false, bool substance = false, bool substrate = false) const;
 
+    /**
+     * Convert the specified bit array from the order in which the
+     * channels are defined to the order in which the channels are
+     * laid out in the pixel
+     */
+    QBitArray orderChannelFlags(const QBitArray & origChannelFlags);
 
-     /**
+    /**
      * The size in bytes of a single pixel in this color model
      */
-     virtual quint32 pixelSize() const = 0;
+    virtual quint32 pixelSize() const = 0;
 
-     /**
-      * Return a string with the channel's value suitable for display in the gui.
-      */
-     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
+    /**
+     * Return a string with the channel's value suitable for display in the gui.
+     */
+    virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
 
-     /**
-      * Return a string with the channel's value with integer
-      * channels normalised to the floating point range 0 to 1, if
-      * appropriate.
-      *
-      * XXX: Also have something like this that returns a QVector<float> in the range
-      * 0-1? And vice-versa -- fill the pixel from a QVector<float>?
+    /**
+     * Return a string with the channel's value with integer
+     * channels normalised to the floating point range 0 to 1, if
+     * appropriate.
+     *
+     * XXX: Also have something like this that returns a QVector<float> in the range
+     * 0-1? And vice-versa -- fill the pixel from a QVector<float>?
      */
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
 
@@ -207,11 +213,11 @@ public:
      */
     virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos) const = 0;
 
-     /**
-      * Set dstPixel to the pixel containing only the given channel of srcPixel. The remaining channels
-      * should be set to whatever makes sense for 'empty' channels of this color space,
-      * with the intent being that the pixel should look like it only has the given channel.
-      */
+    /**
+     * Set dstPixel to the pixel containing only the given channel of srcPixel. The remaining channels
+     * should be set to whatever makes sense for 'empty' channels of this color space,
+     * with the intent being that the pixel should look like it only has the given channel.
+     */
     virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const = 0;
 
     //========== Identification ===============================================//
@@ -408,8 +414,8 @@ public:
 //
 
     /**
-    * Get the alpha value of the given pixel, downscaled to an 8-bit value.
-    */
+     * Get the alpha value of the given pixel, downscaled to an 8-bit value.
+     */
     virtual quint8 alpha(const quint8 * pixel) const = 0;
 
     /**
@@ -498,7 +504,7 @@ public:
 
     /**
      * Calculate the intensity of the given pixel, scaled down to the range 0-255. XXX: Maybe this should be more flexible
-    */
+     */
     virtual quint8 intensity8(const quint8 * src) const = 0;
 
     /**
@@ -613,7 +619,7 @@ private:
 
 class KoColorSpaceFactory {
 public:
-	virtual ~KoColorSpaceFactory() {}
+    virtual ~KoColorSpaceFactory() {}
     /**
      * ID for use in files and internally: unchanging name +
      * i18n'able description.
@@ -633,7 +639,7 @@ public:
      * Returns the default icc profile for use with this colorspace. This may be ""
      *
      & @return the default icc profile name
-     */
+    */
     virtual QString defaultProfile() = 0;
 
 };

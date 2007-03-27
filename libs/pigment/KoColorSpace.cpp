@@ -318,7 +318,7 @@ QVector<quint8> * KoColorSpace::threadLocalConversionCache(quint32 size) const
 {
     QVector<quint8> * ba = 0;
     if ( !d->conversionCache.hasLocalData() ) {
-        ba = new QVector<quint8>( '0', size );
+        ba = new QVector<quint8>( size, '0' );
         d->conversionCache.setLocalData( ba );
     }
     else {

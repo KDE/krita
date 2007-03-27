@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <ktemporaryfile.h>
-#include <kprocess.h>
+#include <k3process.h>
 
 #include "KoPictureKey.h"
 #include "KoPictureBase.h"
@@ -119,7 +119,7 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
     // create GS command line
 
     QString cmdBuf ( "gs -sOutputFile=" );
-    cmdBuf += KProcess::quote(tmpFile.fileName());
+    cmdBuf += K3Process::quote(tmpFile.fileName());
     cmdBuf += " -q -g";
     cmdBuf += QString::number( wantedWidth );
     cmdBuf += 'x';

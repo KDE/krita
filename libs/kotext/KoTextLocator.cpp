@@ -24,6 +24,7 @@
 
 #include <KoShape.h>
 
+#include <KDebug>
 #include <QTextDocument>
 #include <QTextList>
 #include <QTextInlineObject>
@@ -45,6 +46,7 @@ void KoTextLocator::updatePosition(const QTextDocument *document, QTextInlineObj
         m_dirty = true;
         m_document = document;
         m_cursorPosition = posInDocument;
+kDebug() << "KoTextLocator page: " << pageNumber() << ", chapter: " << chapter() << endl;
     }
 }
 
@@ -78,6 +80,8 @@ KoTextBlockData *KoTextLocator::chapterBlockData() const {
 
 int KoTextLocator::pageNumber() const {
     const_cast<KoTextLocator*>(this)->update();
+
+// TODO make page a variable
     KoShape *shape = shapeForPosition(m_document, m_cursorPosition);
     if(shape == 0)
         return -1;

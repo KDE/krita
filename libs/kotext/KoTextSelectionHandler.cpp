@@ -23,6 +23,7 @@
 #include "KoTextShapeData.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoVariable.h"
+#include "KoTextLocator.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoStyleManager.h"
@@ -339,6 +340,21 @@ void KoTextSelectionHandler::nextParagraph() {
         QTextBlock block = m_caret->block();
         nextStyle->applyStyle(block);
     }
+}
+
+bool KoTextSelectionHandler::insertIndexMarker() {
+    QTextBlock block = m_caret->block();
+    if(m_caret->position() >= block.position() + block.length() -1)
+        return false; // can't insert one at end of text
+    if(block.text()[ m_caret->position() - block.position() ].isSpace())
+        return false; // can't insert one on a whitespace as that does not indicate a word.
+
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+    Q_ASSERT(layout);
+    Q_ASSERT(layout->inlineObjectTextManager());
+    KoTextLocator *tl = new KoTextLocator();
+    layout->inlineObjectTextManager()->insertInlineObject(*m_caret, tl);
+    return true;
 }
 
 #include <KoTextSelectionHandler.moc>

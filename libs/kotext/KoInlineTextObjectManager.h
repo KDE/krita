@@ -30,6 +30,7 @@
 #include <QTextCharFormat>
 
 class KoCanvasBase;
+class KoTextLocator;
 class QAction;
 
 /**
@@ -107,6 +108,8 @@ public:
      * @see KoVariableManager
      */
     QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
+
+    QList<KoTextLocator*> textLocators() const;
 
 signals:
     /**

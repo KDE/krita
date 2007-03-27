@@ -33,6 +33,7 @@ class KoTextShapeData;
 class KoVariable;
 class QTextCursor;
 class QStackedWidget;
+class KoTextLocator;
 
 /**
  * The public class that is able to manipulate selected text.
@@ -43,6 +44,13 @@ public:
     explicit KoTextSelectionHandler(QObject *parent = 0);
 
     QString selectedText() const;
+
+    /**
+     * At the current cursor position, insert a marker that marks the next word as being part of the index.
+     * @returns returns true when successful, or false if failed.  Failure can be because there is no word
+     *  at the cursor position or there already is an index marker available.
+     */
+    bool insertIndexMarker();
 
 public slots:
 

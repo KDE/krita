@@ -19,6 +19,7 @@
 #include "KoInlineTextObjectManager.h"
 #include "InsertNamedVariableAction_p.h"
 #include "KoInlineObjectRegistry.h"
+#include "KoTextLocator.h"
 
 #include <QTextCursor>
 #include <QPainter>
@@ -107,6 +108,16 @@ QList<QAction*> KoInlineTextObjectManager::createInsertVariableActions(KoCanvasB
         answer.insert(i++, new InsertNamedVariableAction(host, this, name));
     }
     return answer;
+}
+
+QList<KoTextLocator*> KoInlineTextObjectManager::textLocators() const {
+    QList<KoTextLocator*> answers;
+    foreach(KoInlineObject *object, m_objects) {
+        KoTextLocator *tl = dynamic_cast<KoTextLocator*> (object);
+        if(tl)
+            answers.append(tl);
+    }
+    return answers;
 }
 
 #include "KoInlineTextObjectManager.moc"

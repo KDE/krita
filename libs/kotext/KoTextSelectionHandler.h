@@ -42,6 +42,7 @@ class KOTEXT_EXPORT KoTextSelectionHandler : public KoToolSelection {
     Q_OBJECT
 public:
     explicit KoTextSelectionHandler(QObject *parent = 0);
+    ~KoTextSelectionHandler();
 
     QString selectedText() const;
 
@@ -133,14 +134,13 @@ public slots:
 
 protected:
     friend class TextTool;
-    void setShape(KoShape *shape) { m_textShape = shape; }
-    void setShapeData(KoTextShapeData *data) { m_textShapeData = data; }
-    void setCaret(QTextCursor *caret) { m_caret = caret; }
+    void setShape(KoShape *shape);
+    void setShapeData(KoTextShapeData *data);
+    void setCaret(QTextCursor *caret);
 
 private:
-    KoShape *m_textShape;
-    KoTextShapeData *m_textShapeData;
-    QTextCursor *m_caret;
+    class Private;
+    Private * const d;
 };
 
 #endif

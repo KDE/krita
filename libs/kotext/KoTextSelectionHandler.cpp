@@ -34,6 +34,15 @@
 #include <QTextCursor>
 #include <QTextBlock>
 
+class KoTextSelectionHandler::Private {
+public:
+    Private() :textShape(0), textShapeData(0), caret(0) {}
+
+    KoShape *textShape;
+    KoTextShapeData *textShapeData;
+    QTextCursor *caret;
+};
+
 class CharFormatVisitor {
 public:
     CharFormatVisitor() {}
@@ -122,14 +131,17 @@ public:
 
 KoTextSelectionHandler::KoTextSelectionHandler(QObject *parent)
 : KoToolSelection(parent),
-    m_textShape(0),
-    m_textShapeData(0),
-    m_caret(0)
+    d(new Private())
 {
 }
 
+KoTextSelectionHandler::~KoTextSelectionHandler()
+{
+    delete d;
+}
+
 void KoTextSelectionHandler::bold(bool bold) {
-    Q_ASSERT(m_caret);
+    Q_ASSERT(d->caret);
     class Bolder : public CharFormatVisitor {
     public:
         Bolder(bool on) : bold(on) {}
@@ -139,11 +151,11 @@ void KoTextSelectionHandler::bold(bool bold) {
         bool bold;
     };
     Bolder bolder(bold);
-    CharFormatVisitor::visitSelection(m_caret, bolder);
+    CharFormatVisitor::visitSelection(d->caret, bolder);
 }
 
 void KoTextSelectionHandler::italic(bool italic) {
-    Q_ASSERT(m_caret);
+    Q_ASSERT(d->caret);
     class Italic : public CharFormatVisitor {
     public:
         Italic(bool on) : italic(on) {}
@@ -153,11 +165,11 @@ void KoTextSelectionHandler::italic(bool italic) {
         bool italic;
     };
     Italic ital(italic);
-    CharFormatVisitor::visitSelection(m_caret, ital);
+    CharFormatVisitor::visitSelection(d->caret, ital);
 }
 
 void KoTextSelectionHandler::underline(bool underline) {
-    Q_ASSERT(m_caret);
+    Q_ASSERT(d->caret);
     class Underliner : public CharFormatVisitor {
     public:
         Underliner(bool on) : underline(on) {}
@@ -167,11 +179,11 @@ void KoTextSelectionHandler::underline(bool underline) {
         bool underline;
     };
     Underliner underliner(underline);
-    CharFormatVisitor::visitSelection(m_caret, underliner);
+    CharFormatVisitor::visitSelection(d->caret, underliner);
 }
 
 void KoTextSelectionHandler::strikeOut(bool strikeout) {
-    Q_ASSERT(m_caret);
+    Q_ASSERT(d->caret);
     class Striker : public CharFormatVisitor {
     public:
         Striker(bool on) : strikeout(on) {}
@@ -181,24 +193,24 @@ void KoTextSelectionHandler::strikeOut(bool strikeout) {
         bool strikeout;
     };
     Striker striker(strikeout);
-    CharFormatVisitor::visitSelection(m_caret, striker);
+    CharFormatVisitor::visitSelection(d->caret, striker);
 }
 
 void KoTextSelectionHandler::insertFrameBreak() {
-    QTextBlock block = m_caret->block();
+    QTextBlock block = d->caret->block();
 /*
-    if(m_caret->position() == block.position() && block.length() > 0) { // start of parag
-        QTextBlockFormat bf = m_caret->blockFormat();
+    if(d->caret->position() == block.position() && block.length() > 0) { // start of parag
+        QTextBlockFormat bf = d->caret->blockFormat();
         bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysAfter);
-        m_caret->setBlockFormat(bf);
+        d->caret->setBlockFormat(bf);
     } else { */
-        QTextBlockFormat bf = m_caret->blockFormat();
-//       if(m_caret->position() != block.position() + block.length() -1 ||
+        QTextBlockFormat bf = d->caret->blockFormat();
+//       if(d->caret->position() != block.position() + block.length() -1 ||
 //               bf.pageBreakPolicy() != QTextFormat::PageBreak_Auto) // end of parag or already a pagebreak
             nextParagraph();
-        bf = m_caret->blockFormat();
+        bf = d->caret->blockFormat();
         bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
-        m_caret->setBlockFormat(bf);
+        d->caret->setBlockFormat(bf);
     //}
 }
 
@@ -215,7 +227,7 @@ void KoTextSelectionHandler::decreaseFontSize() {
 }
 
 void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
-    Q_ASSERT(m_caret);
+    Q_ASSERT(d->caret);
     class Aligner : public BlockFormatVisitor {
     public:
         Aligner(Qt::Alignment align) : alignment(align) {}
@@ -225,11 +237,11 @@ void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
         Qt::Alignment alignment;
     };
     Aligner aligner(align);
-    BlockFormatVisitor::visitSelection(m_caret, aligner);
+    BlockFormatVisitor::visitSelection(d->caret, aligner);
 }
 
 void KoTextSelectionHandler::setVerticalTextAlignment(Qt::Alignment align) {
-    Q_ASSERT(m_caret);
+    Q_ASSERT(d->caret);
     class Aligner : public CharFormatVisitor {
     public:
         Aligner(QTextCharFormat::VerticalAlignment align) : alignment(align) {}
@@ -246,7 +258,7 @@ void KoTextSelectionHandler::setVerticalTextAlignment(Qt::Alignment align) {
         charAlign = QTextCharFormat::AlignSubScript;
 
     Aligner aligner(charAlign);
-    CharFormatVisitor::visitSelection(m_caret, aligner);
+    CharFormatVisitor::visitSelection(d->caret, aligner);
 }
 
 void KoTextSelectionHandler::increaseIndent() {
@@ -259,7 +271,7 @@ void KoTextSelectionHandler::increaseIndent() {
         Qt::Alignment alignment;
     };
     Indenter indenter;
-    BlockFormatVisitor::visitSelection(m_caret, indenter);
+    BlockFormatVisitor::visitSelection(d->caret, indenter);
 }
 
 void KoTextSelectionHandler::decreaseIndent() {
@@ -272,7 +284,7 @@ void KoTextSelectionHandler::decreaseIndent() {
         Qt::Alignment alignment;
     };
     Indenter indenter;
-    BlockFormatVisitor::visitSelection(m_caret, indenter);
+    BlockFormatVisitor::visitSelection(d->caret, indenter);
 }
 
 void KoTextSelectionHandler::setTextColor(const QColor &color) {
@@ -284,47 +296,47 @@ void KoTextSelectionHandler::setTextBackgroundColor(const QColor &color) {
 }
 
 QString KoTextSelectionHandler::selectedText() const {
-    return m_caret->selectedText();
+    return d->caret->selectedText();
 }
 
 void KoTextSelectionHandler::insert(const QString &text) {
-    m_caret->insertText(text);
+    d->caret->insertText(text);
 }
 
 void KoTextSelectionHandler::selectFont(QWidget *parent) {
-    KoFontDia *fontDlg = new KoFontDia( m_caret->charFormat()); // , 0, parent);
+    KoFontDia *fontDlg = new KoFontDia( d->caret->charFormat()); // , 0, parent);
     fontDlg->exec();
-    m_caret->setCharFormat(fontDlg->format());
+    d->caret->setCharFormat(fontDlg->format());
     delete fontDlg;
 }
 
 void KoTextSelectionHandler::insertVariable(KoVariable *variable) {
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineObjectTextManager());
-    layout->inlineObjectTextManager()->insertInlineObject(*m_caret, variable);
+    layout->inlineObjectTextManager()->insertInlineObject(*d->caret, variable);
 }
 
 void KoTextSelectionHandler::setStyle(KoParagraphStyle* style) {
     Q_ASSERT(style);
-    QTextBlock block = m_caret->block();
+    QTextBlock block = d->caret->block();
     style->applyStyle(block);
 }
 
 void KoTextSelectionHandler::setStyle(KoCharacterStyle* style) {
     Q_ASSERT(style);
-    style->applyStyle(m_caret);
+    style->applyStyle(d->caret);
 }
 
 QTextCursor KoTextSelectionHandler::caret() const {
-    return m_caret ? *m_caret : QTextCursor();
+    return d->caret ? *d->caret : QTextCursor();
 }
 
 void KoTextSelectionHandler::nextParagraph() {
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
     KoParagraphStyle *nextStyle = 0;
     if(lay && lay->styleManager()) {
-        int id = m_caret->blockFormat().intProperty(KoParagraphStyle::StyleId);
+        int id = d->caret->blockFormat().intProperty(KoParagraphStyle::StyleId);
         KoParagraphStyle *currentStyle = lay->styleManager()->paragraphStyle(id);
         if(currentStyle == 0) // not a style based parag.  Lets make the next one correct.
             nextStyle = lay->styleManager()->defaultParagraphStyle();
@@ -332,29 +344,41 @@ void KoTextSelectionHandler::nextParagraph() {
             nextStyle = lay->styleManager()->paragraphStyle(currentStyle->nextStyle());
         Q_ASSERT(nextStyle);
     }
-    m_caret->insertText("\n");
-    QTextBlockFormat bf = m_caret->blockFormat();
+    d->caret->insertText("\n");
+    QTextBlockFormat bf = d->caret->blockFormat();
     bf.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
-    m_caret->setBlockFormat(bf);
+    d->caret->setBlockFormat(bf);
     if(nextStyle) {
-        QTextBlock block = m_caret->block();
+        QTextBlock block = d->caret->block();
         nextStyle->applyStyle(block);
     }
 }
 
 bool KoTextSelectionHandler::insertIndexMarker() {
-    QTextBlock block = m_caret->block();
-    if(m_caret->position() >= block.position() + block.length() -1)
+    QTextBlock block = d->caret->block();
+    if(d->caret->position() >= block.position() + block.length() -1)
         return false; // can't insert one at end of text
-    if(block.text()[ m_caret->position() - block.position() ].isSpace())
+    if(block.text()[ d->caret->position() - block.position() ].isSpace())
         return false; // can't insert one on a whitespace as that does not indicate a word.
 
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineObjectTextManager());
     KoTextLocator *tl = new KoTextLocator();
-    layout->inlineObjectTextManager()->insertInlineObject(*m_caret, tl);
+    layout->inlineObjectTextManager()->insertInlineObject(*d->caret, tl);
     return true;
+}
+
+void KoTextSelectionHandler::setShape(KoShape *shape) {
+    d->textShape = shape;
+}
+
+void KoTextSelectionHandler::setShapeData(KoTextShapeData *data) {
+    d->textShapeData = data;
+}
+
+void KoTextSelectionHandler::setCaret(QTextCursor *caret) {
+    d->caret = caret;
 }
 
 #include <KoTextSelectionHandler.moc>

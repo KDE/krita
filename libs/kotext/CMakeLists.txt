@@ -44,6 +44,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp
+    KoTextLocator.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp

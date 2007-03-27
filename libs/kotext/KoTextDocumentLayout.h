@@ -151,6 +151,8 @@ public:
         virtual KoStyleManager *styleManager() const = 0;
     };
 
+    KoShape* shapeForPosition(int position) const;
+
 protected:
     LayoutState *m_state;
 

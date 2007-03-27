@@ -19,7 +19,6 @@
 #ifndef KOINLINEOBJECTBASE_H
 #define KOINLINEOBJECTBASE_H
 
-#include <Qt> // for Q_UNUSED
 #include <kotext_export.h>
 
 class QTextDocument;
@@ -30,6 +29,7 @@ class QPainter;
 class QRectF;
 class QVariant;
 
+class KoShape;
 class KoInlineTextObjectManager;
 class InlineObjectPrivate;
 
@@ -181,6 +181,9 @@ public:
      * @see KoInlineTextObjectManager::setProperty()
      */
     bool propertyChangeListener() const;
+
+protected:
+    static KoShape *shapeForPosition(const QTextDocument *document, int position);
 
 private:
     InlineObjectPrivate * const d;

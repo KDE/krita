@@ -109,6 +109,9 @@ public:
     /// returns the currently set margins for the shape.
     KoInsets shapeMargins() const;
 
+    void setPageNumber(int page);
+    int pageNumber() const;
+
 signals:
     /**
      * emitted when the shape thinks it should be relayouted, for example after

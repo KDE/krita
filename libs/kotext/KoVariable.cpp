@@ -70,21 +70,7 @@ void KoVariable::updatePosition(const QTextDocument *document, QTextInlineObject
     Q_UNUSED(object);
     Q_UNUSED(format);
     // Variables are always 'in place' so the position is 100% defined by the text layout.
-
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (d->document->documentLayout());
-    if(lay == 0)
-        return;
-    KoShape *textShape = 0;
-    foreach(KoShape *shape, lay->shapes()) {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
-        if(data == 0)
-            continue;
-        if(data->position() <= posInDocument && (data->endPosition() == -1 || data->endPosition() > posInDocument)) {
-            textShape = shape;
-            break;
-        }
-    }
-    variableMoved(textShape, d->document, posInDocument);
+    variableMoved(shapeForPosition(d->document, posInDocument), d->document, posInDocument);
 }
 
 void KoVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) {

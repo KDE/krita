@@ -322,4 +322,15 @@ KoStyleManager *KoTextDocumentLayout::styleManager() const {
     return m_state->styleManager();
 }
 
+KoShape* KoTextDocumentLayout::shapeForPosition(int position) const {
+    foreach(KoShape *shape, shapes()) {
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
+        if(data == 0)
+            continue;
+        if(data->position() <= position && (data->endPosition() == -1 || data->endPosition() > position))
+            return shape;
+    }
+    return 0;
+}
+
 #include "KoTextDocumentLayout.moc"

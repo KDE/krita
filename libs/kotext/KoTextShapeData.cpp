@@ -26,7 +26,7 @@ public:
     QTextDocument *document;
     bool ownsDocument, dirty;
     double offset;
-    int position, endPosition;
+    int position, endPosition, pageNumber;
     KoInsets margins;
 };
 
@@ -106,6 +106,14 @@ void KoTextShapeData::setShapeMargins(const KoInsets &margins) {
 
 KoInsets KoTextShapeData::shapeMargins() const {
     return d->margins;
+}
+
+void KoTextShapeData::setPageNumber(int page) {
+    d->pageNumber = page;
+}
+
+int KoTextShapeData::pageNumber() const {
+    return d->pageNumber;
 }
 
 #include "KoTextShapeData.moc"

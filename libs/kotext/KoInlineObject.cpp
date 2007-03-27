@@ -18,7 +18,7 @@
  */
 
 #include "KoInlineObject.h"
-
+#include "KoTextDocumentLayout.h"
 
 class InlineObjectPrivate {
 public:
@@ -66,4 +66,12 @@ void KoInlineObject::setId(int id) {
 
 bool KoInlineObject::propertyChangeListener() const {
     return d->propertyChangeListener;
+}
+
+//static
+KoShape * KoInlineObject::shapeForPosition(const QTextDocument *document, int position) {
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (document->documentLayout());
+    if(lay == 0)
+        return 0;
+    return lay->shapeForPosition(position);
 }

@@ -32,6 +32,7 @@ class KoPACanvas;
 class KoPADocument;
 class KToggleAction;
 class KoPAPageBase;
+class KoPAViewMode;
 class KoShapeManager;
 class KoZoomAction;
 class KoZoomController;
@@ -70,6 +71,8 @@ public:
     /// @return the master shape manager used for this view
     KoShapeManager* masterShapeManager() const;
 
+    KoPAViewMode* viewMode() const;
+
 public slots:
     /// Shows/hides the rulers
     void setShowRulers(bool show);
@@ -98,6 +101,7 @@ protected:
     KoPADocument *m_doc;
     KoPACanvas *m_canvas;
     KoPAPageBase *m_activePage;
+    KoPAViewMode *m_viewMode;
 
 private:
     KoCanvasController * m_canvasController;

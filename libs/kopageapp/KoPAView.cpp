@@ -40,10 +40,11 @@
 #include <KoToolDocker.h>
 #include <KoShapeLayer.h>
 
-#include <KoPACanvas.h>
-#include <KoPADocument.h>
-#include <KoPAPage.h>
-#include <KoPAMasterPage.h>
+#include "KoPACanvas.h"
+#include "KoPADocument.h"
+#include "KoPAPage.h"
+#include "KoPAMasterPage.h"
+#include "KoPAViewModeNormal.h"
 
 #include <klocale.h>
 #include <kicon.h>
@@ -54,6 +55,7 @@ KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
 , m_doc( document )
 , m_activePage( 0 )
+, m_viewMode( 0 )                   
 {
     initGUI();
     initActions();
@@ -98,6 +100,8 @@ void KoPAView::initGUI()
 
     connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, double ) ),
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, double ) ) );
+
+    m_viewMode = new KoPAViewModeNormal( this, m_canvas );
 
     //Ruler
     m_horizontalRuler = new KoRuler(this, Qt::Horizontal, viewConverter());
@@ -172,6 +176,11 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, double zoom )
 KoShapeManager* KoPAView::shapeManager() const
 {
     return m_canvas->shapeManager();
+}
+
+KoPAViewMode* KoPAView::viewMode() const
+{
+    return m_viewMode;
 }
 
 KoShapeManager* KoPAView::masterShapeManager() const

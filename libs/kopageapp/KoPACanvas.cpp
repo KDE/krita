@@ -25,6 +25,7 @@
 
 #include "KoPADocument.h"
 #include "KoPAView.h"
+#include "KoPAViewMode.h"
 #include "KoPAPage.h"
 
 #include <QDebug>
@@ -128,42 +129,42 @@ void KoPACanvas::paintEvent( QPaintEvent *event )
 
 void KoPACanvas::tabletEvent( QTabletEvent *event )
 {
-    m_toolProxy->tabletEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_view->viewMode()->tabletEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::mousePressEvent( QMouseEvent *event )
 {
-    m_toolProxy->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_view->viewMode()->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::mouseDoubleClickEvent( QMouseEvent *event )
 {
-    m_toolProxy->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_view->viewMode()->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::mouseMoveEvent( QMouseEvent *event )
 {
-    m_toolProxy->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_view->viewMode()->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::mouseReleaseEvent( QMouseEvent *event )
 {
-    m_toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_view->viewMode()->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::keyPressEvent( QKeyEvent *event )
 {
-    m_toolProxy->keyPressEvent( event );
+    m_view->viewMode()->keyPressEvent( event );
 }
 
 void KoPACanvas::keyReleaseEvent( QKeyEvent *event )
 {
-    m_toolProxy->keyReleaseEvent( event );
+    m_view->viewMode()->keyReleaseEvent( event );
 }
 
 void KoPACanvas::wheelEvent ( QWheelEvent * event )
 {
-    m_toolProxy->wheelEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_view->viewMode()->wheelEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 bool KoPACanvas::event (QEvent *event) {

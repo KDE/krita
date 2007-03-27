@@ -230,7 +230,6 @@ void KisFiltersListView::setPaintDevice(KisPaintDeviceSP pd)
 {
     if( pd != m_original)
     {
-        kDebug() << "pd: " << pd->name() << endl;
         m_original = pd;
         buildPreviews();
     }

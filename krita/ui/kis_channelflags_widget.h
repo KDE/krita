@@ -46,11 +46,19 @@ public:
 
 public:
 
+    /**
+     * Set the channelflags -- they are supposed to be in pixel order.
+     */
     void setChannelFlags( const QBitArray & channelFlags );
+
+    /**
+     * retrieve the channel flags, in pixel order.
+     */
     QBitArray channelFlags() const;
 
 private:
 
+    const KoColorSpace * m_colorSpace;
     QList<QCheckBox*> m_channelChecks;
 
 };

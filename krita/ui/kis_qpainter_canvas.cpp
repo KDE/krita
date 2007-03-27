@@ -130,14 +130,19 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     m_d->viewConverter->zoom(&sx, &sy);
 
     t.start();
-    if ( !cfg.scrollCheckers() ) {
-        // Checks
-
-        gc.fillRect(ev->rect(), m_d->checkBrush );
-        kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
-
-        t.restart();
+    if ( cfg.scrollCheckers() ) {
+        gc.save();
+        gc.translate(-m_d->documentOffset );
+        gc.fillRect( ev->rect(), m_d->checkBrush );
+        gc.restore();
     }
+    else {
+        // Checks
+        gc.fillRect(ev->rect(), m_d->checkBrush );
+    }
+    kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
+
+    t.restart();
     gc.drawImage( 0, 0, m_d->prescaledImage );
     kDebug(41010) << "Drawing image:" << t.elapsed() << endl;
 
@@ -351,17 +356,12 @@ void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
 
 void KisQPainterCanvas::preScale()
 {
-    KisConfig cfg;
     // Thread this!
     QTime t;
     t.start();
     m_d->prescaledImage = QImage( size(), QImage::Format_ARGB32);
 
     QPainter gc( &m_d->prescaledImage );
-    if ( cfg.scrollCheckers() ) {
-        gc.fillRect(m_d->prescaledImage.rect(), m_d->checkBrush );
-    }
-
     drawScaledImage( QRect( QPoint( 0, 0 ), size() ), gc);
     kDebug(41010) << "preScale():" << t.elapsed() << endl;
 

@@ -175,9 +175,16 @@ public:
     /**
      * Convert the specified bit array from the order in which the
      * channels are defined to the order in which the channels are
-     * laid out in the pixel
+     * laid out in the pixel (for example, rgba->abgr).
      */
-    QBitArray orderChannelFlags(const QBitArray & origChannelFlags) const;
+    QBitArray setChannelFlagsToPixelOrder(const QBitArray & origChannelFlags) const;
+
+    /**
+     * Convert the specified bit array from the order in which the
+     * channels are stored in the pixel to the order in which the
+     * channels are defined in the olorspace. (for example, abgr->rgba)
+     */
+    QBitArray setChannelFlagsToColorSpaceOrder( const QBitArray & origChannelFlags ) const;
 
     /**
      * The size in bytes of a single pixel in this color model

@@ -93,12 +93,28 @@ QBitArray KoColorSpace::channelFlags(bool color, bool alpha, bool substance, boo
     return ba;
 }
 
-QBitArray KoColorSpace::orderChannelFlags(const QBitArray & origChannelFlags) const
+QBitArray KoColorSpace::setChannelFlagsToPixelOrder(const QBitArray & origChannelFlags) const
 {
-    QBitArray orderedChannelFlags( orderedChannelFlags.size() );
+    if ( origChannelFlags.isEmpty() ) return origChannelFlags;
+
+    QBitArray orderedChannelFlags( origChannelFlags.size() );
     for ( int i = 0; i < origChannelFlags.size(); ++i ) {
+
         KoChannelInfo * channel = d->channels.at( i );
         orderedChannelFlags.setBit( channel->pos(), origChannelFlags.testBit( i ) );
+    }
+    return orderedChannelFlags;
+}
+
+QBitArray KoColorSpace::setChannelFlagsToColorSpaceOrder( const QBitArray & origChannelFlags ) const
+{
+    if ( origChannelFlags.isEmpty() ) return origChannelFlags;
+
+    QBitArray orderedChannelFlags( origChannelFlags.size() );
+    for ( int i = 0; i < orderedChannelFlags.size(); ++i )
+    {
+        KoChannelInfo * channel = d->channels.at( i );
+        orderedChannelFlags.setBit( i, origChannelFlags.testBit( channel->pos() ) );
     }
     return orderedChannelFlags;
 }

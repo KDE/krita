@@ -4,8 +4,8 @@
     <Menu name="Tools"><text>&amp;Tools</text>
       <Separator/>
       <Action name="executescriptfile"/>
-      <Action name="configurescripts"/>
       <Action name="scripts"/>
+      <Action name="configurescripts"/>
     </Menu>
   </MenuBar>
 </kpartgui>

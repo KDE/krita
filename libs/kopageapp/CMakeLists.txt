@@ -13,7 +13,6 @@ set( kopageapp_LIB_SRCS
      KoPADocument.cpp
      KoPAView.cpp
      KoPACanvas.cpp
-     KoPAViewModeNormal.cpp
      KoPASavingContext.cpp
      KoPAPageBase.cpp
      KoPAMasterPage.cpp

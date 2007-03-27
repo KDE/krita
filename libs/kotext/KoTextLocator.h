@@ -20,33 +20,46 @@
 #define KOTEXTLOCATOR_H
 
 #include "KoInlineObject.h"
+#include "kotext_export.h"
 
 #include <QString>
 
 class KoTextBlockData;
 
-class KoTextLocator : public KoInlineObject {
+/**
+ * This inline object can be inserted in text to mark it and to later get location information from.
+ * After inserting this locator you can request things like pageNumber() and chapter() for the
+ * place where the locator has been positioned in the document.
+ */
+class KOTEXT_EXPORT KoTextLocator : public KoInlineObject {
 public:
+    /// constructor
     KoTextLocator();
+    virtual ~KoTextLocator();
 
+    /// reimplemented from super
     virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
             int posInDocument, const QTextCharFormat &format);
+    /// reimplemented from super
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
             int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    /// reimplemented from super
     virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
             const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
+    /// returns the text of the paragraph that is the first chapter before the index.
     QString chapter() const;
     KoTextBlockData *chapterBlockData() const;
+    /// return the page number on which the locator is placed.
     int pageNumber() const;
+    /// return the position in the text document at which the locator is inserted.
+    int indexPosition() const;
+    /// return the word in which the locator is inserted.
+    QString word() const;
 
 private:
-    void update();
-
-    bool m_dirty;
-    const QTextDocument *m_document;
-    int m_cursorPosition;
-    int m_chapterPosition;
+    class Private;
+    Private * const d;
 };
 
 #endif

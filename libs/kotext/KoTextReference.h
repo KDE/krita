@@ -21,15 +21,19 @@
 
 #include "KoVariable.h"
 
+class KoTextLocator;
+
 class KoTextReference : public KoVariable {
 public:
     KoTextReference( int indexId );
+    ~KoTextReference();
 
     virtual void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
 
     virtual void setup();
 
 private:
+    KoTextLocator *locator();
     int m_indexId;
 };
 

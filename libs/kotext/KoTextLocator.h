@@ -25,6 +25,7 @@
 #include <QString>
 
 class KoTextBlockData;
+class KoTextReference;
 
 /**
  * This inline object can be inserted in text to mark it and to later get location information from.
@@ -56,6 +57,9 @@ public:
     int indexPosition() const;
     /// return the word in which the locator is inserted.
     QString word() const;
+
+    void addListener(KoTextReference *reference);
+    void removeListener(KoTextReference *reference);
 
 private:
     class Private;

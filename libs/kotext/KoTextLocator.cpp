@@ -20,6 +20,7 @@
 #include "KoTextLocator.h"
 #include "KoTextBlockData.h"
 #include "KoTextShapeData.h"
+#include "KoTextReference.h"
 #include "styles/KoListStyle.h"
 
 #include <KoShape.h>
@@ -39,6 +40,8 @@ public:
             return;
         dirty = false;
         chapterPosition = -1;
+
+        int pageTmp = pageNumber, chapterTmp = chapterPosition;
         if(document == 0)
             return;
 
@@ -63,6 +66,10 @@ public:
             KoTextShapeData *data = static_cast<KoTextShapeData*> (shape->userData());
             pageNumber = data->pageNumber();
         }
+        if(pageTmp != pageNumber || chapterTmp != chapterPosition) {
+            foreach(KoTextReference* reference, listeners)
+                reference->variableMoved(0, 0, 0);
+        }
     }
 
     const QTextDocument *document;
@@ -70,6 +77,8 @@ public:
     int cursorPosition;
     int chapterPosition;
     int pageNumber;
+
+    QList<KoTextReference*> listeners;
 };
 
 
@@ -139,5 +148,13 @@ QString KoTextLocator::word() const {
     cursor.movePosition(QTextCursor::NextWord);
     cursor.movePosition(QTextCursor::WordLeft, QTextCursor::KeepAnchor);
     return cursor.selectedText().trimmed().remove(0xFFFC);
+}
+
+void KoTextLocator::addListener(KoTextReference *reference) {
+    d->listeners.append(reference);
+}
+
+void KoTextLocator::removeListener(KoTextReference *reference) {
+    d->listeners.removeAll(reference);
 }
 

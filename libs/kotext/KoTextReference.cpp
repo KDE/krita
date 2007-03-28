@@ -27,17 +27,29 @@ KoTextReference::KoTextReference( int indexId )
 {
 }
 
+KoTextReference::~KoTextReference() {
+    KoTextLocator *loc = locator();
+    if(loc)
+        loc->removeListener(this);
+}
+
 void KoTextReference::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument) {
     Q_UNUSED(shape);
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
     Q_ASSERT(manager());
-    KoTextLocator *locator = dynamic_cast<KoTextLocator*> (manager()->inlineTextObject(m_indexId));
-    Q_ASSERT(locator); // if this fails the id was faulty
-    setValue(QString::number(locator->pageNumber()));
+    KoTextLocator *loc = locator();
+    if(loc)
+        setValue(QString::number(loc->pageNumber()));
+    else
+        setValue("NOREF"); // anything smarter to point to a broken reference?
 }
 
 void KoTextReference::setup() {
+    locator()->addListener(this);
     variableMoved(0, 0, 0);
 }
 
+KoTextLocator* KoTextReference::locator() {
+    return dynamic_cast<KoTextLocator*> (manager()->inlineTextObject(m_indexId));
+}

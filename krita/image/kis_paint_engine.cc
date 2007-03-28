@@ -55,6 +55,7 @@ public:
     QPointF brushOrigin;
     QPainterPath clipPath;
     QFont font;
+//     QPicture img;
     bool isClipEnabled;
 };
 
@@ -95,10 +96,12 @@ bool KisPaintEngine::end()
     // XXX: End transaction for undo?
     if (d->dirty.boundingRect().isNull())
         return true;
+
     QRect r = d->dirty.boundingRect();
+
     KisPainter kp(d->dev);
     kp.bitBlt(r.x(), r.y(), d->dev->colorSpace()->compositeOp( COMPOSITE_COPY ),
-              d->buffer, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+              d->buffer, OPACITY_OPAQUE, 0, 0, r.width(), r.height());
     kp.end();
     return true;
 }
@@ -247,7 +250,8 @@ void KisPaintEngine::drawPath(const QPainterPath &path)
 
     QImage img(r.width(), r.height(), QImage::Format_ARGB32);
     img.fill(0);
-    QPainter p(&img);
+    QPainter p;
+    p.begin(&img);
     p.translate(-r.x(), -r.y());
     initPainter(p);
     p.drawPath(path);
@@ -280,13 +284,65 @@ void KisPaintEngine::drawPoints(const QPoint *points, int pointCount)
 void KisPaintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
 {
     kDebug(41001) << "KisPaintEngine::drawPolygon QPointF: " << pointCount << endl;
-    QPaintEngine::drawPolygon( points, pointCount, mode );
+
+    QPolygonF path;
+    const QPointF *point = points;
+
+    for (int i = 0; i < pointCount; i++)
+        path.append(*(point++));
+
+    QPolygonF newPath = d->matrix.map(path);
+    QRect r = newPath.boundingRect().toRect();
+
+    QImage img(r.width(), r.height(), QImage::Format_ARGB32);
+    img.fill(0);
+    QPainter p;
+    p.begin(&img);
+    p.translate(-r.x(), -r.y());
+    initPainter(p);
+    p.drawPolygon(path);
+    p.end();
+
+    KisPaintDeviceSP dev = new KisPaintDevice(d->dev->colorSpace());
+    dev->convertFromQImage(img, "");
+    KisPainter kp(d->buffer.data());
+    kp.bitBlt(r.x(), r.y(), d->dev->colorSpace()->compositeOp( COMPOSITE_OVER ),
+              dev, OPACITY_OPAQUE, 0, 0, r.width(), r.height());
+    kp.end();
+
+    d->dirty += QRegion(r);
 }
 
 void KisPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode)
 {
     kDebug(41001) << "KisPaintEngine::drawPolygon QPoint: " << pointCount << endl;
-    QPaintEngine::drawPolygon( points, pointCount, mode );
+
+    QPolygon path;
+    const QPoint *point = points;
+
+    for (int i = 0; i < pointCount; i++)
+        path.append(*(point++));
+
+    QPolygon newPath = d->matrix.map(path);
+    QRect r = newPath.boundingRect();
+
+    QImage img(r.width(), r.height(), QImage::Format_ARGB32);
+    img.fill(0);
+    QPainter p;
+    p.begin(&img);
+    p.translate(-r.x(), -r.y());
+    initPainter(p);
+    p.drawPolygon(path);
+    p.end();
+
+    KisPaintDeviceSP dev = new KisPaintDevice(d->dev->colorSpace());
+    dev->convertFromQImage(img, "");
+    KisPainter kp(d->buffer.data());
+    kp.bitBlt(r.x(), r.y(), d->dev->colorSpace()->compositeOp( COMPOSITE_OVER ),
+              dev, OPACITY_OPAQUE, 0, 0, r.width(), r.height());
+    kp.end();
+
+    d->dirty += QRegion(r);
 }
 
 

@@ -72,7 +72,7 @@ public:
      * @param startPosition the position at the start of the selection
      * @param endPosition the position at the end of the selection
      */
-    virtual void checkSection(QTextDocument *document, int startPosition, int endPosition) = 0;
+    virtual void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
 protected:
     /**

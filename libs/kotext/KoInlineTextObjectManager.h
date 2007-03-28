@@ -58,6 +58,8 @@ public:
      */
     KoInlineObject *inlineTextObject(const QTextCursor &cursor) const;
 
+    KoInlineObject *inlineTextObject(int id) const;
+
     /**
      * Insert a new inline object into the manager as well as the document.
      * This method will cause a placeholder to be inserted into the text at cursor position,

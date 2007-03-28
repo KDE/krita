@@ -17,35 +17,36 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "InsertNamedVariableAction_p.h"
-#include "KoInlineTextObjectManager.h"
-#include "KoVariableManager.h"
+#include "InsertVariableActionBase.h"
+//   #include "KoInlineTextObjectManager.h"
+//   #include "KoVariableManager.h"
 #include "KoTextSelectionHandler.h"
 
 #include <KoToolProxy.h>
 #include <KoCanvasBase.h>
 
-#include <kdebug.h>
+#include <KDebug>
 
-InsertNamedVariableAction::InsertNamedVariableAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager, const QString &name)
+InsertVariableActionBase::InsertVariableActionBase(KoCanvasBase *canvas, const QString &name)
     : KAction(name, canvas->canvasWidget()),
-    m_canvas(canvas),
-    m_manager(manager),
-    m_name(name)
+    m_canvas(canvas)
 {
     connect(this, SIGNAL(triggered(bool)), this, SLOT(activated()));
 }
 
-void InsertNamedVariableAction::activated() {
+InsertVariableActionBase::~InsertVariableActionBase() {
+}
+
+void InsertVariableActionBase::activated() {
     Q_ASSERT(m_canvas->toolProxy());
     KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (m_canvas->toolProxy()->selection());
     if(handler) {
-        KoVariable *variable = m_manager->variableManager()->createVariable(m_name);
+        KoVariable *variable = createVariable();
         if(variable)
             handler->insertVariable(variable);
     }
     else
-        kWarning(32500) << "InsertNamedVariableAction: No texttool selected while trying to insert variable\n";
+        kWarning(32500) << "InsertVariableAction: No texttool selected while trying to insert variable\n";
 }
 
-#include "InsertNamedVariableAction_p.moc"
+#include "InsertVariableActionBase.moc"

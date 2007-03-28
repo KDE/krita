@@ -56,3 +56,9 @@ QString KoTextEditingPlugin::paragraph(QTextDocument *document, int cursorPositi
     QTextBlock block = document->findBlock(cursorPosition);
     return block.text();
 }
+
+void KoTextEditingPlugin::checkSection(QTextDocument *document, int startPosition, int endPosition) {
+    // loop over the blocks indicated.
+    // for each complete paragraph call finishedParagraph
+    // for each (complete) word in the text; call finishedWord
+}

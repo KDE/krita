@@ -19,7 +19,7 @@
 
 #include "KoInlineObjectRegistry.h"
 #include "KoInlineObjectFactory.h"
-#include "InsertVariableAction_p.h"
+#include "InsertVariableAction.h"
 
 #include <KoCanvasBase.h>
 #include <KoPluginLoader.h>

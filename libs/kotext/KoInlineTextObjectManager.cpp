@@ -17,7 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoInlineTextObjectManager.h"
-#include "InsertNamedVariableAction_p.h"
+#include "InsertNamedVariableAction.h"
+#include "InsertTextReferenceAction.h"
 #include "KoInlineObjectRegistry.h"
 #include "KoTextLocator.h"
 
@@ -41,6 +42,10 @@ KoInlineObject *KoInlineTextObjectManager::inlineTextObject(const QTextCharForma
 
 KoInlineObject *KoInlineTextObjectManager::inlineTextObject(const QTextCursor &cursor) const {
     return inlineTextObject(cursor.charFormat());
+}
+
+KoInlineObject *KoInlineTextObjectManager::inlineTextObject(int id) const {
+    return m_objects.value(id);
 }
 
 void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInlineObject *object) {
@@ -107,6 +112,8 @@ QList<QAction*> KoInlineTextObjectManager::createInsertVariableActions(KoCanvasB
     foreach(QString name, m_variableManager.variables()) {
         answer.insert(i++, new InsertNamedVariableAction(host, this, name));
     }
+
+    answer.append(new InsertTextReferenceAction(host, this));
     return answer;
 }
 

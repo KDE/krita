@@ -38,13 +38,17 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoInlineTextObjectManager.cpp
     KoInlineObjectFactory.cpp
     KoInlineObjectRegistry.cpp
-    InsertVariableAction_p.cpp
-    InsertNamedVariableAction_p.cpp
+    InsertVariableActionBase.cpp
+    InsertVariableAction.cpp
+    InsertNamedVariableAction.cpp
+    InsertNamedVariableAction.cpp
+    InsertTextReferenceAction.cpp
     KoInlineObject.cpp
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp
     KoTextLocator.cpp
+    KoTextReference.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp

@@ -17,30 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INSERTNAMEDVARIABLEACTION_H
-#define INSERTNAMEDVARIABLEACTION_H
+#ifndef INSERTTEXTREFERENCEACTION_H
+#define INSERTTEXTREFERENCEACTION_H
 
-#include <kaction.h>
-#include <QString>
+#include "InsertVariableActionBase.h"
 
-class KoCanvasBase;
+//#include <kaction.h>
+//#include <QString>
+
 class KoInlineTextObjectManager;
 
 /**
  * helper class
  */
-class InsertNamedVariableAction : public KAction {
-    Q_OBJECT
+class InsertTextReferenceAction : public InsertVariableActionBase {
 public:
-    InsertNamedVariableAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager, const QString &name);
-
-private slots:
-    void activated();
+    InsertTextReferenceAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager);
 
 private:
-    KoCanvasBase *m_canvas;
+    virtual KoVariable *createVariable();
+
     const KoInlineTextObjectManager *m_manager;
-    QString m_name;
 };
 
 #endif

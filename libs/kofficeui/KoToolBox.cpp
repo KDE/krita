@@ -96,7 +96,7 @@ void KoToolBox::setup() {
         }
     }
     m_buttons.clear();
-    layout()->addWidget(widget);
+    setWidget(widget);
     layout()->setAlignment(widget, Qt::AlignLeft | Qt::AlignTop);
     layout()->setMargin(0);
 

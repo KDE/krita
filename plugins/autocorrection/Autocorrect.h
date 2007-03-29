@@ -28,7 +28,6 @@ public:
 
     void finishedWord(QTextDocument *document, int cursorPosition);
     void finishedParagraph(QTextDocument *document, int cursorPosition);
-    void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
 private:
     void uppercaseFirstCharOfSentence();

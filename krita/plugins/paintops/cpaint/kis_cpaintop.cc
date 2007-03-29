@@ -66,11 +66,13 @@ KisCPaintOpFactory::KisCPaintOpFactory()
 
 KisCPaintOpFactory::~KisCPaintOpFactory()
 {
+    kDebug() << "KisCPaintOpFactory::~KisCPaintOpFactory()\n";
+/*
     for (uint i = 0; i < m_brushes.count(); i++) {
         delete m_brushes[i];
         m_brushes[i] = 0;
     }
-
+*/
 }
 
 KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,

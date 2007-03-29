@@ -64,13 +64,14 @@ KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer
 KisShapeController::~KisShapeController()
 {
     kDebug(41007) << "Deleting the KisShapeController. There are " << m_d->layerShapes.size() << " shapes" << endl;
+/*
     foreach( KoShape* shape, m_d->layerShapes ) {
         removeShape( shape);
         delete shape; // XXX: What happes with stuff on the
                       // clipboard? And how about undo information?
     }
     m_d->layerShapes.clear();
-
+*/
     delete m_d;
 }
 
@@ -118,6 +119,7 @@ void KisShapeController::removeShape( KoShape* shape )
 
     KoShapeContainer * container = shape->parent();
     kDebug(41007) << "parent is " << container << endl;
+
     if ( container ) {
         container->removeChild( shape );
 
@@ -127,13 +129,13 @@ void KisShapeController::removeShape( KoShape* shape )
             removeShape( container );
         }
     }
-/*
+
     foreach( KoView *view, m_d->doc->views() ) {
         KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
         canvas->shapeManager()->remove(shape);
         canvas->canvasWidget()->update();
     }
-*/
+
     m_d->doc->setModified( true );
 }
 

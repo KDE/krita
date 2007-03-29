@@ -20,6 +20,7 @@
 #include "bristle.h"
 #include "gauss.h"
 
+#include <kdebug.h>
 
 #define RADIUS_INCRE 1.5
 #define DX .8
@@ -33,7 +34,7 @@
 
 Brush::Brush ( int s )
 {
-    m_bristles = new Bristle[s];
+    m_bristles = 0;
     setSize ( s );
     for ( int i = 0; i < 3; i++ )
         addInk();
@@ -41,7 +42,8 @@ Brush::Brush ( int s )
 
 Brush::~Brush ()
 {
-    delete m_bristles;
+    if ( m_bristles )
+        delete m_bristles;
 }
 
 void Brush::setInitialPosition ( double x, double y )
@@ -137,15 +139,14 @@ void Brush::setBristlesPos ()
 {
     double x, y, p, tx, ty, maxradius, px, py, xxyy;
     int i, j;
-
     m_numBristles = 0;
     m_radius =  m_size * RADIUS_INCRE * ( 1 + 1/500.0 );
     maxradius = 6 * RADIUS_INCRE * ( 1 + MAXPRESSURE/500.0 );
     i = ( int )( pow ( m_radius / DX * m_radius / DY, 2 ) * 4 );
-    if ( m_bristles )
-        delete ( m_bristles );
+    if ( m_bristles ) {
+        delete[] m_bristles;
+    }
     m_bristles = new Bristle[i];
-
     x = y = -1.0 * m_radius;
     while ( x <  m_radius ) {
         while ( y <  m_radius ) {

@@ -392,10 +392,11 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     if (startWith.isNull()) {
         return;
     }
+    m_projection->clear( rc );
 
     bool first = true; // The first layer in a stack needs special compositing
 #ifdef DIRTY_AND_PROJECTION
-    // Fill the projection either with the cached data, or erase it.
+    // Fill the projection either the cached data, if it's there
     KisFillPainter gc(m_projection);
 
     if (!adjLayer.isNull()) {
@@ -405,11 +406,11 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         first = false;
     }
     else {
-        gc.eraseRect(rc);
         first = true;
     }
     gc.end();
 #endif
+
     KisMergeVisitor visitor(m_projection, rc);
 
     child = startWith;

@@ -306,8 +306,8 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
             t.restart();
             QImage img2 = canvasImage.copy( drawRect );
             img2 = img2.scaled( dstSize, Qt::KeepAspectRatio, Qt::FastTransformation );
-#endif
             kDebug() << "qimage fast scale: " << t.elapsed()  << endl;
+#endif
             gc.drawImage( rc.topLeft(), img2 );
         }
         else {

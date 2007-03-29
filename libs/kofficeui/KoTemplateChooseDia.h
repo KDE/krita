@@ -1,9 +1,9 @@
 /*
    This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   2000, 2001 Werner Trobin <trobin@kde.org>
-   2002, 2003 Thomas Nagy <tnagy@eleve.emn.fr>
-   2004 David Faure <faure@kde.org>
+   Copyright 2000, 2001 Werner Trobin <trobin@kde.org>
+   Copyright 2002, 2003 Thomas Nagy <tnagy@eleve.emn.fr>
+   Copyright 2004, 2007 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,23 +24,19 @@
 #ifndef koTemplateChooseDia_h
 #define koTemplateChooseDia_h
 
-#include <kcomponentdata.h>
 #include <kpagedialog.h>
 #include <kicondialog.h>
-#include <k3iconview.h>
 #include <kofficeui_export.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QHideEvent>
-#include <QKeyEvent>
-#include <QByteArray>
 
-// KoTCD : KoTemplateChooseDia
-
-class KoTCDIconViewItem;
+class QPixmap;
+class QByteArray;
 class KoTemplateTree;
 class KoTemplateGroup;
 class QGridLayout;
+class KComponentData;
+
+// KoTCD : KoTemplateChooseDia
+class KoTCDIconViewItem;
 
 /**
  * Our reimplementation of KIconCanvas used within the template-chooser dialog.
@@ -49,20 +45,15 @@ class QGridLayout;
 class KoTCDIconCanvas : public KIconCanvas
 {
     Q_OBJECT
-    public:
+public:
     explicit KoTCDIconCanvas( QWidget *parent = 0, const char *name = 0L )
 	    : KIconCanvas( parent ) { Q_UNUSED(name) }
 
 	bool isCurrentValid() { return currentItem(); }
 	QListWidgetItem * load(KoTemplateGroup *group, const QString& name, const KComponentData &instance);
 
-    protected:
-	virtual void keyPressEvent( QKeyEvent *e ) {
-	    if ( e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter )
-		e->ignore();
-	    else
-		KIconCanvas::keyPressEvent( e );
-	}
+protected:
+    virtual void keyPressEvent( QKeyEvent *e );
 };
 
 /// @internal
@@ -91,38 +82,6 @@ class KoTCDIconViewItem : public QListWidgetItem
 
 };
 
-#include <kfileiconview.h>
-#include <QLabel>
-/**
- * Our reimplementation of KFileIconView used as the "recent files" view
- * within the template-chooser dialog.
- * @internal
- */
-class KoTCDRecentFilesIconView : public KFileIconView {
-    Q_OBJECT
-    public:
-	KoTCDRecentFilesIconView( QWidget* parent, const char* name ) :
-		KFileIconView( parent, name ), toolTip(0)
-	{
-	    connect( this, SIGNAL( onItem( QListWidgetItem * ) ),
-                     SLOT( showToolTip( QListWidgetItem * ) ) );
-	    connect( this, SIGNAL( onViewport() ),
-                     SLOT( removeToolTip() ) );
-	}
-        virtual ~KoTCDRecentFilesIconView();
-    protected:
-        /**
-         * Reimplemented to remove an eventual tooltip
-         */
-        virtual void hideEvent( QHideEvent * );
-
-    private slots:
-        void showToolTip( QListWidgetItem* );
-        void removeToolTip();
-    private:
-        QLabel* toolTip;
-};
-
 class KoTemplateChooseDiaPrivate;
 
 /**
@@ -144,17 +103,15 @@ public:
      * on the input of the user.
      * Cancel = The user pressed 'Cancel'
      * Template = The user selected a template
-     * File = The user has chosen a file
      * Empty = The user selected "Empty document"
      */
-    enum ReturnType { Cancel, Template, File, Empty };
+    enum ReturnType { Cancel, Template, Empty };
     /**
      * To configure the dialog you have to use this enum.
-     * Everything = Show templates and the rest of the dialog
      * OnlyTemplates = Show only the templates
-     * NoTemplates = Just guess :)
+     * This is the only supported option in KOffice 2.
      */
-    enum DialogType { Everything, OnlyTemplates, NoTemplates };
+    enum DialogType { OnlyTemplates };
 
     ~KoTemplateChooseDia();
 
@@ -185,7 +142,7 @@ private:
                              const QByteArray &format,
                              const QString &nativeName,
                              const QStringList& extraNativeMimeTypes,
-                             const DialogType &dialogType=Everything,
+                             const DialogType &dialogType,
                              const QByteArray& templateType="",
                              QWidget* parent = 0);
 public:
@@ -231,7 +188,7 @@ private:
                         const QByteArray &format,
                         const QString &nativeName,
                         const QStringList &extraNativeMimeTypes,
-                        const DialogType &dialogType=Everything,
+                        const DialogType &dialogType,
                         const QByteArray& templateType="");
 
 private:
@@ -240,10 +197,7 @@ private:
     QString descriptionText(const QString &name, const QString &description);
     void setupDialog();
     void setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout);
-    void setupFileDialog(QWidget * widgetbase, QGridLayout * layout);
-    void setupRecentDialog(QWidget * widgetbase, QGridLayout * layout);
     bool collectInfo();
-    bool noStartupDlg() const;
 
 private slots:
 

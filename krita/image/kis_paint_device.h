@@ -209,6 +209,11 @@ public:
     void fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel);
 
     /**
+     * Clear the given rectangle to transparent black
+     */
+    void clear( const QRect & rc );
+
+    /**
      * Read the bytes representing the rectangle described by x, y, w, h into
      * data. If data is not big enough, Krita will gladly overwrite the rest
      * of your precious memory.
@@ -575,7 +580,7 @@ public:
     /**
      * This function return true if the layer has exif info associated with it.
      */
-    bool hasExifInfo() { return m_exifInfo != 0; }
+    bool hasExifInfo();
 signals:
     void positionChanged(KisPaintDeviceSP device);
     void ioProgress(qint8 percentage);
@@ -593,65 +598,11 @@ protected:
     KisDataManagerSP m_datamanager;
 
 private:
-    /* The KisLayer that contains this paint device, or 0 if this is not
-     * part of a layer.
-     */
-    KisLayer *m_parentLayer;
 
-    bool m_extentIsValid;
+    class Private;
+    Private * const m_d;
 
-    qint32 m_x;
-    qint32 m_y;
-    KoColorSpace * m_colorSpace;
-    // Cached for quick access
-    qint32 m_pixelSize;
-    qint32 m_nChannels;
-
-    // Whether the selection is active
-    mutable bool m_hasSelection;
-    mutable bool m_selectionDeselected;
-
-    // Contains the actual selection. For now, there can be only
-    // one selection per layer. XXX: is this a limitation?
-    mutable KisSelectionSP m_selection;
-
-    KisExifInfo* m_exifInfo;
-
-    QList<KisFilter*> m_longRunningFilters;
-    QTimer * m_longRunningFilterTimer;
-
-    QPaintEngine * m_paintEngine;
 };
-
-inline qint32 KisPaintDevice::pixelSize() const
-{
-    Q_ASSERT(m_pixelSize > 0);
-    return m_pixelSize;
-}
-
-inline qint32 KisPaintDevice::channelCount() const
-{
-    Q_ASSERT(m_nChannels > 0);
-    return m_nChannels;
-;
-}
-
-inline KoColorSpace * KisPaintDevice::colorSpace() const
-{
-    Q_ASSERT(m_colorSpace != 0);
-        return m_colorSpace;
-}
-
-
-inline qint32 KisPaintDevice::getX() const
-{
-    return m_x;
-}
-
-inline qint32 KisPaintDevice::getY() const
-{
-    return m_y;
-}
 
 #endif // KIS_PAINT_DEVICE_IMPL_H_
 

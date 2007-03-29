@@ -124,11 +124,6 @@ void KisLayer::setProperties( const PropertyList &properties )
 
 void KisLayer::setChannelFlags( QBitArray & channelFlags )
 {
-    kDebug() << "KisLayer:: Setting channel flags " << channelFlags.size() << endl;
-
-    for ( int i = 0; i < channelFlags.size(); ++i ) {
-        kDebug() << "Channel " << i << ", " << channelFlags.testBit( i ) << endl;
-    }
     Q_ASSERT( ( ( quint32 )channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()) );
     m_d->channelFlags = channelFlags;
 }

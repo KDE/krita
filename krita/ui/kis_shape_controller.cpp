@@ -127,13 +127,13 @@ void KisShapeController::removeShape( KoShape* shape )
             removeShape( container );
         }
     }
-
+/*
     foreach( KoView *view, m_d->doc->views() ) {
         KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
         canvas->shapeManager()->remove(shape);
         canvas->canvasWidget()->update();
     }
-
+*/
     m_d->doc->setModified( true );
 }
 

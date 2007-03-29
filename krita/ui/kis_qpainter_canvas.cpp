@@ -50,10 +50,8 @@
 #include "kis_doc2.h"
 #include "kis_grid_drawer.h"
 
-#define PATTERN_WIDTH 32
-#define PATTERN_HEIGHT 32
-
 //#define DEBUG_REPAINT
+//#define USE_QT_SCALING
 
 namespace {
 // XXX: Remove this with Qt 4.3
@@ -125,7 +123,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     setAutoFillBackground(false);
 
     QPainter gc( this );
-
+    gc.setCompositionMode( QPainter::CompositionMode_Source );
     double sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
 
@@ -143,6 +141,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
 
     t.restart();
+    gc.setCompositionMode( QPainter::CompositionMode_SourceOver );
     gc.drawImage( 0, 0, m_d->prescaledImage );
     kDebug(41010) << "Drawing image:" << t.elapsed() << endl;
 
@@ -277,6 +276,7 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
     QRect rc = r;
 
     const QImage canvasImage = m_d->canvas->canvasCache();
+    //canvasImage.fill( 0 );
 
     double sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
@@ -297,8 +297,18 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
     }
     else {
         if ( scaleX > 2.0 && scaleY > 2.0 ) {
-            gc.drawImage( rc.topLeft(), ImageUtils::sampleImage(canvasImage,
-                     dstSize.width(), dstSize.height(), drawRect));
+            QTime t;
+            t.start();
+#ifndef USE_QT_SCALING
+            QImage img2 = ImageUtils::sampleImage(canvasImage, dstSize.width(), dstSize.height(), drawRect);
+            kDebug() << "imageutiles sampleImage " << t.elapsed()  << endl;
+#else
+            t.restart();
+            QImage img2 = canvasImage.copy( drawRect );
+            img2 = img2.scaled( dstSize, Qt::KeepAspectRatio, Qt::FastTransformation );
+#endif
+            kDebug() << "qimage fast scale: " << t.elapsed()  << endl;
+            gc.drawImage( rc.topLeft(), img2 );
         }
         else {
             // Go from the widget coordinates to points
@@ -316,7 +326,21 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
 
             QSize sz = QSize( ( int )( alignedRect.width() * scaleX ), ( int )( alignedRect.height() * scaleY ));
             QImage croppedImage = canvasImage.copy( alignedRect );
-            gc.drawImage( rc.topLeft(), ImageUtils::scale( croppedImage, sz.width(), sz.height() ));
+            QTime t;
+            t.start();
+#ifndef USE_QT_SCALING
+            QImage img2 = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
+            kDebug() << "Imageutils scale: " << t.elapsed() << endl;
+#else
+            t.restart();
+            QImage img2 = croppedImage.scaled( sz, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+            kDebug() << "qimage smooth scale: " << t.elapsed() << endl;
+#endif
+            gc.drawImage( rc.topLeft(), img2 );
+
+
+            //gc.drawImage( rc.topLeft(), ImageUtils::scale(croppedImage, sz.width(), sz.height() ));
+
         }
     }
 }
@@ -332,7 +356,7 @@ void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
 
     QImage img = QImage(e->size(), QImage::Format_ARGB32);
     QPainter gc( &img );
-
+    gc.setCompositionMode( QPainter::CompositionMode_Source );
     gc.drawImage( 0, 0, m_d->prescaledImage, 0, 0, m_d->prescaledImage.width(), m_d->prescaledImage.height() );
 
     if ( newSize.width() > oldSize.width() || newSize.height() > oldSize.height() ) {
@@ -362,6 +386,8 @@ void KisQPainterCanvas::preScale()
     m_d->prescaledImage = QImage( size(), QImage::Format_ARGB32);
 
     QPainter gc( &m_d->prescaledImage );
+    gc.setCompositionMode( QPainter::CompositionMode_Source );
+
     drawScaledImage( QRect( QPoint( 0, 0 ), size() ), gc);
     kDebug(41010) << "preScale():" << t.elapsed() << endl;
 

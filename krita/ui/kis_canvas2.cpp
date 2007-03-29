@@ -44,6 +44,7 @@
 #include "kis_abstract_canvas_widget.h"
 #include "kis_qpainter_canvas.h"
 #include "kis_opengl_canvas2.h"
+#include "kis_group_layer.h"
 #include "kis_opengl_image_context.h"
 
 #ifdef HAVE_OPENGL
@@ -243,8 +244,8 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
 #endif
         // XXX: Use the KisQPainterImageContext here
         QPainter p( &m_d->canvasCache );
-        p.setCompositionMode( QPainter::CompositionMode_Source );
 
+        p.setCompositionMode( QPainter::CompositionMode_Source );
         p.drawImage( rc.x(), rc.y(),
                      image()->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
                                               m_d->monitorProfile,
@@ -258,6 +259,7 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
             m_d->canvasWidget->preScale( vRect );
             m_d->canvasWidget->widget()->update( vRect );
         }
+
 #ifdef HAVE_OPENGL
     }
 #endif

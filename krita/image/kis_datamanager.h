@@ -132,15 +132,16 @@ public:
      * Clear the specified rect to the specified value.
      */
     inline void clear(qint32 x, qint32 y,
-           qint32 w, qint32 h,
-           quint8 def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); }
+                      qint32 w, qint32 h,
+                      quint8 def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); }
 
     /**
      * Clear the specified rect to the specified pixel value.
      */
     inline void clear(qint32 x, qint32 y,
-           qint32 w, qint32 h,
-           const quint8 * def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); }
+                      qint32 w, qint32 h,
+                      const quint8 * def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); }
+
 
     /**
      * Clear all back to default values.

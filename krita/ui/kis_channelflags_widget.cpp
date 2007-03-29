@@ -41,7 +41,6 @@ KisChannelFlagsWidget::KisChannelFlagsWidget(const KoColorSpace * colorSpace, QW
 
     for ( int i = 0; i < colorSpace->channels().size(); ++i ) {
         KoChannelInfo * channel = colorSpace->channels().at( i );
-        kDebug() << "Channel: " << channel->name() << endl;
         QCheckBox * bx = new QCheckBox(channel->name(), w );
         bx->setCheckState( Qt::Checked );
         vbl->addWidget( bx );
@@ -63,7 +62,6 @@ void KisChannelFlagsWidget::setChannelFlags( const QBitArray & cf )
 
     QBitArray channelFlags = m_colorSpace->setChannelFlagsToColorSpaceOrder( cf );
     for ( int i = 0; i < qMin( m_channelChecks.size(), channelFlags.size() ); ++i ) {
-        kDebug() << i << ", " << m_channelChecks.at( i )->text() << ", " << channelFlags.testBit( i );
         m_channelChecks.at( i )->setChecked( channelFlags.testBit( i ) );
     }
 }

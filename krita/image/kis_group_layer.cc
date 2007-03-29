@@ -262,6 +262,7 @@ QRect KisGroupLayer::extent() const
 
 QRect KisGroupLayer::exactBounds() const
 {
+
     QRect groupExactBounds;
 
     for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); ++it)
@@ -320,7 +321,10 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     KisLayerSP child = lastChild();
 
     // No child -- clear the projection. Without children, a group layer is empty.
-    if (!child) m_projection->clear();
+    if (!child)
+        m_projection->clear();
+    else
+        m_projection->clear( rc );
 
     KisLayerSP startWith = KisLayerSP(0);
 #ifdef DIRTY_AND_PROJECTION

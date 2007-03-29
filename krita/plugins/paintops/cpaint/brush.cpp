@@ -33,7 +33,7 @@
 
 Brush::Brush ( int s )
 {
-    m_bristles = 0;
+    m_bristles = new Bristle[s];
     setSize ( s );
     for ( int i = 0; i < 3; i++ )
         addInk();

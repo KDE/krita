@@ -29,7 +29,7 @@
 
 #include <kdebug.h>
 
-// #define DEBUG_REPAINT
+//#define DEBUG_REPAINT
 
 KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter)
     : QObject(parent)

@@ -445,15 +445,6 @@ public:
     bool checkAutoSaveFile();
 
     /**
-     * This setting indicates who is calling initDoc.
-     * Usually the app will want to
-     * - show the template dialog with 'everything' if InitDocAppStarting, InitDocFileClose or InitDocEmbedded
-     * - show the template dialog with 'templates only' if InitDocFileNew
-     * - create an empty document with default settings if InitDocEmpty
-     */
-    enum InitDocFlags { InitDocAppStarting, InitDocFileNew, InitDocFileClose, InitDocEmbedded, InitDocEmpty };
-
-    /**
      * Creates and shows the start up widget.
      * @param parent the KoMainWindow used as parent for the widget.
      * @param alwaysShow always show the widget even if the user has configured it to not show.

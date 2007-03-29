@@ -310,8 +310,17 @@ public slots:
 
 protected: // protected methods are mostly for koshell, it's the only one deriving from KoMainWindow
 
+    /**
+     * This setting indicates who is calling chooseNewDocument.
+     * Usually the app will want to
+     * - show the template dialog with 'everything' if InitDocAppStarting, InitDocFileClose or InitDocEmbedded
+     * - show the template dialog with 'templates only' if InitDocFileNew
+     * - create an empty document with default settings if InitDocEmpty
+     */
+    enum InitDocFlags { /*InitDocAppStarting, */ InitDocFileNew, InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/ };
+
     /// Helper method for slotFileNew and slotFileClose
-    void chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFlags );
+    void chooseNewDocument( InitDocFlags initDocFlags );
     /**
      * Special method for KOShell, to allow switching the root
      * document (and its views) among a set of them.

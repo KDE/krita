@@ -41,7 +41,6 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     InsertVariableActionBase.cpp
     InsertVariableAction.cpp
     InsertNamedVariableAction.cpp
-    InsertNamedVariableAction.cpp
     InsertTextReferenceAction.cpp
     KoInlineObject.cpp
     KoVariable.cpp

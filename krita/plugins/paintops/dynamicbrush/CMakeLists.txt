@@ -15,6 +15,7 @@ kde4_add_plugin(kritadynamicbrushpaintop ${kritadynamicbrush_PART_SRCS})
 
 
 target_link_libraries(kritadynamicbrushpaintop kritaui kritadynamicbrush kritafilterslistdynamicprogram )
+set_target_properties(kritadynamicbrushpaintop PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
 install(TARGETS kritadynamicbrushpaintop DESTINATION ${PLUGIN_INSTALL_DIR})
 

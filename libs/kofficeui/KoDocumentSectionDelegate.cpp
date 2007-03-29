@@ -187,37 +187,45 @@ void KoDocumentSectionDelegate::updateEditorGeometry( QWidget *widget, const QSt
 
 bool KoDocumentSectionDelegate::eventFilter( QObject *object, QEvent *event )
 {
-    if( event->type() == QEvent::MouseButtonPress && d->edit )
+    switch( event->type() )
     {
-        QMouseEvent *me = static_cast<QMouseEvent*>( event );
-        if( !QRect( d->edit->mapToGlobal( QPoint() ), d->edit->size() ).contains( me->globalPos() ) )
-            emit closeEditor( d->edit );
-    }
-
-    QLineEdit *edit = qobject_cast<QLineEdit*>( object );
-    if( edit && edit == d->edit && event->type() == QEvent::KeyPress )
-    {
-        QKeyEvent *ke = static_cast<QKeyEvent*>( event );
-        switch( ke->key() )
+        case QEvent::MouseButtonPress:
         {
-            case Qt::Key_Escape:
-                emit closeEditor( edit );
-                return true;
-            case Qt::Key_Tab:
-                emit commitData( edit );
-                emit closeEditor( edit, EditNextItem );
-                return true;
-            case Qt::Key_Backtab:
-                emit commitData( edit );
-                emit closeEditor( edit, EditPreviousItem );
-                return true;
-            case Qt::Key_Return:
-            case Qt::Key_Enter:
-                emit commitData( edit );
-                emit closeEditor( edit );
-                return true;
-            default: break;
-        }
+            if( d->edit )
+            {
+                QMouseEvent *me = static_cast<QMouseEvent*>( event );
+                if( !QRect( d->edit->mapToGlobal( QPoint() ), d->edit->size() ).contains( me->globalPos() ) )
+                    emit closeEditor( d->edit );
+            }
+        } break;
+        case QEvent::KeyPress:
+        {
+            QLineEdit *edit = qobject_cast<QLineEdit*>( object );
+            if( edit && edit == d->edit ) {
+                QKeyEvent *ke = static_cast<QKeyEvent*>( event );
+                switch( ke->key() )
+                {
+                    case Qt::Key_Escape:
+                        emit closeEditor( edit );
+                        return true;
+                    case Qt::Key_Tab:
+                        emit commitData( edit );
+                        emit closeEditor( edit, EditNextItem );
+                        return true;
+                    case Qt::Key_Backtab:
+                        emit commitData( edit );
+                        emit closeEditor( edit, EditPreviousItem );
+                        return true;
+                    case Qt::Key_Return:
+                    case Qt::Key_Enter:
+                        emit commitData( edit );
+                        emit closeEditor( edit );
+                        return true;
+                    default: break;
+                }
+            }
+        } break;
+        default: break;
     }
 
     return super::eventFilter( object, event );

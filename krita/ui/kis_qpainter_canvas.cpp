@@ -112,6 +112,8 @@ KisQPainterCanvas::~KisQPainterCanvas()
 
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
+    QPixmap pm( ev->rect().size() );
+
     KisConfig cfg;
 
     kDebug(41010) << "paintEvent: rect " << ev->rect() << ", doc offset: " << m_d->documentOffset << endl;
@@ -122,7 +124,9 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     setAutoFillBackground(false);
 
-    QPainter gc( this );
+    QPainter gc( &pm );
+    gc.translate( -ev->rect().topLeft() );
+
     gc.setCompositionMode( QPainter::CompositionMode_Source );
     double sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
@@ -169,6 +173,13 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     // Give the tool a chance to paint its stuff
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
     kDebug(41010) << "Drawing tools:" << t.elapsed() << endl;
+    gc.end();
+
+
+    QPainter gc2( this );
+    t.restart();
+    gc2.drawPixmap( ev->rect().topLeft(), pm );
+    kDebug(41010 ) << "Drawing pixmap on widget: " << t.elapsed() << endl;
 }
 
 void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {

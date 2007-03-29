@@ -546,6 +546,7 @@ void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *
 
 void KisPaintDevice::clear( const QRect & rc )
 {
+    m_datamanager->clear( rc.x(), rc.y(), rc.width(), rc.height(), m_d->defaultPixel );
 }
 
 void KisPaintDevice::mirrorX()

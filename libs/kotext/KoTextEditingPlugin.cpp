@@ -23,6 +23,8 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
+#include <KDebug>
+
 KoTextEditingPlugin::KoTextEditingPlugin()
     : d(0)
 {
@@ -35,17 +37,22 @@ KoTextEditingPlugin::~KoTextEditingPlugin() {
 void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) const {
     cursor.setPosition(cursorPosition);
     QTextBlock block = cursor.block();
+    cursor.setPosition(block.position());
     cursorPosition -= block.position();
     QString string = block.text();
     int pos = 0;
+    bool space = false;
     QString::Iterator iter = string.begin();
     while(iter != string.end()) {
         if(iter->isSpace()) {
-            if(pos < cursorPosition)
-                cursor.setPosition(pos + block.position());
+            if(space) ;// double spaces belong to the previous word
+            else if(pos < cursorPosition)
+                cursor.setPosition(pos + block.position() + 1); // +1 because we don't want to set it on the space itself
             else
-                break;
+                space = true;
         }
+        else if(space)
+            break;
         pos++;
         iter++;
     }
@@ -58,7 +65,28 @@ QString KoTextEditingPlugin::paragraph(QTextDocument *document, int cursorPositi
 }
 
 void KoTextEditingPlugin::checkSection(QTextDocument *document, int startPosition, int endPosition) {
-    // loop over the blocks indicated.
-    // for each complete paragraph call finishedParagraph
-    // for each (complete) word in the text; call finishedWord
+    QTextBlock block = document->findBlock(startPosition);
+    int pos = block.position();
+    while(true) {
+        if(!block.contains(startPosition-1) && !block.contains(endPosition+1)) // only parags that are completely in
+            finishedParagraph(document, block.position());
+
+        QString text = block.text();
+        bool space = true;
+        QString::Iterator iter = text.begin();
+        while(pos < endPosition && iter != text.end()) {
+            bool isSpace = iter->isSpace();
+            if(pos >= startPosition && space && !isSpace) // for each word, call finishedWord
+                finishedWord(document, pos);
+            else if(!isSpace && pos == startPosition)
+                finishedWord(document, startPosition);
+            space = isSpace;
+            pos++;
+            iter++;
+        }
+
+        if(! (block.isValid() && block.position() + block.length() < endPosition))
+            break;
+        block = block.next();
+    }
 }

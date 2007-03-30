@@ -50,8 +50,9 @@ public:
     virtual void wheelEvent( QWheelEvent * event, const QPointF &point ) = 0;
     
 protected:
-    KoPAView * m_view;
+    KoPACanvas * m_canvas;
     KoToolProxy * m_toolProxy;
+    KoPAView * m_view;
 };
 
 #endif /* KOPAVIEWMODE_H */

@@ -25,6 +25,7 @@
 #include <KoView.h>
 #include <KoZoomHandler.h>
 #include <KoRuler.h>
+#include "KoPageApp.h"
 #include "kopageapp_export.h"
 
 class KoCanvasController;
@@ -64,6 +65,8 @@ public:
 
     /// Set page shown in the canvas to @p page
     void setActivePage( KoPAPageBase * page );
+
+    void navigatePage( KoPageApp::PageNavigation pageNavigation );
 
     /// @return the shape manager used for this view
     KoShapeManager* shapeManager() const;

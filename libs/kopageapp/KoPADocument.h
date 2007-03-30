@@ -24,17 +24,20 @@
 
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
+#include "KoPageApp.h"
 #include "kopageapp_export.h"
 
 class KoPAPage;
 class KoPAPageBase;
 class KoPAMasterPage;
+class KoPAView;
 
 /// Document class that stores KoPAPage and KoPAMasterPage objects
 class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase
 {
     Q_OBJECT
 public:
+
     explicit KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
     virtual ~KoPADocument();
 
@@ -52,7 +55,17 @@ public:
      * @param index of the page
      * @param masterPage if true return a masterPage, if false a normal page
      */
-    KoPAPageBase* pageByIndex( int index, bool masterPage );
+    KoPAPageBase* pageByIndex( int index, bool masterPage ) const;
+
+    /**
+     * Get page by navigation
+     *
+     * @param currentPage the current page
+     * @param pageNavigation how to navigate from the current page
+     *
+     * @return the page which is reached by pageNavigation
+     */
+    KoPAPageBase* pageByNavigation( KoPAPageBase * currentPage, KoPageApp::PageNavigation pageNavigation ) const;
 
     /**
      * Insert page to the document at index

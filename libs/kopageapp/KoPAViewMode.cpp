@@ -22,8 +22,9 @@
 #include "KoPACanvas.h"
 
 KoPAViewMode::KoPAViewMode( KoPAView * view, KoPACanvas * canvas )
-: m_view( view )    
+: m_canvas( canvas )    
 , m_toolProxy( canvas->toolProxy() )
+, m_view( view )    
 {
 }
 

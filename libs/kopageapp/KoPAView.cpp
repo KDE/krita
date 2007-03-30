@@ -228,6 +228,17 @@ void KoPAView::setActivePage( KoPAPageBase* page )
 
     QSizeF pageSize( layout.width, layout.height );
     m_zoomController->setPageSize( pageSize ); 
+
+    m_canvas->update();
+}
+
+void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
+{
+    KoPAPageBase * newPage = m_doc->pageByNavigation( m_activePage, pageNavigation );
+
+    if ( newPage != m_activePage ) {
+        setActivePage( newPage );
+    }
 }
 
 void KoPAView::canvasControllerResized()

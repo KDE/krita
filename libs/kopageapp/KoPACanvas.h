@@ -45,6 +45,7 @@ public:
     KoViewConverter *viewConverter();
     QWidget* canvasWidget() { return this; }
     KoUnit unit();
+    const QPoint & documentOffset() const;
 
 public slots:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)

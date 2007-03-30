@@ -115,16 +115,14 @@ KoUnit KoPACanvas::unit()
     return m_doc->unit();
 }
 
+const QPoint & KoPACanvas::documentOffset() const
+{
+    return m_documentOffset;
+}
+
 void KoPACanvas::paintEvent( QPaintEvent *event )
 {
-    QPainter painter( this );
-    painter.translate(-m_documentOffset);
-    painter.setRenderHint( QPainter::Antialiasing );
-    painter.setClipRect( event->rect().translated(m_documentOffset) );
-
-    m_masterShapeManager->paint( painter, *( viewConverter() ), false );
-    m_shapeManager->paint( painter, *( viewConverter() ), false );
-    m_toolProxy->paint( painter, *( viewConverter() ) );
+    m_view->viewMode()->paintEvent( event );
 }
 
 void KoPACanvas::tabletEvent( QTabletEvent *event )

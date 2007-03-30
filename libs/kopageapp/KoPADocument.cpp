@@ -217,7 +217,7 @@ void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyl
     delete stylesWriter;
 }
 
-KoPAPageBase* KoPADocument::pageByIndex( int index, bool masterPage )
+KoPAPageBase* KoPADocument::pageByIndex( int index, bool masterPage ) const
 {
     if ( masterPage )
     {
@@ -227,6 +227,46 @@ KoPAPageBase* KoPADocument::pageByIndex( int index, bool masterPage )
     {
         return m_pages.at( index );
     }
+}
+;;
+KoPAPageBase* KoPADocument::pageByNavigation( KoPAPageBase * currentPage, KoPageApp::PageNavigation pageNavigation ) const
+{
+    const QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( currentPage ) ? m_masterPages : m_pages;
+
+    Q_ASSERT( ! pages.isEmpty() );
+
+    KoPAPageBase * newPage = currentPage;
+
+    switch ( pageNavigation )
+    {
+        case KoPageApp::PageFirst:
+            newPage = pages.first();
+            break;
+        case KoPageApp::PageLast:
+            newPage = pages.last();
+            break;
+        case KoPageApp::PagePrevious:
+        {
+            int index = pages.indexOf( currentPage ) - 1;
+            if ( index >= 0 )
+            {
+                newPage = pages.at( index );
+            }
+        }   break;
+        case KoPageApp::PageNext:
+            // fall through
+        default:
+        {
+            int index = pages.indexOf( currentPage ) + 1;
+            if ( index < pages.size() )
+            {
+                newPage = pages.at( index );
+            }
+            break;
+        }
+    }
+
+    return newPage;
 }
 
 void KoPADocument::addShape( KoShape * shape )

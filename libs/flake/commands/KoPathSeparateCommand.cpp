@@ -66,6 +66,7 @@ KoPathSeparateCommand::~KoPathSeparateCommand()
 
 void KoPathSeparateCommand::redo()
 {
+    QUndoCommand::redo();
     if( d->separatedPaths.isEmpty() )
     {
         foreach( KoPathShape* p, d->paths )
@@ -91,6 +92,7 @@ void KoPathSeparateCommand::redo()
 
 void KoPathSeparateCommand::undo()
 {
+    QUndoCommand::undo();
     if( d->controller )
     {
         foreach( KoPathShape *p, d->separatedPaths )

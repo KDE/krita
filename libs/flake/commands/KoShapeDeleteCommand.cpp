@@ -74,6 +74,7 @@ KoShapeDeleteCommand::~KoShapeDeleteCommand() {
 }
 
 void KoShapeDeleteCommand::redo () {
+    QUndoCommand::redo();
     if( ! d->controller )
         return;
 
@@ -87,6 +88,7 @@ void KoShapeDeleteCommand::redo () {
 }
 
 void KoShapeDeleteCommand::undo () {
+    QUndoCommand::undo();
     if( ! d->controller )
         return;
 

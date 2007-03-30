@@ -40,6 +40,7 @@ KoShapeKeepAspectRatioCommand::~KoShapeKeepAspectRatioCommand()
 
 void KoShapeKeepAspectRatioCommand::redo()
 {
+    QUndoCommand::redo();
     for(int i = 0; i < m_shapes.count(); ++i) {
         m_shapes[i]->setKeepAspectRatio(m_newKeepAspectRatio[i]);
     }
@@ -47,6 +48,7 @@ void KoShapeKeepAspectRatioCommand::redo()
 
 void KoShapeKeepAspectRatioCommand::undo()
 {
+    QUndoCommand::undo();
     for(int i = 0; i < m_shapes.count(); ++i) {
         m_shapes[i]->setKeepAspectRatio(m_oldKeepAspectRatio[i]);
     }

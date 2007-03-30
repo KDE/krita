@@ -130,11 +130,13 @@ KoShapeDistributeCommand::~KoShapeDistributeCommand()
 
 void KoShapeDistributeCommand::redo()
 {
+    QUndoCommand::redo();
     d->command->redo();
 }
 
 void KoShapeDistributeCommand::undo()
 {
+    QUndoCommand::undo();
     d->command->undo();
 }
 

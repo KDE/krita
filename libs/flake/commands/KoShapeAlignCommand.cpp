@@ -92,10 +92,12 @@ KoShapeAlignCommand::~KoShapeAlignCommand()
 
 void KoShapeAlignCommand::redo()
 {
+    QUndoCommand::redo();
     d->command->redo();
 }
 
 void KoShapeAlignCommand::undo()
 {
+    QUndoCommand::undo();
     d->command->undo();
 }

@@ -53,6 +53,7 @@ KoPathPointTypeCommand::~KoPathPointTypeCommand()
 
 void KoPathPointTypeCommand::redo()
 {
+    QUndoCommand::redo();
     repaint( false );
 
     QList<PointData>::iterator it( m_oldPointData.begin() );
@@ -114,6 +115,7 @@ void KoPathPointTypeCommand::redo()
 
 void KoPathPointTypeCommand::undo()
 {
+    QUndoCommand::undo();
     repaint( false );
 
     QList<PointData>::iterator it( m_oldPointData.begin() );

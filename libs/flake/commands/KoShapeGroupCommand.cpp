@@ -60,6 +60,7 @@ KoShapeGroupCommand::KoShapeGroupCommand(QUndoCommand *parent)
 }
 
 void KoShapeGroupCommand::redo () {
+    QUndoCommand::redo();
     QList <QPointF> positions;
     bool boundingRectInitialized=true;
     QRectF bound;
@@ -87,6 +88,7 @@ void KoShapeGroupCommand::redo () {
 }
 
 void KoShapeGroupCommand::undo () {
+    QUndoCommand::undo();
     QList <QPointF> positions;
     foreach(KoShape *shape, m_shapes)
         positions.append(shape->absolutePosition());

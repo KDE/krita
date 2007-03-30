@@ -63,6 +63,7 @@ KoPathCombineCommand::~KoPathCombineCommand()
 
 void KoPathCombineCommand::redo()
 {
+    QUndoCommand::redo();
     if( ! d->paths.size() )
         return;
 
@@ -92,6 +93,7 @@ void KoPathCombineCommand::redo()
 
 void KoPathCombineCommand::undo()
 {
+    QUndoCommand::undo();
     if( ! d->paths.size() )
         return;
 

@@ -35,6 +35,7 @@ KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPoi
 }
 
 void KoShapeMoveCommand::redo() {
+    QUndoCommand::redo();
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->repaint();
         m_shapes.at(i)->setPosition( m_newPositions.at(i) );
@@ -43,6 +44,7 @@ void KoShapeMoveCommand::redo() {
 }
 
 void KoShapeMoveCommand::undo() {
+    QUndoCommand::undo();
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->repaint();
         m_shapes.at(i)->setPosition( m_previousPositions.at(i) );

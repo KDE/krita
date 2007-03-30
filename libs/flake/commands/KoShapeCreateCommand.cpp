@@ -57,6 +57,7 @@ KoShapeCreateCommand::~KoShapeCreateCommand() {
 }
 
 void KoShapeCreateCommand::redo () {
+    QUndoCommand::redo();
     Q_ASSERT(d->shape);
     Q_ASSERT(d->controller);
     if( d->shapeParent )
@@ -67,6 +68,7 @@ void KoShapeCreateCommand::redo () {
 }
 
 void KoShapeCreateCommand::undo () {
+    QUndoCommand::undo();
     Q_ASSERT(d->shape);
     Q_ASSERT(d->controller);
     // the parent has to be there when it is removed from the KoShapeControllerBase

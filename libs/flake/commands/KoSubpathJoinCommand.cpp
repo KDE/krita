@@ -28,7 +28,7 @@ KoSubpathJoinCommand::KoSubpathJoinCommand( const KoPathPointData &pointData1, c
 , m_splitIndex( KoPathPointIndex( -1, -1 ) )
 , m_oldProperties1( KoPathPoint::Normal )
 , m_oldProperties2( KoPathPoint::Normal )
-, m_reverse( 0 )                                                        
+, m_reverse( 0 )
 {
     Q_ASSERT( m_pointData1.m_pathShape == m_pointData2.m_pathShape );
     KoPathShape * pathShape = m_pointData1.m_pathShape;
@@ -71,6 +71,7 @@ KoSubpathJoinCommand::~KoSubpathJoinCommand()
 
 void KoSubpathJoinCommand::redo()
 {
+    QUndoCommand::redo();
     KoPathShape * pathShape = m_pointData1.m_pathShape;
 
     bool closeSubpath = m_pointData1.m_pointIndex.first == m_pointData2.m_pointIndex.first; 
@@ -118,6 +119,7 @@ void KoSubpathJoinCommand::redo()
 
 void KoSubpathJoinCommand::undo()
 {
+    QUndoCommand::undo();
     KoPathShape * pathShape = m_pointData1.m_pathShape;
     pathShape->repaint();
     if ( m_pointData1.m_pointIndex.first == m_pointData2.m_pointIndex.first )

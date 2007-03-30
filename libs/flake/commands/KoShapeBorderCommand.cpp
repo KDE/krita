@@ -51,6 +51,7 @@ KoShapeBorderCommand::~KoShapeBorderCommand() {
 }
 
 void KoShapeBorderCommand::redo () {
+    QUndoCommand::redo();
     foreach( KoShape *shape, d->shapes ) {
         d->oldBorders.append( shape->border() ); // TODO this seems buggy. Why append every redo?
         shape->setBorder( d->newBorder );
@@ -59,6 +60,7 @@ void KoShapeBorderCommand::redo () {
 }
 
 void KoShapeBorderCommand::undo () {
+    QUndoCommand::undo();
     QList<KoShapeBorderModel*>::iterator borderIt = d->oldBorders.begin();
     foreach( KoShape *shape, d->shapes ) {
         shape->setBorder( *borderIt );

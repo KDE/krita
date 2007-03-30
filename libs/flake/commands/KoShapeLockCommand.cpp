@@ -42,6 +42,7 @@ KoShapeLockCommand::~KoShapeLockCommand()
 
 void KoShapeLockCommand::redo()
 {
+    QUndoCommand::redo();
     for(int i = 0; i < m_shapes.count(); ++i) {
         m_shapes[i]->setLocked(m_newLock[i]);
     }
@@ -49,6 +50,7 @@ void KoShapeLockCommand::redo()
 
 void KoShapeLockCommand::undo()
 {
+    QUndoCommand::undo();
     for(int i = 0; i < m_shapes.count(); ++i) {
         m_shapes[i]->setLocked(m_oldLock[i]);
     }

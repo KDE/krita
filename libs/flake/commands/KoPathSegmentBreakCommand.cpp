@@ -50,6 +50,7 @@ KoPathSegmentBreakCommand::~KoPathSegmentBreakCommand()
 
 void KoPathSegmentBreakCommand::redo()
 {
+    QUndoCommand::redo();
     // a repaint before is needed as the shape can shrink during the break
     m_pointData.m_pathShape->repaint();
     if ( m_startIndex.first != -1 )
@@ -71,6 +72,7 @@ void KoPathSegmentBreakCommand::redo()
 
 void KoPathSegmentBreakCommand::undo()
 {
+    QUndoCommand::undo();
     if ( m_startIndex.first != -1 )
     {
         m_startIndex = m_pointData.m_pathShape->closeSubpath( m_startIndex );

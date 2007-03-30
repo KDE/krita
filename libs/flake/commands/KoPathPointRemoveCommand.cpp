@@ -138,6 +138,7 @@ KoPathPointRemoveCommand::~KoPathPointRemoveCommand()
 
 void KoPathPointRemoveCommand::redo()
 {
+    QUndoCommand::redo();
     KoPathShape * lastPathShape = 0;
     int updateBefore = m_pointDataList.size();
     for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
@@ -183,6 +184,7 @@ void KoPathPointRemoveCommand::redo()
 
 void KoPathPointRemoveCommand::undo()
 {
+    QUndoCommand::undo();
     KoPathShape * lastPathShape = 0;
     for ( int i = 0; i < m_pointDataList.size(); ++i )
     {

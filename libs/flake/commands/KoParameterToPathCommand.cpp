@@ -91,6 +91,7 @@ KoParameterToPathCommand::~KoParameterToPathCommand()
 
 void KoParameterToPathCommand::redo()
 {
+    QUndoCommand::redo();
     for ( int i = 0; i < m_shapes.size(); ++i )
     {
         KoParameterShape * parameterShape = m_shapes.at( i );
@@ -103,6 +104,7 @@ void KoParameterToPathCommand::redo()
 
 void KoParameterToPathCommand::undo()
 {
+    QUndoCommand::undo();
     for ( int i = 0; i < m_shapes.size(); ++i )
     {
         KoParameterShape * parameterShape = m_shapes.at( i );

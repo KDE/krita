@@ -35,6 +35,7 @@ KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSiz
 }
 
 void KoShapeSizeCommand::redo () {
+    QUndoCommand::redo();
     int i=0;
     foreach(KoShape *shape, m_shapes) {
         shape->repaint();
@@ -44,6 +45,7 @@ void KoShapeSizeCommand::redo () {
 }
 
 void KoShapeSizeCommand::undo () {
+    QUndoCommand::undo();
     int i=0;
     foreach(KoShape *shape, m_shapes) {
         shape->repaint();

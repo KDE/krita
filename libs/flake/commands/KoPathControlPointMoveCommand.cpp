@@ -43,6 +43,7 @@ KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
 
 void KoPathControlPointMoveCommand::redo()
 {
+    QUndoCommand::redo();
     KoPathShape * pathShape = m_pointData.m_pathShape;
     KoPathPoint * point = pathShape->pointByIndex( m_pointData.m_pointIndex );
     if ( point )
@@ -97,6 +98,7 @@ void KoPathControlPointMoveCommand::redo()
 
 void KoPathControlPointMoveCommand::undo()
 {
+    QUndoCommand::undo();
     m_offset *= -1.0;
     redo();
     m_offset *= -1.0;

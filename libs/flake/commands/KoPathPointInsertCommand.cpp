@@ -91,6 +91,7 @@ KoPathPointInsertCommand::~KoPathPointInsertCommand()
 
 void KoPathPointInsertCommand::redo()
 {
+    QUndoCommand::redo();
     for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
     {
         KoPathPointData pointData = m_pointDataList.at( i );
@@ -122,6 +123,7 @@ void KoPathPointInsertCommand::redo()
 
 void KoPathPointInsertCommand::undo()
 {
+    QUndoCommand::undo();
     for ( int i = 0; i < m_pointDataList.size(); ++i )
     {
         const KoPathPointData &pdBefore = m_pointDataList.at( i );

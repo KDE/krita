@@ -75,6 +75,7 @@ KoPathSegmentTypeCommand::~KoPathSegmentTypeCommand()
 
 void KoPathSegmentTypeCommand::redo()
 {
+    QUndoCommand::redo();
     QList<KoPathPointData>::const_iterator it( m_pointDataList.begin() ); 
     for ( ; it != m_pointDataList.end(); ++it )
     {
@@ -104,6 +105,7 @@ void KoPathSegmentTypeCommand::redo()
 
 void KoPathSegmentTypeCommand::undo()
 {
+    QUndoCommand::undo();
     for ( int i = 0; i < m_pointDataList.size(); ++i )
     {
         const KoPathPointData & pd = m_pointDataList.at( i );

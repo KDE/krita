@@ -39,6 +39,7 @@ KoParameterHandleMoveCommand::~KoParameterHandleMoveCommand()
 /// redo the command
 void KoParameterHandleMoveCommand::redo()
 {
+    QUndoCommand::redo();
     m_shape->repaint();
     m_shape->moveHandle( m_handleId, m_endPoint );
     m_shape->repaint();
@@ -47,6 +48,7 @@ void KoParameterHandleMoveCommand::redo()
 /// revert the actions done in redo
 void KoParameterHandleMoveCommand::undo()
 {
+    QUndoCommand::undo();
     m_shape->repaint();
     m_shape->moveHandle( m_handleId, m_startPoint );
     m_shape->repaint();

@@ -77,6 +77,7 @@ KoPathBreakAtPointCommand::~KoPathBreakAtPointCommand()
 
 void KoPathBreakAtPointCommand::redo()
 {
+    QUndoCommand::redo();
     KoPathPointData last( 0, KoPathPointIndex( -1, -1 ) );
 
     // offset, needed when path was opened
@@ -127,6 +128,7 @@ void KoPathBreakAtPointCommand::redo()
 
 void KoPathBreakAtPointCommand::undo()
 {
+    QUndoCommand::undo();
     KoPathShape * lastPathShape = 0;
 
     for ( int i = 0; i < m_pointDataList.size(); ++i )

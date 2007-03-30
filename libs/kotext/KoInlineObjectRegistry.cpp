@@ -33,11 +33,11 @@ void KoInlineObjectRegistry::init() {
 }
 
 KoInlineObjectRegistry *KoInlineObjectRegistry::s_instance = 0;
-static KStaticDeleter<KoInlineObjectRegistry> staticShapeRegistryDeleter;
+static KStaticDeleter<KoInlineObjectRegistry> staticInlineObjectRegistryDeleter;
 
 KoInlineObjectRegistry* KoInlineObjectRegistry::instance() {
     if(KoInlineObjectRegistry::s_instance == 0) {
-        staticShapeRegistryDeleter.setObject(s_instance, new KoInlineObjectRegistry());
+        staticInlineObjectRegistryDeleter.setObject(s_instance, new KoInlineObjectRegistry());
         KoInlineObjectRegistry::s_instance->init();
     }
     return KoInlineObjectRegistry::s_instance;

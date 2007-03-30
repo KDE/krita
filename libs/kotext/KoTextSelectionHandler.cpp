@@ -343,6 +343,8 @@ void KoTextSelectionHandler::nextParagraph() {
         else
             nextStyle = lay->styleManager()->paragraphStyle(currentStyle->nextStyle());
         Q_ASSERT(nextStyle);
+        if(currentStyle == nextStyle)
+            nextStyle = 0;
     }
     d->caret->insertText("\n");
     QTextBlockFormat bf = d->caret->blockFormat();

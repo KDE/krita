@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOINLINEOBJECTREGISTRY_H
-#define KOINLINEOBJECTREGISTRY_H
+#ifndef KOTEXTEDITINGREGISTRY_H
+#define KOTEXTEDITINGREGISTRY_H
 
 #include <KoGenericRegistry.h>
 #include <kotext_export.h>

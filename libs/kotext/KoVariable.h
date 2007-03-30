@@ -16,6 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef __KOVARIABLE_H__
+#define __KOVARIABLE_H__
 
 // KOffice libs
 #include "KoInlineObject.h"
@@ -99,3 +101,5 @@ private:
 private:
     VariablePrivate * const d;
 };
+#endif
+

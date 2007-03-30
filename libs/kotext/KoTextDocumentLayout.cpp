@@ -61,22 +61,29 @@ public:
 
 class KoTextDocumentLayout::Private {
 public:
-    Private()
+    Private(KoTextDocumentLayout *parent_)
         : inlineTextObjectManager(0),
-        scheduled(false)
+        scheduled(false),
+        parent(parent_)
     {
+    }
+
+    void relayoutPrivate() {
+        scheduled = false;
+        parent->relayout();
     }
 
     QList<KoShape *> shapes;
     KoInlineTextObjectManager *inlineTextObjectManager;
     bool scheduled;
+    KoTextDocumentLayout *parent;
 };
 
 // ------------------- KoTextDocumentLayout --------------------
 KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLayout::LayoutState *layout)
     : QAbstractTextDocumentLayout(doc),
     m_state(layout),
-    d(new Private())
+    d(new Private(this))
 {
     setPaintDevice( new KoPostscriptPaintDevice() );
     if(m_state == 0)
@@ -253,8 +260,9 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 void KoTextDocumentLayout::scheduleLayout() {
     if(d->scheduled)
         return;
+    interruptLayout();
     d->scheduled = true;
-    QTimer::singleShot(0, this, SLOT(relayout()));
+    QTimer::singleShot(0, this, SLOT(relayoutPrivate()));
 }
 
 void KoTextDocumentLayout::relayout() {

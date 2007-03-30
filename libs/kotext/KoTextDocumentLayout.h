@@ -153,6 +153,10 @@ public:
 
     KoShape* shapeForPosition(int position) const;
 
+public slots:
+    /// make sure we start a layout run
+    void scheduleLayout();
+
 protected:
     LayoutState *m_state;
 
@@ -160,9 +164,8 @@ protected:
     /// reimplemented from QAbstractTextDocumentLayout
     void documentChanged(int position, int charsRemoved, int charsAdded);
 
-private slots:
     /// make sure we start a layout run
-    void relayout();
+    virtual void relayout();
 
 private:
     /// reimplemented
@@ -172,10 +175,9 @@ private:
     /// reimplemented
     void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
 
-    /// make sure we start a layout run
-    virtual void scheduleLayout();
-
 private:
+    Q_PRIVATE_SLOT(d, void relayoutPrivate())
+
     class Private;
     Private * const d;
 };

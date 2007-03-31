@@ -298,11 +298,13 @@ void KoInteractionTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
 }
 
 void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
+    event->ignore();
     if(m_currentStrategy &&
        (event->key() == Qt::Key_Control ||
             event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift ||
             event->key() == Qt::Key_Meta)) {
         m_currentStrategy->handleMouseMove( d->lastPoint, event->modifiers() );
+        event->accept();
     } else if(m_currentStrategy == 0) {
         double x=0.0, y=0.0;
         if(event->key() == Qt::Key_Left)
@@ -345,6 +347,7 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
                     m_canvas->addCommand(d->moveCommand);
                 }
                 d->lastUsedMoveCommand = QTime::currentTime();
+                event->accept();
             }
         }
     }

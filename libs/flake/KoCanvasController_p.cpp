@@ -299,7 +299,7 @@ void Viewport::resetLayout()
         if ( marginBottom > 0 ) resizeH = viewH - marginBottom;
 
     }
-    if(!m_parent->isCanvasCentered()) {
+    if( m_parent->canvasMode() == KoCanvasController::AlignLeft ) {
         resizeH -= moveY;
         moveY = 0;
     }

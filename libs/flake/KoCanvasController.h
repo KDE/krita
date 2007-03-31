@@ -56,6 +56,12 @@ class KoCanvasBase;
 class FLAKE_EXPORT KoCanvasController : public QAbstractScrollArea {
     Q_OBJECT
 public:
+    enum CanvasMode {
+        AlignLeft,  ///< canvas is left aligned if smaller than the viewport
+        Centered,   ///< canvas is centered if smaller than the viewport
+        Infinite    ///< canvas is never smaller than the viewport
+    };
+
     /**
      * Constructor.
      * @param parent the parent this widget will belong to
@@ -105,18 +111,13 @@ public:
     int canvasOffsetY() const;
 
     /**
-     * Set the canvas to be displayed centered in this widget.
-     * In the case that the canvas widget is smaller then this one the canvas will be centered
-     * and a contrasting color used for the background.
-     * @param centered center canvas if true, or aligned to the left (LTR) if false.
-     *        Centered is the default value.
+     * Sets the how the canvas behaves if the zoomed document becomes smaller than the viewport.
+     * @param mode the new canvas mode, CanvasMode::Centered is the default value
      */
-    void centerCanvas(bool centered);
-    /**
-     * return the canvas centering value.
-     * @return the canvas centering value
-     */
-    bool isCanvasCentered() const;
+    void setCanvasMode( CanvasMode mode );
+
+    /// Returns the current canvas mode
+    CanvasMode canvasMode() const;
 
     /// Reimplemented from QObject
     virtual bool eventFilter(QObject* watched, QEvent* event);

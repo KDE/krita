@@ -38,9 +38,9 @@
 class KoCanvasController::Private
 {
 public:
-    Private() : canvas(0), centerCanvas(true), toolOptionWidget(0), margin(0) {}
+    Private() : canvas(0), canvasMode( Centered ), toolOptionWidget(0), margin(0) {}
     KoCanvasBase * canvas;
-    bool centerCanvas;
+    CanvasMode canvasMode;
     QWidget * toolOptionWidget;
     int margin; // The viewport margin around the document
     QSize documentSize;
@@ -141,14 +141,14 @@ int KoCanvasController::visibleWidth() const {
     return qMin(width1, width2);
 }
 
-bool KoCanvasController::isCanvasCentered() const {
-    return m_d->centerCanvas;
+void KoCanvasController::setCanvasMode( CanvasMode mode )
+{
+    m_d->canvasMode = mode;
 }
 
-void KoCanvasController::centerCanvas(bool centered)
+KoCanvasController::CanvasMode KoCanvasController::canvasMode() const
 {
-    Q_UNUSED( centered );
-    m_d->centerCanvas = true;
+    return m_d->canvasMode;
 }
 
 int KoCanvasController::canvasOffsetX() const {

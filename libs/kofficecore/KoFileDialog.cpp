@@ -30,7 +30,7 @@ KoFileDialog::KoFileDialog(const QString& startDir, const QString& filter,
                            bool /*modal*/ )
     : KFileDialog( startDir, filter, parent )
 {
-    connect( filterWidget(), SIGNAL( activated( int) ),
+    connect( filterWidget, SIGNAL( activated( int) ),
              this, SLOT( slotChangedfilter( int ) ) );
 }
 
@@ -96,19 +96,19 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
     int idx = 1; // 0 is the native format
 
     if ( addUncompressed )
-        filterWidget()->setItemText( idx++, i18n("%1 (Uncompressed XML Files)", type->comment() ) );
+        filterWidget->setItemText( idx++, i18n("%1 (Uncompressed XML Files)", type->comment() ) );
     if ( addFlatXML )
-        filterWidget()->setItemText( idx++, i18n("%1 (Flat XML File)", type->comment() ) );
+        filterWidget->setItemText( idx++, i18n("%1 (Flat XML File)", type->comment() ) );
     if ( addEncrypted )
-        filterWidget()->setItemText( idx++, i18n("%1 (Encrypted)", type->comment() ) );
+        filterWidget->setItemText( idx++, i18n("%1 (Encrypted)", type->comment() ) );
     // if you add an entry here, update numSpecialEntries above and specialEntrySelected() below
 
     // For native format...
     if (currentFormat == nativeFormat || currentFormat.isEmpty())
     {
         // KFileFilterCombo selected the _last_ "native mimetype" entry, select the correct one
-        filterWidget()->setCurrentIndex( idxSpecialOutputFlag );
-        slotChangedfilter( filterWidget()->currentIndex() );
+        filterWidget->setCurrentIndex( idxSpecialOutputFlag );
+        slotChangedfilter( filterWidget->currentIndex() );
     }
     // [Mainly KWord] Tell MS Office users that they can save in RTF!
     int i = 0;
@@ -121,14 +121,14 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
             mime = KMimeType::defaultMimeTypePtr();
         compatString = mime->property ("X-KDE-CompatibleApplication").toString ();
         if (!compatString.isEmpty ())
-            filterWidget()->setItemText( i, i18n ("%1 (%2 Compatible)", mime->comment (), compatString) );
+            filterWidget->setItemText( i, i18n ("%1 (%2 Compatible)", mime->comment (), compatString) );
 	i++;
     }
 }
 
 int KoFileDialog::specialEntrySelected()
 {
-    int i = filterWidget()->currentIndex();
+    int i = filterWidget->currentIndex();
     // Item 0 is the native format, the following ones are the special formats
     if ( i >= 1 && i <= (int)m_specialFormats.count() )
         return m_specialFormats[i-1];

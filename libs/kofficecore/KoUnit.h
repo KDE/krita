@@ -82,48 +82,104 @@ public:
 
     bool operator!=(const KoUnit &ku) {return m_unit!=ku.m_unit;}
 
-    /// Prepare ptValue to be displayed in pt
+    /**
+     * Prepare ptValue to be displayed in pt
+     * This method will round to 0.001 precision
+     */
     static double toPoint( double ptValue ) {
         // No conversion, only rounding (to 0.001 precision)
         return floor( ptValue * 1000.0 ) / 1000.0;
     }
 
-    /// Prepare ptValue to be displayed in mm
-    static double toMM( double ptValue ) {
+    /// Deprecated, use toMillimeter()
+    static double KDE_DEPRECATED toMM( double ptValue ) {
+        return toMillimeter(ptValue);
+    }
+
+    /**
+     * Prepare ptValue to be displayed in mm
+     * This method will round to 0.0001 precision, use POINT_TO_MM() for lossless conversion.
+     */
+    static double toMillimeter( double ptValue ) {
         // "mm" values are rounded to 0.0001 millimeters
         return floor( POINT_TO_MM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
-    /// Prepare ptValue to be displayed in cm
-    static double toCM( double ptValue ) {
+    /// Deprecated, use toCentimeter()
+    static double KDE_DEPRECATED toCM( double ptValue ) {
+        return toCentimeter(ptValue);
+    }
+
+    /**
+     * Prepare ptValue to be displayed in cm
+     * This method will round to 0.0001 precision, use POINT_TO_CM() for lossless conversion.
+     */
+    static double toCentimeter( double ptValue ) {
         return floor( POINT_TO_CM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
-    /// Prepare ptValue to be displayed in dm
-    static double toDM( double ptValue ) {
+    /// Deprecated use toDecimeter
+    static double KDE_DEPRECATED toDM( double ptValue ) {
+        return toDecimeter(ptValue);
+    }
+
+    /**
+     * Prepare ptValue to be displayed in dm
+     * This method will round to 0.0001 precision, use POINT_TO_DM() for lossless conversion.
+     */
+    static double toDecimeter( double ptValue ) {
         return floor( POINT_TO_DM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
-    /// Prepare ptValue to be displayed in inch
+    /**
+     * Prepare ptValue to be displayed in inch
+     * This method will round to 0.00001 precision, use POINT_TO_INCH() for lossless conversion.
+     */
     static double toInch( double ptValue ) {
         // "in" values are rounded to 0.00001 inches
         return floor( POINT_TO_INCH( ptValue ) * 100000.0 ) / 100000.0;
     }
 
-    /// Prepare ptValue to be displayed in pica
-    static double toPI( double ptValue ) {
+    /// Deprecated use toPica()
+    static double KDE_DEPRECATED toPI( double ptValue ) {
+        return toPica(ptValue);
+    }
+
+    /**
+     * Prepare ptValue to be displayed in pica
+     * This method will round to 0.00001 precision, use POINT_TO_PI() for lossless conversion.
+     */
+    static double toPica( double ptValue ) {
         // "pi" values are rounded to 0.00001 inches
         return floor( POINT_TO_PI( ptValue ) * 100000.0 ) / 100000.0;
     }
 
-    /// Prepare ptValue to be displayed in didot
-    static double toDD( double ptValue ) {
+
+    /// Deprecated use toDidot()
+    static double KDE_DEPRECATED toDD( double ptValue ) {
+        return toDidot(ptValue);
+    }
+
+    /**
+     * Prepare ptValue to be displayed in didot
+     * This method will round to 0.00001 precision, use POINT_TO_DD() for lossless conversion.
+     */
+    static double toDidot( double ptValue ) {
         // "dd" values are rounded to 0.00001 inches
         return floor( POINT_TO_DD( ptValue ) * 100000.0 ) / 100000.0;
     }
 
-    /// Prepare ptValue to be displayed in cicero
-    static double toCC( double ptValue ) {
+
+    /// Deprecated use toCicero()
+    static double KDE_DEPRECATED toCC( double ptValue ) {
+        return toCicero(ptValue);
+    }
+
+    /**
+     * Prepare ptValue to be displayed in cicero
+     * This method will round to 0.00001 precision, use POINT_TO_CC() for lossless conversion.
+     */
+    static double toCicero( double ptValue ) {
         // "cc" values are rounded to 0.00001 inches
         return floor( POINT_TO_CC( ptValue ) * 100000.0 ) / 100000.0;
     }

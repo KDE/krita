@@ -739,6 +739,7 @@ bool KoMainWindow::exportConfirmation( const QByteArray &outputFormat )
                   QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
                   i18n( "Confirm Save" ),
                   KStandardGuiItem::save (),
+                  KStandardGuiItem::cancel(),
                   "NonNativeSaveConfirmation"
                   );
     }
@@ -752,6 +753,7 @@ bool KoMainWindow::exportConfirmation( const QByteArray &outputFormat )
                   QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
                   i18n( "Confirm Export" ),
                   KGuiItem(i18n ("Export")),
+                  KStandardGuiItem::cancel(),
                   "NonNativeExportConfirmation" // different to the one used for Save (above)
                   );
     }

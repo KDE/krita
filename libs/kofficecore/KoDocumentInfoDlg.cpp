@@ -391,6 +391,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
                           "<p>Do you still want to decrypt the file?</qt>" ),
                     i18n( "Confirm Decrypt" ),
                     KGuiItem( i18n( "Decrypt" ) ),
+                    KStandardGuiItem::cancel(),
                     "DecryptConfirmation"
             ) != KMessageBox::Continue )
         {
@@ -432,6 +433,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
                               "<p>Do you want to change the file to OASIS OpenDocument?</qt>", QString( "<b>%1</b>" ).arg( comment ) ),
                         i18n( "Change Filetype" ),
                         KGuiItem( i18n( "Change" ) ),
+                        KStandardGuiItem::cancel(),
                         "EncryptChangeFiletypeConfirmation"
                 ) != KMessageBox::Continue ) {
                 return;

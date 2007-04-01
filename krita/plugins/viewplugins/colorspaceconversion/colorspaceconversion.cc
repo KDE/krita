@@ -96,6 +96,7 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
                     , image->colorSpace()->name()),
             i18n("Colorspace Conversion"),
             KGuiItem(i18n("Continue")),
+            KStandardGuiItem::cancel(),
             "lab16degradation") != KMessageBox::Continue) return;
 
     }
@@ -133,6 +134,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
                     , dev->colorSpace()->name()),
             i18n("Colorspace Conversion"),
             KGuiItem(i18n("Continue")),
+            KStandardGuiItem::cancel(),
             "lab16degradation") != KMessageBox::Continue) return;
 
     }

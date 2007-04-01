@@ -414,6 +414,7 @@ void KisFilterManager::slotApplyFilter(int i)
                                                        , dev->colorSpace()->name()),
                                                i18n("Filter Will Convert Your Layer Data"),
                                                KGuiItem(i18n("Continue")),
+                                               KStandardGuiItem::cancel(),
                                                "lab16degradation") != KMessageBox::Continue) return;
 
         }
@@ -424,6 +425,7 @@ void KisFilterManager::slotApplyFilter(int i)
                                                        , dev->colorSpace()->name()),
                                                i18n("Filter Will Convert Your Layer Data"),
                                                KGuiItem(i18n("Continue")),
+                                               KStandardGuiItem::cancel(),
                                                "rgba8degradation") != KMessageBox::Continue) return;
         }
     }

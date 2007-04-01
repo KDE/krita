@@ -473,8 +473,8 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
     }
 
     // check if there is still a shape selected the active tool can work on
-    // there needs to be at least one shape that a tool without a activationShapeId
-    // can work
+    // there needs to be at least one shape for a tool without an activationShapeId
+    // to work
     // if not change the current tool to the default tool
     if ( ! ( d->canvasData->activationShapeId.isNull() && shapes.size() > 0 ) && d->canvasData->activationShapeId != "flake/always" &&
             ! types.contains( d->canvasData->activationShapeId ) ) {

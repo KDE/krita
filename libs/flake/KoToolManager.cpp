@@ -2,7 +2,7 @@
  *
  * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -473,10 +473,13 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
     }
 
     // check if there is still a shape selected the active tool can work on
+    // there needs to be at least one shape that a tool without a activationShapeId
+    // can work
     // if not change the current tool to the default tool
-    if ( ! d->canvasData->activationShapeId.isNull() && d->canvasData->activationShapeId != "flake/always" &&
-            ! types.contains( d->canvasData->activationShapeId ) )
+    if ( ! ( d->canvasData->activationShapeId.isNull() && shapes.size() > 0 ) && d->canvasData->activationShapeId != "flake/always" &&
+            ! types.contains( d->canvasData->activationShapeId ) ) {
         switchTool(KoInteractionTool_ID, false);
+    }
 
     emit toolCodesSelected(d->canvasData->canvas, types);
 }

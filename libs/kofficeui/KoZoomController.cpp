@@ -93,7 +93,6 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
     }
 
     m_zoomHandler->setZoom(zoom);
-    emit zoomChanged(mode, zoom);
 
     // Tell the canvasController that the zoom has changed
     // Actually canvasController doesn't know about zoom, but the document in pixels
@@ -101,6 +100,8 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
     m_canvasController->setDocumentSize(
             QSize( int(0.5 + m_zoomHandler->documentToViewX(m_pageSize.width())),
                    int(0.5 + m_zoomHandler->documentToViewY(m_pageSize.height())) ) );
+
+    emit zoomChanged(mode, zoom);
 
     // Finally ask the canvasController to recenter
     m_canvasController->recenterPreferred();

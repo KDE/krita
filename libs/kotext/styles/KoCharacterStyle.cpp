@@ -138,6 +138,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         QTextFormat::TextOutline,
         QTextFormat::BackgroundBrush,
         QTextFormat::ForegroundBrush,
+        QTextFormat::TextUnderlineColor,
         -1
     };
 
@@ -208,9 +209,12 @@ void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
     //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) ) { // 3.10.3
-        QBrush brush = foreground();
-        brush.setColor( QColor(styleStack.attributeNS( KoXmlNS::fo, "color" )) ); // #rrggbb format
-        setForeground(brush);
+        QColor color(styleStack.attributeNS( KoXmlNS::fo, "color" )); // #rrggbb format
+        if ( color.isValid() ) {
+            QBrush brush = foreground();
+            brush.setColor(color);
+            setForeground(brush);
+        }
     }
 
     QString fontName;
@@ -218,8 +222,6 @@ void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
         fontName = styleStack.attributeNS( KoXmlNS::fo, "font-family" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-family" ) )
         fontName = styleStack.attributeNS( KoXmlNS::style, "font-family" );
-    //if ( styleStack.hasAttributeNS( KoXmlNS::svg, "font-family" ) )
-    //    fontName = styleStack.attributeNS( KoXmlNS::svg, "font-family" );
     if ( ! fontName.isNull() ) {
         // Hmm, the remove "'" could break it's in the middle of the fontname...
         fontName = fontName.remove( "'" );

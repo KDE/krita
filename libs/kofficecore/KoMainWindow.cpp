@@ -40,7 +40,6 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
-#include <kkeydialog.h>
 #include <kedittoolbar.h>
 #include <QProgressBar>
 #include <kpushbutton.h>

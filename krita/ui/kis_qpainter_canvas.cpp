@@ -146,7 +146,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     t.restart();
     gc.setCompositionMode( QPainter::CompositionMode_SourceOver );
-    gc.drawImage( 0, 0, m_d->prescaledImage );
+    gc.drawImage( ev->rect(), m_d->prescaledImage, ev->rect() );
     kDebug(41010) << "Drawing image:" << t.elapsed() << endl;
 
 #ifdef DEBUG_REPAINT

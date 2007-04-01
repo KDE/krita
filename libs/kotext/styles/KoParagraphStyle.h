@@ -349,10 +349,13 @@ public:
     void setTextIndent (double margin) { setProperty(QTextFormat::TextIndent, margin); }
     /// duplicated property from QTextBlockFormat
     double textIndent () const { return propertyDouble(QTextFormat::TextIndent); }
+#if 0
+as this is a duplicate of leftMargin, lets make it very clear we are using that one.
     /// duplicated property from QTextBlockFormat
     void setIndent (int indent) { setProperty(QTextFormat::BlockIndent, indent); }
     /// duplicated property from QTextBlockFormat
     int indent () const { return propertyInt(QTextFormat::BlockIndent); }
+#endif
     /// duplicated property from QTextBlockFormat
     void setNonBreakableLines(bool on) { setProperty(QTextFormat::BlockNonBreakableLines, on); }
     /// duplicated property from QTextBlockFormat
@@ -434,6 +437,8 @@ public:
      * OpenDocument format.
      */
     void loadOasis(KoStyleStack& styleStack);
+
+    static KoParagraphStyle *fromBlockFormat(const QTextBlockFormat &format);
 
 private:
     void setProperty(int key, const QVariant &value);

@@ -30,6 +30,70 @@
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
 
+
+// all relevant properties.
+static const int properties[] = {
+    QTextFormat::BlockTopMargin,
+    QTextFormat::BlockBottomMargin,
+    QTextFormat::BlockLeftMargin,
+    QTextFormat::BlockRightMargin,
+    QTextFormat::BlockAlignment,
+    QTextFormat::TextIndent,
+    QTextFormat::BlockIndent,
+    QTextFormat::BlockNonBreakableLines,
+    KoParagraphStyle::StyleId,
+    KoParagraphStyle::FixedLineHeight,
+    KoParagraphStyle::MinimumLineHeight,
+    KoParagraphStyle::LineSpacing,
+    KoParagraphStyle::LineSpacingFromFont,
+    //      KoParagraphStyle::AlignLastLine,
+    //      KoParagraphStyle::WidowThreshold,
+    //      KoParagraphStyle::OrphanThreshold,
+    //      KoParagraphStyle::DropCaps,
+    //      KoParagraphStyle::DropCapsLength,
+    //      KoParagraphStyle::DropCapsLines,
+    //      KoParagraphStyle::DropCapsDistance,
+    //      KoParagraphStyle::FollowDocBaseline,
+    KoParagraphStyle::BreakBefore,
+    KoParagraphStyle::BreakAfter,
+    //      KoParagraphStyle::HasLeftBorder,
+    //      KoParagraphStyle::HasTopBorder,
+    //      KoParagraphStyle::HasRightBorder,
+    //      KoParagraphStyle::HasBottomBorder,
+    //      KoParagraphStyle::BorderLineWidth,
+    //      KoParagraphStyle::SecondBorderLineWidth,
+    //      KoParagraphStyle::DistanceToSecondBorder,
+    KoParagraphStyle::LeftPadding,
+    KoParagraphStyle::TopPadding,
+    KoParagraphStyle::RightPadding,
+    KoParagraphStyle::BottomPadding,
+    KoParagraphStyle::LeftBorderWidth,
+    KoParagraphStyle::LeftInnerBorderWidth,
+    KoParagraphStyle::LeftBorderSpacing,
+    KoParagraphStyle::LeftBorderStyle,
+    KoParagraphStyle::TopBorderWidth,
+    KoParagraphStyle::TopInnerBorderWidth,
+    KoParagraphStyle::TopBorderSpacing,
+    KoParagraphStyle::TopBorderStyle,
+    KoParagraphStyle::RightBorderWidth,
+    KoParagraphStyle::RightInnerBorderWidth,
+    KoParagraphStyle::RightBorderSpacing,
+    KoParagraphStyle::RightBorderStyle,
+    KoParagraphStyle::BottomBorderWidth,
+    KoParagraphStyle::BottomInnerBorderWidth,
+    KoParagraphStyle::BottomBorderSpacing,
+    KoParagraphStyle::BottomBorderStyle,
+    KoParagraphStyle::LeftBorderColor,
+    KoParagraphStyle::TopBorderColor,
+    KoParagraphStyle::RightBorderColor,
+    KoParagraphStyle::BottomBorderColor,
+    KoParagraphStyle::ExplicitListValue,
+    KoParagraphStyle::RestartListNumbering,
+
+    -1
+};
+
+
 KoParagraphStyle::KoParagraphStyle()
     : m_charStyle(new KoCharacterStyle(this)),
     m_listStyle(0),
@@ -131,68 +195,6 @@ QColor KoParagraphStyle::propertyColor(int key) const {
 }
 
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
-    // copy all relevant properties.
-    static const int properties[] = {
-        QTextFormat::BlockTopMargin,
-        QTextFormat::BlockBottomMargin,
-        QTextFormat::BlockLeftMargin,
-        QTextFormat::BlockRightMargin,
-        QTextFormat::BlockAlignment,
-        QTextFormat::TextIndent,
-        QTextFormat::BlockIndent,
-        QTextFormat::BlockNonBreakableLines,
-        StyleId,
-        FixedLineHeight,
-        MinimumLineHeight,
-        LineSpacing,
-        LineSpacingFromFont,
-//       AlignLastLine,
-//       WidowThreshold,
-//       OrphanThreshold,
-//       DropCaps,
-//       DropCapsLength,
-//       DropCapsLines,
-//       DropCapsDistance,
-//       FollowDocBaseline,
-        BreakBefore,
-        BreakAfter,
-//       HasLeftBorder,
-//       HasTopBorder,
-//       HasRightBorder,
-//       HasBottomBorder,
-//       BorderLineWidth,
-//       SecondBorderLineWidth,
-//       DistanceToSecondBorder,
-        LeftPadding,
-        TopPadding,
-        RightPadding,
-        BottomPadding,
-        LeftBorderWidth,
-        LeftInnerBorderWidth,
-        LeftBorderSpacing,
-        LeftBorderStyle,
-        TopBorderWidth,
-        TopInnerBorderWidth,
-        TopBorderSpacing,
-        TopBorderStyle,
-        RightBorderWidth,
-        RightInnerBorderWidth,
-        RightBorderSpacing,
-        RightBorderStyle,
-        BottomBorderWidth,
-        BottomInnerBorderWidth,
-        BottomBorderSpacing,
-        BottomBorderStyle,
-        LeftBorderColor,
-        TopBorderColor,
-        RightBorderColor,
-        BottomBorderColor,
-        ExplicitListValue,
-        RestartListNumbering,
-
-        -1
-    };
-
     int i=0;
     while(properties[i] != -1) {
         QVariant const *variant = get(properties[i]);
@@ -531,6 +533,25 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
     // DropCapsDistance,
     // FollowDocBaseline,
 
+}
+
+// static
+KoParagraphStyle *KoParagraphStyle::fromBlockFormat(const QTextBlockFormat &format) {
+    KoParagraphStyle *answer = new KoParagraphStyle();
+    delete answer->characterStyle(); // TODO instead replace it with a character style from a QTextCharFormat
+    answer->m_charStyle = 0;
+
+    int i=0;
+    while(properties[i] != -1) {
+        int key = properties[i];
+        if(format.hasProperty(key))
+            answer->setProperty(key, format.property(key));
+        i++;
+    }
+
+    // listStyle ??
+
+    return answer;
 }
 
 #include "KoParagraphStyle.moc"

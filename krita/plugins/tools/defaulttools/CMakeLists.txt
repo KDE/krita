@@ -9,6 +9,7 @@ set(kritadefaulttools_PART_SRCS
     kis_tool_rectangle.cc
     kis_tool_ellipse.cc
     kis_tool_gradient.cc
+    kis_tool_measure.cc
     )
 
 kde4_automoc(${kritadefaulttools_PART_SRCS})

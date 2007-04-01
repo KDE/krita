@@ -72,6 +72,14 @@ public slots:
     /// every time the canvas changes content size, tell us.  Note that the size is in pt.
     void setPageSize(const QSizeF &pageSize);
 
+    /**
+    * Every time the document changes size, tell us.
+    * For most applictaions the document size equals the page size.
+    * Note that the size is in pt.
+    * @param documentSize the new document size in points
+    */
+    void setDocumentSize( const QSizeF &documentSize );
+
 signals:
     // the document can use the emitted data for persistency purposes.
     void zoomChanged (KoZoomMode::Mode mode, double zoom);
@@ -99,6 +107,7 @@ private:
     KoZoomHandler *m_zoomHandler;
     KoZoomAction *m_action;
     QSizeF m_pageSize;
+    QSizeF m_documentSize;
 };
 
 #endif

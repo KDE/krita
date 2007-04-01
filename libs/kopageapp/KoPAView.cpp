@@ -227,7 +227,8 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     m_verticalRuler->setActiveRange(layout.top, layout.height - layout.bottom);
 
     QSizeF pageSize( layout.width, layout.height );
-    m_zoomController->setPageSize( pageSize ); 
+    m_zoomController->setPageSize( pageSize );
+    m_zoomController->setDocumentSize( pageSize );
 
     m_canvas->update();
 }

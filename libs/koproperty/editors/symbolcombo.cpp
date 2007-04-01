@@ -103,14 +103,15 @@ SymbolCombo::selectChar()
 	dialog.setModal( false );
 	dialog.showButtonSeparator( true );
 
-	KCharSelect *select = new KCharSelect(&dialog, "select_char");
+	KCharSelect *select = new KCharSelect(&dialog);
+	dialog.setObjectName( "select_char" );
 	dialog.setMainWidget(select);
 
 	if (!(m_edit->text().isNull()))
 		select->setChar(m_edit->text().at(0));
 
 	if (dialog.exec() == QDialog::Accepted)
-		m_edit->setText(select->chr());
+		m_edit->setText(select->currentChar());
 }
 
 void

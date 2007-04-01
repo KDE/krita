@@ -73,10 +73,10 @@ void KoCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
-    charSelect = new KCharSelect( page,  _font, _chr );
-    connect(charSelect, SIGNAL(doubleClicked()),this, SLOT(slotDoubleClicked()));
+    charSelect = new KCharSelect( page, _chr, QFont(_font) );
+    connect(charSelect, SIGNAL(charSelected()),this, SLOT(slotDoubleClicked()));
     charSelect->resize( charSelect->sizeHint() );
-    charSelect->enableFontCombo( true );
+//     charSelect->enableFontCombo( true );
     grid->addWidget( charSelect, 0, 0 );
 
     grid->addItem( new QSpacerItem( charSelect->width(), 0 ), 0, 0 );
@@ -114,12 +114,12 @@ bool KoCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont,
 
 QChar KoCharSelectDia::chr() const
 {
-    return charSelect->chr();
+    return charSelect->currentChar();
 }
 
 QString KoCharSelectDia::font() const
 {
-    return charSelect->font();
+    return charSelect->font().family();
 }
 
 void KoCharSelectDia::slotUser1()

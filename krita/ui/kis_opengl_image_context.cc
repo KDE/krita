@@ -161,7 +161,7 @@ QGLWidget *KisOpenGLImageContext::sharedContextWidget() const
 
 void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 {
-    //kDebug(41007) << "updateImageTextureTiles " << rect << endl;
+    kDebug(41001) << "updateImageTextureTiles " << rect << endl;
 
     QRect updateRect = rect & m_image->bounds();
 
@@ -190,8 +190,8 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 
                 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-                QImage tileUpdateImage = m_image->convertToQImage(tileUpdateRect.left(), tileUpdateRect.top(),
-                                                                  tileUpdateRect.right(), tileUpdateRect.bottom(),
+                QImage tileUpdateImage = m_image->convertToQImage(tileUpdateRect.x(), tileUpdateRect.y(),
+                                                                  tileUpdateRect.width(), tileUpdateRect.height(),
                                                                   m_monitorProfile, m_exposure);
 
                 if (m_displaySelection) {
@@ -205,13 +205,13 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                 if (tileUpdateRect.width() == m_imageTextureTileWidth && tileUpdateRect.height() == m_imageTextureTileHeight) {
 
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_imageTextureTileWidth, m_imageTextureTileHeight, 0,
-                                 GL_BGRA, GL_UNSIGNED_BYTE, QGLWidget::convertToGLFormat( tileUpdateImage ).bits());
+                                 GL_BGRA, GL_UNSIGNED_BYTE, tileUpdateImage.bits());
                 } else {
                     int xOffset = tileUpdateRect.x() - tileRect.x();
                     int yOffset = tileUpdateRect.y() - tileRect.y();
 
                     glTexSubImage2D(GL_TEXTURE_2D, 0, xOffset, yOffset, tileUpdateRect.width(), tileUpdateRect.height(),
-                                    GL_BGRA, GL_UNSIGNED_BYTE, QGLWidget::convertToGLFormat( tileUpdateImage ).bits());
+                                    GL_BGRA, GL_UNSIGNED_BYTE, tileUpdateImage.bits());
                 }
 
                 GLenum error = glGetError ();

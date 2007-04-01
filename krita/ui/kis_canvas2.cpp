@@ -117,6 +117,7 @@ void KisCanvas2::createQPainterCanvas()
     m_d->openGLImageContext = 0;
 #endif
     setCanvasWidget( new KisQPainterCanvas( this, m_d->view ) );
+    m_d->currentCanvasIsOpenGL = false;
 }
 
 void KisCanvas2::createCanvas()

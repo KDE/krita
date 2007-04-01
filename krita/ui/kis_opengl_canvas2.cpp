@@ -67,7 +67,7 @@ public:
  };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageContextSP context )
-    : QGLWidget( QGLFormat(QGL::SampleBuffers), parent )
+    : QGLWidget( QGLFormat(QGL::SampleBuffers), parent, context->sharedContextWidget() )
 {
     m_d = new Private();
     m_d->canvas = canvas;
@@ -92,8 +92,8 @@ void KisOpenGLCanvas2::initializeGL()
 {
     qglClearColor(QColor::fromCmykF(0.40, 0.0, 1.0, 0.0));
     glShadeModel(GL_FLAT);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_CULL_FACE);
 }
 
 void KisOpenGLCanvas2::resizeGL(int w, int h)
@@ -119,6 +119,19 @@ void KisOpenGLCanvas2::paintGL()
     if ( !img ) return;
     QRect vr = QRect(0, 0, width(), height());
 
+    // Zoom factor
+    double sx, sy;
+    m_d->viewConverter->zoom(&sx, &sy);
+
+    // Resolution
+    double pppx,pppy;
+    pppx = img->xRes();
+    pppy = img->yRes();
+
+    // Compute the scale factors
+    double scaleX = sx / pppx;
+    double scaleY = sy / pppy;
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, width(), height());
@@ -136,20 +149,6 @@ void KisOpenGLCanvas2::paintGL()
 
     glTexCoord2f(0.0, 0.0);
     glVertex2f(0.0, 0.0);
-
-    // Zoom factor
-    double sx, sy;
-    m_d->viewConverter->zoom(&sx, &sy);
-
-    // Resolution
-    double pppx,pppy;
-    pppx = img->xRes();
-    pppy = img->yRes();
-
-    // Compute the scale factors
-    double scaleX = sx / pppx;
-    double scaleY = sy / pppy;
-
 
     glTexCoord2f((img->width() * scaleX) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH, 0.0);
     glVertex2f(img->width() * scaleX, 0.0);

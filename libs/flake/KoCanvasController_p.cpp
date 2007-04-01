@@ -299,11 +299,14 @@ void Viewport::resetLayout()
         if ( marginBottom > 0 ) resizeH = viewH - marginBottom;
 
     }
-    if( m_parent->canvasMode() == KoCanvasController::AlignLeft ) {
+    if( m_parent->canvasMode() == KoCanvasController::AlignTop ) {
         resizeH -= moveY;
         moveY = 0;
     }
-    m_canvas->setGeometry( moveX, moveY, resizeW, resizeH );
+    if( m_parent->canvasMode() == KoCanvasController::Infinite )
+        m_canvas->setGeometry( 0, 0, viewW, viewH );
+    else
+        m_canvas->setGeometry( moveX, moveY, resizeW, resizeH );
 
 //     kDebug() << "View port geom: " << geometry() << endl;
 //     kDebug() << "Canvas widget geom: " << m_canvas->geometry() << endl;

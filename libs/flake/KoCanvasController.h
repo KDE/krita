@@ -57,7 +57,7 @@ class FLAKE_EXPORT KoCanvasController : public QAbstractScrollArea {
     Q_OBJECT
 public:
     enum CanvasMode {
-        AlignLeft,  ///< canvas is left aligned if smaller than the viewport
+        AlignTop,  ///< canvas is top aligned if smaller than the viewport
         Centered,   ///< canvas is centered if smaller than the viewport
         Infinite    ///< canvas is never smaller than the viewport
     };

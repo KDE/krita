@@ -21,17 +21,18 @@
 
 #include <QToolBar>
 #include <QBoxLayout>
-#include <QTreeView>
 #include <QModelIndex>
-#include <QHeaderView>
 #include <QLineEdit>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kicon.h>
+#include <kaction.h>
+#include <kactioncollection.h>
 
 #include <kross/core/manager.h>
 #include <kross/core/model.h>
+#include <kross/core/view.h>
 #include <kross/core/guiclient.h>
 //#include <core/actioncollection.h>
 
@@ -87,8 +88,9 @@ class KoScriptingDocker::Private
 {
     public:
         Kross::GUIClient* guiclient;
-        Kross::ActionCollectionProxyModel* model;
-        QTreeView* view;
+        //Kross::ActionCollectionProxyModel* model;
+        Kross::ActionCollectionView* view;
+        QMap<QString, QAction* > actions;
 };
 
 KoScriptingDocker::KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
@@ -102,15 +104,14 @@ KoScriptingDocker::KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclien
     layout->setMargin(0);
     widget->setLayout(layout);
 
-    d->view = new QTreeView(widget);
+    d->view = new Kross::ActionCollectionView(widget);
     d->view->setRootIsDecorated(false);
-    d->view->header()->hide();
 
     //Kross::ActionCollectionModel::Mode modelmode = Kross::ActionCollectionModel::Mode( Kross::ActionCollectionModel::ToolTips );
     //d->model = new Kross::ActionCollectionProxyModel(this, new Kross::ActionCollectionModel(this, 0, modelmode));
-    d->model = new Kross::ActionCollectionProxyModel(this);
+    Kross::ActionCollectionProxyModel* model = new Kross::ActionCollectionProxyModel(this);
 
-    d->view->setModel(d->model);
+    d->view->setModel(model);
     layout->addWidget(d->view, 1);
     d->view->expandAll();
 
@@ -118,21 +119,33 @@ KoScriptingDocker::KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclien
     layout->addWidget(tb);
     tb->setMovable(false);
     //tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    tb->addAction(KIcon("media-playback-start"), i18n("Run Script"), this, SLOT(runScript()) );
-    tb->addAction(KIcon("media-playback-stop"), i18n("Stop Script"), this, SLOT(stopScript()) );
-    tb->addAction(KIcon("media-eject"), i18n("Script Manager..."), this, SLOT(configureScript()) );
+
+    KActionCollection* collection = d->view->actionCollection();
+    if( QAction* a = collection->action("run") ) {
+        a = tb->addAction(a->icon(), a->text(), a, SLOT(trigger()));
+        a->setEnabled(false);
+        d->actions.insert( "run", a );
+    }
+    if( QAction* a = collection->action("stop") ) {
+        a = tb->addAction(a->icon(), a->text(), a, SLOT(trigger()));
+        a->setEnabled(false);
+        d->actions.insert( "stop",  a );
+    }
+    if( QAction* a = collection->action("manager") )
+        tb->addAction(a->icon(), a->text(), a, SLOT(trigger()));
 
     /*
-    tb->addSeparator();
+    d->tb->addSeparator();
     QLineEdit* filter = new QLineEdit(tb);
-    tb->addWidget(filter);
-    connect(filter, SIGNAL(textChanged(const QString&)), d->model, SLOT(setFilterRegExp(const QString&)));
+    d->tb->addWidget(filter);
+    connect(filter, SIGNAL(textChanged(const QString&)), model, SLOT(setFilterRegExp(const QString&)));
     */
 
     setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
     setWidget(widget);
 
-    connect(d->view, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(runScript()));
+    connect(d->view, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(slotDoubleClicked()));
+    connect(d->view, SIGNAL(enabledChanged(const QString&)), this, SLOT(slotEnabledChanged(const QString&)));
 }
 
 KoScriptingDocker::~KoScriptingDocker()
@@ -145,33 +158,18 @@ Kross::GUIClient* KoScriptingDocker::guiClient() const
     return d->guiclient;
 }
 
-void KoScriptingDocker::runScript()
+void KoScriptingDocker::slotEnabledChanged(const QString& actionname)
 {
-    QModelIndex index = d->model->mapToSource( d->view->currentIndex() );
-    if( index.isValid() ) {
-        Kross::Action* action = Kross::ActionCollectionModel::action(index);
-        if( action ) {
-            kDebug() << "KoScriptingDocker::runScript execute action=" << action->objectName() << endl;
-            action->trigger();
-        }
-    }
+    if( d->actions.contains(actionname) )
+        if( QAction* a = d->view->actionCollection()->action(actionname) )
+            d->actions[actionname]->setEnabled( a->isEnabled() );
 }
 
-void KoScriptingDocker::stopScript()
+void KoScriptingDocker::slotDoubleClicked()
 {
-    QModelIndex index = d->model->mapToSource( d->view->currentIndex() );
-    if( index.isValid() ) {
-        Kross::Action* action = Kross::ActionCollectionModel::action(index);
-        if( action ) {
-            kDebug() << "KoScriptingDocker::stopScript finalize action=" << action->objectName() << endl;
-            action->finalize();
-        }
-    }
-}
-
-void KoScriptingDocker::configureScript()
-{
-    d->guiclient->showManager();
+    //TODO why does this not got called since 4.3?
+    kDebug()<<"KoScriptingDocker::slotDoubleClicked()"<<endl;
+    d->view->slotRun();
 }
 
 #include "KoScriptingDocker.moc"

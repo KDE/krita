@@ -50,10 +50,9 @@ class KOKROSS_EXPORT KoScriptingDocker : public QDockWidget
         KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient);
         virtual ~KoScriptingDocker();
         Kross::GUIClient* guiClient() const;
-    private slots:
-        void runScript();
-        void stopScript();
-        void configureScript();
+    private Q_SLOTS:
+        void slotEnabledChanged(const QString&);
+        void slotDoubleClicked();
     private:
         class Private;
         Private* const d;

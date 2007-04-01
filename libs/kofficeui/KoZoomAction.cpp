@@ -222,8 +222,8 @@ void KoZoomAction::zoomOut()
 
 QWidget * KoZoomAction::createWidget( QWidget * _parent )
 {
-    QToolBar *parent = qobject_cast<QToolBar *>(_parent);
-    if (!parent || !qobject_cast<QStatusBar*>(parent->parent()))
+    // create the custom widget only if we add the action to the status bar
+    if( ! qobject_cast<QStatusBar*>(_parent) )
         return KSelectAction::createWidget(_parent);
 
     QWidget * group = new QWidget(_parent);

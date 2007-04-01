@@ -50,6 +50,7 @@
 #include <kicon.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
+#include <kstatusbar.h>
 
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
@@ -96,7 +97,7 @@ void KoPAView::initGUI()
     m_zoomController = new KoZoomController( m_canvasController, &m_zoomHandler, actionCollection() );
 
     m_zoomAction = m_zoomController->zoomAction();
-    viewBar()->addAction( m_zoomAction );
+    addStatusBarItem( m_zoomAction->createWidget( statusBar() ), 0 );
 
     connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, double ) ),
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, double ) ) );

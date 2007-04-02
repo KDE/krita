@@ -46,6 +46,7 @@ public:
     enum Property {
         StyleId = QTextFormat::UserProperty+1,
         // Linespacing properties
+        PercentLineHeight,  ///< this propery is used for a percentage of the highest character on that line
         FixedLineHeight,    ///< this propery is used to use a non-default line height
         MinimumLineHeight,  ///< this property is used to have a minimum line spacing
         LineSpacing,        ///< Hard leader height.
@@ -128,31 +129,34 @@ public:
     /**
      * Sets the line height as a percentage of the highest character on that line.
      * A good typographically correct value would be 120%
-     * @see setFontIndependentLineSpacing
+     * Note that lineSpacing() is added to this.
+     * @see setLineSpacingFromFont
      */
     void setLineHeightPercent(int lineHeight)
-        {setProperty(FixedLineHeight, lineHeight); remove(LineSpacing);}
-    int lineHeightPercent() const { return propertyInt(FixedLineHeight); }
+       ;
+    int lineHeightPercent() const;
 
     /**
      * Sets the line height to a specific pt-based height, ignoring the font size.
+     * Note that lineSpacing() is added to this.
      */
     void setLineHeightAbsolute(double height)
-        {setProperty(FixedLineHeight, height); remove(LineSpacing);}
-    double lineHeightAbsolute() const {return propertyDouble(FixedLineHeight); }
+       ;
+    double lineHeightAbsolute() const;
 
     /**
      * Sets the line height to have a minimum height in pt.
      */
-    void setMinimumLineHeight(double height) {setProperty(MinimumLineHeight, height); }
-    double minimumLineHeight() const { return propertyDouble(MinimumLineHeight); }
+    void setMinimumLineHeight(double height);
+    double minimumLineHeight() const;
 
     /**
-     * Sets the space between two lines to be a specific height, ignoring the font size.
+     * Sets the space between two lines to be a specific height. The total linespacing will become
+     * the line height + this height.  Where the line height is dependent on the font.
      */
     void setLineSpacing(double spacing)
-        {setProperty(LineSpacing, spacing); remove(FixedLineHeight); }
-    double lineSpacing() const {return propertyDouble(LineSpacing); }
+       ;
+    double lineSpacing() const;
 
     /**
      * If set to true the font-encoded height will be used instead of the font-size propery
@@ -161,11 +165,11 @@ public:
      * current linespacing percentage.  When on the linespacing embedded in the font
      * is used which can differ for various fonts, even if they are the same pt-size.
      */
-    void setLineSpacingFromFont(bool on) {setProperty(LineSpacingFromFont, on); }
+    void setLineSpacingFromFont(bool on);
     /**
-     * @see setFontIndependentLineSpacing
+     * @see setLineSpacingFromFont
      */
-    bool lineSpacingFromFont() const {return propertyBoolean(LineSpacingFromFont); }
+    bool lineSpacingFromFont() const;
 
 
     /**
@@ -173,13 +177,11 @@ public:
      * There are only 3 valid options, Left, Center and Justified. (where Left will
      * be right aligned for RTL text).
      */
-    void setAlignLastLine(Qt::Alignment alignment ) { setProperty(AlignLastLine, (int) alignment); }
+    void setAlignLastLine(Qt::Alignment alignment );
     /**
      * @see setAlignLastLine
      */
-    Qt::Alignment alignLastLine() const {
-        return static_cast<Qt::Alignment> (propertyInt(QTextFormat::BlockAlignment));
-    }
+    Qt::Alignment alignLastLine() const;
     /**
      * Paragraphs that are broken across two frames are normally broken at the bottom
      * of the frame.  Using this property we can set the minimum number of lines that should
@@ -188,11 +190,11 @@ public:
      * frame, setting a widowThreshold of 4 will break at 6 lines instead to leave the
      * requested 4 lines.
      */
-    void setWidowThreshold(int lines) { setProperty(WidowThreshold, lines); }
+    void setWidowThreshold(int lines);
     /**
      * @see setWidowThreshold
      */
-    int widowThreshold() const { return propertyInt(WidowThreshold); }
+    int widowThreshold() const;
     /**
      * Paragraphs that are broken across two frames are normally broken at the bottom
      * of the frame.  Using this property we can set the minimum number of lines that should
@@ -201,194 +203,190 @@ public:
      * setting the orphanThreshold to something greater than 2 will move the whole paragraph
      * to the second frame.
      */
-    void setOrphanThreshold(int lines) { setProperty(OrphanThreshold, lines); }
+    void setOrphanThreshold(int lines);
     /**
      * @see setOrphanThreshold
      */
-    int orphanThreshold() const { return propertyInt(OrphanThreshold); }
+    int orphanThreshold() const;
     /**
      * If true, make the first character span multiple lines.
      * @see setDropCapsLength
      * @see setDropCapsLines
      * @see dropCapsDistance
      */
-    void setDropCaps(bool on) { setProperty(DropCaps, on); }
+    void setDropCaps(bool on);
     /**
      * @see setDropCaps
      */
-    bool dropCaps() const { return propertyBoolean(DropCaps); }
+    bool dropCaps() const;
     /**
      * Set the number of glyphs to show as drop-caps
      * @see setDropCaps
      * @see setDropCapsLines
      * @see dropCapsDistance
      */
-    void setDropCapsLength(int characters) { setProperty(DropCapsLength, characters); }
+    void setDropCapsLength(int characters);
     /**
      * set dropCaps Length in characters
      * @see setDropCapsLength
      */
-    int dropCapsLength() const { return propertyInt(DropCapsLength); }
+    int dropCapsLength() const;
     /**
      * Set the number of lines that the drop-caps span
      * @see setDropCapsLength
      * @see setDropCaps
      * @see dropCapsDistance
      */
-    void setDropCapsLines(int lines) { setProperty(DropCapsLines, lines); }
+    void setDropCapsLines(int lines);
     /**
      * set dropCapsLines
      * @see setDropCapsLines
      */
-    int dropCapsLines() const { return propertyInt(DropCapsLines); }
+    int dropCapsLines() const;
     /**
      * set the distance between drop caps and text in pt
      * @see setDropCapsLength
      * @see setDropCaps
      * @see setDropCapsLines
      */
-    void setDropCapsDistance(double distance) { setProperty(DropCapsDistance, distance); }
+    void setDropCapsDistance(double distance);
     /**
      * Set dropCaps distance
      * @see setDropCapsDistance
      */
-    double dropCapsDistance() const { return propertyDouble(DropCapsDistance); }
+    double dropCapsDistance() const;
     /**
      * If true the baselines will be aligned with the doc-wide grid
      */
-    void setFollowDocBaseline(bool on) { setProperty(FollowDocBaseline, on); }
+    void setFollowDocBaseline(bool on);
     /**
      * return if baseline alignment is used
      * @see setFollowDocBaseline
      */
-    bool followDocBaseline() const { return propertyBoolean(FollowDocBaseline); }
+    bool followDocBaseline() const;
 
-    void setBreakBefore(bool on) { setProperty(BreakBefore, on); }
-    bool breakBefore() { return propertyBoolean(BreakBefore); }
-    void setBreakAfter(bool on) { setProperty(BreakAfter, on); }
-    bool breakAfter() { return propertyBoolean(BreakAfter); }
-    void setLeftPadding(double padding) { setProperty(LeftPadding, padding); }
-    double leftPadding() { return propertyDouble(LeftPadding); }
-    void setTopPadding(double padding) { setProperty(TopPadding, padding); }
-    double topPadding() { return propertyDouble(TopPadding); }
-    void setRightPadding(double padding) { setProperty(RightPadding, padding); }
-    double rightPadding() { return propertyDouble(RightPadding); }
-    void setBottomPadding(double padding) { setProperty(BottomPadding, padding); }
-    double bottomPadding() { return propertyDouble(BottomPadding); }
+    void setBreakBefore(bool on);
+    bool breakBefore();
+    void setBreakAfter(bool on);
+    bool breakAfter();
+    void setLeftPadding(double padding);
+    double leftPadding();
+    void setTopPadding(double padding);
+    double topPadding();
+    void setRightPadding(double padding);
+    double rightPadding();
+    void setBottomPadding(double padding);
+    double bottomPadding();
 
-    void setLeftBorderWidth(double width) { setProperty(LeftBorderWidth, width); }
-    double leftBorderWidth() { return propertyDouble(LeftBorderWidth); }
-    void setLeftInnerBorderWidth(double width) { setProperty(LeftInnerBorderWidth, width); }
-    double leftInnerBorderWidth() { return propertyDouble(LeftInnerBorderWidth); }
-    void setLeftBorderSpacing(double width) { setProperty(LeftBorderSpacing, width); }
-    double leftBorderSpacing() { return propertyDouble(LeftBorderSpacing); }
-    void setLeftBorderStyle(BorderStyle style) { setProperty(LeftBorderStyle, style); }
-    BorderStyle leftBorderStyle() { return static_cast<BorderStyle> (propertyInt(LeftBorderStyle)); }
-    void setLeftBorderColor(QColor color) { setProperty(LeftBorderColor, color); }
-    QColor leftBorderColor() { return propertyColor(LeftBorderColor); }
-    void setTopBorderWidth(double width) { setProperty(TopBorderWidth, width); }
-    double topBorderWidth() { return propertyDouble(TopBorderWidth); }
-    void setTopInnerBorderWidth(double width) { setProperty(TopInnerBorderWidth, width); }
-    double topInnerBorderWidth() { return propertyDouble(TopInnerBorderWidth); }
-    void setTopBorderSpacing(double width) { setProperty(TopBorderSpacing, width); }
-    double topBorderSpacing() { return propertyDouble(TopBorderSpacing); }
-    void setTopBorderStyle(BorderStyle style) { setProperty(TopBorderStyle, style); }
-    BorderStyle topBorderStyle() { return static_cast<BorderStyle> (propertyInt(TopBorderStyle)); }
-    void setTopBorderColor(QColor color) { setProperty(TopBorderColor, color); }
-    QColor topBorderColor() { return propertyColor(TopBorderColor); }
-    void setRightBorderWidth(double width) { setProperty(RightBorderWidth, width); }
-    double rightBorderWidth() { return propertyDouble(RightBorderWidth); }
-    void setRightInnerBorderWidth(double width) { setProperty(RightInnerBorderWidth, width); }
-    double rightInnerBorderWidth() { return propertyDouble(RightInnerBorderWidth); }
-    void setRightBorderSpacing(double width) { setProperty(RightBorderSpacing, width); }
-    double rightBorderSpacing() { return propertyDouble(RightBorderSpacing); }
-    void setRightBorderStyle(BorderStyle style) { setProperty(RightBorderStyle, style); }
-    BorderStyle rightBorderStyle() { return static_cast<BorderStyle> (propertyInt(RightBorderStyle)); }
-    void setRightBorderColor(QColor color) { setProperty(RightBorderColor, color); }
-    QColor rightBorderColor() { return propertyColor(RightBorderColor); }
-    void setBottomBorderWidth(double width) { setProperty(BottomBorderWidth, width); }
-    double bottomBorderWidth() { return propertyDouble(BottomBorderWidth); }
-    void setBottomInnerBorderWidth(double width) { setProperty(BottomInnerBorderWidth, width); }
-    double bottomInnerBorderWidth() { return propertyDouble(BottomInnerBorderWidth); }
-    void setBottomBorderSpacing(double width) { setProperty(BottomBorderSpacing, width); }
-    double bottomBorderSpacing() { return propertyDouble(BottomBorderSpacing); }
-    void setBottomBorderStyle(BorderStyle style) { setProperty(BottomBorderStyle, style); }
-    BorderStyle bottomBorderStyle() { return static_cast<BorderStyle> (propertyInt(BottomBorderStyle)); }
-    void setBottomBorderColor(QColor color) { setProperty(BottomBorderColor, color); }
-    QColor bottomBorderColor() { return propertyColor(BottomBorderColor); }
+    void setLeftBorderWidth(double width);
+    double leftBorderWidth();
+    void setLeftInnerBorderWidth(double width);
+    double leftInnerBorderWidth();
+    void setLeftBorderSpacing(double width);
+    double leftBorderSpacing();
+    void setLeftBorderStyle(BorderStyle style);
+    BorderStyle leftBorderStyle();
+    void setLeftBorderColor(QColor color);
+    QColor leftBorderColor();
+    void setTopBorderWidth(double width);
+    double topBorderWidth();
+    void setTopInnerBorderWidth(double width);
+    double topInnerBorderWidth();
+    void setTopBorderSpacing(double width);
+    double topBorderSpacing();
+    void setTopBorderStyle(BorderStyle style);
+    BorderStyle topBorderStyle();
+    void setTopBorderColor(QColor color);
+    QColor topBorderColor();
+    void setRightBorderWidth(double width);
+    double rightBorderWidth();
+    void setRightInnerBorderWidth(double width);
+    double rightInnerBorderWidth();
+    void setRightBorderSpacing(double width);
+    double rightBorderSpacing();
+    void setRightBorderStyle(BorderStyle style);
+    BorderStyle rightBorderStyle();
+    void setRightBorderColor(QColor color);
+    QColor rightBorderColor();
+    void setBottomBorderWidth(double width);
+    double bottomBorderWidth();
+    void setBottomInnerBorderWidth(double width);
+    double bottomInnerBorderWidth();
+    void setBottomBorderSpacing(double width);
+    double bottomBorderSpacing();
+    void setBottomBorderStyle(BorderStyle style);
+    BorderStyle bottomBorderStyle();
+    void setBottomBorderColor(QColor color);
+    QColor bottomBorderColor();
 
 
     // ************ properties from QTextFormat
     /// duplicated property from QTextBlockFormat
-    void setTopMargin(double topMargin) { setProperty(QTextFormat::BlockTopMargin, topMargin); }
+    void setTopMargin(double topMargin);
     /// duplicated property from QTextBlockFormat
-    double topMargin() const { return propertyDouble(QTextFormat::BlockTopMargin); }
+    double topMargin() const;
 
     /// duplicated property from QTextBlockFormat
-    void setBottomMargin (double margin) { setProperty(QTextFormat::BlockBottomMargin, margin); }
+    void setBottomMargin (double margin);
     /// duplicated property from QTextBlockFormat
-    double bottomMargin () const { return propertyDouble(QTextFormat::BlockBottomMargin); }
+    double bottomMargin () const;
     /// duplicated property from QTextBlockFormat
-    void setLeftMargin (double margin) { setProperty(QTextFormat::BlockLeftMargin, margin); }
+    void setLeftMargin (double margin);
     /// duplicated property from QTextBlockFormat
-    double leftMargin () const { return propertyDouble(QTextFormat::BlockLeftMargin); }
+    double leftMargin () const;
     /// duplicated property from QTextBlockFormat
-    void setRightMargin (double margin) { setProperty(QTextFormat::BlockRightMargin, margin); }
+    void setRightMargin (double margin);
     /// duplicated property from QTextBlockFormat
-    double rightMargin () const { return propertyDouble(QTextFormat::BlockRightMargin); }
+    double rightMargin () const;
 
     /// duplicated property from QTextBlockFormat
-    void setAlignment (Qt::Alignment alignment) {
-        setProperty(QTextFormat::BlockAlignment, (int) alignment);
-    }
+    void setAlignment (Qt::Alignment alignment);
     /// duplicated property from QTextBlockFormat
-    Qt::Alignment alignment () const {
-        return static_cast<Qt::Alignment> (propertyInt(QTextFormat::BlockAlignment));
-    }
+    Qt::Alignment alignment () const;
     /// duplicated property from QTextBlockFormat
-    void setTextIndent (double margin) { setProperty(QTextFormat::TextIndent, margin); }
+    void setTextIndent (double margin);
     /// duplicated property from QTextBlockFormat
-    double textIndent () const { return propertyDouble(QTextFormat::TextIndent); }
+    double textIndent () const;
 #if 0
 as this is a duplicate of leftMargin, lets make it very clear we are using that one.
     /// duplicated property from QTextBlockFormat
-    void setIndent (int indent) { setProperty(QTextFormat::BlockIndent, indent); }
+    void setIndent (int indent);
     /// duplicated property from QTextBlockFormat
-    int indent () const { return propertyInt(QTextFormat::BlockIndent); }
+    int indent () const;
 #endif
     /// duplicated property from QTextBlockFormat
-    void setNonBreakableLines(bool on) { setProperty(QTextFormat::BlockNonBreakableLines, on); }
+    void setNonBreakableLines(bool on);
     /// duplicated property from QTextBlockFormat
-    bool nonBreakableLines() const { return propertyBoolean(QTextFormat::BlockNonBreakableLines); }
+    bool nonBreakableLines() const;
 
     /// set the parent style this one inherits its unset properties from.
     void setParent(KoParagraphStyle *parent);
 
     /// return the parent style
-    KoParagraphStyle *parent() const { return m_parent; }
+    KoParagraphStyle *parent() const;
 
     /// the 'next' style is the one used when the user creates a new paragrap after this one.
-    void setNextStyle(int next) { m_next = next; }
+    void setNextStyle(int next);
 
     /// the 'next' style is the one used when the user creates a new paragrap after this one.
-    int nextStyle() const { return m_next; }
+    int nextStyle() const;
 
     /// return the name of the style.
-    const QString& name() const { return m_name; }
+    const QString& name() const;
 
     /// set a user-visible name on the style.
-    void setName(const QString &name) { m_name = name; }
+    void setName(const QString &name);
 
     /// each style has a unique ID (non persistent) given out by the styleManager
-    int styleId() const { return propertyInt(StyleId); }
+    int styleId() const;
 
     /// each style has a unique ID (non persistent) given out by the styleManager
-    void setStyleId(int id) { setProperty(StyleId, id); if(m_next == 0) m_next=id; }
+    void setStyleId(int id);
 
     /// Set to true if this paragraph is marked to start the list numbering from the first entry.
-    void setRestartListNumbering(bool on) { setProperty(RestartListNumbering, on); }
+    void setRestartListNumbering(bool on);
     /// return if this paragraph is marked to start the list numbering from the first entry.
-    bool restartListNumbering() { return propertyBoolean(RestartListNumbering); }
+    bool restartListNumbering();
 
     /**
      * Apply this style to a blockFormat by copying all properties from this, and parent
@@ -403,21 +401,21 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
      */
     void applyStyle(QTextBlock &block) const;
 
-    KoCharacterStyle *characterStyle() { return m_charStyle; }
-    const KoCharacterStyle *characterStyle() const { return m_charStyle; }
+    KoCharacterStyle *characterStyle();
+    const KoCharacterStyle *characterStyle() const;
 
     /**
      * Returns the list style for this paragraph style, or 0 if there is none.
      * @see setListStyle()
      * @see removeListStyle()
      */
-    KoListStyle *listStyle() { return m_listStyle; }
+    KoListStyle *listStyle();
     /**
      * Returns the list style for this paragraph style, or 0 if there is none.
      * @see setListStyle()
      * @see removeListStyle()
      */
-    const KoListStyle *listStyle() const { return m_listStyle; }
+    const KoListStyle *listStyle() const;
 
     /**
      * Set a new liststyle on this paragraph style, making all paragraphs that use this style
@@ -449,13 +447,8 @@ private:
     QColor propertyColor(int key) const;
     QVariant const *get(int key) const;
 
-private:
-    QString m_name;
-    KoCharacterStyle *m_charStyle;
-    KoListStyle *m_listStyle;
-    KoParagraphStyle *m_parent;
-    int m_next;
-    StylePrivate *m_stylesPrivate;
+    class Private;
+    Private * const d;
 };
 
 #endif

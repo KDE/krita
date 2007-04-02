@@ -85,16 +85,13 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         QRegion r = m_painter->dirtyRegion();
 
         if (!m_paintOnSelection) {
-            if (!m_paintIncremental) {
                 m_currentImage->activeLayer()->setDirty(r);
-            }
-            else {
-                m_target->setDirty( r);
-                m_incrementalDirtyRegion = r;
-            }
         }
         else {
             m_target->setDirty( r);
+        }
+        if (!m_paintIncremental) {
+            m_incrementalDirtyRegion = r;
         }
     }
 }
@@ -122,7 +119,9 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
             // r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
             m_target->setDirty(region);
         }
-        m_incrementalDirtyRegion += region;
+        if (!m_paintIncremental) {
+          m_incrementalDirtyRegion += region;
+        }
     }
 }
 

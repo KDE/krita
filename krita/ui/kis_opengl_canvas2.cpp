@@ -107,7 +107,7 @@ void KisOpenGLCanvas2::paintGL()
 {
     kDebug() << "paintGL\n";
 
-    glDrawBuffer(GL_BACK);
+    //glDrawBuffer(GL_BACK);
 
     QColor widgetBackgroundColor = palette().color(QPalette::Mid);
 
@@ -142,8 +142,6 @@ void KisOpenGLCanvas2::paintGL()
 
     glBindTexture(GL_TEXTURE_2D, m_d->openGLImageContext->backgroundTexture());
 
-    glTranslatef(m_d->documentOffset.x(), m_d->documentOffset.y(), 0.0);
-
     glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS);
 
@@ -163,8 +161,6 @@ void KisOpenGLCanvas2::paintGL()
     glEnd();
 
     glTranslatef(-m_d->documentOffset.x(), -m_d->documentOffset.y(), 0.0);
-
-//    glTranslatef(-horzValue(), -vertValue(), 0.0);
     glScalef(scaleX, scaleY, 1.0);
 
     glEnable(GL_BLEND);
@@ -214,8 +210,7 @@ void KisOpenGLCanvas2::paintGL()
     QPainter gc ( this );
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
 
-    swapBuffers();
-
+    //swapBuffers();
 }
 
 KoToolProxy * KisOpenGLCanvas2::toolProxy() {

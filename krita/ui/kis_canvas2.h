@@ -145,6 +145,7 @@ private:
 
     void createCanvas();
     void createQPainterCanvas();
+    void createOpenGLCanvas();
 
     /**
      * Returns a rect in widget pixels that is translated for document

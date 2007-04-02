@@ -120,22 +120,29 @@ void KisCanvas2::createQPainterCanvas()
     m_d->currentCanvasIsOpenGL = false;
 }
 
+void KisCanvas2::createOpenGLCanvas()
+{
+#ifdef HAVE_OPENGL
+    if ( QGLFormat::hasOpenGL() ) {
+        // XXX: The image isn't done loading here!
+        if ( m_d->openGLImageContext ) delete m_d->openGLImageContext;
+        m_d->openGLImageContext = KisOpenGLImageContext::getImageContext(m_d->view->image(), m_d->monitorProfile);
+        setCanvasWidget( new KisOpenGLCanvas2( this, m_d->view, m_d->openGLImageContext ) );
+        m_d->currentCanvasIsOpenGL = true;
+    }
+    else {
+        kWarning() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
+        createQPainterCanvas();
+    }
+#endif
+}
+
 void KisCanvas2::createCanvas()
 {
     KisConfig cfg;
     if ( cfg.useOpenGL() ) {
 #ifdef HAVE_OPENGL
-        if ( !QGLFormat::hasOpenGL() ) {
-            kWarning() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
-            createQPainterCanvas();
-        }
-        else {
-            // XXX: The image isn't done loading here!
-            if ( m_d->openGLImageContext ) delete m_d->openGLImageContext;
-            m_d->openGLImageContext = KisOpenGLImageContext::getImageContext(m_d->view->image(), m_d->monitorProfile);
-            setCanvasWidget( new KisOpenGLCanvas2( this, m_d->view, m_d->openGLImageContext ) );
-            m_d->currentCanvasIsOpenGL = true;
-        }
+        createOpenGLCanvas();
 #else
         kWarning() << "OpenGL requested while its not available, starting qpainter canvas";
         createQPainterCanvas();
